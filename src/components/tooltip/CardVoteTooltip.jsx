@@ -161,7 +161,7 @@ const CardVoteTooltip = ({ author, permlink, showTooltip, setShowTooltip, setVot
   return (
     <div className="upvote-tooltip-wrap" ref={tooltipRef} onClick={(e) =>{ e.preventDefault()}}>
       {showTooltip && (
-        <div className={`tooltip-box ${cardStyle ? "card" : ""}  `}>
+        <div className="tooltip-box card" >
           <p>Vote Weight: {weight}%</p>
           <div className="wrap">
             {isLoading ? (

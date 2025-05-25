@@ -2,6 +2,9 @@
 .vid-comment-wrap {
   padding-left: 20px;
   margin: 15px 0;
+  @include respond(phone) {
+      padding-left: 0px;
+    }
   p {
     font-size: 14px;
     margin-bottom: 5px;

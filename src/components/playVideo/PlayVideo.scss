@@ -262,6 +262,9 @@
             outline: none;
             padding: 10px;
             box-sizing: border-box;
+            @include mix.respond(phone) {
+                height: 60px;
+              }
             &.sub{
                 height: 50px; 
                 border-radius: 12px; 

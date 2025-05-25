@@ -183,6 +183,9 @@
           gap: 2px;
           .icon {
             font-size: 17px;
+            @include respond(phone) {
+              font-size: 21px;
+                }
             &:hover {
               color: red;
             }

@@ -5,7 +5,7 @@
 
   .tooltip-box {
     position: absolute;
-    top: -50px;
+    top: -70px;
     // left: 10%;
     right: -100px;
     transform: translateX(-50%);
@@ -16,20 +16,26 @@
     z-index: 100;
     width: 210px;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
     @include respond(phone) {
       width: 200px;
       padding: 6px;
-      // left: 160px;
+      left: -100px;
+      top: -46px;
     }
     &.card{
+      left: 120px;
+      top: -70px;
       @include respond(phone) {
-      // left: 110px;
+        top: -60px;
+      left: 110px;
     }
     }
     &.comment{
       @include respond(phone) {
-      right: 100px;
-      left: auto;
+      top: -60px;
+      left: -85px;
     }
     }
 

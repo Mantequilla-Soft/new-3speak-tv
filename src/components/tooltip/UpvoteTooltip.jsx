@@ -137,10 +137,7 @@ const UpvoteTooltip = ({ author, permlink, showTooltip, setShowTooltip, cardStyl
             toast.success('Vote successful');
             setIsLoading(false);
             setShowTooltip(false);
-            // setActiveTooltipPermlink(null);
             setIsVoted(true);
-            // console.log(showTooltip)
-            // setVotedPosts((prev) => [...prev, `${author}/${permlink}`]);
             
           } else {
             toast.error('Vote failed, please try again');
@@ -164,7 +161,7 @@ const UpvoteTooltip = ({ author, permlink, showTooltip, setShowTooltip, cardStyl
   return (
     <div className="upvote-tooltip-wrap" ref={tooltipRef} onClick={(e) =>{ e.preventDefault()}}>
       {showTooltip && (
-        <div className={`tooltip-box ${cardStyle ? "card" : ""} ${commemtStyle ? "comment" : ""}`}>
+        <div className="tooltip-box" >
           <p>Vote Weight: {weight}%</p>
           <div className="wrap">
             {isLoading ? (

@@ -3,27 +3,6 @@ import React, { useEffect, useState } from 'react'
 import "./ToolTip.scss"
 
 function ToolTip({tooltipVoters}) {
-    // const [data, setData] = useState([])
-    // const [loading, setLoading] = useState(true); // Optional loading state
-    // const [error, setError] = useState(null);
-
-    // useEffect(()=>{
-    //     const fetchData = async ()=>{
-    //      try{
-    //         setLoading(true)
-    //         const result = await getTooltipVoters();
-    //         setData(result);
-    //      } catch(err){
-    //         console.error("Failed to fetch tooltip voters:", err)
-    //         setError("failed to load data")
-    //      } finally{
-    //         setLoading(false);
-    //      }
-    //     }
-    //     fetchData()
-    // },[getTooltipVoters])
-    // console.log(tooltipVoters)
-
   return (
     <div className="tooltip" id="reward-tooltip">
                 {/* {data.length > 0 ? ( */}

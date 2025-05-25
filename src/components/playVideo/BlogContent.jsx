@@ -1,29 +1,40 @@
 import React, { useEffect, useState } from "react";
 import { renderPostBody } from "@ecency/render-helper";
-import {getUersContent} from "../../utils/hiveUtils"
-import "./BlogContent.scss"
+import { getUersContent } from "../../utils/hiveUtils";
+import "./BlogContent.scss";
 
-
-const BlogContent = ({ author, permlink}) => {
+const BlogContent = ({ author, permlink }) => {
   const [content, setContent] = useState("");
   const [renderedContent, setRenderedContent] = useState("");
 
-  
-  // const author = "dootilda"
-  // const permlink = 'vrcqokytxb'
+  // Function to remove unwanted content
+  const cleanContent = (htmlString) => {
+    // Remove "testing video upload OOT" text with Uploaded using 3Speak
+    let cleaned = htmlString.replace(
+      /<sub>Uploaded using 3Speak Mobile App<\/sub>/g,
+      ''
+    );
 
-  // Fetch post content from the Hive blockchain
+    // Remove 3Speak video embed
+    cleaned = cleaned.replace(
+      /<p dir="auto"><a class="markdown-video-link markdown-video-link-speak" data-embed-src="https:\/\/3speak\.tv\/embed\?v=[^"]+"><img class="no-replace video-thumbnail" src="[^"]+" \/><span class="markdown-video-play"><\/span><\/a><\/p>/g,
+      ''
+    );
+
+    // Remove any empty <p> tags left behind
+    cleaned = cleaned.replace(/<p dir="auto"><\/p>/g, '');
+
+    return cleaned;
+  };
+
   async function getPostDescription(author, permlink) {
-    const data = await getUersContent(author, permlink)
-    // console.log(data)
-    return data.body
+    const data = await getUersContent(author, permlink);
+    return data.body;
   }
 
-  // Fetch content when author or permlink change
   useEffect(() => {
     async function fetchContent() {
       const postContent = await getPostDescription(author, permlink);
-      // console.error("postContent===>:", postContent);
       if (postContent) {
         setContent(postContent);
       } else {
@@ -34,13 +45,8 @@ const BlogContent = ({ author, permlink}) => {
     fetchContent();
   }, [author, permlink]);
 
-  // console.log(content)
-
-  // Render content when it changes
   useEffect(() => {
-
     if (content) {
-      // Convert content to a proper string
       const contentString =
         typeof content === "string"
           ? content
@@ -48,12 +54,10 @@ const BlogContent = ({ author, permlink}) => {
           ? content.join("\n")
           : "";
 
-          // console.error("contentString", contentString);
-
       try {
-        // Render the content using @ecency/render-heper
-        const renderedHTML = renderPostBody(contentString, false);
-        // console.log("Rendered HTML Output:", renderedHTML);
+        let renderedHTML = renderPostBody(contentString, false);
+        // Clean the rendered HTML before setting it
+        renderedHTML = cleanContent(renderedHTML);
         setRenderedContent(renderedHTML);
       } catch (error) {
         console.error("Error rendering post body:", error);
@@ -62,7 +66,6 @@ const BlogContent = ({ author, permlink}) => {
     }
   }, [content]);
 
-  // Render the processed content
   return (
     <div
       className="markdown-view"

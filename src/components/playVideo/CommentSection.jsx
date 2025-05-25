@@ -193,14 +193,7 @@ function CommentSection({ videoDetails, author, permlink }) {
     console.log('Toggle Tooltip:', author, permlink, index);
     setSelectedPost({ author, permlink });
     console.log('Selected Post:', selectedPost);
-    // setShowTooltip((prev)=> !prev)
     setShowTooltip(prev => !prev || activeTooltipPermlink !== permlink);
-  //   setShowTooltip((prev) => {
-  //   const isSame = activeTooltipPermlink === permlink;
-  //   if (!isSame) setActiveTooltipPermlink(permlink);
-  //   else setActiveTooltipPermlink(null);
-  //   return !prev || !isSame;
-  // });
     setActiveTooltipPermlink((prev) => (prev === permlink ? null : permlink));
   };
 

@@ -43,55 +43,6 @@ function Cards({
 
   const voters = (numVotes) => (numVotes <= 0 ? 0 : numVotes);
 
-  // const handleVote = async (username, permlink, weight = 10000) => {
-  //   if (!authenticated) {
-  //     toast.error("Login to complete this operation");
-  //     return;
-  //   }
-
-  //   try {
-  //     setIsLoading(true);
-  //     const data = await getUersContent(username, permlink);
-  //     if (data.active_votes.some((vote) => vote.voter === user)) {
-  //       toast.info("You have already voted on this post");
-  //       setIsLoading(false);
-  //       return;
-  //     }
-
-  //     if (window.hive_keychain) {
-  //       window.hive_keychain.requestBroadcast(
-  //         user,
-  //         [
-  //           [
-  //             "vote",
-  //             {
-  //               voter: user,
-  //               author: username,
-  //               permlink,
-  //               weight,
-  //             },
-  //           ],
-  //         ],
-  //         "Posting",
-  //         (response) => {
-  //           setIsLoading(false);
-  //           if (response.success) {
-  //             toast.success("Vote successful!");
-  //             setVotedPosts((prev) => [...prev, `${username}/${permlink}`]);
-  //           } else {
-  //             toast.error(`Vote failed: ${response.message}`);
-  //           }
-  //         }
-  //       );
-  //     } else {
-  //       toast.info("Hive Keychain is not installed. Please install the extension.");
-  //     }
-  //   } catch (err) {
-  //     console.log("Something went wrong", err);
-  //     setIsLoading(false);
-  //   }
-  // };
-
   const toggleTooltip = (username, permlink, index) => {
     setSelectedPost({ username, permlink });
     setActiveTooltipIndex((prev) => (prev === index ? null : index));
