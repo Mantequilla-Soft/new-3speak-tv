@@ -218,7 +218,8 @@ function StudioPage() {
            <span>Other accounts that should get a % of the post rewards.</span>
            </div>
            <div className="bene-btn-wrap" onClick={toggleBeneficiaryModal}>
-            <span>{list.length > 0 && <spa>{list.length}</spa>} {" "} BENEFICIARIES</span>
+            {list.length > 0 && <spa>{list.length}</spa>}
+            <span> BENEFICIARIES</span>
             <MdPeopleAlt />
            </div>
           </div>
