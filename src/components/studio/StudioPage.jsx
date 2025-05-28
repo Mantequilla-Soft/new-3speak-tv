@@ -1,9 +1,6 @@
 import  { useEffect, useState } from "react";
 import axios from "axios";
-// import * as tus from "tus-js-client";
 import "./StudioPage.scss"
-// import ReactQuill from 'react-quill';
-// import 'react-quill/dist/quill.snow.css';
 import { SiComma } from "react-icons/si";
 import Communitie_modal from "../modal/Communitie_modal";
 import Beneficiary_modal from "../modal/Beneficiary_modal"
@@ -142,9 +139,9 @@ function StudioPage() {
       });
 
       console.log("Details submitted successfully:", response.data);
-      updateProcessing(response.data.permlink)
-      toast.success("Video uploaded successfully!")
-      navigate("/")
+      updateProcessing(response.data.permlink, response.data.title)
+      toast.success("Video uploaded & Processing");
+      navigate("/profile")
     } catch (error) {
       console.error("Failed to submit details:", error);
       toast.error("Failed uploading video details.")
