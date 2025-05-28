@@ -123,7 +123,7 @@ function ProfilePage() {
       </div>
       <div className="toggle-wrap">
         <div className="wrap">
-          <span>Videos</span>
+          <span className="vn">Videos</span>
           <Link to="/draft">Edit Video</Link>
           <span onClick={() => handleWalletNavigate(user)}>Wallet</span>
         </div>
