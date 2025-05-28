@@ -4,6 +4,7 @@ import "./DraftStudio.scss"
 import FilterBar from '../Draft/FilterBar';
 import VideoCard from '../Draft/VideoCard';
 import { useNavigate } from 'react-router-dom';
+import BarLoader from '../Loader/BarLoader';
 
 
 
@@ -53,7 +54,7 @@ const DraftStudio = () => {
     navigate(`/editvideo/${video._id}`, {state: {video}})
   }
 
-  if (loading) return <div>Loading...</div>;
+  if (loading) return <div><BarLoader /></div>;
 
   return (
     <div>

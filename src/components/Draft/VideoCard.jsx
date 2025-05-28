@@ -8,6 +8,8 @@ const VideoCard = ({  video, onEdit, onView, onDelete, onPublish}) => {
     navigate(`/watch?v=${video?.owner}/${video.permlink ?? "unknown"}`)
   }
 
+  console.log(video)
+
   return (
     <div className="video-card">
       <div className="thumbnail">

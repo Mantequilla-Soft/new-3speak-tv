@@ -1,6 +1,6 @@
 import { useQuery } from "@apollo/client";
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { GET_SOCIAL_FEED_BY_CREATOR } from "../graphql/queries";
 import { useAppStore } from "../lib/store";
 import "./ProfilePage.scss";
@@ -17,7 +17,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import { FaVideo } from 'react-icons/fa';
 
 function ProfilePage() {
-  const { user, isProcessing, updateProcessing, authenticated } = useAppStore();
+  const { user, isProcessing, title : processTitle, updateProcessing, authenticated } = useAppStore();
   const [follower, setFollower] = useState(null);
   const [processing, setProcessing] = useState(false);
   const [intervalId, setIntervalId] = useState(null);
@@ -92,7 +92,7 @@ function ProfilePage() {
     }
   } else {
     setProcessing(false);
-    updateProcessing(null);
+    updateProcessing(null, "");
     if (intervalId) {
       clearInterval(intervalId);
       setIntervalId(null);
@@ -109,6 +109,8 @@ function ProfilePage() {
     }
   };
 
+  console.log("Processing video:",isProcessing , processTitle);
+
   return (
     <div className="profile-page-container">
       <ToastContainer />
@@ -122,6 +124,7 @@ function ProfilePage() {
       <div className="toggle-wrap">
         <div className="wrap">
           <span>Videos</span>
+          <Link to="/draft">Edit Video</Link>
           <span onClick={() => handleWalletNavigate(user)}>Wallet</span>
         </div>
 
@@ -164,6 +167,11 @@ function ProfilePage() {
                   <span className="subtitle">
                     Please wait, it will appear shortly.
                   </span>
+                  
+                  <div className="wrap">
+                    <span>Title: </span>
+                    <p>{processTitle}</p>
+                  </div>
                 </div>
               </div>
             )}

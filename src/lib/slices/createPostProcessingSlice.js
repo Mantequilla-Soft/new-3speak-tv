@@ -3,9 +3,12 @@
 export const createPostProcessingSlice = (set) => ({
 
     isProcessing : null,
+    title: "",
 
-    updateProcessing:(permlink)=>{
-        set({isProcessing: permlink})
+    updateProcessing:(permlink, title)=>{
+        set({isProcessing: permlink,
+            title:title
+        })
     }
     
 })
