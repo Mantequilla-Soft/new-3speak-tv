@@ -3,7 +3,7 @@ import { renderPostBody } from "@ecency/render-helper";
 import { getUersContent } from "../../utils/hiveUtils";
 import "./BlogContent.scss";
 
-const BlogContent = ({ author, permlink }) => {
+const BlogContent = ({ author, permlink, description }) => {
   const [content, setContent] = useState("");
   const [renderedContent, setRenderedContent] = useState("");
 
@@ -34,16 +34,18 @@ const BlogContent = ({ author, permlink }) => {
 
   useEffect(() => {
     async function fetchContent() {
-      const postContent = await getPostDescription(author, permlink);
-      if (postContent) {
-        setContent(postContent);
-      } else {
-        setContent("No content available");
+      if (description) {
+        // Use provided description (upload preview)
+        setContent(description);
+      } else if (author && permlink) {
+        // Fallback: fetch from Hive
+        const postContent = await getPostDescription(author, permlink);
+        setContent(postContent || "No content available");
       }
     }
 
     fetchContent();
-  }, [author, permlink]);
+  }, [author, permlink, description]);
 
   useEffect(() => {
     if (content) {

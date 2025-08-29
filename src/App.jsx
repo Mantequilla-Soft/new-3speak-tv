@@ -36,6 +36,9 @@ import TestingLogin3 from "./page/Login/TestingLogin3";
 // import TestingLogin from "./page/Login/TestingLogin";
 import AboutPage from "./components/LandingPage/AboutPage";
 import { Toaster } from 'sonner'
+import Thumbnail from "./components/studio2/Thumbnail";
+import Details from "./components/studio2/Details";
+import Preview from "./components/studio2/Preview";
 
 function App() {
   const { initializeAuth, authenticated } = useAppStore();
@@ -86,6 +89,9 @@ function App() {
             {/* <Route path="/keychain" element={<KeyChainLogin />} /> */}
             <Route path="/newlogin" element={<LoginNew />} />
             <Route path="/studio" element={<StudioPage />} />
+            <Route path="/studio/thumbnail" element={<Thumbnail />} />
+            <Route path="/studio/details" element={<Details />} />
+            <Route path="/studio/preview" element={<Preview />} />
             <Route path="/studio2" element={<StudioPage2 />} />
             <Route path="/draft" element={<DraftStudio />} />
             <Route path="/editvideo/:d" element={<EditVideo />} />

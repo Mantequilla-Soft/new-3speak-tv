@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import "./Communitie_modal.scss";
 
 function CommunitieModal({ isOpen, data, close, setCommunity }) {
+  console.log( data , setCommunity)
   const [searchQuery, setSearchQuery] = useState(""); // State for search input
   const [visibleCommunities, setVisibleCommunities] = useState([]);
 

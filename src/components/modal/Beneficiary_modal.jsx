@@ -166,7 +166,7 @@ function Beneficiary_modal({ isOpen, close, setBeneficiaries, setBeneficiaryList
                 onChange={(e) => setPercent(parseFloat(e.target.value))}
               />
               <span>%</span>
-              <button onClick={handleBeneficairy}>+</button>
+              <button onClick={handleBeneficairy} className='green'>+</button>
             </div>
           </div>
 

@@ -327,24 +327,13 @@ const handleProfileNavigate = (user) => {
     setShowTooltip((prev)=> !prev)
   };
 
-
-
-
-   
-
-
-    
-
-
-
-
   return (
     <>
     <div className="play-video">
       <div className="top-container">
 {videoUrlSelected ? (
     <JWPlayer
-      library="https://cdn.jwplayer.com/libraries/HT7Dts3H.js" // Updated library
+      library={`https://cdn.jwplayer.com/libraries/${import.meta.env.VITE_JWPLAYER_LICENSE_ID}.js `} // Updated library
       licenseKey={import.meta.env.VITE_JWPLAYER_LICENSE_KEY} // Verify key validity
       playlist={[
         {

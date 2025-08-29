@@ -2,28 +2,31 @@ import React, { useState } from 'react'
 import "./Preview.scss"
 import axios from 'axios';
 import {  toast } from 'sonner'
-import { useNavigate } from 'react-router-dom';
+import { Navigate, useNavigate } from "react-router-dom";
 import { useAppStore } from '../../lib/store';
 import { TailChase } from 'ldrs/react'
 import 'ldrs/react/TailChase.css'
 import VideoPreview from '../studio/VideoPreview';
-function Preview({ title, description, tagsPreview, videoId, prevVideoFile, community,declineRewards, rewardPowerup, beneficiaries, tagsInputValue, thumbnailFile, sanitizedDescription }) {
+import { useUpload } from '../../context/UploadContext';
+import { StepProgress } from './StepProgress';
+import BlogContent from '../playVideo/BlogContent';
+function Preview() {
+ const  { step, title, description, tagsPreview, videoId, prevVideoFile, community,declineRewards, rewardPowerup, beneficiaries, tagsInputValue, thumbnailFile, resetUploadState } = useUpload()
   const studioEndPoint = "https://studio.3speak.tv";
   const {updateProcessing, } = useAppStore()
   const [loading, setLoading] = useState(false)
   const username = localStorage.getItem("user_id");
   const accessToken = localStorage.getItem("access_token");
-    const navigate = useNavigate();
   const client = axios.create({});
+  const navigate = useNavigate()
+
+  if (!description || !title || !videoId) {
+    return <Navigate to="/studio" replace />;
+  }
+
   
 
   const handleSubmitDetails = async () => {
-    console.log(beneficiaries)
-    console.log(title)
-    console.log(tagsInputValue)
-    console.log(community)
-    console.log(thumbnailFile)
-
     if (!title || !description || !tagsInputValue || !community || !thumbnailFile ) {
       toast.error("Please fill in all fields, upload a thumbnail, and upload a video!");
       return;
@@ -57,6 +60,7 @@ function Preview({ title, description, tagsPreview, videoId, prevVideoFile, comm
       updateProcessing(response.data.permlink, response.data.title, username)
       toast.success("Video uploaded & Processing");
       navigate("/profile")
+      setTimeout(() => resetUploadState(), 100) // clear after redirect
     } catch (error) {
       console.error("Failed to submit details:", error);
       toast.error("Failed uploading video details.")
@@ -64,7 +68,19 @@ function Preview({ title, description, tagsPreview, videoId, prevVideoFile, comm
     }
   };
     return (
-        <div className="preview-container">
+
+
+
+<>
+    <div className="studio-main-container">
+      <div className="studio-page-header">
+        <h1>Upload Video</h1>
+        <p>Follow the steps below to upload and publish your video</p>
+      </div>
+      <StepProgress step={step} />
+      <div className="studio-page-content">
+
+                <div className="preview-container">
   <div className="preview">
     <h3>Preview</h3>
 
@@ -75,15 +91,16 @@ function Preview({ title, description, tagsPreview, videoId, prevVideoFile, comm
       </div>
     )}
 
-    {sanitizedDescription && (
+    
       <div className="preview-section">
         <label className="preview-label">Description</label>
-        <div
+        {/* <div
           className="preview-description"
           dangerouslySetInnerHTML={{ __html: sanitizedDescription }}
-        />
+        /> */}
+        <BlogContent description={description} />
       </div>
-    )}
+    
 
     {videoId && (
       <div className="preview-section">
@@ -132,6 +149,14 @@ function Preview({ title, description, tagsPreview, videoId, prevVideoFile, comm
     </button>
   </div>
 </div>
+
+
+
+        </div>
+    </div>
+          
+
+      </>
 
   )
 }
