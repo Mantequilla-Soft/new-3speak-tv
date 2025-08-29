@@ -1,29 +1,19 @@
-import React, { useRef, useState } from 'react'
+import React, { useRef } from 'react'
 import { Upload, Video } from "lucide-react";
 import "./VideoUploadStep1.scss"
 import {generateVideoThumbnails} from "@rajesh896/video-thumbnails-generator";
 import * as tus from "tus-js-client";
 import {  toast } from 'sonner'
 import Arrow from "./../../../public/images/arrow.png"
-function VideoUploadStep1({ setVideoDuration, setUploadURL, videoFile,  setVideoFile,setPrevVideoUrl, setPrevVideoFile, setGeneratedThumbnail, setStep,setUploadVideoProgress, uploadURLRef , thumbnailFile, setThumbnailFile }) {
-    const studioEndPoint = "https://studio.3speak.tv";
+import { useUpload } from '../../context/UploadContext';
+import { useNavigate } from 'react-router-dom';
+function VideoUploadStep1() {
+ const  { setVideoDuration, setUploadURL, videoFile,  setVideoFile,setPrevVideoUrl, setPrevVideoFile, setGeneratedThumbnail,setUploadVideoProgress, uploadURLRef } = useUpload()
   const tusEndPoint = "https://uploads.3speak.tv/files/";
-
-  
- 
-  
-  const [uploadProgress, setUploadProgress] = useState(0);
-  const [thumbnailProgress, setThumbnailProgress] = useState(0); // State for thumbnail progress
-  const [error, setError] = useState("")
-  const [loading, setLoading] = useState(false)
-  // const [selectedVideo, setSelectedVideo] = useState()
+  const navigate = useNavigate()
 
 
   const videoInputRef = useRef(null);
-
-  // const handleVideoDivClick = () => {
-  //   videoInputRef.current.click();
-  // };
 
   const calculateVideoDuration = (file) => {
     return new Promise((resolve) => {
@@ -69,7 +59,6 @@ function VideoUploadStep1({ setVideoDuration, setUploadURL, videoFile,  setVideo
       },
       onProgress: (bytesUploaded, bytesTotal) => {
         const percentage = Number(((bytesUploaded / bytesTotal) * 100).toFixed(2));
-        setUploadProgress(percentage);
         setUploadVideoProgress(percentage)
       },
       onSuccess: () => {
@@ -85,11 +74,13 @@ function VideoUploadStep1({ setVideoDuration, setUploadURL, videoFile,  setVideo
   };
 
   const uploadVideo = ()=>{
+    console.log("Testing")
     if(!videoFile){
       toast.error("Please select a video file first.")
       return;
     }
-    setStep(2)
+    navigate("/studio/thumbnail")
+    // setStep(2)
   }
   return (
     <div><div className="upload-step">
@@ -97,9 +88,6 @@ function VideoUploadStep1({ setVideoDuration, setUploadURL, videoFile,  setVideo
         <h2 className="title">Upload Your Video</h2>
         <p className="subtitle">Select a video file to get started</p>
       </div> */}
-
-    
-      
 
       <div className="content">
         <div className="file-upload">
@@ -131,7 +119,7 @@ function VideoUploadStep1({ setVideoDuration, setUploadURL, videoFile,  setVideo
 
             <input
               type="file"
-              // accept="video/*"
+              accept="video/*"
             ref={videoInputRef}
               onChange={handleFileUpload}
               className="input"
