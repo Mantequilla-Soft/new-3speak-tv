@@ -333,7 +333,8 @@ const handleProfileNavigate = (user) => {
       <div className="top-container">
 {videoUrlSelected ? (
     <JWPlayer
-      library={`https://cdn.jwplayer.com/libraries/${import.meta.env.VITE_JWPLAYER_LICENSE_ID}.js `} // Updated library
+      // library={`https://cdn.jwplayer.com/libraries/${import.meta.env.VITE_JWPLAYER_LICENSE_ID}.js `} // Updated library
+      library={`https://cdn.jwplayer.com/libraries/j7Kz0Rae.js `}
       licenseKey={import.meta.env.VITE_JWPLAYER_LICENSE_KEY} // Verify key validity
       playlist={[
         {
