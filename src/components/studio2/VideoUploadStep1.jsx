@@ -76,7 +76,7 @@ function VideoUploadStep1() {
     // console.log(banned.canUpload)
   const uploadVideo = ()=>{
 
-    if (!isBanned) {
+    if (isBanned) {
       toast.error("user have been banned");
       return;
     }
