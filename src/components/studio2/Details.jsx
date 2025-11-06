@@ -195,7 +195,7 @@ function Details() {
        <div className="progressbar-container">
         <div className="content-wrap">
           <div className="wrap">
-            <div className="wrap-top"><h3>Video encoding</h3> <div>{uploadVideoProgress}%</div></div>
+            <div className="wrap-top"><h3>Fetching Video </h3> <div>{uploadVideoProgress}%</div></div>
             { uploadVideoProgress > 0 &&<div className="progress-bars">
             <div className="progress-bar-fill" style={{ width: `${uploadVideoProgress}%` }}>
               {/* {uploadVideoProgress > 0 && <span className="progress-bar-text">{uploadVideoProgress}%</span>} */}

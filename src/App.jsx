@@ -46,6 +46,8 @@ import Test from "./page/Test";
 
 
 import { jwtDecode } from "jwt-decode";
+import AuthCallback from "./page/Login/AuthCallback";
+import NotFound from "./page/NotFound";
 
 function App() {
   const { initializeAuth, authenticated, LogOut } = useAppStore();
@@ -124,8 +126,8 @@ function App() {
             <Route path="/trend" element={<Trend />} />
             <Route path="/new" element={<NewVideos />} />
             <Route path="/login" element={<KeyChainLogin />} />
-            {/* <Route path="/auth/callback" element={<AuthCallback />} />
-            <Route path="/email" element={<Email/>} /> */}
+             <Route path="/auth/callback" element={<AuthCallback />} />
+            {/* <Route path="/email" element={<Email/>} />  */}
             <Route path="/newlogin" element={<LoginNew />} />
             <Route path="/studio" element={<StudioPage />} />
             <Route path="/studio/thumbnail" element={<Thumbnail />} />
@@ -146,6 +148,7 @@ function App() {
             <Route path="/p/:user" element={<UserProfilePage />} />
             <Route path="/wallet/:user" element={<Wallet />} />
             <Route path="/test" element={<Test />} />
+            <Route path="*" element={<NotFound />} />
           </Routes>
         </div>
         <ProfileNav isVisible={profileNavVisible} onclose={toggleProfileNav} toggleAddAccount={toggleAddAccount} />

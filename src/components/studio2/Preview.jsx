@@ -11,7 +11,7 @@ import { useUpload } from '../../context/UploadContext';
 import { StepProgress } from './StepProgress';
 import BlogContent from '../playVideo/BlogContent';
 function Preview() {
- const  { step, title, description, tagsPreview, videoId, prevVideoFile, community,declineRewards, rewardPowerup, beneficiaries, tagsInputValue, thumbnailFile, resetUploadState } = useUpload()
+ const  { step, title, description, tagsPreview, videoId, prevVideoFile, community,declineRewards, rewardPowerup, beneficiaries, tagsInputValue, thumbnailFile, resetUploadState, setJobId } = useUpload()
   const studioEndPoint = "https://studio.3speak.tv";
   const {updateProcessing, } = useAppStore()
   const [loading, setLoading] = useState(false)

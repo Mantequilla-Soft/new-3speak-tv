@@ -195,7 +195,7 @@ function Beneficiary_modal({ isOpen, close, setBeneficiaries, setBeneficiaryList
               <span>spk.beneficiary</span> <span>10% === Infrastructure</span>
             </div>
             <div className="wrap">
-              <span>sagarkothari88</span> <span>1%  === Video Encoding </span>
+               <span> Video Encoding === 1%</span>
             </div>
           </div>
         </div>
