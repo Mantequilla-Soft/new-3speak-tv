@@ -43,11 +43,25 @@ function KeyChainLogin() {
     setAccountList(getAccountlist);
   }, []);
 
-  useEffect(() => {
-  if (window.hive_keychain) {
-    setHasKeychain(true);
-  }
+useEffect(() => {
+  let interval; // ✅ declare variable before use
+
+  const checkKeychain = () => {
+    if (window.hive_keychain) {
+      setHasKeychain(true);
+      clearInterval(interval); // safe to use now
+    }
+  };
+
+  checkKeychain(); // run immediately
+  interval = setInterval(checkKeychain, 500); // assign after declaration
+
+  return () => clearInterval(interval);
 }, []);
+
+
+
+console.log(hasKeychain)
 
   async function logMe() {
     if (!username) {
@@ -273,10 +287,11 @@ const handleSwitchAccount = (user) => {
               <img src={hiveauthImg} alt="HiveAuth" />
               <span>HiveAuth</span>
             </div>
-            {/* <div className="wrap keychain-down" onClick={login3SpeakEmail}>
-              <img src={hiveauthImg} alt="HiveAuth" />
+              {/* <div className="wrap keychain-down" onClick={login3SpeakEmail}>
+              <img src={hiveauthImg} alt="email" />
               <span>Email</span>
             </div> */}
+
 
           </div>
 
