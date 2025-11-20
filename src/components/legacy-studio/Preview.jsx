@@ -11,6 +11,7 @@ import { useLegacyUpload } from "../../context/LegacyUploadContext";
 import VideoUploadStatus from "./VideoUploadStatus";
 import { CheckCircle } from "lucide-react";
 import {  toast } from 'sonner'
+import { UPLOAD_TOKEN } from "../../utils/config";
 
 function Preview() {
   const {
@@ -32,7 +33,7 @@ function Preview() {
 
   const navigate = useNavigate();
 
-  const UPLOAD_TOKEN = "gJTe63FNQ7a";
+
 
   // -----------------------------
   // STATUS UI STATES
@@ -43,6 +44,7 @@ function Preview() {
   const [statusText, setStatusText] = useState("Preparing…");
   const [progress, setProgress] = useState(0);
   const [statusMessages, setStatusMessages] = useState([]);
+  const user = localStorage.getItem("user_id")
 
   const addMessage = (msg, type = "info") => {
     setStatusMessages((prev) => [
@@ -103,18 +105,19 @@ function Preview() {
   owner: localStorage.getItem("user_id"),
   title,
   description,
-  tagsPreview,
+  tags:tagsPreview,
   size: videoFile?.size,
   duration: videoDuration,
   community,
   declineRewards,
-  beneficiaries:finalBeneficiaries
+  beneficiaries:finalBeneficiaries,
+  originalFilename: videoFile.name,
 });
 
       const prepareResp = await axios.post(
         "https://video.3speak.tv/api/upload/prepare",
         {
-          owner: localStorage.getItem("user_id"),
+          owner: user,
           title,
           description,
           tags: tagsPreview,
@@ -123,7 +126,6 @@ function Preview() {
           originalFilename: videoFile.name,
           community,
           declineRewards,
-          beneficiaries
         },
         {
           headers: {

@@ -380,13 +380,7 @@ const handleProfileNavigate = (user) => {
     //     },
     //   }}
     // />
-    <div
-  style={{
-    position: "relative",
-    paddingBottom: "56.25%",
-    height: 0,
-  }}
->
+    <div className="video-iframe-wrapper">
   <iframe
     src={`https://play.3speak.tv/watch?v=${author}/${permlink}&mode=iframe`}
     style={{
