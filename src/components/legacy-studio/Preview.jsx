@@ -33,8 +33,6 @@ function Preview() {
 
   const navigate = useNavigate();
 
-
-
   // -----------------------------
   // STATUS UI STATES
   // -----------------------------

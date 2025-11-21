@@ -33,6 +33,10 @@ const fetchVideos = async ({ pageParam = 0 }) => {
 
 
 function Test() {
+  useEffect(()=>{
+    getData()
+  },[])
+
 const {
     data,
     fetchNextPage,
@@ -72,6 +76,23 @@ const {
 
   // Flatten all pages into one list
   const videos = data?.pages.flat() || [];
+
+
+  const getData= async()=>{
+    // testing function
+    try{
+      const res = await axios.get(`http://144.48.107.2:3005/getjobid/${user}/${permlink}`)
+      console.log(res)
+
+      const ress = await axios.get(`https://encoder-gateway.infra.3speak.tv/api/v0/gateway/jobstatus/${res.data.jobId}`)
+      console.log(ress.data.job.progress.download_pct )
+    }catch (err){
+      console.log(err)
+
+    }
+  }
+
+
 
   return (
     <div>

@@ -1,5 +1,6 @@
 import { Upload, FileText, Info, CheckCircle } from "lucide-react";
 import "./VideoUploadStatus.scss";
+import { useMemo } from "react";
 // import { useEffect, useState } from "react";
 
 
@@ -52,10 +53,38 @@ const VideoUploadStatus = ({progress, statusMessages, uploadVideoTo3Speak}) => {
 //     return () => clearInterval(interval);
 //   }, []);
 
-    // ✅ Get the latest status automatically
-    const latestStatus = statusMessages.length
-        ? statusMessages[statusMessages.length - 1].message
-        : "Starting...";
+console.log("message status", statusMessages)
+
+const successPairs = [
+    { loading: "Preparing upload request…", done: "Prepare completed ✔" },
+    { loading: "Uploading thumbnail…", done: "Thumbnail uploaded ✔" },
+    { loading: "Uploading video…", done: "Video upload finished ✔" },
+    // add more pairs if you have other loading/done messages
+  ];
+
+  // Memoize cleaned messages for performance
+  const cleanedMessages = useMemo(() => {
+    // shallow copy
+    let filtered = [...statusMessages];
+
+    successPairs.forEach(pair => {
+      const hasDone = filtered.some(m => m.message === pair.done);
+      if (hasDone) {
+        filtered = filtered.filter(m => m.message !== pair.loading);
+      }
+    });
+
+    return filtered;
+  }, [statusMessages]);
+
+  // latest status text based on cleaned messages
+  const latestStatus = cleanedMessages.length
+    ? cleanedMessages[cleanedMessages.length - 1].message
+    : "Starting...";
+
+  const hasError = statusMessages.some(m => m.type === "error");
+
+
 
   return (
     <div className="upload-status-container">
@@ -109,21 +138,23 @@ const VideoUploadStatus = ({progress, statusMessages, uploadVideoTo3Speak}) => {
           <span>Activity Log</span>
         </div>
         <div className="activity-log-content">
-          {statusMessages.map((msg, i) => (
-            <div key={i} className={`activity-item ${msg.type}`}>
-              <div className="activity-icon">
-                {msg.type === "info" ? (
-                  <Info size={20} />
-                ) : (
-                  <CheckCircle size={20} />
-                )}
+          {cleanedMessages.map((msg, i) => {
+            const isSuccess = msg.message.includes("✔") || msg.type === "success";
+            const itemClass = isSuccess ? "success" : msg.type === "error" ? "error" : "info";
+
+            return (
+              <div key={i} className={`activity-item ${itemClass}`}>
+                <div className="activity-icon">
+                  {isSuccess ? <CheckCircle size={20} /> : <Info size={20} />}
+                </div>
+                <div className="activity-details">
+                  {/* optional time */}
+                  {/* <span className="activity-time">{msg.time}</span> */}
+                  <p className="activity-message">{msg.message}</p>
+                </div>
               </div>
-              <div className="activity-details">
-                {/* <span className="activity-time">{msg.time}</span> */}
-                <p className="activity-message">{msg.message}</p>
-              </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
 
       </div>
