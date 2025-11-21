@@ -11,7 +11,7 @@ import { useLegacyUpload } from "../../context/LegacyUploadContext";
 import VideoUploadStatus from "./VideoUploadStatus";
 import { CheckCircle } from "lucide-react";
 import {  toast } from 'sonner'
-import { UPLOAD_TOKEN } from "../../utils/config";
+import { UPLOAD_TOKEN , UPLOAD_URL} from "../../utils/config";
 
 function Preview() {
   const {
@@ -115,7 +115,7 @@ function Preview() {
 });
 
       const prepareResp = await axios.post(
-        "https://video.3speak.tv/api/upload/prepare",
+        `${UPLOAD_URL}/api/upload/prepare`,
         {
           owner: user,
           title,
@@ -149,7 +149,7 @@ function Preview() {
       formData.append("thumbnail", thumbnailFile);
 
       await axios.post(
-        `https://video.3speak.tv/api/upload/thumbnail/${video_id}`,
+        `${UPLOAD_URL}/api/upload/thumbnail/${video_id}`,
         formData,
         { headers: { Authorization: `Bearer ${UPLOAD_TOKEN}` } }
       );
@@ -163,7 +163,7 @@ function Preview() {
 
       await new Promise((resolve, reject) => {
         const upload = new tus.Upload(videoFile, {
-          endpoint: "https://video.3speak.tv/files/",
+          endpoint: `${UPLOAD_URL}/files/`,
           retryDelays: [0, 2000, 5000],
           metadata: {
             video_id,
@@ -200,7 +200,7 @@ function Preview() {
       const poll = setInterval(async () => {
         try {
           const statusResp = await axios.get(
-            `https://video.3speak.tv/api/upload/video/${video_id}/status`,
+            `${UPLOAD_URL}/api/upload/video/${video_id}/status`,
             { headers: { Authorization: `Bearer ${UPLOAD_TOKEN}` } }
           );
 
