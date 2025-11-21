@@ -126,6 +126,7 @@ function Preview() {
           originalFilename: videoFile.name,
           community,
           declineRewards,
+          beneficiaries: JSON.stringify(finalBeneficiaries),
         },
         {
           headers: {
@@ -233,7 +234,7 @@ function Preview() {
       }, 5000);
     } catch (err) {
       addMessage("Upload failed: " + err.message, "error");
-      setUploading(false);
+      // setUploading(false);
     }
   };
 
@@ -333,7 +334,7 @@ function Preview() {
       {uploading && (
         <div className="status-container">
 
-          <VideoUploadStatus progress={progress} statusMessages={statusMessages} />
+          <VideoUploadStatus progress={progress} statusMessages={statusMessages} uploadVideoTo3Speak={uploadVideoTo3Speak} />
         </div>
       )}
 

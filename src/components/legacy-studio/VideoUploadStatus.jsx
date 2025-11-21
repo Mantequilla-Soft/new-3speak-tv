@@ -4,7 +4,7 @@ import "./VideoUploadStatus.scss";
 
 
 
-const VideoUploadStatus = ({progress, statusMessages}) => {
+const VideoUploadStatus = ({progress, statusMessages, uploadVideoTo3Speak}) => {
 
 
 //     const [progress, setProgress] = useState(0);
@@ -97,6 +97,12 @@ const VideoUploadStatus = ({progress, statusMessages}) => {
         </div>
       </div>
 
+      {statusMessages.some(msg => msg.type === "error") && (
+      <div className="retry-btn-wrapper">
+        <button onClick={uploadVideoTo3Speak} className="retry-btn">Retry Upload</button>
+      </div>
+      )}
+
       <div className="activity-log">
         <div className="activity-log-header">
           <FileText size={18} />
@@ -119,6 +125,7 @@ const VideoUploadStatus = ({progress, statusMessages}) => {
             </div>
           ))}
         </div>
+
       </div>
     </div>
   );

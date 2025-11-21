@@ -172,6 +172,29 @@
     }
   }
 
+  .retry-btn-wrapper {
+    display: flex;
+    justify-content: center;
+    .retry-btn {
+      padding: 7px 20px;
+      border-radius: 8px;
+      background-color: #c23320;
+      border: none;
+      margin: 7px 0px;
+      color: #fff;
+      animation: bounce 1.2s infinite ease-in-out;
+    }
+  }
+
+  @keyframes bounce {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-6px); // adjust to make bounce higher
+  }
+}
+
   .activity-log {
     .activity-log-header {
       display: flex;
