@@ -1,5 +1,5 @@
 @use "../../mixins.scss" as mix;
-.studio-main-container{
+.studio-main-container {
   min-height: 87vh;
   // background-color: red;
 }
@@ -11,15 +11,15 @@
   h1 {
     margin-bottom: 10px;
     @include mix.respond(phone) {
-    font-size: 24px;
-  }
+      font-size: 24px;
+    }
   }
   p {
     margin-bottom: 20px;
     color: hsl(215.4, 16.3%, 46.9%);
     @include mix.respond(phone) {
-    font-size: 14px;
-  }
+      font-size: 14px;
+    }
   }
 }
 
@@ -29,13 +29,13 @@
   padding: 10px;
   border-radius: 10px;
   margin-bottom: 40px;
-  margin:  0 auto 40px; 
+  margin: 0 auto 40px;
   border-width: 1px;
   border-style: solid;
   border-color: #e5e7eb;
   @include mix.respond(phone) {
-        width: 90%;
-        margin-bottom: 20px;
+    width: 90%;
+    margin-bottom: 20px;
   }
   .content-wrap {
     .wrap {
@@ -48,29 +48,29 @@
         justify-content: space-between;
         align-items: center;
         margin-bottom: 7px;
-         @include mix.respond(phone) {
+        @include mix.respond(phone) {
           font-size: 12px;
         }
-        h3{
+        h3 {
           font-size: 14px;
           font-weight: 500%;
           @include mix.respond(phone) {
-          font-size: 12px;
-        }
+            font-size: 12px;
+          }
         }
       }
-      .wrap-upload{
+      .wrap-upload {
         display: flex;
         gap: 15px;
         align-items: center;
-         @include mix.respond(phone) {
+        @include mix.respond(phone) {
           font-size: 12px;
         }
-        img{
+        img {
           width: 30px;
-           @include mix.respond(phone) {
-          width: 20px;
-        }
+          @include mix.respond(phone) {
+            width: 20px;
+          }
         }
       }
 
@@ -83,7 +83,7 @@
         overflow: hidden; // Ensure content doesn’t spill outside
         margin-bottom: 10px;
         @include mix.respond(phone) {
-        height: 10px;
+          height: 10px;
         }
         // margin: 5px 0;
 
@@ -99,7 +99,6 @@
           font-size: 14px; // Adjust text size
           font-weight: bold;
           border-radius: 10px;
-       
         }
 
         .progress-bar-text {
@@ -177,6 +176,11 @@
         outline: none;
         background-color: #eaecf4;
         border: 1px solid #d1d3e2;
+        @supports (-webkit-touch-callout: none) {
+          font-size: 16px;
+          transform: scale(0.875);
+          transform-origin: left center;
+        }
       }
       .wrap-dec {
         height: 300px;

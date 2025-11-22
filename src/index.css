@@ -44,6 +44,20 @@ img{
   font-size: 15px; /* Adjust size as needed */
 }
 
+
+
+
+input{
+@supports (-webkit-touch-callout: none) {
+  font-size: 16px;
+  transform: scale(0.875);
+  transform-origin: left center;
+}
+}
+
+
+
+
 /* button {
   border-radius: 8px;
   border: 1px solid transparent;
