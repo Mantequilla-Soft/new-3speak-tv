@@ -47,17 +47,6 @@ img{
 
 
 
-input{
-@supports (-webkit-touch-callout: none) {
-  font-size: 30px;
-  transform: scale(0.875);
-  transform-origin: left center;
-  width: 114%; 
-  
-}
-}
-
-
 
 
 /* button {

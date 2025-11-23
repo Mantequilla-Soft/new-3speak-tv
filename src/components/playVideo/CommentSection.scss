@@ -10,6 +10,11 @@
     margin-bottom: 5px;
     color: #5a5a5a;
   }
+  .textarea-box{
+     @include respond(phone) {
+      font-size: 16px;
+    }
+  }
   h4 {
     font-size: 14px;
     color: #5a5a5a;

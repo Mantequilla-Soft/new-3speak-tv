@@ -135,7 +135,6 @@
       height: fit-content;
       flex-direction: column;
       margin-bottom: 10px;
-      width: 100%;
 
       label {
         margin: 0;
@@ -179,14 +178,6 @@
         border: 1px solid #d1d3e2;
         @include mix.respond(phone) {
           font-size: 16px;
-        }
-        @supports (-webkit-touch-callout: none) {
-          input {
-            font-size: 16px !important;
-            transform: scale(0.875);
-            transform-origin: left center;
-            width: 114%; /* Fix the width shrink problem */
-          }
         }
       }
       .wrap-dec {
