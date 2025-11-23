@@ -76,6 +76,7 @@
        border: 1px solid #d1d3e2;
        @include mix.respond(phone) {
         width: 30px;
+        font-size: 16px;
       }
       }
       button {
