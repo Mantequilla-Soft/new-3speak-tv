@@ -1,11 +1,13 @@
-import { Upload, FileText, Info, CheckCircle } from "lucide-react";
+import { Upload, FileText, Info, CheckCircle, ArrowLeft } from "lucide-react";
 import "./VideoUploadStatus.scss";
 import { useMemo } from "react";
 // import { useEffect, useState } from "react";
 
 
 
-const VideoUploadStatus = ({progress, statusMessages, uploadVideoTo3Speak}) => {
+
+
+const VideoUploadStatus = ({progress, statusMessages, uploadVideoTo3Speak, setUploading}) => {
 
 
 //     const [progress, setProgress] = useState(0);
@@ -88,6 +90,9 @@ const successPairs = [
 
   return (
     <div className="upload-status-container">
+      {statusMessages.some(msg => msg.type === "error") && (<button className="btn-close" onClick={()=>setUploading(false)}>
+            <ArrowLeft />
+          </button>)}
       <div className="upload-icon">
         <Upload size={30} strokeWidth={1.5} />
       </div>

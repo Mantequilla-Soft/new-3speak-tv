@@ -56,14 +56,14 @@ function Beneficiary_modal({ isOpen, close, setBeneficiaries, setBeneficiaryList
         return;
       }
     if (percent < 1) return
-    if (percent === "") {
-      setError("Enter a valid number")
-      return;
-    }
-    if (!percent || isNaN(percent)) {
-      setError("Enter a valid reward percent.");
-      return;
-    }
+    // if (percent === "") {
+    //   setError("Enter a valid number")
+    //   return;
+    // }
+    // if (!percent || isNaN(percent)) {
+    //   setError("Enter a valid reward percent.");
+    //   return;
+    // }
 
     setError('');
 

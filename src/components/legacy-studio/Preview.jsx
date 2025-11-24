@@ -332,7 +332,7 @@ function Preview() {
       {uploading && (
         <div className="status-container">
 
-          <VideoUploadStatus progress={progress} statusMessages={statusMessages} uploadVideoTo3Speak={uploadVideoTo3Speak} />
+          <VideoUploadStatus progress={progress} statusMessages={statusMessages} uploadVideoTo3Speak={uploadVideoTo3Speak} setUploading={setUploading} />
         </div>
       )}
 
