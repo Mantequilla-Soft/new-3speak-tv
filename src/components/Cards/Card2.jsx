@@ -8,7 +8,7 @@ import PropTypes from "prop-types";
 import "./Cards.scss";
 import { useAppStore } from '../..//lib/store';
 import { FaCirclePlay } from "react-icons/fa6";
-import img from "../../assets/image/deleted.jpg"
+import img from "../../assets/image/speak.jpg"
 
 dayjs.extend(relativeTime);
 

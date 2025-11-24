@@ -18,6 +18,7 @@ const client = new Client(['https://api.hive.blog']);
 function CommentSection({ videoDetails, author, permlink }) {
   const { user } = useAppStore();
   const [commentInfo, setCommentInfo] = useState('');
+  const [replyText, setReplyText] = useState("");
   const [activeReply, setActiveReply] = useState(null);
   const [replyToComment, setReplyToComment] = useState(null);
   const [commentList, setCommentList] = useState([]);
@@ -111,7 +112,12 @@ function CommentSection({ videoDetails, author, permlink }) {
   };
 
   const handlePostComment = async () => {
-    if (!commentInfo.trim()) return;
+
+    const textToPost = replyToComment ? replyText : commentInfo;
+
+  if (!textToPost.trim()) return;
+
+  // 
 
     // Determine if we're replying to the main post or a comment
     const isReplyingToMainPost = !replyToComment;
@@ -144,7 +150,7 @@ function CommentSection({ videoDetails, author, permlink }) {
       // parent_permlink,
       author: parent_author,
       permlink: isReplyingToMainPost ? permlink : replyToComment.permlink,
-      comment: commentInfo,
+      comment: textToPost,
       
     }
     console.log('Posting comment data:', data);
@@ -157,7 +163,7 @@ try {
       // parent_permlink,
       author: parent_author,
       permlink: isReplyingToMainPost ? permlink : replyToComment.permlink,
-      comment: commentInfo,
+      comment: textToPost,
       
     },
     {
@@ -168,9 +174,10 @@ try {
     }
   );
 
-  console.log('Comment response:', response.data);
+
 
   if (response.data.success) {
+    toast.success('Comment Successful!')
     const newComment = {
       author: {
         username: user,
@@ -182,7 +189,7 @@ try {
       },
       permlink: new_permlink,
       created_at: new Date().toISOString(),
-      body: commentInfo,
+      body: textToPost,
       stats: {
         num_likes: 0,
         num_dislikes: 0,
@@ -214,6 +221,7 @@ try {
     }
 
     setCommentInfo('');
+    setReplyText('')
     setActiveReply(null);
     setReplyToComment(null);
   } else {
@@ -299,6 +307,8 @@ try {
           setActiveReply={setActiveReply}
           setReplyToComment={setReplyToComment}
           setCommentInfo={setCommentInfo}
+          setReplyText={setReplyText}
+          replyText={replyText}
           commentInfo={commentInfo}
           handlePostComment={handlePostComment}
           depth={0}
@@ -332,6 +342,8 @@ function Comment({
   setReplyToComment,
   processedBody,
   setCommentInfo,
+  setReplyText,
+  replyText,
   commentInfo,
   handlePostComment,
   depth,
@@ -380,6 +392,8 @@ function Comment({
             <span
               className="main-reply"
               onClick={() => {
+                setCommentInfo("");
+                setReplyText("")
                 setActiveReply(comment.permlink);
                 setReplyToComment(comment);
               }}
@@ -412,11 +426,11 @@ function Comment({
           <textarea
             placeholder="Write your reply here..."
             className="textarea-box sub"
-            value={commentInfo}
-            onChange={(e) => setCommentInfo(e.target.value)}
+            value={replyText}
+            onChange={(e) => setReplyText(e.target.value)}
           />
           <div className="btn-wrap">
-            <button onClick={() => setActiveReply(null)}>Cancel</button>
+            <button onClick={() => {setReplyText(""); setActiveReply(null)} }>Cancel</button>
             <button onClick={handlePostComment}>Comment</button>
           </div>
         </div>
@@ -434,6 +448,7 @@ function Comment({
               setActiveReply={setActiveReply}
               setReplyToComment={setReplyToComment}
               setCommentInfo={setCommentInfo}
+              setReplyText={setReplyText}
               commentInfo={commentInfo}
               handlePostComment={handlePostComment}
               depth={depth + 1}

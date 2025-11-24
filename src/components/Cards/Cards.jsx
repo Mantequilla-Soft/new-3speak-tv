@@ -8,7 +8,7 @@ import "./Cards.scss";
 import { useAppStore } from "../../lib/store";
 import { useEffect, useState } from "react";
 import UpvoteTooltip from "../tooltip/UpvoteTooltip";
-import img from "../../assets/image/deleted.jpg";
+import img from "../../assets/image/speak.jpg";
 import CardVoteTooltip from "../tooltip/CardVoteTooltip";
 import { estimate, getVotePower } from "../../utils/hiveUtils";
 

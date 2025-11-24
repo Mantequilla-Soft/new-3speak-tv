@@ -9,7 +9,7 @@ import { useAppStore } from "../../lib/store";
 import { useEffect, useState } from "react";
 import CardVoteTooltip from "../tooltip/CardVoteTooltip";
 // import LazyPayout from "../LazyPayout"; // ✅ Add LazyPayout
-import img from "../../assets/image/deleted.jpg";
+import img from "../../assets/image/speak.jpg";
 import { estimate, getVotePower } from "../../utils/hiveUtils";
 import LazyPayout from "../../page/LazyPayout";
 import { fixVideoThumbnail } from "../../utils/fixThumbnails";
