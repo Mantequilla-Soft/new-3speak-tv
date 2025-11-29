@@ -61,6 +61,8 @@ function Nav({ setSideBar, toggleProfileNav }) {
 
 
 
+
+
   return (
     <nav className="nav-container">
       <div className="nav-left flex-dev">
@@ -73,10 +75,19 @@ function Nav({ setSideBar, toggleProfileNav }) {
         <Link to="/"><img className="logo" src={logo} alt="" /></Link>
       </div>
       <div className="nav-middle flex-dev">
-        <div className="search-box" ref={searchBoxRef}>
-          <input onFocus={() => setIsDropdownOpen(true)} value={searchTerm} type="text" placeholder="Search users or communities..." onChange={(e)=> setSearchTerm(e.target.value.toLowerCase()) } />
-          <CiSearch className="search-icon" />
+        <div className="search-wrapper" >
+          <span className="search-icon" ref={searchBoxRef}>
+            <svg xmlns="http://www.w3.org/2000/svg" className="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+              <circle cx="11" cy="11" r="7"></circle>
+              <path d="m16 16 4 4"></path>
+            </svg>
+          </span>
+          <input onFocus={() => setIsDropdownOpen(true)} value={searchTerm} onChange={(e)=> setSearchTerm(e.target.value.toLowerCase()) } type="search" placeholder="Search users or communities..." className="search-input" />
         </div>
+
+
+
+
         <SearchList searchTerm={searchTerm} setSearchTerm={setSearchTerm} searchBoxRef={searchBoxRef} isDropdownOpen={isDropdownOpen} setIsDropdownOpen={setIsDropdownOpen} />
       </div>
       <div className={nav ? "side-nav" : "side-nav-else"} ref={sideNavRef}>

@@ -13,18 +13,18 @@
   .user-wrap{
     display: flex;
     align-items: center;
-    justify-content: space-around;
+    justify-content: space-between;
     background-color: #eaecf4;
        border: 1px solid #d1d3e2;
-       padding: 10px 0px;
-       border-radius: 0px 0px 6px 6px;
+       padding: 10px 6px;
+       border-radius:  6px;
 
   }
   
   .reward-main {
     display: flex;
     align-items: center;
-    justify-content: space-around;
+    justify-content: space-between;
     width: 100%;
     height: 35px;
     margin-top: 5px;
@@ -38,17 +38,20 @@
       gap: 3px;
       margin-top: 7px;
       height: 100%;
+      padding: 0px 4px;
+      background-color: #eaecf4;
+        border: 1px solid #d1d3e2;
+        border-radius: 6px;
       input {
         width: 200px;
         height: 100%;
         border: none;
         outline: none;
-        border-radius: 6px;
+        
         background-color: #eaecf4;
-        border: 1px solid #d1d3e2;
         padding: 1px 4px;
         @include mix.respond(phone) {
-          width: 100px;
+          width: 150px;
           font-size: 16px;
         }
       }
@@ -101,9 +104,9 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      background-color: #ccc;
-      border-bottom: 1px solid grey;
-      padding: 6px 4px;
+      background-color: rgba(214, 93, 56, 0.144);
+      border-bottom: 1px solid rgb(243 244 246 );
+      padding: 10px 6px;
       border-radius: 7px;
       margin-bottom: 5px;
       span {
@@ -151,7 +154,8 @@
   }
   .default-bene-wrap{
     margin-top: 10px;
-    border: 1px solid grey;
+    border: 1px solid rgba(128, 128, 128, 0.308);
+    background-color: rgba(214, 93, 56, 0.082);
     border-radius: 4px;
     padding: 5px;
     p{
@@ -173,6 +177,12 @@
     text-align: center;
     font-size: 14.25px;
     color: black;
+    font-weight: 400;
+    margin: 10px 0px;
+        @include mix.respond(phone) {
+      font-size: 12.25px;
+      margin: 6px 0px;
+    }
   }
 .error{
     color: red;

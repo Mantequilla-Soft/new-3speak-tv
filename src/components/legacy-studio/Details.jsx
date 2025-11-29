@@ -1,15 +1,11 @@
 import React, { useEffect,  } from 'react'
-import DOMPurify from 'dompurify';
 import {  toast } from 'sonner'
 import { StepProgress } from './StepProgress';
-import { LineSpinner } from 'ldrs/react';
 import TextEditor from '../studio/TextEditor';
 import { IoIosArrowDropdownCircle } from 'react-icons/io';
 import { MdPeopleAlt } from 'react-icons/md';
 import Communitie_modal from "../modal/Communitie_modal";
 import Beneficiary_modal from '../modal/Beneficiary_modal';
-import VideoPreview from '../studio/VideoPreview';
-import BlogContent from '../playVideo/BlogContent';
 import { Navigate } from 'react-router-dom';
 import { useLegacyUpload } from '../../context/LegacyUploadContext';
 
@@ -23,7 +19,6 @@ function Details() {
         SetDeclineRewards,
         setRewardPowerup,
         communitiesData, 
-        prevVideoFile, 
         navigate,
         BeneficiaryList, setBeneficiaryList,
         list, setList,
@@ -35,18 +30,14 @@ function Details() {
       } = useLegacyUpload();
 
 
-
-
-  if (!selectedThumbnail) {
-    return <Navigate to="/studio" replace />;
-  }
-
-
   useEffect(() => {
     setStep(3)
   }, [])
 
 
+  if (!selectedThumbnail) {
+    return <Navigate to="/studio" replace />;
+  }
 
     const closeCommunityModal = () => {
         setIsOpen(false);
@@ -73,7 +64,6 @@ function Details() {
         }
     }
 
-    // const sanitizedDescription = DOMPurify.sanitize(description);
 
 
     const process = () => {
@@ -85,8 +75,6 @@ function Details() {
         setStep(4)
 
     }
-
-
 
   return (
     <>
@@ -129,11 +117,13 @@ function Details() {
     ))}</span>}
         </div>
         </div>
-
+        <div className="community-box-wrap">
         <div className="community-wrap" onClick={openCommunityModal}>
-            {community ? <span>{community === "hive-181335" ? "Select Community" : <div className="wrap"><img src={`https://images.hive.blog/u/${community.name}/avatar`} alt="" /><span></span>{community.title}</div> }</span> : <span> Select Community </span> }
+            {community ? <span>{community === "hive-181335" ? <div className="wrap"><img src={`https://images.hive.blog/u/hive-181335/avatar`} alt="" /><span></span>Threespeak</div> : <div className="wrap"><img src={`https://images.hive.blog/u/${community.name}/avatar`} alt="" /><span></span>{community.title}</div> }</span> : <span> Select Community </span> }
             <IoIosArrowDropdownCircle size={16} />
-          </div> 
+          </div>  
+          <span>Select Community </span>
+          </div>
 
         <div className="advance-option">
           <div className="beneficiary-wrap mb">

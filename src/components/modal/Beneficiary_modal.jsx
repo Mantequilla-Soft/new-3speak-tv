@@ -151,11 +151,22 @@ function Beneficiary_modal({ isOpen, close, setBeneficiaries, setBeneficiaryList
         {error && <span className="error">{error}</span>}
 
         <div className="bene-content-wrap">
-          <div className="list-top-wrap">
-            <span>Username</span> <span>Reward</span>
-          </div>
           <div className="user-wrap">
             <span>{user}</span> <span>{remaingPercent}%</span>
+          </div>
+
+          {/* Render the beneficiary list */}
+          <div className="beneficiary-list">
+            {list.map((item, index) => (
+              <div className="wrap" key={index}>
+                <span>@{item.account}</span>
+                <span>{item.percent}%</span>
+                <MdDeleteForever
+                  className="delete-icon"
+                  onClick={() => handleDelete(index)}
+                />
+              </div>
+            ))}
           </div>
 
           <div className="reward-main">
@@ -164,18 +175,18 @@ function Beneficiary_modal({ isOpen, close, setBeneficiaries, setBeneficiaryList
               <input
                 type="text"
                 value={account}
+                placeholder='Enter username'
                 onChange={(e) => setAccount(e.target.value.toLowerCase())}
               />
             </div>
             <div className="num-wrap">
-              <label>Reward</label>
-
               <div className="input-tooltip-wrap">
                 <input
                   type="number"
                   value={percent}
                   min="1"
                   step="1"
+                  palaceholder="Enter usernmae"
                   onChange={(e) => {
                     const value = parseFloat(e.target.value);
 
@@ -202,7 +213,7 @@ function Beneficiary_modal({ isOpen, close, setBeneficiaries, setBeneficiaryList
 
           </div>
 
-          {/* Render the beneficiary list */}
+          {/* Render the beneficiary list
           <div className="beneficiary-list">
             {list.map((item, index) => (
               <div className="wrap" key={index}>
@@ -214,7 +225,7 @@ function Beneficiary_modal({ isOpen, close, setBeneficiaries, setBeneficiaryList
                 />
               </div>
             ))}
-          </div>
+          </div> */}
 
           <div className="last-btn-wrap">
             {/* <button onClick={close}>Cancel</button> */}

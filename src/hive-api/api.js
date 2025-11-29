@@ -1,5 +1,6 @@
 // import { keychainBroadcast, addAccountTokeychain } from "../helpers/keychain";
 import { Client, PrivateKey } from "@hiveio/dhive";
+import axios from "axios";
  const SERVERS = [
     // "https://rpc.ecency.com",
     "https://api.deathwing.me",
@@ -13,6 +14,20 @@ const client = new Client(SERVERS, {
   });
   const bridgeApiCall = (endpoint, params) =>
     client.call("bridge", endpoint, params);
+
+
+
+
+  // Hive Bridge API helper
+  export const hiveBridgeCall = async (method, params = {}) => {
+    const { data } = await axios.post("https://api.hive.blog", {
+      jsonrpc: "2.0",
+      id: 1,
+      method: "bridge." + method,
+      params,
+    });
+    return data.result;
+  };
 
 
 

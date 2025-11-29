@@ -382,7 +382,8 @@ const handleProfileNavigate = (user) => {
     // />
     <div className="video-iframe-wrapper">
   <iframe
-    src={`https://play.3speak.tv/watch?v=${author}/${permlink}&mode=iframe`}
+    // src={`https://play.3speak.tv/watch?v=${author}/${permlink}&mode=iframe`}
+    src={`https://play.3speak.tv/watch?v=${author}/${permlink}&layout=desktop&mode=iframe`}
     style={{
       position: "absolute",
       top: 0,

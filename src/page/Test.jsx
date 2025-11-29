@@ -1,114 +1,96 @@
+import { useState, useMemo } from "react";
+import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
-import React, { useEffect } from "react";
-import { useInfiniteQuery } from "@tanstack/react-query";
-import Card3 from "../components/Cards/Card3";
-import CardSkeleton from "../components/Cards/CardSkeleton";
+import "./Test.scss";
+import { hiveBridgeCall } from "../hive-api/api";
 
-// const fetchVideos = async ({ pageParam = 1 }) => {
-//   const res = await axios.get(
-//     // `https://3speak.tv/apiv2/feeds/@kesolink?page=${pageParam}`
-//     // `https://3speak.tv/apiv2/feeds/community/hive-140169/new?page=${pageParam}`
-//     `https://3speak.tv/apiv2/feeds/trending/more?skip=${pageParam}`
-//   );
-//   return res.data;
+// // Hive Bridge API helper
+// const hiveBridgeCall = async (method, params = {}) => {
+//   const { data } = await axios.post("https://api.hive.blog", {
+//     jsonrpc: "2.0",
+//     id: 1,
+//     method: "bridge." + method,
+//     params,
+//   });
+//   return data.result;
 // };
 
-const fetchVideos = async ({ pageParam = 0 }) => {
-  let user = `eddiespino`
-  let url;
-
-  // On first load, use /feeds/trending
-  if (pageParam === 0) {
-    url = `https://3speak.tv/apiv2/feeds/@${user}?page=${pageParam}`;
-  } 
-  // On later loads, use /feeds/trending/more with skip
-  else {
-    url = `https://3speak.tv/apiv2/feeds/@${user}/more?page=${pageParam}`;
-  }
-
-  const res = await axios.get(url);
-  // Notice: trending returns an array, while /more returns { trends: [...] }
-  return res.data.trends || res.data;
+// Debounce hook
+const useDebounce = (value, delay = 300) => {
+  const [debounced, setDebounced] = useState(value);
+  useMemo(() => {
+    const handler = setTimeout(() => setDebounced(value), delay);
+    return () => clearTimeout(handler);
+  }, [value, delay, value]);
+  return debounced;
 };
 
+// Main component
+export default function Test({ activeUser, onSelect }) {
+  const [query, setQuery] = useState("");
+  const debouncedQuery = useDebounce(query, 300);
 
-function Test() {
-  useEffect(()=>{
-    getData()
-  },[])
-
-const {
-    data,
-    fetchNextPage,
-    hasNextPage,
-    isFetchingNextPage,
-    isLoading,
-    isError,
-  } = useInfiniteQuery({
-    queryKey: ["trendingVideos"],
-    queryFn: fetchVideos,
-    getNextPageParam: (lastPage, allPages) => {
-      // If lastPage returned data, calculate new skip
-      const currentTotal = allPages.flat().length;
-      if (lastPage && lastPage.length > 0) return currentTotal;
-      return undefined; // Stop when no more data
-    },
+  // Search communities
+  const { data: communities = [], isLoading } = useQuery({
+    queryKey: ["search-communities", debouncedQuery],
+    enabled: debouncedQuery.trim() !== "",
+    queryFn: () =>
+      hiveBridgeCall("list_communities", {
+        last: "",
+        limit: 20,
+        sort: "rank",
+        query: debouncedQuery.trim() || null,
+        observer: activeUser?.username || "",
+      }),
   });
 
-  console.log(data)
-
- // Infinite scroll effect
-  useEffect(() => {
-    const handleScroll = () => {
-      if (
-        window.innerHeight + window.scrollY >=
-          document.body.offsetHeight - 200 &&
-        !isFetchingNextPage &&
-        hasNextPage
-      ) {
-        fetchNextPage();
-      }
-    };
-
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, [isFetchingNextPage, hasNextPage, fetchNextPage]);
-
-  // Flatten all pages into one list
-  const videos = data?.pages.flat() || [];
+  const handleSelect = (community) => {
+    onSelect?.(community);
+  };
 
 
-  const getData= async()=>{
-    // testing function
-    try{
-      const res = await axios.get(`http://144.48.107.2:3005/getjobid/${user}/${permlink}`)
-      console.log(res)
-
-      const ress = await axios.get(`https://encoder-gateway.infra.3speak.tv/api/v0/gateway/jobstatus/${res.data.jobId}`)
-      console.log(ress.data.job.progress.download_pct )
-    }catch (err){
-      console.log(err)
-
-    }
-  }
-
-
+  console.log(communities)
 
   return (
-    <div>
-      {isLoading ? <CardSkeleton /> :  <Card3 videos={videos} loading={isFetchingNextPage} />}
-      {isError && <p>Error fetching videos</p>}
+    <div className="hive-community-selector">
+      <input
+        type="text"
+        className="hive-community-input"
+        placeholder="Search Hive communities..."
+        value={query}
+        onChange={(e) => setQuery(e.target.value)}
+      />
 
-      
+      {isLoading && <div className="hive-loading">Searching...</div>}
 
-      {isFetchingNextPage && (
-        <p style={{ textAlign: "center" }}>Loading more...</p>
+      {!isLoading && debouncedQuery && communities.length === 0 && (
+        <div className="hive-no-results">No communities found.</div>
       )}
-      {/* {!hasNextPage && (
-        <p style={{ textAlign: "center" }}>No more videos</p>
-      )} */}
+
+      <div className="hive-community-list">
+        {communities.map((c) => (
+          <button
+            key={c.name}
+            className="hive-community-item"
+            onClick={() => handleSelect(c)}
+          >
+            {c.icon && (
+              <img
+                src={c.icon}
+                alt={c.name}
+                className="hive-community-icon"
+              />
+            )}
+            <div className="hive-community-info">
+              <div className="hive-community-name">hive-{c.name}</div>
+              <div className="hive-community-title">{c.title}</div>
+            </div>
+            {c.community_type && (
+              <span className="hive-community-type">{c.community_type}</span>
+            )}
+          </button>
+        ))}
+      </div>
     </div>
   );
 }
-
-export default Test;
