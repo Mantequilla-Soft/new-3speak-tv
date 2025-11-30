@@ -279,14 +279,15 @@ const handleSwitchAccount = (user) => {
           />
 
           <div className="wrap-btn">
+              <div className="wrap keychain-down" onClick={handleLoginWithHiveAuth}>
+              <img src={hiveauthImg} alt="HiveAuth" />
+              <span>HiveAuth</span>
+            </div>
             {hasKeychain &&<div className="wrap keychain-down" onClick={logMe}>
               <img src={keychainImg} alt="keychain" />
               <span>Keychain</span>
             </div>}
-            <div className="wrap keychain-down" onClick={handleLoginWithHiveAuth}>
-              <img src={hiveauthImg} alt="HiveAuth" />
-              <span>HiveAuth</span>
-            </div>
+
               {/* <div className="wrap keychain-down" onClick={login3SpeakEmail}>
               <img src={hiveauthImg} alt="email" />
               <span>Email</span>

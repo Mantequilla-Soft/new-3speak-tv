@@ -39,7 +39,7 @@ animation: fadeZoom 0.2s ease forwards;
     overflow-y: hidden !important;
     @include mix.respond(phone) {
       max-width: 100%;
-      height: 50vh;
+      height: 53vh;
       border-radius: 1.3rem 1.3rem 0 0;
       animation: slideUp .3s ease forwards;
     }
