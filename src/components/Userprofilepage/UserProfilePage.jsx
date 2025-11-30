@@ -12,6 +12,9 @@ import 'ldrs/react/Quantum.css'
 import { useInfiniteQuery } from '@tanstack/react-query';
 import axios from 'axios';
 import Card3 from '../Cards/Card3';
+import { IoMdShare } from 'react-icons/io';
+import { IoLogoRss } from 'react-icons/io5';
+import Follower from './Follower';
 
 
 
@@ -19,6 +22,7 @@ function UserProfilePage() {
     const { user } = useParams();
     const navigate = useNavigate()
     const [follower, setFollower] = useState(null)
+    const [show, setShow] = useState("video");
       // GET_TOTAL_COUNT_OF_FOLLOWING
       // const { username } = useParams();
       useEffect(()=>{
@@ -104,26 +108,85 @@ const {
     console.log(data)
   return (
     <div className="profile-page-container">
-      <div className="com-profile-img-wrap">
-        {/* <img src={`https://media.3speak.tv/user/${id}/cover.png`} alt="" /> */}
-        <img src={`https://images.hive.blog/u/${user}/cover`} alt="" />
-        <div className="wrap">
-          <img src={`https://images.hive.blog/u/${user}/avatar`} alt="" />
-          <span>{user}</span>
+      <div className="profile-card">
+        <div className="profile-header">
+          <img className="gradient-bg" src={`https://images.hive.blog/u/${user}/cover`} alt="" />
         </div>
-      </div>
+      <div className="profile-body">
+          <div className="top-section">
+            <div className="left-info">
+              <div className="avatar">
+                <img
+                  src={`https://images.hive.blog/u/${user}/avatar`}
+                  alt="Profile avatar"
+                />
+              </div>
+              <div className="user-meta">
+                <h2>{user}</h2>
+                <div className="user-badges">
+                  <span className="status-dot">
+                    <span className="dot"></span>Verified creator
+                  </span>
+                </div>
+              </div>
+            </div>
+      
+            <div className="button-group">
+              <button className="btn btn-primary" onClick={() => setShow("follower")}>
+                Followers{" "}
+                  {follower?.follower_count !== undefined ? (
+                    follower.follower_count
+                  ) : (
+                    <Quantum size="15" speed="1.75" color="red" />
+                  )}
+              </button>
+              <button className="btn btn-secondary" onClick={() => window.open(`https://3speak.tv/rss/${user}.xml`, "_blank")}>
+                <IoLogoRss />
+              </button>
+                    <button
+                      className="btn btn-secondary"
+                      onClick={() => {
+                        if (navigator.share) {
+                          navigator.share({
+                            title: `${user}`,
+                            text: `Follow ${user} on 3Speak`,
+                            url: `https://3speak.tv/user/${user}`,
+                          });
+                        } else {
+                          window.open(`https://3speak.tv/user/${user}`, "_blank");
+                        }
+                      }}
+                    >
+                      <IoMdShare />
+                    </button>
+      
+            </div>
+          </div>
+        </div>
+        </div>
       <div className="toggle-wrap">
         <div className="wrap">
-          <span>Videos</span> 
-          {/* <Link to="/wallet"><span onClick={()=>{handleWalletNavigate(user)}}>wallet</span></Link> */}
-          <span onClick={()=>{handleWalletNavigate(user)}}>wallet</span> 
+          <span onClick={() => setShow("video")}>Videos</span> 
         </div>
-        <span className="followers"> Followers{" "} {follower?.follower_count !== undefined ? ( follower.follower_count ) : (<Quantum size="15" speed="1.75" color="red" />  )}</span>
+        <span className="followers" onClick={()=>{handleWalletNavigate(user)}}>wallet</span> 
       </div>
       <div className="container-video">
-        {isLoading ? (<BarLoader/>) : videos?.length === 0 ? ( <div className='empty-wrap'>  <img src={icon} alt="" /><span>No Video Data Available</span></div>) : (<Card3 videos={videos} loading={isFetchingNextPage} />
-        ) }
+  {show === "video" ? (
+    isLoading ? (
+      <BarLoader />
+    ) : videos?.length === 0 ? (
+      <div className='empty-wrap'>
+        <img src={icon} alt="" />
+        <span>No Video Data Available</span>
       </div>
+    ) : (
+      <Card3 videos={videos} loading={isFetchingNextPage} />
+    )
+  ) : (
+    <Follower count={follower} />
+  )}
+</div>
+
     </div>
   )
 }

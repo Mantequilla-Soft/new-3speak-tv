@@ -48,6 +48,7 @@ import Test from "./page/Test";
 import { jwtDecode } from "jwt-decode";
 import AuthCallback from "./page/Login/AuthCallback";
 import NotFound from "./page/NotFound";
+import ProfileModal from "./components/modal/ProfileModal";
 
 function App() {
   const { initializeAuth, authenticated, LogOut } = useAppStore();
@@ -147,7 +148,7 @@ function App() {
             <Route path="/profile" element={<ProfilePage />} />
             <Route path="/p/:user" element={<UserProfilePage />} />
             <Route path="/wallet/:user" element={<Wallet />} />
-            <Route path="/test" element={<Test />} />
+            <Route path="/test" element={<ProfileModal />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </div>

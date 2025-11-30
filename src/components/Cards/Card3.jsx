@@ -13,6 +13,7 @@ import img from "../../assets/image/speak.jpg";
 import { estimate, getVotePower } from "../../utils/hiveUtils";
 import LazyPayout from "../../page/LazyPayout";
 import { fixVideoThumbnail } from "../../utils/fixThumbnails";
+import ProfileModal from "../modal/ProfileModal";
 
 dayjs.extend(relativeTime);
 
@@ -22,6 +23,11 @@ function Card3({ videos = [], loading = false, error = null }) {
   const [voteValue, setVoteValue] = useState(0.0);
   const [activeTooltipIndex, setActiveTooltipIndex] = useState(null);
   const [votersNum, setVotersNum] = useState({});
+  const [hoverUser, setHoverUser] = useState(null);
+  const [hoverTimeout, setHoverTimeout] = useState(null);
+  const [hoverPos, setHoverPos] = useState({ x: 0, y: 0 });
+  const [modalUser, setModalUser] = useState(null);
+
   const [selectedPost, setSelectedPost] = useState({
     username: "",
     permlink: "",
@@ -59,9 +65,7 @@ function Card3({ videos = [], loading = false, error = null }) {
     setActiveTooltipIndex((prev) => (prev === index ? null : index));
   };
 
-  const handleProfileNavigation = (username) => {
-    navigate(`/p/${username}`);
-  };
+
   
  
   return (
@@ -116,7 +120,7 @@ function Card3({ videos = [], loading = false, error = null }) {
                   }/avatar`}
                   alt=""
                 />
-                <h2
+                {/* <h2
                   onClick={(e) => {
                     e.preventDefault();
                     e.stopPropagation();
@@ -124,7 +128,18 @@ function Card3({ videos = [], loading = false, error = null }) {
                   }}
                 >
                   {video.author?.username || video.author || video.owner}
+                </h2> */}
+
+                <h2
+                  onClick={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    setModalUser(video.author?.username || video.author || video.owner);
+                  }}
+                >
+                  {video.author?.username || video.author || video.owner}
                 </h2>
+
               </div>
             </div>
 
@@ -174,6 +189,12 @@ function Card3({ videos = [], loading = false, error = null }) {
           </Link>
         );
       })}
+      {modalUser && (
+        <ProfileModal
+          username={modalUser}
+          onClose={() => setModalUser(null)}
+        />
+      )}
     </div>
   );
 }

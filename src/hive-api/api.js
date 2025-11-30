@@ -29,6 +29,10 @@ const client = new Client(SERVERS, {
     return data.result;
   };
 
+  export const getHiveUserProfile = async (username) => {
+  return await hiveBridgeCall("get_profile", { account: username });
+};
+
 
 
   export const getCommunity = async (name, observer = "") => {
@@ -50,6 +54,25 @@ const client = new Client(SERVERS, {
           return null;
     }
   }
+
+
+
+export const getRelationshipBetweenAccounts = async (follower , following) => {
+  console.log(following, follower )
+  try {
+    const relation = await client.call(
+      "bridge",
+      "get_relationship_between_accounts",
+      [follower, following]
+    );
+    console.log(relation)
+    return relation;
+  } catch (error) {
+    console.error(error);
+    return null;
+  }
+};
+
 
 //   export async function getFollowCount(username) {
 //   try {

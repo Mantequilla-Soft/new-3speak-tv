@@ -6,20 +6,18 @@ import Sidebar from "../Sidebar/Sidebar";
 import { Link, NavLink } from "react-router-dom";
 import { useAppStore } from "../../lib/store";
 import { useGetMyQuery } from "../../hooks/getUserDetails";
-import { IoIosNotifications } from "react-icons/io";
 import { AiOutlineClose} from "react-icons/ai";
 import { IoCloudUploadSharp } from "react-icons/io5";
 import { MdOutlineDashboard, MdOutlineDynamicFeed, MdOutlineLeaderboard } from "react-icons/md";
 import { FaFire, FaRegSmile } from "react-icons/fa";
 import { LuNewspaper } from "react-icons/lu";
-import { HiInformationCircle } from "react-icons/hi";
-import { PiUserSwitchBold } from "react-icons/pi";
-import { RiProfileLine } from "react-icons/ri";
 import apple_icon from "../../assets/image/app-store.png"
 import play_store from "../../assets/image/playstore.png"
 import { useEffect, useRef, useState } from "react";
 import SearchList from "./SearchList";
 import SearchList_Sm from "./SearchList_Sm";
+import { TiThMenu } from "react-icons/ti";
+
 function Nav({ setSideBar, toggleProfileNav }) {
   const { authenticated, LogOut, user } = useAppStore();
   const [nav, setNav] = useState(false)
@@ -66,12 +64,12 @@ function Nav({ setSideBar, toggleProfileNav }) {
   return (
     <nav className="nav-container">
       <div className="nav-left flex-dev">
-        <GiToggles size={25} className="menu-icon" onClick={() => setSideBar((prev) => (prev === false ? true : false))}/>
+        <TiThMenu size={25} className="menu-icon" onClick={() => setSideBar((prev) => (prev === false ? true : false))}/>
         <Link to="/"><img className="logo" src={logo} alt="" /></Link>
       </div>
       
       <div className="phone-nav-left" ref={menuIconRef} >
-        <GiToggles size={25} className="menu-icon" onClick={handleNav} />
+        <TiThMenu size={25} className="menu-icon" onClick={handleNav} />
         <Link to="/"><img className="logo" src={logo} alt="" /></Link>
       </div>
       <div className="nav-middle flex-dev">
