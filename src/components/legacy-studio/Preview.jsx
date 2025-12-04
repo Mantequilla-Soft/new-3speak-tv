@@ -12,6 +12,7 @@ import VideoUploadStatus from "./VideoUploadStatus";
 import { CheckCircle } from "lucide-react";
 import {  toast } from 'sonner'
 import { UPLOAD_TOKEN , UPLOAD_URL} from "../../utils/config";
+import EditorPreview from "../Editor/EditorPreview";
 
 function Preview() {
   const {
@@ -270,7 +271,8 @@ function Preview() {
           className="preview-description"
           dangerouslySetInnerHTML={{ __html: sanitizedDescription }}
         /> */}
-        <BlogContent description={description} />
+        {/* <BlogContent description={description} /> */}
+        <EditorPreview content={description} />
       </div>
     
 

@@ -1,0 +1,64 @@
+// EditorWithPreview.scss
+
+.editor-with-preview {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+  padding: 24px;
+  min-height: 100vh;
+  background: #f5f7fa;
+
+  .editor-section,
+  .preview-section {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .editor-section h2 {
+    margin: 0;
+    font-size: 24px;
+    font-weight: 700;
+    color: #333;
+  }
+
+  .preview-section {
+    position: sticky;
+    top: 24px;
+    height: fit-content;
+    max-height: calc(100vh - 48px);
+  }
+}
+
+.preview-content{
+    p{
+        font-size: 14px;
+    }
+}
+
+.preview-content ul,
+.preview-content ol {
+  margin: 0;
+  padding-left: 15px;
+}
+
+@media (max-width: 1024px) {
+  .editor-with-preview {
+    grid-template-columns: 1fr;
+    
+    .preview-section {
+      position: relative;
+      top: 0;
+      max-height: none;
+    }
+  }
+}
+
+.preview-content img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+  margin: 12px 0;
+  border-radius: 6px;
+  object-fit: contain;
+}

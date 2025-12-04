@@ -1,0 +1,251 @@
+@use "../../mixins.scss" as *;
+.editor-wrapper {
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  background: white;
+  position: relative; /* ensure absolute elements inside are positioned relative to wrapper */
+}
+
+.editor-toolbar {
+  display: flex;
+  gap: 25px;
+  border-bottom: 1px solid #ccc;
+  padding: 6px;
+  background: #f6f6f6;
+  align-items: center;
+  position: relative;
+    @include respond(phone) {
+      padding-left: 0px;
+      gap: 15px;
+      padding: 6px 8px;
+      font-size: 15px;
+    }
+
+  button {
+    font-size: 14px;
+    cursor: pointer;
+    border: none;
+    border-radius: 4px;
+    background: white;
+
+
+    &.active {
+      background: #d1e3ff;
+      border-color: #609bff;
+      padding: 5px;
+    }
+
+    &:hover {
+      background: #eee;
+    }
+  }
+}
+    .wrap-in-btn{
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      color: black;
+      font-size: 16px;
+    }
+
+
+.heading-dropdown {
+  position: relative;
+
+  .heading-btn {
+    cursor: pointer;
+    border: none;
+    background: white;
+    padding: 5px 10px;
+    border-radius: 4px;
+
+    &:hover {
+      background: #eee;
+    }
+  }
+
+  .dropdown-menu {
+    display: flex;
+    flex-direction: column;
+
+    button.active {
+      background: #d1e3ff;
+    }
+
+    button:hover {
+      background: #f0f0f0;
+    }
+  }
+}
+
+
+.editor-content {
+  position: relative;
+  min-height: 150px;
+  padding: 10px;
+  font-size: 15px;
+  line-height: 1.5;
+  height:400px;
+  outline: none;
+  border: none;
+  box-shadow: none;
+
+  strong {
+    font-weight: bold;
+  }
+
+  .ProseMirror {
+    height: 100%;           /* fixed height */
+    overflow-y: auto;       /* scroll if content exceeds height */
+    // padding: 12px;          /* inner padding */
+    box-sizing: border-box; /* include padding in height */
+    outline: none;          /* remove focus outline */
+  }
+}
+
+.editor-content img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+  margin: 12px 0;
+  border-radius: 6px;
+  object-fit: contain;
+}
+
+.editor-content ul,
+.editor-content ol {
+  margin: 0;
+  padding-left: 15px;
+}
+
+
+.mention-tag {
+  background: #eef2ff;
+  padding: 3px 6px;
+  border-radius: 5px;
+  font-weight: bold;
+  color: #0047b2;
+}
+
+
+
+.emoji-container {
+  position: absolute;
+  top: 50px;
+  // left: 5px;
+  z-index: 9999;
+
+    //   @include respond(phone) {
+      
+    // }
+}
+// .em-emoji-picker{
+// position: absolute;
+// }
+
+em-emoji-picker {
+  position: absolute !important;
+  top: 40px !important;
+  left: 10px!important;
+  z-index: 2000 !important;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  background: white;
+  width: 250px;
+  height: 300px;
+    //     @include respond(phone) {
+    //   right: 10px !important;
+    // }
+//     @media (max-width: 600px) {
+
+//     right: 20px !important;
+  
+// }
+
+
+
+}
+
+@media (max-width: 768px) {
+  em-emoji-picker,
+  .em-emoji-picker {
+    left: auto !important;            /* IMPORTANT: clear left so right can take effect */
+    right: 20px !important;           /* desired mobile position */
+    top: 40px !important;             /* re-assert top in case other rules differ */
+  }
+}
+
+/* 📱 Mobile Screen */
+// @media (max-width: 600px) {
+//   em-emoji-picker {
+//     right: 20px !important;
+//   }
+// }
+
+.emoji-wrapper {
+  position: absolute;
+  top: 40px;
+  left: 10px;
+  z-index: 2000;
+  width: 100%;
+          @include respond(phone) {
+      right: 10px !important;
+    }
+}
+
+.em-emoji-picker {
+  --em-picker-height: 100px;
+  --em-picker-width: 300px;
+}
+
+.upload-overlay {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: rgba(255,255,255,0.75);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  font-weight: bold;
+}
+
+
+
+.format-dropdown {
+  position: relative;
+
+  .format-btn {
+    cursor: pointer;
+    border: none;
+    background: white;
+    padding: 5px 10px;
+    border-radius: 4px;
+    font-weight: bold;
+
+    &:hover {
+      background: #eee;
+    }
+  }
+
+  .dropdown-menu {
+    display: flex;
+    flex-direction: column;
+
+    button {
+      background: white;
+      border: none;
+      padding: 7px 12px;
+      text-align: left;
+      cursor: pointer;
+
+      &.active {
+        background: #d1e3ff;
+      }
+
+      &:hover {
+        background: #f0f0f0;
+      }
+    }
+  }
+}

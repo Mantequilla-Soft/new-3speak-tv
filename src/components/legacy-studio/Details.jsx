@@ -8,6 +8,9 @@ import Communitie_modal from "../modal/Communitie_modal";
 import Beneficiary_modal from '../modal/Beneficiary_modal';
 import { Navigate } from 'react-router-dom';
 import { useLegacyUpload } from '../../context/LegacyUploadContext';
+// import BlogContent from "../playVideo/BlogContent";
+import TiptapEditor from '../Editor/TiptapEditor';
+// import EditorPreview from '../playVideo/EditorPreview';
 
 function Details() {
     const {
@@ -97,7 +100,8 @@ function Details() {
           <label htmlFor="">Description</label>
           <div className="wrap-dec">
           {/* <ReactQuill theme="snow" value={description} onChange={setDescription}  style={{ height: "90%", }} /> */}
-          <TextEditor description={description} setDescription={setDescription} style={{ height: "80%", }} />
+          {/* <TextEditor description={description} setDescription={setDescription} style={{ height: "80%", }} /> */}
+          <TiptapEditor value={description} onChange={setDescription} />
           </div>
         </div>
 
@@ -157,6 +161,7 @@ function Details() {
         </div>
 
         </div>
+        {/* <EditorPreview content={description} /> */}
         {/* <div className="Preview">
         <h3>Preview</h3>
 

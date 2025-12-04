@@ -49,6 +49,7 @@ import { jwtDecode } from "jwt-decode";
 import AuthCallback from "./page/Login/AuthCallback";
 import NotFound from "./page/NotFound";
 import ProfileModal from "./components/modal/ProfileModal";
+import HiveImageUploader from "./page/HiveImageUploader";
 
 function App() {
   const { initializeAuth, authenticated, LogOut } = useAppStore();
@@ -149,6 +150,7 @@ function App() {
             <Route path="/p/:user" element={<UserProfilePage />} />
             <Route path="/wallet/:user" element={<Wallet />} />
             <Route path="/test" element={<ProfileModal />} />
+            <Route path="/image" element={<HiveImageUploader />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </div>

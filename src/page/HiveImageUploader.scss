@@ -1,0 +1,349 @@
+// HiveImageUploader.scss
+
+.hive-image-uploader {
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  padding: 20px;
+
+  .uploader-container {
+    background: white;
+    border-radius: 16px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    padding: 40px;
+    max-width: 600px;
+    width: 100%;
+
+    h2 {
+      margin: 0 0 30px 0;
+      font-size: 28px;
+      color: #333;
+      text-align: center;
+      font-weight: 700;
+    }
+  }
+
+  // Credentials Section
+  .credentials-section {
+    margin-bottom: 30px;
+
+    .input-group {
+      margin-bottom: 20px;
+
+      label {
+        display: block;
+        margin-bottom: 8px;
+        font-weight: 600;
+        color: #555;
+        font-size: 14px;
+      }
+
+      input {
+        width: 100%;
+        padding: 12px 16px;
+        border: 2px solid #e0e0e0;
+        border-radius: 8px;
+        font-size: 14px;
+        transition: all 0.3s ease;
+
+        &:focus {
+          outline: none;
+          border-color: #667eea;
+          box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        &::placeholder {
+          color: #999;
+        }
+      }
+
+      .warning {
+        display: block;
+        margin-top: 6px;
+        color: #ff6b6b;
+        font-size: 12px;
+        font-weight: 500;
+      }
+    }
+  }
+
+  // Upload Section
+  .upload-section {
+    margin-bottom: 24px;
+
+    .drop-zone {
+      border: 3px dashed #d0d0d0;
+      border-radius: 12px;
+      padding: 40px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      background: #fafafa;
+      position: relative;
+      overflow: hidden;
+
+      &:hover {
+        border-color: #667eea;
+        background: #f5f7ff;
+      }
+
+      &.has-image {
+        padding: 0;
+        border: none;
+        background: transparent;
+      }
+
+      .drop-zone-content {
+        .upload-icon {
+          width: 64px;
+          height: 64px;
+          margin: 0 auto 16px;
+          color: #667eea;
+        }
+
+        p {
+          margin: 0 0 8px 0;
+          font-size: 18px;
+          font-weight: 600;
+          color: #333;
+        }
+
+        span {
+          font-size: 14px;
+          color: #999;
+        }
+      }
+
+      .preview-image {
+        width: 100%;
+        max-height: 400px;
+        object-fit: contain;
+        border-radius: 8px;
+      }
+    }
+
+    .file-input {
+      display: none;
+    }
+
+    .file-info {
+      margin-top: 16px;
+      padding: 12px 16px;
+      background: #f5f7ff;
+      border-radius: 8px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+
+      .file-name {
+        margin: 0;
+        font-weight: 600;
+        color: #333;
+        font-size: 14px;
+        flex: 1;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+
+      .file-size {
+        margin: 0;
+        color: #777;
+        font-size: 13px;
+        margin-left: 12px;
+      }
+    }
+  }
+
+  // Error Message
+  .error-message {
+    background: #fee;
+    border: 1px solid #fcc;
+    color: #c33;
+    padding: 12px 16px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 14px;
+
+    span {
+      font-size: 16px;
+    }
+  }
+
+  // Button Group
+  .button-group {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 24px;
+
+    .btn {
+      flex: 1;
+      padding: 14px 24px;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+
+      &:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+      }
+
+      &.btn-primary {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+
+        &:hover:not(:disabled) {
+          transform: translateY(-2px);
+          box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        &:active:not(:disabled) {
+          transform: translateY(0);
+        }
+      }
+
+      &.btn-secondary {
+        background: #f0f0f0;
+        color: #666;
+
+        &:hover {
+          background: #e0e0e0;
+        }
+      }
+
+      .spinner {
+        width: 16px;
+        height: 16px;
+        border: 2px solid rgba(255, 255, 255, 0.3);
+        border-top-color: white;
+        border-radius: 50%;
+        animation: spin 0.8s linear infinite;
+      }
+    }
+  }
+
+  // Success Section
+  .success-section {
+    .success-message {
+      background: #e8f5e9;
+      border: 1px solid #c8e6c9;
+      color: #2e7d32;
+      padding: 12px 16px;
+      border-radius: 8px;
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 14px;
+      font-weight: 600;
+
+      span {
+        font-size: 16px;
+      }
+    }
+
+    .url-display {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 20px;
+
+      .url-input {
+        flex: 1;
+        padding: 12px 16px;
+        border: 2px solid #e0e0e0;
+        border-radius: 8px;
+        font-size: 13px;
+        font-family: monospace;
+        background: #f9f9f9;
+      }
+
+      .btn-copy {
+        padding: 12px 20px;
+        background: #667eea;
+        color: white;
+        border: none;
+        border-radius: 8px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+
+        &:hover {
+          background: #5568d3;
+        }
+      }
+    }
+
+    .uploaded-preview {
+      border-radius: 8px;
+      overflow: hidden;
+      border: 1px solid #e0e0e0;
+
+      img {
+        width: 100%;
+        display: block;
+        max-height: 400px;
+        object-fit: contain;
+        background: #f5f5f5;
+      }
+    }
+  }
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+// Responsive Design
+@media (max-width: 768px) {
+  .hive-image-uploader {
+    padding: 12px;
+
+    .uploader-container {
+      padding: 24px;
+
+      h2 {
+        font-size: 24px;
+      }
+    }
+
+    .upload-section .drop-zone {
+      padding: 30px 20px;
+
+      .drop-zone-content .upload-icon {
+        width: 48px;
+        height: 48px;
+      }
+    }
+
+    .button-group {
+      flex-direction: column;
+
+      .btn {
+        width: 100%;
+      }
+    }
+
+    .success-section .url-display {
+      flex-direction: column;
+
+      .btn-copy {
+        width: 100%;
+      }
+    }
+  }
+}

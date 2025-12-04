@@ -124,6 +124,7 @@
   background-color: #fff;
   @include mix.respond(phone) {
     flex-direction: column;
+    padding: 8px;
   }
   .video-items {
     width: 50%;
@@ -178,7 +179,7 @@
         border: 1px solid #d1d3e2;
       }
       .wrap-dec {
-        height: 300px;
+        // height: 300px;
         margin-bottom: 3px;
       }
       .wrap {
