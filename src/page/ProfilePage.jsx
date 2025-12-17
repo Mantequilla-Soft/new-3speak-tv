@@ -66,6 +66,7 @@ function ProfilePage() {
     // stop polling when done
     if (json.data.count === 0 && pollingRef.current) {
       clearInterval(pollingRef.current);
+      refetch();
       pollingRef.current = null;
     }
   } catch (err) {
@@ -123,6 +124,7 @@ function ProfilePage() {
     hasNextPage,
     isFetchingNextPage,
     isLoading,
+    refetch,
   } = useInfiniteQuery({
     queryKey: ["ProfilePage", user],
     queryFn: fetchVideos,
