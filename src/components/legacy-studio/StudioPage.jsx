@@ -7,7 +7,6 @@ import axios from "axios";
 import { has3SpeakPostAuth } from "../../utils/hiveUtils";
 import 'ldrs/react/LineSpinner.css'
 import { useLegacyUpload} from "../../context/LegacyUploadContext";
-import BackgroundJobModal from "../modal/BackgroundJobModal";
 
 function StudioPage() {
 
@@ -35,34 +34,12 @@ function StudioPage() {
     setUploadStatus,
     setError,
     uploadURLRef,
-    hasBackgroundJob
   } = useLegacyUpload();
-
-
-    const getBanInfo = async ()=>{
-    const res = await axios.get(`https://check-api.3speak.tv/check/${username}`)
-    console.log(res.data)
-    setBanned(res.data.canUpload)
-  }
-
-    const  checkPostAuth= async(username)=>{
-        if(!authenticated){
-          return
-        }
-        const hasAuth = await has3SpeakPostAuth(username);
-        if (!hasAuth) {
-          setIsOpenAuth(true);
-        }
-      }
-
-  
 
   useEffect(()=>{
     setStep(1)
     getBanInfo()
   }, [])
-
-  
 
 
     useEffect(() => {
@@ -102,18 +79,26 @@ function StudioPage() {
     setIsOpenAuth( (prev)=> !prev)
   }
 
-  
-
   useEffect(()=>{
     checkPostAuth(user);
   },[])
 
-  if (hasBackgroundJob) {
-    return <BackgroundJobModal />;
+
+  const getBanInfo = async ()=>{
+    const res = await axios.get(`https://check-api.3speak.tv/check/${username}`)
+    console.log(res.data)
+    setBanned(res.data.canUpload)
   }
 
-
-
+    const  checkPostAuth= async(username)=>{
+        if(!authenticated){
+          return
+        }
+        const hasAuth = await has3SpeakPostAuth(username);
+        if (!hasAuth) {
+          setIsOpenAuth(true);
+        }
+      }
 
       const updateVideoInfo = async (thumbnailFile) => {
           console.log("Upload URL:", uploadURL);

@@ -1,118 +1,68 @@
-import React, { useEffect, useRef, useState } from "react";
+import { useQuery } from "@apollo/client";
+import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { useInfiniteQuery } from "@tanstack/react-query";
-import axios from "axios";
-import { toast } from "sonner";
-
+import { GET_SOCIAL_FEED_BY_CREATOR } from "../graphql/queries";
 import { useAppStore } from "../lib/store";
+import "./ProfilePage.scss";
+import Cards from "../components/Cards/Cards";
 import { getFollowers } from "../hive-api/api";
-
-import Card3 from "../components/Cards/Card3";
-import Follower from "../components/Userprofilepage/Follower";
+import { Quantum } from "ldrs/react";
+import "ldrs/react/Quantum.css";
 import BarLoader from "../components/Loader/BarLoader";
-
+import icon from "../../public/images/stack.png";
+import { Leapfrog } from "ldrs/react";
+import "ldrs/react/Leapfrog.css";
+import { toast } from "sonner";
 import { FaVideo } from "react-icons/fa";
 import { IoLogoRss } from "react-icons/io5";
 import { IoMdShare } from "react-icons/io";
-
-import { LineSpinner, Quantum } from "ldrs/react";
-import "ldrs/react/Quantum.css";
-
-import icon from "../../public/images/stack.png";
-import { UPLOAD_TOKEN, UPLOAD_URL } from "../utils/config";
-import "./ProfilePage.scss";
-import { useLegacyUpload } from "../context/LegacyUploadContext";
+import Follower from "../components/Userprofilepage/Follower";
+import axios from "axios";
+import { useInfiniteQuery } from "@tanstack/react-query";
+import Card3 from "../components/Cards/Card3";
 
 function ProfilePage() {
-
-  const  {uploadVideoProgress, uploadStatus, hasBackgroundJob} = useLegacyUpload();
-  const { user, authenticated } = useAppStore();
-  const navigate = useNavigate();
+  const {
+    user,
+    isProcessing,
+    title: processTitle,
+    processUser,
+    updateProcessing,
+    authenticated,
+  } = useAppStore();
 
   const [follower, setFollower] = useState(null);
+  const [processing, setProcessing] = useState(false);
+  const [intervalId, setIntervalId] = useState(null);
   const [show, setShow] = useState("video");
-
-  /* ===============================
-     IN-PROGRESS UPLOAD STATE
-  =============================== */
-  const [inProgress, setInProgress] = useState(null);
-  const pollingRef = useRef(null);
-
-  /* ===============================
-     FETCH IN-PROGRESS UPLOADS
-  =============================== */
-  const fetchInProgressUploads = async () => {
-  if (!user) return;
-
-  try {
-    const res = await axios.get(
-      `${UPLOAD_URL}/api/upload/in-progress`,
-      {
-        headers: {
-          "X-Hive-Username": user,
-        },
-      }
-    );
-
-    const json = res.data;
+  const [uploadStatus, setUploadStatus] = useState("");
+  const [jobId, setJobId] = useState("");
+  const username = localStorage.getItem("user_id");
+  const navigate = useNavigate();
 
 
-    console.log(json)
+  // const isProcessing = "sdojdfnsnof"
 
-    if (!json.success) return;
-
-    setInProgress(json.data);
-
-    // stop polling when done
-    if (json.data.count === 0 && pollingRef.current) {
-      clearInterval(pollingRef.current);
-      pollingRef.current = null;
-    }
-  } catch (err) {
-    console.error(
-      "In-progress fetch error:",
-      err.response?.data || err.message
-    );
-  }
-};
-
-
-  /* ===============================
-     START POLLING ON LOAD
-  =============================== */
   useEffect(() => {
-    fetchInProgressUploads();
-
-    pollingRef.current = setInterval(() => {
-      fetchInProgressUploads();
-    }, 5000);
-
+    getFollowersCount(user);
     return () => {
-      if (pollingRef.current) {
-        clearInterval(pollingRef.current);
-      }
+      if (intervalId) clearInterval(intervalId);
     };
-  }, [user]);
+  }, []);
 
-  /* ===============================
-     FOLLOWERS
-  =============================== */
-  useEffect(() => {
-    if (!user) return;
-    getFollowers(user)
-      .then(setFollower)
-      .catch(console.error);
-  }, [user]);
+  // useEffect(()=>{
+  //   getUploadStatus("8f622a56-6e46-4c20-bf87-cec0c45f066c")
+  // },[])
 
-  /* ===============================
-     VIDEO FEED (INFINITE SCROLL)
-  =============================== */
+  const LIMIT = 100;
+
   const fetchVideos = async ({ pageParam = 0 }) => {
-    const url =
-      pageParam === 0
-        ? `https://3speak.tv/apiv2/feeds/@${user}`
-        : `https://3speak.tv/apiv2/feeds/@${user}/more?skip=${pageParam}`;
-
+    let url;
+    if (pageParam === 0) {
+      url = `https://3speak.tv/apiv2/feeds/@${user}`;
+    } else {
+      url = `https://3speak.tv/apiv2/feeds/@${user}/more?skip=${pageParam}`;
+    }
     const res = await axios.get(url);
     return res.data;
   };
@@ -123,18 +73,18 @@ function ProfilePage() {
     hasNextPage,
     isFetchingNextPage,
     isLoading,
+    refetch,
   } = useInfiniteQuery({
     queryKey: ["ProfilePage", user],
     queryFn: fetchVideos,
-    getNextPageParam: (lastPage, allPages) =>
-      lastPage.length > 0 ? allPages.flat().length : undefined,
+    getNextPageParam: (lastPage, allPages) => {
+      if (lastPage.length > 0) {
+        return allPages.flat().length;
+      }
+      return undefined;
+    },
   });
 
-  const videos = data?.pages.flat() || [];
-
-  /* ===============================
-     SCROLL HANDLER
-  =============================== */
   useEffect(() => {
     const handleScroll = () => {
       if (
@@ -151,173 +101,239 @@ function ProfilePage() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, [isFetchingNextPage, hasNextPage, fetchNextPage]);
 
-  /* ===============================
-     NAVIGATION
-  =============================== */
-  const handleUploadNavigate = () => {
-    if (!authenticated) {
-      toast.error("Login to upload video");
-    } else {
-      navigate("/studio");
+  const videos = data?.pages.flat() || [];
+
+  useEffect(() => {
+    if (videos.length > 0 && isProcessing) {
+      checkProcessingvideo();
+    }
+  }, [videos, isProcessing]);
+
+  const getFollowersCount = async (user) => {
+    try {
+      const follower = await getFollowers(user);
+      setFollower(follower);
+    } catch (err) {
+      console.log(err);
     }
   };
 
+  const handleWalletNavigate = (user) => {
+    navigate(`/wallet/${user}`);
+  };
+
+  const getJobId = async () => {
+    try {
+      const res = await axios.get(
+        `http://144.48.107.2:3005/getjobid/${user}/${isProcessing}`
+      );
+      setJobId(res.data.jobId);
+      console.log(res.data)
+      // call immediately after getting job ID
+      // getUploadStatus(res.data.jobId);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const getUploadStatus = async (id = jobId) => {
+    if (!id) return;
+    try {
+      const res = await axios.get(
+        `https://encoder-gateway.infra.3speak.tv/api/v0/gateway/jobstatus/${id}`
+      );
+      console.log("status response", res.data);
+      // setUploadStatus(res.data.job);
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
+
+  const checkProcessingvideo = () => {
+    if (isProcessing === null) {
+      setProcessing(false);
+      if (intervalId) {
+        clearInterval(intervalId);
+        setIntervalId(null);
+      }
+      return;
+    }
+
+    const available = videos.find((data) => data.permlink === isProcessing);
+    console.log("Matched video:", available);
+
+    if (!available) {
+      setProcessing(true);
+
+      if (!intervalId) {
+        // getJobId(); // ✅ get the job id first
+
+        const id = setInterval(() => {
+          // if (jobId) getUploadStatus(); // ✅ poll status only when jobId is set
+
+          console.log("is calling interval every 5 seconds......")
+
+          refetch()
+            .then((res) => {
+              const updatedVideos = res.data?.pages?.flat() || [];
+              const found = updatedVideos.find(
+                (data) => data.permlink === isProcessing
+              );
+              if (found) {
+                setProcessing(false);
+                updateProcessing(null);
+                clearInterval(id);
+                setIntervalId(null);
+              }
+            })
+            .catch((err) => console.error("Refetch error:", err));
+        }, 5000);
+
+        setIntervalId(id);
+      }
+    } else {
+      setProcessing(false);
+      updateProcessing(null, "");
+      if (intervalId) {
+        clearInterval(intervalId);
+        setIntervalId(null);
+      }
+    }
+  };
+
+  const handleNavigate = () => {
+    if (!authenticated) {
+      toast.error("Login to upload video");
+    } else {
+      navigate(`/studio`);
+    }
+  };
+
+  console.log("Processing video:", isProcessing, processTitle);
+  console.log(videos);
+
   return (
     <div className="profile-page-container">
-      {/* ================= PROFILE HEADER ================= */}
       <div className="profile-card">
-        <div className="profile-header">
+  <div className="profile-header">
+    <img className="gradient-bg" src={`https://images.hive.blog/u/${user}/cover`} alt="" />
+  </div>
+
+  <div className="profile-body">
+    <div className="top-section">
+      <div className="left-info">
+        <div className="avatar">
           <img
-            className="gradient-bg"
-            src={`https://images.hive.blog/u/${user}/cover`}
-            alt=""
+            src={`https://images.hive.blog/u/${user}/avatar`}
+            alt="Profile avatar"
           />
         </div>
-
-        <div className="profile-body">
-          <div className="top-section">
-            <div className="left-info">
-              <div className="avatar">
-                <img
-                  src={`https://images.hive.blog/u/${user}/avatar`}
-                  alt="avatar"
-                />
-              </div>
-
-              <div className="user-meta">
-                <h2>{user}</h2>
-                <span className="status-dot">
-                  <span className="dot" /> Verified creator
-                </span>
-              </div>
-            </div>
-
-            <div className="button-group">
-              <button
-                className="btn btn-primary"
-                onClick={() => setShow("follower")}
-              >
-                Followers{" "}
-                {follower?.follower_count ?? (
-                  <Quantum size="15" speed="1.75" color="red" />
-                )}
-              </button>
-
-              <button
-                className="btn btn-secondary"
-                onClick={() =>
-                  window.open(`https://3speak.tv/rss/${user}.xml`, "_blank")
-                }
-              >
-                <IoLogoRss />
-              </button>
-
-              <button
-                className="btn btn-secondary"
-                onClick={() =>
-                  navigator.share
-                    ? navigator.share({
-                        title: user,
-                        url: `https://3speak.tv/user/${user}`,
-                      })
-                    : window.open(
-                        `https://3speak.tv/user/${user}`,
-                        "_blank"
-                      )
-                }
-              >
-                <IoMdShare />
-              </button>
-            </div>
+        <div className="user-meta">
+          <h2>{user}</h2>
+          <div className="user-badges">
+            <span className="status-dot">
+              <span className="dot"></span>Verified creator
+            </span>
           </div>
         </div>
       </div>
 
-      {/* ================= TOGGLE ================= */}
+      <div className="button-group">
+        <button className="btn btn-primary" onClick={() => setShow("follower")}>
+          Followers{" "}
+            {follower?.follower_count !== undefined ? (
+              follower.follower_count
+            ) : (
+              <Quantum size="15" speed="1.75" color="red" />
+            )}
+        </button>
+        <button className="btn btn-secondary" onClick={() => window.open(`https://3speak.tv/rss/${user}.xml`, "_blank")}>
+          <IoLogoRss />
+        </button>
+              <button
+                className="btn btn-secondary"
+                onClick={() => {
+                  if (navigator.share) {
+                    navigator.share({
+                      title: `${user}`,
+                      text: `Follow ${user} on 3Speak`,
+                      url: `https://3speak.tv/user/${user}`,
+                    });
+                  } else {
+                    window.open(`https://3speak.tv/user/${user}`, "_blank");
+                  }
+                }}
+              >
+                <IoMdShare />
+              </button>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+
       <div className="toggle-wrap">
         <div className="wrap">
-          <span onClick={() => setShow("video")}>Videos</span>
+          <span className="vn" onClick={() => setShow("video")}>
+            Videos
+          </span>
           <Link to="/draft">Edit Video</Link>
         </div>
 
         <div className="wrap-in">
-          <span onClick={() => navigate(`/wallet/${user}`)}>Wallet</span>
+          <span className="followers" onClick={() => handleWalletNavigate(user)}>Wallet</span>
 
           {authenticated && (
-            <div className="wrap-upload-video" onClick={handleUploadNavigate}>
+            <div className="wrap-upload-video" onClick={handleNavigate}>
               <FaVideo />
             </div>
           )}
         </div>
       </div>
 
-      {/* ================= IN-PROGRESS BANNER ================= */}
-
-      {hasBackgroundJob && !uploadStatus && (<div className="progressbar-container">
-            <div className="content-wrap">
-              <div className="wrap">
-                <div className="wrap-top"><h3>Fetching Video </h3> <div>{uploadVideoProgress}%</div></div>
-                {uploadVideoProgress > 0 && <div className="progress-bars">
-                  <div className="progress-bar-fill" style={{ width: `${uploadVideoProgress}%` }}>
-                    {/* {uploadVideoProgress > 0 && <span className="progress-bar-text">{uploadVideoProgress}%</span>} */}
-                  </div>
-                </div>}
-              </div>
-              <div className="wrap">
-                <div className="wrap-upload"><h3>{!uploadStatus ? "Uploading video" : 'Video uploaded'} </h3> <div>{!uploadStatus ? <LineSpinner size="20" stroke="3" speed="1" color="black" /> : <img src={checker} alt="" />}</div></div>
-              </div>
-            </div>
-          </div>
-      )}
-
-    {inProgress?.count > 0 && (
-      <div className="active-renders">
-        {inProgress.videos.map(video => (
-          <div key={video.video_id} className="render-card">
-          <div className="left">
-            <div className="icon">▶</div>
-            <div className="info">
-              <h3>{video.title}</h3>
-              <p className="sub">🎬 Processing your videos</p>
-              <div className="meta">
-                <span className="status">{video.status_label}</span>
-                <span className="time">{video.elapsed_minutes} min ago</span>
-              </div>
-            </div>
-          </div>
-
-         <div className="wrap-progress">
-          <div className="right">
-            <div className="percent">{video.progress_percent}%</div>
-          </div>
-          <div className="progress">
-            <div className="bar" style={{ width: `${video.progress_percent}%` }}></div>
-          </div>
-        </div>
-        </div>
-      ))}
-      </div>
-      )}
-
-
-      
-
-
-      
-
-      {/* ================= VIDEO LIST ================= */}
       <div className="container-video">
         {isLoading ? (
           <BarLoader />
-        ) : videos.length === 0 ? (
+        ) : videos.length === 0 && !processing ? (
           <div className="empty-wrap">
             <img src={icon} alt="empty" />
             <span>No Video Data Available</span>
           </div>
-        ) : show === "video" ? (
-          <Card3 videos={videos} loading={isFetchingNextPage} />
         ) : (
-          <Follower count={follower} />
+          <>
+            {processing && user === processUser && (
+              <div className="processing-card">
+                <div className="skeleton video-thumbnail-skeleton" />
+                <div className="details">
+                  <span className="title">
+                    Your video is processing{" "}
+                    <Leapfrog size="20" speed="2.5" color="red" />
+                  </span>
+                  <span className="subtitle">
+                    Please wait, it will appear shortly.
+                  </span>
+
+                  {/* <div className="wrap">
+                    <span>Upload Status: </span>
+                    <p>{uploadStatus?.status || "pending"}</p>
+                  </div> */}
+
+                  <div className="wrap">
+                    <span>Title: </span>
+                    <p>{processTitle}</p>
+                  </div>
+                  {/* <p>Upload: {uploadStatus?.progress?.upload_pct || 0}%</p> */}
+                </div>
+              </div>
+            )}
+
+            {show === "video" ? (
+              <Card3 videos={videos} loading={isFetchingNextPage} />
+            ) : (
+              <Follower count={follower} />
+            )}
+          </>
         )}
       </div>
     </div>

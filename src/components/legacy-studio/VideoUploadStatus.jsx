@@ -1,49 +1,80 @@
 import { Upload, FileText, Info, CheckCircle, ArrowLeft } from "lucide-react";
 import "./VideoUploadStatus.scss";
 import { useMemo } from "react";
-import { useLegacyUpload } from "../../context/LegacyUploadContext";
+// import { useEffect, useState } from "react";
 
-const VideoUploadStatus = ({  uploadVideoTo3Speak, setUploading}) => {
 
-  
 
-  const {uploadVideoProgress, statusMessages} = useLegacyUpload()
-  console.log("message status", statusMessages)
 
-  const successPairs = [
+
+const VideoUploadStatus = ({progress, statusMessages, uploadVideoTo3Speak, setUploading}) => {
+
+
+//     const [progress, setProgress] = useState(0);
+//   const [statusMessages, setStatusMessages] = useState([]);
+
+//   // Helper to add messages
+//   const pushStatus = (message, type = "info") => {
+//     setStatusMessages(prev => [
+//       ...prev,
+//       {
+//         message,
+//         type,
+//         time: new Date().toLocaleTimeString(),
+//       },
+//     ]);
+//   };
+
+//   useEffect(() => {
+//     // Simulate upload events
+//     let steps = [
+//       { msg: "Preparing upload…", prog: 5 },
+//       { msg: "Uploading thumbnail…", prog: 10 },
+//       { msg: "Uploading video…", prog: 40 },
+//       { msg: "Uploading video 50%…", prog: 50 },
+//       { msg: "Uploading video 75%…", prog: 75 },
+//     //   { msg: "Finalizing upload…", prog: 90 },
+//     //   { msg: "Encoding video 20%…", prog: 92 },
+//     //   { msg: "Encoding video 60%…", prog: 95 },
+//     //   { msg: "Publishing video…", prog: 100 },
+//       { msg: "Upload complete!", prog: 100, type: "success" },
+//     ];
+
+//     let i = 0;
+
+//     const interval = setInterval(() => {
+//       if (i < steps.length) {
+//         pushStatus(steps[i].msg, steps[i].type || "info");
+//         setProgress(steps[i].prog);
+//         i++;
+//       } else {
+//         clearInterval(interval);
+//       }
+//     }, 1200);
+
+//     return () => clearInterval(interval);
+//   }, []);
+
+console.log("message status", statusMessages)
+
+const successPairs = [
     { loading: "Preparing upload request…", done: "Prepare completed ✔" },
-    { loading: "Uploading thumbnail…", done: "✔ Thumbnail uploaded successfully" },
+    { loading: "Uploading thumbnail…", done: "Thumbnail uploaded ✔" },
     { loading: "Uploading video…", done: "Video upload finished ✔" },
-    { loading: "Starting finalization…", done: "✔ Upload finalized successfully" },
-    { loading: "Waiting for encoding to start…", done: "🎬 Video encoding has started!" },
+    // add more pairs if you have other loading/done messages
   ];
 
   // Memoize cleaned messages for performance
   const cleanedMessages = useMemo(() => {
-    // shallow copyr
+    // shallow copy
     let filtered = [...statusMessages];
 
-    // Remove loading messages if their "done" counterpart exists
     successPairs.forEach(pair => {
       const hasDone = filtered.some(m => m.message === pair.done);
       if (hasDone) {
         filtered = filtered.filter(m => m.message !== pair.loading);
       }
     });
-
-    // Keep only the LATEST encoding progress message (remove older ones)
-    const encodingMessages = filtered.filter(m => 
-      m.message.includes("⚙️ Encoding in progress:")
-    );
-    
-    if (encodingMessages.length > 1) {
-      // Keep only the last encoding message
-      const latestEncodingMsg = encodingMessages[encodingMessages.length - 1];
-      filtered = filtered.filter(m => 
-        !m.message.includes("⚙️ Encoding in progress:") || 
-        m === latestEncodingMsg
-      );
-    }
 
     return filtered;
   }, [statusMessages]);
@@ -55,14 +86,13 @@ const VideoUploadStatus = ({  uploadVideoTo3Speak, setUploading}) => {
 
   const hasError = statusMessages.some(m => m.type === "error");
 
+
+
   return (
     <div className="upload-status-container">
-      {statusMessages.some(msg => msg.type === "error") && (
-        <button className="btn-close" onClick={() => setUploading(false)}>
-          <ArrowLeft />
-        </button>
-      )}
-      
+      {statusMessages.some(msg => msg.type === "error") && (<button className="btn-close" onClick={()=>setUploading(false)}>
+            <ArrowLeft />
+          </button>)}
       <div className="upload-icon">
         <Upload size={30} strokeWidth={1.5} />
       </div>
@@ -81,14 +111,14 @@ const VideoUploadStatus = ({  uploadVideoTo3Speak, setUploading}) => {
       <div className="progress-section">
         <div className="progress-header">
           <span className="progress-label">Upload Progress</span>
-          <span className="progress-percentage">{uploadVideoProgress}%</span>
+          <span className="progress-percentage">{progress}%</span>
         </div>
 
         <div className="progress-bar-container">
           <div className="progress-bar">
             <div
               className="progress-fill"
-              style={{ width: `${uploadVideoProgress}%` }}
+              style={{ width: `${progress}%` }}
             ></div>
           </div>
           <div className="progress-markers">
@@ -102,77 +132,36 @@ const VideoUploadStatus = ({  uploadVideoTo3Speak, setUploading}) => {
       </div>
 
       {statusMessages.some(msg => msg.type === "error") && (
-        <div className="retry-btn-wrapper">
-          <button onClick={uploadVideoTo3Speak} className="retry-btn">
-            Retry Upload
-          </button>
-        </div>
-      )}
-
-      <div className="caution-wrap">
-        Please stay on this page until the upload is finished.
+      <div className="retry-btn-wrapper">
+        <button onClick={uploadVideoTo3Speak} className="retry-btn">Retry Upload</button>
       </div>
+      )}
 
       <div className="activity-log">
         <div className="activity-log-header">
-          <div className="wrapin">
-            <FileText size={18} />
-             <span>Activity Log</span>
-          </div>
-          <div className="discord">
-            For Support reach out to us on{" "}
-            <a
-              href="https://discord.gg/NSFS2VGj83"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="discord-link"
-            >
-              Discord
-            </a>
-          </div>
-
-
+          <FileText size={18} />
+          <span>Activity Log</span>
         </div>
         <div className="activity-log-content">
           {cleanedMessages.map((msg, i) => {
-            const isSuccess = 
-              msg.message.includes("✔") || 
-              msg.message.includes("✅") || 
-              msg.message.includes("🎉") ||
-              msg.type === "success";
-            
-            const isEncoding = msg.message.includes("⚙️ Encoding");
-            
-            const itemClass = isSuccess 
-              ? "success" 
-              : msg.type === "error" 
-              ? "error" 
-              : "info";
+            const isSuccess = msg.message.includes("✔") || msg.type === "success";
+            const itemClass = isSuccess ? "success" : msg.type === "error" ? "error" : "info";
 
             return (
               <div key={i} className={`activity-item ${itemClass}`}>
                 <div className="activity-icon">
-                  {isSuccess ? (
-                    <CheckCircle size={20} />
-                  ) : (
-                    <Info size={20} />
-                  )}
+                  {isSuccess ? <CheckCircle size={20} /> : <Info size={20} />}
                 </div>
                 <div className="activity-details">
+                  {/* optional time */}
+                  {/* <span className="activity-time">{msg.time}</span> */}
                   <p className="activity-message">{msg.message}</p>
-                  {/* {msg.time && (
-                    <span className="activity-time">{msg.time}</span>
-                  )} */}
                 </div>
               </div>
             );
           })}
         </div>
-        <div className="notification-wrap">
-          <p>The encoding can take between one minute to an hour depending on the size and length of the video.</p>
-          <p>Visit <a href="https://monitor.3speak.tv" target="_blank" rel="noopener noreferrer" className="monitor-link">monitor.3speak.tv</a> to watch the progress of the encoding.</p>
-          <p>Note: Once the video is encoded, it can take up to 10 minutes for the video to be posted to Hive frontends.</p>
-        </div>
+
       </div>
     </div>
   );

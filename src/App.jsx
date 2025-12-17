@@ -50,7 +50,6 @@ import AuthCallback from "./page/Login/AuthCallback";
 import NotFound from "./page/NotFound";
 import ProfileModal from "./components/modal/ProfileModal";
 import HiveImageUploader from "./page/HiveImageUploader";
-import { LegacyUploadProvider } from "./context/LegacyUploadContext";
 
 function App() {
   const { initializeAuth, authenticated, LogOut } = useAppStore();
@@ -113,7 +112,6 @@ function App() {
   }
 
   return (
-    <LegacyUploadProvider>
     <div onClick={()=> {setGlobalCloseRender(true)}}>
       <Toaster richColors position="top-right" />
       <Nav setSideBar={setSideBar} toggleProfileNav={toggleProfileNav}  globalClose={globalCloseRender} setGlobalClose={setGlobalCloseRender} />
@@ -161,11 +159,6 @@ function App() {
         
       </div>
     </div>
-
-    {/* ✅ Global Upload Indicator (added) */}
-    {/* <UploadStatusIndicator /> */}
-
-    </LegacyUploadProvider>
   );
 }
 

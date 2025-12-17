@@ -22,8 +22,6 @@ function Thumbnail() {
     setSelectedThumbnail,
     selectedIndex,
     setSelectedIndex,
-    isUploadLocked,
-    hasBackgroundJob
   } = useLegacyUpload();
 
   const [customfile, setCustomFile] = useState([]);
@@ -36,15 +34,6 @@ function Thumbnail() {
   useEffect(() => {
     setStep(2);
   }, []);
-
-     if (isUploadLocked) {
-      return <Navigate to="/studio/preview" replace />;
-    }
-
-      if (hasBackgroundJob) {
-        return <BackgroundJobModal />;
-      }
-  
 
   // AUTO SELECT FIRST GENERATED THUMBNAIL ONLY IF NO CUSTOM EXISTS
   useEffect(() => {

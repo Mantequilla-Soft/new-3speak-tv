@@ -1,15 +1,16 @@
-import React, { useEffect } from 'react'
-import { toast } from 'sonner'
+import React, { useEffect,  } from 'react'
+import {  toast } from 'sonner'
 import { StepProgress } from './StepProgress';
+import TextEditor from '../studio/TextEditor';
 import { IoIosArrowDropdownCircle } from 'react-icons/io';
 import { MdPeopleAlt } from 'react-icons/md';
 import Communitie_modal from "../modal/Communitie_modal";
 import Beneficiary_modal from '../modal/Beneficiary_modal';
 import { Navigate } from 'react-router-dom';
 import { useLegacyUpload } from '../../context/LegacyUploadContext';
-import { LineSpinner } from 'ldrs/react';
-import checker from "../../../public/images/checker.png"
+// import BlogContent from "../playVideo/BlogContent";
 import TiptapEditor from '../Editor/TiptapEditor';
+// import EditorPreview from '../playVideo/EditorPreview';
 
 function Details() {
     const {
@@ -29,21 +30,12 @@ function Details() {
         isOpen, setIsOpen,
         benficaryOpen, setBeneficiaryOpen,
         selectedThumbnail,
-        uploadVideoProgress,
-        uploadStatus,
-        isUploadLocked
-        // NOTE: Auto-submit values imported but not used in Details
-        // The logic happens in Preview page when user clicks "Post Video"
       } = useLegacyUpload();
 
 
   useEffect(() => {
     setStep(3)
   }, [])
-
-    if (isUploadLocked) {
-    return <Navigate to="/studio/preview" replace />;
-  }
 
 
   if (!selectedThumbnail) {
@@ -75,19 +67,16 @@ function Details() {
         }
     }
 
-    // ============================================
-    // Handle Proceed to Preview
-    // ============================================
+
+
     const process = () => {
         if (!title || !description || !tagsInputValue || !community || !selectedThumbnail) {
             toast.error("Please fill in all fields, Title, Description and tag!");
             return;
         }
+        navigate("/studio/preview")
+        setStep(4)
 
-        // Always go to preview page first
-        // The upload status check happens there when user clicks "Post Video"
-        navigate("/studio/preview");
-        setStep(4);
     }
 
   return (
@@ -99,26 +88,7 @@ function Details() {
       </div>
       <StepProgress step={step} />
       <div className="studio-page-content">
-       <div className="progressbar-container">
-        <div className="content-wrap">
-          <div className="wrap">
-            <div className="wrap-top"><h3>Fetching Video </h3> <div>{uploadVideoProgress}%</div></div>
-            { uploadVideoProgress > 0 &&<div className="progress-bars">
-            <div className="progress-bar-fill" style={{ width: `${uploadVideoProgress}%` }}>
-              {/* {uploadVideoProgress > 0 && <span className="progress-bar-text">{uploadVideoProgress}%</span>} */}
-            </div>
-          </div>}
-          </div>
-          
-          <div className="wrap">
-            <div className="wrap-upload"><h3>{!uploadStatus ? "Uploading video" :'Video uploaded'} </h3> <div>{!uploadStatus ? <LineSpinner size="20" stroke="3" speed="1" color="black" /> : <img src={checker} alt="" />}</div></div>
-          </div>
-
-          
-        </div>
-        
-
-       </div>
+       
 
         <div className="video-detail-wrap">
         <div className="video-items">
@@ -129,6 +99,8 @@ function Details() {
         <div className="input-group">
           <label htmlFor="">Description</label>
           <div className="wrap-dec">
+          {/* <ReactQuill theme="snow" value={description} onChange={setDescription}  style={{ height: "90%", }} /> */}
+          {/* <TextEditor description={description} setDescription={setDescription} style={{ height: "80%", }} /> */}
           <TiptapEditor value={description} onChange={setDescription} />
           </div>
         </div>
@@ -185,20 +157,49 @@ function Details() {
         </div>
 
         <div className="submit-btn-wrap">
-          {/* Button always shows "Proceed" - no auto-submit logic here */}
-          <button 
-            onClick={() => {
-              console.log("description===>", description); 
-              process();
-            }}
-            disabled={!title || !description || !tagsInputValue}
-          >
-            Proceed
-          </button>
+        <button onClick={()=>{console.log("description===>", description); process() }}>Proceed</button>
         </div>
 
         </div>
+        {/* <EditorPreview content={description} /> */}
+        {/* <div className="Preview">
+        <h3>Preview</h3>
 
+
+        <div className="preview-title">
+           {title && <span> {title}</span>}
+        </div>
+        <BlogContent description={description} />
+        <div className="preview-tags">
+        {tagsPreview &&<span> Tags: {tagsPreview.map((item, index) => (
+      <span className="item" key={index} style={{ marginRight: '8px' }}>
+        {item}
+      </span>
+    ))}</span>}
+        </div>
+
+        
+
+       
+        {selectedThumbnail && (
+              <div className="preview-video">
+                
+                <VideoPreview file={prevVideoFile} />
+                </div>)}
+
+      
+        {selectedThumbnail && (
+          <div className="preview-thumbnail">
+            <img
+              src={selectedThumbnail}
+              alt="Thumbnail"
+              style={{ width: "250px", height: "auto", borderRadius: "8px",marginTop: "10px", }}
+            />
+          </div>
+        )}
+        
+
+        </div> */}
       </div> 
 
       
