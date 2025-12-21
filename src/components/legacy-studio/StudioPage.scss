@@ -112,6 +112,35 @@
         }
       }
     }
+
+    .background-text {
+      margin-top: 12px;
+      padding: 12px 14px;
+      border-radius: 10px;
+
+      background: linear-gradient(135deg, #fff8e1, #fff3c4);
+      border: 1px solid #ffe082;
+
+      font-size: 14px;
+      color: #6d4c41;
+
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+
+      p {
+        margin: 0;
+        line-height: 1.45;
+
+        &:first-child {
+          font-weight: 600;
+          color: #5d4037;
+        }
+      }
+
+      /* subtle attention pulse */
+      animation: bgPulse 2.5s ease-in-out infinite;
+    }
   }
 }
 
@@ -202,11 +231,11 @@
       }
     }
 
-    .community-box-wrap{
+    .community-box-wrap {
       display: flex;
       align-items: center;
       gap: 10px;
-      span{
+      span {
         font-size: 12px;
         color: #858796;
         font-weight: 600;
@@ -385,5 +414,17 @@
         font-weight: 500;
       }
     }
+  }
+} 
+
+@keyframes bgPulse {
+  0% {
+    box-shadow: 0 0 0 rgba(255, 193, 7, 0.0);
+  }
+  50% {
+    box-shadow: 0 0 10px rgba(255, 193, 7, 0.35);
+  }
+  100% {
+    box-shadow: 0 0 0 rgba(255, 193, 7, 0.0);
   }
 }

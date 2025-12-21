@@ -200,15 +200,34 @@
     }
   }
 
-  .caution-wrap {
-    padding: 10px 8px;
-    border-radius: 8px;
-    border: 1px solid rgb(247, 193, 189);
-    background-color: #fcebeb;
-    color: red;
-    margin: 6px 0px;
-    font-size: 14px;
+.caution-wrap {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  padding: 10px 8px;
+  border-radius: 8px;
+  border: 1px solid rgb(247, 193, 189);
+  background-color: #fcebeb;
+  color: red;
+  margin: 6px 0;
+  font-size: 14px;
+
+  &.can-leave {
+    border-color: #4caf50;
+    background-color: #e8f5e9;
+    color: #2e7d32;
   }
+}
+
+.bip-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background-color: rgb(247, 11, 11);
+  flex-shrink: 0;
+  animation: bip 1.2s infinite ease-in-out;
+}
 
   .activity-log {
     .activity-log-header {
@@ -433,5 +452,22 @@
     &:active {
       transform: translateY(0);
     }
+  }
+}
+
+
+/* Smooth attention-grabbing blink */
+@keyframes bip {
+  0% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.5);
+    opacity: 0.4;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
   }
 }
