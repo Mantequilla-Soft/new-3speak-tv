@@ -8,6 +8,9 @@
 
     <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
     <script src="https://cdn.jwplayer.com/libraries/j7Kz0Rae.js"></script>
+    <!-- Buffer polyfill for Hive crypto libraries -->
+    <script src="https://bundle.run/buffer@6.0.3"></script>
+    <script>window.Buffer = window.Buffer || buffer.Buffer;</script>
     <title>3Speak</title>
   </head>
   <body>

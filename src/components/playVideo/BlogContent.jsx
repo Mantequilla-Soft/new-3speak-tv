@@ -1,7 +1,28 @@
 import React, { useEffect, useState } from "react";
-import { renderPostBody } from "@ecency/render-helper";
 import { getUersContent } from "../../utils/hiveUtils";
 import "./BlogContent.scss";
+
+// Lazy-loaded renderer to avoid Node.js polyfill issues at bundle time
+let rendererPromise = null;
+const getRenderer = async () => {
+  if (!rendererPromise) {
+    rendererPromise = import('@snapie/renderer').then(({ createHiveRenderer }) => {
+      return createHiveRenderer({
+        ipfsGateway: 'https://ipfs-3speak.b-cdn.net',
+        ipfsFallbackGateways: [
+          'https://ipfs.skatehive.app',
+          'https://cloudflare-ipfs.com',
+          'https://ipfs.io'
+        ],
+        convertHiveUrls: true,
+        internalUrlPrefix: '',
+        usertagUrlFn: (account) => `/p/${account}`,
+        hashtagUrlFn: (tag) => `/t/${tag}`,
+      });
+    });
+  }
+  return rendererPromise;
+};
 
 const BlogContent = ({ author, permlink, description }) => {
   const [content, setContent] = useState("");
@@ -56,15 +77,21 @@ const BlogContent = ({ author, permlink, description }) => {
           ? content.join("\n")
           : "";
 
-      try {
-        let renderedHTML = renderPostBody(contentString, false);
-        // Clean the rendered HTML before setting it
-        renderedHTML = cleanContent(renderedHTML);
-        setRenderedContent(renderedHTML);
-      } catch (error) {
-        console.error("Error rendering post body:", error);
-        setRenderedContent("Error processing content.");
-      }
+      // Use async renderer
+      getRenderer().then(renderer => {
+        try {
+          let renderedHTML = renderer.render(contentString);
+          // Clean the rendered HTML before setting it
+          renderedHTML = cleanContent(renderedHTML);
+          setRenderedContent(renderedHTML);
+        } catch (error) {
+          console.error("Error rendering post body:", error);
+          setRenderedContent("Error processing content.");
+        }
+      }).catch(error => {
+        console.error("Error loading renderer:", error);
+        setRenderedContent("Error loading renderer.");
+      });
     }
   }, [content]);
 

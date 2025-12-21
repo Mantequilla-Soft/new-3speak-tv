@@ -5,7 +5,6 @@ import { GiTwoCoins } from 'react-icons/gi';
 import { BiDislike, BiLike } from 'react-icons/bi';
 import dayjs from 'dayjs';
 import { useAppStore } from '../../lib/store';
-import { renderPostBody } from '@ecency/render-helper';
 import { Client } from '@hiveio/dhive';
 import UpvoteTooltip from '../tooltip/UpvoteTooltip';
 import CommentVoteTooltip from '../tooltip/CommentVoteTooltip';
@@ -14,6 +13,22 @@ import axios from 'axios';
 import { estimate, getVotePower } from '../../utils/hiveUtils';
 
 const client = new Client(['https://api.hive.blog']);
+
+// Lazy-loaded renderer to avoid Node.js polyfill issues at bundle time
+let rendererPromise = null;
+const getRenderer = async () => {
+  if (!rendererPromise) {
+    rendererPromise = import('@snapie/renderer').then(({ createHiveRenderer }) => {
+      return createHiveRenderer({
+        ipfsGateway: 'https://ipfs-3speak.b-cdn.net',
+        convertHiveUrls: true,
+        usertagUrlFn: (account) => `/p/${account}`,
+        hashtagUrlFn: (tag) => `/t/${tag}`,
+      });
+    });
+  }
+  return rendererPromise;
+};
 
 function CommentSection({ videoDetails, author, permlink }) {
   const { user } = useAppStore();
@@ -29,6 +44,8 @@ function CommentSection({ videoDetails, author, permlink }) {
     const [weight, setWeight] = useState(100);
     const [voteValue, setVoteValue] = useState(0.0);
       const [accountData, setAccountData] = useState(null);
+  // Cache for rendered comment bodies
+  const [renderedBodies, setRenderedBodies] = useState({});
 
 
       
@@ -39,6 +56,20 @@ function CommentSection({ videoDetails, author, permlink }) {
         const replies = await client.call('condenser_api', 'get_content_replies', [author, permlink]);
         const commentsWithChildren = await loadNestedComments(replies);
         setCommentList(commentsWithChildren);
+        
+        // Pre-render all comment bodies
+        const renderer = await getRenderer();
+        const rendered = {};
+        const renderComment = (comment) => {
+          if (comment?.body) {
+            rendered[comment.permlink] = renderer.render(comment.body);
+          }
+          if (comment.children) {
+            comment.children.forEach(renderComment);
+          }
+        };
+        commentsWithChildren.forEach(renderComment);
+        setRenderedBodies(rendered);
       } catch (error) {
         console.error('Failed to fetch comments from Hive:', error);
       }
@@ -106,9 +137,14 @@ function CommentSection({ videoDetails, author, permlink }) {
     return result;
   };
 
-  const processedBody = (content) => {
+  const processedBody = (content, permlink) => {
     if (!content) return '';
-    return renderPostBody(content, false);
+    // Use pre-rendered body if available
+    if (permlink && renderedBodies[permlink]) {
+      return renderedBodies[permlink];
+    }
+    // Fallback - return raw content (will be rendered on next fetch)
+    return content;
   };
 
   const handlePostComment = async () => {
@@ -373,7 +409,7 @@ function Comment({
             {comment?.author?.username}
             <span>{dayjs(comment?.created_at).fromNow()}</span>
           </h3>
-          <p className="markdown-view" dangerouslySetInnerHTML={{ __html: processedBody(comment?.body || '') }} />
+          <p className="markdown-view" dangerouslySetInnerHTML={{ __html: processedBody(comment?.body || '', comment?.permlink) }} />
           <div className="comment-action">
             <div className="wrap">
               <BiLike style={{ color: comment.has_voted ? 'red' : '' }}

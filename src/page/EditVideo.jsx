@@ -3,7 +3,6 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import { Edit, Save } from 'lucide-react';
 import "./EditVideo.scss";
 import {  toast } from 'sonner'
-import { renderPostBody } from "@ecency/render-helper";
 import { convert } from 'html-to-text';
 import axios from 'axios';
 import { API_URL_FROM_WEST } from '../utils/config';
@@ -11,6 +10,22 @@ import TextEditor from '../components/studio/TextEditor';
 import { useAppStore } from '../lib/store';
 import * as dhive from '@hiveio/dhive';
 const client = new dhive.Client(['https://api.hive.blog']);
+
+// Lazy-loaded renderer to avoid Node.js polyfill issues at bundle time
+let rendererPromise = null;
+const getRenderer = async () => {
+  if (!rendererPromise) {
+    rendererPromise = import('@snapie/renderer').then(({ createHiveRenderer }) => {
+      return createHiveRenderer({
+        ipfsGateway: 'https://ipfs-3speak.b-cdn.net',
+        convertHiveUrls: true,
+        usertagUrlFn: (account) => `/p/${account}`,
+        hashtagUrlFn: (tag) => `/t/${tag}`,
+      });
+    });
+  }
+  return rendererPromise;
+};
 
 const EditVideo = () => {
   const location = useLocation();
@@ -24,6 +39,7 @@ const EditVideo = () => {
   const [date, setDate] = useState('');
   const [permlink, setPermlink] = useState("")
   const [ id, setId ] = useState("");
+  const [renderedHTML, setRenderedHTML] = useState('');
   const accessToken = localStorage.getItem("access_token");
 
   const video = location.state?.video;
@@ -53,6 +69,18 @@ const EditVideo = () => {
       toast.error('Video not found');
     }
   }, [id, navigate, video]);
+
+  // Render description with the async renderer
+  useEffect(() => {
+    if (description) {
+      getRenderer().then(renderer => {
+        setRenderedHTML(renderer.render(description));
+      }).catch(err => {
+        console.error('Error rendering description:', err);
+        setRenderedHTML(description);
+      });
+    }
+  }, [description]);
 
   console.log(permlink)
   console.log(id)
@@ -109,7 +137,7 @@ const handleSubmit = async (e) => {
 };
 
 
-  const renderedHTML = renderPostBody(description, false);
+  // renderedHTML is now handled via useEffect above
 
   if (loading) {
     return (
