@@ -1,3 +1,6 @@
+// MUST be first import - sets up Buffer before other modules
+import './polyfills';
+
 import React from 'react';
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
@@ -11,10 +14,8 @@ import store from '../src/redux/Store'; // Importing the Redux store (replace wi
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import '@fortawesome/fontawesome-free/css/all.min.css';
-import { Buffer } from 'buffer';
 import { AppProviders } from './context/Providers';
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-window.Buffer = Buffer;
 
 // import { Buffer } from 'buffer';
 // window.Buffer = Buffer;

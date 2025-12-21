@@ -6,17 +6,24 @@ export default defineConfig({
   plugins: [
     react(),
     nodePolyfills({
-      include: ["buffer", "stream", "crypto", "util", "process", "querystring"],
+      // Include all modules needed by keychain-sdk and hive crypto libraries
+      include: ["buffer", "stream", "crypto", "util", "process", "querystring", "events", "string_decoder"],
       globals: {
         Buffer: true,
         global: true,
         process: true,
       },
+      // Use polyfills even in dev mode
+      protocolImports: true,
+      // Override to ensure proper Buffer implementation
+      overrides: {
+        fs: 'memfs',
+      },
     }),
   ],
   define: {
     "process.env": {},
-    global: "globalThis", // Ensures `global` is available
+    global: "globalThis",
   },
   resolve: {
     alias: {
@@ -25,16 +32,29 @@ export default defineConfig({
       stream: "stream-browserify",
       util: "util/",
       querystring: "querystring-es3",
+      // Force readable-stream to use the polyfilled buffer
+      buffer: "buffer",
     },
   },
   optimizeDeps: {
     esbuildOptions: {
       define: {
-        global: "globalThis", // Fixes global scope issues
+        global: "globalThis",
       },
+      // Inject Buffer shim at the top of every file
+      inject: ['./src/polyfills.js'],
     },
+    // Force these to be pre-bundled together so polyfills are available
+    include: [
+      "buffer",
+      "react-quilljs", 
+      "quill", 
+      "qrcode.react", 
+      "hive-auth-wrapper",
+      "keychain-sdk",
+      "readable-stream",
+    ],
     exclude: ['@metamask/providers', 'web3'],
-    include: ["react-quilljs", "quill", "qrcode.react", "hive-auth-wrapper"], // Explicitly optimize these deps
   },
   build: {
     commonjsOptions: {
