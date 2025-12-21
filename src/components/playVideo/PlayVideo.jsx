@@ -362,8 +362,8 @@ const handleProfileNavigate = (user) => {
       <div className="top-container">
 {videoUrlSelected ? (
     // <JWPlayer
-    //   // library={`https://cdn.jwplayer.com/libraries/${import.meta.env.VITE_JWPLAYER_LICENSE_ID}.js `} // Updated library
-    //   // licenseKey={import.meta.env.VITE_JWPLAYER_LICENSE_KEY} // Verify key validity
+    //   library={`https://cdn.jwplayer.com/libraries/${import.meta.env.VITE_JWPLAYER_LICENSE_ID}.js `} // Updated library
+    //   licenseKey={import.meta.env.VITE_JWPLAYER_LICENSE_KEY} // Verify key validity
     //   playlist={[
     //     {
     //       file: videoUrlSelected,
@@ -380,22 +380,22 @@ const handleProfileNavigate = (user) => {
     //     },
     //   }}
     // />
-    <div className="video-iframe-wrapper">
-  <iframe
-    // src={`https://play.3speak.tv/watch?v=${author}/${permlink}&mode=iframe`}
-    src={`https://play.3speak.tv/watch?v=${author}/${permlink}&layout=desktop&mode=iframe`}
-    style={{
-      position: "absolute",
-      top: 0,
-      left: 0,
-      width: "100%",
-      height: "100%",
-      border: "0",
-    }}
-    frameBorder="0"
-    allowFullScreen
-  ></iframe>
-</div>
+            <div className="video-iframe-wrapper">
+              <iframe
+                // src={`https://play.3speak.tv/watch?v=${author}/${permlink}&mode=iframe`}
+                src={`https://play.3speak.tv/watch?v=${author}/${permlink}&layout=desktop&mode=iframe`}
+                style={{
+                  position: "absolute",
+                  top: 0,
+                  left: 0,
+                  width: "100%",
+                  height: "100%",
+                  border: "0",
+                }}
+                frameBorder="0"
+                allowFullScreen
+              ></iframe>
+            </div>
 
 
   ) : (

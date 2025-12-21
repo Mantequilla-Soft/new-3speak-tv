@@ -15,7 +15,7 @@ const VideoUploadStatus = ({  uploadVideoTo3Speak, setUploading}) => {
     { loading: "Uploading thumbnail…", done: "✔ Thumbnail uploaded successfully" },
     { loading: "Uploading video…", done: "Video upload finished ✔" },
     { loading: "Starting finalization…", done: "✔ Upload finalized successfully" },
-    { loading: "Waiting for encoding to start…", done: "🎬 Video encoding has started!" },
+    { loading: "Waiting for encoding to start…", done: "Video encoding has started!" },
   ];
 
   // Memoize cleaned messages for performance
@@ -67,6 +67,14 @@ const cleanedMessages = useMemo(() => {
     : "Starting...";
 
   const hasError = statusMessages.some(m => m.type === "error");
+
+const canLeavePage = statusMessages.some(msg =>
+  [
+    "⏳ Queued for encoding...",
+    "🎬 ⏳ Queued for encoding...",
+    "🎬 Processing (assigned)...",
+  ].includes(msg.message)
+);
 
   return (
     <div className="upload-status-container">
@@ -122,9 +130,14 @@ const cleanedMessages = useMemo(() => {
         </div>
       )}
 
-      <div className="caution-wrap">
-        Please stay on this page until the upload is finished.
+      <div className={`caution-wrap ${canLeavePage ? "can-leave" : ""}`}>
+        {canLeavePage && <span className="bip-dot" />}
+        {canLeavePage
+          ? "You can now leave the page while your video is processing."
+          : "Please stay on this page until the upload is finished."
+        }
       </div>
+
 
       <div className="activity-log">
         <div className="activity-log-header">

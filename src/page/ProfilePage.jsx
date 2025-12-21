@@ -22,6 +22,7 @@ import icon from "../../public/images/stack.png";
 import { UPLOAD_TOKEN, UPLOAD_URL } from "../utils/config";
 import "./ProfilePage.scss";
 import { useLegacyUpload } from "../context/LegacyUploadContext";
+import checker from "../../public/images/checker.png"
 
 function ProfilePage() {
 
@@ -295,13 +296,22 @@ function ProfilePage() {
               <div className="wrap">
                 <div className="wrap-upload"><h3>{!uploadStatus ? "Uploading video" : 'Video uploaded'} </h3> <div>{!uploadStatus ? <LineSpinner size="20" stroke="3" speed="1" color="black" /> : <img src={checker} alt="" />}</div></div>
               </div>
+          <div className="background-text">
+            <p>Please do not close your browser while the upload is in progress.</p>
+            <p>A background job is currently running and will automatically publish your post.</p>
+          </div>
+
+
             </div>
           </div>
       )}
 
     {inProgress?.count > 0 && (
       <div className="active-renders">
-        {inProgress.videos.map(video => (
+        {inProgress.videos.map(video => { 
+          const progress = Number(video.progress_percent).toFixed(2);
+
+          return (
           <div key={video.video_id} className="render-card">
           <div className="left">
             <div className="icon">▶</div>
@@ -317,14 +327,14 @@ function ProfilePage() {
 
          <div className="wrap-progress">
           <div className="right">
-            <div className="percent">{video.progress_percent}%</div>
+            <div className="percent">{progress}%</div>
           </div>
           <div className="progress">
-            <div className="bar" style={{ width: `${video.progress_percent}%` }}></div>
+            <div className="bar" style={{ width: `${progress}%` }}></div>
           </div>
         </div>
         </div>
-      ))}
+      )})}
       </div>
       )}
 
