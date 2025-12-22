@@ -11,6 +11,7 @@ import CommentVoteTooltip from '../tooltip/CommentVoteTooltip';
 import {  toast } from 'sonner'
 import axios from 'axios';
 import { estimate, getVotePower } from '../../utils/hiveUtils';
+import { filterByReputation } from '../../utils/reputation';
 
 const client = new Client(['https://api.hive.blog']);
 
@@ -55,7 +56,9 @@ function CommentSection({ videoDetails, author, permlink }) {
       try {
         const replies = await client.call('condenser_api', 'get_content_replies', [author, permlink]);
         const commentsWithChildren = await loadNestedComments(replies);
-        setCommentList(commentsWithChildren);
+        // Filter out spam accounts (negative reputation)
+        const filteredComments = await filterByReputation(commentsWithChildren);
+        setCommentList(filteredComments);
         
         // Pre-render all comment bodies (createHiveRenderer returns a function directly)
         const render = await getRenderer();
@@ -68,7 +71,7 @@ function CommentSection({ videoDetails, author, permlink }) {
             comment.children.forEach(renderComment);
           }
         };
-        commentsWithChildren.forEach(renderComment);
+        filteredComments.forEach(renderComment);
         setRenderedBodies(rendered);
       } catch (error) {
         console.error('Failed to fetch comments from Hive:', error);
