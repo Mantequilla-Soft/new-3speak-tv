@@ -8,7 +8,7 @@
   p {
     font-size: 14px;
     margin-bottom: 5px;
-    color: #5a5a5a;
+    color: var(--text-secondary);
   }
   .textarea-box{
      @include respond(phone) {
@@ -17,7 +17,7 @@
   }
   h4 {
     font-size: 14px;
-    color: #5a5a5a;
+    color: var(--text-secondary);
     margin-top: 15px;
   }
 }
@@ -26,9 +26,10 @@
   align-items: flex-start;
   margin: 20px 0;
   padding: 10px;
-  background-color: #fff;
+  background-color: var(--card-bg);
   border-radius: 10px;
-  box-shadow: 0 1px 6px 0 #20212447;
+  box-shadow: var(--card-shadow);
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
   > img {
     // Only apply avatar styles to direct child images (the avatar)
     width: 35px;
@@ -51,9 +52,10 @@
   h3 {
     font-size: 14px;
     margin-bottom: 2px;
+    color: var(--text-primary);
     span {
       font-size: 12px;
-      color: #5a5a5a;
+      color: var(--text-secondary);
       font-weight: 500;
       margin-left: 8px;
     }
@@ -63,6 +65,7 @@
     align-items: center;
     margin: 8px 0;
     font-size: 14px;
+    color: var(--text-secondary);
 
     img {
       border-radius: 0;
@@ -71,7 +74,7 @@
     }
     span {
       margin-right: 20px;
-      color: #5a5a5a;
+      color: var(--text-secondary);
       @include respond(phone) {
         margin-right: 10px;
       }
@@ -87,6 +90,9 @@
     }
     .main-reply {
       cursor: pointer;
+      &:hover {
+        color: var(--accent-primary);
+      }
     }
   }
 }

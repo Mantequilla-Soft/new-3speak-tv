@@ -1,29 +1,154 @@
+/* ========================================
+   THEME CSS VARIABLES - 3Speak Dark Mode
+   ======================================== */
+
+/* Light Mode (Default) */
+:root {
+  /* Backgrounds */
+  --bg-primary: #f9f9f9;
+  --bg-secondary: #ffffff;
+  --bg-tertiary: #eff4f5;
+  --bg-elevated: #ffffff;
+  --bg-hover: rgba(0, 0, 0, 0.05);
+  
+  /* Text Colors */
+  --text-primary: #000000;
+  --text-secondary: #5a5a5a;
+  --text-muted: #64748b;
+  --text-inverse: #ffffff;
+  
+  /* Borders & Dividers */
+  --border-color: #cccccc;
+  --border-light: #e0e0e0;
+  --divider: #cccccc;
+  
+  /* Shadows */
+  --shadow-sm: 0px 1px 3px rgba(0, 0, 0, 0.1);
+  --shadow-md: 0px 1px 7px rgba(0, 0, 0, 0.15);
+  --shadow-lg: 0 4px 10px rgba(0, 0, 0, 0.2);
+  --shadow-card: 1px 4px 9px rgba(0, 0, 0, 0.23);
+  
+  /* Brand Colors */
+  --accent-primary: #e53935;
+  --accent-hover: #c62828;
+  --accent-light: rgba(229, 57, 53, 0.1);
+  
+  /* Interactive States */
+  --link-color: #5a5a5a;
+  --link-hover: #e53935;
+  
+  /* Input Fields */
+  --input-bg: #ffffff;
+  --input-border: #cccccc;
+  --input-focus: rgb(247, 193, 189);
+  
+  /* Sidebar specific */
+  --sidebar-bg: #ffffff;
+  --sidebar-hover-bg: rgba(0, 0, 0, 0.05);
+  
+  /* Nav specific */
+  --nav-bg: #ffffff;
+  --nav-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  
+  /* Card specific */
+  --card-bg: #ffffff;
+  --card-shadow: 1px 4px 9px rgba(0, 0, 0, 0.23);
+  
+  /* Misc */
+  --overlay-bg: rgba(0, 0, 0, 0.6);
+  --backdrop-blur: blur(10px);
+}
+
+/* Dark Mode */
+[data-theme="dark"] {
+  /* Backgrounds */
+  --bg-primary: #0f0f0f;
+  --bg-secondary: #1a1a1a;
+  --bg-tertiary: #242424;
+  --bg-elevated: #2d2d2d;
+  --bg-hover: rgba(255, 255, 255, 0.08);
+  
+  /* Text Colors */
+  --text-primary: #f1f1f1;
+  --text-secondary: #aaaaaa;
+  --text-muted: #717171;
+  --text-inverse: #000000;
+  
+  /* Borders & Dividers */
+  --border-color: #3d3d3d;
+  --border-light: #2d2d2d;
+  --divider: #3d3d3d;
+  
+  /* Shadows */
+  --shadow-sm: 0px 1px 3px rgba(0, 0, 0, 0.3);
+  --shadow-md: 0px 1px 7px rgba(0, 0, 0, 0.4);
+  --shadow-lg: 0 4px 10px rgba(0, 0, 0, 0.5);
+  --shadow-card: 1px 4px 9px rgba(0, 0, 0, 0.4);
+  
+  /* Brand Colors */
+  --accent-primary: #ff5252;
+  --accent-hover: #ff1744;
+  --accent-light: rgba(255, 82, 82, 0.15);
+  
+  /* Interactive States */
+  --link-color: #aaaaaa;
+  --link-hover: #ff5252;
+  
+  /* Input Fields */
+  --input-bg: #2d2d2d;
+  --input-border: #3d3d3d;
+  --input-focus: rgba(255, 82, 82, 0.3);
+  
+  /* Sidebar specific */
+  --sidebar-bg: #1a1a1a;
+  --sidebar-hover-bg: rgba(255, 255, 255, 0.08);
+  
+  /* Nav specific */
+  --nav-bg: #1a1a1a;
+  --nav-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+  
+  /* Card specific */
+  --card-bg: #1a1a1a;
+  --card-shadow: 1px 4px 9px rgba(0, 0, 0, 0.4);
+  
+  /* Misc */
+  --overlay-bg: rgba(0, 0, 0, 0.8);
+  --backdrop-blur: blur(10px);
+}
+
+/* ========================================
+   BASE STYLES
+   ======================================== */
+
 *{
   margin: 0;
   padding: 0;
-  box-sizing: 0;
-  /* font-family: 'Inter'; */
-  /* font-family: sans-serif; */
-  /* font-family: Roboto, Helvetica Neue, Helvetica, Arial, sans-serif; */
-  /* font-family: "Nunito", -apple-system, BlinkMacSystemFont, "Segoe UI",
-            Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji",
-            "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji"; */
-            font-family: "Roboto", "Arial", sans-serif;
+  box-sizing: border-box;
+  font-family: "Roboto", "Arial", sans-serif;
+}
 
+html {
+  color-scheme: light;
+}
+
+[data-theme="dark"] {
+  color-scheme: dark;
 }
 
 body{
-  /* font-family: Arial, Helvetica, sans-serif; */
-  /* font-family: Poppins, Inter, sans-serif; */
-}
-html{
-  /* font-family: ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji"; */
-  /* font-family: Poppins, Inter, sans-serif; */
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 a{
   text-decoration: none;
-  color: #5a5a5a;
+  color: var(--link-color);
+  transition: color 0.2s ease;
+}
+
+a:hover {
+  color: var(--link-hover);
 }
 
 button{
