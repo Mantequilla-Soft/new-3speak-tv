@@ -1,4 +1,5 @@
 import { IoChevronUpCircleOutline } from "react-icons/io5";
+import { IoEyeOutline } from "react-icons/io5";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 import { Link } from "react-router-dom";
@@ -6,9 +7,9 @@ import { FaHeart } from "react-icons/fa";
 import { FaCircleUser } from "react-icons/fa6";
 import PropTypes from "prop-types";
 import "./Cards.scss";
-import { useAppStore } from '../..//lib/store';
-import { FaCirclePlay } from "react-icons/fa6";
-import img from "../../assets/image/speak.jpg"
+import { useAppStore } from '../../lib/store';
+import img from "../../assets/image/speak.jpg";
+import useViewCounts from "../../hooks/useViewCounts";
 
 dayjs.extend(relativeTime);
 
@@ -17,29 +18,32 @@ function Card2({
     loading = false,
     error = null,
     defaultThumbnail = "default_thumb.jpg",
-    defaultUsername = "Anonymous",
-    linkPrefix = "/video",
     className = "",
-    truncateLength = 65,
   }) {
-       const {user} = useAppStore();
+      const { user } = useAppStore();
+      const { getViewCount } = useViewCounts(videos);
+
       if (loading) return <div>Loading...</div>;
       if (error) return <div>Error: {error}</div>;
-    
-    
+
       const filteredVideos = videos.filter(
         (video) =>
-          video.spkvideo !== null && // Ensure spkvideo is not null
-          video.spkvideo !== undefined && // Ensure spkvideo is not undefined
-          !video.spkvideo.thumbnail_url?.includes("https://media.3speak.tv") // Ensure thumbnail_url does not include the specified string
+          video.spkvideo !== null &&
+          video.spkvideo !== undefined &&
+          !video.spkvideo.thumbnail_url?.includes("https://media.3speak.tv")
       );
-      
+
       const voters = (numVotes) => (numVotes <= 0 ? 0 : numVotes);
-      console.log(videos)
-    
-       const handleVote = (username, permlink, weight = 10000) => {
+
+      const formatViewCount = (views) => {
+        if (views === null || views === undefined) return null;
+        if (views >= 1000000) return `${(views / 1000000).toFixed(1)}M`;
+        if (views >= 1000) return `${(views / 1000).toFixed(1)}K`;
+        return views.toLocaleString();
+      };
+
+      const handleVote = (username, permlink, weight = 10000) => {
         if (window.hive_keychain) {
-          // const [author, postPermlink] = permlink.split("/"); // Split permlink into author and postPermlink
           window.hive_keychain.requestBroadcast(
             user,
             [
@@ -49,7 +53,7 @@ function Card2({
                   voter: user,
                   author: username,
                   permlink,
-                  weight, // 10000 = 100%, 5000 = 50%
+                  weight,
                 },
               ],
             ],
@@ -66,8 +70,6 @@ function Card2({
           alert("Hive Keychain is not installed. Please install the extension.");
         }
       };
-
-      console.log(videos)
 
 
 
@@ -111,7 +113,12 @@ function Card2({
               {video?.author?.profile?.images?.avatar ? <img className="profile-img" src={video?.author?.profile?.images?.avatar} alt="" /> : <FaCircleUser size={16} />}
               <h2>{video.author.username}</h2>
               </div>
-              {/* TODO: Add real view count - needs GraphQL schema update to expose views from MongoDB */}
+              {getViewCount(video.author.username, video.permlink) !== null && (
+                <div className="view-count">
+                  <IoEyeOutline size={14} />
+                  <span>{formatViewCount(getViewCount(video.author.username, video.permlink))}</span>
+                </div>
+              )}
               </div>
               {/* <h3>Vibes</h3> */}
               <div className="bottom-action">
@@ -140,6 +147,7 @@ Card2.propTypes = {
     PropTypes.shape({
       id: PropTypes.string,
       title: PropTypes.string,
+      permlink: PropTypes.string,
       created_at: PropTypes.string,
       spkvideo: PropTypes.shape({
         thumbnail_url: PropTypes.string,
@@ -160,10 +168,7 @@ Card2.propTypes = {
   loading: PropTypes.bool,
   error: PropTypes.object,
   defaultThumbnail: PropTypes.string,
-  defaultUsername: PropTypes.string,
-  linkPrefix: PropTypes.string,
   className: PropTypes.string,
-  truncateLength: PropTypes.number,
 };
 
-export default Card2
+export default Card2;

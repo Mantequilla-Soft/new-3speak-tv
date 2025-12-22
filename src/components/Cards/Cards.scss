@@ -114,6 +114,18 @@
         }
 
       }
+
+      .view-count {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        color: var(--text-secondary);
+        font-size: 12px;
+        
+        span {
+          font-size: 11px;
+        }
+      }
   
     }
     
