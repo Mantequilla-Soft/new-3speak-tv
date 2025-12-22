@@ -4,11 +4,12 @@
   align-items: center;
   padding: 10px 2%;
   justify-content: space-between;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-  background: #fff;
+  box-shadow: var(--nav-shadow);
+  background: var(--nav-bg);
   position: sticky;
   top: 0px;
   z-index: 10;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
 
   .nav-left {
     display: flex;
@@ -24,6 +25,7 @@
       width: 30px;
       margin-right: 20px;
       cursor: pointer;
+      color: var(--text-primary);
     }
     .logo {
       width: 130px;
@@ -42,6 +44,7 @@
     .menu-icon {
       width: 30px;
       margin-right: 20px;
+      color: var(--text-primary);
     }
     .logo {
       width: 130px;
@@ -55,7 +58,6 @@
 
     .search-wrapper {
       position: relative;
-      // width: 100%;
       width: 400px;
       max-width: 40rem;
       @include mix.respond(phone) {
@@ -69,7 +71,7 @@
         left: 0.75rem;
         display: flex;
         align-items: center;
-        color: #64748b;
+        color: var(--text-muted);
 
         .icon {
           width: 1rem;
@@ -80,36 +82,39 @@
       .search-input {
         width: 100%;
         border-radius: 9999px;
-        border: none;
-        box-shadow: 0px 1px 7px 0px #00000040;
-        // background: rgba(2, 6, 23, 0.8);
+        border: 1px solid var(--border-light);
+        box-shadow: var(--shadow-md);
+        background: var(--input-bg);
+        color: var(--text-primary);
         padding: 0.5rem 0.75rem;
         padding-left: 2.25rem;
         font-size: 0.875rem;
-        // color: #f1f5f9;
+        transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease;
 
         &::placeholder {
-          color: #64748b;
+          color: var(--text-muted);
         }
 
         &:focus {
           outline: none;
-          border-color: #334155;
-          box-shadow: 0 0 0 2px rgb(247, 193, 189);
+          border-color: var(--accent-primary);
+          box-shadow: 0 0 0 2px var(--input-focus);
         }
       }
     }
   }
 
   .nav-right {
-    gap: 5px;
+    gap: 8px;
 
     span {
       padding: 5px 20px;
       border-radius: 15px;
-      background-color: #ccc;
+      background-color: var(--bg-tertiary);
+      color: var(--text-primary);
       font-size: 14px;
       font-weight: 500;
+      transition: background-color 0.3s ease, color 0.3s ease;
       @include mix.respond(phone) {
         display: none;
       }
@@ -128,13 +133,15 @@
     border-radius: 5px;
     font-weight: 500;
     font-size: 14px;
-    color: black;
+    color: var(--text-primary);
     border: none;
-    background-color: #fff;
-    // border: 1px solid grey;
-    box-shadow: 3px 4px 2px 0px #00000040;
-    // border-right-width: 2px;
-    // border-right-color: red;
+    background-color: var(--bg-secondary);
+    box-shadow: var(--shadow-md);
+    transition: background-color 0.3s ease, color 0.3s ease;
+    
+    &:hover {
+      background-color: var(--bg-hover);
+    }
   }
 
   .side-nav {
@@ -144,15 +151,12 @@
     top: 0px;
     width: 50%;
     height: 100%;
-    background-color: rgb(233, 236, 239);
+    background-color: var(--bg-tertiary);
     border-radius: 0px 12px 30px 0px;
     backdrop-filter: blur(10px);
-    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-    transition-duration: 500ms;
-    color: white;
+    transition: background-color 0.3s ease, transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
     padding: 0px 20px;
-    // border: 2px solid red;
-    border-right: 5px solid red;
+    border-right: 5px solid var(--accent-primary);
 
     @include mix.respond(desktop) {
       display: none;
@@ -166,8 +170,9 @@
       .icon {
         width: 20px;
         margin-right: 15px;
+        color: var(--text-secondary);
         &:hover {
-          color: red;
+          color: var(--accent-primary);
         }
       }
       .search-wrap-sm {
@@ -176,18 +181,20 @@
         .wrap {
           display: flex;
           align-items: center;
-          background-color: red;
-          background-color: #fff;
+          background-color: var(--input-bg);
           gap: 2px;
           border-radius: 8px;
           height: 30px;
           padding: 0px 5px;
+          transition: background-color 0.3s ease;
           input {
             width: 100%;
             height: 100%;
             outline: none;
             border: none;
             padding-left: 4px;
+            background: transparent;
+            color: var(--text-primary);
             @include mix.respond(phone) {
               font-size: 16px;
             }
@@ -198,13 +205,14 @@
     .side-link-n {
       display: flex;
       padding: 10px 0;
-      color: black;
+      color: var(--text-primary);
       border-radius: 4px;
       align-items: center;
       margin-bottom: 20px;
       width: fit-content;
       flex-wrap: wrap;
       cursor: pointer;
+      transition: color 0.3s ease;
       span {
         font-size: 14px;
         font-weight: 500;
@@ -217,17 +225,16 @@
       &:hover {
         padding-left: 10px;
         width: 90%;
-        background-color: rgba(0, 0, 0, 0.05);
-        box-shadow: rgba(0, 0, 0, 0.25);
-        box-shadow: 0px 1px 7px 0px #00000040;
-        color: red;
+        background-color: var(--bg-hover);
+        box-shadow: var(--shadow-md);
+        color: var(--accent-primary);
       }
     }
 
     hr {
       border: 0;
       height: 1px;
-      background: #ccc;
+      background: var(--divider);
       width: 85%;
     }
 
@@ -235,7 +242,7 @@
       h3 {
         font-size: 13px;
         margin: 20px 0px;
-        color: #5a5a5a;
+        color: var(--text-secondary);
       }
 
       .icon {
@@ -257,31 +264,30 @@
     right: 20px;
     cursor: pointer;
     font-size: 18px;
-    color: black;
+    color: var(--text-primary);
   }
   .dropdown-menu {
     position: absolute;
     right: 10px;
     top: 50px;
-
-    // margin-top: 0.5rem; // mt-2
-    width: 12rem; // w-48
-    background-color: #fff; // bg-white
-    border-radius: 0.5rem; // rounded-lg
-    box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1),
-      0 4px 6px -4px rgb(0 0 0 / 0.1); // shadow-lg
-    padding: 0.5rem 0; // py-2
-    border: 1px solid #e5e7eb; // border-gray-200
+    width: 12rem;
+    background-color: var(--bg-secondary);
+    border-radius: 0.5rem;
+    box-shadow: var(--shadow-lg);
+    padding: 0.5rem 0;
+    border: 1px solid var(--border-light);
+    transition: background-color 0.3s ease, border-color 0.3s ease;
 
     .list {
-      display: block; // block
-      padding: 0.5rem 1rem; // px-4 py-2
-      color: #374151; // text-gray-700
+      display: block;
+      padding: 0.5rem 1rem;
+      color: var(--text-secondary);
       text-decoration: none;
       font-size: 13.5px;
 
       &:hover {
-        background-color: #f3f4f6; // hover:bg-gray-100
+        background-color: var(--bg-hover);
+        color: var(--accent-primary);
       }
     }
   }
