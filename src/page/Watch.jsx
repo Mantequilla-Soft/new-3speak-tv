@@ -7,15 +7,23 @@ import { GET_RELATED, GET_VIDEO_DETAILS, TRENDING_FEED } from '../graphql/querie
 import { useQuery } from '@apollo/client';
 import BarLoader from '../components/Loader/BarLoader';
 
-// Filter out videos older than 3 years (videos before 2022 may not exist)
-const MIN_VIDEO_DATE = new Date('2022-01-01T00:00:00.000Z');
+// Filter out videos older than December 2023 (old videos may not exist on CDN)
+const MIN_VIDEO_DATE = new Date('2023-12-01T00:00:00.000Z');
 
-function filterRecentVideos(videos) {
+function filterValidVideos(videos) {
   if (!videos || !Array.isArray(videos)) return [];
   return videos.filter(video => {
+    // Must have created_at date
     if (!video?.created_at) return false;
+    
+    // Filter out old videos
     const videoDate = new Date(video.created_at);
-    return videoDate >= MIN_VIDEO_DATE;
+    if (videoDate < MIN_VIDEO_DATE) return false;
+    
+    // Filter out videos without a valid play_url (likely deleted)
+    if (!video?.spkvideo?.play_url) return false;
+    
+    return true;
   });
 }
 
@@ -39,22 +47,22 @@ function Watch() {
   const { data: trendingData, loading: trendingLoading } = useQuery(TRENDING_FEED);
 
   // Smart recommendation logic:
-  // 1. Filter out old videos from related feed
+  // 1. Filter out old/deleted videos from related feed
   // 2. If no valid related videos, use trending feed (also filtered)
   // 3. Exclude the current video from recommendations
   const suggestedVideos = useMemo(() => {
     const relatedItems = suggestionsData?.relatedFeed?.items || [];
     const trendingItems = trendingData?.trendingFeed?.items || [];
     
-    // Filter recent videos from related feed
-    let recommendations = filterRecentVideos(relatedItems);
+    // Filter valid videos from related feed
+    let recommendations = filterValidVideos(relatedItems);
     
     // If related feed has less than 5 valid videos, supplement with trending
     if (recommendations.length < 5) {
-      const recentTrending = filterRecentVideos(trendingItems);
+      const validTrending = filterValidVideos(trendingItems);
       const existingPermlinks = new Set(recommendations.map(v => v.permlink));
       
-      for (const video of recentTrending) {
+      for (const video of validTrending) {
         if (!existingPermlinks.has(video.permlink) && recommendations.length < 20) {
           recommendations.push(video);
           existingPermlinks.add(video.permlink);
