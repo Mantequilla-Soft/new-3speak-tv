@@ -11,12 +11,13 @@
    }
 
   .card {
-    background-color: #fff;
+    background-color: var(--card-bg);
     border-radius: 12px;
-    box-shadow: 1px 4px 9px 0px #0000003B;
+    box-shadow: var(--card-shadow);
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
     @include respond(phone) {
       border-radius: 8px;
    }
@@ -52,9 +53,9 @@
         bottom: 1%;
         width: -webkit-fill-available;
         padding: 12px 4px;
-        background-color: rgba(255, 255, 255, 0.2);
-        backdrop-filter: blur(10px);
-        color: #fff;
+        background-color: var(--overlay-bg);
+        backdrop-filter: var(--backdrop-blur);
+        color: var(--text-inverse);
         p {
           font-size: 13px;
         }
@@ -66,6 +67,7 @@
     display: -webkit-box;
     -webkit-box-orient: vertical;
     -webkit-line-clamp: 2;
+    color: var(--text-primary);
     }
     .profile-view-wrap{
       display: flex;
@@ -91,7 +93,7 @@
         h2 {
           font-size: 12.95px;
           font-weight: 400;
-          color: #000;
+          color: var(--text-primary);
           margin: 5px 0;
         }
       }
@@ -99,8 +101,8 @@
         display: flex;
         align-items: center;
         gap: 2px;
-        background: #E32933;
-        color: #fff;
+        background: var(--accent-primary);
+        color: var(--text-inverse);
         padding: 2px 8px;
         border-radius: 24px;
         // font-size: 4.02px;
@@ -111,6 +113,18 @@
           font-size: 10.5px;
         }
 
+      }
+
+      .view-count {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        color: var(--text-secondary);
+        font-size: 12px;
+        
+        span {
+          font-size: 11px;
+        }
       }
   
     }
@@ -123,8 +137,8 @@
         gap: 5px;
         padding: 3px 7px;
         border-radius: 12px;
-        color: #fff;
-        background: #E32933;
+        color: var(--text-inverse);
+        background: var(--accent-primary);
         img {
           width: 15px;
           height: 15px;
@@ -142,27 +156,27 @@
         font-size: 10px;
         padding: 3px 7px;
         border-radius: 12px;
-        color: #fff;
-        background-color: #fff;
-        background: #E32933;
+        color: var(--text-inverse);
+        background: var(--accent-primary);
       }
     }
 
     h2 {
       font-size: 12.95px;
       font-weight: 500;
-      color: #000;
+      color: var(--text-primary);
       margin: 5px 0;
     }
     h3 {
       font-size: 14px;
       font-weight: 600;
-      color: #555;
+      color: var(--text-secondary);
       margin: 6px 0;
       padding: 0px 4px;
     }
     p {
       font-size: 14px;
+      color: var(--text-secondary);
     }
 
     .bottom-action {
@@ -171,10 +185,9 @@
       justify-content: space-between;
       padding: 5px 4px;
       // border-radius: 5px;
-      border-top: 1px solid grey;
+      border-top: 1px solid var(--border-light);
       margin-top: 2px;
       border-top-width: 1px;
-      border-color:rgb(226, 232, 240);
       // border: 1px solid grey;
       @include respond(phone) {
         padding: 7px 4px;
@@ -185,24 +198,26 @@
         gap: 12px;
         font-size: 14px;
         margin-bottom: 2px;
+        color: var(--text-secondary);
         .flex-div {
           gap: 2px;
           .icon {
             font-size: 17px;
+            color: var(--text-secondary);
             @include respond(phone) {
               font-size: 21px;
                 }
             &:hover {
-              color: red;
+              color: var(--accent-primary);
             }
             &.voted {
-              color: red;
+              color: var(--accent-primary);
             }
           }
           .icon-heart{
             font-size: 15px;
             &:hover {
-              color: red;
+              color: var(--accent-primary);
             }
           }
         }

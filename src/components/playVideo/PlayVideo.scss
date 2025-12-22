@@ -13,16 +13,17 @@
 
     .top-container{
         padding: 10px;
-        background-color: #fff;
+        background-color: var(--card-bg);
         border-radius: 10px;
-        box-shadow: 0 1px 6px 0 #20212447;
+        box-shadow: var(--card-shadow);
+        transition: background-color 0.3s ease, box-shadow 0.3s ease;
         .video-loader {
             display: flex;
             align-items: center;
             justify-content: center;
             height: 450px; // adjust as needed
             font-size: 18px;
-            color: #555;
+            color: var(--text-secondary);
             background-color: #000;
             width: 100%;
             border-radius: 8px;
@@ -30,7 +31,7 @@
             .spinner {
     font-size: 3rem;
     animation: spin 1s linear infinite;
-    color: var(--primary-color);
+    color: var(--accent-primary);
   }
           }
           
@@ -38,6 +39,7 @@
             margin-top: 10px;
             font-weight: 600;
             font-size: 18.5px;
+            color: var(--text-primary);
             @include mix.respond(phone) {
                 font-size: 14.5px;
               }
@@ -51,10 +53,11 @@
               }
             span{
                 padding: 2px 10px;
-                background-color: #4a96c281;
+                background-color: var(--accent-light);
                 border-radius: 8px;
                 margin-right: 3px;
                 font-size: 14.35px;
+                color: var(--text-primary);
                 @include mix.respond(phone) {
                     margin-bottom: 5px;
                     font-size: 12.35px;
@@ -71,6 +74,7 @@
             span{
                 font-size: 13px;
                 font-weight: 500;
+                color: var(--text-secondary);
             }
         }
 
@@ -81,7 +85,7 @@
             flex-wrap: wrap;
             margin-top: 10px;
             font-size: 14px;
-            color: #5a5a5a;
+            color: var(--text-secondary);
             .wrap-left{
                 display: flex;
                 align-items: center;
@@ -113,10 +117,10 @@
                     .icon{
                         font-size: 20px;
                         margin-right: 4px;  
-                         
+                        color: var(--text-secondary);
                     }
                     .icon-red{
-                        color: red;
+                        color: var(--accent-primary);
                         font-size: 20px;
                         margin-right: 4px;   
                     }
@@ -126,6 +130,7 @@
                     .amount{
                         border: none;
                         background-color: transparent;
+                        color: var(--text-secondary);
                         cursor: pointer;
                     }
                     
@@ -133,8 +138,8 @@
             }
             .tip-btn{
                 padding: 2px 12px;
-                background-color: red;
-                color: white;
+                background-color: var(--accent-primary);
+                color: var(--text-inverse);
                 border: none;
                 border-radius: 5px;
                 font-size: 13.35px;
@@ -177,20 +182,21 @@
         align-items: center;
         margin-top: 20px;
         padding: 10px;
-        background-color: #fff;
+        background-color: var(--card-bg);
         border-radius: 10px;
-        box-shadow: 0 1px 6px 0 #20212447;
+        box-shadow: var(--card-shadow);
+        transition: background-color 0.3s ease;
         div{
             flex: 1;
             line-height: 18px;
             p{
-                color: #000;
+                color: var(--text-primary);
                 font-weight: 600;
                 font-size: 18px;
             }
             span{
                 font-size: 13px;
-                color: #5a5a5a;
+                color: var(--text-secondary);
             }
         }
         img{
@@ -201,8 +207,8 @@
             object-fit: cover;
         }
         button{
-            background: #5a5a5a;
-            color: #fff;
+            background: var(--text-secondary);
+            color: var(--text-inverse);
             padding: 4px 30px;
             border: 0;
             outline: 0;
@@ -218,9 +224,11 @@
         margin-top: 10px;
         padding: 20px;
         border-radius: 10px;
-        background-color: #fff;
+        background-color: var(--card-bg);
         border-radius: 10px;
-        box-shadow: 0 1px 6px 0 #20212447;
+        box-shadow: var(--card-shadow);
+        color: var(--text-primary);
+        transition: background-color 0.3s ease;
     }
 
     // .blog-content {
@@ -244,11 +252,12 @@
 
       .add-comment-wrap{
         margin-top: 10px;
-        background-color: #fff;
+        background-color: var(--card-bg);
         border-radius: 10px;
-        box-shadow: 0 1px 6px 0 #20212447;
+        box-shadow: var(--card-shadow);
         width: 100% !important;
         box-sizing: border-box;
+        transition: background-color 0.3s ease;
         
             // color: #fff;
             &.sub{
@@ -265,8 +274,8 @@
             padding-bottom: 3px;
             border-radius: 10px 10px 0px 0px;
             box-sizing: border-box;
-            background-color: rgb(245 245 245);
-            // background-color: rgb(252 252 252);
+            background-color: var(--bg-tertiary);
+            color: var(--text-primary);
 
             width: 100% ;
         }
@@ -280,6 +289,8 @@
             outline: none;
             padding: 10px;
             box-sizing: border-box;
+            background-color: var(--card-bg);
+            color: var(--text-primary);
             @include mix.respond(phone) {
                 height: 60px;
               }
@@ -288,7 +299,7 @@
                 border-radius: 12px; 
             }
             &::placeholder {
-                color: #999;
+                color: var(--text-muted);
                 font-style: italic;
                 font-size: 14px;
                 // padding: 5px;
@@ -306,7 +317,7 @@
                 border: none;
                 border-radius: 5px;
                 background-color: #4ba1d3;
-                color: #fff;
+                color: var(--text-inverse);
 
 
             }

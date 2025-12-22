@@ -14,10 +14,14 @@
 
 import { Buffer } from 'buffer';
 import process from 'process';
+import process from 'process';
 
 // Aggressively set Buffer globally
 window.Buffer = Buffer;
+// Aggressively set Buffer globally
+window.Buffer = Buffer;
 globalThis.Buffer = Buffer;
+global.Buffer = Buffer;
 global.Buffer = Buffer;
 
 // Set process

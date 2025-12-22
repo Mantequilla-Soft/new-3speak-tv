@@ -9,7 +9,7 @@
 </p>
 
 <p align="center">
-  <a href="https://3speak.tv">Live Site</a> •
+  <a href="https://new.3speak.tv">Live Site</a> •
   <a href="#features">Features</a> •
   <a href="#getting-started">Getting Started</a> •
   <a href="#development">Development</a> •
@@ -39,7 +39,7 @@
 - **Blockchain**: Hive (via @hiveio/dhive)
 - **Authentication**: Hive Keychain SDK, HiveAuth, Aioha
 - **GraphQL**: Apollo Client
-- **Video Player**: JW Player
+- **Video Player**: JW Player - Snapie Open Source Video Player
 
 ## Getting Started
 
@@ -53,7 +53,7 @@
 
 1. **Clone the repository**
    ```bash
-   git clone https://github.com/3speaknetwork/new-3speak-tv.git
+   git clone https://github.com/Mantequilla-Soft/new-3speak-tv.git
    cd new-3speak-tv
    ```
 
@@ -174,7 +174,7 @@ Follow [Conventional Commits](https://www.conventionalcommits.org/):
 
 ## Related Projects
 
-- [3Speak Backend](https://github.com/3speaknetwork) - API services
+- [3Speak Backend](https://github.com/spknetwork) - API services
 - [@snapie/renderer](https://www.npmjs.com/package/@snapie/renderer) - Hive markdown renderer
 - [@snapie/operations](https://www.npmjs.com/package/@snapie/operations) - Hive operation builder
 
@@ -184,13 +184,15 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## Links
 
-- 🌐 [3Speak.tv](https://3speak.tv)
-- 💬 [Discord](https://discord.gg/3speak)
-- 🐦 [Twitter](https://twitter.com/3aboratories)
-- 📝 [Hive Blog](https://peakd.com/@threespeak)
+- 🌐 [3Speak.tv](https://new.3speak.tv)
+- 💬 [Discord](https://discord.gg/NSFS2VGj83)
+- 🐦 [Twitter/X](https://x.com/3speaktv)
+- 📝 [Hive Blog](https://ecency.com/@threespeak)
 
 ---
 
 <p align="center">
   Built with ❤️ by the 3Speak team and contributors
+<br>
+@kesolink - @menobass - @eddiespino
 </p>

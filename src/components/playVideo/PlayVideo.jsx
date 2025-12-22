@@ -391,8 +391,10 @@ const handleProfileNavigate = (user) => {
                   width: "100%",
                   height: "100%",
                   border: "0",
+                  overflow: "hidden",
                 }}
                 frameBorder="0"
+                scrolling="no"
                 allowFullScreen
               ></iframe>
             </div>

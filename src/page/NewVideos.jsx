@@ -13,12 +13,21 @@ const NewVideos = () => {
   
   const { data, loading, error } = useQuery(NEW_CONTENT, {
     variables: { limit: VIDEOS_PER_PAGE, skip },
+    fetchPolicy: 'network-only', // Prevent cache from causing duplicate onCompleted calls
     onCompleted: (newData) => {
       const newItems = newData?.socialFeed?.items || [];
       if (skip === 0) {
         setAllVideos(newItems);
       } else {
-        setAllVideos(prev => [...prev, ...newItems]);
+        // Deduplicate by permlink + author
+        setAllVideos(prev => {
+          const existingKeys = new Set(prev.map(v => `${v.author?.username || v.author}-${v.permlink}`));
+          const uniqueNew = newItems.filter(item => {
+            const key = `${item.author?.username || item.author}-${item.permlink}`;
+            return !existingKeys.has(key);
+          });
+          return [...prev, ...uniqueNew];
+        });
       }
     }
   });

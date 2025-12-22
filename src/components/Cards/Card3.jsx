@@ -1,4 +1,5 @@
 import { IoChevronUpCircleOutline } from "react-icons/io5";
+import { IoEyeOutline } from "react-icons/io5";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 import { Link, useNavigate } from "react-router-dom";
@@ -14,6 +15,7 @@ import { estimate, getVotePower } from "../../utils/hiveUtils";
 import LazyPayout from "../../page/LazyPayout";
 import { fixVideoThumbnail } from "../../utils/fixThumbnails";
 import ProfileModal from "../modal/ProfileModal";
+import useViewCounts from "../../hooks/useViewCounts";
 
 dayjs.extend(relativeTime);
 
@@ -27,12 +29,20 @@ function Card3({ videos = [], loading = false, error = null }) {
   const [hoverTimeout, setHoverTimeout] = useState(null);
   const [hoverPos, setHoverPos] = useState({ x: 0, y: 0 });
   const [modalUser, setModalUser] = useState(null);
+  const { getViewCount } = useViewCounts(videos);
 
   const [selectedPost, setSelectedPost] = useState({
     username: "",
     permlink: "",
   });
   const [voteStatus, setVoteStatus] = useState({})
+
+  const formatViewCount = (views) => {
+    if (views === null || views === undefined) return null;
+    if (views >= 1000000) return `${(views / 1000000).toFixed(1)}M`;
+    if (views >= 1000) return `${(views / 1000).toFixed(1)}K`;
+    return views.toLocaleString();
+  };
 
   useEffect(() => {
     const fetchAccountData = async () => {
@@ -141,6 +151,12 @@ function Card3({ videos = [], loading = false, error = null }) {
                 </h2>
 
               </div>
+              {getViewCount(video.author?.username || video.author || video.owner, video.permlink) !== null && (
+                <div className="view-count">
+                  <IoEyeOutline size={14} />
+                  <span>{formatViewCount(getViewCount(video.author?.username || video.author || video.owner, video.permlink))}</span>
+                </div>
+              )}
             </div>
 
             {/* Bottom actions */}

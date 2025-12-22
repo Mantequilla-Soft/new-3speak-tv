@@ -1,11 +1,13 @@
 import { GiToggles } from "react-icons/gi";
 import logo from "../../assets/image/3S_logo.svg";
+import logoDark from "../../assets/image/3S_logodark.png";
 import "./nav.scss";
 import { CiSearch } from "react-icons/ci";
 import Sidebar from "../Sidebar/Sidebar";
 import { Link, NavLink } from "react-router-dom";
 import { useAppStore } from "../../lib/store";
 import { useGetMyQuery } from "../../hooks/getUserDetails";
+import ThemeToggle from "./ThemeToggle";
 import { AiOutlineClose} from "react-icons/ai";
 import { IoCloudUploadSharp } from "react-icons/io5";
 import { MdOutlineDashboard, MdOutlineDynamicFeed, MdOutlineLeaderboard } from "react-icons/md";
@@ -19,7 +21,7 @@ import SearchList_Sm from "./SearchList_Sm";
 import { TiThMenu } from "react-icons/ti";
 
 function Nav({ setSideBar, toggleProfileNav }) {
-  const { authenticated, LogOut, user } = useAppStore();
+  const { authenticated, LogOut, user, initializeTheme, theme } = useAppStore();
   const [nav, setNav] = useState(false)
   const [searchTerm, setSearchTerm] = useState('');
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -35,6 +37,11 @@ function Nav({ setSideBar, toggleProfileNav }) {
   const handleNav = () =>{
     setNav((prev) => !prev);
    }
+
+   // Initialize theme on mount
+   useEffect(() => {
+    initializeTheme();
+   }, []);
 
    useEffect(() => {
   const handleClickOutside = (e) => {
@@ -65,12 +72,12 @@ function Nav({ setSideBar, toggleProfileNav }) {
     <nav className="nav-container">
       <div className="nav-left flex-dev">
         <TiThMenu size={25} className="menu-icon" onClick={() => setSideBar((prev) => (prev === false ? true : false))}/>
-        <Link to="/"><img className="logo" src={logo} alt="" /></Link>
+        <Link to="/"><img className="logo" src={theme === 'dark' ? logoDark : logo} alt="3Speak" /></Link>
       </div>
       
       <div className="phone-nav-left" ref={menuIconRef} >
         <TiThMenu size={25} className="menu-icon" onClick={handleNav} />
-        <Link to="/"><img className="logo" src={logo} alt="" /></Link>
+        <Link to="/"><img className="logo" src={theme === 'dark' ? logoDark : logo} alt="3Speak" /></Link>
       </div>
       <div className="nav-middle flex-dev">
         <div className="search-wrapper" >
@@ -154,6 +161,7 @@ function Nav({ setSideBar, toggleProfileNav }) {
 
       {authenticated ? (
         <div className="nav-right flex-div">
+          <ThemeToggle />
           <span>{user}</span>
           {/* <IoIosNotifications size={20} /> */}
           
@@ -167,11 +175,12 @@ function Nav({ setSideBar, toggleProfileNav }) {
           </div> */}
         </div>
       ) : (
-        <>
+        <div className="nav-right flex-div">
+          <ThemeToggle />
           <Link to="/login">
             <button>LOG IN</button>
           </Link>
-        </>
+        </div>
       )}
     </nav>
   );
