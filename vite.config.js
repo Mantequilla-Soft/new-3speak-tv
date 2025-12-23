@@ -7,7 +7,16 @@ export default defineConfig({
     react(),
     nodePolyfills({
       // Include all modules needed by keychain-sdk and hive crypto libraries
-      include: ["buffer", "stream", "crypto", "util", "process", "querystring", "events", "string_decoder"],
+      include: [
+        "buffer",
+        "stream",
+        "crypto",
+        "util",
+        "process",
+        "querystring",
+        "events",
+        "string_decoder",
+      ],
       globals: {
         Buffer: true,
         global: true,
@@ -17,14 +26,16 @@ export default defineConfig({
       protocolImports: true,
       // Override to ensure proper Buffer implementation
       overrides: {
-        fs: 'memfs',
+        fs: "memfs",
       },
     }),
   ],
+
   define: {
     "process.env": {},
     global: "globalThis",
   },
+
   resolve: {
     alias: {
       // Ensure browser-compatible versions of Node.js modules
@@ -36,33 +47,32 @@ export default defineConfig({
       buffer: "buffer",
     },
   },
+
   optimizeDeps: {
     esbuildOptions: {
       define: {
         global: "globalThis",
       },
-      // Inject Buffer shim at the top of every file
-      inject: ['./src/polyfills.js'],
+
     },
-    // Force these to be pre-bundled together so polyfills are available
     include: [
       "buffer",
-      "react-quilljs", 
-      "quill", 
-      "qrcode.react", 
+      "react-quilljs",
+      "quill",
+      "qrcode.react",
       "hive-auth-wrapper",
       "keychain-sdk",
       "readable-stream",
     ],
-    exclude: ['@metamask/providers', 'web3'],
+    exclude: ["@metamask/providers", "web3"],
   },
+
   build: {
     commonjsOptions: {
-      transformMixedEsModules: true, // Helps with CJS/ESM interop
+      transformMixedEsModules: true,
     },
   },
 
-  // ✅ Add this block to enable SCSS source maps
   css: {
     devSourcemap: true,
   },
