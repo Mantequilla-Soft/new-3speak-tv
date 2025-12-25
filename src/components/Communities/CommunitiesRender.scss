@@ -11,15 +11,20 @@
     justify-content: space-between;
     align-items: center;
     background-color: #e2e2ec;
+    [data-theme="dark"] & {
+      color: var(--text-primary);
+      background: #3a3939c9;
+      border: solid 1px rgba(128, 128, 128, 0.144);
+    }
     h1 {
       width: 50%;
       font-size: 20px;
+
       @include respond(phone) {
         display: none;
       }
-      
     }
-    .phone-c{
+    .phone-c {
       display: none;
       @include respond(phone) {
         font-size: 18px;
@@ -36,7 +41,6 @@
       @include respond(phone) {
         font-size: 14px;
         padding: 10px 10px;
-        
       }
     }
   }
@@ -54,7 +58,7 @@
       transition: border-color 0.3s;
       @include respond(phone) {
         width: 40%;
-        font-size: 16px;     
+        font-size: 16px;
       }
       &:focus {
         border-color: #0073e6;
@@ -68,8 +72,8 @@
     gap: 20px;
     @include respond(phone) {
       display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(70px, 1fr));
-    gap: 20px;    
+      grid-template-columns: repeat(auto-fill, minmax(70px, 1fr));
+      gap: 20px;
     }
 
     .blog-card {
@@ -92,9 +96,14 @@
         padding: 12px;
         margin-bottom: 8px;
         transition: transform 0.5s;
+            [data-theme="dark"] & {
+
+      background: #3a3939c9;
+      border: solid 1px rgba(128, 128, 128, 0.144);
+    }
         @include respond(phone) {
-          height:70px;
-        width: 70px;     
+          height: 70px;
+          width: 70px;
         }
       }
 
@@ -110,7 +119,7 @@
         margin: 10px;
         text-align: center;
         @include respond(phone) {
-          font-size: 14px;    
+          font-size: 14px;
         }
       }
     }

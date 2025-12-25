@@ -22,6 +22,10 @@ $indigo-500: #6366f1;
   min-height: 100vh;
   background-color: $gray-50;
   padding: 3rem 1rem;
+  [data-theme="dark"] & {
+    background: #1a1a1a;
+    // border: solid 1px rgba(128, 128, 128, 0.144);
+  }
   @include mix.respond(phone) {
     padding: 0rem 0.6rem;
   }
@@ -36,7 +40,7 @@ $indigo-500: #6366f1;
         margin-bottom: 1rem;
       }
 
-      .wrap{
+      .wrap {
         display: flex;
         align-items: center;
         gap: 10px;
@@ -46,6 +50,10 @@ $indigo-500: #6366f1;
         font-size: 2.25rem;
         font-weight: 700;
         color: $gray-900;
+        [data-theme="dark"] & {
+          color: var(--text-primary);
+          // border: solid 1px rgba(128, 128, 128, 0.144);
+        }
         @include mix.respond(phone) {
           font-size: 1.55rem;
         }
@@ -73,6 +81,10 @@ $indigo-500: #6366f1;
         padding: 1.5rem;
         position: relative;
         overflow: hidden;
+        [data-theme="dark"] & {
+          background: #3a3939c9;
+          border: solid 1px rgba(128, 128, 128, 0.144);
+        }
         @include mix.respond(phone) {
           padding: 0.9rem;
         }
@@ -88,6 +100,9 @@ $indigo-500: #6366f1;
               font-size: 1.5rem;
               font-weight: 600;
               color: $gray-900;
+              [data-theme="dark"] & {
+                color: var(--text-primary);
+              }
               @include mix.respond(phone) {
                 font-size: 1rem;
               }
@@ -114,9 +129,15 @@ $indigo-500: #6366f1;
             border-radius: 12px;
             background-color: rgb(252, 235, 235);
             border: 1px solid rgb(247, 193, 189);
+            [data-theme="dark"] & {
+              color: var(--text-primary);
+              background-color: #1a1a1a;
+            }
+            border: 1px solid #1e293b;
+            background: rgba(15, 23, 42, 0.8);
             @include mix.respond(phone) {
-                padding: 0.4rem 1rem;
-                font-size: 0.675rem;
+              padding: 0.4rem 1rem;
+              font-size: 0.675rem;
             }
 
             // &:hover {
@@ -135,6 +156,9 @@ $indigo-500: #6366f1;
             font-size: 2.25rem;
             font-weight: 700;
             color: $gray-900;
+            [data-theme="dark"] & {
+              color: var(--text-primary);
+            }
             @include mix.respond(phone) {
               font-size: 1.25rem;
             }
@@ -151,6 +175,9 @@ $indigo-500: #6366f1;
           .usd-value {
             margin-top: 0.25rem;
             color: $gray-600;
+            [data-theme="dark"] & {
+              color: var(--text-primary);
+            }
             @include mix.respond(phone) {
               font-size: 0.75rem;
             }
@@ -179,13 +206,16 @@ $indigo-500: #6366f1;
       justify-content: center;
       z-index: 50;
 
-      .modal-content-trx {
+      .modal-content-tran {
         background: white;
         border-radius: 1rem;
         padding: 1.5rem;
         width: 100%;
         max-width: 32rem;
-
+        [data-theme="dark"] & {
+          background: #1a1a1a;
+          border: solid 1px rgba(128, 128, 128, 0.144);
+        }
         h3 {
           font-size: 1.25rem;
           font-weight: 600;
@@ -201,6 +231,9 @@ $indigo-500: #6366f1;
             font-weight: 500;
             color: $gray-700;
             margin-bottom: 0.25rem;
+            [data-theme="dark"] & {
+              color: var(--text-primary);
+            }
           }
 
           input {
@@ -209,7 +242,7 @@ $indigo-500: #6366f1;
             border: 1px solid $gray-300;
             border-radius: 0.5rem;
             box-sizing: border-box;
-            
+
             @include mix.respond(phone) {
               font-size: 16px;
             }
@@ -250,9 +283,17 @@ $indigo-500: #6366f1;
               color: $gray-700;
               border: 1px solid;
               border-color: #302c5c38;
+              [data-theme="dark"] & {
+                background: #3a3939c9;
+                color: var(--text-primary);
+                border: solid 1px rgba(128, 128, 128, 0.144);
+              }
 
               &:hover {
                 background: $gray-200;
+                [data-theme="dark"] & {
+                  background: #555252c9;
+                }
               }
             }
 
@@ -262,10 +303,18 @@ $indigo-500: #6366f1;
               color: red;
               background-color: rgb(252, 235, 235);
               border: 1px solid rgb(247, 193, 189);
+              [data-theme="dark"] & {
+                background: #3a3939c9;
+                color: var(--text-primary);
+                border: solid 1px rgba(128, 128, 128, 0.144);
+              }
 
-              //   &:hover {
-              //     background: $indigo-700;
-              //   }
+              &:hover {
+                background: $gray-200;
+                [data-theme="dark"] & {
+                  background: #555252c9;
+                }
+              }
             }
           }
         }

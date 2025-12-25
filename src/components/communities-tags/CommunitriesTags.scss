@@ -1,45 +1,54 @@
 @use "../../mixins.scss" as *;
 .wrap-community {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 7px;
+  position: sticky;
+  top: 0;
+  .wrap {
     display: flex;
     align-items: center;
-    justify-content: space-between;
     gap: 7px;
-    position: sticky;
-    top: 0;
-    .wrap {
-      display: flex;
-      align-items: center;
-      gap: 7px;
-      span {
-        font-size: 12.5px;
-        font-weight: 700;
-        padding: 5px 10px;
-        color: red;
-        border-radius: 12px;
-        background-color: rgb(252, 235, 235);
-        border: 1px solid rgb(247, 193, 189);
-        cursor: pointer;
-      }
-      .tags{
-        @include respond(phone) {
-          display: none;
-        }
-        &.tab-out{
-          @include respond(tab) {
-          display: none;
-        }
-        }
-      }
-    }
-    .wrap-upload-video {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      width: 30px;
-      height: 30px;
+    span {
+      font-size: 12.5px;
+      font-weight: 700;
+      padding: 5px 10px;
       color: red;
-      border-radius: 50%;
+      border-radius: 12px;
       background-color: rgb(252, 235, 235);
       border: 1px solid rgb(247, 193, 189);
+      cursor: pointer;
+      [data-theme="dark"] & {
+        background: #3a3939c9;
+        border: solid 1px rgba(255, 0, 0, 0.61);
+        color: var(--text-primary);
+      }
+    }
+    .tags {
+      @include respond(phone) {
+        display: none;
+      }
+      &.tab-out {
+        @include respond(tab) {
+          display: none;
+        }
+      }
     }
   }
+  .wrap-upload-video {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 30px;
+    height: 30px;
+    color: red;
+    border-radius: 50%;
+    background-color: rgb(252, 235, 235);
+    border: 1px solid rgb(247, 193, 189);
+    [data-theme="dark"] & {
+      background: #3a3939c9;
+      border: 1px solid red;
+    }
+  }
+}

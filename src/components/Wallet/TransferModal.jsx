@@ -87,7 +87,7 @@ function TransferModal({showModal, selectedCoin, balances, fetchBalances}) {
       
   return (
     <div className="transfer-modal">
-            <div className="modal-content-trx">
+            <div className="modal-content-tran">
               <h3>Transfer {selectedCoin.name}</h3>
               <div className="input-group">
                 <label>Amount ({selectedCoin.name})</label> <span className='error'>{balErr}</span>

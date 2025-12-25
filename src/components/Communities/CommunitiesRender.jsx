@@ -67,7 +67,7 @@ function CommunitiesRender() {
     <>
     <div className="communities-render">
       <div className="create-communitie-wrap">
-        <h1 d>Communities – Best online, decentralized, immutable, rewarding communities</h1>
+        <h1 >Communities – Best online, decentralized, immutable, rewarding communities</h1>
         <h1 className='phone-c'>Communities</h1>
         <button onClick={toggleModal}>Create Community</button>
       </div>
