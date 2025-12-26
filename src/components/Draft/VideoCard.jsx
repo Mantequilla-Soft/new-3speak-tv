@@ -46,7 +46,7 @@ const VideoCard = ({  video, onEdit, onView, onDelete, onPublish}) => {
                 </svg>
                 View
               </button>
-              <button 
+              {/* <button 
                 className="btn btn--danger btn--sm" 
                 onClick={() => onDelete(video.id)}
               >
@@ -57,7 +57,7 @@ const VideoCard = ({  video, onEdit, onView, onDelete, onPublish}) => {
                   <line x1="14" y1="11" x2="14" y2="17" />
                 </svg>
                 Delete
-              </button>
+              </button> */}
             </>
           ) : (
             <button 

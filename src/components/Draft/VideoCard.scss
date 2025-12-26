@@ -29,6 +29,10 @@ $black: #212529;
     overflow: hidden;
     transition: all 0.3s ease-in-out;
     position: relative;
+            [data-theme="dark"] & {
+          background: #3a3939c9;
+          border: solid 1px rgba(128, 128, 128, 0.144);
+        }
     
     &:hover {
       transform: translateY(-5px);
@@ -148,9 +152,19 @@ $black: #212529;
       background-color: $white;
       color: $black;
       border: 1px solid $gray;
+                    [data-theme="dark"] & {
+          color: #fff;
+          background: #3a3939c9;
+          border: solid 1px rgba(128, 128, 128, 0.144);
+        }
       
       &:hover {
         background-color: $light-gray;
+                                    [data-theme="dark"] & {
+          color: #fff;
+          background: #d16f6f2d;
+          border: solid 1px rgba(128, 128, 128, 0.144);
+        }
       }
     }
     
@@ -160,6 +174,7 @@ $black: #212529;
       
       &:hover {
         background-color: darken($primary-red, 8%);
+
       }
     }
     
@@ -179,6 +194,9 @@ $black: #212529;
     svg {
       width: 16px;
       height: 16px;
+              [data-theme="dark"] & {
+          color: #fff;
+        }
     }
   }
 

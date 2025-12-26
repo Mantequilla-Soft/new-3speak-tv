@@ -1,5 +1,5 @@
 @use "../mixins.scss" as *;
-$primary-blue: #1EAEDB;
+$primary-blue: #1eaedb;
 $primary-red: #ea384c;
 $white: #ffffff;
 $light-gray: #f8f9fa;
@@ -7,228 +7,239 @@ $gray: #e9ecef;
 $dark-gray: #6c757d;
 $black: #212529;
 .edit-page {
-    background-color: $white;
-    border-radius: 10px;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-    margin-bottom: 30px;
-    animation: fade-in 0.4s ease-out;
-    padding: 10px;
-    
-    .header {
-      padding: 20px;
-      border-bottom: 1px solid $gray;
-      
-      h1 {
-        font-size: 24px;
-        display: flex;
-        align-items: center;
-        gap: 10px;
-        color: $black;
-        
-        .edit-icon {
-          color: $primary-red;
-        }
+  background-color: $white;
+  border-radius: 10px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  margin-bottom: 30px;
+  animation: fade-in 0.4s ease-out;
+  padding: 10px;
+  [data-theme="dark"] & {
+    background: #3a3939c9;
+    border: solid 1px rgba(128, 128, 128, 0.144);
+  }
+
+  .header {
+    padding: 20px;
+    border-bottom: 1px solid $gray;
+
+    h1 {
+      font-size: 24px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: $black;
+      [data-theme="dark"] & {
+        color: #ffffff;
+      }
+
+      .edit-icon {
+        color: $primary-red;
       }
     }
-    
-    .content {
+  }
+
+  .content {
     //   display: grid;
     //   grid-template-columns: 1fr 1fr;
     display: flex;
-      gap: 30px;
-      margin-top: 20px;
-      width: 100%;
-      
-      @include respond(phone) {
-        flex-direction: column;
-      }
-    }
-    
-    .form-container {
-      animation: slide-in-right 0.3s ease-out;
-      width: 50%;
-      @include respond(phone) {
-        width: 100%;
-      }
-    }
-    
-    
-  }
-  
-  .edit-form {
-    .form-group {
-      margin-bottom: 20px;
-      &.tap-sp{
-        margin-top: 60px;
-      }
-      
-      label {
-        display: block;
-        margin-bottom: 8px;
-        font-weight: 500;
-        color: $dark-gray;
-      }
-      
-      .form-input,
-      .form-textarea {
-        width: 100%;
-        border: 1px solid $gray;
-        border-radius: 6px;
-        transition: border-color 0.3s;
-        
-        &:focus {
-          outline: none;
-          border-color: $primary-red;
-          box-shadow: 0 0 0 2px rgba($primary-red, 0.1);
-        }
-      }
+    gap: 30px;
+    margin-top: 20px;
+    width: 100%;
 
-      .form-input {
-        height: 30px;
-        padding-left: 5px;
-      }
-      
-      .form-textarea {
-        height: 400px;
-        resize: vertical; // Optional: allows users to resize textarea
-        padding: 5px;
-        @include respond(phone) {
-          height: 200px;
-        }
-      }
-    }
-    
-    .form-actions {
-      display: flex;
-      justify-content: flex-start;
-      margin-top: 30px;
+    @include respond(phone) {
+      flex-direction: column;
     }
   }
-  .preview {
-    animation: scale-in 0.4s ease-out;
+
+  .form-container {
+    animation: slide-in-right 0.3s ease-out;
     width: 50%;
     @include respond(phone) {
       width: 100%;
     }
-    
-    h2 {
-      margin-bottom: 20px;
-      font-size: 18px;
-      font-weight: 600;
-      color: $dark-gray;
-    }
   }
-  .video-preview {
-    background-color: $white;
-    border: 1px solid $gray;
-    border-radius: 8px;
-    overflow: hidden;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-    
-    .thumbnail {
-      // width: 70%;
-      height: 200px;
-      overflow: hidden;
-      
-      img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
+}
+
+.edit-form {
+  .form-group {
+    margin-bottom: 20px;
+    &.tap-sp {
+      margin-top: 60px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 500;
+      color: $dark-gray;
+      [data-theme="dark"] & {
+        color: #ffffff;
       }
     }
 
-    .content-pre {
-        padding: 15px;
-        .title {
-          font-size: 18px;
-          font-weight: 600;
-          margin-bottom: 10px;
-          color: $black;
-        }
+    .form-input,
+    .form-textarea {
+      width: 100%;
+      border: 1px solid $gray;
+      border-radius: 6px;
+      transition: border-color 0.3s;
+
+      &:focus {
+        outline: none;
+        border-color: $primary-red;
+        box-shadow: 0 0 0 2px rgba($primary-red, 0.1);
       }
-    
-    
-    
-    
-    
-    // .meta {
-    //   display: flex;
-    //   justify-content: space-between;
-    //   align-items: center;
-    //   margin-bottom: 15px;
-      
-    //   .video-preview__date {
-    //     font-size: 14px;
-    //     color: $dark-gray;
-    //   }
-      
-    //   .video-preview__status {
-    //     display: inline-block;
-    //     padding: 3px 10px;
-    //     font-size: 12px;
-    //     border-radius: 30px;
-    //     font-weight: 500;
-        
-    //     &--published {
-    //       background-color: rgba($primary-red, 0.1);
-    //       color: $primary-red;
-    //     }
-        
-    //     &--failed {
-    //       background-color: rgba($primary-red, 0.1);
-    //       color: $primary-red;
-    //     }
-    //   }
-    // }
-    
-    .description {
-      margin-bottom: 15px;
-      font-size: 14px;
-      color: $dark-gray;
-      line-height: 1.5;
     }
-    
-    .tags {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      margin-top: 5px;
-      
-      .tag {
-        display: inline-block;
-        padding: 4px 10px;
-        background-color: #1bbbeb5d;
-        border-radius: 20px;
-        font-size: 12px;
-        color: black;
+
+    .form-input {
+      height: 30px;
+      padding-left: 5px;
+    }
+
+    .form-textarea {
+      height: 400px;
+      resize: vertical; // Optional: allows users to resize textarea
+      padding: 5px;
+      @include respond(phone) {
+        height: 200px;
       }
     }
   }
-  
-  // Loading state
-  .page-loading {
+
+  .form-actions {
     display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    min-height: 400px;
-    
-    .spinner {
-      width: 40px;
-      height: 40px;
-      border: 3px solid rgba($primary-red, 0.3);
-      border-radius: 50%;
-      border-top-color: $primary-red;
-      animation: spin 1s ease-in-out infinite;
-      margin-bottom: 15px;
-    }
-    
-    p {
-      color: $dark-gray;
+    justify-content: flex-start;
+    margin-top: 30px;
+  }
+}
+.preview {
+  animation: scale-in 0.4s ease-out;
+  width: 50%;
+  @include respond(phone) {
+    width: 100%;
+  }
+
+  h2 {
+    margin-bottom: 20px;
+    font-size: 18px;
+    font-weight: 600;
+    color: $dark-gray;
+  }
+}
+.video-preview {
+  background-color: $white;
+  border: 1px solid $gray;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        [data-theme="dark"] & {
+          background: #3a3939c9;
+          border: solid 1px rgba(128, 128, 128, 0.144);
+        }
+  .thumbnail {
+    // width: 70%;
+    height: 200px;
+    overflow: hidden;
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
     }
   }
-  
-  @keyframes spin {
-    to { transform: rotate(360deg); }
+
+  .content-pre {
+    padding: 15px;
+    .title {
+      font-size: 18px;
+      font-weight: 600;
+      margin-bottom: 10px;
+      color: $black;
+              [data-theme="dark"] & {
+          color: #fff;
+        }
+    }
   }
-  
+
+  // .meta {
+  //   display: flex;
+  //   justify-content: space-between;
+  //   align-items: center;
+  //   margin-bottom: 15px;
+
+  //   .video-preview__date {
+  //     font-size: 14px;
+  //     color: $dark-gray;
+  //   }
+
+  //   .video-preview__status {
+  //     display: inline-block;
+  //     padding: 3px 10px;
+  //     font-size: 12px;
+  //     border-radius: 30px;
+  //     font-weight: 500;
+
+  //     &--published {
+  //       background-color: rgba($primary-red, 0.1);
+  //       color: $primary-red;
+  //     }
+
+  //     &--failed {
+  //       background-color: rgba($primary-red, 0.1);
+  //       color: $primary-red;
+  //     }
+  //   }
+  // }
+
+  .description {
+    margin-bottom: 15px;
+    font-size: 14px;
+    color: $dark-gray;
+    line-height: 1.5;
+  }
+
+  .tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 5px;
+
+    .tag {
+      display: inline-block;
+      padding: 4px 10px;
+      background-color: #1bbbeb5d;
+      border-radius: 20px;
+      font-size: 12px;
+      color: black;
+    }
+  }
+}
+
+// Loading state
+.page-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 400px;
+
+  .spinner {
+    width: 40px;
+    height: 40px;
+    border: 3px solid rgba($primary-red, 0.3);
+    border-radius: 50%;
+    border-top-color: $primary-red;
+    animation: spin 1s ease-in-out infinite;
+    margin-bottom: 15px;
+  }
+
+  p {
+    color: $dark-gray;
+  }
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}

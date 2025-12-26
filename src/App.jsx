@@ -162,9 +162,6 @@ function App() {
       </div>
     </div>
 
-    {/* ✅ Global Upload Indicator (added) */}
-    {/* <UploadStatusIndicator /> */}
-
     </LegacyUploadProvider>
   );
 }
