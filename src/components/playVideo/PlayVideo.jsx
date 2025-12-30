@@ -179,7 +179,7 @@ const calculateVoteValue = async (account, percent) => {
   }, [author, permlink]); // Add author and permlink as dependencies
 
   // const handlePostComment = () => {
-  //   if(!authenticated){
+  //   if(!authenticated){gs?
   //       toast.error("Login to make comment")
   //       return
   //     }
@@ -232,7 +232,7 @@ const calculateVoteValue = async (account, percent) => {
   });
 
   const profile = getUserProfile.data?.profile;
-  const tags = videoDetails?.tags?.slice(0, 7);
+  const tags = videoDetails?.tags?.slice(0, 7) || [];
   const comunity_name = videoDetails?.community?.title;
 
 useEffect(() => {
@@ -360,7 +360,7 @@ const handleProfileNavigate = (user) => {
     <>
     <div className="play-video">
       <div className="top-container">
-{videoUrlSelected ? (
+{(author && permlink) ? (
     // <JWPlayer
     //   library={`https://cdn.jwplayer.com/libraries/${import.meta.env.VITE_JWPLAYER_LICENSE_ID}.js `} // Updated library
     //   licenseKey={import.meta.env.VITE_JWPLAYER_LICENSE_KEY} // Verify key validity
