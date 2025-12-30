@@ -223,7 +223,7 @@ const calculateVoteValue = async (account, percent) => {
     data: getVideo,
     loading,
   } = useQuery(GET_VIDEO, { variables: { author, permlink }, ssr: true });
-  const spkvideo = getVideo?.socialPost.spkvideo;
+  const spkvideo = getVideo?.socialPost?.spkvideo;
   console.log("hive ---- data" , spkvideo)
   const [videoUrlSelected, setVideoUrlSelected] = useState(null);
 
