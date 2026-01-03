@@ -116,8 +116,8 @@ function Card3({ videos = [], loading = false, error = null }) {
                     .padStart(2, "0")}
                 </span>
               </div>
-              {/* Scheduled Post Badge */}
-              {video.publish_type === 'schedule' && (
+              {/* Scheduled Post Badge - only show while status is 'scheduled' */}
+              {video.publish_type === 'schedule' && video.status === 'scheduled' && (
                 <div className="scheduled-badge" title={`Scheduled for ${dayjs(video.publish_data?.scheduled_at).format('MMM D, YYYY h:mm A')}`}>
                   <IoCalendarOutline size={18} />
                 </div>
