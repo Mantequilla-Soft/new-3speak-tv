@@ -33,6 +33,8 @@ function Card3({ videos = [], loading = false, error = null }) {
   const [hoverPos, setHoverPos] = useState({ x: 0, y: 0 });
   const [modalUser, setModalUser] = useState(null);
   const { getViewCount } = useViewCounts(videos);
+  const [showTooltip, setShowTooltip] = useState(false);
+
 
   const [selectedPost, setSelectedPost] = useState({
     username: "",
@@ -46,6 +48,13 @@ function Card3({ videos = [], loading = false, error = null }) {
     if (views >= 1000) return `${(views / 1000).toFixed(1)}K`;
     return views.toLocaleString();
   };
+
+  useEffect(() => {
+  const close = () => setShowTooltip(false);
+  window.addEventListener("click", close);
+  return () => window.removeEventListener("click", close);
+}, []);
+
 
   useEffect(() => {
     const fetchAccountData = async () => {
@@ -121,10 +130,31 @@ function Card3({ videos = [], loading = false, error = null }) {
 
               {/* Status Badges */}
               {video.status === 'scheduled' && video.publish_type === 'schedule' && (
-                <div className="status-badge scheduled" title={`Scheduled for ${dayjs(video.publish_data?.scheduled_at).format('MMM D, YYYY h:mm A')}`}>
+                <div
+                  className="status-badge scheduled"
+                  onMouseEnter={() => setShowTooltip(true)}
+                  onMouseLeave={() => setShowTooltip(false)}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    setShowTooltip((prev) => !prev);
+                  }}
+                >
                   <IoCalendarOutline size={18} />
                   <span>Scheduled</span>
+
+                  {showTooltip && (
+                    <div className="schedule-tooltip">
+                      Scheduled for <br />
+                      <strong>
+                        {dayjs(video.publish_data?.scheduled_at).format(
+                          "MMM D, YYYY h:mm A"
+                        )}
+                      </strong>
+                    </div>
+                  )}
                 </div>
+
               )}
 
               {video.publish_type === 'publish_manual' && (

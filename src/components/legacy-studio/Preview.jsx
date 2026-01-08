@@ -554,7 +554,7 @@ const startEncodingPolling = (vid) => {
             </button>
           </div>
         </div>
-      )}
+       )} 
       {showUploadModal && (
 
         <div className="upload-warning-modal">
