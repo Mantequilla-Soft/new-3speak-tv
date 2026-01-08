@@ -4,10 +4,11 @@ import { useMemo } from "react";
 import { useLegacyUpload } from "../../context/LegacyUploadContext";
 
 const VideoUploadStatus = ({  uploadVideoTo3Speak, setUploading}) => {
+  // 🎬 ✅ Publishing to Hive...
 
   
 
-  const {uploadVideoProgress, statusMessages} = useLegacyUpload()
+  const {uploadVideoProgress, statusMessages, isScheduled} = useLegacyUpload()
   console.log("message status", statusMessages)
 
   const successPairs = [
@@ -29,6 +30,14 @@ const cleanedMessages = useMemo(() => {
       filtered = filtered.filter(m => m.message !== pair.loading);
     }
   });
+
+    /* ---------------- REMOVE PUBLISHING MESSAGE WHEN SCHEDULED ---------------- */
+  if (isScheduled) {
+    filtered = filtered.filter(
+      msg =>
+        !msg.message.includes("🎬 ✅ Publishing to Hive...")
+    );
+  }
 
   /* ---------------- DEDUPE STATUS LABELS ---------------- */
   const seenStatus = new Map();

@@ -192,6 +192,7 @@ function ProfilePage() {
   });
 
   const videos = data?.pages.flat() || [];
+  console.log(videos)
 
   /* ===============================
      SCROLL HANDLER
