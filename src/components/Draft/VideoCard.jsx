@@ -2,25 +2,40 @@ import React from 'react';
 import "./VideoCard.scss"
 import dayjs from "dayjs";
 import {  useNavigate } from 'react-router-dom';
+import { fixVideoThumbnail } from '../../utils/fixThumbnails';
 const VideoCard = ({  video, onEdit, onView, onDelete, onPublish}) => {
   const navigate = useNavigate()
   const handleNavigate = ()=>{
     navigate(`/watch?v=${video?.owner}/${video.permlink ?? "unknown"}`)
   }
+  const getStatusLabel = (status) => {
+  switch (status) {
+    case 'published':
+      return 'Published';
+    case 'scheduled':
+      return 'Scheduled';
+    case 'failed':
+    case 'publish_manual':
+      return 'Failed';
+    default:
+      return status;
+  }
+};
 
-  console.log(video)
+
+  // console.log(video)
 
   return (
     <div className="video-card">
       <div className="thumbnail">
-        <img src={video.thumbUrl} alt={video.title} />
+        <img src={fixVideoThumbnail(video)} alt={video.title} />
       </div>
       <div className="content">
         <h3 className="title">{video.title || ""}</h3>
         <div className="metas">
-          <span className="date">{dayjs(video.created).fromNow()}</span>
+          <span className="date">{dayjs(video.created_at).fromNow()}</span>
           <span className={`status status--${video.status}`}>
-            {video.status === 'published' ? 'Published' : 'Failed'}
+            {getStatusLabel(video.status)}
           </span>
         </div>
         <div className="actions">
