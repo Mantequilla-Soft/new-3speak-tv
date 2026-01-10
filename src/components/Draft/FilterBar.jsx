@@ -12,6 +12,7 @@ const FilterBar = ({ onFilterChange, activeFilter }) => {
   const filters = [
     { value: 'all', label: 'All Videos' },
     { value: 'published', label: 'Published' },
+    {value: "scheduled", label: "scheduled"},
     { value: 'publish_manual', label: 'Failed' }
   ];
 

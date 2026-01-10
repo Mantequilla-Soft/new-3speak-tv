@@ -108,6 +108,11 @@ $black: #212529;
         background-color: rgba($primary-blue, 0.1);
         color: $primary-blue;
       }
+
+      &--scheduled {
+        background-color: yellow;
+        color: black;
+      }
       
       &--publish_manual {
         background-color: rgba($primary-red, 0.1);

@@ -1,60 +1,102 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import "./DraftStudio.scss"
+import "./DraftStudio.scss";
 import FilterBar from '../Draft/FilterBar';
 import VideoCard from '../Draft/VideoCard';
 import { useNavigate } from 'react-router-dom';
 import BarLoader from '../Loader/BarLoader';
-
-
+import { useAppStore } from '../../lib/store';
+import { useInfiniteQuery } from '@tanstack/react-query';
 
 const DraftStudio = () => {
-  const navigate = useNavigate()
-  const [videos, setVideos] = useState([]);
+  const { user, authenticated } = useAppStore();
+  const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
-  const accessToken = localStorage.getItem("access_token");
   const [filter, setFilter] = useState('all');
-  console.log(accessToken)
-  console.log(videos)
 
- 
+  const pageSize = 20;
 
-  const fetchMyVideos = async () => {
+  /* ===============================
+       VIDEO FEED (INFINITE SCROLL)
+    =============================== */
+  const fetchVideos = async ({ pageParam = 0, queryKey }) => {
+    const [, user, filter] = queryKey;
+
+    const status =
+      filter === 'all'
+        ? 'all'
+        : filter === 'failed'
+        ? 'publish_manual'
+        : filter;
+
     try {
-      const response = await axios.get('https://studio.3speak.tv/mobile/api/my-videos', {
+      const res = await axios.get('https://views.3speak.tv/api/my-videos', {
+        params: {
+          username: user,
+          limit: pageSize,
+          offset: pageParam * pageSize,
+          status,
+          sort: 'newest',
+        },
         headers: {
           'Content-Type': 'application/json',
-          // ✅ Important: Use a browser extension or server to pass the correct cookie if CORS blocks it
-          Authorization: `Bearer ${accessToken}`, // This must be set from the browser session or via a proxy
         },
-        withCredentials: true // Needed to send cookies from browser
       });
 
-      setVideos(response.data || []);
+      const videos = res.data?.data?.videos || [];
+      return videos.filter(video => video.status !== 'uploaded');
     } catch (error) {
-      console.error('Failed to fetch videos:', error.response.data);
+      console.error('Failed to fetch videos:', error);
+      return [];
     } finally {
       setLoading(false);
     }
   };
-  const filteredVideos = videos.filter(video => {
-    if (filter === 'all') return true;
-    return video.status === filter;
+
+  const {
+    data,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+    isLoading,
+  } = useInfiniteQuery({
+    queryKey: ['ProfilePage', user, filter],
+    queryFn: fetchVideos,
+    getNextPageParam: (lastPage, allPages) =>
+      lastPage.length < pageSize ? undefined : allPages.length,
+    enabled: !!user,
   });
+
+  const videos = data?.pages.flat() || [];
+
+  /* ===============================
+       SCROLL HANDLER
+    =============================== */
+  useEffect(() => {
+    const handleScroll = () => {
+      if (
+        window.innerHeight + window.scrollY >=
+          document.body.offsetHeight - 200 &&
+        !isFetchingNextPage &&
+        hasNextPage
+      ) {
+        fetchNextPage();
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [isFetchingNextPage, hasNextPage, fetchNextPage]);
 
   const handleFilterChange = (newFilter) => {
     setFilter(newFilter);
   };
 
-  useEffect(() => {
-    fetchMyVideos();
-  }, []);
+  const handleEdit = (video) => {
+    navigate(`/editvideo/${video._id}`, { state: { video } });
+  };
 
-  const handleEdit = (video) =>{
-    navigate(`/editvideo/${video._id}`, {state: {video}})
-  }
-
-  if (loading) return <div><BarLoader /></div>;
+  if (loading || isLoading) return <div><BarLoader /></div>;
 
   return (
     <div>
@@ -66,14 +108,11 @@ const DraftStudio = () => {
         </div>
       ) : (
         <div className="video-grid">
-          {filteredVideos.map(video => (
+          {videos.map(video => (
             <VideoCard
               key={video._id}
               video={video}
-              onEdit={()=>handleEdit(video)}
-              // onView={handleView}
-              // onDelete={handleDelete}
-              // onPublish={handlePublish}
+              onEdit={() => handleEdit(video)}
             />
           ))}
         </div>
