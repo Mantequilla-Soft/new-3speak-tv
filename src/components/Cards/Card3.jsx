@@ -210,9 +210,16 @@ function Card3({ videos = [], loading = false, error = null }) {
                   }/avatar`}
                   alt=""
                 />
-                <h2>
+                <h2
+                  onClick={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    setModalUser(video.author?.username || video.author || video.owner);
+                  }}
+                >
                   {video.author?.username || video.author || video.owner}
                 </h2>
+
               </Link>
               {getViewCount(video.author?.username || video.author || video.owner, video.permlink) !== null && (
                 <div className="view-count">

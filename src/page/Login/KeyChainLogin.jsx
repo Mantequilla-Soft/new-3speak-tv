@@ -300,9 +300,13 @@ const handleSwitchAccount = (user) => {
           </div>
 
           <div className="wrap-signup keychain-space">
-            <span>Don't have an account?</span>
-            <span className="last">Sign up now!</span>
-            {/* <QRCodeSVG value={qrUrl} size={200} /> */}
+              <span onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                window.open("https://3speak.tv", "_blank", "noopener,noreferrer");
+              }} className="email-login">
+                Login with email
+              </span>
           </div>
 
           {accountList.length > 0 && (

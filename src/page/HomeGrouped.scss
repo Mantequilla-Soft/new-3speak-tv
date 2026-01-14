@@ -13,7 +13,7 @@
 }
 
 .home-grouped-container {
-  padding: 20px 0;
+  // padding: 20px 0;
   max-width: 100%;
 
   @include respond(phone) {
@@ -29,7 +29,7 @@
 }
 
 .video-row {
-  margin-bottom: 25px;
+  margin-bottom: 10px;
 
   @include respond(phone) {
     margin-bottom: 15px;
@@ -46,11 +46,23 @@
       margin-bottom: 4px;
       padding: 0 6px;
     }
+    .wrap-title{
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      svg{
+        fill: var(--accent-primary);
+        @include respond(phone) {
+          width: 14px;
+          height: 14px;
+        }
+      }
+    }
 
     h2 {
       font-size: 16px;
       font-weight: 600;
-      color: var(--text-primary);
+      color: red;
       margin: 0;
 
       @include respond(phone) {
@@ -60,7 +72,7 @@
 
     .view-all {
       font-size: 12px;
-      color: var(--accent-primary);
+      color: red;
       text-decoration: none;
       font-weight: 500;
       transition: opacity 0.2s ease;

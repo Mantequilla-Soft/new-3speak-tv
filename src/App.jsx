@@ -55,7 +55,7 @@ import { LegacyUploadProvider } from "./context/LegacyUploadContext";
 
 function App() {
   const { initializeAuth, authenticated, LogOut } = useAppStore();
-  const [sidebar, setSideBar] = useState(false);
+  const [sidebar, setSideBar] = useState(true);
   const [profileNavVisible, setProfileNavVisible] = useState(false);
 
   const [globalCloseRender, setGlobalCloseRender] = useState(false)

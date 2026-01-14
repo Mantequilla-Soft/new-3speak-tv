@@ -27,7 +27,7 @@ function TagFeed() {
       // ---------------------------
   // FETCH COMMUNITY VIDEOS
   // ---------------------------
-  const fetchVideos = async ({ pageParam = 0 }) => {
+  const fetchVideos = async () => {
     const LIMIT = 200;
     let url;
     const trend = false
@@ -93,10 +93,12 @@ function TagFeed() {
 
   return (
     <div className='firstupload-container'>
-            <div className='headers'>{state.commuintyName}</div>
-            { loading ? <CardSkeleton /> :<Card3 videos={videos} loading={isFetchingNextPage}
+            {/* <div className='headers'>{state.commuintyName}</div> */}
+            { loading ? <CardSkeleton /> :<Card3 videos={videos}
+             error={isError ? "Failed to load videos" : ""}
+            loading={isFetchingNextPage}
     
-          error={isError} 
+          // error={isError} 
           className="custom-video-feed" />}
     
     
