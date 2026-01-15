@@ -38,7 +38,6 @@ function Preview() {
     setVideoId,
     uploadStatus,
     uploadVideoProgress,
-    // NEW: Auto-submit values
     onSaveClicked,
     userWantsToSubmit,
     setUserWantsToSubmit,
@@ -61,7 +60,8 @@ function Preview() {
   const navigate = useNavigate();
   const [showUploadModal, setShowUploadModal] = useState(false);
 
-
+  // ✅ ADDED: prevent duplicate background messages
+  const pollingStoppedRef = useRef(false);
 
   const addMessage = (msg, type = "info") => {
     setStatusMessages((prev) => [
@@ -74,12 +74,6 @@ function Preview() {
     ]);
   };
 
-  // ============================================
-  // REMOVED: Auto-trigger upload on mount
-  // Now only triggers when user clicks "Post Video" button
-  // ============================================
-
-  // Cleanup polling on unmount
   useEffect(() => {
     return () => {
       if (encodingIntervalRef.current) {
@@ -92,176 +86,93 @@ function Preview() {
     return <Navigate to="/studio" replace />;
   }
 
-//   if (isUploadLocked) {
-//   return <Navigate to="/studio/preview" replace />;
-// }
+  const startEncodingPolling = (vid) => {
+    setStatusText("Processing video…");
+    addMessage("Waiting for encoding to start…", "info");
 
- // --------------------------------------------------------
-// STATUS POLLING FUNCTION (every 5 seconds)
-// --------------------------------------------------------
-// const startEncodingPolling = (vid) => {
-//   setStatusText("Processing video…");
-//   addMessage("Waiting for encoding to start…");
+    let lastStatusLabel = null;
 
-//   let lastEncodingProgress = 0; // Track last progress to avoid duplicate messages
-//   let hasStartedEncoding = false; // Track if encoding has started
+    encodingIntervalRef.current = setInterval(async () => {
+      try {
+        const res = await axios.get(
+          `${UPLOAD_URL}/api/upload/in-progress`,
+          {
+            headers: {
+              "X-Hive-Username": user,
+            },
+          }
+        );
 
-//   encodingIntervalRef.current = setInterval(async () => {
-//     try {
-//       const statusResp = await axios.get(
-//         `${UPLOAD_URL}/api/upload/video/${vid}/status`,
-//         {
-//           headers: { Authorization: `Bearer ${UPLOAD_TOKEN}` },
-//         }
-//       );
+        const data = res.data?.data;
 
-//       const data = statusResp.data.data.video;
+        console.log("Polling response:", data);
 
-//       console.log(data)
-
-//       // ENCODING
-//       if (data.status === "encoding") {
-//         const encodingPct = data.encodingProgress || 0;
-        
-//         // Show message when encoding starts
-//         if (!hasStartedEncoding) {
-//           addMessage("🎬 Video encoding has started!", "info");
-//           hasStartedEncoding = true;
-//         }
-        
-//         // Update progress only if it changed by at least 5% (to avoid spam)
-//         if (encodingPct - lastEncodingProgress >= 5) {
-//           addMessage(`⚙️ Encoding progress: ${encodingPct}%`, "info");
-//           lastEncodingProgress = encodingPct;
-//         }
-        
-//         setStatusText(`Encoding video… (${encodingPct}%)`);
-//       }
-
-//       // PUBLISHING
-//       if (data.status === "publishing") {
-//         if (hasStartedEncoding) {
-//           addMessage("✅ Encoding completed (100%)", "success");
-//           hasStartedEncoding = false; // Reset for next stage
-//         }
-//         setStatusText("Publishing to blockchain…");
-//         addMessage("📡 Publishing video to blockchain…", "info");
-
-//       }
-
-//       // PUBLISHED
-//       if (data.status === "published") {
-//         clearInterval(encodingIntervalRef.current);
-//         setStatusText("Completed");
-//         setCompleted(true);
-//         setUploading(false);
-//         setIsSubmitting(false); // NEW: Mark as no longer submitting
-//         addMessage("🎉 Video successfully published!", "success");
-//       }
-
-//       // FAILED
-//       if (data.status === "failed") {
-//         clearInterval(encodingIntervalRef.current);
-//         setUploading(false);
-//         setIsSubmitting(false); // NEW: Mark as no longer submitting
-//         addMessage("❌ Video processing failed", "error");
-//         toast.error("Video processing failed");
-//       }
-//     } catch (err) {
-//       addMessage("⚠️ Polling error: " + err.message, "error");
-//       console.error("Polling error:", err);
-//     }
-//   }, 5000); // Poll every 5 seconds
-// };
-
-
-
-const startEncodingPolling = (vid) => {
-  setStatusText("Processing video…");
-  addMessage("Waiting for encoding to start…", "info");
-
-  let lastStatusLabel = null;
-
-  encodingIntervalRef.current = setInterval(async () => {
-    try {
-      const res = await axios.get(
-        `${UPLOAD_URL}/api/upload/in-progress`,
-        {
-          headers: {
-            "X-Hive-Username": user,
-          },
+        if (!data?.videos || data.videos.length === 0) {
+          clearInterval(encodingIntervalRef.current);
+          setStatusText("Completed");
+          setCompleted(true);
+          setUploading(false);
+          setIsSubmitting(false);
+          addMessage("🎉 Video successfully published!", "success");
+          return;
         }
-      );
 
-      const data = res.data?.data;
-      
-      console.log("Polling response:", data);
+        const video = data.videos.find(v => v.video_id === vid);
 
-      // Check if no videos are being processed (PUBLISHED state)
-      if (!data?.videos || data.videos.length === 0) {
-        clearInterval(encodingIntervalRef.current);
-        setStatusText("Completed");
-        setCompleted(true);
-        setUploading(false);
-        setIsSubmitting(false);
-        addMessage("🎉 Video successfully published!", "success");
-        return;
+        if (!video) {
+          console.warn("Video not found in progress list");
+          return;
+        }
+
+        const { status_label } = video;
+
+        if (status_label && status_label !== lastStatusLabel) {
+          addMessage(`🎬 ${status_label}`, "info");
+          setStatusText(status_label);
+          lastStatusLabel = status_label;
+        }
+
+      } catch (err) {
+        // ✅ ADDED: polling failure ≠ upload failure
+        if (!pollingStoppedRef.current) {
+          pollingStoppedRef.current = true;
+
+          clearInterval(encodingIntervalRef.current);
+
+          addMessage(
+            "⚠️ We can no longer track the upload status.",
+            "warning"
+          );
+
+          addMessage(
+            "✅ Your video is still processing and will be published shortly. Please do NOT re-upload.",
+            "success"
+          );
+
+          addMessage(
+            "ℹ️ You can safely leave this page. Processing continues in the background.",
+            "info"
+          );
+
+          setStatusText("Processing in background");
+          setUploading(false);
+          setIsSubmitting(false);
+          setHasBackgroundJob(true);
+        }
+
+        console.warn("Polling stopped due to error:", err);
       }
+    }, 5000);
+  };
 
-      // Find the exact video
-      const video = data.videos.find(v => v.video_id === vid);
-      
-      if (!video) {
-        console.warn("Video not found in progress list");
-        return;
-      }
-
-      const { status_label } = video;
-
-      // Update status message only when it changes
-      if (status_label && status_label !== lastStatusLabel) {
-        addMessage(`🎬 ${status_label}`, "info");
-        setStatusText(status_label);
-        lastStatusLabel = status_label;
-      }
-
-    } catch (err) {
-      addMessage(`⚠️ Polling error: ${err.message}`, "error");
-      console.error("Polling error:", err);
-    }
-  }, 5000);
-};
-
-
-  // --------------------------------------------------------
-  // HANDLE POST VIDEO BUTTON CLICK
-  // --------------------------------------------------------
   const handlePostVideo = () => {
-    // Check if upload is complete
     if (uploadStatus) {
-      // Upload complete - post immediately
-      console.log('✅ Upload complete - posting video immediately');
       uploadVideoTo3Speak();
     } else {
-      // Upload not complete - start auto-check
-      console.log('⏳ Upload not complete - starting auto-check');
       setShowUploadModal(true);
     }
   };
 
-  // // --------------------------------------------------------
-  // // AUTO-SUBMIT WHEN UPLOAD COMPLETES (if user clicked early)
-  // // --------------------------------------------------------
-  // useEffect(() => {
-  //   if (uploadStatus && userWantsToSubmit && !uploading && !completed) {
-  //     console.log('🚀 Upload complete! Auto-posting video...');
-  //     uploadVideoTo3Speak();
-  //   }
-  // }, [uploadStatus, userWantsToSubmit]);
-
-  // --------------------------------------------------------
-  // UPLOAD THUMBNAIL
-  // --------------------------------------------------------
   const uploadThumbnail = async (vid) => {
     if (!thumbnailFile) {
       addMessage("No thumbnail to upload", "warning");
@@ -292,73 +203,46 @@ const startEncodingPolling = (vid) => {
     }
   };
 
-  // --------------------------------------------------------
-  // FINALIZE UPLOAD + THUMBNAIL + POLLING
-  // --------------------------------------------------------
   const uploadVideoTo3Speak = async () => {
     if (!title || !description || !tagsPreview) {
       toast.error("Please fill in all fields: Title, Description and Tags!");
       return;
     }
 
-    // NEW: Stop auto-check interval (if running)
     stopAutoCheck();
-
-    // NEW: Mark as submitting
     setIsSubmitting(true);
     setUploading(true);
     setStatusText("Finalizing upload…");
     addMessage("Starting finalization…");
-    setHasBackgroundJob(true)
+    setHasBackgroundJob(true);
 
     try {
-      // ----------------------------------- 
-      // STEP 1 — FINALIZE
-      // ----------------------------------- 
-
       let parsedBeneficiaries = beneficiaries;
-    if (typeof beneficiaries === 'string') {
-      try {
-        parsedBeneficiaries = JSON.parse(beneficiaries);
-      } catch (e) {
-        parsedBeneficiaries = [];
-      }
-    }
-
-    // Get scheduling parameters
-    const schedulingParams = getSchedulingParams(isScheduled, scheduleDateTime);
-
-    // setIsUploadLocked(true)
-      const raw= {
-          upload_id: uploadId,
-        owner: user,
-        title: title,
-        description,
-        tags: tagsPreview,
-        size: videoFile.size,
-        duration: videoDuration,
-        originalFilename: videoFile.name,
-        community,
-        declineRewards,
-        beneficiaries: parsedBeneficiaries,
-        ...schedulingParams
+      if (typeof beneficiaries === 'string') {
+        try {
+          parsedBeneficiaries = JSON.parse(beneficiaries);
+        } catch (e) {
+          parsedBeneficiaries = [];
         }
-        console.log(raw)
+      }
+
+      const schedulingParams = getSchedulingParams(isScheduled, scheduleDateTime);
+
       const res = await axios.post(
         `${UPLOAD_URL}/api/upload/finalize`,
         {
           upload_id: uploadId,
-        owner: user,
-        title: title,
-        description,
-        tags: tagsPreview,
-        size: videoFile.size,
-        duration: videoDuration,
-        originalFilename: videoFile.name,
-        community,
-        declineRewards,
-        beneficiaries: parsedBeneficiaries,
-        ...schedulingParams
+          owner: user,
+          title,
+          description,
+          tags: tagsPreview,
+          size: videoFile.size,
+          duration: videoDuration,
+          originalFilename: videoFile.name,
+          community,
+          declineRewards,
+          beneficiaries: parsedBeneficiaries,
+          ...schedulingParams
         },
         {
           headers: {
@@ -382,23 +266,15 @@ const startEncodingPolling = (vid) => {
 
       addMessage("✔ Upload finalized successfully");
 
-      // ----------------------------------- 
-      // STEP 2 — UPLOAD THUMBNAIL
-      // ----------------------------------- 
       await uploadThumbnail(vid);
-
-      // ----------------------------------- 
-      // STEP 3 — START POLLING
-      // ----------------------------------- 
       startEncodingPolling(vid);
-      // setIsUploadLocked(false)
+
     } catch (err) {
       console.error("Upload error:", err);
       addMessage("❌ Upload failed: " + err.message, "error");
       toast.error("Upload failed: " + err.message);
       setUploading(false);
-      setIsSubmitting(false); // NEW: Reset submitting flag
-      // setIsUploadLocked(false)
+      setIsSubmitting(false);
     }
   };
 

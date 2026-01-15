@@ -303,7 +303,7 @@ const handleSwitchAccount = (user) => {
               <span onClick={(e) => {
                 e.preventDefault();
                 e.stopPropagation();
-                window.open("https://3speak.tv", "_blank", "noopener,noreferrer");
+                window.open("https://legacy.3speak.tv", "_blank", "noopener,noreferrer");
               }} className="email-login">
                 Login with email
               </span>

@@ -108,7 +108,7 @@ const iconsByTitle = {
             </div>
           ) : (
             <div className="card-container-horizontal">
-              <Card3 videos={videos.slice(0, 16)} loading={false} />
+              <Card3 videos={videos.slice(0, 16)} loading={false}  tooltipVariant="group" />
             </div>
           )}
         </div>

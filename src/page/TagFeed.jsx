@@ -48,29 +48,29 @@ function TagFeed() {
   };
 
 
-   const {
-  data,
-  fetchNextPage,
-  hasNextPage,
-  isFetchingNextPage,
-  isLoading : loading,
-  isError,
-} = useInfiniteQuery({
-  queryKey: ["homeCommunityFeed"],
-  queryFn: fetchVideos,
-  getNextPageParam: (lastPage, allPages) => {
-    // 🧠 Stop fetching if we already got one batch (no real pagination)
-    if (!lastPage || lastPage.length === 0) return undefined;
+  const {
+    data,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+    isLoading: loading,
+    isError,
+  } = useInfiniteQuery({
+    queryKey: ["homeCommunityFeed"],
+    queryFn: fetchVideos,
+    getNextPageParam: (lastPage, allPages) => {
+      // 🧠 Stop fetching if we already got one batch (no real pagination)
+      if (!lastPage || lastPage.length === 0) return undefined;
 
-    // If the server returns less than 200 (LIMIT), assume it's the end
-    if (lastPage.length < 200) return undefined;
+      // If the server returns less than 200 (LIMIT), assume it's the end
+      if (lastPage.length < 200) return undefined;
 
-    // Otherwise, stop after first page since API doesn’t support skip
-    if (allPages.length >= 1) return undefined;
+      // Otherwise, stop after first page since API doesn’t support skip
+      if (allPages.length >= 1) return undefined;
 
-    return 1; // optional — but we stop anyway
-  },
-});
+      return 1; // optional — but we stop anyway
+    },
+  });
 
 
   // Infinite scroll

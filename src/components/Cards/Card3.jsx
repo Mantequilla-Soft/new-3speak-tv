@@ -22,7 +22,7 @@ import useViewCounts from "../../hooks/useViewCounts";
 
 dayjs.extend(relativeTime);
 
-function Card3({ videos = [], loading = false, error = null }) {
+function Card3({ videos = [], loading = false, error = null, tooltipVariant = "default" }) {
   const { user } = useAppStore();
   const navigate = useNavigate();
   const [voteValue, setVoteValue] = useState(0.0);
@@ -271,6 +271,7 @@ function Card3({ videos = [], loading = false, error = null }) {
               voteValue={voteValue}
               setVoteValue={setVoteValue}
               setVoteStatus={setVoteStatus}
+              tooltipVariant={tooltipVariant}
             />
           </Link>
         );

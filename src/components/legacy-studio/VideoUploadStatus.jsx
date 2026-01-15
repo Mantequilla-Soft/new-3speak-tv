@@ -11,6 +11,10 @@ const VideoUploadStatus = ({  uploadVideoTo3Speak, setUploading}) => {
   const {uploadVideoProgress, statusMessages, isScheduled} = useLegacyUpload()
   console.log("message status", statusMessages)
 
+  const isBackgroundProcessing = statusMessages.some(msg =>
+  msg.message.includes("processing in the background")
+);
+
   const successPairs = [
     { loading: "Preparing upload request…", done: "Prepare completed ✔" },
     { loading: "Uploading thumbnail…", done: "✔ Thumbnail uploaded successfully" },
@@ -82,6 +86,8 @@ const canLeavePage = statusMessages.some(msg =>
     "⏳ Queued for encoding...",
     "🎬 ⏳ Queued for encoding...",
     "🎬 Processing (assigned)...",
+    "🎬 🎬 Encoding: 0%",
+    "🎬 Processing (uploading)..."
   ].includes(msg.message)
 );
 
@@ -92,7 +98,9 @@ const canLeavePage = statusMessages.some(msg =>
   );
   
   // Only show retry if there's an error AND finalize hasn't succeeded yet
-  const shouldShowRetry = hasError && !hasFinalizeSuccess;
+  // const shouldShowRetry = hasError && !hasFinalizeSuccess;
+  const shouldShowRetry = hasError && !hasFinalizeSuccess && !isBackgroundProcessing;
+
 
   return (
     <div className="upload-status-container">

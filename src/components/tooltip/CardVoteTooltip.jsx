@@ -12,7 +12,7 @@ import {  toast } from 'sonner'
 
 
 
-const CardVoteTooltip = ({ author, permlink, showTooltip, setShowTooltip, voteValue, setVoteValue, setVoteStatus }) => {
+const CardVoteTooltip = ({ author, permlink, showTooltip, setShowTooltip, voteValue, setVoteValue, setVoteStatus, tooltipVariant = "default"}) => {
   const { user, authenticated} = useAppStore();
   // const [votingPower, setVotingPower] = useState(100);
   const [weight, setWeight] = useState(100);
@@ -139,7 +139,7 @@ const getVotingDefaultValue = async (account, percent)=>{
   return (
     <div className="upvote-tooltip-wrap" ref={tooltipRef} onClick={(e) => e.preventDefault()} >
       {showTooltip && (
-        <div className="tooltip-box card">
+        <div className={`tooltip-box cap ${tooltipVariant }`}>
           <p>Vote Weight: {weight}%</p>
           <div className="wrap">
             {isLoading ? (

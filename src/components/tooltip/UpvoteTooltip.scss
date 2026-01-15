@@ -23,20 +23,35 @@
       border: solid 1px rgba(128, 128, 128, 0.144);
     }
     @include respond(phone) {
-      width: 200px;
+      // width: 200px;
       padding: 6px;
       left: -100px;
       top: -46px;
     }
-    &.card {
-      left: 120px;
-      top: -70px;
-      @include respond(phone) {
-        top: -60px;
-        left: 110px;
+
+      &.cap {
+        width: 200px;
+        left: 120px;
+        top: -70px;
+        @include respond(phone) {
+          top: -60px;
+          left: 110px;
+        }
       }
-    }
+      &.group {
+        width: 200px;
+        left: 120px;
+        top: -70px;
+        @include respond(phone) {
+          width: 165px;
+          top: -68px;
+          left: 80px;
+        }
+      }
+
+
     &.comment {
+      width: 200px;
       top: -65px;
       right: -120px;
       @include respond(phone) {
@@ -44,6 +59,7 @@
         left: -85px;
       }
     }
+
 
     p {
       @include respond(phone) {
