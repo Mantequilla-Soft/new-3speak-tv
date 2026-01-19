@@ -9,6 +9,11 @@
   color: #333;
   font-family: "Poppins", sans-serif;
   padding: 20px;
+    [data-theme="dark"] & {
+    background: #3a3939c9;
+    border: solid 1px rgba(128, 128, 128, 0.144);
+    color: #fff;
+  }
 }
 
 .not-found-container img {

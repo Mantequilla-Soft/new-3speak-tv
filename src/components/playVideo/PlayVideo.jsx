@@ -22,7 +22,7 @@ import { MdPeople } from "react-icons/md";
 import { estimate, getUersContent, getVotePower } from "../../utils/hiveUtils";
 import ToolTip from "../tooltip/ToolTip";
 import { ImSpinner9 } from "react-icons/im";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import BarLoader from "../Loader/BarLoader";
 import TipModal from "../../components/tip-reward/TipModal"
 import {  toast } from 'sonner'
@@ -245,9 +245,12 @@ const calculateVoteValue = async (account, percent) => {
     variables: { id: videoDetails?.author?.id },
   });
 
+  console.log(videoDetails)
+
   const profile = getUserProfile.data?.profile;
   const tags = videoDetails?.tags?.slice(0, 7) || [];
   const comunity_name = videoDetails?.community?.title;
+  const community_id = videoDetails?.community?.username;
 
 useEffect(() => {
   if (spkvideo?.play_url) {
@@ -368,7 +371,12 @@ const handleProfileNavigate = (user) => {
     setShowTooltip((prev)=> !prev)
   };
 
-  console.log(videoUrlSelected)
+
+
+const handleCommunityNavigate = (community) => {
+      navigate(`/community/${community}`);
+     }
+
 
   return (
     <>
@@ -425,7 +433,7 @@ const handleProfileNavigate = (user) => {
             <span key={index} onClick={()=>handleSelectTag(tags)}>{tags}</span>
           ))}
         </div>
-        <div className="community-title-wrap">
+        <div className="community-title-wrap" onClick={()=>handleCommunityNavigate(community_id)}>
           <MdPeople />
           <span>{comunity_name}</span>
         </div>

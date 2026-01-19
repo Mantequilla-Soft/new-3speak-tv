@@ -21,7 +21,7 @@ function LazyPayout({ author, permlink, setVotersNum, setHasVoted1 }) {
             setVotersNum(data.voters);
             setHasVoted1(data.isVoted)
           }
-          console.log("data", data)
+          // console.log("data", data)
         } catch (err) {
           console.error("Error fetching payout:", err);
         } finally {

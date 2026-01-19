@@ -1,4 +1,5 @@
 import { Client, SMTAsset } from '@hiveio/dhive';
+import moment from 'moment';
 
 
 
@@ -254,7 +255,7 @@ export const getDynamicProps = async () => {
 };
 
 
-export const votingPower = (account )=> {
+export const votingPower = (account) => {
   // @ts-ignore "Account" is compatible with dhive's "ExtendedAccount"
   const calc = account && client.rc.calculateVPMana(account);
   const { percentage } = calc;
@@ -262,50 +263,62 @@ export const votingPower = (account )=> {
   return percentage / 100;
 };
 
- export const estimate = async (account, percent) => {
-    const { fundRecentClaims, fundRewardBalance, base, quote } = await getDynamicProps()
+export const accountVestingShares = (account) => {
+  let effectiveVestingShares = 
+    parseAsset(account.vesting_shares).amount + 
+    parseAsset(account.received_vesting_shares).amount - 
+    parseAsset(account.delegated_vesting_shares).amount;
+  
+  // If there is a power down occurring, also reduce effective vesting shares by this week's power down amount
+  if (moment.utc(account.next_vesting_withdrawal).isAfter(moment.unix(0).utc())) {
+    // Reduce by minimum between 'weekly amount' and 'remainder'
+    const vestingWithdrawRate = parseAsset(account.vesting_withdraw_rate).amount;
+    const toWithdraw = parseFloat(account.to_withdraw) / 1e6; // Convert from VESTS
+    const withdrawn = parseFloat(account.withdrawn) / 1e6; // Convert from VESTS
+    
+    effectiveVestingShares -= Math.min(vestingWithdrawRate, toWithdraw - withdrawn);
+  }
+  
+  return effectiveVestingShares;
+};
+
+export const calculateVoteRshares = (userEffectiveVests, voteWeight = 10000) => {
+  const userVestingShares = parseInt(userEffectiveVests * 1e6, 10);
+  const userVotingPower = 10000 * (Math.abs(voteWeight) / 10000);
+  return userVestingShares * (userVotingPower / 10000) * 0.02;
+};
+
+export const estimate = async (account, percent) => {
+  try {
+    const { fundRecentClaims, fundRewardBalance, base, quote } = await getDynamicProps();
+    
+    if (!fundRecentClaims || !fundRewardBalance || !base || !quote) {
+      console.error('Missing dynamic props data');
+      return '0.000';
+    }
+
     const sign = percent < 0 ? -1 : 1;
-    const postRshares =  0;
-
-    const totalVests =
-      parseAsset(account.vesting_shares).amount +
-      parseAsset(account.received_vesting_shares).amount -
-      parseAsset(account.delegated_vesting_shares).amount;
-
-
-    const userVestingShares = totalVests * 1e6;
-
-    const userVotingPower = votingPower(account) * Math.abs(percent);
-    const voteEffectiveShares = userVestingShares * (userVotingPower / 10000) * 0.02;
-
-    // reward curve algorithm (no idea whats going on here)
-    const CURVE_CONSTANT = 2000000000000;
-    const CURVE_CONSTANT_X4 = 4 * CURVE_CONSTANT;
-    const SQUARED_CURVE_CONSTANT = CURVE_CONSTANT * CURVE_CONSTANT;
-
-    const postRsharesNormalized = postRshares + CURVE_CONSTANT;
-    const postRsharesAfterVoteNormalized = postRshares + voteEffectiveShares + CURVE_CONSTANT;
-    const postRsharesCurve =
-      (postRsharesNormalized * postRsharesNormalized - SQUARED_CURVE_CONSTANT) /
-      (postRshares + CURVE_CONSTANT_X4);
-    const postRsharesCurveAfterVote =
-      (postRsharesAfterVoteNormalized * postRsharesAfterVoteNormalized - SQUARED_CURVE_CONSTANT) /
-      (postRshares + voteEffectiveShares + CURVE_CONSTANT_X4);
-
-    const voteClaim = postRsharesCurveAfterVote - postRsharesCurve;
-
-    const proportion = voteClaim / fundRecentClaims;
-    const fullVote = proportion * fundRewardBalance;
-
-    const voteValue = fullVote * (base / quote);
-    // if (sign > 0) {
-    //   return Math.max(voteValue * sign, 0);
-    // }
-
-    const estimated = voteValue * sign;
+    
+    // Get effective vesting shares (accounting for power down)
+    const userEffectiveVests = accountVestingShares(account);
+    
+    // Calculate voting power (0-10000)
+    const userVotingPower = votingPower(account) * 100; // votingPower returns 0-100, we need 0-10000
+    
+    // Calculate vote weight (1-10000, based on slider percent)
+    const voteWeight = Math.abs(percent) * 100; // Convert percent (1-100) to weight (100-10000)
+    
+    // Calculate rshares
+    const voteEffectiveShares = calculateVoteRshares(userEffectiveVests, userVotingPower * (voteWeight / 10000));
+    
+    // Calculate vote value
+    const voteValue = (voteEffectiveShares / fundRecentClaims) * fundRewardBalance * (base / quote);
+    
+    const estimated = Math.max(voteValue, 0) * sign;
+    
     return estimated.toFixed(3);
-  };
-
-
-
- 
+  } catch (err) {
+    console.error('Vote estimation failed:', err);
+    return '0.000';
+  }
+};
