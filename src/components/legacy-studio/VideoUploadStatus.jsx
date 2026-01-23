@@ -9,7 +9,6 @@ const VideoUploadStatus = ({  uploadVideoTo3Speak, setUploading}) => {
   
 
   const {uploadVideoProgress, statusMessages, isScheduled} = useLegacyUpload()
-  console.log("message status", statusMessages)
 
   const isBackgroundProcessing = statusMessages.some(msg =>
   msg.message.includes("processing in the background")

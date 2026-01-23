@@ -51,7 +51,6 @@ const CreateCommunity = ({ isOpen, close}) => {
       const keys = getPrivateKeys(communityName, password);
       setCommunityKeys(keys);
     } catch (error) {
-      console.log(error);
       toast.error("Failed to generate community info");
     }
   };
@@ -88,7 +87,6 @@ const CreateCommunity = ({ isOpen, close}) => {
       setStep(4);
       setError(error.message || "An error occurred");
       toast.error(`Error: ${error.message || "An error occurred"}`);
-      console.log(error);
     } finally {
       setIsLoading(false);
     }
@@ -135,7 +133,6 @@ const CreateCommunity = ({ isOpen, close}) => {
         setIsLoading(false);
         setError(error.message);
         toast.error(`Error: ${error.message}`);
-        console.log(error);
       }
     }
   };

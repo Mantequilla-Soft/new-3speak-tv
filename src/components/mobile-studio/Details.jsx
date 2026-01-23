@@ -63,10 +63,7 @@ function Details() {
 
   useEffect(() => {
     const interval = setInterval(() => {
-      console.log("Checking for uploadURL...");
-
       if (uploadURL && thumbnailFile) {
-        console.log("uploadURL is available:", uploadURL);
         updateVideoInfo(thumbnailFile);
         clearInterval(interval); // Stop checking
       }
@@ -121,11 +118,6 @@ function Details() {
 
 
   const updateVideoInfo = async (thumbnailFile) => {
-  console.log("=== updateVideoInfo CALLED ===");
-  console.log("Upload URL:", uploadURL);
-  console.log("Video File:", videoFile);
-  console.log("Thumbnail File:", thumbnailFile);
-  console.log(username, "username")
 
   if (!uploadURL || !videoFile || !thumbnailFile) {
     console.error("Missing video and thumbnail data.");
@@ -153,7 +145,7 @@ function Details() {
     isReel: false,
   };
 
-  console.log("🚀 Payload being sent:", payload);
+  
 
   try {
     setLoading(true);
@@ -169,7 +161,6 @@ function Details() {
       }
     );
 
-    console.log("✅ Video info updated successfully:", data);
     setVideoId(data._id);
     setUploadStatus(true);
     return data;
@@ -284,7 +275,7 @@ function Details() {
         </div>
 
         <div className="submit-btn-wrap">
-        <button onClick={()=>{console.log("description===>", description); process() }}>Processed</button>
+        <button onClick={()=>{ process() }}>Processed</button>
         </div>
 
         </div>

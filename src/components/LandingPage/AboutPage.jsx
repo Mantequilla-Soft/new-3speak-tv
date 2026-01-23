@@ -23,7 +23,7 @@ const AboutPage = () => {
   };
 
   const iflogin = ()=>{
-    console.log(user)
+    
     if(user){
       navigate("/")
     }else{

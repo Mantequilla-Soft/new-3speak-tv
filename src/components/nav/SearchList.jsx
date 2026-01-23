@@ -119,7 +119,7 @@ function SearchList({searchTerm, setSearchTerm, setIsDropdownOpen, isDropdownOpe
               query: query.toLowerCase()
             });
       
-            console.log(result)
+            
             
             if (result?.length > 0) {
               return result

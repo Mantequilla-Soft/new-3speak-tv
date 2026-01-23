@@ -13,6 +13,7 @@ import { useQuery } from "@apollo/client"
 import { LATEST_FEED } from "../../graphql/queries"
 import Cards from "../Cards/Cards"
 import axios from "axios"
+import { FEED_URL } from '../../utils/config'
 import { useInfiniteQuery } from "@tanstack/react-query"
 import Card3 from "../Cards/Card3"
 
@@ -23,10 +24,10 @@ const fetchVideos = async ({ pageParam = 0 }) => {
 
   if (pageParam === 0) {
     // 🧩 First load
-    url = `https://legacy.3speak.tv/apiv2/feeds/home?page=${pageParam}`;
+    url = `${FEED_URL}/apiv2/feeds/home?page=${pageParam}`;
   } else {
     // 🧩 Only two "more" pages are available: 64 and 128
-    url = `https://legacy.3speak.tv/api/feed/more?skip=${pageParam}`;
+    url = `${FEED_URL}/api/feed/more?skip=${pageParam}`;
   }
 
   const res = await axios.get(url);
@@ -81,7 +82,6 @@ function Feed() {
   
     // Flatten all pages into a single array
     const videos = data?.pages.flat() || [];
-    console.log(videos)
 
 
  

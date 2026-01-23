@@ -105,8 +105,6 @@ function Preview() {
 
         const data = res.data?.data;
 
-        console.log("Polling response:", data);
-
         if (!data?.videos || data.videos.length === 0) {
           clearInterval(encodingIntervalRef.current);
           setStatusText("Completed");

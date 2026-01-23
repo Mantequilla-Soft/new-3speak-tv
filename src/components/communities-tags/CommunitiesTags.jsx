@@ -9,7 +9,6 @@ function CommunitiesTags() {
   const { authenticated } = useAppStore();
   const navigate = useNavigate();
   const handleSelectTag = (tag, name) => {
-    console.log(tag)
     navigate(`/t/${tag}`, {state: {commuintyName: name}});
   };
   const handleNavigate = ()=>{

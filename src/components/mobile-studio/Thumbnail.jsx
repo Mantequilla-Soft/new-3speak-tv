@@ -106,7 +106,7 @@ const handleThumbnailUpload = (event) => {
             onSuccess: () => {
                 const uploadedUrl = upload.url;
                 setThumbnailFile(uploadedUrl)
-                console.log("Thumbnail uploaded successfully:", uploadedUrl);
+                
                 setThumbnailFile(uploadedUrl)
 
             },

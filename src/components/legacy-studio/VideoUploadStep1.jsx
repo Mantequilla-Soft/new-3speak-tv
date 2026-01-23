@@ -84,7 +84,6 @@ function VideoUploadStep1() {
       });
 
       const result = await initResponse.json();
-      console.log("Init result:", result);
 
       if (!result.success) {
         throw new Error(result.error || 'Upload initialization failed');
@@ -92,7 +91,6 @@ function VideoUploadStep1() {
 
       const upload_id = result.data.upload_id;
       // const tus_endpoint = result.data.tus_endpoint;
-      console.log(upload_id)
 
       setUploadId(upload_id);
 

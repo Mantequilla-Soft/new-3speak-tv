@@ -14,6 +14,6 @@ globalThis.process = process;
 window.global = window;
 globalThis.global = globalThis;
 
-console.log('✅ Polyfills loaded - Buffer available:', typeof Buffer !== 'undefined');
+// console.log('✅ Polyfills loaded - Buffer available:', typeof Buffer !== 'undefined');
 
 export { Buffer, process };

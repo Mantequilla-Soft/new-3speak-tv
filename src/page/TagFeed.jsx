@@ -7,6 +7,7 @@ import { useLocation, useParams } from 'react-router-dom';
 import axios from 'axios';
 import { useInfiniteQuery } from '@tanstack/react-query';
 import Card3 from '../components/Cards/Card3';
+import { TAG_FEED_URL } from '../utils/config';
 // import './App.css';
 
 function TagFeed() {
@@ -23,10 +24,10 @@ function TagFeed() {
 
     if (trend) {
       // 🔥 Trending feed
-      url = `http://144.48.107.2:5000/videos/tag/${tag}?page=${pageParam}&limit=${LIMIT}`;
+      url = `${TAG_FEED_URL}/videos/tag/${tag}?page=${pageParam}&limit=${LIMIT}`;
     } else {
       // 🆕 New feed
-      url = `http://144.48.107.2:5000/videos/tag/${tag}?page=${pageParam}&limit=${LIMIT}`;
+      url = `${TAG_FEED_URL}/videos/tag/${tag}?page=${pageParam}&limit=${LIMIT}`;
     }
 
     const res = await axios.get(url);

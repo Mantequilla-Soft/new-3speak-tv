@@ -7,7 +7,7 @@ const APP_IMAGE_CDN_DOMAIN = "https://media.3speak.tv";
 
 export function fixVideoThumbnail(video) {
   const thumbnail = video?.images?.thumbnail || video?.thumbUrl || video?.spkvideo?.thumbnail_url || video?.thumbnail;
-  console.log("Original thumbnail:", video.thumbnail);
+
 
   // 🚧 If no thumbnail, return a fallback image
   if (!thumbnail) {
