@@ -19,7 +19,6 @@ function ProfileModal({ username = "kesolink", onClose }) {
       setLoading(true);
       const user = await getHiveUserProfile(username);
       setProfile(user);
-      console.log(user)
       setLoading(false);
     };
     loadProfile();
@@ -42,10 +41,7 @@ function ProfileModal({ username = "kesolink", onClose }) {
         return;
       }
 
-      console.log(activeUser, username)
-
       const relation = await getRelationshipBetweenAccounts(activeUser, username);
-      console.log(relation)
 
       if (relation && typeof relation.follows === "boolean") {
       setIsFollowing(relation.follows);
@@ -80,7 +76,7 @@ function ProfileModal({ username = "kesolink", onClose }) {
     what: isFollow ? ["blog"] : []
   });
 
-  console.log("Sending JSON:", json);
+  
 
   window.hive_keychain.requestCustomJson(
     activeUser,
@@ -89,7 +85,7 @@ function ProfileModal({ username = "kesolink", onClose }) {
     json,
     isFollow ? `Follow @${username}` : `Unfollow @${username}`,
     async (response) => {
-      console.log(response);
+      
 
       if (response.success) {
         toast.success(isFollow ? "Followed" : "Unfollowed");
@@ -111,7 +107,7 @@ function ProfileModal({ username = "kesolink", onClose }) {
 
   
 
-  console.log(isFollowing)
+  
 // .skeleton {
 //   animation: shimmer 2s infinite linear;
 //   background: linear-gradient(to right, #f0f0f0 4%, #e0e0e0 25%, #f0f0f0 36%);
@@ -122,7 +118,7 @@ function ProfileModal({ username = "kesolink", onClose }) {
     <div className="Profile-modal-overlay">
       <div className="modal-backdrop" onClick={onClose}></div>
 
-      <div className="profile-card">
+      <div className="profile-card-container">
         <button className="btn-close" onClick={onClose}>
           <IoClose className="icon" size={18} />
         </button>

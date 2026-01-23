@@ -80,7 +80,6 @@ function Upload_modal({ setPrevVideoUrl, setPrevVideoFile,  close, isOpen, setVi
       onSuccess: () => {
         const finalURL = upload.url.replace(tusEndPoint, "");
         setUploadURL(finalURL);
-        console.log("Upload successful! URL:", finalURL);
       },
     });
 
@@ -107,7 +106,6 @@ function Upload_modal({ setPrevVideoUrl, setPrevVideoFile,  close, isOpen, setVi
       },
       onSuccess: () => {
         const uploadedUrl = upload.url;
-        console.log("Thumbnail uploaded successfully:", uploadedUrl);
 
         // Save the uploaded thumbnail URL in state
         setThumbnailPreview(uploadedUrl);
@@ -152,7 +150,7 @@ function Upload_modal({ setPrevVideoUrl, setPrevVideoFile,  close, isOpen, setVi
         }
       );
 
-      console.log("Video info updated successfully:", data);
+      
       setVideoId(data._id);
       close()
       return data;

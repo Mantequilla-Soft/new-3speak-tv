@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom";
 import { Client } from "@hiveio/dhive";
 import "./CommunityPage.scss";
 import axios from "axios";
+import { FEED_URL } from '../../utils/config'
 import { useInfiniteQuery } from "@tanstack/react-query";
 import Card3 from "../Cards/Card3";
 import CardSkeleton from "../Cards/CardSkeleton";
@@ -42,11 +43,11 @@ function CommunityPage() {
 
     if (trend) {
       // 🔥 Trending feed
-        url = `https://legacy.3speak.tv/apiv2/feeds/community/${id}/trending?limit=${LIMIT}`;
+        url = `${FEED_URL}/apiv2/feeds/community/${id}/trending?limit=${LIMIT}`;
       
     } else {
       // 🆕 New feed
-        url = `https://legacy.3speak.tv/apiv2/feeds/community/${id}/new?limit=${LIMIT}`;
+        url = `${FEED_URL}/apiv2/feeds/community/${id}/new?limit=${LIMIT}`;
 
     }
 
@@ -96,7 +97,6 @@ function CommunityPage() {
   }, [isFetchingNextPage, hasNextPage, fetchNextPage]);
 
   const videos = data?.pages.flat() || [];
-  console.log(videos)
 
   return (
     <div className="community-page-wrap">

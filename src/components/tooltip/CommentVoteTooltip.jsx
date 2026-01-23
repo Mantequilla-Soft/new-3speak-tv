@@ -143,7 +143,7 @@ const CommentVoteTooltip = ({
         }
       );
 
-      console.log('Vote response:', response.data);
+      
 
       if (response.data.success) {
         toast.success(`Vote successful! Value: $${voteValue}`);

@@ -6,6 +6,7 @@ import logoDark from '../../assets/image/3S_logodark.png';
 import keychainImg from '../../assets/image/keychain.png';
 import hiveauthImg from '../../../public/images/hiveauth.jpeg';
 import { useNavigate, useLocation } from 'react-router-dom';
+import { FEED_URL } from '../../utils/config';
 import { LOCAL_STORAGE_ACCESS_TOKEN_KEY, LOCAL_STORAGE_USER_ID_KEY } from '../../hooks/localStorageKeys';
 import { useAppStore } from '../../lib/store';
 import { LuLogOut } from 'react-icons/lu';
@@ -313,7 +314,7 @@ const handleSwitchAccount = (user) => {
               <span onClick={(e) => {
                 e.preventDefault();
                 e.stopPropagation();
-                window.open("https://legacy.3speak.tv", "_blank", "noopener,noreferrer");
+                window.open(`${FEED_URL}`, "_blank", "noopener,noreferrer");
               }} className="email-login">
                 Login with email
               </span>

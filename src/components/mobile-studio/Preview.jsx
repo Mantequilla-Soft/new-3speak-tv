@@ -56,7 +56,7 @@ function Preview() {
         },
       });
 
-      console.log("Details submitted successfully:", response.data);
+      
       updateProcessing(response.data.permlink, response.data.title, username)
       toast.success("Video uploaded & Processing");
       navigate("/profile")
@@ -138,7 +138,7 @@ function Preview() {
 
   <div className="submit-btn-wrap">
     <button onClick={() => {
-      console.log("description ===>", description);
+      
       handleSubmitDetails();
     }}>
       {loading ? (

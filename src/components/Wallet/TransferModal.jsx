@@ -32,7 +32,7 @@ function TransferModal({showModal, selectedCoin, balances, fetchBalances}) {
         }
 
         const valid = await isAccountValid(recipient)
-        console.log(valid)
+        
         if(!valid){
             setError("Invalid username")
             return
@@ -60,9 +60,8 @@ function TransferModal({showModal, selectedCoin, balances, fetchBalances}) {
               'Active', // Requires active key
               async (response) => {
                 if (response.success) {
-                  console.log('Transfer successful:', response);
-                //   await fetchBalances();
-                showModal(false)
+                  // Transfer succeeded
+                  showModal(false)
                 } else {
                   console.error('Transfer failed:', response.message);
                 }

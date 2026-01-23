@@ -256,7 +256,6 @@ const handleTagChange = (e) => {
           {/* Button always shows "Proceed" - no auto-submit logic here */}
           <button 
             onClick={() => {
-              console.log("description===>", description); 
               process();
             }}
             // disabled={!title || !description || !tagsInputValue}

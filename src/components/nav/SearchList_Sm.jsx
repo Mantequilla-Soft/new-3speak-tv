@@ -117,7 +117,7 @@ function SearchList_Sm({searchTerm, setSearchTerm, handleNav, setIsDropdownOpens
               query: query.toLowerCase()
             });
       
-            console.log(result)
+            
             
             if (result?.length > 0) {
               return result

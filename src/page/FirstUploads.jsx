@@ -6,13 +6,14 @@ import Cards from "../components/Cards/Cards"
 import CardSkeleton from "../components/Cards/CardSkeleton";
 import axios from 'axios'
 import Card3 from '../components/Cards/Card3';
+import { FEED_URL } from '../utils/config';
 import { useInfiniteQuery } from '@tanstack/react-query';
 
 const fetchVideos = async ({ pageParam = 1 }) => {
   const LIMIT = 300;
   const res = await axios.get(
-    `https://legacy.3speak.tv/apiv2/feeds/firstUploads?page=${pageParam}`
-    // `https://legacy.3speak.tv/apiv2/feeds/firstUploads?limit=${LIMIT}`
+    `${FEED_URL}/apiv2/feeds/firstUploads?page=${pageParam}`
+    // `${FEED_URL}/apiv2/feeds/firstUploads?limit=${LIMIT}`
   );
   return res.data;
 };

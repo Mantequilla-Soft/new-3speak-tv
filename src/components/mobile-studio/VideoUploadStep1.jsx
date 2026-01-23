@@ -41,7 +41,7 @@ function VideoUploadStep1() {
 
     const fileUrl = URL.createObjectURL(file);
     setPrevVideoUrl(fileUrl)
-    console.log("file", file)
+    
     const thumbs = await generateVideoThumbnails(file, 2, "url");
     // console.log("Generated Thumbnails:", thumbs);
     setGeneratedThumbnail(thumbs)
@@ -68,7 +68,7 @@ function VideoUploadStep1() {
         uploadURLRef.current = finalURL
         setUploadURL(finalURL);
         
-        console.log("Upload successful! URL:", finalURL);
+        
       },
     });
 
@@ -91,7 +91,7 @@ function VideoUploadStep1() {
   }
 
 
-  console.log(banned)
+  
   return (
     <div><div className="upload-step">
       {/* <div className="header">

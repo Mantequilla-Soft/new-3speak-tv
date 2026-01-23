@@ -198,29 +198,41 @@ function Card3({ videos = [], loading = false, error = null, tooltipVariant = "d
 
             {/* Author */}
             <div className="profile-view-wrap">
-              <Link
-                to={`/p/${video.author?.username || video.author || video.owner}`}
-                className="profile-wrapper"
-                onClick={(e) => e.stopPropagation()}
-              >
-                <img
-                  className="profile-img"
-                  src={`https://images.hive.blog/u/${
-                    video.author?.username || video.author || video.owner
-                  }/avatar`}
-                  alt=""
-                />
-                <h2
+                <div
+                  className="profile-wrapper"
+                  role="link"
+                  tabIndex={0}
                   onClick={(e) => {
                     e.preventDefault();
                     e.stopPropagation();
-                    setModalUser(video.author?.username || video.author || video.owner);
+                    navigate(`/p/${video.author?.username || video.author || video.owner}`);
+                  }}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                      e.preventDefault();
+                      e.stopPropagation();
+                      navigate(`/p/${video.author?.username || video.author || video.owner}`);
+                    }
                   }}
                 >
-                  {video.author?.username || video.author || video.owner}
-                </h2>
+                  <img
+                    className="profile-img"
+                    src={`https://images.hive.blog/u/${
+                      video.author?.username || video.author || video.owner
+                    }/avatar`}
+                    alt=""
+                  />
+                  <h2
+                    onClick={(e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
+                      setModalUser(video.author?.username || video.author || video.owner);
+                    }}
+                  >
+                    {video.author?.username || video.author || video.owner}
+                  </h2>
 
-              </Link>
+                </div>
               {getViewCount(video.author?.username || video.author || video.owner, video.permlink) !== null && (
                 <div className="view-count">
                   <IoEyeOutline size={14} />

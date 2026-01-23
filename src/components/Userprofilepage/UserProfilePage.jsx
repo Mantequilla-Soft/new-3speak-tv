@@ -11,6 +11,7 @@ import { Quantum } from 'ldrs/react'
 import 'ldrs/react/Quantum.css'
 import { useInfiniteQuery } from '@tanstack/react-query';
 import axios from 'axios';
+import { FEED_URL } from '../../utils/config';
 import Card3 from '../Cards/Card3';
 import { IoMdShare } from 'react-icons/io';
 import { IoLogoRss } from 'react-icons/io5';
@@ -33,12 +34,12 @@ function UserProfilePage() {
 
 const fetchVideos = async ({ pageParam = 0 }) => {
   let url;
-  if (pageParam === 0) {
+    if (pageParam === 0) {
     // first 100 videos
-    url = `https://legacy.3speak.tv/apiv2/feeds/@${user}`;
+    url = `${FEED_URL}/apiv2/feeds/@${user}`;
   } else {
     // next batches
-    url = `https://legacy.3speak.tv/apiv2/feeds/@${user}/more?skip=${pageParam}`;
+    url = `${FEED_URL}/apiv2/feeds/@${user}/more?skip=${pageParam}`;
   }
 
   const res = await axios.get(url);
@@ -83,7 +84,6 @@ const {
           
             // Flatten all pages into a single array
             const videos = data?.pages.flat() || [];
-            console.log(videos)
 
 
       // const { loading, error, data } = useQuery(GET_SOCIAL_FEED_BY_CREATOR, {
@@ -105,7 +105,7 @@ const {
       const handleWalletNavigate = (user)=>{
         navigate(`/wallet/${user}`)
       }
-    console.log(data)
+    
   return (
     <div className="profile-page-container">
       <div className="profile-card">
@@ -140,7 +140,7 @@ const {
                     <Quantum size="15" speed="1.75" color="red" />
                   )}
               </button>
-              <button className="btn btn-secondary" onClick={() => window.open(`https://legacy.3speak.tv/rss/${user}.xml`, "_blank")}>
+              <button className="btn btn-secondary" onClick={() => window.open(`${FEED_URL}/rss/${user}.xml`, "_blank")}>
                 <IoLogoRss />
               </button>
                     <button
@@ -150,10 +150,10 @@ const {
                           navigator.share({
                             title: `${user}`,
                             text: `Follow ${user} on 3Speak`,
-                            url: `https://legacy.3speak.tv/user/${user}`,
+                            url: `${FEED_URL}/user/${user}`,
                           });
                         } else {
-                          window.open(`https://legacy.3speak.tv/user/${user}`, "_blank");
+                          window.open(`${FEED_URL}/user/${user}`, "_blank");
                         }
                       }}
                     >

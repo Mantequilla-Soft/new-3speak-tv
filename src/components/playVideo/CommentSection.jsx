@@ -75,7 +75,7 @@ function CommentSection({ videoDetails, author, permlink }) {
         setRenderedBodies(rendered);
       } catch (error) {
         console.error('Failed to fetch comments from Hive:', error);
-      }
+            }
     };
 
     fetchComments();
@@ -192,7 +192,7 @@ function CommentSection({ videoDetails, author, permlink }) {
       comment: textToPost,
       
     }
-    console.log('Posting comment data:', data);
+    
 
 try {
   const response = await axios.post(

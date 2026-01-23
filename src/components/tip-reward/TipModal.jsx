@@ -40,14 +40,14 @@ const TipModal = ({ recipient, isOpen, onClose, onSendTip }) => {
     const data = await fetchBalances(activetUser)
     setBalances(data)
     }catch(err){
-        console.log("error fetching this data", err)
+        
     }finally{
         setLoading(false)
     }
   }
 
   
-  console.log(balances)
+  
 
 //   const handleSendTip = () => {
 //     // onSendTip(amount, currency, memo);

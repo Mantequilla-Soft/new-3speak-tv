@@ -62,10 +62,7 @@ function StudioPage() {
 
   useEffect(() => {
     const interval = setInterval(() => {
-      console.log("Checking for uploadURL...");
-  
       if (uploadURL && thumbnailFile) {
-        console.log("uploadURL is available:", uploadURL);
         updateVideoInfo(thumbnailFile);
         clearInterval(interval); // Stop checking
       }
@@ -86,7 +83,7 @@ function StudioPage() {
 
   const getBanInfo = async ()=>{
     const res = await axios.get(`http://144.48.107.2:5000/check/${username}`)
-    console.log(res.data)
+    
     setBanned(res.data.canUpload)
   }
 
@@ -100,10 +97,7 @@ function StudioPage() {
         }
       }
 
-      const updateVideoInfo = async (thumbnailFile) => {
-          console.log("Upload URL:", uploadURL);
-          console.log("Video File:", videoFile);
-          console.log("Thumbnail File:", thumbnailFile);
+        const updateVideoInfo = async (thumbnailFile) => {
           if (!uploadURL || !videoFile || !thumbnailFile) {
               console.error("Missing video and thumbnail data.");
               setError("Video and thumbnail is require.")
@@ -113,7 +107,6 @@ function StudioPage() {
           const oFilename = videoFile.name;
           const fileSize = videoFile.size;
           const thumbnailIdentifier = thumbnailFile.replace("https://uploads.3speak.tv/files/", "");
-          console.log(thumbnailIdentifier)
   
           try {
               setLoading(true)
@@ -137,11 +130,10 @@ function StudioPage() {
                   }
               );
   
-              if(data){
-                  console.log("Video info updated successfully:", data);
+                if(data){
                   setVideoId(data._id);
                   setUploadStatus(true)
-              }
+                }
   
               
   

@@ -61,7 +61,7 @@ function AddAccount_modal({ isOpen, close}) {
         
       });
 
-      console.log("Login response:", login);
+      
       if (login.error === "HiveAuth authentication request expired") {
         toast.error("HiveAuth authentication request expired");
         setQrCode("")
@@ -100,7 +100,7 @@ function AddAccount_modal({ isOpen, close}) {
       }
     );
 
-    console.log('Login Success:', response.data);
+    
     const decodedMessage = response.data.token;
       localStorage.setItem(LOCAL_STORAGE_ACCESS_TOKEN_KEY, decodedMessage);
       localStorage.setItem(LOCAL_STORAGE_USER_ID_KEY, username);
@@ -141,7 +141,7 @@ function AddAccount_modal({ isOpen, close}) {
                   },
                 },
               });
-              console.log("Login response:", login);
+              
               if (login.error === "HiveAuth authentication request expired") {
                 toast.error("HiveAuth authentication request expired");
                 setQrCode("")
@@ -182,7 +182,7 @@ function AddAccount_modal({ isOpen, close}) {
               }
             );
         
-            console.log('Login Success:', response.data);
+    
             const decodedMessage = response.data.token;
               localStorage.setItem(LOCAL_STORAGE_ACCESS_TOKEN_KEY, decodedMessage);
               localStorage.setItem(LOCAL_STORAGE_USER_ID_KEY, username);

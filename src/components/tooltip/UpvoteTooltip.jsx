@@ -143,7 +143,7 @@ const UpvoteTooltip = ({
         }
       );
 
-      console.log('Vote response:', response.data);
+      
 
       if (response.data.success) {
         // If this is a new vote (not a re-vote), increment vote count

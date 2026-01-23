@@ -19,7 +19,7 @@ function Beneficiary_modal({ isOpen, close, setBeneficiaries, setBeneficiaryList
   setBeneficiaryList(prev => prev + list.length);
 }, [list]);
 
-  console.log('list', list.length);
+  
 
 
 
@@ -122,7 +122,7 @@ function Beneficiary_modal({ isOpen, close, setBeneficiaries, setBeneficiaryList
     // Convert to the required string format
     const beneficiariesString = JSON.stringify(beneficiaries);
 
-    console.log(beneficiariesString); // For debugging
+    
     setBeneficiaries(beneficiariesString); // Set the formatted string to the parent component
     close(); // Close the modal after saving
   };

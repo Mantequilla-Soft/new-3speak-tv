@@ -60,7 +60,7 @@ function Follower({count}) {
       </div>
     </div>
   );
-  console.log(count)
+  
 
   return (
     <div className="followers-page">

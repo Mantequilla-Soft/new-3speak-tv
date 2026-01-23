@@ -31,6 +31,7 @@ import 'ldrs/react/TailChase.css'
 import { getFollowers } from "../../hive-api/api";
 import UpvoteTooltip from "../tooltip/UpvoteTooltip";
 import axios from "axios";
+import { FEED_URL } from '../../utils/config';
   import bs58 from "bs58";
   import { Buffer } from "buffer";
 
@@ -77,7 +78,6 @@ const getTooltipVoters = async () => {
   try {
     const data = await getUersContent(author, permlink);
     if (!data) return [];
-    console.log(data)
 
     // setView(data.active_votes.length)
 
@@ -123,18 +123,18 @@ const calculateVoteValue = async (account, percent) => {
           const data = await estimate(account, percent)
           setVoteValue(data)
         }catch(err){
-          console.log(err)
+          console.error(err)
         }
       };
 
 
-      const speakWatchData = async ()=>{
-        const res = await axios.get(`https://legacy.3speak.tv/apiv2/@${author}/${permlink}`)
-         console.log("3speak--data----", res.data)
-         setSpeakData(res.data)
-        //  setVideoUrlSelected(res.data.playUrl)
-         setView(res.data.views)
-      }
+        const speakWatchData = async ()=>{
+          const res = await axios.get(`${FEED_URL}/apiv2/@${author}/${permlink}`)
+          
+           setSpeakData(res.data)
+          //  setVideoUrlSelected(res.data.playUrl)
+           setView(res.data.views)
+        }
 
  // Fetch account & VP
     useEffect(() => {
@@ -183,7 +183,7 @@ const calculateVoteValue = async (account, percent) => {
           const follower = await getFollowers(author);
           setFollowData(follower);
         } catch (err) {
-          console.log(err);
+          console.error(err);
         }
       };
 
@@ -238,14 +238,13 @@ const calculateVoteValue = async (account, percent) => {
     loading,
   } = useQuery(GET_VIDEO, { variables: { author, permlink }, ssr: true });
   const spkvideo = getVideo?.socialPost?.spkvideo;
-  console.log("hive ---- data" , spkvideo)
   const [videoUrlSelected, setVideoUrlSelected] = useState(null);
 
   const getUserProfile = useQuery(GET_PROFILE, {
     variables: { id: videoDetails?.author?.id },
   });
 
-  console.log(videoDetails)
+  
 
   const profile = getUserProfile.data?.profile;
   const tags = videoDetails?.tags?.slice(0, 7) || [];
@@ -332,7 +331,6 @@ useEffect(() => {
     
   // };
   const handleSelectTag = (tag) => {
-    console.log(tag)
     navigate(`/t/${tag}`);
   };
 
@@ -354,7 +352,6 @@ useEffect(() => {
     'Follow User',
     (response) => {
       if (response.success) {
-        console.log('Successfully followed user:', response);
         // Optional: show toast
       } else {
         console.error('Failed to follow user:', response.message);
@@ -419,6 +416,9 @@ const handleCommunityNavigate = (community) => {
                 allowFullScreen
               ></iframe>
             </div>
+
+
+
 
 
   ) : (

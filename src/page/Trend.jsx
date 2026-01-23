@@ -4,6 +4,7 @@ import { useEffect } from "react";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import axios from "axios";
 import Card3 from "../components/Cards/Card3";
+import { FEED_URL } from '../utils/config';
 
 const LIMIT = 500;
 
@@ -12,11 +13,11 @@ const fetchVideos = async ({ pageParam = 0 }) => {
 
   // On first load, use /feeds/trending
   if (pageParam === 0) {
-    url = `https://legacy.3speak.tv/apiv2/feeds/trending?limit=${LIMIT}`;
+    url = `${FEED_URL}/apiv2/feeds/trending?limit=${LIMIT}`;
   } 
   // On later loads, use /feeds/trending/more with skip
   else {
-    url = `https://legacy.3speak.tvapiv2/feeds/trending/more?skip=${pageParam}`;
+    url = `${FEED_URL}/apiv2/feeds/trending/more?skip=${pageParam}`;
   }
 
   const res = await axios.get(url);

@@ -8,20 +8,21 @@ import "./HomeGrouped.scss";
 import { NEW_CONTENT } from "../graphql/queries";
 import CardSkeleton from "../components/Cards/CardSkeleton";
 import Card3 from "../components/Cards/Card3";
+import { FEED_URL } from "../utils/config";
 
 // Fetch functions for each feed
 const fetchHome = async () => {
-  const res = await axios.get(`https://legacy.3speak.tv/apiv2/feeds/home?page=0`);
+  const res = await axios.get(`${FEED_URL}/apiv2/feeds/home?page=0`);
   return res.data.trends || res.data;
 };
 
 const fetchFirstUploads = async () => {
-  const res = await axios.get(`https://legacy.3speak.tv/apiv2/feeds/firstUploads?page=1`);
+  const res = await axios.get(`${FEED_URL}/apiv2/feeds/firstUploads?page=1`);
   return res.data;
 };
 
 const fetchTrending = async () => {
-  const res = await axios.get(`https://legacy.3speak.tv/apiv2/feeds/trending?limit=50`);
+  const res = await axios.get(`${FEED_URL}/apiv2/feeds/trending?limit=50`);
   return res.data;
 };
 

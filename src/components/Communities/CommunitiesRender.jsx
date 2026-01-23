@@ -17,7 +17,6 @@ function CommunitiesRender() {
   const [searchQuery, setSearchQuery] = useState(''); // Search query state
   const [openModal, setOpenModal] = useState(false)
   const navigate = useNavigate();
-  console.log(openModal)
 
   // Fetch communities data
   const generate = async () => {
@@ -36,7 +35,7 @@ function CommunitiesRender() {
       setLoading(false);
     }
   };
-  console.log(data)
+  
 
   // Handle search input change
   const handleSearch = (e) => {

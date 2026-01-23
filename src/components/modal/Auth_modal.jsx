@@ -20,9 +20,7 @@ function Auth_modal({isOpenAuth, closeAuth}) {
     
     const addaccountauthority = await keychain.addAccountAuthority( formParamsAsObject.data);
     closeAuth()
-    console.log({ addaccountauthority });
   } catch (error) {
-    console.log({ error });
   }
 
   }

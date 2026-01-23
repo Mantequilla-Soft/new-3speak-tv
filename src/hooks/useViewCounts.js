@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import axios from 'axios';
-import { API_URL_FROM_WEST } from '../utils/config';
+import { API_URL_FROM_WEST, VIEWS_URL } from '../utils/config';
 
 const BATCH_SIZE = 50;
 
@@ -50,7 +50,7 @@ const useViewCounts = (videos) => {
           }));
 
           const response = await axios.post(
-            `${API_URL_FROM_WEST}/views`,
+            `${VIEWS_URL}/views`,
             { videos: videosPayload },
             { timeout: 15000 }
           );

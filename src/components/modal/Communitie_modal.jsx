@@ -43,7 +43,7 @@ function CommunitieModal({ isOpen, data, close, setCommunity }) {
 
   if (!isOpen) return null;
 
-  console.log(visibleCommunities)
+  
 
   return (
     <div className={`modal ${isOpen ? "open" : ""}`}>

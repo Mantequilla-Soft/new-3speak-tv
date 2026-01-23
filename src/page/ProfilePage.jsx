@@ -19,7 +19,7 @@ import { LineSpinner, Quantum } from "ldrs/react";
 import "ldrs/react/Quantum.css";
 
 import icon from "../../public/images/stack.png";
-import { UPLOAD_TOKEN, UPLOAD_URL } from "../utils/config";
+import { UPLOAD_TOKEN, UPLOAD_URL, FEED_URL } from "../utils/config";
 import "./ProfilePage.scss";
 import { useLegacyUpload } from "../context/LegacyUploadContext";
 import checker from "../../public/images/checker.png"
@@ -272,7 +272,7 @@ function ProfilePage() {
               <button
                 className="btn btn-secondary"
                 onClick={() =>
-                  window.open(`https://legacy.3speak.tv/rss/${user}.xml`, "_blank")
+                  window.open(`${FEED_URL}/rss/${user}.xml`, "_blank")
                 }
               >
                 <IoLogoRss />
@@ -282,14 +282,14 @@ function ProfilePage() {
                 className="btn btn-secondary"
                 onClick={() =>
                   navigator.share
-                    ? navigator.share({
-                        title: user,
-                        url: `https://legacy.3speak.tv/user/${user}`,
-                      })
-                    : window.open(
-                        `https://legacy.3speak.tv/user/${user}`,
-                        "_blank"
-                      )
+                      ? navigator.share({
+                          title: user,
+                          url: `${FEED_URL}/user/${user}`,
+                        })
+                      : window.open(
+                          `${FEED_URL}/user/${user}`,
+                          "_blank"
+                        )
                 }
               >
                 <IoMdShare />
