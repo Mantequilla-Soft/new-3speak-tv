@@ -3,6 +3,8 @@ import './CommentSection.scss';
 import './BlogContent.scss';
 import { GiTwoCoins } from 'react-icons/gi';
 import { BiDislike, BiLike } from 'react-icons/bi';
+import { ImSpinner9 } from 'react-icons/im';
+import { TailChase } from 'ldrs/react';
 import dayjs from 'dayjs';
 import { useAppStore } from '../../lib/store';
 import { Client } from '@hiveio/dhive';
@@ -38,6 +40,7 @@ function CommentSection({ videoDetails, author, permlink }) {
   const [activeReply, setActiveReply] = useState(null);
   const [replyToComment, setReplyToComment] = useState(null);
   const [commentList, setCommentList] = useState([]);
+  const [loadingComments, setLoadingComments] = useState(true);
   const [selectedPost, setSelectedPost] = useState({ author: '', permlink: '' });
   const [showTooltip, setShowTooltip] = useState(false);
   const [activeTooltipPermlink, setActiveTooltipPermlink] = useState(null);
@@ -53,6 +56,7 @@ function CommentSection({ videoDetails, author, permlink }) {
 
   useEffect(() => {
     const fetchComments = async () => {
+      setLoadingComments(true);
       try {
         const replies = await client.call('condenser_api', 'get_content_replies', [author, permlink]);
         const commentsWithChildren = await loadNestedComments(replies);
@@ -65,7 +69,11 @@ function CommentSection({ videoDetails, author, permlink }) {
         const rendered = {};
         const renderComment = (comment) => {
           if (comment?.body) {
-            rendered[comment.permlink] = render(comment.body);
+            try {
+              rendered[comment.permlink] = render(comment.body);
+            } catch (err) {
+              rendered[comment.permlink] = '';
+            }
           }
           if (comment.children) {
             comment.children.forEach(renderComment);
@@ -75,7 +83,9 @@ function CommentSection({ videoDetails, author, permlink }) {
         setRenderedBodies(rendered);
       } catch (error) {
         console.error('Failed to fetch comments from Hive:', error);
-            }
+      } finally {
+        setLoadingComments(false);
+      }
     };
 
     fetchComments();
@@ -309,6 +319,12 @@ try {
     setActiveTooltipPermlink((prev) => (prev === permlink ? null : permlink));
   };
 
+  // Count total comments including nested children
+  const countComments = (comments) => {
+    if (!comments || comments.length === 0) return 0;
+    return comments.reduce((sum, c) => sum + 1 + countComments(c.children || []), 0);
+  };
+
   return (
     <div className="vid-comment-wrap">
       
@@ -334,9 +350,16 @@ try {
         </div>
       </div>
 
-      <h4>{commentList.length} Comments</h4>
-      
-      {commentList.map((comment, index) => (
+      <h4>{countComments(commentList)} Comments</h4>
+
+      {loadingComments ? (
+        <div className="comments-loading">
+          <div className="loader-center"> 
+            <TailChase size={16} speed={1.5} color="var(--accent-primary)" />
+          </div>
+        </div>
+      ) : (
+        commentList.map((comment, index) => (
         <Comment
         key={`${comment.author?.username}-${comment.permlink || index}`}
           commentIndex={index}
@@ -367,7 +390,7 @@ try {
       setAccountData={setAccountData}
           
         />
-      ))}
+      )) )}
     </div>
   );
 }

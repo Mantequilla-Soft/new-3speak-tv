@@ -21,6 +21,31 @@
     margin-top: 15px;
   }
 }
+/* Loader for comments */
+.vid-comment-wrap {
+  .comments-loading {
+    padding: 12px 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    .loader-center {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .spinner {
+      font-size: 20px;
+      animation: spin 1s linear infinite;
+    }
+  }
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
 .comment {
   display: flex;
   align-items: flex-start;

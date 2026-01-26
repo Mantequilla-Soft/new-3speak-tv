@@ -2,6 +2,8 @@ import React, { useEffect, useState, useRef } from "react";
 import { getUersContent } from "../../utils/hiveUtils";
 import "./BlogContent.scss";
 import { FaChevronDown, FaChevronUp } from "react-icons/fa";
+import { ImSpinner9 } from 'react-icons/im';
+import { TailChase } from 'ldrs/react';
 
 // Lazy-loaded renderer to avoid Node.js polyfill issues at bundle time
 let rendererPromise = null;
@@ -30,6 +32,7 @@ const THRESHOLD_HEIGHT = 100;
 const BlogContent = ({ author, permlink, description }) => {
   const [content, setContent] = useState("");
   const [renderedContent, setRenderedContent] = useState("");
+  const [loading, setLoading] = useState(false);
   const [isExpanded, setIsExpanded] = useState(false);
   const [needsExpansion, setNeedsExpansion] = useState(false);
   const contentRef = useRef(null);
@@ -107,13 +110,19 @@ const BlogContent = ({ author, permlink, description }) => {
 
   useEffect(() => {
     async function fetchContent() {
-      if (description) {
-        // Use provided description (upload preview)
-        setContent(description);
-      } else if (author && permlink) {
-        // Fallback: fetch from Hive
-        const postContent = await getPostDescription(author, permlink);
-        setContent(postContent || "No content available");
+      setLoading(true);
+      try {
+        if (description) {
+          // Use provided description (upload preview)
+          setContent(description);
+        } else if (author && permlink) {
+          // Fallback: fetch from Hive
+          const postContent = await getPostDescription(author, permlink);
+          setContent(postContent || "No content available");
+        }
+      } catch (err) {
+        console.error('Failed fetching post content:', err);
+        setContent('Error loading content.');
       }
     }
 
@@ -122,6 +131,7 @@ const BlogContent = ({ author, permlink, description }) => {
 
   useEffect(() => {
     if (content) {
+      setLoading(true);
       const contentString =
         typeof content === "string"
           ? content
@@ -130,20 +140,23 @@ const BlogContent = ({ author, permlink, description }) => {
           : "";
 
       // Use async renderer (createHiveRenderer returns a function directly)
-      getRenderer().then(render => {
-        try {
-          let renderedHTML = render(contentString);
-          // Clean the rendered HTML before setting it
-          renderedHTML = cleanContent(renderedHTML);
-          setRenderedContent(renderedHTML);
-        } catch (error) {
-          console.error("Error rendering post body:", error);
-          setRenderedContent("Error processing content.");
-        }
-      }).catch(error => {
-        console.error("Error loading renderer:", error);
-        setRenderedContent("Error loading renderer.");
-      });
+      getRenderer()
+        .then((render) => {
+          try {
+            let renderedHTML = render(contentString);
+            // Clean the rendered HTML before setting it
+            renderedHTML = cleanContent(renderedHTML);
+            setRenderedContent(renderedHTML);
+          } catch (error) {
+            console.error("Error rendering post body:", error);
+            setRenderedContent("Error processing content.");
+          }
+        })
+        .catch((error) => {
+          console.error("Error loading renderer:", error);
+          setRenderedContent("Error loading renderer.");
+        })
+        .finally(() => setLoading(false));
     }
   }, [content]);
 
@@ -168,10 +181,18 @@ const BlogContent = ({ author, permlink, description }) => {
         className={`content-wrapper ${needsExpansion && !isExpanded ? 'collapsed' : 'expanded'}`}
         ref={contentRef}
       >
-        <div
-          className="markdown-view"
-          dangerouslySetInnerHTML={{ __html: renderedContent }}
-        />
+        {loading ? (
+          <div className="blog-loading">
+            <div className="loader-center">
+              <TailChase size={16} speed={1.5} color="var(--accent-primary)" />
+            </div>
+          </div>
+        ) : (
+          <div
+            className="markdown-view"
+            dangerouslySetInnerHTML={{ __html: renderedContent }}
+          />
+        )}
         {needsExpansion && !isExpanded && <div className="fade-overlay" />}
       </div>
 

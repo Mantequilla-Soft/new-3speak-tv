@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { getFollowers, getFollowing } from '../../utils/hiveUtils';
 import { useAppStore } from '../../lib/store';
 import './Follower.scss';
@@ -11,14 +11,15 @@ function Follower({count}) {
   const [activeTab, setActiveTab] = useState('followers');
   const [isLoading, setIsLoading] = useState(true);
   const { user } = useAppStore();
-  const navigate = useNavigate()
+  const navigate = useNavigate();
+  const hasFetchedRef = useRef(false);
 
   useEffect(() => {
-    
     const fetchData = async () => {
-      if (!user) return;
+      if (!user || hasFetchedRef.current) return;
       try {
         setIsLoading(true);
+        hasFetchedRef.current = true;
         const followersData = await getFollowers(user);
         const followingData = await getFollowing(user);
         setFollower(followersData || []);

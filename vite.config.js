@@ -16,6 +16,11 @@ export default defineConfig({
         "querystring",
         "events",
         "string_decoder",
+        // Add common node modules used by renderers/libs that need browser polyfills
+        "os",
+        "path",
+        "url",
+        "source-map-js",
       ],
       globals: {
         Buffer: true,
@@ -45,6 +50,11 @@ export default defineConfig({
       querystring: "querystring-es3",
       // Force readable-stream to use the polyfilled buffer
       buffer: "buffer",
+      // Browser polyfills for node core modules
+      path: "path-browserify",
+      os: "os-browserify/browser",
+      url: "url",
+      'source-map-js': 'source-map-js',
     },
   },
 
@@ -63,6 +73,11 @@ export default defineConfig({
       "hive-auth-wrapper",
       "keychain-sdk",
       "readable-stream",
+      // ensure these deps are pre-bundled
+      "path-browserify",
+      "os-browserify",
+      "source-map-js",
+      "url",
     ],
     exclude: ["@metamask/providers", "web3"],
   },

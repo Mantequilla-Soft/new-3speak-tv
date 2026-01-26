@@ -2,64 +2,58 @@ import PropTypes from "prop-types";
 import "./PlayVideo.scss";
 import { FaEye } from "react-icons/fa";
 import { LuTimer } from "react-icons/lu";
-import { BiDislike, BiLike } from "react-icons/bi";
+import { BiLike } from "react-icons/bi";
 import { GiTwoCoins } from "react-icons/gi";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback, useMemo } from "react";
 import { useQuery } from "@apollo/client";
 import {
   GET_PROFILE,
-  GET_TOTAL_COUNT_OF_FOLLOWING,
   GET_VIDEO,
 } from "../../graphql/queries";
-// import ReactJWPlayer from "react-jw-player";
-import JWPlayer from "@jwplayer/jwplayer-react";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 import BlogContent from "./BlogContent";
 import CommentSection from "./CommentSection";
-import { useAppStore } from '../..//lib/store';
+import { useAppStore } from '../../lib/store';
 import { MdPeople } from "react-icons/md";
 import { estimate, getUersContent, getVotePower } from "../../utils/hiveUtils";
 import ToolTip from "../tooltip/ToolTip";
 import { ImSpinner9 } from "react-icons/im";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import BarLoader from "../Loader/BarLoader";
-import TipModal from "../../components/tip-reward/TipModal"
-import {  toast } from 'sonner'
-import { TailChase } from 'ldrs/react'
-import 'ldrs/react/TailChase.css'
+import TipModal from "../../components/tip-reward/TipModal";
+import { toast } from 'sonner';
+import { TailChase } from 'ldrs/react';
+import 'ldrs/react/TailChase.css';
 import { getFollowers } from "../../hive-api/api";
 import UpvoteTooltip from "../tooltip/UpvoteTooltip";
 import axios from "axios";
 import { FEED_URL } from '../../utils/config';
-  import bs58 from "bs58";
-  import { Buffer } from "buffer";
+
+dayjs.extend(relativeTime);
 
 const PlayVideo = ({ videoDetails, author, permlink }) => {
   const { user, authenticated } = useAppStore();
+  const navigate = useNavigate();
+  
+  // State
   const [hasKeychain, setHasKeychain] = useState(false);
-  const [commentData, setCommentData] = useState("");
   const [openTooltip, setOpenToolTip] = useState(false);
   const [tooltipVoters, setTooltipVoters] = useState([]);
-  const [voted, setVoted] = useState(null)
   const [isTipModalOpen, setIsTipModalOpen] = useState(false);
-  const [isVoted, setIsVoted] = useState(false)
-  const [isLoading, setIsLoading] = useState(false)
+  const [isVoted, setIsVoted] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [followData, setFollowData] = useState(null);
   const [showTooltip, setShowTooltip] = useState(false);
-  const [optimisticVoteCount, setOptimisticVoteCount] = useState();
-  const [votingPower, setVotingPower] = useState(100);
+  const [optimisticVoteCount, setOptimisticVoteCount] = useState(0);
   const [accountData, setAccountData] = useState(null);
   const [voteValue, setVoteValue] = useState(0.0);
   const [weight, setWeight] = useState(100);
-  const [view, setView] = useState(0)
-  const [speakData, setSpeakData]= useState(null)
-  const navigate = useNavigate();
+  const [view, setView] = useState(0);
+  const [speakData, setSpeakData] = useState(null);
 
-  dayjs.extend(relativeTime);
-
-
-  const formatRelativeTime = (date) => {
+  // Memoized format function
+  const formatRelativeTime = useCallback((date) => {
     const now = dayjs();
     const created = dayjs(date);
     const diffInMinutes = now.diff(created, "minute");
@@ -71,334 +65,231 @@ const PlayVideo = ({ videoDetails, author, permlink }) => {
     if (diffInDays < 30) return `${diffInDays}d ago`;
     const diffInMonths = now.diff(created, "month");
     return `${diffInMonths}mo ago`;
-  };
+  }, []);
 
-  // Define getTooltipVoters BEFORE useEffect
-const getTooltipVoters = async () => {
-  try {
-    const data = await getUersContent(author, permlink);
-    if (!data) return [];
-
-    // setView(data.active_votes.length)
-
-    if (data.active_votes) {
-      setOptimisticVoteCount(data.active_votes.length);
-
-      setIsVoted(data.active_votes.some(vote => vote.voter === user));
-
-      const totalRshares = data.active_votes.reduce(
-        (sum, vote) => sum + parseInt(vote.rshares),
-        0
-      );
-
-      const totalPayout =
-        parseFloat(data.pending_payout_value) > 0
-          ? parseFloat(data.pending_payout_value)
-          : parseFloat(data.total_payout_value) + parseFloat(data.curator_payout_value);
-
-      const topVotes = data.active_votes
-        .sort((a, b) => parseInt(b.rshares) - parseInt(a.rshares))
-        .slice(0, 10)
-        .map(vote => {
-          const reward =
-            totalRshares > 0
-              ? (parseInt(vote.rshares) / totalRshares) * totalPayout
-              : 0;
-          return {
-            username: vote.voter,
-            reward: +reward.toFixed(3), // use `+` to make sure it's number
-          };
-        });
-
-      setTooltipVoters(topVotes);
-    }
-  } catch (error) {
-    console.error("Error fetching upvotes:", error);
-    return [];
-  }
-};
-
-const calculateVoteValue = async (account, percent) => {
-        try{
-          const data = await estimate(account, percent)
-          setVoteValue(data)
-        }catch(err){
-          console.error(err)
-        }
-      };
-
-
-        const speakWatchData = async ()=>{
-          const res = await axios.get(`${FEED_URL}/apiv2/@${author}/${permlink}`)
-          
-           setSpeakData(res.data)
-          //  setVideoUrlSelected(res.data.playUrl)
-           setView(res.data.views)
-        }
-
- // Fetch account & VP
-    useEffect(() => {
-      const fetchAccountData = async () => {
-        try {
-          const result = await getVotePower(user);
-          if (result) {
-            const { account } = result;
-            setAccountData(account);
-            calculateVoteValue(account, weight);
-          }
-        } catch (err) {
-          console.error('Error fetching account:', err);
-        }
-      };
-      fetchAccountData();
-      speakWatchData()
-    }, [ ]);
-
-    // Detect Hive Keychain extension presence (poll briefly to catch late installs)
-    useEffect(() => {
-      const check = () => setHasKeychain(typeof window !== 'undefined' && !!window.hive_keychain);
-      check();
-      const id = setInterval(check, 1000);
-      // stop polling after 10s
-      const stopId = setTimeout(() => clearInterval(id), 10000);
-      return () => {
-        clearInterval(id);
-        clearTimeout(stopId);
-      };
-    }, []);
-
-  useEffect(() => {
-    if (!accountData) return;
-    calculateVoteValue(accountData, weight);
-  }, [weight, showTooltip ]);
-
-
-
-  useEffect(() => {
-      getFollowersCount(author);
-    }, []);
-
-    const getFollowersCount = async (author) => {
-        try {
-          const follower = await getFollowers(author);
-          setFollowData(follower);
-        } catch (err) {
-          console.error(err);
-        }
-      };
-
-  // Call getTooltipVoters in useEffect
-  useEffect(() => {
-    getTooltipVoters();
-  }, [author, permlink]); // Add author and permlink as dependencies
-
-  // const handlePostComment = () => {
-  //   if(!authenticated){gs?
-  //       toast.error("Login to make comment")
-  //       return
-  //     }
-  //   const parent_permlink = permlink;
-  //   const permlinks = `re-${parent_permlink}-${Date.now()}`;
-  //   if (window.hive_keychain) {
-  //     window.hive_keychain.requestBroadcast(
-  //       user,
-  //       [
-  //         [
-  //           "comment",
-  //           {
-  //             parent_author: author,
-  //             parent_permlink,
-  //             author: user,
-  //             permlink: permlinks,
-  //             weight: 10000,
-  //             title: "",
-  //             body: commentData,
-  //             json_metadata: "{\"app\":\"3speak/new-version\"}",
-  //             __config: { originalBody: null, comment_options: {} },
-  //           },
-  //         ],
-  //       ],
-  //       "Posting",
-  //       (response) => {
-  //         if (response.success) {
-  //           setCommentData("")
-  //           toast.success("Comment successful!");
-  //         } else {
-  //           toast.error(`Comment failed: ${response.message}`);
-  //         }
-  //       }
-  //     );
-  //   } else {
-  //     alert("Hive Keychain is not installed. Please install the extension.");
-  //   }
-  // };
-
+  // Queries with proper skip conditions
   const {
     data: getVideo,
-    loading,
-  } = useQuery(GET_VIDEO, { variables: { author, permlink }, ssr: true });
-  const spkvideo = getVideo?.socialPost?.spkvideo;
-  const [videoUrlSelected, setVideoUrlSelected] = useState(null);
+    loading: videoLoading,
+  } = useQuery(GET_VIDEO, { 
+    variables: { author, permlink },
+    skip: !author || !permlink,
+    ssr: true 
+  });
 
   const getUserProfile = useQuery(GET_PROFILE, {
     variables: { id: videoDetails?.author?.id },
+    skip: !videoDetails?.author?.id,
   });
 
-  
+  console.log("Video Data:", getVideo);
 
+  const spkvideo = getVideo?.socialPost?.spkvideo;
   const profile = getUserProfile.data?.profile;
-  const tags = videoDetails?.tags?.slice(0, 7) || [];
-  const comunity_name = videoDetails?.community?.title;
-  const community_id = videoDetails?.community?.username;
+  
+  // Memoized values
+  const tags = useMemo(() => videoDetails?.tags?.slice(0, 7) || [], [videoDetails?.tags]);
+  const comunity_name = useMemo(() => videoDetails?.community?.title, [videoDetails?.community?.title]);
+  const community_id = useMemo(() => {
+  const raw = videoDetails?.community?._id;
+  return raw ? raw.split('/').pop() : null;
+}, [videoDetails?.community?._id]);
 
-useEffect(() => {
-  if (spkvideo?.play_url) {
+  console.log("Community ID:", videoDetails);
+  // Memoized video URL
+  const videoUrlSelected = useMemo(() => {
+    if (!spkvideo?.play_url) return null;
+    
     const url = spkvideo.play_url;
-
-    // If the URL starts with "ipfs://", convert it to a CDN link
     if (url.startsWith("ipfs://")) {
       const ipfsHash = url.replace("ipfs://", "");
-      setVideoUrlSelected(`https://ipfs-3speak.b-cdn.net/ipfs/${ipfsHash}`);
-    } 
-    // Otherwise, use the link directly (e.g., m3u8 link)
-    else {
-      setVideoUrlSelected(url);
+      return `https://ipfs-3speak.b-cdn.net/ipfs/${ipfsHash}`;
     }
-  }
-}, [spkvideo]);
+    return url;
+  }, [spkvideo?.play_url]);
 
+  // Memoized callbacks to prevent recreating functions
+  const calculateVoteValue = useCallback(async (account, percent) => {
+    try {
+      const data = await estimate(account, percent);
+      setVoteValue(data);
+    } catch (err) {
+      console.error(err);
+    }
+  }, []);
 
+  const getTooltipVoters = useCallback(async () => {
+    try {
+      const data = await getUersContent(author, permlink);
+      if (!data) return;
 
-  if (loading) {
+      // Batch state updates to prevent multiple re-renders
+      const updates = {};
+
+      if (data.active_votes) {
+        updates.optimisticVoteCount = data.active_votes.length;
+        updates.isVoted = data.active_votes.some(vote => vote.voter === user);
+
+        const totalRshares = data.active_votes.reduce(
+          (sum, vote) => sum + parseInt(vote.rshares),
+          0
+        );
+
+        const totalPayout =
+          parseFloat(data.pending_payout_value) > 0
+            ? parseFloat(data.pending_payout_value)
+            : parseFloat(data.total_payout_value) + parseFloat(data.curator_payout_value);
+
+        const topVotes = data.active_votes
+          .sort((a, b) => parseInt(b.rshares) - parseInt(a.rshares))
+          .slice(0, 10)
+          .map(vote => {
+            const reward =
+              totalRshares > 0
+                ? (parseInt(vote.rshares) / totalRshares) * totalPayout
+                : 0;
+            return {
+              username: vote.voter,
+              reward: +reward.toFixed(3),
+            };
+          });
+
+        updates.tooltipVoters = topVotes;
+      }
+
+      // Single state update
+      setOptimisticVoteCount(updates.optimisticVoteCount || 0);
+      setIsVoted(updates.isVoted || false);
+      setTooltipVoters(updates.tooltipVoters || []);
+    } catch (error) {
+      console.error("Error fetching upvotes:", error);
+    }
+  }, [author, permlink, user]);
+
+  const speakWatchData = useCallback(async () => {
+    try {
+      const res = await axios.get(`${FEED_URL}/apiv2/@${author}/${permlink}`);
+      setSpeakData(res.data);
+      setView(res.data.views);
+    } catch (err) {
+      console.error("Error fetching speak data:", err);
+    }
+  }, [author, permlink]);
+
+  const getFollowersCount = useCallback(async (authorName) => {
+    try {
+      const follower = await getFollowers(authorName);
+      setFollowData(follower);
+    } catch (err) {
+      console.error(err);
+    }
+  }, []);
+
+  // Effect: Detect Hive Keychain
+  useEffect(() => {
+    const check = () => setHasKeychain(typeof window !== 'undefined' && !!window.hive_keychain);
+    check();
+    const id = setInterval(check, 1000);
+    const stopId = setTimeout(() => clearInterval(id), 10000);
+    return () => {
+      clearInterval(id);
+      clearTimeout(stopId);
+    };
+  }, []);
+
+  // Effect: Fetch account data (only once when user changes)
+  useEffect(() => {
+    if (!user) return;
+    
+    const fetchAccountData = async () => {
+      try {
+        const result = await getVotePower(user);
+        if (result?.account) {
+          setAccountData(result.account);
+          await calculateVoteValue(result.account, weight);
+        }
+      } catch (err) {
+        console.error('Error fetching account:', err);
+      }
+    };
+    
+    fetchAccountData();
+  }, [user, calculateVoteValue, weight]);
+
+  // Effect: Fetch speak data and followers (only when author/permlink changes)
+  useEffect(() => {
+    if (!author || !permlink) return;
+    
+    speakWatchData();
+    getFollowersCount(author);
+  }, [author, permlink, speakWatchData, getFollowersCount]);
+
+  // Effect: Get tooltip voters (only when author/permlink/user changes)
+  useEffect(() => {
+    if (!author || !permlink) return;
+    getTooltipVoters();
+  }, [author, permlink, getTooltipVoters]);
+
+  // Effect: Recalculate vote value when weight changes
+  useEffect(() => {
+    if (!accountData) return;
+    calculateVoteValue(accountData, weight);
+  }, [weight, accountData, calculateVoteValue]);
+
+  // Memoized handlers
+  const handleSelectTag = useCallback((tag) => {
+    navigate(`/t/${tag}`);
+  }, [navigate]);
+
+  const followUserWithKeychain = useCallback((follower, following) => {
+    const json = JSON.stringify([
+      'follow',
+      {
+        follower,
+        following,
+        what: ['blog'],
+      },
+    ]);
+
+    window.hive_keychain.requestCustomJson(
+      follower,
+      'follow',
+      'Posting',
+      json,
+      'Follow User',
+      (response) => {
+        if (response.success) {
+          toast.success("Followed successfully!");
+        } else {
+          console.error('Failed to follow user:', response.message);
+          toast.error("Failed to follow user");
+        }
+      }
+    );
+  }, []);
+
+  const handleProfileNavigate = useCallback((userName) => {
+    navigate(`/p/${userName}`);
+  }, [navigate]);
+
+  const toggleTooltip = useCallback(() => {
+    setShowTooltip((prev) => !prev);
+  }, []);
+
+  const handleCommunityNavigate = useCallback((community) => {
+    navigate(`/community/${community}`);
+  }, [navigate]);
+
+  // Loading state
+  if (videoLoading) {
     return <BarLoader />;
   }
 
-  //Recalculate when weight changes
- 
-
-
-
-  // const handleVote = async (username, permlink, weight = 10000) => {
-  //   if(!authenticated){
-  //       toast.error("Login to upvote")
-  //       return
-  //     }
-  //   try{
-  //     setIsLoading(true)
-  //     const data = await getUersContent(author, permlink);
-  //     if (data.active_votes.some(vote => vote.voter === user)){
-  //       toast.info("You have already vote this post")
-  //       setIsLoading(false)
-  //       return
-  //     }
-
-  //     if (window.hive_keychain) {
-  //     window.hive_keychain.requestBroadcast(
-  //       user,
-  //       [
-  //         [
-  //           "vote",
-  //           {
-  //             voter: user,
-  //             author: username,
-  //             permlink,
-  //             weight, // 10000 = 100%, 5000 = 50%
-  //           },
-  //         ],
-  //       ],
-  //       "Posting",
-  //       (response) => {
-  //         if (response.success) {
-  //           toast.success("Vote successful!");
-  //           setIsVoted(true);
-  //           setIsLoading(false)
-
-
-  //         } else {
-  //           setIsLoading(false)
-  //           toast.error(`Vote failed: ${response.message}`);
-  //         }
-  //       }
-  //     );
-  //   } else {
-  //     setIsLoading(false)
-  //     toast.info("Hive Keychain is not installed. Please install the extension.");
-  //   }
-
-  //   }catch(err){
-  //     console.log("somthing went wrong" , err)
-  //   }
-    
-  // };
-  const handleSelectTag = (tag) => {
-    navigate(`/t/${tag}`);
-  };
-
-  const followUserWithKeychain = (follower, following) => {
-  const json = JSON.stringify([
-    'follow',
-    {
-      follower,
-      following,
-      what: ['blog'], // use [] to unfollow
-    },
-  ]);
-
-  window.hive_keychain.requestCustomJson(
-    follower,
-    'follow',
-    'Posting',
-    json,
-    'Follow User',
-    (response) => {
-      if (response.success) {
-        // Optional: show toast
-      } else {
-        console.error('Failed to follow user:', response.message);
-        // Optional: show toast
-      }
-    }
-  );
-};
-
-const handleProfileNavigate = (user) => {
-      navigate(`/p/${user}`);
-     }
-     const toggleTooltip = () => {
-    setShowTooltip((prev)=> !prev)
-  };
-
-
-
-const handleCommunityNavigate = (community) => {
-      navigate(`/community/${community}`);
-     }
-
-
   return (
     <>
-    <div className="play-video">
-      <div className="top-container">
-{(author && permlink) ? (
-    // <JWPlayer
-    //   library={`https://cdn.jwplayer.com/libraries/${import.meta.env.VITE_JWPLAYER_LICENSE_ID}.js `} // Updated library
-    //   licenseKey={import.meta.env.VITE_JWPLAYER_LICENSE_KEY} // Verify key validity
-    //   playlist={[
-    //     {
-    //       file: videoUrlSelected,
-    //       image: spkvideo?.thumbnail_url,
-    //     },
-    //   ]}
-    //   playbackRateControls={true}
-    //   autostart={false}
-    //   aspectRatio="16:9"
-    //   customProps={{
-    //     hlsjsConfig: {
-    //       debug: true, // Enable HLS.js debugging
-    //       capLevelToPlayerSize: true, // Auto quality adjustment
-    //     },
-    //   }}
-    // />
+      <div className="play-video">
+        <div className="top-container">
+          {(author && permlink) ? (
             <div className="video-iframe-wrapper">
               <iframe
                 src={`https://play.3speak.tv/watch?v=${author}/${permlink}&layout=desktop&mode=iframe`}
@@ -414,127 +305,127 @@ const handleCommunityNavigate = (community) => {
                 frameBorder="0"
                 scrolling="no"
                 allowFullScreen
-              ></iframe>
+              />
             </div>
-
-
-
-
-
-  ) : (
-    <div className="video-loader">
-      <ImSpinner9 className="spinner" />
-    </div>
-  )}
-
-        <h3>{videoDetails?.title}</h3>
-        <div className="tag-wrapper">
-          {tags.map((tags, index) => (
-            <span key={index} onClick={()=>handleSelectTag(tags)}>{tags}</span>
-          ))}
-        </div>
-        <div className="community-title-wrap" onClick={()=>handleCommunityNavigate(community_id)}>
-          <MdPeople />
-          <span>{comunity_name}</span>
-        </div>
-        <div className="play-video-info">
-          <div className="wrap-left">
-            <div className="wrap">
-              <FaEye />
-              <span>{view}</span>
+          ) : (
+            <div className="video-loader">
+              <ImSpinner9 className="spinner" />
             </div>
-            <div className="wrap">
-              <LuTimer />
-              <span>{formatRelativeTime(videoDetails?.created_at)}</span>
-            </div>
+          )}
+
+          <h3>{videoDetails?.title}</h3>
+          
+          <div className="tag-wrapper">
+            {tags.map((tag, index) => (
+              <span key={index} onClick={() => handleSelectTag(tag)}>{tag}</span>
+            ))}
           </div>
-          <div className="wrap-right">
-            <span className="wrap">
-              {isLoading ?
-                <div className="loader-circle"><TailChase className="loader-circle" size="15" speed="1.5" color="red" /></div> :
-              <BiLike className={isVoted ? "icon-red" :"icon"} 
-              onClick={() => { toggleTooltip(author, permlink) }} 
-              />}
-              <div className="amount" onMouseEnter={() => setOpenToolTip(true)} onMouseLeave={() => setOpenToolTip(false)}>{optimisticVoteCount}</div>
-              {openTooltip && <ToolTip tooltipVoters={tooltipVoters} />}
-            </span>
+          
+          {community_id && (<div className="community-title-wrap" onClick={() => handleCommunityNavigate(community_id)}>
+            <MdPeople />
+            <span>{comunity_name}</span>
+          </div>)}
+          
+          <div className="play-video-info">
+            <div className="wrap-left">
+              <div className="wrap">
+                <FaEye />
+                <span>{view}</span>
+              </div>
+              <div className="wrap">
+                <LuTimer />
+                <span>{formatRelativeTime(videoDetails?.created_at)}</span>
+              </div>
+            </div>
             
+            <div className="wrap-right">
+              <span className="wrap">
+                {isLoading ? (
+                  <div className="loader-circle">
+                    <TailChase className="loader-circle" size="15" speed="1.5" color="red" />
+                  </div>
+                ) : (
+                  <BiLike 
+                    className={isVoted ? "icon-red" : "icon"} 
+                    onClick={toggleTooltip} 
+                  />
+                )}
+                <div 
+                  className="amount" 
+                  onMouseEnter={() => setOpenToolTip(true)} 
+                  onMouseLeave={() => setOpenToolTip(false)}
+                >
+                  {optimisticVoteCount}
+                </div>
+                {openTooltip && <ToolTip tooltipVoters={tooltipVoters} />}
+              </span>
 
-            {/* <span className="wrap">
-              <BiDislike className="icon" />
-              <span>0</span>
-            </span> */}
-            <span className="wrap">
-              <GiTwoCoins className="icon" />
-              <span>${videoDetails?.stats?.total_hive_reward?.toFixed(2) ?? '0.00'}</span>
-            </span>
-            {/* <span>Reply</span> */}
-            {authenticated && hasKeychain && (
-              <button className="tip-btn" onClick={() => setIsTipModalOpen(true)}>Tip</button>
-            )}
-            <UpvoteTooltip
-              showTooltip={showTooltip}
-              setShowTooltip={setShowTooltip}
-              author={author}
-              permlink={permlink}
-              setIsVoted={setIsVoted}
-              setOptimisticVoteCount={setOptimisticVoteCount}
-              weight={weight}
-              setWeight={setWeight}
-              voteValue={voteValue}
-              setAccountData={setAccountData}
-              accountData={accountData}
+              <span className="wrap">
+                <GiTwoCoins className="icon" />
+                <span>${videoDetails?.stats?.total_hive_reward?.toFixed(2) ?? '0.00'}</span>
+              </span>
               
-              // setVotedPosts={setVotedPosts}
-            />
+              {authenticated && hasKeychain && (
+                <button className="tip-btn" onClick={() => setIsTipModalOpen(true)}>
+                  Tip
+                </button>
+              )}
+              
+              <UpvoteTooltip
+                showTooltip={showTooltip}
+                setShowTooltip={setShowTooltip}
+                author={author}
+                permlink={permlink}
+                setIsVoted={setIsVoted}
+                setOptimisticVoteCount={setOptimisticVoteCount}
+                weight={weight}
+                setWeight={setWeight}
+                voteValue={voteValue}
+                setAccountData={setAccountData}
+                accountData={accountData}
+              />
+            </div>
           </div>
         </div>
-      </div>
 
-      <div className="big-mid-wrap"></div>
-      <div className="publisher">
-        <img src={profile?.images?.avatar} alt="" />
-        <div>
-          <p 
-          onClick={()=>handleProfileNavigate(videoDetails?.author?.id)}
-          >{videoDetails?.author?.id}</p>
-          <span>{followData?.follower_count} Followers</span>
+        <div className="big-mid-wrap"></div>
+        
+        <div className="publisher">
+          <img src={profile?.images?.avatar} alt="" />
+          <div>
+            <p onClick={() => handleProfileNavigate(videoDetails?.author?.id)}>
+              {videoDetails?.author?.id}
+            </p>
+            <span>{followData?.follower_count} Followers</span>
+          </div>
+          {author !== user && (
+            <button onClick={() => followUserWithKeychain(user, author)}>
+              Follow
+            </button>
+          )}
         </div>
-        {author !== user && <button onClick={()=>followUserWithKeychain(user, author)}>Follow</button>}
-      </div>
 
-      <div className="description-wrap">
-        <div className="blog-content">
-          <BlogContent author={author} permlink={permlink} />
+        <div className="description-wrap">
+          <div className="blog-content">
+            <BlogContent author={author} permlink={permlink} />
+          </div>
         </div>
-      </div>
 
-      {/* <div className="add-comment-wrap">
-        <span>Reply:</span>
-        <textarea
-          className="textarea-box"
-          value={commentData}
-          onChange={(e) => setCommentData(e.target.value)}
-          placeholder="Write your comment here..."
+        <CommentSection
+          videoDetails={videoDetails}
+          author={author}
+          permlink={permlink}
+          setIsVoted={setIsVoted}
         />
-        <div className="btn-wrap">
-          <button onClick={handlePostComment}>Comment</button>
-        </div>
-      </div> */}
-
-      <CommentSection
-        videoDetails={videoDetails}
-        author={author}
-        permlink={permlink}
-        setIsVoted={setIsVoted}
-      />
-    </div>
-    {isTipModalOpen && <TipModal
-    recipient={author}
-    isOpen={isTipModalOpen}
-    onClose={() => setIsTipModalOpen(false)}
-    // onSendTip={handleSendTip}
-     />}
+      </div>
+      
+      {isTipModalOpen && (
+        <TipModal
+          recipient={author}
+          isOpen={isTipModalOpen}
+          onClose={() => setIsTipModalOpen(false)}
+        />
+      )}
     </>
   );
 };
@@ -554,17 +445,12 @@ PlayVideo.propTypes = {
       follower_count: PropTypes.number,
       id: PropTypes.string,
     }),
-    comments: PropTypes.arrayOf(
-      PropTypes.shape({
-        id: PropTypes.number,
-        author: PropTypes.string,
-        text: PropTypes.string,
-        date: PropTypes.string,
-        likes: PropTypes.number,
-        dislikes: PropTypes.number,
-        reward: PropTypes.number,
-      })
-    ),
+    community: PropTypes.shape({
+      title: PropTypes.string,
+      username: PropTypes.string,
+    }),
+    tags: PropTypes.arrayOf(PropTypes.string),
+    created_at: PropTypes.string,
   }),
   author: PropTypes.string.isRequired,
   permlink: PropTypes.string.isRequired,

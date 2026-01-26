@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState, useCallback } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import axios from "axios";
@@ -38,85 +38,76 @@ function ProfilePage() {
   =============================== */
   const [inProgress, setInProgress] = useState(null);
   const pollingRef = useRef(null);
+  const refetchRef = useRef(null);
 
   /* ===============================
      FETCH IN-PROGRESS UPLOADS
   =============================== */
-  const fetchInProgressUploads = async () => {
-  if (!user) return;
+  const fetchInProgressUploads = useCallback(async () => {
+    if (!user) return;
 
-  try {
-    const res = await axios.get(
-      `${UPLOAD_URL}/api/upload/in-progress`,
-      {
-        headers: {
-          "X-Hive-Username": user,
-        },
+    try {
+      const res = await axios.get(
+        `${UPLOAD_URL}/api/upload/in-progress`,
+        {
+          headers: {
+            "X-Hive-Username": user,
+          },
+        }
+      );
+
+      const json = res.data;
+
+      console.log(json)
+
+      if (!json.success) return;
+
+      setInProgress(json.data);
+
+      // stop polling when done
+      if (json.data.count === 0 && pollingRef.current) {
+        clearInterval(pollingRef.current);
+        pollingRef.current = null;
+        if (refetchRef.current) {
+          refetchRef.current();
+        }
       }
-    );
-
-    const json = res.data;
-
-
-    console.log(json)
-
-    if (!json.success) return;
-
-    setInProgress(json.data);
-
-    // stop polling when done
-    if (json.data.count === 0 && pollingRef.current) {
-      clearInterval(pollingRef.current);
-      refetch();
-      pollingRef.current = null;
+    } catch (err) {
+      console.error(
+        "In-progress fetch error:",
+        err.response?.data || err.message
+      );
     }
-  } catch (err) {
-    console.error(
-      "In-progress fetch error:",
-      err.response?.data || err.message
-    );
-  }
-};
+  }, [user]);
 
 
   /* ===============================
      START POLLING ON LOAD
   =============================== */
-// useEffect(() => {
-//   if (!user) return;
-
-//   // run immediately
-//   fetchInProgressUploads();
-
-//   // clear any existing interval first
-//   if (pollingRef.current) {
-//     clearInterval(pollingRef.current);
-//   }
-
-//   pollingRef.current = setInterval(() => {
-//     fetchInProgressUploads();
-//   }, 5000);
-
-//   return () => {
-//     if (pollingRef.current) {
-//       clearInterval(pollingRef.current);
-//       pollingRef.current = null;
-//     }
-//   };
-// }, [user, uploadStatus]);
-
-
   useEffect(() => { 
-    fetchInProgressUploads(); 
-    pollingRef.current = setInterval(() => { fetchInProgressUploads(); }, 5000); 
-    return () => { if (pollingRef.current) { clearInterval(pollingRef.current); } };
-   }, [user ]);
+    if (!user) return;
 
-   useEffect(() => { 
+    // Clear any existing interval first
+    if (pollingRef.current) {
+      clearInterval(pollingRef.current);
+      pollingRef.current = null;
+    }
+
+    // Run immediately
     fetchInProgressUploads(); 
-    pollingRef.current = setInterval(() => { fetchInProgressUploads(); }, 5000); 
-    return () => { if (pollingRef.current) { clearInterval(pollingRef.current); } };
-   }, [ uploadStatus]);
+
+    // Set up polling interval
+    pollingRef.current = setInterval(() => { 
+      fetchInProgressUploads(); 
+    }, 5000); 
+
+    return () => { 
+      if (pollingRef.current) { 
+        clearInterval(pollingRef.current); 
+        pollingRef.current = null;
+      } 
+    };
+  }, [user, fetchInProgressUploads]);
 
 
   /* ===============================
@@ -190,6 +181,11 @@ function ProfilePage() {
       return allPages.length;
     },
   });
+
+  // Store refetch in ref for use in fetchInProgressUploads
+  useEffect(() => {
+    refetchRef.current = refetch;
+  }, [refetch]);
 
   const videos = data?.pages.flat() || [];
   console.log(videos)
