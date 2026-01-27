@@ -7,6 +7,7 @@ import { useAppStore } from '../lib/store';
 import { Client } from '@hiveio/dhive';
 import TransferModal from '../components/Wallet/TransferModal';
 import { useParams } from 'react-router-dom';
+import { toast } from 'sonner';
 
 const client = new Client([
   'https://api.hive.blog',
@@ -22,6 +23,8 @@ function Wallet() {
   const [selectedCoin, setSelectedCoin] = useState(null);
   const [amount, setAmount] = useState('');
   const [recipient, setRecipient] = useState('');
+  const [hasKeychain, setHasKeychain] = useState(false);
+
   const [balances, setBalances] = useState({
     hp: 0,
     hbd: 0,
@@ -41,6 +44,19 @@ function Wallet() {
     if (user) fetchBalances();
     fetchPrices();
   }, [user]);
+
+  // Detect Hive Keychain extension presence (poll briefly to catch late installs)
+    useEffect(() => {
+      const check = () => setHasKeychain(typeof window !== 'undefined' && !!window.hive_keychain);
+      check();
+      const id = setInterval(check, 1000);
+      // stop polling after 10s
+      const stopId = setTimeout(() => clearInterval(id), 10000);
+      return () => {
+        clearInterval(id);
+        clearTimeout(stopId);
+      };
+    }, []);
 
   const fetchBalances = async () => {
     try {
@@ -130,12 +146,20 @@ function Wallet() {
                   <h2>{coin.name}</h2>
                   <p>Current Balance</p>
                 </div>
-                {currentUser === user &&<button
-                  className="transfer-btn"
-                  onClick={() => handleTransfer(coin.name)}
-                >
-                  Transfer {coin.name}
-                </button>}
+                {currentUser === user && (
+                  <button
+                    className="transfer-btn"
+                    onClick={() => {
+                      if (!hasKeychain) {
+                        toast.error('You need Keychain extension to make transfer');
+                        return;
+                      }
+                      handleTransfer(coin.name);
+                    }}
+                  >
+                    Transfer {coin.name}
+                  </button>
+                )}
               </div>
 
               <div className="balance-section">
