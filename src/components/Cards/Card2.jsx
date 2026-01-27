@@ -10,6 +10,8 @@ import "./Cards.scss";
 import { useAppStore } from '../../lib/store';
 import img from "../../assets/image/speak.jpg";
 import useViewCounts from "../../hooks/useViewCounts";
+import { voteWithAioha, isLoggedIn } from "../../hive-api/aioha";
+import { toast } from 'sonner';
 
 dayjs.extend(relativeTime);
 
@@ -42,32 +44,17 @@ function Card2({
         return views.toLocaleString();
       };
 
-      const handleVote = (username, permlink, weight = 10000) => {
-        if (window.hive_keychain) {
-          window.hive_keychain.requestBroadcast(
-            user,
-            [
-              [
-                "vote",
-                {
-                  voter: user,
-                  author: username,
-                  permlink,
-                  weight,
-                },
-              ],
-            ],
-            "Posting",
-            (response) => {
-              if (response.success) {
-                alert("Vote successful!");
-              } else {
-                alert(`Vote failed: ${response.message}`);
-              }
-            }
-          );
-        } else {
-          alert("Hive Keychain is not installed. Please install the extension.");
+      const handleVote = async (username, permlink, weight = 10000) => {
+        if (!isLoggedIn()) {
+          toast.error("Please login to vote");
+          return;
+        }
+
+        try {
+          await voteWithAioha(username, permlink, weight);
+          toast.success("Vote successful!");
+        } catch (error) {
+          toast.error(`Vote failed: ${error.message}`);
         }
       };
 

@@ -31,6 +31,7 @@ import 'ldrs/react/TailChase.css'
 import { getFollowers } from "../../hive-api/api";
 import UpvoteTooltip from "../tooltip/UpvoteTooltip";
 import axios from "axios";
+import { followWithAioha, isLoggedIn } from "../../hive-api/aioha";
   import bs58 from "bs58";
   import { Buffer } from "buffer";
 
@@ -333,33 +334,20 @@ useEffect(() => {
     navigate(`/t/${tag}`);
   };
 
-  const followUserWithKeychain = (follower, following) => {
-  const json = JSON.stringify([
-    'follow',
-    {
-      follower,
-      following,
-      what: ['blog'], // use [] to unfollow
-    },
-  ]);
-
-  window.hive_keychain.requestCustomJson(
-    follower,
-    'follow',
-    'Posting',
-    json,
-    'Follow User',
-    (response) => {
-      if (response.success) {
-        console.log('Successfully followed user:', response);
-        // Optional: show toast
-      } else {
-        console.error('Failed to follow user:', response.message);
-        // Optional: show toast
-      }
+  const followUser = async (following) => {
+    if (!isLoggedIn()) {
+      toast.error("Please login to follow users");
+      return;
     }
-  );
-};
+
+    try {
+      await followWithAioha(following, true);
+      toast.success(`Successfully followed @${following}`);
+    } catch (error) {
+      console.error('Failed to follow user:', error);
+      toast.error(`Failed to follow: ${error.message}`);
+    }
+  };
 
 const handleProfileNavigate = (user) => {
       navigate(`/p/${user}`);
@@ -461,7 +449,7 @@ const handleProfileNavigate = (user) => {
               <span>${videoDetails?.stats?.total_hive_reward?.toFixed(2) ?? '0.00'}</span>
             </span>
             {/* <span>Reply</span> */}
-            {authenticated && hasKeychain && (
+            {authenticated && isLoggedIn() && (
               <button className="tip-btn" onClick={() => setIsTipModalOpen(true)}>Tip</button>
             )}
             <UpvoteTooltip
@@ -492,7 +480,7 @@ const handleProfileNavigate = (user) => {
           >{videoDetails?.author?.id}</p>
           <span>{followData?.follower_count} Followers</span>
         </div>
-        {author !== user && <button onClick={()=>followUserWithKeychain(user, author)}>Follow</button>}
+        {author !== user && <button onClick={() => followUser(author)}>Follow</button>}
       </div>
 
       <div className="description-wrap">

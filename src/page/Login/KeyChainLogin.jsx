@@ -15,15 +15,6 @@ import   {KeyTypes, Providers } from '@aioha/aioha'
 import QrCode_modal from '../../components/modal/QrCode_modal';
 import aioha from "../../hive-api/aioha";
 
-const APP_META = {
-  name: "3speak",
-  description: "3Speak video platform",
-  icon: undefined
-};
-
-
-
-
 function KeyChainLogin() {
   const client = axios.create({});
 
@@ -288,25 +279,16 @@ const handleSwitchAccount = (user) => {
           />
 
           <div className="wrap-btn">
-            {isMobile && (
-              <div className="wrap keychain-down" onClick={handleLoginWithHiveAuth}>
-                <img src={hiveauthImg} alt="HiveAuth" />
-                <span>HiveAuth</span>
-              </div>
-            )}
             {hasKeychain && (
               <div className="wrap keychain-down" onClick={logMe}>
                 <img src={keychainImg} alt="keychain" />
                 <span>Keychain</span>
               </div>
             )}
-
-              {/* <div className="wrap keychain-down" onClick={login3SpeakEmail}>
-              <img src={hiveauthImg} alt="email" />
-              <span>Email</span>
-            </div> */}
-
-
+            <div className="wrap keychain-down" onClick={handleLoginWithHiveAuth}>
+              <img src={hiveauthImg} alt="HiveAuth" />
+              <span>HiveAuth</span>
+            </div>
           </div>
 
           <div className="wrap-signup keychain-space">

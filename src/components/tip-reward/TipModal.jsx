@@ -3,9 +3,10 @@ import Success from './Success';
 import './TipModal.scss';
 import { fetchBalances, isAccountValid } from '../../hive-api/api';
 import { useAppStore } from '../../lib/store';
-import {  toast } from 'sonner'
+import { toast } from 'sonner'
 import { LineSpinner } from 'ldrs/react'
 import 'ldrs/react/LineSpinner.css'
+import { transferWithAioha, isLoggedIn } from '../../hive-api/aioha';
 
 
 
@@ -67,44 +68,28 @@ const TipModal = ({ recipient, isOpen, onClose, onSendTip }) => {
       toast.error("All fields are required");
       return;
     }
-  
-    if (amount > selectedBalance) {
+
+    if (!isLoggedIn()) {
+      toast.error("Please login to send a tip");
+      return;
+    }
+
+    if (parseFloat(amount) > selectedBalance) {
       toast.error("Insufficient balance");
       return;
     }
-  
+
     const valid = await isAccountValid(recipient);
     if (!valid) {
       toast.error("Invalid username");
       return;
     }
-  
+
     try {
-      const transferOp = [
-        'transfer',
-        {
-          from: activetUser,
-          to: recipient,
-          amount: `${parseFloat(amount).toFixed(3)} ${currency}`,
-          memo: memo || ''
-        }
-      ];
-  
-      window.hive_keychain.requestBroadcast(
-        activetUser,
-        [transferOp],
-        'Active',
-        async (response) => {
-          if (response.success) {
-            setStep(2);
-          } else {
-            toast.error(`Transfer failed: ${response.message}`);
-          }
-        }
-      );
-  
+      await transferWithAioha(recipient, parseFloat(amount), currency, memo || '');
+      setStep(2);
     } catch (error) {
-      toast.error("Error processing transfer");
+      toast.error(`Transfer failed: ${error.message}`);
       console.error(error);
     }
   };

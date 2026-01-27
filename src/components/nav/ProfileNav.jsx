@@ -8,7 +8,7 @@ import { ImPower } from "react-icons/im";
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { FaDiscord, FaLanguage } from 'react-icons/fa';
 import { IoPower } from 'react-icons/io5';
-import { FaCheckToSlot, FaJxl, FaSquareXTwitter, FaUserGroup } from 'react-icons/fa6';
+import { FaCheckToSlot, FaJxl, FaSquareXTwitter } from 'react-icons/fa6';
 import { TiThList } from "react-icons/ti";
 import { IoMdPerson } from 'react-icons/io';
 import { RiWallet3Fill } from 'react-icons/ri';
@@ -20,35 +20,15 @@ import { getVotePower } from '../../utils/hiveUtils';
 
 
 
-function ProfileNav({ isVisible, onclose, toggleAddAccount }) {
+function ProfileNav({ isVisible, onclose, toggleAddAccount, openLoginModal }) {
   const location = useLocation();
   const navigate = useNavigate()
-  const { LogOut, user, switchAccount, theme } = useAppStore();
-  const [showDropdown, setShowDropdown] = useState(false);
+  const { user, theme } = useAppStore();
   const [votingPower, setVotingPower] = useState(0);
   const [rc, setRc] = useState(0);
 
-  const [accountList, setAccountList] = useState();     
-        useEffect(()=>{
-          const getAccountlist = JSON.parse(localStorage.getItem("accountsList")) || [];
-          setAccountList(getAccountlist)
-        },[isVisible])
-
-  useEffect(() => {
-    const getAccountlist = JSON.parse(localStorage.getItem("accountsList")) || [];
-    setAccountList(getAccountlist)
-  }, [isVisible])
-
   const handlewallletNavigation = () => {
     navigate(`/wallet/${user}`)
-  }
-  const handleSwitchAccount = async(user) => {
-    switchAccount(user)
-    onclose()
-    navigate("/")
-    const preAuth = (location.state && location.state.from && location.state.from.pathname) || sessionStorage.getItem('preLoginPath') || '/';
-    navigate(preAuth);
-
   }
 
   const fetchVotePower = async (user) => {
@@ -115,24 +95,12 @@ function ProfileNav({ isVisible, onclose, toggleAddAccount }) {
           <a className="wrap" onClick={() => { handlewallletNavigation(); onclose() }}>
             <RiWallet3Fill className="icon" /> <span>Wallet</span>
           </a>
-          <a className="wrap dropdown-parent" onClick={() => setShowDropdown(!showDropdown)}>
-            <FaUserGroup className="icon" /> <span>Switch User</span>
-            {showDropdown && accountList.length > 0 && (<div className="dropdown-menu">
-              <span className='close-btn' onClick={() => setShowDropdown(!showDropdown)}>x</span>
-
-              {accountList.map((list, index) => (
-                <div key={index} className="list" onClick={(e) => { e.stopPropagation(); handleSwitchAccount(list.username); setShowDropdown(!showDropdown) }}> <img src={`https://images.hive.blog/u/${list.username}/avatar`} alt="" /> <span>{list.username}</span></div>
-              ))}
-              <button className='add-account' onClick={() => { onclose(); toggleAddAccount(); }}>Add Account</button>
-
-            </div>)}
-          </a>
           {/* <Link className="wrap">
             <FaLanguage className="icon" /> <span>Language Settings</span>
           </Link> */}
-          <Link to={"/login"} onClick={() => { LogOut(user); onclose() }} className="wrap">
-            <IoPower className="icon" /> <span>Logout</span>
-          </Link>
+          <a className="wrap" onClick={() => { onclose(); openLoginModal(); }}>
+            <IoPower className="icon" /> <span>Change account</span>
+          </a>
 
            </div>
            <div className="logo-wrap">

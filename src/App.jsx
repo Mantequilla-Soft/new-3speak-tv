@@ -1,4 +1,5 @@
 import { Route, Routes, useLocation } from "react-router-dom";
+import { useRef } from "react";
 import "./App.css";
 // import Home from './page/Home'
 // import Treanding from './page/Treanding'
@@ -52,16 +53,25 @@ import NotFound from "./page/NotFound";
 import ProfileModal from "./components/modal/ProfileModal";
 import HiveImageUploader from "./page/HiveImageUploader";
 import { LegacyUploadProvider } from "./context/LegacyUploadContext";
+import { AiohaModal, useAioha } from "@aioha/react-ui";
+import { KeyTypes } from "@aioha/aioha";
+import '@aioha/react-ui/dist/build.css';
+import { LOCAL_STORAGE_ACCESS_TOKEN_KEY, LOCAL_STORAGE_USER_ID_KEY } from "./hooks/localStorageKeys";
+import axios from "axios";
 
 function App() {
   const location = useLocation();
-  const { initializeAuth, authenticated, LogOut } = useAppStore();
+  const { initializeAuth, authenticated, LogOut, switchAccount, setUser, user: appUser } = useAppStore();
+  const { aioha, user: aiohaUser } = useAioha();
   const [sidebar, setSideBar] = useState(true);
   const [profileNavVisible, setProfileNavVisible] = useState(false);
 
   const [globalCloseRender, setGlobalCloseRender] = useState(false)
   const [toggle, setToggle] = useState(false);
   const [reloadSwitch, setRelaodSwitch] = useState(false)
+  const [loginModalOpen, setLoginModalOpen] = useState(false);
+  const [loginProof, setLoginProof] = useState(() => Math.floor(Date.now() / 1000));
+  const userWhenModalOpened = useRef(null); // Track user when modal opens
   
 
 
@@ -86,7 +96,84 @@ function App() {
     }
   }, [location]);
 
+  // Watch for aioha user changes and sync with 3Speak
+  useEffect(() => {
+    const syncAiohaUser = async () => {
+      // If aioha user changed and is different from app user
+      if (aiohaUser && aiohaUser !== appUser) {
+        console.log("Aioha user changed:", aiohaUser, "App user:", appUser);
 
+        // Check if we already have a token for this user (no need to re-authenticate)
+        const existingAccounts = JSON.parse(localStorage.getItem("accountsList")) || [];
+        const existingAccount = existingAccounts.find(acc => acc.username === aiohaUser);
+
+        if (existingAccount && existingAccount.access_token) {
+          // Use existing token - no signing required
+          console.log("Using existing token for:", aiohaUser);
+          localStorage.setItem(LOCAL_STORAGE_ACCESS_TOKEN_KEY, existingAccount.access_token);
+          localStorage.setItem(LOCAL_STORAGE_USER_ID_KEY, aiohaUser);
+          setUser(aiohaUser);
+          initializeAuth();
+          setLoginModalOpen(false);
+          toast.success(`Switched to ${aiohaUser}`);
+        } else {
+          // New account - need to sign and get token from backend
+          try {
+            const proof = Math.floor(Date.now() / 1000);
+            const signResult = await aioha.signMessage(`${proof}`, KeyTypes.Posting);
+
+            if (signResult.error) {
+              console.error("Sign error:", signResult.error);
+              return;
+            }
+
+            const data = {
+              challenge: signResult.result,
+              proof: proof,
+              publicKey: signResult.publicKey,
+              username: aiohaUser,
+            };
+
+            const response = await axios.post(
+              'https://studio.3speak.tv/mobile/login',
+              data,
+              {
+                headers: {
+                  'Content-Type': 'application/json',
+                },
+              }
+            );
+
+            console.log('Account switch success:', response.data);
+            const token = response.data.token;
+
+            localStorage.setItem(LOCAL_STORAGE_ACCESS_TOKEN_KEY, token);
+            localStorage.setItem(LOCAL_STORAGE_USER_ID_KEY, aiohaUser);
+
+            // Save to accountsList for future switches
+            const filtered = existingAccounts.filter(acc => acc.username !== aiohaUser);
+            const updated = [...filtered, { username: aiohaUser, access_token: token }];
+            localStorage.setItem("accountsList", JSON.stringify(updated));
+
+            setUser(aiohaUser);
+            initializeAuth();
+            setLoginModalOpen(false);
+            toast.success(`Switched to ${aiohaUser}`);
+          } catch (err) {
+            console.error("Account switch error:", err);
+            toast.error("Failed to switch account: " + (err.response?.data?.error || err.message));
+          }
+        }
+      } else if (!aiohaUser && appUser) {
+        // Aioha logged out - log out of 3Speak too
+        console.log("Aioha logged out, logging out of 3Speak");
+        LogOut(appUser);
+        toast.success("Logged out successfully");
+      }
+    };
+
+    syncAiohaUser();
+  }, [aiohaUser]);
 
 
 
@@ -128,11 +215,140 @@ function App() {
     setToggle((prev) => !prev);
   }
 
+  const openLoginModal = () => {
+    setLoginProof(Math.floor(Date.now() / 1000)); // Fresh timestamp when modal opens
+    userWhenModalOpened.current = aioha.getCurrentUser(); // Save current user when modal opens
+    setLoginModalOpen(true);
+  }
+
+  const closeLoginModal = async () => {
+    setLoginModalOpen(false);
+
+    // Check if aioha user changed while modal was open (e.g., switch user)
+    const currentAiohaUser = aioha.getCurrentUser();
+    const previousUser = userWhenModalOpened.current;
+
+    // Compare against user when modal was opened (more reliable than appUser due to race conditions)
+    if (currentAiohaUser && currentAiohaUser !== previousUser) {
+      console.log("User changed while modal was open:", currentAiohaUser, "vs", previousUser);
+
+      // Check if we already have a token for this user (no need to re-authenticate)
+      const existingAccounts = JSON.parse(localStorage.getItem("accountsList")) || [];
+      const existingAccount = existingAccounts.find(acc => acc.username === currentAiohaUser);
+
+      if (existingAccount && existingAccount.access_token) {
+        // Use existing token - no signing required
+        console.log("Using existing token for:", currentAiohaUser);
+        localStorage.setItem(LOCAL_STORAGE_ACCESS_TOKEN_KEY, existingAccount.access_token);
+        localStorage.setItem(LOCAL_STORAGE_USER_ID_KEY, currentAiohaUser);
+        setUser(currentAiohaUser);
+        initializeAuth();
+        toast.success(`Switched to ${currentAiohaUser}`);
+      } else {
+        // New account - need to sign and get token from backend
+        try {
+          const proof = Math.floor(Date.now() / 1000);
+          const signResult = await aioha.signMessage(`${proof}`, KeyTypes.Posting);
+
+          if (signResult.error) {
+            console.error("Sign error:", signResult.error);
+            return;
+          }
+
+          const data = {
+            challenge: signResult.result,
+            proof: proof,
+            publicKey: signResult.publicKey,
+            username: currentAiohaUser,
+          };
+
+          const response = await axios.post(
+            'https://studio.3speak.tv/mobile/login',
+            data,
+            {
+              headers: {
+                'Content-Type': 'application/json',
+              },
+            }
+          );
+
+          console.log('Account switch success:', response.data);
+          const token = response.data.token;
+
+          localStorage.setItem(LOCAL_STORAGE_ACCESS_TOKEN_KEY, token);
+          localStorage.setItem(LOCAL_STORAGE_USER_ID_KEY, currentAiohaUser);
+
+          // Save to accountsList for future switches
+          const filtered = existingAccounts.filter(acc => acc.username !== currentAiohaUser);
+          const updated = [...filtered, { username: currentAiohaUser, access_token: token }];
+          localStorage.setItem("accountsList", JSON.stringify(updated));
+
+          setUser(currentAiohaUser);
+          initializeAuth();
+          toast.success(`Switched to ${currentAiohaUser}`);
+        } catch (err) {
+          console.error("Account switch error:", err);
+          toast.error("Failed to switch account: " + (err.response?.data?.error || err.message));
+        }
+      }
+    } else if (!currentAiohaUser && previousUser) {
+      // User logged out via modal
+      console.log("User logged out via modal");
+      LogOut(previousUser);
+      toast.success("Logged out successfully");
+    }
+
+    // Clear the ref
+    userWhenModalOpened.current = null;
+  }
+
+  // Handle login callback from AiohaModal
+  const handleAiohaLogin = async (loginResult) => {
+    console.log("Aioha login result:", loginResult);
+
+    if (!loginResult || loginResult.error) {
+      toast.error("Login failed: " + (loginResult?.error || "Unknown error"));
+      return;
+    }
+
+    try {
+      // Send to 3Speak backend for JWT token
+      // Use the same proof that was signed in loginOptions.msg
+      const data = {
+        challenge: loginResult.result,
+        proof: loginProof,
+        publicKey: loginResult.publicKey,
+        username: loginResult.username,
+      };
+
+      const response = await axios.post(
+        'https://studio.3speak.tv/mobile/login',
+        data,
+        {
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        }
+      );
+
+      console.log('Login Success:', response.data);
+      const token = response.data.token;
+      localStorage.setItem(LOCAL_STORAGE_ACCESS_TOKEN_KEY, token);
+      localStorage.setItem(LOCAL_STORAGE_USER_ID_KEY, loginResult.username);
+      initializeAuth();
+      setLoginModalOpen(false);
+      toast.success("Login successful!");
+    } catch (err) {
+      console.error("3Speak auth error:", err);
+      toast.error("Login failed: " + (err.response?.data?.error || err.message));
+    }
+  }
+
   return (
     <LegacyUploadProvider>
     <div onClick={()=> {setGlobalCloseRender(true)}}>
       <Toaster richColors position="top-right" />
-      <Nav setSideBar={setSideBar} toggleProfileNav={toggleProfileNav}  globalClose={globalCloseRender} setGlobalClose={setGlobalCloseRender} />
+      <Nav setSideBar={setSideBar} toggleProfileNav={toggleProfileNav} globalClose={globalCloseRender} setGlobalClose={setGlobalCloseRender} openLoginModal={openLoginModal} />
       <div>
         <Sidebar sidebar={sidebar} />
         <div className={`container ${sidebar ? "" : "large-container"}`}>
@@ -173,9 +389,18 @@ function App() {
             <Route path="*" element={<NotFound />} />
           </Routes>
         </div>
-        <ProfileNav isVisible={profileNavVisible} onclose={toggleProfileNav} toggleAddAccount={toggleAddAccount} />
+        <ProfileNav isVisible={profileNavVisible} onclose={toggleProfileNav} toggleAddAccount={toggleAddAccount} openLoginModal={openLoginModal} />
         {toggle && <AddAccount_modal close={toggleAddAccount} isOpen={toggle} /> }
-        
+        <AiohaModal
+          displayed={loginModalOpen}
+          onLogin={handleAiohaLogin}
+          onClose={closeLoginModal}
+          loginTitle="Login to 3Speak"
+          loginOptions={{
+            msg: `${loginProof}`,
+            keyType: KeyTypes.Posting
+          }}
+        />
       </div>
     </div>
 

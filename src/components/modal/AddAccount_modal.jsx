@@ -18,12 +18,6 @@ import   {KeyTypes, Providers } from '@aioha/aioha'
 import QrCode_modal from '../../components/modal/QrCode_modal';
 import aioha from "../../hive-api/aioha";
 
-const APP_META = {
-  name: "3speak",
-  description: "3Speak video platform",
-  icon: undefined
-};
-
 function AddAccount_modal({ isOpen, close}) {
     const location = useLocation();
     const client = axios.create({});
@@ -231,7 +225,7 @@ function AddAccount_modal({ isOpen, close}) {
             onChange={(e) => setUsername(e.target.value.toLowerCase())}
             style={{
                   fontSize: isMobile ? (isIphone ? '16px' : '14px') : undefined
-                }}    
+                }}
           />
 
           <div className="wrap-btn">

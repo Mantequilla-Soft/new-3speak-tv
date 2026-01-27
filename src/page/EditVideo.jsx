@@ -10,6 +10,7 @@ import TextEditor from '../components/studio/TextEditor';
 import { useAppStore } from '../lib/store';
 import * as dhive from '@hiveio/dhive';
 import MarkdownComposer from '../components/studio/MarkdownComposer';
+import { broadcastWithAioha, isLoggedIn, KeyTypes } from '../hive-api/aioha';
 const client = new dhive.Client(['https://api.hive.blog']);
 
 // Lazy-loaded renderer to avoid Node.js polyfill issues at bundle time
@@ -91,6 +92,11 @@ const EditVideo = () => {
 const handleSubmit = async (e) => {
   e.preventDefault();
 
+  if (!isLoggedIn()) {
+    toast.error("Please login to update the video");
+    return;
+  }
+
   const tagsArray = tags.split(',').map(tag => tag.trim()).filter(Boolean);
 
   // Convert description to HTML paragraphs
@@ -101,7 +107,7 @@ const handleSubmit = async (e) => {
 
   const metadata = {
     tags: tagsArray,
-    app: 'your-app-name/0.1', // replace with your app name
+    app: '3speak/new-version',
     format: 'html',
   };
 
@@ -120,21 +126,14 @@ const handleSubmit = async (e) => {
     },
   ];
 
-  // Broadcast the operation via Keychain
-  window.hive_keychain.requestBroadcast(
-    user,
-    [commentOp],
-    'Posting',
-    async (response) => {
-      if (response.success) {
-        toast.success("Post successfully updated on Hive!");
-        navigate("/draft")      
-      } else {
-        toast.error("Failed to update post on Hive");
-        console.error("Keychain Error:", response.message);
-      }
-    }
-  );
+  try {
+    await broadcastWithAioha([commentOp], KeyTypes.Posting);
+    toast.success("Post successfully updated on Hive!");
+    navigate("/draft");
+  } catch (error) {
+    toast.error(`Failed to update post: ${error.message}`);
+    console.error("Update error:", error);
+  }
 };
 
 

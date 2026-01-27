@@ -1,27 +1,18 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { Client } from '@hiveio/dhive';
 import './UpvoteTooltip.scss';
 import { useAppStore } from '../../lib/store';
 import { IoChevronUpCircleOutline } from 'react-icons/io5';
 import {  toast } from 'sonner'
-import 'react-toastify/dist/ReactToastify.css';
 import { estimate, getUersContent, getVotePower } from '../../utils/hiveUtils';
 import { TailChase } from 'ldrs/react';
 import 'ldrs/react/TailChase.css';
-import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
-
-const client = new Client(['https://api.hive.blog']);
+import { voteWithAioha, isLoggedIn } from '../../hive-api/aioha';
 
 const CommentVoteTooltip = ({ author, permlink, showTooltip, setShowTooltip,weight,setWeight, setCommentList,voteValue,setVoteValue,accountData,setAccountData, setActiveTooltipPermlink }) => {
-  const { user, authenticated, LogOut } = useAppStore();
+  const { user, authenticated } = useAppStore();
   const [votingPower, setVotingPower] = useState(100);
-  // const [weight, setWeight] = useState(100);
-  // const [voteValue, setVoteValue] = useState(0.0);
-  // const [accountData, setAccountData] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const tooltipRef = useRef(null);
-  const accessToken = localStorage.getItem("access_token");
 
   // Close tooltip on outside click
   useEffect(() => {
@@ -81,7 +72,7 @@ const CommentVoteTooltip = ({ author, permlink, showTooltip, setShowTooltip,weig
 
 
 const handleVote = async () => {
-  if (!authenticated) {
+  if (!authenticated || !isLoggedIn()) {
     toast.error('Login to complete this operation');
     return;
   }
@@ -104,32 +95,19 @@ const handleVote = async () => {
       return;
     }
 
+    // Use aioha for client-side voting
+    await voteWithAioha(author, permlink, voteWeight);
 
-    const response = await axios.post('https://studio.3speak.tv/mobile/vote', {
-              author,
-              permlink,
-              weight: voteWeight
-            }, {
-              headers: {
-                'Authorization': `Bearer ${accessToken}`,
-                'Content-Type': 'application/json',
-              }
-            });
+    toast.success('Vote successful');
+    setCommentList(prev => updateCommentsRecursively(prev, permlink));
 
-            console.log('Vote response:', response.data);
-      if (response.data.success) {
-        toast.success('Vote successful');
-        setCommentList(prev => updateCommentsRecursively(prev, permlink));
-
-      }
-      setIsLoading(false);
-      setShowTooltip(false);
-      setActiveTooltipPermlink(null);
-  
+    setIsLoading(false);
+    setShowTooltip(false);
+    setActiveTooltipPermlink(null);
 
   } catch (err) {
     console.error('Vote failed:', err);
-    toast.error('Vote failed, please try again');
+    toast.error('Vote failed: ' + (err.message || 'please try again'));
     setIsLoading(false);
     setShowTooltip(false);
   }
