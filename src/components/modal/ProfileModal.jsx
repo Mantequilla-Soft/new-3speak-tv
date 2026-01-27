@@ -5,6 +5,7 @@ import {  getHiveUserProfile, getRelationshipBetweenAccounts } from "../../hive-
 import "./ProfileModal.scss";
 import { useNavigate } from "react-router-dom";
 import {  toast } from 'sonner'
+import { followWithAioha, isLoggedIn } from "../../hive-api/aioha";
 
 function ProfileModal({ username = "kesolink", onClose }) {
   const [profile, setProfile] = useState(null);
@@ -59,8 +60,8 @@ function ProfileModal({ username = "kesolink", onClose }) {
 
 
  const handleFollow = async () => {
-  if (!window.hive_keychain) {
-    toast.error("Hive Keychain not installed!");
+  if (!isLoggedIn()) {
+    toast.error("Please login first");
     return;
   }
 
@@ -70,37 +71,21 @@ function ProfileModal({ username = "kesolink", onClose }) {
   }
 
   const isFollow = !isFollowing;
-  const json = JSON.stringify({
-    follower: activeUser,
-    following: username,
-    what: isFollow ? ["blog"] : []
-  });
 
-  
+  try {
+    await followWithAioha(username, isFollow);
+    toast.success(isFollow ? "Followed" : "Unfollowed");
+    setIsFollowing(isFollow);
 
-  window.hive_keychain.requestCustomJson(
-    activeUser,
-    "follow",
-    "Posting",    // 🔥 REQUIRED
-    json,
-    isFollow ? `Follow @${username}` : `Unfollow @${username}`,
-    async (response) => {
-      
-
-      if (response.success) {
-        toast.success(isFollow ? "Followed" : "Unfollowed");
-        setIsFollowing(isFollow);
-        
-        // re-check real follow status after blockchain confirms
-        setTimeout(async () => {
-          const relation = await getRelationshipBetweenAccounts(activeUser, username);
-          setIsFollowing(relation?.follows || false);
-        }, 2000);
-      } else {
-        toast.error("Keychain transaction rejected");
-      }
-    }
-  );
+    // re-check real follow status after blockchain confirms
+    setTimeout(async () => {
+      const relation = await getRelationshipBetweenAccounts(activeUser, username);
+      setIsFollowing(relation?.follows || false);
+    }, 2000);
+  } catch (error) {
+    console.error("Follow error:", error);
+    toast.error(`Failed to ${isFollow ? 'follow' : 'unfollow'}: ${error.message}`);
+  }
 };
 
 

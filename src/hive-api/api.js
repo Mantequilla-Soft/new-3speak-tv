@@ -1,6 +1,7 @@
 // import { keychainBroadcast, addAccountTokeychain } from "../helpers/keychain";
 import { Client, PrivateKey } from "@hiveio/dhive";
 import axios from "axios";
+import { broadcastWithAioha, isLoggedIn, KeyTypes } from "./aioha";
  const SERVERS = [
     // "https://rpc.ecency.com",
     "https://api.deathwing.me",
@@ -177,66 +178,64 @@ export const getRelationshipBetweenAccounts = async (follower , following) => {
   };
 
   export const createHiveCommunity = async (username, communityName, keys) => {
-    return new Promise(async (resolve, reject) => {
-      const op_name = "account_create";
-      const memoKey = keys.memo
-      const activeKey = keys.active
-      const postingKey = keys.posting
-      
-      const owner = {
-        weight_threshold: 1,
-        account_auths: [],
-        key_auths: [[keys.ownerPubkey, 1]]
-      };
-      const active = {
-        weight_threshold: 1,
-        account_auths: [],
-        key_auths: [[keys.activePubkey, 1]]
-      };
-      const posting = {
-        weight_threshold: 1,
-        account_auths: [["ecency.app", 1]],
-        key_auths: [[keys.postingPubkey, 1]]
-      };
-  
-      const ops = [];
-      const params = {
-        creator: username,
-        new_account_name: communityName,
-        owner,
-        active,
-        posting,
-        memo_key: keys.memoPubkey,
-        json_metadata: "",
-        extensions: [],
-        fee: "3.000 HIVE"
-      };
-  
-      const operation = [op_name, params];
-      ops.push(operation);
-  
-      try {
-        const response = await keychainBroadcast(username, [operation], "Active");
-        if (response) {
-          resolve(response);
-        } else {
-          reject("Account creation failed");
-        }
-      } catch (err) {
-        console.log(err);
-        reject(err);
-      }
-  
+    const memoKey = keys.memo;
+    const activeKey = keys.active;
+    const postingKey = keys.posting;
+
+    const owner = {
+      weight_threshold: 1,
+      account_auths: [],
+      key_auths: [[keys.ownerPubkey, 1]]
+    };
+    const active = {
+      weight_threshold: 1,
+      account_auths: [],
+      key_auths: [[keys.activePubkey, 1]]
+    };
+    const posting = {
+      weight_threshold: 1,
+      account_auths: [["ecency.app", 1]],
+      key_auths: [[keys.postingPubkey, 1]]
+    };
+
+    const params = {
+      creator: username,
+      new_account_name: communityName,
+      owner,
+      active,
+      posting,
+      memo_key: keys.memoPubkey,
+      json_metadata: "",
+      extensions: [],
+      fee: "3.000 HIVE"
+    };
+
+    const operation = ["account_create", params];
+
+    if (!isLoggedIn()) {
+      throw new Error("Please login to create a community");
+    }
+
+    try {
+      const response = await broadcastWithAioha([operation], KeyTypes.Active);
+
+      // Try to add account to Keychain if available (Keychain-specific feature)
       try {
         await addAccountTokeychain(communityName, {
-          active: activeKey, 
+          active: activeKey,
           posting: postingKey,
           memo: memoKey
-        })
-      } catch (error) {
-        console.log(error)
+        });
+      } catch (keychainError) {
+        // Keychain may not be available if using HiveAuth, this is okay
+        console.log("Could not add account to Keychain:", keychainError);
       }
-    });
+
+      return response;
+    } catch (err) {
+      console.log("Error creating community:", err);
+      throw err;
+    }
   };
 
   export const  genCommuninityName = () => {
@@ -282,15 +281,13 @@ export const getRelationshipBetweenAccounts = async (follower , following) => {
     }
   };
 
-  export const createHiveCommunityX = async (user, communityName, communityKeys, userKey) => {
-    // Ensure that the userKey is either an Active or Owner key
-    if (!userKey) {
-      throw new Error("Owner or Active Key is required");
+  export const createHiveCommunityX = async (user, communityName, communityKeys) => {
+    if (!isLoggedIn()) {
+      throw new Error("Please login to create a community");
     }
-  
-    // Use the provided key for authentication
-    const response = await keychainBroadcast("custom_json", {
-      required_auths: [user], 
+
+    const customJsonOp = ["custom_json", {
+      required_auths: [user],
       required_posting_auths: [],
       id: "community_create",
       json: JSON.stringify({
@@ -298,8 +295,9 @@ export const getRelationshipBetweenAccounts = async (follower , following) => {
         name: communityName,
         keys: communityKeys,
       }),
-    }, userKey); // Use userKey for signing the transaction
-  
+    }];
+
+    const response = await broadcastWithAioha([customJsonOp], KeyTypes.Active);
     return response;
   };
   
@@ -307,22 +305,24 @@ export const getRelationshipBetweenAccounts = async (follower , following) => {
 
 //   ***********Keychain***************
 
-export const keychainBroadcast = (account, operations, key, rpc = null) => {
-    return new Promise((resolve, reject) => {
-      window.hive_keychain?.requestBroadcast(
-        account,
-        operations,
-        key,
-        (resp) => {
-          if (!resp.success) {
-            reject(resp);
-          }
-          resolve(resp);
-        },
-        rpc
-      );
-    });
+// Legacy keychainBroadcast - now uses aioha for multi-provider support
+export const keychainBroadcast = async (account, operations, key, rpc = null) => {
+  console.warn('keychainBroadcast is deprecated. Use broadcastWithAioha from aioha.js instead.');
+
+  if (!isLoggedIn()) {
+    throw new Error("Please login first");
+  }
+
+  // Map key type string to aioha KeyTypes
+  const keyTypeMap = {
+    'Active': KeyTypes.Active,
+    'Posting': KeyTypes.Posting,
+    'Memo': KeyTypes.Memo
   };
+
+  const keyType = keyTypeMap[key] || KeyTypes.Active;
+  return await broadcastWithAioha(operations, keyType);
+};
 
 export const addAccountTokeychain = (username, keys) => new Promise((resolve, reject) => {
   if (window.hive_keychain) {

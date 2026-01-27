@@ -45,19 +45,24 @@ export const createAuthUserSlice = (set) => ({
     if (switched) {
     const newUser = aioha.getCurrentUser();
     console.log('Switched to:', newUser);
-    
+
   } else {
     console.warn('Switch failed. User may not be authenticated.');
   }
     const account = JSON.parse(localStorage.getItem("accountsList")).find(acc => acc.username === username);
     console.log(account)
-    
+
     if (account) {
       set({ userId: username, user: username, authenticated: true });
       localStorage.setItem("access_token", account.access_token);
       localStorage.setItem("user_id", account.username);
     }
     toast.success(`Switched to ${username} successfully!`)
+  },
+
+  // Set user directly without calling aioha.switchUser (for when aioha already switched)
+  setUser: (username) => {
+    set({ userId: username, user: username, authenticated: true });
   },
 
   
@@ -77,6 +82,7 @@ export const createAuthUserSlice = (set) => ({
       set({
         authenticated: false,
         userId: null,
+        user: null,
         allowAccess: null,
         userDetails: null,
         listAccounts: [],

@@ -16,6 +16,8 @@ import 'react-toastify/dist/ReactToastify.css';
 import '@fortawesome/fontawesome-free/css/all.min.css';
 import { AppProviders } from './context/Providers';
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { AiohaProvider } from '@aioha/react-ui';
+import aioha from './hive-api/aioha';
 
 // import { Buffer } from 'buffer';
 // window.Buffer = Buffer;
@@ -24,6 +26,7 @@ createRoot(document.getElementById('root')).render(
 
   <StrictMode>
     <BrowserRouter>
+    <AiohaProvider aioha={aioha}>
     <AppProviders>
       <QueryClientProvider client={queryClient}>
 
@@ -35,6 +38,7 @@ createRoot(document.getElementById('root')).render(
       </ApolloProvider>
       </QueryClientProvider>
       </AppProviders>
+    </AiohaProvider>
     </BrowserRouter>
   </StrictMode>
 );

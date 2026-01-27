@@ -29,6 +29,7 @@ import { getFollowers } from "../../hive-api/api";
 import UpvoteTooltip from "../tooltip/UpvoteTooltip";
 import axios from "axios";
 import { FEED_URL } from '../../utils/config';
+import { followWithAioha, isLoggedIn } from "../../hive-api/aioha";
 
 dayjs.extend(relativeTime);
 
@@ -285,6 +286,22 @@ const PlayVideo = ({ videoDetails, author, permlink }) => {
     return <BarLoader />;
   }
 
+  // Follow user using aioha (supports multiple providers)
+  const followUser = async (following) => {
+    if (!isLoggedIn()) {
+      toast.error("Please login to follow users");
+      return;
+    }
+
+    try {
+      await followWithAioha(following, true);
+      toast.success(`Successfully followed @${following}`);
+    } catch (error) {
+      console.error('Failed to follow user:', error);
+      toast.error(`Failed to follow: ${error.message}`);
+    }
+  };
+
   return (
     <>
       <div className="play-video">
@@ -364,13 +381,13 @@ const PlayVideo = ({ videoDetails, author, permlink }) => {
                 <GiTwoCoins className="icon" />
                 <span>${videoDetails?.stats?.total_hive_reward?.toFixed(2) ?? '0.00'}</span>
               </span>
-              
-              {authenticated && hasKeychain && (
+
+              {authenticated && isLoggedIn() && (
                 <button className="tip-btn" onClick={() => setIsTipModalOpen(true)}>
                   Tip
                 </button>
               )}
-              
+
               <UpvoteTooltip
                 showTooltip={showTooltip}
                 setShowTooltip={setShowTooltip}
@@ -399,7 +416,7 @@ const PlayVideo = ({ videoDetails, author, permlink }) => {
             <span>{followData?.follower_count} Followers</span>
           </div>
           {author !== user && (
-            <button onClick={() => followUserWithKeychain(user, author)}>
+            <button onClick={() => followUser(author)}>
               Follow
             </button>
           )}

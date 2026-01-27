@@ -3,33 +3,31 @@ import './UpvoteTooltip.scss';
 import { useAppStore } from '../../lib/store';
 import { IoChevronUpCircleOutline } from 'react-icons/io5';
 import { toast } from 'sonner';
-import 'react-toastify/dist/ReactToastify.css';
 import { estimate, getUersContent, getVotePower } from '../../utils/hiveUtils';
 import { TailChase } from 'ldrs/react';
 import 'ldrs/react/TailChase.css';
-import axios from 'axios';
-import { Orbit } from 'ldrs/react'
-import 'ldrs/react/Orbit.css'
+import { Orbit } from 'ldrs/react';
+import 'ldrs/react/Orbit.css';
+import { voteWithAioha, isLoggedIn } from '../../hive-api/aioha';
 
-const UpvoteTooltip = ({ 
-  author, 
-  permlink, 
-  showTooltip, 
-  setShowTooltip, 
-  voteValue, 
-  setVoteValue, 
-  setIsVoted, 
-  weight, 
-  setWeight, 
-  accountData, 
-  setAccountData, 
-  setOptimisticVoteCount 
+const UpvoteTooltip = ({
+  author,
+  permlink,
+  showTooltip,
+  setShowTooltip,
+  voteValue,
+  setVoteValue,
+  setIsVoted,
+  weight,
+  setWeight,
+  accountData,
+  setAccountData,
+  setOptimisticVoteCount
 }) => {
   const { user, authenticated } = useAppStore();
   const [isLoading, setIsLoading] = useState(false);
   const [isCalculating, setIsCalculating] = useState(false);
   const tooltipRef = useRef(null);
-  const accessToken = localStorage.getItem("access_token");
 
   // Handle click outside to close tooltip
   useEffect(() => {
@@ -101,7 +99,7 @@ const UpvoteTooltip = ({
   };
 
   const handleVote = async () => {
-    if (!authenticated) {
+    if (!authenticated || !isLoggedIn()) {
       toast.error('Login to complete this operation');
       return;
     }
@@ -128,45 +126,20 @@ const UpvoteTooltip = ({
         }
       }
 
-      const response = await axios.post(
-        'https://studio.3speak.tv/mobile/vote',
-        {
-          author,
-          permlink,
-          weight: voteWeight
-        },
-        {
-          headers: {
-            'Authorization': `Bearer ${accessToken}`,
-            'Content-Type': 'application/json',
-          }
-        }
-      );
+      // Use aioha for client-side voting
+      await voteWithAioha(author, permlink, voteWeight);
 
-      
-
-      if (response.data.success) {
-        // If this is a new vote (not a re-vote), increment vote count
-        if (!existingVote) {
-          setOptimisticVoteCount((prevCount) => prevCount + 1);
-        }
-
-        toast.success(`Vote successful! Value: $${voteValue}`);
-        setIsVoted(true);
-        setShowTooltip(false);
-      } else {
-        toast.error('Vote failed, please try again');
+      // Success case - If this is a new vote (not a re-vote), increment vote count
+      if (!existingVote) {
+        setOptimisticVoteCount((prevCount) => prevCount + 1);
       }
+
+      toast.success(`Vote successful! Value: $${voteValue}`);
+      setIsVoted(true);
+      setShowTooltip(false);
     } catch (err) {
       console.error('Vote failed:', err);
-      
-      if (err.response?.data?.message) {
-        toast.error(`Vote failed: ${err.response.data.message}`);
-      } else if (err.message === 'Network Error') {
-        toast.error('Network error. Please check your connection.');
-      } else {
-        toast.error('Vote failed, please try again');
-      }
+      toast.error('Vote failed: ' + (err.message || 'please try again'));
     } finally {
       setIsLoading(false);
     }

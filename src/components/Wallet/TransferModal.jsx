@@ -1,16 +1,9 @@
 import React, { useEffect, useState } from 'react'
-// import "./TransferModal.scss"
 import "./TransferModal.scss"
 import {useAppStore } from "../../lib/store"
-import { Client } from '@hiveio/dhive';
 import {isAccountValid} from "../../hive-api/api"
-
-const client = new Client([
-  'https://api.hive.blog',
-  'https://api.hivekings.com',
-  'https://anyx.io',
-  'https://api.openhive.network'
-]);
+import { transferWithAioha, isLoggedIn } from "../../hive-api/aioha"
+import { toast } from 'sonner';
 
 function TransferModal({showModal, selectedCoin, balances, fetchBalances}) {
     const { user } = useAppStore();
@@ -22,56 +15,39 @@ function TransferModal({showModal, selectedCoin, balances, fetchBalances}) {
     const [balErr, setBalErr] = useState("")
 
     const handleSubmitTransfer = async (coinType) => {
-        if (!amount || !recipient || !selectedCoin || !amount || !coinType ) return;
+        if (!amount || !recipient || !selectedCoin || !coinType) return;
 
-        if (amount > balance){
-            setBalErr("insuficent balance")
-            return
-        }else{
-            setBalErr("")
+        if (!isLoggedIn()) {
+            toast.error("Please login to transfer");
+            return;
         }
 
-        const valid = await isAccountValid(recipient)
-        
-        if(!valid){
-            setError("Invalid username")
-            return
-        }else{
-            setError("")
+        if (parseFloat(amount) > balance) {
+            setBalErr("Insufficient balance");
+            return;
+        } else {
+            setBalErr("");
         }
+
+        const valid = await isAccountValid(recipient);
+        console.log(valid);
+        if (!valid) {
+            setError("Invalid username");
+            return;
+        } else {
+            setError("");
+        }
+
         try {
-            const currency = coinType
-        
-            // Prepare transfer operation
-            const transferOp = [
-              'transfer',
-              {
-                from: user,
-                to: recipient,
-                amount: `${parseFloat(amount).toFixed(3)} ${currency}`,
-                memo: memo || ''
-              }
-            ];
-        
-            // Call Keychain to broadcast transaction
-            window.hive_keychain.requestBroadcast(
-              user,
-              [transferOp],
-              'Active', // Requires active key
-              async (response) => {
-                if (response.success) {
-                  // Transfer succeeded
-                  showModal(false)
-                } else {
-                  console.error('Transfer failed:', response.message);
-                }
-              }
-            );
-        
-          } catch (error) {
-            console.error('Error processing transfer:', error);
-          }
-      };
+            await transferWithAioha(recipient, parseFloat(amount), coinType, memo || '');
+            toast.success('Transfer successful!');
+            showModal(false);
+        } catch (error) {
+            console.error('Transfer failed:', error);
+            toast.error(`Transfer failed: ${error.message}`);
+        }
+    };
+
       useEffect(()=>{
         CurrentBalance()
       }, [])
@@ -83,7 +59,7 @@ function TransferModal({showModal, selectedCoin, balances, fetchBalances}) {
             setBalance(balances.hbd)
         }
       }
-      
+
   return (
     <div className="transfer-modal">
             <div className="modal-content-tran">

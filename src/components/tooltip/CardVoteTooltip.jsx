@@ -2,22 +2,23 @@ import React, { useEffect, useState, useRef } from 'react';
 import './UpvoteTooltip.scss';
 import { useAppStore } from '../../lib/store';
 import { IoChevronUpCircleOutline } from 'react-icons/io5';
-import { estimate, getUersContent, getVotePower, votingPower } from '../../utils/hiveUtils';
+import { estimate, getUersContent, getVotePower } from '../../utils/hiveUtils';
 import { TailChase } from 'ldrs/react';
 import 'ldrs/react/TailChase.css';
-import axios from 'axios';
 import { toast } from 'sonner';
-import { Orbit } from 'ldrs/react'
-import 'ldrs/react/Orbit.css'
+import { Orbit } from 'ldrs/react';
+import 'ldrs/react/Orbit.css';
+import { voteWithAioha, isLoggedIn } from '../../hive-api/aioha';
 
-const CardVoteTooltip = ({ 
-  author, 
-  permlink, 
-  showTooltip, 
-  setShowTooltip, 
-  voteValue, 
-  setVoteValue, 
-  setVoteStatus, 
+
+const CardVoteTooltip = ({
+  author,
+  permlink,
+  showTooltip,
+  setShowTooltip,
+  voteValue,
+  setVoteValue,
+  setVoteStatus,
   tooltipVariant = "default"
 }) => {
   const { user, authenticated } = useAppStore();
@@ -26,7 +27,6 @@ const CardVoteTooltip = ({
   const [isLoading, setIsLoading] = useState(false);
   const [isCalculating, setIsCalculating] = useState(false);
   const tooltipRef = useRef(null);
-  const accessToken = localStorage.getItem("access_token");
 
   useEffect(() => {
     const handleClickOutside = (e) => {
@@ -75,7 +75,7 @@ const CardVoteTooltip = ({
   // Recalculate vote value when weight changes
   useEffect(() => {
     if (!accountData) return;
-    
+
     const debounceTimer = setTimeout(() => {
       calculateVoteValue(accountData, weight);
     }, 100); // Small debounce to avoid too many calculations
@@ -97,7 +97,7 @@ const CardVoteTooltip = ({
   };
 
   const handleVote = async () => {
-    if (!authenticated) {
+    if (!authenticated || !isLoggedIn()) {
       toast.error('Login to complete this operation');
       return;
     }
@@ -124,47 +124,21 @@ const CardVoteTooltip = ({
         }
       }
 
-      const response = await axios.post(
-        'https://studio.3speak.tv/mobile/vote',
-        {
-          author,
-          permlink,
-          weight: voteWeight
-        },
-        {
-          headers: {
-            'Authorization': `Bearer ${accessToken}`,
-            'Content-Type': 'application/json',
-          }
-        }
-      );
+      // Use aioha for client-side voting
+      await voteWithAioha(author, permlink, voteWeight);
 
-      
+      toast.success(`Vote successful! Value: $${voteValue}`);
+      const postKey = `${author}/${permlink}`;
+      // Optimistically mark as voted
+      setVoteStatus((prev) => ({
+        ...prev,
+        [postKey]: true,
+      }));
 
-      if (response.data.success) {
-        toast.success(`Vote successful! Value: $${voteValue}`);
-        const postKey = `${author}/${permlink}`;
-        
-        // Optimistically mark as voted
-        setVoteStatus((prev) => ({
-          ...prev,
-          [postKey]: true,
-        }));
-        
-        setShowTooltip(false);
-      } else {
-        toast.error('Vote failed, please try again');
-      }
+      setShowTooltip(false);
     } catch (err) {
       console.error('Vote failed:', err);
-      
-      if (err.response?.data?.message) {
-        toast.error(`Vote failed: ${err.response.data.message}`);
-      } else if (err.message === 'Network Error') {
-        toast.error('Network error. Please check your connection.');
-      } else {
-        toast.error('Vote failed, please try again');
-      }
+      toast.error('Vote failed: ' + (err.message || 'please try again'));
     } finally {
       setIsLoading(false);
     }
