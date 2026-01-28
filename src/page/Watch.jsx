@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect, useCallback } from 'react';
 import './Watch.scss';
 import PlayVideo from '../components/playVideo/PlayVideo';
 import Recommended from '../components/recommended/Recommended';
@@ -34,6 +34,34 @@ function Watch() {
   const [searchParams] = useSearchParams();
   const v = searchParams.get('v'); // Extract the "v" query parameter
   const [author, permlink] = (v ?? 'unknown/unknown').split('/');
+
+  // Send command to the player iframe
+  const sendPlayerCommand = useCallback((command) => {
+    const iframe = document.querySelector('.video-iframe-wrapper iframe');
+    if (iframe && iframe.contentWindow) {
+      iframe.contentWindow.postMessage({ type: command }, '*');
+    }
+  }, []);
+
+  const triggerPlay = useCallback(() => {
+    sendPlayerCommand('play');
+  }, [sendPlayerCommand]);
+
+  // Listen for player ready message and auto-play
+  useEffect(() => {
+    const handleMessage = (event) => {
+      // Handle player-ready for auto-play
+      if (event.data && event.data.type === '3speak-player-ready') {
+        // Small delay to ensure player is fully ready
+        setTimeout(() => {
+          triggerPlay();
+        }, 100);
+      }
+    };
+
+    window.addEventListener('message', handleMessage);
+    return () => window.removeEventListener('message', handleMessage);
+  }, [triggerPlay]);
 
   const { data: videoData, loading: videoLoading, error: videoError } = useQuery(GET_VIDEO_DETAILS, {
     variables: { author, permlink },
