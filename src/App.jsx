@@ -53,6 +53,7 @@ import NotFound from "./page/NotFound";
 import ProfileModal from "./components/modal/ProfileModal";
 import HiveImageUploader from "./page/HiveImageUploader";
 import { LegacyUploadProvider } from "./context/LegacyUploadContext";
+import { HiveAuthProvider } from "./context/HiveAuthContext";
 import { AiohaModal, useAioha } from "@aioha/react-ui";
 import { KeyTypes } from "@aioha/aioha";
 import '@aioha/react-ui/dist/build.css';
@@ -345,6 +346,7 @@ function App() {
   }
 
   return (
+    <HiveAuthProvider>
     <LegacyUploadProvider>
     <div onClick={()=> {setGlobalCloseRender(true)}}>
       <Toaster richColors position="top-right" />
@@ -405,6 +407,7 @@ function App() {
     </div>
 
     </LegacyUploadProvider>
+    </HiveAuthProvider>
   );
 }
 
