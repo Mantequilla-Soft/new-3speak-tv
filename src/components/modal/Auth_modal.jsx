@@ -3,7 +3,7 @@ import "./Auth_modal.scss"
 import { KeychainSDK, KeychainKeyTypes} from 'keychain-sdk';
 import { useAppStore } from '../../lib/store';
 
-function Auth_modal({isOpenAuth, closeAuth}) {
+function Auth_modal({isOpenAuth, closeAuth, onSuccess}) {
     const {user} = useAppStore();
   const  handleAuth3speak = async ()=>{
     try
@@ -19,10 +19,16 @@ function Auth_modal({isOpenAuth, closeAuth}) {
 }
     
     const addaccountauthority = await keychain.addAccountAuthority( formParamsAsObject.data);
-    closeAuth()
     console.log({ addaccountauthority });
+    // Call onSuccess to indicate authorization was granted
+    if (onSuccess) {
+      onSuccess();
+    }
+    closeAuth();
   } catch (error) {
     console.log({ error });
+    // On error, still close but don't call onSuccess
+    closeAuth();
   }
 
   }

@@ -3,14 +3,17 @@ import "./StudioPage.scss";
 import { StepProgress } from "./StepProgress";
 import VideoUploadStep1 from "./VideoUploadStep1";
 import Auth_modal from "../modal/Auth_modal";
+import VerifyAuthModal from "../modal/VerifyAuthModal";
 import axios from "axios";
 import { has3SpeakPostAuth } from "../../utils/hiveUtils";
-import 'ldrs/react/LineSpinner.css'
+import 'ldrs/react/LineSpanner.css'
 import { useMobileUpload } from "../../context/MobileUploadContext";
+import { useNavigate } from "react-router-dom";
 
 function StudioPage() {
-
+  const navigate = useNavigate();
   const [banned, setBanned]= useState(null)
+  const [isVerifying, setIsVerifying] = useState(false);
 
   const {
     user,
@@ -75,8 +78,31 @@ function StudioPage() {
     return () => clearInterval(interval);
   }, [uploadURL, thumbnailFile]); // Empty dependency to only run once on mount
   
-  const toggleUploadModalAuth = ()=>{
-    setIsOpenAuth( (prev)=> !prev)
+  const handleAuthSuccess = () => {
+    // User successfully authorized, just close modal
+    setIsOpenAuth(false);
+  }
+
+  const toggleUploadModalAuth = async ()=>{
+    // User closed modal without authorizing
+    setIsOpenAuth(false);
+    setIsVerifying(true);
+    // 4-second delay to allow Hive blockchain propagation
+    setTimeout(async () => {
+      try {
+        const hasAuth = await has3SpeakPostAuth(user);
+        setIsVerifying(false);
+        if (!hasAuth) {
+          // If still no auth after delay, redirect to home
+          navigate('/new');
+        }
+      } catch (error) {
+        console.error('Error checking auth:', error);
+        setIsVerifying(false);
+        // On error, redirect to be safe
+        navigate('/new');
+      }
+    }, 4000);
   }
 
   useEffect(()=>{
@@ -265,7 +291,8 @@ function StudioPage() {
               setRemaingPercent={setRemaingPercent}
               remaingPercent={remaingPercent}
           />} */}
-          {isOpenAuth && <Auth_modal isOpenAuth={isOpenAuth} closeAuth={toggleUploadModalAuth} />}
+          {isOpenAuth && <Auth_modal isOpenAuth={isOpenAuth} closeAuth={toggleUploadModalAuth} onSuccess={handleAuthSuccess} />}
+          <VerifyAuthModal isOpen={isVerifying} />
 
       </>
   );
