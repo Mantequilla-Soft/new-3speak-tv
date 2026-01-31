@@ -9,20 +9,42 @@ import { NEW_CONTENT } from "../graphql/queries";
 import CardSkeleton from "../components/Cards/CardSkeleton";
 import Card3 from "../components/Cards/Card3";
 
+// Helper to filter and deduplicate videos
+const filterAndDeduplicate = (videos) => {
+  if (!videos || !Array.isArray(videos)) return [];
+  
+  // Filter out internal re-encoding account
+  const filtered = videos.filter(item => {
+    const author = item.author?.username || item.author || item.owner;
+    return author !== 'threespeak-fixer';
+  });
+  
+  // Deduplicate by author+permlink
+  const seen = new Set();
+  return filtered.filter(item => {
+    const author = item.author?.username || item.author || item.owner;
+    const key = `${author}-${item.permlink}`;
+    if (seen.has(key)) return false;
+    seen.add(key);
+    return true;
+  });
+};
+
 // Fetch functions for each feed
 const fetchHome = async () => {
   const res = await axios.get(`https://legacy.3speak.tv/apiv2/feeds/home?page=0`);
-  return res.data.trends || res.data;
+  const data = res.data.trends || res.data;
+  return filterAndDeduplicate(data);
 };
 
 const fetchFirstUploads = async () => {
   const res = await axios.get(`https://legacy.3speak.tv/apiv2/feeds/firstUploads?page=1`);
-  return res.data;
+  return filterAndDeduplicate(res.data);
 };
 
 const fetchTrending = async () => {
   const res = await axios.get(`https://legacy.3speak.tv/apiv2/feeds/trending?limit=50`);
-  return res.data;
+  return filterAndDeduplicate(res.data);
 };
 
 // Horizontal scrollable video row component
@@ -174,6 +196,9 @@ const HomeGrouped = () => {
     variables: { limit: 50, skip: 0 },
   });
 
+  // Filter new content to remove threespeak-fixer account
+  const filteredNewContent = filterAndDeduplicate(newContentData?.socialFeed?.items || []);
+
   return (
     <div className="home-grouped-container">
       <VideoRow
@@ -185,7 +210,7 @@ const HomeGrouped = () => {
 
       <VideoRow
         title="New Content"
-        videos={newContentData?.socialFeed?.items || []}
+        videos={filteredNewContent}
         linkTo="/new"
         isLoading={newContentLoading}
       />
