@@ -130,8 +130,21 @@ const BlogContent = ({ author, permlink, description }) => {
           : "";
 
       // Use async renderer (createHiveRenderer returns a function directly)
-      getRenderer().then(render => {
+      getRenderer().then(renderer => {
         try {
+          // Handle both function and object with render method
+          const render = typeof renderer === 'function' 
+            ? renderer 
+            : typeof renderer?.render === 'function'
+            ? renderer.render
+            : null;
+
+          if (!render) {
+            console.error("Renderer is not a function:", renderer);
+            setRenderedContent("Error: Invalid renderer.");
+            return;
+          }
+
           let renderedHTML = render(contentString);
           // Clean the rendered HTML before setting it
           renderedHTML = cleanContent(renderedHTML);
