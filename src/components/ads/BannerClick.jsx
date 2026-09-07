@@ -108,20 +108,27 @@ export default function BannerClick({
     const url = creative && creative.videoUrl;
     if (!drawing || !url || !el || el.tagName !== 'VIDEO') return undefined;
 
+    /* 🚨 hls.js FIRST, canPlayType only as the fallback.
+     *
+     * Firefox answers "maybe" to canPlayType('application/vnd.apple.mpegurl') and then
+     * has no decoder for it, so trusting that answer put an m3u8 straight on the
+     * element and the console filled with "no decoder for requested format". Ask the
+     * library whether it can do the job instead, and keep the native path for Safari,
+     * which really does play HLS from a src and has no MSE for hls.js to attach to. */
     let hls = null;
     let cancelled = false;
-    if (el.canPlayType('application/vnd.apple.mpegurl')) {
-      el.src = url;
-    } else {
-      import('hls.js')
-        .then(({ default: Hls }) => {
-          if (cancelled || !Hls.isSupported()) return;
+    import('hls.js')
+      .then(({ default: Hls }) => {
+        if (cancelled) return;
+        if (Hls.isSupported()) {
           hls = new Hls({ maxBufferLength: 10 });
           hls.loadSource(url);
           hls.attachMedia(el);
-        })
-        .catch(() => { /* no banner is better than a broken watch page */ });
-    }
+        } else if (el.canPlayType('application/vnd.apple.mpegurl')) {
+          el.src = url;
+        }
+      })
+      .catch(() => { /* no banner is better than a broken watch page */ });
     return () => {
       cancelled = true;
       if (hls) hls.destroy();
