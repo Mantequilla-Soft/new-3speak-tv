@@ -1543,10 +1543,20 @@ function Watch({ v2 = false }) {
       try { el.currentTime = to; } catch { /* it plays through, as it did before */ }
       lastSeen = to;
     };
+    /* 🚨 'seeking' does the work here, not 'seeked'.
+     *
+     * 'seeked' fires once the media has SETTLED on the new position, by which time a
+     * frame or two of the ad has been decoded and shown — the flash of ad you get
+     * from clicking into its span. 'seeking' fires the moment currentTime changes,
+     * before anything is presented, and setting currentTime again from inside it
+     * supersedes the seek in flight. 'seeked' stays as the backstop for any path that
+     * reaches a new position without announcing it first. */
     el.addEventListener('timeupdate', guard);
+    el.addEventListener('seeking', guard);
     el.addEventListener('seeked', guard);
     return () => {
       el.removeEventListener('timeupdate', guard);
+      el.removeEventListener('seeking', guard);
       el.removeEventListener('seeked', guard);
     };
   }, [videoAttached]);
