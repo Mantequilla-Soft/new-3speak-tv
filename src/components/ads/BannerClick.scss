@@ -1,6 +1,48 @@
 /* The click target over a burned-in banner. Invisible on purpose: the banner is
    already in the picture, and drawing anything on top of it would obscure the thing
    the advertiser paid for. All this contributes is a place to click. */
+/* The drawn banner.
+ *
+ * z-index 6 puts it over .video-interact-overlay (5), the click-to-play surface, and
+ * under .video-controls (10) — so the playhead stays visible and usable across it,
+ * and a scrub along the bottom of the frame seeks rather than opening the ad. The
+ * click target (7) sits over it for the same reason it always did. */
+.watch-banner-media {
+  position: absolute;
+  z-index: 6;
+  pointer-events: none;
+  overflow: hidden;
+  border-radius: 4px;
+  line-height: 0;
+
+  img,
+  video {
+    width: 100%;
+    height: 100%;
+    /* The box is already the creative's shape once its dimensions are known, so this
+       only matters for the frames before that: fit rather than crop, because half an
+       advertiser's artwork is worse than a letterboxed version of all of it. */
+    object-fit: contain;
+    display: block;
+  }
+}
+
+/* The disclosure, in the banner's own corner so it travels with the ad instead of
+   sitting somewhere a filter rule could take on its own. */
+.watch-banner-label {
+  position: absolute;
+  left: 4px;
+  bottom: 4px;
+  padding: 1px 5px;
+  border-radius: 3px;
+  background: rgba(0, 0, 0, 0.6);
+  color: #fff;
+  font-size: 10px;
+  font-weight: 600;
+  line-height: 1.5;
+  letter-spacing: 0.02em;
+}
+
 .watch-banner-hit {
   position: absolute;
   /* Above the play/pause surface (.video-interact-overlay, z-index 5) for the same

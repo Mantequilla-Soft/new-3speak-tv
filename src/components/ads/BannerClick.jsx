@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import { MdOpenInNew, MdClose } from 'react-icons/md';
 import './BannerClick.scss';
@@ -26,9 +26,16 @@ import './BannerClick.scss';
  * intrinsic size and the target is placed inside THAT.
  */
 export default function BannerClick({
-  videoRef, placement, visible, clickUrl, advertiser, onDismiss,
+  videoRef, placement, visible, clickUrl, advertiser, onDismiss, overlay,
 }) {
   const [rect, setRect] = useState(null);
+  /* The creative's real shape, once it is known.
+   *
+   * The server sends no aspect for a banner, so the box would otherwise be whatever
+   * widthPct x maxHeightPct works out to and the artwork would sit letterboxed inside
+   * it — with the close button on the corner of the BOX, floating off the banner. */
+  const [mediaAspect, setMediaAspect] = useState(null);
+  const mediaRef = useRef(null);
 
   useEffect(() => {
     const el = videoRef?.current;
@@ -58,8 +65,11 @@ export default function BannerClick({
       // click target either side of it, over plain video.
       const boxW = (fw * placement.widthPct) / 100;
       const boxH = (fh * placement.maxHeightPct) / 100;
-      const w = placement.aspect > 0 ? Math.min(boxW, boxH * placement.aspect) : boxW;
-      const h = placement.aspect > 0 ? w / placement.aspect : boxH;
+      // The server's aspect when it has one, otherwise the creative's own once it has
+      // loaded. Either way the box ends up the shape of the thing inside it.
+      const aspect = placement.aspect > 0 ? placement.aspect : (mediaAspect || 0);
+      const w = aspect > 0 ? Math.min(boxW, boxH * aspect) : boxW;
+      const h = aspect > 0 ? w / aspect : boxH;
       const bottom = (fh * placement.bottomPct) / 100;
 
       setRect({
@@ -82,15 +92,89 @@ export default function BannerClick({
       el.removeEventListener('loadedmetadata', measure);
       window.removeEventListener('orientationchange', measure);
     };
-  }, [videoRef, placement, visible]);
+  }, [videoRef, placement, visible, mediaAspect]);
+
+  const creative = overlay && (overlay.imageUrl || overlay.videoUrl) ? overlay : null;
+  const drawing = !!(visible && rect && creative);
+
+  /* Play the creative when it is a video.
+   *
+   * It arrives as an HLS manifest, which only Safari will play from a `src`, so
+   * everywhere else needs hls.js. Imported on demand rather than at the top of the
+   * file: the main player already pulls it in, and a still banner should not wait on
+   * it to draw. A failure here costs the banner, never the page. */
+  useEffect(() => {
+    const el = mediaRef.current;
+    const url = creative && creative.videoUrl;
+    if (!drawing || !url || !el || el.tagName !== 'VIDEO') return undefined;
+
+    let hls = null;
+    let cancelled = false;
+    if (el.canPlayType('application/vnd.apple.mpegurl')) {
+      el.src = url;
+    } else {
+      import('hls.js')
+        .then(({ default: Hls }) => {
+          if (cancelled || !Hls.isSupported()) return;
+          hls = new Hls({ maxBufferLength: 10 });
+          hls.loadSource(url);
+          hls.attachMedia(el);
+        })
+        .catch(() => { /* no banner is better than a broken watch page */ });
+    }
+    return () => {
+      cancelled = true;
+      if (hls) hls.destroy();
+    };
+  }, [drawing, creative]);
 
   /* ⚠️ The close button renders whether or not there is a click URL, so the guard
    * above cannot require one any more. A banner with no advertiser website is still a
    * banner somebody may want gone. */
   if (!visible || !rect) return null;
 
+  const noteAspect = (w, h) => { if (w > 0 && h > 0) setMediaAspect(w / h); };
+
   return (
     <>
+    {drawing ? (
+      /* The banner itself, drawn into the page rather than burned into the video.
+       *
+       * Sits UNDER the click target and under the player's controls, so the playhead
+       * stays usable across it and a scrub near the bottom of the frame seeks instead
+       * of opening the advertiser's site. */
+      <div
+        className="watch-banner-media"
+        style={{
+          left: `${rect.left}px`,
+          top: `${rect.top}px`,
+          width: `${rect.width}px`,
+          height: `${rect.height}px`,
+        }}
+      >
+        {creative.videoUrl ? (
+          <video
+            ref={mediaRef}
+            muted
+            playsInline
+            autoPlay
+            /* Deliberately NOT looping: an advertiser books a number of seconds and
+               makes a creative that long, the same rule the burned version follows. */
+            onLoadedMetadata={(e) => noteAspect(e.currentTarget.videoWidth, e.currentTarget.videoHeight)}
+          />
+        ) : (
+          <img
+            ref={mediaRef}
+            src={creative.imageUrl}
+            alt=""
+            onLoad={(e) => noteAspect(e.currentTarget.naturalWidth, e.currentTarget.naturalHeight)}
+          />
+        )}
+        {/* The disclosure travels with the ad. Burned banners carry it in their own
+            pixels; a drawn one has to say it here. */}
+        <span className="watch-banner-label">{creative.label || 'Ad'}</span>
+      </div>
+    ) : null}
     {onDismiss ? (
       /* Close.
        *
@@ -158,4 +242,10 @@ BannerClick.propTypes = {
   /** Called when the viewer closes the ad. Absent means no close button. */
   onDismiss: PropTypes.func,
   advertiser: PropTypes.string,
+  /** The creative to draw, when the server handed it over instead of burning it. */
+  overlay: PropTypes.shape({
+    imageUrl: PropTypes.string,
+    videoUrl: PropTypes.string,
+    label: PropTypes.string,
+  }),
 };

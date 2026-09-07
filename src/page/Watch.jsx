@@ -572,6 +572,21 @@ function Watch({ v2 = false }) {
 
   const dismissBanner = useCallback(async () => {
     setBannerVisible(false);
+
+    /* 🚨 A DRAWN BANNER IS ALREADY GONE.
+     *
+     * Hiding the element removes it, so none of what follows applies: there is no
+     * reload, so no window where the clock reads zero and a passed spot looks live,
+     * and nothing to seek back from. Everything below exists only because a burned
+     * banner lives in bytes the browser has already downloaded.
+     *
+     * Told to the server all the same, so it stops counting the banner as on screen
+     * and stops serving it for the rest of the session. */
+    if (adBreakRef.current?.bannerOverlay) {
+      try { await adBreakRef.current?.dismissBanner?.(); } catch { /* the hide stands */ }
+      return;
+    }
+
     // Everything ad-related goes quiet until the new manifest is parsed: a reload walks
     // the playhead through zero, and a spot booked at the start of the video is inside
     // its own window there.
@@ -1950,6 +1965,7 @@ function Watch({ v2 = false }) {
           <BannerClick
             videoRef={videoElRef}
             placement={adBreakRef.current.bannerInfo?.placement}
+            overlay={adBreakRef.current.bannerOverlay}
             visible={bannerVisible}
             clickUrl={adBreakRef.current.bannerInfo?.brand?.clickUrl}
             advertiser={adBreakRef.current.bannerInfo?.advertiser}

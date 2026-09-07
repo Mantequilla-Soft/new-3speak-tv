@@ -137,6 +137,9 @@ export function createAdBreak() {
     /** The banner running on this playback, or null. */
     get bannerInfo() { return banner; },
 
+    /** The creative to draw, when the server handed it over. Null when burned. */
+    get bannerOverlay() { return (banner && banner.overlay) || null; },
+
     /**
      * The viewer closed the banner.
      *
@@ -220,6 +223,14 @@ export function createAdBreak() {
           body: JSON.stringify({
             owner, permlink, viewer: viewer || null, manifestUrl, capId: CAP_ID,
             recentAdKeys: recentAdKeys(),
+            /* Hand the banner over rather than burning it into the picture.
+             *
+             * Burned, closing one meant reloading the source onto a dismissed
+             * playlist and seeking back to where the viewer was, because the covered
+             * seconds keep the same segment urls and a refetch just returns the same
+             * burned bytes. That swap could never be seamless. Drawn, closing it is
+             * hiding an element. */
+            bannerOverlay: true,
           }),
         });
         if (!res.ok) return null;
@@ -238,7 +249,10 @@ export function createAdBreak() {
             durationSeconds: data.banner.durationSeconds,
             advertiser: data.banner.advertiser || null,
             brand: data.banner.brand || null,
-            // Where the server burned it, in frame percentages. Never assumed here.
+            // The creative to DRAW. Null would mean the server burned it instead,
+            // which is still a shape this code understands.
+            overlay: data.banner.overlay || null,
+            // Where the banner goes, in frame percentages. Never assumed here.
             placement: data.banner.placement || null,
             manifestUrl: data.banner.manifestUrl,
           };
