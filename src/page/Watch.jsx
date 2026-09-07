@@ -570,6 +570,41 @@ function Watch({ v2 = false }) {
     try { player?.seek(to); } catch { /* the spot simply plays out */ }
   }, [player]);
 
+  /* 🚨 A SPOT THAT HAS RUN IS A HOLE IN THE TIMELINE.
+   *
+   * The ad is stitched into the manifest, so its seconds are real positions somebody
+   * can drag the handle onto, and scrubbing back over your own video played the ad
+   * again. Reloading onto a clean manifest would fix it and cost far more than it is
+   * worth: that is the source swap the banner used to do, and it was never seamless.
+   * So the seconds stay in the file and the playhead refuses to rest on them, jumping
+   * to whichever side the viewer was travelling towards.
+   *
+   * `lastSeen` is the position BEFORE this event, which is the only way to tell a
+   * scrub back from a scrub forward. Bound to `seeked` as well as `timeupdate`
+   * because a quarter of a second of an ad already sat through still reads as one.
+   */
+  useEffect(() => {
+    const el = videoElRef.current;
+    if (!el) return undefined;
+    let lastSeen = null;
+    const guard = () => {
+      const ab = adBreakRef.current;
+      const at = el.currentTime;
+      if (!ab || !Number.isFinite(at)) return;
+      ab.noteTime?.(at);
+      const to = ab.skipTargetFor?.(at, lastSeen);
+      if (to == null) { lastSeen = at; return; }
+      try { el.currentTime = to; } catch { /* it plays through, as it did before */ }
+      lastSeen = to;
+    };
+    el.addEventListener('timeupdate', guard);
+    el.addEventListener('seeked', guard);
+    return () => {
+      el.removeEventListener('timeupdate', guard);
+      el.removeEventListener('seeked', guard);
+    };
+  }, [videoAttached]);
+
   const dismissBanner = useCallback(async () => {
     setBannerVisible(false);
 

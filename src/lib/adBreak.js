@@ -117,6 +117,14 @@ export function createAdBreak() {
   let bannerCloseAfter = 5;
   // Set once the spot has been passed for good; nothing shows its chrome afterwards.
   let spotRetired = false;
+  /* Has this spot actually RUN?
+   *
+   * A spot that has been sat through is spent, and the seconds it occupies become a
+   * hole in the timeline rather than something to serve again to somebody scrubbing
+   * back over their own video. `entered` is what keeps that honest: dragging straight
+   * past a spot that never played does not spend it. */
+  let spotEntered = false;
+  let spotConsumed = false;
   let premium = false;
   // The banner is a SEPARATE placement, from a separate advertiser, that can be
   // present with or without a spot. It is not a second kind of break: it adds no
@@ -396,6 +404,9 @@ export function createAdBreak() {
      * which is a smaller harm than delaying the skip the viewer just asked for.
      */
     recordSkip() {
+      // Pressing Skip spends the spot as surely as watching it out does. Without this
+      // the timeline would offer it back the moment somebody scrubbed over it.
+      spotConsumed = true;
       const sid = session?.sid;
       if (!sid) return;
       fetch(`${AD_BASE}/m/${encodeURIComponent(sid)}/skipped`, {
@@ -454,6 +465,57 @@ export function createAdBreak() {
     get spotRetired() { return spotRetired; },
 
     /**
+     * Where the spot sits on the player's clock, ignoring whether it is retired.
+     *
+     * isInside() answers "should spot chrome be on screen", which a retired spot
+     * silences. This answers "are these seconds the ad", which stays true either way
+     * and is what the seek guard has to ask.
+     */
+    spansSpot(playerTime) {
+      if (!window_ || !Number.isFinite(playerTime)) return false;
+      return playerTime >= window_.start && playerTime < window_.start + window_.duration;
+    },
+
+    /**
+     * Told the clock on every tick, so a spot that has run can be marked spent.
+     *
+     * Entering it is not enough on its own and neither is passing its end: a viewer
+     * who drags the handle from before the spot to after it has done both without
+     * seeing a frame of it. Both, in order, is what "watched" means here.
+     */
+    noteTime(playerTime) {
+      if (!window_ || !Number.isFinite(playerTime)) return;
+      if (this.spansSpot(playerTime)) { spotEntered = true; return; }
+      if (spotEntered && playerTime >= window_.start + window_.duration) spotConsumed = true;
+    },
+
+    /** Has the spot been watched, or skipped, and become a hole in the timeline? */
+    get spotConsumed() { return spotConsumed; },
+
+    /**
+     * Where to put the playhead when it lands in a spot that has already run.
+     *
+     * Null unless the spot is spent and the playhead is in it. Direction matters:
+     * arriving from AFTER the spot means scrubbing back, and the viewer wants the
+     * content before the ad rather than the ad again, so they are put in front of it.
+     * Every other arrival is travelling forward and goes to the far side. Playing
+     * forward off that landing point re-enters the spot and jumps it again, which is
+     * the correct reading of a hole: the ad occupies no content time at all.
+     */
+    skipTargetFor(playerTime, cameFrom) {
+      if (!spotConsumed || !this.spansSpot(playerTime)) return null;
+      const end = window_.start + window_.duration;
+      if (Number.isFinite(cameFrom) && cameFrom >= end) {
+        const before = window_.start - 0.05;
+        /* A PRE-ROLL has nothing in front of it. Landing at 0 would be landing inside
+         * the ad again, and the guard would immediately throw the playhead forward —
+         * two seeks to reach the one place that was ever available. */
+        return before > 0 ? before : end + 0.05;
+      }
+      return end + 0.05;
+    },
+
+    /**
      * Player time → content time. Inside the break the content has not advanced at
      * all, so it pins to the cut point; after it, the ad's length comes off. This
      * is what keeps ad seconds out of `view-durations`.
@@ -466,6 +528,6 @@ export function createAdBreak() {
       return playerTime - duration;
     },
 
-    reset() { session = null; window_ = null; skipAfter = null; spotRetired = false; banner = null; bannerWindow = null; bannerSid = null; premium = false; },
+    reset() { session = null; window_ = null; skipAfter = null; spotRetired = false; spotEntered = false; spotConsumed = false; banner = null; bannerWindow = null; bannerSid = null; premium = false; },
   };
 }
