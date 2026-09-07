@@ -2027,9 +2027,33 @@ function Watch({ v2 = false }) {
         scheduledOn={scheduledDoc?.scheduledOn}
         onEditScheduled={() => { pause(); setScheduledEditOpen(true); }}
         videoControls={{
-          currentTime: playerState.currentTime,
-          duration: playerState.duration,
-          buffered: playerState.buffered,
+          /* 🚨 THE TIMELINE IS DRAWN IN CONTENT SECONDS, NOT THE FILE'S.
+           *
+           * The spot is stitched into the manifest, so the file is longer than the
+           * creator's video by exactly the ad and every position after the cut sits
+           * that much further along. A bar measured against the file therefore shows
+           * a region belonging to the ad and puts every chapter marker, every heatmap
+           * peak and every scrub thumbnail out by the ad's length once past it.
+           *
+           * VideoControls is a pure function of currentTime, duration and onSeek, so
+           * mapping those three here makes the whole control content-native — the
+           * progress fill, the markers, the preview and the clock — with nothing
+           * inside it needing to know an ad exists.
+           *
+           * While the spot runs, contentTime() pins to the cut point, so the bar
+           * holds still for the ad's length rather than advancing through seconds the
+           * creator never made. That is also why the ad cannot be scrubbed into any
+           * more: no content second maps inside it. */
+          currentTime: adBreakRef.current.contentTime(playerState.currentTime),
+          duration: adBreakRef.current.contentDuration(playerState.duration),
+          // A fraction of the FILE, so it has to be re-expressed as a fraction of the
+          // content or the buffered bar runs ahead of the fill it sits behind.
+          buffered: (() => {
+            const ab = adBreakRef.current;
+            const d = ab.contentDuration(playerState.duration);
+            if (!(d > 0) || !(playerState.duration > 0)) return playerState.buffered;
+            return Math.min(1, ab.contentTime(playerState.buffered * playerState.duration) / d);
+          })(),
           isPlaying: !playerState.paused,
           isMuted: playerState.muted,
           volume: playerState.volume,
@@ -2045,9 +2069,21 @@ function Watch({ v2 = false }) {
               setMuted(false);
             }
           },
-          onSeekBackward: () => seek(Math.max(0, playerState.currentTime - 10)),
-          onSeekForward: () => seek(Math.min(playerState.duration, playerState.currentTime + 10)),
-          onSeek: seek,
+          /* Ten seconds of the VIDEO, not of the file. Stepping back over a spot in
+             file seconds would land inside it and then be bounced out again. */
+          onSeekBackward: () => {
+            const ab = adBreakRef.current;
+            const at = ab.contentTime(playerState.currentTime);
+            seek(ab.playerTimeFor(Math.max(0, at - 10)));
+          },
+          onSeekForward: () => {
+            const ab = adBreakRef.current;
+            const at = ab.contentTime(playerState.currentTime);
+            const end = ab.contentDuration(playerState.duration);
+            seek(ab.playerTimeFor(Math.min(end, at + 10)));
+          },
+          // The bar hands back a content second; the player needs the file's.
+          onSeek: (t) => seek(adBreakRef.current.playerTimeFor(t)),
           onRefreshReactions: refreshMarkers,
           onToggleFullscreen: handleToggleFullscreen,
           onMouseMove: showControlsTemporarily,

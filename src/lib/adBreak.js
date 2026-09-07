@@ -528,6 +528,36 @@ export function createAdBreak() {
       return playerTime - duration;
     },
 
+    /**
+     * Content time → the player's clock. The inverse of contentTime().
+     *
+     * What a timeline drawn in content seconds needs in order to seek: the viewer
+     * points at a second of the creator's video, and this says where that second
+     * actually lives in the stitched file.
+     *
+     * `<=` at the cut point on purpose. contentTime() collapses the WHOLE spot onto
+     * `start`, so that one content second is where the playhead reads from while the
+     * ad runs. Mapping it back to the far side would mean anything that round-trips
+     * the displayed position — a control reading the clock and seeking to it — would
+     * jump the viewer past an ad they had not watched.
+     */
+    playerTimeFor(contentSeconds) {
+      if (!window_ || !Number.isFinite(contentSeconds)) return contentSeconds;
+      const { start, duration } = window_;
+      return contentSeconds <= start ? contentSeconds : contentSeconds + duration;
+    },
+
+    /**
+     * How long the creator's video is, with the spot taken back out.
+     *
+     * The stitched file is longer than the video by exactly the ad, and a timeline
+     * measured against the file counts seconds the creator never made.
+     */
+    contentDuration(mediaDuration) {
+      if (!window_ || !Number.isFinite(mediaDuration)) return mediaDuration;
+      return Math.max(0, mediaDuration - window_.duration);
+    },
+
     reset() { session = null; window_ = null; skipAfter = null; spotRetired = false; spotEntered = false; spotConsumed = false; banner = null; bannerWindow = null; bannerSid = null; premium = false; },
   };
 }
