@@ -22,6 +22,21 @@
  */
 import { CHECKER_URL } from '../utils/config';
 
+/* 🚨 HOW FAR PAST THE AD TO LAND, and why it is not a few milliseconds.
+ *
+ * The stitched playlist declares the ad's length from the ad's OWN manifest, and that
+ * number is not the length of the media. A measured example: the playlist said 7.967s
+ * for a segment whose container really runs 8.013s. The 46ms difference is ad that
+ * exists in the bytes and not in the timeline, so it sits at the start of what the
+ * arithmetic calls content — which is why the tail of an ad kept showing after a jump
+ * that was, on paper, past the end of it.
+ *
+ * The drift belongs to each creative's encode, so it cannot be computed here. This is
+ * a margin wide enough to clear it, paid for with a third of a second of the video at
+ * a cut the viewer is being moved across anyway.
+ */
+const LANDING_MARGIN_S = 0.35;
+
 const AD_BASE = CHECKER_URL;
 
 // The stitcher only learns where the cut fell when a variant playlist is fetched,
@@ -443,7 +458,7 @@ export function createAdBreak() {
     get skipOffered() { return skipAfter != null; },
 
     endOfBreak() {
-      return window_ ? window_.start + window_.duration + 0.05 : null;
+      return window_ ? window_.start + window_.duration + LANDING_MARGIN_S : null;
     },
 
     isInside(playerTime) {
@@ -519,9 +534,9 @@ export function createAdBreak() {
         /* A PRE-ROLL has nothing in front of it. Landing at 0 would be landing inside
          * the ad again, and the guard would immediately throw the playhead forward —
          * two seeks to reach the one place that was ever available. */
-        return before > 0 ? before : end + 0.05;
+        return before > 0 ? before : end + LANDING_MARGIN_S;
       }
-      return end + 0.05;
+      return end + LANDING_MARGIN_S;
     },
 
     /**
