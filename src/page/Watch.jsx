@@ -1534,6 +1534,9 @@ function Watch({ v2 = false }) {
     if (!el) return undefined;
     let lastSeen = null;
     let boundaryRaf = 0;
+    /* How far ahead of the cut to leave. Covers the gap between the frame on screen
+     * and the clock, plus the seek's own latency. */
+    const BOUNDARY_LEAD_S = 0.16;
 
     /* 🚨 WATCH THE BOUNDARY BY FRAME, not by timeupdate.
      *
@@ -1551,7 +1554,19 @@ function Watch({ v2 = false }) {
       const start = ab?.spotStart?.();
       const at = el.currentTime;
       if (start == null || !ab.spotConsumed || !Number.isFinite(at) || el.paused) return;
-      if (at >= start) { guard(); return; }
+      /* 🚨 JUMP BEFORE THE CUT, not on it.
+       *
+       * Waiting until the playhead is inside the spot is already too late twice over:
+       * the frame on screen is decoded ahead of what currentTime reports, and the seek
+       * itself takes long enough that the ad frame sits there while it runs. Leaving a
+       * sixth of a second early costs content at a point the viewer is about to be
+       * moved away from anyway, and it is the difference between a glimpse of
+       * somebody's ad and none. */
+      if (at >= start - BOUNDARY_LEAD_S) {
+        const to = ab.endOfBreak?.();
+        if (Number.isFinite(to)) { try { el.currentTime = to; } catch { /* it plays through */ } }
+        return;
+      }
       if (start - at > 1.5) return;
       boundaryRaf = requestAnimationFrame(boundaryTick);
     };
