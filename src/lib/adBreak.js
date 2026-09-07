@@ -340,8 +340,17 @@ export function createAdBreak() {
      */
     secondsUntil(playerTime) {
       if (!window_ || !Number.isFinite(playerTime)) return null;
+      /* Nothing to warn about. A spot already watched is jumped rather than played,
+       * so counting down to it announces an interruption that never arrives — and it
+       * announced it again every time somebody re-watched the run-up to the cut. */
+      if (spotConsumed) return null;
       const left = window_.start - playerTime;
       return left > 0 ? left : null;
+    },
+
+    /** Where the spot begins on the player's clock, or null. */
+    spotStart() {
+      return window_ ? window_.start : null;
     },
 
     /**

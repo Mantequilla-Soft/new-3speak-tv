@@ -1533,13 +1533,44 @@ function Watch({ v2 = false }) {
     const el = videoElRef.current;
     if (!el) return undefined;
     let lastSeen = null;
+    let boundaryRaf = 0;
+
+    /* 🚨 WATCH THE BOUNDARY BY FRAME, not by timeupdate.
+     *
+     * A seek is announced, so it can be redirected before anything is drawn. Ordinary
+     * playback into a spent spot is not: it just arrives, and timeupdate reports about
+     * four times a second, so up to a quarter second of an ad the viewer already sat
+     * through was presented before the jump. Re-watching the run-up to a mid-roll is
+     * where that shows.
+     *
+     * Armed only within a second and a half of the cut and dropped as soon as playback
+     * is past it or paused, so this is not a render loop the page carries around. */
+    const boundaryTick = () => {
+      boundaryRaf = 0;
+      const ab = adBreakRef.current;
+      const start = ab?.spotStart?.();
+      const at = el.currentTime;
+      if (start == null || !ab.spotConsumed || !Number.isFinite(at) || el.paused) return;
+      if (at >= start) { guard(); return; }
+      if (start - at > 1.5) return;
+      boundaryRaf = requestAnimationFrame(boundaryTick);
+    };
+    const armBoundary = () => {
+      if (boundaryRaf) return;
+      const ab = adBreakRef.current;
+      const start = ab?.spotStart?.();
+      const at = el.currentTime;
+      if (start == null || !ab.spotConsumed || !Number.isFinite(at) || el.paused) return;
+      if (at < start && start - at <= 1.5) boundaryRaf = requestAnimationFrame(boundaryTick);
+    };
+
     const guard = () => {
       const ab = adBreakRef.current;
       const at = el.currentTime;
       if (!ab || !Number.isFinite(at)) return;
       ab.noteTime?.(at);
       const to = ab.skipTargetFor?.(at, lastSeen);
-      if (to == null) { lastSeen = at; return; }
+      if (to == null) { lastSeen = at; armBoundary(); return; }
       try { el.currentTime = to; } catch { /* it plays through, as it did before */ }
       lastSeen = to;
     };
@@ -1555,6 +1586,7 @@ function Watch({ v2 = false }) {
     el.addEventListener('seeking', guard);
     el.addEventListener('seeked', guard);
     return () => {
+      if (boundaryRaf) cancelAnimationFrame(boundaryRaf);
       el.removeEventListener('timeupdate', guard);
       el.removeEventListener('seeking', guard);
       el.removeEventListener('seeked', guard);
