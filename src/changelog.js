@@ -7,6 +7,15 @@
 // 1.0.0 — that way they see all of these when develop is pushed to production.
 export const CHANGELOG = [
   {
+    version: '1.78.64',
+    date: '2026-09-08',
+    summary:
+      'The "Replace video" button in a video\'s Edit window now works on older videos '
+      + 'too, including ones from before the current upload system whose file had gone '
+      + 'missing. The video keeps its post, its date, its views and its place in your '
+      + 'profile.',
+  },
+  {
     version: '1.78.63',
     date: '2026-09-04',
     summary:

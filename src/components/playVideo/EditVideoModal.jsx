@@ -9,7 +9,7 @@ import { Client } from '@hiveio/dhive';
 import { HIVE_API_NODES, CHECKER_URL, CHECKER_API_KEY } from '../../utils/config';
 import { commentWithAioha } from '../../hive-api/aioha';
 import { uploadThumbnail } from '../../utils/uploadThumbnail';
-import { uploadVideoAsset, probeVideoDuration, registerMediaReplacement } from '../../utils/uploadVideoAsset';
+import { uploadVideoAsset, probeVideoDuration, registerMediaReplacement, fetchReplaceTarget } from '../../utils/uploadVideoAsset';
 import { setChannelTrailer, fetchChannelTrailer, trailerMatches } from '../../utils/channelTrailer';
 import { useAppStore } from '../../lib/store';
 import PromoteModal from '../Promote/PromoteModal';
@@ -410,6 +410,30 @@ export default function EditVideoModal({ isOpen, onClose, author, permlink, onSa
     // Same 5GB ceiling the embed studio enforces (and the server enforces too).
     if (file.size > 5 * 1024 * 1024 * 1024) {
       toast.error('Video too large (max 5 GB).');
+      return;
+    }
+
+    // Check the ORIGINAL is replaceable before uploading anything.
+    //
+    // Registration happens on save, long after the file has been uploaded and
+    // encoded — so a post the service will refuse used to cost the creator a
+    // full upload and leave behind an orphan asset (registration is also what
+    // delists the carrier, so a refusal leaves it listed in their profile with
+    // no Hive post). One request up front turns all of that into a sentence.
+    const originalAssetPermlink = original?.meta?.video?.info?.permlink;
+    if (!originalAssetPermlink) {
+      toast.error("This post has no video entry to replace — its metadata doesn't reference one.");
+      return;
+    }
+    const target = await fetchReplaceTarget(originalAssetPermlink);
+    // `null` means no host could answer. That's a health problem, not a verdict
+    // on this video, so don't block the upload on it.
+    if (target?.found === false) {
+      toast.error("This post's video is no longer in the library, so its file can't be replaced.");
+      return;
+    }
+    if (target?.owner && target.owner !== author) {
+      toast.error('You can only replace the file on your own video.');
       return;
     }
 
