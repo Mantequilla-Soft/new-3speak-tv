@@ -14,7 +14,7 @@ const processedCodes = new Set()
 const ManteAuthCallback = () => {
   const navigate = useNavigate()
   const [params] = useSearchParams()
-  const { setUser } = useAppStore()
+  const { setUser, setIncubationUser } = useAppStore()
   const hasRun = useRef(false)
   const [closeable, setCloseable] = useState(false)
   const [ok, setOk] = useState(null) // null = working, true = success, false = failed
@@ -47,7 +47,11 @@ const ManteAuthCallback = () => {
       if (code && processedCodes.has(code)) return
       if (code) processedCodes.add(code)
 
-      if (!code || !username) {
+      // Only `code` is required. `username` is absent for an INCUBATING login:
+      // that user has no Hive account yet, which is the whole point. Requiring
+      // it here rejected the flow before the exchange could even report what
+      // kind of session it was.
+      if (!code) {
         if (isPopup) return finishPopup({ error: "login failed" })
         toast.error("Butter Auth login failed")
         navigate("/")
@@ -79,15 +83,34 @@ const ManteAuthCallback = () => {
         // parse error doesn't mask the real status.
         let data = {}
         try { data = await res.json() } catch { /* non-JSON error body */ }
-        if (!res.ok || !data.username) {
+        // A session is valid with EITHER a Hive account or an incubation handle.
+        if (!res.ok || (!data.username && !data.handle)) {
           throw new Error(data.error || `Token exchange failed (${res.status})`)
         }
 
         // Local marker that we're in a ManteAuth-backed session. Username is
         // also in the threespeak_user cookie (non-sensitive). localStorage is
         // shared with the opener, so this also keeps a later reload logged in.
-        localStorage.setItem("user_id", data.username)
         localStorage.setItem("manteauth_login", "true")
+
+        if (data.incubation) {
+          // The handle is deliberately kept OUT of `user_id`. getOperationUser()
+          // reads that key and everything that builds a Hive operation reads
+          // getOperationUser() — putting a handle there would have every
+          // broadcast try to post as an account that does not exist, which is
+          // exactly the failure the null hiveUsername is designed to prevent.
+          if (isPopup) return finishPopup({ handle: data.handle, incubation: true })
+
+          // Writes the handle key and clears user_id itself, so the store and
+          // localStorage cannot disagree about which kind of session this is.
+          setIncubationUser(data.handle)
+          toast.success(`Signed in as @${data.handle}`)
+          navigate(state || "/")
+          return
+        }
+
+        localStorage.setItem("user_id", data.username)
+        localStorage.removeItem("incubation_handle")
 
         if (isPopup) return finishPopup({ username: data.username })
 

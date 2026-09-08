@@ -445,7 +445,13 @@ app.post('/api/manteauth/exchange', exchangeLimiter, async (req, res) => {
     if (!code_verifier && existingSession) {
       const decoded = await verifyManteAuthToken(existingSession)
       if (decoded?.hiveUsername) {
-        return res.json({ username: decoded.hiveUsername })
+        return res.json({ username: decoded.hiveUsername, incubation: false, handle: null })
+      }
+      // An INCUBATING session has no hiveUsername by design, so the check above
+      // would treat a perfectly good double-invoke as a failure and bounce the
+      // user back to login.
+      if (decoded?.incubation && decoded?.handle) {
+        return res.json({ username: null, incubation: true, handle: decoded.handle })
       }
     }
 
@@ -469,7 +475,12 @@ app.post('/api/manteauth/exchange', exchangeLimiter, async (req, res) => {
         clearPkceCookie(res)
         return res.status(401).json({ error: data.error || 'Token exchange failed' })
       }
-      tokens = { accessToken: data.access_token, username: data.username }
+      tokens = {
+        accessToken: data.access_token,
+        username: data.username || null,
+        incubation: !!data.incubation,
+        handle: data.handle || null
+      }
       refreshToken = data.refresh_token || null
     } catch {
       try {
@@ -485,7 +496,10 @@ app.post('/api/manteauth/exchange', exchangeLimiter, async (req, res) => {
     }
     clearPkceCookie(res)
 
-    setSessionCookie(res, tokens.accessToken, tokens.username)
+    // An incubating user has no Hive account, so there is no username to put in
+    // the public cookie. Empty rather than the handle: anything that reads this
+    // cookie is asking "which Hive account is this?", and the handle is not one.
+    setSessionCookie(res, tokens.accessToken, tokens.username || '')
     // The access token lasts an hour; the refresh token renews it for 30 days
     // (see resolveButrUser). Without it the session died at the hour mark and
     // every proxied op 401'd.
@@ -493,9 +507,24 @@ app.post('/api/manteauth/exchange', exchangeLimiter, async (req, res) => {
     // Belt and braces: also mint our own signed session, the same stateless
     // 30-day token wallet logins use (auth path 2 in /api/broadcast). It keeps
     // the user working even if a refresh is ever refused.
+    //
+    // NOT minted for an incubating user, and this is load-bearing rather than
+    // incidental: a wallet session is a signed assertion that this browser may
+    // act as a named Hive account, and /api/broadcast trusts it as auth path 2.
+    // Minting one for a user whose account does not exist would hand the
+    // broadcast path a username of '' or, worse, a handle that is not an
+    // account. The falsy guard already covered this; it is now deliberate.
     const buser = String(tokens.username || '').toLowerCase()
-    if (buser && SESSION_SIGNING_SECRET) setWalletSessionCookie(res, mintWalletSession(buser))
-    res.json({ username: tokens.username })
+    if (buser && !tokens.incubation && SESSION_SIGNING_SECRET) {
+      setWalletSessionCookie(res, mintWalletSession(buser))
+    }
+    res.json({
+      username: tokens.username || null,
+      incubation: !!tokens.incubation,
+      // The public pseudonym to DISPLAY. Never a Hive account, and never fed to
+      // an operation builder.
+      handle: tokens.handle || null
+    })
   } catch (err) {
     console.error('Exchange error:', err.message)
     clearPkceCookie(res)
@@ -508,11 +537,17 @@ app.get('/api/manteauth/me', baseLimiter, async (req, res) => {
   const token = req.cookies?.[SESSION_COOKIE_NAME]
   if (!token) return res.status(401).json({ error: 'Unauthorized' })
   const decoded = await verifyManteAuthToken(token)
+  // Valid session, no Hive account: an incubating user. Treating the missing
+  // username as "unauthorized" would clear their cookie and log them out on
+  // every page reload.
+  if (decoded?.incubation && decoded?.handle) {
+    return res.json({ username: null, incubation: true, handle: decoded.handle })
+  }
   if (!decoded?.hiveUsername) {
     clearSessionCookie(res)
     return res.status(401).json({ error: 'Unauthorized' })
   }
-  res.json({ username: decoded.hiveUsername })
+  res.json({ username: decoded.hiveUsername, incubation: false, handle: null })
 })
 
 // POST /api/manteauth/logout — clear the session cookie

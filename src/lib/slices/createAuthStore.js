@@ -12,6 +12,12 @@ import { toastIn } from '../../utils/toast';
 const toast = toastIn('Sign in');
 
 const LOCAL_STORAGE_USER_ID_KEY = "user_id";
+// An INCUBATING user's public pseudonym. Deliberately a SEPARATE key from
+// user_id: getOperationUser() reads user_id, and everything that builds a Hive
+// operation reads getOperationUser(), so a handle stored there would produce
+// posts authored by an account that does not exist. Keeping them apart makes
+// that mistake unrepresentable rather than merely discouraged.
+const LOCAL_STORAGE_HANDLE_KEY = "incubation_handle";
 
 export const createAuthUserSlice = (set) => ({
   authenticated: false,
@@ -20,6 +26,11 @@ export const createAuthUserSlice = (set) => ({
   listAccounts: [],
   allowAccess: null,
   userDetails: null,
+  // The incubation handle, when this session belongs to someone with no Hive
+  // account. `user` stays NULL for them on purpose: anything reading `user`
+  // wants a Hive username, and they do not have one. Components that can work
+  // without a chain account branch on this instead.
+  incubationHandle: null,
   // Set true by initializeAuth when it finds a persisted user_id with no live
   // wallet session (expired HiveSigner token etc.). The UI watches this to
   // prompt a re-login. Kept in the store (not component state) so it survives
@@ -33,6 +44,15 @@ export const createAuthUserSlice = (set) => ({
     if (typeof window !== "undefined") {
       const aiohaUser = aioha.getCurrentUser();
       const userId = aiohaUser || window.localStorage.getItem(LOCAL_STORAGE_USER_ID_KEY);
+      const handle = window.localStorage.getItem(LOCAL_STORAGE_HANDLE_KEY);
+
+      // An incubating session has a handle and NO user_id, so the expiry check
+      // below (which keys off user_id) would never see it and the branch after
+      // it would set authenticated:false — logging them out on every reload.
+      if (!userId && handle) {
+        set({ authenticated: true, user: null, userId: null, incubationHandle: handle });
+        return;
+      }
 
       // A persisted user_id with NO live wallet session means the session
       // expired while the app was closed. This is the classic HiveSigner case:
@@ -52,9 +72,9 @@ export const createAuthUserSlice = (set) => ({
 
       if (userId) {
         window.localStorage.setItem(LOCAL_STORAGE_USER_ID_KEY, userId);
-        set({ authenticated: true, user: userId });
+        set({ authenticated: true, user: userId, incubationHandle: null });
       } else {
-        set({ authenticated: false, user: null });
+        set({ authenticated: false, user: null, incubationHandle: null });
       }
     }
   },
@@ -85,7 +105,21 @@ export const createAuthUserSlice = (set) => ({
 
   // Set user directly without calling aioha.switchUser (for when aioha already switched)
   setUser: (username) => {
-    set({ userId: username, user: username, authenticated: true });
+    // Clears incubationHandle: reaching here means a real Hive account, which
+    // is what graduation produces. Leaving it set would keep the UI offering
+    // off-chain writes to someone who should now be posting to the chain.
+    set({ userId: username, user: username, authenticated: true, incubationHandle: null });
+  },
+
+  // Sign in a user who has NO Hive account. `authenticated` is true (they are a
+  // real signed-in person) while `user` stays null (there is no Hive account to
+  // name), which is precisely the state the rest of the app has to handle.
+  setIncubationUser: (handle) => {
+    try {
+      window.localStorage.setItem(LOCAL_STORAGE_HANDLE_KEY, handle);
+      window.localStorage.removeItem(LOCAL_STORAGE_USER_ID_KEY);
+    } catch { /* ignore */ }
+    set({ userId: null, user: null, authenticated: true, incubationHandle: handle });
   },
 
   
@@ -113,11 +147,13 @@ export const createAuthUserSlice = (set) => ({
     window.localStorage.removeItem("access_token")
     window.localStorage.removeItem("manteauth_login")
     window.localStorage.removeItem("manteauth_token") // legacy
+    window.localStorage.removeItem(LOCAL_STORAGE_HANDLE_KEY)
 
     set({
       authenticated: false,
       userId: null,
       user: null,
+      incubationHandle: null,
       allowAccess: null,
       userDetails: null,
       listAccounts: [],
