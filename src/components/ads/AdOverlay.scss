@@ -7,7 +7,10 @@
      absolutely positioned wrapper whose own width is shrink-to-fit, so a `%`
      max-width resolved against that wrapper instead of against the video and
      collapsed the overlay to a sliver. The wrapper carries the responsive cap. */
-  max-width: 340px;
+  /* Smaller than it was. This is a required disclosure sitting on somebody's video,
+     not a second piece of content: at 340px with a 57px logo it covered a fifth of
+     the frame. It has to be readable, not prominent. */
+  max-width: 240px;
   padding: 8px 12px 10px;
   border-radius: 10px;
   /* Its own dark ground rather than the theme's: it sits on video, which can be any
@@ -30,7 +33,7 @@
 /* When the content comes back. Sits under the brand block so the eye reads who the
    ad is from first and the wait second. */
 .brandmark-resume {
-  font-size: 11.5px;
+  font-size: 10.5px;
   line-height: 1.3;
   color: rgba(255, 255, 255, 0.72);
   font-variant-numeric: tabular-nums;
@@ -49,8 +52,8 @@
   flex: none;
   /* 1.5x the original 38px. The logo is the one part a viewer recognises at a
      glance, so it earns the space more than the text beside it does. */
-  width: 57px;
-  height: 57px;
+  width: 34px;
+  height: 34px;
   border-radius: 50%;
   object-fit: cover;
   background: rgba(255, 255, 255, 0.12);
@@ -67,7 +70,7 @@
 }
 
 .brandmark-name {
-  font-size: 14px;
+  font-size: 11px;
   font-weight: 700;
   line-height: 1.25;
   overflow: hidden;
@@ -165,3 +168,4 @@
     line-clamp: 1;
   }
 }
+

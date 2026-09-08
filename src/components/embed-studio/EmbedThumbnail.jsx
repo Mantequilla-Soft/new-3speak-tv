@@ -1,12 +1,16 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Upload, Check } from "lucide-react";
 import "../legacy-studio/VideoUploadStep2.scss";
-import { toast } from "sonner";
+import { toastIn } from '../../utils/toast';
 import { TailChase } from "ldrs/react";
 import "ldrs/react/TailChase.css";
 import { StepProgress } from "../legacy-studio/StepProgress";
 import { Navigate, useNavigate } from "react-router-dom";
 import { useEmbedUpload } from "../../context/EmbedUploadContext";
+
+// Every toast from this module is headed "Upload"; the message becomes the
+// line under it. See utils/toast.js.
+const toast = toastIn('Upload');
 
 function EmbedThumbnail() {
   const {

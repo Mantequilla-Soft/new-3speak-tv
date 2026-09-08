@@ -1,13 +1,17 @@
 import { useState, useEffect } from 'react';
 import { createPortal } from 'react-dom';
 import { useQueryClient } from '@tanstack/react-query';
-import { toast } from 'sonner';
+import { toastIn } from '../../utils/toast';
 import { useAppStore } from '../../lib/store';
 import { fetchUserInterests, saveInterestsToHive } from '../../utils/interests';
 import { usePromptsActive, setPromptActive } from '../../utils/welcomeGate';
 import { refreshHomeFeeds } from '../../utils/feedSeed';
 import TagsV2Picker from '../tooltip/TagsV2Picker';
 import './InterestsPrompt.scss';
+
+// Every toast from this module is headed "Settings"; the message becomes the
+// line under it. See utils/toast.js.
+const toast = toastIn('Settings');
 
 // Per-user "already asked" flag (browser storage) so a given account is prompted
 // at most once — set when they save a selection OR dismiss the prompt.

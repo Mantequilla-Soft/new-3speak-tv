@@ -116,6 +116,73 @@ export async function registerMediaReplacement(newPermlink, originalPermlink) {
 }
 
 /**
+ * Ask whether a permlink's media can be replaced, and by whom — BEFORE uploading.
+ *
+ * Registration used to be the first thing that checked, which meant a rejected
+ * replacement had already pushed a whole file through upload and encoding; and
+ * since registration is also what delists the carrier asset, a failure left an
+ * orphan video listed in the owner's profile with no Hive post behind it.
+ *
+ * Resolves to `{ found, kind: 'embed' | 'legacy', owner, status }`,
+ * or `null` when no host could answer — callers treat that as "don't know" and
+ * carry on rather than blocking an upload on a health check.
+ *
+ * @param {string} originalPermlink  the asset permlink the post points at
+ */
+export async function fetchReplaceTarget(originalPermlink) {
+  if (!originalPermlink || !EMBED_API_KEY) return null;
+  const path = `/video/${encodeURIComponent(originalPermlink)}/replace-target`;
+
+  for (const apiBase of embedHostList()) {
+    try {
+      const res = await fetch(`${apiBase}${path}`, { headers: { 'X-API-Key': EMBED_API_KEY } });
+      const data = await res.json().catch(() => null);
+      if (res.ok && data) return data;
+      // A 404 is only an ANSWER when it came from the handler. A host that
+      // predates this route 404s too, with Express's HTML page — which parses as
+      // null, so it falls through to the next host instead of being mistaken for
+      // "this video does not exist".
+      if (res.status === 404 && data && data.found === false) return data;
+    } catch {
+      // Unreachable host — try the next one.
+    }
+  }
+  return null;
+}
+
+/** Every embed host worth asking, primary tier first, de-duplicated. */
+function embedHostList() {
+  return [...new Set(
+    [...getEmbedHosts(), ...(EMBED_UPLOAD_FALLBACK_HOSTS || [])]
+      .map((h) => (h || '').replace(/\/+$/, ''))
+      .filter(Boolean),
+  )];
+}
+
+/**
+ * Turn per-host failures into one honest message.
+ *
+ * Every embed host shares a single MongoDB, so when they all answer the same way
+ * the answer is the SERVICE's verdict, not a host being broken — naming a host
+ * there sends whoever reads the toast hunting a deployment problem that doesn't
+ * exist. (This is exactly how "replaces failed on embed-okinoko (404)" was read
+ * as a missing deploy when it actually meant "that original isn't replaceable".)
+ * Only when the hosts genuinely disagree is the per-host breakdown the story.
+ */
+function describeHostFailures(path, failures) {
+  if (!failures.length) return `${path} failed: no embed host reachable`;
+
+  const unanimous = failures.every(
+    (f) => f.status === failures[0].status && f.message === failures[0].message,
+  );
+  if (unanimous) {
+    const { status, message } = failures[0];
+    return message ? `${message} (${status})` : `${path} failed (${status})`;
+  }
+  return `${path} failed: ${failures.map((f) => `${f.host} ${f.status}`).join(', ')}`;
+}
+
+/**
  * POST to the first embed host that accepts it.
  *
  * These are DATABASE writes, and every embed host shares the same MongoDB — so a
@@ -126,15 +193,9 @@ export async function registerMediaReplacement(newPermlink, originalPermlink) {
  * "this host is too old", not "the video doesn't exist" — try the next.
  */
 async function postToAnyEmbedHost(path, body) {
-  const hosts = [...getEmbedHosts(), ...(EMBED_UPLOAD_FALLBACK_HOSTS || [])]
-    .map((h) => (h || '').replace(/\/+$/, ''))
-    .filter(Boolean);
-  const tried = new Set();
+  const failures = [];
 
-  let lastErr = null;
-  for (const apiBase of hosts) {
-    if (tried.has(apiBase)) continue;
-    tried.add(apiBase);
+  for (const apiBase of embedHostList()) {
     try {
       const res = await fetch(`${apiBase}${path}`, {
         method: 'POST',
@@ -142,12 +203,21 @@ async function postToAnyEmbedHost(path, body) {
         body: JSON.stringify(body),
       });
       if (res.ok) return await res.json().catch(() => ({}));
-      lastErr = new Error(`${path} failed on ${apiBase} (${res.status})`);
+      const detail = await res.json().catch(() => null);
+      failures.push({
+        host: hostLabel(apiBase),
+        status: res.status,
+        message: detail?.error || detail?.message || null,
+      });
     } catch (err) {
-      lastErr = err;
+      failures.push({ host: hostLabel(apiBase), status: 0, message: err?.message || 'unreachable' });
     }
   }
-  throw lastErr || new Error(`${path} failed: no embed host reachable`);
+
+  const err = new Error(describeHostFailures(path, failures));
+  err.failures = failures;
+  err.status = failures.length ? failures[0].status : 0;
+  throw err;
 }
 
 /** Bare hostname of a URL, for display ("https://embed2.3speak.tv/uploads" -> "embed2.3speak.tv"). */

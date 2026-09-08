@@ -1,9 +1,13 @@
 import { useState } from 'react';
-import { toast } from 'sonner';
+import { toastIn } from '../../utils/toast';
 import { MdPeopleAlt, MdClose } from 'react-icons/md';
 import MarkdownComposer from '../studio/MarkdownComposer';
 import { useAppStore } from '../../lib/store';
 import { publishSnap, SNAP_TAG, MAX_USER_TAGS } from '../../lib/snaps';
+
+// Every toast from this module is headed "Post"; the message becomes the
+// line under it. See utils/toast.js.
+const toast = toastIn('Post');
 
 /**
  * Owner-only composer for a written "snap" — same fields as the shorts description

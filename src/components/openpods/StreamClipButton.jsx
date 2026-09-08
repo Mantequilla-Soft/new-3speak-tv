@@ -1,6 +1,10 @@
 import { useEffect, useState, useCallback } from 'react';
 import { Scissors } from 'lucide-react';
-import { toast } from 'sonner';
+import { toastIn } from '../../utils/toast';
+
+// Every toast from this module is headed "Live"; the message becomes the
+// line under it. See utils/toast.js.
+const toast = toastIn('Live');
 
 // Viewer-facing "clip the last 30s" button for a live OpenPods stream. Only a
 // Pro host has DVR running, so the button appears only while /dvr/status reports

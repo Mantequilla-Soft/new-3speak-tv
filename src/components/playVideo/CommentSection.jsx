@@ -16,7 +16,7 @@ import { useAppStore } from '../../lib/store';
 import { Client } from '@hiveio/dhive';
 import UpvoteTooltip from '../tooltip/UpvoteTooltip';
 import CommentVoteTooltip from '../tooltip/CommentVoteTooltip';
-import {  toast } from 'sonner'
+import { toastIn } from '../../utils/toast';
 import { estimate, getVotePower } from '../../utils/hiveUtils';
 import { markByReputation, getUserReputation } from '../../utils/reputation';
 import { markByHidden } from '../../utils/hiddenCreators';
@@ -31,6 +31,10 @@ import { Link } from 'react-router-dom';
 import EmojiGifPicker from '../common/EmojiGifPicker/EmojiGifPicker';
 import { insertAtCursor, gifMarkdown } from '../../utils/composerInsert';
 import { getHiveRenderer } from '../../lib/hiveRenderer';
+
+// Every toast from this module is headed "Comment"; the message becomes the
+// line under it. See utils/toast.js.
+const toast = toastIn('Comment');
 
 const client = getHiveClient();
 

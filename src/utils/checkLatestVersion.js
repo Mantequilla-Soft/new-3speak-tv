@@ -1,6 +1,10 @@
-import { toast } from "sonner";
+import { toastIn } from './toast';
 import { APP_VERSION } from "../version";
 import { APP_VERSION_STORAGE_KEY } from "./appVersion";
+
+// Every toast from this module is headed "App update"; the message becomes the
+// line under it. See utils/toast.js.
+const toast = toastIn('App update');
 
 // The live release lives on the repo's `production` branch, whose version.js is
 // the source of truth for the latest released version. We read it raw from GitHub

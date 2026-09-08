@@ -479,7 +479,7 @@ export const syncWalletSession = async () => {
 }
 
 let walletSessionPromise = null
-export const establishWalletSession = async () => {
+export const establishWalletSession = async (wantAccount = null) => {
   if (isManteAuthLogin()) return false
   // This module holds its OWN Aioha instance, separate from the one the login
   // hook builds, and each only calls loadAuth() when it is constructed. This
@@ -489,7 +489,16 @@ export const establishWalletSession = async () => {
   // no-op and the session is only ever minted lazily, on the first broadcast —
   // so a viewer who never posts stays anonymous to the gate and sees the
   // paywall on videos they are entitled to.
-  if (!aioha.getCurrentUser()) {
+  //
+  // 🚨 And re-read it when this instance holds a DIFFERENT account from the one
+  // being acted for. Switching accounts happens on the other instance, so an
+  // "is anybody logged in" check passes with the OLD user still loaded here —
+  // and re-minting then produces a session for the account you just left. That
+  // is what made a switched account keep signing as the previous one.
+  const current = aioha.getCurrentUser()
+  const stale = !!wantAccount && !!current
+    && String(current).toLowerCase() !== String(wantAccount).toLowerCase()
+  if (!current || stale) {
     try { aioha.loadAuth() } catch { /* nothing persisted yet */ }
   }
   const provider = aioha.getCurrentProvider()

@@ -9,7 +9,11 @@ import "./CreateCommunity.scss"
 import { MdOutlineContentCopy } from "react-icons/md";
 import { FaDownload } from "react-icons/fa";
 import gif from "../../../public/images/icons8-success.gif"
-import {  toast } from 'sonner'
+import { toastIn } from '../../utils/toast';
+
+// Every toast from this module is headed "Community"; the message becomes the
+// line under it. See utils/toast.js.
+const toast = toastIn('Community');
 
 const CreateCommunity = ({ isOpen, close}) => {
 

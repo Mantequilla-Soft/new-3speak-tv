@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
-import { toast } from 'sonner';
+import { toastIn } from '../../utils/toast';
 import { useAppStore } from '../../lib/store';
 import { isLoggedIn } from '../../hive-api/aioha';
 import {
@@ -18,6 +18,10 @@ import { useHangout } from '../../context/HangoutContext';
 import { usePremiumStatus } from '../../hooks/usePremiumStatus';
 import SubscriberTicker from '../SubscriberTicker/SubscriberTicker';
 import './ThreeSpeakPro.scss';
+
+// Every toast from this module is headed "Wallet"; the message becomes the
+// line under it. See utils/toast.js.
+const toast = toastIn('Wallet');
 
 const INTERVAL_LABELS = {
   daily: 'Daily',

@@ -4,7 +4,7 @@ import { getCreatorSettings, isUploadBlocked } from '../utils/creatorSettings';
 import { useSupportBlock } from '../lib/supportBlockStore';
 import { useNavigate } from 'react-router-dom';
 import * as tus from 'tus-js-client';
-import { toast } from 'sonner';
+import { toastIn } from '../utils/toast';
 import { EMBED_UPLOAD_URL, EMBED_API_URL, EMBED_API_KEY, HIVE_API_URL, EMBED_DEBUG, CHECKER_API_KEY } from '../utils/config';
 import { uploadThumbnail } from '../utils/uploadThumbnail';
 import { pickEmbedEndpoint } from '../utils/embedEndpoints';
@@ -18,6 +18,10 @@ import { enforceLockedBeneficiaries, getLockedBeneficiaries, chargesEncoder, LOC
 import { oaEnvelope, threespeakVideo, probeVideoOrientation, OA_ARTICLE, OA_MICROPOST, OA_COMMENT } from '../utils/openAttribute';
 import axios from 'axios';
 import { isWeakLinkForced } from '../utils/uploadFaults';
+
+// Every toast from this module is headed "Upload"; the message becomes the
+// line under it. See utils/toast.js.
+const toast = toastIn('Upload');
 
 // Hosts that support TUS resume (tusd-backed). The legacy embed.3speak.tv origin
 // does NOT — a leftover fingerprint there fails with "invalid or missing length

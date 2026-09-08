@@ -22,6 +22,21 @@
  */
 import { CHECKER_URL } from '../utils/config';
 
+/* 🚨 HOW FAR PAST THE AD TO LAND, and why it is not a few milliseconds.
+ *
+ * The stitched playlist declares the ad's length from the ad's OWN manifest, and that
+ * number is not the length of the media. A measured example: the playlist said 7.967s
+ * for a segment whose container really runs 8.013s. The 46ms difference is ad that
+ * exists in the bytes and not in the timeline, so it sits at the start of what the
+ * arithmetic calls content — which is why the tail of an ad kept showing after a jump
+ * that was, on paper, past the end of it.
+ *
+ * The drift belongs to each creative's encode, so it cannot be computed here. This is
+ * a margin wide enough to clear it, paid for with a third of a second of the video at
+ * a cut the viewer is being moved across anyway.
+ */
+const LANDING_MARGIN_S = 0.35;
+
 const AD_BASE = CHECKER_URL;
 
 // The stitcher only learns where the cut fell when a variant playlist is fetched,
@@ -111,6 +126,20 @@ const CAP_ID = (() => {
 export function createAdBreak() {
   let session = null;
   let window_ = null;
+  // Seconds into the spot at which a Skip may be offered, or null for never.
+  let skipAfter = null;
+  // Seconds into the banner before its close button may appear. The server decides.
+  let bannerCloseAfter = 5;
+  // Set once the spot has been passed for good; nothing shows its chrome afterwards.
+  let spotRetired = false;
+  /* Has this spot actually RUN?
+   *
+   * A spot that has been sat through is spent, and the seconds it occupies become a
+   * hole in the timeline rather than something to serve again to somebody scrubbing
+   * back over their own video. `entered` is what keeps that honest: dragging straight
+   * past a spot that never played does not spend it. */
+  let spotEntered = false;
+  let spotConsumed = false;
   let premium = false;
   // The banner is a SEPARATE placement, from a separate advertiser, that can be
   // present with or without a spot. It is not a second kind of break: it adds no
@@ -131,6 +160,43 @@ export function createAdBreak() {
     /** The banner running on this playback, or null. */
     get bannerInfo() { return banner; },
 
+    /** The creative to draw, when the server handed it over. Null when burned. */
+    get bannerOverlay() { return (banner && banner.overlay) || null; },
+
+    /**
+     * The viewer closed the banner.
+     *
+     * Tells the server to stop burning it, and forgets it locally so the click target
+     * and the close button go with it. The pixels already decoded still carry the ad:
+     * the caller flushes the player's buffer to shorten that to about a second, and
+     * the impression stands either way. It was delivered, and refunding it would make
+     * closing an ad an attack on the advertiser.
+     *
+     * Fire and forget. A failed request means the viewer keeps seeing an ad they asked
+     * to close, which is bad, but blocking the UI on it would be worse.
+     */
+    dismissBanner() {
+      const sid = session?.sid || bannerSid;
+      banner = null;
+      bannerWindow = null;
+      if (!sid) return Promise.resolve();
+      /* ⚠️ RETURNS the request, and the caller must wait for it.
+       *
+       * The caller reloads the playlist straight afterwards, and the playlist is only
+       * clean once the server knows the banner was closed. Fire-and-forget here is a
+       * race the viewer loses about half the time: the reload arrives first, gets the
+       * burned playlist back, and closing the ad appears to do nothing.
+       *
+       * A failure still resolves. The local hide has already happened, and the banner
+       * finishing its run is a far better outcome than a rejection nobody handles. */
+      return fetch(`${AD_BASE}/m/${encodeURIComponent(sid)}/dismiss`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: '{}',
+        keepalive: true,
+      }).catch(() => { /* they still get the local hide */ });
+    },
+
     /**
      * Is the banner on screen at this moment?
      *
@@ -142,6 +208,19 @@ export function createAdBreak() {
      */
     isBannerVisible(playerTime) {
       if (!bannerWindow || !Number.isFinite(playerTime)) return false;
+      /* 🚨 Never while the SPOT is playing.
+       *
+       * A banner is burned into the CONTENT's frames. During a break the picture is
+       * the ad, which carries no banner, so there is nothing on screen to label or to
+       * click and its controls must not appear.
+       *
+       * It is not enough to rely on the window arithmetic, because contentTime() pins
+       * to the break's own position for the whole break. A playback carrying a pre-roll
+       * AND a banner booked early therefore reads as "banner visible" for every second
+       * of the spot: the close button and click target sat on top of a different
+       * advertiser's ad. */
+      if (this.isInside(playerTime)) return false;
+
       const t = this.contentTime(playerTime);
       return t >= bannerWindow.start && t < bannerWindow.start + bannerWindow.duration;
     },
@@ -151,6 +230,7 @@ export function createAdBreak() {
     async request({ owner, permlink, viewer, manifestUrl }) {
       session = null;
       window_ = null;
+      skipAfter = null;
       banner = null;
       bannerWindow = null;
       bannerSid = null;
@@ -166,6 +246,14 @@ export function createAdBreak() {
           body: JSON.stringify({
             owner, permlink, viewer: viewer || null, manifestUrl, capId: CAP_ID,
             recentAdKeys: recentAdKeys(),
+            /* Hand the banner over rather than burning it into the picture.
+             *
+             * Burned, closing one meant reloading the source onto a dismissed
+             * playlist and seeking back to where the viewer was, because the covered
+             * seconds keep the same segment urls and a refetch just returns the same
+             * burned bytes. That swap could never be seamless. Drawn, closing it is
+             * hiding an element. */
+            bannerOverlay: true,
           }),
         });
         if (!res.ok) return null;
@@ -184,7 +272,10 @@ export function createAdBreak() {
             durationSeconds: data.banner.durationSeconds,
             advertiser: data.banner.advertiser || null,
             brand: data.banner.brand || null,
-            // Where the server burned it, in frame percentages. Never assumed here.
+            // The creative to DRAW. Null would mean the server burned it instead,
+            // which is still a shape this code understands.
+            overlay: data.banner.overlay || null,
+            // Where the banner goes, in frame percentages. Never assumed here.
             placement: data.banner.placement || null,
             manifestUrl: data.banner.manifestUrl,
           };
@@ -229,10 +320,19 @@ export function createAdBreak() {
             if (banner && !bannerWindow
               && typeof d.bannerStartAt === 'number' && d.bannerDurationSeconds) {
               bannerWindow = { start: d.bannerStartAt, duration: d.bannerDurationSeconds };
+              if (typeof d.bannerCloseAfterSeconds === 'number') bannerCloseAfter = d.bannerCloseAfterSeconds;
             }
             if (session && !window_
               && typeof d.adStartAt === 'number' && d.adDurationSeconds) {
               window_ = { start: d.adStartAt, duration: d.adDurationSeconds };
+              /* Whether this spot may be skipped, and after how long.
+               *
+               * Read HERE, in the same breath as the window, because they arrive
+               * together and a skip threshold without a window is unusable: canSkip
+               * needs both to say anything. The SERVER decides — a page that worked it
+               * out itself could offer a skip on a spot the server considers
+               * unskippable, and nothing would say which was right. */
+              skipAfter = typeof d.skipAfterSeconds === 'number' ? d.skipAfterSeconds : null;
             }
             // Done once everything present has been located.
             const spotDone = !session || !!window_;
@@ -255,8 +355,17 @@ export function createAdBreak() {
      */
     secondsUntil(playerTime) {
       if (!window_ || !Number.isFinite(playerTime)) return null;
+      /* Nothing to warn about. A spot already watched is jumped rather than played,
+       * so counting down to it announces an interruption that never arrives — and it
+       * announced it again every time somebody re-watched the run-up to the cut. */
+      if (spotConsumed) return null;
       const left = window_.start - playerTime;
       return left > 0 ? left : null;
+    },
+
+    /** Where the spot begins on the player's clock, or null. */
+    spotStart() {
+      return window_ ? window_.start : null;
     },
 
     /**
@@ -272,9 +381,162 @@ export function createAdBreak() {
       return Math.max(0, start + duration - playerTime);
     },
 
+    /**
+     * May the viewer skip this spot yet?
+     *
+     * True only INSIDE the break, only once the server's threshold has actually
+     * elapsed, and only when the server offered a skip at all. Everything is measured
+     * off the same window as the disclosure and the countdown, so a Skip button can
+     * never appear over a spot that is not running.
+     */
+    canSkip(playerTime) {
+      if (skipAfter == null || !window_ || !Number.isFinite(playerTime)) return false;
+      const elapsed = playerTime - window_.start;
+      return elapsed >= skipAfter && elapsed < window_.duration;
+    },
+
+    /**
+     * Where the content resumes, for a player that is skipping the break.
+     *
+     * A hair PAST the end. Landing exactly on the boundary can leave the player one
+     * frame inside the spot, which puts the disclosure back on screen for an instant
+     * and reads as the skip having failed.
+     */
+    /**
+     * Seconds until skipping is allowed, or null when it already is (or never will be).
+     *
+     * Null means two different things on purpose, and the caller wants them collapsed:
+     * a spot with no skip offered shows no control at all, and one past its threshold
+     * shows a pressable button. `skipOffered` separates them for the one caller that
+     * needs to know which.
+     */
+    secondsUntilSkip(playerTime) {
+      if (skipAfter == null || !window_ || !Number.isFinite(playerTime)) return null;
+      const left = (window_.start + skipAfter) - playerTime;
+      return left > 0 ? left : null;
+    },
+
+    /**
+     * The viewer pressed Skip. Tell the server, which counts it as watched.
+     *
+     * The button only appears after the threshold, so a press means they sat through
+     * the part we ask for and then chose to move on. Billing that is the honest
+     * reading, and it also means a skip costs us nothing, so it can stay generous
+     * rather than becoming something we are tempted to make harder.
+     *
+     * Fire and forget: a lost request costs the advertiser an impression they earned,
+     * which is a smaller harm than delaying the skip the viewer just asked for.
+     */
+    recordSkip() {
+      // Pressing Skip spends the spot as surely as watching it out does. Without this
+      // the timeline would offer it back the moment somebody scrubbed over it.
+      spotConsumed = true;
+      const sid = session?.sid;
+      if (!sid) return;
+      fetch(`${AD_BASE}/m/${encodeURIComponent(sid)}/skipped`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: '{}',
+        keepalive: true,
+      }).catch(() => { /* the viewer still skips */ });
+    },
+
+    /**
+     * May the banner be closed yet?
+     *
+     * Not from its first frame. An ad dismissible instantly is an ad nobody reads, and
+     * the advertiser bought seconds on screen rather than a button. The threshold comes
+     * from the server so this page and the embed player cannot disagree about a number
+     * that is really one decision.
+     */
+    bannerClosable(playerTime) {
+      if (!bannerWindow || !Number.isFinite(playerTime)) return false;
+      return (this.contentTime(playerTime) - bannerWindow.start) >= bannerCloseAfter;
+    },
+
+    /** Does this spot offer a skip at all? Decided by the server, not here. */
+    get skipOffered() { return skipAfter != null; },
+
+    endOfBreak() {
+      return window_ ? window_.start + window_.duration + LANDING_MARGIN_S : null;
+    },
+
     isInside(playerTime) {
       if (!window_ || !Number.isFinite(playerTime)) return false;
+      // 🚨 A spot that has been RETIRED is never inside anything again. See retireSpot:
+      // this is the one place every piece of spot chrome funnels through, so silencing
+      // it here silences the disclosure, the Skip and the resume countdown together
+      // rather than leaving each to remember on its own.
+      if (spotRetired) return false;
       return playerTime >= window_.start && playerTime < window_.start + window_.duration;
+    },
+
+    /**
+     * This spot is done with, whatever the clock says.
+     *
+     * Closing a banner reloads the source, and a reload walks the playhead through zero
+     * before the new manifest lands. A spot booked at the START of the video is inside
+     * its own window at zero, so its disclosure and Skip came back up over a video that
+     * was merely reloading — controls for an ad that had already finished.
+     *
+     * Timing guards could not fix that, and two attempts proved it: the moment is not
+     * knowable from a clock that is itself being reset. So the spot is retired outright
+     * once it has been passed, and no arithmetic can bring it back.
+     */
+    retireSpot() { spotRetired = true; },
+
+    /** Has the spot been passed and retired? */
+    get spotRetired() { return spotRetired; },
+
+    /**
+     * Where the spot sits on the player's clock, ignoring whether it is retired.
+     *
+     * isInside() answers "should spot chrome be on screen", which a retired spot
+     * silences. This answers "are these seconds the ad", which stays true either way
+     * and is what the seek guard has to ask.
+     */
+    spansSpot(playerTime) {
+      if (!window_ || !Number.isFinite(playerTime)) return false;
+      return playerTime >= window_.start && playerTime < window_.start + window_.duration;
+    },
+
+    /**
+     * Told the clock on every tick, so a spot that has run can be marked spent.
+     *
+     * Entering it is not enough on its own and neither is passing its end: a viewer
+     * who drags the handle from before the spot to after it has done both without
+     * seeing a frame of it. Both, in order, is what "watched" means here.
+     */
+    noteTime(playerTime) {
+      if (!window_ || !Number.isFinite(playerTime)) return;
+      if (this.spansSpot(playerTime)) { spotEntered = true; return; }
+      if (spotEntered && playerTime >= window_.start + window_.duration) spotConsumed = true;
+    },
+
+    /** Has the spot been watched, or skipped, and become a hole in the timeline? */
+    get spotConsumed() { return spotConsumed; },
+
+    /**
+     * Where to put the playhead when it lands in a spot that has already run.
+     *
+     * Null unless the spot is spent and the playhead is in it. Direction matters:
+     * arriving from AFTER the spot means scrubbing back, and the viewer wants the
+     * content before the ad rather than the ad again, so they are put in front of it.
+     * Every other arrival is travelling forward and goes to the far side. Playing
+     * forward off that landing point re-enters the spot and jumps it again, which is
+     * the correct reading of a hole: the ad occupies no content time at all.
+     */
+    skipTargetFor(playerTime, cameFrom) {
+      if (!spotConsumed || !this.spansSpot(playerTime)) return null;
+      const end = window_.start + window_.duration;
+      if (Number.isFinite(cameFrom) && cameFrom >= end) {
+        const before = window_.start - 0.05;
+        /* A PRE-ROLL has nothing in front of it. Landing at 0 would be landing inside
+         * the ad again, and the guard would immediately throw the playhead forward —
+         * two seeks to reach the one place that was ever available. */
+        return before > 0 ? before : end + LANDING_MARGIN_S;
+      }
+      return end + LANDING_MARGIN_S;
     },
 
     /**
@@ -290,6 +552,36 @@ export function createAdBreak() {
       return playerTime - duration;
     },
 
-    reset() { session = null; window_ = null; banner = null; bannerWindow = null; bannerSid = null; premium = false; },
+    /**
+     * Content time → the player's clock. The inverse of contentTime().
+     *
+     * What a timeline drawn in content seconds needs in order to seek: the viewer
+     * points at a second of the creator's video, and this says where that second
+     * actually lives in the stitched file.
+     *
+     * `<=` at the cut point on purpose. contentTime() collapses the WHOLE spot onto
+     * `start`, so that one content second is where the playhead reads from while the
+     * ad runs. Mapping it back to the far side would mean anything that round-trips
+     * the displayed position — a control reading the clock and seeking to it — would
+     * jump the viewer past an ad they had not watched.
+     */
+    playerTimeFor(contentSeconds) {
+      if (!window_ || !Number.isFinite(contentSeconds)) return contentSeconds;
+      const { start, duration } = window_;
+      return contentSeconds <= start ? contentSeconds : contentSeconds + duration;
+    },
+
+    /**
+     * How long the creator's video is, with the spot taken back out.
+     *
+     * The stitched file is longer than the video by exactly the ad, and a timeline
+     * measured against the file counts seconds the creator never made.
+     */
+    contentDuration(mediaDuration) {
+      if (!window_ || !Number.isFinite(mediaDuration)) return mediaDuration;
+      return Math.max(0, mediaDuration - window_.duration);
+    },
+
+    reset() { session = null; window_ = null; skipAfter = null; spotRetired = false; spotEntered = false; spotConsumed = false; banner = null; bannerWindow = null; bannerSid = null; premium = false; },
   };
 }

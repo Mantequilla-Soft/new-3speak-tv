@@ -2,7 +2,7 @@ import { useEffect, useRef, useState, useMemo } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { IoIosNotifications } from 'react-icons/io';
 import { MdNotificationsActive, MdNotificationsOff } from 'react-icons/md';
-import { toast } from 'sonner';
+import { toastIn } from '../../utils/toast';
 import { useAppStore } from '../../lib/store';
 import {
   pushSupported, getPushState, enablePush, disablePush, syncPushSubscription,
@@ -25,6 +25,10 @@ import { groupNotifications } from '../../utils/notificationGrouping';
 import { useWhaleDetection } from '../../utils/whaleDetection';
 import threeSpeakLogo from '../../assets/image/3S_mark.svg';
 import './NotificationBell.scss';
+
+// Every toast from this module is headed "Notifications"; the message becomes the
+// line under it. See utils/toast.js.
+const toast = toastIn('Notifications');
 
 const PREVIEW_LIMIT = 20;
 const MAX_STACKED_AVATARS = 4;

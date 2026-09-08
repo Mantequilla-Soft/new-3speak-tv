@@ -3,11 +3,15 @@ import { createPortal } from 'react-dom';
 import { MdStar, MdStarBorder, MdClose, MdThumbUp, MdThumbDown } from 'react-icons/md';
 import { useLocation } from 'react-router-dom';
 import axios from 'axios';
-import { toast } from 'sonner';
+import { toastIn } from '../../utils/toast';
 import { CHECKER_URL } from '../../utils/config';
 import { APP_VERSION } from '../../version';
 import { useReviewModal } from '../../lib/reviewStore';
 import './ReviewModal.scss';
+
+// Every toast from this module is headed "Feedback"; the message becomes the
+// line under it. See utils/toast.js.
+const toast = toastIn('Feedback');
 
 // What the feedback is about — optional multi-select tags stored on the review.
 const ASPECTS = [

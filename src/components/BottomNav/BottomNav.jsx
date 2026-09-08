@@ -20,10 +20,14 @@ import { getHiveUrl } from "../../utils/hiveNode";
 import { useState, useRef, useEffect } from "react";
 import { createPortal } from "react-dom";
 import PremiumBadge from "../PremiumBadge/PremiumBadge";
-import { toast } from "sonner";
+import { toastIn } from '../../utils/toast';
 import logo from "../../assets/image/3S_logo.svg";
 import logoDark from "../../assets/image/3S_logodark.png";
 import "./BottomNav.scss";
+
+// Every toast from this module is headed "Install"; the message becomes the
+// line under it. See utils/toast.js.
+const toast = toastIn('Install');
 
 // Split out so the polling subscription only exists while the badge is actually
 // rendered (mobile + connected chat). Server-truth count, never a local tally.

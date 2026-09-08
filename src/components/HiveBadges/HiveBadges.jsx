@@ -8,9 +8,13 @@ import {
 import { IoClose } from 'react-icons/io5';
 import { MdLock } from 'react-icons/md';
 import { RxDragHandleDots2 } from 'react-icons/rx';
-import { toast } from 'sonner';
+import { toastIn } from '../../utils/toast';
 import { fetchHiveBadges, isThreeSpeakBadge, saveBadgeOrder } from '../../utils/hiveBadges';
 import './HiveBadges.scss';
+
+// Every toast from this module is headed "Profile"; the message becomes the
+// line under it. See utils/toast.js.
+const toast = toastIn('Profile');
 
 // Enough to show what a creator is known for without the badge row taking over
 // the profile header. The rest live one click away.
@@ -75,7 +79,8 @@ function moveBadge(list, activeId, overId) {
 }
 
 /**
- * Full badge list, opened from "Show more" or "Arrange". Portalled to body so
+ * Full badge list, opened from "Show more"
+ or "Arrange". Portalled to body so
  * the profile header's backdrop-filter and stacking context can't clip it.
  *
  * On your own profile it doubles as the editor: drag the movable badges into

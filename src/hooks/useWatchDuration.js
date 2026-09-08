@@ -2,6 +2,7 @@ import { useEffect, useRef } from 'react';
 import { getPlayerUrl } from '../utils/playerUrl';
 import { useAppStore } from '../lib/store';
 import { resolveVideoMeta } from '../lib/videoMetaCache';
+import { viewerRewardsName } from '../utils/viewerRewards';
 
 /**
  * Drives the snapievideoplayer watch-duration heartbeat against the player
@@ -134,7 +135,11 @@ export default function useWatchDuration({ api, author, permlink, playerState, e
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             // `premium` marks the row as ad-free so the ad inventory forecast excludes it.
-              body: JSON.stringify({ owner, permlink: vPermlink, type, duration, position: posRef.current, source: '3speak', premium: !!premium, private: !!useAppStore.getState().privateMode }),
+              body: JSON.stringify({ owner, permlink: vPermlink, type, duration, position: posRef.current, source: '3speak', premium: !!premium, private: !!useAppStore.getState().privateMode,
+                // Sent ONLY for a viewer who opted into rewards, so we do not
+                // transmit a name for anyone who declined. The player re-checks the
+                // opt-in against the database before storing anything.
+                viewer: viewerRewardsName() }),
           });
           if (!res.ok) continue;                       // 404 for the wrong collection → try the next
           const data = await res.json().catch(() => null);

@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState, useCallback, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
-import { toast } from 'sonner';
+import { toastIn } from '../../utils/toast';
 import { FaChevronLeft, FaChevronRight } from 'react-icons/fa';
 import { SUGGESTED_CREATORS_URL } from '../../utils/config';
 import { feedParams } from '../../utils/feedParams';
@@ -14,6 +14,10 @@ import { useAppStore } from '../../lib/store';
 import { getTagLabel, getTagEmoji } from '../../utils/tagsV2';
 import HiveAvatar from '../HiveAvatar/HiveAvatar';
 import './SuggestedCreators.scss';
+
+// Every toast from this module is headed "Following"; the message becomes the
+// line under it. See utils/toast.js.
+const toast = toastIn('Following');
 
 const FETCH_LIMIT = 20;   // the pool we pick from
 const MAX_SHOWN = 15;     // how many tiles the scroller holds

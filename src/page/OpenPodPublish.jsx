@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { getHiveUrl } from '../utils/hiveNode';
 import { useNavigate, useSearchParams } from 'react-router-dom';
-import { toast } from 'sonner';
+import { toastIn } from '../utils/toast';
 import axios from 'axios';
 import { MdMic, MdPeopleAlt } from 'react-icons/md';
 import { IoIosArrowDropdownCircle } from 'react-icons/io';
@@ -15,6 +15,10 @@ import AudioPlayerInline from '../components/AudioPlayerInline/AudioPlayerInline
 import { usePremiumStatus } from '../hooks/usePremiumStatus';
 import { enforceLockedBeneficiaries } from '../utils/beneficiaries';
 import './OpenPodPublish.scss';
+
+// Every toast from this module is headed "Live"; the message becomes the
+// line under it. See utils/toast.js.
+const toast = toastIn('Live');
 
 const HANGOUTS_API = import.meta.env.VITE_HANGOUTS_API_URL;
 

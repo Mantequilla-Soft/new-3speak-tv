@@ -1700,7 +1700,9 @@
      box a real width, which the overlay fills and never exceeds. The percentage
      resolves against the player frame, which is what it should measure against. */
   right: 12px;
-  max-width: min(340px, 62%);
+  /* Narrowed with the overlay it holds. The slot bounds the disclosure against the
+     player frame, so it has to come down too or it just leaves empty box. */
+  max-width: min(240px, 46%);
 
   @media (max-width: 600px) {
     top: 8px;
@@ -1708,7 +1710,7 @@
     right: 8px;
     /* Was 82%, which let the overlay cover most of the frame on a phone. The
        disclosure only has to be readable. */
-    max-width: 58%;
+    max-width: 62%;
   }
 }
 

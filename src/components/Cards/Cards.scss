@@ -8,7 +8,7 @@ html[data-card-size="large"] { --card-min-w: 420px; }
 
 .card-container {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(var(--card-min-w, 460px), 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(var(--card-min-w, 280px), 1fr));
   grid-column-gap: 16px;
   // Match the vertical gap to the horizontal one on desktop (was a roomier 30px).
   // Mobile keeps its own tighter row-gap in the phone block below.
@@ -354,6 +354,11 @@ html[data-card-size="large"] { --card-min-w: 420px; }
     .wrap {
       .user-wrap {
         position: absolute;
+        // Above the thumbnail. CardThumbnail gives the <img> `position: relative;
+        // z-index: 1` for its fade-in, so an overlay without a z-index of its own
+        // is painted UNDER the image and only becomes visible while the image is
+        // still loading or has failed. .card-live-badge already got this right.
+        z-index: 3;
         top: 4%;
         left: 1%;
         gap: 5px;
@@ -373,6 +378,7 @@ html[data-card-size="large"] { --card-min-w: 420px; }
 
       .play {
         position: absolute;
+        z-index: 3;   // see .user-wrap above — the thumbnail sits at z-index 1
         top: 4%;
         right: 1%;
         font-size: 10px;

@@ -9,11 +9,15 @@ import { FEED_URL } from '../../utils/config';
 import { LOCAL_STORAGE_USER_ID_KEY } from '../../hooks/localStorageKeys';
 import { useAppStore } from '../../lib/store';
 import { LuLogOut } from 'react-icons/lu';
-import {  toast } from 'sonner'
+import { toastIn } from '../../utils/toast';
 import { QRCodeSVG } from 'qrcode.react';
 import   {KeyTypes, Providers } from '@aioha/aioha'
 import QrCode_modal from '../../components/modal/QrCode_modal';
 import aioha from "../../hive-api/aioha";
+
+// Every toast from this module is headed "Sign in"; the message becomes the
+// line under it. See utils/toast.js.
+const toast = toastIn('Sign in');
 
 function KeyChainLogin() {
   const { initializeAuth, setActiveUser, switchAccount, clearAccount, LogOut, user, theme } = useAppStore();

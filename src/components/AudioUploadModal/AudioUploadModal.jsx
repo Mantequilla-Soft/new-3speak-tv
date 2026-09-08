@@ -5,7 +5,7 @@ import {
   MdPublic, MdLock, MdCheck, MdAdd,
 } from 'react-icons/md';
 import axios from 'axios';
-import { toast } from 'sonner';
+import { toastIn } from '../../utils/toast';
 import { useQueryClient } from '@tanstack/react-query';
 import { KeyTypes } from '@aioha/aioha';
 import { useMyPlaylists } from '../../hooks/useMyPlaylists';
@@ -23,6 +23,10 @@ import { usePremiumStatus } from '../../hooks/usePremiumStatus';
 import { enforceLockedBeneficiaries } from '../../utils/beneficiaries';
 import { PPL_BENEFICIARY, ENABLE_PPL, CHECKER_URL, CHECKER_API_KEY } from '../../utils/config';
 import './AudioUploadModal.scss';
+
+// Every toast from this module is headed "Upload"; the message becomes the
+// line under it. See utils/toast.js.
+const toast = toastIn('Upload');
 
 // Hive post conventions: mirror snapie — comments under the latest peak.snaps container.
 const HIVE_APP_NAME = 'new-3speak-tv';

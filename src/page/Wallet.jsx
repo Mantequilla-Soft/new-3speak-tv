@@ -7,10 +7,14 @@ import { Client } from '@hiveio/dhive';
 import TransferModal from '../components/Wallet/TransferModal';
 import ProPlansPanel from '../components/Wallet/ProPlansPanel';
 import { useParams } from 'react-router-dom';
-import { toast } from 'sonner';
+import { toastIn } from '../utils/toast';
 import { HIVE_API_NODES, ENABLE_SUBS } from '../utils/config';
 import { IS_VSC_TESTNET, HIVE_TESTNET_NODES } from '../utils/vscContract';
 import { getHiveClient } from '../utils/hiveNode';
+
+// Every toast from this module is headed "Wallet"; the message becomes the
+// line under it. See utils/toast.js.
+const toast = toastIn('Wallet');
 
 // Mainnet → the shared session-picked node client. Testnet keeps its own.
 const client = IS_VSC_TESTNET

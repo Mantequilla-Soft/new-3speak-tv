@@ -7,10 +7,14 @@ import { X, ChevronUp } from 'lucide-react';
 import { estimate, getUersContent, getVotePower } from '../../utils/hiveUtils';
 import { TailChase } from 'ldrs/react';
 import 'ldrs/react/TailChase.css';
-import { toast } from 'sonner';
+import { toastIn } from '../../utils/toast';
 import { Orbit } from 'ldrs/react';
 import 'ldrs/react/Orbit.css';
 import { voteWithAioha, isLoggedIn } from '../../hive-api/aioha';
+
+// Every toast from this module is headed "Vote"; the message becomes the
+// line under it. See utils/toast.js.
+const toast = toastIn('Vote');
 
 const isMobile = () => window.matchMedia('(max-width: 767px)').matches;
 

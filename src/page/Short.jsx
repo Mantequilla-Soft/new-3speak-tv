@@ -1,4 +1,13 @@
 import { SHORTS_ADS_ENABLED } from '../utils/config';
+
+/* How long a spot may sit there without producing a frame before we give the feed back.
+ *
+ * Needed because the countdown now starts on PLAYBACK rather than on arrival. That is
+ * what stops an 8 second spot being cut short by loading, but it also means a spot that
+ * never plays would hold the surface forever, where the old on-arrival timer would at
+ * least have run out. Nothing is charged for it either way: an impression is recorded
+ * from the measured segments, which a spot that never played never fetches. */
+const SHORTS_AD_START_TIMEOUT_MS = 8000;
 import { countShortWatched, requestShortsAd } from '../lib/shortsAd';
 import ShortsAdOverlay from '../components/ads/ShortsAdOverlay';
 import React, { useState, useEffect, useCallback, useRef, useMemo } from 'react';
@@ -78,7 +87,7 @@ import { recordWatch } from '../utils/watchHistory';
 import { recordReshare, getResharesForVideo, deleteReshare } from '../utils/reshares';
 import axios from 'axios';
 import { Helmet } from 'react-helmet-async';
-import { toast } from 'sonner';
+import { toastIn } from '../utils/toast';
 import CommentVoteTooltip from '../components/tooltip/CommentVoteTooltip';
 import { FEATURE_EDITOR } from '../utils/config';
 import { getHiveRenderer } from '../lib/hiveRenderer';
@@ -98,6 +107,10 @@ import EditorModal from '../components/modal/EditorModal';
 import EditVideoModal from '../components/playVideo/EditVideoModal';
 import { notifyMediaPlay, onMediaPlay } from '../utils/mediaCoordinator';
 import HiveAvatar from '../components/HiveAvatar/HiveAvatar';
+
+// Every toast from this module is headed "Shorts"; the message becomes the
+// line under it. See utils/toast.js.
+const toast = toastIn('Shorts');
 
 // Thin wrapper: reads currentTime from a ref via polling to avoid re-rendering the whole Shorts page
 // The Watch Later playlist is identified by NAME — same convention as the watch
@@ -394,6 +407,9 @@ const VideoShort = () => {
   const [swipeDirection, setSwipeDirection] = useState(null); // 'up' | 'down' | null
   const [swipeDragY, setSwipeDragY] = useState(0); // live drag offset in px
   const swipeAnimRef = useRef(null);
+  // Wheel cooldown. A ref so it survives the effect being torn down and rebuilt, which
+  // happens on every render — see the wheel handler below.
+  const wheelLockRef = useRef(false);
   const touchStartYRef = useRef(null); // Synchronous mirror of touchStart for gesture detection
 
   const progressBarRef = useRef(null);
@@ -736,7 +752,15 @@ const VideoShort = () => {
     }
   }, [showComments, togglePlayPause, quickUpvote]);
 
+  /* Seeking is the viewer's control over THEIR short, and during a spot the player is
+   * showing the advertiser's. Guarded here rather than at each caller because there are
+   * several — two keyboard handlers and the progress bar — and the arrow keys were still
+   * scrubbing through an ad after the bar itself was hidden.
+   *
+   * Ref, not state: these handlers are bound once and would otherwise close over the
+   * value as it was when they were attached. */
   const seekTo = useCallback((time) => {
+    if (adPlayingRef.current) return;
     sendCommand('seek', { time });
   }, [sendCommand]);
 
@@ -981,9 +1005,35 @@ const VideoShort = () => {
         setShortsAd(null);
       });
     }
+    return undefined;
+  }, [shortsAd]);
+
+  /* The countdown runs on PLAYBACK, not on arrival.
+   *
+   * It used to start in the effect above, the moment the spot was taken — so the clock
+   * was already running while the manifest was still being fetched and the first
+   * segment decoded. An 8 second spot could lose a second or two of that to loading and
+   * be pulled off screen before it finished: the advertiser paid for 8 seconds and the
+   * viewer saw six.
+   *
+   * `adStarted` is set from the player's own time, so this begins when a frame has
+   * actually played. Deliberately a SEPARATE effect: adding adStarted to the deps above
+   * would re-run player.load() and restart the spot the instant it began.
+   *
+   * Kept as a timer rather than moved to the player's `ended` event for the reason
+   * above: a missed `ended` strands a viewer on a finished ad, and a timer plus Skip
+   * cannot strand anybody. */
+  useEffect(() => {
+    if (!SHORTS_ADS_ENABLED || !shortsAd || !adStarted) return undefined;
+    // Paused means paused. The spacebar still works during a spot, and a countdown that
+    // kept running through a paused ad would just be the Skip button with extra steps:
+    // hold space, watch nothing, get your feed back. Stopping the clock instead means an
+    // advertiser is paid for seconds that were actually on screen, and the viewer keeps
+    // an ordinary control.
+    if (!isPlaying) return undefined;
     const tick = setInterval(() => setAdSecondsLeft((n) => (n > 0 ? n - 1 : 0)), 1000);
     return () => clearInterval(tick);
-  }, [shortsAd]);
+  }, [shortsAd, adStarted, isPlaying]);
 
   // When the spot is done — its time is up, or the viewer skipped — put the short back.
   const endShortsAd = useCallback(() => {
@@ -1004,6 +1054,20 @@ const VideoShort = () => {
     if (!shortsAd || adSecondsLeft > 0) return;
     endShortsAd();
   }, [shortsAd, adSecondsLeft, endShortsAd]);
+
+  // The floor under the playback-driven countdown: a spot that never starts gives the
+  // feed back rather than holding a viewer on a still frame with only Skip for a way out.
+  useEffect(() => {
+    if (!shortsAd || adStarted) return undefined;
+    // Not while the viewer has paused before a frame ever played: that is a choice, not
+    // the stall this exists to catch, and ending the spot would be punishing them for it.
+    if (!isPlaying) return undefined;
+    const bail = setTimeout(() => {
+      console.warn('[VideoShort] shorts spot never started playing; returning to the feed');
+      endShortsAd();
+    }, SHORTS_AD_START_TIMEOUT_MS);
+    return () => clearTimeout(bail);
+  }, [shortsAd, adStarted, isPlaying, endShortsAd]);
 
   // Force-show fallback: if the player hasn't fired ready after 6s, show it anyway and try playing
   useEffect(() => {
@@ -2117,8 +2181,30 @@ const VideoShort = () => {
   // the touch swipe all funnel through these two. Guarding here rather than at each
   // call site is what stops the next surface that learns to navigate from quietly
   // reopening the hole.
+  /* Swiping past a spot ENDS it. It does not queue behind it.
+   *
+   * A shorts feed is a swipe, and a card that refuses to move does not read as an ad
+   * you have to watch, it reads as a broken feed: people swipe again, harder, and then
+   * leave. Every other shorts product lets you flick past the ad, so anyone arriving
+   * here already knows the gesture and expects it to work.
+   *
+   * The advertiser is not cheated by it. An impression completes only once enough of
+   * the spot has actually played, so a spot swiped away after a second was never
+   * billed. What they buy is attention; this only stops them buying the absence of an
+   * alternative.
+   */
+  const endAdForNavigation = () => {
+    if (!adPlaying) return;
+    setShortsAd(null);
+    setAdStarted(false);
+    setAdSecondsLeft(0);
+    // Deliberately NOT endShortsAd(): that reloads the short the spot interrupted,
+    // which is the one being navigated away from. Clearing the spot lets the effect
+    // that follows `currentIndex` load the short being moved TO instead.
+  };
+
   const handlePrevious = () => {
-    if (adPlaying) return;
+    endAdForNavigation();
     if (currentIndex === 0) return;
     shortHistoryRef.current = [];
     triggerSwipeAnimation('down');
@@ -2126,7 +2212,7 @@ const VideoShort = () => {
   };
 
   const handleNext = async () => {
-    if (adPlaying) return;
+    endAdForNavigation();
     if (currentIndex >= videos.length - 1) {
       if (hasMore && !loadingMoreRef.current) {
         await loadMoreVideos();
@@ -2192,23 +2278,33 @@ const VideoShort = () => {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [handleNext, handlePrevious, seekTo, togglePlayPause, toggleMute, showComments, isTransitioning]);
 
-  // Desktop: the scroll wheel navigates shorts, exactly like the Up/Down arrows
-  // (scroll down = next, scroll up = previous). Attached to the video container
-  // only, so scrolling the comments side-panel still scrolls the comments.
-  // A short cooldown stops one wheel gesture from skipping several shorts.
+  /* Desktop: the scroll wheel navigates shorts, exactly like the Up/Down arrows
+   * (scroll down = next, scroll up = previous). Attached to the video container only,
+   * so scrolling the comments side-panel still scrolls the comments.
+   *
+   * A cooldown stops one wheel gesture from skipping several shorts. One flick of a
+   * wheel, and every moment of a trackpad swipe, is dozens of events.
+   *
+   * 🚨 THE COOLDOWN LIVES IN A REF, and has to.
+   *
+   * It was a local inside this effect, and the effect depends on handleNext and
+   * handlePrevious, which are rebuilt on every render. So advancing re-rendered,
+   * re-ran the effect, and the replacement started with lock = false again — the
+   * cooldown was thrown away between the events it existed to swallow, and one gesture
+   * walked through five or ten shorts. A ref is the same value across every re-run,
+   * which is the only thing that makes a cooldown mean anything here. */
   useEffect(() => {
     if (typeof window === 'undefined' || window.innerWidth <= 768) return;
     const el = videoContainerRef.current;
     if (!el) return;
-    let lock = false;
     const onWheel = (e) => {
       if (Math.abs(e.deltaY) < 8) return; // ignore tiny trackpad jitter
       e.preventDefault();
-      if (lock || isTransitioning) return;
-      lock = true;
+      if (wheelLockRef.current || isTransitioning) return;
+      wheelLockRef.current = true;
       if (e.deltaY > 0) handleNext();
       else handlePrevious();
-      setTimeout(() => { lock = false; }, 700);
+      setTimeout(() => { wheelLockRef.current = false; }, 700);
     };
     el.addEventListener('wheel', onWheel, { passive: false });
     return () => el.removeEventListener('wheel', onWheel);
@@ -2266,10 +2362,10 @@ const VideoShort = () => {
   };
 
   const onTouchMove = (e) => {
-    // adPlaying: handleNext/handlePrevious already refuse to move, but without this
-    // the card still rubber-bands under the finger and then snaps back — which reads
-    // as the swipe having failed rather than as it being switched off.
-    if (showComments || adPlaying) return;
+    // A spot no longer blocks the gesture, so the card tracks the finger during one
+    // exactly as it does anywhere else. Only the comment sheet still swallows it,
+    // because there the vertical drag belongs to the sheet.
+    if (showComments) return;
     const y = e.targetTouches[0].clientY;
     setTouchEnd(y);
     // Live drag: clamp to ±120px for visual feedback
@@ -2303,7 +2399,7 @@ const VideoShort = () => {
     const distance = startY != null && endY != null ? startY - endY : 0;
     const wasSwipe = Math.abs(distance) > minSwipeDistance;
 
-    if (startY != null && endY != null && !showComments && !isTransitioning && !adPlaying) {
+    if (startY != null && endY != null && !showComments && !isTransitioning) {
       // `|| interestsMode` so a swipe at the END of the interests feed still reaches
       // handleNext, which is what triggers the automatic fall-back to Discover.
       if (distance > minSwipeDistance && (currentIndex < videos.length - 1 || hasMore || interestsMode)) {

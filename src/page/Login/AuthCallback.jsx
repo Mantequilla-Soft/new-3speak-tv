@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { jwtDecode } from "jwt-decode";
 import { useNavigate } from "react-router-dom";
-import { toast } from "sonner";
+import { toastIn } from '../../utils/toast';
 import axios from "axios";
 import { useAppStore } from "../../lib/store";
 import { Helix} from 'ldrs/react';
@@ -10,6 +10,10 @@ import {
   LOCAL_STORAGE_ACCESS_TOKEN_KEY,
   LOCAL_STORAGE_USER_ID_KEY,
 } from "../../hooks/localStorageKeys";
+
+// Every toast from this module is headed "Sign in"; the message becomes the
+// line under it. See utils/toast.js.
+const toast = toastIn('Sign in');
 
 const AuthCallback = () => {
   const navigate = useNavigate();

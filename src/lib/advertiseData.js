@@ -77,6 +77,32 @@ export async function fetchApplication(reference) {
  * no /access route, or the network. That is NOT "no": the caller has to decide
  * for itself, and the decision differs by surface.
  */
+/**
+ * The delegated signer signs for whoever the SESSION says you are, not for the account
+ * the page thinks you are. Those can disagree: an API session cookie outlives a
+ * front-end login, so a browser that has switched accounts keeps the old one until it
+ * signs in again.
+ *
+ * When they disagree the signature is over a different username, the checker rebuilds
+ * the message with the account we sent, the two do not match, and it comes back as
+ * "Invalid signature" — which reads as a broken key and is really a stale cookie. It
+ * cost a session to find, because the signature itself was perfectly valid: it just
+ * named somebody else.
+ *
+ * Refuse rather than send the mismatched pair. Sending `data.username` instead would be
+ * worse: it would quietly save the setting onto the wrong account.
+ */
+function assertSignedForUs(data, account) {
+  const signedFor = String(data?.username || '').toLowerCase();
+  const want = String(account || '').toLowerCase();
+  if (signedFor && want && signedFor !== want) {
+    throw new Error(
+      `You are signed in as @${signedFor} on the server but acting as @${want}. `
+      + 'Log out and back in, then try again.',
+    );
+  }
+}
+
 export async function fetchAdAccess(account) {
   try {
     const res = await fetch(`${BASE}/access/${encodeURIComponent(account)}`);
@@ -164,7 +190,21 @@ async function signViaThreespeak(adsEnabled, communitySharePct, account) {
   // signed a challenge with their posting key at login) and the server checks it
   // ahead of the claimed-username path, so this is what keeps delegated signing
   // working for wallet logins if ALLOW_APPKEY_AUTH is ever turned off.
-  if (isWallet && res.status === 401 && await establishWalletSession()) {
+  /* Re-mint the session and retry, for a refusal AND for a signature made in somebody
+   * else's name.
+   *
+   * The API session cookie outlives a front-end account switch: the page is on the new
+   * account while the cookie still names the old one, so the signer signs for the old
+   * one and the checker rejects it. Switching accounts should just work, so the mismatch
+   * is treated exactly like the 401 it resembles — establishWalletSession() re-mints for
+   * whoever is logged in NOW, and the second attempt is signed for them.
+   *
+   * assertSignedForUs() below is still the backstop, for when re-minting cannot fix it. */
+  const signedForSomeoneElse = () => {
+    const got = String(data?.username || '').toLowerCase();
+    return !!got && got !== String(account || '').toLowerCase();
+  };
+  if (isWallet && (res.status === 401 || signedForSomeoneElse()) && await establishWalletSession(account)) {
     ({ r: res, d: data } = await doPost());
   }
   if (!res.ok || !data.signature) {
@@ -173,6 +213,7 @@ async function signViaThreespeak(adsEnabled, communitySharePct, account) {
     // already says so in words, and is what a login that cannot sign locally shows.
     throw new Error(data.error || 'Could not save the setting. Please try again.');
   }
+  assertSignedForUs(data, account);
   return { signature: data.signature, timestamp: data.timestamp };
 }
 
@@ -224,6 +265,108 @@ export async function setCreatorAdPrefs(account, { adsEnabled, communitySharePct
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ account, adsEnabled, communitySharePct, signature, timestamp }),
+  }));
+}
+
+/* ─── viewer rewards: consent to be identified ────────────────────────── */
+
+// Must match viewerPrefsMessage() in 3speakchecks/routes/advertise.js exactly.
+// A distinct action string from creator-prefs, so a signature taken for one can
+// never be replayed into the other.
+const viewerPrefsMessage = (account, rewardsEnabled, timestamp) =>
+  ['3speak-ads', 'viewer-prefs', account, rewardsEnabled ? 'on' : 'off',
+    String(timestamp)].join('|');
+
+/**
+ * Has this viewer answered the question yet, and what did they say?
+ *
+ * `decided` is the field the prompt keys off. Without it "said no" and "never
+ * asked" both look like `rewardsEnabled: false`, and we would nag someone who has
+ * already declined every time they open the app.
+ */
+export async function fetchViewerAdPrefs(account) {
+  return readJson(await fetch(`${BASE}/viewer/prefs/${encodeURIComponent(account)}`));
+}
+
+async function signViewerViaThreespeak(rewardsEnabled, account) {
+  const provider = getCurrentProvider();
+  const isWallet = !!provider && provider !== Providers.HiveSigner && !isManteAuthLogin();
+
+  const doPost = async () => {
+    const headers = { 'Content-Type': 'application/json' };
+    const body = { rewardsEnabled };
+    if (provider === Providers.HiveSigner) {
+      const token = localStorage.getItem('hivesignerToken');
+      if (!token) throw new Error('Your HiveSigner session expired — reconnect and try again.');
+      headers.Authorization = `Bearer ${token}`;
+    } else if (!isManteAuthLogin()) {
+      headers['X-API-Key'] = EMBED_API_KEY;
+      body.username = account;
+    }
+    const r = await fetch(`${THREESPEAK_API}/ads/viewer-signature`, {
+      method: 'POST', headers, credentials: 'include', body: JSON.stringify(body),
+    });
+    return { r, d: await r.json().catch(() => ({})) };
+  };
+
+  let { r: res, d: data } = await doPost();
+  /* Re-mint the session and retry, for a refusal AND for a signature made in somebody
+   * else's name.
+   *
+   * The API session cookie outlives a front-end account switch: the page is on the new
+   * account while the cookie still names the old one, so the signer signs for the old
+   * one and the checker rejects it. Switching accounts should just work, so the mismatch
+   * is treated exactly like the 401 it resembles — establishWalletSession() re-mints for
+   * whoever is logged in NOW, and the second attempt is signed for them.
+   *
+   * assertSignedForUs() below is still the backstop, for when re-minting cannot fix it. */
+  const signedForSomeoneElse = () => {
+    const got = String(data?.username || '').toLowerCase();
+    return !!got && got !== String(account || '').toLowerCase();
+  };
+  if (isWallet && (res.status === 401 || signedForSomeoneElse()) && await establishWalletSession(account)) {
+    ({ r: res, d: data } = await doPost());
+  }
+  if (!res.ok || !data.signature) {
+    throw new Error(data.error || 'Could not save the setting. Please try again.');
+  }
+  assertSignedForUs(data, account);
+  return { signature: data.signature, timestamp: data.timestamp };
+}
+
+/**
+ * Record whether this viewer wants to be identified so they can earn a share of ad
+ * revenue. Delegated signature first, wallet second — same order and same reasoning
+ * as the creator settings: most accounts have already granted @threespeak posting
+ * authority, and a preference toggle should not summon a wallet popup when it has.
+ *
+ * ⚠️ Turning this OFF also deletes the identified watch rows already collected.
+ * The server does that, not the client, but it is the reason the copy says the
+ * data is removed rather than merely that collection stops.
+ */
+export async function setViewerAdPrefs(account, { rewardsEnabled }) {
+  let signed;
+  try {
+    signed = await signViewerViaThreespeak(rewardsEnabled, account);
+  } catch (err) {
+    if (!canSignLocally()) throw err;
+    const timestamp = Date.now();
+    const res = await signMessageWithAioha(
+      viewerPrefsMessage(account, rewardsEnabled, timestamp),
+      KeyTypes.Posting,
+      rewardsEnabled ? 'Turn on viewer rewards' : 'Turn off viewer rewards',
+    );
+    // `cause` carries the delegated-signing failure that sent us down the wallet
+    // path, so a rejected prompt does not erase why we asked for one.
+    if (!res?.success || !res.result) throw new Error('Signature was rejected.', { cause: err });
+    signed = { signature: res.result, timestamp };
+  }
+  const { signature, timestamp } = signed;
+
+  return readJson(await fetch(`${BASE}/viewer/prefs`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ account, rewardsEnabled, signature, timestamp }),
   }));
 }
 

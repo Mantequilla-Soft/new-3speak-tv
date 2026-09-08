@@ -1,7 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { toast } from 'sonner';
+import { toastIn } from '../../utils/toast';
 import './GuestListEditor.scss';
+
+// Every toast from this module is headed "Gated video"; the message becomes the
+// line under it. See utils/toast.js.
+const toast = toastIn('Gated video');
 
 const HIVE_USER_RE = /^[a-z][a-z0-9.-]{2,15}$/;
 

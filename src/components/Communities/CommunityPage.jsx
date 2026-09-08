@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { getHiveClient } from '../../utils/hiveNode';
 import { useParams } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
-import { toast } from 'sonner';
+import { toastIn } from '../../utils/toast';
 import { Clock, TrendingUp, Users, PenLine, FileText, Coins, CalendarDays, Check, Plus } from 'lucide-react';
 import "./CommunityPage.scss";
 import axios from "axios";
@@ -18,6 +18,10 @@ import { useWatchHistory } from "../../hooks/useWatchHistory";
 import useViewCounts from "../../hooks/useViewCounts";
 import { useAppStore } from "../../lib/store";
 import { customJsonWithAioha, isLoggedIn, KeyTypes } from "../../hive-api/aioha";
+
+// Every toast from this module is headed "Community"; the message becomes the
+// line under it. See utils/toast.js.
+const toast = toastIn('Community');
 
 // Hive client
 const client = getHiveClient();

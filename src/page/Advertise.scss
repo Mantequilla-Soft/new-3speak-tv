@@ -1,6 +1,20 @@
 @use "../mixins.scss" as mix;
 
+/* Below the masthead this page runs on three type sizes and no others: a heading,
+   body copy, and a smaller line for anything supporting. A fourth size is almost
+   always a request for a different hierarchy, so add the hierarchy instead. */
+$mkt-head: 18px;
+$mkt-text: 14px;
+$mkt-sub: 12px;
+
 .mkt-page {
+  /* The floor for the three-size rule. Without it a heading whose container has no
+     rule of its own falls through to the browser default, which is how a fourth
+     size gets onto the page without anyone choosing it. Every rule below is more
+     specific than these, so the deliberate ones still win. */
+  h2, h3, h4, h5 { font-size: $mkt-head; }
+  p, li, label, input, select, textarea, button, td, th { font-size: $mkt-text; }
+
   max-width: 860px;
   margin: 0 auto;
   padding: 20px 16px 80px;
@@ -43,12 +57,12 @@
   .mkt-lede {
     margin: 0 0 8px;
     color: var(--text-secondary);
-    font-size: 15px;
+    font-size: $mkt-text;
     line-height: 1.55;
     max-width: 68ch;
 
     &:first-of-type {
-      font-size: 18px;
+      font-size: $mkt-head;
       line-height: 1.45;
       color: var(--text-primary);
       margin-bottom: 10px;
@@ -58,11 +72,6 @@
 
     strong { color: var(--accent-primary); }
 
-    @include mix.respond(phone) {
-      font-size: 14px;
-
-      &:first-of-type { font-size: 16px; }
-    }
   }
 
   /* ── how it works, above the tabs ───────────────────────── */
@@ -71,14 +80,16 @@
 
     h2 {
       margin: 0 0 4px;
-      font-size: 18px;
+      font-size: $mkt-head;
       font-weight: 700;
     }
   }
 
+  /* The line under a section heading that introduces what follows. Used by more than
+     one section, so it is a shared class rather than a per-section modifier. */
   .mkt-intro-lede {
     margin: 0 0 14px;
-    font-size: 14px;
+    font-size: $mkt-text;
     color: var(--text-secondary);
   }
 
@@ -124,7 +135,7 @@
         border-radius: 50%;
         background: var(--accent-primary);
         color: var(--text-inverse);
-        font-size: 12px;
+        font-size: $mkt-sub;
         font-weight: 700;
         display: flex;
         align-items: center;
@@ -133,15 +144,26 @@
 
       strong {
         display: block;
-        font-size: 14px;
+        font-size: $mkt-text;
         margin-bottom: 3px;
         color: var(--text-primary);
       }
 
       span {
-        font-size: 13px;
+        font-size: $mkt-text;
         line-height: 1.5;
         color: var(--text-secondary);
+
+        /* The supporting line under the tile's lead sentence. It has to be nested
+           here rather than written as its own rule: a bare .mkt-step-detail rule
+           loses to this one and the detail silently renders at body size. */
+        &.mkt-step-detail {
+          display: block;
+          margin-top: 4px;
+          font-size: $mkt-sub;
+          line-height: 1.45;
+          color: var(--text-muted);
+        }
       }
     }
   }
@@ -160,7 +182,7 @@
     display: flex;
     align-items: center;
     gap: 8px;
-    font-size: 13px;
+    font-size: $mkt-sub;
     color: var(--text-muted);
 
     &.current { color: var(--text-primary); font-weight: 700; }
@@ -176,7 +198,7 @@
     flex: none;
     border-radius: 50%;
     border: 1px solid var(--border-color);
-    font-size: 12px;
+    font-size: $mkt-sub;
     font-weight: 700;
 
     .mkt-wiz-step.current & {
@@ -232,7 +254,7 @@
       min-width: 0;
     }
 
-    strong { font-size: 14px; color: var(--text-primary); }
+    strong { font-size: $mkt-text; color: var(--text-primary); }
   }
 
   .mkt-adtype { margin-bottom: 18px; }
@@ -294,7 +316,7 @@
     background: var(--accent-primary);
     color: var(--text-inverse);
     font: inherit;
-    font-size: 16px;
+    font-size: $mkt-text;
     font-weight: 700;
     cursor: pointer;
 
@@ -328,7 +350,7 @@
     margin-bottom: -1px;
     background: none;
     font: inherit;
-    font-size: 14px;
+    font-size: $mkt-text;
     font-weight: 600;
     color: var(--text-muted);
     white-space: nowrap;
@@ -352,7 +374,7 @@
     border-radius: 999px;
     background: var(--bg-tertiary);
     color: var(--text-secondary);
-    font-size: 11px;
+    font-size: $mkt-sub;
     font-weight: 700;
   }
 
@@ -365,7 +387,7 @@
 
     h2 {
       margin: 0 0 14px;
-      font-size: 18px;
+      font-size: $mkt-head;
       font-weight: 700;
     }
 
@@ -379,9 +401,162 @@
   /* No max-width here on purpose. The page is already 860px wide; a 66ch cap on
      top of that broke 13px copy at about half the column, which reads as stray
      line breaks in the middle of a sentence rather than as a narrow measure. */
+  /* The length input and its Automatic toggle sit on one line: the checkbox decides
+     what the number means, so putting it underneath reads as a separate question. */
+  /* The same number the field holds, in minutes. Its own line under the hint, at the
+     hint's size: it is a reading of the input, not a second instruction. */
+  /* Pay from the wallet, or say you already sent it. Side by side because they are two
+     answers to one question, and wrapping on a phone rather than shrinking to fit. */
+  /* Which asset the transfer is in. Two states of one choice, so a segmented pair
+     rather than two independent-looking buttons. */
+  /* The one line somebody has to act on: an account, an amount and a memo they may be
+     copying by hand. Body size rather than the fine-print size the rest of this panel
+     uses, because a mistyped memo is a payment nobody can match to a booking. */
+  /* The list heading and its one action. Nothing else belongs on this row, so the
+     button sits at the end of it rather than under the list where a long list hides it. */
+  .mkt-split-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    margin-bottom: 12px;
+
+    h2 { margin: 0; }
+  }
+
+  /* Both head buttons on one side of the heading. */
+  .mkt-head-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-shrink: 0;
+  }
+
+  /* The way back into a product you hold a reference for. Quieter than "New", which
+     is the action this page is actually for. */
+  .mkt-codebtn {
+    flex-shrink: 0;
+    padding: 4px 12px;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    background: transparent;
+    color: var(--text-secondary);
+    font: inherit;
+    font-size: $mkt-sub;
+    font-weight: 600;
+    cursor: pointer;
+
+    &:hover { border-color: var(--accent-primary); color: var(--accent-primary); }
+
+    &[aria-expanded='true'] {
+      border-color: var(--accent-primary);
+      color: var(--accent-primary);
+    }
+  }
+
+  .mkt-newproduct {
+    flex-shrink: 0;
+    padding: 4px 12px;
+    border: 1px solid var(--accent-primary);
+    border-radius: 8px;
+    background: transparent;
+    color: var(--accent-primary);
+    font: inherit;
+    font-size: $mkt-sub;
+    font-weight: 700;
+    cursor: pointer;
+
+    &:hover:not(:disabled) { background: var(--accent-primary); color: var(--text-inverse); }
+    &:disabled { opacity: 0.45; cursor: not-allowed; }
+  }
+
+  .mkt-copy {
+    padding: 1px 8px;
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    background: transparent;
+    color: var(--text-secondary);
+    font: inherit;
+    font-size: $mkt-sub;
+    cursor: pointer;
+    vertical-align: baseline;
+
+    &:hover { border-color: var(--accent-primary); color: var(--accent-primary); }
+    // Confirmation lives on the button itself: a toast for a clipboard write is more
+    // interruption than the action deserves.
+    &.done { border-color: var(--accent-primary); color: var(--accent-primary); }
+  }
+
+  .mkt-pay-line {
+    margin: 0 0 10px;
+    font-size: $mkt-text;
+    line-height: 1.5;
+    color: var(--text-secondary);
+
+    strong { color: var(--text-primary); }
+    code { font-size: $mkt-text; }
+  }
+
+  .mkt-pay-ccy {
+    display: inline-flex;
+    margin: 0 0 10px;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    overflow: hidden;
+
+    .mkt-ccy {
+      padding: 5px 14px;
+      border: 0;
+      background: transparent;
+      color: var(--text-secondary);
+      font: inherit;
+      font-size: $mkt-sub;
+      font-weight: 700;
+      cursor: pointer;
+
+      &.selected { background: var(--accent-primary); color: var(--text-inverse); }
+      &:disabled { opacity: 0.4; cursor: not-allowed; }
+    }
+  }
+
+  .mkt-pay-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    align-items: center;
+  }
+
+  .mkt-mins {
+    display: block;
+    margin-top: 2px;
+    font-size: $mkt-sub;
+    color: var(--accent-primary);
+  }
+
+  .mkt-length-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+
+    input[type="number"] { flex: 0 1 auto; min-width: 0; }
+    input[type="number"]:disabled { opacity: 0.55; cursor: not-allowed; }
+  }
+
+  .mkt-auto-length {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    white-space: nowrap;
+    cursor: pointer;
+
+    // A checkbox nobody can tick yet should look it, not just refuse the click.
+    &:has(input:disabled) { opacity: 0.5; cursor: not-allowed; }
+    input { cursor: inherit; }
+  }
+
   .mkt-fine {
     margin: 10px 0 0;
-    font-size: 13px;
+    font-size: $mkt-sub;
     line-height: 1.5;
     color: var(--text-muted);
   }
@@ -395,7 +570,7 @@
 
   .mkt-panel-muted {
     color: var(--text-muted);
-    font-size: 14px;
+    font-size: $mkt-text;
     line-height: 1.5;
   }
 
@@ -432,20 +607,20 @@
     background: var(--card-bg);
 
     .mkt-stat-value {
-      font-size: 28px;
+      font-size: $mkt-head;
       font-weight: 700;
       line-height: 1.1;
       font-variant-numeric: tabular-nums;
     }
 
     .mkt-stat-label {
-      font-size: 13px;
+      font-size: $mkt-text;
       font-weight: 600;
       color: var(--text-secondary);
     }
 
     .mkt-stat-note {
-      font-size: 12px;
+      font-size: $mkt-sub;
       color: var(--text-muted);
     }
   }
@@ -453,7 +628,7 @@
   .mkt-slots h3,
   .mkt-countries h3 {
     margin: 0 0 10px;
-    font-size: 15px;
+    font-size: $mkt-head;
     font-weight: 700;
   }
 
@@ -467,7 +642,7 @@
   .mkt-table {
     width: 100%;
     border-collapse: collapse;
-    font-size: 14px;
+    font-size: $mkt-text;
 
     th,
     td {
@@ -478,7 +653,7 @@
     }
 
     th {
-      font-size: 12px;
+      font-size: $mkt-sub;
       font-weight: 600;
       text-transform: uppercase;
       letter-spacing: 0.06em;
@@ -505,7 +680,7 @@
     padding: 1px 7px;
     border: 1px solid var(--border-color);
     border-radius: 999px;
-    font-size: 11px;
+    font-size: $mkt-sub;
     text-transform: none;
     letter-spacing: 0;
     color: var(--text-muted);
@@ -524,12 +699,11 @@
       grid-template-columns: minmax(90px, 150px) 1fr 48px;
       align-items: center;
       gap: 12px;
-      font-size: 14px;
+      font-size: $mkt-text;
 
       @include mix.respond(phone) {
         grid-template-columns: minmax(80px, 110px) 1fr 42px;
         gap: 8px;
-        font-size: 13px;
       }
     }
   }
@@ -571,14 +745,14 @@
     border-left: 3px solid var(--accent-primary);
     border-radius: 0 8px 8px 0;
     background: var(--bg-secondary);
-    font-size: 13px;
+    font-size: $mkt-sub;
     line-height: 1.55;
     color: var(--text-secondary);
 
     svg {
       flex-shrink: 0;
       margin-top: 2px;
-      font-size: 17px;
+      font-size: $mkt-text;
       color: var(--accent-primary);
     }
 
@@ -604,7 +778,7 @@
 
     label,
     .mkt-label {
-      font-size: 13px;
+      font-size: $mkt-text;
       font-weight: 600;
       color: var(--text-primary);
     }
@@ -619,7 +793,7 @@
       background: var(--input-bg);
       color: var(--text-primary);
       font-family: inherit;
-      font-size: 14px;
+      font-size: $mkt-text;
 
       &:focus {
         outline: none;
@@ -648,7 +822,7 @@
   }
 
   .mkt-hint {
-    font-size: 12px;
+    font-size: $mkt-sub;
     color: var(--text-muted);
     line-height: 1.45;
   }
@@ -665,7 +839,7 @@
     border-radius: 999px;
     background: var(--bg-secondary);
     color: var(--text-secondary);
-    font-size: 13px;
+    font-size: $mkt-sub;
     cursor: pointer;
 
     &:hover { background: var(--bg-hover); }
@@ -703,7 +877,7 @@
   .mkt-outline {
     padding: 10px 20px;
     border-radius: 8px;
-    font-size: 14px;
+    font-size: $mkt-text;
     font-weight: 600;
     font-family: inherit;
     cursor: pointer;
@@ -752,7 +926,7 @@
     gap: 3px;
 
     strong {
-      font-size: 15px;
+      font-size: $mkt-text;
       color: var(--text-primary);
     }
   }
@@ -796,7 +970,7 @@
 
     h3 {
       margin: 0;
-      font-size: 15px;
+      font-size: $mkt-head;
       font-weight: 700;
       color: var(--text-primary);
     }
@@ -804,21 +978,21 @@
 
   .mkt-rc-rate {
     flex: none;
-    font-size: 13px;
+    font-size: $mkt-text;
     font-weight: 700;
     color: var(--accent-primary);
     white-space: nowrap;
   }
 
   .mkt-rc-unit {
-    font-size: 11px;
+    font-size: $mkt-sub;
     font-weight: 600;
     color: var(--text-muted);
   }
 
   .mkt-rc-blurb {
     margin: 0;
-    font-size: 13px;
+    font-size: $mkt-sub;
     line-height: 1.5;
     color: var(--text-secondary);
   }
@@ -833,7 +1007,7 @@
       display: flex;
       justify-content: space-between;
       gap: 10px;
-      font-size: 12.5px;
+      font-size: $mkt-sub;
     }
 
     dt { color: var(--text-muted); }
@@ -857,25 +1031,36 @@
   }
 
   .mkt-rc-example-price {
-    font-size: 18px;
+    font-size: $mkt-head;
     font-weight: 700;
     color: var(--text-primary);
     font-variant-numeric: tabular-nums;
   }
 
+  /* The same total in HIVE. Deliberately quieter than the HBD figure beside it:
+     the rate card is priced in HBD and this is a convenience for anyone paying in
+     the other asset, not a second headline price. */
+  .mkt-rc-example-hive {
+    display: block;
+    font-size: $mkt-sub;
+    font-weight: 500;
+    color: var(--text-muted);
+    font-variant-numeric: tabular-nums;
+  }
+
   .mkt-rc-example-note {
-    font-size: 12px;
+    font-size: $mkt-sub;
     color: var(--text-muted);
   }
 
   .mkt-headline-price {
     margin: 0 0 12px;
-    font-size: 20px;
+    font-size: $mkt-head;
     color: var(--text-primary);
 
     strong { color: var(--accent-primary); }
 
-    .mkt-hint { font-size: 13px; }
+    .mkt-hint { font-size: $mkt-sub; }
   }
 
   /* A character counter that has not been satisfied yet is a blocker, not a note. */
@@ -900,7 +1085,7 @@
     border-radius: 6px;
     background: var(--bg-tertiary);
     color: var(--text-primary);
-    font-size: 14px;
+    font-size: $mkt-text;
     user-select: all;
   }
 
@@ -910,12 +1095,12 @@
     gap: 6px;
     padding: 4px 12px;
     border-radius: 999px;
-    font-size: 13px;
+    font-size: $mkt-text;
     font-weight: 600;
     background: var(--bg-tertiary);
     color: var(--text-secondary);
 
-    svg { font-size: 16px; }
+    svg { font-size: $mkt-text; }
   }
 
   .mkt-status-approved { color: #1e8f5e; }
@@ -926,11 +1111,9 @@
     display: flex;
     gap: 10px;
     flex-wrap: wrap;
-    /* It sits at the foot of the product list now, under a divider, because it is
-       another way into the same pane rather than a separate section. */
-    margin-top: 14px;
-    padding-top: 14px;
-    border-top: 1px solid var(--border-color);
+    /* Hangs off the button that reveals it, so it needs separating from what follows
+       rather than from what came before. */
+    margin: 0 0 14px;
 
     input {
       flex: 1 1 140px;
@@ -941,7 +1124,7 @@
       background: var(--input-bg);
       color: var(--text-primary);
       font-family: inherit;
-      font-size: 14px;
+      font-size: $mkt-text;
 
       &:focus-visible {
         outline: 2px solid var(--accent-primary);
@@ -965,18 +1148,40 @@
   }
 
   .mkt-lookup-note {
-    font-size: 14px;
+    font-size: $mkt-sub;
     line-height: 1.55;
   }
 
   /* ── creators ───────────────────────────────────────────── */
-  .mkt-creators {
+  /* The creator and viewer tiles are the same object with different copy, so they
+     share one rule rather than drifting apart the moment one of them is edited. */
+  .mkt-creators,
+  .mkt-viewers {
     padding: 18px 20px;
     border: 1px solid var(--border-color);
     border-radius: 10px;
     background: var(--bg-secondary);
 
-    h2 { font-size: 16px; }
+    /* Flex rather than an inline icon: an svg on a text baseline sits low and drags
+       the line height around. The gap does the spacing, so the markup needs no
+       non-breaking space to hold the icon off the word. */
+    h2 {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: $mkt-head;
+
+      svg {
+        flex-shrink: 0;
+        font-size: 20px;
+        color: var(--accent-primary);
+      }
+    }
+
+    /* The whole tile body is one size. These are asides to an advertiser rather than
+       the pitch, so neither line needs to shout. Both lines land on the same colour in
+       this theme, so the heading is the only hierarchy inside the tile. */
+    p { font-size: $mkt-sub; }
     > p:last-child { margin-bottom: 0; }
   }
 
@@ -1006,10 +1211,82 @@
     }
   }
 
+  /* The product list used to be a 300px column beside the detail. It is a strip
+     across the top now: with a handful of products that column was mostly empty
+     space, taken out of the part of the page people actually work in. */
+  .mkt-stack {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+
+  .mkt-products { min-width: 0; }
+
+  /* Scrolls sideways on its own rather than widening the page. */
+  .mkt-mine-strip {
+    list-style: none;
+    margin: 0 0 14px;
+    /* Room for the focus ring and the selected border, which a flush edge clips. */
+    padding: 2px;
+    display: flex;
+    gap: 10px;
+    overflow-x: auto;
+    scrollbar-width: thin;
+
+    > li { flex: 0 0 auto; }
+
+    /* Cards sized to their contents instead of a column's full width. */
+    .mkt-mine-item {
+      width: auto;
+      min-width: 220px;
+      max-width: 320px;
+    }
+  }
+
+  /* One product's three jobs. Deliberately quieter than the page-level .mkt-tabs,
+     which stays the primary navigation. */
+  .mkt-ptabs {
+    display: flex;
+    gap: 4px;
+    margin: 0 0 20px;
+    border-bottom: 1px solid var(--border-color);
+    overflow-x: auto;
+    scrollbar-width: none;
+
+    &::-webkit-scrollbar { display: none; }
+  }
+
+  .mkt-ptab {
+    flex: none;
+    padding: 8px 14px;
+    border: 0;
+    border-bottom: 2px solid transparent;
+    margin-bottom: -1px;
+    background: none;
+    font: inherit;
+    font-size: $mkt-sub;
+    font-weight: 600;
+    color: var(--text-muted);
+    white-space: nowrap;
+    cursor: pointer;
+
+    &:hover { color: var(--text-primary); }
+
+    &.selected {
+      color: var(--text-primary);
+      border-bottom-color: var(--accent-primary);
+    }
+
+    &:focus-visible {
+      outline: 2px solid var(--accent-primary);
+      outline-offset: -2px;
+    }
+  }
+
   .mkt-split-nav {
     min-width: 0;
 
-    h2 { margin: 0 0 12px; font-size: 18px; font-weight: 700; }
+    h2 { margin: 0 0 12px; font-size: $mkt-head; font-weight: 700; }
 
     @media (min-width: 860px) {
       position: sticky;
@@ -1071,7 +1348,7 @@
     flex: 1;
 
     strong {
-      font-size: 14px;
+      font-size: $mkt-text;
       color: var(--text-primary);
       overflow: hidden;
       text-overflow: ellipsis;
@@ -1087,11 +1364,11 @@
     gap: 14px;
     width: 100%;
 
-    h3 { margin: 0 0 2px; font-size: 18px; font-weight: 700; }
+    h3 { margin: 0 0 2px; font-size: $mkt-head; font-weight: 700; }
   }
 
   .mkt-mine-meta {
-    font-size: 12px;
+    font-size: $mkt-sub;
     color: var(--text-muted);
 
     code {
@@ -1124,7 +1401,7 @@
     margin-bottom: 4px;
     border-bottom: 1px solid var(--border-color);
 
-    h3 { margin: 0; font-size: 15px; font-weight: 700; }
+    h3 { margin: 0; font-size: $mkt-head; font-weight: 700; }
     .mkt-fine { margin: 0; }
   }
 
@@ -1168,7 +1445,7 @@
     flex-direction: column;
     gap: 10px;
 
-    h3 { margin: 0; font-size: 15px; font-weight: 700; }
+    h3 { margin: 0; font-size: $mkt-head; font-weight: 700; }
     .mkt-fine { margin: 0; }
   }
 
@@ -1225,7 +1502,7 @@
 
   .mkt-upload-error {
     margin: 0;
-    font-size: 13px;
+    font-size: $mkt-text;
     line-height: 1.45;
     color: var(--accent-primary);
   }
@@ -1247,7 +1524,7 @@
       border: 1px solid var(--border-color);
       border-radius: 8px;
       background: var(--bg-secondary);
-      font-size: 13px;
+      font-size: $mkt-text;
     }
   }
 
@@ -1256,7 +1533,7 @@
     border-radius: 999px;
     background: var(--bg-tertiary);
     color: var(--text-secondary);
-    font-size: 12px;
+    font-size: $mkt-sub;
     font-weight: 600;
     white-space: nowrap;
   }
@@ -1265,7 +1542,6 @@
   .mkt-creative-rejected { color: #c0392b; }
 
   .mkt-creative-meta { color: var(--text-muted); }
-
 
   /* ── flights ────────────────────────────────────────────── */
   .mkt-campaigns {
@@ -1277,7 +1553,7 @@
     flex-direction: column;
     gap: 12px;
 
-    h3 { margin: 0; font-size: 15px; font-weight: 700; }
+    h3 { margin: 0; font-size: $mkt-head; font-weight: 700; }
   }
 
   /* Field groups inside the booking form. */
@@ -1306,7 +1582,7 @@
 
     legend {
       padding: 0 6px;
-      font-size: 12px;
+      font-size: $mkt-sub;
       font-weight: 700;
       letter-spacing: 0.03em;
       text-transform: uppercase;
@@ -1369,32 +1645,32 @@
   }
 
   .mkt-format-name {
-    font-size: 14px;
+    font-size: $mkt-text;
     font-weight: 700;
   }
 
   .mkt-format-rate {
     flex: none;
-    font-size: 13px;
+    font-size: $mkt-text;
     font-weight: 700;
     color: var(--accent-primary);
     white-space: nowrap;
   }
 
   .mkt-format-rate-unit {
-    font-size: 11px;
+    font-size: $mkt-sub;
     font-weight: 500;
     color: var(--text-muted);
   }
 
   .mkt-format-blurb {
-    font-size: 12px;
+    font-size: $mkt-sub;
     line-height: 1.45;
     color: var(--text-secondary);
   }
 
   .mkt-format-meta {
-    font-size: 11px;
+    font-size: $mkt-sub;
     color: var(--text-muted);
   }
 
@@ -1431,7 +1707,7 @@
     justify-content: center;
     text-align: center;
     gap: 12px;
-    font-size: 13px;
+    font-size: $mkt-text;
     color: var(--text-secondary);
   }
 
@@ -1442,7 +1718,7 @@
     border: 1px solid var(--border-color);
     border-radius: 8px;
     background: var(--bg-tertiary);
-    font-size: 13px;
+    font-size: $mkt-text;
     line-height: 1.5;
     color: var(--text-secondary);
 
@@ -1465,7 +1741,7 @@
       border: 1px solid var(--border-color);
       border-radius: 10px;
       background: var(--bg-secondary);
-      font-size: 13px;
+      font-size: $mkt-text;
     }
   }
 
@@ -1485,7 +1761,7 @@
     border-radius: 6px;
     background: var(--bg-tertiary);
     color: var(--text-secondary);
-    font-size: 12px;
+    font-size: $mkt-sub;
   }
 
   .mkt-pay {
@@ -1510,7 +1786,7 @@
       background: var(--input-bg);
       color: var(--text-primary);
       font-family: inherit;
-      font-size: 13px;
+      font-size: $mkt-text;
     }
   }
 
@@ -1525,20 +1801,23 @@
 
   .mkt-refund { color: var(--accent-primary); font-weight: 600; }
 
+  /* Credit EARNED. Carries the same weight as .mkt-refund but not its red:
+     that colour is for the shortfall we still owe an answer on, and money
+     coming back to the advertiser was reading as a problem because of it. */
+  .mkt-credit-earned { color: var(--text-primary); font-weight: 600; }
+
   /* Credit spent on this flight. Deliberately quieter than .mkt-refund: earning
      credit is news, spending it is a receipt. */
   .mkt-credit-used {
     color: var(--text-muted);
-    font-size: 13px;
+    font-size: $mkt-sub;
   }
-
 
   /* The closed-trial notice sits above the figures it qualifies. */
   .mkt-note-trial {
     order: -1;
     border-left-color: var(--text-muted);
   }
-
 
   /* "Have us make the video" — asked on the application form and again at booking,
      where the fee is actually charged. Spans the form grid in both places. */
@@ -1559,7 +1838,7 @@
     display: flex;
     align-items: flex-start;
     gap: 10px;
-    font-size: 13px;
+    font-size: $mkt-text;
     line-height: 1.5;
     color: var(--text-secondary);
     cursor: pointer;
@@ -1577,3 +1856,19 @@
   }
 
 }
+
+  /* Creator and viewer, side by side. They are the two halves of the same fact —
+     ad money reaches real people — so they read as a pair rather than as one
+     section with an afterthought under it. Stacks on a phone. */
+  .mkt-audience-pair {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 16px;
+
+    @media (min-width: 700px) {
+      grid-template-columns: 1fr 1fr;
+    }
+
+    .mkt-section { margin-bottom: 0; }
+  }
+

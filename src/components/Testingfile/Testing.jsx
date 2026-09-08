@@ -5,15 +5,15 @@ import { QRCodeSVG } from 'qrcode.react';
 import { initAioha, Asset, KeyTypes, Providers } from '@aioha/aioha'
 import axios from 'axios';
 import { useAppStore } from '../../lib/store';
-import {  toast } from 'sonner'
+import { toastIn } from '../../utils/toast';
 import { LOCAL_STORAGE_ACCESS_TOKEN_KEY, LOCAL_STORAGE_USER_ID_KEY } from '../../hooks/localStorageKeys';
 import { useNavigate } from 'react-router-dom';
 import QrCode_modal from '../modal/QrCode_modal';
 import aioha from "../../hive-api/aioha";
 
-
-
-
+// Every toast from this module is headed "3Speak"; the message becomes the
+// line under it. See utils/toast.js.
+const toast = toastIn('3Speak');
 
 const LoginWithHiveAuth = () => {
   const navigate = useNavigate();

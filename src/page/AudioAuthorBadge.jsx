@@ -2,8 +2,12 @@ import { useState, useEffect, useCallback } from 'react';
 import { getRelationshipBetweenAccounts } from '../hive-api/api';
 import { followWithAioha, isLoggedIn } from '../hive-api/aioha';
 import { useAppStore } from '../lib/store';
-import { toast } from 'sonner';
+import { toastIn } from '../utils/toast';
 import HiveAvatar from '../components/HiveAvatar/HiveAvatar';
+
+// Every toast from this module is headed "Profile"; the message becomes the
+// line under it. See utils/toast.js.
+const toast = toastIn('Profile');
 
 /**
  * Compact vertical author card for the Audio page creators row.

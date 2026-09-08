@@ -1,20 +1,19 @@
-import logo from "../../assets/image/3S_logo.svg";
-import logoDark from "../../assets/image/3S_logodark.png";
+import mark from "../../assets/image/3S_mark.svg";
 import "./nav.scss";
 import Sidebar from "../Sidebar/Sidebar";
 import { Link, NavLink, useLocation } from "react-router-dom";
 import { useAppStore } from "../../lib/store";
-import { AiOutlineClose} from "react-icons/ai";
 import { IoCloudUploadSharp } from "react-icons/io5";
 import { useEffect, useRef, useState } from "react";
 import NavSearch from "./NavSearch";
 import { TiThMenu } from "react-icons/ti";
-import { MdOutlineSearch, MdGraphicEq, MdPlaylistPlay, MdWatchLater, MdHistory, MdKeyboardArrowDown, MdAdd } from "react-icons/md";
+import { MdOutlineSearch, MdGraphicEq, MdPlaylistPlay, MdWatchLater, MdHistory, MdKeyboardArrowDown, MdAdd, MdHomeFilled, MdChevronRight, MdChevronLeft } from "react-icons/md";
 import { FaMedal } from "react-icons/fa6";
 import { useMyPlaylists } from "../../hooks/useMyPlaylists";
 import ShortsIcon from "../icons/ShortsIcon";
 import UploadLinks from "../UploadLinks";
 import NotificationBell from "./NotificationBell";
+import { hideToastLayer, showToastLayer } from "../../utils/toast";
 import ChatButton from "../Chat/ChatButton";
 import PremiumBadge from "../PremiumBadge/PremiumBadge";
 import { FiSettings, FiLogIn } from "react-icons/fi";
@@ -97,8 +96,12 @@ function NavUploadDropdown() {
   );
 }
 
+// Per-browser, like the theme: a choice about how this person wants the bar to
+// look, not something to sync anywhere.
+const NAV_TABS_KEY = '3speak_nav_tabs_open';
+
 function Nav({ setSideBar, toggleProfileNav, openLoginModal }) {
-  const { authenticated, LogOut, user, initializeTheme, theme } = useAppStore();
+  const { authenticated, LogOut, user, initializeTheme } = useAppStore();
   const sidebarHidden = useAppStore((s) => s.sidebarHidden);
   // Shows a just-uploaded profile picture immediately instead of the cached
   // hive proxy copy (utils/avatarCache).
@@ -108,6 +111,30 @@ function Nav({ setSideBar, toggleProfileNav, openLoginModal }) {
    const sideNavRef = useRef(null); // Ref for the side nav container
   const menuIconRef = useRef(null); // Ref for the menu toggle button
   const [navHidden, setNavHidden] = useState(false);
+  // The page tabs are folded away behind the logo, and whether they are out is
+  // remembered per browser — so someone who wants them can set it once instead of
+  // reaching for the logo on every visit.
+  //
+  // Read in the initialiser rather than in an effect, so the first paint is
+  // already right: setting it afterwards makes the row flick into place on every
+  // load for the people who chose to keep it.
+  const [tabsOpen, setTabsOpen] = useState(() => {
+    try {
+      return localStorage.getItem(NAV_TABS_KEY) === 'true';
+    } catch {
+      // Private mode, or storage switched off. Not being able to remember the
+      // preference is not a reason to fail to render a nav bar.
+      return false;
+    }
+  });
+
+  const toggleTabs = () => {
+    setTabsOpen((open) => {
+      const next = !open;
+      try { localStorage.setItem(NAV_TABS_KEY, String(next)); } catch { /* see above */ }
+      return next;
+    });
+  };
   const [settingsOpen, setSettingsOpen] = useState(false);
   const navContainerRef = useRef(null);
 
@@ -129,6 +156,44 @@ function Nav({ setSideBar, toggleProfileNav, openLoginModal }) {
   useEffect(() => {
     document.documentElement.style.setProperty('--nav-top-offset', navHidden ? '0px' : 'var(--nav-height, 50px)');
   }, [navHidden]);
+
+  // Deliberately nothing closes this but the logo. It used to shut on an outside
+  // click and on choosing a page, which is right for a popover but wrong for a
+  // remembered setting: both of them fired within a click or two of opening it,
+  // so the stored value would have been "closed" almost every time it was read.
+
+  // Toasts get out of the way of the right-hand nav's panels, and come back on
+  // the next click anywhere else. Bound on the document rather than on each
+  // panel because those panels own their open state privately (the Share
+  // flyout, the bell, the profile drawer) and threading a callback through all
+  // of them would be four places to keep in step for one visual rule.
+  //
+  // The click that OPENS a panel lands inside .nav-right and is skipped here,
+  // so it cannot un-hide what the capture handler just hid.
+  useEffect(() => {
+    // The cluster itself plus the surfaces it opens. A click inside an open
+    // panel is someone still using it, so the stack stays down; the backdrop
+    // is deliberately NOT in this list, because clicking it closes the drawer
+    // and the toasts should come straight back.
+    const KEEP_HIDDEN = '.nav-right, .profile-wrap, .notif-dropdown, .nav-upload-flyout';
+    const onDocClick = (e) => {
+      if (e.target instanceof Element && e.target.closest(KEEP_HIDDEN)) return;
+      showToastLayer();
+    };
+    document.addEventListener('click', onDocClick);
+    return () => {
+      document.removeEventListener('click', onDocClick);
+      showToastLayer();
+    };
+  }, []);
+
+  // ...and put it back to zero when the bar is not rendered at all (mobile Shorts
+  // unmounts it). Everything that hangs off this — the toasts, Discover's sticky
+  // filter row, the watch-page rail — should sit flush when there is no bar above
+  // them, and a stale value from the last route is how you get a gap under nothing.
+  useEffect(() => () => {
+    document.documentElement.style.setProperty('--nav-top-offset', '0px');
+  }, []);
 
   // The top nav stays locked/visible — no scroll-based auto-hide (it flickered).
   // The only time it hides is immersive landscape video on /watch, which is
@@ -183,10 +248,33 @@ function Nav({ setSideBar, toggleProfileNav, openLoginModal }) {
         {!sidebarHidden && (
           <TiThMenu size={25} className="menu-icon" onClick={() => setSideBar((prev) => (prev === false ? true : false))}/>
         )}
-        <Link to="/"><img className="logo" src={theme === 'dark' ? logoDark : logo} alt="3Speak" /></Link>
+        {/* The logo opens the pages instead of going home — "Overview" below is
+            the way home now. A button, not a link: it goes nowhere, and shipping
+            it as an <a> would put it in the tab order promising navigation. */}
+        <button
+          type="button"
+          className={`nav-logo-btn${tabsOpen ? ' is-open' : ''}`}
+          aria-expanded={tabsOpen}
+          aria-controls="nav-tabs"
+          title={tabsOpen ? 'Hide pages' : 'Show pages'}
+          onClick={toggleTabs}
+        >
+          <img className="logo" src={mark} alt="3Speak" />
+          {/* The hint that the logo does something, on the side the tabs come out
+              of. Inside the button on purpose: it has to be clickable, and a
+              second button beside it would be two tab stops and two screen-reader
+              announcements for one action. */}
+          <MdChevronRight className="nav-logo-chevron" aria-hidden="true" />
+        </button>
       </div>
 
-      <div className="nav-tabs flex-dev">
+      {tabsOpen && (
+      <div className="nav-tabs flex-dev" id="nav-tabs">
+        {/* What the logo used to do. First in the row, so the way home is the
+            first thing under the cursor once the group opens. */}
+        <NavLink to="/" end className={({ isActive }) => `nav-tab${isActive ? ' active' : ''}`}>
+          <MdHomeFilled className="nav-tab-icon" /> <span>Overview</span>
+        </NavLink>
         <NavLink to="/shorts" className={({ isActive }) => `nav-tab${isActive ? ' active' : ''}`}>
           <ShortsIcon className="nav-tab-icon" outlineWidth={30} /> <span>Shorts</span>
         </NavLink>
@@ -198,15 +286,21 @@ function Nav({ setSideBar, toggleProfileNav, openLoginModal }) {
           <FaMedal className="nav-tab-icon nav-tab-icon--medal" /> <span>Leaderboard</span>
         </NavLink>
       </div>
+      )}
 
       <div className="phone-nav-left" ref={menuIconRef} >
         {!sidebarHidden && (
           <TiThMenu size={25} className="menu-icon" onClick={handleNav} />
         )}
-        <Link to="/"><img className="logo" src={theme === 'dark' ? logoDark : logo} alt="3Speak" /></Link>
+        <Link to="/"><img className="logo" src={mark} alt="3Speak" /></Link>
       </div>
       <div className={nav ? "side-nav" : "side-nav-else"} ref={sideNavRef}>
-      <AiOutlineClose className="close-nav" onClick={handleNav}/>
+      {/* Was a bare × in the top-right corner, which sat on the drawer's blurred
+          backdrop at text colour and was easy to miss. A chevron on the left edge
+          points the way the drawer leaves. */}
+      <button type="button" className="side-nav-close" onClick={handleNav} aria-label="Close menu">
+        <MdChevronLeft />
+      </button>
       <Sidebar sidebar={true} onNavigate={handleNav} />
       </div>
 
@@ -214,7 +308,7 @@ function Nav({ setSideBar, toggleProfileNav, openLoginModal }) {
       <NavSearch />
 
       {authenticated ? (
-        <div className="nav-right flex-div">
+        <div className="nav-right flex-div" onClickCapture={hideToastLayer}>
           <NavUploadDropdown />
           <Link to="/discover" className="nav-mobile-discover" title="Discover">
             <MdOutlineSearch size={19} />
@@ -228,7 +322,7 @@ function Nav({ setSideBar, toggleProfileNav, openLoginModal }) {
           </span>
         </div>
       ) : (
-        <div className="nav-right flex-div">
+        <div className="nav-right flex-div" onClickCapture={hideToastLayer}>
           <Link to="/discover" className="nav-mobile-discover" title="Discover">
             <MdOutlineSearch size={19} />
           </Link>

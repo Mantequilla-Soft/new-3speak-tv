@@ -2,9 +2,13 @@ import React, { useState } from 'react';
 import VideoCard, { VideoData } from './VideoCard';
 import FilterBar from './FilterBar';
 // import { toast } from 'sonner';
-import {  toast } from 'sonner'
+import { toastIn } from '../../utils/toast';
 import 'react-toastify/dist/ReactToastify.css';
 import "./VideoGrid.scss"
+
+// Every toast from this module is headed "Video"; the message becomes the
+// line under it. See utils/toast.js.
+const toast = toastIn('Video');
 
 const VideoGrid = ({ videos }) => {
   const [filter, setFilter] = useState('all');

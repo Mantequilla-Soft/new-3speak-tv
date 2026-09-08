@@ -1,59 +1,101 @@
 /* ───────────────────────────────────────────────────────────────────────────
    3Speak-styled sonner toasts (configured on the <Toaster/> in App.jsx).
-   card-bg background · foreground text · type-coloured icon on the right ·
-   inline close (×) · rounded + prominent · swipe-right to dismiss.
+   card-bg surface · type-coloured rail down the left edge · icon on the left
+   beside the text · inline close (×) · swipe-right to dismiss.
+
+   The rail carries the status so the colour is readable before the words are,
+   without washing the whole surface in it — which stops mattering after one
+   toast and starts shouting at six, and six is what visibleToasts allows.
+
+   Positioning lives on the <Toaster/>, not here: the `offset` prop hangs off
+   --nav-top-offset so the stack always clears the title bar. Toasts used to
+   land on top of the user icon, which is exactly what someone is reaching for
+   when the login messages fire.
    ─────────────────────────────────────────────────────────────────────────── */
+
 .ts-toast {
+  position: relative;
   display: flex !important;
-  align-items: center !important;
-  gap: 12px !important;
-  padding: 14px 16px !important;
+  align-items: flex-start !important;
+  gap: 11px !important;
+  /* Extra left padding is the rail's 3px plus the same 12px everything else
+     gets, so the icon sits on one vertical line with the text below it. */
+  padding: 12px 14px 12px 15px !important;
   background: var(--card-bg) !important;
   color: var(--text-primary) !important;
-  border: 1px solid var(--border-light) !important;
-  border-radius: 14px !important;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.30), 0 2px 6px rgba(0, 0, 0, 0.18) !important;
-  font-size: 14px;
+  border: 1px solid var(--border-color) !important;
+  border-radius: 10px !important;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.28) !important;
+  overflow: hidden;
+  font-size: 13.5px;
 }
 
-/* Text block fills the row, sits on the left. */
+/* Lighter drop on the light theme: the dark theme's shadow reads as a smudge
+   on a white page rather than as elevation. */
+[data-theme='light'] .ts-toast {
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.10) !important;
+}
+
+/* The rail. Full bleed top to bottom, so a two-line toast gets a taller one
+   rather than a stub floating beside the first line. */
+.ts-toast::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 3px;
+  background: var(--ts-accent, var(--border-color));
+}
+
+/* One custom property per type feeds both the rail and the icon, so those two
+   can never drift apart. A plain toast() with no type gets the neutral
+   fallback above rather than borrowing a status colour it did not ask for. */
+.ts-toast[data-type='success'] { --ts-accent: #22c55e; }
+.ts-toast[data-type='error']   { --ts-accent: var(--accent-primary); }
+.ts-toast[data-type='warning'] { --ts-accent: #f5a623; }
+.ts-toast[data-type='info']    { --ts-accent: #3b9df8; }
+.ts-toast[data-type='loading'] { --ts-accent: var(--text-secondary); }
+
+/* Icon left, text, close right. Sonner renders the close button first in the
+   DOM (it is absolutely positioned in its own stylesheet), so the running
+   order has to be stated rather than inherited. */
+.ts-toast-icon {
+  order: 1 !important;
+  margin: 1px 0 0 !important;
+  width: 20px !important;
+  height: 20px !important;
+  flex-shrink: 0;
+  color: var(--ts-accent, var(--text-secondary));
+}
+.ts-toast-icon svg {
+  width: 20px;
+  height: 20px;
+  display: block;
+}
+
 .ts-toast [data-content] {
-  order: 1;
+  order: 2;
   flex: 1 1 auto;
   min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
 }
 .ts-toast-title {
   color: var(--text-primary) !important;
   font-weight: 600;
-  font-size: 14px;
-  line-height: 1.35;
+  font-size: 13.5px;
+  line-height: 1.4;
 }
 .ts-toast-desc {
   color: var(--text-secondary) !important;
-  font-size: 13px;
+  font-size: 12.5px;
+  line-height: 1.45;
 }
 
-/* Type icon on the right, coloured by message type. */
-.ts-toast-icon {
-  order: 2 !important;
-  margin: 0 !important;
-  width: 22px !important;
-  height: 22px !important;
-  flex-shrink: 0;
-  align-self: center;
-}
-.ts-toast-icon svg {
-  width: 22px;
-  height: 22px;
-  display: block;
-}
-.ts-toast[data-type="success"] .ts-toast-icon { color: #22c55e; }
-.ts-toast[data-type="error"]   .ts-toast-icon { color: var(--accent-primary); }
-.ts-toast[data-type="warning"] .ts-toast-icon { color: #f5a623; }
-.ts-toast[data-type="info"]    .ts-toast-icon { color: #3b9df8; }
-.ts-toast[data-type="loading"] .ts-toast-icon { color: var(--text-secondary); }
-
-/* Close (×) — inline at the far right, not sonner's default corner badge. */
+/* Close (×) — inline at the far right, not sonner's default corner badge.
+   Aligned to the top so it stays put whether the toast is one line or three. */
 .ts-toast-close {
   order: 3 !important;
   position: static !important;
@@ -61,17 +103,18 @@
   top: auto !important;
   right: auto !important;
   left: auto !important;
-  margin: 0 !important;
+  margin: 1px 0 0 !important;
   width: 22px !important;
   height: 22px !important;
   display: flex;
   align-items: center;
   justify-content: center;
+  flex-shrink: 0;
   border: none !important;
   border-radius: 7px !important;
   background: transparent !important;
   color: var(--text-secondary) !important;
-  opacity: 0.65;
+  opacity: 0.6;
   transition: opacity 0.15s ease, background 0.15s ease, color 0.15s ease;
 }
 .ts-toast-close:hover {
@@ -80,6 +123,30 @@
   color: var(--text-primary) !important;
 }
 .ts-toast-close svg {
-  width: 15px;
-  height: 15px;
+  width: 14px;
+  height: 14px;
+}
+
+/* ───────────────────────────────────────────────────────────────────────────
+   Out of the way of the nav panels.
+
+   The right-hand nav (profile, notifications, chat, Share) drops its panels
+   into the same corner the toasts stack in, so utils/toast.js flags <html>
+   while one is open and the whole stack fades out. Faded rather than removed:
+   an upload still running keeps ticking underneath and comes back when the
+   panel closes. pointer-events go with it, so an invisible toast can never
+   swallow a click meant for the menu.
+   ─────────────────────────────────────────────────────────────────────────── */
+
+[data-sonner-toaster] {
+  transition: opacity 0.14s ease;
+}
+
+[data-toasts-hidden] [data-sonner-toaster] {
+  opacity: 0;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [data-sonner-toaster] { transition: none; }
 }

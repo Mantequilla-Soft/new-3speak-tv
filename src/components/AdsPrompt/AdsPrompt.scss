@@ -27,6 +27,47 @@
   box-shadow: 0 12px 40px rgba(0, 0, 0, 0.35);
 }
 
+// ─── header ───────────────────────────────────────────────────────────────
+// The same icon-beside-title arrangement as the /advertise page header, and the
+// creator/viewer sections at the foot of it, so someone who meets the ad system
+// in a dialog first recognises the page when they land on it (and the other way
+// round). Each dialog passes its own icon: campaign for buying, videocam for the
+// creator side, tv for the viewer side, matching /advertise one for one.
+.ads-prompt-head {
+  display: flex;
+  align-items: flex-start;
+  gap: 13px;
+  margin-bottom: 18px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--border-light, rgba(255, 255, 255, 0.08));
+
+  // The title sits in the header rather than above it, so it lines up with the
+  // icon instead of the icon hanging off the side of the card.
+  .ads-prompt-title {
+    margin: 0 0 5px;
+    font-size: 21px;
+    line-height: 1.2;
+    letter-spacing: -0.01em;
+  }
+}
+
+.ads-prompt-head-icon {
+  flex-shrink: 0;
+  // Two lines of title-plus-lede tall, the same proportion the page header uses.
+  font-size: 40px;
+  color: var(--accent-primary, #e0594b);
+}
+
+.ads-prompt-lede {
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--text-secondary, #aaa);
+
+  // Accent on the emphasised words, as on /advertise.
+  strong { color: var(--accent-primary, #e0594b); font-weight: 600; }
+}
+
 .ads-prompt-step {
   display: block;
   margin-bottom: 8px;
@@ -55,38 +96,92 @@
 
 /* ─── the split, drawn ─────────────────────────────────────────────────── */
 
+// Three ways now that viewers are paid, and the viewer slice is small enough
+// (5 of 100 at the defaults) that a number will not fit inside it. So the bar is
+// pure proportion and the key underneath carries the labels and the numbers.
 .ads-prompt-bar {
   display: flex;
-  height: 34px;
-  border-radius: 9px;
+  height: 14px;
+  border-radius: 7px;
   overflow: hidden;
-  font-size: 12.5px;
-  font-weight: 700;
 
-  > span {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
+  // A hairline between the slices, so the two accent-coloured ones do not read as
+  // a single block on a screen where the tint is hard to tell apart.
+  > span + span { box-shadow: inset 1px 0 0 var(--bg-secondary, #1e1e1e); }
 }
 
 .ads-prompt-bar-creators {
   background: var(--accent-primary, #e0594b);
-  color: #fff;
+}
+
+// The logo cyan (#6DC5D7 in 3S_mark.svg), which is the brand's own second colour —
+// so the three slices are accent red, brand cyan, neutral, rather than two shades
+// of one red that read as a rendering artifact at 10% width.
+.ads-prompt-bar-viewers {
+  background: var(--ads-bar-viewers, #3f9fb4);
+}
+
+// The 3Speak slice is the one segment with no accent to carry it, so it is the one
+// that disappears into the card if it just borrows --bg-tertiary: that token is a
+// low-opacity overlay of the FOREGROUND colour, which lands a few shades off the
+// card in either theme. Stated per theme instead, and inverted — light grey on the
+// dark card, dark grey on the light one — so the bar reads as three slices at a
+// glance whichever theme you are in.
+//
+// A custom property rather than two rules, so the key swatch below cannot drift
+// away from the slice it is labelling.
+.ads-prompt {
+  --ads-bar-platform: #35363a;
+  // A step deeper than the logo cyan: #6DC5D7 is mixed for a dark ground and goes
+  // pale on a white card, where it has to hold a 9px swatch as well as the slice.
+  --ads-bar-viewers: #3f9fb4;
+}
+
+[data-theme='dark'] .ads-prompt {
+  --ads-bar-platform: #c9cbd0;
+  --ads-bar-viewers: #6dc5d7;
 }
 
 .ads-prompt-bar-platform {
   flex: 1 1 auto;
-  background: var(--bg-tertiary, rgba(255, 255, 255, 0.08));
-  color: var(--text-secondary, #aaa);
+  background: var(--ads-bar-platform, #35363a);
 }
 
-.ads-prompt-bar-legend {
+.ads-prompt-bar-key {
+  margin: 9px 0 16px;
+  padding: 0;
+  list-style: none;
   display: flex;
-  justify-content: space-between;
-  margin: 6px 0 16px;
-  font-size: 11.5px;
-  color: var(--text-secondary, #aaa);
+  flex-direction: column;
+  gap: 5px;
+
+  li {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 12.5px;
+    color: var(--text-secondary, #aaa);
+
+    // Swatch matching the bar, which is what ties a row to its slice — the slices
+    // are too uneven for a left-to-right legend to line up with them.
+    &::before {
+      content: '';
+      flex: 0 0 auto;
+      width: 9px;
+      height: 9px;
+      border-radius: 3px;
+      background: var(--ads-bar-platform, #35363a);
+    }
+
+    &.is-creators::before { background: var(--accent-primary, #e0594b); }
+    &.is-viewers::before { background: var(--ads-bar-viewers, #3f9fb4); }
+
+    b {
+      margin-left: auto;
+      font-weight: 700;
+      color: var(--text-primary, #f1f1f1);
+    }
+  }
 }
 
 .ads-prompt-points {
@@ -185,10 +280,13 @@
 
 .ads-prompt-breakdown {
   display: flex;
+  flex-wrap: wrap;
   gap: 8px;
 
   span {
-    flex: 1 1 0;
+    // Wraps to two rows rather than shrinking "community" to a column of letters
+    // once the viewer cell makes four of them.
+    flex: 1 1 96px;
     padding: 8px 6px;
     border-radius: 9px;
     background: var(--bg-tertiary, rgba(255, 255, 255, 0.06));
@@ -317,6 +415,16 @@
     overscroll-behavior: contain;
     animation: ads-prompt-sheet-up 0.28s ease forwards;
   }
+
+  .ads-prompt-head {
+    gap: 11px;
+    margin-bottom: 15px;
+    padding-bottom: 13px;
+
+    .ads-prompt-title { font-size: 18.5px; }
+  }
+
+  .ads-prompt-head-icon { font-size: 32px; }
 
   .ads-prompt-actions {
     gap: 8px;

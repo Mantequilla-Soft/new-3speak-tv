@@ -1117,6 +1117,50 @@ app.post('/api/ads/opt-out-signature', signChallengeLimiter, async (req, res) =>
   }
 })
 
+// POST /api/ads/viewer-signature — sign a VIEWER's reward opt-in on their behalf.
+//
+// Same delegated-signing shape as the creator preference above, and needed for the
+// same reason: HiveSigner and Butter Auth sessions hold no key in the browser, so
+// without this the viewers least able to sign would be the only ones unable to
+// consent to being paid.
+//
+// ⚠️ The thing being signed here is CONSENT to store a username against viewing.
+// It is deliberately not derivable from anything the client sends except the
+// logged-in identity this server already established: the body carries a boolean
+// and nothing else, so this endpoint cannot be steered into signing a claim about
+// somebody else.
+app.post('/api/ads/viewer-signature', signChallengeLimiter, async (req, res) => {
+  try {
+    if (!POSTING_WIF) return res.status(500).json({ error: 'Server is not configured' })
+    const hiveUsername = await resolveDelegatedSignUser(req, res)
+    if (!hiveUsername) return res.status(401).json({ error: 'Unauthorized' })
+
+    // A real boolean. `undefined` becoming "on" would opt somebody into being
+    // identified because their client sent a malformed body.
+    if (typeof req.body?.rewardsEnabled !== 'boolean') {
+      return res.status(400).json({ error: 'rewardsEnabled must be true or false' })
+    }
+    const rewardsEnabled = req.body.rewardsEnabled
+
+    if (!(await hasThreespeakPostingGrant(hiveUsername))) {
+      return res.status(403).json({
+        error: `Setting this from here needs @${HIVE_ACCOUNT} posting authority on your account. Log in with Keychain, HiveAuth, PeakVault or Ledger to set it directly instead.`,
+      })
+    }
+
+    const timestamp = Date.now()
+    // Keep in lockstep with viewerPrefsMessage() in 3speakchecks/routes/advertise.js.
+    const message = ['3speak-ads', 'viewer-prefs', hiveUsername, rewardsEnabled ? 'on' : 'off',
+      String(timestamp)].join('|')
+    const signature = PrivateKey.fromString(POSTING_WIF).sign(cryptoUtils.sha256(Buffer.from(message, 'utf8'))).toString()
+
+    return res.json({ success: true, signature, timestamp, username: hiveUsername, rewardsEnabled })
+  } catch (err) {
+    console.error('Ads viewer signature error:', err.message)
+    res.status(500).json({ error: 'Signing failed' })
+  }
+})
+
 // POST /api/ads/identity-signature — prove who is logged in, so /advertise can list
 // their own applications without them keeping a reference code around.
 //

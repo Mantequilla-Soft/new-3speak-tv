@@ -3,13 +3,14 @@ import Success from './Success';
 import './TipModal.scss';
 import { fetchBalances, isAccountValid } from '../../hive-api/api';
 import { useAppStore } from '../../lib/store';
-import { toast } from 'sonner'
+import { toastIn } from '../../utils/toast';
 import { LineSpinner } from 'ldrs/react'
 import 'ldrs/react/LineSpinner.css'
 import { transferWithAioha, isLoggedIn } from '../../hive-api/aioha';
 
-
-
+// Every toast from this module is headed "Tip"; the message becomes the
+// line under it. See utils/toast.js.
+const toast = toastIn('Tip');
 
 const TipModal = ({ recipient, isOpen, onClose, onSendTip }) => {
     const { user: activetUser } = useAppStore();

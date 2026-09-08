@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { Edit, Save } from 'lucide-react';
 import "./EditVideo.scss";
-import {  toast } from 'sonner'
+import { toastIn } from '../utils/toast';
 import { convert } from 'html-to-text';
 import axios from 'axios';
 import { API_URL_FROM_WEST, CHECKER_URL, CHECKER_API_KEY } from '../utils/config';
@@ -15,6 +15,11 @@ import PromoteModal from '../components/Promote/PromoteModal';
 import { Rocket } from 'lucide-react';
 import { getPostBodyRenderer } from '../lib/hiveRenderer';
 import { setChannelTrailer, fetchChannelTrailer, trailerMatches } from '../utils/channelTrailer';
+
+// Every toast from this module is headed "Video"; the message becomes the
+// line under it. See utils/toast.js.
+const toast = toastIn('Video');
+
 const client = getHiveClient();
 
 const EditVideo = () => {

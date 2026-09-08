@@ -27,7 +27,7 @@
     "@reduxjs/toolkit": "^2.12.0",
     "@snapie/chat-client": "^0.3.0",
     "@snapie/hangouts-core": "^0.16.0",
-    "@snapie/hangouts-react": "^0.26.2",
+    "@snapie/hangouts-react": "file:../../../../../home/dockeruser/hangouts/packages/sdk-react/snapie-hangouts-react-0.26.4.tgz",
     "@tanstack/react-query": "^5.101.4",
     "@tiptap/extension-color": "^3.30.0",
     "@tiptap/extension-highlight": "^3.30.0",

@@ -8,9 +8,13 @@ import { useNavigate } from 'react-router-dom';
 import { LOCAL_STORAGE_ACCESS_TOKEN_KEY, LOCAL_STORAGE_USER_ID_KEY } from '../../hooks/localStorageKeys';
 import { useAppStore } from '../../lib/store';
 import { LuLogOut } from 'react-icons/lu';
-import {  toast } from 'sonner'
+import { toastIn } from '../../utils/toast';
 import {QRCodeSVG} from 'qrcode.react';
 import HAS from 'hive-auth-wrapper'
+
+// Every toast from this module is headed "Sign in"; the message becomes the
+// line under it. See utils/toast.js.
+const toast = toastIn('Sign in');
 
 const APP_META = {
   name: "3speak",

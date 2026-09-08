@@ -16,7 +16,7 @@ import {
   updatePlaylist,
   PlaylistActionTypes
 } from '../utils/playlistOperations';
-import { toast } from 'sonner';
+import { toastIn } from '../utils/toast';
 import './PlaylistView.scss';
 import { HIVE_API_URL, PLAYLISTS_READ_URL, CHECKER_URL } from '../utils/config';
 import { MdPlayArrow as MdPlayIcon } from 'react-icons/md';
@@ -26,6 +26,11 @@ import { fixVideoThumbnail, fallbackImg } from '../utils/fixThumbnails';
 import useHoverPreview from '../hooks/useHoverPreview';
 import { uploadThumbnail } from '../utils/uploadThumbnail';
 import { DATE_FILTERS, getSinceTimestamp, formatRelativeDate } from '../utils/dateFilters';
+
+// Every toast from this module is headed "Playlist"; the message becomes the
+// line under it. See utils/toast.js.
+const toast = toastIn('Playlist');
+
 dayjs.extend(relativeTime);
 
 /**
