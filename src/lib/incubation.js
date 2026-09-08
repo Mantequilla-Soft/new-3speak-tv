@@ -37,6 +37,28 @@ export function clearIncubation() {
   try { localStorage.removeItem(HANDLE_KEY); } catch { /* ignore */ }
 }
 
+/**
+ * A deterministic avatar for a handle, as an inline SVG data URI.
+ *
+ * Incubating users have no Hive account, and images.hive.blog answers an
+ * unknown name with a 500 rather than a placeholder — so the usual
+ * `/u/<name>/avatar/small` URL renders as a broken image for every one of them.
+ * Generated locally: no network call, no failure mode, and stable per handle so
+ * the same person looks the same everywhere.
+ */
+export function handleAvatar(handle) {
+  const h = String(handle || '?');
+  let n = 0;
+  for (let i = 0; i < h.length; i++) n = (n * 31 + h.charCodeAt(i)) >>> 0;
+  const hue = n % 360;
+  const letter = (h[0] || '?').toUpperCase();
+  const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64">`
+    + `<rect width="64" height="64" rx="32" fill="hsl(${hue} 62% 42%)"/>`
+    + `<text x="32" y="43" font-family="system-ui,sans-serif" font-size="30" font-weight="600"`
+    + ` fill="#fff" text-anchor="middle">${letter}</text></svg>`;
+  return `data:image/svg+xml;utf8,${encodeURIComponent(svg)}`;
+}
+
 async function json(res) {
   if (!res.ok) {
     const body = await res.json().catch(() => ({}));
@@ -97,29 +119,81 @@ export async function fetchIncubationReplies(parentAuthor, parentPermlink, limit
   return json(await fetch(`${CHECKER_URL}/incubation/replies?${qs}`));
 }
 
-// --- writes, via the incubation service -------------------------------------
+// --- writes, via our own server ------------------------------------------
 //
-// Every write carries the ButrAuth access token. The service verifies it and
-// REFUSES anyone who already has a Hive account (409), because their content
+// NOT straight to the incubation service. The ButrAuth access token lives in an
+// httpOnly cookie, so the browser cannot read it to build an Authorization
+// header — and it should not be able to. Our server holds the credential and
+// forwards on the user's behalf, exactly as /api/broadcast does for chain ops.
+//
+// The proxy refuses anyone who already has a Hive account (409): their content
 // belongs on chain, not in a shadow database.
 
-async function write(path, method, body, accessToken) {
-  if (!accessToken) throw new Error('Not signed in');
-  return json(await fetch(`${INCUBATION_URL}${path}`, {
+async function write(path, method, body) {
+  const res = await fetch(`/api/incubation${path}`, {
     method,
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${accessToken}`
-    },
-    body: body === undefined ? undefined : JSON.stringify(body)
-  }));
+    headers: { 'Content-Type': 'application/json' },
+    credentials: 'include',
+    body: ['GET', 'HEAD'].includes(method) ? undefined : JSON.stringify(body || {})
+  });
+  return json(res);
 }
 
-export const postIncubationContent = (payload, token) => write('/content', 'POST', payload, token);
-export const voteIncubation = (author, permlink, weight, token) =>
-  write('/social/vote', 'PUT', { author, permlink, weight }, token);
-export const followIncubation = (following, state, token) =>
-  write('/social/follow', 'PUT', { following, state }, token);
-export const saveIncubationProfile = (profile, interests, token) =>
-  write('/social/profile', 'PUT', { profile, interests }, token);
-export const fetchGraduationPlan = (token) => write('/public/graduation/plan', 'GET', undefined, token);
+/** Post off-chain content. `parentAuthor`/`parentPermlink` make it a reply. */
+export const postIncubationContent = (payload) => write('/content', 'POST', payload);
+export const fetchMyIncubationContent = () => write('/content/mine', 'GET');
+export const voteIncubation = (author, permlink, weight) =>
+  write('/social/vote', 'PUT', { author, permlink, weight });
+export const followIncubation = (following, state) =>
+  write('/social/follow', 'PUT', { following, state });
+export const saveIncubationProfile = (profile, interests) =>
+  write('/social/profile', 'PUT', { profile, interests });
+export const fetchMyIncubationProfile = () => write('/social/profile/mine', 'GET');
+export const fetchMyIncubationFollows = () => write('/social/follows/mine', 'GET');
+
+/**
+ * What would and would not be republished to Hive if this user graduated now.
+ *
+ * Worth showing rather than hiding: their votes are not coming with them, and a
+ * back catalogue of videos publishes over days rather than at once, because a
+ * new account's resource credits only allow a couple of posts a day at first.
+ */
+export const fetchGraduationPlan = () => write('/public/graduation/plan', 'GET');
+
+/**
+ * ButrAuth's half of the graduation decision.
+ *
+ * `canGraduate` means "may this identity have a free Hive account" — caps,
+ * provider availability, one per person. It does NOT mean they have earned one.
+ * That half is ours, and lives in hasEarnedGraduation() below.
+ *
+ * `graduationBlockedReason` is coarse on purpose ('network_limit' covers several
+ * distinct causes) because a precise reason would leak information about other
+ * people on the same network. Surface it as "contact support", never try to
+ * distinguish the cases.
+ */
+export async function fetchGraduationStatus() {
+  const res = await fetch('/api/incubation/graduation-status', { credentials: 'include' });
+  return json(res);
+}
+
+/**
+ * 3Speak's half: has this person actually earned an account?
+ *
+ * 🚧 PLACEHOLDER. The real measure is not decided yet — the original idea was
+ * "content with good upvotes", but incubating content is off-chain and cannot
+ * receive Hive votes, so the signal has to come from our own engagement data
+ * (watch time, distinct viewers, retention) which is both richer and much
+ * harder to game than a vote count.
+ *
+ * Deliberately ONE function so there is a single place to change when that
+ * measure is agreed, rather than a threshold scattered across components.
+ * Today it only asks for a minimum amount of real content, which is enough to
+ * keep the prompt away from drive-by signups but is NOT an earning bar.
+ */
+export const GRADUATION_MIN_POSTS = 3;
+
+export function hasEarnedGraduation(plan) {
+  const posts = plan?.comment?.total ?? 0;
+  return posts >= GRADUATION_MIN_POSTS;
+}

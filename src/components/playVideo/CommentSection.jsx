@@ -13,6 +13,7 @@ import TranslateButton from '../TranslateButton/TranslateButton';
 import ReactVideoTab from '../ReactVideoModal/ReactVideoModal';
 import dayjs from 'dayjs';
 import { useAppStore } from '../../lib/store';
+import { postIncubationContent, handleAvatar, fetchIncubationReplies } from '../../lib/incubation';
 import { Client } from '@hiveio/dhive';
 import UpvoteTooltip from '../tooltip/UpvoteTooltip';
 import CommentVoteTooltip from '../tooltip/CommentVoteTooltip';
@@ -60,7 +61,10 @@ function parseTimeInput(str) {
 }
 
 function CommentSection({ videoDetails, author, permlink, currentTime, duration, onSeek, onPause, onRefreshReactions }) {
-  const { user } = useAppStore();
+  const { user, incubationHandle } = useAppStore();
+  // The name to SHOW. For an incubating user there is no Hive account, so
+  // `user` is null and the handle is all there is.
+  const displayName = user || incubationHandle;
   const { translate, getTranslation, clearTranslation, translating } = useTranslation();
   const [commentInfo, setCommentInfo] = useState('');
   const [activeTab, setActiveTab] = useState('comment'); // 'comment' | 'react'
@@ -156,7 +160,44 @@ function CommentSection({ videoDetails, author, permlink, currentTime, duration,
           }
         };
         await attachRep(markedComments);
-        setCommentList(markedComments);
+
+        // Merge in off-chain replies from incubating users.
+        //
+        // They comment on REAL Hive posts, so without this their comments are
+        // invisible on the very page they were written for — including to the
+        // person who wrote them, which reads as "my comment vanished".
+        //
+        // Best-effort: if the checker is unreachable, the Hive thread still
+        // renders. A comments section that fails entirely because an optional
+        // enrichment call timed out would be a bad trade.
+        let withOffChain = markedComments;
+        try {
+          const off = await fetchIncubationReplies(author, permlink);
+          if (off?.items?.length) {
+            const mapped = off.items.map(it => ({
+              author: {
+                username: it.author?.handle || it.handle,
+                profile: { images: { avatar: handleAvatar(it.author?.handle || it.handle) } },
+              },
+              permlink: it.permlink,
+              created_at: it.created,
+              body: it.body,
+              parentTimestamp: it.jsonMetadata?.parentTimestamp ?? null,
+              has_voted: false,
+              stats: { num_likes: 0, num_dislikes: 0, total_hive_reward: 0 },
+              children: [],
+              // Nothing downstream should try to build a Hive permalink, fetch
+              // votes, or offer a vote button for these.
+              onChain: false,
+            }));
+            withOffChain = [...mapped, ...markedComments].sort(
+              (a, b) => new Date(b.created_at) - new Date(a.created_at)
+            );
+          }
+        } catch (err) {
+          console.warn('[incubation] replies unavailable:', err?.message);
+        }
+        setCommentList(withOffChain);
         
         // Pre-render all comment bodies (createHiveRenderer returns a function directly)
         const render = await getHiveRenderer();
@@ -341,27 +382,49 @@ function CommentSection({ videoDetails, author, permlink, currentTime, duration,
         body += `\n<br><sup>replied to [${tsLabel}](${baseUrl}/watch?v=${author}/${permlink}&t=${ts}) on [${host}](${baseUrl})</sup>`;
       }
 
-      // Use aioha for comment broadcasting (works with all providers: Keychain, HiveAuth, etc.)
-      const result = await commentWithAioha(
-        parent_author,
-        parent_permlink,
-        new_permlink,
-        '', // title (empty for comments)
-        body,
-        metadata
-      );
+      // An incubating user has no Hive account to sign with, so their comment is
+      // stored off-chain instead of broadcast. It still hangs off the REAL Hive
+      // parent, which is what lets the checker merge it back into this thread.
+      let result;
+      if (incubationHandle) {
+        await postIncubationContent({
+          body,
+          parentAuthor: parent_author,
+          parentPermlink: parent_permlink,
+          jsonMetadata: metadata
+        });
+        result = { success: true };
+      } else {
+        // Use aioha for comment broadcasting (works with all providers: Keychain, HiveAuth, etc.)
+        result = await commentWithAioha(
+          parent_author,
+          parent_permlink,
+          new_permlink,
+          '', // title (empty for comments)
+          body,
+          metadata
+        );
+      }
 
       if (result.success) {
         toast.success('Comment posted successfully!');
         const newComment = {
           author: {
-            username: user,
+            username: displayName,
             profile: {
               images: {
-                avatar: `https://images.hive.blog/u/${user}/avatar/small`,
+                // images.hive.blog answers an unknown name with a 500, not a
+                // placeholder, so an incubating handle needs a local avatar or
+                // it renders broken.
+                avatar: incubationHandle
+                  ? handleAvatar(incubationHandle)
+                  : `https://images.hive.blog/u/${user}/avatar/small`,
               },
             },
           },
+          // Marks this as off-chain so the thread can show it differently and
+          // so nothing tries to build a Hive permalink for it.
+          onChain: !incubationHandle,
           permlink: new_permlink,
           created_at: new Date().toISOString(),
           body: textToPost,

@@ -135,6 +135,7 @@ import InterestsPrompt from "./components/InterestsPrompt/InterestsPrompt";
 import WelcomePrompt from "./components/WelcomePrompt/WelcomePrompt";
 import AdsPrompt from "./components/AdsPrompt/AdsPrompt";
 import ViewerRewardsPrompt from "./components/AdsPrompt/ViewerRewardsPrompt";
+import GraduationPrompt from "./components/Incubation/GraduationPrompt";
 import AvatarSync from "./components/HiveAvatar/AvatarSync";
 import EditorModal from "./components/modal/EditorModal";
 import { FEATURE_EDITOR } from "./utils/config";
@@ -702,6 +703,10 @@ function App() {
         <InterestsPrompt />
         <AdsPrompt />
         <ViewerRewardsPrompt />
+        {/* Offers an incubating user their own Hive account once BOTH
+            butrauth (may they) and our own signal (have they earned it)
+            agree. Shares the one-prompt-at-a-time gate with the others. */}
+        <GraduationPrompt />
         {FEATURE_EDITOR && (
           <EditorModal
             isOpen={editorModalOpen}

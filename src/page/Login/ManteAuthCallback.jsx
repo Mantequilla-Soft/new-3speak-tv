@@ -20,7 +20,6 @@ const ManteAuthCallback = () => {
   const [ok, setOk] = useState(null) // null = working, true = success, false = failed
 
   const code = params.get("code")
-  const username = params.get("username")
   const state = params.get("state")
   const isPopup = state === "popup"
 
@@ -47,10 +46,10 @@ const ManteAuthCallback = () => {
       if (code && processedCodes.has(code)) return
       if (code) processedCodes.add(code)
 
-      // Only `code` is required. `username` is absent for an INCUBATING login:
-      // that user has no Hive account yet, which is the whole point. Requiring
-      // it here rejected the flow before the exchange could even report what
-      // kind of session it was.
+      // Only `code` is required. The `username` redirect param is deliberately
+      // NOT read: it is absent for an INCUBATING login, and the exchange response
+      // is the authoritative answer about what kind of session this is anyway.
+      // Requiring it here rejected the flow before the exchange could run.
       if (!code) {
         if (isPopup) return finishPopup({ error: "login failed" })
         toast.error("Butter Auth login failed")

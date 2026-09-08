@@ -105,6 +105,16 @@ const exchangeLimiter = rateLimit({
   legacyHeaders: false,
   message: { error: 'Too many requests' }
 })
+// Incubation writes are cheap (a Mongo insert, no chain broadcast) so this sits
+// above the broadcast budget, but it is still a write path on someone else's
+// service and should not be a free firehose.
+const incubationLimiter = rateLimit({
+  windowMs: 60 * 1000,
+  max: 60,
+  standardHeaders: true,
+  legacyHeaders: false,
+  message: { error: 'Too many requests' }
+})
 const broadcastLimiter = rateLimit({
   windowMs: 60 * 1000,
   max: 30,
@@ -548,6 +558,129 @@ app.get('/api/manteauth/me', baseLimiter, async (req, res) => {
     return res.status(401).json({ error: 'Unauthorized' })
   }
   res.json({ username: decoded.hiveUsername, incubation: false, handle: null })
+})
+
+// =====================================================================
+// Incubation proxy — writes for users with NO Hive account.
+//
+// The ButrAuth access token lives in an httpOnly cookie, so the browser cannot
+// send it to the incubation service itself. Same shape as /api/broadcast: the
+// server holds the credential and forwards on the user's behalf.
+// =====================================================================
+const INCUBATION_URL = (process.env.INCUBATION_URL || 'http://127.0.0.1:3040').replace(/\/+$/, '')
+
+// The live access token plus its claims, refreshing if the access token died.
+//
+// Sibling of resolveButrUser, which returns only a username and so cannot serve
+// an INCUBATING session at all — that session's username is null by design, and
+// the token itself is what the incubation service needs.
+async function resolveButrSession(req, res) {
+  const cookieToken = req.cookies?.[SESSION_COOKIE_NAME]
+  if (cookieToken) {
+    const claims = await verifyManteAuthToken(cookieToken)
+    if (claims) return { token: cookieToken, claims }
+  }
+  const refreshToken = req.cookies?.[REFRESH_COOKIE_NAME]
+  if (!refreshToken) {
+    if (cookieToken) clearSessionCookie(res)
+    return null
+  }
+  try {
+    const { ok, data } = await butrTokenRequest({ grant_type: 'refresh_token', refresh_token: refreshToken })
+    if (!ok || !data.access_token) {
+      clearRefreshCookie(res)
+      clearSessionCookie(res)
+      return null
+    }
+    setSessionCookie(res, data.access_token, data.username || '')
+    if (data.refresh_token) setRefreshCookie(res, data.refresh_token)
+    const claims = await verifyManteAuthToken(data.access_token)
+    return claims ? { token: data.access_token, claims } : null
+  } catch (err) {
+    console.warn('[incubation] refresh failed:', err.message)
+    return null
+  }
+}
+
+// ALLOWLISTED, not a catch-all proxy. A blanket forwarder would expose whatever
+// the incubation service grows next — including anything it later mounts for
+// internal use — to any logged-in browser.
+const INCUBATION_ROUTES = new Map([
+  ['POST /content', '/content'],
+  ['GET /content/mine', '/content/mine'],
+  ['PUT /social/vote', '/social/vote'],
+  ['PUT /social/follow', '/social/follow'],
+  ['PUT /social/profile', '/social/profile'],
+  ['GET /social/profile/mine', '/social/profile/mine'],
+  ['GET /social/follows/mine', '/social/follows/mine'],
+  ['GET /public/graduation/plan', '/public/graduation/plan']
+])
+
+// GET /api/incubation/graduation-status — BUTRAUTH's half of the decision.
+//
+// Answers "may this identity have a free Hive account" (caps, provider
+// availability, one per person). It does NOT answer "have they earned one" —
+// butrauth cannot see watch time, so that half is 3Speak's. The prompt should
+// only appear when both agree.
+//
+// Mounted BEFORE the catch-all below, which would otherwise match this path and
+// 404 it against the incubation service's allowlist.
+app.get('/api/incubation/graduation-status', incubationLimiter, async (req, res) => {
+  try {
+    const session = await resolveButrSession(req, res)
+    if (!session) return res.status(401).json({ error: 'Not signed in' })
+    if (!butr) return res.status(503).json({ error: 'ButrAuth not ready' })
+    const status = await butr.getIncubationStatus(session.token)
+    res.json(status)
+  } catch (err) {
+    console.error('[incubation] graduation status:', err.message)
+    res.status(502).json({ error: 'Could not read graduation status' })
+  }
+})
+
+app.all('/api/incubation/*', incubationLimiter, async (req, res) => {
+  try {
+    const sub = req.path.replace(/^\/api\/incubation/, '') || '/'
+    const key = `${req.method} ${sub}`
+    const target = INCUBATION_ROUTES.get(key)
+    if (!target) return res.status(404).json({ error: 'Unknown incubation route' })
+
+    const session = await resolveButrSession(req, res)
+    if (!session) return res.status(401).json({ error: 'Not signed in' })
+
+    // Refused HERE as well as in the service. The service is the authority, but
+    // failing at the edge means a user who has graduated mid-session gets a
+    // clear answer instead of a round trip that ends in the same 409.
+    if (session.claims.hiveUsername || !session.claims.incubation) {
+      return res.status(409).json({
+        error: 'This account is on Hive — publish to the chain, not the incubation service.',
+        reason: 'has_hive_account'
+      })
+    }
+
+    const ctrl = new AbortController()
+    const timer = setTimeout(() => ctrl.abort(), 15000)
+    let upstream
+    try {
+      upstream = await fetch(INCUBATION_URL + target, {
+        method: req.method,
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${session.token}`
+        },
+        body: ['GET', 'HEAD'].includes(req.method) ? undefined : JSON.stringify(req.body || {}),
+        signal: ctrl.signal
+      })
+    } finally {
+      clearTimeout(timer)
+    }
+    const text = await upstream.text()
+    res.status(upstream.status).type('application/json').send(text)
+  } catch (err) {
+    const msg = err?.name === 'AbortError' ? 'Incubation service timed out' : 'Incubation request failed'
+    console.error('[incubation proxy]', err.message)
+    res.status(502).json({ error: msg })
+  }
 })
 
 // POST /api/manteauth/logout — clear the session cookie
