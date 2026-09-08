@@ -5,8 +5,11 @@ import {persist} from "zustand/middleware"
 
 import aioha, { isLoggedIn as hasLiveSession } from "../../hive-api/aioha";
 
-import {  toast } from 'sonner'
+import { toastIn } from '../../utils/toast';
 
+// Every toast from this module is headed "Sign in"; the message becomes the
+// line under it. See utils/toast.js.
+const toast = toastIn('Sign in');
 
 const LOCAL_STORAGE_USER_ID_KEY = "user_id";
 

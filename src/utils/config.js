@@ -12,6 +12,14 @@ const PLAYER_URLS = (import.meta.env.VITE_PLAYER_URLS || import.meta.env.VITE_PL
   .filter(Boolean);
 const PLAYER_URL = PLAYER_URLS[0] || '';
 
+// Public player origin baked into the embed snippets the share menu hands out.
+// Deliberately NOT getPlayerUrl(): that can resolve to a preview/fallback box,
+// and that URL would then live on someone else's website forever. Only override
+// this if the canonical player moves off play.3speak.tv.
+const EMBED_PLAYER_BASE = (import.meta.env.VITE_EMBED_PLAYER_BASE || 'https://play.3speak.tv')
+  .trim()
+  .replace(/\/+$/, '');
+
 const HIVE_API_URL = import.meta.env.VITE_HIVE_API_URL || 'https://api.hive.blog';
 const FEED_URL = import.meta.env.VITE_FEED_URL || 'https://legacy.3speak.tv';
 const CHECKER_URL = import.meta.env.VITE_CHECKER_URL || 'https://checker.3speak.tv';
@@ -304,6 +312,7 @@ export {
   SHORTS_ADS_ENABLED,
   PLAYER_URL,
   PLAYER_URLS,
+  EMBED_PLAYER_BASE,
   PLAYLISTS_API_URL,
   PLAYLISTS_READ_URL,
   WATCH_HISTORY_THRESHOLD_DAYS,

@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { createPortal } from 'react-dom';
 import { Link } from 'react-router-dom';
+import { MdCampaign } from 'react-icons/md';
 import { fetchPricing } from '../../lib/advertiseData';
 
 /**
@@ -41,11 +42,25 @@ export default function AdPitchDialog({ onDone }) {
     // settings dialog so the pair behaves consistently.
     <div className="ads-prompt-overlay">
       <div className="ads-prompt">
-        <h3 className="ads-prompt-title">Want a spot of your own?</h3>
+        {/* The /advertise header, verbatim: icon, title and lede. This dialog is the
+            front door to that page for anyone who never went looking for it, and
+            arriving on a page you have already seen the top of reads as one thing
+            rather than two pitches that happen to be about the same product. */}
+        <header className="ads-prompt-head">
+          <MdCampaign className="ads-prompt-head-icon" aria-hidden="true" />
+          <div>
+            <h3 className="ads-prompt-title">Advertise on 3Speak videos</h3>
+            <p className="ads-prompt-lede">
+              Your ad plays <strong>inside</strong> the video rather than in a box beside
+              it, so it reaches people whether or not they run an ad blocker.
+            </p>
+          </div>
+        </header>
+
         <p className="ads-prompt-text">
-          3Speak sells its own ad slots, paid in HIVE or HBD, with no third party
-          tracking anyone. If you have a project, a channel or an event to put in front
-          of this audience, these are the formats you can book.
+          Want a spot of your own? 3Speak sells its own ad slots, paid in HIVE or HBD,
+          with no third party tracking anyone. If you have a project, a channel or an
+          event to put in front of this audience, these are the formats you can book.
         </p>
 
         <ul className="ads-prompt-formats">

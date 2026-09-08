@@ -1,8 +1,9 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
-import { MdCampaign, MdInfoOutline, MdCheckCircle, MdSchedule, MdCancel } from 'react-icons/md';
-import { toast } from 'sonner';
+import { MdCampaign, MdInfoOutline, MdCheckCircle, MdSchedule, MdCancel, MdVideocam, MdTv } from 'react-icons/md';
+import { toastIn } from '../utils/toast';
 import { useAppStore } from '../lib/store';
+import { transferWithAioha, getOperationUser } from '../hive-api/aioha';
 import { adsEnabledFor, ENABLE_BUTRAUTH } from '../utils/config';
 import SEOHead from '../components/SEOHead';
 import NotFound from './NotFound';
@@ -40,6 +41,10 @@ import {
 } from '../lib/advertiseData';
 import './Advertise.scss';
 
+// Every toast from this module is headed "Advertising"; the message becomes the
+// line under it. See utils/toast.js.
+const toast = toastIn('Advertising');
+
 // The inventory forecast only moves every few hours, so a long stale time keeps
 // the page instant on revisit without ever showing a number the backend disowns.
 const INVENTORY_STALE_MS = 10 * 60 * 1000;
@@ -53,6 +58,10 @@ const SHOW_MARKETS = false;
 
 /** The enrollment steps, in the order they have to happen. */
 const WIZARD_STEPS = ['Your product', 'Your ad', 'Book a slot'];
+
+/* Booking, for a product that already exists. Same three things the enrollment
+   wizard ends on, minus registering the product itself. */
+const BOOK_STEPS = ['Your ad', 'The booking', 'Pay'];
 
 const EMPTY_FORM = {
   projectName: '',
@@ -105,7 +114,7 @@ function InventoryPanel({ data, isLoading, error }) {
   }
   if (!data) return null;
 
-  const { audience, slots, quality, trial } = data;
+  const { audience, slots, quality } = data;
   // Mid-roll first: it is what we actually sell, and leading with the bigger
   // pre-roll number would be selling a slot we do not recommend.
   // Plain time order. It used to push pre-roll to the bottom so the biggest number
@@ -116,14 +125,6 @@ function InventoryPanel({ data, isLoading, error }) {
 
   return (
     <div className="mkt-inventory">
-      {trial?.active && (
-        // Without this a reader takes platform capacity for what their spot would
-        // reach today. The restriction is real and stating it costs us nothing.
-        <p className="mkt-note mkt-note-trial">
-          <MdInfoOutline aria-hidden="true" />
-          <span>{trial.note}</span>
-        </p>
-      )}
       <div className="mkt-stats">
         <StatTile value={formatCount(audience?.sessionsPerDay)} label="Watch sessions a day" note="Trailing 7 days, after filtering" />
         <StatTile value={formatCount(audience?.videos)} label="Videos in the pool" note={`Last ${data.windowDays} days`} />
@@ -160,7 +161,7 @@ function InventoryPanel({ data, isLoading, error }) {
         <p className="mkt-fine">
           <strong>Not recommended:</strong> an ad before the video reaches more sessions on
           paper, but almost half of all
-          watching here stops inside fifteen seconds — so most of those plays land on
+          watching here stops inside fifteen seconds, so most of those plays land on
           someone who was already leaving. An ad placed further in is counted only when
           the viewer actually got there.
         </p>
@@ -185,12 +186,10 @@ function InventoryPanel({ data, isLoading, error }) {
 
       {quality && (
         <p className="mkt-note">
-          <MdInfoOutline aria-hidden="true" />
           <span>
             <strong>{quality.removedPct}% of raw traffic is excluded</strong> from these
-            figures — sessions under {quality.minEngagedSeconds} seconds, accounts whose
-            average session is too short to be a person watching, and videos whose creator
-            opted out. What is left is what we are willing to sell.
+            figures: sessions under {quality.minEngagedSeconds} seconds, accounts too fast to
+            be real viewers, and videos whose creator opted out. What is left is what we sell.
           </span>
         </p>
       )}
@@ -236,7 +235,7 @@ function FormatPicker({ formats, value, onChange }) {
               </span>
               <span className="mkt-format-blurb">{f.blurb}</span>
               <span className="mkt-format-meta">
-                {f.creativeKind === 'image' ? 'You supply an image' : 'You supply a video'}
+                {`You supply ${suppliesFor(f).toLowerCase()}`}
                 {' · up to '}{f.maxSeconds}s
                 {f.rateIsCustom ? ' · your agreed rate' : null}
               </span>
@@ -272,11 +271,157 @@ const SURFACE_LABEL = {
  * per-second-per-day rate is a number nobody can price a campaign from in their head.
  */
 const EXAMPLE_SECONDS = 10;
+/* The window every example price is quoted over.
+ *
+ * Deliberately NOT the bookable minimum. That is now one day, and a one-day quote makes
+ * every format look like small change, which reads as a toy rather than as a rate card.
+ * Three days is short enough to still be a real booking and long enough that the numbers
+ * separate. Floored at the minimum so this cannot quote a window nobody can book. */
+const EXAMPLE_DAYS = 3;
+/** The longer flight quoted beside it, to show the day rate falling. */
+const LONG_EXAMPLE_DAYS = 30;
+
+/**
+ * The same total expressed in HIVE, or null when we cannot say.
+ *
+ * Shown ONLY on totals, never on the per-second rate: the rate card is denominated
+ * in HBD, and a second price on every line would read as two rate cards. A total is
+ * the number an advertiser actually has to send, so that is where naming the other
+ * asset earns its place.
+ *
+ * `hbdPerHive` is the on-chain median, the same figure the claim uses to value an
+ * incoming HIVE transfer, so what is quoted here is what would actually be credited.
+ * It moves, hence "about".
+ */
+/**
+ * A seconds field read back in minutes.
+ *
+ * Video length is entered in seconds because that is what the server filters on, but
+ * nobody thinks about a ten minute video as 600. Shown alongside rather than replacing
+ * the input: converting the field itself would make "601" impossible to type.
+ */
+function inMinutes(raw) {
+  const n = parseInt(raw, 10);
+  if (!Number.isFinite(n) || n <= 0) return null;
+  const mins = Math.floor(n / 60);
+  const secs = n % 60;
+  if (!mins) return `${secs} sec`;
+  return secs ? `${mins} min ${secs} sec` : `${mins} min`;
+}
+
+/**
+ * The HIVE to actually SEND for an HBD price.
+ *
+ * Rounds UP, unlike hiveEquivalent() which rounds to the nearest and is for display.
+ * The server credits a HIVE payment at `amount * hbdPerHive` using the rate at CLAIM
+ * time, so an amount converted at the rate we quoted and rounded down can land a
+ * thousandth short and leave the flight unpaid for no reason anyone can see.
+ */
+/**
+ * Copy one value to the clipboard.
+ *
+ * The memo is the field that has to be exact: an account or an amount that is wrong
+ * gets noticed, a mistyped memo produces a payment nobody can match to a booking and a
+ * support conversation to untangle it.
+ *
+ * Falls back silently. The clipboard API needs a secure context and can be refused
+ * outright, and the value is on screen either way, so a refusal is not worth an error.
+ */
+function CopyButton({ value }) {
+  const [done, setDone] = useState(false);
+  const timer = useRef(null);
+  useEffect(() => () => clearTimeout(timer.current), []);
+  return (
+    <button
+      type="button"
+      className={`mkt-copy${done ? ' done' : ''}`}
+      title="Copy the memo"
+      onClick={async () => {
+        try {
+          await navigator.clipboard.writeText(String(value));
+          setDone(true);
+          clearTimeout(timer.current);
+          timer.current = setTimeout(() => setDone(false), 1500);
+        } catch {
+          // Nothing to say: the memo is right there to select.
+        }
+      }}
+    >
+      {done ? 'Copied' : 'Copy'}
+    </button>
+  );
+}
+
+/**
+ * What a flight costs: rate x seconds x days^K.
+ *
+ * Mirrors priceForDays() in 3speakchecks/utils/adModel.js, and takes K from the pricing
+ * payload rather than declaring its own. A second copy of a pricing constant is how a
+ * page ends up quoting one number and the server charging another; if the curve ever
+ * moves, this follows without being touched.
+ *
+ * Falls back to a straight line when the server sent no K, which is what an older
+ * checker means — never a discount we then fail to honour.
+ */
+function flightPrice(days, ratePerSecondDay, seconds, dayCurveK) {
+  const d = Number(days);
+  const r = Number(ratePerSecondDay);
+  const secs = Number(seconds);
+  if (!Number.isFinite(d) || d <= 0 || !Number.isFinite(r) || !Number.isFinite(secs)) return null;
+  const k = Number(dayCurveK);
+  const exp = Number.isFinite(k) && k > 0 && k <= 1 ? k : 1;
+  return Math.round((d ** exp) * r * secs * 1000) / 1000;
+}
+
+function hivePayable(hbd, hbdPerHive) {
+  const rate = Number(hbdPerHive);
+  if (!Number.isFinite(rate) || rate <= 0 || !Number.isFinite(hbd) || hbd <= 0) return null;
+  return Math.ceil((hbd / rate) * 1000) / 1000;
+}
+
+function hiveEquivalent(hbd, hbdPerHive) {
+  const rate = Number(hbdPerHive);
+  if (!Number.isFinite(rate) || rate <= 0 || !Number.isFinite(hbd) || hbd <= 0) return null;
+  return Math.round((hbd / rate) * 1000) / 1000;
+}
+
+/**
+ * How much cheaper a day is on an N-day flight than on a one-day one, as a percentage.
+ *
+ * The curve is `days^K`, so the day rate is `days^(K-1)` of the single-day rate and the
+ * spot length and HBD rate cancel out entirely — this is a property of the curve, not of
+ * any particular format, which is why one number can be quoted for the whole page.
+ *
+ * Returns null when there is nothing to advertise: no curve (K = 1, or a checker too old
+ * to send one) or a saving too small to be worth a sentence.
+ */
+/**
+ * What an advertiser has to bring for a format, in words.
+ *
+ * Reads the LIST of accepted kinds rather than the single `creativeKind`, because the
+ * banner takes either and saying "an image" would turn away somebody who has a video
+ * ready. Falls back to the singular for a checker too old to send the list.
+ */
+function suppliesFor(f) {
+  const kinds = f?.creativeKinds?.length ? f.creativeKinds : (f ? [f.creativeKind] : []);
+  const image = kinds.includes('image');
+  const video = kinds.includes('video');
+  if (image && video) return 'An image or a video';
+  return image ? 'An image' : 'A video';
+}
+
+function savingAt(days, pricing) {
+  const k = Number(pricing?.dayCurveK);
+  if (!(k > 0 && k < 1) || !(days > 1)) return null;
+  if (pricing?.maxDays && days > pricing.maxDays) return null;
+  const saving = Math.round((1 - days ** (k - 1)) * 100);
+  return saving >= 5 ? saving : null;
+}
 
 function RateCard({ pricing }) {
   const formats = pricing?.formats || [];
   if (!formats.length) return null;
-  const days = pricing?.minDays || null;
+  const days = Math.max(EXAMPLE_DAYS, pricing?.minDays || 0) || null;
 
   return (
     <ul className="mkt-ratecard">
@@ -286,8 +431,24 @@ function RateCard({ pricing }) {
         // baseline is quoted at its cap and says so.
         const seconds = Math.min(EXAMPLE_SECONDS, f.maxSeconds || EXAMPLE_SECONDS);
         const example = days && f.ratePerSecondDayHbd
-          ? Math.round(f.ratePerSecondDayHbd * days * seconds * 1000) / 1000
+          ? flightPrice(days, f.ratePerSecondDayHbd, seconds, pricing?.dayCurveK)
           : null;
+        /* The same spot over a month, quoted beside it. A day rate that falls as the
+         * flight grows is the offer, and nobody acts on an offer they have to derive —
+         * so the longer number sits next to the short one rather than being implied.
+         * Hidden when there is no curve to advertise (K = 1, or a checker too old to
+         * send one) and when the saving is too small to be worth a sentence. */
+        const longer = (() => {
+          const k = Number(pricing?.dayCurveK);
+          if (!example || !days || !(k > 0 && k < 1)) return null;
+          if (!pricing?.maxDays || LONG_EXAMPLE_DAYS > pricing.maxDays) return null;
+          const price = flightPrice(LONG_EXAMPLE_DAYS, f.ratePerSecondDayHbd, seconds, k);
+          if (price == null) return null;
+          // Against the ONE-day rate, the same baseline the section above quotes, so
+          // the two numbers on the page cannot disagree about the same curve.
+          const saving = savingAt(LONG_EXAMPLE_DAYS, pricing);
+          return saving ? { days: LONG_EXAMPLE_DAYS, price, saving } : null;
+        })();
         return (
           <li key={f.key} className="mkt-rc-tile">
             <div className="mkt-rc-head">
@@ -308,7 +469,7 @@ function RateCard({ pricing }) {
               <div>
                 <dt>You supply</dt>
                 <dd>
-                  {f.creativeKind === 'image' ? 'An image' : 'A video'}
+                  {suppliesFor(f)}
                   {f.maxSeconds ? `, up to ${f.maxSeconds}s` : null}
                 </dd>
               </div>
@@ -316,9 +477,23 @@ function RateCard({ pricing }) {
 
             {example != null ? (
               <div className="mkt-rc-example">
-                <span className="mkt-rc-example-price">{example} HBD</span>
+                <span className="mkt-rc-example-price">
+                  {example} HBD
+                  {hiveEquivalent(example, pricing?.hbdPerHive) != null ? (
+                    <span className="mkt-rc-example-hive">
+                      {' '}or about {hiveEquivalent(example, pricing.hbdPerHive)} HIVE
+                    </span>
+                  ) : null}
+                </span>
                 <span className="mkt-rc-example-note">
                   for a {seconds}s spot over {days} days
+                  {longer ? (
+                    <>
+                      {'; '}
+                      <strong>{longer.price} HBD</strong> for {longer.days} days, about
+                      {' '}{longer.saving}% less per day
+                    </>
+                  ) : null}
                 </span>
               </div>
             ) : null}
@@ -358,9 +533,21 @@ function StatusBadge({ status }) {
 // has to agree, or the shorts flow silently offers an image picker.
 const isVideoAd = (t) => t === 'video' || t === 'shorts';
 
-function CampaignPanel({ reference, pricing, creatives, onNeedCreative, production, awaitingApproval = false, lockFormat = null }) {
+function CampaignPanel({
+  reference, pricing, creatives, onNeedCreative, production,
+  awaitingApproval = false, lockFormat = null,
+  /* Which third of this panel to render. The page shows one at a time so a
+     product's page is not one long scroll of form, live flights and finished
+     ones. The wizard still asks for 'all', because there it IS the whole step. */
+  view = 'all',
+  /* Where the booking wizard has got to, when there is one. Step 2 is the form and
+     step 3 is paying for what it just created; step 1 is the ad itself, which this
+     panel does not own. Null means no wizard, which is the enrollment flow. */
+  step = null,
+  onBooked,
+}) {
   const [campaigns, setCampaigns] = useState([]);
-  const [days, setDays] = useState(pricing?.minDays || 7);
+  const [days, setDays] = useState(pricing?.minDays || 1);
   // When it should start. Optional: blank means "as soon as it is approved and paid",
   // which is what most people want and what the server already did on its own.
   const [startAt, setStartAt] = useState('');
@@ -388,6 +575,8 @@ function CampaignPanel({ reference, pricing, creatives, onNeedCreative, producti
   // flight with no confirmation and no way back. Picking and saving are two acts.
   const [picked, setPicked] = useState({});
   const [saving, setSaving] = useState(null);
+  // The flight this panel just created, so the paying step can show that one alone.
+  const [bookedId, setBookedId] = useState(null);
 
   // Credit carried from earlier flights that under-delivered. Comes back with the
   // campaign list rather than needing its own request, because it is only ever shown
@@ -403,6 +592,20 @@ function CampaignPanel({ reference, pricing, creatives, onNeedCreative, producti
       .catch(() => { /* an unreadable list is not worth an error banner */ });
   }, [reference]);
   useEffect(() => { refresh(); }, [refresh]);
+
+  /* A spot finishes encoding on its own schedule, and the server only notices on its
+   * next sweep. This list was fetched once on mount and never again, so "still
+   * encoding" stuck on screen permanently — the upload was done in seconds and the page
+   * kept saying otherwise until someone thought to reload.
+   *
+   * Polls only while something is actually pending and stops the moment nothing is, so
+   * an idle advertiser page makes no requests at all. */
+  const awaitingEncode = creatives.some((c) => c.kind !== 'image' && !c.encoded);
+  useEffect(() => {
+    if (!awaitingEncode) return undefined;
+    const t = setInterval(refresh, 15000);
+    return () => clearInterval(t);
+  }, [awaitingEncode, refresh]);
 
   const formats = pricing?.formats || [];
   // Default to the first format the server offers rather than naming one here: the
@@ -443,7 +646,15 @@ function CampaignPanel({ reference, pricing, creatives, onNeedCreative, producti
   // nobody has approved would let anyone reserve the rate card by filling in a form.
   // Burned into the picture rather than spliced before it, which changes what the
   // positions are called and whether pre-roll's warning applies.
-  const isBanner = fmt?.creativeKind === 'image';
+  /* ⚠️ A banner is a format that BURNS INTO the picture. It is not "the format whose
+   * creative is an image", which is what this asked before a banner could also be a
+   * video: every one of these checks would have flipped the moment somebody uploaded
+   * a moving banner, and the page would have started calling it a pre-roll. */
+  const isBanner = !!fmt?.burnsIn;
+  // What this format will actually take. Older checkers send no list, so fall back to
+  // the single kind they do send.
+  const acceptedKinds = fmt?.creativeKinds?.length ? fmt.creativeKinds : (fmt ? [fmt.creativeKind] : []);
+  const takesVideo = acceptedKinds.includes('video');
 
   const slotRow = (p) => slotState?.find((x) => x.percent === p) || null;
   // FULL, not merely occupied. A position now carries several advertisers at once and
@@ -475,8 +686,101 @@ function CampaignPanel({ reference, pricing, creatives, onNeedCreative, producti
   // may run, and quoting one number for both was how the old form read.
   const maxSpot = fmt?.maxSeconds || pricing?.maxCreativeSeconds || 15;
   const minSpot = pricing?.minSpotSeconds || 1;
-  const chosenLength = spotSeconds ?? maxSpot;
+  /* The spot's own length, taken from the most recent video uploaded to this campaign.
+   * The list arrives newest first, and a campaign almost always carries one file, so
+   * "the latest video" is the file being booked.
+   *
+   * Ceil, not round: the video has to FIT inside the length being bought, and buying 8s
+   * for an 8.4s spot is buying too little. A format that takes an image has no duration
+   * to read, so automatic simply is not offered there.
+   *
+   * Not clamped to the format's cap on purpose. A 30s file against a 15s format is a
+   * real problem the advertiser has to see and fix, and quietly booking 15s would price
+   * a spot that cannot run. lengthOk already refuses it, and the hint says why. */
+  const spotCandidates = useMemo(() => (
+    (creatives || []).filter((c) => c.kind !== 'image' && Number(c.durationSeconds) > 0)
+  ), [creatives]);
+  /* Exactly one file, or none of this. With two uploaded, "the length of your video" has
+     no answer and picking the newest would quietly price against a file the advertiser
+     may not have meant. They choose, and the number is theirs to type.
+     
+     Note this does NOT wait for encoding. The duration is known from the moment the file
+     is uploaded and does not change, so gating on the encode would make somebody wait for
+     a number we already have. */
+  const latestSpotSeconds = spotCandidates.length === 1
+    ? Math.ceil(Number(spotCandidates[0].durationSeconds))
+    : null;
+  /* Automatic length reads the uploaded video's own duration.
+   *
+   * It now covers banners too, which is the one place the number means something
+   * different: for a roll it is how long the spot plays, for a banner it is how long
+   * the banner is ON SCREEN. A banner video is played once rather than looped, so it
+   * has to be at least as long as the booking, and ticking this is the easy way to
+   * guarantee that: it books exactly the length of the video that was uploaded.
+   *
+   * Keyed on whether a VIDEO was uploaded rather than on the format, so a banner with
+   * a still has no length to read and the box stays out of reach, exactly as before. */
+  const autoAvailable = latestSpotSeconds != null && takesVideo;
+  const tooManySpots = spotCandidates.length > 1 && takesVideo;
+  const [autoLength, setAutoLength] = useState(true);
+
+  /* Paying from the wallet, rather than making somebody copy three fields into one.
+   *
+   * transferWithAioha already routes every login correctly: Keychain, HiveAuth,
+   * PeakVault and Ledger sign directly, and a Butter Auth session — which holds no key
+   * and cannot sign an active op — goes through ActiveAuthModal, the wallet picker
+   * mounted in App.jsx. So there is no provider branching to do here.
+   *
+   * 🚨 The account matters as much as the amount. A transfer only buys the flight if it
+   * comes from the account the campaign is booked under; anything else is refused and
+   * returned. Checked before signing, because the alternative is letting someone pay
+   * and find out days later. */
+  // Per campaign, not one shared value: with two unpaid flights on screen, a single
+  // toggle would silently change the currency of the one you are not looking at.
+  const [payCcy, setPayCcy] = useState({});
+  const [payBusy, setPayBusy] = useState(null);
+  const [payError, setPayError] = useState(null);
+
+  const payWithWallet = useCallback(async (c) => {
+    const owed = Math.round((c.priceHbd - c.paidHbd) * 1000) / 1000;
+    if (!(owed > 0)) return;
+    const ccy = payCcy[c.id] === 'HIVE' ? 'HIVE' : 'HBD';
+    const amount = ccy === 'HIVE' ? hivePayable(owed, pricing?.hbdPerHive) : owed;
+    if (amount == null) {
+      setPayError('We cannot read the HIVE price right now. Pay in HBD, or try again shortly.');
+      return;
+    }
+    setPayError(null);
+    const signer = getOperationUser();
+    if (!signer) {
+      setPayError('Log in with the account this flight is booked under to pay from your wallet.');
+      return;
+    }
+    if (c.payFrom && signer.toLowerCase() !== String(c.payFrom).toLowerCase()) {
+      setPayError(`This flight is booked under @${c.payFrom}, and only a payment from that account buys it. You are signed in as @${signer}, so a transfer from here would be returned to you. Switch account, or send it manually from @${c.payFrom}.`);
+      return;
+    }
+    setPayBusy(c.id);
+    try {
+      await transferWithAioha(c.payTo, amount, ccy, c.memo);
+      // The transfer is signed, not yet irreversible-block. Give the chain a moment
+      // before asking the checker to look, or the first check reliably finds nothing
+      // and reads as a failure to the advertiser.
+      await new Promise((r) => setTimeout(r, 4000));
+      onCheckPayment(c.id);
+    } catch (err) {
+      // A cancelled signature is not an error worth shouting about, but a failed one is.
+      const msg = String(err?.message || err || 'Transfer failed');
+      setPayError(/cancel|reject|denied/i.test(msg) ? null : msg);
+    } finally {
+      setPayBusy(null);
+    }
+  }, [onCheckPayment, payCcy, pricing?.hbdPerHive]);
+  const autoOn = autoLength && autoAvailable;
+
+  const chosenLength = autoOn ? latestSpotSeconds : (spotSeconds ?? maxSpot);
   const lengthOk = Number.isInteger(chosenLength) && chosenLength >= minSpot && chosenLength <= maxSpot;
+  const autoTooLong = autoOn && chosenLength > maxSpot;
 
   // Video-length targeting, entered in seconds and open-ended at both ends.
   const [minVideo, setMinVideo] = useState('');
@@ -486,15 +790,19 @@ function CampaignPanel({ reference, pricing, creatives, onNeedCreative, producti
   const videoRangeOk = !(Number.isFinite(minVideoNum) && Number.isFinite(maxVideoNum)
     && minVideoNum > maxVideoNum);
 
-  // The earliest start we will accept: tomorrow, in the viewer's own timezone. Not
-  // today — a flight still has to be approved and paid before anything runs, so a
-  // start of "today" is a promise the pipeline cannot keep, and a start in the past
-  // was only ever silently clamped to now by the server. Built from the local date
-  // parts on purpose: toISOString is UTC and would offer yesterday to anyone west of
-  // it.
+  /* The earliest start we accept: TODAY, in the viewer's own timezone.
+   *
+   * It used to be tomorrow, on the reasoning that a flight has to be approved and paid
+   * before it runs. But windowFrom() already begins the clock at the later of now and
+   * the requested date, so "today" does not promise anything early: it means start the
+   * moment it is approved and paid, which is the thing an advertiser actually wants and
+   * is what a blank field has always done. Offering tomorrow as the floor just pushed
+   * every same-day booking a day out for no reason.
+   *
+   * Built from the local date parts on purpose: toISOString is UTC and would offer
+   * yesterday to anyone west of it. */
   const earliestISO = useMemo(() => {
     const d = new Date();
-    d.setDate(d.getDate() + 1);
     return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
   }, []);
   // `min` on a date input stops the PICKER, not a typed or pasted value, so the same
@@ -519,9 +827,26 @@ function CampaignPanel({ reference, pricing, creatives, onNeedCreative, producti
   // writes have to agree.
   const rate = fmt ? fmt.ratePerSecondDayHbd : pricing?.pricePerSecondDayHbd;
   const flight = rate != null
-    ? Math.round(days * rate * chosenLength * 1000) / 1000
+    ? flightPrice(days, rate, chosenLength, pricing?.dayCurveK)
     : null;
   const total = flight != null ? Math.round((flight + productionFee) * 1000) / 1000 : null;
+  /* What a day of this flight actually costs per second, after the curve. Derived from
+   * the quote rather than recomputed, so it can never describe a different number than
+   * the one above it. */
+  const effectiveDayRate = flight != null && Number(days) > 0 && chosenLength > 0
+    ? Math.round((flight / Number(days) / chosenLength) * 10000) / 10000
+    : null;
+  const daysSaving = savingAt(Number(days), pricing);
+  /* The next length worth suggesting, and only while there is a real gain left in it.
+   * Past a month the curve has given most of what it has, and a booking form that keeps
+   * asking for more is a booking form people stop reading. */
+  const nextStep = (() => {
+    const d = Number(days);
+    const step = [7, 14, 30].find((n) => n > d);
+    if (!step) return null;
+    const saving = savingAt(step, pricing);
+    return saving && saving > (daysSaving || 0) + 2 ? { days: step, saving } : null;
+  })();
   const briefTooShort = wantProduction && brief.trim().length < 20;
 
   async function onBook(e) {
@@ -546,10 +871,14 @@ function CampaignPanel({ reference, pricing, creatives, onNeedCreative, producti
       // there may be nothing left to send. Telling someone to pay when they do not
       // have to would send them looking for a payment step that is not there.
       toast.success(res?.payment?.alreadyCovered
-        ? 'Booked and scheduled — covered in full by your credit'
+        ? 'Booked and scheduled, covered in full by your credit'
         : 'Booked. Send the payment to start it');
       refresh();
       if (!creatives.length) onNeedCreative?.();
+      if (res?.campaign?.id) {
+        setBookedId(res.campaign.id);
+        onBooked?.(res.campaign.id);
+      }
       return res;
     } catch (err) {
       setError(err.message || 'Could not make that booking');
@@ -565,7 +894,7 @@ function CampaignPanel({ reference, pricing, creatives, onNeedCreative, producti
       refresh();
     } catch (err) {
       // A missing payment is the normal case right after booking, not a failure.
-      setError(err.status === 404 ? 'No matching transfer found yet — it can take a moment to appear on chain.' : (err.message || 'Could not check'));
+      setError(err.status === 404 ? 'No matching transfer found yet. It can take a moment to appear on chain.' : (err.message || 'Could not check'));
     }
   }
 
@@ -597,35 +926,85 @@ function CampaignPanel({ reference, pricing, creatives, onNeedCreative, producti
 
   const ready = creatives.filter((c) => c.status === 'ready');
   /**
+   * Has this flight's kind of spot been uploaded and be waiting on US?
+   *
+   * `pending` is still encoding and `review` is waiting for a person, and in both cases
+   * the advertiser has done everything they can. Scoped by kind, because a video
+   * sitting in review says nothing useful about a banner flight.
+   */
+  const awaitingUs = (campaign) => {
+    const kinds = kindsFor(campaign);
+    return creatives.some(
+      (cr) => (cr.status === 'review' || cr.status === 'pending')
+        && (!kinds.length || kinds.includes(cr.kind || 'video')),
+    );
+  };
+  /**
+   * Every creative kind this flight can run.
+   *
+   * The banner takes a still OR a video, so the singular `creativeKind` is only the
+   * one its copy leads with and is the wrong thing to filter on. Falls back to the
+   * singular for a checker too old to send the list.
+   */
+  const kindsFor = (campaign) => (
+    campaign.creativeKinds?.length
+      ? campaign.creativeKinds
+      : (campaign.creativeKind ? [campaign.creativeKind] : [])
+  );
+  /**
    * Only the creatives THIS flight can use. A banner flight cannot run a video and a
    * spot flight cannot run a still, so offering both and letting the server refuse
    * is a worse experience than offering the one that works.
    */
-  const readyFor = (campaign) => (
+  const readyFor = (campaign) => {
     // No stated requirement — an older campaign shape, or a response from before the
     // server published it — means show everything. Guessing 'video' here would hide
     // a perfectly good banner from a banner flight and leave no way to attach it,
     // which is exactly the failure this filter was added to prevent.
-    campaign.creativeKind
-      ? ready.filter((cr) => (cr.kind || 'video') === campaign.creativeKind)
-      : ready
-  );
+    const kinds = kindsFor(campaign);
+    return kinds.length ? ready.filter((cr) => kinds.includes(cr.kind || 'video')) : ready;
+  };
+
+  /* A flight nobody can act on any more belongs in history: it either ran its course
+     or was called off. Everything else is still live in some sense — being drafted,
+     waiting on payment, scheduled, running or paused — and is what somebody checks on. */
+  const FINISHED = new Set(['complete', 'cancelled']);
+  const showBooking = view === 'all' || (view === 'book' && step === 2);
+  /* Credit is about what the next booking costs, so it belongs where one is being
+     made. Repeating it over the finished flights said nothing about them. */
+  const showBalance = view === 'all' || view === 'book';
+  const listed = view === 'active'
+    ? campaigns.filter((c) => !FINISHED.has(c.status))
+    : view === 'history'
+      ? campaigns.filter((c) => FINISHED.has(c.status))
+      : view === 'book'
+        /* Only what was just booked, and only on the step that asks for payment. The
+           full list lives under Active spots; showing it here as well was the same
+           flights twice on one page. */
+        ? (step === 3 && bookedId ? campaigns.filter((c) => c.id === bookedId) : [])
+        : campaigns;
 
   return (
     <div className="mkt-campaigns">
-      <h3>Your bookings</h3>
+      {view === 'all' ? <h3>Your bookings</h3> : null}
+      {showBooking && (
+        <>
 
-      {/* Said before they choose, not after they pay. Slots are held by approval, not
-          by booking, so a position picked now is a request rather than a reservation
-          — and somebody reviewed ahead of you may take it. */}
+      {/* Said before they choose, not after they pay. Booking DOES hold the position
+          now: utils/adSlots.js treats a draft or awaiting-payment campaign as holding
+          its slot for AD_SLOT_HOLD_HOURS, on the window it would get if it paid. The
+          note used to say the opposite, that slots were settled at approval, which had
+          simply stopped being true. The duration comes from the server so this cannot
+          drift the same way twice. */}
       {awaitingApproval && (
         <p className="mkt-note">
           <MdInfoOutline aria-hidden="true" />
           <span>
-            You can book now, while we review you. We cannot promise the position yet:
-            another advertiser may have applied for the same slot before you, and slots
-            are settled when we approve, not when they are booked. If yours is taken by
-            then we will come back to you before anything runs or is charged.
+            You can book now, while we review you. Booking holds the position
+            {pricing?.slotHoldHours ? ` for ${pricing.slotHoldHours} hours` : ''}, so it
+            is yours if your payment arrives in that time. If it does not, the hold
+            lapses and the slot goes back on sale. Nothing runs and nothing is charged
+            until you pay.
           </span>
         </p>
       )}
@@ -649,6 +1028,22 @@ function CampaignPanel({ reference, pricing, creatives, onNeedCreative, producti
         <fieldset className="mkt-group">
           <legend>The booking</legend>
         <div className="mkt-field">
+          <label htmlFor="mkt-days">Days</label>
+          <input
+            id="mkt-days" type="number" min={pricing?.minDays || 1} max={pricing?.maxDays || 90}
+            value={days} onChange={(e) => setDays(e.target.value)}
+          />
+          <span className="mkt-hint">
+            How long it runs. {pricing?.minDays || 1} to {pricing?.maxDays || 90}.
+            {/* The nudge, at the moment the number is being chosen. Once they are past
+                a month there is little left to sell them, so it stops rather than
+                badgering — and it never appears at all if the curve is off. */}
+            {daysSaving ? ` At ${days} days you pay about ${daysSaving}% less per day than a single day.` : ''}
+            {nextStep ? ` ${nextStep.days} days would make it about ${nextStep.saving}% less.` : ''}
+          </span>
+        </div>
+
+        <div className="mkt-field">
           <label htmlFor="mkt-start">Starts <span className="mkt-optional">optional</span></label>
           <input
             id="mkt-start"
@@ -659,41 +1054,68 @@ function CampaignPanel({ reference, pricing, creatives, onNeedCreative, producti
           />
           <span className={startOk ? 'mkt-hint' : 'mkt-upload-error'}>
             {!startOk
-              ? 'The earliest start is tomorrow — a flight has to be approved and paid first.'
+              ? 'That date has passed. Pick today or later.'
               : runsUntil
                 ? `Runs to ${runsUntil}.`
-                : 'Leave blank to start as soon as it is approved and paid.'}
-          </span>
-        </div>
-
-        <div className="mkt-field">
-          <label htmlFor="mkt-days">Days</label>
-          <input
-            id="mkt-days" type="number" min={pricing?.minDays || 7} max={pricing?.maxDays || 90}
-            value={days} onChange={(e) => setDays(e.target.value)}
-          />
-          <span className="mkt-hint">
-            How long it runs. {pricing?.minDays || 7} to {pricing?.maxDays || 90}.
+                : 'Leave blank, or pick today, to start as soon as it is approved and paid.'}
           </span>
         </div>
         <div className="mkt-field">
           <label htmlFor="mkt-length">
-            {fmt?.creativeKind === 'image' ? 'How long it shows' : 'Ad length'}
+            {isBanner ? 'How long it shows' : 'Ad length'}
           </label>
-          <input
-            id="mkt-length"
-            type="number"
-            min={minSpot}
-            max={maxSpot}
-            step="1"
-            value={chosenLength}
-            onChange={(e) => setSpotSeconds(e.target.value === '' ? '' : Number(e.target.value))}
-          />
+          <div className="mkt-length-row">
+            <input
+              id="mkt-length"
+              type="number"
+              min={minSpot}
+              max={maxSpot}
+              step="1"
+              value={chosenLength}
+              disabled={autoOn}
+              onChange={(e) => setSpotSeconds(e.target.value === '' ? '' : Number(e.target.value))}
+            />
+            {takesVideo && (
+              <label
+                className="mkt-check mkt-auto-length"
+                title={autoAvailable
+                  ? ''
+                  : (tooManySpots
+                    ? 'You have more than one ad video, so we cannot tell which length to use. Enter it yourself.'
+                    : 'Upload your ad video first')}
+              >
+                <input
+                  type="checkbox"
+                  checked={autoOn}
+                  disabled={!autoAvailable}
+                  onChange={(e) => {
+                    // Turning it off keeps the number that was on screen instead of
+                    // falling back to the format's maximum. This is a price field, and
+                    // jumping 8s to 30s the moment you take manual control quadruples
+                    // the quote without anyone typing anything.
+                    if (!e.target.checked && spotSeconds == null) setSpotSeconds(chosenLength);
+                    setAutoLength(e.target.checked);
+                  }}
+                />
+                <span>Automatic</span>
+              </label>
+            )}
+          </div>
           <span className={`mkt-hint${lengthOk ? '' : ' mkt-hint-short'}`}>
-            Seconds, {minSpot} to {maxSpot}.{' '}
-            {fmt?.creativeKind === 'image'
-              ? 'How long the banner stays on screen.'
-              : 'Your ad video has to fit inside this.'}
+            {autoTooLong
+              ? `Your spot is ${chosenLength}s, longer than this format allows. Upload a shorter one, or pick a format that takes it.`
+              : (
+                <>
+                  Seconds, {minSpot} to {maxSpot}.{' '}
+                  {autoOn
+                    ? 'Taken from the ad video you uploaded.'
+                    : (isBanner
+                      ? 'How long the banner stays on screen. A video banner has to be at least this long.'
+                      : (tooManySpots
+                        ? 'More than one ad video uploaded, so enter the length of the one you are booking.'
+                        : 'Your ad video has to fit inside this.'))}
+                </>
+              )}
           </span>
         </div>
 
@@ -725,8 +1147,8 @@ function CampaignPanel({ reference, pricing, creatives, onNeedCreative, producti
                   ? 'Before the video (not recommended)'
                   : slotLabel({ percent: p, banner: isBanner })}
                 {slotTaken(p)
-                  ? ' — full for these dates'
-                  : (sharingWith(p) > 0 ? ` — ${sharesLeft(p)} of ${slotRow(p).sharesTotal} places left` : '')}
+                  ? ' (full for these dates)'
+                  : (sharingWith(p) > 0 ? ` (${sharesLeft(p)} of ${slotRow(p).sharesTotal} places left)` : '')}
               </option>
             ))}
           </select>
@@ -759,6 +1181,7 @@ function CampaignPanel({ reference, pricing, creatives, onNeedCreative, producti
             value={minVideo} onChange={(e) => setMinVideo(e.target.value)}
           />
           <span className="mkt-hint">Seconds. Blank for no minimum.</span>
+          {inMinutes(minVideo) ? <span className="mkt-mins">{inMinutes(minVideo)}</span> : null}
         </div>
 
         <div className="mkt-field">
@@ -772,6 +1195,7 @@ function CampaignPanel({ reference, pricing, creatives, onNeedCreative, producti
               ? 'Seconds. Blank for no maximum.'
               : 'The longest cannot be shorter than the shortest.'}
           </span>
+          {inMinutes(maxVideo) ? <span className="mkt-mins">{inMinutes(maxVideo)}</span> : null}
         </div>
         </fieldset>
         ) : null}
@@ -780,11 +1204,22 @@ function CampaignPanel({ reference, pricing, creatives, onNeedCreative, producti
           {total != null ? (
             <span>
               <strong>{total} HBD</strong> total
+              {hiveEquivalent(total, pricing?.hbdPerHive) != null ? (
+                <span className="mkt-hint">
+                  {' '}(about {hiveEquivalent(total, pricing.hbdPerHive)} HIVE)
+                </span>
+              ) : null}
               {productionFee > 0 ? <span className="mkt-hint"> ({flight} booking + {productionFee} production)</span> : null}
+              {/* ⚠️ This used to read "{chosenLength}s x {days} days at {rate} HBD per
+                  second per day", which is a multiplication that no longer reproduces
+                  the total: the day rate falls with the length of the flight. Quoting
+                  the EFFECTIVE day rate keeps the line arithmetically honest and shows
+                  the discount at the same time. */}
               <span className="mkt-hint">
-                {' '}· {fmt ? `${fmt.label}, ` : ''}{chosenLength}s × {days} days
-                {fmt?.rateIsCustom ? ` at your agreed ${rate} HBD` : ` at ${rate} HBD`}
-                {' '}per second per day
+                {' '}· {fmt ? `${fmt.label}, ` : ''}{chosenLength}s over {days} day{Number(days) === 1 ? '' : 's'}
+                {fmt?.rateIsCustom ? ' at your agreed rate, ' : ', '}
+                {effectiveDayRate != null ? `${effectiveDayRate} HBD per second per day` : `${rate} HBD per second per day`}
+                {daysSaving ? ` — ${rate} on a single day, ${daysSaving}% less at this length` : ''}
               </span>
               {/* What they will actually be asked to transfer. The server spends the
                   balance when the campaign is created, so quoting only the total
@@ -812,21 +1247,31 @@ function CampaignPanel({ reference, pricing, creatives, onNeedCreative, producti
         </div>
       </form>
       {error ? <p className="mkt-upload-error">{error}</p> : null}
+        </>
+      )}
 
       {/* Shown whether or not they have campaigns: credit somebody has to go looking
           for is credit they will never spend, which would make "we credit you instead
           of refunding" a way of keeping the money rather than an alternative to
           sending it back. It comes off the next booking on its own. */}
-      {balanceHbd > 0 && (
+      {showBalance && balanceHbd > 0 && (
         <p className="mkt-balance">
           You have <strong>{balanceHbd} HBD</strong> in credit from flights that
           under-delivered. It comes off your next booking automatically.
         </p>
       )}
 
-      {campaigns.length > 0 && (
+      {(view === 'active' || view === 'history') && listed.length === 0 && (
+        <p className="mkt-fine">
+          {view === 'active'
+            ? 'No live bookings. Anything you book shows up here until it finishes.'
+            : 'Nothing here yet. Flights land here once they finish or are called off.'}
+        </p>
+      )}
+
+      {listed.length > 0 && (
         <ul className="mkt-campaign-list">
-          {campaigns.map((c) => (
+          {listed.map((c) => (
             <li key={c.id}>
               <div className="mkt-campaign-head">
                 <span className="mkt-campaign-name">{c.name}</span>
@@ -849,19 +1294,58 @@ function CampaignPanel({ reference, pricing, creatives, onNeedCreative, producti
                 </div>
               )}
 
-              {c.blockedBy && (
-                <div className="mkt-campaign-blocked">
-                  {BLOCKED_REASON[c.blockedBy] || c.blockedBy}
-                </div>
-              )}
+              {/* 'unpaid' is left out: the campaign's own status already says awaiting
+                  payment, and the panel asking for the payment is directly below. The
+                  key stays in BLOCKED_REASON because dropping it would fall through to
+                  the raw `unpaid` for anything else that reads the map. */}
+              {c.blockedBy && c.blockedBy !== 'unpaid' && (() => {
+                /* "No spot attached yet" is true of the CAMPAIGN and false of the
+                   advertiser: the server means no creative is attached, but a spot that
+                   is uploaded and waiting on our review is not attachable yet. Telling
+                   someone who has done their part that they have not is how a paid
+                   advertiser ends up wondering what they missed. */
+                const label = (c.blockedBy === 'no_creative' && awaitingUs(c))
+                  ? 'The team will review your ad file soon. We attach it for you once it passes, and get in touch if there is a choice to make.'
+                  : (BLOCKED_REASON[c.blockedBy] || c.blockedBy);
+                return <div className="mkt-campaign-blocked">{label}</div>;
+              })()}
 
               {c.paidHbd < c.priceHbd && (
                 <div className="mkt-pay">
-                  <p className="mkt-fine">
-                    Send <strong>{(c.priceHbd - c.paidHbd).toFixed(3)} HBD</strong> to{' '}
-                    <strong>@{c.payTo}</strong> with the memo <code>{c.memo}</code>. HIVE works too and
-                    is valued at the on-chain price.
-                  </p>
+                  {(() => {
+                    const owed = Math.round((c.priceHbd - c.paidHbd) * 1000) / 1000;
+                    const ccy = payCcy[c.id] === 'HIVE' ? 'HIVE' : 'HBD';
+                    const inHive = hivePayable(owed, pricing?.hbdPerHive);
+                    const shown = ccy === 'HIVE' ? inHive : owed;
+                    return (
+                      <>
+                        <div className="mkt-pay-ccy" role="group" aria-label="Pay with">
+                          {['HBD', 'HIVE'].map((k) => (
+                            <button
+                              key={k}
+                              type="button"
+                              className={`mkt-ccy${ccy === k ? ' selected' : ''}`}
+                              // No HIVE price, no HIVE option: an unpriced button would
+                              // send an amount we cannot work out.
+                              disabled={k === 'HIVE' && inHive == null}
+                              aria-pressed={ccy === k}
+                              onClick={() => setPayCcy((m) => ({ ...m, [c.id]: k }))}
+                            >
+                              {k}
+                            </button>
+                          ))}
+                        </div>
+                        {/* After the choice, because it describes what that choice
+                            means: the amount and the asset both change with it. */}
+                        <p className="mkt-pay-line">
+                          Send <strong>{shown != null ? shown.toFixed(3) : '—'} {ccy}</strong> to{' '}
+                          <strong>@{c.payTo}</strong> with the memo <code>{c.memo}</code>{' '}
+                          <CopyButton value={c.memo} />.
+                          {ccy === 'HIVE' ? ' HIVE is valued at the on-chain price when it arrives, so this covers the price at today\u2019s.' : ''}
+                        </p>
+                      </>
+                    );
+                  })()}
                   {/* Without this the figure above simply does not match the price on
                       the line beside it, which reads as a pricing bug rather than a
                       discount. Say where the difference went. */}
@@ -871,24 +1355,45 @@ function CampaignPanel({ reference, pricing, creatives, onNeedCreative, producti
                       flight that under-delivered.
                     </p>
                   )}
-                  <button type="button" className="mkt-secondary" onClick={() => onCheckPayment(c.id)}>
-                    I have sent it
-                  </button>
+                  <div className="mkt-pay-actions">
+                    <button
+                      type="button"
+                      className="mkt-outline"
+                      disabled={payBusy === c.id}
+                      onClick={() => payWithWallet(c)}
+                    >
+                      {payBusy === c.id ? 'Waiting for your wallet…' : 'Send with wallet'}
+                    </button>
+                    <button type="button" className="mkt-secondary" onClick={() => onCheckPayment(c.id)}>
+                      Manually sent
+                    </button>
+                  </div>
+                  {payError && <p className="mkt-upload-error">{payError}</p>}
                 </div>
               )}
 
-              {!c.creative && (() => {
+              {/* Nothing to attach to a flight that has already run or been called
+                  off: the picker offered a choice that could not change anything. */}
+              {!c.creative && c.status !== 'complete' && c.status !== 'cancelled' && (() => {
                 const usable = readyFor(c);
-                const wantsImage = (c.creativeKind || 'video') === 'image';
+                const kinds = kindsFor(c);
+                const canImage = kinds.includes('image');
+                const canVideo = kinds.includes('video');
+                // Only when the still is the ONLY thing that runs. A banner flight
+                // takes either, and calling that "image" is what hid a finished
+                // video banner from its own picker.
+                const wantsImage = canImage && !canVideo;
                 if (!usable.length) {
                   // Approved creatives exist, just none of the right kind. Say which
                   // kind is missing rather than showing an empty picker.
                   return ready.length > 0 ? (
                     <div className="mkt-pay">
                       <p className="mkt-hint">
-                        {wantsImage
-                          ? `This is a ${c.formatLabel || 'banner'} flight, so it needs an approved banner image${c.creativeSpec ? ` (${c.creativeSpec.recommended}, between ${c.creativeSpec.minAspect}:1 and ${c.creativeSpec.maxAspect}:1)` : ''}.`
-                          : 'This flight needs an approved ad video.'}
+                        {canImage && canVideo
+                          ? `This is a ${c.formatLabel || 'banner'} flight, so it needs an approved banner, either an image${c.creativeSpec ? ` (${c.creativeSpec.recommended}, between ${c.creativeSpec.minAspect}:1 and ${c.creativeSpec.maxAspect}:1)` : ''} or a video.`
+                          : wantsImage
+                            ? `This is a ${c.formatLabel || 'banner'} flight, so it needs an approved banner image${c.creativeSpec ? ` (${c.creativeSpec.recommended}, between ${c.creativeSpec.minAspect}:1 and ${c.creativeSpec.maxAspect}:1)` : ''}.`
+                            : 'This flight needs an approved ad video.'}
                       </p>
                     </div>
                   ) : null;
@@ -896,7 +1401,9 @@ function CampaignPanel({ reference, pricing, creatives, onNeedCreative, producti
                 return (
                 <div className="mkt-pay">
                   <label className="mkt-hint" htmlFor={`attach-${c.id}`}>
-                    {wantsImage ? 'Use one of your approved banners' : 'Use one of your approved ad videos'}
+                    {canImage && canVideo
+                      ? 'Use one of your approved banners or ad videos'
+                      : wantsImage ? 'Use one of your approved banners' : 'Use one of your approved ad videos'}
                   </label>
                   <div className="mkt-attach-row">
                     <select
@@ -934,11 +1441,14 @@ function CampaignPanel({ reference, pricing, creatives, onNeedCreative, producti
                   {/* A shortfall against forecast is settled as credit toward the
                       next booking, not as a transfer back. Saying "we will send it"
                       would leave them waiting for money that is not coming. */}
+                  {/* Credit EARNED is good news. It shared .mkt-refund with the
+                      "we are looking at this one" case, which is a problem and is
+                      meant to read as one, so both came out in the warning red. */}
                   {c.refundHbd > 0 && (
-                    <span className="mkt-refund">
+                    <span className={c.refundStatus === 'credited' ? 'mkt-credit-earned' : 'mkt-refund'}>
                       {c.refundStatus === 'credited'
-                        ? `${c.creditHbd ?? c.refundHbd} HBD credited to you for under-delivery — it comes off your next booking`
-                        : `${c.refundHbd} HBD short of forecast — we are looking at this one`}
+                        ? `${c.creditHbd ?? c.refundHbd} HBD credited to you for under-delivery. It comes off your next booking`
+                        : `${c.refundHbd} HBD short of forecast. We are looking at this one`}
                     </span>
                   )}
                   {c.creditAppliedHbd > 0 && (
@@ -1136,7 +1646,7 @@ function CreativePanel({ reference, account, maxSeconds, bannerSpec, onCreatives
           throw new Error(`That video is ${durationSeconds} seconds. The most an ad can run is ${maxSeconds}.`);
         }
         await uploadCreative({ file, account, reference, durationSeconds });
-        toast.success('Spot uploaded — we will review it before it runs');
+        toast.success('Spot uploaded. We will review it before it runs');
       }
       refresh();
     } catch (err) {
@@ -1178,7 +1688,9 @@ function CreativePanel({ reference, account, maxSeconds, bannerSpec, onCreatives
         {adType === 'banner'
           ? (
             <>
-              A player banner is a single still, shown over the video while it plays.
+              A player banner is a still or a short video, shown over the video while it
+              plays. A video banner is played once, so it has to be at least as long as
+              the banner runs.
               {bannerSpec
                 ? ` ${bannerSpec.recommended} works well, and it needs to be a strip between `
                   + `${bannerSpec.minAspect}:1 and ${bannerSpec.maxAspect}:1.`
@@ -1216,12 +1728,16 @@ function CreativePanel({ reference, account, maxSeconds, bannerSpec, onCreatives
         </p>
       )}
 
+      {/* A banner takes a still OR a video, and a video is played once for the seconds
+          it runs rather than looped, so it has to cover the booking. Deliberately not
+          offering GIFs: the compositor takes real video, and a GIF would be accepted by
+          the picker and then refused by the encoder. */}
       <div className="mkt-upload-row">
         <input
           ref={inputRef}
           id="mkt-creative-file"
           type="file"
-          accept={adType === 'banner' ? 'image/*' : (isVideoAd(adType) ? 'video/*' : 'video/*,image/*')}
+          accept={adType === 'banner' ? 'image/*,video/*' : (isVideoAd(adType) ? 'video/*' : 'video/*,image/*')}
           onChange={onFile}
           disabled={busy || atLimit}
           className="mkt-visually-hidden"
@@ -1235,7 +1751,7 @@ function CreativePanel({ reference, account, maxSeconds, bannerSpec, onCreatives
             ? 'Uploading…'
             : (atLimit
               ? 'Replace it below to change it'
-              : (adType === 'banner' ? 'Upload your banner image'
+              : (adType === 'banner' ? 'Upload your banner'
                 : (isVideoAd(adType) ? 'Upload your ad video' : 'Upload a video or image')))}
         </label>
       </div>
@@ -1343,7 +1859,12 @@ export default function Advertise({ openLoginModal }) {
   // so without this the list would keep showing the pre-apply set until a reload.
   const [refsVersion, setRefsVersion] = useState(0);
   // Lifted so the flight panel can offer the spots the creative panel has loaded.
+  /* Two lists, not one. Both panels stay MOUNTED — the tabs hide with `hidden`, they do
+     not unmount — so a single shared list is written by whichever panel fetched last.
+     It was only ever fed by the My-products panel, which is why the wizard's booking
+     step saw no creatives at all and could not offer the automatic length. */
   const [creativeList, setCreativeList] = useState([]);
+  const [wizCreativeList, setWizCreativeList] = useState([]);
 
   const { data: inventory, isLoading, error } = useQuery({
     queryKey: ['advertise-inventory'],
@@ -1492,10 +2013,29 @@ export default function Advertise({ openLoginModal }) {
   // for sale, filling in a form, and managing work already in flight. Tabs so each
   // one is a place you can be, rather than a stretch of page you have to find.
   const [tab, setTab] = useState('general');
+  /* Which part of ONE product you are looking at. Booking, the flights that are live
+     and the ones that are done are three different jobs, and a single scroll made you
+     hunt for whichever one you came for. */
+  const [ptab, setPtab] = useState('book');
+  /* Opening a product by its reference is the fallback path: it matters to somebody
+     who registered on another browser, and to nobody else. It sat permanently at the
+     foot of the product list, so it took up room on every visit for the one visit it
+     is needed on. */
+  const [showLookup, setShowLookup] = useState(false);
+  /* Where Book a spot has got to. It was one page holding an upload panel, a booking
+     form and every flight ever booked, which asked somebody to work out the order for
+     themselves. */
+  const [bookStep, setBookStep] = useState(1);
   const TABS = [
     { id: 'general', label: 'General' },
     { id: 'wizard', label: 'Enroll your ad' },
     { id: 'mine', label: 'My products' },
+  ];
+
+  const PRODUCT_TABS = [
+    { id: 'book', label: 'Book a spot' },
+    { id: 'active', label: 'Active spots' },
+    { id: 'history', label: 'Booking history' },
   ];
 
   const toggleMarket = (code) => setForm((f) => ({
@@ -1621,7 +2161,7 @@ export default function Advertise({ openLoginModal }) {
                 id="mkt-contact"
                 value={form.contact}
                 onChange={set('contact')}
-                placeholder="Discord, Telegram, email — whatever you actually read"
+                placeholder="Discord, Telegram, email, whatever you actually read"
                 required
               />
             </div>
@@ -1792,34 +2332,34 @@ export default function Advertise({ openLoginModal }) {
         <ol className="mkt-steps">
           <li>
             <strong>Your product</strong>
-            <span>
-              Whatever you want to advertise. Tell us about it once and a person reads it.
-              Advertising something different later means a new product, reviewed on its
-              own.
+            <span>Whatever you want to advertise.</span>
+            <span className="mkt-step-detail">
+              Tell us once and a person reads it. Something different later means a new
+              product.
             </span>
           </li>
           <li>
             <strong>Your ad videos</strong>
             <span>
-              The clip that plays inside someone&apos;s video
-              {pricing?.maxCreativeSeconds ? `, up to ${pricing.maxCreativeSeconds} seconds` : ''}.
-              {' '}Upload as many as you like under one product, or ask us to make one. We watch
-              each one before it can run.
+              The clip that plays inside someone&apos;s video.
+            </span>
+            <span className="mkt-step-detail">
+              Upload as many as you like{pricing?.maxCreativeSeconds ? ` (up to ${pricing.maxCreativeSeconds} seconds)` : ''}, or ask
+              us to make one. We watch each before it runs.
             </span>
           </li>
           <li>
             <strong>Your bookings</strong>
-            <span>
-              When your ad runs, where in the video it falls, and what it costs. Book as
-              many as you like under one product. Each booking uses one of your ad videos
-              and starts once your payment lands.
+            <span>When your ad runs, where it falls, and what it costs.</span>
+            <span className="mkt-step-detail">
+              Book as many as you like. Each uses one of your ad videos and starts when your
+              payment lands.
             </span>
           </li>
         </ol>
         <p className="mkt-fine">
-          Bookings are priced per second of ad, per day, never by the thousand impressions.
-          Nothing runs in front of anyone until both your product and the ad video have been
-          approved.
+          Priced per second of ad, per day. Nothing runs until your product and ad video are
+          both approved.
         </p>
       </section>
 
@@ -1837,16 +2377,19 @@ export default function Advertise({ openLoginModal }) {
 
       <section className="mkt-section">
         <h2>How it is priced</h2>
-        {/* Every number here comes from /advertise/pricing rather than the copy: a
-            hardcoded price is a promise the server has no idea it made. */}
-        <RateCard pricing={pricing} />
         {pricing?.formats?.length ? (
-          <p className="mkt-fine">
-            Every spot is priced per second of ad, per day it runs, so a longer spot or a
-            longer flight costs proportionally more. Each example above prices a
-            {' '}{EXAMPLE_SECONDS}-second spot over the {pricing.minDays}-day minimum, as a
-            like-for-like comparison rather than a limit.
-            {pricing.maxDays ? ` A booking can run up to ${pricing.maxDays} days.` : null}
+          <p className="mkt-intro-lede">
+            Every spot is priced per second of ad, per day it runs, and the day rate
+            falls the longer you book
+            {/* Named in real numbers rather than described. "Cheaper for longer" is a
+                claim every rate card makes; a week at 25% off is a reason to book a
+                week. Both figures come from the server's own curve, so they cannot
+                drift from what the booking form will quote. */}
+            {savingAt(7, pricing) ? ` — a week costs about ${savingAt(7, pricing)}% less per day than a single day, a month about ${savingAt(30, pricing)}% less` : ''}.
+            {' '}Examples use a
+            {' '}{EXAMPLE_SECONDS}-second spot over {Math.max(EXAMPLE_DAYS, pricing.minDays || 0)} days
+            {pricing.minDays ? `; you can book from ${pricing.minDays} day${pricing.minDays === 1 ? '' : 's'}` : ''}
+            {pricing.maxDays ? ` up to ${pricing.maxDays}` : ''}.
           </p>
         ) : pricing?.pricePerSecondDayHbd ? (
           // Fallback for a checker too old to send the rate card: one product, one price.
@@ -1855,35 +2398,52 @@ export default function Advertise({ openLoginModal }) {
             {pricing.minDays && pricing.maxCreativeSeconds ? (
               <span className="mkt-hint">
                 {' '}· a {pricing.maxCreativeSeconds}s spot for the {pricing.minDays}-day minimum
-                is {Math.round(pricing.pricePerSecondDayHbd * pricing.minDays * pricing.maxCreativeSeconds * 1000) / 1000} HBD,
+                  is {flightPrice(pricing.minDays, pricing.pricePerSecondDayHbd, pricing.maxCreativeSeconds, pricing.dayCurveK)} HBD{hiveEquivalent(flightPrice(pricing.minDays, pricing.pricePerSecondDayHbd, pricing.maxCreativeSeconds, pricing.dayCurveK), pricing.hbdPerHive) != null ? ` (about ${hiveEquivalent(flightPrice(pricing.minDays, pricing.pricePerSecondDayHbd, pricing.maxCreativeSeconds, pricing.dayCurveK), pricing.hbdPerHive)} HIVE)` : ''},
                 and a shorter spot costs proportionally less
               </span>
             ) : null}
           </p>
         ) : null}
+        {/* Every number here comes from /advertise/pricing rather than the copy: a
+            hardcoded price is a promise the server has no idea it made. */}
+        <RateCard pricing={pricing} />
         <p>
-          Spots are sold as a flat booking — your spot runs across the network for a fixed
-          period, at a fixed price in HBD. We do not sell by the thousand impressions: at
-          this scale that would mean quoting numbers too small to mean anything, and it
-          rewards padding the count instead of finding the right audience.
+          A flat booking: your spot runs across the network for a fixed period at a fixed
+          price. No CPM, so nobody has a reason to pad the count.
         </p>
         <p>
           You are quoted against the forecast above and reported against what actually
-          played. If delivery falls short of the forecast, the difference comes back as
-          credit on your next booking.
+          played. Fall short and the difference comes back as credit on your next booking.
         </p>
       </section>
 
-      <section className="mkt-section mkt-creators">
-        <h2>If you are a creator</h2>
-        <p>
-          Spots run across the network by default, and a share of what they earn goes to the
-          creator whose video carried them and to the community it was posted in. You can turn
-          ads off for your own videos at any time &mdash; a video with ads switched off is
-          removed from the availability figures above as well, so nothing is sold that we have
-          promised not to use.
-        </p>
-      </section>
+      {/* Two audiences who are not buying anything, side by side: the people whose
+          videos carry the ads and the people who watch them. Both are paid, and an
+          advertiser reading this page should see that the money goes somewhere real. */}
+      <div className="mkt-audience-pair">
+        <section className="mkt-section mkt-creators">
+          <h2><MdVideocam aria-hidden="true" /> If you are a creator</h2>
+          <p>
+            Ads run on your videos and you earn a share of what they make, along with the
+            community you posted in.
+          </p>
+          <p className="mkt-fine">
+            Switch them off any time in Settings. Your videos are then removed from what we
+            offer advertisers too.
+          </p>
+        </section>
+
+        <section className="mkt-section mkt-viewers">
+          <h2><MdTv aria-hidden="true" /> If you are a viewer</h2>
+          <p>
+            You earn a share too, for the videos you actually watch. Paid in HBD or HIVE,
+            same as everyone else.
+          </p>
+          <p className="mkt-fine">
+            Opt in from Settings. We only count a video once you have watched most of it.
+          </p>
+        </section>
+      </div>
       </div>
 
       <div
@@ -2042,7 +2602,7 @@ export default function Advertise({ openLoginModal }) {
                     {wizType === 'banner'
                       ? 'Upload the image that will be shown over the video.'
                       : (wizType === 'shorts'
-                        ? 'Upload the upright video that will play between shorts. It has to be portrait — a landscape spot plays small with black bars either side. 1080x1920 works well.'
+                        ? 'Upload the upright video that will play between shorts. It has to be portrait, because a landscape spot plays small with black bars either side. 1080x1920 works well.'
                         : 'Upload the video that will play, or ask us to make it. This is also where the logo and slogan shown over your ad are set.')}
                   </p>
                   <CreativePanel
@@ -2059,6 +2619,7 @@ export default function Advertise({ openLoginModal }) {
                        would collect something that is never drawn. */
                     brand={wizType === 'banner' ? null : { productName: wizRef.projectName, logoUrl: null, slogan: null }}
                     offer={wizType === 'banner' ? null : { ...bookProduction, feeHbd: pricing?.productionFeeHbd, onChange: setBookProduction }}
+                    onCreatives={setWizCreativeList}
                   />
                   <div className="mkt-wiz-actions">
                     <button type="button" className="mkt-primary" onClick={() => goStep(3)}>
@@ -2080,7 +2641,7 @@ export default function Advertise({ openLoginModal }) {
                   <CampaignPanel
                     reference={wizRef.reference}
                     pricing={pricing}
-                    creatives={creativeList}
+                    creatives={wizCreativeList}
                     production={bookProduction}
                     awaitingApproval={wizRef.status !== 'approved'}
                     lockFormat={WIZ_FORMAT[wizType] || 'video_roll'}
@@ -2136,9 +2697,81 @@ export default function Advertise({ openLoginModal }) {
         {/* Master/detail. The list used to sit above the detail, so opening a product
             pushed everything down and you lost sight of which one you were looking at
             once you scrolled into its bookings. */}
-        <div className="mkt-split">
-          <aside className="mkt-split-nav">
-            <h2>Your products</h2>
+        <div className="mkt-stack">
+          <div className="mkt-products">
+            <div className="mkt-split-head">
+              <h2>Your products</h2>
+              <div className="mkt-head-actions">
+              {user && (() => {
+                /* The server allows many products but only ONE application under review
+                   at a time, so that a reviewer is not reading the same person twice.
+                   Saying so on the button beats letting somebody fill in the whole form
+                   and meet a 409 at the end of it. */
+                const pending = (myApps || []).find((a) => a.status === 'pending');
+                return (
+                <button
+                  type="button"
+                  className="mkt-newproduct"
+                  disabled={!!pending}
+                  title={pending
+                    ? `${pending.projectName || 'A product'} is still under review. We come back to you on that one before you start another.`
+                    : 'Register another product'}
+                  onClick={() => {
+                    /* A second product is a fresh enrollment, so the wizard has to be
+                       genuinely empty. Clearing storage alone is not enough: `receipt`
+                       holds the product registered earlier in this session and wins over
+                       storage when wizRef is resolved, so the wizard would reopen the one
+                       you just finished instead of starting a new one. */
+                    clearWizard(user);
+                    setReceipt(null);
+                    setRefsVersion((v) => v + 1);
+                    setWizStep(1);
+                    setLookupRef('');
+                    setTab('wizard');
+                  }}
+                >
+                  <span aria-hidden="true">+</span> New
+                </button>
+                );
+              })()}
+              <button
+                type="button"
+                className="mkt-codebtn"
+                aria-expanded={showLookup}
+                aria-controls="mkt-lookup-form"
+                title="Open a product with the reference you were given"
+                onClick={() => setShowLookup((v) => !v)}
+              >
+                Open by code
+              </button>
+              </div>
+            </div>
+
+            {showLookup && (
+              <form className="mkt-lookup" id="mkt-lookup-form" onSubmit={onLookup}>
+                <label className="mkt-visually-hidden" htmlFor="mkt-ref">Product reference</label>
+                <input
+                  id="mkt-ref"
+                  value={lookupRef}
+                  onChange={(e) => setLookupRef(e.target.value)}
+                  placeholder="Open by reference"
+                  autoComplete="off"
+                  // Only ever rendered by pressing the button above, so taking the
+                  // caret is finishing that action rather than stealing focus.
+                  autoFocus
+                />
+                <button type="submit" className="mkt-secondary" disabled={lookingUp || !lookupRef.trim()}>
+                  {lookingUp ? 'Checking…' : 'Open'}
+                </button>
+              </form>
+            )}
+            {/* Said in the panel too, not only in a tooltip nobody hovers on a phone. */}
+            {user && (myApps || []).some((a) => a.status === 'pending') && (
+              <p className="mkt-fine">
+                One product is under review. We come back to you on that one before you
+                start another.
+              </p>
+            )}
 
             {!user && (
               <div className="mkt-panel mkt-panel-muted">
@@ -2165,7 +2798,7 @@ export default function Advertise({ openLoginModal }) {
             )}
 
             {myApps && myApps.length > 0 && (
-              <ul className="mkt-mine-list">
+              <ul className="mkt-mine-strip">
                 {myApps.map((a) => (
                   <li key={a.reference}>
                     {/* The whole row is the control. A separate "Open" button made the
@@ -2215,20 +2848,7 @@ export default function Advertise({ openLoginModal }) {
               </p>
             )}
 
-            <form className="mkt-lookup" onSubmit={onLookup}>
-              <label className="mkt-visually-hidden" htmlFor="mkt-ref">Product reference</label>
-              <input
-                id="mkt-ref"
-                value={lookupRef}
-                onChange={(e) => setLookupRef(e.target.value)}
-                placeholder="Open by reference"
-                autoComplete="off"
-              />
-              <button type="submit" className="mkt-secondary" disabled={lookingUp || !lookupRef.trim()}>
-                {lookingUp ? 'Checking…' : 'Open'}
-              </button>
-            </form>
-          </aside>
+          </div>
 
           <div className="mkt-split-main">
             {lookup ? (
@@ -2244,10 +2864,52 @@ export default function Advertise({ openLoginModal }) {
                 </div>
                 {lookup.note ? <p className="mkt-lookup-note">{lookup.note}</p> : null}
 
+                {(lookup.status === 'pending' || lookup.status === 'approved') && (
+                  <div className="mkt-ptabs" role="tablist" aria-label="This product">
+                    {PRODUCT_TABS.map((t) => (
+                      <button
+                        key={t.id}
+                        type="button"
+                        role="tab"
+                        aria-selected={ptab === t.id}
+                        className={`mkt-ptab${ptab === t.id ? ' selected' : ''}`}
+                        onClick={() => setPtab(t.id)}
+                      >
+                        {t.label}
+                      </button>
+                    ))}
+                  </div>
+                )}
+
+                {ptab === 'book' && (lookup.status === 'pending' || lookup.status === 'approved') && (
+                  <ol className="mkt-wiz-nav">
+                    {BOOK_STEPS.map((label, i) => {
+                      const n = i + 1;
+                      const state = n < bookStep ? ' done' : (n === bookStep ? ' current' : '');
+                      return (
+                        <li
+                          key={label}
+                          className={`mkt-wiz-step${state}`}
+                          aria-current={n === bookStep ? 'step' : undefined}
+                        >
+                          <span className="mkt-wiz-num">{n < bookStep ? '✓' : n}</span>
+                          <span>{label}</span>
+                        </li>
+                      );
+                    })}
+                  </ol>
+                )}
+
                 {/* Uploading is open to a pending applicant; booking is not. Nothing can
                     run either way until the product is approved and a booking is paid for,
-                    so the split is where it belongs. */}
+                    so the split is where it belongs.
+
+                    Kept MOUNTED on every tab rather than rendered only on its own: this
+                    panel owns the creative list, and the attach pickers on a flight under
+                    Active spots are filled from it. Rendering it conditionally left them
+                    empty for anyone who opened a product straight into another tab. */}
                 {(lookup.status === 'pending' || lookup.status === 'approved') && (
+                  <div style={{ display: ptab === 'book' && bookStep === 1 ? undefined : 'none' }}>
                   <CreativePanel
                     reference={lookupRef.trim()}
                     account={lookup.hiveAccount}
@@ -2267,6 +2929,7 @@ export default function Advertise({ openLoginModal }) {
                       onChange: setBookProduction,
                     } : null}
                   />
+                  </div>
                 )}
                 {/* Booking is open before approval now. The whole thing can be filled
                     in one sitting and reviewed afterwards; nothing reaches a viewer
@@ -2279,14 +2942,46 @@ export default function Advertise({ openLoginModal }) {
                     creatives={creativeList}
                     production={bookProduction}
                     awaitingApproval={lookup.status !== 'approved'}
+                    view={ptab}
+                    step={ptab === 'book' ? bookStep : null}
+                    onBooked={() => setBookStep(3)}
                   />
+                )}
+
+                {ptab === 'book' && (lookup.status === 'pending' || lookup.status === 'approved') && (
+                  <div className="mkt-wiz-actions">
+                    {bookStep === 1 && (
+                      <button type="button" className="mkt-primary" onClick={() => setBookStep(2)}>
+                        Next: the booking
+                      </button>
+                    )}
+                    {bookStep === 2 && (
+                      <button type="button" className="mkt-outline" onClick={() => setBookStep(1)}>
+                        Back to your ad
+                      </button>
+                    )}
+                    {bookStep === 3 && (
+                      <>
+                        <button
+                          type="button"
+                          className="mkt-primary"
+                          onClick={() => { setPtab('active'); setBookStep(1); }}
+                        >
+                          Done
+                        </button>
+                        <button type="button" className="mkt-outline" onClick={() => setBookStep(2)}>
+                          Book another
+                        </button>
+                      </>
+                    )}
+                  </div>
                 )}
               </div>
             ) : (
               <div className="mkt-panel mkt-panel-muted mkt-split-empty">
                 <p style={{ margin: 0 }}>
                   {myApps?.length
-                    ? 'Pick a product on the left to see its ad videos and bookings.'
+                    ? 'Pick a product above to see its ad videos and bookings.'
                     : 'Open a product with its reference to see its ad videos and bookings.'}
                 </p>
               </div>

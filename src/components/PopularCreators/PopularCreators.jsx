@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
-import { toast } from 'sonner';
+import { toastIn } from '../../utils/toast';
 import { TRENDING_SORTED_URL } from '../../utils/config';
 import { feedParams } from '../../utils/feedParams';
 import { getFollowing } from '../../utils/hiveUtils';
@@ -11,6 +11,10 @@ import { followWithAioha, isLoggedIn } from '../../hive-api/aioha';
 import { useAppStore } from '../../lib/store';
 import HiveAvatar from '../HiveAvatar/HiveAvatar';
 import './PopularCreators.scss';
+
+// Every toast from this module is headed "Following"; the message becomes the
+// line under it. See utils/toast.js.
+const toast = toastIn('Following');
 
 // How many creators to surface, and how deep into trending to look for them.
 const MAX_CARDS = 12;

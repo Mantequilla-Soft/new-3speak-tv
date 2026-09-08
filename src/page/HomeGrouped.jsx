@@ -781,7 +781,7 @@ const HomeGrouped = () => {
 
   return (
     <PullToRefresh onRefresh={handleRefresh}>
-    <div className="home-grouped-container home-tabbed" data-card-size={homeCardSize || 'large'}>
+    <div className="home-grouped-container home-tabbed" data-card-size={homeCardSize || 'small'}>
       <ShortsStories />
       {/* Logged-in only, and renders nothing when there's nothing unwatched. */}
       <NewFromFollowing />

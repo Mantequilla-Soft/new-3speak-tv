@@ -1,7 +1,11 @@
 import { useEffect, useRef, useState } from "react"
 import { useNavigate, useSearchParams } from "react-router-dom"
-import { toast } from "sonner"
+import { toastIn } from '../../utils/toast';
 import { useAppStore } from "../../lib/store"
+
+// Every toast from this module is headed "Sign in"; the message becomes the
+// line under it. See utils/toast.js.
+const toast = toastIn('Sign in');
 
 // Module-level guard: survives React StrictMode double-invokes and component re-mounts.
 // Keyed by the OAuth code so a different flow can still run.

@@ -11,12 +11,16 @@ import icon from '../../public/images/stack.png';
 import { useAppStore } from '../lib/store';
 import { getWatchHistory, getWatchHistoryCount, deleteWatchHistoryEntry } from '../utils/watchHistory';
 import { HIVE_API_URL, SHORTS_MAX_DURATION_SEC } from '../utils/config';
-import { toast } from 'sonner';
+import { toastIn } from '../utils/toast';
 import { fixVideoThumbnail, fallbackImg } from '../utils/fixThumbnails';
 import { getSinceTimestamp, formatRelativeDate } from '../utils/dateFilters';
 import { findShortByEmbedUrl } from '../hive-api/hiveApi';
 import { FeedToolbar, Pagination } from '../components/FeedToolbar/FeedToolbar';
 import './WatchedView.scss';
+
+// Every toast from this module is headed "Video"; the message becomes the
+// line under it. See utils/toast.js.
+const toast = toastIn('Video');
 
 async function fetchVideosFromHistory(items) {
   if (!items?.length) return [];

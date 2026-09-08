@@ -1,13 +1,17 @@
 import { useState, useRef, useCallback, useEffect } from 'react';
 import { MdUploadFile, MdVideocam, MdStop, MdFiberManualRecord } from 'react-icons/md';
 import * as tus from 'tus-js-client';
-import { toast } from 'sonner';
+import { toastIn } from '../../utils/toast';
 import { EMBED_UPLOAD_URL, EMBED_API_URL, EMBED_API_KEY, SHORTS_MAX_DURATION_SEC, shortsMaxDurationLabel } from '../../utils/config';
 import { commentWithAioha, broadcastViaThreespeak, getCurrentProvider, Providers } from '../../hive-api/aioha';
 import { hasThreespeakPostingAuth, addThreespeakToPostingAuth } from '../../utils/postingAuthority';
 import { useAppStore } from '../../lib/store';
 import { oaEnvelope, threespeakVideo, probeVideoOrientation, OA_COMMENT } from '../../utils/openAttribute';
 import './ReactVideoModal.scss';
+
+// Every toast from this module is headed "Video"; the message becomes the
+// line under it. See utils/toast.js.
+const toast = toastIn('Video');
 
 /**
  * Inline "React" tab panel — sits inside the comment input container.

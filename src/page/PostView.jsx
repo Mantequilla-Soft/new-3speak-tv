@@ -2,7 +2,7 @@ import { useState, useEffect, useMemo, useCallback } from 'react';
 import { getHiveUrl } from '../utils/hiveNode';
 import { useParams, Navigate, Link, useLocation } from 'react-router-dom';
 import axios from 'axios';
-import { toast } from 'sonner';
+import { toastIn } from '../utils/toast';
 import { useAppStore } from '../lib/store';
 import BlogContent from '../components/playVideo/BlogContent';
 import CommentSection from '../components/playVideo/CommentSection';
@@ -21,6 +21,10 @@ import { LuTimer } from 'react-icons/lu';
 import { Repeat2 } from 'lucide-react';
 import { MdAttachMoney, MdComment, MdFlag, MdShare } from 'react-icons/md';
 import './PostView.scss';
+
+// Every toast from this module is headed "Post"; the message becomes the
+// line under it. See utils/toast.js.
+const toast = toastIn('Post');
 
 function parseAudioPermlink(audioUrl) {
   try {

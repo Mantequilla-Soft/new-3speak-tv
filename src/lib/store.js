@@ -30,9 +30,10 @@ export const useAppStore = create(
       setSidebarHidden: (val) => a[0]({ sidebarHidden: typeof val === 'function' ? val(a[1]().sidebarHidden) : val }),
       showNsfw: false,
       setShowNsfw: (val) => a[0]({ showNsfw: typeof val === 'function' ? val(a[1]().showNsfw) : val }),
-      // Video card size: 'small' | 'large' (default large). Drives home, profile
-      // and playlist card grids.
-      homeCardSize: 'large',
+      // Video card size: 'small' | 'large' (default small — a first-time visitor
+      // sees more videos per screen; returning users keep whatever they persisted).
+      // Drives home, profile and playlist card grids.
+      homeCardSize: 'small',
       setHomeCardSize: (val) => a[0]({ homeCardSize: typeof val === 'function' ? val(a[1]().homeCardSize) : val }),
       // Hover/scroll video previews on cards (default on).
       previewEnabled: true,

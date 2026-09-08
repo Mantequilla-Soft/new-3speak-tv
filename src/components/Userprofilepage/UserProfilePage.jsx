@@ -28,7 +28,7 @@ import { useUserPlaylists } from '../../hooks/useUserPlaylists';
 import { useAppStore } from '../../lib/store';
 import CreatorStats from '../CreatorStats/CreatorStats';
 import { createPlaylist } from '../../utils/playlistOperations';
-import { toast } from 'sonner';
+import { toastIn } from '../../utils/toast';
 import { useContentBatch } from '../../hooks/useContentBatch';
 import { useWatchHistory } from '../../hooks/useWatchHistory';
 import useViewCounts from '../../hooks/useViewCounts';
@@ -49,7 +49,9 @@ import ProfileOverview from './ProfileOverview';
 import ProfileLinksButton from './ProfileLinksButton';
 import ProfileEmptyState from './ProfileEmptyState';
 
-
+// Every toast from this module is headed "Profile"; the message becomes the
+// line under it. See utils/toast.js.
+const toast = toastIn('Profile');
 
 function UserProfilePage() {
     const { user } = useParams();

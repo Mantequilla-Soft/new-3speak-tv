@@ -1,4 +1,4 @@
-import { toast } from 'sonner';
+import { toastIn } from './toast';
 import { commentWithAioha } from '../hive-api/aioha';
 import { enforceLockedBeneficiaries } from './beneficiaries';
 import {
@@ -8,6 +8,10 @@ import {
   buildOpenPodSnapMetadata,
 } from './openpodUtils';
 import { oaEnvelope, threespeakVideo, OA_ARTICLE, OA_MICROPOST } from './openAttribute';
+
+// Every toast from this module is headed "Live"; the message becomes the
+// line under it. See utils/toast.js.
+const toast = toastIn('Live');
 
 // --- Shared announce config (community / payout / beneficiaries) ----------
 // Edited in TWO places — the create-room dialog AND the studio's post tab —

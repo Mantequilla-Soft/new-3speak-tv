@@ -1,11 +1,15 @@
 import { useState, useEffect, useCallback } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { toast } from 'sonner';
+import { toastIn } from '../../utils/toast';
 import { getFollowers, getRelationshipBetweenAccounts } from '../../hive-api/api';
 import { followWithAioha, isLoggedIn } from '../../hive-api/aioha';
 import { useAppStore } from '../../lib/store';
 import PremiumBadge from '../PremiumBadge/PremiumBadge';
 import './AuthorBadge.scss';
+
+// Every toast from this module is headed "Profile"; the message becomes the
+// line under it. See utils/toast.js.
+const toast = toastIn('Profile');
 
 // `subtitle` replaces the followers line — used by rails that describe the
 // creator by something other than their follower count ("3 shorts / 2 videos").

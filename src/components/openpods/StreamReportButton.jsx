@@ -1,11 +1,15 @@
 import { useState } from 'react';
 import axios from 'axios';
 import { Flag } from 'lucide-react';
-import { toast } from 'sonner';
+import { toastIn } from '../../utils/toast';
 import { CHECKER_URL } from '../../utils/config';
 import { APP_VERSION } from '../../version';
 import { useAppStore } from '../../lib/store';
 import './StreamReportButton.scss';
+
+// Every toast from this module is headed "Live"; the message becomes the
+// line under it. See utils/toast.js.
+const toast = toastIn('Live');
 
 // Report a live stream / room for abuse. POSTs to the checker's `/reports`
 // collection (processed:false) for moderator triage — same triage pattern as

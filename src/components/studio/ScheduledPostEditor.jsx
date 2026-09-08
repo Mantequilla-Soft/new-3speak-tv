@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { toast } from 'sonner';
+import { toastIn } from '../../utils/toast';
 import { MdPeopleAlt } from 'react-icons/md';
 import { useAppStore } from '../../lib/store';
 import { CHECKER_API_KEY } from '../../utils/config';
@@ -13,6 +13,10 @@ import Beneficiary_modal from '../modal/Beneficiary_modal';
 // plus EditScheduledPost.scss for the thumbnail row + the secondary buttons.
 import '../legacy-studio/StudioPage.scss';
 import '../../page/EditScheduledPost.scss';
+
+// Every toast from this module is headed "Post"; the message becomes the
+// line under it. See utils/toast.js.
+const toast = toastIn('Post');
 
 const CHECKER_BASE =
   import.meta.env.VITE_SCHEDULED_POSTS_API_URL || 'https://prod-checker.okinoko.io';

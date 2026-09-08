@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { IoClose } from 'react-icons/io5';
 import { FaYoutube, FaSoundcloud, FaCopy, FaCheck, FaTrash, FaExternalLinkAlt } from 'react-icons/fa';
-import { toast } from 'sonner';
+import { toastIn } from '../../utils/toast';
 import {
   getHash,
   getLinks,
@@ -13,6 +13,10 @@ import {
   platformLabel,
 } from '../../utils/socialVerifier';
 import './AddSocialLink_modal.scss';
+
+// Every toast from this module is headed "Profile"; the message becomes the
+// line under it. See utils/toast.js.
+const toast = toastIn('Profile');
 
 const PLATFORM_ICONS = {
   youtube: FaYoutube,

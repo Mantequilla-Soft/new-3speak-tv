@@ -1,0 +1,81 @@
+/* Skip, bottom-right of the frame.
+ *
+ * Sits on the same line as `.watch-ad-countdown` ("Ad in 3") and uses its offsets
+ * deliberately: both are transient ad furniture in the same corner, and matching them
+ * means neither ever lands somewhere the other has taught people not to look. They
+ * cannot appear together — one counts down TO the break, the other runs during it.
+ *
+ * `bottom` clears the control bar. A skip button under the scrubber is a skip button
+ * nobody can press on a phone.
+ */
+.ad-skip {
+  position: absolute;
+  right: 12px;
+  bottom: 56px;
+  /* Above the click-to-play surface (5), which spans the frame: underneath it, a tap
+     here would toggle playback instead, and on touch that handler calls
+     preventDefault() so the tap is swallowed outright. */
+  z-index: 7;
+
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 6px 11px;
+  border-radius: 999px;
+  /* Its own dark ground: drawn over video we do not control and can assume no
+     contrast against. */
+  background: rgba(0, 0, 0, 0.66);
+  backdrop-filter: blur(6px);
+  color: #fff;
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1.4;
+  letter-spacing: 0.02em;
+  /* So the countdown does not jitter the box width as it ticks. */
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+
+  svg { font-size: 16px; }
+
+  @media (max-width: 600px) {
+    right: 8px;
+    bottom: 44px;
+    padding: 5px 9px;
+    font-size: 12px;
+    svg { font-size: 14px; }
+  }
+}
+
+/* Waiting: present, readable, and plainly not yet pressable. No border, no hover, no
+   pointer — everything that would suggest it does something now. */
+.ad-skip-waiting {
+  pointer-events: none;
+  opacity: 0.9;
+  border: 1px solid transparent;
+
+  strong { font-weight: 700; }
+}
+
+/* Ready. The border is the whole signal that it became pressable, which is why the
+   waiting state reserves the space for one. */
+.ad-skip-ready {
+  pointer-events: auto;
+  cursor: pointer;
+  border: 1px solid rgba(255, 255, 255, 0.45);
+  transition: background 120ms ease, border-color 120ms ease;
+
+  &:hover,
+  &:focus-visible {
+    background: rgba(0, 0, 0, 0.85);
+    border-color: rgba(255, 255, 255, 0.75);
+  }
+
+  &:focus-visible {
+    outline: 2px solid #fff;
+    outline-offset: 2px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ad-skip-ready { transition: none; }
+}

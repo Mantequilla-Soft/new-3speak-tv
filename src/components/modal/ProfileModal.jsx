@@ -4,8 +4,12 @@ import { CiCalendarDate } from "react-icons/ci";
 import {  getHiveUserProfile, getRelationshipBetweenAccounts } from "../../hive-api/api";
 import "./ProfileModal.scss";
 import { useNavigate } from "react-router-dom";
-import {  toast } from 'sonner'
+import { toastIn } from '../../utils/toast';
 import { followWithAioha, isLoggedIn } from "../../hive-api/aioha";
+
+// Every toast from this module is headed "Profile"; the message becomes the
+// line under it. See utils/toast.js.
+const toast = toastIn('Profile');
 
 function ProfileModal({ username = "kesolink", onClose }) {
   const [profile, setProfile] = useState(null);

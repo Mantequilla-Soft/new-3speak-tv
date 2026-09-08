@@ -1,7 +1,12 @@
 import { useState } from 'react';
 import { createPortal } from 'react-dom';
-import { toast } from 'sonner';
+import { MdVideocam } from 'react-icons/md';
+import { toastIn } from '../../utils/toast';
 import { saveCreatorAdSettings } from '../../utils/adSettings';
+
+// Every toast from this module is headed "Advertising"; the message becomes the
+// line under it. See utils/toast.js.
+const toast = toastIn('Advertising');
 
 /**
  * Two steps: what the deal is, then what you want.
@@ -16,13 +21,24 @@ import { saveCreatorAdSettings } from '../../utils/adSettings';
 export default function AdSettingsDialog({ user, split, initialAdsEnabled, onSaved, onDismiss }) {
   const [step, setStep] = useState(0);
   const [adsEnabled, setAdsEnabled] = useState(initialAdsEnabled !== false);
-  // Seeded from the server's own default (25 of the 50-point pool) rather than a
-  // constant kept here — see readCreatorAdChoice.
+  // Seeded from the server's own default community share rather than a constant
+  // kept here — see readCreatorAdChoice. (That default is 0 now, not the 25 this
+  // comment used to name: sharing with a community is opt in.)
   const [community, setCommunity] = useState(split.communityPct);
   const [saving, setSaving] = useState(false);
 
   const pool = split.poolPct;
   const mine = pool - community;
+  // Viewers are paid out of 3Speak's own cut, not the creator pool — `pool` is the
+  // same number whether or not anyone watching is opted in. Both of these come from
+  // the server for the same reason the pool does: a checker that changes the viewer
+  // share must not need a frontend release to stop lying about it.
+  //
+  // A checker that predates the viewer share sends neither, and the fallback is the
+  // old two-way split rather than a guess: showing an invented 5% here would be a
+  // promise nothing in the payout run has made.
+  const viewers = Number.isFinite(split.viewerPct) ? split.viewerPct : 0;
+  const platform = Number.isFinite(split.platformPct) ? split.platformPct : 100 - pool;
 
   async function save() {
     if (saving) return;
@@ -55,36 +71,71 @@ export default function AdSettingsDialog({ user, split, initialAdsEnabled, onSav
     // out is the explicit "Not now" button.
     <div className="ads-prompt-overlay">
       <div className="ads-prompt">
+        {/* The creator half of /advertise, same icon and same promise, so the page
+            and this dialog are recognisably one feature. It stays put across both
+            steps: the step titles below say where you are, the header says what the
+            whole thing is, and losing that on step two is how "Your choice" ends up
+            floating with nothing naming the subject. */}
+        <header className="ads-prompt-head">
+          <MdVideocam className="ads-prompt-head-icon" aria-hidden="true" />
+          <div>
+            <h3 className="ads-prompt-title">Ads on your videos</h3>
+            <p className="ads-prompt-lede">
+              Ads run on your videos and you earn a share of what they make, along with
+              the community you posted in.
+            </p>
+          </div>
+        </header>
+
         <span className="ads-prompt-step">Step {step + 1} of 2</span>
 
         {step === 0 ? (
           <>
-            <h3 className="ads-prompt-title">Ads on your videos</h3>
             <p className="ads-prompt-text">
               3Speak can play a short sponsor spot in your videos. Here is the whole
               arrangement, with nothing behind it.
             </p>
 
+            {/* The numbers moved out of the bar and into the key below it when the
+                viewer share was added: at 5% of the width there is no room to print
+                "5%" inside the segment, and a bar where only the wide slices are
+                labelled invites you to read the unlabelled one as rounding. */}
             <div className="ads-prompt-bar" aria-hidden="true">
-              <span className="ads-prompt-bar-creators" style={{ width: `${pool}%` }}>{pool}%</span>
-              <span className="ads-prompt-bar-platform">{100 - pool}%</span>
+              <span className="ads-prompt-bar-creators" style={{ width: `${pool}%` }} />
+              {viewers > 0 ? (
+                <span className="ads-prompt-bar-viewers" style={{ width: `${viewers}%` }} />
+              ) : null}
+              <span className="ads-prompt-bar-platform" />
             </div>
-            <div className="ads-prompt-bar-legend" aria-hidden="true">
-              <span>Creator side</span>
-              <span>Keeping 3Speak running</span>
-            </div>
+            <ul className="ads-prompt-bar-key">
+              <li className="is-creators"><span>Creator side</span><b>{pool}%</b></li>
+              {viewers > 0 ? (
+                <li className="is-viewers"><span>People watching</span><b>{viewers}%</b></li>
+              ) : null}
+              <li className="is-platform">
+                <span>Keeping 3Speak running</span><b>{platform}%</b>
+              </li>
+            </ul>
 
             <ul className="ads-prompt-points">
               <li>
                 <strong>{pool}% of what an ad earns goes to the creator side.</strong> The
-                other {100 - pool}% keeps 3Speak thriving: encoding, storage, bandwidth
-                and the people who keep it up.
+                other {100 - pool}% pays the people watching and keeps 3Speak thriving:
+                encoding, storage, bandwidth and the people who keep it up.
               </li>
               <li>
                 <strong>That {pool}% is yours to divide.</strong> You can pass part of it to
                 the community the video was posted into, so the community carrying your
                 work earns from it too. Keep all {pool}% if you would rather.
               </li>
+              {viewers > 0 ? (
+                <li>
+                  <strong>Viewers earn {viewers}% too, and not out of your share.</strong>{' '}
+                  People who opt in are paid for the videos they actually watch, out of
+                  3Speak&apos;s end of the split rather than yours. Your {pool}% is the
+                  same either way.
+                </li>
+              ) : null}
               <li>
                 <strong>You can say no.</strong> Turn ads off and your videos carry none at
                 all. They are also withdrawn from what we offer advertisers, so nothing
@@ -103,7 +154,7 @@ export default function AdSettingsDialog({ user, split, initialAdsEnabled, onSav
           </>
         ) : (
           <>
-            <h3 className="ads-prompt-title">Your choice</h3>
+            <h4 className="ads-prompt-title">Your choice</h4>
             <p className="ads-prompt-text">
               You can change either of these at any time in <strong>Settings</strong>.
             </p>
@@ -152,7 +203,10 @@ export default function AdSettingsDialog({ user, split, initialAdsEnabled, onSav
                 <div className="ads-prompt-breakdown">
                   <span><b>{mine}%</b> you</span>
                   <span><b>{community}%</b> community</span>
-                  <span className="muted"><b>{100 - pool}%</b> 3Speak</span>
+                  {viewers > 0 ? (
+                    <span className="muted"><b>{viewers}%</b> viewers</span>
+                  ) : null}
+                  <span className="muted"><b>{platform}%</b> 3Speak</span>
                 </div>
               </div>
             )}

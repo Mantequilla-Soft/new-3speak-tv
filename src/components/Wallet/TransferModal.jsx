@@ -3,7 +3,11 @@ import "./TransferModal.scss"
 import {useAppStore } from "../../lib/store"
 import {isAccountValid} from "../../hive-api/api"
 import { transferWithAioha, isLoggedIn } from "../../hive-api/aioha"
-import { toast } from 'sonner';
+import { toastIn } from '../../utils/toast';
+
+// Every toast from this module is headed "Wallet"; the message becomes the
+// line under it. See utils/toast.js.
+const toast = toastIn('Wallet');
 
 function TransferModal({showModal, selectedCoin, balances, fetchBalances}) {
     const { user } = useAppStore();

@@ -4,7 +4,7 @@ import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { Link } from 'react-router-dom';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
-import { toast } from 'sonner';
+import { toastIn } from '../../utils/toast';
 import { BiCommentDetail } from 'react-icons/bi';
 import { MdMoreVert, MdEdit, MdClose } from 'react-icons/md';
 import {
@@ -25,6 +25,10 @@ import AuthorBadge from '../AuthorBadge/AuthorBadge';
 import CommentVoteTooltip from '../tooltip/CommentVoteTooltip';
 import BarLoader from '../Loader/BarLoader';
 import './CommunitySnaps.scss';
+
+// Every toast from this module is headed "Post"; the message becomes the
+// line under it. See utils/toast.js.
+const toast = toastIn('Post');
 
 dayjs.extend(relativeTime);
 

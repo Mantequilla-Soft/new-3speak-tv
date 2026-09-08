@@ -29,6 +29,7 @@ import { batchCheckHidden, isCreatorHidden } from '../utils/hiddenCreators';
 import { usePlayer } from '@mantequilla-soft/3speak-player/react';
 import { createAdBreak } from '../lib/adBreak';
 import AdOverlay from '../components/ads/AdOverlay';
+import AdSkip from '../components/ads/AdSkip';
 import BannerClick from '../components/ads/BannerClick';
 
 // How long before a break the countdown appears. Three seconds is enough to register
@@ -45,6 +46,7 @@ import { notifyMediaPlay, onMediaPlay } from '../utils/mediaCoordinator';
 import AmbientGlow, { useAmbientGlow } from '../components/AmbientGlow/AmbientGlow';
 import useSubtitles from '../hooks/useSubtitles';
 import useWatchDuration from '../hooks/useWatchDuration';
+import { usePremiumStatus } from '../hooks/usePremiumStatus';
 import { fetchScheduledPost, getScheduledEmbedRef } from '../utils/scheduledPosts';
 import EditScheduledModal from '../components/modal/EditScheduledModal';
 import { getHiveRenderer } from '../lib/hiveRenderer';
@@ -270,6 +272,10 @@ function Watch({ v2 = false }) {
 
   const { glowMode, toggleGlow } = useAmbientGlow();
 
+  // Pro status for the logged-in viewer, from the checker rather than inferred
+  // from whether an ad happened to be served. See the `premium` note below.
+  const premiumStatus = usePremiumStatus(user);
+
   // Subtitles
   const {
     availableLanguages: subtitleLanguages,
@@ -437,10 +443,39 @@ function Watch({ v2 = false }) {
   // the thing a viewer actually wants to know, and a number that is visibly
   // ticking down reads as shorter than the same wait with no number on it.
   const [resumeIn, setResumeIn] = useState(null);
+  // Whether a Skip is being offered on the spot playing right now. The server decides
+  // IF and AFTER HOW LONG; this is only whether that moment has arrived.
+  const [canSkipAd, setCanSkipAd] = useState(false);
+  /* A hard rule: NO ad chrome at all while the source is being swapped.
+   *
+   * Reloading a source resets the playhead to zero before the new manifest lands, and
+   * a spot booked at the start of the video is "playing" at zero. So for a moment
+   * after closing a banner, the roll's disclosure and Skip flashed up over a video
+   * that was simply reloading. Rather than teach every control to recognise that
+   * moment, one flag silences all of them, and it is a flag rather than more window
+   * arithmetic because the timeline is exactly what cannot be trusted mid-swap. */
+  const [adChromeOff, setAdChromeOff] = useState(false);
+  // Seconds until the Skip becomes pressable, or null once it is. The control is on
+  // screen for the whole spot either way; this only decides which state it is in.
+  const [skipIn, setSkipIn] = useState(null);
+  // Whether the banner may be closed yet. See adBreak.bannerClosable.
+  const [bannerClosable, setBannerClosable] = useState(false);
   // Disclosure. Required by EU and US advertising rules, and driven off the same
   // clock the tracker reads so it can never disagree with what is on screen.
   useEffect(() => {
     const ab = adBreakRef.current;
+    // Silenced while the source is swapping: the clock is meaningless until the new
+    // manifest is parsed, so nothing derived from it may be shown.
+    if (adChromeOff) {
+      if (sponsorVisible) setSponsorVisible(false);
+      if (bannerVisible) setBannerVisible(false);
+      if (bannerClosable) setBannerClosable(false);
+      if (adCountdown !== null) setAdCountdown(null);
+      if (resumeIn !== null) setResumeIn(null);
+      if (canSkipAd) setCanSkipAd(false);
+      if (skipIn !== null) setSkipIn(null);
+      return;
+    }
     // `active` is the SPOT. A playback can carry a banner and no spot, so the banner
     // is cleared on its own terms rather than with the break.
     if (!ab.active && !ab.bannerInfo) {
@@ -448,6 +483,8 @@ function Watch({ v2 = false }) {
       if (bannerVisible) setBannerVisible(false);
       if (adCountdown !== null) setAdCountdown(null);
       if (resumeIn !== null) setResumeIn(null);
+      if (canSkipAd) setCanSkipAd(false);
+      if (skipIn !== null) setSkipIn(null);
       return;
     }
     if (!ab.active) {
@@ -475,7 +512,148 @@ function Watch({ v2 = false }) {
     const remain = inside ? ab.secondsRemaining(t) : null;
     const shown = remain == null ? null : Math.max(0, Math.ceil(remain));
     if (shown !== resumeIn) setResumeIn(shown);
-  }, [playerState?.currentTime, sponsorVisible, bannerVisible, adCountdown, resumeIn]);
+
+    // Skippable, and only once the server's threshold has actually elapsed. Read off
+    // the same clock as the disclosure, so a Skip can never appear over a spot that is
+    // not running.
+    // The banner's close button waits too, on the same server-sent threshold. The
+    // click target does not: following an ad is something a viewer may do at once.
+    const closable = onBanner && ab.bannerClosable(t);
+    if (closable !== bannerClosable) setBannerClosable(closable);
+
+    const skippable = inside && ab.canSkip(t);
+    if (skippable !== canSkipAd) setCanSkipAd(skippable);
+
+    // Whole seconds, so it ticks once rather than flickering per frame — the same
+    // treatment the resume countdown gets, for the same reason.
+    const untilSkip = inside ? ab.secondsUntilSkip(t) : null;
+    const shownSkip = untilSkip == null ? null : Math.max(1, Math.ceil(untilSkip));
+    if (shownSkip !== skipIn) setSkipIn(shownSkip);
+  }, [playerState?.currentTime, sponsorVisible, bannerVisible, adCountdown, resumeIn, canSkipAd, skipIn, adChromeOff, bannerClosable]);
+
+  /* The viewer closed the banner.
+   *
+   * 🚨 Telling the server is not enough on its own. The banner is IN the picture, so
+   * every second the player has already buffered still carries it, and on a healthy
+   * connection that is most of its run: closing it would appear to do nothing for
+   * several seconds, which reads as a broken button rather than a slow one.
+   *
+   * So the buffer AHEAD of the playhead is dropped and refetched. Those segments come
+   * back unburned now that the server has been told, and the ad goes in about a
+   * second. It costs a moment of loading, which is the right trade for somebody who
+   * has just asked to be rid of it. Only what is ahead: flushing from zero would throw
+   * away what is behind too and make a scrub back re-download.
+   *
+   * All best-effort. hls.js is not guaranteed to be the engine, and a flush that fails
+   * leaves the old behaviour, where the banner simply finishes its run. Never a reason
+   * to throw inside a click handler on the watch page.
+   */
+  /* Skip the rest of the spot: seek to where the content resumes.
+   *
+   * The break is spliced INTO the playlist, so there is nothing to unload — the video
+   * carries on immediately after it, and moving the playhead past the break is the
+   * whole of skipping. `endOfBreak` lands a hair past the boundary, because stopping
+   * exactly on it can leave the player one frame inside the spot and flash the
+   * disclosure back up.
+   *
+   * The advertiser is not billed for what was not watched: an impression completes
+   * only once enough of the spot has actually played, so a skip at five seconds of a
+   * fifteen second spot was never a charge in the first place.
+   */
+  const skipAd = useCallback(() => {
+    const to = adBreakRef.current?.endOfBreak?.();
+    // Counted as watched. The button only exists after the threshold, so pressing it
+    // means the spot got the seconds it was owed.
+    try { adBreakRef.current?.recordSkip?.(); } catch { /* the skip still happens */ }
+    setCanSkipAd(false);
+    if (!Number.isFinite(to)) return;
+    try { player?.seek(to); } catch { /* the spot simply plays out */ }
+  }, [player]);
+
+
+  const dismissBanner = useCallback(async () => {
+    setBannerVisible(false);
+
+    /* 🚨 A DRAWN BANNER IS ALREADY GONE.
+     *
+     * Hiding the element removes it, so none of what follows applies: there is no
+     * reload, so no window where the clock reads zero and a passed spot looks live,
+     * and nothing to seek back from. Everything below exists only because a burned
+     * banner lives in bytes the browser has already downloaded.
+     *
+     * Told to the server all the same, so it stops counting the banner as on screen
+     * and stops serving it for the rest of the session. */
+    if (adBreakRef.current?.bannerOverlay) {
+      try { await adBreakRef.current?.dismissBanner?.(); } catch { /* the hide stands */ }
+      return;
+    }
+
+    // Everything ad-related goes quiet until the new manifest is parsed: a reload walks
+    // the playhead through zero, and a spot booked at the start of the video is inside
+    // its own window there.
+    setAdChromeOff(true);
+
+    /* HARD RULE: a spot already passed never shows its chrome again.
+     *
+     * Silencing only for the duration of the swap was not enough. The flag comes off
+     * when the manifest parses, which is BEFORE the player has seeked back, so there
+     * was still a window where the clock read zero and the pre-roll looked live.
+     *
+     * If the break ends at or before where the viewer is being put back, it is retired
+     * outright and no clock can resurrect it. A break not yet reached is left alone:
+     * that one still has to run. */
+    try {
+      const end = adBreakRef.current?.endOfBreak?.();
+      const at0 = videoElRef.current?.currentTime;
+      if (Number.isFinite(end) && Number.isFinite(at0) && end <= at0) {
+        adBreakRef.current?.retireSpot?.();
+      }
+    } catch { /* the swap flag still covers the reload itself */ }
+    try { await adBreakRef.current?.dismissBanner?.(); } catch { /* the hide still happens */ }
+
+    /* SWAP THE SOURCE. Do not try to un-burn what is already downloaded.
+     *
+     * 🚨 Flushing the buffer was the wrong tool and could never have worked. The
+     * covered seconds keep the SAME segment urls whether or not the banner is on them,
+     * so a refetch is a refetch of the burned bytes, and the browser will happily serve
+     * them from its own cache without asking anybody. Two rounds of cache headers and
+     * buffer margins went into that and none of it could have.
+     *
+     * A dismissed session's playlist points those seconds at the CDN original instead,
+     * so reloading the source genuinely changes which files play. Different urls, so
+     * nothing cached under the old ones can come back.
+     *
+     * The position is captured first and restored once the new manifest is parsed,
+     * because loading a source starts it from the beginning otherwise, and a viewer who
+     * closed an ad should not be sent back to the start of the video for it.
+     */
+    try {
+      const hls = player?.hls;
+      const el = videoElRef.current;
+      const at = el?.currentTime;
+      const wasPlaying = el && !el.paused;
+      if (!hls?.loadSource || !hls.url || !Number.isFinite(at)) { setAdChromeOff(false); return; }
+      /* `startLoad(position)` rather than setting currentTime.
+       *
+       * Reloading a source detaches and re-attaches the MediaSource, so the element
+       * starts empty at zero. Assigning currentTime against an empty buffer is ignored
+       * as often as not; telling hls.js WHERE TO BEGIN LOADING is the supported way,
+       * and the element lands there once the first fragment arrives. */
+      hls.once('hlsManifestParsed', () => {
+        try {
+          hls.startLoad(at);
+          if (wasPlaying) videoElRef.current?.play?.().catch(() => {});
+        } catch { /* the viewer can press play */ }
+        // Back on only once the playhead means something again.
+        setAdChromeOff(false);
+      });
+      hls.loadSource(hls.url);
+      // Belt and braces: a manifest that never parses must not silence the chrome for
+      // the rest of the video.
+      setTimeout(() => setAdChromeOff(false), 8000);
+    } catch { setAdChromeOff(false); }
+  }, [player]);
+
 
   useWatchDuration({
     api: sdkApiRef.current,
@@ -486,7 +664,19 @@ function Watch({ v2 = false }) {
     // Report CONTENT time. Without this a stitched spot's seconds are credited as
     // watch time on the creator's video.
     mapPosition: (t) => adBreakRef.current.contentTime(t),
-    premium: adBreakRef.current.isPremiumViewer,
+    /* 🚨 Asked of the checker directly, NOT taken from the ad response.
+     *
+     * `adBreak.isPremiumViewer` starts false and is only set when /m/session
+     * answers, which happens AFTER this hook has already opened the watch session.
+     * So every session was stamped `premium: false`, a Pro subscriber's included,
+     * and services/adInventory.js — which filters `premium: {$ne: true}` precisely
+     * so we never sell inventory we will not serve — was counting them as sellable.
+     * Serving itself was never affected: adDecision() resolves premium server-side
+     * from embed-users.
+     *
+     * usePremiumStatus returns null while loading, so `=== true` keeps an
+     * unresolved answer out of the flag rather than guessing either way. */
+    premium: premiumStatus?.premium === true,
   });
 
   // Also record a normal view once playback actually starts (increments the view
@@ -820,6 +1010,21 @@ function Watch({ v2 = false }) {
     });
 
     const unsubEnded = player.on('ended', () => {
+      /* 🚨 Is this a REAL end, or did the buffer just run dry?
+       *
+       * `ended` is not only fired by reaching the end of a video. Anything that empties
+       * the media element's buffer can produce one, and then autoplay-next carries the
+       * viewer off to another video for no reason they can see. Closing a banner ad did
+       * exactly that: it flushes the buffer so the ad stops sooner, the element found
+       * itself with nothing, and the page moved on.
+       *
+       * A real end has the playhead AT the end. Anything else is the player having a
+       * moment, and the right response is to ignore it rather than to navigate. */
+      const el = videoElRef.current;
+      if (el && Number.isFinite(el.duration) && el.duration > 0
+        && el.currentTime < el.duration - 1.5) {
+        return;
+      }
       // Don't autoplay when user is selecting clip start/end or a popup is open
       if (clipModeActiveRef.current || popupOpenRef.current) {
         setVideoEnded(true);
@@ -1311,6 +1516,98 @@ function Watch({ v2 = false }) {
     if (el && posterUrl) el.poster = posterUrl;
   }, [posterUrl, videoAttached]);
 
+  /* 🚨 A SPOT THAT HAS RUN IS A HOLE IN THE TIMELINE.
+   *
+   * The ad is stitched into the manifest, so its seconds are real positions somebody
+   * can drag the handle onto, and scrubbing back over your own video played the ad
+   * again. Reloading onto a clean manifest would fix it and cost far more than it is
+   * worth: that is the source swap the banner used to do, and it was never seamless.
+   * So the seconds stay in the file and the playhead refuses to rest on them, jumping
+   * to whichever side the viewer was travelling towards.
+   *
+   * `lastSeen` is the position BEFORE this event, which is the only way to tell a
+   * scrub back from a scrub forward. Bound to `seeked` as well as `timeupdate`
+   * because a quarter of a second of an ad already sat through still reads as one.
+   */
+  useEffect(() => {
+    const el = videoElRef.current;
+    if (!el) return undefined;
+    let lastSeen = null;
+    let boundaryRaf = 0;
+    /* How far ahead of the cut to leave. Covers the gap between the frame on screen
+     * and the clock, plus the seek's own latency. */
+    const BOUNDARY_LEAD_S = 0.16;
+
+    /* 🚨 WATCH THE BOUNDARY BY FRAME, not by timeupdate.
+     *
+     * A seek is announced, so it can be redirected before anything is drawn. Ordinary
+     * playback into a spent spot is not: it just arrives, and timeupdate reports about
+     * four times a second, so up to a quarter second of an ad the viewer already sat
+     * through was presented before the jump. Re-watching the run-up to a mid-roll is
+     * where that shows.
+     *
+     * Armed only within a second and a half of the cut and dropped as soon as playback
+     * is past it or paused, so this is not a render loop the page carries around. */
+    const boundaryTick = () => {
+      boundaryRaf = 0;
+      const ab = adBreakRef.current;
+      const start = ab?.spotStart?.();
+      const at = el.currentTime;
+      if (start == null || !ab.spotConsumed || !Number.isFinite(at) || el.paused) return;
+      /* 🚨 JUMP BEFORE THE CUT, not on it.
+       *
+       * Waiting until the playhead is inside the spot is already too late twice over:
+       * the frame on screen is decoded ahead of what currentTime reports, and the seek
+       * itself takes long enough that the ad frame sits there while it runs. Leaving a
+       * sixth of a second early costs content at a point the viewer is about to be
+       * moved away from anyway, and it is the difference between a glimpse of
+       * somebody's ad and none. */
+      if (at >= start - BOUNDARY_LEAD_S) {
+        const to = ab.endOfBreak?.();
+        if (Number.isFinite(to)) { try { el.currentTime = to; } catch { /* it plays through */ } }
+        return;
+      }
+      if (start - at > 1.5) return;
+      boundaryRaf = requestAnimationFrame(boundaryTick);
+    };
+    const armBoundary = () => {
+      if (boundaryRaf) return;
+      const ab = adBreakRef.current;
+      const start = ab?.spotStart?.();
+      const at = el.currentTime;
+      if (start == null || !ab.spotConsumed || !Number.isFinite(at) || el.paused) return;
+      if (at < start && start - at <= 1.5) boundaryRaf = requestAnimationFrame(boundaryTick);
+    };
+
+    const guard = () => {
+      const ab = adBreakRef.current;
+      const at = el.currentTime;
+      if (!ab || !Number.isFinite(at)) return;
+      ab.noteTime?.(at);
+      const to = ab.skipTargetFor?.(at, lastSeen);
+      if (to == null) { lastSeen = at; armBoundary(); return; }
+      try { el.currentTime = to; } catch { /* it plays through, as it did before */ }
+      lastSeen = to;
+    };
+    /* 🚨 'seeking' does the work here, not 'seeked'.
+     *
+     * 'seeked' fires once the media has SETTLED on the new position, by which time a
+     * frame or two of the ad has been decoded and shown — the flash of ad you get
+     * from clicking into its span. 'seeking' fires the moment currentTime changes,
+     * before anything is presented, and setting currentTime again from inside it
+     * supersedes the seek in flight. 'seeked' stays as the backstop for any path that
+     * reaches a new position without announcing it first. */
+    el.addEventListener('timeupdate', guard);
+    el.addEventListener('seeking', guard);
+    el.addEventListener('seeked', guard);
+    return () => {
+      if (boundaryRaf) cancelAnimationFrame(boundaryRaf);
+      el.removeEventListener('timeupdate', guard);
+      el.removeEventListener('seeking', guard);
+      el.removeEventListener('seeked', guard);
+    };
+  }, [videoAttached]);
+
   const handleVideoEdited = useCallback((changes) => {
     if (!changes) return;
     setEditOverride({
@@ -1747,6 +2044,9 @@ function Watch({ v2 = false }) {
           />
         ) : null}
         adCountdown={adCountdown}
+        adSkip={sponsorVisible && adBreakRef.current?.skipOffered ? (
+          <AdSkip secondsUntil={skipIn} onSkip={canSkipAd ? skipAd : null} />
+        ) : null}
         bannerHit={(
           // Nothing is drawn for a banner — it is already in the picture. This is
           // only somewhere to click, and only while it is on screen.
@@ -1758,9 +2058,11 @@ function Watch({ v2 = false }) {
           <BannerClick
             videoRef={videoElRef}
             placement={adBreakRef.current.bannerInfo?.placement}
+            overlay={adBreakRef.current.bannerOverlay}
             visible={bannerVisible}
             clickUrl={adBreakRef.current.bannerInfo?.brand?.clickUrl}
             advertiser={adBreakRef.current.bannerInfo?.advertiser}
+            onDismiss={dismissBanner}
           />
         )}
         wrapperRef={wrapperRef}
@@ -1772,9 +2074,33 @@ function Watch({ v2 = false }) {
         scheduledOn={scheduledDoc?.scheduledOn}
         onEditScheduled={() => { pause(); setScheduledEditOpen(true); }}
         videoControls={{
-          currentTime: playerState.currentTime,
-          duration: playerState.duration,
-          buffered: playerState.buffered,
+          /* 🚨 THE TIMELINE IS DRAWN IN CONTENT SECONDS, NOT THE FILE'S.
+           *
+           * The spot is stitched into the manifest, so the file is longer than the
+           * creator's video by exactly the ad and every position after the cut sits
+           * that much further along. A bar measured against the file therefore shows
+           * a region belonging to the ad and puts every chapter marker, every heatmap
+           * peak and every scrub thumbnail out by the ad's length once past it.
+           *
+           * VideoControls is a pure function of currentTime, duration and onSeek, so
+           * mapping those three here makes the whole control content-native — the
+           * progress fill, the markers, the preview and the clock — with nothing
+           * inside it needing to know an ad exists.
+           *
+           * While the spot runs, contentTime() pins to the cut point, so the bar
+           * holds still for the ad's length rather than advancing through seconds the
+           * creator never made. That is also why the ad cannot be scrubbed into any
+           * more: no content second maps inside it. */
+          currentTime: adBreakRef.current.contentTime(playerState.currentTime),
+          duration: adBreakRef.current.contentDuration(playerState.duration),
+          // A fraction of the FILE, so it has to be re-expressed as a fraction of the
+          // content or the buffered bar runs ahead of the fill it sits behind.
+          buffered: (() => {
+            const ab = adBreakRef.current;
+            const d = ab.contentDuration(playerState.duration);
+            if (!(d > 0) || !(playerState.duration > 0)) return playerState.buffered;
+            return Math.min(1, ab.contentTime(playerState.buffered * playerState.duration) / d);
+          })(),
           isPlaying: !playerState.paused,
           isMuted: playerState.muted,
           volume: playerState.volume,
@@ -1790,9 +2116,21 @@ function Watch({ v2 = false }) {
               setMuted(false);
             }
           },
-          onSeekBackward: () => seek(Math.max(0, playerState.currentTime - 10)),
-          onSeekForward: () => seek(Math.min(playerState.duration, playerState.currentTime + 10)),
-          onSeek: seek,
+          /* Ten seconds of the VIDEO, not of the file. Stepping back over a spot in
+             file seconds would land inside it and then be bounced out again. */
+          onSeekBackward: () => {
+            const ab = adBreakRef.current;
+            const at = ab.contentTime(playerState.currentTime);
+            seek(ab.playerTimeFor(Math.max(0, at - 10)));
+          },
+          onSeekForward: () => {
+            const ab = adBreakRef.current;
+            const at = ab.contentTime(playerState.currentTime);
+            const end = ab.contentDuration(playerState.duration);
+            seek(ab.playerTimeFor(Math.min(end, at + 10)));
+          },
+          // The bar hands back a content second; the player needs the file's.
+          onSeek: (t) => seek(adBreakRef.current.playerTimeFor(t)),
           onRefreshReactions: refreshMarkers,
           onToggleFullscreen: handleToggleFullscreen,
           onMouseMove: showControlsTemporarily,

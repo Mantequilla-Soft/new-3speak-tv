@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react'
-import { toast } from 'sonner'
+import { toastIn } from '../../utils/toast';
 import { StepProgress } from '../legacy-studio/StepProgress';
 import { IoIosArrowDropdownCircle } from 'react-icons/io';
 import { MdPeopleAlt } from 'react-icons/md';
@@ -19,6 +19,10 @@ import { getHiveClient } from '../../utils/hiveNode';
 import '../legacy-studio/StudioPage.scss';
 import SettingInfo, { SettingSheet } from './SettingInfo';
 import './EmbedDetails.scss';
+
+// Every toast from this module is headed "Upload"; the message becomes the
+// line under it. See utils/toast.js.
+const toast = toastIn('Upload');
 
 const REWARD_LABELS = {
   default: 'Default 50% 50%',

@@ -3,7 +3,7 @@ import "./ProfileNav.scss"
 import '../../page/Login/KeyChainLogin.scss';
 import { useAppStore } from '../../lib/store';
 import { useGetMyQuery } from '../../hooks/getUserDetails';
-import { MdKeyboardArrowDown, MdOutlineKeyboardArrowUp, MdSettings, MdTrendingUp, MdCampaign } from "react-icons/md";
+import { MdKeyboardArrowDown, MdOutlineKeyboardArrowUp, MdSettings, MdTrendingUp, MdCampaign, MdChevronRight } from "react-icons/md";
 import { ImPower } from "react-icons/im";
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { FaDiscord, FaLanguage } from 'react-icons/fa';
@@ -69,6 +69,12 @@ function ProfileNav({ isVisible, onclose, toggleAddAccount, openLoginModal }) {
 
     <div className={`profilenav-container ${isVisible ? 'visible' : ''}`} onClick={onclose}>
       <div className="profile-wrap" onClick={(e) => e.stopPropagation()}>
+        {/* Was a bare letter "X" at 16px in the top-right corner, sitting on
+            whatever cover photo the account happens to have. This is a real
+            button on the edge the panel slides back through. */}
+        <button type="button" className="profilenav-close" onClick={onclose} aria-label="Close menu">
+          <MdChevronRight />
+        </button>
 
         <div className='pro-top-wrap'style={{ backgroundImage: `url(https://images.hive.blog/u/${user}/cover)`, backgroundSize: "cover", backgroundPosition: "center",}}> 
             {/* <img className='' src={getUserProfile?.images?.cover} alt="" /> */}
@@ -167,7 +173,6 @@ function ProfileNav({ isVisible, onclose, toggleAddAccount, openLoginModal }) {
 
         </div>
            
-           <span className='close-btn' onClick={onclose}>X</span>
 
            <SettingsModal isOpen={settingsOpen} onClose={() => setSettingsOpen(false)} />
 

@@ -11,12 +11,16 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { LOCAL_STORAGE_ACCESS_TOKEN_KEY, LOCAL_STORAGE_USER_ID_KEY } from '../../hooks/localStorageKeys';
 import { useAppStore } from '../../lib/store';
 import { LuLogOut } from 'react-icons/lu';
-import {  toast } from 'sonner'
+import { toastIn } from '../../utils/toast';
 import 'react-toastify/dist/ReactToastify.css';
 import { QRCodeSVG } from 'qrcode.react';
 import   {KeyTypes, Providers } from '@aioha/aioha'
 import QrCode_modal from '../../components/modal/QrCode_modal';
 import aioha from "../../hive-api/aioha";
+
+// Every toast from this module is headed "Sign in"; the message becomes the
+// line under it. See utils/toast.js.
+const toast = toastIn('Sign in');
 
 function AddAccount_modal({ isOpen, close}) {
     const location = useLocation();

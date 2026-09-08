@@ -2,7 +2,7 @@ import React, { useRef, useState, useEffect, useMemo } from 'react'
 import { Upload, FileVideo, Video } from "lucide-react";
 import "../legacy-studio/VideoUploadStep1.scss"
 import { generateVideoThumbnails } from "../../utils/videoThumbnails";
-import { toast } from 'sonner'
+import { toastIn } from '../../utils/toast';
 import Arrow from "./../../../public/images/arrow.png"
 import { useEmbedUpload } from '../../context/EmbedUploadContext';
 import { useNavigate } from 'react-router-dom';
@@ -16,6 +16,10 @@ import { checkPostingRc } from '../../utils/rcCheck';
 import RcInsufficientModal from './RcInsufficientModal';
 import { SHORTS_MAX_DURATION_SEC, shortsMaxDurationLabel, cameraRecordEnabledFor } from '../../utils/config';
 import { isChromium } from '../../utils/browser';
+
+// Every toast from this module is headed "Upload"; the message becomes the
+// line under it. See utils/toast.js.
+const toast = toastIn('Upload');
 
 function EmbedVideoUploadStep1() {
   const {

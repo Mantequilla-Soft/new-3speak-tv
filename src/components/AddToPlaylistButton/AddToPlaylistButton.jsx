@@ -1,10 +1,14 @@
 import { useState } from "react";
 import { MdPlaylistAdd } from "react-icons/md";
-import { toast } from "sonner";
+import { toastIn } from '../../utils/toast';
 import PropTypes from "prop-types";
 import { isLoggedIn } from "../../hive-api/aioha";
 import AddToPlaylistModal from "../AddToPlaylistModal/AddToPlaylistModal";
 import "./AddToPlaylistButton.scss";
+
+// Every toast from this module is headed "Playlist"; the message becomes the
+// line under it. See utils/toast.js.
+const toast = toastIn('Playlist');
 
 function AddToPlaylistButton({ author, permlink, title, size = 20, className = "" }) {
   const [isModalOpen, setIsModalOpen] = useState(false);

@@ -1,0 +1,66 @@
+/* The pre-upload spot. Full-screen and above everything, because it is a condition of
+   posting rather than a suggestion — but plain, because it interrupts somebody's work
+   and dressing it up would make that worse. */
+.upload-gate {
+  position: fixed;
+  inset: 0;
+  z-index: 10000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.92);
+  padding: 16px;
+}
+
+.upload-gate-inner {
+  width: min(880px, 100%);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.upload-gate-video {
+  width: 100%;
+  max-height: 70vh;
+  background: #000;
+  border-radius: 10px;
+  display: block;
+}
+
+.upload-gate-bar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 13px;
+  color: #f1f1f1;
+}
+
+.upload-gate-label {
+  padding: 2px 8px;
+  border-radius: 5px;
+  background: rgba(255, 255, 255, 0.16);
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  font-size: 11px;
+}
+
+.upload-gate-brand {
+  color: #f1f1f1;
+  text-decoration: none;
+
+  &:hover { text-decoration: underline; }
+}
+
+/* Pushed to the end so the eye lands on it: it is the only number that matters here. */
+.upload-gate-count {
+  margin-left: auto;
+  font-variant-numeric: tabular-nums;
+  color: rgba(255, 255, 255, 0.75);
+}
+
+.upload-gate-note {
+  margin: 0;
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.6);
+}

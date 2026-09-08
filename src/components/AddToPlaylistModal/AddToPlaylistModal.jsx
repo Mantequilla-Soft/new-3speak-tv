@@ -1,12 +1,16 @@
 import { useState } from 'react';
 import { createPortal } from 'react-dom';
 import { MdPlaylistAdd, MdPlaylistAddCheck, MdAdd, MdClose, MdLock, MdPublic, MdWatchLater } from 'react-icons/md';
-import { toast } from 'sonner';
+import { toastIn } from '../../utils/toast';
 import { useQueryClient } from '@tanstack/react-query';
 import { useMyPlaylists, isVideoInPlaylist } from '../../hooks/useMyPlaylists';
 import { addToPlaylist, createPlaylistAndAdd } from '../../utils/playlistOperations';
 import { useAppStore } from '../../lib/store';
 import './AddToPlaylistModal.scss';
+
+// Every toast from this module is headed "Playlist"; the message becomes the
+// line under it. See utils/toast.js.
+const toast = toastIn('Playlist');
 
 // Reserved playlist name for Watch Later
 const WATCH_LATER_NAME = 'Watch Later';

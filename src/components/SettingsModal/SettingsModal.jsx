@@ -1,20 +1,24 @@
-import { useState, useEffect, useLayoutEffect, useRef } from 'react';
+import { useState, useEffect, useLayoutEffect, useMemo, useRef } from 'react';
 import { createPortal } from 'react-dom';
 import { IoClose } from 'react-icons/io5';
-import { toast } from 'sonner';
+import { toastIn } from '../../utils/toast';
 import { useAppStore } from '../../lib/store';
 import { APP_VERSION } from '../../version';
 import { getHiveUrl } from '../../utils/hiveNode';
 import { fetchUserInterests, saveInterestsToHive } from '../../utils/interests';
-import { fetchCreatorAdPrefs } from '../../lib/advertiseData';
+import { fetchAdAccess, fetchCreatorAdPrefs, fetchViewerAdPrefs, setViewerAdPrefs } from '../../lib/advertiseData';
 import { saveCreatorAdSettings } from '../../utils/adSettings';
-import { adsEnabledFor } from '../../utils/config';
+import { adsEnabledFor, adsBetaUserFor } from '../../utils/config';
 import {
   pushSupported, getPushState, enablePush, disablePush, getPushPrefs, setPushPrefs,
 } from '../../utils/webPush';
 import TagsV2Picker from '../tooltip/TagsV2Picker';
 import DataRequestForm from './DataRequestForm';
 import './SettingsModal.scss';
+
+// Every toast from this module is headed "Settings"; the message becomes the
+// line under it. See utils/toast.js.
+const toast = toastIn('Settings');
 
 const sameSet = (a, b) =>
   JSON.stringify([...(a || [])].sort()) === JSON.stringify([...(b || [])].sort());
@@ -252,6 +256,88 @@ function AdsSection() {
   );
 }
 
+/**
+ * Viewer rewards. A separate section from AdsSection on purpose: that one is about
+ * what runs on YOUR videos as a creator, this one is about being paid for watching
+ * other people's. Same person, two unrelated decisions, and merging them would
+ * imply that turning ads off on your channel also gives up your viewer share.
+ *
+ * The consent is the feature. We cannot pay someone we cannot name, so the toggle
+ * is really "may we store your username against what you watch" — and the copy
+ * says that plainly rather than hiding it behind the word "rewards".
+ */
+function ViewerRewardsSection() {
+  const user = useAppStore((s) => s.user);
+  const [enabled, setEnabled] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
+  const [error, setError] = useState(null);
+
+  const visible = adsEnabledFor(user);
+
+  useEffect(() => {
+    if (!user || !visible) return undefined;
+    let alive = true;
+    setLoading(true);
+    fetchViewerAdPrefs(user)
+      .then((r) => { if (alive) setEnabled(r.rewardsEnabled === true); })
+      .catch(() => { /* an unreadable setting is not worth an error banner */ })
+      .finally(() => { if (alive) setLoading(false); });
+    return () => { alive = false; };
+  }, [user, visible]);
+
+  if (!user || !visible) return null;
+
+  async function onToggle(next) {
+    // Optimistic, then rolled back on failure. Every save costs a signature, so the
+    // switch must not sit unresponsive while a wallet prompt is open.
+    const previous = enabled;
+    setEnabled(next);
+    setSaving(true);
+    setError(null);
+    try {
+      await setViewerAdPrefs(user, { rewardsEnabled: next });
+      toast.success(next
+        ? 'Viewer rewards on'
+        : 'Viewer rewards off, and your watch data has been deleted');
+    } catch (err) {
+      setEnabled(previous);
+      setError(err.message || 'Could not save that setting.');
+    } finally {
+      setSaving(false);
+    }
+  }
+
+  return (
+    <div className="settings-modal-section">
+      <h3 className="settings-section-title">Earn while you watch</h3>
+      <div className="settings-modal-row">
+        <div className="settings-row-text">
+          <span className="settings-row-title">Viewer rewards</span>
+          <span className="settings-row-desc">
+            Earn a share of ad revenue for what you watch, paid in HBD or HIVE. You are
+            paid on videos watched, whether or not an ad played, so it rewards watching
+            rather than sitting through ads. Ads themselves play for everyone except
+            3Speak Pro subscribers. We record how much of each video you watched, on top
+            of the watch history the Watched page already keeps, and delete it the moment
+            you turn this off.
+          </span>
+        </div>
+        <Switch
+          checked={enabled}
+          onChange={onToggle}
+          ariaLabel="Earn a share of ad revenue for what you watch"
+        />
+      </div>
+      {(loading || saving || error) && (
+        <p className={`settings-ads-status${error ? ' error' : ''}`}>
+          {error || (saving ? 'Saving…' : 'Loading your current setting…')}
+        </p>
+      )}
+    </div>
+  );
+}
+
 function Switch({ checked, onChange, ariaLabel }) {
   return (
     <button
@@ -415,6 +501,10 @@ const TABS = [
   { id: 'general', label: 'General' },
   { id: 'shorts', label: 'Shorts' },
   { id: 'content', label: 'Content' },
+  // Its own page rather than a tail on Content. Both halves are about money moving
+  // between advertisers, creators and viewers, and they were the two longest things on
+  // a page otherwise made of one-line switches.
+  { id: 'rewards', label: 'Ads & rewards' },
   { id: 'interests', label: 'Interests' },
   { id: 'notifications', label: 'Notifications' },
   { id: 'about', label: 'About / Contact' },
@@ -426,7 +516,42 @@ const TABS = [
  */
 export default function SettingsModal({ isOpen, onClose }) {
   const { theme, showNsfw, setShowNsfw, toggleTheme, sidebarHidden, setSidebarHidden, homeCardSize, setHomeCardSize, previewEnabled, setPreviewEnabled, shortsCommentBar, setShortsCommentBar, openShortsOnStart, setOpenShortsOnStart, inlineShorts, setInlineShorts, hideWatched, setHideWatched, privateMode, setPrivateMode, simpleFeed, setSimpleFeed } = useAppStore();
+  /* Whether the Ads & rewards page exists at all.
+   *
+   * 🚨 THE CHECKER DECIDES, not the build flag. adsEnabledFor() is true for everybody
+   * whenever VITE_ENABLE_ADS is set, which it is on preview — so gating on it showed the
+   * page to every logged-in account while the checker was still refusing all of them for
+   * not being in the closed test. A settings page whose every write is rejected is worse
+   * than no page.
+   *
+   * `/advertise/access` is the same answer the ad prompts already use, with the local
+   * beta list as the fallback for when it cannot be reached. The build flag stays as a
+   * necessary condition: it says whether this build has the feature at all. */
+  const settingsUser = useAppStore((st) => st.user);
+  const [adAccess, setAdAccess] = useState(null);
+  useEffect(() => {
+    if (!isOpen || !settingsUser || !adsEnabledFor(settingsUser)) { setAdAccess(null); return undefined; }
+    let alive = true;
+    fetchAdAccess(settingsUser).then((a) => {
+      if (!alive) return;
+      setAdAccess({ account: settingsUser, allowed: a ? a.allowed : adsBetaUserFor(settingsUser) });
+    });
+    return () => { alive = false; };
+  }, [isOpen, settingsUser]);
+  const rewardsVisible = !!settingsUser
+    && adsEnabledFor(settingsUser)
+    && adAccess?.account === settingsUser
+    && adAccess.allowed === true;
+  const visibleTabs = useMemo(
+    () => TABS.filter((t) => t.id !== 'rewards' || rewardsVisible),
+    [rewardsVisible],
+  );
   const [tab, setTab] = useState('general');
+  // Losing the group (or logging out) while standing on that page would leave the modal
+  // with no tab selected and nothing rendered.
+  useEffect(() => {
+    if (tab === 'rewards' && !rewardsVisible) setTab('general');
+  }, [tab, rewardsVisible]);
 
   // Lock background page scroll while the modal is open (restore on close).
   useEffect(() => {
@@ -519,7 +644,7 @@ export default function SettingsModal({ isOpen, onClose }) {
         </div>
 
         <div className="settings-tabs" role="tablist">
-          {TABS.map(({ id, label }) => (
+          {visibleTabs.map(({ id, label }) => (
             <button
               key={id}
               type="button"
@@ -624,7 +749,13 @@ export default function SettingsModal({ isOpen, onClose }) {
               onChange={(v) => setPrivateMode(v)}
             />
           </div>
-          <AdsSection />
+          </>
+        )}
+
+        {tab === 'rewards' && (
+          <>
+            <AdsSection />
+            <ViewerRewardsSection />
           </>
         )}
 

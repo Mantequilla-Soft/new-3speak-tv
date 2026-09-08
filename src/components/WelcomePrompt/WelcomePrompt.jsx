@@ -143,7 +143,7 @@ export default function WelcomePrompt() {
             </div>
 
             <p className="welcome-note">
-              One last thing before you dive in: let people know who they are watching.
+              One last thing before you start: let people know who they are watching.
             </p>
 
             <div className="welcome-actions">

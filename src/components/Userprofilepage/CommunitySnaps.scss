@@ -27,11 +27,11 @@
     .snap-card {
       margin: 0;
       min-width: 0; // allow shrinking instead of overflowing
-      flex: 1 1 var(--card-min-w, 460px);
+      flex: 1 1 var(--card-min-w, 280px);
       max-width: min(560px, 100%);
     }
     .playlist-feed-card {
-      flex: 1 1 var(--card-min-w, 460px);
+      flex: 1 1 var(--card-min-w, 280px);
       max-width: min(340px, 100%);
     }
 

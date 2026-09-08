@@ -7,6 +7,59 @@
 // 1.0.0 — that way they see all of these when develop is pushed to production.
 export const CHANGELOG = [
   {
+    version: '1.78.64',
+    date: '2026-09-08',
+    summary:
+      'The "Replace video" button in a video\'s Edit window now works on older videos '
+      + 'too, including ones from before the current upload system whose file had gone '
+      + 'missing. The video keeps its post, its date, its views and its place in your '
+      + 'profile.',
+  },
+  {
+    version: '1.78.63',
+    date: '2026-09-04',
+    summary:
+      'The 3Speak Pro panel in your wallet now opens on a General tab, listing the '
+      + 'benefits that apply to everyone first.',
+  },
+  {
+    version: '1.78.62',
+    date: '2026-09-04',
+    summary:
+      'The page tabs in the top bar now fold away behind the logo. Click it to show or '
+      + 'hide them, and your choice is remembered.',
+  },
+  {
+    version: '1.78.61',
+    date: '2026-09-04',
+    summary:
+      'The home page now shows smaller video cards by default. You can change this in '
+      + 'Settings.',
+  },
+  {
+    version: '1.78.60',
+    date: '2026-09-04',
+    summary:
+      'Pop-up messages now show a short heading saying what they are about, and sit below '
+      + 'the title bar instead of covering the account menu.',
+  },
+  {
+    version: '1.78.59',
+    date: '2026-09-03',
+    summary:
+      'The Share menu on a video page now has an “Embed on a website” option. It gives you '
+      + 'ready made HTML to paste into a blog or any other site, either a responsive size that '
+      + 'fits the page it sits on or a fixed size like 560 x 315, and one click copies it to '
+      + 'your clipboard.',
+  },
+  {
+    version: '1.78.58',
+    date: '2026-09-02',
+    summary:
+      'Video thumbnails show the video\u2019s length again. The duration was being drawn '
+      + 'behind the picture, so it only appeared on cards whose image had not loaded yet.',
+  },
+  {
     version: '1.78.57',
     date: '2026-08-30',
     summary:

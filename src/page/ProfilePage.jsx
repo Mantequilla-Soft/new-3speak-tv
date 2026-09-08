@@ -2,8 +2,7 @@ import React, { useEffect, useRef, useState, useCallback, useMemo } from "react"
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
 import axios from "axios";
-import { toast } from "sonner";
-
+import { toastIn } from '../utils/toast';
 import { useAppStore } from "../lib/store";
 import { getFollowers } from "../hive-api/api";
 import { MY_VIDEOS_URL, CHECKER_URL } from "../utils/config";
@@ -51,6 +50,10 @@ import ProfileOverview from "../components/Userprofilepage/ProfileOverview";
 import ProfileEmptyState from "../components/Userprofilepage/ProfileEmptyState";
 import ProfileEditModal from "../components/WelcomePrompt/ProfileEditModal";
 import { FiEdit2 } from "react-icons/fi";
+
+// Every toast from this module is headed "Profile"; the message becomes the
+// line under it. See utils/toast.js.
+const toast = toastIn('Profile');
 
 // Reserved playlist name for Watch Later
 const WATCH_LATER_NAME = 'Watch Later';

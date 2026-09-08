@@ -26,7 +26,7 @@ import { ImSpinner9 } from "react-icons/im";
 import { useNavigate } from "react-router-dom";
 import BarLoader from "../Loader/BarLoader";
 import TipModal from "../../components/tip-reward/TipModal";
-import { toast } from 'sonner';
+import { toastIn } from '../../utils/toast';
 import { TailChase } from 'ldrs/react';
 import 'ldrs/react/TailChase.css';
 import { getFollowers, getRelationshipBetweenAccounts } from "../../hive-api/api";
@@ -70,9 +70,13 @@ import useTitleMeta from '../../hooks/useTitleMeta';
 import TitleTranslate from '../TitleTranslate/TitleTranslate';
 import SummaryModal from '../SummaryModal/SummaryModal';
 
+// Every toast from this module is headed "Video"; the message becomes the
+// line under it. See utils/toast.js.
+const toast = toastIn('Video');
+
 dayjs.extend(relativeTime);
 
-const PlayVideo = ({ videoDetails, author, permlink, mediaUnavailable = false, mediaBlocked = false, onRetryPlayback = null, mediaLoading = false, playlistData, onClosePlaylist, videoControls, mobileReactionPanel, cinemaReactionPanel, videoRef, wrapperRef, onVideoEdited, overrideBody, scheduled = false, scheduledOn = null, onEditScheduled, v2 = false, isLive = false, streamRoom = null, liveChatSlot = null, onLiveChatSent = null, vodAssetPending = false, onStreamRoomMeta = null, belowPlayerSlot = null, sponsorLabel = null, adCountdown = null, bannerHit = null, adPlaying = false }) => {
+const PlayVideo = ({ videoDetails, author, permlink, mediaUnavailable = false, mediaBlocked = false, onRetryPlayback = null, mediaLoading = false, playlistData, onClosePlaylist, videoControls, mobileReactionPanel, cinemaReactionPanel, videoRef, wrapperRef, onVideoEdited, overrideBody, scheduled = false, scheduledOn = null, onEditScheduled, v2 = false, isLive = false, streamRoom = null, liveChatSlot = null, onLiveChatSent = null, vodAssetPending = false, onStreamRoomMeta = null, belowPlayerSlot = null, sponsorLabel = null, adCountdown = null, bannerHit = null, adSkip = null, adPlaying = false }) => {
   const { user, authenticated } = useAppStore();
   const interests = useAppStore((s) => s.interests);
   const setInterests = useAppStore((s) => s.setInterests);
@@ -814,6 +818,10 @@ const PlayVideo = ({ videoDetails, author, permlink, mediaUnavailable = false, m
                   Ad in {adCountdown}
                 </div>
               )}
+              {/* Skip, bottom-right. Its own slot rather than part of the disclosure:
+                  the disclosure sits at the TOP of the frame, and a child of it can
+                  only be positioned against that box, not against the video. */}
+              {adSkip}
               {sponsorLabel && (
                 // Disclosure while a sponsor spot is playing. Rendered inside the
                 // player frame rather than as a page-level element: a filter list
@@ -1522,6 +1530,10 @@ const PlayVideo = ({ videoDetails, author, permlink, mediaUnavailable = false, m
           open={shareChooserOpen}
           url={`${window.location.origin}/watch?v=${author}/${permlink}`}
           title={videoDetails?.title}
+          /* Embed code is offered only for something a stranger's page can
+             actually play: a scheduled post isn't public yet, and a live stream
+             has no VOD asset for the player to resolve. */
+          embed={!scheduled && !isLive ? { author, permlink } : null}
           onClose={() => setShareChooserOpen(false)}
           onGeneralShare={handleShare}
         />

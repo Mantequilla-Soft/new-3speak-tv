@@ -1,7 +1,11 @@
 import * as tus from 'tus-js-client';
-import { toast } from 'sonner';
+import { toastIn } from './toast';
 import { EMBED_API_KEY, CHECKER_URL, CHECKER_API_KEY } from './config';
 import { pickEmbedEndpoint } from './embedEndpoints';
+
+// Every toast from this module is headed "Live"; the message becomes the
+// line under it. See utils/toast.js.
+const toast = toastIn('Live');
 
 /**
  * Publish a finished OpenPods broadcast as the session's video-on-demand.

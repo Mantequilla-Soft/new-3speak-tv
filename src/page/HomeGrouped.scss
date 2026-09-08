@@ -17,12 +17,12 @@
   max-width: 100%;
   overflow-x: hidden;
 
-  // Card-size preference (desktop rails). Large is the default.
-  --home-card-w: 420px;
-  --home-title-scale: 1.3;
-  &[data-card-size="small"] {
-    --home-card-w: 280px;
-    --home-title-scale: 1;
+  // Card-size preference (desktop rails). Small is the default.
+  --home-card-w: 280px;
+  --home-title-scale: 1;
+  &[data-card-size="large"] {
+    --home-card-w: 420px;
+    --home-title-scale: 1.3;
   }
 
   .home-card-size-toggle {

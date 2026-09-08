@@ -8,7 +8,7 @@ import {
 } from '@snapie/chat-client/react'
 import { extractImageUrls } from '@snapie/chat-client'
 import { getChatClient } from '../../lib/snapieChat'
-import { toast } from 'sonner'
+import { toastIn } from '../../utils/toast';
 import { useSearchParams } from 'react-router-dom'
 import ChatComposerTools from './ChatComposerTools'
 import EmojiTextInput from './EmojiTextInput'
@@ -21,6 +21,10 @@ import { useAppStore } from '../../lib/store'
 import { EMBED_API_KEY } from '../../utils/config'
 import { getAccounts } from '../../hive-api/hiveApi'
 import './chat.scss'
+
+// Every toast from this module is headed "Chat"; the message becomes the
+// line under it. See utils/toast.js.
+const toast = toastIn('Chat');
 
 const avatar = (name) => `https://images.hive.blog/u/${name}/avatar/small`
 

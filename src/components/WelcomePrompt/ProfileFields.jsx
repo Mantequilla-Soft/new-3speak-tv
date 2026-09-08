@@ -1,10 +1,14 @@
 import { useCallback, useRef, useState } from 'react';
-import { toast } from 'sonner';
+import { toastIn } from '../../utils/toast';
 import { Camera, MapPin, Loader2 } from 'lucide-react';
 import { saveProfileToHive } from '../../utils/profileMeta';
 import { uploadThumbnail } from '../../utils/uploadThumbnail';
 import { setAvatarOverride, clearAvatarOverride, useAvatarUrl } from '../../utils/avatarCache';
 import defaultCover from '../../assets/image/default-cover.svg';
+
+// Every toast from this module is headed "Profile"; the message becomes the
+// line under it. See utils/toast.js.
+const toast = toastIn('Profile');
 
 // The profile picture / display name / bio / location block, shared by the
 // new-user welcome flow and the "Edit" button on your own profile page.

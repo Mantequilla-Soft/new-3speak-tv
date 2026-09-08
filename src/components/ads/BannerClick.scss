@@ -1,6 +1,48 @@
 /* The click target over a burned-in banner. Invisible on purpose: the banner is
    already in the picture, and drawing anything on top of it would obscure the thing
    the advertiser paid for. All this contributes is a place to click. */
+/* The drawn banner.
+ *
+ * z-index 6 puts it over .video-interact-overlay (5), the click-to-play surface, and
+ * under .video-controls (10) — so the playhead stays visible and usable across it,
+ * and a scrub along the bottom of the frame seeks rather than opening the ad. The
+ * click target (7) sits over it for the same reason it always did. */
+.watch-banner-media {
+  position: absolute;
+  z-index: 6;
+  pointer-events: none;
+  overflow: hidden;
+  border-radius: 4px;
+  line-height: 0;
+
+  img,
+  video {
+    width: 100%;
+    height: 100%;
+    /* The box is already the creative's shape once its dimensions are known, so this
+       only matters for the frames before that: fit rather than crop, because half an
+       advertiser's artwork is worse than a letterboxed version of all of it. */
+    object-fit: contain;
+    display: block;
+  }
+}
+
+/* The disclosure, in the banner's own corner so it travels with the ad instead of
+   sitting somewhere a filter rule could take on its own. */
+.watch-banner-label {
+  position: absolute;
+  left: 4px;
+  bottom: 4px;
+  padding: 1px 5px;
+  border-radius: 3px;
+  background: rgba(0, 0, 0, 0.6);
+  color: #fff;
+  font-size: 10px;
+  font-weight: 600;
+  line-height: 1.5;
+  letter-spacing: 0.02em;
+}
+
 .watch-banner-hit {
   position: absolute;
   /* Above the play/pause surface (.video-interact-overlay, z-index 5) for the same
@@ -61,5 +103,64 @@
     width: 13px;
     height: 13px;
     padding: 2px;
+  }
+}
+
+/* The close button.
+ *
+ * Sits just ABOVE the banner's top-right corner rather than on it. On the corner it
+ * would cover the advertiser's own artwork, and it has to be outside the click target
+ * so that closing an ad is never a click THROUGH to the ad.
+ *
+ * Visible, unlike everything else here. The open-in-new hint can afford to be quiet
+ * because nobody goes looking for it; a control the viewer is meant to find has to be
+ * findable without hunting, or the ad reads as unclosable and the complaint is worse
+ * than the ad. */
+.watch-banner-close {
+  position: absolute;
+  /* Above the click target (7) so it is never swallowed by it, and still below the
+     player controls. */
+  z-index: 8;
+  width: 22px;
+  height: 22px;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 0;
+  border-radius: 50%;
+  /* Its own dark ground, for the same reason the open icon has one: it is drawn over
+     a picture we do not control and cannot assume any contrast against. */
+  background: rgba(0, 0, 0, 0.62);
+  color: #fff;
+  font-size: 15px;
+  line-height: 1;
+  cursor: pointer;
+  opacity: 0.8;
+  transition: opacity 120ms ease, background 120ms ease;
+
+  &:hover,
+  &:focus-visible {
+    opacity: 1;
+    background: rgba(0, 0, 0, 0.82);
+  }
+
+  &:focus-visible {
+    outline: 2px solid #fff;
+    outline-offset: 2px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .watch-banner-close { transition: none; }
+}
+
+/* Big enough to hit on a phone without covering the banner it belongs to. */
+@media (max-width: 640px) {
+  .watch-banner-close {
+    width: 26px;
+    height: 26px;
+    font-size: 17px;
+    opacity: 0.9;
   }
 }

@@ -3,8 +3,13 @@ import { Link, useNavigate } from "react-router-dom";
 import "./CommunitriesTags.scss"
 import { FaVideo } from 'react-icons/fa'
 import { useAppStore } from "../../lib/store";
-import {  toast } from 'sonner'
+import { toastIn } from '../../utils/toast';
 import 'react-toastify/dist/ReactToastify.css';
+
+// Every toast from this module is headed "Community"; the message becomes the
+// line under it. See utils/toast.js.
+const toast = toastIn('Community');
+
 function CommunitiesTags() {
   const { authenticated } = useAppStore();
   const navigate = useNavigate();

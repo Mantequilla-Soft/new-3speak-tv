@@ -1,13 +1,17 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { createPortal } from 'react-dom';
 import axios from 'axios';
-import { toast } from 'sonner';
+import { toastIn } from '../../utils/toast';
 import { Rocket, X } from 'lucide-react';
 import { CHECKER_URL, CHECKER_API_KEY } from '../../utils/config';
 import { transferWithAioha, isLoggedIn } from '../../hive-api/aioha';
 import { fetchBalances } from '../../hive-api/api';
 import { useAppStore } from '../../lib/store';
 import './PromoteModal.scss';
+
+// Every toast from this module is headed "Promotion"; the message becomes the
+// line under it. See utils/toast.js.
+const toast = toastIn('Promotion');
 
 /**
  * Promote a video by transferring HBD (or the HIVE equivalent) to the promotion

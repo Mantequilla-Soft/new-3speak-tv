@@ -5,11 +5,15 @@ import { HangoutsProvider, ProPlans } from '@snapie/hangouts-react';
 // so without this the Pro panel renders completely unstyled.
 import '@snapie/hangouts-react/src/styles/hangouts.css';
 import { useNavigate } from 'react-router-dom';
-import { toast } from 'sonner';
+import { toastIn } from '../../utils/toast';
 import { useAppStore } from '../../lib/store';
 import { useHangout } from '../../context/HangoutContext';
 import aioha, { broadcastWithAioha, getOperationUser } from '../../hive-api/aioha';
 import { defaultEndpoint } from '../../utils/hangoutsEndpoints';
+
+// Every toast from this module is headed "Wallet"; the message becomes the
+// line under it. See utils/toast.js.
+const toast = toastIn('Wallet');
 
 // Premium status + the free trial live on the hangouts API. That is a DIFFERENT
 // deployment from the rooms API for us right now (prod hangout-api has no

@@ -8,12 +8,16 @@ import {
 import { MdFormatClear } from 'react-icons/md';
 import EmojiPicker from 'emoji-picker-react';
 import { uploadImageToHive } from '../Editor/uploadImageToHiv';
-import { toast } from 'sonner';
+import { toastIn } from '../../utils/toast';
 import './MarkdownComposer.scss';
 import { useAppStore } from '../../lib/store';
 import useGiphySearch, { normalizeGifUrl } from '../../hooks/useGiphySearch';
 import { gifMarkdown } from '../../utils/composerInsert';
 import { getHiveRenderer, getPostBodyRenderer } from '../../lib/hiveRenderer';
+
+// Every toast from this module is headed "Post"; the message becomes the
+// line under it. See utils/toast.js.
+const toast = toastIn('Post');
 
 // The preview has to render the way the DESTINATION renders, or it isn't a
 // preview. A video description ends up on a watch page, which never embeds a

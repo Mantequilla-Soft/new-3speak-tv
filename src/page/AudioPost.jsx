@@ -5,7 +5,7 @@ import axios from 'axios';
 import { MdPlayArrow, MdPause, MdQueueMusic, MdThumbUp } from 'react-icons/md';
 import { BiDollar } from 'react-icons/bi';
 import { LuTimer } from 'react-icons/lu';
-import { toast } from 'sonner';
+import { toastIn } from '../utils/toast';
 import { useAppStore } from '../lib/store';
 import { CHECKER_URL, HIVE_API_URL } from '../utils/config';
 import BlogContent from '../components/playVideo/BlogContent';
@@ -18,6 +18,10 @@ import TipModal from '../components/tip-reward/TipModal';
 import { fixVideoThumbnail, fallbackImg } from '../utils/fixThumbnails';
 import { isLoggedIn } from '../hive-api/aioha';
 import './AudioPost.scss';
+
+// Every toast from this module is headed "Post"; the message becomes the
+// line under it. See utils/toast.js.
+const toast = toastIn('Post');
 
 function fmt(sec) {
   if (!sec || isNaN(sec)) return '0:00';

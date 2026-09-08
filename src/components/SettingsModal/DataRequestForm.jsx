@@ -10,10 +10,14 @@
  * having no button at all.
  */
 import { useEffect, useState } from 'react';
-import { toast } from 'sonner';
+import { toastIn } from '../../utils/toast';
 import { CHECKER_URL } from '../../utils/config';
 import { useAppStore } from '../../lib/store';
 import './DataRequestForm.scss';
+
+// Every toast from this module is headed "Settings"; the message becomes the
+// line under it. See utils/toast.js.
+const toast = toastIn('Settings');
 
 export default function DataRequestForm() {
   const user = useAppStore((s) => s.user);

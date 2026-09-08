@@ -39,9 +39,20 @@
     margin-left: auto;
   }
 
-  // Search bar sits next to the nav tabs (desktop) / after the logo (tablet)
+  // Search bar is centred on the BAR, not on what is left over after the tabs and
+  // the right cluster — so it stays put whether the page tabs are folded away or
+  // open. Taken out of the flow to do it: with it in the row, the centre moved
+  // every time the group opened or the right cluster changed width.
+  //
+  // .nav-container is sticky, which makes it the containing block, so 50% here is
+  // half the bar. The z-index keeps the input clickable if a long tab row ever
+  // reaches under it.
   > .navsearch-wrap {
-    margin-left: 16px;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    margin-left: 0;
+    z-index: 2;
   }
   transition: background-color 0.3s ease, box-shadow 0.3s ease;
 
@@ -72,7 +83,10 @@
       color: var(--text-primary);
     }
     .logo {
-      width: 130px;
+      // The mark, not the wordmark: sized against the bar's height rather than
+      // set to a fixed width, which was the wordmark's measurement.
+      height: 34px;
+      width: auto;
       cursor: pointer;
     }
   }
@@ -89,7 +103,43 @@
       display: none;
     }
     .logo {
-      width: 130px;
+      height: 30px;
+      width: auto;
+    }
+  }
+
+  // The logo is the disclosure for the page tabs, so it has to look pressable
+  // without becoming a second button in a bar that already has plenty.
+  .nav-logo-btn {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    padding: 0;
+    border: 0;
+    background: none;
+    cursor: pointer;
+    border-radius: 8px;
+    transition: opacity 0.15s ease;
+
+    &:hover { opacity: 0.75; }
+    &.is-open { opacity: 0.6; }
+    &:focus-visible { outline: 2px solid var(--accent-primary); outline-offset: 3px; }
+
+    // Points at the space the tabs will fill, and turns to point back at the
+    // logo once they are there — so it reads as the control that put them
+    // there rather than as decoration beside the mark.
+    .nav-logo-chevron {
+      flex-shrink: 0;
+      font-size: 20px;
+      color: var(--text-secondary);
+      transition: transform 0.18s ease, color 0.15s ease;
+    }
+
+    &:hover .nav-logo-chevron { color: var(--text-primary); }
+    &.is-open .nav-logo-chevron { transform: rotate(180deg); }
+
+    @media (prefers-reduced-motion: reduce) {
+      .nav-logo-chevron { transition: none; }
     }
   }
 
@@ -99,6 +149,11 @@
     gap: 4px;
     margin-left: 16px;
     flex-shrink: 0;
+    // Opens from under the logo rather than appearing fully formed, so the row
+    // reads as belonging to the button that revealed it.
+    animation: nav-tabs-in 0.16s ease;
+
+    @media (prefers-reduced-motion: reduce) { animation: none; }
 
     @include mix.respond(tab) { display: none; }
     @include mix.respond(phone) { display: none; }
@@ -677,13 +732,37 @@
     display: none;
   }
 
-  .close-nav {
+  // Sits on the edge the drawer slides back to, and is given a real surface:
+  // the old × was an 18px glyph at text colour on a blurred backdrop, which is
+  // why nobody could find it.
+  .side-nav-close {
     position: absolute;
-    top: 20px;
-    right: 20px;
-    cursor: pointer;
-    font-size: 18px;
+    top: 14px;
+    left: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 34px;
+    height: 34px;
+    padding: 0;
+    border: 1px solid var(--border-light, #444);
+    border-radius: 50%;
+    background: var(--bg-secondary);
     color: var(--text-primary);
+    cursor: pointer;
+    transition: background 0.15s ease, border-color 0.15s ease, transform 0.15s ease;
+
+    svg { font-size: 22px; display: block; }
+
+    &:hover {
+      background: var(--bg-hover);
+      border-color: var(--text-secondary);
+      transform: translateX(-2px);
+    }
+
+    &:focus-visible { outline: 2px solid var(--accent-primary); outline-offset: 2px; }
+
+    @media (prefers-reduced-motion: reduce) { transition: none; }
   }
   .dropdown-menu {
     position: absolute;
@@ -715,4 +794,9 @@
 @keyframes nav-tab-live-pulse {
   0%, 100% { box-shadow: 0 0 0 2px var(--bg-secondary, #1a1a1a), 0 0 0 0 rgba(255, 59, 48, 0.55); }
   50%      { box-shadow: 0 0 0 2px var(--bg-secondary, #1a1a1a), 0 0 0 5px rgba(255, 59, 48, 0); }
+}
+
+@keyframes nav-tabs-in {
+  from { opacity: 0; transform: translateX(-6px); }
+  to   { opacity: 1; transform: translateX(0); }
 }

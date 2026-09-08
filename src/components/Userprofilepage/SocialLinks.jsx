@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { FaYoutube, FaSoundcloud } from 'react-icons/fa';
 import { IoClose } from 'react-icons/io5';
-import { toast } from 'sonner';
+import { toastIn } from '../../utils/toast';
 import {
   getLinks,
   unlinkLink,
@@ -9,6 +9,10 @@ import {
   platformLabel,
 } from '../../utils/socialVerifier';
 import './SocialLinks.scss';
+
+// Every toast from this module is headed "Profile"; the message becomes the
+// line under it. See utils/toast.js.
+const toast = toastIn('Profile');
 
 const PLATFORM_ICONS = {
   youtube: FaYoutube,

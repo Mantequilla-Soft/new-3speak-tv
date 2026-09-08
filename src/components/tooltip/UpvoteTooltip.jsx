@@ -2,7 +2,7 @@ import React, { useEffect, useState, useRef } from 'react';
 import './UpvoteTooltip.scss';
 import { useAppStore } from '../../lib/store';
 import { IoChevronUpCircleOutline } from 'react-icons/io5';
-import { toast } from 'sonner';
+import { toastIn } from '../../utils/toast';
 import { estimate, getUersContent, getVotePower } from '../../utils/hiveUtils';
 import { TailChase } from 'ldrs/react';
 import 'ldrs/react/TailChase.css';
@@ -10,6 +10,10 @@ import { Orbit } from 'ldrs/react';
 import 'ldrs/react/Orbit.css';
 import { voteWithAioha, tagVideoWithAioha, isLoggedIn } from '../../hive-api/aioha';
 import { recordViewerTag, VIEWER_TAG_OPTIONS } from '../../utils/viewerTag';
+
+// Every toast from this module is headed "Vote"; the message becomes the
+// line under it. See utils/toast.js.
+const toast = toastIn('Vote');
 
 const UpvoteTooltip = ({
   author,

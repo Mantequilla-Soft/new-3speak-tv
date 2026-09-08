@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
 import PropTypes from 'prop-types';
 import { X } from 'lucide-react';
-import { toast } from 'sonner';
+import { toastIn } from '../../utils/toast';
 import { TailChase } from 'ldrs/react';
 import 'ldrs/react/TailChase.css';
 import { Orbit } from 'ldrs/react';
@@ -16,6 +16,10 @@ import TagsV2Picker from '../tooltip/TagsV2Picker';
 // tag-tile styles, so tagging looks identical wherever it's offered.
 import '../tooltip/UpvoteTooltip.scss';
 import './AddTagModal.scss';
+
+// Every toast from this module is headed "Video"; the message becomes the
+// line under it. See utils/toast.js.
+const toast = toastIn('Video');
 
 // Full-strength weight for the topic tally. This is NOT a Hive vote — it's only
 // how much this tag counts toward the video's topic consensus. Tagging from the

@@ -2624,23 +2624,26 @@
   }
 
   /* Vote, comment, reshare, save, share, remix, edit — the mobile comment bar, and the
-     desktop up/down arrows. The arrows are inert during a spot (handleNext and
-     handlePrevious both bail), so they have to LOOK inert; a button that visibly does
-     nothing when pressed is read as broken. */
+     desktop up/down arrows.
+     
+     Hidden rather than dimmed. They were greyed to 0.35 on the reasoning that a control
+     which vanishes is more confusing than one that looks disabled, but that argument is
+     for a control you could plausibly still want. Every one of these acts on the short
+     UNDERNEATH the spot, which is not what is on screen: a greyed comment button next to
+     somebody's ad still invites a comment on a stranger's video. For these few seconds
+     the surface is the advertiser's, and the only control that belongs to the viewer is
+     Skip. */
   .actionSidebar,
   .shortsBottomComment,
   .navigationArrows {
-    pointer-events: none;
-    opacity: 0.35;
-    filter: grayscale(1);
-    transition: opacity 0.2s ease, filter 0.2s ease;
+    display: none;
   }
 
-  /* The rail sets `cursor: pointer` on its items; without this they still look
-     clickable while doing nothing, which is worse than looking disabled. */
-  .actionSidebar .actionItem,
-  .actionSidebar .actionButton {
-    cursor: default;
+  /* The timeline, for the same reason and one more: it scrubs the short underneath,
+     which is paused behind the spot. Dragging it moved a video nobody could see, and on
+     release the viewer landed somewhere they never chose. */
+  .videoProgressBar {
+    display: none;
   }
 
   /* The reaction chain names a DIFFERENT creator again — the author of the original

@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { toast } from 'sonner';
+import { toastIn } from '../../utils/toast';
 import { FiTrash2, FiChevronDown, FiExternalLink, FiCopy, FiImage, FiSliders, FiZap, FiRotateCcw, FiUser, FiGrid, FiVideo } from 'react-icons/fi';
 import { useAppStore } from '../../lib/store';
 import { RxDragHandleDots2 } from 'react-icons/rx';
@@ -32,6 +32,10 @@ import { getHiveClient } from '../../utils/hiveNode';
 import { CHECKER_URL } from '../../utils/config';
 import { isLoggedIn } from '../../hive-api/aioha';
 import './SpotlightEditor.scss';
+
+// Every toast from this module is headed "Spotlight"; the message becomes the
+// line under it. See utils/toast.js.
+const toast = toastIn('Spotlight');
 
 const uid = () => `s_${Date.now().toString(36)}_${Math.floor(performance.now())}`;
 

@@ -260,6 +260,26 @@
     color: #fff;
     &:hover { opacity: 0.92; }
   }
+
+  /* Inert, and it has to LOOK inert.
+   *
+   * The pre-upload gate leaves Post Video on screen but disabled until the sponsor
+   * spot has run, so the destination stays obvious. There was no disabled rule at all,
+   * so it kept the full accent fill, the pointer cursor AND the hover lift — it read
+   * as a live button that simply ignored the click.
+   *
+   * ⚠️ Declared after the variants on purpose. `.ep-btn--primary:hover` and
+   * `.ep-btn:disabled` carry the same specificity (0,2,0), so source order is what
+   * settles it; and `:hover` still matches a disabled button in every browser, hence
+   * the explicit `:disabled:hover`. */
+  &:disabled,
+  &:disabled:hover {
+    background: var(--bg-secondary, #f1f1f3);
+    color: var(--text-secondary, #6b7280);
+    border-color: var(--border-light, #d1d5db);
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
 }
 
 /* Promote button on the upload success screen */

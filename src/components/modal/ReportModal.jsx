@@ -1,10 +1,14 @@
 import { useState } from 'react';
 import { createPortal } from 'react-dom';
 import { IoClose } from 'react-icons/io5';
-import { toast } from 'sonner';
+import { toastIn } from '../../utils/toast';
 import { useAppStore } from '../../lib/store';
 import { REPORT_API_URL, REPORT_API_SECRET } from '../../utils/config';
 import './ReportModal.scss';
+
+// Every toast from this module is headed "Report"; the message becomes the
+// line under it. See utils/toast.js.
+const toast = toastIn('Report');
 
 /**
  * Check if a target has been reported by this browser.

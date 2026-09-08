@@ -2,7 +2,7 @@ import { useState, useRef, useEffect, useCallback } from "react";
 import { createPortal } from "react-dom";
 import { MdPlaylistAdd, MdMoreVert } from "react-icons/md";
 import { IoBanOutline, IoEyeOffOutline, IoPricetagOutline } from "react-icons/io5";
-import { toast } from "sonner";
+import { toastIn } from '../../utils/toast';
 import PropTypes from "prop-types";
 import { isLoggedIn } from "../../hive-api/aioha";
 import { useAppStore } from "../../lib/store";
@@ -10,6 +10,10 @@ import AddToPlaylistModal from "../AddToPlaylistModal/AddToPlaylistModal";
 import AddTagModal from "../AddTagModal/AddTagModal";
 import { hideVideo, unhideVideo, hideCreator, unhideCreator } from "../../utils/userFilters";
 import "./CardOptionsMenu.scss";
+
+// Every toast from this module is headed "Video"; the message becomes the
+// line under it. See utils/toast.js.
+const toast = toastIn('Video');
 
 /**
  * The "⋮" menu on a thumbnail card. It replaces the old bare add-to-playlist

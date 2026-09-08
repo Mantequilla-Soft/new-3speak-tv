@@ -3,7 +3,7 @@ import { createPortal } from 'react-dom';
 import './UpvoteTooltip.scss';
 import { useAppStore } from '../../lib/store';
 import { X, ChevronUp } from 'lucide-react';
-import { toast } from 'sonner';
+import { toastIn } from '../../utils/toast';
 import { getUersContent, getVotePower, getDynamicProps, votingPower, accountVestingShares, calculateVoteRshares } from '../../utils/hiveUtils';
 import { TailChase } from 'ldrs/react';
 import 'ldrs/react/TailChase.css';
@@ -14,6 +14,10 @@ import { recordViewerTag, getViewerTags, getMyViewerTag } from '../../utils/view
 import { getVideoTagsV2, getCachedTagsV2, getTagLabel, getCategoryOf } from '../../utils/tagsV2';
 import { getSavedVoteWeight, saveVoteWeight } from '../../utils/voteWeight';
 import TagsV2Picker from './TagsV2Picker';
+
+// Every toast from this module is headed "Vote"; the message becomes the
+// line under it. See utils/toast.js.
+const toast = toastIn('Vote');
 
 // Hive posts pay out (and voting stops mattering) 7 days after creation.
 const PAYOUT_WINDOW_MS = 7 * 24 * 60 * 60 * 1000;

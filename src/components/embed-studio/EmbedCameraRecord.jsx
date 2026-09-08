@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useNavigate, useLocation, Navigate } from 'react-router-dom';
-import { toast } from 'sonner';
+import { toastIn } from '../../utils/toast';
 import {
   X, Camera, Mic, RotateCcw, Check, Download, GripHorizontal, ChevronLeft, ChevronDown, ChevronUp, RotateCw, Sliders,
 } from 'lucide-react';
@@ -12,6 +12,10 @@ import { useAppStore } from '../../lib/store';
 import { detectScriptLang, modelIdToTag } from '../../utils/detectLang';
 import { createSttStream } from '../../utils/sttClient';
 import './EmbedCameraRecord.scss';
+
+// Every toast from this module is headed "Upload"; the message becomes the
+// line under it. See utils/toast.js.
+const toast = toastIn('Upload');
 
 const SETTINGS_KEY = 'tp-overlay-settings';
 const BOX_KEY = 'tp-overlay-box';

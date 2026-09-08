@@ -15,6 +15,7 @@
   }
 
   .profile-wrap {
+    position: relative;
     display: flex;
     flex-direction: column;
     width: 19%;
@@ -239,12 +240,41 @@
       justify-content: center;
       gap: 10px;
     }
-    .close-btn {
+    // Sits on the edge the panel slides back through, pointing the way it goes.
+    // The old control was the letter "X" at 16px in the opposite corner, with no
+    // surface under it — over a light cover photo there was nothing to see.
+    .profilenav-close {
       position: absolute;
-      top: calc(20px + env(safe-area-inset-top, 0px));
-      right: 20px;
+      top: calc(14px + env(safe-area-inset-top, 0px));
+      left: 14px;
+      z-index: 2;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 34px;
+      height: 34px;
+      padding: 0;
+      border: 1px solid rgba(255, 255, 255, 0.28);
+      border-radius: 50%;
+      // Translucent dark rather than a theme colour: this sits on whatever cover
+      // image the account has, so it needs to hold up over both.
+      background: rgba(0, 0, 0, 0.45);
+      backdrop-filter: blur(6px);
+      -webkit-backdrop-filter: blur(6px);
+      color: #fff;
       cursor: pointer;
-      font-size: 16px;
+      transition: background 0.15s ease, transform 0.15s ease;
+
+      svg { font-size: 22px; display: block; }
+
+      &:hover {
+        background: rgba(0, 0, 0, 0.65);
+        transform: translateX(2px);
+      }
+
+      &:focus-visible { outline: 2px solid var(--accent-primary); outline-offset: 2px; }
+
+      @media (prefers-reduced-motion: reduce) { transition: none; }
     }
   }
   .dropdown-menu {
