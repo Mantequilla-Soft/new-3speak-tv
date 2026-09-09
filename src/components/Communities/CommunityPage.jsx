@@ -46,6 +46,7 @@ function CommunityPage() {
   const [subscribed, setSubscribed] = useState(false);
   const [subLoading, setSubLoading] = useState(false);
   const [subCount, setSubCount] = useState(null); // optimistic subscriber count
+  const incubationHandle = useAppStore(s => s.incubationHandle);
 
   // Fetch community info. Passing the logged-in user as `observer` makes Hive
   // return `context.subscribed`, so we can show the correct button state.
@@ -69,10 +70,25 @@ function CommunityPage() {
     if (id) fetchCommunityData(id);
   }, [id, feedUser]);
 
+  // Hive answers `context.subscribed` for an observer it knows. An incubating
+  // user is not one, so their subscriptions are read from where they are kept.
+  useEffect(() => {
+    if (!incubationHandle || !id) return undefined;
+    let alive = true;
+    import('../../lib/incubation')
+      .then(m => m.fetchMyIncubationSubscriptions())
+      .then(d => { if (alive) setSubscribed((d.items || []).some(i => i.community === id)); })
+      .catch(() => { /* leave the button in its default state */ });
+    return () => { alive = false; };
+  }, [incubationHandle, id]);
+
   // Subscribe / unsubscribe via the on-chain `community` custom_json (posting auth).
   const handleSubscribe = async () => {
     if (subLoading) return;
-    if (!authenticated || !isLoggedIn()) {
+    // isLoggedIn() is the wallet check, and an incubating user has no wallet.
+    // Testing it alone told the one group who cannot subscribe on chain to log
+    // in, while they were already logged in.
+    if (!authenticated || (!incubationHandle && !isLoggedIn())) {
       toast.error('Log in to subscribe');
       return;
     }
@@ -80,6 +96,17 @@ function CommunityPage() {
     setSubLoading(true);
     try {
       const label = dataMain?.title || id;
+      if (incubationHandle) {
+        const { subscribeIncubation } = await import('../../lib/incubation');
+        await subscribeIncubation(id, next);
+        setSubscribed(next);
+        // The subscriber count is Hive's, and this subscription is not on Hive
+        // yet, so it is left alone rather than shown a number that no other
+        // client would agree with.
+        toast.success(next ? `Subscribed to ${label}` : `Unsubscribed from ${label}`);
+        setSubLoading(false);
+        return;
+      }
       const json = JSON.stringify([next ? 'subscribe' : 'unsubscribe', { community: id }]);
       await customJsonWithAioha(
         KeyTypes.Posting,
@@ -208,10 +235,17 @@ function CommunityPage() {
         username={id}
         name={dataMain?.title || id}
         bio={dataMain?.about}
-        actions={
-          authenticated && isLoggedIn() ? (
+        // nameActions, not actions: subscribing is the thing a visitor came to
+        // this page to decide, and in the actions group it sat below the fold of
+        // the header as one control among several. Beside the name is where a
+        // profile puts Follow, and this is the same decision about a community.
+        //
+        // The profile's own hero classes, so the two read as one control in two
+        // places rather than two that happen to look similar.
+        nameActions={
+          authenticated && (isLoggedIn() || incubationHandle) ? (
             <button
-              className={`btn community-sub-btn${subscribed ? ' community-sub-btn--on' : ''}`}
+              className={`btn ${subscribed ? 'btn-hero-following' : 'btn-hero-follow'} community-sub-btn`}
               onClick={handleSubscribe}
               disabled={subLoading}
             >

@@ -34,23 +34,14 @@
     }
   }
 
-  // --- Subscribe button (ProfileHeader actions) -----------------------------
+  // --- Subscribe button -----------------------------------------------------
+  // Colour and state now come from the profile header's own .btn-hero-follow /
+  // .btn-hero-following, so Subscribe and Follow are one control in two places.
+  // All that is left here is the icon spacing, which those classes do not set.
   .community-sub-btn {
     display: inline-flex;
     align-items: center;
     gap: 6px;
-    // "Subscribe" = accent fill; "Subscribed" = subtle outline (like Following).
-    background: var(--accent-primary, #e53935);
-    color: #fff;
-    border: 1px solid var(--accent-primary, #e53935);
-
-    &:hover { filter: brightness(1.05); }
-
-    &--on {
-      background: transparent;
-      color: var(--text-primary, #f1f1f1);
-      border-color: var(--border-color, rgba(150, 150, 150, 0.35));
-    }
 
     &:disabled { opacity: 0.6; cursor: default; }
   }

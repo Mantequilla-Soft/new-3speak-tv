@@ -215,6 +215,17 @@ export const markIncubationNotificationsRead = () => write('/notifications/read'
 export const fetchMyIncubationFollows = () => write('/social/follows/mine', 'GET');
 
 /**
+ * Subscribe to a community without a Hive account.
+ *
+ * Stored off-chain and replayed as the ordinary `community` custom_json at
+ * graduation, so the communities they joined while getting started are already
+ * theirs when the account arrives.
+ */
+export const subscribeIncubation = (community, subscribed) =>
+  write('/social/subscribe', 'PUT', { community, state: subscribed ? 'subscribed' : 'unsubscribed' });
+export const fetchMyIncubationSubscriptions = () => write('/social/subscriptions/mine', 'GET');
+
+/**
  * People you follow here who now have a real Hive account.
  *
  * A follow of a handle could never reach the chain, so when that person

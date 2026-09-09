@@ -705,6 +705,8 @@ const INCUBATION_ROUTES = new Map([
   ['PUT /social/profile', { path: '/social/profile' }],
   ['GET /social/profile/mine', { path: '/social/profile/mine' }],
   ['GET /social/follows/mine', { path: '/social/follows/mine' }],
+  ['PUT /social/subscribe', { path: '/social/subscribe' }],
+  ['GET /social/subscriptions/mine', { path: '/social/subscriptions/mine' }],
   ['GET /public/graduation/plan', { path: '/public/graduation/plan' }],
   ['GET /progress', { path: '/progress' }],
   ['GET /notifications', { path: '/notifications' }],
