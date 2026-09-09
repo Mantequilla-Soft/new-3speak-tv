@@ -638,9 +638,13 @@ app.get('/api/incubation/graduation-status', incubationLimiter, async (req, res)
   }
 })
 
-app.all('/api/incubation/*', incubationLimiter, async (req, res) => {
+// app.use, not app.all('/api/incubation/*'): this server is on Express 5, whose
+// path-to-regexp rejects a bare '*' outright and takes the whole process down
+// at startup rather than at request time. A mount needs no wildcard syntax at
+// all, and req.path is already relative to it.
+app.use('/api/incubation', incubationLimiter, async (req, res) => {
   try {
-    const sub = req.path.replace(/^\/api\/incubation/, '') || '/'
+    const sub = req.path || '/'
     const key = `${req.method} ${sub}`
     const target = INCUBATION_ROUTES.get(key)
     if (!target) return res.status(404).json({ error: 'Unknown incubation route' })

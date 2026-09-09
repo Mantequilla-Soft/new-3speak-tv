@@ -11,9 +11,6 @@
 
 import { CHECKER_URL } from '../utils/config';
 
-const INCUBATION_URL =
-  import.meta.env.VITE_INCUBATION_URL || 'https://incubation.3speak.tv';
-
 const HANDLE_KEY = 'incubation_handle';
 
 /**
