@@ -22,9 +22,14 @@ const FIELDS = ['name', 'about', 'location', 'profile_image', 'cover_image'];
 
 /**
  * Form state + upload + save for the profile block. `seed` fills it from an
- * already-fetched Hive profile; `save` broadcasts and resolves true on success.
+ * already-fetched profile; `save` resolves true on success.
+ *
+ * `onSave` replaces the Hive broadcast with somewhere else to put it. It exists
+ * for users who have no Hive account yet: the form, the upload and the copy are
+ * the same for them, only the destination differs, and a second editor would be
+ * a second place for these fields to drift.
  */
-export function useProfileEditor(username) {
+export function useProfileEditor(username, { onSave = null } = {}) {
   const [form, setForm] = useState(EMPTY);
   const [saving, setSaving] = useState(false);
   const [uploading, setUploading] = useState(false);
@@ -73,14 +78,19 @@ export function useProfileEditor(username) {
   const hasAnything = FIELDS.some((k) => String(form[k] || '').trim());
 
   const save = useCallback(async (successMessage = 'Profile saved') => {
-    if (!username) return false;
+    if (!onSave && !username) return false;
     setSaving(true);
     try {
-      await saveProfileToHive(username, form);
-      // Render the picture we just uploaded straight away: the hive avatar
-      // proxy would keep serving the old one for a while.
-      if (form.profile_image) setAvatarOverride(username, form.profile_image);
-      else clearAvatarOverride(username);
+      if (onSave) {
+        await onSave(form);
+      } else {
+        await saveProfileToHive(username, form);
+        // Render the picture we just uploaded straight away: the hive avatar
+        // proxy would keep serving the old one for a while. Only for the Hive
+        // path — the override is keyed by account name, and a handle is not one.
+        if (form.profile_image) setAvatarOverride(username, form.profile_image);
+        else clearAvatarOverride(username);
+      }
       toast.success(successMessage);
       return true;
     } catch (e) {
@@ -89,7 +99,7 @@ export function useProfileEditor(username) {
     } finally {
       setSaving(false);
     }
-  }, [username, form]);
+  }, [username, form, onSave]);
 
   return { form, seed, setForm, setField, pickImage, uploading, saving, hasAnything, save };
 }
@@ -97,6 +107,8 @@ export function useProfileEditor(username) {
 export default function ProfileFields({ username, form, setField, pickImage, uploading, saving }) {
   const fileRef = useRef(null);
   const coverRef = useRef(null);
+  // useAvatarUrl answers a null account with the 3Speak mark, so someone with
+  // no Hive account gets a sane picture here without a special case.
   const currentAvatar = useAvatarUrl(username, null);
   const avatar = form.profile_image || currentAvatar;
   const cover = form.cover_image || defaultCover;

@@ -1,19 +1,23 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import {
-  MdCheckCircle, MdRadioButtonUnchecked, MdVerified, MdExpandMore,
+  MdCheckCircle, MdRadioButtonUnchecked, MdVerified, MdExpandMore, MdEdit,
 } from 'react-icons/md';
 import Card3 from '../Cards/Card3';
+import ProfileEditModal from '../WelcomePrompt/ProfileEditModal';
 import {
   fetchIncubationProfile, fetchIncubationPosts, fetchIncubationProgress, handleAvatar,
+  fetchMyIncubationProfile, saveIncubationProfile,
 } from '../../lib/incubation';
 import './IncubatingProfile.scss';
 
 const TASK_COPY = {
-  video: { label: 'Upload a video', hint: 'A proper upload, however short.' },
-  short: { label: 'Post 2 shorts', hint: 'Vertical clips from the shorts camera.' },
-  comment: { label: 'Write 5 comments', hint: 'Real ones, on videos you actually watched.' },
-  watch: { label: 'Watch an hour of 3Speak', hint: 'Any videos. Counted while you are really watching.' },
+  video: { label: 'Upload a video', hint: 'Share something about you and what your channel will be about.' },
+  short: { label: 'Post 2 shorts', hint: 'Participate in 3Speak Shorts and upload some moments of your daily life or some stories you want to share.' },
+  // No hint here: the comment one states the length floor, which is the
+  // server's number, so it is built in taskHint below rather than written twice.
+  comment: { label: 'Write 5 comments' },
+  watch: { label: 'Watch an hour on 3Speak', hint: 'Any videos. Counted while you are really watching.' },
 };
 
 /**
@@ -30,6 +34,27 @@ function asDuration(seconds) {
   if (h && m) return `${h}h ${m}m`;
   if (h) return `${h}h`;
   return `${m}m`;
+}
+
+/**
+ * The line under a task's name.
+ *
+ * The comment floor lives on the task itself rather than in fine print below
+ * the list: it is the rule that decides whether a comment counts, and someone
+ * reading "1/5" needs it right there, not in a footnote they have already
+ * scrolled past.
+ */
+function taskHint(t, minCommentChars) {
+  if (t.type === 'comment' && minCommentChars > 0) {
+    return `Comments count once they are at least ${minCommentChars} characters. A real thought, not just “nice”.`;
+  }
+  return TASK_COPY[t.type]?.hint || '';
+}
+
+/** How far along one task is, 0-100, for the fill behind its card. */
+function taskPct(t) {
+  if (!t.need) return 0;
+  return Math.max(0, Math.min(100, (t.have / t.need) * 100));
 }
 
 function taskAmount(t) {
@@ -59,7 +84,12 @@ export default function IncubatingProfile({ handle, own = false }) {
   const [posts, setPosts] = useState([]);
   const [progress, setProgress] = useState(null);
   const [tasksOpen, setTasksOpen] = useState(readOpen);
+  const [editing, setEditing] = useState(false);
   const [error, setError] = useState('');
+  // Saving REPLACES the stored profile object, interests included, so the ones
+  // already set have to be sent back with it or picking a new avatar silently
+  // clears them.
+  const interestsRef = useRef([]);
 
   useEffect(() => {
     let alive = true;
@@ -67,6 +97,7 @@ export default function IncubatingProfile({ handle, own = false }) {
       .then(([p, list]) => {
         if (!alive) return;
         setProfile(p);
+        interestsRef.current = p.interests || [];
         setPosts(list.items || []);
       })
       .catch(() => { if (alive) setError('Could not load this profile.'); });
@@ -83,6 +114,23 @@ export default function IncubatingProfile({ handle, own = false }) {
       .catch(() => { /* the page still works without it */ });
     return () => { alive = false; };
   }, [own]);
+
+  // Stable identities: ProfileEditModal reloads whenever `loadProfile` changes,
+  // so a new function every render would refetch in a loop.
+  const loadOwnProfile = useCallback(async () => {
+    const mine = await fetchMyIncubationProfile();
+    interestsRef.current = mine.interests || [];
+    return mine.profile || {};
+  }, []);
+
+  const saveOwnProfile = useCallback(
+    (form) => saveIncubationProfile(form, interestsRef.current),
+    [],
+  );
+
+  const onProfileSaved = useCallback(() => {
+    fetchIncubationProfile(handle).then(setProfile).catch(() => { /* keep what is shown */ });
+  }, [handle]);
 
   function toggleTasks() {
     setTasksOpen((wasOpen) => {
@@ -102,17 +150,19 @@ export default function IncubatingProfile({ handle, own = false }) {
     duration: p.duration || 0,
     created: p.created,
     hive_body: p.body || '',
+    // Keeps its portrait shape inside the mixed grid. Videos and shorts sit in
+    // ONE grid here, newest first, because a new channel with three posts does
+    // not need to be filed into sections.
+    _short: p.contentType === 'short',
     _incubation: true,
   });
 
-  // Split by the type the server derived, so a short is laid out as a short.
-  // Anything older than that field is a video, which is what those rows are.
-  const videos = useMemo(
-    () => posts.filter((p) => p.contentType !== 'short').map(toCard),
-    [posts, handle], // eslint-disable-line react-hooks/exhaustive-deps
-  );
-  const shorts = useMemo(
-    () => posts.filter((p) => p.contentType === 'short').map(toCard),
+  // ONE grid, videos and shorts together, newest first as the checker returns
+  // them. Splitting them into sections is a library view, and these channels
+  // have a handful of posts: two headings over two and one card said far more
+  // about our data model than about the person whose page it is.
+  const cards = useMemo(
+    () => posts.map(toCard),
     [posts, handle], // eslint-disable-line react-hooks/exhaustive-deps
   );
 
@@ -124,7 +174,7 @@ export default function IncubatingProfile({ handle, own = false }) {
   const showSidebar = own && !graduated;
   const doneCount = progress ? progress.tasks.filter((t) => t.done).length : 0;
   const totalTasks = progress ? progress.tasks.length : 0;
-  const nothingYet = videos.length === 0 && shorts.length === 0;
+  const nothingYet = cards.length === 0;
 
   return (
     <div className="inc-profile">
@@ -153,6 +203,12 @@ export default function IncubatingProfile({ handle, own = false }) {
             <span><strong>{profile.counts?.posts ?? 0}</strong>posts</span>
             <span><strong>{profile.counts?.following ?? 0}</strong>following</span>
           </div>
+          {own && (
+            <button type="button" className="inc-edit-btn" onClick={() => setEditing(true)}>
+              <MdEdit size={15} aria-hidden="true" />
+              Edit profile
+            </button>
+          )}
         </div>
       </header>
 
@@ -204,12 +260,18 @@ export default function IncubatingProfile({ handle, own = false }) {
                   <div id="inc-task-list">
                     <ul className="inc-tasks">
                       {progress.tasks.map((t) => (
-                        <li key={t.type} className={t.done ? 'is-done' : ''}>
+                        <li
+                          key={t.type}
+                          className={t.done ? 'is-done' : ''}
+                          // Read by the fill behind the card, so "2 of 5" is
+                          // visible as a quantity and not only as a number.
+                          style={{ '--task-fill': `${taskPct(t)}%` }}
+                        >
                           {t.done ? <MdCheckCircle size={20} className="inc-task-icon done" />
                             : <MdRadioButtonUnchecked size={20} className="inc-task-icon" />}
                           <span className="inc-task-text">
                             <strong>{TASK_COPY[t.type]?.label || t.type}</strong>
-                            <span>{TASK_COPY[t.type]?.hint}</span>
+                            <span>{taskHint(t, progress.minCommentChars)}</span>
                           </span>
                           <span className="inc-task-count">{taskAmount(t)}</span>
                         </li>
@@ -222,11 +284,6 @@ export default function IncubatingProfile({ handle, own = false }) {
                         ? 'All done. The team will review your channel and upgrade you. Nothing more for you to do.'
                         : 'Once you have completed all of these, the team will review your channel and upgrade you.'}
                     </p>
-                    {progress.minCommentChars > 0 && !progress.tasks.find((t) => t.type === 'comment')?.done && (
-                      <p className="inc-review-fine">
-                        Comments count once they are at least {progress.minCommentChars} characters. A real thought, not just “nice”.
-                      </p>
-                    )}
                   </div>
                 )}
               </section>
@@ -235,7 +292,7 @@ export default function IncubatingProfile({ handle, own = false }) {
             <section className="inc-panel inc-unlocks">
               <h2>What a Hive account gets you</h2>
               <ul>
-                <li><strong>Your posts start earning.</strong> Videos on Hive can be rewarded in HIVE and HBD by anyone who watches them.</li>
+                <li><strong>Your posts start earning.</strong> Videos on Hive can be rewarded in HIVE and HBD by anyone who watches them, and they can carry ads you take a share of.</li>
                 <li><strong>Publish everything you made here.</strong> The videos, shorts and follows on this page can be posted to the chain under your own name, and you choose which.</li>
                 <li><strong>Vote, tip, follow and build playlists.</strong> All the buttons that are greyed out for you today.</li>
                 <li><strong>Keys only you hold.</strong> Nobody can lock you out, and the same login works across every Hive app, not just 3Speak.</li>
@@ -251,26 +308,31 @@ export default function IncubatingProfile({ handle, own = false }) {
             </p>
           )}
 
-          {videos.length > 0 && (
+          {cards.length > 0 && (
             <>
-              <h2 className="inc-subhead">Videos</h2>
-              <Card3 videos={videos} />
-            </>
-          )}
-
-          {shorts.length > 0 && (
-            <>
-              <h2 className="inc-subhead">Shorts</h2>
-              {/* shortsGrid for the portrait layout, but deliberately NOT
-                  linkPrefix="/shorts": that viewer reads its feed from Hive and
-                  can only fail on a post that is not there. The watch page
-                  already falls back to the incubation service, so these open
-                  somewhere that works. */}
-              <Card3 videos={shorts} shortsGrid />
+              <h2 className="inc-subhead">{own ? 'Your posts' : 'Posts'}</h2>
+              {/* Deliberately NOT linkPrefix="/shorts" for the shorts in here:
+                  that viewer reads its feed from Hive and can only fail on a
+                  post that is not there. The watch page already falls back to
+                  the incubation service, so every card opens somewhere that
+                  works. */}
+              <Card3 videos={cards} />
             </>
           )}
         </main>
       </div>
+
+      {own && (
+        <ProfileEditModal
+          open={editing}
+          username={null}
+          onClose={() => setEditing(false)}
+          loadProfile={loadOwnProfile}
+          onSave={saveOwnProfile}
+          onSaved={onProfileSaved}
+          fineprint="Saved to your 3Speak profile. It goes to Hive with everything else when you get your account."
+        />
+      )}
     </div>
   );
 }

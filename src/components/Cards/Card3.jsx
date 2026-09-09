@@ -70,6 +70,13 @@ function shortsHint(video) {
   return raw.length > SHORT_HINT_MAX ? `${raw.slice(0, SHORT_HINT_MAX).trimEnd()}…` : raw;
 }
 
+// A card that is a short, in a grid that is NOT all shorts. `shortsGrid` makes
+// the WHOLE grid portrait, which is right for a shorts row and wrong for a mixed
+// feed: a profile with two shorts and a video should show each in its own shape
+// rather than force one of them into the other's. Cards opt in with `_short`, so
+// every existing caller is unaffected.
+const isShortCard = (video, shortsGrid) => !!(shortsGrid || video?._short);
+
 function Card3({ videos = [], loading = false, error = null, interleaveEvery = 0, renderInterleave = null, communityEvery = 0, renderCommunity = null, creatorsEvery = 0, renderCreators = null, getContentForVideo = null, isWatched = null, getViewCount = null, linkPrefix = '/watch', linkQuery = '', shortTimeAgo = true, shortsGrid = false, priority = false, hideWatched = false, watchedVersion = 0 }) {
   const navigate = useNavigate();
   const [modalUser, setModalUser] = useState(null);
@@ -145,7 +152,12 @@ function Card3({ videos = [], loading = false, error = null, interleaveEvery = 0
         && isWatched(v.author?.username || v.author || v.owner, v.permlink) === true))
       .map(video => ({
         ...video,
-        _processedThumbnail: video._liveStream ? video.thumbnail : fixVideoThumbnail(video, shortsGrid)
+        // Portrait resize for a portrait card, whether the whole grid is shorts
+        // or just this one is: asking for a 340x191 crop of a 9:16 source is
+        // what makes a mixed grid look like a row of letterboxed accidents.
+        _processedThumbnail: video._liveStream
+          ? video.thumbnail
+          : fixVideoThumbnail(video, isShortCard(video, shortsGrid))
       }));
   }, [videos, shortsGrid, dismissed, deadVideos, hideWatched, isWatched, watchedVersion]);
 
@@ -154,7 +166,9 @@ function Card3({ videos = [], loading = false, error = null, interleaveEvery = 0
 
   return (
     <div
-      className={`card-container${shortsGrid ? ' card-container--shorts' : ''}`}
+      className={`card-container${shortsGrid ? ' card-container--shorts' : ''}${
+        !shortsGrid && processedVideos.some((v) => v._short) ? ' card-container--mixed' : ''
+      }`}
       {...containerProps}
     >
       {withInterleave(processedVideos.map((video, index) => {
@@ -171,13 +185,13 @@ function Card3({ videos = [], loading = false, error = null, interleaveEvery = 0
               : `${linkPrefix}?v=${cardAuthor}/${
                 video.permlink
               }${linkQuery}${video._scheduled ? '&scheduled=1' : ''}`}
-            className="card"
+            className={`card${!shortsGrid && video._short ? ' card--short' : ''}`}
             key={postKey}
             data-vidkey={postKey}
             {...(video._liveStream
               ? {}
               : getCardProps(postKey, cardAuthor, video.permlink, video._processedThumbnail, video.status, video.title))}
-            {...(shortsGrid ? { title: shortsHint(video) } : {})}
+            {...(isShortCard(video, shortsGrid) ? { title: shortsHint(video) } : {})}
           >
             {/* Thumbnail — fast fallback so a dead image host can't leave the
                 card blank for ~a minute (see CardThumbnail). */}
@@ -187,7 +201,7 @@ function Card3({ videos = [], loading = false, error = null, interleaveEvery = 0
                 fallback={img}
                 eager={priority && index < 6}
               />
-              {!shortsGrid && !video._liveStream && (
+              {!isShortCard(video, shortsGrid) && !video._liveStream && (
                 <div className="wrap">
                   <span className="play">
                     {Math.floor((video.spkvideo?.duration || video.duration) / 60)}:
@@ -203,7 +217,7 @@ function Card3({ videos = [], loading = false, error = null, interleaveEvery = 0
                   Presentation only: the gate re-checks entitlement on every
                   manifest and key request, so hiding this badge would not grant
                   anyone access. Shorts are never gated. */}
-              {video.gated && !shortsGrid && (
+              {video.gated && !isShortCard(video, shortsGrid) && (
                 <div className="card-gated-badge" title="Supporters only — 3Speak Pro unlocks the full video">
                   <span aria-hidden="true">🔒</span> PRO
                 </div>

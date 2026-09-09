@@ -147,6 +147,28 @@
   }
 }
 
+.inc-edit-btn {
+  align-self: center;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  flex-shrink: 0;
+  padding: 7px 13px;
+  border-radius: 999px;
+  border: 1px solid var(--border-color);
+  background: var(--bg-tertiary);
+  color: var(--text-primary);
+  font: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+
+  &:hover {
+    border-color: var(--accent-primary);
+    color: var(--accent-primary);
+  }
+}
+
 /* ------------------------------------------------------------- panels --- */
 
 .inc-note {
@@ -293,6 +315,7 @@
   gap: 10px;
 
   li {
+    position: relative;
     display: flex;
     align-items: center;
     gap: 12px;
@@ -300,11 +323,41 @@
     border: 1px solid var(--border-color);
     border-radius: 12px;
     background: var(--bg-secondary);
+    overflow: hidden;
   }
 
+  // How much of this ONE task is done, filled from the left. The summary bar at
+  // the top answers "how many tasks", which is a different question: three
+  // untouched tasks and three nearly-finished ones look identical up there.
+  li::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    width: var(--task-fill, 0%);
+    background: color-mix(in srgb, #2e9c4a 16%, transparent);
+    border-right: 1px solid color-mix(in srgb, #2e9c4a 30%, transparent);
+    transition: width 0.45s ease;
+    pointer-events: none;
+  }
+
+  // The fill is painted behind the row, so the row's own content has to be
+  // lifted out of its way -- an absolutely positioned sibling otherwise covers
+  // static content whatever the source order.
+  li > * {
+    position: relative;
+    z-index: 1;
+  }
+
+  // Complete: the fill is already the full width, so this only marks the edge.
+  // No second background, or a finished task would be tinted twice.
   li.is-done {
     border-color: color-mix(in srgb, #2e9c4a 45%, transparent);
-    background: color-mix(in srgb, #2e9c4a 8%, var(--bg-secondary));
+  }
+
+  li.is-done::before {
+    border-right-color: transparent;
   }
 }
 
@@ -349,12 +402,6 @@
   font-size: 13.5px;
   line-height: 1.5;
   color: var(--text-primary);
-}
-
-.inc-review-fine {
-  margin: 8px 0 0;
-  font-size: 12.5px;
-  color: var(--text-muted);
 }
 
 /* ------------------------------------------------------------ unlocks --- */
@@ -422,6 +469,10 @@
 
   .inc-hero-stats {
     gap: 18px;
+  }
+
+  .inc-edit-btn {
+    align-self: flex-start;
   }
 
   .inc-hero-text h1 { font-size: 21px; }

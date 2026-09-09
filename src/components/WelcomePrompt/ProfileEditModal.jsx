@@ -13,27 +13,38 @@ import './WelcomePrompt.scss';
  * `onSaved` fires after a successful broadcast so the page can refresh whatever
  * it renders from the profile.
  */
-export default function ProfileEditModal({ open, username, onClose, onSaved }) {
-  const { form, seed, setField, pickImage, uploading, saving, save } = useProfileEditor(username);
+export default function ProfileEditModal({
+  open, username, onClose, onSaved,
+  // Where the profile comes from and goes to. Both default to Hive; an
+  // incubating user has no Hive account, so they pass their own pair and get
+  // the same form rather than a second one built to drift from this.
+  loadProfile = null,
+  onSave = null,
+  fineprint = 'Saved to your Hive account, so every Hive app shows the same profile.',
+}) {
+  const { form, seed, setField, pickImage, uploading, saving, save } = useProfileEditor(username, { onSave });
   const [loading, setLoading] = useState(false);
 
   // Load the current profile every time it opens, so the form always reflects
   // what is on chain right now rather than a stale copy from a previous open.
   useEffect(() => {
-    if (!open || !username) return;
+    if (!open) return undefined;
+    if (!loadProfile && !username) return undefined;
     let alive = true;
     setLoading(true);
     (async () => {
-      const profile = await fetchProfile(username);
+      const profile = loadProfile ? await loadProfile() : await fetchProfile(username);
       if (!alive) return;
       if (profile) {
-        reconcileAvatarOverride(username, profile.profile_image);
+        // Only meaningful for the Hive path: the override is keyed by account
+        // name, and there is no account here otherwise.
+        if (!loadProfile) reconcileAvatarOverride(username, profile.profile_image);
         seed(profile);
       }
       setLoading(false);
     })();
     return () => { alive = false; };
-  }, [open, username, seed]);
+  }, [open, username, seed, loadProfile]);
 
   useEffect(() => {
     if (!open) return;
@@ -91,9 +102,7 @@ export default function ProfileEditModal({ open, username, onClose, onSaved }) {
           />
         )}
 
-        <p className="welcome-fineprint">
-          Saved to your Hive account, so every Hive app shows the same profile.
-        </p>
+        <p className="welcome-fineprint">{fineprint}</p>
 
         <div className="welcome-actions">
           <button type="button" className="welcome-skip" onClick={() => onClose && onClose()} disabled={saving}>
