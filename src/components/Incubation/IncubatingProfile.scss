@@ -232,8 +232,15 @@
 
 // Sitting under the feed now, it is the widest thing on the page, so the
 // unlock cards spread out again instead of stacking in a 340px column.
-.inc-main .inc-unlocks ul {
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+.inc-main .inc-unlocks {
+  // The card grid ends flush against its own last row, so without this the
+  // panel reads as another row of the feed rather than a separate thing. Same
+  // gap the section headings use, so the column keeps one rhythm.
+  margin-top: 26px;
+
+  ul {
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  }
 }
 
 /* ----------------------------------------------------------------- tabs --- */
