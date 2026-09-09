@@ -4,6 +4,7 @@ import { useQueryClient } from '@tanstack/react-query';
 import { toastIn } from '../../utils/toast';
 import { useAppStore } from '../../lib/store';
 import { fetchUserInterests, saveInterestsToHive } from '../../utils/interests';
+import { fetchMyIncubationProfile, saveIncubationProfile } from '../../lib/incubation';
 import { usePromptsActive, setPromptActive } from '../../utils/welcomeGate';
 import { refreshHomeFeeds } from '../../utils/feedSeed';
 import TagsV2Picker from '../tooltip/TagsV2Picker';
@@ -34,8 +35,12 @@ const markPrompted = (username) => {
  */
 export default function InterestsPrompt() {
   const user = useAppStore((s) => s.user);
+  const incubationHandle = useAppStore((s) => s.incubationHandle);
   const authenticated = useAppStore((s) => s.authenticated);
   const setInterests = useAppStore((s) => s.setInterests);
+  // Whose interests these are. A handle is not a Hive account, but it is a
+  // stable identity for the "already asked" memo and for reading them back.
+  const who = user || incubationHandle;
   const queryClient = useQueryClient();
   const [open, setOpen] = useState(false);
   const [selected, setSelected] = useState([]);
@@ -45,17 +50,25 @@ export default function InterestsPrompt() {
   const promptsActive = usePromptsActive('interests');
 
   useEffect(() => {
-    if (!authenticated || !user || wasPrompted(user)) return;
+    // Incubating users get asked too. They were skipped entirely, because this
+    // reads interests off a Hive account they do not have -- so the people who
+    // most need a feed worth scrolling were the only ones never offered one.
+    if (!authenticated || !who || wasPrompted(who)) return;
     if (promptsActive) return;
     let alive = true;
     // Small delay so we don't collide with the login flow / other modals.
     const t = setTimeout(async () => {
-      const server = await fetchUserInterests(user);
+      const server = incubationHandle
+        ? await fetchMyIncubationProfile().then((d) => d.interests || []).catch(() => null)
+        : await fetchUserInterests(user);
       if (!alive) return;
       if (server == null) return;      // couldn't read Hive — try again next session
       if (server.length > 0) {         // already has interests — remember + don't ask
+        // Loading them into the store is the point even when we do not ask: it
+        // is what biases the feed, and for an incubating user nothing else
+        // would ever put them there.
         setInterests(server);
-        markPrompted(user);
+        markPrompted(who);
         return;
       }
       setSelected([]);
@@ -65,7 +78,7 @@ export default function InterestsPrompt() {
       setOpen(true);
     }, 1200);
     return () => { alive = false; clearTimeout(t); };
-  }, [authenticated, user, promptsActive]);
+  }, [authenticated, user, incubationHandle, promptsActive]);
 
   // Release the slot however this unmounts, so a prompt waiting on it is not
   // left waiting forever by a route change mid-decision.
@@ -74,7 +87,7 @@ export default function InterestsPrompt() {
   if (!open) return null;
 
   const dismiss = () => {
-    if (user) markPrompted(user);
+    if (who) markPrompted(who);
     setOpen(false);
     setPromptActive('interests', false);
   };
@@ -82,9 +95,19 @@ export default function InterestsPrompt() {
   const save = async () => {
     setSaving(true);
     try {
-      const list = await saveInterestsToHive(user, selected);
+      // Off-chain for someone with no account to write metadata onto. They
+      // travel to the chain at graduation, into the same 3speak namespace this
+      // reads from (see the incubation service's profile op).
+      let list;
+      if (incubationHandle) {
+        const mine = await fetchMyIncubationProfile();
+        await saveIncubationProfile(mine.profile || {}, selected);
+        list = selected;
+      } else {
+        list = await saveInterestsToHive(user, selected);
+      }
       setInterests(list);
-      if (user) markPrompted(user);
+      if (who) markPrompted(who);
       toast.success('Interests saved — change them anytime in Settings');
       setOpen(false);
       setPromptActive('interests', false);
