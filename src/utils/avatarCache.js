@@ -132,6 +132,11 @@ export function getResolvedAvatar(username) {
  * chain says they have, else the (day-cached) hive proxy. Re-renders the caller
  * when any of that changes, so a new picture appears the moment it's saved.
  */
+// Shown when there is no Hive account to read an avatar from. Someone
+// incubating has no Hive profile at all, so `username` is null and the URL
+// below would resolve to /u//avatar or /u/null/avatar and render broken.
+export const NO_ACCOUNT_AVATAR = '/pwa-192x192.png';
+
 export function useAvatarUrl(username, size = 'small') {
   const [, bump] = useState(0);
   useEffect(() => {
@@ -139,6 +144,11 @@ export function useAvatarUrl(username, size = 'small') {
     subscribers.add(fn);
     return () => { subscribers.delete(fn); };
   }, []);
+  // No account: return the 3Speak mark rather than building a Hive URL for a
+  // name that does not exist. Fixes every caller at once — the nav trigger, the
+  // profile dropdown and anything else that asks for "my avatar" while the
+  // viewer has no Hive account.
+  if (!username) return NO_ACCOUNT_AVATAR;
   return getAvatarOverride(username)
     || getResolvedAvatar(username)
     || hiveAvatarUrl(username, size);

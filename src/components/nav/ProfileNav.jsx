@@ -30,6 +30,10 @@ function ProfileNav({ isVisible, onclose, toggleAddAccount, openLoginModal }) {
   const location = useLocation();
   const navigate = useNavigate()
   const { user, theme, showNsfw, setShowNsfw, toggleTheme, sidebarHidden, setSidebarHidden, LogOut } = useAppStore();
+  const incubationHandle = useAppStore((s) => s.incubationHandle);
+  // What to SHOW. Someone incubating has no Hive account, so `user` is null and
+  // the panel rendered a blank name over a broken cover.
+  const displayName = user || incubationHandle;
   const isManteAuth = localStorage.getItem("manteauth_login") === "true";
   // Serves a freshly uploaded picture instead of the cached hive proxy copy.
   const myAvatar = useAvatarUrl(user, null);
@@ -76,10 +80,10 @@ function ProfileNav({ isVisible, onclose, toggleAddAccount, openLoginModal }) {
           <MdChevronRight />
         </button>
 
-        <div className='pro-top-wrap'style={{ backgroundImage: `url(https://images.hive.blog/u/${user}/cover)`, backgroundSize: "cover", backgroundPosition: "center",}}> 
+        <div className='pro-top-wrap'style={{ backgroundImage: user ? `url(https://images.hive.blog/u/${user}/cover)` : 'none', backgroundSize: "cover", backgroundPosition: "center",}}> 
             {/* <img className='' src={getUserProfile?.images?.cover} alt="" /> */}
             <img className='avatar-img' src={myAvatar}  alt="" />
-            <span className='username'>{user}</span>
+            <span className='username'>{displayName}</span>
             <div className="power-wrap">
             <div className="wrap-in">
               <div className="wrap">
