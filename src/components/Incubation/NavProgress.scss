@@ -42,14 +42,16 @@
   white-space: nowrap;
 }
 
-// Phones: the bar alone. The nav is already tight there, and the fraction is
-// the first thing to go since the bar says the same thing at a glance.
+// Phones: the bar alone, but a WIDER one. The fraction is the first thing to go
+// since the bar says the same thing at a glance, and the space it frees is
+// better spent making the bar readable than on padding: at 34px a quarter of
+// the way along was three pixels of colour.
 @media screen and (max-width: 767px) {
   .nav-progress {
-    padding: 0 8px;
+    padding: 0 10px;
     gap: 0;
   }
 
-  .nav-progress-bar { width: 34px; }
+  .nav-progress-bar { width: 68px; }
   .nav-progress-count { display: none; }
 }

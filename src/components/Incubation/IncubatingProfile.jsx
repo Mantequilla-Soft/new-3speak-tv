@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import {
   MdCheckCircle, MdRadioButtonUnchecked, MdVerified, MdExpandMore, MdEdit,
 } from 'react-icons/md';
+import { FaFilm, FaRocket, FaUnlockAlt } from 'react-icons/fa';
 import Card3 from '../Cards/Card3';
 import ProfileEditModal from '../WelcomePrompt/ProfileEditModal';
 import {
@@ -17,6 +18,7 @@ const TASK_COPY = {
   // No hint here: the comment one states the length floor, which is the
   // server's number, so it is built in taskHint below rather than written twice.
   comment: { label: 'Write 5 comments' },
+  follow: { label: 'Follow 10 creators', hint: 'Build up a network of likeminded people, or creators you find exciting.' },
   watch: { label: 'Watch an hour on 3Speak', hint: 'Any videos. Counted while you are really watching.' },
 };
 
@@ -208,7 +210,9 @@ export default function IncubatingProfile({ handle, own = false }) {
 
   return (
     <div className="inc-profile">
-      <header className="inc-hero">
+      {/* has-cover, so the name is only given a shadow when there is actually an
+          image under it. On the plain tinted header a shadow just looks smudged. */}
+      <header className={`inc-hero${p.cover_image ? ' has-cover' : ''}`}>
         {p.cover_image && <div className="inc-hero-cover" style={{ backgroundImage: `url(${p.cover_image})` }} />}
         <div className="inc-hero-body">
           <img className="inc-hero-avatar" src={p.profile_image || handleAvatar(handle)} alt="" />
@@ -284,7 +288,7 @@ export default function IncubatingProfile({ handle, own = false }) {
             {progress && (
               <section className="inc-panel inc-progress">
                 <header>
-                  <h2>Your path to a Hive account</h2>
+                  <h2><FaRocket size={14} aria-hidden="true" /> Your path to a Hive account</h2>
                   <span className="inc-progress-count">{doneCount} of {totalTasks} done</span>
                 </header>
                 {/* The bar stays put whatever the list does: it is the one thing
@@ -345,15 +349,6 @@ export default function IncubatingProfile({ handle, own = false }) {
               </section>
             )}
 
-            <section className="inc-panel inc-unlocks">
-              <h2>What a Hive account gets you</h2>
-              <ul>
-                <li><strong>Your posts start earning.</strong> Videos on Hive can be rewarded in HIVE and HBD by anyone who watches them, and they can carry ads you take a share of.</li>
-                <li><strong>Publish everything you made here.</strong> The videos, shorts and follows on this page can be posted to the chain under your own name, and you choose which.</li>
-                <li><strong>Vote, tip, follow and build playlists.</strong> All the buttons that are greyed out for you today.</li>
-                <li><strong>Keys only you hold.</strong> Nobody can lock you out, and the same login works across every Hive app, not just 3Speak.</li>
-              </ul>
-            </section>
           </aside>
         )}
 
@@ -376,7 +371,7 @@ export default function IncubatingProfile({ handle, own = false }) {
             <>
               {videoCards.length > 0 && (
                 <>
-                  <h2 className="inc-subhead">Videos</h2>
+                  <h2 className="inc-subhead"><FaFilm size={15} aria-hidden="true" /> Videos</h2>
                   <Card3 videos={videoCards} />
                 </>
               )}
@@ -391,10 +386,25 @@ export default function IncubatingProfile({ handle, own = false }) {
             <>
               {/* Names the two things in the feed, since they share one grid
                   rather than sitting under separate headings. */}
-              <h2 className="inc-subhead">Videos and Shorts</h2>
+              <h2 className="inc-subhead"><FaFilm size={15} aria-hidden="true" /> Videos and Shorts</h2>
               <Card3 videos={cards} />
             </>
           ))}
+          {/* Below the feed rather than in the sidebar: it is the reward for
+              the checklist, so it reads better after the work than beside it,
+              and it leaves the goals alone at the top of the column. */}
+          {showSidebar && (
+            <section className="inc-panel inc-unlocks">
+              <h2><FaUnlockAlt size={14} aria-hidden="true" /> What a Hive account gets you</h2>
+              <ul>
+                <li><strong>Your posts start earning.</strong> Videos on Hive can be rewarded in HIVE and HBD by anyone who watches them, and they can carry ads you take a share of.</li>
+                <li><strong>Publish everything you made here.</strong> The videos, shorts and follows on this page can be posted to the chain under your own name, and you choose which.</li>
+                <li><strong>Vote, tip, follow and build playlists.</strong> All the buttons that are greyed out for you today.</li>
+                <li><strong>Keys only you hold.</strong> Nobody can lock you out, and the same login works across every Hive app, not just 3Speak.</li>
+                <li><strong>Be part of the global Hive ecosystem.</strong> 3Speak is one app on a whole network of them: blogs, communities, games, marketplaces and more, all sharing the one account and the same following list.</li>
+              </ul>
+            </section>
+          )}
         </main>
       </div>
 

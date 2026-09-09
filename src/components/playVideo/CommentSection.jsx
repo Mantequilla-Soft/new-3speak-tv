@@ -148,10 +148,21 @@ function CommentSection({ videoDetails, author, permlink, currentTime, duration,
     const fetchComments = async () => {
       setLoadingComments(true);
       try {
-        const replies = await client.call('condenser_api', 'get_content_replies', [author, permlink]);
-        const commentsWithChildren = await loadNestedComments(replies);
-        // Mark low-reputation accounts (rep < 15) — also caches reputations
-        const markedComments = await markByHidden(await markByReputation(commentsWithChildren));
+        // The Hive thread, in its OWN try: an off-chain post does not exist on
+        // chain, and get_content_replies ANSWERS THAT BY THROWING ("Post a/p
+        // does not exist") rather than returning an empty list. That threw out
+        // of the whole function, so the off-chain merge below never ran and a
+        // post whose only comments are off-chain showed none of them.
+        let markedComments = [];
+        try {
+          const replies = await client.call('condenser_api', 'get_content_replies', [author, permlink]);
+          const commentsWithChildren = await loadNestedComments(replies);
+          // Mark low-reputation accounts (rep < 15) — also caches reputations
+          markedComments = await markByHidden(await markByReputation(commentsWithChildren));
+        } catch (err) {
+          // Normal for an off-chain post; anything else is worth a line.
+          console.warn('[comments] no Hive thread:', err?.message);
+        }
         // Attach cached reputations to comment authors (all cache hits after marking)
         const attachRep = async (comments) => {
           for (const c of comments) {
@@ -234,7 +245,10 @@ function CommentSection({ videoDetails, author, permlink, currentTime, duration,
             comment.children.forEach(renderComment);
           }
         };
-        markedComments.forEach(renderComment);
+        // withOffChain, not markedComments: the off-chain replies are what this
+        // whole merge exists for, and a comment with no entry here renders as an
+        // empty bubble -- present in the list and invisible on the page.
+        withOffChain.forEach(renderComment);
         setRenderedBodies(rendered);
       } catch (error) {
         console.error('Failed to fetch comments from Hive:', error);

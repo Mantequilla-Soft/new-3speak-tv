@@ -1,6 +1,7 @@
 import { lazy, Suspense, useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { Navigate, useParams } from 'react-router-dom';
 import { fetchIncubationProfile } from '../../lib/incubation';
+import { useAppStore } from '../../lib/store';
 import IncubatingProfile from './IncubatingProfile';
 
 const UserProfilePage = lazy(() => import('../Userprofilepage/UserProfilePage'));
@@ -30,6 +31,7 @@ const cache = new Map();
 export default function ProfileRouter() {
   const { user } = useParams();
   const handle = String(user || '').toLowerCase();
+  const myHandle = useAppStore((s) => s.incubationHandle);
   const [verdict, setVerdict] = useState(() => cache.get(handle) ?? null);
 
   useEffect(() => {
@@ -53,6 +55,13 @@ export default function ProfileRouter() {
       });
     return () => { alive = false; };
   }, [handle]);
+
+  // Your own handle is your own profile: /profile is the same page with the
+  // owner's half of it, so land there rather than on the visitor's view of
+  // yourself. `replace` so Back does not bounce between the two.
+  if (myHandle && handle === String(myHandle).toLowerCase()) {
+    return <Navigate to="/profile" replace />;
+  }
 
   if (verdict === null) return null;          // one tick; the app already shows a shell
   if (verdict === 'incubating') return <IncubatingProfile handle={handle} />;

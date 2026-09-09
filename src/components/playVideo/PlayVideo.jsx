@@ -834,7 +834,10 @@ const PlayVideo = ({ videoDetails, author, permlink, mediaUnavailable = false, m
         </div>
       </div>
       <div className="wrap-right-stats">
-        <span
+        {/* An off-chain post has no payout and no beneficiaries: there is no
+            Hive post to reward. "$0.00" beside it read as "this earned
+            nothing", which is a different and much worse statement. */}
+        {!postIsOffChain && <span
           ref={payoutRef}
           onMouseEnter={() => setShowBeneficiaries(true)}
           onMouseLeave={() => setShowBeneficiaries(false)}
@@ -842,8 +845,8 @@ const PlayVideo = ({ videoDetails, author, permlink, mediaUnavailable = false, m
           style={{ cursor: 'pointer' }}
         >
           <PayoutAmount amount={videoDetails?.stats?.total_hive_reward ?? 0} size={13} />
-        </span>
-        {(showBeneficiaries || pinnedBeneficiaries) && beneficiaries.length > 0 && (
+        </span>}
+        {!postIsOffChain && (showBeneficiaries || pinnedBeneficiaries) && beneficiaries.length > 0 && (
           <BeneficiariesTooltip
             beneficiaries={beneficiaries}
             payoutInfo={payoutInfo}
@@ -855,8 +858,11 @@ const PlayVideo = ({ videoDetails, author, permlink, mediaUnavailable = false, m
         )}
         <span className="wrap" ref={voteCountRef}>
           <UpvoteCount
-            count={optimisticVoteCount}
-            voted={isVoted}
+            // Off-chain posts have no Hive votes to count, so the stored ones
+            // are the only ones there are. A Hive post keeps its own count:
+            // mixing the two would report a number that matches neither.
+            count={postIsOffChain ? (offChainVotes ?? 0) : optimisticVoteCount}
+            voted={postIsOffChain ? offChainVoted : isVoted}
             onClick={toggleTooltip}
             loading={isLoading}
             onCountEnter={() => setOpenToolTip(true)}
