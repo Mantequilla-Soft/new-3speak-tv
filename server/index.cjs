@@ -593,6 +593,48 @@ app.get('/api/manteauth/me', baseLimiter, async (req, res) => {
 // =====================================================================
 const INCUBATION_URL = (process.env.INCUBATION_URL || 'http://127.0.0.1:3040').replace(/\/+$/, '')
 
+// === Single-flight refresh ===
+//
+// ButrAuth ROTATES refresh tokens and treats a second use of one as theft: it
+// deletes the whole token family and answers 401. That is the right policy, and
+// it made a stampede here fatal. A page fires several requests at once; when the
+// one-hour access token has expired, EACH of them independently tried to refresh
+// with the same cookie value, so the first rotated and the rest looked exactly
+// like a replay. The family was revoked, both cookies were cleared, and the user
+// was silently signed out mid-action — the "no session cookie at all" seen in
+// the logs, and the failed short upload.
+//
+// It hit INCUBATING users hardest because they are the only ones with no
+// fallback: a wallet login, and a butrauth login that owns a Hive account, both
+// also carry the 30-day signed session, and an incubating user deliberately
+// does not.
+//
+// So one refresh runs per token value and every concurrent caller shares its
+// answer. The answer is then kept for a GRACE window rather than dropped when it
+// settles: a request that was already in flight still carries the old cookie and
+// would otherwise arrive moments later and spend the spent token itself, which
+// is the same replay by a slower route.
+const REFRESH_GRACE_MS = 60 * 1000
+const refreshFlight = new Map()
+
+function refreshOnce(refreshToken) {
+  const now = Date.now()
+  for (const [k, e] of refreshFlight) if (e.keepUntil && e.keepUntil <= now) refreshFlight.delete(k)
+
+  const hit = refreshFlight.get(refreshToken)
+  if (hit) return hit.promise
+
+  const entry = { keepUntil: 0 }
+  entry.promise = butrTokenRequest({ grant_type: 'refresh_token', refresh_token: refreshToken })
+    .then(
+      (r) => { entry.keepUntil = Date.now() + REFRESH_GRACE_MS; return r },
+      // Not cached: a transport failure is worth retrying, unlike a rotation.
+      (err) => { refreshFlight.delete(refreshToken); throw err }
+    )
+  refreshFlight.set(refreshToken, entry)
+  return entry.promise
+}
+
 // The live access token plus its claims, refreshing if the access token died.
 //
 // Sibling of resolveButrUser, which returns only a username and so cannot serve
@@ -615,10 +657,18 @@ async function resolveButrSession(req, res) {
     return null
   }
   try {
-    const { ok, data } = await butrTokenRequest({ grant_type: 'refresh_token', refresh_token: refreshToken })
+    const { ok, status, data } = await refreshOnce(refreshToken)
     if (!ok || !data.access_token) {
-      clearRefreshCookie(res)
-      clearSessionCookie(res)
+      // Clear ONLY when butrauth actually refused the grant. A 5xx or a timeout
+      // says nothing about whether the token is still good, and throwing the
+      // cookies away on one means a brief outage signs every user out for real
+      // rather than for the length of the outage.
+      if (status === 400 || status === 401) {
+        clearRefreshCookie(res)
+        clearSessionCookie(res)
+      } else {
+        console.warn('[incubation] refresh unavailable, session kept:', status)
+      }
       return null
     }
     setSessionCookie(res, data.access_token, data.username || '')
@@ -652,11 +702,40 @@ const INCUBATION_ROUTES = new Map([
   ['GET /social/profile/mine', { path: '/social/profile/mine' }],
   ['GET /social/follows/mine', { path: '/social/follows/mine' }],
   ['GET /public/graduation/plan', { path: '/public/graduation/plan' }],
+  ['GET /progress', { path: '/progress' }],
   ['GET /backfill/items', { path: '/backfill/items', graduated: true }],
   ['GET /backfill/summary', { path: '/backfill/summary', graduated: true }],
   ['POST /backfill/mark', { path: '/backfill/mark', graduated: true }],
   ['POST /backfill/claim-assets', { path: '/backfill/claim-assets', graduated: true }]
 ])
+
+/**
+ * Read butrauth's graduation verdict for this token.
+ *
+ * Calls the SDK when it actually has the method, and otherwise talks to the
+ * endpoint directly. The published client is 0.2.0, which predates incubation
+ * entirely: `butr.getIncubationStatus` is undefined there, so every call threw
+ * "is not a function" and this route answered 502 for weeks. That is the SAME
+ * skew that made incubating writes fail earlier, so it is handled the same way,
+ * and the SDK branch means publishing 0.3.0 needs no change here.
+ *
+ * The request carries BOTH the user's bearer token and the app's client secret:
+ * butrauth authenticates the caller before it says anything about the token.
+ */
+async function readIncubationStatus(token) {
+  if (typeof butr.getIncubationStatus === 'function') {
+    return butr.getIncubationStatus(token)
+  }
+  const url = `${MANTEAUTH_URL}/api/incubation/status?client_id=${encodeURIComponent(MANTEAUTH_CLIENT_ID)}`
+  const r = await fetch(url, {
+    headers: {
+      authorization: `Bearer ${token}`,
+      'x-client-secret': MANTEAUTH_CLIENT_SECRET || ''
+    }
+  })
+  if (!r.ok) throw new Error(`butrauth /incubation/status returned ${r.status}`)
+  return r.json()
+}
 
 // GET /api/incubation/graduation-status — BUTRAUTH's half of the decision.
 //
@@ -671,10 +750,9 @@ app.get('/api/incubation/graduation-status', incubationLimiter, async (req, res)
   try {
     const session = await resolveButrSession(req, res)
 
-    if (!session) return res.status(401).json({ error: 'Not signed in' })
+    if (!session) return res.status(401).json({ error: 'Your session has expired. Please sign in again.', reason: 'session_expired' })
     if (!butr) return res.status(503).json({ error: 'ButrAuth not ready' })
-    const status = await butr.getIncubationStatus(session.token)
-    res.json(status)
+    res.json(await readIncubationStatus(session.token))
   } catch (err) {
     console.error('[incubation] graduation status:', err.message)
     res.status(502).json({ error: 'Could not read graduation status' })
