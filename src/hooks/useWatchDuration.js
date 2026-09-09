@@ -3,6 +3,7 @@ import { getPlayerUrl } from '../utils/playerUrl';
 import { useAppStore } from '../lib/store';
 import { resolveVideoMeta } from '../lib/videoMetaCache';
 import { viewerRewardsName } from '../utils/viewerRewards';
+import { currentHandle } from '../lib/incubation';
 
 /**
  * Drives the snapievideoplayer watch-duration heartbeat against the player
@@ -139,7 +140,13 @@ export default function useWatchDuration({ api, author, permlink, playerState, e
                 // Sent ONLY for a viewer who opted into rewards, so we do not
                 // transmit a name for anyone who declined. The player re-checks the
                 // opt-in against the database before storing anything.
-                viewer: viewerRewardsName() }),
+                viewer: viewerRewardsName(),
+                // An incubating viewer has no Hive name, so `viewer` above is
+                // null for them. Sent unconditionally rather than behind the
+                // ad-rewards opt-in: this feeds the watch-time goal on their own
+                // onboarding checklist, which their profile shows them, and it
+                // is never written to the payout ledger.
+                incubationViewer: currentHandle() }),
           });
           if (!res.ok) continue;                       // 404 for the wrong collection → try the next
           const data = await res.json().catch(() => null);

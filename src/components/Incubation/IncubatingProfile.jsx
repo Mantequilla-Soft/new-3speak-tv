@@ -13,7 +13,29 @@ const TASK_COPY = {
   video: { label: 'Upload a video', hint: 'A proper upload, however short.' },
   short: { label: 'Post 2 shorts', hint: 'Vertical clips from the shorts camera.' },
   comment: { label: 'Write 5 comments', hint: 'Real ones, on videos you actually watched.' },
+  watch: { label: 'Watch an hour of 3Speak', hint: 'Any videos. Counted while you are really watching.' },
 };
+
+/**
+ * Seconds as a duration a person would say out loud.
+ *
+ * Driven by the task's `unit`, not by its name, so the server decides which
+ * numbers are durations and this only decides how they read.
+ */
+function asDuration(seconds) {
+  const total = Math.max(0, Math.round(seconds));
+  if (total < 60) return `${total}s`;
+  const h = Math.floor(total / 3600);
+  const m = Math.round((total % 3600) / 60);
+  if (h && m) return `${h}h ${m}m`;
+  if (h) return `${h}h`;
+  return `${m}m`;
+}
+
+function taskAmount(t) {
+  if (t.unit !== 'seconds') return `${Math.min(t.have, t.need)}/${t.need}`;
+  return `${asDuration(Math.min(t.have, t.need))} / ${asDuration(t.need)}`;
+}
 
 // Remembered per browser so the list does not spring open on every visit once
 // someone has folded it away. Open is the default: it is the point of the page
@@ -189,7 +211,7 @@ export default function IncubatingProfile({ handle, own = false }) {
                             <strong>{TASK_COPY[t.type]?.label || t.type}</strong>
                             <span>{TASK_COPY[t.type]?.hint}</span>
                           </span>
-                          <span className="inc-task-count">{Math.min(t.have, t.need)}/{t.need}</span>
+                          <span className="inc-task-count">{taskAmount(t)}</span>
                         </li>
                       ))}
                     </ul>
