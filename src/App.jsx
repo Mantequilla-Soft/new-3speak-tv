@@ -398,6 +398,15 @@ function App() {
         toast.error('Butter Auth login failed: ' + payload.error);
         return;
       }
+      // An incubating login has NO username by design — that is the whole
+      // point of it — so checking only for one dropped the result on the floor:
+      // the popup closed and the user was simply never logged in.
+      if (payload?.incubation && payload?.handle) {
+        useAppStore.getState().setIncubationUser(payload.handle);
+        setLoginModalOpen(false);
+        toast.success(`Signed in as @${payload.handle}`);
+        return;
+      }
       if (payload?.username) {
         useAppStore.getState().setUser(payload.username); // sets user + authenticated
         setLoginModalOpen(false);
