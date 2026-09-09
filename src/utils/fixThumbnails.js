@@ -99,6 +99,15 @@ export function fixVideoThumbnail(video, portrait = false) {
     return FALLBACK_THUMBNAIL;
   }
 
+  // ⚠️ images.hive.blog's resize proxy 403s on OUR OWN image host too, exactly
+  // as it does on ecency's. Verified: proxying an images.3speak.tv URL returns
+  // 403, so every thumbnail routed through it rendered blank. Served directly
+  // instead — these are already thumbnail-sized webp written by the uploader,
+  // so there is nothing to downscale.
+  if (cleanThumbnail.includes("images.3speak.tv")) {
+    return cleanThumbnail;
+  }
+
   // 🧠 Handle regular HTTP URLs with Hive proxy
   if (cleanThumbnail.startsWith("http")) {
     return hiveProxy(cleanThumbnail, size);

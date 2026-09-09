@@ -175,8 +175,23 @@ export async function fetchVideoDetails(author, permlink) {
     // exist", code -32602) for a missing post instead of returning an empty
     // object. That's "not found" (→ null), NOT a network problem — only genuine
     // transport failures should bubble up and show the "Network error" screen.
-    const msg = String(err?.message || err || '').toLowerCase();
-    if (msg.includes('does not exist') || msg.includes('-32602') || msg.includes('assert')) {
+    // dhive does NOT put the useful text in `err.message`: for a missing post
+    // that reads " category=hivemind", which matched none of these patterns, so
+    // every not-found fell through to `throw` and the watch page reported a
+    // network error. The assertion lives in jse_info.extension instead, so the
+    // whole error surface is searched rather than one field of it.
+    const info = err?.jse_info || {};
+    const msg = [
+      err?.message,
+      err?.jse_shortmsg,
+      info.message,
+      info?.extension?.assertion_expression,
+    ].filter(Boolean).join(' ').toLowerCase();
+    const isMissing = msg.includes('does not exist')
+      || msg.includes('-32602')
+      || msg.includes('assert')
+      || err?.name === 'RPCError';
+    if (isMissing) {
       return await fetchIncubationVideoDetails(author, permlink);
     }
     throw err;
