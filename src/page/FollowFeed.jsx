@@ -26,6 +26,11 @@ const fetchVideos = async ({ pageParam = 1 }, username) => {
 
 const FollowFeed = () => {
   const { user, showNsfw, hideWatched } = useAppStore();
+  const incubationHandle = useAppStore((s) => s.incubationHandle);
+  // Whose follows this feed is of. A handle is not a Hive account, but the
+  // checker resolves it against the off-chain follows, so it answers the same
+  // question. Without this the query never ran for them at all.
+  const feedName = user || incubationHandle;
   const queryClient = useQueryClient();
 
   const {
@@ -36,14 +41,14 @@ const FollowFeed = () => {
     isLoading,
     isError,
   } = useInfiniteQuery({
-    queryKey: ["follow-feed-page", user, showNsfw, hideWatched],
-    queryFn: (ctx) => fetchVideos(ctx, user),
+    queryKey: ["follow-feed-page", feedName, showNsfw, hideWatched],
+    queryFn: (ctx) => fetchVideos(ctx, feedName),
     getNextPageParam: (lastPage) => {
       if (!lastPage || lastPage.page >= lastPage.totalPages) return undefined;
       return lastPage.page + 1;
     },
     initialPageParam: 1,
-    enabled: !!user,
+    enabled: !!feedName,
   });
 
   useEffect(() => {
@@ -70,8 +75,8 @@ const FollowFeed = () => {
   const { getViewCount } = useViewCounts(videos);
 
   const handleRefresh = useCallback(async () => {
-    await queryClient.invalidateQueries({ queryKey: ["follow-feed-page", user] });
-  }, [queryClient, user]);
+    await queryClient.invalidateQueries({ queryKey: ["follow-feed-page", feedName] });
+  }, [queryClient, feedName]);
 
   return (
     <PullToRefresh onRefresh={handleRefresh}>

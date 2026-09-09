@@ -6,6 +6,22 @@
 html[data-card-size="small"] { --card-min-w: 280px; }
 html[data-card-size="large"] { --card-min-w: 420px; }
 
+// ONE type size per card. Every text element under .card reads --card-fs and
+// every icon reads --card-icon-fs, so a card can never mix sizes again — the
+// old spread of 10 / 10.4 / 10.5 / 11 / 12 / 12.95 / 13 / 14px inside a single
+// tile is what made one card look like several different fonts.
+// Weight is title-only: the <h2> is 700, everything else stays 400.
+// Phones shift BOTH tokens together (two-up tiles have half the width), so the
+// card stays internally uniform at every breakpoint.
+.card {
+  --card-fs: 13px;
+  --card-icon-fs: 15px;
+  @include respond(phone) {
+    --card-fs: 11px;
+    --card-icon-fs: 13px;
+  }
+}
+
 .card-container {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(var(--card-min-w, 280px), 1fr));
@@ -90,7 +106,7 @@ html[data-card-size="large"] { --card-min-w: 420px; }
         backdrop-filter: var(--backdrop-blur);
         color: var(--text-inverse);
         p {
-          font-size: 13px;
+          font-size: var(--card-fs);
         }
       }
 
@@ -146,8 +162,8 @@ html[data-card-size="large"] { --card-min-w: 420px; }
         display: flex;
         align-items: center;
         gap: 4px;
-        font-size: 12px;
-        font-weight: 600;
+        font-size: var(--card-fs);
+        font-weight: 400;
         box-shadow: 0 2px 8px rgba(255, 152, 0, 0.4);
         transition: transform 0.2s ease, box-shadow 0.2s ease;
         z-index: 2;
@@ -159,7 +175,6 @@ html[data-card-size="large"] { --card-min-w: 420px; }
 
         @include respond(phone) {
           padding: 5px 7px;
-          font-size: 11px;
         }
       }
 
@@ -175,8 +190,8 @@ html[data-card-size="large"] { --card-min-w: 420px; }
         display: flex;
         align-items: center;
         gap: 6px;
-        font-size: 12px;
-        font-weight: 600;
+        font-size: var(--card-fs);
+        font-weight: 400;
         box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
         transition: transform 0.2s ease, box-shadow 0.2s ease;
         z-index: 2;
@@ -254,7 +269,6 @@ html[data-card-size="large"] { --card-min-w: 420px; }
 
         @include respond(phone) {
           padding: 5px 8px;
-          font-size: 11px;
           gap: 4px;
 
           span {
@@ -279,8 +293,8 @@ html[data-card-size="large"] { --card-min-w: 420px; }
       -webkit-box-orient: vertical;
       -webkit-line-clamp: 2;
       color: var(--text-primary);
-      font-size: 13px;
-      font-weight: 500;
+      font-size: var(--card-fs);
+      font-weight: 700;
       line-height: 1.4;
       min-height: 2.8em;
       margin: 5px 0;
@@ -321,7 +335,7 @@ html[data-card-size="large"] { --card-min-w: 420px; }
 
         }
         h2 {
-          font-size: 12.95px;
+          font-size: var(--card-fs);
           font-weight: 400;
           color: var(--text-primary);
           margin: 5px 0;
@@ -337,10 +351,10 @@ html[data-card-size="large"] { --card-min-w: 420px; }
         border-radius: 24px;
         // font-size: 4.02px;
         .icon{
-          font-size: 12px;
+          font-size: var(--card-icon-fs);
         }
         p{
-          font-size: 10.5px;
+          font-size: var(--card-fs);
         }
 
       }
@@ -372,7 +386,7 @@ html[data-card-size="large"] { --card-min-w: 420px; }
           border-radius: 50%;
         }
         span {
-          font-size: 10px;
+          font-size: var(--card-fs);
         }
       }
 
@@ -381,24 +395,24 @@ html[data-card-size="large"] { --card-min-w: 420px; }
         z-index: 3;   // see .user-wrap above — the thumbnail sits at z-index 1
         top: 4%;
         right: 1%;
-        font-size: 10px;
+        font-size: var(--card-fs);
         padding: 3px 7px;
         border-radius: 12px;
-        font-weight: 600;
+        font-weight: 400;
         color: #000;
         background: rgba(255, 255, 255, 0.7);
       }
     }
 
     h3 {
-      font-size: 14px;
-      font-weight: 600;
+      font-size: var(--card-fs);
+      font-weight: 400;
       color: var(--text-secondary);
       margin: 6px 0;
       padding: 0px 4px;
     }
     p {
-      font-size: 14px;
+      font-size: var(--card-fs);
       color: var(--text-secondary);
     }
 
@@ -406,6 +420,9 @@ html[data-card-size="large"] { --card-min-w: 420px; }
       display: flex;
       align-items: center;
       justify-content: space-between;
+      // Metrics and date are the same size now, so nothing but this gap keeps
+      // them apart on a narrow two-up phone tile.
+      column-gap: 8px;
       padding: 5px 4px;
       // border-radius: 5px;
       border-top: 1px solid var(--border-light);
@@ -417,15 +434,17 @@ html[data-card-size="large"] { --card-min-w: 420px; }
       }
 
       p {
-        font-size: 12.95px;
+        font-size: var(--card-fs);
         color: var(--text-secondary);
+        white-space: nowrap;
+        flex: 0 0 auto;
       }
 
       .wrap-left {
         display: flex;
         align-items: center;
         gap: 12px;
-        font-size: 12.95px;
+        font-size: var(--card-fs);
         margin-bottom: 2px;
         color: var(--text-secondary);
         // Phones show two cards per row, so this strip has roughly half the
@@ -433,21 +452,20 @@ html[data-card-size="large"] { --card-min-w: 420px; }
         // stop wrapping or crowding the edge. AFTER the declarations above:
         // sass warns about declarations that follow a nested rule.
         @include respond(phone) {
-          gap: 6px;
+          gap: 4px;
         }
+        // Never let the metrics push the date off the tile; they ellipsize first.
+        min-width: 0;
         .flex-div {
           gap: 2px;
 
           span {
-            font-size: 12.95px;
+            font-size: var(--card-fs);
           }
 
           .icon {
-            font-size: 17px;
+            font-size: var(--card-icon-fs);
             color: var(--text-secondary);
-            @include respond(phone) {
-              font-size: 21px;
-                }
             &:hover {
               color: var(--accent-primary);
             }
@@ -456,7 +474,7 @@ html[data-card-size="large"] { --card-min-w: 420px; }
             }
           }
           .icon-heart{
-            font-size: 15px;
+            font-size: var(--card-icon-fs);
             &:hover {
               color: var(--accent-primary);
             }
@@ -464,30 +482,11 @@ html[data-card-size="large"] { --card-min-w: 420px; }
         }
       }
 
-      // ~80% type on phones. The metrics strip is secondary information and
-      // two-up cards give it half the width — the title and author keep their
-      // size, since those are what people actually read.
-      //
-      // MUST come after the rules above: a media query adds no specificity, so
-      // an override placed earlier in the file simply loses to the base rule.
+      // The phone shrink that used to live here (10.4px text / 9.6px badges)
+      // is gone: --card-fs already drops to 11px on phones and every element
+      // in the strip reads it, so the whole card scales as one.
       @include respond(phone) {
-        p,
-        .wrap-left,
-        .wrap-left .flex-div span { font-size: 10.4px; }
-        .wrap-left .flex-div .icon { font-size: 17px; }
-        .wrap-left .flex-div .icon-heart { font-size: 12px; }
-
-        // Payout / votes / comments are each their own component with their own
-        // `font-size: 12px` on a single class. Nothing in the strip's own rules
-        // reaches them, so they're named here — and with two classes ahead of
-        // them, this beats the component rule wherever it loads from.
-        .payout-amount-badge,
-        .upvote-count-badge,
-        .comment-count-badge {
-          font-size: 9.6px;
-          gap: 2px;
-          svg { font-size: 12px; width: 12px; height: 12px; }
-        }
+        .wrap-left .flex-div { gap: 2px; }
       }
     }
   }
@@ -724,8 +723,8 @@ html[data-card-size="large"] { --card-min-w: 420px; }
   z-index: 3;
   background: linear-gradient(135deg, #ff2a4a, #c00e2c);
   color: #fff;
-  font-size: 0.62rem;
-  font-weight: 800;
+  font-size: var(--card-fs);
+  font-weight: 400;
   letter-spacing: 0.05em;
   padding: 0.2rem 0.5rem;
   border-radius: 999px;
@@ -744,8 +743,8 @@ html[data-card-size="large"] { --card-min-w: 420px; }
   // Plain text, not a pill — it sits in the same muted stats row as the view
   // count, so a bordered chip made it read as a button.
   color: var(--text-secondary);
-  font-size: 11px;
-  font-weight: 600;
+  font-size: var(--card-fs);
+  font-weight: 400;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -761,14 +760,6 @@ html[data-card-size="large"] { --card-min-w: 420px; }
 }
 
 
-// The view count sits beside the author rather than in the metrics strip, but
-// it's the same class of secondary info — scale it with them on phones.
-.card .profile-view-wrap .view-count-badge {
-  @include respond(phone) {
-    font-size: 9.6px;
-    svg { font-size: 12px; }
-  }
-}
 
 /* 🔐 Supporters-only (gated) tile badge.
    Top-LEFT on purpose: the live badge owns the top-right, and the card options
@@ -784,11 +775,32 @@ html[data-card-size="large"] { --card-min-w: 420px; }
   gap: 0.25rem;
   background: linear-gradient(135deg, #f5b301, #d18700);
   color: #1a1a1a;
-  font-size: 0.62rem;
-  font-weight: 800;
+  font-size: var(--card-fs);
+  font-weight: 400;
   letter-spacing: 0.05em;
   padding: 0.2rem 0.5rem;
   border-radius: 999px;
   box-shadow: 0 0 10px rgba(245, 179, 1, 0.45);
   pointer-events: none;
+}
+
+
+// The payout / upvote / comment / view badges are shared components (they also
+// render on the watch page and in recommendations) and each carries its own
+// `font-size: 12px`. Inside a card they follow the card's single size instead.
+// Scoped to .card on purpose — this must not change them anywhere else.
+.card {
+  .payout-amount-badge,
+  .upvote-count-badge,
+  .comment-count-badge,
+  .view-count-badge {
+    font-size: var(--card-fs);
+    font-weight: 400;
+
+    svg {
+      font-size: var(--card-icon-fs);
+      width: var(--card-icon-fs);
+      height: var(--card-icon-fs);
+    }
+  }
 }
