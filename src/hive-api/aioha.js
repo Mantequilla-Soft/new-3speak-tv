@@ -376,6 +376,27 @@ export const customJsonWithAioha = async (keyType, id, json, displayTitle = '') 
 
 // Helper function to post a comment
 export const commentWithAioha = async (parentAuthor, parentPermlink, permlink, title, body, jsonMetadata = {}, options = null) => {
+  // No Hive account: store it off-chain instead of signing as an author who
+  // does not exist. This is the same divert applied to votes and broadcasts,
+  // and it belongs here too — commentWithAioha is a SEPARATE path used by
+  // uploads, snaps, reactions and edits, so leaving it out meant every one of
+  // those still tried to publish for a nonexistent account.
+  //
+  // comment_options is dropped: it sets beneficiaries and payout terms on a
+  // post that has no payout, and it would be meaningless to replay against the
+  // reward window of whenever the user eventually publishes.
+  if (incubatingHandle()) {
+    const { postIncubationContent } = await import('../lib/incubation');
+    const res = await postIncubationContent({
+      title,
+      body,
+      parentAuthor: parentAuthor || '',
+      parentPermlink: parentPermlink || '',
+      jsonMetadata: jsonMetadata || {},
+      videoId: jsonMetadata?.video?.info?.permlink || jsonMetadata?.videoId || null
+    });
+    return { success: true, incubation: true, permlink: res.permlink };
+  }
   if (isManteAuthLogin()) {
     const author = localStorage.getItem('user_id')
     const ops = [['comment', {

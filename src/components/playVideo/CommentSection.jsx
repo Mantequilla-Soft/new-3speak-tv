@@ -13,7 +13,7 @@ import TranslateButton from '../TranslateButton/TranslateButton';
 import ReactVideoTab from '../ReactVideoModal/ReactVideoModal';
 import dayjs from 'dayjs';
 import { useAppStore } from '../../lib/store';
-import { postIncubationContent, handleAvatar, fetchIncubationReplies } from '../../lib/incubation';
+import { handleAvatar, fetchIncubationReplies } from '../../lib/incubation';
 import { Client } from '@hiveio/dhive';
 import UpvoteTooltip from '../tooltip/UpvoteTooltip';
 import CommentVoteTooltip from '../tooltip/CommentVoteTooltip';
@@ -382,29 +382,19 @@ function CommentSection({ videoDetails, author, permlink, currentTime, duration,
         body += `\n<br><sup>replied to [${tsLabel}](${baseUrl}/watch?v=${author}/${permlink}&t=${ts}) on [${host}](${baseUrl})</sup>`;
       }
 
-      // An incubating user has no Hive account to sign with, so their comment is
-      // stored off-chain instead of broadcast. It still hangs off the REAL Hive
-      // parent, which is what lets the checker merge it back into this thread.
-      let result;
-      if (incubationHandle) {
-        await postIncubationContent({
-          body,
-          parentAuthor: parent_author,
-          parentPermlink: parent_permlink,
-          jsonMetadata: metadata
-        });
-        result = { success: true };
-      } else {
-        // Use aioha for comment broadcasting (works with all providers: Keychain, HiveAuth, etc.)
-        result = await commentWithAioha(
-          parent_author,
-          parent_permlink,
-          new_permlink,
-          '', // title (empty for comments)
-          body,
-          metadata
-        );
-      }
+      // Use aioha for comment broadcasting (works with all providers: Keychain,
+      // HiveAuth, etc). An incubating user has no Hive account to sign with, and
+      // commentWithAioha diverts them to off-chain storage itself — handled at
+      // that one choke point rather than branched here, so uploads, snaps and
+      // reactions get the same treatment without each remembering to ask.
+      const result = await commentWithAioha(
+        parent_author,
+        parent_permlink,
+        new_permlink,
+        '', // title (empty for comments)
+        body,
+        metadata
+      );
 
       if (result.success) {
         toast.success('Comment posted successfully!');
