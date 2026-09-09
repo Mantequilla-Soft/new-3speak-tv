@@ -37,6 +37,26 @@ function asDuration(seconds) {
 }
 
 /**
+ * True below the app's mobile breakpoint (767px, as in App.jsx).
+ *
+ * The feed needs this in JS, not CSS: above it videos and shorts share one
+ * justified row, and below it they split into two grids with different card
+ * shapes. That is a different component tree, not a different rule.
+ */
+function useIsNarrow() {
+  const [narrow, setNarrow] = useState(
+    () => typeof window !== 'undefined' && window.matchMedia?.('(max-width: 767px)').matches,
+  );
+  useEffect(() => {
+    const mq = window.matchMedia('(max-width: 767px)');
+    const onChange = (e) => setNarrow(e.matches);
+    mq.addEventListener('change', onChange);
+    return () => mq.removeEventListener('change', onChange);
+  }, []);
+  return narrow;
+}
+
+/**
  * The line under a task's name.
  *
  * The comment floor lives on the task itself rather than in fine print below
@@ -88,6 +108,7 @@ export default function IncubatingProfile({ handle, own = false }) {
   // Which half is on screen at phone/tablet width, where the two columns stack.
   // Ignored above that: both are visible side by side and the tabs are hidden.
   const [mobileTab, setMobileTab] = useState('progress');
+  const isNarrow = useIsNarrow();
   const [error, setError] = useState('');
   // Saving REPLACES the stored profile object, interests included, so the ones
   // already set have to be sent back with it or picking a new avatar silently
@@ -172,6 +193,8 @@ export default function IncubatingProfile({ handle, own = false }) {
     () => posts.map(toCard),
     [posts, handle], // eslint-disable-line react-hooks/exhaustive-deps
   );
+  const videoCards = useMemo(() => cards.filter((c) => !c._short), [cards]);
+  const shortCards = useMemo(() => cards.filter((c) => c._short), [cards]);
 
   if (error) return <p className="inc-profile-error">{error}</p>;
   if (!profile) return <p className="desc" style={{ padding: 32 }}>Loading…</p>;
@@ -341,19 +364,37 @@ export default function IncubatingProfile({ handle, own = false }) {
             </p>
           )}
 
-          {cards.length > 0 && (
+          {/* Deliberately NOT linkPrefix="/shorts" on the shorts anywhere below:
+              that viewer reads its feed from Hive and can only fail on a post
+              that is not there. The watch page already falls back to the
+              incubation service, so every card opens somewhere that works. */}
+          {cards.length > 0 && (isNarrow ? (
+            // A phone has no room for the justified row, so the mixed grid falls
+            // back to equal boxes and a short becomes a letterboxed sliver of a
+            // 16:9 card. Split them there instead, and each kind gets the grid
+            // built for its shape: shorts in proper portrait tiles, two up.
+            <>
+              {videoCards.length > 0 && (
+                <>
+                  <h2 className="inc-subhead">Videos</h2>
+                  <Card3 videos={videoCards} />
+                </>
+              )}
+              {shortCards.length > 0 && (
+                <>
+                  <h2 className="inc-subhead">Shorts</h2>
+                  <Card3 videos={shortCards} shortsGrid />
+                </>
+              )}
+            </>
+          ) : (
             <>
               {/* Names the two things in the feed, since they share one grid
                   rather than sitting under separate headings. */}
               <h2 className="inc-subhead">Videos and Shorts</h2>
-              {/* Deliberately NOT linkPrefix="/shorts" for the shorts in here:
-                  that viewer reads its feed from Hive and can only fail on a
-                  post that is not there. The watch page already falls back to
-                  the incubation service, so every card opens somewhere that
-                  works. */}
               <Card3 videos={cards} />
             </>
-          )}
+          ))}
         </main>
       </div>
 
