@@ -139,6 +139,21 @@ export async function fetchIncubationFeed(limit = 20) {
  * into the thread their comments are invisible on the very page they were
  * written for. Callers should merge by `created` and mark these `onChain:false`.
  */
+/**
+ * Every off-chain reply under ANY of these parents, in one request.
+ *
+ * The single-parent call below only answers for the post itself, which is the
+ * first level of a thread. A reply to a COMMENT hangs off that comment's
+ * permlink, so nothing asked for it and its own author could not see it.
+ */
+export async function fetchIncubationRepliesFor(permlinks) {
+  return json(await fetch(`${CHECKER_URL}/incubation/replies/for`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ permlinks }),
+  }));
+}
+
 export async function fetchIncubationReplies(parentAuthor, parentPermlink, limit = 100) {
   const qs = new URLSearchParams({ parentAuthor, parentPermlink, limit: String(limit) });
   return json(await fetch(`${CHECKER_URL}/incubation/replies?${qs}`));
