@@ -3,7 +3,10 @@ import { Link } from 'react-router-dom';
 import {
   MdCheckCircle, MdRadioButtonUnchecked, MdVerified, MdExpandMore, MdEdit,
 } from 'react-icons/md';
-import { FaFilm, FaRocket, FaUnlockAlt } from 'react-icons/fa';
+import {
+  FaFilm, FaRocket, FaUnlockAlt, FaVideo, FaMobileAlt, FaComments, FaUserPlus,
+  FaClock, FaCoins, FaCloudUploadAlt, FaThumbsUp, FaKey, FaGlobeAmericas,
+} from 'react-icons/fa';
 import Card3 from '../Cards/Card3';
 import ProfileEditModal from '../WelcomePrompt/ProfileEditModal';
 import {
@@ -13,14 +16,24 @@ import {
 import './IncubatingProfile.scss';
 
 const TASK_COPY = {
-  video: { label: 'Upload a video', hint: 'Share something about you and what your channel will be about.' },
-  short: { label: 'Post 2 shorts', hint: 'Participate in 3Speak Shorts and upload some moments of your daily life or some stories you want to share.' },
+  video: { Icon: FaVideo, label: 'Upload a video', hint: 'Share something about you and what your channel will be about.' },
+  short: { Icon: FaMobileAlt, label: 'Post 2 shorts', hint: 'Participate in 3Speak Shorts and upload some moments of your daily life or some stories you want to share.' },
   // No hint here: the comment one states the length floor, which is the
   // server's number, so it is built in taskHint below rather than written twice.
-  comment: { label: 'Write 5 comments' },
-  follow: { label: 'Follow 10 creators', hint: 'Build up a network of likeminded people, or creators you find exciting.' },
-  watch: { label: 'Watch an hour on 3Speak', hint: 'Any videos. Counted while you are really watching.' },
+  comment: { Icon: FaComments, label: 'Write 5 comments' },
+  follow: { Icon: FaUserPlus, label: 'Follow 10 creators', hint: 'Build up a network of likeminded people, or creators you find exciting.' },
+  watch: { Icon: FaClock, label: 'Watch an hour on 3Speak', hint: 'Any videos. Counted while you are really watching.' },
 };
+
+// The unlock tiles, as data: the icon belongs beside its own heading, and the
+// list was long enough that repeating the markup five times hid the copy.
+const UNLOCKS = [
+  { Icon: FaCoins, title: 'Your posts start earning.', body: 'Videos on Hive can be rewarded in HIVE and HBD by anyone who watches them, and they can carry ads you take a share of.' },
+  { Icon: FaCloudUploadAlt, title: 'Publish everything you made here.', body: 'The videos, shorts and follows on this page can be posted to the chain under your own name, and you choose which.' },
+  { Icon: FaThumbsUp, title: 'Vote, tip, follow and build playlists.', body: 'All the buttons that are greyed out for you today.' },
+  { Icon: FaKey, title: 'Keys only you hold.', body: 'Nobody can lock you out, and the same login works across every Hive app, not just 3Speak.' },
+  { Icon: FaGlobeAmericas, title: 'Be part of the global Hive ecosystem.', body: '3Speak is one app on a whole network of them: blogs, communities, games, marketplaces and more, all sharing the one account and the same following list.' },
+];
 
 /**
  * Seconds as a duration a person would say out loud.
@@ -330,7 +343,12 @@ export default function IncubatingProfile({ handle, own = false }) {
                           {t.done ? <MdCheckCircle size={20} className="inc-task-icon done" />
                             : <MdRadioButtonUnchecked size={20} className="inc-task-icon" />}
                           <span className="inc-task-text">
-                            <strong>{TASK_COPY[t.type]?.label || t.type}</strong>
+                            <strong>
+                              {TASK_COPY[t.type]?.Icon
+                                ? (() => { const I = TASK_COPY[t.type].Icon; return <I size={12} aria-hidden="true" />; })()
+                                : null}
+                              {TASK_COPY[t.type]?.label || t.type}
+                            </strong>
                             <span>{taskHint(t, progress.minCommentChars)}</span>
                           </span>
                           <span className="inc-task-count">{taskAmount(t)}</span>
@@ -397,11 +415,12 @@ export default function IncubatingProfile({ handle, own = false }) {
             <section className="inc-panel inc-unlocks">
               <h2><FaUnlockAlt size={14} aria-hidden="true" /> What a Hive account gets you</h2>
               <ul>
-                <li><strong>Your posts start earning.</strong> Videos on Hive can be rewarded in HIVE and HBD by anyone who watches them, and they can carry ads you take a share of.</li>
-                <li><strong>Publish everything you made here.</strong> The videos, shorts and follows on this page can be posted to the chain under your own name, and you choose which.</li>
-                <li><strong>Vote, tip, follow and build playlists.</strong> All the buttons that are greyed out for you today.</li>
-                <li><strong>Keys only you hold.</strong> Nobody can lock you out, and the same login works across every Hive app, not just 3Speak.</li>
-                <li><strong>Be part of the global Hive ecosystem.</strong> 3Speak is one app on a whole network of them: blogs, communities, games, marketplaces and more, all sharing the one account and the same following list.</li>
+                {UNLOCKS.map(({ Icon, title, body }) => (
+                  <li key={title}>
+                    <strong><Icon size={13} aria-hidden="true" />{title}</strong>
+                    {body}
+                  </li>
+                ))}
               </ul>
             </section>
           )}

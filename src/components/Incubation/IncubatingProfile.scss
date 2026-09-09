@@ -448,8 +448,22 @@
   min-width: 0;
 
   strong {
+    display: flex;
+    // Not centre: a label that wraps to two lines would float its icon into
+    // the middle of the block instead of sitting beside the first word.
+    align-items: flex-start;
+    gap: 7px;
     font-size: 14px;
     color: var(--text-primary);
+  }
+
+  // Foreground, not accent: these sit inside the row rather than heading it,
+  // and five red marks down the panel would pull the eye away from the bar
+  // that is actually reporting something.
+  strong svg {
+    color: currentColor;
+    flex-shrink: 0;
+    margin-top: 3px;   // optical centre of the first line
   }
 
   span {
@@ -500,9 +514,17 @@
   }
 
   strong {
-    display: block;
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
     color: var(--text-primary);
-    margin-bottom: 2px;
+    margin-bottom: 3px;
+  }
+
+  strong svg {
+    color: currentColor;
+    flex-shrink: 0;
+    margin-top: 3px;   // optical centre of the first line
   }
 }
 
