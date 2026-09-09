@@ -91,7 +91,21 @@ function AuthorBadge({ author, onClick, followersCount, fetchFollowers, showFoll
 
   const inner = (
     <>
-      <img src={`https://images.hive.blog/u/${author}/avatar/small`} alt="" />
+      <img
+        src={`https://images.hive.blog/u/${author}/avatar/small`}
+        alt=""
+        onError={(e) => {
+          // images.hive.blog answers an UNKNOWN account with a 500, not a
+          // placeholder, so anyone who has no Hive account yet renders as a
+          // broken image here. Fall back to the 3Speak mark.
+          //
+          // The data flag stops a loop if the fallback itself ever fails to
+          // load: without it onError would fire again on the new src forever.
+          if (e.currentTarget.dataset.fellBack) return;
+          e.currentTarget.dataset.fellBack = '1';
+          e.currentTarget.src = '/pwa-192x192.png';
+        }}
+      />
       <div className="author-text">
         <span className="author-name-row">
           <span className="author-name">@{author}{reputation != null ? ` (${Math.round(reputation)})` : ''}</span>

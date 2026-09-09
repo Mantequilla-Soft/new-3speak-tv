@@ -50,7 +50,17 @@ const HiveAvatar = forwardRef(function HiveAvatar(
         src={url}
         alt={alt ?? username}
         className={imgClassName}
-        onError={onError}
+        onError={onError || ((e) => {
+          // images.hive.blog answers an UNKNOWN account with a 500, not a
+          // placeholder, so anyone who has no Hive account yet renders as a
+          // broken image here. Fall back to the 3Speak mark.
+          //
+          // The data flag stops a loop if the fallback itself ever fails to
+          // load: without it onError would fire again on the new src forever.
+          if (e.currentTarget.dataset.fellBack) return;
+          e.currentTarget.dataset.fellBack = '1';
+          e.currentTarget.src = '/pwa-192x192.png';
+        })}
       />
       <PremiumBadge
         username={username}
