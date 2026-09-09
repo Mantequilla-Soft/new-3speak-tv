@@ -13,6 +13,7 @@ import { useMyPlaylists } from "../../hooks/useMyPlaylists";
 import ShortsIcon from "../icons/ShortsIcon";
 import UploadLinks from "../UploadLinks";
 import NavProgress from '../Incubation/NavProgress';
+import IncubationBell from '../Incubation/IncubationBell';
 import NotificationBell from "./NotificationBell";
 import { hideToastLayer, showToastLayer } from "../../utils/toast";
 import ChatButton from "../Chat/ChatButton";
@@ -104,6 +105,7 @@ const NAV_TABS_KEY = '3speak_nav_tabs_open';
 function Nav({ setSideBar, toggleProfileNav, openLoginModal }) {
   const { authenticated, LogOut, user, initializeTheme } = useAppStore();
   const sidebarHidden = useAppStore((s) => s.sidebarHidden);
+  const incubationHandle = useAppStore((s) => s.incubationHandle);
   // Shows a just-uploaded profile picture immediately instead of the cached
   // hive proxy copy (utils/avatarCache).
   const myAvatar = useAvatarUrl(user, 'small');
@@ -317,7 +319,10 @@ function Nav({ setSideBar, toggleProfileNav, openLoginModal }) {
             <MdOutlineSearch size={19} />
           </Link>
           <ChatButton />
-          <NotificationBell />
+          {/* One bell or the other. Hive's notifications need a Hive account,
+              so an incubating user's bell reads from the incubation service
+              instead of showing them a permanently empty one. */}
+          {incubationHandle ? <IncubationBell /> : <NotificationBell />}
           <FiSettings size={19} className="nav-settings-btn" onClick={() => setSettingsOpen(true)} title="Settings" />
           <span className="nav-avatar-wrap" onClick={toggleProfileNav}>
             <img src={myAvatar} alt="" />

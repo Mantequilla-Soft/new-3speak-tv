@@ -703,6 +703,8 @@ const INCUBATION_ROUTES = new Map([
   ['GET /social/follows/mine', { path: '/social/follows/mine' }],
   ['GET /public/graduation/plan', { path: '/public/graduation/plan' }],
   ['GET /progress', { path: '/progress' }],
+  ['GET /notifications', { path: '/notifications' }],
+  ['POST /notifications/read', { path: '/notifications/read' }],
   ['GET /backfill/items', { path: '/backfill/items', graduated: true }],
   ['GET /backfill/summary', { path: '/backfill/summary', graduated: true }],
   ['POST /backfill/mark', { path: '/backfill/mark', graduated: true }],

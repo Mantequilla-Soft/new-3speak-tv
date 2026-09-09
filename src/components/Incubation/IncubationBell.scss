@@ -1,0 +1,135 @@
+// Matches the nav's other icon buttons in size and hit area so the row stays
+// even, and the dropdown borrows the app's surface tokens rather than inventing
+// a second popup style.
+.inc-bell {
+  position: relative;
+  display: inline-flex;
+}
+
+.inc-bell-trigger {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--text-primary);
+  cursor: pointer;
+
+  &:hover { color: var(--accent-primary); }
+}
+
+.inc-bell-dot {
+  position: absolute;
+  top: -2px;
+  right: -2px;
+  min-width: 16px;
+  height: 16px;
+  padding: 0 4px;
+  border-radius: 999px;
+  background: var(--accent-primary);
+  color: #fff;
+  font-size: 10px;
+  font-weight: 700;
+  line-height: 16px;
+  text-align: center;
+}
+
+.inc-bell-menu {
+  position: absolute;
+  top: calc(100% + 10px);
+  right: 0;
+  width: 340px;
+  max-height: 420px;
+  overflow-y: auto;
+  z-index: 60;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  box-shadow: var(--shadow-lg);
+
+  > header {
+    padding: 12px 14px;
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--text-primary);
+    border-bottom: 1px solid var(--border-color);
+  }
+
+  ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  li + li { border-top: 1px solid var(--border-color); }
+
+  a {
+    display: flex;
+    gap: 10px;
+    padding: 11px 14px;
+    text-decoration: none;
+    color: var(--text-secondary);
+
+    &:hover { background: var(--bg-hover, var(--bg-tertiary)); }
+  }
+
+  img {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    object-fit: cover;
+    flex-shrink: 0;
+    background: var(--bg-tertiary);
+  }
+}
+
+.inc-bell-text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.inc-bell-line {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  color: var(--text-primary);
+
+  strong { font-weight: 600; }
+  svg { color: var(--accent-primary); flex-shrink: 0; }
+}
+
+.inc-bell-excerpt {
+  font-size: 12.5px;
+  color: var(--text-muted);
+  // Two lines is enough to recognise a reply; the rest is on the page it links
+  // to, which is one tap away.
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.inc-bell-when {
+  font-size: 11.5px;
+  color: var(--text-muted);
+}
+
+.inc-bell-empty {
+  margin: 0;
+  padding: 18px 14px;
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--text-muted);
+}
+
+@media screen and (max-width: 767px) {
+  .inc-bell-menu {
+    width: min(88vw, 340px);
+  }
+}

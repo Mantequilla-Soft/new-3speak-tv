@@ -195,6 +195,16 @@ export const fetchMyIncubationProfile = () => write('/social/profile/mine', 'GET
  * progress someone is shown is the progress that actually counts.
  */
 export const fetchIncubationProgress = () => write('/progress', 'GET');
+
+/**
+ * Who reacted to this user's content.
+ *
+ * Hive's own notifications come from `bridge.account_notifications`, which
+ * needs an account. These users have none, so this is the only thing that ever
+ * tells them somebody replied.
+ */
+export const fetchIncubationNotifications = () => write('/notifications', 'GET');
+export const markIncubationNotificationsRead = () => write('/notifications/read', 'POST');
 export const fetchMyIncubationFollows = () => write('/social/follows/mine', 'GET');
 
 /**
