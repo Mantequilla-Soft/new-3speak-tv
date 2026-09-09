@@ -63,6 +63,8 @@ const AuthCallback = lazy(() => import("./page/Login/AuthCallback"));
 const ChatPage = lazy(() => import("./components/Chat/ChatPage"));
 const CommunitiesRender = lazy(() => import("./components/Communities/CommunitiesRender"));
 const CommunityPage = lazy(() => import("./components/Communities/CommunityPage"));
+const BadgesRender = lazy(() => import("./components/Badges/BadgesRender"));
+const BadgePage = lazy(() => import("./components/Badges/BadgePage"));
 const Discover = lazy(() => import("./page/Discover"));
 const DraftStudio = lazy(() => import("./components/studio/DraftStudio"));
 const EditScheduledPost = lazy(() => import("./page/EditScheduledPost"));
@@ -669,6 +671,12 @@ function App() {
               path="/community/:communityName"
               element={<CommunityPage />}
             />
+            <Route path="/badges" element={<BadgesRender />} />
+            {/* /b/:account is the path PeakD uses for a badge, so links to a
+                badge page carry over between the two sites unchanged.
+                /badge/:account is the spelled-out alias. */}
+            <Route path="/b/:account" element={<BadgePage />} />
+            <Route path="/badge/:account" element={<BadgePage />} />
             <Route path="/t/:tag" element={<TagFeed />} />
             <Route path="/leaderboard" element={<Leaderboard />} />
             <Route path="/advertise" element={<Advertise openLoginModal={openLoginModal} />} />

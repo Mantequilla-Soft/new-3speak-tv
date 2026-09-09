@@ -13,7 +13,7 @@ import { Helmet } from 'react-helmet-async';
  * (react-helmet-async lets the last-rendered value win, and we'd rather not
  * depend on mount order.)
  */
-const SELF_TITLED = ['/watch', '/shorts', '/community/:communityName'];
+const SELF_TITLED = ['/watch', '/shorts', '/community/:communityName', '/b/:account', '/badge/:account'];
 
 // First match wins. `title` may be a string or a fn of the matched params.
 // `full: true` means the string IS the whole tab title — it does not get the
@@ -34,6 +34,7 @@ const ROUTES = [
   { path: '/leaderboard', title: 'Leaderboard' },
   { path: '/notifications', title: 'Notifications' },
   { path: '/communities', title: 'Communities' },
+  { path: '/badges', title: 'Badges' },
   { path: '/audio/:author/:permlink', title: (p) => `Audio by @${p.author}` },
   { path: '/audio', title: 'Audio' },
   { path: '/playlist/:playlistId', title: 'Playlist' },

@@ -7,6 +7,17 @@
 // 1.0.0 — that way they see all of these when develop is pushed to production.
 export const CHANGELOG = [
   {
+    version: '1.78.65',
+    date: '2026-09-09',
+    summary:
+      'Badges now have their own pages. A badge is awarded on Hive for things '
+      + 'like attending an event or reaching a milestone, and the people who hold '
+      + 'one are its recipients. Open Badges in the sidebar to browse them all, '
+      + 'then open a badge to watch what its recipients publish on 3Speak, see who '
+      + 'holds it, and subscribe. Badge links from PeakD work here too, so '
+      + '3speak.tv/b/badge-030021 opens the Hive Open Days badge.',
+  },
+  {
     version: '1.78.64',
     date: '2026-09-08',
     summary:

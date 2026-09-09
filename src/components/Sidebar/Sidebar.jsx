@@ -10,6 +10,7 @@ import {
   MdWatchLater,
   MdHistory,
   MdMic,
+  MdOutlineWorkspacePremium,
 } from "react-icons/md";
 import useOpenPodsCount from "../../hooks/useOpenPodsCount";
 import { LuNewspaper } from "react-icons/lu";
@@ -134,6 +135,9 @@ const Sidebar = ({ sidebar, onNavigate }) => {
         </Link>
         <Link to="/communities" className="side-link" title="Communities" onClick={nav}>
           <MdOutlineDynamicFeed className="icon" /> <span>Communities</span>
+        </Link>
+        <Link to="/badges" className="side-link" title="Badges" onClick={nav}>
+          <MdOutlineWorkspacePremium className="icon" /> <span>Badges</span>
         </Link>
         <Link to="/about" className="side-link" title="About 3speak" onClick={nav}>
           <HiInformationCircle className="icon" /> <span>About 3speak</span>

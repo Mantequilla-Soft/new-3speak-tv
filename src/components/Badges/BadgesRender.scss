@@ -1,0 +1,123 @@
+@use "../../mixins.scss" as *;
+
+.badges-render {
+  padding: 16px 4px 40px;
+
+  .badges-head {
+    margin-bottom: 16px;
+
+    h1 {
+      margin: 0 0 6px;
+      font-size: 24px;
+      color: var(--text-primary, #f1f1f1);
+    }
+
+    p {
+      margin: 0;
+      max-width: 620px;
+      font-size: 13.5px;
+      line-height: 1.5;
+      color: var(--text-secondary, #888);
+    }
+
+    @include respond(phone) {
+      h1 { font-size: 20px; }
+    }
+  }
+
+  .search-wrapper {
+    margin-bottom: 18px;
+
+    input {
+      width: 100%;
+      max-width: 420px;
+      padding: 10px 14px;
+      border-radius: 10px;
+      border: 1px solid var(--border-light, rgba(150, 150, 150, 0.25));
+      background: var(--bg-secondary, rgba(150, 150, 150, 0.06));
+      color: var(--text-primary, #f1f1f1);
+      font-size: 13.5px;
+
+      &::placeholder { color: var(--text-secondary, #888); }
+      &:focus {
+        outline: none;
+        border-color: var(--accent-primary, #e0594b);
+      }
+    }
+  }
+
+  .badges-error {
+    padding: 32px 4px;
+    color: var(--text-secondary, #888);
+  }
+
+  .badges-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+    gap: 14px;
+
+    @include respond(phone) {
+      grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+      gap: 10px;
+    }
+  }
+
+  .badge-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 8px;
+    padding: 16px 12px 14px;
+    border: 1px solid var(--border-light, rgba(150, 150, 150, 0.18));
+    border-radius: 14px;
+    background: var(--bg-secondary, rgba(150, 150, 150, 0.06));
+    text-decoration: none;
+    color: inherit;
+    transition: border-color 0.12s ease, transform 0.12s ease;
+
+    &:hover {
+      border-color: var(--accent-primary, #e0594b);
+      transform: translateY(-2px);
+    }
+
+    .badge-card-img {
+      width: 76px;
+      height: 76px;
+
+      img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain; // badge art is rarely square-cropped like an avatar
+      }
+    }
+
+    .badge-card-title {
+      margin: 0;
+      font-size: 13.5px;
+      font-weight: 700;
+      line-height: 1.3;
+      color: var(--text-primary, #f1f1f1);
+    }
+
+    .badge-card-desc {
+      margin: 0;
+      font-size: 11.5px;
+      line-height: 1.4;
+      color: var(--text-secondary, #888);
+      // Three lines is enough to tell two badges apart without letting one card
+      // set the height of the whole row.
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    .badge-card-count {
+      margin-top: auto;
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--accent-primary, #e0594b);
+    }
+  }
+}
