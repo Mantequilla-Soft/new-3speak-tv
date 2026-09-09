@@ -285,6 +285,19 @@ export const transferWithAioha = async (to, amount, currency, memo = '') => {
 
 // Helper function to follow/unfollow a user
 export const followWithAioha = async (target, follow = true) => {
+  // No Hive account: the follow is recorded off-chain, like the vote and the
+  // comment above. Without this it fell through to the ButrAuth branch, which
+  // reads `user_id` -- null while incubating -- and broadcast a custom_json with
+  // required_posting_auths: [null]. That is refused, and the refusal surfaced as
+  // "Follow action failed: Unauthorized".
+  //
+  // It also made "follow 10 creators" impossible to satisfy, since nothing was
+  // ever stored to count.
+  if (incubatingHandle()) {
+    const { followIncubation } = await import('../lib/incubation');
+    await followIncubation(target, follow ? 'following' : 'unfollowed');
+    return { success: true, incubation: true };
+  }
   if (isManteAuthLogin()) {
     const follower = localStorage.getItem('user_id')
     const json = JSON.stringify(['follow', {

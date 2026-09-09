@@ -60,6 +60,7 @@ function UserProfilePage() {
     const location = useLocation();
     const queryClient = useReactQueryClient();
     const { user: authenticatedUser, authenticated } = useAppStore();
+    const incubationHandle = useAppStore((st) => st.incubationHandle);
     const [follower, setFollower] = useState(null)
     const [isFollowing, setIsFollowing] = useState(false);
     const [followLoading, setFollowLoading] = useState(false);
@@ -453,6 +454,24 @@ const {
           });
         }
       }, [authenticated, authenticatedUser, user]);
+
+      // The same question for someone with no Hive account. Their follows are
+      // stored off-chain, so the on-chain relationship above is always "no" for
+      // them and the button came back saying Follow on every reload -- including
+      // for creators they had already followed.
+      useEffect(() => {
+        if (!incubationHandle || !user) return undefined;
+        let alive = true;
+        import('../../lib/incubation')
+          .then((m) => m.fetchMyIncubationFollows())
+          .then((d) => {
+            if (!alive) return;
+            const target = String(user).toLowerCase();
+            setIsFollowing((d.items || []).some((f) => String(f.following).toLowerCase() === target));
+          })
+          .catch(() => { /* the button still works; it just starts unfollowed */ });
+        return () => { alive = false; };
+      }, [incubationHandle, user]);
 
       const handleFollowToggle = async () => {
         // Follow is the point of a profile, so the button shows to signed-out
