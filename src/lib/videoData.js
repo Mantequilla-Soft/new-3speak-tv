@@ -96,6 +96,75 @@ export async function fetchPlaySource(author, permlink) {
 // post (the player loads its own source via author/permlink, so the spkvideo
 // here is only a hint for the editor/clip feature). Same shape the old
 // `socialPost` HivePost returned.
+// Thumbnail + playable source, read out of a post's video metadata. Shared by
+// the Hive path and the off-chain fallback below so the watch page cannot
+// resolve the same fields differently depending on where the post lives.
+function videoSourcesFrom(meta) {
+  const info = meta?.video?.info || {};
+  let thumbnail_url = null;
+  if (info.sourceMap) {
+    const t = info.sourceMap.find((s) => s.type === 'thumbnail');
+    if (t) thumbnail_url = t.url;
+  }
+  if (!thumbnail_url && meta?.image?.[0]) thumbnail_url = meta.image[0];
+
+  let play_url = info.video_v2 || info.file || null;
+  if (!play_url && info.sourceMap) {
+    const v = info.sourceMap.find((s) => s.type === 'video');
+    if (v) play_url = v.url;
+  }
+  return { thumbnail_url, play_url, duration: info.duration || 0 };
+}
+
+/**
+ * A post that only exists on 3Speak, because its author has no Hive account.
+ *
+ * Reached only when Hive has nothing, so it costs a request exactly once per
+ * genuinely-missing post — and without it every card in the "Just getting
+ * started" section would be a dead link.
+ *
+ * Zeroed stats and a null community are the honest values, not placeholders:
+ * an off-chain post has no votes, no payout and no Hive category.
+ */
+async function fetchIncubationVideoDetails(author, permlink) {
+  let data;
+  try {
+    const { fetchIncubationPost } = await import('./incubation');
+    data = await fetchIncubationPost(author, permlink);
+  } catch {
+    return null;
+  }
+  if (!data?.post) return null;
+
+  const meta = data.post.jsonMetadata || {};
+  const { thumbnail_url, play_url, duration } = videoSourcesFrom(meta);
+
+  return {
+    live: false,
+    roomName: null,
+    title: data.post.title || '',
+    body: data.post.body || '',
+    json_metadata: JSON.stringify(meta),
+    author: {
+      id: data.author?.handle || author,
+      username: data.author?.handle || author,
+      profile: {
+        name: data.author?.handle || author,
+        images: { avatar: '/pwa-192x192.png' },
+      },
+    },
+    stats: { num_comments: 0, num_votes: 0, total_hive_reward: 0 },
+    community: null,
+    created_at: data.post.created,
+    tags: meta.tags || [],
+    parent_permlink: data.post.parentPermlink || '',
+    spkvideo: (play_url || thumbnail_url) ? { play_url, thumbnail_url, duration } : null,
+    // Lets the watch page hide voting, payout and anything else that assumes a
+    // post exists on chain.
+    _incubation: true,
+  };
+}
+
 export async function fetchVideoDetails(author, permlink) {
   if (!author || author === 'unknown' || !permlink) return null;
   let post;
@@ -108,27 +177,16 @@ export async function fetchVideoDetails(author, permlink) {
     // transport failures should bubble up and show the "Network error" screen.
     const msg = String(err?.message || err || '').toLowerCase();
     if (msg.includes('does not exist') || msg.includes('-32602') || msg.includes('assert')) {
-      return null;
+      return await fetchIncubationVideoDetails(author, permlink);
     }
     throw err;
   }
-  if (!post || !post.author) return null;
+  if (!post || !post.author) return await fetchIncubationVideoDetails(author, permlink);
 
   const meta = parseMeta(post.json_metadata);
   const videoInfo = meta.video?.info || {};
 
-  let thumbnail_url = null;
-  if (videoInfo.sourceMap) {
-    const t = videoInfo.sourceMap.find((s) => s.type === 'thumbnail');
-    if (t) thumbnail_url = t.url;
-  }
-  if (!thumbnail_url && meta.image?.[0]) thumbnail_url = meta.image[0];
-
-  let play_url = videoInfo.video_v2 || videoInfo.file || null;
-  if (!play_url && videoInfo.sourceMap) {
-    const v = videoInfo.sourceMap.find((s) => s.type === 'video');
-    if (v) play_url = v.url;
-  }
+  const { thumbnail_url, play_url } = videoSourcesFrom(meta);
 
   const payout =
     parseFloat(post.total_payout_value) +

@@ -1,24 +1,22 @@
-import { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
-import { fetchIncubationFeed, handleAvatar } from '../../lib/incubation';
+import { useEffect, useMemo, useState } from 'react';
+import Card3 from '../Cards/Card3';
+import { fetchIncubationFeed } from '../../lib/incubation';
 import './NewOn3SpeakRail.scss';
 
 /**
  * Recent posts from people who are on 3Speak but not yet on Hive.
  *
- * A LABELLED RAIL, deliberately, rather than mixing these into the ranked feed.
- * Two reasons, and both matter:
+ * Renders through Card3, the same card every other feed uses, so these get the
+ * real thumbnail, duration pill, hover preview and layout rather than a
+ * second card implementation that would drift from it.
  *
- *  - This content has not been through the same gates as everything else. The
- *    ranked feed is where trust is spent; a rail with its own heading is where
- *    it is earned. Nothing here is hidden, it is just not presented as though a
- *    ranking system vouched for it.
- *  - These posts have no votes, no payout and no view history, so they have
- *    nothing the ranking pipeline actually ranks on. Interleaving them would
- *    mean inventing scores for them, and an invented score is a thumb on the
- *    scale that nobody can later reason about.
+ * A LABELLED SECTION, deliberately, rather than interleaving into the ranked
+ * feed. This content has not been through the same gates, and it has no votes,
+ * views or payout to rank on — interleaving would mean inventing scores, and an
+ * invented score is a thumb on the scale nobody can reason about later. A
+ * heading shows the content without implying the ranking vouched for it.
  *
- * Renders NOTHING when there is nothing to show, so it costs an empty request
+ * Renders NOTHING when there is nothing to show, so it costs one empty request
  * and no layout until incubating users actually exist.
  */
 export default function NewOn3SpeakRail({ limit = 8 }) {
@@ -27,12 +25,25 @@ export default function NewOn3SpeakRail({ limit = 8 }) {
   useEffect(() => {
     let alive = true;
     fetchIncubationFeed(limit)
-      .then(d => { if (alive) setItems((d.items || []).filter(i => i.author?.handle)); })
-      .catch(() => { /* the rail is optional; the feed must not depend on it */ });
+      .then(d => { if (alive) setItems((d.items || []).filter(i => i.author?.handle || i.handle)); })
+      .catch(() => { /* the section is optional; the feed must not depend on it */ });
     return () => { alive = false; };
   }, [limit]);
 
-  if (!items.length) return null;
+  // Card3 reads author/permlink/title/thumbnail/duration/created, so the shape
+  // it wants is the shape it gets. `_incubation` marks these as off-chain for
+  // anything downstream that needs to know.
+  const videos = useMemo(() => items.map(it => ({
+    author: it.author?.handle || it.handle,
+    permlink: it.permlink,
+    title: it.title || '',
+    thumbnail: it.thumbnail || null,
+    duration: it.duration || 0,
+    created: it.created,
+    _incubation: true,
+  })), [items]);
+
+  if (!videos.length) return null;
 
   return (
     <section className="new3s-rail" aria-label="New on 3Speak">
@@ -40,20 +51,7 @@ export default function NewOn3SpeakRail({ limit = 8 }) {
         <h3>Just getting started</h3>
         <p>New here, not on Hive yet. These posts live on 3Speak.</p>
       </header>
-      <ul className="new3s-rail-list">
-        {items.map(item => (
-          <li key={`${item.handle}/${item.permlink}`} className="new3s-card">
-            <Link to={`/p/${item.author.handle}`} className="new3s-card-author">
-              <img src={handleAvatar(item.author.handle)} alt="" />
-              <span>@{item.author.handle}</span>
-            </Link>
-            <p className="new3s-card-title">{item.title || '(untitled)'}</p>
-            <p className="new3s-card-date">
-              {item.created ? new Date(item.created).toLocaleDateString() : ''}
-            </p>
-          </li>
-        ))}
-      </ul>
+      <Card3 videos={videos} />
     </section>
   );
 }

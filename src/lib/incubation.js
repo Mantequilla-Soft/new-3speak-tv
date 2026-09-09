@@ -103,6 +103,20 @@ export async function fetchIncubationProfile(handle) {
   return json(await fetch(`${CHECKER_URL}/incubation/profile/${encodeURIComponent(handle)}`));
 }
 
+/**
+ * One off-chain post, for the watch page.
+ *
+ * 404 means no such post; 409 means it has since been published to Hive and
+ * should be read from there instead. Both are "not ours" to the caller.
+ */
+export async function fetchIncubationPost(handle, permlink) {
+  const res = await fetch(
+    `${CHECKER_URL}/incubation/post/${encodeURIComponent(handle)}/${encodeURIComponent(permlink)}`
+  );
+  if (res.status === 404 || res.status === 409) return null;
+  return json(res);
+}
+
 export async function fetchIncubationPosts(handle, limit = 30) {
   return json(await fetch(`${CHECKER_URL}/incubation/user/${encodeURIComponent(handle)}/posts?limit=${limit}`));
 }
