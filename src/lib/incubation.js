@@ -187,6 +187,14 @@ export const followIncubation = (following, state) =>
 export const saveIncubationProfile = (profile, interests) =>
   write('/social/profile', 'PUT', { profile, interests });
 export const fetchMyIncubationProfile = () => write('/social/profile/mine', 'GET');
+
+/**
+ * How far this person is towards being reviewed for a real Hive account.
+ *
+ * The bar comes back WITH the counts rather than being hardcoded here, so the
+ * progress someone is shown is the progress that actually counts.
+ */
+export const fetchIncubationProgress = () => write('/progress', 'GET');
 export const fetchMyIncubationFollows = () => write('/social/follows/mine', 'GET');
 
 /**

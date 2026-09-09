@@ -1,18 +1,30 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { fetchIncubationProfile, fetchIncubationPosts, handleAvatar } from '../../lib/incubation';
+import { MdCheckCircle, MdRadioButtonUnchecked, MdVerified } from 'react-icons/md';
+import Card3 from '../Cards/Card3';
+import {
+  fetchIncubationProfile, fetchIncubationPosts, fetchIncubationProgress, handleAvatar,
+} from '../../lib/incubation';
 import './IncubatingProfile.scss';
 
+const TASK_COPY = {
+  video: { label: 'Upload a video', hint: 'A proper upload, however short.' },
+  short: { label: 'Post 2 shorts', hint: 'Vertical clips from the shorts camera.' },
+  comment: { label: 'Write 5 comments', hint: 'Real ones, on videos you actually watched.' },
+};
+
 /**
- * The profile of someone who is on 3Speak but not yet on Hive.
+ * The profile of someone on 3Speak who is not yet on Hive.
  *
- * Its job is to be honest about that. A visitor arriving from a comment thread
- * needs to understand why there is no reputation, no follower count and no
- * wallet, without it reading as a broken or empty account.
+ * Two audiences in one page. A VISITOR needs to understand why there is no
+ * reputation, no follower count and no payout, without it reading as a broken
+ * account. The OWNER needs to know what to do next and what it gets them — so
+ * they see their progress and what a real account unlocks, and nobody else does.
  */
 export default function IncubatingProfile({ handle, own = false }) {
   const [profile, setProfile] = useState(null);
   const [posts, setPosts] = useState([]);
+  const [progress, setProgress] = useState(null);
   const [error, setError] = useState('');
 
   useEffect(() => {
@@ -27,74 +39,130 @@ export default function IncubatingProfile({ handle, own = false }) {
     return () => { alive = false; };
   }, [handle]);
 
+  // Only for the owner: progress is theirs to see, and the endpoint is scoped
+  // to the signed-in identity anyway.
+  useEffect(() => {
+    if (!own) return undefined;
+    let alive = true;
+    fetchIncubationProgress()
+      .then((p) => { if (alive) setProgress(p); })
+      .catch(() => { /* the page still works without it */ });
+    return () => { alive = false; };
+  }, [own]);
+
+  // Card3 wants author/permlink/title/thumbnail/duration/created, which is the
+  // same shape the feed rail builds — one card component, one shape.
+  const videos = useMemo(() => posts.map((p) => ({
+    author: handle,
+    permlink: p.permlink,
+    title: p.title || '',
+    thumbnail: p.thumbnail || null,
+    duration: p.duration || 0,
+    created: p.created,
+    _incubation: true,
+  })), [posts, handle]);
+
   if (error) return <p className="inc-profile-error">{error}</p>;
-  if (!profile) return <p className="desc" style={{ padding: 24 }}>Loading…</p>;
+  if (!profile) return <p className="desc" style={{ padding: 32 }}>Loading…</p>;
 
   const p = profile.profile || {};
+  const graduated = profile.status === 'graduated' && profile.hiveUsername;
+  const doneCount = progress ? progress.tasks.filter((t) => t.done).length : 0;
+  const totalTasks = progress ? progress.tasks.length : 0;
+
   return (
     <div className="inc-profile">
-      <header className="inc-profile-head">
-        <img className="inc-profile-avatar" src={p.profile_image || handleAvatar(handle)} alt="" />
-        <div>
-          <h1>{p.name || `@${handle}`}</h1>
-          <p className="inc-profile-handle">@{handle}</p>
-          {p.about && <p className="inc-profile-about">{p.about}</p>}
+      <header className="inc-hero">
+        {p.cover_image && <div className="inc-hero-cover" style={{ backgroundImage: `url(${p.cover_image})` }} />}
+        <div className="inc-hero-body">
+          <img className="inc-hero-avatar" src={p.profile_image || handleAvatar(handle)} alt="" />
+          <div className="inc-hero-text">
+            <h1>{p.name || `@${handle}`}</h1>
+            <p className="inc-hero-handle">
+              {/* Only when a display name exists, or the heading already said it. */}
+              {p.name && <span>@{handle}</span>}
+              <span className="inc-badge">
+                <MdVerified size={13} aria-hidden="true" />
+                {graduated ? 'On Hive' : 'Getting started'}
+              </span>
+            </p>
+            {p.about && <p className="inc-hero-about">{p.about}</p>}
+            {profile.interests?.length > 0 && (
+              <ul className="inc-chips">
+                {profile.interests.map((t) => <li key={t}>{t}</li>)}
+              </ul>
+            )}
+          </div>
+          <div className="inc-hero-stats">
+            <span><strong>{profile.counts?.posts ?? 0}</strong>posts</span>
+            <span><strong>{profile.counts?.following ?? 0}</strong>following</span>
+          </div>
         </div>
       </header>
 
-      {/* Stated plainly rather than left as a set of missing widgets. */}
-      <p className="inc-profile-note">
-        {profile.status === 'graduated' && profile.hiveUsername ? (
-          <>
-            Now on Hive as <Link to={`/p/${profile.hiveUsername}`}>@{profile.hiveUsername}</Link>.
-            Anything below was made before that and lives on 3Speak.
-          </>
+      <p className="inc-note">
+        {graduated ? (
+          <>Now on Hive as <Link to={`/p/${profile.hiveUsername}`}>@{profile.hiveUsername}</Link>. Anything below was made before that.</>
+        ) : own ? (
+          <>This is how others see you. Your posts live on 3Speak and are not on the Hive blockchain yet, so they do not earn rewards. That changes when you get your account.</>
         ) : (
-          own ? (
-            <>
-              This is how others see you while you get started. Your posts live on 3Speak
-              and are not on the Hive blockchain yet, so they do not earn rewards. When
-              you create your Hive account you can publish them, and everything after
-              that goes straight to the chain.
-            </>
-          ) : (
-            <>
-              Getting started on 3Speak. Posts below are here on 3Speak and are not on the
-              Hive blockchain yet, so they do not earn rewards.
-            </>
-          )
+          <>New here. These posts live on 3Speak and are not on the Hive blockchain yet, so they do not earn rewards.</>
         )}
       </p>
 
-      {profile.interests?.length > 0 && (
-        <ul className="inc-profile-interests">
-          {profile.interests.map(t => <li key={t}>{t}</li>)}
-        </ul>
+      {own && !graduated && progress && (
+        <section className="inc-panel inc-progress">
+          <header>
+            <h2>Your path to a Hive account</h2>
+            <span className="inc-progress-count">{doneCount} of {totalTasks} done</span>
+          </header>
+          <div className="inc-progress-bar" role="progressbar" aria-valuenow={doneCount} aria-valuemin={0} aria-valuemax={totalTasks}>
+            <span style={{ width: `${totalTasks ? (doneCount / totalTasks) * 100 : 0}%` }} />
+          </div>
+          <ul className="inc-tasks">
+            {progress.tasks.map((t) => (
+              <li key={t.type} className={t.done ? 'is-done' : ''}>
+                {t.done ? <MdCheckCircle size={20} className="inc-task-icon done" />
+                  : <MdRadioButtonUnchecked size={20} className="inc-task-icon" />}
+                <span className="inc-task-text">
+                  <strong>{TASK_COPY[t.type]?.label || t.type}</strong>
+                  <span>{TASK_COPY[t.type]?.hint}</span>
+                </span>
+                <span className="inc-task-count">{Math.min(t.have, t.need)}/{t.need}</span>
+              </li>
+            ))}
+          </ul>
+          {/* Said plainly, because "finish the list" without saying what happens
+              next reads as a slot machine rather than a process. */}
+          <p className="inc-review">
+            {progress.complete
+              ? 'All done. The team will review your channel and upgrade you. Nothing more for you to do.'
+              : 'Once you have completed all of these, the team will review your channel and upgrade you.'}
+          </p>
+          {progress.minCommentChars > 0 && !progress.tasks.find((t) => t.type === 'comment')?.done && (
+            <p className="inc-review-fine">
+              Comments count once they are at least {progress.minCommentChars} characters. A real thought, not just “nice”.
+            </p>
+          )}
+        </section>
       )}
 
-      <div className="inc-profile-stats">
-        <span><strong>{profile.counts?.posts ?? 0}</strong> posts</span>
-        <span><strong>{profile.counts?.following ?? 0}</strong> following</span>
-        {/* followers is null, not 0: nobody can follow an account that does not
-            exist yet, and "0 followers" would read as rejection rather than
-            as not-applicable. */}
-      </div>
-
-      <h2 className="inc-profile-subhead">Posts</h2>
-      {posts.length === 0 ? (
-        <p className="desc">Nothing published yet.</p>
-      ) : (
-        <ul className="inc-profile-posts">
-          {posts.map(post => (
-            <li key={post.permlink}>
-              <span className="inc-profile-post-title">{post.title || '(untitled)'}</span>
-              <span className="inc-profile-post-date">
-                {post.created ? new Date(post.created).toLocaleDateString() : ''}
-              </span>
-            </li>
-          ))}
-        </ul>
+      {own && !graduated && (
+        <section className="inc-panel inc-unlocks">
+          <h2>What a Hive account gets you</h2>
+          <ul>
+            <li><strong>Your posts start earning.</strong> Videos on Hive can be rewarded in HIVE and HBD by anyone who watches them.</li>
+            <li><strong>Publish everything you made here.</strong> The videos, shorts and follows on this page can be posted to the chain under your own name, and you choose which.</li>
+            <li><strong>Vote, tip, follow and build playlists.</strong> All the buttons that are greyed out for you today.</li>
+            <li><strong>Keys only you hold.</strong> Nobody can lock you out, and the same login works across every Hive app, not just 3Speak.</li>
+          </ul>
+        </section>
       )}
+
+      <h2 className="inc-subhead">{own ? 'Your posts' : 'Posts'}</h2>
+      {videos.length === 0
+        ? <p className="desc">{own ? 'Nothing yet. Your first upload starts the list above.' : 'Nothing published yet.'}</p>
+        : <Card3 videos={videos} />}
     </div>
   );
 }
