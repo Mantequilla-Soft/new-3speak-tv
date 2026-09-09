@@ -1,6 +1,8 @@
 import { useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { MdCheckCircle, MdRadioButtonUnchecked, MdVerified } from 'react-icons/md';
+import {
+  MdCheckCircle, MdRadioButtonUnchecked, MdVerified, MdExpandMore,
+} from 'react-icons/md';
 import Card3 from '../Cards/Card3';
 import {
   fetchIncubationProfile, fetchIncubationPosts, fetchIncubationProgress, handleAvatar,
@@ -13,18 +15,28 @@ const TASK_COPY = {
   comment: { label: 'Write 5 comments', hint: 'Real ones, on videos you actually watched.' },
 };
 
+// Remembered per browser so the list does not spring open on every visit once
+// someone has folded it away. Open is the default: it is the point of the page
+// the first time you land on it.
+const OPEN_KEY = 'inc_progress_open';
+
+function readOpen() {
+  try { return localStorage.getItem(OPEN_KEY) !== '0'; } catch { return true; }
+}
+
 /**
  * The profile of someone on 3Speak who is not yet on Hive.
  *
  * Two audiences in one page. A VISITOR needs to understand why there is no
  * reputation, no follower count and no payout, without it reading as a broken
- * account. The OWNER needs to know what to do next and what it gets them — so
- * they see their progress and what a real account unlocks, and nobody else does.
+ * account. The OWNER needs to know what to do next and what it gets them, so
+ * they get a sidebar nobody else sees.
  */
 export default function IncubatingProfile({ handle, own = false }) {
   const [profile, setProfile] = useState(null);
   const [posts, setPosts] = useState([]);
   const [progress, setProgress] = useState(null);
+  const [tasksOpen, setTasksOpen] = useState(readOpen);
   const [error, setError] = useState('');
 
   useEffect(() => {
@@ -50,25 +62,47 @@ export default function IncubatingProfile({ handle, own = false }) {
     return () => { alive = false; };
   }, [own]);
 
+  function toggleTasks() {
+    setTasksOpen((wasOpen) => {
+      const next = !wasOpen;
+      try { localStorage.setItem(OPEN_KEY, next ? '1' : '0'); } catch { /* private mode */ }
+      return next;
+    });
+  }
+
   // Card3 wants author/permlink/title/thumbnail/duration/created, which is the
-  // same shape the feed rail builds — one card component, one shape.
-  const videos = useMemo(() => posts.map((p) => ({
+  // same shape the feed rail builds: one card component, one shape.
+  const toCard = (p) => ({
     author: handle,
     permlink: p.permlink,
     title: p.title || '',
     thumbnail: p.thumbnail || null,
     duration: p.duration || 0,
     created: p.created,
+    hive_body: p.body || '',
     _incubation: true,
-  })), [posts, handle]);
+  });
+
+  // Split by the type the server derived, so a short is laid out as a short.
+  // Anything older than that field is a video, which is what those rows are.
+  const videos = useMemo(
+    () => posts.filter((p) => p.contentType !== 'short').map(toCard),
+    [posts, handle], // eslint-disable-line react-hooks/exhaustive-deps
+  );
+  const shorts = useMemo(
+    () => posts.filter((p) => p.contentType === 'short').map(toCard),
+    [posts, handle], // eslint-disable-line react-hooks/exhaustive-deps
+  );
 
   if (error) return <p className="inc-profile-error">{error}</p>;
   if (!profile) return <p className="desc" style={{ padding: 32 }}>Loading…</p>;
 
   const p = profile.profile || {};
   const graduated = profile.status === 'graduated' && profile.hiveUsername;
+  const showSidebar = own && !graduated;
   const doneCount = progress ? progress.tasks.filter((t) => t.done).length : 0;
   const totalTasks = progress ? progress.tasks.length : 0;
+  const nothingYet = videos.length === 0 && shorts.length === 0;
 
   return (
     <div className="inc-profile">
@@ -110,59 +144,111 @@ export default function IncubatingProfile({ handle, own = false }) {
         )}
       </p>
 
-      {own && !graduated && progress && (
-        <section className="inc-panel inc-progress">
-          <header>
-            <h2>Your path to a Hive account</h2>
-            <span className="inc-progress-count">{doneCount} of {totalTasks} done</span>
-          </header>
-          <div className="inc-progress-bar" role="progressbar" aria-valuenow={doneCount} aria-valuemin={0} aria-valuemax={totalTasks}>
-            <span style={{ width: `${totalTasks ? (doneCount / totalTasks) * 100 : 0}%` }} />
-          </div>
-          <ul className="inc-tasks">
-            {progress.tasks.map((t) => (
-              <li key={t.type} className={t.done ? 'is-done' : ''}>
-                {t.done ? <MdCheckCircle size={20} className="inc-task-icon done" />
-                  : <MdRadioButtonUnchecked size={20} className="inc-task-icon" />}
-                <span className="inc-task-text">
-                  <strong>{TASK_COPY[t.type]?.label || t.type}</strong>
-                  <span>{TASK_COPY[t.type]?.hint}</span>
-                </span>
-                <span className="inc-task-count">{Math.min(t.have, t.need)}/{t.need}</span>
-              </li>
-            ))}
-          </ul>
-          {/* Said plainly, because "finish the list" without saying what happens
-              next reads as a slot machine rather than a process. */}
-          <p className="inc-review">
-            {progress.complete
-              ? 'All done. The team will review your channel and upgrade you. Nothing more for you to do.'
-              : 'Once you have completed all of these, the team will review your channel and upgrade you.'}
-          </p>
-          {progress.minCommentChars > 0 && !progress.tasks.find((t) => t.type === 'comment')?.done && (
-            <p className="inc-review-fine">
-              Comments count once they are at least {progress.minCommentChars} characters. A real thought, not just “nice”.
+      <div className={`inc-cols${showSidebar ? ' inc-cols--split' : ''}`}>
+        {showSidebar && (
+          <aside className="inc-side">
+            {progress && (
+              <section className="inc-panel inc-progress">
+                <header>
+                  <h2>Your path to a Hive account</h2>
+                  <span className="inc-progress-count">{doneCount} of {totalTasks} done</span>
+                </header>
+                {/* The bar stays put whatever the list does: it is the one thing
+                    worth seeing at a glance, and collapsing it would leave the
+                    panel saying nothing. */}
+                <div
+                  className="inc-progress-bar"
+                  role="progressbar"
+                  aria-label="Tasks completed"
+                  aria-valuenow={doneCount}
+                  aria-valuemin={0}
+                  aria-valuemax={totalTasks}
+                >
+                  <span style={{ width: `${totalTasks ? (doneCount / totalTasks) * 100 : 0}%` }} />
+                </div>
+
+                <button
+                  type="button"
+                  className={`inc-tasks-toggle${tasksOpen ? ' is-open' : ''}`}
+                  onClick={toggleTasks}
+                  aria-expanded={tasksOpen}
+                  aria-controls="inc-task-list"
+                >
+                  <MdExpandMore size={18} aria-hidden="true" />
+                  {tasksOpen ? 'Hide the details' : 'Show what is left'}
+                </button>
+
+                {tasksOpen && (
+                  <div id="inc-task-list">
+                    <ul className="inc-tasks">
+                      {progress.tasks.map((t) => (
+                        <li key={t.type} className={t.done ? 'is-done' : ''}>
+                          {t.done ? <MdCheckCircle size={20} className="inc-task-icon done" />
+                            : <MdRadioButtonUnchecked size={20} className="inc-task-icon" />}
+                          <span className="inc-task-text">
+                            <strong>{TASK_COPY[t.type]?.label || t.type}</strong>
+                            <span>{TASK_COPY[t.type]?.hint}</span>
+                          </span>
+                          <span className="inc-task-count">{Math.min(t.have, t.need)}/{t.need}</span>
+                        </li>
+                      ))}
+                    </ul>
+                    {/* Said plainly, because "finish the list" without saying what
+                        happens next reads as a slot machine rather than a process. */}
+                    <p className="inc-review">
+                      {progress.complete
+                        ? 'All done. The team will review your channel and upgrade you. Nothing more for you to do.'
+                        : 'Once you have completed all of these, the team will review your channel and upgrade you.'}
+                    </p>
+                    {progress.minCommentChars > 0 && !progress.tasks.find((t) => t.type === 'comment')?.done && (
+                      <p className="inc-review-fine">
+                        Comments count once they are at least {progress.minCommentChars} characters. A real thought, not just “nice”.
+                      </p>
+                    )}
+                  </div>
+                )}
+              </section>
+            )}
+
+            <section className="inc-panel inc-unlocks">
+              <h2>What a Hive account gets you</h2>
+              <ul>
+                <li><strong>Your posts start earning.</strong> Videos on Hive can be rewarded in HIVE and HBD by anyone who watches them.</li>
+                <li><strong>Publish everything you made here.</strong> The videos, shorts and follows on this page can be posted to the chain under your own name, and you choose which.</li>
+                <li><strong>Vote, tip, follow and build playlists.</strong> All the buttons that are greyed out for you today.</li>
+                <li><strong>Keys only you hold.</strong> Nobody can lock you out, and the same login works across every Hive app, not just 3Speak.</li>
+              </ul>
+            </section>
+          </aside>
+        )}
+
+        <main className="inc-main">
+          {nothingYet && (
+            <p className="desc">
+              {own ? 'Nothing yet. Your first upload ticks off the list beside this.' : 'Nothing published yet.'}
             </p>
           )}
-        </section>
-      )}
 
-      {own && !graduated && (
-        <section className="inc-panel inc-unlocks">
-          <h2>What a Hive account gets you</h2>
-          <ul>
-            <li><strong>Your posts start earning.</strong> Videos on Hive can be rewarded in HIVE and HBD by anyone who watches them.</li>
-            <li><strong>Publish everything you made here.</strong> The videos, shorts and follows on this page can be posted to the chain under your own name, and you choose which.</li>
-            <li><strong>Vote, tip, follow and build playlists.</strong> All the buttons that are greyed out for you today.</li>
-            <li><strong>Keys only you hold.</strong> Nobody can lock you out, and the same login works across every Hive app, not just 3Speak.</li>
-          </ul>
-        </section>
-      )}
+          {videos.length > 0 && (
+            <>
+              <h2 className="inc-subhead">Videos</h2>
+              <Card3 videos={videos} />
+            </>
+          )}
 
-      <h2 className="inc-subhead">{own ? 'Your posts' : 'Posts'}</h2>
-      {videos.length === 0
-        ? <p className="desc">{own ? 'Nothing yet. Your first upload starts the list above.' : 'Nothing published yet.'}</p>
-        : <Card3 videos={videos} />}
+          {shorts.length > 0 && (
+            <>
+              <h2 className="inc-subhead">Shorts</h2>
+              {/* shortsGrid for the portrait layout, but deliberately NOT
+                  linkPrefix="/shorts": that viewer reads its feed from Hive and
+                  can only fail on a post that is not there. The watch page
+                  already falls back to the incubation service, so these open
+                  somewhere that works. */}
+              <Card3 videos={shorts} shortsGrid />
+            </>
+          )}
+        </main>
+      </div>
     </div>
   );
 }

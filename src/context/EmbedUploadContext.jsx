@@ -1617,7 +1617,24 @@ export function EmbedUploadProvider({ children }) {
       addMessage('Publishing to Hive blockchain...');
 
       // ─── Step 2: Post to Hive via aioha ───
-      const hivePermlink = generatedPermlink;
+      // Normally the app's generated permlink, which a Hive upload also hands to
+      // the embed asset -- and a 3Speak video resolves its play source from the
+      // post's author/permlink, so the two matching is what makes playback work
+      // at all.
+      //
+      // An INCUBATING upload does not get that for free: its asset is created
+      // without a Hive owner and keeps a server-generated id, so the post and
+      // the asset diverged and the player found nothing. Take the asset's id as
+      // the post permlink, which is the invariant a Hive upload satisfies by
+      // accident. It has to hold at graduation too, when this row is replayed
+      // on chain and has to resolve the same way.
+      let hivePermlink = generatedPermlink;
+      if (incubationHandle) {
+        try {
+          const assetId = (new URL(capturedEmbedUrl).searchParams.get('v') || '').split('/')[1];
+          if (assetId) hivePermlink = assetId;
+        } catch { /* no parseable embed URL: keep the generated permlink */ }
+      }
       const communityTag = typeof community === 'string' ? community : community?.name || 'hive-181335';
 
       // Build body: embed URL (video first) + description + credit to original author
