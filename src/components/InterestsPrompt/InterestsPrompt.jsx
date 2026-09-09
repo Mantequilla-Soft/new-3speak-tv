@@ -15,7 +15,8 @@ import './InterestsPrompt.scss';
 const toast = toastIn('Settings');
 
 // Per-user "already asked" flag (browser storage) so a given account is prompted
-// at most once — set when they save a selection OR dismiss the prompt.
+// at most once — set when they save a selection or explicitly decline with
+// "Not now". Clicking the backdrop away does NOT set it; see close/decline.
 const PROMPTED_KEY = '3speak_interests_prompted';
 const loadPrompted = () => {
   try { return JSON.parse(localStorage.getItem(PROMPTED_KEY) || '[]'); } catch { return []; }
@@ -86,10 +87,21 @@ export default function InterestsPrompt() {
 
   if (!open) return null;
 
-  const dismiss = () => {
-    if (who) markPrompted(who);
+  // Two ways out, and they mean different things.
+  //
+  // "Not now" is an answer: they were asked and declined, so we stop asking.
+  // Clicking the backdrop is not -- it is how people close a thing that
+  // appeared over what they were doing, and treating it as a refusal meant one
+  // stray click cost them a personalised feed permanently, with no way back
+  // except finding Settings.
+  const close = () => {
     setOpen(false);
     setPromptActive('interests', false);
+  };
+
+  const decline = () => {
+    if (who) markPrompted(who);
+    close();
   };
 
   const save = async () => {
@@ -123,7 +135,7 @@ export default function InterestsPrompt() {
   };
 
   return createPortal(
-    <div className="interests-prompt-overlay" onClick={dismiss}>
+    <div className="interests-prompt-overlay" onClick={close}>
       <div className="interests-prompt" onClick={(e) => e.stopPropagation()}>
         <h3 className="interests-prompt-title">What are you into?</h3>
         <p className="interests-prompt-text">
@@ -140,7 +152,7 @@ export default function InterestsPrompt() {
           disabled={saving}
         />
         <div className="interests-prompt-actions">
-          <button type="button" className="interests-prompt-cancel" onClick={dismiss} disabled={saving}>
+          <button type="button" className="interests-prompt-cancel" onClick={decline} disabled={saving}>
             Not now
           </button>
           <button

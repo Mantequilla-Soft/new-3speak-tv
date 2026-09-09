@@ -6,21 +6,8 @@
   display: inline-flex;
 }
 
-.inc-bell-trigger {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 32px;
-  height: 32px;
-  padding: 0;
-  border: 0;
-  background: none;
-  color: var(--text-primary);
-  cursor: pointer;
-
-  &:hover { color: var(--accent-primary); }
-}
-
+// The trigger itself is .notif-bell-btn, styled in NotificationBell.scss. Only
+// the badge differs: that bell shows a bare dot, this one shows a count.
 .inc-bell-dot {
   position: absolute;
   top: -2px;

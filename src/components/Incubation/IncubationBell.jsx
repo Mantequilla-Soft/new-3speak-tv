@@ -6,6 +6,12 @@ import { useAppStore } from '../../lib/store';
 import {
   fetchIncubationNotifications, markIncubationNotificationsRead, handleAvatar,
 } from '../../lib/incubation';
+// The trigger wears NotificationBell's own classes, so it is styled by rules
+// already proven in this exact nav slot rather than by a second set of my own
+// that has to re-derive the size, colour and hover of a nav icon button. Its
+// stylesheet is imported here too, so those rules are present whichever bell
+// the nav decides to render.
+import '../nav/NotificationBell.scss';
 import './IncubationBell.scss';
 
 const REFRESH_MS = 60 * 1000;
@@ -71,14 +77,15 @@ export default function IncubationBell() {
   };
 
   return (
-    <div className="inc-bell" ref={ref}>
+    <div className="notif-bell-wrapper inc-bell" ref={ref}>
       <button
         type="button"
-        className="inc-bell-trigger"
+        className="notif-bell-btn"
+        title="Notifications"
         onClick={toggle}
         aria-label={data.unread ? `Notifications, ${data.unread} unread` : 'Notifications'}
       >
-        <IoIosNotifications size={20} />
+        <IoIosNotifications size={22} />
         {data.unread > 0 && <span className="inc-bell-dot">{data.unread > 9 ? '9+' : data.unread}</span>}
       </button>
 
