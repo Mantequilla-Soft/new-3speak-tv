@@ -1485,7 +1485,7 @@ const PlayVideo = ({ videoDetails, author, permlink, mediaUnavailable = false, m
 
                 {authenticated && isLoggedIn() && (
                   <>
-                    <button type="button" className="pv-btn playlist-btn" onClick={() => setIsPlaylistModalOpen(true)} title="Add to playlist">
+                    <button type="button" className="pv-btn playlist-btn" onClick={() => setIsPlaylistModalOpen(true)} title="Add to playlist" {...lockProps}>
                       <MdPlaylistAdd />
                       <span>Playlist</span>
                     </button>
@@ -1761,6 +1761,8 @@ const PlayVideo = ({ videoDetails, author, permlink, mediaUnavailable = false, m
                     className="fab-action-btn"
                     onClick={() => { setIsPlaylistModalOpen(true); setFabOpen(false); }}
                     aria-label="Add to playlist"
+                    title="Add to playlist"
+                    {...lockProps}
                   >
                     <MdPlaylistAdd size={20} />
                   </button>
