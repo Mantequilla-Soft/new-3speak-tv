@@ -12,6 +12,7 @@ import { FaMedal } from "react-icons/fa6";
 import { useMyPlaylists } from "../../hooks/useMyPlaylists";
 import ShortsIcon from "../icons/ShortsIcon";
 import UploadLinks from "../UploadLinks";
+import NavProgress from '../Incubation/NavProgress';
 import NotificationBell from "./NotificationBell";
 import { hideToastLayer, showToastLayer } from "../../utils/toast";
 import ChatButton from "../Chat/ChatButton";
@@ -309,6 +310,8 @@ function Nav({ setSideBar, toggleProfileNav, openLoginModal }) {
 
       {authenticated ? (
         <div className="nav-right flex-div" onClickCapture={hideToastLayer}>
+          {/* Incubating users only; renders nothing for everyone else. */}
+          <NavProgress />
           <NavUploadDropdown />
           <Link to="/discover" className="nav-mobile-discover" title="Discover">
             <MdOutlineSearch size={19} />

@@ -348,14 +348,17 @@ function Card3({ videos = [], loading = false, error = null, interleaveEvery = 0
             {/* Bottom actions */}
             <div className="bottom-action">
               <div className="wrap-left">
-                <PayoutAmount
+                {/* An off-chain post has no payout and never will until it is
+                    republished to Hive, so the slot is omitted rather than left
+                    showing a placeholder that reads as "still loading". */}
+                {!video._incubation && <PayoutAmount
                   amount={(() => {
                     const author = video.author?.username || video.author || video.owner;
                     const content = getContentForVideo?.(author, video.permlink);
                     const val = content?.payout ?? video.stats?.total_hive_reward;
                     return val != null ? Number(val) : null;
                   })()}
-                />
+                />}
                 <UpvoteCount
                   count={(() => {
                     const author = video.author?.username || video.author || video.owner;

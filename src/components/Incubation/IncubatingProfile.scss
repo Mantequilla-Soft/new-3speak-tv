@@ -200,6 +200,36 @@
   }
 }
 
+/* ----------------------------------------------------------------- tabs --- */
+
+// Hidden by default: above the split both panels are on screen at once, so a
+// switch between them would do nothing.
+.inc-tabs {
+  display: none;
+  gap: 6px;
+  margin-bottom: 14px;
+  border-bottom: 1px solid var(--border-color);
+
+  button {
+    flex: 1;
+    padding: 10px 8px;
+    background: none;
+    border: 0;
+    border-bottom: 2px solid transparent;
+    margin-bottom: -1px;
+    font: inherit;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-muted);
+    cursor: pointer;
+  }
+
+  button.is-active {
+    color: var(--text-primary);
+    border-bottom-color: var(--accent-primary);
+  }
+}
+
 /* --------------------------------------------------------------- layout --- */
 
 // One column by default, which is what a VISITOR gets: there is no sidebar for
@@ -448,6 +478,10 @@
 // ABOVE the posts, because on a phone the owner's next step matters more than
 // scrolling their own back catalogue.
 @media (max-width: 1000px) {
+  .inc-tabs {
+    display: flex;
+  }
+
   .inc-cols--split {
     grid-template-columns: minmax(0, 1fr);
 
@@ -458,6 +492,11 @@
       grid-row: auto;
     }
   }
+
+  // One at a time, chosen by the tabs above. Both stay mounted, so switching
+  // back does not refetch the feed or lose the collapsed/expanded state.
+  .inc-cols--split.inc-show-progress .inc-main { display: none; }
+  .inc-cols--split.inc-show-posts .inc-side { display: none; }
 }
 
 @include mix.respond(phone) {

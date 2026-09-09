@@ -85,6 +85,9 @@ export default function IncubatingProfile({ handle, own = false }) {
   const [progress, setProgress] = useState(null);
   const [tasksOpen, setTasksOpen] = useState(readOpen);
   const [editing, setEditing] = useState(false);
+  // Which half is on screen at phone/tablet width, where the two columns stack.
+  // Ignored above that: both are visible side by side and the tabs are hidden.
+  const [mobileTab, setMobileTab] = useState('progress');
   const [error, setError] = useState('');
   // Saving REPLACES the stored profile object, interests included, so the ones
   // already set have to be sent back with it or picking a new avatar silently
@@ -154,6 +157,10 @@ export default function IncubatingProfile({ handle, own = false }) {
     // ONE grid here, newest first, because a new channel with three posts does
     // not need to be filed into sections.
     _short: p.contentType === 'short',
+    // The card footer reads these from `stats`, the same shape a Hive feed
+    // supplies, so the counts render through the existing components instead of
+    // sitting at the placeholder they would otherwise never leave.
+    stats: { num_votes: p.likeCount || 0, num_comments: p.replyCount || 0 },
     _incubation: true,
   });
 
@@ -222,7 +229,33 @@ export default function IncubatingProfile({ handle, own = false }) {
         )}
       </p>
 
-      <div className={`inc-cols${showSidebar ? ' inc-cols--split' : ''}`}>
+      {showSidebar && (
+        // Only rendered when there IS a second panel to switch to. Below the
+        // split the goals sit above the feed, so reaching your own videos meant
+        // scrolling past the whole checklist every time.
+        <div className="inc-tabs" role="tablist" aria-label="Profile sections">
+          <button
+            type="button"
+            role="tab"
+            aria-selected={mobileTab === 'progress'}
+            className={mobileTab === 'progress' ? 'is-active' : ''}
+            onClick={() => setMobileTab('progress')}
+          >
+            Your goals
+          </button>
+          <button
+            type="button"
+            role="tab"
+            aria-selected={mobileTab === 'posts'}
+            className={mobileTab === 'posts' ? 'is-active' : ''}
+            onClick={() => setMobileTab('posts')}
+          >
+            Videos and Shorts
+          </button>
+        </div>
+      )}
+
+      <div className={`inc-cols${showSidebar ? ` inc-cols--split inc-show-${mobileTab}` : ''}`}>
         {showSidebar && (
           <aside className="inc-side">
             {progress && (

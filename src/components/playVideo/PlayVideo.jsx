@@ -100,18 +100,30 @@ const PlayVideo = ({ videoDetails, author, permlink, mediaUnavailable = false, m
   const voteIsOffChain = postIsOffChain || viewerHasNoAccount;
   const [offChainVoted, setOffChainVoted] = useState(false);
   const [offChainVotes, setOffChainVotes] = useState(null);
-  useEffect(() => {
-    if (!postIsOffChain || !author || !permlink) return undefined;
-    let alive = true;
-    fetchIncubationLikes(author, permlink, user || incubationHandle)
+  // Keyed on voteIsOffChain, NOT postIsOffChain. An incubating viewer's vote is
+  // stored off-chain wherever it lands, including on an ordinary Hive video, so
+  // loading the count only for off-chain POSTS meant their vote was saved and
+  // then never shown: the count stayed null, the optimistic bump below leaves
+  // null alone, and the label renders nothing for a falsy count. From the
+  // viewer's side, voting did nothing at all.
+  // `token` cancels a load whose video has since changed, so a slow response for
+  // the previous post cannot land on this one.
+  const loadOffChainLikes = useCallback((token) => {
+    if (!voteIsOffChain || !author || !permlink) return undefined;
+    return fetchIncubationLikes(author, permlink, user || incubationHandle)
       .then((d) => {
-        if (!alive) return;
+        if (token?.cancelled) return;
         setOffChainVotes(d.count ?? 0);
         setOffChainVoted(!!d.liked);
       })
       .catch(() => { /* the count is decoration; the button still works */ });
-    return () => { alive = false; };
-  }, [postIsOffChain, author, permlink, user, incubationHandle]);
+  }, [voteIsOffChain, author, permlink, user, incubationHandle]);
+
+  useEffect(() => {
+    const token = { cancelled: false };
+    loadOffChainLikes(token);
+    return () => { token.cancelled = true; };
+  }, [loadOffChainLikes]);
 
   const handleOffChainVote = useCallback(async () => {
     if (!authenticated) return;
@@ -121,12 +133,15 @@ const PlayVideo = ({ videoDetails, author, permlink, mediaUnavailable = false, m
     setOffChainVotes((n) => (n == null ? n : Math.max(0, n + (next ? 1 : -1))));
     try {
       await voteIncubation(author, permlink, next ? 10000 : 0);
+      // Re-read rather than trust the guess: the optimistic bump cannot move a
+      // count that was still unknown, and other people vote on this too.
+      loadOffChainLikes();
     } catch (err) {
       setOffChainVoted(!next);
       setOffChainVotes((n) => (n == null ? n : Math.max(0, n + (next ? -1 : 1))));
       toast.error(err.message || 'Could not save your vote');
     }
-  }, [authenticated, offChainVoted, author, permlink]);
+  }, [authenticated, offChainVoted, author, permlink, loadOffChainLikes]);
   // The viewer's own reason wins when both apply: it is the one they can act on.
   const LOCKED_TITLE = viewerHasNoAccount
     ? 'Unlocked once you create your Hive account'

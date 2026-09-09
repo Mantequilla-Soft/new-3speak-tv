@@ -1,0 +1,55 @@
+// Sits in the nav next to Share. Deliberately quiet: it is a status, not a call
+// to action, and it should not compete with the button beside it.
+.nav-progress {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  height: 32px;
+  padding: 0 12px;
+  border-radius: 999px;
+  border: 1px solid var(--border-color);
+  background: var(--bg-tertiary);
+  text-decoration: none;
+  flex-shrink: 0;
+
+  &:hover {
+    border-color: var(--accent-primary);
+  }
+}
+
+.nav-progress-bar {
+  display: block;
+  width: 54px;
+  height: 6px;
+  border-radius: 999px;
+  background: var(--bg-primary);
+  overflow: hidden;
+
+  span {
+    display: block;
+    height: 100%;
+    border-radius: inherit;
+    background: linear-gradient(90deg, var(--accent-primary), color-mix(in srgb, var(--accent-primary) 55%, #ffb300));
+    transition: width 0.45s ease;
+  }
+}
+
+.nav-progress-count {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+// Phones: the bar alone. The nav is already tight there, and the fraction is
+// the first thing to go since the bar says the same thing at a glance.
+@media screen and (max-width: 767px) {
+  .nav-progress {
+    padding: 0 8px;
+    gap: 0;
+  }
+
+  .nav-progress-bar { width: 34px; }
+  .nav-progress-count { display: none; }
+}
