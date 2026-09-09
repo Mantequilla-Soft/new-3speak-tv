@@ -158,6 +158,13 @@ async function write(path, method, body) {
 }
 
 /** Post off-chain content. `parentAuthor`/`parentPermlink` make it a reply. */
+/**
+ * Store a post off-chain.
+ *
+ * `payload.permlink` is optional but the upload path supplies it, so the stored
+ * post carries the same permlink the on-chain one would have — which is what
+ * the player resolves a video's source by.
+ */
 export const postIncubationContent = (payload) => write('/content', 'POST', payload);
 export const fetchMyIncubationContent = () => write('/content/mine', 'GET');
 export const voteIncubation = (author, permlink, weight) =>

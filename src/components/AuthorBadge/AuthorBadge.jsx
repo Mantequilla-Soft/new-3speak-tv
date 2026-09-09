@@ -13,7 +13,10 @@ const toast = toastIn('Profile');
 
 // `subtitle` replaces the followers line — used by rails that describe the
 // creator by something other than their follower count ("3 shorts / 2 videos").
-function AuthorBadge({ author, onClick, followersCount, fetchFollowers, showFollow, isFollowing: isFollowingProp, onFollow, noLink, compact, reputation, color, tabHint, subtitle }) {
+// `followLockedReason` disables Follow and explains why. Following writes a
+// custom_json naming the target account, so it cannot work when that account
+// does not exist on chain yet — the caller knows that, this component does not.
+function AuthorBadge({ author, onClick, followersCount, fetchFollowers, showFollow, isFollowing: isFollowingProp, onFollow, noLink, compact, reputation, color, tabHint, subtitle, followLockedReason = null }) {
   const navigate = useNavigate();
   const { user } = useAppStore();
   const [localFollowers, setLocalFollowers] = useState(null);
@@ -28,6 +31,7 @@ function AuthorBadge({ author, onClick, followersCount, fetchFollowers, showFoll
   // Check actual follow status from blockchain when showFollow is true
   useEffect(() => {
     if (!showFollow || !author || !user || author === user || isFollowingProp != null) return;
+    if (followLockedReason) return; // no on-chain relationship to look up
     let cancelled = false;
     getRelationshipBetweenAccounts(user, author).then((relation) => {
       if (!cancelled && relation?.follows != null) {
@@ -35,7 +39,7 @@ function AuthorBadge({ author, onClick, followersCount, fetchFollowers, showFoll
       }
     }).catch(() => {});
     return () => { cancelled = true; };
-  }, [author, user, showFollow, isFollowingProp]);
+  }, [author, user, showFollow, isFollowingProp, followLockedReason]);
 
   useEffect(() => {
     if (!fetchFollowers || followersCount != null || !author) return;
@@ -136,8 +140,12 @@ function AuthorBadge({ author, onClick, followersCount, fetchFollowers, showFoll
       {showFollowBtn && (
         <button
           className={`follow-btn ${following ? 'following' : ''}`}
-          onClick={handleFollow}
+          onClick={followLockedReason ? (e) => { e.preventDefault(); e.stopPropagation(); } : handleFollow}
           disabled={followLoading}
+          // aria-disabled rather than disabled: a disabled button fires no
+          // mouse events, so the title explaining the lock would never show.
+          aria-disabled={followLockedReason ? true : undefined}
+          title={followLockedReason || undefined}
           style={color && following ? { color } : undefined}
         >
           {followLoading ? '...' : following ? 'Following' : 'Follow'}

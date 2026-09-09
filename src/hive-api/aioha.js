@@ -390,6 +390,12 @@ export const commentWithAioha = async (parentAuthor, parentPermlink, permlink, t
     const res = await postIncubationContent({
       title,
       body,
+      // The SAME permlink the on-chain post would have used. A 3Speak video
+      // resolves its play source from the post's author/permlink, which only
+      // works because the uploader gives the post and the embed asset the same
+      // one. Letting the store invent its own broke playback now, and would
+      // have broken it again on the post replayed at graduation.
+      permlink,
       parentAuthor: parentAuthor || '',
       parentPermlink: parentPermlink || '',
       jsonMetadata: jsonMetadata || {},

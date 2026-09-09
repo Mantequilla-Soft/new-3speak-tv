@@ -82,8 +82,16 @@ const PlayVideo = ({ videoDetails, author, permlink, mediaUnavailable = false, m
   // Actions that move value on Hive: promoting spends funds, tipping sends
   // them, and a clip/remix publishes a post that pays its original author
   // through beneficiaries. None can work without a Hive account.
-  const lockedForIncubation = !!incubationHandle;
-  const LOCKED_TITLE = 'Unlocked once you create your Hive account';
+  const viewerHasNoAccount = !!incubationHandle;
+  // The POST itself is off-chain. Nobody can vote, tip or promote it — not even
+  // a Hive user — because there is nothing on chain to act on. A different
+  // situation from the viewer lacking an account, so it gets its own wording.
+  const postIsOffChain = !!videoDetails?._incubation;
+  const lockedForIncubation = viewerHasNoAccount || postIsOffChain;
+  // The viewer's own reason wins when both apply: it is the one they can act on.
+  const LOCKED_TITLE = viewerHasNoAccount
+    ? 'Unlocked once you create your Hive account'
+    : 'Not available yet: this post is not on Hive';
 
   // Spread LAST onto a locked button so it overrides that button's own title
   // and onClick.
@@ -1135,6 +1143,10 @@ const PlayVideo = ({ videoDetails, author, permlink, mediaUnavailable = false, m
               reputation={authorReputation}
               followersCount={followData?.follower_count}
               showFollow
+              // Following writes a custom_json naming the target account. An
+              // author with no Hive account cannot be named, so the button is
+              // locked rather than left to fail on broadcast.
+              followLockedReason={postIsOffChain ? 'You can follow them once they are on Hive' : null}
               isFollowing={isFollowingCreator}
               onFollow={(_, willFollow) => setIsFollowingCreator(willFollow)}
             />
@@ -1329,6 +1341,7 @@ const PlayVideo = ({ videoDetails, author, permlink, mediaUnavailable = false, m
                     className="pv-btn vote-btn"
                     onClick={toggleTooltip}
                     title={votingClosed ? 'Tag this video' : 'Vote on this video'}
+                    {...lockProps}
                   >
                     {votingClosed ? <IoPricetagOutline size={14} /> : <FaHeart size={14} />}
                     <span>{votingClosed ? 'Tag' : 'Vote'}</span>
@@ -1527,7 +1540,14 @@ const PlayVideo = ({ videoDetails, author, permlink, mediaUnavailable = false, m
         <div className="description-wrap">
           <div className={`description-collapsible${descriptionExpanded ? '' : ' collapsed'}`}>
             <div className="blog-content">
-              <BlogContent author={author} permlink={permlink} description={overrideBody} />
+              {/* BlogContent falls back to fetching the post from Hive, which has
+                  never heard of an off-chain one — that is the "No content
+                  available" it was showing. Hand it the body we already have. */}
+              <BlogContent
+                author={author}
+                permlink={permlink}
+                description={overrideBody ?? (postIsOffChain ? videoDetails?.body : undefined)}
+              />
             </div>
           </div>
           <button
@@ -1705,6 +1725,8 @@ const PlayVideo = ({ videoDetails, author, permlink, mediaUnavailable = false, m
                     className="fab-action-btn"
                     onClick={() => { handleFabFollow(); setFabOpen(false); }}
                     aria-label="Follow creator"
+                    title="Follow creator"
+                    {...lockProps}
                   >
                     <MdPersonAdd size={20} />
                   </button>
