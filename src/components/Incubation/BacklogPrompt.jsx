@@ -3,7 +3,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { MdUploadFile } from 'react-icons/md';
 import { useAppStore } from '../../lib/store';
 import { usePromptsActive, setPromptActive } from '../../utils/welcomeGate';
-import { fetchBackfillSummary } from '../../lib/incubation';
+import { fetchBackfillSummary, claimAssetsOnce } from '../../lib/incubation';
 import '../AdsPrompt/AdsPrompt.scss';
 
 const SNOOZE_KEY = 'backlog_prompt_snoozed_until';
@@ -41,6 +41,11 @@ export default function BacklogPrompt() {
     fetchBackfillSummary()
       .then(s => {
         if (!alive) return;
+        // Reaching here at all means a graduated user, which is the moment their
+        // uploaded videos need to move from the handle to the real account. Done
+        // regardless of whether anything is pending: someone with an empty
+        // backlog can still have videos sitting under their old name.
+        claimAssetsOnce().catch(() => { /* retried next session */ });
         if (s?.pending > 0) {
           setSummary(s);
           setOpen(true);

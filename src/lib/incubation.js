@@ -212,6 +212,26 @@ export function isAwaitingApproval(status) {
 
 export const fetchBackfillItems = () => write('/backfill/items', 'GET');
 export const fetchBackfillSummary = () => write('/backfill/summary', 'GET');
+
+/**
+ * Move videos uploaded while incubating onto the new Hive account.
+ *
+ * Uploads were real assets all along; only the Hive post was deferred. They
+ * were stored under the handle, so without this the user's own videos stop
+ * appearing under their name the moment they graduate.
+ *
+ * Idempotent and cheap, but pointless to repeat, so callers guard it to once
+ * per browser session.
+ */
+export const claimIncubationAssets = () => write('/backfill/claim-assets', 'POST', {});
+
+const CLAIMED_KEY = 'incubation_assets_claimed';
+export async function claimAssetsOnce() {
+  try { if (sessionStorage.getItem(CLAIMED_KEY)) return null; } catch { /* ignore */ }
+  const res = await claimIncubationAssets();
+  try { sessionStorage.setItem(CLAIMED_KEY, '1'); } catch { /* ignore */ }
+  return res;
+}
 const markBackfilled = (type, id, permlink) =>
   write('/backfill/mark', 'POST', { type, id, permlink });
 

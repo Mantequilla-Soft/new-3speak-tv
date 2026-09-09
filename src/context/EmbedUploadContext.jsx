@@ -91,7 +91,18 @@ export function useEmbedUpload() {
 }
 
 export function EmbedUploadProvider({ children }) {
-  const { user } = useAppStore();
+  const { user, incubationHandle } = useAppStore();
+  // Who the uploaded ASSET belongs to.
+  //
+  // embed-video keys assets by a plain owner string and creates the row from it
+  // on first upload — it never checks the name against Hive — so an incubating
+  // user can own assets under their handle. Graduation rewrites these to the
+  // real account (see /backfill/claim-assets).
+  //
+  // Deliberately NOT used for `username:` below: those feed beneficiary and Pro
+  // calculations, which are Hive payout concepts. A post with no payout has no
+  // beneficiaries, and passing a handle there would invent a payee.
+  const assetOwner = user || incubationHandle;
   const navigate = useNavigate();
   // Pro subscribers skip the threespeakfund 10% — their sub fee
   // covers what that split normally funds. Remix attribution to the
@@ -489,7 +500,7 @@ export function EmbedUploadProvider({ children }) {
       const tokenRes = await axios.post(
         `${tokenBase}/uploads/token`,
         {
-          owner: user,
+          owner: assetOwner,
           frontend_app: '3speak-tv',
           short: !!fromStories,
           gated: !!gated,
@@ -593,7 +604,7 @@ export function EmbedUploadProvider({ children }) {
         filename: videoFile.name,
         filetype: videoFile.type,
         frontend_app: '3speak-tv',
-        owner: user,
+        owner: assetOwner,
         short: fromStories ? 'true' : 'false',
         duration: String(Math.round(videoDuration)),
         ...(generatedPermlink ? { permlink: generatedPermlink } : {}),
@@ -905,7 +916,7 @@ export function EmbedUploadProvider({ children }) {
       chunkSize = await measureChunkSize();
       const tokenRes = await axios.post(
         `${base}/uploads/token`,
-        { owner: user, frontend_app: '3speak-tv', short: !!fromStories, gated: !!gated, defer_encode: true, ...(gated && gatedAllowlist.length ? { allowlist: gatedAllowlist } : {}) },
+        { owner: assetOwner, frontend_app: '3speak-tv', short: !!fromStories, gated: !!gated, defer_encode: true, ...(gated && gatedAllowlist.length ? { allowlist: gatedAllowlist } : {}) },
         { headers: { 'X-API-Key': EMBED_API_KEY, 'Content-Type': 'application/json' } }
       );
       const token = tokenRes.data?.token;
@@ -1204,7 +1215,7 @@ export function EmbedUploadProvider({ children }) {
 
     const tokenRes = await axios.post(
       `${base}/uploads/token`,
-      { owner: user, frontend_app: '3speak-tv', short: !!fromStories, gated: !!gated, defer_encode: true, ...(gated && gatedAllowlist.length ? { allowlist: gatedAllowlist } : {}) },
+      { owner: assetOwner, frontend_app: '3speak-tv', short: !!fromStories, gated: !!gated, defer_encode: true, ...(gated && gatedAllowlist.length ? { allowlist: gatedAllowlist } : {}) },
       { headers: { 'X-API-Key': EMBED_API_KEY, 'Content-Type': 'application/json' } },
     );
     const token = tokenRes.data?.token;
@@ -1835,7 +1846,7 @@ export function EmbedUploadProvider({ children }) {
           setStatusText('Saving scheduled post...');
           addMessage('Saving scheduled post...');
           const resp = await axios.post(url, {
-            owner: user,
+            owner: assetOwner,
             permlink: hivePermlink,
             scheduledOn: scheduledOnIso,
             title,

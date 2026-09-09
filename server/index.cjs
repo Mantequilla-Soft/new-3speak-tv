@@ -620,7 +620,8 @@ const INCUBATION_ROUTES = new Map([
   ['GET /public/graduation/plan', { path: '/public/graduation/plan' }],
   ['GET /backfill/items', { path: '/backfill/items', graduated: true }],
   ['GET /backfill/summary', { path: '/backfill/summary', graduated: true }],
-  ['POST /backfill/mark', { path: '/backfill/mark', graduated: true }]
+  ['POST /backfill/mark', { path: '/backfill/mark', graduated: true }],
+  ['POST /backfill/claim-assets', { path: '/backfill/claim-assets', graduated: true }]
 ])
 
 // GET /api/incubation/graduation-status — BUTRAUTH's half of the decision.

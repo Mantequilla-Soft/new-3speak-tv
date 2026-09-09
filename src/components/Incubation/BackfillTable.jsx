@@ -2,7 +2,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { toastIn } from '../../utils/toast';
 import { useAppStore } from '../../lib/store';
 import {
-  fetchBackfillItems, publishBackfill, rootPostWaitMs, ROOT_POST_INTERVAL_MS
+  fetchBackfillItems, publishBackfill, rootPostWaitMs, claimAssetsOnce
 } from '../../lib/incubation';
 import './BackfillTable.scss';
 
@@ -42,6 +42,9 @@ export default function BackfillTable() {
   const load = useCallback(async () => {
     setState('loading');
     try {
+      // Also here, not only in the prompt: someone can reach this page directly
+      // without the prompt ever having run.
+      claimAssetsOnce().catch(() => { /* not fatal to listing the backlog */ });
       const data = await fetchBackfillItems();
       setItems(data.items || []);
       setExcluded(data.excluded || []);
