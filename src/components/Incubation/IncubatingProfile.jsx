@@ -263,7 +263,7 @@ export default function IncubatingProfile({ handle, own = false }) {
         {graduated ? (
           <>Now on Hive as <Link to={`/p/${profile.hiveUsername}`}>@{profile.hiveUsername}</Link>. Anything below was made before that.</>
         ) : own ? (
-          <>This is how others see you. Your posts live on 3Speak and are not on the Hive blockchain yet, so they do not earn rewards. That changes when you get your account.</>
+          <>This is how others see you. Your posts live on 3Speak and are not on the Hive blockchain yet, so they do not earn rewards. That changes when you get your account after completing all the tasks below.</>
         ) : (
           <>New here. These posts live on 3Speak and are not on the Hive blockchain yet, so they do not earn rewards.</>
         )}
