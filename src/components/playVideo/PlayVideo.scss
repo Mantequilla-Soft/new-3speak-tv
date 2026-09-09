@@ -1740,3 +1740,21 @@
     font-size: 11px;
   }
 }
+
+// Actions that need a Hive account (promote, tip, clip/remix) while the viewer
+// has none. Keyed on aria-disabled rather than :disabled on purpose: a truly
+// disabled button fires no mouse events, so its title tooltip never shows — and
+// the tooltip saying it unlocks later is the whole point of dimming it.
+.pv-btn[aria-disabled="true"],
+.fab-action-btn[aria-disabled="true"] {
+  opacity: 0.45;
+  cursor: not-allowed;
+
+  // Hover and active states would otherwise still fire and make it look live.
+  &:hover,
+  &:active {
+    opacity: 0.45;
+    transform: none;
+    filter: none;
+  }
+}

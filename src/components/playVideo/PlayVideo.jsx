@@ -78,6 +78,32 @@ dayjs.extend(relativeTime);
 
 const PlayVideo = ({ videoDetails, author, permlink, mediaUnavailable = false, mediaBlocked = false, onRetryPlayback = null, mediaLoading = false, playlistData, onClosePlaylist, videoControls, mobileReactionPanel, cinemaReactionPanel, videoRef, wrapperRef, onVideoEdited, overrideBody, scheduled = false, scheduledOn = null, onEditScheduled, v2 = false, isLive = false, streamRoom = null, liveChatSlot = null, onLiveChatSent = null, vodAssetPending = false, onStreamRoomMeta = null, belowPlayerSlot = null, sponsorLabel = null, adCountdown = null, bannerHit = null, adSkip = null, adPlaying = false }) => {
   const { user, authenticated } = useAppStore();
+  const incubationHandle = useAppStore((s) => s.incubationHandle);
+  // Actions that move value on Hive: promoting spends funds, tipping sends
+  // them, and a clip/remix publishes a post that pays its original author
+  // through beneficiaries. None can work without a Hive account.
+  const lockedForIncubation = !!incubationHandle;
+  const LOCKED_TITLE = 'Unlocked once you create your Hive account';
+
+  // Spread LAST onto a locked button so it overrides that button's own title
+  // and onClick.
+  //
+  // aria-disabled rather than `disabled`: a disabled button fires no mouse
+  // events in Chrome or Firefox, so its title tooltip never appears — and the
+  // tooltip explaining WHY it is locked is the whole point. This keeps the
+  // element interactive enough to be hovered while refusing the action, and
+  // a click says the same thing for anyone on a touch screen with no hover.
+  const lockProps = lockedForIncubation
+    ? {
+        'aria-disabled': true,
+        title: LOCKED_TITLE,
+        onClick: (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          toast.info(LOCKED_TITLE);
+        },
+      }
+    : {};
   const interests = useAppStore((s) => s.interests);
   const setInterests = useAppStore((s) => s.setInterests);
   const theme = useAppStore((s) => s.theme);
@@ -1236,6 +1262,7 @@ const PlayVideo = ({ videoDetails, author, permlink, mediaUnavailable = false, m
                     onClick={clipMode ? handleCancelClip : handleStartClipMode}
                     title={!authenticated ? 'Log in to clip' : clipMode ? 'Cancel clip' : 'Clip video'}
                     disabled={!authenticated}
+                    {...lockProps}
                   >
                     <Scissors size={16} />
                     <span className="tools-row-label">Clip Video</span>
@@ -1347,6 +1374,7 @@ const PlayVideo = ({ videoDetails, author, permlink, mediaUnavailable = false, m
                     className="pv-btn promote-btn"
                     onClick={() => setPromoteOpen(true)}
                     title="Promote this video"
+                    {...lockProps}
                   >
                     <Rocket size={15} />
                     <span>Promote</span>
@@ -1399,7 +1427,7 @@ const PlayVideo = ({ videoDetails, author, permlink, mediaUnavailable = false, m
                       <MdPlaylistAdd />
                       <span>Playlist</span>
                     </button>
-                    <button type="button" className="pv-btn tip-btn" onClick={() => setIsTipModalOpen(true)} title="Tip the creator">
+                    <button type="button" className="pv-btn tip-btn" onClick={() => setIsTipModalOpen(true)} title="Tip the creator" {...lockProps}>
                       <Gift size={16} />
                       <span>Tip</span>
                     </button>
@@ -1443,6 +1471,7 @@ const PlayVideo = ({ videoDetails, author, permlink, mediaUnavailable = false, m
                 onClick={clipMode ? handleCancelClip : handleStartClipMode}
                 title={!authenticated ? 'Log in to clip' : clipMode ? 'Cancel clip' : 'Clip video'}
                 disabled={!authenticated}
+                {...lockProps}
               >
                 <Scissors size={16} />
                 <span className="tools-row-label">Clip Video</span>
@@ -1689,6 +1718,8 @@ const PlayVideo = ({ videoDetails, author, permlink, mediaUnavailable = false, m
                     className="fab-action-btn"
                     onClick={() => { setIsTipModalOpen(true); setFabOpen(false); }}
                     aria-label="Tip"
+                    title="Tip the creator"
+                    {...lockProps}
                   >
                     <MdAttachMoney size={20} />
                   </button>
@@ -1702,6 +1733,8 @@ const PlayVideo = ({ videoDetails, author, permlink, mediaUnavailable = false, m
                     className={`fab-action-btn${clipMode ? ' fab-action-btn--active' : ''}`}
                     onClick={() => { setMobileDetailsExpanded(true); handleStartClipMode(); setFabOpen(false); }}
                     aria-label="Clip"
+                    title="Clip video"
+                    {...lockProps}
                   >
                     <Scissors size={18} />
                   </button>
