@@ -633,9 +633,14 @@ async function resolveButrSession(req, res) {
 // every stored row has been waiting for — so the incubating check below has to
 // be skipped for it, not merely relaxed.
 const INCUBATION_ROUTES = new Map([
-  ['POST /content', { path: '/content' }],
+  // anyActor: reachable by a Hive user too, because these are the two things
+  // that CANNOT happen on chain for an off-chain post — Hive rejects a comment
+  // whose parent does not exist, and there is no post to vote on. The service
+  // still decides what each kind may do (a Hive user may reply, never
+  // root-post), so this only opens the door.
+  ['POST /content', { path: '/content', anyActor: true }],
   ['GET /content/mine', { path: '/content/mine' }],
-  ['PUT /social/vote', { path: '/social/vote' }],
+  ['PUT /social/vote', { path: '/social/vote', anyActor: true }],
   ['PUT /social/follow', { path: '/social/follow' }],
   ['PUT /social/profile', { path: '/social/profile' }],
   ['GET /social/profile/mine', { path: '/social/profile/mine' }],
@@ -659,6 +664,35 @@ const INCUBATION_ROUTES = new Map([
 app.get('/api/incubation/graduation-status', incubationLimiter, async (req, res) => {
   try {
     const session = await resolveButrSession(req, res)
+
+    // A wallet login (Keychain/HiveAuth/PeakVault/Ledger) holds no butrauth
+    // session, so there is no bearer token to forward — but they are a real,
+    // server-verified Hive user and these routes are open to them. Assert the
+    // identity with the app's own client credentials instead, which is the same
+    // trust /api/broadcast already extends when it posts to the chain as them.
+    if (!session && route.anyActor) {
+      const hiveUser = await resolveDelegatedSignUser(req, res)
+      if (!hiveUser) return res.status(401).json({ error: 'Not signed in' })
+      const ctrlW = new AbortController()
+      const timerW = setTimeout(() => ctrlW.abort(), 15000)
+      try {
+        const up = await fetch(INCUBATION_URL + target, {
+          method: req.method,
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            ...(req.body || {}),
+            client_id: MANTEAUTH_CLIENT_ID,
+            client_secret: MANTEAUTH_CLIENT_SECRET,
+            hive_author: hiveUser
+          }),
+          signal: ctrlW.signal
+        })
+        const t = await up.text()
+        return res.status(up.status).type('application/json').send(t)
+      } finally {
+        clearTimeout(timerW)
+      }
+    }
     if (!session) return res.status(401).json({ error: 'Not signed in' })
     if (!butr) return res.status(503).json({ error: 'ButrAuth not ready' })
     const status = await butr.getIncubationStatus(session.token)
@@ -684,7 +718,9 @@ app.use('/api/incubation', incubationLimiter, async (req, res) => {
     const session = await resolveButrSession(req, res)
     if (!session) return res.status(401).json({ error: 'Not signed in' })
 
-    if (route.graduated) {
+    if (route.anyActor) {
+      // Either kind may pass; the service sorts out what each is allowed to do.
+    } else if (route.graduated) {
       // The mirror image: these routes need a real Hive account to publish AS.
       if (!session.claims.hiveUsername) {
         return res.status(409).json({

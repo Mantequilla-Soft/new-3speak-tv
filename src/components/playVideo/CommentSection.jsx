@@ -13,7 +13,7 @@ import TranslateButton from '../TranslateButton/TranslateButton';
 import ReactVideoTab from '../ReactVideoModal/ReactVideoModal';
 import dayjs from 'dayjs';
 import { useAppStore } from '../../lib/store';
-import { handleAvatar, fetchIncubationReplies } from '../../lib/incubation';
+import { handleAvatar, fetchIncubationReplies, postIncubationContent } from '../../lib/incubation';
 import { Client } from '@hiveio/dhive';
 import UpvoteTooltip from '../tooltip/UpvoteTooltip';
 import CommentVoteTooltip from '../tooltip/CommentVoteTooltip';
@@ -174,10 +174,24 @@ function CommentSection({ videoDetails, author, permlink, currentTime, duration,
         try {
           const off = await fetchIncubationReplies(author, permlink);
           if (off?.items?.length) {
-            const mapped = off.items.map(it => ({
+            const mapped = off.items.map(it => {
+              // A reply is stored off-chain for either of two reasons, and they
+              // render differently: its writer has no Hive account (show the
+              // handle and the 3Speak mark), or the POST is off-chain while the
+              // writer is an ordinary Hive user (show their real account, so
+              // their avatar and reputation resolve as they should anywhere).
+              const isHiveAuthor = !!it.hiveAuthor;
+              const name = it.hiveAuthor || it.author?.handle || it.handle;
+              return {
               author: {
-                username: it.author?.handle || it.handle,
-                profile: { images: { avatar: handleAvatar(it.author?.handle || it.handle) } },
+                username: name,
+                profile: {
+                  images: {
+                    avatar: isHiveAuthor
+                      ? `https://images.hive.blog/u/${name}/avatar/small`
+                      : handleAvatar(name),
+                  },
+                },
               },
               permlink: it.permlink,
               created_at: it.created,
@@ -189,7 +203,8 @@ function CommentSection({ videoDetails, author, permlink, currentTime, duration,
               // Nothing downstream should try to build a Hive permalink, fetch
               // votes, or offer a vote button for these.
               onChain: false,
-            }));
+              };
+            });
             withOffChain = [...mapped, ...markedComments].sort(
               (a, b) => new Date(b.created_at) - new Date(a.created_at)
             );
@@ -382,19 +397,35 @@ function CommentSection({ videoDetails, author, permlink, currentTime, duration,
         body += `\n<br><sup>replied to [${tsLabel}](${baseUrl}/watch?v=${author}/${permlink}&t=${ts}) on [${host}](${baseUrl})</sup>`;
       }
 
-      // Use aioha for comment broadcasting (works with all providers: Keychain,
-      // HiveAuth, etc). An incubating user has no Hive account to sign with, and
-      // commentWithAioha diverts them to off-chain storage itself — handled at
-      // that one choke point rather than branched here, so uploads, snaps and
-      // reactions get the same treatment without each remembering to ask.
-      const result = await commentWithAioha(
-        parent_author,
-        parent_permlink,
-        new_permlink,
-        '', // title (empty for comments)
-        body,
-        metadata
-      );
+      // Two different reasons a comment cannot be broadcast, and only one of
+      // them is about the commenter.
+      //
+      // The PARENT being off-chain is decided here, because only the caller
+      // knows it: Hive rejects a comment whose parent does not exist, so a
+      // reply to an off-chain post has to be stored no matter who is writing it
+      // — including a Hive user with a perfectly good account.
+      //
+      // The AUTHOR having no Hive account is handled inside commentWithAioha,
+      // at the one choke point every posting path already passes through.
+      let result;
+      if (videoDetails?._incubation) {
+        const stored = await postIncubationContent({
+          body,
+          parentAuthor: parent_author,
+          parentPermlink: parent_permlink,
+          jsonMetadata: metadata,
+        });
+        result = { success: true, incubation: true, permlink: stored.permlink };
+      } else {
+        result = await commentWithAioha(
+          parent_author,
+          parent_permlink,
+          new_permlink,
+          '', // title (empty for comments)
+          body,
+          metadata
+        );
+      }
 
       if (result.success) {
         toast.success('Comment posted successfully!');

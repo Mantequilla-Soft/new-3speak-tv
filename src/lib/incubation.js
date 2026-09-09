@@ -167,6 +167,19 @@ async function write(path, method, body) {
  */
 export const postIncubationContent = (payload) => write('/content', 'POST', payload);
 export const fetchMyIncubationContent = () => write('/content/mine', 'GET');
+/**
+ * How many people have voted on an off-chain post, and whether the viewer has.
+ *
+ * These are stored votes, not Hive votes: they move no rewards, earn no
+ * curation and are never replayed to the chain. Everything downstream should
+ * treat the number as a count of people, never as something with a payout.
+ */
+export async function fetchIncubationLikes(author, permlink, viewer) {
+  const qs = new URLSearchParams({ author, permlink });
+  if (viewer) qs.set('viewer', viewer);
+  return json(await fetch(`${CHECKER_URL}/incubation/likes?${qs}`));
+}
+
 export const voteIncubation = (author, permlink, weight) =>
   write('/social/vote', 'PUT', { author, permlink, weight });
 export const followIncubation = (following, state) =>

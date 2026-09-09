@@ -18,6 +18,7 @@ import VideoStats from "../CreatorStats/VideoStats";
 import { fetchVideoHasStats } from "../../lib/creatorStats";
 import ShareChooserModal from "../Chat/ShareChooserModal";
 import { useAppStore } from '../../lib/store';
+import { fetchIncubationLikes, voteIncubation } from '../../lib/incubation';
 import { estimate, getUersContent, getVotePower } from "../../utils/hiveUtils";
 import { getUserReputation } from "../../utils/reputation";
 import ToolTip from "../tooltip/ToolTip";
@@ -88,6 +89,44 @@ const PlayVideo = ({ videoDetails, author, permlink, mediaUnavailable = false, m
   // situation from the viewer lacking an account, so it gets its own wording.
   const postIsOffChain = !!videoDetails?._incubation;
   const lockedForIncubation = viewerHasNoAccount || postIsOffChain;
+
+  // VOTING is the exception to that lock. A vote on an off-chain post is stored
+  // rather than broadcast — it moves no rewards and is never replayed — so it
+  // works for everyone, including a Hive user, and including an incubating
+  // viewer voting on anything. Only a signed-out visitor is refused.
+  //
+  // Deliberately NOT relabelled: it is the same gesture in the same place, and
+  // a second word for it would make people wonder which one counted.
+  const voteIsOffChain = postIsOffChain || viewerHasNoAccount;
+  const [offChainVoted, setOffChainVoted] = useState(false);
+  const [offChainVotes, setOffChainVotes] = useState(null);
+  useEffect(() => {
+    if (!postIsOffChain || !author || !permlink) return undefined;
+    let alive = true;
+    fetchIncubationLikes(author, permlink, user || incubationHandle)
+      .then((d) => {
+        if (!alive) return;
+        setOffChainVotes(d.count ?? 0);
+        setOffChainVoted(!!d.liked);
+      })
+      .catch(() => { /* the count is decoration; the button still works */ });
+    return () => { alive = false; };
+  }, [postIsOffChain, author, permlink, user, incubationHandle]);
+
+  const handleOffChainVote = useCallback(async () => {
+    if (!authenticated) return;
+    const next = !offChainVoted;
+    // Optimistic: the write is a single row and the failure path puts it back.
+    setOffChainVoted(next);
+    setOffChainVotes((n) => (n == null ? n : Math.max(0, n + (next ? 1 : -1))));
+    try {
+      await voteIncubation(author, permlink, next ? 10000 : 0);
+    } catch (err) {
+      setOffChainVoted(!next);
+      setOffChainVotes((n) => (n == null ? n : Math.max(0, n + (next ? -1 : 1))));
+      toast.error(err.message || 'Could not save your vote');
+    }
+  }, [authenticated, offChainVoted, author, permlink]);
   // The viewer's own reason wins when both apply: it is the one they can act on.
   const LOCKED_TITLE = viewerHasNoAccount
     ? 'Unlocked once you create your Hive account'
@@ -1338,13 +1377,23 @@ const PlayVideo = ({ videoDetails, author, permlink, mediaUnavailable = false, m
                   // user has already tagged (the tag is one-shot).
                   <button
                     type="button"
-                    className="pv-btn vote-btn"
-                    onClick={toggleTooltip}
-                    title={votingClosed ? 'Tag this video' : 'Vote on this video'}
-                    {...lockProps}
+                    className={`pv-btn vote-btn${voteIsOffChain && offChainVoted ? ' voted' : ''}`}
+                    onClick={voteIsOffChain ? handleOffChainVote : toggleTooltip}
+                    title={voteIsOffChain
+                      ? (authenticated
+                        ? 'Vote on this video. It is saved on 3Speak and pays no rewards.'
+                        : 'Sign in to vote')
+                      : (votingClosed ? 'Tag this video' : 'Vote on this video')}
+                    {...(voteIsOffChain ? {} : lockProps)}
+                    {...(voteIsOffChain && !authenticated
+                      ? { 'aria-disabled': true, onClick: (e) => { e.preventDefault(); } }
+                      : {})}
                   >
-                    {votingClosed ? <IoPricetagOutline size={14} /> : <FaHeart size={14} />}
-                    <span>{votingClosed ? 'Tag' : 'Vote'}</span>
+                    {votingClosed && !voteIsOffChain ? <IoPricetagOutline size={14} /> : <FaHeart size={14} />}
+                    <span>
+                      {votingClosed && !voteIsOffChain ? 'Tag' : 'Vote'}
+                      {voteIsOffChain && offChainVotes ? ` ${offChainVotes}` : ''}
+                    </span>
                   </button>
                 )}
                 {canSeeVideoStats && (
