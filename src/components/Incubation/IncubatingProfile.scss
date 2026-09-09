@@ -1,0 +1,113 @@
+@use "../../mixins.scss" as mix;
+
+.inc-profile {
+  max-width: 820px;
+  margin: 0 auto;
+  padding: 24px 16px 64px;
+
+  h1 {
+    margin: 0;
+    font-size: 24px;
+  }
+}
+
+.inc-profile-head {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.inc-profile-avatar {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+.inc-profile-handle {
+  margin: 2px 0 0;
+  opacity: 0.7;
+  font-size: 14px;
+}
+
+.inc-profile-about {
+  margin: 6px 0 0;
+  font-size: 14px;
+}
+
+// The explanation carries real weight here, so it is a panel rather than fine
+// print: without it the page reads as a broken account.
+.inc-profile-note {
+  border: 1px solid var(--border-color, rgba(255, 255, 255, 0.12));
+  border-radius: 10px;
+  padding: 12px 14px;
+  font-size: 14px;
+  line-height: 1.55;
+  margin: 0 0 20px;
+}
+
+.inc-profile-interests {
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  padding: 0;
+  margin: 0 0 20px;
+
+  li {
+    border: 1px solid var(--border-color, rgba(255, 255, 255, 0.18));
+    border-radius: 999px;
+    padding: 2px 10px;
+    font-size: 12px;
+  }
+}
+
+.inc-profile-stats {
+  display: flex;
+  gap: 20px;
+  font-size: 14px;
+  margin-bottom: 24px;
+}
+
+.inc-profile-subhead {
+  font-size: 16px;
+  margin: 0 0 10px;
+}
+
+.inc-profile-posts {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+
+  li {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--border-color, rgba(255, 255, 255, 0.1));
+  }
+}
+
+.inc-profile-post-title {
+  word-break: break-word;
+}
+
+.inc-profile-post-date {
+  opacity: 0.6;
+  font-size: 13px;
+  white-space: nowrap;
+}
+
+.inc-profile-error {
+  padding: 24px;
+  color: var(--error, #e0594b);
+}
+
+@include mix.respond(phone) {
+  .inc-profile-head {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}

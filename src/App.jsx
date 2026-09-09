@@ -99,6 +99,10 @@ const Trend = lazy(() => import("./page/Trend"));
 const UploadVideo = lazy(() => import("./page/UploadVideo"));
 const PublishBacklog = lazy(() => import("./page/PublishBacklog"));
 const UserProfilePage = lazy(() => import("./components/Userprofilepage/UserProfilePage"));
+// Routes a profile URL to the Hive page or, for someone who has no Hive
+// account yet, to the incubating one. See ProfileRouter for why it wraps
+// rather than modifies UserProfilePage.
+const ProfileRouter = lazy(() => import("./components/Incubation/ProfileRouter"));
 const Wallet = lazy(() => import("./page/Wallet"));
 const Watch = lazy(() => import("./page/Watch"));
 const WatchStream = lazy(() => import("./page/WatchStream"));
@@ -660,8 +664,8 @@ function App() {
                 Legacy /@handle/links still resolves (nginx 301s it to /links/ in prod). */}
             <Route path="/links/:handle" element={<Spotlight />} />
             <Route path="/:handle/links" element={<Spotlight />} />
-            <Route path="/p/:user" element={<UserProfilePage />} />
-            <Route path="/user/:user" element={<UserProfilePage />} />
+            <Route path="/p/:user" element={<ProfileRouter />} />
+            <Route path="/user/:user" element={<ProfileRouter />} />
             <Route path="/playlist/:playlistId" element={<PlaylistView />} />
             <Route path="/watched/:username" element={<WatchedView />} />
             <Route path="/wallet/:user" element={<Wallet />} />

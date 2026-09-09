@@ -118,6 +118,56 @@ export const VIEWER_TAG_CJ_ID = '3speak-viewer-tag';
 // Helper function to vote on content. When `viewerTag` is supplied, the vote and
 // a `3speak-viewer-tag` custom_json are broadcast together as ONE transaction
 // (both posting-auth ops), so the tag choice is atomic with the vote — one signature.
+
+// ---------------------------------------------------------------------------
+// Incubating users: no Hive account, so nothing can be signed or broadcast.
+//
+// Intercepted HERE, at the one place every vote and every posting broadcast
+// already passes through, rather than at each button. There are three vote
+// entry points and six follow ones today, and wiring them individually would
+// mean the next one someone adds silently tries to sign as an account that does
+// not exist. A choke point cannot be forgotten.
+//
+// Only the operations that HAVE an off-chain equivalent are diverted. Anything
+// else falls through to the normal path and fails as it should: an incubating
+// user genuinely cannot transfer funds or update a witness.
+// ---------------------------------------------------------------------------
+const incubatingHandle = () => {
+  try { return localStorage.getItem('incubation_handle') || null; } catch { return null; }
+};
+
+// Lazily imported so the aioha module keeps no static dependency on the
+// incubation client (and the code is absent from bundles that never need it).
+const incubationApi = () => import('../lib/incubation');
+
+/**
+ * Divert one posting operation to the off-chain store, or return null if this
+ * operation has no off-chain equivalent.
+ */
+async function divertToIncubation([opType, opData]) {
+  const api = await incubationApi();
+  if (opType === 'vote') {
+    await api.voteIncubation(opData.author, opData.permlink, opData.weight);
+    return { success: true, incubation: true };
+  }
+  if (opType === 'custom_json' && opData?.id === 'follow') {
+    // Hive models follow and unfollow as the same op, distinguished by whether
+    // what[] is empty. The off-chain store keeps the same distinction so the
+    // replay at graduation reproduces the user's END state.
+    const payload = JSON.parse(opData.json);
+    const body = Array.isArray(payload) ? payload[1] : payload;
+    const state = (body.what || []).length ? 'following' : 'unfollowed';
+    await api.followIncubation(body.following, state);
+    return { success: true, incubation: true };
+  }
+  if (opType === 'account_update2') {
+    const meta = JSON.parse(opData.posting_json_metadata || '{}');
+    await api.saveIncubationProfile(meta.profile || {}, meta.profile?.interests);
+    return { success: true, incubation: true };
+  }
+  return null;
+}
+
 export const voteWithAioha = async (author, permlink, weight = 10000, viewerTag = null) => {
   const tag = viewerTag ? String(viewerTag).trim().toLowerCase() : null;
 
@@ -136,6 +186,14 @@ export const voteWithAioha = async (author, permlink, weight = 10000, viewerTag 
     return ops;
   };
 
+  // No Hive account: the vote is recorded off-chain instead. The viewer tag is
+  // dropped on purpose — it is an on-chain custom_json about an on-chain vote,
+  // and there is no vote on chain to tag.
+  if (incubatingHandle()) {
+    const { voteIncubation } = await import('../lib/incubation');
+    await voteIncubation(author, permlink, weight);
+    return { success: true, incubation: true };
+  }
   if (isManteAuthLogin()) {
     const voter = localStorage.getItem('user_id')
     return broadcastViaManteAuth(buildOps(voter))
@@ -366,6 +424,13 @@ export const commentWithAioha = async (parentAuthor, parentPermlink, permlink, t
 // Generic broadcast for raw operations
 // ManteAuth only supports posting-level ops — active key ops (transfers, etc.) will fail
 export const broadcastWithAioha = async (operations, keyType = KeyTypes.Active) => {
+  // Single-op posting broadcasts with an off-chain equivalent (follow, profile)
+  // are diverted. Multi-op transactions are deliberately NOT: they are atomic on
+  // chain, and half-applying one off-chain would be worse than refusing.
+  if (incubatingHandle() && keyType === KeyTypes.Posting && operations?.length === 1) {
+    const diverted = await divertToIncubation(operations[0]);
+    if (diverted) return diverted;
+  }
   if (isManteAuthLogin() && keyType === KeyTypes.Posting) {
     return broadcastViaManteAuth(operations)
   }
