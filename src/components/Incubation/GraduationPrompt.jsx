@@ -5,7 +5,7 @@ import { toastIn } from '../../utils/toast';
 import { useAppStore } from '../../lib/store';
 import { usePromptsActive, setPromptActive } from '../../utils/welcomeGate';
 import {
-  fetchGraduationPlan, fetchGraduationStatus, hasEarnedGraduation
+  fetchGraduationPlan, fetchGraduationStatus, canCreateAccount
 } from '../../lib/incubation';
 // Reuses the ads prompt's dialog styles rather than duplicating them. That file
 // is the app's one modal-dialog shape, and a second copy would drift from it.
@@ -21,14 +21,14 @@ const SNOOZE_MS = 7 * 24 * 60 * 60 * 1000;
 /**
  * Offers an incubating user their own Hive account, once they have earned it.
  *
- * TWO HALVES, and both must agree before this appears:
- *   - ButrAuth's `canGraduate` — may this identity have a free account at all
- *     (caps, provider availability, one per person).
- *   - Our `hasEarnedGraduation(plan)` — have they actually done anything.
+ * `canGraduate` is the whole gate, and it is not a UI decision: butrauth
+ * refuses /account/create outright until the owner of THIS frontend has
+ * activated the person in their sign-ups queue. So this prompt appears only for
+ * someone a human has already looked at and cleared.
  *
- * Neither is sufficient alone. Showing it on `canGraduate` alone would pitch a
- * free account to someone who signed up ten seconds ago, which is the exact
- * spend this whole design exists to avoid.
+ * Nothing is shown while they are still waiting. Someone in the queue has done
+ * nothing wrong, and a prompt that dead-ends — or a refusal that reads as
+ * rejection — is worse than silence.
  *
  * Snoozing is deliberately localStorage and not a server record, unlike the ads
  * consent prompt: this is an OFFER, not a consent decision, so re-asking on
@@ -60,9 +60,9 @@ export default function GraduationPrompt() {
     Promise.all([fetchGraduationStatus(), fetchGraduationPlan()])
       .then(([status, p]) => {
         if (!alive) return;
-        // Both halves, checked together. `canGraduate` is butrauth's answer and
-        // is authoritative about eligibility; hasEarnedGraduation is ours.
-        if (status?.canGraduate && hasEarnedGraduation(p)) {
+        // Server-authoritative. The prompt cannot show for anyone butrauth
+        // would refuse, because it is the same answer /account/create gives.
+        if (canCreateAccount(status)) {
           setPlan(p);
           setOpen(true);
           setPromptActive('graduation', true);

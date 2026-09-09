@@ -161,11 +161,12 @@ export const fetchMyIncubationFollows = () => write('/social/follows/mine', 'GET
 export const fetchGraduationPlan = () => write('/public/graduation/plan', 'GET');
 
 /**
- * ButrAuth's half of the graduation decision.
+ * Whether this person may create their Hive account, and why not if they cannot.
  *
- * `canGraduate` means "may this identity have a free Hive account" — caps,
- * provider availability, one per person. It does NOT mean they have earned one.
- * That half is ours, and lives in hasEarnedGraduation() below.
+ * `canGraduate` folds in everything: butrauth's own eligibility (caps, provider
+ * availability, one free account per person) AND whether this frontend's owner
+ * has activated them in their sign-ups queue. `awaitingApproval` separates
+ * "a human has not looked yet" from an actual refusal.
  *
  * `graduationBlockedReason` is coarse on purpose ('network_limit' covers several
  * distinct causes) because a precise reason would leak information about other
@@ -178,22 +179,30 @@ export async function fetchGraduationStatus() {
 }
 
 /**
- * 3Speak's half: has this person actually earned an account?
+ * Is this person cleared to create their Hive account?
  *
- * 🚧 PLACEHOLDER. The real measure is not decided yet — the original idea was
- * "content with good upvotes", but incubating content is off-chain and cannot
- * receive Hive votes, so the signal has to come from our own engagement data
- * (watch time, distinct viewers, retention) which is both richer and much
- * harder to game than a vote count.
+ * `canGraduate` is now the WHOLE answer, not half of it. It already folds in
+ * the two things that matter: butrauth's own eligibility (caps, provider
+ * availability, one free account per person) AND whether the owner of this
+ * frontend has activated them in their sign-ups queue.
  *
- * Deliberately ONE function so there is a single place to change when that
- * measure is agreed, rather than a threshold scattered across components.
- * Today it only asks for a minimum amount of real content, which is enough to
- * keep the prompt away from drive-by signups but is NOT an earning bar.
+ * That activation replaced the placeholder heuristic that used to live here. It
+ * is a better signal than any threshold we could have written: the original
+ * "content with good upvotes" could never work — incubating content is
+ * off-chain and can receive no Hive votes — and a watch-time formula would
+ * still be guessing at what the site's own operator can simply look at and
+ * judge.
  */
-export const GRADUATION_MIN_POSTS = 3;
+export function canCreateAccount(status) {
+  return !!status?.canGraduate;
+}
 
-export function hasEarnedGraduation(plan) {
-  const posts = plan?.comment?.total ?? 0;
-  return posts >= GRADUATION_MIN_POSTS;
+/**
+ * Waiting on a human, as opposed to refused.
+ *
+ * Worth distinguishing: someone in the queue has done nothing wrong and should
+ * not be shown a prompt that dead-ends, nor a refusal that reads as rejection.
+ */
+export function isAwaitingApproval(status) {
+  return !!status?.awaitingApproval;
 }
