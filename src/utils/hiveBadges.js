@@ -3,8 +3,9 @@
 // The convention is chain-level, not app-level: a badge is a normal Hive
 // account named `badge-<digits>` (e.g. @badge-012345), and an account HOLDS
 // that badge when the badge account FOLLOWS it. The badge's artwork and
-// display name live in the badge account's own profile metadata, and its
-// public page is https://peakd.com/b/<account>.
+// display name live in the badge account's own profile metadata, and its page
+// is /b/<account> -- the same path PeakD uses, which we now serve ourselves
+// (see components/Badges/BadgePage.jsx).
 //
 // Reading them back cheaply relies on hivemind returning followers sorted
 // alphabetically: we seek straight to the `badge-` block instead of walking a
@@ -151,7 +152,8 @@ function applyBadgeOrder(badges, order) {
 /**
  * Every PeakD badge held by `username`.
  *
- * @returns {Promise<Array<{account, name, about, image, url}>>} 3Speak badges
+ * @returns {Promise<Array<{account, name, about, image, url}>>} `url` is the
+ *   in-app badge page. 3Speak badges
  *   first, then the creator's saved order, then the rest in chain order. Empty
  *   array when the account holds none — which is most accounts.
  */
@@ -186,7 +188,9 @@ export async function fetchHiveBadges(username) {
       // The image proxy resolves profile_image server-side, so this works even
       // for the accounts whose metadata we couldn't parse.
       image: hiveAvatarUrl(account.name, 'small'),
-      url: `https://peakd.com/b/${account.name}`,
+      // In-app, not peakd.com: a badge chip used to send the reader off the
+      // site to read what is on our own /b/ page.
+      url: `/b/${account.name}`,
     };
   });
 

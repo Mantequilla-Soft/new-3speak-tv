@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
+import { Link } from 'react-router-dom';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import {
   DndContext, DragOverlay, useDraggable, useDroppable,
@@ -154,15 +155,14 @@ function AllBadgesModal({ username, badges, canArrange, startArranging, onClose,
                 <BadgeRowBody badge={badge} />
               </div>
             ) : (
-              <a
+              <Link
                 key={badge.account}
                 className="hbadges-row"
-                href={badge.url}
-                target="_blank"
-                rel="noopener noreferrer"
+                to={badge.url}
+                onClick={onClose}
               >
                 <BadgeRowBody badge={badge} />
-              </a>
+              </Link>
             )
           ))}
 
@@ -189,15 +189,14 @@ function AllBadgesModal({ username, badges, canArrange, startArranging, onClose,
             </DndContext>
           ) : (
             rows.map((badge) => (
-              <a
+              <Link
                 key={badge.account}
                 className="hbadges-row"
-                href={badge.url}
-                target="_blank"
-                rel="noopener noreferrer"
+                to={badge.url}
+                onClick={onClose}
               >
                 <BadgeRowBody badge={badge} />
-              </a>
+              </Link>
             ))
           )}
         </div>
@@ -239,7 +238,9 @@ function AllBadgesModal({ username, badges, canArrange, startArranging, onClose,
  * profile header.
  *
  * These are the PeakD-convention badges: a `badge-*` account following you
- * means you hold that badge (see utils/hiveBadges). 3Speak's own badges are
+ * means you hold that badge (see utils/hiveBadges). Each one opens its own
+ * badge page here at /b/<account>, which used to be a link out to peakd.com.
+ * 3Speak's own badges are
  * pinned to the front; the rest follow the order the creator saved to their
  * Hive account, and past the first few the row collapses behind "Show more".
  *
@@ -280,17 +281,15 @@ function HiveBadges({ username, canArrange = false }) {
   return (
     <div className="hive-badges">
       {visible.map((badge) => (
-        <a
+        <Link
           key={badge.account}
           className="hive-badge"
-          href={badge.url}
-          target="_blank"
-          rel="noopener noreferrer"
+          to={badge.url}
           title={badge.about ? `${badge.name}\n${badge.about}` : badge.name}
         >
           <BadgeImage badge={badge} className="hive-badge-img" />
           <span className="hive-badge-name">{badge.name}</span>
-        </a>
+        </Link>
       ))}
 
       {(hidden > 0 || arrangeOnly) && (

@@ -7,6 +7,14 @@
 // 1.0.0 — that way they see all of these when develop is pushed to production.
 export const CHANGELOG = [
   {
+    version: '1.78.66',
+    date: '2026-09-09',
+    summary:
+      'The badges on a profile now open here instead of sending you to PeakD. '
+      + 'Click any badge someone holds to see everyone else who holds it and what '
+      + 'they publish on 3Speak.',
+  },
+  {
     version: '1.78.65',
     date: '2026-09-09',
     summary:
