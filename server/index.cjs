@@ -128,7 +128,30 @@ const broadcastLimiter = rateLimit({
 async function verifyManteAuthToken(token) {
   if (!butr) return null
   try {
-    return await butr.verifyAccessToken(token)
+    const claims = await butr.verifyAccessToken(token)
+
+    // The PUBLISHED SDK (0.2.0) predates incubation and does not copy these two
+    // claims into what it returns, so every caller saw `incubation: undefined`
+    // and concluded the session belonged to a Hive account — which turned every
+    // incubating write into "this account is on Hive, publish to the chain".
+    //
+    // Read them off the SAME token, and only AFTER verifyAccessToken has
+    // resolved: that call is what proves the signature, expiry, issuer and
+    // audience. Decoding beforehand would be trusting unverified input;
+    // decoding after it means the payload is exactly what butrauth signed.
+    //
+    // Delete this once the published SDK carries the fields.
+    if (claims && claims.incubation === undefined) {
+      try {
+        const payload = JSON.parse(Buffer.from(token.split('.')[1], 'base64url').toString('utf8'))
+        claims.incubation = !!payload.incubation
+        claims.handle = payload.handle || null
+      } catch {
+        claims.incubation = false
+        claims.handle = null
+      }
+    }
+    return claims
   } catch {
     return null
   }
