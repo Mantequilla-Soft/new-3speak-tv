@@ -10,7 +10,7 @@ import './IncubatingProfile.scss';
  * needs to understand why there is no reputation, no follower count and no
  * wallet, without it reading as a broken or empty account.
  */
-export default function IncubatingProfile({ handle }) {
+export default function IncubatingProfile({ handle, own = false }) {
   const [profile, setProfile] = useState(null);
   const [posts, setPosts] = useState([]);
   const [error, setError] = useState('');
@@ -50,10 +50,19 @@ export default function IncubatingProfile({ handle }) {
             Anything below was made before that and lives on 3Speak.
           </>
         ) : (
-          <>
-            Getting started on 3Speak. Posts below are here on 3Speak and are not on the
-            Hive blockchain yet, so they do not earn rewards and cannot be voted on.
-          </>
+          own ? (
+            <>
+              This is how others see you while you get started. Your posts live on 3Speak
+              and are not on the Hive blockchain yet, so they do not earn rewards. When
+              you create your Hive account you can publish them, and everything after
+              that goes straight to the chain.
+            </>
+          ) : (
+            <>
+              Getting started on 3Speak. Posts below are here on 3Speak and are not on the
+              Hive blockchain yet, so they do not earn rewards.
+            </>
+          )
         )}
       </p>
 

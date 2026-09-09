@@ -91,6 +91,9 @@ const PlaylistView = lazy(() => import("./page/PlaylistView"));
 const PostView = lazy(() => import("./page/PostView"));
 const ProfileModal = lazy(() => import("./components/modal/ProfileModal"));
 const ProfilePage = lazy(() => import("./page/ProfilePage"));
+// "My profile" — ProfilePage is built around a Hive account, so someone
+// incubating gets their own page instead of an empty channel.
+const OwnProfileRoute = lazy(() => import("./components/Incubation/OwnProfileRoute"));
 const Short = lazy(() => import("./page/Short"));
 const ShortsStoryFeed = lazy(() => import("./page/ShortsStoryFeed"));
 const Spotlight = lazy(() => import("./page/Spotlight"));
@@ -668,7 +671,7 @@ function App() {
             <Route path="/t/:tag" element={<TagFeed />} />
             <Route path="/leaderboard" element={<Leaderboard />} />
             <Route path="/advertise" element={<Advertise openLoginModal={openLoginModal} />} />
-            <Route path="/profile" element={<ProfilePage />} />
+            <Route path="/profile" element={<OwnProfileRoute />} />
             {/* Spotlight — creator link page. Canonical: 3speak.tv/links/username (no @).
                 Legacy /@handle/links still resolves (nginx 301s it to /links/ in prod). */}
             <Route path="/links/:handle" element={<Spotlight />} />
