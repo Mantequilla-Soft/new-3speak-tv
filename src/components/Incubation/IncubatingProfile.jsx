@@ -310,7 +310,9 @@ export default function IncubatingProfile({ handle, own = false }) {
 
           {cards.length > 0 && (
             <>
-              <h2 className="inc-subhead">{own ? 'Your posts' : 'Posts'}</h2>
+              {/* Names the two things in the feed, since they share one grid
+                  rather than sitting under separate headings. */}
+              <h2 className="inc-subhead">Videos and Shorts</h2>
               {/* Deliberately NOT linkPrefix="/shorts" for the shorts in here:
                   that viewer reads its feed from Hive and can only fail on a
                   post that is not there. The watch page already falls back to
