@@ -7,7 +7,7 @@ import { IoCloudUploadSharp } from "react-icons/io5";
 import { useEffect, useRef, useState } from "react";
 import NavSearch from "./NavSearch";
 import { TiThMenu } from "react-icons/ti";
-import { MdOutlineSearch, MdGraphicEq, MdPlaylistPlay, MdWatchLater, MdHistory, MdKeyboardArrowDown, MdAdd, MdHomeFilled, MdChevronRight, MdChevronLeft } from "react-icons/md";
+import { MdOutlineSearch, MdGraphicEq, MdPlaylistPlay, MdWatchLater, MdHistory, MdKeyboardArrowDown, MdAdd, MdHomeFilled, MdChevronRight, MdChevronLeft, MdOutlineWorkspacePremium } from "react-icons/md";
 import { FaMedal } from "react-icons/fa6";
 import { useMyPlaylists } from "../../hooks/useMyPlaylists";
 import ShortsIcon from "../icons/ShortsIcon";
@@ -287,6 +287,9 @@ function Nav({ setSideBar, toggleProfileNav, openLoginModal }) {
         {authenticated && <NavPlaylistsDropdown user={user} />}
         <NavLink to="/leaderboard" className={({ isActive }) => `nav-tab${isActive ? ' active' : ''}`}>
           <FaMedal className="nav-tab-icon nav-tab-icon--medal" /> <span>Leaderboard</span>
+        </NavLink>
+        <NavLink to="/badges" className={({ isActive }) => `nav-tab${isActive ? ' active' : ''}`}>
+          <MdOutlineWorkspacePremium className="nav-tab-icon" /> <span>Badges</span>
         </NavLink>
       </div>
       )}
