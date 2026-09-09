@@ -238,6 +238,7 @@ async function resolveButrUser(req, res) {
   try {
     const { ok, data } = await butrTokenRequest({ grant_type: 'refresh_token', refresh_token: refreshToken })
     if (!ok || !data.access_token) {
+      console.warn('[incubation] refresh refused:', data?.error || 'no access_token in response')
       // Refused (expired, revoked, or a detected replay) — drop both cookies so
       // the user is cleanly logged out instead of retrying a dead token forever.
       clearRefreshCookie(res)
@@ -605,6 +606,11 @@ async function resolveButrSession(req, res) {
   }
   const refreshToken = req.cookies?.[REFRESH_COOKIE_NAME]
   if (!refreshToken) {
+    // WHY it failed, never the token itself. A 401 from here is indistinguishable
+    // from a dozen other causes at the client, and "Not signed in" told the user
+    // something that was not necessarily true.
+    console.warn('[incubation] no session:',
+      cookieToken ? 'access token invalid/expired and NO refresh cookie' : 'no session cookie at all')
     if (cookieToken) clearSessionCookie(res)
     return null
   }
@@ -696,7 +702,17 @@ app.use('/api/incubation', incubationLimiter, async (req, res) => {
     // trust /api/broadcast already extends when it posts to the chain as them.
     if (!session && route.anyActor) {
       const hiveUser = await resolveDelegatedSignUser(req, res)
-      if (!hiveUser) return res.status(401).json({ error: 'Not signed in' })
+      if (!hiveUser) {
+        // Reached when there is no butrauth session AND no wallet session, which
+        // for an incubating user means their session lapsed rather than that
+        // they were never signed in. Saying "Not signed in" to someone looking
+        // at their own logged-in avatar is not a useful thing to tell them.
+        console.warn(`[incubation] 401 on ${key} — no butrauth session and no wallet session`)
+        return res.status(401).json({
+          error: 'Your session has expired. Please sign in again.',
+          reason: 'session_expired',
+        })
+      }
       const ctrlW = new AbortController()
       const timerW = setTimeout(() => ctrlW.abort(), 15000)
       try {
@@ -717,7 +733,13 @@ app.use('/api/incubation', incubationLimiter, async (req, res) => {
         clearTimeout(timerW)
       }
     }
-    if (!session) return res.status(401).json({ error: 'Not signed in' })
+    if (!session) {
+      console.warn(`[incubation] 401 on ${key} — session could not be resolved`)
+      return res.status(401).json({
+        error: 'Your session has expired. Please sign in again.',
+        reason: 'session_expired',
+      })
+    }
 
     if (route.anyActor) {
       // Either kind may pass; the service sorts out what each is allowed to do.
