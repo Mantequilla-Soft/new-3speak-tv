@@ -99,9 +99,16 @@ export async function resolveAuthors(handles) {
   return out;
 }
 
-export async function fetchIncubationProfile(handle) {
-  return json(await fetch(`${CHECKER_URL}/incubation/profile/${encodeURIComponent(handle)}`));
+export async function fetchIncubationProfile(handle, viewer = null) {
+  // `viewer` answers "do I already follow them", so the button does not come
+  // back saying Follow to somebody who does.
+  const qs = viewer ? `?viewer=${encodeURIComponent(viewer)}` : '';
+  return json(await fetch(`${CHECKER_URL}/incubation/profile/${encodeURIComponent(handle)}${qs}`));
 }
+
+/** Follow (or unfollow) an incubating creator. Works for Hive users too. */
+export const followIncubationUser = (handle, following) =>
+  write('/social/follow', 'PUT', { following: handle, state: following ? 'following' : 'unfollowed' });
 
 /**
  * One off-chain post, for the watch page.
@@ -206,6 +213,16 @@ export const fetchIncubationProgress = () => write('/progress', 'GET');
 export const fetchIncubationNotifications = () => write('/notifications', 'GET');
 export const markIncubationNotificationsRead = () => write('/notifications/read', 'POST');
 export const fetchMyIncubationFollows = () => write('/social/follows/mine', 'GET');
+
+/**
+ * People you follow here who now have a real Hive account.
+ *
+ * A follow of a handle could never reach the chain, so when that person
+ * graduates the follow is stranded. This is how the follower finds out, with
+ * the name to follow for real.
+ */
+export const fetchGraduatedFollows = () => write('/social/graduated-follows', 'GET');
+export const ackGraduatedFollow = (handle) => write('/social/graduated-follows/ack', 'POST', { handle });
 
 /**
  * What would and would not be republished to Hive if this user graduated now.

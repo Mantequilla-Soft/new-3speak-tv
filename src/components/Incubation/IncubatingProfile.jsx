@@ -5,13 +5,14 @@ import {
 } from 'react-icons/md';
 import {
   FaFilm, FaRocket, FaUnlockAlt, FaVideo, FaMobileAlt, FaComments, FaUserPlus,
-  FaClock, FaCoins, FaCloudUploadAlt, FaThumbsUp, FaKey, FaGlobeAmericas,
+  FaClock, FaCoins, FaCloudUploadAlt, FaThumbsUp, FaKey, FaGlobeAmericas, FaUserCheck,
 } from 'react-icons/fa';
 import Card3 from '../Cards/Card3';
+import { useAppStore } from '../../lib/store';
 import ProfileEditModal from '../WelcomePrompt/ProfileEditModal';
 import {
   fetchIncubationProfile, fetchIncubationPosts, fetchIncubationProgress, handleAvatar,
-  fetchMyIncubationProfile, saveIncubationProfile,
+  fetchMyIncubationProfile, saveIncubationProfile, followIncubationUser,
 } from '../../lib/incubation';
 import './IncubatingProfile.scss';
 
@@ -120,6 +121,8 @@ export default function IncubatingProfile({ handle, own = false }) {
   const [progress, setProgress] = useState(null);
   const [tasksOpen, setTasksOpen] = useState(readOpen);
   const [editing, setEditing] = useState(false);
+  const [following, setFollowing] = useState(false);
+  const [followBusy, setFollowBusy] = useState(false);
   // Which half is on screen at phone/tablet width, where the two columns stack.
   // Ignored above that: both are visible side by side and the tabs are hidden.
   const [mobileTab, setMobileTab] = useState('progress');
@@ -132,10 +135,12 @@ export default function IncubatingProfile({ handle, own = false }) {
 
   useEffect(() => {
     let alive = true;
-    Promise.all([fetchIncubationProfile(handle), fetchIncubationPosts(handle)])
+    const viewer = useAppStore.getState().user || useAppStore.getState().incubationHandle || null;
+    Promise.all([fetchIncubationProfile(handle, viewer), fetchIncubationPosts(handle)])
       .then(([p, list]) => {
         if (!alive) return;
         setProfile(p);
+        setFollowing(!!p.viewerFollows);
         interestsRef.current = p.interests || [];
         setPosts(list.items || []);
       })
@@ -248,8 +253,42 @@ export default function IncubatingProfile({ handle, own = false }) {
           </div>
           <div className="inc-hero-stats">
             <span><strong>{profile.counts?.posts ?? 0}</strong>posts</span>
+            <span><strong>{profile.counts?.followers ?? 0}</strong>followers</span>
             <span><strong>{profile.counts?.following ?? 0}</strong>following</span>
           </div>
+          {!own && !graduated && (
+            // Someone can finally follow back. Until now this was impossible:
+            // the account does not exist on chain, so the ordinary follow was
+            // broadcast at nothing. These are stored off-chain, and the creator
+            // is told about them.
+            <button
+              type="button"
+              className={`inc-follow-btn${following ? ' is-following' : ''}`}
+              onClick={async () => {
+                if (followBusy) return;
+                const next = !following;
+                setFollowBusy(true);
+                setFollowing(next);
+                try {
+                  await followIncubationUser(handle, next);
+                  setProfile((p2) => (p2 ? {
+                    ...p2,
+                    counts: {
+                      ...p2.counts,
+                      followers: Math.max(0, (p2.counts?.followers || 0) + (next ? 1 : -1)),
+                    },
+                  } : p2));
+                } catch {
+                  setFollowing(!next);
+                } finally {
+                  setFollowBusy(false);
+                }
+              }}
+            >
+              {following ? <FaUserCheck size={13} aria-hidden="true" /> : <FaUserPlus size={13} aria-hidden="true" />}
+              {following ? 'Following' : 'Follow'}
+            </button>
+          )}
           {own && (
             <button type="button" className="inc-edit-btn" onClick={() => setEditing(true)}>
               <MdEdit size={15} aria-hidden="true" />

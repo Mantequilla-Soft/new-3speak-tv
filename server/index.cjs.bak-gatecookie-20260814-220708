@@ -25,19 +25,6 @@ const PORT = process.env.SERVER_PORT || 4020
 
 const POSTING_WIF = process.env.THREESPEAK_POSTING_WIF
 const HIVE_ACCOUNT = process.env.THREESPEAK_HIVE_ACCOUNT || 'badadib'
-// Share of ad revenue split between the creator and the community they posted in.
-// MUST match AD_CREATOR_POOL_PCT on the checker: this endpoint signs the message the
-// checker verifies, so a disagreement would produce signatures it rejects.
-const AD_CREATOR_POOL_PCT = Number(process.env.AD_CREATOR_POOL_PCT) || 50
-// Must equal AD_DEFAULT_COMMUNITY_PCT on the checker. Both sides build the signed
-// message, so a disagreement here signs one split and stores another.
-// 🚨 Zero on purpose: sharing ad income with a community is opt IN. This was 25,
-// which quietly donated half of every creator's share for them. Changing it on one
-// side only would sign one split and store another, so the checker and BOTH API
-// servers move together or not at all.
-const AD_DEFAULT_COMMUNITY_PCT = Number.isInteger(Number(process.env.AD_DEFAULT_COMMUNITY_PCT))
-  ? Number(process.env.AD_DEFAULT_COMMUNITY_PCT)
-  : 0
 // Shared app key (same one the embed TUS upload uses) — authenticates wallet
 // logins (Keychain/HiveAuth/PeakVault/Ledger) on the post-creation path, which
 // can't present a token/cookie. Same trust level the upload pipeline already
@@ -105,16 +92,6 @@ const exchangeLimiter = rateLimit({
   legacyHeaders: false,
   message: { error: 'Too many requests' }
 })
-// Incubation writes are cheap (a Mongo insert, no chain broadcast) so this sits
-// above the broadcast budget, but it is still a write path on someone else's
-// service and should not be a free firehose.
-const incubationLimiter = rateLimit({
-  windowMs: 60 * 1000,
-  max: 60,
-  standardHeaders: true,
-  legacyHeaders: false,
-  message: { error: 'Too many requests' }
-})
 const broadcastLimiter = rateLimit({
   windowMs: 60 * 1000,
   max: 30,
@@ -128,30 +105,7 @@ const broadcastLimiter = rateLimit({
 async function verifyManteAuthToken(token) {
   if (!butr) return null
   try {
-    const claims = await butr.verifyAccessToken(token)
-
-    // The PUBLISHED SDK (0.2.0) predates incubation and does not copy these two
-    // claims into what it returns, so every caller saw `incubation: undefined`
-    // and concluded the session belonged to a Hive account — which turned every
-    // incubating write into "this account is on Hive, publish to the chain".
-    //
-    // Read them off the SAME token, and only AFTER verifyAccessToken has
-    // resolved: that call is what proves the signature, expiry, issuer and
-    // audience. Decoding beforehand would be trusting unverified input;
-    // decoding after it means the payload is exactly what butrauth signed.
-    //
-    // Delete this once the published SDK carries the fields.
-    if (claims && claims.incubation === undefined) {
-      try {
-        const payload = JSON.parse(Buffer.from(token.split('.')[1], 'base64url').toString('utf8'))
-        claims.incubation = !!payload.incubation
-        claims.handle = payload.handle || null
-      } catch {
-        claims.incubation = false
-        claims.handle = null
-      }
-    }
-    return claims
+    return await butr.verifyAccessToken(token)
   } catch {
     return null
   }
@@ -238,7 +192,6 @@ async function resolveButrUser(req, res) {
   try {
     const { ok, data } = await butrTokenRequest({ grant_type: 'refresh_token', refresh_token: refreshToken })
     if (!ok || !data.access_token) {
-      console.warn('[incubation] refresh refused:', data?.error || 'no access_token in response')
       // Refused (expired, revoked, or a detected replay) — drop both cookies so
       // the user is cleanly logged out instead of retrying a dead token forever.
       clearRefreshCookie(res)
@@ -306,29 +259,12 @@ function verifyWalletSession(token) {
   if (a.length !== b.length || !crypto.timingSafeEqual(a, b)) return null
   return username
 }
-// `domain` makes the session readable across 3speak.tv subdomains. Without it
-// the cookie is host-only, so a session minted on preview.3speak.tv is never
-// sent to gate.3speak.tv — and the gate identifies the viewer from this cookie,
-// so gated playback would show the paywall to everyone, Pro subscribers
-// included. SameSite=lax is already satisfied: the subdomains are same-site.
-//
-// Existing host-only cookies keep working, so nobody is logged out; new logins
-// get a domain cookie. A browser holding both sends both, and verifyWalletSession
-// checks an HMAC, so either one satisfies it.
-const WSESSION_COOKIE_DOMAIN = process.env.WSESSION_COOKIE_DOMAIN || '.3speak.tv'
 function setWalletSessionCookie(res, token) {
   res.cookie(WSESSION_COOKIE_NAME, token, {
-    httpOnly: true, secure: true, sameSite: 'lax', maxAge: WSESSION_TTL_MS, path: '/',
-    ...(WSESSION_COOKIE_DOMAIN ? { domain: WSESSION_COOKIE_DOMAIN } : {})
+    httpOnly: true, secure: true, sameSite: 'lax', maxAge: WSESSION_TTL_MS, path: '/'
   })
 }
 function clearWalletSessionCookie(res) {
-  // Cleared with AND without the domain: a browser may still hold a host-only
-  // cookie from before this change, and clearing only the domain form would
-  // leave the old one behind and keep the user silently logged in.
-  if (WSESSION_COOKIE_DOMAIN) {
-    res.clearCookie(WSESSION_COOKIE_NAME, { path: '/', domain: WSESSION_COOKIE_DOMAIN })
-  }
   res.clearCookie(WSESSION_COOKIE_NAME, { path: '/' })
 }
 
@@ -479,13 +415,7 @@ app.post('/api/manteauth/exchange', exchangeLimiter, async (req, res) => {
     if (!code_verifier && existingSession) {
       const decoded = await verifyManteAuthToken(existingSession)
       if (decoded?.hiveUsername) {
-        return res.json({ username: decoded.hiveUsername, incubation: false, handle: null })
-      }
-      // An INCUBATING session has no hiveUsername by design, so the check above
-      // would treat a perfectly good double-invoke as a failure and bounce the
-      // user back to login.
-      if (decoded?.incubation && decoded?.handle) {
-        return res.json({ username: null, incubation: true, handle: decoded.handle })
+        return res.json({ username: decoded.hiveUsername })
       }
     }
 
@@ -509,12 +439,7 @@ app.post('/api/manteauth/exchange', exchangeLimiter, async (req, res) => {
         clearPkceCookie(res)
         return res.status(401).json({ error: data.error || 'Token exchange failed' })
       }
-      tokens = {
-        accessToken: data.access_token,
-        username: data.username || null,
-        incubation: !!data.incubation,
-        handle: data.handle || null
-      }
+      tokens = { accessToken: data.access_token, username: data.username }
       refreshToken = data.refresh_token || null
     } catch {
       try {
@@ -530,10 +455,7 @@ app.post('/api/manteauth/exchange', exchangeLimiter, async (req, res) => {
     }
     clearPkceCookie(res)
 
-    // An incubating user has no Hive account, so there is no username to put in
-    // the public cookie. Empty rather than the handle: anything that reads this
-    // cookie is asking "which Hive account is this?", and the handle is not one.
-    setSessionCookie(res, tokens.accessToken, tokens.username || '')
+    setSessionCookie(res, tokens.accessToken, tokens.username)
     // The access token lasts an hour; the refresh token renews it for 30 days
     // (see resolveButrUser). Without it the session died at the hour mark and
     // every proxied op 401'd.
@@ -541,24 +463,9 @@ app.post('/api/manteauth/exchange', exchangeLimiter, async (req, res) => {
     // Belt and braces: also mint our own signed session, the same stateless
     // 30-day token wallet logins use (auth path 2 in /api/broadcast). It keeps
     // the user working even if a refresh is ever refused.
-    //
-    // NOT minted for an incubating user, and this is load-bearing rather than
-    // incidental: a wallet session is a signed assertion that this browser may
-    // act as a named Hive account, and /api/broadcast trusts it as auth path 2.
-    // Minting one for a user whose account does not exist would hand the
-    // broadcast path a username of '' or, worse, a handle that is not an
-    // account. The falsy guard already covered this; it is now deliberate.
     const buser = String(tokens.username || '').toLowerCase()
-    if (buser && !tokens.incubation && SESSION_SIGNING_SECRET) {
-      setWalletSessionCookie(res, mintWalletSession(buser))
-    }
-    res.json({
-      username: tokens.username || null,
-      incubation: !!tokens.incubation,
-      // The public pseudonym to DISPLAY. Never a Hive account, and never fed to
-      // an operation builder.
-      handle: tokens.handle || null
-    })
+    if (buser && SESSION_SIGNING_SECRET) setWalletSessionCookie(res, mintWalletSession(buser))
+    res.json({ username: tokens.username })
   } catch (err) {
     console.error('Exchange error:', err.message)
     clearPkceCookie(res)
@@ -571,303 +478,11 @@ app.get('/api/manteauth/me', baseLimiter, async (req, res) => {
   const token = req.cookies?.[SESSION_COOKIE_NAME]
   if (!token) return res.status(401).json({ error: 'Unauthorized' })
   const decoded = await verifyManteAuthToken(token)
-  // Valid session, no Hive account: an incubating user. Treating the missing
-  // username as "unauthorized" would clear their cookie and log them out on
-  // every page reload.
-  if (decoded?.incubation && decoded?.handle) {
-    return res.json({ username: null, incubation: true, handle: decoded.handle })
-  }
   if (!decoded?.hiveUsername) {
     clearSessionCookie(res)
     return res.status(401).json({ error: 'Unauthorized' })
   }
-  res.json({ username: decoded.hiveUsername, incubation: false, handle: null })
-})
-
-// =====================================================================
-// Incubation proxy — writes for users with NO Hive account.
-//
-// The ButrAuth access token lives in an httpOnly cookie, so the browser cannot
-// send it to the incubation service itself. Same shape as /api/broadcast: the
-// server holds the credential and forwards on the user's behalf.
-// =====================================================================
-const INCUBATION_URL = (process.env.INCUBATION_URL || 'http://127.0.0.1:3040').replace(/\/+$/, '')
-
-// === Single-flight refresh ===
-//
-// ButrAuth ROTATES refresh tokens and treats a second use of one as theft: it
-// deletes the whole token family and answers 401. That is the right policy, and
-// it made a stampede here fatal. A page fires several requests at once; when the
-// one-hour access token has expired, EACH of them independently tried to refresh
-// with the same cookie value, so the first rotated and the rest looked exactly
-// like a replay. The family was revoked, both cookies were cleared, and the user
-// was silently signed out mid-action — the "no session cookie at all" seen in
-// the logs, and the failed short upload.
-//
-// It hit INCUBATING users hardest because they are the only ones with no
-// fallback: a wallet login, and a butrauth login that owns a Hive account, both
-// also carry the 30-day signed session, and an incubating user deliberately
-// does not.
-//
-// So one refresh runs per token value and every concurrent caller shares its
-// answer. The answer is then kept for a GRACE window rather than dropped when it
-// settles: a request that was already in flight still carries the old cookie and
-// would otherwise arrive moments later and spend the spent token itself, which
-// is the same replay by a slower route.
-const REFRESH_GRACE_MS = 60 * 1000
-const refreshFlight = new Map()
-
-function refreshOnce(refreshToken) {
-  const now = Date.now()
-  for (const [k, e] of refreshFlight) if (e.keepUntil && e.keepUntil <= now) refreshFlight.delete(k)
-
-  const hit = refreshFlight.get(refreshToken)
-  if (hit) return hit.promise
-
-  const entry = { keepUntil: 0 }
-  entry.promise = butrTokenRequest({ grant_type: 'refresh_token', refresh_token: refreshToken })
-    .then(
-      (r) => { entry.keepUntil = Date.now() + REFRESH_GRACE_MS; return r },
-      // Not cached: a transport failure is worth retrying, unlike a rotation.
-      (err) => { refreshFlight.delete(refreshToken); throw err }
-    )
-  refreshFlight.set(refreshToken, entry)
-  return entry.promise
-}
-
-// The live access token plus its claims, refreshing if the access token died.
-//
-// Sibling of resolveButrUser, which returns only a username and so cannot serve
-// an INCUBATING session at all — that session's username is null by design, and
-// the token itself is what the incubation service needs.
-async function resolveButrSession(req, res) {
-  const cookieToken = req.cookies?.[SESSION_COOKIE_NAME]
-  if (cookieToken) {
-    const claims = await verifyManteAuthToken(cookieToken)
-    if (claims) return { token: cookieToken, claims }
-  }
-  const refreshToken = req.cookies?.[REFRESH_COOKIE_NAME]
-  if (!refreshToken) {
-    // WHY it failed, never the token itself. A 401 from here is indistinguishable
-    // from a dozen other causes at the client, and "Not signed in" told the user
-    // something that was not necessarily true.
-    console.warn('[incubation] no session:',
-      cookieToken ? 'access token invalid/expired and NO refresh cookie' : 'no session cookie at all')
-    if (cookieToken) clearSessionCookie(res)
-    return null
-  }
-  try {
-    const { ok, status, data } = await refreshOnce(refreshToken)
-    if (!ok || !data.access_token) {
-      // Clear ONLY when butrauth actually refused the grant. A 5xx or a timeout
-      // says nothing about whether the token is still good, and throwing the
-      // cookies away on one means a brief outage signs every user out for real
-      // rather than for the length of the outage.
-      if (status === 400 || status === 401) {
-        clearRefreshCookie(res)
-        clearSessionCookie(res)
-      } else {
-        console.warn('[incubation] refresh unavailable, session kept:', status)
-      }
-      return null
-    }
-    setSessionCookie(res, data.access_token, data.username || '')
-    if (data.refresh_token) setRefreshCookie(res, data.refresh_token)
-    const claims = await verifyManteAuthToken(data.access_token)
-    return claims ? { token: data.access_token, claims } : null
-  } catch (err) {
-    console.warn('[incubation] refresh failed:', err.message)
-    return null
-  }
-}
-
-// ALLOWLISTED, not a catch-all proxy. A blanket forwarder would expose whatever
-// the incubation service grows next — including anything it later mounts for
-// internal use — to any logged-in browser.
-// `graduated: true` marks the routes that are for someone who ALREADY has a
-// Hive account. Backfill is exactly that — their account is the author field
-// every stored row has been waiting for — so the incubating check below has to
-// be skipped for it, not merely relaxed.
-const INCUBATION_ROUTES = new Map([
-  // anyActor: reachable by a Hive user too, because these are the two things
-  // that CANNOT happen on chain for an off-chain post — Hive rejects a comment
-  // whose parent does not exist, and there is no post to vote on. The service
-  // still decides what each kind may do (a Hive user may reply, never
-  // root-post), so this only opens the door.
-  ['POST /content', { path: '/content', anyActor: true }],
-  ['GET /content/mine', { path: '/content/mine' }],
-  ['PUT /social/vote', { path: '/social/vote', anyActor: true }],
-  // anyActor: a Hive user has to be able to follow an incubating creator, since
-  // that account does not exist on chain to be followed the normal way.
-  ['PUT /social/follow', { path: '/social/follow', anyActor: true }],
-  ['GET /social/graduated-follows', { path: '/social/graduated-follows', anyActor: true }],
-  ['POST /social/graduated-follows/ack', { path: '/social/graduated-follows/ack', anyActor: true }],
-  ['PUT /social/profile', { path: '/social/profile' }],
-  ['GET /social/profile/mine', { path: '/social/profile/mine' }],
-  ['GET /social/follows/mine', { path: '/social/follows/mine' }],
-  ['GET /public/graduation/plan', { path: '/public/graduation/plan' }],
-  ['GET /progress', { path: '/progress' }],
-  ['GET /notifications', { path: '/notifications' }],
-  ['POST /notifications/read', { path: '/notifications/read' }],
-  ['GET /backfill/items', { path: '/backfill/items', graduated: true }],
-  ['GET /backfill/summary', { path: '/backfill/summary', graduated: true }],
-  ['POST /backfill/mark', { path: '/backfill/mark', graduated: true }],
-  ['POST /backfill/claim-assets', { path: '/backfill/claim-assets', graduated: true }]
-])
-
-/**
- * Read butrauth's graduation verdict for this token.
- *
- * Calls the SDK when it actually has the method, and otherwise talks to the
- * endpoint directly. The published client is 0.2.0, which predates incubation
- * entirely: `butr.getIncubationStatus` is undefined there, so every call threw
- * "is not a function" and this route answered 502 for weeks. That is the SAME
- * skew that made incubating writes fail earlier, so it is handled the same way,
- * and the SDK branch means publishing 0.3.0 needs no change here.
- *
- * The request carries BOTH the user's bearer token and the app's client secret:
- * butrauth authenticates the caller before it says anything about the token.
- */
-async function readIncubationStatus(token) {
-  if (typeof butr.getIncubationStatus === 'function') {
-    return butr.getIncubationStatus(token)
-  }
-  const url = `${MANTEAUTH_URL}/api/incubation/status?client_id=${encodeURIComponent(MANTEAUTH_CLIENT_ID)}`
-  const r = await fetch(url, {
-    headers: {
-      authorization: `Bearer ${token}`,
-      'x-client-secret': MANTEAUTH_CLIENT_SECRET || ''
-    }
-  })
-  if (!r.ok) throw new Error(`butrauth /incubation/status returned ${r.status}`)
-  return r.json()
-}
-
-// GET /api/incubation/graduation-status — BUTRAUTH's half of the decision.
-//
-// Answers "may this identity have a free Hive account" (caps, provider
-// availability, one per person). It does NOT answer "have they earned one" —
-// butrauth cannot see watch time, so that half is 3Speak's. The prompt should
-// only appear when both agree.
-//
-// Mounted BEFORE the catch-all below, which would otherwise match this path and
-// 404 it against the incubation service's allowlist.
-app.get('/api/incubation/graduation-status', incubationLimiter, async (req, res) => {
-  try {
-    const session = await resolveButrSession(req, res)
-
-    if (!session) return res.status(401).json({ error: 'Your session has expired. Please sign in again.', reason: 'session_expired' })
-    if (!butr) return res.status(503).json({ error: 'ButrAuth not ready' })
-    res.json(await readIncubationStatus(session.token))
-  } catch (err) {
-    console.error('[incubation] graduation status:', err.message)
-    res.status(502).json({ error: 'Could not read graduation status' })
-  }
-})
-
-// app.use, not app.all('/api/incubation/*'): this server is on Express 5, whose
-// path-to-regexp rejects a bare '*' outright and takes the whole process down
-// at startup rather than at request time. A mount needs no wildcard syntax at
-// all, and req.path is already relative to it.
-app.use('/api/incubation', incubationLimiter, async (req, res) => {
-  try {
-    const sub = req.path || '/'
-    const key = `${req.method} ${sub}`
-    const route = INCUBATION_ROUTES.get(key)
-    if (!route) return res.status(404).json({ error: 'Unknown incubation route' })
-    const target = route.path
-
-    const session = await resolveButrSession(req, res)
-
-    // A wallet login (Keychain/HiveAuth/PeakVault/Ledger) holds no butrauth
-    // session, so there is no bearer token to forward — but they are a real,
-    // server-verified Hive user and these routes are open to them. Assert the
-    // identity with the app's own client credentials instead, which is the same
-    // trust /api/broadcast already extends when it posts to the chain as them.
-    if (!session && route.anyActor) {
-      const hiveUser = await resolveDelegatedSignUser(req, res)
-      if (!hiveUser) {
-        // Reached when there is no butrauth session AND no wallet session, which
-        // for an incubating user means their session lapsed rather than that
-        // they were never signed in. Saying "Not signed in" to someone looking
-        // at their own logged-in avatar is not a useful thing to tell them.
-        console.warn(`[incubation] 401 on ${key} — no butrauth session and no wallet session`)
-        return res.status(401).json({
-          error: 'Your session has expired. Please sign in again.',
-          reason: 'session_expired',
-        })
-      }
-      const ctrlW = new AbortController()
-      const timerW = setTimeout(() => ctrlW.abort(), 15000)
-      try {
-        const up = await fetch(INCUBATION_URL + target, {
-          method: req.method,
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            ...(req.body || {}),
-            client_id: MANTEAUTH_CLIENT_ID,
-            client_secret: MANTEAUTH_CLIENT_SECRET,
-            hive_author: hiveUser
-          }),
-          signal: ctrlW.signal
-        })
-        const t = await up.text()
-        return res.status(up.status).type('application/json').send(t)
-      } finally {
-        clearTimeout(timerW)
-      }
-    }
-    if (!session) {
-      console.warn(`[incubation] 401 on ${key} — session could not be resolved`)
-      return res.status(401).json({
-        error: 'Your session has expired. Please sign in again.',
-        reason: 'session_expired',
-      })
-    }
-
-    if (route.anyActor) {
-      // Either kind may pass; the service sorts out what each is allowed to do.
-    } else if (route.graduated) {
-      // The mirror image: these routes need a real Hive account to publish AS.
-      if (!session.claims.hiveUsername) {
-        return res.status(409).json({
-          error: 'Create your Hive account first — there is nothing to publish as yet.',
-          reason: 'not_graduated'
-        })
-      }
-    } else if (session.claims.hiveUsername || !session.claims.incubation) {
-      // Refused HERE as well as in the service. The service is the authority, but
-      // failing at the edge means a user who has graduated mid-session gets a
-      // clear answer instead of a round trip that ends in the same 409.
-      return res.status(409).json({
-        error: 'This account is on Hive — publish to the chain, not the incubation service.',
-        reason: 'has_hive_account'
-      })
-    }
-
-    const ctrl = new AbortController()
-    const timer = setTimeout(() => ctrl.abort(), 15000)
-    let upstream
-    try {
-      upstream = await fetch(INCUBATION_URL + target, {
-        method: req.method,
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${session.token}`
-        },
-        body: ['GET', 'HEAD'].includes(req.method) ? undefined : JSON.stringify(req.body || {}),
-        signal: ctrl.signal
-      })
-    } finally {
-      clearTimeout(timer)
-    }
-    const text = await upstream.text()
-    res.status(upstream.status).type('application/json').send(text)
-  } catch (err) {
-    const msg = err?.name === 'AbortError' ? 'Incubation service timed out' : 'Incubation request failed'
-    console.error('[incubation proxy]', err.message)
-    res.status(502).json({ error: msg })
-  }
+  res.json({ username: decoded.hiveUsername })
 })
 
 // POST /api/manteauth/logout — clear the session cookie
@@ -1041,195 +656,11 @@ app.post('/api/auth/wallet/login', walletAuthLimiter, async (req, res) => {
   }
 })
 
-// POST /api/auth/hivesigner/session — trade a HiveSigner access token for the
-// same session cookie the wallet flow mints.
-//
-// HiveSigner logins have no posting-key signature to give, so they cannot do the
-// SIWH challenge/response. They were therefore the one login type with no
-// session cookie at all — and since the gate identifies gated-video viewers from
-// that cookie, a HiveSigner user looked anonymous forever and hit the paywall on
-// videos they were entitled to, 3Speak Pro subscribers included.
-//
-// The token is proof enough on its own: hivesigner.com tells us whose it is, and
-// the user had to authenticate there to hold it. Rate-limited with the other
-// wallet auth routes, since it takes an unauthenticated token and calls out.
-app.post('/api/auth/hivesigner/session', walletAuthLimiter, async (req, res) => {
-  if (!SESSION_SIGNING_SECRET) {
-    return res.status(503).json({ error: 'Sessions are not configured on this server' })
-  }
-  // Accepted from the Authorization header or the body: the frontend already
-  // sends this token as a Bearer for broadcasts, so the header form keeps the
-  // two call sites identical.
-  const header = req.get('authorization') || ''
-  const token = header.startsWith('Bearer ') ? header.slice(7) : (req.body && req.body.token)
-  if (!token || typeof token !== 'string') {
-    return res.status(400).json({ error: 'HiveSigner token required' })
-  }
-
-  const username = await verifyHiveSignerToken(token)
-  if (!username || !HIVE_USER_RE.test(username)) {
-    return res.status(401).json({ error: 'HiveSigner token is invalid or expired' })
-  }
-
-  setWalletSessionCookie(res, mintWalletSession(username))
-  res.json({ success: true, username })
-})
-
-// GET /api/auth/wallet/status — who, if anyone, the session cookie says we are.
-//
-// The cookie is httpOnly, so the client cannot read it and cannot tell that it
-// belongs to a different account than the one now signed in. Switching accounts
-// in the UI does not clear it, and the gate trusts it over anything the page
-// claims — so a creator who switched to another account kept watching their own
-// supporters-only videos as themselves. This lets the client notice and rotate.
-app.get('/api/auth/wallet/status', (req, res) => {
-  const token = req.cookies?.[WSESSION_COOKIE_NAME]
-  res.json({ user: (token && verifyWalletSession(token)) || null })
-})
-
 // POST /api/auth/wallet/logout — clear the wallet session cookie.
 app.post('/api/auth/wallet/logout', (req, res) => {
   clearWalletSessionCookie(res)
   res.clearCookie('threespeak_user', { path: '/' })
   res.json({ success: true })
-})
-
-// ── 🔐 Gated content: guest list ──────────────────────────────────────────────
-// Lets a creator add or remove the named accounts that can watch one of their
-// supporters-only videos without 3Speak Pro.
-//
-// This lives HERE rather than in embedvideos on purpose. embedvideos only has
-// app-level API keys, and the embed key ships inside the browser bundle, so a
-// route there would let anyone edit anyone else's guest list. This service knows
-// WHICH USER is calling, which is exactly what the check needs.
-const GATE_URL = process.env.GATE_URL || ''
-const GATE_INTERNAL_API_KEY = process.env.GATE_INTERNAL_API_KEY || ''
-const EMBED_API_BASE = process.env.EMBED_API_BASE || 'https://embed2.3speak.tv'
-
-/**
- * Shared gate for both guest-list routes: who is calling, and do they own this
- * video. Returns { user, video } or null after having already answered.
- *
- * Identity resolution mirrors /api/broadcast minus the legacy app-key path:
- * that path trusts a CLAIMED username, which is fine for posting ops the user
- * signs anyway, and not fine for deciding who may watch a paid video.
- */
-async function resolveGatedVideoOwner(req, res) {
-  if (!GATE_URL || !GATE_INTERNAL_API_KEY) {
-    res.status(503).json({ error: 'Gate is not configured on this instance' })
-    return null
-  }
-
-  let hiveUsername = await resolveButrUser(req, res)
-  if (!hiveUsername) {
-    const ws = req.cookies?.[WSESSION_COOKIE_NAME]
-    const wu = ws && verifyWalletSession(ws)
-    if (wu) hiveUsername = wu
-  }
-  if (!hiveUsername) {
-    const authHeader = req.headers.authorization || ''
-    const bearer = authHeader.startsWith('Bearer ') ? authHeader.slice(7).trim() : ''
-    if (bearer) hiveUsername = await verifyHiveSignerToken(bearer)
-  }
-  if (!hiveUsername) {
-    res.status(401).json({ error: 'Sign in to manage your guest list' })
-    return null
-  }
-
-  const permlink = String(req.params.permlink || '').trim()
-  if (!/^[A-Za-z0-9][A-Za-z0-9_.-]{0,127}$/.test(permlink)) {
-    res.status(400).json({ error: 'invalid permlink' })
-    return null
-  }
-
-  // Ownership is checked against the embed record, which is the source of truth
-  // for who uploaded the asset. Never trust a client-supplied owner.
-  let video
-  try {
-    const r = await fetch(`${EMBED_API_BASE.replace(/\/+$/, '')}/video/${encodeURIComponent(permlink)}`, {
-      signal: AbortSignal.timeout(8000),
-    })
-    if (!r.ok) { res.status(404).json({ error: 'video not found' }); return null }
-    video = await r.json()
-  } catch {
-    res.status(502).json({ error: 'could not verify video ownership' })
-    return null
-  }
-
-  if (String(video?.owner || '').toLowerCase() !== hiveUsername.toLowerCase()) {
-    console.warn(`[gated] @${hiveUsername} tried to touch the guest list of ${permlink} owned by @${video?.owner}`)
-    res.status(403).json({ error: 'You can only manage guest lists on your own videos' })
-    return null
-  }
-  if (video?.gated !== true) {
-    res.status(400).json({ error: 'That video is not supporters-only' })
-    return null
-  }
-
-  return { user: hiveUsername, video, permlink }
-}
-
-// Read the current guest list, so the editor can show who is already invited.
-app.get('/api/gated/:permlink/allowlist', async (req, res) => {
-  try {
-    const ctx = await resolveGatedVideoOwner(req, res)
-    if (!ctx) return undefined
-
-    const r = await fetch(
-      `${GATE_URL.replace(/\/+$/, '')}/internal/videos/${encodeURIComponent(ctx.video.gate_video_id || ctx.permlink)}`,
-      { headers: { 'X-API-Key': GATE_INTERNAL_API_KEY }, signal: AbortSignal.timeout(8000) }
-    )
-    // A gated video that finished encoding is registered with the gate; one that
-    // has not got there yet simply has no list to show.
-    if (r.status === 404) return res.json({ allowlist: [], registered: false })
-    if (!r.ok) return res.status(502).json({ error: 'Could not read the guest list' })
-
-    const body = await r.json()
-    return res.json({ allowlist: body.allowlist ?? [], registered: true })
-  } catch (err) {
-    console.error('GET /api/gated/:permlink/allowlist error:', err.message)
-    return res.status(500).json({ error: 'Internal server error' })
-  }
-})
-
-app.patch('/api/gated/:permlink/allowlist', async (req, res) => {
-  try {
-    const ctx = await resolveGatedVideoOwner(req, res)
-    if (!ctx) return undefined
-    const { user: hiveUsername, video, permlink } = ctx
-
-    const list = req.body?.allowlist
-    if (!Array.isArray(list) || list.length > 500) {
-      return res.status(422).json({ error: 'allowlist must be an array of at most 500 usernames' })
-    }
-    const names = [...new Set(list.map((u) => String(u).trim().toLowerCase().replace(/^@/, '')))]
-    const bad = names.find((n) => !HIVE_USER_RE.test(n))
-    if (bad !== undefined) {
-      return res.status(422).json({ error: `"${bad}" is not a valid Hive account name` })
-    }
-
-    const gateRes = await fetch(
-      `${GATE_URL.replace(/\/+$/, '')}/internal/videos/${encodeURIComponent(video.gate_video_id || permlink)}/allowlist`,
-      {
-        method: 'PATCH',
-        headers: { 'Content-Type': 'application/json', 'X-API-Key': GATE_INTERNAL_API_KEY },
-        body: JSON.stringify({ allowlist: names }),
-        signal: AbortSignal.timeout(8000),
-      }
-    )
-    if (!gateRes.ok) {
-      const text = await gateRes.text().catch(() => '')
-      console.error(`[gated] gate rejected allowlist update for ${permlink}: ${gateRes.status} ${text}`)
-      return res.status(502).json({ error: 'Could not update the guest list' })
-    }
-
-    const body = await gateRes.json()
-    console.log(`[gated] @${hiveUsername} set ${names.length} guest(s) on ${permlink}`)
-    return res.json({ success: true, allowlist: body.allowlist ?? names })
-  } catch (err) {
-    console.error('PATCH /api/gated/:permlink/allowlist error:', err.message)
-    return res.status(500).json({ error: 'Internal server error' })
-  }
 })
 
 app.post('/api/broadcast', broadcastLimiter, async (req, res) => {
@@ -1317,39 +748,17 @@ async function resolveDelegatedSignUser(req, res) {
   // silently broke an hour after login while broadcasting still worked.
   const butrUser = await resolveButrUser(req, res)
   if (butrUser) return butrUser.toLowerCase()
-
-  // SIWH wallet session cookie — the same credential /api/broadcast checks before
-  // it will post a video for someone. The user proved posting-key control at login
-  // and the username is bound to a server-signed cookie, so a wallet login that has
-  // signed in is identified here rather than falling through to the claimed-name
-  // path below. This check was missing, which is why the comment underneath used to
-  // claim parity with /api/broadcast that did not exist: broadcast tries this first
-  // and gates the app key behind a flag, and this helper did neither.
-  const ws = req.cookies?.[WSESSION_COOKIE_NAME]
-  const wu = ws && verifyWalletSession(ws)
-  if (wu) return String(wu).toLowerCase()
-
   const authHeader = req.headers.authorization || ''
   const bearer = authHeader.startsWith('Bearer ') ? authHeader.slice(7).trim() : ''
   if (bearer) {
     const u = await verifyHiveSignerToken(bearer)
     if (u) return u.toLowerCase()
   }
-
-  // LEGACY app-key path, now gated by the same ALLOW_APPKEY_AUTH as /api/broadcast.
-  // It trusts the PUBLIC app key (it ships in the frontend bundle) plus a CLAIMED
-  // username, so anyone holding the key could ask for a signature as any account
-  // that opted into @threespeak. Setting ALLOW_APPKEY_AUTH=0 now closes it here too,
-  // instead of closing it on broadcast while leaving the signing oracles open.
-  if (ALLOW_APPKEY_AUTH) {
-    const apiKey = req.headers['x-api-key'] || ''
-    if (EMBED_API_KEY && apiKey === EMBED_API_KEY) {
-      const claimed = typeof req.body?.username === 'string' ? req.body.username.trim().toLowerCase() : ''
-      if (claimed) {
-        console.warn(`[appkey-auth] delegated signing as @${claimed} via legacy public-app-key path (no SIWH session)`)
-        return claimed
-      }
-    }
+  // Wallet logins: trust the public app key + claimed username (same as broadcast).
+  const apiKey = req.headers['x-api-key'] || ''
+  if (EMBED_API_KEY && apiKey === EMBED_API_KEY) {
+    const claimed = typeof req.body?.username === 'string' ? req.body.username.trim().toLowerCase() : ''
+    if (claimed) return claimed
   }
   return null
 }
@@ -1413,165 +822,6 @@ app.post('/api/snapie-chat/sign-challenge', signChallengeLimiter, async (req, re
   }
 })
 
-// POST /api/ads/opt-out-signature — sign a creator's ad preference on their behalf.
-//
-// HiveSigner and Butter Auth sessions hold no signing key in the browser, so those
-// creators could never sign the checker's ad-preference message client-side. Without
-// this endpoint the people least able to sign would be the only ones unable to turn
-// ads off on their own videos — which is exactly backwards for a consent control.
-//
-// The client sends ONLY a boolean. The message is built here, from the username the
-// session resolves to, in the canonical form the checker expects. That is the whole
-// safety argument: unlike a generic signing oracle this can never be steered into
-// signing arbitrary bytes (a transaction digest, say), because the caller supplies
-// none of them. Compare the snapie-chat endpoint, which has to validate a UUID shape
-// for the same reason.
-app.post('/api/ads/opt-out-signature', signChallengeLimiter, async (req, res) => {
-  try {
-    if (!POSTING_WIF) return res.status(500).json({ error: 'Server is not configured' })
-    const hiveUsername = await resolveDelegatedSignUser(req, res)
-    if (!hiveUsername) return res.status(401).json({ error: 'Unauthorized' })
-
-    // Must be a real boolean: `undefined` would quietly become "off" and turn ads
-    // off for someone who never asked.
-    if (typeof req.body?.adsEnabled !== 'boolean') {
-      return res.status(400).json({ error: 'adsEnabled must be true or false' })
-    }
-    const adsEnabled = req.body.adsEnabled
-
-    // The community's cut of the creator pool. Signed along with everything else so
-    // a signature cannot be lifted from one split and reused on another — this is
-    // the field that decides where money goes. Absent means 0.
-    const shareRaw = req.body.communitySharePct
-    const communitySharePct = shareRaw === undefined || shareRaw === null
-      ? AD_DEFAULT_COMMUNITY_PCT
-      : Number(shareRaw)
-    if (!Number.isInteger(communitySharePct) || communitySharePct < 0 || communitySharePct > AD_CREATOR_POOL_PCT) {
-      return res.status(400).json({ error: `communitySharePct must be a whole number between 0 and ${AD_CREATOR_POOL_PCT}` })
-    }
-
-    // We sign as @threespeak, so the grant has to actually exist — otherwise the
-    // checker would reject the signature anyway and the user would see a cryptic
-    // failure instead of a reason.
-    if (!(await hasThreespeakPostingGrant(hiveUsername))) {
-      return res.status(403).json({
-        error: `Turning ads off from here needs @${HIVE_ACCOUNT} posting authority on your account. Log in with Keychain, HiveAuth, PeakVault or Ledger to set it directly instead.`,
-      })
-    }
-
-    const timestamp = Date.now()
-    // Keep in lockstep with prefsMessage() in 3speakchecks/routes/advertise.js.
-    const message = ['3speak-ads', 'creator-prefs', hiveUsername, adsEnabled ? 'on' : 'off',
-      String(communitySharePct), String(timestamp)].join('|')
-    const signature = PrivateKey.fromString(POSTING_WIF).sign(cryptoUtils.sha256(Buffer.from(message, 'utf8'))).toString()
-
-    return res.json({ success: true, signature, timestamp, username: hiveUsername, communitySharePct })
-  } catch (err) {
-    console.error('Ads opt-out signature error:', err.message)
-    res.status(500).json({ error: 'Signing failed' })
-  }
-})
-
-// POST /api/ads/viewer-signature — sign a VIEWER's reward opt-in on their behalf.
-//
-// Same delegated-signing shape as the creator preference above, and needed for the
-// same reason: HiveSigner and Butter Auth sessions hold no key in the browser, so
-// without this the viewers least able to sign would be the only ones unable to
-// consent to being paid.
-//
-// ⚠️ The thing being signed here is CONSENT to store a username against viewing.
-// It is deliberately not derivable from anything the client sends except the
-// logged-in identity this server already established: the body carries a boolean
-// and nothing else, so this endpoint cannot be steered into signing a claim about
-// somebody else.
-app.post('/api/ads/viewer-signature', signChallengeLimiter, async (req, res) => {
-  try {
-    if (!POSTING_WIF) return res.status(500).json({ error: 'Server is not configured' })
-    const hiveUsername = await resolveDelegatedSignUser(req, res)
-    if (!hiveUsername) return res.status(401).json({ error: 'Unauthorized' })
-
-    // A real boolean. `undefined` becoming "on" would opt somebody into being
-    // identified because their client sent a malformed body.
-    if (typeof req.body?.rewardsEnabled !== 'boolean') {
-      return res.status(400).json({ error: 'rewardsEnabled must be true or false' })
-    }
-    const rewardsEnabled = req.body.rewardsEnabled
-
-    if (!(await hasThreespeakPostingGrant(hiveUsername))) {
-      return res.status(403).json({
-        error: `Setting this from here needs @${HIVE_ACCOUNT} posting authority on your account. Log in with Keychain, HiveAuth, PeakVault or Ledger to set it directly instead.`,
-      })
-    }
-
-    const timestamp = Date.now()
-    // Keep in lockstep with viewerPrefsMessage() in 3speakchecks/routes/advertise.js.
-    const message = ['3speak-ads', 'viewer-prefs', hiveUsername, rewardsEnabled ? 'on' : 'off',
-      String(timestamp)].join('|')
-    const signature = PrivateKey.fromString(POSTING_WIF).sign(cryptoUtils.sha256(Buffer.from(message, 'utf8'))).toString()
-
-    return res.json({ success: true, signature, timestamp, username: hiveUsername, rewardsEnabled })
-  } catch (err) {
-    console.error('Ads viewer signature error:', err.message)
-    res.status(500).json({ error: 'Signing failed' })
-  }
-})
-
-// POST /api/ads/identity-signature — prove who is logged in, so /advertise can list
-// their own applications without them keeping a reference code around.
-//
-// The checker will not answer "which applications does @x have" on a name alone:
-// behind a reference sit contact details, a stated budget, the applicant's brief and
-// our private note to them. So it wants a signature, and this endpoint produces one
-// for the logins that cannot sign in the browser.
-//
-// It deliberately does NOT use resolveDelegatedSignUser(). That helper's last branch
-// accepts the public app key plus a CLAIMED username, which is fine for a broadcast
-// the user is watching happen and useless as proof here — it would let anyone read
-// anyone's application by typing a name. Only a real server-side session counts:
-// a Butter Auth cookie, or a HiveSigner token we verify with HiveSigner itself.
-// Wallet logins (Keychain, HiveAuth, PeakVault, Ledger) hold a key in the browser
-// and sign this message client-side instead, so they lose nothing by being refused.
-app.post('/api/ads/identity-signature', signChallengeLimiter, async (req, res) => {
-  try {
-    if (!POSTING_WIF) return res.status(500).json({ error: 'Server is not configured' })
-
-    let hiveUsername = await resolveButrUser(req, res)
-    if (!hiveUsername) {
-      const authHeader = req.headers.authorization || ''
-      const bearer = authHeader.startsWith('Bearer ') ? authHeader.slice(7).trim() : ''
-      if (bearer) hiveUsername = await verifyHiveSignerToken(bearer)
-    }
-    // This message is shown to the user as-is on /advertise, so it says what to do
-    // rather than just refusing. A bare "Unauthorized" is the right status and the
-    // wrong sentence.
-    if (!hiveUsername) {
-      return res.status(401).json({
-        error: 'We could not confirm your login from here. Open an application with its reference instead.',
-      })
-    }
-    hiveUsername = hiveUsername.toLowerCase()
-
-    // We sign as @threespeak, so the grant has to actually exist — otherwise the
-    // checker rejects the signature and the user sees a cryptic failure instead of
-    // a reason they can act on.
-    if (!(await hasThreespeakPostingGrant(hiveUsername))) {
-      return res.status(403).json({
-        error: `Listing your applications from here needs @${HIVE_ACCOUNT} posting authority on your account. You can still look one up with its reference.`,
-      })
-    }
-
-    const timestamp = Date.now()
-    // Keep in lockstep with mineMessage() in 3speakchecks/routes/advertise.js.
-    const message = ['3speak-ads', 'mine', hiveUsername, String(timestamp)].join('|')
-    const signature = PrivateKey.fromString(POSTING_WIF).sign(cryptoUtils.sha256(Buffer.from(message, 'utf8'))).toString()
-
-    return res.json({ success: true, signature, timestamp, username: hiveUsername })
-  } catch (err) {
-    console.error('Ads identity signature error:', err.message)
-    res.status(500).json({ error: 'Signing failed' })
-  }
-})
-
 // Image upload — sign the standard images.hive.blog "ImageSigningChallenge" with
 // @threespeak's posting key and upload on the user's behalf. Lets every login
 // (incl. HiveSigner, which can't sign client-side) attach covers/thumbnails with
@@ -1606,17 +856,7 @@ app.post('/api/upload-image', imageUploadLimiter, express.raw({ type: () => true
     const data = await hostResp.json().catch(() => ({}))
     if (!hostResp.ok || !data.url) {
       console.error('Image host rejected:', hostResp.status, JSON.stringify(data).slice(0, 200))
-      // Tell the caller WHICH failure this is. A 429 from images.hive.blog is the
-      // shared @threespeak upload quota running out — it is not the user's file, not
-      // retryable in the next second, and not something a generic "upload failed"
-      // helps anyone diagnose. It has bitten thumbnails too.
-      const quota = hostResp.status === 429 || /qouta|quota/i.test(JSON.stringify(data))
-      return res.status(quota ? 503 : 502).json({
-        error: quota
-          ? "3Speak's image upload quota is exhausted for now — this is on our side, not your file. Try again later."
-          : 'Image host rejected the upload',
-        upstreamStatus: hostResp.status,
-      })
+      return res.status(502).json({ error: 'Image host rejected the upload' })
     }
     return res.json({ success: true, url: data.url })
   } catch (e) {

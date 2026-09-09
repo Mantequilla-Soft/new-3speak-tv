@@ -145,6 +145,7 @@ import AdsPrompt from "./components/AdsPrompt/AdsPrompt";
 import ViewerRewardsPrompt from "./components/AdsPrompt/ViewerRewardsPrompt";
 import GraduationPrompt from "./components/Incubation/GraduationPrompt";
 import BacklogPrompt from "./components/Incubation/BacklogPrompt";
+import GraduatedFollowsPrompt from "./components/Incubation/GraduatedFollowsPrompt";
 import AvatarSync from "./components/HiveAvatar/AvatarSync";
 import EditorModal from "./components/modal/EditorModal";
 import { FEATURE_EDITOR } from "./utils/config";
@@ -730,6 +731,8 @@ function App() {
         {/* The other side of the same journey: once they HAVE an account,
             tell them the things they made earlier are still here. */}
         <BacklogPrompt />
+        {/* Speaks through a toast, so it never competes for the modal slot. */}
+        <GraduatedFollowsPrompt />
         {FEATURE_EDITOR && (
           <EditorModal
             isOpen={editorModalOpen}

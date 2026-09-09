@@ -167,6 +167,36 @@
   }
 }
 
+// Shares the shape of the edit button, since they occupy the same slot for
+// different viewers. Primary while not following, because following is the
+// action being offered; quiet once it is done.
+.inc-follow-btn {
+  align-self: center;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  flex-shrink: 0;
+  padding: 8px 16px;
+  border-radius: 999px;
+  border: 1px solid var(--accent-primary);
+  background: var(--accent-primary);
+  color: #fff;
+  font: inherit;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+
+  &:hover { background: var(--accent-hover); border-color: var(--accent-hover); }
+
+  &.is-following {
+    background: transparent;
+    color: var(--text-primary);
+    border-color: var(--border-color);
+
+    &:hover { border-color: var(--accent-primary); color: var(--accent-primary); }
+  }
+}
+
 .inc-edit-btn {
   align-self: center;
   display: inline-flex;
