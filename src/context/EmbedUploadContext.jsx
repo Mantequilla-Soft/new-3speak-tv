@@ -1392,7 +1392,11 @@ export function EmbedUploadProvider({ children }) {
    * 3. Link embed video to Hive post
    */
   const publishToEmbed = async () => {
-    if (!user) {
+    // `assetOwner` is the Hive account when there is one and the incubation
+    // handle otherwise. Guarding on `user` alone refused every incubating
+    // uploader with "User not logged in", which is not what had happened: they
+    // are logged in, they simply have no Hive account yet.
+    if (!assetOwner) {
       toast.error('User not logged in');
       return;
     }
@@ -1427,7 +1431,10 @@ export function EmbedUploadProvider({ children }) {
     // Backstop upload gate: blocks "Post Video/Short" for creators with
     // canUpload === false, even if they reached /embed-studio directly (bypassing
     // the upload-button gate). Fails open if the check errors.
-    if (isUploadBlocked(await getCreatorSettings(user))) {
+    // Only meaningful for a Hive account: creator settings are stored against
+    // one, so for an incubating user this would look up `null` and the result
+    // would say nothing about them either way.
+    if (user && isUploadBlocked(await getCreatorSettings(user))) {
       useSupportBlock.getState().showSupportBlock('upload');
       return;
     }
@@ -1648,7 +1655,10 @@ export function EmbedUploadProvider({ children }) {
 
       // Embed ASSET owner/permlink (…/embed?v=owner/permlink) — this is what the
       // `video.info` block below carries so peakd/ecency render the player.
-      let embedOwner = user;
+      // assetOwner, not user: normally this is overwritten from the embed URL
+      // below, but the fallback ran with `null` for an incubating uploader and
+      // would have written video.info.author = null into the post metadata.
+      let embedOwner = assetOwner;
       let embedAssetPermlink = hivePermlink;
       try {
         const vParam = new URL(capturedEmbedUrl).searchParams.get('v') || '';
@@ -1899,7 +1909,11 @@ export function EmbedUploadProvider({ children }) {
 
       let result;
 
-      if (originalAuthor && originalPermlink && !fromStories) {
+      // Not for an incubating user: the dual post is two ops in ONE transaction,
+      // which is atomic on chain and which the off-chain path deliberately will
+      // not half-apply. They get the single post; the "I remixed this" reply is
+      // a courtesy notification, not the upload itself.
+      if (originalAuthor && originalPermlink && !fromStories && !incubationHandle) {
         // Dual post (non-short remix): video post + comment on original video
         addMessage('Creating post and comment on original video...');
 
@@ -1979,7 +1993,10 @@ export function EmbedUploadProvider({ children }) {
       const embedApiBase = chosenEmbedBaseRef.current || EMBED_API_URL;
 
       try {
-        if (embedPermlink && embedApiBase) {
+        // Skipped when the post went off-chain: there is no Hive post to point
+        // at, and sending hive_author: null would write a broken association
+        // that the graduation replay would then have to unpick.
+        if (embedPermlink && embedApiBase && !result.incubation) {
           await fetch(`${embedApiBase}/video/${embedPermlink}/hive`, {
             method: 'POST',
             headers: {
