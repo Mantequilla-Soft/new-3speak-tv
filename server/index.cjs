@@ -665,6 +665,30 @@ app.get('/api/incubation/graduation-status', incubationLimiter, async (req, res)
   try {
     const session = await resolveButrSession(req, res)
 
+    if (!session) return res.status(401).json({ error: 'Not signed in' })
+    if (!butr) return res.status(503).json({ error: 'ButrAuth not ready' })
+    const status = await butr.getIncubationStatus(session.token)
+    res.json(status)
+  } catch (err) {
+    console.error('[incubation] graduation status:', err.message)
+    res.status(502).json({ error: 'Could not read graduation status' })
+  }
+})
+
+// app.use, not app.all('/api/incubation/*'): this server is on Express 5, whose
+// path-to-regexp rejects a bare '*' outright and takes the whole process down
+// at startup rather than at request time. A mount needs no wildcard syntax at
+// all, and req.path is already relative to it.
+app.use('/api/incubation', incubationLimiter, async (req, res) => {
+  try {
+    const sub = req.path || '/'
+    const key = `${req.method} ${sub}`
+    const route = INCUBATION_ROUTES.get(key)
+    if (!route) return res.status(404).json({ error: 'Unknown incubation route' })
+    const target = route.path
+
+    const session = await resolveButrSession(req, res)
+
     // A wallet login (Keychain/HiveAuth/PeakVault/Ledger) holds no butrauth
     // session, so there is no bearer token to forward — but they are a real,
     // server-verified Hive user and these routes are open to them. Assert the
@@ -693,29 +717,6 @@ app.get('/api/incubation/graduation-status', incubationLimiter, async (req, res)
         clearTimeout(timerW)
       }
     }
-    if (!session) return res.status(401).json({ error: 'Not signed in' })
-    if (!butr) return res.status(503).json({ error: 'ButrAuth not ready' })
-    const status = await butr.getIncubationStatus(session.token)
-    res.json(status)
-  } catch (err) {
-    console.error('[incubation] graduation status:', err.message)
-    res.status(502).json({ error: 'Could not read graduation status' })
-  }
-})
-
-// app.use, not app.all('/api/incubation/*'): this server is on Express 5, whose
-// path-to-regexp rejects a bare '*' outright and takes the whole process down
-// at startup rather than at request time. A mount needs no wildcard syntax at
-// all, and req.path is already relative to it.
-app.use('/api/incubation', incubationLimiter, async (req, res) => {
-  try {
-    const sub = req.path || '/'
-    const key = `${req.method} ${sub}`
-    const route = INCUBATION_ROUTES.get(key)
-    if (!route) return res.status(404).json({ error: 'Unknown incubation route' })
-    const target = route.path
-
-    const session = await resolveButrSession(req, res)
     if (!session) return res.status(401).json({ error: 'Not signed in' })
 
     if (route.anyActor) {
