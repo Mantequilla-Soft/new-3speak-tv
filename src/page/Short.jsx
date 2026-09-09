@@ -999,6 +999,14 @@ const VideoShort = () => {
     if (!SHORTS_ADS_ENABLED || !shortsAd) return undefined;
     const player = playerRef.current;
     if (player && !player.destroyed) {
+      /* 🚨 A SPOT NEVER LOOPS.
+       *
+       * The feed's default mode is auto-replay, so the player was set to loop and a
+       * creative shorter than the seconds booked simply started again: a 28.5s spot
+       * against a 29s booking showed half a second of its own opening at the end. It
+       * also meant `ended` never fired, because a looping element does not end, so
+       * nothing could notice the creative had finished. */
+      player.setLoop(false);
       player.load({ url: shortsAd.manifestUrl }).catch((err) => {
         // A spot that will not load must never cost the viewer their feed.
         console.error('[VideoShort] shorts spot failed to load:', err);
@@ -1042,6 +1050,10 @@ const VideoShort = () => {
     setAdSecondsLeft(0);
     const player = playerRef.current;
     const vid = videos[currentIndexRef.current];
+    if (player && !player.destroyed) {
+      // Back to whatever the viewer chose, which the spot borrowed the player from.
+      player.setLoop(playbackModeRef.current === 'auto-replay');
+    }
     if (player && !player.destroyed && vid) {
       const cached = prefetchedSourcesRef.current.get(vid.id);
       player.load(cached || `${vid.author}/${vid.permlink}`)
@@ -1049,6 +1061,11 @@ const VideoShort = () => {
         .catch((err) => console.error('[VideoShort] could not resume after the spot:', err));
     }
   }, [videos]);
+
+  /* The `ended` listener is registered once, on mount, so it cannot close over this
+   * callback — it reads the latest one through a ref instead. */
+  const endShortsAdRef = useRef(null);
+  endShortsAdRef.current = endShortsAd;
 
   useEffect(() => {
     if (!shortsAd || adSecondsLeft > 0) return;
@@ -2608,6 +2625,20 @@ const VideoShort = () => {
     });
 
     player.on('ended', () => {
+      /* 🚨 A SPOT THAT REACHES ITS END IS OVER, whatever the clock still says.
+       *
+       * Checked BEFORE the watch beat, because these seconds are an ad and must not be
+       * credited as time spent on the short underneath it.
+       *
+       * The countdown deliberately stays as the floor rather than being replaced by
+       * this: a missed `ended` would strand a viewer on a finished spot, and that risk
+       * is why the timer exists. This only ever ends a spot EARLY, when the creative
+       * is shorter than the seconds booked — which is the normal case, since an
+       * advertiser books whole seconds and an encoder produces what it produces. */
+      if (adPlayingRef.current) {
+        endShortsAdRef.current?.();
+        return;
+      }
       // Capture the tail of the watched short.
       shortWatchBeat(shortWatchRef, currentTimeRef.current);
       if (playbackModeRef.current === 'none') {
