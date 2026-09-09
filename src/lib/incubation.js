@@ -203,3 +203,83 @@ export function canCreateAccount(status) {
 export function isAwaitingApproval(status) {
   return !!status?.awaitingApproval;
 }
+
+// --- backfill: publishing an incubation backlog to Hive after graduation ----
+//
+// The user has a Hive account now, so every stored row finally has an author.
+// The server hands back FULLY BUILT Hive operations (see the incubation
+// service's lib/ops.js): publishing is a replay, not a translation.
+
+export const fetchBackfillItems = () => write('/backfill/items', 'GET');
+export const fetchBackfillSummary = () => write('/backfill/summary', 'GET');
+const markBackfilled = (type, id, permlink) =>
+  write('/backfill/mark', 'POST', { type, id, permlink });
+
+// Chain-enforced spacing. These are not our policy, they are consensus rules,
+// and hitting them shows up as an opaque broadcast error — so the UI paces
+// itself instead of letting the user discover them one failure at a time.
+export const ROOT_POST_INTERVAL_MS = 5 * 60 * 1000;   // HIVE_MIN_ROOT_COMMENT_INTERVAL
+const REPLY_INTERVAL_MS = 3 * 1000;                    // HIVE_MIN_REPLY_INTERVAL
+const LAST_ROOT_KEY = 'backfill_last_root_post_at';
+
+export function lastRootPostAt() {
+  try { return Number(localStorage.getItem(LAST_ROOT_KEY)) || 0; } catch { return 0; }
+}
+export function rootPostWaitMs() {
+  return Math.max(0, ROOT_POST_INTERVAL_MS - (Date.now() - lastRootPostAt()));
+}
+
+const sleep = (ms) => new Promise(r => setTimeout(r, ms));
+
+/**
+ * Publish selected items, one at a time, oldest first.
+ *
+ * Sequential and stop-on-failure by design. A root post can only be broadcast
+ * once every five minutes per account, and a fresh account's resource credits
+ * allow only a couple a day, so firing a whole backlog at once would fail most
+ * of the way through and leave the user unable to tell what actually landed.
+ *
+ * The broadcast goes through /api/broadcast — the same endpoint the normal
+ * posting UI uses, with the same validation and posting-authority check. This
+ * adds no capability; it just supplies the operation.
+ *
+ * `onProgress(item, status, detail)` is called for every item so the table can
+ * update live rather than freezing until the whole run finishes.
+ */
+export async function publishBackfill(items, onProgress = () => {}) {
+  const done = [];
+  for (const item of items) {
+    if (item.isRootPost) {
+      const wait = rootPostWaitMs();
+      if (wait > 0) {
+        onProgress(item, 'waiting', wait);
+        break;   // stop, do not silently fail the rest
+      }
+    }
+    onProgress(item, 'publishing');
+    try {
+      const res = await fetch('/api/broadcast', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+        body: JSON.stringify({ operations: [item.op] })
+      });
+      const body = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(body.error || `Publish failed (${res.status})`);
+
+      const permlink = item.op?.[1]?.permlink || null;
+      await markBackfilled(item.type, item.id, permlink);
+      if (item.isRootPost) {
+        try { localStorage.setItem(LAST_ROOT_KEY, String(Date.now())); } catch { /* ignore */ }
+      }
+      done.push(item.id);
+      onProgress(item, 'done');
+      // Replies and custom_json have their own 3-second floor.
+      if (!item.isRootPost) await sleep(REPLY_INTERVAL_MS);
+    } catch (err) {
+      onProgress(item, 'error', err.message);
+      break;   // one failure usually means the next will fail the same way
+    }
+  }
+  return done;
+}

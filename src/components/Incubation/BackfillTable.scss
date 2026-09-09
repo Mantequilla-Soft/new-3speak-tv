@@ -1,0 +1,135 @@
+@use "../../mixins.scss" as mix;
+
+// The backlog table a graduated user publishes from. Full-width page content
+// rather than a dialog: this is a considered, repeated task, not a prompt.
+
+.backfill {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 24px 16px 64px;
+
+  h2 {
+    margin: 0 0 8px;
+  }
+
+  .desc {
+    margin: 0 0 20px;
+  }
+}
+
+.backfill-note {
+  border: 1px solid var(--border-color, rgba(255, 255, 255, 0.12));
+  border-radius: 10px;
+  padding: 12px 14px;
+  margin-bottom: 20px;
+  font-size: 14px;
+  line-height: 1.55;
+}
+
+.backfill-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 12px;
+}
+
+// Pushes the primary action to the right on desktop; on a phone the row wraps
+// and it simply follows the count.
+.backfill-count {
+  flex: 1;
+  font-size: 13px;
+  opacity: 0.75;
+}
+
+.backfill-wait {
+  font-size: 13px;
+  opacity: 0.8;
+  margin: 0 0 12px;
+}
+
+.backfill-error,
+.backfill-row-error {
+  color: var(--error, #e0594b);
+  font-size: 13px;
+}
+
+.backfill-row-error {
+  display: block;
+  margin-top: 2px;
+}
+
+.backfill-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+
+  th,
+  td {
+    text-align: left;
+    padding: 10px 8px;
+    border-bottom: 1px solid var(--border-color, rgba(255, 255, 255, 0.1));
+    vertical-align: top;
+  }
+
+  th {
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    opacity: 0.6;
+  }
+
+  // Published rows stay in place rather than disappearing: a row that vanishes
+  // on success leaves the user unsure whether it worked.
+  tr.is-done {
+    opacity: 0.5;
+  }
+
+  tr.is-error td {
+    border-bottom-color: var(--error, #e0594b);
+  }
+}
+
+.backfill-what {
+  word-break: break-word;
+}
+
+.backfill-tag {
+  display: inline-block;
+  margin-left: 6px;
+  padding: 1px 6px;
+  border-radius: 999px;
+  border: 1px solid var(--border-color, rgba(255, 255, 255, 0.18));
+  font-size: 11px;
+  opacity: 0.75;
+  white-space: nowrap;
+}
+
+.backfill-excluded {
+  margin-top: 32px;
+  font-size: 14px;
+
+  h3 {
+    font-size: 15px;
+    margin: 0 0 8px;
+  }
+
+  ul {
+    margin: 0;
+    padding-left: 18px;
+    line-height: 1.6;
+  }
+}
+
+@include mix.respond(phone) {
+  // The date column is the first thing to go: it is the least load-bearing
+  // information and the labels need the width more.
+  .backfill-table th:nth-child(4),
+  .backfill-table td:nth-child(4) {
+    display: none;
+  }
+
+  .backfill-actions .btn-primary {
+    width: 100%;
+  }
+}

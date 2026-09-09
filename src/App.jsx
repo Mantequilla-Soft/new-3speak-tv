@@ -97,6 +97,7 @@ const Spotlight = lazy(() => import("./page/Spotlight"));
 const TagFeed = lazy(() => import("./page/TagFeed"));
 const Trend = lazy(() => import("./page/Trend"));
 const UploadVideo = lazy(() => import("./page/UploadVideo"));
+const PublishBacklog = lazy(() => import("./page/PublishBacklog"));
 const UserProfilePage = lazy(() => import("./components/Userprofilepage/UserProfilePage"));
 const Wallet = lazy(() => import("./page/Wallet"));
 const Watch = lazy(() => import("./page/Watch"));
@@ -136,6 +137,7 @@ import WelcomePrompt from "./components/WelcomePrompt/WelcomePrompt";
 import AdsPrompt from "./components/AdsPrompt/AdsPrompt";
 import ViewerRewardsPrompt from "./components/AdsPrompt/ViewerRewardsPrompt";
 import GraduationPrompt from "./components/Incubation/GraduationPrompt";
+import BacklogPrompt from "./components/Incubation/BacklogPrompt";
 import AvatarSync from "./components/HiveAvatar/AvatarSync";
 import EditorModal from "./components/modal/EditorModal";
 import { FEATURE_EDITOR } from "./utils/config";
@@ -610,6 +612,8 @@ function App() {
             <Route path="/notifications" element={<Notifications />} />
             <Route path="/post/:author/:permlink" element={<PostView />} />
             <Route path="/upload" element={<UploadVideo />} />
+            {/* Publish the backlog someone made before they had a Hive account. */}
+            <Route path="/publish-backlog" element={<PublishBacklog />} />
             <Route path="/firstupload" element={<FirstUploads />} />
             <Route path="/trend" element={<Trend />} />
             <Route path="/discover" element={<Discover />} />
@@ -707,6 +711,9 @@ function App() {
             butrauth (may they) and our own signal (have they earned it)
             agree. Shares the one-prompt-at-a-time gate with the others. */}
         <GraduationPrompt />
+        {/* The other side of the same journey: once they HAVE an account,
+            tell them the things they made earlier are still here. */}
+        <BacklogPrompt />
         {FEATURE_EDITOR && (
           <EditorModal
             isOpen={editorModalOpen}

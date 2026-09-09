@@ -605,15 +605,22 @@ async function resolveButrSession(req, res) {
 // ALLOWLISTED, not a catch-all proxy. A blanket forwarder would expose whatever
 // the incubation service grows next — including anything it later mounts for
 // internal use — to any logged-in browser.
+// `graduated: true` marks the routes that are for someone who ALREADY has a
+// Hive account. Backfill is exactly that — their account is the author field
+// every stored row has been waiting for — so the incubating check below has to
+// be skipped for it, not merely relaxed.
 const INCUBATION_ROUTES = new Map([
-  ['POST /content', '/content'],
-  ['GET /content/mine', '/content/mine'],
-  ['PUT /social/vote', '/social/vote'],
-  ['PUT /social/follow', '/social/follow'],
-  ['PUT /social/profile', '/social/profile'],
-  ['GET /social/profile/mine', '/social/profile/mine'],
-  ['GET /social/follows/mine', '/social/follows/mine'],
-  ['GET /public/graduation/plan', '/public/graduation/plan']
+  ['POST /content', { path: '/content' }],
+  ['GET /content/mine', { path: '/content/mine' }],
+  ['PUT /social/vote', { path: '/social/vote' }],
+  ['PUT /social/follow', { path: '/social/follow' }],
+  ['PUT /social/profile', { path: '/social/profile' }],
+  ['GET /social/profile/mine', { path: '/social/profile/mine' }],
+  ['GET /social/follows/mine', { path: '/social/follows/mine' }],
+  ['GET /public/graduation/plan', { path: '/public/graduation/plan' }],
+  ['GET /backfill/items', { path: '/backfill/items', graduated: true }],
+  ['GET /backfill/summary', { path: '/backfill/summary', graduated: true }],
+  ['POST /backfill/mark', { path: '/backfill/mark', graduated: true }]
 ])
 
 // GET /api/incubation/graduation-status — BUTRAUTH's half of the decision.
@@ -646,16 +653,25 @@ app.use('/api/incubation', incubationLimiter, async (req, res) => {
   try {
     const sub = req.path || '/'
     const key = `${req.method} ${sub}`
-    const target = INCUBATION_ROUTES.get(key)
-    if (!target) return res.status(404).json({ error: 'Unknown incubation route' })
+    const route = INCUBATION_ROUTES.get(key)
+    if (!route) return res.status(404).json({ error: 'Unknown incubation route' })
+    const target = route.path
 
     const session = await resolveButrSession(req, res)
     if (!session) return res.status(401).json({ error: 'Not signed in' })
 
-    // Refused HERE as well as in the service. The service is the authority, but
-    // failing at the edge means a user who has graduated mid-session gets a
-    // clear answer instead of a round trip that ends in the same 409.
-    if (session.claims.hiveUsername || !session.claims.incubation) {
+    if (route.graduated) {
+      // The mirror image: these routes need a real Hive account to publish AS.
+      if (!session.claims.hiveUsername) {
+        return res.status(409).json({
+          error: 'Create your Hive account first — there is nothing to publish as yet.',
+          reason: 'not_graduated'
+        })
+      }
+    } else if (session.claims.hiveUsername || !session.claims.incubation) {
+      // Refused HERE as well as in the service. The service is the authority, but
+      // failing at the edge means a user who has graduated mid-session gets a
+      // clear answer instead of a round trip that ends in the same 409.
       return res.status(409).json({
         error: 'This account is on Hive — publish to the chain, not the incubation service.',
         reason: 'has_hive_account'
