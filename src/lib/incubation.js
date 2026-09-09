@@ -34,26 +34,33 @@ export function clearIncubation() {
   try { localStorage.removeItem(HANDLE_KEY); } catch { /* ignore */ }
 }
 
+// The 3Speak mark, used as the default avatar for anyone without a Hive
+// account. Served from public/, so it is one cached request for every such user
+// rather than a distinct image each.
+//
+// The square PWA icon deliberately, NOT src/assets/image/3S_logo.svg — that one
+// is the wide wordmark (509x130) and would be squashed or cropped to nonsense
+// in a round avatar.
+const DEFAULT_INCUBATION_AVATAR = '/pwa-192x192.png';
+
 /**
- * A deterministic avatar for a handle, as an inline SVG data URI.
+ * Avatar for someone with no Hive account.
  *
- * Incubating users have no Hive account, and images.hive.blog answers an
+ * They have no Hive profile to read one from, and images.hive.blog answers an
  * unknown name with a 500 rather than a placeholder — so the usual
  * `/u/<name>/avatar/small` URL renders as a broken image for every one of them.
- * Generated locally: no network call, no failure mode, and stable per handle so
- * the same person looks the same everywhere.
+ *
+ * Everyone shares the 3Speak mark, which is a deliberate trade: it reads as
+ * "new here, on 3Speak" at a glance, at the cost of not telling two incubating
+ * users apart by picture alone. The handle is always shown beside it, so the
+ * name still distinguishes them.
+ *
+ * `handle` is accepted but unused, so call sites need not change if this ever
+ * goes back to being per-user.
  */
+// eslint-disable-next-line no-unused-vars
 export function handleAvatar(handle) {
-  const h = String(handle || '?');
-  let n = 0;
-  for (let i = 0; i < h.length; i++) n = (n * 31 + h.charCodeAt(i)) >>> 0;
-  const hue = n % 360;
-  const letter = (h[0] || '?').toUpperCase();
-  const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64">`
-    + `<rect width="64" height="64" rx="32" fill="hsl(${hue} 62% 42%)"/>`
-    + `<text x="32" y="43" font-family="system-ui,sans-serif" font-size="30" font-weight="600"`
-    + ` fill="#fff" text-anchor="middle">${letter}</text></svg>`;
-  return `data:image/svg+xml;utf8,${encodeURIComponent(svg)}`;
+  return DEFAULT_INCUBATION_AVATAR;
 }
 
 async function json(res) {
