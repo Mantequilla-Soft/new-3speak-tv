@@ -2,7 +2,7 @@ import { useCallback, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { MdCheckCircle, MdRadioButtonUnchecked, MdExpandMore } from 'react-icons/md';
 import {
-  FaRocket, FaVideo, FaMobileAlt, FaComments, FaUserPlus, FaClock,
+  FaRocket, FaVideo, FaMobileAlt, FaComments, FaUserPlus, FaClock, FaHourglassHalf,
 } from 'react-icons/fa';
 import {
   fetchIncubationProgress, progressHue, progressFraction, onIncubationProgress,
@@ -75,6 +75,15 @@ const TASK_COPY = {
     ],
     cta: { label: 'Watch something', to: '/' },
   },
+  // The only goal with no call to action, deliberately: there is nothing to go
+  // and do, which is the whole point of it. Its "what counts" list is built in
+  // taskCounts so it can name the actual date from the server.
+  time: {
+    Icon: FaHourglassHalf,
+    label: 'Be here for 3 days',
+    hint: 'This one finishes on its own. Nothing to do.',
+    why: 'A channel that appeared an hour ago and a channel that has been here a few days look the same on paper. The days are what tell them apart, so everyone waits the same short while.',
+  },
 };
 
 /**
@@ -98,7 +107,7 @@ function asDuration(seconds) {
  *
  * The comment floor lives on the task itself rather than in fine print below
  * the list: it is the rule that decides whether a comment counts, and someone
- * reading "1/5" needs it right there, not in a footnote they have already
+ * reading "1/10" needs it right there, not in a footnote they have already
  * scrolled past.
  */
 function taskHint(t, minCommentChars) {
@@ -117,6 +126,16 @@ function taskHint(t, minCommentChars) {
  * under their own video and sees 0/10 deserves to be able to find out why.
  */
 function taskCounts(t, minCommentChars) {
+  if (t.type === 'time') {
+    const when = t.readyAt ? asDate(t.readyAt) : null;
+    return [
+      'Three full days from the day you signed up.',
+      when
+        ? `For you that is ${when}. The other goals can all be finished before then.`
+        : 'The other goals can all be finished before then.',
+      'It keeps counting whether you are here or not, so there is nothing to keep up.',
+    ];
+  }
   if (t.type === 'comment') {
     return [
       minCommentChars > 0
@@ -135,8 +154,25 @@ function taskPct(t) {
 }
 
 function taskAmount(t) {
-  if (t.unit !== 'seconds') return `${Math.min(t.have, t.need)}/${t.need}`;
-  return `${asDuration(Math.min(t.have, t.need))} / ${asDuration(t.need)}`;
+  if (t.unit === 'seconds') return `${asDuration(Math.min(t.have, t.need))} / ${asDuration(t.need)}`;
+  // Spelled out, because "0/3" beside a goal nobody can act on reads like
+  // something is broken. "0 of 3 days" reads as a wait.
+  if (t.unit === 'days') {
+    return `${Math.min(t.have, t.need)} of ${t.need} ${t.need === 1 ? 'day' : 'days'}`;
+  }
+  return `${Math.min(t.have, t.need)}/${t.need}`;
+}
+
+/**
+ * "14 September" from an ISO date, in the reader's own locale.
+ *
+ * Date only, no time: the server floors to whole days, so naming an hour would
+ * promise a precision the requirement does not have.
+ */
+function asDate(iso) {
+  const d = new Date(iso);
+  if (Number.isNaN(d.getTime())) return null;
+  return d.toLocaleDateString(undefined, { day: 'numeric', month: 'long' });
 }
 
 // Remembered per browser so the list does not spring open on every visit once
@@ -208,10 +244,13 @@ export default function IncubationProgressPanel() {
           worth seeing at a glance, and collapsing it would leave the
           panel saying nothing. */}
       {/* One bar, filled to the SAME proportional figure the pill in
-          the nav shows: five goals, a fifth each, and a part-finished
+          the nav shows: an equal share per goal, and a part-finished
           goal counts for its part. So a single comment lengthens it.
-          It is drawn as one track rather than five because five stubs
-          read as five separate errands instead of one journey. */}
+          It is drawn as one track rather than one stub per goal,
+          because stubs read as separate errands instead of one
+          journey. The share per goal comes from the server's task
+          list rather than a number written here, so adding a goal
+          does not silently leave this bar measuring the wrong thing. */}
       <div
         className="inc-progress-bar"
         role="progressbar"
@@ -251,8 +290,8 @@ export default function IncubationProgressPanel() {
                 <li
                   key={t.type}
                   className={`${t.done ? 'is-done' : ''}${open ? ' is-open' : ''}`.trim()}
-                  // Read by the fill behind the card, so "2 of 5" is
-                  // visible as a quantity and not only as a number.
+                  // Read by the fill behind the card, so a part-done
+                  // goal is visible as a quantity, not only as a number.
                   style={{ '--task-fill': `${taskPct(t)}%` }}
                 >
                   {/* The whole row is the control, not just the
