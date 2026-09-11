@@ -165,6 +165,31 @@
           width: 25px;
           margin-right: 12px;
         }
+
+        // How many posts are still waiting. A number rather than a dot: deciding
+        // whether to open this is a different decision at 1 than at 40.
+        //
+        // Deliberately not the accent colour. A red pill in a quiet menu reads
+        // as an error to fix, and this is a pile of work to get to when they
+        // feel like it -- the same reason the "Getting started" badge lost its
+        // red background.
+        .profilenav-count {
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          min-width: 20px;
+          height: 18px;
+          margin-left: 8px;
+          padding: 0 6px;
+          border-radius: 999px;
+          background: var(--bg-tertiary);
+          border: 1px solid var(--border-color);
+          color: var(--text-secondary);
+          font-size: 11px;
+          font-weight: 600;
+          line-height: 1;
+          font-variant-numeric: tabular-nums;
+        }
       }
 
       .upload-dropdown {

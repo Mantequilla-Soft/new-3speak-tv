@@ -499,15 +499,27 @@ function Row({ title, desc, checked, onChange }) {
 
 const TABS = [
   { id: 'general', label: 'General' },
-  { id: 'shorts', label: 'Shorts' },
+  // Shorts and Interests are sub-tabs of this one now. Seven top-level tabs
+  // overflowed the row even on desktop, and the three of them were all answering
+  // "what shows up in my feeds" from separate pages.
   { id: 'content', label: 'Content' },
+  // Hive accounts only: every setting behind it is about notifications that come
+  // from the chain, so for anyone else it was a page of switches that could not
+  // do anything.
+  { id: 'notifications', label: 'Notifications' },
   // Its own page rather than a tail on Content. Both halves are about money moving
   // between advertisers, creators and viewers, and they were the two longest things on
-  // a page otherwise made of one-line switches.
+  // a page otherwise made of one-line switches. Only shown to those who have it.
   { id: 'rewards', label: 'Ads & rewards' },
+  { id: 'about', label: 'About / Version' },
+];
+
+// The three panels behind Content. Kept as data so the sub-tab bar and the
+// panels below cannot fall out of step.
+const CONTENT_TABS = [
+  { id: 'feed', label: 'Feed' },
+  { id: 'shorts', label: 'Shorts' },
   { id: 'interests', label: 'Interests' },
-  { id: 'notifications', label: 'Notifications' },
-  { id: 'about', label: 'About / Contact' },
 ];
 
 /**
@@ -515,7 +527,7 @@ const TABS = [
  * side menu, now grouped with headers + explanations and compact switches.
  */
 export default function SettingsModal({ isOpen, onClose }) {
-  const { theme, showNsfw, setShowNsfw, toggleTheme, sidebarHidden, setSidebarHidden, homeCardSize, setHomeCardSize, previewEnabled, setPreviewEnabled, shortsCommentBar, setShortsCommentBar, openShortsOnStart, setOpenShortsOnStart, inlineShorts, setInlineShorts, hideWatched, setHideWatched, privateMode, setPrivateMode, simpleFeed, setSimpleFeed } = useAppStore();
+  const { theme, showNsfw, setShowNsfw, toggleTheme, homeCardSize, setHomeCardSize, previewEnabled, setPreviewEnabled, shortsCommentBar, setShortsCommentBar, openShortsOnStart, setOpenShortsOnStart, inlineShorts, setInlineShorts, hideWatched, setHideWatched, privateMode, setPrivateMode, simpleFeed, setSimpleFeed } = useAppStore();
   /* Whether the Ads & rewards page exists at all.
    *
    * 🚨 THE CHECKER DECIDES, not the build flag. adsEnabledFor() is true for everybody
@@ -542,16 +554,26 @@ export default function SettingsModal({ isOpen, onClose }) {
     && adsEnabledFor(settingsUser)
     && adAccess?.account === settingsUser
     && adAccess.allowed === true;
+  // Notifications are read from the chain against a Hive account. Someone signed
+  // in without one -- incubating, or a wallet-less session -- had a tab of
+  // switches that could not take effect.
+  const notificationsVisible = !!settingsUser;
   const visibleTabs = useMemo(
-    () => TABS.filter((t) => t.id !== 'rewards' || rewardsVisible),
-    [rewardsVisible],
+    () => TABS.filter((t) => {
+      if (t.id === 'rewards') return rewardsVisible;
+      if (t.id === 'notifications') return notificationsVisible;
+      return true;
+    }),
+    [rewardsVisible, notificationsVisible],
   );
   const [tab, setTab] = useState('general');
+  const [contentTab, setContentTab] = useState('feed');
   // Losing the group (or logging out) while standing on that page would leave the modal
   // with no tab selected and nothing rendered.
   useEffect(() => {
     if (tab === 'rewards' && !rewardsVisible) setTab('general');
-  }, [tab, rewardsVisible]);
+    if (tab === 'notifications' && !notificationsVisible) setTab('general');
+  }, [tab, rewardsVisible, notificationsVisible]);
 
   // Lock background page scroll while the modal is open (restore on close).
   useEffect(() => {
@@ -609,8 +631,6 @@ export default function SettingsModal({ isOpen, onClose }) {
 
   if (!isOpen) return null;
 
-  // The left sidebar only exists on desktop, so its toggle is irrelevant on mobile/tablet.
-  const isDesktop = window.matchMedia('(min-width: 1025px)').matches;
   // Previews only work on touch devices in large mode, so hide the toggle when
   // a touch user has small cards selected (it would have no effect).
   const isTouch = !window.matchMedia('(hover: hover)').matches;
@@ -687,19 +707,27 @@ export default function SettingsModal({ isOpen, onClose }) {
               checked={!!simpleFeed}
               onChange={(v) => setSimpleFeed(v)}
             />
-            {/* The sidebar only exists on desktop, so this is hidden on mobile/tablet. */}
-            {isDesktop && (
-              <Row
-                title="Hide sidebar"
-                desc="Collapse the left navigation sidebar for a wider content area."
-                checked={!!sidebarHidden}
-                onChange={(hide) => setSidebarHidden(hide)}
-              />
-            )}
           </div>
         )}
 
-        {tab === 'shorts' && (
+        {tab === 'content' && (
+          <div className="settings-subtabs" role="tablist" aria-label="Content settings">
+            {CONTENT_TABS.map((t) => (
+              <button
+                key={t.id}
+                type="button"
+                role="tab"
+                aria-selected={contentTab === t.id}
+                className={`settings-subtab${contentTab === t.id ? ' is-active' : ''}`}
+                onClick={() => setContentTab(t.id)}
+              >
+                {t.label}
+              </button>
+            ))}
+          </div>
+        )}
+
+        {tab === 'content' && contentTab === 'shorts' && (
           <div className="settings-section">
             <h4 className="settings-section-title">Shorts</h4>
             {/* Comment bar is only rendered under 768px, so it's hidden on desktop. */}
@@ -726,10 +754,10 @@ export default function SettingsModal({ isOpen, onClose }) {
           </div>
         )}
 
-        {tab === 'content' && (
+        {tab === 'content' && contentTab === 'feed' && (
           <>
           <div className="settings-section">
-            <h4 className="settings-section-title">Content</h4>
+            <h4 className="settings-section-title">Feed</h4>
             <Row
               title="Show NSFW content"
               desc="Display videos and audio marked not-safe-for-work. Off by default."
@@ -759,7 +787,7 @@ export default function SettingsModal({ isOpen, onClose }) {
           </>
         )}
 
-        {tab === 'interests' && <InterestsSection />}
+        {tab === 'content' && contentTab === 'interests' && <InterestsSection />}
         {tab === 'notifications' && <NotificationsSection />}
 
         {tab === 'about' && (

@@ -101,6 +101,7 @@ import ShortsLoadingScreen from '../components/ShortsLoadingScreen/ShortsLoading
 import { markByReputation } from '../utils/reputation';
 import { markByHidden } from '../utils/hiddenCreators';
 import { getVotePower, getDynamicProps } from '../utils/hiveUtils';
+import { mergeOffChainReplies, applyOffChainLikes } from '../utils/offChainReplies';
 import { commentWithAioha, isLoggedIn } from '../hive-api/aioha';
 import AmbientGlow, { useAmbientGlow } from '../components/AmbientGlow/AmbientGlow';
 import EditorModal from '../components/modal/EditorModal';
@@ -239,6 +240,7 @@ function shortWatchBeat(watchRef, position) {
 /* ================= COMPONENT ================= */
 const VideoShort = () => {
   const { user, authenticated, watchHistoryEnabled } = useAppStore();
+  const incubationHandle = useAppStore((s) => s.incubationHandle);
   // Shorts feed mode — 'discover' (everything, interests just boost the ranking) or
   // 'interests' (ONLY shorts whose winning topic is one of mine). Persisted in the
   // store. Never applies to a creator's feed (?user=…), which stays date-sorted.
@@ -850,8 +852,9 @@ const VideoShort = () => {
     updateUrlWithCurrentVideo(currentVid);
 
     // Record watch history — use hivePermlink so WatchedView can look it up via Hive API
-    if (user && watchHistoryEnabled !== false && currentVid.author && (currentVid.hivePermlink || currentVid.permlink)) {
-      recordWatch(user, currentVid.author, currentVid.hivePermlink || currentVid.permlink, { short: true });
+    const historyUser = user || incubationHandle;
+    if (historyUser && watchHistoryEnabled !== false && currentVid.author && (currentVid.hivePermlink || currentVid.permlink)) {
+      recordWatch(historyUser, currentVid.author, currentVid.hivePermlink || currentVid.permlink, { short: true });
     }
 
     // Decrement unseen_count for the current creator in the stories bar cache
@@ -1698,7 +1701,11 @@ const VideoShort = () => {
   /* ---------- FETCH COMMENTS ---------- */
   const fetchComments = useCallback(async () => {
     const video = videos[currentIndex];
-    if (!video || !video.hivePermlink || !video.author) return;
+    // hivePermlink OR permlink: a short posted by someone still in the warm-up
+    // has no Hive post at all, so requiring hivePermlink meant its comment panel
+    // loaded nothing -- not even the off-chain replies written on it.
+    const rootPermlink = video?.hivePermlink || video?.permlink;
+    if (!video || !rootPermlink || !video.author) return;
 
     if (commentsFetchedRef.current.has(video.id)) return;
 
@@ -1706,8 +1713,24 @@ const VideoShort = () => {
     commentsFetchedRef.current.add(video.id);
 
     try {
-      const rawComments = await hiveApi.fetchPostComments(video.author, video.hivePermlink, user);
-      const comments = await markByHidden(await markByReputation(rawComments));
+      // Its own try: condenser_api THROWS for a post that is not on chain
+      // rather than returning an empty list, and letting that escape would
+      // abandon the off-chain replies below with it.
+      let rawComments = [];
+      if (video.hivePermlink) {
+        try {
+          rawComments = await hiveApi.fetchPostComments(video.author, video.hivePermlink, user);
+        } catch (e) {
+          console.warn('[shorts] hive replies unavailable:', e?.message);
+        }
+      }
+      // Marked BEFORE the merge, like the watch page does it: reputation and
+      // hidden-creator marking are Hive lookups, and an off-chain handle is not
+      // a Hive account to look up.
+      const marked = await markByHidden(await markByReputation(rawComments));
+      const merged = await mergeOffChainReplies(rootPermlink, marked);
+      // Off-chain likes on those comments, in one request for the whole thread.
+      const comments = await applyOffChainLikes(merged, user || incubationHandle);
 
       // Pre-render comment bodies as HTML
       try {

@@ -1,0 +1,102 @@
+@use "../mixins.scss" as mix;
+
+.groups-page {
+  padding: 18px 16px 48px;
+}
+
+.groups-head {
+  margin-bottom: 14px;
+
+  h1 {
+    margin: 0;
+    font-size: 26px;
+    color: var(--text-primary);
+  }
+
+  p {
+    margin: 6px 0 0;
+    font-size: 14px;
+    color: var(--text-muted);
+  }
+}
+
+// Underlined rather than filled, matching the sub-tab row in Settings, so a
+// row of tabs means the same thing wherever it appears.
+.groups-tabs {
+  display: flex;
+  gap: 4px;
+  margin-bottom: 18px;
+  border-bottom: 1px solid var(--border-color);
+  overflow-x: auto;
+  scrollbar-width: none;
+
+  &::-webkit-scrollbar { display: none; }
+}
+
+.groups-tab {
+  flex: 0 0 auto;
+  padding: 10px 14px;
+  margin-bottom: -1px;
+  border: 0;
+  border-bottom: 2px solid transparent;
+  background: none;
+  color: var(--text-muted);
+  font: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+
+  &:hover { color: var(--text-primary); }
+
+  &.is-active {
+    color: var(--text-primary);
+    border-bottom-color: var(--accent-primary);
+  }
+}
+
+// Badges still carries its own <h1> from when it was a page of its own. The tab
+// above already says which one you are looking at. (Communities lost its
+// heading outright when its header became a search-and-actions bar.)
+.groups-page {
+  .badges-head h1 { display: none; }
+  .badges-head { margin-top: 0; }
+
+  // Both pages were written as standalone routes and brought their own page
+  // padding: 20px on communities, 16px 4px on badges. Inside Groups that made
+  // the two grids start at different left edges, so the cards visibly shifted
+  // when you changed tab. The page's own padding is the only one now.
+  .communities-render,
+  .badges-render {
+    padding: 0;
+  }
+
+  // The two intros are coloured in their own stylesheets, both on
+  // --text-secondary. Overriding them from here tied on specificity and lost to
+  // whichever file loaded last, which is not a thing to leave to import order.
+}
+
+.groups-soon {
+  border: 1px dashed var(--border-color);
+  border-radius: 14px;
+  padding: 28px;
+  text-align: center;
+
+  h2 {
+    margin: 0 0 8px;
+    font-size: 18px;
+    color: var(--text-primary);
+  }
+
+  p {
+    margin: 0 auto;
+    max-width: 460px;
+    font-size: 14px;
+    line-height: 1.6;
+    color: var(--text-muted);
+  }
+}
+
+@include mix.respond(phone) {
+  .groups-head h1 { font-size: 21px; }
+  .groups-page { padding: 14px 12px 40px; }
+}

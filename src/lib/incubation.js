@@ -108,7 +108,7 @@ export async function fetchIncubationProfile(handle, viewer = null) {
 
 /** Follow (or unfollow) an incubating creator. Works for Hive users too. */
 export const followIncubationUser = (handle, following) =>
-  write('/social/follow', 'PUT', { following: handle, state: following ? 'following' : 'unfollowed' });
+  announcing(write('/social/follow', 'PUT', { following: handle, state: following ? 'following' : 'unfollowed' }));
 
 /**
  * One off-chain post, for the watch page.
@@ -159,6 +159,52 @@ export async function fetchIncubationReplies(parentAuthor, parentPermlink, limit
   return json(await fetch(`${CHECKER_URL}/incubation/replies?${qs}`));
 }
 
+// --- public profile reads, via our own server ----------------------------
+//
+// Through the same proxy as the writes below, but with NO credentials: these
+// are the public half of somebody's profile and a signed-out visitor has to be
+// able to read them. The proxy allowlists exactly these three paths.
+//
+// Not from the checker, unlike the feed and profile reads above: the checker
+// mirrors published content, and none of this is published. A comment written
+// off-chain, a follow of an account that does not exist on chain yet -- the
+// incubation service is the only thing that has ever seen them.
+
+async function publicRead(handle, what, limit = 50) {
+  // Lowercased HERE, not just server-side. A handle reaches this from a URL
+  // somebody may have typed or been sent with capitals in it, and the proxy's
+  // allowlist pattern is lowercase-only -- so `/@Alice` would 404 at the edge
+  // with nothing to explain it, while `/@alice` worked.
+  const res = await fetch(
+    `/api/incubation/public/user/${encodeURIComponent(String(handle).toLowerCase())}/${what}?limit=${limit}`,
+    { credentials: 'omit' }
+  );
+  return json(res);
+}
+
+/** What this handle has said on other people's posts. */
+export const fetchIncubationUserComments = (handle, limit = 50) =>
+  publicRead(handle, 'comments', limit);
+
+/** Who follows this handle. Each row is a Hive account OR another handle. */
+export const fetchIncubationFollowers = (handle, limit = 100) =>
+  publicRead(handle, 'followers', limit);
+
+/** Who this handle follows. */
+export const fetchIncubationFollowing = (handle, limit = 100) =>
+  publicRead(handle, 'following', limit);
+
+/**
+ * What this handle has POSTED, straight from the incubation service.
+ *
+ * Distinct from fetchIncubationPosts above, which reads the checker's mirror
+ * and returns render-ready cards. This one exists to answer "what is the title
+ * of the off-chain post somebody replied to", which the mirror cannot answer
+ * for another user's unpublished content.
+ */
+export const fetchIncubationUserContent = (handle, limit = 100) =>
+  publicRead(handle, 'content', limit);
+
 // --- writes, via our own server ------------------------------------------
 //
 // NOT straight to the incubation service. The ButrAuth access token lives in an
@@ -170,12 +216,31 @@ export async function fetchIncubationReplies(parentAuthor, parentPermlink, limit
 // belongs on chain, not in a shadow database.
 
 async function write(path, method, body) {
-  const res = await fetch(`/api/incubation${path}`, {
+  const send = () => fetch(`/api/incubation${path}`, {
     method,
     headers: { 'Content-Type': 'application/json' },
     credentials: 'include',
     body: ['GET', 'HEAD'].includes(method) ? undefined : JSON.stringify(body || {})
   });
+
+  let res = await send();
+
+  // A wallet login (Keychain, HiveAuth, PeakVault, Ledger) proves who it is by
+  // signing a challenge at login, which mints a session cookie our server can
+  // read. Nothing else identifies them: the keys live in their extension and
+  // the server never sees a token.
+  //
+  // That cookie can be absent or expired while the page still looks logged in,
+  // and then every write here answers 401 -- which is what happened to a Hive
+  // user trying to follow an incubating creator. Re-mint once and retry, the
+  // same recovery lib/advertiseData.js already does for the signing endpoint.
+  if (res.status === 401 && !currentHandle()) {
+    try {
+      const { establishWalletSession } = await import('../hive-api/aioha');
+      if (await establishWalletSession()) res = await send();
+    } catch { /* fall through to the original 401 */ }
+  }
+
   return json(res);
 }
 
@@ -187,7 +252,7 @@ async function write(path, method, body) {
  * post carries the same permlink the on-chain one would have — which is what
  * the player resolves a video's source by.
  */
-export const postIncubationContent = (payload) => write('/content', 'POST', payload);
+export const postIncubationContent = (payload) => announcing(write('/content', 'POST', payload));
 export const fetchMyIncubationContent = () => write('/content/mine', 'GET');
 /**
  * How many people have voted on an off-chain post, and whether the viewer has.
@@ -202,13 +267,70 @@ export async function fetchIncubationLikes(author, permlink, viewer) {
   return json(await fetch(`${CHECKER_URL}/incubation/likes?${qs}`));
 }
 
+/**
+ * Like counts for MANY off-chain posts at once.
+ *
+ * `items` is [{ author, permlink }]; the answer is keyed "author/permlink".
+ * Used wherever a list is rendered -- a comment thread, a snaps feed, the shorts
+ * rail -- because asking the single-post route per item is one request per row.
+ */
+export async function fetchIncubationLikesFor(items, viewer) {
+  const list = (items || []).filter((i) => i?.author && i?.permlink);
+  if (!list.length) return {};
+  const res = await json(await fetch(`${CHECKER_URL}/incubation/likes/for`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ items: list, viewer: viewer || undefined }),
+  }));
+  return res?.items || {};
+}
+
 export const voteIncubation = (author, permlink, weight) =>
   write('/social/vote', 'PUT', { author, permlink, weight });
 export const followIncubation = (following, state) =>
-  write('/social/follow', 'PUT', { following, state });
+  announcing(write('/social/follow', 'PUT', { following, state }));
 export const saveIncubationProfile = (profile, interests) =>
   write('/social/profile', 'PUT', { profile, interests });
 export const fetchMyIncubationProfile = () => write('/social/profile/mine', 'GET');
+
+/**
+ * "Something that can move a goal just happened."
+ *
+ * The nav pill and the profile panel both poll, but a poll is the wrong tool
+ * for the moment a user actually cares about: they post the comment that takes
+ * them to 10/10 and then watch a stale bar for up to a minute. The write paths
+ * below announce themselves instead, so the bar moves as the action lands.
+ *
+ * A plain window event rather than store state: two unrelated components want
+ * to know, neither owns the data, and both already refetch from the server --
+ * which is the only place the real number lives, since watch time is written by
+ * the PLAYER and nothing in this app would know to update it.
+ */
+const PROGRESS_EVENT = 'incubation:progress-changed';
+
+export function notifyIncubationProgress() {
+  try { window.dispatchEvent(new Event(PROGRESS_EVENT)); } catch { /* SSR / no DOM */ }
+}
+
+/** Subscribe to the above. Returns its own unsubscribe. */
+export function onIncubationProgress(handler) {
+  if (typeof window === 'undefined') return () => {};
+  window.addEventListener(PROGRESS_EVENT, handler);
+  return () => window.removeEventListener(PROGRESS_EVENT, handler);
+}
+
+/**
+ * Fire the announcement only once the write has actually landed.
+ *
+ * Announcing before it resolves would have the listeners re-read progress that
+ * the server has not counted yet, which is worse than not announcing at all:
+ * the bar would refresh to the OLD number and then sit there looking correct.
+ */
+async function announcing(promise) {
+  const result = await promise;
+  notifyIncubationProgress();
+  return result;
+}
 
 /**
  * How far this person is towards being reviewed for a real Hive account.
@@ -217,6 +339,48 @@ export const fetchMyIncubationProfile = () => write('/social/profile/mine', 'GET
  * progress someone is shown is the progress that actually counts.
  */
 export const fetchIncubationProgress = () => write('/progress', 'GET');
+
+/**
+ * How far along the whole checklist is, 0 to 1.
+ *
+ * Every goal is worth the SAME share of the bar (a fifth, with five of them),
+ * and partial progress inside a goal counts for its part of that share. So the
+ * seventh of ten comments moves the bar by two percent rather than by nothing,
+ * and the bar answers "how far am I" instead of "how many have I finished",
+ * which for a goal like an hour of watch time could sit at zero for an hour.
+ *
+ * Clamped per goal, so overshooting one (twelve follows against five) cannot
+ * borrow room from the others and show more progress than there is.
+ */
+export function progressFraction(tasks) {
+  if (!tasks?.length) return 0;
+  const sum = tasks.reduce((acc, t) => {
+    if (!t.need) return acc + (t.done ? 1 : 0);
+    return acc + Math.min(1, Math.max(0, (t.have || 0) / t.need));
+  }, 0);
+  return sum / tasks.length;
+}
+
+/**
+ * The hue a progress bar should be at `fraction` complete, 0 to 1.
+ *
+ * Red at the start, green at the end, through orange and yellow on the way. The
+ * bar then says two things at once -- how far along, and how close -- so a
+ * glance at the colour is enough without reading the number beside it.
+ *
+ * Returned as a HUE rather than a colour so the stylesheet keeps control of
+ * saturation and lightness, which have to differ between the two places this is
+ * used and between light and dark.
+ *
+ * Shared so the nav pill and the profile panel can never drift into disagreeing
+ * about what "nearly done" looks like.
+ */
+export function progressHue(fraction) {
+  const f = Math.max(0, Math.min(1, Number(fraction) || 0));
+  // 4deg is the red the accent already uses; 142deg is a green that stays
+  // legible on both themes without going neon.
+  return Math.round(4 + f * 138);
+}
 
 /**
  * Who reacted to this user's content.

@@ -40,9 +40,14 @@
     bottom: calc(100% + 6px);
     left: 50%;
     transform: translateX(-50%);
-    padding: 4px 8px;
-    background: rgba(0, 0, 0, 0.88);
-    color: #fff;
+    padding: 5px 9px;
+    // Theme tokens, not a hardcoded black chip. On a light page the black
+    // bubble was the only piece of pure black on screen, and it did not match
+    // the app's own popups (see .votes-tooltip, which uses these same tokens).
+    background: var(--bg-elevated);
+    border: 1px solid var(--border-color);
+    box-shadow: var(--shadow-md);
+    color: var(--text-primary);
     font-size: 11px;
     font-weight: 600;
     line-height: 1;
@@ -64,7 +69,7 @@
     left: 50%;
     transform: translateX(-50%);
     border: 4px solid transparent;
-    border-top-color: rgba(0, 0, 0, 0.88);
+    border-top-color: var(--border-color);
     pointer-events: none;
     opacity: 0;
     transition: opacity 0.12s ease;

@@ -303,6 +303,28 @@
   }
 }
 
+/* The VISITOR's tab strip.
+   Same control as the owner's switcher above, but visible at EVERY width: for
+   the owner those tabs are a mobile fallback for a layout that is two columns
+   on a desktop, so the rule above hides them there. For a visitor they are the
+   page's actual navigation, and hiding them on a desktop would hide three of
+   the four things on the page. */
+.inc-tabs--visitor {
+  display: flex;
+
+  /* Four labels will not always fit a narrow phone. Let them keep their own
+     width and scroll, rather than squeezing every one to an ellipsis. */
+  overflow-x: auto;
+  scrollbar-width: none;
+
+  &::-webkit-scrollbar { display: none; }
+
+  button {
+    flex: 1 0 auto;
+    white-space: nowrap;
+  }
+}
+
 /* --------------------------------------------------------------- layout --- */
 
 // One column by default, which is what a VISITOR gets: there is no sidebar for
@@ -373,10 +395,10 @@
 /* ----------------------------------------------------------- progress --- */
 
 .inc-progress {
-  // Lifted out of the flat card stack: this is the thing the owner came for.
-  background:
-    linear-gradient(180deg, color-mix(in srgb, var(--accent-primary) 7%, transparent), transparent 120px),
-    var(--card-bg);
+  // Plain card. The tint that used to sit behind the top of this panel read as
+  // a rendering artefact rather than emphasis, especially next to the bar,
+  // which is doing that job properly now by changing colour.
+  background: var(--card-bg);
 
   > header {
     display: flex;
@@ -390,23 +412,38 @@
 .inc-progress-count {
   font-size: 13px;
   font-weight: 600;
-  color: var(--accent-primary);
+  color: hsl(var(--bar-hue, 4) 72% 52%);
   white-space: nowrap;
+  transition: color 0.45s ease;
 }
 
+// One continuous track. The number behind it is still built goal by goal (each
+// of the five is worth a fifth, and a part-finished goal contributes its part),
+// so a single comment moves the bar; it is only the DRAWING that stopped being
+// divided, because five stubs read as five separate things to finish rather
+// than as one journey.
 .inc-progress-bar {
   height: 8px;
+  margin-bottom: 12px;
   border-radius: 999px;
   background: var(--bg-tertiary);
   overflow: hidden;
-  margin-bottom: 12px;
 
   span {
     display: block;
     height: 100%;
     border-radius: inherit;
-    background: linear-gradient(90deg, var(--accent-primary), color-mix(in srgb, var(--accent-primary) 55%, #ffb300));
-    transition: width 0.45s ease;
+    // --bar-hue is set per render from the completion fraction: red at the
+    // start, green at the end. The fallback is the red it starts at, so a
+    // missing value is the honest one rather than a surprise.
+    background: linear-gradient(
+      90deg,
+      hsl(var(--bar-hue, 4) 78% 46%),
+      hsl(var(--bar-hue, 4) 85% 57%)
+    );
+    // The colour crosses with the width, so finishing a task visibly moves it
+    // along AND warms it towards green in the same motion.
+    transition: width 0.45s ease, background 0.45s ease;
   }
 }
 
@@ -417,51 +454,81 @@
   display: grid;
   gap: 10px;
 
-  li {
+  // Child selectors throughout: an expanded goal carries its own <ul> of rules,
+  // and a descendant selector would give every one of those bullets the border,
+  // padding and background of a goal card.
+  > li {
     position: relative;
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    padding: 12px 14px;
     border: 1px solid var(--border-color);
     border-radius: 12px;
     background: var(--bg-secondary);
     overflow: hidden;
   }
 
-  // How much of this ONE task is done, filled from the left. The summary bar at
-  // the top answers "how many tasks", which is a different question: three
-  // untouched tasks and three nearly-finished ones look identical up there.
-  li::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    width: var(--task-fill, 0%);
-    background: color-mix(in srgb, #2e9c4a 16%, transparent);
-    border-right: 1px solid color-mix(in srgb, #2e9c4a 30%, transparent);
-    transition: width 0.45s ease;
-    pointer-events: none;
-  }
-
-  // The fill is painted behind the row, so the row's own content has to be
-  // lifted out of its way -- an absolutely positioned sibling otherwise covers
-  // static content whatever the source order.
-  li > * {
-    position: relative;
-    z-index: 1;
-  }
-
   // Complete: the fill is already the full width, so this only marks the edge.
   // No second background, or a finished task would be tinted twice.
-  li.is-done {
+  > li.is-done {
     border-color: color-mix(in srgb, #2e9c4a 45%, transparent);
   }
 
-  li.is-done::before {
+  > li.is-done .inc-task-head::before {
     border-right-color: transparent;
   }
+
+  > li.is-open .inc-task-chevron {
+    transform: rotate(180deg);
+  }
+}
+
+// The header IS the button. The row was already one idea; making only the
+// chevron interactive would have put a 18px target on a phone next to a 300px
+// one that does nothing.
+.inc-task-head {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  padding: 12px 14px;
+  border: 0;
+  background: none;
+  font: inherit;
+  color: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+// How much of this ONE task is done, filled from the left. The summary bar at
+// the top answers "how many tasks", which is a different question: three
+// untouched tasks and three nearly-finished ones look identical up there.
+//
+// On the header rather than the whole card, or an expanded goal would carry a
+// tall block of green behind its rules.
+.inc-task-head::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: var(--task-fill, 0%);
+  background: color-mix(in srgb, #2e9c4a 16%, transparent);
+  border-right: 1px solid color-mix(in srgb, #2e9c4a 30%, transparent);
+  transition: width 0.45s ease;
+  pointer-events: none;
+}
+
+// The fill is painted behind the row, so the row's own content has to be
+// lifted out of its way -- an absolutely positioned sibling otherwise covers
+// static content whatever the source order.
+.inc-task-head > * {
+  position: relative;
+  z-index: 1;
+}
+
+.inc-task-chevron {
+  flex-shrink: 0;
+  color: var(--text-muted);
+  transition: transform 0.2s ease;
 }
 
 .inc-task-icon {
@@ -508,6 +575,88 @@
   font-weight: 600;
   color: var(--text-secondary);
   white-space: nowrap;
+}
+
+/* ------------------------------------------- expanded goal detail --- */
+
+.inc-task-detail {
+  position: relative;
+  z-index: 1;
+  // Aligned under the goal's LABEL rather than the card edge, so the detail
+  // reads as belonging to the row above it. 14px padding + 20px status icon +
+  // 12px gap is where that label starts.
+  padding: 12px 14px 14px 46px;
+  border-top: 1px solid var(--border-color);
+
+  h5 {
+    margin: 12px 0 6px;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--text-muted);
+  }
+
+  ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 6px;
+  }
+
+  // Hand-drawn bullets: list-style markers sit outside the padding box and
+  // would hang into the indent that lines this panel up with the label.
+  li {
+    position: relative;
+    padding-left: 14px;
+    font-size: 12.5px;
+    line-height: 1.5;
+    color: var(--text-secondary);
+  }
+
+  li::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 7px;
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: var(--text-muted);
+  }
+
+  @include mix.respond(phone) {
+    // The indent costs more than it buys once the column is narrow: five words
+    // per line is worse than losing the alignment with the label.
+    padding-left: 14px;
+  }
+}
+
+.inc-task-why {
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.55;
+  color: var(--text-primary);
+}
+
+.inc-task-cta {
+  display: inline-flex;
+  align-items: center;
+  margin-top: 12px;
+  padding: 7px 14px;
+  border-radius: 8px;
+  border: 1px solid var(--accent-primary);
+  background: transparent;
+  color: var(--accent-primary);
+  font-size: 12.5px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: background 0.15s ease;
+
+  &:hover {
+    background: var(--accent-light);
+  }
 }
 
 .inc-review {

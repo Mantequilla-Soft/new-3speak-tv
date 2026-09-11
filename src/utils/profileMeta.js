@@ -1,4 +1,5 @@
 import { getAccounts } from '../hive-api/hiveApi';
+import { META_NS, normalizeInterestList } from './interests';
 import { broadcastWithAioha, KeyTypes } from '../hive-api/aioha';
 
 // Read/write the standard Hive `profile` block (display name, bio, location,
@@ -68,7 +69,7 @@ export function isProfileEmpty(profile) {
  * json_metadata is sent as '' which means "leave unchanged" on-chain, so only
  * posting_json_metadata is written and posting authority suffices.
  */
-export async function saveProfileToHive(username, fields) {
+export async function saveProfileToHive(username, fields, { interests } = {}) {
   const u = clean(username);
   if (!u) throw new Error('Not logged in');
 
@@ -90,6 +91,14 @@ export async function saveProfileToHive(username, fields) {
   if (!profile.version) profile.version = 2;
 
   meta.profile = profile;
+
+  // Interests ride along in the SAME operation when the caller has them.
+  // They live in the same posting_json_metadata under the 3speak namespace, so
+  // writing them separately would cost a second broadcast and a second wallet
+  // prompt for what is, on chain, one edit to one document.
+  if (Array.isArray(interests)) {
+    meta[META_NS] = { ...(meta[META_NS] || {}), interests: normalizeInterestList(interests) };
+  }
 
   const op = ['account_update2', {
     account: u,

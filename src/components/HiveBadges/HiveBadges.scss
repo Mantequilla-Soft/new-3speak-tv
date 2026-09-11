@@ -70,6 +70,30 @@
     font-family: inherit;
     color: #cbd5e1;
   }
+
+  // The award pill. Same shape as the other chips so the row stays one row, but
+  // outlined in the accent rather than filled: it is an action sitting among
+  // badges, and a solid red pill would out-shout the badges it is offering.
+  .hive-badge-award {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 3px 12px;
+    cursor: pointer;
+    font-family: inherit;
+    border: 1px dashed color-mix(in srgb, var(--accent-primary) 55%, transparent);
+    background: transparent;
+    color: var(--accent-primary);
+
+    &:hover {
+      background: color-mix(in srgb, var(--accent-primary) 10%, transparent);
+      border-style: solid;
+    }
+  }
+
+  .hive-badge-award-icon {
+    font-size: 14px;
+  }
 }
 
 // ---- "Show more" popup ----

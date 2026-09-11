@@ -7,10 +7,13 @@ import {
   PointerSensor, KeyboardSensor, useSensor, useSensors, pointerWithin,
 } from '@dnd-kit/core';
 import { IoClose } from 'react-icons/io5';
-import { MdLock } from 'react-icons/md';
+import { MdLock, MdAdd } from 'react-icons/md';
 import { RxDragHandleDots2 } from 'react-icons/rx';
 import { toastIn } from '../../utils/toast';
 import { fetchHiveBadges, isThreeSpeakBadge, saveBadgeOrder } from '../../utils/hiveBadges';
+import { listAwardableBadges } from '../../utils/badgeAwards';
+import { useAppStore } from '../../lib/store';
+import AwardBadgeModal from './AwardBadgeModal';
 import './HiveBadges.scss';
 
 // Every toast from this module is headed "Profile"; the message becomes the
@@ -252,6 +255,8 @@ function AllBadgesModal({ username, badges, canArrange, startArranging, onClose,
  *   canArrange  Viewer owns this profile, so they get the arrange controls.
  */
 function HiveBadges({ username, canArrange = false }) {
+  const viewer = useAppStore((st) => st.user);
+  const [awarding, setAwarding] = useState(false);
   // Store WHICH profile the popup was opened for rather than a plain boolean:
   // navigating from one profile to another then closes it for free, with no
   // reset effect.
@@ -269,7 +274,23 @@ function HiveBadges({ username, canArrange = false }) {
   });
 
   const badges = data || [];
-  if (!badges.length) return null;
+
+  // Badges the VIEWER can award, from the checker (chain-verified there). Only
+  // asked once per viewer, and never for their own profile: awarding yourself a
+  // badge you made is not a thing anyone needs a button for.
+  const { data: mine } = useQuery({
+    queryKey: ['awardable-badges', viewer],
+    queryFn: () => listAwardableBadges(viewer),
+    enabled: !!viewer && viewer !== username,
+    staleTime: 10 * 60 * 1000,
+    retry: false,
+  });
+  const awardable = mine || [];
+
+  // Not `!badges.length` alone any more: awarding somebody their FIRST badge is
+  // the ordinary case, and returning null here meant the pill could never
+  // appear on exactly the profiles that need it most.
+  if (!badges.length && !awardable.length) return null;
 
   const visible = badges.slice(0, MAX_VISIBLE);
   const hidden = badges.length - visible.length;
@@ -303,6 +324,35 @@ function HiveBadges({ username, canArrange = false }) {
         >
           {arrangeOnly ? 'Arrange' : 'Show more'}
         </button>
+      )}
+
+      {/* Last in the row, so it reads as an action on the badges rather than one
+          of them. Absent entirely when the viewer has made none, which is the
+          normal case for almost everybody. */}
+      {awardable.length > 0 && (
+        <button
+          type="button"
+          className="hive-badge hive-badge-award"
+          onClick={() => setAwarding(true)}
+          title={`Award one of your badges to @${username}`}
+        >
+          <MdAdd className="hive-badge-award-icon" aria-hidden="true" />
+          <span className="hive-badge-name">Award</span>
+        </button>
+      )}
+
+      {awarding && (
+        <AwardBadgeModal
+          username={username}
+          badges={awardable}
+          onClose={() => setAwarding(false)}
+          onAwarded={() => {
+            setAwarding(false);
+            // Hivemind takes a few seconds to serve the new follow back, so ask
+            // again shortly rather than showing a row that looks unchanged.
+            setTimeout(() => queryClient.invalidateQueries({ queryKey: ['hive-badges', username] }), 4000);
+          }}
+        />
       )}
 
       {open && (

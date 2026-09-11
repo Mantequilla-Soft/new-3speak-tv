@@ -13,7 +13,8 @@ import TranslateButton from '../TranslateButton/TranslateButton';
 import ReactVideoTab from '../ReactVideoModal/ReactVideoModal';
 import dayjs from 'dayjs';
 import { useAppStore } from '../../lib/store';
-import { handleAvatar, fetchIncubationRepliesFor, postIncubationContent } from '../../lib/incubation';
+import { handleAvatar, postIncubationContent } from '../../lib/incubation';
+import { mergeOffChainReplies, applyOffChainLikes } from '../../utils/offChainReplies';
 import { Client } from '@hiveio/dhive';
 import UpvoteTooltip from '../tooltip/UpvoteTooltip';
 import CommentVoteTooltip from '../tooltip/CommentVoteTooltip';
@@ -172,114 +173,16 @@ function CommentSection({ videoDetails, author, permlink, currentTime, duration,
         };
         await attachRep(markedComments);
 
-        // Merge in off-chain replies from incubating users.
+        // Off-chain replies and off-chain likes, merged into the Hive thread.
         //
-        // They comment on REAL Hive posts, so without this their comments are
-        // invisible on the very page they were written for — including to the
-        // person who wrote them, which reads as "my comment vanished".
-        //
-        // Best-effort: if the checker is unreachable, the Hive thread still
-        // renders. A comments section that fails entirely because an optional
-        // enrichment call timed out would be a bad trade.
-        let withOffChain = markedComments;
-        try {
-          // Every permlink in the thread, not just the post's. An off-chain
-          // reply hangs off whatever it answered, so asking only about the post
-          // returned the top level and silently dropped every reply to a
-          // comment -- including the author's own, under their own video.
-          const known = new Set([permlink]);
-          const walk = (list) => list.forEach((c) => {
-            if (!c?.permlink) return;
-            known.add(c.permlink);
-            if (c.children?.length) walk(c.children);
-          });
-          walk(markedComments);
-
-          // Loop, because an off-chain reply can itself be replied to
-          // off-chain, and those parents are only known once the first round
-          // comes back. Bounded: threads are not deep, and this stops as soon
-          // as a round finds nothing new.
-          const collected = [];
-          const seen = new Set();
-          let ask = [...known];
-          for (let round = 0; round < 4 && ask.length; round += 1) {
-            const { items } = await fetchIncubationRepliesFor(ask);
-            const fresh = (items || []).filter((it) => it.permlink && !seen.has(it.permlink));
-            if (!fresh.length) break;
-            fresh.forEach((it) => seen.add(it.permlink));
-            collected.push(...fresh);
-            ask = fresh.map((f) => f.permlink);
-          }
-
-          const off = { items: collected };
-          if (off?.items?.length) {
-            const mapped = off.items.map(it => {
-              // A reply is stored off-chain for either of two reasons, and they
-              // render differently: its writer has no Hive account (show the
-              // handle and the 3Speak mark), or the POST is off-chain while the
-              // writer is an ordinary Hive user (show their real account, so
-              // their avatar and reputation resolve as they should anywhere).
-              const isHiveAuthor = !!it.hiveAuthor;
-              const name = it.hiveAuthor || it.author?.handle || it.handle;
-              return {
-              author: {
-                username: name,
-                profile: {
-                  images: {
-                    avatar: isHiveAuthor
-                      ? `https://images.hive.blog/u/${name}/avatar/small`
-                      : handleAvatar(name),
-                  },
-                },
-              },
-              permlink: it.permlink,
-              // Kept so the nesting below knows what this answered.
-              parentPermlink: it.parentPermlink,
-              created_at: it.created,
-              body: it.body,
-              parentTimestamp: it.jsonMetadata?.parentTimestamp ?? null,
-              has_voted: false,
-              stats: { num_likes: 0, num_dislikes: 0, total_hive_reward: 0 },
-              children: [],
-              // Nothing downstream should try to build a Hive permalink, fetch
-              // votes, or offer a vote button for these.
-              onChain: false,
-              };
-            });
-            // Attach each one under what it actually replied to. Anything
-            // answering the POST itself is a top-level comment; anything
-            // answering a comment becomes that comment's child, so a reply
-            // reads where it was written instead of jumping to the top.
-            const byPermlink = new Map();
-            const index = (list) => list.forEach((c) => {
-              if (!c?.permlink) return;
-              byPermlink.set(c.permlink, c);
-              if (c.children?.length) index(c.children);
-            });
-            index(markedComments);
-            // Registered before attaching, so a reply to an off-chain reply
-            // finds its parent too.
-            mapped.forEach((m) => byPermlink.set(m.permlink, m));
-
-            const roots = [];
-            mapped.forEach((m) => {
-              const parent = m.parentPermlink && m.parentPermlink !== permlink
-                ? byPermlink.get(m.parentPermlink)
-                : null;
-              if (parent && parent !== m) {
-                parent.children = [...(parent.children || []), m];
-              } else {
-                roots.push(m);
-              }
-            });
-
-            withOffChain = [...roots, ...markedComments].sort(
-              (a, b) => new Date(b.created_at) - new Date(a.created_at)
-            );
-          }
-        } catch (err) {
-          console.warn('[incubation] replies unavailable:', err?.message);
-        }
+        // Both halves used to live inline here, which is why no other view had
+        // them: shorts and snaps would have had to copy a hundred lines to show
+        // a reply written under their own content. Shared now, so the three
+        // surfaces cannot drift into disagreeing about what a thread contains.
+        const withOffChain = await applyOffChainLikes(
+          await mergeOffChainReplies(permlink, markedComments),
+          displayName,
+        );
         setCommentList(withOffChain);
         
         // Pre-render all comment bodies (createHiveRenderer returns a function directly)

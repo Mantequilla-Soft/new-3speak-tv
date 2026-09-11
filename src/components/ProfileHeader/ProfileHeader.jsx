@@ -6,6 +6,7 @@ import { fetchProfile } from '../../utils/profileMeta';
 import { setResolvedAvatar } from '../../utils/avatarCache';
 import { useImageLuminance } from '../../utils/imageLuminance';
 import defaultCover from '../../assets/image/default-cover.svg';
+import { hiveProxyRefuses } from '../../utils/fixThumbnails';
 import './ProfileHeader.scss';
 
 /**
@@ -43,6 +44,12 @@ export default function ProfileHeader({
   refreshKey = 0,
   showHandle = false,
   onAvatarClick,
+  // Pictures we already hold, handed over rather than resolved through
+  // images.hive.blog. Their proxy cannot read images.3speak.tv, so a badge or
+  // community whose art we host showed a grey placeholder and our default
+  // banner even though both images were set and serving fine.
+  avatarUrl,
+  coverUrl: coverUrlProp,
 }) {
   const [hiveBio, setHiveBio] = useState('');
   const [hiveName, setHiveName] = useState('');
@@ -75,6 +82,8 @@ export default function ProfileHeader({
   // The metadata is the source of truth: no `cover_image` means anything that URL
   // returns is the host's filler, and we show our own banner instead.
   const [hasCover, setHasCover] = useState(null);   // null = not known yet
+  // The account's own cover URL, used directly when Hive cannot proxy it.
+  const [metaCover, setMetaCover] = useState('');
   useEffect(() => {
     if (!username) return;
     let cancelled = false;
@@ -84,12 +93,17 @@ export default function ProfileHeader({
       // A failed lookup stays `null`, which also means "use our banner" — better
       // a deliberate 3Speak cover than the host's placeholder.
       setHasCover(profile ? !!String(profile.cover_image || '').trim() : null);
-      if (!profile || !showHandle) return;
+      if (!profile) return;
+      // BEFORE the showHandle gate. Handing the real picture to the avatar cache
+      // has nothing to do with whether this header prints an @handle, and gating
+      // it there meant every page that does not — user profiles included — kept
+      // rendering the hive proxy copy. For anyone whose avatar is hosted by us
+      // that copy is the host's grey placeholder, served with a cheerful 200.
+      setResolvedAvatar(username, profile.profile_image || '');
+      setMetaCover(String(profile.cover_image || '').trim());
+      if (!showHandle) return;
       setHiveName(profile.name || '');
       setHiveLocation(profile.location || '');
-      // We already have their metadata, so hand the real picture to the avatar
-      // cache rather than leaving the header on the day-cached hive proxy.
-      setResolvedAvatar(username, profile.profile_image || '');
     })();
     return () => { cancelled = true; };
   }, [showHandle, username, refreshKey]);
@@ -129,11 +143,14 @@ export default function ProfileHeader({
   // branded banner so every profile has a real cover, and measure THAT one — the
   // scrim has to match whatever is actually on screen.
   const [coverFailed, setCoverFailed] = useState(false);
-  const coverUrl = `https://images.hive.blog/u/${username}/cover`;
+  const coverUrl = coverUrlProp
+    || (hiveProxyRefuses(metaCover) ? metaCover : `https://images.hive.blog/u/${username}/cover`);
   // Our banner unless the account genuinely has one. `hasCover === null` (still
   // loading, or the lookup failed) also lands here, so the host's placeholder is
   // never on screen even for a moment.
-  const shownCover = (coverFailed || !hasCover) ? defaultCover : coverUrl;
+  // An explicit cover IS the answer to "does this account have one", so it does
+  // not wait on the metadata lookup that hasCover performs.
+  const shownCover = (coverFailed || (!coverUrlProp && !hasCover)) ? defaultCover : coverUrl;
   useEffect(() => { setCoverFailed(false); }, [coverUrl]);
   const coverLuminance = useImageLuminance(shownCover);
   // Unmeasurable is NOT the same as dark. images.hive.blog serves a pale default
@@ -183,6 +200,7 @@ export default function ProfileHeader({
                 size={null}
                 alt={`${heading} avatar`}
                 badgeSize={avatarBadgeSize}
+                srcOverride={avatarUrl}
               />
               {avatarClickable ? (
                 <span className="avatar-edit-overlay" aria-hidden="true">

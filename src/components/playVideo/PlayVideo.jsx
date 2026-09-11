@@ -657,21 +657,26 @@ const PlayVideo = ({ videoDetails, author, permlink, mediaUnavailable = false, m
         const { reshares, count } = await getResharesForVideo(author, permlink);
         setReshareCount(count);
         if (user) {
-          setHasReshared(reshares.some(r => r.username === user));
+          setHasReshared(reshares.some(r => r.username === (user || incubationHandle)));
         }
       } catch (err) {
         console.warn('Failed to fetch reshares:', err);
       }
     })();
-  }, [author, permlink, user]);
+  }, [author, permlink, user, incubationHandle]);
 
   const handleReshare = useCallback(async () => {
-    if (!authenticated || !user) {
+    // A reshare is not a chain operation: it is a row in 3Speak's own reshare
+    // store, keyed by name. So an incubating user can make one under their
+    // handle, and the only thing that was stopping them was this gate asking
+    // for a Hive username they do not have.
+    const asWho = user || incubationHandle;
+    if (!authenticated || !asWho) {
       toast.error('Log in to reshare');
       return;
     }
     if (hasReshared) return;
-    const result = await recordReshare(user, author, permlink);
+    const result = await recordReshare(asWho, author, permlink);
     if (result) {
       setHasReshared(true);
       setReshareCount(prev => prev + 1);
@@ -679,7 +684,7 @@ const PlayVideo = ({ videoDetails, author, permlink, mediaUnavailable = false, m
     } else {
       toast.error('Failed to reshare');
     }
-  }, [authenticated, user, author, permlink, hasReshared]);
+  }, [authenticated, user, incubationHandle, author, permlink, hasReshared]);
 
   const handleRemix = useCallback((mediaType = 'video') => {
     if (!videoUrlSelected) {
@@ -1203,11 +1208,14 @@ const PlayVideo = ({ videoDetails, author, permlink, mediaUnavailable = false, m
               reputation={authorReputation}
               followersCount={followData?.follower_count}
               showFollow
-              // Following writes a custom_json naming the target account. An
-              // author with no Hive account cannot be named, so the button is
-              // locked rather than left to fail on broadcast.
-              followLockedReason={postIsOffChain ? 'You can follow them once they are on Hive' : null}
-              isFollowing={isFollowingCreator}
+              // No longer locked for an author with no Hive account. A follow
+              // of one is stored off-chain instead of being broadcast at an
+              // account that does not exist, and they are told when it does.
+              offChainAuthor={!!postIsOffChain}
+              // Left to the badge for an off-chain author: it reads that state
+              // from the incubation store, and the Hive lookup this holds would
+              // always answer "no".
+              isFollowing={postIsOffChain ? undefined : isFollowingCreator}
               onFollow={(_, willFollow) => setIsFollowingCreator(willFollow)}
             />
             {community_id && (<div className="community-title-wrap" onClick={() => handleCommunityNavigate(community_id)}>
@@ -1443,7 +1451,7 @@ const PlayVideo = ({ videoDetails, author, permlink, mediaUnavailable = false, m
                   type="button"
                   className={`pv-btn reshare-btn${hasReshared ? ' reshared' : ''}`}
                   onClick={handleReshare}
-                  disabled={!authenticated || !isLoggedIn()}
+                  disabled={!authenticated || (!isLoggedIn() && !incubationHandle)}
                   title={!authenticated ? 'Log in to reshare' : hasReshared ? 'Reshared' : 'Reshare'}
                 >
                   <Repeat2 size={16} />

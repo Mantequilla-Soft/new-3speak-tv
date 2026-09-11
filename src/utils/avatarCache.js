@@ -137,6 +137,66 @@ export function getResolvedAvatar(username) {
 // below would resolve to /u//avatar or /u/null/avatar and render broken.
 export const NO_ACCOUNT_AVATAR = '/pwa-192x192.png';
 
+
+// ---------------------------------------------------------------- lazy resolve
+//
+// The proxy fallback is FINE for most accounts and wrong for one important
+// group: anyone whose picture is hosted by us. images.hive.blog cannot fetch
+// images.3speak.tv, and rather than failing it serves its own grey face with a
+// 200 — so a new user appears in every comment thread as a stranger's default
+// avatar, with nothing in the console to suggest anything went wrong.
+//
+// Resolving needs the account's metadata, so it is done lazily and in BATCHES:
+// asking per avatar would be one request per comment in a thread.
+const pendingLookups = new Set();
+const inFlight = new Set();
+let lookupTimer = null;
+
+async function flushLookups() {
+  lookupTimer = null;
+  const names = [...pendingLookups].filter((n) => !inFlight.has(n)).slice(0, 100);
+  if (!names.length) return;
+  names.forEach((n) => { pendingLookups.delete(n); inFlight.add(n); });
+  try {
+    const { getHiveUrl } = await import('./hiveNode');
+    const res = await fetch(getHiveUrl(), {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        jsonrpc: '2.0', id: 1,
+        method: 'condenser_api.get_accounts', params: [names],
+      }),
+    });
+    const { result } = await res.json();
+    for (const acct of result || []) {
+      let image = '';
+      for (const field of ['posting_json_metadata', 'json_metadata']) {
+        try {
+          const parsed = JSON.parse(acct[field] || '{}');
+          if (parsed?.profile?.profile_image) { image = String(parsed.profile.profile_image).trim(); break; }
+        } catch { /* hand-edited metadata; try the other field */ }
+      }
+      // Remembered even when EMPTY, so an account with no picture is not asked
+      // about again on every render for the rest of the session.
+      setResolvedAvatar(acct.name, image);
+    }
+  } catch {
+    // Offline or a bad node: the proxy URL still renders something.
+  } finally {
+    names.forEach((n) => inFlight.delete(n));
+  }
+}
+
+/** Ask for this account's real picture, once, soon, together with others. */
+function queueLookup(username) {
+  const u = clean(username);
+  if (!u || inFlight.has(u)) return;
+  loadResolved();
+  if (u in resolved) return;        // already known, including "known to be blank"
+  pendingLookups.add(u);
+  if (!lookupTimer) lookupTimer = setTimeout(flushLookups, 60);
+}
+
 export function useAvatarUrl(username, size = 'small') {
   const [, bump] = useState(0);
   useEffect(() => {
@@ -149,7 +209,13 @@ export function useAvatarUrl(username, size = 'small') {
   // profile dropdown and anything else that asks for "my avatar" while the
   // viewer has no Hive account.
   if (!username) return NO_ACCOUNT_AVATAR;
-  return getAvatarOverride(username)
-    || getResolvedAvatar(username)
-    || hiveAvatarUrl(username, size);
+  const override = getAvatarOverride(username);
+  if (override) return override;
+  const known = getResolvedAvatar(username);
+  if (known) return known;
+  // Nothing known yet: show the proxy now and find out the truth in the
+  // background. When the answer arrives, notify() re-renders every avatar for
+  // that account at once.
+  queueLookup(username);
+  return hiveAvatarUrl(username, size);
 }

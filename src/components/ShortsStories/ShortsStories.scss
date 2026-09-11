@@ -224,6 +224,16 @@
       border: 2.5px solid var(--text-primary);
     }
 
+    // HiveAvatar wraps the <img> in a span (so the premium badge can overlap the
+    // corner). That span is an auto-sized inline-block, so "height: 100%" on the
+    // image below resolved against nothing and the picture spilled out of its
+    // ring. Give the wrapper the ring's box and the image fills it properly.
+    .hive-avatar {
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+
     .story-avatar {
       width: 100%;
       height: 100%;

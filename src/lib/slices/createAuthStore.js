@@ -111,6 +111,28 @@ export const createAuthUserSlice = (set) => ({
     set({ userId: username, user: username, authenticated: true, incubationHandle: null });
   },
 
+  // The same person, now WITH a Hive account, because they graduated somewhere
+  // else -- on another device, or in another tab.
+  //
+  // setUser() alone is not enough: it updates the store but writes nothing to
+  // localStorage, so the next reload would find no user_id, find the handle
+  // still sitting there, and sign them back in as their warm-up self. The two
+  // keys have to move together, which is why this lives beside
+  // setIncubationUser rather than in whichever component noticed.
+  //
+  // Callers MUST have a confirmed graduation and a real account name. Never
+  // call this on a failed or ambiguous status read: it deletes the handle, and
+  // deleting the handle for somebody who is in fact still incubating logs them
+  // out with no way back.
+  promoteFromIncubation: (username) => {
+    if (!username) return;
+    try {
+      window.localStorage.setItem(LOCAL_STORAGE_USER_ID_KEY, username);
+      window.localStorage.removeItem(LOCAL_STORAGE_HANDLE_KEY);
+    } catch { /* ignore */ }
+    set({ userId: username, user: username, authenticated: true, incubationHandle: null });
+  },
+
   // Sign in a user who has NO Hive account. `authenticated` is true (they are a
   // real signed-in person) while `user` stays null (there is no Hive account to
   // name), which is precisely the state the rest of the app has to handle.

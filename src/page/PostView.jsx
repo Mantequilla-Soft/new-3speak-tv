@@ -54,6 +54,10 @@ function PostView() {
   const params = useParams();
   const { state } = useLocation();
   const { authenticated, user: currentUser } = useAppStore();
+  // Reshares are 3Speak's own store, not a chain op, so a handle works. Kept
+  // separate from requireLogin, which also gates voting and replying -- those
+  // DO need an account and must stay shut.
+  const incubationHandle = useAppStore((st) => st.incubationHandle);
 
   // Support both `:author` and `:user` param names defensively
   const author = (params.author || params.user || '').replace(/^@/, '');
@@ -149,7 +153,7 @@ function PostView() {
         if (cancelled) return;
         setReshareCount(count);
         if (currentUser) {
-          setHasReshared(reshares.some(r => r.username === currentUser));
+          setHasReshared(reshares.some(r => r.username === (currentUser || incubationHandle)));
         }
       } catch (err) {
         console.warn('Failed to fetch post reshares:', err);
@@ -157,7 +161,7 @@ function PostView() {
     })();
 
     return () => { cancelled = true; };
-  }, [author, permlink, currentUser]);
+  }, [author, permlink, currentUser, incubationHandle]);
 
   const requireLogin = useCallback((action) => {
     if (authenticated && currentUser && isLoggedIn()) return true;
@@ -193,13 +197,17 @@ function PostView() {
   }, [author, permlink, post?.title]);
 
   const handleReshare = useCallback(async () => {
-    if (!requireLogin('reblog')) return;
+    const asWho = currentUser || incubationHandle;
+    if (!authenticated || !asWho) {
+      toast.error('Log in to reblog');
+      return;
+    }
     if (hasReshared) {
       toast.info('Already reblogged');
       return;
     }
 
-    const result = await recordReshare(currentUser, author, permlink);
+    const result = await recordReshare(asWho, author, permlink);
     if (result) {
       setHasReshared(true);
       setReshareCount(prev => prev + 1);
@@ -207,7 +215,7 @@ function PostView() {
     } else {
       toast.error('Failed to reblog');
     }
-  }, [requireLogin, hasReshared, currentUser, author, permlink]);
+  }, [authenticated, hasReshared, currentUser, incubationHandle, author, permlink]);
 
   const handleReply = useCallback(() => {
     const commentBox = document.querySelector('.post-view-comments .add-comment-wrap .textarea-box');
@@ -479,7 +487,9 @@ function PostView() {
               type="button"
               className={`post-icon-action post-reshare-action${hasReshared ? ' active' : ''}`}
               onClick={handleReshare}
-              disabled={!authenticated || !isLoggedIn()}
+              // isLoggedIn() is the wallet check, which an incubating user
+              // never passes. The reshare itself does not need one.
+              disabled={!authenticated || (!isLoggedIn() && !incubationHandle)}
               title={!authenticated ? 'Log in to reblog' : hasReshared ? 'Reblogged' : 'Reblog'}
             >
               <Repeat2 size={16} />

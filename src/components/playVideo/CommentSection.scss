@@ -123,13 +123,31 @@
       }
     }
   }
+  // One size for the whole comment: the body, the date and the controls under
+  // it. The body was 16px against a 12px timestamp, which made every comment
+  // read as loud as the post's own description and pushed the thread long.
+  // Scoped to .comment, so the same markdown renderer keeps its size on a post.
+  .comment-content .markdown-view {
+    font-size: 12px;
+  }
+
   .comment-action {
     display: flex;
     align-items: center;
     gap: 12px;
     margin: 8px 0;
-    font-size: 13px;
+    font-size: 12px;
     color: var(--text-secondary);
+  }
+
+  // .btn-default is a site-wide class, so this is deliberately reached through
+  // .comment-action-right rather than restyled globally.
+  .comment-action-right {
+    .btn-default,
+    .comment-translate-btn,
+    .comment-shorts-link {
+      font-size: 12px;
+    }
   }
 
   .comment-action-right {

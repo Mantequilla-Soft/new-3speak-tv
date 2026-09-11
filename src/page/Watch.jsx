@@ -120,6 +120,7 @@ function Watch({ v2 = false }) {
   const location = useLocation();
   const navigate = useNavigate();
   const { user, watchHistoryEnabled, setMiniPlayer, clearMiniPlayer, showNsfw, inlineShorts } = useAppStore();
+  const incubationHandle = useAppStore((s) => s.incubationHandle);
   const v = searchParams.get('v'); // Extract the "v" query parameter
   const playlistId = searchParams.get('playlist');
   const posParam = searchParams.get('pos');
@@ -1626,7 +1627,11 @@ function Watch({ v2 = false }) {
 
   // Record watch history when video loads (if tracking is enabled)
   useEffect(() => {
-    if (scheduled || !user || !author || !permlink || author === 'unknown' || watchHistoryEnabled === false) {
+    // A handle records history just as well as a Hive name: this is 3Speak's
+    // own store, not the chain. Without it an incubating viewer built no
+    // history, so nothing could be hidden from them later.
+    const historyUser = user || incubationHandle;
+    if (scheduled || !historyUser || !author || !permlink || author === 'unknown' || watchHistoryEnabled === false) {
       return;
     }
 
@@ -1637,8 +1642,8 @@ function Watch({ v2 = false }) {
 
     // Mark as recorded and send to API
     recordedWatchRef.current.add(watchKey);
-    recordWatch(user, author, permlink);
-  }, [scheduled, user, author, permlink, watchHistoryEnabled]);
+    recordWatch(historyUser, author, permlink);
+  }, [scheduled, user, incubationHandle, author, permlink, watchHistoryEnabled]);
 
   // Save mini player state on unmount or when switching videos
   const miniPlayerDataRef = useRef(null);

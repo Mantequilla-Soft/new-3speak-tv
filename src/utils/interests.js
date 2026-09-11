@@ -46,7 +46,7 @@ export const displayTag = (id) => {
 // Where interests live inside the account's posting_json_metadata. Namespaced
 // under `3speak` so it sits alongside — not on top of — the standard `profile`
 // object other Hive apps read/write.
-const META_NS = '3speak';
+export const META_NS = '3speak';
 
 const clean = (u) => String(u || '').trim().replace(/^@/, '').toLowerCase();
 
@@ -78,7 +78,7 @@ const LEGACY_TAG_MIGRATIONS = { tutorial: 'education' };
  * work and stored nothing. Accept the full v2 vocabulary, keeping v1 ids valid so
  * accounts saved by the old prod picker still load.
  */
-function normalizeInterestList(list) {
+export function normalizeInterestList(list) {
   const out = [];
   const seen = new Set();
   for (const raw of list || []) {

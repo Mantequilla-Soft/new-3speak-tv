@@ -283,6 +283,51 @@ export const transferWithAioha = async (to, amount, currency, memo = '') => {
   }, 'Approve transfer on HiveAuth...');
 };
 
+/**
+ * Award (or withdraw) a badge by making the BADGE account follow someone.
+ *
+ * A badge is a Hive account and its FOLLOWING list is the roll of who holds it,
+ * so awarding is a follow whose follower is the badge rather than the person
+ * pressing the button. That is signable without ever logging in as the badge:
+ * whoever created it is in its posting authority, so their own posting key
+ * satisfies `required_posting_auths: [badgeAccount]`.
+ *
+ * ⚠️ NOT usable by an incubating user, and it does not silently divert to the
+ * off-chain store like followWithAioha does: a badge is an on-chain account and
+ * an off-chain "follow" from it would award nothing to anybody.
+ */
+export const awardBadgeWithAioha = async (badgeAccount, target, award = true) => {
+  if (incubatingHandle()) {
+    throw new Error('Badges are awarded from a Hive account. Yours is still being set up.');
+  }
+  const json = JSON.stringify(['follow', {
+    follower: badgeAccount,
+    following: target,
+    what: award ? ['blog'] : [],
+  }]);
+  const ops = [['custom_json', {
+    required_auths: [],
+    // The BADGE authorises this, not the signer. Hive resolves the signer's own
+    // posting authority through the badge's account_auths.
+    required_posting_auths: [badgeAccount],
+    id: 'follow',
+    json,
+  }]];
+
+  if (isManteAuthLogin()) return broadcastViaManteAuth(ops);
+  if (usesThreespeakProxy()) {
+    try {
+      return await broadcastViaThreespeak(ops);
+    } catch (e) {
+      if (!isNotGrantedError(e)) throw e; // not granted → sign it client-side below
+    }
+  }
+  return withHiveAuthWaiting(
+    () => broadcastWithAioha(ops, KeyTypes.Posting),
+    'Approve the badge award on HiveAuth...',
+  );
+};
+
 // Helper function to follow/unfollow a user
 export const followWithAioha = async (target, follow = true) => {
   // No Hive account: the follow is recorded off-chain, like the vote and the

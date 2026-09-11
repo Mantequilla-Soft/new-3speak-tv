@@ -1,56 +1,410 @@
 @use "../../mixins.scss" as mix;
 
-// The backlog table a graduated user publishes from. Full-width page content
-// rather than a dialog: this is a considered, repeated task, not a prompt.
+// The backlog a graduated user publishes from. Full-width page content rather
+// than a dialog: this is a considered, repeated task, not a prompt.
+//
+// Built from the same pieces as the rest of the incubation UI -- the 16px
+// rounded panel on --card-bg with --shadow-md, an accent-coloured icon beside
+// each heading -- so it reads as a 3Speak page rather than as a form. It was a
+// bare <table>, which is the right shape for data you scan and the wrong one
+// for a decision you make once per section.
 
 .backfill {
+  // Status colours. index.css carries no success/error tokens, so they live
+  // here rather than being hardcoded at four call sites -- and as a PAIR,
+  // because the green that reads on #0f0f0f is far too pale on #f9f9f9.
+  --backfill-ok: #1a8a4b;
+  --backfill-err: #c2402f;
+  // In-progress is NOT the accent colour, which is what it was first: 3Speak's
+  // accent is red, so a "Publishing…" pill sat next to a "Failed" pill in very
+  // nearly the same red. Work in progress must not read as work that broke.
+  --backfill-busy: #a86500;
+
   max-width: 900px;
   margin: 0 auto;
   padding: 24px 16px 64px;
+}
+
+[data-theme="dark"] .backfill {
+  --backfill-ok: #3fc47a;
+  --backfill-err: #e0594b;
+  --backfill-busy: #e5a54b;
+}
+
+/* .btn-primary, .btn-ghost, .btn-small and .desc are NOT defined anywhere in
+   this app. They are butrauth's vocabulary, which this component was written
+   in, so on 3Speak every button here rendered as a raw browser button and the
+   intro as a bare paragraph -- most of why the page read as a form rather than
+   a page.
+
+   Defined SCOPED to .backfill, not globally: several components carry their own
+   local .btn-primary, and a loose global one would reach into all of them. The
+   idiom is 3Speak's own (AudioUploadModal and friends): accent fill for the
+   primary, a bordered ghost, 8px radius, 13px semibold. */
+.backfill {
+  .desc {
+    color: var(--text-secondary);
+    font-size: 14px;
+    line-height: 1.6;
+  }
+
+  .btn-primary,
+  .btn-ghost {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 16px;
+    border-radius: 8px;
+    font: inherit;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: filter 0.12s ease, background 0.12s ease, border-color 0.12s ease;
+
+    &:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+  }
+
+  .btn-primary {
+    background: var(--accent-primary);
+    border: 1px solid var(--accent-primary);
+    color: #fff;
+
+    &:hover:not(:disabled) { filter: brightness(1.1); }
+  }
+
+  .btn-ghost {
+    background: transparent;
+    border: 1px solid var(--border-color);
+    color: var(--text-secondary);
+
+    &:hover:not(:disabled) {
+      background: var(--bg-hover);
+      color: var(--text-primary);
+    }
+  }
+
+  /* Declared after both, so the smaller padding wins at equal specificity. */
+  .btn-small {
+    padding: 5px 11px;
+    font-size: 12px;
+  }
+}
+
+.backfill-hero {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  margin-bottom: 18px;
 
   h2 {
     margin: 0 0 8px;
+    color: var(--text-primary);
   }
 
   .desc {
-    margin: 0 0 20px;
+    margin: 0;
+    // No measure cap. 62ch read as a mistake here rather than as typography:
+    // the panels underneath run the full 900px of the page, so a paragraph
+    // stopping two thirds of the way across looked like a broken column
+    // instead of a comfortable line length.
+    line-height: 1.6;
   }
 }
 
-.backfill-note {
-  border: 1px solid var(--border-color, rgba(255, 255, 255, 0.12));
-  border-radius: 10px;
-  padding: 12px 14px;
-  margin-bottom: 20px;
-  font-size: 14px;
-  line-height: 1.55;
+/* Loading and error, centred in the page rather than pinned to its top-left.
+   Shares the .backfill container so the width and padding match the real page,
+   and the transition into the loaded table is not a jump. */
+.backfill-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 55vh;
+  text-align: center;
+
+  // The shared loader sizes itself to fill a page (85vh), which is right when it
+  // IS the page and wrong inside a column that also has a caption underneath --
+  // the caption ended up below the fold.
+  .barloader-container {
+    height: auto;
+    margin-bottom: 4px;
+  }
+
+  .desc {
+    margin: 0;
+  }
 }
 
-.backfill-actions {
+.backfill-hero-text {
+  min-width: 0;
+  flex: 1;
+}
+
+// Tinted disc rather than a bare glyph, so the heading has something to sit
+// against and the page opens with an image of what it is for.
+.backfill-hero-icon {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 42px;
+  height: 42px;
+  border-radius: 12px;
+  background: var(--accent-light);
+  border: 1px solid color-mix(in srgb, var(--accent-primary) 35%, transparent);
+  color: var(--accent-primary);
+  font-size: 20px;
+  // Optical alignment with the cap-height of the h2 beside it.
+  margin-top: 2px;
+
+  &.is-done {
+    background: color-mix(in srgb, var(--backfill-ok) 14%, transparent);
+    border-color: color-mix(in srgb, var(--backfill-ok) 40%, transparent);
+    color: var(--backfill-ok);
+  }
+}
+
+@media (max-width: 560px) {
+  .backfill-hero {
+    gap: 10px;
+  }
+  .backfill-hero-icon {
+    width: 34px;
+    height: 34px;
+    font-size: 16px;
+  }
+}
+
+/* The cost, said once, up front. An accent rule rather than a full panel: it is
+   context for the page, not another thing to act on. */
+/* Plain text, not a panel. This is background a reader passes once on the way
+   to the list; the accent rule and filled box gave it the weight of something
+   to act on, competing with the publish controls that actually are. */
+.backfill-note {
+  margin: 0 0 18px;
+  font-size: 13px;
+  line-height: 1.55;
+  color: var(--text-muted);
+
+  strong { color: var(--text-secondary); font-weight: 600; }
+}
+
+/* ----------------------------------------------------------- action bar --- */
+
+/* Sticky, because the list is long enough to scroll past and the count and the
+   publish button are the whole reason somebody is scrolling it. */
+.backfill-bar {
+  position: sticky;
+  top: calc(var(--nav-height, 60px) + 8px);
+  z-index: 3;
+
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 14px;
+  box-shadow: var(--shadow-md);
+  padding: 12px 14px;
+  margin-bottom: 18px;
+}
+
+.backfill-bar-count {
+  flex: 1;
+  min-width: 0;
+  font-size: 14px;
+  color: var(--text-secondary);
+  line-height: 1.45;
+
+  strong {
+    color: var(--text-primary);
+    font-size: 16px;
+  }
+}
+
+/* Each qualification on its own line: they are conditions, and run together
+   they read as one long apology. */
+.backfill-bar-sub {
+  display: block;
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+.backfill-bar-actions {
   display: flex;
   align-items: center;
   gap: 8px;
   flex-wrap: wrap;
-  margin-bottom: 12px;
 }
 
-// Pushes the primary action to the right on desktop; on a phone the row wraps
-// and it simply follows the count.
-.backfill-count {
+/* --------------------------------------------------------------- groups --- */
+
+.backfill-group {
+  border: 1px solid var(--border-color);
+  border-radius: 16px;
+  background: var(--card-bg);
+  box-shadow: var(--shadow-md);
+  margin-bottom: 16px;
+  /* Keeps the first and last rows inside the rounded corners. */
+  overflow: hidden;
+}
+
+.backfill-group-head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 13px 16px;
+  border-bottom: 1px solid var(--border-light);
+
+  svg {
+    color: var(--accent-primary);
+    flex-shrink: 0;
+  }
+
+  h3 {
+    margin: 0;
+    font-size: 16px;
+    color: var(--text-primary);
+  }
+}
+
+.backfill-group-count {
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
+  padding: 1px 9px;
+  border-radius: 999px;
+  background: var(--bg-hover);
+  color: var(--text-secondary);
+}
+
+/* Takes the slack, so the section button sits hard right whether or not a
+   section has a note. */
+.backfill-group-note {
   flex: 1;
-  font-size: 13px;
-  opacity: 0.75;
+  font-size: 12px;
+  color: var(--text-muted);
 }
 
-.backfill-wait {
-  font-size: 13px;
-  opacity: 0.8;
-  margin: 0 0 12px;
+.backfill-group-all {
+  margin-left: auto;
+  flex-shrink: 0;
+}
+
+/* ----------------------------------------------------------------- rows --- */
+
+.backfill-rows {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.backfill-row + .backfill-row {
+  border-top: 1px solid var(--border-light);
+}
+
+/* The whole row is the click target, not a 13px box at the end of it. */
+.backfill-row-inner {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 11px 16px;
+  cursor: pointer;
+  transition: background 120ms ease;
+
+  &:hover { background: var(--bg-hover); }
+
+  input[type="checkbox"] {
+    flex: 0 0 auto;
+    width: 17px;
+    height: 17px;
+    accent-color: var(--accent-primary);
+    cursor: pointer;
+  }
+}
+
+/* Published rows stay put rather than disappearing: a row that vanishes on
+   success leaves the reader unsure whether it worked. */
+.backfill-row.is-done .backfill-row-inner {
+  cursor: default;
+
+  .backfill-row-label { color: var(--text-muted); }
+  &:hover { background: none; }
+}
+
+.backfill-row-main {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.backfill-row-label {
+  color: var(--text-primary);
+  font-size: 14px;
+  font-weight: 500;
+  overflow-wrap: anywhere;
+  /* Two lines of a long video title, then ellipsis: enough to recognise it,
+     not enough for one row to bury the next five. */
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.backfill-row-meta {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+.backfill-tag {
+  padding: 1px 7px;
+  border-radius: 999px;
+  border: 1px solid var(--border-color);
+  font-size: 11px;
+  white-space: nowrap;
+}
+
+.backfill-status {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  flex-shrink: 0;
+  font-size: 12px;
+  white-space: nowrap;
+  padding: 3px 10px;
+  border-radius: 999px;
+  border: 1px solid var(--border-color);
+  color: var(--text-muted);
+
+  &.is-done {
+    color: var(--backfill-ok);
+    border-color: var(--backfill-ok);
+  }
+
+  &.is-error {
+    color: var(--backfill-err);
+    border-color: var(--backfill-err);
+  }
+
+  &.is-publishing {
+    color: var(--backfill-busy);
+    border-color: var(--backfill-busy);
+  }
 }
 
 .backfill-error,
 .backfill-row-error {
-  color: var(--error, #e0594b);
+  color: var(--backfill-err, #c2402f);
   font-size: 13px;
 }
 
@@ -59,77 +413,181 @@
   margin-top: 2px;
 }
 
-.backfill-table {
-  width: 100%;
-  border-collapse: collapse;
-  font-size: 14px;
+/* ----------------------------------------------- excluded and waiting --- */
 
-  th,
-  td {
-    text-align: left;
-    padding: 10px 8px;
-    border-bottom: 1px solid var(--border-color, rgba(255, 255, 255, 0.1));
-    vertical-align: top;
-  }
-
-  th {
-    font-size: 12px;
-    text-transform: uppercase;
-    letter-spacing: 0.04em;
-    opacity: 0.6;
-  }
-
-  // Published rows stay in place rather than disappearing: a row that vanishes
-  // on success leaves the user unsure whether it worked.
-  tr.is-done {
-    opacity: 0.5;
-  }
-
-  tr.is-error td {
-    border-bottom-color: var(--error, #e0594b);
-  }
-}
-
-.backfill-what {
-  word-break: break-word;
-}
-
-.backfill-tag {
-  display: inline-block;
-  margin-left: 6px;
-  padding: 1px 6px;
-  border-radius: 999px;
-  border: 1px solid var(--border-color, rgba(255, 255, 255, 0.18));
-  font-size: 11px;
-  opacity: 0.75;
-  white-space: nowrap;
-}
-
+/* Same panel as a group, so "not coming" and "coming later" read as part of the
+   same list rather than as footnotes under it. */
 .backfill-excluded {
-  margin-top: 32px;
+  border: 1px solid var(--border-color);
+  border-radius: 16px;
+  background: var(--card-bg);
+  padding: 16px;
+  margin-top: 20px;
   font-size: 14px;
+  color: var(--text-secondary);
 
   h3 {
     font-size: 15px;
-    margin: 0 0 8px;
+    margin: 0 0 6px;
+    color: var(--text-primary);
   }
+
+  .desc { margin: 0 0 8px; }
 
   ul {
     margin: 0;
     padding-left: 18px;
-    line-height: 1.6;
+    line-height: 1.65;
   }
+
+  strong { color: var(--text-primary); }
 }
 
 @include mix.respond(phone) {
-  // The date column is the first thing to go: it is the least load-bearing
-  // information and the labels need the width more.
-  .backfill-table th:nth-child(4),
-  .backfill-table td:nth-child(4) {
-    display: none;
+  .backfill {
+    padding: 16px 12px 56px;
   }
 
-  .backfill-actions .btn-primary {
+  /* The bar stops sticking on a phone: pinned to the top it ate a third of a
+     short screen, and the list it floats over is what the reader came for. */
+  .backfill-bar {
+    position: static;
+  }
+
+  .backfill-bar-actions {
     width: 100%;
+
+    .btn-primary {
+      flex: 1;
+    }
+  }
+
+  /* The status pill drops to its own line rather than squeezing the label. */
+  .backfill-row-inner {
+    flex-wrap: wrap;
+  }
+
+  /* The section note takes a full line of its own instead of being wrung out
+     into a three-word-wide column between the count and the button. */
+  .backfill-group-head {
+    flex-wrap: wrap;
+  }
+
+  .backfill-group-note {
+    order: 10;
+    flex: 1 0 100%;
+  }
+
+  .backfill-group-all {
+    margin-left: auto;
+  }
+
+  .backfill-status {
+    margin-left: 29px;
+  }
+}
+
+/* ------------------------------------------- grouping switch --- */
+
+/* Above the list, not in the publish bar: this changes how you READ the rows,
+   it does not act on the selection. */
+.backfill-modes {
+  display: inline-flex;
+  gap: 4px;
+  padding: 4px;
+  margin-bottom: 12px;
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  background: var(--bg-tertiary);
+}
+
+.backfill-mode {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 7px 14px;
+  border: 0;
+  border-radius: 9px;
+  background: transparent;
+  color: var(--text-secondary);
+  font: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+
+  &:hover { color: var(--text-primary); }
+
+  /* The selected one is a raised panel rather than a colour: two red pills side
+     by side would read as two actions instead of one choice. */
+  &.is-on {
+    background: var(--bg-secondary);
+    color: var(--text-primary);
+    box-shadow: 0 1px 2px rgb(0 0 0 / 0.18);
+  }
+}
+
+/* ------------------------------------------------- rich rows --- */
+
+/* HiveAvatar wraps the <img> in a span so the premium badge can overlap the
+   corner, and leaves shape to the caller. Rounding only the wrapper left a
+   square picture painted on top of a round box -- the image itself has to be
+   the round one. */
+.backfill-row-avatar {
+  flex-shrink: 0;
+  width: 30px;
+  height: 30px;
+
+  > img {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    object-fit: cover;
+    background: var(--bg-tertiary);
+  }
+}
+
+/* The reply's own words, under its "Reply to @x" line. Clamped to two lines:
+   enough to recognise what you wrote, never enough to turn the list into a
+   wall of prose. */
+.backfill-row-excerpt {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  margin-top: 2px;
+  font-size: 12.5px;
+  line-height: 1.45;
+  color: var(--text-muted);
+}
+
+@media (max-width: 560px) {
+  .backfill-modes { width: 100%; }
+  .backfill-mode { flex: 1; justify-content: center; }
+}
+
+/* Out of resource credits. Amber, like the in-progress pill: this is a wait,
+   not a failure, and the page already uses red for things that broke. */
+.backfill-rc {
+  margin-bottom: 12px;
+  padding: 12px 14px;
+  border-radius: 10px;
+  border: 1px solid color-mix(in srgb, var(--backfill-busy) 45%, transparent);
+  background: color-mix(in srgb, var(--backfill-busy) 10%, transparent);
+  font-size: 13px;
+  line-height: 1.55;
+  color: var(--text-primary);
+
+  strong { color: var(--text-primary); }
+}
+
+/* A title you can open. Underlined on hover only: a list of permanently
+   underlined links reads as busier than it is. */
+.backfill-row-label.is-link {
+  color: var(--text-primary);
+  text-decoration: none;
+
+  &:hover {
+    color: var(--accent-primary);
+    text-decoration: underline;
   }
 }

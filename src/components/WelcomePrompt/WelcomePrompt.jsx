@@ -4,6 +4,9 @@ import { Video, Zap, Radio, Users, MessageCircle, Sparkles } from 'lucide-react'
 import { useAppStore } from '../../lib/store';
 import { isManteAuthLogin } from '../../hive-api/aioha';
 import { fetchProfile, isProfileEmpty } from '../../utils/profileMeta';
+import { fetchIncubationProfile } from '../../lib/incubation';
+import { normalizeInterestList, fetchUserInterests } from '../../utils/interests';
+import TagsV2Picker from '../tooltip/TagsV2Picker';
 import { reconcileAvatarOverride } from '../../utils/avatarCache';
 import { setWelcomeActive } from '../../utils/welcomeGate';
 import ProfileFields, { useProfileEditor } from './ProfileFields';
@@ -52,7 +55,10 @@ export default function WelcomePrompt() {
   const [open, setOpen] = useState(false);
   const [step, setStep] = useState(0);
   const editor = useProfileEditor(user);
-  const { form, seed, setField, pickImage, uploading, saving, hasAnything, save } = editor;
+  const {
+    form, seed, setField, pickImage, uploading, saving, hasAnything, save,
+    interests, setInterests,
+  } = editor;
 
   useEffect(() => {
     const forced = isForced();
@@ -70,7 +76,7 @@ export default function WelcomePrompt() {
     setWelcomeActive(true);
     let alive = true;
     (async () => {
-      const profile = await fetchProfile(user);
+      let profile = await fetchProfile(user);
       if (!alive) return;
       if (profile == null) {           // couldn't read Hive, try again next session
         setWelcomeActive(false);
@@ -85,6 +91,58 @@ export default function WelcomePrompt() {
         setWelcomeActive(false);
         return;
       }
+      // Nothing on Hive yet -- but this may not be a blank slate of a person.
+      // Somebody who came through the warm-up has probably already written a
+      // display name, a bio and picked a picture, and all of it was stored
+      // off-chain because they had no account to write it to. Showing them an
+      // empty form here asks them to do the same work twice, and silently drops
+      // what they already chose the moment they save.
+      //
+      // Read by name rather than from the session: after graduation the account
+      // IS the old handle (graduation creates it under that name), and the
+      // public profile needs no session to answer, so this keeps working
+      // however the identity is resolved.
+      // Interests, ALWAYS — not only for an empty profile.
+      //
+      // What the account already has wins; the warm-up choices fill in when it
+      // has none. Seeding this only in the empty-profile branch left the chips
+      // blank whenever somebody had already set a profile, and because the save
+      // writes whatever is ticked, saving from that state would have wiped
+      // interests they had genuinely chosen.
+      try {
+        const onHive = await fetchUserInterests(user);
+        if (!alive) return;
+        if (onHive?.length) {
+          setInterests(onHive);
+        } else {
+          const warmup = await fetchIncubationProfile(user).catch(() => null);
+          if (!alive) return;
+          if (Array.isArray(warmup?.interests) && warmup.interests.length) {
+            setInterests(normalizeInterestList(warmup.interests));
+          }
+        }
+      } catch { /* no interests to show; the chips simply start empty */ }
+
+      if (isProfileEmpty(profile)) {
+        try {
+          const inc = await fetchIncubationProfile(user);
+          const carried = inc?.profile;
+          if (!alive) return;
+          if (carried && !isProfileEmpty(carried)) {
+            // Only the fields the editor actually owns, so nothing unexpected
+            // rides along into a Hive profile update.
+            profile = {
+              ...profile,
+              name: carried.name || profile.name || '',
+              about: carried.about || profile.about || '',
+              location: carried.location || profile.location || '',
+              profile_image: carried.profile_image || profile.profile_image || '',
+              cover_image: carried.cover_image || profile.cover_image || '',
+            };
+          }
+        } catch { /* no warm-up profile, or the store is down: blank form */ }
+      }
+
       seed(profile);
       setStep(0);
       setOpen(true);
@@ -125,8 +183,8 @@ export default function WelcomePrompt() {
               <span className="welcome-wave" aria-hidden="true">👋</span>
               <h2>Welcome to 3Speak</h2>
               <p className="welcome-hero-sub">
-                Hey <strong>@{user}</strong>, you made it. 3Speak is a creator owned video platform
-                built on Hive: your account, your audience and your content belong to you, not to us.
+                Hey <strong>@{user}</strong>, you made it. 3Speak is built on Hive, so your
+                account, your audience and your content belong to you.
               </p>
             </div>
 
@@ -153,14 +211,11 @@ export default function WelcomePrompt() {
               </button>
             </div>
           </>
-        ) : (
+        ) : step === 1 ? (
           <>
             <div className="welcome-head">
               <h2>Let people know who you are</h2>
-              <p>
-                This is what shows on your profile and next to everything you post.
-                You can change it any time from your profile.
-              </p>
+              <p>This is what people see on your profile. You can change it any time.</p>
             </div>
 
             <ProfileFields
@@ -172,13 +227,56 @@ export default function WelcomePrompt() {
               saving={saving}
             />
 
-            <p className="welcome-fineprint">
-              Saved to your Hive account, so every Hive app shows the same profile.
-            </p>
-
+            {/* Split off the topics, which used to sit under all of this. The
+                two together were taller than a phone screen, so the save button
+                fell below the fold on exactly the devices most people sign up
+                on. Nothing is written until the last step, so moving between
+                them costs nothing. */}
             <div className="welcome-actions">
               <button type="button" className="welcome-skip" onClick={finish} disabled={saving}>
                 Skip for now
+              </button>
+              <button
+                type="button"
+                className="welcome-primary"
+                onClick={() => setStep(2)}
+                disabled={uploading}
+              >
+                {uploading ? 'Uploading…' : 'Next'}
+              </button>
+            </div>
+          </>
+        ) : (
+          <>
+            <div className="welcome-head">
+              <h2>What are you into?</h2>
+              <p>
+                We use these to pick what shows up on your home page. Choose as many
+                as you like, or none, and change them whenever you want.
+              </p>
+            </div>
+
+            {/* The SAME picker as Settings → Interests and the interests prompt.
+                An earlier version rendered utils/interests INTERESTS, which is a
+                different, older vocabulary: the stored topics are v2 slugs like
+                "tech-science", so nothing a user had actually chosen could ever
+                appear ticked. One picker, one taxonomy. */}
+            <TagsV2Picker
+              multi
+              searchable
+              value={interests}
+              onChange={setInterests}
+              disabled={saving}
+            />
+
+            <p className="welcome-fineprint">
+              Saved to your Hive account, so every Hive app shows the same profile
+              and the same interests.
+            </p>
+
+            <div className="welcome-actions">
+              <button type="button" className="welcome-back" onClick={() => setStep(1)} disabled={saving}>
+                Back
               </button>
               <button type="button" className="welcome-primary" onClick={submit} disabled={saving || uploading}>
                 {saving ? 'Saving…' : 'Save and start exploring'}

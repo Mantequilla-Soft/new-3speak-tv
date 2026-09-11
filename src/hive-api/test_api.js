@@ -1,3 +1,15 @@
+// ⚠️ DEAD FILE — DO NOT USE, DO NOT IMPORT.
+//
+// This was the live paste-your-key account creation route until 2026-09-10. Its
+// posting authority was `[["ecency.app", 1]]` and NOTHING ELSE, so every account
+// created through it handed Ecency posting rights and gave the person who paid
+// the 3 HIVE no authority at all over what they had just bought.
+//
+// The real implementation is createHiveCommunityKY in hive-api/api.js, which
+// builds its operation with buildAccountCreateOp so every route -- wallet,
+// Keychain extension, pasted key -- creates an identical account. Kept only so
+// the history of this bug is findable; delete once nothing references it.
+
 import { Client, PrivateKey } from "@hiveio/dhive";
 import { getHiveClient } from '../utils/hiveNode';
 

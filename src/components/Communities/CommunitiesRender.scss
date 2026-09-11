@@ -2,126 +2,148 @@
 .communities-render {
   padding: 20px;
 
-  .create-communitie-wrap {
-    padding: 12px;
-    border-radius: 12px;
-    margin-bottom: 12px;
-    // color: #fff;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    background-color: #e2e2ec;
-    [data-theme="dark"] & {
-      color: var(--text-primary);
-      background: #3a3939c9;
-      border: solid 1px rgba(128, 128, 128, 0.144);
-    }
-    h1 {
-      width: 50%;
-      font-size: 20px;
+  // Mirrors the badge grid next door -- same card, same hover, same spacing --
+  // so the two tabs of Groups read as one page. The one difference is width:
+  // twice the badge minimum, because a community carries a sentence about
+  // itself where a badge carries a title.
+  // Search left, sort and create right. Matches the Groups page it now lives
+  // in: same control heights, same radius, same border token.
+  // Mirrors .badges-head p, so both tabs introduce themselves the same way.
+  .communities-head {
+    margin: 0 0 14px;
 
-      @include respond(phone) {
-        display: none;
-      }
-    }
-    .phone-c {
-      display: none;
-      @include respond(phone) {
-        font-size: 18px;
-        display: block;
-      }
-    }
-    button {
-      padding: 10px 30px;
-      border: none;
-      border-radius: 10px;
-      width: fit-content;
-      height: fit-content;
-      font-size: 14.5px;
-      @include respond(phone) {
-        font-size: 14px;
-        padding: 10px 10px;
-      }
-    }
-  }
-
-  .search-wrapper {
-    margin-bottom: 20px;
-
-    input {
-      width: 30%;
-      padding: 10px;
-      border: 1px solid #e2e2ec;
-      border-radius: 8px;
-      font-size: 1rem;
-      outline: none;
-      transition: border-color 0.3s;
-      @include respond(phone) {
-        width: 40%;
-        font-size: 16px;
-      }
-      &:focus {
-        border-color: #0073e6;
-      }
+    p {
+      margin: 0;
+      max-width: 640px;
+      font-size: 13.5px;
+      line-height: 1.55;
+      // --text-secondary, matching .badges-head p. The two intros are the same
+      // kind of sentence and were on different greys.
+      color: var(--text-secondary);
     }
   }
 
   .blog-feed {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-    gap: 20px;
+    grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+    gap: 14px;
     @include respond(phone) {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(70px, 1fr));
-      gap: 20px;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 10px;
     }
 
     .blog-card {
-      //   background: #fff;
-      border-radius: 8px;
-      overflow: hidden;
-      //   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-      transition: transform 0.2s;
-      width: fit-content;
+      // Logo on the left, the three lines stacked beside it:
+      //
+      //        | Name
+      //   logo | Description
+      //        | Subscribers
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      text-align: left;
+      padding: 14px 16px;
+      border: 1px solid var(--border-light, rgba(150, 150, 150, 0.18));
+      border-radius: 14px;
+      background: var(--bg-secondary, rgba(150, 150, 150, 0.06));
+      cursor: pointer;
+      transition: border-color 0.12s ease, transform 0.12s ease;
 
       &:hover {
-        transform: translateY(-5px);
+        border-color: var(--accent-primary, #e0594b);
+        transform: translateY(-2px);
       }
 
       .img-wrap {
-        border-radius: 15%;
-        background: #e2e2ec;
-        height: 110px;
-        width: 110px;
-        padding: 12px;
-        margin-bottom: 8px;
-        transition: transform 0.5s;
-            [data-theme="dark"] & {
-
-      background: #3a3939c9;
-      border: solid 1px rgba(128, 128, 128, 0.144);
-    }
-        @include respond(phone) {
-          height: 70px;
-          width: 70px;
-        }
+        // Never squashed by a long description, and never stretched by a short
+        // one: it is a fixed square the text sits beside.
+        flex: 0 0 76px;
+        width: 76px;
+        height: 76px;
+        border-radius: 50%;
+        overflow: hidden;
+        background: var(--bg-tertiary, #e2e2ec);
       }
 
       .blog-image {
         height: 100%;
         width: 100%;
-        border-radius: 15%;
         object-fit: cover;
       }
 
+      // Title, blurb and count, matched to the badge card so the two grids are
+      // the same object with different contents.
+      // The three lines, held together against the logo.
+      .blog-text {
+        display: flex;
+        flex-direction: column;
+        gap: 3px;
+        // Lets the description ellipsis instead of forcing the card wider.
+        min-width: 0;
+      }
+
       .blog-title {
-        font-size: 1rem;
-        margin: 10px;
-        text-align: center;
-        @include respond(phone) {
-          font-size: 14px;
+        margin: 0;
+        font-size: 13.5px;
+        font-weight: 700;
+        line-height: 1.3;
+        color: var(--text-primary, #f1f1f1);
+      }
+
+      .blog-about {
+        margin: 0;
+        font-size: 11.5px;
+        line-height: 1.4;
+        color: var(--text-secondary, #888);
+        // Three lines, as on a badge: enough to tell two communities apart
+        // without one long description setting the height of the whole row.
+        display: -webkit-box;
+        -webkit-line-clamp: 3;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+      }
+
+      // Size, in the accent: the one number most people are scanning for.
+      .blog-count {
+        font-size: 11px;
+        font-weight: 600;
+        color: var(--accent-primary, #e0594b);
+      }
+
+      // Everything else on its own line, all in the muted grey. These are
+      // context rather than headline: how busy it is, what is in flight, how
+      // old it is. Colouring them like the subscriber count made a card of four
+      // red numbers with no hierarchy at all.
+      .blog-meta {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 3px 10px;
+        font-size: 11px;
+        font-weight: 500;
+        color: var(--text-muted);
+
+        span {
+          display: inline-flex;
+          align-items: center;
+          white-space: nowrap;
+          color: inherit;
+        }
+
+        // Drawn BEFORE each item except the first, so a missing stat never
+        // leaves a dangling dot.
+        span + span::before {
+          content: "";
+          width: 3px;
+          height: 3px;
+          margin-right: 10px;
+          border-radius: 50%;
+          background: currentColor;
+          opacity: 0.55;
         }
       }
+
     }
   }
 }

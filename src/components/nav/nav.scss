@@ -29,7 +29,10 @@
   padding: 10px 2% 10px 1%;
   padding-top: calc(10px + env(safe-area-inset-top, 0px));
   box-shadow: var(--nav-shadow);
-  background: var(--nav-bg);
+  // Fades away from the screen edge, so the bar looks lit from the top rather
+  // than being a flat slab against the content. --nav-fade-to carries the theme
+  // difference; see index.css.
+  background: linear-gradient(180deg, var(--nav-bg) 0%, var(--nav-fade-to) 100%);
   position: sticky;
   top: 0px;
   z-index: 1000;
@@ -76,12 +79,6 @@
     @include mix.respond(tab) {
       display: none;
     }
-    .menu-icon {
-      width: 30px;
-      margin-right: 20px;
-      cursor: pointer;
-      color: var(--text-primary);
-    }
     .logo {
       // The mark, not the wordmark: sized against the bar's height rather than
       // set to a fixed width, which was the wordmark's measurement.
@@ -99,9 +96,6 @@
       display: none;
     }
 
-    .menu-icon {
-      display: none;
-    }
     .logo {
       height: 30px;
       width: auto;
@@ -122,7 +116,10 @@
     transition: opacity 0.15s ease;
 
     &:hover { opacity: 0.75; }
-    &.is-open { opacity: 0.6; }
+    // Deliberately NO dimming while open. Fading the logo for as long as the
+    // tabs are showing left the brand mark looking disabled during the state it
+    // is most often in, and the state is already said by the chevron below,
+    // which turns to point back at the logo.
     &:focus-visible { outline: 2px solid var(--accent-primary); outline-offset: 3px; }
 
     // Points at the space the tabs will fill, and turns to point back at the
@@ -153,7 +150,55 @@
     // reads as belonging to the button that revealed it.
     animation: nav-tabs-in 0.16s ease;
 
-    @media (prefers-reduced-motion: reduce) { animation: none; }
+    // Never runs under the search box. --nav-tabs-max is the gap between the
+    // start of this row and the box's left edge, measured in Nav.jsx: the box is
+    // centred on the bar and out of the flow, so the row is free to grow under
+    // it and the stylesheet has no way to know where it starts. Past that width
+    // the row scrolls sideways instead of hiding pills behind the box.
+    max-width: var(--nav-tabs-max, none);
+    overflow-x: auto;
+    overflow-y: hidden;
+    // Rides the box's own 0.18s grow-on-focus rather than snapping narrower.
+    transition: max-width 0.18s ease;
+    // Programmatic scrolls only (scrolling the active pill into view); wheel and
+    // touch are unaffected.
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;          // Firefox
+    -ms-overflow-style: none;       // old Edge
+    &::-webkit-scrollbar { display: none; } // WebKit
+
+    // Room for a focus ring inside the clip, taken straight back off so the bar
+    // is the height it always was.
+    padding-block: 3px;
+    margin-block: -3px;
+
+    // Pills keep their own size; the row scrolls instead of squashing them into
+    // ellipsised stubs.
+    > * { flex: 0 0 auto; }
+
+    // Fade the cut edge, so a half-shown pill reads as "there is more this way"
+    // rather than as a clipping bug. Classes are set by the scroll handler in
+    // Nav.jsx; masking the scroll container itself (not a pseudo-element inside
+    // it) keeps the fade pinned to the edge while the content moves under it.
+    &.can-scroll-right {
+      -webkit-mask-image: linear-gradient(to right, #000 calc(100% - 28px), transparent 100%);
+      mask-image: linear-gradient(to right, #000 calc(100% - 28px), transparent 100%);
+    }
+    &.can-scroll-left {
+      -webkit-mask-image: linear-gradient(to right, transparent 0, #000 28px);
+      mask-image: linear-gradient(to right, transparent 0, #000 28px);
+    }
+    &.can-scroll-left.can-scroll-right {
+      -webkit-mask-image: linear-gradient(to right, transparent 0, #000 28px, #000 calc(100% - 28px), transparent 100%);
+      mask-image: linear-gradient(to right, transparent 0, #000 28px, #000 calc(100% - 28px), transparent 100%);
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      animation: none;
+      transition: none;
+      scroll-behavior: auto;
+    }
 
     @include mix.respond(tab) { display: none; }
     @include mix.respond(phone) { display: none; }
@@ -268,56 +313,6 @@
       flex-shrink: 0;
       transition: transform 0.15s ease;
       &.open { transform: rotate(180deg); }
-    }
-  }
-
-  .nav-playlists-flyout {
-    position: absolute;
-    top: calc(100% + 6px);
-    left: 0;
-    min-width: 200px;
-    background: var(--bg-secondary);
-    border-radius: 8px;
-    box-shadow: var(--shadow-lg, 0 4px 16px rgba(0, 0, 0, 0.2));
-    border: 1px solid var(--border-light);
-    padding: 6px 0;
-    z-index: 100;
-  }
-
-  .nav-playlists-flyout-item {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    padding: 10px 16px;
-    color: var(--text-primary);
-    font-size: 14px;
-    font-weight: 500;
-    text-decoration: none;
-    white-space: nowrap;
-    cursor: pointer;
-    transition: background-color 0.15s ease;
-
-    .nav-playlists-flyout-icon {
-      width: 16px;
-      height: 16px;
-      flex-shrink: 0;
-    }
-
-    &:hover {
-      background-color: var(--bg-hover, var(--sidebar-hover-bg));
-      color: var(--accent-primary);
-    }
-
-    &:hover {
-      color: var(--text-primary);
-      background: var(--bg-hover);
-      border-color: var(--text-secondary);
-    }
-
-    &.active {
-      color: var(--text-primary);
-      background: var(--bg-tertiary);
-      border-color: var(--text-secondary);
     }
   }
 
@@ -672,98 +667,9 @@
     }
   }
 
-  .side-nav {
-    z-index: 1000;
-    position: fixed;
-    left: 0px;
-    top: 0px;
-    width: fit-content;
-    max-width: 80%;
-    height: 100%;
-    background-color: var(--bg-tertiary);
-    border-radius: 0px 12px 30px 0px;
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
-    transition: background-color 0.3s ease,
-      transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-    padding: 0px 20px;
-    padding-top: calc(50px + env(safe-area-inset-top, 0px));
-    border-right: none;
-    box-shadow: 4px 0 20px rgba(0, 0, 0, 0.5);
-    overflow-y: auto;
-
-    @include mix.respond(desktop) {
-      display: none;
-    }
-
-    .side-nav-search {
-      .search-wrap-sm {
-        position: relative;
-        padding: 12px 0;
-        .wrap {
-          display: flex;
-          align-items: center;
-          background-color: var(--input-bg);
-          gap: 2px;
-          border-radius: 8px;
-          height: 30px;
-          padding: 0px 5px;
-          transition: background-color 0.3s ease;
-          input {
-            width: 100%;
-            height: 100%;
-            outline: none;
-            border: none;
-            padding-left: 4px;
-            background: transparent;
-            color: var(--text-primary);
-            @include mix.respond(phone) {
-              font-size: 16px;
-            }
-          }
-        }
-      }
-    }
-  }
-
-  .side-nav-else {
-    position: fixed;
-    left: -100%;
-    display: none;
-  }
-
   // Sits on the edge the drawer slides back to, and is given a real surface:
   // the old × was an 18px glyph at text colour on a blurred backdrop, which is
   // why nobody could find it.
-  .side-nav-close {
-    position: absolute;
-    top: 14px;
-    left: 14px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 34px;
-    height: 34px;
-    padding: 0;
-    border: 1px solid var(--border-light, #444);
-    border-radius: 50%;
-    background: var(--bg-secondary);
-    color: var(--text-primary);
-    cursor: pointer;
-    transition: background 0.15s ease, border-color 0.15s ease, transform 0.15s ease;
-
-    svg { font-size: 22px; display: block; }
-
-    &:hover {
-      background: var(--bg-hover);
-      border-color: var(--text-secondary);
-      transform: translateX(-2px);
-    }
-
-    &:focus-visible { outline: 2px solid var(--accent-primary); outline-offset: 2px; }
-
-    @media (prefers-reduced-motion: reduce) { transition: none; }
-  }
   .dropdown-menu {
     position: absolute;
     right: 10px;
@@ -788,6 +694,51 @@
         color: var(--accent-primary);
       }
     }
+  }
+}
+
+// Portaled to <body> (see Nav.jsx: the tab row scrolls, and a scroll container
+// would clip a flyout hanging out of it), so these rules sit outside
+// .nav-container and the box is placed from the trigger's rect. Above the bar's
+// own z-index: 1000.
+.nav-playlists-flyout {
+  position: fixed;
+  min-width: 200px;
+  background: var(--bg-secondary);
+  border-radius: 8px;
+  box-shadow: var(--shadow-lg, 0 4px 16px rgba(0, 0, 0, 0.2));
+  border: 1px solid var(--border-light);
+  padding: 6px 0;
+  z-index: 1100;
+}
+
+.nav-playlists-flyout-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 16px;
+  color: var(--text-primary);
+  font-size: 14px;
+  font-weight: 500;
+  text-decoration: none;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+
+  .nav-playlists-flyout-icon {
+    width: 16px;
+    height: 16px;
+    flex-shrink: 0;
+  }
+
+  &:hover {
+    color: var(--text-primary);
+    background: var(--bg-hover, var(--sidebar-hover-bg));
+  }
+
+  &.active {
+    color: var(--text-primary);
+    background: var(--bg-tertiary);
   }
 }
 

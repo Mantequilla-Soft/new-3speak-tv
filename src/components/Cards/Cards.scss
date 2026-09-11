@@ -14,11 +14,19 @@ html[data-card-size="large"] { --card-min-w: 420px; }
 // Phones shift BOTH tokens together (two-up tiles have half the width), so the
 // card stays internally uniform at every breakpoint.
 .card {
-  --card-fs: 13px;
-  --card-icon-fs: 15px;
+  // 12px is what the comment / upvote / payout badges always used — the card
+  // now takes that as its single size rather than the old 13px title size.
+  --card-fs: 12px;
+  --card-icon-fs: 14px;
+  // The duration pill is the ONE deliberate exception to the single size. It is
+  // the only dark-on-light element on the card (black on a white pill, over the
+  // thumbnail); at an identical 12px that contrast makes it read a size larger
+  // than the gray-on-dark text around it. One step down cancels that out.
+  --card-duration-fs: 10px;
   @include respond(phone) {
-    --card-fs: 11px;
-    --card-icon-fs: 13px;
+    --card-fs: 10px;
+    --card-icon-fs: 12px;
+    --card-duration-fs: 9px;
   }
 }
 
@@ -395,7 +403,7 @@ html[data-card-size="large"] { --card-min-w: 420px; }
         z-index: 3;   // see .user-wrap above — the thumbnail sits at z-index 1
         top: 4%;
         right: 1%;
-        font-size: var(--card-fs);
+        font-size: var(--card-duration-fs);
         padding: 3px 7px;
         border-radius: 12px;
         font-weight: 400;
@@ -802,5 +810,15 @@ html[data-card-size="large"] { --card-min-w: 420px; }
       width: var(--card-icon-fs);
       height: var(--card-icon-fs);
     }
+  }
+
+  // AuthorBadge is a shared component and hardcodes `.author-name` to 13px/600.
+  // That single rule is why the creator name kept reading a size larger than
+  // the rest of the tile, most obviously on phones where everything else had
+  // stepped down. Two classes, so it beats the component's own one-class rule.
+  .author-badge .author-name,
+  .author-name {
+    font-size: var(--card-fs);
+    font-weight: 400;
   }
 }

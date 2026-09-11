@@ -3,7 +3,7 @@ import "./ProfileNav.scss"
 import '../../page/Login/KeyChainLogin.scss';
 import { useAppStore } from '../../lib/store';
 import { useGetMyQuery } from '../../hooks/getUserDetails';
-import { MdKeyboardArrowDown, MdOutlineKeyboardArrowUp, MdSettings, MdTrendingUp, MdCampaign, MdChevronRight } from "react-icons/md";
+import { MdKeyboardArrowDown, MdOutlineKeyboardArrowUp, MdSettings, MdTrendingUp, MdCampaign, MdChevronRight, MdCloudUpload } from "react-icons/md";
 import { ImPower } from "react-icons/im";
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { FaDiscord, FaLanguage } from 'react-icons/fa';
@@ -22,6 +22,7 @@ import { adsEnabledFor } from '../../utils/config';
 import LabeledToggle from '../LabeledToggle/LabeledToggle';
 import SettingsModal from '../SettingsModal/SettingsModal';
 import { useAvatarUrl } from '../../utils/avatarCache';
+import { fetchBackfillSummary } from '../../lib/incubation';
 
 
 
@@ -29,8 +30,31 @@ import { useAvatarUrl } from '../../utils/avatarCache';
 function ProfileNav({ isVisible, onclose, toggleAddAccount, openLoginModal }) {
   const location = useLocation();
   const navigate = useNavigate()
-  const { user, theme, showNsfw, setShowNsfw, toggleTheme, sidebarHidden, setSidebarHidden, LogOut } = useAppStore();
+  const { user, theme, showNsfw, setShowNsfw, toggleTheme, LogOut } = useAppStore();
   const incubationHandle = useAppStore((s) => s.incubationHandle);
+  // No Hive account: voting power, resource credits, a wallet, analytics and
+  // the advertiser console are all things that read or spend an account that
+  // does not exist yet. Showing them was offering a menu of dead ends.
+  const isIncubating = !user && !!incubationHandle;
+
+  // How many off-chain posts are still waiting to be published to Hive.
+  //
+  // Only a GRADUATED user has any: the backlog is the things they made before
+  // the account existed. 0 for everyone else, and the entry is hidden rather
+  // than shown empty -- a menu item leading to "nothing to publish" is a dead
+  // end, which is the same reason the wallet and analytics rows are hidden
+  // during the warm-up.
+  const [backlogPending, setBacklogPending] = useState(0);
+  useEffect(() => {
+    if (!user) { setBacklogPending(0); return undefined; }
+    let alive = true;
+    fetchBackfillSummary()
+      .then((sum) => { if (alive) setBacklogPending(Number(sum?.pending) || 0); })
+      // 401 (not a butrauth identity) and 409 (never incubated) are the ORDINARY
+      // answers for most users, not errors. Either way: no entry.
+      .catch(() => { if (alive) setBacklogPending(0); });
+    return () => { alive = false; };
+  }, [user]);
   // What to SHOW. Someone incubating has no Hive account, so `user` is null and
   // the panel rendered a blank name over a broken cover.
   const displayName = user || incubationHandle;
@@ -84,7 +108,7 @@ function ProfileNav({ isVisible, onclose, toggleAddAccount, openLoginModal }) {
             {/* <img className='' src={getUserProfile?.images?.cover} alt="" /> */}
             <img className='avatar-img' src={myAvatar}  alt="" />
             <span className='username'>{displayName}</span>
-            <div className="power-wrap">
+            {!isIncubating && <div className="power-wrap">
             <div className="wrap-in">
               <div className="wrap">
                 <MdOutlineKeyboardArrowUp />
@@ -106,28 +130,38 @@ function ProfileNav({ isVisible, onclose, toggleAddAccount, openLoginModal }) {
               </div>
               </div>
 
-            </div>
+            </div>}
            </div>
         <div className="list-wrap">
           <Link to="/profile" className="wrap" onClick={onclose}>
             <IoMdPerson className="icon" /> <span>My Channel</span>
           </Link>
-          <Link to="/profile?tab=stats" className="wrap" onClick={onclose}>
-            <MdTrendingUp className="icon" /> <span>Analytics</span>
-          </Link>
+          {backlogPending > 0 && (
+            <Link to="/publish-backlog" className="wrap" onClick={onclose}>
+              <MdCloudUpload className="icon" />
+              <span>Publish backlog<span className="profilenav-count">{backlogPending}</span></span>
+            </Link>
+          )}
+          {!isIncubating && (
+            <Link to="/profile?tab=stats" className="wrap" onClick={onclose}>
+              <MdTrendingUp className="icon" /> <span>Analytics</span>
+            </Link>
+          )}
           {/* <Link className="wrap" onClick={onclose}>
             <TiThList className="icon" /> <span>Playlist</span>
           </Link> */}
 
-          <a className="wrap" onClick={() => { handlewallletNavigation(); onclose() }}>
-            <RiWallet3Fill className="icon" /> <span>Wallet</span>
-          </a>
+          {!isIncubating && (
+            <a className="wrap" onClick={() => { handlewallletNavigation(); onclose() }}>
+              <RiWallet3Fill className="icon" /> <span>Wallet</span>
+            </a>
+          )}
           {/* <Link className="wrap">
             <FaLanguage className="icon" /> <span>Language Settings</span>
           </Link> */}
           {/* Closed testing. Same gate as the /advertise page itself, so the menu can
               never offer a link to a page that would answer with a 404. */}
-          {adsEnabledFor(user) && (
+          {!isIncubating && adsEnabledFor(user) && (
             <Link to="/advertise" className="wrap" onClick={onclose}>
               <MdCampaign className="icon" /> <span>Advertise</span>
             </Link>

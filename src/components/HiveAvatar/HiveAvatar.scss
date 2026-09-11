@@ -9,6 +9,11 @@
 
   > img {
     display: block;
+    // Sources used to be images.hive.blog/u/<name>/avatar, which is always a
+    // pre-cropped square. Now that the real profile_image is preferred (it is
+    // immutable and never stale), the source can be any shape at all — so the
+    // crop has to happen here instead of being inherited from the proxy.
+    object-fit: cover;
   }
 
   &__badge {

@@ -31,13 +31,20 @@ const HiveAvatar = forwardRef(function HiveAvatar(
     onClick,
     onError,
     style,
+    // An explicit picture, bypassing images.hive.blog entirely. Their proxy
+    // cannot fetch images.3speak.tv -- it answers 403 for a cover and serves its
+    // own grey placeholder for an avatar -- so any account whose picture we host
+    // ourselves has to be handed over directly or it silently shows a stranger's
+    // default face.
+    srcOverride,
   },
   ref,
 ) {
   // Hook first: it has to run on every render, including the empty-username one.
   // Serves a just-uploaded picture directly instead of the cached hive proxy
   // copy (see utils/avatarCache).
-  const url = useAvatarUrl(username, size || 'small');
+  const resolved = useAvatarUrl(username, size || 'small');
+  const url = srcOverride || resolved;
   if (!username) return null;
   return (
     <span

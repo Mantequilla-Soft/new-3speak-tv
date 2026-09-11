@@ -6,10 +6,7 @@ import { useInfiniteQuery } from "@tanstack/react-query";
 import { Users, Video, CalendarDays, Award, Check, Plus, Globe, MapPin } from "lucide-react";
 import { BADGES_URL, appendNsfw } from "../../utils/config";
 import { feedParams } from "../../utils/feedParams";
-import { toastIn } from "../../utils/toast";
 import { useAppStore } from "../../lib/store";
-import { followWithAioha, isLoggedIn } from "../../hive-api/aioha";
-import { getRelationshipBetweenAccounts } from "../../hive-api/api";
 import ProfileHeader from "../ProfileHeader/ProfileHeader";
 import HiveAvatar from "../HiveAvatar/HiveAvatar";
 import Card3 from "../Cards/Card3";
@@ -18,9 +15,6 @@ import { useContentBatch } from "../../hooks/useContentBatch";
 import { useWatchHistory } from "../../hooks/useWatchHistory";
 import useViewCounts from "../../hooks/useViewCounts";
 import "./BadgePage.scss";
-
-// Every toast from this module is headed "Badge". See utils/toast.js.
-const toast = toastIn('Badge');
 
 const LIMIT = 30;
 
@@ -55,12 +49,8 @@ function BadgeView({ account }) {
   const [tab, setTab] = useState('videos');           // 'videos' | 'recipients'
   const [recipients, setRecipients] = useState(null); // null until the tab is opened
   const [recipientsError, setRecipientsError] = useState(false);
-  const [following, setFollowing] = useState(false);
-  const [followLoading, setFollowLoading] = useState(false);
 
   const user = useAppStore(s => s.user);
-  const authenticated = useAppStore(s => s.authenticated);
-  const incubationHandle = useAppStore(s => s.incubationHandle);
   const hideWatched = useAppStore(s => s.hideWatched);
   const showNsfw = useAppStore(s => s.showNsfw);
 
@@ -78,17 +68,6 @@ function BadgeView({ account }) {
     return () => { alive = false; };
   }, [account]);
 
-  // "Subscribed" on a badge is an ordinary Hive follow of the badge account,
-  // which is exactly what its follower count (shown as Subscribers) counts.
-  useEffect(() => {
-    if (!user || !account) return undefined;
-    let alive = true;
-    getRelationshipBetweenAccounts(user, account)
-      .then(rel => { if (alive) setFollowing(!!rel?.follows); })
-      .catch(() => { /* leave the button in its default state */ });
-    return () => { alive = false; };
-  }, [user, account]);
-
   // Recipients are fetched when the tab is first opened, not on page load: the
   // list is a second round trip and most visitors only ever look at the videos.
   useEffect(() => {
@@ -99,29 +78,6 @@ function BadgeView({ account }) {
       .catch(() => { if (alive) setRecipientsError(true); });
     return () => { alive = false; };
   }, [tab, recipients, account]);
-
-  const handleFollow = async () => {
-    if (followLoading) return;
-    if (!authenticated || (!incubationHandle && !isLoggedIn())) {
-      toast.error('Log in to subscribe');
-      return;
-    }
-    const next = !following;
-    setFollowLoading(true);
-    try {
-      await followWithAioha(account, next);
-      setFollowing(next);
-      setBadge(b => (b && typeof b.subscribers === 'number'
-        ? { ...b, subscribers: Math.max(0, b.subscribers + (next ? 1 : -1)) }
-        : b));
-      toast.success(next ? `Subscribed to ${badgeTitle}` : `Unsubscribed from ${badgeTitle}`);
-    } catch (err) {
-      console.error('Badge subscribe failed:', err);
-      toast.error(next ? 'Could not subscribe' : 'Could not unsubscribe');
-    } finally {
-      setFollowLoading(false);
-    }
-  };
 
   const fetchVideos = async ({ pageParam = 1 }) => {
     const url = appendNsfw(
@@ -184,7 +140,6 @@ function BadgeView({ account }) {
   const kpis = badge ? [
     { key: 'recipients', icon: <Award size={16} />, label: 'Recipients', value: fmtNum(badge.recipients) },
     { key: 'videos', icon: <Video size={16} />, label: 'Recent videos', value: fmtNum(videoTotal) },
-    { key: 'subs', icon: <Users size={16} />, label: 'Subscribers', value: fmtNum(badge.subscribers) },
     { key: 'since', icon: <CalendarDays size={16} />, label: 'Issued', value: createdLabel },
   ] : [];
 
@@ -248,21 +203,14 @@ function BadgeView({ account }) {
         username={account}
         name={badge?.title || account}
         bio={badge?.description}
-        nameActions={
-          authenticated && (isLoggedIn() || incubationHandle) ? (
-            <button
-              className={`btn ${following ? 'btn-hero-following' : 'btn-hero-follow'} badge-sub-btn`}
-              onClick={handleFollow}
-              disabled={followLoading}
-            >
-              {followLoading
-                ? 'Loading…'
-                : following
-                  ? <><Check size={16} /> Subscribed</>
-                  : <><Plus size={16} /> Subscribe</>}
-            </button>
-          ) : null
-        }
+        // Straight from the index. A badge's art is usually uploaded here, and
+        // images.hive.blog cannot serve it back to us.
+        avatarUrl={badge?.image}
+        coverUrl={badge?.cover}
+        // No subscribe here. Subscribing to a badge is a plain Hive follow of
+        // the badge account, which does nothing: a badge is not a feed you join,
+        // it is an award someone gives you. The count it produced was a
+        // popularity number that read as if it meant membership.
       />
 
       {/* Mobile-only: stats sit above the tabs; the desktop sidebar carries them. */}

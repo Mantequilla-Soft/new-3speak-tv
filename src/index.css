@@ -51,6 +51,11 @@
   
   /* Nav specific */
   --nav-bg: #ffffff;
+  /* The far end of the nav bars' fade. Both the top bar and the mobile bottom
+     bar use it, so they cannot drift apart. Light: a barely-there cyan, taken
+     from the other half of the logo. Red at this size read as a warning tint
+     across the whole bar rather than as brand colour. */
+  --nav-fade-to: #f1fafd;
   --nav-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
   
   /* Card specific */
@@ -108,6 +113,9 @@
   
   /* Nav specific */
   --nav-bg: #1a1a1a;
+  /* Dark: a step lighter than the bar itself, not a tint. Red at any strength
+     on a dark bar reads as a warning rather than as depth. */
+  --nav-fade-to: #262626;
   --nav-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
   
   /* Card specific */

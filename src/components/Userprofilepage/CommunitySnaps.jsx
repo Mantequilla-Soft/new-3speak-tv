@@ -16,6 +16,7 @@ import { getHiveRenderer } from '../../lib/hiveRenderer';
 import { getHiveClient } from '../../utils/hiveNode';
 import { getVotePower, getDynamicProps } from '../../utils/hiveUtils';
 import { commentWithAioha } from '../../hive-api/aioha';
+import { fetchIncubationRepliesFor, fetchIncubationLikes } from '../../lib/incubation';
 import { useAppStore } from '../../lib/store';
 import SnapComposer from './SnapComposer';
 import EmojiGifPicker from '../common/EmojiGifPicker/EmojiGifPicker';
@@ -34,9 +35,56 @@ dayjs.extend(relativeTime);
 
 const hiveTime = (t) => (t ? dayjs(/Z$/.test(String(t)) ? t : `${t}Z`).fromNow() : '');
 
+/**
+ * Replies to one snap or one comment, Hive AND off-chain, in the shape this
+ * component renders.
+ *
+ * Off-chain replies are written by people with no Hive account. Reading Hive
+ * alone left them invisible on the very snap they were written under, including
+ * to whoever wrote them.
+ *
+ * ONE batch call covers two questions: replies to THIS parent (merged in here)
+ * and replies to each of its children (which is the only way a child knows to
+ * offer a "replies" toggle -- an off-chain reply never increments the Hive
+ * `children` count that the toggle used to read).
+ */
 async function fetchReplies(author, permlink) {
-  const replies = await getHiveClient().call('condenser_api', 'get_content_replies', [author, permlink]);
-  return (replies || []).sort((a, b) => new Date(a.created) - new Date(b.created));
+  // condenser_api THROWS for a post that is not on chain rather than returning
+  // an empty list, so an off-chain snap would take the whole loader down with it.
+  let hive = [];
+  try {
+    hive = await getHiveClient().call('condenser_api', 'get_content_replies', [author, permlink]) || [];
+  } catch { /* not on chain, or the node is unhappy: off-chain replies still load */ }
+
+  let off = [];
+  try {
+    const ask = [permlink, ...hive.map((c) => c.permlink).filter(Boolean)];
+    const { items } = await fetchIncubationRepliesFor(ask);
+    off = items || [];
+  } catch { /* enrichment is best-effort; the Hive thread still renders */ }
+
+  const offChildren = new Map();
+  const here = [];
+  off.forEach((o) => {
+    if (o.parentPermlink === permlink) here.push(o);
+    else offChildren.set(o.parentPermlink, (offChildren.get(o.parentPermlink) || 0) + 1);
+  });
+
+  const mapped = here.map((o) => ({
+    // A Hive user replying to an off-chain snap keeps their real account; a
+    // warm-up user shows their handle.
+    author: o.hiveAuthor || o.author?.handle || o.handle,
+    permlink: o.permlink,
+    created: o.created,
+    body: o.body,
+    children: 0,
+    offChildren: 0,
+    // Nothing downstream should build a Hive permalink or offer a Hive vote.
+    onChain: false,
+  }));
+
+  return [...hive.map((c) => ({ ...c, offChildren: offChildren.get(c.permlink) || 0 })), ...mapped]
+    .sort((a, b) => new Date(a.created) - new Date(b.created));
 }
 
 // Body with "read more"/"show less" — a very long snap is capped at a fraction of
@@ -104,10 +152,14 @@ function SnapBody({ body, maxVh = 0.33, onReadMore }) {
 // onPosted fires ~3s later, when the RPC can actually return the new reply.
 function ReplyBox({ parentAuthor, parentPermlink, onPosted, onSigned, autoFocus = false }) {
   const user = useAppStore((s) => s.user);
+  const incubationHandle = useAppStore((s) => s.incubationHandle);
   const [reply, setReply] = useState('');
   const [posting, setPosting] = useState(false);
   const replyRef = useRef(null);
-  if (!user) return null;
+  // A warm-up user has a handle rather than a `user`, and commentWithAioha
+  // already stores their reply off-chain. Gating on `user` alone hid the
+  // composer from exactly the people the warm-up asks to write ten comments.
+  if (!user && !incubationHandle) return null;
 
   const submit = async () => {
     const text = reply.trim();
@@ -153,10 +205,12 @@ function ReplyBox({ parentAuthor, parentPermlink, onPosted, onSigned, autoFocus 
 // A single comment — recursive, so replies-on-replies work.
 function SnapComment({ comment }) {
   const user = useAppStore((s) => s.user);
+  const incubationHandle = useAppStore((s) => s.incubationHandle);
   const [html, setHtml] = useState('');
   const [replying, setReplying] = useState(false);
   const [showReplies, setShowReplies] = useState(false);
-  const childCount = comment.children ?? 0;
+  // Both kinds: an off-chain reply never increments Hive's `children`.
+  const childCount = (comment.children ?? 0) + (comment.offChildren ?? 0);
 
   useEffect(() => {
     let alive = true;
@@ -179,7 +233,7 @@ function SnapComment({ comment }) {
       </div>
       <div className="snap-comment-body markdown-body" dangerouslySetInnerHTML={{ __html: html }} />
       <div className="snap-comment-actions">
-        {user && (
+        {(user || incubationHandle) && (
           <button type="button" onClick={() => setReplying((v) => !v)}>{replying ? 'Cancel' : 'Reply'}</button>
         )}
         {childCount > 0 && (
@@ -412,6 +466,10 @@ function SnapCommentsModal({ owner, permlink, onClose, onCommented }) {
 // the reply box grabs focus) without another click.
 export function SnapCard({ snap, feedMode = false, onRemove, onOpenTab, maxVh, autoOpenComments = false }) {
   const user = useAppStore((s) => s.user);
+  const incubationHandle = useAppStore((s) => s.incubationHandle);
+  // Whoever is reading this card, by whichever identity they have. The off-chain
+  // like store keys a Hive reader by account and a warm-up reader by handle.
+  const viewer = user || incubationHandle;
   const client = getHiveClient();
   const queryClient = useQueryClient();
   const [showComments, setShowComments] = useState(autoOpenComments);
@@ -447,14 +505,24 @@ export function SnapCard({ snap, feedMode = false, onRemove, onOpenTab, maxVh, a
   });
 
   const { data: meta, refetch } = useQuery({
-    queryKey: ['snap-meta', snap.owner, snap.permlink],
+    queryKey: ['snap-meta', snap.owner, snap.permlink, viewer],
     queryFn: async () => {
-      const post = await client.call('condenser_api', 'get_content', [snap.owner, snap.permlink]);
+      // Both stores, because a snap can carry either kind of like: Hive votes
+      // from account holders, and off-chain likes from people still in the
+      // warm-up. Counting only the first showed a warm-up user their own like
+      // disappearing the moment the card re-read its counts.
+      const [post, off] = await Promise.all([
+        // get_content throws for a post that is not on chain.
+        client.call('condenser_api', 'get_content', [snap.owner, snap.permlink]).catch(() => null),
+        fetchIncubationLikes(snap.owner, snap.permlink, viewer).catch(() => null),
+      ]);
       const av = post?.active_votes || [];
+      const hiveVotes = av.filter((v) => Number(v.percent) > 0).length;
       return {
-        votes: av.filter((v) => Number(v.percent) > 0).length,
+        votes: hiveVotes + (off?.count || 0),
         comments: post?.children ?? 0,
-        voted: !!user && av.some((v) => v.voter === user && Number(v.percent) > 0),
+        voted: (!!user && av.some((v) => v.voter === user && Number(v.percent) > 0))
+          || !!off?.liked,
       };
     },
     staleTime: 60_000,

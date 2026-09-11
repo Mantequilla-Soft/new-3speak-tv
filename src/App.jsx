@@ -1,11 +1,10 @@
 import { Route, Routes, useLocation, useNavigate, Navigate } from "react-router-dom";
-import { useRef, lazy, Suspense } from "react";
+import { useRef, Suspense } from "react";
 import "./App.css";
 // import Home from './page/Home'
 // import Treanding from './page/Treanding'
 import Nav from "./components/nav/Nav";
 import { useState } from "react";
-import Sidebar from "./components/Sidebar/Sidebar";
 import HomeGrouped from "./page/HomeGrouped";
 // KeyChainLogin replaced by LoginRedirect (opens aioha modal)
 import { useAppStore } from "./lib/store";
@@ -23,6 +22,8 @@ import ProfileNav from "./components/nav/ProfileNav";
 // (the embed-studio uploader in non-short mode is the only video upload flow).
 // import StudioPage from "./components/legacy-studio/StudioPage";
 import ScrollToTop from "./components/ScrollToTop";
+import RouteErrorBoundary from "./components/RouteErrorBoundary";
+import lazyRoute from "./utils/lazyRoute";
 import RouteTitle from "./components/RouteTitle";
 import OpenShortsOnStart from "./components/OpenShortsOnStart";
 import AddAccount_modal from "./components/modal/AddAccount_modal";
@@ -49,69 +50,68 @@ import { EmbedUploadProvider } from "./context/EmbedUploadContext";
 import { HiveAuthProvider } from "./context/HiveAuthContext";
 import { HangoutContextProvider, useHangout } from "./context/HangoutContext";
 import { ChatProvider } from "./context/ChatContext";
-const OpenPodModal = lazy(() => import("./components/OpenPod/OpenPodModal"));
-const ObsOverlay = lazy(() => import("./page/ObsOverlay"));
+const OpenPodModal = lazyRoute(() => import("./components/OpenPod/OpenPodModal"), "./components/OpenPod/OpenPodModal");
+const ObsOverlay = lazyRoute(() => import("./page/ObsOverlay"), "./page/ObsOverlay");
 
 // Route components are code-split: only the route the visitor actually opens is
 // downloaded. Everything here used to be a static import, so a first paint pulled
 // the studio, wallet, editor and every other page down before rendering anything.
 // The index route (HomeGrouped) stays eager - lazying it would only add a waterfall.
-const AboutPage = lazy(() => import("./components/LandingPage/AboutPage"));
-const Audio = lazy(() => import("./page/Audio"));
-const AudioPost = lazy(() => import("./page/AudioPost"));
-const AuthCallback = lazy(() => import("./page/Login/AuthCallback"));
-const ChatPage = lazy(() => import("./components/Chat/ChatPage"));
-const CommunitiesRender = lazy(() => import("./components/Communities/CommunitiesRender"));
-const CommunityPage = lazy(() => import("./components/Communities/CommunityPage"));
-const BadgesRender = lazy(() => import("./components/Badges/BadgesRender"));
-const BadgePage = lazy(() => import("./components/Badges/BadgePage"));
-const Discover = lazy(() => import("./page/Discover"));
-const DraftStudio = lazy(() => import("./components/studio/DraftStudio"));
-const EditScheduledPost = lazy(() => import("./page/EditScheduledPost"));
-const EditVideo = lazy(() => import("./page/EditVideo"));
-const EgressStream = lazy(() => import("./page/EgressStream"));
-const EmbedCameraRecord = lazy(() => import("./components/embed-studio/EmbedCameraRecord"));
-const EmbedDetails = lazy(() => import("./components/embed-studio/EmbedDetails"));
-const EmbedPlayer = lazy(() => import("./page/EmbedPlayer"));
-const EmbedPreview = lazy(() => import("./components/embed-studio/EmbedPreview"));
-const EmbedStudioPage = lazy(() => import("./components/embed-studio/EmbedStudioPage"));
-const EmbedThumbnail = lazy(() => import("./components/embed-studio/EmbedThumbnail"));
-const Feed = lazy(() => import("./components/Feed/Feed"));
-const FirstUploads = lazy(() => import("./page/FirstUploads"));
-const FollowFeed = lazy(() => import("./page/FollowFeed"));
-const HiveImageUploader = lazy(() => import("./page/HiveImageUploader"));
-const Leaderboard = lazy(() => import("./page/Leaderboard"));
-const Advertise = lazy(() => import("./page/Advertise"));
-const Legal = lazy(() => import("./page/Legal"));
-const LoginNew = lazy(() => import("./page/Login/LoginNew"));
-const ManteAuthCallback = lazy(() => import("./page/Login/ManteAuthCallback"));
-const NewVideos = lazy(() => import("./page/NewVideos"));
-const Notifications = lazy(() => import("./page/Notifications"));
-const OpenPodPublish = lazy(() => import("./page/OpenPodPublish"));
-const OpenPods = lazy(() => import("./page/OpenPods"));
-const PlaylistView = lazy(() => import("./page/PlaylistView"));
-const PostView = lazy(() => import("./page/PostView"));
-const ProfileModal = lazy(() => import("./components/modal/ProfileModal"));
-const ProfilePage = lazy(() => import("./page/ProfilePage"));
+const AboutPage = lazyRoute(() => import("./components/LandingPage/AboutPage"), "./components/LandingPage/AboutPage");
+const Audio = lazyRoute(() => import("./page/Audio"), "./page/Audio");
+const AudioPost = lazyRoute(() => import("./page/AudioPost"), "./page/AudioPost");
+const AuthCallback = lazyRoute(() => import("./page/Login/AuthCallback"), "./page/Login/AuthCallback");
+const ChatPage = lazyRoute(() => import("./components/Chat/ChatPage"), "./components/Chat/ChatPage");
+const CommunityPage = lazyRoute(() => import("./components/Communities/CommunityPage"), "./components/Communities/CommunityPage");
+const Groups = lazyRoute(() => import("./page/Groups"), "./page/Groups");
+const BadgePage = lazyRoute(() => import("./components/Badges/BadgePage"), "./components/Badges/BadgePage");
+const Discover = lazyRoute(() => import("./page/Discover"), "./page/Discover");
+const DraftStudio = lazyRoute(() => import("./components/studio/DraftStudio"), "./components/studio/DraftStudio");
+const EditScheduledPost = lazyRoute(() => import("./page/EditScheduledPost"), "./page/EditScheduledPost");
+const EditVideo = lazyRoute(() => import("./page/EditVideo"), "./page/EditVideo");
+const EgressStream = lazyRoute(() => import("./page/EgressStream"), "./page/EgressStream");
+const EmbedCameraRecord = lazyRoute(() => import("./components/embed-studio/EmbedCameraRecord"), "./components/embed-studio/EmbedCameraRecord");
+const EmbedDetails = lazyRoute(() => import("./components/embed-studio/EmbedDetails"), "./components/embed-studio/EmbedDetails");
+const EmbedPlayer = lazyRoute(() => import("./page/EmbedPlayer"), "./page/EmbedPlayer");
+const EmbedPreview = lazyRoute(() => import("./components/embed-studio/EmbedPreview"), "./components/embed-studio/EmbedPreview");
+const EmbedStudioPage = lazyRoute(() => import("./components/embed-studio/EmbedStudioPage"), "./components/embed-studio/EmbedStudioPage");
+const EmbedThumbnail = lazyRoute(() => import("./components/embed-studio/EmbedThumbnail"), "./components/embed-studio/EmbedThumbnail");
+const Feed = lazyRoute(() => import("./components/Feed/Feed"), "./components/Feed/Feed");
+const FirstUploads = lazyRoute(() => import("./page/FirstUploads"), "./page/FirstUploads");
+const FollowFeed = lazyRoute(() => import("./page/FollowFeed"), "./page/FollowFeed");
+const HiveImageUploader = lazyRoute(() => import("./page/HiveImageUploader"), "./page/HiveImageUploader");
+const Leaderboard = lazyRoute(() => import("./page/Leaderboard"), "./page/Leaderboard");
+const Advertise = lazyRoute(() => import("./page/Advertise"), "./page/Advertise");
+const Legal = lazyRoute(() => import("./page/Legal"), "./page/Legal");
+const LoginNew = lazyRoute(() => import("./page/Login/LoginNew"), "./page/Login/LoginNew");
+const ManteAuthCallback = lazyRoute(() => import("./page/Login/ManteAuthCallback"), "./page/Login/ManteAuthCallback");
+const NewVideos = lazyRoute(() => import("./page/NewVideos"), "./page/NewVideos");
+const Notifications = lazyRoute(() => import("./page/Notifications"), "./page/Notifications");
+const OpenPodPublish = lazyRoute(() => import("./page/OpenPodPublish"), "./page/OpenPodPublish");
+const OpenPods = lazyRoute(() => import("./page/OpenPods"), "./page/OpenPods");
+const PlaylistView = lazyRoute(() => import("./page/PlaylistView"), "./page/PlaylistView");
+const PostView = lazyRoute(() => import("./page/PostView"), "./page/PostView");
+const ProfileModal = lazyRoute(() => import("./components/modal/ProfileModal"), "./components/modal/ProfileModal");
+const ProfilePage = lazyRoute(() => import("./page/ProfilePage"), "./page/ProfilePage");
 // "My profile" — ProfilePage is built around a Hive account, so someone
 // incubating gets their own page instead of an empty channel.
-const OwnProfileRoute = lazy(() => import("./components/Incubation/OwnProfileRoute"));
-const Short = lazy(() => import("./page/Short"));
-const ShortsStoryFeed = lazy(() => import("./page/ShortsStoryFeed"));
-const Spotlight = lazy(() => import("./page/Spotlight"));
-const TagFeed = lazy(() => import("./page/TagFeed"));
-const Trend = lazy(() => import("./page/Trend"));
-const UploadVideo = lazy(() => import("./page/UploadVideo"));
-const PublishBacklog = lazy(() => import("./page/PublishBacklog"));
-const UserProfilePage = lazy(() => import("./components/Userprofilepage/UserProfilePage"));
+const OwnProfileRoute = lazyRoute(() => import("./components/Incubation/OwnProfileRoute"), "./components/Incubation/OwnProfileRoute");
+const Short = lazyRoute(() => import("./page/Short"), "./page/Short");
+const ShortsStoryFeed = lazyRoute(() => import("./page/ShortsStoryFeed"), "./page/ShortsStoryFeed");
+const Spotlight = lazyRoute(() => import("./page/Spotlight"), "./page/Spotlight");
+const TagFeed = lazyRoute(() => import("./page/TagFeed"), "./page/TagFeed");
+const Trend = lazyRoute(() => import("./page/Trend"), "./page/Trend");
+const UploadVideo = lazyRoute(() => import("./page/UploadVideo"), "./page/UploadVideo");
+const PublishBacklog = lazyRoute(() => import("./page/PublishBacklog"), "./page/PublishBacklog");
+const UserProfilePage = lazyRoute(() => import("./components/Userprofilepage/UserProfilePage"), "./components/Userprofilepage/UserProfilePage");
 // Routes a profile URL to the Hive page or, for someone who has no Hive
 // account yet, to the incubating one. See ProfileRouter for why it wraps
 // rather than modifies UserProfilePage.
-const ProfileRouter = lazy(() => import("./components/Incubation/ProfileRouter"));
-const Wallet = lazy(() => import("./page/Wallet"));
-const Watch = lazy(() => import("./page/Watch"));
-const WatchStream = lazy(() => import("./page/WatchStream"));
-const WatchedView = lazy(() => import("./page/WatchedView"));
+const ProfileRouter = lazyRoute(() => import("./components/Incubation/ProfileRouter"), "./components/Incubation/ProfileRouter");
+const Wallet = lazyRoute(() => import("./page/Wallet"), "./page/Wallet");
+const Watch = lazyRoute(() => import("./page/Watch"), "./page/Watch");
+const WatchStream = lazyRoute(() => import("./page/WatchStream"), "./page/WatchStream");
+const WatchedView = lazyRoute(() => import("./page/WatchedView"), "./page/WatchedView");
 
 function OpenPodModalMounter() {
   const { activeRoom, closeRoom, sessionToken, hangoutsUser } = useHangout();
@@ -148,6 +148,10 @@ import ViewerRewardsPrompt from "./components/AdsPrompt/ViewerRewardsPrompt";
 import GraduationPrompt from "./components/Incubation/GraduationPrompt";
 import BacklogPrompt from "./components/Incubation/BacklogPrompt";
 import GraduatedFollowsPrompt from "./components/Incubation/GraduatedFollowsPrompt";
+import IncubationWelcome from "./components/Incubation/IncubationWelcome";
+import IncubationTips from "./components/Incubation/IncubationTips";
+import HandleTakenPrompt from "./components/Incubation/HandleTakenPrompt";
+import IncubationSessionSync from "./components/Incubation/IncubationSessionSync";
 import AvatarSync from "./components/HiveAvatar/AvatarSync";
 import EditorModal from "./components/modal/EditorModal";
 import { FEATURE_EDITOR } from "./utils/config";
@@ -211,9 +215,6 @@ function App() {
   }, [homeCardSize]);
   const clearSessionExpired = useAppStore((s) => s.clearSessionExpired);
   const { aioha, user: aiohaUser } = useAioha();
-  const sidebar = useAppStore((s) => s.sidebarOpen);
-  const setSideBar = useAppStore((s) => s.setSidebarOpen);
-  const sidebarHidden = useAppStore((s) => s.sidebarHidden);
   const [profileNavVisible, setProfileNavVisible] = useState(false);
 
   const [globalCloseRender, setGlobalCloseRender] = useState(false)
@@ -596,11 +597,14 @@ function App() {
       <ReviewFab />
       <ShortsPreloader />
       {!hideNavOnMobile && (
-        <Nav setSideBar={setSideBar} toggleProfileNav={toggleProfileNav} globalClose={globalCloseRender} setGlobalClose={setGlobalCloseRender} openLoginModal={openLoginModal} />
+        <Nav toggleProfileNav={toggleProfileNav} globalClose={globalCloseRender} setGlobalClose={setGlobalCloseRender} openLoginModal={openLoginModal} />
       )}
       <div>
-        {!hideNavOnMobile && !sidebarHidden && <Sidebar sidebar={sidebar} />}
-        <div className={`container ${sidebar && !sidebarHidden ? "" : "large-container"} ${sidebarHidden ? "sidebar-fully-hidden" : ""} ${hideNavOnMobile ? "shorts-mobile-container" : ""}`}>
+        {/* The left sidebar is gone. The content keeps the classes it wore
+            when the sidebar was hidden -- large-container plus
+            sidebar-fully-hidden -- which is now simply what the layout is,
+            rather than one of three states it could be in. */}
+        <div className={`container large-container sidebar-fully-hidden ${hideNavOnMobile ? "shorts-mobile-container" : ""}`}>
           <ScrollToTop />
           {/* Browser-tab title for every route (watch/shorts set their own). */}
           <RouteTitle />
@@ -608,96 +612,102 @@ function App() {
           <OpenShortsOnStart />
           {/* <Toaster richColors position="top-right" /> */}
           {/* Every route below the index one is lazy, so the router needs a
-              boundary. The fallback is deliberately EMPTY: the nav, sidebar and
+              boundary. The fallback is deliberately EMPTY: the nav and
               bottom bar live outside this boundary and keep rendering, so a route
               chunk arriving swaps in just the page body. A spinner here would
               flash on every navigation, which reads worse than the shell holding
               still for a moment. */}
           <Suspense fallback={<div className="route-suspense-fallback" />}>
-          <Routes>
-            <Route path="/" element={<HomeGrouped />} />
-            <Route path="/home-feed" element={<Feed />} />
-            <Route path="/follow-feed" element={<FollowFeed />} />
-            <Route path="/watch" element={<Watch v2 />} />
-            {/* Live OpenPods stream at /watch/<roomName> (path param, distinct
-                from the ?v= VOD route above). */}
-            <Route path="/watch/:streamId" element={<WatchStream />} />
-            {/* Short alias for stream share links — see buildOpenPodShareUrl. */}
-            <Route path="/l/:streamId" element={<WatchStream />} />
-            {/* Opened by the LiveKit egress worker, never by a person: a
-                chrome-free full-bleed render of a standalone stream, which is
-                what gets recorded into the VOD. */}
-            <Route path="/egress-stream" element={<EgressStream />} />
-            <Route path="/notifications" element={<Notifications />} />
-            <Route path="/post/:author/:permlink" element={<PostView />} />
-            <Route path="/upload" element={<UploadVideo />} />
-            {/* Publish the backlog someone made before they had a Hive account. */}
-            <Route path="/publish-backlog" element={<PublishBacklog />} />
-            <Route path="/firstupload" element={<FirstUploads />} />
-            <Route path="/trend" element={<Trend />} />
-            <Route path="/discover" element={<Discover />} />
-            <Route path="/audio" element={<Audio />} />
-            <Route path="/audio/:author/:permlink" element={<AudioPost />} />
-            <Route path="/new" element={<NewVideos />} />
-            <Route path="/login" element={<LoginRedirect openLoginModal={openLoginModal} />} />
-            <Route path="/auth/login" element={<LoginRedirect openLoginModal={openLoginModal} />} />
-             <Route path="/auth/callback" element={<AuthCallback />} />
-            <Route path="/callback" element={<ManteAuthCallback />} />
-            {/* <Route path="/email" element={<Email/>} />  */}
-            <Route path="/newlogin" element={<LoginNew />} />
-            {/* Legacy /studio retired — redirect to the embed-studio non-short uploader.
-                The embed-studio defaults to non-short mode when no ?from=stories|shorts
-                query string is present, which is the case for these plain redirects. */}
-            <Route path="/studio" element={<Navigate to="/embed-studio" replace />} />
-            <Route path="/studio/thumbnail" element={<Navigate to="/embed-studio/thumbnail" replace />} />
-            <Route path="/studio/details" element={<Navigate to="/embed-studio/details" replace />} />
-            <Route path="/studio/preview" element={<Navigate to="/embed-studio/preview" replace />} />
-            {/* Embed studio (uses embed.okinoko.io upload service) */}
-            <Route path="/embed-studio" element={<EmbedStudioPage />} />
-            <Route path="/embed-studio/record" element={<EmbedCameraRecord />} />
-            <Route path="/embed-studio/thumbnail" element={<EmbedThumbnail />} />
-            <Route path="/embed-studio/details" element={<EmbedDetails />} />
-            <Route path="/embed-studio/preview" element={<EmbedPreview />} />
-            <Route path="/draft" element={<DraftStudio />} />
-            <Route path="/editvideo/:d" element={<EditVideo />} />
-            <Route path="/edit-scheduled/:permlink" element={<EditScheduledPost />} />
-            <Route path="/communities" element={<CommunitiesRender />} />
-            <Route path="/about" element={<AboutPage />} />
-            <Route path="/privacy" element={<Legal />} />
-            <Route path="/imprint" element={<Legal />} />
-            <Route path="/shorts/stories" element={<ShortsStoryFeed />} />
-            <Route path="/shorts" element={<Short />} />
-            <Route
-              path="/community/:communityName"
-              element={<CommunityPage />}
-            />
-            <Route path="/badges" element={<BadgesRender />} />
-            {/* /b/:account is the path PeakD uses for a badge, so links to a
-                badge page carry over between the two sites unchanged.
-                /badge/:account is the spelled-out alias. */}
-            <Route path="/b/:account" element={<BadgePage />} />
-            <Route path="/badge/:account" element={<BadgePage />} />
-            <Route path="/t/:tag" element={<TagFeed />} />
-            <Route path="/leaderboard" element={<Leaderboard />} />
-            <Route path="/advertise" element={<Advertise openLoginModal={openLoginModal} />} />
-            <Route path="/profile" element={<OwnProfileRoute />} />
-            {/* Spotlight — creator link page. Canonical: 3speak.tv/links/username (no @).
-                Legacy /@handle/links still resolves (nginx 301s it to /links/ in prod). */}
-            <Route path="/links/:handle" element={<Spotlight />} />
-            <Route path="/:handle/links" element={<Spotlight />} />
-            <Route path="/p/:user" element={<ProfileRouter />} />
-            <Route path="/user/:user" element={<ProfileRouter />} />
-            <Route path="/playlist/:playlistId" element={<PlaylistView />} />
-            <Route path="/watched/:username" element={<WatchedView />} />
-            <Route path="/wallet/:user" element={<Wallet />} />
-            <Route path="/test" element={<ProfileModal />} />
-            <Route path="/image" element={<HiveImageUploader />} />
-            <Route path="/openpods" element={<OpenPods />} />
-            <Route path="/openpods/publish" element={<OpenPodPublish />} />
-            <Route path="/openpods/:roomName" element={<OpenPods />} />
-            <Route path="/chat" element={<ChatPage />} />
-            <Route path="*" element={<HiveLinkRedirect />} />
-          </Routes>
+          <RouteErrorBoundary routeKey={location.pathname}>
+            <Routes>
+              <Route path="/" element={<HomeGrouped />} />
+              <Route path="/home-feed" element={<Feed />} />
+              <Route path="/follow-feed" element={<FollowFeed />} />
+              <Route path="/watch" element={<Watch v2 />} />
+              {/* Live OpenPods stream at /watch/<roomName> (path param, distinct
+                  from the ?v= VOD route above). */}
+              <Route path="/watch/:streamId" element={<WatchStream />} />
+              {/* Short alias for stream share links — see buildOpenPodShareUrl. */}
+              <Route path="/l/:streamId" element={<WatchStream />} />
+              {/* Opened by the LiveKit egress worker, never by a person: a
+                  chrome-free full-bleed render of a standalone stream, which is
+                  what gets recorded into the VOD. */}
+              <Route path="/egress-stream" element={<EgressStream />} />
+              <Route path="/notifications" element={<Notifications />} />
+              <Route path="/post/:author/:permlink" element={<PostView />} />
+              <Route path="/upload" element={<UploadVideo />} />
+              {/* Publish the backlog someone made before they had a Hive account. */}
+              <Route path="/publish-backlog" element={<PublishBacklog />} />
+              <Route path="/firstupload" element={<FirstUploads />} />
+              <Route path="/trend" element={<Trend />} />
+              <Route path="/discover" element={<Discover />} />
+              <Route path="/audio" element={<Audio />} />
+              <Route path="/audio/:author/:permlink" element={<AudioPost />} />
+              <Route path="/new" element={<NewVideos />} />
+              <Route path="/login" element={<LoginRedirect openLoginModal={openLoginModal} />} />
+              <Route path="/auth/login" element={<LoginRedirect openLoginModal={openLoginModal} />} />
+               <Route path="/auth/callback" element={<AuthCallback />} />
+              <Route path="/callback" element={<ManteAuthCallback />} />
+              {/* <Route path="/email" element={<Email/>} />  */}
+              <Route path="/newlogin" element={<LoginNew />} />
+              {/* Legacy /studio retired — redirect to the embed-studio non-short uploader.
+                  The embed-studio defaults to non-short mode when no ?from=stories|shorts
+                  query string is present, which is the case for these plain redirects. */}
+              <Route path="/studio" element={<Navigate to="/embed-studio" replace />} />
+              <Route path="/studio/thumbnail" element={<Navigate to="/embed-studio/thumbnail" replace />} />
+              <Route path="/studio/details" element={<Navigate to="/embed-studio/details" replace />} />
+              <Route path="/studio/preview" element={<Navigate to="/embed-studio/preview" replace />} />
+              {/* Embed studio (uses embed.okinoko.io upload service) */}
+              <Route path="/embed-studio" element={<EmbedStudioPage />} />
+              <Route path="/embed-studio/record" element={<EmbedCameraRecord />} />
+              <Route path="/embed-studio/thumbnail" element={<EmbedThumbnail />} />
+              <Route path="/embed-studio/details" element={<EmbedDetails />} />
+              <Route path="/embed-studio/preview" element={<EmbedPreview />} />
+              <Route path="/draft" element={<DraftStudio />} />
+              <Route path="/editvideo/:d" element={<EditVideo />} />
+              <Route path="/edit-scheduled/:permlink" element={<EditScheduledPost />} />
+              <Route path="/groups" element={<Groups />} />
+              {/* Both pages are tabs of /groups now. The old addresses are kept
+                  as redirects rather than removed: they are linked from posts,
+                  from search results and from our own changelog. */}
+              <Route path="/communities" element={<Navigate to="/groups" replace />} />
+              <Route path="/about" element={<AboutPage />} />
+              <Route path="/privacy" element={<Legal />} />
+              <Route path="/imprint" element={<Legal />} />
+              <Route path="/shorts/stories" element={<ShortsStoryFeed />} />
+              <Route path="/shorts" element={<Short />} />
+              <Route
+                path="/community/:communityName"
+                element={<CommunityPage />}
+              />
+              <Route path="/badges" element={<Navigate to="/groups?tab=badges" replace />} />
+              {/* /b/:account is the path PeakD uses for a badge, so links to a
+                  badge page carry over between the two sites unchanged.
+                  /badge/:account is the spelled-out alias. */}
+              <Route path="/b/:account" element={<BadgePage />} />
+              <Route path="/badge/:account" element={<BadgePage />} />
+              <Route path="/t/:tag" element={<TagFeed />} />
+              <Route path="/leaderboard" element={<Leaderboard />} />
+              <Route path="/advertise" element={<Advertise openLoginModal={openLoginModal} />} />
+              <Route path="/profile" element={<OwnProfileRoute />} />
+              {/* Spotlight — creator link page. Canonical: 3speak.tv/links/username (no @).
+                  Legacy /@handle/links still resolves (nginx 301s it to /links/ in prod). */}
+              <Route path="/links/:handle" element={<Spotlight />} />
+              <Route path="/:handle/links" element={<Spotlight />} />
+              <Route path="/p/:user" element={<ProfileRouter />} />
+              <Route path="/user/:user" element={<ProfileRouter />} />
+              <Route path="/playlist/:playlistId" element={<PlaylistView />} />
+              <Route path="/watched/:username" element={<WatchedView />} />
+              <Route path="/wallet/:user" element={<Wallet />} />
+              <Route path="/test" element={<ProfileModal />} />
+              <Route path="/image" element={<HiveImageUploader />} />
+              <Route path="/openpods" element={<OpenPods />} />
+              <Route path="/openpods/publish" element={<OpenPodPublish />} />
+              <Route path="/openpods/:roomName" element={<OpenPods />} />
+              <Route path="/chat" element={<ChatPage />} />
+              <Route path="*" element={<HiveLinkRedirect />} />
+            </Routes>
+          </RouteErrorBoundary>
           </Suspense>
           <OpenPodModalMounter />
         </div>
@@ -741,6 +751,16 @@ function App() {
         <BacklogPrompt />
         {/* Speaks through a toast, so it never competes for the modal slot. */}
         <GraduatedFollowsPrompt />
+        {/* Both render nothing for anyone who already has a Hive account. */}
+        <IncubationWelcome />
+        <IncubationTips />
+        {/* Last of the incubation prompts, and the only one about something
+            being lost rather than gained: it holds the others back while it is
+            up (see its setPromptActive). */}
+        <HandleTakenPrompt />
+        {/* Before the prompts have anything to say: if this device is
+            behind and the account already exists, none of them apply. */}
+        <IncubationSessionSync />
         {FEATURE_EDITOR && (
           <EditorModal
             isOpen={editorModalOpen}

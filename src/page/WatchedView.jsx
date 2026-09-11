@@ -99,13 +99,18 @@ function WatchedView() {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const { user: authenticatedUser, watchHistoryEnabled, setWatchHistoryEnabled } = useAppStore();
+  // History is keyed by name, and an incubating viewer's name is their handle.
+  // Without this they could open their own history but not own it: no delete,
+  // no toggle, because isOwner compared against a Hive username they lack.
+  const incubationHandle = useAppStore((s) => s.incubationHandle);
   const [deletedKeys, setDeletedKeys] = useState(new Set());
   const [activeTab, setActiveTab] = useState('videos');
   const [videosPage, setVideosPage] = useState(1);
   const [shortsPage, setShortsPage] = useState(1);
   const [dateFilter, setDateFilter] = useState('all');
 
-  const isOwner = authenticatedUser && username?.toLowerCase() === authenticatedUser.toLowerCase();
+  const me = authenticatedUser || incubationHandle;
+  const isOwner = me && username?.toLowerCase() === me.toLowerCase();
 
   const since = useMemo(() => getSinceTimestamp(dateFilter), [dateFilter]);
 

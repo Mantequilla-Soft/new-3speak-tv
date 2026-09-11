@@ -16,6 +16,7 @@
 import axios from 'axios';
 import { getHiveUrl } from './hiveNode';
 import { hiveAvatarUrl } from './avatarCache';
+import { hiveProxyRefuses } from './fixThumbnails';
 import { getAccounts } from '../hive-api/hiveApi';
 import { broadcastWithAioha, KeyTypes } from '../hive-api/aioha';
 
@@ -185,9 +186,16 @@ export async function fetchHiveBadges(username) {
       // itself is a poor label but better than an unlabelled chip.
       name: profile.name?.trim() || account.name,
       about: profile.about?.trim() || '',
-      // The image proxy resolves profile_image server-side, so this works even
-      // for the accounts whose metadata we couldn't parse.
-      image: hiveAvatarUrl(account.name, 'small'),
+      // The image proxy resolves profile_image server-side, which is why it is
+      // still the fallback: it works even for accounts whose metadata we could
+      // not parse. But it cannot fetch images.3speak.tv, and for those it
+      // answers with its own grey placeholder rather than an error — so a badge
+      // whose art was uploaded here appeared blank next to badges that worked.
+      // We already have the metadata, so use the real URL when the proxy would
+      // refuse it.
+      image: hiveProxyRefuses(profile.profile_image)
+        ? profile.profile_image
+        : hiveAvatarUrl(account.name, 'small'),
       // In-app, not peakd.com: a badge chip used to send the reader off the
       // site to read what is on our own /b/ page.
       url: `/b/${account.name}`,

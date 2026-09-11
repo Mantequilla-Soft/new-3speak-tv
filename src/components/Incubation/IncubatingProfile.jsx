@@ -1,30 +1,20 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
+import { MdVerified, MdEdit } from 'react-icons/md';
 import {
-  MdCheckCircle, MdRadioButtonUnchecked, MdVerified, MdExpandMore, MdEdit,
-} from 'react-icons/md';
-import {
-  FaFilm, FaRocket, FaUnlockAlt, FaVideo, FaMobileAlt, FaComments, FaUserPlus,
-  FaClock, FaCoins, FaCloudUploadAlt, FaThumbsUp, FaKey, FaGlobeAmericas, FaUserCheck,
+  FaFilm, FaUnlockAlt, FaUserPlus, FaCoins, FaCloudUploadAlt, FaThumbsUp,
+  FaKey, FaGlobeAmericas, FaUserCheck,
 } from 'react-icons/fa';
 import Card3 from '../Cards/Card3';
 import { useAppStore } from '../../lib/store';
 import ProfileEditModal from '../WelcomePrompt/ProfileEditModal';
+import IncubationProgressPanel from './IncubationProgressPanel';
+import IncubatingActivity from './IncubatingActivity';
 import {
-  fetchIncubationProfile, fetchIncubationPosts, fetchIncubationProgress, handleAvatar,
+  fetchIncubationProfile, fetchIncubationPosts, handleAvatar,
   fetchMyIncubationProfile, saveIncubationProfile, followIncubationUser,
 } from '../../lib/incubation';
 import './IncubatingProfile.scss';
-
-const TASK_COPY = {
-  video: { Icon: FaVideo, label: 'Upload a video', hint: 'Share something about you and what your channel will be about.' },
-  short: { Icon: FaMobileAlt, label: 'Post 2 shorts', hint: 'Participate in 3Speak Shorts and upload some moments of your daily life or some stories you want to share.' },
-  // No hint here: the comment one states the length floor, which is the
-  // server's number, so it is built in taskHint below rather than written twice.
-  comment: { Icon: FaComments, label: 'Write 5 comments' },
-  follow: { Icon: FaUserPlus, label: 'Follow 10 creators', hint: 'Build up a network of likeminded people, or creators you find exciting.' },
-  watch: { Icon: FaClock, label: 'Watch an hour on 3Speak', hint: 'Any videos. Counted while you are really watching.' },
-};
 
 // The unlock tiles, as data: the icon belongs beside its own heading, and the
 // list was long enough that repeating the markup five times hid the copy.
@@ -35,22 +25,6 @@ const UNLOCKS = [
   { Icon: FaKey, title: 'Keys only you hold.', body: 'Nobody can lock you out, and the same login works across every Hive app, not just 3Speak.' },
   { Icon: FaGlobeAmericas, title: 'Be part of the global Hive ecosystem.', body: '3Speak is one app on a whole network of them: blogs, communities, games, marketplaces and more, all sharing the one account and the same following list.' },
 ];
-
-/**
- * Seconds as a duration a person would say out loud.
- *
- * Driven by the task's `unit`, not by its name, so the server decides which
- * numbers are durations and this only decides how they read.
- */
-function asDuration(seconds) {
-  const total = Math.max(0, Math.round(seconds));
-  if (total < 60) return `${total}s`;
-  const h = Math.floor(total / 3600);
-  const m = Math.round((total % 3600) / 60);
-  if (h && m) return `${h}h ${m}m`;
-  if (h) return `${h}h`;
-  return `${m}m`;
-}
 
 /**
  * True below the app's mobile breakpoint (767px, as in App.jsx).
@@ -73,41 +47,6 @@ function useIsNarrow() {
 }
 
 /**
- * The line under a task's name.
- *
- * The comment floor lives on the task itself rather than in fine print below
- * the list: it is the rule that decides whether a comment counts, and someone
- * reading "1/5" needs it right there, not in a footnote they have already
- * scrolled past.
- */
-function taskHint(t, minCommentChars) {
-  if (t.type === 'comment' && minCommentChars > 0) {
-    return `Comments count once they are at least ${minCommentChars} characters. A real thought, not just “nice”.`;
-  }
-  return TASK_COPY[t.type]?.hint || '';
-}
-
-/** How far along one task is, 0-100, for the fill behind its card. */
-function taskPct(t) {
-  if (!t.need) return 0;
-  return Math.max(0, Math.min(100, (t.have / t.need) * 100));
-}
-
-function taskAmount(t) {
-  if (t.unit !== 'seconds') return `${Math.min(t.have, t.need)}/${t.need}`;
-  return `${asDuration(Math.min(t.have, t.need))} / ${asDuration(t.need)}`;
-}
-
-// Remembered per browser so the list does not spring open on every visit once
-// someone has folded it away. Open is the default: it is the point of the page
-// the first time you land on it.
-const OPEN_KEY = 'inc_progress_open';
-
-function readOpen() {
-  try { return localStorage.getItem(OPEN_KEY) !== '0'; } catch { return true; }
-}
-
-/**
  * The profile of someone on 3Speak who is not yet on Hive.
  *
  * Two audiences in one page. A VISITOR needs to understand why there is no
@@ -118,14 +57,22 @@ function readOpen() {
 export default function IncubatingProfile({ handle, own = false }) {
   const [profile, setProfile] = useState(null);
   const [posts, setPosts] = useState([]);
-  const [progress, setProgress] = useState(null);
-  const [tasksOpen, setTasksOpen] = useState(readOpen);
   const [editing, setEditing] = useState(false);
   const [following, setFollowing] = useState(false);
   const [followBusy, setFollowBusy] = useState(false);
   // Which half is on screen at phone/tablet width, where the two columns stack.
   // Ignored above that: both are visible side by side and the tabs are hidden.
   const [mobileTab, setMobileTab] = useState('progress');
+  // A VISITOR's view of the page. Posts alone answer "what do they upload",
+  // which is the wrong question for the person this page is most often opened
+  // by: an app owner deciding whether somebody has earned a real Hive account.
+  // Somebody who comments daily and has followers looks inactive on an uploads
+  // list. The owner's own page does not get these -- their half is the goal
+  // checklist, and their own comments and follows are not news to them.
+  const [visitorTab, setVisitorTab] = useState('posts');
+  // Comment count is not in the profile payload the way follows are, so the tab
+  // learns it from the first load and keeps it.
+  const [commentCount, setCommentCount] = useState(null);
   const isNarrow = useIsNarrow();
   const [error, setError] = useState('');
   // Saving REPLACES the stored profile object, interests included, so the ones
@@ -148,17 +95,6 @@ export default function IncubatingProfile({ handle, own = false }) {
     return () => { alive = false; };
   }, [handle]);
 
-  // Only for the owner: progress is theirs to see, and the endpoint is scoped
-  // to the signed-in identity anyway.
-  useEffect(() => {
-    if (!own) return undefined;
-    let alive = true;
-    fetchIncubationProgress()
-      .then((p) => { if (alive) setProgress(p); })
-      .catch(() => { /* the page still works without it */ });
-    return () => { alive = false; };
-  }, [own]);
-
   // Stable identities: ProfileEditModal reloads whenever `loadProfile` changes,
   // so a new function every render would refetch in a loop.
   const loadOwnProfile = useCallback(async () => {
@@ -175,14 +111,6 @@ export default function IncubatingProfile({ handle, own = false }) {
   const onProfileSaved = useCallback(() => {
     fetchIncubationProfile(handle).then(setProfile).catch(() => { /* keep what is shown */ });
   }, [handle]);
-
-  function toggleTasks() {
-    setTasksOpen((wasOpen) => {
-      const next = !wasOpen;
-      try { localStorage.setItem(OPEN_KEY, next ? '1' : '0'); } catch { /* private mode */ }
-      return next;
-    });
-  }
 
   // Card3 wants author/permlink/title/thumbnail/duration/created, which is the
   // same shape the feed rail builds: one card component, one shape.
@@ -222,8 +150,6 @@ export default function IncubatingProfile({ handle, own = false }) {
   const p = profile.profile || {};
   const graduated = profile.status === 'graduated' && profile.hiveUsername;
   const showSidebar = own && !graduated;
-  const doneCount = progress ? progress.tasks.filter((t) => t.done).length : 0;
-  const totalTasks = progress ? progress.tasks.length : 0;
   const nothingYet = cards.length === 0;
 
   return (
@@ -304,7 +230,7 @@ export default function IncubatingProfile({ handle, own = false }) {
         ) : own ? (
           <>This is how others see you. Your posts live on 3Speak and are not on the Hive blockchain yet, so they do not earn rewards. That changes when you get your account after completing all the tasks below.</>
         ) : (
-          <>New here. These posts live on 3Speak and are not on the Hive blockchain yet, so they do not earn rewards.</>
+          <>New here, not on Hive yet. These posts live on 3Speak, so they earn no rewards for now. Follow and comment anyway: early encouragement is what carries someone through their first weeks. When they get their Hive account we will tell you, so you can follow them there too.</>
         )}
       </p>
 
@@ -334,82 +260,57 @@ export default function IncubatingProfile({ handle, own = false }) {
         </div>
       )}
 
+      {!own && (
+        // Same control as the owner's mobile switcher above -- one tab strip on
+        // this page, not two that look alike. The two can never both render:
+        // showSidebar requires `own` and this requires `!own`.
+        <div className="inc-tabs inc-tabs--visitor" role="tablist" aria-label="Profile sections">
+          {[
+            // 'Uploads', not the 'Videos and Shorts' the owner's strip uses:
+            // four labels share this row at phone width, and the grid heading
+            // directly below already names the two things in it.
+            ['posts', 'Uploads', profile?.counts?.posts],
+            ['comments', 'Comments', commentCount],
+            ['followers', 'Followers', profile?.counts?.followers],
+            ['following', 'Following', profile?.counts?.following],
+          ].map(([id, label, count]) => (
+            <button
+              key={id}
+              type="button"
+              role="tab"
+              aria-selected={visitorTab === id}
+              className={visitorTab === id ? 'is-active' : ''}
+              onClick={() => setVisitorTab(id)}
+            >
+              {label}
+              {/* A count only when we have one. `> 0` rather than != null, so a
+                  tab does not advertise "(0)" before anyone has looked. */}
+              {count > 0 ? ` (${count})` : ''}
+            </button>
+          ))}
+        </div>
+      )}
+
       <div className={`inc-cols${showSidebar ? ` inc-cols--split inc-show-${mobileTab}` : ''}`}>
         {showSidebar && (
           <aside className="inc-side">
-            {progress && (
-              <section className="inc-panel inc-progress">
-                <header>
-                  <h2><FaRocket size={14} aria-hidden="true" /> Your path to a Hive account</h2>
-                  <span className="inc-progress-count">{doneCount} of {totalTasks} done</span>
-                </header>
-                {/* The bar stays put whatever the list does: it is the one thing
-                    worth seeing at a glance, and collapsing it would leave the
-                    panel saying nothing. */}
-                <div
-                  className="inc-progress-bar"
-                  role="progressbar"
-                  aria-label="Tasks completed"
-                  aria-valuenow={doneCount}
-                  aria-valuemin={0}
-                  aria-valuemax={totalTasks}
-                >
-                  <span style={{ width: `${totalTasks ? (doneCount / totalTasks) * 100 : 0}%` }} />
-                </div>
-
-                <button
-                  type="button"
-                  className={`inc-tasks-toggle${tasksOpen ? ' is-open' : ''}`}
-                  onClick={toggleTasks}
-                  aria-expanded={tasksOpen}
-                  aria-controls="inc-task-list"
-                >
-                  <MdExpandMore size={18} aria-hidden="true" />
-                  {tasksOpen ? 'Hide the details' : 'Show what is left'}
-                </button>
-
-                {tasksOpen && (
-                  <div id="inc-task-list">
-                    <ul className="inc-tasks">
-                      {progress.tasks.map((t) => (
-                        <li
-                          key={t.type}
-                          className={t.done ? 'is-done' : ''}
-                          // Read by the fill behind the card, so "2 of 5" is
-                          // visible as a quantity and not only as a number.
-                          style={{ '--task-fill': `${taskPct(t)}%` }}
-                        >
-                          {t.done ? <MdCheckCircle size={20} className="inc-task-icon done" />
-                            : <MdRadioButtonUnchecked size={20} className="inc-task-icon" />}
-                          <span className="inc-task-text">
-                            <strong>
-                              {TASK_COPY[t.type]?.Icon
-                                ? (() => { const I = TASK_COPY[t.type].Icon; return <I size={12} aria-hidden="true" />; })()
-                                : null}
-                              {TASK_COPY[t.type]?.label || t.type}
-                            </strong>
-                            <span>{taskHint(t, progress.minCommentChars)}</span>
-                          </span>
-                          <span className="inc-task-count">{taskAmount(t)}</span>
-                        </li>
-                      ))}
-                    </ul>
-                    {/* Said plainly, because "finish the list" without saying what
-                        happens next reads as a slot machine rather than a process. */}
-                    <p className="inc-review">
-                      {progress.complete
-                        ? 'All done. The team will review your channel and upgrade you. Nothing more for you to do.'
-                        : 'Once you have completed all of these, the team will review your channel and upgrade you.'}
-                    </p>
-                  </div>
-                )}
-              </section>
-            )}
+            <IncubationProgressPanel />
 
           </aside>
         )}
 
         <main className="inc-main">
+          {/* The three list tabs replace the feed rather than sitting under it:
+              they are alternative answers to "who is this", not extra sections
+              of the same one. */}
+          {!own && visitorTab !== 'posts' ? (
+            <IncubatingActivity
+              handle={handle}
+              tab={visitorTab}
+              onCount={(t, n) => { if (t === 'comments') setCommentCount(n); }}
+            />
+          ) : (
+          <>
           {nothingYet && (
             <p className="desc">
               {own ? 'Nothing yet. Your first upload ticks off the list beside this.' : 'Nothing published yet.'}
@@ -450,6 +351,9 @@ export default function IncubatingProfile({ handle, own = false }) {
           {/* Below the feed rather than in the sidebar: it is the reward for
               the checklist, so it reads better after the work than beside it,
               and it leaves the goals alone at the top of the column. */}
+          </>
+          )}
+
           {showSidebar && (
             <section className="inc-panel inc-unlocks">
               <h2><FaUnlockAlt size={14} aria-hidden="true" /> What a Hive account gets you</h2>

@@ -31,6 +31,10 @@ const FIELDS = ['name', 'about', 'location', 'profile_image', 'cover_image'];
  */
 export function useProfileEditor(username, { onSave = null } = {}) {
   const [form, setForm] = useState(EMPTY);
+  // Kept beside the form rather than inside it: interests are a list on the
+  // same metadata document, not a profile text field, and saveProfileToHive
+  // treats them separately.
+  const [interests, setInterests] = useState([]);
   const [saving, setSaving] = useState(false);
   const [uploading, setUploading] = useState(false);
 
@@ -42,6 +46,10 @@ export function useProfileEditor(username, { onSave = null } = {}) {
       profile_image: profile?.profile_image || '',
       cover_image: profile?.cover_image || '',
     });
+  }, []);
+
+  const toggleInterest = useCallback((id) => {
+    setInterests((cur) => (cur.includes(id) ? cur.filter((x) => x !== id) : [...cur, id]));
   }, []);
 
   const setField = useCallback(
@@ -84,7 +92,8 @@ export function useProfileEditor(username, { onSave = null } = {}) {
       if (onSave) {
         await onSave(form);
       } else {
-        await saveProfileToHive(username, form);
+        // One broadcast for both: interests live in the same metadata document.
+        await saveProfileToHive(username, form, { interests });
         // Render the picture we just uploaded straight away: the hive avatar
         // proxy would keep serving the old one for a while. Only for the Hive
         // path — the override is keyed by account name, and a handle is not one.
@@ -99,9 +108,12 @@ export function useProfileEditor(username, { onSave = null } = {}) {
     } finally {
       setSaving(false);
     }
-  }, [username, form, onSave]);
+  }, [username, form, interests, onSave]);
 
-  return { form, seed, setForm, setField, pickImage, uploading, saving, hasAnything, save };
+  return {
+    form, seed, setForm, setField, pickImage, uploading, saving, hasAnything, save,
+    interests, setInterests, toggleInterest,
+  };
 }
 
 export default function ProfileFields({ username, form, setField, pickImage, uploading, saving }) {

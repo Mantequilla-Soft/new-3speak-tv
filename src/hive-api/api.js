@@ -118,41 +118,16 @@ export const getRelationshipBetweenAccounts = async (follower , following) => {
   };
 
 
+  // Hive validates that an authority's account_auths are sorted by name and
+  // rejects the operation otherwise, which is easy to miss because it only
+  // fails at broadcast time.
+  const sortAuths = (auths) =>
+    [...auths].sort((a, b) => (a[0] < b[0] ? -1 : a[0] > b[0] ? 1 : 0));
   export const createHiveCommunityKY = async (username, communityName, keys, activeKey) => {
     return new Promise(async (resolve, reject) => {
-      const op_name = "account_create";
-  
-      const owner = {
-        weight_threshold: 1,
-        account_auths: [],
-        key_auths: [[keys.ownerPubkey, 1]]
-      };
-  
-      const active = {
-        weight_threshold: 1,
-        account_auths: [],
-        key_auths: [[keys.activePubkey, 1]]
-      };
-  
-      const posting = {
-        weight_threshold: 1,
-        account_auths: [["ecency.app", 1]], // Example: granting access to Ecency
-        key_auths: [[keys.postingPubkey, 1]]
-      };
-  
-      const params = {
-        fee: "3.000 HIVE", // Required fee for account creation
-        creator: username, // The existing account creating the new community
-        new_account_name: communityName, // The name of the new community
-        owner,
-        active,
-        posting,
-        memo_key: keys.memoPubkey,
-        json_metadata: "",
-        extensions: []
-      };
-  
-      const operation = [op_name, params];
+      // Same operation as every other route, from the one builder: a pasted key
+      // must create exactly the account a wallet would.
+      const operation = buildAccountCreateOp(username, communityName, keys);
   
       try {
         // Sign and broadcast the transaction using the creator's active key
@@ -167,11 +142,15 @@ export const getRelationshipBetweenAccounts = async (follower , following) => {
     });
   };
 
-  export const createHiveCommunity = async (username, communityName, keys) => {
-    const memoKey = keys.memo;
-    const activeKey = keys.active;
-    const postingKey = keys.posting;
-
+  /**
+   * The account_create operation, shared by every route that signs it.
+   *
+   * Extracted so a wallet that signs WITHOUT an app login (see
+   * createHiveCommunityWithKeychain) broadcasts byte-for-byte the same thing as
+   * the aioha path. Two copies of an authority structure is how one of them
+   * quietly drifts.
+   */
+  export const buildAccountCreateOp = (username, communityName, keys) => {
     const owner = {
       weight_threshold: 1,
       account_auths: [],
@@ -183,12 +162,21 @@ export const getRelationshipBetweenAccounts = async (follower , following) => {
       key_auths: [[keys.activePubkey, 1]]
     };
     const posting = {
+      // ONLY the creator. This used to also hand posting authority to
+      // "ecency.app" -- copied in from Ecency's own creation flow -- so every
+      // community and badge made on 3Speak silently granted another app posting
+      // rights over it, in perpetuity, and gave the person who paid the 3 HIVE
+      // no say in it. Nothing here needs a third party to be able to post.
+      //
+      // sortAuths is kept even for a single entry: Hive REJECTS an authority
+      // whose account_auths are not in lexicographic order, so anything added
+      // here later is ordered by construction rather than by remembering to.
       weight_threshold: 1,
-      account_auths: [["ecency.app", 1]],
+      account_auths: sortAuths([[username, 1]]),
       key_auths: [[keys.postingPubkey, 1]]
     };
 
-    const params = {
+    return ["account_create", {
       creator: username,
       new_account_name: communityName,
       owner,
@@ -198,9 +186,55 @@ export const getRelationshipBetweenAccounts = async (follower , following) => {
       json_metadata: "",
       extensions: [],
       fee: "3.000 HIVE"
-    };
+    }];
+  };
 
-    const operation = ["account_create", params];
+  /**
+   * Create the account by asking the Keychain EXTENSION to sign, with no app login.
+   *
+   * Signing one transaction and logging in are different things, and the screen
+   * that offers this is asking for the first. Calling aioha.login() there
+   * replaced the user's identity -- a ButrAuth session was swapped for a wallet
+   * one mid-flow, which is not something somebody clicking "sign" agreed to.
+   *
+   * requestBroadcast asks Keychain for a single Active-key signature and leaves
+   * the session alone.
+   */
+  export const createHiveCommunityWithKeychain = (username, communityName, keys) =>
+    new Promise((resolve, reject) => {
+      const kc = typeof window !== "undefined" && window.hive_keychain;
+      if (!kc) {
+        reject(new Error("Hive Keychain is not installed in this browser"));
+        return;
+      }
+      const operation = buildAccountCreateOp(username, communityName, keys);
+      kc.requestBroadcast(username, [operation], "Active", async (resp) => {
+        if (!resp || resp.success !== true) {
+          reject(new Error(resp?.message || "Keychain did not sign the transaction"));
+          return;
+        }
+        // Best-effort convenience, exactly as the aioha path does it.
+        try {
+          await addAccountTokeychain(communityName, {
+            active: keys.active,
+            posting: keys.posting,
+            memo: keys.memo
+          });
+        } catch (e) {
+          console.log("Could not add account to Keychain:", e);
+        }
+        resolve({ success: true, result: resp.result });
+      });
+    });
+
+  export const createHiveCommunity = async (username, communityName, keys) => {
+    const memoKey = keys.memo;
+    const activeKey = keys.active;
+    const postingKey = keys.posting;
+
+    // Built once, in buildAccountCreateOp, so this and the Keychain route cannot
+    // broadcast different authority structures.
+    const operation = buildAccountCreateOp(username, communityName, keys);
 
     if (!isLoggedIn()) {
       throw new Error("Please login to create a community");
@@ -228,8 +262,111 @@ export const getRelationshipBetweenAccounts = async (follower , following) => {
     }
   };
 
+  /**
+   * Write the new account's own profile, and for a community its props.
+   *
+   * 🚨 WITHOUT THIS THE FORM IS DECORATIVE. account_create carries
+   * `json_metadata: ""`, so the title and description someone typed were
+   * collected, validated, and then thrown away: the community appeared
+   * untitled, with no avatar and no description, after they had paid 3 HIVE.
+   *
+   * Signed with the NEW account's own posting key, which we have because we
+   * just generated it. posting_json_metadata and the community `updateProps`
+   * op both accept posting authority, so the user's own active key is not
+   * needed again after the create.
+   *
+   * Best-effort by design: the account EXISTS once account_create lands, and
+   * that is the part that cost money. If this second broadcast fails the user
+   * still owns the account and can set it up later, so it must not be reported
+   * as "creation failed".
+   */
+  export const finalizeNewAccount = async (accountName, keys, { profile, community }) => {
+    const ops = [];
+
+    // The avatar, banner, display name and bio. This is what every Hive app
+    // reads to render an account, communities included.
+    ops.push(["account_update2", {
+      account: accountName,
+      json_metadata: "",
+      posting_json_metadata: JSON.stringify({ profile }),
+      extensions: []
+    }]);
+
+    // A community's title and description do NOT live in that metadata: they
+    // live in hivemind's own community table, set by this custom_json. Setting
+    // only the profile above is why a community can look right on its account
+    // page and still be untitled in the directory.
+    if (community) {
+      ops.push(["custom_json", {
+        required_auths: [],
+        required_posting_auths: [accountName],
+        id: "community",
+        json: JSON.stringify(["updateProps", {
+          community: accountName,
+          props: community
+        }])
+      }]);
+    }
+
+    const postingKey = PrivateKey.fromString(keys.posting);
+    return client.broadcast.sendOperations(ops, postingKey);
+  };
+
   export const  genCommuninityName = () => {
     return `hive-${Math.floor(Math.random() * 100000) + 100000}`;
+  };
+
+  // A badge is a plain Hive account named `badge-<digits>` -- the same
+  // convention PeakD reads, which is why /b/<account> already renders one.
+  export const genBadgeName = () => {
+    return `badge-${Math.floor(Math.random() * 900000) + 100000}`;
+  };
+
+  // Is this name taken? bridge.get_community only answers for communities, so
+  // a badge needs the plain account lookup. Returns true when the name is
+  // already an account, and true on an ERROR as well: a name that cannot be
+  // checked must not be reported as free, since the next step spends 3 HIVE.
+  export const accountExists = async (name) => {
+    try {
+      const client = getHiveClient();
+      const [account] = await client.database.getAccounts([name]);
+      return !!account;
+    } catch (error) {
+      console.error('accountExists failed:', error);
+      // Fails to "taken" ON PURPOSE: its callers are about to CREATE an account,
+      // and letting a network blip read as "free" walks them into a broadcast
+      // that fails. Anything that needs to tell "taken" from "could not ask"
+      // must use handleStateOnHive below instead.
+      return true;
+    }
+  };
+
+  /**
+   * Is this name registered on Hive? 'free' | 'taken' | 'unknown'.
+   *
+   * The three-state answer is the whole point. A warm-up handle is NOT a
+   * reservation -- nothing short of creating the account holds a name -- so
+   * somebody else can register it before the user graduates, and we want to warn
+   * them. But accountExists() answers a network failure with "taken", which here
+   * would tell every warm-up user their name was gone during any Hive hiccup and
+   * send them off to rename themselves for nothing.
+   *
+   * 'unknown' is the honest answer to a failed lookup, and callers are expected
+   * to do nothing with it.
+   */
+  export const handleStateOnHive = async (name) => {
+    const clean = String(name || '').trim().toLowerCase();
+    if (!clean) return 'unknown';
+    try {
+      const client = getHiveClient();
+      const accounts = await client.database.getAccounts([clean]);
+      // A successful call returns an array; an empty one means nobody has it.
+      if (!Array.isArray(accounts)) return 'unknown';
+      return accounts.length && accounts[0] ? 'taken' : 'free';
+    } catch (error) {
+      console.warn('handleStateOnHive failed:', error?.message);
+      return 'unknown';
+    }
   };
 
   export const getPrivateKeys = (username, password) => {

@@ -7,7 +7,9 @@
   left: 0;
   right: 0;
   z-index: 100;
-  background: var(--nav-bg);
+  // Mirrored: the light edge meets the content above, the flat tone sits at the
+  // screen edge below, so the two bars frame the page the same way.
+  background: linear-gradient(0deg, var(--nav-bg) 0%, var(--nav-fade-to) 100%);
   border-top: 1px solid var(--border-light);
   height: var(--bottom-nav-height, 56px);
   align-items: center;

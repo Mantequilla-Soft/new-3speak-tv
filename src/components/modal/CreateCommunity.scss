@@ -312,3 +312,502 @@
 
     }
 }
+/* ------------------------------------------------------------------------
+   The redesigned first step. Built on the app's own tokens rather than the
+   hardcoded colours the rest of this file still uses, so it follows the
+   light/dark switch like every other surface.
+   ------------------------------------------------------------------------ */
+
+.cc-step {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 4px 2px 2px;
+  text-align: left;
+}
+
+.cc-head {
+  h2 {
+    margin: 0;
+    font-size: 19px;
+    color: var(--text-primary);
+  }
+
+  p {
+    margin: 6px 0 0;
+    font-size: 13px;
+    line-height: 1.5;
+    color: var(--text-secondary);
+  }
+}
+
+/* Banner: a real 4:1 strip you can see, not a file input labelled "cover". */
+.cc-banner {
+  position: relative;
+  display: block;
+  width: 100%;
+  aspect-ratio: 4 / 1;
+  border: 1px dashed var(--border-color);
+  border-radius: 12px;
+  background: var(--bg-tertiary) center / cover no-repeat;
+  cursor: pointer;
+  overflow: hidden;
+
+  &:hover { border-color: var(--accent-primary); }
+  &:disabled { opacity: 0.6; cursor: default; }
+}
+
+.cc-banner-action {
+  position: absolute;
+  right: 10px;
+  bottom: 10px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border-radius: 999px;
+  /* Its own dark chip, because it sits over an image we know nothing about. */
+  background: rgba(0, 0, 0, 0.62);
+  color: #fff;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.cc-avatar-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.cc-avatar {
+  position: relative;
+  width: 68px;
+  height: 68px;
+  flex-shrink: 0;
+  padding: 0;
+  border: 1px dashed var(--border-color);
+  border-radius: 50%;
+  background: var(--bg-tertiary);
+  cursor: pointer;
+  // NOT overflow:hidden. The only thing that needs clipping to the circle is the
+  // image, and clipping the whole box cut the corner off the camera badge, which
+  // deliberately overhangs the edge. The image rounds itself instead.
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: inherit;
+  }
+
+  &:hover { border-color: var(--accent-primary); }
+  &:disabled { opacity: 0.6; cursor: default; }
+}
+
+.cc-avatar-badge {
+  position: absolute;
+  right: -2px;
+  bottom: -2px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: var(--accent-primary);
+  color: #fff;
+  // Above the image, not merely unclipped: an <img> that has loaded paints over
+  // an overlapping sibling that has no stacking position of its own.
+  z-index: 1;
+  // A ring in the panel colour, so the badge reads as sitting ON the avatar
+  // rather than merging into whatever the picture happens to show behind it.
+  box-shadow: 0 0 0 2px var(--bg-secondary);
+}
+
+.cc-avatar-text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+
+  strong { font-size: 13.5px; color: var(--text-primary); }
+  span { font-size: 12px; color: var(--text-muted); }
+}
+
+.cc-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+
+  input,
+  textarea {
+    width: 100%;
+    padding: 10px 12px;
+    border-radius: 10px;
+    border: 1px solid var(--border-color);
+    background: var(--bg-secondary);
+    color: var(--text-primary);
+    font: inherit;
+    font-size: 13.5px;
+    resize: vertical;
+
+    &::placeholder { color: var(--text-muted); }
+
+    &:focus-visible {
+      outline: 2px solid var(--accent-primary);
+      outline-offset: 1px;
+      border-color: transparent;
+    }
+  }
+}
+
+.cc-label {
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--text-primary);
+
+  em {
+    margin-left: 4px;
+    font-style: normal;
+    font-weight: 500;
+    color: var(--text-muted);
+  }
+}
+
+.cc-hint {
+  font-size: 11.5px;
+  color: var(--text-muted);
+}
+
+/* ---------------------------------------------- step 2: keys --- */
+
+/* Creator and fee, side by side. Facts about what is about to happen, not
+   fields, so they are flat rather than boxed like inputs. */
+.cc-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 28px;
+}
+
+.cc-meta-item {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.cc-meta-value {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 13.5px;
+  font-weight: 600;
+  color: var(--text-primary);
+
+  img {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    object-fit: cover;
+  }
+}
+
+/* Availability. Its own tokens per theme: the green that reads on a dark panel
+   is washed out on a light one, which is why this was never an inline colour. */
+.cc-check {
+  font-size: 12px;
+  font-weight: 600;
+
+  &.is-ok { color: #1a8a4b; }
+  &.is-bad { color: #c2402f; }
+}
+
+[data-theme="dark"] .cc-check {
+  &.is-ok { color: #3fc47a; }
+  &.is-bad { color: #e0594b; }
+}
+
+/* Password + copy, as one control rather than an input with a stray icon. */
+.cc-copy-row {
+  display: flex;
+  align-items: stretch;
+  gap: 8px;
+
+  input {
+    flex: 1;
+    min-width: 0;
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-size: 12.5px;
+  }
+}
+
+.cc-copy {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+  background: var(--bg-tertiary);
+  color: var(--text-secondary);
+  cursor: pointer;
+
+  &:hover {
+    color: var(--text-primary);
+    border-color: var(--text-muted);
+  }
+}
+
+/* The one warning that matters on this screen: an amber rule, not another red
+   thing competing with the accent. */
+.cc-warn {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 11px 13px;
+  border-radius: 10px;
+  border: 1px solid color-mix(in srgb, #a86500 45%, transparent);
+  background: color-mix(in srgb, #a86500 10%, transparent);
+  color: var(--text-primary);
+  font-size: 12.5px;
+  line-height: 1.5;
+
+  svg {
+    flex-shrink: 0;
+    margin-top: 1px;
+    color: #a86500;
+  }
+}
+
+[data-theme="dark"] .cc-warn svg { color: #e5a54b; }
+
+/* The action the whole screen exists for, so it spans the panel rather than
+   sitting in the button row as one option among several. */
+.cc-download {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  width: 100%;
+  height: 40px;
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+  background: var(--bg-tertiary);
+  color: var(--text-primary);
+  font: inherit;
+  font-size: 13.5px;
+  font-weight: 700;
+  cursor: pointer;
+
+  &:hover:not(:disabled) {
+    border-color: var(--accent-primary);
+    color: var(--accent-primary);
+  }
+
+  &:disabled { opacity: 0.6; cursor: default; }
+}
+
+/* ------------------------------------------- step 3: signing --- */
+
+.cc-providers {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+}
+
+@media (max-width: 460px) {
+  .cc-providers { grid-template-columns: 1fr; }
+}
+
+.cc-provider {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  height: 44px;
+  padding: 0 14px;
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+  background: var(--bg-tertiary);
+  color: var(--text-primary);
+  font: inherit;
+  font-size: 13.5px;
+  font-weight: 600;
+  cursor: pointer;
+  text-align: left;
+
+  &:hover:not(:disabled) {
+    border-color: var(--accent-primary);
+    color: var(--accent-primary);
+  }
+
+  &:disabled { opacity: 0.55; cursor: default; }
+
+  // The one they are already signed in with opens without a second login, so
+  // say which it is rather than letting them find out by clicking.
+  &.is-current {
+    border-color: color-mix(in srgb, var(--accent-primary) 55%, transparent);
+  }
+}
+
+.cc-provider-tag {
+  flex-shrink: 0;
+  padding: 2px 7px;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--accent-primary) 14%, transparent);
+  color: var(--accent-primary);
+  font-size: 10.5px;
+  font-weight: 700;
+  text-transform: lowercase;
+}
+
+.cc-provider-name {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* A rule with the word in it, rather than a bare word floating between two
+   blocks with no relationship to either. */
+.cc-or {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: var(--text-muted);
+  font-size: 12px;
+
+  &::before,
+  &::after {
+    content: "";
+    flex: 1;
+    height: 1px;
+    background: var(--border-color);
+  }
+}
+
+/* ------------------------------------------ step 4: the result --- */
+
+.cc-done {
+  align-items: center;
+  text-align: center;
+
+  h2 {
+    margin: 0;
+    font-size: 19px;
+    color: var(--text-primary);
+  }
+
+  .cc-actions {
+    justify-content: center;
+    width: 100%;
+  }
+}
+
+.cc-done-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: color-mix(in srgb, #1a8a4b 14%, transparent);
+  border: 1px solid color-mix(in srgb, #1a8a4b 45%, transparent);
+  color: #1a8a4b;
+  font-size: 24px;
+
+  &.is-bad {
+    background: color-mix(in srgb, #c2402f 12%, transparent);
+    border-color: color-mix(in srgb, #c2402f 45%, transparent);
+    color: #c2402f;
+  }
+}
+
+[data-theme="dark"] .cc-done-icon {
+  background: color-mix(in srgb, #3fc47a 16%, transparent);
+  border-color: color-mix(in srgb, #3fc47a 45%, transparent);
+  color: #3fc47a;
+
+  &.is-bad {
+    background: color-mix(in srgb, #e0594b 14%, transparent);
+    border-color: color-mix(in srgb, #e0594b 45%, transparent);
+    color: #e0594b;
+  }
+}
+
+/* The account name is the one fact they might need to write down, so it gets
+   its own line and a face that reads as an identifier. */
+.cc-done-name {
+  margin: 0;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.cc-done-text {
+  margin: 0;
+  max-width: 46ch;
+  font-size: 13.5px;
+  line-height: 1.6;
+  color: var(--text-secondary);
+}
+
+.cc-done-note {
+  margin: 0;
+  max-width: 46ch;
+  font-size: 12px;
+  line-height: 1.55;
+  color: var(--text-muted);
+}
+
+/* An <a> styled as the primary button needs the text centring a <button> gets
+   for free. */
+.cc-primary-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+}
+
+.cc-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 4px;
+}
+
+/* Red is an outline here too, never a fill. */
+.cc-primary,
+.cc-secondary {
+  height: 38px;
+  padding: 0 18px;
+  border-radius: 10px;
+  font: inherit;
+  font-size: 13.5px;
+  font-weight: 700;
+  cursor: pointer;
+
+  &:disabled { opacity: 0.6; cursor: default; }
+}
+
+.cc-primary {
+  border: 1px solid var(--accent-primary);
+  background: transparent;
+  color: var(--accent-primary);
+
+  &:hover:not(:disabled) { background: color-mix(in srgb, var(--accent-primary) 10%, transparent); }
+}
+
+.cc-secondary {
+  border: 1px solid var(--border-color);
+  background: transparent;
+  color: var(--text-secondary);
+
+  &:hover { color: var(--text-primary); border-color: var(--text-muted); }
+}
+
+.cc-spin { animation: cc-spin 0.9s linear infinite; }
+
+@keyframes cc-spin {
+  to { transform: rotate(360deg); }
+}
