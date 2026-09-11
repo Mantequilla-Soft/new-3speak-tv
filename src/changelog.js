@@ -7,6 +7,25 @@
 // 1.0.0 — that way they see all of these when develop is pushed to production.
 export const CHANGELOG = [
   {
+    version: '1.78.68',
+    date: '2026-09-11',
+    summary:
+      'Communities and badges now live together under Groups in the top bar, and you '
+      + 'can create either one from there. A community is a space people join; a badge '
+      + 'is an award you hand out. Once you have made a badge, an Award button on '
+      + 'anyone\'s profile gives it to them, with no account switching and no keys to '
+      + 'dig out.',
+  },
+  {
+    version: '1.78.67',
+    date: '2026-09-11',
+    summary:
+      'General interface fixes across the site. Profile pictures and banners uploaded '
+      + 'through 3Speak now show up everywhere instead of a grey placeholder, avatars '
+      + 'in the stories bar are no longer cropped, and badge pages list videos newest '
+      + 'first.',
+  },
+  {
     version: '1.78.66',
     date: '2026-09-09',
     summary:
