@@ -10,6 +10,12 @@ const { Client, PrivateKey, PublicKey, Signature, cryptoUtils } = require('@hive
 
 // ButrAuth SDK is ESM-only — load via dynamic import at startup.
 let butr = null
+// Same for the incubation client, and it is NOT optional to do it this way:
+// this file is CJS and runs under /usr/bin/node v18, which cannot require() an
+// ES module at all (ERR_REQUIRE_ESM). A plain require would not fail on the
+// first incubation request, it would refuse to start the whole API.
+let inc = null
+let IncubationErrorClass = null
 async function initButrAuth() {
   const { ButrAuthClient } = await import('@mantequilla-soft/butrauth-client')
   butr = new ButrAuthClient({
@@ -18,6 +24,19 @@ async function initButrAuth() {
     clientSecret: MANTEAUTH_CLIENT_SECRET
   })
   console.log('[INFO] ButrAuth SDK initialised')
+
+  const { IncubationClient, IncubationError } = await import('@mantequilla-soft/incubation-client')
+  IncubationErrorClass = IncubationError
+  inc = new IncubationClient({
+    baseUrl: INCUBATION_URL,
+    // Only used for the app-asserted Hive actor: a wallet login holds no
+    // ButrAuth token, so the app vouches for them with the same credentials it
+    // already uses to broadcast on their behalf.
+    clientId: MANTEAUTH_CLIENT_ID,
+    clientSecret: MANTEAUTH_CLIENT_SECRET,
+    timeoutMs: 15000
+  })
+  console.log('[INFO] Incubation SDK initialised')
 }
 
 const app = express()
@@ -393,6 +412,31 @@ async function verifySiwhSignature(username, challenge, signature) {
 // metadata, e.g. a user's 3Speak interests) — broadcastAsThreespeak enforces
 // that it carries no owner/active/posting/memo_key or json_metadata, so posting
 // authority is sufficient and it can never touch keys or active-auth metadata.
+// Does `user` hold posting authority over `account`, per the chain?
+//
+// Cached briefly: a broadcast should not cost an extra account read every time,
+// but authority that has been REVOKED must stop working quickly, so the window
+// is seconds rather than minutes.
+const POSTING_AUTHORITY_TTL_MS = 30 * 1000
+const postingAuthorityCache = new Map()
+
+async function hasPostingAuthorityOver(user, account) {
+  const key = `${user}/${account}`
+  const hit = postingAuthorityCache.get(key)
+  if (hit && Date.now() - hit.at < POSTING_AUTHORITY_TTL_MS) return hit.ok
+  let ok = false
+  try {
+    const [acct] = await client.database.getAccounts([account])
+    ok = !!acct && (acct.posting?.account_auths || []).some(([who]) => who === user)
+  } catch (err) {
+    // Fail CLOSED: an unreadable account is not permission.
+    console.error('[authority] check failed:', err.message)
+    ok = false
+  }
+  postingAuthorityCache.set(key, { ok, at: Date.now() })
+  return ok
+}
+
 const ALLOWED_OPS = ['vote', 'comment', 'delete_comment', 'comment_options', 'custom_json', 'claim_reward_balance', 'account_update2']
 
 const ALLOWED_CUSTOM_JSON_IDS = new Set([
@@ -438,7 +482,7 @@ const OP_USER_FIELD = {
 // =====================================================================
 app.post('/api/manteauth/start', baseLimiter, (req, res) => {
   try {
-    const { redirect_uri, state, signup } = req.body
+    const { redirect_uri, state, signup, graduate, changeHandle } = req.body
     if (!redirect_uri || typeof redirect_uri !== 'string') {
       return res.status(400).json({ error: 'Invalid request' })
     }
@@ -453,8 +497,20 @@ app.post('/api/manteauth/start', baseLimiter, (req, res) => {
     })
     setPkceCookie(res, codeVerifier)
 
-    // signup:true → tell ButrAuth to jump straight to account creation.
-    const finalUrl = signup ? url + (url.includes('?') ? '&' : '?') + 'screen_hint=signup' : url
+    // signup:true   → butrauth jumps straight to account creation.
+    // graduate:true → the caller is an INCUBATING user turning the handle they
+    //                 already have into a real Hive account. A plain signup
+    //                 hint is wrong for them: butrauth reads "already has a
+    //                 name, nothing to decide" and completes the authorization,
+    //                 which lands them back here having done nothing.
+    // changeHandle:true → an incubating user whose chosen name has since been
+    //                 registered on Hive by somebody else. They are sent to
+    //                 butrauth to pick a new one. Checked FIRST: such a user is
+    //                 also mid-warm-up, so a 'graduate' or 'signup' hint would
+    //                 march them into creating an account under the very name
+    //                 that is no longer available.
+    const hint = changeHandle ? 'handle' : (graduate ? 'graduate' : (signup ? 'signup' : null))
+    const finalUrl = hint ? url + (url.includes('?') ? '&' : '?') + `screen_hint=${hint}` : url
 
     res.json({ url: finalUrl })
   } catch (err) {
@@ -694,28 +750,82 @@ const INCUBATION_ROUTES = new Map([
   // whose parent does not exist, and there is no post to vote on. The service
   // still decides what each kind may do (a Hive user may reply, never
   // root-post), so this only opens the door.
-  ['POST /content', { path: '/content', anyActor: true }],
-  ['GET /content/mine', { path: '/content/mine' }],
-  ['PUT /social/vote', { path: '/social/vote', anyActor: true }],
+  //
+  // `user` and `hive` are the SDK calls for each kind of actor, and the split is
+  // the point: asHiveUser() has no post() at all, so the shape that would store
+  // a real account's root post off-chain cannot be written here by accident.
+  ['POST /content', {
+    anyActor: true,
+    user: (s, b) => s.post(b),
+    hive: (s, b) => s.reply(b)
+  }],
+  ['GET /content/mine', { user: (s, _b, q) => s.myContent({ limit: q.limit }) }],
+  ['PUT /social/vote', {
+    anyActor: true,
+    user: (s, b) => s.vote(b),
+    hive: (s, b) => s.vote(b)
+  }],
   // anyActor: a Hive user has to be able to follow an incubating creator, since
   // that account does not exist on chain to be followed the normal way.
-  ['PUT /social/follow', { path: '/social/follow', anyActor: true }],
-  ['GET /social/graduated-follows', { path: '/social/graduated-follows', anyActor: true }],
-  ['POST /social/graduated-follows/ack', { path: '/social/graduated-follows/ack', anyActor: true }],
-  ['PUT /social/profile', { path: '/social/profile' }],
-  ['GET /social/profile/mine', { path: '/social/profile/mine' }],
-  ['GET /social/follows/mine', { path: '/social/follows/mine' }],
-  ['PUT /social/subscribe', { path: '/social/subscribe' }],
-  ['GET /social/subscriptions/mine', { path: '/social/subscriptions/mine' }],
-  ['GET /public/graduation/plan', { path: '/public/graduation/plan' }],
-  ['GET /progress', { path: '/progress' }],
-  ['GET /notifications', { path: '/notifications' }],
-  ['POST /notifications/read', { path: '/notifications/read' }],
-  ['GET /backfill/items', { path: '/backfill/items', graduated: true }],
-  ['GET /backfill/summary', { path: '/backfill/summary', graduated: true }],
-  ['POST /backfill/mark', { path: '/backfill/mark', graduated: true }],
-  ['POST /backfill/claim-assets', { path: '/backfill/claim-assets', graduated: true }]
+  ['PUT /social/follow', {
+    anyActor: true,
+    user: (s, b) => s.follow(b),
+    hive: (s, b) => s.follow(b)
+  }],
+  // The `hive` call here goes upstream as a POST while the browser asks with a
+  // GET, and that is the whole fix rather than an inconsistency. App-asserted
+  // credentials live in the request body; fetch throws outright on a GET with a
+  // body, so this used to reach the service as a TypeError and come back 502 —
+  // "someone you follow got a real account" never fired for a wallet login,
+  // which is exactly who it is for. The SDK picks the shape each actor can use.
+  ['GET /social/graduated-follows', {
+    anyActor: true,
+    user: (s) => s.graduatedFollows(),
+    hive: (s) => s.graduatedFollows()
+  }],
+  ['POST /social/graduated-follows/ack', {
+    anyActor: true,
+    user: (s, b) => s.ackGraduatedFollow(b.handle),
+    hive: (s, b) => s.ackGraduatedFollow(b.handle)
+  }],
+  ['PUT /social/profile', { user: (s, b) => s.setProfile(b) }],
+  ['GET /social/profile/mine', { user: (s) => s.myProfile() }],
+  ['GET /social/follows/mine', { user: (s) => s.myFollows() }],
+  ['PUT /social/subscribe', { user: (s, b) => s.subscribe(b) }],
+  ['GET /social/subscriptions/mine', { user: (s) => s.mySubscriptions() }],
+  ['GET /public/graduation/plan', { user: (s) => s.graduationPlan() }],
+  ['GET /progress', { user: (s) => s.progress() }],
+  ['GET /notifications', { user: (s) => s.notifications() }],
+  ['POST /notifications/read', { user: (s) => s.markNotificationsRead() }],
+  ['GET /backfill/items', { graduated: true, grad: (s) => s.items() }],
+  ['GET /backfill/summary', { graduated: true, grad: (s) => s.summary() }],
+  ['POST /backfill/mark', { graduated: true, grad: (s, b) => s.mark(b) }],
+  ['POST /backfill/claim-assets', { graduated: true, grad: (s) => s.claimAssets() }]
 ])
+
+/**
+ * Turn whatever the SDK threw into a response.
+ *
+ * The service's own refusals are passed through with their status and their
+ * WHOLE body — a 409 from an incubating-only route names the account the caller
+ * turned out to have, and rebuilding the response from message+reason would
+ * drop it. A transport failure is status 0, which is not a refusal at all and
+ * must not be reported as one: it becomes a 502, the same as before.
+ */
+function sendIncubationError(res, err, where) {
+  if (IncubationErrorClass && err instanceof IncubationErrorClass && err.status > 0) {
+    return res.status(err.status).json(err.body || { error: err.message, reason: err.reason || null })
+  }
+  const timedOut = /timeout|aborted/i.test(err?.message || '')
+  console.error(`[incubation proxy] ${where}:`, err?.message)
+  return res.status(502).json({ error: timedOut ? 'Incubation service timed out' : 'Incubation request failed' })
+}
+
+// The public half of a profile: what someone said, who follows them, who they
+// follow. Separate from INCUBATION_ROUTES because these carry a handle in the
+// path, and separate from a wildcard because a wildcard would forward whatever
+// /public/ grows next. A handle is Hive-shaped -- lowercase, digits, dot, dash.
+const PUBLIC_PROFILE_RE = /^\/public\/user\/([a-z0-9.-]{1,64})\/(comments|followers|following|content)$/
 
 /**
  * Read butrauth's graduation verdict for this token.
@@ -775,9 +885,38 @@ app.use('/api/incubation', incubationLimiter, async (req, res) => {
   try {
     const sub = req.path || '/'
     const key = `${req.method} ${sub}`
+
+    // Public profile reads, handled BEFORE the allowlist Map and before any
+    // session work: a visitor reading somebody's comments or follow lists is
+    // not signed in to anything, and requiring a session would make a public
+    // profile page blank for exactly the people it is written for.
+    //
+    // Still an allowlist, just one that can carry a handle: the Map is exact
+    // match, these paths have a variable segment, and the regex below is every
+    // bit as closed as an entry in it. Nothing is forwarded but the handle and
+    // a bounded `limit`, and no credential of any kind goes upstream.
+    if (req.method === 'GET') {
+      const pub = PUBLIC_PROFILE_RE.exec(sub)
+      if (pub) {
+        if (!inc) return res.status(503).json({ error: 'Incubation client not ready' })
+        const limit = Math.min(Math.max(parseInt(req.query.limit, 10) || 50, 1), 200)
+        const read = {
+          content: () => inc.userContent(pub[1], { limit }),
+          comments: () => inc.userComments(pub[1], { limit }),
+          followers: () => inc.userFollowers(pub[1], { limit }),
+          following: () => inc.userFollowing(pub[1], { limit })
+        }[pub[2]]
+        try {
+          return res.json(await read())
+        } catch (err) {
+          return sendIncubationError(res, err, `public/${pub[2]}`)
+        }
+      }
+    }
+
     const route = INCUBATION_ROUTES.get(key)
     if (!route) return res.status(404).json({ error: 'Unknown incubation route' })
-    const target = route.path
+    if (!inc) return res.status(503).json({ error: 'Incubation client not ready' })
 
     const session = await resolveButrSession(req, res)
 
@@ -799,24 +938,13 @@ app.use('/api/incubation', incubationLimiter, async (req, res) => {
           reason: 'session_expired',
         })
       }
-      const ctrlW = new AbortController()
-      const timerW = setTimeout(() => ctrlW.abort(), 15000)
+      // The SDK adds the credentials and picks the request shape this actor can
+      // actually be authenticated through — which for the graduated-follows
+      // read is a POST, because a GET cannot carry them.
       try {
-        const up = await fetch(INCUBATION_URL + target, {
-          method: req.method,
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            ...(req.body || {}),
-            client_id: MANTEAUTH_CLIENT_ID,
-            client_secret: MANTEAUTH_CLIENT_SECRET,
-            hive_author: hiveUser
-          }),
-          signal: ctrlW.signal
-        })
-        const t = await up.text()
-        return res.status(up.status).type('application/json').send(t)
-      } finally {
-        clearTimeout(timerW)
+        return res.json(await route.hive(inc.asHiveUser(hiveUser), req.body || {}, req.query || {}))
+      } catch (err) {
+        return sendIncubationError(res, err, `${key} (hive)`)
       }
     }
     if (!session) {
@@ -847,28 +975,19 @@ app.use('/api/incubation', incubationLimiter, async (req, res) => {
       })
     }
 
-    const ctrl = new AbortController()
-    const timer = setTimeout(() => ctrl.abort(), 15000)
-    let upstream
     try {
-      upstream = await fetch(INCUBATION_URL + target, {
-        method: req.method,
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${session.token}`
-        },
-        body: ['GET', 'HEAD'].includes(req.method) ? undefined : JSON.stringify(req.body || {}),
-        signal: ctrl.signal
-      })
-    } finally {
-      clearTimeout(timer)
+      // A graduated user reads their backlog through a different scope: their
+      // token now names a Hive account, which is the author field every stored
+      // row has been waiting for.
+      const scope = route.graduated ? inc.asGraduate(session.token) : inc.asUser(session.token)
+      const call = route.graduated ? route.grad : route.user
+      return res.json(await call(scope, req.body || {}, req.query || {}))
+    } catch (err) {
+      return sendIncubationError(res, err, key)
     }
-    const text = await upstream.text()
-    res.status(upstream.status).type('application/json').send(text)
   } catch (err) {
-    const msg = err?.name === 'AbortError' ? 'Incubation service timed out' : 'Incubation request failed'
     console.error('[incubation proxy]', err.message)
-    res.status(502).json({ error: msg })
+    res.status(502).json({ error: 'Incubation request failed' })
   }
 })
 
@@ -940,7 +1059,25 @@ async function broadcastAsThreespeak(hiveUsername, operations, res) {
     if (opType === 'custom_json') {
       const auths = opData.required_posting_auths || []
       if (!auths.includes(hiveUsername)) {
-        return res.status(403).json({ error: 'Operation not allowed' })
+        // Acting for ANOTHER account is allowed only where that account has
+        // granted THIS user posting authority — a badge they created being the
+        // case this exists for. Awarding a badge is the badge account following
+        // someone, so the op is authorised by the badge, never by them.
+        //
+        // 🚨 The check is what keeps this from being an escalation. @threespeak
+        // holds a posting grant over every user who signed up here, so without
+        // verifying the requester's OWN authority over the named account, one
+        // user could have the proxy act as any other. Chain-verified, and it
+        // grants nothing they could not already do by signing themselves.
+        const others = auths.filter((a) => a !== hiveUsername)
+        if (!others.length) {
+          return res.status(403).json({ error: 'Operation not allowed' })
+        }
+        for (const acct of others) {
+          if (!await hasPostingAuthorityOver(hiveUsername, acct)) {
+            return res.status(403).json({ error: 'You do not hold posting authority over @' + acct })
+          }
+        }
       }
       if (!ALLOWED_CUSTOM_JSON_IDS.has(opData.id)) {
         return res.status(403).json({ error: 'custom_json id not allowed for this app' })
