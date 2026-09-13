@@ -300,6 +300,14 @@ export default function IncubatingProfile({ handle, own = false }) {
         )}
 
         <main className="inc-main">
+          {/* Wrapped so the mobile tabs can hide the FEED without hiding the
+              whole column. "What a Hive account gets you" sits below it, in
+              this same column, and hiding .inc-main took that with it -- so the
+              one panel that explains why the checklist is worth doing was
+              missing from the tab showing the checklist. A child of a
+              display:none parent cannot be shown again, so the hiding has to
+              happen at this level instead. */}
+          <div className="inc-feed">
           {/* The three list tabs replace the feed rather than sitting under it:
               they are alternative answers to "who is this", not extra sections
               of the same one. */}
@@ -353,6 +361,7 @@ export default function IncubatingProfile({ handle, own = false }) {
               and it leaves the goals alone at the top of the column. */}
           </>
           )}
+          </div>
 
           {showSidebar && (
             <section className="inc-panel inc-unlocks">
