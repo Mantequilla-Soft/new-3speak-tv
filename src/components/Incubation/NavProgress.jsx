@@ -64,6 +64,15 @@ export default function NavProgress() {
   const [progress, setProgress] = useState(null);
   const [celebrating, setCelebrating] = useState(false);
   const alive = useRef(true);
+  // Which goals were done the LAST time we looked, so a goal that has just
+  // flipped can be told from one that was already done.
+  //
+  // null means "have not looked yet", and that distinction is the whole point:
+  // on the first poll every finished goal looks newly finished, so starting
+  // from an empty Set would fire the burst on every page load for work done
+  // days ago. Nothing is celebrated until there is a previous answer to compare
+  // against.
+  const doneBefore = useRef(null);
 
   const refresh = useCallback(async () => {
     if (!incubationHandle) return;
@@ -71,8 +80,27 @@ export default function NavProgress() {
       const p = await fetchIncubationProgress();
       if (!alive.current || !Array.isArray(p?.tasks)) return;
       setProgress(p);
+
+      // A single goal landing is worth the same burst as the last one. Someone
+      // who just posted their second short is looking at the pill right now,
+      // and the bar moving by a sixth in silence is a smaller moment than it
+      // should be.
+      const nowDone = new Set(p.tasks.filter((t) => t.done).map((t) => t.type));
+      const previously = doneBefore.current;
+      doneBefore.current = nowDone;
+      // Compared by TYPE rather than by count, so it survives the list changing
+      // length -- adding a sixth goal must not read as five goals completing.
+      const justDone = previously
+        ? [...nowDone].filter((type) => !previously.has(type))
+        : [];
+
       if (isFull(p) && !alreadyCelebrated(incubationHandle)) {
         markCelebrated(incubationHandle);
+        setCelebrating(true);
+      } else if (justDone.length) {
+        // Not remembered in localStorage, unlike the finish: this fires on a
+        // transition seen in THIS session, so a reload cannot replay it and
+        // there is nothing to write down.
         setCelebrating(true);
       }
     } catch {
