@@ -23,6 +23,22 @@ const FALLBACK_FORMATS = [
 export default function AdPitchDialog({ onDone }) {
   const [formats, setFormats] = useState(null);
 
+  // 640px is this dialog's own breakpoint: the same width at which AdsPrompt.scss
+  // turns the card into a bottom sheet. On a phone the card is read standing up,
+  // one thumb away from the close button, so it carries the short version of every
+  // line and the formats become a two-up grid of names with the blurbs dropped.
+  // The blurbs are a rate-card detail, and /advertise is one tap away with all of
+  // them; what has to survive here is only what the formats ARE.
+  const [isMobile, setIsMobile] = useState(
+    () => typeof window !== 'undefined' && window.matchMedia?.('(max-width: 640px)').matches,
+  );
+  useEffect(() => {
+    const mq = window.matchMedia('(max-width: 640px)');
+    const onChange = (e) => setIsMobile(e.matches);
+    mq.addEventListener('change', onChange);
+    return () => mq.removeEventListener('change', onChange);
+  }, []);
+
   useEffect(() => {
     let alive = true;
     fetchPricing()
@@ -51,23 +67,35 @@ export default function AdPitchDialog({ onDone }) {
           <div>
             <h3 className="ads-prompt-title">Advertise on 3Speak videos</h3>
             <p className="ads-prompt-lede">
-              Your ad plays <strong>inside</strong> the video rather than in a box beside
-              it, so it reaches people whether or not they run an ad blocker.
+              {isMobile ? (
+                <>Your ad plays <strong>inside</strong> the video, so ad blockers do not hide it.</>
+              ) : (
+                <>
+                  Your ad plays <strong>inside</strong> the video rather than in a box beside
+                  it, so it reaches people whether or not they run an ad blocker.
+                </>
+              )}
             </p>
           </div>
         </header>
 
         <p className="ads-prompt-text">
-          Want a spot of your own? 3Speak sells its own ad slots, paid in HIVE or HBD,
-          with no third party tracking anyone. If you have a project, a channel or an
-          event to put in front of this audience, these are the formats you can book.
+          {isMobile ? (
+            <>Spots are sold by 3Speak, paid in HIVE or HBD, with no third party tracking.</>
+          ) : (
+            <>
+              Want a spot of your own? 3Speak sells its own ad slots, paid in HIVE or HBD,
+              with no third party tracking anyone. If you have a project, a channel or an
+              event to put in front of this audience, these are the formats you can book.
+            </>
+          )}
         </p>
 
-        <ul className="ads-prompt-formats">
+        <ul className={`ads-prompt-formats${isMobile ? ' is-compact' : ''}`}>
           {shown.map((f) => (
             <li key={f.key}>
               <span className="ads-prompt-format-name">{f.label}</span>
-              <span className="ads-prompt-format-blurb">{f.blurb}</span>
+              {!isMobile && <span className="ads-prompt-format-blurb">{f.blurb}</span>}
             </li>
           ))}
         </ul>
@@ -75,8 +103,14 @@ export default function AdPitchDialog({ onDone }) {
         {/* The reach point, which is the part people do not expect: a 3Speak player
             embedded on someone else's site is still a 3Speak player. */}
         <p className="ads-prompt-reach">
-          Your spot runs on 3Speak, and in every 3Speak player embedded on other sites.
-          It travels with the video wherever it is watched, not only here.
+          {isMobile ? (
+            <>It also runs in every 3Speak player embedded on other sites, not only here.</>
+          ) : (
+            <>
+              Your spot runs on 3Speak, and in every 3Speak player embedded on other sites.
+              It travels with the video wherever it is watched, not only here.
+            </>
+          )}
         </p>
 
         <div className="ads-prompt-actions">
