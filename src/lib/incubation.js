@@ -133,6 +133,21 @@ export async function fetchIncubationFeed(limit = 20) {
 }
 
 /**
+ * Warm-up SHORTS only, for mixing into the shorts feed.
+ *
+ * Asked of the server rather than filtered here: the feed is newest-first with
+ * a limit, so filtering a mixed page client-side returns however many shorts
+ * happened to fall inside the most recent `limit` rows -- which on a quiet week
+ * is none, and looks like the feature is broken rather than like there is
+ * nothing to show.
+ */
+export async function fetchIncubationShorts(limit = 10) {
+  return json(await fetch(
+    `${CHECKER_URL}/incubation/feed?contentType=short&limit=${limit}`,
+  ));
+}
+
+/**
  * Off-chain replies under a REAL Hive post.
  *
  * Incubating users comment on ordinary Hive videos, so without merging these
