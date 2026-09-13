@@ -1,5 +1,5 @@
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { MdOutlineSearch, MdOutlineDownload, MdGraphicEq, MdSettings, MdTrendingUp } from "react-icons/md";
+import { MdOutlineSearch, MdOutlineDownload, MdGraphicEq, MdGroups, MdSettings, MdTrendingUp } from "react-icons/md";
 import { IoAddCircleOutline, IoPower, IoCloudUploadSharp, IoShareOutline } from "react-icons/io5";
 import { IoMdPerson } from "react-icons/io";
 import { HiInformationCircle } from "react-icons/hi";
@@ -8,10 +8,8 @@ import { RiWallet3Fill } from "react-icons/ri";
 import { FaDiscord } from "react-icons/fa";
 import { FaSquareXTwitter, FaMedal, FaChartBar } from "react-icons/fa6";
 import { SiTelegram } from "react-icons/si";
-import { Clapperboard, MessageCircle } from "lucide-react";
+import { Clapperboard } from "lucide-react";
 import { useAppStore } from "../../lib/store";
-import { useChat } from "../../context/ChatContext";
-import { useServerUnread } from "../../hooks/useServerUnread";
 import ShortsIcon from "../icons/ShortsIcon";
 import SettingsModal from "../SettingsModal/SettingsModal";
 import { FEATURE_EDITOR } from "../../utils/config";
@@ -29,42 +27,19 @@ import "./BottomNav.scss";
 // line under it. See utils/toast.js.
 const toast = toastIn('Install');
 
-// Split out so the polling subscription only exists while the badge is actually
-// rendered (mobile + connected chat). Server-truth count, never a local tally.
-function BottomNavChatBadge() {
-  const { unreadCount } = useServerUnread();
-  if (!unreadCount) return null;
-  return (
-    <span className="bottom-nav-chat-badge">{unreadCount > 9 ? "9+" : unreadCount}</span>
-  );
-}
-
 const BottomNav = ({ openLoginModal }) => {
   const location = useLocation();
   const navigate = useNavigate();
   const { authenticated, user, theme, LogOut } = useAppStore();
-  const incubationHandle = useAppStore((s) => s.incubationHandle);
   const isManteAuth = localStorage.getItem("manteauth_login") === "true";
   const path = location.pathname;
   const [menuOpen, setMenuOpen] = useState(false);
   const [settingsOpen, setSettingsOpen] = useState(false);
   const menuRef = useRef(null);
-  const { ready: chatReady } = useChat();
-
-  // This bar is CSS-hidden rather than unmounted on desktop, so gate the unread
-  // subscription on the same breakpoint the CSS uses.
-  const [isMobileBar, setIsMobileBar] = useState(
-    () => typeof window !== "undefined" && window.matchMedia("(max-width: 1024px)").matches,
-  );
-  useEffect(() => {
-    const mq = window.matchMedia("(max-width: 1024px)");
-    const on = () => setIsMobileBar(mq.matches);
-    mq.addEventListener("change", on);
-    return () => mq.removeEventListener("change", on);
-  }, []);
 
   const isActive = (route) => path === route;
   const isShortsActive = path.startsWith("/shorts");
+  const isGroupsActive = path.startsWith("/groups");
 
   // PWA install prompt
   const [installPrompt, setInstallPrompt] = useState(null);
@@ -110,17 +85,6 @@ const BottomNav = ({ openLoginModal }) => {
     setMenuOpen(false);
   }, [path]);
 
-  // Chat needs an account, so logged out this asks for one instead of routing to
-  // a page that can't do anything.
-  const handleChatClick = (e) => {
-    if (!authenticated) {
-      e.preventDefault();
-      openLoginModal();
-      return;
-    }
-    setMenuOpen(false);
-  };
-
   const showInstallOption = !isStandalone && (installPrompt || isIOS);
 
   const handleProfileClick = (e) => {
@@ -143,38 +107,27 @@ const BottomNav = ({ openLoginModal }) => {
         <span>Feeds</span>
       </Link>
 
-      <Link to="/audio" className={`bottom-nav-item ${isActive("/audio") ? "active" : ""}`}>
-        <MdGraphicEq className="bottom-nav-icon" />
-        <span>Audio</span>
-      </Link>
-
-      {/* Chat = the centre item (Share moved to the top bar's "+"). Logged out it
-          opens the login modal, exactly as the old centre item did.
-          Absent entirely during the warm-up: chat is signed with Hive account
-          keys, which these users do not have yet. The bar is flex, so the
-          remaining items simply share the width. */}
-      {!incubationHandle && (
-      <Link
-        to="/chat"
-        className={`bottom-nav-item ${isActive("/chat") ? "active" : ""}`}
-        onClick={handleChatClick}
-      >
-        <span className="bottom-nav-icon-wrap">
-          <MessageCircle className="bottom-nav-icon" />
-          {/* Mounted on mobile only: the badge polls the server for unread, and
-              this bar stays mounted (just CSS-hidden) on desktop, where the
-              top-bar chat button already owns that subscription. */}
-          {authenticated && chatReady && isMobileBar && <BottomNavChatBadge />}
-        </span>
-        <span>Chat</span>
-      </Link>
-      )}
-
       <Link to="/shorts" className={`bottom-nav-item ${isShortsActive ? "active" : ""}`}>
         <span className="bottom-nav-icon-wrap">
           <ShortsIcon className="bottom-nav-icon bottom-nav-icon--shorts" outlineWidth={isShortsActive ? 40 : 30} />
         </span>
         <span>Shorts</span>
+      </Link>
+
+      {/* Groups takes the slot chat used to hold. Chat is not gone: it moved to
+          the top bar, which now shows its button at every width instead of
+          hiding it below 1024px, so the unread badge went with it and is no
+          longer mounted in two places. */}
+      <Link to="/groups" className={`bottom-nav-item ${isGroupsActive ? "active" : ""}`}>
+        <span className="bottom-nav-icon-wrap">
+          <MdGroups className="bottom-nav-icon" />
+        </span>
+        <span>Groups</span>
+      </Link>
+
+      <Link to="/audio" className={`bottom-nav-item ${isActive("/audio") ? "active" : ""}`}>
+        <MdGraphicEq className="bottom-nav-icon" />
+        <span>Audio</span>
       </Link>
 
       <a href="#" className={`bottom-nav-item ${menuOpen ? "active" : ""}`} onClick={handleProfileClick}>
@@ -215,7 +168,7 @@ const BottomNav = ({ openLoginModal }) => {
             <MdTrendingUp className="bottom-nav-menu-icon" /> Analytics
           </Link>
           <Link to="/leaderboard" className="bottom-nav-menu-item" onClick={() => setMenuOpen(false)}>
-            <FaMedal className="bottom-nav-menu-icon" /> Leaderboard
+            <FaMedal className="bottom-nav-menu-icon" /> Rankings
           </Link>
 
           <Link to={`/wallet/${user}`} className="bottom-nav-menu-item" onClick={() => setMenuOpen(false)}>

@@ -8,11 +8,10 @@
   align-items: center;
   justify-content: center;
 
-  // Chat moved to the centre item of the mobile bottom bar (BottomNav), so the
-  // top-bar button hides wherever that bar is shown (phone + tab, ≤1024px).
-  @media screen and (max-width: 1024px) {
-    display: none;
-  }
+  // Shown at every width. Chat used to be the centre item of the mobile bottom
+  // bar and this button hid below 1024px to avoid two of them; the bottom bar
+  // now carries Groups in that slot, so this is chat's entry point everywhere.
+  // The unread badge comes with it, which is why it is no longer mounted twice.
   background: transparent;
   border: none;
   cursor: pointer;

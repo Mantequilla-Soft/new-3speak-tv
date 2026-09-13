@@ -95,6 +95,17 @@ function EmbedStudioPage() {
 
     if (completed) {
       resetUploadState();
+      // resetUploadState() sets fromStories back to false, and this effect is
+      // declared AFTER the one that reads ?from= -- so on a mount where the
+      // previous upload had completed, the reset ran second and threw the mode
+      // away. Opening "Post a short" straight after finishing a video landed on
+      // "Share a Video", which read as the uploader ignoring the button.
+      //
+      // Re-derived from the URL rather than captured before the reset: the URL
+      // is the thing that actually says which uploader was asked for, and it
+      // cannot be stale by the time this runs.
+      const from = new URLSearchParams(window.location.search).get('from');
+      setFromStories(from === 'stories' || from === 'shorts');
     } else {
       setStep(1);
     }
