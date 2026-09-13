@@ -391,6 +391,7 @@
 }
 
 .welcome-skip,
+.welcome-back,
 .welcome-primary {
   padding: 11px 18px;
   font-size: 14px;
@@ -403,7 +404,8 @@
   &:disabled { opacity: 0.6; cursor: default; }
 }
 
-.welcome-skip {
+.welcome-skip,
+.welcome-back {
   background: transparent;
   color: var(--text-secondary, #aaa);
   border: 1px solid var(--border-color, #3d3d3d);
@@ -423,4 +425,119 @@
     background: var(--accent-hover, #ff1744);
     border-color: var(--accent-hover, #ff1744);
   }
+}
+
+/* Interests carried over from the warm-up. Chips rather than a fresh list: they
+   are already chosen, so the job here is confirming and adjusting, not picking
+   from scratch. */
+.welcome-interests {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.welcome-interests-label {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-muted);
+}
+
+.welcome-interests-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+  /* A long vocabulary must not push the save button off a short screen. */
+  max-height: 132px;
+  overflow-y: auto;
+}
+
+.welcome-interest {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 5px 11px;
+  border: 1px solid var(--border-color);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--text-secondary);
+  font: inherit;
+  font-size: 12.5px;
+  cursor: pointer;
+
+  &:hover:not(:disabled) {
+    border-color: var(--text-muted);
+    color: var(--text-primary);
+  }
+
+  &:disabled { opacity: 0.6; cursor: default; }
+
+  /* Selected reads as selected without shouting: an outline in the accent
+     rather than a block of it, since most of these will be on at once. */
+  &.is-on {
+    border-color: var(--accent-primary);
+    color: var(--accent-primary);
+    background: color-mix(in srgb, var(--accent-primary) 10%, transparent);
+  }
+}
+
+/* ------------------------------------------------- phone trims --- */
+
+/* Step one carries three blocks of guidance that are genuinely useful on a
+   desktop and simply push the buttons off a phone: the banner spec, the picture
+   spec, and the roomy gaps between fields. The CONTROLS are unchanged — only
+   the prose that explains them goes, since the pickers are self-evident once
+   tapped, and step one was 718px tall in a 780px viewport. */
+@include respond(phone) {
+  .welcome-cover-hint { display: none; }
+
+  /* Keep the "Profile picture" label; drop the pixel advice under it. */
+  .welcome-avatar-text span { display: none; }
+
+  .welcome-head {
+    h2 { font-size: 19px; }
+    p { font-size: 13px; }
+  }
+
+  .welcome-avatar-row { padding: 9px 11px; }
+
+  /* A 3-row bio is comfortable on a desktop and is the single tallest block on
+     a phone. Two rows still shows a short bio in full and is what finally puts
+     the whole step on screen without scrolling. */
+  .welcome-field textarea { min-height: 0; height: 4.4em; }
+
+  .welcome-field { margin-bottom: 10px; }
+}
+
+/* The intro step was the worst offender on a phone: six cards stacked one per
+   row, each with a sentence under its title, pushed the content to 937px in a
+   718px card — so "Set up my profile" sat off screen and the step looked like a
+   wall of text with no way forward.
+   Two columns, titles only. Six short labels scan faster than six sentences
+   nobody reads on a phone anyway, and the button comes back into view. */
+@include respond(phone) {
+  .welcome-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+
+  .welcome-card {
+    flex-direction: column;
+    gap: 6px;
+    padding: 10px;
+
+    /* Titles stay; the explanatory sentence goes. */
+    p { display: none; }
+
+    h4 { margin: 0; font-size: 12.5px; line-height: 1.3; }
+  }
+
+  .welcome-hero {
+    h2 { font-size: 21px; }
+    .welcome-wave { font-size: 26px; }
+  }
+
+  .welcome-hero-sub { font-size: 13px; }
+
+  /* The button underneath already says "Set up my profile". */
+  .welcome-note { display: none; }
 }

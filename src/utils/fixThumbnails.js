@@ -22,9 +22,24 @@ const PORTRAIT = { w: 360, h: 640 };
 const IPFS_PROXY_HOST = "https://ipfs-3speak.b-cdn.net";
 const IPFS_GATEWAY_RE = /^https?:\/\/(?:ipfs\.3speak\.tv|hotipfs-3speak-1\.b-cdn\.net|ipfs-3speak\.b-cdn\.net|ipfs-audio\.3speak\.tv)\/ipfs\/(.+)$/i;
 
+// Hosts Hive's resize proxy REFUSES. It answers 403 for images.3speak.tv, so
+// every image we host ourselves came back as a broken picture the moment it was
+// sent through the proxy -- badge avatars and covers among them, which is why a
+// badge with a perfectly good profile_image on chain showed nothing at all.
+//
+// These are already our own CDN and already web-sized, so there is nothing for
+// the proxy to do for them anyway.
+const PROXY_REFUSES = /^https?:\/\/(?:images|img)\.3speak\.tv\//i;
+
+/** True for an image URL images.hive.blog cannot fetch on our behalf. */
+export const hiveProxyRefuses = (url) => PROXY_REFUSES.test(String(url || ''));
+
 // Downscale any absolute image URL through Hive's resize proxy.
-const hiveProxy = (url, size) =>
-  `https://images.hive.blog/p/${bs58.encode(Buffer.from(url))}?format=jpeg&mode=cover&width=${size.w}&height=${size.h}`;
+const hiveProxy = (url, size) => (
+  PROXY_REFUSES.test(url)
+    ? url
+    : `https://images.hive.blog/p/${bs58.encode(Buffer.from(url))}?format=jpeg&mode=cover&width=${size.w}&height=${size.h}`
+);
 
 export function fixVideoThumbnail(video, portrait = false) {
   const size = portrait ? PORTRAIT : LANDSCAPE;
@@ -97,6 +112,15 @@ export function fixVideoThumbnail(video, portrait = false) {
   // ⚠️ media.3speak.tv doesn't exist anymore - use fallback
   if (cleanThumbnail.includes(APP_IMAGE_CDN_DOMAIN)) {
     return FALLBACK_THUMBNAIL;
+  }
+
+  // ⚠️ images.hive.blog's resize proxy 403s on OUR OWN image host too, exactly
+  // as it does on ecency's. Verified: proxying an images.3speak.tv URL returns
+  // 403, so every thumbnail routed through it rendered blank. Served directly
+  // instead — these are already thumbnail-sized webp written by the uploader,
+  // so there is nothing to downscale.
+  if (cleanThumbnail.includes("images.3speak.tv")) {
+    return cleanThumbnail;
   }
 
   // 🧠 Handle regular HTTP URLs with Hive proxy

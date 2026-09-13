@@ -1035,6 +1035,7 @@ function Thread({ conv }) {
 export default function ChatPage() {
   const { ready, connecting, activeConversation, openDmWith, shareDraft } = useChat()
   const authenticated = useAppStore((s) => s.authenticated)
+  const incubationHandle = useAppStore((s) => s.incubationHandle)
   const [searchParams, setSearchParams] = useSearchParams()
 
   // Deep link: /chat?dm=<username> (e.g. the "Write message" profile button)
@@ -1047,6 +1048,28 @@ export default function ChatPage() {
     next.delete('dm')
     setSearchParams(next, { replace: true })
   }, [ready, searchParams, openDmWith, setSearchParams])
+
+  // Checked before the logged-out gate, because a warm-up user IS logged in and
+  // would otherwise fall through to the chat client and fail on a signing step
+  // they can never satisfy. The entry points are hidden for them; this is what a
+  // typed URL or an old link lands on.
+  if (incubationHandle) {
+    return (
+      <div className="chat-page">
+        <div className="chat-gate">
+          <div className="chat-gate-icon">
+            <MessageCirclePlus size={44} />
+          </div>
+          <h3>Chat needs a Hive account</h3>
+          <p>
+            Messages are signed with your own account keys, so chat unlocks along
+            with everything else once your account is ready. Finish the goals on
+            your profile and the team will get you there.
+          </p>
+        </div>
+      </div>
+    )
+  }
 
   if (!authenticated) {
     return (

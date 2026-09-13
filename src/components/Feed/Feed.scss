@@ -1,4 +1,10 @@
 
+// /home-feed renders the SAME Card3 component as the main grid, so it inherits
+// --card-fs / --card-icon-fs from Cards.scss. The rules below are a second copy
+// of the card styles at equal specificity (4 classes), which means source order
+// decided the winner — that is how this route kept a 10px duration and a 14px
+// title after the grid had been unified. They read the tokens now; the
+// fallbacks only matter if this stylesheet ever loads without Cards.scss.
 .feed {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
@@ -27,7 +33,7 @@
         backdrop-filter: blur(10px);
         color: #fff;
         p {
-          font-size: 13px;
+          font-size: var(--card-fs, 12px);
         }
       }
     }
@@ -48,7 +54,7 @@
           border-radius: 50%;
         }
         span {
-          font-size: 12px;
+          font-size: var(--card-fs, 12px);
         }
       }
 
@@ -56,7 +62,7 @@
         position: absolute;
         top: 4%;
         right: 1%;
-        font-size: 10px;
+        font-size: var(--card-duration-fs, 10px);
         padding: 3px 7px;
         border-radius: 12px;
         color: black;
@@ -65,19 +71,19 @@
     }
 
     h2 {
-      font-size: 14px;
-      font-weight: 600;
+      font-size: var(--card-fs, 12px);
+      font-weight: 700;
       color: #000;
       margin: 5px 0;
     }
     h3 {
-      font-size: 14px;
-      font-weight: 600;
+      font-size: var(--card-fs, 12px);
+      font-weight: 400;
       color: #555;
       margin: 6px 0;
     }
     p {
-      font-size: 14px;
+      font-size: var(--card-fs, 12px);
     }
 
     .bottom-action {
@@ -91,11 +97,11 @@
         display: flex;
         align-items: center;
         gap: 7px;
-        font-size: 14px;
+        font-size: var(--card-fs, 12px);
         .flex-div {
           gap: 3px;
           .icon {
-            font-size: 17px;
+            font-size: var(--card-icon-fs, 14px);
             &:hover {
               color: red;
             }

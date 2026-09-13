@@ -10,13 +10,19 @@ import { WATCH_HISTORY_THRESHOLD_DAYS } from '../utils/config';
  */
 export function useWatchHistory(videos) {
   const { user } = useAppStore();
+  // Watch history is 3Speak's own store, keyed by a name -- not a chain record.
+  // A handle is a perfectly good key, and gating on `user` alone meant an
+  // incubating viewer's history was never read, so "hide watched" quietly did
+  // nothing for them and Discover kept showing videos they had just seen.
+  const incubationHandle = useAppStore((s) => s.incubationHandle);
+  const historyUser = user || incubationHandle;
   const watchedDataRef = useRef(new Map());
   const [version, setVersion] = useState(0);
   const [loading, setLoading] = useState(false);
   const fetchedRef = useRef(new Set());
 
   useEffect(() => {
-    if (!user || !videos || videos.length === 0) {
+    if (!historyUser || !videos || videos.length === 0) {
       return;
     }
 
@@ -57,7 +63,7 @@ export function useWatchHistory(videos) {
       });
 
       try {
-        const results = await batchCheckWatched(user, postsToFetch);
+        const results = await batchCheckWatched(historyUser, postsToFetch);
 
         // Merge new results with existing data in ref
         results.forEach((value, key) => {
@@ -74,14 +80,14 @@ export function useWatchHistory(videos) {
     };
 
     fetchWatchHistory();
-  }, [videos, user]);
+  }, [videos, historyUser]);
 
   // Helper function to check if a video was watched
   const isWatched = useCallback((author, permlink) => {
-    if (!user) return null; // null = unknown (not logged in)
+    if (!historyUser) return null; // null = unknown (nobody is signed in)
     const key = `${author}/${permlink}`;
     return watchedDataRef.current.has(key);
-  }, [user]);
+  }, [historyUser]);
 
   // Helper function to get watch data for a video
   const getWatchData = useCallback((author, permlink) => {

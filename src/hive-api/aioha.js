@@ -118,6 +118,56 @@ export const VIEWER_TAG_CJ_ID = '3speak-viewer-tag';
 // Helper function to vote on content. When `viewerTag` is supplied, the vote and
 // a `3speak-viewer-tag` custom_json are broadcast together as ONE transaction
 // (both posting-auth ops), so the tag choice is atomic with the vote — one signature.
+
+// ---------------------------------------------------------------------------
+// Incubating users: no Hive account, so nothing can be signed or broadcast.
+//
+// Intercepted HERE, at the one place every vote and every posting broadcast
+// already passes through, rather than at each button. There are three vote
+// entry points and six follow ones today, and wiring them individually would
+// mean the next one someone adds silently tries to sign as an account that does
+// not exist. A choke point cannot be forgotten.
+//
+// Only the operations that HAVE an off-chain equivalent are diverted. Anything
+// else falls through to the normal path and fails as it should: an incubating
+// user genuinely cannot transfer funds or update a witness.
+// ---------------------------------------------------------------------------
+const incubatingHandle = () => {
+  try { return localStorage.getItem('incubation_handle') || null; } catch { return null; }
+};
+
+// Lazily imported so the aioha module keeps no static dependency on the
+// incubation client (and the code is absent from bundles that never need it).
+const incubationApi = () => import('../lib/incubation');
+
+/**
+ * Divert one posting operation to the off-chain store, or return null if this
+ * operation has no off-chain equivalent.
+ */
+async function divertToIncubation([opType, opData]) {
+  const api = await incubationApi();
+  if (opType === 'vote') {
+    await api.voteIncubation(opData.author, opData.permlink, opData.weight);
+    return { success: true, incubation: true };
+  }
+  if (opType === 'custom_json' && opData?.id === 'follow') {
+    // Hive models follow and unfollow as the same op, distinguished by whether
+    // what[] is empty. The off-chain store keeps the same distinction so the
+    // replay at graduation reproduces the user's END state.
+    const payload = JSON.parse(opData.json);
+    const body = Array.isArray(payload) ? payload[1] : payload;
+    const state = (body.what || []).length ? 'following' : 'unfollowed';
+    await api.followIncubation(body.following, state);
+    return { success: true, incubation: true };
+  }
+  if (opType === 'account_update2') {
+    const meta = JSON.parse(opData.posting_json_metadata || '{}');
+    await api.saveIncubationProfile(meta.profile || {}, meta.profile?.interests);
+    return { success: true, incubation: true };
+  }
+  return null;
+}
+
 export const voteWithAioha = async (author, permlink, weight = 10000, viewerTag = null) => {
   const tag = viewerTag ? String(viewerTag).trim().toLowerCase() : null;
 
@@ -136,6 +186,14 @@ export const voteWithAioha = async (author, permlink, weight = 10000, viewerTag 
     return ops;
   };
 
+  // No Hive account: the vote is recorded off-chain instead. The viewer tag is
+  // dropped on purpose — it is an on-chain custom_json about an on-chain vote,
+  // and there is no vote on chain to tag.
+  if (incubatingHandle()) {
+    const { voteIncubation } = await import('../lib/incubation');
+    await voteIncubation(author, permlink, weight);
+    return { success: true, incubation: true };
+  }
   if (isManteAuthLogin()) {
     const voter = localStorage.getItem('user_id')
     return broadcastViaManteAuth(buildOps(voter))
@@ -225,8 +283,66 @@ export const transferWithAioha = async (to, amount, currency, memo = '') => {
   }, 'Approve transfer on HiveAuth...');
 };
 
+/**
+ * Award (or withdraw) a badge by making the BADGE account follow someone.
+ *
+ * A badge is a Hive account and its FOLLOWING list is the roll of who holds it,
+ * so awarding is a follow whose follower is the badge rather than the person
+ * pressing the button. That is signable without ever logging in as the badge:
+ * whoever created it is in its posting authority, so their own posting key
+ * satisfies `required_posting_auths: [badgeAccount]`.
+ *
+ * ⚠️ NOT usable by an incubating user, and it does not silently divert to the
+ * off-chain store like followWithAioha does: a badge is an on-chain account and
+ * an off-chain "follow" from it would award nothing to anybody.
+ */
+export const awardBadgeWithAioha = async (badgeAccount, target, award = true) => {
+  if (incubatingHandle()) {
+    throw new Error('Badges are awarded from a Hive account. Yours is still being set up.');
+  }
+  const json = JSON.stringify(['follow', {
+    follower: badgeAccount,
+    following: target,
+    what: award ? ['blog'] : [],
+  }]);
+  const ops = [['custom_json', {
+    required_auths: [],
+    // The BADGE authorises this, not the signer. Hive resolves the signer's own
+    // posting authority through the badge's account_auths.
+    required_posting_auths: [badgeAccount],
+    id: 'follow',
+    json,
+  }]];
+
+  if (isManteAuthLogin()) return broadcastViaManteAuth(ops);
+  if (usesThreespeakProxy()) {
+    try {
+      return await broadcastViaThreespeak(ops);
+    } catch (e) {
+      if (!isNotGrantedError(e)) throw e; // not granted → sign it client-side below
+    }
+  }
+  return withHiveAuthWaiting(
+    () => broadcastWithAioha(ops, KeyTypes.Posting),
+    'Approve the badge award on HiveAuth...',
+  );
+};
+
 // Helper function to follow/unfollow a user
 export const followWithAioha = async (target, follow = true) => {
+  // No Hive account: the follow is recorded off-chain, like the vote and the
+  // comment above. Without this it fell through to the ButrAuth branch, which
+  // reads `user_id` -- null while incubating -- and broadcast a custom_json with
+  // required_posting_auths: [null]. That is refused, and the refusal surfaced as
+  // "Follow action failed: Unauthorized".
+  //
+  // It also made "follow 10 creators" impossible to satisfy, since nothing was
+  // ever stored to count.
+  if (incubatingHandle()) {
+    const { followIncubation } = await import('../lib/incubation');
+    await followIncubation(target, follow ? 'following' : 'unfollowed');
+    return { success: true, incubation: true };
+  }
   if (isManteAuthLogin()) {
     const follower = localStorage.getItem('user_id')
     const json = JSON.stringify(['follow', {
@@ -318,6 +434,33 @@ export const customJsonWithAioha = async (keyType, id, json, displayTitle = '') 
 
 // Helper function to post a comment
 export const commentWithAioha = async (parentAuthor, parentPermlink, permlink, title, body, jsonMetadata = {}, options = null) => {
+  // No Hive account: store it off-chain instead of signing as an author who
+  // does not exist. This is the same divert applied to votes and broadcasts,
+  // and it belongs here too — commentWithAioha is a SEPARATE path used by
+  // uploads, snaps, reactions and edits, so leaving it out meant every one of
+  // those still tried to publish for a nonexistent account.
+  //
+  // comment_options is dropped: it sets beneficiaries and payout terms on a
+  // post that has no payout, and it would be meaningless to replay against the
+  // reward window of whenever the user eventually publishes.
+  if (incubatingHandle()) {
+    const { postIncubationContent } = await import('../lib/incubation');
+    const res = await postIncubationContent({
+      title,
+      body,
+      // The SAME permlink the on-chain post would have used. A 3Speak video
+      // resolves its play source from the post's author/permlink, which only
+      // works because the uploader gives the post and the embed asset the same
+      // one. Letting the store invent its own broke playback now, and would
+      // have broken it again on the post replayed at graduation.
+      permlink,
+      parentAuthor: parentAuthor || '',
+      parentPermlink: parentPermlink || '',
+      jsonMetadata: jsonMetadata || {},
+      videoId: jsonMetadata?.video?.info?.permlink || jsonMetadata?.videoId || null
+    });
+    return { success: true, incubation: true, permlink: res.permlink };
+  }
   if (isManteAuthLogin()) {
     const author = localStorage.getItem('user_id')
     const ops = [['comment', {
@@ -366,6 +509,13 @@ export const commentWithAioha = async (parentAuthor, parentPermlink, permlink, t
 // Generic broadcast for raw operations
 // ManteAuth only supports posting-level ops — active key ops (transfers, etc.) will fail
 export const broadcastWithAioha = async (operations, keyType = KeyTypes.Active) => {
+  // Single-op posting broadcasts with an off-chain equivalent (follow, profile)
+  // are diverted. Multi-op transactions are deliberately NOT: they are atomic on
+  // chain, and half-applying one off-chain would be worse than refusing.
+  if (incubatingHandle() && keyType === KeyTypes.Posting && operations?.length === 1) {
+    const diverted = await divertToIncubation(operations[0]);
+    if (diverted) return diverted;
+  }
   if (isManteAuthLogin() && keyType === KeyTypes.Posting) {
     return broadcastViaManteAuth(operations)
   }

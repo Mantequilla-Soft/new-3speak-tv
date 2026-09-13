@@ -41,6 +41,9 @@ const VIEWS_URL = CHECKER_URL;
 const MY_VIDEOS_URL = CHECKER_URL;
 const TRENDING_SORTED_URL = `${CHECKER_URL}/feeds/trendingSorted`;
 const FOLLOW_FEED_URL = `${CHECKER_URL}/feed`;
+// Hive badge accounts: directory, one badge's profile, its recipients, and the
+// feed of videos by those recipients. See routes/badges.js in the checker.
+const BADGES_URL = `${CHECKER_URL}/badges`;
 // Discovery feed: interest + retention driven, ignores votes/views entirely.
 const DISCOVER_FEED_URL = `${CHECKER_URL}/feeds/discover`;
 // Dedicated interests feed. It has its OWN topic-stratified pool — the old
@@ -325,6 +328,7 @@ export {
   TRANSLATE_API_URL,
   TRENDING_SORTED_URL,
   FOLLOW_FEED_URL,
+  BADGES_URL,
   DISCOVER_FEED_URL,
   INTERESTS_FEED_URL,
   SUGGESTED_CREATORS_URL,

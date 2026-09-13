@@ -1,0 +1,298 @@
+@use "../../mixins.scss" as *;
+
+// Deliberately the same skeleton as CommunityPage.scss: header, tab bar, grid +
+// 20% sidebar, stats card. A badge page and a community page are the same kind
+// of page, so they should not look like two different products.
+.badge-page-wrap {
+  // Header is rendered by the shared <ProfileHeader> component.
+
+  .badge-sub-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+
+    &:disabled { opacity: 0.6; cursor: default; }
+  }
+
+  // Two rendered copies of the stats card - CSS decides which shows:
+  //   .badge-intro above the tabs on phones, .badge-side beside the grid on desktop.
+  .badge-intro { display: none; }
+  @include respond(phone) {
+    .badge-intro {
+      display: block;
+      margin: 12px 4px 4px;
+
+      // Same card, laid out as a 2x2 strip rather than the sidebar's vertical
+      // list: four stacked rows pushed the first video row off the screen.
+      .badge-kpis {
+        flex-direction: row;
+        flex-wrap: wrap;
+        gap: 0;
+        padding: 8px 4px;
+
+        .badge-kpi {
+          flex: 1 1 42%;
+          min-width: 0;
+          padding: 6px 8px;
+
+          & + .badge-kpi { border-top: none; }
+        }
+      }
+    }
+  }
+
+  // --- Videos / Recipients tab bar (mirrors .community-tabs) ----------------
+  .badge-tabs {
+    display: flex;
+    gap: 2px;
+    margin: 16px 0 4px;
+    border-bottom: 1px solid var(--border-light, rgba(255, 255, 255, 0.1));
+
+    .badge-tab {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      flex: 0 0 auto;
+      padding: 9px 14px;
+      border: none;
+      background: transparent;
+      color: var(--text-secondary, #888);
+      font-size: 13.5px;
+      font-weight: 600;
+      white-space: nowrap;
+      cursor: pointer;
+      border-bottom: 2px solid transparent;
+      margin-bottom: -1px; // sit on top of the container's bottom border
+      user-select: none;
+      transition: color 0.12s ease, border-color 0.12s ease;
+
+      .badge-tab-icon { display: inline-flex; opacity: 0.9; }
+
+      &:hover { color: var(--text-primary, #f1f1f1); }
+
+      &.active {
+        color: var(--text-primary, #f1f1f1);
+        border-bottom-color: var(--accent-primary, #e0594b);
+      }
+    }
+
+    @include respond(phone) {
+      .badge-tab { padding: 8px 12px; font-size: 13px; }
+    }
+  }
+
+  // --- Body: grid + sidebar -------------------------------------------------
+  .badge-body {
+    display: flex;
+    align-items: flex-start;
+    gap: 20px;
+    margin-top: 4px;
+
+    .badge-feed {
+      flex: 1 1 auto;
+      min-width: 0;
+    }
+
+    .badge-feed .card-container { margin-top: 12px; }
+
+    .badge-side {
+      flex: 0 0 20%;
+      min-width: 220px;
+      max-width: 320px;
+      position: sticky;
+      top: calc(var(--nav-height, 56px) + 12px);
+      max-height: calc(100vh - var(--nav-height, 56px) - 24px);
+      overflow-y: auto;
+      scrollbar-width: thin;
+      padding-bottom: 28px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    @include respond(phone) {
+      .badge-side { display: none; }
+    }
+  }
+
+  // --- Stats card -----------------------------------------------------------
+  .badge-kpis {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding: 12px;
+    border: 1px solid var(--border-light, rgba(150, 150, 150, 0.18));
+    border-radius: 12px;
+    background: var(--bg-secondary, rgba(150, 150, 150, 0.06));
+
+    .badge-kpi {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 7px 4px;
+
+      & + .badge-kpi {
+        border-top: 1px solid var(--border-light, rgba(150, 150, 150, 0.12));
+      }
+
+      .badge-kpi-icon {
+        display: inline-flex;
+        color: var(--accent-primary, #e53935);
+        flex: 0 0 auto;
+      }
+
+      .badge-kpi-text {
+        display: flex;
+        flex-direction: column;
+        line-height: 1.2;
+        min-width: 0;
+      }
+
+      .badge-kpi-value {
+        font-size: 15px;
+        font-weight: 700;
+        color: var(--text-primary, #f1f1f1);
+      }
+
+      .badge-kpi-label {
+        font-size: 11.5px;
+        color: var(--text-secondary, #888);
+      }
+    }
+
+    @include respond(phone) {
+      padding: 10px;
+      .badge-kpi { padding: 6px 2px; gap: 8px; }
+    }
+  }
+
+  // --- Issuer / links -------------------------------------------------------
+  .badge-meta {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    font-size: 12.5px;
+    color: var(--text-secondary, #888);
+
+    .badge-meta-row {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      min-width: 0;
+
+      a {
+        color: var(--text-primary, #f1f1f1);
+        text-decoration: none;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+
+        &:hover { text-decoration: underline; }
+      }
+    }
+  }
+
+  // --- Recipients tab -------------------------------------------------------
+  .badge-recipients-summary {
+    margin: 14px 4px 10px;
+    font-size: 13px;
+    color: var(--text-secondary, #888);
+  }
+
+  .badge-recipients-loading {
+    margin: 16px 4px;
+    color: var(--text-secondary, #888);
+  }
+
+  .badge-recipients {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 10px;
+
+    @include respond(phone) {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .badge-recipient {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 12px;
+    border: 1px solid var(--border-light, rgba(150, 150, 150, 0.18));
+    border-radius: 12px;
+    background: var(--bg-secondary, rgba(150, 150, 150, 0.06));
+    text-decoration: none;
+    color: inherit;
+    transition: border-color 0.12s ease, background 0.12s ease;
+
+    &:hover {
+      border-color: var(--accent-primary, #e0594b);
+      background: var(--bg-hover, rgba(150, 150, 150, 0.12));
+    }
+
+    .badge-recipient-avatar img {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      object-fit: cover;
+    }
+
+    .badge-recipient-text {
+      display: flex;
+      flex-direction: column;
+      line-height: 1.25;
+      min-width: 0;
+      flex: 1 1 auto;
+    }
+
+    .badge-recipient-name {
+      font-size: 13.5px;
+      font-weight: 600;
+      color: var(--text-primary, #f1f1f1);
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .badge-recipient-handle {
+      font-size: 11.5px;
+      color: var(--text-secondary, #888);
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .badge-recipient-count {
+      flex: 0 0 auto;
+      font-size: 11.5px;
+      font-weight: 600;
+      color: var(--text-secondary, #888);
+    }
+  }
+
+  // --- Empty states ---------------------------------------------------------
+  .badge-empty {
+    text-align: center;
+    padding: 48px 16px;
+    color: var(--text-secondary, #888);
+
+    h2 {
+      margin: 0 0 8px;
+      font-size: 18px;
+      color: var(--text-primary, #f1f1f1);
+    }
+
+    p { margin: 0; font-size: 13.5px; }
+
+    .badge-empty-link {
+      display: inline-block;
+      margin-top: 14px;
+      color: var(--accent-primary, #e0594b);
+      font-weight: 600;
+      text-decoration: none;
+
+      &:hover { text-decoration: underline; }
+    }
+  }
+}

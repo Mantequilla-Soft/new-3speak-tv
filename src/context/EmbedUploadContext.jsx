@@ -91,7 +91,18 @@ export function useEmbedUpload() {
 }
 
 export function EmbedUploadProvider({ children }) {
-  const { user } = useAppStore();
+  const { user, incubationHandle } = useAppStore();
+  // Who the uploaded ASSET belongs to.
+  //
+  // embed-video keys assets by a plain owner string and creates the row from it
+  // on first upload — it never checks the name against Hive — so an incubating
+  // user can own assets under their handle. Graduation rewrites these to the
+  // real account (see /backfill/claim-assets).
+  //
+  // Deliberately NOT used for `username:` below: those feed beneficiary and Pro
+  // calculations, which are Hive payout concepts. A post with no payout has no
+  // beneficiaries, and passing a handle there would invent a payee.
+  const assetOwner = user || incubationHandle;
   const navigate = useNavigate();
   // Pro subscribers skip the threespeakfund 10% — their sub fee
   // covers what that split normally funds. Remix attribution to the
@@ -489,7 +500,7 @@ export function EmbedUploadProvider({ children }) {
       const tokenRes = await axios.post(
         `${tokenBase}/uploads/token`,
         {
-          owner: user,
+          owner: assetOwner,
           frontend_app: '3speak-tv',
           short: !!fromStories,
           gated: !!gated,
@@ -593,7 +604,7 @@ export function EmbedUploadProvider({ children }) {
         filename: videoFile.name,
         filetype: videoFile.type,
         frontend_app: '3speak-tv',
-        owner: user,
+        owner: assetOwner,
         short: fromStories ? 'true' : 'false',
         duration: String(Math.round(videoDuration)),
         ...(generatedPermlink ? { permlink: generatedPermlink } : {}),
@@ -905,7 +916,7 @@ export function EmbedUploadProvider({ children }) {
       chunkSize = await measureChunkSize();
       const tokenRes = await axios.post(
         `${base}/uploads/token`,
-        { owner: user, frontend_app: '3speak-tv', short: !!fromStories, gated: !!gated, defer_encode: true, ...(gated && gatedAllowlist.length ? { allowlist: gatedAllowlist } : {}) },
+        { owner: assetOwner, frontend_app: '3speak-tv', short: !!fromStories, gated: !!gated, defer_encode: true, ...(gated && gatedAllowlist.length ? { allowlist: gatedAllowlist } : {}) },
         { headers: { 'X-API-Key': EMBED_API_KEY, 'Content-Type': 'application/json' } }
       );
       const token = tokenRes.data?.token;
@@ -1204,7 +1215,7 @@ export function EmbedUploadProvider({ children }) {
 
     const tokenRes = await axios.post(
       `${base}/uploads/token`,
-      { owner: user, frontend_app: '3speak-tv', short: !!fromStories, gated: !!gated, defer_encode: true, ...(gated && gatedAllowlist.length ? { allowlist: gatedAllowlist } : {}) },
+      { owner: assetOwner, frontend_app: '3speak-tv', short: !!fromStories, gated: !!gated, defer_encode: true, ...(gated && gatedAllowlist.length ? { allowlist: gatedAllowlist } : {}) },
       { headers: { 'X-API-Key': EMBED_API_KEY, 'Content-Type': 'application/json' } },
     );
     const token = tokenRes.data?.token;
@@ -1381,7 +1392,11 @@ export function EmbedUploadProvider({ children }) {
    * 3. Link embed video to Hive post
    */
   const publishToEmbed = async () => {
-    if (!user) {
+    // `assetOwner` is the Hive account when there is one and the incubation
+    // handle otherwise. Guarding on `user` alone refused every incubating
+    // uploader with "User not logged in", which is not what had happened: they
+    // are logged in, they simply have no Hive account yet.
+    if (!assetOwner) {
       toast.error('User not logged in');
       return;
     }
@@ -1416,7 +1431,10 @@ export function EmbedUploadProvider({ children }) {
     // Backstop upload gate: blocks "Post Video/Short" for creators with
     // canUpload === false, even if they reached /embed-studio directly (bypassing
     // the upload-button gate). Fails open if the check errors.
-    if (isUploadBlocked(await getCreatorSettings(user))) {
+    // Only meaningful for a Hive account: creator settings are stored against
+    // one, so for an incubating user this would look up `null` and the result
+    // would say nothing about them either way.
+    if (user && isUploadBlocked(await getCreatorSettings(user))) {
       useSupportBlock.getState().showSupportBlock('upload');
       return;
     }
@@ -1599,7 +1617,24 @@ export function EmbedUploadProvider({ children }) {
       addMessage('Publishing to Hive blockchain...');
 
       // ─── Step 2: Post to Hive via aioha ───
-      const hivePermlink = generatedPermlink;
+      // Normally the app's generated permlink, which a Hive upload also hands to
+      // the embed asset -- and a 3Speak video resolves its play source from the
+      // post's author/permlink, so the two matching is what makes playback work
+      // at all.
+      //
+      // An INCUBATING upload does not get that for free: its asset is created
+      // without a Hive owner and keeps a server-generated id, so the post and
+      // the asset diverged and the player found nothing. Take the asset's id as
+      // the post permlink, which is the invariant a Hive upload satisfies by
+      // accident. It has to hold at graduation too, when this row is replayed
+      // on chain and has to resolve the same way.
+      let hivePermlink = generatedPermlink;
+      if (incubationHandle) {
+        try {
+          const assetId = (new URL(capturedEmbedUrl).searchParams.get('v') || '').split('/')[1];
+          if (assetId) hivePermlink = assetId;
+        } catch { /* no parseable embed URL: keep the generated permlink */ }
+      }
       const communityTag = typeof community === 'string' ? community : community?.name || 'hive-181335';
 
       // Build body: embed URL (video first) + description + credit to original author
@@ -1637,7 +1672,10 @@ export function EmbedUploadProvider({ children }) {
 
       // Embed ASSET owner/permlink (…/embed?v=owner/permlink) — this is what the
       // `video.info` block below carries so peakd/ecency render the player.
-      let embedOwner = user;
+      // assetOwner, not user: normally this is overwritten from the embed URL
+      // below, but the fallback ran with `null` for an incubating uploader and
+      // would have written video.info.author = null into the post metadata.
+      let embedOwner = assetOwner;
       let embedAssetPermlink = hivePermlink;
       try {
         const vParam = new URL(capturedEmbedUrl).searchParams.get('v') || '';
@@ -1835,7 +1873,7 @@ export function EmbedUploadProvider({ children }) {
           setStatusText('Saving scheduled post...');
           addMessage('Saving scheduled post...');
           const resp = await axios.post(url, {
-            owner: user,
+            owner: assetOwner,
             permlink: hivePermlink,
             scheduledOn: scheduledOnIso,
             title,
@@ -1888,7 +1926,11 @@ export function EmbedUploadProvider({ children }) {
 
       let result;
 
-      if (originalAuthor && originalPermlink && !fromStories) {
+      // Not for an incubating user: the dual post is two ops in ONE transaction,
+      // which is atomic on chain and which the off-chain path deliberately will
+      // not half-apply. They get the single post; the "I remixed this" reply is
+      // a courtesy notification, not the upload itself.
+      if (originalAuthor && originalPermlink && !fromStories && !incubationHandle) {
         // Dual post (non-short remix): video post + comment on original video
         addMessage('Creating post and comment on original video...');
 
@@ -1968,7 +2010,10 @@ export function EmbedUploadProvider({ children }) {
       const embedApiBase = chosenEmbedBaseRef.current || EMBED_API_URL;
 
       try {
-        if (embedPermlink && embedApiBase) {
+        // Skipped when the post went off-chain: there is no Hive post to point
+        // at, and sending hive_author: null would write a broken association
+        // that the graduation replay would then have to unpick.
+        if (embedPermlink && embedApiBase && !result.incubation) {
           await fetch(`${embedApiBase}/video/${embedPermlink}/hive`, {
             method: 'POST',
             headers: {

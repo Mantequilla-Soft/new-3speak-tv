@@ -14,6 +14,7 @@ import { getFeedSeed, refreshHomeFeeds } from "../utils/feedSeed";
 import ShortsStories from "../components/ShortsStories/ShortsStories";
 import NewFromFollowing from "../components/NewFromFollowing/NewFromFollowing";
 import SuggestedCreators from "../components/SuggestedCreators/SuggestedCreators";
+import NewOn3SpeakRail from "../components/Incubation/NewOn3SpeakRail";
 import { useLiveStreams } from "../hooks/useLiveStreams";
 import PullToRefresh from "../components/PullToRefresh/PullToRefresh";
 import ShortsRow from "../components/ShortsRow/ShortsRow";
@@ -593,7 +594,16 @@ const HomeGrouped = () => {
   // case the empty `.card-interleave` wrapper collapses to zero height.
   const renderCreatorsRow = useCallback((slot) => {
     if (slot !== 0) return null;
-    return <SuggestedCreators variant={activeSection?.key} perRow={creatorsPerRow} />;
+    return (
+      <>
+        <SuggestedCreators variant={activeSection?.key} perRow={creatorsPerRow} />
+        {/* People with no Hive account yet, in their own labelled rail rather
+            than mixed into the ranked feed — they have no votes or views to
+            rank on, and this content has not been through the same gates. It
+            renders nothing when there is nothing to show. */}
+        <NewOn3SpeakRail />
+      </>
+    );
   }, [activeSection?.key, creatorsPerRow]);
 
   const { getContentForVideo } = useContentBatch(visibleVideos);

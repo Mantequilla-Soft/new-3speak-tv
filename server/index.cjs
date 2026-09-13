@@ -10,6 +10,12 @@ const { Client, PrivateKey, PublicKey, Signature, cryptoUtils } = require('@hive
 
 // ButrAuth SDK is ESM-only — load via dynamic import at startup.
 let butr = null
+// Same for the incubation client, and it is NOT optional to do it this way:
+// this file is CJS and runs under /usr/bin/node v18, which cannot require() an
+// ES module at all (ERR_REQUIRE_ESM). A plain require would not fail on the
+// first incubation request, it would refuse to start the whole API.
+let inc = null
+let IncubationErrorClass = null
 async function initButrAuth() {
   const { ButrAuthClient } = await import('@mantequilla-soft/butrauth-client')
   butr = new ButrAuthClient({
@@ -18,6 +24,19 @@ async function initButrAuth() {
     clientSecret: MANTEAUTH_CLIENT_SECRET
   })
   console.log('[INFO] ButrAuth SDK initialised')
+
+  const { IncubationClient, IncubationError } = await import('@mantequilla-soft/incubation-client')
+  IncubationErrorClass = IncubationError
+  inc = new IncubationClient({
+    baseUrl: INCUBATION_URL,
+    // Only used for the app-asserted Hive actor: a wallet login holds no
+    // ButrAuth token, so the app vouches for them with the same credentials it
+    // already uses to broadcast on their behalf.
+    clientId: MANTEAUTH_CLIENT_ID,
+    clientSecret: MANTEAUTH_CLIENT_SECRET,
+    timeoutMs: 15000
+  })
+  console.log('[INFO] Incubation SDK initialised')
 }
 
 const app = express()
@@ -105,6 +124,16 @@ const exchangeLimiter = rateLimit({
   legacyHeaders: false,
   message: { error: 'Too many requests' }
 })
+// Incubation writes are cheap (a Mongo insert, no chain broadcast) so this sits
+// above the broadcast budget, but it is still a write path on someone else's
+// service and should not be a free firehose.
+const incubationLimiter = rateLimit({
+  windowMs: 60 * 1000,
+  max: 60,
+  standardHeaders: true,
+  legacyHeaders: false,
+  message: { error: 'Too many requests' }
+})
 const broadcastLimiter = rateLimit({
   windowMs: 60 * 1000,
   max: 30,
@@ -118,7 +147,30 @@ const broadcastLimiter = rateLimit({
 async function verifyManteAuthToken(token) {
   if (!butr) return null
   try {
-    return await butr.verifyAccessToken(token)
+    const claims = await butr.verifyAccessToken(token)
+
+    // The PUBLISHED SDK (0.2.0) predates incubation and does not copy these two
+    // claims into what it returns, so every caller saw `incubation: undefined`
+    // and concluded the session belonged to a Hive account — which turned every
+    // incubating write into "this account is on Hive, publish to the chain".
+    //
+    // Read them off the SAME token, and only AFTER verifyAccessToken has
+    // resolved: that call is what proves the signature, expiry, issuer and
+    // audience. Decoding beforehand would be trusting unverified input;
+    // decoding after it means the payload is exactly what butrauth signed.
+    //
+    // Delete this once the published SDK carries the fields.
+    if (claims && claims.incubation === undefined) {
+      try {
+        const payload = JSON.parse(Buffer.from(token.split('.')[1], 'base64url').toString('utf8'))
+        claims.incubation = !!payload.incubation
+        claims.handle = payload.handle || null
+      } catch {
+        claims.incubation = false
+        claims.handle = null
+      }
+    }
+    return claims
   } catch {
     return null
   }
@@ -205,6 +257,7 @@ async function resolveButrUser(req, res) {
   try {
     const { ok, data } = await butrTokenRequest({ grant_type: 'refresh_token', refresh_token: refreshToken })
     if (!ok || !data.access_token) {
+      console.warn('[incubation] refresh refused:', data?.error || 'no access_token in response')
       // Refused (expired, revoked, or a detected replay) — drop both cookies so
       // the user is cleanly logged out instead of retrying a dead token forever.
       clearRefreshCookie(res)
@@ -359,6 +412,31 @@ async function verifySiwhSignature(username, challenge, signature) {
 // metadata, e.g. a user's 3Speak interests) — broadcastAsThreespeak enforces
 // that it carries no owner/active/posting/memo_key or json_metadata, so posting
 // authority is sufficient and it can never touch keys or active-auth metadata.
+// Does `user` hold posting authority over `account`, per the chain?
+//
+// Cached briefly: a broadcast should not cost an extra account read every time,
+// but authority that has been REVOKED must stop working quickly, so the window
+// is seconds rather than minutes.
+const POSTING_AUTHORITY_TTL_MS = 30 * 1000
+const postingAuthorityCache = new Map()
+
+async function hasPostingAuthorityOver(user, account) {
+  const key = `${user}/${account}`
+  const hit = postingAuthorityCache.get(key)
+  if (hit && Date.now() - hit.at < POSTING_AUTHORITY_TTL_MS) return hit.ok
+  let ok = false
+  try {
+    const [acct] = await client.database.getAccounts([account])
+    ok = !!acct && (acct.posting?.account_auths || []).some(([who]) => who === user)
+  } catch (err) {
+    // Fail CLOSED: an unreadable account is not permission.
+    console.error('[authority] check failed:', err.message)
+    ok = false
+  }
+  postingAuthorityCache.set(key, { ok, at: Date.now() })
+  return ok
+}
+
 const ALLOWED_OPS = ['vote', 'comment', 'delete_comment', 'comment_options', 'custom_json', 'claim_reward_balance', 'account_update2']
 
 const ALLOWED_CUSTOM_JSON_IDS = new Set([
@@ -404,7 +482,7 @@ const OP_USER_FIELD = {
 // =====================================================================
 app.post('/api/manteauth/start', baseLimiter, (req, res) => {
   try {
-    const { redirect_uri, state, signup } = req.body
+    const { redirect_uri, state, signup, graduate, changeHandle } = req.body
     if (!redirect_uri || typeof redirect_uri !== 'string') {
       return res.status(400).json({ error: 'Invalid request' })
     }
@@ -419,8 +497,20 @@ app.post('/api/manteauth/start', baseLimiter, (req, res) => {
     })
     setPkceCookie(res, codeVerifier)
 
-    // signup:true → tell ButrAuth to jump straight to account creation.
-    const finalUrl = signup ? url + (url.includes('?') ? '&' : '?') + 'screen_hint=signup' : url
+    // signup:true   → butrauth jumps straight to account creation.
+    // graduate:true → the caller is an INCUBATING user turning the handle they
+    //                 already have into a real Hive account. A plain signup
+    //                 hint is wrong for them: butrauth reads "already has a
+    //                 name, nothing to decide" and completes the authorization,
+    //                 which lands them back here having done nothing.
+    // changeHandle:true → an incubating user whose chosen name has since been
+    //                 registered on Hive by somebody else. They are sent to
+    //                 butrauth to pick a new one. Checked FIRST: such a user is
+    //                 also mid-warm-up, so a 'graduate' or 'signup' hint would
+    //                 march them into creating an account under the very name
+    //                 that is no longer available.
+    const hint = changeHandle ? 'handle' : (graduate ? 'graduate' : (signup ? 'signup' : null))
+    const finalUrl = hint ? url + (url.includes('?') ? '&' : '?') + `screen_hint=${hint}` : url
 
     res.json({ url: finalUrl })
   } catch (err) {
@@ -445,7 +535,13 @@ app.post('/api/manteauth/exchange', exchangeLimiter, async (req, res) => {
     if (!code_verifier && existingSession) {
       const decoded = await verifyManteAuthToken(existingSession)
       if (decoded?.hiveUsername) {
-        return res.json({ username: decoded.hiveUsername })
+        return res.json({ username: decoded.hiveUsername, incubation: false, handle: null })
+      }
+      // An INCUBATING session has no hiveUsername by design, so the check above
+      // would treat a perfectly good double-invoke as a failure and bounce the
+      // user back to login.
+      if (decoded?.incubation && decoded?.handle) {
+        return res.json({ username: null, incubation: true, handle: decoded.handle })
       }
     }
 
@@ -469,7 +565,12 @@ app.post('/api/manteauth/exchange', exchangeLimiter, async (req, res) => {
         clearPkceCookie(res)
         return res.status(401).json({ error: data.error || 'Token exchange failed' })
       }
-      tokens = { accessToken: data.access_token, username: data.username }
+      tokens = {
+        accessToken: data.access_token,
+        username: data.username || null,
+        incubation: !!data.incubation,
+        handle: data.handle || null
+      }
       refreshToken = data.refresh_token || null
     } catch {
       try {
@@ -485,7 +586,10 @@ app.post('/api/manteauth/exchange', exchangeLimiter, async (req, res) => {
     }
     clearPkceCookie(res)
 
-    setSessionCookie(res, tokens.accessToken, tokens.username)
+    // An incubating user has no Hive account, so there is no username to put in
+    // the public cookie. Empty rather than the handle: anything that reads this
+    // cookie is asking "which Hive account is this?", and the handle is not one.
+    setSessionCookie(res, tokens.accessToken, tokens.username || '')
     // The access token lasts an hour; the refresh token renews it for 30 days
     // (see resolveButrUser). Without it the session died at the hour mark and
     // every proxied op 401'd.
@@ -493,9 +597,24 @@ app.post('/api/manteauth/exchange', exchangeLimiter, async (req, res) => {
     // Belt and braces: also mint our own signed session, the same stateless
     // 30-day token wallet logins use (auth path 2 in /api/broadcast). It keeps
     // the user working even if a refresh is ever refused.
+    //
+    // NOT minted for an incubating user, and this is load-bearing rather than
+    // incidental: a wallet session is a signed assertion that this browser may
+    // act as a named Hive account, and /api/broadcast trusts it as auth path 2.
+    // Minting one for a user whose account does not exist would hand the
+    // broadcast path a username of '' or, worse, a handle that is not an
+    // account. The falsy guard already covered this; it is now deliberate.
     const buser = String(tokens.username || '').toLowerCase()
-    if (buser && SESSION_SIGNING_SECRET) setWalletSessionCookie(res, mintWalletSession(buser))
-    res.json({ username: tokens.username })
+    if (buser && !tokens.incubation && SESSION_SIGNING_SECRET) {
+      setWalletSessionCookie(res, mintWalletSession(buser))
+    }
+    res.json({
+      username: tokens.username || null,
+      incubation: !!tokens.incubation,
+      // The public pseudonym to DISPLAY. Never a Hive account, and never fed to
+      // an operation builder.
+      handle: tokens.handle || null
+    })
   } catch (err) {
     console.error('Exchange error:', err.message)
     clearPkceCookie(res)
@@ -508,11 +627,368 @@ app.get('/api/manteauth/me', baseLimiter, async (req, res) => {
   const token = req.cookies?.[SESSION_COOKIE_NAME]
   if (!token) return res.status(401).json({ error: 'Unauthorized' })
   const decoded = await verifyManteAuthToken(token)
+  // Valid session, no Hive account: an incubating user. Treating the missing
+  // username as "unauthorized" would clear their cookie and log them out on
+  // every page reload.
+  if (decoded?.incubation && decoded?.handle) {
+    return res.json({ username: null, incubation: true, handle: decoded.handle })
+  }
   if (!decoded?.hiveUsername) {
     clearSessionCookie(res)
     return res.status(401).json({ error: 'Unauthorized' })
   }
-  res.json({ username: decoded.hiveUsername })
+  res.json({ username: decoded.hiveUsername, incubation: false, handle: null })
+})
+
+// =====================================================================
+// Incubation proxy — writes for users with NO Hive account.
+//
+// The ButrAuth access token lives in an httpOnly cookie, so the browser cannot
+// send it to the incubation service itself. Same shape as /api/broadcast: the
+// server holds the credential and forwards on the user's behalf.
+// =====================================================================
+const INCUBATION_URL = (process.env.INCUBATION_URL || 'http://127.0.0.1:3040').replace(/\/+$/, '')
+
+// === Single-flight refresh ===
+//
+// ButrAuth ROTATES refresh tokens and treats a second use of one as theft: it
+// deletes the whole token family and answers 401. That is the right policy, and
+// it made a stampede here fatal. A page fires several requests at once; when the
+// one-hour access token has expired, EACH of them independently tried to refresh
+// with the same cookie value, so the first rotated and the rest looked exactly
+// like a replay. The family was revoked, both cookies were cleared, and the user
+// was silently signed out mid-action — the "no session cookie at all" seen in
+// the logs, and the failed short upload.
+//
+// It hit INCUBATING users hardest because they are the only ones with no
+// fallback: a wallet login, and a butrauth login that owns a Hive account, both
+// also carry the 30-day signed session, and an incubating user deliberately
+// does not.
+//
+// So one refresh runs per token value and every concurrent caller shares its
+// answer. The answer is then kept for a GRACE window rather than dropped when it
+// settles: a request that was already in flight still carries the old cookie and
+// would otherwise arrive moments later and spend the spent token itself, which
+// is the same replay by a slower route.
+const REFRESH_GRACE_MS = 60 * 1000
+const refreshFlight = new Map()
+
+function refreshOnce(refreshToken) {
+  const now = Date.now()
+  for (const [k, e] of refreshFlight) if (e.keepUntil && e.keepUntil <= now) refreshFlight.delete(k)
+
+  const hit = refreshFlight.get(refreshToken)
+  if (hit) return hit.promise
+
+  const entry = { keepUntil: 0 }
+  entry.promise = butrTokenRequest({ grant_type: 'refresh_token', refresh_token: refreshToken })
+    .then(
+      (r) => { entry.keepUntil = Date.now() + REFRESH_GRACE_MS; return r },
+      // Not cached: a transport failure is worth retrying, unlike a rotation.
+      (err) => { refreshFlight.delete(refreshToken); throw err }
+    )
+  refreshFlight.set(refreshToken, entry)
+  return entry.promise
+}
+
+// The live access token plus its claims, refreshing if the access token died.
+//
+// Sibling of resolveButrUser, which returns only a username and so cannot serve
+// an INCUBATING session at all — that session's username is null by design, and
+// the token itself is what the incubation service needs.
+async function resolveButrSession(req, res) {
+  const cookieToken = req.cookies?.[SESSION_COOKIE_NAME]
+  if (cookieToken) {
+    const claims = await verifyManteAuthToken(cookieToken)
+    if (claims) return { token: cookieToken, claims }
+  }
+  const refreshToken = req.cookies?.[REFRESH_COOKIE_NAME]
+  if (!refreshToken) {
+    // WHY it failed, never the token itself. A 401 from here is indistinguishable
+    // from a dozen other causes at the client, and "Not signed in" told the user
+    // something that was not necessarily true.
+    console.warn('[incubation] no session:',
+      cookieToken ? 'access token invalid/expired and NO refresh cookie' : 'no session cookie at all')
+    if (cookieToken) clearSessionCookie(res)
+    return null
+  }
+  try {
+    const { ok, status, data } = await refreshOnce(refreshToken)
+    if (!ok || !data.access_token) {
+      // Clear ONLY when butrauth actually refused the grant. A 5xx or a timeout
+      // says nothing about whether the token is still good, and throwing the
+      // cookies away on one means a brief outage signs every user out for real
+      // rather than for the length of the outage.
+      if (status === 400 || status === 401) {
+        clearRefreshCookie(res)
+        clearSessionCookie(res)
+      } else {
+        console.warn('[incubation] refresh unavailable, session kept:', status)
+      }
+      return null
+    }
+    setSessionCookie(res, data.access_token, data.username || '')
+    if (data.refresh_token) setRefreshCookie(res, data.refresh_token)
+    const claims = await verifyManteAuthToken(data.access_token)
+    return claims ? { token: data.access_token, claims } : null
+  } catch (err) {
+    console.warn('[incubation] refresh failed:', err.message)
+    return null
+  }
+}
+
+// ALLOWLISTED, not a catch-all proxy. A blanket forwarder would expose whatever
+// the incubation service grows next — including anything it later mounts for
+// internal use — to any logged-in browser.
+// `graduated: true` marks the routes that are for someone who ALREADY has a
+// Hive account. Backfill is exactly that — their account is the author field
+// every stored row has been waiting for — so the incubating check below has to
+// be skipped for it, not merely relaxed.
+const INCUBATION_ROUTES = new Map([
+  // anyActor: reachable by a Hive user too, because these are the two things
+  // that CANNOT happen on chain for an off-chain post — Hive rejects a comment
+  // whose parent does not exist, and there is no post to vote on. The service
+  // still decides what each kind may do (a Hive user may reply, never
+  // root-post), so this only opens the door.
+  //
+  // `user` and `hive` are the SDK calls for each kind of actor, and the split is
+  // the point: asHiveUser() has no post() at all, so the shape that would store
+  // a real account's root post off-chain cannot be written here by accident.
+  ['POST /content', {
+    anyActor: true,
+    user: (s, b) => s.post(b),
+    hive: (s, b) => s.reply(b)
+  }],
+  ['GET /content/mine', { user: (s, _b, q) => s.myContent({ limit: q.limit }) }],
+  ['PUT /social/vote', {
+    anyActor: true,
+    user: (s, b) => s.vote(b),
+    hive: (s, b) => s.vote(b)
+  }],
+  // anyActor: a Hive user has to be able to follow an incubating creator, since
+  // that account does not exist on chain to be followed the normal way.
+  ['PUT /social/follow', {
+    anyActor: true,
+    user: (s, b) => s.follow(b),
+    hive: (s, b) => s.follow(b)
+  }],
+  // The `hive` call here goes upstream as a POST while the browser asks with a
+  // GET, and that is the whole fix rather than an inconsistency. App-asserted
+  // credentials live in the request body; fetch throws outright on a GET with a
+  // body, so this used to reach the service as a TypeError and come back 502 —
+  // "someone you follow got a real account" never fired for a wallet login,
+  // which is exactly who it is for. The SDK picks the shape each actor can use.
+  ['GET /social/graduated-follows', {
+    anyActor: true,
+    user: (s) => s.graduatedFollows(),
+    hive: (s) => s.graduatedFollows()
+  }],
+  ['POST /social/graduated-follows/ack', {
+    anyActor: true,
+    user: (s, b) => s.ackGraduatedFollow(b.handle),
+    hive: (s, b) => s.ackGraduatedFollow(b.handle)
+  }],
+  ['PUT /social/profile', { user: (s, b) => s.setProfile(b) }],
+  ['GET /social/profile/mine', { user: (s) => s.myProfile() }],
+  ['GET /social/follows/mine', { user: (s) => s.myFollows() }],
+  ['PUT /social/subscribe', { user: (s, b) => s.subscribe(b) }],
+  ['GET /social/subscriptions/mine', { user: (s) => s.mySubscriptions() }],
+  ['GET /public/graduation/plan', { user: (s) => s.graduationPlan() }],
+  ['GET /progress', { user: (s) => s.progress() }],
+  ['GET /notifications', { user: (s) => s.notifications() }],
+  ['POST /notifications/read', { user: (s) => s.markNotificationsRead() }],
+  ['GET /backfill/items', { graduated: true, grad: (s) => s.items() }],
+  ['GET /backfill/summary', { graduated: true, grad: (s) => s.summary() }],
+  ['POST /backfill/mark', { graduated: true, grad: (s, b) => s.mark(b) }],
+  ['POST /backfill/claim-assets', { graduated: true, grad: (s) => s.claimAssets() }]
+])
+
+/**
+ * Turn whatever the SDK threw into a response.
+ *
+ * The service's own refusals are passed through with their status and their
+ * WHOLE body — a 409 from an incubating-only route names the account the caller
+ * turned out to have, and rebuilding the response from message+reason would
+ * drop it. A transport failure is status 0, which is not a refusal at all and
+ * must not be reported as one: it becomes a 502, the same as before.
+ */
+function sendIncubationError(res, err, where) {
+  if (IncubationErrorClass && err instanceof IncubationErrorClass && err.status > 0) {
+    return res.status(err.status).json(err.body || { error: err.message, reason: err.reason || null })
+  }
+  const timedOut = /timeout|aborted/i.test(err?.message || '')
+  console.error(`[incubation proxy] ${where}:`, err?.message)
+  return res.status(502).json({ error: timedOut ? 'Incubation service timed out' : 'Incubation request failed' })
+}
+
+// The public half of a profile: what someone said, who follows them, who they
+// follow. Separate from INCUBATION_ROUTES because these carry a handle in the
+// path, and separate from a wildcard because a wildcard would forward whatever
+// /public/ grows next. A handle is Hive-shaped -- lowercase, digits, dot, dash.
+const PUBLIC_PROFILE_RE = /^\/public\/user\/([a-z0-9.-]{1,64})\/(comments|followers|following|content)$/
+
+/**
+ * Read butrauth's graduation verdict for this token.
+ *
+ * Calls the SDK when it actually has the method, and otherwise talks to the
+ * endpoint directly. The published client is 0.2.0, which predates incubation
+ * entirely: `butr.getIncubationStatus` is undefined there, so every call threw
+ * "is not a function" and this route answered 502 for weeks. That is the SAME
+ * skew that made incubating writes fail earlier, so it is handled the same way,
+ * and the SDK branch means publishing 0.3.0 needs no change here.
+ *
+ * The request carries BOTH the user's bearer token and the app's client secret:
+ * butrauth authenticates the caller before it says anything about the token.
+ */
+async function readIncubationStatus(token) {
+  if (typeof butr.getIncubationStatus === 'function') {
+    return butr.getIncubationStatus(token)
+  }
+  const url = `${MANTEAUTH_URL}/api/incubation/status?client_id=${encodeURIComponent(MANTEAUTH_CLIENT_ID)}`
+  const r = await fetch(url, {
+    headers: {
+      authorization: `Bearer ${token}`,
+      'x-client-secret': MANTEAUTH_CLIENT_SECRET || ''
+    }
+  })
+  if (!r.ok) throw new Error(`butrauth /incubation/status returned ${r.status}`)
+  return r.json()
+}
+
+// GET /api/incubation/graduation-status — BUTRAUTH's half of the decision.
+//
+// Answers "may this identity have a free Hive account" (caps, provider
+// availability, one per person). It does NOT answer "have they earned one" —
+// butrauth cannot see watch time, so that half is 3Speak's. The prompt should
+// only appear when both agree.
+//
+// Mounted BEFORE the catch-all below, which would otherwise match this path and
+// 404 it against the incubation service's allowlist.
+app.get('/api/incubation/graduation-status', incubationLimiter, async (req, res) => {
+  try {
+    const session = await resolveButrSession(req, res)
+
+    if (!session) return res.status(401).json({ error: 'Your session has expired. Please sign in again.', reason: 'session_expired' })
+    if (!butr) return res.status(503).json({ error: 'ButrAuth not ready' })
+    res.json(await readIncubationStatus(session.token))
+  } catch (err) {
+    console.error('[incubation] graduation status:', err.message)
+    res.status(502).json({ error: 'Could not read graduation status' })
+  }
+})
+
+// app.use, not app.all('/api/incubation/*'): this server is on Express 5, whose
+// path-to-regexp rejects a bare '*' outright and takes the whole process down
+// at startup rather than at request time. A mount needs no wildcard syntax at
+// all, and req.path is already relative to it.
+app.use('/api/incubation', incubationLimiter, async (req, res) => {
+  try {
+    const sub = req.path || '/'
+    const key = `${req.method} ${sub}`
+
+    // Public profile reads, handled BEFORE the allowlist Map and before any
+    // session work: a visitor reading somebody's comments or follow lists is
+    // not signed in to anything, and requiring a session would make a public
+    // profile page blank for exactly the people it is written for.
+    //
+    // Still an allowlist, just one that can carry a handle: the Map is exact
+    // match, these paths have a variable segment, and the regex below is every
+    // bit as closed as an entry in it. Nothing is forwarded but the handle and
+    // a bounded `limit`, and no credential of any kind goes upstream.
+    if (req.method === 'GET') {
+      const pub = PUBLIC_PROFILE_RE.exec(sub)
+      if (pub) {
+        if (!inc) return res.status(503).json({ error: 'Incubation client not ready' })
+        const limit = Math.min(Math.max(parseInt(req.query.limit, 10) || 50, 1), 200)
+        const read = {
+          content: () => inc.userContent(pub[1], { limit }),
+          comments: () => inc.userComments(pub[1], { limit }),
+          followers: () => inc.userFollowers(pub[1], { limit }),
+          following: () => inc.userFollowing(pub[1], { limit })
+        }[pub[2]]
+        try {
+          return res.json(await read())
+        } catch (err) {
+          return sendIncubationError(res, err, `public/${pub[2]}`)
+        }
+      }
+    }
+
+    const route = INCUBATION_ROUTES.get(key)
+    if (!route) return res.status(404).json({ error: 'Unknown incubation route' })
+    if (!inc) return res.status(503).json({ error: 'Incubation client not ready' })
+
+    const session = await resolveButrSession(req, res)
+
+    // A wallet login (Keychain/HiveAuth/PeakVault/Ledger) holds no butrauth
+    // session, so there is no bearer token to forward — but they are a real,
+    // server-verified Hive user and these routes are open to them. Assert the
+    // identity with the app's own client credentials instead, which is the same
+    // trust /api/broadcast already extends when it posts to the chain as them.
+    if (!session && route.anyActor) {
+      const hiveUser = await resolveDelegatedSignUser(req, res)
+      if (!hiveUser) {
+        // Reached when there is no butrauth session AND no wallet session, which
+        // for an incubating user means their session lapsed rather than that
+        // they were never signed in. Saying "Not signed in" to someone looking
+        // at their own logged-in avatar is not a useful thing to tell them.
+        console.warn(`[incubation] 401 on ${key} — no butrauth session and no wallet session`)
+        return res.status(401).json({
+          error: 'Your session has expired. Please sign in again.',
+          reason: 'session_expired',
+        })
+      }
+      // The SDK adds the credentials and picks the request shape this actor can
+      // actually be authenticated through — which for the graduated-follows
+      // read is a POST, because a GET cannot carry them.
+      try {
+        return res.json(await route.hive(inc.asHiveUser(hiveUser), req.body || {}, req.query || {}))
+      } catch (err) {
+        return sendIncubationError(res, err, `${key} (hive)`)
+      }
+    }
+    if (!session) {
+      console.warn(`[incubation] 401 on ${key} — session could not be resolved`)
+      return res.status(401).json({
+        error: 'Your session has expired. Please sign in again.',
+        reason: 'session_expired',
+      })
+    }
+
+    if (route.anyActor) {
+      // Either kind may pass; the service sorts out what each is allowed to do.
+    } else if (route.graduated) {
+      // The mirror image: these routes need a real Hive account to publish AS.
+      if (!session.claims.hiveUsername) {
+        return res.status(409).json({
+          error: 'Create your Hive account first — there is nothing to publish as yet.',
+          reason: 'not_graduated'
+        })
+      }
+    } else if (session.claims.hiveUsername || !session.claims.incubation) {
+      // Refused HERE as well as in the service. The service is the authority, but
+      // failing at the edge means a user who has graduated mid-session gets a
+      // clear answer instead of a round trip that ends in the same 409.
+      return res.status(409).json({
+        error: 'This account is on Hive — publish to the chain, not the incubation service.',
+        reason: 'has_hive_account'
+      })
+    }
+
+    try {
+      // A graduated user reads their backlog through a different scope: their
+      // token now names a Hive account, which is the author field every stored
+      // row has been waiting for.
+      const scope = route.graduated ? inc.asGraduate(session.token) : inc.asUser(session.token)
+      const call = route.graduated ? route.grad : route.user
+      return res.json(await call(scope, req.body || {}, req.query || {}))
+    } catch (err) {
+      return sendIncubationError(res, err, key)
+    }
+  } catch (err) {
+    console.error('[incubation proxy]', err.message)
+    res.status(502).json({ error: 'Incubation request failed' })
+  }
 })
 
 // POST /api/manteauth/logout — clear the session cookie
@@ -583,7 +1059,25 @@ async function broadcastAsThreespeak(hiveUsername, operations, res) {
     if (opType === 'custom_json') {
       const auths = opData.required_posting_auths || []
       if (!auths.includes(hiveUsername)) {
-        return res.status(403).json({ error: 'Operation not allowed' })
+        // Acting for ANOTHER account is allowed only where that account has
+        // granted THIS user posting authority — a badge they created being the
+        // case this exists for. Awarding a badge is the badge account following
+        // someone, so the op is authorised by the badge, never by them.
+        //
+        // 🚨 The check is what keeps this from being an escalation. @threespeak
+        // holds a posting grant over every user who signed up here, so without
+        // verifying the requester's OWN authority over the named account, one
+        // user could have the proxy act as any other. Chain-verified, and it
+        // grants nothing they could not already do by signing themselves.
+        const others = auths.filter((a) => a !== hiveUsername)
+        if (!others.length) {
+          return res.status(403).json({ error: 'Operation not allowed' })
+        }
+        for (const acct of others) {
+          if (!await hasPostingAuthorityOver(hiveUsername, acct)) {
+            return res.status(403).json({ error: 'You do not hold posting authority over @' + acct })
+          }
+        }
       }
       if (!ALLOWED_CUSTOM_JSON_IDS.has(opData.id)) {
         return res.status(403).json({ error: 'custom_json id not allowed for this app' })

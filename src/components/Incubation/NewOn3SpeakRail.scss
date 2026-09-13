@@ -1,0 +1,23 @@
+// Wrapper only. The cards themselves are Card3 and carry their own styling —
+// duplicating any of it here is how the two would drift apart.
+.new3s-rail {
+  margin: 8px 0 24px;
+  // Spans the whole feed grid: it is interleaved between card rows, and a
+  // section occupying one cell would shove the row out of alignment.
+  grid-column: 1 / -1;
+}
+
+.new3s-rail-head {
+  margin-bottom: 10px;
+
+  h3 {
+    margin: 0;
+    font-size: 16px;
+  }
+
+  p {
+    margin: 2px 0 0;
+    font-size: 13px;
+    opacity: 0.7;
+  }
+}
