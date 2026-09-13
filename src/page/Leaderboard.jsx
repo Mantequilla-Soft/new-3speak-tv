@@ -262,7 +262,7 @@ function Leaderboard() {
       <header className="lb-header">
         <MdOutlineLeaderboard className="lb-header-icon" />
         <div>
-          <h1>Leaderboard</h1>
+          <h1>Rankings</h1>
           <p>
             {metric.blurb} — top creators
             {activeTopic ? ` in ${activeTopic}` : ' on 3Speak'}.

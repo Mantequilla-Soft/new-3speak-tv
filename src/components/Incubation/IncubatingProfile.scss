@@ -747,7 +747,12 @@
 
   // One at a time, chosen by the tabs above. Both stay mounted, so switching
   // back does not refetch the feed or lose the collapsed/expanded state.
-  .inc-cols--split.inc-show-progress .inc-main { display: none; }
+  //
+  // The goals tab hides the FEED, not the whole main column: "What a Hive
+  // account gets you" lives at the bottom of that column, and hiding .inc-main
+  // took it away from the one tab where it argues for the work being shown.
+  // It stays on both tabs now, under whichever one is open.
+  .inc-cols--split.inc-show-progress .inc-feed { display: none; }
   .inc-cols--split.inc-show-posts .inc-side { display: none; }
 }
 

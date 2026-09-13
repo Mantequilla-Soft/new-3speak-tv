@@ -102,6 +102,9 @@ import { markByReputation } from '../utils/reputation';
 import { markByHidden } from '../utils/hiddenCreators';
 import { getVotePower, getDynamicProps } from '../utils/hiveUtils';
 import { mergeOffChainReplies, applyOffChainLikes } from '../utils/offChainReplies';
+import { fetchIncubationShorts, handleAvatar } from '../lib/incubation';
+import { timeAgo } from '../lib/creatorStats';
+import { warmupRailEnabledFor } from '../utils/config';
 import { commentWithAioha, isLoggedIn } from '../hive-api/aioha';
 import AmbientGlow, { useAmbientGlow } from '../components/AmbientGlow/AmbientGlow';
 import EditorModal from '../components/modal/EditorModal';
@@ -1249,6 +1252,110 @@ const VideoShort = () => {
 
   /* ---------- FETCH SHORTS DATA ---------- */
   useEffect(() => {
+    /**
+     * Warm-up shorts, in the shape the shorts feed already speaks.
+     *
+     * Two things make these different from a Hive short, and both are handled
+     * here rather than by special cases further down:
+     *
+     *  - `_enriched: true`. The lazy enrichment below calls Hive for vote state
+     *    and the reaction chain. There is no Hive post behind one of these, so
+     *    that call has nothing to find; saying it is already enriched is what
+     *    keeps it from being made at all.
+     *  - An UNPLAYABLE row is dropped, not rendered. A short with no source is a
+     *    card that spins forever, which is worse in a feed you swipe than one
+     *    card fewer. The source is read the same way the watch page reads it.
+     */
+    const formatIncubationShorts = (items) => (items || []).map((it) => {
+      const meta = it.jsonMetadata || {};
+      const info = meta?.video?.info || {};
+      let play = info.video_v2 || info.file || null;
+      if (!play && Array.isArray(info.sourceMap)) {
+        const v = info.sourceMap.find((x) => x && x.type === 'video');
+        if (v) play = v.url;
+      }
+      if (!play) return null;
+      const handle = it.author?.handle || it.handle;
+      if (!handle) return null;
+      const avatar = handleAvatar(handle);
+      // Shorts are captioned from the description when they have no title --
+      // the same rule the backlog list uses, so one short is named the same way
+      // wherever it appears.
+      const caption = it.title
+        || String(it.body || '').replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim().slice(0, 120);
+      return {
+        id: `inc-${handle}-${it.permlink}`,
+        author: handle,
+        permlink: it.permlink,
+        hivePermlink: null,
+        embedUrl: play,
+        thumbnailUrl: it.thumbnail || null,
+        user: {
+          username: handle,
+          avatar,
+          isSubscribed: false,
+          followersCount: null,
+          reputation: null,
+        },
+        caption,
+        tags: meta.tags || [],
+        audio: `${handle} - Original Audio`,
+        albumArt: avatar,
+        // Zeroes, not fabrications: an off-chain short has no payout and its
+        // likes live in a different store. Better an honest nought than a
+        // number that means something else here than it does on every other card.
+        stats: { likes: 0, dislikes: 0, comments: 0, shares: 0, remixes: 0, views: 0, payout: 0 },
+        isLiked: false,
+        isDisliked: false,
+        comments: [],
+        commentsLoaded: false,
+        timeAgo: timeAgo(it.created),
+        createdAt: it.created,
+        _enriched: true,
+        _incubation: true,
+      };
+    }).filter(Boolean);
+
+    /**
+     * Drop the warm-up shorts in at every Nth slot.
+     *
+     * Not appended, because nobody reaches the end of a shorts feed, and not
+     * shuffled in randomly, because the same swipe should not be a different
+     * feed each reload. Every Nth is the compromise the home rail is not making:
+     * there is no header here to say what these are, so they must not arrive in
+     * a run.
+     */
+    const interleaveWarmup = (main, extra, every = 5) => {
+      if (!extra.length) return main;
+      const out = [];
+      let e = 0;
+      for (let i = 0; i < main.length; i += 1) {
+        out.push(main[i]);
+        if ((i + 1) % every === 0 && e < extra.length) { out.push(extra[e]); e += 1; }
+      }
+      // Anything that did not fit goes on the end rather than being thrown away.
+      while (e < extra.length) { out.push(extra[e]); e += 1; }
+      return out;
+    };
+
+    /**
+     * Gated to the warm-up testers, like the home rail. Off-chain shorts have
+     * not been through the same gates as ranked content, so putting them in the
+     * main swipe feed is a decision to take once and deliberately.
+     *
+     * Failure is silent and non-blocking: the shorts feed is the product, and a
+     * warm-up feed that is slow or down must never keep it from painting.
+     */
+    const withWarmupShorts = async (formatted) => {
+      if (!warmupRailEnabledFor(user || incubationHandle)) return formatted;
+      try {
+        const data = await fetchIncubationShorts(10);
+        return interleaveWarmup(formatted, formatIncubationShorts(data?.items), 5);
+      } catch {
+        return formatted;
+      }
+    };
+
     const formatShorts = (shorts) => shorts.map(short => ({
       id: short.id,
       author: short.author,
@@ -1418,7 +1525,7 @@ const VideoShort = () => {
 
             const preloaded = await consumePreloadedShorts();
             if (preloaded?.success) {
-              const formattedVideos = formatShorts(preloaded.shorts);
+              const formattedVideos = await withWarmupShorts(formatShorts(preloaded.shorts));
               await applySharedVideoLogic(formattedVideos, preloaded);
               setLoading(false);
               return;
@@ -1437,7 +1544,10 @@ const VideoShort = () => {
           const data = await hiveApi.fetchShortsWithDetails(1, SHORTS_PAGE_SIZE, user);
 
           if (data.success) {
-            const formattedVideos = formatShorts(data.shorts);
+            // Global feed only. A user-specific feed (`feedUser`, above) is
+            // "this person's shorts", so mixing somebody else's into it would
+            // be answering a different question than the one asked.
+            const formattedVideos = await withWarmupShorts(formatShorts(data.shorts));
             await applySharedVideoLogic(formattedVideos, data);
           }
         }
@@ -1451,7 +1561,7 @@ const VideoShort = () => {
 
     fetchShorts();
     // `shortsFeedMode` is a dep so flipping Discover ⇄ My interests refetches page 1.
-  }, [user, feedUser, shortsFeedMode, getSharedVideoFromUrl, updateUrlWithCurrentVideo]);
+  }, [user, incubationHandle, feedUser, shortsFeedMode, getSharedVideoFromUrl, updateUrlWithCurrentVideo]);
 
   /* ---------- HANDLE IN-PAGE NAVIGATION TO A SHORT ---------- */
   // When location.search changes (e.g. clicking "View parent reaction"),

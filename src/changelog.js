@@ -7,6 +7,22 @@
 // 1.0.0 — that way they see all of these when develop is pushed to production.
 export const CHANGELOG = [
   {
+    version: '1.78.70',
+    date: '2026-09-13',
+    summary:
+      'Groups is now in the mobile bar, so communities and badges are one tap '
+      + 'away. Chat moved up to the top bar, unread count included. The '
+      + 'Leaderboard is now called Rankings.',
+  },
+  {
+    version: '1.78.69',
+    date: '2026-09-13',
+    summary:
+      'Fixed the uploader opening in video mode when you had asked for a short. '
+      + 'If you finished a video and then chose "Post a short", it showed '
+      + '"Share a Video" instead.',
+  },
+  {
     version: '1.78.68',
     date: '2026-09-11',
     summary:
