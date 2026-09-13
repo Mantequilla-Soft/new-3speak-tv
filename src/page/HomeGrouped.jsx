@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 import "./HomeGrouped.scss";
 import CardSkeleton from "../components/Cards/CardSkeleton";
 import Card3 from "../components/Cards/Card3";
-import { FEED_URL, TRENDING_SORTED_URL, FOLLOW_FEED_URL, DISCOVER_FEED_URL, INTERESTS_FEED_URL, NEW_CONTENT_URL, CHECKER_URL, appendNsfw } from "../utils/config";
+import { FEED_URL, TRENDING_SORTED_URL, FOLLOW_FEED_URL, DISCOVER_FEED_URL, INTERESTS_FEED_URL, NEW_CONTENT_URL, CHECKER_URL, appendNsfw, warmupRailEnabledFor } from "../utils/config";
 import { useContentBatch } from "../hooks/useContentBatch";
 import { useWatchHistory } from "../hooks/useWatchHistory";
 import useViewCounts from "../hooks/useViewCounts";
@@ -250,6 +250,10 @@ function useVisibleKeys(rootRef, sig, count) {
 
 const HomeGrouped = () => {
   const { authenticated, user, showNsfw, homeCardSize, hideWatched, interests, simpleFeed } = useAppStore();
+  // Who is looking, for feature gates that are keyed on a name. A warm-up user
+  // has a handle and no Hive username, so `user` alone is null for them.
+  const incubationHandle = useAppStore((st) => st.incubationHandle);
+  const railViewer = user || incubationHandle;
   const queryClient = useQueryClient();
   const hasInterests = Array.isArray(interests) && interests.length > 0;
   const interestsKey = hasInterests ? interests.join(',') : '';
@@ -600,11 +604,21 @@ const HomeGrouped = () => {
         {/* People with no Hive account yet, in their own labelled rail rather
             than mixed into the ranked feed — they have no votes or views to
             rank on, and this content has not been through the same gates. It
-            renders nothing when there is nothing to show. */}
-        <NewOn3SpeakRail />
+            renders nothing when there is nothing to show.
+
+            Gated to the warm-up testers while the feature is still being
+            worked on: everything else on this page has been through ranking
+            and moderation, so giving unvetted content a labelled slot next to
+            it is a call to make deliberately rather than to inherit. Flip
+            VITE_ENABLE_WARMUP_RAIL when it should be everyone's.
+
+            A warm-up user is identified by their HANDLE, not a Hive username,
+            which is why both are offered here: gating on `user` alone would
+            hide the rail from exactly the people it is about. */}
+        {warmupRailEnabledFor(railViewer) && <NewOn3SpeakRail />}
       </>
     );
-  }, [activeSection?.key, creatorsPerRow]);
+  }, [activeSection?.key, creatorsPerRow, railViewer]);
 
   const { getContentForVideo } = useContentBatch(visibleVideos);
   const { isWatched, version: watchedVersion } = useWatchHistory(visibleVideos);

@@ -228,6 +228,28 @@ const ALWAYS_ON_TEST_USERS = ['badadib', 'meno', 'tibfox', 'coolmole'];
 const isTestUser = (user) => !!user && ALWAYS_ON_TEST_USERS.includes(String(user).toLowerCase());
 const openpodsEnabledFor = (user) => ENABLE_OPENPODS || isTestUser(user);
 
+// The "New here" rail: creators who have no Hive account yet, surfaced in the
+// home feed. OFF by default while the warm-up is still being tested -- the whole
+// point of a warm-up is that this content has not been through the same gates as
+// ranked content, so putting it in front of everyone is a decision to take once,
+// deliberately, and not a side effect of shipping the feature.
+//
+// Set VITE_ENABLE_WARMUP_RAIL=true to show it to everyone, or list accounts in
+// VITE_WARMUP_BETA_USERS to widen the test without a code change. The team
+// accounts above always see it.
+//
+// UI-only, like the ad flags: the rail's DATA comes from the checker's public
+// incubation feed, which is readable by anyone. Hiding the rail hides the
+// placement, not the content.
+const ENABLE_WARMUP_RAIL = import.meta.env.VITE_ENABLE_WARMUP_RAIL === 'true';
+const WARMUP_BETA_USERS = new Set(
+  (import.meta.env.VITE_WARMUP_BETA_USERS || '')
+    .split(',').map((s) => s.trim().toLowerCase()).filter(Boolean),
+);
+const warmupRailEnabledFor = (user) => ENABLE_WARMUP_RAIL
+  || isTestUser(user)
+  || (!!user && WARMUP_BETA_USERS.has(String(user).toLowerCase()));
+
 // Advertising (the /advertise page and the creator's ad opt-out in Settings).
 // OFF by default — set VITE_ENABLE_ADS=true to open it to everyone. Until then the
 // team accounts above see it, plus anyone listed in VITE_ADS_BETA_USERS so testers
@@ -361,6 +383,7 @@ export {
   ENABLE_ADS,
   adsEnabledFor,
   adsBetaUserFor,
+  warmupRailEnabledFor,
   ENABLE_THIRDPARTY_ADS,
   FEED_EXCLUDED_HOSTS,
   ENABLE_CAMERA_RECORD,
