@@ -1,4 +1,5 @@
 import mark from "../../assets/image/3S_mark.svg";
+import { useSignupPossible } from '../../utils/signupPossible';
 import "./nav.scss";
 import { Link, NavLink, useLocation } from "react-router-dom";
 import { useAppStore } from "../../lib/store";
@@ -142,6 +143,7 @@ const NAV_TABS_KEY = '3speak_nav_tabs_open';
 function Nav({ toggleProfileNav, openLoginModal }) {
   const { authenticated, LogOut, user, initializeTheme } = useAppStore();
   const incubationHandle = useAppStore((s) => s.incubationHandle);
+  const signupPossible = useSignupPossible();
   // Shows a just-uploaded profile picture immediately instead of the cached
   // hive proxy copy (utils/avatarCache).
   const myAvatar = useAvatarUrl(user, 'small');
@@ -433,7 +435,11 @@ function Nav({ toggleProfileNav, openLoginModal }) {
             <MdOutlineSearch size={19} />
           </Link>
           <Link to="/about" className="nav-guest-about">About 3Speak</Link>
-          {ENABLE_BUTRAUTH ? (
+          {/* Sign up is dropped when Butter Auth says no account can be created
+              from this address, leaving the single Log in button the
+              butrauth-disabled build shows -- so the bar has no gap where a
+              button used to be. Fails open: a failed check still offers it. */}
+          {ENABLE_BUTRAUTH && signupPossible.possible ? (
             <>
               <button className="nav-guest-login nav-guest-login--secondary" onClick={() => openLoginModal('login')}><FiLogIn /> Log in</button>
               <button className="nav-guest-signup" onClick={() => openLoginModal('signup')}>Sign up</button>

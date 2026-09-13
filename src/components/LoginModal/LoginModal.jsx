@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useSignupPossible } from '../../utils/signupPossible';
 import { AiohaModal, useAioha } from "@aioha/react-ui";
 import { Providers, KeyTypes } from "@aioha/aioha";
 import { IoPower } from "react-icons/io5";
@@ -225,6 +226,8 @@ function LoginModal({ displayed, onLogin, onClose, loginTitle, loginOptions, int
   // false for both). When logged in with a Hive wallet, "Change account" must NOT
   // surface Butter Auth; the user has to log out first.
   const showLoginExtras = displayed && step === 'providers' && !aioha.isLoggedIn();
+  // Asked once per page load and shared by every entry point.
+  const signupPossible = useSignupPossible();
 
   return (
     <>
@@ -261,13 +264,25 @@ function LoginModal({ displayed, onLogin, onClose, loginTitle, loginOptions, int
                     : 'Log in to your account.'}
                 </p>
 
-                {ENABLE_BUTRAUTH && (
+                {/* Hidden when Butter Auth says no account can be created from
+                    this address -- a capped network, or a VPN. Offering the
+                    button anyway means somebody signs in, picks a name,
+                    generates keys and is refused at the last step. The check
+                    fails OPEN, so a failed request still shows the button. */}
+                {ENABLE_BUTRAUTH && signupPossible.possible && (
                   <button className="login-chooser-signup" onClick={() => startButrauthFlow(true)}>
                     <span className="butrauth-text">
                       <span className="butrauth-title">Sign up</span>
                       <span className="butrauth-subtitle">New here? Use Google, email &amp; more</span>
                     </span>
                   </button>
+                )}
+                {ENABLE_BUTRAUTH && !signupPossible.possible && (
+                  <p className="login-chooser-sub" style={{ marginTop: 0 }}>
+                    {signupPossible.reason === 'datacenter_ip'
+                      ? 'New accounts can\u2019t be created over a VPN or proxy. Turn it off and reload, or log in below if you already have an account.'
+                      : 'New accounts aren\u2019t available on this network right now. You can still log in below.'}
+                  </p>
                 )}
 
                 <button className="login-chooser-login" onClick={() => setStep('providers')}>
