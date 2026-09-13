@@ -13,6 +13,8 @@ import TranslateButton from '../TranslateButton/TranslateButton';
 import ReactVideoTab from '../ReactVideoModal/ReactVideoModal';
 import dayjs from 'dayjs';
 import { useAppStore } from '../../lib/store';
+import { handleAvatar, postIncubationContent } from '../../lib/incubation';
+import { mergeOffChainReplies, applyOffChainLikes } from '../../utils/offChainReplies';
 import { Client } from '@hiveio/dhive';
 import UpvoteTooltip from '../tooltip/UpvoteTooltip';
 import CommentVoteTooltip from '../tooltip/CommentVoteTooltip';
@@ -60,7 +62,10 @@ function parseTimeInput(str) {
 }
 
 function CommentSection({ videoDetails, author, permlink, currentTime, duration, onSeek, onPause, onRefreshReactions }) {
-  const { user } = useAppStore();
+  const { user, incubationHandle } = useAppStore();
+  // The name to SHOW. For an incubating user there is no Hive account, so
+  // `user` is null and the handle is all there is.
+  const displayName = user || incubationHandle;
   const { translate, getTranslation, clearTranslation, translating } = useTranslation();
   const [commentInfo, setCommentInfo] = useState('');
   const [activeTab, setActiveTab] = useState('comment'); // 'comment' | 'react'
@@ -144,10 +149,21 @@ function CommentSection({ videoDetails, author, permlink, currentTime, duration,
     const fetchComments = async () => {
       setLoadingComments(true);
       try {
-        const replies = await client.call('condenser_api', 'get_content_replies', [author, permlink]);
-        const commentsWithChildren = await loadNestedComments(replies);
-        // Mark low-reputation accounts (rep < 15) — also caches reputations
-        const markedComments = await markByHidden(await markByReputation(commentsWithChildren));
+        // The Hive thread, in its OWN try: an off-chain post does not exist on
+        // chain, and get_content_replies ANSWERS THAT BY THROWING ("Post a/p
+        // does not exist") rather than returning an empty list. That threw out
+        // of the whole function, so the off-chain merge below never ran and a
+        // post whose only comments are off-chain showed none of them.
+        let markedComments = [];
+        try {
+          const replies = await client.call('condenser_api', 'get_content_replies', [author, permlink]);
+          const commentsWithChildren = await loadNestedComments(replies);
+          // Mark low-reputation accounts (rep < 15) — also caches reputations
+          markedComments = await markByHidden(await markByReputation(commentsWithChildren));
+        } catch (err) {
+          // Normal for an off-chain post; anything else is worth a line.
+          console.warn('[comments] no Hive thread:', err?.message);
+        }
         // Attach cached reputations to comment authors (all cache hits after marking)
         const attachRep = async (comments) => {
           for (const c of comments) {
@@ -156,7 +172,18 @@ function CommentSection({ videoDetails, author, permlink, currentTime, duration,
           }
         };
         await attachRep(markedComments);
-        setCommentList(markedComments);
+
+        // Off-chain replies and off-chain likes, merged into the Hive thread.
+        //
+        // Both halves used to live inline here, which is why no other view had
+        // them: shorts and snaps would have had to copy a hundred lines to show
+        // a reply written under their own content. Shared now, so the three
+        // surfaces cannot drift into disagreeing about what a thread contains.
+        const withOffChain = await applyOffChainLikes(
+          await mergeOffChainReplies(permlink, markedComments),
+          displayName,
+        );
+        setCommentList(withOffChain);
         
         // Pre-render all comment bodies (createHiveRenderer returns a function directly)
         const render = await getHiveRenderer();
@@ -178,7 +205,10 @@ function CommentSection({ videoDetails, author, permlink, currentTime, duration,
             comment.children.forEach(renderComment);
           }
         };
-        markedComments.forEach(renderComment);
+        // withOffChain, not markedComments: the off-chain replies are what this
+        // whole merge exists for, and a comment with no entry here renders as an
+        // empty bubble -- present in the list and invisible on the page.
+        withOffChain.forEach(renderComment);
         setRenderedBodies(rendered);
       } catch (error) {
         console.error('Failed to fetch comments from Hive:', error);
@@ -341,27 +371,55 @@ function CommentSection({ videoDetails, author, permlink, currentTime, duration,
         body += `\n<br><sup>replied to [${tsLabel}](${baseUrl}/watch?v=${author}/${permlink}&t=${ts}) on [${host}](${baseUrl})</sup>`;
       }
 
-      // Use aioha for comment broadcasting (works with all providers: Keychain, HiveAuth, etc.)
-      const result = await commentWithAioha(
-        parent_author,
-        parent_permlink,
-        new_permlink,
-        '', // title (empty for comments)
-        body,
-        metadata
-      );
+      // Two different reasons a comment cannot be broadcast, and only one of
+      // them is about the commenter.
+      //
+      // The PARENT being off-chain is decided here, because only the caller
+      // knows it: Hive rejects a comment whose parent does not exist, so a
+      // reply to an off-chain post has to be stored no matter who is writing it
+      // — including a Hive user with a perfectly good account.
+      //
+      // The AUTHOR having no Hive account is handled inside commentWithAioha,
+      // at the one choke point every posting path already passes through.
+      let result;
+      if (videoDetails?._incubation) {
+        const stored = await postIncubationContent({
+          body,
+          parentAuthor: parent_author,
+          parentPermlink: parent_permlink,
+          jsonMetadata: metadata,
+        });
+        result = { success: true, incubation: true, permlink: stored.permlink };
+      } else {
+        result = await commentWithAioha(
+          parent_author,
+          parent_permlink,
+          new_permlink,
+          '', // title (empty for comments)
+          body,
+          metadata
+        );
+      }
 
       if (result.success) {
         toast.success('Comment posted successfully!');
         const newComment = {
           author: {
-            username: user,
+            username: displayName,
             profile: {
               images: {
-                avatar: `https://images.hive.blog/u/${user}/avatar/small`,
+                // images.hive.blog answers an unknown name with a 500, not a
+                // placeholder, so an incubating handle needs a local avatar or
+                // it renders broken.
+                avatar: incubationHandle
+                  ? handleAvatar(incubationHandle)
+                  : `https://images.hive.blog/u/${user}/avatar/small`,
               },
             },
           },
+          // Marks this as off-chain so the thread can show it differently and
+          // so nothing tries to build a Hive permalink for it.
+          onChain: !incubationHandle,
           permlink: new_permlink,
           created_at: new Date().toISOString(),
           body: textToPost,

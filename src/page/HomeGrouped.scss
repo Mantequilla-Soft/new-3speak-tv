@@ -257,70 +257,43 @@
           min-width: var(--home-card-w);
           transition: transform 0.2s ease, box-shadow 0.2s ease;
 
-          // Larger title in large mode (scale = 1.5; small mode keeps 1).
-          h2 {
-            font-size: calc(13px * var(--home-title-scale));
-          }
+          // Large mode scales the WHOLE card's type, not just the title, so a
+          // home-row card stays internally uniform the way a feed card does.
+          // (This used to size only the h2, which is how the row ended up with
+          // a big title sitting on top of fixed-size metadata.)
+          --card-fs: calc(12px * var(--home-title-scale));
+          --card-icon-fs: calc(14px * var(--home-title-scale));
 
           @include respond(phone) {
             width: 160px;
             min-width: 160px;
+
+            // 160px tiles are narrower than the feed's, so the token steps down
+            // one notch here. Every element in the card follows it — the long
+            // list of per-element 10px overrides that used to live here is gone.
+            --card-fs: 10px;
+            --card-icon-fs: 12px;
 
             // Force 16:9 aspect ratio on thumbnail
             .img-wrap img {
               height: 90px; // 160px * 9/16 = 90px
             }
 
-            // Smaller fonts for mobile cards
             h2 {
-              font-size: 10px;
               margin: 3px 0;
               -webkit-line-clamp: 2;
             }
 
-            .profile-view-wrap {
-              .author-badge {
-                img {
-                  width: 18px;
-                  height: 18px;
-                }
-                .author-name {
-                  font-size: 10px;
-                }
-              }
-              .view-count-badge {
-                font-size: 10px;
-              }
+            .profile-view-wrap .author-badge img {
+              width: 18px;
+              height: 18px;
             }
 
             .bottom-action {
               padding: 4px 3px;
 
-              p {
-                font-size: 10px;
-              }
-
               .wrap-left {
                 gap: 8px;
-                font-size: 10px;
-
-                .view-count-badge,
-                .upvote-count-badge,
-                .payout-amount-badge {
-                  font-size: 10px;
-                }
-
-                .flex-div {
-                  span {
-                    font-size: 10px;
-                  }
-                  .icon {
-                    font-size: 14px;
-                  }
-                  .icon-heart {
-                    font-size: 11px;
-                  }
-                }
               }
             }
           }

@@ -1,0 +1,95 @@
+@use "../../mixins.scss" as mix;
+
+// Bottom-left, above the mobile bar and clear of the feedback button on the
+// right. Never a modal: a hint that blocks the page is not a hint.
+.inct {
+  position: fixed;
+  left: 16px;
+  bottom: 16px;
+  z-index: 900;
+  display: flex;
+  gap: 11px;
+  width: min(340px, calc(100vw - 32px));
+  padding: 14px 34px 14px 14px;
+  border: 1px solid var(--border-color);
+  border-radius: 14px;
+  background: var(--bg-elevated);
+  box-shadow: var(--shadow-lg);
+  animation: inct-in 0.28s ease both;
+
+  @include mix.respond(phone) {
+    left: 12px;
+    right: 12px;
+    width: auto;
+    // Clears the bottom navigation bar.
+    bottom: calc(var(--bottom-nav-height, 62px) + 12px);
+  }
+}
+
+@keyframes inct-in {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .inct { animation: none; }
+}
+
+.inct-close {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  border: 0;
+  border-radius: 50%;
+  background: none;
+  color: var(--text-muted);
+  cursor: pointer;
+
+  &:hover { color: var(--text-primary); background: var(--bg-tertiary); }
+}
+
+.inct-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--accent-primary) 12%, transparent);
+  color: var(--accent-primary);
+}
+
+.inct-text {
+  min-width: 0;
+
+  strong {
+    display: block;
+    margin-bottom: 3px;
+    font-size: 13.5px;
+    color: var(--text-primary);
+  }
+
+  p {
+    margin: 0;
+    font-size: 12.5px;
+    line-height: 1.5;
+    color: var(--text-secondary);
+  }
+}
+
+.inct-cta {
+  display: inline-block;
+  margin-top: 8px;
+  font-size: 12.5px;
+  font-weight: 700;
+  color: var(--accent-primary);
+  text-decoration: none;
+
+  &:hover { text-decoration: underline; }
+}

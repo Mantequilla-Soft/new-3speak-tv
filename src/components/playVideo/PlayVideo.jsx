@@ -18,6 +18,7 @@ import VideoStats from "../CreatorStats/VideoStats";
 import { fetchVideoHasStats } from "../../lib/creatorStats";
 import ShareChooserModal from "../Chat/ShareChooserModal";
 import { useAppStore } from '../../lib/store';
+import { fetchIncubationLikes, voteIncubation } from '../../lib/incubation';
 import { estimate, getUersContent, getVotePower } from "../../utils/hiveUtils";
 import { getUserReputation } from "../../utils/reputation";
 import ToolTip from "../tooltip/ToolTip";
@@ -78,6 +79,93 @@ dayjs.extend(relativeTime);
 
 const PlayVideo = ({ videoDetails, author, permlink, mediaUnavailable = false, mediaBlocked = false, onRetryPlayback = null, mediaLoading = false, playlistData, onClosePlaylist, videoControls, mobileReactionPanel, cinemaReactionPanel, videoRef, wrapperRef, onVideoEdited, overrideBody, scheduled = false, scheduledOn = null, onEditScheduled, v2 = false, isLive = false, streamRoom = null, liveChatSlot = null, onLiveChatSent = null, vodAssetPending = false, onStreamRoomMeta = null, belowPlayerSlot = null, sponsorLabel = null, adCountdown = null, bannerHit = null, adSkip = null, adPlaying = false }) => {
   const { user, authenticated } = useAppStore();
+  const incubationHandle = useAppStore((s) => s.incubationHandle);
+  // Actions that move value on Hive: promoting spends funds, tipping sends
+  // them, and a clip/remix publishes a post that pays its original author
+  // through beneficiaries. None can work without a Hive account.
+  const viewerHasNoAccount = !!incubationHandle;
+  // The POST itself is off-chain. Nobody can vote, tip or promote it — not even
+  // a Hive user — because there is nothing on chain to act on. A different
+  // situation from the viewer lacking an account, so it gets its own wording.
+  const postIsOffChain = !!videoDetails?._incubation;
+  const lockedForIncubation = viewerHasNoAccount || postIsOffChain;
+
+  // VOTING is the exception to that lock. A vote on an off-chain post is stored
+  // rather than broadcast — it moves no rewards and is never replayed — so it
+  // works for everyone, including a Hive user, and including an incubating
+  // viewer voting on anything. Only a signed-out visitor is refused.
+  //
+  // Deliberately NOT relabelled: it is the same gesture in the same place, and
+  // a second word for it would make people wonder which one counted.
+  const voteIsOffChain = postIsOffChain || viewerHasNoAccount;
+  const [offChainVoted, setOffChainVoted] = useState(false);
+  const [offChainVotes, setOffChainVotes] = useState(null);
+  // Keyed on voteIsOffChain, NOT postIsOffChain. An incubating viewer's vote is
+  // stored off-chain wherever it lands, including on an ordinary Hive video, so
+  // loading the count only for off-chain POSTS meant their vote was saved and
+  // then never shown: the count stayed null, the optimistic bump below leaves
+  // null alone, and the label renders nothing for a falsy count. From the
+  // viewer's side, voting did nothing at all.
+  // `token` cancels a load whose video has since changed, so a slow response for
+  // the previous post cannot land on this one.
+  const loadOffChainLikes = useCallback((token) => {
+    if (!voteIsOffChain || !author || !permlink) return undefined;
+    return fetchIncubationLikes(author, permlink, user || incubationHandle)
+      .then((d) => {
+        if (token?.cancelled) return;
+        setOffChainVotes(d.count ?? 0);
+        setOffChainVoted(!!d.liked);
+      })
+      .catch(() => { /* the count is decoration; the button still works */ });
+  }, [voteIsOffChain, author, permlink, user, incubationHandle]);
+
+  useEffect(() => {
+    const token = { cancelled: false };
+    loadOffChainLikes(token);
+    return () => { token.cancelled = true; };
+  }, [loadOffChainLikes]);
+
+  const handleOffChainVote = useCallback(async () => {
+    if (!authenticated) return;
+    const next = !offChainVoted;
+    // Optimistic: the write is a single row and the failure path puts it back.
+    setOffChainVoted(next);
+    setOffChainVotes((n) => (n == null ? n : Math.max(0, n + (next ? 1 : -1))));
+    try {
+      await voteIncubation(author, permlink, next ? 10000 : 0);
+      // Re-read rather than trust the guess: the optimistic bump cannot move a
+      // count that was still unknown, and other people vote on this too.
+      loadOffChainLikes();
+    } catch (err) {
+      setOffChainVoted(!next);
+      setOffChainVotes((n) => (n == null ? n : Math.max(0, n + (next ? -1 : 1))));
+      toast.error(err.message || 'Could not save your vote');
+    }
+  }, [authenticated, offChainVoted, author, permlink, loadOffChainLikes]);
+  // The viewer's own reason wins when both apply: it is the one they can act on.
+  const LOCKED_TITLE = viewerHasNoAccount
+    ? 'Unlocked once you create your Hive account'
+    : 'Not available yet: this post is not on Hive';
+
+  // Spread LAST onto a locked button so it overrides that button's own title
+  // and onClick.
+  //
+  // aria-disabled rather than `disabled`: a disabled button fires no mouse
+  // events in Chrome or Firefox, so its title tooltip never appears — and the
+  // tooltip explaining WHY it is locked is the whole point. This keeps the
+  // element interactive enough to be hovered while refusing the action, and
+  // a click says the same thing for anyone on a touch screen with no hover.
+  const lockProps = lockedForIncubation
+    ? {
+        'aria-disabled': true,
+        title: LOCKED_TITLE,
+        onClick: (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          toast.info(LOCKED_TITLE);
+        },
+      }
+    : {};
   const interests = useAppStore((s) => s.interests);
   const setInterests = useAppStore((s) => s.setInterests);
   const theme = useAppStore((s) => s.theme);
@@ -569,21 +657,26 @@ const PlayVideo = ({ videoDetails, author, permlink, mediaUnavailable = false, m
         const { reshares, count } = await getResharesForVideo(author, permlink);
         setReshareCount(count);
         if (user) {
-          setHasReshared(reshares.some(r => r.username === user));
+          setHasReshared(reshares.some(r => r.username === (user || incubationHandle)));
         }
       } catch (err) {
         console.warn('Failed to fetch reshares:', err);
       }
     })();
-  }, [author, permlink, user]);
+  }, [author, permlink, user, incubationHandle]);
 
   const handleReshare = useCallback(async () => {
-    if (!authenticated || !user) {
+    // A reshare is not a chain operation: it is a row in 3Speak's own reshare
+    // store, keyed by name. So an incubating user can make one under their
+    // handle, and the only thing that was stopping them was this gate asking
+    // for a Hive username they do not have.
+    const asWho = user || incubationHandle;
+    if (!authenticated || !asWho) {
       toast.error('Log in to reshare');
       return;
     }
     if (hasReshared) return;
-    const result = await recordReshare(user, author, permlink);
+    const result = await recordReshare(asWho, author, permlink);
     if (result) {
       setHasReshared(true);
       setReshareCount(prev => prev + 1);
@@ -591,7 +684,7 @@ const PlayVideo = ({ videoDetails, author, permlink, mediaUnavailable = false, m
     } else {
       toast.error('Failed to reshare');
     }
-  }, [authenticated, user, author, permlink, hasReshared]);
+  }, [authenticated, user, incubationHandle, author, permlink, hasReshared]);
 
   const handleRemix = useCallback((mediaType = 'video') => {
     if (!videoUrlSelected) {
@@ -746,7 +839,10 @@ const PlayVideo = ({ videoDetails, author, permlink, mediaUnavailable = false, m
         </div>
       </div>
       <div className="wrap-right-stats">
-        <span
+        {/* An off-chain post has no payout and no beneficiaries: there is no
+            Hive post to reward. "$0.00" beside it read as "this earned
+            nothing", which is a different and much worse statement. */}
+        {!postIsOffChain && <span
           ref={payoutRef}
           onMouseEnter={() => setShowBeneficiaries(true)}
           onMouseLeave={() => setShowBeneficiaries(false)}
@@ -754,8 +850,8 @@ const PlayVideo = ({ videoDetails, author, permlink, mediaUnavailable = false, m
           style={{ cursor: 'pointer' }}
         >
           <PayoutAmount amount={videoDetails?.stats?.total_hive_reward ?? 0} size={13} />
-        </span>
-        {(showBeneficiaries || pinnedBeneficiaries) && beneficiaries.length > 0 && (
+        </span>}
+        {!postIsOffChain && (showBeneficiaries || pinnedBeneficiaries) && beneficiaries.length > 0 && (
           <BeneficiariesTooltip
             beneficiaries={beneficiaries}
             payoutInfo={payoutInfo}
@@ -767,8 +863,11 @@ const PlayVideo = ({ videoDetails, author, permlink, mediaUnavailable = false, m
         )}
         <span className="wrap" ref={voteCountRef}>
           <UpvoteCount
-            count={optimisticVoteCount}
-            voted={isVoted}
+            // Off-chain posts have no Hive votes to count, so the stored ones
+            // are the only ones there are. A Hive post keeps its own count:
+            // mixing the two would report a number that matches neither.
+            count={postIsOffChain ? (offChainVotes ?? 0) : optimisticVoteCount}
+            voted={postIsOffChain ? offChainVoted : isVoted}
             onClick={toggleTooltip}
             loading={isLoading}
             onCountEnter={() => setOpenToolTip(true)}
@@ -1109,7 +1208,14 @@ const PlayVideo = ({ videoDetails, author, permlink, mediaUnavailable = false, m
               reputation={authorReputation}
               followersCount={followData?.follower_count}
               showFollow
-              isFollowing={isFollowingCreator}
+              // No longer locked for an author with no Hive account. A follow
+              // of one is stored off-chain instead of being broadcast at an
+              // account that does not exist, and they are told when it does.
+              offChainAuthor={!!postIsOffChain}
+              // Left to the badge for an off-chain author: it reads that state
+              // from the incubation store, and the Hive lookup this holds would
+              // always answer "no".
+              isFollowing={postIsOffChain ? undefined : isFollowingCreator}
               onFollow={(_, willFollow) => setIsFollowingCreator(willFollow)}
             />
             {community_id && (<div className="community-title-wrap" onClick={() => handleCommunityNavigate(community_id)}>
@@ -1236,6 +1342,7 @@ const PlayVideo = ({ videoDetails, author, permlink, mediaUnavailable = false, m
                     onClick={clipMode ? handleCancelClip : handleStartClipMode}
                     title={!authenticated ? 'Log in to clip' : clipMode ? 'Cancel clip' : 'Clip video'}
                     disabled={!authenticated}
+                    {...lockProps}
                   >
                     <Scissors size={16} />
                     <span className="tools-row-label">Clip Video</span>
@@ -1299,12 +1406,23 @@ const PlayVideo = ({ videoDetails, author, permlink, mediaUnavailable = false, m
                   // user has already tagged (the tag is one-shot).
                   <button
                     type="button"
-                    className="pv-btn vote-btn"
-                    onClick={toggleTooltip}
-                    title={votingClosed ? 'Tag this video' : 'Vote on this video'}
+                    className={`pv-btn vote-btn${voteIsOffChain && offChainVoted ? ' voted' : ''}`}
+                    onClick={voteIsOffChain ? handleOffChainVote : toggleTooltip}
+                    title={voteIsOffChain
+                      ? (authenticated
+                        ? 'Vote on this video. It is saved on 3Speak and pays no rewards.'
+                        : 'Sign in to vote')
+                      : (votingClosed ? 'Tag this video' : 'Vote on this video')}
+                    {...(voteIsOffChain ? {} : lockProps)}
+                    {...(voteIsOffChain && !authenticated
+                      ? { 'aria-disabled': true, onClick: (e) => { e.preventDefault(); } }
+                      : {})}
                   >
-                    {votingClosed ? <IoPricetagOutline size={14} /> : <FaHeart size={14} />}
-                    <span>{votingClosed ? 'Tag' : 'Vote'}</span>
+                    {votingClosed && !voteIsOffChain ? <IoPricetagOutline size={14} /> : <FaHeart size={14} />}
+                    <span>
+                      {votingClosed && !voteIsOffChain ? 'Tag' : 'Vote'}
+                      {voteIsOffChain && offChainVotes ? ` ${offChainVotes}` : ''}
+                    </span>
                   </button>
                 )}
                 {canSeeVideoStats && (
@@ -1333,7 +1451,7 @@ const PlayVideo = ({ videoDetails, author, permlink, mediaUnavailable = false, m
                   type="button"
                   className={`pv-btn reshare-btn${hasReshared ? ' reshared' : ''}`}
                   onClick={handleReshare}
-                  disabled={!authenticated || !isLoggedIn()}
+                  disabled={!authenticated || (!isLoggedIn() && !incubationHandle)}
                   title={!authenticated ? 'Log in to reshare' : hasReshared ? 'Reshared' : 'Reshare'}
                 >
                   <Repeat2 size={16} />
@@ -1347,6 +1465,7 @@ const PlayVideo = ({ videoDetails, author, permlink, mediaUnavailable = false, m
                     className="pv-btn promote-btn"
                     onClick={() => setPromoteOpen(true)}
                     title="Promote this video"
+                    {...lockProps}
                   >
                     <Rocket size={15} />
                     <span>Promote</span>
@@ -1395,11 +1514,11 @@ const PlayVideo = ({ videoDetails, author, permlink, mediaUnavailable = false, m
 
                 {authenticated && isLoggedIn() && (
                   <>
-                    <button type="button" className="pv-btn playlist-btn" onClick={() => setIsPlaylistModalOpen(true)} title="Add to playlist">
+                    <button type="button" className="pv-btn playlist-btn" onClick={() => setIsPlaylistModalOpen(true)} title="Add to playlist" {...lockProps}>
                       <MdPlaylistAdd />
                       <span>Playlist</span>
                     </button>
-                    <button type="button" className="pv-btn tip-btn" onClick={() => setIsTipModalOpen(true)} title="Tip the creator">
+                    <button type="button" className="pv-btn tip-btn" onClick={() => setIsTipModalOpen(true)} title="Tip the creator" {...lockProps}>
                       <Gift size={16} />
                       <span>Tip</span>
                     </button>
@@ -1443,6 +1562,7 @@ const PlayVideo = ({ videoDetails, author, permlink, mediaUnavailable = false, m
                 onClick={clipMode ? handleCancelClip : handleStartClipMode}
                 title={!authenticated ? 'Log in to clip' : clipMode ? 'Cancel clip' : 'Clip video'}
                 disabled={!authenticated}
+                {...lockProps}
               >
                 <Scissors size={16} />
                 <span className="tools-row-label">Clip Video</span>
@@ -1498,7 +1618,14 @@ const PlayVideo = ({ videoDetails, author, permlink, mediaUnavailable = false, m
         <div className="description-wrap">
           <div className={`description-collapsible${descriptionExpanded ? '' : ' collapsed'}`}>
             <div className="blog-content">
-              <BlogContent author={author} permlink={permlink} description={overrideBody} />
+              {/* BlogContent falls back to fetching the post from Hive, which has
+                  never heard of an off-chain one — that is the "No content
+                  available" it was showing. Hand it the body we already have. */}
+              <BlogContent
+                author={author}
+                permlink={permlink}
+                description={overrideBody ?? (postIsOffChain ? videoDetails?.body : undefined)}
+              />
             </div>
           </div>
           <button
@@ -1663,6 +1790,8 @@ const PlayVideo = ({ videoDetails, author, permlink, mediaUnavailable = false, m
                     className="fab-action-btn"
                     onClick={() => { setIsPlaylistModalOpen(true); setFabOpen(false); }}
                     aria-label="Add to playlist"
+                    title="Add to playlist"
+                    {...lockProps}
                   >
                     <MdPlaylistAdd size={20} />
                   </button>
@@ -1676,6 +1805,8 @@ const PlayVideo = ({ videoDetails, author, permlink, mediaUnavailable = false, m
                     className="fab-action-btn"
                     onClick={() => { handleFabFollow(); setFabOpen(false); }}
                     aria-label="Follow creator"
+                    title="Follow creator"
+                    {...lockProps}
                   >
                     <MdPersonAdd size={20} />
                   </button>
@@ -1689,6 +1820,8 @@ const PlayVideo = ({ videoDetails, author, permlink, mediaUnavailable = false, m
                     className="fab-action-btn"
                     onClick={() => { setIsTipModalOpen(true); setFabOpen(false); }}
                     aria-label="Tip"
+                    title="Tip the creator"
+                    {...lockProps}
                   >
                     <MdAttachMoney size={20} />
                   </button>
@@ -1702,6 +1835,8 @@ const PlayVideo = ({ videoDetails, author, permlink, mediaUnavailable = false, m
                     className={`fab-action-btn${clipMode ? ' fab-action-btn--active' : ''}`}
                     onClick={() => { setMobileDetailsExpanded(true); handleStartClipMode(); setFabOpen(false); }}
                     aria-label="Clip"
+                    title="Clip video"
+                    {...lockProps}
                   >
                     <Scissors size={18} />
                   </button>

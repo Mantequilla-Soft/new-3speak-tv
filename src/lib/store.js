@@ -22,12 +22,6 @@ export const useAppStore = create(
       ...createAudioPlayerSlice(...a),
       watchHistoryEnabled: true,
       setWatchHistoryEnabled: (enabled) => a[0]({ watchHistoryEnabled: enabled }),
-      sidebarOpen: false,
-      setSidebarOpen: (open) => a[0]({ sidebarOpen: typeof open === 'function' ? open(a[1]().sidebarOpen) : open }),
-      // User preference: completely hide the persistent left sidebar (default true).
-      // The hamburger drawer in the top bar still works regardless.
-      sidebarHidden: true,
-      setSidebarHidden: (val) => a[0]({ sidebarHidden: typeof val === 'function' ? val(a[1]().sidebarHidden) : val }),
       showNsfw: false,
       setShowNsfw: (val) => a[0]({ showNsfw: typeof val === 'function' ? val(a[1]().showNsfw) : val }),
       // Video card size: 'small' | 'large' (default small — a first-time visitor
@@ -98,8 +92,6 @@ export const useAppStore = create(
         isProcessing: state.isProcessing,
         theme: state.theme, // Persist theme preference
         watchHistoryEnabled: state.watchHistoryEnabled,
-        sidebarOpen: state.sidebarOpen,
-        sidebarHidden: state.sidebarHidden,
         showNsfw: state.showNsfw,
         homeCardSize: state.homeCardSize,
         previewEnabled: state.previewEnabled,

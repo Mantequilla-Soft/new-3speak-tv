@@ -43,6 +43,7 @@ const BottomNav = ({ openLoginModal }) => {
   const location = useLocation();
   const navigate = useNavigate();
   const { authenticated, user, theme, LogOut } = useAppStore();
+  const incubationHandle = useAppStore((s) => s.incubationHandle);
   const isManteAuth = localStorage.getItem("manteauth_login") === "true";
   const path = location.pathname;
   const [menuOpen, setMenuOpen] = useState(false);
@@ -148,7 +149,11 @@ const BottomNav = ({ openLoginModal }) => {
       </Link>
 
       {/* Chat = the centre item (Share moved to the top bar's "+"). Logged out it
-          opens the login modal, exactly as the old centre item did. */}
+          opens the login modal, exactly as the old centre item did.
+          Absent entirely during the warm-up: chat is signed with Hive account
+          keys, which these users do not have yet. The bar is flex, so the
+          remaining items simply share the width. */}
+      {!incubationHandle && (
       <Link
         to="/chat"
         className={`bottom-nav-item ${isActive("/chat") ? "active" : ""}`}
@@ -163,6 +168,7 @@ const BottomNav = ({ openLoginModal }) => {
         </span>
         <span>Chat</span>
       </Link>
+      )}
 
       <Link to="/shorts" className={`bottom-nav-item ${isShortsActive ? "active" : ""}`}>
         <span className="bottom-nav-icon-wrap">

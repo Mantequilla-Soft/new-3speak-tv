@@ -7,6 +7,7 @@ import CommunityModal from "../modal/Community_modal";
 import Beneficiary_modal from '../modal/Beneficiary_modal';
 import { Navigate } from 'react-router-dom';
 import { useEmbedUpload } from '../../context/EmbedUploadContext';
+import { useAppStore } from '../../lib/store';
 import MarkdownComposer from '../studio/MarkdownComposer';
 import { getMinMaxDates } from '../../utils/schedulingHelpers';
 import EmbedUploadProgressBar from './EmbedUploadProgressBar';
@@ -31,6 +32,9 @@ const REWARD_LABELS = {
 };
 
 function EmbedDetails() {
+  // Someone with no Hive account yet. Their upload is stored off-chain, so
+  // every Hive payout concept below is inapplicable rather than merely unset.
+  const incubationHandle = useAppStore((s) => s.incubationHandle);
   const {
     title, setTitle,
     description, setDescription,
@@ -320,6 +324,12 @@ function EmbedDetails() {
                   ))}</span>
                 </div>
               </div>
+              {/* Hidden, not removed, for someone with no Hive account. Community is a
+                  Hive category, and Rewards, Beneficiaries and Remix all divide a payout
+                  that an off-chain post does not have. Showing them would ask the user to
+                  configure things that cannot apply, and quietly imply their post earns.
+                  They come back by themselves once the user graduates. */}
+              {!incubationHandle && (
               <div className="advance-option">
                 {!fromStories && (
                   <div className="beneficiary-wrap community-tile is-clickable" onClick={openCommunityModal}>
@@ -483,6 +493,7 @@ function EmbedDetails() {
                   </div>
                 )}
               </div>
+              )}
 
               <SettingSheet title="Rewards" open={rewardsOpen} onClose={() => setRewardsOpen(false)}>
                 <div className="option-sheet">

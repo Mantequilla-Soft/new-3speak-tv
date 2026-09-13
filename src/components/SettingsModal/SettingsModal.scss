@@ -274,17 +274,68 @@
   background: var(--bg-tertiary, rgba(255, 255, 255, 0.05));
   border-radius: 10px;
 
-  /* With 5 tabs this can exceed a narrow phone; scroll the row rather than
-     wrapping or crushing the labels. */
+  /* Six tabs overflow even on a desktop modal, so the row scrolls rather than
+     wrapping or crushing the labels.
+
+     The scrollbar is SHOWN. It used to be hidden, which left the last tab
+     ("About / Contact") cut off at the edge with nothing to say the row moved
+     at all -- a scrollable thing that looks unscrollable is just a thing with
+     a missing tab. Slim and quiet, so it reads as an affordance rather than
+     furniture. */
   overflow-x: auto;
-  scrollbar-width: none;
-  &::-webkit-scrollbar { display: none; }
+  padding-bottom: 6px;
+  scrollbar-width: thin;
+  scrollbar-color: var(--border-color) transparent;
+
+  &::-webkit-scrollbar { height: 6px; }
+  &::-webkit-scrollbar-track { background: transparent; }
+
+  &::-webkit-scrollbar-thumb {
+    background: var(--border-color);
+    border-radius: 999px;
+  }
+
+  &::-webkit-scrollbar-thumb:hover { background: var(--text-muted); }
 }
 
 @media (max-width: 480px) {
   .settings-tab {
     font-size: 13px;
     padding: 8px 10px;
+  }
+}
+
+/* The row inside Content. Deliberately a different shape from the tab bar
+   above it -- underlined text rather than a filled pill -- so two rows of tabs
+   stacked on each other read as a hierarchy instead of a repeat. */
+.settings-subtabs {
+  display: flex;
+  gap: 4px;
+  margin: -8px 0 14px;
+  border-bottom: 1px solid var(--border-color, rgba(255, 255, 255, 0.12));
+  overflow-x: auto;
+  scrollbar-width: none;
+
+  &::-webkit-scrollbar { display: none; }
+}
+
+.settings-subtab {
+  flex: 0 0 auto;
+  padding: 8px 12px;
+  margin-bottom: -1px;
+  border: 0;
+  border-bottom: 2px solid transparent;
+  background: none;
+  color: var(--text-secondary, #aaa);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+
+  &:hover { color: var(--text-primary, #f1f1f1); }
+
+  &.is-active {
+    color: var(--text-primary, #f1f1f1);
+    border-bottom-color: var(--accent-primary, #e53935);
   }
 }
 

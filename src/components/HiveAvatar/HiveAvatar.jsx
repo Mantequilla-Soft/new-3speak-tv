@@ -31,13 +31,20 @@ const HiveAvatar = forwardRef(function HiveAvatar(
     onClick,
     onError,
     style,
+    // An explicit picture, bypassing images.hive.blog entirely. Their proxy
+    // cannot fetch images.3speak.tv -- it answers 403 for a cover and serves its
+    // own grey placeholder for an avatar -- so any account whose picture we host
+    // ourselves has to be handed over directly or it silently shows a stranger's
+    // default face.
+    srcOverride,
   },
   ref,
 ) {
   // Hook first: it has to run on every render, including the empty-username one.
   // Serves a just-uploaded picture directly instead of the cached hive proxy
   // copy (see utils/avatarCache).
-  const url = useAvatarUrl(username, size || 'small');
+  const resolved = useAvatarUrl(username, size || 'small');
+  const url = srcOverride || resolved;
   if (!username) return null;
   return (
     <span
@@ -50,7 +57,17 @@ const HiveAvatar = forwardRef(function HiveAvatar(
         src={url}
         alt={alt ?? username}
         className={imgClassName}
-        onError={onError}
+        onError={onError || ((e) => {
+          // images.hive.blog answers an UNKNOWN account with a 500, not a
+          // placeholder, so anyone who has no Hive account yet renders as a
+          // broken image here. Fall back to the 3Speak mark.
+          //
+          // The data flag stops a loop if the fallback itself ever fails to
+          // load: without it onError would fire again on the new src forever.
+          if (e.currentTarget.dataset.fellBack) return;
+          e.currentTarget.dataset.fellBack = '1';
+          e.currentTarget.src = '/pwa-192x192.png';
+        })}
       />
       <PremiumBadge
         username={username}

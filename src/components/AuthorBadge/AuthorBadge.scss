@@ -148,3 +148,10 @@
     opacity: 0.85;
   }
 }
+
+// Follow disabled because the target has no Hive account to follow. Keyed on
+// aria-disabled so the button still receives hover and can show its tooltip.
+.follow-btn[aria-disabled="true"] {
+  opacity: 0.45;
+  cursor: not-allowed;
+}

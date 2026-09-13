@@ -14,10 +14,28 @@ import { HIVE_API_NODES, HIVE_API_URL } from './config';
 const client = getHiveClient();
 
 /**
+ * The post's own thumbnail, or null.
+ *
+ * json_metadata arrives as a STRING, and from somebody else's post: it is not
+ * ours, it is not validated, and a single malformed one must cost a thumbnail
+ * rather than the whole batch. The http(s) test is the same reason -- this
+ * value goes straight into a src attribute.
+ */
+function firstImage(raw) {
+  try {
+    const meta = typeof raw === 'string' ? JSON.parse(raw) : (raw || {});
+    const img = Array.isArray(meta.image) ? meta.image[0] : meta.image;
+    return typeof img === 'string' && /^https?:\/\//.test(img) ? img : null;
+  } catch {
+    return null;
+  }
+}
+
+/**
  * Batch fetch content data for multiple posts in a single API call
  * @param {Array<{author: string, permlink: string}>} posts - Array of post identifiers
  * @param {string} activeUser - Current logged-in user (to check if voted)
- * @returns {Promise<Map<string, {payout: string, voters: number, isVoted: boolean, children: number}>>}
+ * @returns {Promise<Map<string, {payout: string, voters: number, isVoted: boolean, children: number, title: string, image: string|null}>>}
  */
 export async function batchGetContent(posts, activeUser = null) {
   if (!posts || posts.length === 0) {
@@ -62,6 +80,12 @@ export async function batchGetContent(posts, activeUser = null) {
         // Hive's own reply count. The checker's stats.num_comments is a hardcoded
         // 0 placeholder, so this is the only trustworthy source.
         children: post.children ?? 0,
+        // Enough to render a link to the post as something a reader recognises
+        // rather than an author and a slug. Added for the comments tab on an
+        // incubating profile; existing callers read named fields, so two more
+        // cost them nothing.
+        title: post.title || '',
+        image: firstImage(post.json_metadata),
       });
     }
 

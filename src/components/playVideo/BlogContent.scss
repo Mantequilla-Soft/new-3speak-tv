@@ -8,6 +8,13 @@
     overflow: hidden;
     transition: max-height 0.3s ease;
 
+    // The description reads at the same size as the comments below it. At 16px
+    // against their 12px it was the loudest text on the page, which is a lot of
+    // weight for what is usually a line or two of links.
+    .markdown-view {
+      font-size: 12px;
+    }
+
     &.collapsed {
       max-height: 50px;
     }
