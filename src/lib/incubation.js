@@ -369,11 +369,39 @@ export const fetchIncubationProgress = () => write('/progress', 'GET');
  */
 export function progressFraction(tasks) {
   if (!tasks?.length) return 0;
-  const sum = tasks.reduce((acc, t) => {
-    if (!t.need) return acc + (t.done ? 1 : 0);
-    return acc + Math.min(1, Math.max(0, (t.have || 0) / t.need));
-  }, 0);
+  const sum = tasks.reduce((acc, t) => acc + taskFraction(t), 0);
   return sum / tasks.length;
+}
+
+/**
+ * How far along ONE goal is, 0 to 1.
+ *
+ * Counted goals are just have/need. A goal measured in TIME is not: the server
+ * floors it to whole days, because "three days" has to mean three WHOLE days,
+ * and a floored count moves three times in three days -- so a bar driven by it
+ * sits still for a day at a stretch and reads as broken rather than as waiting.
+ *
+ * So time is measured from the clock instead. `readyAt` is the finish line and
+ * `need` is how long the span is, which means the start is readyAt minus need
+ * days and the fraction follows from those two alone. No extra field from the
+ * server, and nothing here has to know what the requirement is.
+ *
+ * `done` still comes from the SERVER, never from this number. A percentage is
+ * for showing; whether a goal is met is the server's call, and the two must not
+ * be able to disagree about it -- 99.97% is not done, however round it looks.
+ */
+export function taskFraction(t) {
+  if (!t) return 0;
+  if (t.done) return 1;
+  if (t.unit === 'days' && t.readyAt && t.need > 0) {
+    const end = new Date(t.readyAt).getTime();
+    if (Number.isFinite(end)) {
+      const span = t.need * 24 * 60 * 60 * 1000;
+      return Math.min(1, Math.max(0, (Date.now() - (end - span)) / span));
+    }
+  }
+  if (!t.need) return 0;
+  return Math.min(1, Math.max(0, (t.have || 0) / t.need));
 }
 
 /**

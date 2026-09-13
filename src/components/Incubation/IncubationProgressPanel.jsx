@@ -5,7 +5,7 @@ import {
   FaRocket, FaVideo, FaMobileAlt, FaComments, FaUserPlus, FaClock, FaHourglassHalf,
 } from 'react-icons/fa';
 import {
-  fetchIncubationProgress, progressHue, progressFraction, onIncubationProgress,
+  fetchIncubationProgress, progressHue, progressFraction, taskFraction, onIncubationProgress,
 } from '../../lib/incubation';
 
 /* The goals panel, as its own component so that refreshing it refreshes IT.
@@ -149,16 +149,25 @@ function taskCounts(t, minCommentChars) {
 
 /** How far along one task is, 0-100, for the fill behind its card. */
 function taskPct(t) {
-  if (!t.need) return 0;
-  return Math.max(0, Math.min(100, (t.have / t.need) * 100));
+  // Shared with the nav pill and the overall bar, so a goal cannot be drawn as
+  // one amount here and counted as another there. It is also what makes the
+  // time goal move smoothly instead of in thirds.
+  return Math.max(0, Math.min(100, taskFraction(t) * 100));
 }
 
 function taskAmount(t) {
   if (t.unit === 'seconds') return `${asDuration(Math.min(t.have, t.need))} / ${asDuration(t.need)}`;
-  // Spelled out, because "0/3" beside a goal nobody can act on reads like
-  // something is broken. "0 of 3 days" reads as a wait.
+  // A percentage, not a day count. The server floors days so that "three days"
+  // means three WHOLE days, which is right for deciding whether the goal is met
+  // and useless for showing progress: it reads 0 of 3 for a whole day, then 1 of
+  // 3 for another. The percentage comes off the clock, so it always reflects
+  // where someone actually is.
+  //
+  // Rounded DOWN, and never to 100 until the server says done: rounding 99.7 up
+  // would show a finished goal beside an unfinished tick.
   if (t.unit === 'days') {
-    return `${Math.min(t.have, t.need)} of ${t.need} ${t.need === 1 ? 'day' : 'days'}`;
+    const pct = taskFraction(t) * 100;
+    return t.done ? '100%' : `${Math.min(99, Math.floor(pct))}%`;
   }
   return `${Math.min(t.have, t.need)}/${t.need}`;
 }
