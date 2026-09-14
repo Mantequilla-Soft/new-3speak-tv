@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useSignupPossible } from '../../utils/signupPossible';
+import { withReferrer } from '../../utils/referral';
 import { AiohaModal, useAioha } from "@aioha/react-ui";
 import { Providers, KeyTypes } from "@aioha/aioha";
 import { IoPower } from "react-icons/io5";
@@ -56,6 +57,9 @@ function LoginModal({ displayed, onLogin, onClose, loginTitle, loginOptions, int
       });
       const data = await res.json();
       if (!res.ok || !data.url) throw new Error(data.error || 'Failed to start Butter Auth login');
+      // Same referral hand-off as openButrauthPopup. Both paths, or attribution
+      // works only for whichever button the user happened to press.
+      const url = withReferrer(data.url);
       // Sized to the screen (capped) rather than a fixed 480x720: the signup
       // flow is tall — explainer, provider buttons, captcha — and was scrolling
       // inside a small popup.
@@ -63,8 +67,8 @@ function LoginModal({ displayed, onLogin, onClose, loginTitle, loginOptions, int
       const h = Math.min(980, Math.max(660, Math.round(window.screen.availHeight * 0.92)));
       const left = window.screenX + Math.max(0, (window.outerWidth - w) / 2);
       const top = window.screenY + Math.max(0, (window.outerHeight - h) / 2);
-      const popup = window.open(data.url, 'butrauth-login', `width=${w},height=${h},left=${left},top=${top}`);
-      if (!popup) { window.location.href = data.url; return; } // popup blocked → full-page redirect
+      const popup = window.open(url, 'butrauth-login', `width=${w},height=${h},left=${left},top=${top}`);
+      if (!popup) { window.location.href = url; return; } // popup blocked → full-page redirect
       // Keep a handle so the opener can close the popup once login completes —
       // more reliable than the popup closing itself after the cross-origin hop.
       window.__butrauthLoginPopup = popup;
