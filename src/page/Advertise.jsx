@@ -197,6 +197,22 @@ function InventoryPanel({ data, isLoading, error }) {
   );
 }
 
+/* Which surfaces exist ONLY on 3speak.tv.
+ *
+ * A video roll or banner travels with the video: a 3Speak player embedded on someone
+ * else's site is still a 3Speak player, and the spot is already in the manifest it
+ * loads. The shorts feed and the upload studio have no embedded equivalent — they are
+ * pages on this site, so a spot booked on either runs here and nowhere else.
+ *
+ * Stated on the page because an advertiser comparing formats on price alone reads the
+ * shorts rate as buying the same reach as the video rate, and it does not. Better they
+ * know which audience they are buying before they book than discover it from a
+ * delivery report afterwards.
+ *
+ * Keyed off `surface`, the server's own word, so a format on a NEW surface is treated
+ * as travelling rather than being silently labelled site-only on a guess. */
+const SITE_ONLY_SURFACES = new Set(['shorts', 'upload']);
+
 /**
  * Pick what you are buying, before anything else on the form.
  *
@@ -237,6 +253,10 @@ function FormatPicker({ formats, value, onChange }) {
               <span className="mkt-format-meta">
                 {`You supply ${suppliesFor(f).toLowerCase()}`}
                 {' · up to '}{f.maxSeconds}s
+                {/* Said at the point of CHOOSING, not only in the rate card below it.
+                    Reach is part of what separates these formats, and a difference an
+                    advertiser only meets after picking is one they meet too late. */}
+                {SITE_ONLY_SURFACES.has(f.surface) ? ' · 3speak.tv only' : null}
                 {f.rateIsCustom ? ' · your agreed rate' : null}
               </span>
             </button>
@@ -466,6 +486,12 @@ function RateCard({ pricing }) {
                 <dt>Where it runs</dt>
                 <dd>{SURFACE_LABEL[f.surface] || f.surface}</dd>
               </div>
+              {SITE_ONLY_SURFACES.has(f.surface) ? (
+                <div>
+                  <dt>Seen on</dt>
+                  <dd>3speak.tv only</dd>
+                </div>
+              ) : null}
               <div>
                 <dt>You supply</dt>
                 <dd>

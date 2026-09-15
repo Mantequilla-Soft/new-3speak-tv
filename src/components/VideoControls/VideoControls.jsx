@@ -53,6 +53,12 @@ function VideoControls({
   // normally, so it never sets this: taking the timeline away then would be
   // removing a control from ordinary playback.
   adPlaying = false,
+  /* A break is imminent or running and the timeline must not move the playhead past
+   * it. Separate from adPlaying on purpose: that takes the WHOLE bar down for the
+   * length of a spot, which is right while somebody else's video is on screen and
+   * wrong in the seconds before it, where the creator's video is still playing and
+   * the viewer should keep pause, volume and fullscreen. Only the scrubber goes. */
+  adLocked = false,
   currentTime,
   duration,
   buffered,
@@ -370,7 +376,7 @@ function VideoControls({
       onMouseLeave={() => { if (!isTouchDevice) setHovering(false); }}
     >
       {/* Progress bar */}
-      <div className={`vc-progress-row${adPlaying ? ' vc-ad-locked' : ''}`}>
+      <div className={`vc-progress-row${adPlaying ? ' vc-ad-locked' : ''}${!adPlaying && adLocked ? ' vc-ad-imminent' : ''}`}>
         <div
           className="vc-progress-track"
           ref={trackRef}
