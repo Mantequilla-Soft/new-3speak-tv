@@ -7,6 +7,15 @@
 // 1.0.0 — that way they see all of these when develop is pushed to production.
 export const CHANGELOG = [
   {
+    version: '1.79.0',
+    date: '2026-09-16',
+    summary:
+      'Advertising on 3Speak is open: creators earn a share of every ad shown on '
+      + 'their videos, and anyone can book a spot paid in HIVE or HBD with no '
+      + 'third-party tracking. Manage your share under Settings, or book a campaign '
+      + 'from the Advertise page.',
+  },
+  {
     version: '1.78.70',
     date: '2026-09-13',
     summary:
