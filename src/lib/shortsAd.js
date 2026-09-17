@@ -74,6 +74,38 @@ export function resetShortsAdCount() {
   watchedSinceAd = 0;
 }
 
+/** The session id lives in the manifest URL; nothing else hands it to us. */
+function sidOf(manifestUrl) {
+  return (String(manifestUrl || '').match(/\/m\/([0-9a-f]{32})\/short\.m3u8/) || [])[1] || null;
+}
+
+/**
+ * Tell the server how many seconds of the spot actually PLAYED.
+ *
+ * 🚨 This is what bills the advertiser and pays the creator, not the segment fetches.
+ * A player downloads ahead of what it shows — the closing segment of a 29s spot is
+ * requested around eleven seconds in and not shown until 24.6s — so measuring delivery
+ * by what was fetched counted buffered spots nobody saw and missed watched spots that
+ * ended early. The server credits this against its own clock, so an inflated figure
+ * buys nothing; being honest here is simply the only way the number is right.
+ *
+ * Fire-and-forget on purpose, `keepalive` so the last beat survives the page going
+ * away, and every failure swallowed: a viewer's feed must never stutter because our
+ * accounting had a bad moment.
+ */
+export function reportShortsWatched(manifestUrl, seconds) {
+  const sid = sidOf(manifestUrl);
+  if (!sid || !(seconds > 0)) return;
+  try {
+    fetch(`${CHECKER_URL}/m/${sid}/w`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ seconds }),
+      keepalive: true,
+    }).catch(() => {});
+  } catch { /* never the reason a short fails to play */ }
+}
+
 /**
  * 🚫 DO NOT ADD A PREFETCH HERE. It was tried, and it is wrong twice over.
  *

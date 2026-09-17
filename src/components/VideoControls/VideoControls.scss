@@ -1165,3 +1165,21 @@
   visibility: hidden;
   pointer-events: none;
 }
+
+/* The seconds BEFORE the spot, while the countdown is on screen.
+ *
+ * Dimmed rather than hidden, which is the whole difference between this and
+ * .vc-ad-locked above. The creator's video is still playing here, so a bar that
+ * vanished for three seconds and came back would read as the player glitching; a
+ * bar that visibly greys out reads as "not now", which is what it means. It also
+ * leaves the position indicator on screen, so the viewer can still see where they
+ * are in the video while they cannot move.
+ *
+ * pointer-events covers the drag, the click and the scrub preview together. The
+ * keyboard and every programmatic path are refused in adBreak.lockedSeekTarget —
+ * CSS is the part the viewer can see, not the part that enforces anything. */
+.vc-progress-row.vc-ad-imminent {
+  pointer-events: none;
+  opacity: 0.45;
+  transition: opacity 0.2s ease;
+}

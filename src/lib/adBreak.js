@@ -37,6 +37,22 @@ import { CHECKER_URL } from '../utils/config';
  */
 const LANDING_MARGIN_S = 0.35;
 
+/* How many seconds of warning a viewer gets before the break.
+ *
+ * Exported because it is now TWO decisions wearing one number: how long the "Ad in 3"
+ * hint is on screen, and how long the seek lock is armed for. Those have to be the
+ * same window or the hint tells the viewer to do something the lock then refuses,
+ * which reads as the player being broken rather than as the ad being unskippable.
+ */
+export const AD_COUNTDOWN_FROM = 3;
+
+/* How many seconds of a spot ON SCREEN make it a delivered impression.
+ *
+ * 🚨 Keep in step with AD_COUNT_AFTER_SECONDS on the checker, which is the one that
+ * actually decides. This copy only says when to SEND the beat; the server credits it
+ * against its own clock, so the two drifting apart costs a request, never a payout. */
+export const AD_BILLABLE_SECONDS = 3;
+
 const AD_BASE = CHECKER_URL;
 
 // The stitcher only learns where the cut fell when a variant playlist is fetched,
@@ -140,6 +156,26 @@ export function createAdBreak() {
    * past a spot that never played does not spend it. */
   let spotEntered = false;
   let spotConsumed = false;
+  /* Has the countdown actually been on screen for this spot?
+   *
+   * The seek lock hangs off this rather than off the clock alone, because "the
+   * playhead is near the cut" is also true at t=0 of a PRE-ROLL, where no countdown
+   * ever runs — secondsUntil() is null there, the spot is already playing. Arming
+   * the lock on position alone therefore refused the ?t= deep-link seek that fires
+   * 200ms after ready, and a link into the middle of a video silently landed at the
+   * start of it. The latch keeps the lock to what the viewer was actually warned
+   * about: a break they watched count down. */
+  let countdownSeen = false;
+  /* Seconds of the spot that have really PLAYED, and the clock they are measured on.
+   *
+   * 🚨 Measured from the PLAYER's own time inside the break, not from wall clock and
+   * not from segment fetches. Player time only advances while the media is actually
+   * playing, so a pause contributes nothing without anyone having to notice the pause,
+   * and a spot that was buffered but never reached contributes nothing either — which
+   * is exactly what billing off segment fetches got wrong. */
+  let adWatched = 0;
+  let lastInsideAt = null;
+  let watchBeatAt = 0;
   let premium = false;
   // The banner is a SEPARATE placement, from a separate advertiser, that can be
   // present with or without a spot. It is not a second kind of break: it adds no
@@ -472,6 +508,59 @@ export function createAdBreak() {
     },
 
     /**
+     * Whole seconds to show in the "Ad in N" hint, or null for no hint.
+     *
+     * The arithmetic lives here rather than in each player's render because it also
+     * ARMS THE SEEK LOCK. Two copies of "is the countdown up" is two chances for the
+     * lock to disagree with the thing the viewer can see.
+     */
+    countdownAt(playerTime) {
+      const left = this.secondsUntil(playerTime);
+      if (left == null || left > AD_COUNTDOWN_FROM) return null;
+      countdownSeen = true;
+      return Math.max(1, Math.ceil(left));
+    },
+
+    /**
+     * 🚨 Is the playhead under the no-skip lock?
+     *
+     * From the moment the countdown appears until the spot has been sat through. The
+     * warning is otherwise an instruction: it told the viewer exactly when to drag the
+     * handle, and the timeline let them, so a spot an advertiser paid for was skipped
+     * by the very thing meant to make it bearable.
+     *
+     * Bounded by `spotConsumed` at one end and the latch at the other, so a spot that
+     * has already run locks nothing — those seconds are a hole to be jumped, not an ad
+     * to be protected — and a pre-roll nobody was warned about locks nothing either.
+     */
+    seekLocked(playerTime) {
+      if (!window_ || !Number.isFinite(playerTime)) return false;
+      if (spotConsumed || !countdownSeen) return false;
+      return playerTime >= window_.start - AD_COUNTDOWN_FROM
+          && playerTime < window_.start + window_.duration;
+    },
+
+    /**
+     * Where a seek made under the lock must land instead, or null to let it through.
+     *
+     * Refusing means staying put, not being thrown forward: the viewer asked to leave
+     * and the answer is no, so the playhead simply does not move.
+     *
+     * BACKWARDS IS ALWAYS ALLOWED. Rewinding out of the countdown is not a way past
+     * the ad — the break is still in front of them and they will meet it again on the
+     * way back. Blocking it would take the one control that costs the advertiser
+     * nothing, and turn "you cannot skip this" into "you cannot move at all", which is
+     * the version people take to be a bug.
+     */
+    lockedSeekTarget(playerTime, cameFrom) {
+      if (!Number.isFinite(playerTime) || !Number.isFinite(cameFrom)) return null;
+      if (!this.seekLocked(cameFrom)) return null;
+      if (playerTime < window_.start) return null;   // going back, or still short of the cut
+      if (playerTime <= cameFrom) return null;       // not a forward jump
+      return cameFrom;
+    },
+
+    /**
      * This spot is done with, whatever the clock says.
      *
      * Closing a banner reloads the source, and a reload walks the playhead through zero
@@ -509,8 +598,56 @@ export function createAdBreak() {
      */
     noteTime(playerTime) {
       if (!window_ || !Number.isFinite(playerTime)) return;
-      if (this.spansSpot(playerTime)) { spotEntered = true; return; }
+      if (this.spansSpot(playerTime)) {
+        spotEntered = true;
+        if (lastInsideAt != null) {
+          const step = playerTime - lastInsideAt;
+          /* Forward, and small. A backward step is a rewind and a big one is a seek or
+           * a tick that arrived late after a stall; neither is a second of ad anybody
+           * watched. 2s is comfortably above the ~250ms a timeupdate really delivers
+           * and far below any jump worth having. */
+          if (step > 0 && step < 2) adWatched += step;
+        }
+        lastInsideAt = playerTime;
+        // The billing beat, sent once, the moment the spot has been on screen long
+        // enough to owe the creator for it.
+        if (adWatched >= AD_BILLABLE_SECONDS && watchBeatAt === 0) {
+          watchBeatAt = adWatched;
+          this.reportWatched();
+        }
+        return;
+      }
+      /* Just left the break. The closing beat carries the full figure, so a spot
+       * watched for nine seconds is on record as nine rather than frozen at the three
+       * that billed it. Sent on the way OUT rather than per tick: one request for the
+       * whole playback instead of one a second. */
+      if (lastInsideAt != null) {
+        lastInsideAt = null;
+        if (adWatched > 0) this.reportWatched();
+      }
       if (spotEntered && playerTime >= window_.start + window_.duration) spotConsumed = true;
+    },
+
+    /** Seconds of the spot that actually played. */
+    get watchedSeconds() { return Math.round(adWatched * 100) / 100; },
+
+    /**
+     * Tell the server what really played. Fire and forget.
+     *
+     * `keepalive` so a beat sent as the page goes away still arrives, and every failure
+     * swallowed: a video must never stutter because our accounting had a bad moment.
+     */
+    reportWatched() {
+      const sid = session && session.sid;
+      if (!sid || !(adWatched > 0)) return;
+      try {
+        fetch(`${AD_BASE}/m/${sid}/w`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ seconds: Math.round(adWatched * 100) / 100 }),
+          keepalive: true,
+        }).catch(() => {});
+      } catch { /* never the reason a video fails to play */ }
     },
 
     /** Has the spot been watched, or skipped, and become a hole in the timeline? */
@@ -582,6 +719,6 @@ export function createAdBreak() {
       return Math.max(0, mediaDuration - window_.duration);
     },
 
-    reset() { session = null; window_ = null; skipAfter = null; spotRetired = false; spotEntered = false; spotConsumed = false; banner = null; bannerWindow = null; bannerSid = null; premium = false; },
+    reset() { session = null; window_ = null; skipAfter = null; spotRetired = false; spotEntered = false; spotConsumed = false; countdownSeen = false; adWatched = 0; lastInsideAt = null; watchBeatAt = 0; banner = null; bannerWindow = null; bannerSid = null; premium = false; },
   };
 }

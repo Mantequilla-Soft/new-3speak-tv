@@ -16,6 +16,7 @@ import { GlobalReviewModal } from "./components/ReviewModal/ReviewModal";
 import ReviewFab from "./components/ReviewModal/ReviewFab";
 import { useEffect } from "react";
 import { readAppVersion } from "./utils/appVersion";
+import { captureReferralFromUrl } from "./utils/referral";
 import ChangelogModal from "./components/Changelog/ChangelogModal";
 import ProfileNav from "./components/nav/ProfileNav";
 // Legacy studio is retired: /studio routes now redirect to /embed-studio
@@ -304,6 +305,17 @@ function App() {
     const { previousVersion, shouldPrompt } = readAppVersion();
     if (shouldPrompt) useAppStore.getState().setAppUpdatedFrom(previousVersion);
   }, []);
+
+  // Remember a `?ref=` the visitor arrived with, on any route, so the creator
+  // who shared the link is credited when they sign up through Butter Auth --
+  // which may be several pages and several days later. First touch wins and it
+  // expires after 30 days; see utils/referral.js.
+  //
+  // Keyed on the search string rather than [] because a referral link is often
+  // followed INTO the app by client-side navigation (a shared /watch URL, say),
+  // and a mount-only effect would miss every one of those.
+  const { search } = location;
+  useEffect(() => { captureReferralFromUrl(search); }, [search]);
 
   // Compare the running build against the latest version on GitHub (develop) and
   // prompt the user to refresh if they're on a stale (cached) build — so updates

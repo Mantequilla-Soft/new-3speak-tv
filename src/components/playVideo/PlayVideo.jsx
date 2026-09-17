@@ -77,7 +77,7 @@ const toast = toastIn('Video');
 
 dayjs.extend(relativeTime);
 
-const PlayVideo = ({ videoDetails, author, permlink, mediaUnavailable = false, mediaBlocked = false, onRetryPlayback = null, mediaLoading = false, playlistData, onClosePlaylist, videoControls, mobileReactionPanel, cinemaReactionPanel, videoRef, wrapperRef, onVideoEdited, overrideBody, scheduled = false, scheduledOn = null, onEditScheduled, v2 = false, isLive = false, streamRoom = null, liveChatSlot = null, onLiveChatSent = null, vodAssetPending = false, onStreamRoomMeta = null, belowPlayerSlot = null, sponsorLabel = null, adCountdown = null, bannerHit = null, adSkip = null, adPlaying = false }) => {
+const PlayVideo = ({ videoDetails, author, permlink, mediaUnavailable = false, mediaBlocked = false, onRetryPlayback = null, mediaLoading = false, playlistData, onClosePlaylist, videoControls, mobileReactionPanel, cinemaReactionPanel, videoRef, wrapperRef, onVideoEdited, overrideBody, scheduled = false, scheduledOn = null, onEditScheduled, v2 = false, isLive = false, streamRoom = null, liveChatSlot = null, onLiveChatSent = null, vodAssetPending = false, onStreamRoomMeta = null, belowPlayerSlot = null, sponsorLabel = null, adCountdown = null, bannerHit = null, adSkip = null, adPlaying = false, adLocked = false }) => {
   const { user, authenticated } = useAppStore();
   const incubationHandle = useAppStore((s) => s.incubationHandle);
   // Actions that move value on Hive: promoting spends funds, tipping sends
@@ -1107,6 +1107,7 @@ const PlayVideo = ({ videoDetails, author, permlink, mediaUnavailable = false, m
                   />
                   <VideoControls
                     adPlaying={adPlaying}
+                    adLocked={adLocked}
                     currentTime={videoControls.currentTime}
                     duration={videoControls.duration}
                     buffered={videoControls.buffered}

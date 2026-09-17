@@ -8,7 +8,15 @@ import { SHORTS_ADS_ENABLED } from '../utils/config';
  * least have run out. Nothing is charged for it either way: an impression is recorded
  * from the measured segments, which a spot that never played never fetches. */
 const SHORTS_AD_START_TIMEOUT_MS = 8000;
-import { countShortWatched, requestShortsAd } from '../lib/shortsAd';
+/* How many seconds of a spot on screen make it a delivered impression.
+ *
+ * 🚨 Keep in step with AD_COUNT_AFTER_SECONDS on the checker, which is the one that
+ * actually decides. This copy only exists so the beat is SENT at the moment the
+ * threshold is crossed rather than a second either side of it; the server credits
+ * against its own clock regardless, so the two drifting apart costs a beat, not a
+ * wrong payout. */
+const AD_BILLABLE_SECONDS = 3;
+import { countShortWatched, requestShortsAd, reportShortsWatched } from '../lib/shortsAd';
 import ShortsAdOverlay from '../components/ads/ShortsAdOverlay';
 import React, { useState, useEffect, useCallback, useRef, useMemo } from 'react';
 import { createPortal } from 'react-dom';
@@ -260,6 +268,11 @@ const VideoShort = () => {
   // would hand it comments, votes, an author and a permlink it does not have.
   const [shortsAd, setShortsAd] = useState(null);
   const [adSecondsLeft, setAdSecondsLeft] = useState(0);
+  /* Seconds of the current spot that have actually PLAYED — not since it was handed
+   * over, not since it was loaded. A ref rather than state: it ticks every second and
+   * nothing renders it, so putting it in state would re-render the feed once a second
+   * for a number nobody can see. */
+  const adWatchedRef = useRef(0);
   const adBusyRef = useRef(false);
   // A spot the server has already handed over, waiting for the next swipe to play it
   // on. Held in a ref rather than state on purpose: it must not render anything until
@@ -901,6 +914,7 @@ const VideoShort = () => {
         takingSpot = true;
         setShortsAd(spot);
         setAdStarted(false);
+        adWatchedRef.current = 0;
         setAdSecondsLeft(Math.round(Number(spot.durationSeconds) || 0));
       } else {
         const finished = videos[prevIndex];
@@ -1045,12 +1059,35 @@ const VideoShort = () => {
     // advertiser is paid for seconds that were actually on screen, and the viewer keeps
     // an ordinary control.
     if (!isPlaying) return undefined;
-    const tick = setInterval(() => setAdSecondsLeft((n) => (n > 0 ? n - 1 : 0)), 1000);
+    const tick = setInterval(() => {
+      /* Seconds of the spot that were really ON SCREEN, counted on the same clock as
+       * the countdown so the two can never disagree. This is what bills the advertiser
+       * and pays the creator: see reportShortsWatched, and AD_COUNT_AFTER_SECONDS on
+       * the checker for where the line sits.
+       *
+       * Gated on adStarted and isPlaying by the effect this lives in, which is the
+       * whole point — loading time is not watch time, and a paused ad is not playing. */
+      adWatchedRef.current += 1;
+      // One beat at the billing threshold so a viewer who leaves straight after still
+      // counts, and the rest is carried by the final beat when the spot ends.
+      if (adWatchedRef.current === AD_BILLABLE_SECONDS) {
+        reportShortsWatched(shortsAd.manifestUrl, adWatchedRef.current);
+      }
+      setAdSecondsLeft((n) => (n > 0 ? n - 1 : 0));
+    }, 1000);
     return () => clearInterval(tick);
   }, [shortsAd, adStarted, isPlaying]);
 
   // When the spot is done — its time is up, or the viewer skipped — put the short back.
   const endShortsAd = useCallback(() => {
+    /* The closing beat, carrying the full figure. Sent from here rather than from the
+     * countdown because this is the one path every ending goes through — time up, Skip
+     * pressed, or the feed moving on — and a spot watched for nine seconds of twenty-
+     * nine should be on record as nine, not frozen at the three that billed it. */
+    if (shortsAd && adWatchedRef.current > 0) {
+      reportShortsWatched(shortsAd.manifestUrl, adWatchedRef.current);
+    }
+    adWatchedRef.current = 0;
     setShortsAd(null);
     setAdStarted(false);
     setAdSecondsLeft(0);
@@ -1066,12 +1103,28 @@ const VideoShort = () => {
         .then(() => playPlayerWithMuteSync(player))
         .catch((err) => console.error('[VideoShort] could not resume after the spot:', err));
     }
-  }, [videos]);
+  }, [videos, shortsAd]);
 
   /* The `ended` listener is registered once, on mount, so it cannot close over this
    * callback — it reads the latest one through a ref instead. */
   const endShortsAdRef = useRef(null);
   endShortsAdRef.current = endShortsAd;
+
+  /* Leaving the feed in the middle of a spot.
+   *
+   * Every ordinary ending goes through endShortsAd, which beats the full figure and
+   * zeroes the counter — so by the time this cleanup runs on those paths there is
+   * nothing left to send and it does nothing. Navigating away is the one exit that
+   * never reaches endShortsAd, and without this the spot's watched seconds would stop
+   * at whatever the threshold beat happened to carry. `keepalive` inside
+   * reportShortsWatched is what lets that last request outlive the page. */
+  const liveSpotRef = useRef(null);
+  liveSpotRef.current = shortsAd;
+  useEffect(() => () => {
+    if (liveSpotRef.current && adWatchedRef.current > 0) {
+      reportShortsWatched(liveSpotRef.current.manifestUrl, adWatchedRef.current);
+    }
+  }, []);
 
   useEffect(() => {
     if (!shortsAd || adSecondsLeft > 0) return;

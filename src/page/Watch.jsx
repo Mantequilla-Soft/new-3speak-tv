@@ -32,9 +32,6 @@ import AdOverlay from '../components/ads/AdOverlay';
 import AdSkip from '../components/ads/AdSkip';
 import BannerClick from '../components/ads/BannerClick';
 
-// How long before a break the countdown appears. Three seconds is enough to register
-// without becoming its own distraction.
-const AD_COUNTDOWN_FROM = 3;
 import { useGatedPlayback } from '../hooks/useGatedPlayback';
 import GuestListEditor from '../components/gated/GuestListEditor';
 import { ThreeSpeakApi } from '@mantequilla-soft/3speak-player';
@@ -440,6 +437,12 @@ function Watch({ v2 = false }) {
   // warning is the part people resent most; a few seconds' notice costs the
   // advertiser nothing and turns an interruption into a beat.
   const [adCountdown, setAdCountdown] = useState(null);
+  /* 🚨 Is the timeline locked because a break is imminent or running?
+   *
+   * The countdown used to be a warning with no teeth: it named the second to drag the
+   * handle past, and the bar was still live to do it with. This is the same window,
+   * read off adBreak so the lock and the hint can never disagree. */
+  const [adLocked, setAdLocked] = useState(false);
   // Seconds until the content resumes, while the spot is on screen. The wait is
   // the thing a viewer actually wants to know, and a number that is visibly
   // ticking down reads as shorter than the same wait with no number on it.
@@ -472,6 +475,7 @@ function Watch({ v2 = false }) {
       if (bannerVisible) setBannerVisible(false);
       if (bannerClosable) setBannerClosable(false);
       if (adCountdown !== null) setAdCountdown(null);
+      if (adLocked) setAdLocked(false);
       if (resumeIn !== null) setResumeIn(null);
       if (canSkipAd) setCanSkipAd(false);
       if (skipIn !== null) setSkipIn(null);
@@ -483,6 +487,7 @@ function Watch({ v2 = false }) {
       if (sponsorVisible) setSponsorVisible(false);
       if (bannerVisible) setBannerVisible(false);
       if (adCountdown !== null) setAdCountdown(null);
+      if (adLocked) setAdLocked(false);
       if (resumeIn !== null) setResumeIn(null);
       if (canSkipAd) setCanSkipAd(false);
       if (skipIn !== null) setSkipIn(null);
@@ -491,6 +496,7 @@ function Watch({ v2 = false }) {
     if (!ab.active) {
       if (sponsorVisible) setSponsorVisible(false);
       if (adCountdown !== null) setAdCountdown(null);
+      if (adLocked) setAdLocked(false);
       if (resumeIn !== null) setResumeIn(null);
       const t0 = Number(playerState?.currentTime) || 0;
       const onB = ab.isBannerVisible(t0);
@@ -505,9 +511,15 @@ function Watch({ v2 = false }) {
     if (onBanner !== bannerVisible) setBannerVisible(onBanner);
 
     // Only inside the last few seconds, and never while the spot is already playing.
-    const left = inside ? null : ab.secondsUntil(t);
-    const next = left != null && left <= AD_COUNTDOWN_FROM ? Math.max(1, Math.ceil(left)) : null;
+    // countdownAt() rather than the arithmetic inline: it is what arms the seek lock,
+    // so the hint appearing and the timeline locking are one event, not two.
+    const next = inside ? null : ab.countdownAt(t);
     if (next !== adCountdown) setAdCountdown(next);
+
+    // Armed by the hint above and held through the spot. Read after it, so the first
+    // frame the countdown is visible is already a locked one.
+    const locked = ab.seekLocked(t);
+    if (locked !== adLocked) setAdLocked(locked);
 
     // Whole seconds, so it ticks once a second rather than flickering per frame.
     const remain = inside ? ab.secondsRemaining(t) : null;
@@ -530,7 +542,7 @@ function Watch({ v2 = false }) {
     const untilSkip = inside ? ab.secondsUntilSkip(t) : null;
     const shownSkip = untilSkip == null ? null : Math.max(1, Math.ceil(untilSkip));
     if (shownSkip !== skipIn) setSkipIn(shownSkip);
-  }, [playerState?.currentTime, sponsorVisible, bannerVisible, adCountdown, resumeIn, canSkipAd, skipIn, adChromeOff, bannerClosable]);
+  }, [playerState?.currentTime, sponsorVisible, bannerVisible, adCountdown, adLocked, resumeIn, canSkipAd, skipIn, adChromeOff, bannerClosable]);
 
   /* The viewer closed the banner.
    *
@@ -1580,12 +1592,30 @@ function Watch({ v2 = false }) {
       if (at < start && start - at <= 1.5) boundaryRaf = requestAnimationFrame(boundaryTick);
     };
 
-    const guard = () => {
+    /* `ev` says whether the playhead was MOVED or simply arrived: this is bound to
+     * timeupdate as well as the two seek events.
+     *
+     * 🚨 The lock must only ever refuse a seek. Playing normally into the cut walks
+     * the clock forward across the spot's start like any other second, and treating
+     * that as a jump to be refused pins the playhead just short of the ad and never
+     * lets the spot start at all — the break would be unreachable and unbillable,
+     * which is the exact opposite of the point. Spent-spot jumping has no such
+     * problem (those seconds are meant to be skipped however they are reached), so it
+     * runs on every event. */
+    const guard = (ev) => {
       const ab = adBreakRef.current;
       const at = el.currentTime;
       if (!ab || !Number.isFinite(at)) return;
       ab.noteTime?.(at);
-      const to = ab.skipTargetFor?.(at, lastSeen);
+      const moved = !!ev && ev.type !== 'timeupdate';
+      /* Two rules, in order, and they never both apply: skipTargetFor moves the
+       * playhead OUT of a spot already watched, lockedSeekTarget refuses to let it
+       * leave one that has not been. The second is the backstop for every way past a
+       * break that is not the progress bar — a deep link, a chapter marker, a reaction
+       * jump, a media key, anything a later feature adds — because they all end up
+       * setting currentTime on this element whatever they called to get here. */
+      const to = ab.skipTargetFor?.(at, lastSeen)
+        ?? (moved ? ab.lockedSeekTarget?.(at, lastSeen) : null);
       if (to == null) { lastSeen = at; armBoundary(); return; }
       try { el.currentTime = to; } catch { /* it plays through, as it did before */ }
       lastSeen = to;
@@ -2049,6 +2079,7 @@ function Watch({ v2 = false }) {
           />
         ) : null}
         adCountdown={adCountdown}
+        adLocked={adLocked}
         adSkip={sponsorVisible && adBreakRef.current?.skipOffered ? (
           <AdSkip secondsUntil={skipIn} onSkip={canSkipAd ? skipAd : null} />
         ) : null}
@@ -2128,14 +2159,27 @@ function Watch({ v2 = false }) {
             const at = ab.contentTime(playerState.currentTime);
             seek(ab.playerTimeFor(Math.max(0, at - 10)));
           },
+          /* 🚨 Refused while the lock is on, and refused HERE as well as in the guard.
+           *
+           * The guard alone would work — it puts the playhead back either way — but it
+           * does so after the seek has been issued, which is a visible twitch of the
+           * bar and, on HLS, a real seek the player then has to unwind. Saying no at
+           * the source costs nothing and the viewer sees a control that simply does
+           * not respond, which is what a disabled control should look like. */
           onSeekForward: () => {
             const ab = adBreakRef.current;
+            if (ab.seekLocked(playerState.currentTime)) return;
             const at = ab.contentTime(playerState.currentTime);
             const end = ab.contentDuration(playerState.duration);
             seek(ab.playerTimeFor(Math.min(end, at + 10)));
           },
           // The bar hands back a content second; the player needs the file's.
-          onSeek: (t) => seek(adBreakRef.current.playerTimeFor(t)),
+          onSeek: (t) => {
+            const ab = adBreakRef.current;
+            const to = ab.playerTimeFor(t);
+            if (ab.lockedSeekTarget(to, playerState.currentTime) != null) return;
+            seek(to);
+          },
           onRefreshReactions: refreshMarkers,
           onToggleFullscreen: handleToggleFullscreen,
           onMouseMove: showControlsTemporarily,
