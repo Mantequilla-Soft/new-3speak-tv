@@ -1,3 +1,5 @@
+import { withReferrer } from './referral';
+
 /**
  * Open a Butter Auth flow in a popup.
  *
@@ -34,6 +36,10 @@ export async function openButrauthPopup({ signup = false, graduate = false, chan
   const data = await res.json();
   if (!res.ok || !data.url) throw new Error(data.error || 'Could not start Butter Auth');
 
+  // Carry a `?ref=` the visitor arrived with, so the person who sent them here
+  // is credited at the moment they name themselves on Butter Auth.
+  const url = withReferrer(data.url);
+
   // Sized to the screen rather than fixed: these flows are tall (explainer,
   // provider buttons, captcha, key backup) and scrolled inside a small popup.
   const w = Math.min(640, Math.max(420, Math.round(window.screen.availWidth * 0.42)));
@@ -41,10 +47,10 @@ export async function openButrauthPopup({ signup = false, graduate = false, chan
   const left = window.screenX + Math.max(0, (window.outerWidth - w) / 2);
   const top = window.screenY + Math.max(0, (window.outerHeight - h) / 2);
 
-  const popup = window.open(data.url, 'butrauth-login', `width=${w},height=${h},left=${left},top=${top}`);
+  const popup = window.open(url, 'butrauth-login', `width=${w},height=${h},left=${left},top=${top}`);
   if (!popup) {
     // Blocked. A full-page redirect is the same flow without the window.
-    window.location.href = data.url;
+    window.location.href = url;
     return true;
   }
   // The opener closes it when the flow reports back — more reliable than the

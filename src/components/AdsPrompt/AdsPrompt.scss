@@ -426,6 +426,43 @@
 
   .ads-prompt-head-icon { font-size: 32px; }
 
+  .ads-prompt-text { margin-bottom: 13px; }
+
+  // Two tiles to a row on a phone, names only (AdPitchDialog drops the blurbs at
+  // the same width). Four one-line tiles instead of four three-line ones is what
+  // keeps the buttons above the fold on a small screen, which is the whole point
+  // of the sheet: the card should end where the thumb already is.
+  //
+  // A grid rather than a wrapping flex row, so the pair in a row are the same
+  // height whatever the two names are, and an odd last tile stays half width
+  // instead of stretching across.
+  .ads-prompt-formats.is-compact {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px;
+    margin-bottom: 12px;
+
+    li {
+      display: flex;
+      align-items: center;
+      min-height: 42px;
+      padding: 8px 10px;
+    }
+
+    .ads-prompt-format-name {
+      font-size: 12.5px;
+      line-height: 1.25;
+      // A rate-card label added later can be longer than the four we ship with,
+      // and it should wrap inside its tile rather than push the grid sideways.
+      overflow-wrap: anywhere;
+    }
+  }
+
+  .ads-prompt-reach {
+    padding: 9px 11px;
+    font-size: 12px;
+  }
+
   .ads-prompt-actions {
     gap: 8px;
 

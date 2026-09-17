@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useId, useMemo, useRef, useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { MdCampaign, MdInfoOutline, MdCheckCircle, MdSchedule, MdCancel, MdVideocam, MdTv } from 'react-icons/md';
 import { toastIn } from '../utils/toast';
@@ -197,6 +197,22 @@ function InventoryPanel({ data, isLoading, error }) {
   );
 }
 
+/* Which surfaces exist ONLY on 3speak.tv.
+ *
+ * A video roll or banner travels with the video: a 3Speak player embedded on someone
+ * else's site is still a 3Speak player, and the spot is already in the manifest it
+ * loads. The shorts feed and the upload studio have no embedded equivalent — they are
+ * pages on this site, so a spot booked on either runs here and nowhere else.
+ *
+ * Stated on the page because an advertiser comparing formats on price alone reads the
+ * shorts rate as buying the same reach as the video rate, and it does not. Better they
+ * know which audience they are buying before they book than discover it from a
+ * delivery report afterwards.
+ *
+ * Keyed off `surface`, the server's own word, so a format on a NEW surface is treated
+ * as travelling rather than being silently labelled site-only on a guess. */
+const SITE_ONLY_SURFACES = new Set(['shorts', 'upload']);
+
 /**
  * Pick what you are buying, before anything else on the form.
  *
@@ -237,6 +253,10 @@ function FormatPicker({ formats, value, onChange }) {
               <span className="mkt-format-meta">
                 {`You supply ${suppliesFor(f).toLowerCase()}`}
                 {' · up to '}{f.maxSeconds}s
+                {/* Said at the point of CHOOSING, not only in the rate card below it.
+                    Reach is part of what separates these formats, and a difference an
+                    advertiser only meets after picking is one they meet too late. */}
+                {SITE_ONLY_SURFACES.has(f.surface) ? ' · 3speak.tv only' : null}
                 {f.rateIsCustom ? ' · your agreed rate' : null}
               </span>
             </button>
@@ -466,6 +486,12 @@ function RateCard({ pricing }) {
                 <dt>Where it runs</dt>
                 <dd>{SURFACE_LABEL[f.surface] || f.surface}</dd>
               </div>
+              {SITE_ONLY_SURFACES.has(f.surface) ? (
+                <div>
+                  <dt>Seen on</dt>
+                  <dd>3speak.tv only</dd>
+                </div>
+              ) : null}
               <div>
                 <dt>You supply</dt>
                 <dd>
@@ -740,6 +766,10 @@ function CampaignPanel({
   const [payCcy, setPayCcy] = useState({});
   const [payBusy, setPayBusy] = useState(null);
   const [payError, setPayError] = useState(null);
+  /* Progress while the chain catches up, kept OUT of payError on purpose: that renders
+   * in .mkt-upload-error, and telling somebody their payment is being confirmed in red
+   * error styling is how you get them to pay twice. */
+  const [payWaiting, setPayWaiting] = useState(null);
 
   const payWithWallet = useCallback(async (c) => {
     const owed = Math.round((c.priceHbd - c.paidHbd) * 1000) / 1000;
@@ -763,11 +793,11 @@ function CampaignPanel({
     setPayBusy(c.id);
     try {
       await transferWithAioha(c.payTo, amount, ccy, c.memo);
-      // The transfer is signed, not yet irreversible-block. Give the chain a moment
-      // before asking the checker to look, or the first check reliably finds nothing
-      // and reads as a failure to the advertiser.
-      await new Promise((r) => setTimeout(r, 4000));
-      onCheckPayment(c.id);
+      /* AWAITED, and polled. The wait used to be a bare 4s sleep followed by one
+       * unawaited check, so the button un-busied while the claim was still in flight
+       * and a slow chain read as a failure. onCheckPayment now waits the transfer out
+       * itself, and the button stays busy until there is a real answer. */
+      await onCheckPayment(c.id, { afterPay: true });
     } catch (err) {
       // A cancelled signature is not an error worth shouting about, but a failed one is.
       const msg = String(err?.message || err || 'Transfer failed');
@@ -886,15 +916,68 @@ function CampaignPanel({
     return null;
   }
 
-  async function onCheckPayment(id) {
+  /* 🚨 POLL FOR THE PAYMENT, DO NOT ASK ONCE.
+   *
+   * This used to fire a single claim four seconds after the wallet signed, and give up
+   * on the first "not found". Four seconds does not cover broadcast, inclusion in a
+   * block (3s block time) and the node indexing it into account history. A real payment
+   * was missed by TWO SECONDS: the claim asked at 17:30:16 and the transfer landed in a
+   * block at 17:30:18. The advertiser was told they had not paid, having just paid.
+   *
+   * That is the worst failure this page can produce. Money has left their wallet and
+   * the screen says it did not arrive, so the rational next move is to pay again.
+   *
+   * Only a 404 is worth waiting for — it means "no matching transfer yet". Every other
+   * status is a real answer (wrong payer, cancelled campaign) and is shown at once
+   * rather than after a minute of pointless polling.
+   */
+  const CLAIM_POLL_MS = [0, 3000, 5000, 8000, 12000, 20000];   // ~48s across 6 tries
+  const CLAIM_ONCE_MS = [0, 4000];                              // the manual button
+
+  async function claimWithRetry(id, delays, onWaiting) {
+    let last = null;
+    for (let i = 0; i < delays.length; i += 1) {
+      if (delays[i]) await new Promise((r) => setTimeout(r, delays[i]));
+      try {
+        return await claimCampaign(id);
+      } catch (err) {
+        last = err;
+        if (err.status !== 404) throw err;   // a real answer, not "not yet"
+        onWaiting?.(i + 1, delays.length);
+      }
+    }
+    throw last;
+  }
+
+  /**
+   * `afterPay` says whether we just watched the wallet sign.
+   *
+   * If we did, the transfer is definitely coming and it is worth waiting out the chain.
+   * If the advertiser pressed "Manually sent", they may have paid an hour ago or not at
+   * all, and making them watch a spinner for a minute to be told "no transfer" is worse
+   * than answering quickly.
+   */
+  async function onCheckPayment(id, { afterPay = false } = {}) {
     setError(null);
+    setPayError(null);
+    setPayWaiting(null);
     try {
-      const r = await claimCampaign(id);
+      const r = await claimWithRetry(
+        id,
+        afterPay ? CLAIM_POLL_MS : CLAIM_ONCE_MS,
+        (n, of) => setPayWaiting(`Confirming your payment on chain… (${n}/${of})`),
+      );
+      setPayWaiting(null);
       toast.success(r.message || 'Payment found');
       refresh();
     } catch (err) {
+      setPayWaiting(null);
       // A missing payment is the normal case right after booking, not a failure.
-      setError(err.status === 404 ? 'No matching transfer found yet. It can take a moment to appear on chain.' : (err.message || 'Could not check'));
+      setError(err.status === 404
+        ? (afterPay
+          ? 'Your transfer has not shown up on chain yet. It is signed, so it will arrive — press "Manually sent" in a moment and it will be picked up. Do not pay again.'
+          : 'No matching transfer found yet. It can take a moment to appear on chain.')
+        : (err.message || 'Could not check'));
     }
   }
 
@@ -1362,12 +1445,15 @@ function CampaignPanel({
                       disabled={payBusy === c.id}
                       onClick={() => payWithWallet(c)}
                     >
-                      {payBusy === c.id ? 'Waiting for your wallet…' : 'Send with wallet'}
+                      {payBusy === c.id
+                        ? (payWaiting ? 'Confirming payment…' : 'Waiting for your wallet…')
+                        : 'Send with wallet'}
                     </button>
                     <button type="button" className="mkt-secondary" onClick={() => onCheckPayment(c.id)}>
                       Manually sent
                     </button>
                   </div>
+                  {payWaiting && <p className="mkt-fine">{payWaiting}</p>}
                   {payError && <p className="mkt-upload-error">{payError}</p>}
                 </div>
               )}
@@ -1609,6 +1695,17 @@ function CreativePanel({ reference, account, maxSeconds, bannerSpec, onCreatives
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState(null);
   const inputRef = useRef(null);
+  /* 🚨 UNIQUE PER PANEL. This id was the constant "mkt-creative-file", and there are
+   * TWO CreativePanels on the product page: the booking wizard's, and the one below it
+   * that is deliberately kept MOUNTED on every tab (hidden with display:none) so the
+   * attach pickers stay filled. Two inputs, one id — and `htmlFor` binds a label to the
+   * FIRST match in the document, not to the input beside it.
+   *
+   * So once the wizard panel had its one creative it disabled its own input, and every
+   * upload button on the page silently pointed at that disabled input. The button did
+   * nothing, with no error, because the click was landing on a different panel's
+   * control. */
+  const inputId = `mkt-creative-file-${useId()}`;
 
   // One file when the wizard asks for one. A booking runs a single creative, so
   // offering "add another" mid-enrollment invites a library nobody asked for and a
@@ -1735,7 +1832,7 @@ function CreativePanel({ reference, account, maxSeconds, bannerSpec, onCreatives
       <div className="mkt-upload-row">
         <input
           ref={inputRef}
-          id="mkt-creative-file"
+          id={inputId}
           type="file"
           accept={adType === 'banner' ? 'image/*,video/*' : (isVideoAd(adType) ? 'video/*' : 'video/*,image/*')}
           onChange={onFile}
@@ -1743,7 +1840,7 @@ function CreativePanel({ reference, account, maxSeconds, bannerSpec, onCreatives
           className="mkt-visually-hidden"
         />
         <label
-          htmlFor="mkt-creative-file"
+          htmlFor={inputId}
           className={`mkt-outline mkt-upload-btn${busy || atLimit ? ' disabled' : ''}`}
           aria-disabled={atLimit ? 'true' : undefined}
         >

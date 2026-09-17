@@ -207,6 +207,12 @@ const ENABLE_METAMASK_SNAP = import.meta.env.VITE_ENABLE_METAMASK_SNAP === 'true
 // is off, so testers can reveal the Butter Auth login + signup before launch.
 const ENABLE_BUTRAUTH = import.meta.env.VITE_ENABLE_BUTRAUTH !== 'false'
   || (typeof localStorage !== 'undefined' && localStorage.getItem('butrauth_unlocked') === 'true');
+// Where Butter Auth lives, for the few calls the BROWSER has to make to it
+// directly rather than through our own /api. There is exactly one today:
+// "can this device sign up at all", whose answer depends on the caller's IP --
+// proxying it through our server would ask about the server's address instead
+// of the user's, and always get "yes".
+const BUTRAUTH_URL = (import.meta.env.VITE_BUTRAUTH_URL || 'https://butrauth.com').replace(/\/+$/, '');
 const ENABLE_SUBS = import.meta.env.VITE_ENABLE_SUBS === 'true';
 // Pay-per-listen reward controls in the audio uploader. Enabled by
 // default; set VITE_ENABLE_PPL=false to hide the earn-mode chooser and
@@ -376,6 +382,7 @@ export {
   LISTEN_BEAT_KEY,
   ENABLE_METAMASK_SNAP,
   ENABLE_BUTRAUTH,
+  BUTRAUTH_URL,
   ENABLE_SUBS,
   OPENPODS_STANDALONE,
   ENABLE_OPENPODS,
