@@ -306,6 +306,17 @@ const VideoShort = () => {
   // Desktop opens the comments side-panel by default; mobile keeps it closed
   // (it's a full-screen bottom sheet there).
   const [showComments, setShowComments] = useState(() => typeof window !== 'undefined' && window.innerWidth > 768);
+  // The comments panel stands down for the length of a spot, like the rest of the
+  // chrome in the `.ad-playing` block in Short.scss. It was the one piece that did
+  // not, and on desktop it is open by DEFAULT, so an advertiser's spot played with a
+  // stranger's comment thread beside it and every reply box in it posted to the short
+  // paused underneath.
+  //
+  // `showComments` itself is deliberately left alone, so whatever the viewer had open
+  // comes straight back when the spot ends. The wrapper's `with-comments` shift has to
+  // drop with it or the spot would sit 200px off-centre against an empty rail; both
+  // transition at 0.3s, so the panel slides out as the spot centres.
+  const commentsVisible = showComments && !adPlaying;
   const [newComment, setNewComment] = useState('');
   const mainCommentRef = useRef(null);
   const bottomCommentRef = useRef(null);
@@ -3034,7 +3045,7 @@ const VideoShort = () => {
         className="keyboard-capture"
         aria-hidden="true"
       />
-      <div className={`videoWrapper ${showComments ? 'with-comments' : ''}`}>
+      <div className={`videoWrapper ${commentsVisible ? 'with-comments' : ''}`}>
 
         {/* VIDEO */}
         <div
@@ -3731,12 +3742,12 @@ const VideoShort = () => {
       {createPortal(
       <div className="short-main shorts-comments-portal">
       <div
-        className={`commentsOverlay ${showComments ? 'visible' : ''}`}
+        className={`commentsOverlay ${commentsVisible ? 'visible' : ''}`}
         onClick={handleToggleComments}
       />
 
       {/* COMMENTS PANEL */}
-      <div className={`commentsPanel ${showComments ? 'open' : ''}`} ref={commentsPanelRef}>
+      <div className={`commentsPanel ${commentsVisible ? 'open' : ''}`} ref={commentsPanelRef}>
         {/* Mobile drag handle */}
         <div
           className="commentsPanelHandle"
