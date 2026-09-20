@@ -3,6 +3,7 @@ import { getPlayerUrl } from '../utils/playerUrl';
 import { useAppStore } from '../lib/store';
 import { resolveVideoMeta } from '../lib/videoMetaCache';
 import { viewerRewardsName } from '../utils/viewerRewards';
+import { fetchWatchToken } from '../lib/advertiseData';
 import { currentHandle } from '../lib/incubation';
 
 /**
@@ -128,6 +129,19 @@ export default function useWatchDuration({ api, author, permlink, playerState, e
         ? storedDuration
         : (Number(playerState?.duration) || undefined);
       countsInBackgroundRef.current = Number.isFinite(duration) && duration >= BACKGROUND_OK_SECONDS;
+      /* A token proving who is watching, minted by our own server for the session it
+       * can already see.
+       *
+       * Fetched ONLY for a viewer who opted in, so nothing identifying is requested
+       * for somebody who declined, and fetched once rather than per collection guess.
+       *
+       * ⚠️ The plain `viewer` below is still sent alongside it. The player service
+       * prefers the token and falls back to the unsigned name, so this works before
+       * AND after that fallback is closed. When it IS closed, a viewer whose login
+       * cannot be proved server-side stops earning, which is why the token has to be
+       * deployed and seen working before the switch is flipped. */
+      const rewardName = viewerRewardsName();
+      const watchToken = rewardName ? await fetchWatchToken(owner, vPermlink) : null;
       // A video lives in exactly one collection — try embed (also matches
       // hive_permlink) then legacy; whichever owns it opens the session.
       for (const type of ['embed', 'legacy']) {
@@ -140,7 +154,10 @@ export default function useWatchDuration({ api, author, permlink, playerState, e
                 // Sent ONLY for a viewer who opted into rewards, so we do not
                 // transmit a name for anyone who declined. The player re-checks the
                 // opt-in against the database before storing anything.
-                viewer: viewerRewardsName(),
+                viewer: rewardName,
+                // Proof of that name. The player service takes the viewer from here
+                // when it verifies, and records which app signed it.
+                viewerToken: watchToken || undefined,
                 // An incubating viewer has no Hive name, so `viewer` above is
                 // null for them. Sent unconditionally rather than behind the
                 // ad-rewards opt-in: this feeds the watch-time goal on their own
