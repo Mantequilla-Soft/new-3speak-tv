@@ -7,6 +7,14 @@
 // 1.0.0 — that way they see all of these when develop is pushed to production.
 export const CHANGELOG = [
   {
+    version: '1.79.3',
+    date: '2026-09-21',
+    summary:
+      'Behind-the-scenes improvements to how watch time is tracked for ad rewards. '
+      + 'Nothing changes in how you watch, and your rewards opt-in under Settings is '
+      + 'unchanged.',
+  },
+  {
     version: '1.79.2',
     date: '2026-09-18',
     summary:
