@@ -92,6 +92,7 @@ const HiveIcon = ({ size = 24, className = '' }) => (
 import hiveApi, { SHORTS_PAGE_SIZE, consumePreloadedShorts, hasShortsPreloaded, preloadShorts, fetchUserShortsWithDetails } from '../hive-api/hiveApi';
 import { useAppStore } from '../lib/store';
 import { recordWatch } from '../utils/watchHistory';
+import { dropWatchedFromFeeds } from '../utils/feedWatched';
 import { recordReshare, getResharesForVideo, deleteReshare } from '../utils/reshares';
 import axios from 'axios';
 import { Helmet } from 'react-helmet-async';
@@ -882,6 +883,12 @@ const VideoShort = () => {
     const historyUser = user || incubationHandle;
     if (historyUser && watchHistoryEnabled !== false && currentVid.author && (currentVid.hivePermlink || currentVid.permlink)) {
       recordWatch(historyUser, currentVid.author, currentVid.hivePermlink || currentVid.permlink, { short: true });
+      // Drop it from the loaded feeds in place, rather than relying on a refetch to
+      // rebuild them (see utils/feedWatched.js).
+      dropWatchedFromFeeds(queryClient, {
+        author: currentVid.author,
+        permlink: currentVid.hivePermlink || currentVid.permlink,
+      });
     }
 
     // Decrement unseen_count for the current creator in the stories bar cache

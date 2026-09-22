@@ -7,13 +7,14 @@ import SEOHead from '../components/SEOHead';
 import Card3 from '../components/Cards/Card3';
 import { useContentBatch } from '../hooks/useContentBatch';
 import { useSearchParams, useLocation, useNavigate } from 'react-router-dom';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { fetchVideoDetails, fetchPlaySource, fetchTrendingFeed, fetchAuthorVideos, fetchRelatedFeed } from '../lib/videoData';
 // BarLoader is intentionally not imported: this page renders immediately rather
 // than blocking on the post-metadata query (see the note above the render return).
 import { useAppStore } from '../lib/store';
 import { hasConsent } from '../lib/consent';
 import { recordWatch, batchCheckWatched } from '../utils/watchHistory';
+import { dropWatchedFromFeeds } from '../utils/feedWatched';
 import { Client } from '@hiveio/dhive';
 import { HIVE_API_NODES, SHORTS_API_URL, appendNsfw } from '../utils/config';
 import { getPlayerUrl } from '../utils/playerUrl';
@@ -117,6 +118,7 @@ function Watch({ v2 = false }) {
   const location = useLocation();
   const navigate = useNavigate();
   const { user, watchHistoryEnabled, setMiniPlayer, clearMiniPlayer, showNsfw, inlineShorts } = useAppStore();
+  const queryClient = useQueryClient();
   const incubationHandle = useAppStore((s) => s.incubationHandle);
   const v = searchParams.get('v'); // Extract the "v" query parameter
   const playlistId = searchParams.get('playlist');
@@ -1673,7 +1675,10 @@ function Watch({ v2 = false }) {
     // Mark as recorded and send to API
     recordedWatchRef.current.add(watchKey);
     recordWatch(historyUser, author, permlink);
-  }, [scheduled, user, incubationHandle, author, permlink, watchHistoryEnabled]);
+    // Take it out of the feeds the viewer already has loaded, so going back shows
+    // the same list minus this one video rather than a refetched, reordered feed.
+    dropWatchedFromFeeds(queryClient, { author, permlink });
+  }, [scheduled, user, incubationHandle, author, permlink, watchHistoryEnabled, queryClient]);
 
   // Save mini player state on unmount or when switching videos
   const miniPlayerDataRef = useRef(null);
