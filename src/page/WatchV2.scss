@@ -199,11 +199,17 @@
       margin-top: 4px;
     }
 
-    /* ---- "Included in playlists": its own full-width row, sitting after the
+    /* ---- The playlist slot: its own full-width row, sitting after the
        title/author/tags header and BEFORE the description. Without an explicit
        order it defaults to 0 and jumps to the start of the flex row, landing
-       inline-left of the author badge (which is what we don't want). ---- */
-    .play-video .video-playlists {
+       inline-left of the author badge (which is what we don't want).
+
+       Both states of that slot need this, because PlayVideo renders exactly one
+       of them: .playlist-bar while watching FROM a playlist, .video-playlists
+       ("included in playlists") otherwise. They are never on screen together, so
+       they share one order. ---- */
+    .play-video .video-playlists,
+    .play-video .playlist-bar {
       order: 6;
       flex: 0 0 100%;
       width: 100%;

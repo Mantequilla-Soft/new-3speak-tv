@@ -74,7 +74,28 @@ import { HelmetProvider } from 'react-helmet-async';
 
 // import { Buffer } from 'buffer';
 // window.Buffer = Buffer;
-const queryClient = new QueryClient();
+// ⚠️ `new QueryClient()` with no defaults leaves refetchOnWindowFocus ON, and that
+// is what made the feeds change by themselves. Every feed sets staleTime 5min, so
+// leaving the tab for longer than that and coming back refetched EVERY loaded page
+// of EVERY feed at once. It read as "the feed refreshed for no reason", because
+// nothing the viewer did asked for it.
+//
+// A feed is a place the viewer is reading, not a dashboard, so it must not move
+// under them. Anything that genuinely needs to stay live (stream status, the
+// OpenPods strip) already sets its own refetchInterval, which is unaffected by
+// this. Explicit refreshes still work: pull-to-refresh and the interests prompt go
+// through refreshHomeFeeds().
+//
+// The one thing the refetch did usefully -- dropping a video you just watched --
+// now happens locally and precisely, see utils/feedWatched.js.
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      refetchOnWindowFocus: false,
+      refetchOnReconnect: false,
+    },
+  },
+});
 
 const boot = () => createRoot(document.getElementById('root')).render(
   <StrictMode>
