@@ -1716,6 +1716,93 @@ app.post('/api/ads/identity-signature', signChallengeLimiter, async (req, res) =
 // (incl. HiveSigner, which can't sign client-side) attach covers/thumbnails with
 // no wallet signature. Gated by the shared app key (same trust as the embed
 // upload); the image is hosted under @threespeak and needs no user authority.
+/* ─── watch tokens ────────────────────────────────────────────────────────────
+ *
+ * A short-lived, signed assertion of WHO IS WATCHING, for the player service.
+ *
+ * The player records watch time against a Hive account, and that ledger pays real
+ * money, so the name has to be proved rather than claimed. Partner apps prove it with
+ * a key we issue them. 3speak.tv cannot hold a key in the browser, so its own frontend
+ * asks here instead and the server signs for the session it can already see.
+ *
+ * 🚨 STRICTER THAN resolveDelegatedSignUser ON PURPOSE. That helper's last branch
+ * accepts the PUBLIC app key plus a CLAIMED username, which is fine for a broadcast
+ * the user is watching happen and worthless as proof here: it would let anyone mint a
+ * token naming anyone, which is exactly the hole this exists to close. Only the three
+ * branches that are real evidence count.
+ */
+const WATCH_TOKEN_SECRET = process.env.WATCH_TOKEN_SECRET || ''
+const WATCH_TOKEN_APP = process.env.WATCH_TOKEN_APP || '3speak'
+/* Checked only when the session opens, so this need not cover the watch itself. Kept
+ * short because the token travels to the browser, and the player service refuses
+ * anything claiming more than its own ceiling anyway. */
+const WATCH_TOKEN_TTL_S = 600
+
+const watchTokenLimiter = rateLimit({
+  windowMs: 60 * 1000, max: 120, standardHeaders: true, legacyHeaders: false,
+})
+
+/** Identity we can actually stand behind. Never the claimed-name path. */
+async function resolveProvenViewer(req, res) {
+  const butrUser = await resolveButrUser(req, res)
+  if (butrUser) return String(butrUser).toLowerCase()
+
+  // The user proved posting-key control at login and the name is bound to a
+  // server-signed cookie, so a wallet login that signed in counts here.
+  const ws = req.cookies?.[WSESSION_COOKIE_NAME]
+  const wu = ws && verifyWalletSession(ws)
+  if (wu) return String(wu).toLowerCase()
+
+  const authHeader = req.headers.authorization || ''
+  const bearer = authHeader.startsWith('Bearer ') ? authHeader.slice(7).trim() : ''
+  if (bearer) {
+    const u = await verifyHiveSignerToken(bearer)
+    if (u) return String(u).toLowerCase()
+  }
+  return null
+}
+
+const b64urlWatch = (b) => Buffer.from(b).toString('base64')
+  .replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '')
+
+/**
+ * POST /api/watch/token  { owner, permlink } -> { token, viewer }
+ *
+ * Must stay byte-compatible with verifyViewerToken() in the player service's
+ * watchTracking.js: base64url JSON {v,a,p,e} then HMAC-SHA256 of that string.
+ *
+ * ⚠️ Answers 401 when the login cannot be proved from here, and that is not an error
+ * worth showing anybody: the watch simply goes unattributed, exactly as it does for a
+ * signed-out viewer. The caller is expected to carry on without a token.
+ */
+app.post('/api/watch/token', watchTokenLimiter, async (req, res) => {
+  try {
+    if (!WATCH_TOKEN_SECRET) return res.status(503).json({ error: 'Not configured' })
+    const viewer = await resolveProvenViewer(req, res)
+    if (!viewer) return res.status(401).json({ error: 'Unauthorized' })
+
+    const owner = String(req.body?.owner || '').trim().toLowerCase()
+    const permlink = String(req.body?.permlink || '').trim().toLowerCase()
+    if (!/^[a-z0-9._-]{3,32}$/.test(owner) || !/^[a-z0-9._-]{1,64}$/.test(permlink)) {
+      return res.status(400).json({ error: 'Invalid owner/permlink' })
+    }
+
+    // Bound to ONE video, so a token lifted from the browser is worth the watch it
+    // was already for rather than a farm across the catalogue.
+    const payload = b64urlWatch(JSON.stringify({
+      v: viewer,
+      a: WATCH_TOKEN_APP,
+      p: `${owner}/${permlink}`,
+      e: Math.floor(Date.now() / 1000) + WATCH_TOKEN_TTL_S,
+    }))
+    const sig = b64urlWatch(crypto.createHmac('sha256', WATCH_TOKEN_SECRET).update(payload).digest())
+    return res.json({ token: `${payload}.${sig}`, viewer })
+  } catch (err) {
+    console.error('Watch token error:', err.message)
+    res.status(500).json({ error: 'Token failed' })
+  }
+})
+
 const imageUploadLimiter = rateLimit({ windowMs: 60 * 1000, max: 40, standardHeaders: true, legacyHeaders: false })
 app.post('/api/upload-image', imageUploadLimiter, express.raw({ type: () => true, limit: '15mb' }), async (req, res) => {
   try {

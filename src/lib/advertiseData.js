@@ -288,6 +288,42 @@ export async function fetchViewerAdPrefs(account) {
   return readJson(await fetch(`${BASE}/viewer/prefs/${encodeURIComponent(account)}`));
 }
 
+/**
+ * A short-lived token proving WHO IS WATCHING, for the player service.
+ *
+ * The player records watch time against a Hive account and that ledger pays out, so
+ * the name has to be proved rather than claimed. A browser cannot hold a signing key,
+ * so our server signs for the session it can already see and hands back a token bound
+ * to one video for a few minutes.
+ *
+ * 🚨 The server accepts ONLY logins it can actually verify: a Butter Auth session, a
+ * SIWH wallet cookie, or a HiveSigner token it checks with HiveSigner. It deliberately
+ * refuses the app-key-plus-claimed-name path the signing routes above still allow,
+ * because that path would let anyone mint a token naming anyone.
+ *
+ * Returns null on any failure, and that is not an error worth surfacing: the watch is
+ * simply unattributed, exactly as it is for a signed-out viewer.
+ */
+export async function fetchWatchToken(owner, permlink) {
+  try {
+    if (!owner || !permlink) return null;
+    const headers = { 'Content-Type': 'application/json' };
+    if (getCurrentProvider() === Providers.HiveSigner) {
+      const t = localStorage.getItem('hivesignerToken');
+      if (t) headers.Authorization = `Bearer ${t}`;
+    }
+    const r = await fetch(`${THREESPEAK_API}/watch/token`, {
+      method: 'POST', headers, credentials: 'include',
+      body: JSON.stringify({ owner, permlink }),
+    });
+    if (!r.ok) return null;                       // 401 simply means "not provable here"
+    const d = await r.json().catch(() => null);
+    return d?.token || null;
+  } catch {
+    return null;
+  }
+}
+
 async function signViewerViaThreespeak(rewardsEnabled, account) {
   const provider = getCurrentProvider();
   const isWallet = !!provider && provider !== Providers.HiveSigner && !isManteAuthLogin();

@@ -84,7 +84,7 @@ const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
  * and an ad decision must never be the thing that breaks a page.
  */
 const SEEN_KEY = '3speak-ads-seen';
-const SEEN_MINUTES = 30;   // matches AD_FREQUENCY_CAP_MINUTES on the server
+const SEEN_MINUTES = 15;   // matches AD_FREQUENCY_CAP_MINUTES on the server
 
 /**
  * Which ADS this viewer has already been shown recently, so the same advertiser does
