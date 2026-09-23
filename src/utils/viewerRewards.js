@@ -37,14 +37,25 @@ export function primeViewerRewards(account) {
   return inFlight;
 }
 
-/** The name to send, or null. Synchronous, for use inside a request body. */
-export function viewerRewardsName() {
+/**
+ * The name to send, or null.
+ *
+ * 🚨 ASYNC because a cold cache is not an answer. This used to return null whenever
+ * it had not been primed for the account yet, priming in the background for "next
+ * time". Nothing else in the app ever called `primeViewerRewards`, so the only thing
+ * that warmed the cache was the call that had already given up: the FIRST video of
+ * every page load was recorded anonymous and skipped the watch token entirely.
+ * Opening a link, watching one video and leaving is the most common visit there is,
+ * and not one of those was ever credited.
+ */
+export async function viewerRewardsName() {
   const user = useAppStore.getState().user;
   if (!user) return null;
-  if (cached.account !== user) {
-    // Not primed for this account yet — prime for next time, send nothing now.
-    primeViewerRewards(user);
-    return null;
-  }
-  return cached.enabled ? user : null;
+  if (cached.account !== user) await primeViewerRewards(user);
+  /* Re-read the account. It can change while the fetch is in flight (a logout, or a
+   * switch between accounts, which shares the in-flight request above), and a cached
+   * answer belonging to somebody else must never be sent. Mismatch fails closed. */
+  const now = useAppStore.getState().user;
+  if (!now || cached.account !== now) return null;
+  return cached.enabled ? now : null;
 }
