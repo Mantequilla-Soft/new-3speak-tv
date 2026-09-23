@@ -301,7 +301,12 @@ function clearPkceCookie(res) {
 // once; we verify it against their on-chain posting authority and mint an
 // httpOnly session cookie. All subsequent proxied broadcasts trust that cookie.
 // Colons delimit our tokens/challenges — a Hive username never contains one.
-const WSESSION_COOKIE_NAME = 'threespeak_wsession'
+// Overridable because preview and prod both set this cookie on `.3speak.tv` but
+// sign it with DIFFERENT secrets. Under one shared name each login overwrote the
+// other's cookie, so a user of both sites was asked to sign in again after every
+// switch. Preview sets WSESSION_COOKIE_NAME=threespeak_wsession_preview; prod
+// keeps the default. The gate verifying this cookie must be given the same name.
+const WSESSION_COOKIE_NAME = process.env.WSESSION_COOKIE_NAME || 'threespeak_wsession'
 const WSESSION_TTL_MS = 30 * 24 * 60 * 60 * 1000 // 30 days ("remember me"); stateless token, so no per-session revocation — rotate SESSION_SIGNING_SECRET to invalidate all at once
 const SIWH_CHALLENGE_TTL_MS = 5 * 60 * 1000     // 5 minutes to sign
 const HIVE_USER_RE = /^[a-z][a-z0-9.-]{2,15}$/
