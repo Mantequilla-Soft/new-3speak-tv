@@ -95,3 +95,56 @@ export function dropWatchedFromFeeds(queryClient, { author, permlink } = {}) {
     },
   );
 }
+
+/* ── Shorts, within one page load ────────────────────────────────────────────
+ *
+ * The checker FREEZES its already-watched filter into the cached feed list, on
+ * purpose: a live filter shrinks the list under a scrolling viewer, so page 2 is
+ * fetched with skip=(page-1)*limit against a shorter list and lands past shorts
+ * they never saw. That cached entry lives 15 minutes and is keyed by the viewer's
+ * seed, which is stable for the whole page load. So leaving /shorts and coming
+ * straight back hands you the same list, including the ones you just swiped past.
+ *
+ * This closes that window from the client, where it costs nothing and cannot cause
+ * the drift the freeze exists to prevent: the server still builds and paginates
+ * exactly the same list, we simply do not re-display what this viewer already saw.
+ * Module state, so it survives leaving /shorts and returning, and is gone on reload
+ * (by then the server's own filter has been re-evaluated).
+ */
+const watchedThisLoad = new Set();
+
+const videoKey = (author, permlink) => `${norm(author)}/${norm(permlink)}`;
+
+/**
+ * Remember a short the viewer just watched. Both permlinks are stored because the
+ * feed rows carry the ASSET id in `permlink` while a watch is recorded against the
+ * HIVE permlink, and either can be the one that comes back.
+ */
+export function rememberWatchedShort({ author, permlink, hivePermlink } = {}) {
+  if (!author) return;
+  if (permlink) watchedThisLoad.add(videoKey(author, permlink));
+  if (hivePermlink) watchedThisLoad.add(videoKey(author, hivePermlink));
+}
+
+/**
+ * Drop shorts already watched this page load out of a freshly fetched feed page.
+ * Call it at FETCH time only, never on already-rendered state: removing a row the
+ * viewer is looking at is the drift this is meant to avoid.
+ *
+ * Never returns an empty list, because the caller is usually building the feed the
+ * viewer is about to look at: if they really have seen everything on the page,
+ * showing it again beats an empty screen telling them there are no shorts. Pass
+ * `allowEmpty` when appending a later page, where dropping everything just means
+ * the next page is fetched instead.
+ */
+export function dropWatchedShorts(list, { allowEmpty = false } = {}) {
+  if (!Array.isArray(list) || list.length === 0 || watchedThisLoad.size === 0) return list;
+  const { hideWatched, watchHistoryEnabled } = useAppStore.getState();
+  if (!hideWatched || watchHistoryEnabled === false) return list;
+
+  const next = list.filter((v) => !(
+    watchedThisLoad.has(videoKey(v?.author, v?.permlink))
+    || watchedThisLoad.has(videoKey(v?.author, v?.hivePermlink))
+  ));
+  return (next.length || allowEmpty) ? next : list;
+}

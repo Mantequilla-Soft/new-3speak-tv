@@ -17,8 +17,26 @@
  * Bonus: the checker caches its sorted shorts list keyed by seed. Regenerating the
  * seed on every visit to /shorts (the old behaviour) minted a fresh cache entry and
  * re-ran the full pipeline each time. A stable per-session seed reuses it.
+ *
+ * ...but only for the SAME visitor. A seed drawn from a million values is unique in
+ * practice, so every first load was a cache MISS and paid for the whole pipeline:
+ * measured 2026-09-23 on prod, 1.34s for /shortssorted cold against ~0.12s warm,
+ * and that sits in front of everything else the shorts page does. Drawing from a
+ * small number of BUCKETS instead keeps what this file is for (different visitors
+ * get different orders, a reload reshuffles) while letting the checker's 100-entry
+ * cache actually hold them all.
  */
-let SESSION_SEED = Math.floor(Math.random() * 1_000_000);
+const SEED_BUCKETS = 24;
+
+const drawSeed = (avoid = null) => {
+  // Not just "draw again if equal": that can return `avoid` twice in a row from a
+  // caller's point of view. Draw from the OTHER buckets.
+  if (avoid == null) return Math.floor(Math.random() * SEED_BUCKETS);
+  const n = Math.floor(Math.random() * (SEED_BUCKETS - 1));
+  return n >= avoid ? n + 1 : n;
+};
+
+let SESSION_SEED = drawSeed();
 
 /** The current session's seed. Stable until the page is reloaded. */
 export function getFeedSeed() {
@@ -31,7 +49,9 @@ export function getFeedSeed() {
  * which is what made the feed reshuffle behind the user's back.
  */
 export function regenerateFeedSeed() {
-  SESSION_SEED = Math.floor(Math.random() * 1_000_000);
+  // Never the bucket we are already on: with only 24 of them, redrawing blind would
+  // hand back the identical order about one pull-to-refresh in 24.
+  SESSION_SEED = drawSeed(SESSION_SEED);
   return SESSION_SEED;
 }
 
