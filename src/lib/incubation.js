@@ -519,8 +519,26 @@ export function isAwaitingApproval(status) {
 // The server hands back FULLY BUILT Hive operations (see the incubation
 // service's lib/ops.js): publishing is a replay, not a translation.
 
-export const fetchBackfillItems = () => write('/backfill/items', 'GET');
-export const fetchBackfillSummary = () => write('/backfill/summary', 'GET');
+//
+// Only a Butter Auth login can have a backlog: graduation happens there, and the
+// server answers these routes from the butrauth token alone. For a wallet login
+// (Keychain etc.) the answer is always 401, and write() treats a 401 as a lapsed
+// session and asks the wallet to sign a fresh challenge -- so the menu and the
+// backlog prompt, which both ask on every page, had Keychain users signing in
+// over and over on one page. Refuse locally with the same 401 instead of asking.
+async function backfill(path) {
+  const { isManteAuthLogin } = await import('../hive-api/aioha');
+  if (!isManteAuthLogin()) {
+    const err = new Error('Only a Butter Auth account can have an incubation backlog');
+    err.status = 401;
+    err.reason = 'not_butrauth';
+    throw err;
+  }
+  return write(path, 'GET');
+}
+
+export const fetchBackfillItems = () => backfill('/backfill/items');
+export const fetchBackfillSummary = () => backfill('/backfill/summary');
 
 /**
  * Move videos uploaded while incubating onto the new Hive account.
