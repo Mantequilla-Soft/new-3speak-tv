@@ -140,7 +140,7 @@ export default function useWatchDuration({ api, author, permlink, playerState, e
        * AND after that fallback is closed. When it IS closed, a viewer whose login
        * cannot be proved server-side stops earning, which is why the token has to be
        * deployed and seen working before the switch is flipped. */
-      const rewardName = viewerRewardsName();
+      const rewardName = await viewerRewardsName();
       const watchToken = rewardName ? await fetchWatchToken(owner, vPermlink) : null;
       // A video lives in exactly one collection — try embed (also matches
       // hive_permlink) then legacy; whichever owns it opens the session.
