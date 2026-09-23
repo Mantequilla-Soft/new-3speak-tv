@@ -74,6 +74,7 @@ import { SUPPORTED_LANGUAGES } from '../utils/translate';
 import EmojiGifPicker from '../components/common/EmojiGifPicker/EmojiGifPicker';
 import { insertAtCursor, gifMarkdown } from '../utils/composerInsert';
 import { prefetchVideoTagsV2 } from '../utils/tagsV2';
+import AiBadge from '../components/AiBadge/AiBadge';
 
 // Custom Hive Icon Component
 const HiveIcon = ({ size = 24, className = '' }) => (
@@ -92,7 +93,7 @@ const HiveIcon = ({ size = 24, className = '' }) => (
 import hiveApi, { SHORTS_PAGE_SIZE, consumePreloadedShorts, hasShortsPreloaded, preloadShorts, fetchUserShortsWithDetails } from '../hive-api/hiveApi';
 import { useAppStore } from '../lib/store';
 import { recordWatch } from '../utils/watchHistory';
-import { dropWatchedFromFeeds } from '../utils/feedWatched';
+import { dropWatchedFromFeeds, rememberWatchedShort, dropWatchedShorts } from '../utils/feedWatched';
 import { recordReshare, getResharesForVideo, deleteReshare } from '../utils/reshares';
 import axios from 'axios';
 import { Helmet } from 'react-helmet-async';
@@ -126,6 +127,11 @@ import HiveAvatar from '../components/HiveAvatar/HiveAvatar';
 const toast = toastIn('Shorts');
 
 // Thin wrapper: reads currentTime from a ref via polling to avoid re-rendering the whole Shorts page
+// How long the neighbour prefetch waits for the first player before going ahead
+// anyway. Long enough that a healthy load always reports ready first, short enough
+// that a broken one barely delays the swipe-ahead warm-up.
+const PREFETCH_GRACE_MS = 4000;
+
 // The Watch Later playlist is identified by NAME — same convention as the watch
 // page and the add-to-playlist modal. Private, and created on first save.
 const WATCH_LATER_NAME = 'Watch Later';
@@ -335,6 +341,8 @@ const VideoShort = () => {
   const chainDragRef = useRef({ isDown: false, startX: 0, scrollLeft: 0 });
   const [shortNavLoading, setShortNavLoading] = useState(false);
   const [firstPlayerReady, setFirstPlayerReady] = useState(false);
+  // When the neighbour prefetch stopped waiting for the first player (see below).
+  const prefetchGraceStartRef = useRef(null);
   const shortHistoryRef = useRef([]); // Stack of {author, permlink} for back navigation
   const isNavigatingBackRef = useRef(false); // Prevents URL-change effect from pushing to history on back
 
@@ -890,6 +898,18 @@ const VideoShort = () => {
         permlink: currentVid.hivePermlink || currentVid.permlink,
       });
     }
+
+    // Remembered for THIS page load whether or not there is an account to record it
+    // against, so re-entering /shorts does not hand back the same shorts out of the
+    // checker's frozen list. A signed-out viewer gets no server-side filtering at
+    // all, so this is the only thing standing between them and a repeat. The
+    // viewer's hide-watched preference is honoured where it is read, in
+    // dropWatchedShorts().
+    rememberWatchedShort({
+      author: currentVid.author,
+      permlink: currentVid.permlink,
+      hivePermlink: currentVid.hivePermlink,
+    });
 
     // Decrement unseen_count for the current creator in the stories bar cache
     if (isStoriesMode && feedUser) {
@@ -1596,7 +1616,7 @@ const VideoShort = () => {
 
             const preloaded = await consumePreloadedShorts();
             if (preloaded?.success) {
-              const formattedVideos = await withWarmupShorts(formatShorts(preloaded.shorts));
+              const formattedVideos = await withWarmupShorts(dropWatchedShorts(formatShorts(preloaded.shorts)));
               await applySharedVideoLogic(formattedVideos, preloaded);
               setLoading(false);
               return;
@@ -1618,7 +1638,7 @@ const VideoShort = () => {
             // Global feed only. A user-specific feed (`feedUser`, above) is
             // "this person's shorts", so mixing somebody else's into it would
             // be answering a different question than the one asked.
-            const formattedVideos = await withWarmupShorts(formatShorts(data.shorts));
+            const formattedVideos = await withWarmupShorts(dropWatchedShorts(formatShorts(data.shorts)));
             await applySharedVideoLogic(formattedVideos, data);
           }
         }
@@ -1867,7 +1887,12 @@ const VideoShort = () => {
         // twice and throw the swipe index off.
         setVideos(prev => {
           const seen = new Set(prev.map(v => v.id));
-          const fresh = formattedVideos.filter(v => !seen.has(v.id));
+          // Watched-this-load shorts are dropped here too: after re-entering /shorts
+          // the checker's frozen list still carries them on every page, not just the
+          // first. `allowEmpty` because an empty append simply means the next page
+          // gets fetched, which is not the same problem as an empty feed.
+          const fresh = dropWatchedShorts(formattedVideos, { allowEmpty: true })
+            .filter(v => !seen.has(v.id));
           return fresh.length ? [...prev, ...fresh] : prev;
         });
         setHasMore(nextPage < data.totalPages);
@@ -2942,18 +2967,44 @@ const VideoShort = () => {
 
   // Prefetch upcoming videos when currentIndex changes
   useEffect(() => {
-    preloadedIndices.forEach(idx => {
+    const prefetchIdx = (idx) => {
       if (idx === currentIndex) return; // Current video gets a real player, not just prefetch
       const video = videos[idx];
-      if (video) {
-        prefetchVideo(video.id, video.author, video.permlink);
-      }
-    });
-    // Also prefetch chain entries
-    chainPreloadEntries.forEach(entry => {
-      prefetchVideo(entry.id, entry.author, entry.permlink);
-    });
-  }, [currentIndex, preloadedIndices, videos, chainPreloadEntries, prefetchVideo]);
+      if (video) prefetchVideo(video.id, video.author, video.permlink);
+    };
+
+    // The very next video is never held back. It is the one a viewer can reach with
+    // a single swipe, sometimes before the current one has even started, so it is
+    // worth the one extra request it costs alongside the current video.
+    prefetchIdx(currentIndex + 1);
+
+    const run = () => {
+      preloadedIndices.forEach(prefetchIdx);
+      // Also prefetch chain entries
+      chainPreloadEntries.forEach(entry => {
+        prefetchVideo(entry.id, entry.author, entry.permlink);
+      });
+    };
+
+    // The REST of the window waits for the first player. On a cold load all of it
+    // fired at once and put five more /api/embed + manifest fetches on the wire
+    // beside the one video the viewer is actually waiting for, all against the same
+    // two hosts. Nothing is dropped, it just stops competing with the video on
+    // screen. prefetchVideo() de-dupes, so the next video is not fetched twice.
+    if (firstPlayerReady) {
+      run();
+      return undefined;
+    }
+    // ...but only for so long. A first video that never reports ready must not
+    // suppress prefetching for the rest of the session, so start anyway once the
+    // page has had its grace period. Measured from first mount, not from this
+    // effect: `videos` changes identity as the feed enriches, and a timer keyed to
+    // that would be cancelled and restarted forever without ever firing.
+    if (prefetchGraceStartRef.current == null) prefetchGraceStartRef.current = Date.now();
+    const waited = Date.now() - prefetchGraceStartRef.current;
+    const timer = setTimeout(run, Math.max(0, PREFETCH_GRACE_MS - waited));
+    return () => clearTimeout(timer);
+  }, [currentIndex, preloadedIndices, videos, chainPreloadEntries, prefetchVideo, firstPlayerReady]);
 
   // Clean up stale prefetch caches for videos far out of range
   useEffect(() => {
@@ -3075,6 +3126,16 @@ const VideoShort = () => {
               key="shorts-player"
               id="shorts-player"
               ref={setupVideoElement}
+              // The feed already handed us this short's thumbnail, so paint it while
+              // the manifest and first segments are still in flight. Before this the
+              // wait was a black screen with "Loading shorts..." on it, twice: once
+              // for the feed, then again for the player.
+              //
+              // FIRST LOAD ONLY. Once a player has been ready once, the element keeps
+              // showing the previous short until the next one decodes, and a poster
+              // turns that into a visible thumbnail flash on every swipe -- a change
+              // to the swipe feel that this was never meant to make.
+              poster={!firstPlayerReady ? (currentVideo.thumbnailUrl || undefined) : undefined}
               autoPlay
               playsInline
               webkit-playsinline=""
@@ -3137,7 +3198,10 @@ const VideoShort = () => {
           )}
 
           {/* Full "Loading shorts..." overlay for the very first video until its player is ready */}
-          {showInitialLoadingOverlay && (
+          {/* Only when there is nothing else to look at. With the short's own
+              thumbnail painted underneath (see the poster above), a second
+              "Loading shorts..." over it is just the same wait announced twice. */}
+          {showInitialLoadingOverlay && !currentVideo?.thumbnailUrl && (
             <ShortsLoadingScreen overlay />
           )}
 
@@ -3537,6 +3601,17 @@ const VideoShort = () => {
                 reputation={currentVideo.user.reputation}
                 color="#fff"
               />
+              {/* Sits here rather than in the caption row because the caption
+                  collapses and this should not depend on it being open.
+                  The ASSET permlink, not the hive one: subtitles-tags is keyed by
+                  owner + asset id, so this is the direct hit, and it still works
+                  for a short that has no Hive post to resolve through. */}
+              <AiBadge
+                key={`${currentVideo.author}/${currentVideo.permlink}`}
+                author={currentVideo.author}
+                permlink={currentVideo.permlink}
+                className="ai-badge--on-video"
+              />
             </div>
             <div className={`caption${captionExpanded ? ' caption--expanded' : ''}`} onClick={(e) => { e.stopPropagation(); setCaptionExpanded(prev => !prev); }}>
               {!captionExpanded && !currentVideo.caption?.trim() && (
@@ -3781,8 +3856,12 @@ const VideoShort = () => {
             </div>
           ) : currentVideo.comments?.length === 0 ? (
             <div className="noComments">
-              <p>No comments yet</p>
-              <span>Be the first to comment!</span>
+              <p>{currentVideo.hivePostMissing ? 'Comments are closed' : 'No comments yet'}</p>
+              <span>
+                {currentVideo.hivePostMissing
+                  ? "The Hive post behind this short was removed, so it can no longer take comments or votes."
+                  : 'Be the first to comment!'}
+              </span>
             </div>
           ) : (
             currentVideo.comments?.map((comment) => (
@@ -3830,7 +3909,14 @@ const VideoShort = () => {
           <textarea
             ref={mainCommentRef}
             rows={1}
-            placeholder={user ? "Add a comment..." : "Login to comment"}
+            placeholder={
+              // A short whose Hive post was deleted has no parent to comment on,
+              // so the box is disabled. Without this it still read "Add a
+              // comment..." and simply refused to focus, which reads as broken.
+              currentVideo.hivePostMissing
+                ? "Comments aren't available for this post"
+                : user ? "Add a comment..." : "Login to comment"
+            }
             value={newComment}
             onChange={(e) => {
               setNewComment(e.target.value);
@@ -3881,7 +3967,11 @@ const VideoShort = () => {
           <textarea
             ref={bottomCommentRef}
             rows={1}
-            placeholder={user ? 'Add a comment…' : 'Login to comment'}
+            placeholder={
+              currentVideo.hivePostMissing
+                ? "Comments aren't available for this post"
+                : user ? 'Add a comment…' : 'Login to comment'
+            }
             value={newComment}
             onChange={(e) => {
               setNewComment(e.target.value);
@@ -3972,6 +4062,15 @@ const CommentItem = ({
 
   const isReplying = activeReply === comment.permlink;
 
+  // Hive replies carry `author` as a plain string and a `user` block; the
+  // off-chain ones merged in by mergeOffChainReplies carry an author OBJECT and
+  // no `user` at all. Read both, so every comment here can point at its author's
+  // profile and show their avatar.
+  const authorName = (typeof comment.author === 'string'
+    ? comment.author
+    : comment.author?.username || comment.user?.username || '').replace(/^@/, '');
+  const authorAvatar = comment.user?.avatar || comment.author?.profile?.images?.avatar;
+
   // Use pre-rendered HTML if available, strip "replied to" metadata
   const getCommentHtml = () => {
     let html = renderedBodies?.[comment.permlink] || comment.body || '';
@@ -3987,8 +4086,8 @@ const CommentItem = ({
     return (
       <div className="commentItem">
         <div className="comment-collapsed-bar" onClick={() => setCollapsed(false)}>
-          <img className="comment-collapsed-avatar" src={comment.user?.avatar} alt="" />
-          <span className="comment-collapsed-name">@{comment.user?.username}</span>
+          <img className="comment-collapsed-avatar" src={authorAvatar} alt="" />
+          <span className="comment-collapsed-name">@{authorName}</span>
           <ChevronUp size={16} className="comment-collapsed-chevron" />
         </div>
       </div>
@@ -4001,12 +4100,22 @@ const CommentItem = ({
     <div className={`commentWrapper ${depth > 0 ? 'nested' : ''}`}>
       {/* Main comment row */}
       <div className="commentItem">
-        <div className="commentAvatar">
-          <img src={comment.user?.avatar} alt="" />
-        </div>
+        {authorName ? (
+          <Link to={`/p/${authorName}`} className="commentAvatar" onClick={(e) => e.stopPropagation()}>
+            <img src={authorAvatar} alt="" />
+          </Link>
+        ) : (
+          <div className="commentAvatar">
+            <img src={authorAvatar} alt="" />
+          </div>
+        )}
         <div className="commentContent">
           <div className="commentMeta">
-            <span className="commentUsername">{comment.user?.username}</span>
+            {authorName ? (
+              <Link to={`/p/${authorName}`} className="commentUsername" onClick={(e) => e.stopPropagation()}>@{authorName}</Link>
+            ) : (
+              <span className="commentUsername">{comment.user?.username}</span>
+            )}
             <span className="commentTime">{comment.timeAgo}</span>
             <span className="comment-collapse-chevron" onClick={() => setCollapsed(true)}><ChevronUp size={16} /></span>
           </div>
