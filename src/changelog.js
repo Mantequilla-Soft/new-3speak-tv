@@ -7,6 +7,13 @@
 // 1.0.0 — that way they see all of these when develop is pushed to production.
 export const CHANGELOG = [
   {
+    version: '1.79.6',
+    date: '2026-09-23',
+    summary:
+      'Optimizations in recording watch time if the viewer has opted into the '
+      + '3Speak rewards program.',
+  },
+  {
     version: '1.79.5',
     date: '2026-09-22',
     summary:
