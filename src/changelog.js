@@ -7,6 +7,13 @@
 // 1.0.0 — that way they see all of these when develop is pushed to production.
 export const CHANGELOG = [
   {
+    version: '1.79.12',
+    date: '2026-09-23',
+    summary:
+      'Keychain, HiveAuth, PeakVault and Ledger users were asked to sign in again and again '
+      + 'while browsing, sometimes several times on one page. You now sign once.',
+  },
+  {
     version: '1.79.11',
     date: '2026-09-23',
     summary:
