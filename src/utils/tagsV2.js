@@ -148,12 +148,16 @@ export function getCachedTagsV2(author, permlink) {
 
 /**
  * The v2 tags the tagger assigned to a video, via the checker (which resolves the
- * hive→asset permlink mapping). Returns `{ tags, model }`; `tags` is [] when the
- * video was never processed OR analysed with no confident result — both are
- * "untagged" for display. Never throws.
+ * hive→asset permlink mapping). Returns `{ tags, model, aiGenerated }`; `tags` is
+ * [] when the video was never processed OR analysed with no confident result —
+ * both are "untagged" for display. Never throws.
+ *
+ * `aiGenerated` comes from the same pipeline's AI-generation detection and is only
+ * ever true when the checker says so explicitly: a video the detector has not
+ * reached yet, and one that errored, both read false. It drives <AiBadge/>.
  */
 export async function getVideoTagsV2(author, permlink) {
-  if (!author || !permlink) return { tags: [], model: null };
+  if (!author || !permlink) return { tags: [], model: null, aiGenerated: false };
   const key = cacheKey(author, permlink);
   const hit = cache.get(key);
   if (hit) return hit;
@@ -165,11 +169,15 @@ export async function getVideoTagsV2(author, permlink) {
         `${CHECKER_URL}/transcription-tags/${encodeURIComponent(author)}/${encodeURIComponent(permlink)}`
       );
       const tags = Array.isArray(res.data?.tagsV2) ? res.data.tagsV2.filter(isKnownTag) : [];
-      const out = { tags, model: res.data?.tagModelV2 || null };
+      const out = {
+        tags,
+        model: res.data?.tagModelV2 || null,
+        aiGenerated: res.data?.aiGenerated === true,
+      };
       cache.set(key, out); // only cache real answers, so a failure can be retried
       return out;
     } catch {
-      return { tags: [], model: null };
+      return { tags: [], model: null, aiGenerated: false };
     } finally {
       inflight.delete(key);
     }

@@ -33,6 +33,7 @@ import 'ldrs/react/TailChase.css';
 import { getFollowers, getRelationshipBetweenAccounts } from "../../hive-api/api";
 import CommentVoteTooltip from "../tooltip/CommentVoteTooltip";
 import { prefetchVideoTagsV2 } from '../../utils/tagsV2';
+import AiBadge from '../AiBadge/AiBadge';
 import axios from "axios";
 import mantequillaLogo from "../../assets/mantequilla-logo.png";
 import threespeakLogo from "../../assets/image/3S_logo.svg";
@@ -1175,6 +1176,7 @@ const PlayVideo = ({ videoDetails, author, permlink, mediaUnavailable = false, m
                   selectedLang={titleMeta.selectedLang}
                   onSelect={titleMeta.selectLanguage}
                 />
+                <AiBadge key={`${author}/${permlink}`} author={author} permlink={permlink} />
               </div>
               <div className="mobile-title-meta">
                 <AuthorBadge

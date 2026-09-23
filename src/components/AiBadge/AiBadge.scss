@@ -1,0 +1,27 @@
+/* Small "AI" pill. Deliberately quiet: it is a note about the content, not a
+   warning about the creator, so it reads like the date next to it rather than
+   like an error. */
+.ai-badge {
+  display: inline-flex;
+  align-items: center;
+  flex-shrink: 0;
+  padding: 1px 6px;
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  background: none;
+  color: var(--text-secondary);
+  font-size: 0.6875rem;
+  font-weight: 600;
+  line-height: 1.45;
+  letter-spacing: 0.04em;
+  vertical-align: middle;
+  cursor: default;
+  user-select: none;
+
+  /* On top of a video the theme vars are the wrong contrast — the surface is
+     whatever frame is playing, so match the other on-video chips instead. */
+  &--on-video {
+    border-color: rgba(255, 255, 255, 0.28);
+    color: rgba(255, 255, 255, 0.75);
+  }
+}
