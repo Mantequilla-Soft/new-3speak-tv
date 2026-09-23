@@ -74,6 +74,7 @@ import { SUPPORTED_LANGUAGES } from '../utils/translate';
 import EmojiGifPicker from '../components/common/EmojiGifPicker/EmojiGifPicker';
 import { insertAtCursor, gifMarkdown } from '../utils/composerInsert';
 import { prefetchVideoTagsV2 } from '../utils/tagsV2';
+import AiBadge from '../components/AiBadge/AiBadge';
 
 // Custom Hive Icon Component
 const HiveIcon = ({ size = 24, className = '' }) => (
@@ -3537,6 +3538,17 @@ const VideoShort = () => {
                 reputation={currentVideo.user.reputation}
                 color="#fff"
               />
+              {/* Sits here rather than in the caption row because the caption
+                  collapses and this should not depend on it being open.
+                  The ASSET permlink, not the hive one: subtitles-tags is keyed by
+                  owner + asset id, so this is the direct hit, and it still works
+                  for a short that has no Hive post to resolve through. */}
+              <AiBadge
+                key={`${currentVideo.author}/${currentVideo.permlink}`}
+                author={currentVideo.author}
+                permlink={currentVideo.permlink}
+                className="ai-badge--on-video"
+              />
             </div>
             <div className={`caption${captionExpanded ? ' caption--expanded' : ''}`} onClick={(e) => { e.stopPropagation(); setCaptionExpanded(prev => !prev); }}>
               {!captionExpanded && !currentVideo.caption?.trim() && (
@@ -3781,8 +3793,12 @@ const VideoShort = () => {
             </div>
           ) : currentVideo.comments?.length === 0 ? (
             <div className="noComments">
-              <p>No comments yet</p>
-              <span>Be the first to comment!</span>
+              <p>{currentVideo.hivePostMissing ? 'Comments are closed' : 'No comments yet'}</p>
+              <span>
+                {currentVideo.hivePostMissing
+                  ? "The Hive post behind this short was removed, so it can no longer take comments or votes."
+                  : 'Be the first to comment!'}
+              </span>
             </div>
           ) : (
             currentVideo.comments?.map((comment) => (
@@ -3830,7 +3846,14 @@ const VideoShort = () => {
           <textarea
             ref={mainCommentRef}
             rows={1}
-            placeholder={user ? "Add a comment..." : "Login to comment"}
+            placeholder={
+              // A short whose Hive post was deleted has no parent to comment on,
+              // so the box is disabled. Without this it still read "Add a
+              // comment..." and simply refused to focus, which reads as broken.
+              currentVideo.hivePostMissing
+                ? "Comments aren't available for this post"
+                : user ? "Add a comment..." : "Login to comment"
+            }
             value={newComment}
             onChange={(e) => {
               setNewComment(e.target.value);
@@ -3881,7 +3904,11 @@ const VideoShort = () => {
           <textarea
             ref={bottomCommentRef}
             rows={1}
-            placeholder={user ? 'Add a comment…' : 'Login to comment'}
+            placeholder={
+              currentVideo.hivePostMissing
+                ? "Comments aren't available for this post"
+                : user ? 'Add a comment…' : 'Login to comment'
+            }
             value={newComment}
             onChange={(e) => {
               setNewComment(e.target.value);
@@ -3972,6 +3999,15 @@ const CommentItem = ({
 
   const isReplying = activeReply === comment.permlink;
 
+  // Hive replies carry `author` as a plain string and a `user` block; the
+  // off-chain ones merged in by mergeOffChainReplies carry an author OBJECT and
+  // no `user` at all. Read both, so every comment here can point at its author's
+  // profile and show their avatar.
+  const authorName = (typeof comment.author === 'string'
+    ? comment.author
+    : comment.author?.username || comment.user?.username || '').replace(/^@/, '');
+  const authorAvatar = comment.user?.avatar || comment.author?.profile?.images?.avatar;
+
   // Use pre-rendered HTML if available, strip "replied to" metadata
   const getCommentHtml = () => {
     let html = renderedBodies?.[comment.permlink] || comment.body || '';
@@ -3987,8 +4023,8 @@ const CommentItem = ({
     return (
       <div className="commentItem">
         <div className="comment-collapsed-bar" onClick={() => setCollapsed(false)}>
-          <img className="comment-collapsed-avatar" src={comment.user?.avatar} alt="" />
-          <span className="comment-collapsed-name">@{comment.user?.username}</span>
+          <img className="comment-collapsed-avatar" src={authorAvatar} alt="" />
+          <span className="comment-collapsed-name">@{authorName}</span>
           <ChevronUp size={16} className="comment-collapsed-chevron" />
         </div>
       </div>
@@ -4001,12 +4037,22 @@ const CommentItem = ({
     <div className={`commentWrapper ${depth > 0 ? 'nested' : ''}`}>
       {/* Main comment row */}
       <div className="commentItem">
-        <div className="commentAvatar">
-          <img src={comment.user?.avatar} alt="" />
-        </div>
+        {authorName ? (
+          <Link to={`/p/${authorName}`} className="commentAvatar" onClick={(e) => e.stopPropagation()}>
+            <img src={authorAvatar} alt="" />
+          </Link>
+        ) : (
+          <div className="commentAvatar">
+            <img src={authorAvatar} alt="" />
+          </div>
+        )}
         <div className="commentContent">
           <div className="commentMeta">
-            <span className="commentUsername">{comment.user?.username}</span>
+            {authorName ? (
+              <Link to={`/p/${authorName}`} className="commentUsername" onClick={(e) => e.stopPropagation()}>@{authorName}</Link>
+            ) : (
+              <span className="commentUsername">{comment.user?.username}</span>
+            )}
             <span className="commentTime">{comment.timeAgo}</span>
             <span className="comment-collapse-chevron" onClick={() => setCollapsed(true)}><ChevronUp size={16} /></span>
           </div>

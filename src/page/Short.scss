@@ -1999,6 +1999,9 @@
   }
 
   .commentAvatar {
+    // It is an <a> to the author's profile, so it needs a box: an inline anchor
+    // ignores the width/height below and collapses to nothing.
+    display: block;
     width: 2.25rem;
     height: 2.25rem;
     border-radius: 50%;
@@ -2056,6 +2059,13 @@
     font-size: 0.8125rem;
     font-weight: 500;
     color: var(--text-primary);
+
+    // Links to the author's profile: keep the comment's own color, and say so
+    // on hover rather than looking like plain text.
+    &:hover {
+      color: var(--text-primary);
+      text-decoration: underline;
+    }
   }
 
   .commentTime {

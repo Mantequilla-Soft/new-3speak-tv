@@ -7,6 +7,27 @@
 // 1.0.0 — that way they see all of these when develop is pushed to production.
 export const CHANGELOG = [
   {
+    version: '1.79.9',
+    date: '2026-09-23',
+    summary:
+      'Videos and Shorts that were made with AI now carry a small "AI" label next '
+      + 'to the title, so you can see it at a glance.',
+  },
+  {
+    version: '1.79.8',
+    date: '2026-09-23',
+    summary:
+      "The Shorts comment box now tells you when a short isn't taking comments, "
+      + 'instead of just sitting there.',
+  },
+  {
+    version: '1.79.7',
+    date: '2026-09-23',
+    summary:
+      'In the Shorts comments, tap a commenter\'s avatar or name to open their '
+      + 'profile.',
+  },
+  {
     version: '1.79.6',
     date: '2026-09-23',
     summary:
