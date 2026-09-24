@@ -23,6 +23,13 @@ import { useAvatarUrl } from '../../utils/avatarCache';
 import { fetchBackfillSummary } from '../../lib/incubation';
 import { fetchMyInviteLinks } from '../../lib/referralLinks';
 import LeaderboardBadges from '../LeaderboardBadges/LeaderboardBadges';
+import { usePwaInstall } from '../../utils/pwaInstall';
+import { MdOutlineDownload } from 'react-icons/md';
+import { FaMedal } from 'react-icons/fa6';
+import { toastIn } from '../../utils/toast';
+
+// Headed "Install", the same as the bottom bar's install hint.
+const installToast = toastIn('Install');
 
 
 
@@ -77,6 +84,7 @@ function ProfileNav({ isVisible, onclose, toggleAddAccount, openLoginModal }) {
   const [votingPower, setVotingPower] = useState(0);
   const [rc, setRc] = useState(0);
   const [settingsOpen, setSettingsOpen] = useState(false);
+  const { canInstallPrompt, isIOS, showInstall, promptInstall } = usePwaInstall();
   // Currently chosen Hive RPC node (auto-picked by the session probe).
   const [rpcNode, setRpcNode] = useState(getHiveUrl());
   useEffect(() => {
@@ -106,6 +114,16 @@ function ProfileNav({ isVisible, onclose, toggleAddAccount, openLoginModal }) {
     fetchVotePower(user);
   }, []);
 
+  // Leaving the page closes the menu. On phones the bottom bar stays usable
+  // while it is open, so a tap on Feeds or Shorts would otherwise navigate
+  // underneath a menu that stays up.
+  const openPath = useRef(null);
+  useEffect(() => {
+    if (!isVisible) { openPath.current = null; return; }
+    if (openPath.current === null) { openPath.current = location.pathname; return; }
+    if (openPath.current !== location.pathname) onclose();
+  }, [isVisible, location.pathname, onclose]);
+
   // A dropdown closes on Escape, the same as every other menu people know.
   useEffect(() => {
     if (!isVisible) return undefined;
@@ -118,7 +136,8 @@ function ProfileNav({ isVisible, onclose, toggleAddAccount, openLoginModal }) {
 
   return (
     // Desktop: a dropdown hanging from the avatar, like every account menu people
-    // already know. Phone: a bottom sheet. The cover photo that used to fill the
+    // already know. Phone: the same card, compact, just above the bottom bar's
+    // Profile button. The cover photo that used to fill the
     // top was dropped on purpose: it was the loudest thing on screen and said
     // nothing about what the menu does.
     <div className={`profilenav-container ${isVisible ? 'visible' : ''}`} onClick={onclose}>
@@ -197,9 +216,29 @@ function ProfileNav({ isVisible, onclose, toggleAddAccount, openLoginModal }) {
               <MdPersonAdd className="pn-icon" /> <span>Invite links</span>
             </Link>
           )}
+          {/* Phone only: on desktop the sidebar already links the rankings. */}
+          <Link to="/leaderboard" className="pn-item pn-phone-only" role="menuitem" onClick={onclose}>
+            <FaMedal className="pn-icon" /> <span>Rankings</span>
+          </Link>
           <Link to="/about" className="pn-item" role="menuitem" onClick={onclose}>
             <HiInformationCircle className="pn-icon" /> <span>About 3Speak</span>
           </Link>
+          {/* Phone only, and only where the app can actually be installed. iOS
+              has no install prompt, so it gets the Share-sheet instructions. */}
+          {showInstall && (
+            <button
+              type="button"
+              className="pn-item pn-phone-only"
+              role="menuitem"
+              onClick={() => {
+                onclose();
+                if (canInstallPrompt) promptInstall();
+                else if (isIOS) installToast('Tap the Share button in Safari, then "Add to Home Screen"', { icon: '📲' });
+              }}
+            >
+              <MdOutlineDownload className="pn-icon" /> <span>Install App</span>
+            </button>
+          )}
         </div>
 
         <div className="pn-section">

@@ -739,7 +739,7 @@ function App() {
           onClose={() => { setAudioUploadOpen(false); setPendingAudioTrack(null); }}
           initialTrack={pendingAudioTrack}
         />
-        {!hideNavOnMobile && <BottomNav openLoginModal={openLoginModal} />}
+        {!hideNavOnMobile && <BottomNav openLoginModal={openLoginModal} onOpenProfileMenu={toggleProfileNav} profileMenuOpen={profileNavVisible} />}
         {toggle && <AddAccount_modal close={toggleAddAccount} isOpen={toggle} /> }
         <LoginModal
           displayed={loginModalOpen}
