@@ -139,13 +139,14 @@
     background: var(--bg-hover);
   }
 
+  // Red buttons are outlined, never filled: same as the nav's Sign up button.
   &.primary {
-    background: var(--accent-primary);
+    background: transparent;
     border-color: var(--accent-primary);
-    color: var(--text-inverse, #fff);
+    color: var(--accent-primary);
 
     &:hover {
-      filter: brightness(1.08);
+      background: var(--bg-hover);
     }
   }
 
