@@ -83,6 +83,7 @@ const FollowFeed = lazyRoute(() => import("./page/FollowFeed"), "./page/FollowFe
 const HiveImageUploader = lazyRoute(() => import("./page/HiveImageUploader"), "./page/HiveImageUploader");
 const Leaderboard = lazyRoute(() => import("./page/Leaderboard"), "./page/Leaderboard");
 const InvitePage = lazyRoute(() => import("./page/Invite/InvitePage"), "./page/Invite/InvitePage");
+import InvitePopup from "./components/InvitePopup/InvitePopup";
 const InviteLinks = lazyRoute(() => import("./page/Invite/InviteLinks"), "./page/Invite/InviteLinks");
 const Advertise = lazyRoute(() => import("./page/Advertise"), "./page/Advertise");
 const Legal = lazyRoute(() => import("./page/Legal"), "./page/Legal");
@@ -705,7 +706,7 @@ function App() {
               <Route path="/advertise" element={<Advertise openLoginModal={openLoginModal} />} />
               {/* Invite links (Butter Auth referral fast-track): the landing page a
                   referrer's link opens, and the referrer's own list of links. */}
-              <Route path="/invite/:code" element={<InvitePage openLoginModal={openLoginModal} />} />
+              <Route path="/invite/:code" element={<InvitePage />} />
               <Route path="/invite-links" element={<InviteLinks openLoginModal={openLoginModal} />} />
               <Route path="/profile" element={<OwnProfileRoute />} />
               {/* Spotlight — creator link page. Canonical: 3speak.tv/links/username (no @).
@@ -741,6 +742,9 @@ function App() {
         />
         {!hideNavOnMobile && <BottomNav openLoginModal={openLoginModal} onOpenProfileMenu={toggleProfileNav} profileMenuOpen={profileNavVisible} />}
         {toggle && <AddAccount_modal close={toggleAddAccount} isOpen={toggle} /> }
+        {/* After a 3speak.tv/invite/<code> link: "@alice invited you" over
+            the home page. The code stays for any later sign-up. */}
+        <InvitePopup openLoginModal={openLoginModal} />
         <LoginModal
           displayed={loginModalOpen}
           intent={loginIntent}

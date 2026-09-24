@@ -280,3 +280,49 @@
     border-color: #2e9c4a;
   }
 }
+
+// The invite popup (components/InvitePopup). Centred on desktop, a bottom sheet
+// on phones like every other 3Speak popup.
+.invite-popup-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 10000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  background: rgba(0, 0, 0, 0.6);
+
+  @include mix.respond(phone) {
+    align-items: flex-end;
+    padding: 0;
+  }
+}
+
+.invite-popup {
+  width: 100%;
+  max-width: 480px;
+  max-height: 88vh;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 22px;
+  border-radius: 16px;
+  border: 1px solid var(--border-color);
+  background: var(--card-bg, var(--bg-secondary));
+  box-shadow: var(--shadow-md, 0 10px 30px rgba(0, 0, 0, 0.35));
+
+  @include mix.respond(phone) {
+    max-width: 100%;
+    border-radius: 16px 16px 0 0;
+    padding-bottom: calc(22px + env(safe-area-inset-bottom, 0px));
+    animation: invite-popup-up 0.22s ease-out;
+  }
+}
+
+@keyframes invite-popup-up {
+  from { transform: translateY(100%); }
+  to { transform: translateY(0); }
+}

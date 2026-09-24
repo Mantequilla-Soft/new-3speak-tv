@@ -156,3 +156,23 @@ export function getStoredInvite() {
 export function clearStoredInvite() {
   try { localStorage.removeItem(INVITE_KEY); } catch { /* nothing to clear */ }
 }
+
+// One invite popup per followed link. The /invite/:code route queues the code
+// and redirects home; components/InvitePopup takes it and shows the popup once.
+// sessionStorage, so it never reappears in a later visit.
+const POPUP_KEY = 'threespeak_invite_popup';
+
+export function queueInvitePopup(code) {
+  try { sessionStorage.setItem(POPUP_KEY, String(code || '').toLowerCase()); } catch { /* private mode */ }
+}
+
+export function takeQueuedInvitePopup() {
+  try {
+    const c = sessionStorage.getItem(POPUP_KEY);
+    sessionStorage.removeItem(POPUP_KEY);
+    return c && INVITE_RE.test(c) ? c : null;
+  } catch {
+    return null;
+  }
+}
+
