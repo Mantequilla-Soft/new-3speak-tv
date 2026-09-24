@@ -7,6 +7,14 @@
 // 1.0.0 — that way they see all of these when develop is pushed to production.
 export const CHANGELOG = [
   {
+    version: '1.79.13',
+    date: '2026-09-24',
+    summary:
+      'Refreshed: the profile menu (your avatar, top right) is now a tidy dropdown showing your '
+      + 'badges, VP and RC at a glance, and everything grouped where you\'d expect it. '
+      + 'On phones it slides up from the bottom.',
+  },
+  {
     version: '1.79.12',
     date: '2026-09-23',
     summary:

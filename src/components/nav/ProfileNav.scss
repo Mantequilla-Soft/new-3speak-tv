@@ -1,365 +1,286 @@
 @use "../../mixins.scss" as *;
+// Type scale, kept on purpose: 13px for your name and the rows, 12px for
+// everything secondary; medium weight for the name only.
+//
+// Account menu. Desktop: a dropdown hanging from the avatar in the top bar.
+// Phone: a bottom sheet (every popup on phones is one). No cover photo: it was
+// the loudest thing on screen and told nobody what the menu was for.
 .profilenav-container {
   display: none;
-  justify-content: flex-end;
-  background: #0000004d;
   position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
+  inset: 0;
   z-index: 100000;
+  // Transparent on desktop: a dropdown does not dim the page. The layer is only
+  // here to catch the click outside that closes it.
+  background: transparent;
 
-  &.visible {
-    display: flex; /* Visible when 'visible' class is added */
+  &.visible { display: block; }
+
+  @include respond(phone) {
+    background: rgba(0, 0, 0, 0.45);
   }
 
   .profile-wrap {
-    position: relative;
+    position: absolute;
+    // Right under the bar, whatever height it currently measures (Nav.jsx
+    // publishes it), lined up with the avatar at the right edge.
+    top: calc(var(--nav-top-offset, 56px) + 6px);
+    right: 12px;
+    width: 300px;
+    max-height: calc(100vh - var(--nav-top-offset, 56px) - 18px);
+    overflow-y: auto;
+    overscroll-behavior: contain;
     display: flex;
     flex-direction: column;
-    width: 19%;
-    background-color: #fff;
-    border-radius: 20px 0px 0px 20px;
+    padding: 8px 0;
     box-sizing: border-box;
+    background: var(--bg-secondary);
+    color: var(--text-primary);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.18), 0 2px 6px rgba(0, 0, 0, 0.08);
+    font-family: "Roboto", "Arial", sans-serif;
+    transform-origin: top right;
+    animation: pn-drop-in 0.14s ease-out;
+
     [data-theme="dark"] & {
-      background-color: #1a1a1a;
-      border: solid 1px rgba(128, 128, 128, 0.144);
+      background: #212121;
+      box-shadow: 0 12px 32px rgba(0, 0, 0, 0.55), 0 2px 6px rgba(0, 0, 0, 0.35);
     }
+
     @include respond(phone) {
-      width: 60%;
-    }
-    .pro-top-wrap {
+      top: auto;
+      right: 0;
+      bottom: 0;
+      left: 0;
       width: 100%;
-      height: 220px;
-      padding-top: calc(20px + env(safe-area-inset-top, 0px));
-      position: relative;
-      border-radius: 10px 10px 0 0;
-      overflow: hidden;
-      // background-color: aqua;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-direction: column;
-      // background-image: linear-gradient(rgba(0, 0, 0, 0.2) 0%, rgba(0, 0, 0, 0.2) 40%, rgba(10, 10, 10, 0.75) 100%);
-      // background-color: rgb(2, 2, 2);
-      // background-image: blue;
-
-      .avatar-img {
-        width: 90px;
-        height: 90px;
-        border-radius: 50%;
-        border: 3px solid white;
-        position: relative;
-        display: flex;
-        align-items: center;
-        // bottom: -40px;
-        // left: 50%;
-        // transform: translateX(-50%);
-        background: white;
-        margin-bottom: 8px;
-      }
-      .username {
-        text-align: center;
-        color: #fff;
-        font-weight: 600;
-        background: rgba(0, 0, 0, 0.4);
-        padding: 4px 14px;
-        border-radius: 12px;
-        margin-bottom: 16px;
-        [data-theme="dark"] & {
-            color: #fff;
-          }
-      }
-      .power-wrap {
-        display: flex;
-        align-items: center;
-        gap: 10px;
-        margin-top: 8px;
-        position: relative;
-        .wrap-in {
-          position: relative;
-          // [data-theme="dark"] & {
-          //   background-color: #1a1a1a;
-          //   border: solid 1px rgba(128, 128, 128, 0.144);
-          // }
-
-          .tooltip {
-            position: absolute;
-            bottom: 125%; /* Position above the text */
-            left: 50%;
-            transform: translateX(-50%);
-            background-color: #333;
-            color: #fff;
-            padding: 8px 12px;
-            border-radius: 4px;
-            white-space: nowrap;
-            font-size: 14px;
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity 0.3s ease;
-            z-index: 1;
-            font-size: 12px;
-          }
-
-          .tooltip-arrow {
-            position: absolute;
-            top: 100%;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 0;
-            height: 0;
-            border-left: 6px solid transparent;
-            border-right: 6px solid transparent;
-            border-top: 6px solid #333;
-          }
-
-          .wrap {
-            display: flex;
-            align-items: center;
-            gap: 3px;
-            padding: 3px 6px;
-            border-radius: 7px;
-            font-size: 12.3px;
-            background-color: #fff;
-            [data-theme="dark"] & {
-            background-color: #1a1a1a;
-            border: solid 1px rgba(128, 128, 128, 0.144);
-          }
-            &:hover + .tooltip {
-              opacity: 1;
-              pointer-events: auto;
-            }
-          }
-        }
-      }
+      max-height: 85vh;
+      border-radius: 16px 16px 0 0;
+      border-bottom: 0;
+      padding-bottom: calc(8px + env(safe-area-inset-bottom, 0px));
+      transform-origin: bottom center;
+      animation-name: pn-sheet-in;
+      animation-duration: 0.2s;
     }
-    .list-wrap {
-      padding: 20px 20px;
-      // color: rgb(90, 90, 90);
-      font-weight: 500;
-      font-size: 14px;
-      .wrap {
-        display: flex;
-        padding: 15px 0;
-        border-radius: 4px;
-        align-items: center;
-        width: fit-content;
-        flex-wrap: wrap;
-        cursor: pointer;
-        [data-theme="dark"] & {
-          color: var(--text-primary);
-        }
 
-        &.dropdown-parent {
-          position: relative;
-        }
-        &:hover {
-          color: var(--link-hover);
-        }
-        span {
-          font-size: 14px;
-          font-weight: 500;
-        }
-        .icon {
-          width: 25px;
-          margin-right: 12px;
-        }
+    @media (prefers-reduced-motion: reduce) { animation: none; }
+  }
 
-        // How many posts are still waiting. A number rather than a dot: deciding
-        // whether to open this is a different decision at 1 than at 40.
-        //
-        // Deliberately not the accent colour. A red pill in a quiet menu reads
-        // as an error to fix, and this is a pile of work to get to when they
-        // feel like it -- the same reason the "Getting started" badge lost its
-        // red background.
-        .profilenav-count {
-          display: inline-flex;
-          align-items: center;
-          justify-content: center;
-          min-width: 20px;
-          height: 18px;
-          margin-left: 8px;
-          padding: 0 6px;
-          border-radius: 999px;
-          background: var(--bg-tertiary);
-          border: 1px solid var(--border-color);
-          color: var(--text-secondary);
-          font-size: 11px;
-          font-weight: 600;
-          line-height: 1;
-          font-variant-numeric: tabular-nums;
-        }
-      }
+  // Who is signed in, in one row: avatar, name, handle, and the way to their channel.
+  .pn-header {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 10px 16px 14px;
+  }
+  .pn-avatar-link {
+    flex: 0 0 auto;
+    display: flex;
+    border-radius: 50%;
+    &:focus-visible { outline: 2px solid var(--text-secondary); outline-offset: 2px; }
+  }
+  .pn-avatar {
+    flex: 0 0 auto;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+    background: var(--bg-tertiary);
+  }
+  .pn-identity {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    gap: 2px;
+  }
+  .pn-name,
+  .pn-handle {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .pn-name {
+    font-size: 13px;
+    font-weight: 500;
+    line-height: 1.3;
+  }
+  .pn-handle {
+    font-size: 12px;
+    color: var(--text-secondary);
+  }
 
-      .upload-dropdown {
-        .upload-chevron {
-          margin-left: 6px;
-          font-size: 16px;
-          color: var(--text-secondary);
-        }
-
-        .upload-subitems {
-          padding-left: 20px;
-
-          .sub-item {
-            padding: 10px 0;
-            .icon {
-              width: 20px;
-            }
-            span {
-              font-size: 13px;
-            }
-          }
-        }
-      }
-    }
-    .profile-divider {
-      border: 0;
-      height: 1px;
-      background: var(--divider, #e0e0e0);
-      width: 85%;
-      margin: 10px auto;
-    }
-    // Subtle RPC-node indicator — confirms the auto-picked Hive node.
-    .rpc-node-line {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 6px;
-      margin: 4px auto 0;
-      padding: 0 12px;
-      font-size: 11px;
-      line-height: 1.3;
-      color: var(--text-secondary, #888);
-      .rpc-node-dot {
-        width: 6px;
-        height: 6px;
-        border-radius: 50%;
-        background: #2ecc71;
-        flex: 0 0 auto;
-      }
-      .rpc-node-label {
-        opacity: 0.7;
-      }
-      .rpc-node-host {
-        font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-        max-width: 100%;
-      }
-    }
-    .logo-wrap {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin-top: 20px;
-      .logo {
-        width: 70%;
-      }
-    }
-    .support-wrap {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 10px;
-    }
-    // Sits on the edge the panel slides back through, pointing the way it goes.
-    // The old control was the letter "X" at 16px in the opposite corner, with no
-    // surface under it — over a light cover photo there was nothing to see.
-    .profilenav-close {
-      position: absolute;
-      top: calc(14px + env(safe-area-inset-top, 0px));
-      left: 14px;
-      z-index: 2;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      width: 34px;
-      height: 34px;
-      padding: 0;
-      border: 1px solid rgba(255, 255, 255, 0.28);
-      border-radius: 50%;
-      // Translucent dark rather than a theme colour: this sits on whatever cover
-      // image the account has, so it needs to hold up over both.
-      background: rgba(0, 0, 0, 0.45);
-      backdrop-filter: blur(6px);
-      -webkit-backdrop-filter: blur(6px);
-      color: #fff;
-      cursor: pointer;
-      transition: background 0.15s ease, transform 0.15s ease;
-
-      svg { font-size: 22px; display: block; }
-
-      &:hover {
-        background: rgba(0, 0, 0, 0.65);
-        transform: translateX(2px);
-      }
-
-      &:focus-visible { outline: 2px solid var(--accent-primary); outline-offset: 2px; }
-
-      @media (prefers-reduced-motion: reduce) { transition: none; }
+  // Automatic badges, a touch smaller than on the profile header so the row
+  // stays one line in a 300px menu.
+  .pn-badges {
+    padding: 0 16px 14px;
+    &:empty { display: none; }
+    .lb-badge {
+      font-size: 12px;
+      font-weight: 400;
+      padding: 2px 8px;
     }
   }
-  .dropdown-menu {
-    position: absolute;
-    left: 0px;
-    top: 40px;
 
-    // margin-top: 0.5rem; // mt-2
-    width: 12rem; // w-48
-    background-color: #fff; // bg-white
-    border-radius: 0.5rem; // rounded-lg
-    box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1),
-      0 4px 6px -4px rgb(0 0 0 / 0.1); // shadow-lg
-    padding: 0.5rem 0; // py-2
-    padding-top: 15px;
-    border: 1px solid #e5e7eb; // border-gray-200
-    [data-theme="dark"] & {
-      background-color: #1a1a1a;
-      border: solid 1px rgba(128, 128, 128, 0.144);
+  // VP and RC: one short line, not a feature. Label, a small bar, the number.
+  // The full names live in the hover title.
+  .pn-meters {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    padding: 8px 16px;
+    border-top: 1px solid var(--divider);
+  }
+  .pn-meter {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    color: var(--text-secondary);
+    white-space: nowrap;
+    cursor: default;
+    strong {
+      color: var(--text-primary);
+      font-weight: 400;
+      font-variant-numeric: tabular-nums;
     }
-    .close-btn {
-      position: absolute;
-      // padding: 2px 0px;
-      top: -2px;
-      right: 1px;
-      cursor: pointer;
-      font-size: 16px;
+  }
+  .pn-meter-label { font-weight: 400; }
+  .pn-meter-track {
+    width: 36px;
+    height: 4px;
+    border-radius: 999px;
+    background: var(--bg-hover);
+    overflow: hidden;
+  }
+  .pn-meter-fill {
+    height: 100%;
+    border-radius: inherit;
+    // Neutral, not the brand red: nothing in this menu is an alert.
+    background: var(--text-secondary);
+    transition: width 0.3s ease;
+  }
+
+  .pn-section {
+    padding: 8px 0;
+    border-top: 1px solid var(--divider);
+    &:empty { display: none; }
+  }
+
+  // One row. Links and buttons share it, so the button defaults are reset here.
+  .pn-item {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    width: 100%;
+    min-height: 36px;
+    padding: 0 16px;
+    box-sizing: border-box;
+    border: 0;
+    background: none;
+    color: var(--text-primary);
+    font: inherit;
+    font-size: 13px;
+    text-align: left;
+    text-decoration: none;
+    cursor: pointer;
+
+    &:hover { background: var(--bg-hover); }
+    &:focus-visible {
+      outline: 2px solid var(--text-secondary);
+      outline-offset: -2px;
     }
 
-    .list {
-      display: block; // block
+    @include respond(phone) { min-height: 48px; }
+  }
+  .pn-icon {
+    flex: 0 0 auto;
+    width: 18px;
+    height: 18px;
+    color: var(--text-secondary);
+  }
+
+  // How many posts are still waiting. A number rather than a dot: deciding
+  // whether to open this is a different decision at 1 than at 40.
+  //
+  // Deliberately not the accent colour. A red pill in a quiet menu reads as an
+  // error to fix, and this is a pile of work to get to when they feel like it.
+  .profilenav-count {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 20px;
+    height: 18px;
+    margin-left: auto;
+    padding: 0 6px;
+    border-radius: 999px;
+    background: var(--bg-tertiary);
+    border: 1px solid var(--border-color);
+    color: var(--text-secondary);
+    font-size: 12px;
+    font-weight: 400;
+    line-height: 1;
+    font-variant-numeric: tabular-nums;
+  }
+
+  // Quiet footer: which Hive node is serving you, and where to find 3Speak.
+  .pn-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 10px 16px 4px;
+    border-top: 1px solid var(--divider);
+  }
+  .rpc-node-line {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    min-width: 0;
+    font-size: 12px;
+    color: var(--text-secondary);
+    .rpc-node-dot {
+      flex: 0 0 auto;
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: #2ecc71;
+    }
+    .rpc-node-host {
+      font-family: inherit;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+  }
+  .support-wrap {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    flex: 0 0 auto;
+    .social-link {
       display: flex;
       align-items: center;
-      gap: 4px;
-      padding: 0.5rem 1rem; // px-4 py-2
-      color: #374151; // text-gray-700
-      text-decoration: none;
-      font-size: 13.5px;
-      [data-theme="dark"] & {
+      justify-content: center;
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      color: var(--text-secondary);
+      svg { width: 16px; height: 16px; }
+      &:hover {
+        background: var(--bg-hover);
         color: var(--text-primary);
       }
-      img {
-        width: 20px;
-        height: 20px;
-        border-radius: 50%;
-      }
-
-      &:hover {
-        background-color: #7a96ce2c; // hover:bg-gray-100
-      }
-    }
-    button {
-      margin: 5px 16px;
-      background: #e32933;
-      color: #fff;
-      border: none;
-      padding: 2px 4px;
-      border-radius: 4px;
     }
   }
+}
+
+@keyframes pn-drop-in {
+  from { opacity: 0; transform: translateY(-4px) scale(0.98); }
+  to { opacity: 1; transform: none; }
+}
+@keyframes pn-sheet-in {
+  from { transform: translateY(100%); }
+  to { transform: none; }
 }
 
 // NSFW toggle in profile nav

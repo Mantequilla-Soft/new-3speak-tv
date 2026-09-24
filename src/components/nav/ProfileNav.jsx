@@ -3,7 +3,7 @@ import "./ProfileNav.scss"
 import '../../page/Login/KeyChainLogin.scss';
 import { useAppStore } from '../../lib/store';
 import { useGetMyQuery } from '../../hooks/getUserDetails';
-import { MdKeyboardArrowDown, MdOutlineKeyboardArrowUp, MdSettings, MdTrendingUp, MdCampaign, MdChevronRight, MdCloudUpload, MdPersonAdd } from "react-icons/md";
+import { MdSettings, MdTrendingUp, MdCampaign, MdCloudUpload, MdPersonAdd } from "react-icons/md";
 import { ImPower } from "react-icons/im";
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { FaDiscord, FaLanguage } from 'react-icons/fa';
@@ -13,8 +13,6 @@ import { TiThList } from "react-icons/ti";
 import { IoMdPerson } from 'react-icons/io';
 import { HiInformationCircle } from 'react-icons/hi';
 import { RiWallet3Fill } from 'react-icons/ri';
-import logo from "../../assets/image/3S_logo.svg";
-import logoDark from '../../assets/image/3S_logodark.png';
 import { SiTelegram } from "react-icons/si";
 import { getVotePower } from '../../utils/hiveUtils';
 import { getHiveUrl, ensureHealthyNode } from '../../utils/hiveNode';
@@ -24,6 +22,7 @@ import SettingsModal from '../SettingsModal/SettingsModal';
 import { useAvatarUrl } from '../../utils/avatarCache';
 import { fetchBackfillSummary } from '../../lib/incubation';
 import { fetchMyInviteLinks } from '../../lib/referralLinks';
+import LeaderboardBadges from '../LeaderboardBadges/LeaderboardBadges';
 
 
 
@@ -31,7 +30,7 @@ import { fetchMyInviteLinks } from '../../lib/referralLinks';
 function ProfileNav({ isVisible, onclose, toggleAddAccount, openLoginModal }) {
   const location = useLocation();
   const navigate = useNavigate()
-  const { user, theme, showNsfw, setShowNsfw, toggleTheme, LogOut } = useAppStore();
+  const { user, showNsfw, setShowNsfw, toggleTheme, LogOut } = useAppStore();
   const incubationHandle = useAppStore((s) => s.incubationHandle);
   // No Hive account: voting power, resource credits, a wallet, analytics and
   // the advertiser console are all things that read or spend an account that
@@ -107,134 +106,141 @@ function ProfileNav({ isVisible, onclose, toggleAddAccount, openLoginModal }) {
     fetchVotePower(user);
   }, []);
 
+  // A dropdown closes on Escape, the same as every other menu people know.
+  useEffect(() => {
+    if (!isVisible) return undefined;
+    const onKey = (e) => { if (e.key === 'Escape') onclose(); };
+    document.addEventListener('keydown', onKey);
+    return () => document.removeEventListener('keydown', onKey);
+  }, [isVisible, onclose]);
+
+  const rpcHost = rpcNode.replace(/^https?:\/\//, '').replace(/\/$/, '');
+
   return (
-
+    // Desktop: a dropdown hanging from the avatar, like every account menu people
+    // already know. Phone: a bottom sheet. The cover photo that used to fill the
+    // top was dropped on purpose: it was the loudest thing on screen and said
+    // nothing about what the menu does.
     <div className={`profilenav-container ${isVisible ? 'visible' : ''}`} onClick={onclose}>
-      <div className="profile-wrap" onClick={(e) => e.stopPropagation()}>
-        {/* Was a bare letter "X" at 16px in the top-right corner, sitting on
-            whatever cover photo the account happens to have. This is a real
-            button on the edge the panel slides back through. */}
-        <button type="button" className="profilenav-close" onClick={onclose} aria-label="Close menu">
-          <MdChevronRight />
-        </button>
+      <div className="profile-wrap" role="menu" aria-label="Account menu" onClick={(e) => e.stopPropagation()}>
+        <div className="pn-header">
+          <Link to="/profile" className="pn-avatar-link" onClick={onclose} aria-label="My channel">
+            <img className="pn-avatar" src={myAvatar} alt="" />
+          </Link>
+          <div className="pn-identity">
+            <span className="pn-name">{displayName}</span>
+            <span className="pn-handle">@{displayName}</span>
+          </div>
+        </div>
 
-        <div className='pro-top-wrap'style={{ backgroundImage: user ? `url(https://images.hive.blog/u/${user}/cover)` : 'none', backgroundSize: "cover", backgroundPosition: "center",}}> 
-            {/* <img className='' src={getUserProfile?.images?.cover} alt="" /> */}
-            <img className='avatar-img' src={myAvatar}  alt="" />
-            <span className='username'>{displayName}</span>
-            {!isIncubating && <div className="power-wrap">
-            <div className="wrap-in">
-              <div className="wrap">
-                <MdOutlineKeyboardArrowUp />
-                <span>{votingPower}% {" "} VP</span>
-              </div>
-              <div className="tooltip">
-                Voting Power
-                <div className="tooltip-arrow"></div>
-              </div>
+        {/* The same automatic badges the profile header shows (3Speak Pro plus
+            leaderboard standings). The component renders nothing for an account
+            holding none, and the wrapper then collapses. A badge is a link to its
+            board, so following one closes the menu. */}
+        {user && (
+          <div className="pn-badges" onClick={(e) => { if (e.target.closest('a')) onclose(); }}>
+            <LeaderboardBadges username={user} />
+          </div>
+        )}
+
+        {!isIncubating && (
+          <div className="pn-meters">
+            <div className="pn-meter" title="Voting Power: how much weight your next vote carries">
+              <span className="pn-meter-label">VP</span>
+              <div className="pn-meter-track"><div className="pn-meter-fill" style={{ width: `${Math.min(100, Number(votingPower) || 0)}%` }} /></div>
+              <strong>{votingPower}%</strong>
             </div>
-            <div className="wrap-in">
-              <div className="wrap">
-              <MdKeyboardArrowDown />
-              <span>{rc}% {" "} RC</span>
-              </div>
-              <div className="tooltip">
-                Resource Credit
-                <div className="tooltip-arrow"></div>
-              </div>
-              </div>
+            <div className="pn-meter" title="Resource Credits: what your actions on Hive cost">
+              <span className="pn-meter-label">RC</span>
+              <div className="pn-meter-track"><div className="pn-meter-fill" style={{ width: `${Math.min(100, Number(rc) || 0)}%` }} /></div>
+              <strong>{rc}%</strong>
+            </div>
+          </div>
+        )}
 
-            </div>}
-           </div>
-        <div className="list-wrap">
-          <Link to="/profile" className="wrap" onClick={onclose}>
-            <IoMdPerson className="icon" /> <span>My Channel</span>
+        <div className="pn-section">
+          <Link to="/profile" className="pn-item" role="menuitem" onClick={onclose}>
+            <IoMdPerson className="pn-icon" /> <span>My Channel</span>
           </Link>
           {backlogPending > 0 && (
-            <Link to="/publish-backlog" className="wrap" onClick={onclose}>
-              <MdCloudUpload className="icon" />
-              <span>Publish backlog<span className="profilenav-count">{backlogPending}</span></span>
+            <Link to="/publish-backlog" className="pn-item" role="menuitem" onClick={onclose}>
+              <MdCloudUpload className="pn-icon" />
+              <span>Publish backlog</span>
+              <span className="profilenav-count">{backlogPending}</span>
             </Link>
           )}
           {!isIncubating && (
-            <Link to="/profile?tab=stats" className="wrap" onClick={onclose}>
-              <MdTrendingUp className="icon" /> <span>Analytics</span>
-            </Link>
+            <button type="button" className="pn-item" role="menuitem" onClick={() => { handlewallletNavigation(); onclose() }}>
+              <RiWallet3Fill className="pn-icon" /> <span>Wallet</span>
+            </button>
           )}
-          {/* <Link className="wrap" onClick={onclose}>
-            <TiThList className="icon" /> <span>Playlist</span>
-          </Link> */}
+          <button type="button" className="pn-item" role="menuitem" onClick={() => { setSettingsOpen(true); onclose(); }}>
+            <MdSettings className="pn-icon" /> <span>Settings</span>
+          </button>
+        </div>
 
+        <div className="pn-section">
           {!isIncubating && (
-            <a className="wrap" onClick={() => { handlewallletNavigation(); onclose() }}>
-              <RiWallet3Fill className="icon" /> <span>Wallet</span>
-            </a>
+            <Link to="/profile?tab=stats" className="pn-item" role="menuitem" onClick={onclose}>
+              <MdTrendingUp className="pn-icon" /> <span>Analytics</span>
+            </Link>
           )}
-          {/* <Link className="wrap">
-            <FaLanguage className="icon" /> <span>Language Settings</span>
-          </Link> */}
           {/* Closed testing. Same gate as the /advertise page itself, so the menu can
               never offer a link to a page that would answer with a 404. */}
           {!isIncubating && adsEnabledFor(user) && (
-            <Link to="/advertise" className="wrap" onClick={onclose}>
-              <MdCampaign className="icon" /> <span>Advertise</span>
+            <Link to="/advertise" className="pn-item" role="menuitem" onClick={onclose}>
+              <MdCampaign className="pn-icon" /> <span>Advertise</span>
             </Link>
           )}
           {inviteLinkCount > 0 && (
-            <Link to="/invite-links" className="wrap" onClick={onclose}>
-              <MdPersonAdd className="icon" /> <span>Invite links</span>
+            <Link to="/invite-links" className="pn-item" role="menuitem" onClick={onclose}>
+              <MdPersonAdd className="pn-icon" /> <span>Invite links</span>
             </Link>
           )}
-          <a className="wrap" onClick={() => { setSettingsOpen(true); onclose(); }}>
-            <MdSettings className="icon" /> <span>Settings</span>
-          </a>
-          <Link to="/about" className="wrap" onClick={onclose}>
-            <HiInformationCircle className="icon" /> <span>About 3Speak</span>
+          <Link to="/about" className="pn-item" role="menuitem" onClick={onclose}>
+            <HiInformationCircle className="pn-icon" /> <span>About 3Speak</span>
           </Link>
+        </div>
+
+        <div className="pn-section">
           {/* Hidden for ButrAuth sessions: the account switcher is aioha-only and
               there is no path yet between a ButrAuth session and an aioha wallet.
               Until ButrAuth is available as an aioha provider, offering the switch
               would just strand the user. */}
           {!isManteAuth && (
-            <a className="wrap" onClick={() => { onclose(); openLoginModal(); }}>
-              <IoPower className="icon" /> <span>Change account</span>
-            </a>
+            <button type="button" className="pn-item" role="menuitem" onClick={() => { onclose(); openLoginModal(); }}>
+              <IoPower className="pn-icon" /> <span>Change account</span>
+            </button>
           )}
           {isManteAuth && (
-            <a className="wrap" onClick={() => { LogOut(user); onclose(); navigate('/'); }}>
-              <IoPower className="icon" /> <span>Logout</span>
-            </a>
+            <button type="button" className="pn-item" role="menuitem" onClick={() => { LogOut(user); onclose(); navigate('/'); }}>
+              <IoPower className="pn-icon" /> <span>Logout</span>
+            </button>
           )}
-
-           </div>
-           <hr className="profile-divider" />
-           <div className="rpc-node-line" title={rpcNode}>
-             <span className="rpc-node-dot" aria-hidden="true" />
-             <span className="rpc-node-label">RPC:</span>
-             <span className="rpc-node-host">{rpcNode.replace(/^https?:\/\//, '').replace(/\/$/, '')}</span>
-           </div>
-           <div className="logo-wrap">
-          {theme === "light" ? <img className="logo" src={logo} alt="3Speak Logo" /> :
-            <img className="logo" src={logoDark} alt="3Speak Logo" />}
-           </div>
-        <div className="support-wrap">
-          <a href="https://discord.com/invite/NSFS2VGj83" className="social-link" target="_blank" rel="noopener noreferrer">
-            <FaDiscord size={30} />
-          </a>
-          <a href="https://x.com/3speaktv?utm_source=3speak.tv " className="social-link" target="_blank" rel="noopener noreferrer">
-            <FaSquareXTwitter size={30} />
-          </a>
-          <a href="https://t.me/threespeak?utm_source=3speak.tv" className="social-link" target="_blank" rel="noopener noreferrer">
-            <SiTelegram size={30} />
-          </a>
-
         </div>
-           
 
-           <SettingsModal isOpen={settingsOpen} onClose={() => setSettingsOpen(false)} />
-
-        
+        <div className="pn-footer">
+          <div className="rpc-node-line" title={rpcNode}>
+            <span className="rpc-node-dot" aria-hidden="true" />
+            <span className="rpc-node-host">{rpcHost}</span>
+          </div>
+          <div className="support-wrap">
+            <a href="https://discord.com/invite/NSFS2VGj83" className="social-link" target="_blank" rel="noopener noreferrer" aria-label="3Speak on Discord">
+              <FaDiscord />
+            </a>
+            <a href="https://x.com/3speaktv?utm_source=3speak.tv " className="social-link" target="_blank" rel="noopener noreferrer" aria-label="3Speak on X">
+              <FaSquareXTwitter />
+            </a>
+            <a href="https://t.me/threespeak?utm_source=3speak.tv" className="social-link" target="_blank" rel="noopener noreferrer" aria-label="3Speak on Telegram">
+              <SiTelegram />
+            </a>
+          </div>
+        </div>
       </div>
+
+      {/* Portals to <body>, so it shows even though this container hides once the
+          menu row that opened it closes the menu. */}
+      <SettingsModal isOpen={settingsOpen} onClose={() => setSettingsOpen(false)} />
     </div>
   )
 }
