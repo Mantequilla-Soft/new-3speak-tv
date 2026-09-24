@@ -82,6 +82,8 @@ const FirstUploads = lazyRoute(() => import("./page/FirstUploads"), "./page/Firs
 const FollowFeed = lazyRoute(() => import("./page/FollowFeed"), "./page/FollowFeed");
 const HiveImageUploader = lazyRoute(() => import("./page/HiveImageUploader"), "./page/HiveImageUploader");
 const Leaderboard = lazyRoute(() => import("./page/Leaderboard"), "./page/Leaderboard");
+const InvitePage = lazyRoute(() => import("./page/Invite/InvitePage"), "./page/Invite/InvitePage");
+const InviteLinks = lazyRoute(() => import("./page/Invite/InviteLinks"), "./page/Invite/InviteLinks");
 const Advertise = lazyRoute(() => import("./page/Advertise"), "./page/Advertise");
 const Legal = lazyRoute(() => import("./page/Legal"), "./page/Legal");
 const LoginNew = lazyRoute(() => import("./page/Login/LoginNew"), "./page/Login/LoginNew");
@@ -701,6 +703,10 @@ function App() {
               <Route path="/t/:tag" element={<TagFeed />} />
               <Route path="/leaderboard" element={<Leaderboard />} />
               <Route path="/advertise" element={<Advertise openLoginModal={openLoginModal} />} />
+              {/* Invite links (Butter Auth referral fast-track): the landing page a
+                  referrer's link opens, and the referrer's own list of links. */}
+              <Route path="/invite/:code" element={<InvitePage openLoginModal={openLoginModal} />} />
+              <Route path="/invite-links" element={<InviteLinks openLoginModal={openLoginModal} />} />
               <Route path="/profile" element={<OwnProfileRoute />} />
               {/* Spotlight — creator link page. Canonical: 3speak.tv/links/username (no @).
                   Legacy /@handle/links still resolves (nginx 301s it to /links/ in prod). */}

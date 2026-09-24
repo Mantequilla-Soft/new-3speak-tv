@@ -105,3 +105,54 @@ export function withReferrer(url) {
     return url;
   }
 }
+
+/**
+ * Invite links: `https://3speak.tv/invite/<code>`
+ *
+ * Different from `?ref=` above, and stronger. A `?ref=` name is only a claim;
+ * an invite code was issued by 3Speak (on Butter Auth's Referrals tab) to a
+ * referrer it trusts, and a new user who signs up with it can get a real Hive
+ * account straight away instead of the warm-up. The code is kept here from the
+ * moment the invite page opens until sign-up, then handed to Butter Auth by
+ * /api/manteauth/start, which puts it on the authorize URL through the SDK.
+ *
+ * FIRST TOUCH WINS, like the referral name: Butter Auth binds an invite to a
+ * person write-once, so a second link could never take over anyway, and
+ * keeping the first here keeps the two sides in agreement.
+ */
+const INVITE_KEY = 'threespeak_invite';
+const INVITE_RE = /^[a-z0-9]{10}$/;
+
+export function rememberInvite(code) {
+  const c = String(code || '').trim().toLowerCase();
+  if (!INVITE_RE.test(c)) return getStoredInvite();
+  const existing = getStoredInvite();
+  if (existing) return existing;
+  try {
+    localStorage.setItem(INVITE_KEY, JSON.stringify({ code: c, at: Date.now() }));
+  } catch {
+    // Private mode: the invite still works if they sign up in this visit,
+    // because the landing page passes it along directly as well.
+  }
+  return c;
+}
+
+/** The remembered invite code, or null if none or expired (30 days, as above). */
+export function getStoredInvite() {
+  try {
+    const raw = localStorage.getItem(INVITE_KEY);
+    if (!raw) return null;
+    const { code, at } = JSON.parse(raw);
+    if (!code || !at || Date.now() - at > MAX_AGE_MS || !INVITE_RE.test(code)) {
+      localStorage.removeItem(INVITE_KEY);
+      return null;
+    }
+    return code;
+  } catch {
+    return null;
+  }
+}
+
+export function clearStoredInvite() {
+  try { localStorage.removeItem(INVITE_KEY); } catch { /* nothing to clear */ }
+}

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useSignupPossible } from '../../utils/signupPossible';
-import { withReferrer } from '../../utils/referral';
+import { withReferrer, getStoredInvite } from '../../utils/referral';
 import { AiohaModal, useAioha } from "@aioha/react-ui";
 import { Providers, KeyTypes } from "@aioha/aioha";
 import { IoPower } from "react-icons/io5";
@@ -53,7 +53,9 @@ function LoginModal({ displayed, onLogin, onClose, loginTitle, loginOptions, int
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include',
         // signup:true → butrauth jumps straight to account creation (screen_hint=signup)
-        body: JSON.stringify({ redirect_uri: window.location.origin + '/callback', state: 'popup', signup }),
+        // invite: the code from a 3speak.tv/invite/<code> link, if the visitor
+        // came through one (utils/referral.js). Same hand-off as openButrauthPopup.
+        body: JSON.stringify({ redirect_uri: window.location.origin + '/callback', state: 'popup', signup, invite: getStoredInvite() }),
       });
       const data = await res.json();
       if (!res.ok || !data.url) throw new Error(data.error || 'Failed to start Butter Auth login');

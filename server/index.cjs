@@ -487,7 +487,7 @@ const OP_USER_FIELD = {
 // =====================================================================
 app.post('/api/manteauth/start', baseLimiter, (req, res) => {
   try {
-    const { redirect_uri, state, signup, graduate, changeHandle } = req.body
+    const { redirect_uri, state, signup, graduate, changeHandle, invite } = req.body
     if (!redirect_uri || typeof redirect_uri !== 'string') {
       return res.status(400).json({ error: 'Invalid request' })
     }
@@ -495,11 +495,25 @@ app.post('/api/manteauth/start', baseLimiter, (req, res) => {
 
     res.set('Cache-Control', 'no-store')
 
-    const { url, codeVerifier } = butr.createAuthRequest({
+    // The code from a 3speak.tv/invite/<code> link the visitor arrived through
+    // (see /api/referral/invite below and src/utils/referral.js). butrauth binds
+    // it after sign-in and, while the referrer's link has room, sends a new
+    // user straight to account creation instead of the warm-up. It came from
+    // the visitor's own URL and butrauth validates it, so only its shape is
+    // checked here.
+    const inviteCode = typeof invite === 'string' && INVITE_CODE_RE.test(invite.toLowerCase()) ? invite.toLowerCase() : null
+
+    let { url, codeVerifier } = butr.createAuthRequest({
       redirectUri: redirect_uri,
       scope: 'posting',
-      state: state || ''
+      state: state || '',
+      invite: inviteCode
     })
+    // An SDK older than 0.5 ignores `invite` silently. Append it rather than
+    // lose the invite, so a stale node_modules degrades to the same URL.
+    if (inviteCode && !url.includes('invite=')) {
+      url += (url.includes('?') ? '&' : '?') + `invite=${inviteCode}`
+    }
     setPkceCookie(res, codeVerifier)
 
     // signup:true   → butrauth jumps straight to account creation.
@@ -521,6 +535,90 @@ app.post('/api/manteauth/start', baseLimiter, (req, res) => {
   } catch (err) {
     console.error('Start error:', err.message)
     res.status(500).json({ error: 'Internal error' })
+  }
+})
+
+// =====================================================================
+// Invite links (butrauth's referral fast-track), through the butrauth SDK.
+//
+// An account 3Speak activated as a referrer (on butrauth's Referrals tab) hands
+// out https://3speak.tv/invite/<code>. The landing page reads the invite from
+// here, keeps the code, and /api/manteauth/start passes it to butrauth. The
+// referrer's own screen (/invite-links) lists their links with this month's
+// usage. Everything goes through the SDK so other integrators get the same
+// calls: getInvite, getReferralLinks, getReferralPeople.
+// =====================================================================
+const INVITE_CODE_RE = /^[a-z0-9]{10}$/
+
+// Who is signed in, from a VERIFIED credential only: a butrauth session, or a
+// wallet session the user proved with their posting key. Deliberately NOT the
+// legacy app-key path in resolveDelegatedSignUser, which trusts a claimed
+// username: butrauth answers getReferralLinks for whatever account we name, so
+// naming an unverified one would show somebody else's invite codes.
+async function resolveVerifiedHiveUser(req, res) {
+  const butrUser = await resolveButrUser(req, res)
+  if (butrUser) return butrUser.toLowerCase()
+  const ws = req.cookies?.[WSESSION_COOKIE_NAME]
+  const wu = ws && verifyWalletSession(ws)
+  return wu ? String(wu).toLowerCase() : null
+}
+
+function referralSdkReady(res) {
+  if (!butr) { res.status(503).json({ error: 'ButrAuth not ready' }); return false }
+  if (typeof butr.getReferralLinks !== 'function') {
+    console.error('[referral] @mantequilla-soft/butrauth-client is older than 0.5.0; invite links need it')
+    res.status(503).json({ error: 'Invite links are not available right now' })
+    return false
+  }
+  return true
+}
+
+// GET /api/referral/invite/:code: what the invite landing page shows.
+app.get('/api/referral/invite/:code', baseLimiter, async (req, res) => {
+  const code = String(req.params.code || '').toLowerCase()
+  res.set('Cache-Control', 'no-store')
+  if (!INVITE_CODE_RE.test(code)) return res.json({ valid: false })
+  if (!referralSdkReady(res)) return
+  try {
+    const inv = await butr.getInvite(code)
+    if (!inv.valid) return res.json({ valid: false })
+    // Another app's invite is not an invite to 3Speak. butrauth would refuse
+    // to bind it through our /authorize anyway; say so before sign-up.
+    if (inv.app?.clientId !== MANTEAUTH_CLIENT_ID) return res.json({ valid: false, reason: 'other_app' })
+    res.json({ valid: true, referrer: inv.referrer, fastTrack: inv.fastTrack })
+  } catch (err) {
+    console.warn('[referral] invite lookup failed:', err.message)
+    res.status(502).json({ error: 'Could not check this invite right now' })
+  }
+})
+
+// GET /api/referral/links: the signed-in user's invite links for 3Speak.
+app.get('/api/referral/links', baseLimiter, async (req, res) => {
+  res.set('Cache-Control', 'no-store')
+  if (!referralSdkReady(res)) return
+  const account = await resolveVerifiedHiveUser(req, res)
+  if (!account) return res.status(401).json({ error: 'Not signed in' })
+  try {
+    res.json({ account, links: await butr.getReferralLinks(account) })
+  } catch (err) {
+    console.warn('[referral] links lookup failed:', err.message)
+    res.status(502).json({ error: 'Could not load your invite links right now' })
+  }
+})
+
+// GET /api/referral/links/:id/people: who came in through one of them.
+app.get('/api/referral/links/:id/people', baseLimiter, async (req, res) => {
+  res.set('Cache-Control', 'no-store')
+  if (!/^[0-9a-f]{24}$/.test(String(req.params.id || ''))) return res.status(400).json({ error: 'Invalid request' })
+  if (!referralSdkReady(res)) return
+  const account = await resolveVerifiedHiveUser(req, res)
+  if (!account) return res.status(401).json({ error: 'Not signed in' })
+  try {
+    res.json({ people: await butr.getReferralPeople(account, req.params.id) })
+  } catch (err) {
+    if (err.status === 404) return res.status(404).json({ error: 'Not found' })
+    console.warn('[referral] people lookup failed:', err.message)
+    res.status(502).json({ error: 'Could not load this list right now' })
   }
 })
 

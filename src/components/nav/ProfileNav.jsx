@@ -3,7 +3,7 @@ import "./ProfileNav.scss"
 import '../../page/Login/KeyChainLogin.scss';
 import { useAppStore } from '../../lib/store';
 import { useGetMyQuery } from '../../hooks/getUserDetails';
-import { MdKeyboardArrowDown, MdOutlineKeyboardArrowUp, MdSettings, MdTrendingUp, MdCampaign, MdChevronRight, MdCloudUpload } from "react-icons/md";
+import { MdKeyboardArrowDown, MdOutlineKeyboardArrowUp, MdSettings, MdTrendingUp, MdCampaign, MdChevronRight, MdCloudUpload, MdPersonAdd } from "react-icons/md";
 import { ImPower } from "react-icons/im";
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { FaDiscord, FaLanguage } from 'react-icons/fa';
@@ -23,6 +23,7 @@ import LabeledToggle from '../LabeledToggle/LabeledToggle';
 import SettingsModal from '../SettingsModal/SettingsModal';
 import { useAvatarUrl } from '../../utils/avatarCache';
 import { fetchBackfillSummary } from '../../lib/incubation';
+import { fetchMyInviteLinks } from '../../lib/referralLinks';
 
 
 
@@ -53,6 +54,19 @@ function ProfileNav({ isVisible, onclose, toggleAddAccount, openLoginModal }) {
       // 401 (not a butrauth identity) and 409 (never incubated) are the ORDINARY
       // answers for most users, not errors. Either way: no entry.
       .catch(() => { if (alive) setBacklogPending(0); });
+    return () => { alive = false; };
+  }, [user]);
+  // Does 3Speak have this account down as a referrer? Only then is there an
+  // "Invite links" entry. Hidden rather than shown empty for everybody else,
+  // the same reasoning as the backlog entry above. Any failure (signed out,
+  // Butter Auth unreachable) just means no entry.
+  const [inviteLinkCount, setInviteLinkCount] = useState(0);
+  useEffect(() => {
+    if (!user) { setInviteLinkCount(0); return undefined; }
+    let alive = true;
+    fetchMyInviteLinks()
+      .then((d) => { if (alive) setInviteLinkCount((d?.links || []).length); })
+      .catch(() => { if (alive) setInviteLinkCount(0); });
     return () => { alive = false; };
   }, [user]);
   // What to SHOW. Someone incubating has no Hive account, so `user` is null and
@@ -164,6 +178,11 @@ function ProfileNav({ isVisible, onclose, toggleAddAccount, openLoginModal }) {
           {!isIncubating && adsEnabledFor(user) && (
             <Link to="/advertise" className="wrap" onClick={onclose}>
               <MdCampaign className="icon" /> <span>Advertise</span>
+            </Link>
+          )}
+          {inviteLinkCount > 0 && (
+            <Link to="/invite-links" className="wrap" onClick={onclose}>
+              <MdPersonAdd className="icon" /> <span>Invite links</span>
             </Link>
           )}
           <a className="wrap" onClick={() => { setSettingsOpen(true); onclose(); }}>
