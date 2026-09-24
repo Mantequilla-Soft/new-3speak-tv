@@ -79,8 +79,20 @@
     }
   }
 
+  // HiveAvatar renders a <span> around an unsized <img>: the size has to go on
+  // the img itself, or the picture shows at its natural resolution.
   .invite-avatar {
     flex-shrink: 0;
+    display: inline-flex;
+    position: relative;
+
+    img {
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      object-fit: cover;
+      display: block;
+    }
   }
 }
 
@@ -226,9 +238,18 @@
 
   .invite-people-avatar {
     flex-shrink: 0;
+    display: inline-flex;
     width: 24px;
     height: 24px;
     border-radius: 50%;
+
+    img {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      object-fit: cover;
+      display: block;
+    }
 
     &.empty {
       background: var(--bg-tertiary);
