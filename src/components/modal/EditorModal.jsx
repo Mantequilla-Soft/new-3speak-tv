@@ -137,6 +137,30 @@ function EditorModal({ isOpen, onClose, videoUrl, videoName, videoType, clipStar
     return () => window.removeEventListener('message', handleMessage);
   }, [isOpen, resolvedUrl, videoUrl, videoName, videoType, clipStart, clipEnd, sendToEditor]);
 
+  // While the editor is open, keys must not reach the page behind it (the
+  // shorts page plays/pauses on Space and switches videos on the arrow keys).
+  // Space is forwarded so it plays/pauses the editor preview instead.
+  useEffect(() => {
+    if (!isOpen) return;
+    const onKeyDown = (e) => {
+      const t = e.target;
+      const editable = t?.tagName === 'INPUT' || t?.tagName === 'TEXTAREA' || t?.tagName === 'SELECT' || t?.isContentEditable;
+      e.stopImmediatePropagation();
+      if (editable) return;
+      if (e.key === ' ' || e.code === 'Space') {
+        e.preventDefault();
+        if (editorReady) sendToEditor({ type: 'toggle-play' });
+      }
+    };
+    window.addEventListener('keydown', onKeyDown, true);
+    return () => window.removeEventListener('keydown', onKeyDown, true);
+  }, [isOpen, editorReady, sendToEditor]);
+
+  // Give the editor keyboard focus once it is ready, so its own shortcuts work
+  useEffect(() => {
+    if (editorReady) iframeRef.current?.focus();
+  }, [editorReady]);
+
   // Prevent navigation away while the editor is open
   useEffect(() => {
     if (!isOpen || !editorReady) return;
