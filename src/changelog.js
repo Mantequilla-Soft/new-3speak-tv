@@ -7,6 +7,13 @@
 // 1.0.0 — that way they see all of these when develop is pushed to production.
 export const CHANGELOG = [
   {
+    version: '1.79.14',
+    date: '2026-09-24',
+    summary:
+      'Watching a livestream or its recording no longer asks you to sign anything. '
+      + "You're only asked when you want to chat or raise your hand.",
+  },
+  {
     version: '1.79.13',
     date: '2026-09-24',
     summary:

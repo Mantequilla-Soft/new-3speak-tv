@@ -148,7 +148,10 @@ export function HangoutContextProvider({ children, tokenStorage = 'none' }) {
   // mid-session and tearing down cached entries.
   const storageRef = useRef(buildTokenStorage(tokenStorage));
 
-  const loginToHangouts = useCallback(async (requestedUser = user) => {
+  // `interactive: false` = the silent @threespeak signature only, never a
+  // wallet popup. Watching a stream uses that: the viewer is only asked to sign
+  // once they actually want to chat or raise a hand.
+  const loginToHangouts = useCallback(async (requestedUser = user, { interactive = true } = {}) => {
     if (!OPENPODS_ENABLED) return null;
     if (!authenticated || !requestedUser) return null;
 
@@ -194,7 +197,9 @@ export function HangoutContextProvider({ children, tokenStorage = 'none' }) {
     // Aioha signature (the actual fallback happens at the loginPromise below).
 
     // Deduplicate: if a login is already in-flight, await it
-    if (pendingLogin?.user === requestedUser) {
+    // A silent attempt in flight does not satisfy an interactive request: it
+    // cannot fall back to the wallet. That case waits below and retries.
+    if (pendingLogin?.user === requestedUser && (pendingLogin.interactive || !interactive)) {
       try {
         const token = await pendingLogin.promise;
         if (isStillCurrentUser()) setSessionToken(token);
@@ -210,7 +215,7 @@ export function HangoutContextProvider({ children, tokenStorage = 'none' }) {
       try {
         await pendingLogin.promise;
       } catch { /* error already logged by the initiating call */ }
-      return isStillCurrentUser() ? loginToHangouts(requestedUser) : null;
+      return isStillCurrentUser() ? loginToHangouts(requestedUser, { interactive }) : null;
     }
 
     setSessionLoading(true);
@@ -226,7 +231,7 @@ export function HangoutContextProvider({ children, tokenStorage = 'none' }) {
           (challenge) => signOpenPodsChallengeViaThreespeak(challenge, requestedUser),
         );
       } catch (bgErr) {
-        if (canSignClientSide()) {
+        if (interactive && canSignClientSide()) {
           return loginWithAioha(hangoutsClient, aioha, requestedUser);
         }
         throw bgErr;
@@ -251,7 +256,7 @@ export function HangoutContextProvider({ children, tokenStorage = 'none' }) {
         if (pendingLogin?.user === requestedUser) pendingLogin = null;
       });
 
-    pendingLogin = { user: requestedUser, promise: loginPromise };
+    pendingLogin = { user: requestedUser, promise: loginPromise, interactive };
 
     try {
       const token = await loginPromise;

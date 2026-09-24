@@ -1464,6 +1464,10 @@ function Watch({ v2 = false }) {
   // no published video exists yet — otherwise we'd show "Connecting to the
   // stream…" over a room that ended hours ago.
   const [liveVodReady, setLiveVodReady] = useState(false);
+  // Whether that check has answered at least once. Until it has, a finished
+  // stream looks live, and mounting the live player means signing in to the
+  // hangouts room: a wallet prompt for a recording nobody can chat in.
+  const [liveChecked, setLiveChecked] = useState(false);
   // The encoder has an asset for this post but hasn't published it yet — i.e.
   // the stream is over and the recording is still being transcoded. Shown over
   // the (now dead) live player so the page says "coming back shortly" instead
@@ -1472,6 +1476,7 @@ function Watch({ v2 = false }) {
   useEffect(() => {
     setLiveVodReady(false);
     setVodProcessing(false);
+    setLiveChecked(false);
     if (!videoDetails?.live || !author || !permlink) return undefined;
     let alive = true;
     let timer = null;
@@ -1481,6 +1486,7 @@ function Watch({ v2 = false }) {
       fetchPlaySource(author, permlink)
         .then((src) => {
           if (!alive) return;
+          setLiveChecked(true);
           if (src?.published) { setLiveVodReady(true); return; }   // done — stop polling
           // No asset at all means nothing was ever recorded (the host didn't
           // tick "replace the stream with a video"), and a failed encode is
@@ -1489,15 +1495,26 @@ function Watch({ v2 = false }) {
           setVodProcessing(!!src && !dead);
           timer = setTimeout(check, 20000);
         })
-        .catch(() => { if (alive) timer = setTimeout(check, 20000); });
+        .catch(() => {
+          if (!alive) return;
+          // Could not tell. Treat it as live, as before, rather than hide a
+          // stream that may really be on.
+          setLiveChecked(true);
+          timer = setTimeout(check, 20000);
+        });
     };
     check();
     return () => { alive = false; if (timer) clearTimeout(timer); };
   }, [videoDetails?.live, author, permlink]);
 
-  // Mirror the live flag into the ref the player callbacks read.
-  const isLive = !!videoDetails?.live && !liveVodReady;
-  useEffect(() => { isLiveRef.current = isLive; }, [isLive]);
+  // Two answers on purpose. `livePending` (live, or not known yet) is what the
+  // player's failure handling needs: a live post has no VOD, and a load error
+  // during the check must not flag it as a dead video. `isLive` (confirmed) is
+  // what mounts the live player, the chat column and the hangouts sign-in.
+  const livePending = !!videoDetails?.live && !liveVodReady;
+  const isLive = livePending && liveChecked;
+  const liveUnknown = livePending && !liveChecked;
+  useEffect(() => { isLiveRef.current = livePending; }, [livePending]);
 
   // Live chat takes the reaction panel's place in the right column. The panel
   // itself is rendered by <LiveStreamPlayer> and portalled in here, so it can
@@ -2066,10 +2083,10 @@ function Watch({ v2 = false }) {
         onLiveChatSent={mirrorChatToHive}
         vodAssetPending={vodProcessing}
         onStreamRoomMeta={setStreamRoomMeta}
-        mediaUnavailable={!isLive && mediaUnavailable}
-        mediaBlocked={!isLive && playbackBlocked}
+        mediaUnavailable={!livePending && mediaUnavailable}
+        mediaBlocked={!livePending && playbackBlocked}
         onRetryPlayback={retryPlayback}
-        mediaLoading={!isLive && mediaLoading}
+        mediaLoading={liveUnknown || (!livePending && mediaLoading)}
         videoRef={videoRef}
         adPlaying={sponsorVisible}
         sponsorLabel={sponsorVisible ? (

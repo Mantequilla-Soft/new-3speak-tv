@@ -4,6 +4,7 @@ import { HangoutsProvider, StandaloneWatch, StreamVideo, StreamViewerCount, Chat
 import { defaultEndpoint, findRoomEndpoint } from '../../utils/hangoutsEndpoints';
 import { useStreamSession } from '../../hooks/useStreamSession';
 import StreamBoostButton from '../openpods/StreamBoostButton';
+import StreamSignInButton from '../openpods/StreamSignInButton';
 import '@snapie/hangouts-react/src/styles/hangouts.css';
 import './LiveStreamPlayer.scss';
 
@@ -72,7 +73,7 @@ export default function LiveStreamPlayer({ roomName, chatSlot = null, onChatSent
     return () => { alive = false; };
   }, [roomName, endpoint?.api]);
 
-  const { aioha, authenticated, sessionToken, hangoutsUser, connectReady, joinKey } = useStreamSession();
+  const { aioha, sessionToken, hangoutsUser, connectReady, joinKey, needsSignIn, canInteract, signIn, signingIn } = useStreamSession();
 
   if (!roomName) return null;
   return (
@@ -96,12 +97,16 @@ export default function LiveStreamPlayer({ roomName, chatSlot = null, onChatSent
             )} />
             <StreamBoostButton variant="overlay" />
             <div className="live-stream-player__collab">
-              <CollabRequest canRequest={authenticated} />
+              {needsSignIn
+                ? <StreamSignInButton variant="overlay" label="Sign in to raise your hand" onSignIn={signIn} busy={signingIn} />
+                : <CollabRequest canRequest={canInteract} />}
             </div>
             {chatSlot && createPortal(
               <ChatPanel
-                readOnly={!authenticated}
-                readOnlyNotice="🔒 Sign in to join the chat."
+                readOnly={!canInteract}
+                readOnlyNotice={needsSignIn
+                  ? <StreamSignInButton label="Sign in to chat" onSignIn={signIn} busy={signingIn} />
+                  : '🔒 Sign in to join the chat.'}
                 onMessageSent={onChatSent || undefined}
               />,
               chatSlot,
