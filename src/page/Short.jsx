@@ -62,7 +62,7 @@ import { GiTwoCoins } from 'react-icons/gi';
 import { MdTranslate, MdClosedCaption, MdClosedCaptionOff, MdFlag } from 'react-icons/md';
 import mantequillaLogo from '../assets/mantequilla-logo.png';
 import ReportModal, { isReported } from '../components/modal/ReportModal';
-import { Flag } from 'lucide-react';
+import { Flag, Megaphone } from 'lucide-react';
 import ShareChooserModal from '../components/Chat/ShareChooserModal';
 import { useMyPlaylists, isVideoInPlaylist } from '../hooks/useMyPlaylists';
 import { addToPlaylist, removeFromPlaylist, createPlaylistAndAdd } from '../utils/playlistOperations';
@@ -119,6 +119,7 @@ import { commentWithAioha, isLoggedIn } from '../hive-api/aioha';
 import AmbientGlow, { useAmbientGlow } from '../components/AmbientGlow/AmbientGlow';
 import EditorModal from '../components/modal/EditorModal';
 import EditVideoModal from '../components/playVideo/EditVideoModal';
+import PromoteModal from '../components/Promote/PromoteModal';
 import { notifyMediaPlay, onMediaPlay } from '../utils/mediaCoordinator';
 import HiveAvatar from '../components/HiveAvatar/HiveAvatar';
 
@@ -349,6 +350,7 @@ const VideoShort = () => {
   // Editor modal state
   const [showEditorModal, setShowEditorModal] = useState(false);
   const [isEditShortOpen, setIsEditShortOpen] = useState(false);
+  const [isPromoteOpen, setIsPromoteOpen] = useState(false);
   const [editorVideoUrl, setEditorVideoUrl] = useState(null);
   const [editorVideoName, setEditorVideoName] = useState(null);
   const [editorOriginalAuthor, setEditorOriginalAuthor] = useState(null);
@@ -3773,6 +3775,19 @@ const VideoShort = () => {
             ) : null;
           })()}
 
+          {/* Promote — own shorts only, same rule as Edit. Boosting somebody else's
+              short is allowed elsewhere, but the rail is narrow and the thing people
+              come here to do is promote their own. Needs a Hive post: both the boost
+              and the ad point at one. */}
+          {authenticated && user === currentVideo.author && !currentVideo.hivePostMissing && (
+            <div className="actionItem" onClick={(e) => { e.stopPropagation(); try { playerRef.current?.pause?.(); } catch { /* not fatal */ } setIsPromoteOpen(true); }}>
+              <div className="actionButton">
+                <Megaphone size={24} />
+              </div>
+              <span className="actionLabel">Promote</span>
+            </div>
+          )}
+
           {/* Edit — own shorts only, and only when there's a Hive post to edit. */}
           {authenticated && user === currentVideo.author && !currentVideo.hivePostMissing && (
             <div className="actionItem" onClick={(e) => { e.stopPropagation(); try { playerRef.current?.pause?.(); } catch {} setIsEditShortOpen(true); }}>
@@ -3791,6 +3806,15 @@ const VideoShort = () => {
           title={currentVideo.title}
           onClose={() => setShareChooserOpen(false)}
           onGeneralShare={handleShare}
+        />
+
+        <PromoteModal
+          open={isPromoteOpen}
+          onClose={() => setIsPromoteOpen(false)}
+          author={currentVideo.author}
+          /* The HIVE permlink: both the boost memo and the ad booking are about the
+             post, not the asset. */
+          permlink={currentVideo.hivePermlink || currentVideo.permlink}
         />
 
         <EditVideoModal

@@ -2,11 +2,12 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { createPortal } from 'react-dom';
 import axios from 'axios';
 import { toastIn } from '../../utils/toast';
-import { Rocket, X } from 'lucide-react';
-import { CHECKER_URL, CHECKER_API_KEY } from '../../utils/config';
+import { Rocket, X, Megaphone, ChevronRight } from 'lucide-react';
+import { CHECKER_URL, CHECKER_API_KEY, adsEnabledFor } from '../../utils/config';
 import { transferWithAioha, isLoggedIn } from '../../hive-api/aioha';
 import { fetchBalances } from '../../hive-api/api';
 import { useAppStore } from '../../lib/store';
+import AdWizardModal from './AdWizardModal';
 import './PromoteModal.scss';
 
 // Every toast from this module is headed "Promotion"; the message becomes the
@@ -22,6 +23,14 @@ const toast = toastIn('Promotion');
  * the payer). Promotion is blocked while a promotion is already active.
  */
 export default function PromoteModal({ open, onClose, author, permlink, promotedUntil, onPromoted }) {
+  /* Two different things can be bought here and they are NOT variations of each
+   * other: a boost moves this video up 3Speak's own feeds, an ad plays it inside
+   * other people's playback and is paid for per second per day. One button, one
+   * choice, rather than two buttons whose difference nobody can guess.
+   *
+   * null = the chooser. Reset every time the modal opens, so closing on the ad
+   * wizard does not reopen into it. */
+  const [mode, setMode] = useState(null);
   const [quote, setQuote] = useState(null); // { account, costPer24hHbd, maxDays, hbdPerHive }
   const [days, setDays] = useState(1);
   const [currency, setCurrency] = useState('HBD');
@@ -37,6 +46,7 @@ export default function PromoteModal({ open, onClose, author, permlink, promoted
   useEffect(() => {
     if (!open) return;
     let cancelled = false;
+    setMode(null);
     setFreshUntil(promotedUntil || null);
     setBalances(null);
     axios.get(`${CHECKER_URL}/promote/quote`)
@@ -66,6 +76,12 @@ export default function PromoteModal({ open, onClose, author, permlink, promoted
   const insufficient = walletBalance != null && amount > 0 && amount > walletBalance;
 
   if (!open) return null;
+
+  // The wizard is its own modal, so hand the whole surface over rather than nesting
+  // one dialog inside another.
+  if (mode === 'ad') {
+    return <AdWizardModal open onClose={onClose} author={author} permlink={permlink} />;
+  }
 
   const handlePromote = async () => {
     if (!isLoggedIn()) { toast.error('Please log in to promote.'); return; }
@@ -116,7 +132,32 @@ export default function PromoteModal({ open, onClose, author, permlink, promoted
           <h3>Promote this video</h3>
         </div>
 
-        {isActive ? (
+        {mode === null ? (
+          <div className="promote-choose">
+            <button className="promote-choice" onClick={() => setMode('boost')}>
+              <Rocket size={18} />
+              <span>
+                <strong>Boost in feeds</strong>
+                <em>Show it first in recommendations and the Promoted row on 3Speak.</em>
+              </span>
+              <ChevronRight size={16} />
+            </button>
+            {/* Behind the same flag as every other ad-buying surface here, so this
+                does not become the one place ads are purchasable while /advertise is
+                still dark. Where those ads may SHOW is a separate, server-side
+                limit (AD_SELFPROMO_ALLOWED_OWNERS on the checker). */}
+            {adsEnabledFor(me) && (
+              <button className="promote-choice" onClick={() => setMode('ad')}>
+                <Megaphone size={18} />
+                <span>
+                  <strong>Run it as an ad</strong>
+                  <em>Your video plays as a paid spot inside other videos and shorts.</em>
+                </span>
+                <ChevronRight size={16} />
+              </button>
+            )}
+          </div>
+        ) : isActive ? (
           <div className="promote-active">
             <p>This video is already promoted until</p>
             <strong>{new Date(activeUntil).toLocaleString()}</strong>
