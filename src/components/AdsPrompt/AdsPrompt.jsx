@@ -6,25 +6,20 @@ import { readCreatorAdChoice } from '../../utils/adSettings';
 import { fetchAdAccess } from '../../lib/advertiseData';
 import { usePromptsActive, setPromptActive } from '../../utils/welcomeGate';
 import AdSettingsDialog from './AdSettingsDialog';
-import AdPitchDialog from './AdPitchDialog';
 import './AdsPrompt.scss';
 
 /**
- * The two ad prompts a creator sees once, in order: set your split, then hear the
- * pitch for buying a spot of your own.
+ * The ad prompt a creator sees once: choose how ads run on your videos.
  *
- * Sequenced from one place rather than mounted as two independent components,
- * because the second one's cue is the first one CLOSING — and two components each
- * deciding that on their own timer is how you get both on screen at once.
+ * There used to be a second one after it, pitching creators to buy a spot of
+ * their own. It was dropped (2026-09-24) as too pushy: /advertise is still in
+ * the account menu for anyone who wants it.
  *
  * Mounted once at the app root.
  */
 
-// Per-user "already asked" flags. Separate keys on purpose: a creator who already
-// had settings when we shipped this should still get pitched, and one who saw the
-// pitch before the settings prompt existed should still be asked to choose.
+// Per-user "already asked" flag.
 const SETTINGS_KEY = '3speak_ad_settings_prompted';
-const PITCH_KEY = '3speak_ad_pitch_seen';
 
 const load = (key) => {
   try { return JSON.parse(localStorage.getItem(key) || '[]'); } catch { return []; }
@@ -41,7 +36,7 @@ const markSeen = (key, username) => {
 export default function AdsPrompt() {
   const user = useAppStore((s) => s.user);
   const authenticated = useAppStore((s) => s.authenticated);
-  // 'settings' | 'pitch' | null
+  // 'settings' | null
   const [stage, setStage] = useState(null);
   // The server's own split (pool size and the default community share) so no
   // number in this flow is a second copy of a platform default living in the
@@ -98,8 +93,7 @@ export default function AdsPrompt() {
     if (stage) return undefined;              // already running
     if (promptsActive) return undefined;      // welcome / interests has the screen
     const askSettings = !wasSeen(SETTINGS_KEY, user);
-    const askPitch = !wasSeen(PITCH_KEY, user);
-    if (!askSettings && !askPitch) return undefined;
+    if (!askSettings) return undefined;
 
     let alive = true;
     // Later than the interests prompt's 1.2s so that one wins the slot on a fresh
@@ -127,7 +121,6 @@ export default function AdsPrompt() {
         }
       }
 
-      if (!next && askPitch) next = 'pitch';
       if (!next || !alive) return;
       // Claim the slot in the same tick we decide to open.
       setPromptActive('ads', true);
@@ -146,26 +139,12 @@ export default function AdsPrompt() {
     setPromptActive('ads', false);
   };
 
-  // Saved: roll straight into the pitch if it is still owed, keeping the slot
-  // rather than releasing and re-claiming it.
+  // Saved or dismissed: asked at most once, like the interests prompt.
   const afterSettingsSaved = () => {
     if (user) markSeen(SETTINGS_KEY, user);
-    if (user && !wasSeen(PITCH_KEY, user)) { setStage('pitch'); return; }
     finish();
   };
-
-  // Dismissed. Asked at most once, like the interests prompt, but do NOT chain
-  // into the pitch: someone who just closed one dialog does not want a second one
-  // opening in its place. The pitch is still owed and comes up next session.
-  const afterSettingsDismissed = () => {
-    if (user) markSeen(SETTINGS_KEY, user);
-    finish();
-  };
-
-  const afterPitch = () => {
-    if (user) markSeen(PITCH_KEY, user);
-    finish();
-  };
+  const afterSettingsDismissed = afterSettingsSaved;
 
   if (!user || !visible) return null;
 
@@ -180,6 +159,5 @@ export default function AdsPrompt() {
       />
     );
   }
-  if (stage === 'pitch') return <AdPitchDialog onDone={afterPitch} />;
   return null;
 }
