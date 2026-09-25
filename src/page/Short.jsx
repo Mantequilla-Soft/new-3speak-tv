@@ -3429,7 +3429,19 @@ const VideoShort = () => {
             const chain = currentVideo.reactionChain || [];
             const rootStep = chain.find(s => s.isRoot);
             const childSteps = chain.filter(s => !s.isRoot);
-            const rootUrl = rootStep ? `/watch?v=${rootStep.author}/${rootStep.permlink}${currentVideo.parentTimestamp != null ? `&t=${currentVideo.parentTimestamp}` : ''}` : null;
+            /* The origin is not always a full video any more: a reaction to a SNAP
+               starts at that snap, because the container above it was dropped as
+               plumbing (see isSnapsContainer in hiveApi). So the card's link and icon
+               follow what the origin IS — a short opens in shorts, a snap opens as a
+               post, a video plays at its timestamp. */
+            const rootIsVideo = !rootStep || rootStep.type === 'video';
+            const rootUrl = !rootStep
+              ? null
+              : (rootStep.shortPermlink
+                ? `/shorts?v=${rootStep.shortAuthor || rootStep.author}/${rootStep.shortPermlink}`
+                : (rootIsVideo
+                  ? `/watch?v=${rootStep.author}/${rootStep.permlink}${currentVideo.parentTimestamp != null ? `&t=${currentVideo.parentTimestamp}` : ''}`
+                  : `/post/${rootStep.author}/${rootStep.permlink}`));
             return (
               <div className={`reactionChainOverlay${parentCardVisible ? '' : ' collapsed'}${shortHistoryRef.current.length > 0 ? ' has-back' : ''}`} onClick={(e) => e.stopPropagation()}>
                 {parentCardVisible && (
@@ -3441,7 +3453,13 @@ const VideoShort = () => {
                           <img className="chainRootThumb" src={fixVideoThumbnail({ thumbnail: rootStep.thumbnail })} alt="" onError={(e) => (e.currentTarget.src = fallbackImg)} />
                         )}
                         <div className="chainRootInfo">
-                          <span className="chainRootTitle">{rootStep.title || 'Original video'}</span>
+                          {/* A snap has no title of its own, so what it SAYS is the
+                              only thing that identifies it. The generic labels are
+                              the last resort, not the second choice. */}
+                          <span className="chainRootTitle">
+                            {rootStep.title || rootStep.body
+                              || (rootIsVideo ? 'Original video' : 'Snap')}
+                          </span>
                           <div className="chainRootMeta">
                             <AuthorBadge author={rootStep.author} compact noLink />
                             {currentVideo.parentTimestamp != null && (
@@ -3451,14 +3469,26 @@ const VideoShort = () => {
                             )}
                           </div>
                         </div>
-                        <Link to={rootUrl} className="chainActionBtn" onClick={(e) => e.stopPropagation()} title="Watch">
-                          <Video size={14} />
+                        <Link
+                          to={rootUrl}
+                          className="chainActionBtn"
+                          onClick={(e) => e.stopPropagation()}
+                          title={rootStep.shortPermlink ? 'Open short' : (rootIsVideo ? 'Watch' : 'Open snap')}
+                        >
+                          {rootStep.shortPermlink
+                            ? <Camera size={14} />
+                            : (rootIsVideo ? <Video size={14} /> : <MessageSquare size={14} />)}
                         </Link>
                       </div>
                     )}
 
                     {/* Child steps — horizontal scroll row */}
-                    {(childSteps.length > 0 || currentVideo.childReactions?.length > 0) && (
+                    {/* `rootStep` is in the condition because the row also holds the
+                        CURRENT card. Without it a two-step chain (an origin and this
+                        short, nothing in between) drew the origin alone and left the
+                        viewer out of their own chain — which is what promoting the
+                        snap to origin turned every snap reaction into. */}
+                    {(childSteps.length > 0 || currentVideo.childReactions?.length > 0 || rootStep) && (
                       <div
                         className="chainChildRow"
                         ref={chainRowRef}
