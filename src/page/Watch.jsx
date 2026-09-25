@@ -113,6 +113,22 @@ function filterValidVideos(videos) {
   });
 }
 
+// Safari on macOS, or any browser on iPhone/iPad (all WebKit). Detected the way
+// the player SDK does it; an iPad reports itself as a Mac with touch.
+const IS_APPLE_WEBKIT = typeof navigator !== 'undefined' && (
+  /iPad|iPhone|iPod/.test(navigator.userAgent)
+  || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1)
+  || /^((?!chrome|android).)*safari/i.test(navigator.userAgent)
+);
+// Apple's SourceBuffer quota. The same numbers the embed player has used on
+// Apple devices since January 2026, and that SDK 0.3.3 applies by itself.
+const APPLE_HLS_CAPS = {
+  maxBufferLength: 20,
+  maxMaxBufferLength: 40,
+  maxBufferSize: 20 * 1000 * 1000,
+  backBufferLength: 10,
+};
+
 function Watch({ v2 = false }) {
   const [searchParams] = useSearchParams();
   const location = useLocation();
@@ -408,6 +424,10 @@ function Watch({ v2 = false }) {
       // throughput is known.
       startLevel: -1,
       abrEwmaDefaultEstimate: 1000000, // ~1 Mbps → starts around 480p, not 1080p
+      // Apple devices cap how much video a page may buffer. The 60s / 60MB above
+      // trips that limit on iPad and Mac Safari and playback stalls further into
+      // a video, so they get the limits the embed player uses there.
+      ...(IS_APPLE_WEBKIT ? APPLE_HLS_CAPS : {}),
     },
   });
 

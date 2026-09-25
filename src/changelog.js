@@ -7,6 +7,13 @@
 // 1.0.0 — that way they see all of these when develop is pushed to production.
 export const CHANGELOG = [
   {
+    version: '1.79.16',
+    date: '2026-09-25',
+    summary:
+      'Smoother video playback on iPhone and iPad, with fewer pauses to load, '
+      + 'especially on longer videos.',
+  },
+  {
     version: '1.79.15',
     date: '2026-09-24',
     summary:
