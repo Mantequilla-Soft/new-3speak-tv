@@ -7,6 +7,18 @@
 // 1.0.0 — that way they see all of these when develop is pushed to production.
 export const CHANGELOG = [
   {
+    version: '1.79.19',
+    date: '2026-09-25',
+    summary:
+      'Before you publish, the summary now lists all beneficiaries your post will have, '
+      + "including 3Speak's share and the original creator's share on remixes.",
+  },
+  {
+    version: '1.79.18',
+    date: '2026-09-25',
+    summary: 'The Remix button now also shows on shorts you open straight from a link.',
+  },
+  {
     version: '1.79.17',
     date: '2026-09-25',
     summary: 'The video editor now asks before closing if you click outside it, so your edits stay safe.',
