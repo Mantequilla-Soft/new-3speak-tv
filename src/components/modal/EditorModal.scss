@@ -6,7 +6,8 @@
   left: 0;
   right: 0;
   bottom: 0;
-  z-index: 1100;
+  // Above ProfileNav (100000); only the phone landscape blocker (999999) sits higher
+  z-index: 100050;
 }
 
 .editor-modal-overlay {

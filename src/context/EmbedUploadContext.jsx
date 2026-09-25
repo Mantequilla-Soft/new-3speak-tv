@@ -2088,6 +2088,8 @@ export function EmbedUploadProvider({ children }) {
   };
 
   const value = {
+    // Read by the publish summary so it shows the same locked splits publishing adds
+    isPremium,
     // Step
     step, setStep,
     // Video

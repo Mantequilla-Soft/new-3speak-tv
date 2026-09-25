@@ -8,6 +8,7 @@ import '@snapie/hangouts-react/src/styles/hangouts.css';
 import StreamBoostButton from '../components/openpods/StreamBoostButton';
 import StreamReportButton from '../components/openpods/StreamReportButton';
 import StreamClipButton from '../components/openpods/StreamClipButton';
+import StreamSignInButton from '../components/openpods/StreamSignInButton';
 import { useStreamSession } from '../hooks/useStreamSession';
 import { useLiveStreamPager } from '../hooks/useLiveStreamPager';
 import { useStreamChatMirror } from '../hooks/useStreamChatMirror';
@@ -37,7 +38,7 @@ const IMAGE_KEY = import.meta.env.VITE_IMAGE_SERVER_API_KEY;
  * comment bar — separate from the chat overlay, which shows messages only.
  * Must live inside <StandaloneWatch> to reach the LiveKit room context.
  */
-function StreamChatBar({ canChat, onSent }) {
+function StreamChatBar({ canChat, needsSignIn = false, onSignIn, signingIn = false, onSent }) {
   // The SDK's chat hook — ChatPanel renders what THIS publishes. LiveKit's
   // own useChat is a different transport; sending on it meant neither the
   // viewer nor the streamer ever saw the message.
@@ -55,9 +56,13 @@ function StreamChatBar({ canChat, onSent }) {
     <form className="shortsBottomComment ws-shorts__bar" onSubmit={submit}>
       <textarea
         rows={1}
-        placeholder={canChat ? 'Say something…' : 'Sign in to chat'}
+        placeholder={canChat ? 'Say something…' : (signingIn ? 'Waiting for your wallet…' : 'Sign in to chat')}
         value={text}
-        disabled={!canChat}
+        // Signed in to 3Speak but not to the room yet: tapping the box is the
+        // "I want to chat" moment, so that is when the wallet is asked.
+        readOnly={!canChat && needsSignIn}
+        onFocus={() => { if (!canChat && needsSignIn && !signingIn) onSignIn?.(); }}
+        disabled={!canChat && !needsSignIn}
         onChange={(e) => setText(e.target.value)}
         onKeyDown={(e) => { if (e.key === 'Enter' && !e.shiftKey) submit(e); }}
       />
@@ -71,7 +76,7 @@ function StreamChatBar({ canChat, onSent }) {
 export default function WatchStream() {
   const { streamId } = useParams();
   const navigate = useNavigate();
-  const { aioha, authenticated, sessionToken, hangoutsUser, connectReady, joinKey } = useStreamSession();
+  const { aioha, sessionToken, hangoutsUser, connectReady, joinKey, needsSignIn, canInteract, signIn, signingIn } = useStreamSession();
 
   const [state, setState] = useState({ status: 'loading', room: null, hivePost: null });
   const [copied, setCopied] = useState(false);
@@ -287,7 +292,7 @@ export default function WatchStream() {
                         </div>
                         <span className="actionLabel">Chat</span>
                       </div>
-                      <CollabRequest variant="rail" canRequest={authenticated} />
+                      <CollabRequest variant="rail" canRequest={canInteract} />
                       <StreamBoostButton variant="rail" />
                       <div className="actionItem" onClick={copyLink}>
                         <div className="actionButton"><Share2 size={24} /></div>
@@ -305,7 +310,7 @@ export default function WatchStream() {
                     )}
                   </div>
                 </div>
-                <StreamChatBar canChat={authenticated} onSent={mirrorChatToHive} />
+                <StreamChatBar canChat={canInteract} needsSignIn={needsSignIn} onSignIn={signIn} signingIn={signingIn} onSent={mirrorChatToHive} />
               </main>
             </StandaloneWatch>
           )}
@@ -372,7 +377,9 @@ export default function WatchStream() {
                   <div className="play-video-info">
                     <div className="info-buttons-row">
                       <div className="info-buttons-right">
-                        <CollabRequest canRequest={authenticated} />
+                        {needsSignIn
+                          ? <StreamSignInButton variant="overlay" label="Sign in to raise your hand" onSignIn={signIn} busy={signingIn} />
+                          : <CollabRequest canRequest={canInteract} />}
                         <StreamBoostButton />
                         <button type="button" className="pv-btn share-btn" onClick={copyLink} title="Copy the stream link">
                           <MdShare size={16} /><span>{copied ? 'Copied' : 'Share'}</span>
@@ -406,8 +413,10 @@ export default function WatchStream() {
               <div className="ws-chat">
                 <div className="ws-chat-head">Live chat</div>
                 <ChatPanel
-                  readOnly={!authenticated}
-                  readOnlyNotice="🔒 Sign in to join the chat."
+                  readOnly={!canInteract}
+                  readOnlyNotice={needsSignIn
+                    ? <StreamSignInButton label="Sign in to chat" onSignIn={signIn} busy={signingIn} />
+                    : '🔒 Sign in to join the chat.'}
                   onMessageSent={mirrorChatToHive}
                 />
               </div>

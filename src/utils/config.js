@@ -284,6 +284,14 @@ const adsBetaUserFor = (user) => isTestUser(user)
 // surface to every visitor while the checker still refuses their writes.
 const adsEnabledFor = (user) => ENABLE_ADS || adsBetaUserFor(user);
 
+// Self-promotion (Promote -> "Run it as an ad"): a creator buying a spot for their
+// OWN video. Beta testers only (the ads beta list above), even though the rest of
+// the ad UI is open to everyone: while it is tested it sells at a testing price that
+// sticks to each advertiser at first booking. Set VITE_ENABLE_SELFPROMO=true to open
+// it, together with the checker's AD_SELFPROMO_RATE_HBD / AD_SELFPROMO_ALLOWED_OWNERS.
+const ENABLE_SELFPROMO = import.meta.env.VITE_ENABLE_SELFPROMO === 'true';
+const selfPromoEnabledFor = (user) => adsEnabledFor(user) && (ENABLE_SELFPROMO || adsBetaUserFor(user));
+
 // THIRD-PARTY advertising. Distinct from ENABLE_ADS above, and the distinction
 // matters: ENABLE_ADS gates OUR OWN ad system (the /advertise page, house campaigns
 // paid in HIVE/HBD, server-side stitched by the checker). This flag gates loading
@@ -389,6 +397,7 @@ export {
   openpodsEnabledFor,
   ENABLE_ADS,
   adsEnabledFor,
+  selfPromoEnabledFor,
   adsBetaUserFor,
   warmupRailEnabledFor,
   ENABLE_THIRDPARTY_ADS,

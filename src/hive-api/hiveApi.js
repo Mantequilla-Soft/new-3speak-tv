@@ -6,6 +6,19 @@
 
 import axios from "axios";
 import { getHiveUrl } from '../utils/hiveNode';
+import { isSnapsContainer } from '../utils/snapsContainer';
+
+/* Hivemind SYNTHESISES a title for a comment: `bridge.get_post` answers
+ * "RE: <parent title>" where the raw post has none at all. Harmless in a thread view
+ * and wrong everywhere else — it put "RE: Snaps Container // 6/8/2026, 2:36:00 PM" on
+ * the origin card of a reaction chain, which is the container's name on a card that
+ * exists to name the person's snap.
+ *
+ * Treated as absent, so callers fall through to the body, which is what was written. */
+const chainTitle = (title) => {
+  const t = String(title || '').trim();
+  return /^re:\s/i.test(t) ? '' : t;
+};
 import { convert } from "html-to-text";
 import { HIVE_API_URL, CHECKER_URL, SHORTS_API_URL, USER_SHORTS_API_URL, appendNsfw } from "../utils/config";
 import { getPlayerUrl } from "../utils/playerUrl";
@@ -394,7 +407,7 @@ export async function fetchCompleteShortData(shortItem, loggedInUser = null) {
                 const reactionChain = [{
                   author: immediateParent.author,
                   permlink: immediateParent.permlink,
-                  title: immediateParent.title || '',
+                  title: chainTitle(immediateParent.title),
                   body: parentBody,
                   duration: parentDur,
                   type: parentJm.video ? 'video' : 'comment',
@@ -415,7 +428,7 @@ export async function fetchCompleteShortData(shortItem, loggedInUser = null) {
                     reactionChain.unshift({
                       author: current.author,
                       permlink: current.permlink,
-                      title: current.title || '',
+                      title: chainTitle(current.title),
                       body: cBody,
                       duration: dur,
                       type: cJm.video ? 'video' : 'comment',
@@ -430,8 +443,23 @@ export async function fetchCompleteShortData(shortItem, loggedInUser = null) {
                 intermediateChain = reactionChain;
               }
 
+              /* THE CONTAINER IS NOT A STEP.
+               *
+               * A snap lives as a comment under @peak.snaps' rotating container post,
+               * so walking up from a reaction lands on that container and it became the
+               * origin card: "Snaps Container // 6/8/2026" above the snap somebody
+               * actually wrote. Three steps, the first of which nobody authored and
+               * nobody can meaningfully open.
+               *
+               * Dropped here rather than hidden in the view, so everything reading a
+               * reaction chain agrees on where it starts. The snap itself is promoted
+               * to the origin below, after the permlink resolution — marking it root
+               * any earlier would exclude it from that pass and cost it its "open the
+               * short" link. */
+              const rootIsContainer = isSnapsContainer(rootPost);
+
               // Store the root video
-              if (rootPost && !rootPost.parent_author) {
+              if (rootPost && !rootPost.parent_author && !rootIsContainer) {
                 const rootJm = typeof rootPost.json_metadata === 'string'
                   ? JSON.parse(rootPost.json_metadata || '{}')
                   : (rootPost.json_metadata || {});
@@ -454,7 +482,7 @@ export async function fetchCompleteShortData(shortItem, loggedInUser = null) {
                 const rootEntry = {
                   author: rootPost.author,
                   permlink: rootPost.permlink,
-                  title: rootPost.title || '',
+                  title: chainTitle(rootPost.title),
                   body: rootBody,
                   duration: rootDur,
                   type: 'video',
@@ -480,6 +508,32 @@ export async function fetchCompleteShortData(shortItem, loggedInUser = null) {
                 } catch (e) {
                   console.warn('Failed to resolve chain step permlinks:', e.message);
                 }
+              }
+
+              /* The container case: the chain is the intermediates alone, and the
+               * oldest of them — the snap the reaction answers — becomes the origin.
+               * `parentVideo` is deliberately left null: there is no root VIDEO here,
+               * and pointing it at the container would send anybody following it to a
+               * page full of other people's snaps. */
+              if (rootIsContainer && intermediateChain.length > 0) {
+                base.reactionChain = intermediateChain;
+                try {
+                  await Promise.all(
+                    base.reactionChain
+                      .filter((step) => step.type === 'video')
+                      .map(async (step) => {
+                        if (step.shortPermlink) return;
+                        const found = await findShortByEmbedUrl(step.author, step.permlink);
+                        if (found) {
+                          step.shortAuthor = found.owner;
+                          step.shortPermlink = found.permlink;
+                        }
+                      }),
+                  );
+                } catch (e) {
+                  console.warn('Failed to resolve chain step permlinks:', e.message);
+                }
+                base.reactionChain[0].isRoot = true;
               }
             }
           } catch (err) {

@@ -1,0 +1,310 @@
+/* Self-promotion wizard. Shares the promote modal's shape and tokens so the two
+   read as one feature; the step rail and the format cards are the only new parts. */
+.adw-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 4000;
+  background: rgba(0, 0, 0, 0.55);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  backdrop-filter: blur(2px);
+
+  /* Bottom sheet on phones, per the standing convention for every modal here. */
+  @media (max-width: 640px) {
+    align-items: flex-end;
+    padding: 0;
+  }
+}
+
+.adw-modal {
+  position: relative;
+  width: 100%;
+  max-width: 440px;
+  background: var(--card-bg, #fff);
+  color: var(--text-primary, #111);
+  border-radius: 16px;
+  padding: 22px 22px 18px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.35);
+  /* Capped and scrollable on every size, not just mobile: the summary step grows
+     with the options and must never push its own pay button off screen. */
+  max-height: 88vh;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+
+  @media (max-width: 640px) {
+    max-width: 100%;
+    border-radius: 16px 16px 0 0;
+    padding-bottom: calc(18px + env(safe-area-inset-bottom, 0px));
+    animation: adwSlideUp 0.22s ease-out;
+  }
+}
+
+@keyframes adwSlideUp {
+  from { transform: translateY(100%); }
+  to { transform: translateY(0); }
+}
+
+.adw-close {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  border: none;
+  background: transparent;
+  color: var(--text-secondary, #888);
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 8px;
+  &:hover { background: var(--bg-primary, #f1f1f3); }
+}
+
+.adw-back {
+  border: none;
+  background: transparent;
+  color: var(--text-secondary, #888);
+  cursor: pointer;
+  padding: 2px;
+  display: inline-flex;
+  &:hover { color: var(--text-primary, #111); }
+}
+
+.adw-head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 14px;
+  padding-right: 28px;
+
+  h3 { margin: 0; font-size: 1.05rem; }
+}
+
+/* Three dots, not "Step 2 of 3": the same information in less furniture. */
+.adw-steps {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 16px;
+
+  span {
+    height: 3px;
+    flex: 1;
+    border-radius: 2px;
+    background: var(--border-color, #e3e3e6);
+
+    &.on { background: var(--accent-primary, #e53935); }
+    &.done { background: var(--text-secondary, #9a9a9a); }
+  }
+}
+
+.adw-intro {
+  margin: 0 0 16px;
+  font-size: 0.875rem;
+  line-height: 1.45;
+  color: var(--text-secondary, #666);
+}
+
+.adw-field {
+  margin-bottom: 16px;
+
+  > label {
+    display: block;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    margin-bottom: 8px;
+  }
+
+  input[type="range"] { width: 100%; }
+
+  input[type="date"],
+  input[type="number"] {
+    background: var(--bg-primary, #f7f7f8);
+    border: 1px solid var(--border-color, #e3e3e6);
+    border-radius: 10px;
+    padding: 9px 12px;
+    color: var(--text-primary, #111);
+    font-family: inherit;
+    font-size: 0.875rem;
+    outline: none;
+    &:focus { border-color: var(--accent-primary, #e53935); }
+  }
+  input[type="date"] { width: 100%; }
+}
+
+.adw-optional {
+  font-weight: 400;
+  color: var(--text-secondary, #999);
+}
+
+.adw-formats {
+  display: grid;
+  gap: 8px;
+}
+
+.adw-format {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  text-align: left;
+  padding: 11px 13px;
+  border-radius: 12px;
+  border: 1px solid var(--border-color, #e3e3e6);
+  background: none;
+  color: inherit;
+  font-family: inherit;
+  cursor: pointer;
+
+  strong { font-size: 0.875rem; }
+  span { font-size: 0.75rem; color: var(--text-secondary, #888); }
+
+  &:hover { border-color: var(--text-secondary, #aaa); }
+  &.on {
+    border-color: var(--accent-primary, #e53935);
+    background: color-mix(in srgb, var(--accent-primary, #e53935) 8%, transparent);
+  }
+}
+
+.adw-minmax {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  input { width: 84px; }
+  span { font-size: 0.8125rem; color: var(--text-secondary, #888); }
+  .adw-unit { margin-left: 2px; }
+}
+
+.adw-ends {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.6875rem;
+  color: var(--text-secondary, #999);
+}
+
+.adw-hint {
+  margin: 6px 0 0;
+  font-size: 0.75rem;
+  line-height: 1.45;
+  color: var(--text-secondary, #888);
+}
+
+.adw-foot { margin-top: 10px; }
+
+.adw-beta {
+  margin-top: 10px;
+  padding: 8px 10px;
+  border-radius: 8px;
+  background: var(--bg-primary, #f4f4f6);
+}
+
+.adw-summary {
+  border: 1px solid var(--border-color, #e3e3e6);
+  border-radius: 12px;
+  padding: 4px 12px;
+  margin-bottom: 16px;
+
+  > div {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 0;
+    font-size: 0.8125rem;
+
+    + div { border-top: 1px solid var(--border-color, #eee); }
+    span { color: var(--text-secondary, #888); }
+  }
+}
+
+.adw-currency {
+  display: flex;
+  gap: 8px;
+
+  button {
+    flex: 1;
+    padding: 9px 0;
+    border-radius: 10px;
+    border: 1px solid var(--border-color, #e3e3e6);
+    background: none;
+    color: inherit;
+    font-family: inherit;
+    font-size: 0.8125rem;
+    cursor: pointer;
+
+    &.on {
+      border-color: var(--accent-primary, #e53935);
+      color: var(--accent-primary, #e53935);
+      font-weight: 600;
+    }
+    &:disabled { opacity: 0.45; cursor: not-allowed; }
+  }
+}
+
+.adw-total {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 4px;
+
+  span { font-size: 0.8125rem; color: var(--text-secondary, #888); }
+  strong { font-size: 1.15rem; }
+}
+
+.adw-balance {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.75rem;
+  color: var(--text-secondary, #888);
+  margin-bottom: 14px;
+
+  .low { color: var(--accent-primary, #e53935); }
+}
+
+.adw-cta {
+  width: 100%;
+  padding: 12px 0;
+  border-radius: 12px;
+  border: none;
+  background: var(--accent-primary, #e53935);
+  color: #fff;
+  font-family: inherit;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  cursor: pointer;
+
+  &:disabled { opacity: 0.5; cursor: not-allowed; }
+}
+
+.adw-loading,
+.adw-note {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 18px 0;
+  font-size: 0.875rem;
+  color: var(--text-secondary, #777);
+
+  p { margin: 0; }
+}
+
+.adw-spin { animation: adwSpin 1s linear infinite; }
+@keyframes adwSpin { to { transform: rotate(360deg); } }
+
+.adw-done {
+  text-align: center;
+  padding: 6px 0 0;
+
+  p { margin: 0 0 8px; font-size: 0.875rem; }
+
+  .adw-cta { margin-top: 14px; }
+}
+
+.adw-tick {
+  width: 46px;
+  height: 46px;
+  margin: 0 auto 12px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  background: #2e9e5b;
+}

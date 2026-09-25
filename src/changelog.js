@@ -7,6 +7,58 @@
 // 1.0.0 — that way they see all of these when develop is pushed to production.
 export const CHANGELOG = [
   {
+    version: '1.79.20',
+    date: '2026-09-25',
+    summary: 'Reactions to snaps now start their chain at the snap itself, showing what it says and linking straight to it.',
+  },
+  {
+    version: '1.79.19',
+    date: '2026-09-25',
+    summary:
+      'Before you publish, the summary now lists all beneficiaries your post will have, '
+      + "including 3Speak's share and the original creator's share on remixes.",
+  },
+  {
+    version: '1.79.18',
+    date: '2026-09-25',
+    summary: 'The Remix button now also shows on shorts you open straight from a link.',
+  },
+  {
+    version: '1.79.17',
+    date: '2026-09-25',
+    summary: 'The video editor now asks before closing if you click outside it, so your edits stay safe.',
+  },
+  {
+    version: '1.79.16',
+    date: '2026-09-25',
+    summary:
+      'Smoother video playback on iPhone and iPad, with fewer pauses to load, '
+      + 'especially on longer videos.',
+  },
+  {
+    version: '1.79.15',
+    date: '2026-09-24',
+    summary:
+      'New remix modes: tap Remix on a short and pick Stitch (your clip after the original), '
+      + 'Reaction (record yourself while it plays, in a small box or tiled) or Free edit. '
+      + 'The editor now also plays and pauses with the spacebar.',
+  },
+  {
+    version: '1.79.14',
+    date: '2026-09-24',
+    summary:
+      'Watching a livestream or its recording no longer asks you to sign anything. '
+      + "You're only asked when you want to chat or raise your hand.",
+  },
+  {
+    version: '1.79.13',
+    date: '2026-09-24',
+    summary:
+      'Refreshed: the profile menu (your avatar, top right) is now a tidy dropdown showing your '
+      + 'badges, VP and RC at a glance, and everything grouped where you\'d expect it. '
+      + 'On phones it slides up from the bottom.',
+  },
+  {
     version: '1.79.12',
     date: '2026-09-23',
     summary:
