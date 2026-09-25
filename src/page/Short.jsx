@@ -1571,6 +1571,8 @@ const VideoShort = () => {
               parentShort: sharedVideoData.parentShort || null,
               reactionChain: sharedVideoData.reactionChain || null,
               childReactions: sharedVideoData.childReactions || null,
+              // Gates the Remix button; without it a directly opened short never shows Remix
+              reusable: sharedVideoData.reusable,
             };
 
             setVideos([formattedSharedVideo, ...formattedVideos]);
@@ -1768,6 +1770,8 @@ const VideoShort = () => {
               parentShort: shortData.parentShort || null,
               reactionChain: shortData.reactionChain || null,
               childReactions: shortData.childReactions || null,
+              reusable: shortData.reusable,
+              hivePostMissing: shortData.hivePostMissing,
             };
           }));
         } catch (err) {
@@ -1816,6 +1820,8 @@ const VideoShort = () => {
           parentShort: shortData.parentShort || null,
           reactionChain: shortData.reactionChain || null,
           childReactions: shortData.childReactions || null,
+          reusable: shortData.reusable,
+          hivePostMissing: shortData.hivePostMissing,
         };
 
         setVideos(prev => [formatted, ...prev]);
