@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
+import { createPortal } from 'react-dom';
 import { useNavigate } from 'react-router-dom';
 import { X, Loader2 } from 'lucide-react';
 import { generateVideoThumbnails } from '../../utils/videoThumbnails';
@@ -128,7 +129,8 @@ function EditorModal({ isOpen, onClose, videoUrl, videoName, videoType, clipStar
           break;
 
         case 'editor-closed':
-          handleClose();
+          // The editor already asked "are you sure" inside the iframe
+          handleClose({ confirmed: true });
           break;
       }
     };
@@ -360,8 +362,8 @@ function EditorModal({ isOpen, onClose, videoUrl, videoName, videoType, clipStar
     };
   }, []);
 
-  const handleClose = () => {
-    if (editorReady && !window.confirm('Are you sure you want to close the editor? Unsaved changes will be lost.')) {
+  const handleClose = (opts) => {
+    if (editorReady && opts?.confirmed !== true && !window.confirm('Are you sure you want to close the editor? Unsaved changes will be lost.')) {
       return;
     }
     setEditorReady(false);
@@ -384,9 +386,22 @@ function EditorModal({ isOpen, onClose, videoUrl, videoName, videoType, clipStar
 
   if (!isOpen) return null;
 
-  return (
-    <div className="editor-modal">
-      <div className="editor-modal-overlay"></div>
+  // Portaled to <body> so nothing on the page behind (nav, shorts controls,
+  // transformed containers) can sit above the backdrop and take the click.
+  // Portal events still bubble through the React tree, so stop them here
+  // before they reach the page's own click/touch handlers.
+  const stop = (e) => e.stopPropagation();
+  return createPortal(
+    <div
+      className="editor-modal"
+      onClick={stop}
+      onMouseDown={stop}
+      onPointerDown={stop}
+      onTouchStart={stop}
+      onTouchEnd={stop}
+      onWheel={stop}
+    >
+      <div className="editor-modal-overlay" onClick={() => handleClose()}></div>
       <div className="editor-modal-content">
         <div className="editor-modal-body">
           {/* Show iframe only after a working URL is resolved */}
@@ -470,7 +485,8 @@ function EditorModal({ isOpen, onClose, videoUrl, videoName, videoType, clipStar
           )}
         </div>
       </div>
-    </div>
+    </div>,
+    document.body
   );
 }
 
