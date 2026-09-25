@@ -62,7 +62,7 @@ import { GiTwoCoins } from 'react-icons/gi';
 import { MdTranslate, MdClosedCaption, MdClosedCaptionOff, MdFlag } from 'react-icons/md';
 import mantequillaLogo from '../assets/mantequilla-logo.png';
 import ReportModal, { isReported } from '../components/modal/ReportModal';
-import { Flag } from 'lucide-react';
+import { Flag, Megaphone } from 'lucide-react';
 import ShareChooserModal from '../components/Chat/ShareChooserModal';
 import { useMyPlaylists, isVideoInPlaylist } from '../hooks/useMyPlaylists';
 import { addToPlaylist, removeFromPlaylist, createPlaylistAndAdd } from '../utils/playlistOperations';
@@ -119,6 +119,7 @@ import { commentWithAioha, isLoggedIn } from '../hive-api/aioha';
 import AmbientGlow, { useAmbientGlow } from '../components/AmbientGlow/AmbientGlow';
 import EditorModal from '../components/modal/EditorModal';
 import EditVideoModal from '../components/playVideo/EditVideoModal';
+import PromoteModal from '../components/Promote/PromoteModal';
 import { notifyMediaPlay, onMediaPlay } from '../utils/mediaCoordinator';
 import HiveAvatar from '../components/HiveAvatar/HiveAvatar';
 
@@ -349,6 +350,7 @@ const VideoShort = () => {
   // Editor modal state
   const [showEditorModal, setShowEditorModal] = useState(false);
   const [isEditShortOpen, setIsEditShortOpen] = useState(false);
+  const [isPromoteOpen, setIsPromoteOpen] = useState(false);
   const [editorVideoUrl, setEditorVideoUrl] = useState(null);
   const [editorVideoName, setEditorVideoName] = useState(null);
   const [editorOriginalAuthor, setEditorOriginalAuthor] = useState(null);
@@ -1569,6 +1571,8 @@ const VideoShort = () => {
               parentShort: sharedVideoData.parentShort || null,
               reactionChain: sharedVideoData.reactionChain || null,
               childReactions: sharedVideoData.childReactions || null,
+              // Gates the Remix button; without it a directly opened short never shows Remix
+              reusable: sharedVideoData.reusable,
             };
 
             setVideos([formattedSharedVideo, ...formattedVideos]);
@@ -1766,6 +1770,8 @@ const VideoShort = () => {
               parentShort: shortData.parentShort || null,
               reactionChain: shortData.reactionChain || null,
               childReactions: shortData.childReactions || null,
+              reusable: shortData.reusable,
+              hivePostMissing: shortData.hivePostMissing,
             };
           }));
         } catch (err) {
@@ -1814,6 +1820,8 @@ const VideoShort = () => {
           parentShort: shortData.parentShort || null,
           reactionChain: shortData.reactionChain || null,
           childReactions: shortData.childReactions || null,
+          reusable: shortData.reusable,
+          hivePostMissing: shortData.hivePostMissing,
         };
 
         setVideos(prev => [formatted, ...prev]);
@@ -3421,7 +3429,19 @@ const VideoShort = () => {
             const chain = currentVideo.reactionChain || [];
             const rootStep = chain.find(s => s.isRoot);
             const childSteps = chain.filter(s => !s.isRoot);
-            const rootUrl = rootStep ? `/watch?v=${rootStep.author}/${rootStep.permlink}${currentVideo.parentTimestamp != null ? `&t=${currentVideo.parentTimestamp}` : ''}` : null;
+            /* The origin is not always a full video any more: a reaction to a SNAP
+               starts at that snap, because the container above it was dropped as
+               plumbing (see isSnapsContainer in hiveApi). So the card's link and icon
+               follow what the origin IS — a short opens in shorts, a snap opens as a
+               post, a video plays at its timestamp. */
+            const rootIsVideo = !rootStep || rootStep.type === 'video';
+            const rootUrl = !rootStep
+              ? null
+              : (rootStep.shortPermlink
+                ? `/shorts?v=${rootStep.shortAuthor || rootStep.author}/${rootStep.shortPermlink}`
+                : (rootIsVideo
+                  ? `/watch?v=${rootStep.author}/${rootStep.permlink}${currentVideo.parentTimestamp != null ? `&t=${currentVideo.parentTimestamp}` : ''}`
+                  : `/post/${rootStep.author}/${rootStep.permlink}`));
             return (
               <div className={`reactionChainOverlay${parentCardVisible ? '' : ' collapsed'}${shortHistoryRef.current.length > 0 ? ' has-back' : ''}`} onClick={(e) => e.stopPropagation()}>
                 {parentCardVisible && (
@@ -3433,7 +3453,13 @@ const VideoShort = () => {
                           <img className="chainRootThumb" src={fixVideoThumbnail({ thumbnail: rootStep.thumbnail })} alt="" onError={(e) => (e.currentTarget.src = fallbackImg)} />
                         )}
                         <div className="chainRootInfo">
-                          <span className="chainRootTitle">{rootStep.title || 'Original video'}</span>
+                          {/* A snap has no title of its own, so what it SAYS is the
+                              only thing that identifies it. The generic labels are
+                              the last resort, not the second choice. */}
+                          <span className="chainRootTitle">
+                            {rootStep.title || rootStep.body
+                              || (rootIsVideo ? 'Original video' : 'Snap')}
+                          </span>
                           <div className="chainRootMeta">
                             <AuthorBadge author={rootStep.author} compact noLink />
                             {currentVideo.parentTimestamp != null && (
@@ -3443,14 +3469,26 @@ const VideoShort = () => {
                             )}
                           </div>
                         </div>
-                        <Link to={rootUrl} className="chainActionBtn" onClick={(e) => e.stopPropagation()} title="Watch">
-                          <Video size={14} />
+                        <Link
+                          to={rootUrl}
+                          className="chainActionBtn"
+                          onClick={(e) => e.stopPropagation()}
+                          title={rootStep.shortPermlink ? 'Open short' : (rootIsVideo ? 'Watch' : 'Open snap')}
+                        >
+                          {rootStep.shortPermlink
+                            ? <Camera size={14} />
+                            : (rootIsVideo ? <Video size={14} /> : <MessageSquare size={14} />)}
                         </Link>
                       </div>
                     )}
 
                     {/* Child steps — horizontal scroll row */}
-                    {(childSteps.length > 0 || currentVideo.childReactions?.length > 0) && (
+                    {/* `rootStep` is in the condition because the row also holds the
+                        CURRENT card. Without it a two-step chain (an origin and this
+                        short, nothing in between) drew the origin alone and left the
+                        viewer out of their own chain — which is what promoting the
+                        snap to origin turned every snap reaction into. */}
+                    {(childSteps.length > 0 || currentVideo.childReactions?.length > 0 || rootStep) && (
                       <div
                         className="chainChildRow"
                         ref={chainRowRef}
@@ -3773,6 +3811,19 @@ const VideoShort = () => {
             ) : null;
           })()}
 
+          {/* Promote — own shorts only, same rule as Edit. Boosting somebody else's
+              short is allowed elsewhere, but the rail is narrow and the thing people
+              come here to do is promote their own. Needs a Hive post: both the boost
+              and the ad point at one. */}
+          {authenticated && user === currentVideo.author && !currentVideo.hivePostMissing && (
+            <div className="actionItem" onClick={(e) => { e.stopPropagation(); try { playerRef.current?.pause?.(); } catch { /* not fatal */ } setIsPromoteOpen(true); }}>
+              <div className="actionButton">
+                <Megaphone size={24} />
+              </div>
+              <span className="actionLabel">Promote</span>
+            </div>
+          )}
+
           {/* Edit — own shorts only, and only when there's a Hive post to edit. */}
           {authenticated && user === currentVideo.author && !currentVideo.hivePostMissing && (
             <div className="actionItem" onClick={(e) => { e.stopPropagation(); try { playerRef.current?.pause?.(); } catch {} setIsEditShortOpen(true); }}>
@@ -3791,6 +3842,15 @@ const VideoShort = () => {
           title={currentVideo.title}
           onClose={() => setShareChooserOpen(false)}
           onGeneralShare={handleShare}
+        />
+
+        <PromoteModal
+          open={isPromoteOpen}
+          onClose={() => setIsPromoteOpen(false)}
+          author={currentVideo.author}
+          /* The HIVE permlink: both the boost memo and the ad booking are about the
+             post, not the asset. */
+          permlink={currentVideo.hivePermlink || currentVideo.permlink}
         />
 
         <EditVideoModal

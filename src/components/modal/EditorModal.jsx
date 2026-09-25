@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
+import { createPortal } from 'react-dom';
 import { useNavigate } from 'react-router-dom';
 import { X, Loader2 } from 'lucide-react';
 import { generateVideoThumbnails } from '../../utils/videoThumbnails';
@@ -128,7 +129,8 @@ function EditorModal({ isOpen, onClose, videoUrl, videoName, videoType, clipStar
           break;
 
         case 'editor-closed':
-          handleClose();
+          // The editor already asked "are you sure" inside the iframe
+          handleClose({ confirmed: true });
           break;
       }
     };
@@ -136,6 +138,30 @@ function EditorModal({ isOpen, onClose, videoUrl, videoName, videoType, clipStar
     window.addEventListener('message', handleMessage);
     return () => window.removeEventListener('message', handleMessage);
   }, [isOpen, resolvedUrl, videoUrl, videoName, videoType, clipStart, clipEnd, sendToEditor]);
+
+  // While the editor is open, keys must not reach the page behind it (the
+  // shorts page plays/pauses on Space and switches videos on the arrow keys).
+  // Space is forwarded so it plays/pauses the editor preview instead.
+  useEffect(() => {
+    if (!isOpen) return;
+    const onKeyDown = (e) => {
+      const t = e.target;
+      const editable = t?.tagName === 'INPUT' || t?.tagName === 'TEXTAREA' || t?.tagName === 'SELECT' || t?.isContentEditable;
+      e.stopImmediatePropagation();
+      if (editable) return;
+      if (e.key === ' ' || e.code === 'Space') {
+        e.preventDefault();
+        if (editorReady) sendToEditor({ type: 'toggle-play' });
+      }
+    };
+    window.addEventListener('keydown', onKeyDown, true);
+    return () => window.removeEventListener('keydown', onKeyDown, true);
+  }, [isOpen, editorReady, sendToEditor]);
+
+  // Give the editor keyboard focus once it is ready, so its own shortcuts work
+  useEffect(() => {
+    if (editorReady) iframeRef.current?.focus();
+  }, [editorReady]);
 
   // Prevent navigation away while the editor is open
   useEffect(() => {
@@ -336,8 +362,8 @@ function EditorModal({ isOpen, onClose, videoUrl, videoName, videoType, clipStar
     };
   }, []);
 
-  const handleClose = () => {
-    if (editorReady && !window.confirm('Are you sure you want to close the editor? Unsaved changes will be lost.')) {
+  const handleClose = (opts) => {
+    if (editorReady && opts?.confirmed !== true && !window.confirm('Are you sure you want to close the editor? Unsaved changes will be lost.')) {
       return;
     }
     setEditorReady(false);
@@ -360,9 +386,22 @@ function EditorModal({ isOpen, onClose, videoUrl, videoName, videoType, clipStar
 
   if (!isOpen) return null;
 
-  return (
-    <div className="editor-modal">
-      <div className="editor-modal-overlay"></div>
+  // Portaled to <body> so nothing on the page behind (nav, shorts controls,
+  // transformed containers) can sit above the backdrop and take the click.
+  // Portal events still bubble through the React tree, so stop them here
+  // before they reach the page's own click/touch handlers.
+  const stop = (e) => e.stopPropagation();
+  return createPortal(
+    <div
+      className="editor-modal"
+      onClick={stop}
+      onMouseDown={stop}
+      onPointerDown={stop}
+      onTouchStart={stop}
+      onTouchEnd={stop}
+      onWheel={stop}
+    >
+      <div className="editor-modal-overlay" onClick={() => handleClose()}></div>
       <div className="editor-modal-content">
         <div className="editor-modal-body">
           {/* Show iframe only after a working URL is resolved */}
@@ -446,7 +485,8 @@ function EditorModal({ isOpen, onClose, videoUrl, videoName, videoType, clipStar
           )}
         </div>
       </div>
-    </div>
+    </div>,
+    document.body
   );
 }
 

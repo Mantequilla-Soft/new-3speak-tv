@@ -1,4 +1,4 @@
-import { withReferrer } from './referral';
+import { withReferrer, getStoredInvite } from './referral';
 
 /**
  * Open a Butter Auth flow in a popup.
@@ -31,6 +31,10 @@ export async function openButrauthPopup({ signup = false, graduate = false, chan
       signup,
       graduate,
       changeHandle,
+      // An invite link's code, put on the authorize URL by the server through
+      // the SDK. Harmless for a user who already has an account: Butter Auth
+      // only binds it for somebody signing up.
+      invite: getStoredInvite(),
     }),
   });
   const data = await res.json();

@@ -6,6 +6,7 @@ import { CheckCircle, Upload, FileText, Info, Users, Coins, Gift, Repeat2, Tag, 
 import { StepProgress } from "../legacy-studio/StepProgress";
 import EmbedUploadProgressBar from "./EmbedUploadProgressBar";
 import { useEmbedUpload } from "../../context/EmbedUploadContext";
+import { enforceLockedBeneficiaries } from "../../utils/beneficiaries";
 import "../legacy-studio/VideoUploadStatus.scss";
 import BlogContent from "../playVideo/BlogContent";
 import EmbedPreviewPlayer from "./EmbedPreviewPlayer";
@@ -41,6 +42,7 @@ function EmbedPreview() {
     originalPermlink,
     isNsfw,
     publishedPermlink,
+    isPremium,
   } = useEmbedUpload();
 
   const navigate = useNavigate();
@@ -158,7 +160,25 @@ function EmbedPreview() {
   } catch (_) {
     beneList = [];
   }
-  const userBeneficiaries = beneList.filter((b) => b && b.account);
+  // Show what publishing will actually set: the chosen list plus the locked
+  // splits (3Speak fund, encoder, remix author), via the same rule publish uses.
+  // Declining rewards publishes with no beneficiaries at all.
+  const userBeneficiaries = (() => {
+    if (declineRewards) return [];
+    const beneMap = new Map();
+    for (const b of beneList) {
+      if (b && b.account) beneMap.set(b.account, Math.max(beneMap.get(b.account) || 0, Number(b.weight) || 0));
+    }
+    enforceLockedBeneficiaries(beneMap, {
+      isPremium,
+      username: user,
+      includeEncoder: true,
+      originalAuthor: originalAuthor && originalPermlink ? originalAuthor : null,
+    });
+    return [...beneMap.entries()]
+      .map(([account, weight]) => ({ account, weight }))
+      .sort((a, b) => b.weight - a.weight);
+  })();
 
 
   /* The spot plays only when they ask for it, on its own button.

@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { useAioha } from '@aioha/react-ui';
 import { useHangout } from '../context/HangoutContext';
 import { useAppStore } from '../lib/store';
@@ -19,6 +19,11 @@ import { useAppStore } from '../lib/store';
  * Shared by the shorts-style mobile stream page and the live player embedded in
  * the normal watch page, which must behave identically — a viewer who chats
  * from one and then the other should be the same person both times.
+ *
+ * Only the SILENT handover (@threespeak signs server-side) happens on its own.
+ * If that is not possible for this account, the viewer watches as a guest and
+ * is asked for a wallet signature only when they choose to chat or raise a
+ * hand (`signIn`). Opening a stream used to pop a wallet prompt straight away.
  */
 export function useStreamSession() {
   const { sessionToken, sessionLoading, retryLogin, hangoutsUser } = useHangout();
@@ -37,6 +42,9 @@ export function useStreamSession() {
   // signed-in viewer stuck as an anonymous guest for the whole session, with
   // nothing on the watch page offering to try again.
   const triesRef = useRef({ user: null, count: 0 });
+  // Finished silent attempts, per account, for rendering (the ref above only
+  // schedules them).
+  const [silentSettled, setSilentSettled] = useState({ user: null, count: 0 });
   useEffect(() => {
     if (!canHandover || sessionToken || sessionLoading) return undefined;
     const t = triesRef.current;
@@ -46,7 +54,12 @@ export function useStreamSession() {
     const delay = triesRef.current.count === 0 ? 0 : 3000;
     const timer = setTimeout(() => {
       triesRef.current.count += 1;
-      retryLogin(handoverUser);
+      Promise.resolve(retryLogin(handoverUser, { interactive: false }))
+        .catch(() => null)
+        .finally(() => setSilentSettled((p) => ({
+          user: handoverUser,
+          count: p.user === handoverUser ? p.count + 1 : 1,
+        })));
     }, delay);
     return () => clearTimeout(timer);
   }, [canHandover, handoverUser, sessionToken, sessionLoading, retryLogin]);
@@ -71,6 +84,23 @@ export function useStreamSession() {
   // genuinely expired session that initializeAuth will reject). A truly
   // anonymous viewer — no persisted user_id — doesn't wait at all.
   const [waited, setWaited] = useState(false);
+
+  // The silent attempts are used up without a token: connect as a guest now
+  // instead of sitting out the 10s deadline.
+  const silentDone = canHandover && !sessionToken
+    && silentSettled.user === handoverUser && silentSettled.count >= 2;
+
+  // Asked for by the chat and raise-hand controls: may show a wallet prompt.
+  const [signingIn, setSigningIn] = useState(false);
+  const signIn = useCallback(async () => {
+    if (!canHandover || signingIn) return null;
+    setSigningIn(true);
+    try {
+      return await retryLogin(handoverUser, { interactive: true });
+    } finally {
+      setSigningIn(false);
+    }
+  }, [canHandover, handoverUser, retryLogin, signingIn]);
   useEffect(() => {
     if (!likelyAuthed) return undefined;
     const t = setTimeout(() => setWaited(true), 10000);
@@ -82,7 +112,12 @@ export function useStreamSession() {
     authenticated,
     sessionToken,
     hangoutsUser,
-    connectReady: !!sessionToken || !likelyAuthed || waited,
+    connectReady: !!sessionToken || !likelyAuthed || waited || silentDone,
+    // Signed in to 3Speak but not yet to the room: offer to sign in on demand.
+    needsSignIn: canHandover && !sessionToken,
+    canInteract: !!sessionToken,
+    signIn,
+    signingIn,
     joinKey: sessionToken ? `auth-${hangoutsUser || 'user'}` : 'guest',
   };
 }

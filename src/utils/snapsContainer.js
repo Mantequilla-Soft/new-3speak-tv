@@ -22,6 +22,27 @@ import { HIVE_API_NODES } from './config';
 // keep re-trying rounds until a deadline before admitting defeat.
 
 const SNAP_ACCOUNT = 'peak.snaps';
+
+/* Accounts whose top-level posts are CONTAINERS: a bucket other people reply into,
+ * not something anybody wrote to be read. @peak.snaps rotates one every ~8-13h;
+ * Ecency's waves work the same way. Listed rather than pattern-matched on the
+ * permlink, because the permlink conventions differ per app and the account does not.
+ *
+ * Extend this when another snap-style host appears. */
+const CONTAINER_ACCOUNTS = new Set([SNAP_ACCOUNT, 'ecency.waves']);
+
+/**
+ * Is this post a container rather than content?
+ *
+ * Used to keep containers out of anything that presents a conversation to a viewer.
+ * A snap replying to a container is the start of that conversation; the container
+ * above it is plumbing, and showing it turns a two-step reaction chain into a
+ * three-step one whose first step nobody wrote.
+ */
+export function isSnapsContainer(post) {
+  if (!post) return false;
+  return CONTAINER_ACCOUNTS.has(String(post.author || '').trim().toLowerCase());
+}
 const PER_CALL_TIMEOUT_MS = 6000;
 const DEFAULT_DEADLINE_MS = 45000;
 const ROUND_BACKOFF_MS = [500, 1500, 3000, 5000];

@@ -147,3 +147,46 @@
 
   &--low { color: #e0a800; font-weight: 700; }
 }
+
+/* The chooser that now sits in front of the boost form. Two rows, because the two
+   products are different enough that picking between them IS the first decision. */
+.promote-choose {
+  display: grid;
+  gap: 8px;
+}
+
+.promote-choice {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  text-align: left;
+  padding: 13px 14px;
+  border-radius: 12px;
+  border: 1px solid var(--border-color, #e3e3e6);
+  background: none;
+  color: inherit;
+  font-family: inherit;
+  cursor: pointer;
+
+  > span {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  strong { font-size: 0.875rem; }
+
+  em {
+    font-style: normal;
+    font-size: 0.75rem;
+    line-height: 1.4;
+    color: var(--text-secondary, #888);
+  }
+
+  &:hover {
+    border-color: var(--accent-primary, #e53935);
+    background: color-mix(in srgb, var(--accent-primary, #e53935) 6%, transparent);
+  }
+}
