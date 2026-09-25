@@ -3,7 +3,7 @@ import { createPortal } from 'react-dom';
 import axios from 'axios';
 import { toastIn } from '../../utils/toast';
 import { Rocket, X, Megaphone, ChevronRight } from 'lucide-react';
-import { CHECKER_URL, CHECKER_API_KEY, adsEnabledFor } from '../../utils/config';
+import { CHECKER_URL, CHECKER_API_KEY, selfPromoEnabledFor } from '../../utils/config';
 import { transferWithAioha, isLoggedIn } from '../../hive-api/aioha';
 import { fetchBalances } from '../../hive-api/api';
 import { useAppStore } from '../../lib/store';
@@ -79,7 +79,8 @@ export default function PromoteModal({ open, onClose, author, permlink, promoted
 
   // The wizard is its own modal, so hand the whole surface over rather than nesting
   // one dialog inside another.
-  if (mode === 'ad') {
+  // Guarded here too, not only on the button: the wizard is beta-only
+  if (mode === 'ad' && selfPromoEnabledFor(me)) {
     return <AdWizardModal open onClose={onClose} author={author} permlink={permlink} />;
   }
 
@@ -142,11 +143,10 @@ export default function PromoteModal({ open, onClose, author, permlink, promoted
               </span>
               <ChevronRight size={16} />
             </button>
-            {/* Behind the same flag as every other ad-buying surface here, so this
-                does not become the one place ads are purchasable while /advertise is
-                still dark. Where those ads may SHOW is a separate, server-side
-                limit (AD_SELFPROMO_ALLOWED_OWNERS on the checker). */}
-            {adsEnabledFor(me) && (
+            {/* Beta testers only (selfPromoEnabledFor), even with ads public: it
+                sells at a testing price while in beta. Where those ads may SHOW is a
+                separate, server-side limit (AD_SELFPROMO_ALLOWED_OWNERS on the checker). */}
+            {selfPromoEnabledFor(me) && (
               <button className="promote-choice" onClick={() => setMode('ad')}>
                 <Megaphone size={18} />
                 <span>
