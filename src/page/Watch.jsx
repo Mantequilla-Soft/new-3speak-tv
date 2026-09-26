@@ -147,6 +147,9 @@ function Watch({ v2 = false }) {
   const surfChannel = getChannel(searchParams.get(SURF_PARAM))?.slug || null;
   // Set by SurfBar while it is mounted; the `ended` handler calls it.
   const surfFlipRef = useRef(null);
+  // For the player's event handlers, which outlive a flip to the next video.
+  const surfChannelRef = useRef(surfChannel);
+  surfChannelRef.current = surfChannel;
 
   // Scheduled mode: the post isn't on Hive yet, so we load it from the checker
   // and play it via its embed asset instead of the Hive/GraphQL path. Set by the
@@ -357,7 +360,9 @@ function Watch({ v2 = false }) {
     // optional "functional" storage (the SDK persists the position in localStorage
     // as `3speak_pos_*`). Was hardcoded `false`, which disabled resume entirely.
     // The storage guard in lib/consent.js enforces the same choice at write time.
-    resume: hasConsent('functional'),
+    // Not while surfing: a channel starts every video from the top, and a resumed
+    // playhead near the end would end it again straight away.
+    resume: hasConsent('functional') && !surfChannel,
     // FATAL means the player already tried its alternate CDN sources (it emits a
     // separate `fallback` event for those) and every one of them failed — so the
     // media is a real candidate for being gone. Non-fatal errors recover; ignore them.
@@ -1000,9 +1005,16 @@ function Watch({ v2 = false }) {
         player.play().then(() => {
           setAutoplayBlocked(false);
         }).catch((err) => {
-          if (err?.name === 'NotAllowedError') {
-            setAutoplayBlocked(true);
+          if (err?.name !== 'NotAllowedError') return;
+          // Surfing plays on by itself. A browser that refuses sound without a tap
+          // still allows muted playback, so the channel keeps going muted rather than
+          // stopping. player.setMuted does not touch the saved mute preference.
+          if (surfChannelRef.current && !player.element?.muted) {
+            player.setMuted(true);
+            player.play().then(() => setAutoplayBlocked(false)).catch(() => setAutoplayBlocked(true));
+            return;
           }
+          setAutoplayBlocked(true);
         });
       };
       if (videoEl) {
@@ -1072,11 +1084,12 @@ function Watch({ v2 = false }) {
         setVideoEnded(true);
         return;
       }
-      if (playlistDataRef.current && showPlaylistRef.current) {
-        navigateToNextVideoRef.current();
-      } else if (surfFlipRef.current) {
-        // Surfing: stay on the channel rather than following the suggestions.
+      if (surfFlipRef.current) {
+        // Surfing: always stay on the channel, whatever the autoplay-next toggle or
+        // an open playlist would do otherwise.
         surfFlipRef.current();
+      } else if (playlistDataRef.current && showPlaylistRef.current) {
+        navigateToNextVideoRef.current();
       } else if (autoplayNextRef.current && suggestedVideosRef.current?.length > 0) {
         // Find the first suggested video not already watched (backend) or played (session)
         const next = suggestedVideosRef.current.find(v => {
