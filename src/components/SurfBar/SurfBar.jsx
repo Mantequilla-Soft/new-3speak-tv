@@ -1,18 +1,20 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { useNavigate } from 'react-router-dom';
+import { useQueryClient } from '@tanstack/react-query';
 import { MdSkipNext, MdKeyboardArrowUp, MdKeyboardArrowDown, MdClose } from 'react-icons/md';
 import { toastIn } from '../../utils/toast';
 import { useAppStore } from '../../lib/store';
 import { TAG_CATEGORIES } from '../../utils/tagsV2';
 import { fixVideoThumbnail, fallbackImg } from '../../utils/fixThumbnails';
+import { fetchVideoDetails } from '../../lib/videoData';
 import {
   getChannel, channelNumber, channelTitle, stepChannel, findNextOnChannel,
-  markSeen, saveLastChannel, surfUrl,
+  markSeen, saveLastChannel, surfUrl, videoAuthor,
 } from '../../utils/surf';
 import './SurfBar.scss';
 
-const toast = toastIn('Channel Surf');
+const toast = toastIn('Channel Surfing');
 
 /**
  * The remote control under the video while channel surfing. Watch renders it only
@@ -21,15 +23,25 @@ const toast = toastIn('Channel Surf');
  *
  * `flipRef` hands Watch the flip function, so a video that plays to the end moves
  * on to the next one on the same channel, like TV does.
+ *
+ * `overlayTarget` is the player wrapper while it is fullscreen (null otherwise):
+ * the bar under the video is not part of the fullscreen element, so a small copy
+ * of the remote is portalled into the player itself, fading with its controls.
+ *
+ * A flip is an in-place swap: /watch stays mounted and only the URL changes, so
+ * the player is reused and fullscreen survives. What made it feel like a fresh
+ * page load was the Hive metadata fetch, so the next video's details are warmed
+ * into the query cache as soon as "up next" is known.
  */
-function SurfBar({ channel: slug, author, permlink, flipRef }) {
+function SurfBar({ channel: slug, author, permlink, flipRef, overlayTarget = null, overlayVisible = false }) {
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
   const channel = getChannel(slug);
   const currentKey = author && permlink ? `${author}/${permlink}` : null;
 
   // Keyed on what is on screen, so a stale answer for the previous video is
   // never offered as "up next" for this one.
-  // hideAi too: flipping the setting mid-surf re-picks what Flip will play.
+  // hideAi too: flipping the setting mid-surf re-picks what Zap will play.
   const hideAi = useAppStore((s) => s.hideAi);
   const tuneKey = `${slug}|${currentKey}|${hideAi ? 'noai' : 'ai'}`;
   const [prefetched, setPrefetched] = useState({ key: null, video: null });
@@ -43,7 +55,7 @@ function SurfBar({ channel: slug, author, permlink, flipRef }) {
     saveLastChannel(slug);
   }, [currentKey, slug]);
 
-  // What "Flip" will play, fetched ahead so the button can show it.
+  // What "Zap" will play, fetched ahead so the button can show it.
   useEffect(() => {
     let alive = true;
     findNextOnChannel(slug, currentKey)
@@ -51,6 +63,18 @@ function SurfBar({ channel: slug, author, permlink, flipRef }) {
       .catch(() => { /* the button still works; it fetches again on press */ });
     return () => { alive = false; };
   }, [slug, currentKey, tuneKey]);
+
+  // Same key and fetcher as Watch's own details query, so a flip finds the title,
+  // description and stats already cached instead of waiting on a Hive RPC.
+  useEffect(() => {
+    const a = videoAuthor(upNext);
+    if (!a || !upNext?.permlink) return;
+    queryClient.prefetchQuery({
+      queryKey: ['video-details', a, upNext.permlink],
+      queryFn: () => fetchVideoDetails(a, upNext.permlink),
+      staleTime: 60 * 1000,
+    }).catch(() => { /* Watch fetches it itself on arrival */ });
+  }, [upNext, queryClient]);
 
   const tuneTo = useCallback(async (targetSlug, preloaded = null) => {
     if (busyRef.current) return;
@@ -124,7 +148,7 @@ function SurfBar({ channel: slug, author, permlink, flipRef }) {
   if (!channel) return null;
 
   return (
-    <section className={`surf-bar${tuning ? ' is-tuning' : ''}`} aria-label="Channel Surf remote">
+    <section className={`surf-bar${tuning ? ' is-tuning' : ''}`} aria-label="Channel Surfing remote">
       <div className="surf-bar__tuner">
         <button
           type="button"
@@ -151,9 +175,6 @@ function SurfBar({ channel: slug, author, permlink, flipRef }) {
           </button>
         </div>
 
-        <button type="button" className="surf-bar__off" onClick={stopSurfing} title="Stop surfing (keeps this video playing)">
-          <MdClose aria-hidden="true" /><span className="sr-only">Stop surfing</span>
-        </button>
       </div>
 
       <button type="button" className="surf-bar__flip" onClick={flip} disabled={tuning} title="Next video (→)">
@@ -163,11 +184,34 @@ function SurfBar({ channel: slug, author, permlink, flipRef }) {
           ) : <span className="surf-bar__static surf-bar__static--loop" />}
         </span>
         <span className="surf-bar__flip-text">
-          <span className="surf-bar__flip-label">{tuning ? 'Tuning…' : 'Flip'}</span>
+          <span className="surf-bar__flip-label">{tuning ? 'Tuning…' : 'Zap'}</span>
           <span className="surf-bar__flip-next">{upNext?.title || 'Finding the next one…'}</span>
         </span>
         <MdSkipNext className="surf-bar__flip-icon" aria-hidden="true" />
       </button>
+
+      {/* Last in the row on every screen size, so it never sits between the
+          channel rocker and Zap. */}
+      <button type="button" className="surf-bar__off" onClick={stopSurfing} title="Stop surfing (keeps this video playing)">
+        <MdClose aria-hidden="true" /><span className="sr-only">Stop surfing</span>
+      </button>
+
+      {overlayTarget && createPortal(
+        <div className={`surf-fs${overlayVisible ? ' is-visible' : ''}${tuning ? ' is-tuning' : ''}`} role="group" aria-label="Channel Surfing remote">
+          <span className="surf-fs__ch">CH {channelNumber(channel)}</span>
+          <span className="surf-fs__name">{channelTitle(channel)}</span>
+          <button type="button" onClick={() => changeChannel(prev.slug)} disabled={tuning} title={`CH ${channelNumber(prev)}: ${channelTitle(prev)}`}>
+            <MdKeyboardArrowDown aria-hidden="true" /><span className="sr-only">Previous channel</span>
+          </button>
+          <button type="button" onClick={() => changeChannel(next.slug)} disabled={tuning} title={`CH ${channelNumber(next)}: ${channelTitle(next)}`}>
+            <MdKeyboardArrowUp aria-hidden="true" /><span className="sr-only">Next channel</span>
+          </button>
+          <button type="button" className="surf-fs__flip" onClick={flip} disabled={tuning} title="Next video">
+            {tuning ? 'Tuning…' : 'Zap'} <MdSkipNext aria-hidden="true" />
+          </button>
+        </div>,
+        overlayTarget,
+      )}
 
       {guideOpen && createPortal(
         <div className="surf-guide-overlay" onClick={() => setGuideOpen(false)}>

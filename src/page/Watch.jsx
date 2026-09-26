@@ -142,7 +142,7 @@ function Watch({ v2 = false }) {
   const playlistId = searchParams.get('playlist');
   const posParam = searchParams.get('pos');
   const [author, permlink] = (v ?? 'unknown/unknown').split('/');
-  // Channel Surf: only links built by /surf carry this, so the surf bar and the
+  // Channel Surfing: only links built by /surf carry this, so the surf bar and the
   // flip-on-end below never touch a watch page opened any other way.
   const surfChannel = getChannel(searchParams.get(SURF_PARAM))?.slug || null;
   // Set by SurfBar while it is mounted; the `ended` handler calls it.
@@ -2088,7 +2088,14 @@ function Watch({ v2 = false }) {
         belowPlayerSlot={(
           <>
         {surfChannel && (
-          <SurfBar channel={surfChannel} author={author} permlink={permlink} flipRef={surfFlipRef} />
+          <SurfBar
+            channel={surfChannel}
+            author={author}
+            permlink={permlink}
+            flipRef={surfFlipRef}
+            overlayTarget={isFullscreen ? wrapperRef.current : null}
+            overlayVisible={controlsVisible}
+          />
         )}
         {/* 🔐 The creator's own guest list, shown only to them. Server re-checks
             ownership on every call, so rendering this is a convenience, not a

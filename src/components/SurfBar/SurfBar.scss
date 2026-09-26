@@ -25,10 +25,43 @@
   button { font: inherit; cursor: pointer; }
   button:disabled { cursor: progress; }
 
+  // Phones: one slim row (channel, rocker, Flip, off) instead of two tall blocks.
+  // The up-next thumbnail and title and the "On air" line are dropped there;
+  // the static burst on the display still marks each flip.
   @include respond(phone) {
-    flex-direction: column;
-    gap: 8px;
-    margin: 8px 0 4px;
+    align-items: center;
+    gap: 6px;
+    margin: 6px 0 2px;
+    padding: 6px;
+    border-radius: 10px;
+
+    .surf-bar__tuner { gap: 6px; align-items: center; }
+    .surf-bar__display {
+      grid-template-rows: auto;
+      column-gap: 8px;
+      padding: 6px 10px;
+      border-radius: 8px;
+    }
+    .surf-bar__ch { grid-row: auto; font-size: 15px; letter-spacing: 0.5px; }
+    .surf-bar__name { font-size: 13px; }
+    .surf-bar__live { display: none; }
+
+    .surf-bar__rocker {
+      flex-direction: row;
+      width: auto;
+      height: 34px;
+      border-radius: 17px;
+
+      button { width: 34px; font-size: 20px; }
+    }
+    .surf-bar__rocker-label { display: none; }
+
+    .surf-bar__off {
+      align-self: center;
+      width: 28px;
+      height: 28px;
+      font-size: 16px;
+    }
   }
 }
 
@@ -194,8 +227,17 @@
   &:disabled { opacity: 0.7; }
 
   @include respond(phone) {
-    flex: 1 1 auto;
-    width: 100%;
+    flex: 0 0 auto;
+    gap: 4px;
+    height: 34px;
+    padding: 0 8px 0 12px;
+    border-width: 1.5px;
+    border-radius: 17px;
+
+    .surf-bar__flip-thumb,
+    .surf-bar__flip-next { display: none; }
+    .surf-bar__flip-label { font-size: 13px; }
+    .surf-bar__flip-icon { font-size: 20px; }
   }
 }
 
@@ -245,6 +287,90 @@
 }
 
 .surf-bar.is-tuning .surf-bar__ch { animation: surf-blink 0.4s steps(2) infinite; }
+
+// ── Fullscreen remote ────────────────────────────────────────────────────────
+// Portalled into the player wrapper while it is fullscreen. Top-right (the
+// sponsor label owns top-left), above the control bar (z 10) and the tap
+// surface (z 5), and it fades in and out with the controls. Always dark,
+// whatever the theme: it sits on video, like the control bar does.
+.surf-fs {
+  position: absolute;
+  top: calc(12px + env(safe-area-inset-top, 0px));
+  right: calc(12px + env(safe-area-inset-right, 0px));
+  z-index: 11;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  max-width: calc(100% - 24px);
+  padding: 4px 4px 4px 12px;
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.6);
+  color: #fff;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+
+  &.is-visible { opacity: 1; pointer-events: auto; }
+
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+  }
+
+  button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 2px;
+    height: 32px;
+    min-width: 32px;
+    border: 0;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.12);
+    color: #fff;
+    font: inherit;
+    font-size: 20px;
+    cursor: pointer;
+
+    &:hover:not(:disabled) { background: rgba(255, 255, 255, 0.24); }
+    &:disabled { cursor: progress; opacity: 0.7; }
+  }
+
+  &.is-tuning .surf-fs__ch { animation: surf-blink 0.4s steps(2) infinite; }
+}
+
+.surf-fs__ch {
+  font-family: "Courier New", ui-monospace, monospace;
+  font-weight: 700;
+  font-size: 15px;
+}
+
+.surf-fs__name {
+  min-width: 0;
+  font-size: 13px;
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+
+  @include respond(phone) { display: none; }
+}
+
+.surf-fs .surf-fs__flip {
+  padding: 0 10px 0 14px;
+  border: 1.5px solid #fff;
+  background: transparent;
+  font-size: 13px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+
+  svg { font-size: 20px; }
+}
 
 // ── Channel guide ────────────────────────────────────────────────────────────
 .surf-guide-overlay {

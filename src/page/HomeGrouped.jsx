@@ -819,6 +819,8 @@ const HomeGrouped = () => {
             data-tab-key={s.key}
             aria-selected={s.key === activeSection?.key}
             className={`home-tab${s.key === activeSection?.key ? ' active' : ''}${drag?.key === s.key ? ' dragging' : ''}`}
+            aria-label={s.title}
+            title={s.title}
             onPointerDown={onTabPointerDown(s.key)}
           >
             <span className="home-tab-handle" aria-hidden="true" title="Drag to reorder"><GripVertical size={14} /></span>
@@ -826,11 +828,11 @@ const HomeGrouped = () => {
             <span className="home-tab-label">{s.title}</span>
           </button>
         ))}
-        {/* Channel Surf lives here rather than in the top menu. A link, not a
+        {/* Channel Surfing lives here rather than in the top menu. A link, not a
             tab: it leaves the page, and the reorder drag only hit-tests
             `.home-tab`, so it can never be dragged in among the feeds. */}
-        <Link to="/surf" className="home-tab-surf" title="Channel Surf: pick a topic and watch it like TV">
-          <Tv size={16} aria-hidden="true" /> <span>Surf</span>
+        <Link to="/surf" className="home-tab-surf" title="Channel Surfing: pick a topic and watch it like TV">
+          <Tv size={16} aria-hidden="true" /> <span>Zapping</span>
         </Link>
       </div>
 

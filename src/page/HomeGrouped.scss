@@ -518,14 +518,17 @@
     .home-tab.active .home-tab-handle { opacity: 0.5; width: 14px; }
   }
 
-  // Tighter tabs on mobile so more fit without a wide gap.
+  // Tighter tabs on mobile, and only the ACTIVE tab keeps its label: with every
+  // label shown the bar overflowed and pushed Surf off the right edge.
   @include respond(phone) {
     gap: 0;
     padding: 0 4px;
     .home-tab {
-      padding: 8px 8px;
+      padding: 8px 10px;
       gap: 4px;
       font-size: 13px;
+      .home-tab-icon { opacity: 1; }
+      &:not(.active) .home-tab-label { display: none; }
     }
   }
 }
@@ -552,9 +555,15 @@
 
   @include respond(phone) {
     gap: 4px;
-    margin-left: 6px;
-    padding: 4px 8px;
+    margin-left: auto;
+    padding: 4px 10px;
     font-size: 13px;
+    // Pinned to the right edge even if the tabs still overflow (long labels,
+    // narrow phones): the bar scrolls under it instead of scrolling it away.
+    position: sticky;
+    right: 0;
+    background: var(--bg-primary, #0f0f0f);
+    box-shadow: -10px 0 10px -4px var(--bg-primary, #0f0f0f);
   }
 }
 
