@@ -37,6 +37,14 @@ export default function AiBadge({ author, permlink, className, title = 'Detected
 
   if (!flagged) return null;
 
+  return <AiPill className={className} title={title} />;
+}
+
+/**
+ * The pill alone, for callers that already know the answer — feed cards, which
+ * look their flags up in one batch (utils/aiFlags) instead of one request each.
+ */
+export function AiPill({ className, title = 'Detected as AI-generated' }) {
   return (
     <span
       className={`ai-badge${className ? ` ${className}` : ''}`}

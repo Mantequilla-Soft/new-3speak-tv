@@ -527,7 +527,7 @@ const CONTENT_TABS = [
  * side menu, now grouped with headers + explanations and compact switches.
  */
 export default function SettingsModal({ isOpen, onClose }) {
-  const { theme, showNsfw, setShowNsfw, toggleTheme, homeCardSize, setHomeCardSize, previewEnabled, setPreviewEnabled, shortsCommentBar, setShortsCommentBar, openShortsOnStart, setOpenShortsOnStart, inlineShorts, setInlineShorts, hideWatched, setHideWatched, privateMode, setPrivateMode, simpleFeed, setSimpleFeed } = useAppStore();
+  const { theme, showNsfw, setShowNsfw, toggleTheme, homeCardSize, setHomeCardSize, previewEnabled, setPreviewEnabled, shortsCommentBar, setShortsCommentBar, openShortsOnStart, setOpenShortsOnStart, inlineShorts, setInlineShorts, hideWatched, setHideWatched, hideAi, setHideAi, privateMode, setPrivateMode, simpleFeed, setSimpleFeed } = useAppStore();
   /* Whether the Ads & rewards page exists at all.
    *
    * 🚨 THE CHECKER DECIDES, not the build flag. adsEnabledFor() is true for everybody
@@ -769,6 +769,12 @@ export default function SettingsModal({ isOpen, onClose }) {
               desc="Leave out videos you've already watched from the home, trending and recommended feeds."
               checked={!!hideWatched}
               onChange={(v) => setHideWatched(v)}
+            />
+            <Row
+              title="Hide AI-generated videos"
+              desc="Leave out videos and shorts marked AI-generated, in every feed. The mark comes from an automatic check, so some may slip through."
+              checked={!!hideAi}
+              onChange={(v) => setHideAi(v)}
             />
             <Row
               title="Private mode"

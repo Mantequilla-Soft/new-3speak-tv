@@ -24,4 +24,19 @@
     border-color: rgba(255, 255, 255, 0.28);
     color: rgba(255, 255, 255, 0.75);
   }
+
+  /* On a feed card's thumbnail: any image can sit behind it, so it gets its own
+     dark backing rather than relying on the frame for contrast. Bottom-left,
+     because the top corners belong to the duration, live, PRO and status chips.
+     z-index 3: the thumbnail <img> sits at 1 (see .card .wrap .play). */
+  &--on-thumb {
+    position: absolute;
+    left: 6px;
+    bottom: 6px;
+    z-index: 3;
+    border-color: rgba(255, 255, 255, 0.28);
+    background: rgba(0, 0, 0, 0.6);
+    color: rgba(255, 255, 255, 0.9);
+    pointer-events: none;
+  }
 }

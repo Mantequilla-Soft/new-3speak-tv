@@ -58,6 +58,11 @@ export const useAppStore = create(
       // Hide videos the user has already watched from discovery feeds (default ON).
       hideWatched: true,
       setHideWatched: (val) => a[0]({ hideWatched: typeof val === 'function' ? val(a[1]().hideWatched) : val }),
+      // Leave out videos + shorts the pipeline flagged AI-generated, in every feed
+      // (Card3, the shorts rails, the shorts swipe feed). Default OFF: flagged
+      // content just carries an AI pill. Filtered client-side, see utils/aiFlags.
+      hideAi: false,
+      setHideAi: (val) => a[0]({ hideAi: !!(typeof val === 'function' ? val(a[1]().hideAi) : val) }),
       // Private mode: suppresses the COUNTRY on this viewer's watch sessions.
       //
       // It is no longer about the IP. As of 2026-07-14 no viewer IP is stored for
@@ -101,6 +106,7 @@ export const useAppStore = create(
         openShortsOnStart: state.openShortsOnStart,
         inlineShorts: state.inlineShorts,
         hideWatched: state.hideWatched,
+        hideAi: state.hideAi,
         privateMode: state.privateMode,
         simpleFeed: state.simpleFeed,
       }),
