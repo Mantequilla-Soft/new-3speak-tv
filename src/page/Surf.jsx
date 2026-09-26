@@ -9,11 +9,11 @@ import {
 } from '../utils/surf';
 import './Surf.scss';
 
-const toast = toastIn('Channel Surf');
+const toast = toastIn('Channel Surfing');
 
 /**
- * Channel Surf: pick a topic, and the watch page keeps playing the best-ranked
- * videos on it, with a big Flip button to skip ahead and a channel rocker.
+ * Channel Surfing: pick a topic, and the watch page keeps playing the best-ranked
+ * videos on it, with a big Zap button to skip ahead and a channel rocker.
  */
 function Surf() {
   const navigate = useNavigate();
@@ -78,21 +78,21 @@ function Surf() {
           <span className="surf-hero__screen"><span className="surf-hero__noise" />📺</span>
         </div>
         <div className="surf-hero__text">
-          <h1>Channel Surf</h1>
+          <h1>Channel Surfing</h1>
           <p>
             Pick a channel and lean back. We line up the best videos on that topic one
-            after another. Bored? Hit <strong>Flip</strong>. Want something else? Change the channel.
+            after another. Bored? Hit <strong>Zap</strong>. Want something else? Change the channel.
           </p>
-          <div className="surf-hero__actions">
-            {last && (
-              <button type="button" className="surf-btn surf-btn--primary" onClick={() => tuneIn(last.slug)} disabled={!!tuning}>
-                <MdPlayArrow aria-hidden="true" /> Back to CH {channelNumber(last)} {last.emoji} {channelTitle(last)}
-              </button>
-            )}
-            <button type="button" className={`surf-btn${last ? '' : ' surf-btn--primary'}`} onClick={surprise} disabled={!!tuning}>
-              <MdCasino aria-hidden="true" /> Surprise me
+        </div>
+        <div className="surf-hero__actions">
+          {last && (
+            <button type="button" className="surf-btn surf-btn--primary" onClick={() => tuneIn(last.slug)} disabled={!!tuning}>
+              <MdPlayArrow aria-hidden="true" /> Back to CH {channelNumber(last)} {last.emoji} {channelTitle(last)}
             </button>
-          </div>
+          )}
+          <button type="button" className={`surf-btn${last ? '' : ' surf-btn--primary'}`} onClick={surprise} disabled={!!tuning}>
+            <MdCasino aria-hidden="true" /> Surprise me
+          </button>
         </div>
       </header>
 

@@ -1,4 +1,4 @@
-// Channel Surf: watching 3Speak like TV. A "channel" is one v2 topic; flipping
+// Channel Surfing: watching 3Speak like TV. A "channel" is one v2 topic; flipping
 // plays the next video the tag feed ranks for it.
 //
 // The ranking is the checker's, not ours: /videos/tag/:tag already runs the shared
