@@ -68,7 +68,7 @@ export default function UploadLinks({ linkClass, iconClass = "icon", onClick }) 
   return (
     <>
       <div className="share-menu-heading">Upload</div>
-      <Link to="/studio" className={linkClass} title="Regular Video" onClick={(e) => gatedGo(e, () => navigate('/studio'))}>
+      <Link to="/embed-studio" className={linkClass} title="Regular Video" onClick={(e) => gatedGo(e, () => navigate('/embed-studio'))}>
         <IoCloudUploadSharp className={iconClass} /> <span>Regular Video</span>
       </Link>
       <Link to="/embed-studio?from=shorts" className={linkClass} title="Vertical Short" onClick={(e) => gatedGo(e, () => navigate('/embed-studio?from=shorts'))}>

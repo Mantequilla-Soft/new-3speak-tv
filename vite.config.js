@@ -73,7 +73,7 @@ export default defineConfig({
           {
             name: "Upload Video",
             short_name: "Upload",
-            url: "/studio",
+            url: "/embed-studio",
             icons: [{ src: "/pwa-192x192.png", sizes: "192x192" }],
           },
           {
