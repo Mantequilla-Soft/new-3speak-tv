@@ -312,6 +312,25 @@ const VideoShort = () => {
   const [videos, setVideos] = useState([]);
   const videosRef = useRef([]);
   videosRef.current = videos;
+
+  // "Hide AI-generated" switched on while shorts are loaded. Page loads filter on
+  // their own; this catches what is already in the list. Only shorts AHEAD of the
+  // current one go: the list is index-addressed, so the short on screen and every
+  // one before it must keep their positions.
+  const hideAi = useAppStore((s) => s.hideAi);
+  useEffect(() => {
+    if (!hideAi) return;
+    let cancelled = false;
+    (async () => {
+      const ahead = videosRef.current.slice(currentIndexRef.current + 1);
+      if (!ahead.length) return;
+      const kept = new Set((await dropAiShorts(ahead, { allowEmpty: true, hide: true })).map((v) => v.id));
+      const drop = new Set(ahead.filter((v) => !kept.has(v.id)).map((v) => v.id));
+      if (cancelled || !drop.size) return;
+      setVideos((prev) => prev.filter((v, i) => i <= currentIndexRef.current || !drop.has(v.id)));
+    })();
+    return () => { cancelled = true; };
+  }, [hideAi]);
   // Desktop opens the comments side-panel by default; mobile keeps it closed
   // (it's a full-screen bottom sheet there).
   const [showComments, setShowComments] = useState(() => typeof window !== 'undefined' && window.innerWidth > 768);
@@ -1605,7 +1624,7 @@ const VideoShort = () => {
           setLoading(true);
           const data = await fetchUserShortsWithDetails(feedUser, 1, 20);
           if (data.success) {
-            const formattedVideos = formatShorts(data.shorts);
+            const formattedVideos = await dropAiShorts(formatShorts(data.shorts), { hide: useAppStore.getState().hideAi });
             await applySharedVideoLogic(formattedVideos, data);
           }
         } else {

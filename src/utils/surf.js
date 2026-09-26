@@ -77,14 +77,17 @@ export const saveLastChannel = (slug) => {
 const PAGE_SIZE = 20;
 const MAX_PAGES = 5;
 const PAGE_TTL_MS = 5 * 60 * 1000;
-const pageCache = new Map(); // `${slug}|${page}` → { at, promise }
+const pageCache = new Map(); // `${slug}|${page}|${feedParams()}` → { at, promise }
 
 function fetchTagPage(slug, page) {
-  const key = `${slug}|${page}`;
+  // feedParams() is personal (user, interests, hide-watched, chrono), so it is part
+  // of the key: switching account or a feed setting must not reuse another answer.
+  const params = feedParams();
+  const key = `${slug}|${page}|${params}`;
   const hit = pageCache.get(key);
   if (hit && Date.now() - hit.at < PAGE_TTL_MS) return hit.promise;
   const promise = axios
-    .get(`${TAG_FEED_URL}/videos/tag/${encodeURIComponent(slug)}?page=${page}&limit=${PAGE_SIZE}&type=videos${feedParams()}`)
+    .get(`${TAG_FEED_URL}/videos/tag/${encodeURIComponent(slug)}?page=${page}&limit=${PAGE_SIZE}&type=videos${params}`)
     .then((res) => ({
       videos: (res.data?.videos || []).filter((v) => videoKey(v)),
       total: res.data?.total || 0,
