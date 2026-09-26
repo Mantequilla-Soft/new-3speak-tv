@@ -24,7 +24,7 @@ import { SnapCard } from "../components/Userprofilepage/CommunitySnaps";
 import { fetchPlaylistsFeed } from "../lib/playlistsFeed";
 import PlaylistFeedCard from "../components/Cards/PlaylistFeedCard";
 import { SHORTS_API_URL } from "../utils/config";
-import { Rocket, Compass, Users, Tags, Clock, GripVertical } from "lucide-react";
+import { Rocket, Compass, Users, Tags, Clock, GripVertical, Tv } from "lucide-react";
 
 // Extra feed params for the logged-in user: interests (checker weights the feed
 // toward them), currentuser (needed for BOTH the always-on dismissals and
@@ -826,6 +826,12 @@ const HomeGrouped = () => {
             <span className="home-tab-label">{s.title}</span>
           </button>
         ))}
+        {/* Channel Surf lives here rather than in the top menu. A link, not a
+            tab: it leaves the page, and the reorder drag only hit-tests
+            `.home-tab`, so it can never be dragged in among the feeds. */}
+        <Link to="/surf" className="home-tab-surf" title="Channel Surf: pick a topic and watch it like TV">
+          <Tv size={16} aria-hidden="true" /> <span>Surf</span>
+        </Link>
       </div>
 
       <div className="home-tab-panel" role="tabpanel" ref={panelRef}>

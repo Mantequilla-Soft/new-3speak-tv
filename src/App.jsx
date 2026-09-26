@@ -103,6 +103,7 @@ const OwnProfileRoute = lazyRoute(() => import("./components/Incubation/OwnProfi
 const Short = lazyRoute(() => import("./page/Short"), "./page/Short");
 const ShortsStoryFeed = lazyRoute(() => import("./page/ShortsStoryFeed"), "./page/ShortsStoryFeed");
 const Spotlight = lazyRoute(() => import("./page/Spotlight"), "./page/Spotlight");
+const Surf = lazyRoute(() => import("./page/Surf"), "./page/Surf");
 const TagFeed = lazyRoute(() => import("./page/TagFeed"), "./page/TagFeed");
 const Trend = lazyRoute(() => import("./page/Trend"), "./page/Trend");
 const UploadVideo = lazyRoute(() => import("./page/UploadVideo"), "./page/UploadVideo");
@@ -703,6 +704,7 @@ function App() {
               <Route path="/badge/:account" element={<BadgePage />} />
               <Route path="/t/:tag" element={<TagFeed />} />
               <Route path="/leaderboard" element={<Leaderboard />} />
+              <Route path="/surf" element={<Surf />} />
               <Route path="/advertise" element={<Advertise openLoginModal={openLoginModal} />} />
               {/* Invite links (Butter Auth referral fast-track): the landing page a
                   referrer's link opens, and the referrer's own list of links. */}

@@ -94,6 +94,7 @@ import hiveApi, { SHORTS_PAGE_SIZE, consumePreloadedShorts, hasShortsPreloaded, 
 import { useAppStore } from '../lib/store';
 import { recordWatch } from '../utils/watchHistory';
 import { dropWatchedFromFeeds, rememberWatchedShort, dropWatchedShorts } from '../utils/feedWatched';
+import { dropAiShorts } from '../utils/aiFlags';
 import { recordReshare, getResharesForVideo, deleteReshare } from '../utils/reshares';
 import axios from 'axios';
 import { Helmet } from 'react-helmet-async';
@@ -1620,7 +1621,7 @@ const VideoShort = () => {
 
             const preloaded = await consumePreloadedShorts();
             if (preloaded?.success) {
-              const formattedVideos = await withWarmupShorts(dropWatchedShorts(formatShorts(preloaded.shorts)));
+              const formattedVideos = await withWarmupShorts(await dropAiShorts(dropWatchedShorts(formatShorts(preloaded.shorts)), { hide: useAppStore.getState().hideAi }));
               await applySharedVideoLogic(formattedVideos, preloaded);
               setLoading(false);
               return;
@@ -1642,7 +1643,7 @@ const VideoShort = () => {
             // Global feed only. A user-specific feed (`feedUser`, above) is
             // "this person's shorts", so mixing somebody else's into it would
             // be answering a different question than the one asked.
-            const formattedVideos = await withWarmupShorts(dropWatchedShorts(formatShorts(data.shorts)));
+            const formattedVideos = await withWarmupShorts(await dropAiShorts(dropWatchedShorts(formatShorts(data.shorts)), { hide: useAppStore.getState().hideAi }));
             await applySharedVideoLogic(formattedVideos, data);
           }
         }
@@ -1890,6 +1891,10 @@ const VideoShort = () => {
           _enriched: short._enriched != null ? short._enriched : true,
         }));
 
+        // "Hide AI-generated": resolved before the append, because a short cannot
+        // disappear from an index-addressed list once it is in.
+        const aiFiltered = await dropAiShorts(formattedVideos, { allowEmpty: true, hide: useAppStore.getState().hideAi });
+
         // Dedup on append: if the server's list ever shifts under us, a page can
         // overlap what we already hold. Appending blindly would show the same short
         // twice and throw the swipe index off.
@@ -1899,7 +1904,7 @@ const VideoShort = () => {
           // the checker's frozen list still carries them on every page, not just the
           // first. `allowEmpty` because an empty append simply means the next page
           // gets fetched, which is not the same problem as an empty feed.
-          const fresh = dropWatchedShorts(formattedVideos, { allowEmpty: true })
+          const fresh = dropWatchedShorts(aiFiltered, { allowEmpty: true })
             .filter(v => !seen.has(v.id));
           return fresh.length ? [...prev, ...fresh] : prev;
         });

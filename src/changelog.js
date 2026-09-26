@@ -7,6 +7,20 @@
 // 1.0.0 — that way they see all of these when develop is pushed to production.
 export const CHANGELOG = [
   {
+    version: '1.79.23',
+    date: '2026-09-26',
+    summary:
+      'New: Channel Surf. Tap Surf next to the home feed tabs, pick a topic and watch it like TV. '
+      + 'Hit Flip for the next video, or try the arrow keys for navigation.',
+  },
+  {
+    version: '1.79.22',
+    date: '2026-09-26',
+    summary:
+      'Videos and shorts marked as AI-generated now show a small "AI" label on their thumbnail in every feed. '
+      + "If you'd rather not see them, turn on “Hide AI-generated videos” in Settings → Content → Feed.",
+  },
+  {
     version: '1.79.21',
     date: '2026-09-26',
     summary:
