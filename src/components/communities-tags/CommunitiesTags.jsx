@@ -20,7 +20,7 @@ function CommunitiesTags() {
     if(!authenticated){
       toast.error("Login to upload video")
     }else{
-      navigate(`/studio`)
+      navigate(`/embed-studio`)
     }
   }
   return (

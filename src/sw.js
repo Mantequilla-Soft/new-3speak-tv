@@ -128,7 +128,7 @@ const shareTargetRoute = new Route(
       }));
     }
 
-    return Response.redirect('/studio?shared=true', 303);
+    return Response.redirect('/embed-studio?shared=true', 303);
   },
   'POST'
 );
