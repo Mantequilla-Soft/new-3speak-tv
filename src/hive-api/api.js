@@ -121,7 +121,7 @@ export const getRelationshipBetweenAccounts = async (follower , following) => {
   // Hive validates that an authority's account_auths are sorted by name and
   // rejects the operation otherwise, which is easy to miss because it only
   // fails at broadcast time.
-  const sortAuths = (auths) =>
+  export const sortAuths = (auths) =>
     [...auths].sort((a, b) => (a[0] < b[0] ? -1 : a[0] > b[0] ? 1 : 0));
   export const createHiveCommunityKY = async (username, communityName, keys, activeKey) => {
     return new Promise(async (resolve, reject) => {

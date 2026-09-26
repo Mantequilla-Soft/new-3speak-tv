@@ -7,6 +7,7 @@
 import { Client } from '@hiveio/dhive';
 import { getHiveUrl } from './hiveNode';
 import { broadcastWithAioha, KeyTypes, getCurrentProvider, Providers } from '../hive-api/aioha';
+import { sortAuths } from '../hive-api/api';
 import { encodeOps } from '@aioha/aioha/build/lib/hive-uri.js';
 
 // HiveSigner can't broadcast active-key ops with its access token, so we open the
@@ -80,9 +81,12 @@ export async function addThreespeakToPostingAuth(username, opts = {}) {
     return { alreadyAuthorized: true };
   }
 
+  // Must stay sorted: the node re-sorts account_auths before computing the signing
+  // digest, so appending 'threespeak' after e.g. 'travelfeed.app' makes the
+  // signature match no key and fails as "Missing active authority".
   const newPosting = {
     weight_threshold: posting.weight_threshold,
-    account_auths: [...posting.account_auths, [THREESPEAK_AUTHORITY, weight]],
+    account_auths: sortAuths([...posting.account_auths, [THREESPEAK_AUTHORITY, weight]]),
     key_auths: posting.key_auths || [],
   };
 
