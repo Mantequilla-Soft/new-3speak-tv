@@ -530,6 +530,34 @@
   }
 }
 
+// Channel Surf entry, pinned to the right end of the bar. Neutral outline pill.
+.home-tabs .home-tab-surf {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  flex: 0 0 auto;
+  align-self: center;
+  margin-left: auto;
+  padding: 5px 14px;
+  border: 1px solid var(--border-color, #3d3d3d);
+  border-radius: 999px;
+  color: var(--text-primary, #f1f1f1);
+  font-size: 13.5px;
+  font-weight: 700;
+  white-space: nowrap;
+  text-decoration: none;
+  transition: background 0.12s ease;
+
+  &:hover { background: var(--bg-hover, rgba(150, 150, 150, 0.12)); }
+
+  @include respond(phone) {
+    gap: 4px;
+    margin-left: 6px;
+    padding: 4px 8px;
+    font-size: 13px;
+  }
+}
+
 // Sticky tab bar at the top of the feed.
 .home-tabs--bar {
   position: sticky;

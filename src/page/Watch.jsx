@@ -35,6 +35,8 @@ import BannerClick from '../components/ads/BannerClick';
 
 import { useGatedPlayback } from '../hooks/useGatedPlayback';
 import GuestListEditor from '../components/gated/GuestListEditor';
+import SurfBar from '../components/SurfBar/SurfBar';
+import { SURF_PARAM, getChannel } from '../utils/surf';
 import { ThreeSpeakApi } from '@mantequilla-soft/3speak-player';
 import { resolveVideoMeta } from '../lib/videoMetaCache';
 import { fixVideoThumbnail } from '../utils/fixThumbnails';
@@ -140,6 +142,11 @@ function Watch({ v2 = false }) {
   const playlistId = searchParams.get('playlist');
   const posParam = searchParams.get('pos');
   const [author, permlink] = (v ?? 'unknown/unknown').split('/');
+  // Channel Surf: only links built by /surf carry this, so the surf bar and the
+  // flip-on-end below never touch a watch page opened any other way.
+  const surfChannel = getChannel(searchParams.get(SURF_PARAM))?.slug || null;
+  // Set by SurfBar while it is mounted; the `ended` handler calls it.
+  const surfFlipRef = useRef(null);
 
   // Scheduled mode: the post isn't on Hive yet, so we load it from the checker
   // and play it via its embed asset instead of the Hive/GraphQL path. Set by the
@@ -1067,6 +1074,9 @@ function Watch({ v2 = false }) {
       }
       if (playlistDataRef.current && showPlaylistRef.current) {
         navigateToNextVideoRef.current();
+      } else if (surfFlipRef.current) {
+        // Surfing: stay on the channel rather than following the suggestions.
+        surfFlipRef.current();
       } else if (autoplayNextRef.current && suggestedVideosRef.current?.length > 0) {
         // Find the first suggested video not already watched (backend) or played (session)
         const next = suggestedVideosRef.current.find(v => {
@@ -2064,6 +2074,9 @@ function Watch({ v2 = false }) {
       <PlayVideo
         belowPlayerSlot={(
           <>
+        {surfChannel && (
+          <SurfBar channel={surfChannel} author={author} permlink={permlink} flipRef={surfFlipRef} />
+        )}
         {/* 🔐 The creator's own guest list, shown only to them. Server re-checks
             ownership on every call, so rendering this is a convenience, not a
             permission. Keyed on the EMBED asset id, which is what the gate knows
