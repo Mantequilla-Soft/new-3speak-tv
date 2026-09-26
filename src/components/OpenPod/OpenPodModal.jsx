@@ -174,7 +174,7 @@ export default function OpenPodModal({ isOpen, onClose, roomName, sessionToken, 
         },
       }));
       onClose();
-      window.location.href = '/studio?shared=true';
+      window.location.href = '/embed-studio?shared=true';
     } catch (err) {
       console.error('OpenPod video handoff failed:', err);
     }

@@ -146,6 +146,26 @@ function EmbedStudioPage() {
       return;
     }
 
+    // OS share sheet (sw.js share target) and the OpenPods recording handoff both
+    // park the file in this cache and land here with ?shared=true.
+    if (new URLSearchParams(window.location.search).get('shared') === 'true' && typeof caches !== 'undefined') {
+      sharedFileHandled.current = true; // before the await: a second mount must not take it too
+      (async () => {
+        try {
+          const cache = await caches.open('share-target-cache');
+          const res = await cache.match('/shared-video');
+          if (!res) return;
+          const blob = await res.blob();
+          await cache.delete('/shared-video');
+          const name = res.headers.get('X-File-Name') || 'shared-video.mp4';
+          await processFile(new File([blob], name, { type: blob.type || res.headers.get('Content-Type') || 'video/mp4' }));
+        } catch (err) {
+          console.error('Shared video pickup failed:', err);
+        }
+      })();
+      return;
+    }
+
     // Handle PWA file_handlers (editor "Open with" action)
     if ('launchQueue' in window) {
       window.launchQueue.setConsumer(async (launchParams) => {

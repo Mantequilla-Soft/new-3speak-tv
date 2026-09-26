@@ -7,6 +7,32 @@
 // 1.0.0 — that way they see all of these when develop is pushed to production.
 export const CHANGELOG = [
   {
+    version: '1.79.24',
+    date: '2026-09-26',
+    summary: 'Channel Surf now plays on by itself, video after video. Videos shared to 3Speak from your phone open straight in the uploader.',
+  },
+  {
+    version: '1.79.23',
+    date: '2026-09-26',
+    summary:
+      'New: Channel Surf. Tap Surf next to the home feed tabs, pick a topic and watch it like TV. '
+      + 'Hit Flip for the next video, or try the arrow keys for navigation.',
+  },
+  {
+    version: '1.79.22',
+    date: '2026-09-26',
+    summary:
+      'Videos and shorts marked as AI-generated now show a small "AI" label on their thumbnail in every feed. '
+      + "If you'd rather not see them, turn on “Hide AI-generated videos” in Settings → Content → Feed.",
+  },
+  {
+    version: '1.79.21',
+    date: '2026-09-26',
+    summary:
+      'Giving 3Speak permission to post for you (used for scheduled posts) now works smoothly for every account, '
+      + 'including accounts that already use several other Hive apps.',
+  },
+  {
     version: '1.79.20',
     date: '2026-09-25',
     summary: 'Reactions to snaps now start their chain at the snap itself, showing what it says and linking straight to it.',

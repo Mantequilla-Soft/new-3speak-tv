@@ -23,6 +23,9 @@ import { fixVideoThumbnail } from "../../utils/fixThumbnails";
 import AuthorBadge from "../AuthorBadge/AuthorBadge";
 import ProfileModal from "../modal/ProfileModal";
 import useHoverPreview from "../../hooks/useHoverPreview";
+import { AiPill } from "../AiBadge/AiBadge";
+import { aiKey, isAiFlagged, useAiFlags } from "../../utils/aiFlags";
+import { useAppStore } from "../../lib/store";
 
 
 /**
@@ -77,6 +80,17 @@ function shortsHint(video) {
 // every existing caller is unaffected.
 const isShortCard = (video, shortsGrid) => !!(shortsGrid || video?._short);
 
+// AI flag lookup keys for a card. The card is addressed by its hive author, but a
+// short can carry the ASSET permlink with an owner who is not the hive author, so
+// the owner pair is asked too. Live tiles are rooms, not videos.
+const cardAuthorOf = (v) => v.author?.username || v.author || v.owner;
+const aiKeysFor = (v) => (v._liveStream ? [] : [
+  aiKey(cardAuthorOf(v), v.permlink),
+  v.owner && v.owner !== cardAuthorOf(v) ? aiKey(v.owner, v.permlink) : null,
+].filter(Boolean));
+const isAiCard = (v) => !v._liveStream
+  && (isAiFlagged(cardAuthorOf(v), v.permlink) || (!!v.owner && isAiFlagged(v.owner, v.permlink)));
+
 function Card3({ videos = [], loading = false, error = null, interleaveEvery = 0, renderInterleave = null, communityEvery = 0, renderCommunity = null, creatorsEvery = 0, renderCreators = null, getContentForVideo = null, isWatched = null, getViewCount = null, linkPrefix = '/watch', linkQuery = '', shortTimeAgo = true, shortsGrid = false, priority = false, hideWatched = false, watchedVersion = 0 }) {
   const navigate = useNavigate();
   const [modalUser, setModalUser] = useState(null);
@@ -130,6 +144,15 @@ function Card3({ videos = [], loading = false, error = null, interleaveEvery = 0
   // feed fetch. Empty on the normal path, so this costs nothing.
   const deadVideos = useDeadVideos();
 
+  // AI-generated flags: one batched lookup for the whole grid. Drives the AI pill
+  // on each card and, with "Hide AI-generated" on, drops flagged cards. Like the
+  // dead-video filter above it is client-side, so it covers every feed that
+  // renders through Card3 without each checker route having to know about it. A
+  // flagged card can show for a moment before its answer lands and it goes.
+  const hideAi = useAppStore((s) => s.hideAi);
+  const aiKeys = useMemo(() => videos.flatMap(aiKeysFor), [videos]);
+  const aiVersion = useAiFlags(aiKeys);
+
   // Memoize video processing to prevent re-computing thumbnails on every render
   const processedVideos = useMemo(() => {
     const ownerOf = (v) => String(v.author?.username || v.author || v.owner || "").toLowerCase();
@@ -137,6 +160,7 @@ function Card3({ videos = [], loading = false, error = null, interleaveEvery = 0
       .filter((v) => !dismissed.creators.has(ownerOf(v)))
       .filter((v) => !dismissed.videos.has(`${ownerOf(v)}/${v.permlink}`))
       .filter((v) => !deadVideos.has(`${ownerOf(v)}/${v.permlink}`))
+      .filter((v) => !(hideAi && isAiCard(v)))
       // Already-watched: same reason as `dismissed` above — the checker only drops
       // watched videos from the NEXT feed fetch, so a just-watched one lingers in the
       // cached feed until then. When the caller opts in (feeds with "Hide watched"
@@ -159,7 +183,9 @@ function Card3({ videos = [], loading = false, error = null, interleaveEvery = 0
           ? video.thumbnail
           : fixVideoThumbnail(video, isShortCard(video, shortsGrid))
       }));
-  }, [videos, shortsGrid, dismissed, deadVideos, hideWatched, isWatched, watchedVersion]);
+    // aiVersion: isAiFlagged reads a module cache, so the counter is what makes
+    // this recompute when answers arrive.
+  }, [videos, shortsGrid, dismissed, deadVideos, hideWatched, isWatched, watchedVersion, hideAi, aiVersion]);
 
   if (loading && videos.length === 0) return <div>Loading...</div>;
   if (error) return <div>Error: {error}</div>;
@@ -222,6 +248,9 @@ function Card3({ videos = [], loading = false, error = null, interleaveEvery = 0
                   <span aria-hidden="true">🔒</span> PRO
                 </div>
               )}
+
+              {/* AI-generated → small pill, bottom-left of the thumbnail. */}
+              {isAiCard(video) && <AiPill className="ai-badge--on-thumb" />}
 
               {/* Live tile → badge (top-right). A group-chat (conference) room
                   reads "LIVE CHAT"; a standalone stream reads "LIVE". */}

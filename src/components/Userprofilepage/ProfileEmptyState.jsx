@@ -25,7 +25,7 @@ const KINDS = {
     title: 'No videos yet',
     text: 'Upload your first video and it lands right here.',
     cta: 'Upload a video',
-    go: (navigate) => navigate('/studio'),
+    go: (navigate) => navigate('/embed-studio'),
     visitor: (u) => `@${u} hasn't published any videos yet.`,
   },
   shorts: {

@@ -1,0 +1,388 @@
+@use "../../mixins.scss" as *;
+
+// Neutral surfaces from the theme; red only as text or border, and only on what
+// matters: the Flip button, the channel number, the channel you are on.
+
+.surf-bar {
+  display: flex;
+  align-items: stretch;
+  gap: 12px;
+  margin: 12px 0 4px;
+  padding: 10px;
+  border-radius: 12px;
+  background: var(--card-bg);
+  border: 1px solid var(--border-light);
+
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+  }
+
+  button { font: inherit; cursor: pointer; }
+  button:disabled { cursor: progress; }
+
+  @include respond(phone) {
+    flex-direction: column;
+    gap: 8px;
+    margin: 8px 0 4px;
+  }
+}
+
+.surf-bar__tuner {
+  display: flex;
+  align-items: stretch;
+  gap: 8px;
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.surf-bar__display {
+  position: relative;
+  overflow: hidden;
+  flex: 1 1 auto;
+  min-width: 0;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  grid-template-rows: auto auto;
+  column-gap: 12px;
+  align-items: center;
+  padding: 8px 14px;
+  text-align: left;
+  border: 1px solid var(--border-light);
+  border-radius: 10px;
+  background: var(--bg-tertiary);
+  color: var(--text-primary);
+  transition: border-color 0.15s;
+
+  &:hover { border-color: var(--border-color); }
+}
+
+.surf-bar__ch {
+  grid-row: 1 / span 2;
+  font-family: "Courier New", ui-monospace, monospace;
+  font-weight: 700;
+  font-size: 22px;
+  letter-spacing: 1px;
+  color: var(--accent-primary);
+}
+
+.surf-bar__name {
+  font-weight: 700;
+  font-size: 15px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.surf-bar__live {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  color: var(--text-muted);
+
+  i {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    border: 2px solid var(--accent-primary);
+    animation: surf-blink 1.6s ease-in-out infinite;
+  }
+}
+
+// TV static, in the theme's own grey: a short burst over the display on every
+// flip, and a loop in the thumbnail slot while the next video is being found.
+.surf-bar__static {
+  position: absolute;
+  inset: -50%;
+  z-index: 1;
+  pointer-events: none;
+  opacity: 0;
+  background:
+    repeating-radial-gradient(circle at 17% 32%, var(--text-muted) 0 1px, transparent 1px 3px),
+    repeating-radial-gradient(circle at 73% 61%, var(--text-secondary) 0 1px, transparent 1px 2px),
+    var(--bg-tertiary);
+  animation: surf-static-burst 0.55s steps(6) 1;
+
+  &--loop {
+    opacity: 0.6;
+    animation: surf-static-jitter 0.3s steps(3) infinite;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    animation: none;
+  }
+}
+
+.surf-bar__rocker {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  width: 44px;
+  flex-shrink: 0;
+  border-radius: 22px;
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border-light);
+  overflow: hidden;
+
+  button {
+    flex: 1;
+    width: 100%;
+    display: grid;
+    place-items: center;
+    border: 0;
+    background: transparent;
+    color: var(--text-primary);
+    font-size: 22px;
+    transition: background 0.15s, transform 0.1s;
+
+    &:hover:not(:disabled) { background: var(--bg-hover); }
+    &:active:not(:disabled) { transform: scale(0.9); }
+  }
+}
+
+.surf-bar__rocker-label {
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 1px;
+  color: var(--text-muted);
+}
+
+.surf-bar__off {
+  flex-shrink: 0;
+  align-self: flex-start;
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 1px solid var(--border-light);
+  background: transparent;
+  color: var(--text-secondary);
+  font-size: 18px;
+
+  &:hover { color: var(--text-primary); background: var(--bg-hover); }
+}
+
+.surf-bar__flip {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex: 0 1 380px;
+  min-width: 0;
+  padding: 8px 16px 8px 8px;
+  border: 2px solid var(--accent-primary);
+  border-radius: 10px;
+  color: var(--accent-primary);
+  background: transparent;
+  text-align: left;
+  transition: background 0.15s, transform 0.12s;
+
+  &:hover:not(:disabled) {
+    background: var(--bg-hover);
+
+    .surf-bar__flip-icon { animation: surf-nudge 0.5s ease-in-out; }
+  }
+  &:active:not(:disabled) { transform: scale(0.97); }
+  &:disabled { opacity: 0.7; }
+
+  @include respond(phone) {
+    flex: 1 1 auto;
+    width: 100%;
+  }
+}
+
+.surf-bar__flip-thumb {
+  position: relative;
+  flex-shrink: 0;
+  width: 88px;
+  aspect-ratio: 16 / 9;
+  border-radius: 6px;
+  overflow: hidden;
+  background: var(--bg-tertiary);
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+}
+
+.surf-bar__flip-text {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  flex: 1;
+}
+
+.surf-bar__flip-label {
+  font-size: 20px;
+  font-weight: 800;
+  line-height: 1.1;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
+.surf-bar__flip-next {
+  font-size: 12px;
+  color: var(--text-secondary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.surf-bar__flip-icon {
+  flex-shrink: 0;
+  font-size: 32px;
+}
+
+.surf-bar.is-tuning .surf-bar__ch { animation: surf-blink 0.4s steps(2) infinite; }
+
+// ── Channel guide ────────────────────────────────────────────────────────────
+.surf-guide-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 3000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  background: var(--overlay-bg, rgba(0, 0, 0, 0.6));
+
+  @include respond(phone) {
+    align-items: flex-end;
+    padding: 0;
+  }
+}
+
+.surf-guide {
+  width: min(720px, 100%);
+  max-height: 80vh;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: 16px;
+  border-radius: 16px;
+  background: var(--bg-secondary);
+  color: var(--text-primary);
+  box-shadow: var(--shadow-lg);
+
+  @include respond(phone) {
+    max-width: 100%;
+    max-height: 88vh;
+    border-radius: 16px 16px 0 0;
+    padding-bottom: calc(16px + env(safe-area-inset-bottom, 0px));
+    animation: surf-sheet-up 0.22s ease-out;
+  }
+}
+
+.surf-guide__head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+  font-size: 16px;
+
+  button {
+    display: grid;
+    place-items: center;
+    width: 32px;
+    height: 32px;
+    border: 0;
+    border-radius: 50%;
+    background: transparent;
+    color: var(--text-secondary);
+    font-size: 20px;
+    cursor: pointer;
+
+    &:hover { background: var(--bg-hover); color: var(--text-primary); }
+  }
+}
+
+.surf-guide__group + .surf-guide__group {
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px solid var(--border-light);
+}
+
+.surf-guide__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 8px;
+}
+
+.surf-guide__ch {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px;
+  border-radius: 10px;
+  border: 1px solid var(--border-light);
+  background: var(--bg-tertiary);
+  color: var(--text-primary);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+  transition: border-color 0.15s;
+
+  &:hover { border-color: var(--border-color); }
+
+  &--category { font-weight: 700; }
+
+  &.is-current {
+    border-color: var(--accent-primary);
+
+    .surf-guide__num,
+    .surf-guide__label { color: var(--accent-primary); }
+  }
+}
+
+.surf-guide__num {
+  font-family: "Courier New", ui-monospace, monospace;
+  font-weight: 700;
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+.surf-guide__emoji { font-size: 18px; }
+
+.surf-guide__label {
+  font-size: 13px;
+  font-weight: inherit;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+@keyframes surf-blink {
+  50% { opacity: 0.35; }
+}
+
+@keyframes surf-static-burst {
+  0% { opacity: 0.9; transform: translate(0, 0); }
+  33% { transform: translate(-6%, 4%); }
+  66% { opacity: 0.5; transform: translate(5%, -3%); }
+  100% { opacity: 0; transform: translate(0, 0); }
+}
+
+@keyframes surf-static-jitter {
+  0% { transform: translate(0, 0); }
+  33% { transform: translate(-7%, 5%); }
+  66% { transform: translate(6%, -4%); }
+}
+
+@keyframes surf-nudge {
+  50% { transform: translateX(4px); }
+}
+
+@keyframes surf-sheet-up {
+  from { transform: translateY(100%); }
+  to { transform: translateY(0); }
+}
