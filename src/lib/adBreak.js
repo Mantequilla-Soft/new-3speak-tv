@@ -187,6 +187,8 @@ export function createAdBreak() {
   // sid — both placements ride one session — but it is read from the banner's own
   // manifest URL because that is the only one present in that case.
   let bannerSid = null;
+  // Whether the banner's adKey has gone into the seen list. Set on first sight.
+  let bannerRemembered = false;
 
   return {
     get active() { return !!session; },
@@ -270,6 +272,7 @@ export function createAdBreak() {
       banner = null;
       bannerWindow = null;
       bannerSid = null;
+      bannerRemembered = false;
       premium = false;
       if (!owner || !permlink || !manifestUrl) return null;
       try {
@@ -295,9 +298,12 @@ export function createAdBreak() {
         if (!res.ok) return null;
         const data = await res.json();
         premium = data?.premium === true;
-        // Remembered as soon as the server hands one over, not when it finishes
-        // playing: a viewer who skips away mid-spot has still been shown that ad.
-        rememberAdSeen(data?.ad?.adKey, data?.banner?.adKey);
+        /* 🚨 NOT remembered here. This is only the server's CHOICE: the viewer may
+         * leave before a mid-roll or the banner ever comes round, and remembering it
+         * now burned the ad for the whole cap window without anyone seeing it.
+         * noteTime() remembers each one the first time it is actually on screen.
+         * Still remembered on entry, not on completion: a viewer who skips away
+         * mid-spot has been shown that ad. */
 
         // Kept whether or not there is also a spot: a playback can carry a banner
         // alone, and then the banner's manifest is the one to load.
@@ -308,6 +314,7 @@ export function createAdBreak() {
             durationSeconds: data.banner.durationSeconds,
             advertiser: data.banner.advertiser || null,
             brand: data.banner.brand || null,
+            adKey: data.banner.adKey || null,
             // The creative to DRAW. Null would mean the server burned it instead,
             // which is still a shape this code understands.
             overlay: data.banner.overlay || null,
@@ -334,6 +341,7 @@ export function createAdBreak() {
           // Who the ad is from, for the overlay. Absent fields are fine: the
           // overlay renders what is there and omits what is not.
           brand: data.ad.brand || null,
+          adKey: data.ad.adKey || null,
         };
         return session;
       } catch {
@@ -597,8 +605,14 @@ export function createAdBreak() {
      * seeing a frame of it. Both, in order, is what "watched" means here.
      */
     noteTime(playerTime) {
+      // Ahead of the spot's early return: a playback can carry a banner alone.
+      if (!bannerRemembered && banner?.adKey && this.isBannerVisible(playerTime)) {
+        bannerRemembered = true;
+        rememberAdSeen(banner.adKey);
+      }
       if (!window_ || !Number.isFinite(playerTime)) return;
       if (this.spansSpot(playerTime)) {
+        if (!spotEntered && session?.adKey) rememberAdSeen(session.adKey);
         spotEntered = true;
         if (lastInsideAt != null) {
           const step = playerTime - lastInsideAt;
@@ -719,6 +733,6 @@ export function createAdBreak() {
       return Math.max(0, mediaDuration - window_.duration);
     },
 
-    reset() { session = null; window_ = null; skipAfter = null; spotRetired = false; spotEntered = false; spotConsumed = false; countdownSeen = false; adWatched = 0; lastInsideAt = null; watchBeatAt = 0; banner = null; bannerWindow = null; bannerSid = null; premium = false; },
+    reset() { session = null; window_ = null; skipAfter = null; spotRetired = false; spotEntered = false; spotConsumed = false; countdownSeen = false; adWatched = 0; lastInsideAt = null; watchBeatAt = 0; banner = null; bannerWindow = null; bannerSid = null; bannerRemembered = false; premium = false; },
   };
 }
