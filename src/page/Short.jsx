@@ -124,6 +124,7 @@ import PromoteModal from '../components/Promote/PromoteModal';
 import { notifyMediaPlay, onMediaPlay } from '../utils/mediaCoordinator';
 import HiveAvatar from '../components/HiveAvatar/HiveAvatar';
 
+import { soundLabel } from '../utils/soundCredits';
 // Every toast from this module is headed "Shorts"; the message becomes the
 // line under it. See utils/toast.js.
 const toast = toastIn('Shorts');
@@ -1412,7 +1413,7 @@ const VideoShort = () => {
         },
         caption,
         tags: meta.tags || [],
-        audio: `${handle} - Original Audio`,
+        audio: soundLabel(meta?.video?.sound, handle),
         albumArt: avatar,
         // Zeroes, not fabrications: an off-chain short has no payout and its
         // likes live in a different store. Better an honest nought than a
@@ -1485,7 +1486,7 @@ const VideoShort = () => {
       },
       caption: short.caption || short.title || '',
       tags: short.tags || [],
-      audio: `${short.user.username} - Original Audio`,
+      audio: soundLabel(short.sound, short.user.username),
       albumArt: short.user.avatar,
       stats: {
         likes: short.stats.likes,
@@ -1576,7 +1577,7 @@ const VideoShort = () => {
               embedUrl: sharedVideoData.embedUrl,
               user: sharedVideoData.user,
               caption: sharedVideoData.caption || sharedVideoData.title || '',
-              audio: `${sharedVideoData.user.username} - Original Audio`,
+              audio: soundLabel(sharedVideoData.sound, sharedVideoData.user.username),
               albumArt: sharedVideoData.user.avatar,
               stats: sharedVideoData.stats,
               isLiked: sharedVideoData.isLiked || false,
@@ -1733,7 +1734,7 @@ const VideoShort = () => {
           isSubscribed: false,
         },
         caption: chainData.title || '',
-        audio: `@${chainData.author} - Original Audio`,
+        audio: soundLabel(chainData.sound, `@${chainData.author}`),
         albumArt: `https://images.hive.blog/u/${chainData.author}/avatar/small`,
         stats: { likes: 0, dislikes: 0, comments: 0, shares: 0, remixes: 0, views: 0, payout: '0.00' },
         isLiked: false,
@@ -1775,7 +1776,7 @@ const VideoShort = () => {
               hivePermlink: shortData.hivePermlink,
               user: shortData.user,
               caption: shortData.caption || shortData.title || '',
-              audio: `${shortData.user.username} - Original Audio`,
+              audio: soundLabel(shortData.sound, shortData.user.username),
               albumArt: shortData.user.avatar,
               stats: shortData.stats,
               isLiked: shortData.isLiked || false,
@@ -1825,7 +1826,7 @@ const VideoShort = () => {
           hivePermlink: shortData.hivePermlink,
           user: shortData.user,
           caption: shortData.caption || shortData.title || '',
-          audio: `${shortData.user.username} - Original Audio`,
+          audio: soundLabel(shortData.sound, shortData.user.username),
           albumArt: shortData.user.avatar,
           stats: shortData.stats,
           isLiked: shortData.isLiked || false,
@@ -1884,7 +1885,7 @@ const VideoShort = () => {
           },
           caption: short.caption || short.title || '',
           tags: short.tags || [],
-          audio: `${short.user.username} - Original Audio`,
+          audio: soundLabel(short.sound, short.user.username),
           albumArt: short.user.avatar,
           stats: {
             likes: short.stats.likes,

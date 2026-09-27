@@ -7,6 +7,13 @@
 // 1.0.0 — that way they see all of these when develop is pushed to production.
 export const CHANGELOG = [
   {
+    version: '1.79.26',
+    date: '2026-09-27',
+    summary:
+      'New in the shorts editor: a Music Library. Tap + on the timeline, pick a song by mood and add it. '
+      + 'The song credit is added to your post, and the shorts player shows the song name instead of "Original Audio".',
+  },
+  {
     version: '1.79.25',
     date: '2026-09-26',
     summary: 'Channel Surfing on your phone: a slimmer remote, icon tabs so the Zapping button always fits, and Zap buttons in fullscreen.',

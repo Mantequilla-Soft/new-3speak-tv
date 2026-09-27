@@ -347,6 +347,7 @@ export async function fetchCompleteShortData(shortItem, loggedInUser = null) {
         const jm = typeof post.json_metadata === 'string'
           ? JSON.parse(post.json_metadata || '{}')
           : (post.json_metadata || {});
+        if (jm.video?.sound && typeof jm.video.sound === 'object') base.sound = jm.video.sound;
 
         // Extract reusable flag from MongoDB via checker endpoint
         try {
@@ -757,6 +758,8 @@ export async function fetchShortsWithDetails(page = 1, limit = 10, loggedInUser 
       title: s.hive_title || s.embed_title || "",
       caption: bodyToPlaintext(s.hive_body) || s.hive_title || s.embed_title || "",
       tags: Array.isArray(s.hive_tags) ? s.hive_tags : [],
+      // Music library song (json_metadata.video.sound), for the soundtrack ticker
+      sound: s.hive_sound || null,
       user: {
         username: `@${finalAuthor}`,
         avatar: `https://images.hive.blog/u/${finalAuthor}/avatar/small`,
@@ -834,6 +837,8 @@ export async function fetchUserShortsWithDetails(username, page = 1, limit = 20,
       title: s.hive_title || s.embed_title || "",
       caption: bodyToPlaintext(s.hive_body) || s.hive_title || s.embed_title || "",
       tags: Array.isArray(s.hive_tags) ? s.hive_tags : [],
+      // Music library song (json_metadata.video.sound), for the soundtrack ticker
+      sound: s.hive_sound || null,
       user: {
         username: `@${finalAuthor}`,
         avatar: `https://images.hive.blog/u/${finalAuthor}/avatar/small`,
