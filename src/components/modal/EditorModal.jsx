@@ -8,11 +8,12 @@ import { useAppStore } from '../../lib/store';
 import { useEmbedUpload } from '../../context/EmbedUploadContext';
 import { usePremiumStatus } from '../../hooks/usePremiumStatus';
 import { getLockedBeneficiaries } from '../../utils/beneficiaries';
+import { sanitizeMusicCredits, soundAuthorsOf } from '../../utils/soundCredits';
 import './EditorModal.scss';
 
 function EditorModal({ isOpen, onClose, videoUrl, videoName, videoType, clipStart, clipEnd, originalAuthor, originalPermlink, originalShortPermlink }) {
   const navigate = useNavigate();
-  const { setVideoFile, setPrevVideoFile, setGeneratedThumbnail, setVideoDuration, setOriginalAuthor, setOriginalPermlink, setOriginalShortPermlink, setFromStories, setList, setRemaingPercent } = useEmbedUpload();
+  const { setVideoFile, setPrevVideoFile, setGeneratedThumbnail, setVideoDuration, setOriginalAuthor, setOriginalPermlink, setOriginalShortPermlink, setMusicCredits, setFromStories, setList, setRemaingPercent } = useEmbedUpload();
   const iframeRef = useRef(null);
   const mediaLoadedRef = useRef(false);
   const [editorReady, setEditorReady] = useState(false);
@@ -125,7 +126,7 @@ function EditorModal({ isOpen, onClose, videoUrl, videoName, videoType, clipStar
           break;
 
         case 'post-to-3speak':
-          handlePostTo3Speak(data.outputUrl);
+          handlePostTo3Speak(data.outputUrl, data.musicCredits);
           break;
 
         case 'editor-closed':
@@ -244,7 +245,7 @@ function EditorModal({ isOpen, onClose, videoUrl, videoName, videoType, clipStar
   };
 
   // Handle "Post to 3Speak" from editor — fetch rendered video, navigate to embed-studio
-  const handlePostTo3Speak = async (outputUrl) => {
+  const handlePostTo3Speak = async (outputUrl, rawMusicCredits) => {
     if (!outputUrl) return;
 
     try {
@@ -308,6 +309,11 @@ function EditorModal({ isOpen, onClose, videoUrl, videoName, videoType, clipStar
       if (originalPermlink) setOriginalPermlink(originalPermlink);
       if (originalShortPermlink) setOriginalShortPermlink(originalShortPermlink);
 
+      // Songs from the editor's music library: credited in the post body and
+      // metadata, and 3Speak sound creators get a locked 5% like remix authors
+      const musicCredits = sanitizeMusicCredits(rawMusicCredits);
+      setMusicCredits(musicCredits);
+
       // Remix from shorts should use the short upload form (no title/tags)
       setFromStories(true);
 
@@ -317,6 +323,7 @@ function EditorModal({ isOpen, onClose, videoUrl, videoName, videoType, clipStar
       const lockedBeneficiaries = getLockedBeneficiaries({
         isPremium,
         originalAuthor: originalAuthor || null,
+        soundAuthors: soundAuthorsOf(musicCredits, user),
       });
       setList(lockedBeneficiaries);
       const usedPercent = lockedBeneficiaries.reduce((sum, b) => sum + b.percent, 0);

@@ -52,6 +52,9 @@ export function chargesEncoder({ isPremium, username, includeEncoder }) {
 
 export const REMIX_AUTHOR_PERCENT = 5;
 export const REMIX_AUTHOR_WEIGHT = REMIX_AUTHOR_PERCENT * 100;
+// A 3Speak creator whose sound (music library) is used in a short
+export const SOUND_AUTHOR_PERCENT = 5;
+export const SOUND_AUTHOR_WEIGHT = SOUND_AUTHOR_PERCENT * 100;
 
 /**
  * Initial UI list of locked beneficiaries shown in the publish dialog.
@@ -61,10 +64,11 @@ export const REMIX_AUTHOR_WEIGHT = REMIX_AUTHOR_PERCENT * 100;
  *    (Pro skips it unless grandfathered — see ENCODER_PREMIUM_PAYERS)
  *  - always includes the remix-source author when `originalAuthor` is
  *    provided (remix attribution survives Pro)
+ *  - and every 3Speak sound creator in `soundAuthors` (same rule)
  *
  * @returns {Array<{account, percent, locked, minPercent}>}
  */
-export function getLockedBeneficiaries({ isPremium, originalAuthor, includeEncoder, username }) {
+export function getLockedBeneficiaries({ isPremium, originalAuthor, includeEncoder, username, soundAuthors = [] }) {
   const locked = [];
   if (!isPremium) {
     locked.push({
@@ -90,6 +94,20 @@ export function getLockedBeneficiaries({ isPremium, originalAuthor, includeEncod
       minPercent: REMIX_AUTHOR_PERCENT,
     });
   }
+  for (const account of soundAuthors) {
+    const existing = locked.find(b => b.account === account);
+    if (existing) {
+      existing.percent = Math.max(existing.percent, SOUND_AUTHOR_PERCENT);
+      existing.minPercent = Math.max(existing.minPercent, SOUND_AUTHOR_PERCENT);
+      continue;
+    }
+    locked.push({
+      account,
+      percent: SOUND_AUTHOR_PERCENT,
+      locked: true,
+      minPercent: SOUND_AUTHOR_PERCENT,
+    });
+  }
   return locked;
 }
 
@@ -102,7 +120,7 @@ export function getLockedBeneficiaries({ isPremium, originalAuthor, includeEncod
  *
  * Mutates `beneMap` in place and returns it for chaining.
  */
-export function enforceLockedBeneficiaries(beneMap, { isPremium, originalAuthor, includeEncoder, username }) {
+export function enforceLockedBeneficiaries(beneMap, { isPremium, originalAuthor, includeEncoder, username, soundAuthors = [] }) {
   if (!isPremium) {
     beneMap.set(
       LOCKED_FUND_ACCOUNT,
@@ -128,6 +146,9 @@ export function enforceLockedBeneficiaries(beneMap, { isPremium, originalAuthor,
       originalAuthor,
       Math.max(beneMap.get(originalAuthor) || 0, REMIX_AUTHOR_WEIGHT),
     );
+  }
+  for (const account of soundAuthors) {
+    beneMap.set(account, Math.max(beneMap.get(account) || 0, SOUND_AUTHOR_WEIGHT));
   }
   return beneMap;
 }
