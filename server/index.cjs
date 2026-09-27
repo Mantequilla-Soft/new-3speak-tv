@@ -15,7 +15,8 @@ let butr = null
 // ES module at all (ERR_REQUIRE_ESM). A plain require would not fail on the
 // first incubation request, it would refuse to start the whole API.
 let inc = null
-let IncubationErrorClass = null
+// The warm-up backend (the SDK's proxy with 3Speak's goals), built at startup.
+let warmupHandler = null
 async function initButrAuth() {
   const { ButrAuthClient } = await import('@mantequilla-soft/butrauth-client')
   butr = new ButrAuthClient({
@@ -25,8 +26,7 @@ async function initButrAuth() {
   })
   console.log('[INFO] ButrAuth SDK initialised')
 
-  const { IncubationClient, IncubationError } = await import('@mantequilla-soft/incubation-client')
-  IncubationErrorClass = IncubationError
+  const { IncubationClient, WarmupGoals, createWarmupHandler } = await import('@mantequilla-soft/incubation-client')
   inc = new IncubationClient({
     baseUrl: INCUBATION_URL,
     // Only used for the app-asserted Hive actor: a wallet login holds no
@@ -36,6 +36,10 @@ async function initButrAuth() {
     clientSecret: MANTEAUTH_CLIENT_SECRET,
     timeoutMs: 15000
   })
+  warmupHandler = require('./warmup.cjs').createWarmupBackend(
+    { WarmupGoals, createWarmupHandler },
+    { inc, butr, getSession: resolveButrSession, getHiveUser: resolveDelegatedSignUser }
+  )
   console.log('[INFO] Incubation SDK initialised')
 }
 
@@ -750,7 +754,9 @@ app.get('/api/manteauth/me', baseLimiter, async (req, res) => {
 // send it to the incubation service itself. Same shape as /api/broadcast: the
 // server holds the credential and forwards on the user's behalf.
 // =====================================================================
-const INCUBATION_URL = (process.env.INCUBATION_URL || 'http://127.0.0.1:3040').replace(/\/+$/, '')
+// Butter Auth's hosted incubation service. Called over loopback: it runs on this
+// box, and a local caller is exempt from its per-app rate limit.
+const INCUBATION_URL = (process.env.INCUBATION_URL || 'http://127.0.0.1:3042').replace(/\/+$/, '')
 
 // === Single-flight refresh ===
 //
@@ -840,258 +846,14 @@ async function resolveButrSession(req, res) {
   }
 }
 
-// ALLOWLISTED, not a catch-all proxy. A blanket forwarder would expose whatever
-// the incubation service grows next — including anything it later mounts for
-// internal use — to any logged-in browser.
-// `graduated: true` marks the routes that are for someone who ALREADY has a
-// Hive account. Backfill is exactly that — their account is the author field
-// every stored row has been waiting for — so the incubating check below has to
-// be skipped for it, not merely relaxed.
-const INCUBATION_ROUTES = new Map([
-  // anyActor: reachable by a Hive user too, because these are the two things
-  // that CANNOT happen on chain for an off-chain post — Hive rejects a comment
-  // whose parent does not exist, and there is no post to vote on. The service
-  // still decides what each kind may do (a Hive user may reply, never
-  // root-post), so this only opens the door.
-  //
-  // `user` and `hive` are the SDK calls for each kind of actor, and the split is
-  // the point: asHiveUser() has no post() at all, so the shape that would store
-  // a real account's root post off-chain cannot be written here by accident.
-  ['POST /content', {
-    anyActor: true,
-    user: (s, b) => s.post(b),
-    hive: (s, b) => s.reply(b)
-  }],
-  ['GET /content/mine', { user: (s, _b, q) => s.myContent({ limit: q.limit }) }],
-  ['PUT /social/vote', {
-    anyActor: true,
-    user: (s, b) => s.vote(b),
-    hive: (s, b) => s.vote(b)
-  }],
-  // anyActor: a Hive user has to be able to follow an incubating creator, since
-  // that account does not exist on chain to be followed the normal way.
-  ['PUT /social/follow', {
-    anyActor: true,
-    user: (s, b) => s.follow(b),
-    hive: (s, b) => s.follow(b)
-  }],
-  // The `hive` call here goes upstream as a POST while the browser asks with a
-  // GET, and that is the whole fix rather than an inconsistency. App-asserted
-  // credentials live in the request body; fetch throws outright on a GET with a
-  // body, so this used to reach the service as a TypeError and come back 502 —
-  // "someone you follow got a real account" never fired for a wallet login,
-  // which is exactly who it is for. The SDK picks the shape each actor can use.
-  ['GET /social/graduated-follows', {
-    anyActor: true,
-    user: (s) => s.graduatedFollows(),
-    hive: (s) => s.graduatedFollows()
-  }],
-  ['POST /social/graduated-follows/ack', {
-    anyActor: true,
-    user: (s, b) => s.ackGraduatedFollow(b.handle),
-    hive: (s, b) => s.ackGraduatedFollow(b.handle)
-  }],
-  ['PUT /social/profile', { user: (s, b) => s.setProfile(b) }],
-  ['GET /social/profile/mine', { user: (s) => s.myProfile() }],
-  ['GET /social/follows/mine', { user: (s) => s.myFollows() }],
-  ['PUT /social/subscribe', { user: (s, b) => s.subscribe(b) }],
-  ['GET /social/subscriptions/mine', { user: (s) => s.mySubscriptions() }],
-  ['GET /public/graduation/plan', { user: (s) => s.graduationPlan() }],
-  ['GET /progress', { user: (s) => s.progress() }],
-  ['GET /notifications', { user: (s) => s.notifications() }],
-  ['POST /notifications/read', { user: (s) => s.markNotificationsRead() }],
-  ['GET /backfill/items', { graduated: true, grad: (s) => s.items() }],
-  ['GET /backfill/summary', { graduated: true, grad: (s) => s.summary() }],
-  ['POST /backfill/mark', { graduated: true, grad: (s, b) => s.mark(b) }],
-  ['POST /backfill/claim-assets', { graduated: true, grad: (s) => s.claimAssets() }]
-])
-
-/**
- * Turn whatever the SDK threw into a response.
- *
- * The service's own refusals are passed through with their status and their
- * WHOLE body — a 409 from an incubating-only route names the account the caller
- * turned out to have, and rebuilding the response from message+reason would
- * drop it. A transport failure is status 0, which is not a refusal at all and
- * must not be reported as one: it becomes a 502, the same as before.
- */
-function sendIncubationError(res, err, where) {
-  if (IncubationErrorClass && err instanceof IncubationErrorClass && err.status > 0) {
-    return res.status(err.status).json(err.body || { error: err.message, reason: err.reason || null })
-  }
-  const timedOut = /timeout|aborted/i.test(err?.message || '')
-  console.error(`[incubation proxy] ${where}:`, err?.message)
-  return res.status(502).json({ error: timedOut ? 'Incubation service timed out' : 'Incubation request failed' })
-}
-
-// The public half of a profile: what someone said, who follows them, who they
-// follow. Separate from INCUBATION_ROUTES because these carry a handle in the
-// path, and separate from a wildcard because a wildcard would forward whatever
-// /public/ grows next. A handle is Hive-shaped -- lowercase, digits, dot, dash.
-const PUBLIC_PROFILE_RE = /^\/public\/user\/([a-z0-9.-]{1,64})\/(comments|followers|following|content)$/
-
-/**
- * Read butrauth's graduation verdict for this token.
- *
- * Calls the SDK when it actually has the method, and otherwise talks to the
- * endpoint directly. The published client is 0.2.0, which predates incubation
- * entirely: `butr.getIncubationStatus` is undefined there, so every call threw
- * "is not a function" and this route answered 502 for weeks. That is the SAME
- * skew that made incubating writes fail earlier, so it is handled the same way,
- * and the SDK branch means publishing 0.3.0 needs no change here.
- *
- * The request carries BOTH the user's bearer token and the app's client secret:
- * butrauth authenticates the caller before it says anything about the token.
- */
-async function readIncubationStatus(token) {
-  if (typeof butr.getIncubationStatus === 'function') {
-    return butr.getIncubationStatus(token)
-  }
-  const url = `${MANTEAUTH_URL}/api/incubation/status?client_id=${encodeURIComponent(MANTEAUTH_CLIENT_ID)}`
-  const r = await fetch(url, {
-    headers: {
-      authorization: `Bearer ${token}`,
-      'x-client-secret': MANTEAUTH_CLIENT_SECRET || ''
-    }
-  })
-  if (!r.ok) throw new Error(`butrauth /incubation/status returned ${r.status}`)
-  return r.json()
-}
-
-// GET /api/incubation/graduation-status — BUTRAUTH's half of the decision.
-//
-// Answers "may this identity have a free Hive account" (caps, provider
-// availability, one per person). It does NOT answer "have they earned one" —
-// butrauth cannot see watch time, so that half is 3Speak's. The prompt should
-// only appear when both agree.
-//
-// Mounted BEFORE the catch-all below, which would otherwise match this path and
-// 404 it against the incubation service's allowlist.
-app.get('/api/incubation/graduation-status', incubationLimiter, async (req, res) => {
-  try {
-    const session = await resolveButrSession(req, res)
-
-    if (!session) return res.status(401).json({ error: 'Your session has expired. Please sign in again.', reason: 'session_expired' })
-    if (!butr) return res.status(503).json({ error: 'ButrAuth not ready' })
-    res.json(await readIncubationStatus(session.token))
-  } catch (err) {
-    console.error('[incubation] graduation status:', err.message)
-    res.status(502).json({ error: 'Could not read graduation status' })
-  }
-})
-
-// app.use, not app.all('/api/incubation/*'): this server is on Express 5, whose
-// path-to-regexp rejects a bare '*' outright and takes the whole process down
-// at startup rather than at request time. A mount needs no wildcard syntax at
-// all, and req.path is already relative to it.
-app.use('/api/incubation', incubationLimiter, async (req, res) => {
-  try {
-    const sub = req.path || '/'
-    const key = `${req.method} ${sub}`
-
-    // Public profile reads, handled BEFORE the allowlist Map and before any
-    // session work: a visitor reading somebody's comments or follow lists is
-    // not signed in to anything, and requiring a session would make a public
-    // profile page blank for exactly the people it is written for.
-    //
-    // Still an allowlist, just one that can carry a handle: the Map is exact
-    // match, these paths have a variable segment, and the regex below is every
-    // bit as closed as an entry in it. Nothing is forwarded but the handle and
-    // a bounded `limit`, and no credential of any kind goes upstream.
-    if (req.method === 'GET') {
-      const pub = PUBLIC_PROFILE_RE.exec(sub)
-      if (pub) {
-        if (!inc) return res.status(503).json({ error: 'Incubation client not ready' })
-        const limit = Math.min(Math.max(parseInt(req.query.limit, 10) || 50, 1), 200)
-        const read = {
-          content: () => inc.userContent(pub[1], { limit }),
-          comments: () => inc.userComments(pub[1], { limit }),
-          followers: () => inc.userFollowers(pub[1], { limit }),
-          following: () => inc.userFollowing(pub[1], { limit })
-        }[pub[2]]
-        try {
-          return res.json(await read())
-        } catch (err) {
-          return sendIncubationError(res, err, `public/${pub[2]}`)
-        }
-      }
-    }
-
-    const route = INCUBATION_ROUTES.get(key)
-    if (!route) return res.status(404).json({ error: 'Unknown incubation route' })
-    if (!inc) return res.status(503).json({ error: 'Incubation client not ready' })
-
-    const session = await resolveButrSession(req, res)
-
-    // A wallet login (Keychain/HiveAuth/PeakVault/Ledger) holds no butrauth
-    // session, so there is no bearer token to forward — but they are a real,
-    // server-verified Hive user and these routes are open to them. Assert the
-    // identity with the app's own client credentials instead, which is the same
-    // trust /api/broadcast already extends when it posts to the chain as them.
-    if (!session && route.anyActor) {
-      const hiveUser = await resolveDelegatedSignUser(req, res)
-      if (!hiveUser) {
-        // Reached when there is no butrauth session AND no wallet session, which
-        // for an incubating user means their session lapsed rather than that
-        // they were never signed in. Saying "Not signed in" to someone looking
-        // at their own logged-in avatar is not a useful thing to tell them.
-        console.warn(`[incubation] 401 on ${key} — no butrauth session and no wallet session`)
-        return res.status(401).json({
-          error: 'Your session has expired. Please sign in again.',
-          reason: 'session_expired',
-        })
-      }
-      // The SDK adds the credentials and picks the request shape this actor can
-      // actually be authenticated through — which for the graduated-follows
-      // read is a POST, because a GET cannot carry them.
-      try {
-        return res.json(await route.hive(inc.asHiveUser(hiveUser), req.body || {}, req.query || {}))
-      } catch (err) {
-        return sendIncubationError(res, err, `${key} (hive)`)
-      }
-    }
-    if (!session) {
-      console.warn(`[incubation] 401 on ${key} — session could not be resolved`)
-      return res.status(401).json({
-        error: 'Your session has expired. Please sign in again.',
-        reason: 'session_expired',
-      })
-    }
-
-    if (route.anyActor) {
-      // Either kind may pass; the service sorts out what each is allowed to do.
-    } else if (route.graduated) {
-      // The mirror image: these routes need a real Hive account to publish AS.
-      if (!session.claims.hiveUsername) {
-        return res.status(409).json({
-          error: 'Create your Hive account first — there is nothing to publish as yet.',
-          reason: 'not_graduated'
-        })
-      }
-    } else if (session.claims.hiveUsername || !session.claims.incubation) {
-      // Refused HERE as well as in the service. The service is the authority, but
-      // failing at the edge means a user who has graduated mid-session gets a
-      // clear answer instead of a round trip that ends in the same 409.
-      return res.status(409).json({
-        error: 'This account is on Hive — publish to the chain, not the incubation service.',
-        reason: 'has_hive_account'
-      })
-    }
-
-    try {
-      // A graduated user reads their backlog through a different scope: their
-      // token now names a Hive account, which is the author field every stored
-      // row has been waiting for.
-      const scope = route.graduated ? inc.asGraduate(session.token) : inc.asUser(session.token)
-      const call = route.graduated ? route.grad : route.user
-      return res.json(await call(scope, req.body || {}, req.query || {}))
-    } catch (err) {
-      return sendIncubationError(res, err, key)
-    }
-  } catch (err) {
-    console.error('[incubation proxy]', err.message)
-    res.status(502).json({ error: 'Incubation request failed' })
-  }
+// /api/incubation/* -- the warm-up backend. The SDK's createWarmupHandler:
+// an allowlist of routes, each forwarded to one SDK call with the user's own
+// token (or, for a wallet login, vouched for with 3Speak's client credentials),
+// plus GET /progress (3Speak's goals), GET /graduation-status and POST
+// /backfill/claim-assets. 3Speak's part is warmup.cjs.
+app.use('/api/incubation', incubationLimiter, (req, res) => {
+  if (!warmupHandler) return res.status(503).json({ error: 'Incubation client not ready' })
+  return warmupHandler(req, res, () => res.status(404).json({ error: 'Unknown incubation route' }))
 })
 
 // POST /api/manteauth/logout — clear the session cookie
