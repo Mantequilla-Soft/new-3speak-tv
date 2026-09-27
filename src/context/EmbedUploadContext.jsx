@@ -14,6 +14,7 @@ import { hasThreespeakPostingAuth, addThreespeakToPostingAuth } from '../utils/p
 import { useAppStore } from '../lib/store';
 import { usePremiumStatus } from '../hooks/usePremiumStatus';
 import { setChannelTrailer } from '../utils/channelTrailer';
+import { sanitizeMusicCredits, soundAuthorsOf, soundCreditsMarkdown, primarySoundMetadata } from '../utils/soundCredits';
 import { enforceLockedBeneficiaries, getLockedBeneficiaries, chargesEncoder, LOCKED_FUND_ACCOUNT, LOCKED_ENCODER_ACCOUNT } from '../utils/beneficiaries';
 import { oaEnvelope, threespeakVideo, probeVideoOrientation, OA_ARTICLE, OA_MICROPOST, OA_COMMENT } from '../utils/openAttribute';
 import axios from 'axios';
@@ -207,6 +208,11 @@ export function EmbedUploadProvider({ children }) {
   const [originalPermlink, setOriginalPermlink] = useState(null);
   const [originalShortPermlink, setOriginalShortPermlink] = useState(null);
 
+  // Songs from the shorts editor's music library (credited in the body, shown
+  // in the soundtrack ticker, 3Speak sound creators get a locked split)
+  const [musicCredits, setMusicCreditsRaw] = useState([]);
+  const setMusicCredits = useCallback((raw) => setMusicCreditsRaw(sanitizeMusicCredits(raw)), []);
+
   // Reusable flag (allow others to remix/clip this video)
   const [reusable, setReusable] = useState(true);
 
@@ -361,6 +367,7 @@ export function EmbedUploadProvider({ children }) {
     setOriginalAuthor(null);
     setOriginalPermlink(null);
     setOriginalShortPermlink(null);
+    setMusicCreditsRaw([]);
     setReusable(true);
     setUploading(false);
     setCompleted(false);
@@ -1647,6 +1654,7 @@ export function EmbedUploadProvider({ children }) {
           : `${window.location.origin}/@${originalAuthor}/${originalPermlink}`;
         postBody += `\n\n---\n*Based on a video by [@${originalAuthor}](${originalLink})*`;
       }
+      postBody += soundCreditsMarkdown(musicCredits);
 
       // "Watch on 3Speak" link at the bottom, pointing at the right page for the
       // content type: shorts → /shorts, regular videos → /watch. Always points at
@@ -1712,6 +1720,7 @@ export function EmbedUploadProvider({ children }) {
           reusable: (originalAuthor && originalPermlink) ? true : reusable,
           ...(thumbnailUrl ? { thumbnail: thumbnailUrl } : {}),
           ...(originalAuthor ? { originalAuthor, originalPermlink } : {}),
+          ...(musicCredits.length ? { sound: primarySoundMetadata(musicCredits) } : {}),
           // Legacy 3Speak `info` block. Other Hive frontends (peakd, ecency, …)
           // render the player by reading video.info.author + video.info.permlink
           // to build the embed — WITHOUT it they request an EMPTY owner/permlink
@@ -1775,6 +1784,7 @@ export function EmbedUploadProvider({ children }) {
         username: user,
         includeEncoder: true,
         originalAuthor: originalAuthor && originalPermlink ? originalAuthor : null,
+        soundAuthors: soundAuthorsOf(musicCredits, user),
       });
 
         // Convert map to sorted array (sorted by account name — required by Hive protocol)
@@ -2152,6 +2162,7 @@ export function EmbedUploadProvider({ children }) {
     originalAuthor, setOriginalAuthor,
     originalPermlink, setOriginalPermlink,
     originalShortPermlink, setOriginalShortPermlink,
+    musicCredits, setMusicCredits,
     // Reusable flag
     reusable, setReusable,
     // User

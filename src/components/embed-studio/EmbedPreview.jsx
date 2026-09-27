@@ -7,6 +7,7 @@ import { StepProgress } from "../legacy-studio/StepProgress";
 import EmbedUploadProgressBar from "./EmbedUploadProgressBar";
 import { useEmbedUpload } from "../../context/EmbedUploadContext";
 import { enforceLockedBeneficiaries } from "../../utils/beneficiaries";
+import { soundCreditsMarkdown, soundAuthorsOf } from '../../utils/soundCredits';
 import "../legacy-studio/VideoUploadStatus.scss";
 import BlogContent from "../playVideo/BlogContent";
 import EmbedPreviewPlayer from "./EmbedPreviewPlayer";
@@ -40,6 +41,7 @@ function EmbedPreview() {
     reusable,
     originalAuthor,
     originalPermlink,
+    musicCredits,
     isNsfw,
     publishedPermlink,
     isPremium,
@@ -145,8 +147,8 @@ function EmbedPreview() {
         fromStories
           ? `${window.location.origin}/shorts?v=${originalAuthor}/${originalPermlink}`
           : `${window.location.origin}/@${originalAuthor}/${originalPermlink}`
-      })*`
-    : description;
+      })*${soundCreditsMarkdown(musicCredits)}`
+    : `${description}${soundCreditsMarkdown(musicCredits)}`;
 
   // `beneficiaries` is an array initially but the beneficiary modal stores it as
   // a JSON string — normalise both shapes before rendering.
@@ -174,6 +176,7 @@ function EmbedPreview() {
       username: user,
       includeEncoder: true,
       originalAuthor: originalAuthor && originalPermlink ? originalAuthor : null,
+      soundAuthors: soundAuthorsOf(musicCredits, user),
     });
     return [...beneMap.entries()]
       .map(([account, weight]) => ({ account, weight }))
