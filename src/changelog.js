@@ -7,6 +7,13 @@
 // 1.0.0 — that way they see all of these when develop is pushed to production.
 export const CHANGELOG = [
   {
+    version: '1.79.27',
+    date: '2026-09-27',
+    summary:
+      "Captions now use your device's language automatically, with English as the fallback. "
+      + 'Hovering over a video card also shows its captions in your language.',
+  },
+  {
     version: '1.79.26',
     date: '2026-09-27',
     summary:
