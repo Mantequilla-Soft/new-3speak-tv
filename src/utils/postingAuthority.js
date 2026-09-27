@@ -63,35 +63,22 @@ export async function hasThreespeakPostingAuth(username) {
   return auths.some(([acc]) => acc === THREESPEAK_AUTHORITY);
 }
 
-/**
- * Add @threespeak to the user's posting account_auths, preserving the existing
- * authority structure (other auths, key auths, weight_threshold) verbatim.
- *
- * Uses `account_update2` so the change can be signed with the user's ACTIVE key
- * (account_update would require the OWNER key — much scarier UX). aioha is
- * asked to sign and broadcast the op.
- */
-export async function addThreespeakToPostingAuth(username, opts = {}) {
-  const weight = opts.weight || 1;
-  const account = await fetchAccount(username);
+// Broadcast an account_update2 that swaps in `accountAuths` as the posting
+// account_auths, keeping key auths and weight_threshold verbatim.
+//
+// account_update2 so it can be signed with the user's ACTIVE key (account_update
+// would require the OWNER key, much scarier UX). Only the `posting` field is set;
+// omitted fields are left untouched. extensions is required (empty).
+async function updatePostingAccountAuths(username, account, accountAuths, opts) {
   const posting = account.posting || { weight_threshold: 1, account_auths: [], key_auths: [] };
-
-  // No-op (and don't pop a wallet) if it's already there.
-  if (posting.account_auths.some(([acc]) => acc === THREESPEAK_AUTHORITY)) {
-    return { alreadyAuthorized: true };
-  }
-
   // Must stay sorted: the node re-sorts account_auths before computing the signing
   // digest, so appending 'threespeak' after e.g. 'travelfeed.app' makes the
   // signature match no key and fails as "Missing active authority".
   const newPosting = {
     weight_threshold: posting.weight_threshold,
-    account_auths: sortAuths([...posting.account_auths, [THREESPEAK_AUTHORITY, weight]]),
+    account_auths: sortAuths(accountAuths),
     key_auths: posting.key_auths || [],
   };
-
-  // account_update2 — signed with active key. Only the `posting` field is set;
-  // omitted fields are left untouched. extensions is required (empty).
   const op = [
     'account_update2',
     {
@@ -107,12 +94,78 @@ export async function addThreespeakToPostingAuth(username, opts = {}) {
   // user to HiveSigner to sign the account_update2 themselves.
   if (getCurrentProvider() === Providers.HiveSigner) {
     const txid = await signOpInHiveSignerWindow(op, opts.signWindow);
-    return { alreadyAuthorized: false, tx: txid, viaHiveSigner: true };
+    return { tx: txid, viaHiveSigner: true };
   }
 
   const result = await broadcastWithAioha([op], KeyTypes.Active);
   if (!result || !result.success) {
-    throw new Error('Failed to add @threespeak to posting authority');
+    const reason = result?.error?.message || (typeof result?.error === 'string' && result.error);
+    throw new Error(reason || 'Failed to update posting authority');
   }
-  return { alreadyAuthorized: false, tx: result.result };
+  return { tx: result.result };
+}
+
+/**
+ * Re-read the chain until @threespeak's presence matches `expected`, or give up.
+ * A broadcast only lands in the next block (~3s) and the RPC node can lag behind
+ * that, so a single read straight after it usually still sees the old authority.
+ *
+ * @returns {Promise<boolean>} the last state read (may still differ on timeout).
+ */
+export async function waitForThreespeakPostingAuth(username, expected, { timeoutMs = 30000, intervalMs = 2000 } = {}) {
+  const deadline = Date.now() + timeoutMs;
+  let last = !expected;
+  for (;;) {
+    try { last = await hasThreespeakPostingAuth(username); } catch { /* node hiccup, try again */ }
+    if (last === expected || Date.now() >= deadline) return last;
+    await new Promise((r) => setTimeout(r, intervalMs));
+  }
+}
+
+/**
+ * Add @threespeak to the user's posting account_auths, preserving the existing
+ * authority structure (other auths, key auths, weight_threshold) verbatim.
+ */
+export async function addThreespeakToPostingAuth(username, opts = {}) {
+  const weight = opts.weight || 1;
+  const account = await fetchAccount(username);
+  const auths = (account.posting && account.posting.account_auths) || [];
+
+  // No-op (and don't pop a wallet) if it's already there.
+  if (auths.some(([acc]) => acc === THREESPEAK_AUTHORITY)) {
+    return { alreadyAuthorized: true };
+  }
+
+  const res = await updatePostingAccountAuths(
+    username, account, [...auths, [THREESPEAK_AUTHORITY, weight]], opts,
+  );
+  return { alreadyAuthorized: false, ...res };
+}
+
+/**
+ * Remove @threespeak from the user's posting account_auths. Everything else in
+ * the posting authority is kept as it is.
+ *
+ * Refuses when @threespeak's weight alone is what meets the threshold (no key
+ * or other account could sign posting ops afterwards). Hive rejects an
+ * unsatisfiable authority anyway, but this gives a readable reason first.
+ */
+export async function removeThreespeakFromPostingAuth(username, opts = {}) {
+  const account = await fetchAccount(username);
+  const posting = account.posting || { weight_threshold: 1, account_auths: [], key_auths: [] };
+  const auths = posting.account_auths || [];
+
+  if (!auths.some(([acc]) => acc === THREESPEAK_AUTHORITY)) {
+    return { notAuthorized: true };
+  }
+
+  const remaining = auths.filter(([acc]) => acc !== THREESPEAK_AUTHORITY);
+  const remainingWeight = [...remaining, ...(posting.key_auths || [])]
+    .reduce((sum, [, w]) => sum + Number(w || 0), 0);
+  if (remainingWeight < posting.weight_threshold) {
+    throw new Error('Removing @threespeak would leave your posting authority unable to sign. Add a posting key first.');
+  }
+
+  const res = await updatePostingAccountAuths(username, account, remaining, opts);
+  return { notAuthorized: false, ...res };
 }
