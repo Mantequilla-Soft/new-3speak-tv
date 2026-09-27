@@ -221,3 +221,9 @@
   .nav-progress.is-celebrating::after { display: none; }
   .nav-progress-sparks { display: none; }
 }
+
+// Before they have picked viewer / creator / advertiser: a prompt, not a bar.
+.nav-progress.is-choose .nav-progress-count {
+  color: var(--accent-primary);
+  font-weight: 600;
+}

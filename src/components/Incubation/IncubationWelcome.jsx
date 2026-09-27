@@ -8,6 +8,7 @@ import {
 import { MdClose } from 'react-icons/md';
 import { useAppStore } from '../../lib/store';
 import { usePromptsActive, setPromptActive } from '../../utils/welcomeGate';
+import TrackChooser from './TrackChooser';
 import './IncubationWelcome.scss';
 
 // Shown once per handle, per browser. Not a server flag: it is a greeting, and
@@ -92,20 +93,22 @@ const STEPS = [
     ),
   },
   {
-    key: 'next',
+    // The question itself is rendered below the body (TrackChooser), because it
+    // needs state; see `current.key === 'path'` in the component.
+    key: 'path',
     Icon: FaRocket,
-    title: 'What happens next',
+    title: 'What brings you to 3Speak?',
     body: (
       <>
         <p>
-          Your profile shows a short list of things to do: post a video, a couple of
-          shorts, follow a few people, write some comments, and watch some videos on
-          3Speak.
+          Your profile shows a short list of things to do, and it depends on what you
+          are here for: viewers watch and join in, creators publish, and advertisers
+          set up their brand.
         </p>
         <p>
-          It is not a test. It is simply how we can tell a real channel from an empty
-          or malicious one. Once the list is done the team reviews your channel and
-          upgrades you as soon as possible.
+          It is not a test. It is simply how we can tell a real account from an empty
+          or malicious one. Once the list is done the team reviews you and upgrades
+          you as soon as possible.
         </p>
         <div className="incw-perks">
           <span><FaCoins aria-hidden="true" /> Posts that earn</span>
@@ -130,6 +133,8 @@ export default function IncubationWelcome() {
   const promptsActive = usePromptsActive('incubation-welcome');
   const [open, setOpen] = useState(false);
   const [step, setStep] = useState(0);
+  // Their answer on the last step. Optional here: the profile asks again.
+  const [chosen, setChosen] = useState(null);
 
   useEffect(() => {
     if (!authenticated || !incubationHandle) return undefined;
@@ -169,6 +174,9 @@ export default function IncubationWelcome() {
             {current.title}
           </h2>
           {current.body}
+          {current.key === 'path' && (
+            <TrackChooser current={chosen} onChosen={setChosen} />
+          )}
         </div>
 
         <div className="incw-foot">
@@ -187,7 +195,7 @@ export default function IncubationWelcome() {
             )}
             {last ? (
               <Link to="/profile" className="incw-primary" onClick={close}>
-                Show me my list
+                {chosen ? 'Show me my list' : 'Decide later'}
               </Link>
             ) : (
               <button type="button" className="incw-primary" onClick={() => setStep((n) => n + 1)}>

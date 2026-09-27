@@ -402,11 +402,46 @@
 
   > header {
     display: flex;
+    flex-wrap: wrap;
     align-items: baseline;
     justify-content: space-between;
     gap: 12px;
     margin-bottom: 12px;
   }
+}
+
+// Which path they picked (viewer, creator, advertiser), and a way to change it.
+.inc-track-current {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 6px;
+  margin-right: auto;
+  font-size: 12px;
+  color: var(--text-secondary);
+}
+
+.inc-track-change {
+  padding: 0;
+  border: none;
+  background: none;
+  color: var(--accent-primary);
+  font-size: 12px;
+  cursor: pointer;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+.inc-progress > .inc-track-change {
+  margin-top: 10px;
+}
+
+.inc-track-intro {
+  margin: 0 0 12px;
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--text-secondary);
 }
 
 .inc-progress-count {
