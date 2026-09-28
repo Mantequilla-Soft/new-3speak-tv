@@ -33,7 +33,7 @@ export default function TrackQuestion() {
       <h2><FaRocket size={14} aria-hidden="true" /> What brings you to 3Speak?</h2>
       <p className="inc-track-intro">
         Your path to a Hive account depends on it: viewers watch and join in,
-        creators publish, and advertisers set up their brand. You can change it later.
+        creators publish, and advertisers set up their brand.
       </p>
       <TrackChooser />
     </section>
