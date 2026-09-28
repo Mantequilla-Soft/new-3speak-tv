@@ -133,8 +133,8 @@ export default function IncubationWelcome() {
   const promptsActive = usePromptsActive('incubation-welcome');
   const [open, setOpen] = useState(false);
   const [step, setStep] = useState(0);
-  // Their answer on the last step. The list only exists once they have picked,
-  // so the last button waits for it.
+  // Their answer on the last step. Optional here: until they pick, the nav pill
+  // says "Choose your path" and their profile asks again.
   const [chosen, setChosen] = useState(null);
 
   useEffect(() => {
@@ -198,15 +198,9 @@ export default function IncubationWelcome() {
               </button>
             )}
             {last ? (
-              chosen ? (
-                <Link to="/profile" className="incw-primary" onClick={close}>
-                  Show me my list
-                </Link>
-              ) : (
-                <button type="button" className="incw-primary" disabled title="Choose your path first">
-                  Show me my list
-                </button>
-              )
+              <Link to="/profile" className="incw-primary" onClick={close}>
+                {chosen ? 'Show me my list' : 'Decide later'}
+              </Link>
             ) : (
               <button type="button" className="incw-primary" onClick={() => setStep((n) => n + 1)}>
                 Next

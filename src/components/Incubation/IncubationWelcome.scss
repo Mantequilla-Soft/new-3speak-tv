@@ -201,13 +201,7 @@
   background: transparent;
   color: var(--accent-primary);
 
-  &:hover:not(:disabled) { background: color-mix(in srgb, var(--accent-primary) 10%, transparent); }
-
-  // Before a path is picked on the last step.
-  &:disabled {
-    opacity: 0.45;
-    cursor: not-allowed;
-  }
+  &:hover { background: color-mix(in srgb, var(--accent-primary) 10%, transparent); }
 }
 
 // The headline over the three path tiles on the last step.
