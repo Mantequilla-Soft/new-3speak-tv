@@ -91,7 +91,7 @@ const aiKeysFor = (v) => (v._liveStream ? [] : [
 const isAiCard = (v) => !v._liveStream
   && (isAiFlagged(cardAuthorOf(v), v.permlink) || (!!v.owner && isAiFlagged(v.owner, v.permlink)));
 
-function Card3({ videos = [], loading = false, error = null, interleaveEvery = 0, renderInterleave = null, communityEvery = 0, renderCommunity = null, creatorsEvery = 0, renderCreators = null, getContentForVideo = null, isWatched = null, getViewCount = null, linkPrefix = '/watch', linkQuery = '', shortTimeAgo = true, shortsGrid = false, priority = false, hideWatched = false, watchedVersion = 0 }) {
+function Card3({ videos = [], loading = false, error = null, interleaveEvery = 0, renderInterleave = null, communityEvery = 0, renderCommunity = null, creatorsEvery = 0, renderCreators = null, getContentForVideo = null, isWatched = null, getViewCount = null, isNew = null, linkPrefix = '/watch', linkQuery = '', shortTimeAgo = true, shortsGrid = false, priority = false, hideWatched = false, watchedVersion = 0 }) {
   const navigate = useNavigate();
   const [modalUser, setModalUser] = useState(null);
 
@@ -246,6 +246,14 @@ function Card3({ videos = [], loading = false, error = null, interleaveEvery = 0
               {video.gated && !isShortCard(video, shortsGrid) && (
                 <div className="card-gated-badge" title="Supporters only — 3Speak Pro unlocks the full video">
                   <span aria-hidden="true">🔒</span> PRO
+                </div>
+              )}
+
+              {/* New since the viewer's last visit (community pages pass isNew).
+                  Top-left like the PRO badge, and below it when both apply. */}
+              {isNew?.(video) && (
+                <div className={`card-new-badge${video.gated && !isShortCard(video, shortsGrid) ? ' card-new-badge--below' : ''}`}>
+                  NEW
                 </div>
               )}
 
@@ -432,6 +440,7 @@ Card3.propTypes = {
   error: PropTypes.string,
   getContentForVideo: PropTypes.func,
   isWatched: PropTypes.func,
+  isNew: PropTypes.func,             // (video) => true badges the card NEW
   hideWatched: PropTypes.bool,       // opt-in: drop (not just badge) already-watched videos
   watchedVersion: PropTypes.number,  // bump from useWatchHistory so the filter reacts to new data
   getViewCount: PropTypes.func,

@@ -36,6 +36,7 @@ function EmbedStudioPage() {
     setPrefilledFromQuery,
     videoMode, setVideoMode,
     clearVideoSelection,
+    setCommunity,
   } = useEmbedUpload();
 
   // `?trailer=1` — arrived from the "Upload a channel trailer" button on an own
@@ -110,6 +111,18 @@ function EmbedStudioPage() {
       setStep(1);
     }
   }, []);
+
+  // `?community=hive-…&communityTitle=…` — arrived from a community page's
+  // "Upload to this community" button. Preselects the community on the details
+  // step (the same {name, title} shape the picker sets). Declared AFTER the reset
+  // above on purpose: that reset puts the community back to 3Speak's default.
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    const name = params.get('community') || '';
+    if (!/^hive-\d+$/.test(name)) return;
+    setCommunity(name === 'hive-181335' ? name : { name, title: params.get('communityTitle') || name });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [location.search]);
 
   // Pick up file shared from StudioPage (vertical short redirect) or PWA file_handlers
   const sharedFileHandled = useRef(false);

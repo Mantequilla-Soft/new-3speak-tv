@@ -5,7 +5,7 @@ import {
 import {
   listSubtitleLanguages,
   loadSubtitleCues,
-  SUBTITLE_LANG_KEY,
+  pickSubtitleLang,
 } from '../../hooks/useSubtitles';
 import './Transcript.scss';
 
@@ -67,13 +67,9 @@ export default function Transcript({ author, permlink, currentTime = 0, onSeek, 
     listSubtitleLanguages(author, permlink).then((list) => {
       if (!alive || !list.length) return;
       setLanguages(list);
-      // Prefer the viewer's caption language, then English, then whatever exists.
-      let stored = null;
-      try { stored = localStorage.getItem(SUBTITLE_LANG_KEY); } catch { /* private mode */ }
-      const pick = list.find((l) => l.lang === stored)
-        || list.find((l) => l.lang === 'en')
-        || list[0];
-      setLang(pick.lang);
+      // Prefer the viewer's caption language, then their device language, then
+      // English, then whatever exists.
+      setLang(pickSubtitleLang(list, { anyAsLastResort: true }));
     });
     return () => { alive = false; };
   }, [author, permlink]);

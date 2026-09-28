@@ -4,7 +4,7 @@ import { ThreeSpeakApi } from "@mantequilla-soft/3speak-player";
 import { getPlayerUrl } from "../utils/playerUrl";
 import { createLowResPreviewPlayer } from "../lib/lowResPreviewPlayer";
 import { useAppStore } from "../lib/store";
-import useSubtitles from "./useSubtitles";
+import useSubtitles, { prefetchSubtitles } from "./useSubtitles";
 import SubtitleOverlay from "../components/SubtitleOverlay/SubtitleOverlay";
 
 // Statuses with no playable stream — never preview these.
@@ -211,8 +211,10 @@ export default function useHoverPreview({ renderControls } = {}) {
 
   useEffect(() => () => { try { playerRef.current?.destroy(); } catch { /* ignore */ } }, []);
 
-  // English subtitles for the active video (force 'en' if present, no persistence).
-  const { cues, subtitleStyle } = useSubtitles(hover?.author, hover?.permlink, { autoEnglish: true });
+  // Captions for the active video, always on since the preview is muted: the
+  // viewer's saved CC language, else their device language, else English.
+  // Nothing is saved as a choice.
+  const { cues, subtitleStyle } = useSubtitles(hover?.author, hover?.permlink, { autoSelect: true });
 
   const rectOf = (node) => {
     const cont = containerRef.current;
@@ -259,6 +261,7 @@ export default function useHoverPreview({ renderControls } = {}) {
       const key = best.dataset.postkey;
       if (key !== mobileKeyRef.current) {
         mobileKeyRef.current = key;
+        prefetchSubtitles(best.dataset.author, best.dataset.permlink);
         setReady(false);
         setHover({
           key,
@@ -318,6 +321,9 @@ export default function useHoverPreview({ renderControls } = {}) {
     // where it was cancelled on a quick scroll-out; if still unresolved by play
     // time, player.load falls back to the "author/permlink" string itself.
     preload(postKey, author, permlink);
+    // Start on the captions now too, so they're ready when the clip starts
+    // playing after the hover delay instead of arriving seconds into it.
+    prefetchSubtitles(author, permlink);
     const node = e.currentTarget;
     setHover((h) => (h && h.key !== postKey ? null : h));
     hoverTimer.current = setTimeout(() => {

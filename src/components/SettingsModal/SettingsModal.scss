@@ -455,3 +455,26 @@
   white-space: nowrap;
   border: 0;
 }
+
+/* @threespeak posting authority buttons. Remove stays neutral on purpose, so it
+   does not draw the eye; Add is the red one, outlined rather than filled. */
+.settings-auth-btn {
+  flex-shrink: 0;
+  padding: 6px 14px;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  background: transparent;
+  color: var(--text-primary);
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+
+  &:focus-visible { outline: 2px solid var(--accent-primary); outline-offset: 2px; }
+  &:disabled { opacity: 0.55; cursor: not-allowed; }
+}
+
+.settings-auth-add {
+  border-color: var(--accent-primary);
+  color: var(--accent-primary);
+}

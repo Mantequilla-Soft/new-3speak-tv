@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { hiveProxy } from './fixThumbnails';
 
 // images.hive.blog/u/<name>/avatar resolves profile_image server-side, but it
 // answers with `cache-control: public, max-age=86400`. So a browser that ever
@@ -59,6 +60,21 @@ export function hiveAvatarUrl(username, size = 'small') {
   return size
     ? `https://images.hive.blog/u/${u}/avatar/${size}`
     : `https://images.hive.blog/u/${u}/avatar`;
+}
+
+// A resolved profile_image is a URL on SOMEONE ELSE's host, and loading it
+// straight from the page is at that host's mercy: ipfs.io answers hotlinked
+// avatars with 429 (@cahlen's picture broke that way), personal sites go dark.
+// So it is fetched through Hive's image proxy BY ITS EXACT URL. That keeps what
+// the resolve was for (the proxy caches per image URL, so a new picture is a new
+// URL and shows at once) while the proxy does the fetching and resizing. Our own
+// images.3speak.tv is the exception: hiveProxy() hands it back untouched, since
+// the proxy cannot fetch it and it is already our CDN.
+const PROXY_PX = { small: 64, medium: 128, large: 512 };
+function viaHiveProxy(url, size) {
+  if (!/^https?:\/\//i.test(url) || /^https?:\/\/images\.hive\.blog\//i.test(url)) return url;
+  const px = PROXY_PX[size] || 256;
+  return hiveProxy(url, { w: px, h: px });
 }
 
 /** Remember the image we just uploaded for this account. */
@@ -212,7 +228,7 @@ export function useAvatarUrl(username, size = 'small') {
   const override = getAvatarOverride(username);
   if (override) return override;
   const known = getResolvedAvatar(username);
-  if (known) return known;
+  if (known) return viaHiveProxy(known, size);
   // Nothing known yet: show the proxy now and find out the truth in the
   // background. When the answer arrives, notify() re-renders every avatar for
   // that account at once.

@@ -39,9 +39,11 @@
       //        | Name
       //   logo | Description
       //        | Subscribers
+      //   [ 3Speak activity strip ]
       display: flex;
-      align-items: center;
-      gap: 14px;
+      flex-direction: column;
+      align-items: stretch;
+      gap: 12px;
       text-align: left;
       padding: 14px 16px;
       border: 1px solid var(--border-light, rgba(150, 150, 150, 0.18));
@@ -53,6 +55,13 @@
       &:hover {
         border-color: var(--accent-primary, #e0594b);
         transform: translateY(-2px);
+      }
+
+      .blog-card-main {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        min-width: 0;
       }
 
       .img-wrap {
@@ -142,6 +151,55 @@
           background: currentColor;
           opacity: 0.55;
         }
+      }
+
+      // --- 3Speak activity ------------------------------------------------
+      .blog-activity {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        padding-top: 10px;
+        border-top: 1px solid var(--border-light, rgba(150, 150, 150, 0.14));
+      }
+
+      .blog-activity-counts {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 3px 10px;
+        font-size: 11px;
+        font-weight: 600;
+        color: var(--text-secondary, #888);
+
+        // Accent as TEXT only: "posted today" is the live signal on the card.
+        .is-today { color: var(--accent-primary, #e0594b); }
+
+        span + span::before {
+          content: "·";
+          margin-right: 10px;
+          opacity: 0.6;
+          color: var(--text-secondary, #888);
+        }
+      }
+
+      // Three equal 16:9 tiles; fewer videos leave the slots empty rather than
+      // stretching one thumbnail across the card.
+      .blog-activity-strip {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 6px;
+      }
+
+      .blog-activity-thumb {
+        display: block;
+        aspect-ratio: 16 / 9;
+        border-radius: 8px;
+        overflow: hidden;
+        background: var(--bg-tertiary, rgba(150, 150, 150, 0.14));
+        transition: opacity 0.12s ease;
+
+        img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+        &:hover { opacity: 0.85; }
       }
 
     }

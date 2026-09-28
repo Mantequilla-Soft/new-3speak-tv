@@ -793,6 +793,26 @@ html[data-card-size="large"] { --card-min-w: 420px; }
 }
 
 
+/* "NEW since your last visit" tile badge (community pages). Same family as the
+   gated badge; the accent is a border + text, never a red fill. */
+.card .img-wrap .card-new-badge {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  z-index: 3;
+  background: rgba(0, 0, 0, 0.72);
+  color: #fff;
+  border: 1px solid var(--accent-primary, #e0594b);
+  font-size: var(--card-fs);
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  padding: 0.15rem 0.5rem;
+  border-radius: 999px;
+  pointer-events: none;
+
+  &.card-new-badge--below { top: 36px; }
+}
+
 // The payout / upvote / comment / view badges are shared components (they also
 // render on the watch page and in recommendations) and each carries its own
 // `font-size: 12px`. Inside a card they follow the card's single size instead.

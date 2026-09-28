@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { getHiveClient } from '../../utils/hiveNode';
 import { Client } from '@hiveio/dhive';
 import { MdAdd } from 'react-icons/md';
@@ -10,9 +10,46 @@ import SkeletonLoader from './SkeletonLoader';
 import './CommunitiesRender.scss';
 import { Link, useNavigate } from 'react-router-dom';
 import CreateCommunity from '../modal/CreateCommunity';
-import { HIVE_API_NODES } from '../../utils/config';
+import { HIVE_API_NODES, FEED_URL, CHECKER_URL } from '../../utils/config';
+import { useQuery } from '@tanstack/react-query';
+import axios from 'axios';
+import { fixVideoThumbnail, fallbackImg } from '../../utils/fixThumbnails';
 
 const client = getHiveClient();
+
+// Per community: videos posted today / this week / in 30 days on 3Speak, and the
+// newest few (different creators first). One cached checker call for the whole
+// directory, not one per card.
+const fetchActivity = async () => {
+  const { data } = await axios.get(`${FEED_URL}/feeds/communities/activity`);
+  return data?.communities || {};
+};
+
+// Details for communities the directory did not load, a few at a time so a
+// long list does not open dozens of RPC calls at once.
+async function fetchCommunities(names) {
+  const out = [];
+  for (let i = 0; i < names.length; i += 8) {
+    const batch = await Promise.all(names.slice(i, i + 8).map((name) =>
+      client.call('bridge', 'get_community', { name, observer: '' }).catch(() => null)));
+    out.push(...batch.filter((c) => c && c.name));
+  }
+  return out;
+}
+
+// Every typed word must appear in the title, hive-id or description (Hive's own
+// search reads the description too), in any order, and a word may be half-typed
+// ("gaming ph" finds "Gaming Photography").
+const matchesQuery = (c, q) => {
+  const hay = `${c?.title || ''} ${c?.name || ''} ${c?.about || ''}`.toLowerCase();
+  return q.toLowerCase().split(/\s+/).filter(Boolean).every((w) => hay.includes(w));
+};
+const uniqByName = (list) => {
+  const seen = new Set();
+  return list.filter((c) => c?.name && !seen.has(c.name) && seen.add(c.name));
+};
+
+const plural = (n, word) => `${n.toLocaleString()} ${word}${n === 1 ? '' : 's'}`;
 
 function CommunitiesRender() {
   const [data, setData] = useState([]); // All communities data
@@ -46,6 +83,12 @@ function CommunitiesRender() {
     }
     return () => { alive = false; };
   }, [user, incubationHandle]);
+  const { data: activity = {} } = useQuery({
+    queryKey: ['communities-activity'],
+    queryFn: fetchActivity,
+    staleTime: 5 * 60_000,
+  });
+
   const [searchQuery, setSearchQuery] = useState(''); // Search query state
   const [openModal, setOpenModal] = useState(false)
   const navigate = useNavigate();
@@ -71,10 +114,14 @@ function CommunitiesRender() {
 
   // Typing filters the loaded page IMMEDIATELY, so the list reacts to every
   // keystroke, and then asks Hive.
+  // What Hive answered for the last search, kept so narrowing that search while
+  // typing filters it instantly instead of emptying the list until Hive answers.
+  const [searchPool, setSearchPool] = useState([]);
+
   const handleSearch = (e) => {
     const query = e.target.value.toLowerCase();
     setSearchQuery(query);
-    setFilteredData(data.filter((c) => c.title.toLowerCase().includes(query)));
+    setFilteredData(uniqByName([...data, ...searchPool]).filter((c) => matchesQuery(c, query)));
   };
 
   // ...because the loaded page is only the 100 biggest communities, and the
@@ -90,10 +137,43 @@ function CommunitiesRender() {
 
     let alive = true;
     // Debounced: this is a network call per keystroke otherwise.
-    const t = setTimeout(() => {
-      client.call('bridge', 'list_communities', { last: '', limit: 100, query: q, observer: '' })
-        .then((res) => { if (alive && Array.isArray(res)) setFilteredData(res); })
-        .catch(() => { /* the local filter above is still showing something */ });
+    //
+    // Hive matches WHOLE words only: "gaming photo" finds Gaming Photography,
+    // "gaming ph" finds nothing. Its answer used to REPLACE the list, so the
+    // right community flashed up from the local filter and then vanished. Now
+    // an empty answer to a multi-word search is retried without the half-typed
+    // last word, and whatever comes back is merged with the local matches and
+    // narrowed by every typed word here.
+    //
+    // The checker's /communities/search is the first choice: it holds every
+    // community and matches substrings, so "gamin" finds what "gaming" finds.
+    // The Hive path below is the fallback when the checker cannot answer.
+    const ask = (query) => client.call('bridge', 'list_communities', { last: '', limit: 100, query, observer: '' })
+      .then((res) => (Array.isArray(res) ? res : []));
+    const t = setTimeout(async () => {
+      try {
+        const { data: found } = await axios.get(`${CHECKER_URL}/communities/search`, { params: { q } });
+        if (!alive) return;
+        const res = Array.isArray(found?.communities) ? found.communities : [];
+        setSearchPool(res);
+        setFilteredData(uniqByName([...res, ...data.filter((c) => matchesQuery(c, q))]));
+        return;
+      } catch { /* checker unavailable: ask Hive instead */ }
+      try {
+        let res = await ask(q);
+        // Hive answered the full query: its matches stand as they are. Only a
+        // retry (asked WITHOUT the last word) needs narrowing by it here.
+        let exact = true;
+        const words = q.split(/\s+/).filter(Boolean);
+        if (!res.length && words.length > 1) {
+          res = await ask(words.slice(0, -1).join(' '));
+          exact = false;
+        }
+        if (!alive) return;
+        setSearchPool(res);
+        const fromHive = exact ? res : res.filter((c) => matchesQuery(c, q));
+        setFilteredData(uniqByName([...data.filter((c) => matchesQuery(c, q)), ...fromHive]));
+      } catch { /* the local filter above is still showing something */ }
     }, 300);
 
     return () => { alive = false; clearTimeout(t); };
@@ -101,6 +181,33 @@ function CommunitiesRender() {
     // including it would re-run the search for no reason.
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchQuery]);
+
+  // The directory loads Hive's 100 BIGGEST communities, but about half of the
+  // communities people actually post 3Speak videos in are smaller than that and
+  // never appeared. Once both lists are in, the active ones that are missing are
+  // fetched and added, so the directory shows where the videos are.
+  // A ref, not state: flipping state re-ran this effect, whose cleanup then
+  // marked the fetch still in flight as stale and dropped its answer.
+  const addedActive = useRef(false);
+  useEffect(() => {
+    if (addedActive.current || loading || !data.length || !Object.keys(activity).length) return undefined;
+    addedActive.current = true;
+    const have = new Set(data.map((c) => c.name));
+    const missing = Object.keys(activity).filter((id) => !have.has(id));
+    if (!missing.length) return undefined;
+    // No cancel-on-cleanup: the ref above makes this run once, so a cleanup
+    // (React's dev double-mount, or `data` changing) would drop the only fetch.
+    fetchCommunities(missing).then((extra) => {
+      if (!extra.length) return;
+      const next = [...data, ...extra.filter((c) => !have.has(c.name))];
+      setData(next);
+      // Only while not searching: a search result list is Hive's answer to
+      // the query and should stay exactly that.
+      setFilteredData((prev) => (searchQuery.trim() ? prev : next));
+    });
+    return undefined;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [activity, data, loading]);
 
   useEffect(() => {
     // The tab title comes from RouteTitle like every other page. Setting
@@ -118,8 +225,11 @@ function CommunitiesRender() {
 
   // What the list can be ordered by. Every one of these comes straight from
   // bridge.list_communities, so nothing extra is fetched to offer them.
+  // "Videos this week" is the one sort that is not from bridge: it comes from
+  // the activity call above, and is how busy the community is ON 3SPEAK.
   const SORTS = [
     { id: 'subscribers', label: 'Subscribers', value: (c) => c.subscribers },
+    { id: 'active', label: 'Videos this week', value: (c) => activity[c.name]?.week ?? 0 },
     { id: 'authors', label: 'Active authors', value: (c) => c.num_authors },
     { id: 'pending', label: 'Pending rewards', value: (c) => c.sum_pending },
     { id: 'posts', label: 'Pending posts', value: (c) => c.num_pending },
@@ -184,7 +294,8 @@ function CommunitiesRender() {
       ) : (
         <div className="blog-feed">
           {sortBy(filteredData || [], SORTS, sortField, sortDir, { ids: mine, idOf: (c) => c.name }).map((community, index) => (
-            <div key={index} className="blog-card" onClick={() => handleCardClick(community.name)}>
+            <div key={community.name || index} className="blog-card" onClick={() => handleCardClick(community.name)}>
+              <div className="blog-card-main">
               <div className="img-wrap">
                 {/* The community's own picture when the index has it. The
                     hardcoded proxy below is the fallback: it cannot read
@@ -236,6 +347,42 @@ function CommunitiesRender() {
                   {community.created_at && <TimeAgo date={community.created_at} short />}
                 </div>
               </div>
+              </div>
+
+              {/* What is happening there on 3Speak right now: counts, then the
+                  newest videos. Absent for a community with no videos in the
+                  last 30 days, so a quiet card stays compact. */}
+              {activity[community.name] && (() => {
+                const a = activity[community.name];
+                return (
+                  <div className="blog-activity">
+                    <div className="blog-activity-counts">
+                      {a.today > 0 && <span className="is-today">{plural(a.today, 'video')} today</span>}
+                      {a.week > 0
+                        ? <span>{plural(a.week, 'video')} this week</span>
+                        : <span>{plural(a.month, 'video')} this month</span>}
+                    </div>
+                    <div className="blog-activity-strip">
+                      {a.latest.map((v) => (
+                        <Link
+                          key={`${v.author}/${v.permlink}`}
+                          to={`/watch?v=${v.author}/${v.permlink}`}
+                          className="blog-activity-thumb"
+                          title={`${v.title} by @${v.author}`}
+                          onClick={(e) => e.stopPropagation()}
+                        >
+                          <img
+                            src={fixVideoThumbnail(v)}
+                            alt=""
+                            loading="lazy"
+                            onError={(e) => { e.currentTarget.src = fallbackImg; }}
+                          />
+                        </Link>
+                      ))}
+                    </div>
+                  </div>
+                );
+              })()}
             </div>
           ))}
         </div>

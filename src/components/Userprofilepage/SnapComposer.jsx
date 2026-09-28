@@ -15,7 +15,9 @@ const toast = toastIn('Post');
  * minus the video-only "Allow Remix/Clip". Publishes under @peak.snaps and calls
  * onPosted(snap) with an optimistic snap object so the list can show it immediately.
  */
-export default function SnapComposer({ onPosted }) {
+// `community` (a hive-<digits> id) files the post under that community's
+// Discussion tab instead of it being only an update to the author's followers.
+export default function SnapComposer({ onPosted, community = '', placeholder = 'Share an update with your followers…' }) {
   const user = useAppStore((s) => s.user);
 
   const [body, setBody] = useState('');
@@ -68,7 +70,7 @@ export default function SnapComposer({ onPosted }) {
     const userTags = [...new Set([...tags, ...(pending && pending !== SNAP_TAG ? [pending] : [])])].slice(0, MAX_USER_TAGS);
     setPosting(true);
     try {
-      const res = await publishSnap({ user, body: text, tags: userTags, rewards, beneficiaries, nsfw });
+      const res = await publishSnap({ user, body: text, tags: userTags, rewards, beneficiaries, nsfw, community });
       toast.success('Snap posted!');
       const snap = res.indexed || {
         _id: `${user}/${res.permlink}`,
@@ -78,6 +80,7 @@ export default function SnapComposer({ onPosted }) {
         body: text,
         tags: [SNAP_TAG, ...userTags, ...(nsfw ? ['nsfw'] : [])],
         nsfw,
+        community: community || null,
         created: new Date().toISOString(),
       };
       // reset
@@ -98,7 +101,7 @@ export default function SnapComposer({ onPosted }) {
       <MarkdownComposer
         value={body}
         onChange={setBody}
-        placeholder="Share an update with your followers…"
+        placeholder={placeholder}
         previewContext="snap"
       />
 

@@ -7,6 +7,41 @@
 // 1.0.0 — that way they see all of these when develop is pushed to production.
 export const CHANGELOG = [
   {
+    version: '1.79.31',
+    date: '2026-09-28',
+    summary:
+      "The Communities page (/groups) now shows each community's newest videos and weekly activity, "
+      + 'and search finds communities as you type.',
+  },
+  {
+    version: '1.79.30',
+    date: '2026-09-28',
+    summary:
+      'Avatars hosted on busy image services load reliably again, and comments on community posts now show up '
+      + 'the moment you post them.',
+  },
+  {
+    version: '1.79.29',
+    date: '2026-09-28',
+    summary:
+      'Community pages now show pinned posts, top creators, the team and rules, plus Top and Discussion tabs. '
+      + 'New videos since your last visit are marked.',
+  },
+  {
+    version: '1.79.28',
+    date: '2026-09-27',
+    summary:
+      'Settings now shows whether @threespeak can post on your behalf, with a button to add it or take it back. '
+      + 'Both ask for your active key.',
+  },
+  {
+    version: '1.79.27',
+    date: '2026-09-27',
+    summary:
+      "Captions now use your device's language automatically, with English as the fallback. "
+      + 'Hovering over a video card also shows its captions in your language.',
+  },
+  {
     version: '1.79.26',
     date: '2026-09-27',
     summary:

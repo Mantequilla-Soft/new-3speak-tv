@@ -12,6 +12,11 @@ import { adsEnabledFor, adsBetaUserFor } from '../../utils/config';
 import {
   pushSupported, getPushState, enablePush, disablePush, getPushPrefs, setPushPrefs,
 } from '../../utils/webPush';
+import { getCurrentProvider, Providers } from '../../hive-api/aioha';
+import {
+  hasThreespeakPostingAuth, addThreespeakToPostingAuth, removeThreespeakFromPostingAuth,
+  waitForThreespeakPostingAuth,
+} from '../../utils/postingAuthority';
 import TagsV2Picker from '../tooltip/TagsV2Picker';
 import DataRequestForm from './DataRequestForm';
 import './SettingsModal.scss';
@@ -334,6 +339,98 @@ function ViewerRewardsSection() {
           {error || (saving ? 'Saving…' : 'Loading your current setting…')}
         </p>
       )}
+    </div>
+  );
+}
+
+/**
+ * @threespeak in the user's posting authority. Uploads ask for it (3Speak posts
+ * videos on the creator's behalf, and scheduled posts need it), but until now
+ * there was nowhere to see whether it is granted or to take it back.
+ *
+ * Both directions are an account_update2 signed with the ACTIVE key.
+ */
+function PostingAuthoritySection() {
+  const user = useAppStore((s) => s.user);
+  // null = checking, true/false = on chain, 'unavailable' = no Hive account to read
+  const [granted, setGranted] = useState(null);
+  // false | 'signing' | 'confirming'
+  const [busy, setBusy] = useState(false);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    if (!user) return undefined;
+    let alive = true;
+    setGranted(null);
+    hasThreespeakPostingAuth(user)
+      .then((v) => { if (alive) setGranted(v); })
+      // An incubating account has no Hive account yet, so there is nothing to show.
+      .catch(() => { if (alive) setGranted('unavailable'); });
+    return () => { alive = false; };
+  }, [user]);
+
+  if (!user || granted === 'unavailable') return null;
+
+  async function change(add) {
+    if (busy) return;
+    setBusy('signing');
+    setError(null);
+    // HiveSigner signs in a popup; open it synchronously on the click so it is
+    // not blocked, the helper navigates it to the sign URL.
+    const signWindow = getCurrentProvider() === Providers.HiveSigner ? window.open('', '_blank') : null;
+    try {
+      if (add) await addThreespeakToPostingAuth(user, { signWindow });
+      else await removeThreespeakFromPostingAuth(user, { signWindow });
+    } catch (err) {
+      setError(err.message || 'Could not update your posting authority.');
+      setBusy(false);
+      try { signWindow?.close(); } catch { /* ignore */ }
+      return;
+    }
+    try { signWindow?.close(); } catch { /* ignore */ }
+
+    // A signed broadcast is not proof it applied. Wait until the chain shows the
+    // change, and let the button follow what the chain says, not what we sent.
+    setBusy('confirming');
+    const now = await waitForThreespeakPostingAuth(user, add);
+    setGranted(now);
+    setBusy(false);
+    if (now === add) {
+      toast.success(add ? '@threespeak added to your posting authority' : '@threespeak removed from your posting authority');
+    } else {
+      setError(add
+        ? 'Signed, but @threespeak does not show up on your account yet. Reopen settings in a minute to check again.'
+        : 'Signed, but @threespeak is still on your account. Reopen settings in a minute to check again.');
+    }
+  }
+
+  return (
+    <div className="settings-section">
+      <h4 className="settings-section-title">Posting authority</h4>
+      <div className="settings-modal-row">
+        <div className="settings-row-text">
+          <span className="settings-row-title">
+            @threespeak {granted === true ? 'can post for you' : granted === false ? 'cannot post for you' : '\u2026'}
+          </span>
+          <span className="settings-row-desc">
+            Lets 3Speak publish your uploads and scheduled posts on your behalf, and save
+            some settings without a wallet prompt each time. It can only post, vote and
+            comment; it can never move funds or change your keys. Without it, uploads ask
+            you to add it again. Changing this needs your active key.
+          </span>
+        </div>
+        {granted === true && (
+          <button type="button" className="settings-auth-btn" onClick={() => change(false)} disabled={busy}>
+            {busy === 'confirming' ? 'Checking\u2026' : busy ? 'Removing\u2026' : 'Remove'}
+          </button>
+        )}
+        {granted === false && (
+          <button type="button" className="settings-auth-btn settings-auth-add" onClick={() => change(true)} disabled={busy}>
+            {busy === 'confirming' ? 'Checking\u2026' : busy ? 'Adding\u2026' : 'Add'}
+          </button>
+        )}
+      </div>
+      {error && <p className="settings-ads-status error">{error}</p>}
     </div>
   );
 }
@@ -709,6 +806,7 @@ export default function SettingsModal({ isOpen, onClose }) {
             />
           </div>
         )}
+        {tab === 'general' && <PostingAuthoritySection />}
 
         {tab === 'content' && (
           <div className="settings-subtabs" role="tablist" aria-label="Content settings">
