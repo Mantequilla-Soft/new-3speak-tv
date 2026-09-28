@@ -201,7 +201,21 @@
   background: transparent;
   color: var(--accent-primary);
 
-  &:hover { background: color-mix(in srgb, var(--accent-primary) 10%, transparent); }
+  &:hover:not(:disabled) { background: color-mix(in srgb, var(--accent-primary) 10%, transparent); }
+
+  // Before a path is picked on the last step.
+  &:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+  }
+}
+
+// The headline over the three path tiles on the last step.
+.incw-choose {
+  margin: 18px 0 10px;
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--text-primary);
 }
 
 .incw-secondary {

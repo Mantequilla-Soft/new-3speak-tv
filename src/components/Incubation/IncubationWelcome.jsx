@@ -133,7 +133,8 @@ export default function IncubationWelcome() {
   const promptsActive = usePromptsActive('incubation-welcome');
   const [open, setOpen] = useState(false);
   const [step, setStep] = useState(0);
-  // Their answer on the last step. Optional here: the profile asks again.
+  // Their answer on the last step. The list only exists once they have picked,
+  // so the last button waits for it.
   const [chosen, setChosen] = useState(null);
 
   useEffect(() => {
@@ -175,7 +176,10 @@ export default function IncubationWelcome() {
           </h2>
           {current.body}
           {current.key === 'path' && (
-            <TrackChooser current={chosen} onChosen={setChosen} />
+            <>
+              <h3 className="incw-choose">Choose your path</h3>
+              <TrackChooser current={chosen} onChosen={setChosen} />
+            </>
           )}
         </div>
 
@@ -194,9 +198,15 @@ export default function IncubationWelcome() {
               </button>
             )}
             {last ? (
-              <Link to="/profile" className="incw-primary" onClick={close}>
-                {chosen ? 'Show me my list' : 'Decide later'}
-              </Link>
+              chosen ? (
+                <Link to="/profile" className="incw-primary" onClick={close}>
+                  Show me my list
+                </Link>
+              ) : (
+                <button type="button" className="incw-primary" disabled title="Choose your path first">
+                  Show me my list
+                </button>
+              )
             ) : (
               <button type="button" className="incw-primary" onClick={() => setStep((n) => n + 1)}>
                 Next
