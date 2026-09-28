@@ -176,4 +176,406 @@
       .community-kpi { padding: 6px 2px; gap: 8px; }
     }
   }
+
+  // --- Mobile-only team + rules (the sidebar carries them on desktop) ------
+  .community-about--mobile { display: none; }
+  @include respond(phone) {
+    .community-about--mobile {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin: 12px 4px 0;
+    }
+  }
+
+  // --- Surf / Upload -------------------------------------------------------
+  // Neutral outline pills: the accent is text/border only, never a fill.
+  .community-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin: 14px 4px 0;
+
+    .community-action {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 7px 14px;
+      border-radius: 999px;
+      border: 1px solid var(--border-light, rgba(150, 150, 150, 0.3));
+      background: transparent;
+      color: var(--text-primary, #f1f1f1);
+      font-size: 13px;
+      font-weight: 600;
+      text-decoration: none;
+      cursor: pointer;
+      transition: border-color 0.12s ease, color 0.12s ease;
+
+      &:hover { border-color: var(--accent-primary, #e0594b); color: var(--accent-primary, #e0594b); }
+      &:disabled { opacity: 0.6; cursor: default; }
+    }
+  }
+
+  .community-section-title {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin: 0 0 8px;
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--text-primary, #f1f1f1);
+
+    svg { color: var(--accent-primary, #e0594b); }
+  }
+
+  // Horizontal rows scroll inside themselves, never the page.
+  %community-row {
+    display: flex;
+    gap: 12px;
+    overflow-x: auto;
+    scrollbar-width: thin;
+    padding-bottom: 6px;
+    scroll-snap-type: x proximity;
+    > * { scroll-snap-align: start; }
+  }
+
+  // --- Pinned ("Start here") ---------------------------------------------------
+  .community-pinned {
+    margin: 18px 4px 0;
+
+    .community-pinned-row { @extend %community-row; }
+
+    .community-pinned-card {
+      flex: 0 0 240px;
+      min-width: 0;
+      color: inherit;
+      text-decoration: none;
+
+      @include respond(phone) { flex-basis: 70%; }
+    }
+
+    .community-pinned-thumb {
+      position: relative;
+      aspect-ratio: 16 / 9;
+      border-radius: 10px;
+      overflow: hidden;
+      background: var(--bg-secondary, rgba(150, 150, 150, 0.12));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+      .community-pinned-thumb-text {
+        font-size: 28px;
+        font-weight: 700;
+        color: var(--text-secondary, #888);
+      }
+
+      .community-pinned-badge {
+        position: absolute;
+        top: 8px;
+        left: 8px;
+        z-index: 1;
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        padding: 2px 8px;
+        border-radius: 999px;
+        background: rgba(0, 0, 0, 0.72);
+        border: 1px solid var(--accent-primary, #e0594b);
+        color: #fff;
+        font-size: 11px;
+        font-weight: 600;
+      }
+    }
+
+    .community-pinned-title {
+      margin-top: 6px;
+      font-size: 13.5px;
+      font-weight: 600;
+      line-height: 1.3;
+      color: var(--text-primary, #f1f1f1);
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    .community-pinned-author {
+      margin-top: 2px;
+      font-size: 12px;
+      color: var(--text-secondary, #888);
+    }
+  }
+
+  // --- Top creators -------------------------------------------------------------
+  // Phones: a horizontal strip in the mobile block. Desktop: a sidebar card.
+  .community-top-creators {
+    margin: 0;
+
+    .community-creators-row { @extend %community-row; gap: 8px; }
+
+    .community-creator {
+      flex: 0 0 96px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 3px;
+      padding: 10px 6px;
+      border-radius: 12px;
+      color: inherit;
+      text-decoration: none;
+      transition: background 0.12s ease;
+
+      &:hover { background: var(--bg-secondary, rgba(150, 150, 150, 0.08)); }
+    }
+
+    .community-creator-avatar {
+      position: relative;
+
+      img {
+        width: 56px;
+        height: 56px;
+        border-radius: 50%;
+        object-fit: cover;
+        display: block;
+        background: var(--bg-secondary, rgba(150, 150, 150, 0.12));
+      }
+    }
+
+    // Fixed colours: the badge sits on an avatar whose brightness we do not
+    // control, same reason the leaderboard badges are opaque.
+    .community-creator-rank {
+      position: absolute;
+      right: -2px;
+      bottom: -2px;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      font-weight: 800;
+      color: #1a1a1a;
+      border: 2px solid var(--bg-primary, #0f0f0f);
+
+      &.rank-1 { background: #f5c542; }
+      &.rank-2 { background: #c9d1d9; }
+      &.rank-3 { background: #d99a5b; }
+    }
+
+    .community-creator-name {
+      max-width: 100%;
+      font-size: 12.5px;
+      font-weight: 600;
+      color: var(--text-primary, #f1f1f1);
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .community-creator-stat {
+      font-size: 11px;
+      color: var(--text-secondary, #888);
+      white-space: nowrap;
+    }
+  }
+
+  // Sidebar card: one row per creator (avatar, name, views), rank on the avatar.
+  .community-top-creators--side {
+    .community-creators-row {
+      flex-direction: column;
+      gap: 2px;
+      overflow: visible;
+      padding-bottom: 0;
+    }
+
+    .community-creator {
+      flex: 0 0 auto;
+      flex-direction: row;
+      gap: 8px;
+      padding: 5px 4px;
+      border-radius: 8px;
+    }
+
+    .community-creator-avatar img { width: 30px; height: 30px; }
+
+    .community-creator-rank {
+      width: 15px;
+      height: 15px;
+      font-size: 9px;
+      right: -4px;
+      bottom: -3px;
+      border-width: 1.5px;
+    }
+
+    .community-creator-name { flex: 1 1 auto; min-width: 0; font-size: 13px; text-align: left; }
+    .community-creator-stat { flex: 0 0 auto; }
+  }
+
+  // --- Tab extras ------------------------------------------------------------------
+  .community-tabs .community-tab .community-tab-count {
+    min-width: 18px;
+    padding: 0 6px;
+    border-radius: 999px;
+    border: 1px solid var(--accent-primary, #e0594b);
+    color: var(--accent-primary, #e0594b);
+    font-size: 11px;
+    line-height: 16px;
+    text-align: center;
+  }
+
+  // Phones already squeeze four tabs; let the bar scroll rather than wrap.
+  @include respond(phone) {
+    .community-tabs { overflow-x: auto; scrollbar-width: none; }
+  }
+
+  .community-windows {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin: 10px 4px 0;
+
+    .community-window {
+      padding: 5px 12px;
+      border-radius: 999px;
+      border: 1px solid var(--border-light, rgba(150, 150, 150, 0.3));
+      background: transparent;
+      color: var(--text-secondary, #888);
+      font-size: 12.5px;
+      font-weight: 600;
+      cursor: pointer;
+
+      &:hover { color: var(--text-primary, #f1f1f1); }
+      &.active {
+        color: var(--text-primary, #f1f1f1);
+        border-color: var(--accent-primary, #e0594b);
+      }
+    }
+  }
+
+  .community-empty {
+    margin: 24px 4px;
+    color: var(--text-secondary, #888);
+  }
+
+  .community-feed .community-snaps { margin-top: 12px; }
+
+  // --- Sidebar cards (team, rules) ---------------------------------------------
+  .community-card {
+    padding: 12px;
+    border: 1px solid var(--border-light, rgba(150, 150, 150, 0.18));
+    border-radius: 12px;
+    background: var(--bg-secondary, rgba(150, 150, 150, 0.06));
+
+    .community-card-title {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin: 0 0 8px;
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--text-primary, #f1f1f1);
+
+      svg { color: var(--accent-primary, #e0594b); }
+    }
+
+    .community-card-toggle {
+      width: 100%;
+      margin: 0;
+      padding: 0;
+      border: none;
+      background: transparent;
+      cursor: pointer;
+      text-align: left;
+
+      svg:last-child { margin-left: auto; color: var(--text-secondary, #888); }
+    }
+
+    .community-card-more {
+      margin-top: 6px;
+      padding: 0;
+      border: none;
+      background: transparent;
+      color: var(--text-secondary, #888);
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+
+      &:hover { color: var(--text-primary, #f1f1f1); }
+    }
+  }
+
+  .community-team-list {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+
+    // Phones: a compact wrap of chips instead of a tall list.
+    @include respond(phone) {
+      flex-direction: row;
+      flex-wrap: wrap;
+    }
+  }
+
+  .community-team-member {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    min-width: 0;
+    color: inherit;
+    text-decoration: none;
+
+    img {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      object-fit: cover;
+      flex: 0 0 auto;
+      background: var(--bg-primary, rgba(150, 150, 150, 0.12));
+    }
+
+    .community-team-text {
+      display: flex;
+      flex-direction: column;
+      min-width: 0;
+      line-height: 1.2;
+    }
+
+    .community-team-name {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-primary, #f1f1f1);
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .community-team-role {
+      font-size: 11px;
+      color: var(--text-secondary, #888);
+    }
+
+    &:hover .community-team-name { text-decoration: underline; }
+
+    @include respond(phone) {
+      padding: 4px 10px 4px 4px;
+      border-radius: 999px;
+      border: 1px solid var(--border-light, rgba(150, 150, 150, 0.18));
+      img { width: 24px; height: 24px; }
+    }
+  }
+
+  .community-rules-list {
+    margin: 0;
+    padding-left: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    font-size: 12.5px;
+    line-height: 1.4;
+    color: var(--text-secondary, #aaa);
+  }
 }

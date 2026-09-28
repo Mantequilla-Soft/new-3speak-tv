@@ -3,7 +3,10 @@ import { Link } from 'react-router-dom';
 import { MdCheckCircle, MdRadioButtonUnchecked, MdExpandMore } from 'react-icons/md';
 import {
   FaRocket, FaVideo, FaMobileAlt, FaComments, FaUserPlus, FaClock, FaHourglassHalf,
+  FaUsers, FaIdCard,
 } from 'react-icons/fa';
+import TrackChooser from './TrackChooser';
+import { trackTitle } from './tracks';
 import {
   fetchIncubationProgress, progressHue, progressFraction, taskFraction, onIncubationProgress,
 } from '../../lib/incubation';
@@ -17,10 +20,22 @@ import {
  * pixels, which is all that has actually changed.
  */
 
+// Plural wording from the goal's own number, which the server decides per track
+// (a creator posts 1 short, say): so the label can never promise a different
+// number from the one that is counted.
+const plural = (n, one, many) => (n === 1 ? one : many.replace('#', n));
+
+// Watch time as a person would say it: "an hour", "20 minutes".
+function watchWords(seconds) {
+  if (seconds >= 3600 && seconds % 3600 === 0) return plural(seconds / 3600, 'an hour', '# hours');
+  return plural(Math.round(seconds / 60), 'a minute', '# minutes');
+}
+
+// `label` is a function of the goal's `need`.
 const TASK_COPY = {
   video: {
     Icon: FaVideo,
-    label: 'Upload a video',
+    label: (n) => plural(n, 'Upload a video', 'Upload # videos'),
     hint: 'Share something about you and what your channel will be about.',
     why: 'This is the first thing the team looks at when they review you, and the first thing a visitor sees when they open your channel.',
     counts: [
@@ -31,22 +46,22 @@ const TASK_COPY = {
   },
   short: {
     Icon: FaMobileAlt,
-    label: 'Post 2 shorts',
+    label: (n) => plural(n, 'Post a short', 'Post # shorts'),
     hint: 'Participate in 3Speak Shorts and upload some moments of your daily life or some stories you want to share.',
     why: 'Shorts are the fastest way to be found. They play in a feed of creators people do not follow yet, so a short reaches past your own channel.',
     counts: [
       'Vertical videos posted from the shorts uploader.',
-      'Two of them, on any subject you like.',
+      'On any subject you like.',
     ],
     cta: { label: 'Post a short', to: '/embed-studio?from=shorts' },
   },
   follow: {
     Icon: FaUserPlus,
-    label: 'Follow 5 creators',
+    label: (n) => plural(n, 'Follow a creator', 'Follow # creators'),
     hint: 'Build up a network of likeminded people, or creators you find exciting.',
     why: 'Your following list is what turns the home feed into your feed. It travels with you to Hive when you are upgraded.',
     counts: [
-      'Five creators you follow right now.',
+      'Creators you follow right now.',
       'Unfollowing someone lowers the count again, so this tracks who you actually follow rather than how many buttons you pressed.',
     ],
     cta: { label: 'Find creators', to: '/discover' },
@@ -56,18 +71,18 @@ const TASK_COPY = {
   // "what counts" list is built in taskCounts for the same reason.
   comment: {
     Icon: FaComments,
-    label: 'Write 10 comments',
+    label: (n) => plural(n, 'Write a comment', 'Write # comments'),
     why: 'Comments are how people find you before you have an audience. One real reply under somebody else\u2019s video will do more for you than an upload nobody has seen yet.',
     cta: { label: 'Find something to reply to', to: '/discover' },
   },
   watch: {
     Icon: FaClock,
-    label: 'Watch an hour on 3Speak',
+    label: (n) => `Watch ${watchWords(n)} on 3Speak`,
     hint: 'Any videos. Counted while you are really watching.',
-    why: 'The hour says you are here as a viewer and not only as an uploader. It is the goal most people finish without trying.',
+    why: 'Watching says you are here to take part and not only to post. It is the goal most people finish without trying.',
     counts: [
       'Time on 3Speak itself. The same video embedded on another site cannot count.',
-      'Once per video. Rewatching one raises its best time, it never adds to it, and no single video can supply the whole hour on its own.',
+      'Once per video. Rewatching one raises its best time, it never adds to it, and no single video can supply all of it on its own.',
       'Real playing time, so speeding a video up is not punished and slowing it down does not stretch the hour.',
       'On screen. A video left playing in a background tab does not build the hour.',
       'Not your own videos.',
@@ -80,11 +95,39 @@ const TASK_COPY = {
   // taskCounts so it can name the actual date from the server.
   time: {
     Icon: FaHourglassHalf,
-    label: 'Be here for 3 days',
+    label: (n) => plural(n, 'Be here for a day', 'Be here for # days'),
     hint: 'This one finishes on its own. Nothing to do.',
-    why: 'A channel that appeared an hour ago and a channel that has been here a few days look the same on paper. The days are what tell them apart, so everyone waits the same short while.',
+    why: 'An account that appeared an hour ago and one that has been here a few days look the same on paper. The days are what tell them apart, so everyone waits the same short while.',
+  },
+  subscription: {
+    Icon: FaUsers,
+    label: (n) => plural(n, 'Join a community', 'Join # communities'),
+    hint: 'Find communities about the things you like to watch or make.',
+    why: 'Communities gather the videos on one subject and the people who care about it. Joining one fills your feed with more of what you like, and for creators it is where a new channel finds its first viewers.',
+    counts: [
+      'Communities you are a member of right now.',
+      'Leaving one lowers the count again.',
+    ],
+    cta: { label: 'Browse communities', to: '/groups' },
+  },
+  // For advertisers: a brand is judged by its profile. The five fields are the
+  // ones server/warmup.cjs counts; whether they fit the brand is the team's call.
+  profile: {
+    Icon: FaIdCard,
+    label: () => 'Set up your brand profile',
+    hint: 'Name, about text, logo, banner and website. Use "Edit profile" at the top of this page.',
+    why: 'Viewers, and the team reviewing you, see who is behind an ad before anything else. A complete profile is what makes a brand recognisable and trustworthy.',
+    counts: [
+      'Display name: your brand name.',
+      'About: what the brand does, in a sentence or two.',
+      'Profile picture: your logo.',
+      'Cover image: your banner.',
+      'Website: where people can find out more.',
+    ],
   },
 };
+
+const labelOf = (t) => TASK_COPY[t.type]?.label?.(t.need) || t.type;
 
 /**
  * Seconds as a duration a person would say out loud.
@@ -129,7 +172,7 @@ function taskCounts(t, minCommentChars) {
   if (t.type === 'time') {
     const when = t.readyAt ? asDate(t.readyAt) : null;
     return [
-      'Three full days from the day you signed up.',
+      `${plural(t.need, 'A full day', '# full days')} from the day you signed up.`,
       when
         ? `For you that is ${when}. The other goals can all be finished before then.`
         : 'The other goals can all be finished before then.',
@@ -200,6 +243,8 @@ export default function IncubationProgressPanel() {
   // on purpose: folding the whole list away is a standing preference worth
   // remembering, opening one goal is a question you have finished asking.
   const [openTasks, setOpenTasks] = useState(() => new Set());
+  // Showing the "what brings you here" choices again, to change the answer.
+  const [changingTrack, setChangingTrack] = useState(false);
 
   useEffect(() => {
     let alive = true;
@@ -232,6 +277,27 @@ export default function IncubationProgressPanel() {
 
   if (!progress) return null;
 
+  // Nothing to count until they say what they are here for.
+  if (progress.needsTrack || changingTrack) {
+    return (
+      <section className="inc-panel inc-progress">
+        <header>
+          <h2><FaRocket size={14} aria-hidden="true" /> What brings you to 3Speak?</h2>
+        </header>
+        <p className="inc-track-intro">
+          Your path to a Hive account depends on it: viewers watch and join in,
+          creators publish, and advertisers set up their brand. You can change it later.
+        </p>
+        <TrackChooser current={progress.track || null} onChosen={() => setChangingTrack(false)} />
+        {changingTrack && (
+          <button type="button" className="inc-track-change" onClick={() => setChangingTrack(false)}>
+            Keep my current path
+          </button>
+        )}
+      </section>
+    );
+  }
+
   const doneCount = progress.tasks.filter((t) => t.done).length;
   const totalTasks = progress.tasks.length;
   // Each goal is worth an equal share and partial progress inside one counts, so
@@ -242,6 +308,14 @@ export default function IncubationProgressPanel() {
     <section className="inc-panel inc-progress">
       <header>
         <h2><FaRocket size={14} aria-hidden="true" /> Your path to a Hive account</h2>
+        {progress.track && (
+          <span className="inc-track-current">
+            {trackTitle(progress.track)}
+            <button type="button" className="inc-track-change" onClick={() => setChangingTrack(true)}>
+              Change
+            </button>
+          </span>
+        )}
         <span
           className="inc-progress-count"
           style={{ '--bar-hue': progressHue(filled) }}
@@ -318,7 +392,7 @@ export default function IncubationProgressPanel() {
                     <span className="inc-task-text">
                       <strong>
                         {Icon ? <Icon size={12} aria-hidden="true" /> : null}
-                        {copy.label || t.type}
+                        {labelOf(t)}
                       </strong>
                       <span>{taskHint(t, progress.minCommentChars)}</span>
                     </span>

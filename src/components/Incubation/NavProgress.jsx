@@ -148,6 +148,16 @@ export default function NavProgress() {
 
   if (!incubationHandle || !progress) return null;
 
+  // They have not said what they are here for, so there are no goals to count
+  // yet: point them at the question instead of showing an empty 0/0.
+  if (progress.needsTrack) {
+    return (
+      <Link to="/profile" className="nav-progress is-choose" title="Tell us what brings you to 3Speak to see your path to a Hive account.">
+        <span className="nav-progress-count">Choose your path</span>
+      </Link>
+    );
+  }
+
   const done = progress.tasks.filter((t) => t.done).length;
   const total = progress.tasks.length;
   // Same scale as the profile panel: each goal is worth an equal share and

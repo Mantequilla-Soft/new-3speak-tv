@@ -5,8 +5,9 @@
 // passing refusals through) is the SDK's createWarmupHandler. What is 3Speak's
 // is only this file:
 //
-//   goals         the ladder a channel climbs before the team reviews it for a
-//                 Hive account. The counts come from the hosted service; watch
+//   goals         the ladders a person climbs before the team reviews them for
+//                 a Hive account, one per kind of user (viewer, creator,
+//                 advertiser). The counts come from the hosted service; watch
 //                 time is 3Speak's own measurement (the player writes it into
 //                 3Speak's database) and comes from the checker.
 //
@@ -19,17 +20,37 @@
 
 const CHECKER_INTERNAL_URL = (process.env.CHECKER_INTERNAL_URL || 'http://127.0.0.1:3131').replace(/\/+$/, '')
 
-// Follow before comment: the easier first step, and it gives them a feed worth
-// commenting on. `time` is last because it is the only one you cannot go and
-// do: three days between signing up and being reviewable.
-const GOALS = [
-  { type: 'video', need: 1 },
-  { type: 'short', need: 2 },
-  { type: 'follow', need: 5 },
-  { type: 'comment', need: 10 },
-  { type: 'watch', need: 3600, unit: 'seconds', measure: ({ handle }) => watchSeconds(handle) },
-  { type: 'time', from: 'days', need: 3 }
-]
+// What a person has to do before the team reviews them for a Hive account,
+// by what they told us they are here for (the SDK's WarmupGoals tracks). They
+// pick on the welcome screen or their profile, and can change it later.
+//
+// `time` is last in every list because it is the only goal you cannot go and
+// do: a minimum age between signing up and being reviewable.
+const watch = (need) => ({ type: 'watch', need, unit: 'seconds', measure: ({ handle }) => watchSeconds(handle) })
+const TRACKS = {
+  viewer: [
+    watch(3600),
+    { type: 'comment', need: 10 },
+    { type: 'follow', need: 5 },
+    { type: 'subscription', need: 1 },
+    { type: 'time', from: 'days', need: 5 }
+  ],
+  creator: [
+    { type: 'video', need: 1 },
+    { type: 'short', need: 1 },
+    { type: 'follow', need: 5 },
+    { type: 'subscription', need: 2 },
+    watch(1200),
+    { type: 'comment', need: 5 },
+    { type: 'time', from: 'days', need: 3 }
+  ],
+  // A brand is judged by its profile: name, about, logo, banner and website
+  // filled in. Whether they fit the brand is the reviewer's call.
+  advertiser: [
+    { type: 'profile', need: 5, fields: ['name', 'about', 'profile_image', 'cover_image', 'website'] },
+    { type: 'time', from: 'days', need: 1 }
+  ]
+}
 // A length floor for a reply to count, not a quality judgement.
 const MIN_COMMENT_CHARS = 20
 
@@ -58,7 +79,7 @@ async function claimAssets({ handle, hiveUsername }) {
  * @param deps { inc, butr, getSession, getHiveUser } from index.cjs
  */
 function createWarmupBackend(sdk, { inc, butr, getSession, getHiveUser }) {
-  const goals = new sdk.WarmupGoals({ goals: GOALS, minCommentChars: MIN_COMMENT_CHARS, butrauth: butr })
+  const goals = new sdk.WarmupGoals({ tracks: TRACKS, minCommentChars: MIN_COMMENT_CHARS, butrauth: butr })
   return sdk.createWarmupHandler({
     client: inc,
     goals,
@@ -69,4 +90,4 @@ function createWarmupBackend(sdk, { inc, butr, getSession, getHiveUser }) {
   })
 }
 
-module.exports = { createWarmupBackend, GOALS, MIN_COMMENT_CHARS }
+module.exports = { createWarmupBackend, TRACKS, MIN_COMMENT_CHARS }

@@ -27,6 +27,18 @@ export async function fetchSnaps(owner, page = 1, limit = 20) {
   return data; // { success, snaps, page, limit, total, hasMore }
 }
 
+// A Hive community id. A snap posted from a community page names it in
+// json_metadata.community; the checker reads it back from the chain when indexing.
+const COMMUNITY_ID = /^hive-\d+$/;
+
+/** Snaps posted into one Hive community's Discussion tab, newest first. */
+export async function fetchCommunitySnaps(community, page = 1, limit = 20) {
+  const { data } = await axios.get(
+    `${CHECKER_URL}/snaps/community/${encodeURIComponent(community)}?page=${page}&limit=${limit}`,
+  );
+  return data; // { success, snaps, page, limit, total, hasMore }
+}
+
 /**
  * Cross-author community-post feed for the home sections (fresh <7d, excludes the
  * viewer's hidden + already-engaged snaps server-side).
@@ -101,11 +113,12 @@ function buildOptions(author, permlink, rewards, beneficiaries) {
 
 /**
  * Publish a written snap, then index it in the checker.
+ * `community` (a hive-<digits> id) files the snap under that community's Discussion tab.
  * @param {{ user:string, body:string, tags?:string[], rewards?:'default'|'powerup'|'decline',
- *           beneficiaries?:{account:string,weight:number}[], nsfw?:boolean }} opts
+ *           beneficiaries?:{account:string,weight:number}[], nsfw?:boolean, community?:string }} opts
  * @returns {{ author:string, permlink:string, indexed:object|null }}
  */
-export async function publishSnap({ user, body, tags = [], rewards = 'default', beneficiaries = [], nsfw = false }) {
+export async function publishSnap({ user, body, tags = [], rewards = 'default', beneficiaries = [], nsfw = false, community = '' }) {
   if (!user) throw new Error('Please log in first');
   const text = String(body || '').trim();
   if (!text) throw new Error('Write something first');
@@ -129,6 +142,7 @@ export async function publishSnap({ user, body, tags = [], rewards = 'default', 
     format: 'markdown',
     tags: finalTags,
     type: 'snap',
+    ...(COMMUNITY_ID.test(community) ? { community } : {}),
   };
 
   const options = buildOptions(user, permlink, rewards, beneficiaries);
@@ -182,11 +196,20 @@ export async function updateSnap({ user, permlink, body, tags = [], nsfw = false
   const cleanTags = [SNAP_TAG, ...userTags];
   if (nsfw) cleanTags.push('nsfw');
 
+  // Keep the community the snap was filed under: an edit rewrites the whole
+  // json_metadata, and dropping it would pull the snap out of that Discussion tab.
+  let community = '';
+  try {
+    const prev = typeof post.json_metadata === 'string' ? JSON.parse(post.json_metadata || '{}') : (post.json_metadata || {});
+    if (COMMUNITY_ID.test(prev.community || '')) community = prev.community;
+  } catch { /* unreadable metadata: nothing to keep */ }
+
   const jsonMetadata = {
     app: SNAP_APP,
     format: 'markdown',
     tags: cleanTags.slice(0, 10),
     type: 'snap',
+    ...(community ? { community } : {}),
   };
 
   const result = await commentWithAioha(post.parent_author, post.parent_permlink, permlink, '', text, jsonMetadata, null);

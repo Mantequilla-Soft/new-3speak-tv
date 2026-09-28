@@ -307,6 +307,10 @@ export const followIncubation = (following, state) =>
 export const saveIncubationProfile = (profile, interests) =>
   write('/social/profile', 'PUT', { profile, interests });
 export const fetchMyIncubationProfile = () => write('/social/profile/mine', 'GET');
+// What they are here for: 'viewer', 'creator' or 'advertiser'. Decides which
+// goals they get (server/warmup.cjs); announced so the panel and the nav pill
+// re-read their list straight away.
+export const setIncubationTrack = (track) => announcing(write('/social/track', 'PUT', { track }));
 
 /**
  * "Something that can move a goal just happened."
