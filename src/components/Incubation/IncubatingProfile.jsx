@@ -364,6 +364,9 @@ export default function IncubatingProfile({ handle, own = false }) {
           )}
           </div>
 
+          {/* Above the unlocks: until a path is picked there is no list to work
+              through, so the question comes first. */}
+          {showSidebar && <TrackQuestion />}
           {showSidebar && (
             <section className="inc-panel inc-unlocks">
               <h2><FaUnlockAlt size={14} aria-hidden="true" /> What a Hive account gets you</h2>
@@ -377,7 +380,6 @@ export default function IncubatingProfile({ handle, own = false }) {
               </ul>
             </section>
           )}
-          {showSidebar && <TrackQuestion />}
         </main>
       </div>
 
