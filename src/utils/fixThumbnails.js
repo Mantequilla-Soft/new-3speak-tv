@@ -35,7 +35,7 @@ const PROXY_REFUSES = /^https?:\/\/(?:images|img)\.3speak\.tv\//i;
 export const hiveProxyRefuses = (url) => PROXY_REFUSES.test(String(url || ''));
 
 // Downscale any absolute image URL through Hive's resize proxy.
-const hiveProxy = (url, size) => (
+export const hiveProxy = (url, size) => (
   PROXY_REFUSES.test(url)
     ? url
     : `https://images.hive.blog/p/${bs58.encode(Buffer.from(url))}?format=jpeg&mode=cover&width=${size.w}&height=${size.h}`

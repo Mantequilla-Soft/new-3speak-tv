@@ -8,7 +8,7 @@ import { toastIn } from '../../utils/toast';
 import { BiCommentDetail } from 'react-icons/bi';
 import { MdMoreVert, MdEdit, MdClose } from 'react-icons/md';
 import {
-  fetchSnaps, SNAP_TAG, MAX_USER_TAGS, recordSnapInteraction, updateSnap,
+  fetchSnaps, fetchCommunitySnaps, SNAP_TAG, MAX_USER_TAGS, recordSnapInteraction, updateSnap,
   hideSnap, unhideSnap, hideSnapCreator, unhideSnapCreator,
 } from '../../lib/snaps';
 import MarkdownComposer from '../studio/MarkdownComposer';
@@ -87,6 +87,31 @@ async function fetchReplies(author, permlink) {
     .sort((a, b) => new Date(a.created) - new Date(b.created));
 }
 
+// A reply shows the moment it is signed, not when a node gets round to returning
+// it: get_content_replies routinely lags a fresh comment by several seconds, and
+// the single refetch 3s after posting often came back without it, so the thread
+// looked like the comment had failed until a reload. `pending` holds what the
+// viewer just wrote; each entry drops out once the fetched thread contains it
+// (same permlink, or same author + body for an off-chain reply stored under its
+// own permlink). The refetches are spread out until the chain catches up.
+const REFETCH_AFTER_MS = [3000, 8000, 15000];
+function usePendingReplies(fetched, refetch) {
+  const [pending, setPending] = useState([]);
+  const timers = useRef([]);
+  useEffect(() => () => timers.current.forEach(clearTimeout), []);
+
+  const landed = (p) => fetched.some((c) => c.permlink === p.permlink
+    || (c.author === p.author && String(c.body || '').trim() === String(p.body || '').trim()));
+  const waiting = pending.filter((p) => !landed(p));
+
+  const add = (reply) => {
+    if (!reply) return;
+    setPending((prev) => [...prev, reply]);
+    timers.current.push(...REFETCH_AFTER_MS.map((ms) => setTimeout(() => refetch(), ms)));
+  };
+  return { all: [...fetched, ...waiting], waitingCount: waiting.length, add };
+}
+
 // Body with "read more"/"show less" — a very long snap is capped at a fraction of
 // the viewport (`maxVh`), but only when it actually overflows (no fade on short
 // posts). The feed uses a tighter cap than the profile tab.
@@ -149,7 +174,8 @@ function SnapBody({ body, maxVh = 0.33, onReadMore }) {
 
 // Reply composer — reused for the snap itself and for any comment (nested replies).
 // onSigned fires the moment the broadcast succeeds (for instant counters);
-// onPosted fires ~3s later, when the RPC can actually return the new reply.
+// onPosted fires right after it with the new reply, so the thread can show it
+// before any node returns it (see usePendingReplies).
 function ReplyBox({ parentAuthor, parentPermlink, onPosted, onSigned, autoFocus = false }) {
   const user = useAppStore((s) => s.user);
   const incubationHandle = useAppStore((s) => s.incubationHandle);
@@ -169,9 +195,20 @@ function ReplyBox({ parentAuthor, parentPermlink, onPosted, onSigned, autoFocus 
       const rp = `re-${parentPermlink}-${Date.now() % 1000000}`.toLowerCase().replace(/[^a-z0-9-]/g, '').slice(0, 250);
       await commentWithAioha(parentAuthor, parentPermlink, rp, '', text, { app: '3speak/snap', format: 'markdown' }, null);
       toast.success('Comment posted!');
-      onSigned?.(); // instant — counters bump right after signing
+      // What was just written, in the shape the thread renders, so it can be
+      // shown before any node returns it (see usePendingReplies).
+      const local = {
+        author: user || incubationHandle,
+        permlink: rp,
+        body: text,
+        created: new Date().toISOString(),
+        children: 0,
+        offChildren: 0,
+        onChain: !!user,
+      };
+      onSigned?.(local); // instant — counters bump right after signing
       setReply('');
-      setTimeout(() => onPosted?.(), 3000);
+      onPosted?.(local);
     } catch (e) {
       toast.error(e?.message || 'Could not post the comment');
     } finally {
@@ -218,12 +255,14 @@ function SnapComment({ comment }) {
     return () => { alive = false; };
   }, [comment.body]);
 
-  const { data: children = [], refetch } = useQuery({
+  const { data: fetchedChildren = [], refetch } = useQuery({
     queryKey: ['snap-replies', comment.author, comment.permlink],
     queryFn: () => fetchReplies(comment.author, comment.permlink),
     enabled: showReplies,
     staleTime: 30_000,
   });
+  const { all: children, waitingCount, add: addPending } = usePendingReplies(fetchedChildren, refetch);
+  const shownCount = childCount + waitingCount;
 
   return (
     <li className="snap-comment">
@@ -236,9 +275,9 @@ function SnapComment({ comment }) {
         {(user || incubationHandle) && (
           <button type="button" onClick={() => setReplying((v) => !v)}>{replying ? 'Cancel' : 'Reply'}</button>
         )}
-        {childCount > 0 && (
+        {shownCount > 0 && (
           <button type="button" onClick={() => setShowReplies((v) => !v)}>
-            {showReplies ? 'Hide replies' : `${childCount} ${childCount > 1 ? 'replies' : 'reply'}`}
+            {showReplies ? 'Hide replies' : `${shownCount} ${shownCount > 1 ? 'replies' : 'reply'}`}
           </button>
         )}
       </div>
@@ -247,7 +286,7 @@ function SnapComment({ comment }) {
           parentAuthor={comment.author}
           parentPermlink={comment.permlink}
           autoFocus
-          onPosted={() => { setReplying(false); setShowReplies(true); refetch(); }}
+          onPosted={(local) => { setReplying(false); setShowReplies(true); addPending(local); }}
         />
       )}
       {showReplies && children.length > 0 && (
@@ -260,16 +299,17 @@ function SnapComment({ comment }) {
 }
 
 function SnapComments({ owner, permlink, onCommented, autoFocus = false }) {
-  const { data: comments = [], isLoading, refetch } = useQuery({
+  const { data: fetched = [], isLoading, refetch } = useQuery({
     queryKey: ['snap-comments', owner, permlink],
     queryFn: () => fetchReplies(owner, permlink),
     staleTime: 30_000,
   });
+  const { all: comments, add: addPending } = usePendingReplies(fetched, refetch);
 
   return (
     <div className="snap-comments">
-      <ReplyBox parentAuthor={owner} parentPermlink={permlink} onSigned={onCommented} onPosted={refetch} autoFocus={autoFocus} />
-      {isLoading ? (
+      <ReplyBox parentAuthor={owner} parentPermlink={permlink} onSigned={onCommented} onPosted={addPending} autoFocus={autoFocus} />
+      {isLoading && comments.length === 0 ? (
         <div className="snap-comments-status">Loading comments…</div>
       ) : comments.length === 0 ? (
         <div className="snap-comments-status">No comments yet.</div>
@@ -464,7 +504,10 @@ function SnapCommentsModal({ owner, permlink, onClose, onCommented }) {
 // `autoOpenComments` is the landing side of that hand-off: the Community tab
 // passes it on the ONE card the visitor was routed to, so its thread opens (and
 // the reply box grabs focus) without another click.
-export function SnapCard({ snap, feedMode = false, onRemove, onOpenTab, maxVh, autoOpenComments = false }) {
+// `showAuthor` names the author like the feed does but keeps the profile tab's
+// behaviour otherwise (inline comments, full clamp) — a community Discussion tab
+// is a list of many authors that is still a page of its own, not a feed rail.
+export function SnapCard({ snap, feedMode = false, showAuthor = false, onRemove, onOpenTab, maxVh, autoOpenComments = false }) {
   const user = useAppStore((s) => s.user);
   const incubationHandle = useAppStore((s) => s.incubationHandle);
   // Whoever is reading this card, by whichever identity they have. The off-chain
@@ -563,11 +606,11 @@ export function SnapCard({ snap, feedMode = false, onRemove, onOpenTab, maxVh, a
 
   return (
     <article className={`snap-card${autoOpenComments ? ' snap-card--highlighted' : ''}`} ref={cardRef}>
-      <div className={`snap-card-head${feedMode ? ' snap-card-head--feed' : ''}`}>
+      <div className={`snap-card-head${feedMode || showAuthor ? ' snap-card-head--feed' : ''}`}>
         {/* In the home feed the snap is from any creator — show the author badge so
             the viewer can follow them right there; on a profile Community tab it's
             always that profile, so we omit it. */}
-        {feedMode && (
+        {(feedMode || showAuthor) && (
           <AuthorBadge author={snap.owner} showFollow compact tabHint="community" />
         )}
         {feedMode && <span className="snap-feed-title">Community snap</span>}
@@ -677,23 +720,27 @@ export function SnapCard({ snap, feedMode = false, onRemove, onOpenTab, maxVh, a
 // `onOpenTab`, when given, marks every card as an OVERVIEW preview (see SnapCard)
 // — used only for the Overview page's own "Community" rail, never on the actual
 // Community tab, where cards behave normally (expand/open inline).
-export default function CommunitySnaps({ user, canPost = false, limit = 0, hideEmpty = false, targetPermlink = null, openComments = false, onOpenTab = null }) {
+//
+// `community` switches to a Hive community's Discussion tab: the list is every
+// author's snaps filed under that community, cards name their author (showAuthor),
+// and the composer (still gated by canPost) files new posts there.
+export default function CommunitySnaps({ user, community = '', canPost = false, limit = 0, hideEmpty = false, targetPermlink = null, openComments = false, onOpenTab = null }) {
   const [optimistic, setOptimistic] = useState([]);
   const queryClient = useQueryClient();
 
   const { data, isLoading, refetch } = useQuery({
-    queryKey: ['community-snaps', user],
-    queryFn: () => fetchSnaps(user),
-    enabled: !!user,
+    queryKey: community ? ['community-discussion', community] : ['community-snaps', user],
+    queryFn: () => (community ? fetchCommunitySnaps(community) : fetchSnaps(user)),
+    enabled: !!(community || user),
     staleTime: 30_000,
   });
 
   const snaps = useMemo(() => {
     const fetched = data?.snaps || [];
-    const seen = new Set(fetched.map((s) => s.permlink));
-    const extra = optimistic.filter((s) => s.owner === user && !seen.has(s.permlink));
+    const seen = new Set(fetched.map((s) => `${s.owner}/${s.permlink}`));
+    const extra = optimistic.filter((s) => (community || s.owner === user) && !seen.has(`${s.owner}/${s.permlink}`));
     return [...extra, ...fetched];
-  }, [data?.snaps, optimistic, user]);
+  }, [data?.snaps, optimistic, user, community]);
 
   const onPosted = (snap) => {
     setOptimistic((prev) => [snap, ...prev.filter((s) => s.permlink !== snap.permlink)]);
@@ -707,14 +754,22 @@ export default function CommunitySnaps({ user, canPost = false, limit = 0, hideE
 
   return (
     <div className="community-snaps">
-      {canPost && <SnapComposer onPosted={onPosted} />}
+      {canPost && (
+        <SnapComposer
+          onPosted={onPosted}
+          community={community}
+          {...(community ? { placeholder: 'Start a discussion in this community…' } : {})}
+        />
+      )}
 
       {isLoading && snaps.length === 0 ? (
         <BarLoader />
       ) : snaps.length === 0 ? (
         hideEmpty ? null : (
           <div className="snap-empty">
-            {canPost ? 'No community posts yet — share your first update above.' : 'No community posts yet.'}
+            {community
+              ? (canPost ? 'No discussions yet. Start the first one above.' : 'No discussions yet. Log in to start one.')
+              : (canPost ? 'No community posts yet — share your first update above.' : 'No community posts yet.')}
           </div>
         )
       ) : (
@@ -724,6 +779,7 @@ export default function CommunitySnaps({ user, canPost = false, limit = 0, hideE
               <SnapCard
                 key={s._id || `${s.owner}/${s.permlink}`}
                 snap={s}
+                showAuthor={!!community}
                 onOpenTab={onOpenTab}
                 autoOpenComments={openComments && !!targetPermlink && s.permlink === targetPermlink}
               />

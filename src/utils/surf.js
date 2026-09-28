@@ -10,7 +10,7 @@
 // Surf mode lives in the watch URL as `&surf=<slug>`, so it survives a reload and
 // the back button, and a watch page opened any other way never shows the bar.
 import axios from 'axios';
-import { TAG_FEED_URL } from './config';
+import { TAG_FEED_URL, FEED_URL } from './config';
 import { feedParams } from './feedParams';
 import { TAG_CATEGORIES } from './tagsV2';
 import { aiKey, isAiFlagged, loadAiFlags } from './aiFlags';
@@ -26,9 +26,33 @@ export const CHANNELS = TAG_CATEGORIES.flatMap((c) => [
   ...c.topics.map((t) => ({ ...t, isCategory: false, category: c.slug })),
 ]).map((c, i) => ({ ...c, number: i + 1 }));
 const BY_SLUG = new Map(CHANNELS.map((c) => [c.slug, c]));
-export const getChannel = (slug) => BY_SLUG.get(slug) || null;
 
-export const channelNumber = (ch) => String(ch?.number ?? 0).padStart(2, '0');
+// A Hive community is a channel too ("Surf this community" on its page), just not
+// one in the numbered lineup: it has no CH number, and ↑/↓ from it step into the
+// lineup. Its slug is the community id; the display name is remembered from the
+// community page, because the watch page has nothing else to read it from.
+const COMMUNITY_SLUG = /^hive-\d+$/;
+const COMMUNITY_TITLES_KEY = '3speak_surf_community_titles';
+const loadCommunityTitles = () => {
+  try { return JSON.parse(localStorage.getItem(COMMUNITY_TITLES_KEY) || '{}') || {}; } catch { return {}; }
+};
+export function rememberCommunityChannel(id, title) {
+  if (!COMMUNITY_SLUG.test(id || '') || !title) return;
+  try {
+    const titles = loadCommunityTitles();
+    if (titles[id] === title) return;
+    titles[id] = title;
+    localStorage.setItem(COMMUNITY_TITLES_KEY, JSON.stringify(titles));
+  } catch { /* ignore */ }
+}
+export const getChannel = (slug) => {
+  const hit = BY_SLUG.get(slug);
+  if (hit) return hit;
+  if (!COMMUNITY_SLUG.test(slug || '')) return null;
+  return { slug, label: loadCommunityTitles()[slug] || 'Community', emoji: '👥', isCommunity: true, isCategory: false };
+};
+
+export const channelNumber = (ch) => (ch?.isCommunity ? 'CM' : String(ch?.number ?? 0).padStart(2, '0'));
 export const channelTitle = (ch) => (ch?.isCategory ? `All of ${ch.label}` : ch?.label || '');
 
 /** The channel `step` places away from `slug`, wrapping at both ends. */
@@ -97,6 +121,28 @@ function fetchTagPage(slug, page) {
   return promise;
 }
 
+// A community channel plays the community's Trending feed (views over 30 days,
+// personalised by feedParams() like the tag feeds), and falls back to its New feed
+// for a quiet community with nothing in that window.
+function fetchCommunityPage(id, page) {
+  const params = feedParams();
+  const key = `${id}|${page}|${params}`;
+  const hit = pageCache.get(key);
+  if (hit && Date.now() - hit.at < PAGE_TTL_MS) return hit.promise;
+  const get = (variant, extra) => axios
+    .get(`${FEED_URL}/feeds/community/${encodeURIComponent(id)}/${variant}?page=${page}&limit=${PAGE_SIZE}${extra}`)
+    .then((res) => ({
+      videos: (res.data?.videos || []).filter((v) => videoKey(v)),
+      // The community feeds report no usable total; a full page means "maybe more".
+      total: (page - 1) * PAGE_SIZE + (res.data?.videos || []).length + ((res.data?.videos || []).length === PAGE_SIZE ? 1 : 0),
+    }));
+  const promise = get('trending', params)
+    .then((r) => (r.videos.length || page > 1 ? r : get('new', '')))
+    .catch((err) => { pageCache.delete(key); throw err; });
+  pageCache.set(key, { at: Date.now(), promise });
+  return promise;
+}
+
 /**
  * One page of a channel. A topic is one tag feed. A category is not: the checker
  * matches the category slug only as a literal tag, which the tagger uses just for
@@ -106,6 +152,7 @@ function fetchTagPage(slug, page) {
  */
 async function fetchChannelPage(slug, page) {
   const ch = getChannel(slug);
+  if (ch?.isCommunity) return fetchCommunityPage(slug, page);
   if (!ch?.isCategory) return fetchTagPage(slug, page);
   const lists = await Promise.all([slug, ...ch.topics].map((t) =>
     fetchTagPage(t, page).catch(() => ({ videos: [], total: 0 }))));
