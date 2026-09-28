@@ -6,6 +6,7 @@ import {
   FaUsers, FaIdCard,
 } from 'react-icons/fa';
 import TrackChooser from './TrackChooser';
+import { TRACK_QUESTION_ID } from './TrackQuestion';
 import { trackTitle } from './tracks';
 import {
   fetchIncubationProgress, progressHue, progressFraction, taskFraction, onIncubationProgress,
@@ -277,8 +278,30 @@ export default function IncubationProgressPanel() {
 
   if (!progress) return null;
 
-  // Nothing to count until they say what they are here for.
-  if (progress.needsTrack || changingTrack) {
+  // Nothing to count until they say what they are here for. The question itself
+  // is in the main column (TrackQuestion): three tiles do not fit in here.
+  if (progress.needsTrack && !changingTrack) {
+    return (
+      <section className="inc-panel inc-progress">
+        <header>
+          <h2><FaRocket size={14} aria-hidden="true" /> Your path to a Hive account</h2>
+        </header>
+        <p className="inc-track-intro">
+          Your list of things to do depends on what brings you to 3Speak.
+        </p>
+        <button
+          type="button"
+          className="inc-task-cta"
+          onClick={() => document.getElementById(TRACK_QUESTION_ID)?.scrollIntoView({ behavior: 'smooth', block: 'center' })}
+        >
+          Choose your path
+        </button>
+      </section>
+    );
+  }
+
+  // Changing an earlier answer happens right here; the tiles stack to fit.
+  if (changingTrack) {
     return (
       <section className="inc-panel inc-progress">
         <header>
@@ -289,11 +312,9 @@ export default function IncubationProgressPanel() {
           creators publish, and advertisers set up their brand. You can change it later.
         </p>
         <TrackChooser current={progress.track || null} onChosen={() => setChangingTrack(false)} />
-        {changingTrack && (
-          <button type="button" className="inc-track-change" onClick={() => setChangingTrack(false)}>
-            Keep my current path
-          </button>
-        )}
+        <button type="button" className="inc-track-change" onClick={() => setChangingTrack(false)}>
+          Keep my current path
+        </button>
       </section>
     );
   }

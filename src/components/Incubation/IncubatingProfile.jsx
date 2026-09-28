@@ -9,6 +9,7 @@ import Card3 from '../Cards/Card3';
 import { useAppStore } from '../../lib/store';
 import ProfileEditModal from '../WelcomePrompt/ProfileEditModal';
 import IncubationProgressPanel from './IncubationProgressPanel';
+import TrackQuestion from './TrackQuestion';
 import IncubatingActivity from './IncubatingActivity';
 import {
   fetchIncubationProfile, fetchIncubationPosts, handleAvatar,
@@ -376,6 +377,7 @@ export default function IncubatingProfile({ handle, own = false }) {
               </ul>
             </section>
           )}
+          {showSidebar && <TrackQuestion />}
         </main>
       </div>
 
