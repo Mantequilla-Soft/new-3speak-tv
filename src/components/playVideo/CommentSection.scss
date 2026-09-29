@@ -110,6 +110,11 @@
       color: var(--text-secondary);
       font-weight: 500;
     }
+    .comment-edited {
+      font-size: 12px;
+      color: var(--text-secondary);
+      font-style: italic;
+    }
     .comment-timestamp-badge {
       margin-left: auto;
       font-size: 11px;
@@ -305,6 +310,11 @@
 }
 
 // Compact reply variant — constrain to parent width despite the margin-left inset
+// Inline editor that takes the place of a comment's body while editing it.
+.add-comment-wrap.comment-edit-wrap {
+  margin: 6px 0 4px;
+}
+
 .add-comment-wrap.sub {
   max-width: calc(100% - 40px);
 

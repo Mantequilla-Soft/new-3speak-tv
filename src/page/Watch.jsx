@@ -2386,8 +2386,19 @@ function Watch({ v2 = false }) {
           <WatchTabs
             author={author}
             permlink={permlink}
-            currentTime={playerState.currentTime}
-            onSeek={seek}
+            /* CONTENT time, like the progress bar and the subtitles. The player's own
+             * clock counts a stitched ad's seconds, so the transcript ran ahead during
+             * the spot and stayed off by its length afterwards. contentTime() pins to
+             * the cut point while the ad plays, so the transcript holds still. */
+            currentTime={adBreakRef.current.contentTime(playerState.currentTime)}
+            // A cue's start is a content second; seek where it lives in the file,
+            // with the same ad lock the progress bar respects.
+            onSeek={(t) => {
+              const ab = adBreakRef.current;
+              const to = ab.playerTimeFor(t);
+              if (ab.lockedSeekTarget(to, playerState.currentTime) != null) return;
+              seek(to);
+            }}
             reactionPanel={
               <>
                 {isReactionPlayerVisible && reactions.length > 0 && (

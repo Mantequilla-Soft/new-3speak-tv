@@ -10,8 +10,7 @@ import './TrackChooser.scss';
  * to set up their brand's profile.
  *
  * Shown on the welcome screen, and on the profile for anyone who has not
- * answered yet. It can be changed later; nothing already done is lost, the
- * goals are simply counted again.
+ * answered yet. The profile offers no way to change the answer afterwards.
  */
 export default function TrackChooser({ current = null, onChosen }) {
   const [saving, setSaving] = useState(null);

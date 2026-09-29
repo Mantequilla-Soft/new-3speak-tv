@@ -5,7 +5,7 @@ import {
   FaRocket, FaVideo, FaMobileAlt, FaComments, FaUserPlus, FaClock, FaHourglassHalf,
   FaUsers, FaIdCard,
 } from 'react-icons/fa';
-import TrackChooser from './TrackChooser';
+import { TRACK_QUESTION_ID } from './TrackQuestion';
 import { trackTitle } from './tracks';
 import {
   fetchIncubationProgress, progressHue, progressFraction, taskFraction, onIncubationProgress,
@@ -243,8 +243,6 @@ export default function IncubationProgressPanel() {
   // on purpose: folding the whole list away is a standing preference worth
   // remembering, opening one goal is a question you have finished asking.
   const [openTasks, setOpenTasks] = useState(() => new Set());
-  // Showing the "what brings you here" choices again, to change the answer.
-  const [changingTrack, setChangingTrack] = useState(false);
 
   useEffect(() => {
     let alive = true;
@@ -277,23 +275,24 @@ export default function IncubationProgressPanel() {
 
   if (!progress) return null;
 
-  // Nothing to count until they say what they are here for.
-  if (progress.needsTrack || changingTrack) {
+  // Nothing to count until they say what they are here for. The question itself
+  // is in the main column (TrackQuestion): three tiles do not fit in here.
+  if (progress.needsTrack) {
     return (
       <section className="inc-panel inc-progress">
         <header>
-          <h2><FaRocket size={14} aria-hidden="true" /> What brings you to 3Speak?</h2>
+          <h2><FaRocket size={14} aria-hidden="true" /> Your path to a Hive account</h2>
         </header>
         <p className="inc-track-intro">
-          Your path to a Hive account depends on it: viewers watch and join in,
-          creators publish, and advertisers set up their brand. You can change it later.
+          Your list of things to do depends on what brings you to 3Speak.
         </p>
-        <TrackChooser current={progress.track || null} onChosen={() => setChangingTrack(false)} />
-        {changingTrack && (
-          <button type="button" className="inc-track-change" onClick={() => setChangingTrack(false)}>
-            Keep my current path
-          </button>
-        )}
+        <button
+          type="button"
+          className="inc-task-cta"
+          onClick={() => document.getElementById(TRACK_QUESTION_ID)?.scrollIntoView({ behavior: 'smooth', block: 'center' })}
+        >
+          Choose your path
+        </button>
       </section>
     );
   }
@@ -309,12 +308,7 @@ export default function IncubationProgressPanel() {
       <header>
         <h2><FaRocket size={14} aria-hidden="true" /> Your path to a Hive account</h2>
         {progress.track && (
-          <span className="inc-track-current">
-            {trackTitle(progress.track)}
-            <button type="button" className="inc-track-change" onClick={() => setChangingTrack(true)}>
-              Change
-            </button>
-          </span>
+          <span className="inc-track-current">{trackTitle(progress.track)}</span>
         )}
         <span
           className="inc-progress-count"
