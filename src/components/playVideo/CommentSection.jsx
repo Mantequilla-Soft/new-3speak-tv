@@ -1056,6 +1056,10 @@ function Comment({
               setReplyToComment={setReplyToComment}
               setCommentInfo={setCommentInfo}
               setReplyText={setReplyText}
+              // Without the value a nested reply box is UNCONTROLLED: typing shows
+              // in the box, but a picked GIF or emoji only lands in state, which
+              // this box never displays, and replaces what was typed there.
+              replyText={replyText}
               commentInfo={commentInfo}
               handlePostComment={handlePostComment}
               depth={depth + 1}
