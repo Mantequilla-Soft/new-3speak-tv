@@ -7,6 +7,12 @@
 // 1.0.0 — that way they see all of these when develop is pushed to production.
 export const CHANGELOG = [
   {
+    version: '1.79.33',
+    date: '2026-09-29',
+    summary:
+      'The transcript on the watch page now holds still while an ad plays and stays in step with the video after it.',
+  },
+  {
     version: '1.79.32',
     date: '2026-09-29',
     summary:
