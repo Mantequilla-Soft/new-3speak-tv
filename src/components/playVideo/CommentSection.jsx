@@ -61,6 +61,23 @@ function parseTimeInput(str) {
   return null;
 }
 
+// Replace timestamp-linked 3speak URLs so the renderer doesn't embed them
+// Matches [0:00] or [1:23:45] style text linking to 3speak/play.3speak URLs
+const stripTimestampEmbeds = (body) =>
+  body.replace(/\[(\d{1,2}:\d{2}(?::\d{2})?)\]\((https?:\/\/(?:3speak\.tv|play\.3speak\.tv)[^)]*)\)/g, '$1');
+
+// A timestamped comment's body ENDS with the "replied to [0:42](…) on [host](…)"
+// line that handlePostComment appends. It is ours, not the author's words, so an
+// edit keeps it out of the text box and puts it back unchanged on save; losing it
+// would silently drop the comment's link back to its moment in the video.
+const REPLIED_TO_RE = /\n?<br><sup>replied to \[[^\]]*\]\([^)]*\) on \[[^\]]*\]\([^)]*\)<\/sup>\s*$/;
+function splitRepliedTo(body) {
+  const m = REPLIED_TO_RE.exec(body || '');
+  return m
+    ? { text: body.slice(0, m.index), suffix: m[0] }
+    : { text: body || '', suffix: '' };
+}
+
 function CommentSection({ videoDetails, author, permlink, currentTime, duration, onSeek, onPause, onRefreshReactions }) {
   const { user, incubationHandle } = useAppStore();
   // The name to SHOW. For an incubating user there is no Hive account, so
@@ -188,11 +205,6 @@ function CommentSection({ videoDetails, author, permlink, currentTime, duration,
         // Pre-render all comment bodies (createHiveRenderer returns a function directly)
         const render = await getHiveRenderer();
         const rendered = {};
-        // Replace timestamp-linked 3speak URLs so the renderer doesn't embed them
-        // Matches [0:00] or [1:23:45] style text linking to 3speak/play.3speak URLs
-        const stripTimestampEmbeds = (body) =>
-          body.replace(/\[(\d{1,2}:\d{2}(?::\d{2})?)\]\((https?:\/\/(?:3speak\.tv|play\.3speak\.tv)[^)]*)\)/g, '$1');
-
         const renderComment = (comment) => {
           if (comment?.body) {
             try {
@@ -257,8 +269,10 @@ function CommentSection({ videoDetails, author, permlink, currentTime, duration,
         let hasVideo = false;
         let shortAuthor = null;
         let shortPermlink = null;
+        let jsonMetadata = null;
         try {
           const meta = typeof comment.json_metadata === 'string' ? JSON.parse(comment.json_metadata) : comment.json_metadata;
+          if (meta && typeof meta === 'object') jsonMetadata = meta;
           if (meta?.parentTimestamp != null) parentTimestamp = meta.parentTimestamp;
           if (meta?.video?.url) {
             hasVideo = true;
@@ -297,6 +311,13 @@ function CommentSection({ videoDetails, author, permlink, currentTime, duration,
           },
           permlink: comment.permlink,
           created_at: comment.created,
+          // Hive edits the comment in place when the SAME author/permlink is
+          // broadcast again under the same parent, so an edit needs all of these,
+          // plus the original metadata so it keeps its timestamp and app tag.
+          parentAuthor: comment.parent_author,
+          parentPermlink: comment.parent_permlink,
+          jsonMetadata,
+          edited: !!comment.last_update && comment.last_update !== comment.created,
           body: comment.body,
           parentTimestamp,
           hasVideo,
@@ -422,7 +443,13 @@ function CommentSection({ videoDetails, author, permlink, currentTime, duration,
           onChain: !incubationHandle,
           permlink: new_permlink,
           created_at: new Date().toISOString(),
-          body: textToPost,
+          parentAuthor: parent_author,
+          parentPermlink: parent_permlink,
+          jsonMetadata: metadata,
+          // The full broadcast body, "replied to" line included, as a fetched
+          // comment carries it, so editing a just-posted comment keeps that line.
+          // processedBody strips it for display.
+          body,
           parentTimestamp: metadata.parentTimestamp ?? null,
           has_voted: false,
           stats: {
@@ -474,6 +501,57 @@ function CommentSection({ videoDetails, author, permlink, currentTime, duration,
     } catch (err) {
       console.error('Comment failed:', err);
       toast.error(err.message || 'Comment failed, please try again');
+    }
+  };
+
+  // Only a signed-in Hive account edits, and only its own on-chain comments. An
+  // incubating user has no chain comments to edit, and commentWithAioha would
+  // divert their broadcast to the off-chain store instead of editing anything.
+  const editableBy = user && !incubationHandle ? user : null;
+
+  /**
+   * Edit one of your own comments: broadcast the same author/permlink again,
+   * under the same parent, with the new body. No comment_options, which can
+   * only be set once per comment and would fail the whole transaction.
+   * Resolves true when the edit landed, so the editor knows to close.
+   */
+  const handleEditComment = async (comment, newText) => {
+    const text = (newText || '').trim();
+    if (!text) return false;
+    if (!editableBy || comment?.author?.username !== editableBy) return false;
+    const { suffix } = splitRepliedTo(comment.body);
+    const body = text + suffix;
+    try {
+      const result = await commentWithAioha(
+        comment.parentAuthor,
+        comment.parentPermlink,
+        comment.permlink,
+        '', // title (empty for comments)
+        body,
+        comment.jsonMetadata || { app: '3speak/new-version' },
+      );
+      if (!result?.success) {
+        toast.error('Edit failed, please try again');
+        return false;
+      }
+      const applyEdit = (comments) =>
+        comments.map((c) => {
+          if (c.permlink === comment.permlink && c.author?.username === editableBy) {
+            return { ...c, body, edited: true };
+          }
+          return c.children ? { ...c, children: applyEdit(c.children) } : c;
+        });
+      setCommentList((prev) => applyEdit(prev));
+      try {
+        const render = await getHiveRenderer();
+        setRenderedBodies((prev) => ({ ...prev, [comment.permlink]: render(stripTimestampEmbeds(body)) }));
+      } catch { /* falls back to the raw body until the next fetch */ }
+      toast.success('Comment updated');
+      return true;
+    } catch (err) {
+      console.error('Comment edit failed:', err);
+      toast.error(err.message || 'Edit failed, please try again');
+      return false;
     }
   };
 
@@ -651,6 +729,8 @@ function CommentSection({ videoDetails, author, permlink, currentTime, duration,
       getTranslation={getTranslation}
       clearTranslation={clearTranslation}
       translating={translating}
+      editableBy={editableBy}
+      onEditComment={handleEditComment}
         />
       )) )}
     </div>
@@ -693,9 +773,41 @@ function Comment({
       getTranslation,
       clearTranslation,
       translating,
+      editableBy,
+      onEditComment,
 }) {
   const isReplying = activeReply === comment.permlink;
   const replyInputRef = useRef(null);
+  const editInputRef = useRef(null);
+  const [editing, setEditing] = useState(false);
+  const [editText, setEditText] = useState('');
+  const [savingEdit, setSavingEdit] = useState(false);
+  // Off-chain replies (onChain: false) live in our own store, not on Hive, so a
+  // Hive edit cannot reach them.
+  const canEdit = !!editableBy && comment.onChain !== false
+    && comment?.author?.username === editableBy && !!comment.parentPermlink;
+
+  const startEdit = () => {
+    setEditText(splitRepliedTo(comment.body).text.trim());
+    setEditing(true);
+  };
+
+  const saveEdit = async () => {
+    if (savingEdit || !editText.trim()) return;
+    setSavingEdit(true);
+    const ok = await onEditComment?.(comment, editText);
+    setSavingEdit(false);
+    if (ok) setEditing(false);
+  };
+
+  // Size the box to its content when it opens, as typing does afterwards.
+  useEffect(() => {
+    const el = editInputRef.current;
+    if (!editing || !el) return;
+    el.style.height = 'auto';
+    el.style.height = el.scrollHeight + 'px';
+    el.focus();
+  }, [editing]);
   const [replyTab, setReplyTab] = useState('comment');
   const [collapsed, setCollapsed] = useState(false);
   const [translatedText, setTranslatedText] = useState(null);
@@ -746,12 +858,43 @@ function Comment({
           <div className="comment-header">
             <AuthorBadge author={comment?.author?.username} reputation={comment?.author?.reputation} noLink />
             <span className="comment-date"><TimeAgo date={comment?.created_at} /></span>
+            {comment?.edited && <span className="comment-edited">(edited)</span>}
             {comment?.parentTimestamp != null && (
               <span className="comment-timestamp-badge" onClick={() => onSeek?.(comment.parentTimestamp)}>at {formatTimeInput(comment.parentTimestamp)}</span>
             )}
             <span className="comment-collapse-chevron" onClick={() => setCollapsed(true)}><MdKeyboardArrowUp size={18} /></span>
           </div>
-          <MarkdownView html={processedBody(comment?.body || '', comment?.permlink)} />
+          {editing ? (
+            <div className="add-comment-wrap comment-edit-wrap">
+              <textarea
+                ref={editInputRef}
+                className="textarea-box"
+                value={editText}
+                disabled={savingEdit}
+                onChange={(e) => {
+                  setEditText(e.target.value);
+                  e.target.style.height = 'auto';
+                  e.target.style.height = e.target.scrollHeight + 'px';
+                }}
+              />
+              <div className="comment-form-row">
+                <EmojiGifPicker
+                  onPickEmoji={(em) => insertAtCursor(editInputRef.current, editText, em, setEditText)}
+                  onPickGif={(url) => insertAtCursor(editInputRef.current, editText, gifMarkdown(url), setEditText)}
+                />
+                <div className="btn-wrap">
+                  <Button text="Cancel" onClick={() => setEditing(false)} />
+                  <Button
+                    text={savingEdit ? 'Saving...' : 'Save'}
+                    prominent
+                    onClick={saveEdit}
+                  />
+                </div>
+              </div>
+            </div>
+          ) : (
+            <MarkdownView html={processedBody(comment?.body || '', comment?.permlink)} />
+          )}
           {translatedText && (
             <div className="comment-translation">
               <div className="comment-translation-header">
@@ -795,6 +938,9 @@ function Comment({
                   <MdVideocam size={13} />
                   <span className="comment-btn-label">Open in Shorts</span>
                 </Link>
+              )}
+              {canEdit && !editing && (
+                <Button text="Edit" onClick={startEdit} />
               )}
               <Button text="Reply" onClick={() => {
                   setCommentInfo("");
@@ -935,6 +1081,8 @@ function Comment({
       getTranslation={getTranslation}
       clearTranslation={clearTranslation}
       translating={translating}
+      editableBy={editableBy}
+      onEditComment={onEditComment}
             />
           ))}
         </div>
