@@ -6,12 +6,19 @@
   display: flex;
   flex-direction: column;
   gap: 8px;
+  // Sized by where it is placed, not by the screen: three across in the main
+  // column or a dialog, one per row in the narrow profile sidebar.
+  container-type: inline-size;
 }
 
 .track-chooser-options {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 10px;
+
+  @container (max-width: 520px) {
+    grid-template-columns: 1fr;
+  }
 
   @include mix.respond(phone) {
     grid-template-columns: 1fr;

@@ -204,6 +204,14 @@
   &:hover { background: color-mix(in srgb, var(--accent-primary) 10%, transparent); }
 }
 
+// The headline over the three path tiles on the last step.
+.incw-choose {
+  margin: 18px 0 10px;
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
 .incw-secondary {
   border: 1px solid var(--border-color);
   background: transparent;

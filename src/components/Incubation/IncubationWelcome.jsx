@@ -133,7 +133,8 @@ export default function IncubationWelcome() {
   const promptsActive = usePromptsActive('incubation-welcome');
   const [open, setOpen] = useState(false);
   const [step, setStep] = useState(0);
-  // Their answer on the last step. Optional here: the profile asks again.
+  // Their answer on the last step. Optional here: until they pick, the nav pill
+  // says "Choose your path" and their profile asks again.
   const [chosen, setChosen] = useState(null);
 
   useEffect(() => {
@@ -175,7 +176,10 @@ export default function IncubationWelcome() {
           </h2>
           {current.body}
           {current.key === 'path' && (
-            <TrackChooser current={chosen} onChosen={setChosen} />
+            <>
+              <h3 className="incw-choose">Choose your path</h3>
+              <TrackChooser current={chosen} onChosen={setChosen} />
+            </>
           )}
         </div>
 

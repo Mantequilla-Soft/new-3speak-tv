@@ -22,7 +22,7 @@ const CHECKER_INTERNAL_URL = (process.env.CHECKER_INTERNAL_URL || 'http://127.0.
 
 // What a person has to do before the team reviews them for a Hive account,
 // by what they told us they are here for (the SDK's WarmupGoals tracks). They
-// pick on the welcome screen or their profile, and can change it later.
+// pick on the welcome screen or on their profile.
 //
 // `time` is last in every list because it is the only goal you cannot go and
 // do: a minimum age between signing up and being reviewable.

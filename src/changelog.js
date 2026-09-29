@@ -7,6 +7,25 @@
 // 1.0.0 — that way they see all of these when develop is pushed to production.
 export const CHANGELOG = [
   {
+    version: '1.79.34',
+    date: '2026-09-29',
+    summary:
+      'GIFs and emojis now drop straight into your reply at every level of a comment thread, right after your text.',
+  },
+  {
+    version: '1.79.33',
+    date: '2026-09-29',
+    summary:
+      'The transcript on the watch page now holds still while an ad plays and stays in step with the video after it.',
+  },
+  {
+    version: '1.79.32',
+    date: '2026-09-29',
+    summary:
+      'You can now edit your own comments: click Edit under a comment you wrote, change it and save. '
+      + 'Edited comments show an "(edited)" label.',
+  },
+  {
     version: '1.79.31',
     date: '2026-09-28',
     summary:

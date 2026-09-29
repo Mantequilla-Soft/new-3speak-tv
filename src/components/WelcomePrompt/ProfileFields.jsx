@@ -187,7 +187,8 @@ export default function ProfileFields({ username, form, setField, pickImage, upl
           value={form.name}
           onChange={setField('name')}
           maxLength={NAME_MAX}
-          placeholder={`How should we call you? (@${username})`}
+          // A warm-up user has no Hive name yet, so there is no @name to show.
+          placeholder={username ? `How should we call you? (@${username})` : 'How should we call you?'}
           disabled={saving}
         />
       </label>
