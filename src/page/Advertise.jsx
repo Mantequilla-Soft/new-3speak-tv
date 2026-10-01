@@ -10,6 +10,8 @@ import SEOHead from '../components/SEOHead';
 import NotFound from './NotFound';
 import AdOverlay from '../components/ads/AdOverlay';
 import TickerCrawl from '../components/ads/TickerCrawl';
+import FundsNotice from '../components/ads/FundsNotice';
+import { fetchBalances } from '../hive-api/api';
 import {
   AD_CATEGORIES,
   fetchInventory,
@@ -547,6 +549,24 @@ function CampaignPanel({
   // Per campaign, not one shared value: with two unpaid flights on screen, a single
   // toggle would silently change the currency of the one you are not looking at.
   const [payCcy, setPayCcy] = useState({});
+  /* The paying wallet's liquid balance, to PRESELECT the currency: HIVE when it holds
+   * enough HIVE for this flight, HBD otherwise. A click still decides. Read once per
+   * account; unknown means the old default (HBD). */
+  const payer = useAppStore((s) => s.user);
+  const [wallet, setWallet] = useState(null);
+  useEffect(() => {
+    let alive = true;
+    if (!payer) return undefined;
+    fetchBalances(payer)
+      .then((b) => { if (alive && b) setWallet({ account: payer, hive: Number(b.hive) || 0 }); })
+      .catch(() => { /* keep HBD as the default */ });
+    return () => { alive = false; };
+  }, [payer]);
+  const ccyFor = useCallback((c, owed) => {
+    if (payCcy[c.id]) return payCcy[c.id] === 'HIVE' ? 'HIVE' : 'HBD';
+    const inHive = hivePayable(owed, pricing?.hbdPerHive);
+    return wallet && wallet.account === payer && inHive != null && wallet.hive >= inHive ? 'HIVE' : 'HBD';
+  }, [payCcy, wallet, payer, pricing?.hbdPerHive]);
   const [payBusy, setPayBusy] = useState(null);
   const [payError, setPayError] = useState(null);
   /* Progress while the chain catches up, kept OUT of payError on purpose: that renders
@@ -557,7 +577,8 @@ function CampaignPanel({
   const payWithWallet = useCallback(async (c) => {
     const owed = Math.round((c.priceHbd - c.paidHbd) * 1000) / 1000;
     if (!(owed > 0)) return;
-    const ccy = payCcy[c.id] === 'HIVE' ? 'HIVE' : 'HBD';
+    // Same rule the buttons show, so what is highlighted is what gets sent.
+    const ccy = ccyFor(c, owed);
     const amount = ccy === 'HIVE' ? hivePayable(owed, pricing?.hbdPerHive) : owed;
     if (amount == null) {
       setPayError('We cannot read the HIVE price right now. Pay in HBD, or try again shortly.');
@@ -588,7 +609,7 @@ function CampaignPanel({
     } finally {
       setPayBusy(null);
     }
-  }, [onCheckPayment, payCcy, pricing?.hbdPerHive]);
+  }, [onCheckPayment, ccyFor, pricing?.hbdPerHive]);
   const autoOn = autoLength && autoAvailable;
 
   const chosenLength = autoOn ? latestSpotSeconds : (spotSeconds ?? maxSpot);
@@ -1182,7 +1203,7 @@ function CampaignPanel({
                 <div className="mkt-pay">
                   {(() => {
                     const owed = Math.round((c.priceHbd - c.paidHbd) * 1000) / 1000;
-                    const ccy = payCcy[c.id] === 'HIVE' ? 'HIVE' : 'HBD';
+                    const ccy = ccyFor(c, owed);
                     const inHive = hivePayable(owed, pricing?.hbdPerHive);
                     const shown = ccy === 'HIVE' ? inHive : owed;
                     return (
@@ -2299,6 +2320,9 @@ export default function Advertise({ openLoginModal }) {
           </p>
         </div>
       </header>
+
+      {/* Only for a signed-in account with an empty wallet: where HIVE comes from. */}
+      <FundsNotice user={user} hbdPerHive={pricing?.hbdPerHive} />
 
       <div className="mkt-tabs" role="tablist" aria-label="Advertising">
         {TABS.map((t) => (

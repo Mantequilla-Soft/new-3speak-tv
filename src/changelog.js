@@ -7,6 +7,13 @@
 // 1.0.0 — that way they see all of these when develop is pushed to production.
 export const CHANGELOG = [
   {
+    version: '1.79.41',
+    date: '2026-10-01',
+    summary:
+      'When you pay for an ad on the Advertise page (/advertise), HIVE is now picked for you '
+      + 'if your wallet holds enough of it. You can still switch to HBD.',
+  },
+  {
     version: '1.79.40',
     date: '2026-10-01',
     summary:

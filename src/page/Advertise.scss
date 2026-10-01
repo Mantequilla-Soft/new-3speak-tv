@@ -420,6 +420,135 @@ $mkt-sub: 12px;
   /* The last section in a panel should not add a gap above the page padding. */
   [role="tabpanel"] > .mkt-section:last-child { margin-bottom: 0; }
 
+  /* ── empty wallet: where HIVE comes from (FundsNotice) ──── */
+  .mkt-funds {
+    margin-bottom: 24px;
+    padding: 20px 22px;
+
+    h2 {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin: 0 0 8px;
+
+      svg { color: var(--accent-primary); font-size: 0.9em; }
+    }
+
+    // Section labels, not more text: small, muted, spaced.
+    h3 {
+      margin: 20px 0 10px;
+      font-size: $mkt-sub;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+    }
+
+    > p { margin: 0; line-height: 1.6; color: var(--text-secondary); }
+  }
+
+  .mkt-funds-rates {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 10px !important;
+  }
+
+  .mkt-funds-pill {
+    padding: 3px 10px;
+    border-radius: 999px;
+    background: color-mix(in srgb, var(--accent-primary) 14%, transparent);
+    color: var(--text-primary);
+    font-size: $mkt-sub;
+    font-weight: 700;
+
+    &.is-muted {
+      background: var(--bg-secondary);
+      color: var(--text-secondary);
+      font-weight: 500;
+    }
+  }
+
+  // Even tiles: the name on top, the market under it. Neutral, not the red
+  // outline: these leave 3Speak for somebody else's site.
+  .mkt-funds-exchanges {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 8px;
+  }
+
+  .mkt-funds-btn {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    padding: 10px 14px;
+    border: 1px solid var(--border-color);
+    border-radius: 10px;
+    background: var(--bg-secondary);
+    color: var(--text-primary);
+    text-decoration: none;
+    transition: background 0.15s ease, border-color 0.15s ease;
+
+    strong {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 6px;
+      font-size: $mkt-text;
+
+      svg { font-size: 10px; opacity: 0.55; }
+    }
+
+    span { font-size: $mkt-sub; color: var(--text-muted); }
+
+    &:hover { background: var(--bg-hover); border-color: var(--text-muted); }
+  }
+
+  // Numbered steps. A global reset strips list markers, so the numbers are drawn.
+  .mkt-funds-steps {
+    counter-reset: funds-step;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+
+    li {
+      counter-increment: funds-step;
+      position: relative;
+      padding-left: 34px;
+      line-height: 1.55;
+      color: var(--text-secondary);
+
+      &::before {
+        content: counter(funds-step);
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 22px;
+        height: 22px;
+        border-radius: 50%;
+        display: grid;
+        place-items: center;
+        background: var(--bg-secondary);
+        border: 1px solid var(--border-color);
+        color: var(--text-primary);
+        font-size: $mkt-sub;
+        font-weight: 700;
+      }
+
+      strong { color: var(--text-primary); }
+    }
+  }
+
+  // The disclaimer, set apart from the instructions it qualifies.
+  .mkt-funds .mkt-fine {
+    margin-top: 18px;
+    padding-top: 12px;
+    border-top: 1px solid var(--border-color);
+  }
+
   /* ── sections ───────────────────────────────────────────── */
   .mkt-section {
     margin-bottom: 40px;

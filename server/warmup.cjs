@@ -110,11 +110,13 @@ async function saveContact(userId, body) {
   return { status: r.status, data }
 }
 
-async function claimAssets({ handle, hiveUsername }) {
+async function claimAssets({ userId, handle, hiveUsername }) {
   const r = await fetch(`${CHECKER_INTERNAL_URL}/incubation/internal/claim-assets`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ handle, hiveUsername }),
+    // userId too: the checker links an advertiser's private contact record to the
+    // new Hive account, which is how the site knows that account is an advertiser.
+    body: JSON.stringify({ userId, handle, hiveUsername }),
     signal: AbortSignal.timeout(10000)
   })
   const body = await r.json().catch(() => ({}))
