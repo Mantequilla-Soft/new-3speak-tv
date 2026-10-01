@@ -26,7 +26,11 @@ import mantequillaLogo from '../../assets/mantequilla-logo.png';
 import '../../page/Audio.scss';
 import './GlobalAudioPlayer.scss';
 
-const AUDIO_CDN = 'https://hotipfs-3speak-1.b-cdn.net/ipfs';
+// ipfs-audio serves every embed-audio CID with CORS + Range. The hotipfs zone
+// can't pull from its origin (500 "block was not found locally") and took the
+// whole audio tab down; the main Bunny zone is the fallback on a media error.
+const AUDIO_GATEWAYS = ['https://ipfs-audio.3speak.tv/ipfs', 'https://ipfs-3speak.b-cdn.net/ipfs'];
+const AUDIO_CDN = AUDIO_GATEWAYS[0];
 
 // Optional heartbeat obfuscation — AES-256-GCM with a key derived from the
 // shared LISTEN_BEAT_KEY (must match the checker's). Output is
@@ -261,6 +265,22 @@ function GlobalAudioPlayer() {
     el.play().catch(() => {});
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [audioCurrent?._id, audioPlayNonce]);
+
+  // Gateway failover: on a media error, retry the same CID on the next host.
+  useEffect(() => {
+    const el = audioRef.current; const cid = audioCurrent?.audio_cid;
+    if (!el || !cid) return;
+    const onError = () => {
+      const i = AUDIO_GATEWAYS.findIndex(g => el.src === `${g}/${cid}`);
+      if (i < 0 || i + 1 >= AUDIO_GATEWAYS.length) return;
+      const t = el.currentTime;
+      el.src = `${AUDIO_GATEWAYS[i + 1]}/${cid}`;
+      if (t) el.currentTime = t;
+      el.play().catch(() => {});
+    };
+    el.addEventListener('error', onError);
+    return () => el.removeEventListener('error', onError);
+  }, [audioCurrent?._id, audioCurrent?.audio_cid]);
 
   // Open a measured listen session on track change/replay. Only logged-in
   // listeners earn the author a pay-per-listen credit; anonymous playback
