@@ -118,6 +118,23 @@ export function recentAdKeys() {
   return Object.keys(readSeen());
 }
 
+/**
+ * Remember an ad for a SHORTER time than the list's window (the ticker: 5 minutes).
+ *
+ * The list stores when each ad was seen and drops it SEEN_MINUTES later, so an entry
+ * dated back by the difference drops out after `minutes`. Same stored shape, so older
+ * pages reading this list keep working.
+ */
+export function rememberAdSeenFor(minutes, key) {
+  const m = Number(minutes);
+  if (!(m > 0) || m >= SEEN_MINUTES || typeof key !== 'string' || !key) { rememberAdSeen(key); return; }
+  try {
+    const seen = readSeen();
+    seen[key] = Date.now() - (SEEN_MINUTES - m) * 60 * 1000;
+    localStorage.setItem(SEEN_KEY, JSON.stringify(seen));
+  } catch { /* storage unavailable — the server still caps a signed-in viewer */ }
+}
+
 export function rememberAdSeen(...keys) {
   const flat = keys.flat().filter((k) => typeof k === 'string' && k);
   if (!flat.length) return;
@@ -191,6 +208,12 @@ export function createAdBreak() {
   let bannerRemembered = false;
   // Whether this playback's overlay banner has been reported as shown. Once only.
   let bannerReported = false;
+  /* The TICKER: a third placement, drawn entirely by the page. It never touches the
+   * playlist, so a ticker-only playback is the creator's own video, untouched. Its
+   * window is a percentage of the CONTENT, worked out here from the content length,
+   * because there is no segment boundary for the server to report. */
+  let ticker = null;
+  let tickerReported = false;
 
   return {
     get active() { return !!session; },
@@ -199,6 +222,37 @@ export function createAdBreak() {
 
     /** The banner running on this playback, or null. */
     get bannerInfo() { return banner; },
+
+    /** The ticker on this playback, or null. */
+    get tickerInfo() { return ticker; },
+
+    /**
+     * Is the ticker crawling at this moment?
+     *
+     * Content time against the content length, so a spliced roll ahead of it does not
+     * shift it. Never while the spot itself plays: two ads on screen at once is the
+     * one thing every placement here is built to avoid.
+     */
+    isTickerVisible(playerTime, mediaDuration) {
+      if (!ticker || !Number.isFinite(playerTime) || !Number.isFinite(mediaDuration) || mediaDuration <= 0) return false;
+      if (this.isInside(playerTime)) return false;
+      const total = this.contentDuration(mediaDuration);
+      const start = Math.max(0, (Number(ticker.positionPercent) || 0) / 100) * total;
+      const t = this.contentTime(playerTime);
+      return t >= start && t < start + ticker.durationSeconds;
+    },
+
+    /** The ticker ran its full crossing. Once per playback; the server refuses early claims. */
+    reportTickerShown() {
+      if (!ticker?.shownUrl || tickerReported) return;
+      tickerReported = true;
+      fetch(ticker.shownUrl, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: '{}',
+        keepalive: true,
+      }).catch(() => { /* an unreported impression is the advertiser's loss, not a crash */ });
+    },
 
     /** The creative to draw, when the server handed it over. Null when burned. */
     get bannerOverlay() { return (banner && banner.overlay) || null; },
@@ -292,8 +346,10 @@ export function createAdBreak() {
     /** True when the server said this playback is ad-free because the viewer is Pro. */
     get isPremiumViewer() { return premium; },
 
-    async request({ owner, permlink, viewer, manifestUrl }) {
+    async request({ owner, permlink, viewer, manifestUrl, ticker: canTicker = false }) {
       session = null;
+      ticker = null;
+      tickerReported = false;
       window_ = null;
       skipAfter = null;
       banner = null;
@@ -321,11 +377,29 @@ export function createAdBreak() {
              * burned bytes. That swap could never be seamless. Drawn, closing it is
              * hiding an element. */
             bannerOverlay: true,
+            // Only a page that can draw a ticker asks for one (beta testers for now).
+            ticker: !!canTicker,
           }),
         });
         if (!res.ok) return null;
         const data = await res.json();
         premium = data?.premium === true;
+        // Kept independently of the roll and the banner: it needs no manifest, so a
+        // ticker-only answer still returns null below and the video plays plainly.
+        if (data?.ticker?.message && Number(data.ticker.durationSeconds) > 0) {
+          ticker = {
+            message: data.ticker.message,
+            account: data.ticker.account || null,
+            productName: data.ticker.productName || null,
+            clickUrl: data.ticker.clickUrl || null,
+            shownUrl: data.ticker.shownUrl || null,
+            positionPercent: Number(data.ticker.positionPercent) || 0,
+            durationSeconds: Number(data.ticker.durationSeconds),
+            label: data.ticker.label || 'Ad',
+            adKey: data.ticker.adKey || null,
+            capMinutes: Number(data.ticker.capMinutes) || null,
+          };
+        }
         /* 🚨 NOT remembered here. This is only the server's CHOICE: the viewer may
          * leave before a mid-roll or the banner ever comes round, and remembering it
          * now burned the ad for the whole cap window without anyone seeing it.
@@ -761,6 +835,6 @@ export function createAdBreak() {
       return Math.max(0, mediaDuration - window_.duration);
     },
 
-    reset() { session = null; window_ = null; skipAfter = null; spotRetired = false; spotEntered = false; spotConsumed = false; countdownSeen = false; adWatched = 0; lastInsideAt = null; watchBeatAt = 0; banner = null; bannerWindow = null; bannerSid = null; bannerRemembered = false; premium = false; },
+    reset() { session = null; window_ = null; skipAfter = null; spotRetired = false; spotEntered = false; spotConsumed = false; countdownSeen = false; adWatched = 0; lastInsideAt = null; watchBeatAt = 0; banner = null; bannerWindow = null; bannerSid = null; bannerRemembered = false; ticker = null; tickerReported = false; premium = false; },
   };
 }

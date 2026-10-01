@@ -7,6 +7,13 @@
 // 1.0.0 — that way they see all of these when develop is pushed to production.
 export const CHANGELOG = [
   {
+    version: '1.79.38',
+    date: '2026-10-01',
+    summary:
+      'New ad type on the Advertise page (/advertise): the ticker. Write a short message and a link, '
+      + 'and it scrolls across the top of videos with your avatar and product name. No image or video needed.',
+  },
+  {
     version: '1.79.37',
     date: '2026-10-01',
     summary:

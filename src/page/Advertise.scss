@@ -1442,6 +1442,23 @@ $mkt-sub: 12px;
     .mkt-hint { min-height: 0; }
   }
 
+  /* The ticker preview: a short dark stage standing in for the top of a video, so the
+     strip is judged on what it will actually sit on. */
+  .mkt-ticker-preview {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .mkt-ticker-stage {
+    position: relative;
+    height: 72px;
+    border-radius: 8px;
+    overflow: hidden;
+    background: linear-gradient(180deg, #0d0d0d, #2a2a2a);
+
+  }
+
   /* ── the advertiser's spot ──────────────────────────────── */
   .mkt-creatives {
     width: 100%;

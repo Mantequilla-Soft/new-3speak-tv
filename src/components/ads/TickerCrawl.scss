@@ -1,0 +1,118 @@
+/* The ticker strip.
+ *
+ * Along the TOP edge (owner, 2026-10-01: it looks better there). Up there it never
+ * competes with the controls bar, so it needs no lifting when the controls show. The
+ * only other thing at the top of this frame is the roll's disclosure, and a ticker
+ * never runs during a roll. z-index 7 matches the banner's click target: over the
+ * click-to-play surface (5), under the controls (10). */
+.watch-ticker {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  z-index: 7;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  height: 34px;
+  padding: 0 8px;
+  background: rgba(0, 0, 0, 0.72);
+  color: #fff;
+  font-size: 14px;
+  line-height: 1;
+  pointer-events: auto;
+}
+
+.ticker-label {
+  flex: none;
+  padding: 2px 6px;
+  border-radius: 3px;
+  background: #fff;
+  color: #000;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
+.ticker-window {
+  position: relative;
+  flex: 1;
+  min-width: 0;
+  height: 100%;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  color: inherit;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+/* padding-left: 100% starts the content just off the right edge; translating the
+   track by its own full width carries it just off the left. One pass = the booking. */
+.ticker-track {
+  display: inline-flex;
+  padding-left: 100%;
+  white-space: nowrap;
+  animation: ticker-crawl var(--ticker-duration, 15s) linear var(--ticker-iterations, 1) forwards;
+  animation-play-state: var(--ticker-state, running);
+  will-change: transform;
+}
+
+.ticker-content {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.ticker-avatar {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  object-fit: cover;
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.ticker-account {
+  font-weight: 700;
+}
+
+.ticker-product {
+  opacity: 0.8;
+
+  &::before {
+    content: '\00B7';
+    margin-right: 8px;
+  }
+}
+
+.ticker-message {
+  margin-left: 6px;
+}
+
+@keyframes ticker-crawl {
+  from { transform: translateX(0); }
+  to { transform: translateX(-100%); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ticker-track {
+    animation: none;
+    padding-left: 0;
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+}
+
+/* Phones: the controls bar is shorter and the frame is small, so the strip is too. */
+@media (max-width: 600px) {
+  .watch-ticker {
+    height: 28px;
+    font-size: 12px;
+  }
+
+  .ticker-avatar {
+    width: 18px;
+    height: 18px;
+  }
+}

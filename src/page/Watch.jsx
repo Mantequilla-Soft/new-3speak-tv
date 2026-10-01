@@ -28,10 +28,11 @@ import { MdVideocam, MdChatBubble } from 'react-icons/md';
 import { batchGetReputations, LOW_REP_THRESHOLD } from '../utils/reputation';
 import { batchCheckHidden, isCreatorHidden } from '../utils/hiddenCreators';
 import { usePlayer } from '@mantequilla-soft/3speak-player/react';
-import { createAdBreak } from '../lib/adBreak';
+import { createAdBreak, rememberAdSeenFor } from '../lib/adBreak';
 import AdOverlay from '../components/ads/AdOverlay';
 import AdSkip from '../components/ads/AdSkip';
 import BannerClick from '../components/ads/BannerClick';
+import TickerCrawl from '../components/ads/TickerCrawl';
 
 import { useGatedPlayback } from '../hooks/useGatedPlayback';
 import GuestListEditor from '../components/gated/GuestListEditor';
@@ -467,6 +468,11 @@ function Watch({ v2 = false }) {
   // click target over it. Separate from sponsorVisible: the two placements have
   // different windows and either can run without the other.
   const [bannerVisible, setBannerVisible] = useState(false);
+  // The ticker crawl. Its own window again: it can run with, without or instead of
+  // either of the other two placements.
+  const [tickerVisible, setTickerVisible] = useState(false);
+  // Paused behind a video spot that cut in mid-crossing. See the ticker effect.
+  const [tickerHeld, setTickerHeld] = useState(false);
   // Seconds left before the break, 3 → 1, or null. A mid-roll that arrives with no
   // warning is the part people resent most; a few seconds' notice costs the
   // advertiser nothing and turns an interruption into a beat.
@@ -617,6 +623,52 @@ function Watch({ v2 = false }) {
     try { player?.seek(to); } catch { /* the spot simply plays out */ }
   }, [player]);
 
+
+  /* Seconds the ticker has ACTUALLY been watched in its current run: playback time
+   * that advanced while the strip was on screen, the video playing and the tab in
+   * front. A paused video freezes the strip and a background tab shows nobody
+   * anything, so neither counts; a seek out of the window starts the count over. */
+  const tickerWatchRef = useRef({ seconds: 0, lastT: null, done: false });
+
+  /* The ticker's window, off the same clock as everything else. Hidden while the
+   * source is swapping, for the reason every other piece of ad chrome is. */
+  useEffect(() => {
+    const ab = adBreakRef.current;
+    const t = Number(playerState?.currentTime) || 0;
+    const on = !adChromeOff && ab.isTickerVisible(t, Number(playerState?.duration) || 0);
+    const w = tickerWatchRef.current;
+    /* A video spot cutting in mid-crossing PAUSES the ticker: kept mounted but hidden
+     * and frozen, its watched seconds kept, and it carries on after the spot. Ending
+     * the run there meant a ticker sharing a playback with an early spot never
+     * completed and was never counted. */
+    const held = !on && ab.isInside(t) && w.seconds > 0 && !w.done;
+    if (held !== tickerHeld) setTickerHeld(held);
+    if (held) { w.lastT = null; return; }
+    if (on !== tickerVisible) setTickerVisible(on);
+    if (!on) {
+      // Out of the window: a partial run is not a view. Nothing is kept.
+      if (!w.done) { w.seconds = 0; w.lastT = null; }
+      return;
+    }
+    const playing = playerState?.paused === false
+      && (typeof document === 'undefined' || document.visibilityState === 'visible');
+    if (playing && w.lastT != null) {
+      const dt = t - w.lastT;
+      // Normal playback only. A jump (seek) inside the window is not time watched.
+      if (dt > 0 && dt <= 1.5) w.seconds += dt;
+    }
+    w.lastT = playing ? t : null;
+
+    const booked = Number(ab.tickerInfo?.durationSeconds) || 0;
+    // A whole crossing watched: only NOW is it seen. The impression is reported and the
+    // ad goes into the browser's seen-list for its own window (capMinutes), so the two
+    // agree with the server, which only counts reported crossings.
+    if (!w.done && booked > 0 && w.seconds >= booked * 0.95) {
+      w.done = true;
+      try { ab.reportTickerShown(); } catch { /* an unreported impression is not a crash */ }
+      if (ab.tickerInfo?.adKey) rememberAdSeenFor(ab.tickerInfo.capMinutes, ab.tickerInfo.adKey);
+    }
+  }, [playerState?.currentTime, playerState?.duration, playerState?.paused, adChromeOff, tickerVisible, tickerHeld]);
 
   /* Report a DRAWN banner once it has been on screen for its booked seconds.
    *
@@ -927,6 +979,9 @@ function Watch({ v2 = false }) {
     // Someone who paid for content should no more see an ad than a Pro subscriber.
     const viewer = (useAppStore.getState().user || '').toLowerCase() || null;
     adBreakRef.current.reset();
+    // A new video is a new ticker run.
+    tickerWatchRef.current = { seconds: 0, lastT: null, done: false };
+    setTickerHeld(false);
     setSponsorVisible(false);
     setBannerVisible(false);
     (async () => {
@@ -951,6 +1006,9 @@ function Watch({ v2 = false }) {
           permlink: meta?.permlink || permlink,
           viewer,
           manifestUrl: source.url,
+          // This page can draw a ticker, for every viewer. Which channels carry one is
+          // the checker's call (AD_TICKER_ALLOWED_OWNERS, badadib during the beta).
+          ticker: true,
         });
         if (!active) return;
         if (spot) {
@@ -2194,6 +2252,18 @@ function Watch({ v2 = false }) {
             onDismiss={dismissBanner}
           />
         )}
+        tickerSlot={(tickerVisible || tickerHeld) && adBreakRef.current.tickerInfo ? (
+          <TickerCrawl
+            hidden={tickerHeld}
+            account={adBreakRef.current.tickerInfo.account}
+            productName={adBreakRef.current.tickerInfo.productName}
+            message={adBreakRef.current.tickerInfo.message}
+            label={adBreakRef.current.tickerInfo.label}
+            clickUrl={adBreakRef.current.tickerInfo.clickUrl}
+            durationSeconds={adBreakRef.current.tickerInfo.durationSeconds}
+            paused={tickerHeld || playerState?.paused === true}
+          />
+        ) : null}
         wrapperRef={wrapperRef}
         playlistData={showPlaylist ? playlistData : null}
         onClosePlaylist={() => setShowPlaylist(false)}

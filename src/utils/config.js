@@ -292,6 +292,13 @@ const adsEnabledFor = (user) => ENABLE_ADS || adsBetaUserFor(user);
 const ENABLE_SELFPROMO = import.meta.env.VITE_ENABLE_SELFPROMO === 'true';
 const selfPromoEnabledFor = (user) => adsEnabledFor(user) && (ENABLE_SELFPROMO || adsBetaUserFor(user));
 
+// Formats the checker marks `beta` (the ticker was one until it went public on
+// 2026-10-01) are shown on /advertise to ads beta testers only. A public format is not
+// marked, so this changes nothing for it. The real gate is the checker's (for the
+// ticker, AD_TICKER_BETA_ONLY). VITE_ENABLE_TICKER=true shows beta formats to everyone.
+const ENABLE_TICKER = import.meta.env.VITE_ENABLE_TICKER === 'true';
+const tickerEnabledFor = (user) => ENABLE_TICKER || adsBetaUserFor(user);
+
 // THIRD-PARTY advertising. Distinct from ENABLE_ADS above, and the distinction
 // matters: ENABLE_ADS gates OUR OWN ad system (the /advertise page, house campaigns
 // paid in HIVE/HBD, server-side stitched by the checker). This flag gates loading
@@ -398,6 +405,7 @@ export {
   ENABLE_ADS,
   adsEnabledFor,
   selfPromoEnabledFor,
+  tickerEnabledFor,
   adsBetaUserFor,
   warmupRailEnabledFor,
   ENABLE_THIRDPARTY_ADS,
