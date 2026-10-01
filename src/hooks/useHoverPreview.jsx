@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect, useCallback, useMemo } from "react";
+import { useState, useRef, useEffect, useLayoutEffect, useCallback, useMemo } from "react";
 import { reportVideoUnavailable } from '../lib/reportUnavailable';
 import { ThreeSpeakApi } from "@mantequilla-soft/3speak-player";
 import { getPlayerUrl } from "../utils/playerUrl";
@@ -313,6 +313,27 @@ export default function useHoverPreview({ renderControls } = {}) {
   };
 
   // ── Desktop hover tracking ──
+  // The overlay's rect is a snapshot taken when the preview starts, but the grid can
+  // reflow underneath it — promoted videos are PREPENDED once their own fetch lands
+  // (watch-page recommendations, a cached home feed), shifting every card one slot.
+  // The overlay then sat over whichever card moved into the old spot, playing the
+  // wrong video there. Re-measure the hovered card after every render (the list
+  // changing re-renders the grid that owns this hook) and follow it, or drop the
+  // preview if the card left the grid.
+  const hoverNodeRef = useRef(null);
+  // No deps on purpose: runs after every render, and only sets state when the rect moved.
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  useLayoutEffect(() => {
+    if (!hover || mobileAutoplay) return;
+    const node = hoverNodeRef.current;
+    if (!node || !node.isConnected) { setHover(null); return; }
+    const r = rectOf(node);
+    if (!r) return;
+    const o = hover.rect;
+    if (o && o.top === r.top && o.left === r.left && o.width === r.width && o.height === r.height) return;
+    setHover((h) => (h && h.key === hover.key ? { ...h, rect: r } : h));
+  });
+
   const onCardEnter = (e, postKey, author, permlink, thumb, title) => {
     if (!canHover) return;
     clearTimeout(hoverTimer.current);
@@ -327,6 +348,8 @@ export default function useHoverPreview({ renderControls } = {}) {
     const node = e.currentTarget;
     setHover((h) => (h && h.key !== postKey ? null : h));
     hoverTimer.current = setTimeout(() => {
+      const thumbEl = node.querySelector(".img-wrap, .video-thumbnail") || node;
+      hoverNodeRef.current = thumbEl;
       setReady(false);
       setHover({
         key: postKey,
@@ -335,7 +358,7 @@ export default function useHoverPreview({ renderControls } = {}) {
         thumb,
         title,
         source: sourcesRef.current.get(postKey),
-        rect: rectOf(node.querySelector(".img-wrap, .video-thumbnail") || node),
+        rect: rectOf(thumbEl),
       });
     }, 500);
   };

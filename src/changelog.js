@@ -7,6 +7,13 @@
 // 1.0.0 — that way they see all of these when develop is pushed to production.
 export const CHANGELOG = [
   {
+    version: '1.79.40',
+    date: '2026-10-01',
+    summary:
+      'Hovering a video card now always previews that card. Before, a promoted video loading in at the top of a list '
+      + 'could push the cards over, and the first preview would play on top of the wrong card.',
+  },
+  {
     version: '1.79.39',
     date: '2026-10-01',
     summary:
