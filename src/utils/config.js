@@ -292,10 +292,10 @@ const adsEnabledFor = (user) => ENABLE_ADS || adsBetaUserFor(user);
 const ENABLE_SELFPROMO = import.meta.env.VITE_ENABLE_SELFPROMO === 'true';
 const selfPromoEnabledFor = (user) => adsEnabledFor(user) && (ENABLE_SELFPROMO || adsBetaUserFor(user));
 
-// The TICKER ad format (a crawling text line under the video). BOOKING it is for beta
-// testers only: only they see it on /advertise. Watching it is for everyone, on the
-// channels the checker allows (AD_TICKER_ALLOWED_OWNERS). The real booking gate is the
-// checker's AD_TICKER_BETA_ONLY. Set VITE_ENABLE_TICKER=true to show it to all buyers.
+// Formats the checker marks `beta` (the ticker was one until it went public on
+// 2026-10-01) are shown on /advertise to ads beta testers only. A public format is not
+// marked, so this changes nothing for it. The real gate is the checker's (for the
+// ticker, AD_TICKER_BETA_ONLY). VITE_ENABLE_TICKER=true shows beta formats to everyone.
 const ENABLE_TICKER = import.meta.env.VITE_ENABLE_TICKER === 'true';
 const tickerEnabledFor = (user) => ENABLE_TICKER || adsBetaUserFor(user);
 
