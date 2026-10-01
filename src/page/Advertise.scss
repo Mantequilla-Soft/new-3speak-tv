@@ -7,6 +7,14 @@ $mkt-head: 18px;
 $mkt-text: 14px;
 $mkt-sub: 12px;
 
+/* The market panels (components/ads/AdMarketPanels) embedded in another page, such
+   as an advertiser's warm-up profile: the same styles, without this page's own box. */
+.mkt-page.mkt-embed {
+  max-width: none;
+  margin: 14px 0 0;
+  padding: 0;
+}
+
 .mkt-page {
   /* The floor for the three-size rule. Without it a heading whose container has no
      rule of its own falls through to the browser default, which is how a fourth
