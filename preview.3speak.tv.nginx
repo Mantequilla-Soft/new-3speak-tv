@@ -118,6 +118,20 @@ server {
         proxy_set_header X-Forwarded-Proto $scheme;
         proxy_buffering off;
     }
+    # Discord inline-video MP4s (server/og-video.cjs, served by the OG sidecar).
+    # Every UA, not just bots: Discord fetches the file through its media proxy
+    # AND straight from clients. The sidecar holds a request open while a cold
+    # remux finishes (up to 75s), and does its own Range handling.
+    location ^~ /og-video/ {
+        proxy_pass http://127.0.0.1:4023;
+        proxy_http_version 1.1;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_read_timeout 120s;
+        proxy_buffering off;
+    }
     location ~ ^/@ {
         proxy_pass $threespeak_share_backend$request_uri;
         proxy_http_version 1.1;

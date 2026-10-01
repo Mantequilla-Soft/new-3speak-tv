@@ -19,6 +19,7 @@
 // nvm v22 segfaults on this box — see the preview-3speak-api service notes).
 
 const http = require('http');
+const ogVideo = require('./og-video.cjs');
 
 const PORT = process.env.OG_PORT || 4023;
 const HIVE_API = 'https://api.hive.blog';
@@ -500,6 +501,7 @@ function buildOgHtml({
   subtitleLanguages,
   comments,
   commentCount,
+  video,
 }) {
   const safeTitle = escapeHtml(title);
   const safeDesc = escapeHtml(description);
@@ -510,6 +512,28 @@ function buildOgHtml({
   const durationMeta = duration
     ? `<meta property="og:video:duration" content="${Math.round(duration)}" />`
     : '';
+
+  // Inline playback in Discord: a direct progressive MP4 (see og-video.cjs).
+  // twitter:card=player only goes out with it, i.e. only to Discordbot: a real
+  // Twitter player card needs an approved twitter:player iframe, and without one
+  // X would drop the large-image card it shows today.
+  const videoAbs = video ? escapeHtml(video.url) : '';
+  const videoMeta = video
+    ? `
+  <meta property="og:video" content="${videoAbs}" />
+  <meta property="og:video:url" content="${videoAbs}" />
+  <meta property="og:video:secure_url" content="${videoAbs}" />
+  <meta property="og:video:type" content="video/mp4" />
+  <meta property="og:video:width" content="${Number(video.width) || 1280}" />
+  <meta property="og:video:height" content="${Number(video.height) || 720}" />`
+    : '';
+  const twitterCard = video
+    ? `<meta name="twitter:card" content="player" />
+  <meta name="twitter:player:stream" content="${videoAbs}" />
+  <meta name="twitter:player:stream:content_type" content="video/mp4" />
+  <meta name="twitter:player:width" content="${Number(video.width) || 1280}" />
+  <meta name="twitter:player:height" content="${Number(video.height) || 720}" />`
+    : '<meta name="twitter:card" content="summary_large_image" />';
 
   const robotsMeta = noindex
     ? '<meta name="robots" content="noindex, follow" />'
@@ -582,10 +606,10 @@ function buildOgHtml({
   <meta property="og:description" content="${safeDesc}" />
   <meta property="og:image" content="${safeImage}" />
   <meta property="og:url" content="${safeUrl}" />
-  ${durationMeta}
+  ${durationMeta}${videoMeta}
 
   <!-- Twitter Card -->
-  <meta name="twitter:card" content="summary_large_image" />
+  ${twitterCard}
   <meta name="twitter:site" content="@3speaktv" />
   <meta name="twitter:title" content="${safeTitle}" />
   <meta name="twitter:description" content="${safeDesc}" />
@@ -674,9 +698,30 @@ const server = http.createServer(async (req, res) => {
     return sendHtml(req, res, 200, buildGenericHtml(origin));
   }
 
+  // The remuxed MP4 behind og:video. nginx sends this path here for every UA:
+  // Discord fetches it through its media proxy and from clients directly.
+  if (ogVideo.isMediaPath(url.pathname)) {
+    try {
+      return await ogVideo.serveMedia(req, res, url.pathname);
+    } catch (err) {
+      console.error('[og-video] serve error:', err && err.message);
+      if (!res.headersSent) {
+        res.writeHead(503, { 'Content-Type': 'text/plain', 'Cache-Control': 'no-store', 'Retry-After': '30' });
+      }
+      return res.end();
+    }
+  }
+
   try {
     const video = parseVideoUrl(url);
     if (!video) return sendHtml(req, res, 200, buildGenericHtml(origin + req.url));
+
+    // Started now so the probe overlaps the Hive/checker lookups below. It only
+    // resolves + probes (cached per rendition); the remux starts further down,
+    // once the page is known to be allowed to carry the video.
+    const inlineVideo = ogVideo.wantsVideo(req.headers['user-agent'])
+      ? ogVideo.ogVideoFor(video.author, video.permlink).catch(() => null)
+      : Promise.resolve(null);
 
     // Resolve the Hive post and/or the embed-video doc. Shorts (and some embed
     // videos) aren't Hive posts — the share URL's permlink is the embed *asset*
@@ -733,9 +778,16 @@ const server = http.createServer(async (req, res) => {
 
     // Indexability: full signal set when there's a Hive post; for embed-only
     // assets fall back to the NSFW flag + title heuristic.
+    const indexability = post ? getIndexability(post, meta) : null;
     const index = post
-      ? getIndexability(post, meta).index
+      ? indexability.index
       : !(embed && embed.isNsfwContent) && !isAdultByTitle(title);
+    // Inline playback follows the same NSFW/muted/blacklist rules, but not the
+    // SEO-only "empty" one: a short posted as an Ecency wave is a reply with a
+    // one-line body, which is thin for Google and perfectly fine for Discord.
+    const inlineAllowed =
+      (index || (indexability && indexability.reason === 'empty')) &&
+      !(embed && (embed.gated === true || embed.gated === 'true'));
 
     // Transcripts only exist for Hive-backed videos; fetch by the resolved Hive
     // author/permlink (not the embed asset id), and skip on noindex pages.
@@ -743,18 +795,24 @@ const server = http.createServer(async (req, res) => {
     let transcriptLang = null;
     let subtitleLanguages = null;
     let comments = [];
+    let inline = null;
     if (post && index) {
       // Both hang off the same Hive post; fetch them together rather than
       // adding the comment round-trip on top of the transcript's.
-      const [t, c] = await Promise.all([
+      const [t, c, v] = await Promise.all([
         fetchTranscript(post.author, post.permlink),
         fetchComments(post.author, post.permlink),
+        inlineVideo,
       ]);
+      if (inlineAllowed) inline = v;
       transcript = (t && t.text) || null;
       transcriptLang = (t && t.lang) || null;
       subtitleLanguages = (t && t.languages) || null;
       comments = c;
+    } else if (inlineAllowed) {
+      inline = await inlineVideo;
     }
+    if (inline) inline.prepare();
 
     const html = buildOgHtml({
       title,
@@ -771,6 +829,7 @@ const server = http.createServer(async (req, res) => {
       subtitleLanguages,
       comments,
       commentCount: post && typeof post.children === 'number' ? post.children : undefined,
+      video: inline ? { url: origin + inline.path, width: inline.width, height: inline.height } : null,
     });
 
     return sendHtml(req, res, 200, html);
