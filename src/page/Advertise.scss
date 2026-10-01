@@ -1017,6 +1017,13 @@ $mkt-sub: 12px;
       text-align: right;
       color: var(--text-primary);
     }
+
+    // The rule behind a recommended size, one step quieter than the size itself.
+    .mkt-rc-sub {
+      display: block;
+      font-size: 0.85em;
+      color: var(--text-muted);
+    }
   }
 
   /* Pushed to the bottom edge so the price line sits level across tiles of

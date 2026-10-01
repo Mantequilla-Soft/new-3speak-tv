@@ -430,6 +430,69 @@ function suppliesFor(f) {
   return image ? 'An image' : 'A video';
 }
 
+/**
+ * The size and file guidance for a format, as short key/value facts for its tile.
+ *
+ * Rows in the tile's fact list rather than (i) buttons: a tooltip hides the one thing
+ * an advertiser needs before they open an editor, and does not exist on a phone. Two
+ * terse rows cost less space than a sentence and are read the same way as the rows
+ * above them.
+ *
+ * Read from `creativeSpec`, which is the same definition the attach route enforces, so
+ * the tile cannot recommend a size the server then refuses. Formats with no spec (the
+ * landscape spots) have no shape rule; they get the player's own shape as advice.
+ */
+/**
+ * The shape of the recommended banner size: its ratio, and the smallest size at that
+ * ratio the server still accepts. 1456x240 gives 6:1 and 728x120. Null when the
+ * recommendation is not a WxH we can read.
+ */
+function bannerShape(spec) {
+  const m = /^(\d+)\s*x\s*(\d+)$/i.exec(String(spec?.recommended || ''));
+  if (!m) return null;
+  const ratio = Number(m[1]) / Number(m[2]);
+  if (!(ratio > 0)) return null;
+  const minW = spec.minWidth || Number(m[1]);
+  return {
+    // 1456/240 is 6.07, which nobody wants to read as "6.1:1".
+    ratio: Math.abs(ratio - Math.round(ratio)) < 0.1 ? Math.round(ratio) : ratio.toFixed(1),
+    smallest: `${minW}×${Math.round(minW / ratio)}`,
+  };
+}
+
+/** The banner size advice as one sentence, for the upload panel. */
+function bannerAdvice(spec) {
+  const shape = bannerShape(spec);
+  if (!shape) return 'It needs to be a wide strip.';
+  return `Make it ${spec.recommended.replace('x', '×')}, or any other size in the same `
+    + `${shape.ratio}:1 shape, such as ${shape.smallest}.`;
+}
+
+function specFor(f) {
+  const spec = f?.creativeSpec;
+  const kinds = f?.creativeKinds?.length ? f.creativeKinds : [f?.creativeKind];
+  const files = kinds.includes('image') && kinds.includes('video')
+    ? 'PNG, JPG or MP4'
+    : (kinds.includes('image') ? 'PNG or JPG' : 'MP4 (H.264)');
+  const x = (s) => String(s || '').replace('x', '×');
+  if (spec?.shape === 'portrait') {
+    return { size: `${x(spec.recommended)}, 9:16`, note: `upright, at least ${spec.minWidth}px wide`, files };
+  }
+  if (spec) {
+    // Recommend the recommended SHAPE, not the 3:1 to 12:1 range the server will merely
+    // accept: anything off that shape is letterboxed inside the banner box.
+    const shape = bannerShape(spec);
+    return {
+      size: x(spec.recommended),
+      note: shape
+        ? `or any ${shape.ratio}:1 size, e.g. ${shape.smallest}`
+        : `at least ${spec.minWidth}px wide`,
+      files,
+    };
+  }
+  return { size: '1920×1080, 16:9', note: 'landscape, like the player', files };
+}
+
 function savingAt(days, pricing) {
   const k = Number(pricing?.dayCurveK);
   if (!(k > 0 && k < 1) || !(days > 1)) return null;
@@ -499,6 +562,24 @@ function RateCard({ pricing }) {
                   {f.maxSeconds ? `, up to ${f.maxSeconds}s` : null}
                 </dd>
               </div>
+              {(() => {
+                const s = specFor(f);
+                return (
+                  <>
+                    <div>
+                      <dt>Best size</dt>
+                      <dd>
+                        {s.size}
+                        <span className="mkt-rc-sub">{s.note}</span>
+                      </dd>
+                    </div>
+                    <div>
+                      <dt>File</dt>
+                      <dd>{s.files}</dd>
+                    </div>
+                  </>
+                );
+              })()}
             </dl>
 
             {example != null ? (
@@ -1788,19 +1869,13 @@ function CreativePanel({ reference, account, maxSeconds, bannerSpec, onCreatives
               A player banner is a still or a short video, shown over the video while it
               plays. A video banner is played once, so it has to be at least as long as
               the banner runs.
-              {bannerSpec
-                ? ` ${bannerSpec.recommended} works well, and it needs to be a strip between `
-                  + `${bannerSpec.minAspect}:1 and ${bannerSpec.maxAspect}:1.`
-                : ' It needs to be a wide strip.'}
+              {` ${bannerAdvice(bannerSpec)}`}
             </>
           )
           : (
             <>
-              Images too. A still is what a <strong>player banner</strong> is made of &mdash;
-              {bannerSpec
-                ? ` ${bannerSpec.recommended} works well, and it needs to be a strip between `
-                  + `${bannerSpec.minAspect}:1 and ${bannerSpec.maxAspect}:1.`
-                : ' it needs to be a wide strip.'}
+              Images too. A still is what a <strong>player banner</strong> is made of.
+              {` ${bannerAdvice(bannerSpec)}`}
               {' '}A logo or key art that is not that shape is still worth uploading: we can
               build an ad video around it.
             </>
