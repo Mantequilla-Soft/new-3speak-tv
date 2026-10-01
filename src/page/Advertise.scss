@@ -1720,6 +1720,14 @@ $mkt-sub: 12px;
     flex: 1 1 100%;
   }
 
+  /* The line that stands in for the format picker once the type was chosen in "Your
+     ad". It takes the picker's full row too: without it, the next fieldset packed in
+     beside it and the booking fields were squeezed into half the width. */
+  .mkt-locked-format {
+    flex: 1 1 100%;
+    margin: 0;
+  }
+
   .mkt-format-list {
     display: flex;
     flex-wrap: wrap;
