@@ -1764,6 +1764,20 @@ const PlayVideo = ({ videoDetails, author, permlink, mediaUnavailable = false, m
                 </div>
               )}
 
+              {authenticated && user === author && (
+                <div className="fab-action">
+                  <span className="fab-action-label">Edit</span>
+                  <button
+                    className="fab-action-btn"
+                    onClick={() => { videoControls?.onPause?.(); setIsEditOpen(true); setFabOpen(false); }}
+                    aria-label="Edit video details"
+                    title="Edit video details"
+                  >
+                    <MdEdit size={20} />
+                  </button>
+                </div>
+              )}
+
               <div className="fab-action">
                 <span className="fab-action-label">Share</span>
                 <button
@@ -1816,7 +1830,7 @@ const PlayVideo = ({ videoDetails, author, permlink, mediaUnavailable = false, m
                 </div>
               )}
 
-              {authenticated && isLoggedIn() && (
+              {authenticated && isLoggedIn() && author !== user && (
                 <div className="fab-action">
                   <span className="fab-action-label">Tip</span>
                   <button
@@ -1827,6 +1841,21 @@ const PlayVideo = ({ videoDetails, author, permlink, mediaUnavailable = false, m
                     {...lockProps}
                   >
                     <MdAttachMoney size={20} />
+                  </button>
+                </div>
+              )}
+
+              {authenticated && isLoggedIn() && (
+                <div className="fab-action">
+                  <span className="fab-action-label">Promote</span>
+                  <button
+                    className="fab-action-btn"
+                    onClick={() => { setPromoteOpen(true); setFabOpen(false); }}
+                    aria-label="Promote this video"
+                    title="Promote this video"
+                    {...lockProps}
+                  >
+                    <Rocket size={18} />
                   </button>
                 </div>
               )}
@@ -1846,7 +1875,7 @@ const PlayVideo = ({ videoDetails, author, permlink, mediaUnavailable = false, m
                 </div>
               )}
 
-              {authenticated && isLoggedIn() && (
+              {authenticated && isLoggedIn() && author !== user && (
                 <div className="fab-action">
                   <span className="fab-action-label">Reshare{reshareCount > 0 ? ` (${reshareCount})` : ''}</span>
                   <button
@@ -1859,7 +1888,7 @@ const PlayVideo = ({ videoDetails, author, permlink, mediaUnavailable = false, m
                 </div>
               )}
 
-              {authenticated && isLoggedIn() && !(votingClosed && alreadyTagged) && (
+              {authenticated && isLoggedIn() && author !== user && !(votingClosed && alreadyTagged) && (
                 <div className="fab-action">
                   <span className="fab-action-label">{votingClosed ? 'Tag' : 'Vote'}</span>
                   <button

@@ -189,6 +189,8 @@ export function createAdBreak() {
   let bannerSid = null;
   // Whether the banner's adKey has gone into the seen list. Set on first sight.
   let bannerRemembered = false;
+  // Whether this playback's overlay banner has been reported as shown. Once only.
+  let bannerReported = false;
 
   return {
     get active() { return !!session; },
@@ -200,6 +202,31 @@ export function createAdBreak() {
 
     /** The creative to draw, when the server handed it over. Null when burned. */
     get bannerOverlay() { return (banner && banner.overlay) || null; },
+
+    /**
+     * An overlay banner was on screen for its booked time.
+     *
+     * A burned banner measures itself, because the player must fetch bytes only the
+     * stitcher can produce. A drawn one is painted from a CDN asset and nothing about
+     * it reaches the server, so this is the only signal there is. Without it every
+     * overlay shown on this page went uncounted: the campaign read 16 deliveries while
+     * well over a thousand playbacks carried the banner.
+     *
+     * The server refuses a claim that arrives too early and counts one per session, so
+     * this cannot bill an advertiser twice or the moment a page loads. The flag here
+     * only saves the request.
+     */
+    reportBannerShown() {
+      const sid = session?.sid || bannerSid;
+      if (!sid || !banner?.overlay || bannerReported) return;
+      bannerReported = true;
+      fetch(`${AD_BASE}/m/${encodeURIComponent(sid)}/banner-shown`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: '{}',
+        keepalive: true,
+      }).catch(() => { /* an unreported impression is the advertiser's loss, not a crash */ });
+    },
 
     /**
      * The viewer closed the banner.
@@ -273,6 +300,7 @@ export function createAdBreak() {
       bannerWindow = null;
       bannerSid = null;
       bannerRemembered = false;
+      bannerReported = false;
       premium = false;
       if (!owner || !permlink || !manifestUrl) return null;
       try {
