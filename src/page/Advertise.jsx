@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useId, useMemo, useRef, useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
-import { MdCampaign, MdInfoOutline, MdCheckCircle, MdSchedule, MdCancel, MdVideocam, MdTv } from 'react-icons/md';
+import { MdCampaign, MdInfoOutline, MdCheckCircle, MdSchedule, MdCancel } from 'react-icons/md';
+import { FaRocket, FaLayerGroup, FaUsers, FaVideo, FaTv } from 'react-icons/fa';
 import { toastIn } from '../utils/toast';
 import { useAppStore } from '../lib/store';
 import { transferWithAioha, getOperationUser } from '../hive-api/aioha';
@@ -129,7 +130,9 @@ function InventoryPanel({ data, isLoading, error }) {
     <div className="mkt-inventory">
       <div className="mkt-stats">
         <StatTile value={formatCount(audience?.sessionsPerDay)} label="Watch sessions a day" note="Trailing 7 days, after filtering" />
-        <StatTile value={formatCount(audience?.videos)} label="Videos in the pool" note={`Last ${data.windowDays} days`} />
+        {/* Distinct videos with at least one counted watch in the window (adInventory.js),
+            not uploads and not plays. "In the pool" read as either. */}
+        <StatTile value={formatCount(audience?.videos)} label="Videos watched" note={`Different videos with real viewers, last ${data.windowDays} days`} />
         <StatTile value={formatCount(audience?.watchHours)} label="Watch hours" note={`Last ${data.windowDays} days`} />
       </div>
 
@@ -512,14 +515,55 @@ function savingAt(days, pricing) {
   return saving >= 5 ? saving : null;
 }
 
+/* The formats, grouped by how the viewer meets them. One list for every place the
+ * formats are shown (rate card, "What are you running?"), so the two agree. A format
+ * the checker adds later and nobody has placed lands in "More formats" rather than
+ * disappearing. */
+const FORMAT_GROUPS = [
+  {
+    id: 'screen',
+    title: 'Takes the screen',
+    note: 'Plays instead of the video for a few seconds, so it has the viewer\u2019s full attention.',
+    keys: ['video_roll', 'shorts_roll'],
+  },
+  {
+    id: 'overlay',
+    title: 'Over the picture',
+    note: 'Shown while the video keeps playing. Nothing is interrupted. Not on shorts yet.',
+    keys: ['video_banner', 'video_ticker'],
+  },
+  {
+    id: 'creators',
+    title: 'Before an upload',
+    note: 'Seen by creators about to publish, on any upload like a video or a short.',
+    keys: ['upload_gate'],
+  },
+];
+
+/** Split items into FORMAT_GROUPS by their format key, keeping each group's order. */
+function groupByFormat(items, keyOf) {
+  const placed = new Set(FORMAT_GROUPS.flatMap((g) => g.keys));
+  const groups = FORMAT_GROUPS
+    .map((g) => ({ ...g, items: g.keys.map((k) => items.find((it) => keyOf(it) === k)).filter(Boolean) }))
+    .filter((g) => g.items.length);
+  const rest = items.filter((it) => !placed.has(keyOf(it)));
+  if (rest.length) groups.push({ id: 'more', title: 'More formats', note: null, items: rest });
+  return groups;
+}
+
 function RateCard({ pricing }) {
   const formats = pricing?.formats || [];
   if (!formats.length) return null;
   const days = Math.max(EXAMPLE_DAYS, pricing?.minDays || 0) || null;
 
   return (
+    <div className="mkt-format-groups">
+    {groupByFormat(formats, (f) => f.key).map((g) => (
+    <section key={g.id} className="mkt-format-group" aria-label={g.title}>
+      <h3 className="mkt-group-title">{g.title}</h3>
+      {g.note ? <p className="mkt-group-note">{g.note}</p> : null}
     <ul className="mkt-ratecard">
-      {formats.map((f) => {
+      {g.items.map((f) => {
         // Quoted at one length across every tile, so they compare the SPOTS rather
         // than their maximum lengths. Clamped, so a format capped under the
         // baseline is quoted at its cap and says so.
@@ -555,6 +599,12 @@ function RateCard({ pricing }) {
 
             <p className="mkt-rc-blurb">{f.blurb}</p>
 
+            {/* Name, rate and one line by default; the facts and the worked prices on
+                request. Five tiles in full were a wall of numbers before anyone had
+                picked a format to care about. Native <details>, so it opens from the
+                keyboard and is announced without any state of ours. */}
+            <details className="mkt-rc-more">
+            <summary>Details</summary>
             <dl className="mkt-rc-facts">
               <div>
                 <dt>Where it runs</dt>
@@ -606,12 +656,16 @@ function RateCard({ pricing }) {
                 </span>
               </div>
             ) : null}
+            </details>
 
             {f.rateIsCustom ? <span className="mkt-tag">your agreed rate</span> : null}
           </li>
         );
       })}
     </ul>
+    </section>
+    ))}
+    </div>
   );
 }
 
@@ -640,13 +694,13 @@ function StatusBadge({ status }) {
 // A shorts spot and a video roll are both VIDEO ads — they differ in shape and in
 // where they run, not in what the advertiser uploads. Every "is this a video?" branch
 // has to agree, or the shorts flow silently offers an image picker.
-const isVideoAd = (t) => t === 'video' || t === 'shorts';
+const isVideoAd = (t) => t === 'video' || t === 'shorts' || t === 'upload';
 
 /* Which product an ad TYPE books. Module-level so the wizard and a product's own
    "Book a spot" agree on it. */
-const AD_TYPE_FORMAT = { video: 'video_roll', banner: 'video_banner', shorts: 'shorts_roll', ticker: 'video_ticker' };
+const AD_TYPE_FORMAT = { video: 'video_roll', banner: 'video_banner', shorts: 'shorts_roll', ticker: 'video_ticker', upload: 'upload_gate' };
 // Types that run a video spot, and so carry the label overlay and the "we make it" offer.
-const isSpotType = (t) => t === 'video' || t === 'shorts';
+const isSpotType = (t) => t === 'video' || t === 'shorts' || t === 'upload';
 
 /**
  * What "Your ad" still needs before the booking makes sense, as a sentence, or null when
@@ -683,17 +737,20 @@ function AdTypePicker({ value, onChange, pricing }) {
     },
     { id: 'banner', title: 'A player banner', blurb: 'A still shown over the video while it plays.' },
     { id: 'shorts', title: 'A shorts spot', blurb: 'Plays full screen between shorts. Upright video only.' },
-    ...(pricing?.formats?.some((f) => f.key === 'video_ticker')
-      ? [{ id: 'ticker', title: 'A ticker', blurb: 'A line of text that crawls along the top of the video. No file needed.' }]
-      : []),
-  ];
+    { id: 'ticker', title: 'A ticker', blurb: 'A line of text that crawls along the top of the video. No file needed.' },
+    { id: 'upload', title: 'A pre-upload spot', blurb: 'A video creators watch before they can upload. Landscape, like a video ad.' },
+  // Only what the rate card offers right now (a beta format only to its testers).
+  ].filter((o) => !pricing?.formats?.length || pricing.formats.some((f) => f.key === AD_TYPE_FORMAT[o.id]));
   const name = `mkt-adtype-${useId()}`;
   return (
     <>
       <div className="mkt-field mkt-field-wide mkt-adtype">
         <span className="mkt-label">What are you running?</span>
+        {groupByFormat(options, (o) => AD_TYPE_FORMAT[o.id]).map((g) => (
+        <div key={g.id} className="mkt-adtype-group">
+        <span className="mkt-adtype-group-title">{g.title}</span>
         <div className="mkt-adtype-row">
-          {options.map((o) => (
+          {g.items.map((o) => (
             <label key={o.id} className={`mkt-adtype-opt${value === o.id ? ' selected' : ''}`}>
               <input
                 type="radio"
@@ -709,10 +766,14 @@ function AdTypePicker({ value, onChange, pricing }) {
             </label>
           ))}
         </div>
+        </div>
+        ))}
       </div>
       <p className="mkt-fine">
         {value === 'ticker'
           ? 'Write the message and the link. Your avatar, @name and product name are added for you.'
+          : value === 'upload'
+            ? 'Upload the landscape video creators will watch before their upload starts, or ask us to make it.'
           : value === 'banner'
             ? 'Upload the image that will be shown over the video.'
             : (value === 'shorts'
@@ -2730,7 +2791,7 @@ export default function Advertise({ openLoginModal }) {
           whether they were filling in a product, a video or a booking. Numbered
           because the order is real: no booking without a product. */}
       <section className="mkt-intro">
-        <h2>How it works</h2>
+        <h2><FaRocket aria-hidden="true" /> Your ad, live in three steps</h2>
         <p className="mkt-intro-lede">
           Three things, and each one holds the next.
         </p>
@@ -2744,26 +2805,27 @@ export default function Advertise({ openLoginModal }) {
             </span>
           </li>
           <li>
-            <strong>Your ad videos</strong>
+            <strong>Your ads</strong>
             <span>
-              The clip that plays inside someone&apos;s video.
+              What viewers see: a video, a banner or a line of text.
             </span>
             <span className="mkt-step-detail">
-              Upload as many as you like{pricing?.maxCreativeSeconds ? ` (up to ${pricing.maxCreativeSeconds} seconds)` : ''}, or ask
-              us to make one. We watch each before it runs.
+              Upload a video{pricing?.maxCreativeSeconds ? ` (up to ${pricing.maxCreativeSeconds} seconds)` : ''} or an
+              image, write a ticker message, or ask us to make a video for you. We check each
+              one before it runs.
             </span>
           </li>
           <li>
             <strong>Your bookings</strong>
-            <span>When your ad runs, where it falls, and what it costs.</span>
+            <span>Which format, when it runs, where it falls, and what it costs.</span>
             <span className="mkt-step-detail">
-              Book as many as you like. Each uses one of your ad videos and starts when your
-              payment lands.
+              Book as many as you like. Each runs one of your approved ads and starts when
+              your payment lands.
             </span>
           </li>
         </ol>
         <p className="mkt-fine">
-          Priced per second of ad, per day. Nothing runs until your product and ad video are
+          Priced per second of ad, per day. Nothing runs until your product and your ad are
           both approved.
         </p>
       </section>
@@ -2776,12 +2838,7 @@ export default function Advertise({ openLoginModal }) {
       </button>
 
       <section className="mkt-section">
-        <h2>What you would be buying</h2>
-        <InventoryPanel data={inventory} isLoading={isLoading} error={error} />
-      </section>
-
-      <section className="mkt-section">
-        <h2>How it is priced</h2>
+        <h2><FaLayerGroup aria-hidden="true" /> Pick the format that fits your message</h2>
         {pricing?.formats?.length ? (
           <p className="mkt-intro-lede">
             Every spot is priced per second of ad, per day it runs, and the day rate
@@ -2817,17 +2874,23 @@ export default function Advertise({ openLoginModal }) {
           price. No CPM, so nobody has a reason to pad the count.
         </p>
         <p>
-          You are quoted against the forecast above and reported against what actually
+          You are quoted against the forecast below and reported against what actually
           played. Fall short and the difference comes back as credit on your next booking.
         </p>
       </section>
+
+      <section className="mkt-section">
+        <h2><FaUsers aria-hidden="true" /> The audience waiting for your ad</h2>
+        <InventoryPanel data={inventory} isLoading={isLoading} error={error} />
+      </section>
+
 
       {/* Two audiences who are not buying anything, side by side: the people whose
           videos carry the ads and the people who watch them. Both are paid, and an
           advertiser reading this page should see that the money goes somewhere real. */}
       <div className="mkt-audience-pair">
         <section className="mkt-section mkt-creators">
-          <h2><MdVideocam aria-hidden="true" /> If you are a creator</h2>
+          <h2><FaVideo aria-hidden="true" /> If you are a creator</h2>
           <p>
             Ads run on your videos and you earn a share of what they make, along with the
             community you posted in.
@@ -2839,7 +2902,7 @@ export default function Advertise({ openLoginModal }) {
         </section>
 
         <section className="mkt-section mkt-viewers">
-          <h2><MdTv aria-hidden="true" /> If you are a viewer</h2>
+          <h2><FaTv aria-hidden="true" /> If you are a viewer</h2>
           <p>
             You earn a share too, for the videos you actually watch. Paid in HBD or HIVE,
             same as everyone else.
