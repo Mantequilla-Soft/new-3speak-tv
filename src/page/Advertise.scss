@@ -85,6 +85,22 @@ $mkt-sub: 12px;
     }
   }
 
+  /* An icon in front of each main heading on the General tab. Flex rather than an
+     inline svg, which would sit low on the text baseline (same reasoning as the
+     creator/viewer cards). */
+  .mkt-intro h2,
+  .mkt-section h2 {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    > svg {
+      flex-shrink: 0;
+      color: var(--accent-primary);
+      font-size: 0.9em;
+    }
+  }
+
   /* The line under a section heading that introduces what follows. Used by more than
      one section, so it is a shared class rather than a per-section modifier. */
   .mkt-intro-lede {
@@ -258,6 +274,21 @@ $mkt-sub: 12px;
   }
 
   .mkt-adtype { margin-bottom: 18px; }
+
+  /* "What are you running?", grouped like the rate card. */
+  .mkt-adtype-group {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+
+    & + .mkt-adtype-group { margin-top: 12px; }
+  }
+
+  .mkt-adtype-group-title {
+    font-size: $mkt-sub;
+    font-weight: 600;
+    color: var(--text-muted);
+  }
 
   .mkt-wiz-cancel {
     display: flex;
@@ -949,6 +980,71 @@ $mkt-sub: 12px;
     @include mix.respond(phone) {
       grid-template-columns: minmax(0, 1fr);
     }
+  }
+
+  /* Tiles grouped by how the viewer meets the ad (see FORMAT_GROUPS). */
+  .mkt-format-groups {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    margin: 0 0 14px;
+
+    /* Closed, a row's tiles are the same height (the grid stretches them). Once one is
+       open, that row lets each tile keep its own height: stretching there made the
+       neighbour grow too and look opened. Each group is one row, so this is per row. */
+    .mkt-ratecard { margin: 0; }
+    .mkt-ratecard:has(.mkt-rc-more[open]) { align-items: start; }
+  }
+
+  .mkt-group-title {
+    margin: 0 0 2px;
+    font-size: $mkt-head;
+    font-weight: 700;
+    color: var(--text-primary);
+  }
+
+  .mkt-group-note {
+    margin: 0 0 10px;
+    font-size: $mkt-sub;
+    color: var(--text-muted);
+  }
+
+  /* The tile's facts and prices, folded away until asked for. */
+  .mkt-rc-more {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    // Pinned to the tile's bottom edge, so "Details" lines up across a stretched row.
+    margin-top: auto;
+
+    > summary {
+      list-style: none;
+      cursor: pointer;
+      width: fit-content;
+      font-size: $mkt-sub;
+      font-weight: 600;
+      color: var(--accent-primary);
+
+      &::-webkit-details-marker { display: none; }
+
+      &::after {
+        content: '';
+        display: inline-block;
+        width: 6px;
+        height: 6px;
+        margin-left: 7px;
+        border-right: 2px solid currentColor;
+        border-bottom: 2px solid currentColor;
+        transform: translateY(-2px) rotate(45deg);
+        transition: transform 0.15s ease;
+      }
+    }
+
+    &[open] > summary { margin-bottom: 8px; }
+    &[open] > summary::after { transform: translateY(1px) rotate(-135deg); }
+
+    /* Inside the fold there is nothing to push to the bottom edge any more. */
+    .mkt-rc-example { margin-top: 10px; }
   }
 
   .mkt-rc-tile {

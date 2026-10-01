@@ -7,6 +7,13 @@
 // 1.0.0 — that way they see all of these when develop is pushed to production.
 export const CHANGELOG = [
   {
+    version: '1.79.39',
+    date: '2026-10-01',
+    summary:
+      'The Advertise page (/advertise) now groups ad types by how viewers see them, '
+      + 'and each price tile opens for details only when you want them.',
+  },
+  {
     version: '1.79.38',
     date: '2026-10-01',
     summary:
