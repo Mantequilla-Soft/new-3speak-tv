@@ -7,6 +7,13 @@
 // 1.0.0 — that way they see all of these when develop is pushed to production.
 export const CHANGELOG = [
   {
+    version: '1.79.35',
+    date: '2026-10-01',
+    summary:
+      'The Advertise page (/advertise) now shows the best size and file type for every ad format right on its tile, '
+      + 'so your banner or video fits the first time.',
+  },
+  {
     version: '1.79.34',
     date: '2026-09-29',
     summary:
