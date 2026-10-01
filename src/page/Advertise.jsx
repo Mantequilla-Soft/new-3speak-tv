@@ -649,6 +649,20 @@ const AD_TYPE_FORMAT = { video: 'video_roll', banner: 'video_banner', shorts: 's
 const isSpotType = (t) => t === 'video' || t === 'shorts';
 
 /**
+ * What "Your ad" still needs before the booking makes sense, as a sentence, or null when
+ * it is complete. Read from the creatives on record, so a rejected one does not count,
+ * and for a video spot "have us make it" with a usable brief counts as the video.
+ */
+function adStepMissing(type, creatives, production) {
+  const live = (creatives || []).filter((c) => c.status !== 'rejected');
+  const has = (...kinds) => live.some((c) => kinds.includes(c.kind || 'video'));
+  if (type === 'ticker') return has('text') ? null : 'Save your ticker first.';
+  if (type === 'banner') return has('image', 'video') ? null : 'Upload your banner first.';
+  const briefOk = !!production?.wanted && String(production?.brief || '').trim().length >= 20;
+  return has('video') || briefOk ? null : 'Upload your ad video, or ask us to make it.';
+}
+
+/**
  * "What are you running?" — asked FIRST, because everything after it depends on the
  * answer: a banner has no label overlay and no "we make it" offer, a ticker has no file
  * at all. Showing the video settings to someone booking a banner was the old version.
@@ -740,7 +754,14 @@ function CampaignPanel({
   const [spotSeconds, setSpotSeconds] = useState(null);
   // A position or length picked for one format means nothing for another, so a change
   // of type in "Your ad" starts the booking fresh, as the picker's own onChange does.
-  useEffect(() => { setSlotPct(null); setSpotSeconds(null); }, [lockFormat]);
+  // Reset during render against the last value seen (React's pattern for this), not
+  // in an effect, which would paint the stale choice once first.
+  const [lockSeen, setLockSeen] = useState(lockFormat);
+  if (lockSeen !== lockFormat) {
+    setLockSeen(lockFormat);
+    setSlotPct(null);
+    setSpotSeconds(null);
+  }
   // "Make the spot for us" lives up in the spot panel now, where the subject is the
   // video itself — asking "do you have a spot?" underneath Days and Placement put it
   // in the middle of a pricing decision. The fee is still charged HERE, on the
@@ -2981,9 +3002,18 @@ export default function Advertise({ openLoginModal }) {
                   />
                   )}
                   <div className="mkt-wiz-actions">
-                    <button type="button" className="mkt-primary" onClick={() => goStep(3)}>
+                    {/* Outline, not a red fill, and only once "Your ad" is complete. */}
+                    <button
+                      type="button"
+                      className="mkt-outline"
+                      disabled={!!adStepMissing(wizType, wizCreativeList, bookProduction)}
+                      onClick={() => goStep(3)}
+                    >
                       Next: book a slot
                     </button>
+                    {adStepMissing(wizType, wizCreativeList, bookProduction)
+                      ? <span className="mkt-hint">{adStepMissing(wizType, wizCreativeList, bookProduction)}</span>
+                      : null}
                     {/* Stopping here is a legitimate ending, not a failure — but it is
                         not a booked ad, and saying so now is kinder than letting them
                         find out when nothing ever runs. */}
@@ -3331,11 +3361,22 @@ export default function Advertise({ openLoginModal }) {
 
                 {ptab === 'book' && (lookup.status === 'pending' || lookup.status === 'approved') && (
                   <div className="mkt-wiz-actions">
-                    {bookStep === 1 && (
-                      <button type="button" className="mkt-primary" onClick={() => setBookStep(2)}>
-                        Next: the booking
-                      </button>
-                    )}
+                    {bookStep === 1 && (() => {
+                      const missing = adStepMissing(bookType, creativeList, bookProduction);
+                      return (
+                        <>
+                          <button
+                            type="button"
+                            className="mkt-outline"
+                            disabled={!!missing}
+                            onClick={() => setBookStep(2)}
+                          >
+                            Next: the booking
+                          </button>
+                          {missing ? <span className="mkt-hint">{missing}</span> : null}
+                        </>
+                      );
+                    })()}
                     {bookStep === 2 && (
                       <button type="button" className="mkt-outline" onClick={() => setBookStep(1)}>
                         Back to your ad
