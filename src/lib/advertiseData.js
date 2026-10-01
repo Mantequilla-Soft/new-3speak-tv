@@ -742,6 +742,15 @@ export async function uploadCreative({ file, account, reference, durationSeconds
   }));
 }
 
+/** Save a ticker's message and link as a creative. It goes to review like any other. */
+export async function saveTickerCreative({ reference, message, clickUrl }) {
+  return readJson(await fetch(`${BASE}/creatives`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ reference, message, clickUrl }),
+  }));
+}
+
 export async function fetchCreatives(reference) {
   return readJson(await fetch(`${BASE}/creatives?reference=${encodeURIComponent(reference)}`));
 }
@@ -753,11 +762,13 @@ export async function fetchCreatives(reference) {
  * away from the platform default. Without one it is the public rate card. Passing it
  * matters: the total shown before booking has to be the total that gets charged.
  */
-export async function fetchPricing(reference) {
-  const url = reference
-    ? `${BASE}/pricing?reference=${encodeURIComponent(reference)}`
-    : `${BASE}/pricing`;
-  return readJson(await fetch(url));
+export async function fetchPricing(reference, { beta = false } = {}) {
+  const q = new URLSearchParams();
+  if (reference) q.set('reference', reference);
+  // Asks to SEE beta formats (the ticker). The checker still decides who may book one.
+  if (beta) q.set('beta', '1');
+  const qs = q.toString();
+  return readJson(await fetch(qs ? `${BASE}/pricing?${qs}` : `${BASE}/pricing`));
 }
 
 /* ─── campaigns ───────────────────────────────────────────────────────── */

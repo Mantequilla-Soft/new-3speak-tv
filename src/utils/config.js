@@ -292,6 +292,13 @@ const adsEnabledFor = (user) => ENABLE_ADS || adsBetaUserFor(user);
 const ENABLE_SELFPROMO = import.meta.env.VITE_ENABLE_SELFPROMO === 'true';
 const selfPromoEnabledFor = (user) => adsEnabledFor(user) && (ENABLE_SELFPROMO || adsBetaUserFor(user));
 
+// The TICKER ad format (a crawling text line under the video). BOOKING it is for beta
+// testers only: only they see it on /advertise. Watching it is for everyone, on the
+// channels the checker allows (AD_TICKER_ALLOWED_OWNERS). The real booking gate is the
+// checker's AD_TICKER_BETA_ONLY. Set VITE_ENABLE_TICKER=true to show it to all buyers.
+const ENABLE_TICKER = import.meta.env.VITE_ENABLE_TICKER === 'true';
+const tickerEnabledFor = (user) => ENABLE_TICKER || adsBetaUserFor(user);
+
 // THIRD-PARTY advertising. Distinct from ENABLE_ADS above, and the distinction
 // matters: ENABLE_ADS gates OUR OWN ad system (the /advertise page, house campaigns
 // paid in HIVE/HBD, server-side stitched by the checker). This flag gates loading
@@ -398,6 +405,7 @@ export {
   ENABLE_ADS,
   adsEnabledFor,
   selfPromoEnabledFor,
+  tickerEnabledFor,
   adsBetaUserFor,
   warmupRailEnabledFor,
   ENABLE_THIRDPARTY_ADS,

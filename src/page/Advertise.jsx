@@ -4,10 +4,11 @@ import { MdCampaign, MdInfoOutline, MdCheckCircle, MdSchedule, MdCancel, MdVideo
 import { toastIn } from '../utils/toast';
 import { useAppStore } from '../lib/store';
 import { transferWithAioha, getOperationUser } from '../hive-api/aioha';
-import { adsEnabledFor, ENABLE_BUTRAUTH } from '../utils/config';
+import { adsEnabledFor, tickerEnabledFor, ENABLE_BUTRAUTH } from '../utils/config';
 import SEOHead from '../components/SEOHead';
 import NotFound from './NotFound';
 import AdOverlay from '../components/ads/AdOverlay';
+import TickerCrawl from '../components/ads/TickerCrawl';
 import {
   AD_CATEGORIES,
   fetchInventory,
@@ -27,6 +28,7 @@ import {
   saveBranding,
   SLOGAN_MAX,
   fetchCreatives,
+  saveTickerCreative,
   fetchPricing,
   createCampaign,
   fetchCampaigns,
@@ -424,6 +426,7 @@ function hiveEquivalent(hbd, hbdPerHive) {
  */
 function suppliesFor(f) {
   const kinds = f?.creativeKinds?.length ? f.creativeKinds : (f ? [f.creativeKind] : []);
+  if (kinds.includes('text')) return 'A short message and a link';
   const image = kinds.includes('image');
   const video = kinds.includes('video');
   if (image && video) return 'An image or a video';
@@ -471,26 +474,34 @@ function bannerAdvice(spec) {
 function specFor(f) {
   const spec = f?.creativeSpec;
   const kinds = f?.creativeKinds?.length ? f.creativeKinds : [f?.creativeKind];
+  // A ticker has no file to size. What it needs is the length limit, said in the same
+  // two rows so the tiles still line up.
+  if (kinds.includes('text')) {
+    return {
+      rows: [
+        { label: 'Message', value: `Up to ${spec?.maxChars || 140} characters`, note: 'shown with your avatar and product name' },
+        { label: 'Link', value: 'Any https:// page' },
+      ],
+    };
+  }
   const files = kinds.includes('image') && kinds.includes('video')
     ? 'PNG, JPG or MP4'
     : (kinds.includes('image') ? 'PNG or JPG' : 'MP4 (H.264)');
   const x = (s) => String(s || '').replace('x', '×');
+  const rows = (size, note) => ({ rows: [{ label: 'Best size', value: size, note }, { label: 'File', value: files }] });
   if (spec?.shape === 'portrait') {
-    return { size: `${x(spec.recommended)}, 9:16`, note: `upright, at least ${spec.minWidth}px wide`, files };
+    return rows(`${x(spec.recommended)}, 9:16`, `upright, at least ${spec.minWidth}px wide`);
   }
   if (spec) {
     // Recommend the recommended SHAPE, not the 3:1 to 12:1 range the server will merely
     // accept: anything off that shape is letterboxed inside the banner box.
     const shape = bannerShape(spec);
-    return {
-      size: x(spec.recommended),
-      note: shape
-        ? `or any ${shape.ratio}:1 size, e.g. ${shape.smallest}`
-        : `at least ${spec.minWidth}px wide`,
-      files,
-    };
+    return rows(
+      x(spec.recommended),
+      shape ? `or any ${shape.ratio}:1 size, e.g. ${shape.smallest}` : `at least ${spec.minWidth}px wide`,
+    );
   }
-  return { size: '1920×1080, 16:9', note: 'landscape, like the player', files };
+  return rows('1920×1080, 16:9', 'landscape, like the player');
 }
 
 function savingAt(days, pricing) {
@@ -562,24 +573,15 @@ function RateCard({ pricing }) {
                   {f.maxSeconds ? `, up to ${f.maxSeconds}s` : null}
                 </dd>
               </div>
-              {(() => {
-                const s = specFor(f);
-                return (
-                  <>
-                    <div>
-                      <dt>Best size</dt>
-                      <dd>
-                        {s.size}
-                        <span className="mkt-rc-sub">{s.note}</span>
-                      </dd>
-                    </div>
-                    <div>
-                      <dt>File</dt>
-                      <dd>{s.files}</dd>
-                    </div>
-                  </>
-                );
-              })()}
+              {specFor(f).rows.map((r) => (
+                <div key={r.label}>
+                  <dt>{r.label}</dt>
+                  <dd>
+                    {r.value}
+                    {r.note ? <span className="mkt-rc-sub">{r.note}</span> : null}
+                  </dd>
+                </div>
+              ))}
             </dl>
 
             {example != null ? (
@@ -640,6 +642,73 @@ function StatusBadge({ status }) {
 // has to agree, or the shorts flow silently offers an image picker.
 const isVideoAd = (t) => t === 'video' || t === 'shorts';
 
+/* Which product an ad TYPE books. Module-level so the wizard and a product's own
+   "Book a spot" agree on it. */
+const AD_TYPE_FORMAT = { video: 'video_roll', banner: 'video_banner', shorts: 'shorts_roll', ticker: 'video_ticker' };
+// Types that run a video spot, and so carry the label overlay and the "we make it" offer.
+const isSpotType = (t) => t === 'video' || t === 'shorts';
+
+/**
+ * "What are you running?" — asked FIRST, because everything after it depends on the
+ * answer: a banner has no label overlay and no "we make it" offer, a ticker has no file
+ * at all. Showing the video settings to someone booking a banner was the old version.
+ *
+ * The ticker appears only when the rate card offers it, which it does only for beta
+ * testers (the page asks for beta formats only for them).
+ */
+function AdTypePicker({ value, onChange, pricing }) {
+  const options = [
+    {
+      id: 'video',
+      title: 'A video ad',
+      // From the rate card, not typed in: this number moved from 15 to 30 and the two
+      // places it had been written by hand did not move with it.
+      blurb: pricing?.maxCreativeSeconds
+        ? `Plays inside the video, up to ${pricing.maxCreativeSeconds} seconds.`
+        : 'Plays inside the video.',
+    },
+    { id: 'banner', title: 'A player banner', blurb: 'A still shown over the video while it plays.' },
+    { id: 'shorts', title: 'A shorts spot', blurb: 'Plays full screen between shorts. Upright video only.' },
+    ...(pricing?.formats?.some((f) => f.key === 'video_ticker')
+      ? [{ id: 'ticker', title: 'A ticker', blurb: 'A line of text that crawls along the top of the video. No file needed.' }]
+      : []),
+  ];
+  const name = `mkt-adtype-${useId()}`;
+  return (
+    <>
+      <div className="mkt-field mkt-field-wide mkt-adtype">
+        <span className="mkt-label">What are you running?</span>
+        <div className="mkt-adtype-row">
+          {options.map((o) => (
+            <label key={o.id} className={`mkt-adtype-opt${value === o.id ? ' selected' : ''}`}>
+              <input
+                type="radio"
+                name={name}
+                value={o.id}
+                checked={value === o.id}
+                onChange={() => onChange(o.id)}
+              />
+              <span>
+                <strong>{o.title}</strong>
+                <span className="mkt-hint">{o.blurb}</span>
+              </span>
+            </label>
+          ))}
+        </div>
+      </div>
+      <p className="mkt-fine">
+        {value === 'ticker'
+          ? 'Write the message and the link. Your avatar, @name and product name are added for you.'
+          : value === 'banner'
+            ? 'Upload the image that will be shown over the video.'
+            : (value === 'shorts'
+              ? 'Upload the upright video that will play between shorts. It has to be portrait, because a landscape spot plays small with black bars either side. 1080x1920 works well.'
+              : 'Upload the video that will play, or ask us to make it. This is also where the logo and slogan shown over your ad are set.')}
+      </p>
+    </>
+  );
+}
+
 function CampaignPanel({
   reference, pricing, creatives, onNeedCreative, production,
   awaitingApproval = false, lockFormat = null,
@@ -669,6 +738,9 @@ function CampaignPanel({
   // How long a spot this flight buys. Priced per second, so it is the other half of
   // the total alongside the number of days.
   const [spotSeconds, setSpotSeconds] = useState(null);
+  // A position or length picked for one format means nothing for another, so a change
+  // of type in "Your ad" starts the booking fresh, as the picker's own onChange does.
+  useEffect(() => { setSlotPct(null); setSpotSeconds(null); }, [lockFormat]);
   // "Make the spot for us" lives up in the spot panel now, where the subject is the
   // video itself — asking "do you have a spot?" underneath Days and Placement put it
   // in the middle of a pricing decision. The fee is still charged HERE, on the
@@ -707,7 +779,8 @@ function CampaignPanel({
    *
    * Polls only while something is actually pending and stops the moment nothing is, so
    * an idle advertiser page makes no requests at all. */
-  const awaitingEncode = creatives.some((c) => c.kind !== 'image' && !c.encoded);
+  // Only a VIDEO encodes. A still or a ticker never will, and polling for them never stopped.
+  const awaitingEncode = creatives.some((c) => (c.kind || 'video') === 'video' && !c.encoded);
   useEffect(() => {
     if (!awaitingEncode) return undefined;
     const t = setInterval(refresh, 15000);
@@ -757,7 +830,11 @@ function CampaignPanel({
    * creative is an image", which is what this asked before a banner could also be a
    * video: every one of these checks would have flipped the moment somebody uploaded
    * a moving banner, and the page would have started calling it a pre-roll. */
-  const isBanner = !!fmt?.burnsIn;
+  // The ticker is drawn over the picture rather than burned in, but for the booking it
+  // behaves like a banner: it interrupts nothing, so 0% is "at the beginning" and the
+  // length is time on screen.
+  const isTicker = !!fmt?.overlayOnly;
+  const isBanner = !!fmt?.burnsIn || isTicker;
   // What this format will actually take. Older checkers send no list, so fall back to
   // the single kind they do send.
   const acceptedKinds = fmt?.creativeKinds?.length ? fmt.creativeKinds : (fmt ? [fmt.creativeKind] : []);
@@ -1080,7 +1157,7 @@ function CampaignPanel({
       await attachCreative(cr?.kind === 'image'
         ? { reference, campaignId: id, imageUrl: cr.imageUrl }
         : { reference, campaignId: id, embedId: value });
-      toast.success(cr?.kind === 'image' ? 'Banner saved' : 'Spot saved');
+      toast.success(cr?.kind === 'image' ? 'Banner saved' : (cr?.kind === 'text' ? 'Ticker saved' : 'Spot saved'));
       setPicked((p) => { const n = { ...p }; delete n[id]; return n; });
       refresh();
     } catch (err) {
@@ -1179,8 +1256,8 @@ function CampaignPanel({
             position is even yours to choose. */}
         {lockFormat ? (
           <p className="mkt-fine mkt-locked-format">
-            Booking a <strong>{fmt?.label || lockFormat}</strong>, to match the ad you uploaded.
-            {' '}Change it in <em>Your ad</em> if that is not what you meant.
+            Booking a <strong>{fmt?.label || lockFormat}</strong>, the type you chose in <em>Your ad</em>.
+            {' '}Go back a step to change it.
           </p>
         ) : (
           <FormatPicker formats={offered} value={fmt?.key} onChange={(k) => { setFormatKey(k); setSlotPct(null); setSpotSeconds(null); }} />
@@ -1273,7 +1350,9 @@ function CampaignPanel({
                   Seconds, {minSpot} to {maxSpot}.{' '}
                   {autoOn
                     ? 'Taken from the ad video you uploaded.'
-                    : (isBanner
+                    : (isTicker
+                      ? 'How long the ticker takes to cross the screen once.'
+                      : isBanner
                       ? 'How long the banner stays on screen. A video banner has to be at least this long.'
                       : (tooManySpots
                         ? 'More than one ad video uploaded, so enter the length of the one you are booking.'
@@ -1546,6 +1625,7 @@ function CampaignPanel({
                 const kinds = kindsFor(c);
                 const canImage = kinds.includes('image');
                 const canVideo = kinds.includes('video');
+                const wantsText = kinds.includes('text');
                 // Only when the still is the ONLY thing that runs. A banner flight
                 // takes either, and calling that "image" is what hid a finished
                 // video banner from its own picker.
@@ -1556,7 +1636,9 @@ function CampaignPanel({
                   return ready.length > 0 ? (
                     <div className="mkt-pay">
                       <p className="mkt-hint">
-                        {canImage && canVideo
+                        {wantsText
+                          ? 'This is a ticker flight, so it needs an approved ticker message.'
+                          : canImage && canVideo
                           ? `This is a ${c.formatLabel || 'banner'} flight, so it needs an approved banner, either an image${c.creativeSpec ? ` (${c.creativeSpec.recommended}, between ${c.creativeSpec.minAspect}:1 and ${c.creativeSpec.maxAspect}:1)` : ''} or a video.`
                           : wantsImage
                             ? `This is a ${c.formatLabel || 'banner'} flight, so it needs an approved banner image${c.creativeSpec ? ` (${c.creativeSpec.recommended}, between ${c.creativeSpec.minAspect}:1 and ${c.creativeSpec.maxAspect}:1)` : ''}.`
@@ -1568,7 +1650,9 @@ function CampaignPanel({
                 return (
                 <div className="mkt-pay">
                   <label className="mkt-hint" htmlFor={`attach-${c.id}`}>
-                    {canImage && canVideo
+                    {wantsText
+                      ? 'Use one of your approved ticker messages'
+                      : canImage && canVideo
                       ? 'Use one of your approved banners or ad videos'
                       : wantsImage ? 'Use one of your approved banners' : 'Use one of your approved ad videos'}
                   </label>
@@ -1584,7 +1668,9 @@ function CampaignPanel({
                           {/* A still has no duration — "0s ad" was what it used to say. */}
                           {cr.kind === 'image'
                             ? `Banner${cr.imageWidth ? ` · ${cr.imageWidth}×${cr.imageHeight}` : ''}`
-                            : `${cr.durationSeconds}s ad`}
+                            : cr.kind === 'text'
+                              ? `Ticker · ${cr.message.length > 48 ? `${cr.message.slice(0, 47)}…` : cr.message}`
+                              : `${cr.durationSeconds}s ad`}
                         </option>
                       ))}
                     </select>
@@ -1767,6 +1853,118 @@ function BrandPanel({ reference, account, productName, initialLogoUrl, initialSl
       </div>
 
       {error ? <p className="mkt-upload-error">{error}</p> : null}
+    </div>
+  );
+}
+
+/**
+ * Write the ticker: a message and a link, with the strip previewed live underneath.
+ *
+ * The ticker's creative IS this text, so it is saved as a creative and goes to the
+ * same review as an image or a video. Editing a word makes a new one that has to be
+ * reviewed again, which the server enforces by keying the creative on its content.
+ */
+function TickerPanel({ reference, account, productName, maxChars = 140, onCreatives }) {
+  const [message, setMessage] = useState('');
+  const [link, setLink] = useState('https://');
+  const [busy, setBusy] = useState(false);
+  const [error, setError] = useState(null);
+  const [saved, setSaved] = useState([]);
+
+  const refresh = useCallback(() => {
+    fetchCreatives(reference)
+      .then((r) => {
+        const all = r.creatives || [];
+        setSaved(all.filter((c) => c.kind === 'text'));
+        onCreatives?.(all);
+      })
+      .catch(() => { /* an unreadable list is not worth an error banner */ });
+  }, [reference, onCreatives]);
+  useEffect(() => { refresh(); }, [refresh]);
+
+  const length = [...message.trim()].length;
+  const linkOk = /^https:\/\/[^\s/]+\.[^\s]+/i.test(link.trim());
+  const canSave = length > 0 && length <= maxChars && linkOk && !busy;
+
+  async function onSave() {
+    if (!canSave) return;
+    setBusy(true); setError(null);
+    try {
+      await saveTickerCreative({ reference, message: message.trim(), clickUrl: link.trim() });
+      toast.success('Ticker saved. We will review it before it runs');
+      setMessage('');
+      refresh();
+    } catch (err) {
+      setError(err.message || 'Could not save the ticker');
+    } finally { setBusy(false); }
+  }
+
+  return (
+    <div className="mkt-creatives">
+      <h3>Your ticker</h3>
+      <div className="mkt-field mkt-field-wide">
+        <label htmlFor="mkt-ticker-msg">Message</label>
+        <textarea
+          id="mkt-ticker-msg"
+          rows={2}
+          value={message}
+          onChange={(e) => setMessage(e.target.value)}
+          placeholder="What should viewers read? One or two sentences and a reason to click."
+        />
+        <span className={`mkt-hint${length > maxChars ? ' mkt-hint-short' : ''}`}>
+          {length} / {maxChars} characters
+        </span>
+      </div>
+      <div className="mkt-field mkt-field-wide">
+        <label htmlFor="mkt-ticker-link">Link</label>
+        <input
+          id="mkt-ticker-link"
+          type="url"
+          inputMode="url"
+          value={link}
+          onChange={(e) => setLink(e.target.value)}
+        />
+        <span className={`mkt-hint${link.trim() && link.trim() !== 'https://' && !linkOk ? ' mkt-hint-short' : ''}`}>
+          Where a click goes. A full https:// address.
+        </span>
+      </div>
+
+      <div className="mkt-ticker-preview" aria-label="Preview">
+        <span className="mkt-preview-cap">Along the top of the video</span>
+        <div className="mkt-ticker-stage">
+          <TickerCrawl
+            account={account}
+            productName={productName}
+            message={message.trim() || 'Your message crawls along here.'}
+            durationSeconds={12}
+            loop
+          />
+        </div>
+      </div>
+
+      <div className="mkt-upload-row">
+        <button type="button" className="mkt-outline" disabled={!canSave} onClick={onSave}>
+          {busy ? 'Saving…' : 'Save ticker'}
+        </button>
+      </div>
+      {error ? <p className="mkt-upload-error">{error}</p> : null}
+
+      {saved.length > 0 && (
+        <ul className="mkt-creative-list">
+          {saved.map((c) => (
+            <li key={c.embedId}>
+              <span className={`mkt-creative-status mkt-creative-${c.status}`}>
+                {CREATIVE_STATUS[c.status] || c.status}
+              </span>
+              <span className="mkt-creative-meta">
+                {c.message}
+                {c.note ? ` · ${c.note}` : ''}
+              </span>
+              <a href={c.clickUrl} target="_blank" rel="noopener noreferrer">Check the link</a>
+            </li>
+          ))}
+        </ul>
+      )}
     </div>
   );
 }
@@ -1982,7 +2180,9 @@ function CreativePanel({ reference, account, maxSeconds, bannerSpec, onCreatives
                     copy of the rule to drift out of step. */}
                 {c.kind === 'image'
                   ? `Image${c.imageWidth ? ` · ${c.imageWidth}×${c.imageHeight}` : ''}`
-                  : (c.durationSeconds ? `${c.durationSeconds}s` : 'duration unknown')}
+                  : c.kind === 'text'
+                    ? `Ticker · ${c.message}`
+                    : (c.durationSeconds ? `${c.durationSeconds}s` : 'duration unknown')}
                 {c.note ? ` · ${c.note}` : ''}
               </span>
               {c.kind === 'image' ? (
@@ -2000,6 +2200,8 @@ function CreativePanel({ reference, account, maxSeconds, bannerSpec, onCreatives
                 >
                   <img src={c.imageUrl} alt="Your banner" loading="lazy" />
                 </a>
+              ) : c.kind === 'text' ? (
+                <a href={c.clickUrl} target="_blank" rel="noopener noreferrer">Check the link</a>
               ) : c.previewUrl && c.encoded ? (
                 <a href={c.previewUrl} target="_blank" rel="noopener noreferrer">Watch it back</a>
               ) : <span className="mkt-creative-meta">still encoding</span>}
@@ -2123,7 +2325,7 @@ export default function Advertise({ openLoginModal }) {
   // here, rather than inferred later from whatever happened to be uploaded.
   // What the wizard's plain-language choice means to the rate card. Kept as a map so
   // a new format is one line here rather than another arm on a ternary.
-  const WIZ_FORMAT = { video: 'video_roll', banner: 'video_banner', shorts: 'shorts_roll' };
+  const WIZ_FORMAT = AD_TYPE_FORMAT;
   const [wizType, setWizType] = useState('video');
 
   const [wizKilling, setWizKilling] = useState(false);
@@ -2170,16 +2372,24 @@ export default function Advertise({ openLoginModal }) {
   // page shows the public rate card until you open yours, and your own rate after.
   // Quoting the default and then charging the negotiated one would be the worst of
   // both, so the key has to include the reference.
-  const { data: pricing } = useQuery({
+  const { data: rawPricing } = useQuery({
     // Whichever product is in play: the one opened from My products, or the one the
     // wizard is enrolling. Keyed on lookupRef alone, the wizard never passed a
     // reference at all and quoted the PUBLIC rate card while booking against an
     // advertiser who had been given their own rate.
-    queryKey: ['advertise-pricing', lookupRef.trim() || wizRef?.reference || null],
-    queryFn: () => fetchPricing(lookupRef.trim() || wizRef?.reference || undefined),
+    queryKey: ['advertise-pricing', lookupRef.trim() || wizRef?.reference || null, tickerEnabledFor(user)],
+    queryFn: () => fetchPricing(lookupRef.trim() || wizRef?.reference || undefined, { beta: tickerEnabledFor(user) }),
     staleTime: INVENTORY_STALE_MS,
     retry: false,
   });
+  /* A format the checker marks `beta` is hidden from everyone outside the beta, here
+   * once, so the rate card, the picker and the booking form all agree. Hiding it is a
+   * courtesy: the checker refuses the booking either way. */
+  const pricing = useMemo(() => {
+    if (!rawPricing?.formats) return rawPricing;
+    const showBeta = tickerEnabledFor(user);
+    return { ...rawPricing, formats: rawPricing.formats.filter((f) => !f.beta || showBeta) };
+  }, [rawPricing, user]);
 
   // The page was one long scroll that mixed three unrelated jobs: reading what is
   // for sale, filling in a form, and managing work already in flight. Tabs so each
@@ -2198,6 +2408,8 @@ export default function Advertise({ openLoginModal }) {
      form and every flight ever booked, which asked somebody to work out the order for
      themselves. */
   const [bookStep, setBookStep] = useState(1);
+  // What a product's "Book a spot" is booking, chosen first in step 1. See AdTypePicker.
+  const [bookType, setBookType] = useState('video');
   const TABS = [
     { id: 'general', label: 'General' },
     { id: 'wizard', label: 'Enroll your ad' },
@@ -2737,46 +2949,20 @@ export default function Advertise({ openLoginModal }) {
                 <>
                   <h2>Your ad</h2>
 
-                  <div className="mkt-field mkt-field-wide mkt-adtype">
-                    <span className="mkt-label">What are you running?</span>
-                    <div className="mkt-adtype-row">
-                      {[
-                        {
-                          id: 'video',
-                          title: 'A video ad',
-                          // From the rate card, not typed in: this number moved from 15 to 30
-                          // and the two places it had been written by hand did not move with it.
-                          blurb: pricing?.maxCreativeSeconds
-                            ? `Plays inside the video, up to ${pricing.maxCreativeSeconds} seconds.`
-                            : 'Plays inside the video.',
-                        },
-                        { id: 'banner', title: 'A player banner', blurb: 'A still shown over the video while it plays.' },
-                        { id: 'shorts', title: 'A shorts spot', blurb: 'Plays full screen between shorts. Upright video only.' },
-                      ].map((o) => (
-                        <label key={o.id} className={`mkt-adtype-opt${wizType === o.id ? ' selected' : ''}`}>
-                          <input
-                            type="radio"
-                            name="mkt-adtype"
-                            value={o.id}
-                            checked={wizType === o.id}
-                            onChange={() => { setWizType(o.id); if (wizRef?.reference) rememberWizard(user, wizRef.reference, wizAt, o.id); }}
-                          />
-                          <span>
-                            <strong>{o.title}</strong>
-                            <span className="mkt-hint">{o.blurb}</span>
-                          </span>
-                        </label>
-                      ))}
-                    </div>
-                  </div>
-
-                  <p className="mkt-fine">
-                    {wizType === 'banner'
-                      ? 'Upload the image that will be shown over the video.'
-                      : (wizType === 'shorts'
-                        ? 'Upload the upright video that will play between shorts. It has to be portrait, because a landscape spot plays small with black bars either side. 1080x1920 works well.'
-                        : 'Upload the video that will play, or ask us to make it. This is also where the logo and slogan shown over your ad are set.')}
-                  </p>
+                  <AdTypePicker
+                    value={wizType}
+                    pricing={pricing}
+                    onChange={(t) => { setWizType(t); if (wizRef?.reference) rememberWizard(user, wizRef.reference, wizAt, t); }}
+                  />
+                  {wizType === 'ticker' ? (
+                    <TickerPanel
+                      reference={wizRef.reference}
+                      account={wizRef.hiveAccount}
+                      productName={wizRef.projectName}
+                      maxChars={pricing?.formats?.find((f) => f.key === 'video_ticker')?.creativeSpec?.maxChars}
+                      onCreatives={setWizCreativeList}
+                    />
+                  ) : (
                   <CreativePanel
                     reference={wizRef.reference}
                     account={wizRef.hiveAccount}
@@ -2793,6 +2979,7 @@ export default function Advertise({ openLoginModal }) {
                     offer={wizType === 'banner' ? null : { ...bookProduction, feeHbd: pricing?.productionFeeHbd, onChange: setBookProduction }}
                     onCreatives={setWizCreativeList}
                   />
+                  )}
                   <div className="mkt-wiz-actions">
                     <button type="button" className="mkt-primary" onClick={() => goStep(3)}>
                       Next: book a slot
@@ -2814,7 +3001,9 @@ export default function Advertise({ openLoginModal }) {
                     reference={wizRef.reference}
                     pricing={pricing}
                     creatives={wizCreativeList}
-                    production={bookProduction}
+                    // A ticker has no video for us to make, so a production request ticked
+                    // earlier for a video ad must not ride along and charge its fee.
+                    production={wizType === 'ticker' ? null : bookProduction}
                     awaitingApproval={wizRef.status !== 'approved'}
                     lockFormat={WIZ_FORMAT[wizType] || 'video_roll'}
                   />
@@ -3082,6 +3271,10 @@ export default function Advertise({ openLoginModal }) {
                     empty for anyone who opened a product straight into another tab. */}
                 {(lookup.status === 'pending' || lookup.status === 'approved') && (
                   <div style={{ display: ptab === 'book' && bookStep === 1 ? undefined : 'none' }}>
+                  <AdTypePicker value={bookType} onChange={setBookType} pricing={pricing} />
+                  {/* The upload panel stays MOUNTED for the ticker too (hidden), because it
+                      owns the creative list the Active spots pickers are filled from. */}
+                  <div style={{ display: bookType === 'ticker' ? 'none' : undefined }}>
                   <CreativePanel
                     reference={lookupRef.trim()}
                     account={lookup.hiveAccount}
@@ -3090,17 +3283,30 @@ export default function Advertise({ openLoginModal }) {
                     onCreatives={setCreativeList}
                     pending={lookup.status !== 'approved'}
                     production={!!lookup.production?.requested}
-                    brand={{
+                    adType={bookType}
+                    // The label overlay and "we make it" belong to video spots only. A
+                    // banner carries its own disclosure in the picture.
+                    brand={isSpotType(bookType) ? {
                       productName: lookup.projectName,
                       logoUrl: lookup.logoUrl,
                       slogan: lookup.slogan,
-                    }}
-                    offer={lookup.status === 'approved' && !lookup.production?.requested ? {
+                    } : null}
+                    offer={isSpotType(bookType) && lookup.status === 'approved' && !lookup.production?.requested ? {
                       ...bookProduction,
                       feeHbd: pricing?.productionFeeHbd,
                       onChange: setBookProduction,
                     } : null}
                   />
+                  </div>
+                  {bookType === 'ticker' && (
+                    <TickerPanel
+                      reference={lookupRef.trim()}
+                      account={lookup.hiveAccount}
+                      productName={lookup.projectName}
+                      maxChars={pricing?.formats?.find((f) => f.key === 'video_ticker')?.creativeSpec?.maxChars}
+                      onCreatives={setCreativeList}
+                    />
+                  )}
                   </div>
                 )}
                 {/* Booking is open before approval now. The whole thing can be filled
@@ -3112,8 +3318,11 @@ export default function Advertise({ openLoginModal }) {
                     reference={lookupRef.trim()}
                     pricing={pricing}
                     creatives={creativeList}
-                    production={bookProduction}
+                    // A production request only means something for a video spot.
+                    production={isSpotType(bookType) ? bookProduction : null}
                     awaitingApproval={lookup.status !== 'approved'}
+                    // Settled in "Your ad", so the booking form does not ask again.
+                    lockFormat={AD_TYPE_FORMAT[bookType] || 'video_roll'}
                     view={ptab}
                     step={ptab === 'book' ? bookStep : null}
                     onBooked={() => setBookStep(3)}
