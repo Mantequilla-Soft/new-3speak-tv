@@ -618,6 +618,24 @@ function Watch({ v2 = false }) {
   }, [player]);
 
 
+  /* Report a DRAWN banner once it has been on screen for its booked seconds.
+   *
+   * A burned banner is counted by the server as its segments are fetched; a drawn one
+   * never touches the server, so unless the page says so it is never counted. Same rule
+   * as the standalone player: continuous time on screen, so seeking away or closing it
+   * first cancels the claim. */
+  useEffect(() => {
+    if (!bannerVisible) return undefined;
+    const ab = adBreakRef.current;
+    if (!ab.bannerOverlay) return undefined;
+    const booked = Number(ab.bannerInfo?.durationSeconds) || 0;
+    if (booked <= 0) return undefined;
+    const timer = setTimeout(() => {
+      try { ab.reportBannerShown(); } catch { /* an unreported impression is not a crash */ }
+    }, booked * 1000);
+    return () => clearTimeout(timer);
+  }, [bannerVisible]);
+
   const dismissBanner = useCallback(async () => {
     setBannerVisible(false);
 
