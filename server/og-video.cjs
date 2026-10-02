@@ -1,4 +1,4 @@
-// Inline-playable video for Discord share cards.
+// Inline-playable teaser for Discord share cards.
 //
 // WHY THIS EXISTS
 // ---------------
@@ -8,21 +8,26 @@
 // cannot play HLS. Every 3Speak video is HLS on IPFS, so a shared link only ever
 // showed a thumbnail card.
 //
-// The HLS segments are already H.264 + AAC, so no transcode is needed: ffmpeg
-// remuxes one rendition into an MP4 container (`-c copy`), which takes seconds
-// and almost no CPU. Streaming that remux live would have no length and no
-// range support (iOS Discord and Discord's media proxy both reject that), so
-// the file is remuxed ONCE, cached on disk, then served statically.
+// What Discord gets is a TEASER, not the video: the first CLIP_SECONDS, then an
+// outro video (OG_VIDEO_OUTRO) that sends people to 3speak.tv for the rest. The
+// point of a share is a visit, not a view inside Discord.
 //
-// Flow ("lazy remux + cache"):
+// The two pieces never share a shape (resolution, profile, audio rate all vary
+// across the library, and the manifests lie about it), so they're re-encoded
+// into one 480p-class H.264/AAC file rather than joined with `-c copy`. That's
+// ~25s of video: 2-4s of CPU, and only the first few segments are downloaded,
+// so it's ready before Discord checks the file (it does so the moment it
+// unfurls the link, and gives up well within the ~35s a full-length copy took).
+//
+// Flow ("lazy build + cache"):
 //   1. Discordbot fetches the share page → og-server asks ogVideoFor(): resolve
-//      the video's HLS source, ffprobe it (codec, real dimensions, duration),
-//      and if it's eligible emit og:video + kick off the remux in the background.
-//   2. Someone clicks play → GET /og-video/<author>/<permlink>.mp4 → served from
-//      the cache (waiting for the in-flight remux if it hasn't finished).
+//      the video's HLS source + ffprobe it (real dimensions, duration), then
+//      prepare() builds the teaser while the card waits a few seconds for it.
+//   2. Discord fetches GET /og-video/<author>/<permlink>.mp4 → served from the
+//      cache (waiting for an in-flight build if it hasn't finished).
 //
 // Only Discordbot triggers this (OG_VIDEO_BOTS). The same sidecar also serves
-// Googlebot, and remuxing for a crawler that walks the whole catalogue would
+// Googlebot, and building for a crawler that walks the whole catalogue would
 // fill the disk for nothing.
 //
 // Deps: none, Node 18 built-ins + the system ffmpeg/ffprobe.
@@ -46,21 +51,20 @@ const VIDEO_BOTS = (process.env.OG_VIDEO_BOTS || 'Discordbot')
   .map((s) => s.trim().toLowerCase())
   .filter(Boolean);
 
-// 480p at ~1.5 Mbps is ~11 MB/min, so 20 minutes is ~220 MB. Longer videos keep
-// the plain thumbnail card rather than parking a huge file for one share.
-const MAX_SECONDS = Number(process.env.OG_VIDEO_MAX_SECONDS) || 1200;
-// Duration alone doesn't bound the size: the encoder's passthrough path puts the
-// SOURCE (seen: 2160x1080, 275 MB for 10 min) in the folder labelled 480p.
-const MAX_BYTES = (Number(process.env.OG_VIDEO_MAX_MB) || 200) * 1e6;
+const CLIP_SECONDS = Number(process.env.OG_VIDEO_CLIP_SECONDS) || 20;
+// author/permlink of the video appended after the teaser; empty = no outro.
+const OUTRO_REF = (process.env.OG_VIDEO_OUTRO ?? 'badadib/test-886').trim();
+// Bump when the encode settings change, so old teasers aren't served as new.
+const ENCODE_VERSION = 'e1';
 const CACHE_MAX_BYTES = (Number(process.env.OG_VIDEO_CACHE_MAX_GB) || 20) * 1024 ** 3;
 const CACHE_TTL_MS = (Number(process.env.OG_VIDEO_CACHE_TTL_DAYS) || 14) * 86400000;
 const MAX_CONCURRENT = Number(process.env.OG_VIDEO_MAX_CONCURRENT) || 2;
 const MAX_QUEUED = 10;
-const REMUX_TIMEOUT_MS = 10 * 60 * 1000;
+const BUILD_TIMEOUT_MS = 3 * 60 * 1000;
 const PROBE_TIMEOUT_MS = 20000;
-// A failed remux (gateway hiccup) is retried, but not on every request.
+// A failed build (gateway hiccup) is retried, but not on every request.
 const FAILURE_COOLDOWN_MS = 15 * 60 * 1000;
-// How long the media route holds a request open for an in-flight remux.
+// How long the media route holds a request open for an in-flight build.
 // Cloudflare gives up on the origin at 100s.
 const SERVE_WAIT_MS = 75000;
 
@@ -100,9 +104,8 @@ function withTimeout(promise, ms) {
 }
 
 /**
- * Pick the rendition to remux: 480p when there is one (small, fast, plenty for
- * an inline preview), otherwise whatever is nearest to it without going over
- * 720p. RESOLUTION in the manifest is only used for choosing; the real
+ * Pick the rendition to read: 480p when there is one (the teaser is 480p-class
+ * anyway), otherwise whatever is nearest to it without going over 720p. RESOLUTION in the manifest is only used for choosing; the real
  * dimensions come from ffprobe (the encoder writes 854x480 for everything,
  * portrait shorts included).
  */
@@ -177,7 +180,7 @@ async function lookupSource(author, permlink) {
       if (!r.ok) continue;
       const text = await r.text();
       if (!text.startsWith('#EXTM3U')) continue;
-      // A media playlist (no variants) is remuxed as-is.
+      // A media playlist (no variants) is read as-is.
       const variant = text.includes('#EXT-X-STREAM-INF') ? pickVariant(text) : '';
       if (variant === null) continue;
       const variantUrl = variant ? new URL(variant, masterUrl).href : masterUrl;
@@ -194,7 +197,7 @@ function run(cmd, args, timeoutMs) {
   return new Promise((resolve, reject) => {
     const child = spawn(cmd, args, { stdio: ['ignore', 'pipe', 'pipe'] });
     // The sidecar's unit is OOM-protected (OOMScoreAdjust=-900) and children
-    // inherit that. A remux is disposable, so hand the protection back and
+    // inherit that. A teaser build is disposable, so hand the protection back and
     // yield the CPU to everything else on the box.
     if (child.pid) {
       fsp.writeFile(`/proc/${child.pid}/oom_score_adj`, '500').catch(() => {});
@@ -225,48 +228,17 @@ function run(cmd, args, timeoutMs) {
   });
 }
 
-/**
- * Rough output size: the first segment's bytes per second times the duration.
- * One small playlist read plus a HEAD. null when it can't tell, which lets the
- * video through rather than blocking it on a guess.
- */
-async function estimateBytes(variantUrl, duration) {
-  try {
-    const r = await fetchWithTimeout(variantUrl, 8000);
-    if (!r.ok) return null;
-    const lines = (await r.text()).split(/\r?\n/).map((l) => l.trim());
-    const inf = lines.findIndex((l) => l.startsWith('#EXTINF:'));
-    if (inf === -1) return null;
-    const secs = parseFloat(lines[inf].slice(8));
-    const uri = lines.slice(inf + 1).find((l) => l && !l.startsWith('#'));
-    if (!uri || !(secs > 0)) return null;
-    const ctrl = new AbortController();
-    const timer = setTimeout(() => ctrl.abort(), 8000);
-    try {
-      const head = await fetch(new URL(uri, variantUrl).href, { method: 'HEAD', signal: ctrl.signal });
-      const len = Number(head.headers.get('content-length'));
-      return head.ok && len > 0 ? Math.round((len / secs) * duration) : null;
-    } finally {
-      clearTimeout(timer);
-    }
-  } catch (_) {
-    return null;
-  }
-}
-
-const metaPath = (key) => path.join(CACHE_DIR, `${key}.json`);
+const probePath = (key) => path.join(CACHE_DIR, `${key}.probe.json`);
 const mp4Path = (key) => path.join(CACHE_DIR, `${key}.mp4`);
 
 /**
- * Codec, real dimensions and duration of the rendition, decided once per
+ * Real dimensions, duration and whether there's audio, decided once per
  * rendition and kept on disk: a CID never changes content, so neither does the
- * answer. Anything but H.264 (+ AAC or silence) is ineligible, because `-c copy`
- * of HEVC would give an MP4 Discord can't play, and a real transcode is exactly
- * the cost this design avoids.
+ * answer. Any codec ffmpeg can decode is fine, since the teaser is re-encoded.
  */
-async function probe(src) {
+async function probeRendition(src) {
   try {
-    return JSON.parse(await fsp.readFile(metaPath(src.key), 'utf8'));
+    return JSON.parse(await fsp.readFile(probePath(src.key), 'utf8'));
   } catch (_) {
     /* not probed yet */
   }
@@ -276,7 +248,7 @@ async function probe(src) {
     [
       '-v', 'error',
       '-rw_timeout', '15000000',
-      '-show_entries', 'stream=codec_type,codec_name,width,height:stream_side_data=rotation:format=duration',
+      '-show_entries', 'stream=codec_type,width,height:stream_side_data=rotation:format=duration',
       '-of', 'json',
       src.variantUrl,
     ],
@@ -286,36 +258,47 @@ async function probe(src) {
   const streams = info.streams || [];
   const video = streams.find((s) => s.codec_type === 'video');
   const audio = streams.find((s) => s.codec_type === 'audio');
-  const duration = Number(info.format && info.format.duration) || 0;
 
   let meta;
-  if (!video || video.codec_name !== 'h264') {
-    meta = { ok: false, reason: `video codec ${video ? video.codec_name : 'none'}` };
-  } else if (audio && audio.codec_name !== 'aac') {
-    meta = { ok: false, reason: `audio codec ${audio.codec_name}` };
-  } else if (duration > MAX_SECONDS) {
-    meta = { ok: false, reason: `duration ${Math.round(duration)}s` };
-  } else if ((await estimateBytes(src.variantUrl, duration)) > MAX_BYTES) {
-    meta = { ok: false, reason: `estimated size over ${MAX_BYTES / 1e6}MB` };
+  if (!video) {
+    meta = { ok: false, reason: 'no video stream' };
   } else {
     let { width, height } = video;
     const rotation = ((video.side_data_list || []).find((d) => d.rotation != null) || {}).rotation;
     if (Math.abs(Number(rotation)) === 90) [width, height] = [height, width];
-    meta = { ok: true, width, height, duration: Math.round(duration), audio: !!audio };
+    const duration = Math.round((Number(info.format && info.format.duration) || 0) * 100) / 100;
+    meta = { ok: true, width, height, duration, audio: !!audio };
   }
-  await fsp.writeFile(metaPath(src.key), JSON.stringify(meta));
+  await fsp.writeFile(probePath(src.key), JSON.stringify(meta));
   if (!meta.ok) console.log('[og-video] ineligible', src.key, meta.reason);
   return meta;
 }
 
-// Remux queue: at most MAX_CONCURRENT ffmpeg processes, MAX_QUEUED waiting.
+// One in-flight probe per rendition.
+const probes = new Map();
+
+function probeOnce(src) {
+  let p = probes.get(src.key);
+  if (!p) {
+    p = probeRendition(src)
+      .catch((err) => {
+        console.error('[og-video] probe failed', src.key, err && err.message);
+        return null;
+      })
+      .finally(() => probes.delete(src.key));
+    probes.set(src.key, p);
+  }
+  return p;
+}
+
+// Build queue: at most MAX_CONCURRENT ffmpeg processes, MAX_QUEUED waiting.
 let active = 0;
 const waiting = [];
 
 function schedule(task) {
   return new Promise((resolve, reject) => {
     if (active >= MAX_CONCURRENT && waiting.length >= MAX_QUEUED) {
-      return reject(new Error('remux queue full'));
+      return reject(new Error('build queue full'));
     }
     const start = () => {
       active++;
@@ -332,104 +315,200 @@ function schedule(task) {
   });
 }
 
-async function remux(src, meta) {
-  const final = mp4Path(src.key);
+/**
+ * The outro, copied once from IPFS to a local file (it's read by every build).
+ * null when none is configured, or it can't be fetched right now: the teaser is
+ * then built without it, under its own cache key.
+ */
+let outroMemo = null;
+
+async function getOutro() {
+  if (!OUTRO_REF) return null;
+  if (outroMemo && Date.now() < outroMemo.expires) {
+    const o = await outroMemo.promise;
+    // The sweep may have evicted the local copy since.
+    if (!o || fs.existsSync(o.file)) return o;
+  }
+  const promise = loadOutro().catch((err) => {
+    console.error('[og-video] outro unavailable', OUTRO_REF, err && err.message);
+    return null;
+  });
+  outroMemo = { promise, expires: 0 };
+  const o = await promise;
+  outroMemo.expires = Date.now() + (o ? 10 * 60 * 1000 : 60 * 1000);
+  return o;
+}
+
+async function loadOutro() {
+  const [author, permlink] = OUTRO_REF.split('/');
+  const src = validRef(author, permlink) && (await resolveSource(author, permlink));
+  if (!src) throw new Error('not resolvable');
+  const meta = await probeOnce(src);
+  if (!meta || !meta.ok) throw new Error('probe failed');
+  const file = path.join(CACHE_DIR, `outro-${src.key}.mp4`);
+  try {
+    await fsp.access(file);
+  } catch (_) {
+    const tmp = `${file}.${process.pid}.${Date.now()}.tmp`;
+    try {
+      await run('ffmpeg', ['-nostdin', '-v', 'error', '-y', '-rw_timeout', '30000000', '-i', src.variantUrl,
+        '-map', '0:v:0', '-map', '0:a:0?', '-c', 'copy', '-f', 'mp4', tmp], BUILD_TIMEOUT_MS);
+      await fsp.rename(tmp, file);
+    } catch (err) {
+      await fsp.unlink(tmp).catch(() => {});
+      throw err;
+    }
+  }
+  return { file, cid: src.cid, duration: meta.duration || 1, audio: meta.audio };
+}
+
+// The teaser's frame: the source's own aspect ratio inside 854x480 (portrait
+// stays portrait), even dimensions for H.264.
+function fitBox(w, h) {
+  if (!(w > 0 && h > 0)) return [854, 480];
+  const s = Math.min(1, 854 / Math.max(w, h), 480 / Math.min(w, h));
+  const even = (n) => Math.max(2, Math.round(n / 2) * 2);
+  return [even(w * s), even(h * s)];
+}
+
+/**
+ * Everything a teaser build needs, and the cache key that captures all of it:
+ * the rendition, the clip length, the encode settings and the outro. Changing
+ * any of them (e.g. swapping in the real outro) makes a new file and a new URL.
+ */
+async function planFor(src) {
+  const meta = await probeOnce(src);
+  if (!meta || !meta.ok) return null;
+  const outro = await getOutro();
+  const clip = meta.duration > 0 ? Math.min(CLIP_SECONDS, meta.duration) : CLIP_SECONDS;
+  const [width, height] = fitBox(meta.width, meta.height);
+  const outroTag = outro ? outro.cid.slice(-8) : 'none';
+  return {
+    src,
+    meta,
+    outro,
+    clip,
+    width,
+    height,
+    duration: clip + (outro ? outro.duration : 0),
+    key: `${src.key}-${ENCODE_VERSION}-t${CLIP_SECONDS}-o${outroTag}`,
+    tag: `${src.cid.slice(-8)}${outroTag}`,
+  };
+}
+
+async function build(plan) {
+  const { src, meta, outro, clip, width: W, height: H } = plan;
+  const final = mp4Path(plan.key);
   const tmp = `${final}.${process.pid}.${Date.now()}.tmp`;
   const started = Date.now();
+
+  // -t before -i: ffmpeg stops reading the HLS input there, so only the first
+  // few segments are ever downloaded.
+  const inputs = ['-rw_timeout', '30000000', '-t', String(clip), '-i', src.variantUrl];
+  let next = 1;
+  let outroIdx = null;
+  if (outro) {
+    inputs.push('-i', outro.file);
+    outroIdx = next++;
+  }
+  // A silent source gets generated silence, so both pieces always have audio
+  // for the concat.
+  const silence = (secs) => {
+    inputs.push('-f', 'lavfi', '-t', String(secs), '-i', 'anullsrc=r=44100:cl=stereo');
+    return `${next++}:a`;
+  };
+  const mainAudio = meta.audio ? '0:a' : silence(clip);
+  const outroAudio = outro ? (outro.audio ? `${outroIdx}:a` : silence(outro.duration)) : null;
+
+  const fitV = (i) =>
+    `[${i}:v]scale=${W}:${H}:force_original_aspect_ratio=decrease,pad=${W}:${H}:(ow-iw)/2:(oh-ih)/2,setsar=1,fps=30,format=yuv420p`;
+  // The library mixes 44.1k and 48k; padding to the exact length keeps the
+  // outro's sound starting with its picture.
+  const fitA = (label, secs) =>
+    `[${label}]aresample=44100,aformat=sample_fmts=fltp:channel_layouts=stereo,atrim=0:${secs},apad=whole_dur=${secs}`;
+  let graph = `${fitV(0)}[v0];${fitA(mainAudio, clip)}[a0]`;
+  let outV = '[v0]';
+  let outA = '[a0]';
+  if (outro) {
+    graph += `;${fitV(outroIdx)}[v1];${fitA(outroAudio, outro.duration)}[a1];[v0][a0][v1][a1]concat=n=2:v=1:a=1[v][a]`;
+    outV = '[v]';
+    outA = '[a]';
+  }
+
   const args = [
     '-nostdin', '-v', 'error', '-y',
-    '-rw_timeout', '30000000',
-    '-i', src.variantUrl,
-    '-map', '0:v:0',
-    ...(meta.audio ? ['-map', '0:a:0', '-bsf:a', 'aac_adtstoasc'] : []),
-    '-c', 'copy',
+    ...inputs,
+    '-filter_complex', graph,
+    '-map', outV, '-map', outA,
+    '-c:v', 'libx264', '-preset', 'veryfast', '-crf', '26', '-profile:v', 'main',
+    '-c:a', 'aac', '-b:a', '128k',
+    '-threads', '2',
     // moov atom up front, so playback can start before the whole file arrives.
     '-movflags', '+faststart',
     '-f', 'mp4',
     tmp,
   ];
   try {
-    await run('ffmpeg', args, REMUX_TIMEOUT_MS);
+    await run('ffmpeg', args, BUILD_TIMEOUT_MS);
     await fsp.rename(tmp, final);
   } catch (err) {
     await fsp.unlink(tmp).catch(() => {});
     throw err;
   }
   const { size } = await fsp.stat(final);
-  console.log(`[og-video] remuxed ${src.key} ${(size / 1e6).toFixed(1)}MB in ${((Date.now() - started) / 1000).toFixed(1)}s`);
+  console.log(`[og-video] built ${plan.key} ${(size / 1e6).toFixed(1)}MB in ${((Date.now() - started) / 1000).toFixed(1)}s`);
   return final;
 }
 
-// One in-flight job per rendition, shared by every caller.
-const jobs = new Map();
+// One in-flight build per teaser, shared by every caller.
+const builds = new Map();
 const failedAt = new Map();
 
-function getJob(src) {
-  let job = jobs.get(src.key);
-  if (job) return job;
-  job = { meta: probe(src).catch((err) => {
-    console.error('[og-video] probe failed', src.key, err && err.message);
-    return null;
-  }) };
-  jobs.set(src.key, job);
-  // Forget the job once it has settled; the disk cache carries the result.
-  job.meta.then(() => {
-    if (!job.file) setTimeout(() => jobs.get(src.key) === job && !job.file && jobs.delete(src.key), 60000);
-  });
-  return job;
-}
-
-/** The cached MP4 for this rendition, remuxing it first if needed. null if ineligible. */
-function ensureFile(src) {
-  const job = getJob(src);
-  if (!job.file) {
-    job.file = (async () => {
-      const meta = await job.meta;
-      if (!meta || !meta.ok) return null;
-      try {
-        await fsp.access(mp4Path(src.key));
-        return mp4Path(src.key);
-      } catch (_) {
-        /* not cached */
-      }
-      const last = failedAt.get(src.key);
-      if (last && Date.now() - last < FAILURE_COOLDOWN_MS) return null;
-      try {
-        return await schedule(() => remux(src, meta));
-      } catch (err) {
-        failedAt.set(src.key, Date.now());
-        console.error('[og-video] remux failed', src.key, err && err.message);
-        return null;
-      }
-    })().finally(() => {
-      if (jobs.get(src.key) === job) jobs.delete(src.key);
-    });
-  }
-  return job.file;
+/** The cached teaser for this plan, building it first if needed. null on failure. */
+function ensureFile(plan) {
+  let p = builds.get(plan.key);
+  if (p) return p;
+  p = (async () => {
+    try {
+      await fsp.access(mp4Path(plan.key));
+      return mp4Path(plan.key);
+    } catch (_) {
+      /* not cached */
+    }
+    const last = failedAt.get(plan.key);
+    if (last && Date.now() - last < FAILURE_COOLDOWN_MS) return null;
+    try {
+      return await schedule(() => build(plan));
+    } catch (err) {
+      failedAt.set(plan.key, Date.now());
+      console.error('[og-video] build failed', plan.key, err && err.message);
+      return null;
+    }
+  })().finally(() => builds.delete(plan.key));
+  builds.set(plan.key, p);
+  return p;
 }
 
 /**
  * og:video data for a share card, or null. Waits at most `waitMs` for the
- * probe. Only resolves + probes: the caller decides whether the page may carry
- * the video at all and then calls `prepare()`, which starts the remux in the
- * background so the card is never held up by it.
+ * source + probe. The caller decides whether the page may carry the video at
+ * all, then calls `prepare(ms)`: it starts the build and resolves when the file
+ * is ready or `ms` has passed, whichever comes first.
  */
 async function ogVideoFor(author, permlink, { waitMs = 6000 } = {}) {
   if (!validRef(author, permlink)) return null;
   const src = await withTimeout(resolveSource(author, permlink), waitMs);
   if (!src) return null;
-  const meta = await withTimeout(getJob(src).meta, waitMs);
-  if (!meta || !meta.ok) return null;
+  const plan = await withTimeout(planFor(src), waitMs);
+  if (!plan) return null;
   return {
-    prepare: () => {
-      ensureFile(src).catch(() => {});
-    },
-    // The rendition key in the query makes a replaced video file a new URL, so
-    // Discord's and Cloudflare's caches can keep the old one as long as they like.
-    path: `/og-video/${encodeURIComponent(author)}/${encodeURIComponent(permlink)}.mp4?r=${src.cid.slice(-12)}`,
-    width: meta.width,
-    height: meta.height,
-    duration: meta.duration,
+    prepare: (ms) => withTimeout(ensureFile(plan), ms),
+    // The source CID + outro in the query make a replaced video file or a new
+    // outro a new URL, so Discord's and Cloudflare's caches can keep the old one.
+    path: `/og-video/${encodeURIComponent(author)}/${encodeURIComponent(permlink)}.mp4?r=${plan.tag}`,
+    width: plan.width,
+    height: plan.height,
+    duration: Math.round(plan.duration),
   };
 }
 
@@ -460,10 +539,10 @@ async function serveMedia(req, res, pathname) {
 
   const src = await resolveSource(author, permlink);
   if (!src) return sendStatus(res, 404);
-  const meta = await getJob(src).meta;
-  if (!meta || !meta.ok) return sendStatus(res, meta ? 404 : 503, meta ? {} : { 'Retry-After': '30' });
+  const plan = await planFor(src);
+  if (!plan) return sendStatus(res, 503, { 'Retry-After': '30' });
 
-  const file = await withTimeout(ensureFile(src), SERVE_WAIT_MS);
+  const file = await withTimeout(ensureFile(plan), SERVE_WAIT_MS);
   if (!file) return sendStatus(res, 503, { 'Retry-After': '30' });
 
   let stat;
@@ -521,7 +600,8 @@ async function serveMedia(req, res, pathname) {
 /**
  * Drop MP4s unused for CACHE_TTL_MS, then the least recently used ones until
  * the cache is under CACHE_MAX_BYTES, plus temp files a crash left behind.
- * Probe results (.json) are tiny and stay, except very old ones.
+ * Probe results (.json) are tiny and stay, except very old ones. The local
+ * outro copy is an .mp4 like the rest; getOutro() fetches it again if evicted.
  */
 async function sweep() {
   let names;
@@ -542,7 +622,7 @@ async function sweep() {
     }
     const age = now - st.mtimeMs;
     if (name.endsWith('.tmp')) {
-      if (age > REMUX_TIMEOUT_MS * 2) await fsp.unlink(file).catch(() => {});
+      if (age > BUILD_TIMEOUT_MS * 2) await fsp.unlink(file).catch(() => {});
     } else if (name.endsWith('.json')) {
       if (age > CACHE_TTL_MS * 6) await fsp.unlink(file).catch(() => {});
     } else if (name.endsWith('.mp4')) {

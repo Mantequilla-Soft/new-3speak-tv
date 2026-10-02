@@ -698,7 +698,7 @@ const server = http.createServer(async (req, res) => {
     return sendHtml(req, res, 200, buildGenericHtml(origin));
   }
 
-  // The remuxed MP4 behind og:video. nginx sends this path here for every UA:
+  // The teaser MP4 behind og:video. nginx sends this path here for every UA:
   // Discord fetches it through its media proxy and from clients directly.
   if (ogVideo.isMediaPath(url.pathname)) {
     try {
@@ -717,8 +717,8 @@ const server = http.createServer(async (req, res) => {
     if (!video) return sendHtml(req, res, 200, buildGenericHtml(origin + req.url));
 
     // Started now so the probe overlaps the Hive/checker lookups below. It only
-    // resolves + probes (cached per rendition); the remux starts further down,
-    // once the page is known to be allowed to carry the video.
+    // resolves + probes (cached per rendition); the teaser build starts further
+    // down, once the page is known to be allowed to carry the video.
     const inlineVideo = ogVideo.wantsVideo(req.headers['user-agent'])
       ? ogVideo.ogVideoFor(video.author, video.permlink).catch(() => null)
       : Promise.resolve(null);
@@ -812,7 +812,9 @@ const server = http.createServer(async (req, res) => {
     } else if (inlineAllowed) {
       inline = await inlineVideo;
     }
-    if (inline) inline.prepare();
+    // Discord fetches the MP4 the moment it unfurls and gives up if it's slow,
+    // so hold the card until the teaser is built (2-4s typically, capped).
+    if (inline) await inline.prepare(8000);
 
     const html = buildOgHtml({
       title,
