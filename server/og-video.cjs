@@ -71,7 +71,7 @@ const BADGE_LOGO = process.env.OG_VIDEO_BADGE_LOGO ?? path.join(__dirname, 'og-o
 // Bump when the encode settings change, so old teasers aren't served as new.
 const ENCODE_VERSION = 'e8';
 const CACHE_MAX_BYTES = (Number(process.env.OG_VIDEO_CACHE_MAX_GB) || 20) * 1024 ** 3;
-const CACHE_TTL_MS = (Number(process.env.OG_VIDEO_CACHE_TTL_DAYS) || 14) * 86400000;
+const CACHE_TTL_MS = (Number(process.env.OG_VIDEO_CACHE_TTL_DAYS) || 7) * 86400000;
 const MAX_CONCURRENT = Number(process.env.OG_VIDEO_MAX_CONCURRENT) || 2;
 const MAX_QUEUED = 10;
 const BUILD_TIMEOUT_MS = 3 * 60 * 1000;
