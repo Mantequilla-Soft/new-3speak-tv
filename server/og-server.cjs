@@ -502,6 +502,7 @@ function buildOgHtml({
   comments,
   commentCount,
   video,
+  oembedUrl,
 }) {
   const safeTitle = escapeHtml(title);
   const safeDesc = escapeHtml(description);
@@ -615,7 +616,11 @@ function buildOgHtml({
   <meta name="twitter:description" content="${safeDesc}" />
   <meta name="twitter:image" content="${safeImage}" />
 
-  <link rel="canonical" href="${safeUrl}" />
+  <link rel="canonical" href="${safeUrl}" />${
+    oembedUrl
+      ? `\n  <link rel="alternate" type="application/json+oembed" href="${escapeHtml(oembedUrl)}" />`
+      : ''
+  }
 
   ${jsonLd}
 </head>
@@ -682,6 +687,49 @@ function sendHtml(req, res, status, html) {
   res.end(html);
 }
 
+// Discord drops og:description from any embed that carries a video, so a
+// video card would lose the post's text. It does show an oEmbed author_name
+// above the video (the same trick fxtwitter uses), so the description goes
+// there. The card was just rendered when Discord asks for this, so its text is
+// remembered briefly instead of fetched twice.
+const OEMBED_PATH = '/og-video/oembed.json';
+const oembedMemo = new Map();
+const OEMBED_TTL_MS = 60 * 60 * 1000;
+
+function rememberOembed(ref, entry) {
+  if (oembedMemo.size > 5000) oembedMemo.clear();
+  oembedMemo.set(ref, { ...entry, expires: Date.now() + OEMBED_TTL_MS });
+}
+
+async function serveOembed(req, res, url, origin) {
+  const ref = url.searchParams.get('v') || '';
+  const [author, ...rest] = ref.split('/');
+  const permlink = rest.join('/');
+  let entry = oembedMemo.get(ref);
+  if (!entry || Date.now() > entry.expires) {
+    entry = null;
+    // After a restart: one Hive lookup. Shorts (asset ids) just get the
+    // generic line.
+    if (/^[a-z0-9][a-z0-9.-]{1,15}$/.test(author) && permlink) {
+      const post = await fetchHivePost(author, permlink).catch(() => null);
+      if (post) entry = { description: extractDescription(post.body), url: `${origin}/watch?v=${author}/${permlink}` };
+    }
+  }
+  const text = (entry && entry.description) || (author ? `A video by @${author} on 3Speak` : '3Speak');
+  const body = {
+    version: '1.0',
+    type: 'link',
+    // Discord caps author_name at 256 characters.
+    author_name: text.length > 256 ? `${text.slice(0, 253)}...` : text,
+    author_url: (entry && entry.url) || origin,
+    provider_name: '3Speak',
+    provider_url: origin,
+  };
+  res.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8', 'Cache-Control': 'no-store' });
+  if (req.method === 'HEAD') return res.end();
+  res.end(JSON.stringify(body));
+}
+
 const server = http.createServer(async (req, res) => {
   const origin = requestOrigin(req);
 
@@ -700,6 +748,16 @@ const server = http.createServer(async (req, res) => {
 
   // The teaser MP4 behind og:video. nginx sends this path here for every UA:
   // Discord fetches it through its media proxy and from clients directly.
+  if (url.pathname === OEMBED_PATH) {
+    try {
+      return await serveOembed(req, res, url, origin);
+    } catch (err) {
+      console.error('[og] oembed error:', err && err.message);
+      res.writeHead(500, { 'Content-Type': 'text/plain', 'Cache-Control': 'no-store' });
+      return res.end();
+    }
+  }
+
   if (ogVideo.isMediaPath(url.pathname)) {
     try {
       return await ogVideo.serveMedia(req, res, url.pathname);
@@ -819,7 +877,10 @@ const server = http.createServer(async (req, res) => {
     }
     // Discord fetches the MP4 the moment it unfurls and gives up if it's slow,
     // so hold the card until the teaser is built (2-4s typically, capped).
-    if (inline) await inline.prepare(8000);
+    if (inline) {
+      await inline.prepare(8000);
+      rememberOembed(`${video.author}/${video.permlink}`, { description, url: canonicalUrl });
+    }
 
     const html = buildOgHtml({
       title,
@@ -837,6 +898,7 @@ const server = http.createServer(async (req, res) => {
       comments,
       commentCount: post && typeof post.children === 'number' ? post.children : undefined,
       video: inline ? { url: origin + inline.path, width: inline.width, height: inline.height } : null,
+      oembedUrl: inline ? `${origin}${OEMBED_PATH}?v=${encodeURIComponent(`${video.author}/${video.permlink}`)}` : null,
     });
 
     return sendHtml(req, res, 200, html);
