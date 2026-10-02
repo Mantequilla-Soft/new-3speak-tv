@@ -7,7 +7,7 @@ import { IoCloudUploadSharp } from "react-icons/io5";
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import NavSearch from "./NavSearch";
-import { MdOutlineSearch, MdGraphicEq, MdPlaylistPlay, MdWatchLater, MdHistory, MdKeyboardArrowDown, MdAdd, MdHomeFilled, MdChevronRight, MdGroups } from "react-icons/md";
+import { MdOutlineSearch, MdGraphicEq, MdPlaylistPlay, MdWatchLater, MdHistory, MdKeyboardArrowDown, MdAdd, MdHomeFilled, MdChevronRight, MdGroups, MdCampaign } from "react-icons/md";
 import { FaMedal } from "react-icons/fa6";
 import { useMyPlaylists } from "../../hooks/useMyPlaylists";
 import ShortsIcon from "../icons/ShortsIcon";
@@ -22,6 +22,7 @@ import { FiSettings, FiLogIn } from "react-icons/fi";
 import SettingsModal from "../SettingsModal/SettingsModal";
 import { ENABLE_BUTRAUTH } from "../../utils/config";
 import { useAvatarUrl } from "../../utils/avatarCache";
+import { isRememberedAdvertiser, rememberAdvertiserAccount, hasAdvertiserProduct } from "../../utils/advertiserAccount";
 
 function NavPlaylistsDropdown({ user, scrollerRef }) {
   const [open, setOpen] = useState(false);
@@ -102,6 +103,33 @@ function NavPlaylistsDropdown({ user, scrollerRef }) {
         document.body
       )}
     </div>
+  );
+}
+
+/**
+ * "Advertise", left of Share, for advertiser accounts only: one that graduated from
+ * the advertiser warm-up in this browser, or one with an advertiser product on file.
+ * Nothing for anyone else, and nothing while we cannot tell.
+ */
+function NavAdvertiseButton({ user }) {
+  const [show, setShow] = useState(() => isRememberedAdvertiser(user));
+  useEffect(() => {
+    let alive = true;
+    if (!user) return undefined;
+    if (isRememberedAdvertiser(user)) { setShow(true); return undefined; }
+    hasAdvertiserProduct(user).then((yes) => {
+      if (!alive) return;
+      if (yes) rememberAdvertiserAccount(user);
+      setShow(yes);
+    });
+    return () => { alive = false; };
+  }, [user]);
+  if (!show) return null;
+  return (
+    <Link to="/advertise" className="nav-advertise-btn" title="Advertise">
+      <MdCampaign size={18} aria-hidden="true" />
+      <span className="nav-advertise-label">Advertise</span>
+    </Link>
   );
 }
 
@@ -414,6 +442,8 @@ function Nav({ toggleProfileNav, openLoginModal }) {
         <div className="nav-right flex-div" onClickCapture={hideToastLayer}>
           {/* Incubating users only; renders nothing for everyone else. */}
           <NavProgress />
+          {/* Hive accounts only: an incubating user cannot book ads yet. */}
+          {!incubationHandle && <NavAdvertiseButton user={user} />}
           <NavUploadDropdown />
           <Link to="/discover" className="nav-mobile-discover" title="Discover">
             <MdOutlineSearch size={19} />

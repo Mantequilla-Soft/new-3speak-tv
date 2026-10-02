@@ -7,6 +7,27 @@
 // 1.0.0 — that way they see all of these when develop is pushed to production.
 export const CHANGELOG = [
   {
+    version: '1.79.42',
+    date: '2026-10-02',
+    summary:
+      'Sharing a 3Speak video on Discord or Telegram now shows a short teaser right in the chat, '
+      + 'with a link to watch the full video on 3Speak.',
+  },
+  {
+    version: '1.79.41',
+    date: '2026-10-01',
+    summary:
+      'When you pay for an ad on the Advertise page (/advertise), HIVE is now picked for you '
+      + 'if your wallet holds enough of it. You can still switch to HBD.',
+  },
+  {
+    version: '1.79.40',
+    date: '2026-10-01',
+    summary:
+      'Hovering a video card now always previews that card. Before, a promoted video loading in at the top of a list '
+      + 'could push the cards over, and the first preview would play on top of the wrong card.',
+  },
+  {
     version: '1.79.39',
     date: '2026-10-01',
     summary:

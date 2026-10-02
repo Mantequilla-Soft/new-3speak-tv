@@ -6,6 +6,7 @@ import { useAppStore } from '../../lib/store';
 import { adsEnabledFor, adsBetaUserFor } from '../../utils/config';
 import { fetchAdAccess, fetchViewerAdPrefs, setViewerAdPrefs } from '../../lib/advertiseData';
 import { usePromptsActive, setPromptActive } from '../../utils/welcomeGate';
+import { isAdvertiserAccount } from '../../utils/advertiserAccount';
 import './AdsPrompt.scss';
 
 // Every toast from this module is headed "Advertising"; the message becomes the
@@ -48,9 +49,11 @@ export default function ViewerRewardsPrompt() {
   useEffect(() => {
     if (!authenticated || !user || !uiAvailable) return undefined;
     let alive = true;
-    fetchAdAccess(user).then((a) => {
+    // Not for advertisers: they came to book ads, not to be paid for watching them.
+    // Not asked rather than answered for them, so the Settings toggle stays theirs.
+    Promise.all([fetchAdAccess(user), isAdvertiserAccount(user)]).then(([a, advertiser]) => {
       if (!alive) return;
-      setAccess({ account: user, allowed: a ? a.allowed : adsBetaUserFor(user) });
+      setAccess({ account: user, allowed: !advertiser && (a ? a.allowed : adsBetaUserFor(user)) });
     });
     return () => { alive = false; };
   }, [authenticated, user, uiAvailable]);

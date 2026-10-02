@@ -44,10 +44,16 @@ const TRACKS = {
     { type: 'comment', need: 5 },
     { type: 'time', from: 'days', need: 3 }
   ],
-  // A brand is judged by its profile: name, about, logo, banner and website
-  // filled in. Whether they fit the brand is the reviewer's call.
+  // A brand is judged by its profile: name, about and logo filled in (no banner,
+  // owner 2026-10-01: keep it as simple as possible). Whether they fit the brand is
+  // the reviewer's call.
+  //
+  // Then a way to reach the business: an email (required), plus EITHER a postal
+  // address OR a website on the profile. Email and address are private and
+  // off-chain (see contactComplete); the website is a public profile field.
   advertiser: [
-    { type: 'profile', need: 5, fields: ['name', 'about', 'profile_image', 'cover_image', 'website'] },
+    { type: 'profile', need: 3, fields: ['name', 'about', 'profile_image'] },
+    { type: 'contact', need: 1, measure: ({ userId, stats }) => contactComplete(userId, stats) },
     { type: 'time', from: 'days', need: 1 }
   ]
 }
@@ -62,11 +68,55 @@ async function watchSeconds(handle) {
   return Number((await r.json()).seconds) || 0
 }
 
-async function claimAssets({ handle, hiveUsername }) {
+/**
+ * 1 once an advertiser has given an email and either an address or a website.
+ *
+ * 🚨 The email and address live ONLY in the checker's private incubation_contacts
+ * collection, never in the incubation profile: that profile is shown to others and
+ * becomes the Hive account's profile at graduation, and these must never reach the
+ * chain. The website is the one public field here, read from the profile stats.
+ */
+async function contactComplete(userId, stats) {
+  if (!userId) return 0
+  const c = await readContact(userId)
+  const website = (stats?.profileFilled || []).includes('website')
+  return c.email && (c.addressComplete || website) ? 1 : 0
+}
+
+async function readContact(userId) {
+  const r = await fetch(`${CHECKER_INTERNAL_URL}/incubation/internal/contact/${encodeURIComponent(userId)}`, {
+    signal: AbortSignal.timeout(5000)
+  })
+  if (!r.ok) throw new Error(`checker contact returned ${r.status}`)
+  return r.json()
+}
+
+async function readContactByHandle(handle) {
+  const r = await fetch(`${CHECKER_INTERNAL_URL}/incubation/internal/contact-by-handle/${encodeURIComponent(handle)}`, {
+    signal: AbortSignal.timeout(5000)
+  })
+  if (!r.ok) throw new Error(`checker contact-by-handle returned ${r.status}`)
+  return r.json()
+}
+
+async function saveContact(userId, body) {
+  const r = await fetch(`${CHECKER_INTERNAL_URL}/incubation/internal/contact/${encodeURIComponent(userId)}`, {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(body),
+    signal: AbortSignal.timeout(5000)
+  })
+  const data = await r.json().catch(() => ({}))
+  return { status: r.status, data }
+}
+
+async function claimAssets({ userId, handle, hiveUsername }) {
   const r = await fetch(`${CHECKER_INTERNAL_URL}/incubation/internal/claim-assets`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ handle, hiveUsername }),
+    // userId too: the checker links an advertiser's private contact record to the
+    // new Hive account, which is how the site knows that account is an advertiser.
+    body: JSON.stringify({ userId, handle, hiveUsername }),
     signal: AbortSignal.timeout(10000)
   })
   const body = await r.json().catch(() => ({}))
@@ -90,4 +140,4 @@ function createWarmupBackend(sdk, { inc, butr, getSession, getHiveUser }) {
   })
 }
 
-module.exports = { createWarmupBackend, TRACKS, MIN_COMMENT_CHARS }
+module.exports = { createWarmupBackend, TRACKS, MIN_COMMENT_CHARS, readContact, readContactByHandle, saveContact }

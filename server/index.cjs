@@ -846,6 +846,101 @@ async function resolveButrSession(req, res) {
   }
 }
 
+/* Is the signed-in user an admin of 3Speak's ButrAuth app?
+ *
+ * Asked of ButrAuth (GET /api/auth/app-role), which answers from its database: a
+ * platform admin, or the owner of this app. Never decided here and never taken from
+ * anything the browser sends. Cached for a minute per user so a page view does not
+ * become a ButrAuth call per panel; a revoked admin is refused within that minute.
+ *
+ * FAILS CLOSED: any error, timeout or unknown answer (including a ButrAuth that does
+ * not have the endpoint yet) means "not an admin". */
+const APP_ROLE_TTL_MS = 60 * 1000
+const appRoleCache = new Map()
+async function isAppAdmin(session) {
+  const userId = session?.claims?.userId
+  if (!userId || !session.token) return false
+  const hit = appRoleCache.get(userId)
+  if (hit && hit.exp > Date.now()) return hit.canManage
+  let canManage = false
+  try {
+    const r = await fetch(`${MANTEAUTH_URL}/api/auth/app-role?client_id=${encodeURIComponent(process.env.MANTEAUTH_CLIENT_ID || '')}`, {
+      headers: { Authorization: `Bearer ${session.token}`, 'X-Client-Secret': process.env.MANTEAUTH_CLIENT_SECRET || '' },
+      signal: AbortSignal.timeout(5000)
+    })
+    if (r.ok) canManage = (await r.json()).canManage === true
+  } catch { canManage = false }
+  appRoleCache.set(userId, { canManage, exp: Date.now() + APP_ROLE_TTL_MS })
+  if (appRoleCache.size > 5000) appRoleCache.clear()
+  return canManage
+}
+
+/* /api/warmup/admin/advertiser/:handle -- an advertiser's PRIVATE details, for
+ * 3Speak's admins only (isAppAdmin). Everyone else gets a plain 404, so the route
+ * does not even confirm to them that there is anything here. Never logged. */
+app.get('/api/warmup/admin/advertiser/:handle', incubationLimiter, async (req, res) => {
+  try {
+    res.set('Cache-Control', 'no-store')
+    const handle = String(req.params.handle || '').toLowerCase()
+    if (!/^[a-z0-9][a-z0-9.-]{0,63}$/.test(handle)) return res.status(404).json({ error: 'Not found' })
+    const session = await resolveButrSession(req, res)
+    if (!(await isAppAdmin(session))) return res.status(404).json({ error: 'Not found' })
+    const c = await require('./warmup.cjs').readContactByHandle(handle)
+    res.json({
+      handle,
+      contact: c.found ? {
+        email: c.email || null,
+        address: c.address || null,
+        addressComplete: !!c.addressComplete,
+        firstSavedAt: c.createdAt || null,
+        updatedAt: c.updatedAt || null,
+        butrauthUserId: c.userId || null
+      } : null
+    })
+  } catch (err) {
+    console.error('[warmup-admin] advertiser lookup failed:', err.message)
+    res.status(502).json({ error: 'Could not load the advertiser details' })
+  }
+})
+
+/* /api/warmup/contact -- an advertiser's PRIVATE business contact (email, address).
+ *
+ * 🚨 Never on chain and never shown: stored only in the checker's private
+ * incubation_contacts (warmup.cjs), keyed by the signed-in user's own id, so nobody
+ * can read or write anyone else's. Not part of the incubation profile, which is
+ * public and becomes the Hive profile at graduation. Never logged. */
+app.get('/api/warmup/contact', incubationLimiter, async (req, res) => {
+  try {
+    const session = await resolveButrSession(req, res)
+    const userId = session?.claims?.userId
+    if (!userId) return res.status(401).json({ error: 'Not signed in' })
+    const c = await require('./warmup.cjs').readContact(userId)
+    res.set('Cache-Control', 'no-store')
+    res.json({ email: c.email, address: c.address, addressComplete: c.addressComplete })
+  } catch (err) {
+    console.error('[warmup-contact] read failed:', err.message)
+    res.status(502).json({ error: 'Could not load your contact details' })
+  }
+})
+app.put('/api/warmup/contact', incubationLimiter, async (req, res) => {
+  try {
+    const session = await resolveButrSession(req, res)
+    const userId = session?.claims?.userId
+    if (!userId) return res.status(401).json({ error: 'Not signed in' })
+    const b = req.body || {}
+    const { status, data } = await require('./warmup.cjs').saveContact(userId, {
+      handle: session.claims.handle || null,
+      email: b.email,
+      address: b.address
+    })
+    res.set('Cache-Control', 'no-store')
+    res.status(status === 200 ? 200 : (status === 400 ? 400 : 502)).json(data)
+  } catch (err) {
+    console.error('[warmup-contact] save failed:', err.message)
+    res.status(502).json({ error: 'Could not save your contact details' })
+  }
+})
+
 // /api/incubation/* -- the warm-up backend. The SDK's createWarmupHandler:
 // an allowlist of routes, each forwarded to one SDK call with the user's own
 // token (or, for a wallet login, vouched for with 3Speak's client credentials),

@@ -19,6 +19,7 @@
 // nvm v22 segfaults on this box — see the preview-3speak-api service notes).
 
 const http = require('http');
+const ogVideo = require('./og-video.cjs');
 
 const PORT = process.env.OG_PORT || 4023;
 const HIVE_API = 'https://api.hive.blog';
@@ -500,6 +501,10 @@ function buildOgHtml({
   subtitleLanguages,
   comments,
   commentCount,
+  video,
+  oembedUrl,
+  ogType = 'video.other',
+  imageType,
 }) {
   const safeTitle = escapeHtml(title);
   const safeDesc = escapeHtml(description);
@@ -510,6 +515,28 @@ function buildOgHtml({
   const durationMeta = duration
     ? `<meta property="og:video:duration" content="${Math.round(duration)}" />`
     : '';
+
+  // Inline playback in Discord: a direct progressive MP4 (see og-video.cjs).
+  // twitter:card=player only goes out with it, i.e. only to Discordbot: a real
+  // Twitter player card needs an approved twitter:player iframe, and without one
+  // X would drop the large-image card it shows today.
+  const videoAbs = video ? escapeHtml(video.url) : '';
+  const videoMeta = video
+    ? `
+  <meta property="og:video" content="${videoAbs}" />
+  <meta property="og:video:url" content="${videoAbs}" />
+  <meta property="og:video:secure_url" content="${videoAbs}" />
+  <meta property="og:video:type" content="video/mp4" />
+  <meta property="og:video:width" content="${Number(video.width) || 1280}" />
+  <meta property="og:video:height" content="${Number(video.height) || 720}" />`
+    : '';
+  const twitterCard = video
+    ? `<meta name="twitter:card" content="player" />
+  <meta name="twitter:player:stream" content="${videoAbs}" />
+  <meta name="twitter:player:stream:content_type" content="video/mp4" />
+  <meta name="twitter:player:width" content="${Number(video.width) || 1280}" />
+  <meta name="twitter:player:height" content="${Number(video.height) || 720}" />`
+    : '<meta name="twitter:card" content="summary_large_image" />';
 
   const robotsMeta = noindex
     ? '<meta name="robots" content="noindex, follow" />'
@@ -576,22 +603,28 @@ function buildOgHtml({
   ${robotsMeta}
 
   <!-- Open Graph -->
-  <meta property="og:type" content="video.other" />
+  <meta property="og:type" content="${escapeHtml(ogType)}" />
   <meta property="og:site_name" content="3Speak" />
   <meta property="og:title" content="${safeTitle}" />
   <meta property="og:description" content="${safeDesc}" />
-  <meta property="og:image" content="${safeImage}" />
+  <meta property="og:image" content="${safeImage}" />${
+    imageType ? `\n  <meta property="og:image:type" content="${escapeHtml(imageType)}" />` : ''
+  }
   <meta property="og:url" content="${safeUrl}" />
-  ${durationMeta}
+  ${durationMeta}${videoMeta}
 
   <!-- Twitter Card -->
-  <meta name="twitter:card" content="summary_large_image" />
+  ${twitterCard}
   <meta name="twitter:site" content="@3speaktv" />
   <meta name="twitter:title" content="${safeTitle}" />
   <meta name="twitter:description" content="${safeDesc}" />
   <meta name="twitter:image" content="${safeImage}" />
 
-  <link rel="canonical" href="${safeUrl}" />
+  <link rel="canonical" href="${safeUrl}" />${
+    oembedUrl
+      ? `\n  <link rel="alternate" type="application/json+oembed" href="${escapeHtml(oembedUrl)}" />`
+      : ''
+  }
 
   ${jsonLd}
 </head>
@@ -658,6 +691,49 @@ function sendHtml(req, res, status, html) {
   res.end(html);
 }
 
+// Discord drops og:description from any embed that carries a video, so a
+// video card would lose the post's text. It does show an oEmbed author_name
+// above the video (the same trick fxtwitter uses), so the description goes
+// there. The card was just rendered when Discord asks for this, so its text is
+// remembered briefly instead of fetched twice.
+const OEMBED_PATH = '/og-video/oembed.json';
+const oembedMemo = new Map();
+const OEMBED_TTL_MS = 60 * 60 * 1000;
+
+function rememberOembed(ref, entry) {
+  if (oembedMemo.size > 5000) oembedMemo.clear();
+  oembedMemo.set(ref, { ...entry, expires: Date.now() + OEMBED_TTL_MS });
+}
+
+async function serveOembed(req, res, url, origin) {
+  const ref = url.searchParams.get('v') || '';
+  const [author, ...rest] = ref.split('/');
+  const permlink = rest.join('/');
+  let entry = oembedMemo.get(ref);
+  if (!entry || Date.now() > entry.expires) {
+    entry = null;
+    // After a restart: one Hive lookup. Shorts (asset ids) just get the
+    // generic line.
+    if (/^[a-z0-9][a-z0-9.-]{1,15}$/.test(author) && permlink) {
+      const post = await fetchHivePost(author, permlink).catch(() => null);
+      if (post) entry = { description: extractDescription(post.body), url: `${origin}/watch?v=${author}/${permlink}` };
+    }
+  }
+  const text = (entry && entry.description) || (author ? `A video by @${author} on 3Speak` : '3Speak');
+  const body = {
+    version: '1.0',
+    type: 'link',
+    // Discord caps author_name at 256 characters.
+    author_name: text.length > 256 ? `${text.slice(0, 253)}...` : text,
+    author_url: (entry && entry.url) || origin,
+    provider_name: '3Speak',
+    provider_url: origin,
+  };
+  res.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8', 'Cache-Control': 'no-store' });
+  if (req.method === 'HEAD') return res.end();
+  res.end(JSON.stringify(body));
+}
+
 const server = http.createServer(async (req, res) => {
   const origin = requestOrigin(req);
 
@@ -674,9 +750,51 @@ const server = http.createServer(async (req, res) => {
     return sendHtml(req, res, 200, buildGenericHtml(origin));
   }
 
+  // The teaser MP4 behind og:video. nginx sends this path here for every UA:
+  // Discord fetches it through its media proxy and from clients directly.
+  if (url.pathname === ogVideo.THUMB_PATH) {
+    try {
+      return await ogVideo.serveThumb(req, res, url);
+    } catch (err) {
+      console.error('[og] thumb error:', err && err.message);
+      res.writeHead(404, { 'Content-Type': 'text/plain', 'Cache-Control': 'no-store' });
+      return res.end();
+    }
+  }
+
+  if (url.pathname === OEMBED_PATH) {
+    try {
+      return await serveOembed(req, res, url, origin);
+    } catch (err) {
+      console.error('[og] oembed error:', err && err.message);
+      res.writeHead(500, { 'Content-Type': 'text/plain', 'Cache-Control': 'no-store' });
+      return res.end();
+    }
+  }
+
+  if (ogVideo.isMediaPath(url.pathname)) {
+    try {
+      return await ogVideo.serveMedia(req, res, url.pathname);
+    } catch (err) {
+      console.error('[og-video] serve error:', err && err.message);
+      if (!res.headersSent) {
+        res.writeHead(503, { 'Content-Type': 'text/plain', 'Cache-Control': 'no-store', 'Retry-After': '30' });
+      }
+      return res.end();
+    }
+  }
+
   try {
     const video = parseVideoUrl(url);
     if (!video) return sendHtml(req, res, 200, buildGenericHtml(origin + req.url));
+
+    // Started now so the probe overlaps the Hive/checker lookups below. It only
+    // resolves + probes (cached per rendition); the teaser build starts further
+    // down, once the page is known to be allowed to carry the video.
+    const videoBot = ogVideo.wantsVideo(req.headers['user-agent']);
+    const inlineVideo = videoBot
+      ? ogVideo.ogVideoFor(video.author, video.permlink).catch(() => null)
+      : Promise.resolve(null);
 
     // Resolve the Hive post and/or the embed-video doc. Shorts (and some embed
     // videos) aren't Hive posts — the share URL's permlink is the embed *asset*
@@ -712,7 +830,13 @@ const server = http.createServer(async (req, res) => {
       if (thumbSource) thumbnail = thumbSource.url;
     }
     if (!thumbnail && meta.image && meta.image[0]) thumbnail = meta.image[0];
-    const image = boundImage(fixThumbnail(thumbnail));
+    let image = boundImage(fixThumbnail(thumbnail));
+    // WhatsApp shows no preview at all for a WebP image (every 3Speak
+    // thumbnail is WebP), and may read video.other as "a video" it can't
+    // play. It gets a JPEG copy and a plain website card instead.
+    const whatsapp = /whatsapp/i.test(req.headers['user-agent'] || '');
+    const waThumb = whatsapp ? ogVideo.jpegThumbPath(image) : null;
+    if (waThumb) image = origin + waThumb;
 
     const kindLabel = video.kind === 'shorts' ? 'Short' : 'Video';
     const title =
@@ -733,9 +857,16 @@ const server = http.createServer(async (req, res) => {
 
     // Indexability: full signal set when there's a Hive post; for embed-only
     // assets fall back to the NSFW flag + title heuristic.
+    const indexability = post ? getIndexability(post, meta) : null;
     const index = post
-      ? getIndexability(post, meta).index
+      ? indexability.index
       : !(embed && embed.isNsfwContent) && !isAdultByTitle(title);
+    // Inline playback follows the same NSFW/muted/blacklist rules, but not the
+    // SEO-only "empty" one: a short posted as an Ecency wave is a reply with a
+    // one-line body, which is thin for Google and perfectly fine for Discord.
+    const inlineAllowed =
+      (index || (indexability && indexability.reason === 'empty')) &&
+      !(embed && (embed.gated === true || embed.gated === 'true'));
 
     // Transcripts only exist for Hive-backed videos; fetch by the resolved Hive
     // author/permlink (not the embed asset id), and skip on noindex pages.
@@ -743,17 +874,35 @@ const server = http.createServer(async (req, res) => {
     let transcriptLang = null;
     let subtitleLanguages = null;
     let comments = [];
-    if (post && index) {
+    let inline = null;
+    // Transcript + comments are for search engines; Discord shows neither, and
+    // it gives up on a slow unfurl. Skipping them for the video bot keeps its
+    // card at "lookup + teaser build" even when the translate API hangs
+    // (seen 2026-10-02: every Discord card waited out the 6s transcript budget).
+    if (post && index && !videoBot) {
       // Both hang off the same Hive post; fetch them together rather than
       // adding the comment round-trip on top of the transcript's.
-      const [t, c] = await Promise.all([
+      const [t, c, v] = await Promise.all([
         fetchTranscript(post.author, post.permlink),
         fetchComments(post.author, post.permlink),
+        inlineVideo,
       ]);
+      if (inlineAllowed) inline = v;
       transcript = (t && t.text) || null;
       transcriptLang = (t && t.lang) || null;
       subtitleLanguages = (t && t.languages) || null;
       comments = c;
+    } else if (inlineAllowed) {
+      inline = await inlineVideo;
+    }
+    // Discord fetches the MP4 the moment it unfurls and gives up if it's slow,
+    // so its card waits for the teaser build (2-4s typically, capped). Other
+    // apps get the card at once (WhatsApp drops slow previews); the build runs
+    // in the background and the media route waits for it if they ask early.
+    if (inline) {
+      const discord = /discordbot/i.test(req.headers['user-agent'] || '');
+      await inline.prepare(discord ? 8000 : 0);
+      rememberOembed(`${video.author}/${video.permlink}`, { description, url: canonicalUrl });
     }
 
     const html = buildOgHtml({
@@ -771,6 +920,10 @@ const server = http.createServer(async (req, res) => {
       subtitleLanguages,
       comments,
       commentCount: post && typeof post.children === 'number' ? post.children : undefined,
+      video: inline ? { url: origin + inline.path, width: inline.width, height: inline.height } : null,
+      ogType: whatsapp ? 'website' : 'video.other',
+      imageType: waThumb ? 'image/jpeg' : undefined,
+      oembedUrl: inline ? `${origin}${OEMBED_PATH}?v=${encodeURIComponent(`${video.author}/${video.permlink}`)}` : null,
     });
 
     return sendHtml(req, res, 200, html);

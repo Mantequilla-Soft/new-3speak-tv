@@ -5,7 +5,8 @@ import { toastIn } from '../../utils/toast';
 import { useAppStore } from '../../lib/store';
 import { usePromptsActive, setPromptActive } from '../../utils/welcomeGate';
 import {
-  fetchGraduationPlan, fetchGraduationStatus, canCreateAccount
+  fetchGraduationPlan, fetchGraduationStatus, canCreateAccount,
+  fetchIncubationProgress, fetchMyIncubationProfile,
 } from '../../lib/incubation';
 import { openButrauthPopup } from '../../utils/butrauthPopup';
 // Reuses the ads prompt's dialog styles rather than duplicating them. That file
@@ -31,6 +32,14 @@ let dismissedThisVisit = false;
 
 /** "1 video", "2 shorts" — and nothing at all for a zero. */
 const count = (n, one, many = `${one}s`) => (n > 0 ? `${n} ${n === 1 ? one : many}` : null);
+
+/** Seconds as "3h 10m" or "25m". */
+function watched(seconds) {
+  const m = Math.floor((Number(seconds) || 0) / 60);
+  if (m < 1) return null;
+  const h = Math.floor(m / 60);
+  return h ? `${h}h${m % 60 ? ` ${m % 60}m` : ''}` : `${m}m`;
+}
 
 /** "a, b and c", skipping the empties. */
 function sentenceList(parts) {
@@ -70,6 +79,10 @@ export default function GraduationPrompt() {
 
   const [open, setOpen] = useState(false);
   const [plan, setPlan] = useState(null);
+  // What they came for (viewer / creator / advertiser) and what they did, so the
+  // offer can speak to THEM. Both optional: without them it reads as before.
+  const [progress, setProgress] = useState(null);
+  const [brandName, setBrandName] = useState(null);
 
   useEffect(() => {
     if (!authenticated || !incubationHandle || onBusyPage || promptsActive) return undefined;
@@ -77,13 +90,21 @@ export default function GraduationPrompt() {
     if (dismissedThisVisit) return undefined;
 
     let alive = true;
-    Promise.all([fetchGraduationStatus(), fetchGraduationPlan()])
-      .then(([status, p]) => {
+    Promise.all([
+      fetchGraduationStatus(),
+      fetchGraduationPlan(),
+      // Wording only: never a reason not to offer the account.
+      fetchIncubationProgress().catch(() => null),
+      fetchMyIncubationProfile().catch(() => null),
+    ])
+      .then(([status, p, prog, mine]) => {
         if (!alive) return;
         // Server-authoritative. The prompt cannot show for anyone butrauth
         // would refuse, because it is the same answer /account/create gives.
         if (canCreateAccount(status)) {
           setPlan(p);
+          setProgress(prog);
+          setBrandName(mine?.profile?.name || null);
           setOpen(true);
           setPromptActive('graduation', true);
         }
@@ -140,6 +161,33 @@ export default function GraduationPrompt() {
   // up until that post does. Everything aimed at real Hive content goes across.
   const waiting = (plan?.waiting?.comment || 0) + (plan?.waiting?.vote || 0);
 
+  /* The words, by what they came here for. A viewer did not come to post and an
+   * advertiser did not come to earn from posts, so the creator's offer ("your posts
+   * start earning") answered neither. What happens next is identical for all three;
+   * only how it is said changes. Unknown or no track reads as the creator copy. */
+  const track = progress?.track || null;
+  const have = (type) => progress?.tasks?.find((t) => t.type === type)?.have;
+  const viewerDone = sentenceList([
+    watched(have('watch')) ? `watched ${watched(have('watch'))}` : null,
+    count(have('comment'), 'comment') ? `written ${count(have('comment'), 'comment')}` : null,
+    count(have('follow'), 'creator') ? `followed ${count(have('follow'), 'creator')}` : null,
+  ]);
+  const copy = track === 'advertiser' ? {
+    title: 'Your advertiser account is ready',
+    lede: <>The team has reviewed <strong>{brandName || `@${incubationHandle}`}</strong>. Create your <strong>Hive account</strong>, for free: it becomes your advertiser account.</>,
+    text: 'With it you book ads across 3Speak, from video spots and banners to tickers, and pay for them straight from its wallet, in HBD or HIVE. The key is yours alone, so nobody can lock you out.',
+    note: <>Your brand profile comes across with you. Your business email and address stay private with 3Speak and never go on the blockchain.{moving ? <>{' '}Your <strong>{moving}</strong> come across too, published gradually over a few days.</> : null}</>,
+    cta: 'Create my advertiser account',
+  } : track === 'viewer' ? {
+    title: 'Your own account is ready',
+    lede: viewerDone
+      ? <>As <strong>@{incubationHandle}</strong> you have {viewerDone}. Turn that into a <strong>Hive account</strong> that belongs to you, for free.</>
+      : <>Turn <strong>@{incubationHandle}</strong> into a <strong>Hive account</strong> that belongs to you, for free.</>,
+    text: 'With it you can vote on and tip the videos you like, earn from your comments, opt in to viewer rewards for what you watch, and build playlists. The same login and the same follows work across every Hive app, and the key is yours alone.',
+    note: null,
+    cta: 'Create my account',
+  } : null;
+
   return (
     <div className="ads-prompt-overlay">
       <div
@@ -152,24 +200,30 @@ export default function GraduationPrompt() {
           <MdRocketLaunch className="ads-prompt-head-icon" aria-hidden="true" />
           <div>
             <h3 className="ads-prompt-title" id="graduation-title">
-              You can create your own account now
+              {copy ? copy.title : 'You can create your own account now'}
             </h3>
             <p className="ads-prompt-lede">
-              You have been posting as <strong>@{incubationHandle}</strong>. Turn that into a
-              real <strong>Hive account</strong> that belongs to you, for free.
+              {copy ? copy.lede : (
+                <>
+                  You have been posting as <strong>@{incubationHandle}</strong>. Turn that into a
+                  real <strong>Hive account</strong> that belongs to you, for free.
+                </>
+              )}
             </p>
           </div>
         </header>
 
         <p className="ads-prompt-text">
-          A Hive account is a key only you hold. Nobody can lock you out of it, your posts
-          start earning, and the same login works across every Hive app, not just 3Speak.
+          {copy ? copy.text : 'A Hive account is a key only you hold. Nobody can lock you out of it, your posts start earning, and the same login works across every Hive app, not just 3Speak.'}
         </p>
 
         {/* Said up front rather than discovered afterwards. Publishing the back
             catalogue is slow because a new account's resource credits only allow
             a couple of posts a day at first. Finding that out later would feel
             like a bait and switch. */}
+        {track === 'advertiser' ? (
+          <p className="ads-prompt-note">{copy.note}</p>
+        ) : (
         <p className="ads-prompt-note">
           {moving
             ? <>Your <strong>{moving}</strong> come across with you.</>
@@ -179,13 +233,14 @@ export default function GraduationPrompt() {
           {waiting === 1 && <>{' '}One of them waits for the post it answers to be published first.</>}
           {waiting > 1 && <>{' '}{waiting} of them wait for the posts they answer to be published first.</>}
         </p>
+        )}
 
         <div className="ads-prompt-actions">
           <button type="button" className="ads-prompt-ghost" onClick={() => close(true)}>
             Not yet
           </button>
           <button type="button" className="ads-prompt-primary" onClick={goCreate}>
-            Create my account
+            {copy ? copy.cta : 'Create my account'}
           </button>
         </div>
       </div>

@@ -1,10 +1,11 @@
 import { useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
-import { Video, Zap, Radio, Users, MessageCircle, Sparkles } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
+import { Video, Zap, Radio, Users, MessageCircle, Sparkles, Megaphone, Wallet, Crosshair, BarChart3 } from 'lucide-react';
 import { useAppStore } from '../../lib/store';
 import { isManteAuthLogin } from '../../hive-api/aioha';
 import { fetchProfile, isProfileEmpty } from '../../utils/profileMeta';
-import { fetchIncubationProfile } from '../../lib/incubation';
+import { fetchIncubationProfile, fetchWarmupContact } from '../../lib/incubation';
 import { normalizeInterestList, fetchUserInterests } from '../../utils/interests';
 import TagsV2Picker from '../tooltip/TagsV2Picker';
 import { reconcileAvatarOverride } from '../../utils/avatarCache';
@@ -48,12 +49,29 @@ const THINGS_YOU_CAN_DO = [
   { Icon: Sparkles, title: 'Get inspired, get involved', text: 'Discover creators, support the ones you love, and earn while you are at it.' },
 ];
 
+// The same welcome for someone who came to ADVERTISE: what their account is for
+// is booking ads, so that is what it shows them. Talking to customers is in the
+// list, as the optional extra it is for them.
+const THINGS_AN_ADVERTISER_CAN_DO = [
+  { Icon: Megaphone, title: 'Book ads across 3Speak', text: 'Video spots, shorts spots, player banners, tickers and pre-upload spots, from one day to three months.' },
+  { Icon: Wallet, title: 'Pay from your own wallet', text: 'In HBD or HIVE, straight from this account. No card and no middleman.' },
+  { Icon: Crosshair, title: 'Choose where it runs', text: 'Pick the format, the position in the video and how many days it runs.' },
+  { Icon: BarChart3, title: 'See what it delivered', text: 'Plays and clicks for every booking, and credit back if a booking falls short.' },
+  { Icon: MessageCircle, title: 'Talk to your customers', text: 'If you want to: post videos, answer comments and follow people under your brand.' },
+  { Icon: Users, title: 'One account everywhere', text: 'The same brand and login across every Hive app, with a key only you hold.' },
+];
+
 export default function WelcomePrompt() {
   const user = useAppStore((s) => s.user);
   const authenticated = useAppStore((s) => s.authenticated);
 
   const [open, setOpen] = useState(false);
   const [step, setStep] = useState(0);
+  // Came through the ADVERTISER warm-up. Known from their own private contact
+  // record (only advertisers have one), read with their session; no record or no
+  // session simply means the ordinary welcome.
+  const [advertiser, setAdvertiser] = useState(false);
+  const navigate = useNavigate();
   const editor = useProfileEditor(user);
   const {
     form, seed, setField, pickImage, uploading, saving, hasAnything, save,
@@ -138,10 +156,15 @@ export default function WelcomePrompt() {
               location: carried.location || profile.location || '',
               profile_image: carried.profile_image || profile.profile_image || '',
               cover_image: carried.cover_image || profile.cover_image || '',
+              website: carried.website || profile.website || '',
             };
           }
         } catch { /* no warm-up profile, or the store is down: blank form */ }
       }
+
+      const contact = await fetchWarmupContact().catch(() => null);
+      if (!alive) return;
+      setAdvertiser(!!contact?.email);
 
       seed(profile);
       setStep(0);
@@ -174,6 +197,15 @@ export default function WelcomePrompt() {
     if (ok) finish();
   };
 
+  // Advertiser: save the brand profile (that is what moves it onto the Hive
+  // account), then optionally on to booking. Only when they ask: never a redirect.
+  const submitBrand = async ({ thenBook = false } = {}) => {
+    const ok = hasAnything ? await save('Your brand profile is live. Welcome to 3Speak!') : true;
+    if (!ok) return;
+    finish();
+    if (thenBook) navigate('/advertise');
+  };
+
   return createPortal(
     <div className="welcome-overlay" role="dialog" aria-modal="true" aria-label="Welcome to 3Speak">
       <div className="welcome-modal">
@@ -181,15 +213,21 @@ export default function WelcomePrompt() {
           <>
             <div className="welcome-hero">
               <span className="welcome-wave" aria-hidden="true">👋</span>
-              <h2>Welcome to 3Speak</h2>
+              <h2>{advertiser ? `Welcome to 3Speak${form.name ? `, ${form.name}` : ''}` : 'Welcome to 3Speak'}</h2>
               <p className="welcome-hero-sub">
-                Hey <strong>@{user}</strong>, you made it. 3Speak is built on Hive, so your
-                account, your audience and your content belong to you.
+                {advertiser ? (
+                  <>Your advertiser account <strong>@{user}</strong> is ready. This is the account you book ads with and pay from.</>
+                ) : (
+                  <>
+                    Hey <strong>@{user}</strong>, you made it. 3Speak is built on Hive, so your
+                    account, your audience and your content belong to you.
+                  </>
+                )}
               </p>
             </div>
 
             <div className="welcome-grid">
-              {THINGS_YOU_CAN_DO.map(({ Icon, title, text }) => (
+              {(advertiser ? THINGS_AN_ADVERTISER_CAN_DO : THINGS_YOU_CAN_DO).map(({ Icon, title, text }) => (
                 <div className="welcome-card" key={title}>
                   <span className="welcome-card-icon"><Icon size={18} /></span>
                   <div>
@@ -201,21 +239,27 @@ export default function WelcomePrompt() {
             </div>
 
             <p className="welcome-note">
-              One last thing before you start: let people know who they are watching.
+              {advertiser
+                ? 'First, a quick look at your brand profile: it is what viewers see next to your ads.'
+                : 'One last thing before you start: let people know who they are watching.'}
             </p>
 
             <div className="welcome-actions">
               <button type="button" className="welcome-skip" onClick={finish}>Maybe later</button>
               <button type="button" className="welcome-primary" onClick={() => setStep(1)}>
-                Set up my profile
+                {advertiser ? 'Check my brand profile' : 'Set up my profile'}
               </button>
             </div>
           </>
         ) : step === 1 ? (
           <>
             <div className="welcome-head">
-              <h2>Let people know who you are</h2>
-              <p>This is what people see on your profile. You can change it any time.</p>
+              <h2>{advertiser ? 'Your brand profile' : 'Let people know who you are'}</h2>
+              <p>
+                {advertiser
+                  ? 'Carried over from your warm-up. Saving puts it on your Hive account; you can change it any time.'
+                  : 'This is what people see on your profile. You can change it any time.'}
+              </p>
             </div>
 
             <ProfileFields
@@ -232,6 +276,21 @@ export default function WelcomePrompt() {
                 fell below the fold on exactly the devices most people sign up
                 on. Nothing is written until the last step, so moving between
                 them costs nothing. */}
+            {advertiser ? (
+              // No interests step for an advertiser: they came to book ads, and
+              // their feed is not what this account is for.
+              <div className="welcome-actions">
+                <button type="button" className="welcome-skip" onClick={finish} disabled={saving}>
+                  Skip for now
+                </button>
+                <button type="button" className="welcome-back" onClick={() => submitBrand()} disabled={saving || uploading}>
+                  {saving ? 'Saving…' : 'Save'}
+                </button>
+                <button type="button" className="welcome-primary" onClick={() => submitBrand({ thenBook: true })} disabled={saving || uploading}>
+                  {saving ? 'Saving…' : 'Save and book my first ad'}
+                </button>
+              </div>
+            ) : (
             <div className="welcome-actions">
               <button type="button" className="welcome-skip" onClick={finish} disabled={saving}>
                 Skip for now
@@ -245,6 +304,7 @@ export default function WelcomePrompt() {
                 {uploading ? 'Uploading…' : 'Next'}
               </button>
             </div>
+            )}
           </>
         ) : (
           <>

@@ -304,8 +304,9 @@ export const voteIncubation = (author, permlink, weight) =>
   write('/social/vote', 'PUT', { author, permlink, weight });
 export const followIncubation = (following, state) =>
   announcing(write('/social/follow', 'PUT', { following, state }));
+// Announced: for an advertiser the profile IS a goal, and the bar should move on save.
 export const saveIncubationProfile = (profile, interests) =>
-  write('/social/profile', 'PUT', { profile, interests });
+  announcing(write('/social/profile', 'PUT', { profile, interests }));
 export const fetchMyIncubationProfile = () => write('/social/profile/mine', 'GET');
 // What they are here for: 'viewer', 'creator' or 'advertiser'. Decides which
 // goals they get (server/warmup.cjs); announced so the panel and the nav pill
@@ -329,6 +330,46 @@ const PROGRESS_EVENT = 'incubation:progress-changed';
 
 export function notifyIncubationProgress() {
   try { window.dispatchEvent(new Event(PROGRESS_EVENT)); } catch { /* SSR / no DOM */ }
+}
+
+/**
+ * An advertiser's PRIVATE business contact: email (required) and postal address.
+ * Stored off-chain by 3Speak only, never in the warm-up profile and never on Hive.
+ */
+export async function fetchWarmupContact() {
+  const res = await fetch('/api/warmup/contact', { credentials: 'include' });
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok) throw new Error(data.error || 'Could not load your contact details');
+  return data;
+}
+
+/**
+ * An advertiser's private details, for 3Speak's admins only. The server asks ButrAuth
+ * whether the signed-in user may manage the app and answers 404 to everyone else, so
+ * null here simply means "not for you" (or nothing to show).
+ */
+export async function fetchAdvertiserAdminView(handle) {
+  try {
+    const res = await fetch(`/api/warmup/admin/advertiser/${encodeURIComponent(handle)}`, { credentials: 'include' });
+    if (!res.ok) return null;
+    return await res.json();
+  } catch {
+    return null;
+  }
+}
+
+export async function saveWarmupContact({ email, address }) {
+  const res = await fetch('/api/warmup/contact', {
+    method: 'PUT',
+    credentials: 'include',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ email, address }),
+  });
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok) throw new Error(data.error || 'Could not save your contact details');
+  // The goal may have just been met.
+  notifyIncubationProgress();
+  return data;
 }
 
 /** Subscribe to the above. Returns its own unsubscribe. */
