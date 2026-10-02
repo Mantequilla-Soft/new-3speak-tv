@@ -20,6 +20,7 @@
 
 const http = require('http');
 const ogVideo = require('./og-video.cjs');
+const ogSite = require('./og-site.cjs');
 
 const PORT = process.env.OG_PORT || 4023;
 const HIVE_API = 'https://api.hive.blog';
@@ -58,6 +59,18 @@ const BOT_USER_AGENTS = [
   'Applebot',
   'Googlebot',
   'bingbot',
+  // AI assistants and their crawlers: none of them run JS either.
+  'GPTBot',
+  'OAI-SearchBot',
+  'ChatGPT-User',
+  'ClaudeBot',
+  'Claude-SearchBot',
+  'Claude-User',
+  'PerplexityBot',
+  'Perplexity-User',
+  'CCBot',
+  'DuckAssistBot',
+  'MistralAI-User',
 ];
 
 function isBot(userAgent) {
@@ -784,6 +797,20 @@ const server = http.createServer(async (req, res) => {
     }
   }
 
+  // What 3Speak is (/ and /about, AI agents only per nginx) and the dynamic
+  // sitemaps. See og-site.cjs.
+  if (ogSite.isSitemapPath(url.pathname)) {
+    return ogSite.serveSitemap(req, res, url.pathname);
+  }
+  if (ogSite.isSitePath(url.pathname)) {
+    try {
+      return await ogSite.serveSitePage(req, res, url, origin);
+    } catch (err) {
+      console.error('[og] site page error:', err && err.message);
+      return sendHtml(req, res, 200, buildGenericHtml(origin + req.url));
+    }
+  }
+
   try {
     const video = parseVideoUrl(url);
     if (!video) return sendHtml(req, res, 200, buildGenericHtml(origin + req.url));
@@ -936,4 +963,5 @@ const server = http.createServer(async (req, res) => {
 
 server.listen(PORT, '127.0.0.1', () => {
   console.log(`3Speak OG prerender service running on 127.0.0.1:${PORT}`);
+  setTimeout(ogSite.warm, 5000);
 });

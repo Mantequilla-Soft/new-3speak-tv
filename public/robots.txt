@@ -2,6 +2,10 @@
 User-agent: *
 Allow: /
 
+# AI assistants and search crawlers (GPTBot, ClaudeBot, PerplexityBot and the
+# rest) are welcome. A plain-text summary of 3Speak for language models:
+# https://3speak.tv/llms.txt and https://3speak.tv/llms-full.txt
+
 # Sitemaps
 Sitemap: https://3speak.tv/sitemap.xml
 
