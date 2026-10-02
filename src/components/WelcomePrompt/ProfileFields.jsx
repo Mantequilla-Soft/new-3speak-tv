@@ -17,7 +17,9 @@ export const NAME_MAX = 30;
 export const ABOUT_MAX = 160;
 export const LOCATION_MAX = 30;
 const MAX_IMAGE_BYTES = 8 * 1024 * 1024;
-const EMPTY = { name: '', about: '', location: '', profile_image: '', cover_image: '' };
+// `website` rides along even where no field shows it: saving REPLACES the stored
+// profile, so a field the form does not carry is a field every save would erase.
+const EMPTY = { name: '', about: '', location: '', profile_image: '', cover_image: '', website: '' };
 const FIELDS = ['name', 'about', 'location', 'profile_image', 'cover_image'];
 
 /**
@@ -45,6 +47,7 @@ export function useProfileEditor(username, { onSave = null } = {}) {
       location: profile?.location || '',
       profile_image: profile?.profile_image || '',
       cover_image: profile?.cover_image || '',
+      website: profile?.website || '',
     });
   }, []);
 

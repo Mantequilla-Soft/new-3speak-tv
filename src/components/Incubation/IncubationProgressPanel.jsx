@@ -1,14 +1,17 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { MdCheckCircle, MdRadioButtonUnchecked, MdExpandMore } from 'react-icons/md';
 import {
   FaRocket, FaVideo, FaMobileAlt, FaComments, FaUserPlus, FaClock, FaHourglassHalf,
-  FaUsers, FaIdCard,
+  FaUsers, FaIdCard, FaEnvelope,
 } from 'react-icons/fa';
+import AdvertiserContactForm from './AdvertiserContactForm';
+import BrandProfileForm from './BrandProfileForm';
 import { TRACK_QUESTION_ID } from './TrackQuestion';
 import { trackTitle } from './tracks';
 import {
   fetchIncubationProgress, progressHue, progressFraction, taskFraction, onIncubationProgress,
+  fetchGraduationStatus, canCreateAccount,
 } from '../../lib/incubation';
 
 /* The goals panel, as its own component so that refreshing it refreshes IT.
@@ -110,19 +113,26 @@ const TASK_COPY = {
     ],
     cta: { label: 'Browse communities', to: '/groups' },
   },
-  // For advertisers: a brand is judged by its profile. The five fields are the
+  // For advertisers: a brand is judged by its profile. The three fields are the
   // ones server/warmup.cjs counts; whether they fit the brand is the team's call.
+  // Filled in right inside the goal (BrandProfileForm).
   profile: {
     Icon: FaIdCard,
     label: () => 'Set up your brand profile',
-    hint: 'Name, about text, logo, banner and website. Use "Edit profile" at the top of this page.',
+    hint: 'Your brand name, what you do and your logo.',
     why: 'Viewers, and the team reviewing you, see who is behind an ad before anything else. A complete profile is what makes a brand recognisable and trustworthy.',
+  },
+  // For advertisers: how the team reaches the business. Email and address are
+  // PRIVATE and off-chain; the form says so (AdvertiserContactForm).
+  contact: {
+    Icon: FaEnvelope,
+    label: () => 'Add your business contact',
+    hint: 'An email, plus your address or a website.',
+    why: 'Before an ad runs, the team needs a real way to reach the business behind it. Your email and address are private: they are never stored on the blockchain or shown anywhere.',
     counts: [
-      'Display name: your brand name.',
-      'About: what the brand does, in a sentence or two.',
-      'Profile picture: your logo.',
-      'Cover image: your banner.',
-      'Website: where people can find out more.',
+      'Email: required.',
+      'Address: optional.',
+      'You need your address OR a website in your brand profile above, at least one of the two.',
     ],
   },
 };
@@ -244,10 +254,33 @@ export default function IncubationProgressPanel() {
   // remembering, opening one goal is a question you have finished asking.
   const [openTasks, setOpenTasks] = useState(() => new Set());
 
+  /* An advertiser's two goals are forms, filled in right here. On the first load the
+   * first one still to do opens, so the page starts at the thing to fill in rather
+   * than at a list of closed rows. After that the person decides what is open. */
+  const autoOpened = useRef(false);
+  // Approved already: "the team will review you" is no longer true, and the way
+  // forward is the "your account is ready" panel and popup instead.
+  const [approved, setApproved] = useState(false);
+  useEffect(() => {
+    let alive = true;
+    fetchGraduationStatus()
+      .then((s) => { if (alive) setApproved(canCreateAccount(s)); })
+      .catch(() => { /* keep the line; it is only wrong after approval */ });
+    return () => { alive = false; };
+  }, []);
+
   useEffect(() => {
     let alive = true;
     const load = () => fetchIncubationProgress()
-      .then((p) => { if (alive) setProgress(p); })
+      .then((p) => {
+        if (!alive) return;
+        setProgress(p);
+        if (!autoOpened.current && p?.tasks) {
+          autoOpened.current = true;
+          const first = p.tasks.find((t) => (t.type === 'profile' || t.type === 'contact') && !t.done);
+          if (first) setOpenTasks(new Set([first.type]));
+        }
+      })
       .catch(() => { /* the page still works without it */ });
     load();
     // Re-read when a write says a goal may have moved, rather than making the
@@ -405,6 +438,11 @@ export default function IncubationProgressPanel() {
                           </ul>
                         </>
                       )}
+                      {/* The contact goal is filled in right here: there is no
+                          other page for private details. Kept open when done, so
+                          they can still be corrected. */}
+                      {t.type === 'profile' && <BrandProfileForm />}
+                      {t.type === 'contact' && <AdvertiserContactForm />}
                       {/* No call to action on a finished goal: it would
                           invite work that earns nothing. */}
                       {copy.cta && !t.done && (
@@ -420,11 +458,13 @@ export default function IncubationProgressPanel() {
           </ul>
           {/* Said plainly, because "finish the list" without saying what
               happens next reads as a slot machine rather than a process. */}
+          {!approved && (
           <p className="inc-review">
             {progress.complete
               ? 'All done. The team will review your channel and upgrade you. Nothing more for you to do.'
               : 'Once you have completed all of these, the team will review your channel and upgrade you.'}
           </p>
+          )}
         </div>
       )}
     </section>

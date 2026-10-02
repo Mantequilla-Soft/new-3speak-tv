@@ -10,6 +10,8 @@ import SEOHead from '../components/SEOHead';
 import NotFound from './NotFound';
 import AdOverlay from '../components/ads/AdOverlay';
 import TickerCrawl from '../components/ads/TickerCrawl';
+import FundsNotice from '../components/ads/FundsNotice';
+import { fetchBalances } from '../hive-api/api';
 import {
   AD_CATEGORIES,
   fetchInventory,
@@ -42,6 +44,20 @@ import {
   slotLabel,
   countryName,
 } from '../lib/advertiseData';
+import { InventoryPanel, RateCard } from '../components/ads/AdMarketPanels';
+import {
+  SHOW_MARKETS,
+  SITE_ONLY_SURFACES,
+  EXAMPLE_SECONDS,
+  EXAMPLE_DAYS,
+  flightPrice,
+  hivePayable,
+  hiveEquivalent,
+  suppliesFor,
+  bannerAdvice,
+  savingAt,
+  groupByFormat,
+} from '../lib/adMarket';
 import './Advertise.scss';
 
 // Every toast from this module is headed "Advertising"; the message becomes the
@@ -51,13 +67,6 @@ const toast = toastIn('Advertising');
 // The inventory forecast only moves every few hours, so a long stale time keeps
 // the page instant on revisit without ever showing a number the backend disowns.
 const INVENTORY_STALE_MS = 10 * 60 * 1000;
-
-// Country breakdown and per-market targeting, hidden for now. The numbers behind
-// them are real but thin at this scale — a market with a 4% share is a handful of
-// sessions a day, and offering it as something to buy promises a precision we
-// cannot deliver yet. Flip to true to bring back both the "Who watches" panel and
-// the market chips on the form; the backend has accepted `markets` all along.
-const SHOW_MARKETS = false;
 
 /** The enrollment steps, in the order they have to happen. */
 const WIZARD_STEPS = ['Your product', 'Your ad', 'Book a slot'];
@@ -79,144 +88,6 @@ const EMPTY_FORM = {
   wantProduction: false,
   productionBrief: '',
 };
-
-function StatTile({ value, label, note }) {
-  return (
-    <div className="mkt-stat">
-      <span className="mkt-stat-value">{value}</span>
-      <span className="mkt-stat-label">{label}</span>
-      {note ? <span className="mkt-stat-note">{note}</span> : null}
-    </div>
-  );
-}
-
-function InventoryPanel({ data, isLoading, error }) {
-  if (isLoading) return <div className="mkt-panel mkt-panel-muted">Loading current availability…</div>;
-
-  if (error) {
-    // A 503 means the forecast job has not produced a snapshot yet — that is a
-    // different message from "something broke", and an advertiser deserves the
-    // honest one rather than a spinner that never resolves.
-    // 404 means the whole ad surface is switched off server-side, not that one
-    // number is missing — and in that state the form below does NOT work either,
-    // so saying it does would send someone into a dead end.
-    if (error.status === 404) {
-      return (
-        <div className="mkt-panel mkt-panel-muted">
-          Advertising is switched off at the moment. Nothing here will submit until it is turned back on.
-        </div>
-      );
-    }
-    return (
-      <div className="mkt-panel mkt-panel-muted">
-        {error.status === 503
-          ? 'Availability figures are being recalculated. Apply below and we will send you the current numbers with your quote.'
-          : 'Availability figures are temporarily unavailable. The form below still works.'}
-      </div>
-    );
-  }
-  if (!data) return null;
-
-  const { audience, slots, quality } = data;
-  // Mid-roll first: it is what we actually sell, and leading with the bigger
-  // pre-roll number would be selling a slot we do not recommend.
-  // Plain time order. It used to push pre-roll to the bottom so the biggest number
-  // would not lead, but a table of positions that is not in position order reads as
-  // broken — the "not recommended" tag carries that argument on its own.
-  const ordered = [...(slots || [])].sort((a, b) => a.percent - b.percent);
-  const topCountries = (audience?.countries || []).slice(0, 6);
-
-  return (
-    <div className="mkt-inventory">
-      <div className="mkt-stats">
-        <StatTile value={formatCount(audience?.sessionsPerDay)} label="Watch sessions a day" note="Trailing 7 days, after filtering" />
-        {/* Distinct videos with at least one counted watch in the window (adInventory.js),
-            not uploads and not plays. "In the pool" read as either. */}
-        <StatTile value={formatCount(audience?.videos)} label="Videos watched" note={`Different videos with real viewers, last ${data.windowDays} days`} />
-        <StatTile value={formatCount(audience?.watchHours)} label="Watch hours" note={`Last ${data.windowDays} days`} />
-      </div>
-
-      <div className="mkt-slots">
-        <h3>Where an ad can run</h3>
-        <div className="mkt-table-wrap">
-          <table className="mkt-table">
-            <thead>
-              <tr>
-                <th>Placement</th>
-                <th className="num">Plays a day</th>
-                <th className="num">Plays a month</th>
-                <th className="num">Reach</th>
-              </tr>
-            </thead>
-            <tbody>
-              {ordered.map((s) => (
-                <tr key={s.percent}>
-                  <td>
-                    {slotLabel(s)}
-                    {s.percent === 0 ? <span className="mkt-tag">not recommended</span> : null}
-                  </td>
-                  <td className="num">{formatCount(s.perDay)}</td>
-                  <td className="num">{formatCount(s.perMonth)}</td>
-                  <td className="num">{s.reachPct}%</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-        <p className="mkt-fine">
-          <strong>Not recommended:</strong> an ad before the video reaches more sessions on
-          paper, but almost half of all
-          watching here stops inside fifteen seconds, so most of those plays land on
-          someone who was already leaving. An ad placed further in is counted only when
-          the viewer actually got there.
-        </p>
-      </div>
-
-      {SHOW_MARKETS && topCountries.length > 0 && (
-        <div className="mkt-countries">
-          <h3>Who watches</h3>
-          <ul className="mkt-country-list">
-            {topCountries.map((c) => (
-              <li key={c.code}>
-                <span className="mkt-country-name">{countryName(c.code)}</span>
-                <span className="mkt-country-bar" aria-hidden="true">
-                  <span style={{ width: `${Math.min(100, c.sharePct * 3)}%` }} />
-                </span>
-                <span className="mkt-country-share">{c.sharePct}%</span>
-              </li>
-            ))}
-          </ul>
-        </div>
-      )}
-
-      {quality && (
-        <p className="mkt-note">
-          <span>
-            <strong>{quality.removedPct}% of raw traffic is excluded</strong> from these
-            figures: sessions under {quality.minEngagedSeconds} seconds, accounts too fast to
-            be real viewers, and videos whose creator opted out. What is left is what we sell.
-          </span>
-        </p>
-      )}
-    </div>
-  );
-}
-
-/* Which surfaces exist ONLY on 3speak.tv.
- *
- * A video roll or banner travels with the video: a 3Speak player embedded on someone
- * else's site is still a 3Speak player, and the spot is already in the manifest it
- * loads. The shorts feed and the upload studio have no embedded equivalent — they are
- * pages on this site, so a spot booked on either runs here and nowhere else.
- *
- * Stated on the page because an advertiser comparing formats on price alone reads the
- * shorts rate as buying the same reach as the video rate, and it does not. Better they
- * know which audience they are buying before they book than discover it from a
- * delivery report afterwards.
- *
- * Keyed off `surface`, the server's own word, so a format on a NEW surface is treated
- * as travelling rather than being silently labelled site-only on a guess. */
-const SITE_ONLY_SURFACES = new Set(['shorts', 'upload']);
 
 /**
  * Pick what you are buying, before anything else on the form.
@@ -271,40 +142,6 @@ function FormatPicker({ formats, value, onChange }) {
     </fieldset>
   );
 }
-
-// Where each format actually runs, in the reader's terms. Keyed off `surface`,
-// which is the server's own word for it, so a format on a new surface shows the
-// raw key rather than being silently mislabelled as one of these.
-const SURFACE_LABEL = {
-  watch: 'Inside videos',
-  shorts: 'Between shorts',
-  upload: 'Before an upload',
-};
-
-/**
- * The full rate card: every bookable spot, each with its own price.
- *
- * Built from `pricing.formats`, the same array FormatPicker reads, so a format
- * added on the server appears here without a frontend change. The section used to
- * quote one number — the video roll's — as though it were the price of the page,
- * which understated the banner and left the shorts and pre-upload spots off the
- * page entirely.
- *
- * Tiles rather than a table: these are four different products, not four readings
- * of one measure, and a row per product invited a price comparison down a column
- * that is not the point. Each tile carries a worked example, because a raw
- * per-second-per-day rate is a number nobody can price a campaign from in their head.
- */
-const EXAMPLE_SECONDS = 10;
-/* The window every example price is quoted over.
- *
- * Deliberately NOT the bookable minimum. That is now one day, and a one-day quote makes
- * every format look like small change, which reads as a toy rather than as a rate card.
- * Three days is short enough to still be a real booking and long enough that the numbers
- * separate. Floored at the minimum so this cannot quote a window nobody can book. */
-const EXAMPLE_DAYS = 3;
-/** The longer flight quoted beside it, to show the day rate falling. */
-const LONG_EXAMPLE_DAYS = 30;
 
 /**
  * The same total expressed in HIVE, or null when we cannot say.
@@ -374,298 +211,6 @@ function CopyButton({ value }) {
     >
       {done ? 'Copied' : 'Copy'}
     </button>
-  );
-}
-
-/**
- * What a flight costs: rate x seconds x days^K.
- *
- * Mirrors priceForDays() in 3speakchecks/utils/adModel.js, and takes K from the pricing
- * payload rather than declaring its own. A second copy of a pricing constant is how a
- * page ends up quoting one number and the server charging another; if the curve ever
- * moves, this follows without being touched.
- *
- * Falls back to a straight line when the server sent no K, which is what an older
- * checker means — never a discount we then fail to honour.
- */
-function flightPrice(days, ratePerSecondDay, seconds, dayCurveK) {
-  const d = Number(days);
-  const r = Number(ratePerSecondDay);
-  const secs = Number(seconds);
-  if (!Number.isFinite(d) || d <= 0 || !Number.isFinite(r) || !Number.isFinite(secs)) return null;
-  const k = Number(dayCurveK);
-  const exp = Number.isFinite(k) && k > 0 && k <= 1 ? k : 1;
-  return Math.round((d ** exp) * r * secs * 1000) / 1000;
-}
-
-function hivePayable(hbd, hbdPerHive) {
-  const rate = Number(hbdPerHive);
-  if (!Number.isFinite(rate) || rate <= 0 || !Number.isFinite(hbd) || hbd <= 0) return null;
-  return Math.ceil((hbd / rate) * 1000) / 1000;
-}
-
-function hiveEquivalent(hbd, hbdPerHive) {
-  const rate = Number(hbdPerHive);
-  if (!Number.isFinite(rate) || rate <= 0 || !Number.isFinite(hbd) || hbd <= 0) return null;
-  return Math.round((hbd / rate) * 1000) / 1000;
-}
-
-/**
- * How much cheaper a day is on an N-day flight than on a one-day one, as a percentage.
- *
- * The curve is `days^K`, so the day rate is `days^(K-1)` of the single-day rate and the
- * spot length and HBD rate cancel out entirely — this is a property of the curve, not of
- * any particular format, which is why one number can be quoted for the whole page.
- *
- * Returns null when there is nothing to advertise: no curve (K = 1, or a checker too old
- * to send one) or a saving too small to be worth a sentence.
- */
-/**
- * What an advertiser has to bring for a format, in words.
- *
- * Reads the LIST of accepted kinds rather than the single `creativeKind`, because the
- * banner takes either and saying "an image" would turn away somebody who has a video
- * ready. Falls back to the singular for a checker too old to send the list.
- */
-function suppliesFor(f) {
-  const kinds = f?.creativeKinds?.length ? f.creativeKinds : (f ? [f.creativeKind] : []);
-  if (kinds.includes('text')) return 'A short message and a link';
-  const image = kinds.includes('image');
-  const video = kinds.includes('video');
-  if (image && video) return 'An image or a video';
-  return image ? 'An image' : 'A video';
-}
-
-/**
- * The size and file guidance for a format, as short key/value facts for its tile.
- *
- * Rows in the tile's fact list rather than (i) buttons: a tooltip hides the one thing
- * an advertiser needs before they open an editor, and does not exist on a phone. Two
- * terse rows cost less space than a sentence and are read the same way as the rows
- * above them.
- *
- * Read from `creativeSpec`, which is the same definition the attach route enforces, so
- * the tile cannot recommend a size the server then refuses. Formats with no spec (the
- * landscape spots) have no shape rule; they get the player's own shape as advice.
- */
-/**
- * The shape of the recommended banner size: its ratio, and the smallest size at that
- * ratio the server still accepts. 1456x240 gives 6:1 and 728x120. Null when the
- * recommendation is not a WxH we can read.
- */
-function bannerShape(spec) {
-  const m = /^(\d+)\s*x\s*(\d+)$/i.exec(String(spec?.recommended || ''));
-  if (!m) return null;
-  const ratio = Number(m[1]) / Number(m[2]);
-  if (!(ratio > 0)) return null;
-  const minW = spec.minWidth || Number(m[1]);
-  return {
-    // 1456/240 is 6.07, which nobody wants to read as "6.1:1".
-    ratio: Math.abs(ratio - Math.round(ratio)) < 0.1 ? Math.round(ratio) : ratio.toFixed(1),
-    smallest: `${minW}×${Math.round(minW / ratio)}`,
-  };
-}
-
-/** The banner size advice as one sentence, for the upload panel. */
-function bannerAdvice(spec) {
-  const shape = bannerShape(spec);
-  if (!shape) return 'It needs to be a wide strip.';
-  return `Make it ${spec.recommended.replace('x', '×')}, or any other size in the same `
-    + `${shape.ratio}:1 shape, such as ${shape.smallest}.`;
-}
-
-function specFor(f) {
-  const spec = f?.creativeSpec;
-  const kinds = f?.creativeKinds?.length ? f.creativeKinds : [f?.creativeKind];
-  // A ticker has no file to size. What it needs is the length limit, said in the same
-  // two rows so the tiles still line up.
-  if (kinds.includes('text')) {
-    return {
-      rows: [
-        { label: 'Message', value: `Up to ${spec?.maxChars || 140} characters`, note: 'shown with your avatar and product name' },
-        { label: 'Link', value: 'Any https:// page' },
-      ],
-    };
-  }
-  const files = kinds.includes('image') && kinds.includes('video')
-    ? 'PNG, JPG or MP4'
-    : (kinds.includes('image') ? 'PNG or JPG' : 'MP4 (H.264)');
-  const x = (s) => String(s || '').replace('x', '×');
-  const rows = (size, note) => ({ rows: [{ label: 'Best size', value: size, note }, { label: 'File', value: files }] });
-  if (spec?.shape === 'portrait') {
-    return rows(`${x(spec.recommended)}, 9:16`, `upright, at least ${spec.minWidth}px wide`);
-  }
-  if (spec) {
-    // Recommend the recommended SHAPE, not the 3:1 to 12:1 range the server will merely
-    // accept: anything off that shape is letterboxed inside the banner box.
-    const shape = bannerShape(spec);
-    return rows(
-      x(spec.recommended),
-      shape ? `or any ${shape.ratio}:1 size, e.g. ${shape.smallest}` : `at least ${spec.minWidth}px wide`,
-    );
-  }
-  return rows('1920×1080, 16:9', 'landscape, like the player');
-}
-
-function savingAt(days, pricing) {
-  const k = Number(pricing?.dayCurveK);
-  if (!(k > 0 && k < 1) || !(days > 1)) return null;
-  if (pricing?.maxDays && days > pricing.maxDays) return null;
-  const saving = Math.round((1 - days ** (k - 1)) * 100);
-  return saving >= 5 ? saving : null;
-}
-
-/* The formats, grouped by how the viewer meets them. One list for every place the
- * formats are shown (rate card, "What are you running?"), so the two agree. A format
- * the checker adds later and nobody has placed lands in "More formats" rather than
- * disappearing. */
-const FORMAT_GROUPS = [
-  {
-    id: 'screen',
-    title: 'Takes the screen',
-    note: 'Plays instead of the video for a few seconds, so it has the viewer\u2019s full attention.',
-    keys: ['video_roll', 'shorts_roll'],
-  },
-  {
-    id: 'overlay',
-    title: 'Over the picture',
-    note: 'Shown while the video keeps playing. Nothing is interrupted. Not on shorts yet.',
-    keys: ['video_banner', 'video_ticker'],
-  },
-  {
-    id: 'creators',
-    title: 'Before an upload',
-    note: 'Seen by creators about to publish, on any upload like a video or a short.',
-    keys: ['upload_gate'],
-  },
-];
-
-/** Split items into FORMAT_GROUPS by their format key, keeping each group's order. */
-function groupByFormat(items, keyOf) {
-  const placed = new Set(FORMAT_GROUPS.flatMap((g) => g.keys));
-  const groups = FORMAT_GROUPS
-    .map((g) => ({ ...g, items: g.keys.map((k) => items.find((it) => keyOf(it) === k)).filter(Boolean) }))
-    .filter((g) => g.items.length);
-  const rest = items.filter((it) => !placed.has(keyOf(it)));
-  if (rest.length) groups.push({ id: 'more', title: 'More formats', note: null, items: rest });
-  return groups;
-}
-
-function RateCard({ pricing }) {
-  const formats = pricing?.formats || [];
-  if (!formats.length) return null;
-  const days = Math.max(EXAMPLE_DAYS, pricing?.minDays || 0) || null;
-
-  return (
-    <div className="mkt-format-groups">
-    {groupByFormat(formats, (f) => f.key).map((g) => (
-    <section key={g.id} className="mkt-format-group" aria-label={g.title}>
-      <h3 className="mkt-group-title">{g.title}</h3>
-      {g.note ? <p className="mkt-group-note">{g.note}</p> : null}
-    <ul className="mkt-ratecard">
-      {g.items.map((f) => {
-        // Quoted at one length across every tile, so they compare the SPOTS rather
-        // than their maximum lengths. Clamped, so a format capped under the
-        // baseline is quoted at its cap and says so.
-        const seconds = Math.min(EXAMPLE_SECONDS, f.maxSeconds || EXAMPLE_SECONDS);
-        const example = days && f.ratePerSecondDayHbd
-          ? flightPrice(days, f.ratePerSecondDayHbd, seconds, pricing?.dayCurveK)
-          : null;
-        /* The same spot over a month, quoted beside it. A day rate that falls as the
-         * flight grows is the offer, and nobody acts on an offer they have to derive —
-         * so the longer number sits next to the short one rather than being implied.
-         * Hidden when there is no curve to advertise (K = 1, or a checker too old to
-         * send one) and when the saving is too small to be worth a sentence. */
-        const longer = (() => {
-          const k = Number(pricing?.dayCurveK);
-          if (!example || !days || !(k > 0 && k < 1)) return null;
-          if (!pricing?.maxDays || LONG_EXAMPLE_DAYS > pricing.maxDays) return null;
-          const price = flightPrice(LONG_EXAMPLE_DAYS, f.ratePerSecondDayHbd, seconds, k);
-          if (price == null) return null;
-          // Against the ONE-day rate, the same baseline the section above quotes, so
-          // the two numbers on the page cannot disagree about the same curve.
-          const saving = savingAt(LONG_EXAMPLE_DAYS, pricing);
-          return saving ? { days: LONG_EXAMPLE_DAYS, price, saving } : null;
-        })();
-        return (
-          <li key={f.key} className="mkt-rc-tile">
-            <div className="mkt-rc-head">
-              <h3>{f.label}</h3>
-              <span className="mkt-rc-rate">
-                {f.ratePerSecondDayHbd} HBD
-                <span className="mkt-rc-unit"> /sec /day</span>
-              </span>
-            </div>
-
-            <p className="mkt-rc-blurb">{f.blurb}</p>
-
-            {/* Name, rate and one line by default; the facts and the worked prices on
-                request. Five tiles in full were a wall of numbers before anyone had
-                picked a format to care about. Native <details>, so it opens from the
-                keyboard and is announced without any state of ours. */}
-            <details className="mkt-rc-more">
-            <summary>Details</summary>
-            <dl className="mkt-rc-facts">
-              <div>
-                <dt>Where it runs</dt>
-                <dd>{SURFACE_LABEL[f.surface] || f.surface}</dd>
-              </div>
-              {SITE_ONLY_SURFACES.has(f.surface) ? (
-                <div>
-                  <dt>Seen on</dt>
-                  <dd>3speak.tv only</dd>
-                </div>
-              ) : null}
-              <div>
-                <dt>You supply</dt>
-                <dd>
-                  {suppliesFor(f)}
-                  {f.maxSeconds ? `, up to ${f.maxSeconds}s` : null}
-                </dd>
-              </div>
-              {specFor(f).rows.map((r) => (
-                <div key={r.label}>
-                  <dt>{r.label}</dt>
-                  <dd>
-                    {r.value}
-                    {r.note ? <span className="mkt-rc-sub">{r.note}</span> : null}
-                  </dd>
-                </div>
-              ))}
-            </dl>
-
-            {example != null ? (
-              <div className="mkt-rc-example">
-                <span className="mkt-rc-example-price">
-                  {example} HBD
-                  {hiveEquivalent(example, pricing?.hbdPerHive) != null ? (
-                    <span className="mkt-rc-example-hive">
-                      {' '}or about {hiveEquivalent(example, pricing.hbdPerHive)} HIVE
-                    </span>
-                  ) : null}
-                </span>
-                <span className="mkt-rc-example-note">
-                  for a {seconds}s spot over {days} days
-                  {longer ? (
-                    <>
-                      {'; '}
-                      <strong>{longer.price} HBD</strong> for {longer.days} days, about
-                      {' '}{longer.saving}% less per day
-                    </>
-                  ) : null}
-                </span>
-              </div>
-            ) : null}
-            </details>
-
-            {f.rateIsCustom ? <span className="mkt-tag">your agreed rate</span> : null}
-          </li>
-        );
-      })}
-    </ul>
-    </section>
-    ))}
-    </div>
   );
 }
 
@@ -1004,6 +549,24 @@ function CampaignPanel({
   // Per campaign, not one shared value: with two unpaid flights on screen, a single
   // toggle would silently change the currency of the one you are not looking at.
   const [payCcy, setPayCcy] = useState({});
+  /* The paying wallet's liquid balance, to PRESELECT the currency: HIVE when it holds
+   * enough HIVE for this flight, HBD otherwise. A click still decides. Read once per
+   * account; unknown means the old default (HBD). */
+  const payer = useAppStore((s) => s.user);
+  const [wallet, setWallet] = useState(null);
+  useEffect(() => {
+    let alive = true;
+    if (!payer) return undefined;
+    fetchBalances(payer)
+      .then((b) => { if (alive && b) setWallet({ account: payer, hive: Number(b.hive) || 0 }); })
+      .catch(() => { /* keep HBD as the default */ });
+    return () => { alive = false; };
+  }, [payer]);
+  const ccyFor = useCallback((c, owed) => {
+    if (payCcy[c.id]) return payCcy[c.id] === 'HIVE' ? 'HIVE' : 'HBD';
+    const inHive = hivePayable(owed, pricing?.hbdPerHive);
+    return wallet && wallet.account === payer && inHive != null && wallet.hive >= inHive ? 'HIVE' : 'HBD';
+  }, [payCcy, wallet, payer, pricing?.hbdPerHive]);
   const [payBusy, setPayBusy] = useState(null);
   const [payError, setPayError] = useState(null);
   /* Progress while the chain catches up, kept OUT of payError on purpose: that renders
@@ -1014,7 +577,8 @@ function CampaignPanel({
   const payWithWallet = useCallback(async (c) => {
     const owed = Math.round((c.priceHbd - c.paidHbd) * 1000) / 1000;
     if (!(owed > 0)) return;
-    const ccy = payCcy[c.id] === 'HIVE' ? 'HIVE' : 'HBD';
+    // Same rule the buttons show, so what is highlighted is what gets sent.
+    const ccy = ccyFor(c, owed);
     const amount = ccy === 'HIVE' ? hivePayable(owed, pricing?.hbdPerHive) : owed;
     if (amount == null) {
       setPayError('We cannot read the HIVE price right now. Pay in HBD, or try again shortly.');
@@ -1045,7 +609,7 @@ function CampaignPanel({
     } finally {
       setPayBusy(null);
     }
-  }, [onCheckPayment, payCcy, pricing?.hbdPerHive]);
+  }, [onCheckPayment, ccyFor, pricing?.hbdPerHive]);
   const autoOn = autoLength && autoAvailable;
 
   const chosenLength = autoOn ? latestSpotSeconds : (spotSeconds ?? maxSpot);
@@ -1639,7 +1203,7 @@ function CampaignPanel({
                 <div className="mkt-pay">
                   {(() => {
                     const owed = Math.round((c.priceHbd - c.paidHbd) * 1000) / 1000;
-                    const ccy = payCcy[c.id] === 'HIVE' ? 'HIVE' : 'HBD';
+                    const ccy = ccyFor(c, owed);
                     const inHive = hivePayable(owed, pricing?.hbdPerHive);
                     const shown = ccy === 'HIVE' ? inHive : owed;
                     return (
@@ -2073,7 +1637,6 @@ function CreativePanel({ reference, account, maxSeconds, bannerSpec, onCreatives
   // question ("which of these runs?") the flow cannot answer yet.
   const atLimit = single && creatives.length >= 1;
 
-
   const refresh = useCallback(() => {
     fetchCreatives(reference)
       .then((r) => { setCreatives(r.creatives || []); onCreatives?.(r.creatives || []); })
@@ -2328,7 +1891,6 @@ export default function Advertise({ openLoginModal }) {
     staleTime: INVENTORY_STALE_MS,
     retry: false,
   });
-
 
   // Offer the markets we can actually deliver rather than a full country list —
   // picking a market with no audience here helps nobody. Empty while SHOW_MARKETS
@@ -2759,6 +2321,9 @@ export default function Advertise({ openLoginModal }) {
         </div>
       </header>
 
+      {/* Only for a signed-in account with an empty wallet: where HIVE comes from. */}
+      <FundsNotice user={user} hbdPerHive={pricing?.hbdPerHive} />
+
       <div className="mkt-tabs" role="tablist" aria-label="Advertising">
         {TABS.map((t) => (
           <button
@@ -2883,7 +2448,6 @@ export default function Advertise({ openLoginModal }) {
         <h2><FaUsers aria-hidden="true" /> The audience waiting for your ad</h2>
         <InventoryPanel data={inventory} isLoading={isLoading} error={error} />
       </section>
-
 
       {/* Two audiences who are not buying anything, side by side: the people whose
           videos carry the ads and the people who watch them. Both are paid, and an

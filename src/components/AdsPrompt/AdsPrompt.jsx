@@ -4,6 +4,7 @@ import { useAppStore } from '../../lib/store';
 import { adsEnabledFor, adsBetaUserFor } from '../../utils/config';
 import { readCreatorAdChoice } from '../../utils/adSettings';
 import { fetchAdAccess } from '../../lib/advertiseData';
+import { isAdvertiserAccount } from '../../utils/advertiserAccount';
 import { usePromptsActive, setPromptActive } from '../../utils/welcomeGate';
 import AdSettingsDialog from './AdSettingsDialog';
 import './AdsPrompt.scss';
@@ -78,12 +79,15 @@ export default function AdsPrompt() {
   useEffect(() => {
     if (!authenticated || !user || !uiAvailable) return undefined;
     let alive = true;
-    fetchAdAccess(user).then((a) => {
+    // Not for advertisers: this asks a CREATOR about ads on their videos and the
+    // community share, which is not what an advertiser's account is for. Not asked
+    // rather than answered for them, so Settings still lets them choose.
+    Promise.all([fetchAdAccess(user), isAdvertiserAccount(user)]).then(([a, advertiser]) => {
       if (!alive) return;
       // No answer (a checker without the /access route, or the network): fall back
       // to the accounts this build knows are testers — NOT to the blanket flag,
       // which is the thing that was wrong.
-      setAccess({ account: user, allowed: a ? a.allowed : adsBetaUserFor(user) });
+      setAccess({ account: user, allowed: !advertiser && (a ? a.allowed : adsBetaUserFor(user)) });
     });
     return () => { alive = false; };
   }, [authenticated, user, uiAvailable]);

@@ -378,6 +378,31 @@
   .nav-right {
     gap: 8px;
 
+    /* "Advertise", left of Share, for advertiser accounts (NavAdvertiseButton).
+       Same pill as Share but neutral: one red button in the bar is enough. */
+    .nav-advertise-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      height: 34px;
+      padding: 0 12px;
+      border: 1px solid var(--border-color);
+      border-radius: 17px;
+      color: var(--text-primary);
+      text-decoration: none;
+      white-space: nowrap;
+      transition: background 0.15s ease;
+
+      .nav-advertise-label { font-size: 13px; font-weight: 500; }
+
+      &:hover { background: var(--bg-hover); }
+
+      // Round and icon-only wherever Share shrinks to its "+", so the two match.
+      @include mix.respond(phone) { width: 26px; height: 26px; padding: 0; border-radius: 50%; .nav-advertise-label { display: none; } }
+      @include mix.respond(tab)   { width: 26px; height: 26px; padding: 0; border-radius: 50%; .nav-advertise-label { display: none; } }
+    }
+
     .nav-upload-wrapper {
       position: relative;
 

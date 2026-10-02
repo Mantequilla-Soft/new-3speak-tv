@@ -3,7 +3,8 @@ import { Link } from 'react-router-dom';
 import { MdVerified, MdEdit } from 'react-icons/md';
 import {
   FaFilm, FaUnlockAlt, FaUserPlus, FaCoins, FaCloudUploadAlt, FaThumbsUp,
-  FaKey, FaGlobeAmericas, FaUserCheck,
+  FaKey, FaGlobeAmericas, FaUserCheck, FaBullhorn, FaWallet, FaChartLine, FaComments,
+  FaUsers, FaLayerGroup,
 } from 'react-icons/fa';
 import Card3 from '../Cards/Card3';
 import { useAppStore } from '../../lib/store';
@@ -11,9 +12,14 @@ import ProfileEditModal from '../WelcomePrompt/ProfileEditModal';
 import IncubationProgressPanel from './IncubationProgressPanel';
 import TrackQuestion from './TrackQuestion';
 import IncubatingActivity from './IncubatingActivity';
+import AdvertiserAdminPanel from './AdvertiserAdminPanel';
+import CreateAccountPanel from './CreateAccountPanel';
+import { InventoryPanel, RateCard } from '../ads/AdMarketPanels';
+import { fetchInventory, fetchPricing } from '../../lib/advertiseData';
 import {
   fetchIncubationProfile, fetchIncubationPosts, handleAvatar,
   fetchMyIncubationProfile, saveIncubationProfile, followIncubationUser,
+  fetchIncubationProgress, onIncubationProgress,
 } from '../../lib/incubation';
 import './IncubatingProfile.scss';
 
@@ -25,6 +31,17 @@ const UNLOCKS = [
   { Icon: FaThumbsUp, title: 'Vote, tip, follow and build playlists.', body: 'All the buttons that are greyed out for you today.' },
   { Icon: FaKey, title: 'Keys only you hold.', body: 'Nobody can lock you out, and the same login works across every Hive app, not just 3Speak.' },
   { Icon: FaGlobeAmericas, title: 'Be part of the global Hive ecosystem.', body: '3Speak is one app on a whole network of them: blogs, communities, games, marketplaces and more, all sharing the one account and the same following list.' },
+];
+
+// The same tiles for an ADVERTISER. They are not here to earn from posts: the Hive
+// account is the account they book and pay for ads with. Talking to customers is
+// in the list, but as the optional extra it is for them.
+const ADVERTISER_UNLOCKS = [
+  { Icon: FaBullhorn, title: 'Book ads across 3Speak.', body: 'Video spots, shorts spots, player banners, tickers and pre-upload spots, from one day to three months.' },
+  { Icon: FaWallet, title: 'Pay from your own wallet.', body: 'In HBD or HIVE, straight from your account. No card and no middleman.' },
+  { Icon: FaChartLine, title: 'See what your ads delivered.', body: 'Plays and clicks for every booking, and credit back on your next one if a booking falls short.' },
+  { Icon: FaComments, title: 'Talk to your customers, if you want to.', body: 'Post videos, answer comments and follow people under your brand\u2019s name.' },
+  { Icon: FaKey, title: 'Keys only you hold.', body: 'Nobody can lock you out, and the same login works across every Hive app, not just 3Speak.' },
 ];
 
 /**
@@ -80,6 +97,41 @@ export default function IncubatingProfile({ handle, own = false }) {
   // already set have to be sent back with it or picking a new avatar silently
   // clears them.
   const interestsRef = useRef([]);
+  /* The owner's goals payload, for the track and the advertiser road. Only read on
+   * their own page; a visitor's view does not change by track. Re-read when goals
+   * may have moved (a track picked, a contact saved), like the goals panel. */
+  const [progress, setProgress] = useState(null);
+  useEffect(() => {
+    if (!own) return undefined;
+    let alive = true;
+    const load = () => fetchIncubationProgress()
+      .then((p) => { if (alive) setProgress(p); })
+      .catch(() => { /* the page works without it, as the viewer layout */ });
+    load();
+    const off = onIncubationProgress(load);
+    return () => { alive = false; off(); };
+  }, [own]);
+
+  /* The market an advertiser is working towards: the audience forecast and the rate
+   * card, the same two panels /advertise shows (components/ads/AdMarketPanels). Only
+   * fetched for an advertiser's own page; both endpoints are public. */
+  const isAdvertiserOwner = own && progress?.track === 'advertiser';
+  // Starts as loading: it is only ever shown once the fetch below is under way.
+  const [market, setMarket] = useState({ inventory: null, pricing: null, loading: true, error: null });
+  useEffect(() => {
+    if (!isAdvertiserOwner) return undefined;
+    let alive = true;
+    Promise.allSettled([fetchInventory(), fetchPricing()]).then(([inv, pr]) => {
+      if (!alive) return;
+      setMarket({
+        inventory: inv.status === 'fulfilled' ? inv.value : null,
+        pricing: pr.status === 'fulfilled' ? pr.value : null,
+        loading: false,
+        error: inv.status === 'rejected' ? inv.reason : null,
+      });
+    });
+    return () => { alive = false; };
+  }, [isAdvertiserOwner]);
 
   useEffect(() => {
     let alive = true;
@@ -152,6 +204,10 @@ export default function IncubatingProfile({ handle, own = false }) {
   const graduated = profile.status === 'graduated' && profile.hiveUsername;
   const showSidebar = own && !graduated;
   const nothingYet = cards.length === 0;
+  // The owner is here to advertise: their page leads with the road to a first ad,
+  // and their videos are the optional extra rather than the point.
+  const advertiser = showSidebar && progress?.track === 'advertiser';
+  const unlocks = advertiser ? ADVERTISER_UNLOCKS : UNLOCKS;
 
   return (
     <div className="inc-profile">
@@ -168,7 +224,7 @@ export default function IncubatingProfile({ handle, own = false }) {
               {p.name && <span>@{handle}</span>}
               <span className="inc-badge">
                 <MdVerified size={13} aria-hidden="true" />
-                {graduated ? 'On Hive' : 'Getting started'}
+                {graduated ? 'On Hive' : (advertiser ? 'Advertiser \u00b7 getting started' : 'Getting started')}
               </span>
             </p>
             {p.about && <p className="inc-hero-about">{p.about}</p>}
@@ -228,6 +284,8 @@ export default function IncubatingProfile({ handle, own = false }) {
       <p className="inc-note">
         {graduated ? (
           <>Now on Hive as <Link to={`/p/${profile.hiveUsername}`}>@{profile.hiveUsername}</Link>. Anything below was made before that.</>
+        ) : advertiser ? (
+          <>This is your brand page on 3Speak. Finish the steps below and the team reviews your brand. Once approved you get a Hive account: that is your advertiser account, the one you book ads with and pay from.</>
         ) : own ? (
           <>This is how others see you. Your posts live on 3Speak and are not on the Hive blockchain yet, so they do not earn rewards. That changes when you get your account after completing all the tasks below.</>
         ) : (
@@ -235,7 +293,11 @@ export default function IncubatingProfile({ handle, own = false }) {
         )}
       </p>
 
-      {showSidebar && (
+      {/* Approved and not yet on Hive: the way to the account, always on their own
+          page, so "Not yet" on the popup never leaves them hunting for it. */}
+      {showSidebar && <CreateAccountPanel advertiser={advertiser} />}
+
+      {showSidebar && !advertiser && (
         // Only rendered when there IS a second panel to switch to. Below the
         // split the goals sit above the feed, so reaching your own videos meant
         // scrolling past the whole checklist every time.
@@ -292,8 +354,10 @@ export default function IncubatingProfile({ handle, own = false }) {
         </div>
       )}
 
-      <div className={`inc-cols${showSidebar ? ` inc-cols--split inc-show-${mobileTab}` : ''}`}>
-        {showSidebar && (
+      {/* An advertiser's page is ONE column: their checklist leads it (below), and
+          nothing sits beside it. */}
+      <div className={`inc-cols${showSidebar && !advertiser ? ` inc-cols--split inc-show-${mobileTab}` : ''}`}>
+        {showSidebar && !advertiser && (
           <aside className="inc-side">
             <IncubationProgressPanel />
 
@@ -308,6 +372,28 @@ export default function IncubatingProfile({ handle, own = false }) {
               missing from the tab showing the checklist. A child of a
               display:none parent cannot be shown again, so the hiding has to
               happen at this level instead. */}
+          {/* For 3Speak's admins visiting someone else's warm-up page: the private
+              details only they may see. Renders nothing for anyone else. */}
+          {!own && <AdvertiserAdminPanel handle={handle} profile={p} interests={profile.interests || []} counts={profile.counts || {}} />}
+          {/* An advertiser's checklist leads the wide column, then the market they
+              are working towards: who they would reach, and what they can book. */}
+          {advertiser && <IncubationProgressPanel />}
+          {advertiser && (
+            <section className="inc-panel inc-market">
+              <h2><FaUsers size={14} aria-hidden="true" /> The audience waiting for your ad</h2>
+              <div className="mkt-page mkt-embed">
+                <InventoryPanel data={market.inventory} isLoading={market.loading} error={market.error} />
+              </div>
+            </section>
+          )}
+          {advertiser && market.pricing?.formats?.length > 0 && (
+            <section className="inc-panel inc-market">
+              <h2><FaLayerGroup size={14} aria-hidden="true" /> Pick the format that fits your message</h2>
+              <div className="mkt-page mkt-embed">
+                <RateCard pricing={market.pricing} />
+              </div>
+            </section>
+          )}
           <div className="inc-feed">
           {/* The three list tabs replace the feed rather than sitting under it:
               they are alternative answers to "who is this", not extra sections
@@ -320,9 +406,14 @@ export default function IncubatingProfile({ handle, own = false }) {
             />
           ) : (
           <>
+          {advertiser && (
+            <h2 className="inc-subhead"><FaFilm size={15} aria-hidden="true" /> Your brand&apos;s videos <span className="inc-subhead-note">optional</span></h2>
+          )}
           {nothingYet && (
             <p className="desc">
-              {own ? 'Nothing yet. Your first upload ticks off the list beside this.' : 'Nothing published yet.'}
+              {advertiser
+                ? 'Videos here are for talking to customers, if you want to. Ads are booked separately on the Advertise page and do not need any.'
+                : own ? 'Nothing yet. Your first upload ticks off the list beside this.' : 'Nothing published yet.'}
             </p>
           )}
 
@@ -353,7 +444,7 @@ export default function IncubatingProfile({ handle, own = false }) {
             <>
               {/* Names the two things in the feed, since they share one grid
                   rather than sitting under separate headings. */}
-              <h2 className="inc-subhead"><FaFilm size={15} aria-hidden="true" /> Videos and Shorts</h2>
+              {!advertiser && <h2 className="inc-subhead"><FaFilm size={15} aria-hidden="true" /> Videos and Shorts</h2>}
               <Card3 videos={cards} />
             </>
           ))}
@@ -369,9 +460,9 @@ export default function IncubatingProfile({ handle, own = false }) {
           {showSidebar && <TrackQuestion />}
           {showSidebar && (
             <section className="inc-panel inc-unlocks">
-              <h2><FaUnlockAlt size={14} aria-hidden="true" /> What a Hive account gets you</h2>
+              <h2><FaUnlockAlt size={14} aria-hidden="true" /> {advertiser ? 'What your advertiser account gets you' : 'What a Hive account gets you'}</h2>
               <ul>
-                {UNLOCKS.map(({ Icon, title, body }) => (
+                {unlocks.map(({ Icon, title, body }) => (
                   <li key={title}>
                     <strong><Icon size={13} aria-hidden="true" />{title}</strong>
                     {body}
