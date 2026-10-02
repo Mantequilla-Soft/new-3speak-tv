@@ -54,6 +54,8 @@ const VIDEO_BOTS = (process.env.OG_VIDEO_BOTS || 'Discordbot')
   .filter(Boolean);
 
 const CLIP_SECONDS = Number(process.env.OG_VIDEO_CLIP_SECONDS) || 20;
+// The teaser fades to black and silence over its last seconds, into the outro.
+const FADE_SECONDS = 2;
 // Appended after the teaser; picked by the video's orientation. Set either to
 // an empty string to drop the outro for that orientation.
 const OUTROS = {
@@ -66,7 +68,7 @@ const BADGE_TEXT = (process.env.OG_VIDEO_BADGE_TEXT ?? 'Teaser').trim();
 const BADGE_FONT = process.env.OG_VIDEO_BADGE_FONT || '/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf';
 const BADGE_LOGO = process.env.OG_VIDEO_BADGE_LOGO ?? path.join(__dirname, 'og-outro', '3s-mark.png');
 // Bump when the encode settings change, so old teasers aren't served as new.
-const ENCODE_VERSION = 'e4';
+const ENCODE_VERSION = 'e5';
 const CACHE_MAX_BYTES = (Number(process.env.OG_VIDEO_CACHE_MAX_GB) || 20) * 1024 ** 3;
 const CACHE_TTL_MS = (Number(process.env.OG_VIDEO_CACHE_TTL_DAYS) || 14) * 86400000;
 const MAX_CONCURRENT = Number(process.env.OG_VIDEO_MAX_CONCURRENT) || 2;
@@ -532,7 +534,13 @@ async function build(plan) {
     if (badge.logo) v0 += `[shaded];[shaded][logo]overlay=${b.logoX}:${b.logoY}`;
     v0 += `,${text(b.textX, b.textY, 'white')},format=yuv420p`;
   }
-  let graph = `${v0}[v0];${fitA(mainAudio, clip)}[a0]`;
+  // Fade picture (badge included) to black and sound to silence at the end of
+  // the teaser part, so the cut to the outro isn't abrupt. Half the clip at
+  // most, for a very short source.
+  const fade = Math.min(FADE_SECONDS, clip / 2);
+  const fadeAt = Math.max(0, clip - fade);
+  v0 += `,fade=t=out:st=${fadeAt}:d=${fade}`;
+  let graph = `${v0}[v0];${fitA(mainAudio, clip)},afade=t=out:st=${fadeAt}:d=${fade}[a0]`;
   let outV = '[v0]';
   let outA = '[a0]';
   if (outro) {
