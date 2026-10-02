@@ -8,9 +8,10 @@
 // cannot play HLS. Every 3Speak video is HLS on IPFS, so a shared link only ever
 // showed a thumbnail card.
 //
-// What Discord gets is a TEASER, not the video: the first CLIP_SECONDS, then an
-// outro video (OG_VIDEO_OUTRO) that sends people to 3speak.tv for the rest. The
-// point of a share is a visit, not a view inside Discord.
+// What Discord gets is a TEASER, not the video: the first CLIP_SECONDS with a
+// small "3S logo + TEASER" badge top right, then an outro (server/og-outro/, the
+// portrait or landscape cut to match the video) that sends people to 3speak.tv
+// for the rest. The point of a share is a visit, not a view inside Discord.
 //
 // The two pieces never share a shape (resolution, profile, audio rate all vary
 // across the library, and the manifests lie about it), so they're re-encoded
@@ -36,6 +37,7 @@ const fs = require('fs');
 const fsp = fs.promises;
 const os = require('os');
 const path = require('path');
+const crypto = require('crypto');
 const { spawn } = require('child_process');
 
 const PLAYER_URL = process.env.PLAYER_URL || 'https://play.3speak.tv';
@@ -52,10 +54,19 @@ const VIDEO_BOTS = (process.env.OG_VIDEO_BOTS || 'Discordbot')
   .filter(Boolean);
 
 const CLIP_SECONDS = Number(process.env.OG_VIDEO_CLIP_SECONDS) || 20;
-// author/permlink of the video appended after the teaser; empty = no outro.
-const OUTRO_REF = (process.env.OG_VIDEO_OUTRO ?? 'badadib/test-886').trim();
+// Appended after the teaser; picked by the video's orientation. Set either to
+// an empty string to drop the outro for that orientation.
+const OUTROS = {
+  landscape: process.env.OG_VIDEO_OUTRO_LANDSCAPE ?? path.join(__dirname, 'og-outro', 'landscape.mp4'),
+  portrait: process.env.OG_VIDEO_OUTRO_PORTRAIT ?? path.join(__dirname, 'og-outro', 'portrait.mp4'),
+};
+// Top-right badge over the teaser part (not the outro): the 3S mark, then the
+// text. Empty text = no badge; empty logo = text only.
+const BADGE_TEXT = (process.env.OG_VIDEO_BADGE_TEXT ?? 'TEASER').trim();
+const BADGE_FONT = process.env.OG_VIDEO_BADGE_FONT || '/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf';
+const BADGE_LOGO = process.env.OG_VIDEO_BADGE_LOGO ?? path.join(__dirname, 'og-outro', '3s-mark.png');
 // Bump when the encode settings change, so old teasers aren't served as new.
-const ENCODE_VERSION = 'e1';
+const ENCODE_VERSION = 'e3';
 const CACHE_MAX_BYTES = (Number(process.env.OG_VIDEO_CACHE_MAX_GB) || 20) * 1024 ** 3;
 const CACHE_TTL_MS = (Number(process.env.OG_VIDEO_CACHE_TTL_DAYS) || 14) * 86400000;
 const MAX_CONCURRENT = Number(process.env.OG_VIDEO_MAX_CONCURRENT) || 2;
@@ -193,7 +204,7 @@ async function lookupSource(author, permlink) {
   return null;
 }
 
-function run(cmd, args, timeoutMs) {
+function run(cmd, args, timeoutMs, { stderr = false } = {}) {
   return new Promise((resolve, reject) => {
     const child = spawn(cmd, args, { stdio: ['ignore', 'pipe', 'pipe'] });
     // The sidecar's unit is OOM-protected (OOMScoreAdjust=-900) and children
@@ -222,7 +233,7 @@ function run(cmd, args, timeoutMs) {
     });
     child.on('close', (code, signal) => {
       clearTimeout(timer);
-      if (code === 0) resolve(out);
+      if (code === 0) resolve(stderr ? err : out);
       else reject(new Error(`${cmd} exited ${code || signal}: ${err.trim().slice(-300)}`));
     });
   });
@@ -316,50 +327,112 @@ function schedule(task) {
 }
 
 /**
- * The outro, copied once from IPFS to a local file (it's read by every build).
- * null when none is configured, or it can't be fetched right now: the teaser is
- * then built without it, under its own cache key.
+ * The outro for this orientation: its probe plus a content hash, so editing or
+ * replacing the file yields new teasers (and new URLs) instead of stale ones.
+ * Memoised by mtime+size; null when none is configured or the file is unusable,
+ * and the teaser is then built without one, under its own cache key.
  */
-let outroMemo = null;
+const outroMemo = new Map();
 
-async function getOutro() {
-  if (!OUTRO_REF) return null;
-  if (outroMemo && Date.now() < outroMemo.expires) {
-    const o = await outroMemo.promise;
-    // The sweep may have evicted the local copy since.
-    if (!o || fs.existsSync(o.file)) return o;
+async function getOutro(orientation) {
+  const file = OUTROS[orientation];
+  if (!file) return null;
+  let st;
+  try {
+    st = await fsp.stat(file);
+  } catch (_) {
+    console.error('[og-video] outro missing', file);
+    return null;
   }
-  const promise = loadOutro().catch((err) => {
-    console.error('[og-video] outro unavailable', OUTRO_REF, err && err.message);
+  const stamp = `${st.mtimeMs}:${st.size}`;
+  const memo = outroMemo.get(file);
+  if (memo && memo.stamp === stamp) return memo.promise;
+  const promise = (async () => {
+    const tag = crypto.createHash('sha1').update(await fsp.readFile(file)).digest('hex').slice(0, 8);
+    const info = JSON.parse(await run('ffprobe', ['-v', 'error', '-show_entries',
+      'stream=codec_type:format=duration', '-of', 'json', file], PROBE_TIMEOUT_MS));
+    const streams = info.streams || [];
+    if (!streams.some((s) => s.codec_type === 'video')) throw new Error('no video stream');
+    const duration = Math.round((Number(info.format && info.format.duration) || 0) * 100) / 100;
+    return { file, tag, duration: duration || 1, audio: streams.some((s) => s.codec_type === 'audio') };
+  })().catch((err) => {
+    console.error('[og-video] outro unusable', file, err && err.message);
+    outroMemo.delete(file);
     return null;
   });
-  outroMemo = { promise, expires: 0 };
-  const o = await promise;
-  outroMemo.expires = Date.now() + (o ? 10 * 60 * 1000 : 60 * 1000);
-  return o;
+  outroMemo.set(file, { stamp, promise });
+  return promise;
 }
 
-async function loadOutro() {
-  const [author, permlink] = OUTRO_REF.split('/');
-  const src = validRef(author, permlink) && (await resolveSource(author, permlink));
-  if (!src) throw new Error('not resolvable');
-  const meta = await probeOnce(src);
-  if (!meta || !meta.ok) throw new Error('probe failed');
-  const file = path.join(CACHE_DIR, `outro-${src.key}.mp4`);
-  try {
-    await fsp.access(file);
-  } catch (_) {
-    const tmp = `${file}.${process.pid}.${Date.now()}.tmp`;
-    try {
-      await run('ffmpeg', ['-nostdin', '-v', 'error', '-y', '-rw_timeout', '30000000', '-i', src.variantUrl,
-        '-map', '0:v:0', '-map', '0:a:0?', '-c', 'copy', '-f', 'mp4', tmp], BUILD_TIMEOUT_MS);
-      await fsp.rename(tmp, file);
-    } catch (err) {
-      await fsp.unlink(tmp).catch(() => {});
-      throw err;
+// The badge text goes to ffmpeg as a file, so no character in it can break
+// the filtergraph (':' ',' and quotes all mean something there).
+const badgeFile = path.join(CACHE_DIR, 'badge.txt');
+
+/**
+ * What the badge layout needs, measured once: the text's real rendered width
+ * and cap height per point of font size (drawtext + bbox on a blank frame, so
+ * the logo can sit a fixed gap before it), and the logo's aspect ratio. The
+ * tag covers text, font and logo bytes, so changing any of them re-keys every
+ * teaser. null = no badge.
+ */
+let badgeMemo = null;
+
+function badgeAssets() {
+  if (!badgeMemo) {
+    badgeMemo = loadBadge().catch((err) => {
+      console.error('[og-video] badge unavailable', err && err.message);
+      badgeMemo = null;
+      return null;
+    });
+  }
+  return badgeMemo;
+}
+
+async function loadBadge() {
+  if (!BADGE_TEXT || !fs.existsSync(BADGE_FONT)) return null;
+  await fsp.writeFile(badgeFile, BADGE_TEXT);
+  const log = await run('ffmpeg', ['-hide_banner', '-nostdin', '-nostats', '-v', 'info',
+    '-f', 'lavfi', '-i', 'color=c=black:s=4000x300',
+    '-vf', `drawtext=fontfile=${BADGE_FONT}:textfile=${badgeFile}:fontsize=100:fontcolor=white:x=10:y=10,bbox`,
+    '-frames:v', '1', '-f', 'null', '-'], PROBE_TIMEOUT_MS, { stderr: true });
+  const m = log.match(/ w:(\d+) h:(\d+)/);
+  if (!m) throw new Error('could not measure the badge text');
+
+  const hash = crypto.createHash('sha1').update(`${BADGE_TEXT}|${BADGE_FONT}|`);
+  let logo = null;
+  if (BADGE_LOGO && fs.existsSync(BADGE_LOGO)) {
+    const [lw, lh] = (await run('ffprobe', ['-v', 'error', '-show_entries', 'stream=width,height',
+      '-of', 'csv=p=0', BADGE_LOGO], PROBE_TIMEOUT_MS)).trim().split(',').map(Number);
+    if (lw > 0 && lh > 0) {
+      logo = { file: BADGE_LOGO, aspect: lw / lh };
+      hash.update(await fsp.readFile(BADGE_LOGO));
     }
   }
-  return { file, cid: src.cid, duration: meta.duration || 1, audio: meta.audio };
+  return { textW: Number(m[1]) / 100, textH: Number(m[2]) / 100, logo, tag: hash.digest('hex').slice(0, 6) };
+}
+
+/**
+ * Badge geometry for a W x H frame: about 5.5% of the height, shrunk so the
+ * whole badge never takes more than half the width (a 270px-wide short).
+ * The logo stands a little taller than the capitals and the text is centred
+ * on it vertically.
+ */
+function badgeLayout(W, H, badge) {
+  const logoPerSize = badge.logo ? badge.textH * 1.4 * badge.logo.aspect + 0.3 : 0;
+  const size = Math.max(9, Math.round(Math.min(H * 0.055, (W * 0.5) / (badge.textW + logoPerSize))));
+  const margin = Math.max(6, Math.round(Math.min(W, H) * 0.035));
+  const textW = Math.round(badge.textW * size);
+  const capH = Math.round(badge.textH * size);
+  const textX = W - margin - textW;
+  const out = { size, textX, textY: margin, shadow: Math.max(1, Math.round(size * 0.07)) };
+  if (badge.logo) {
+    out.logoH = Math.round(capH * 1.4 / 2) * 2;
+    out.logoW = Math.round(out.logoH * badge.logo.aspect / 2) * 2;
+    out.logoX = textX - Math.round(size * 0.3) - out.logoW;
+    out.logoY = margin;
+    out.textY = margin + Math.round((out.logoH - capH) / 2);
+  }
+  return out;
 }
 
 // The teaser's frame: the source's own aspect ratio inside 854x480 (portrait
@@ -373,31 +446,35 @@ function fitBox(w, h) {
 
 /**
  * Everything a teaser build needs, and the cache key that captures all of it:
- * the rendition, the clip length, the encode settings and the outro. Changing
+ * the rendition, the clip length, the encode settings, the outro and the badge. Changing
  * any of them (e.g. swapping in the real outro) makes a new file and a new URL.
  */
 async function planFor(src) {
   const meta = await probeOnce(src);
   if (!meta || !meta.ok) return null;
-  const outro = await getOutro();
+  const portrait = meta.height > meta.width;
+  const outro = await getOutro(portrait ? 'portrait' : 'landscape');
   const clip = meta.duration > 0 ? Math.min(CLIP_SECONDS, meta.duration) : CLIP_SECONDS;
   const [width, height] = fitBox(meta.width, meta.height);
-  const outroTag = outro ? outro.cid.slice(-8) : 'none';
+  const outroTag = outro ? outro.tag : 'none';
+  const badge = await badgeAssets();
+  const badgeTag = badge ? badge.tag : 'none';
   return {
     src,
     meta,
     outro,
+    badge,
     clip,
     width,
     height,
     duration: clip + (outro ? outro.duration : 0),
-    key: `${src.key}-${ENCODE_VERSION}-t${CLIP_SECONDS}-o${outroTag}`,
-    tag: `${src.cid.slice(-8)}${outroTag}`,
+    key: `${src.key}-${ENCODE_VERSION}-t${CLIP_SECONDS}-o${outroTag}-b${badgeTag}`,
+    tag: `${src.cid.slice(-8)}${outroTag}${badgeTag}`,
   };
 }
 
 async function build(plan) {
-  const { src, meta, outro, clip, width: W, height: H } = plan;
+  const { src, meta, outro, badge, clip, width: W, height: H } = plan;
   const final = mp4Path(plan.key);
   const tmp = `${final}.${process.pid}.${Date.now()}.tmp`;
   const started = Date.now();
@@ -426,7 +503,22 @@ async function build(plan) {
   // outro's sound starting with its picture.
   const fitA = (label, secs) =>
     `[${label}]aresample=44100,aformat=sample_fmts=fltp:channel_layouts=stereo,atrim=0:${secs},apad=whole_dur=${secs}`;
-  let graph = `${fitV(0)}[v0];${fitA(mainAudio, clip)}[a0]`;
+  // Badge on the teaser part only: the logo overlaid (a still image, which
+  // overlay repeats for the whole clip), then the text with a soft shadow and a
+  // faint outline so it reads on bright and dark footage alike.
+  let v0 = fitV(0);
+  if (badge) {
+    const b = badgeLayout(W, H, badge);
+    if (badge.logo) {
+      inputs.push('-i', badge.logo.file);
+      const logoIdx = next++;
+      v0 += `[base];[${logoIdx}:v]scale=${b.logoW}:${b.logoH},format=rgba[logo];[base][logo]overlay=${b.logoX}:${b.logoY}`;
+    }
+    v0 += `,drawtext=fontfile=${BADGE_FONT}:textfile=${badgeFile}:fontsize=${b.size}:fontcolor=white` +
+      `:shadowcolor=black@0.6:shadowx=${b.shadow}:shadowy=${b.shadow}` +
+      `:borderw=1:bordercolor=black@0.35:x=${b.textX}:y=${b.textY},format=yuv420p`;
+  }
+  let graph = `${v0}[v0];${fitA(mainAudio, clip)}[a0]`;
   let outV = '[v0]';
   let outA = '[a0]';
   if (outro) {
@@ -503,8 +595,8 @@ async function ogVideoFor(author, permlink, { waitMs = 6000 } = {}) {
   if (!plan) return null;
   return {
     prepare: (ms) => withTimeout(ensureFile(plan), ms),
-    // The source CID + outro in the query make a replaced video file or a new
-    // outro a new URL, so Discord's and Cloudflare's caches can keep the old one.
+    // The source CID, outro and badge in the query make any change a new URL,
+    // so Discord's and Cloudflare's caches can keep the old one.
     path: `/og-video/${encodeURIComponent(author)}/${encodeURIComponent(permlink)}.mp4?r=${plan.tag}`,
     width: plan.width,
     height: plan.height,
@@ -600,8 +692,7 @@ async function serveMedia(req, res, pathname) {
 /**
  * Drop MP4s unused for CACHE_TTL_MS, then the least recently used ones until
  * the cache is under CACHE_MAX_BYTES, plus temp files a crash left behind.
- * Probe results (.json) are tiny and stay, except very old ones. The local
- * outro copy is an .mp4 like the rest; getOutro() fetches it again if evicted.
+ * Probe results (.json) are tiny and stay, except very old ones.
  */
 async function sweep() {
   let names;
