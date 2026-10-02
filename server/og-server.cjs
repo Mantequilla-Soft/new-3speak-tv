@@ -719,7 +719,8 @@ const server = http.createServer(async (req, res) => {
     // Started now so the probe overlaps the Hive/checker lookups below. It only
     // resolves + probes (cached per rendition); the teaser build starts further
     // down, once the page is known to be allowed to carry the video.
-    const inlineVideo = ogVideo.wantsVideo(req.headers['user-agent'])
+    const videoBot = ogVideo.wantsVideo(req.headers['user-agent']);
+    const inlineVideo = videoBot
       ? ogVideo.ogVideoFor(video.author, video.permlink).catch(() => null)
       : Promise.resolve(null);
 
@@ -796,7 +797,11 @@ const server = http.createServer(async (req, res) => {
     let subtitleLanguages = null;
     let comments = [];
     let inline = null;
-    if (post && index) {
+    // Transcript + comments are for search engines; Discord shows neither, and
+    // it gives up on a slow unfurl. Skipping them for the video bot keeps its
+    // card at "lookup + teaser build" even when the translate API hangs
+    // (seen 2026-10-02: every Discord card waited out the 6s transcript budget).
+    if (post && index && !videoBot) {
       // Both hang off the same Hive post; fetch them together rather than
       // adding the comment round-trip on top of the transcript's.
       const [t, c, v] = await Promise.all([
