@@ -7,6 +7,13 @@
 // 1.0.0 — that way they see all of these when develop is pushed to production.
 export const CHANGELOG = [
   {
+    version: '1.79.42',
+    date: '2026-10-02',
+    summary:
+      'Sharing a 3Speak video on Discord or Telegram now shows a short teaser right in the chat, '
+      + 'with a link to watch the full video on 3Speak.',
+  },
+  {
     version: '1.79.41',
     date: '2026-10-01',
     summary:
