@@ -65,10 +65,11 @@ const OUTROS = {
 // Top-left badge over the teaser part (not the outro): the 3S mark, then the
 // text. Empty text = no badge; empty logo = text only.
 const BADGE_TEXT = (process.env.OG_VIDEO_BADGE_TEXT ?? 'Teaser').trim();
-const BADGE_FONT = process.env.OG_VIDEO_BADGE_FONT || '/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf';
+// DM Sans SemiBold (OFL), shipped with the repo so no host font is assumed.
+const BADGE_FONT = process.env.OG_VIDEO_BADGE_FONT || path.join(__dirname, 'og-outro', 'dm-sans-600.woff2');
 const BADGE_LOGO = process.env.OG_VIDEO_BADGE_LOGO ?? path.join(__dirname, 'og-outro', '3s-mark.png');
 // Bump when the encode settings change, so old teasers aren't served as new.
-const ENCODE_VERSION = 'e5';
+const ENCODE_VERSION = 'e8';
 const CACHE_MAX_BYTES = (Number(process.env.OG_VIDEO_CACHE_MAX_GB) || 20) * 1024 ** 3;
 const CACHE_TTL_MS = (Number(process.env.OG_VIDEO_CACHE_TTL_DAYS) || 14) * 86400000;
 const MAX_CONCURRENT = Number(process.env.OG_VIDEO_MAX_CONCURRENT) || 2;
@@ -371,8 +372,9 @@ async function getOutro(orientation) {
 const badgeFile = path.join(CACHE_DIR, 'badge.txt');
 
 /**
- * What the badge layout needs, measured once: the text's real rendered width
- * and cap height per point of font size (drawtext + bbox on a blank frame, so
+ * What the badge layout needs, measured once: the text's real rendered width,
+ * height and top offset (fonts differ in where drawtext's y lands relative to
+ * the first ink) per point of font size (drawtext + bbox on a blank frame, so
  * the logo can sit a fixed gap before it), and the logo's aspect ratio. The
  * tag covers text, font and logo bytes, so changing any of them re-keys every
  * teaser. null = no badge.
@@ -397,7 +399,7 @@ async function loadBadge() {
     '-f', 'lavfi', '-i', 'color=c=black:s=4000x300',
     '-vf', `drawtext=fontfile=${BADGE_FONT}:textfile=${badgeFile}:fontsize=100:fontcolor=white:x=10:y=10,bbox`,
     '-frames:v', '1', '-f', 'null', '-'], PROBE_TIMEOUT_MS, { stderr: true });
-  const m = log.match(/ w:(\d+) h:(\d+)/);
+  const m = log.match(/ y1:(\d+) .* w:(\d+) h:(\d+)/);
   if (!m) throw new Error('could not measure the badge text');
 
   const hash = crypto.createHash('sha1').update(`${BADGE_TEXT}|${BADGE_FONT}|`);
@@ -410,18 +412,27 @@ async function loadBadge() {
       hash.update(await fsp.readFile(BADGE_LOGO));
     }
   }
-  return { textW: Number(m[1]) / 100, textH: Number(m[2]) / 100, logo, tag: hash.digest('hex').slice(0, 6) };
+  return {
+    textW: Number(m[2]) / 100,
+    textH: Number(m[3]) / 100,
+    // drawtext ran at y=10, so anything past that is the font's own top gap.
+    textTop: (Number(m[1]) - 10) / 100,
+    logo,
+    tag: hash.digest('hex').slice(0, 6),
+  };
 }
 
 /**
- * Badge geometry for a W x H frame, anchored top left: about 5.5% of the
- * height, shrunk so the whole badge never takes more than half the width (a
+ * Badge geometry for a W x H frame, anchored top left: about 4.4% of the
+ * height (at most 480), shrunk so the whole badge never takes more than half the width (a
  * 270px-wide short). The logo stands a little taller than the capitals and the
  * text is centred on it vertically.
  */
 function badgeLayout(W, H, badge) {
   const logoPerSize = badge.logo ? badge.textH * 1.4 * badge.logo.aspect + 0.3 : 0;
-  const size = Math.max(9, Math.round(Math.min(H * 0.055, (W * 0.5) / (badge.textW + logoPerSize))));
+  // Height capped at 480 so a portrait frame (852 tall) gets the same badge as
+  // a landscape one rather than a much bigger one.
+  const size = Math.max(9, Math.round(Math.min(Math.min(H, 480) * 0.044, (W * 0.5) / (badge.textW + logoPerSize))));
   const margin = Math.max(6, Math.round(Math.min(W, H) * 0.035));
   const capH = Math.round(badge.textH * size);
   const out = {
@@ -438,7 +449,8 @@ function badgeLayout(W, H, badge) {
     out.logoX = margin;
     out.logoY = margin;
     out.textX = margin + out.logoW + Math.round(size * 0.3);
-    out.textY = margin + Math.round((out.logoH - capH) / 2);
+    // Centre the letters' ink (not drawtext's box) on the logo.
+    out.textY = margin + Math.round((out.logoH - capH) / 2 - badge.textTop * size);
   }
   return out;
 }
@@ -526,7 +538,8 @@ async function build(plan) {
       inputs.push('-i', badge.logo.file);
       const logoIdx = next++;
       logoChain = `[${logoIdx}:v]scale=${b.logoW}:${b.logoH},format=rgba,split[logo][logosil];` +
-        `[logosil]colorchannelmixer=rr=0:gg=0:bb=0:aa=0.8[logoshadow];`;
+        // Lighter than the text's: the mark is colourful and reads on its own.
+        `[logosil]colorchannelmixer=rr=0:gg=0:bb=0:aa=0.4[logoshadow];`;
       shadow += `[canvas];[canvas][logoshadow]overlay=${b.logoX + b.offset}:${b.logoY + b.offset}`;
     }
     shadow += `,${text(b.textX + b.offset, b.textY + b.offset, 'black@0.85')},gblur=sigma=${b.blur}[shadow]`;
