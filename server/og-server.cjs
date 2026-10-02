@@ -503,6 +503,8 @@ function buildOgHtml({
   commentCount,
   video,
   oembedUrl,
+  ogType = 'video.other',
+  imageType,
 }) {
   const safeTitle = escapeHtml(title);
   const safeDesc = escapeHtml(description);
@@ -601,11 +603,13 @@ function buildOgHtml({
   ${robotsMeta}
 
   <!-- Open Graph -->
-  <meta property="og:type" content="video.other" />
+  <meta property="og:type" content="${escapeHtml(ogType)}" />
   <meta property="og:site_name" content="3Speak" />
   <meta property="og:title" content="${safeTitle}" />
   <meta property="og:description" content="${safeDesc}" />
-  <meta property="og:image" content="${safeImage}" />
+  <meta property="og:image" content="${safeImage}" />${
+    imageType ? `\n  <meta property="og:image:type" content="${escapeHtml(imageType)}" />` : ''
+  }
   <meta property="og:url" content="${safeUrl}" />
   ${durationMeta}${videoMeta}
 
@@ -748,6 +752,16 @@ const server = http.createServer(async (req, res) => {
 
   // The teaser MP4 behind og:video. nginx sends this path here for every UA:
   // Discord fetches it through its media proxy and from clients directly.
+  if (url.pathname === ogVideo.THUMB_PATH) {
+    try {
+      return await ogVideo.serveThumb(req, res, url);
+    } catch (err) {
+      console.error('[og] thumb error:', err && err.message);
+      res.writeHead(404, { 'Content-Type': 'text/plain', 'Cache-Control': 'no-store' });
+      return res.end();
+    }
+  }
+
   if (url.pathname === OEMBED_PATH) {
     try {
       return await serveOembed(req, res, url, origin);
@@ -816,7 +830,13 @@ const server = http.createServer(async (req, res) => {
       if (thumbSource) thumbnail = thumbSource.url;
     }
     if (!thumbnail && meta.image && meta.image[0]) thumbnail = meta.image[0];
-    const image = boundImage(fixThumbnail(thumbnail));
+    let image = boundImage(fixThumbnail(thumbnail));
+    // WhatsApp shows no preview at all for a WebP image (every 3Speak
+    // thumbnail is WebP), and may read video.other as "a video" it can't
+    // play. It gets a JPEG copy and a plain website card instead.
+    const whatsapp = /whatsapp/i.test(req.headers['user-agent'] || '');
+    const waThumb = whatsapp ? ogVideo.jpegThumbPath(image) : null;
+    if (waThumb) image = origin + waThumb;
 
     const kindLabel = video.kind === 'shorts' ? 'Short' : 'Video';
     const title =
@@ -901,6 +921,8 @@ const server = http.createServer(async (req, res) => {
       comments,
       commentCount: post && typeof post.children === 'number' ? post.children : undefined,
       video: inline ? { url: origin + inline.path, width: inline.width, height: inline.height } : null,
+      ogType: whatsapp ? 'website' : 'video.other',
+      imageType: waThumb ? 'image/jpeg' : undefined,
       oembedUrl: inline ? `${origin}${OEMBED_PATH}?v=${encodeURIComponent(`${video.author}/${video.permlink}`)}` : null,
     });
 

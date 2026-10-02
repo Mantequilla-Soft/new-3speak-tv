@@ -676,6 +676,11 @@ async function serveMedia(req, res, pathname) {
   const file = await withTimeout(ensureFile(plan), SERVE_WAIT_MS);
   if (!file) return sendStatus(res, 503, { 'Retry-After': '30' });
 
+  return sendFile(req, res, file, 'video/mp4');
+}
+
+/** A cached file as a plain static response, with single-range support. */
+async function sendFile(req, res, file, contentType) {
   let stat;
   try {
     stat = await fsp.stat(file);
@@ -689,7 +694,7 @@ async function serveMedia(req, res, pathname) {
   }
 
   const headers = {
-    'Content-Type': 'video/mp4',
+    'Content-Type': contentType,
     'Accept-Ranges': 'bytes',
     'Access-Control-Allow-Origin': '*',
     'Cache-Control': 'public, max-age=86400',
@@ -728,6 +733,79 @@ async function serveMedia(req, res, pathname) {
   stream.pipe(res);
 }
 
+// ---------------------------------------------------------------------------
+// JPEG copies of share-card thumbnails, for WhatsApp.
+//
+// Every 3Speak thumbnail is WebP, and WhatsApp's link preview only promises
+// JPEG/PNG under ~300 KB: a card pointing at WebP showed no preview at all.
+// GET /og-video/thumb.jpg?u=<image url> converts once (ffmpeg, max 1200px
+// wide), caches, and serves it. Only our own image hosts are accepted, so this
+// can't be used to proxy arbitrary URLs.
+const THUMB_PATH = '/og-video/thumb.jpg';
+const THUMB_HOSTS = new Set([
+  'images.3speak.tv',
+  'images.hive.blog',
+  'files.peakd.com',
+  'i.ecency.com',
+  'ipfs-3speak.b-cdn.net',
+  'hotipfs-3speak-1.b-cdn.net',
+  'ipfs.3speak.tv',
+  '3speak.tv',
+  'preview.3speak.tv',
+]);
+
+function thumbSourceOk(u) {
+  try {
+    const parsed = new URL(u);
+    return parsed.protocol === 'https:' && THUMB_HOSTS.has(parsed.hostname);
+  } catch (_) {
+    return false;
+  }
+}
+
+/** The thumb URL to put in a card (relative; the caller adds the origin), or null. */
+function jpegThumbPath(imageUrl) {
+  return thumbSourceOk(imageUrl) ? `${THUMB_PATH}?u=${encodeURIComponent(imageUrl)}` : null;
+}
+
+const thumbBuilds = new Map();
+
+async function buildThumb(src, final) {
+  const tmp = `${final}.${process.pid}.${Date.now()}.tmp`;
+  try {
+    await run('ffmpeg', ['-nostdin', '-v', 'error', '-y', '-rw_timeout', '15000000', '-i', src,
+      '-frames:v', '1', '-vf', "scale='min(1200,iw)':-2", '-q:v', '5', '-f', 'mjpeg', tmp], 30000);
+    await fsp.rename(tmp, final);
+    return final;
+  } catch (err) {
+    await fsp.unlink(tmp).catch(() => {});
+    console.error('[og-video] thumb failed', src, err && err.message);
+    return null;
+  }
+}
+
+async function serveThumb(req, res, url) {
+  if (req.method !== 'GET' && req.method !== 'HEAD') return sendStatus(res, 405, { Allow: 'GET, HEAD' });
+  const src = url.searchParams.get('u') || '';
+  if (!thumbSourceOk(src)) return sendStatus(res, 404);
+  const key = crypto.createHash('sha1').update(src).digest('hex').slice(0, 20);
+  const final = path.join(CACHE_DIR, `thumb-${key}.jpg`);
+  let file = null;
+  try {
+    await fsp.access(final);
+    file = final;
+  } catch (_) {
+    let p = thumbBuilds.get(key);
+    if (!p) {
+      p = buildThumb(src, final).finally(() => thumbBuilds.delete(key));
+      thumbBuilds.set(key, p);
+    }
+    file = await p;
+  }
+  if (!file) return sendStatus(res, 404);
+  return sendFile(req, res, file, 'image/jpeg');
+}
+
 /**
  * Drop MP4s unused for CACHE_TTL_MS, then the least recently used ones until
  * the cache is under CACHE_MAX_BYTES, plus temp files a crash left behind.
@@ -755,7 +833,7 @@ async function sweep() {
       if (age > BUILD_TIMEOUT_MS * 2) await fsp.unlink(file).catch(() => {});
     } else if (name.endsWith('.json')) {
       if (age > CACHE_TTL_MS * 6) await fsp.unlink(file).catch(() => {});
-    } else if (name.endsWith('.mp4')) {
+    } else if (name.endsWith('.mp4') || name.endsWith('.jpg')) {
       if (age > CACHE_TTL_MS) await fsp.unlink(file).catch(() => {});
       else mp4s.push({ file, size: st.size, mtime: st.mtimeMs });
     }
@@ -772,4 +850,4 @@ async function sweep() {
 sweep();
 setInterval(sweep, 3600000).unref();
 
-module.exports = { wantsVideo, ogVideoFor, isMediaPath, serveMedia };
+module.exports = { wantsVideo, ogVideoFor, isMediaPath, serveMedia, THUMB_PATH, jpegThumbPath, serveThumb };
