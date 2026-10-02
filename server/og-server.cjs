@@ -876,9 +876,12 @@ const server = http.createServer(async (req, res) => {
       inline = await inlineVideo;
     }
     // Discord fetches the MP4 the moment it unfurls and gives up if it's slow,
-    // so hold the card until the teaser is built (2-4s typically, capped).
+    // so its card waits for the teaser build (2-4s typically, capped). Other
+    // apps get the card at once (WhatsApp drops slow previews); the build runs
+    // in the background and the media route waits for it if they ask early.
     if (inline) {
-      await inline.prepare(8000);
+      const discord = /discordbot/i.test(req.headers['user-agent'] || '');
+      await inline.prepare(discord ? 8000 : 0);
       rememberOembed(`${video.author}/${video.permlink}`, { description, url: canonicalUrl });
     }
 

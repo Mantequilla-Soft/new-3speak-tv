@@ -27,7 +27,7 @@
 //   2. Discord fetches GET /og-video/<author>/<permlink>.mp4 → served from the
 //      cache (waiting for an in-flight build if it hasn't finished).
 //
-// Only Discordbot triggers this (OG_VIDEO_BOTS). The same sidecar also serves
+// Only the apps in OG_VIDEO_BOTS (Discord, Telegram, WhatsApp) trigger this. The same sidecar also serves
 // Googlebot, and building for a crawler that walks the whole catalogue would
 // fill the disk for nothing.
 //
@@ -48,7 +48,9 @@ const GATEWAYS = (process.env.OG_VIDEO_GATEWAYS || 'https://ipfs-3speak.b-cdn.ne
   .split(',')
   .map((s) => s.trim().replace(/\/+$/, ''))
   .filter(Boolean);
-const VIDEO_BOTS = (process.env.OG_VIDEO_BOTS || 'Discordbot')
+// Apps that get the teaser as og:video. X is deliberately absent: it only
+// plays inline through an approved twitter:player iframe, not og:video.
+const VIDEO_BOTS = (process.env.OG_VIDEO_BOTS || 'Discordbot,TelegramBot,WhatsApp')
   .split(',')
   .map((s) => s.trim().toLowerCase())
   .filter(Boolean);
