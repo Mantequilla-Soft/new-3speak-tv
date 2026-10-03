@@ -14,6 +14,7 @@ import { hasThreespeakPostingAuth, addThreespeakToPostingAuth } from '../utils/p
 import { useAppStore } from '../lib/store';
 import { usePremiumStatus } from '../hooks/usePremiumStatus';
 import { setChannelTrailer } from '../utils/channelTrailer';
+import { syncVideoAdOptOut } from '../lib/advertiseData';
 import { sanitizeMusicCredits, soundAuthorsOf, soundCreditsMarkdown, primarySoundMetadata } from '../utils/soundCredits';
 import { enforceLockedBeneficiaries, getLockedBeneficiaries, chargesEncoder, LOCKED_FUND_ACCOUNT, LOCKED_ENCODER_ACCOUNT } from '../utils/beneficiaries';
 import { oaEnvelope, threespeakVideo, probeVideoOrientation, OA_ARTICLE, OA_MICROPOST, OA_COMMENT } from '../utils/openAttribute';
@@ -152,6 +153,9 @@ export function EmbedUploadProvider({ children }) {
   const [declineRewards, SetDeclineRewards] = useState(false);
   const [rewardPowerup, setRewardPowerup] = useState(false);
   const [isNsfw, setIsNsfw] = useState(false);
+  // Per-video ad opt-out. Only offered to creators whose account-level setting
+  // carries ads; written into the post itself, see the publish path below.
+  const [videoAdsEnabled, setVideoAdsEnabled] = useState(true);
   // "Mark as channel trailer" — pinned to the creator's profile after publish.
   const [isChannelTrailer, setIsChannelTrailer] = useState(false);
   const [isScheduled, setIsScheduled] = useState(false);
@@ -360,6 +364,7 @@ export function EmbedUploadProvider({ children }) {
     setCommunity('hive-181335');
     setBeneficiaries([]);
     setIsNsfw(false);
+    setVideoAdsEnabled(true);
     setIsChannelTrailer(false);
     SetDeclineRewards(false);
     setRewardPowerup(false);
@@ -1744,6 +1749,11 @@ export function EmbedUploadProvider({ children }) {
         // the Hive permlink (a remix reuses an existing asset), so it is stored
         // explicitly rather than re-derived by every reader.
         ...(gated ? { gated: true, gatedVideoId: embedAssetPermlink } : {}),
+        // Per-video ad opt-out, namespaced like the account-level `3speak.ads` in
+        // posting_json_metadata. Written only when off: the post is the creator's
+        // signed record, and the checker mirrors it from the chain (routes/
+        // advertise.js, /creator/video-ads/sync), so no separate signature is asked.
+        ...(videoAdsEnabled ? {} : { '3speak': { ads: false } }),
       };
 
       // Build comment_options. When the author is declining payout, skip
@@ -2051,6 +2061,21 @@ export function EmbedUploadProvider({ children }) {
         }
       }
 
+      // ─── Per-video ad opt-out ───
+      // Only needed when off: an absent row already means ads on. Non-fatal, but
+      // surfaced, because a quiet failure means ads play on a video the creator
+      // said should have none. A scheduled post is synced by the checker itself.
+      if (!videoAdsEnabled && !result.incubation) {
+        try {
+          await syncVideoAdOptOut(user, hivePermlink);
+          addMessage(t('upload.publishing.log.adsOffSaved'), 'success');
+        } catch (adsErr) {
+          console.warn('Failed to save per-video ad opt-out:', adsErr);
+          addMessage(t('upload.publishing.log.adsOffFailed'), 'warning');
+          toast.error(t('upload.publishing.adsOffFailedToast'));
+        }
+      }
+
       // ─── Channel trailer ───
       // After the post exists, never before: the checker verifies the permlink
       // really belongs to this creator before pinning it. Non-fatal — the video
@@ -2111,6 +2136,7 @@ export function EmbedUploadProvider({ children }) {
     declineRewards, SetDeclineRewards,
     rewardPowerup, setRewardPowerup,
     isNsfw, setIsNsfw,
+    videoAdsEnabled, setVideoAdsEnabled,
     isChannelTrailer, setIsChannelTrailer,
     isScheduled, setIsScheduled,
     scheduleDateTime, setScheduleDateTime,

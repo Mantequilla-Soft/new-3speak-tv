@@ -193,6 +193,12 @@
       "info": "Bu videoyu yetişkin içerik olarak işaretler. NSFW'yi açmamış izleyiciler için akışlardan ve aramadan gizlenir ve Hive genelinde <code>nsfw</code> olarak etiketlenir.",
       "hint": "Yetişkin içerik."
     },
+    "ads": {
+      "label": "Bu videoda reklamlar",
+      "info": "Hesabında reklamlar açık, bu yüzden burada kapatmadığın sürece bu videoda da reklam gösterilir. Bu yalnızca bu videoyu etkiler; diğer videoların ve hesap ayarın aynı kalır.",
+      "hintOn": "Bu videoda reklam gösterilebilir.",
+      "hintOff": "Bu videoda reklam yok."
+    },
     "gated": {
       "label": "Yalnızca destekçilere",
       "info": "Bu videoyu şifreler, böylece yalnızca 3Speak Pro aboneleri oynatabilir. Yanında <b>10 saniyelik şifresiz bir önizleme</b> yayınlanır, böylece gönderi Hive'ın her yerinde yine bir fragman gösterir. Başlığın, açıklaman ve etiketlerin sıradan Hive gönderi içeriğidir ve <b>şifrelenmez</b>; yalnızca video şifrelenir. <b>Bu, yüklemeden sonra değiştirilemez.</b>",
@@ -254,6 +260,7 @@
     "scheduledFor": "{{when}} için planlandı",
     "scheduled": "Gönderi planlandı!",
     "linkingEmbed": "Gömülü video bağlanıyor...",
+    "adsOffFailedToast": "Yayınlandı, ancak bu videonun reklamları henüz kapatılamadı.",
     "trailerFailedToast": "Yayınlandı ama kanal fragmanın olarak ayarlanamadı.",
     "completed": "Tamamlandı",
     "publishedToast": "Video yayınlandı!",
@@ -279,6 +286,8 @@
       "embedLinkFailed": "Uyarı: Gömülü video bağlanamadı (kritik değil)",
       "thumbnailLinked": "Küçük resim gömülü videoya bağlandı",
       "thumbnailLinkFailed": "Uyarı: Gömülü video küçük resmi ayarlanamadı (kritik değil)",
+      "adsOffSaved": "Bu video için reklamlar kapatıldı",
+      "adsOffFailed": "Bu video için reklamsız ayarı kaydedilemedi",
       "trailerSet": "Kanal fragmanın olarak ayarlandı",
       "trailerFailed": "Yayınlandı ama kanal fragmanın olarak ayarlanamadı",
       "published": "Video yayınlandı!"
