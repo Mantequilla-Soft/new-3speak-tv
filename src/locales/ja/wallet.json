@@ -1,0 +1,50 @@
+{
+  "tabs": {
+    "overview": "概要",
+    "transactions": "取引",
+    "aria": "ウォレットのセクション"
+  },
+  "errors": {
+    "fetchBalances": "残高を取得できませんでした",
+    "needKeychain": "送金するには Keychain 拡張機能が必要です"
+  },
+  "header": {
+    "mine": "マイウォレット",
+    "ofUser": "{{user}} のウォレット"
+  },
+  "assets": "資産",
+  "transfer": "送金",
+  "transferModal": {
+    "loginRequired": "送金するにはログインしてください",
+    "insufficient": "残高が不足しています",
+    "invalidUsername": "無効なユーザー名です",
+    "success": "送金しました！",
+    "failed": "送金に失敗しました: {{error}}",
+    "title": "{{coin}} を送金",
+    "amountLabel": "金額（{{coin}}）",
+    "balance": "残高 {{balance}}",
+    "max": "最大",
+    "recipientLabel": "受取人のユーザー名",
+    "recipientPlaceholder": "Hive ユーザー名を入力",
+    "memoLabel": "メモ",
+    "memoPlaceholder": "メモを入力",
+    "confirm": "送金を確定"
+  },
+  "history": {
+    "loadFailed": "取引を読み込めませんでした",
+    "title": "取引履歴",
+    "cols": {
+      "type": "種類",
+      "amount": "金額",
+      "account": "アカウント",
+      "date": "日付",
+      "memo": "メモ"
+    },
+    "types": {
+      "transfer": "送金",
+      "claim": "報酬の請求",
+      "received": "受取"
+    },
+    "claimedRewards": "請求した報酬"
+  }
+}

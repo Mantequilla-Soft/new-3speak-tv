@@ -1,0 +1,172 @@
+{
+  "addTag": {
+    "loginRequired": "この動画にタグを付けるにはログインしてください",
+    "pickTopic": "先にトピックを選んでください",
+    "tagged": "「{{label}}」のタグを付けました",
+    "failed": "タグ付けに失敗しました: {{error}}",
+    "pleaseTryAgain": "もう一度お試しください",
+    "title": "この動画にタグを付ける",
+    "question": "この動画は何についての動画ですか？",
+    "existing": "この動画には <b>{{label}}</b> のタグを付けています。別のものを選ぶと置き換わります。",
+    "submit": "タグを送信"
+  },
+  "addAccount": {
+    "usernameRequired": "続けるにはユーザー名が必要です。",
+    "hiveAuthExpired": "HiveAuth の認証リクエストの有効期限が切れました",
+    "loginSuccess": "ログインしました！",
+    "loginFailed": "ログインに失敗しました: {{error}}",
+    "logoAlt": "3Speak ロゴ",
+    "title": "ユーザー名でログイン",
+    "usernamePlaceholder": "ユーザー名"
+  },
+  "socialLink": {
+    "hashCopied": "ハッシュをコピーしました",
+    "copyFailed": "クリップボードにコピーできませんでした",
+    "enterHandle": "プラットフォームのハンドルまたは ID を入力してください",
+    "verified": "アカウントを確認してリンクしました",
+    "errors": {
+      "hashNotFound": "プロフィールにまだハッシュが見つかりません。変更が公開状態で保存されていることを確認して、もう一度お試しください。",
+      "alreadyLinked": "このチャンネルはすでに別の Hive ユーザー（@{{user}}）によって確認されています。",
+      "tooMany": "リンクできるアカウント数の上限に達しました。",
+      "notFound": "そのチャンネルはプラットフォーム上に存在しません。",
+      "badSignature": "署名を確認できませんでした。ポスティングキーでログインしていることを確認してください。",
+      "rateLimited": "リクエストが多すぎます。1 分ほど待ってからもう一度お試しください。",
+      "lookupFailed": "プラットフォームの照会に失敗しました。少ししてからお試しください。",
+      "verifyFailed": "確認に失敗しました",
+      "stillPresent": "ハッシュがまだプロフィールに残っています。先に削除してください。",
+      "unlinkFailed": "リンクの解除に失敗しました",
+      "noSuchLink": "削除するリンクがありません。"
+    },
+    "confirmUnlink": "{{platform}} のリンクを削除しますか？確認用ハッシュが公開プロフィールから削除されていることを確認してください。残っているとリンク解除は拒否されます。",
+    "removed": "リンクを削除しました",
+    "title": "リンクした外部プロフィール",
+    "intro": "YouTube（またはほかの）チャンネルの所有者であることを証明するには、あなた専用の 3Speak ハッシュを公開プロフィールの説明に貼り付けてから、ここで確認してください。",
+    "openProfile": "プロフィールを開く",
+    "removeLink": "リンクを削除",
+    "empty": "リンクした外部プロフィールはまだありません。",
+    "addPlatform": "新しいプラットフォームを追加",
+    "flowTitle": "{{platform}} チャンネルをリンク",
+    "step1": "あなた専用の確認用ハッシュをコピーします:",
+    "step2": "<strong>{{platform}} の公開プロフィールの説明に貼り付けます</strong>（概要、自己紹介、説明など、どこでも構いません）。変更を保存してください。",
+    "step3": "{{platform}} の識別子を入力します:",
+    "verifying": "確認中…",
+    "verify": "確認"
+  },
+  "auth": {
+    "title": "3Speak を承認してください！",
+    "text": "3Speak に動画をアップロードするには、あなたのポスティング権限が必要です。これにより、アップロードした動画を Hive に公開できます。ポスティング権限の付与は一度だけで済みます。",
+    "authorize": "承認"
+  },
+  "beneficiary": {
+    "errors": {
+      "emptyUsername": "ユーザー名を入力してください。",
+      "sameUser": "自分自身を受益者に設定することはできません",
+      "greaterThanZero": "報酬の割合は 0 より大きくしてください。",
+      "exceedsRemaining": "報酬の割合が残りの配分 {{percent}}% を超えています。",
+      "validNumber": "有効な数値を入力してください",
+      "validPercent": "有効な報酬の割合を入力してください。",
+      "duplicate": "このアカウントはすでにリストに追加されています。",
+      "invalidAccount": "ユーザー名またはコミュニティ ID が無効です。",
+      "cannotIncrease": "残りの {{percent}}% を超えて増やすことはできません",
+      "pendingRow": "@{{account}} はまだ追加されていません。+ をクリックして追加するか、入力欄をクリアしてください。",
+      "atLeastOne": "報酬の割合は 1% 以上にしてください"
+    },
+    "title": "受益者",
+    "intro": "この投稿の報酬の一部を自動的に受け取るユーザーを追加します。",
+    "minPercent": "%（最小 {{percent}}%）",
+    "usernamePlaceholder": "ユーザー名を入力",
+    "minimumReward": "最小の報酬は <strong>1%</strong> です",
+    "checking": "Hive で <strong>@{{account}}</strong> を確認中…",
+    "notExisting": "⚠️ <strong>@{{account}}</strong> は存在する Hive アカウントではありません。",
+    "notAdded": "⚠️ <strong>@{{account}}</strong> はまだ追加されていません。<strong>+</strong> をクリックして追加するか、入力欄をクリアしてください。",
+    "infrastructure": "10% === インフラ",
+    "videoEncoding": "動画エンコード === 1%",
+    "defaults": "デフォルトの受益者（{{count}}）"
+  },
+  "qr": {
+    "scan": "Hive Keychain でこの QR をスキャン:",
+    "click": "QR をクリックして Keychain アプリで開く"
+  },
+  "editVideoHint": {
+    "title": "自分の動画はいつでも編集できます",
+    "text": "自分の動画を開き、プレーヤーの下の操作バーにある<strong>ペンのボタン</strong>を探してください。クリックすると、タイトル、説明、サムネイル、タグなどを変更できます。",
+    "penTitle": "動画の詳細を編集",
+    "tip": "ヒント",
+    "caption": "このペンのボタンです",
+    "gotIt": "OK"
+  },
+  "verifyAuth": {
+    "title": "承認を確認中",
+    "text": "承認が付与されたかを確認しています。しばらくお待ちください..."
+  },
+  "editor": {
+    "confirmLeave": "エディターがまだ開いています。このページを離れるとエディターが閉じ、未保存の変更は失われます。\n\nOK = エディターを閉じて移動\nキャンセル = このページにとどまる",
+    "confirmClose": "エディターを閉じてもよろしいですか？未保存の変更は失われます。",
+    "iframeTitle": "3Speak 動画エディター",
+    "finding": "利用できるエディターを探しています...",
+    "loading": "エディターを読み込み中...",
+    "unavailable": "現在利用できるエディターサーバーがありません。しばらくしてからお試しください。",
+    "sending": "レンダリングサービスに送信中...",
+    "rendering": "レンダリング中... {{percent}}%",
+    "complete": "レンダリングが完了しました！",
+    "useVideo": "この動画を使う",
+    "preparing": "アップロード用に動画を準備中...",
+    "renderUnavailable": "レンダリングサービスはまだ利用できません。タイムラインのデータはコンソールに出力されました。",
+    "backToEditor": "エディターに戻る",
+    "postError": "アップロード用の動画を準備できませんでした。代わりにダウンロードをお試しください。"
+  },
+  "profile": {
+    "mustLogin": "先にログインしてください",
+    "followed": "フォローしました",
+    "unfollowed": "フォローを解除しました",
+    "followFailed": "フォローに失敗しました: {{error}}",
+    "unfollowFailed": "フォロー解除に失敗しました: {{error}}",
+    "avatarAlt": "プロフィール",
+    "posts": "投稿",
+    "followers": "フォロワー",
+    "joined": "{{date}} に参加",
+    "about": "概要",
+    "noBio": "自己紹介はありません"
+  },
+  "report": {
+    "reasons": {
+      "spamMisleading": "スパムまたは誤解を招く内容",
+      "harassment": "嫌がらせやいじめ",
+      "hateSpeech": "ヘイトスピーチ",
+      "violence": "暴力的または生々しいコンテンツ",
+      "sexual": "性的なコンテンツ",
+      "copyright": "著作権侵害",
+      "scam": "詐欺",
+      "other": "その他",
+      "spam": "スパム",
+      "impersonation": "なりすまし",
+      "spamAccount": "スパムアカウント"
+    },
+    "selectReasonError": "理由を選んでください",
+    "loginRequired": "報告するにはログインが必要です",
+    "submitted": "報告を送信しました。ありがとうございます。",
+    "failed": "報告を送信できませんでした",
+    "titles": {
+      "user": "ユーザーを報告",
+      "comment": "コメントを報告",
+      "short": "ショートを報告",
+      "post": "投稿を報告",
+      "video": "動画を報告"
+    },
+    "reason": "理由",
+    "selectReason": "理由を選択...",
+    "details": "詳細（任意）",
+    "detailsPlaceholder": "詳しい状況を教えてください...",
+    "submitting": "送信中...",
+    "submit": "報告を送信"
+  },
+  "upload": {
+    "missingInfo": "動画またはサムネイルの情報がありません。",
+    "updateFailed": "動画情報を更新できませんでした。もう一度お試しください。",
+    "title": "動画とサムネイルをアップロード",
+    "selectVideo": "動画を選択",
+    "thumbnail": "サムネイル",
+    "clickThumbnail": "クリックしてサムネイルをアップロード",
+    "updateInfo": "動画情報を更新"
+  }
+}

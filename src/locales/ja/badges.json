@@ -1,0 +1,92 @@
+{
+  "page": {
+    "fallbackTitle": "バッジ",
+    "kpis": {
+      "recipients": "受け取った人",
+      "recentVideos": "最近の動画",
+      "issued": "発行日"
+    },
+    "issuedBy": "発行者: <creatorLink>@{{creator}}</creatorLink>",
+    "notFoundTitle": "バッジが見つかりません",
+    "notFoundBody": "@{{account}} という Hive アカウントを現在読み込めません。",
+    "browseAll": "すべてのバッジを見る",
+    "tabs": {
+      "videos": "動画",
+      "recipients": "受け取った人",
+      "recipientsWithCount": "受け取った人（{{num}}）"
+    },
+    "errorVideos": "動画の取得中にエラーが発生しました",
+    "noVideosTitle": "まだ動画がありません",
+    "noHolders": "このバッジを持っている人はまだいません。",
+    "noHolderVideos": "このバッジを持っている人で、3Speak に動画を公開した人はまだいません。",
+    "loadingMore": "さらに読み込み中...",
+    "recipientsError": "受け取った人を読み込めませんでした",
+    "recipientsLoading": "受け取った人を読み込み中...",
+    "noRecipientsTitle": "まだ受け取った人がいません",
+    "noRecipientsBody": "このバッジを授与された人はまだいません。",
+    "recipientsSummary_other": "{{num}} 人が受け取りました",
+    "recipientsSummaryWithVideos_other": "{{num}} 人が受け取り、うち {{publishing}} 人が 3Speak で公開中",
+    "recipientVideos_other": "{{num}} 本の動画",
+    "recipientNoVideos": "動画なし"
+  },
+  "directory": {
+    "title": "バッジ",
+    "intro": "バッジは、イベントや貢献、節目の記念として、Hive 上で<b>ほかの人から贈られる</b>賞です。自分から参加することはできず、誰かが授与します。バッジを開くと、受け取った人がここで公開している動画を見られます。",
+    "searchPlaceholder": "バッジを検索...",
+    "sort": {
+      "recipients": "受け取った人",
+      "created": "作成日",
+      "name": "名前"
+    },
+    "createLocked": "バッジの作成には Hive アカウントが必要です。アカウントの準備ができると使えるようになります。",
+    "create": "バッジを作成",
+    "loadError": "現在バッジを読み込めません。",
+    "noMatch": "検索に一致するバッジはありません。",
+    "held": "所持中",
+    "recipients_other": "{{num}} 人が受け取りました"
+  },
+  "award": {
+    "success": "@{{username}} さんが {{title}} を受け取りました",
+    "failed": "バッジを授与できませんでした",
+    "dialogLabel": "{{username}} さんにバッジを授与",
+    "title": "バッジを授与",
+    "toUser": "@{{username}} さんへ",
+    "awarding": "授与中…",
+    "held": "所持中",
+    "award": "授与",
+    "note": "バッジが Hive 上で相手をフォローします。これがバッジを持っているということです。バッジのページから取り消すこともできます。"
+  },
+  "hive": {
+    "dragToReorder": "ドラッグして並べ替え",
+    "orderSaved": "バッジの順番を Hive プロフィールに保存しました",
+    "orderSaveFailed": "バッジの順番を保存できませんでした",
+    "dialogLabel": "@{{username}} さんが持っているバッジ",
+    "title": "バッジ",
+    "arrangeHint": "表示したい順番にバッジをドラッグしてください。",
+    "earnedCount_other": "@{{username}} さんが Hive で獲得したバッジ {{count}} 個",
+    "alwaysFirst": "常に最初に表示",
+    "saveOrder": "順番を保存",
+    "arrange": "並べ替え",
+    "arrangeTitle": "バッジの表示順を選ぶ",
+    "showAll_other": "{{count}} 個のバッジをすべて表示",
+    "awardTitle": "自分のバッジを @{{username}} さんに授与"
+  },
+  "leaderboardBadges": {
+    "proTitle": "このクリエイターは Pro サブスクリプションで 3Speak を応援しています"
+  },
+  "leaderboard": {
+    "watchNotice": "視聴時間は {{since}} から記録を始めたため、長い期間を選んでも同じ短い履歴が表示されます。",
+    "unclaimed": "未請求",
+    "noActivity": "この期間にはまだアクティビティがありません",
+    "otherTopics": "その他",
+    "title": "ランキング",
+    "subtitle": "{{blurb}} — 3Speak のトップクリエイター。",
+    "subtitleTopic": "{{blurb}} — {{topic}} のトップクリエイター。",
+    "allTopics": "すべてのトピック",
+    "finding": "このランキングで @{{user}} さんを探しています…",
+    "notInTop": "@{{user}} さんはこのランキングの上位 {{n}} 位に入っていません。",
+    "loading": "ランキングを読み込み中…",
+    "loadError": "ランキングを読み込めませんでした。しばらくしてからお試しください。",
+    "empty": "この期間の {{metric}} はまだ誰にもありません。"
+  }
+}

@@ -1,0 +1,43 @@
+{
+  "labels": {
+    "tech-science": "テクノロジーと科学",
+    "technology": "テクノロジー",
+    "education": "教育",
+    "science": "科学",
+    "programming": "プログラミング",
+    "crypto-finance": "暗号資産と金融",
+    "cryptocurrency": "暗号資産",
+    "finance": "金融",
+    "business": "ビジネス",
+    "entertainment": "エンタメ",
+    "music": "音楽",
+    "gaming": "ゲーム",
+    "film-tv": "映画とテレビ",
+    "lifestyle": "ライフスタイル",
+    "vlog": "Vlog",
+    "comedy": "お笑い",
+    "story-time": "ストーリー",
+    "commercial": "コマーシャル",
+    "arts-diy": "アートと DIY",
+    "art": "アート",
+    "diy-crafts": "DIY とクラフト",
+    "photography": "写真",
+    "food-outdoor": "グルメとアウトドア",
+    "nature": "自然",
+    "travel": "旅行",
+    "food": "グルメ",
+    "pets": "ペット",
+    "gardening": "ガーデニング",
+    "sports-health": "スポーツと健康",
+    "sports": "スポーツ",
+    "health": "健康",
+    "fitness": "フィットネス",
+    "life-society": "暮らしと社会",
+    "news": "ニュース",
+    "spirituality": "スピリチュアル",
+    "politics": "政治"
+  },
+  "display": {
+    "cryptocurrency": "暗号資産"
+  }
+}

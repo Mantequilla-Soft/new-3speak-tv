@@ -1,0 +1,116 @@
+{
+  "ranges": {
+    "d7": "7日",
+    "d28": "28日",
+    "d90": "90日",
+    "all": "全期間"
+  },
+  "content": {
+    "all": "すべて",
+    "videos": "動画",
+    "shorts": "ショート"
+  },
+  "metrics": {
+    "watchTime": "視聴時間",
+    "views": "視聴回数",
+    "avgPct": "平均 %",
+    "votes": "投票",
+    "comments": "コメント",
+    "payout": "報酬"
+  },
+  "days": {
+    "short": {
+      "sun": "日",
+      "mon": "月",
+      "tue": "火",
+      "wed": "水",
+      "thu": "木",
+      "fri": "金",
+      "sat": "土"
+    },
+    "initial": {
+      "sun": "日",
+      "mon": "月",
+      "tue": "火",
+      "wed": "水",
+      "thu": "木",
+      "fri": "金",
+      "sat": "土"
+    }
+  },
+  "sources": {
+    "threespeak": "3Speak",
+    "player": "埋め込みプレーヤー"
+  },
+  "trend": {
+    "empty": "この期間の視聴時間はまだありません。",
+    "tip_other": "{{count}} 回視聴 · {{date}}"
+  },
+  "noData": "まだデータがありません。",
+  "demo": {
+    "viewerLocations": "視聴者の地域",
+    "mapBubble_other": "{{country}} — {{count}} セッション",
+    "empty": "この期間の視聴者データはまだありません。",
+    "breakdown": "内訳",
+    "map": "地図",
+    "countries": "国",
+    "devices": "デバイス",
+    "browsers": "ブラウザ",
+    "whereTitle": "視聴場所",
+    "whereSub": "3Speak と埋め込みプレーヤーの比較",
+    "newVsReturning": "新規とリピーター",
+    "new": "新規",
+    "returning": "リピーター",
+    "located": "{{total}} 件の視聴セッションのうち {{located}} 件の地域を特定。"
+  },
+  "when": {
+    "title": "視聴者が見る時間帯",
+    "sub": "UTC · 濃いほど視聴回数が多い",
+    "cellTitle_other": "{{day}} {{hour}}:00 — {{count}} 回視聴",
+    "hour": "{{hour}}時"
+  },
+  "detail": {
+    "summary": "投票 {{votes}} · コメント {{comments}} · ${{payout}}"
+  },
+  "compare": {
+    "notEnough": "比較するのに十分なデータがありません。",
+    "start": "開始",
+    "axis": "動画全体の視聴維持率",
+    "end": "終了",
+    "title": "動画を比較",
+    "pickA": "動画を選択…",
+    "vs": "vs",
+    "pickB": "別の動画を選択…"
+  },
+  "loadError": "現在、統計を読み込めません。",
+  "emptyRange": "この期間の視聴データはまだありません。「全期間」を試すか、動画が視聴されるのをお待ちください。",
+  "tiles": {
+    "avgViewDuration": "平均視聴時間",
+    "avgWatched": "平均視聴率",
+    "reactionsPerView": "リアクション / 視聴"
+  },
+  "subtotals": "動画 {{videos}} · 投票 {{votes}} · コメント {{comments}} · ${{payout}} · 平均速度 {{rate}}×",
+  "sections": {
+    "trend": "視聴時間の推移",
+    "best": "パフォーマンスの高い動画",
+    "audience": "視聴者"
+  },
+  "openInNewTab": "新しいタブで動画を開く",
+  "footnote": "視聴統計はプレビュー版の計測によるもので、あなたにのみ表示されます。",
+  "video": {
+    "noData": "まだデータがありません",
+    "empty": "この動画の視聴データはまだありません。",
+    "uniqueViewers": "ユニーク視聴者",
+    "avgSpeed": "平均速度",
+    "mostDropOff": "📉 最も離脱が多いのは <b>{{time}}</b>",
+    "earlyDrop": "⚡ 最初の 3 秒で <b>{{pct}}%</b> が離脱",
+    "replayed": "🔁 リプレイ:",
+    "retentionTitle": "視聴者維持率",
+    "retentionSub": "各時点でまだ視聴している視聴者の割合",
+    "pctWatching": "{{pct}}% が視聴中",
+    "replayTitle": "よくリプレイされた部分",
+    "replaySub": "視聴者が何度も見ている部分",
+    "hotSpot": "注目ポイント",
+    "notEnoughReplays": "リプレイのデータがまだ足りません"
+  }
+}

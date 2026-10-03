@@ -1,0 +1,129 @@
+{
+  "button": {
+    "label": "チャット"
+  },
+  "tools": {
+    "emoji": "絵文字",
+    "searchEmoji": "絵文字を検索",
+    "searchGifs": "GIF を検索…",
+    "noGifs": "GIF が見つかりません。",
+    "poweredByGiphy": "Powered by GIPHY"
+  },
+  "lightbox": {
+    "openInNewTab": "新しいタブで画像を開く"
+  },
+  "linkCard": {
+    "loadingPreview": "プレビューを読み込み中…",
+    "community": "コミュニティ",
+    "communityWithSubscribers_other": "コミュニティ · 登録者 {{formatted}} 人",
+    "commentFallback": "（コメント）"
+  },
+  "share": {
+    "embedCopied": "埋め込みコードをコピーしました",
+    "pressToCopy": "Ctrl/Cmd + C を押して選択したコードをコピーしてください",
+    "embedTitle": "この動画を埋め込む",
+    "embedHint": "ウェブサイトやブログ記事に貼り付けてください。",
+    "embedSize": "埋め込みサイズ",
+    "embedCode": "埋め込みコード",
+    "copyEmbed": "埋め込みコードをコピー",
+    "responsiveSub": "配置先のページに合わせて拡大縮小",
+    "fixedSub": "固定サイズの iframe",
+    "sendInChat": "3Speak チャットで送る",
+    "sendInChatSub": "3Speak のユーザーにメッセージで送る",
+    "embedOnWebsite": "ウェブサイトに埋め込む",
+    "embedOnWebsiteSub": "自分のサイトやブログ用の HTML をコピー",
+    "generalShare": "共有 / リンクをコピー",
+    "generalShareSub": "ほかのアプリ、またはリンクをコピー"
+  },
+  "gate": {
+    "connectTitle": "3Speak チャットに接続",
+    "connectBody": "チャットは Snapie を利用しています。接続すると、Hive のポスティングキーで一度限りのログイン認証に署名します。トランザクションは発生せず、費用もかかりません。",
+    "connecting": "接続中…",
+    "connectButton": "チャットに接続",
+    "cannotSign": "現在のログイン方法ではチャットの認証に署名できません。Keychain、HiveAuth、PeakVault、Ledger のいずれかを使ってください。",
+    "needsAccountTitle": "チャットには Hive アカウントが必要です",
+    "needsAccountBody": "メッセージは自分のアカウントの鍵で署名されるため、アカウントの準備ができるとほかの機能と一緒にチャットも使えるようになります。プロフィールの目標を達成すれば、チームが手続きを進めます。",
+    "loginTitle": "チャットを使うにはログイン",
+    "loginBody": "Hive アカウントでログインすると、メッセージを送受信できます。",
+    "connectingToChat": "チャットに接続中…"
+  },
+  "errors": {
+    "notHiveAccount": "@{{user}} は Hive アカウントではありません。",
+    "openConversation": "その会話を開けませんでした。",
+    "verifyAccount": "そのアカウントを確認できませんでした。",
+    "createRoom": "ルームを作成できませんでした。",
+    "joinChannel": "そのチャンネルに参加できませんでした。"
+  },
+  "newDm": {
+    "placeholder": "Hive ユーザーにメッセージ…",
+    "start": "チャットを開始"
+  },
+  "newRoom": {
+    "toggle": "新しいプライベートルーム",
+    "namePlaceholder": "ルーム名…",
+    "removeMember": "@{{user}} を削除",
+    "addMore": "さらに追加…",
+    "invitePlaceholder": "Hive ユーザーを招待（任意）…",
+    "create": "作成"
+  },
+  "channels": {
+    "browse": "チャンネルを見る",
+    "publicTitle": "公開チャンネル",
+    "closeBrowser": "チャンネル一覧を閉じる",
+    "loading": "チャンネルを読み込み中…",
+    "empty": "利用できるチャンネルはありません。",
+    "join": "参加"
+  },
+  "markRead": {
+    "nothingToClear": "既読にする会話はありません。サーバー側でカウントが残っている可能性があります。",
+    "requestFailed": "リクエストに失敗しました",
+    "allCaughtUp": "すべて確認済みです",
+    "stillUnread_other": "{{count}} 件のチャットを既読にしましたが、まだ未読が {{total}} 件表示されています。",
+    "stillUnreadNoMatch_other": "{{count}} 件のチャットを既読にしましたが、まだ未読が {{total}} 件表示されています。サーバーはカウントを返していますが、該当する会話がありません。",
+    "notSignedIn": "チャットにログインしていません。チャットに再接続してもう一度お試しください。",
+    "sessionExpired": "既読処理中にチャットのセッションが切れました。チャットに再接続してもう一度お試しください。",
+    "serverRejectedVisible_other": "サーバーが {{count}} 件のリクエストをすべて拒否しました（表示中のリストの ID）",
+    "serverRejectedServerMap_other": "サーバーが {{count}} 件のリクエストをすべて拒否しました（サーバー自身の未読リストの ID）",
+    "failed": "すべてを既読にできませんでした",
+    "marking": "既読にしています…",
+    "button": "すべて既読にする",
+    "buttonCount": "すべて既読にする（{{count}}）"
+  },
+  "list": {
+    "chooseTarget": "送信先のチャットを選んでください",
+    "loading": "会話を読み込み中…",
+    "empty": "まだ会話がありません。上に Hive ユーザー名を入力して始めましょう。"
+  },
+  "leave": {
+    "confirmRoom": "このルームから退出しますか？",
+    "confirmChannel": "このチャンネルから退出しますか？",
+    "errorRoom": "ルームから退出できませんでした。",
+    "errorChannel": "チャンネルから退出できませんでした。",
+    "titleRoom": "ルームから退出",
+    "titleChannel": "チャンネルから退出",
+    "button": "退出"
+  },
+  "thread": {
+    "editError": "メッセージを編集できませんでした。",
+    "deleteConfirm": "このメッセージを削除しますか？「[deleted]」に置き換えられます。",
+    "deleteError": "メッセージを削除できませんでした。",
+    "back": "会話一覧に戻る",
+    "loading": "メッセージを読み込み中…",
+    "empty": "まだメッセージはありません。あいさつしましょう 👋",
+    "editedSuffix": " · 編集済み",
+    "messageActions": "メッセージの操作",
+    "quote": "引用",
+    "forward": "転送",
+    "typing_other": "{{users}} が入力中…",
+    "editing": "メッセージを編集中",
+    "cancelEdit": "編集をキャンセル",
+    "quoting": "@{{user}} を引用中",
+    "cancelQuote": "引用をキャンセル",
+    "removeImage": "画像を削除",
+    "placeholder": "メッセージを入力…"
+  },
+  "page": {
+    "chooseTarget": "送信先のチャットを選んでください。",
+    "selectConversation": "会話を選ぶか、新しく始めてください。"
+  }
+}

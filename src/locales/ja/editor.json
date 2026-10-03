@@ -1,0 +1,19 @@
+{
+  "placeholder": "ここに内容を入力...",
+  "uploadFailed": "アップロードに失敗しました: {{message}}",
+  "uploadingImage": "画像をアップロード中...",
+  "format": {
+    "underline": "下線",
+    "strike": "取り消し線",
+    "highlight": "ハイライト",
+    "bulletList": "箇条書き",
+    "orderedList": "番号付きリスト",
+    "taskList": "タスクリスト"
+  },
+  "emoji": {
+    "searchPlaceholder": "絵文字を検索"
+  },
+  "preview": {
+    "renderError": "コンテンツの表示中にエラーが発生しました"
+  }
+}

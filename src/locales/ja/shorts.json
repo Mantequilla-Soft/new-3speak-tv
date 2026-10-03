@@ -1,0 +1,113 @@
+{
+  "loading": "ショートを読み込み中...",
+  "pleaseTryAgain": "もう一度お試しください",
+  "rotateDevice": "端末を縦向きにしてください",
+  "pageTitle": {
+    "byAuthor": "3S | @{{author}} のショート",
+    "default": "3S | ショート"
+  },
+  "stories": {
+    "you": "あなた"
+  },
+  "errors": {
+    "votingUnavailable": "この投稿には投票できません",
+    "loginToVote": "投票するにはログイン",
+    "loginToComplete": "この操作を完了するにはログインしてください"
+  },
+  "feed": {
+    "ariaLabel": "ショートのフィード",
+    "discover": "発見",
+    "myInterests": "興味のあるトピック",
+    "interestsTitle": "興味に合ったショートだけを表示",
+    "pickInterestsFirst": "先に興味のあるトピックを選んでください",
+    "noInterests": "まだ興味のあるトピックを選んでいません。設定から選んでください",
+    "interestsExhausted": "興味に合ったショートはこれで全部です。発見を表示します",
+    "noInterestMatches": "現在、興味に合ったショートはありません。",
+    "switchToDiscover": "発見に切り替える",
+    "empty": "表示できるショートはありません",
+    "loadError": "ショートの読み込み中にエラーが発生しました: {{error}}"
+  },
+  "glow": {
+    "subtle": "アンビエントライト: 控えめ",
+    "vivid": "アンビエントライト: 鮮やか",
+    "off": "アンビエントライト: オフ"
+  },
+  "playbackMode": {
+    "autoReplay": "自動リプレイ",
+    "autoSwipe": "自動スワイプ",
+    "manual": "手動"
+  },
+  "subtitles": {
+    "off": "オフ"
+  },
+  "chain": {
+    "originalVideo": "元の動画",
+    "snap": "Snap",
+    "openShort": "ショートを開く",
+    "watch": "見る",
+    "openSnap": "Snap を開く",
+    "comment": "コメント",
+    "reaction": "リアクション",
+    "thisVideo": "この動画",
+    "remix": "リミックス",
+    "show": "リアクションの連鎖を表示"
+  },
+  "caption": {
+    "curatedBy": "Mantequilla によるキュレーション",
+    "curated": "キュレーション",
+    "showOriginal": "原文を表示",
+    "more": "もっと見る"
+  },
+  "actions": {
+    "remix": "リミックス",
+    "promote": "プロモーション"
+  },
+  "share": {
+    "defaultTitle": "3Speak ショート",
+    "text": "3Speak で {{user}} さんのショートをチェック！",
+    "shared": "共有しました！",
+    "linkCopied": "リンクをクリップボードにコピーしました！",
+    "failed": "共有に失敗しました"
+  },
+  "reshare": {
+    "loginRequired": "リシェアするにはログイン",
+    "unavailable": "この投稿はリシェアできません",
+    "done": "リシェアしました！",
+    "failed": "リシェアに失敗しました"
+  },
+  "remix": {
+    "noUrl": "リミックス用の動画 URL を取得できませんでした",
+    "loadFailed": "リミックス用の動画を読み込めませんでした"
+  },
+  "watchLater": {
+    "loginRequired": "ショートを保存するにはログイン",
+    "cantSave": "このショートは保存できません",
+    "removed": "「後で見る」から削除しました",
+    "saved": "「後で見る」に保存しました",
+    "failed": "失敗しました: {{message}}"
+  },
+  "comments": {
+    "title": "コメント",
+    "loading": "コメントを読み込み中...",
+    "closed": "コメントは締め切られています",
+    "none": "まだコメントはありません",
+    "postRemoved": "このショートの元になる Hive の投稿が削除されたため、コメントや投票はできなくなりました。",
+    "beFirst": "最初にコメントしましょう！",
+    "unavailable": "この投稿にはコメントできません",
+    "addPlaceholder": "コメントを追加...",
+    "addPlaceholderBar": "コメントを追加…",
+    "loginPlaceholder": "コメントするにはログイン",
+    "send": "コメントを送信",
+    "enterComment": "コメントを入力してください",
+    "loginToComment": "コメントするにはログインしてください",
+    "justNow": "たった今",
+    "posted": "コメントを投稿しました！",
+    "failed": "コメントに失敗しました: {{message}}",
+    "translation": "翻訳",
+    "translationFailed": "翻訳に失敗しました",
+    "reportComment": "コメントを報告",
+    "replyPlaceholder": "返信を入力...",
+    "viewReplies_other": "{{count}} 件の返信を表示",
+    "hideReplies_other": "{{count}} 件の返信を隠す"
+  }
+}

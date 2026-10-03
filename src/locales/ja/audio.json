@@ -1,0 +1,267 @@
+{
+  "untitled": "無題",
+  "categories": {
+    "podcast": "ポッドキャスト",
+    "voice": "ボイス",
+    "music": "音楽",
+    "audiobook": "オーディオブック",
+    "interview": "インタビュー"
+  },
+  "inline": {
+    "defaultTitle": "OpenPod の録音",
+    "defaultSubtitle": "3Speak OpenPods でライブ録音",
+    "kickerPreview": "音声プレビュー",
+    "kickerOpenPod": "OpenPod"
+  },
+  "tile": {
+    "artistAlbum": "アーティストのアルバム",
+    "listenerPlaylist": "リスナーの再生リスト",
+    "bpm": "{{bpm}} bpm",
+    "queue": "キュー",
+    "playlist": "再生リスト",
+    "plays_other": "{{count}} 回再生"
+  },
+  "author": {
+    "followed": "@{{author}} さんをフォローしました",
+    "unfollowed": "@{{author}} さんのフォローを解除しました",
+    "failed": "失敗しました",
+    "tracks_other": "{{count}} トラック"
+  },
+  "player": {
+    "openPost": "音声の投稿を開く",
+    "playlist": "再生リスト",
+    "transcript": "文字起こし",
+    "volume": "音量",
+    "queue": "キュー",
+    "closePlayer": "プレーヤーを閉じる",
+    "curated": "キュレーション",
+    "noCues": "キューポイントはありません。",
+    "clearQueue": "キューをクリア",
+    "clearAll": "すべてクリア",
+    "queueEmpty": "キューは空です。"
+  },
+  "share": {
+    "failed": "失敗しました",
+    "copyPeakd": "PeakD のリンクをコピー",
+    "copiedPeakd": "PeakD のリンクをコピーしました！",
+    "copy3speak": "3Speak のリンクをコピー",
+    "copied3speak": "3Speak のリンクをコピーしました！",
+    "copyAudioPlayer": "オーディオプレーヤーのリンクをコピー",
+    "copiedAudioPlayer": "オーディオプレーヤーのリンクをコピーしました！",
+    "searchingHive": "Hive を検索中…"
+  },
+  "post": {
+    "notFound": "投稿が見つかりません",
+    "loadFailed": "この音声の投稿を読み込めませんでした",
+    "loadFailedFull": "この音声の投稿を読み込めませんでした。",
+    "backToAudio": "← 音声に戻る",
+    "untitled": "（無題）",
+    "addedToQueue": "キューに追加しました",
+    "signInToVote": "投票するにはログイン",
+    "voted": "投票済み",
+    "vote": "投票",
+    "signInToTip": "投げ銭するにはログイン",
+    "tip": "投げ銭",
+    "stillIndexing": "この投稿の音声はまだインデックス中です。数分後にもう一度お試しください。"
+  },
+  "page": {
+    "sections": {
+      "popular": "人気",
+      "recent": "新作",
+      "podcasts": "ポッドキャスト",
+      "songs": "曲",
+      "audiobooks": "オーディオブック",
+      "interviews": "インタビュー"
+    },
+    "dates": {
+      "today": "今日",
+      "thisWeek": "今週",
+      "thisMonth": "今月",
+      "thisYear": "今年"
+    },
+    "duration": {
+      "label": "長さ",
+      "min": "最短の長さ",
+      "max": "最長の長さ",
+      "seconds": "{{value}}秒",
+      "minutes": "{{value}}分",
+      "hours": "{{value}}時間"
+    },
+    "all": "すべて",
+    "musicGenre": "音楽ジャンル",
+    "anyGenre": "すべてのジャンル",
+    "tracks_other": "{{count}} トラック",
+    "noTracks": "トラックが見つかりません。",
+    "creators": "クリエイター",
+    "albumsPlaylists": "アルバムと再生リスト",
+    "noAudioForFilters": "この条件に一致する音声はありません。"
+  },
+  "upload": {
+    "title": "音声をアップロード",
+    "publishing": "公開中…",
+    "failed": "失敗しました",
+    "unknown": "不明",
+    "unknownError": "不明なエラー",
+    "recorded": "録音",
+    "uploaded": "アップロード済み",
+    "steps": {
+      "source": "ソース",
+      "mode": "モード",
+      "playlist": "再生リスト",
+      "post": "投稿",
+      "mainpost": "メイン投稿",
+      "tracks": "トラック",
+      "review": "確認"
+    },
+    "trackTypes": {
+      "voiceSnap": "ボイス / Snap"
+    },
+    "toasts": {
+      "pickImage": "画像ファイルを選んでください",
+      "thumbFailed": "サムネイルのアップロードに失敗しました: {{error}}",
+      "appliedToAll": "すべてのトラックに適用しました",
+      "micDenied": "マイクへのアクセスが拒否されました",
+      "signInFirst": "先にログインしてください",
+      "enterPlaylistName": "再生リストの名前を入力してください",
+      "creatingPlaylist": "再生リスト「{{name}}」を作成中…",
+      "playlistCreated": "再生リストを作成しました",
+      "failedWithError": "失敗しました: {{error}}",
+      "authorized": "@threespeak を承認しました。公開できます",
+      "authFailed": "承認に失敗しました。もう一度お試しください。",
+      "couldntPublishMain": "メイン投稿を公開できませんでした: {{error}}",
+      "couldntResolveContainer": "peak.snaps のコンテナを取得できませんでした: {{error}}",
+      "published_other": "{{count}} トラックを公開しました",
+      "someFailed": "一部のトラックが失敗しました。失敗したトラックを開いて再試行してください"
+    },
+    "gate": {
+      "checking": "確認中…",
+      "allowThreespeak": "音声を公開するには、<b>@threespeak</b> があなたの代わりに投稿することを許可してください。",
+      "authorizing": "承認中…",
+      "authorize": "@threespeak を承認",
+      "notEnoughRc": "現在、アカウントの<b>リソースクレジット</b>が投稿の公開に足りません。",
+      "whyCantUpload": "なぜアップロードできないの？"
+    },
+    "discard": {
+      "title": "アップロードを破棄しますか？",
+      "body_other": "{{count}} トラックが追加されています。閉じると破棄されます。",
+      "bodyRecording_other": "{{count}} トラックが追加され、録音中のものがあります。閉じると破棄されます。",
+      "keepEditing": "編集を続ける",
+      "discard": "破棄"
+    },
+    "source": {
+      "dropHere": "音声ファイルをここにドロップするか、クリックして選択",
+      "formats": "MP3、WAV、OGG、WEBM、M4A、FLAC、AAC（複数可）",
+      "stop": "停止",
+      "orRecord": "またはその場で録音",
+      "recordLimit": "1 回の録音は最大 {{minutes}} 分",
+      "record": "録音",
+      "added": "追加済み（{{count}}）"
+    },
+    "titles": {
+      "help": "各トラックにタイトルを付けて種類を選んでください。音楽トラックにはジャンルと BPM の欄があります。"
+    },
+    "fields": {
+      "trackTitle": "トラックのタイトル",
+      "genre": "ジャンル",
+      "bpm": "BPM",
+      "descriptionOptional": "説明（任意）"
+    },
+    "playlist": {
+      "helpRequired": "必須 — 再生リストを選ぶか作成してください。アルバム投稿は再生リストの中に置かれ、トラックが 3Speak のアルバムとしてまとまります。露出が増え、音声ページで目立つ位置に表示されやすくなります。",
+      "helpOptional": "任意 — すべてのトラックを再生リストに追加します。",
+      "none": "再生リストなし",
+      "noneHint": "トラックはまとめられません",
+      "creatingPending": "作成中…（インデクサーを待っています）",
+      "loading": "再生リストを読み込み中…",
+      "empty": "まだ再生リストがありません。",
+      "items_other": "{{count}} 件",
+      "newPlaylist": "新しい音声の再生リスト",
+      "namePlaceholder": "再生リストの名前",
+      "public": "公開",
+      "private": "非公開",
+      "musicStylePlaceholder": "音楽スタイル / ジャンル（任意、例: エレクトロニック）",
+      "creditsPlaceholder": "クレジット（任意）",
+      "yearPlaceholder": "年",
+      "labelPlaceholder": "レーベル（任意）",
+      "thumbAlt": "アルバムのサムネイル",
+      "removeThumb": "サムネイルを削除",
+      "creating": "作成中…",
+      "create": "作成"
+    },
+    "thumb": {
+      "uploading": "アップロード中…",
+      "addCover": "カバー画像を追加",
+      "hint": "クリックまたはドラッグ＆ドロップ — JPG / PNG / WebP",
+      "coverAlt": "カバー",
+      "removeCover": "カバーを削除"
+    },
+    "mode": {
+      "help_other": "{{count}} トラックが追加されています。公開方法を選んでください。",
+      "howPublished": "どのように公開しますか？",
+      "snapsTitle": "Snap のコメント",
+      "snapsDesc": "各音声を最新の peak.snaps コンテナへの返信として投稿します。Snaps のフィードに表示されます（デフォルト）。",
+      "singleTitle": "単独の投稿",
+      "singleTitleSingleOnly": "単独の投稿（ファイル 1 つのみ）",
+      "singleDesc": "1 つの音声を、タイトル、コミュニティ、タグ、カバー付きの独立した Hive 投稿として公開します。",
+      "albumTitle": "アルバム投稿",
+      "albumTitleNeeds2": "アルバム投稿（ファイル 2 つ以上が必要）",
+      "albumDesc": "音声のないメイン投稿 1 つをランディングページとし、各トラックはそれぞれのカバー、説明、報酬、受益者を持つコメント返信として公開します。",
+      "howEarn": "この音声でどのように報酬を得ますか？",
+      "postRewardsTitle": "投稿の報酬（1 回のみ）",
+      "postRewardsDesc": "通常の Hive の投稿者報酬を受け取ります。公開から約 7 日後に 1 回支払われます。",
+      "pplTitle": "再生ごとの報酬（永続）",
+      "pplDesc": "音声投稿の報酬はすべて @{{account}} に送られます。1 回の支払いの代わりに、3Speak のプログラムがトラックの存続期間中、再生ごとにあなたに支払います。"
+    },
+    "reward": {
+      "distribution": "報酬の分配",
+      "default": "デフォルト（50% HBD / 50% HP）",
+      "powerup": "100% パワーアップ",
+      "decline": "報酬を辞退",
+      "beneficiaries": "受益者",
+      "beneficiariesCount": "受益者（{{count}}）"
+    },
+    "mainPost": {
+      "helpAlbum": "メイン投稿（アルバムのランディングページ）の詳細です。音声は含まず、各トラックは次で設定するコメント返信になります。",
+      "helpSingle": "単独の投稿の詳細です。",
+      "titlePlaceholder": "タイトル（必須）",
+      "selectCommunity": "コミュニティを選択",
+      "change": "変更",
+      "tagsPlaceholder": "タグ — スペースまたはカンマ区切り（任意）",
+      "whatKind": "どんな種類の音声ですか？"
+    },
+    "tracks": {
+      "helpAlbum": "各トラックはメイン投稿へのコメントとして公開されます。共通の値を一度設定してすべてに適用し、トラックごとに上書きできます。",
+      "helpSnaps": "各トラックは独立した Snap として公開されます。共通の値を一度設定してすべてに適用し、トラックごとに上書きできます。",
+      "applyToAllHeading": "すべてのトラックに適用",
+      "sharedDescription": "共通の説明（任意）",
+      "sharedCover": "共通のカバー画像",
+      "applyToAll_other": "{{count}} トラックすべてに適用",
+      "hide": "隠す"
+    },
+    "review": {
+      "standalone": "単独の投稿",
+      "standaloneIn": "{{community}} への単独の投稿",
+      "album_other": "アルバム — メイン投稿 1 件 + トラックのコメント {{count}} 件",
+      "albumIn_other": "アルバム — {{community}} へのメイン投稿 1 件 + トラックのコメント {{count}} 件",
+      "snapComments_other": "Snap のコメント {{count}} 件",
+      "ready_other": "{{count}} トラックを公開する準備ができました。",
+      "readyToPlaylist_other": "{{count}} トラックを再生リスト「{{name}}」に公開する準備ができました。",
+      "publishAs": "公開形式:",
+      "earnings": "報酬:",
+      "earningsPpl": "再生ごとの報酬（@{{account}}）",
+      "earningsNormal": "通常の投稿報酬",
+      "playlist": "再生リスト:",
+      "failedCount_other": "{{count}} トラックが失敗しました。",
+      "retryAllFailed": "失敗したものをすべて再試行",
+      "failedDuringUpload": "音声ファイルのアップロード中に失敗しました: {{message}}",
+      "failedDuringPost": "Hive への投稿中に失敗しました: {{message}}",
+      "failedWithMessage": "失敗しました: {{message}}"
+    },
+    "stage": {
+      "upload": "音声ファイルをアップロード中",
+      "post": "Hive に投稿中",
+      "uploadingFallback": "アップロード中",
+      "published": "公開済み"
+    }
+  }
+}

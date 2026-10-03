@@ -1,0 +1,241 @@
+{
+  "leaderboard": {
+    "windows": {
+      "7d": "7 日間",
+      "30d": "30 日間",
+      "365d": "1 年",
+      "all": "全期間"
+    },
+    "windowsInSentence": {
+      "7d": "7 日間",
+      "30d": "30 日間",
+      "365d": "1 年間",
+      "all": "全期間"
+    },
+    "metrics": {
+      "video_uploads": "動画",
+      "short_uploads": "ショート",
+      "video_watch_secs": "動画の視聴時間",
+      "short_watch_secs": "ショートの視聴時間",
+      "tags_given": "タグ",
+      "streams": "配信",
+      "stream_secs": "配信時間",
+      "stream_peak_viewers": "最大同時視聴者数",
+      "stream_viewers": "視聴者の参加数",
+      "boosts_received": "受け取ったブースト",
+      "boost_amount_received": "受け取った金額",
+      "boosts_given": "送ったブースト",
+      "boost_amount_given": "送った金額"
+    },
+    "metricsInSentence": {
+      "video_uploads": "動画",
+      "short_uploads": "ショート",
+      "video_watch_secs": "動画の視聴時間",
+      "short_watch_secs": "ショートの視聴時間",
+      "tags_given": "タグ",
+      "streams": "配信",
+      "stream_secs": "配信時間",
+      "stream_peak_viewers": "最大同時視聴者数",
+      "stream_viewers": "視聴者の参加数",
+      "boosts_received": "受け取ったブースト",
+      "boost_amount_received": "受け取った金額",
+      "boosts_given": "送ったブースト",
+      "boost_amount_given": "送った金額"
+    },
+    "blurbs": {
+      "video_uploads": "アップロードした動画",
+      "short_uploads": "アップロードしたショート",
+      "video_watch_secs": "動画が視聴された秒数",
+      "short_watch_secs": "ショートが視聴された秒数",
+      "tags_given": "ほかの動画に付けたタグ",
+      "streams": "開始した配信セッション",
+      "stream_secs": "合計配信時間（終了した配信のみ）",
+      "stream_peak_viewers": "最大同時視聴者数（合計ではなく最高値）",
+      "stream_viewers": "視聴者の参加回数（ユニーク数ではなく延べ数）",
+      "boosts_received": "配信に送られたブースト",
+      "boost_amount_received": "受け取ったブーストの合計金額",
+      "boosts_given": "ほかの配信者に送ったブースト",
+      "boost_amount_given": "送ったブーストの合計金額"
+    },
+    "blurbsInSentence": {
+      "video_uploads": "アップロードした動画",
+      "short_uploads": "アップロードしたショート",
+      "video_watch_secs": "動画が視聴された秒数",
+      "short_watch_secs": "ショートが視聴された秒数",
+      "tags_given": "ほかの動画に付けたタグ",
+      "streams": "開始した配信セッション",
+      "stream_secs": "合計配信時間（終了した配信のみ）",
+      "stream_peak_viewers": "最大同時視聴者数（合計ではなく最高値）",
+      "stream_viewers": "視聴者の参加回数（ユニーク数ではなく延べ数）",
+      "boosts_received": "配信に送られたブースト",
+      "boost_amount_received": "受け取ったブーストの合計金額",
+      "boosts_given": "ほかの配信者に送ったブースト",
+      "boost_amount_given": "送ったブーストの合計金額"
+    },
+    "groups": {
+      "video": "動画",
+      "streaming": "配信"
+    },
+    "badgeNouns": {
+      "video_uploads": "動画",
+      "short_uploads": "ショート",
+      "video_watch_secs": "視聴",
+      "short_watch_secs": "ショート視聴",
+      "tags_given": "タグ付け"
+    },
+    "badgeLabel": "{{tier}} {{noun}}",
+    "badgeTitleAllTime": "全期間の{{what}}で {{rank}} 位",
+    "badgeTitleWindow": "過去 {{window}} の{{what}}で {{rank}} 位"
+  },
+  "duration": {
+    "hoursMinutes": "{{h}}時間{{m}}分",
+    "minutesSeconds": "{{m}}分{{s}}秒",
+    "seconds": "{{s}}秒",
+    "aMoment": "一瞬",
+    "lessThanMinute": "1 分未満"
+  },
+  "surf": {
+    "community": "コミュニティ",
+    "allOf": "{{label}} のすべて"
+  },
+  "social": {
+    "signingCancelled": "署名がキャンセルされました",
+    "youtube": {
+      "placeholder": "@handle または UCxxxxxxxxxxxxxxxxxxxxxx",
+      "help": "YouTube の @ハンドル、または UC… で始まるチャンネル ID を貼り付けてください。チャンネル ID に正規化します。"
+    },
+    "soundcloud": {
+      "placeholder": "your-profile または https://soundcloud.com/your-profile",
+      "help": "SoundCloud のプロフィール URL、またはその中のユーザー名だけを貼り付けてください。ハッシュはプロフィールの自己紹介のどこかに入れてください。"
+    }
+  },
+  "snaps": {
+    "retrying": "Snaps のコンテナがまだ見つかりません。再試行中（{{attempt}} 回目）...",
+    "unreachable": "Snaps のコンテナを探すための Hive ノードに接続できませんでした。接続を確認して、もう一度お試しください。",
+    "unreachableWithError": "Snaps のコンテナを探すための Hive ノードに接続できませんでした（最後のエラー: {{error}}）。接続を確認して、もう一度お試しください。"
+  },
+  "embed": {
+    "responsive": "レスポンシブ"
+  },
+  "incubation": {
+    "requestFailed": "リクエストに失敗しました（{{status}}）",
+    "contactLoadFailed": "連絡先情報を読み込めませんでした",
+    "contactSaveFailed": "連絡先情報を保存できませんでした",
+    "onlyButrauthBacklog": "インキュベーションのバックログを持てるのは Butter Auth アカウントだけです",
+    "publishFailed": "公開に失敗しました（{{status}}）"
+  },
+  "routeError": {
+    "title": "このページを読み込めませんでした",
+    "body": "アプリの一部をダウンロードできませんでした。通常は、このタブを開いている間に新しいバージョンが公開されたことが原因です。再読み込みすると反映されます。",
+    "reload": "再読み込み",
+    "goHome": "ホームへ"
+  },
+  "seo": {
+    "defaultTitle": "3Speak - 分散型動画プラットフォーム",
+    "defaultDescription": "3Speak は、ブロックチェーン技術で作られた分散型の動画共有プラットフォームです。動画を視聴、アップロード、共有しながら、暗号資産の報酬を得られます。"
+  },
+  "uploadLinks": {
+    "regularVideo": "通常の動画",
+    "verticalShort": "縦型ショート",
+    "musicAudio": "音楽 / 音声",
+    "groupChat": "グループチャット",
+    "communitySnap": "コミュニティの Snap",
+    "shortsEditor": "ショートエディター",
+    "goLive": "ライブ配信",
+    "streamStudio": "配信スタジオ",
+    "headings": {
+      "upload": "アップロード",
+      "live": "ライブ",
+      "others": "その他"
+    }
+  },
+  "chat": {
+    "connectFailed": "チャットに接続できませんでした。",
+    "loginFirst": "チャットを使うには先にログインしてください。",
+    "roomNameRequired": "ルーム名を入力してください。"
+  },
+  "hiveAuth": {
+    "waiting": "HiveAuth での承認を待っています...",
+    "title": "HiveAuth での承認が必要です",
+    "hint": "HiveAuth アプリでこのトランザクションを承認してください"
+  },
+  "hiveApi": {
+    "keychainNotSigned": "Keychain がトランザクションに署名しませんでした",
+    "loginToCreateCommunity": "コミュニティを作成するにはログインしてください",
+    "loginFirst": "先にログインしてください",
+    "cancelled": "操作がキャンセルされました"
+  },
+  "openpod": {
+    "announced": "ライブセッションを Hive で告知しました！",
+    "announceFailed": "OpenPod は開始しましたが、Hive での告知を投稿できませんでした。"
+  },
+  "appUpdate": {
+    "updating": "最新バージョン（{{version}}）に更新中…",
+    "reloadingForUpload": "アップロードが最新版で動くように再読み込みしています。"
+  },
+  "auth": {
+    "switched": "{{username}} に切り替えました！",
+    "keychainLoginTitle": "Hive でログイン"
+  },
+  "streamVod": {
+    "uploadKeyMissing": "配信は終了しましたが、動画をアップロードできませんでした（アップロードキーがありません）。",
+    "uploading": "配信の動画をアップロード中… {{pct}}%",
+    "uploaded": "配信の動画をアップロードしました。エンコードが終わるとライブ配信と置き換わります。",
+    "uploadFailed": "配信は終了しましたが、動画のアップロードに失敗しました。",
+    "saving": "配信の動画を保存中…",
+    "encoding": "アップロード完了。エンコーダーが動画を処理しています…",
+    "saved": "配信の動画を保存しました。エンコードが終わるとライブ配信と置き換わります。",
+    "saveFailed": "配信は終了しましたが、動画を保存できませんでした: {{error}}。",
+    "uploadFailedShort": "アップロードに失敗しました",
+    "stillProcessing": "配信は終了しました。動画はまだ処理中です。しばらくしてからプロフィールを確認してください。"
+  },
+  "embedPlayer": {
+    "unavailable": "動画を利用できません"
+  },
+  "followFeed": {
+    "title": "フォローフィード",
+    "error": "動画の取得中にエラーが発生しました"
+  },
+  "groups": {
+    "title": "グループ",
+    "badges": "バッジ",
+    "subtitle": "参加できるコミュニティと、みんなが持っているバッジを一か所で。"
+  },
+  "watched": {
+    "removed": "再生履歴から削除しました",
+    "removeFailed": "再生履歴から削除できませんでした",
+    "title": "視聴済み",
+    "count_other": "{{count}} 本視聴済み",
+    "trackHistory": "履歴を記録",
+    "videosTab": "動画（{{count}}）",
+    "shortsTab": "ショート（{{count}}）",
+    "loadFailed": "再生履歴を読み込めませんでした。もう一度お試しください。",
+    "emptyShorts": "視聴したショートはまだありません",
+    "emptyVideos": "視聴した動画はまだありません",
+    "removeTitle": "再生履歴から削除",
+    "watchedAt": "{{when}} に視聴"
+  },
+  "watchStream": {
+    "saySomething": "何か話しかけよう…",
+    "waitingWallet": "ウォレットを待っています…",
+    "signInToChat": "チャットするにはログイン",
+    "sendMessage": "メッセージを送信",
+    "notLive": "この配信は現在ライブではありません。",
+    "notFound": "このリンクのライブ配信は見つかりません。",
+    "browse": "ライブ配信を見る",
+    "back": "3Speak に戻る",
+    "seoTitle": "{{title}}（LIVE）",
+    "swipeNext": "スワイプして次のライブ配信へ",
+    "chat": "チャット",
+    "watchingNow": "👁 {{count}} 人が視聴中",
+    "signInRaiseHand": "挙手するにはログイン",
+    "copyLink": "配信のリンクをコピー",
+    "notAvailableLive": "ライブ配信では利用できません",
+    "vote": "投票",
+    "comment": "コメント",
+    "liveChat": "ライブチャット",
+    "signInToJoin": "🔒 チャットに参加するにはログインしてください。",
+    "moreTag": "#{{tag}} をもっと見る",
+    "moreVideos": "ほかの動画"
+  }
+}

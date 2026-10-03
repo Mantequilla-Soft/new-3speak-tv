@@ -1,0 +1,96 @@
+{
+  "backToOpenPods": "OpenPods に戻る",
+  "modal": {
+    "leaveConfirm": "この OpenPod から退出しますか？ロビーからいつでも再参加できます。",
+    "yourStreamEnded": "配信が終了しました",
+    "thisStreamEnded": "この配信は終了しました",
+    "noLongerLive": "現在は配信されていません。準備ができたらいつでも新しく始めましょう。",
+    "recordingProcessing": "お疲れさまでした！録画を処理しています。まもなく告知投稿に表示されます。",
+    "thanksForLive": "お疲れさまでした。ライブ配信ありがとうございます！",
+    "backHome": "ホームに戻る",
+    "howWasStream": "配信はいかがでしたか？",
+    "connecting": "OpenPods に接続中…",
+    "authenticating": "OpenPods で認証中…"
+  },
+  "strip": {
+    "liveNow_other": "<n>{{count}}</n> 件の OpenPod が配信中",
+    "viewAll": "すべて表示",
+    "joinAria": "OpenPod に参加: {{title}}"
+  },
+  "announce": {
+    "selectCommunity": "コミュニティを選択",
+    "shareToggle": "📣 配信開始時に Hive と 3Speak でこの配信を共有する",
+    "community": "コミュニティ",
+    "rewards": "報酬",
+    "rewardDefault": "デフォルト 50/50",
+    "rewardPowerup": "100% パワーアップ",
+    "rewardDecline": "報酬を辞退",
+    "beneficiaries": "受益者",
+    "beneProHint": "3Speak Pro をご利用中なので、プラットフォーム手数料はかかりません。必要なら分配先を追加できます。",
+    "beneLockedHint": "@threespeakfund への 10% は固定です。さらに追加できます。"
+  },
+  "boost": {
+    "label": "ブースト",
+    "sendTo": "@{{user}} さんにブーストを送る",
+    "send": "ブーストを送る"
+  },
+  "clip": {
+    "saved": "クリップをダウンロードに保存しました。",
+    "slowDown": "少し待ってから、もう一度クリップしてください。",
+    "failed": "クリップを作成できませんでした。数秒後にもう一度お試しください。",
+    "title": "直近 30 秒をクリップ",
+    "label": "30 秒",
+    "clipping": "クリップ中…"
+  },
+  "report": {
+    "reasons": {
+      "harassment": "嫌がらせやヘイト",
+      "sexual": "性的または露骨なコンテンツ",
+      "violence": "暴力や危険な行為",
+      "selfharm": "自傷行為",
+      "illegal": "違法なコンテンツ",
+      "spam": "スパムや詐欺",
+      "other": "その他"
+    },
+    "sent": "ありがとうございます。この配信をチームに報告しました。",
+    "failed": "報告を送信できませんでした。もう一度お試しください。",
+    "title": "この配信を報告",
+    "reporting": "<b>@{{host}}</b> を報告しています。",
+    "intro": "何が問題か教えてください。チームがすべての報告を確認します。",
+    "detailPlaceholder": "詳細を追加（任意）",
+    "sending": "送信中…",
+    "submit": "報告を送信"
+  },
+  "signIn": {
+    "waitingWallet": "ウォレットを待っています…"
+  },
+  "publish": {
+    "errors": {
+      "noTitle": "タイトルを追加してください",
+      "noAudio": "音声の URL が見つかりません",
+      "failed": "公開に失敗しました。もう一度お試しください。"
+    },
+    "published": "録画を Hive に公開しました！",
+    "loginGate": "録画を公開するにはログインしてください。",
+    "heading": "OpenPod の録画を公開",
+    "previewLabel": "録画のプレビュー",
+    "previewHint": "公開する前に音声を確認してください。投稿で読者に表示されるものと同じプレーヤーです。",
+    "recordingFallback": "OpenPod の録画",
+    "title": "タイトル",
+    "titlePlaceholder": "録画にタイトルを付けましょう",
+    "description": "説明",
+    "optional": "（任意）",
+    "descriptionPlaceholder": "何について話しましたか？番組メモやリンク、要約を追加しましょう...",
+    "tags": "タグ",
+    "tagsPlaceholder": "タグをスペースで区切って入力",
+    "declinePayout": "報酬を辞退",
+    "publishing": "公開中…",
+    "submit": "録画を公開"
+  },
+  "lobby": {
+    "descriptionPlaceholder": "このセッションは何についてですか？番組メモやリンク、要約を追加しましょう…",
+    "enableHosting": "ホストと発言を有効にする",
+    "handoverFailed": "ホスト機能を自動で有効にできませんでした。OpenPods は @threespeak を通じてあなたの代わりに投稿します。ポスティング権限を付与しているか確認して、もう一度お試しください。",
+    "signInToHost": "ホストや発言をするには Hive でログイン"
+  }
+}

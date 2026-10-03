@@ -1,0 +1,348 @@
+{
+  "icons": {
+    "link": "リンク",
+    "globe": "ウェブサイト",
+    "podcast": "ポッドキャスト",
+    "email": "メール",
+    "phone": "電話",
+    "rss": "RSS",
+    "qrcode": "QR コード",
+    "shop": "ショップ",
+    "bag": "ストア",
+    "dollar": "お金",
+    "gift": "ギフト",
+    "heart": "応援",
+    "star": "スター",
+    "thumbsup": "いいね",
+    "fire": "炎",
+    "bolt": "稲妻",
+    "music": "音楽",
+    "headphones": "音声",
+    "mic": "マイク",
+    "video": "動画",
+    "film": "映画",
+    "tv": "テレビ",
+    "play": "再生",
+    "camera": "写真",
+    "image": "画像",
+    "palette": "アート",
+    "pen": "執筆",
+    "book": "本",
+    "newspaper": "ニュース",
+    "graduation": "講座",
+    "code": "コード",
+    "gamepad": "ゲーム",
+    "briefcase": "仕事",
+    "home": "ホーム",
+    "location": "場所",
+    "map": "地図",
+    "calendar": "カレンダー",
+    "clock": "時計",
+    "bell": "お知らせ",
+    "tag": "タグ",
+    "download": "ダウンロード",
+    "file": "ファイル",
+    "users": "コミュニティ",
+    "comment": "コメント",
+    "share": "共有",
+    "coffee": "コーヒー",
+    "wallet": "ウォレット",
+    "plus": "その他",
+    "check": "チェック"
+  },
+  "fonts": {
+    "system": "システム",
+    "rounded": "丸ゴシック",
+    "serif": "セリフ",
+    "mono": "等幅",
+    "display": "ディスプレイ",
+    "condensed": "コンデンス",
+    "handwriting": "手書き",
+    "grotesk": "グロテスク",
+    "humanist": "ヒューマニスト",
+    "geometric": "ジオメトリック",
+    "slab": "スラブ",
+    "elegant": "エレガント",
+    "typewriter": "タイプライター",
+    "marker": "マーカー",
+    "brush": "筆",
+    "palatino": "Palatino",
+    "wide": "ワイド"
+  },
+  "motion": {
+    "none": "なし",
+    "float": "ふわふわ",
+    "sway": "ゆらゆら",
+    "pulse": "パルス",
+    "wobble": "ぐらぐら",
+    "bounce": "バウンド",
+    "tilt": "3D チルト",
+    "spin": "回転",
+    "shake": "シェイク",
+    "breathe": "呼吸"
+  },
+  "sectionTypes": {
+    "link": "リンク",
+    "video": "3Speak のコンテンツ",
+    "embed": "リッチリンク",
+    "image": "画像",
+    "header": "タイトル / テキスト"
+  },
+  "blockNames": {
+    "link": "リンク",
+    "header": "見出し",
+    "image": "画像",
+    "video": "動画",
+    "embed": "埋め込み"
+  },
+  "blockNamesPlural": {
+    "link": "リンク",
+    "header": "見出し",
+    "image": "画像",
+    "video": "動画",
+    "embed": "埋め込み"
+  },
+  "templates": {
+    "minimal": {
+      "name": "Minimal",
+      "niche": "シンプルですっきり"
+    },
+    "neon": {
+      "name": "Neon Nights",
+      "niche": "クリエイター / 配信者"
+    },
+    "crypto": {
+      "name": "On-Chain",
+      "niche": "暗号資産 / Web3"
+    },
+    "gamer": {
+      "name": "Player One",
+      "niche": "ゲーム"
+    },
+    "photographer": {
+      "name": "Exposure",
+      "niche": "写真"
+    },
+    "podcaster": {
+      "name": "On Air",
+      "niche": "ポッドキャスト"
+    },
+    "fitness": {
+      "name": "Peak Form",
+      "niche": "フィットネス / コーチ"
+    },
+    "writer": {
+      "name": "Longform",
+      "niche": "ライター / ブロガー"
+    },
+    "chef": {
+      "name": "Mise en Place",
+      "niche": "グルメ / 料理"
+    },
+    "travel": {
+      "name": "Wanderlust",
+      "niche": "自然 / 旅行"
+    },
+    "business": {
+      "name": "Boardroom",
+      "niche": "ビジネス / プロ"
+    },
+    "artist": {
+      "name": "Palette",
+      "niche": "アーティスト / ビジュアル"
+    },
+    "ocean": {
+      "name": "Tidewater",
+      "niche": "チル / ライフスタイル"
+    },
+    "musician": {
+      "name": "Amplified",
+      "niche": "音楽 / バンド"
+    },
+    "developer": {
+      "name": "Terminal",
+      "niche": "開発者 / テック"
+    },
+    "sports": {
+      "name": "Game Day",
+      "niche": "スポーツ / アスリート"
+    }
+  },
+  "errors": {
+    "notLoggedIn": "ログインしていません",
+    "couldNotSaveToHive": "Hive に保存できませんでした"
+  },
+  "arrange": {
+    "title": "タイトル",
+    "video": "動画",
+    "latestPosts": "最新の投稿",
+    "latestPostsBy": "最新の投稿 · @{{account}}",
+    "dragToArrange": "ドラッグして並べ替え"
+  },
+  "page": {
+    "latestPosts": "最新の投稿",
+    "seeNewestPosts": "@{{user}} さんの最新の投稿を見る →",
+    "openLink": "リンクを開く",
+    "empty": "@{{user}} さんはまだリンクを追加していません。",
+    "viewProfile": "3Speak のプロフィールを見る →",
+    "poweredBy": "Powered by 3Speak"
+  },
+  "editor": {
+    "resetToDefault": "デフォルトに戻す",
+    "motion": "モーション",
+    "speed": "速度 {{value}}",
+    "loop": "ループ",
+    "runSeconds": "{{value}} 秒間",
+    "picker": {
+      "videoLabel": "自分の動画から選ぶ",
+      "videoLoading": "動画を読み込み中…",
+      "videoEmpty": "最近の 3Speak 動画が見つかりません。",
+      "shortLabel": "自分のショートから選ぶ",
+      "shortLoading": "ショートを読み込み中…",
+      "shortEmpty": "最近の 3Speak ショートが見つかりません。",
+      "noChannel": "チャンネルが見つかりません（ログインしていますか？）",
+      "loadFailed": "読み込めませんでした: {{error}}"
+    },
+    "toasts": {
+      "unfurlFailed": "リンクのプレビューを取得できませんでした",
+      "imageUploadFailed": "画像のアップロードに失敗しました: {{error}}",
+      "tryAgain": "もう一度お試しください",
+      "styleApplied": "すべての{{type}}ブロックにスタイルを適用しました",
+      "templateApplied": "「{{name}}」を適用しました。調整するか、元に戻せます",
+      "reverted": "以前のデザインに戻しました",
+      "saved": "スポットライトを Hive プロフィールに保存しました",
+      "saveFailed": "保存できませんでした",
+      "linkCopied": "リンクをコピーしました",
+      "uploadFailed": "アップロードに失敗しました"
+    },
+    "link": {
+      "labelPlaceholder": "ラベル（例: マイ YouTube）",
+      "type": "リンクの種類",
+      "typeGroup": "種類",
+      "website": "ウェブサイト / URL",
+      "email": "メール",
+      "phone": "電話",
+      "platformGroup": "プラットフォーム",
+      "yourname": "yourname",
+      "platformIconHint": "アイコンは {{platform}} のロゴです。カスタムアイコンを選ぶには「ウェブサイト / URL」に切り替えてください。",
+      "icon": "アイコン",
+      "iconColor": "アイコンの色",
+      "iconBg": "アイコンの背景"
+    },
+    "header": {
+      "text": "テキスト",
+      "size": "サイズ",
+      "large": "大",
+      "medium": "中",
+      "small": "小",
+      "align": "配置",
+      "left": "左",
+      "center": "中央",
+      "right": "右"
+    },
+    "image": {
+      "uploading": "アップロード中…",
+      "upload": "画像をアップロード",
+      "urlPlaceholder": "…または画像の URL",
+      "linkPlaceholder": "クリック時のリンク（任意）"
+    },
+    "video": {
+      "contentType": "コンテンツの種類",
+      "video": "動画",
+      "short": "ショート",
+      "orPaste": "またはリンクを貼り付け",
+      "pastePlaceholder": "3Speak の動画リンク、または author/permlink を貼り付け",
+      "titlePlaceholder": "動画の上に表示するタイトル（3Speak にリンク）",
+      "hint": "選んだコンテンツがページに埋め込まれて再生されます。"
+    },
+    "embed": {
+      "source": "ソース",
+      "sourceLink": "リンク（リッチプレビュー）",
+      "sourceHiveRecent": "自分の最新の Hive 投稿",
+      "accountPlaceholder": "Hive ユーザー名（自分の場合は空欄）",
+      "showPosts_other": "{{count}} 件の投稿を表示",
+      "perRow": "1 行に {{value}} 件",
+      "hiveRecentHint": "最新のトップレベルの投稿（リブログやクロスポストは除く）。自動で更新されます。",
+      "linkPlaceholder": "Hive の投稿、Instagram、X、YouTube、記事など、どんなリンクでも貼り付け…",
+      "fetching": "プレビューを取得中…",
+      "noPreview": "プレビューが見つかりません。リンクカードとして表示されます。",
+      "pasteHint": "リンクを貼り付けると、タイトル、説明、画像を取り込みます。"
+    },
+    "style": {
+      "title": "スタイル",
+      "applyAllTitle": "このスタイルをすべての{{type}}ブロックに適用",
+      "applyAll": "すべての{{types}}に適用",
+      "background": "背景",
+      "text": "テキスト",
+      "backgroundPct": "背景 {{value}}%",
+      "radius": "角の丸み {{value}}",
+      "fontSizePct": "文字サイズ {{value}}%",
+      "paddingPx": "余白 {{value}}px",
+      "thumbnailPct": "サムネイル {{value}}%",
+      "border": "枠線",
+      "thicknessPx": "太さ {{value}}px",
+      "opacityPct": "不透明度 {{value}}%",
+      "shadow": "影",
+      "strengthPct": "強さ {{value}}%",
+      "color": "色",
+      "blur": "ぼかし {{value}}",
+      "spread": "広がり {{value}}",
+      "inset": "内側",
+      "cardDelayMs": "カードの遅延 {{value}}ms"
+    },
+    "tagline": "リンクと動画を 1 ページに",
+    "openPage": "ページを開く",
+    "templates": {
+      "title": "テンプレート",
+      "hint": "デザインを選ぶとすべてが設定されます。自己紹介は残り、元に戻すこともできます。",
+      "undo": "テンプレートを元に戻す — 自分のデザインに戻る"
+    },
+    "profile": {
+      "title": "プロフィール",
+      "headlinePlaceholder": "短い見出し / 自己紹介（任意）",
+      "avatarSizePct": "アバターのサイズ {{value}}%",
+      "avatarShadowPct": "アバターの影 {{value}}%",
+      "avatarGlow": "アバターの光彩",
+      "glowSize": "光彩のサイズ {{value}}",
+      "channelButtonText": "チャンネルボタンのテキスト"
+    },
+    "page": {
+      "title": "ページのスタイル",
+      "solid": "単色",
+      "gradient": "グラデーション",
+      "image": "画像",
+      "color2": "色 2",
+      "angle": "角度 {{value}}°",
+      "uploadBackground": "背景をアップロード",
+      "imageSet": "画像を設定済み ✓",
+      "overlay": "オーバーレイ",
+      "overlay2": "オーバーレイ 2",
+      "none": "なし",
+      "overlayOpacityPct": "オーバーレイの不透明度 {{value}}%",
+      "overlayAngle": "オーバーレイの角度 {{value}}°",
+      "colors": "色",
+      "buttonBg": "ボタンの背景",
+      "buttonText": "ボタンのテキスト",
+      "buttons": "ボタン",
+      "buttonStyle": "ボタンのスタイル",
+      "soft": "ソフト",
+      "fill": "塗りつぶし",
+      "outline": "枠線",
+      "cornerRadius": "角の丸み {{value}}",
+      "textStyle": "テキストのスタイル（名前、自己紹介、テキストブロック）",
+      "font": "フォント",
+      "normal": "標準",
+      "italic": "斜体",
+      "bold": "太字",
+      "boldItalic": "太字斜体",
+      "strong": "極太",
+      "textBorderPx": "文字の縁取り {{value}}px",
+      "borderColor": "縁取りの色"
+    },
+    "addBlock": "ブロックを追加",
+    "empty": "上から最初のリンク、動画、画像を追加しましょう。",
+    "arrangeHint": "<grip></grip> をドラッグして並べ替え · ブロックを別のブロックにドロップすると横に並びます · ブロックをクリックするとここで編集できます",
+    "livePreview": "ライブプレビュー",
+    "previewTitle": "スポットライトのプレビュー"
+  }
+}

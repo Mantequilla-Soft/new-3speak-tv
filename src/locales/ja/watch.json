@@ -1,0 +1,233 @@
+{
+  "aiBadge": {
+    "title": "AI 生成と判定されました",
+    "label": "AI"
+  },
+  "translate": {
+    "titleButton": "タイトルを翻訳",
+    "original": "原文",
+    "translate": "翻訳",
+    "translating": "翻訳中..."
+  },
+  "summary": {
+    "title": "要約",
+    "close": "要約を閉じる",
+    "showingOriginal": "原文を表示中",
+    "translatedTo": "{{language}}に翻訳済み",
+    "showLanguage": "{{language}}で表示",
+    "showOriginal": "原文を表示",
+    "buttonTitle": "この動画の AI 要約"
+  },
+  "errors": {
+    "notAvailable": "この動画は利用できません。",
+    "goHome": "ホームへ",
+    "scheduledNotFound": "予約投稿が見つかりません。すでに公開またはキャンセルされた可能性があります。",
+    "network": "ネットワークエラーです。接続を確認してください。",
+    "notFound": "動画が見つからないか、読み込みに失敗しました。",
+    "backToProfile": "プロフィールに戻る"
+  },
+  "gated": {
+    "title": "サポーター限定",
+    "checkFailed": "現在、サブスクリプションを確認できませんでした。少ししてからお試しください。",
+    "preview": "無料プレビューを視聴中です。3Speak Pro で動画全編が見られます。",
+    "subscribersOnly": "この動画は 3Speak Pro 登録者が視聴できます。",
+    "cta": "3Speak Pro に登録"
+  },
+  "reactions": {
+    "show": "リアクションを表示",
+    "add": "リアクションを追加"
+  },
+  "liveChat": "ライブチャット",
+  "moreVideos": "ほかの動画",
+  "vote": {
+    "saveFailed": "投票を保存できませんでした"
+  },
+  "locked": {
+    "noAccount": "Hive アカウントを作成すると使えるようになります",
+    "offChainPost": "まだ利用できません: この投稿は Hive 上にありません"
+  },
+  "interests": {
+    "loginRequired": "興味のあるトピックを保存するにはログイン",
+    "added": "「{{tag}}」を興味のあるトピックに追加しました",
+    "saveFailed": "興味のあるトピックを保存できませんでした"
+  },
+  "watchLater": {
+    "removed": "「後で見る」から削除しました",
+    "removeFailed": "削除できませんでした: {{error}}",
+    "removeTitle": "「後で見る」から削除"
+  },
+  "reshare": {
+    "loginRequired": "リシェアするにはログイン",
+    "success": "リシェアしました！",
+    "failed": "リシェアに失敗しました",
+    "reshared": "リシェア済み",
+    "reshare": "リシェア",
+    "reshareWithCount": "リシェア（{{count}}）"
+  },
+  "clip": {
+    "noVideoUrlRemix": "リミックス用の動画 URL を取得できませんでした",
+    "noVideoUrl": "動画の URL を取得できませんでした",
+    "startHint": "クリップの開始位置に移動して、「開始を設定」をクリックしてください",
+    "endHint": "次にクリップの終了位置に移動して、「終了を設定」をクリックしてください",
+    "endBeforeStart": "終了時間は開始時間より後にしてください",
+    "trimmed": "クリップを 1 分に短縮しました。タイムラインの終わりでクリップをカットします。",
+    "set": "クリップを設定しました: {{start}} – {{end}}。「クリップを作成」をクリックしてください",
+    "loginRequired": "クリップするにはログイン",
+    "cancel": "クリップをキャンセル",
+    "clipVideo": "動画をクリップ",
+    "label": "動画をクリップ",
+    "clip": "クリップ",
+    "seekToStart": "開始位置に移動",
+    "setStart": "開始を設定",
+    "setEnd": "終了を設定",
+    "createClip": "クリップを作成",
+    "barStart": "クリップの開始位置に移動してください",
+    "barEnd": "開始: {{start}} — 次に終了位置に移動してください",
+    "barDone": "クリップ: {{start}} – {{end}}"
+  },
+  "share": {
+    "defaultTitle": "3Speak の動画",
+    "linkCopied": "リンクをクリップボードにコピーしました！",
+    "failed": "共有に失敗しました"
+  },
+  "follow": {
+    "loginRequired": "ユーザーをフォローするにはログインしてください",
+    "followed": "@{{user}} さんをフォローしました",
+    "failed": "フォローに失敗しました: {{error}}"
+  },
+  "ad": {
+    "countdown": "{{seconds}} 秒後に広告"
+  },
+  "media": {
+    "unavailableTitle": "この動画は利用できなくなりました",
+    "unavailableBody": "この古いアップロードのメディアがネットワーク上に見つかりませんでした。投稿はブロックチェーン上に残っていますが、動画は再生できなくなっています。",
+    "blockedTitle": "現在動画を読み込めません",
+    "blockedBody": "動画サーバーの 1 つが応答しませんでした。動画自体に問題はないので、もう一度お試しください。"
+  },
+  "tipNudge": {
+    "text": "楽しめましたか？<hide> <b>@{{author}}</b> さんに投げ銭を送りましょう！</hide>",
+    "dismiss": "閉じる"
+  },
+  "community": {
+    "members_other": "メンバー {{count}} 人"
+  },
+  "tags": {
+    "curated": "キュレーション"
+  },
+  "topics": {
+    "taggedBy": "「{{label}}」· {{count}} 人がタグ付け",
+    "viewers_other": "「{{label}}」· 視聴者 {{count}} 人",
+    "autoNoVotes": "自動タグ — 視聴者の投票はまだありません",
+    "noVotes": "視聴者の投票はまだありません",
+    "inInterests": "✓ 興味のあるトピックに追加済み",
+    "addToInterests": "+ 興味のあるトピックに追加",
+    "openTagFeed": "タグのフィードを開く"
+  },
+  "scheduled": {
+    "notice": "<b>{{date}}</b> に公開予定です。まだ公開されていません。",
+    "futureDate": "未来の日付",
+    "edit": "編集、日時の変更、キャンセル",
+    "editTitle": "予約投稿を編集（詳細、日時、キャンセル）"
+  },
+  "actions": {
+    "voteOffChain": "この動画に投票します。投票は 3Speak に保存され、報酬は発生しません。",
+    "signInToVote": "投票するにはログイン",
+    "tagVideo": "この動画にタグを付ける",
+    "voteVideo": "この動画に投票",
+    "tag": "タグ",
+    "vote": "投票",
+    "analyticsTitle": "動画のアナリティクス",
+    "analytics": "アナリティクス",
+    "videoStats": "動画の統計",
+    "promoteTitle": "この動画をプロモーション",
+    "promote": "プロモーション",
+    "editTitle": "動画の詳細を編集",
+    "reportTitle": "動画を報告",
+    "addToPlaylist": "再生リストに追加",
+    "playlist": "再生リスト",
+    "tipTitle": "クリエイターに投げ銭",
+    "tip": "投げ銭",
+    "details": "詳細",
+    "toggleDetails": "詳細の表示を切り替え",
+    "followCreator": "クリエイターをフォロー",
+    "closeMenu": "メニューを閉じる",
+    "openActions": "操作を開く"
+  },
+  "description": {
+    "hide": "説明を隠す",
+    "show": "説明を表示"
+  },
+  "edit": {
+    "title": "動画を編集",
+    "loading": "現在の投稿を読み込み中…",
+    "videoFile": "動画ファイル",
+    "replaceVideo": "動画を差し替え",
+    "replaceHint": "この投稿の動画ファイルを差し替えます。それ以外はそのままで、投稿のいいね、報酬、コメント、アップロード日、プロフィール内の位置は維持されます。現在の動画を残す場合は何もしないでください。",
+    "uploadingTo": "<b>{{host}}</b> にアップロード中… {{pct}}%",
+    "choosingServer": "アップロード先のサーバーを選んでいます…",
+    "uploadedTo": "<b>{{host}}</b> にアップロードしました。保存を押すと差し替わります。",
+    "uploaded": "アップロードしました。保存を押すと差し替わります。",
+    "cancelUpload": "アップロードをキャンセル",
+    "keepCurrent": "現在の動画を残す",
+    "encodeHint": "保存後もエンコードに数分かかり、準備ができるまでは古い動画が再生されます。サムネイルは変わらないので、合わなくなった場合は上で更新してください。",
+    "thumbnail": "サムネイル",
+    "thumbPreviewAlt": "サムネイルのプレビュー",
+    "uploadImage": "画像をアップロード",
+    "uploading": "アップロード中…",
+    "thumbHint": "画像をアップロードするか、直接 URL を貼り付けてください。現在のサムネイルを残す場合は変更しないでください。",
+    "titleLabel": "タイトル",
+    "titleMin": "最低 {{min}} 文字",
+    "tags": "タグ",
+    "tagsPlaceholder": "スペース区切り",
+    "autoTag": "自動で追加されます。削除できません",
+    "tagCount_other": "タグ {{count}}/{{max}}",
+    "tagCountRequired_other": "タグ {{count}}/{{max}} · 1 つ以上必須",
+    "description": "説明",
+    "descriptionPlaceholder": "視聴者に動画のことを伝えましょう…",
+    "markdownHint": "Markdown に対応しています。",
+    "listed": "公開",
+    "unlistedLabel": "限定公開",
+    "listedHint": "フィード、検索、プロフィールに表示されます。",
+    "unlistedHint": "フィードや検索には表示されません。リンクからは再生でき、プロフィールにも（バッジ付きで）残ります。",
+    "allowRemix": "リミックス / クリップを許可",
+    "remixOn": "ほかの人がリミックスやクリップを作れます。あなたは元の作者としてクレジットされます。",
+    "remixOff": "ほかの人はこの動画をリミックスやクリップできません。",
+    "trailer": "チャンネル予告編",
+    "trailerOn": "プロフィールの概要タブの上部で自動再生されます。以前設定した予告編は置き換えられます。",
+    "trailerOff": "プロフィールの概要タブの上部で自動再生される動画に設定します。",
+    "nsfw": "成人向け / NSFW",
+    "notNsfw": "成人向けではない",
+    "nsfwHint": "視聴者が NSFW を有効にしていない限りフィードや検索には表示されず、Hive では nsfw のタグが付きます。",
+    "notNsfwHint": "通常のコンテンツとして、全員に表示されます。",
+    "promoted": "プロモーション中",
+    "promote": "動画をプロモーション",
+    "saveChanges": "変更を保存",
+    "noChanges": "保存する変更はありません。",
+    "thumbUploaded": "サムネイルをアップロードしました。",
+    "videoUploaded": "新しい動画をアップロードしました。保存するとこの投稿に適用されます。",
+    "relisted": "動画を再び公開しました。",
+    "unlisted": "動画を限定公開にしました。",
+    "trailerSet": "チャンネル予告編に設定しました。",
+    "trailerRemoved": "チャンネル予告編から外しました。",
+    "updatedEncoding": "動画を更新しました！新しいファイルのエンコードが終わるまで少しお待ちください。",
+    "updated": "動画を更新しました！",
+    "errors": {
+      "notFound": "Hive でこの投稿が見つかりませんでした。",
+      "loadFailed": "Hive から投稿を読み込めませんでした。もう一度お試しください。",
+      "notImage": "画像ファイルを選んでください。",
+      "imageTooLarge": "画像が大きすぎます（最大 10 MB）。",
+      "thumbUploadFailed": "サムネイルのアップロードに失敗しました。",
+      "notVideo": "動画ファイルを選んでください。",
+      "videoTooLarge": "動画が大きすぎます（最大 5 GB）。",
+      "noVideoEntry": "この投稿には差し替える動画の項目がありません。メタデータが動画を参照していません。",
+      "notInLibrary": "この投稿の動画はライブラリにないため、ファイルを差し替えられません。",
+      "notOwner": "ファイルを差し替えられるのは自分の動画だけです。",
+      "videoUploadFailed": "動画のアップロードに失敗しました。",
+      "noEmbedEntry": "この投稿には差し替える埋め込み動画の項目がありません。メタデータが動画を参照していません。",
+      "broadcastFailed": "ブロードキャストに失敗しました",
+      "listingFailed": "公開設定を更新できませんでした。",
+      "trailerFailed": "チャンネル予告編を更新できませんでした。",
+      "saveFailed": "変更を保存できませんでした。"
+    }
+  }
+}
