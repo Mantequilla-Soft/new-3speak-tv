@@ -94,6 +94,20 @@
   to { transform: translateX(-100%); }
 }
 
+/* 'hold': in from the right edge, centred for the middle 60%, out past the left edge.
+   Positions are measured in px by the component (it only uses this when the line fits). */
+.ticker-track.is-hold {
+  padding-left: 0;
+  animation-name: ticker-hold;
+}
+
+@keyframes ticker-hold {
+  0% { transform: translateX(var(--ticker-from)); }
+  20% { transform: translateX(var(--ticker-center)); }
+  80% { transform: translateX(var(--ticker-center)); }
+  100% { transform: translateX(var(--ticker-to)); }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .ticker-track {
     animation: none;
@@ -104,15 +118,25 @@
   }
 }
 
-/* Phones: the controls bar is shorter and the frame is small, so the strip is too. */
-@media (max-width: 600px) {
-  .watch-ticker {
-    height: 28px;
-    font-size: 12px;
-  }
+/* Phones: the controls bar is shorter and the frame is small, so the strip is too.
+   The mixin is shared with .is-compact, which the /advertise preview sets on its
+   "Phone" stage, so that preview is the phone strip and not a narrow desktop one. */
+@mixin ticker-compact {
+  height: 28px;
+  font-size: 12px;
 
   .ticker-avatar {
     width: 18px;
     height: 18px;
+  }
+}
+
+.watch-ticker.is-compact {
+  @include ticker-compact;
+}
+
+@media (max-width: 600px) {
+  .watch-ticker {
+    @include ticker-compact;
   }
 }

@@ -2261,6 +2261,7 @@ function Watch({ v2 = false }) {
             label={adBreakRef.current.tickerInfo.label}
             clickUrl={adBreakRef.current.tickerInfo.clickUrl}
             durationSeconds={adBreakRef.current.tickerInfo.durationSeconds}
+            tickerStyle={adBreakRef.current.tickerInfo.style}
             paused={tickerHeld || playerState?.paused === true}
           />
         ) : null}

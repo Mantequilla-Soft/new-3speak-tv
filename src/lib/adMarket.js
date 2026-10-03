@@ -146,6 +146,21 @@ export function bannerAdvice(spec) {
     + `${shape.ratio}:1 shape, such as ${shape.smallest}.`;
 }
 
+/* How long a ticker has to run for its message to be readable. The same formula the
+ * checker enforces at attach (utils/adFormats.js tickerMinSeconds), with its numbers
+ * read from the rate card so there is one place they live. Takes a word count or the
+ * message itself. */
+export function tickerMinSeconds(wordsOrMessage, spec) {
+  const words = typeof wordsOrMessage === 'number'
+    ? wordsOrMessage
+    : (String(wordsOrMessage || '').trim() ? String(wordsOrMessage).trim().split(/\s+/).length : 0);
+  const m = spec?.minSeconds || {};
+  const base = Number.isFinite(m.base) ? m.base : 4;
+  const perWord = Number.isFinite(m.perWord) ? m.perWord : 0.5;
+  const floor = Number.isFinite(m.floor) ? m.floor : 5;
+  return Math.max(floor, Math.ceil(base + perWord * words));
+}
+
 export function specFor(f) {
   const spec = f?.creativeSpec;
   const kinds = f?.creativeKinds?.length ? f.creativeKinds : [f?.creativeKind];
@@ -154,8 +169,10 @@ export function specFor(f) {
   if (kinds.includes('text')) {
     return {
       rows: [
-        { label: 'Message', value: `Up to ${spec?.maxChars || 140} characters`, note: 'shown with your avatar and product name' },
-        { label: 'Link', value: 'Any https:// page' },
+        // The note is the readability scale: a longer message has to be booked for
+        // longer, or it crosses the screen faster than anyone can read it.
+        { label: 'Message', value: `Up to ${spec?.maxChars || 140} characters`, note: `10 words need ${tickerMinSeconds(10, spec)}s, 20 words ${tickerMinSeconds(20, spec)}s` },
+        { label: 'Link', value: 'Any https:// page', note: 'your avatar and product name are added' },
       ],
     };
   }
