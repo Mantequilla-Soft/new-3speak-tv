@@ -1,9 +1,9 @@
 import { useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
 import { ArrowLeft, Code2, Copy, MessageCircle, Share2, X } from 'lucide-react'
-import { useNavigate } from 'react-router-dom'
 import { toastIn } from '../../utils/toast';
 import { useChat } from '../../context/ChatContext'
+import { useOpenChat } from '../../hooks/useOpenChat'
 import { EMBED_SIZES, buildEmbedHtml } from '../../utils/embedCode'
 import './shareChooser.scss'
 
@@ -28,8 +28,8 @@ const toast = toastIn('Chat');
  *  - onGeneralShare: () => void  — the page's existing share handler
  */
 export default function ShareChooserModal({ open, url, title, embed, onClose, onGeneralShare }) {
-  const navigate = useNavigate()
-  const { setShareDraft } = useChat()
+  const openChat = useOpenChat()
+  const { setShareDraft, backToList } = useChat()
   // 'menu' | 'embed'. The component stays mounted between opens (the parent just
   // flips `open`), so the view is reset explicitly rather than on mount.
   const [view, setView] = useState('menu')
@@ -53,8 +53,11 @@ export default function ShareChooserModal({ open, url, title, embed, onClose, on
   const sendInChat = () => {
     // Just the link — the chat renders a rich card (title/author/thumb) from it.
     setShareDraft(url)
+    // Back to the list so the user picks a target; an already-open thread would
+    // never see the draft (it prefills on open only).
+    backToList()
     onClose?.()
-    navigate('/chat')
+    openChat()
   }
 
   const generalShare = () => {
