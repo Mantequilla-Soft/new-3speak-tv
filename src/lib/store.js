@@ -59,9 +59,10 @@ export const useAppStore = create(
       hideWatched: true,
       setHideWatched: (val) => a[0]({ hideWatched: typeof val === 'function' ? val(a[1]().hideWatched) : val }),
       // Leave out videos + shorts the pipeline flagged AI-generated, in every feed
-      // (Card3, the shorts rails, the shorts swipe feed). Default OFF: flagged
-      // content just carries an AI pill. Filtered client-side, see utils/aiFlags.
-      hideAi: false,
+      // (Card3, the shorts rails, the shorts swipe feed). Default ON since store v2;
+      // turned off, flagged content just carries an AI pill. Filtered client-side,
+      // see utils/aiFlags.
+      hideAi: true,
       setHideAi: (val) => a[0]({ hideAi: !!(typeof val === 'function' ? val(a[1]().hideAi) : val) }),
       // Private mode: suppresses the COUNTRY on this viewer's watch sessions.
       //
@@ -87,9 +88,13 @@ export const useAppStore = create(
       // Bump when a persisted default changes and existing stores must be migrated.
       // v1: "Hide watched" flipped to default-ON — turn it on for everyone whose
       // store predates the change (they had the old default `false` saved).
-      version: 1,
+      // v2: "Hide AI-generated" flipped to default-ON, same reason. A saved `false`
+      // was nearly always the untouched old default, since the setting started OFF:
+      // the only one it overrides is someone who turned it on and back off again.
+      version: 2,
       migrate: (persistedState, version) => {
         if (version < 1 && persistedState) persistedState.hideWatched = true;
+        if (version < 2 && persistedState) persistedState.hideAi = true;
         return persistedState;
       },
       partialize: (state) => ({
