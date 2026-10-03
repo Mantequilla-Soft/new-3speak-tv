@@ -10,7 +10,7 @@ export const CHANGELOG = [
     version: '1.79.48',
     date: '2026-10-03',
     summary:
-      '3Speak now speaks your language! Choose from 13 languages in Settings → General.',
+      '3Speak now speaks your language! Choose from 21 languages in Settings → General.',
   },
   {
     version: '1.79.47',
