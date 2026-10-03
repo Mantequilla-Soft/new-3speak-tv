@@ -1,5 +1,6 @@
 import MarkdownView from '../common/MarkdownView';
 import { Fragment, useRef, useState, useEffect, useCallback } from 'react';
+import { useTranslation } from 'react-i18next';
 import { getHiveClient } from '../../utils/hiveNode';
 import { MdChevronLeft, MdChevronRight, MdClose, MdAspectRatio, MdVideocam, MdComment, MdKeyboardArrowDown, MdKeyboardArrowUp, MdTranslate, MdFlag } from 'react-icons/md';
 import ReportModal, { isReported } from '../modal/ReportModal';
@@ -16,7 +17,8 @@ import { getHiveRenderer } from '../../lib/hiveRenderer';
 
 const hiveClient = getHiveClient();
 
-const SIZE_LABELS = { small: 'S', medium: 'M', standard: 'Std', big: 'Big', cinema: 'Cin' };
+const SIZE_LABEL_KEYS = { small: 'player.reactions.sizes.small', medium: 'player.reactions.sizes.medium', standard: 'player.reactions.sizes.standard', big: 'player.reactions.sizes.big', cinema: 'player.reactions.sizes.cinema' };
+const SIZE_NAME_KEYS = { small: 'player.reactions.sizeNames.small', medium: 'player.reactions.sizeNames.medium', standard: 'player.reactions.sizeNames.standard', big: 'player.reactions.sizeNames.big', cinema: 'player.reactions.sizeNames.cinema' };
 
 function stripRepliedTo(html) {
   if (!html) return '';
@@ -35,6 +37,7 @@ function strip3SpeakEmbeds(html) {
 }
 
 function CommentNode({ comment, depth, collapsible = true }) {
+  const { t } = useTranslation();
   const [collapsed, setCollapsed] = useState(false);
   const [translatedText, setTranslatedText] = useState(null);
   const [isTranslating, setIsTranslating] = useState(false);
@@ -79,19 +82,19 @@ function CommentNode({ comment, depth, collapsible = true }) {
         <div className="comment-translation">
           <div className="comment-translation-header">
             <MdTranslate size={12} />
-            <span>Translation</span>
+            <span>{t('player.reactions.translation')}</span>
             <button className="comment-translation-dismiss" onClick={() => setTranslatedText(null)}>&times;</button>
           </div>
           <p>{translatedText}</p>
         </div>
       )}
-      {translateError && <div className="comment-translation comment-translation--error"><p>Translation failed</p></div>}
+      {translateError && <div className="comment-translation comment-translation--error"><p>{t('player.reactions.translationFailed')}</p></div>}
       <div className="rct-comment-actions">
         <button
           type="button"
           className={`rct-report-btn${comment.permlink && isReported('comment', `${comment.author}/${comment.permlink}`) ? ' reported' : ''}`}
           onClick={() => setIsReportOpen(true)}
-          title="Report"
+          title={t('common.actions.report')}
         >
           <MdFlag size={14} />
         </button>
@@ -136,6 +139,7 @@ function ReactionPlayer({
   mainIsPlaying,
   onReactionPlay,
 }) {
+  const { t } = useTranslation();
   const scrollRef = useRef(null);
   const itemRefs = useRef([]);
   const userScrolledRef = useRef(false);
@@ -471,7 +475,7 @@ function ReactionPlayer({
           <img className="reactor-avatar" src={current.avatar} alt="" />
           <div className="reactor-text">
             <span className="reactor-name">@{current.author}</span>
-            <span className="reaction-label">{isVideo ? 'Video Reaction' : 'Comment'}</span>
+            <span className="reaction-label">{isVideo ? t('player.reactions.videoReaction') : t('player.reactions.comment')}</span>
           </div>
         </div>
         <div className="reaction-controls">
@@ -479,7 +483,7 @@ function ReactionPlayer({
             className="nav-btn"
             onClick={() => handleItemClick(idx - 1)}
             disabled={!hasPrev}
-            title="Previous"
+            title={t('player.reactions.previous')}
           >
             <MdChevronLeft />
           </button>
@@ -488,18 +492,18 @@ function ReactionPlayer({
             className="nav-btn"
             onClick={() => handleItemClick(idx + 1)}
             disabled={!hasNext}
-            title="Next"
+            title={t('player.reactions.next')}
           >
             <MdChevronRight />
           </button>
           <button
             className="mobile-rct-toggle nav-btn"
             onClick={() => onClose?.()}
-            title="Hide reactions"
+            title={t('player.reactions.hide')}
           >
             <MdKeyboardArrowUp />
           </button>
-          <button className="close-btn" onClick={onClose} title="Hide">
+          <button className="close-btn" onClick={onClose} title={t('player.reactions.hideShort')}>
             <MdKeyboardArrowDown />
           </button>
         </div>
@@ -534,7 +538,7 @@ function ReactionPlayer({
           <div className="rct-comment-panel">
             <div className="rct-comment-thread">
               <CommentNode comment={{ author: current.author, avatar: current.avatar, body: current.body, isLowReputation: current.isLowReputation, isHidden: current.isHidden, children: [] }} depth={0} collapsible={false} />
-              {loadingComments && <div className="rct-thread-loading">Loading replies...</div>}
+              {loadingComments && <div className="rct-thread-loading">{t('player.reactions.loadingReplies')}</div>}
               {nestedComments.map((reply, i) => (
                 <CommentNode key={i} comment={reply} depth={1} />
               ))}
@@ -549,21 +553,21 @@ function ReactionPlayer({
         <div className="overlay-buttons">
           {/* Mobile-only prev/next nav + count */}
           <div className="mobile-overlay-nav">
-            <button className="size-overlay-btn size-overlay-btn--nav" onClick={() => handleItemClick(idx - 1)} disabled={!hasPrev} title="Previous">
+            <button className="size-overlay-btn size-overlay-btn--nav" onClick={() => handleItemClick(idx - 1)} disabled={!hasPrev} title={t('player.reactions.previous')}>
               <MdChevronLeft />
             </button>
             <span className="overlay-count">{idx + 1}/{reactions.length}</span>
-            <button className="size-overlay-btn size-overlay-btn--nav" onClick={() => handleItemClick(idx + 1)} disabled={!hasNext} title="Next">
+            <button className="size-overlay-btn size-overlay-btn--nav" onClick={() => handleItemClick(idx + 1)} disabled={!hasNext} title={t('player.reactions.next')}>
               <MdChevronRight />
             </button>
           </div>
           {onCycleSize && (
-            <button className="size-overlay-btn size-overlay-btn--resize" onClick={onCycleSize} title={`Size: ${size || 'small'}`}>
+            <button className="size-overlay-btn size-overlay-btn--resize" onClick={onCycleSize} title={t('player.reactions.sizeTitle', { size: t(SIZE_NAME_KEYS[size] || SIZE_NAME_KEYS.small) })}>
               <MdAspectRatio />
-              <span>{SIZE_LABELS[size] || 'S'}</span>
+              <span>{t(SIZE_LABEL_KEYS[size] || SIZE_LABEL_KEYS.small)}</span>
             </button>
           )}
-          <button className="size-overlay-btn size-overlay-btn--close" onClick={onClose} title="Hide reactions">
+          <button className="size-overlay-btn size-overlay-btn--close" onClick={onClose} title={t('player.reactions.hide')}>
             <MdKeyboardArrowUp />
           </button>
         </div>
@@ -582,13 +586,13 @@ function ReactionPlayer({
             </div>
             <div className="rct-controls-row">
               <div className="rct-controls-left">
-                <button className="rct-btn" onClick={handleSeekBackward} title="Rewind 10s">
+                <button className="rct-btn" onClick={handleSeekBackward} title={t('player.controls.rewind10')}>
                   <TbRewindBackward10 size={14} />
                 </button>
-                <button className="rct-btn rct-btn--play" onClick={handleTogglePlay} title={rctPlaying ? 'Pause' : 'Play'}>
+                <button className="rct-btn rct-btn--play" onClick={handleTogglePlay} title={rctPlaying ? t('common.actions.pause') : t('common.actions.play')}>
                   {rctPlaying ? <FaPause size={10} /> : <FaPlay size={10} />}
                 </button>
-                <button className="rct-btn" onClick={handleSeekForward} title="Forward 10s">
+                <button className="rct-btn" onClick={handleSeekForward} title={t('player.controls.forward10')}>
                   <TbRewindForward10 size={14} />
                 </button>
                 <div className="rct-time">
@@ -596,10 +600,10 @@ function ReactionPlayer({
                 </div>
               </div>
               <div className="rct-controls-right">
-                <button className="rct-btn" onClick={handleToggleMute} title={rctMuted ? 'Unmute' : 'Mute'}>
+                <button className="rct-btn" onClick={handleToggleMute} title={rctMuted ? t('player.controls.unmute') : t('player.controls.mute')}>
                   {rctMuted ? <FaVolumeMute size={10} /> : <FaVolumeUp size={10} />}
                 </button>
-                <button className="rct-btn" onClick={handleToggleFullscreen} title={rctFullscreen ? 'Exit Fullscreen' : 'Fullscreen'}>
+                <button className="rct-btn" onClick={handleToggleFullscreen} title={rctFullscreen ? t('player.controls.exitFullscreen') : t('player.controls.fullscreen')}>
                   {rctFullscreen ? <FaCompress size={10} /> : <FaExpand size={10} />}
                 </button>
               </div>
@@ -613,7 +617,7 @@ function ReactionPlayer({
         <div className="rct-comment-panel rct-comment-panel--below">
           <div className="rct-comment-thread">
             <CommentNode comment={{ author: current.author, avatar: current.avatar, body: current.body, isLowReputation: current.isLowReputation, isHidden: current.isHidden, children: [] }} depth={0} collapsible={false} />
-            {loadingComments && <div className="rct-thread-loading">Loading replies...</div>}
+            {loadingComments && <div className="rct-thread-loading">{t('player.reactions.loadingReplies')}</div>}
             {nestedComments.map((reply, i) => (
               <CommentNode key={i} comment={reply} depth={1} />
             ))}

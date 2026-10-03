@@ -3,6 +3,7 @@ import { getHiveClient } from '../../utils/hiveNode';
 import "./SearchList.scss"
 import { Client } from "@hiveio/dhive";
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { TailChase } from 'ldrs/react'
 import 'ldrs/react/TailChase.css'
 import { HIVE_API_NODES } from '../../utils/config';
@@ -11,6 +12,7 @@ const client = getHiveClient();
 
 
 function SearchList_Sm({searchTerm, setSearchTerm, handleNav, setIsDropdownOpensm, isDropdownOpensm, searchBoxRefsm}) {
+  const { t } = useTranslation();
      const navigate = useNavigate();
      const tooltipRef = useRef(null);
       const [searchResults, setSearchResults] = useState({
@@ -79,7 +81,7 @@ function SearchList_Sm({searchTerm, setSearchTerm, handleNav, setIsDropdownOpens
             
             setSearchResults({
               users: users.filter(u => u.toLowerCase().includes(term.toLowerCase())),
-              tags: tags.filter(t => t.toLowerCase().includes(term.toLowerCase())),
+              tags: tags.filter(tg => tg.toLowerCase().includes(term.toLowerCase())),
               communities: communities.filter(c => 
                 c.name.toLowerCase().includes(term.toLowerCase()) || 
                 c.title.toLowerCase().includes(term.toLowerCase())
@@ -117,7 +119,7 @@ function SearchList_Sm({searchTerm, setSearchTerm, handleNav, setIsDropdownOpens
             
             if (result?.length > 0) {
               return result
-                .map(t => t.name)
+                .map(tg => tg.name)
                 .filter(tag => tag.toLowerCase().includes(query.toLowerCase()))
                 .slice(0, 10);
             }
@@ -125,7 +127,7 @@ function SearchList_Sm({searchTerm, setSearchTerm, handleNav, setIsDropdownOpens
             // Fallback to condenser API if bridge fails
             const fallbackResult = await client.database.call("get_trending_tags", ["", 100]);
             return fallbackResult
-              .map(t => t.name)
+              .map(tg => tg.name)
               .filter(tag => tag.toLowerCase().startsWith(query.toLowerCase()))
               .slice(0, 10);
           } catch (error) {
@@ -177,7 +179,7 @@ function SearchList_Sm({searchTerm, setSearchTerm, handleNav, setIsDropdownOpens
         <div className="search-results">
           {searchResults.users.length > 0 && (
             <div className="result-section">
-              <h3>Users</h3>
+              <h3>{t('nav.search.types.users')}</h3>
               <ul>
                 {searchResults.users.slice(0, 3).map((username) => (
                   <li key={`user-${username}`}>
@@ -195,7 +197,7 @@ function SearchList_Sm({searchTerm, setSearchTerm, handleNav, setIsDropdownOpens
           {/* Tags Results */}
           {searchResults.tags.length > 0 && (
             <div className="result-section">
-              <h3>Tags</h3>
+              <h3>{t('nav.search.tags')}</h3>
               <ul>
                 {searchResults.tags.map((tag) => (
                   <li key={`tag-${tag}`}>
@@ -215,7 +217,7 @@ function SearchList_Sm({searchTerm, setSearchTerm, handleNav, setIsDropdownOpens
           {/* Communities Results */}
           {searchResults.communities.length > 0 && (
             <div className="result-section">
-              <h3>Communities</h3>
+              <h3>{t('nav.search.types.communities')}</h3>
               <ul>
                 {searchResults.communities.slice(0, 3).map((community) => (
                   <li key={`community-${community.name}`}>
@@ -236,7 +238,7 @@ function SearchList_Sm({searchTerm, setSearchTerm, handleNav, setIsDropdownOpens
       </div>)}
 
       {searchTerm.length > 0 && !hasResults() && !isSearching && !error && (
-        <div className="search-list list">No results </div>
+        <div className="search-list list">{t('common.status.noResults')} </div>
       )}
       </>
   )

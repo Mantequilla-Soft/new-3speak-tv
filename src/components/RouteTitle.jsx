@@ -1,5 +1,7 @@
 import { useLocation, matchPath } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
+import { useTranslation } from 'react-i18next';
+import { t } from '../i18n';
 
 /**
  * Sets the browser-tab title for every route.
@@ -15,7 +17,8 @@ import { Helmet } from 'react-helmet-async';
  */
 const SELF_TITLED = ['/watch', '/shorts', '/community/:communityName', '/b/:account', '/badge/:account'];
 
-// First match wins. `title` may be a string or a fn of the matched params.
+// First match wins. `titleKey` is an i18n key; `title` is a fn of the matched
+// params, called at resolve time (never at module load) so it reads the current language.
 // `full: true` means the string IS the whole tab title — it does not get the
 // "3S | <page>" prefix. Used by the home page, which carries the brand line
 // itself rather than being labelled like a sub-page.
@@ -24,41 +27,41 @@ const SELF_TITLED = ['/watch', '/shorts', '/community/:communityName', '/b/:acco
 // recognisable from the mark alone, and putting it first means the platform
 // survives the truncation a narrow tab applies to the end of the string.
 const ROUTES = [
-  { path: '/', end: true, title: '3S | Real People - Real Stories', full: true },
-  { path: '/home-feed', title: 'Home Feed' },
-  { path: '/follow-feed', title: 'Follow Feed' },
-  { path: '/trend', title: 'Trending' },
-  { path: '/discover', title: 'Discover' },
-  { path: '/new', title: 'New Videos' },
-  { path: '/firstupload', title: 'First Uploads' },
-  { path: '/leaderboard', title: 'Rankings' },
-  { path: '/notifications', title: 'Notifications' },
-  { path: '/groups', title: 'Groups' },
-  { path: '/communities', title: 'Communities' },
-  { path: '/badges', title: 'Badges' },
-  { path: '/audio/:author/:permlink', title: (p) => `Audio by @${p.author}` },
-  { path: '/audio', title: 'Audio' },
-  { path: '/playlist/:playlistId', title: 'Playlist' },
+  { path: '/', end: true, titleKey: 'app.routes.home', full: true },
+  { path: '/home-feed', titleKey: 'app.routes.homeFeed' },
+  { path: '/follow-feed', titleKey: 'app.routes.followFeed' },
+  { path: '/trend', titleKey: 'common.nav.trending' },
+  { path: '/discover', titleKey: 'app.routes.discover' },
+  { path: '/new', titleKey: 'app.routes.newVideos' },
+  { path: '/firstupload', titleKey: 'app.routes.firstUploads' },
+  { path: '/leaderboard', titleKey: 'app.routes.rankings' },
+  { path: '/notifications', titleKey: 'common.nav.notifications' },
+  { path: '/groups', titleKey: 'app.routes.groups' },
+  { path: '/communities', titleKey: 'common.nav.communities' },
+  { path: '/badges', titleKey: 'app.routes.badges' },
+  { path: '/audio/:author/:permlink', title: (p) => t('app.routes.audioBy', { author: p.author }) },
+  { path: '/audio', titleKey: 'app.routes.audio' },
+  { path: '/playlist/:playlistId', titleKey: 'app.routes.playlist' },
   { path: '/t/:tag', title: (p) => `#${p.tag}` },
   { path: '/p/:user', title: (p) => `@${p.user}` },
   { path: '/user/:user', title: (p) => `@${p.user}` },
-  { path: '/watched/:username', title: (p) => `Watch history — @${p.username}` },
-  { path: '/post/:author/:permlink', title: (p) => `Post by @${p.author}` },
-  { path: '/profile', title: 'My Profile' },
-  { path: '/upload', title: 'Upload' },
-  { path: '/embed-studio/*', title: 'Upload Studio' },
-  { path: '/draft', title: 'Drafts' },
-  { path: '/editvideo/:d', title: 'Edit Video' },
-  { path: '/edit-scheduled/:permlink', title: 'Edit Scheduled Post' },
-  { path: '/chat', title: 'Chat' },
-  { path: '/openpods', title: 'OpenPods' },
-  { path: '/about', title: 'About' },
-  { path: '/login', title: 'Login' },
-  { path: '/newlogin', title: 'Login' },
-  { path: '/auth/login', title: 'Login' },
+  { path: '/watched/:username', title: (p) => t('app.routes.watchHistory', { username: p.username }) },
+  { path: '/post/:author/:permlink', title: (p) => t('app.routes.postBy', { author: p.author }) },
+  { path: '/profile', titleKey: 'app.routes.myProfile' },
+  { path: '/upload', titleKey: 'common.actions.upload' },
+  { path: '/embed-studio/*', titleKey: 'app.routes.uploadStudio' },
+  { path: '/draft', titleKey: 'app.routes.drafts' },
+  { path: '/editvideo/:d', titleKey: 'app.routes.editVideo' },
+  { path: '/edit-scheduled/:permlink', titleKey: 'app.routes.editScheduledPost' },
+  { path: '/chat', titleKey: 'app.routes.chat' },
+  { path: '/openpods', title: () => 'OpenPods' },
+  { path: '/about', titleKey: 'app.routes.about' },
+  { path: '/login', titleKey: 'app.routes.login' },
+  { path: '/newlogin', titleKey: 'app.routes.login' },
+  { path: '/auth/login', titleKey: 'app.routes.login' },
 ];
 
-const BRAND_FALLBACK = '3Speak - Decentralized Video Platform';
+const BRAND_FALLBACK_KEY = 'app.routes.brandFallback';
 
 function matchRoute(pathname) {
   for (const r of ROUTES) {
@@ -69,25 +72,30 @@ function matchRoute(pathname) {
 }
 
 /** The page's own label, without the brand suffix. */
+function routeLabel(route, params) {
+  if (typeof route.title === 'function') return route.title(params);
+  return route.titleKey ? t(route.titleKey) : null;
+}
+
 export function resolveRouteTitle(pathname) {
   const hit = matchRoute(pathname);
   if (!hit) return null;
-  return typeof hit.route.title === 'function' ? hit.route.title(hit.params) : hit.route.title;
+  return routeLabel(hit.route, hit.params);
 }
 
 /** The exact string that goes in <title>, suffix rules applied. */
 export function resolveDocumentTitle(pathname) {
   const hit = matchRoute(pathname);
-  const label = hit
-    ? (typeof hit.route.title === 'function' ? hit.route.title(hit.params) : hit.route.title)
-    : null;
+  const label = hit ? routeLabel(hit.route, hit.params) : null;
   // Unknown route → the plain brand title rather than a stale one.
-  if (!label) return BRAND_FALLBACK;
+  if (!label) return t(BRAND_FALLBACK_KEY);
   return hit.route.full ? label : `3S | ${label}`;
 }
 
 export default function RouteTitle() {
   const { pathname } = useLocation();
+  // Subscribes to language changes so the title re-renders in the new language.
+  useTranslation();
 
   // Let self-titling pages own the tag entirely.
   if (SELF_TITLED.some((p) => matchPath({ path: p, end: false }, pathname))) return null;

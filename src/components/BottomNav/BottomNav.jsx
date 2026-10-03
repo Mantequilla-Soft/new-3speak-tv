@@ -1,4 +1,5 @@
 import { Link, useLocation } from "react-router-dom";
+import { useTranslation, Trans } from "react-i18next";
 import { MdOutlineDownload, MdGraphicEq, MdGroups } from "react-icons/md";
 import { IoAddCircleOutline, IoCloudUploadSharp } from "react-icons/io5";
 import { IoMdPerson } from "react-icons/io";
@@ -18,6 +19,7 @@ import "./BottomNav.scss";
 
 
 const BottomNav = ({ openLoginModal, onOpenProfileMenu, profileMenuOpen }) => {
+  const { t } = useTranslation();
   const location = useLocation();
   const { authenticated, user } = useAppStore();
   const path = location.pathname;
@@ -75,14 +77,14 @@ const BottomNav = ({ openLoginModal, onOpenProfileMenu, profileMenuOpen }) => {
         <span className="bottom-nav-icon-wrap">
           <FaChartBar className="bottom-nav-icon bottom-nav-icon--feeds" />
         </span>
-        <span>Feeds</span>
+        <span>{t('nav.bottom.feeds')}</span>
       </Link>
 
       <Link to="/shorts" className={`bottom-nav-item ${isShortsActive ? "active" : ""}`}>
         <span className="bottom-nav-icon-wrap">
           <ShortsIcon className="bottom-nav-icon bottom-nav-icon--shorts" outlineWidth={isShortsActive ? 40 : 30} />
         </span>
-        <span>Shorts</span>
+        <span>{t('common.nav.shorts')}</span>
       </Link>
 
       {/* Groups takes the slot chat used to hold. Chat is not gone: it moved to
@@ -93,12 +95,12 @@ const BottomNav = ({ openLoginModal, onOpenProfileMenu, profileMenuOpen }) => {
         <span className="bottom-nav-icon-wrap">
           <MdGroups className="bottom-nav-icon" />
         </span>
-        <span>Groups</span>
+        <span>{t('nav.bottom.groups')}</span>
       </Link>
 
       <Link to="/audio" className={`bottom-nav-item ${isActive("/audio") ? "active" : ""}`}>
         <MdGraphicEq className="bottom-nav-icon" />
-        <span>Audio</span>
+        <span>{t('nav.bottom.audio')}</span>
       </Link>
 
       <a href="#" className={`bottom-nav-item ${menuOpen || profileMenuOpen ? "active" : ""}`} onClick={handleProfileClick}>
@@ -116,24 +118,24 @@ const BottomNav = ({ openLoginModal, onOpenProfileMenu, profileMenuOpen }) => {
             <GiAstronautHelmet />
           </div>
         )}
-        <span>{authenticated ? "Profile" : "Login"}</span>
+        <span>{authenticated ? t('common.nav.profile') : t('nav.bottom.login')}</span>
       </a>
 
       {menuOpen && !authenticated && showInstallOption && (
         <div className="bottom-nav-menu">
           {installPrompt ? (
             <a href="#" className="bottom-nav-menu-item bottom-nav-install" onClick={handleInstallClick}>
-              <MdOutlineDownload className="bottom-nav-menu-icon" /> Install App
+              <MdOutlineDownload className="bottom-nav-menu-icon" /> {t('nav.installApp')}
             </a>
           ) : isIOS ? (
             <div className="bottom-nav-menu-item bottom-nav-install bottom-nav-ios-hint">
               <MdOutlineDownload className="bottom-nav-menu-icon" />
-              <span>Tap <strong>Share</strong> then <strong>Add to Home Screen</strong></span>
+              <span><Trans i18nKey="nav.iosInstallHint" components={{ b: <strong /> }} /></span>
             </div>
           ) : null}
           <div className="bottom-nav-menu-divider" />
           <a href="#" className="bottom-nav-menu-item" onClick={(e) => { e.preventDefault(); setMenuOpen(false); openLoginModal(); }}>
-            <IoMdPerson className="bottom-nav-menu-icon" /> Login
+            <IoMdPerson className="bottom-nav-menu-icon" /> {t('nav.bottom.login')}
           </a>
         </div>
       )}

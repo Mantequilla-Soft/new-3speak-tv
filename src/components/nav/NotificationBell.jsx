@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState, useMemo } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { IoIosNotifications } from 'react-icons/io';
 import { MdNotificationsActive, MdNotificationsOff } from 'react-icons/md';
 import { toastIn } from '../../utils/toast';
@@ -34,6 +35,7 @@ const PREVIEW_LIMIT = 20;
 const MAX_STACKED_AVATARS = 4;
 
 function NotificationBell() {
+  const { t } = useTranslation();
   const { user, authenticated } = useAppStore();
   const [open, setOpen] = useState(false);
 
@@ -69,14 +71,14 @@ function NotificationBell() {
     try {
       if (push.subscribed) {
         await disablePush(user);
-        toast.success('Notifications turned off for this device');
+        toast.success(t('nav.notifications.pushOff'));
       } else {
         await enablePush(user);
-        toast.success('You will be notified when creators you follow post');
+        toast.success(t('nav.notifications.pushOn'));
       }
       setPush(await getPushState());
     } catch (err) {
-      toast.error(err.message || 'Could not change notification settings');
+      toast.error(err.message || t('nav.notifications.pushFailed'));
     } finally {
       setPushBusy(false);
     }
@@ -186,8 +188,8 @@ function NotificationBell() {
         type="button"
         className="notif-bell-btn"
         onClick={handleToggle}
-        aria-label={`Notifications${unreadCount ? ` (${unreadCount} unread)` : ''}`}
-        title="Notifications"
+        aria-label={unreadCount ? t('nav.notifications.ariaUnread', { count: unreadCount }) : t('common.nav.notifications')}
+        title={t('common.nav.notifications')}
       >
         <IoIosNotifications size={22} />
         {unreadCount > 0 && (
@@ -198,7 +200,7 @@ function NotificationBell() {
       {open && (
         <div className="notif-dropdown" role="menu">
           <div className="notif-dropdown-header">
-            <span className="notif-dropdown-title">Notifications</span>
+            <span className="notif-dropdown-title">{t('common.nav.notifications')}</span>
             <div className="notif-dropdown-actions">
               {pushSupported() && authenticated && (
                 <button
@@ -207,15 +209,15 @@ function NotificationBell() {
                   onClick={togglePush}
                   disabled={pushBusy || push.permission === 'denied' || push.worker === false}
                   title={push.permission === 'denied'
-                    ? 'Notifications are blocked for this site in your browser settings'
+                    ? t('nav.notifications.pushBlocked')
                     : push.worker === false
-                      ? 'This build has no service worker, so notifications cannot be registered here'
+                      ? t('nav.notifications.pushNoWorker')
                       : push.subscribed
-                        ? 'Stop notifying this device'
-                        : 'Get notified when creators you follow post'}
+                        ? t('nav.notifications.pushStop')
+                        : t('nav.notifications.pushStart')}
                 >
                   {push.subscribed ? <MdNotificationsActive size={15} /> : <MdNotificationsOff size={15} />}
-                  <span>{push.subscribed ? 'On' : 'Notify me'}</span>
+                  <span>{push.subscribed ? t('nav.notifications.on') : t('nav.notifications.notifyMe')}</span>
                 </button>
               )}
               <Link
@@ -223,17 +225,17 @@ function NotificationBell() {
                 className="notif-dropdown-seeall"
                 onClick={() => setOpen(false)}
               >
-                See all
+                {t('common.actions.seeAll')}
               </Link>
             </div>
           </div>
 
           {loading && notifications.length === 0 && (
-            <div className="notif-dropdown-empty">Loading…</div>
+            <div className="notif-dropdown-empty">{t('common.status.loading')}</div>
           )}
 
           {!loading && notifications.length === 0 && (
-            <div className="notif-dropdown-empty">You have no notifications yet.</div>
+            <div className="notif-dropdown-empty">{t('nav.notifications.empty')}</div>
           )}
 
           {preview.length > 0 && (
@@ -282,7 +284,7 @@ function NotificationBell() {
                       </div>
                     </div>
                     {is3Speak && (
-                      <img className="notif-3speak-icon" src={threeSpeakLogo} alt="3Speak" title="3Speak video" />
+                      <img className="notif-3speak-icon" src={threeSpeakLogo} alt="3Speak" title={t('nav.notifications.threeSpeakVideo')} />
                     )}
                     {unread && <span className="notif-unread-dot" aria-hidden="true" />}
                     {/* No hover tooltip on single rows: it repeated `n.msg`, which is
@@ -333,6 +335,7 @@ function NotifAvatar({ actor, className = 'notif-avatar', style }) {
 }
 
 function GroupRow({ group, isUnread, is3Speak, getWhaleTier, onClick, hovered, onHover, onLeave }) {
+  const { t } = useTranslation();
   const { actors = [], items, notifType, date } = group;
   const hasUnread = items.some((n) => isUnread(n));
   const topActors = actors.slice(0, MAX_STACKED_AVATARS);
@@ -340,22 +343,24 @@ function GroupRow({ group, isUnread, is3Speak, getWhaleTier, onClick, hovered, o
 
   // Check if any actor in the group is a whale/orca
   const topTier = actors.reduce((best, a) => {
-    const t = getWhaleTier(a);
-    if (t === 'whale') return 'whale';
-    if (t === 'orca' && best !== 'whale') return 'orca';
+    const tier = getWhaleTier(a);
+    if (tier === 'whale') return 'whale';
+    if (tier === 'orca' && best !== 'whale') return 'orca';
     return best;
   }, null);
 
+  // Whole sentences per actor count (one / two / "and N others"), so word order
+  // stays the translator's call.
+  const actorVars = { a: actors[0], b: actors[1], count: actors.length - 1 };
+  const pick = (one, two, many) => (actors.length <= 1 ? one : actors.length === 2 ? two : many);
   let label;
   if (notifType === 'vote') {
-    const names = actors.length <= 2 ? actors.map((a) => `@${a}`).join(' and ') : `@${actors[0]} and ${actors.length - 1} others`;
-    label = `${names} voted on your post`;
-    if (group.totalValue > 0) label += ` ($${group.totalValue.toFixed(2)})`;
+    label = t(pick('nav.notifications.group.voteOne', 'nav.notifications.group.voteTwo', 'nav.notifications.group.voteMany'), actorVars);
+    if (group.totalValue > 0) label = t('nav.notifications.group.withValue', { label, value: group.totalValue.toFixed(2) });
   } else if (notifType === 'follow') {
-    const names = actors.length <= 2 ? actors.map((a) => `@${a}`).join(' and ') : `@${actors[0]} and ${actors.length - 1} others`;
-    label = `${names} followed you`;
+    label = t(pick('nav.notifications.group.followOne', 'nav.notifications.group.followTwo', 'nav.notifications.group.followMany'), actorVars);
   } else {
-    label = `${items.length} ${notifType} notifications`;
+    label = t('nav.notifications.group.other', { count: items.length, type: notifType });
   }
 
   return (
@@ -379,14 +384,14 @@ function GroupRow({ group, isUnread, is3Speak, getWhaleTier, onClick, hovered, o
       <div className="notif-body">
         <div className="notif-msg">{label}</div>
         <div className="notif-meta">
-          <span className="notif-type">{items.length} {notifType}s</span>
+          <span className="notif-type">{t('nav.notifications.group.typeCount', { count: items.length, type: notifType })}</span>
           <span className="notif-dot">·</span>
           <span className="notif-time">{formatNotifTime(date)}</span>
           {topTier && <span className="notif-meta-tier">{topTier === 'whale' ? '🐋' : '🐬'}</span>}
         </div>
       </div>
       {is3Speak && (
-        <img className="notif-3speak-icon" src={threeSpeakLogo} alt="3Speak" title="3Speak video" />
+        <img className="notif-3speak-icon" src={threeSpeakLogo} alt="3Speak" title={t('nav.notifications.threeSpeakVideo')} />
       )}
       {hasUnread && <span className="notif-unread-dot" aria-hidden="true" />}
 
@@ -395,15 +400,15 @@ function GroupRow({ group, isUnread, is3Speak, getWhaleTier, onClick, hovered, o
           <div className="notif-tooltip-msg">{label}</div>
           {topTier && (
             <span className="notif-tooltip-tier">
-              Includes {topTier === 'whale' ? '🐋 whale' : '🐬 orca'} account(s)
+              {topTier === 'whale' ? t('nav.notifications.group.includesWhale') : t('nav.notifications.group.includesOrca')}
             </span>
           )}
           <div className="notif-tooltip-actors">
             {actors.slice(0, 8).map((a) => {
-              const t = getWhaleTier(a);
-              return <span key={a} className={t ? `notif-tooltip-actor-${t}` : ''}>@{a}{t ? (t === 'whale' ? ' 🐋' : ' 🐬') : ''}</span>;
+              const tier = getWhaleTier(a);
+              return <span key={a} className={tier ? `notif-tooltip-actor-${tier}` : ''}>@{a}{tier ? (tier === 'whale' ? ' 🐋' : ' 🐬') : ''}</span>;
             })}
-            {actors.length > 8 && <span>and {actors.length - 8} more…</span>}
+            {actors.length > 8 && <span>{t('nav.notifications.group.andMore', { count: actors.length - 8 })}</span>}
           </div>
         </div>
       )}

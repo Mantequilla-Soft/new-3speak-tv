@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { useLocation } from 'react-router-dom';
+import { useTranslation, Trans } from 'react-i18next';
 import HiveAvatar from '../HiveAvatar/HiveAvatar';
 import { useAppStore } from '../../lib/store';
 import { fetchInvite } from '../../lib/referralLinks';
@@ -21,6 +22,7 @@ import '../../page/Invite/Invite.scss';
  * is for people who do not have one yet.
  */
 export default function InvitePopup({ openLoginModal }) {
+  const { t } = useTranslation();
   const location = useLocation();
   const user = useAppStore((s) => s.user);
   const incubationHandle = useAppStore((s) => s.incubationHandle);
@@ -62,12 +64,12 @@ export default function InvitePopup({ openLoginModal }) {
   let text;
   if (incubationHandle) {
     text = invite.fastTrack
-      ? <>You can turn <strong>@{incubationHandle}</strong> into your own Hive account right now, without finishing the warm-up.</>
-      : <>Keep going with your warm-up. <strong>@{invite.referrer}</strong> is credited as the person who invited you.</>;
+      ? <Trans i18nKey="app.invite.incubatingFastTrack" values={{ handle: incubationHandle }} components={{ b: <strong /> }} />
+      : <Trans i18nKey="app.invite.incubatingKeepGoing" values={{ referrer: invite.referrer }} components={{ b: <strong /> }} />;
   } else {
     text = invite.fastTrack
-      ? <>Sign up and get your own Hive account right away: one login for 3Speak and every other Hive app, with keys only you hold. It takes about a minute.</>
-      : <>Sign up and start with a free profile on 3Speak. Your invite is saved, so <strong>@{invite.referrer}</strong> gets the credit.</>;
+      ? <>{t('app.invite.signUpFastTrack')}</>
+      : <Trans i18nKey="app.invite.signUpFree" values={{ referrer: invite.referrer }} components={{ b: <strong /> }} />;
   }
   const showSignUp = !incubationHandle || invite.fastTrack;
 
@@ -76,16 +78,16 @@ export default function InvitePopup({ openLoginModal }) {
       <div className="invite-popup" role="dialog" aria-modal="true" aria-labelledby="invite-popup-title" onClick={(e) => e.stopPropagation()}>
         <div className="invite-from">
           <HiveAvatar username={invite.referrer} size="medium" className="invite-avatar" />
-          <h1 id="invite-popup-title"><span>@{invite.referrer}</span> invited you to 3Speak</h1>
+          <h1 id="invite-popup-title"><Trans i18nKey="app.invite.title" values={{ referrer: invite.referrer }} components={{ who: <span /> }} /></h1>
         </div>
         <p className="invite-text">{text}</p>
         <div className="invite-actions">
           {showSignUp && (
             <button type="button" className="invite-btn primary" onClick={signUp}>
-              {incubationHandle ? 'Create my Hive account' : invite.fastTrack ? 'Create my account' : 'Sign up'}
+              {incubationHandle ? t('app.invite.createHiveAccount') : invite.fastTrack ? t('app.invite.createAccount') : t('common.actions.signUp')}
             </button>
           )}
-          <button type="button" className="invite-btn" onClick={close}>I just want to look around</button>
+          <button type="button" className="invite-btn" onClick={close}>{t('app.invite.lookAround')}</button>
         </div>
       </div>
     </div>,

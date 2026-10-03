@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { useLocation } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { IoClose, IoChevronBack, IoChevronForward, IoLogoGithub, IoCheckmarkCircle } from 'react-icons/io5';
 import { useAppStore } from '../../lib/store';
 import { APP_VERSION } from '../../version';
@@ -28,6 +29,7 @@ const isSilentRoute = (pathname) => {
 };
 
 export default function ChangelogModal() {
+  const { t } = useTranslation();
   const { pathname } = useLocation();
   const silenced = isSilentRoute(pathname);
   const appUpdatedFrom = useAppStore((s) => s.appUpdatedFrom);
@@ -177,14 +179,14 @@ export default function ChangelogModal() {
   return (
     <div className="changelog-overlay">
       <div className="changelog-modal" role="dialog" aria-modal="true">
-        <button className="changelog-close" onClick={close} aria-label="Close">
+        <button className="changelog-close" onClick={close} aria-label={t('common.actions.close')}>
           <IoClose />
         </button>
 
         <div className="changelog-header">
           <img className="changelog-logo" src={theme === 'dark' ? logoDark : logo} alt="3Speak" />
-          <h2>We shipped an update!</h2>
-          <p className="changelog-subtitle">Here&apos;s what&apos;s new in v{APP_VERSION}</p>
+          <h2>{t('app.changelog.title')}</h2>
+          <p className="changelog-subtitle">{t('app.changelog.subtitle', { version: APP_VERSION })}</p>
         </div>
 
         <div className={`changelog-scroller${atStart ? ' at-start' : ''}${atEnd ? ' at-end' : ''}`}>
@@ -212,10 +214,10 @@ export default function ChangelogModal() {
           )}
           {entries.length > 1 && (
             <>
-              <button className="changelog-arrow left" onClick={() => scrollByCard(-1)} disabled={atStart} aria-label="Previous updates">
+              <button className="changelog-arrow left" onClick={() => scrollByCard(-1)} disabled={atStart} aria-label={t('app.changelog.previousUpdates')}>
                 <IoChevronBack />
               </button>
-              <button className="changelog-arrow right" onClick={() => scrollByCard(1)} disabled={atEnd} aria-label="Newer updates">
+              <button className="changelog-arrow right" onClick={() => scrollByCard(1)} disabled={atEnd} aria-label={t('app.changelog.newerUpdates')}>
                 <IoChevronForward />
               </button>
             </>
@@ -230,11 +232,11 @@ export default function ChangelogModal() {
             rel="noopener noreferrer"
           >
             <IoLogoGithub />
-            <span>Read the code</span>
+            <span>{t('app.changelog.readTheCode')}</span>
           </a>
           <button className="changelog-cta" onClick={close}>
             <IoCheckmarkCircle />
-            <span>Got it</span>
+            <span>{t('app.changelog.gotIt')}</span>
           </button>
         </div>
       </div>

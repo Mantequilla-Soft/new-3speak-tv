@@ -7,6 +7,7 @@ import SEOHead from '../components/SEOHead';
 import Card3 from '../components/Cards/Card3';
 import { useContentBatch } from '../hooks/useContentBatch';
 import { useSearchParams, useLocation, useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { fetchVideoDetails, fetchPlaySource, fetchTrendingFeed, fetchAuthorVideos, fetchRelatedFeed } from '../lib/videoData';
 // BarLoader is intentionally not imported: this page renders immediately rather
@@ -133,6 +134,7 @@ const APPLE_HLS_CAPS = {
 };
 
 function Watch({ v2 = false }) {
+  const { t } = useTranslation();
   const [searchParams] = useSearchParams();
   const location = useLocation();
   const navigate = useNavigate();
@@ -543,26 +545,26 @@ function Watch({ v2 = false }) {
       if (onB !== bannerVisible) setBannerVisible(onB);
       return;
     }
-    const t = Number(playerState?.currentTime) || 0;
-    const inside = ab.isInside(t);
+    const tSec = Number(playerState?.currentTime) || 0;
+    const inside = ab.isInside(tSec);
     if (inside !== sponsorVisible) setSponsorVisible(inside);
 
-    const onBanner = ab.isBannerVisible(t);
+    const onBanner = ab.isBannerVisible(tSec);
     if (onBanner !== bannerVisible) setBannerVisible(onBanner);
 
     // Only inside the last few seconds, and never while the spot is already playing.
     // countdownAt() rather than the arithmetic inline: it is what arms the seek lock,
     // so the hint appearing and the timeline locking are one event, not two.
-    const next = inside ? null : ab.countdownAt(t);
+    const next = inside ? null : ab.countdownAt(tSec);
     if (next !== adCountdown) setAdCountdown(next);
 
     // Armed by the hint above and held through the spot. Read after it, so the first
     // frame the countdown is visible is already a locked one.
-    const locked = ab.seekLocked(t);
+    const locked = ab.seekLocked(tSec);
     if (locked !== adLocked) setAdLocked(locked);
 
     // Whole seconds, so it ticks once a second rather than flickering per frame.
-    const remain = inside ? ab.secondsRemaining(t) : null;
+    const remain = inside ? ab.secondsRemaining(tSec) : null;
     const shown = remain == null ? null : Math.max(0, Math.ceil(remain));
     if (shown !== resumeIn) setResumeIn(shown);
 
@@ -571,15 +573,15 @@ function Watch({ v2 = false }) {
     // not running.
     // The banner's close button waits too, on the same server-sent threshold. The
     // click target does not: following an ad is something a viewer may do at once.
-    const closable = onBanner && ab.bannerClosable(t);
+    const closable = onBanner && ab.bannerClosable(tSec);
     if (closable !== bannerClosable) setBannerClosable(closable);
 
-    const skippable = inside && ab.canSkip(t);
+    const skippable = inside && ab.canSkip(tSec);
     if (skippable !== canSkipAd) setCanSkipAd(skippable);
 
     // Whole seconds, so it ticks once rather than flickering per frame — the same
     // treatment the resume countdown gets, for the same reason.
-    const untilSkip = inside ? ab.secondsUntilSkip(t) : null;
+    const untilSkip = inside ? ab.secondsUntilSkip(tSec) : null;
     const shownSkip = untilSkip == null ? null : Math.max(1, Math.ceil(untilSkip));
     if (shownSkip !== skipIn) setSkipIn(shownSkip);
   }, [playerState?.currentTime, sponsorVisible, bannerVisible, adCountdown, adLocked, resumeIn, canSkipAd, skipIn, adChromeOff, bannerClosable]);
@@ -634,14 +636,14 @@ function Watch({ v2 = false }) {
    * source is swapping, for the reason every other piece of ad chrome is. */
   useEffect(() => {
     const ab = adBreakRef.current;
-    const t = Number(playerState?.currentTime) || 0;
-    const on = !adChromeOff && ab.isTickerVisible(t, Number(playerState?.duration) || 0);
+    const tSec = Number(playerState?.currentTime) || 0;
+    const on = !adChromeOff && ab.isTickerVisible(tSec, Number(playerState?.duration) || 0);
     const w = tickerWatchRef.current;
     /* A video spot cutting in mid-crossing PAUSES the ticker: kept mounted but hidden
      * and frozen, its watched seconds kept, and it carries on after the spot. Ending
      * the run there meant a ticker sharing a playback with an early spot never
      * completed and was never counted. */
-    const held = !on && ab.isInside(t) && w.seconds > 0 && !w.done;
+    const held = !on && ab.isInside(tSec) && w.seconds > 0 && !w.done;
     if (held !== tickerHeld) setTickerHeld(held);
     if (held) { w.lastT = null; return; }
     if (on !== tickerVisible) setTickerVisible(on);
@@ -653,11 +655,11 @@ function Watch({ v2 = false }) {
     const playing = playerState?.paused === false
       && (typeof document === 'undefined' || document.visibilityState === 'visible');
     if (playing && w.lastT != null) {
-      const dt = t - w.lastT;
+      const dt = tSec - w.lastT;
       // Normal playback only. A jump (seek) inside the window is not time watched.
       if (dt > 0 && dt <= 1.5) w.seconds += dt;
     }
-    w.lastT = playing ? t : null;
+    w.lastT = playing ? tSec : null;
 
     const booked = Number(ab.tickerInfo?.durationSeconds) || 0;
     // A whole crossing watched: only NOW is it seen. The impression is reported and the
@@ -780,7 +782,7 @@ function Watch({ v2 = false }) {
     enabled: !scheduled,
     // Report CONTENT time. Without this a stitched spot's seconds are credited as
     // watch time on the creator's video.
-    mapPosition: (t) => adBreakRef.current.contentTime(t),
+    mapPosition: (tSec) => adBreakRef.current.contentTime(tSec),
     /* 🚨 Asked of the checker directly, NOT taken from the ad response.
      *
      * `adBreak.isPremiumViewer` starts false and is only set when /m/session
@@ -1374,7 +1376,7 @@ function Watch({ v2 = false }) {
   }, []);
 
   const REACTION_SIZES = ['medium', 'standard', 'big', 'cinema'];
-  const REACTION_SIZE_LABELS = { medium: 'Medium', standard: 'Standard', big: 'Big', cinema: 'Cinema' };
+  const REACTION_SIZE_LABEL_KEYS = { medium: 'player.reactions.sizeNames.medium', standard: 'player.reactions.sizeNames.standard', big: 'player.reactions.sizeNames.big', cinema: 'player.reactions.sizeNames.cinema' };
   const cycleReactionSize = useCallback(() => {
     setReactionSize(prev => {
       const idx = REACTION_SIZES.indexOf(prev);
@@ -2115,8 +2117,8 @@ function Watch({ v2 = false }) {
   if (authorHidden) {
     return (
       <div className="watch-error">
-        <p>This video is not available.</p>
-        <button className="watch-error-retry" onClick={() => navigate('/')}>Go Home</button>
+        <p>{t('watch.errors.notAvailable')}</p>
+        <button className="watch-error-retry" onClick={() => navigate('/')}>{t('watch.errors.goHome')}</button>
       </div>
     );
   }
@@ -2139,11 +2141,11 @@ function Watch({ v2 = false }) {
     return (
       <div className="watch-error">
         <p>{scheduled
-          ? 'Scheduled post not found — it may have already been published or cancelled.'
-          : (isNetworkError ? 'Network error. Please check your connection.' : 'Video not found or failed to load.')}</p>
+          ? t('watch.errors.scheduledNotFound')
+          : (isNetworkError ? t('watch.errors.network') : t('watch.errors.notFound'))}</p>
         {scheduled
-          ? <button className="watch-error-retry" onClick={() => navigate('/profile')}>Back to profile</button>
-          : <button className="watch-error-retry" onClick={() => refetchVideo()}>Retry</button>}
+          ? <button className="watch-error-retry" onClick={() => navigate('/profile')}>{t('watch.errors.backToProfile')}</button>
+          : <button className="watch-error-retry" onClick={() => refetchVideo()}>{t('common.actions.retry')}</button>}
       </div>
     );
   }
@@ -2188,16 +2190,16 @@ function Watch({ v2 = false }) {
           <div className="gated-paywall" role="status">
             <div className="gated-paywall__lock" aria-hidden="true">🔒</div>
             <div className="gated-paywall__text">
-              <strong>Supporters only</strong>
+              <strong>{t('watch.gated.title')}</strong>
               <span>
                 {gatedPlayback.state === 'error'
-                  ? 'We could not confirm your subscription just now. Try again in a moment.'
+                  ? t('watch.gated.checkFailed')
                   : gatedPlayback.previewUrl
-                    ? 'You are watching a free preview. 3Speak Pro unlocks the full video.'
-                    : 'This video is available to 3Speak Pro subscribers.'}
+                    ? t('watch.gated.preview')
+                    : t('watch.gated.subscribersOnly')}
               </span>
             </div>
-            <a className="gated-paywall__cta" href="/wallet">Get 3Speak Pro</a>
+            <a className="gated-paywall__cta" href="/wallet">{t('watch.gated.cta')}</a>
           </div>
         )}
           </>
@@ -2338,9 +2340,9 @@ function Watch({ v2 = false }) {
             seek(ab.playerTimeFor(Math.min(end, at + 10)));
           },
           // The bar hands back a content second; the player needs the file's.
-          onSeek: (t) => {
+          onSeek: (tSec) => {
             const ab = adBreakRef.current;
-            const to = ab.playerTimeFor(t);
+            const to = ab.playerTimeFor(tSec);
             if (ab.lockedSeekTarget(to, playerState.currentTime) != null) return;
             seek(to);
           },
@@ -2356,7 +2358,7 @@ function Watch({ v2 = false }) {
           getPlaybackHeight,
           onMarkerSelect: handleSelectReaction,
           onCycleReactionSize: isReactionPlayerVisible && reactions.length > 0 ? cycleReactionSize : null,
-          reactionSizeLabel: REACTION_SIZE_LABELS[reactionSize] || reactionSize,
+          reactionSizeLabel: REACTION_SIZE_LABEL_KEYS[reactionSize] ? t(REACTION_SIZE_LABEL_KEYS[reactionSize]) : reactionSize,
           onTogglePip: handleTogglePip,
           videoEnded,
           onReplay: handleReplay,
@@ -2415,12 +2417,12 @@ function Watch({ v2 = false }) {
             )}
             {!isReactionPlayerVisible && reactions.length > 0 && (
               <button className="show-reactions-btn" onClick={() => setReactionsVisible(true)}>
-                Show Reactions ({reactionCountLabel})
+                {t('watch.reactions.show')} ({reactionCountLabel})
               </button>
             )}
             {reactions.length === 0 && (
               <button className="show-reactions-btn" onClick={handleAddReaction}>
-                Add Reaction
+                {t('watch.reactions.add')}
               </button>
             )}
           </>
@@ -2443,12 +2445,12 @@ function Watch({ v2 = false }) {
             )}
             {!isReactionPlayerVisible && reactions.length > 0 && (
               <button className="show-reactions-btn" onClick={() => setReactionsVisible(true)}>
-                Show Reactions ({reactionCountLabel})
+                {t('watch.reactions.show')} ({reactionCountLabel})
               </button>
             )}
             {reactions.length === 0 && (
               <button className="show-reactions-btn" onClick={handleAddReaction}>
-                Add Reaction
+                {t('watch.reactions.add')}
               </button>
             )}
           </>
@@ -2464,7 +2466,7 @@ function Watch({ v2 = false }) {
             <LiveStreamPlayer>; empty until the room connects. */}
         {isLive && (
           <div className="live-chat-column">
-            <div className="live-chat-column__head">Live chat</div>
+            <div className="live-chat-column__head">{t('watch.liveChat')}</div>
             <div className="live-chat-column__body" ref={setLiveChatSlot} />
           </div>
         )}
@@ -2482,9 +2484,9 @@ function Watch({ v2 = false }) {
             currentTime={adBreakRef.current.contentTime(playerState.currentTime)}
             // A cue's start is a content second; seek where it lives in the file,
             // with the same ad lock the progress bar respects.
-            onSeek={(t) => {
+            onSeek={(tSec) => {
               const ab = adBreakRef.current;
-              const to = ab.playerTimeFor(t);
+              const to = ab.playerTimeFor(tSec);
               if (ab.lockedSeekTarget(to, playerState.currentTime) != null) return;
               seek(to);
             }}
@@ -2505,12 +2507,12 @@ function Watch({ v2 = false }) {
                 )}
                 {!isReactionPlayerVisible && reactions.length > 0 && (
                   <button className="show-reactions-btn" onClick={() => setReactionsVisible(true)}>
-                    Show Reactions ({reactionCountLabel})
+                    {t('watch.reactions.show')} ({reactionCountLabel})
                   </button>
                 )}
                 {reactions.length === 0 && (
                   <button className="show-reactions-btn" onClick={handleAddReaction}>
-                    Add Reaction
+                    {t('watch.reactions.add')}
                   </button>
                 )}
               </>
@@ -2520,7 +2522,7 @@ function Watch({ v2 = false }) {
 
         {suggestedVideos.length > 0 && (
           <div className="right-column-videos" ref={desktopRecRef}>
-            <h4>More videos</h4>
+            <h4>{t('watch.moreVideos')}</h4>
             <Card3
               videos={suggestedVideos}
               loading={false}
@@ -2535,7 +2537,7 @@ function Watch({ v2 = false }) {
 
       {suggestedVideos.length > 0 && (
         <div className="mobile-recommended" ref={mobileRecRef}>
-          <h4>More videos</h4>
+          <h4>{t('watch.moreVideos')}</h4>
           <Card3
             videos={suggestedVideos.slice(0, 12)}
             loading={false}

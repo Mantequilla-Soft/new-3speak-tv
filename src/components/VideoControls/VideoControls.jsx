@@ -1,6 +1,7 @@
 import { useState, useCallback, useRef, useEffect, useMemo } from 'react';
 import useSeekPreview from '../../hooks/useSeekPreview';
 import { createPortal } from 'react-dom';
+import { useTranslation } from 'react-i18next';
 import { FaPlay, FaPause, FaExpand, FaCompress, FaVolumeUp, FaVolumeMute, FaVideo, FaCog } from 'react-icons/fa';
 import { MdClosedCaption, MdClosedCaptionOff, MdHighQuality } from 'react-icons/md';
 import { TbRewindBackward10, TbRewindForward10, TbArrowsMaximize, TbPictureInPicture, TbBulbFilled, TbMoonFilled, TbSunFilled, TbPlayerTrackNextFilled } from 'react-icons/tb';
@@ -9,9 +10,9 @@ import { SUBTITLE_FONTS } from '../SubtitleOverlay/SubtitleOverlay';
 import './VideoControls.scss';
 
 const FONT_OPTIONS = [
-  { key: 'sans-serif', label: 'Sans-serif' },
-  { key: 'serif', label: 'Serif' },
-  { key: 'monospace', label: 'Monospace' },
+  { key: 'sans-serif', labelKey: 'player.subtitles.fonts.sansSerif' },
+  { key: 'serif', labelKey: 'player.subtitles.fonts.serif' },
+  { key: 'monospace', labelKey: 'player.subtitles.fonts.monospace' },
   { key: 'arial', label: 'Arial' },
   { key: 'verdana', label: 'Verdana' },
   { key: 'georgia', label: 'Georgia' },
@@ -101,6 +102,7 @@ function VideoControls({
   onHoldControls,
   onReleaseControls,
 }) {
+  const { t } = useTranslation();
   const resolvedMarkers = markers || [];
 
   const [hovering, setHovering] = useState(false);
@@ -436,7 +438,7 @@ function VideoControls({
                 {hoveredMarker === i && marker.label && (
                   <div className="vc-marker-tooltip">
                     {marker.label}
-                    {marker.replyCount > 0 && ` (${marker.replyCount} ${marker.replyCount === 1 ? 'reply' : 'replies'})`}
+                    {marker.replyCount > 0 && ` ${t('player.controls.markerReplies', { count: marker.replyCount })}`}
                   </div>
                 )}
               </div>
@@ -448,13 +450,13 @@ function VideoControls({
       {/* Controls row */}
       <div className="vc-controls-row">
         <div className="vc-controls-left">
-          <button className="vc-btn" onClick={onSeekBackward} title="Rewind 10s">
+          <button className="vc-btn" onClick={onSeekBackward} title={t('player.controls.rewind10')}>
             <TbRewindBackward10 size={18} />
           </button>
-          <button className="vc-btn vc-btn--play" onClick={onTogglePlay} title={isPlaying ? 'Pause' : 'Play'}>
+          <button className="vc-btn vc-btn--play" onClick={onTogglePlay} title={isPlaying ? t('common.actions.pause') : t('common.actions.play')}>
             {isPlaying ? <FaPause size={14} /> : <FaPlay size={14} />}
           </button>
-          <button className="vc-btn" onClick={onSeekForward} title="Forward 10s">
+          <button className="vc-btn" onClick={onSeekForward} title={t('player.controls.forward10')}>
             <TbRewindForward10 size={18} />
           </button>
           <div className="vc-time">
@@ -463,12 +465,12 @@ function VideoControls({
         </div>
         <div className="vc-controls-right">
           {onReactToMoment && (
-            <button className="vc-btn vc-btn--react" onClick={onReactToMoment} title="React to this moment">
+            <button className="vc-btn vc-btn--react" onClick={onReactToMoment} title={t('player.controls.reactToMoment')}>
               <FaVideo size={13} />
             </button>
           )}
           <div className="vc-volume-group">
-            <button className="vc-btn" onClick={onToggleMute} title={isMuted ? 'Unmute' : 'Mute'}>
+            <button className="vc-btn" onClick={onToggleMute} title={isMuted ? t('player.controls.unmute') : t('player.controls.mute')}>
               {isMuted ? <FaVolumeMute size={14} /> : <FaVolumeUp size={14} />}
             </button>
             {onVolumeChange && (
@@ -497,13 +499,13 @@ function VideoControls({
             )}
           </div>
           {onCycleReactionSize && (
-            <button className="vc-btn vc-btn--resize" onClick={onCycleReactionSize} title={`Player size: ${reactionSizeLabel || 'Standard'}`}>
+            <button className="vc-btn vc-btn--resize" onClick={onCycleReactionSize} title={t('player.controls.playerSize', { size: reactionSizeLabel || t('player.controls.sizeStandard') })}>
               <TbArrowsMaximize size={15} />
-              <span className="vc-size-label">{reactionSizeLabel || 'Standard'}</span>
+              <span className="vc-size-label">{reactionSizeLabel || t('player.controls.sizeStandard')}</span>
             </button>
           )}
           {/* {onTogglePip && (
-            <button className="vc-btn" onClick={onTogglePip} title="Picture-in-Picture">
+            <button className="vc-btn" onClick={onTogglePip} title={t('player.controls.pip')}>
               <TbPictureInPicture size={16} />
             </button>
           )} */}
@@ -511,7 +513,7 @@ function VideoControls({
             <button
               className={`vc-btn vc-btn--autoplay${autoplayNext ? ' active' : ''}`}
               onClick={onToggleAutoplay}
-              title={autoplayNext ? 'Autoplay: on' : 'Autoplay: off'}
+              title={autoplayNext ? t('player.controls.autoplayOn') : t('player.controls.autoplayOff')}
             >
               <TbPlayerTrackNextFilled size={15} />
             </button>
@@ -520,7 +522,7 @@ function VideoControls({
             <button
               className={`vc-btn vc-btn--glow${glowMode !== 'off' ? ' active' : ''}`}
               onClick={onToggleGlow}
-              title={glowMode === 'off' ? 'Ambient light: subtle' : glowMode === 'page' ? 'Ambient light: vivid' : 'Ambient light: off'}
+              title={glowMode === 'off' ? t('player.controls.ambientSubtle') : glowMode === 'page' ? t('player.controls.ambientVivid') : t('player.controls.ambientOff')}
             >
               {glowMode === 'off' && <TbMoonFilled size={15} />}
               {glowMode === 'page' && <TbBulbFilled size={15} />}
@@ -532,7 +534,7 @@ function VideoControls({
               <button
                 className={`vc-btn vc-btn--subtitle${selectedSubtitleLang ? ' active' : ''}`}
                 onClick={() => { setSubtitleMenuOpen(o => !o); setQualityMenuOpen(false); }}
-                title="Subtitles"
+                title={t('player.subtitles.title')}
               >
                 {selectedSubtitleLang ? <MdClosedCaption size={18} /> : <MdClosedCaptionOff size={18} />}
               </button>
@@ -547,7 +549,7 @@ function VideoControls({
                     className={`vc-subtitle-item${!selectedSubtitleLang ? ' active' : ''}`}
                     onClick={() => { onSubtitleChange?.(null); setSubtitleMenuOpen(false); }}
                   >
-                    Off
+                    {t('player.subtitles.off')}
                   </button>
                   {subtitleLanguages.map((sub) => {
                     const langInfo = SUPPORTED_LANGUAGES.find(l => l.code === sub.lang);
@@ -565,7 +567,7 @@ function VideoControls({
                   })}
                   {subtitleStyle && onSubtitleStyleChange && (
                     <div className="vc-subtitle-style">
-                      <div className="vc-subtitle-style-label">Font</div>
+                      <div className="vc-subtitle-style-label">{t('player.subtitles.font')}</div>
                       <div className="vc-subtitle-font-list">
                         {FONT_OPTIONS.map(f => (
                           <button
@@ -574,11 +576,11 @@ function VideoControls({
                             style={{ fontFamily: SUBTITLE_FONTS[f.key] }}
                             onClick={() => onSubtitleStyleChange({ fontFamily: f.key })}
                           >
-                            {f.label}
+                            {f.labelKey ? t(f.labelKey) : f.label}
                           </button>
                         ))}
                       </div>
-                      <div className="vc-subtitle-style-label">Size</div>
+                      <div className="vc-subtitle-style-label">{t('player.subtitles.size')}</div>
                       <div className="vc-subtitle-style-row">
                         {[
                           { key: 'small', label: 'A' },
@@ -596,7 +598,7 @@ function VideoControls({
                           </button>
                         ))}
                       </div>
-                      <div className="vc-subtitle-style-label">Text Color</div>
+                      <div className="vc-subtitle-style-label">{t('player.subtitles.textColor')}</div>
                       <div className="vc-subtitle-style-row">
                         <input
                           type="color"
@@ -606,7 +608,7 @@ function VideoControls({
                         />
                         <span className="vc-subtitle-color-hex">{subtitleStyle.color || '#ffffff'}</span>
                       </div>
-                      <div className="vc-subtitle-style-label">Text Border</div>
+                      <div className="vc-subtitle-style-label">{t('player.subtitles.textBorder')}</div>
                       <div className="vc-subtitle-style-row">
                         {[0, 2, 4, 8].map(w => (
                           <button
@@ -614,13 +616,13 @@ function VideoControls({
                             className={`vc-subtitle-bg-btn${subtitleStyle.borderWidth === w ? ' active' : ''}`}
                             onClick={() => onSubtitleStyleChange({ borderWidth: w })}
                           >
-                            {w === 0 ? 'Off' : `${w}px`}
+                            {w === 0 ? t('player.subtitles.off') : `${w}px`}
                           </button>
                         ))}
                       </div>
                       {subtitleStyle.borderWidth > 0 && (
                         <>
-                          <div className="vc-subtitle-style-label">Border Color</div>
+                          <div className="vc-subtitle-style-label">{t('player.subtitles.borderColor')}</div>
                           <div className="vc-subtitle-style-row">
                             <input
                               type="color"
@@ -632,7 +634,7 @@ function VideoControls({
                           </div>
                         </>
                       )}
-                      <div className="vc-subtitle-style-label">Background</div>
+                      <div className="vc-subtitle-style-label">{t('player.subtitles.background')}</div>
                       <div className="vc-subtitle-style-row">
                         {[0, 0.5, 0.7, 1].map(o => (
                           <button
@@ -640,7 +642,7 @@ function VideoControls({
                             className={`vc-subtitle-bg-btn${subtitleStyle.bgOpacity === o ? ' active' : ''}`}
                             onClick={() => onSubtitleStyleChange({ bgOpacity: o })}
                           >
-                            {o === 0 ? 'None' : `${Math.round(o * 100)}%`}
+                            {o === 0 ? t('player.subtitles.none') : `${Math.round(o * 100)}%`}
                           </button>
                         ))}
                       </div>
@@ -656,7 +658,7 @@ function VideoControls({
               <button
                 className={`vc-btn vc-btn--speed${playbackRate !== 1 ? ' active' : ''}`}
                 onClick={() => { setSpeedMenuOpen(o => !o); setQualityMenuOpen(false); setSubtitleMenuOpen(false); }}
-                title="Playback speed"
+                title={t('player.controls.playbackSpeed')}
               >
                 {playbackRate !== 1 ? `${playbackRate}x` : '1x'}
               </button>
@@ -673,7 +675,7 @@ function VideoControls({
                       className={`vc-speed-item${playbackRate === rate ? ' active' : ''}`}
                       onClick={() => { onPlaybackRateChange(rate); setSpeedMenuOpen(false); }}
                     >
-                      {rate === 1 ? 'Normal' : `${rate}x`}
+                      {rate === 1 ? t('player.controls.speedNormal') : `${rate}x`}
                     </button>
                   ))}
                 </div>
@@ -683,7 +685,7 @@ function VideoControls({
           )}
           {qualityLevels && qualityLevels.length > 0 && (
             <div className="vc-quality-wrap" ref={qualityMenuRef}>
-              <button className="vc-btn" onClick={() => { setQualityMenuOpen(o => !o); setSubtitleMenuOpen(false); }} title="Quality">
+              <button className="vc-btn" onClick={() => { setQualityMenuOpen(o => !o); setSubtitleMenuOpen(false); }} title={t('player.controls.quality')}>
                 <FaCog size={14} />
               </button>
               {qualityMenuOpen && (
@@ -697,7 +699,7 @@ function VideoControls({
                     className={`vc-quality-item${currentQuality === -1 ? ' active' : ''}`}
                     onClick={() => { onQualityChange?.(-1); setQualityMenuOpen(false); }}
                   >
-                    Auto
+                    {t('player.controls.qualityAuto')}
                   </button>
                   {qualityLevels.map((q) => (
                     <button
@@ -718,7 +720,7 @@ function VideoControls({
             <button
               className={`vc-btn vc-btn--mobile-settings${mobileSettingsOpen ? ' active' : ''}`}
               onClick={() => setMobileSettingsOpen(o => !o)}
-              title="Settings"
+              title={t('common.nav.settings')}
             >
               <FaCog size={14} />
             </button>
@@ -728,7 +730,7 @@ function VideoControls({
                   <button
                     className={`vc-mobile-settings-item${autoplayNext ? ' active' : ''}`}
                     onClick={() => { onToggleAutoplay(); }}
-                    title={autoplayNext ? 'Autoplay: on' : 'Autoplay: off'}
+                    title={autoplayNext ? t('player.controls.autoplayOn') : t('player.controls.autoplayOff')}
                   >
                     <TbPlayerTrackNextFilled size={15} />
                   </button>
@@ -737,7 +739,7 @@ function VideoControls({
                   <button
                     className={`vc-mobile-settings-item${selectedSubtitleLang ? ' active' : ''}`}
                     onClick={() => { setMobileSettingsOpen(false); setSubtitleMenuOpen(o => !o); }}
-                    title="Subtitles"
+                    title={t('player.subtitles.title')}
                   >
                     {selectedSubtitleLang ? <MdClosedCaption size={18} /> : <MdClosedCaptionOff size={18} />}
                   </button>
@@ -746,7 +748,7 @@ function VideoControls({
                   <button
                     className={`vc-mobile-settings-item${playbackRate !== 1 ? ' active' : ''}`}
                     onClick={() => { setMobileSettingsOpen(false); setSpeedMenuOpen(o => !o); }}
-                    title="Playback speed"
+                    title={t('player.controls.playbackSpeed')}
                   >
                     {playbackRate !== 1 ? `${playbackRate}x` : '1x'}
                   </button>
@@ -755,7 +757,7 @@ function VideoControls({
                   <button
                     className={`vc-mobile-settings-item`}
                     onClick={() => { setMobileSettingsOpen(false); setQualityMenuOpen(o => !o); }}
-                    title="Quality"
+                    title={t('player.controls.quality')}
                   >
                     <MdHighQuality size={16} />
                   </button>
@@ -763,7 +765,7 @@ function VideoControls({
               </div>
             )}
           </div>
-          <button className="vc-btn" onClick={onToggleFullscreen} title={isFullscreen ? 'Exit Fullscreen' : 'Fullscreen'}>
+          <button className="vc-btn" onClick={onToggleFullscreen} title={isFullscreen ? t('player.controls.exitFullscreen') : t('player.controls.fullscreen')}>
             {isFullscreen ? <FaCompress size={14} /> : <FaExpand size={14} />}
           </button>
         </div>

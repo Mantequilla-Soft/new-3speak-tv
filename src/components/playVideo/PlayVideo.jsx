@@ -35,6 +35,8 @@ import CommentVoteTooltip from "../tooltip/CommentVoteTooltip";
 import { prefetchVideoTagsV2 } from '../../utils/tagsV2';
 import AiBadge from '../AiBadge/AiBadge';
 import axios from "axios";
+import { useTranslation, Trans } from "react-i18next";
+import { formatTimeAgo } from "../../i18n";
 import mantequillaLogo from "../../assets/mantequilla-logo.png";
 import threespeakLogo from "../../assets/image/3S_logo.svg";
 import threespeakLogoDark from "../../assets/image/3S_logodark.png";
@@ -79,6 +81,7 @@ const toast = toastIn('Video');
 dayjs.extend(relativeTime);
 
 const PlayVideo = ({ videoDetails, author, permlink, mediaUnavailable = false, mediaBlocked = false, onRetryPlayback = null, mediaLoading = false, playlistData, onClosePlaylist, videoControls, mobileReactionPanel, cinemaReactionPanel, videoRef, wrapperRef, onVideoEdited, overrideBody, scheduled = false, scheduledOn = null, onEditScheduled, v2 = false, isLive = false, streamRoom = null, liveChatSlot = null, onLiveChatSent = null, vodAssetPending = false, onStreamRoomMeta = null, belowPlayerSlot = null, sponsorLabel = null, adCountdown = null, bannerHit = null, tickerSlot = null, adSkip = null, adPlaying = false, adLocked = false }) => {
+  const { t } = useTranslation();
   const { user, authenticated } = useAppStore();
   const incubationHandle = useAppStore((s) => s.incubationHandle);
   // Actions that move value on Hive: promoting spends funds, tipping sends
@@ -140,13 +143,13 @@ const PlayVideo = ({ videoDetails, author, permlink, mediaUnavailable = false, m
     } catch (err) {
       setOffChainVoted(!next);
       setOffChainVotes((n) => (n == null ? n : Math.max(0, n + (next ? -1 : 1))));
-      toast.error(err.message || 'Could not save your vote');
+      toast.error(err.message || t('watch.vote.saveFailed'));
     }
   }, [authenticated, offChainVoted, author, permlink, loadOffChainLikes]);
   // The viewer's own reason wins when both apply: it is the one they can act on.
   const LOCKED_TITLE = viewerHasNoAccount
-    ? 'Unlocked once you create your Hive account'
-    : 'Not available yet: this post is not on Hive';
+    ? t('watch.locked.noAccount')
+    : t('watch.locked.offChainPost');
 
   // Spread LAST onto a locked button so it overrides that button's own title
   // and onClick.
@@ -174,7 +177,7 @@ const PlayVideo = ({ videoDetails, author, permlink, mediaUnavailable = false, m
 
   // Add a topic to the user's interests (from the topic popup), persisting to Hive.
   const addToInterests = useCallback(async (tag) => {
-    if (!user) { toast.error('Login to save interests'); return; }
+    if (!user) { toast.error(t('watch.interests.loginRequired')); return; }
     if (!ALL_TOPIC_SLUGS.includes(tag)) return;
     const cur = useAppStore.getState().interests || [];
     if (cur.includes(tag)) return;
@@ -183,10 +186,10 @@ const PlayVideo = ({ videoDetails, author, permlink, mediaUnavailable = false, m
     try {
       const saved = await saveInterestsToHive(user, next);
       setInterests(saved);
-      toast.success(`Added “${displayTag(tag)}” to your interests`);
+      toast.success(t('watch.interests.added', { tag: displayTag(tag) }));
     } catch (e) {
       setInterests(cur); // revert on failure
-      toast.error(e?.message || 'Could not save interests');
+      toast.error(e?.message || t('watch.interests.saveFailed'));
     }
   }, [user, setInterests]);
   const navigate = useNavigate();
@@ -323,33 +326,21 @@ const PlayVideo = ({ videoDetails, author, permlink, mediaUnavailable = false, m
     setIsRemovingWatchLater(true);
     try {
       await removeFromPlaylist(watchLaterPlaylist.id, author, permlink);
-      toast.success('Removed from Watch Later');
+      toast.success(t('watch.watchLater.removed'));
       setTimeout(() => {
         refetchPlaylists();
         queryClient.invalidateQueries({ queryKey: ['myPlaylists'] });
         queryClient.invalidateQueries({ queryKey: ['userPlaylists'] });
       }, 2000);
     } catch (error) {
-      toast.error('Failed to remove: ' + error.message);
+      toast.error(t('watch.watchLater.removeFailed', { error: error.message }));
     } finally {
       setIsRemovingWatchLater(false);
     }
   }, [watchLaterPlaylist, author, permlink, isRemovingWatchLater, refetchPlaylists, queryClient]);
 
   // Memoized format function
-  const formatRelativeTime = useCallback((date) => {
-    const now = dayjs();
-    const created = dayjs(date);
-    const diffInMinutes = now.diff(created, "minute");
-  
-    if (diffInMinutes < 60) return `${diffInMinutes}m ago`;
-    const diffInHours = now.diff(created, "hour");
-    if (diffInHours < 24) return `${diffInHours}h ago`;
-    const diffInDays = now.diff(created, "day");
-    if (diffInDays < 30) return `${diffInDays}d ago`;
-    const diffInMonths = now.diff(created, "month");
-    return `${diffInMonths}mo ago`;
-  }, []);
+  const formatRelativeTime = useCallback((date) => formatTimeAgo(dayjs(date).toDate(), { style: 'narrow' }), []);
 
   // Uploader profile — from Hive (lib/videoData), not the retired union API.
   const profileName = videoDetails?.author?.username || videoDetails?.author?.id || author;
@@ -425,8 +416,8 @@ const PlayVideo = ({ videoDetails, author, permlink, mediaUnavailable = false, m
     const out = [];
     for (const raw of (videoDetails?.tags || [])) {
       for (const part of String(raw).split(',')) {
-        const t = part.trim().replace(/^#+/, '').trim();
-        if (t && !seen.has(t)) { seen.add(t); out.push(t); }
+        const tag = part.trim().replace(/^#+/, '').trim();
+        if (tag && !seen.has(tag)) { seen.add(tag); out.push(tag); }
       }
     }
     return out.slice(0, 7);
@@ -673,7 +664,7 @@ const PlayVideo = ({ videoDetails, author, permlink, mediaUnavailable = false, m
     // for a Hive username they do not have.
     const asWho = user || incubationHandle;
     if (!authenticated || !asWho) {
-      toast.error('Log in to reshare');
+      toast.error(t('watch.reshare.loginRequired'));
       return;
     }
     if (hasReshared) return;
@@ -681,15 +672,15 @@ const PlayVideo = ({ videoDetails, author, permlink, mediaUnavailable = false, m
     if (result) {
       setHasReshared(true);
       setReshareCount(prev => prev + 1);
-      toast.success('Reshared!');
+      toast.success(t('watch.reshare.success'));
     } else {
-      toast.error('Failed to reshare');
+      toast.error(t('watch.reshare.failed'));
     }
   }, [authenticated, user, incubationHandle, author, permlink, hasReshared]);
 
   const handleRemix = useCallback((mediaType = 'video') => {
     if (!videoUrlSelected) {
-      toast.error('Could not resolve video URL for remix');
+      toast.error(t('watch.clip.noVideoUrlRemix'));
       return;
     }
     if (videoControls?.onPause) videoControls.onPause();
@@ -724,29 +715,29 @@ const PlayVideo = ({ videoDetails, author, permlink, mediaUnavailable = false, m
     setClipMode('start');
     setClipStart(null);
     setClipEnd(null);
-    toast.info('Seek to the start of your clip, then click "Set Start"');
+    toast.info(t('watch.clip.startHint'));
   }, []);
 
   const handleSetClipStart = useCallback(() => {
     const time = Math.floor(videoControls?.currentTime || 0);
     setClipStart(time);
     setClipMode('end');
-    toast.info('Now seek to the end of your clip and click "Set End"');
+    toast.info(t('watch.clip.endHint'));
   }, [videoControls?.currentTime]);
 
   const handleSetClipEnd = useCallback(() => {
     let time = Math.floor(videoControls?.currentTime || 0);
     if (clipStart !== null && time <= clipStart) {
-      toast.error('End time must be after start time');
+      toast.error(t('watch.clip.endBeforeStart'));
       return;
     }
     if (clipStart !== null && time - clipStart > 60) {
       time = clipStart + 60;
-      toast.info('Clip trimmed to 1 minute — we will trim the clip at the end of the timeline.');
+      toast.info(t('watch.clip.trimmed'));
     }
     setClipEnd(time);
     setClipMode('done');
-    toast.success(`Clip set: ${formatTime(clipStart)} – ${formatTime(time)}. Now click on "Create Clip"`);
+    toast.success(t('watch.clip.set', { start: formatTime(clipStart), end: formatTime(time) }));
   }, [videoControls?.currentTime, clipStart]);
 
   const handleCancelClip = useCallback(() => {
@@ -757,7 +748,7 @@ const PlayVideo = ({ videoDetails, author, permlink, mediaUnavailable = false, m
 
   const handleCreateClip = useCallback(() => {
     if (!videoUrlSelected) {
-      toast.error('Could not resolve video URL');
+      toast.error(t('watch.clip.noVideoUrl'));
       return;
     }
     if (videoControls?.onPause) videoControls.onPause();
@@ -782,37 +773,37 @@ const PlayVideo = ({ videoDetails, author, permlink, mediaUnavailable = false, m
     const time = Math.floor(videoControls?.currentTime || 0);
     const timeParam = time > 0 ? `&t=${time}` : '';
     const shareUrl = `${window.location.origin}/watch?v=${author}/${permlink}${timeParam}`;
-    const shareData = { title: videoDetails?.title || '3Speak Video', url: shareUrl };
+    const shareData = { title: videoDetails?.title || t('watch.share.defaultTitle'), url: shareUrl };
     try {
       if (navigator.share && navigator.canShare?.(shareData)) {
         await navigator.share(shareData);
       } else {
         await navigator.clipboard.writeText(shareUrl);
-        toast.success('Link copied to clipboard!');
+        toast.success(t('watch.share.linkCopied'));
       }
     } catch (err) {
       if (err.name !== 'AbortError') {
         try {
           await navigator.clipboard.writeText(shareUrl);
-          toast.success('Link copied to clipboard!');
+          toast.success(t('watch.share.linkCopied'));
         } catch {
-          toast.error('Failed to share');
+          toast.error(t('watch.share.failed'));
         }
       }
     }
   }, [author, permlink, videoDetails?.title, videoControls?.currentTime]);
 
   const handleFabFollow = useCallback(async () => {
-    if (!isLoggedIn()) { toast.error('Please login to follow users'); return; }
+    if (!isLoggedIn()) { toast.error(t('watch.follow.loginRequired')); return; }
     if (followLoading) return;
     setFollowLoading(true);
     setIsFollowingCreator(true);
     try {
       await followWithAioha(author, true);
-      toast.success(`Followed @${author}`);
+      toast.success(t('watch.follow.followed', { user: author }));
     } catch (err) {
       setIsFollowingCreator(false);
-      toast.error('Failed to follow: ' + err.message);
+      toast.error(t('watch.follow.failed', { error: err.message }));
     } finally {
       setFollowLoading(false);
     }
@@ -915,7 +906,7 @@ const PlayVideo = ({ videoDetails, author, permlink, mediaUnavailable = false, m
                 // Bottom-right, opposite the disclosure, so the two never collide.
                 // aria-live so it is announced once rather than on every tick.
                 <div className="watch-ad-countdown" role="status" aria-live="polite">
-                  Ad in {adCountdown}
+                  {t('watch.ad.countdown', { seconds: adCountdown })}
                 </div>
               )}
               {/* Skip, bottom-right. Its own slot rather than part of the disclosure:
@@ -973,11 +964,10 @@ const PlayVideo = ({ videoDetails, author, permlink, mediaUnavailable = false, m
                 }}>
                   <div style={{ fontSize: '2.2rem', lineHeight: 1 }}>🚫</div>
                   <div style={{ fontSize: '1.05rem', fontWeight: 600, color: '#f0f0f0' }}>
-                    This video is no longer available
+                    {t('watch.media.unavailableTitle')}
                   </div>
                   <div style={{ fontSize: '0.85rem', color: '#aaa', maxWidth: '440px', lineHeight: 1.5 }}>
-                    The media for this older upload could not be found on the network. The post
-                    still exists on the blockchain, but the video can no longer be played.
+                    {t('watch.media.unavailableBody')}
                   </div>
                 </div>
               )}
@@ -993,11 +983,10 @@ const PlayVideo = ({ videoDetails, author, permlink, mediaUnavailable = false, m
                 }}>
                   <div style={{ fontSize: '2.2rem', lineHeight: 1 }}>📡</div>
                   <div style={{ fontSize: '1.05rem', fontWeight: 600, color: '#f0f0f0' }}>
-                    Couldn&apos;t load the video right now
+                    {t('watch.media.blockedTitle')}
                   </div>
                   <div style={{ fontSize: '0.85rem', color: '#aaa', maxWidth: '440px', lineHeight: 1.5 }}>
-                    One of our video servers didn&apos;t respond. The video itself is fine, so
-                    please try again.
+                    {t('watch.media.blockedBody')}
                   </div>
                   {onRetryPlayback && (
                     <button
@@ -1009,7 +998,7 @@ const PlayVideo = ({ videoDetails, author, permlink, mediaUnavailable = false, m
                         color: 'var(--accent-primary, #e0594b)',
                       }}
                     >
-                      Try again
+                      {t('common.actions.tryAgain')}
                     </button>
                   )}
                 </div>
@@ -1027,11 +1016,11 @@ const PlayVideo = ({ videoDetails, author, permlink, mediaUnavailable = false, m
               {tipNudgeVisible && !isTipModalOpen && authenticated && isLoggedIn() && user !== author && (
                 <div className="tip-nudge">
                   <FaHeart className="tip-nudge-emoji hide-mobile" style={{ color: '#e53935' }} />
-                  <span className="tip-nudge-text">Enjoyed this?<span className="hide-mobile"> Send <strong>@{author}</strong> a tip!</span></span>
+                  <span className="tip-nudge-text"><Trans i18nKey="watch.tipNudge.text" values={{ author }} components={{ hide: <span className="hide-mobile" />, b: <strong /> }} /></span>
                   <button type="button" className="tip-nudge-btn" onClick={() => { setTipNudgeVisible(false); setIsTipModalOpen(true); }}>
-                    Tip
+                    {t('watch.actions.tip')}
                   </button>
-                  <button type="button" className="tip-nudge-close" onClick={() => setTipNudgeVisible(false)} aria-label="Dismiss">
+                  <button type="button" className="tip-nudge-close" onClick={() => setTipNudgeVisible(false)} aria-label={t('watch.tipNudge.dismiss')}>
                     <MdClose size={14} />
                   </button>
                 </div>
@@ -1061,7 +1050,7 @@ const PlayVideo = ({ videoDetails, author, permlink, mediaUnavailable = false, m
                     {suggestions.length > 0 && (
                       <div className="video-ended-mobile-card">{renderCard(suggestions[0], 0)}</div>
                     )}
-                    <button type="button" className="video-replay-btn" onClick={videoControls.onReplay} title="Replay">
+                    <button type="button" className="video-replay-btn" onClick={videoControls.onReplay} title={t('player.overlay.replay')}>
                       <MdReplay size={48} />
                     </button>
                     {/* Mobile: 1 card right of replay */}
@@ -1079,7 +1068,7 @@ const PlayVideo = ({ videoDetails, author, permlink, mediaUnavailable = false, m
               })()}
               {videoControls?.autoplayBlocked && !videoControls?.videoEnded && (
                 <div className="video-replay-overlay" onClick={videoControls.onAutoplayTap}>
-                  <button type="button" className="video-replay-btn" title="Play">
+                  <button type="button" className="video-replay-btn" title={t('common.actions.play')}>
                     <MdPlayArrow size={48} />
                   </button>
                 </div>
@@ -1228,7 +1217,7 @@ const PlayVideo = ({ videoDetails, author, permlink, mediaUnavailable = false, m
               <div className="community-text">
                 <span className="community-name">{comunity_name}</span>
                 {communityData?.subscribers != null && (
-                  <span className="community-members">{communityData.subscribers} Members</span>
+                  <span className="community-members">{t('watch.community.members', { count: communityData.subscribers })}</span>
                 )}
               </div>
             </div>)}
@@ -1239,7 +1228,7 @@ const PlayVideo = ({ videoDetails, author, permlink, mediaUnavailable = false, m
               {extendedDetails?.mantecurated && (
                 <span className="curated-tag" onClick={() => handleSelectTag('mantecurated')}>
                   <img src={mantequillaLogo} alt="" className="curated-tag-icon" />
-                  Curated
+                  {t('watch.tags.curated')}
                 </span>
               )}
               {tags.map((tag, index) => (
@@ -1282,9 +1271,9 @@ const PlayVideo = ({ videoDetails, author, permlink, mediaUnavailable = false, m
                 anchorRef={{ current: activeTagTip.el }}
                 pinned={!!tagTipPinned}
                 onClose={() => { setTagTipPinned(null); setTagTipHover(null); }}
-                title={`“${label}” · tagged by ${voters.length}`}
-                pinnedTitle={`“${label}” · ${voters.length} viewer${voters.length === 1 ? '' : 's'}`}
-                emptyText={c?.auto ? 'Auto-tagged — no viewer votes yet' : 'No viewer votes yet'}
+                title={t('watch.topics.taggedBy', { label, count: voters.length })}
+                pinnedTitle={t('watch.topics.viewers', { label, count: voters.length })}
+                emptyText={c?.auto ? t('watch.topics.autoNoVotes') : t('watch.topics.noVotes')}
                 footer={(() => {
                   const isInterest = ALL_TOPIC_SLUGS.includes(activeTagTip.tag);
                   const already = (interests || []).includes(activeTagTip.tag);
@@ -1292,14 +1281,14 @@ const PlayVideo = ({ videoDetails, author, permlink, mediaUnavailable = false, m
                     <>
                       {isInterest && authenticated && (
                         already ? (
-                          <div className="votes-tooltip-note">✓ In your interests</div>
+                          <div className="votes-tooltip-note">{t('watch.topics.inInterests')}</div>
                         ) : (
                           <button
                             type="button"
                             className="votes-tooltip-feed-btn secondary"
                             onClick={() => addToInterests(activeTagTip.tag)}
                           >
-                            + Add to my interests
+                            {t('watch.topics.addToInterests')}
                           </button>
                         )
                       )}
@@ -1308,7 +1297,7 @@ const PlayVideo = ({ videoDetails, author, permlink, mediaUnavailable = false, m
                         className="votes-tooltip-feed-btn"
                         onClick={() => { setTagTipPinned(null); setTagTipHover(null); navigate(`/t/${activeTagTip.tag}`); }}
                       >
-                        Open tag feed
+                        {t('watch.topics.openTagFeed')}
                       </button>
                     </>
                   );
@@ -1322,14 +1311,16 @@ const PlayVideo = ({ videoDetails, author, permlink, mediaUnavailable = false, m
               <div className="scheduled-notice">
                 <LuTimer />
                 <span>
-                  Scheduled for{' '}
-                  <strong>{scheduledOn ? new Date(scheduledOn).toLocaleString() : 'a future date'}</strong>
-                  {' '}— not published yet.
+                  <Trans
+                    i18nKey="watch.scheduled.notice"
+                    values={{ date: scheduledOn ? new Date(scheduledOn).toLocaleString() : t('watch.scheduled.futureDate') }}
+                    components={{ b: <strong /> }}
+                  />
                   {(authenticated && user === author) && onEditScheduled && (
                     <>
                       {' '}
                       <button type="button" className="scheduled-notice-edit" onClick={() => onEditScheduled()}>
-                        Edit, reschedule or cancel
+                        {t('watch.scheduled.edit')}
                       </button>
                     </>
                   )}
@@ -1345,28 +1336,28 @@ const PlayVideo = ({ videoDetails, author, permlink, mediaUnavailable = false, m
                     type="button"
                     className={`pv-btn clip-btn${clipMode ? ' active' : ''}`}
                     onClick={clipMode ? handleCancelClip : handleStartClipMode}
-                    title={!authenticated ? 'Log in to clip' : clipMode ? 'Cancel clip' : 'Clip video'}
+                    title={!authenticated ? t('watch.clip.loginRequired') : clipMode ? t('watch.clip.cancel') : t('watch.clip.clipVideo')}
                     disabled={!authenticated}
                     {...lockProps}
                   >
                     <Scissors size={16} />
-                    <span className="tools-row-label">Clip Video</span>
+                    <span className="tools-row-label">{t('watch.clip.label')}</span>
                   </button>
                   {clipMode && (
                     <div className="clip-bar-inline">
                       <span className="clip-bar-inline-label">
-                        {clipMode === 'start' && 'Seek to start'}
+                        {clipMode === 'start' && t('watch.clip.seekToStart')}
                         {clipMode === 'end' && `${formatTime(clipStart)} →`}
                         {clipMode === 'done' && `${formatTime(clipStart)} – ${formatTime(clipEnd)}`}
                       </span>
                       {clipMode === 'start' && (
-                        <button type="button" className="clip-action-btn" onClick={handleSetClipStart}>Set Start</button>
+                        <button type="button" className="clip-action-btn" onClick={handleSetClipStart}>{t('watch.clip.setStart')}</button>
                       )}
                       {clipMode === 'end' && (
-                        <button type="button" className="clip-action-btn" onClick={handleSetClipEnd}>Set End</button>
+                        <button type="button" className="clip-action-btn" onClick={handleSetClipEnd}>{t('watch.clip.setEnd')}</button>
                       )}
                       {clipMode === 'done' && (
-                        <button type="button" className="clip-action-btn" onClick={handleCreateClip}>Create Clip</button>
+                        <button type="button" className="clip-action-btn" onClick={handleCreateClip}>{t('watch.clip.createClip')}</button>
                       )}
                     </div>
                   )}
@@ -1383,7 +1374,7 @@ const PlayVideo = ({ videoDetails, author, permlink, mediaUnavailable = false, m
                       type="button"
                       className="pv-btn edit-video-btn"
                       onClick={() => onEditScheduled?.()}
-                      title="Edit scheduled post (details, date, or cancel)"
+                      title={t('watch.scheduled.editTitle')}
                     >
                       <MdEdit size={16} />
                     </button>
@@ -1395,10 +1386,10 @@ const PlayVideo = ({ videoDetails, author, permlink, mediaUnavailable = false, m
                     type="button"
                     className="pv-btn summary-btn"
                     onClick={() => setSummaryOpen(true)}
-                    title="AI summary of this video"
+                    title={t('watch.summary.buttonTitle')}
                   >
                     <MdAutoAwesome size={15} />
-                    <span>Summary</span>
+                    <span>{t('watch.summary.title')}</span>
                   </button>
                 )}
                 {authenticated && isLoggedIn() && !isVoted && user?.toLowerCase() !== author?.toLowerCase() && !(votingClosed && alreadyTagged) && (
@@ -1415,9 +1406,9 @@ const PlayVideo = ({ videoDetails, author, permlink, mediaUnavailable = false, m
                     onClick={voteIsOffChain ? handleOffChainVote : toggleTooltip}
                     title={voteIsOffChain
                       ? (authenticated
-                        ? 'Vote on this video. It is saved on 3Speak and pays no rewards.'
-                        : 'Sign in to vote')
-                      : (votingClosed ? 'Tag this video' : 'Vote on this video')}
+                        ? t('watch.actions.voteOffChain')
+                        : t('watch.actions.signInToVote'))
+                      : (votingClosed ? t('watch.actions.tagVideo') : t('watch.actions.voteVideo'))}
                     {...(voteIsOffChain ? {} : lockProps)}
                     {...(voteIsOffChain && !authenticated
                       ? { 'aria-disabled': true, onClick: (e) => { e.preventDefault(); } }
@@ -1425,7 +1416,7 @@ const PlayVideo = ({ videoDetails, author, permlink, mediaUnavailable = false, m
                   >
                     {votingClosed && !voteIsOffChain ? <IoPricetagOutline size={14} /> : <FaHeart size={14} />}
                     <span>
-                      {votingClosed && !voteIsOffChain ? 'Tag' : 'Vote'}
+                      {votingClosed && !voteIsOffChain ? t('watch.actions.tag') : t('watch.actions.vote')}
                       {voteIsOffChain && offChainVotes ? ` ${offChainVotes}` : ''}
                     </span>
                   </button>
@@ -1435,21 +1426,21 @@ const PlayVideo = ({ videoDetails, author, permlink, mediaUnavailable = false, m
                     type="button"
                     className={`pv-btn stats-btn${videoStatsOpen ? ' active' : ''}`}
                     onClick={() => setVideoStatsOpen((o) => !o)}
-                    title="Video analytics"
+                    title={t('watch.actions.analyticsTitle')}
                     aria-expanded={videoStatsOpen}
                   >
                     <MdBarChart size={16} />
-                    <span>Analytics</span>
+                    <span>{t('watch.actions.analytics')}</span>
                   </button>
                 )}
                 <button
                   type="button"
                   className="pv-btn share-btn"
                   onClick={() => setShareChooserOpen(true)}
-                  title="Share"
+                  title={t('common.actions.share')}
                 >
                   <MdShare size={16} />
-                  <span>Share</span>
+                  <span>{t('common.actions.share')}</span>
                 </button>
 
                 <button
@@ -1457,10 +1448,10 @@ const PlayVideo = ({ videoDetails, author, permlink, mediaUnavailable = false, m
                   className={`pv-btn reshare-btn${hasReshared ? ' reshared' : ''}`}
                   onClick={handleReshare}
                   disabled={!authenticated || (!isLoggedIn() && !incubationHandle)}
-                  title={!authenticated ? 'Log in to reshare' : hasReshared ? 'Reshared' : 'Reshare'}
+                  title={!authenticated ? t('watch.reshare.loginRequired') : hasReshared ? t('watch.reshare.reshared') : t('watch.reshare.reshare')}
                 >
                   <Repeat2 size={16} />
-                  <span>Reshare</span>
+                  <span>{t('watch.reshare.reshare')}</span>
                   {reshareCount > 0 && <span className="reshare-count">{reshareCount}</span>}
                 </button>
 
@@ -1469,11 +1460,11 @@ const PlayVideo = ({ videoDetails, author, permlink, mediaUnavailable = false, m
                     type="button"
                     className="pv-btn promote-btn"
                     onClick={() => setPromoteOpen(true)}
-                    title="Promote this video"
+                    title={t('watch.actions.promoteTitle')}
                     {...lockProps}
                   >
                     <Rocket size={15} />
-                    <span>Promote</span>
+                    <span>{t('watch.actions.promote')}</span>
                   </button>
                 )}
 
@@ -1485,10 +1476,10 @@ const PlayVideo = ({ videoDetails, author, permlink, mediaUnavailable = false, m
                       videoControls?.onPause?.();
                       setIsEditOpen(true);
                     }}
-                    title="Edit video details"
+                    title={t('watch.actions.editTitle')}
                   >
                     <MdEdit size={16} />
-                    <span>Edit</span>
+                    <span>{t('common.actions.edit')}</span>
                   </button>
                 )}
 
@@ -1496,10 +1487,10 @@ const PlayVideo = ({ videoDetails, author, permlink, mediaUnavailable = false, m
                   type="button"
                   className={`pv-btn report-btn${isReported('post', `${author}/${permlink}`) ? ' reported' : ''}`}
                   onClick={() => setIsReportOpen(true)}
-                  title="Report video"
+                  title={t('watch.actions.reportTitle')}
                 >
                   <MdFlag size={16} />
-                  <span>Report</span>
+                  <span>{t('common.actions.report')}</span>
                 </button>
 
                 {isInWatchLater && (
@@ -1508,7 +1499,7 @@ const PlayVideo = ({ videoDetails, author, permlink, mediaUnavailable = false, m
                     className={`pv-btn watch-later-remove-btn ${isRemovingWatchLater ? 'loading' : ''}`}
                     onClick={handleRemoveFromWatchLater}
                     disabled={isRemovingWatchLater}
-                    title="Remove from Watch Later"
+                    title={t('watch.watchLater.removeTitle')}
                   >
                     <span className="watch-later-icon-wrap">
                       <MdWatchLater />
@@ -1519,13 +1510,13 @@ const PlayVideo = ({ videoDetails, author, permlink, mediaUnavailable = false, m
 
                 {authenticated && isLoggedIn() && (
                   <>
-                    <button type="button" className="pv-btn playlist-btn" onClick={() => setIsPlaylistModalOpen(true)} title="Add to playlist" {...lockProps}>
+                    <button type="button" className="pv-btn playlist-btn" onClick={() => setIsPlaylistModalOpen(true)} title={t('watch.actions.addToPlaylist')} {...lockProps}>
                       <MdPlaylistAdd />
-                      <span>Playlist</span>
+                      <span>{t('watch.actions.playlist')}</span>
                     </button>
-                    <button type="button" className="pv-btn tip-btn" onClick={() => setIsTipModalOpen(true)} title="Tip the creator" {...lockProps}>
+                    <button type="button" className="pv-btn tip-btn" onClick={() => setIsTipModalOpen(true)} title={t('watch.actions.tipTitle')} {...lockProps}>
                       <Gift size={16} />
-                      <span>Tip</span>
+                      <span>{t('watch.actions.tip')}</span>
                     </button>
                   </>
                 )}
@@ -1565,12 +1556,12 @@ const PlayVideo = ({ videoDetails, author, permlink, mediaUnavailable = false, m
                 type="button"
                 className={`pv-btn clip-btn${clipMode ? ' active' : ''}`}
                 onClick={clipMode ? handleCancelClip : handleStartClipMode}
-                title={!authenticated ? 'Log in to clip' : clipMode ? 'Cancel clip' : 'Clip video'}
+                title={!authenticated ? t('watch.clip.loginRequired') : clipMode ? t('watch.clip.cancel') : t('watch.clip.clipVideo')}
                 disabled={!authenticated}
                 {...lockProps}
               >
                 <Scissors size={16} />
-                <span className="tools-row-label">Clip Video</span>
+                <span className="tools-row-label">{t('watch.clip.label')}</span>
               </button>
             </div>
           )}
@@ -1581,22 +1572,22 @@ const PlayVideo = ({ videoDetails, author, permlink, mediaUnavailable = false, m
             <div className="clip-bar-info">
               <Scissors size={16} />
               <span className="clip-bar-label">
-                {clipMode === 'start' && 'Seek to the start of your clip'}
-                {clipMode === 'end' && `Start: ${formatTime(clipStart)} — Now seek to the end`}
-                {clipMode === 'done' && `Clip: ${formatTime(clipStart)} – ${formatTime(clipEnd)}`}
+                {clipMode === 'start' && t('watch.clip.barStart')}
+                {clipMode === 'end' && t('watch.clip.barEnd', { start: formatTime(clipStart) })}
+                {clipMode === 'done' && t('watch.clip.barDone', { start: formatTime(clipStart), end: formatTime(clipEnd) })}
               </span>
             </div>
             <div className="clip-bar-actions">
               {clipMode === 'start' && (
-                <button type="button" className="clip-action-btn" onClick={handleSetClipStart}>Set Start</button>
+                <button type="button" className="clip-action-btn" onClick={handleSetClipStart}>{t('watch.clip.setStart')}</button>
               )}
               {clipMode === 'end' && (
-                <button type="button" className="clip-action-btn" onClick={handleSetClipEnd}>Set End</button>
+                <button type="button" className="clip-action-btn" onClick={handleSetClipEnd}>{t('watch.clip.setEnd')}</button>
               )}
               {clipMode === 'done' && (
-                <button type="button" className="clip-action-btn" onClick={handleCreateClip}>Create Clip</button>
+                <button type="button" className="clip-action-btn" onClick={handleCreateClip}>{t('watch.clip.createClip')}</button>
               )}
-              <button type="button" className="clip-cancel-btn" onClick={handleCancelClip}>Cancel</button>
+              <button type="button" className="clip-cancel-btn" onClick={handleCancelClip}>{t('common.actions.cancel')}</button>
             </div>
           </div>
         )}
@@ -1638,7 +1629,7 @@ const PlayVideo = ({ videoDetails, author, permlink, mediaUnavailable = false, m
             className="description-toggle-btn"
             onClick={() => setDescriptionExpanded(prev => !prev)}
           >
-            {descriptionExpanded ? 'Hide description' : 'Show description'}
+            {descriptionExpanded ? t('watch.description.hide') : t('watch.description.show')}
           </button>
         </div>
         </div>{/* end video-details-collapsible */}
@@ -1750,7 +1741,7 @@ const PlayVideo = ({ videoDetails, author, permlink, mediaUnavailable = false, m
             <div className="fab-actions">
               {canSeeVideoStats && (
                 <div className="fab-action">
-                  <span className="fab-action-label">Analytics</span>
+                  <span className="fab-action-label">{t('watch.actions.analytics')}</span>
                   <button
                     className={`fab-action-btn${videoStatsOpen ? ' fab-action-btn--active' : ''}`}
                     onClick={() => {
@@ -1759,7 +1750,7 @@ const PlayVideo = ({ videoDetails, author, permlink, mediaUnavailable = false, m
                       if (nv) setMobileDetailsExpanded(true); // panel lives inside the collapsible details
                       setFabOpen(false);
                     }}
-                    aria-label="Video stats"
+                    aria-label={t('watch.actions.videoStats')}
                   >
                     <MdBarChart size={20} />
                   </button>
@@ -1768,12 +1759,12 @@ const PlayVideo = ({ videoDetails, author, permlink, mediaUnavailable = false, m
 
               {authenticated && user === author && (
                 <div className="fab-action">
-                  <span className="fab-action-label">Edit</span>
+                  <span className="fab-action-label">{t('common.actions.edit')}</span>
                   <button
                     className="fab-action-btn"
                     onClick={() => { videoControls?.onPause?.(); setIsEditOpen(true); setFabOpen(false); }}
-                    aria-label="Edit video details"
-                    title="Edit video details"
+                    aria-label={t('watch.actions.editTitle')}
+                    title={t('watch.actions.editTitle')}
                   >
                     <MdEdit size={20} />
                   </button>
@@ -1781,22 +1772,22 @@ const PlayVideo = ({ videoDetails, author, permlink, mediaUnavailable = false, m
               )}
 
               <div className="fab-action">
-                <span className="fab-action-label">Share</span>
+                <span className="fab-action-label">{t('common.actions.share')}</span>
                 <button
                   className="fab-action-btn"
                   onClick={() => { setShareChooserOpen(true); setFabOpen(false); }}
-                  aria-label="Share"
+                  aria-label={t('common.actions.share')}
                 >
                   <MdShare size={20} />
                 </button>
               </div>
 
               <div className="fab-action">
-                <span className="fab-action-label">Details</span>
+                <span className="fab-action-label">{t('watch.actions.details')}</span>
                 <button
                   className={`fab-action-btn${mobileDetailsExpanded ? ' fab-action-btn--active' : ''}`}
                   onClick={() => { setMobileDetailsExpanded(prev => !prev); setFabOpen(false); }}
-                  aria-label="Toggle details"
+                  aria-label={t('watch.actions.toggleDetails')}
                 >
                   <MdInfo size={20} />
                 </button>
@@ -1804,12 +1795,12 @@ const PlayVideo = ({ videoDetails, author, permlink, mediaUnavailable = false, m
 
               {authenticated && isLoggedIn() && (
                 <div className="fab-action">
-                  <span className="fab-action-label">Playlist</span>
+                  <span className="fab-action-label">{t('watch.actions.playlist')}</span>
                   <button
                     className="fab-action-btn"
                     onClick={() => { setIsPlaylistModalOpen(true); setFabOpen(false); }}
-                    aria-label="Add to playlist"
-                    title="Add to playlist"
+                    aria-label={t('watch.actions.addToPlaylist')}
+                    title={t('watch.actions.addToPlaylist')}
                     {...lockProps}
                   >
                     <MdPlaylistAdd size={20} />
@@ -1819,12 +1810,12 @@ const PlayVideo = ({ videoDetails, author, permlink, mediaUnavailable = false, m
 
               {authenticated && isLoggedIn() && !isFollowingCreator && author !== user && (
                 <div className="fab-action">
-                  <span className="fab-action-label">Follow</span>
+                  <span className="fab-action-label">{t('common.actions.follow')}</span>
                   <button
                     className="fab-action-btn"
                     onClick={() => { handleFabFollow(); setFabOpen(false); }}
-                    aria-label="Follow creator"
-                    title="Follow creator"
+                    aria-label={t('watch.actions.followCreator')}
+                    title={t('watch.actions.followCreator')}
                     {...lockProps}
                   >
                     <MdPersonAdd size={20} />
@@ -1834,12 +1825,12 @@ const PlayVideo = ({ videoDetails, author, permlink, mediaUnavailable = false, m
 
               {authenticated && isLoggedIn() && author !== user && (
                 <div className="fab-action">
-                  <span className="fab-action-label">Tip</span>
+                  <span className="fab-action-label">{t('watch.actions.tip')}</span>
                   <button
                     className="fab-action-btn"
                     onClick={() => { setIsTipModalOpen(true); setFabOpen(false); }}
-                    aria-label="Tip"
-                    title="Tip the creator"
+                    aria-label={t('watch.actions.tip')}
+                    title={t('watch.actions.tipTitle')}
                     {...lockProps}
                   >
                     <MdAttachMoney size={20} />
@@ -1849,12 +1840,12 @@ const PlayVideo = ({ videoDetails, author, permlink, mediaUnavailable = false, m
 
               {authenticated && isLoggedIn() && (
                 <div className="fab-action">
-                  <span className="fab-action-label">Promote</span>
+                  <span className="fab-action-label">{t('watch.actions.promote')}</span>
                   <button
                     className="fab-action-btn"
                     onClick={() => { setPromoteOpen(true); setFabOpen(false); }}
-                    aria-label="Promote this video"
-                    title="Promote this video"
+                    aria-label={t('watch.actions.promoteTitle')}
+                    title={t('watch.actions.promoteTitle')}
                     {...lockProps}
                   >
                     <Rocket size={18} />
@@ -1864,12 +1855,12 @@ const PlayVideo = ({ videoDetails, author, permlink, mediaUnavailable = false, m
 
               {FEATURE_EDITOR && canRemixClip && authenticated && isLoggedIn() && (
                 <div className="fab-action">
-                  <span className="fab-action-label">Clip Video</span>
+                  <span className="fab-action-label">{t('watch.clip.label')}</span>
                   <button
                     className={`fab-action-btn${clipMode ? ' fab-action-btn--active' : ''}`}
                     onClick={() => { setMobileDetailsExpanded(true); handleStartClipMode(); setFabOpen(false); }}
-                    aria-label="Clip"
-                    title="Clip video"
+                    aria-label={t('watch.clip.clip')}
+                    title={t('watch.clip.clipVideo')}
                     {...lockProps}
                   >
                     <Scissors size={18} />
@@ -1879,11 +1870,11 @@ const PlayVideo = ({ videoDetails, author, permlink, mediaUnavailable = false, m
 
               {authenticated && isLoggedIn() && author !== user && (
                 <div className="fab-action">
-                  <span className="fab-action-label">Reshare{reshareCount > 0 ? ` (${reshareCount})` : ''}</span>
+                  <span className="fab-action-label">{reshareCount > 0 ? t('watch.reshare.reshareWithCount', { count: reshareCount }) : t('watch.reshare.reshare')}</span>
                   <button
                     className={`fab-action-btn${hasReshared ? ' fab-action-btn--voted' : ''}`}
                     onClick={() => { handleReshare(); setFabOpen(false); }}
-                    aria-label="Reshare"
+                    aria-label={t('watch.reshare.reshare')}
                   >
                     <Repeat2 size={20} />
                   </button>
@@ -1892,11 +1883,11 @@ const PlayVideo = ({ videoDetails, author, permlink, mediaUnavailable = false, m
 
               {authenticated && isLoggedIn() && author !== user && !(votingClosed && alreadyTagged) && (
                 <div className="fab-action">
-                  <span className="fab-action-label">{votingClosed ? 'Tag' : 'Vote'}</span>
+                  <span className="fab-action-label">{votingClosed ? t('watch.actions.tag') : t('watch.actions.vote')}</span>
                   <button
                     className={`fab-action-btn${isVoted ? ' fab-action-btn--voted' : ''}`}
                     onClick={() => { setMobileDetailsExpanded(true); setShowTooltip(true); setFabOpen(false); }}
-                    aria-label={votingClosed ? 'Tag' : 'Vote'}
+                    aria-label={votingClosed ? t('watch.actions.tag') : t('watch.actions.vote')}
                   >
                     {votingClosed ? <IoPricetagOutline size={18} /> : <FaHeart size={18} />}
                   </button>
@@ -1908,7 +1899,7 @@ const PlayVideo = ({ videoDetails, author, permlink, mediaUnavailable = false, m
           <button
             className="fab-main"
             onClick={() => setFabOpen(prev => !prev)}
-            aria-label={fabOpen ? 'Close menu' : 'Open actions'}
+            aria-label={fabOpen ? t('watch.actions.closeMenu') : t('watch.actions.openActions')}
           >
             {fabOpen ? <MdClose size={24} /> : <MdAdd size={24} />}
           </button>

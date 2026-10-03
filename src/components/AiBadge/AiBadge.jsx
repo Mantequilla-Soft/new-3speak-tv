@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { getVideoTagsV2, getCachedTagsV2 } from '../../utils/tagsV2';
 import './AiBadge.scss';
 
@@ -19,7 +20,7 @@ import './AiBadge.scss';
  *   className        — layout tweak at the callsite; pass `ai-badge--on-video`
  *                      when it sits on top of a video rather than on the page.
  */
-export default function AiBadge({ author, permlink, className, title = 'Detected as AI-generated' }) {
+export default function AiBadge({ author, permlink, className, title }) {
   // Seeded from the cache so a video whose tags are already known paints the badge
   // on the first frame instead of popping in. Callsites pass a `key` of the
   // author/permlink pair, so switching video remounts this and the seed runs again
@@ -44,14 +45,16 @@ export default function AiBadge({ author, permlink, className, title = 'Detected
  * The pill alone, for callers that already know the answer — feed cards, which
  * look their flags up in one batch (utils/aiFlags) instead of one request each.
  */
-export function AiPill({ className, title = 'Detected as AI-generated' }) {
+export function AiPill({ className, title: titleProp }) {
+  const { t } = useTranslation();
+  const title = titleProp || t('watch.aiBadge.title');
   return (
     <span
       className={`ai-badge${className ? ` ${className}` : ''}`}
       title={title}
       aria-label={title}
     >
-      AI
+      {t('watch.aiBadge.label')}
     </span>
   );
 }

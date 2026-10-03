@@ -1,0 +1,102 @@
+{
+  "controls": {
+    "rewind10": "Rewind 10s",
+    "forward10": "Forward 10s",
+    "reactToMoment": "React to this moment",
+    "mute": "Mute",
+    "unmute": "Unmute",
+    "playerSize": "Player size: {{size}}",
+    "sizeStandard": "Standard",
+    "pip": "Picture-in-Picture",
+    "autoplayOn": "Autoplay: on",
+    "autoplayOff": "Autoplay: off",
+    "ambientSubtle": "Ambient light: subtle",
+    "ambientVivid": "Ambient light: vivid",
+    "ambientOff": "Ambient light: off",
+    "playbackSpeed": "Playback speed",
+    "speedNormal": "Normal",
+    "quality": "Quality",
+    "qualityAuto": "Auto",
+    "fullscreen": "Fullscreen",
+    "exitFullscreen": "Exit Fullscreen",
+    "markerReplies_one": "({{count}} reply)",
+    "markerReplies_other": "({{count}} replies)"
+  },
+  "subtitles": {
+    "title": "Subtitles",
+    "off": "Off",
+    "font": "Font",
+    "size": "Size",
+    "textColor": "Text Color",
+    "textBorder": "Text Border",
+    "borderColor": "Border Color",
+    "background": "Background",
+    "none": "None",
+    "fonts": {
+      "sansSerif": "Sans-serif",
+      "serif": "Serif",
+      "monospace": "Monospace"
+    }
+  },
+  "mini": {
+    "untitled": "Video"
+  },
+  "playlist": {
+    "previous": "Previous video",
+    "next": "Next video",
+    "close": "Close playlist"
+  },
+  "overlay": {
+    "replay": "Replay"
+  },
+  "reactions": {
+    "translation": "Translation",
+    "translationFailed": "Translation failed",
+    "videoReaction": "Video Reaction",
+    "comment": "Comment",
+    "previous": "Previous",
+    "next": "Next",
+    "hide": "Hide reactions",
+    "hideShort": "Hide",
+    "loadingReplies": "Loading replies...",
+    "sizeTitle": "Size: {{size}}",
+    "sizes": {
+      "small": "S",
+      "medium": "M",
+      "standard": "Std",
+      "big": "Big",
+      "cinema": "Cin"
+    },
+    "sizeNames": {
+      "small": "Small",
+      "medium": "Medium",
+      "standard": "Standard",
+      "big": "Big",
+      "cinema": "Cinema"
+    }
+  },
+  "reactionUpload": {
+    "authorized": "@threespeak authorized — you can now post your reaction",
+    "authFailed": "Authorization failed. Please try again.",
+    "webcamDenied": "Could not access webcam",
+    "shortTooLong": "Shorts must be {{max}} or less. Uncheck \"Show in 3Speak Shorts\" or use a shorter video.",
+    "uploadingVideo": "Uploading video...",
+    "noEmbedUrl": "Upload succeeded but no embed URL was returned",
+    "publishingComment": "Publishing comment...",
+    "posted": "Video reaction posted!",
+    "postFailed": "Failed to post comment",
+    "uploadFailed": "Upload failed",
+    "uploadVideo": "Upload Video",
+    "recordVideo": "Record Video",
+    "startRecording": "Start Recording",
+    "stopRecording": "Stop Recording",
+    "recordedVideo": "Recorded video",
+    "descriptionPlaceholder": "Add a description for your video reaction...",
+    "showInShorts": "Show in 3Speak Shorts",
+    "authNote": "Allow <b>@threespeak</b> to post your reaction on your behalf.",
+    "authorizing": "Authorizing…",
+    "authorize": "Authorize @threespeak",
+    "uploading": "Uploading...",
+    "postReaction": "Post Reaction"
+  }
+}

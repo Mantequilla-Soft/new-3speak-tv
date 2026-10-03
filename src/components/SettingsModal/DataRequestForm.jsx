@@ -10,6 +10,7 @@
  * having no button at all.
  */
 import { useEffect, useState } from 'react';
+import { useTranslation, Trans } from 'react-i18next';
 import { toastIn } from '../../utils/toast';
 import { CHECKER_URL } from '../../utils/config';
 import { useAppStore } from '../../lib/store';
@@ -20,6 +21,7 @@ import './DataRequestForm.scss';
 const toast = toastIn('Settings');
 
 export default function DataRequestForm() {
+  const { t } = useTranslation();
   const user = useAppStore((s) => s.user);
 
   const [type, setType] = useState('export');
@@ -50,9 +52,9 @@ export default function DataRequestForm() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!username) { toast.error('Please log in first'); return; }
-    if (!contact.trim()) { toast.error('Enter an email address so we can reply'); return; }
-    if (isDelete && !confirmed) { toast.error('Please confirm you understand what can and cannot be deleted'); return; }
+    if (!username) { toast.error(t('common.status.loginRequired')); return; }
+    if (!contact.trim()) { toast.error(t('settings.dataRequest.emailRequired')); return; }
+    if (isDelete && !confirmed) { toast.error(t('settings.dataRequest.confirmRequired')); return; }
 
     setSubmitting(true);
     try {
@@ -62,12 +64,12 @@ export default function DataRequestForm() {
         body: JSON.stringify({ username: username.trim(), type, contact: contact.trim(), message: message.trim() || undefined }),
       });
       const data = await res.json().catch(() => ({}));
-      if (!res.ok || !data.success) throw new Error(data.error || `Request failed (${res.status})`);
+      if (!res.ok || !data.success) throw new Error(data.error || t('settings.dataRequest.requestFailed', { status: res.status }));
 
       setDone(data);
-      toast.success(isDelete ? 'Deletion request received' : 'Data request received');
+      toast.success(isDelete ? t('settings.dataRequest.deletionReceived') : t('settings.dataRequest.dataReceived'));
     } catch (err) {
-      toast.error(err.message || 'Could not send your request');
+      toast.error(err.message || t('settings.dataRequest.sendFailed'));
     } finally {
       setSubmitting(false);
     }
@@ -76,13 +78,12 @@ export default function DataRequestForm() {
   if (done) {
     return (
       <div className="drf-done">
-        <h5>Request received</h5>
+        <h5>{t('settings.dataRequest.doneTitle')}</h5>
         <p>
-          Your reference is <strong>{done.ref}</strong>. We will reply to <strong>{contact}</strong> by{' '}
-          <strong>{done.dueBy}</strong> at the latest.
+          <Trans i18nKey="settings.dataRequest.doneBody" values={{ ref: done.ref, contact, dueBy: done.dueBy }} components={{ b: <strong /> }} />
         </p>
         <p className="drf-muted">
-          Keep the reference in case you need to follow up.
+          {t('settings.dataRequest.keepRef')}
         </p>
       </div>
     );
@@ -93,7 +94,7 @@ export default function DataRequestForm() {
   if (!username) {
     return (
       <div className="drf-signin">
-        <p>Please log in to request or delete your data — a request applies to the account you're signed in as.</p>
+        <p>{t('settings.dataRequest.signIn')}</p>
       </div>
     );
   }
@@ -101,10 +102,10 @@ export default function DataRequestForm() {
   return (
     <form className="drf" onSubmit={handleSubmit}>
       <div className="drf-account">
-        Request for <strong>@{username}</strong>
+        <Trans i18nKey="settings.dataRequest.requestFor" values={{ username }} components={{ b: <strong /> }} />
       </div>
 
-      <div className="drf-choice" role="radiogroup" aria-label="Request type">
+      <div className="drf-choice" role="radiogroup" aria-label={t('settings.dataRequest.typeAria')}>
         <button
           type="button"
           role="radio"
@@ -112,7 +113,7 @@ export default function DataRequestForm() {
           className={`drf-choice-btn${!isDelete ? ' active' : ''}`}
           onClick={() => setType('export')}
         >
-          Get my data
+          {t('settings.dataRequest.getData')}
         </button>
         <button
           type="button"
@@ -121,19 +122,19 @@ export default function DataRequestForm() {
           className={`drf-choice-btn${isDelete ? ' active' : ''}`}
           onClick={() => setType('delete')}
         >
-          Delete my account data
+          {t('settings.dataRequest.deleteData')}
         </button>
       </div>
 
       <p className="drf-lede">
         {isDelete
-          ? 'We will delete everything 3Speak stores about you in our own database.'
-          : 'We will send you everything 3Speak stores about you in our own database, as a JSON file.'}
+          ? t('settings.dataRequest.ledeDelete')
+          : t('settings.dataRequest.ledeExport')}
       </p>
 
       {scope.length > 0 && (
         <div className="drf-scope">
-          <span className="drf-scope-title">This covers:</span>
+          <span className="drf-scope-title">{t('settings.dataRequest.covers')}</span>
           <ul>
             {scope.map((s) => (
               <li key={s.key}>
@@ -147,32 +148,30 @@ export default function DataRequestForm() {
       {/* The honest part. A front-end to a public ledger cannot unpublish from it,
           and users are entitled to know that BEFORE they ask us to try. */}
       <div className="drf-warning">
-        <span className="drf-warning-title">What we cannot do</span>
+        <span className="drf-warning-title">{t('settings.dataRequest.cannotTitle')}</span>
         <p>
-          3Speak is built on the <strong>Hive blockchain</strong>. Your posts, comments, votes and
-          reshares were signed with your own keys and broadcast to a <strong>public, permanent
-          ledger</strong> that we do not control and cannot edit.
+          <Trans i18nKey="settings.dataRequest.cannotBody" components={{ b: <strong /> }} />
         </p>
         <p>
           {isDelete
-            ? 'We can delete our copies and stop showing your content on 3Speak. We cannot erase it from the blockchain — nobody can, including you. Anyone running a Hive node will still have it.'
-            : 'Your on-chain data is already public and machine-readable via any Hive API — we will point you to it. What we send you is what we hold in addition to that.'}
+            ? t('settings.dataRequest.cannotDelete')
+            : t('settings.dataRequest.cannotExport')}
         </p>
       </div>
 
 
-      <label className="drf-label" htmlFor="drf-contact">Email to reply to</label>
+      <label className="drf-label" htmlFor="drf-contact">{t('settings.dataRequest.emailLabel')}</label>
       <input
         id="drf-contact"
         className="drf-input"
         type="email"
         value={contact}
         onChange={(e) => setContact(e.target.value)}
-        placeholder="you@example.com"
+        placeholder={t('settings.dataRequest.emailPlaceholder')}
         autoComplete="email"
       />
 
-      <label className="drf-label" htmlFor="drf-msg">Anything to add? (optional)</label>
+      <label className="drf-label" htmlFor="drf-msg">{t('settings.dataRequest.messageLabel')}</label>
       <textarea
         id="drf-msg"
         className="drf-textarea"
@@ -180,7 +179,7 @@ export default function DataRequestForm() {
         maxLength={2000}
         value={message}
         onChange={(e) => setMessage(e.target.value)}
-        placeholder="Optional details about your request"
+        placeholder={t('settings.dataRequest.messagePlaceholder')}
       />
 
       {isDelete && (
@@ -191,19 +190,17 @@ export default function DataRequestForm() {
             onChange={(e) => setConfirmed(e.target.checked)}
           />
           <span>
-            I understand my content on the Hive blockchain is permanent and cannot be deleted by
-            3Speak or by anyone else.
+            {t('settings.dataRequest.confirmLabel')}
           </span>
         </label>
       )}
 
       <button type="submit" className="drf-submit" disabled={submitting || (isDelete && !confirmed)}>
-        {submitting ? 'Sending…' : isDelete ? 'Request deletion' : 'Request my data'}
+        {submitting ? t('settings.dataRequest.sending') : isDelete ? t('settings.dataRequest.requestDeletion') : t('settings.dataRequest.requestData')}
       </button>
 
       <p className="drf-foot">
-        We reply within one month. You can also email{' '}
-        <a href="mailto:privacy@3speak.tv">privacy@3speak.tv</a> directly.
+        <Trans i18nKey="settings.dataRequest.foot" components={{ mail: <a href="mailto:privacy@3speak.tv" /> }} />
       </p>
     </form>
   );

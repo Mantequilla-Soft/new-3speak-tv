@@ -1,5 +1,6 @@
 import { useEffect, useState, useCallback } from 'react';
 import { MdClose, MdAutoAwesome } from 'react-icons/md';
+import { useTranslation } from 'react-i18next';
 import TranslateButton from '../TranslateButton/TranslateButton';
 import { translateText, SUPPORTED_LANGUAGES } from '../../utils/translate';
 import './SummaryModal.scss';
@@ -14,6 +15,7 @@ const langName = (code) =>
  * summary can be read in any language.
  */
 export default function SummaryModal({ isOpen, onClose, summary, title }) {
+  const { t } = useTranslation();
   const [translated, setTranslated] = useState(null);
   const [translatedLang, setTranslatedLang] = useState(null);
   const [isTranslating, setIsTranslating] = useState(false);
@@ -64,7 +66,7 @@ export default function SummaryModal({ isOpen, onClose, summary, title }) {
         <div className="summary-modal-header">
           <div className="summary-modal-heading">
             <MdAutoAwesome size={18} />
-            <h3>Summary</h3>
+            <h3>{t('watch.summary.title')}</h3>
           </div>
           <div className="summary-modal-actions">
             <TranslateButton onTranslate={handleTranslate} isTranslating={isTranslating} />
@@ -72,7 +74,7 @@ export default function SummaryModal({ isOpen, onClose, summary, title }) {
               type="button"
               className="summary-modal-close"
               onClick={onClose}
-              aria-label="Close summary"
+              aria-label={t('watch.summary.close')}
             >
               <MdClose size={20} />
             </button>
@@ -84,10 +86,10 @@ export default function SummaryModal({ isOpen, onClose, summary, title }) {
         {translated && (
           <div className="summary-modal-translated-note">
             <span>
-              {showOriginal ? 'Showing original' : `Translated to ${langName(translatedLang)}`}
+              {showOriginal ? t('watch.summary.showingOriginal') : t('watch.summary.translatedTo', { language: langName(translatedLang) })}
             </span>
             <button type="button" onClick={() => setShowOriginal((s) => !s)}>
-              {showOriginal ? `Show ${langName(translatedLang)}` : 'Show original'}
+              {showOriginal ? t('watch.summary.showLanguage', { language: langName(translatedLang) }) : t('watch.summary.showOriginal')}
             </button>
           </div>
         )}

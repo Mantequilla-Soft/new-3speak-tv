@@ -1,0 +1,237 @@
+{
+  "aiBadge": {
+    "title": "Detected as AI-generated",
+    "label": "AI"
+  },
+  "translate": {
+    "titleButton": "Translate title",
+    "original": "Original",
+    "translate": "Translate",
+    "translating": "Translating..."
+  },
+  "summary": {
+    "title": "Summary",
+    "close": "Close summary",
+    "showingOriginal": "Showing original",
+    "translatedTo": "Translated to {{language}}",
+    "showLanguage": "Show {{language}}",
+    "showOriginal": "Show original",
+    "buttonTitle": "AI summary of this video"
+  },
+  "errors": {
+    "notAvailable": "This video is not available.",
+    "goHome": "Go Home",
+    "scheduledNotFound": "Scheduled post not found — it may have already been published or cancelled.",
+    "network": "Network error. Please check your connection.",
+    "notFound": "Video not found or failed to load.",
+    "backToProfile": "Back to profile"
+  },
+  "gated": {
+    "title": "Supporters only",
+    "checkFailed": "We could not confirm your subscription just now. Try again in a moment.",
+    "preview": "You are watching a free preview. 3Speak Pro unlocks the full video.",
+    "subscribersOnly": "This video is available to 3Speak Pro subscribers.",
+    "cta": "Get 3Speak Pro"
+  },
+  "reactions": {
+    "show": "Show Reactions",
+    "add": "Add Reaction"
+  },
+  "liveChat": "Live chat",
+  "moreVideos": "More videos",
+  "vote": {
+    "saveFailed": "Could not save your vote"
+  },
+  "locked": {
+    "noAccount": "Unlocked once you create your Hive account",
+    "offChainPost": "Not available yet: this post is not on Hive"
+  },
+  "interests": {
+    "loginRequired": "Login to save interests",
+    "added": "Added “{{tag}}” to your interests",
+    "saveFailed": "Could not save interests"
+  },
+  "watchLater": {
+    "removed": "Removed from Watch Later",
+    "removeFailed": "Failed to remove: {{error}}",
+    "removeTitle": "Remove from Watch Later"
+  },
+  "reshare": {
+    "loginRequired": "Log in to reshare",
+    "success": "Reshared!",
+    "failed": "Failed to reshare",
+    "reshared": "Reshared",
+    "reshare": "Reshare",
+    "reshareWithCount": "Reshare ({{count}})"
+  },
+  "clip": {
+    "noVideoUrlRemix": "Could not resolve video URL for remix",
+    "noVideoUrl": "Could not resolve video URL",
+    "startHint": "Seek to the start of your clip, then click \"Set Start\"",
+    "endHint": "Now seek to the end of your clip and click \"Set End\"",
+    "endBeforeStart": "End time must be after start time",
+    "trimmed": "Clip trimmed to 1 minute — we will trim the clip at the end of the timeline.",
+    "set": "Clip set: {{start}} – {{end}}. Now click on \"Create Clip\"",
+    "loginRequired": "Log in to clip",
+    "cancel": "Cancel clip",
+    "clipVideo": "Clip video",
+    "label": "Clip Video",
+    "clip": "Clip",
+    "seekToStart": "Seek to start",
+    "setStart": "Set Start",
+    "setEnd": "Set End",
+    "createClip": "Create Clip",
+    "barStart": "Seek to the start of your clip",
+    "barEnd": "Start: {{start}} — Now seek to the end",
+    "barDone": "Clip: {{start}} – {{end}}"
+  },
+  "share": {
+    "defaultTitle": "3Speak Video",
+    "linkCopied": "Link copied to clipboard!",
+    "failed": "Failed to share"
+  },
+  "follow": {
+    "loginRequired": "Please login to follow users",
+    "followed": "Followed @{{user}}",
+    "failed": "Failed to follow: {{error}}"
+  },
+  "ad": {
+    "countdown": "Ad in {{seconds}}"
+  },
+  "media": {
+    "unavailableTitle": "This video is no longer available",
+    "unavailableBody": "The media for this older upload could not be found on the network. The post still exists on the blockchain, but the video can no longer be played.",
+    "blockedTitle": "Couldn't load the video right now",
+    "blockedBody": "One of our video servers didn't respond. The video itself is fine, so please try again."
+  },
+  "tipNudge": {
+    "text": "Enjoyed this?<hide> Send <b>@{{author}}</b> a tip!</hide>",
+    "dismiss": "Dismiss"
+  },
+  "community": {
+    "members_one": "{{count}} Member",
+    "members_other": "{{count}} Members"
+  },
+  "tags": {
+    "curated": "Curated"
+  },
+  "topics": {
+    "taggedBy": "“{{label}}” · tagged by {{count}}",
+    "viewers_one": "“{{label}}” · {{count}} viewer",
+    "viewers_other": "“{{label}}” · {{count}} viewers",
+    "autoNoVotes": "Auto-tagged — no viewer votes yet",
+    "noVotes": "No viewer votes yet",
+    "inInterests": "✓ In your interests",
+    "addToInterests": "+ Add to my interests",
+    "openTagFeed": "Open tag feed"
+  },
+  "scheduled": {
+    "notice": "Scheduled for <b>{{date}}</b> — not published yet.",
+    "futureDate": "a future date",
+    "edit": "Edit, reschedule or cancel",
+    "editTitle": "Edit scheduled post (details, date, or cancel)"
+  },
+  "actions": {
+    "voteOffChain": "Vote on this video. It is saved on 3Speak and pays no rewards.",
+    "signInToVote": "Sign in to vote",
+    "tagVideo": "Tag this video",
+    "voteVideo": "Vote on this video",
+    "tag": "Tag",
+    "vote": "Vote",
+    "analyticsTitle": "Video analytics",
+    "analytics": "Analytics",
+    "videoStats": "Video stats",
+    "promoteTitle": "Promote this video",
+    "promote": "Promote",
+    "editTitle": "Edit video details",
+    "reportTitle": "Report video",
+    "addToPlaylist": "Add to playlist",
+    "playlist": "Playlist",
+    "tipTitle": "Tip the creator",
+    "tip": "Tip",
+    "details": "Details",
+    "toggleDetails": "Toggle details",
+    "followCreator": "Follow creator",
+    "closeMenu": "Close menu",
+    "openActions": "Open actions"
+  },
+  "description": {
+    "hide": "Hide description",
+    "show": "Show description"
+  },
+  "edit": {
+    "title": "Edit Video",
+    "loading": "Loading current post…",
+    "videoFile": "Video file",
+    "replaceVideo": "Replace video",
+    "replaceHint": "Swaps the video file on this post. Everything else stays as it is: the post keeps its likes, payout, comments, upload date and its place in your profile. Leave this alone to keep the current video.",
+    "uploadingTo": "Uploading to <b>{{host}}</b>… {{pct}}%",
+    "choosingServer": "Choosing an upload server…",
+    "uploadedTo": "Uploaded to <b>{{host}}</b>. Press Save to swap it in.",
+    "uploaded": "Uploaded. Press Save to swap it in.",
+    "cancelUpload": "Cancel upload",
+    "keepCurrent": "Keep the current video",
+    "encodeHint": "After you save it still needs a few minutes to encode, and the old video keeps playing until it is ready. Your thumbnail is unchanged, so update it above if it no longer matches.",
+    "thumbnail": "Thumbnail",
+    "thumbPreviewAlt": "Thumbnail preview",
+    "uploadImage": "Upload an image",
+    "uploading": "Uploading…",
+    "thumbHint": "Upload an image or paste a direct URL. Leave unchanged to keep the current thumbnail.",
+    "titleLabel": "Title",
+    "titleMin": "min {{min}}",
+    "tags": "Tags",
+    "tagsPlaceholder": "space-separated",
+    "autoTag": "Added automatically — can't be removed",
+    "tagCount_one": "{{count}}/{{max}} tag",
+    "tagCount_other": "{{count}}/{{max}} tags",
+    "tagCountRequired_one": "{{count}}/{{max}} tag · at least 1 required",
+    "tagCountRequired_other": "{{count}}/{{max}} tags · at least 1 required",
+    "description": "Description",
+    "descriptionPlaceholder": "Tell viewers about your video…",
+    "markdownHint": "Supports markdown.",
+    "listed": "Listed",
+    "unlistedLabel": "Unlisted",
+    "listedHint": "Shown in feeds, search and on your profile.",
+    "unlistedHint": "Hidden from feeds & search — still plays by direct link, stays on your profile (badged).",
+    "allowRemix": "Allow Remix/Clip",
+    "remixOn": "Others can create remixes/clips; you are credited as original author.",
+    "remixOff": "Others cannot remix or clip this video.",
+    "trailer": "Channel trailer",
+    "trailerOn": "Autoplays at the top of your profile’s Overview tab, replacing any trailer you set before.",
+    "trailerOff": "Make this the video that autoplays at the top of your profile’s Overview tab.",
+    "nsfw": "Adult / NSFW",
+    "notNsfw": "Not adult",
+    "nsfwHint": "Hidden from feeds & search unless the viewer enabled NSFW; tagged nsfw on Hive.",
+    "notNsfwHint": "Normal content, shown to everyone.",
+    "promoted": "Promoted",
+    "promote": "Promote video",
+    "saveChanges": "Save changes",
+    "noChanges": "No changes to save.",
+    "thumbUploaded": "Thumbnail uploaded.",
+    "videoUploaded": "New video uploaded. Save to apply it to this post.",
+    "relisted": "Video re-listed.",
+    "unlisted": "Video unlisted.",
+    "trailerSet": "Set as your channel trailer.",
+    "trailerRemoved": "Removed as your channel trailer.",
+    "updatedEncoding": "Video updated! The new file needs a few moments to finish encoding.",
+    "updated": "Video updated!",
+    "errors": {
+      "notFound": "Could not find this post on Hive.",
+      "loadFailed": "Failed to load post from Hive. Please try again.",
+      "notImage": "Please select an image file.",
+      "imageTooLarge": "Image too large (max 10 MB).",
+      "thumbUploadFailed": "Thumbnail upload failed.",
+      "notVideo": "Please select a video file.",
+      "videoTooLarge": "Video too large (max 5 GB).",
+      "noVideoEntry": "This post has no video entry to replace — its metadata doesn't reference one.",
+      "notInLibrary": "This post's video is no longer in the library, so its file can't be replaced.",
+      "notOwner": "You can only replace the file on your own video.",
+      "videoUploadFailed": "Video upload failed.",
+      "noEmbedEntry": "This post has no embed video entry to replace — its metadata doesn't reference one.",
+      "broadcastFailed": "Broadcast failed",
+      "listingFailed": "Could not update the listing.",
+      "trailerFailed": "Could not update your channel trailer.",
+      "saveFailed": "Failed to save changes."
+    }
+  }
+}
