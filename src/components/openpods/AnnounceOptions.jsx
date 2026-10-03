@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import axios from 'axios';
+import { useTranslation } from 'react-i18next';
 import { MdPeopleAlt } from 'react-icons/md';
 import { IoIosArrowDropdownCircle } from 'react-icons/io';
 import { getHiveUrl } from '../../utils/hiveNode';
@@ -16,6 +17,7 @@ import './AnnounceOptions.scss';
  * value set in the create dialog is still there in the studio, and vice versa.
  */
 export default function AnnounceOptions({ announceType, isPremium = false, onChange, showAnnounceToggle = false, announceEnabled: announceEnabledProp, onAnnounceEnabledChange }) {
+  const { t } = useTranslation();
   const init = getAnnounceConfig();
   const [announceEnabledLocal, setAnnounceEnabledLocal] = useState(init.announceEnabled !== false);
   // Controlled when the parent supplies a value (OpenPodModal needs to know,
@@ -110,7 +112,7 @@ export default function AnnounceOptions({ announceType, isPremium = false, onCha
 
   const communityLabel = typeof community === 'string'
     ? (community === 'hive-181335' ? '3Speak (hive-181335)' : community)
-    : community?.title || community?.name || 'Select Community';
+    : community?.title || community?.name || t('live.announce.selectCommunity');
 
   return (
     <div className="hh-announce-opts">
@@ -125,7 +127,7 @@ export default function AnnounceOptions({ announceType, isPremium = false, onCha
             checked={announceEnabled}
             onChange={(e) => setAnnounceEnabled(e.target.checked)}
           />
-          <span>📣 Share this stream on Hive and 3Speak when it starts</span>
+          <span>{t('live.announce.shareToggle')}</span>
         </label>
       )}
 
@@ -135,7 +137,7 @@ export default function AnnounceOptions({ announceType, isPremium = false, onCha
         {/* Community — only relevant to a full top-level post */}
         {announceType === 'post' && (
           <div className="hh-announce-opts__field">
-            <label>Community</label>
+            <label>{t('live.announce.community')}</label>
             <button
               type="button"
               className="hh-announce-opts__selector"
@@ -156,11 +158,11 @@ export default function AnnounceOptions({ announceType, isPremium = false, onCha
 
         {/* Payout / rewards */}
         <div className="hh-announce-opts__field">
-          <label>Rewards</label>
+          <label>{t('live.announce.rewards')}</label>
           <select className="hh-announce-opts__select" onChange={handleReward} defaultValue={rewardInitial}>
-            <option value="default">Default 50/50</option>
-            <option value="powerup">Power up 100%</option>
-            <option value="decline">Decline payout</option>
+            <option value="default">{t('live.announce.rewardDefault')}</option>
+            <option value="powerup">{t('live.announce.rewardPowerup')}</option>
+            <option value="decline">{t('live.announce.rewardDecline')}</option>
           </select>
         </div>
       </div>
@@ -168,11 +170,11 @@ export default function AnnounceOptions({ announceType, isPremium = false, onCha
       {/* Beneficiaries */}
       <div className="hh-announce-opts__bene">
         <div className="hh-announce-opts__bene-info">
-          <span className="hh-announce-opts__bene-title">Beneficiaries</span>
+          <span className="hh-announce-opts__bene-title">{t('live.announce.beneficiaries')}</span>
           <span className="hh-announce-opts__bene-sub">
             {isPremium
-              ? 'You’re on 3Speak Pro — no platform fee. Add splits if you like.'
-              : '10% to @threespeakfund is locked. You can add more.'}
+              ? t('live.announce.beneProHint')
+              : t('live.announce.beneLockedHint')}
           </span>
         </div>
         <button
@@ -182,7 +184,7 @@ export default function AnnounceOptions({ announceType, isPremium = false, onCha
         >
           {beneList.length > 0 && <span className="hh-announce-opts__bene-count">{beneList.length}</span>}
           <MdPeopleAlt />
-          <span>Beneficiaries</span>
+          <span>{t('live.announce.beneficiaries')}</span>
         </button>
       </div>
       </>

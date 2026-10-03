@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { HangoutsProvider, HangoutsRoom } from '@snapie/hangouts-react';
 import '@snapie/hangouts-react/src/styles/hangouts.css';
 import logoDark from '../../assets/image/3S_logodark.png';
@@ -57,6 +58,7 @@ function buildOpenPodShareUrl(roomName, origin, mode) {
 }
 
 export default function OpenPodModal({ isOpen, onClose, roomName, sessionToken, username, isAuthenticated }) {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   useWakeLock(isOpen);
   // Follow the 3speak-selected theme (light/dark/system) instead of
@@ -191,7 +193,7 @@ export default function OpenPodModal({ isOpen, onClose, roomName, sessionToken, 
         if (e.target !== e.currentTarget) return;
         // Already ended — no room to drop, so just close.
         if (streamEnded) { onClose(); return; }
-        if (window.confirm('Leave this OpenPod? You can rejoin from the lobby anytime.')) {
+        if (window.confirm(t('live.modal.leaveConfirm'))) {
           onClose();
         }
       }}
@@ -208,27 +210,27 @@ export default function OpenPodModal({ isOpen, onClose, roomName, sessionToken, 
             <div className="openpod-ended">
               <div className="openpod-ended__icon" aria-hidden="true">✅</div>
               <h2 className="openpod-ended__title">
-                {streamEnded ? 'Your stream has ended' : 'This stream has ended'}
+                {streamEnded ? t('live.modal.yourStreamEnded') : t('live.modal.thisStreamEnded')}
               </h2>
               <p className="openpod-ended__text">
                 {!streamEnded
-                  ? 'It is no longer live. Start a new one whenever you are ready.'
+                  ? t('live.modal.noLongerLive')
                   : announceEnabled && !isUnlisted
-                    ? 'Nice one! Your recording is being processed and will appear on the announcement post shortly.'
-                    : 'Nice one — thanks for going live!'}
+                    ? t('live.modal.recordingProcessing')
+                    : t('live.modal.thanksForLive')}
               </p>
               <div className="openpod-ended__actions">
                 {/* navigate('/') BEFORE onClose: OpenPods' URL-cleanup effect
                     fires on room-close but now only rewrites to /openpods when
                     the path is still /openpods, so going home first sticks. */}
-                <button className="openpod-ended__btn" onClick={() => { navigate('/'); onClose(); }}>Back to Home</button>
-                <button className="openpod-ended__btn" onClick={onClose}>Back to OpenPods</button>
+                <button className="openpod-ended__btn" onClick={() => { navigate('/'); onClose(); }}>{t('live.modal.backHome')}</button>
+                <button className="openpod-ended__btn" onClick={onClose}>{t('live.backToOpenPods')}</button>
               </div>
               <button
                 className="openpod-ended__feedback"
                 onClick={() => openReview({ area: 'stream', username: username || null, permlink: roomName || null })}
               >
-                <Star size={18} /> How was your stream?
+                <Star size={18} /> {t('live.modal.howWasStream')}
               </button>
             </div>
           ) : (roomReady && roomStatus === 'exists') ? (
@@ -286,7 +288,7 @@ export default function OpenPodModal({ isOpen, onClose, roomName, sessionToken, 
             />
           ) : (
             <div className="openpod-connecting">
-              {sessionToken ? 'Connecting to OpenPods…' : 'Authenticating with OpenPods…'}
+              {sessionToken ? t('live.modal.connecting') : t('live.modal.authenticating')}
             </div>
           )}
         </HangoutsProvider>

@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
+import { useTranslation, Trans } from 'react-i18next';
 import { toastIn } from '../../utils/toast';
 import { FiTrash2, FiChevronDown, FiExternalLink, FiCopy, FiImage, FiSliders, FiZap, FiRotateCcw, FiUser, FiGrid, FiVideo } from 'react-icons/fi';
 import { useAppStore } from '../../lib/store';
@@ -42,6 +43,7 @@ const uid = () => `s_${Date.now().toString(36)}_${Math.floor(performance.now())}
 // A color <input> only does solid hex; keep whatever non-hex (rgba) value we had if
 // the user doesn't touch it. `value` may be null/rgba → show a sensible hex swatch.
 function ColorField({ label, value, onChange, allowClear = false }) {
+  const { t } = useTranslation();
   const hex = typeof value === 'string' && /^#[0-9a-fA-F]{6}$/.test(value) ? value : '#888888';
   return (
     <label className="sp-e-color">
@@ -49,7 +51,7 @@ function ColorField({ label, value, onChange, allowClear = false }) {
       <span className="sp-e-color-controls">
         <input type="color" value={hex} onChange={(e) => onChange(e.target.value)} />
         {allowClear && value ? (
-          <button type="button" className="sp-e-clear" title="Reset to default" onClick={() => onChange(null)}>×</button>
+          <button type="button" className="sp-e-clear" title={t('spotlight.editor.resetToDefault')} onClick={() => onChange(null)}>×</button>
         ) : null}
       </span>
     </label>
@@ -77,20 +79,21 @@ function Toggle({ label, checked, onChange }) {
 // (prefix 'anim') and the avatar (prefix 'avatarAnim'). `obj` holds the *Type etc.
 function MotionControls({ prefix, obj, onChange }) {
   const g = (k, d) => { const v = obj[`${prefix}${k}`]; return v === undefined ? d : v; };
+  const { t } = useTranslation();
   const type = g('Type', 'none');
   return (
     <>
-      <label className="sp-e-select"><span>Motion</span>
+      <label className="sp-e-select"><span>{t('spotlight.editor.motion')}</span>
         <select value={type} onChange={(e) => onChange({ [`${prefix}Type`]: e.target.value })}>
-          {ANIM_TYPES.map((o) => <option key={o.value} value={o.value}>{o.label}</option>)}
+          {ANIM_TYPES.map((o) => <option key={o.value} value={o.value}>{t(o.labelKey)}</option>)}
         </select>
       </label>
       {type !== 'none' && (
         <>
-          <Range label={`Speed ${g('Speed', 5)}`} min={1} max={10} value={g('Speed', 5)} onChange={(v) => onChange({ [`${prefix}Speed`]: v })} />
-          <Toggle label="Loop" checked={g('Loop', true) !== false} onChange={(v) => onChange({ [`${prefix}Loop`]: v })} />
+          <Range label={t('spotlight.editor.speed', { value: g('Speed', 5) })} min={1} max={10} value={g('Speed', 5)} onChange={(v) => onChange({ [`${prefix}Speed`]: v })} />
+          <Toggle label={t('spotlight.editor.loop')} checked={g('Loop', true) !== false} onChange={(v) => onChange({ [`${prefix}Loop`]: v })} />
           {g('Loop', true) === false && (
-            <Range label={`Run ${g('Dur', 10)}s`} min={1} max={60} value={g('Dur', 10)} onChange={(v) => onChange({ [`${prefix}Dur`]: v })} />
+            <Range label={t('spotlight.editor.runSeconds', { value: g('Dur', 10) })} min={1} max={60} value={g('Dur', 10)} onChange={(v) => onChange({ [`${prefix}Dur`]: v })} />
           )}
         </>
       )}
@@ -155,13 +158,14 @@ async function fetchRecentShorts(account) {
 
 // Per-kind config for the media picker dropdown (videos and shorts share the UI).
 const MEDIA_PICKERS = {
-  video: { fetch: fetchRecentVideos, label: 'Choose from my videos', loading: 'Loading your videos…', empty: 'No recent 3Speak videos found.' },
-  short: { fetch: fetchRecentShorts, label: 'Choose from my shorts', loading: 'Loading your shorts…', empty: 'No recent 3Speak shorts found.' },
+  video: { fetch: fetchRecentVideos, labelKey: 'spotlight.editor.picker.videoLabel', loadingKey: 'spotlight.editor.picker.videoLoading', emptyKey: 'spotlight.editor.picker.videoEmpty' },
+  short: { fetch: fetchRecentShorts, labelKey: 'spotlight.editor.picker.shortLabel', loadingKey: 'spotlight.editor.picker.shortLoading', emptyKey: 'spotlight.editor.picker.shortEmpty' },
 };
 
 // Thumbnail + title + "how long ago" dropdown that fills a video block on pick.
 // kind picks the source: 'video' → published videos, 'short' → shorts.
 function MediaPicker({ username, kind = 'video', onPick }) {
+  const { t } = useTranslation();
   const cfg = MEDIA_PICKERS[kind] || MEDIA_PICKERS.video;
   const [open, setOpen] = useState(false);
   const [items, setItems] = useState(null);
@@ -186,19 +190,19 @@ function MediaPicker({ username, kind = 'video', onPick }) {
   return (
     <div className="sp-e-vpick">
       <button type="button" className={`sp-e-vpick-btn${open ? ' open' : ''}`} onClick={() => setOpen((o) => !o)}>
-        <span><FiVideo size={14} /> {cfg.label}</span>
+        <span><FiVideo size={14} /> {t(cfg.labelKey)}</span>
         <FiChevronDown className="sp-e-chev" size={15} />
       </button>
       {open && (
         <div className={`sp-e-vpick-menu sp-e-vpick-menu--${kind}`}>
           {loading ? (
-            <div className="sp-e-vpick-note">{cfg.loading}</div>
+            <div className="sp-e-vpick-note">{t(cfg.loadingKey)}</div>
           ) : !username ? (
-            <div className="sp-e-vpick-note">No channel detected (are you logged in?)</div>
+            <div className="sp-e-vpick-note">{t('spotlight.editor.picker.noChannel')}</div>
           ) : err ? (
-            <div className="sp-e-vpick-note">Couldn’t load: {err}</div>
+            <div className="sp-e-vpick-note">{t('spotlight.editor.picker.loadFailed', { error: err })}</div>
           ) : !items || !items.length ? (
-            <div className="sp-e-vpick-note">{cfg.empty} <span style={{ opacity: 0.6 }}>[@{username}]</span></div>
+            <div className="sp-e-vpick-note">{t(cfg.emptyKey)} <span style={{ opacity: 0.6 }}>[@{username}]</span></div>
           ) : items.map((v) => (
             <button type="button" key={`${v.author}/${v.permlink}`} className="sp-e-vpick-item"
               onClick={() => { onPick(v); setOpen(false); }} title={v.title}>
@@ -220,6 +224,7 @@ function MediaPicker({ username, kind = 'video', onPick }) {
 }
 
 function SectionCard({ section, onChange, onRemove, onApplyStyleToType, uploadingSet, username }) {
+  const { t } = useTranslation();
   const [unfurling, setUnfurling] = useState(false);
   const set = (patch) => onChange({ ...section, ...patch });
 
@@ -236,7 +241,7 @@ function SectionCard({ section, onChange, onRemove, onApplyStyleToType, uploadin
       });
       const data = await res.json();
       if (data && data.url) set({ url: data.url, title: data.title || '', description: data.description || '', image: data.image || null, siteName: data.siteName || '' });
-    } catch { toast.error('Could not fetch link preview'); }
+    } catch { toast.error(t('spotlight.editor.toasts.unfurlFailed')); }
     finally { setUnfurling(false); }
   };
 
@@ -247,7 +252,7 @@ function SectionCard({ section, onChange, onRemove, onApplyStyleToType, uploadin
       const url = await uploadThumbnail(file);
       set({ [key]: url });
     } catch (e) {
-      toast.error(`Image upload failed: ${e?.message || 'try again'}`);
+      toast.error(t('spotlight.editor.toasts.imageUploadFailed', { error: e?.message || t('spotlight.editor.toasts.tryAgain') }));
     } finally {
       uploadingSet(section.id, false);
     }
@@ -268,14 +273,14 @@ function SectionCard({ section, onChange, onRemove, onApplyStyleToType, uploadin
     } catch { /* best-effort */ }
   };
 
-  const TypeIcon = (SECTION_TYPES.find((t) => t.type === section.type) || SECTION_TYPES[0]).Icon;
+  const TypeIcon = (SECTION_TYPES.find((st) => st.type === section.type) || SECTION_TYPES[0]).Icon;
 
   return (
     <div className={`sp-e-item sp-e-item--${section.type}`}>
       <div className="sp-e-item-head">
-        <span className="sp-e-type"><TypeIcon size={14} /> {section.type}</span>
+        <span className="sp-e-type"><TypeIcon size={14} /> {t(`spotlight.blockNames.${section.type}`, { defaultValue: section.type })}</span>
         <div className="sp-e-head-actions">
-          <button type="button" className="sp-e-icon-btn sp-e-danger" title="Remove" onClick={() => onRemove(section.id)}><FiTrash2 size={16} /></button>
+          <button type="button" className="sp-e-icon-btn sp-e-danger" title={t('common.actions.remove')} onClick={() => onRemove(section.id)}><FiTrash2 size={16} /></button>
         </div>
       </div>
 
@@ -304,16 +309,16 @@ function SectionCard({ section, onChange, onRemove, onApplyStyleToType, uploadin
           };
           return (
           <>
-            <input className="sp-e-input" placeholder="Label (e.g. My YouTube)" value={section.title} maxLength={80}
+            <input className="sp-e-input" placeholder={t('spotlight.editor.link.labelPlaceholder')} value={section.title} maxLength={80}
               onChange={(e) => set({ title: e.target.value })} />
-            <label className="sp-e-select"><span>Link type</span>
+            <label className="sp-e-select"><span>{t('spotlight.editor.link.type')}</span>
               <select value={mode} onChange={(e) => setMode(e.target.value)}>
-                <optgroup label="Type">
-                  <option value="url">Website / URL</option>
-                  <option value="email">Email</option>
-                  <option value="phone">Phone</option>
+                <optgroup label={t('spotlight.editor.link.typeGroup')}>
+                  <option value="url">{t('spotlight.editor.link.website')}</option>
+                  <option value="email">{t('spotlight.editor.link.email')}</option>
+                  <option value="phone">{t('spotlight.editor.link.phone')}</option>
                 </optgroup>
-                <optgroup label="Platform">
+                <optgroup label={t('spotlight.editor.link.platformGroup')}>
                   {LINK_PLATFORMS.map((p) => <option key={p.slug} value={`platform:${p.slug}`}>{p.label}</option>)}
                 </optgroup>
               </select>
@@ -325,7 +330,7 @@ function SectionCard({ section, onChange, onRemove, onApplyStyleToType, uploadin
               <input className="sp-e-input" type="tel" placeholder="+1 555 123 4567" value={url.slice(4)}
                 onChange={(e) => set({ url: `tel:${e.target.value.replace(/[^0-9+]/g, '')}` })} />
             ) : platform ? (
-              <input className="sp-e-input" placeholder={`${platform.base || 'https://…'}yourname`} value={url}
+              <input className="sp-e-input" placeholder={`${platform.base || 'https://…'}${t('spotlight.editor.link.yourname')}`} value={url}
                 onChange={(e) => set({ url: e.target.value })} />
             ) : (
               <input className="sp-e-input" placeholder="https://…" value={url}
@@ -333,12 +338,12 @@ function SectionCard({ section, onChange, onRemove, onApplyStyleToType, uploadin
                 onBlur={(e) => { const g = guessIconFromUrl(e.target.value); if (g && !BRAND_SLUGS.has(g) && (!section.icon || section.icon === 'link')) set({ icon: g }); }} />
             )}
             {platform ? (
-              <div className="sp-e-hint">Icon is the {platform.label} logo — switch to “Website / URL” to choose a custom icon.</div>
+              <div className="sp-e-hint">{t('spotlight.editor.link.platformIconHint', { platform: platform.label })}</div>
             ) : (
               <div className="sp-e-iconrow">
-                <div className="sp-e-iconpicker" role="group" aria-label="Icon">
-                  {SPOTLIGHT_ICONS_GENERAL.map(({ slug, Icon, label }) => (
-                    <button type="button" key={slug} title={label}
+                <div className="sp-e-iconpicker" role="group" aria-label={t('spotlight.editor.link.icon')}>
+                  {SPOTLIGHT_ICONS_GENERAL.map(({ slug, Icon, labelKey }) => (
+                    <button type="button" key={slug} title={t(labelKey)}
                       className={`sp-e-iconopt${section.icon === slug ? ' sel' : ''}`}
                       onClick={() => set({ icon: slug })}><Icon size={16} /></button>
                   ))}
@@ -346,8 +351,8 @@ function SectionCard({ section, onChange, onRemove, onApplyStyleToType, uploadin
               </div>
             )}
             <div className="sp-e-inline">
-              <ColorField label="Icon color" value={section.iconColor} onChange={(v) => set({ iconColor: v })} allowClear />
-              <ColorField label="Icon bg" value={section.iconBg} onChange={(v) => set({ iconBg: v })} allowClear />
+              <ColorField label={t('spotlight.editor.link.iconColor')} value={section.iconColor} onChange={(v) => set({ iconColor: v })} allowClear />
+              <ColorField label={t('spotlight.editor.link.iconBg')} value={section.iconBg} onChange={(v) => set({ iconBg: v })} allowClear />
             </div>
           </>
           );
@@ -355,17 +360,17 @@ function SectionCard({ section, onChange, onRemove, onApplyStyleToType, uploadin
 
         {section.type === 'header' && (
           <>
-            <input className="sp-e-input" placeholder="Text" value={section.text} maxLength={120}
+            <input className="sp-e-input" placeholder={t('spotlight.editor.header.text')} value={section.text} maxLength={120}
               onChange={(e) => set({ text: e.target.value })} />
             <div className="sp-e-inline">
-              <label className="sp-e-select"><span>Size</span>
+              <label className="sp-e-select"><span>{t('spotlight.editor.header.size')}</span>
                 <select value={section.size} onChange={(e) => set({ size: e.target.value })}>
-                  <option value="lg">Large</option><option value="md">Medium</option><option value="sm">Small</option>
+                  <option value="lg">{t('spotlight.editor.header.large')}</option><option value="md">{t('spotlight.editor.header.medium')}</option><option value="sm">{t('spotlight.editor.header.small')}</option>
                 </select>
               </label>
-              <label className="sp-e-select"><span>Align</span>
+              <label className="sp-e-select"><span>{t('spotlight.editor.header.align')}</span>
                 <select value={section.align} onChange={(e) => set({ align: e.target.value })}>
-                  <option value="left">Left</option><option value="center">Center</option><option value="right">Right</option>
+                  <option value="left">{t('spotlight.editor.header.left')}</option><option value="center">{t('spotlight.editor.header.center')}</option><option value="right">{t('spotlight.editor.header.right')}</option>
                 </select>
               </label>
             </div>
@@ -377,35 +382,35 @@ function SectionCard({ section, onChange, onRemove, onApplyStyleToType, uploadin
             {section.src ? <img className="sp-e-preview-img" src={section.src} alt="" /> : null}
             <div className="sp-e-inline">
               <label className="sp-e-upload">
-                <FiImage size={15} /> {uploadingSet.has(section.id) ? 'Uploading…' : 'Upload image'}
+                <FiImage size={15} /> {uploadingSet.has(section.id) ? t('spotlight.editor.image.uploading') : t('spotlight.editor.image.upload')}
                 <input type="file" accept="image/*" hidden onChange={(e) => onImageFile(e.target.files?.[0], 'src')} />
               </label>
             </div>
-            <input className="sp-e-input" placeholder="…or image URL" value={section.src}
+            <input className="sp-e-input" placeholder={t('spotlight.editor.image.urlPlaceholder')} value={section.src}
               onChange={(e) => set({ src: e.target.value })} />
-            <input className="sp-e-input" placeholder="Link when clicked (optional)" value={section.url || ''}
+            <input className="sp-e-input" placeholder={t('spotlight.editor.image.linkPlaceholder')} value={section.url || ''}
               onChange={(e) => set({ url: e.target.value })} />
           </>
         )}
 
         {section.type === 'video' && (
           <>
-            <div className="sp-e-vmode" role="radiogroup" aria-label="Content type">
+            <div className="sp-e-vmode" role="radiogroup" aria-label={t('spotlight.editor.video.contentType')}>
               <label className={`sp-e-vmode-opt${!section.isShort ? ' active' : ''}`}>
                 <input type="radio" name={`vmode-${section.id}`} checked={!section.isShort}
                   onChange={() => set({ isShort: false })} />
-                <FiVideo size={13} /> Video
+                <FiVideo size={13} /> {t('spotlight.editor.video.video')}
               </label>
               <label className={`sp-e-vmode-opt${section.isShort ? ' active' : ''}`}>
                 <input type="radio" name={`vmode-${section.id}`} checked={!!section.isShort}
                   onChange={() => set({ isShort: true })} />
-                <FiVideo size={13} /> Short
+                <FiVideo size={13} /> {t('spotlight.editor.video.short')}
               </label>
             </div>
             <MediaPicker key={section.isShort ? 'short' : 'video'} username={username} kind={section.isShort ? 'short' : 'video'}
               onPick={(v) => set({ author: v.author, permlink: v.permlink, title: v.title, thumbnail: v.thumbnail || null, isShort: !!section.isShort })} />
-            <div className="sp-e-vpick-or"><span>or paste a link</span></div>
-            <input className="sp-e-input" placeholder="Paste a 3Speak video link or author/permlink"
+            <div className="sp-e-vpick-or"><span>{t('spotlight.editor.video.orPaste')}</span></div>
+            <input className="sp-e-input" placeholder={t('spotlight.editor.video.pastePlaceholder')}
               defaultValue={section.author && section.permlink ? `${section.author}/${section.permlink}` : ''}
               onBlur={(e) => onVideoPaste(e.target.value)} />
             {section.author && section.permlink ? (
@@ -414,40 +419,40 @@ function SectionCard({ section, onChange, onRemove, onApplyStyleToType, uploadin
                   {section.thumbnail ? <img src={section.thumbnail} alt="" /> : null}
                   <span>{section.title || `${section.author}/${section.permlink}`}</span>
                 </div>
-                <input className="sp-e-input" placeholder="Title shown above the video (links to 3Speak)"
+                <input className="sp-e-input" placeholder={t('spotlight.editor.video.titlePlaceholder')}
                   value={section.title || ''} onChange={(e) => set({ title: e.target.value })} />
               </>
-            ) : <div className="sp-e-hint">Selected content will embed and play on your page.</div>}
+            ) : <div className="sp-e-hint">{t('spotlight.editor.video.hint')}</div>}
           </>
         )}
 
         {section.type === 'embed' && (
           <>
-            <label className="sp-e-select"><span>Source</span>
+            <label className="sp-e-select"><span>{t('spotlight.editor.embed.source')}</span>
               <select value={section.source || 'link'} onChange={(e) => set({ source: e.target.value })}>
-                <option value="link">A link (rich preview)</option>
-                <option value="hive-recent">My latest Hive posts</option>
+                <option value="link">{t('spotlight.editor.embed.sourceLink')}</option>
+                <option value="hive-recent">{t('spotlight.editor.embed.sourceHiveRecent')}</option>
               </select>
             </label>
             {(section.source || 'link') === 'hive-recent' ? (
               <>
-                <input className="sp-e-input" placeholder="Hive username (leave blank for your own)"
+                <input className="sp-e-input" placeholder={t('spotlight.editor.embed.accountPlaceholder')}
                   value={section.account || ''}
                   onChange={(e) => set({ account: e.target.value.trim().replace(/^@/, '').toLowerCase() })} />
                 <div className="sp-e-inline">
-                  <Range label={`Show ${section.count ?? 3} post${(section.count ?? 3) > 1 ? 's' : ''}`} min={1} max={6}
+                  <Range label={t('spotlight.editor.embed.showPosts', { count: section.count ?? 3 })} min={1} max={6}
                     value={section.count ?? 3} onChange={(v) => set({ count: v })} />
-                  <Range label={`${section.perRow ?? 1} per row`} min={1} max={3}
+                  <Range label={t('spotlight.editor.embed.perRow', { value: section.perRow ?? 1 })} min={1} max={3}
                     value={section.perRow ?? 1} onChange={(v) => set({ perRow: v })} />
                 </div>
-                <div className="sp-e-hint">Your most recent top-level posts (no reblogs or cross-posts). Updates automatically.</div>
+                <div className="sp-e-hint">{t('spotlight.editor.embed.hiveRecentHint')}</div>
               </>
             ) : (
               <>
-                <input className="sp-e-input" placeholder="Paste any link — Hive post, Instagram, X, YouTube, article…"
+                <input className="sp-e-input" placeholder={t('spotlight.editor.embed.linkPlaceholder')}
                   defaultValue={section.url} onBlur={(e) => onUnfurl(e.target.value)} />
                 {unfurling ? (
-                  <div className="sp-e-hint">Fetching preview…</div>
+                  <div className="sp-e-hint">{t('spotlight.editor.embed.fetching')}</div>
                 ) : (section.title || section.image || section.siteName) ? (
                   <div className="sp-e-embchip">
                     {section.image ? <img className="sp-e-embchip-img" src={section.image} alt="" /> : null}
@@ -458,9 +463,9 @@ function SectionCard({ section, onChange, onRemove, onApplyStyleToType, uploadin
                     </div>
                   </div>
                 ) : section.url ? (
-                  <div className="sp-e-hint">No preview found — it’ll still show as a link card.</div>
+                  <div className="sp-e-hint">{t('spotlight.editor.embed.noPreview')}</div>
                 ) : (
-                  <div className="sp-e-hint">Paste a link and we’ll pull in its title, description &amp; image.</div>
+                  <div className="sp-e-hint">{t('spotlight.editor.embed.pasteHint')}</div>
                 )}
               </>
             )}
@@ -474,43 +479,43 @@ function SectionCard({ section, onChange, onRemove, onApplyStyleToType, uploadin
           return (
             <div className="sp-e-style">
               <div className="sp-e-style-head">
-                <div className="sp-e-glabel sp-e-glabel--sm">Style</div>
-                <button type="button" className="sp-e-applyall" title={`Apply this style to every ${section.type} block`}
-                  onClick={() => onApplyStyleToType(section)}>Apply to all {section.type}s</button>
+                <div className="sp-e-glabel sp-e-glabel--sm">{t('spotlight.editor.style.title')}</div>
+                <button type="button" className="sp-e-applyall" title={t('spotlight.editor.style.applyAllTitle', { type: t(`spotlight.blockNames.${section.type}`, { defaultValue: section.type }) })}
+                  onClick={() => onApplyStyleToType(section)}>{t('spotlight.editor.style.applyAll', { types: t(`spotlight.blockNamesPlural.${section.type}`, { defaultValue: `${section.type}s` }) })}</button>
               </div>
               <div className="sp-e-inline">
-                {hasBg && <ColorField label="Background" value={section.bg} onChange={(v) => set({ bg: v })} allowClear />}
-                {hasBg && <ColorField label="Text" value={section.text} onChange={(v) => set({ text: v })} allowClear />}
-                {hasBg && section.bg && <Range label={`Background ${section.bgOpacity ?? 100}%`} min={0} max={100} value={section.bgOpacity ?? 100} onChange={(v) => set({ bgOpacity: v })} />}
-                <Range label={`Radius ${section.radius ?? 16}`} min={0} max={48} value={section.radius ?? 16} onChange={(v) => set({ radius: v })} />
-                {hasBg && <Range label={`Font size ${section.fontScale ?? 100}%`} min={50} max={250} value={section.fontScale ?? 100} onChange={(v) => set({ fontScale: v })} />}
-                {section.type === 'link' && <Range label={`Padding ${section.padding ?? 15}px`} min={4} max={40} value={section.padding ?? 15} onChange={(v) => set({ padding: v })} />}
-                {section.type === 'embed' && <Range label={`Thumbnail ${section.imgSize ?? 55}%`} min={0} max={100} value={section.imgSize ?? 55} onChange={(v) => set({ imgSize: v })} />}
-              </div>
-
-              <div className="sp-e-theme-sub">Border</div>
-              <div className="sp-e-inline">
-                <Range label={`Thickness ${section.borderWidth ?? 0}px`} min={0} max={12} value={section.borderWidth ?? 0} onChange={(v) => set({ borderWidth: v })} />
-                {borderOn && <ColorField label="Border" value={section.borderColor ?? '#000000'} onChange={(v) => set({ borderColor: v || '#000000' })} />}
-                {borderOn && <Range label={`Opacity ${section.borderOpacity ?? 100}%`} min={0} max={100} value={section.borderOpacity ?? 100} onChange={(v) => set({ borderOpacity: v })} />}
+                {hasBg && <ColorField label={t('spotlight.editor.style.background')} value={section.bg} onChange={(v) => set({ bg: v })} allowClear />}
+                {hasBg && <ColorField label={t('spotlight.editor.style.text')} value={section.text} onChange={(v) => set({ text: v })} allowClear />}
+                {hasBg && section.bg && <Range label={t('spotlight.editor.style.backgroundPct', { value: section.bgOpacity ?? 100 })} min={0} max={100} value={section.bgOpacity ?? 100} onChange={(v) => set({ bgOpacity: v })} />}
+                <Range label={t('spotlight.editor.style.radius', { value: section.radius ?? 16 })} min={0} max={48} value={section.radius ?? 16} onChange={(v) => set({ radius: v })} />
+                {hasBg && <Range label={t('spotlight.editor.style.fontSizePct', { value: section.fontScale ?? 100 })} min={50} max={250} value={section.fontScale ?? 100} onChange={(v) => set({ fontScale: v })} />}
+                {section.type === 'link' && <Range label={t('spotlight.editor.style.paddingPx', { value: section.padding ?? 15 })} min={4} max={40} value={section.padding ?? 15} onChange={(v) => set({ padding: v })} />}
+                {section.type === 'embed' && <Range label={t('spotlight.editor.style.thumbnailPct', { value: section.imgSize ?? 55 })} min={0} max={100} value={section.imgSize ?? 55} onChange={(v) => set({ imgSize: v })} />}
               </div>
 
-              <div className="sp-e-theme-sub">Shadow</div>
+              <div className="sp-e-theme-sub">{t('spotlight.editor.style.border')}</div>
               <div className="sp-e-inline">
-                <Range label={`Strength ${section.shadowOpacity ?? 0}%`} min={0} max={100} value={section.shadowOpacity ?? 0} onChange={(v) => set({ shadowOpacity: v })} />
-                {shadowOn && <ColorField label="Color" value={section.shadowColor ?? '#000000'} onChange={(v) => set({ shadowColor: v || '#000000' })} />}
-                {shadowOn && <Range label={`Blur ${section.shadowBlur ?? 24}`} min={0} max={120} value={section.shadowBlur ?? 24} onChange={(v) => set({ shadowBlur: v })} />}
-                {shadowOn && <Range label={`Spread ${section.shadowSpread ?? 0}`} min={-40} max={40} value={section.shadowSpread ?? 0} onChange={(v) => set({ shadowSpread: v })} />}
+                <Range label={t('spotlight.editor.style.thicknessPx', { value: section.borderWidth ?? 0 })} min={0} max={12} value={section.borderWidth ?? 0} onChange={(v) => set({ borderWidth: v })} />
+                {borderOn && <ColorField label={t('spotlight.editor.style.border')} value={section.borderColor ?? '#000000'} onChange={(v) => set({ borderColor: v || '#000000' })} />}
+                {borderOn && <Range label={t('spotlight.editor.style.opacityPct', { value: section.borderOpacity ?? 100 })} min={0} max={100} value={section.borderOpacity ?? 100} onChange={(v) => set({ borderOpacity: v })} />}
+              </div>
+
+              <div className="sp-e-theme-sub">{t('spotlight.editor.style.shadow')}</div>
+              <div className="sp-e-inline">
+                <Range label={t('spotlight.editor.style.strengthPct', { value: section.shadowOpacity ?? 0 })} min={0} max={100} value={section.shadowOpacity ?? 0} onChange={(v) => set({ shadowOpacity: v })} />
+                {shadowOn && <ColorField label={t('spotlight.editor.style.color')} value={section.shadowColor ?? '#000000'} onChange={(v) => set({ shadowColor: v || '#000000' })} />}
+                {shadowOn && <Range label={t('spotlight.editor.style.blur', { value: section.shadowBlur ?? 24 })} min={0} max={120} value={section.shadowBlur ?? 24} onChange={(v) => set({ shadowBlur: v })} />}
+                {shadowOn && <Range label={t('spotlight.editor.style.spread', { value: section.shadowSpread ?? 0 })} min={-40} max={40} value={section.shadowSpread ?? 0} onChange={(v) => set({ shadowSpread: v })} />}
                 {shadowOn && <Range label={`X ${section.shadowX ?? 0}`} min={-60} max={60} value={section.shadowX ?? 0} onChange={(v) => set({ shadowX: v })} />}
                 {shadowOn && <Range label={`Y ${section.shadowY ?? 10}`} min={-60} max={60} value={section.shadowY ?? 10} onChange={(v) => set({ shadowY: v })} />}
-                {shadowOn && <Toggle label="Inset" checked={!!section.shadowInset} onChange={(v) => set({ shadowInset: v })} />}
+                {shadowOn && <Toggle label={t('spotlight.editor.style.inset')} checked={!!section.shadowInset} onChange={(v) => set({ shadowInset: v })} />}
               </div>
 
-              <div className="sp-e-theme-sub">Motion</div>
+              <div className="sp-e-theme-sub">{t('spotlight.editor.motion')}</div>
               <div className="sp-e-inline">
                 <MotionControls prefix="anim" obj={section} onChange={(patch) => set(patch)} />
                 {section.type === 'embed' && (section.source === 'hive-recent') && section.animType && section.animType !== 'none' && (
-                  <Range label={`Card delay ${section.animStagger ?? 120}ms`} min={0} max={1000} step={20}
+                  <Range label={t('spotlight.editor.style.cardDelayMs', { value: section.animStagger ?? 120 })} min={0} max={1000} step={20}
                     value={section.animStagger ?? 120} onChange={(v) => set({ animStagger: v })} />
                 )}
               </div>
@@ -523,6 +528,7 @@ function SectionCard({ section, onChange, onRemove, onApplyStyleToType, uploadin
 }
 
 export default function SpotlightEditor({ username }) {
+  const { t } = useTranslation();
   const storeUser = useAppStore((s) => s.user);
   const user = (username || storeUser || '').toLowerCase();
 
@@ -546,7 +552,7 @@ export default function SpotlightEditor({ username }) {
   useEffect(() => {
     if (!layout) return undefined;
     let alive = true;
-    const t = setTimeout(async () => {
+    const timer = setTimeout(async () => {
       try {
         const res = await fetch(RENDER_API, {
           method: 'POST', headers: { 'Content-Type': 'application/json' },
@@ -560,7 +566,7 @@ export default function SpotlightEditor({ username }) {
         if (alive) setPreviewHtml(html);
       } catch { /* keep the last good preview */ }
     }, 300);
-    return () => { alive = false; clearTimeout(t); };
+    return () => { alive = false; clearTimeout(timer); };
   }, [layout, user, displayName]);
 
   // Display name for the preview header (best-effort, matches the public page).
@@ -640,7 +646,7 @@ export default function SpotlightEditor({ username }) {
         return copy;
       }),
     });
-    toast.success(`Style applied to all ${src.type} blocks`);
+    toast.success(t('spotlight.editor.toasts.styleApplied', { type: t(`spotlight.blockNames.${src.type}`, { defaultValue: src.type }) }));
   };
 
   // Templates: apply the theme + starter blocks. Non-destructive — the pre-template
@@ -654,20 +660,20 @@ export default function SpotlightEditor({ username }) {
       sections: tpl.sections.map((s) => ({ ...s })),
     }));
     setSelectedId(null);
-    toast.success(`“${tpl.name}” applied — tweak or Undo`);
+    toast.success(t('spotlight.editor.toasts.templateApplied', { name: t(tpl.nameKey) }));
   };
   const undoTemplate = () => {
     if (!preTpl) return;
     markDirty(preTpl);
     setPreTpl(null);
     setSelectedId(null);
-    toast('Reverted to your previous design');
+    toast(t('spotlight.editor.toasts.reverted'));
   };
 
   const publicUrl = `${window.location.origin}/links/${user}`;
 
   const save = async () => {
-    if (!isLoggedIn()) { toast.error('Please log in first'); return; }
+    if (!isLoggedIn()) { toast.error(t('common.status.loginRequired')); return; }
     setSaving(true);
     try {
       // Stored on-chain in posting_json_metadata via posting auth (delegated through
@@ -679,9 +685,9 @@ export default function SpotlightEditor({ username }) {
       baseline.current = JSON.stringify(l);
       setDirty(false);
       setPreTpl(null);
-      toast.success('Spotlight saved to your Hive profile');
+      toast.success(t('spotlight.editor.toasts.saved'));
     } catch (e) {
-      toast.error(e?.message || 'Could not save');
+      toast.error(e?.message || t('spotlight.editor.toasts.saveFailed'));
     } finally {
       setSaving(false);
     }
@@ -694,18 +700,18 @@ export default function SpotlightEditor({ username }) {
           <span className="sp-e-brand-icon"><FiZap size={20} /></span>
           <span className="sp-e-brand-text">
             <span className="sp-e-brand-title">Spotlight</span>
-            <span className="sp-e-brand-sub">Your links & videos on one page</span>
+            <span className="sp-e-brand-sub">{t('spotlight.editor.tagline')}</span>
           </span>
         </div>
         <div className="sp-e-top-actions">
           <div className="sp-e-url">
             <span className="sp-e-url-text" title={publicUrl}>/links/{user}</span>
-            <button type="button" className="sp-e-icon-btn" title="Copy link"
-              onClick={() => { navigator.clipboard?.writeText(publicUrl); toast.success('Link copied'); }}><FiCopy size={15} /></button>
-            <a className="sp-e-icon-btn" href={`/links/${user}`} target="_blank" rel="noreferrer" title="Open page"><FiExternalLink size={15} /></a>
+            <button type="button" className="sp-e-icon-btn" title={t('common.actions.copyLink')}
+              onClick={() => { navigator.clipboard?.writeText(publicUrl); toast.success(t('spotlight.editor.toasts.linkCopied')); }}><FiCopy size={15} /></button>
+            <a className="sp-e-icon-btn" href={`/links/${user}`} target="_blank" rel="noreferrer" title={t('spotlight.editor.openPage')}><FiExternalLink size={15} /></a>
           </div>
           <button type="button" className={`sp-e-save${dirty ? ' dirty' : ''}`} onClick={save} disabled={saving || !dirty}>
-            {saving ? 'Saving…' : dirty ? 'Save' : 'Saved'}
+            {saving ? t('common.actions.saving') : dirty ? t('common.actions.save') : t('common.actions.saved')}
           </button>
         </div>
       </div>
@@ -716,44 +722,44 @@ export default function SpotlightEditor({ username }) {
       {/* Templates — one-click designs (theme + starter blocks); Undo restores. Shown
           first, and open by default for a brand-new page. */}
       <button type="button" className={`sp-e-theme-toggle${showTemplates ? ' open' : ''}`} onClick={() => setShowTemplates((v) => !v)}>
-        <span className="sp-e-tt-l"><FiGrid size={15} /> Templates</span><FiChevronDown className="sp-e-chev" size={16} />
+        <span className="sp-e-tt-l"><FiGrid size={15} /> {t('spotlight.editor.templates.title')}</span><FiChevronDown className="sp-e-chev" size={16} />
       </button>
       {showTemplates && (
         <div className="sp-e-theme sp-e-tpls-wrap">
-          <div className="sp-e-hint">Pick a design to fill everything in — your bio is kept, and you can Undo.</div>
+          <div className="sp-e-hint">{t('spotlight.editor.templates.hint')}</div>
           <div className="sp-e-tpls">
-            {TEMPLATES.map((t) => (
-              <button type="button" key={t.id} className="sp-e-tpl" title={`${t.name} · ${t.niche}`}
-                style={{ background: bgToCss(t.theme.bg) }} onClick={() => applyTemplate(t)}>
-                <span className="sp-e-tpl-emoji">{t.emoji}</span>
+            {TEMPLATES.map((tpl) => (
+              <button type="button" key={tpl.id} className="sp-e-tpl" title={`${t(tpl.nameKey)} · ${t(tpl.nicheKey)}`}
+                style={{ background: bgToCss(tpl.theme.bg) }} onClick={() => applyTemplate(tpl)}>
+                <span className="sp-e-tpl-emoji">{tpl.emoji}</span>
                 <span className="sp-e-tpl-meta">
-                  <span className="sp-e-tpl-name">{t.name}</span>
-                  <span className="sp-e-tpl-niche">{t.niche}</span>
+                  <span className="sp-e-tpl-name">{t(tpl.nameKey)}</span>
+                  <span className="sp-e-tpl-niche">{t(tpl.nicheKey)}</span>
                 </span>
               </button>
             ))}
           </div>
           {preTpl && (
-            <button type="button" className="sp-e-tpl-undo" onClick={undoTemplate}><FiRotateCcw size={14} /> Undo template — back to my design</button>
+            <button type="button" className="sp-e-tpl-undo" onClick={undoTemplate}><FiRotateCcw size={14} /> {t('spotlight.editor.templates.undo')}</button>
           )}
         </div>
       )}
 
       {/* Profile — bio, avatar & the always-present channel button, front and centre. */}
-      <div className="sp-e-glabel"><FiUser size={13} /> Profile</div>
+      <div className="sp-e-glabel"><FiUser size={13} /> {t('spotlight.editor.profile.title')}</div>
       <div className="sp-e-profile">
-        <input className="sp-e-headline" placeholder="A short headline / bio (optional)" value={headline} maxLength={200}
+        <input className="sp-e-headline" placeholder={t('spotlight.editor.profile.headlinePlaceholder')} value={headline} maxLength={200}
           onChange={(e) => markDirty({ ...layout, headline: e.target.value })} />
         <div className="sp-e-inline">
-          <Range label={`Avatar size ${theme.avatarPct ?? 100}%`} min={40} max={250} value={theme.avatarPct ?? 100} onChange={(v) => setTheme({ avatarPct: v })} />
-          <Range label={`Avatar shadow ${theme.avatarShadow ?? 30}%`} min={0} max={100} value={theme.avatarShadow ?? 30} onChange={(v) => setTheme({ avatarShadow: v })} />
-          <ColorField label="Avatar glow" value={theme.avatarGlow} onChange={(v) => setTheme({ avatarGlow: v })} allowClear />
-          {theme.avatarGlow && <Range label={`Glow size ${theme.avatarGlowSize ?? 24}`} min={0} max={80} value={theme.avatarGlowSize ?? 24} onChange={(v) => setTheme({ avatarGlowSize: v })} />}
+          <Range label={t('spotlight.editor.profile.avatarSizePct', { value: theme.avatarPct ?? 100 })} min={40} max={250} value={theme.avatarPct ?? 100} onChange={(v) => setTheme({ avatarPct: v })} />
+          <Range label={t('spotlight.editor.profile.avatarShadowPct', { value: theme.avatarShadow ?? 30 })} min={0} max={100} value={theme.avatarShadow ?? 30} onChange={(v) => setTheme({ avatarShadow: v })} />
+          <ColorField label={t('spotlight.editor.profile.avatarGlow')} value={theme.avatarGlow} onChange={(v) => setTheme({ avatarGlow: v })} allowClear />
+          {theme.avatarGlow && <Range label={t('spotlight.editor.profile.glowSize', { value: theme.avatarGlowSize ?? 24 })} min={0} max={80} value={theme.avatarGlowSize ?? 24} onChange={(v) => setTheme({ avatarGlowSize: v })} />}
         </div>
         <div className="sp-e-inline">
           <MotionControls prefix="avatarAnim" obj={theme} onChange={(patch) => setTheme(patch)} />
         </div>
-        <label className="sp-e-field"><span>Channel button text</span>
+        <label className="sp-e-field"><span>{t('spotlight.editor.profile.channelButtonText')}</span>
           <input className="sp-e-input" placeholder="Open my Channel on 3Speak" maxLength={60}
             value={theme.footerText ?? ''} onChange={(e) => setTheme({ footerText: e.target.value })} />
         </label>
@@ -761,22 +767,22 @@ export default function SpotlightEditor({ username }) {
 
       {/* Page style */}
       <button type="button" className={`sp-e-theme-toggle${showTheme ? ' open' : ''}`} onClick={() => setShowTheme((v) => !v)}>
-        <span className="sp-e-tt-l"><FiSliders size={15} /> Page style</span><FiChevronDown className="sp-e-chev" size={16} />
+        <span className="sp-e-tt-l"><FiSliders size={15} /> {t('spotlight.editor.page.title')}</span><FiChevronDown className="sp-e-chev" size={16} />
       </button>
       {showTheme && (
         <div className="sp-e-theme">
-          <div className="sp-e-theme-sub">Background</div>
+          <div className="sp-e-theme-sub">{t('spotlight.editor.style.background')}</div>
           <div className="sp-e-inline">
-            <label className="sp-e-select"><span>Background</span>
+            <label className="sp-e-select"><span>{t('spotlight.editor.style.background')}</span>
               <select value={theme.bg.type} onChange={(e) => setBg({ type: e.target.value })}>
-                <option value="color">Solid</option><option value="gradient">Gradient</option><option value="image">Image</option>
+                <option value="color">{t('spotlight.editor.page.solid')}</option><option value="gradient">{t('spotlight.editor.page.gradient')}</option><option value="image">{t('spotlight.editor.page.image')}</option>
               </select>
             </label>
-            {theme.bg.type !== 'image' && <ColorField label="Color" value={theme.bg.color} onChange={(v) => setBg({ color: v })} />}
-            {theme.bg.type === 'gradient' && <ColorField label="Color 2" value={theme.bg.color2} onChange={(v) => setBg({ color2: v })} />}
+            {theme.bg.type !== 'image' && <ColorField label={t('spotlight.editor.style.color')} value={theme.bg.color} onChange={(v) => setBg({ color: v })} />}
+            {theme.bg.type === 'gradient' && <ColorField label={t('spotlight.editor.page.color2')} value={theme.bg.color2} onChange={(v) => setBg({ color2: v })} />}
           </div>
           {theme.bg.type === 'gradient' && (
-            <label className="sp-e-range"><span>Angle {theme.bg.angle}°</span>
+            <label className="sp-e-range"><span>{t('spotlight.editor.page.angle', { value: theme.bg.angle })}</span>
               <input type="range" min="0" max="360" value={theme.bg.angle} onChange={(e) => setBg({ angle: Number(e.target.value) })} />
             </label>
           )}
@@ -784,35 +790,35 @@ export default function SpotlightEditor({ username }) {
             <>
               <div className="sp-e-inline">
                 <label className="sp-e-upload">
-                  <FiImage size={15} /> Upload background
+                  <FiImage size={15} /> {t('spotlight.editor.page.uploadBackground')}
                   <input type="file" accept="image/*" hidden onChange={async (e) => {
                     const f = e.target.files?.[0]; if (!f) return;
-                    try { const url = await uploadThumbnail(f); setBg({ image: url }); } catch { toast.error('Upload failed'); }
+                    try { const url = await uploadThumbnail(f); setBg({ image: url }); } catch { toast.error(t('spotlight.editor.toasts.uploadFailed')); }
                   }} />
                 </label>
-                {theme.bg.image ? <span className="sp-e-hint">Image set ✓</span> : null}
+                {theme.bg.image ? <span className="sp-e-hint">{t('spotlight.editor.page.imageSet')}</span> : null}
               </div>
               {/* Overlay tint/gradient over the image for readability. */}
               <div className="sp-e-inline">
-                <label className="sp-e-select"><span>Overlay</span>
+                <label className="sp-e-select"><span>{t('spotlight.editor.page.overlay')}</span>
                   <select value={theme.bg.overlayType || 'none'} onChange={(e) => setBg({ overlayType: e.target.value })}>
-                    <option value="none">None</option><option value="color">Color</option><option value="gradient">Gradient</option>
+                    <option value="none">{t('spotlight.editor.page.none')}</option><option value="color">{t('spotlight.editor.style.color')}</option><option value="gradient">{t('spotlight.editor.page.gradient')}</option>
                   </select>
                 </label>
                 {theme.bg.overlayType && theme.bg.overlayType !== 'none' && (
-                  <ColorField label="Overlay" value={theme.bg.overlayColor} onChange={(v) => setBg({ overlayColor: v })} />
+                  <ColorField label={t('spotlight.editor.page.overlay')} value={theme.bg.overlayColor} onChange={(v) => setBg({ overlayColor: v })} />
                 )}
                 {theme.bg.overlayType === 'gradient' && (
-                  <ColorField label="Overlay 2" value={theme.bg.overlayColor2} onChange={(v) => setBg({ overlayColor2: v })} />
+                  <ColorField label={t('spotlight.editor.page.overlay2')} value={theme.bg.overlayColor2} onChange={(v) => setBg({ overlayColor2: v })} />
                 )}
               </div>
               {theme.bg.overlayType && theme.bg.overlayType !== 'none' && (
                 <div className="sp-e-inline">
-                  <label className="sp-e-range"><span>Overlay opacity {theme.bg.overlayOpacity ?? 45}%</span>
+                  <label className="sp-e-range"><span>{t('spotlight.editor.page.overlayOpacityPct', { value: theme.bg.overlayOpacity ?? 45 })}</span>
                     <input type="range" min="0" max="100" value={theme.bg.overlayOpacity ?? 45} onChange={(e) => setBg({ overlayOpacity: Number(e.target.value) })} />
                   </label>
                   {theme.bg.overlayType === 'gradient' && (
-                    <label className="sp-e-range"><span>Overlay angle {theme.bg.overlayAngle ?? 160}°</span>
+                    <label className="sp-e-range"><span>{t('spotlight.editor.page.overlayAngle', { value: theme.bg.overlayAngle ?? 160 })}</span>
                       <input type="range" min="0" max="360" value={theme.bg.overlayAngle ?? 160} onChange={(e) => setBg({ overlayAngle: Number(e.target.value) })} />
                     </label>
                   )}
@@ -820,69 +826,69 @@ export default function SpotlightEditor({ username }) {
               )}
             </>
           )}
-          <div className="sp-e-theme-sub">Colors</div>
+          <div className="sp-e-theme-sub">{t('spotlight.editor.page.colors')}</div>
           <div className="sp-e-inline">
-            <ColorField label="Text" value={theme.text} onChange={(v) => setTheme({ text: v })} />
-            <ColorField label="Button bg" value={theme.sectionBg} onChange={(v) => setTheme({ sectionBg: v })} />
-            <ColorField label="Button text" value={theme.sectionText} onChange={(v) => setTheme({ sectionText: v })} />
+            <ColorField label={t('spotlight.editor.style.text')} value={theme.text} onChange={(v) => setTheme({ text: v })} />
+            <ColorField label={t('spotlight.editor.page.buttonBg')} value={theme.sectionBg} onChange={(v) => setTheme({ sectionBg: v })} />
+            <ColorField label={t('spotlight.editor.page.buttonText')} value={theme.sectionText} onChange={(v) => setTheme({ sectionText: v })} />
           </div>
-          <div className="sp-e-theme-sub">Buttons</div>
+          <div className="sp-e-theme-sub">{t('spotlight.editor.page.buttons')}</div>
           <div className="sp-e-inline">
-            <label className="sp-e-select"><span>Button style</span>
+            <label className="sp-e-select"><span>{t('spotlight.editor.page.buttonStyle')}</span>
               <select value={theme.buttonStyle} onChange={(e) => setTheme({ buttonStyle: e.target.value })}>
-                <option value="soft">Soft</option><option value="fill">Fill</option><option value="outline">Outline</option>
+                <option value="soft">{t('spotlight.editor.page.soft')}</option><option value="fill">{t('spotlight.editor.page.fill')}</option><option value="outline">{t('spotlight.editor.page.outline')}</option>
               </select>
             </label>
-            <Range label={`Corner radius ${theme.radius}`} min={0} max={48} value={theme.radius} onChange={(v) => setTheme({ radius: v })} />
+            <Range label={t('spotlight.editor.page.cornerRadius', { value: theme.radius })} min={0} max={48} value={theme.radius} onChange={(v) => setTheme({ radius: v })} />
           </div>
 
           {/* Global text styling — applies to the name, bio and every text block. */}
-          <div className="sp-e-theme-sub">Text style (name, bio &amp; text blocks)</div>
+          <div className="sp-e-theme-sub">{t('spotlight.editor.page.textStyle')}</div>
           <div className="sp-e-inline">
-            <label className="sp-e-select"><span>Font</span>
+            <label className="sp-e-select"><span>{t('spotlight.editor.page.font')}</span>
               <select value={theme.font} onChange={(e) => setTheme({ font: e.target.value })}>
-                {FONT_OPTIONS.map((o) => <option key={o.value} value={o.value}>{o.label}</option>)}
+                {FONT_OPTIONS.map((o) => <option key={o.value} value={o.value}>{t(o.labelKey)}</option>)}
               </select>
             </label>
-            <label className="sp-e-select"><span>Style</span>
+            <label className="sp-e-select"><span>{t('spotlight.editor.style.title')}</span>
               <select value={theme.fontStyle || 'normal'} onChange={(e) => setTheme({ fontStyle: e.target.value })}>
-                <option value="normal">Normal</option><option value="italic">Italic</option>
-                <option value="bold">Bold</option><option value="bolditalic">Bold Italic</option>
+                <option value="normal">{t('spotlight.editor.page.normal')}</option><option value="italic">{t('spotlight.editor.page.italic')}</option>
+                <option value="bold">{t('spotlight.editor.page.bold')}</option><option value="bolditalic">{t('spotlight.editor.page.boldItalic')}</option>
               </select>
             </label>
-            <label className="sp-e-select"><span>Shadow</span>
+            <label className="sp-e-select"><span>{t('spotlight.editor.style.shadow')}</span>
               <select value={theme.textShadow || 'none'} onChange={(e) => setTheme({ textShadow: e.target.value })}>
-                <option value="none">None</option><option value="soft">Soft</option><option value="strong">Strong</option>
+                <option value="none">{t('spotlight.editor.page.none')}</option><option value="soft">{t('spotlight.editor.page.soft')}</option><option value="strong">{t('spotlight.editor.page.strong')}</option>
               </select>
             </label>
           </div>
           <div className="sp-e-inline">
-            <label className="sp-e-range"><span>Font size {theme.fontScale ?? 100}%</span>
+            <label className="sp-e-range"><span>{t('spotlight.editor.style.fontSizePct', { value: theme.fontScale ?? 100 })}</span>
               <input type="range" min="60" max="160" value={theme.fontScale ?? 100} onChange={(e) => setTheme({ fontScale: Number(e.target.value) })} />
             </label>
-            <label className="sp-e-range"><span>Text border {theme.textStroke || 0}px</span>
+            <label className="sp-e-range"><span>{t('spotlight.editor.page.textBorderPx', { value: theme.textStroke || 0 })}</span>
               <input type="range" min="0" max="3" value={theme.textStroke || 0} onChange={(e) => setTheme({ textStroke: Number(e.target.value) })} />
             </label>
-            {(theme.textStroke || 0) > 0 && <ColorField label="Border color" value={theme.textStrokeColor} onChange={(v) => setTheme({ textStrokeColor: v || '#000000' })} />}
+            {(theme.textStroke || 0) > 0 && <ColorField label={t('spotlight.editor.page.borderColor')} value={theme.textStrokeColor} onChange={(v) => setTheme({ textStrokeColor: v || '#000000' })} />}
           </div>
         </div>
       )}
 
       {/* Add */}
-      <div className="sp-e-glabel">Add a block</div>
+      <div className="sp-e-glabel">{t('spotlight.editor.addBlock')}</div>
       <div className="sp-e-add">
-        {SECTION_TYPES.map(({ type, label, Icon }) => (
-          <button type="button" key={type} onClick={() => { const s = newBlock(type); markDirty({ ...layout, sections: [...sections, s] }); setSelectedId(s.id); }}><Icon size={15} /> {label}</button>
+        {SECTION_TYPES.map(({ type, labelKey, Icon }) => (
+          <button type="button" key={type} onClick={() => { const s = newBlock(type); markDirty({ ...layout, sections: [...sections, s] }); setSelectedId(s.id); }}><Icon size={15} /> {t(labelKey)}</button>
         ))}
       </div>
 
       {/* Arrange: drag a block's grip onto another to share a row (auto-size), or onto
           a line between rows for a new row. Click a block to edit its content below. */}
       {sections.length === 0 ? (
-        <div className="sp-e-empty">Add your first link, video or image above.</div>
+        <div className="sp-e-empty">{t('spotlight.editor.empty')}</div>
       ) : (
         <>
-          <div className="sp-e-arrange-hint">Drag <RxDragHandleDots2 size={13} /> to arrange · drop a block onto another to put them side by side · click a block to edit it right here</div>
+          <div className="sp-e-arrange-hint"><Trans i18nKey="spotlight.editor.arrangeHint" components={{ grip: <RxDragHandleDots2 size={13} /> }} /></div>
           <ArrangeGrid
             sections={sections}
             selectedId={selectedId}
@@ -904,13 +910,13 @@ export default function SpotlightEditor({ username }) {
 
       {/* Live preview — an iframe rendered by the SAME server code as the public page. */}
       <div className="sp-e-side">
-        <div className="sp-e-preview-label"><span className="sp-e-live-dot" /> Live preview</div>
+        <div className="sp-e-preview-label"><span className="sp-e-live-dot" /> {t('spotlight.editor.livePreview')}</div>
         <div className="sp-e-preview-device">
           <div className="sp-e-preview-bar">
             <span className="sp-e-dot" /><span className="sp-e-dot" /><span className="sp-e-dot" />
             <span className="sp-e-preview-url">3speak.tv/links/{user}</span>
           </div>
-          <iframe ref={frameRef} className="sp-e-preview-frame" title="Spotlight preview" srcDoc={previewHtml}
+          <iframe ref={frameRef} className="sp-e-preview-frame" title={t('spotlight.editor.previewTitle')} srcDoc={previewHtml}
             onLoad={() => { try { const w = frameRef.current?.contentWindow; if (w && scrollRef.current) w.scrollTo(0, scrollRef.current); } catch { /* cross-doc */ } }} />
         </div>
       </div>

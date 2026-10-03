@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { getHiveUrl } from '../utils/hiveNode';
 import { useNavigate, useSearchParams } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { toastIn } from '../utils/toast';
 import axios from 'axios';
 import { MdMic, MdPeopleAlt } from 'react-icons/md';
@@ -23,6 +24,7 @@ const toast = toastIn('Live');
 const HANGOUTS_API = import.meta.env.VITE_HANGOUTS_API_URL;
 
 export default function OpenPodPublish() {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const { authenticated, user } = useAppStore();
@@ -92,13 +94,13 @@ export default function OpenPodPublish() {
   };
 
   const handlePublish = async () => {
-    if (!authenticated) { toast.error('Please log in first'); return; }
-    if (!title.trim())  { toast.error('Please add a title'); return; }
-    if (!audioUrl)      { toast.error('No audio URL found'); return; }
+    if (!authenticated) { toast.error(t('common.status.loginRequired')); return; }
+    if (!title.trim())  { toast.error(t('live.publish.errors.noTitle')); return; }
+    if (!audioUrl)      { toast.error(t('live.publish.errors.noAudio')); return; }
 
     const communityTag = typeof community === 'string' ? community : community?.name || 'hive-181335';
     const tags = ['3speak', 'openpod', communityTag,
-      ...tagsPreview.filter(t => !['3speak', 'openpod', communityTag].includes(t)),
+      ...tagsPreview.filter(tag => !['3speak', 'openpod', communityTag].includes(tag)),
     ];
 
     const thumbnailLine = thumbnailUrl ? `![${title.trim()}](${thumbnailUrl})\n\n` : '';
@@ -156,7 +158,7 @@ export default function OpenPodPublish() {
 
       if (!result.success) throw new Error('Post failed');
 
-      toast.success('Recording published to Hive!');
+      toast.success(t('live.publish.published'));
 
       // Best-effort: enrich the MongoDB audio entry with the Hive post data
       if (audioPerm && roomName && sessionToken) {
@@ -192,7 +194,7 @@ export default function OpenPodPublish() {
       });
     } catch (err) {
       console.error('Publish failed:', err);
-      toast.error('Failed to publish. Please try again.');
+      toast.error(t('live.publish.errors.failed'));
     } finally {
       setPublishing(false);
     }
@@ -203,8 +205,8 @@ export default function OpenPodPublish() {
       <div className="openpod-publish-page">
         <div className="publish-login-gate">
           <MdMic className="gate-icon" />
-          <p>Log in to publish your recording.</p>
-          <button onClick={() => navigate('/login')}>Log in</button>
+          <p>{t('live.publish.loginGate')}</p>
+          <button onClick={() => navigate('/login')}>{t('common.actions.login')}</button>
         </div>
       </div>
     );
@@ -212,26 +214,26 @@ export default function OpenPodPublish() {
 
   const communityLabel = typeof community === 'string'
     ? (community === 'hive-181335' ? '3Speak (hive-181335)' : community)
-    : community?.title || community?.name || 'Select Community';
+    : community?.title || community?.name || t('live.announce.selectCommunity');
 
   return (
     <div className="openpod-publish-page">
       <div className="publish-header">
         <MdMic className="publish-mic-icon" />
-        <h1>Publish OpenPod Recording</h1>
+        <h1>{t('live.publish.heading')}</h1>
       </div>
 
       {/* Audio preview */}
       {audioUrl && (
         <div className="publish-audio-preview">
           <div className="preview-copy">
-            <span className="preview-label">Recording preview</span>
-            <p>Review the audio before publishing. This is the same player readers will see on the post.</p>
+            <span className="preview-label">{t('live.publish.previewLabel')}</span>
+            <p>{t('live.publish.previewHint')}</p>
           </div>
           <AudioPlayerInline
             src={audioUrl}
             variant="preview"
-            title={title || roomTitle || 'OpenPod Recording'}
+            title={title || roomTitle || t('live.publish.recordingFallback')}
             artworkUrl={thumbnailUrl}
             externalUrl={audioUrl}
           />
@@ -241,39 +243,39 @@ export default function OpenPodPublish() {
       <div className="publish-form">
         {/* Title */}
         <div className="publish-field">
-          <label>Title</label>
+          <label>{t('live.publish.title')}</label>
           <input
             type="text"
             value={title}
             onChange={e => setTitle(e.target.value)}
-            placeholder="Give your recording a title"
+            placeholder={t('live.publish.titlePlaceholder')}
             className="publish-input"
           />
         </div>
 
         {/* Description */}
         <div className="publish-field">
-          <label>Description <span className="optional">(optional)</span></label>
+          <label>{t('live.publish.description')} <span className="optional">{t('live.publish.optional')}</span></label>
           <MarkdownComposer
             value={description}
             onChange={setDescription}
-            placeholder="What did you talk about? Add show notes, links, or a summary..."
+            placeholder={t('live.publish.descriptionPlaceholder')}
           />
         </div>
 
         {/* Tags */}
         <div className="publish-field">
-          <label>Tags</label>
+          <label>{t('live.publish.tags')}</label>
           <input
             type="text"
             value={tagsInput}
             onChange={e => handleTagsChange(e.target.value)}
-            placeholder="Space-separated tags"
+            placeholder={t('live.publish.tagsPlaceholder')}
             className="publish-input"
           />
           <div className="tags-preview">
-            {tagsPreview.map((t, i) => (
-              <span key={i} className="tag-chip">{t}</span>
+            {tagsPreview.map((tag, i) => (
+              <span key={i} className="tag-chip">{tag}</span>
             ))}
           </div>
         </div>
@@ -281,7 +283,7 @@ export default function OpenPodPublish() {
         <div className="publish-row">
           {/* Community */}
           <div className="publish-field publish-field--half">
-            <label>Community</label>
+            <label>{t('live.announce.community')}</label>
             <button
               type="button"
               className="publish-selector"
@@ -301,11 +303,11 @@ export default function OpenPodPublish() {
 
           {/* Rewards */}
           <div className="publish-field publish-field--half">
-            <label>Rewards</label>
+            <label>{t('live.announce.rewards')}</label>
             <select className="publish-select" onChange={handleReward}>
-              <option value="default">Default 50/50</option>
-              <option value="powerup">Power up 100%</option>
-              <option value="decline">Decline Payout</option>
+              <option value="default">{t('live.announce.rewardDefault')}</option>
+              <option value="powerup">{t('live.announce.rewardPowerup')}</option>
+              <option value="decline">{t('live.publish.declinePayout')}</option>
             </select>
           </div>
         </div>
@@ -314,11 +316,11 @@ export default function OpenPodPublish() {
         <div className="publish-field">
           <div className="bene-row">
             <div className="bene-info">
-              <span className="bene-title">Beneficiaries</span>
+              <span className="bene-title">{t('live.announce.beneficiaries')}</span>
               <span className="bene-sub">
                 {isPremium
-                  ? 'You’re on 3Speak Pro — no platform fee. Add splits if you like.'
-                  : '10% to @threespeakfund is locked. You can add more.'}
+                  ? t('live.announce.beneProHint')
+                  : t('live.announce.beneLockedHint')}
               </span>
             </div>
             <button
@@ -328,7 +330,7 @@ export default function OpenPodPublish() {
             >
               {beneList.length > 0 && <span className="bene-count">{beneList.length}</span>}
               <MdPeopleAlt />
-              <span>Beneficiaries</span>
+              <span>{t('live.announce.beneficiaries')}</span>
             </button>
           </div>
         </div>
@@ -340,7 +342,7 @@ export default function OpenPodPublish() {
             className="publish-cancel"
             onClick={() => navigate('/openpods')}
           >
-            Back to OpenPods
+            {t('live.backToOpenPods')}
           </button>
           <button
             type="button"
@@ -348,7 +350,7 @@ export default function OpenPodPublish() {
             onClick={handlePublish}
             disabled={publishing}
           >
-            {publishing ? 'Publishing…' : 'Publish Recording'}
+            {publishing ? t('live.publish.publishing') : t('live.publish.submit')}
           </button>
         </div>
       </div>

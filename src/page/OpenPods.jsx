@@ -3,6 +3,7 @@ import { HangoutsProvider, RoomLobby } from '@snapie/hangouts-react';
 import '@snapie/hangouts-react/src/styles/hangouts.css';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { useAioha } from '@aioha/react-ui';
+import { useTranslation } from 'react-i18next';
 import { useHangout } from '../context/HangoutContext';
 import { broadcastWithAioha, getOperationUser } from '../hive-api/aioha';
 import { useAppStore } from '../lib/store';
@@ -25,6 +26,7 @@ const IMAGE_KEY = import.meta.env.VITE_IMAGE_SERVER_API_KEY;
 const PREMIUM_API = (import.meta.env.VITE_HANGOUTS_PREMIUM_API_URL || '').replace(/\/$/, '');
 
 export default function OpenPods() {
+  const { t } = useTranslation();
   const { openRoom, activeRoom, sessionToken, sessionLoading, hangoutsUser, retryLogin } = useHangout();
   const { authenticated, user } = useAppStore();
   // Follow the 3speak-selected theme (light/dark/system) for the SDK lobby.
@@ -266,7 +268,7 @@ export default function OpenPods() {
             <MarkdownComposer
               value={value}
               onChange={onChange}
-              placeholder="What's this session about? Add show notes, links, or a summary…"
+              placeholder={t('live.lobby.descriptionPlaceholder')}
             />
           )}
         />
@@ -288,18 +290,17 @@ export default function OpenPods() {
                   retryLogin(handoverUser);
                 }}
               >
-                Enable hosting &amp; speaking
+                {t('live.lobby.enableHosting')}
               </button>
               {handoverFailed && (
                 <p className="openpods-guest-cta__hint">
-                  Couldn’t enable hosting automatically. OpenPods posts on your behalf via
-                  @threespeak — check that you’ve granted it posting authority, then try again.
+                  {t('live.lobby.handoverFailed')}
                 </p>
               )}
             </>
           ) : (
             <button className="openpods-login-btn" onClick={() => navigate('/login')}>
-              Sign in with Hive to host or speak
+              {t('live.lobby.signInToHost')}
             </button>
           )}
         </div>

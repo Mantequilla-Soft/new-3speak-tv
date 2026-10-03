@@ -1,5 +1,6 @@
 import { useEffect, useState, useCallback } from 'react';
 import { Scissors } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import { toastIn } from '../../utils/toast';
 
 // Every toast from this module is headed "Live"; the message becomes the
@@ -13,6 +14,7 @@ const toast = toastIn('Live');
 const HANGOUTS_API_URL = (import.meta.env.VITE_HANGOUTS_API_URL || '').replace(/\/$/, '');
 
 export default function StreamClipButton({ roomName, variant = 'inline' }) {
+  const { t } = useTranslation();
   const [available, setAvailable] = useState(false);
   const [busy, setBusy] = useState(false);
 
@@ -29,8 +31,8 @@ export default function StreamClipButton({ roomName, variant = 'inline' }) {
     // Poll fairly often so the button appears soon after the host goes live —
     // a viewer who opened the page during standby would otherwise wait a long
     // time (DVR only starts on Start) for the button to show.
-    const t = setInterval(check, 5000);
-    return () => { alive = false; clearInterval(t); };
+    const timer = setInterval(check, 5000);
+    return () => { alive = false; clearInterval(timer); };
   }, [roomName]);
 
   const clip = useCallback(async () => {
@@ -54,30 +56,30 @@ export default function StreamClipButton({ roomName, variant = 'inline' }) {
       a.click();
       a.remove();
       setTimeout(() => URL.revokeObjectURL(objUrl), 15000);
-      toast.success('Clip saved to your downloads.');
+      toast.success(t('live.clip.saved'));
     } catch (e) {
       const msg = String(e?.message) === '429'
-        ? 'Slow down a moment, then clip again.'
-        : 'Could not make a clip. Try again in a few seconds.';
+        ? t('live.clip.slowDown')
+        : t('live.clip.failed');
       toast.error(msg);
     } finally {
       setBusy(false);
     }
-  }, [busy, roomName]);
+  }, [busy, roomName, t]);
 
   if (!available) return null;
 
   if (variant === 'sidebar') {
     return (
-      <div className="actionItem" onClick={clip} role="button" title="Clip the last 30 seconds">
+      <div className="actionItem" onClick={clip} role="button" title={t('live.clip.title')}>
         <div className={`actionButton${busy ? ' liked' : ''}`}><Scissors size={22} /></div>
-        <span className="actionLabel">{busy ? '…' : '30 sec'}</span>
+        <span className="actionLabel">{busy ? '…' : t('live.clip.label')}</span>
       </div>
     );
   }
   return (
-    <button type="button" className="pv-btn" onClick={clip} disabled={busy} title="Clip the last 30 seconds">
-      <Scissors size={14} /><span>{busy ? 'Clipping…' : '30 sec'}</span>
+    <button type="button" className="pv-btn" onClick={clip} disabled={busy} title={t('live.clip.title')}>
+      <Scissors size={14} /><span>{busy ? t('live.clip.clipping') : t('live.clip.label')}</span>
     </button>
   );
 }

@@ -10,12 +10,22 @@
  */
 import { Helmet } from 'react-helmet-async';
 import { Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import './Legal.scss';
 
+// i18n: only the page chrome (tab title, back link) is translated. The body is
+// deliberately English-only: the English text is the binding version, and a
+// machine-translated legal text would be a liability. Non-English readers get a
+// short notice saying so.
 export default function Legal() {
+  const { t, i18n } = useTranslation();
   return (
     <div className="legal">
-      <Helmet><title>How 3Speak handles your data · 3Speak</title></Helmet>
+      <Helmet><title>{t('pages.legal.pageTitle')}</title></Helmet>
+
+      {i18n.resolvedLanguage !== 'en' && (
+        <p className="legal-draft" role="note" lang={i18n.resolvedLanguage}>{t('pages.legal.englishOnly')}</p>
+      )}
 
       <div className="legal-draft" role="note">
         3Speak is an open, decentralised project maintained by a collective of contributors,
@@ -180,7 +190,7 @@ export default function Legal() {
         </p>
       </section>
 
-      <p className="legal-back"><Link to="/">← Back to 3Speak</Link></p>
+      <p className="legal-back"><Link to="/">{t('pages.legal.back')}</Link></p>
     </div>
   );
 }
