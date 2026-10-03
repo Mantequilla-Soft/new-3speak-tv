@@ -1,0 +1,39 @@
+# 3Speak
+
+> 3Speak (https://3speak.tv) is a YouTube alternative built on the Hive blockchain where both creators and viewers earn. Creators earn from community upvotes and get 50% of the ad revenue their videos bring in; viewers who opt in share 10% of ad revenue by watch time and earn curation rewards for upvoting. Every video is a Hive post the creator owns, and video files are stored on IPFS.
+
+Rewards are paid in HIVE and HBD (Hive Backed Dollars), the native assets of the Hive blockchain. There is no subscriber or watch-hour threshold before a creator can earn. Log in with a Hive account through a Hive wallet such as Hive Keychain, HiveSigner or HiveAuth.
+
+## Key facts
+
+- Post rewards: for 7 days after publishing, community upvotes decide a video's share of the Hive reward pool, split between the creator and the curators who upvoted it.
+- Ad revenue for creators: creators who turn ads on get 50% of the ad revenue their videos bring in, paid every 3 days in HBD or HIVE (whatever the advertiser paid with).
+- Viewer rewards: viewers who opt in share 10% of ad revenue, split by watch time across videos they watched at least 75% of (up to 20 minutes counted per video, own videos excluded). Paid every 3 days. 3Speak Pro subscribers, who see no ads, earn it too.
+- Curation rewards: viewers who upvote with Hive Power earn a share of the post rewards of the videos they upvote.
+- Remixes: when someone remixes or clips a video, the original creator automatically receives at least 5% of the remix's rewards.
+- Platform share: uploads carry a 10% beneficiary to @threespeakfund and 1% to @encoder.pay for encoding. 3Speak Pro subscribers skip the 10%.
+- Ownership: videos are posts on the public Hive blockchain under the creator's own account and keys, and stay on chain even if a website hides them.
+
+## Pages
+
+- [About 3Speak](https://3speak.tv/about): what 3Speak is and how earning works, with an FAQ
+- [Full text for language models](https://3speak.tv/llms-full.txt): everything on this page plus the FAQ
+- [Trending videos](https://3speak.tv/trend)
+- [New videos](https://3speak.tv/new)
+- [Shorts](https://3speak.tv/shorts): vertical short videos
+- [Communities](https://3speak.tv/communities)
+- [Creator leaderboard](https://3speak.tv/leaderboard)
+- [Advertise](https://3speak.tv/advertise): video, banner and ticker ads, paid in HBD or HIVE
+
+## URL patterns
+
+- Video: https://3speak.tv/watch?v=<username>/<permlink>
+- Short: https://3speak.tv/shorts?v=<username>/<id>
+- Channel: https://3speak.tv/user/<username>
+- Podcast RSS feed of a channel: https://3speak.tv/rss/<username>.xml
+
+## Optional
+
+- [Video sitemap](https://3speak.tv/sitemap-videos.xml)
+- [Channel sitemap](https://3speak.tv/sitemap-channels.xml)
+- [Hive blockchain](https://hive.io)

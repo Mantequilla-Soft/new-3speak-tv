@@ -396,6 +396,8 @@ export function createAdBreak() {
             positionPercent: Number(data.ticker.positionPercent) || 0,
             durationSeconds: Number(data.ticker.durationSeconds),
             label: data.ticker.label || 'Ad',
+            // 'hold' slides in, pauses centred, slides out; anything else crawls.
+            style: data.ticker.style === 'hold' ? 'hold' : 'crawl',
             adKey: data.ticker.adKey || null,
             capMinutes: Number(data.ticker.capMinutes) || null,
           };

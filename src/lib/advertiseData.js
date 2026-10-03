@@ -743,11 +743,11 @@ export async function uploadCreative({ file, account, reference, durationSeconds
 }
 
 /** Save a ticker's message and link as a creative. It goes to review like any other. */
-export async function saveTickerCreative({ reference, message, clickUrl }) {
+export async function saveTickerCreative({ reference, message, clickUrl, style = 'crawl' }) {
   return readJson(await fetch(`${BASE}/creatives`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ reference, message, clickUrl }),
+    body: JSON.stringify({ reference, message, clickUrl, style }),
   }));
 }
 
