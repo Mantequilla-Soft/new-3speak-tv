@@ -1,0 +1,63 @@
+{
+  "title": "번역 편집",
+  "intro": "저장하면 바로 모든 사용자에게 반영되고, 3Speak 코드에 pull request로 제안돼요.",
+  "loading": "불러오는 중…",
+  "notAvailable": {
+    "title": "번역 편집기",
+    "body": "번역 편집기는 초대받은 번역가만 사용할 수 있어요. GitHub에서 수정 사항을 제안해 도움을 줄 수도 있어요.",
+    "contribute": "번역에 참여하는 방법"
+  },
+  "verify": {
+    "body": "편집기를 열려면 Hive 계정을 확인해 주세요. 지갑에서 로그인 승인을 요청할 거예요.",
+    "button": "계정 확인",
+    "failed": "계정을 확인하지 못했어요."
+  },
+  "language": "언어",
+  "addLanguage": "언어 추가",
+  "communityLanguage": "커뮤니티",
+  "areas": "영역",
+  "allAreas": "전체 영역",
+  "search": "키, 영어 원문 또는 번역 검색",
+  "missingOnly": "누락된 항목만",
+  "communityOnly": "커뮤니티 수정 항목",
+  "columns": {
+    "key": "키",
+    "english": "영어",
+    "translation": "번역"
+  },
+  "pluralForm": "복수형: {{category}}",
+  "editedBadge": "커뮤니티",
+  "pendingReset": "저장하면 기본 제공 텍스트로 돌아가요",
+  "reset": "초기화",
+  "resetTitle": "커뮤니티 수정을 삭제하고 기본 제공 텍스트 사용",
+  "undo": "실행 취소",
+  "save": "저장",
+  "saving": "저장 중…",
+  "unsaved_other": "저장되지 않은 변경 사항 {{count}}개",
+  "noRows": "필터에 맞는 항목이 없어요.",
+  "showMore": "더보기",
+  "showing": "{{total}}개 중 {{shown}}개 표시",
+  "saved_other": "변경 사항 {{count}}개를 저장했어요",
+  "nothingToSave": "저장할 변경 사항이 없어요.",
+  "fixErrors": "저장하기 전에 수정이 필요한 행이 있어요. 빨간색으로 표시돼 있어요.",
+  "partialSaved": "변경 사항 중 일부만 저장됐어요. 표시된 행을 수정한 뒤 다시 저장해 주세요.",
+  "saveFailed": "저장하지 못했어요: {{error}}",
+  "notSignedIn": "로그인을 확인하지 못했어요. 다시 로그인한 뒤 재시도해 주세요.",
+  "forbidden": "이 계정은 번역을 편집할 수 없어요.",
+  "rateLimited": "저장 요청이 너무 많아요. 몇 분 뒤에 다시 시도해 주세요.",
+  "unsavedConfirm": "저장하지 않은 번역이 있어요. 그래도 나갈까요?",
+  "add": {
+    "title": "언어 추가",
+    "code": "언어 코드",
+    "codeHint": "소문자 2~3자(ISO 639), 필요하면 지역 포함: nl, fil, pt-BR",
+    "native": "해당 언어로 된 이름",
+    "nativeHint": "언어 메뉴에 표시되는 이름이에요. 예: Nederlands",
+    "english": "영어 이름",
+    "rtl": "오른쪽에서 왼쪽으로 쓰는 언어(아랍어, 히브리어, 페르시아어, 우르두어…)",
+    "submit": "언어 추가",
+    "cancel": "취소",
+    "added": "{{name}}을(를) 추가했어요. 번역을 시작해 보세요!",
+    "failed": "언어를 추가하지 못했어요.",
+    "invalidCode": "소문자 2~3자를 사용하고, 필요하면 지역을 붙여 주세요(pt-BR)."
+  }
+}
