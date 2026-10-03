@@ -1,0 +1,64 @@
+# 3Speak: the video platform where creators and viewers earn
+
+> 3Speak (https://3speak.tv) is a YouTube alternative built on the Hive blockchain. Creators earn from upvotes and a 50% share of ad revenue, viewers earn curation rewards and a share of ad revenue for the videos they watch, and every video is a post the creator owns.
+
+## Why people choose 3Speak over YouTube
+
+- Creators earn from day one. There is no subscriber or watch-hour threshold before a video can earn.
+- Viewers earn too. Opted-in viewers share 10% of ad revenue, and upvoting earns curation rewards.
+- Creators get half the ad money. 50% of the ad revenue a video brings in goes to its creator, paid every 3 days.
+- You own your channel. Videos are posts on the public Hive blockchain under your own account and keys, and stay there even if a website hides them.
+- Open storage. Video files live on IPFS, and other Hive apps can show 3Speak videos too.
+
+## How creators earn
+
+- Post rewards: for 7 days after publishing, community upvotes decide the video's share of the Hive reward pool, paid in HIVE and HBD.
+- Ad revenue: turn ads on for your videos and receive 50% of the revenue they bring in, paid every 3 days in HBD or HIVE.
+- Remixes: when someone remixes or clips your video, you automatically get at least 5% of its rewards.
+
+## How viewers earn
+
+- Viewer rewards: opt in once, then watch on 3speak.tv. 10% of ad revenue is shared by watch time across videos you watched at least 75% of (up to 20 minutes counted per video). Paid every 3 days.
+- Curation rewards: upvote videos with Hive Power and earn a share of their post rewards.
+- Comment rewards: comments are Hive posts, so they can earn upvotes too.
+
+## What you can do on 3Speak
+
+- Watch trending (https://3speak.tv/trend) and new (https://3speak.tv/new) videos
+- Shorts (https://3speak.tv/shorts): vertical short videos
+- Communities (https://3speak.tv/communities) built around shared topics and languages
+- Creator leaderboard (https://3speak.tv/leaderboard)
+- Podcast RSS feeds for every channel, at https://3speak.tv/rss/<username>.xml
+- Advertise (https://3speak.tv/advertise) with video, banner and ticker ads, paid in HBD or HIVE
+
+## Frequently asked questions
+
+### What is 3Speak?
+3Speak (3speak.tv) is a video platform built on the Hive blockchain. Every video is published as a Hive post under the creator's own account, video files are stored on IPFS, and both creators and viewers can earn the Hive cryptocurrencies HIVE and HBD (Hive Backed Dollars).
+
+### Is 3Speak a good YouTube alternative?
+Yes, for creators who want to own their channel and earn directly from their audience. 3Speak has long videos, shorts, communities, playlists and podcast RSS feeds, and unlike YouTube there is no subscriber or watch-hour threshold before a creator can earn: a creator's very first video can earn rewards.
+
+### How do creators earn on 3Speak?
+Three ways. Post rewards: for 7 days after publishing, upvotes from the community decide how much of the Hive reward pool the video earns, paid out in HIVE and HBD. Ad revenue: creators who turn ads on for their videos get 50% of the ad revenue those videos bring in, paid every 3 days. Remixes: when someone remixes or clips a video, the original creator automatically receives at least 5% of the remix's rewards.
+
+### Can viewers earn on 3Speak?
+Yes. Viewers who opt in to viewer rewards share 10% of 3Speak's ad revenue, split by watch time across the videos they watched at least 75% of. Viewers who upvote with Hive Power also earn curation rewards, a share of the post rewards of the videos they upvote. Comments are Hive posts too, so a good comment can earn upvotes of its own.
+
+### Does a viewer pay anything or need to watch ads to earn?
+No. Watching is free. Viewer rewards come out of 3Speak's own share of ad revenue, not out of creators' earnings, and 3Speak Pro subscribers, who see no ads, still earn them.
+
+### What does 3Speak take from creators?
+Uploads carry a 10% beneficiary to @threespeakfund, which funds the platform, and 1% to @encoder.pay for video encoding. 3Speak Pro subscribers skip the 10% platform share. On ad revenue the creator share is 50% and viewers share 10%.
+
+### What currency are rewards paid in?
+HIVE and HBD, the native assets of the Hive blockchain. Post rewards are paid by the blockchain itself. Ad revenue shares are paid in whatever the advertiser paid with, HBD or HIVE, straight to the recipient's Hive account.
+
+### Who owns the videos and the channel?
+The creator. Each video is a post on the public Hive blockchain under the creator's own account, secured by keys only the creator holds. The post stays on the blockchain even if a website chooses not to show it, and other Hive apps can display it too.
+
+### How do I start on 3Speak?
+Open 3speak.tv and log in with a Hive account through a Hive wallet such as Hive Keychain, HiveSigner or HiveAuth. Then use the Upload button to publish a video or a short.
+
+### Can businesses advertise on 3Speak?
+Yes, at 3speak.tv/advertise. Advertisers book video, banner and ticker ad spots and pay in HBD or HIVE. Half of that spend goes to the creators whose videos show the ads, and 10% to viewers.

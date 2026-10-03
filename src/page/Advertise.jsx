@@ -57,6 +57,7 @@ import {
   bannerAdvice,
   savingAt,
   groupByFormat,
+  tickerMinSeconds,
 } from '../lib/adMarket';
 import './Advertise.scss';
 
@@ -341,6 +342,9 @@ function CampaignPanel({
      panel does not own. Null means no wizard, which is the enrollment flow. */
   step = null,
   onBooked,
+  // Who the ad is for, for the ticker preview (it shows the avatar and product name).
+  account = null,
+  productName = null,
 }) {
   const [campaigns, setCampaigns] = useState([]);
   const [days, setDays] = useState(pricing?.minDays || 1);
@@ -612,8 +616,21 @@ function CampaignPanel({
   }, [onCheckPayment, ccyFor, pricing?.hbdPerHive]);
   const autoOn = autoLength && autoAvailable;
 
-  const chosenLength = autoOn ? latestSpotSeconds : (spotSeconds ?? maxSpot);
-  const lengthOk = Number.isInteger(chosenLength) && chosenLength >= minSpot && chosenLength <= maxSpot;
+  /* The ticker message this booking is for: the newest one not turned down. A ticker
+   * has no duration of its own, but its message has a readability minimum, so that is
+   * the default length (instead of the format's maximum) and the floor the checker
+   * holds the attach to. */
+  const tickerCreative = isTicker
+    ? (creatives || []).find((c) => c.kind === 'text' && c.status !== 'rejected') || null
+    : null;
+  const tickerNeeds = tickerCreative
+    ? (tickerCreative.minSeconds || tickerMinSeconds(tickerCreative.message, fmt?.creativeSpec))
+    : null;
+  const defaultLength = tickerNeeds ? Math.min(tickerNeeds, maxSpot) : maxSpot;
+  const chosenLength = autoOn ? latestSpotSeconds : (spotSeconds ?? defaultLength);
+  const tickerTooShort = tickerNeeds != null && Number(chosenLength) < tickerNeeds;
+  const lengthOk = Number.isInteger(chosenLength) && chosenLength >= minSpot && chosenLength <= maxSpot
+    && !tickerTooShort;
   const autoTooLong = autoOn && chosenLength > maxSpot;
 
   // Video-length targeting, entered in seconds and open-ended at both ends.
@@ -955,7 +972,7 @@ function CampaignPanel({
             <input
               id="mkt-length"
               type="number"
-              min={minSpot}
+              min={tickerNeeds || minSpot}
               max={maxSpot}
               step="1"
               value={chosenLength}
@@ -997,7 +1014,9 @@ function CampaignPanel({
                   {autoOn
                     ? 'Taken from the ad video you uploaded.'
                     : (isTicker
-                      ? 'How long the ticker takes to cross the screen once.'
+                      ? (tickerTooShort
+                        ? `Your message needs at least ${tickerNeeds}s to be read. Shorter and it moves too fast.`
+                        : `How long the ticker takes to cross the screen once.${tickerNeeds ? ` At least ${tickerNeeds}s for your message; longer is slower and easier to read.` : ''}`)
                       : isBanner
                       ? 'How long the banner stays on screen. A video banner has to be at least this long.'
                       : (tooManySpots
@@ -1089,6 +1108,18 @@ function CampaignPanel({
         </fieldset>
         ) : null}
         </div>
+        {/* What this booking buys, exactly: the message at the length being priced, in
+            its style. Changing the seconds above changes the speed here. */}
+        {isTicker && tickerCreative ? (
+          <TickerPreview
+            account={account}
+            productName={productName}
+            message={tickerCreative.message}
+            seconds={Number.isInteger(chosenLength) && chosenLength > 0 ? Math.min(chosenLength, maxSpot) : defaultLength}
+            tickerStyle={tickerCreative.tickerStyle === 'hold' ? 'hold' : 'crawl'}
+            caption={`Your ticker at ${chosenLength}s, as viewers will see it`}
+          />
+        ) : null}
         <div className="mkt-book-total">
           {total != null ? (
             <span>
@@ -1372,6 +1403,38 @@ const CREATIVE_STATUS = {
   rejected: 'Not accepted',
 };
 
+/* A creative still waiting on something (our review, or its encode) changes on the
+ * server's schedule, not the page's. These lists were read once on mount, so "Waiting
+ * for review" stayed on screen after we had approved it until somebody reloaded.
+ *
+ * Re-reads while anything is unsettled and stops once nothing is, so a settled list
+ * makes no requests. Not while the tab is hidden; it catches up the moment it is back. */
+/* The status pill. A rejection carries the team's reason INSIDE the pill: as a trailing
+ * "· reason" in the grey description it read as part of the ad's own text, and the one
+ * thing the advertiser needs to act on was the easiest to miss. */
+const rejectedWithNote = (c) => c.status === 'rejected' && !!c.note;
+function CreativeStatus({ c }) {
+  const label = CREATIVE_STATUS[c.status] || c.status;
+  return (
+    <span className={`mkt-creative-status mkt-creative-${c.status}${rejectedWithNote(c) ? ' has-note' : ''}`}>
+      {rejectedWithNote(c) ? <>{label}: <span className="mkt-creative-note">{c.note}</span></> : label}
+    </span>
+  );
+}
+
+const CREATIVE_POLL_MS = 20000;
+const isUnsettled = (c) => c.status === 'pending' || c.status === 'review';
+function usePollWhileUnsettled(list, refresh) {
+  const waiting = list.some(isUnsettled);
+  useEffect(() => {
+    if (!waiting) return undefined;
+    const tick = () => { if (document.visibilityState === 'visible') refresh(); };
+    const t = setInterval(tick, CREATIVE_POLL_MS);
+    document.addEventListener('visibilitychange', tick);
+    return () => { clearInterval(t); document.removeEventListener('visibilitychange', tick); };
+  }, [waiting, refresh]);
+}
+
 /**
  * Upload the spot.
  *
@@ -1510,8 +1573,61 @@ function BrandPanel({ reference, account, productName, initialLogoUrl, initialSl
  * same review as an image or a video. Editing a word makes a new one that has to be
  * reviewed again, which the server enforces by keying the creative on its content.
  */
-function TickerPanel({ reference, account, productName, maxChars = 140, onCreatives }) {
+const TICKER_STYLES = [
+  { id: 'crawl', title: 'Crawl across', blurb: 'Enters on the right and leaves on the left in one smooth pass.' },
+  { id: 'hold', title: 'Slide in, pause, slide out', blurb: 'Glides in and stops in the middle so it can be read standing still. A line longer than the screen pans slowly from its start to its end instead.' },
+];
+
+/* The ticker as a viewer will get it: the same TickerCrawl the watch page draws, at the
+ * width of a real player and running for the seconds being booked. "Phone" also gives
+ * it the phone strip (smaller type), which is what decides whether a held line fits.
+ *
+ * Keyed on everything that changes the run, so a new length or style restarts it from
+ * the first frame instead of jumping to wherever the old animation had got to. */
+function TickerPreview({ account, productName, message, seconds, tickerStyle = 'crawl', caption }) {
+  const [device, setDevice] = useState('desktop');
+  const compact = device === 'phone';
+  return (
+    <div className="mkt-ticker-preview" aria-label="Preview">
+      <div className="mkt-ticker-preview-head">
+        <span className="mkt-preview-cap">{caption}</span>
+        <div className="mkt-pay-ccy" role="group" aria-label="Screen size">
+          {[['desktop', 'Desktop'], ['phone', 'Phone']].map(([k, label]) => (
+            <button
+              key={k}
+              type="button"
+              className={`mkt-ccy${device === k ? ' selected' : ''}`}
+              aria-pressed={device === k}
+              onClick={() => setDevice(k)}
+            >
+              {label}
+            </button>
+          ))}
+        </div>
+      </div>
+      <div className={`mkt-ticker-stage${compact ? ' is-phone' : ''}`}>
+        <TickerCrawl
+          key={`${seconds}:${tickerStyle}:${device}`}
+          account={account}
+          productName={productName}
+          message={message}
+          durationSeconds={seconds}
+          tickerStyle={tickerStyle}
+          compact={compact}
+          loop
+        />
+      </div>
+    </div>
+  );
+}
+
+function TickerPanel({ reference, account, productName, format = null, onCreatives }) {
+  const spec = format?.creativeSpec;
+  const maxChars = spec?.maxChars || 140;
+  const maxSeconds = format?.maxSeconds || 20;
   const [message, setMessage] = useState('');
+  const [tickerStyle, setTickerStyle] = useState('crawl');
+  const styleName = `mkt-ticker-style-${useId()}`;
   const [link, setLink] = useState('https://');
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState(null);
@@ -1527,18 +1643,28 @@ function TickerPanel({ reference, account, productName, maxChars = 140, onCreati
       .catch(() => { /* an unreadable list is not worth an error banner */ });
   }, [reference, onCreatives]);
   useEffect(() => { refresh(); }, [refresh]);
+  usePollWhileUnsettled(saved, refresh);
 
   const length = [...message.trim()].length;
+  const words = message.trim() ? message.trim().split(/\s+/).length : 0;
+  // How long this message must be booked for to be readable. The checker refuses a
+  // shorter booking at attach, so say it here, while it can still be rewritten.
+  const needs = tickerMinSeconds(message, spec);
+  const tooSlowToRead = needs > maxSeconds;
   const linkOk = /^https:\/\/[^\s/]+\.[^\s]+/i.test(link.trim());
-  const canSave = length > 0 && length <= maxChars && linkOk && !busy;
+  // What is in the form is already saved as-is. The form is NOT cleared after a save
+  // (an empty form right after pressing Save read as "it lost my ticker"), so this is
+  // what tells the advertiser it went through; any edit makes it savable again.
+  const alreadySaved = saved.some((c) => c.message === message.trim()
+    && c.clickUrl === link.trim() && (c.tickerStyle || 'crawl') === tickerStyle);
+  const canSave = length > 0 && length <= maxChars && !tooSlowToRead && linkOk && !busy && !alreadySaved;
 
   async function onSave() {
     if (!canSave) return;
     setBusy(true); setError(null);
     try {
-      await saveTickerCreative({ reference, message: message.trim(), clickUrl: link.trim() });
+      await saveTickerCreative({ reference, message: message.trim(), clickUrl: link.trim(), style: tickerStyle });
       toast.success('Ticker saved. We will review it before it runs');
-      setMessage('');
       refresh();
     } catch (err) {
       setError(err.message || 'Could not save the ticker');
@@ -1557,9 +1683,32 @@ function TickerPanel({ reference, account, productName, maxChars = 140, onCreati
           onChange={(e) => setMessage(e.target.value)}
           placeholder="What should viewers read? One or two sentences and a reason to click."
         />
-        <span className={`mkt-hint${length > maxChars ? ' mkt-hint-short' : ''}`}>
-          {length} / {maxChars} characters
+        <span className={`mkt-hint${length > maxChars || tooSlowToRead ? ' mkt-hint-short' : ''}`}>
+          {length} / {maxChars} characters · {words} word{words === 1 ? '' : 's'}
+          {tooSlowToRead
+            ? ` · needs about ${needs}s to read, and a ticker runs at most ${maxSeconds}s. Shorten it a little.`
+            : ` · book at least ${needs}s so it can be read`}
         </span>
+      </div>
+      <div className="mkt-field mkt-field-wide mkt-adtype">
+        <span className="mkt-label">How it moves</span>
+        <div className="mkt-adtype-row">
+          {TICKER_STYLES.map((o) => (
+            <label key={o.id} className={`mkt-adtype-opt${tickerStyle === o.id ? ' selected' : ''}`}>
+              <input
+                type="radio"
+                name={styleName}
+                value={o.id}
+                checked={tickerStyle === o.id}
+                onChange={() => setTickerStyle(o.id)}
+              />
+              <span>
+                <strong>{o.title}</strong>
+                <span className="mkt-hint">{o.blurb}</span>
+              </span>
+            </label>
+          ))}
+        </div>
       </div>
       <div className="mkt-field mkt-field-wide">
         <label htmlFor="mkt-ticker-link">Link</label>
@@ -1575,22 +1724,20 @@ function TickerPanel({ reference, account, productName, maxChars = 140, onCreati
         </span>
       </div>
 
-      <div className="mkt-ticker-preview" aria-label="Preview">
-        <span className="mkt-preview-cap">Along the top of the video</span>
-        <div className="mkt-ticker-stage">
-          <TickerCrawl
-            account={account}
-            productName={productName}
-            message={message.trim() || 'Your message crawls along here.'}
-            durationSeconds={12}
-            loop
-          />
-        </div>
-      </div>
+      <TickerPreview
+        account={account}
+        productName={productName}
+        message={message.trim() || 'Your message crawls along here.'}
+        // At the shortest booking that is allowed, so this is the FASTEST it will ever
+        // run. Booking longer only slows it down.
+        seconds={Math.min(needs, maxSeconds)}
+        tickerStyle={tickerStyle}
+        caption={`Along the top of the video, at ${Math.min(needs, maxSeconds)}s (the shortest you can book)`}
+      />
 
       <div className="mkt-upload-row">
         <button type="button" className="mkt-outline" disabled={!canSave} onClick={onSave}>
-          {busy ? 'Saving…' : 'Save ticker'}
+          {busy ? 'Saving…' : (alreadySaved ? 'Saved' : 'Save ticker')}
         </button>
       </div>
       {error ? <p className="mkt-upload-error">{error}</p> : null}
@@ -1599,12 +1746,12 @@ function TickerPanel({ reference, account, productName, maxChars = 140, onCreati
         <ul className="mkt-creative-list">
           {saved.map((c) => (
             <li key={c.embedId}>
-              <span className={`mkt-creative-status mkt-creative-${c.status}`}>
-                {CREATIVE_STATUS[c.status] || c.status}
-              </span>
+              <CreativeStatus c={c} />
               <span className="mkt-creative-meta">
                 {c.message}
-                {c.note ? ` · ${c.note}` : ''}
+                {` · ${c.tickerStyle === 'hold' ? 'slides in and pauses' : 'crawls'}`}
+                {c.minSeconds ? `, at least ${c.minSeconds}s` : ''}
+                {c.note && !rejectedWithNote(c) ? ` · ${c.note}` : ''}
               </span>
               <a href={c.clickUrl} target="_blank" rel="noopener noreferrer">Check the link</a>
             </li>
@@ -1644,6 +1791,7 @@ function CreativePanel({ reference, account, maxSeconds, bannerSpec, onCreatives
   }, [reference, onCreatives]);
 
   useEffect(() => { refresh(); }, [refresh]);
+  usePollWhileUnsettled(creatives, refresh);
 
   async function onFile(e) {
     const file = e.target.files && e.target.files[0];
@@ -1815,9 +1963,7 @@ function CreativePanel({ reference, account, maxSeconds, bannerSpec, onCreatives
         <ul className="mkt-creative-list">
           {creatives.map((c) => (
             <li key={c.embedId}>
-              <span className={`mkt-creative-status mkt-creative-${c.status}`}>
-                {CREATIVE_STATUS[c.status] || c.status}
-              </span>
+              <CreativeStatus c={c} />
               <span className="mkt-creative-meta">
                 {/* Its size, not a verdict. Whether a given still is banner-shaped
                     is the attach route's call — creativeSpecError() on the server is
@@ -1828,7 +1974,7 @@ function CreativePanel({ reference, account, maxSeconds, bannerSpec, onCreatives
                   : c.kind === 'text'
                     ? `Ticker · ${c.message}`
                     : (c.durationSeconds ? `${c.durationSeconds}s` : 'duration unknown')}
-                {c.note ? ` · ${c.note}` : ''}
+                {c.note && !rejectedWithNote(c) ? ` · ${c.note}` : ''}
               </span>
               {c.kind === 'image' ? (
                 // The banner itself, not a link to it. Whether a still works as a
@@ -2607,7 +2753,7 @@ export default function Advertise({ openLoginModal }) {
                       reference={wizRef.reference}
                       account={wizRef.hiveAccount}
                       productName={wizRef.projectName}
-                      maxChars={pricing?.formats?.find((f) => f.key === 'video_ticker')?.creativeSpec?.maxChars}
+                      format={pricing?.formats?.find((f) => f.key === 'video_ticker')}
                       onCreatives={setWizCreativeList}
                     />
                   ) : (
@@ -2663,6 +2809,8 @@ export default function Advertise({ openLoginModal }) {
                     production={wizType === 'ticker' ? null : bookProduction}
                     awaitingApproval={wizRef.status !== 'approved'}
                     lockFormat={WIZ_FORMAT[wizType] || 'video_roll'}
+                    account={wizRef.hiveAccount}
+                    productName={wizRef.projectName}
                   />
                   <div className="mkt-wiz-actions">
                     <button type="button" className="mkt-secondary" onClick={() => goStep(2)}>
@@ -2960,7 +3108,7 @@ export default function Advertise({ openLoginModal }) {
                       reference={lookupRef.trim()}
                       account={lookup.hiveAccount}
                       productName={lookup.projectName}
-                      maxChars={pricing?.formats?.find((f) => f.key === 'video_ticker')?.creativeSpec?.maxChars}
+                      format={pricing?.formats?.find((f) => f.key === 'video_ticker')}
                       onCreatives={setCreativeList}
                     />
                   )}
@@ -2983,6 +3131,8 @@ export default function Advertise({ openLoginModal }) {
                     view={ptab}
                     step={ptab === 'book' ? bookStep : null}
                     onBooked={() => setBookStep(3)}
+                    account={lookup.hiveAccount}
+                    productName={lookup.projectName}
                   />
                 )}
 

@@ -94,8 +94,35 @@
   to { transform: translateX(-100%); }
 }
 
+/* 'hold', in four parts of the booked time:
+     0-20%   eases in from the right edge: fast, slowing to the pan's speed (to rest when it fits; curve set by the component),
+     20-70%  a slow pan from its start to its end: takes over at the entry's speed and
+             glides to a stop as the end comes into view (no movement when it fits,
+             because start and end are then the same centred spot),
+     70-80%  rests with its end in view,
+     80-100% eases out past the left edge (gathers speed as it goes).
+   Positions are measured in px by the component. */
+.ticker-track.is-hold {
+  padding-left: 0;
+  animation-name: ticker-hold;
+  // The entry's curve (every later keyframe names its own).
+  animation-timing-function: var(--ticker-in-ease, cubic-bezier(0.2, 0.9, 0.65, 1));
+}
+
+@keyframes ticker-hold {
+  // No timing function here: the entry takes the ELEMENT's (see .is-hold), because a
+  // var() inside a keyframe's timing function is not resolved and falls back to ease.
+  0% { transform: translateX(var(--ticker-from)); }
+  20% { transform: translateX(var(--ticker-start)); animation-timing-function: cubic-bezier(0.3, 0.3, 0.6, 1); }
+  70% { transform: translateX(var(--ticker-end)); animation-timing-function: linear; }
+  80% { transform: translateX(var(--ticker-end)); animation-timing-function: cubic-bezier(0.64, 0, 0.78, 0); }
+  100% { transform: translateX(var(--ticker-to)); }
+}
+
 @media (prefers-reduced-motion: reduce) {
-  .ticker-track {
+  // .is-hold named too: its own rule is more specific and would keep it moving.
+  .ticker-track,
+  .ticker-track.is-hold {
     animation: none;
     padding-left: 0;
     max-width: 100%;
@@ -104,15 +131,25 @@
   }
 }
 
-/* Phones: the controls bar is shorter and the frame is small, so the strip is too. */
-@media (max-width: 600px) {
-  .watch-ticker {
-    height: 28px;
-    font-size: 12px;
-  }
+/* Phones: the controls bar is shorter and the frame is small, so the strip is too.
+   The mixin is shared with .is-compact, which the /advertise preview sets on its
+   "Phone" stage, so that preview is the phone strip and not a narrow desktop one. */
+@mixin ticker-compact {
+  height: 28px;
+  font-size: 12px;
 
   .ticker-avatar {
     width: 18px;
     height: 18px;
+  }
+}
+
+.watch-ticker.is-compact {
+  @include ticker-compact;
+}
+
+@media (max-width: 600px) {
+  .watch-ticker {
+    @include ticker-compact;
   }
 }

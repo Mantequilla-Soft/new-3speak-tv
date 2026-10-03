@@ -27,11 +27,21 @@
 # └────────────────────────────────────────────────────────────────────────────┘
 map $http_user_agent $threespeak_share_backend {
     default                                                                                                                                              http://127.0.0.1:5173;
-    "~*facebookexternalhit|Facebot|Twitterbot|Discordbot|TelegramBot|WhatsApp|LinkedInBot|Slackbot|Embedly|Pinterest|vkShare|Applebot|Googlebot|bingbot" http://127.0.0.1:4023;
+    "~*facebookexternalhit|Facebot|Twitterbot|Discordbot|TelegramBot|WhatsApp|LinkedInBot|Slackbot|Embedly|Pinterest|vkShare|Applebot|Googlebot|bingbot|GPTBot|OAI-SearchBot|ChatGPT-User|ClaudeBot|Claude-SearchBot|Claude-User|PerplexityBot|Perplexity-User|CCBot|DuckAssistBot|MistralAI-User" http://127.0.0.1:4023;
+}
+
+# AI assistants (ChatGPT, Claude, Perplexity and their crawlers) read pages
+# without running JS, so the SPA shell tells them nothing. `/` and `/about`
+# go to the sidecar's plain-HTML "what 3Speak is" page for these UAs only
+# (server/og-site.cjs); Googlebot and humans keep the real SPA there.
+map $http_user_agent $threespeak_ai_backend {
+    default http://127.0.0.1:5173;
+    "~*GPTBot|OAI-SearchBot|ChatGPT-User|ClaudeBot|Claude-SearchBot|Claude-User|PerplexityBot|Perplexity-User|CCBot|DuckAssistBot|MistralAI-User" http://127.0.0.1:4023;
 }
 
 server {
     server_name preview.3speak.tv;
+    include snippets/crawler-policy.conf;  # conf.d/blocked-bots.conf
 
     client_max_body_size 0;
 
@@ -45,7 +55,10 @@ server {
     }
 
     location /upload-api/ {
-        proxy_pass https://video.3speak.tv/;
+        # Runtime DNS: resolve per request so a DNS blip cannot block nginx startup.
+        set $up_video video.3speak.tv;
+        rewrite ^/upload-api/(.*)$ /$1 break;
+        proxy_pass https://$up_video;
         proxy_http_version 1.1;
         proxy_ssl_server_name on;
         proxy_ssl_name video.3speak.tv;
@@ -61,7 +74,10 @@ server {
     }
 
     location /image-api/ {
-        proxy_pass https://images.3speak.tv/;
+        # Runtime DNS: resolve per request so a DNS blip cannot block nginx startup.
+        set $up_images images.3speak.tv;
+        rewrite ^/image-api/(.*)$ /$1 break;
+        proxy_pass https://$up_images;
         proxy_http_version 1.1;
         proxy_set_header Host images.3speak.tv;
         proxy_set_header Origin "";
@@ -70,7 +86,11 @@ server {
     }
 
     location /hive-image-api/ {
-        proxy_pass https://images.hive.blog/;
+        # Runtime DNS: resolve per request so a DNS blip cannot block nginx startup.
+        set $up_hiveimg images.hive.blog;
+        rewrite ^/hive-image-api/(.*)$ /$1 break;
+        proxy_pass https://$up_hiveimg;
+        proxy_ssl_name images.hive.blog;
         proxy_http_version 1.1;
         proxy_ssl_server_name on;
         proxy_set_header Host images.hive.blog;
@@ -118,6 +138,42 @@ server {
         proxy_set_header X-Forwarded-Proto $scheme;
         proxy_buffering off;
     }
+    # What 3Speak is, for AI agents (see the $threespeak_ai_backend map).
+    location = / {
+        proxy_pass $threespeak_ai_backend$request_uri;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection "upgrade";
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_buffering off;
+        proxy_hide_header Cache-Control;
+        add_header Cache-Control "no-store" always;
+    }
+    location = /about {
+        proxy_pass $threespeak_ai_backend$request_uri;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection "upgrade";
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_buffering off;
+        proxy_hide_header Cache-Control;
+        add_header Cache-Control "no-store" always;
+    }
+    # sitemap.xml lists these two; the sidecar builds them from checker feeds
+    # (cached 6h). Every UA. Without this they fell through to the SPA (HTML, 200).
+    location ~ ^/sitemap-(videos|channels)\.xml$ {
+        proxy_pass http://127.0.0.1:4023;
+        proxy_http_version 1.1;
+        proxy_set_header Host $host;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_read_timeout 90s;
+    }
     # Discord inline-video MP4s (server/og-video.cjs, served by the OG sidecar).
     # Every UA, not just bots: Discord fetches the file through its media proxy
     # AND straight from clients. The sidecar holds a request open while a cold
@@ -132,6 +188,20 @@ server {
         proxy_read_timeout 120s;
         proxy_buffering off;
     }
+    # Spotlight creator link pages — canonical public URL is /links/<username>
+    # (chrome-free standalone HTML from the :4021 API for speed).
+    location ~ ^/links/(?<spuser>[^/@]+)/?$ {
+        proxy_pass http://localhost:4021/spotlight-page/$spuser;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+    # Legacy /@user/links → 301 to the new canonical /links/user. MUST precede ^/@.
+    location ~ ^/@(?<spuserlegacy>[^/]+)/links/?$ {
+        return 301 /links/$spuserlegacy;
+    }
+
     location ~ ^/@ {
         proxy_pass $threespeak_share_backend$request_uri;
         proxy_http_version 1.1;
@@ -146,6 +216,17 @@ server {
 
     # Everything else → Vite dev server. The Upgrade/Connection headers are
     # required for Vite's HMR websocket to work through the proxy.
+    # Podcast / RSS feed for a channel, served by the checker (routes/rss.js).
+    # Canonical URL is 3speak.tv/rss/<username>.xml — podcast apps and readers
+    # subscribe to this, so it has to live on the site domain, not the API host.
+    # MUST precede `location /` or the SPA catch-all answers it with HTML.
+    location ~ ^/rss/(?<rssfile>.+\.xml)$ {
+        proxy_pass http://127.0.0.1:3131/rss/$rssfile;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
     location / {
         proxy_pass http://127.0.0.1:5173;
         proxy_http_version 1.1;
@@ -156,6 +237,15 @@ server {
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
         proxy_set_header X-Forwarded-Proto $scheme;
         proxy_buffering off;
+
+        # This is a Vite DEV server — its modules must never be edge-cached.
+        # Cloudflare otherwise caches .js by extension (rewriting the origin's
+        # `no-cache` to max-age=14400), and after an HMR/restart it serves stale
+        # or mismatched modules → "Loading failed for the module" that a browser
+        # hard-refresh can't clear (it's cached at the edge). Force `no-store` so
+        # CF and browsers always refetch dev content.
+        proxy_hide_header Cache-Control;
+        add_header Cache-Control "no-store" always;
     }
 
     listen [::]:443 ssl; # managed by Certbot

@@ -1683,12 +1683,31 @@ $mkt-sub: 12px;
     gap: 6px;
   }
 
+  .mkt-ticker-preview-head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+
+    .mkt-pay-ccy { margin: 0; }
+  }
+
+  /* The top slice of a player at a real player's width: what decides how fast the
+     line moves and whether a held one fits. Narrower containers just get narrower. */
   .mkt-ticker-stage {
     position: relative;
+    width: 100%;
+    max-width: 854px;
     height: 72px;
     border-radius: 8px;
     overflow: hidden;
     background: linear-gradient(180deg, #0d0d0d, #2a2a2a);
+
+    &.is-phone {
+      max-width: 375px;
+      height: 56px;
+    }
 
   }
 
@@ -1797,6 +1816,15 @@ $mkt-sub: 12px;
 
   .mkt-creative-ready { color: #1e8f5e; }
   .mkt-creative-rejected { color: #c0392b; }
+
+  // A rejection with the team's reason: may wrap, and the reason reads as a sentence.
+  .mkt-creative-status.has-note {
+    white-space: normal;
+    border-radius: 8px;
+    border: 1px solid currentColor;
+  }
+
+  .mkt-creative-note { font-weight: 500; }
 
   .mkt-creative-meta { color: var(--text-muted); }
 
