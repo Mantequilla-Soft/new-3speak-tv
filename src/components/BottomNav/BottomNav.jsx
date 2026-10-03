@@ -105,7 +105,7 @@ const BottomNav = ({ openLoginModal, onOpenProfileMenu, profileMenuOpen }) => {
         {authenticated ? (
           <span className="bottom-nav-avatar-wrap">
             <img
-              src={`https://images.hive.blog/u/${user}/avatar/small`}
+              src={`/img/u/${user}/avatar/small`}
               alt={user}
               className="bottom-nav-avatar"
             />

@@ -1730,12 +1730,12 @@ const VideoShort = () => {
         hivePermlink: chainData.hivePermlink,
         user: {
           username: `@${chainData.author}`,
-          avatar: `https://images.hive.blog/u/${chainData.author}/avatar/small`,
+          avatar: `/img/u/${chainData.author}/avatar/small`,
           isSubscribed: false,
         },
         caption: chainData.title || '',
         audio: soundLabel(chainData.sound, `@${chainData.author}`),
-        albumArt: `https://images.hive.blog/u/${chainData.author}/avatar/small`,
+        albumArt: `/img/u/${chainData.author}/avatar/small`,
         stats: { likes: 0, dislikes: 0, comments: 0, shares: 0, remixes: 0, views: 0, payout: '0.00' },
         isLiked: false,
         isDisliked: false,
@@ -2112,7 +2112,7 @@ const VideoShort = () => {
       },
       user: {
         username: `@${user}`,
-        avatar: `https://images.hive.blog/u/${user}/avatar/small`
+        avatar: `/img/u/${user}/avatar/small`
       },
       has_voted: false
     };

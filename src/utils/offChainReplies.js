@@ -63,7 +63,7 @@ export async function mergeOffChainReplies(rootPermlink, comments) {
           profile: {
             images: {
               avatar: isHiveAuthor
-                ? `https://images.hive.blog/u/${name}/avatar/small`
+                ? `/img/u/${name}/avatar/small`
                 : handleAvatar(name),
             },
           },

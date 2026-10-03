@@ -227,7 +227,7 @@ function SearchList({searchTerm, setSearchTerm, setIsDropdownOpen, isDropdownOpe
 
                     onClick={()=>{handleNavigateCommunity(community.name)}}
                     >
-                        <img src={`https://images.hive.blog/u/${community.name}/avatar/small`} alt="" /><span>{community.title}</span>
+                        <img src={`/img/u/${community.name}/avatar/small`} alt="" /><span>{community.title}</span>
                       {/* {community.title} (hive-{community.name}) */}
                     </div>
                   </li>

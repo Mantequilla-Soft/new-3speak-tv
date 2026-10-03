@@ -256,7 +256,7 @@ function ReactionPlayer({
             const children = c.children > 0 ? await buildTree(c.author, c.permlink, depth + 1) : [];
             return {
               author: c.author,
-              avatar: `https://images.hive.blog/u/${c.author}/avatar/small`,
+              avatar: `/img/u/${c.author}/avatar/small`,
               body: bodyHtml,
               children,
             };

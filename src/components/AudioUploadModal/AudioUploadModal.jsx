@@ -1779,7 +1779,7 @@ function MainPostStep({
         onClick={() => setCommunityOpen(true)}
       >
         {community
-          ? <><img src={`https://images.hive.blog/u/${community.name}/avatar/small`} alt="" />{community.title || community.name}</>
+          ? <><img src={`/img/u/${community.name}/avatar/small`} alt="" />{community.title || community.name}</>
           : <>Select community</>}
         <span className="audio-upload-community-change">Change</span>
       </button>

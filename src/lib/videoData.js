@@ -57,7 +57,7 @@ export async function fetchHiveProfile(username) {
     name: p.name || username,
     about: p.about || '',
     images: {
-      avatar: p.profile_image || `https://images.hive.blog/u/${username}/avatar/small`,
+      avatar: p.profile_image || `/img/u/${username}/avatar/small`,
       cover: p.cover_image || '',
     },
   };
@@ -234,7 +234,7 @@ export async function fetchVideoDetails(author, permlink) {
       username: post.author,
       profile: {
         name: post.author,
-        images: { avatar: `https://images.hive.blog/u/${post.author}/avatar/small` },
+        images: { avatar: `/img/u/${post.author}/avatar/small` },
       },
     },
     stats: {

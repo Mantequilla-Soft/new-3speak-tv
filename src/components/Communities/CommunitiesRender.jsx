@@ -304,7 +304,7 @@ function CommunitiesRender() {
                 <img
                   src={
                     community.image
-                    || 'https://images.hive.blog/u/' + community.name + '/avatar/small?size=icon'
+                    || '/img/u/' + community.name + '/avatar/small?size=icon'
                   }
                   alt={community.title}
                   className="blog-image"

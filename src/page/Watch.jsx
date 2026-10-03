@@ -75,7 +75,7 @@ function buildScheduledVideoDetails(doc) {
     author: {
       id: doc.owner,
       username: doc.owner,
-      profile: { name: doc.owner, images: { avatar: `https://images.hive.blog/u/${doc.owner}/avatar/small` } },
+      profile: { name: doc.owner, images: { avatar: `/img/u/${doc.owner}/avatar/small` } },
     },
     stats: { num_comments: 0, num_votes: 0, total_hive_reward: 0 },
     community: doc.parentPermlink ? { _id: doc.parentPermlink, title: doc.parentPermlink } : null,
@@ -1268,7 +1268,7 @@ function Watch({ v2 = false }) {
           markers.push({
             pct: parentTimestamp,
             pctIsSeconds: true,
-            avatar: `https://images.hive.blog/u/${comment.author}/avatar/small`,
+            avatar: `/img/u/${comment.author}/avatar/small`,
             label: comment.author,
             permlink: comment.permlink,
             replyCount,

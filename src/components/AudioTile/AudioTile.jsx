@@ -17,7 +17,7 @@ function audioThumb(item) {
   // Fall back to the cover of the first playlist this audio was published into
   // (set by the checker via $lookup against the playlists collection).
   if (item.playlist_thumbnail) return item.playlist_thumbnail;
-  return `https://images.hive.blog/u/${item.owner}/avatar/small`;
+  return `/img/u/${item.owner}/avatar/small`;
 }
 
 function fmt(sec) {

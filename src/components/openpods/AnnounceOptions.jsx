@@ -143,7 +143,7 @@ export default function AnnounceOptions({ announceType, isPremium = false, onCha
             >
               {typeof community !== 'string' && community?.name && (
                 <img
-                  src={`https://images.hive.blog/u/${community.name}/avatar/small`}
+                  src={`/img/u/${community.name}/avatar/small`}
                   alt=""
                   className="hh-announce-opts__avatar"
                 />

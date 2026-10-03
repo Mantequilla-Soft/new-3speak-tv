@@ -135,7 +135,7 @@ function BadgesRender() {
                     a badge created here had a blank face in this grid while its
                     art was sitting in the index the whole time. */}
                 <img
-                  src={badge.image || `https://images.hive.blog/u/${badge.account}/avatar`}
+                  src={badge.image || `/img/u/${badge.account}/avatar`}
                   alt={badge.title}
                   loading="lazy"
                 />

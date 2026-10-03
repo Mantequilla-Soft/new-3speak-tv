@@ -328,7 +328,7 @@ function TestingLogin3() {
               <div className="list-acct-wrap">
                 {accountList.map((list, idx) => (
                   <div key={idx} className='wrap' onClick={() => handleSwitchAccount(list.username)}>
-                    <img src={`https://images.hive.blog/u/${list.username}/avatar/small`} alt={list.username} />
+                    <img src={`/img/u/${list.username}/avatar/small`} alt={list.username} />
                     <span>{list.username}</span>
                     <LuLogOut size={12} onClick={(e) => { e.stopPropagation(); removeAccount(list.username); }} />
                   </div>

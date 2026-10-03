@@ -67,7 +67,7 @@ function audioThumb(item) {
   if (!item) return fallbackImg;
   const fixed = fixVideoThumbnail({ thumbnail_url: item.thumbnail_url, thumbnail: item.thumbnail_url });
   if (!fixed || fixed === fallbackImg || fixed === '/images/speak.jpg') {
-    return `https://images.hive.blog/u/${item.owner}/avatar/small`;
+    return `/img/u/${item.owner}/avatar/small`;
   }
   return fixed;
 }
