@@ -1409,6 +1409,19 @@ const CREATIVE_STATUS = {
  *
  * Re-reads while anything is unsettled and stops once nothing is, so a settled list
  * makes no requests. Not while the tab is hidden; it catches up the moment it is back. */
+/* The status pill. A rejection carries the team's reason INSIDE the pill: as a trailing
+ * "· reason" in the grey description it read as part of the ad's own text, and the one
+ * thing the advertiser needs to act on was the easiest to miss. */
+const rejectedWithNote = (c) => c.status === 'rejected' && !!c.note;
+function CreativeStatus({ c }) {
+  const label = CREATIVE_STATUS[c.status] || c.status;
+  return (
+    <span className={`mkt-creative-status mkt-creative-${c.status}${rejectedWithNote(c) ? ' has-note' : ''}`}>
+      {rejectedWithNote(c) ? <>{label}: <span className="mkt-creative-note">{c.note}</span></> : label}
+    </span>
+  );
+}
+
 const CREATIVE_POLL_MS = 20000;
 const isUnsettled = (c) => c.status === 'pending' || c.status === 'review';
 function usePollWhileUnsettled(list, refresh) {
@@ -1733,14 +1746,12 @@ function TickerPanel({ reference, account, productName, format = null, onCreativ
         <ul className="mkt-creative-list">
           {saved.map((c) => (
             <li key={c.embedId}>
-              <span className={`mkt-creative-status mkt-creative-${c.status}`}>
-                {CREATIVE_STATUS[c.status] || c.status}
-              </span>
+              <CreativeStatus c={c} />
               <span className="mkt-creative-meta">
                 {c.message}
                 {` · ${c.tickerStyle === 'hold' ? 'slides in and pauses' : 'crawls'}`}
                 {c.minSeconds ? `, at least ${c.minSeconds}s` : ''}
-                {c.note ? ` · ${c.note}` : ''}
+                {c.note && !rejectedWithNote(c) ? ` · ${c.note}` : ''}
               </span>
               <a href={c.clickUrl} target="_blank" rel="noopener noreferrer">Check the link</a>
             </li>
@@ -1952,9 +1963,7 @@ function CreativePanel({ reference, account, maxSeconds, bannerSpec, onCreatives
         <ul className="mkt-creative-list">
           {creatives.map((c) => (
             <li key={c.embedId}>
-              <span className={`mkt-creative-status mkt-creative-${c.status}`}>
-                {CREATIVE_STATUS[c.status] || c.status}
-              </span>
+              <CreativeStatus c={c} />
               <span className="mkt-creative-meta">
                 {/* Its size, not a verdict. Whether a given still is banner-shaped
                     is the attach route's call — creativeSpecError() on the server is
@@ -1965,7 +1974,7 @@ function CreativePanel({ reference, account, maxSeconds, bannerSpec, onCreatives
                   : c.kind === 'text'
                     ? `Ticker · ${c.message}`
                     : (c.durationSeconds ? `${c.durationSeconds}s` : 'duration unknown')}
-                {c.note ? ` · ${c.note}` : ''}
+                {c.note && !rejectedWithNote(c) ? ` · ${c.note}` : ''}
               </span>
               {c.kind === 'image' ? (
                 // The banner itself, not a link to it. Whether a still works as a
