@@ -67,6 +67,7 @@ import ShareChooserModal from '../components/Chat/ShareChooserModal';
 import { useMyPlaylists, isVideoInPlaylist } from '../hooks/useMyPlaylists';
 import { addToPlaylist, removeFromPlaylist, createPlaylistAndAdd } from '../utils/playlistOperations';
 import useTranslation from '../hooks/useTranslation';
+import { useTranslation as useI18n } from 'react-i18next';
 import TranslateButton from '../components/TranslateButton/TranslateButton';
 import useSubtitles from '../hooks/useSubtitles';
 import SubtitleOverlay from '../components/SubtitleOverlay/SubtitleOverlay';
@@ -273,6 +274,7 @@ const VideoShort = () => {
   // Optional comment input under the short (Settings → "Comment bar on shorts").
   const shortsCommentBar = useAppStore((s) => s.shortsCommentBar);
   const { translate: onTranslate, getTranslation, clearTranslation, translating } = useTranslation();
+  const { t } = useI18n();
   // The spot currently interrupting the feed, or null. Held here rather than in the
   // videos array on purpose: an ad is not a short, and injecting one into the feed
   // would hand it comments, votes, an author and a permlink it does not have.
@@ -754,18 +756,18 @@ const VideoShort = () => {
     const video = videos[currentIndex];
     if (!video) return;
     if (video.hivePostMissing) {
-      toast.error("Voting isn't available for this post");
+      toast.error(t('shorts.errors.votingUnavailable'));
       return;
     }
     // Open the vote tooltip (same as clicking the heart in the sidebar)
     if (!authenticated) {
-      toast.error('Login to vote');
+      toast.error(t('shorts.errors.loginToVote'));
       return;
     }
     setSelectedComment({ author: video.author, permlink: video.hivePermlink });
     setShowTooltip(true);
     setActiveTooltipPermlink(video.hivePermlink);
-  }, [videos, currentIndex, authenticated, adPlaying]);
+  }, [videos, currentIndex, authenticated, adPlaying, t]);
 
   // Desktop mouse handlers: mouseDown starts a long-press timer (mute/unmute), mouseUp cancels it,
   // click fires the single/double-click gesture (play/pause or upvote).
@@ -1058,7 +1060,7 @@ const VideoShort = () => {
       });
 
       return () => {
-        timeouts.forEach(t => clearTimeout(t));
+        timeouts.forEach(tid => clearTimeout(tid));
       };
     }
   }, [currentIndex, videos, sendCommandToVideo]);
@@ -2068,7 +2070,7 @@ const VideoShort = () => {
   const toggleVoteTooltip = (author, permlink) => {
     // Require authentication before opening the vote tooltip
     if (!authenticated) {
-      toast.error('Login to complete this operation');
+      toast.error(t('shorts.errors.loginToComplete'));
       return;
     }
 
@@ -2080,17 +2082,17 @@ const VideoShort = () => {
   /* ---------- POST COMMENT ---------- */
   const handlePostComment = async (parentAuthor, parentPermlink, commentText, isReply = false) => {
     if (!commentText.trim()) {
-      toast.error('Please enter a comment');
+      toast.error(t('shorts.comments.enterComment'));
       return;
     }
 
     if (!parentAuthor || !parentPermlink) {
-      toast.error("Comments aren't available for this post");
+      toast.error(t('shorts.comments.unavailable'));
       return;
     }
 
     if (!user || !isLoggedIn()) {
-      toast.error('Please login to comment');
+      toast.error(t('shorts.comments.loginToComment'));
       return;
     }
 
@@ -2103,7 +2105,7 @@ const VideoShort = () => {
       permlink: newPermlink,
       body: commentText,
       createdAt: new Date().toISOString(),
-      timeAgo: 'Just now',
+      timeAgo: t('shorts.comments.justNow'),
       netVotes: 0,
       children: [],
       stats: {
@@ -2150,10 +2152,10 @@ const VideoShort = () => {
         commentText,
         { app: '3speak/new-version' }
       );
-      toast.success('Comment posted successfully!');
+      toast.success(t('shorts.comments.posted'));
     } catch (err) {
       console.error('Comment failed:', err);
-      toast.error('Comment failed: ' + (err.message || 'please try again'));
+      toast.error(t('shorts.comments.failed', { message: err.message || t('shorts.pleaseTryAgain') }));
       // Roll back the optimistic comment + count.
       setVideos(prev =>
         prev.map((v, idx) => {
@@ -2250,8 +2252,8 @@ const VideoShort = () => {
     // Use shorts route with video parameter
     const shareUrl = `${window.location.origin}/shorts?v=${currentVideo.author}/${currentVideo.permlink}`;
     const shareData = {
-      title: currentVideo.caption || '3Speak Short',
-      text: `Check out this short by ${currentVideo.user.username} on 3Speak!`,
+      title: currentVideo.caption || t('shorts.share.defaultTitle'),
+      text: t('shorts.share.text', { user: currentVideo.user.username }),
       url: shareUrl
     };
 
@@ -2259,11 +2261,11 @@ const VideoShort = () => {
       // Check if Web Share API is supported (mainly mobile)
       if (navigator.share && navigator.canShare && navigator.canShare(shareData)) {
         await navigator.share(shareData);
-        toast.success('Shared successfully!');
+        toast.success(t('shorts.share.shared'));
       } else {
         // Fallback: Copy to clipboard
         await navigator.clipboard.writeText(shareUrl);
-        toast.success('Link copied to clipboard!');
+        toast.success(t('shorts.share.linkCopied'));
       }
     } catch (err) {
       // User cancelled share or error occurred
@@ -2271,10 +2273,10 @@ const VideoShort = () => {
         // Try clipboard as fallback
         try {
           await navigator.clipboard.writeText(shareUrl);
-          toast.success('Link copied to clipboard!');
+          toast.success(t('shorts.share.linkCopied'));
         } catch (clipboardErr) {
           console.error('Share failed:', err);
-          toast.error('Failed to share');
+          toast.error(t('shorts.share.failed'));
         }
       }
     }
@@ -2283,11 +2285,11 @@ const VideoShort = () => {
   /* ---------- RESHARE FUNCTIONALITY ---------- */
   const handleReshare = async () => {
     if (!currentVideo || !user) {
-      toast.error('Log in to reshare');
+      toast.error(t('shorts.reshare.loginRequired'));
       return;
     }
     if (currentVideo.hivePostMissing) {
-      toast.error("Reshare isn't available for this post");
+      toast.error(t('shorts.reshare.unavailable'));
       return;
     }
     if (hasReshared) return;
@@ -2300,9 +2302,9 @@ const VideoShort = () => {
       setHasReshared(true);
       setReshareCount(prev => prev + 1);
       setReshareUsers(prev => [...prev, { username: user, reshared_at: Math.floor(Date.now() / 1000) }]);
-      toast.success('Reshared!');
+      toast.success(t('shorts.reshare.done'));
     } else {
-      toast.error('Failed to reshare');
+      toast.error(t('shorts.reshare.failed'));
     }
   };
 
@@ -2328,13 +2330,13 @@ const VideoShort = () => {
         setEditorVideoType(mediaType);
         setShowEditorModal(true);
       } else {
-        toast.error('Could not resolve video URL for remix');
+        toast.error(t('shorts.remix.noUrl'));
       }
     } catch (err) {
       console.error('[VideoShort] Remix URL resolve failed:', err);
-      toast.error('Failed to load video for remix');
+      toast.error(t('shorts.remix.loadFailed'));
     }
-  }, [videos, currentIndex]);
+  }, [videos, currentIndex, t]);
 
   // Close remix dropdown on click outside
   useEffect(() => {
@@ -2412,22 +2414,22 @@ const VideoShort = () => {
   const [watchLaterBusy, setWatchLaterBusy] = useState(false);
 
   const toggleWatchLater = useCallback(async () => {
-    if (!user) { toast.error('Login to save shorts'); return; }
+    if (!user) { toast.error(t('shorts.watchLater.loginRequired')); return; }
     if (!currentVideo || watchLaterBusy) return;
-    if (currentVideo.hivePostMissing) { toast.error("This short can't be saved"); return; }
+    if (currentVideo.hivePostMissing) { toast.error(t('shorts.watchLater.cantSave')); return; }
     const { author, hivePermlink } = currentVideo;
     setWatchLaterBusy(true);
     try {
       if (isInWatchLater) {
         await removeFromPlaylist(watchLaterPlaylist.id, author, hivePermlink);
-        toast.success('Removed from Watch Later');
+        toast.success(t('shorts.watchLater.removed'));
       } else if (watchLaterPlaylist) {
         await addToPlaylist(watchLaterPlaylist.id, author, hivePermlink, 0);
-        toast.success('Saved to Watch Later');
+        toast.success(t('shorts.watchLater.saved'));
       } else {
         // First ever save — create the playlist and add in one go.
         await createPlaylistAndAdd(WATCH_LATER_NAME, 'private', generatePlaylistId(), author, hivePermlink);
-        toast.success('Saved to Watch Later');
+        toast.success(t('shorts.watchLater.saved'));
       }
       // The playlist API is eventually consistent (it writes to Hive), so give it a
       // moment before refetching — same delay the watch page uses.
@@ -2436,11 +2438,11 @@ const VideoShort = () => {
         queryClient.invalidateQueries({ queryKey: ['myPlaylists'] });
       }, 2000);
     } catch (err) {
-      toast.error('Failed: ' + (err.message || 'please try again'));
+      toast.error(t('shorts.watchLater.failed', { message: err.message || t('shorts.pleaseTryAgain') }));
     } finally {
       setWatchLaterBusy(false);
     }
-  }, [user, currentVideo, watchLaterBusy, isInWatchLater, watchLaterPlaylist, refetchPlaylists, queryClient]);
+  }, [user, currentVideo, watchLaterBusy, isInWatchLater, watchLaterPlaylist, refetchPlaylists, queryClient, t]);
 
   // Switch the shorts feed mode. Clears the ?v= param first: we replaceState it to
   // the short in view as you swipe, and the refetch would otherwise treat it as a
@@ -2504,7 +2506,7 @@ const VideoShort = () => {
       // the last one. Guarded on interestsMode, which flips false the moment we
       // switch, so this can't fire twice.
       if (interestsMode && !feedUser && !hasMore && !loadingMoreRef.current) {
-        toast.info("That's all the shorts for your interests — showing Discover");
+        toast.info(t('shorts.feed.interestsExhausted'));
         switchFeedMode('discover');
       }
       return;
@@ -3071,8 +3073,8 @@ const VideoShort = () => {
     return (
       <main className="short-main no-bottom-bar">
         <div className="errorState">
-          <p>Error loading shorts: {error}</p>
-          <button onClick={() => window.location.reload()}>Retry</button>
+          <p>{t('shorts.feed.loadError', { error })}</p>
+          <button onClick={() => window.location.reload()}>{t('common.actions.retry')}</button>
         </div>
       </main>
     );
@@ -3085,9 +3087,9 @@ const VideoShort = () => {
       return (
         <main className="short-main no-bottom-bar">
           <div className="emptyState shortsInterestsEmpty">
-            <p>No shorts match your interests right now.</p>
+            <p>{t('shorts.feed.noInterestMatches')}</p>
             <button type="button" onClick={() => switchFeedMode('discover')}>
-              Switch to Discover
+              {t('shorts.feed.switchToDiscover')}
             </button>
           </div>
         </main>
@@ -3096,7 +3098,7 @@ const VideoShort = () => {
     return (
       <main className="short-main no-bottom-bar">
         <div className="emptyState">
-          <p>No shorts available</p>
+          <p>{t('shorts.feed.empty')}</p>
         </div>
       </main>
     );
@@ -3113,7 +3115,7 @@ const VideoShort = () => {
         onMouseDown={(e) => { e.stopPropagation(); e.preventDefault(); }}
       >
         <RotateCcw size={48} />
-        <p>Please rotate your device to portrait mode</p>
+        <p>{t('shorts.rotateDevice')}</p>
       </div>
       <AmbientGlow getVideoEl={() => videoElRef.current} glowMode={glowMode} />
 
@@ -3124,8 +3126,8 @@ const VideoShort = () => {
           {currentVideo?.title
             ? `3S | ${currentVideo.title}`
             : currentVideo?.author
-              ? `3S | Short by @${currentVideo.author}`
-              : '3S | Shorts'}
+              ? t('shorts.pageTitle.byAuthor', { author: currentVideo.author })
+              : t('shorts.pageTitle.default')}
         </title>
       </Helmet>
 
@@ -3272,7 +3274,7 @@ const VideoShort = () => {
               <div
                 className="shortsFeedSwitch"
                 role="tablist"
-                aria-label="Shorts feed"
+                aria-label={t('shorts.feed.ariaLabel')}
                 onTouchStart={(e) => e.stopPropagation()}
                 onTouchMove={(e) => e.stopPropagation()}
                 onTouchEnd={(e) => e.stopPropagation()}
@@ -3285,7 +3287,7 @@ const VideoShort = () => {
                   className={shortsFeedMode !== 'interests' ? 'active' : ''}
                   onClick={(e) => { e.stopPropagation(); switchFeedMode('discover'); }}
                 >
-                  Discover
+                  {t('shorts.feed.discover')}
                 </button>
                 <button
                   type="button"
@@ -3295,14 +3297,14 @@ const VideoShort = () => {
                   onClick={(e) => {
                     e.stopPropagation();
                     if (!hasInterests) {
-                      toast.error("You haven't picked any interests yet — choose them in Settings");
+                      toast.error(t('shorts.feed.noInterests'));
                       return;
                     }
                     switchFeedMode('interests');
                   }}
-                  title={hasInterests ? 'Only shorts matching your interests' : 'Pick some interests first'}
+                  title={hasInterests ? t('shorts.feed.interestsTitle') : t('shorts.feed.pickInterestsFirst')}
                 >
-                  My interests
+                  {t('shorts.feed.myInterests')}
                 </button>
               </div>
             )}
@@ -3311,7 +3313,7 @@ const VideoShort = () => {
               onClick={(e) => { e.stopPropagation(); toggleGlow(); }}
               onTouchStart={(e) => e.stopPropagation()}
               onTouchEnd={(e) => { e.stopPropagation(); e.preventDefault(); toggleGlow(); }}
-              title={glowMode === 'off' ? 'Ambient light: subtle' : glowMode === 'page' ? 'Ambient light: vivid' : 'Ambient light: off'}
+              title={glowMode === 'off' ? t('shorts.glow.subtle') : glowMode === 'page' ? t('shorts.glow.vivid') : t('shorts.glow.off')}
             >
               {glowMode === 'off' && <Moon size={16} />}
               {glowMode === 'page' && <Lightbulb size={16} />}
@@ -3337,9 +3339,9 @@ const VideoShort = () => {
             </div>
             {/* Playback mode fading text indicator */}
             <div className={`modeIndicatorText ${showModeIndicator ? 'visible' : ''}`}>
-              {playbackMode === 'auto-replay' ? 'Auto-Replay' :
-               playbackMode === 'auto-swipe' ? 'Auto-Swipe' :
-               'Manual'}
+              {playbackMode === 'auto-replay' ? t('shorts.playbackMode.autoReplay') :
+               playbackMode === 'auto-swipe' ? t('shorts.playbackMode.autoSwipe') :
+               t('shorts.playbackMode.manual')}
             </div>
             {/* Replay button for 'none' mode when video ends */}
             {videoEnded && playbackMode === 'none' && (
@@ -3421,7 +3423,7 @@ const VideoShort = () => {
                 className={`shortsSubtitleItem${!selectedSubtitleLang ? ' active' : ''}`}
                 onClick={() => { selectSubtitleLang(null); setSubtitleMenuOpen(false); }}
               >
-                Off
+                {t('shorts.subtitles.off')}
               </button>
               {subtitleLanguages.map((sub) => {
                 const langInfo = SUPPORTED_LANGUAGES.find(l => l.code === sub.lang);
@@ -3445,7 +3447,7 @@ const VideoShort = () => {
           {shortHistoryRef.current.length > 0 && (
             <button className="shortBackBtn" onClick={(e) => { e.stopPropagation(); handleShortBack(); }}>
               <ArrowLeft size={18} />
-              <span>Back</span>
+              <span>{t('common.actions.back')}</span>
             </button>
           )}
 
@@ -3483,7 +3485,7 @@ const VideoShort = () => {
                               the last resort, not the second choice. */}
                           <span className="chainRootTitle">
                             {rootStep.title || rootStep.body
-                              || (rootIsVideo ? 'Original video' : 'Snap')}
+                              || (rootIsVideo ? t('shorts.chain.originalVideo') : t('shorts.chain.snap'))}
                           </span>
                           <div className="chainRootMeta">
                             <AuthorBadge author={rootStep.author} compact noLink />
@@ -3498,7 +3500,7 @@ const VideoShort = () => {
                           to={rootUrl}
                           className="chainActionBtn"
                           onClick={(e) => e.stopPropagation()}
-                          title={rootStep.shortPermlink ? 'Open short' : (rootIsVideo ? 'Watch' : 'Open snap')}
+                          title={rootStep.shortPermlink ? t('shorts.chain.openShort') : (rootIsVideo ? t('shorts.chain.watch') : t('shorts.chain.openSnap'))}
                         >
                           {rootStep.shortPermlink
                             ? <Camera size={14} />
@@ -3546,18 +3548,18 @@ const VideoShort = () => {
                                   <AuthorBadge author={step.author} compact noLink />
                                   {step.type === 'video' && (
                                     step.shortPermlink ? (
-                                      <Link to={`/shorts?v=${step.author}/${step.shortPermlink}`} className="chainActionBtn chainActionBtn--sm" onClick={(e) => e.stopPropagation()} title="Open short">
+                                      <Link to={`/shorts?v=${step.author}/${step.shortPermlink}`} className="chainActionBtn chainActionBtn--sm" onClick={(e) => e.stopPropagation()} title={t('shorts.chain.openShort')}>
                                         <Camera size={11} />
                                       </Link>
                                     ) : (
-                                      <Link to={`/watch?v=${step.author}/${step.permlink}`} className="chainActionBtn chainActionBtn--sm" onClick={(e) => e.stopPropagation()} title="Watch">
+                                      <Link to={`/watch?v=${step.author}/${step.permlink}`} className="chainActionBtn chainActionBtn--sm" onClick={(e) => e.stopPropagation()} title={t('shorts.chain.watch')}>
                                         <Video size={11} />
                                       </Link>
                                     )
                                   )}
                                 </div>
                                 <span className={`chainChildTitle${isExpanded ? ' chainChildTitle--full' : ''}`}>
-                                  {step.title || (step.type === 'comment' ? 'Comment' : 'Reaction')}
+                                  {step.title || (step.type === 'comment' ? t('shorts.chain.comment') : t('shorts.chain.reaction'))}
                                 </span>
                                 {isExpanded && step.body && (
                                   <p className="chainChildText">{step.body}</p>
@@ -3584,7 +3586,7 @@ const VideoShort = () => {
                                 <AuthorBadge author={currentVideo.author} compact noLink />
                               </div>
                               <span className={`chainChildTitle${isCurExpanded ? ' chainChildTitle--full' : ''}`}>
-                                {currentVideo.caption || 'This video'}
+                                {currentVideo.caption || t('shorts.chain.thisVideo')}
                               </span>
                             </div>
                           );
@@ -3596,12 +3598,12 @@ const VideoShort = () => {
                             <div className="chainChild chainChild--video chainChild--downstream">
                               <div className="chainChildHeader">
                                 <AuthorBadge author={child.author} compact noLink />
-                                <Link to={`/shorts?v=${child.shortAuthor || child.author}/${child.shortPermlink}`} className="chainActionBtn chainActionBtn--sm" onClick={(e) => e.stopPropagation()} title="Open short">
+                                <Link to={`/shorts?v=${child.shortAuthor || child.author}/${child.shortPermlink}`} className="chainActionBtn chainActionBtn--sm" onClick={(e) => e.stopPropagation()} title={t('shorts.chain.openShort')}>
                                   <Camera size={11} />
                                 </Link>
                               </div>
                               <span className="chainChildTitle">
-                                {child.title || 'Remix'}
+                                {child.title || t('shorts.chain.remix')}
                               </span>
                               {child.duration > 0 && (
                                 <span className="chainChildDuration">
@@ -3616,7 +3618,7 @@ const VideoShort = () => {
                   </div>
                 )}
                 <button className="chainToggleBtn" onClick={(e) => { e.stopPropagation(); setParentCardVisible(prev => { const next = !prev; localStorage.setItem('3speak-chain-visible', next ? '1' : '0'); return next; }); }}>
-                  {!parentCardVisible && <span className="chainToggleLabel">show reaction chain</span>}
+                  {!parentCardVisible && <span className="chainToggleLabel">{t('shorts.chain.show')}</span>}
                   {parentCardVisible ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
                 </button>
               </div>
@@ -3685,7 +3687,7 @@ const VideoShort = () => {
                     setReportTarget({ type: 'short', author: currentVideo.author, permlink: currentVideo.permlink });
                     setIsReportOpen(true);
                   }}
-                  title="Report"
+                  title={t('common.actions.report')}
                 >
                   <MdFlag size={14} />
                 </button>
@@ -3693,9 +3695,9 @@ const VideoShort = () => {
               <p className="captionText">
                 {renderCaption(translatedCaption || currentVideo.caption)}
                 {!captionExpanded && currentVideo.mantecurated && (
-                  <span className="shortsCuratedBadge shortsCuratedBadge--inline" title="Curated by Mantequilla" onClick={(e) => { e.stopPropagation(); navigate('/t/mantecurated'); }}>
+                  <span className="shortsCuratedBadge shortsCuratedBadge--inline" title={t('shorts.caption.curatedBy')} onClick={(e) => { e.stopPropagation(); navigate('/t/mantecurated'); }}>
                     <img src={mantequillaLogo} alt="" />
-                    Curated
+                    {t('shorts.caption.curated')}
                   </span>
                 )}
               </p>
@@ -3721,14 +3723,14 @@ const VideoShort = () => {
                       setReportTarget({ type: 'short', author: currentVideo.author, permlink: currentVideo.permlink });
                       setIsReportOpen(true);
                     }}
-                    title="Report"
+                    title={t('common.actions.report')}
                   >
                     <MdFlag size={14} />
                   </button>
                   {translatedCaption ? (
                     <button className="captionDismissTranslation" onClick={() => setTranslatedCaption(null)}>
                       <MdTranslate size={12} />
-                      <span>Show original</span>
+                      <span>{t('shorts.caption.showOriginal')}</span>
                     </button>
                   ) : (
                     <TranslateButton
@@ -3738,9 +3740,9 @@ const VideoShort = () => {
                     />
                   )}
                   {currentVideo.mantecurated && (
-                    <span className="shortsCuratedBadge" title="Curated by Mantequilla" onClick={(e) => { e.stopPropagation(); navigate('/t/mantecurated'); }}>
+                    <span className="shortsCuratedBadge" title={t('shorts.caption.curatedBy')} onClick={(e) => { e.stopPropagation(); navigate('/t/mantecurated'); }}>
                       <img src={mantequillaLogo} alt="" />
-                      Curated
+                      {t('shorts.caption.curated')}
                     </span>
                   )}
                 </div>
@@ -3753,7 +3755,7 @@ const VideoShort = () => {
                 </div>
               )}
               {!captionExpanded && currentVideo.caption?.length > 60 && (
-                <span className="captionMore">more</span>
+                <span className="captionMore">{t('shorts.caption.more')}</span>
               )}
             </div>
             <div className="audioMarquee">
@@ -3767,7 +3769,7 @@ const VideoShort = () => {
 
         {/* SIDEBAR */}
         <div className="actionSidebar" onClick={(e) => e.stopPropagation()}>
-          <div className={`actionItem${user && currentVideo.author && user.toLowerCase() === currentVideo.author.toLowerCase() ? ' disabled' : ''}`} onClick={(e) => { e.stopPropagation(); if (user && currentVideo.author && user.toLowerCase() === currentVideo.author.toLowerCase()) return; if (currentVideo.hivePostMissing) { toast.error("Voting isn't available for this post"); return; } toggleVoteTooltip(currentVideo.author, currentVideo.hivePermlink); }}>
+          <div className={`actionItem${user && currentVideo.author && user.toLowerCase() === currentVideo.author.toLowerCase() ? ' disabled' : ''}`} onClick={(e) => { e.stopPropagation(); if (user && currentVideo.author && user.toLowerCase() === currentVideo.author.toLowerCase()) return; if (currentVideo.hivePostMissing) { toast.error(t('shorts.errors.votingUnavailable')); return; } toggleVoteTooltip(currentVideo.author, currentVideo.hivePermlink); }}>
             <div className={`actionButton ${currentVideo.isLiked ? 'liked' : ''}`}>
               <Heart size={24} fill={currentVideo.isLiked ? '#ff2d55' : 'none'} />
             </div>
@@ -3814,14 +3816,14 @@ const VideoShort = () => {
             <div className={`actionButton ${isInWatchLater ? 'saved' : ''}`}>
               <Bookmark size={24} fill={isInWatchLater ? 'currentColor' : 'none'} />
             </div>
-            <span className="actionLabel">{isInWatchLater ? 'Saved' : 'Save'}</span>
+            <span className="actionLabel">{isInWatchLater ? t('common.actions.saved') : t('common.actions.save')}</span>
           </div>
 
           <div className="actionItem" onClick={(e) => { e.stopPropagation(); setShareChooserOpen(true); }}>
             <div className="actionButton">
               <Share2 size={24} />
             </div>
-            <span className="actionLabel">Share</span>
+            <span className="actionLabel">{t('common.actions.share')}</span>
           </div>
 
           {FEATURE_EDITOR && authenticated && (() => {
@@ -3831,7 +3833,7 @@ const VideoShort = () => {
                 <div className="actionButton">
                   <WandSparkles size={24} />
                 </div>
-                <span className="actionLabel">Remix</span>
+                <span className="actionLabel">{t('shorts.actions.remix')}</span>
               </div>
             ) : null;
           })()}
@@ -3845,7 +3847,7 @@ const VideoShort = () => {
               <div className="actionButton">
                 <Megaphone size={24} />
               </div>
-              <span className="actionLabel">Promote</span>
+              <span className="actionLabel">{t('shorts.actions.promote')}</span>
             </div>
           )}
 
@@ -3855,7 +3857,7 @@ const VideoShort = () => {
               <div className="actionButton">
                 <Pencil size={24} />
               </div>
-              <span className="actionLabel">Edit</span>
+              <span className="actionLabel">{t('common.actions.edit')}</span>
             </div>
           )}
 
@@ -3924,7 +3926,7 @@ const VideoShort = () => {
         />
 
         <div className="commentsHeader">
-          <span className="commentsTitle">Comments</span>
+          <span className="commentsTitle">{t('shorts.comments.title')}</span>
           <span className="commentsCount">{currentVideo.stats.comments}</span>
           <div className="commentsHeaderActions">
             <button className="headerBtn" onClick={handleToggleComments}>
@@ -3937,15 +3939,15 @@ const VideoShort = () => {
           {commentsLoading ? (
             <div className="commentsLoading">
               <Loader2 className="spinner" size={24} />
-              <span>Loading comments...</span>
+              <span>{t('shorts.comments.loading')}</span>
             </div>
           ) : currentVideo.comments?.length === 0 ? (
             <div className="noComments">
-              <p>{currentVideo.hivePostMissing ? 'Comments are closed' : 'No comments yet'}</p>
+              <p>{currentVideo.hivePostMissing ? t('shorts.comments.closed') : t('shorts.comments.none')}</p>
               <span>
                 {currentVideo.hivePostMissing
-                  ? "The Hive post behind this short was removed, so it can no longer take comments or votes."
-                  : 'Be the first to comment!'}
+                  ? t('shorts.comments.postRemoved')
+                  : t('shorts.comments.beFirst')}
               </span>
             </div>
           ) : (
@@ -3999,8 +4001,8 @@ const VideoShort = () => {
               // so the box is disabled. Without this it still read "Add a
               // comment..." and simply refused to focus, which reads as broken.
               currentVideo.hivePostMissing
-                ? "Comments aren't available for this post"
-                : user ? "Add a comment..." : "Login to comment"
+                ? t('shorts.comments.unavailable')
+                : user ? t('shorts.comments.addPlaceholder') : t('shorts.comments.loginPlaceholder')
             }
             value={newComment}
             onChange={(e) => {
@@ -4054,8 +4056,8 @@ const VideoShort = () => {
             rows={1}
             placeholder={
               currentVideo.hivePostMissing
-                ? "Comments aren't available for this post"
-                : user ? 'Add a comment…' : 'Login to comment'
+                ? t('shorts.comments.unavailable')
+                : user ? t('shorts.comments.addPlaceholderBar') : t('shorts.comments.loginPlaceholder')
             }
             value={newComment}
             onChange={(e) => {
@@ -4077,7 +4079,7 @@ const VideoShort = () => {
             className="sendCommentBtn"
             onClick={() => handlePostComment(currentVideo.author, currentVideo.hivePermlink, newComment, false)}
             disabled={!user || !newComment.trim() || postingComment || currentVideo.hivePostMissing}
-            aria-label="Send comment"
+            aria-label={t('shorts.comments.send')}
           >
             {postingComment ? <Loader2 size={18} className="spinner" /> : <Send size={18} />}
           </button>
@@ -4128,6 +4130,7 @@ const CommentItem = ({
   clearTranslation,
   translating,
 }) => {
+  const { t } = useI18n();
   const [showReplies, setShowReplies] = useState(false);
   const [collapsed, setCollapsed] = useState(false);
   const [translatedText, setTranslatedText] = useState(null);
@@ -4209,18 +4212,18 @@ const CommentItem = ({
             <div className="comment-translation">
               <div className="comment-translation-header">
                 <MdTranslate size={12} />
-                <span>Translation</span>
+                <span>{t('shorts.comments.translation')}</span>
                 <button className="comment-translation-dismiss" onClick={() => { setTranslatedText(null); clearTranslation?.(comment.permlink); }}>&times;</button>
               </div>
               <p>{translatedText}</p>
             </div>
           )}
-          {translateError && <div className="comment-translation comment-translation--error"><p>Translation failed</p></div>}
+          {translateError && <div className="comment-translation comment-translation--error"><p>{t('shorts.comments.translationFailed')}</p></div>}
           <div className="commentActions">
             <button
               className={`comment-report-btn${isReported('comment', `${comment.author}/${comment.permlink}`) ? ' reported' : ''}`}
               onClick={() => setIsReportOpen(true)}
-              title="Report comment"
+              title={t('shorts.comments.reportComment')}
             >
               <MdFlag size={14} />
             </button>
@@ -4243,7 +4246,7 @@ const CommentItem = ({
                 setReplyText('');
               }}
             >
-              Reply
+              {t('common.actions.reply')}
             </button>
             <CommentVoteTooltip
               voteKind="comment"
@@ -4271,7 +4274,7 @@ const CommentItem = ({
               <input
                 ref={replyInputRef}
                 type="text"
-                placeholder="Write a reply..."
+                placeholder={t('shorts.comments.replyPlaceholder')}
                 value={replyText}
                 onChange={(e) => setReplyText(e.target.value)}
                 disabled={postingComment}
@@ -4289,13 +4292,13 @@ const CommentItem = ({
                   onPickGif={(url) => insertAtCursor(replyInputRef.current, replyText, gifMarkdown(url), setReplyText)}
                 />
                 <div className="replyActions">
-                  <button onClick={() => setActiveReply(null)}>Cancel</button>
+                  <button onClick={() => setActiveReply(null)}>{t('common.actions.cancel')}</button>
                   <button
                     className="submitReply"
                     onClick={() => handlePostComment(comment.author, comment.permlink, replyText, true)}
                     disabled={!replyText.trim() || postingComment}
                   >
-                    {postingComment ? <Loader2 size={14} className="spinner" /> : 'Reply'}
+                    {postingComment ? <Loader2 size={14} className="spinner" /> : t('common.actions.reply')}
                   </button>
                 </div>
               </div>
@@ -4308,7 +4311,7 @@ const CommentItem = ({
               className="viewRepliesBtn"
               onClick={() => setShowReplies(!showReplies)}
             >
-              {showReplies ? 'Hide' : 'View'} {comment.children.length} {comment.children.length === 1 ? 'reply' : 'replies'}
+              {showReplies ? t('shorts.comments.hideReplies', { count: comment.children.length }) : t('shorts.comments.viewReplies', { count: comment.children.length })}
               <ArrowDown size={14} style={{ transform: showReplies ? 'rotate(180deg)' : 'none' }} />
             </button>
           )}

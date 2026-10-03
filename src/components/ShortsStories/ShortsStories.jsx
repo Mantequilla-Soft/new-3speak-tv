@@ -7,6 +7,7 @@ import { SHORTS_STORIES_URL } from "../../utils/config";
 import { useAppStore } from "../../lib/store";
 import HiveAvatar from "../HiveAvatar/HiveAvatar";
 import "./ShortsStories.scss";
+import { useTranslation } from "react-i18next";
 
 const fetchShortsStories = async (username) => {
   const params = {};
@@ -53,6 +54,7 @@ export const useShortsStories = () => {
  * - hiddenOnMobile: boolean — hide the entire bar on mobile (for shorts player, where swipe is used instead)
  */
 const ShortsStories = ({ activeCreator, onCreatorSelect, compact = false, hiddenOnMobile = false }) => {
+  const { t } = useTranslation();
   const { authenticated, user } = useAppStore();
   const navigate = useNavigate();
   const scrollRef = useRef(null);
@@ -186,7 +188,7 @@ const ShortsStories = ({ activeCreator, onCreatorSelect, compact = false, hidden
                       <FaPlus />
                     </div>
                   </div>
-                  <span className="story-username">You</span>
+                  <span className="story-username">{t("shorts.stories.you")}</span>
                 </div>
               )}
 

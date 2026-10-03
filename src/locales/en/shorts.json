@@ -1,0 +1,115 @@
+{
+  "loading": "Loading shorts...",
+  "pleaseTryAgain": "please try again",
+  "rotateDevice": "Please rotate your device to portrait mode",
+  "pageTitle": {
+    "byAuthor": "3S | Short by @{{author}}",
+    "default": "3S | Shorts"
+  },
+  "stories": {
+    "you": "You"
+  },
+  "errors": {
+    "votingUnavailable": "Voting isn't available for this post",
+    "loginToVote": "Login to vote",
+    "loginToComplete": "Login to complete this operation"
+  },
+  "feed": {
+    "ariaLabel": "Shorts feed",
+    "discover": "Discover",
+    "myInterests": "My interests",
+    "interestsTitle": "Only shorts matching your interests",
+    "pickInterestsFirst": "Pick some interests first",
+    "noInterests": "You haven't picked any interests yet — choose them in Settings",
+    "interestsExhausted": "That's all the shorts for your interests — showing Discover",
+    "noInterestMatches": "No shorts match your interests right now.",
+    "switchToDiscover": "Switch to Discover",
+    "empty": "No shorts available",
+    "loadError": "Error loading shorts: {{error}}"
+  },
+  "glow": {
+    "subtle": "Ambient light: subtle",
+    "vivid": "Ambient light: vivid",
+    "off": "Ambient light: off"
+  },
+  "playbackMode": {
+    "autoReplay": "Auto-Replay",
+    "autoSwipe": "Auto-Swipe",
+    "manual": "Manual"
+  },
+  "subtitles": {
+    "off": "Off"
+  },
+  "chain": {
+    "originalVideo": "Original video",
+    "snap": "Snap",
+    "openShort": "Open short",
+    "watch": "Watch",
+    "openSnap": "Open snap",
+    "comment": "Comment",
+    "reaction": "Reaction",
+    "thisVideo": "This video",
+    "remix": "Remix",
+    "show": "show reaction chain"
+  },
+  "caption": {
+    "curatedBy": "Curated by Mantequilla",
+    "curated": "Curated",
+    "showOriginal": "Show original",
+    "more": "more"
+  },
+  "actions": {
+    "remix": "Remix",
+    "promote": "Promote"
+  },
+  "share": {
+    "defaultTitle": "3Speak Short",
+    "text": "Check out this short by {{user}} on 3Speak!",
+    "shared": "Shared successfully!",
+    "linkCopied": "Link copied to clipboard!",
+    "failed": "Failed to share"
+  },
+  "reshare": {
+    "loginRequired": "Log in to reshare",
+    "unavailable": "Reshare isn't available for this post",
+    "done": "Reshared!",
+    "failed": "Failed to reshare"
+  },
+  "remix": {
+    "noUrl": "Could not resolve video URL for remix",
+    "loadFailed": "Failed to load video for remix"
+  },
+  "watchLater": {
+    "loginRequired": "Login to save shorts",
+    "cantSave": "This short can't be saved",
+    "removed": "Removed from Watch Later",
+    "saved": "Saved to Watch Later",
+    "failed": "Failed: {{message}}"
+  },
+  "comments": {
+    "title": "Comments",
+    "loading": "Loading comments...",
+    "closed": "Comments are closed",
+    "none": "No comments yet",
+    "postRemoved": "The Hive post behind this short was removed, so it can no longer take comments or votes.",
+    "beFirst": "Be the first to comment!",
+    "unavailable": "Comments aren't available for this post",
+    "addPlaceholder": "Add a comment...",
+    "addPlaceholderBar": "Add a comment…",
+    "loginPlaceholder": "Login to comment",
+    "send": "Send comment",
+    "enterComment": "Please enter a comment",
+    "loginToComment": "Please login to comment",
+    "justNow": "Just now",
+    "posted": "Comment posted successfully!",
+    "failed": "Comment failed: {{message}}",
+    "translation": "Translation",
+    "translationFailed": "Translation failed",
+    "reportComment": "Report comment",
+    "replyPlaceholder": "Write a reply...",
+    "viewReplies_one": "View {{count}} reply",
+    "viewReplies_other": "View {{count}} replies",
+    "hideReplies_one": "Hide {{count}} reply",
+    "hideReplies_other": "Hide {{count}} replies"
+  }
+}

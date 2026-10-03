@@ -1,5 +1,6 @@
 import EmojiPickerReact from "emoji-picker-react";
 import { useAppStore } from "../../lib/store";
+import { useTranslation } from "react-i18next";
 
 /**
  * Emoji picker for the Tiptap toolbar. Wraps emoji-picker-react — the same
@@ -9,6 +10,7 @@ import { useAppStore } from "../../lib/store";
  * in editor.scss.
  */
 export default function EmojiPicker({ onSelect }) {
+  const { t } = useTranslation();
   const appTheme = useAppStore((s) => s.theme);
 
   return (
@@ -19,7 +21,7 @@ export default function EmojiPicker({ onSelect }) {
       width={250}
       height={300}
       previewConfig={{ showPreview: false }}
-      searchPlaceholder="Search emoji"
+      searchPlaceholder={t("editor.emoji.searchPlaceholder")}
     />
   );
 }
