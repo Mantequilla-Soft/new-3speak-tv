@@ -38,14 +38,17 @@ const TEXT_METHODS = ['success', 'error', 'warning', 'info', 'loading', 'message
  * Bind a category, and get back something shaped exactly like sonner's `toast`.
  *
  * The heading is translated when each toast is shown, from
- * src/locales/<lang>/toastCategories.json (keyed by the English category), so a
+ * src/locales/<lang>/toastCategories.json (keyed by the English category, spaces as _), so a
  * module keeps its plain `toastIn('Upload')` and still speaks the reader's
  * language. A category missing there just shows in English.
  *
  * @param {string} category Heading shown above every message from this module.
  */
 export function toastIn(englishCategory) {
-  const heading = () => t(`toastCategories.${englishCategory}`, { defaultValue: englishCategory });
+  // Keys are the English category with anything but letters/digits/_/- turned into
+  // "_" ("Sign in" → Sign_in): the translation editor only accepts plain key names.
+  const key = `toastCategories.${String(englishCategory).replace(/[^\w-]/g, '_')}`;
+  const heading = () => t(key, { defaultValue: englishCategory });
 
   const headed = (send) => (message, options) => {
     const opts = options || {};
