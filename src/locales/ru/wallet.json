@@ -1,0 +1,50 @@
+{
+  "tabs": {
+    "overview": "Обзор",
+    "transactions": "Транзакции",
+    "aria": "Разделы кошелька"
+  },
+  "errors": {
+    "fetchBalances": "Не удалось получить балансы",
+    "needKeychain": "Для перевода нужно расширение Keychain"
+  },
+  "header": {
+    "mine": "МОЙ кошелёк",
+    "ofUser": "Кошелёк {{user}}"
+  },
+  "assets": "Активы",
+  "transfer": "Перевод",
+  "transferModal": {
+    "loginRequired": "Войдите, чтобы сделать перевод",
+    "insufficient": "Недостаточно средств",
+    "invalidUsername": "Неверное имя пользователя",
+    "success": "Перевод выполнен!",
+    "failed": "Перевод не удался: {{error}}",
+    "title": "Перевод {{coin}}",
+    "amountLabel": "Сумма ({{coin}})",
+    "balance": "Баланс {{balance}}",
+    "max": "Макс.",
+    "recipientLabel": "Имя получателя",
+    "recipientPlaceholder": "Введите имя пользователя Hive",
+    "memoLabel": "Мемо",
+    "memoPlaceholder": "Введите мемо",
+    "confirm": "Подтвердить перевод"
+  },
+  "history": {
+    "loadFailed": "Не удалось загрузить транзакции",
+    "title": "История транзакций",
+    "cols": {
+      "type": "Тип",
+      "amount": "Сумма",
+      "account": "Аккаунт",
+      "date": "Дата",
+      "memo": "Мемо"
+    },
+    "types": {
+      "transfer": "Перевод",
+      "claim": "Получение награды",
+      "received": "Получено"
+    },
+    "claimedRewards": "Полученные награды"
+  }
+}

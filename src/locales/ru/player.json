@@ -1,0 +1,104 @@
+{
+  "controls": {
+    "rewind10": "Назад на 10 с",
+    "forward10": "Вперёд на 10 с",
+    "reactToMoment": "Отреагировать на этот момент",
+    "mute": "Выключить звук",
+    "unmute": "Включить звук",
+    "playerSize": "Размер плеера: {{size}}",
+    "sizeStandard": "Стандартный",
+    "pip": "Картинка в картинке",
+    "autoplayOn": "Автовоспроизведение: вкл.",
+    "autoplayOff": "Автовоспроизведение: выкл.",
+    "ambientSubtle": "Фоновая подсветка: мягкая",
+    "ambientVivid": "Фоновая подсветка: яркая",
+    "ambientOff": "Фоновая подсветка: выкл.",
+    "playbackSpeed": "Скорость воспроизведения",
+    "speedNormal": "Обычная",
+    "quality": "Качество",
+    "qualityAuto": "Авто",
+    "fullscreen": "Во весь экран",
+    "exitFullscreen": "Выйти из полноэкранного режима",
+    "markerReplies_one": "({{count}} ответ)",
+    "markerReplies_few": "({{count}} ответа)",
+    "markerReplies_many": "({{count}} ответов)",
+    "markerReplies_other": "({{count}} ответа)"
+  },
+  "subtitles": {
+    "title": "Субтитры",
+    "off": "Выкл.",
+    "font": "Шрифт",
+    "size": "Размер",
+    "textColor": "Цвет текста",
+    "textBorder": "Обводка текста",
+    "borderColor": "Цвет обводки",
+    "background": "Фон",
+    "none": "Нет",
+    "fonts": {
+      "sansSerif": "Без засечек",
+      "serif": "С засечками",
+      "monospace": "Моноширинный"
+    }
+  },
+  "mini": {
+    "untitled": "Видео"
+  },
+  "playlist": {
+    "previous": "Предыдущее видео",
+    "next": "Следующее видео",
+    "close": "Закрыть плейлист"
+  },
+  "overlay": {
+    "replay": "Повторить"
+  },
+  "reactions": {
+    "translation": "Перевод",
+    "translationFailed": "Не удалось перевести",
+    "videoReaction": "Видеореакция",
+    "comment": "Комментарий",
+    "previous": "Назад",
+    "next": "Далее",
+    "hide": "Скрыть реакции",
+    "hideShort": "Скрыть",
+    "loadingReplies": "Загрузка ответов...",
+    "sizeTitle": "Размер: {{size}}",
+    "sizes": {
+      "small": "S",
+      "medium": "M",
+      "standard": "Ст",
+      "big": "L",
+      "cinema": "Кино"
+    },
+    "sizeNames": {
+      "small": "Маленький",
+      "medium": "Средний",
+      "standard": "Стандартный",
+      "big": "Большой",
+      "cinema": "Кинотеатр"
+    }
+  },
+  "reactionUpload": {
+    "authorized": "@threespeak авторизован — теперь вы можете опубликовать реакцию",
+    "authFailed": "Авторизация не удалась. Попробуйте ещё раз.",
+    "webcamDenied": "Нет доступа к веб-камере",
+    "shortTooLong": "Shorts должны быть не длиннее {{max}}. Снимите галочку «Показать в 3Speak Shorts» или выберите видео покороче.",
+    "uploadingVideo": "Загрузка видео...",
+    "noEmbedUrl": "Загрузка прошла, но URL для встраивания не получен",
+    "publishingComment": "Публикация комментария...",
+    "posted": "Видеореакция опубликована!",
+    "postFailed": "Не удалось опубликовать комментарий",
+    "uploadFailed": "Загрузка не удалась",
+    "uploadVideo": "Загрузить видео",
+    "recordVideo": "Записать видео",
+    "startRecording": "Начать запись",
+    "stopRecording": "Остановить запись",
+    "recordedVideo": "Записанное видео",
+    "descriptionPlaceholder": "Добавьте описание к видеореакции...",
+    "showInShorts": "Показать в 3Speak Shorts",
+    "authNote": "Разрешите <b>@threespeak</b> публиковать реакцию от вашего имени.",
+    "authorizing": "Авторизация…",
+    "authorize": "Авторизовать @threespeak",
+    "uploading": "Загрузка...",
+    "postReaction": "Опубликовать реакцию"
+  }
+}

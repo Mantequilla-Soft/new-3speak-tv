@@ -1,0 +1,244 @@
+{
+  "leaderboard": {
+    "windows": {
+      "7d": "7 дней",
+      "30d": "30 дней",
+      "365d": "Год",
+      "all": "За всё время"
+    },
+    "windowsInSentence": {
+      "7d": "последние 7 дней",
+      "30d": "последние 30 дней",
+      "365d": "последний год",
+      "all": "всё время"
+    },
+    "metrics": {
+      "video_uploads": "Видео",
+      "short_uploads": "Shorts",
+      "video_watch_secs": "Время просмотра видео",
+      "short_watch_secs": "Время просмотра Shorts",
+      "tags_given": "Теги",
+      "streams": "Эфиры",
+      "stream_secs": "Время в эфире",
+      "stream_peak_viewers": "Пик зрителей",
+      "stream_viewers": "Подключения зрителей",
+      "boosts_received": "Полученные бусты",
+      "boost_amount_received": "Полученная сумма",
+      "boosts_given": "Отправленные бусты",
+      "boost_amount_given": "Отправленная сумма"
+    },
+    "metricsInSentence": {
+      "video_uploads": "видео",
+      "short_uploads": "Shorts",
+      "video_watch_secs": "время просмотра видео",
+      "short_watch_secs": "время просмотра Shorts",
+      "tags_given": "теги",
+      "streams": "эфиры",
+      "stream_secs": "время в эфире",
+      "stream_peak_viewers": "пик зрителей",
+      "stream_viewers": "подключения зрителей",
+      "boosts_received": "полученные бусты",
+      "boost_amount_received": "полученная сумма",
+      "boosts_given": "отправленные бусты",
+      "boost_amount_given": "отправленная сумма"
+    },
+    "blurbs": {
+      "video_uploads": "Загружено видео",
+      "short_uploads": "Загружено Shorts",
+      "video_watch_secs": "Секунды просмотра их видео",
+      "short_watch_secs": "Секунды просмотра их Shorts",
+      "tags_given": "Теги, поставленные другим видео",
+      "streams": "Начатые эфиры",
+      "stream_secs": "Общее время в эфире (только завершённые эфиры)",
+      "stream_peak_viewers": "Максимум зрителей одновременно (пиковое значение, а не сумма)",
+      "stream_viewers": "Подключения зрителей (объём, а не уникальный охват)",
+      "boosts_received": "Бусты, отправленные в их эфиры",
+      "boost_amount_received": "Общая сумма полученных бустов",
+      "boosts_given": "Бусты, которые они отправили другим стримерам",
+      "boost_amount_given": "Общая сумма отправленных ими бустов"
+    },
+    "blurbsInSentence": {
+      "video_uploads": "загружено видео",
+      "short_uploads": "загружено Shorts",
+      "video_watch_secs": "секунды просмотра их видео",
+      "short_watch_secs": "секунды просмотра их Shorts",
+      "tags_given": "теги, поставленные другим видео",
+      "streams": "начатые эфиры",
+      "stream_secs": "общее время в эфире (только завершённые эфиры)",
+      "stream_peak_viewers": "максимум зрителей одновременно (пиковое значение, а не сумма)",
+      "stream_viewers": "подключения зрителей (объём, а не уникальный охват)",
+      "boosts_received": "бусты, отправленные в их эфиры",
+      "boost_amount_received": "общая сумма полученных бустов",
+      "boosts_given": "бусты, которые они отправили другим стримерам",
+      "boost_amount_given": "общая сумма отправленных ими бустов"
+    },
+    "groups": {
+      "video": "Видео",
+      "streaming": "Эфиры"
+    },
+    "badgeNouns": {
+      "video_uploads": "Видео",
+      "short_uploads": "Shorts",
+      "video_watch_secs": "Просмотры",
+      "short_watch_secs": "Просмотры Shorts",
+      "tags_given": "Теггер"
+    },
+    "badgeLabel": "{{tier}} {{noun}}",
+    "badgeTitleAllTime": "Место №{{rank}} по показателю «{{what}}» за всё время",
+    "badgeTitleWindow": "Место №{{rank}} по показателю «{{what}}» за {{window}}"
+  },
+  "duration": {
+    "hoursMinutes": "{{h}} ч {{m}} мин",
+    "minutesSeconds": "{{m}} мин {{s}} с",
+    "seconds": "{{s}} с",
+    "aMoment": "мгновение",
+    "lessThanMinute": "меньше минуты"
+  },
+  "surf": {
+    "community": "Сообщество",
+    "allOf": "Вся категория «{{label}}»"
+  },
+  "social": {
+    "signingCancelled": "Подписание отменено",
+    "youtube": {
+      "placeholder": "@handle или UCxxxxxxxxxxxxxxxxxxxxxx",
+      "help": "Вставьте свой @handle на YouTube или ID канала UC…. Мы приведём его к ID канала."
+    },
+    "soundcloud": {
+      "placeholder": "your-profile или https://soundcloud.com/your-profile",
+      "help": "Вставьте URL своего профиля SoundCloud или просто имя пользователя из него. Разместите хеш в любом месте описания профиля."
+    }
+  },
+  "snaps": {
+    "retrying": "Контейнер Snaps пока не найден — повторяем (попытка {{attempt}})...",
+    "unreachable": "Не удалось связаться ни с одним узлом Hive, чтобы найти контейнер Snaps. Проверьте соединение и попробуйте снова.",
+    "unreachableWithError": "Не удалось связаться ни с одним узлом Hive, чтобы найти контейнер Snaps (последняя ошибка — {{error}}). Проверьте соединение и попробуйте снова."
+  },
+  "embed": {
+    "responsive": "Адаптивный"
+  },
+  "incubation": {
+    "requestFailed": "Запрос не удался ({{status}})",
+    "contactLoadFailed": "Не удалось загрузить ваши контактные данные",
+    "contactSaveFailed": "Не удалось сохранить ваши контактные данные",
+    "onlyButrauthBacklog": "Неопубликованные материалы инкубации бывают только у аккаунтов Butter Auth",
+    "publishFailed": "Публикация не удалась ({{status}})"
+  },
+  "routeError": {
+    "title": "Страница не загрузилась",
+    "body": "Часть приложения не скачалась. Обычно это значит, что новая версия вышла, пока эта вкладка была открыта. Перезагрузка подтянет её.",
+    "reload": "Перезагрузить",
+    "goHome": "На главную"
+  },
+  "seo": {
+    "defaultTitle": "3Speak — децентрализованная видеоплатформа",
+    "defaultDescription": "3Speak — децентрализованная платформа для видео на основе технологии блокчейна. Смотрите, загружайте и делитесь видео, получая награды в криптовалюте."
+  },
+  "uploadLinks": {
+    "regularVideo": "Обычное видео",
+    "verticalShort": "Вертикальный Shorts",
+    "musicAudio": "Музыка / аудио",
+    "groupChat": "Групповой чат",
+    "communitySnap": "Snap в сообществе",
+    "shortsEditor": "Редактор Shorts",
+    "goLive": "Начать эфир",
+    "streamStudio": "Студия эфиров",
+    "headings": {
+      "upload": "Загрузка",
+      "live": "Эфир",
+      "others": "Другое"
+    }
+  },
+  "chat": {
+    "connectFailed": "Не удалось подключиться к чату.",
+    "loginFirst": "Сначала войдите, чтобы пользоваться чатом.",
+    "roomNameRequired": "Нужно название комнаты."
+  },
+  "hiveAuth": {
+    "waiting": "Ожидаем подтверждения в HiveAuth...",
+    "title": "Нужно подтверждение в HiveAuth",
+    "hint": "Откройте приложение HiveAuth, чтобы подтвердить эту транзакцию"
+  },
+  "hiveApi": {
+    "keychainNotSigned": "Keychain не подписал транзакцию",
+    "loginToCreateCommunity": "Войдите, чтобы создать сообщество",
+    "loginFirst": "Сначала войдите",
+    "cancelled": "Операция отменена"
+  },
+  "openpod": {
+    "announced": "Эфир анонсирован в Hive!",
+    "announceFailed": "OpenPod запущен, но анонс в Hive опубликовать не удалось."
+  },
+  "appUpdate": {
+    "updating": "Обновляемся до последней версии ({{version}})…",
+    "reloadingForUpload": "Перезагружаем, чтобы ваша загрузка шла на новейшей сборке."
+  },
+  "auth": {
+    "switched": "Переключено на {{username}}!",
+    "keychainLoginTitle": "Вход через Hive"
+  },
+  "streamVod": {
+    "uploadKeyMissing": "Эфир завершён, но видео не удалось загрузить (нет ключа загрузки).",
+    "uploading": "Загружаем видео эфира… {{pct}}%",
+    "uploaded": "Видео эфира загружено — оно заменит трансляцию, когда кодирование завершится.",
+    "uploadFailed": "Эфир завершён, но загрузить видео не удалось.",
+    "saving": "Сохраняем видео эфира…",
+    "encoding": "Загружено — кодировщик обрабатывает ваше видео…",
+    "saved": "Видео эфира сохранено — оно заменит трансляцию, когда кодирование завершится.",
+    "saveFailed": "Эфир завершён, но видео не удалось сохранить: {{error}}.",
+    "uploadFailedShort": "загрузка не удалась",
+    "stillProcessing": "Эфир завершён — видео ещё обрабатывается; загляните в свой профиль чуть позже."
+  },
+  "embedPlayer": {
+    "unavailable": "Видео недоступно"
+  },
+  "followFeed": {
+    "title": "Лента подписок",
+    "error": "Ошибка получения видео"
+  },
+  "groups": {
+    "title": "Группы",
+    "badges": "Значки",
+    "subtitle": "Сообщества, в которые можно вступить, и значки, которые есть у людей, — в одном месте."
+  },
+  "watched": {
+    "removed": "Удалено из истории просмотров",
+    "removeFailed": "Не удалось удалить из истории просмотров",
+    "title": "Просмотренные",
+    "count_one": "{{count}} просмотренное",
+    "count_few": "{{count}} просмотренных",
+    "count_many": "{{count}} просмотренных",
+    "count_other": "{{count}} просмотренных",
+    "trackHistory": "Сохранять историю",
+    "videosTab": "Видео ({{count}})",
+    "shortsTab": "Shorts ({{count}})",
+    "loadFailed": "Не удалось загрузить историю просмотров. Попробуйте ещё раз.",
+    "emptyShorts": "Просмотренных Shorts пока нет",
+    "emptyVideos": "Просмотренных видео пока нет",
+    "removeTitle": "Удалить из истории просмотров",
+    "watchedAt": "Просмотрено {{when}}"
+  },
+  "watchStream": {
+    "saySomething": "Напишите что-нибудь…",
+    "waitingWallet": "Ожидаем ваш кошелёк…",
+    "signInToChat": "Войдите, чтобы писать в чат",
+    "sendMessage": "Отправить сообщение",
+    "notLive": "Этот эфир сейчас не идёт.",
+    "notFound": "По этой ссылке эфир не найден.",
+    "browse": "Смотреть эфиры",
+    "back": "Назад на 3Speak",
+    "seoTitle": "{{title}} (В ЭФИРЕ)",
+    "swipeNext": "Листайте к следующему эфиру",
+    "chat": "Чат",
+    "watchingNow": "👁 Сейчас смотрят: {{count}}",
+    "signInRaiseHand": "Войдите, чтобы поднять руку",
+    "copyLink": "Копировать ссылку на эфир",
+    "notAvailableLive": "Недоступно для прямых эфиров",
+    "vote": "Голосовать",
+    "comment": "Комментировать",
+    "liveChat": "Чат эфира",
+    "signInToJoin": "🔒 Войдите, чтобы присоединиться к чату.",
+    "moreTag": "Ещё #{{tag}}",
+    "moreVideos": "Ещё видео"
+  }
+}

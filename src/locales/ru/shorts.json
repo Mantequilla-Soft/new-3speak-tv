@@ -1,0 +1,119 @@
+{
+  "loading": "Загрузка Shorts...",
+  "pleaseTryAgain": "попробуйте ещё раз",
+  "rotateDevice": "Поверните устройство вертикально",
+  "pageTitle": {
+    "byAuthor": "3S | Shorts от @{{author}}",
+    "default": "3S | Shorts"
+  },
+  "stories": {
+    "you": "Вы"
+  },
+  "errors": {
+    "votingUnavailable": "Голосование за этот пост недоступно",
+    "loginToVote": "Войдите, чтобы голосовать",
+    "loginToComplete": "Войдите, чтобы выполнить это действие"
+  },
+  "feed": {
+    "ariaLabel": "Лента Shorts",
+    "discover": "Обзор",
+    "myInterests": "Мои интересы",
+    "interestsTitle": "Только Shorts по вашим интересам",
+    "pickInterestsFirst": "Сначала выберите интересы",
+    "noInterests": "Вы ещё не выбрали интересы — выберите их в настройках",
+    "interestsExhausted": "Это все Shorts по вашим интересам — показываем «Обзор»",
+    "noInterestMatches": "Сейчас нет Shorts по вашим интересам.",
+    "switchToDiscover": "Перейти в «Обзор»",
+    "empty": "Shorts нет",
+    "loadError": "Ошибка загрузки Shorts: {{error}}"
+  },
+  "glow": {
+    "subtle": "Фоновая подсветка: мягкая",
+    "vivid": "Фоновая подсветка: яркая",
+    "off": "Фоновая подсветка: выкл."
+  },
+  "playbackMode": {
+    "autoReplay": "Автоповтор",
+    "autoSwipe": "Автолистание",
+    "manual": "Вручную"
+  },
+  "subtitles": {
+    "off": "Выкл."
+  },
+  "chain": {
+    "originalVideo": "Оригинальное видео",
+    "snap": "Snap",
+    "openShort": "Открыть ролик",
+    "watch": "Смотреть",
+    "openSnap": "Открыть snap",
+    "comment": "Комментарий",
+    "reaction": "Реакция",
+    "thisVideo": "Это видео",
+    "remix": "Ремикс",
+    "show": "показать цепочку реакций"
+  },
+  "caption": {
+    "curatedBy": "Подборка от Mantequilla",
+    "curated": "Подборка",
+    "showOriginal": "Показать оригинал",
+    "more": "ещё"
+  },
+  "actions": {
+    "remix": "Ремикс",
+    "promote": "Продвинуть"
+  },
+  "share": {
+    "defaultTitle": "Shorts на 3Speak",
+    "text": "Посмотрите этот ролик от {{user}} на 3Speak!",
+    "shared": "Отправлено!",
+    "linkCopied": "Ссылка скопирована!",
+    "failed": "Не удалось поделиться"
+  },
+  "reshare": {
+    "loginRequired": "Войдите, чтобы сделать репост",
+    "unavailable": "Репост этого поста недоступен",
+    "done": "Репост сделан!",
+    "failed": "Не удалось сделать репост"
+  },
+  "remix": {
+    "noUrl": "Не удалось получить URL видео для ремикса",
+    "loadFailed": "Не удалось загрузить видео для ремикса"
+  },
+  "watchLater": {
+    "loginRequired": "Войдите, чтобы сохранять ролики",
+    "cantSave": "Этот ролик нельзя сохранить",
+    "removed": "Удалено из «Смотреть позже»",
+    "saved": "Сохранено в «Смотреть позже»",
+    "failed": "Ошибка: {{message}}"
+  },
+  "comments": {
+    "title": "Комментарии",
+    "loading": "Загрузка комментариев...",
+    "closed": "Комментарии закрыты",
+    "none": "Комментариев пока нет",
+    "postRemoved": "Пост в Hive, к которому привязан этот ролик, удалён, поэтому комментарии и голоса больше не принимаются.",
+    "beFirst": "Оставьте первый комментарий!",
+    "unavailable": "Комментарии к этому посту недоступны",
+    "addPlaceholder": "Добавьте комментарий...",
+    "addPlaceholderBar": "Добавьте комментарий…",
+    "loginPlaceholder": "Войдите, чтобы комментировать",
+    "send": "Отправить комментарий",
+    "enterComment": "Введите комментарий",
+    "loginToComment": "Войдите, чтобы комментировать",
+    "justNow": "Только что",
+    "posted": "Комментарий опубликован!",
+    "failed": "Не удалось отправить комментарий: {{message}}",
+    "translation": "Перевод",
+    "translationFailed": "Не удалось перевести",
+    "reportComment": "Пожаловаться на комментарий",
+    "replyPlaceholder": "Напишите ответ...",
+    "viewReplies_one": "Показать {{count}} ответ",
+    "viewReplies_few": "Показать {{count}} ответа",
+    "viewReplies_many": "Показать {{count}} ответов",
+    "viewReplies_other": "Показать {{count}} ответа",
+    "hideReplies_one": "Скрыть {{count}} ответ",
+    "hideReplies_few": "Скрыть {{count}} ответа",
+    "hideReplies_many": "Скрыть {{count}} ответов",
+    "hideReplies_other": "Скрыть {{count}} ответа"
+  }
+}

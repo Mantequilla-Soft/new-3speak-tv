@@ -1,0 +1,50 @@
+{
+  "loading": "Загрузка...",
+  "error": "Ошибка: {{error}}",
+  "thumbnailAlt": "миниатюра",
+  "topicTitle": "Тема: {{topic}}",
+  "watchingNow_one": "{{count}} зритель сейчас",
+  "watchingNow_few": "{{count}} зрителя сейчас",
+  "watchingNow_many": "{{count}} зрителей сейчас",
+  "watchingNow_other": "{{count}} зрителя сейчас",
+  "badges": {
+    "gatedTitle": "Только для поддержавших: 3Speak Pro открывает полное видео",
+    "pro": "PRO",
+    "new": "НОВОЕ",
+    "live": "● ЭФИР",
+    "liveChat": "● ЧАТ В ЭФИРЕ"
+  },
+  "status": {
+    "scheduled": "Запланировано",
+    "mobile": "Мобильное",
+    "mobileTitle": "Загружено через мобильное приложение",
+    "processing": "Обработка",
+    "processingTitle": "Видео обрабатывается",
+    "draft": "Черновик",
+    "draftTitle": "Черновик, ещё не опубликован",
+    "deleted": "Удалено",
+    "deletedTitle": "Это видео удалено",
+    "failed": "Ошибка",
+    "failedTitle": "Не удалось обработать видео",
+    "unlisted": "По ссылке",
+    "unlistedTitle": "Доступ по ссылке: скрыто из лент и поиска, открывается только по прямой ссылке"
+  },
+  "playlist": {
+    "loading": "Загрузка плейлистов...",
+    "items_one": "{{count}} элемент",
+    "items_few": "{{count}} элемента",
+    "items_many": "{{count}} элементов",
+    "items_other": "{{count}} элемента",
+    "openAria": "Открыть плейлист {{name}}",
+    "tag": "Плейлист",
+    "updated": "Обновлён {{when}}"
+  },
+  "watchLater": {
+    "title": "Смотреть позже",
+    "subtitle": "Видео, которые вы посмотрите позже"
+  },
+  "watched": {
+    "title": "Просмотренные",
+    "subtitle": "Ваша история просмотров"
+  }
+}

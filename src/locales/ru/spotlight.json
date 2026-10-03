@@ -1,0 +1,351 @@
+{
+  "icons": {
+    "link": "Ссылка",
+    "globe": "Сайт",
+    "podcast": "Подкаст",
+    "email": "Email",
+    "phone": "Телефон",
+    "rss": "RSS",
+    "qrcode": "QR-код",
+    "shop": "Магазин",
+    "bag": "Покупки",
+    "dollar": "Деньги",
+    "gift": "Подарок",
+    "heart": "Поддержка",
+    "star": "Звезда",
+    "thumbsup": "Лайк",
+    "fire": "Огонь",
+    "bolt": "Молния",
+    "music": "Музыка",
+    "headphones": "Аудио",
+    "mic": "Микрофон",
+    "video": "Видео",
+    "film": "Фильм",
+    "tv": "ТВ",
+    "play": "Воспроизвести",
+    "camera": "Фото",
+    "image": "Изображение",
+    "palette": "Искусство",
+    "pen": "Текст",
+    "book": "Книга",
+    "newspaper": "Новости",
+    "graduation": "Курс",
+    "code": "Код",
+    "gamepad": "Игры",
+    "briefcase": "Работа",
+    "home": "Дом",
+    "location": "Местоположение",
+    "map": "Карта",
+    "calendar": "Календарь",
+    "clock": "Часы",
+    "bell": "Оповещения",
+    "tag": "Тег",
+    "download": "Скачать",
+    "file": "Файл",
+    "users": "Сообщество",
+    "comment": "Комментарий",
+    "share": "Поделиться",
+    "coffee": "Кофе",
+    "wallet": "Кошелёк",
+    "plus": "Ещё",
+    "check": "Галочка"
+  },
+  "fonts": {
+    "system": "Системный",
+    "rounded": "Скруглённый",
+    "serif": "С засечками",
+    "mono": "Моноширинный",
+    "display": "Акцидентный",
+    "condensed": "Узкий",
+    "handwriting": "Рукописный",
+    "grotesk": "Гротеск",
+    "humanist": "Гуманистический",
+    "geometric": "Геометрический",
+    "slab": "Брусковый",
+    "elegant": "Элегантный",
+    "typewriter": "Машинописный",
+    "marker": "Маркер",
+    "brush": "Кисть",
+    "palatino": "Palatino",
+    "wide": "Широкий"
+  },
+  "motion": {
+    "none": "Нет",
+    "float": "Парение",
+    "sway": "Покачивание",
+    "pulse": "Пульсация",
+    "wobble": "Колебание",
+    "bounce": "Подпрыгивание",
+    "tilt": "3D-наклон",
+    "spin": "Вращение",
+    "shake": "Тряска",
+    "breathe": "Дыхание"
+  },
+  "sectionTypes": {
+    "link": "Ссылка",
+    "video": "Контент 3Speak",
+    "embed": "Расширенная ссылка",
+    "image": "Изображение",
+    "header": "Заголовок / текст"
+  },
+  "blockNames": {
+    "link": "ссылка",
+    "header": "заголовок",
+    "image": "изображение",
+    "video": "видео",
+    "embed": "встраивание"
+  },
+  "blockNamesPlural": {
+    "link": "ссылки",
+    "header": "заголовки",
+    "image": "изображения",
+    "video": "видео",
+    "embed": "встраивания"
+  },
+  "templates": {
+    "minimal": {
+      "name": "Минимал",
+      "niche": "Чисто и просто"
+    },
+    "neon": {
+      "name": "Neon Nights",
+      "niche": "Автор / стример"
+    },
+    "crypto": {
+      "name": "On-Chain",
+      "niche": "Крипто / Web3"
+    },
+    "gamer": {
+      "name": "Player One",
+      "niche": "Игры"
+    },
+    "photographer": {
+      "name": "Экспозиция",
+      "niche": "Фотография"
+    },
+    "podcaster": {
+      "name": "В эфире",
+      "niche": "Подкаст"
+    },
+    "fitness": {
+      "name": "Peak Form",
+      "niche": "Фитнес / тренер"
+    },
+    "writer": {
+      "name": "Лонгрид",
+      "niche": "Писатель / блогер"
+    },
+    "chef": {
+      "name": "Mise en Place",
+      "niche": "Еда / кулинария"
+    },
+    "travel": {
+      "name": "Wanderlust",
+      "niche": "Природа / путешествия"
+    },
+    "business": {
+      "name": "Boardroom",
+      "niche": "Бизнес / профи"
+    },
+    "artist": {
+      "name": "Палитра",
+      "niche": "Художник / визуал"
+    },
+    "ocean": {
+      "name": "Tidewater",
+      "niche": "Чил / лайфстайл"
+    },
+    "musician": {
+      "name": "Amplified",
+      "niche": "Музыка / группа"
+    },
+    "developer": {
+      "name": "Терминал",
+      "niche": "Разработчик / IT"
+    },
+    "sports": {
+      "name": "Game Day",
+      "niche": "Спорт / атлет"
+    }
+  },
+  "errors": {
+    "notLoggedIn": "Вход не выполнен",
+    "couldNotSaveToHive": "Не удалось сохранить в Hive"
+  },
+  "arrange": {
+    "title": "Заголовок",
+    "video": "Видео",
+    "latestPosts": "Последние посты",
+    "latestPostsBy": "Последние посты · @{{account}}",
+    "dragToArrange": "Перетащите, чтобы упорядочить"
+  },
+  "page": {
+    "latestPosts": "Последние посты",
+    "seeNewestPosts": "Новые посты @{{user}} →",
+    "openLink": "Открыть ссылку",
+    "empty": "@{{user}} пока не добавил(а) ни одной ссылки.",
+    "viewProfile": "Профиль на 3Speak →",
+    "poweredBy": "Работает на 3Speak"
+  },
+  "editor": {
+    "resetToDefault": "Сбросить",
+    "motion": "Анимация",
+    "speed": "Скорость {{value}}",
+    "loop": "Повтор",
+    "runSeconds": "Длительность {{value}} с",
+    "picker": {
+      "videoLabel": "Выбрать из моих видео",
+      "videoLoading": "Загрузка ваших видео…",
+      "videoEmpty": "Недавних видео на 3Speak не найдено.",
+      "shortLabel": "Выбрать из моих Shorts",
+      "shortLoading": "Загрузка ваших Shorts…",
+      "shortEmpty": "Недавних Shorts на 3Speak не найдено.",
+      "noChannel": "Канал не определён (вы вошли?)",
+      "loadFailed": "Не удалось загрузить: {{error}}"
+    },
+    "toasts": {
+      "unfurlFailed": "Не удалось получить превью ссылки",
+      "imageUploadFailed": "Не удалось загрузить изображение: {{error}}",
+      "tryAgain": "попробуйте ещё раз",
+      "styleApplied": "Стиль применён ко всем блокам типа «{{type}}»",
+      "templateApplied": "Шаблон «{{name}}» применён — настройте его или отмените",
+      "reverted": "Возвращён ваш прежний дизайн",
+      "saved": "Spotlight сохранён в вашем профиле Hive",
+      "saveFailed": "Не удалось сохранить",
+      "linkCopied": "Ссылка скопирована",
+      "uploadFailed": "Загрузка не удалась"
+    },
+    "link": {
+      "labelPlaceholder": "Подпись (напр. Мой YouTube)",
+      "type": "Тип ссылки",
+      "typeGroup": "Тип",
+      "website": "Сайт / URL",
+      "email": "Email",
+      "phone": "Телефон",
+      "platformGroup": "Платформа",
+      "yourname": "yourname",
+      "platformIconHint": "Иконка — логотип {{platform}}. Выберите «Сайт / URL», чтобы задать свою иконку.",
+      "icon": "Иконка",
+      "iconColor": "Цвет иконки",
+      "iconBg": "Фон иконки"
+    },
+    "header": {
+      "text": "Текст",
+      "size": "Размер",
+      "large": "Большой",
+      "medium": "Средний",
+      "small": "Маленький",
+      "align": "Выравнивание",
+      "left": "Слева",
+      "center": "По центру",
+      "right": "Справа"
+    },
+    "image": {
+      "uploading": "Загрузка…",
+      "upload": "Загрузить изображение",
+      "urlPlaceholder": "…или URL изображения",
+      "linkPlaceholder": "Ссылка при нажатии (необязательно)"
+    },
+    "video": {
+      "contentType": "Тип контента",
+      "video": "Видео",
+      "short": "Shorts",
+      "orPaste": "или вставьте ссылку",
+      "pastePlaceholder": "Вставьте ссылку на видео 3Speak или author/permlink",
+      "titlePlaceholder": "Заголовок над видео (ведёт на 3Speak)",
+      "hint": "Выбранный контент будет встроен и воспроизведётся на вашей странице."
+    },
+    "embed": {
+      "source": "Источник",
+      "sourceLink": "Ссылка (расширенное превью)",
+      "sourceHiveRecent": "Мои последние посты в Hive",
+      "accountPlaceholder": "Имя пользователя Hive (оставьте пустым для своего)",
+      "showPosts_one": "Показать {{count}} пост",
+      "showPosts_few": "Показать {{count}} поста",
+      "showPosts_many": "Показать {{count}} постов",
+      "showPosts_other": "Показать {{count}} поста",
+      "perRow": "{{value}} в ряд",
+      "hiveRecentHint": "Ваши последние посты верхнего уровня (без реблогов и кросспостов). Обновляется автоматически.",
+      "linkPlaceholder": "Вставьте любую ссылку — пост Hive, Instagram, X, YouTube, статья…",
+      "fetching": "Получаем превью…",
+      "noPreview": "Превью не найдено — ссылка всё равно будет показана карточкой.",
+      "pasteHint": "Вставьте ссылку, и мы подтянем её заголовок, описание и изображение."
+    },
+    "style": {
+      "title": "Стиль",
+      "applyAllTitle": "Применить этот стиль ко всем блокам типа «{{type}}»",
+      "applyAll": "Применить ко всем: {{types}}",
+      "background": "Фон",
+      "text": "Текст",
+      "backgroundPct": "Фон {{value}}%",
+      "radius": "Скругление {{value}}",
+      "fontSizePct": "Размер шрифта {{value}}%",
+      "paddingPx": "Отступ {{value}} px",
+      "thumbnailPct": "Миниатюра {{value}}%",
+      "border": "Рамка",
+      "thicknessPx": "Толщина {{value}} px",
+      "opacityPct": "Непрозрачность {{value}}%",
+      "shadow": "Тень",
+      "strengthPct": "Сила {{value}}%",
+      "color": "Цвет",
+      "blur": "Размытие {{value}}",
+      "spread": "Распространение {{value}}",
+      "inset": "Внутренняя",
+      "cardDelayMs": "Задержка карточки {{value}} мс"
+    },
+    "tagline": "Ваши ссылки и видео на одной странице",
+    "openPage": "Открыть страницу",
+    "templates": {
+      "title": "Шаблоны",
+      "hint": "Выберите дизайн, чтобы заполнить всё сразу — ваше описание сохранится, а действие можно отменить.",
+      "undo": "Отменить шаблон — вернуть мой дизайн"
+    },
+    "profile": {
+      "title": "Профиль",
+      "headlinePlaceholder": "Короткий заголовок / описание (необязательно)",
+      "avatarSizePct": "Размер аватара {{value}}%",
+      "avatarShadowPct": "Тень аватара {{value}}%",
+      "avatarGlow": "Свечение аватара",
+      "glowSize": "Размер свечения {{value}}",
+      "channelButtonText": "Текст кнопки канала"
+    },
+    "page": {
+      "title": "Стиль страницы",
+      "solid": "Сплошной",
+      "gradient": "Градиент",
+      "image": "Изображение",
+      "color2": "Цвет 2",
+      "angle": "Угол {{value}}°",
+      "uploadBackground": "Загрузить фон",
+      "imageSet": "Изображение задано ✓",
+      "overlay": "Наложение",
+      "overlay2": "Наложение 2",
+      "none": "Нет",
+      "overlayOpacityPct": "Непрозрачность наложения {{value}}%",
+      "overlayAngle": "Угол наложения {{value}}°",
+      "colors": "Цвета",
+      "buttonBg": "Фон кнопки",
+      "buttonText": "Текст кнопки",
+      "buttons": "Кнопки",
+      "buttonStyle": "Стиль кнопок",
+      "soft": "Мягкий",
+      "fill": "Заливка",
+      "outline": "Контур",
+      "cornerRadius": "Скругление углов {{value}}",
+      "textStyle": "Стиль текста (имя, описание и текстовые блоки)",
+      "font": "Шрифт",
+      "normal": "Обычный",
+      "italic": "Курсив",
+      "bold": "Жирный",
+      "boldItalic": "Жирный курсив",
+      "strong": "Насыщенный",
+      "textBorderPx": "Обводка текста {{value}} px",
+      "borderColor": "Цвет обводки"
+    },
+    "addBlock": "Добавить блок",
+    "empty": "Добавьте выше свою первую ссылку, видео или изображение.",
+    "arrangeHint": "Перетаскивайте <grip></grip>, чтобы упорядочить · бросьте блок на другой, чтобы поставить их рядом · нажмите на блок, чтобы редактировать его прямо здесь",
+    "livePreview": "Предпросмотр",
+    "previewTitle": "Предпросмотр Spotlight"
+  }
+}
