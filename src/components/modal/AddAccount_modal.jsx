@@ -17,12 +17,14 @@ import { QRCodeSVG } from 'qrcode.react';
 import   {KeyTypes, Providers } from '@aioha/aioha'
 import QrCode_modal from '../../components/modal/QrCode_modal';
 import aioha from "../../hive-api/aioha";
+import { useTranslation } from 'react-i18next';
 
 // Every toast from this module is headed "Sign in"; the message becomes the
 // line under it. See utils/toast.js.
 const toast = toastIn('Sign in');
 
 function AddAccount_modal({ isOpen, close}) {
+    const { t } = useTranslation();
     const location = useLocation();
     const client = axios.create({});
     const { initializeAuth, switchAccount, clearAccount, theme } = useAppStore();
@@ -46,7 +48,7 @@ function AddAccount_modal({ isOpen, close}) {
 
     async function logMe() {
     if (!username) {
-      toast.error("Username is required to proceed.");
+      toast.error(t('modals.addAccount.usernameRequired'));
       return;
     }
 
@@ -61,7 +63,7 @@ function AddAccount_modal({ isOpen, close}) {
 
       
       if (login.error === "HiveAuth authentication request expired") {
-        toast.error("HiveAuth authentication request expired");
+        toast.error(t('modals.addAccount.hiveAuthExpired'));
         setQrCode("")
         setShowModal(false);
       }
@@ -107,13 +109,13 @@ function AddAccount_modal({ isOpen, close}) {
       const preAuth = (location.state && location.state.from && location.state.from.pathname) || sessionStorage.getItem('preLoginPath') || '/';
       navigate(preAuth);
       close()
-      toast.success("Login successful!");
+      toast.success(t('modals.addAccount.loginSuccess'));
 
 
 
     } catch (err) {
       console.error(err);
-      toast.error("Login failed: " + err.message);
+      toast.error(t('modals.addAccount.loginFailed', { error: err.message }));
     }
   }
 
@@ -123,7 +125,7 @@ function AddAccount_modal({ isOpen, close}) {
 
       const handleLoginWithHiveAuth = async () => {
         if (!username) {
-          toast.error("Username is required to proceed.");
+          toast.error(t('modals.addAccount.usernameRequired'));
           return;
         }
       
@@ -141,7 +143,7 @@ function AddAccount_modal({ isOpen, close}) {
               });
               
               if (login.error === "HiveAuth authentication request expired") {
-                toast.error("HiveAuth authentication request expired");
+                toast.error(t('modals.addAccount.hiveAuthExpired'));
                 setQrCode("")
                 setShowModal(false);
               }
@@ -187,11 +189,11 @@ function AddAccount_modal({ isOpen, close}) {
               initializeAuth();
               close()
               navigate("/");
-              toast.success("Login successful!");
+              toast.success(t('modals.addAccount.loginSuccess'));
         
             } catch (err) {
               console.error(err);
-              toast.error("Login failed: " + (err.response?.data?.error || err.message));
+              toast.error(t('modals.addAccount.loginFailed', { error: err.response?.data?.error || err.message }));
               
             }
       };
@@ -218,13 +220,13 @@ function AddAccount_modal({ isOpen, close}) {
           <div className="login-container">
 
         <div className="main-login-keywrapper-add">
-          {theme === "light" ? <img src={logo} alt="3Speak Logo" /> :
-                    <img src={logoDark} alt="3Speak Logo" />}
-          <span>Login with your username</span>
+          {theme === "light" ? <img src={logo} alt={t('modals.addAccount.logoAlt')} /> :
+                    <img src={logoDark} alt={t('modals.addAccount.logoAlt')} />}
+          <span>{t('modals.addAccount.title')}</span>
 
           <input
             type="text"
-            placeholder="Username"
+            placeholder={t('modals.addAccount.usernamePlaceholder')}
             value={username}
             onChange={(e) => setUsername(e.target.value.toLowerCase())}
             style={{
@@ -247,11 +249,11 @@ function AddAccount_modal({ isOpen, close}) {
     </div>
         { qrCode && showModal && 
         <div style={{ marginTop: '1.5rem', textAlign: 'center' }}>
-                          <p>Scan this QR in Hive Keychain:</p>
+                          <p>{t('modals.qr.scan')}</p>
                           <div onClick={openKeychainApp} style={{ cursor: 'pointer', display: 'inline-block' }}>
                               <QRCodeSVG value={qrCode} size={180} />
                               <p style={{ fontSize: '0.8rem', marginTop: '0.5rem', color: '#007bff' }}>
-                                  Click QR to open in Keychain app
+                                  {t('modals.qr.click')}
                               </p>
                           </div>
                       </div>}

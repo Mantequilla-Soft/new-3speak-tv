@@ -8,8 +8,10 @@ import gif_icon from "../../assets/image/icons-gif.gif";
 import thumbnail from "../../assets/image/thumbnail.png";
 import { TailChase } from 'ldrs/react'
 import 'ldrs/react/TailChase.css'
+import { useTranslation } from 'react-i18next'
 
 function Upload_modal({ setPrevVideoUrl, setPrevVideoFile,  close, isOpen, setVideoId, username, accessToken, thumbnailFile, setThumbnailFile }) {
+  const { t } = useTranslation();
   const studioEndPoint = "https://studio.3speak.tv";
   const tusEndPoint = "https://uploads.3speak.tv/files/";
 
@@ -120,7 +122,7 @@ function Upload_modal({ setPrevVideoUrl, setPrevVideoFile,  close, isOpen, setVi
   const updateVideoInfo = async () => {
     if (!uploadURL || !videoFile || !thumbnailFile) {
       console.error("Missing video or thumbnail information.");
-      setError("Missing video or thumbnail information.")
+      setError(t('modals.upload.missingInfo'))
       return;
     }
     setError("")
@@ -158,7 +160,7 @@ function Upload_modal({ setPrevVideoUrl, setPrevVideoFile,  close, isOpen, setVi
       console.error("Error updating video info:", e);
       // Extract a meaningful error message
       const errorMessage =
-        e.response?.data?.message || "Failed to update video info. Please try again.";
+        e.response?.data?.message || t('modals.upload.updateFailed');
       setError(errorMessage);
       setLoading(false)
     }
@@ -172,7 +174,7 @@ function Upload_modal({ setPrevVideoUrl, setPrevVideoFile,  close, isOpen, setVi
         onClick={(e) => e.stopPropagation()}
       >
         <div className="modal-header">
-          <h2>Upload Video and Thumbnail</h2>
+          <h2>{t('modals.upload.title')}</h2>
           {error && <span className="err-upload">{error}</span> }
           <button className="close-btn" onClick={close}>
             &times;
@@ -189,7 +191,7 @@ function Upload_modal({ setPrevVideoUrl, setPrevVideoFile,  close, isOpen, setVi
           }}
         >
          <img src={cloud} alt="" />
-          <label>Select Video</label>
+          <label>{t('modals.upload.selectVideo')}</label>
           <input
             type="file"
             ref={videoInputRef}
@@ -214,8 +216,8 @@ function Upload_modal({ setPrevVideoUrl, setPrevVideoFile,  close, isOpen, setVi
           }}
         >
           <img className="thumbnail" src={thumbnail} alt="" />
-          <label>Thumbnail</label>
-          <div>Click to upload thumbnail</div>
+          <label>{t('modals.upload.thumbnail')}</label>
+          <div>{t('modals.upload.clickThumbnail')}</div>
           <input
             type="file"
             accept="image/*"
@@ -230,7 +232,7 @@ function Upload_modal({ setPrevVideoUrl, setPrevVideoFile,  close, isOpen, setVi
           </div>}
         </div>
         <div className="updateVideoInfo-btn-wrap">
-          <button className="btn" onClick={updateVideoInfo}>Update Video Info {loading && <TailChase size="15" speed="1.75" color="white" />}</button>
+          <button className="btn" onClick={updateVideoInfo}>{t('modals.upload.updateInfo')} {loading && <TailChase size="15" speed="1.75" color="white" />}</button>
         </div>
       </div>
     </div>

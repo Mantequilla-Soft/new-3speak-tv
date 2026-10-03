@@ -7,6 +7,7 @@ import { CHECKER_URL } from "../../utils/config";
 import { getSubscriptions } from "../../hive-api/hiveApi";
 import { getHiveUrl } from "../../utils/hiveNode";
 import { useAppStore } from "../../lib/store";
+import { useTranslation } from "react-i18next";
 import { getHiveRenderer } from '../../lib/hiveRenderer';
 
 // Debounce hook
@@ -52,6 +53,7 @@ function MarkdownText({ text }) {
 }
 
 function CommunityCard({ community, onSelect }) {
+  const { t } = useTranslation();
   const [expanded, setExpanded] = useState(false);
   const cardRef = useRef(null);
   // Only load this card's full metadata once it scrolls into view, so a long
@@ -110,7 +112,7 @@ function CommunityCard({ community, onSelect }) {
         <button
           type="button"
           className="community-card-toggle"
-          aria-label={expanded ? "Hide details" : "Show details"}
+          aria-label={expanded ? t('communities.picker.hideDetails') : t('communities.picker.showDetails')}
           aria-expanded={expanded}
           onClick={(e) => { e.stopPropagation(); setExpanded((v) => !v); }}
         >
@@ -121,25 +123,25 @@ function CommunityCard({ community, onSelect }) {
       {expanded && (
         <div className="community-card-detail">
           {isFetching && (
-            <div className="community-card-loading"><Loader2 size={15} className="spin" /> Loading…</div>
+            <div className="community-card-loading"><Loader2 size={15} className="spin" /> {t('common.status.loading')}</div>
           )}
           {detail?.description && (
             <div className="community-card-section">
-              <h4>About</h4>
+              <h4>{t('communities.picker.about')}</h4>
               <MarkdownText text={detail.description} />
             </div>
           )}
           {detail?.rules && (
             <div className="community-card-section">
-              <h4>Rules</h4>
+              <h4>{t('communities.picker.rules')}</h4>
               <MarkdownText text={toBulletList(detail.rules)} />
             </div>
           )}
           {!isFetching && !detail?.description && !detail?.rules && (
-            <div className="community-card-loading">No extra info for this community.</div>
+            <div className="community-card-loading">{t('communities.picker.noExtraInfo')}</div>
           )}
           <button type="button" className="community-card-select" onClick={() => onSelect(community)}>
-            Select this community
+            {t('communities.picker.selectThis')}
           </button>
         </div>
       )}
@@ -148,6 +150,7 @@ function CommunityCard({ community, onSelect }) {
 }
 
 function CommunitieModal({ isOpen, data, close, setCommunity, selected }) {
+  const { t } = useTranslation();
   const [searchQuery, setSearchQuery] = useState("");
 
   const debouncedQuery = useDebounce(searchQuery, 400);
@@ -293,7 +296,7 @@ function CommunitieModal({ isOpen, data, close, setCommunity, selected }) {
 
       <div className={`modal-content community-modal ${isOpen ? "open" : ""}`} onClick={(e) => e.stopPropagation()}>
         <div className="modal-header">
-          <h2>Select a Community</h2>
+          <h2>{t('communities.picker.title')}</h2>
           <button type="button" className="close-btn" onClick={close}>×</button>
         </div>
 
@@ -303,7 +306,7 @@ function CommunitieModal({ isOpen, data, close, setCommunity, selected }) {
           <div className="search-container">
             <input
               type="text"
-              placeholder="Search Communities"
+              placeholder={t('communities.picker.searchPlaceholder')}
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               className="search-input"
@@ -312,7 +315,7 @@ function CommunitieModal({ isOpen, data, close, setCommunity, selected }) {
 
           {/* LOADING */}
           {(isLoading || isFetching) && debouncedQuery.trim().length >= 2 && (
-            <div className="loading-message">Searching...</div>
+            <div className="loading-message">{t('communities.picker.searching')}</div>
           )}
 
           {/* LIST */}
@@ -327,7 +330,7 @@ function CommunitieModal({ isOpen, data, close, setCommunity, selected }) {
                   />
                 ))
               ) : (
-                !isLoading && <p>No communities found.</p>
+                !isLoading && <p>{t('communities.picker.noneFound')}</p>
               )
             ) : (
               <>
@@ -341,11 +344,11 @@ function CommunitieModal({ isOpen, data, close, setCommunity, selected }) {
                 {/* The user's own subscriptions, listed up front so posting to
                     one never requires guessing its name in the search box. */}
                 {user && (subsPending || mySubs.length > 0) && (
-                  <span className="community-group-label">Your communities</span>
+                  <span className="community-group-label">{t('communities.picker.yours')}</span>
                 )}
                 {user && subsPending && (
                   <div className="community-card-loading">
-                    <Loader2 size={15} className="spin" /> Loading your communities…
+                    <Loader2 size={15} className="spin" /> {t('communities.picker.loadingYours')}
                   </div>
                 )}
                 {mySubs.map((community, index) => (
@@ -357,13 +360,13 @@ function CommunitieModal({ isOpen, data, close, setCommunity, selected }) {
                 ))}
                 {user && !subsPending && subsError && (
                   <div className="community-card-loading">
-                    Couldn&apos;t load your communities. Search for one instead.
+                    {t('communities.picker.loadYoursFailed')}
                   </div>
                 )}
 
                 {showPopular && (
                   <>
-                    <span className="community-group-label">Popular communities</span>
+                    <span className="community-group-label">{t('communities.picker.popular')}</span>
                     {popular.map((community, index) => (
                       <CommunityCard
                         key={community.name || index}
@@ -378,7 +381,7 @@ function CommunitieModal({ isOpen, data, close, setCommunity, selected }) {
           </div>
 
           {!searching && (
-            <p className="community-search-hint">Search above to find more communities.</p>
+            <p className="community-search-hint">{t('communities.picker.searchHint')}</p>
           )}
 
         </div>

@@ -1,7 +1,9 @@
 import React from 'react';
 import "./VerifyAuthModal.scss";
+import { useTranslation } from "react-i18next";
 
 function VerifyAuthModal({ isOpen }) {
+  const { t } = useTranslation();
   if (!isOpen) return null;
 
   return (
@@ -9,8 +11,8 @@ function VerifyAuthModal({ isOpen }) {
       <div className="modal-overlay"></div>
       <div className="modal-card">
         <div className="spinner"></div>
-        <h3>Verifying Authorization</h3>
-        <p>Please wait while we verify that authorization was granted...</p>
+        <h3>{t('modals.verifyAuth.title')}</h3>
+        <p>{t('modals.verifyAuth.text')}</p>
       </div>
     </div>
   );

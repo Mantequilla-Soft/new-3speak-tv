@@ -17,6 +17,7 @@ import {
   PlaylistActionTypes
 } from '../utils/playlistOperations';
 import { toastIn } from '../utils/toast';
+import { useTranslation, Trans } from 'react-i18next';
 import './PlaylistView.scss';
 import { HIVE_API_URL, PLAYLISTS_READ_URL, CHECKER_URL } from '../utils/config';
 import { MdPlayArrow as MdPlayIcon } from 'react-icons/md';
@@ -32,6 +33,14 @@ import { DATE_FILTERS, getSinceTimestamp, formatRelativeDate } from '../utils/da
 const toast = toastIn('Playlist');
 
 dayjs.extend(relativeTime);
+
+// utils/dateFilters labels are English; translated here by key at render.
+const DATE_FILTER_KEYS = {
+  all: 'playlists.view.dateFilters.all',
+  today: 'playlists.view.dateFilters.today',
+  week: 'playlists.view.dateFilters.week',
+  month: 'playlists.view.dateFilters.month',
+};
 
 /**
  * Fetch video data from Hive for a list of playlist items
@@ -117,6 +126,7 @@ async function fetchVideosForPlaylist(items) {
 }
 
 function PlaylistView() {
+  const { t } = useTranslation();
   const { playlistId } = useParams();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
@@ -240,13 +250,13 @@ function PlaylistView() {
   const onEditThumbFile = async (e) => {
     const file = e.target.files?.[0];
     if (!file) return;
-    if (!file.type.startsWith('image/')) { toast.error('Pick an image file'); return; }
+    if (!file.type.startsWith('image/')) { toast.error(t('playlists.view.pickImage')); return; }
     setEditThumbUploading(true);
     try {
       const url = await uploadThumbnail(file);
       setEditThumb(url);
     } catch (err) {
-      toast.error(`Thumbnail upload failed: ${err?.message || 'unknown'}`);
+      toast.error(t('playlists.view.thumbFailed', { error: err?.message || t('playlists.view.unknown') }));
     } finally {
       setEditThumbUploading(false);
       if (editThumbInputRef.current) editThumbInputRef.current.value = '';
@@ -256,7 +266,7 @@ function PlaylistView() {
   // Save edit
   const handleSaveEdit = async () => {
     if (!editName.trim()) {
-      toast.error('Playlist name cannot be empty');
+      toast.error(t('playlists.view.nameEmpty'));
       return;
     }
     setIsUpdating(true);
@@ -279,13 +289,13 @@ function PlaylistView() {
         thumbnail: editThumb || '',
         metadata: { album },
       });
-      toast.success('Playlist updated! Changes may take a moment to appear.');
+      toast.success(t('playlists.view.updated'));
       setShowEditModal(false);
       setTimeout(() => {
         queryClient.invalidateQueries(['playlist', playlistId]);
       }, 3000);
     } catch (error) {
-      toast.error('Failed to update: ' + error.message);
+      toast.error(t('playlists.view.updateFailed', { error: error.message }));
     } finally {
       setIsUpdating(false);
     }
@@ -371,16 +381,16 @@ function PlaylistView() {
         playlistId,
         pendingChanges,
         (current, total, change) => {
-          toast.loading(`Processing ${current}/${total}: ${change.type}...`, { id: 'save-progress' });
+          toast.loading(t('playlists.view.processing', { current, total, type: change.type }), { id: 'save-progress' });
         }
       );
 
       toast.dismiss('save-progress');
 
       if (results.failed.length > 0) {
-        toast.error(`${results.failed.length} operation(s) failed`);
+        toast.error(t('playlists.view.opsFailed', { count: results.failed.length }));
       } else {
-        toast.success('All changes saved! They may take a moment to appear.');
+        toast.success(t('playlists.view.allSaved'));
       }
 
       // Clear pending changes
@@ -392,7 +402,7 @@ function PlaylistView() {
         queryClient.invalidateQueries(['playlistVideos', playlistId]);
       }, 3000);
     } catch (error) {
-      toast.error('Failed to save changes: ' + error.message);
+      toast.error(t('playlists.view.saveFailed', { error: error.message }));
     } finally {
       setIsSaving(false);
     }
@@ -410,7 +420,7 @@ function PlaylistView() {
     setIsDeleting(true);
     try {
       await deletePlaylist(playlistId);
-      toast.success('Playlist deleted! Redirecting...');
+      toast.success(t('playlists.view.deleted'));
       setShowDeleteConfirm(false);
 
       // Navigate back to profile after a short delay
@@ -418,7 +428,7 @@ function PlaylistView() {
         navigate(`/p/${playlist.owner}`);
       }, 1500);
     } catch (error) {
-      toast.error('Failed to delete playlist: ' + error.message);
+      toast.error(t('playlists.view.deleteFailed', { error: error.message }));
     } finally {
       setIsDeleting(false);
     }
@@ -436,9 +446,9 @@ function PlaylistView() {
     return (
       <div className="playlist-view-container">
         <div className="error-wrap">
-          <p>Error loading playlist: {playlistError.message}</p>
+          <p>{t('playlists.view.loadError', { error: playlistError.message })}</p>
           <Link to="/" className="back-link">
-            <IoArrowBack /> Back to Home
+            <IoArrowBack /> {t('playlists.view.backHome')}
           </Link>
         </div>
       </div>
@@ -450,9 +460,9 @@ function PlaylistView() {
       <div className="playlist-view-container">
         <div className="empty-wrap">
           <img src={icon} alt="" />
-          <span>Playlist not found</span>
+          <span>{t('playlists.view.notFound')}</span>
           <Link to="/" className="back-link">
-            <IoArrowBack /> Back to Home
+            <IoArrowBack /> {t('playlists.view.backHome')}
           </Link>
         </div>
       </div>
@@ -467,9 +477,9 @@ function PlaylistView() {
       <div className="playlist-view-container">
         <div className="empty-wrap">
           <img src={icon} alt="" />
-          <span>This playlist is private</span>
+          <span>{t('playlists.view.private')}</span>
           <Link to="/" className="back-link">
-            <IoArrowBack /> Back to Home
+            <IoArrowBack /> {t('playlists.view.backHome')}
           </Link>
         </div>
       </div>
@@ -497,16 +507,16 @@ function PlaylistView() {
                 @{playlist.owner}
               </Link>
               <span className="separator">•</span>
-              <span>{allVideos.length} {allVideos.length === 1 ? 'item' : 'items'}</span>
+              <span>{t('playlists.view.items', { count: allVideos.length })}</span>
               <span className="separator">•</span>
-              <span>Created {dayjs.unix(playlist.created_at).fromNow()}</span>
+              <span>{t('playlists.view.created', { when: dayjs.unix(playlist.created_at).fromNow() })}</span>
             </div>
             {playlist.metadata?.album && (
               <div className="playlist-album-meta">
-                {playlist.metadata.album.musicStyle && <span><strong>Genre:</strong> {playlist.metadata.album.musicStyle}</span>}
-                {playlist.metadata.album.year && <span><strong>Year:</strong> {playlist.metadata.album.year}</span>}
-                {playlist.metadata.album.label && <span><strong>Label:</strong> {playlist.metadata.album.label}</span>}
-                {playlist.metadata.album.credits && <span><strong>Credits:</strong> {playlist.metadata.album.credits}</span>}
+                {playlist.metadata.album.musicStyle && <span><Trans i18nKey="playlists.view.album.genre" values={{ value: playlist.metadata.album.musicStyle }} components={{ strong: <strong /> }} /></span>}
+                {playlist.metadata.album.year && <span><Trans i18nKey="playlists.view.album.year" values={{ value: playlist.metadata.album.year }} components={{ strong: <strong /> }} /></span>}
+                {playlist.metadata.album.label && <span><Trans i18nKey="playlists.view.album.label" values={{ value: playlist.metadata.album.label }} components={{ strong: <strong /> }} /></span>}
+                {playlist.metadata.album.credits && <span><Trans i18nKey="playlists.view.album.credits" values={{ value: playlist.metadata.album.credits }} components={{ strong: <strong /> }} /></span>}
                 {playlist.metadata.album.description && <p className="playlist-album-desc">{playlist.metadata.album.description}</p>}
               </div>
             )}
@@ -531,7 +541,7 @@ function PlaylistView() {
               onClick={handleOpenEdit}
               disabled={isSaving}
             >
-              <MdEdit /> Edit
+              <MdEdit /> {t('common.actions.edit')}
             </button>
             <button
               type="button"
@@ -539,7 +549,7 @@ function PlaylistView() {
               onClick={() => setReorderMode(!reorderMode)}
               disabled={isSaving}
             >
-              <IoReorderThree /> {reorderMode ? 'Done' : 'Reorder'}
+              <IoReorderThree /> {reorderMode ? t('common.actions.done') : t('playlists.view.reorder')}
             </button>
             <button
               type="button"
@@ -547,7 +557,7 @@ function PlaylistView() {
               onClick={() => setShowDeleteConfirm(true)}
               disabled={isSaving}
             >
-              <IoTrash /> Delete Playlist
+              <IoTrash /> {t('playlists.view.deletePlaylist')}
             </button>
           </div>
         )}
@@ -557,14 +567,14 @@ function PlaylistView() {
       {isOwner && hasChanges && (
         <div className="save-changes-bar">
           <div className="changes-info">
-            <span>{pendingChanges.length} unsaved change{pendingChanges.length > 1 ? 's' : ''}</span>
+            <span>{t('playlists.view.unsaved', { count: pendingChanges.length })}</span>
           </div>
           <div className="changes-actions">
             <button type="button" className="btn-discard" onClick={handleDiscardChanges} disabled={isSaving}>
-              Discard
+              {t('playlists.view.discard')}
             </button>
             <button type="button" className="btn-save" onClick={handleSaveChanges} disabled={isSaving}>
-              {isSaving ? 'Saving...' : <><IoSave /> Save Changes</>}
+              {isSaving ? t('playlists.view.saving') : <><IoSave /> {t('playlists.view.saveChanges')}</>}
             </button>
           </div>
         </div>
@@ -580,12 +590,12 @@ function PlaylistView() {
               className={`date-filter-btn ${dateFilter === f.key ? 'active' : ''}`}
               onClick={() => setDateFilter(f.key)}
             >
-              {f.label}
+              {f.labelKey ? t(f.labelKey) : DATE_FILTER_KEYS[f.key] ? t(DATE_FILTER_KEYS[f.key]) : f.label}
             </button>
           ))}
         </div>
         {dateFilter !== 'all' && (
-          <span className="filter-count">{displayVideos.length} of {allVideos.length} items</span>
+          <span className="filter-count">{t('playlists.view.filterCount', { shown: displayVideos.length, count: allVideos.length })}</span>
         )}
       </div>
 
@@ -596,7 +606,7 @@ function PlaylistView() {
         ) : displayVideos.length === 0 ? (
           <div className="empty-wrap">
             <img src={icon} alt="" />
-            <span>{dateFilter !== 'all' ? 'No videos added in this period' : 'No videos in this playlist'}</span>
+            <span>{dateFilter !== 'all' ? t('playlists.view.emptyPeriod') : t('playlists.view.empty')}</span>
           </div>
         ) : reorderMode ? (
           /* List view for reorder mode */
@@ -633,7 +643,7 @@ function PlaylistView() {
                       </span>
                     )}
                     {video.isAudio && (
-                      <span className="audio-badge"><MdPlayIcon size={12} /> Audio</span>
+                      <span className="audio-badge"><MdPlayIcon size={12} /> {t('playlists.view.audio')}</span>
                     )}
                   </div>
                   <div className="video-info">
@@ -649,7 +659,7 @@ function PlaylistView() {
                     e.stopPropagation();
                     handleRemoveVideo(video, index);
                   }}
-                  title="Remove from playlist"
+                  title={t('playlists.view.removeFromPlaylist')}
                 >
                   <MdClose />
                 </button>
@@ -707,7 +717,7 @@ function PlaylistView() {
                         e.stopPropagation();
                         handleRemoveVideo(video, allVideos.indexOf(video));
                       }}
-                      title="Remove from playlist"
+                      title={t('playlists.view.removeFromPlaylist')}
                     >
                       <MdClose />
                     </button>
@@ -716,7 +726,7 @@ function PlaylistView() {
                 <div className="video-meta">
                   <h3>{video.title}</h3>
                   <p className="video-author">@{video.author}</p>
-                  <p className="added-date">Added {formatRelativeDate(video.added_at)}</p>
+                  <p className="added-date">{t('playlists.view.added', { when: formatRelativeDate(video.added_at) })}</p>
                 </div>
               </Link>
             ))}
@@ -729,14 +739,14 @@ function PlaylistView() {
       {showDeleteConfirm && (
         <div className="delete-confirm-overlay" onClick={() => setShowDeleteConfirm(false)}>
           <div className="delete-confirm-modal" onClick={(e) => e.stopPropagation()}>
-            <h3>Delete Playlist?</h3>
-            <p>Are you sure you want to delete "{playlist.name}"? This action cannot be undone.</p>
+            <h3>{t('playlists.view.deleteConfirmTitle')}</h3>
+            <p>{t('playlists.view.deleteConfirmText', { name: playlist.name })}</p>
             <div className="modal-actions">
               <button type="button" className="btn-cancel" onClick={() => setShowDeleteConfirm(false)} disabled={isDeleting}>
-                Cancel
+                {t('common.actions.cancel')}
               </button>
               <button type="button" className="btn-confirm-delete" onClick={handleDeletePlaylist} disabled={isDeleting}>
-                {isDeleting ? 'Deleting...' : 'Delete Playlist'}
+                {isDeleting ? t('playlists.view.deleting') : t('playlists.view.deletePlaylist')}
               </button>
             </div>
           </div>
@@ -747,44 +757,44 @@ function PlaylistView() {
       {showEditModal && (
         <div className="delete-confirm-overlay" onClick={() => setShowEditModal(false)}>
           <div className="edit-playlist-modal" onClick={(e) => e.stopPropagation()}>
-            <h3>Edit Playlist</h3>
+            <h3>{t('playlists.view.editTitle')}</h3>
             <div className="form-group">
-              <label>Name</label>
+              <label>{t('playlists.modal.name')}</label>
               <input
                 type="text"
                 value={editName}
                 onChange={(e) => setEditName(e.target.value)}
-                placeholder="Playlist name"
+                placeholder={t('playlists.view.namePlaceholder')}
                 autoFocus
               />
             </div>
             <div className="form-group">
-              <label>Visibility</label>
+              <label>{t('playlists.view.visibility')}</label>
               <div className="privacy-buttons">
                 <button
                   type="button"
                   className={`privacy-btn ${editAccess === 'public' ? 'active' : ''}`}
                   onClick={() => setEditAccess('public')}
                 >
-                  <MdPublic /> Public
+                  <MdPublic /> {t('playlists.public')}
                 </button>
                 <button
                   type="button"
                   className={`privacy-btn ${editAccess === 'private' ? 'active' : ''}`}
                   onClick={() => setEditAccess('private')}
                 >
-                  <MdLock /> Private
+                  <MdLock /> {t('playlists.private')}
                 </button>
               </div>
             </div>
             <div className="form-group">
-              <label>Tags</label>
+              <label>{t('playlists.modal.tags')}</label>
               <div className="tags-input-wrap">
                 <div className="tags-list">
                   {editTags.map((tag) => (
                     <span key={tag} className="tag-chip">
                       {tag}
-                      <button type="button" onClick={() => setEditTags(prev => prev.filter(t => t !== tag))}>
+                      <button type="button" onClick={() => setEditTags(prev => prev.filter(x => x !== tag))}>
                         <MdClose />
                       </button>
                     </span>
@@ -806,30 +816,30 @@ function PlaylistView() {
                       setEditTags(prev => prev.slice(0, -1));
                     }
                   }}
-                  placeholder={editTags.length === 0 ? 'Type a tag and press Enter' : 'Add more...'}
+                  placeholder={editTags.length === 0 ? t('playlists.modal.tagPlaceholder') : t('playlists.modal.tagMorePlaceholder')}
                 />
               </div>
             </div>
             <div className="form-group">
-              <label>Cover image</label>
+              <label>{t('playlists.view.coverImage')}</label>
               <div
                 className={`playlist-edit-thumb${editThumb ? ' has-image' : ''}`}
                 onClick={() => !editThumbUploading && editThumbInputRef.current?.click()}
               >
                 {editThumb ? (
                   <>
-                    <img src={editThumb} alt="Cover" />
+                    <img src={editThumb} alt={t('playlists.view.coverAlt')} />
                     <button
                       type="button"
                       className="playlist-edit-thumb-remove"
                       onClick={(e) => { e.stopPropagation(); setEditThumb(''); }}
-                      aria-label="Remove cover"
+                      aria-label={t('playlists.view.removeCover')}
                     ><MdClose size={14} /></button>
                   </>
                 ) : (
                   <>
                     <MdCloudUpload size={26} />
-                    <span>{editThumbUploading ? 'Uploading…' : 'Add cover image'}</span>
+                    <span>{editThumbUploading ? t('playlists.view.uploading') : t('playlists.view.addCover')}</span>
                     <small>JPG / PNG / WebP</small>
                   </>
                 )}
@@ -844,33 +854,33 @@ function PlaylistView() {
               </div>
             </div>
             <div className="form-group">
-              <label>Genre</label>
-              <input type="text" value={editMusicStyle} onChange={(e) => setEditMusicStyle(e.target.value)} placeholder="e.g. Hip-Hop" />
+              <label>{t('playlists.view.genre')}</label>
+              <input type="text" value={editMusicStyle} onChange={(e) => setEditMusicStyle(e.target.value)} placeholder={t('playlists.view.genrePlaceholder')} />
             </div>
             <div className="form-row">
               <div className="form-group">
-                <label>Year</label>
+                <label>{t('playlists.view.year')}</label>
                 <input type="number" value={editYear} onChange={(e) => setEditYear(e.target.value)} placeholder="1996" />
               </div>
               <div className="form-group">
-                <label>Label</label>
-                <input type="text" value={editLabel} onChange={(e) => setEditLabel(e.target.value)} placeholder="Record label" />
+                <label>{t('playlists.view.label')}</label>
+                <input type="text" value={editLabel} onChange={(e) => setEditLabel(e.target.value)} placeholder={t('playlists.view.labelPlaceholder')} />
               </div>
             </div>
             <div className="form-group">
-              <label>Credits</label>
-              <input type="text" value={editCredits} onChange={(e) => setEditCredits(e.target.value)} placeholder="Produced by…" />
+              <label>{t('playlists.view.credits')}</label>
+              <input type="text" value={editCredits} onChange={(e) => setEditCredits(e.target.value)} placeholder={t('playlists.view.creditsPlaceholder')} />
             </div>
             <div className="form-group">
-              <label>Description</label>
-              <textarea value={editDescription} onChange={(e) => setEditDescription(e.target.value)} placeholder="About this album (optional)" rows={3} maxLength={1000} />
+              <label>{t('playlists.view.description')}</label>
+              <textarea value={editDescription} onChange={(e) => setEditDescription(e.target.value)} placeholder={t('playlists.view.descriptionPlaceholder')} rows={3} maxLength={1000} />
             </div>
             <div className="modal-actions">
               <button type="button" className="btn-cancel" onClick={() => setShowEditModal(false)} disabled={isUpdating}>
-                Cancel
+                {t('common.actions.cancel')}
               </button>
               <button type="button" className="btn-confirm-delete" style={{ background: 'var(--accent-primary, #e53935)', color: '#fff' }} onClick={handleSaveEdit} disabled={isUpdating || !editName.trim()}>
-                {isUpdating ? 'Saving...' : 'Save Changes'}
+                {isUpdating ? t('playlists.view.saving') : t('playlists.view.saveChanges')}
               </button>
             </div>
           </div>

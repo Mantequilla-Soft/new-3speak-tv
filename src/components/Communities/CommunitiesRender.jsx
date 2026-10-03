@@ -13,6 +13,8 @@ import CreateCommunity from '../modal/CreateCommunity';
 import { HIVE_API_NODES, FEED_URL, CHECKER_URL } from '../../utils/config';
 import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
+import { useTranslation, Trans } from 'react-i18next';
+import { formatNumber } from '../../i18n';
 import { fixVideoThumbnail, fallbackImg } from '../../utils/fixThumbnails';
 
 const client = getHiveClient();
@@ -49,9 +51,8 @@ const uniqByName = (list) => {
   return list.filter((c) => c?.name && !seen.has(c.name) && seen.add(c.name));
 };
 
-const plural = (n, word) => `${n.toLocaleString()} ${word}${n === 1 ? '' : 's'}`;
-
 function CommunitiesRender() {
+  const { t } = useTranslation();
   const [data, setData] = useState([]); // All communities data
   const [filteredData, setFilteredData] = useState([]); // Filtered communities based on search
   const [loading, setLoading] = useState(true);
@@ -150,7 +151,7 @@ function CommunitiesRender() {
     // The Hive path below is the fallback when the checker cannot answer.
     const ask = (query) => client.call('bridge', 'list_communities', { last: '', limit: 100, query, observer: '' })
       .then((res) => (Array.isArray(res) ? res : []));
-    const t = setTimeout(async () => {
+    const timer = setTimeout(async () => {
       try {
         const { data: found } = await axios.get(`${CHECKER_URL}/communities/search`, { params: { q } });
         if (!alive) return;
@@ -176,7 +177,7 @@ function CommunitiesRender() {
       } catch { /* the local filter above is still showing something */ }
     }, 300);
 
-    return () => { alive = false; clearTimeout(t); };
+    return () => { alive = false; clearTimeout(timer); };
     // `data` is deliberately not a dependency: it changes once on load, and
     // including it would re-run the search for no reason.
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -228,13 +229,13 @@ function CommunitiesRender() {
   // "Videos this week" is the one sort that is not from bridge: it comes from
   // the activity call above, and is how busy the community is ON 3SPEAK.
   const SORTS = [
-    { id: 'subscribers', label: 'Subscribers', value: (c) => c.subscribers },
-    { id: 'active', label: 'Videos this week', value: (c) => activity[c.name]?.week ?? 0 },
-    { id: 'authors', label: 'Active authors', value: (c) => c.num_authors },
-    { id: 'pending', label: 'Pending rewards', value: (c) => c.sum_pending },
-    { id: 'posts', label: 'Pending posts', value: (c) => c.num_pending },
-    { id: 'created', label: 'Created', value: (c) => (c.created_at ? Date.parse(c.created_at) : null) },
-    { id: 'title', label: 'Name', value: (c) => c.title, text: true },
+    { id: 'subscribers', label: t('communities.directory.sorts.subscribers'), value: (c) => c.subscribers },
+    { id: 'active', label: t('communities.directory.sorts.active'), value: (c) => activity[c.name]?.week ?? 0 },
+    { id: 'authors', label: t('communities.directory.sorts.authors'), value: (c) => c.num_authors },
+    { id: 'pending', label: t('communities.directory.sorts.pending'), value: (c) => c.sum_pending },
+    { id: 'posts', label: t('communities.directory.sorts.posts'), value: (c) => c.num_pending },
+    { id: 'created', label: t('communities.directory.sorts.created'), value: (c) => (c.created_at ? Date.parse(c.created_at) : null) },
+    { id: 'title', label: t('communities.directory.sorts.name'), value: (c) => c.title, text: true },
   ];
 
 
@@ -245,9 +246,7 @@ function CommunitiesRender() {
           know, and this list is mostly read by people who do not yet. */}
       <div className="communities-head">
         <p>
-          Communities are curated spaces around a shared interest. Find people who
-          care about the same things, <strong>join</strong> in, and connect. Anyone
-          can join a community, and you can start your own.
+          <Trans i18nKey="communities.directory.intro" components={{ strong: <strong /> }} />
         </p>
       </div>
 
@@ -258,7 +257,7 @@ function CommunitiesRender() {
         <div className="search-wrapper">
           <input
             type="text"
-            placeholder="Search communities..."
+            placeholder={t('communities.directory.searchPlaceholder')}
             value={searchQuery}
             onChange={handleSearch}
           />
@@ -280,10 +279,10 @@ function CommunitiesRender() {
             onClick={incubationHandle ? undefined : toggleModal}
             aria-disabled={incubationHandle ? true : undefined}
             title={incubationHandle
-              ? 'Creating a community needs a Hive account. This unlocks when yours is ready.'
+              ? t('communities.directory.createLocked')
               : undefined}
           >
-            <MdAdd size={17} /> Create community
+            <MdAdd size={17} /> {t('communities.directory.create')}
           </button>
         </div>
       </div>
@@ -317,7 +316,7 @@ function CommunitiesRender() {
                 <h3 className="blog-title">
                   {community.title}
                   {/* Otherwise "yours first" is an order with no explanation. */}
-                  {mine.has(community.name) && <span className="blog-mine">Joined</span>}
+                  {mine.has(community.name) && <span className="blog-mine">{t('communities.directory.joined')}</span>}
                 </h3>
                 {/* The same two lines a badge card carries, from the fields the
                     communities API already returns. Without them a tile twice as
@@ -332,15 +331,15 @@ function CommunitiesRender() {
                     statements. */}
                 {typeof community.subscribers === 'number' && (
                   <span className="blog-count">
-                    {community.subscribers.toLocaleString()} subscriber{community.subscribers === 1 ? '' : 's'}
+                    {t('communities.directory.subscribers', { count: community.subscribers, n: formatNumber(community.subscribers) })}
                   </span>
                 )}
                 <div className="blog-meta">
                   {typeof community.num_authors === 'number' && (
-                    <span>{community.num_authors.toLocaleString()} author{community.num_authors === 1 ? '' : 's'}</span>
+                    <span>{t('communities.directory.authors', { count: community.num_authors, n: formatNumber(community.num_authors) })}</span>
                   )}
                   {community.sum_pending > 0 && (
-                    <span>${Math.round(community.sum_pending).toLocaleString()} pending</span>
+                    <span>{t('communities.directory.pending', { amount: formatNumber(Math.round(community.sum_pending)) })}</span>
                   )}
                   {/* TimeAgo renders its own span, so it is not wrapped in a
                       second one: the separator rule keys off siblings. */}
@@ -357,10 +356,10 @@ function CommunitiesRender() {
                 return (
                   <div className="blog-activity">
                     <div className="blog-activity-counts">
-                      {a.today > 0 && <span className="is-today">{plural(a.today, 'video')} today</span>}
+                      {a.today > 0 && <span className="is-today">{t('communities.directory.videosToday', { count: a.today, n: formatNumber(a.today) })}</span>}
                       {a.week > 0
-                        ? <span>{plural(a.week, 'video')} this week</span>
-                        : <span>{plural(a.month, 'video')} this month</span>}
+                        ? <span>{t('communities.directory.videosWeek', { count: a.week, n: formatNumber(a.week) })}</span>
+                        : <span>{t('communities.directory.videosMonth', { count: a.month, n: formatNumber(a.month) })}</span>}
                     </div>
                     <div className="blog-activity-strip">
                       {a.latest.map((v) => (
@@ -368,7 +367,7 @@ function CommunitiesRender() {
                           key={`${v.author}/${v.permlink}`}
                           to={`/watch?v=${v.author}/${v.permlink}`}
                           className="blog-activity-thumb"
-                          title={`${v.title} by @${v.author}`}
+                          title={t('communities.directory.videoBy', { title: v.title, author: v.author })}
                           onClick={(e) => e.stopPropagation()}
                         >
                           <img

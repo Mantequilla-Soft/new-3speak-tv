@@ -12,6 +12,7 @@ import {
   platformProfileUrl,
   platformLabel,
 } from '../../utils/socialVerifier';
+import { useTranslation, Trans } from 'react-i18next';
 import './AddSocialLink_modal.scss';
 
 // Every toast from this module is headed "Profile"; the message becomes the
@@ -24,6 +25,7 @@ const PLATFORM_ICONS = {
 };
 
 export default function AddSocialLink_modal({ isOpen, onClose, hiveUsername, onChange }) {
+  const { t } = useTranslation();
   const [step, setStep] = useState('list'); // 'list' | 'flow'
   const [hashInfo, setHashInfo] = useState(null);
   const [links, setLinks] = useState([]);
@@ -72,10 +74,10 @@ export default function AddSocialLink_modal({ isOpen, onClose, hiveUsername, onC
     try {
       await navigator.clipboard.writeText(hashInfo.hash);
       setHashCopied(true);
-      toast.success('Hash copied');
+      toast.success(t('modals.socialLink.hashCopied'));
       setTimeout(() => setHashCopied(false), 1500);
     } catch {
-      toast.error('Could not copy to clipboard');
+      toast.error(t('modals.socialLink.copyFailed'));
     }
   };
 
@@ -87,7 +89,7 @@ export default function AddSocialLink_modal({ isOpen, onClose, hiveUsername, onC
 
   const handleVerify = async () => {
     if (!selectedPlatform || !platformUsername.trim()) {
-      toast.error('Enter your platform handle or ID');
+      toast.error(t('modals.socialLink.enterHandle'));
       return;
     }
     setSubmitting(true);
@@ -99,31 +101,31 @@ export default function AddSocialLink_modal({ isOpen, onClose, hiveUsername, onC
         platform_username: platformUsername.trim(),
       });
       if (record?.verified) {
-        toast.success('Account verified and linked');
+        toast.success(t('modals.socialLink.verified'));
         await refreshLinks();
         resetFlow();
       } else {
         setError(
-          'Hash not found on the profile yet. Make sure the change is saved publicly, then try again.'
+          t('modals.socialLink.errors.hashNotFound')
         );
       }
     } catch (err) {
       const data = err?.response?.data;
       const code = data?.code;
       if (code === 'CHANNEL_ALREADY_LINKED') {
-        setError(`This channel is already verified by another Hive user (@${data?.claimed_by}).`);
+        setError(t('modals.socialLink.errors.alreadyLinked', { user: data?.claimed_by }));
       } else if (code === 'TOO_MANY_LINKS') {
-        setError('You have reached the maximum number of linked accounts.');
+        setError(t('modals.socialLink.errors.tooMany'));
       } else if (err?.response?.status === 404) {
-        setError('That channel does not exist on the platform.');
+        setError(t('modals.socialLink.errors.notFound'));
       } else if (err?.response?.status === 401) {
-        setError('Signature could not be verified. Make sure you are logged in with your posting key.');
+        setError(t('modals.socialLink.errors.badSignature'));
       } else if (err?.response?.status === 429) {
-        setError('Too many requests. Please wait a minute and try again.');
+        setError(t('modals.socialLink.errors.rateLimited'));
       } else if (err?.response?.status === 502) {
-        setError('Platform lookup failed. Try again in a moment.');
+        setError(t('modals.socialLink.errors.lookupFailed'));
       } else {
-        setError(data?.error || err.message || 'Verification failed');
+        setError(data?.error || err.message || t('modals.socialLink.errors.verifyFailed'));
       }
     } finally {
       setSubmitting(false);
@@ -131,7 +133,7 @@ export default function AddSocialLink_modal({ isOpen, onClose, hiveUsername, onC
   };
 
   const handleUnlink = async (link) => {
-    const confirmMsg = `Remove your ${platformLabel(link.platform)} link? Make sure the verification hash is no longer on your public profile, otherwise the unlink will be rejected.`;
+    const confirmMsg = t('modals.socialLink.confirmUnlink', { platform: platformLabel(link.platform) });
     if (!window.confirm(confirmMsg)) return;
     const key = `${link.platform}:${link.platform_username}`;
     setUnlinkingKey(key);
@@ -142,22 +144,22 @@ export default function AddSocialLink_modal({ isOpen, onClose, hiveUsername, onC
         platform_username: link.platform_username,
       });
       if (result?.deleted) {
-        toast.success('Link removed');
+        toast.success(t('modals.socialLink.removed'));
         await refreshLinks();
       } else if (result?.still_present) {
-        toast.error('Hash is still on your profile — remove it first.');
+        toast.error(t('modals.socialLink.errors.stillPresent'));
       } else {
-        toast.error(result?.error || 'Unlink failed');
+        toast.error(result?.error || t('modals.socialLink.errors.unlinkFailed'));
       }
     } catch (err) {
       const data = err?.response?.data;
       if (data?.still_present) {
-        toast.error('Hash is still on your profile — remove it first.');
+        toast.error(t('modals.socialLink.errors.stillPresent'));
       } else if (err?.response?.status === 404) {
-        toast.error('No such link to remove.');
+        toast.error(t('modals.socialLink.errors.noSuchLink'));
         await refreshLinks();
       } else {
-        toast.error(data?.error || err.message || 'Unlink failed');
+        toast.error(data?.error || err.message || t('modals.socialLink.errors.unlinkFailed'));
       }
     } finally {
       setUnlinkingKey(null);
@@ -173,14 +175,13 @@ export default function AddSocialLink_modal({ isOpen, onClose, hiveUsername, onC
 
         {step === 'list' && (
           <>
-            <h3 className="social-link-modal-title">Linked external profiles</h3>
+            <h3 className="social-link-modal-title">{t('modals.socialLink.title')}</h3>
             <p className="social-link-modal-sub">
-              Prove you own a YouTube (or other) channel by pasting your unique 3Speak hash
-              into your public profile description, then verifying it here.
+              {t('modals.socialLink.intro')}
             </p>
 
             {loadingLinks ? (
-              <p className="social-link-loading">Loading…</p>
+              <p className="social-link-loading">{t('common.status.loading')}</p>
             ) : links.length > 0 ? (
               <ul className="social-link-list">
                 {links.map((link) => {
@@ -200,7 +201,7 @@ export default function AddSocialLink_modal({ isOpen, onClose, hiveUsername, onC
                           className="social-link-list__open"
                           target="_blank"
                           rel="noopener noreferrer"
-                          title="Open profile"
+                          title={t('modals.socialLink.openProfile')}
                         >
                           <FaExternalLinkAlt />
                         </a>
@@ -209,7 +210,7 @@ export default function AddSocialLink_modal({ isOpen, onClose, hiveUsername, onC
                         className="social-link-list__remove"
                         onClick={() => handleUnlink(link)}
                         disabled={unlinkingKey === key}
-                        title="Remove link"
+                        title={t('modals.socialLink.removeLink')}
                       >
                         {unlinkingKey === key ? '…' : <FaTrash />}
                       </button>
@@ -218,10 +219,10 @@ export default function AddSocialLink_modal({ isOpen, onClose, hiveUsername, onC
                 })}
               </ul>
             ) : (
-              <p className="social-link-empty">No external profiles linked yet.</p>
+              <p className="social-link-empty">{t('modals.socialLink.empty')}</p>
             )}
 
-            <h4 className="social-link-section-title">Add a new platform</h4>
+            <h4 className="social-link-section-title">{t('modals.socialLink.addPlatform')}</h4>
             <div className="social-link-platform-grid">
               {Object.entries(PLATFORMS).map(([key, info]) => {
                 const Icon = PLATFORM_ICONS[key];
@@ -243,12 +244,12 @@ export default function AddSocialLink_modal({ isOpen, onClose, hiveUsername, onC
         {step === 'flow' && selectedPlatform && (
           <>
             <h3 className="social-link-modal-title">
-              Link your {platformLabel(selectedPlatform)} channel
+              {t('modals.socialLink.flowTitle', { platform: platformLabel(selectedPlatform) })}
             </h3>
 
             <ol className="social-link-steps">
               <li>
-                <strong>Copy your unique verification hash:</strong>
+                <strong>{t('modals.socialLink.step1')}</strong>
                 <div className="social-link-hash-row">
                   <code className="social-link-hash">{hashInfo?.hash || '…'}</code>
                   <button
@@ -261,13 +262,10 @@ export default function AddSocialLink_modal({ isOpen, onClose, hiveUsername, onC
                 </div>
               </li>
               <li>
-                <strong>
-                  Paste it into your public {platformLabel(selectedPlatform)} profile description
-                </strong>{' '}
-                (anywhere — about / bio / description is fine). Save the change.
+                <Trans i18nKey="modals.socialLink.step2" values={{ platform: platformLabel(selectedPlatform) }} components={{ strong: <strong /> }} />
               </li>
               <li>
-                <strong>Enter your {platformLabel(selectedPlatform)} identifier:</strong>
+                <strong>{t('modals.socialLink.step3', { platform: platformLabel(selectedPlatform) })}</strong>
                 <input
                   className="social-link-input"
                   type="text"
@@ -292,14 +290,14 @@ export default function AddSocialLink_modal({ isOpen, onClose, hiveUsername, onC
                 onClick={() => { setStep('list'); setError(''); }}
                 disabled={submitting}
               >
-                Back
+                {t('common.actions.back')}
               </button>
               <button
                 className="social-link-btn-primary"
                 onClick={handleVerify}
                 disabled={submitting || !platformUsername.trim()}
               >
-                {submitting ? 'Verifying…' : 'Verify'}
+                {submitting ? t('modals.socialLink.verifying') : t('modals.socialLink.verify')}
               </button>
             </div>
           </>

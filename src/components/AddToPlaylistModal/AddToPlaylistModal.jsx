@@ -6,6 +6,8 @@ import { useQueryClient } from '@tanstack/react-query';
 import { useMyPlaylists, isVideoInPlaylist } from '../../hooks/useMyPlaylists';
 import { addToPlaylist, createPlaylistAndAdd } from '../../utils/playlistOperations';
 import { useAppStore } from '../../lib/store';
+import { useTranslation } from 'react-i18next';
+import { formatDate as formatLocaleDate } from '../../i18n';
 import './AddToPlaylistModal.scss';
 
 // Every toast from this module is headed "Playlist"; the message becomes the
@@ -16,6 +18,7 @@ const toast = toastIn('Playlist');
 const WATCH_LATER_NAME = 'Watch Later';
 
 function AddToPlaylistModal({ isOpen, onClose, author, permlink, videoTitle }) {
+  const { t } = useTranslation();
   const { user } = useAppStore();
   const queryClient = useQueryClient();
   const { data: playlists = [], isLoading, refetch } = useMyPlaylists();
@@ -37,14 +40,14 @@ function AddToPlaylistModal({ isOpen, onClose, author, permlink, videoTitle }) {
 
   const handleAddToPlaylist = async (playlist) => {
     if (isVideoInPlaylist(playlist, author, permlink)) {
-      toast.info('Video is already in this playlist');
+      toast.info(t('playlists.modal.alreadyInPlaylist'));
       return;
     }
 
     setIsAdding(playlist.id);
     try {
       await addToPlaylist(playlist.id, author, permlink, 0);
-      toast.success(`Added to "${playlist.name}"`);
+      toast.success(t('playlists.modal.addedTo', { name: playlist.name }));
       // Refetch playlists after a short delay
       setTimeout(() => {
         refetch();
@@ -53,7 +56,7 @@ function AddToPlaylistModal({ isOpen, onClose, author, permlink, videoTitle }) {
       }, 2000);
       onClose();
     } catch (error) {
-      toast.error('Failed to add: ' + error.message);
+      toast.error(t('playlists.modal.failedToAdd', { error: error.message }));
     } finally {
       setIsAdding(null);
     }
@@ -61,7 +64,7 @@ function AddToPlaylistModal({ isOpen, onClose, author, permlink, videoTitle }) {
 
   const handleWatchLater = async () => {
     if (isInWatchLater) {
-      toast.info('Video is already in Watch Later');
+      toast.info(t('playlists.modal.alreadyInWatchLater'));
       return;
     }
 
@@ -70,12 +73,12 @@ function AddToPlaylistModal({ isOpen, onClose, author, permlink, videoTitle }) {
       if (watchLaterPlaylist) {
         // Add to existing Watch Later playlist
         await addToPlaylist(watchLaterPlaylist.id, author, permlink, 0);
-        toast.success('Added to Watch Later');
+        toast.success(t('playlists.modal.addedToWatchLater'));
       } else {
         // Create Watch Later playlist and add the video
         const playlistId = generatePlaylistId();
         await createPlaylistAndAdd(WATCH_LATER_NAME, 'private', playlistId, author, permlink);
-        toast.success('Created Watch Later and added video!');
+        toast.success(t('playlists.modal.createdWatchLater'));
       }
 
       // Refetch playlists after a delay
@@ -86,7 +89,7 @@ function AddToPlaylistModal({ isOpen, onClose, author, permlink, videoTitle }) {
       }, 2000);
       onClose();
     } catch (error) {
-      toast.error('Failed: ' + error.message);
+      toast.error(t('playlists.modal.failed', { error: error.message }));
     } finally {
       setIsAddingWatchLater(false);
     }
@@ -103,7 +106,7 @@ function AddToPlaylistModal({ isOpen, onClose, author, permlink, videoTitle }) {
 
   const handleCreateAndAdd = async () => {
     if (!newPlaylistName.trim()) {
-      toast.error('Please enter a playlist name');
+      toast.error(t('playlists.modal.enterName'));
       return;
     }
 
@@ -114,10 +117,10 @@ function AddToPlaylistModal({ isOpen, onClose, author, permlink, videoTitle }) {
       const playlistName = newPlaylistName.trim();
 
       // Single batched transaction: Create playlist + Add video
-      toast.info('Creating playlist and adding video...');
+      toast.info(t('playlists.modal.creatingAndAdding'));
       await createPlaylistAndAdd(playlistName, newPlaylistAccess, playlistId, author, permlink, newPlaylistTags);
 
-      toast.success(`Created "${playlistName}" and added video!`);
+      toast.success(t('playlists.modal.createdAndAdded', { name: playlistName }));
 
       // Refetch playlists after a delay to allow blockchain indexing
       setTimeout(() => {
@@ -133,7 +136,7 @@ function AddToPlaylistModal({ isOpen, onClose, author, permlink, videoTitle }) {
       setShowCreateForm(false);
       onClose();
     } catch (error) {
-      toast.error('Failed: ' + error.message);
+      toast.error(t('playlists.modal.failed', { error: error.message }));
     } finally {
       setIsCreating(false);
     }
@@ -142,7 +145,7 @@ function AddToPlaylistModal({ isOpen, onClose, author, permlink, videoTitle }) {
   const formatDate = (dateStr) => {
     if (!dateStr) return '';
     const date = new Date(dateStr);
-    return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+    return formatLocaleDate(date, { month: 'short', day: 'numeric' });
   };
 
   const handleOverlayClick = (e) => {
@@ -161,7 +164,7 @@ function AddToPlaylistModal({ isOpen, onClose, author, permlink, videoTitle }) {
       <div className="add-to-playlist-modal" onClick={(e) => { e.preventDefault(); e.stopPropagation(); }}>
         <div className="modal-header">
           <h3>
-            <MdPlaylistAdd /> Save to Playlist
+            <MdPlaylistAdd /> {t('playlists.modal.title')}
           </h3>
           <button className="close-btn" onClick={(e) => { e.preventDefault(); e.stopPropagation(); onClose(); }}>
             <MdClose />
@@ -179,27 +182,27 @@ function AddToPlaylistModal({ isOpen, onClose, author, permlink, videoTitle }) {
               <MdWatchLater />
             </div>
             <div className="watch-later-info">
-              <span className="name">Watch Later</span>
+              <span className="name">{t('playlists.watchLater')}</span>
               <span className="meta">
-                <MdLock /> Private
-                {watchLaterPlaylist && ` · ${watchLaterPlaylist.items?.length || 0} videos`}
+                <MdLock /> {t('playlists.private')}
+                {watchLaterPlaylist && ` · ${t('common.units.videos', { count: watchLaterPlaylist.items?.length || 0 })}`}
               </span>
             </div>
-            {isInWatchLater && <span className="added-badge">Added</span>}
+            {isInWatchLater && <span className="added-badge">{t('playlists.modal.added')}</span>}
             {isAddingWatchLater && <span className="loading-indicator">...</span>}
           </button>
 
           <div className="separator">
-            <span>Your Playlists</span>
+            <span>{t('playlists.modal.yourPlaylists')}</span>
           </div>
 
           {isLoading ? (
-            <div className="loading">Loading playlists...</div>
+            <div className="loading">{t('playlists.modal.loading')}</div>
           ) : playlists.filter(p => p.name !== WATCH_LATER_NAME).length === 0 && !showCreateForm ? (
             <div className="empty-state">
-              <p>You don't have any other playlists yet</p>
+              <p>{t('playlists.modal.noOtherPlaylists')}</p>
               <button className="create-first-btn" onClick={(e) => { e.preventDefault(); e.stopPropagation(); setShowCreateForm(true); }}>
-                <MdAdd /> Create a playlist
+                <MdAdd /> {t('playlists.modal.createFirst')}
               </button>
             </div>
           ) : (
@@ -221,11 +224,11 @@ function AddToPlaylistModal({ isOpen, onClose, author, permlink, videoTitle }) {
                         <span className="name">{playlist.name}</span>
                         <span className="meta">
                           {playlist.access === 'private' ? <MdLock /> : <MdPublic />}
-                          {playlist.items?.length || 0} videos
+                          {t('common.units.videos', { count: playlist.items?.length || 0 })}
                           {playlist.updated_at && ` · ${formatDate(playlist.updated_at)}`}
                         </span>
                       </div>
-                      {alreadyAdded && <span className="added-badge">Added</span>}
+                      {alreadyAdded && <span className="added-badge">{t('playlists.modal.added')}</span>}
                     </button>
                   );
                 })}
@@ -233,7 +236,7 @@ function AddToPlaylistModal({ isOpen, onClose, author, permlink, videoTitle }) {
 
               {!showCreateForm && (
                 <button className="create-new-btn" onClick={(e) => { e.preventDefault(); e.stopPropagation(); setShowCreateForm(true); }}>
-                  <MdAdd /> Create new playlist
+                  <MdAdd /> {t('playlists.modal.createNew')}
                 </button>
               )}
             </>
@@ -242,43 +245,43 @@ function AddToPlaylistModal({ isOpen, onClose, author, permlink, videoTitle }) {
           {showCreateForm && (
             <div className="create-form">
               <div className="form-group">
-                <label>Name</label>
+                <label>{t('playlists.modal.name')}</label>
                 <input
                   type="text"
                   value={newPlaylistName}
                   onChange={(e) => setNewPlaylistName(e.target.value)}
                   onClick={(e) => e.stopPropagation()}
-                  placeholder="My awesome playlist"
+                  placeholder={t('playlists.modal.namePlaceholder')}
                   autoFocus
                 />
               </div>
               <div className="form-group">
-                <label>Privacy</label>
+                <label>{t('playlists.modal.privacy')}</label>
                 <div className="privacy-options">
                   <button
                     className={`privacy-btn ${newPlaylistAccess === 'public' ? 'active' : ''}`}
                     onClick={(e) => { e.preventDefault(); e.stopPropagation(); setNewPlaylistAccess('public'); }}
                     type="button"
                   >
-                    <MdPublic /> Public
+                    <MdPublic /> {t('playlists.public')}
                   </button>
                   <button
                     className={`privacy-btn ${newPlaylistAccess === 'private' ? 'active' : ''}`}
                     onClick={(e) => { e.preventDefault(); e.stopPropagation(); setNewPlaylistAccess('private'); }}
                     type="button"
                   >
-                    <MdLock /> Private
+                    <MdLock /> {t('playlists.private')}
                   </button>
                 </div>
               </div>
               <div className="form-group">
-                <label>Tags</label>
+                <label>{t('playlists.modal.tags')}</label>
                 <div className="tags-input-wrap">
                   <div className="tags-list">
                     {newPlaylistTags.map((tag) => (
                       <span key={tag} className="tag-chip">
                         {tag}
-                        <button type="button" onClick={(e) => { e.stopPropagation(); setNewPlaylistTags(prev => prev.filter(t => t !== tag)); }}>
+                        <button type="button" onClick={(e) => { e.stopPropagation(); setNewPlaylistTags(prev => prev.filter(x => x !== tag)); }}>
                           <MdClose />
                         </button>
                       </span>
@@ -301,7 +304,7 @@ function AddToPlaylistModal({ isOpen, onClose, author, permlink, videoTitle }) {
                         setNewPlaylistTags(prev => prev.slice(0, -1));
                       }
                     }}
-                    placeholder={newPlaylistTags.length === 0 ? 'Type a tag and press Enter' : 'Add more...'}
+                    placeholder={newPlaylistTags.length === 0 ? t('playlists.modal.tagPlaceholder') : t('playlists.modal.tagMorePlaceholder')}
                   />
                 </div>
               </div>
@@ -311,14 +314,14 @@ function AddToPlaylistModal({ isOpen, onClose, author, permlink, videoTitle }) {
                   onClick={(e) => { e.preventDefault(); e.stopPropagation(); setShowCreateForm(false); }}
                   disabled={isCreating}
                 >
-                  Cancel
+                  {t('common.actions.cancel')}
                 </button>
                 <button
                   className="create-btn"
                   onClick={(e) => { e.preventDefault(); e.stopPropagation(); handleCreateAndAdd(); }}
                   disabled={isCreating || !newPlaylistName.trim()}
                 >
-                  {isCreating ? 'Creating...' : 'Create & Add'}
+                  {isCreating ? t('playlists.modal.creating') : t('playlists.modal.createAndAdd')}
                 </button>
               </div>
             </div>
