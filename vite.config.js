@@ -146,6 +146,10 @@ export default defineConfig({
       },
       injectManifest: {
         globPatterns: ["**/*.{html,js,css,svg}"],
+        // Interface translations are NOT precached: that would make every visitor
+        // download all 20 non-English languages in the background. The one a
+        // visitor uses is fetched on demand and kept by the runtime JS cache (sw.js).
+        globIgnores: ["**/assets/locales/**"],
         maximumFileSizeToCacheInBytes: 8 * 1024 * 1024,
       },
     }),
@@ -204,6 +208,13 @@ export default defineConfig({
     },
     rollupOptions: {
       output: {
+        // Translation chunks (src/locales/<lang>/*.json, lazy-loaded per language)
+        // get their own folder so the PWA precache can skip them (globIgnores above).
+        chunkFileNames: (chunk) => (
+          chunk.facadeModuleId && /[\\/]src[\\/]locales[\\/]/.test(chunk.facadeModuleId)
+            ? "assets/locales/[name]-[hash].js"
+            : "assets/[name]-[hash].js"
+        ),
         // Split the Hive crypto/wallet stack out of the app chunk. It was one
         // undivided ~8.6 MiB bundle, which had grown past the service worker's
         // precache ceiling, so the app bundle silently stopped being precached
