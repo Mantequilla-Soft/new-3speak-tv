@@ -46,7 +46,22 @@ function holdVars(w, c) {
     '--ticker-start': `${start}px`,
     '--ticker-end': `${end}px`,
     '--ticker-to': `${-c}px`,
+    '--ticker-in-ease': holdEntryEase(w - start, start - end),
   };
+}
+
+/* The entry's ease-out, ending at the speed the pan goes on at, so the line slows INTO
+ * the pan instead of stopping and then lurching off again. A line that fits has no pan
+ * (pan = 0) and eases all the way to rest.
+ *
+ * In the entry's own 0..1 terms the pan's speed is (pan / 50%) / (entry / 20%), the
+ * slope the curve must end on; a cubic-bezier ends on the slope (1 - y2) / (1 - x2).
+ * Capped at 1 (linear): a pan faster than the entry would need the entry to SPEED UP. */
+function holdEntryEase(entry, pan) {
+  const k = entry > 0 ? Math.min(1, (0.4 * Math.max(0, pan)) / entry) : 0;
+  const x2 = 0.65;
+  const y2 = 1 - k * (1 - x2);
+  return `cubic-bezier(0.2, 0.9, ${x2}, ${y2.toFixed(3)})`;
 }
 
 export default function TickerCrawl({

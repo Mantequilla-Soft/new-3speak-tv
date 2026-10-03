@@ -95,7 +95,7 @@
 }
 
 /* 'hold', in four parts of the booked time:
-     0-20%   eases in from the right edge (fast, then settles),
+     0-20%   eases in from the right edge: fast, slowing to the pan's speed (to rest when it fits; curve set by the component),
      20-70%  a slow even pan from its start to its end (no movement when it fits,
              because start and end are then the same centred spot),
      70-80%  rests with its end in view,
@@ -104,10 +104,14 @@
 .ticker-track.is-hold {
   padding-left: 0;
   animation-name: ticker-hold;
+  // The entry's curve (every later keyframe names its own).
+  animation-timing-function: var(--ticker-in-ease, cubic-bezier(0.2, 0.9, 0.65, 1));
 }
 
 @keyframes ticker-hold {
-  0% { transform: translateX(var(--ticker-from)); animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1); }
+  // No timing function here: the entry takes the ELEMENT's (see .is-hold), because a
+  // var() inside a keyframe's timing function is not resolved and falls back to ease.
+  0% { transform: translateX(var(--ticker-from)); }
   20% { transform: translateX(var(--ticker-start)); animation-timing-function: linear; }
   70% { transform: translateX(var(--ticker-end)); animation-timing-function: linear; }
   80% { transform: translateX(var(--ticker-end)); animation-timing-function: cubic-bezier(0.64, 0, 0.78, 0); }
