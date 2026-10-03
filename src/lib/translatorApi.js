@@ -60,6 +60,15 @@ export async function fetchTranslatorStatus() {
   return { user: null, translator: false };
 }
 
+/** Menu hint: is this Hive name on the translator list? Never throws. */
+export async function isTranslatorName(user) {
+  if (!user) return false;
+  try {
+    const r = await request('GET', `/translator/${encodeURIComponent(user)}`);
+    return r.ok && r.data?.translator === true;
+  } catch { return false; }
+}
+
 /**
  * Prove the signed-in wallet account to the server (wallet sign-in prompt for
  * Keychain/HiveAuth/PeakVault/Ledger, token exchange for HiveSigner).

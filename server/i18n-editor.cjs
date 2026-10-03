@@ -595,6 +595,16 @@ function createI18nRouter ({ resolveUser, allowedOrigins, rootDir = path.join(__
     res.json({ user, translator: !!(user && translators.has(user)) })
   })
 
+  // Menu hint only: "is this Hive name a translator?" so the app can show the
+  // Translate entry before a wallet user has proven their account (that proof is
+  // asked for on /translate). Grants nothing: every write still requires a PROVEN
+  // identity in TRANSLATORS. Answers one name at a time, never the list.
+  router.get('/translator/:user', (req, res) => {
+    const u = String(req.params.user || '').toLowerCase()
+    res.set('Cache-Control', 'private, max-age=300')
+    res.json({ translator: HIVE_USER_RE.test(u) && translators.has(u) })
+  })
+
   router.get('/overlay/:lang', requireReady, (req, res) => {
     const { lang } = req.params
     if (!LANG_CODE_RE.test(lang)) return res.status(400).json({ error: 'Invalid language code' })

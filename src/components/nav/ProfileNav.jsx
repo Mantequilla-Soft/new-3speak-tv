@@ -28,6 +28,7 @@ import { usePwaInstall } from '../../utils/pwaInstall';
 import { MdOutlineDownload } from 'react-icons/md';
 import { FaMedal } from 'react-icons/fa6';
 import { toastIn } from '../../utils/toast';
+import { isTranslatorName } from '../../lib/translatorApi';
 
 // Headed "Install", the same as the bottom bar's install hint.
 const installToast = toastIn('Install');
@@ -69,6 +70,14 @@ function ProfileNav({ isVisible, onclose, toggleAddAccount, openLoginModal }) {
   // the same reasoning as the backlog entry above. Any failure (signed out,
   // Butter Auth unreachable) just means no entry.
   const [inviteLinkCount, setInviteLinkCount] = useState(0);
+  // Translators (TRANSLATORS on the server) get a Translate entry in this menu.
+  const [isTranslator, setIsTranslator] = useState(false);
+  useEffect(() => {
+    if (!user) { setIsTranslator(false); return undefined; }
+    let alive = true;
+    isTranslatorName(user).then((ok) => { if (alive) setIsTranslator(ok); });
+    return () => { alive = false; };
+  }, [user]);
   useEffect(() => {
     if (!user) { setInviteLinkCount(0); return undefined; }
     let alive = true;
@@ -216,6 +225,11 @@ function ProfileNav({ isVisible, onclose, toggleAddAccount, openLoginModal }) {
           {inviteLinkCount > 0 && (
             <Link to="/invite-links" className="pn-item" role="menuitem" onClick={onclose}>
               <MdPersonAdd className="pn-icon" /> <span>{t('nav.profile.inviteLinks')}</span>
+            </Link>
+          )}
+          {isTranslator && (
+            <Link to="/translate" className="pn-item" role="menuitem" onClick={onclose}>
+              <FaLanguage className="pn-icon" /> <span>{t('translator.title')}</span>
             </Link>
           )}
           {/* Phone only: on desktop the sidebar already links the rankings. */}
