@@ -96,7 +96,6 @@
   },
   "language": {
     "label": "Dil",
-    "hint": "3Speak menülerinin ve düğmelerinin gösterildiği dil. Videolar ve gönderiler, içerik üreticisinin yazdığı dilde kalır.",
-    "contribute": "Dilin listede yok mu, ya da kulağa tuhaf gelen bir çeviri mi gördün? GitHub'da iyileştirmeye yardım et."
+    "hint": "3Speak menülerinin ve düğmelerinin gösterildiği dil. Videolar ve gönderiler, içerik üreticisinin yazdığı dilde kalır."
   }
 }

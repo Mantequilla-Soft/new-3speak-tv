@@ -5,8 +5,6 @@ import { setLanguage, getAllLanguages, subscribeLanguages } from '../../i18n';
 import { fetchTranslatorStatus } from '../../lib/translatorApi';
 import './LanguagePicker.scss';
 
-// Where translations are contributed (TRANSLATING.md in the repo).
-const CONTRIBUTE_URL = 'https://github.com/Mantequilla-Soft/new-3speak-tv/blob/develop/TRANSLATING.md';
 
 /**
  * Interface-language dropdown. A native <select> on purpose: it is the one control
@@ -54,11 +52,6 @@ export default function LanguagePicker({ compact = false, onNavigate }) {
           </option>
         ))}
       </select>
-      {!compact && (
-        <a className="language-picker-contribute" href={CONTRIBUTE_URL} target="_blank" rel="noopener noreferrer">
-          {t('common.language.contribute')}
-        </a>
-      )}
       {!compact && isTranslator && (
         <Link className="language-picker-contribute" to="/translate" onClick={onNavigate}>
           {t('translator.title')}

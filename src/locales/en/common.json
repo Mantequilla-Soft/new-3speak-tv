@@ -96,7 +96,6 @@
   },
   "language": {
     "label": "Language",
-    "hint": "The language 3Speak's menus and buttons are shown in. Videos and posts stay in the language their creator wrote them in.",
-    "contribute": "Missing your language, or spotted a clumsy translation? Help improve it on GitHub."
+    "hint": "The language 3Speak's menus and buttons are shown in. Videos and posts stay in the language their creator wrote them in."
   }
 }

@@ -91,7 +91,6 @@
   },
   "language": {
     "label": "Bahasa",
-    "hint": "Bahasa yang dipakai untuk menu dan tombol 3Speak. Video dan postingan tetap dalam bahasa yang ditulis kreatornya.",
-    "contribute": "Bahasamu belum ada, atau menemukan terjemahan yang janggal? Bantu perbaiki di GitHub."
+    "hint": "Bahasa yang dipakai untuk menu dan tombol 3Speak. Video dan postingan tetap dalam bahasa yang ditulis kreatornya."
   }
 }

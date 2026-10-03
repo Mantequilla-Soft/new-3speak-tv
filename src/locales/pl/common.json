@@ -106,7 +106,6 @@
   },
   "language": {
     "label": "Język",
-    "hint": "Język, w którym wyświetlane są menu i przyciski 3Speak. Filmy i posty pozostają w języku, w którym napisał je twórca.",
-    "contribute": "Brakuje twojego języka albo trafiło ci się niezgrabne tłumaczenie? Pomóż je poprawić na GitHubie."
+    "hint": "Język, w którym wyświetlane są menu i przyciski 3Speak. Filmy i posty pozostają w języku, w którym napisał je twórca."
   }
 }
