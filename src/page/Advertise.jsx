@@ -24,7 +24,6 @@ import {
   readWizard,
   clearWizard,
   discardProduct,
-  identityIsSilent,
   uploadCreative,
   uploadImageAsset,
   uploadLogo,
@@ -2014,7 +2013,6 @@ export default function Advertise({ openLoginModal }) {
   const [receipt, setReceipt] = useState(null);
   const [lookupRef, setLookupRef] = useState('');
   const [lookup, setLookup] = useState(null);
-  const [lookingUp, setLookingUp] = useState(false);
   // The logged-in account's own applications, so a returning advertiser does not
   // have to keep a reference code around to find their own work. `forceSigned` is
   // the "ask the checker properly" switch, which costs a signature.
@@ -2053,43 +2051,38 @@ export default function Advertise({ openLoginModal }) {
   /**
    * This account's applications.
    *
-   * Two ways in. The cached path replays references we have already proved ownership
-   * of: a reference IS the credential the rest of this page uses, so once one is on
-   * the device it costs nothing and asks for no signature. The signed path goes to
-   * the checker with proof and returns the lot, which is what a new browser needs.
+   * The whole list, from the checker, vouched for by our backend's view of the login
+   * session, so it loads on arrival for every login type with no prompt. Only when
+   * that fails (no session it can verify) does it fall back to the references this
+   * device already holds, which are proof on their own: a reference IS the credential
+   * the rest of this page uses. `forceSigned` is the "Show my products" button, the
+   * one path allowed to ask a wallet for a signature.
    *
    * On react-query rather than a fetch-on-mount effect, like the inventory and rate
    * card above it, so the account key handles invalidation on a login change for us.
    */
-  // Read once per account rather than on every render — localStorage in a render
-  // body would make the query's `enabled` flip about as React re-renders.
-  // eslint-disable-next-line react-hooks/exhaustive-deps -- refsVersion IS the signal
-  const hasCachedRefs = useMemo(() => rememberedReferences(user).length > 0, [user, refsVersion]);
-
   const listMine = useCallback(async () => {
-    const cached = rememberedReferences(user);
-    if (cached.length && !forceSigned) {
+    try {
+      return await fetchMyApplications(user, { prompt: forceSigned });
+    } catch (err) {
+      const cached = forceSigned ? [] : rememberedReferences(user);
+      if (!cached.length) throw err;
       const rows = await Promise.all(cached.map((ref) => fetchApplication(ref)
         .then((r) => ({ ...r, reference: ref }))
         .catch(() => null)));   // a stale reference is not an error worth showing
       return rows.filter(Boolean);
     }
-    return fetchMyApplications(user);
   }, [user, forceSigned]);
 
-  // Runs on arrival when it can do so silently: cached references always, and the
-  // signed route for logins the server can verify on its own (Butter Auth,
-  // HiveSigner). A wallet login would mean a signing popup the moment the page
-  // loads, which is not something to spring on someone who came to read it, so
-  // `forceSigned` waits for them to press the button.
   const {
     data: mine,
     isFetching: mineBusy,
     error: mineError,
+    refetch: refetchMine,
   } = useQuery({
     queryKey: ['advertise-mine', user, forceSigned, refsVersion],
     queryFn: listMine,
-    enabled: !!user && (forceSigned || hasCachedRefs || identityIsSilent()),
+    enabled: !!user,
     staleTime: 60 * 1000,
     retry: false,
   });
@@ -2189,11 +2182,6 @@ export default function Advertise({ openLoginModal }) {
      and the ones that are done are three different jobs, and a single scroll made you
      hunt for whichever one you came for. */
   const [ptab, setPtab] = useState('book');
-  /* Opening a product by its reference is the fallback path: it matters to somebody
-     who registered on another browser, and to nobody else. It sat permanently at the
-     foot of the product list, so it took up room on every visit for the one visit it
-     is needed on. */
-  const [showLookup, setShowLookup] = useState(false);
   /* Where Book a spot has got to. It was one page holding an upload panel, a booking
      form and every flight ever booked, which asked somebody to work out the order for
      themselves. */
@@ -2279,26 +2267,7 @@ export default function Advertise({ openLoginModal }) {
     }
   }
 
-  async function onLookup(e) {
-    e.preventDefault();
-    const ref = lookupRef.trim();
-    if (!ref || lookingUp) return;
-    setLookingUp(true);
-    setLookup(null);
-    try {
-      const found = await fetchApplication(ref);
-      setLookup(found);
-      // Typed once, remembered after — the same bargain as applying.
-      if (found?.hiveAccount) {
-        rememberReference(found.hiveAccount, ref);
-        setRefsVersion((v) => v + 1);
-      }
-    } catch (err) {
-      toast.error(err.status === 404 ? 'No product with that reference' : (err.message || 'Lookup failed'));
-    } finally {
-      setLookingUp(false);
-    }
-  }
+
 
   // The product form, defined once and rendered in two places: the Apply tab and
   // step 1 of the wizard. Duplicating it would mean two forms drifting apart on a
@@ -2422,7 +2391,7 @@ export default function Advertise({ openLoginModal }) {
                     rows={4}
                     value={form.productionBrief}
                     onChange={set('productionBrief')}
-                    placeholder="What you are advertising, who it is for, the one thing a viewer should remember, and anything you want us to avoid. You can send us a logo and stills once you have your reference."
+                    placeholder="What you are advertising, who it is for, the one thing a viewer should remember, and anything you want us to avoid. You can send us a logo and stills once your product is registered."
                     required
                   />
                   <span className={`mkt-hint${briefLeft > 0 ? ' mkt-hint-short' : ''}`}>
@@ -2650,8 +2619,7 @@ export default function Advertise({ openLoginModal }) {
           {wizRef && (
             <div className="mkt-wiz-cancel">
               <span className="mkt-fine">
-                Working on <strong>{wizRef.projectName || 'your product'}</strong> ·{' '}
-                <code>{wizRef.reference}</code>
+                Working on <strong>{wizRef.projectName || 'your product'}</strong>
               </span>
               <button type="button" className="mkt-linkish" onClick={() => setWizKill(true)}>
                 Cancel and delete
@@ -2824,7 +2792,7 @@ export default function Advertise({ openLoginModal }) {
                 <div className="mkt-panel mkt-panel-muted mkt-wiz-exit">
                   <p style={{ margin: 0 }}>
                     <strong>Saved, but not finished.</strong> Your product and anything you
-                    uploaded are kept under reference <code>{wizRef?.reference}</code>. Nothing
+                    uploaded are saved to your account. Nothing
                     will run until you book a slot and pay for it, and we cannot review a
                     booking that does not exist yet.
                   </p>
@@ -2900,37 +2868,9 @@ export default function Advertise({ openLoginModal }) {
                 </button>
                 );
               })()}
-              <button
-                type="button"
-                className="mkt-codebtn"
-                aria-expanded={showLookup}
-                aria-controls="mkt-lookup-form"
-                title="Open a product with the reference you were given"
-                onClick={() => setShowLookup((v) => !v)}
-              >
-                Open by code
-              </button>
               </div>
             </div>
 
-            {showLookup && (
-              <form className="mkt-lookup" id="mkt-lookup-form" onSubmit={onLookup}>
-                <label className="mkt-visually-hidden" htmlFor="mkt-ref">Product reference</label>
-                <input
-                  id="mkt-ref"
-                  value={lookupRef}
-                  onChange={(e) => setLookupRef(e.target.value)}
-                  placeholder="Open by reference"
-                  autoComplete="off"
-                  // Only ever rendered by pressing the button above, so taking the
-                  // caret is finishing that action rather than stealing focus.
-                  autoFocus
-                />
-                <button type="submit" className="mkt-secondary" disabled={lookingUp || !lookupRef.trim()}>
-                  {lookingUp ? 'Checking…' : 'Open'}
-                </button>
-              </form>
-            )}
             {/* Said in the panel too, not only in a tooltip nobody hovers on a phone. */}
             {user && (myApps || []).some((a) => a.status === 'pending') && (
               <p className="mkt-fine">
@@ -2942,9 +2882,11 @@ export default function Advertise({ openLoginModal }) {
             {!user && (
               <div className="mkt-panel mkt-panel-muted">
                 <p style={{ margin: 0 }}>
-                  Log in to see the products registered to your Hive account, or open a single
-                  one with its reference.
+                  Log in to see the products registered to your Hive account.
                 </p>
+                <button type="button" className="mkt-secondary" onClick={() => openLoginModal?.('login')}>
+                  Log in
+                </button>
               </div>
             )}
 
@@ -2953,7 +2895,14 @@ export default function Advertise({ openLoginModal }) {
             {mineError && (
               <div className="mkt-panel mkt-panel-muted">
                 <p style={{ margin: 0 }}>{mineError.message || 'Could not load your products'}</p>
-                <p className="mkt-fine">You can still open one with its reference.</p>
+                {/* The way back. Without it the only control left was a code nobody has. */}
+                <button
+                  type="button"
+                  className="mkt-secondary"
+                  onClick={() => { if (forceSigned) refetchMine(); else setForceSigned(true); }}
+                >
+                  Show my products
+                </button>
               </div>
             )}
 
@@ -3180,8 +3129,8 @@ export default function Advertise({ openLoginModal }) {
               <div className="mkt-panel mkt-panel-muted mkt-split-empty">
                 <p style={{ margin: 0 }}>
                   {myApps?.length
-                    ? 'Pick a product above to see its ad videos and bookings.'
-                    : 'Open a product with its reference to see its ad videos and bookings.'}
+                    ? 'Pick a product to see its ad videos and bookings.'
+                    : 'Your products, their ad videos and bookings show up here once they load.'}
                 </p>
               </div>
             )}
