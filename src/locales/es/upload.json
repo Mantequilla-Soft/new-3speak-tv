@@ -194,6 +194,12 @@
       "info": "Marca este video como contenido para adultos. Se ocultará en feeds y búsquedas para los espectadores que no hayan activado NSFW, y se etiquetará como <code>nsfw</code> en todo Hive.",
       "hint": "Contenido para adultos."
     },
+    "ads": {
+      "label": "Anuncios en este video",
+      "info": "Tu cuenta muestra anuncios, así que este video también, a menos que los desactives aquí. Solo afecta a este video; tus otros videos y el ajuste de tu cuenta no cambian.",
+      "hintOn": "Puede haber anuncios en este video.",
+      "hintOff": "Sin anuncios en este video."
+    },
     "gated": {
       "label": "Solo suscriptores",
       "info": "Cifra este video para que solo los suscriptores de 3Speak Pro puedan reproducirlo. Junto con él se publica una <b>vista previa de 10 segundos sin cifrar</b>, así que la publicación sigue mostrando un tráiler en todo Hive. Tu título, descripción y etiquetas son contenido normal de una publicación de Hive y <b>no se cifran</b>; solo el video. <b>Esto no se puede cambiar después de subirlo.</b>",
@@ -256,6 +262,7 @@
     "scheduledFor": "Programada para el {{when}}",
     "scheduled": "¡Publicación programada!",
     "linkingEmbed": "Vinculando el video insertado...",
+    "adsOffFailedToast": "Publicado, pero aún no se pudieron desactivar los anuncios de este video.",
     "trailerFailedToast": "Publicado, pero no se pudo configurar como tráiler de tu canal.",
     "completed": "Completado",
     "publishedToast": "¡Video publicado!",
@@ -281,6 +288,8 @@
       "embedLinkFailed": "Aviso: no se pudo vincular el video insertado (no es crítico)",
       "thumbnailLinked": "Miniatura vinculada al video insertado",
       "thumbnailLinkFailed": "Aviso: no se pudo configurar la miniatura del video insertado (no es crítico)",
+      "adsOffSaved": "Anuncios desactivados para este video",
+      "adsOffFailed": "No se pudo guardar la opción sin anuncios para este video",
       "trailerSet": "Configurado como tráiler de tu canal",
       "trailerFailed": "Publicado, pero no se pudo configurar como tráiler de tu canal",
       "published": "¡Video publicado!"

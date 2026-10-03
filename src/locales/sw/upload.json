@@ -193,6 +193,12 @@
       "info": "Inaweka alama kuwa video hii ni maudhui ya watu wazima. Itafichwa kwenye milisho na utafutaji kwa watazamaji ambao hawajawasha NSFW, na itawekwa lebo <code>nsfw</code> kote Hive.",
       "hint": "Maudhui ya watu wazima."
     },
+    "ads": {
+      "label": "Matangazo kwenye video hii",
+      "info": "Akaunti yako inaonyesha matangazo, kwa hivyo video hii pia, isipokuwa ukiyazima hapa. Hii inahusu video hii moja tu; video zako nyingine na mpangilio wa akaunti yako vinabaki vilevile.",
+      "hintOn": "Matangazo yanaweza kuchezwa kwenye video hii.",
+      "hintOff": "Hakuna matangazo kwenye video hii."
+    },
     "gated": {
       "label": "Kwa wafadhili tu",
       "info": "Inasimba video hii kwa njia fiche ili wanachama wa 3Speak Pro pekee waweze kuicheza. <b>Onyesho la sekunde 10 lisilosimbwa</b> huchapishwa pamoja nayo, ili chapisho bado lionyeshe trela kila mahali kwenye Hive. Kichwa, maelezo na lebo zako ni maudhui ya kawaida ya chapisho la Hive na <b>hayasimbwi kwa njia fiche</b> — ni video tu inayosimbwa. <b>Hili haliwezi kubadilishwa baada ya kupakia.</b>",
@@ -254,6 +260,7 @@
     "scheduledFor": "Imeratibiwa kwa {{when}}",
     "scheduled": "Chapisho limeratibiwa!",
     "linkingEmbed": "Inaunganisha video iliyopachikwa...",
+    "adsOffFailedToast": "Imechapishwa, lakini matangazo ya video hii bado hayajaweza kuzimwa.",
     "trailerFailedToast": "Imechapishwa, lakini imeshindwa kuiweka kama trela ya chaneli yako.",
     "completed": "Imekamilika",
     "publishedToast": "Video imechapishwa!",
@@ -279,6 +286,8 @@
       "embedLinkFailed": "Onyo: Imeshindwa kuunganisha video iliyopachikwa (si muhimu)",
       "thumbnailLinked": "Picha ndogo imeunganishwa na video iliyopachikwa",
       "thumbnailLinkFailed": "Onyo: Imeshindwa kuweka picha ndogo ya video iliyopachikwa (si muhimu)",
+      "adsOffSaved": "Matangazo yamezimwa kwa video hii",
+      "adsOffFailed": "Imeshindwa kuhifadhi mpangilio wa bila matangazo kwa video hii",
       "trailerSet": "Imewekwa kama trela ya chaneli yako",
       "trailerFailed": "Imechapishwa, lakini imeshindwa kuiweka kama trela ya chaneli yako",
       "published": "Video imechapishwa!"

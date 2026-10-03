@@ -192,6 +192,12 @@
       "info": "将此视频标记为成人内容。对于未开启 NSFW 的观众，它不会出现在信息流和搜索中，并会在整个 Hive 上标记 <code>nsfw</code> 标签。",
       "hint": "成人内容。"
     },
+    "ads": {
+      "label": "此视频的广告",
+      "info": "你的账户已开启广告，因此除非在此关闭，此视频也会显示广告。此设置仅影响这一个视频；你的其他视频和账户设置保持不变。",
+      "hintOn": "此视频可能会播放广告。",
+      "hintOff": "此视频不显示广告。"
+    },
     "gated": {
       "label": "仅限支持者",
       "info": "加密此视频，只有 3Speak Pro 订阅者可以播放。同时会发布一段 <b>10 秒的未加密预览</b>，因此帖子在 Hive 上的任何地方仍会显示预告。你的标题、简介和标签是普通的 Hive 帖子内容，<b>不会被加密</b>——只有视频会被加密。<b>上传后无法更改。</b>",
@@ -252,6 +258,7 @@
     "scheduledFor": "定时于 {{when}}",
     "scheduled": "帖子已定时！",
     "linkingEmbed": "正在关联嵌入视频...",
+    "adsOffFailedToast": "已发布，但暂时无法关闭此视频的广告。",
     "trailerFailedToast": "已发布，但无法设为你的频道预告片。",
     "completed": "已完成",
     "publishedToast": "视频发布成功！",
@@ -277,6 +284,8 @@
       "embedLinkFailed": "警告：无法关联嵌入视频（不影响发布）",
       "thumbnailLinked": "缩略图已关联到嵌入视频",
       "thumbnailLinkFailed": "警告：无法设置嵌入缩略图（不影响发布）",
+      "adsOffSaved": "已关闭此视频的广告",
+      "adsOffFailed": "无法保存此视频的无广告设置",
       "trailerSet": "已设为你的频道预告片",
       "trailerFailed": "已发布，但无法设为你的频道预告片",
       "published": "视频发布成功！"

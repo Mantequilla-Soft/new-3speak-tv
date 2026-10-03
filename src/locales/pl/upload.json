@@ -195,6 +195,12 @@
       "info": "Oznacza ten film jako treść dla dorosłych. Będzie ukryty w kanałach i wyszukiwaniu dla widzów, którzy nie włączyli NSFW, i otagowany jako <code>nsfw</code> w całym Hive.",
       "hint": "Treść dla dorosłych."
     },
+    "ads": {
+      "label": "Reklamy w tym filmie",
+      "info": "Twoje konto wyświetla reklamy, więc ten film też, chyba że wyłączysz je tutaj. Dotyczy to tylko tego jednego filmu; pozostałe filmy i ustawienie konta się nie zmieniają.",
+      "hintOn": "W tym filmie mogą pojawiać się reklamy.",
+      "hintOff": "Brak reklam w tym filmie."
+    },
     "gated": {
       "label": "Tylko dla wspierających",
       "info": "Szyfruje ten film, aby mogli go odtwarzać tylko subskrybenci 3Speak Pro. Razem z nim publikowany jest <b>10-sekundowy niezaszyfrowany podgląd</b>, więc post nadal pokazuje zwiastun wszędzie na Hive. Tytuł, opis i tagi to zwykła treść posta Hive i <b>nie są szyfrowane</b> — szyfrowany jest tylko film. <b>Nie można tego zmienić po przesłaniu.</b>",
@@ -258,6 +264,7 @@
     "scheduledFor": "Zaplanowano na {{when}}",
     "scheduled": "Post zaplanowany!",
     "linkingEmbed": "Łączenie osadzonego filmu...",
+    "adsOffFailedToast": "Opublikowano, ale nie udało się jeszcze wyłączyć reklam w tym filmie.",
     "trailerFailedToast": "Opublikowano, ale nie udało się ustawić go jako zwiastuna kanału.",
     "completed": "Zakończono",
     "publishedToast": "Film opublikowany!",
@@ -283,6 +290,8 @@
       "embedLinkFailed": "Ostrzeżenie: nie udało się połączyć osadzonego filmu (niekrytyczne)",
       "thumbnailLinked": "Miniatura połączona z osadzonym filmem",
       "thumbnailLinkFailed": "Ostrzeżenie: nie udało się ustawić miniatury osadzenia (niekrytyczne)",
+      "adsOffSaved": "Reklamy w tym filmie wyłączone",
+      "adsOffFailed": "Nie udało się zapisać ustawienia bez reklam dla tego filmu",
       "trailerSet": "Ustawiono jako zwiastun kanału",
       "trailerFailed": "Opublikowano, ale nie udało się ustawić go jako zwiastuna kanału",
       "published": "Film opublikowany!"

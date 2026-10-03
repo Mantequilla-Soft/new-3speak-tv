@@ -194,6 +194,12 @@
       "info": "Marca este vídeo como conteúdo adulto. Ele ficará oculto dos feeds e da busca para quem não ativou NSFW e será marcado com <code>nsfw</code> em toda a Hive.",
       "hint": "Conteúdo adulto."
     },
+    "ads": {
+      "label": "Anúncios neste vídeo",
+      "info": "Sua conta exibe anúncios, então este vídeo também, a menos que você os desative aqui. Isso afeta apenas este vídeo; seus outros vídeos e a configuração da sua conta continuam iguais.",
+      "hintOn": "Este vídeo pode exibir anúncios.",
+      "hintOff": "Sem anúncios neste vídeo."
+    },
     "gated": {
       "label": "Só para apoiadores",
       "info": "Criptografa este vídeo para que só assinantes do 3Speak Pro possam reproduzi-lo. Uma <b>prévia de 10 segundos sem criptografia</b> é publicada junto, então o post ainda mostra um trailer em toda a Hive. Seu título, descrição e tags são conteúdo comum de post da Hive e <b>não são criptografados</b> — só o vídeo é. <b>Isso não pode ser alterado depois do envio.</b>",
@@ -256,6 +262,7 @@
     "scheduledFor": "Agendado para {{when}}",
     "scheduled": "Post agendado!",
     "linkingEmbed": "Vinculando o vídeo incorporado...",
+    "adsOffFailedToast": "Publicado, mas ainda não foi possível desativar os anúncios deste vídeo.",
     "trailerFailedToast": "Publicado, mas não foi possível defini-lo como trailer do seu canal.",
     "completed": "Concluído",
     "publishedToast": "Vídeo publicado!",
@@ -281,6 +288,8 @@
       "embedLinkFailed": "Aviso: não foi possível vincular o vídeo incorporado (não crítico)",
       "thumbnailLinked": "Miniatura vinculada ao vídeo incorporado",
       "thumbnailLinkFailed": "Aviso: não foi possível definir a miniatura incorporada (não crítico)",
+      "adsOffSaved": "Anúncios desativados para este vídeo",
+      "adsOffFailed": "Não foi possível salvar a opção sem anúncios para este vídeo",
       "trailerSet": "Definido como trailer do seu canal",
       "trailerFailed": "Publicado, mas não foi possível defini-lo como trailer do seu canal",
       "published": "Vídeo publicado!"

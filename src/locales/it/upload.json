@@ -194,6 +194,12 @@
       "info": "Contrassegna questo video come contenuto per adulti. Verrà nascosto da feed e ricerca per gli spettatori che non hanno abilitato i contenuti NSFW, e taggato <code>nsfw</code> su tutto Hive.",
       "hint": "Contenuto per adulti."
     },
+    "ads": {
+      "label": "Pubblicità su questo video",
+      "info": "Il tuo account mostra pubblicità, quindi anche questo video, a meno che tu non la disattivi qui. Vale solo per questo video; gli altri tuoi video e l'impostazione del tuo account restano invariati.",
+      "hintOn": "Su questo video possono comparire annunci.",
+      "hintOff": "Nessuna pubblicità su questo video."
+    },
     "gated": {
       "label": "Solo per i sostenitori",
       "info": "Cripta questo video in modo che solo gli abbonati a 3Speak Pro possano riprodurlo. Insieme al video viene pubblicata un'<b>anteprima non criptata di 10 secondi</b>, così il post mostra comunque un trailer ovunque su Hive. Titolo, descrizione e tag sono normali contenuti di un post Hive e <b>non sono criptati</b> — lo è solo il video. <b>Non è possibile modificarlo dopo il caricamento.</b>",
@@ -256,6 +262,7 @@
     "scheduledFor": "Programmato per il {{when}}",
     "scheduled": "Post programmato!",
     "linkingEmbed": "Collegamento del video incorporato...",
+    "adsOffFailedToast": "Pubblicato, ma non è stato ancora possibile disattivare la pubblicità per questo video.",
     "trailerFailedToast": "Pubblicato, ma non è stato possibile impostarlo come trailer del canale.",
     "completed": "Completato",
     "publishedToast": "Video pubblicato!",
@@ -281,6 +288,8 @@
       "embedLinkFailed": "Attenzione: impossibile collegare il video incorporato (non critico)",
       "thumbnailLinked": "Miniatura collegata al video incorporato",
       "thumbnailLinkFailed": "Attenzione: impossibile impostare la miniatura incorporata (non critico)",
+      "adsOffSaved": "Pubblicità disattivata per questo video",
+      "adsOffFailed": "Impossibile salvare l'impostazione senza pubblicità per questo video",
       "trailerSet": "Impostato come trailer del tuo canale",
       "trailerFailed": "Pubblicato, ma non è stato possibile impostarlo come trailer del canale",
       "published": "Video pubblicato!"

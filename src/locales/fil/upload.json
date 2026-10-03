@@ -193,6 +193,12 @@
       "info": "Mamarkahan ang video na ito bilang adult content. Itatago ito sa feeds at search para sa mga viewer na hindi nag-enable ng NSFW, at ita-tag na <code>nsfw</code> sa buong Hive.",
       "hint": "Adult content."
     },
+    "ads": {
+      "label": "Mga ad sa video na ito",
+      "info": "May mga ad ang account mo, kaya pati ang video na ito, maliban kung i-off mo ito rito. Sa video na ito lang ito may epekto; hindi magbabago ang iba mong video at ang setting ng account mo.",
+      "hintOn": "Maaaring may ad na mag-play sa video na ito.",
+      "hintOff": "Walang ad sa video na ito."
+    },
     "gated": {
       "label": "Para sa supporters lang",
       "info": "Ine-encrypt ang video na ito para mga 3Speak Pro subscriber lang ang makapanood. May kasamang <b>10 segundong hindi naka-encrypt na preview</b> na ipa-publish, kaya may trailer pa rin ang post kahit saan sa Hive. Ang pamagat, description at tags mo ay ordinaryong content ng Hive post at <b>hindi naka-encrypt</b> — ang video lang. <b>Hindi na ito mababago pagkatapos ng upload.</b>",
@@ -254,6 +260,7 @@
     "scheduledFor": "Naka-schedule sa {{when}}",
     "scheduled": "Naka-schedule na ang post!",
     "linkingEmbed": "Nili-link ang embed video...",
+    "adsOffFailedToast": "Na-publish na, pero hindi pa ma-off ang mga ad para sa video na ito.",
     "trailerFailedToast": "Na-publish na, pero hindi maitakda bilang channel trailer mo.",
     "completed": "Tapos na",
     "publishedToast": "Na-publish na ang video!",
@@ -279,6 +286,8 @@
       "embedLinkFailed": "Babala: Hindi ma-link ang embed video (hindi kritikal)",
       "thumbnailLinked": "Na-link ang thumbnail sa embed video",
       "thumbnailLinkFailed": "Babala: Hindi maitakda ang embed thumbnail (hindi kritikal)",
+      "adsOffSaved": "Naka-off ang mga ad para sa video na ito",
+      "adsOffFailed": "Hindi ma-save ang walang-ad na setting para sa video na ito",
       "trailerSet": "Itinakda bilang channel trailer mo",
       "trailerFailed": "Na-publish na, pero hindi maitakda bilang channel trailer mo",
       "published": "Na-publish na ang video!"
