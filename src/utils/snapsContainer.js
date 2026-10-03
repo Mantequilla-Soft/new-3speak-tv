@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { getHiveUrl } from './hiveNode';
 import { HIVE_API_NODES } from './config';
+import { t } from '../i18n';
 
 // Resolving the latest @peak.snaps container — the parent every snap-style
 // post (video short, audio snap, text snap, OpenPod announcement) replies to.
@@ -132,7 +133,7 @@ export async function resolveSnapsContainer({
     if (signal?.aborted) throw new Error('Cancelled');
     if (round > 0) {
       const wait = ROUND_BACKOFF_MS[Math.min(round - 1, ROUND_BACKOFF_MS.length - 1)];
-      say(`Snaps container not found yet — retrying (attempt ${round + 1})...`);
+      say(t('misc.snaps.retrying', { attempt: round + 1 }));
       await sleep(wait);
     }
 
@@ -155,11 +156,9 @@ export async function resolveSnapsContainer({
     round += 1;
   }
 
-  const detail = lastError?.message ? ` (last error — ${lastError.message})` : '';
-  throw new Error(
-    `Could not reach any Hive node to find the snaps container${detail}. ` +
-    'Please check your connection and try again.'
-  );
+  throw new Error(lastError?.message
+    ? t('misc.snaps.unreachableWithError', { error: lastError.message })
+    : t('misc.snaps.unreachable'));
 }
 
 /** Drop the memo — used after a successful post so the next one re-checks. */

@@ -1,0 +1,200 @@
+{
+  "loaders": {
+    "wifi": "Wifi ローダー"
+  },
+  "supportBlock": {
+    "banned": {
+      "title": "アカウントが停止されています",
+      "body": "3Speak アカウントが停止されているため、ログインできません。誤りだと思われる場合は 3Speak サポートにお問い合わせください。"
+    },
+    "upload": {
+      "title": "このアカウントではアップロードが無効になっています",
+      "body": "3Speak アカウントは現在アップロードが許可されていません。誤りだと思われる場合は 3Speak サポートにお問い合わせください。"
+    }
+  },
+  "emergency": {
+    "title": "現在インフラに問題が発生しています",
+    "body": "チームが対応中で、3Speak の復旧に取り組んでいます。Discord に参加すると、私たちに連絡したり最新情報を受け取ったりできます。ご迷惑をおかけしてすみません。",
+    "joinDiscord": "Discord に参加"
+  },
+  "changelog": {
+    "title": "アップデートしました！",
+    "subtitle": "v{{version}} の新機能",
+    "previousUpdates": "以前のアップデート",
+    "newerUpdates": "新しいアップデート",
+    "readTheCode": "コードを見る",
+    "gotIt": "OK"
+  },
+  "routes": {
+    "homeFeed": "ホームフィード",
+    "followFeed": "フォローフィード",
+    "discover": "発見",
+    "newVideos": "新着動画",
+    "firstUploads": "初投稿",
+    "rankings": "ランキング",
+    "groups": "グループ",
+    "badges": "バッジ",
+    "audioBy": "@{{author}} の音声",
+    "audio": "音声",
+    "playlist": "再生リスト",
+    "watchHistory": "再生履歴 — @{{username}}",
+    "postBy": "@{{author}} の投稿",
+    "myProfile": "マイプロフィール",
+    "uploadStudio": "アップロードスタジオ",
+    "drafts": "下書き",
+    "editVideo": "動画を編集",
+    "editScheduledPost": "予約投稿を編集",
+    "chat": "チャット",
+    "about": "3Speak について",
+    "login": "ログイン",
+    "brandFallback": "3Speak - 分散型動画プラットフォーム"
+  },
+  "invite": {
+    "title": "<who>@{{referrer}}</who> さんから 3Speak に招待されました",
+    "incubatingFastTrack": "ウォームアップを終えなくても、今すぐ <b>@{{handle}}</b> を自分の Hive アカウントにできます。",
+    "incubatingKeepGoing": "ウォームアップを続けましょう。<b>@{{referrer}}</b> さんがあなたを招待した人として記録されます。",
+    "signUpFastTrack": "登録するとすぐに自分の Hive アカウントが手に入ります。3Speak とほかのすべての Hive アプリで使える 1 つのログインで、鍵はあなただけが持ちます。所要時間は約 1 分です。",
+    "signUpFree": "登録して、3Speak の無料プロフィールから始めましょう。招待は保存されるので、<b>@{{referrer}}</b> さんに紹介の実績が付きます。",
+    "createHiveAccount": "Hive アカウントを作成",
+    "createAccount": "アカウントを作成",
+    "lookAround": "まずは見てみる"
+  },
+  "interests": {
+    "saved": "興味のあるトピックを保存しました。設定からいつでも変更できます",
+    "saveFailed": "興味のあるトピックを保存できませんでした",
+    "title": "どんなことに興味がありますか？",
+    "body": "好きなトピックをいくつか選ぶと、あなたの好みに合ったコンテンツを多く表示します。<b>設定</b>からいつでも変更できます。",
+    "notNow": "今はしない",
+    "save": "保存"
+  },
+  "emojiGif": {
+    "emoji": "絵文字",
+    "searchEmoji": "絵文字を検索",
+    "searchGifs": "GIF を検索…",
+    "noGifs": "GIF が見つかりません。",
+    "poweredBy": "Powered by GIPHY"
+  },
+  "welcome": {
+    "things": {
+      "postVideos": {
+        "title": "動画を投稿",
+        "text": "長尺の動画をアップロード。誰にもこっそり削除されないチェーン上で、ずっとあなたのものです。"
+      },
+      "filmShorts": {
+        "title": "ショートを撮る",
+        "text": "手軽で縦長、シェアしやすい動画。最初の視聴者を見つけるのにぴったりです。"
+      },
+      "goLive": {
+        "title": "ライブ配信",
+        "text": "仲間に向けて配信し、ゲストをステージに招いて、終わった後も録画を残せます。"
+      },
+      "buildCommunity": {
+        "title": "コミュニティを作る",
+        "text": "好きなことを中心に場所を作るか、すでに盛り上がっているところに参加しましょう。"
+      },
+      "makeFriends": {
+        "title": "本当の仲間を作る",
+        "text": "互いに支え合う本物の人たちと、コメントやチャットをしたり、コラボしたりできます。"
+      },
+      "getInspired": {
+        "title": "刺激を受けて、参加しよう",
+        "text": "クリエイターを見つけ、好きな人を応援して、その間に報酬も得られます。"
+      }
+    },
+    "advertiserThings": {
+      "bookAds": {
+        "title": "3Speak 全体に広告を掲載",
+        "text": "動画枠、ショート枠、プレーヤーバナー、ティッカー、アップロード前の枠を、1 日から 3 か月まで。"
+      },
+      "payFromWallet": {
+        "title": "自分のウォレットから支払い",
+        "text": "HBD または HIVE で、このアカウントから直接。カードも仲介業者も不要です。"
+      },
+      "chooseWhere": {
+        "title": "掲載場所を選ぶ",
+        "text": "フォーマット、動画内の位置、掲載日数を選べます。"
+      },
+      "seeDelivered": {
+        "title": "成果を確認",
+        "text": "予約ごとの再生数とクリック数を確認でき、目標に届かなかった場合はクレジットが返還されます。"
+      },
+      "talkToCustomers": {
+        "title": "顧客と交流",
+        "text": "必要なら、ブランド名で動画を投稿したり、コメントに返信したり、人をフォローしたりできます。"
+      },
+      "oneAccount": {
+        "title": "どこでも 1 つのアカウント",
+        "text": "すべての Hive アプリで同じブランドとログイン。鍵はあなただけが持ちます。"
+      }
+    },
+    "profileLive": "プロフィールが公開されました。3Speak へようこそ！",
+    "brandProfileLive": "ブランドプロフィールが公開されました。3Speak へようこそ！",
+    "title": "3Speak へようこそ",
+    "titleNamed": "{{name}} さん、3Speak へようこそ",
+    "advertiserReady": "広告主アカウント <b>@{{user}}</b> の準備ができました。このアカウントで広告を予約し、支払いを行います。",
+    "heyUser": "<b>@{{user}}</b> さん、ようこそ。3Speak は Hive 上に作られているので、アカウントも視聴者もコンテンツもあなたのものです。",
+    "noteAdvertiser": "まずはブランドプロフィールを確認しましょう。広告の横に視聴者に表示される内容です。",
+    "note": "始める前に最後にひとつ: あなたがどんな人か、視聴者に伝えましょう。",
+    "maybeLater": "あとで",
+    "checkBrandProfile": "ブランドプロフィールを確認",
+    "setUpProfile": "プロフィールを設定",
+    "brandProfileTitle": "ブランドプロフィール",
+    "profileTitle": "あなたのことを伝えましょう",
+    "brandProfileHint": "ウォームアップから引き継がれています。保存すると Hive アカウントに反映されます。いつでも変更できます。",
+    "profileHint": "プロフィールに表示される内容です。いつでも変更できます。",
+    "skipForNow": "今はスキップ",
+    "saveAndBook": "保存して最初の広告を予約",
+    "uploading": "アップロード中…",
+    "interestsHint": "ホームページに表示する内容を選ぶのに使います。いくつ選んでも、選ばなくても大丈夫です。いつでも変更できます。",
+    "interestsFineprint": "Hive アカウントに保存されるので、どの Hive アプリでも同じプロフィールと興味が表示されます。",
+    "saveAndExplore": "保存して見てみる"
+  },
+  "profileEdit": {
+    "updated": "プロフィールを更新しました",
+    "title": "プロフィールを編集",
+    "subtitle": "写真、名前、自己紹介はプロフィールと、あなたが投稿するすべてのコンテンツの横に表示されます。",
+    "loading": "プロフィールを読み込み中…",
+    "fineprint": "Hive アカウントに保存されるので、どの Hive アプリでも同じプロフィールが表示されます。",
+    "saveChanges": "変更を保存"
+  },
+  "profileFields": {
+    "chooseImage": "画像ファイルを選んでください",
+    "imageTooLarge": "画像が 8MB を超えています。小さいものを選んでください",
+    "uploadFailed": "画像をアップロードできませんでした",
+    "saved": "プロフィールを保存しました",
+    "saveFailed": "プロフィールを保存できませんでした",
+    "uploadBanner": "プロフィールバナーをアップロード",
+    "changeBanner": "バナーを変更",
+    "addBanner": "バナーを追加",
+    "bannerHint": "<b>2800 × 684</b> px（または 4:1 の画像）が最適です。大事な部分は中央に置いてください。狭い画面では両端が切れ、名前は左下に重なります。",
+    "uploadPicture": "プロフィール写真をアップロード",
+    "pictureLabel": "プロフィール写真",
+    "pictureHint": "顔やロゴがおすすめです。正方形で 400 × 400 px 以上、8MB まで。",
+    "displayName": "表示名",
+    "namePlaceholderUser": "なんと呼べばいいですか？（@{{username}}）",
+    "namePlaceholder": "なんと呼べばいいですか？",
+    "shortBio": "自己紹介",
+    "bioPlaceholder": "どんなものを作っていて、どんな投稿が期待できますか？",
+    "location": "場所",
+    "optional": "任意",
+    "locationPlaceholder": "どこにお住まいですか？"
+  },
+  "auth": {
+    "sessionExpired": "セッションの有効期限が切れました。もう一度ログインしてください",
+    "loggedOut": "ログアウトしました",
+    "loginSuccess": "ログインしました！",
+    "switchedTo": "@{{user}} に切り替えました",
+    "butrauthFailed": "Butter Auth でのログインに失敗しました: {{error}}",
+    "signedInAs": "@{{user}} としてログインしました",
+    "loggedInViaButrauth": "Butter Auth で @{{user}} としてログインしました",
+    "tokenExpired": "セッションの有効期限が切れました",
+    "loginFailed": "ログインに失敗しました: {{error}}",
+    "unknownError": "不明なエラー",
+    "loginTitle": "3Speak にログイン"
+  },
+  "update": {
+    "available": "新しいバージョン（{{version}}）があります",
+    "description": "ページを更新して最新版を取得してください。"
+  },
+  "toastsRegion": "通知"
+}

@@ -1,0 +1,351 @@
+{
+  "icons": {
+    "link": "Посилання",
+    "globe": "Вебсайт",
+    "podcast": "Подкаст",
+    "email": "Email",
+    "phone": "Телефон",
+    "rss": "RSS",
+    "qrcode": "QR-код",
+    "shop": "Магазин",
+    "bag": "Крамниця",
+    "dollar": "Гроші",
+    "gift": "Подарунок",
+    "heart": "Підтримка",
+    "star": "Зірка",
+    "thumbsup": "Вподобайка",
+    "fire": "Вогонь",
+    "bolt": "Блискавка",
+    "music": "Музика",
+    "headphones": "Аудіо",
+    "mic": "Мікрофон",
+    "video": "Відео",
+    "film": "Фільм",
+    "tv": "ТБ",
+    "play": "Відтворити",
+    "camera": "Фото",
+    "image": "Зображення",
+    "palette": "Мистецтво",
+    "pen": "Писати",
+    "book": "Книга",
+    "newspaper": "Новини",
+    "graduation": "Курс",
+    "code": "Код",
+    "gamepad": "Ігри",
+    "briefcase": "Робота",
+    "home": "Дім",
+    "location": "Місце",
+    "map": "Карта",
+    "calendar": "Календар",
+    "clock": "Годинник",
+    "bell": "Сповіщення",
+    "tag": "Тег",
+    "download": "Скачати",
+    "file": "Файл",
+    "users": "Спільнота",
+    "comment": "Коментар",
+    "share": "Поділитися",
+    "coffee": "Кава",
+    "wallet": "Гаманець",
+    "plus": "Більше",
+    "check": "Галочка"
+  },
+  "fonts": {
+    "system": "Системний",
+    "rounded": "Заокруглений",
+    "serif": "Із засічками",
+    "mono": "Моноширинний",
+    "display": "Акцидентний",
+    "condensed": "Вузький",
+    "handwriting": "Рукописний",
+    "grotesk": "Гротеск",
+    "humanist": "Гуманістичний",
+    "geometric": "Геометричний",
+    "slab": "Брусковий",
+    "elegant": "Елегантний",
+    "typewriter": "Друкарська машинка",
+    "marker": "Маркер",
+    "brush": "Пензель",
+    "palatino": "Palatino",
+    "wide": "Широкий"
+  },
+  "motion": {
+    "none": "Немає",
+    "float": "Плавання",
+    "sway": "Гойдання",
+    "pulse": "Пульсація",
+    "wobble": "Хитання",
+    "bounce": "Підстрибування",
+    "tilt": "3D-нахил",
+    "spin": "Обертання",
+    "shake": "Трясіння",
+    "breathe": "Дихання"
+  },
+  "sectionTypes": {
+    "link": "Посилання",
+    "video": "Контент 3Speak",
+    "embed": "Розширене посилання",
+    "image": "Зображення",
+    "header": "Заголовок / текст"
+  },
+  "blockNames": {
+    "link": "посилання",
+    "header": "заголовок",
+    "image": "зображення",
+    "video": "відео",
+    "embed": "вбудовування"
+  },
+  "blockNamesPlural": {
+    "link": "посилання",
+    "header": "заголовки",
+    "image": "зображення",
+    "video": "відео",
+    "embed": "вбудовування"
+  },
+  "templates": {
+    "minimal": {
+      "name": "Мінімал",
+      "niche": "Чисто й просто"
+    },
+    "neon": {
+      "name": "Neon Nights",
+      "niche": "Автор / стрімер"
+    },
+    "crypto": {
+      "name": "On-Chain",
+      "niche": "Крипто / Web3"
+    },
+    "gamer": {
+      "name": "Player One",
+      "niche": "Ігри"
+    },
+    "photographer": {
+      "name": "Витримка",
+      "niche": "Фотографія"
+    },
+    "podcaster": {
+      "name": "В ефірі",
+      "niche": "Подкаст"
+    },
+    "fitness": {
+      "name": "Пікова форма",
+      "niche": "Фітнес / тренер"
+    },
+    "writer": {
+      "name": "Лонгрід",
+      "niche": "Письменник / блогер"
+    },
+    "chef": {
+      "name": "Mise en Place",
+      "niche": "Їжа / кулінарія"
+    },
+    "travel": {
+      "name": "Wanderlust",
+      "niche": "Природа / подорожі"
+    },
+    "business": {
+      "name": "Boardroom",
+      "niche": "Бізнес / профі"
+    },
+    "artist": {
+      "name": "Палітра",
+      "niche": "Художник / візуал"
+    },
+    "ocean": {
+      "name": "Tidewater",
+      "niche": "Релакс / стиль життя"
+    },
+    "musician": {
+      "name": "Amplified",
+      "niche": "Музика / гурт"
+    },
+    "developer": {
+      "name": "Термінал",
+      "niche": "Розробник / технології"
+    },
+    "sports": {
+      "name": "Game Day",
+      "niche": "Спорт / атлет"
+    }
+  },
+  "errors": {
+    "notLoggedIn": "Ви не ввійшли",
+    "couldNotSaveToHive": "Не вдалося зберегти в Hive"
+  },
+  "arrange": {
+    "title": "Заголовок",
+    "video": "Відео",
+    "latestPosts": "Останні дописи",
+    "latestPostsBy": "Останні дописи · @{{account}}",
+    "dragToArrange": "Перетягніть, щоб упорядкувати"
+  },
+  "page": {
+    "latestPosts": "Останні дописи",
+    "seeNewestPosts": "Найновіші дописи @{{user}} →",
+    "openLink": "Відкрити посилання",
+    "empty": "@{{user}} ще не додав(-ла) жодного посилання.",
+    "viewProfile": "Переглянути профіль на 3Speak →",
+    "poweredBy": "Працює на 3Speak"
+  },
+  "editor": {
+    "resetToDefault": "Скинути до стандартного",
+    "motion": "Анімація",
+    "speed": "Швидкість {{value}}",
+    "loop": "Повтор",
+    "runSeconds": "Тривалість {{value}} с",
+    "picker": {
+      "videoLabel": "Вибрати з моїх відео",
+      "videoLoading": "Завантаження ваших відео…",
+      "videoEmpty": "Нещодавніх відео на 3Speak не знайдено.",
+      "shortLabel": "Вибрати з моїх Shorts",
+      "shortLoading": "Завантаження ваших Shorts…",
+      "shortEmpty": "Нещодавніх Shorts на 3Speak не знайдено.",
+      "noChannel": "Канал не визначено (ви ввійшли?)",
+      "loadFailed": "Не вдалося завантажити: {{error}}"
+    },
+    "toasts": {
+      "unfurlFailed": "Не вдалося отримати попередній перегляд посилання",
+      "imageUploadFailed": "Не вдалося завантажити зображення: {{error}}",
+      "tryAgain": "спробуйте ще раз",
+      "styleApplied": "Стиль застосовано до всіх блоків типу «{{type}}»",
+      "templateApplied": "«{{name}}» застосовано — налаштуйте або скасуйте",
+      "reverted": "Повернуто ваш попередній дизайн",
+      "saved": "Spotlight збережено у вашому профілі Hive",
+      "saveFailed": "Не вдалося зберегти",
+      "linkCopied": "Посилання скопійовано",
+      "uploadFailed": "Не вдалося завантажити"
+    },
+    "link": {
+      "labelPlaceholder": "Підпис (напр. Мій YouTube)",
+      "type": "Тип посилання",
+      "typeGroup": "Тип",
+      "website": "Вебсайт / URL",
+      "email": "Email",
+      "phone": "Телефон",
+      "platformGroup": "Платформа",
+      "yourname": "yourname",
+      "platformIconHint": "Іконка — логотип {{platform}}; виберіть «Вебсайт / URL», щоб задати власну іконку.",
+      "icon": "Іконка",
+      "iconColor": "Колір іконки",
+      "iconBg": "Фон іконки"
+    },
+    "header": {
+      "text": "Текст",
+      "size": "Розмір",
+      "large": "Великий",
+      "medium": "Середній",
+      "small": "Малий",
+      "align": "Вирівнювання",
+      "left": "Ліворуч",
+      "center": "По центру",
+      "right": "Праворуч"
+    },
+    "image": {
+      "uploading": "Завантаження…",
+      "upload": "Завантажити зображення",
+      "urlPlaceholder": "…або URL зображення",
+      "linkPlaceholder": "Посилання при натисканні (необов'язково)"
+    },
+    "video": {
+      "contentType": "Тип контенту",
+      "video": "Відео",
+      "short": "Shorts",
+      "orPaste": "або вставте посилання",
+      "pastePlaceholder": "Вставте посилання на відео 3Speak або author/permlink",
+      "titlePlaceholder": "Заголовок над відео (веде на 3Speak)",
+      "hint": "Вибраний контент буде вбудовано й відтворюватиметься на вашій сторінці."
+    },
+    "embed": {
+      "source": "Джерело",
+      "sourceLink": "Посилання (розширений перегляд)",
+      "sourceHiveRecent": "Мої останні дописи в Hive",
+      "accountPlaceholder": "Ім'я користувача Hive (залиште порожнім для власного)",
+      "showPosts_one": "Показати {{count}} допис",
+      "showPosts_few": "Показати {{count}} дописи",
+      "showPosts_many": "Показати {{count}} дописів",
+      "showPosts_other": "Показати {{count}} допису",
+      "perRow": "{{value}} в ряду",
+      "hiveRecentHint": "Ваші найновіші дописи верхнього рівня (без репостів і кросспостів). Оновлюється автоматично.",
+      "linkPlaceholder": "Вставте будь-яке посилання — допис Hive, Instagram, X, YouTube, статтю…",
+      "fetching": "Отримуємо попередній перегляд…",
+      "noPreview": "Попередній перегляд не знайдено — посилання все одно показуватиметься як картка.",
+      "pasteHint": "Вставте посилання, і ми підтягнемо його назву, опис і зображення."
+    },
+    "style": {
+      "title": "Стиль",
+      "applyAllTitle": "Застосувати цей стиль до кожного блоку типу «{{type}}»",
+      "applyAll": "Застосувати до всіх: {{types}}",
+      "background": "Фон",
+      "text": "Текст",
+      "backgroundPct": "Фон {{value}}%",
+      "radius": "Заокруглення {{value}}",
+      "fontSizePct": "Розмір шрифту {{value}}%",
+      "paddingPx": "Відступ {{value}} px",
+      "thumbnailPct": "Мініатюра {{value}}%",
+      "border": "Рамка",
+      "thicknessPx": "Товщина {{value}} px",
+      "opacityPct": "Непрозорість {{value}}%",
+      "shadow": "Тінь",
+      "strengthPct": "Інтенсивність {{value}}%",
+      "color": "Колір",
+      "blur": "Розмиття {{value}}",
+      "spread": "Поширення {{value}}",
+      "inset": "Внутрішня",
+      "cardDelayMs": "Затримка картки {{value}} мс"
+    },
+    "tagline": "Ваші посилання й відео на одній сторінці",
+    "openPage": "Відкрити сторінку",
+    "templates": {
+      "title": "Шаблони",
+      "hint": "Виберіть дизайн, щоб заповнити все, — ваше біо збережеться, і дію можна скасувати.",
+      "undo": "Скасувати шаблон — повернути мій дизайн"
+    },
+    "profile": {
+      "title": "Профіль",
+      "headlinePlaceholder": "Короткий заголовок / біо (необов'язково)",
+      "avatarSizePct": "Розмір аватара {{value}}%",
+      "avatarShadowPct": "Тінь аватара {{value}}%",
+      "avatarGlow": "Світіння аватара",
+      "glowSize": "Розмір світіння {{value}}",
+      "channelButtonText": "Текст кнопки каналу"
+    },
+    "page": {
+      "title": "Стиль сторінки",
+      "solid": "Суцільний",
+      "gradient": "Градієнт",
+      "image": "Зображення",
+      "color2": "Колір 2",
+      "angle": "Кут {{value}}°",
+      "uploadBackground": "Завантажити фон",
+      "imageSet": "Зображення задано ✓",
+      "overlay": "Накладання",
+      "overlay2": "Накладання 2",
+      "none": "Немає",
+      "overlayOpacityPct": "Непрозорість накладання {{value}}%",
+      "overlayAngle": "Кут накладання {{value}}°",
+      "colors": "Кольори",
+      "buttonBg": "Фон кнопки",
+      "buttonText": "Текст кнопки",
+      "buttons": "Кнопки",
+      "buttonStyle": "Стиль кнопок",
+      "soft": "М'який",
+      "fill": "Заливка",
+      "outline": "Контур",
+      "cornerRadius": "Заокруглення кутів {{value}}",
+      "textStyle": "Стиль тексту (ім'я, біо й текстові блоки)",
+      "font": "Шрифт",
+      "normal": "Звичайний",
+      "italic": "Курсив",
+      "bold": "Жирний",
+      "boldItalic": "Жирний курсив",
+      "strong": "Насичений",
+      "textBorderPx": "Контур тексту {{value}} px",
+      "borderColor": "Колір контуру"
+    },
+    "addBlock": "Додати блок",
+    "empty": "Додайте вище перше посилання, відео чи зображення.",
+    "arrangeHint": "Перетягуйте <grip></grip>, щоб упорядкувати · киньте блок на інший, щоб поставити їх поруч · натисніть на блок, щоб редагувати його тут",
+    "livePreview": "Попередній перегляд наживо",
+    "previewTitle": "Попередній перегляд Spotlight"
+  }
+}

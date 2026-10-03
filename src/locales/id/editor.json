@@ -1,0 +1,19 @@
+{
+  "placeholder": "Tulis kontenmu di sini...",
+  "uploadFailed": "Gagal mengunggah: {{message}}",
+  "uploadingImage": "Mengunggah gambar...",
+  "format": {
+    "underline": "Garis bawah",
+    "strike": "Coret",
+    "highlight": "Sorot",
+    "bulletList": "Daftar Poin",
+    "orderedList": "Daftar Bernomor",
+    "taskList": "Daftar Tugas"
+  },
+  "emoji": {
+    "searchPlaceholder": "Cari emoji"
+  },
+  "preview": {
+    "renderError": "Gagal menampilkan konten"
+  }
+}

@@ -1,0 +1,237 @@
+{
+  "aiBadge": {
+    "title": "Herkend als AI-gegenereerd",
+    "label": "AI"
+  },
+  "translate": {
+    "titleButton": "Titel vertalen",
+    "original": "Origineel",
+    "translate": "Vertalen",
+    "translating": "Vertalen..."
+  },
+  "summary": {
+    "title": "Samenvatting",
+    "close": "Samenvatting sluiten",
+    "showingOriginal": "Origineel wordt getoond",
+    "translatedTo": "Vertaald naar het {{language}}",
+    "showLanguage": "{{language}} tonen",
+    "showOriginal": "Origineel tonen",
+    "buttonTitle": "AI-samenvatting van deze video"
+  },
+  "errors": {
+    "notAvailable": "Deze video is niet beschikbaar.",
+    "goHome": "Naar home",
+    "scheduledNotFound": "Ingeplande post niet gevonden — misschien is hij al gepubliceerd of geannuleerd.",
+    "network": "Netwerkfout. Controleer je verbinding.",
+    "notFound": "Video niet gevonden of laden mislukt.",
+    "backToProfile": "Terug naar profiel"
+  },
+  "gated": {
+    "title": "Alleen voor supporters",
+    "checkFailed": "We konden je abonnement nu niet bevestigen. Probeer het zo opnieuw.",
+    "preview": "Je kijkt naar een gratis voorproefje. 3Speak Pro ontgrendelt de volledige video.",
+    "subscribersOnly": "Deze video is beschikbaar voor 3Speak Pro-abonnees.",
+    "cta": "3Speak Pro nemen"
+  },
+  "reactions": {
+    "show": "Reacties tonen",
+    "add": "Reactie toevoegen"
+  },
+  "liveChat": "Livechat",
+  "moreVideos": "Meer video's",
+  "vote": {
+    "saveFailed": "Je vote kon niet worden opgeslagen"
+  },
+  "locked": {
+    "noAccount": "Ontgrendeld zodra je je Hive-account hebt aangemaakt",
+    "offChainPost": "Nog niet beschikbaar: deze post staat niet op Hive"
+  },
+  "interests": {
+    "loginRequired": "Log in om interesses op te slaan",
+    "added": "“{{tag}}” toegevoegd aan je interesses",
+    "saveFailed": "Interesses konden niet worden opgeslagen"
+  },
+  "watchLater": {
+    "removed": "Verwijderd uit Later bekijken",
+    "removeFailed": "Verwijderen mislukt: {{error}}",
+    "removeTitle": "Verwijderen uit Later bekijken"
+  },
+  "reshare": {
+    "loginRequired": "Log in om opnieuw te delen",
+    "success": "Opnieuw gedeeld!",
+    "failed": "Opnieuw delen mislukt",
+    "reshared": "Opnieuw gedeeld",
+    "reshare": "Opnieuw delen",
+    "reshareWithCount": "Opnieuw delen ({{count}})"
+  },
+  "clip": {
+    "noVideoUrlRemix": "Video-URL voor de remix kon niet worden gevonden",
+    "noVideoUrl": "Video-URL kon niet worden gevonden",
+    "startHint": "Spoel naar het begin van je clip en klik dan op \"Begin instellen\"",
+    "endHint": "Spoel nu naar het einde van je clip en klik op \"Einde instellen\"",
+    "endBeforeStart": "Het einde moet na het begin liggen",
+    "trimmed": "Clip ingekort tot 1 minuut — we korten de clip in aan het einde van de tijdlijn.",
+    "set": "Clip ingesteld: {{start}} – {{end}}. Klik nu op \"Clip maken\"",
+    "loginRequired": "Log in om te clippen",
+    "cancel": "Clip annuleren",
+    "clipVideo": "Video clippen",
+    "label": "Video clippen",
+    "clip": "Clip",
+    "seekToStart": "Spoel naar het begin",
+    "setStart": "Begin instellen",
+    "setEnd": "Einde instellen",
+    "createClip": "Clip maken",
+    "barStart": "Spoel naar het begin van je clip",
+    "barEnd": "Begin: {{start}} — Spoel nu naar het einde",
+    "barDone": "Clip: {{start}} – {{end}}"
+  },
+  "share": {
+    "defaultTitle": "3Speak-video",
+    "linkCopied": "Link gekopieerd naar klembord!",
+    "failed": "Delen mislukt"
+  },
+  "follow": {
+    "loginRequired": "Log in om gebruikers te volgen",
+    "followed": "Je volgt @{{user}}",
+    "failed": "Volgen mislukt: {{error}}"
+  },
+  "ad": {
+    "countdown": "Advertentie over {{seconds}}"
+  },
+  "media": {
+    "unavailableTitle": "Deze video is niet meer beschikbaar",
+    "unavailableBody": "De media van deze oudere upload zijn niet gevonden op het netwerk. De post bestaat nog op de blockchain, maar de video kan niet meer worden afgespeeld.",
+    "blockedTitle": "De video kon nu niet worden geladen",
+    "blockedBody": "Een van onze videoservers reageerde niet. Er is niets mis met de video zelf, dus probeer het opnieuw."
+  },
+  "tipNudge": {
+    "text": "Vond je dit leuk?<hide> Stuur <b>@{{author}}</b> een fooi!</hide>",
+    "dismiss": "Sluiten"
+  },
+  "community": {
+    "members_one": "{{count}} lid",
+    "members_other": "{{count}} leden"
+  },
+  "tags": {
+    "curated": "Geselecteerd"
+  },
+  "topics": {
+    "taggedBy": "“{{label}}” · getagd door {{count}}",
+    "viewers_one": "“{{label}}” · {{count}} kijker",
+    "viewers_other": "“{{label}}” · {{count}} kijkers",
+    "autoNoVotes": "Automatisch getagd — nog geen votes van kijkers",
+    "noVotes": "Nog geen votes van kijkers",
+    "inInterests": "✓ In je interesses",
+    "addToInterests": "+ Toevoegen aan mijn interesses",
+    "openTagFeed": "Tagfeed openen"
+  },
+  "scheduled": {
+    "notice": "Ingepland voor <b>{{date}}</b> — nog niet gepubliceerd.",
+    "futureDate": "een datum in de toekomst",
+    "edit": "Bewerken, verzetten of annuleren",
+    "editTitle": "Ingeplande post bewerken (details, datum of annuleren)"
+  },
+  "actions": {
+    "voteOffChain": "Vote op deze video. Dit wordt opgeslagen op 3Speak en levert geen beloningen op.",
+    "signInToVote": "Log in om te voten",
+    "tagVideo": "Tag deze video",
+    "voteVideo": "Vote op deze video",
+    "tag": "Taggen",
+    "vote": "Voten",
+    "analyticsTitle": "Videostatistieken",
+    "analytics": "Statistieken",
+    "videoStats": "Videostatistieken",
+    "promoteTitle": "Deze video promoten",
+    "promote": "Promoten",
+    "editTitle": "Videogegevens bewerken",
+    "reportTitle": "Video melden",
+    "addToPlaylist": "Toevoegen aan playlist",
+    "playlist": "Playlist",
+    "tipTitle": "De maker een fooi geven",
+    "tip": "Fooi",
+    "details": "Details",
+    "toggleDetails": "Details tonen/verbergen",
+    "followCreator": "Maker volgen",
+    "closeMenu": "Menu sluiten",
+    "openActions": "Acties openen"
+  },
+  "description": {
+    "hide": "Beschrijving verbergen",
+    "show": "Beschrijving tonen"
+  },
+  "edit": {
+    "title": "Video bewerken",
+    "loading": "Huidige post laden…",
+    "videoFile": "Videobestand",
+    "replaceVideo": "Video vervangen",
+    "replaceHint": "Vervangt het videobestand van deze post. Al het andere blijft zoals het is: de post houdt zijn likes, uitbetaling, reacties, uploaddatum en zijn plek op je profiel. Laat dit met rust om de huidige video te houden.",
+    "uploadingTo": "Uploaden naar <b>{{host}}</b>… {{pct}}%",
+    "choosingServer": "Uploadserver kiezen…",
+    "uploadedTo": "Geüpload naar <b>{{host}}</b>. Druk op Opslaan om hem te vervangen.",
+    "uploaded": "Geüpload. Druk op Opslaan om hem te vervangen.",
+    "cancelUpload": "Upload annuleren",
+    "keepCurrent": "Huidige video houden",
+    "encodeHint": "Na het opslaan duurt het nog een paar minuten om te encoderen, en de oude video blijft afspelen tot hij klaar is. Je thumbnail blijft hetzelfde, dus werk hem hierboven bij als hij niet meer past.",
+    "thumbnail": "Thumbnail",
+    "thumbPreviewAlt": "Voorbeeld van thumbnail",
+    "uploadImage": "Afbeelding uploaden",
+    "uploading": "Uploaden…",
+    "thumbHint": "Upload een afbeelding of plak een directe URL. Laat dit ongewijzigd om de huidige thumbnail te houden.",
+    "titleLabel": "Titel",
+    "titleMin": "min. {{min}}",
+    "tags": "Tags",
+    "tagsPlaceholder": "gescheiden door spaties",
+    "autoTag": "Automatisch toegevoegd — kan niet worden verwijderd",
+    "tagCount_one": "{{count}}/{{max}} tag",
+    "tagCount_other": "{{count}}/{{max}} tags",
+    "tagCountRequired_one": "{{count}}/{{max}} tag · minstens 1 verplicht",
+    "tagCountRequired_other": "{{count}}/{{max}} tags · minstens 1 verplicht",
+    "description": "Beschrijving",
+    "descriptionPlaceholder": "Vertel kijkers over je video…",
+    "markdownHint": "Markdown wordt ondersteund.",
+    "listed": "Zichtbaar",
+    "unlistedLabel": "Verborgen",
+    "listedHint": "Zichtbaar in feeds, zoekresultaten en op je profiel.",
+    "unlistedHint": "Niet zichtbaar in feeds en zoekresultaten — speelt nog af via een directe link, blijft op je profiel staan (met label).",
+    "allowRemix": "Remix/clip toestaan",
+    "remixOn": "Anderen kunnen remixes/clips maken; jij wordt vermeld als oorspronkelijke maker.",
+    "remixOff": "Anderen kunnen deze video niet remixen of clippen.",
+    "trailer": "Kanaaltrailer",
+    "trailerOn": "Speelt automatisch af bovenaan het tabblad Overzicht van je profiel en vervangt een eerder ingestelde trailer.",
+    "trailerOff": "Maak dit de video die automatisch afspeelt bovenaan het tabblad Overzicht van je profiel.",
+    "nsfw": "Volwassenen / NSFW",
+    "notNsfw": "Niet voor volwassenen",
+    "nsfwHint": "Niet zichtbaar in feeds en zoekresultaten tenzij de kijker NSFW heeft ingeschakeld; getagd als nsfw op Hive.",
+    "notNsfwHint": "Normale inhoud, zichtbaar voor iedereen.",
+    "promoted": "Gepromoot",
+    "promote": "Video promoten",
+    "saveChanges": "Wijzigingen opslaan",
+    "noChanges": "Geen wijzigingen om op te slaan.",
+    "thumbUploaded": "Thumbnail geüpload.",
+    "videoUploaded": "Nieuwe video geüpload. Sla op om hem op deze post toe te passen.",
+    "relisted": "Video weer zichtbaar.",
+    "unlisted": "Video verborgen.",
+    "trailerSet": "Ingesteld als je kanaaltrailer.",
+    "trailerRemoved": "Niet langer je kanaaltrailer.",
+    "updatedEncoding": "Video bijgewerkt! Het nieuwe bestand heeft nog even nodig om te encoderen.",
+    "updated": "Video bijgewerkt!",
+    "errors": {
+      "notFound": "Deze post is niet gevonden op Hive.",
+      "loadFailed": "Post laden van Hive mislukt. Probeer het opnieuw.",
+      "notImage": "Kies een afbeeldingsbestand.",
+      "imageTooLarge": "Afbeelding te groot (max. 10 MB).",
+      "thumbUploadFailed": "Thumbnail uploaden mislukt.",
+      "notVideo": "Kies een videobestand.",
+      "videoTooLarge": "Video te groot (max. 5 GB).",
+      "noVideoEntry": "Deze post heeft geen video om te vervangen — de metadata verwijst er niet naar.",
+      "notInLibrary": "De video van deze post staat niet meer in de bibliotheek, dus het bestand kan niet worden vervangen.",
+      "notOwner": "Je kunt alleen het bestand van je eigen video vervangen.",
+      "videoUploadFailed": "Video uploaden mislukt.",
+      "noEmbedEntry": "Deze post heeft geen embedvideo om te vervangen — de metadata verwijst er niet naar.",
+      "broadcastFailed": "Versturen mislukt",
+      "listingFailed": "Zichtbaarheid kon niet worden bijgewerkt.",
+      "trailerFailed": "Je kanaaltrailer kon niet worden bijgewerkt.",
+      "saveFailed": "Wijzigingen opslaan mislukt."
+    }
+  }
+}

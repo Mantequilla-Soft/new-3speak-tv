@@ -1,0 +1,172 @@
+{
+  "addTag": {
+    "loginRequired": "이 동영상에 태그를 달려면 로그인하세요",
+    "pickTopic": "먼저 주제를 선택하세요",
+    "tagged": "“{{label}}” 태그 추가됨",
+    "failed": "태그 실패: {{error}}",
+    "pleaseTryAgain": "다시 시도해 주세요",
+    "title": "이 동영상에 태그 달기",
+    "question": "이 동영상은 어떤 내용인가요?",
+    "existing": "이 동영상에 <b>{{label}}</b> 태그를 달았어요. 다른 태그를 고르면 대체돼요.",
+    "submit": "태그 제출"
+  },
+  "addAccount": {
+    "usernameRequired": "계속하려면 사용자 이름이 필요해요.",
+    "hiveAuthExpired": "HiveAuth 인증 요청이 만료되었어요",
+    "loginSuccess": "로그인했어요!",
+    "loginFailed": "로그인 실패: {{error}}",
+    "logoAlt": "3Speak 로고",
+    "title": "사용자 이름으로 로그인",
+    "usernamePlaceholder": "사용자 이름"
+  },
+  "socialLink": {
+    "hashCopied": "해시를 복사했어요",
+    "copyFailed": "클립보드에 복사하지 못했어요",
+    "enterHandle": "플랫폼 핸들 또는 ID를 입력하세요",
+    "verified": "계정을 인증하고 연결했어요",
+    "errors": {
+      "hashNotFound": "아직 프로필에서 해시를 찾을 수 없어요. 변경 사항이 공개로 저장되었는지 확인한 뒤 다시 시도하세요.",
+      "alreadyLinked": "이 채널은 이미 다른 Hive 사용자(@{{user}})가 인증했어요.",
+      "tooMany": "연결할 수 있는 최대 계정 수에 도달했어요.",
+      "notFound": "해당 플랫폼에 존재하지 않는 채널이에요.",
+      "badSignature": "서명을 확인할 수 없어요. 포스팅 키로 로그인했는지 확인하세요.",
+      "rateLimited": "요청이 너무 많아요. 1분 정도 기다린 뒤 다시 시도하세요.",
+      "lookupFailed": "플랫폼 조회에 실패했어요. 잠시 후 다시 시도하세요.",
+      "verifyFailed": "인증 실패",
+      "stillPresent": "해시가 아직 프로필에 있어요. 먼저 삭제하세요.",
+      "unlinkFailed": "연결 해제 실패",
+      "noSuchLink": "삭제할 연결이 없어요."
+    },
+    "confirmUnlink": "{{platform}} 연결을 삭제할까요? 인증 해시가 공개 프로필에 더 이상 없는지 확인하세요. 그렇지 않으면 연결 해제가 거부돼요.",
+    "removed": "연결을 삭제했어요",
+    "title": "연결된 외부 프로필",
+    "intro": "고유한 3Speak 해시를 공개 프로필 설명에 붙여넣은 다음 여기서 인증하면 YouTube(또는 다른) 채널의 소유자임을 증명할 수 있어요.",
+    "openProfile": "프로필 열기",
+    "removeLink": "연결 삭제",
+    "empty": "아직 연결된 외부 프로필이 없어요.",
+    "addPlatform": "새 플랫폼 추가",
+    "flowTitle": "{{platform}} 채널 연결",
+    "step1": "고유 인증 해시를 복사하세요:",
+    "step2": "<strong>{{platform}} 공개 프로필 설명에 붙여넣으세요</strong>(정보 / 소개 / 설명 어디든 괜찮아요). 변경 사항을 저장하세요.",
+    "step3": "{{platform}} 식별자를 입력하세요:",
+    "verifying": "인증 중…",
+    "verify": "인증"
+  },
+  "auth": {
+    "title": "3Speak 권한 부여!",
+    "text": "3Speak에 동영상을 업로드하려면 포스팅 권한이 필요해요. 이 권한으로 업로드한 동영상을 Hive에 게시할 수 있어요. 포스팅 권한은 한 번만 부여하면 돼요.",
+    "authorize": "권한 부여"
+  },
+  "beneficiary": {
+    "errors": {
+      "emptyUsername": "사용자 이름을 비워 둘 수 없어요.",
+      "sameUser": "본인을 수혜자로 설정할 수 없어요",
+      "greaterThanZero": "보상 비율은 0보다 커야 해요.",
+      "exceedsRemaining": "보상 비율이 남은 할당량 {{percent}}%를 넘어요.",
+      "validNumber": "올바른 숫자를 입력하세요",
+      "validPercent": "올바른 보상 비율을 입력하세요.",
+      "duplicate": "이미 목록에 추가된 계정이에요.",
+      "invalidAccount": "잘못된 사용자 이름 또는 커뮤니티 ID예요.",
+      "cannotIncrease": "남은 {{percent}}%를 넘어서 늘릴 수 없어요",
+      "pendingRow": "@{{account}}이(가) 아직 추가되지 않았어요. +를 눌러 추가하거나 입력란을 비우세요.",
+      "atLeastOne": "보상 비율은 최소 1%여야 해요"
+    },
+    "title": "수혜자",
+    "intro": "이 게시물 보상의 일부를 자동으로 받을 사용자를 추가하세요.",
+    "minPercent": "%(최소 {{percent}}%)",
+    "usernamePlaceholder": "사용자 이름 입력",
+    "minimumReward": "최소 보상은 <strong>1%</strong>예요",
+    "checking": "Hive에서 <strong>@{{account}}</strong> 확인 중…",
+    "notExisting": "⚠️ <strong>@{{account}}</strong>은(는) 존재하지 않는 Hive 계정이에요.",
+    "notAdded": "⚠️ <strong>@{{account}}</strong>이(가) 아직 추가되지 않았어요. <strong>+</strong>를 눌러 추가하거나 입력란을 비우세요.",
+    "infrastructure": "10% === 인프라",
+    "videoEncoding": "동영상 인코딩 === 1%",
+    "defaults": "기본 수혜자({{count}})"
+  },
+  "qr": {
+    "scan": "Hive Keychain으로 이 QR을 스캔하세요:",
+    "click": "QR을 클릭하면 Keychain 앱에서 열려요"
+  },
+  "editVideoHint": {
+    "title": "내 동영상 수정하기",
+    "text": "내 동영상을 열고 플레이어 아래 작업 표시줄에서 <strong>펜 버튼</strong>을 찾으세요. 클릭하면 제목, 설명, 썸네일, 태그 등을 바꿀 수 있어요.",
+    "penTitle": "동영상 정보 수정",
+    "tip": "팁",
+    "caption": "찾으시는 펜 버튼이 바로 이거예요",
+    "gotIt": "확인"
+  },
+  "verifyAuth": {
+    "title": "권한 확인 중",
+    "text": "권한이 부여되었는지 확인하는 동안 잠시 기다려 주세요..."
+  },
+  "editor": {
+    "confirmLeave": "편집기가 아직 열려 있어요. 이 페이지를 나가면 편집기가 닫히고 저장하지 않은 변경 사항이 사라져요.\n\n확인 = 편집기 닫고 나가기\n취소 = 이 페이지에 머물기",
+    "confirmClose": "편집기를 닫을까요? 저장하지 않은 변경 사항이 사라져요.",
+    "iframeTitle": "3Speak 동영상 편집기",
+    "finding": "사용 가능한 편집기 찾는 중...",
+    "loading": "편집기 불러오는 중...",
+    "unavailable": "지금 사용할 수 있는 편집기 서버가 없어요. 나중에 다시 시도해 주세요.",
+    "sending": "렌더링 서비스로 보내는 중...",
+    "rendering": "렌더링 중... {{percent}}%",
+    "complete": "렌더링 완료!",
+    "useVideo": "동영상 사용",
+    "preparing": "업로드할 동영상 준비 중...",
+    "renderUnavailable": "렌더링 서비스를 아직 사용할 수 없어요. 타임라인 데이터를 콘솔에 기록했어요.",
+    "backToEditor": "편집기로 돌아가기",
+    "postError": "업로드할 동영상을 준비하지 못했어요. 대신 다운로드해 보세요."
+  },
+  "profile": {
+    "mustLogin": "먼저 로그인해야 해요",
+    "followed": "팔로우했어요",
+    "unfollowed": "언팔로우했어요",
+    "followFailed": "팔로우 실패: {{error}}",
+    "unfollowFailed": "언팔로우 실패: {{error}}",
+    "avatarAlt": "프로필",
+    "posts": "게시물",
+    "followers": "팔로워",
+    "joined": "{{date}} 가입",
+    "about": "소개",
+    "noBio": "소개가 없어요"
+  },
+  "report": {
+    "reasons": {
+      "spamMisleading": "스팸 또는 오해의 소지가 있는 콘텐츠",
+      "harassment": "괴롭힘 또는 따돌림",
+      "hateSpeech": "혐오 발언",
+      "violence": "폭력적이거나 노골적인 콘텐츠",
+      "sexual": "성적인 콘텐츠",
+      "copyright": "저작권 침해",
+      "scam": "사기",
+      "other": "기타",
+      "spam": "스팸",
+      "impersonation": "사칭",
+      "spamAccount": "스팸 계정"
+    },
+    "selectReasonError": "사유를 선택해 주세요",
+    "loginRequired": "신고하려면 로그인해야 해요",
+    "submitted": "신고가 접수되었어요. 감사합니다.",
+    "failed": "신고를 제출하지 못했어요",
+    "titles": {
+      "user": "사용자 신고",
+      "comment": "댓글 신고",
+      "short": "쇼츠 신고",
+      "post": "게시물 신고",
+      "video": "동영상 신고"
+    },
+    "reason": "사유",
+    "selectReason": "사유 선택...",
+    "details": "추가 세부 정보(선택)",
+    "detailsPlaceholder": "자세한 상황을 알려주세요...",
+    "submitting": "제출 중...",
+    "submit": "신고 제출"
+  },
+  "upload": {
+    "missingInfo": "동영상 또는 썸네일 정보가 없어요.",
+    "updateFailed": "동영상 정보를 업데이트하지 못했어요. 다시 시도해 주세요.",
+    "title": "동영상 및 썸네일 업로드",
+    "selectVideo": "동영상 선택",
+    "thumbnail": "썸네일",
+    "clickThumbnail": "클릭해서 썸네일 업로드",
+    "updateInfo": "동영상 정보 업데이트"
+  }
+}

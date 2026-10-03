@@ -6,21 +6,22 @@ export const TRACKS = [
   {
     id: 'viewer',
     Icon: FaEye,
-    title: 'Mostly a viewer',
-    body: 'I am here to watch, comment and follow creators.',
+    titleKey: 'incubation.tracks.viewer.title',
+    bodyKey: 'incubation.tracks.viewer.body',
   },
   {
     id: 'creator',
     Icon: FaVideo,
-    title: 'Mostly a creator',
-    body: 'I want to publish videos and shorts and build a channel.',
+    titleKey: 'incubation.tracks.creator.title',
+    bodyKey: 'incubation.tracks.creator.body',
   },
   {
     id: 'advertiser',
     Icon: FaBullhorn,
-    title: 'An advertiser',
-    body: 'I represent a brand and want to reach 3Speak viewers.',
+    titleKey: 'incubation.tracks.advertiser.title',
+    bodyKey: 'incubation.tracks.advertiser.body',
   },
 ];
 
-export const trackTitle = (id) => TRACKS.find((t) => t.id === id)?.title || null;
+// Returns the i18n KEY of the track's title (translate it at render with t()).
+export const trackTitleKey = (id) => TRACKS.find((tr) => tr.id === id)?.titleKey || null;

@@ -4,6 +4,7 @@ import { useAppStore } from '../../lib/store';
 import {
   fetchIncubationProgress, progressHue, progressFraction, onIncubationProgress,
 } from '../../lib/incubation';
+import { useTranslation } from 'react-i18next';
 import './NavProgress.scss';
 
 // One read a minute. The goals are each several minutes of real work, so a
@@ -60,6 +61,7 @@ function isFull(p) {
  * the detail, and the thing you can act on, lives on the profile.
  */
 export default function NavProgress() {
+  const { t } = useTranslation();
   const incubationHandle = useAppStore((s) => s.incubationHandle);
   const [progress, setProgress] = useState(null);
   const [celebrating, setCelebrating] = useState(false);
@@ -85,7 +87,7 @@ export default function NavProgress() {
       // who just posted their second short is looking at the pill right now,
       // and the bar moving by a sixth in silence is a smaller moment than it
       // should be.
-      const nowDone = new Set(p.tasks.filter((t) => t.done).map((t) => t.type));
+      const nowDone = new Set(p.tasks.filter((task) => task.done).map((task) => task.type));
       const previously = doneBefore.current;
       doneBefore.current = nowDone;
       // Compared by TYPE rather than by count, so it survives the list changing
@@ -152,13 +154,13 @@ export default function NavProgress() {
   // yet: point them at the question instead of showing an empty 0/0.
   if (progress.needsTrack) {
     return (
-      <Link to="/profile" className="nav-progress is-choose" title="Tell us what brings you to 3Speak to see your path to a Hive account.">
-        <span className="nav-progress-count">Choose your path</span>
+      <Link to="/profile" className="nav-progress is-choose" title={t('incubation.navProgress.chooseTitle')}>
+        <span className="nav-progress-count">{t('incubation.progress.choosePath')}</span>
       </Link>
     );
   }
 
-  const done = progress.tasks.filter((t) => t.done).length;
+  const done = progress.tasks.filter((task) => task.done).length;
   const total = progress.tasks.length;
   // Same scale as the profile panel: each goal is worth an equal share and
   // partial progress inside one counts, so the pill creeps forward as they go
@@ -180,11 +182,11 @@ export default function NavProgress() {
       // goals count towards the bar. Saying which is which stops that reading
       // as a bug.
       title={progress.complete
-        ? `All ${total} goals done (100%). The team will review your channel.`
-        : `${pctLabel}% towards your Hive account. ${done} of ${total} goals fully done.`}
+        ? t('incubation.navProgress.titleComplete', { count: total })
+        : t('incubation.navProgress.titleProgress', { pct: pctLabel, done, count: total })}
       aria-label={complete
-        ? `Your progress: 100%, all ${total} goals done`
-        : `Your progress: ${pctLabel}%, ${done} of ${total} goals fully done`}
+        ? t('incubation.navProgress.ariaComplete', { count: total })
+        : t('incubation.navProgress.ariaProgress', { pct: pctLabel, done, count: total })}
     >
       <span className="nav-progress-bar" aria-hidden="true">
         <span
@@ -204,7 +206,7 @@ export default function NavProgress() {
           that appears at the same instant as its content is not reliably
           announced. */}
       <span className="nav-progress-sr" role="status">
-        {celebrating ? 'All goals done towards your Hive account.' : ''}
+        {celebrating ? t('incubation.navProgress.celebrate') : ''}
       </span>
     </Link>
   );

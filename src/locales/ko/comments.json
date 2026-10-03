@@ -1,0 +1,96 @@
+{
+  "review": {
+    "fabAria": "피드백 보내기",
+    "fab": "피드백",
+    "aspects": {
+      "upload": "업로드",
+      "playback": "재생",
+      "live": "라이브 스트리밍",
+      "discovery": "탐색 / 피드",
+      "design": "디자인 / UX",
+      "performance": "속도",
+      "mobile": "모바일",
+      "other": "기타"
+    },
+    "titles": {
+      "upload": "업로드는 어떠셨나요?",
+      "stream": "라이브 방송은 어떠셨나요?",
+      "watch": "3Speak 시청은 어떠셨나요?",
+      "global": "3Speak 이용 경험은 어떠세요?",
+      "fallback": "3Speak를 더 좋게 만들 수 있도록 도와주세요"
+    },
+    "stars": {
+      "poor": "나쁨",
+      "fair": "보통",
+      "good": "좋음",
+      "great": "아주 좋음",
+      "amazing": "최고"
+    },
+    "errors": {
+      "pickStars": "별점을 선택해 주세요",
+      "sendFailed": "리뷰를 보내지 못했어요. 다시 시도해 주세요."
+    },
+    "thanks": "피드백 감사합니다! 🙏",
+    "sendFeedback": "피드백 보내기",
+    "subtitle": "보내주신 피드백은 3Speak를 개선하는 데 도움이 돼요.",
+    "starRating": "별점",
+    "starsAria_other": "별 {{count}}개",
+    "aboutLabel": "어떤 내용인가요? <opt>(선택)</opt>",
+    "recommendLabel": "3Speak를 추천하시겠어요? <opt>(선택)</opt>",
+    "moreLabel": "자세히 알려주세요 <opt>(선택)</opt>",
+    "placeholder": "어떤 점이 좋았나요? 어떤 점이 개선되면 좋을까요?",
+    "notNow": "나중에",
+    "sending": "보내는 중…"
+  },
+  "tabs": {
+    "reactions": "리액션",
+    "transcript": "스크립트"
+  },
+  "live": {
+    "vodProcessing": "녹화본을 처리하는 중…",
+    "vodProcessingHint": "방송이 종료되었어요. 인코딩이 끝나면 이곳에 동영상이 바로 표시돼요. 새로고침할 필요 없어요.",
+    "watching_other": "👁 {{count}}명 시청 중",
+    "signInRaiseHand": "손을 들려면 로그인하세요",
+    "signInChat": "채팅하려면 로그인하세요",
+    "signInJoinChat": "🔒 채팅에 참여하려면 로그인하세요."
+  },
+  "transcript": {
+    "title": "스크립트",
+    "languageAria": "스크립트 언어",
+    "copyingWithTimes": "타임코드 포함 복사",
+    "copyingTextOnly": "텍스트만 복사",
+    "timecodes": "타임코드",
+    "copyWithTimes": "타임코드 포함 스크립트 복사",
+    "copyText": "스크립트 텍스트 복사",
+    "jumpTo": "{{time}}(으)로 이동",
+    "hide": "스크립트 숨기기",
+    "show": "스크립트 표시",
+    "showWithCount_other": "스크립트 표시({{count}}줄)"
+  },
+  "blog": {
+    "noContent": "표시할 콘텐츠가 없어요",
+    "loadError": "콘텐츠를 불러오는 중 오류가 발생했어요.",
+    "processError": "콘텐츠를 처리하는 중 오류가 발생했어요.",
+    "rendererError": "렌더러를 불러오는 중 오류가 발생했어요."
+  },
+  "section": {
+    "posted": "댓글이 게시되었어요!",
+    "postFailed": "댓글을 게시하지 못했어요. 다시 시도해 주세요",
+    "editFailed": "수정하지 못했어요. 다시 시도해 주세요",
+    "updated": "댓글이 수정되었어요",
+    "commentTab": "댓글",
+    "reactTab": "리액션",
+    "at": "위치",
+    "atTime": "{{time}} 지점",
+    "commentPlaceholder": "댓글을 작성하세요...",
+    "replyPlaceholder": "답글을 작성하세요...",
+    "commentButton": "댓글",
+    "count_other": "댓글 {{count}}개",
+    "edited": "(수정됨)",
+    "saving": "저장 중...",
+    "translation": "번역",
+    "translationFailed": "번역에 실패했어요. 번역 서비스가 실행 중인가요?",
+    "reportComment": "댓글 신고",
+    "openInShorts": "쇼츠에서 열기"
+  }
+}

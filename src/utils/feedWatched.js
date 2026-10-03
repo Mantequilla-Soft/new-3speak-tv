@@ -31,6 +31,7 @@ const FEED_KEYS = new Set([
   'interests-grouped',
   'feed-shorts',
   'trending',
+  'promoted-grouped',
 ]);
 
 // ⚠️ NOT 'newcontent-grouped'. The New feed hardcodes `&hidewatched=0` because it

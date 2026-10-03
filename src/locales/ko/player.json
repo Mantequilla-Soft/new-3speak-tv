@@ -1,0 +1,105 @@
+{
+  "controls": {
+    "rewind10": "10초 뒤로",
+    "forward10": "10초 앞으로",
+    "reactToMoment": "이 장면에 리액션",
+    "mute": "음소거",
+    "unmute": "음소거 해제",
+    "playerSize": "플레이어 크기: {{size}}",
+    "sizeStandard": "표준",
+    "pip": "PIP 모드",
+    "autoplayOn": "자동재생: 켜짐",
+    "autoplayOff": "자동재생: 꺼짐",
+    "ambientSubtle": "앰비언트 조명: 은은하게",
+    "ambientVivid": "앰비언트 조명: 선명하게",
+    "ambientOff": "앰비언트 조명: 꺼짐",
+    "playbackSpeed": "재생 속도",
+    "speedNormal": "보통",
+    "quality": "화질",
+    "qualityAuto": "자동",
+    "fullscreen": "전체 화면",
+    "exitFullscreen": "전체 화면 종료",
+    "markerReplies_other": "(답글 {{count}}개)"
+  },
+  "subtitles": {
+    "title": "자막",
+    "off": "끄기",
+    "font": "글꼴",
+    "size": "크기",
+    "textColor": "글자 색상",
+    "textBorder": "글자 테두리",
+    "borderColor": "테두리 색상",
+    "background": "배경",
+    "none": "없음",
+    "fonts": {
+      "sansSerif": "고딕",
+      "serif": "명조",
+      "monospace": "고정폭"
+    }
+  },
+  "mini": {
+    "untitled": "동영상"
+  },
+  "playlist": {
+    "previous": "이전 동영상",
+    "next": "다음 동영상",
+    "close": "재생목록 닫기"
+  },
+  "overlay": {
+    "replay": "다시 보기"
+  },
+  "reactions": {
+    "translation": "번역",
+    "translationFailed": "번역 실패",
+    "videoReaction": "동영상 리액션",
+    "comment": "댓글",
+    "previous": "이전",
+    "next": "다음",
+    "hide": "리액션 숨기기",
+    "hideShort": "숨기기",
+    "loadingReplies": "답글 불러오는 중...",
+    "sizeTitle": "크기: {{size}}",
+    "sizes": {
+      "small": "S",
+      "medium": "M",
+      "standard": "표준",
+      "big": "크게",
+      "cinema": "영화관"
+    },
+    "sizeNames": {
+      "small": "작게",
+      "medium": "중간",
+      "standard": "표준",
+      "big": "크게",
+      "cinema": "영화관"
+    }
+  },
+  "reactionUpload": {
+    "authorized": "@threespeak 권한 부여 완료 — 이제 리액션을 게시할 수 있어요",
+    "authFailed": "권한 부여에 실패했어요. 다시 시도해 주세요.",
+    "webcamDenied": "웹캠에 접근할 수 없어요",
+    "shortTooLong": "쇼츠는 {{max}} 이하여야 해요. \"3Speak 쇼츠에 표시\"를 해제하거나 더 짧은 동영상을 사용하세요.",
+    "uploadingVideo": "동영상 업로드 중...",
+    "noEmbedUrl": "업로드는 완료됐지만 임베드 URL을 받지 못했어요",
+    "publishingComment": "댓글 게시 중...",
+    "posted": "동영상 리액션이 게시되었어요!",
+    "postFailed": "댓글을 게시하지 못했어요",
+    "uploadFailed": "업로드 실패",
+    "uploadVideo": "동영상 업로드",
+    "recordVideo": "동영상 녹화",
+    "startRecording": "녹화 시작",
+    "stopRecording": "녹화 중지",
+    "recordedVideo": "녹화된 동영상",
+    "descriptionPlaceholder": "동영상 리액션에 설명을 추가하세요...",
+    "showInShorts": "3Speak 쇼츠에 표시",
+    "authNote": "<b>@threespeak</b>이 나 대신 리액션을 게시하도록 허용해요.",
+    "authorizing": "권한 부여 중…",
+    "authorize": "@threespeak 권한 부여",
+    "uploading": "업로드 중...",
+    "postReaction": "리액션 게시"
+  },
+  "inline": {
+    "cantPlay": "이 동영상은 여기서 재생할 수 없어요.",
+    "openOnSite": "3Speak에서 열기"
+  }
+}

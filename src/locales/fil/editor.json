@@ -1,0 +1,19 @@
+{
+  "placeholder": "Isulat dito ang content mo...",
+  "uploadFailed": "Pumalya ang upload: {{message}}",
+  "uploadingImage": "Ina-upload ang larawan...",
+  "format": {
+    "underline": "Underline",
+    "strike": "Strikethrough",
+    "highlight": "Highlight",
+    "bulletList": "Bullet List",
+    "orderedList": "Numbered List",
+    "taskList": "Task List"
+  },
+  "emoji": {
+    "searchPlaceholder": "Maghanap ng emoji"
+  },
+  "preview": {
+    "renderError": "Error sa pag-render ng content"
+  }
+}

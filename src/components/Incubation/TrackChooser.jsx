@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { setIncubationTrack } from '../../lib/incubation';
 import { TRACKS } from './tracks';
+import { useTranslation } from 'react-i18next';
 import './TrackChooser.scss';
 
 /**
@@ -13,6 +14,7 @@ import './TrackChooser.scss';
  * answered yet. The profile offers no way to change the answer afterwards.
  */
 export default function TrackChooser({ current = null, onChosen }) {
+  const { t } = useTranslation();
   const [saving, setSaving] = useState(null);
   const [error, setError] = useState('');
 
@@ -25,7 +27,7 @@ export default function TrackChooser({ current = null, onChosen }) {
       await setIncubationTrack(id);
       onChosen?.(id);
     } catch {
-      setError('That did not save. Please try again.');
+      setError(t('incubation.trackChooser.saveFailed'));
     } finally {
       setSaving(null);
     }
@@ -33,8 +35,8 @@ export default function TrackChooser({ current = null, onChosen }) {
 
   return (
     <div className="track-chooser">
-      <div className="track-chooser-options" role="radiogroup" aria-label="What brings you to 3Speak?">
-        {TRACKS.map(({ id, Icon, title, body }) => (
+      <div className="track-chooser-options" role="radiogroup" aria-label={t('incubation.trackQuestion.title')}>
+        {TRACKS.map(({ id, Icon, titleKey, bodyKey }) => (
           <button
             key={id}
             type="button"
@@ -46,8 +48,8 @@ export default function TrackChooser({ current = null, onChosen }) {
           >
             <span className="track-option-icon"><Icon size={16} aria-hidden="true" /></span>
             <span className="track-option-text">
-              <strong>{title}</strong>
-              <span>{saving === id ? 'Saving...' : body}</span>
+              <strong>{t(titleKey)}</strong>
+              <span>{saving === id ? t('incubation.trackChooser.saving') : t(bodyKey)}</span>
             </span>
           </button>
         ))}

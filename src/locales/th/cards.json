@@ -1,0 +1,44 @@
+{
+  "loading": "กำลังโหลด...",
+  "error": "ข้อผิดพลาด: {{error}}",
+  "thumbnailAlt": "ภาพขนาดย่อ",
+  "topicTitle": "หัวข้อ: {{topic}}",
+  "watchingNow_other": "กำลังดูอยู่ {{count}} คน",
+  "badges": {
+    "gatedTitle": "เฉพาะผู้สนับสนุน — 3Speak Pro ปลดล็อกวิดีโอเต็ม",
+    "pro": "PRO",
+    "new": "ใหม่",
+    "live": "● ไลฟ์",
+    "liveChat": "● แชตสด"
+  },
+  "status": {
+    "scheduled": "ตั้งเวลาไว้",
+    "mobile": "มือถือ",
+    "mobileTitle": "อัปโหลดผ่านแอปมือถือ",
+    "processing": "กำลังประมวลผล",
+    "processingTitle": "วิดีโอกำลังประมวลผล",
+    "draft": "ฉบับร่าง",
+    "draftTitle": "ฉบับร่าง - ยังไม่เผยแพร่",
+    "deleted": "ลบแล้ว",
+    "deletedTitle": "วิดีโอนี้ถูกลบแล้ว",
+    "failed": "ล้มเหลว",
+    "failedTitle": "ประมวลผลวิดีโอไม่สำเร็จ",
+    "unlisted": "ไม่เป็นสาธารณะ",
+    "unlistedTitle": "ไม่เป็นสาธารณะ — ซ่อนจากฟีดและการค้นหา เข้าถึงได้ทางลิงก์โดยตรงเท่านั้น"
+  },
+  "playlist": {
+    "loading": "กำลังโหลดเพลย์ลิสต์...",
+    "items_other": "{{count}} รายการ",
+    "openAria": "เปิดเพลย์ลิสต์ {{name}}",
+    "tag": "เพลย์ลิสต์",
+    "updated": "อัปเดต {{when}}"
+  },
+  "watchLater": {
+    "title": "ดูภายหลัง",
+    "subtitle": "วิดีโอที่จะดูภายหลัง"
+  },
+  "watched": {
+    "title": "ดูแล้ว",
+    "subtitle": "ประวัติการดูของคุณ"
+  }
+}

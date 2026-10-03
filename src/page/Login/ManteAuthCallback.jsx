@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react"
 import { useNavigate, useSearchParams } from "react-router-dom"
 import { toastIn } from '../../utils/toast';
 import { useAppStore } from "../../lib/store"
+import { useTranslation } from "react-i18next"
 
 // Every toast from this module is headed "Sign in"; the message becomes the
 // line under it. See utils/toast.js.
@@ -12,6 +13,7 @@ const toast = toastIn('Sign in');
 const processedCodes = new Set()
 
 const ManteAuthCallback = () => {
+  const { t } = useTranslation()
   const navigate = useNavigate()
   const [params] = useSearchParams()
   const { setUser, setIncubationUser } = useAppStore()
@@ -51,8 +53,8 @@ const ManteAuthCallback = () => {
       // is the authoritative answer about what kind of session this is anyway.
       // Requiring it here rejected the flow before the exchange could run.
       if (!code) {
-        if (isPopup) return finishPopup({ error: "login failed" })
-        toast.error("Butter Auth login failed")
+        if (isPopup) return finishPopup({ error: t('auth.manteCallback.loginFailedLower') })
+        toast.error(t('auth.manteCallback.butrauthFailed'))
         navigate("/")
         return
       }
@@ -84,7 +86,7 @@ const ManteAuthCallback = () => {
         try { data = await res.json() } catch { /* non-JSON error body */ }
         // A session is valid with EITHER a Hive account or an incubation handle.
         if (!res.ok || (!data.username && !data.handle)) {
-          throw new Error(data.error || `Token exchange failed (${res.status})`)
+          throw new Error(data.error || t('auth.manteCallback.exchangeFailedStatus', { status: res.status }))
         }
 
         // Local marker that we're in a ManteAuth-backed session. Username is
@@ -103,7 +105,7 @@ const ManteAuthCallback = () => {
           // Writes the handle key and clears user_id itself, so the store and
           // localStorage cannot disagree about which kind of session this is.
           setIncubationUser(data.handle)
-          toast.success(`Signed in as @${data.handle}`)
+          toast.success(t('auth.manteCallback.signedInAs', { handle: data.handle }))
           navigate(state || "/")
           return
         }
@@ -114,14 +116,14 @@ const ManteAuthCallback = () => {
         if (isPopup) return finishPopup({ username: data.username })
 
         setUser(data.username)
-        toast.success(`Logged in as @${data.username} via Butter Auth`)
+        toast.success(t('auth.manteCallback.loggedInAs', { username: data.username }))
         navigate(state || "/")
       } catch (err) {
         const msg = err?.name === "AbortError"
-          ? "Login timed out — please try again"
-          : (err?.message || "Token exchange failed")
+          ? t('auth.manteCallback.timedOut')
+          : (err?.message || t('auth.manteCallback.exchangeFailed'))
         if (isPopup) return finishPopup({ error: msg })
-        toast.error("Butter Auth login failed: " + msg)
+        toast.error(t('auth.manteCallback.butrauthFailedWith', { msg }))
         navigate("/")
       }
     }
@@ -154,9 +156,9 @@ const ManteAuthCallback = () => {
             <circle pathLength="1" cx="26" cy="26" r="24" />
             <path pathLength="1" d="M18 18 L34 34 M34 18 L18 34" />
           </svg>
-          <h2 style={{ margin: 0 }}>Login failed</h2>
+          <h2 style={{ margin: 0 }}>{t('auth.manteCallback.loginFailed')}</h2>
           <p style={{ margin: 0, color: "var(--text-secondary, #888)" }}>
-            You can close this window and try again.
+            {t('auth.manteCallback.closeAndRetry')}
           </p>
         </>
       ) : (
@@ -165,9 +167,9 @@ const ManteAuthCallback = () => {
             <circle pathLength="1" cx="26" cy="26" r="24" />
             <path pathLength="1" d="M15 27 l7.5 7.5 L38 17" />
           </svg>
-          <h2 style={{ margin: 0 }}>You're in</h2>
+          <h2 style={{ margin: 0 }}>{t('auth.manteCallback.youreIn')}</h2>
           <p style={{ margin: 0, color: "var(--text-secondary, #888)" }}>
-            {closeable ? "You can close this window and return to 3Speak." : "Signing you in…"}
+            {closeable ? t('auth.manteCallback.closeAndReturn') : t('auth.manteCallback.signingIn')}
           </p>
         </>
       )}

@@ -1,0 +1,233 @@
+{
+  "aiBadge": {
+    "title": "Được phát hiện là do AI tạo",
+    "label": "AI"
+  },
+  "translate": {
+    "titleButton": "Dịch tiêu đề",
+    "original": "Bản gốc",
+    "translate": "Dịch",
+    "translating": "Đang dịch..."
+  },
+  "summary": {
+    "title": "Tóm tắt",
+    "close": "Đóng tóm tắt",
+    "showingOriginal": "Đang hiện bản gốc",
+    "translatedTo": "Đã dịch sang {{language}}",
+    "showLanguage": "Hiện {{language}}",
+    "showOriginal": "Hiện bản gốc",
+    "buttonTitle": "Tóm tắt video này bằng AI"
+  },
+  "errors": {
+    "notAvailable": "Video này không khả dụng.",
+    "goHome": "Về trang chủ",
+    "scheduledNotFound": "Không tìm thấy bài đăng đã lên lịch — có thể đã được xuất bản hoặc đã bị hủy.",
+    "network": "Lỗi mạng. Vui lòng kiểm tra kết nối của bạn.",
+    "notFound": "Không tìm thấy video hoặc tải thất bại.",
+    "backToProfile": "Quay lại hồ sơ"
+  },
+  "gated": {
+    "title": "Chỉ dành cho người ủng hộ",
+    "checkFailed": "Hiện chúng tôi không thể xác nhận gói đăng ký của bạn. Hãy thử lại sau giây lát.",
+    "preview": "Bạn đang xem bản xem trước miễn phí. 3Speak Pro mở khóa toàn bộ video.",
+    "subscribersOnly": "Video này dành cho người đăng ký 3Speak Pro.",
+    "cta": "Nhận 3Speak Pro"
+  },
+  "reactions": {
+    "show": "Hiện phản ứng",
+    "add": "Thêm phản ứng"
+  },
+  "liveChat": "Chat trực tiếp",
+  "moreVideos": "Thêm video",
+  "vote": {
+    "saveFailed": "Không thể lưu lượt vote của bạn"
+  },
+  "locked": {
+    "noAccount": "Mở khóa khi bạn tạo tài khoản Hive",
+    "offChainPost": "Chưa khả dụng: bài đăng này chưa có trên Hive"
+  },
+  "interests": {
+    "loginRequired": "Đăng nhập để lưu sở thích",
+    "added": "Đã thêm “{{tag}}” vào sở thích của bạn",
+    "saveFailed": "Không thể lưu sở thích"
+  },
+  "watchLater": {
+    "removed": "Đã xóa khỏi Xem sau",
+    "removeFailed": "Xóa thất bại: {{error}}",
+    "removeTitle": "Xóa khỏi Xem sau"
+  },
+  "reshare": {
+    "loginRequired": "Đăng nhập để chia sẻ lại",
+    "success": "Đã chia sẻ lại!",
+    "failed": "Chia sẻ lại thất bại",
+    "reshared": "Đã chia sẻ lại",
+    "reshare": "Chia sẻ lại",
+    "reshareWithCount": "Chia sẻ lại ({{count}})"
+  },
+  "clip": {
+    "noVideoUrlRemix": "Không thể xác định URL video để remix",
+    "noVideoUrl": "Không thể xác định URL video",
+    "startHint": "Tua đến điểm bắt đầu clip, rồi nhấn \"Đặt điểm đầu\"",
+    "endHint": "Giờ hãy tua đến điểm kết thúc clip và nhấn \"Đặt điểm cuối\"",
+    "endBeforeStart": "Thời điểm kết thúc phải sau thời điểm bắt đầu",
+    "trimmed": "Clip đã được cắt còn 1 phút — chúng tôi sẽ cắt clip ở cuối dòng thời gian.",
+    "set": "Đã đặt clip: {{start}} – {{end}}. Giờ hãy nhấn \"Tạo clip\"",
+    "loginRequired": "Đăng nhập để cắt clip",
+    "cancel": "Hủy clip",
+    "clipVideo": "Cắt clip video",
+    "label": "Cắt clip video",
+    "clip": "Clip",
+    "seekToStart": "Tua đến điểm đầu",
+    "setStart": "Đặt điểm đầu",
+    "setEnd": "Đặt điểm cuối",
+    "createClip": "Tạo clip",
+    "barStart": "Tua đến điểm bắt đầu clip của bạn",
+    "barEnd": "Đầu: {{start}} — Giờ hãy tua đến điểm kết thúc",
+    "barDone": "Clip: {{start}} – {{end}}"
+  },
+  "share": {
+    "defaultTitle": "Video 3Speak",
+    "linkCopied": "Đã sao chép đường liên kết vào bộ nhớ tạm!",
+    "failed": "Chia sẻ thất bại"
+  },
+  "follow": {
+    "loginRequired": "Vui lòng đăng nhập để theo dõi người dùng",
+    "followed": "Đã theo dõi @{{user}}",
+    "failed": "Theo dõi thất bại: {{error}}"
+  },
+  "ad": {
+    "countdown": "Quảng cáo sau {{seconds}}"
+  },
+  "media": {
+    "unavailableTitle": "Video này không còn khả dụng",
+    "unavailableBody": "Không tìm thấy tệp phương tiện của video tải lên cũ này trên mạng. Bài đăng vẫn tồn tại trên blockchain, nhưng video không thể phát được nữa.",
+    "blockedTitle": "Hiện không thể tải video",
+    "blockedBody": "Một trong các máy chủ video của chúng tôi không phản hồi. Bản thân video không có vấn đề gì, vui lòng thử lại."
+  },
+  "tipNudge": {
+    "text": "Bạn thích video này?<hide> Gửi tip cho <b>@{{author}}</b> nhé!</hide>",
+    "dismiss": "Bỏ qua"
+  },
+  "community": {
+    "members_other": "{{count}} thành viên"
+  },
+  "tags": {
+    "curated": "Tuyển chọn"
+  },
+  "topics": {
+    "taggedBy": "“{{label}}” · {{count}} người gắn thẻ",
+    "viewers_other": "“{{label}}” · {{count}} người xem",
+    "autoNoVotes": "Tự động gắn thẻ — chưa có lượt vote nào của người xem",
+    "noVotes": "Chưa có lượt vote nào của người xem",
+    "inInterests": "✓ Trong sở thích của bạn",
+    "addToInterests": "+ Thêm vào sở thích của tôi",
+    "openTagFeed": "Mở bảng tin của thẻ"
+  },
+  "scheduled": {
+    "notice": "Đã lên lịch vào <b>{{date}}</b> — chưa được xuất bản.",
+    "futureDate": "một ngày trong tương lai",
+    "edit": "Chỉnh sửa, đổi lịch hoặc hủy",
+    "editTitle": "Chỉnh sửa bài đăng đã lên lịch (thông tin, ngày hoặc hủy)"
+  },
+  "actions": {
+    "voteOffChain": "Vote cho video này. Lượt vote được lưu trên 3Speak và không trả phần thưởng.",
+    "signInToVote": "Đăng nhập để vote",
+    "tagVideo": "Gắn thẻ video này",
+    "voteVideo": "Vote cho video này",
+    "tag": "Gắn thẻ",
+    "vote": "Vote",
+    "analyticsTitle": "Phân tích video",
+    "analytics": "Phân tích",
+    "videoStats": "Thống kê video",
+    "promoteTitle": "Quảng bá video này",
+    "promote": "Quảng bá",
+    "editTitle": "Chỉnh sửa thông tin video",
+    "reportTitle": "Báo cáo video",
+    "addToPlaylist": "Thêm vào danh sách phát",
+    "playlist": "Danh sách phát",
+    "tipTitle": "Gửi tip cho nhà sáng tạo",
+    "tip": "Tip",
+    "details": "Chi tiết",
+    "toggleDetails": "Ẩn/hiện chi tiết",
+    "followCreator": "Theo dõi nhà sáng tạo",
+    "closeMenu": "Đóng menu",
+    "openActions": "Mở thao tác"
+  },
+  "description": {
+    "hide": "Ẩn mô tả",
+    "show": "Hiện mô tả"
+  },
+  "edit": {
+    "title": "Chỉnh sửa video",
+    "loading": "Đang tải bài đăng hiện tại…",
+    "videoFile": "Tệp video",
+    "replaceVideo": "Thay video",
+    "replaceHint": "Thay tệp video của bài đăng này. Mọi thứ khác giữ nguyên: bài đăng vẫn giữ lượt thích, phần thưởng, bình luận, ngày tải lên và vị trí trên hồ sơ của bạn. Bỏ qua mục này để giữ video hiện tại.",
+    "uploadingTo": "Đang tải lên <b>{{host}}</b>… {{pct}}%",
+    "choosingServer": "Đang chọn máy chủ tải lên…",
+    "uploadedTo": "Đã tải lên <b>{{host}}</b>. Nhấn Lưu để thay vào.",
+    "uploaded": "Đã tải lên. Nhấn Lưu để thay vào.",
+    "cancelUpload": "Hủy tải lên",
+    "keepCurrent": "Giữ video hiện tại",
+    "encodeHint": "Sau khi lưu, video vẫn cần vài phút để mã hóa, và video cũ tiếp tục phát cho đến khi video mới sẵn sàng. Hình thu nhỏ không thay đổi, nên hãy cập nhật ở trên nếu nó không còn phù hợp.",
+    "thumbnail": "Hình thu nhỏ",
+    "thumbPreviewAlt": "Xem trước hình thu nhỏ",
+    "uploadImage": "Tải ảnh lên",
+    "uploading": "Đang tải lên…",
+    "thumbHint": "Tải ảnh lên hoặc dán URL trực tiếp. Để nguyên để giữ hình thu nhỏ hiện tại.",
+    "titleLabel": "Tiêu đề",
+    "titleMin": "tối thiểu {{min}}",
+    "tags": "Thẻ",
+    "tagsPlaceholder": "phân cách bằng dấu cách",
+    "autoTag": "Được thêm tự động — không thể gỡ",
+    "tagCount_other": "{{count}}/{{max}} thẻ",
+    "tagCountRequired_other": "{{count}}/{{max}} thẻ · cần ít nhất 1",
+    "description": "Mô tả",
+    "descriptionPlaceholder": "Giới thiệu video của bạn với người xem…",
+    "markdownHint": "Hỗ trợ markdown.",
+    "listed": "Công khai",
+    "unlistedLabel": "Không công khai",
+    "listedHint": "Hiển thị trong bảng tin, tìm kiếm và trên hồ sơ của bạn.",
+    "unlistedHint": "Ẩn khỏi bảng tin và tìm kiếm — vẫn phát được qua đường liên kết trực tiếp, vẫn nằm trên hồ sơ của bạn (có nhãn).",
+    "allowRemix": "Cho phép Remix/Clip",
+    "remixOn": "Người khác có thể tạo remix/clip; bạn được ghi nhận là tác giả gốc.",
+    "remixOff": "Người khác không thể remix hoặc cắt clip video này.",
+    "trailer": "Video giới thiệu kênh",
+    "trailerOn": "Tự động phát ở đầu tab Tổng quan trên hồ sơ của bạn, thay thế video giới thiệu bạn đã đặt trước đó.",
+    "trailerOff": "Đặt video này làm video tự động phát ở đầu tab Tổng quan trên hồ sơ của bạn.",
+    "nsfw": "Người lớn / NSFW",
+    "notNsfw": "Không dành cho người lớn",
+    "nsfwHint": "Ẩn khỏi bảng tin và tìm kiếm trừ khi người xem bật NSFW; được gắn thẻ nsfw trên Hive.",
+    "notNsfwHint": "Nội dung bình thường, hiển thị cho mọi người.",
+    "promoted": "Đang quảng bá",
+    "promote": "Quảng bá video",
+    "saveChanges": "Lưu thay đổi",
+    "noChanges": "Không có thay đổi nào để lưu.",
+    "thumbUploaded": "Đã tải hình thu nhỏ lên.",
+    "videoUploaded": "Đã tải video mới lên. Hãy lưu để áp dụng cho bài đăng này.",
+    "relisted": "Video đã được công khai lại.",
+    "unlisted": "Video đã chuyển sang không công khai.",
+    "trailerSet": "Đã đặt làm video giới thiệu kênh của bạn.",
+    "trailerRemoved": "Đã gỡ khỏi vị trí video giới thiệu kênh.",
+    "updatedEncoding": "Đã cập nhật video! Tệp mới cần một chút thời gian để mã hóa xong.",
+    "updated": "Đã cập nhật video!",
+    "errors": {
+      "notFound": "Không tìm thấy bài đăng này trên Hive.",
+      "loadFailed": "Không tải được bài đăng từ Hive. Vui lòng thử lại.",
+      "notImage": "Vui lòng chọn một tệp hình ảnh.",
+      "imageTooLarge": "Ảnh quá lớn (tối đa 10 MB).",
+      "thumbUploadFailed": "Tải hình thu nhỏ lên thất bại.",
+      "notVideo": "Vui lòng chọn một tệp video.",
+      "videoTooLarge": "Video quá lớn (tối đa 5 GB).",
+      "noVideoEntry": "Bài đăng này không có mục video để thay thế — metadata của nó không tham chiếu đến video nào.",
+      "notInLibrary": "Video của bài đăng này không còn trong thư viện, nên không thể thay tệp.",
+      "notOwner": "Bạn chỉ có thể thay tệp trên video của chính mình.",
+      "videoUploadFailed": "Tải video lên thất bại.",
+      "noEmbedEntry": "Bài đăng này không có mục video nhúng để thay thế — metadata của nó không tham chiếu đến video nào.",
+      "broadcastFailed": "Phát giao dịch thất bại",
+      "listingFailed": "Không thể cập nhật chế độ hiển thị.",
+      "trailerFailed": "Không thể cập nhật video giới thiệu kênh của bạn.",
+      "saveFailed": "Lưu thay đổi thất bại."
+    }
+  }
+}

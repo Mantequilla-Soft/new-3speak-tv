@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect, useCallback } from 'react';
 import { createPortal } from 'react-dom';
+import { useTranslation } from 'react-i18next';
 import { MdTranslate } from 'react-icons/md';
 import { SUPPORTED_LANGUAGES } from '../../utils/translate';
 import './TitleTranslate.scss';
@@ -17,6 +18,7 @@ const langLabel = (code) => {
  * the button) so it can't be clipped or covered by surrounding rows.
  */
 export default function TitleTranslate({ languages, selectedLang, onSelect }) {
+  const { t } = useTranslation();
   const [open, setOpen] = useState(false);
   const [coords, setCoords] = useState({ top: 0, left: 0 });
   const btnRef = useRef(null);
@@ -56,8 +58,8 @@ export default function TitleTranslate({ languages, selectedLang, onSelect }) {
         type="button"
         className={`title-translate-btn${selectedLang ? ' active' : ''}`}
         onClick={() => setOpen((o) => !o)}
-        title="Translate title"
-        aria-label="Translate title"
+        title={t('watch.translate.titleButton')}
+        aria-label={t('watch.translate.titleButton')}
       >
         <MdTranslate size={16} />
       </button>
@@ -76,7 +78,7 @@ export default function TitleTranslate({ languages, selectedLang, onSelect }) {
                 setOpen(false);
               }}
             >
-              Original
+              {t('watch.translate.original')}
             </button>
             {languages.map((code) => (
               <button

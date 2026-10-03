@@ -1,0 +1,172 @@
+{
+  "addTag": {
+    "loginRequired": "Melde dich an, um dieses Video zu taggen",
+    "pickTopic": "Wähle zuerst ein Thema",
+    "tagged": "Getaggt mit „{{label}}“",
+    "failed": "Taggen fehlgeschlagen: {{error}}",
+    "pleaseTryAgain": "bitte versuch es nochmal",
+    "title": "Dieses Video taggen",
+    "question": "Worum geht es in diesem Video?",
+    "existing": "Du hast das als <b>{{label}}</b> getaggt – wenn du etwas anderes wählst, wird es ersetzt.",
+    "submit": "Tag senden"
+  },
+  "addAccount": {
+    "usernameRequired": "Zum Fortfahren ist ein Benutzername nötig.",
+    "hiveAuthExpired": "Die HiveAuth-Anfrage ist abgelaufen",
+    "loginSuccess": "Anmeldung erfolgreich!",
+    "loginFailed": "Anmeldung fehlgeschlagen: {{error}}",
+    "logoAlt": "3Speak-Logo",
+    "title": "Mit deinem Benutzernamen anmelden",
+    "usernamePlaceholder": "Benutzername"
+  },
+  "socialLink": {
+    "hashCopied": "Hash kopiert",
+    "copyFailed": "Konnte nicht in die Zwischenablage kopieren",
+    "enterHandle": "Gib deinen Plattform-Handle oder deine ID ein",
+    "verified": "Konto verifiziert und verknüpft",
+    "errors": {
+      "hashNotFound": "Der Hash wurde im Profil noch nicht gefunden. Stell sicher, dass die Änderung öffentlich gespeichert ist, und versuch es dann nochmal.",
+      "alreadyLinked": "Dieser Kanal ist bereits von einem anderen Hive-Nutzer (@{{user}}) verifiziert.",
+      "tooMany": "Du hast die maximale Anzahl verknüpfter Konten erreicht.",
+      "notFound": "Dieser Kanal existiert auf der Plattform nicht.",
+      "badSignature": "Die Signatur konnte nicht überprüft werden. Stell sicher, dass du mit deinem Posting Key angemeldet bist.",
+      "rateLimited": "Zu viele Anfragen. Bitte warte eine Minute und versuch es dann nochmal.",
+      "lookupFailed": "Abfrage bei der Plattform fehlgeschlagen. Versuch es gleich nochmal.",
+      "verifyFailed": "Verifizierung fehlgeschlagen",
+      "stillPresent": "Der Hash ist noch in deinem Profil – entferne ihn zuerst.",
+      "unlinkFailed": "Trennen fehlgeschlagen",
+      "noSuchLink": "Diese Verknüpfung gibt es nicht."
+    },
+    "confirmUnlink": "Deine {{platform}}-Verknüpfung entfernen? Stell sicher, dass der Verifizierungs-Hash nicht mehr in deinem öffentlichen Profil steht, sonst wird das Trennen abgelehnt.",
+    "removed": "Verknüpfung entfernt",
+    "title": "Verknüpfte externe Profile",
+    "intro": "Beweise, dass dir ein YouTube-Kanal (oder ein anderer) gehört, indem du deinen eindeutigen 3Speak-Hash in die öffentliche Profilbeschreibung einfügst und ihn hier verifizierst.",
+    "openProfile": "Profil öffnen",
+    "removeLink": "Verknüpfung entfernen",
+    "empty": "Noch keine externen Profile verknüpft.",
+    "addPlatform": "Neue Plattform hinzufügen",
+    "flowTitle": "Deinen {{platform}}-Kanal verknüpfen",
+    "step1": "Kopiere deinen eindeutigen Verifizierungs-Hash:",
+    "step2": "<strong>Füge ihn in deine öffentliche {{platform}}-Profilbeschreibung ein</strong> (egal wo – Info / Bio / Beschreibung passt). Speichere die Änderung.",
+    "step3": "Gib deine {{platform}}-Kennung ein:",
+    "verifying": "Wird verifiziert…",
+    "verify": "Verifizieren"
+  },
+  "auth": {
+    "title": "3Speak autorisieren!",
+    "text": "Um Videos auf 3Speak hochzuladen, brauchen wir deine Posting-Berechtigung. Damit können wir deine hochgeladenen Videos auf Hive veröffentlichen. Du musst uns die Posting-Berechtigung nur einmal erteilen.",
+    "authorize": "Autorisieren"
+  },
+  "beneficiary": {
+    "errors": {
+      "emptyUsername": "Der Benutzername darf nicht leer sein.",
+      "sameUser": "Du kannst nicht dich selbst als Begünstigten festlegen",
+      "greaterThanZero": "Der Belohnungsanteil muss größer als 0 sein.",
+      "exceedsRemaining": "Der Belohnungsanteil übersteigt den verbleibenden Anteil von {{percent}} %.",
+      "validNumber": "Gib eine gültige Zahl ein",
+      "validPercent": "Gib einen gültigen Belohnungsanteil ein.",
+      "duplicate": "Dieses Konto ist bereits in der Liste.",
+      "invalidAccount": "Ungültiger Benutzername oder ungültige Community-ID.",
+      "cannotIncrease": "Kann nicht über die verbleibenden {{percent}} % erhöht werden",
+      "pendingRow": "@{{account}} wurde noch nicht hinzugefügt – klicke auf +, um es hinzuzufügen, oder leere das Feld.",
+      "atLeastOne": "Der Belohnungsanteil muss mindestens 1 % betragen"
+    },
+    "title": "Begünstigte",
+    "intro": "Füge einen Nutzer hinzu, der automatisch einen Teil der Belohnungen für diesen Post erhalten soll.",
+    "minPercent": "% (min. {{percent}} %)",
+    "usernamePlaceholder": "Benutzername eingeben",
+    "minimumReward": "Der Mindestanteil beträgt <strong>1 %</strong>",
+    "checking": "<strong>@{{account}}</strong> wird auf Hive geprüft…",
+    "notExisting": "⚠️ <strong>@{{account}}</strong> ist kein bestehendes Hive-Konto.",
+    "notAdded": "⚠️ <strong>@{{account}}</strong> wurde noch nicht hinzugefügt – klicke auf <strong>+</strong>, um es hinzuzufügen, oder leere das Feld.",
+    "infrastructure": "10 % === Infrastruktur",
+    "videoEncoding": "Video-Encoding === 1 %",
+    "defaults": "Standard-Begünstigte ({{count}})"
+  },
+  "qr": {
+    "scan": "Scanne diesen QR-Code in Hive Keychain:",
+    "click": "Klicke auf den QR-Code, um ihn in der Keychain-App zu öffnen"
+  },
+  "editVideoHint": {
+    "title": "Bearbeite jedes deiner Videos",
+    "text": "Öffne eines deiner eigenen Videos und such in der Aktionsleiste unter dem Player nach dem <strong>Stift-Button</strong>. Klick darauf, um Titel, Beschreibung, Thumbnail, Tags und mehr zu ändern.",
+    "penTitle": "Videodetails bearbeiten",
+    "tip": "Tipp",
+    "caption": "Diesen Stift-Button suchst du",
+    "gotIt": "Verstanden"
+  },
+  "verifyAuth": {
+    "title": "Autorisierung wird überprüft",
+    "text": "Bitte warte, während wir prüfen, ob die Autorisierung erteilt wurde..."
+  },
+  "editor": {
+    "confirmLeave": "Der Editor ist noch geöffnet. Wenn du diese Seite verlässt, wird der Editor geschlossen und ungespeicherte Änderungen gehen verloren.\n\nOK = Editor schließen & Seite verlassen\nAbbrechen = Auf dieser Seite bleiben",
+    "confirmClose": "Willst du den Editor wirklich schließen? Ungespeicherte Änderungen gehen verloren.",
+    "iframeTitle": "3Speak-Videoeditor",
+    "finding": "Verfügbarer Editor wird gesucht...",
+    "loading": "Editor wird geladen...",
+    "unavailable": "Derzeit ist kein Editor-Server verfügbar. Bitte versuch es später nochmal.",
+    "sending": "Wird an den Render-Dienst gesendet...",
+    "rendering": "Wird gerendert... {{percent}}%",
+    "complete": "Rendern abgeschlossen!",
+    "useVideo": "Video verwenden",
+    "preparing": "Video wird für den Upload vorbereitet...",
+    "renderUnavailable": "Der Render-Dienst ist noch nicht verfügbar. Die Timeline-Daten wurden in der Konsole ausgegeben.",
+    "backToEditor": "Zurück zum Editor",
+    "postError": "Das Video konnte nicht für den Upload vorbereitet werden. Bitte lade es stattdessen herunter."
+  },
+  "profile": {
+    "mustLogin": "Du musst dich zuerst anmelden",
+    "followed": "Gefolgt",
+    "unfollowed": "Entfolgt",
+    "followFailed": "Folgen fehlgeschlagen: {{error}}",
+    "unfollowFailed": "Entfolgen fehlgeschlagen: {{error}}",
+    "avatarAlt": "Profil",
+    "posts": "Posts",
+    "followers": "Follower",
+    "joined": "Dabei seit {{date}}",
+    "about": "Info",
+    "noBio": "Keine Bio vorhanden"
+  },
+  "report": {
+    "reasons": {
+      "spamMisleading": "Spam oder irreführend",
+      "harassment": "Belästigung oder Mobbing",
+      "hateSpeech": "Hassrede",
+      "violence": "Gewalttätige oder drastische Inhalte",
+      "sexual": "Sexuelle Inhalte",
+      "copyright": "Urheberrechtsverletzung",
+      "scam": "Betrug",
+      "other": "Sonstiges",
+      "spam": "Spam",
+      "impersonation": "Identitätsdiebstahl",
+      "spamAccount": "Spam-Konto"
+    },
+    "selectReasonError": "Bitte wähle einen Grund",
+    "loginRequired": "Du musst angemeldet sein, um etwas zu melden",
+    "submitted": "Meldung gesendet. Danke.",
+    "failed": "Meldung konnte nicht gesendet werden",
+    "titles": {
+      "user": "Nutzer melden",
+      "comment": "Kommentar melden",
+      "short": "Short melden",
+      "post": "Post melden",
+      "video": "Video melden"
+    },
+    "reason": "Grund",
+    "selectReason": "Grund auswählen...",
+    "details": "Weitere Details (optional)",
+    "detailsPlaceholder": "Gib mehr Kontext an...",
+    "submitting": "Wird gesendet...",
+    "submit": "Meldung senden"
+  },
+  "upload": {
+    "missingInfo": "Video- oder Thumbnail-Informationen fehlen.",
+    "updateFailed": "Videoinfos konnten nicht aktualisiert werden. Bitte versuch es nochmal.",
+    "title": "Video und Thumbnail hochladen",
+    "selectVideo": "Video auswählen",
+    "thumbnail": "Thumbnail",
+    "clickThumbnail": "Klicke, um ein Thumbnail hochzuladen",
+    "updateInfo": "Videoinfos aktualisieren"
+  }
+}

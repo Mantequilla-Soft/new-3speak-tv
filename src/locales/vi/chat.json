@@ -1,0 +1,136 @@
+{
+  "button": {
+    "label": "Chat"
+  },
+  "tools": {
+    "emoji": "Emoji",
+    "searchEmoji": "Tìm emoji",
+    "searchGifs": "Tìm GIF…",
+    "noGifs": "Không tìm thấy GIF nào.",
+    "poweredByGiphy": "Cung cấp bởi GIPHY"
+  },
+  "lightbox": {
+    "openInNewTab": "Mở ảnh trong tab mới"
+  },
+  "linkCard": {
+    "loadingPreview": "Đang tải bản xem trước…",
+    "community": "Cộng đồng",
+    "communityWithSubscribers_other": "Cộng đồng · {{formatted}} người đăng ký",
+    "commentFallback": "(bình luận)",
+    "play": "Phát {{title}}"
+  },
+  "share": {
+    "embedCopied": "Đã sao chép mã nhúng",
+    "pressToCopy": "Nhấn Ctrl/Cmd + C để sao chép mã đã chọn",
+    "embedTitle": "Nhúng video này",
+    "embedHint": "Dán mã này vào bất kỳ trang web hoặc bài blog nào.",
+    "embedSize": "Kích thước nhúng",
+    "embedCode": "Mã nhúng",
+    "copyEmbed": "Sao chép mã nhúng",
+    "responsiveSub": "Tự co giãn vừa với trang chứa nó",
+    "fixedSub": "Iframe kích thước cố định",
+    "sendInChat": "Gửi qua 3Speak Chat",
+    "sendInChatSub": "Nhắn cho ai đó trên 3Speak",
+    "embedOnWebsite": "Nhúng vào trang web",
+    "embedOnWebsiteSub": "Sao chép mã HTML cho trang web hoặc blog của bạn",
+    "generalShare": "Chia sẻ / sao chép đường liên kết",
+    "generalShareSub": "Ứng dụng khác, hoặc sao chép đường liên kết"
+  },
+  "gate": {
+    "connectTitle": "Kết nối với 3Speak Chat",
+    "connectBody": "Chat được vận hành bởi Snapie. Khi kết nối, bạn ký một yêu cầu đăng nhập một lần bằng posting key Hive của mình — không có giao dịch, không mất phí.",
+    "connecting": "Đang kết nối…",
+    "connectButton": "Kết nối chat",
+    "cannotSign": "Phương thức đăng nhập hiện tại của bạn không thể ký yêu cầu chat. Hãy dùng Keychain, HiveAuth, PeakVault hoặc Ledger.",
+    "needsAccountTitle": "Chat cần tài khoản Hive",
+    "needsAccountBody": "Tin nhắn được ký bằng khóa tài khoản của chính bạn, nên chat sẽ mở cùng mọi tính năng khác khi tài khoản của bạn sẵn sàng. Hoàn thành các mục tiêu trên hồ sơ và đội ngũ sẽ giúp bạn đạt được điều đó.",
+    "loginTitle": "Đăng nhập để dùng chat",
+    "loginBody": "Đăng nhập bằng tài khoản Hive để gửi và nhận tin nhắn.",
+    "connectingToChat": "Đang kết nối với chat…"
+  },
+  "errors": {
+    "notHiveAccount": "@{{user}} không phải là tài khoản Hive.",
+    "openConversation": "Không thể mở cuộc trò chuyện đó.",
+    "verifyAccount": "Không thể xác minh tài khoản đó.",
+    "createRoom": "Không thể tạo phòng.",
+    "joinChannel": "Không thể tham gia kênh đó."
+  },
+  "newDm": {
+    "placeholder": "Nhắn tin cho người dùng Hive…",
+    "start": "Bắt đầu chat"
+  },
+  "newRoom": {
+    "toggle": "Phòng riêng tư mới",
+    "namePlaceholder": "Tên phòng…",
+    "removeMember": "Gỡ @{{user}}",
+    "addMore": "Thêm người…",
+    "invitePlaceholder": "Mời người dùng Hive (không bắt buộc)…",
+    "create": "Tạo"
+  },
+  "channels": {
+    "browse": "Duyệt kênh",
+    "publicTitle": "Kênh công khai",
+    "closeBrowser": "Đóng trình duyệt kênh",
+    "loading": "Đang tải kênh…",
+    "empty": "Không có kênh nào.",
+    "join": "Tham gia"
+  },
+  "markRead": {
+    "nothingToClear": "Không có cuộc trò chuyện nào để xóa. Bộ đếm có thể bị kẹt phía máy chủ.",
+    "requestFailed": "yêu cầu thất bại",
+    "allCaughtUp": "Bạn đã xem hết",
+    "stillUnread_other": "Vẫn hiển thị {{total}} chưa đọc sau khi xóa {{count}} cuộc trò chuyện.",
+    "stillUnreadNoMatch_other": "Vẫn hiển thị {{total}} chưa đọc sau khi xóa {{count}} cuộc trò chuyện. Máy chủ báo có số đếm nhưng không có cuộc trò chuyện nào khớp.",
+    "notSignedIn": "Chat chưa đăng nhập. Hãy kết nối lại chat và thử lại.",
+    "sessionExpired": "Phiên chat đã hết hạn trong khi đang xóa. Hãy kết nối lại chat và thử lại.",
+    "serverRejectedVisible_other": "Máy chủ đã từ chối toàn bộ {{count}} yêu cầu (id từ danh sách đang hiển thị)",
+    "serverRejectedServerMap_other": "Máy chủ đã từ chối toàn bộ {{count}} yêu cầu (id từ danh sách chưa đọc của chính máy chủ)",
+    "failed": "Không thể đánh dấu tất cả là đã đọc",
+    "marking": "Đang đánh dấu đã đọc…",
+    "button": "Đánh dấu tất cả là đã đọc",
+    "buttonCount": "Đánh dấu tất cả là đã đọc ({{count}})"
+  },
+  "list": {
+    "chooseTarget": "Chọn cuộc trò chuyện để gửi",
+    "loading": "Đang tải cuộc trò chuyện…",
+    "empty": "Chưa có cuộc trò chuyện nào. Hãy bắt đầu ở trên bằng cách nhập tên người dùng Hive."
+  },
+  "leave": {
+    "confirmRoom": "Rời phòng này?",
+    "confirmChannel": "Rời kênh này?",
+    "errorRoom": "Không thể rời phòng.",
+    "errorChannel": "Không thể rời kênh.",
+    "titleRoom": "Rời phòng",
+    "titleChannel": "Rời kênh",
+    "button": "Rời"
+  },
+  "thread": {
+    "editError": "Không thể chỉnh sửa tin nhắn.",
+    "deleteConfirm": "Xóa tin nhắn này? Tin nhắn sẽ được thay bằng “[đã xóa]”.",
+    "deleteError": "Không thể xóa tin nhắn.",
+    "back": "Quay lại cuộc trò chuyện",
+    "loading": "Đang tải tin nhắn…",
+    "empty": "Chưa có tin nhắn nào — hãy chào nhau đi 👋",
+    "editedSuffix": " · đã chỉnh sửa",
+    "messageActions": "Thao tác tin nhắn",
+    "quote": "Trích dẫn",
+    "forward": "Chuyển tiếp",
+    "typing_other": "{{users}} đang nhập…",
+    "editing": "Đang chỉnh sửa tin nhắn",
+    "cancelEdit": "Hủy chỉnh sửa",
+    "quoting": "Đang trích dẫn @{{user}}",
+    "cancelQuote": "Hủy trích dẫn",
+    "removeImage": "Gỡ ảnh",
+    "placeholder": "Nhập tin nhắn…"
+  },
+  "page": {
+    "chooseTarget": "Chọn cuộc trò chuyện để gửi.",
+    "selectConversation": "Chọn một cuộc trò chuyện, hoặc bắt đầu cuộc trò chuyện mới."
+  },
+  "overlay": {
+    "fullscreen": "Toàn màn hình",
+    "exitFullscreen": "Thoát toàn màn hình",
+    "close": "Đóng chat",
+    "sendInChat": "Gửi qua chat"
+  }
+}

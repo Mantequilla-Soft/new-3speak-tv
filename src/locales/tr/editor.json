@@ -1,0 +1,19 @@
+{
+  "placeholder": "İçeriğini buraya yaz...",
+  "uploadFailed": "Yükleme başarısız: {{message}}",
+  "uploadingImage": "Görsel yükleniyor...",
+  "format": {
+    "underline": "Altı çizili",
+    "strike": "Üstü çizili",
+    "highlight": "Vurgula",
+    "bulletList": "Madde İşaretli Liste",
+    "orderedList": "Numaralı Liste",
+    "taskList": "Görev Listesi"
+  },
+  "emoji": {
+    "searchPlaceholder": "Emoji ara"
+  },
+  "preview": {
+    "renderError": "İçerik görüntülenirken hata oluştu"
+  }
+}

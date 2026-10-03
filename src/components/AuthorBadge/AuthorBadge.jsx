@@ -6,6 +6,7 @@ import { getFollowers, getRelationshipBetweenAccounts } from '../../hive-api/api
 import { followWithAioha, isLoggedIn } from '../../hive-api/aioha';
 import { useAppStore } from '../../lib/store';
 import PremiumBadge from '../PremiumBadge/PremiumBadge';
+import { useTranslation } from 'react-i18next';
 import './AuthorBadge.scss';
 
 // Every toast from this module is headed "Profile"; the message becomes the
@@ -18,6 +19,7 @@ const toast = toastIn('Profile');
 // custom_json naming the target account, so it cannot work when that account
 // does not exist on chain yet — the caller knows that, this component does not.
 function AuthorBadge({ author, onClick, followersCount, fetchFollowers, showFollow, isFollowing: isFollowingProp, onFollow, noLink, compact, reputation, color, tabHint, subtitle, followLockedReason = null, offChainAuthor = false }) {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const { user } = useAppStore();
   // Someone with no Hive account is still SOMEBODY: while incubating, `user` is
@@ -90,7 +92,7 @@ function AuthorBadge({ author, onClick, followersCount, fetchFollowers, showFoll
     // isLoggedIn() is the wallet check. An incubating viewer passes none of it
     // and still follows perfectly well, so it only gates the on-chain path.
     if (!offChainAuthor && !isLoggedIn() && !incubationHandle) {
-      toast.error('Please login to follow users');
+      toast.error(t('profile.follow.loginRequired'));
       return;
     }
 
@@ -111,15 +113,15 @@ function AuthorBadge({ author, onClick, followersCount, fetchFollowers, showFoll
       } else {
         await followWithAioha(author, willFollow);
       }
-      toast.success(willFollow ? `Followed @${author}` : `Unfollowed @${author}`);
+      toast.success(willFollow ? t('profile.follow.followed', { user: author }) : t('profile.follow.unfollowed', { user: author }));
       if (onFollow) onFollow(author, willFollow);
     } catch (err) {
       setFollowing(!willFollow);
-      toast.error(`Failed to ${willFollow ? 'follow' : 'unfollow'}: ${err.message}`);
+      toast.error(willFollow ? t('profile.follow.followFailed', { error: err.message }) : t('profile.follow.unfollowFailed', { error: err.message }));
     } finally {
       setFollowLoading(false);
     }
-  }, [author, following, followLoading, onFollow, offChainAuthor, incubationHandle]);
+  }, [author, following, followLoading, onFollow, offChainAuthor, incubationHandle, t]);
 
   const avatarUrl = useAvatarUrl(author, 'small');
 
@@ -153,7 +155,7 @@ function AuthorBadge({ author, onClick, followersCount, fetchFollowers, showFoll
         {subtitle ? (
           <span className="followers-count">{subtitle}</span>
         ) : displayFollowers != null && (
-          <span className="followers-count">{displayFollowers} Followers</span>
+          <span className="followers-count">{t('profile.authorBadge.followers', { count: displayFollowers })}</span>
         )}
       </div>
     </>
@@ -183,7 +185,7 @@ function AuthorBadge({ author, onClick, followersCount, fetchFollowers, showFoll
           title={followLockedReason || undefined}
           style={color && following ? { color } : undefined}
         >
-          {followLoading ? '...' : following ? 'Following' : 'Follow'}
+          {followLoading ? '...' : following ? t('common.actions.following') : t('common.actions.follow')}
         </button>
       )}
     </div>

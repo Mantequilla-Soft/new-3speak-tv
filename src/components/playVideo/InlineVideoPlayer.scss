@@ -1,0 +1,79 @@
+// The watch-page player at chat-message size. The ad and control layers are the
+// watch page's own classes (PlayVideo.scss, VideoControls.scss); this only gives
+// them a 16:9 frame to sit in.
+.inline-player {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  background: #000;
+  overflow: hidden;
+
+  video {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    background: #000;
+  }
+
+  &:fullscreen,
+  &.is-fullscreen {
+    aspect-ratio: auto;
+    width: 100%;
+    height: 100%;
+  }
+
+  // The watch page's interact layer starts 40px down to keep its top-bar buttons
+  // clickable; this frame has none, so it covers the whole picture.
+  .video-interact-overlay {
+    top: 0;
+    height: 100%;
+  }
+
+  // Controls are built for a full-width player; at chat size the time and the
+  // seek buttons are what goes first.
+  &:not(.is-fullscreen) {
+    .vc-time { font-size: 11px; }
+  }
+}
+
+.inline-player-loading {
+  position: absolute;
+  inset: 0;
+  z-index: 11;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  background: rgba(0, 0, 0, 0.35);
+  pointer-events: none;
+}
+.inline-player-spin { animation: inline-player-spin 0.8s linear infinite; }
+@keyframes inline-player-spin { to { transform: rotate(360deg); } }
+
+.inline-player-failed {
+  position: absolute;
+  inset: 0;
+  z-index: 12;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 16px;
+  text-align: center;
+  color: #ddd;
+  font-size: 13px;
+  background: #000;
+
+  button {
+    padding: 6px 14px;
+    border-radius: 7px;
+    border: 1px solid var(--accent-primary, #e0594b);
+    background: transparent;
+    color: var(--accent-primary, #e0594b);
+    font-size: 12.5px;
+    cursor: pointer;
+  }
+}

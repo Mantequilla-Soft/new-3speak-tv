@@ -1,0 +1,119 @@
+{
+  "ranges": {
+    "d7": "7d",
+    "d28": "28d",
+    "d90": "90d",
+    "all": "Alles"
+  },
+  "content": {
+    "all": "Alles",
+    "videos": "Video's",
+    "shorts": "Shorts"
+  },
+  "metrics": {
+    "watchTime": "Kijktijd",
+    "views": "Weergaven",
+    "avgPct": "Gem. %",
+    "votes": "Votes",
+    "comments": "Reacties",
+    "payout": "Uitbetaling"
+  },
+  "days": {
+    "short": {
+      "sun": "zo",
+      "mon": "ma",
+      "tue": "di",
+      "wed": "wo",
+      "thu": "do",
+      "fri": "vr",
+      "sat": "za"
+    },
+    "initial": {
+      "sun": "Z",
+      "mon": "M",
+      "tue": "D",
+      "wed": "W",
+      "thu": "D",
+      "fri": "V",
+      "sat": "Z"
+    }
+  },
+  "sources": {
+    "threespeak": "3Speak",
+    "player": "Embedspeler"
+  },
+  "trend": {
+    "empty": "Nog geen kijktijd in deze periode.",
+    "tip_one": "{{count}} weergave · {{date}}",
+    "tip_other": "{{count}} weergaven · {{date}}"
+  },
+  "noData": "Nog geen gegevens.",
+  "demo": {
+    "viewerLocations": "Locaties van kijkers",
+    "mapBubble_one": "{{country}} — {{count}} sessie",
+    "mapBubble_other": "{{country}} — {{count}} sessies",
+    "empty": "Nog geen kijkersgegevens in deze periode.",
+    "breakdown": "Uitsplitsing",
+    "map": "Kaart",
+    "countries": "Landen",
+    "devices": "Apparaten",
+    "browsers": "Browsers",
+    "whereTitle": "Waar ze kijken",
+    "whereSub": "3speak vs embedspeler",
+    "newVsReturning": "Nieuw vs terugkerend",
+    "new": "Nieuw",
+    "returning": "Terugkerend",
+    "located": "{{located}} van {{total}} kijksessies gelokaliseerd."
+  },
+  "when": {
+    "title": "Wanneer je kijkers kijken",
+    "sub": "UTC · donkerder = meer weergaven",
+    "cellTitle_one": "{{day}} {{hour}}:00 — {{count}} weergave",
+    "cellTitle_other": "{{day}} {{hour}}:00 — {{count}} weergaven",
+    "hour": "{{hour}}u"
+  },
+  "detail": {
+    "summary": "{{votes}} votes · {{comments}} reacties · ${{payout}}"
+  },
+  "compare": {
+    "notEnough": "Niet genoeg gegevens om te vergelijken.",
+    "start": "Begin",
+    "axis": "Kijkersbehoud door de video heen",
+    "end": "Einde",
+    "title": "Video's vergelijken",
+    "pickA": "Kies een video…",
+    "vs": "vs",
+    "pickB": "Kies er nog een…"
+  },
+  "loadError": "Je statistieken konden nu niet worden geladen.",
+  "emptyRange": "Nog geen kijkgegevens in deze periode — probeer “Alles”, of wacht tot mensen je video's bekijken.",
+  "tiles": {
+    "avgViewDuration": "Gem. kijkduur",
+    "avgWatched": "Gem. bekeken",
+    "reactionsPerView": "Reacties / weergave"
+  },
+  "subtotals": "{{videos}} video's · {{votes}} votes · {{comments}} reacties · ${{payout}} · gem. snelheid {{rate}}×",
+  "sections": {
+    "trend": "Kijktijd door de tijd",
+    "best": "Best presterend",
+    "audience": "Je publiek"
+  },
+  "openInNewTab": "Video openen in een nieuw tabblad",
+  "footnote": "Kijkstatistieken komen uit preview-tracking en zijn alleen voor jou zichtbaar.",
+  "video": {
+    "noData": "Nog geen gegevens",
+    "empty": "Nog geen kijkgegevens voor deze video.",
+    "uniqueViewers": "Unieke kijkers",
+    "avgSpeed": "Gem. snelheid",
+    "mostDropOff": "📉 De meeste kijkers haken af op <b>{{time}}</b>",
+    "earlyDrop": "⚡ <b>{{pct}}%</b> vertrok in de eerste 3 s",
+    "replayed": "🔁 Opnieuw bekeken:",
+    "retentionTitle": "Kijkersbehoud",
+    "retentionSub": "aandeel kijkers dat op elk moment nog kijkt",
+    "pctWatching": "{{pct}}% kijkt",
+    "replayTitle": "Vaakst opnieuw bekeken",
+    "replaySub": "delen die kijkers het vaakst (opnieuw) bekijken",
+    "hotSpot": "hotspot",
+    "notEnoughReplays": "Nog niet genoeg herhalingen"
+  }
+}

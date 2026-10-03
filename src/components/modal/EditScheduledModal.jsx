@@ -1,6 +1,7 @@
 import { createPortal } from 'react-dom';
 import { IoClose } from 'react-icons/io5';
 import ScheduledPostEditor from '../studio/ScheduledPostEditor';
+import { useTranslation } from 'react-i18next';
 import './EditScheduledModal.scss';
 
 /**
@@ -15,12 +16,13 @@ import './EditScheduledModal.scss';
  *   onCancelled  () => void  — after the post is cancelled
  */
 export default function EditScheduledModal({ isOpen, permlink, onClose, onSaved, onCancelled }) {
+  const { t } = useTranslation();
   if (!isOpen) return null;
 
   return createPortal(
     <div className="esm-overlay" onClick={onClose}>
       <div className="esm-content" onClick={(e) => e.stopPropagation()}>
-        <button className="esm-close" onClick={onClose} aria-label="Close">
+        <button className="esm-close" onClick={onClose} aria-label={t('common.actions.close')}>
           <IoClose size={22} />
         </button>
         <ScheduledPostEditor

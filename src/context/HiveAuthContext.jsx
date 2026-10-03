@@ -1,17 +1,19 @@
 import React, { createContext, useContext, useState, useCallback, useEffect } from 'react';
 import { setHiveAuthCallbacks } from '../hive-api/aioha';
+import { useTranslation } from 'react-i18next';
 import './HiveAuthWaiting.scss';
 
 const HiveAuthContext = createContext(null);
 
 export const HiveAuthProvider = ({ children }) => {
+  const { t } = useTranslation();
   const [isWaiting, setIsWaiting] = useState(false);
   const [waitingMessage, setWaitingMessage] = useState('');
 
-  const showWaiting = useCallback((message = 'Waiting for approval on HiveAuth...') => {
-    setWaitingMessage(message);
+  const showWaiting = useCallback((message) => {
+    setWaitingMessage(message || t('misc.hiveAuth.waiting'));
     setIsWaiting(true);
-  }, []);
+  }, [t]);
 
   const hideWaiting = useCallback(() => {
     setIsWaiting(false);
@@ -35,9 +37,9 @@ export const HiveAuthProvider = ({ children }) => {
         <div className="hiveauth-waiting-overlay">
           <div className="hiveauth-waiting-modal">
             <div className="hiveauth-spinner"></div>
-            <h3>HiveAuth Approval Required</h3>
+            <h3>{t('misc.hiveAuth.title')}</h3>
             <p>{waitingMessage}</p>
-            <p className="hiveauth-hint">Please check your HiveAuth app to approve this transaction</p>
+            <p className="hiveauth-hint">{t('misc.hiveAuth.hint')}</p>
           </div>
         </div>
       )}

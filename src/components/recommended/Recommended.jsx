@@ -8,9 +8,11 @@ import UpvoteCount from "../UpvoteCount/UpvoteCount";
 import PayoutAmount from "../PayoutAmount/PayoutAmount";
 import { fixVideoThumbnail, fallbackImg } from "../../utils/fixThumbnails";
 import AddToPlaylistButton from "../AddToPlaylistButton/AddToPlaylistButton";
+import { useTranslation } from "react-i18next";
 
 
 function Recommended({suggestedVideos}) {
+  const { t } = useTranslation();
   const titleTextTruncate = (text, maxLength) =>
     text.length > maxLength ? `${text.slice(0, maxLength)}...` : text;
 
@@ -32,7 +34,7 @@ function Recommended({suggestedVideos}) {
                   alt={data.title}
                   onError={(e) => (e.currentTarget.src = fallbackImg)}
                 />
-                {data._promoted && <span className="promoted-badge">Promoted</span>}
+                {data._promoted && <span className="promoted-badge">{t('feeds.promoted')}</span>}
                 <AddToPlaylistButton
                   author={author}
                   permlink={data.permlink}

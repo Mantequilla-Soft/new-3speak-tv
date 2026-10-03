@@ -1,0 +1,115 @@
+{
+  "loading": "Naglo-load ng Shorts...",
+  "pleaseTryAgain": "subukan ulit",
+  "rotateDevice": "I-rotate ang device mo sa portrait mode",
+  "pageTitle": {
+    "byAuthor": "3S | Short ni @{{author}}",
+    "default": "3S | Shorts"
+  },
+  "stories": {
+    "you": "Ikaw"
+  },
+  "errors": {
+    "votingUnavailable": "Hindi available ang voting sa post na ito",
+    "loginToVote": "Mag-log in para mag-vote",
+    "loginToComplete": "Mag-log in para matapos ang operasyong ito"
+  },
+  "feed": {
+    "ariaLabel": "Shorts feed",
+    "discover": "Discover",
+    "myInterests": "Mga interes ko",
+    "interestsTitle": "Shorts lang na tugma sa mga interes mo",
+    "pickInterestsFirst": "Pumili muna ng ilang interes",
+    "noInterests": "Wala ka pang napiling interes — pumili sa Settings",
+    "interestsExhausted": "Iyan na lahat ng Shorts para sa mga interes mo — ipinapakita ang Discover",
+    "noInterestMatches": "Walang Shorts na tugma sa mga interes mo ngayon.",
+    "switchToDiscover": "Lumipat sa Discover",
+    "empty": "Walang available na Shorts",
+    "loadError": "Error sa pag-load ng Shorts: {{error}}"
+  },
+  "glow": {
+    "subtle": "Ambient light: banayad",
+    "vivid": "Ambient light: matingkad",
+    "off": "Ambient light: off"
+  },
+  "playbackMode": {
+    "autoReplay": "Auto-Replay",
+    "autoSwipe": "Auto-Swipe",
+    "manual": "Manual"
+  },
+  "subtitles": {
+    "off": "Off"
+  },
+  "chain": {
+    "originalVideo": "Original na video",
+    "snap": "Snap",
+    "openShort": "Buksan ang short",
+    "watch": "Panoorin",
+    "openSnap": "Buksan ang snap",
+    "comment": "Comment",
+    "reaction": "Reaction",
+    "thisVideo": "Ang video na ito",
+    "remix": "Remix",
+    "show": "ipakita ang reaction chain"
+  },
+  "caption": {
+    "curatedBy": "Curated ni Mantequilla",
+    "curated": "Curated",
+    "showOriginal": "Ipakita ang original",
+    "more": "higit pa"
+  },
+  "actions": {
+    "remix": "Remix",
+    "promote": "I-promote"
+  },
+  "share": {
+    "defaultTitle": "3Speak Short",
+    "text": "Panoorin ang short na ito ni {{user}} sa 3Speak!",
+    "shared": "Na-share na!",
+    "linkCopied": "Nakopya ang link sa clipboard!",
+    "failed": "Hindi ma-share"
+  },
+  "reshare": {
+    "loginRequired": "Mag-log in para mag-reshare",
+    "unavailable": "Hindi available ang reshare sa post na ito",
+    "done": "Na-reshare!",
+    "failed": "Hindi ma-reshare"
+  },
+  "remix": {
+    "noUrl": "Hindi makuha ang video URL para sa remix",
+    "loadFailed": "Hindi ma-load ang video para sa remix"
+  },
+  "watchLater": {
+    "loginRequired": "Mag-log in para mag-save ng Shorts",
+    "cantSave": "Hindi puwedeng i-save ang short na ito",
+    "removed": "Inalis sa Panoorin Mamaya",
+    "saved": "Na-save sa Panoorin Mamaya",
+    "failed": "Pumalya: {{message}}"
+  },
+  "comments": {
+    "title": "Mga Comment",
+    "loading": "Naglo-load ng mga comment...",
+    "closed": "Sarado na ang comments",
+    "none": "Wala pang comment",
+    "postRemoved": "Inalis na ang Hive post sa likod ng short na ito, kaya hindi na ito puwedeng i-comment o i-vote.",
+    "beFirst": "Ikaw ang unang mag-comment!",
+    "unavailable": "Hindi available ang comments sa post na ito",
+    "addPlaceholder": "Mag-comment...",
+    "addPlaceholderBar": "Mag-comment…",
+    "loginPlaceholder": "Mag-log in para mag-comment",
+    "send": "Ipadala ang comment",
+    "enterComment": "Maglagay ng comment",
+    "loginToComment": "Mag-log in para mag-comment",
+    "justNow": "Ngayon lang",
+    "posted": "Na-post na ang comment mo!",
+    "failed": "Pumalya ang comment: {{message}}",
+    "translation": "Salin",
+    "translationFailed": "Pumalya ang pagsasalin",
+    "reportComment": "I-report ang comment",
+    "replyPlaceholder": "Sumulat ng reply...",
+    "viewReplies_one": "Tingnan ang {{count}} reply",
+    "viewReplies_other": "Tingnan ang {{count}} replies",
+    "hideReplies_one": "Itago ang {{count}} reply",
+    "hideReplies_other": "Itago ang {{count}} replies"
+  }
+}

@@ -12,6 +12,8 @@ import { bodyToPlaintext } from '../../hive-api/hiveApi';
 import { fetchSnaps } from '../../lib/snaps';
 import { SnapCard } from './CommunitySnaps';
 import TimeAgo from '../TimeAgo/TimeAgo';
+import { useTranslation } from 'react-i18next';
+import { formatNumber } from '../../i18n';
 import './ChannelTrailer.scss';
 
 /**
@@ -39,6 +41,7 @@ export function useChannelTrailer(username) {
 }
 
 export default function ChannelTrailer({ username, isOwnProfile = false, onOpenCommunityTab }) {
+  const { t } = useTranslation();
   const { data: trailer } = useChannelTrailer(username);
   const [attached, setAttached] = useState(false);
   const [muted, setMuted] = useState(true);
@@ -156,16 +159,16 @@ export default function ChannelTrailer({ username, isOwnProfile = false, onOpenC
     return (
       <div className="channel-trailer-empty">
         <div className="cte-text">
-          <strong>Add a channel trailer</strong>
-          <span>It plays at the top of your profile, so visitors see what your channel is about.</span>
+          <strong>{t('profile.trailer.addTitle')}</strong>
+          <span>{t('profile.trailer.addBody')}</span>
         </div>
         {/* trailer=1 preselects "Mark as channel trailer" on the upload. */}
-        <Link className="cte-btn" to="/embed-studio?trailer=1">Upload a channel trailer</Link>
+        <Link className="cte-btn" to="/embed-studio?trailer=1">{t('profile.trailer.upload')}</Link>
       </div>
     );
   }
 
-  const fmtViews = (n) => (n >= 1000 ? `${(n / 1000).toFixed(1).replace(/\.0$/, '')}K` : String(n));
+  const fmtViews = (n) => formatNumber(n, { compact: true });
 
   const toggleMute = (e) => {
     const video = e.currentTarget.closest('.channel-trailer')?.querySelector('video');
@@ -184,7 +187,7 @@ export default function ChannelTrailer({ username, isOwnProfile = false, onOpenC
         <video ref={videoRef} playsInline controls muted autoPlay />
         {muted && (
           <button type="button" className="channel-trailer-unmute" onClick={toggleMute}>
-            🔇 Tap for sound
+            🔇 {t('profile.trailer.tapForSound')}
           </button>
         )}
       </div>
@@ -198,7 +201,7 @@ export default function ChannelTrailer({ username, isOwnProfile = false, onOpenC
         ) : null}
         {(views != null || post?.created_at) ? (
           <div className="ct-sub">
-            {views != null ? <span>{fmtViews(views)} views</span> : null}
+            {views != null ? <span>{t('profile.trailer.views', { count: views, num: fmtViews(views) })}</span> : null}
             {views != null && post?.created_at ? <span className="ct-dot">·</span> : null}
             {post?.created_at ? <TimeAgo date={post.created_at} /> : null}
           </div>
@@ -208,7 +211,7 @@ export default function ChannelTrailer({ username, isOwnProfile = false, onOpenC
             long post always has a way out to the full text on the watch page —
             same destination as clicking the title. */}
         {description ? (
-          <Link className="ct-readmore" to={`/watch?v=${author}/${permlink}`}>Read more</Link>
+          <Link className="ct-readmore" to={`/watch?v=${author}/${permlink}`}>{t('profile.trailer.readMore')}</Link>
         ) : null}
       </div>
 

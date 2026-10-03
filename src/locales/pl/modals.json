@@ -1,0 +1,172 @@
+{
+  "addTag": {
+    "loginRequired": "Zaloguj się, aby otagować ten film",
+    "pickTopic": "Najpierw wybierz temat",
+    "tagged": "Otagowano jako „{{label}}”",
+    "failed": "Tagowanie nie powiodło się: {{error}}",
+    "pleaseTryAgain": "spróbuj ponownie",
+    "title": "Otaguj ten film",
+    "question": "O czym jest ten film?",
+    "existing": "Otagowano to jako <b>{{label}}</b> — wybranie innego tematu go zastąpi.",
+    "submit": "Zapisz tag"
+  },
+  "addAccount": {
+    "usernameRequired": "Aby kontynuować, podaj nazwę użytkownika.",
+    "hiveAuthExpired": "Żądanie uwierzytelnienia HiveAuth wygasło",
+    "loginSuccess": "Zalogowano!",
+    "loginFailed": "Logowanie nie powiodło się: {{error}}",
+    "logoAlt": "Logo 3Speak",
+    "title": "Zaloguj się nazwą użytkownika",
+    "usernamePlaceholder": "Nazwa użytkownika"
+  },
+  "socialLink": {
+    "hashCopied": "Skopiowano hash",
+    "copyFailed": "Nie udało się skopiować do schowka",
+    "enterHandle": "Wpisz swoją nazwę lub ID na platformie",
+    "verified": "Konto zweryfikowane i połączone",
+    "errors": {
+      "hashNotFound": "Nie znaleziono jeszcze hasha na profilu. Upewnij się, że zmiana jest zapisana publicznie, i spróbuj ponownie.",
+      "alreadyLinked": "Ten kanał jest już zweryfikowany przez innego użytkownika Hive (@{{user}}).",
+      "tooMany": "Osiągnięto maksymalną liczbę połączonych kont.",
+      "notFound": "Ten kanał nie istnieje na tej platformie.",
+      "badSignature": "Nie udało się zweryfikować podpisu. Upewnij się, że logujesz się kluczem posting.",
+      "rateLimited": "Za dużo żądań. Odczekaj minutę i spróbuj ponownie.",
+      "lookupFailed": "Wyszukiwanie na platformie nie powiodło się. Spróbuj za chwilę.",
+      "verifyFailed": "Weryfikacja nie powiodła się",
+      "stillPresent": "Hash nadal jest na twoim profilu — najpierw go usuń.",
+      "unlinkFailed": "Odłączanie nie powiodło się",
+      "noSuchLink": "Nie ma takiego połączenia do usunięcia."
+    },
+    "confirmUnlink": "Usunąć połączenie z {{platform}}? Upewnij się, że hasha weryfikacyjnego nie ma już na twoim publicznym profilu, inaczej odłączenie zostanie odrzucone.",
+    "removed": "Połączenie usunięte",
+    "title": "Połączone profile zewnętrzne",
+    "intro": "Udowodnij, że jesteś właścicielem kanału YouTube (lub innego), wklejając swój unikalny hash 3Speak do publicznego opisu profilu, a potem weryfikując go tutaj.",
+    "openProfile": "Otwórz profil",
+    "removeLink": "Usuń połączenie",
+    "empty": "Brak połączonych profili zewnętrznych.",
+    "addPlatform": "Dodaj nową platformę",
+    "flowTitle": "Połącz swój kanał {{platform}}",
+    "step1": "Skopiuj swój unikalny hash weryfikacyjny:",
+    "step2": "<strong>Wklej go do publicznego opisu profilu {{platform}}</strong> (w dowolnym miejscu — o mnie / bio / opis). Zapisz zmianę.",
+    "step3": "Wpisz swój identyfikator {{platform}}:",
+    "verifying": "Weryfikowanie…",
+    "verify": "Zweryfikuj"
+  },
+  "auth": {
+    "title": "Autoryzuj 3Speak!",
+    "text": "Aby przesyłać filmy na 3Speak, potrzebujemy twoich uprawnień posting. Dzięki nim możemy publikować przesłane przez ciebie filmy na Hive. Uprawnienia posting przyznajesz nam tylko raz.",
+    "authorize": "Autoryzuj"
+  },
+  "beneficiary": {
+    "errors": {
+      "emptyUsername": "Nazwa użytkownika nie może być pusta.",
+      "sameUser": "Nie możesz ustawić siebie jako beneficjenta",
+      "greaterThanZero": "Procent nagrody musi być większy niż 0.",
+      "exceedsRemaining": "Procent nagrody przekracza pozostałą pulę {{percent}}%.",
+      "validNumber": "Wpisz prawidłową liczbę",
+      "validPercent": "Wpisz prawidłowy procent nagrody.",
+      "duplicate": "To konto jest już na liście.",
+      "invalidAccount": "Nieprawidłowa nazwa użytkownika lub ID społeczności.",
+      "cannotIncrease": "Nie można zwiększyć powyżej pozostałych {{percent}}%",
+      "pendingRow": "@{{account}} nie zostało jeszcze dodane — kliknij +, aby je dodać, albo wyczyść pole.",
+      "atLeastOne": "Procent nagrody musi wynosić co najmniej 1%"
+    },
+    "title": "Beneficjenci",
+    "intro": "Dodaj użytkownika, który ma automatycznie otrzymywać część nagród za ten post.",
+    "minPercent": "% (min. {{percent}}%)",
+    "usernamePlaceholder": "Wpisz nazwę użytkownika",
+    "minimumReward": "Minimalna nagroda to <strong>1%</strong>",
+    "checking": "Sprawdzanie <strong>@{{account}}</strong> na Hive…",
+    "notExisting": "⚠️ <strong>@{{account}}</strong> nie jest istniejącym kontem Hive.",
+    "notAdded": "⚠️ <strong>@{{account}}</strong> nie zostało jeszcze dodane — kliknij <strong>+</strong>, aby je dodać, albo wyczyść pole.",
+    "infrastructure": "10% === Infrastruktura",
+    "videoEncoding": "Kodowanie wideo === 1%",
+    "defaults": "Domyślni beneficjenci ({{count}})"
+  },
+  "qr": {
+    "scan": "Zeskanuj ten kod QR w Hive Keychain:",
+    "click": "Kliknij kod QR, aby otworzyć w aplikacji Keychain"
+  },
+  "editVideoHint": {
+    "title": "Edytuj dowolny ze swoich filmów",
+    "text": "Otwórz jeden ze swoich filmów i znajdź <strong>przycisk z ołówkiem</strong> na pasku akcji pod odtwarzaczem. Kliknij go, aby zmienić tytuł, opis, miniaturę, tagi i nie tylko.",
+    "penTitle": "Edytuj szczegóły filmu",
+    "tip": "Wskazówka",
+    "caption": "Tego przycisku z ołówkiem szukasz",
+    "gotIt": "Rozumiem"
+  },
+  "verifyAuth": {
+    "title": "Weryfikacja autoryzacji",
+    "text": "Poczekaj, aż sprawdzimy, czy autoryzacja została przyznana..."
+  },
+  "editor": {
+    "confirmLeave": "Edytor jest nadal otwarty. Opuszczenie tej strony zamknie edytor, a niezapisane zmiany zostaną utracone.\n\nOK = Zamknij edytor i wyjdź\nAnuluj = Zostań na tej stronie",
+    "confirmClose": "Czy na pewno chcesz zamknąć edytor? Niezapisane zmiany zostaną utracone.",
+    "iframeTitle": "Edytor wideo 3Speak",
+    "finding": "Szukanie dostępnego edytora...",
+    "loading": "Wczytywanie edytora...",
+    "unavailable": "Żaden serwer edytora nie jest teraz dostępny. Spróbuj ponownie później.",
+    "sending": "Wysyłanie do usługi renderowania...",
+    "rendering": "Renderowanie... {{percent}}%",
+    "complete": "Renderowanie zakończone!",
+    "useVideo": "Użyj filmu",
+    "preparing": "Przygotowywanie filmu do przesłania...",
+    "renderUnavailable": "Usługa renderowania nie jest jeszcze dostępna. Dane osi czasu zapisano w konsoli.",
+    "backToEditor": "Wróć do edytora",
+    "postError": "Nie udało się przygotować filmu do przesłania. Spróbuj go zamiast tego pobrać."
+  },
+  "profile": {
+    "mustLogin": "Najpierw musisz się zalogować",
+    "followed": "Obserwujesz",
+    "unfollowed": "Nie obserwujesz już",
+    "followFailed": "Nie udało się zaobserwować: {{error}}",
+    "unfollowFailed": "Nie udało się przestać obserwować: {{error}}",
+    "avatarAlt": "Profil",
+    "posts": "Posty",
+    "followers": "Obserwujący",
+    "joined": "Dołączono {{date}}",
+    "about": "O mnie",
+    "noBio": "Brak opisu"
+  },
+  "report": {
+    "reasons": {
+      "spamMisleading": "Spam lub wprowadzanie w błąd",
+      "harassment": "Nękanie lub zastraszanie",
+      "hateSpeech": "Mowa nienawiści",
+      "violence": "Przemoc lub drastyczne treści",
+      "sexual": "Treści seksualne",
+      "copyright": "Naruszenie praw autorskich",
+      "scam": "Oszustwo",
+      "other": "Inne",
+      "spam": "Spam",
+      "impersonation": "Podszywanie się",
+      "spamAccount": "Konto spamowe"
+    },
+    "selectReasonError": "Wybierz powód",
+    "loginRequired": "Musisz się zalogować, aby zgłosić",
+    "submitted": "Zgłoszenie wysłane. Dziękujemy.",
+    "failed": "Nie udało się wysłać zgłoszenia",
+    "titles": {
+      "user": "Zgłoś użytkownika",
+      "comment": "Zgłoś komentarz",
+      "short": "Zgłoś shorta",
+      "post": "Zgłoś post",
+      "video": "Zgłoś film"
+    },
+    "reason": "Powód",
+    "selectReason": "Wybierz powód...",
+    "details": "Dodatkowe szczegóły (opcjonalnie)",
+    "detailsPlaceholder": "Podaj więcej kontekstu...",
+    "submitting": "Wysyłanie...",
+    "submit": "Wyślij zgłoszenie"
+  },
+  "upload": {
+    "missingInfo": "Brak informacji o filmie lub miniaturze.",
+    "updateFailed": "Nie udało się zaktualizować informacji o filmie. Spróbuj ponownie.",
+    "title": "Prześlij film i miniaturę",
+    "selectVideo": "Wybierz film",
+    "thumbnail": "Miniatura",
+    "clickThumbnail": "Kliknij, aby przesłać miniaturę",
+    "updateInfo": "Zaktualizuj informacje o filmie"
+  }
+}

@@ -1,0 +1,119 @@
+{
+  "ranges": {
+    "d7": "7g",
+    "d28": "28g",
+    "d90": "90g",
+    "all": "Tümü"
+  },
+  "content": {
+    "all": "Tümü",
+    "videos": "Videolar",
+    "shorts": "Shorts"
+  },
+  "metrics": {
+    "watchTime": "İzlenme süresi",
+    "views": "Görüntülenme",
+    "avgPct": "Ort. %",
+    "votes": "Oylar",
+    "comments": "Yorumlar",
+    "payout": "Ödeme"
+  },
+  "days": {
+    "short": {
+      "sun": "Paz",
+      "mon": "Pzt",
+      "tue": "Sal",
+      "wed": "Çar",
+      "thu": "Per",
+      "fri": "Cum",
+      "sat": "Cmt"
+    },
+    "initial": {
+      "sun": "P",
+      "mon": "P",
+      "tue": "S",
+      "wed": "Ç",
+      "thu": "P",
+      "fri": "C",
+      "sat": "C"
+    }
+  },
+  "sources": {
+    "threespeak": "3Speak",
+    "player": "Gömülü oynatıcı"
+  },
+  "trend": {
+    "empty": "Bu aralıkta henüz izlenme süresi yok.",
+    "tip_one": "{{count}} görüntülenme · {{date}}",
+    "tip_other": "{{count}} görüntülenme · {{date}}"
+  },
+  "noData": "Henüz veri yok.",
+  "demo": {
+    "viewerLocations": "İzleyici konumları",
+    "mapBubble_one": "{{country}}: {{count}} oturum",
+    "mapBubble_other": "{{country}}: {{count}} oturum",
+    "empty": "Bu aralıkta henüz izleyici verisi yok.",
+    "breakdown": "Dağılım",
+    "map": "Harita",
+    "countries": "Ülkeler",
+    "devices": "Cihazlar",
+    "browsers": "Tarayıcılar",
+    "whereTitle": "Nerede izliyorlar",
+    "whereSub": "3speak ve gömülü oynatıcı",
+    "newVsReturning": "Yeni ve geri dönen",
+    "new": "Yeni",
+    "returning": "Geri dönen",
+    "located": "{{total}} izleme oturumundan {{located}} tanesinin konumu belirlendi."
+  },
+  "when": {
+    "title": "İzleyicilerin ne zaman izliyor",
+    "sub": "UTC · koyu = daha çok görüntülenme",
+    "cellTitle_one": "{{day}} {{hour}}:00: {{count}} görüntülenme",
+    "cellTitle_other": "{{day}} {{hour}}:00: {{count}} görüntülenme",
+    "hour": "{{hour}}sa"
+  },
+  "detail": {
+    "summary": "{{votes}} oy · {{comments}} yorum · ${{payout}}"
+  },
+  "compare": {
+    "notEnough": "Karşılaştırmak için yeterli veri yok.",
+    "start": "Başlangıç",
+    "axis": "Video boyunca izleyici tutma",
+    "end": "Son",
+    "title": "Videoları karşılaştır",
+    "pickA": "Bir video seç…",
+    "vs": "ve",
+    "pickB": "Başka birini seç…"
+  },
+  "loadError": "İstatistiklerin şu an yüklenemedi.",
+  "emptyRange": "Bu aralıkta henüz izlenme verisi yok. “Tümü”nü dene ya da insanların videolarını izlemesini bekle.",
+  "tiles": {
+    "avgViewDuration": "Ort. izlenme süresi",
+    "avgWatched": "Ort. izlenen",
+    "reactionsPerView": "Tepki / görüntülenme"
+  },
+  "subtotals": "{{videos}} video · {{votes}} oy · {{comments}} yorum · ${{payout}} · ort. hız {{rate}}×",
+  "sections": {
+    "trend": "Zaman içinde izlenme süresi",
+    "best": "En iyi performans",
+    "audience": "Kitlen"
+  },
+  "openInNewTab": "Videoyu yeni sekmede aç",
+  "footnote": "İzlenme istatistikleri önizleme takibinden gelir ve yalnızca sana görünür.",
+  "video": {
+    "noData": "Henüz veri yok",
+    "empty": "Bu video için henüz izlenme verisi yok.",
+    "uniqueViewers": "Tekil izleyiciler",
+    "avgSpeed": "Ort. hız",
+    "mostDropOff": "📉 En çok <b>{{time}}</b> anında bırakılıyor",
+    "earlyDrop": "⚡ İzleyicilerin <b>%{{pct}}</b> kadarı ilk 3 saniyede ayrıldı",
+    "replayed": "🔁 Tekrar izlenen:",
+    "retentionTitle": "İzleyici tutma",
+    "retentionSub": "her anda hâlâ izleyen izleyicilerin oranı",
+    "pctWatching": "%{{pct}} izliyor",
+    "replayTitle": "En çok tekrar izlenen",
+    "replaySub": "izleyicilerin en çok izlediği ve tekrar izlediği bölümler",
+    "hotSpot": "sıcak nokta",
+    "notEnoughReplays": "Henüz yeterli tekrar izleme yok"
+  }
+}

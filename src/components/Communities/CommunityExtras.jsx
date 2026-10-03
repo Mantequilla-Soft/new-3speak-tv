@@ -10,8 +10,10 @@ import { getHiveClient } from '../../utils/hiveNode';
 import { FEED_URL } from '../../utils/config';
 import { useAvatarUrl } from '../../utils/avatarCache';
 import { fallbackImg } from '../../utils/fixThumbnails';
+import { useTranslation } from 'react-i18next';
+import { formatNumber } from '../../i18n';
 
-const fmtNum = (n) => (typeof n === 'number' ? n.toLocaleString('en-US') : '—');
+const fmtNum = (n) => (typeof n === 'number' ? formatNumber(n) : '—');
 
 // ── Pinned ─────────────────────────────────────────────────────────────────────
 // Hive lets a community's mods pin posts; bridge.get_ranked_posts sort=created
@@ -35,6 +37,7 @@ function pinnedThumb(meta) {
 }
 
 export function CommunityPinned({ id }) {
+  const { t } = useTranslation();
   const { data: pinned = [] } = useQuery({
     queryKey: ['community-pinned', id],
     queryFn: async () => {
@@ -66,8 +69,8 @@ export function CommunityPinned({ id }) {
   if (!pinned.length) return null;
 
   return (
-    <section className="community-pinned" aria-label="Pinned by the moderators">
-      <h3 className="community-section-title"><Pin size={15} /> Start here</h3>
+    <section className="community-pinned" aria-label={t('communities.page.pinnedAria')}>
+      <h3 className="community-section-title"><Pin size={15} /> {t('communities.page.startHere')}</h3>
       <div className="community-pinned-row">
         {pinned.map((p) => {
           const meta = metaOf(p);
@@ -83,9 +86,9 @@ export function CommunityPinned({ id }) {
                 {thumb
                   ? <img src={thumb} alt="" loading="lazy" onError={(e) => { e.currentTarget.src = fallbackImg; }} />
                   : <span className="community-pinned-thumb-text">{video ? '▶' : 'Aa'}</span>}
-                <span className="community-pinned-badge"><Pin size={11} /> Pinned</span>
+                <span className="community-pinned-badge"><Pin size={11} /> {t('communities.page.pinned')}</span>
               </div>
-              <div className="community-pinned-title">{p.title || 'Untitled'}</div>
+              <div className="community-pinned-title">{p.title || t('communities.page.untitled')}</div>
               <div className="community-pinned-author">@{p.author}</div>
             </Link>
           );
@@ -117,15 +120,16 @@ async function fetchMonthTop(id) {
 const TOP_CREATORS = 8;
 
 function CreatorChip({ c, rank }) {
+  const { t } = useTranslation();
   const avatar = useAvatarUrl(c.name);
   return (
-    <Link className="community-creator" to={`/p/${c.name}`} title={`@${c.name}: ${fmtNum(c.views)} views from ${c.videos} video${c.videos === 1 ? '' : 's'}`}>
+    <Link className="community-creator" to={`/p/${c.name}`} title={t('communities.page.creatorTitle', { name: c.name, views: fmtNum(c.views), count: c.videos })}>
       <span className="community-creator-avatar">
         <img src={avatar} alt="" loading="lazy" />
         {rank <= 3 && <span className={`community-creator-rank rank-${rank}`}>{rank}</span>}
       </span>
       <span className="community-creator-name">{c.name}</span>
-      <span className="community-creator-stat">{fmtNum(c.views)} views</span>
+      <span className="community-creator-stat">{t('communities.page.creatorViews', { views: fmtNum(c.views) })}</span>
     </Link>
   );
 }
@@ -133,6 +137,7 @@ function CreatorChip({ c, rank }) {
 // `side` renders it as a sidebar card (a ranked list); the default is the
 // horizontal strip phones get, where there is no sidebar.
 export function CommunityTopCreators({ id, side = false }) {
+  const { t } = useTranslation();
   const { data: creators = [] } = useQuery({
     queryKey: ['community-top-creators', id],
     queryFn: async () => {
@@ -161,11 +166,11 @@ export function CommunityTopCreators({ id, side = false }) {
   return (
     <section
       className={`community-top-creators${side ? ' community-card community-top-creators--side' : ''}`}
-      aria-label="Top creators this month"
+      aria-label={t('communities.page.topCreators')}
     >
       {side
-        ? <h4 className="community-card-title"><Crown size={15} /> Top creators this month</h4>
-        : <h3 className="community-section-title"><Crown size={15} /> Top creators this month</h3>}
+        ? <h4 className="community-card-title"><Crown size={15} /> {t('communities.page.topCreators')}</h4>
+        : <h3 className="community-section-title"><Crown size={15} /> {t('communities.page.topCreators')}</h3>}
       <div className="community-creators-row">
         {creators.map((c, i) => <CreatorChip key={c.name} c={c} rank={i + 1} />)}
       </div>
@@ -175,17 +180,18 @@ export function CommunityTopCreators({ id, side = false }) {
 
 // ── Team + rules ───────────────────────────────────────────────────────────────
 const ROLE_ORDER = { owner: 0, admin: 1, mod: 2 };
-const ROLE_LABEL = { owner: 'Owner', admin: 'Admin', mod: 'Moderator' };
+const ROLE_LABEL_KEY = { owner: 'communities.page.roles.owner', admin: 'communities.page.roles.admin', mod: 'communities.page.roles.mod' };
 const TEAM_PREVIEW = 6;
 
 function TeamMember({ name, role, title }) {
+  const { t } = useTranslation();
   const avatar = useAvatarUrl(name);
   return (
     <Link className="community-team-member" to={`/p/${name}`}>
       <img src={avatar} alt="" loading="lazy" />
       <span className="community-team-text">
         <span className="community-team-name">{name}</span>
-        <span className="community-team-role">{title || ROLE_LABEL[role] || role}</span>
+        <span className="community-team-role">{title || (ROLE_LABEL_KEY[role] ? t(ROLE_LABEL_KEY[role]) : role)}</span>
       </span>
     </Link>
   );
@@ -195,6 +201,7 @@ function TeamMember({ name, role, title }) {
 // own hive-<digits> account is listed as its owner; that is not a person, so it
 // is left out.
 export function CommunityTeam({ id, team }) {
+  const { t } = useTranslation();
   const [all, setAll] = useState(false);
   const members = (team || [])
     .filter(([name, role]) => name && name !== id && role in ROLE_ORDER)
@@ -204,7 +211,7 @@ export function CommunityTeam({ id, team }) {
 
   return (
     <div className="community-card community-team">
-      <h4 className="community-card-title"><ShieldCheck size={15} /> Team</h4>
+      <h4 className="community-card-title"><ShieldCheck size={15} /> {t('communities.page.team')}</h4>
       <div className="community-team-list">
         {shown.map(([name, role, title]) => (
           <TeamMember key={name} name={name} role={role} title={title} />
@@ -212,7 +219,7 @@ export function CommunityTeam({ id, team }) {
       </div>
       {members.length > TEAM_PREVIEW && (
         <button type="button" className="community-card-more" onClick={() => setAll((v) => !v)}>
-          {all ? 'Show less' : `Show all ${members.length}`}
+          {all ? t('common.actions.showLess') : t('communities.page.showAll', { count: members.length })}
         </button>
       )}
     </div>
@@ -221,6 +228,7 @@ export function CommunityTeam({ id, team }) {
 
 // `flag_text` is free text the mods write, usually one rule per line.
 export function CommunityRules({ text, collapsible = false }) {
+  const { t } = useTranslation();
   const [open, setOpen] = useState(!collapsible);
   const rules = String(text || '').split(/\r?\n/).map((r) => r.replace(/^\s*(?:\d+[.)]|[-*•])\s*/, '').trim()).filter(Boolean);
   if (!rules.length) return null;
@@ -229,11 +237,11 @@ export function CommunityRules({ text, collapsible = false }) {
     <div className="community-card community-rules">
       {collapsible ? (
         <button type="button" className="community-card-title community-card-toggle" onClick={() => setOpen((v) => !v)} aria-expanded={open}>
-          <ScrollText size={15} /> Rules ({rules.length})
+          <ScrollText size={15} /> {t('communities.page.rulesCount', { count: rules.length })}
           {open ? <ChevronUp size={15} /> : <ChevronDown size={15} />}
         </button>
       ) : (
-        <h4 className="community-card-title"><ScrollText size={15} /> Rules</h4>
+        <h4 className="community-card-title"><ScrollText size={15} /> {t('communities.page.rules')}</h4>
       )}
       {open && (
         <ol className="community-rules-list">

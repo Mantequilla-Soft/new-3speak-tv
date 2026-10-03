@@ -1,0 +1,50 @@
+{
+  "tabs": {
+    "overview": "Visão geral",
+    "transactions": "Transações",
+    "aria": "Seções da carteira"
+  },
+  "errors": {
+    "fetchBalances": "Não foi possível carregar os saldos",
+    "needKeychain": "Você precisa da extensão Keychain para fazer transferências"
+  },
+  "header": {
+    "mine": "MINHA carteira",
+    "ofUser": "Carteira de {{user}}"
+  },
+  "assets": "Ativos",
+  "transfer": "Transferir",
+  "transferModal": {
+    "loginRequired": "Entre na sua conta para transferir",
+    "insufficient": "Saldo insuficiente",
+    "invalidUsername": "Nome de usuário inválido",
+    "success": "Transferência concluída!",
+    "failed": "Falha na transferência: {{error}}",
+    "title": "Transferir {{coin}}",
+    "amountLabel": "Valor ({{coin}})",
+    "balance": "Saldo {{balance}}",
+    "max": "Máx.",
+    "recipientLabel": "Usuário do destinatário",
+    "recipientPlaceholder": "Digite o usuário da Hive",
+    "memoLabel": "Memo",
+    "memoPlaceholder": "Digite o memo",
+    "confirm": "Confirmar transferência"
+  },
+  "history": {
+    "loadFailed": "Não foi possível carregar as transações",
+    "title": "Histórico de transações",
+    "cols": {
+      "type": "Tipo",
+      "amount": "Valor",
+      "account": "Conta",
+      "date": "Data",
+      "memo": "Memo"
+    },
+    "types": {
+      "transfer": "Transferência",
+      "claim": "Resgatar recompensa",
+      "received": "Recebido"
+    },
+    "claimedRewards": "Recompensas resgatadas"
+  }
+}

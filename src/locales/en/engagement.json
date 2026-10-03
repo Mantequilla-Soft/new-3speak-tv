@@ -1,0 +1,98 @@
+{
+  "tip": {
+    "successTitle": "Tip Sent Successfully!",
+    "successMessage": "You have successfully sent {{amount}} {{currency}} as a tip. Thank you for your support!",
+    "errors": {
+      "allRequired": "All fields are required",
+      "loginRequired": "Please login to send a tip",
+      "insufficientBalance": "Insufficient balance",
+      "invalidUsername": "Invalid username",
+      "transferFailed": "Transfer failed: {{message}}"
+    },
+    "heading": "Send a Tip to @{{recipient}}",
+    "amountLabel": "Amount: ",
+    "amountPlaceholder": "e.g. 1.000",
+    "currencyLabel": "Currency:",
+    "availableBalance": "Available balance: {{currency}}",
+    "memoLabel": "Memo (optional):",
+    "memoPlaceholder": "e.g. Thanks for this amazing content!",
+    "send": "Send Tip"
+  },
+  "cardMenu": {
+    "loginToPersonalize": "Please login to personalize your feed",
+    "notInterestedToast": "Not interested — we'll hide this video",
+    "undo": "Undo",
+    "cantHideOwn": "You can't hide your own videos",
+    "hidingCreatorToast": "Hiding videos from @{{author}}",
+    "loginForPlaylists": "Please login to add videos to playlists",
+    "loginToTag": "Please login to tag videos",
+    "moreOptions": "More options",
+    "addToPlaylist": "Add to playlist",
+    "addTag": "Add tag",
+    "notInterested": "Not interested",
+    "dontShowCreator": "Don't show @{{author}}"
+  },
+  "guestList": {
+    "loadFailed": "Could not load the current guest list",
+    "saved_one": "{{count}} guest can watch this",
+    "saved_other": "{{count}} guests can watch this",
+    "cleared": "Guest list cleared",
+    "saveFailed": "Could not save the guest list",
+    "invalidAccounts": "Not valid Hive accounts: {{names}}",
+    "title": "🔒 Guest list",
+    "hint": "These accounts can watch without 3Speak Pro. Kept private on our servers, never published to your post.",
+    "notRegistered": "This video has not finished processing yet. You can still edit the list once it has.",
+    "placeholder": "username, another.user",
+    "empty": "Nobody yet. Only Pro subscribers can watch this.",
+    "removeAria": "Remove {{name}}"
+  },
+  "voters": {
+    "pinnedTitle_one": "Voters ({{count}})",
+    "pinnedTitle_other": "Voters ({{count}})",
+    "topVoters": "Top Voters",
+    "noVotes": "No votes yet"
+  },
+  "payout": {
+    "breakdown": "Payout Breakdown",
+    "estimatedBreakdown": "Estimated Breakdown",
+    "beneficiaries": "Beneficiaries",
+    "curators": "Curators (50%)",
+    "author": "Author",
+    "total": "Total",
+    "totalEstimated": "Total (est.)"
+  },
+  "vote": {
+    "loginRequired": "Login to complete this operation",
+    "fetchPostFailed": "Could not fetch post data",
+    "sameWeight": "You already voted with this weight. Choose a different value.",
+    "failed": "Vote failed: {{message}}",
+    "pleaseTryAgain": "please try again",
+    "weight": "Vote Weight: {{weight}}%",
+    "success": "Vote successful! Value: ${{value}}",
+    "successTagged": "Vote successful! Tagged “{{tag}}”. Value: ${{value}}",
+    "tagged": "Tagged “{{tag}}”.",
+    "vote": "Vote",
+    "tagThisVideo": "Tag this video",
+    "tagOptional": "— optional —",
+    "pickTopicFirst": "Pick a topic first",
+    "taggedNoDot": "Tagged “{{tag}}”",
+    "tagFailed": "Tag failed: {{message}}",
+    "taggedAlreadyVoted": "Tagged “{{tag}}” — your {{weight}}% vote was already cast.",
+    "votingClosed": "Voting closed — tag this video",
+    "youTagged": "You tagged this as <b>{{tag}}</b>.",
+    "pickTopic": "Pick a topic (counts as a 100% vote)",
+    "submitTag": "Submit tag",
+    "tagThisVideoFull": "Tag this video (counts as a 100% vote)",
+    "justTag": "Don’t vote — just tag"
+  },
+  "tagsPicker": {
+    "autoTagged": "Auto-tagged: {{tags}}",
+    "searchPlaceholder": "Search topics…",
+    "searchAria": "Search topics",
+    "noMatches": "No topics match “{{query}}”.",
+    "allSelected": "All of {{category}} is selected. Add individual topics only to go narrower:",
+    "orPickTopics": "Or pick individual topics:",
+    "goodEnough": "Good enough — or get more specific (optional):",
+    "moreSpecific": "More specific:"
+  }
+}

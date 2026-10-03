@@ -1,0 +1,117 @@
+{
+  "loading": "Caricamento Shorts...",
+  "pleaseTryAgain": "riprova",
+  "rotateDevice": "Ruota il dispositivo in verticale",
+  "pageTitle": {
+    "byAuthor": "3S | Short di @{{author}}",
+    "default": "3S | Shorts"
+  },
+  "stories": {
+    "you": "Tu"
+  },
+  "errors": {
+    "votingUnavailable": "Il voto non è disponibile per questo post",
+    "loginToVote": "Accedi per votare",
+    "loginToComplete": "Accedi per completare questa operazione"
+  },
+  "feed": {
+    "ariaLabel": "Feed degli Shorts",
+    "discover": "Scopri",
+    "myInterests": "I miei interessi",
+    "interestsTitle": "Solo Shorts in linea con i tuoi interessi",
+    "pickInterestsFirst": "Prima scegli qualche interesse",
+    "noInterests": "Non hai ancora scelto nessun interesse — sceglili nelle Impostazioni",
+    "interestsExhausted": "Hai visto tutti gli Shorts sui tuoi interessi — ora ti mostriamo Scopri",
+    "noInterestMatches": "Al momento nessuno Short corrisponde ai tuoi interessi.",
+    "switchToDiscover": "Passa a Scopri",
+    "empty": "Nessuno Short disponibile",
+    "loadError": "Errore nel caricamento degli Shorts: {{error}}"
+  },
+  "glow": {
+    "subtle": "Luce ambientale: tenue",
+    "vivid": "Luce ambientale: intensa",
+    "off": "Luce ambientale: disattiva"
+  },
+  "playbackMode": {
+    "autoReplay": "Ripeti automaticamente",
+    "autoSwipe": "Scorri automaticamente",
+    "manual": "Manuale"
+  },
+  "subtitles": {
+    "off": "Disattivati"
+  },
+  "chain": {
+    "originalVideo": "Video originale",
+    "snap": "Snap",
+    "openShort": "Apri short",
+    "watch": "Guarda",
+    "openSnap": "Apri snap",
+    "comment": "Commento",
+    "reaction": "Reazione",
+    "thisVideo": "Questo video",
+    "remix": "Remix",
+    "show": "mostra la catena di reazioni"
+  },
+  "caption": {
+    "curatedBy": "Selezionato da Mantequilla",
+    "curated": "Selezionato",
+    "showOriginal": "Mostra originale",
+    "more": "altro"
+  },
+  "actions": {
+    "remix": "Remix",
+    "promote": "Promuovi"
+  },
+  "share": {
+    "defaultTitle": "Short di 3Speak",
+    "text": "Guarda questo short di {{user}} su 3Speak!",
+    "shared": "Condiviso!",
+    "linkCopied": "Link copiato negli appunti!",
+    "failed": "Condivisione non riuscita"
+  },
+  "reshare": {
+    "loginRequired": "Accedi per ricondividere",
+    "unavailable": "La ricondivisione non è disponibile per questo post",
+    "done": "Ricondiviso!",
+    "failed": "Ricondivisione non riuscita"
+  },
+  "remix": {
+    "noUrl": "Impossibile trovare l'URL del video per il remix",
+    "loadFailed": "Impossibile caricare il video per il remix"
+  },
+  "watchLater": {
+    "loginRequired": "Accedi per salvare gli Shorts",
+    "cantSave": "Questo short non può essere salvato",
+    "removed": "Rimosso da Guarda più tardi",
+    "saved": "Salvato in Guarda più tardi",
+    "failed": "Non riuscito: {{message}}"
+  },
+  "comments": {
+    "title": "Commenti",
+    "loading": "Caricamento commenti...",
+    "closed": "I commenti sono chiusi",
+    "none": "Ancora nessun commento",
+    "postRemoved": "Il post Hive di questo short è stato rimosso, quindi non può più ricevere commenti o voti.",
+    "beFirst": "Commenta per primo!",
+    "unavailable": "I commenti non sono disponibili per questo post",
+    "addPlaceholder": "Aggiungi un commento...",
+    "addPlaceholderBar": "Aggiungi un commento…",
+    "loginPlaceholder": "Accedi per commentare",
+    "send": "Invia commento",
+    "enterComment": "Scrivi un commento",
+    "loginToComment": "Accedi per commentare",
+    "justNow": "Proprio ora",
+    "posted": "Commento pubblicato!",
+    "failed": "Commento non riuscito: {{message}}",
+    "translation": "Traduzione",
+    "translationFailed": "Traduzione non riuscita",
+    "reportComment": "Segnala commento",
+    "replyPlaceholder": "Scrivi una risposta...",
+    "viewReplies_one": "Mostra {{count}} risposta",
+    "viewReplies_many": "Mostra {{count}} risposte",
+    "viewReplies_other": "Mostra {{count}} risposte",
+    "hideReplies_one": "Nascondi {{count}} risposta",
+    "hideReplies_many": "Nascondi {{count}} risposte",
+    "hideReplies_other": "Nascondi {{count}} risposte"
+  }
+}

@@ -1,0 +1,98 @@
+{
+  "tip": {
+    "successTitle": "টিপ সফলভাবে পাঠানো হয়েছে!",
+    "successMessage": "আপনি সফলভাবে {{amount}} {{currency}} টিপ পাঠিয়েছেন। আপনার সমর্থনের জন্য ধন্যবাদ!",
+    "errors": {
+      "allRequired": "সব ঘর পূরণ করা আবশ্যক",
+      "loginRequired": "টিপ পাঠাতে লগ ইন করুন",
+      "insufficientBalance": "পর্যাপ্ত ব্যালেন্স নেই",
+      "invalidUsername": "ইউজারনেম সঠিক নয়",
+      "transferFailed": "ট্রান্সফার ব্যর্থ: {{message}}"
+    },
+    "heading": "@{{recipient}}-কে টিপ পাঠান",
+    "amountLabel": "পরিমাণ: ",
+    "amountPlaceholder": "যেমন 1.000",
+    "currencyLabel": "মুদ্রা:",
+    "availableBalance": "উপলব্ধ ব্যালেন্স: {{currency}}",
+    "memoLabel": "মেমো (ঐচ্ছিক):",
+    "memoPlaceholder": "যেমন: দারুণ কনটেন্টের জন্য ধন্যবাদ!",
+    "send": "টিপ পাঠান"
+  },
+  "cardMenu": {
+    "loginToPersonalize": "আপনার ফিড নিজের মতো সাজাতে লগ ইন করুন",
+    "notInterestedToast": "আগ্রহী নন — আমরা এই ভিডিওটি লুকিয়ে রাখবো",
+    "undo": "আগের অবস্থায় ফেরান",
+    "cantHideOwn": "আপনি নিজের ভিডিও লুকাতে পারবেন না",
+    "hidingCreatorToast": "@{{author}}-এর ভিডিও লুকানো হচ্ছে",
+    "loginForPlaylists": "প্লেলিস্টে ভিডিও যোগ করতে লগ ইন করুন",
+    "loginToTag": "ভিডিও ট্যাগ করতে লগ ইন করুন",
+    "moreOptions": "আরও অপশন",
+    "addToPlaylist": "প্লেলিস্টে যোগ করুন",
+    "addTag": "ট্যাগ যোগ করুন",
+    "notInterested": "আগ্রহী নই",
+    "dontShowCreator": "@{{author}}-কে আর দেখাবেন না"
+  },
+  "guestList": {
+    "loadFailed": "বর্তমান গেস্ট লিস্ট লোড করা যায়নি",
+    "saved_one": "{{count}} জন গেস্ট এটি দেখতে পারবেন",
+    "saved_other": "{{count}} জন গেস্ট এটি দেখতে পারবেন",
+    "cleared": "গেস্ট লিস্ট খালি করা হয়েছে",
+    "saveFailed": "গেস্ট লিস্ট সেভ করা যায়নি",
+    "invalidAccounts": "সঠিক Hive অ্যাকাউন্ট নয়: {{names}}",
+    "title": "🔒 গেস্ট লিস্ট",
+    "hint": "এই অ্যাকাউন্টগুলো 3Speak Pro ছাড়াই দেখতে পারবে। আমাদের সার্ভারে গোপন রাখা হয়, আপনার পোস্টে কখনো প্রকাশ করা হয় না।",
+    "notRegistered": "এই ভিডিওটির প্রসেসিং এখনো শেষ হয়নি। শেষ হলে আপনি লিস্টটি এডিট করতে পারবেন।",
+    "placeholder": "username, another.user",
+    "empty": "এখনো কেউ নেই। শুধু Pro সাবস্ক্রাইবাররা এটি দেখতে পারবেন।",
+    "removeAria": "{{name}}-কে সরান"
+  },
+  "voters": {
+    "pinnedTitle_one": "ভোটার ({{count}})",
+    "pinnedTitle_other": "ভোটার ({{count}})",
+    "topVoters": "শীর্ষ ভোটার",
+    "noVotes": "এখনো কোনো ভোট নেই"
+  },
+  "payout": {
+    "breakdown": "পেআউটের হিসাব",
+    "estimatedBreakdown": "আনুমানিক হিসাব",
+    "beneficiaries": "বেনিফিশিয়ারি",
+    "curators": "কিউরেটর (50%)",
+    "author": "লেখক",
+    "total": "মোট",
+    "totalEstimated": "মোট (আনুমানিক)"
+  },
+  "vote": {
+    "loginRequired": "এই কাজটি সম্পন্ন করতে লগ ইন করুন",
+    "fetchPostFailed": "পোস্টের তথ্য আনা যায়নি",
+    "sameWeight": "আপনি এই ওজনেই ইতিমধ্যে ভোট দিয়েছেন। অন্য একটি মান বেছে নিন।",
+    "failed": "ভোট ব্যর্থ: {{message}}",
+    "pleaseTryAgain": "আবার চেষ্টা করুন",
+    "weight": "ভোটের ওজন: {{weight}}%",
+    "success": "ভোট সফল! মূল্য: ${{value}}",
+    "successTagged": "ভোট সফল! “{{tag}}” ট্যাগ দেওয়া হয়েছে। মূল্য: ${{value}}",
+    "tagged": "“{{tag}}” ট্যাগ দেওয়া হয়েছে।",
+    "vote": "ভোট",
+    "tagThisVideo": "এই ভিডিওটি ট্যাগ করুন",
+    "tagOptional": "— ঐচ্ছিক —",
+    "pickTopicFirst": "আগে একটি বিষয় বেছে নিন",
+    "taggedNoDot": "“{{tag}}” ট্যাগ দেওয়া হয়েছে",
+    "tagFailed": "ট্যাগ ব্যর্থ: {{message}}",
+    "taggedAlreadyVoted": "“{{tag}}” ট্যাগ দেওয়া হয়েছে — আপনার {{weight}}% ভোট আগেই দেওয়া হয়েছিল।",
+    "votingClosed": "ভোটিং বন্ধ — এই ভিডিওটি ট্যাগ করুন",
+    "youTagged": "আপনি এটিকে <b>{{tag}}</b> হিসেবে ট্যাগ করেছেন।",
+    "pickTopic": "একটি বিষয় বেছে নিন (100% ভোট হিসেবে গণ্য হবে)",
+    "submitTag": "ট্যাগ জমা দিন",
+    "tagThisVideoFull": "এই ভিডিওটি ট্যাগ করুন (100% ভোট হিসেবে গণ্য হবে)",
+    "justTag": "ভোট নয় — শুধু ট্যাগ"
+  },
+  "tagsPicker": {
+    "autoTagged": "স্বয়ংক্রিয় ট্যাগ: {{tags}}",
+    "searchPlaceholder": "বিষয় খুঁজুন…",
+    "searchAria": "বিষয় খুঁজুন",
+    "noMatches": "“{{query}}”-এর সাথে মেলে এমন কোনো বিষয় নেই।",
+    "allSelected": "{{category}}-এর সবকিছু বাছাই করা আছে। আরও নির্দিষ্ট করতে চাইলে শুধু আলাদা বিষয় যোগ করুন:",
+    "orPickTopics": "অথবা আলাদা বিষয় বেছে নিন:",
+    "goodEnough": "এটুকুই যথেষ্ট — অথবা আরও নির্দিষ্ট করুন (ঐচ্ছিক):",
+    "moreSpecific": "আরও নির্দিষ্ট:"
+  }
+}

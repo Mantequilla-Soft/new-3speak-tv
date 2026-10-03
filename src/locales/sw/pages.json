@@ -1,0 +1,139 @@
+{
+  "about": {
+    "quotes": {
+      "q1": "Ikiwa uhuru una maana yoyote, ni haki ya kuwaambia watu kile wasichotaka kusikia.",
+      "q2": "Sikubaliani na unachosema, lakini nitaitetea hadi kufa haki yako ya kukisema.",
+      "q3": "Haki ya uhuru wa kujieleza na matarajio yasiyo halisi ya kutochukizwa kamwe haviwezi kwenda pamoja.",
+      "q4": "Hakuna wakati uhuru wa kujieleza una thamani zaidi kuliko pale mtu anapojigonga kidole gumba kwa nyundo.",
+      "q5": "Uhuru wa kujieleza unamaanisha uhuru kwa wale unaowadharau, na uhuru wa kutoa maoni ya kuchukiza kabisa.",
+      "q6": "Uhuru wa kujieleza usio na ufahamu mara nyingi humdhuru msemaji mwenyewe. Hiyo ni mojawapo ya sababu kadhaa kwa nini lazima uachiwe nafasi badala ya kukandamizwa.",
+      "q7": "Uhuru wa kujieleza unajumuisha uhuru wa kuwachukiza watu.",
+      "q8": "Kuna mstari mwembamba kati ya uhuru wa kujieleza na matamshi ya chuki. Uhuru wa kujieleza huhimiza mjadala, ilhali matamshi ya chuki huchochea vurugu.",
+      "q9": "Uhuru wa kujieleza unamaanisha kwamba hutawafanyia watu jambo kwa sababu ya maoni waliyonayo, maoni wanayoyatoa, au maneno wanayosema au kuandika."
+    },
+    "faq": {
+      "what": {
+        "question": "3Speak ni nini?",
+        "answer": "3Speak ni mahali ambapo watayarishaji wa maudhui wanamiliki moja kwa moja mali zao kwenye tovuti na jumuiya zao. Kwa kutumia teknolojia ya blockchain, umiliki wa mali na jumuiya hizi ni wa mtayarishaji na mtumiaji, si wa 3Speak. Kwa hivyo zinaweza kuhamishiwa kwenye programu nyingine zinazotumia teknolojia ya blockchain. Hii inamaanisha kwamba tusipohudumia jumuiya na watayarishaji kwa njia bora zaidi, wanaweza kuchukua mali walizozalisha na kuzihamishia kwenye programu nyingine. Matokeo yake ni kwamba 3Speak inastahimili udhibiti, haiwezi kukunyang'anya mali zako wala kufuta jumuiya zako."
+      },
+      "upvote": {
+        "question": "Kwa nini sipigiwi kura na 3Speak?",
+        "answer": "3Speak hupiga kura kwa hiari yetu wenyewe na hatufuati vigezo maalum. Njia bora ya kuvutia umakini wetu ni kupakia maudhui ya ubora wa juu na kuleta hadhira na jumuiya kwenye 3Speak."
+      },
+      "missing": {
+        "question": "Kwa nini baadhi ya video zangu hazionekani kwenye mlisho wa mpya?",
+        "answer": "Tunakuruhusu kupakia video nyingi kadiri unavyotaka! Hii inamaanisha kwamba wakati mwingine mtumiaji mmoja angeweza kujaza milisho kwa maudhui yake tu. Ili kuzuia hili, tunapunguza idadi ya video za mtayarishaji mmoja zinazoweza kuonyeshwa kwa kila upakiaji."
+      },
+      "creator": {
+        "question": "Ninawezaje kuwa mtayarishaji wa maudhui?",
+        "answer": "Njia ya haraka zaidi ya kupata akaunti ya Hive ni kubonyeza kitufe cha \"Jisajili\" kwenye paneli ya urambazaji na kufuata maelekezo. (usipoteze funguo zako!). Kisha utahitaji kuingia kwa akaunti yako ya Hive na kubofya \"studio ya mtayarishaji\" / pakia. Uko tayari kuanza!"
+      },
+      "rewards": {
+        "question": "Ninawezaje kupata zawadi kwa kutoa maoni?",
+        "answer": "Ili kupata zawadi, unahitaji akaunti ya blockchain ya Hive. Unaweza kupata moja bure kutoka Hive (https://signup.hive.io), kununua mwongozo wa mtumiaji wa Hive, au kumwomba mtumiaji mwingine wa Hive akupe moja. Ukishapata akaunti, ingia kwa HiveSigner na utoe ufunguo wako wa ACTIVE unapoingia mara ya kwanza. Kisha unaweza kuchapisha maoni yanayoweza kupata zawadi za sarafu za kidijitali."
+      }
+    },
+    "hero": {
+      "tagline1": "LINDA MAUDHUI YAKO",
+      "tagline2": "WEKA JUMUIYA YAKO KWENYE TOKENI",
+      "cta": "Jiunge na Mapinduzi",
+      "description": "3Speak imejengwa juu ya blockchain ya Hive, ikihakikisha ugatuzi wa kweli, ustahimilivu dhidi ya udhibiti, na umiliki wa jumuiya."
+    },
+    "how": {
+      "title": "Jinsi 3Speak inavyofanya kazi",
+      "subtitle": "Furahia umiliki wa kweli wa maudhui kupitia teknolojia ya blockchain",
+      "create": {
+        "title": "Tayarisha maudhui",
+        "text": "Pakia video zako na utayarishe maudhui ambayo ni yako kweli kwenye blockchain."
+      },
+      "earn": {
+        "title": "Pata zawadi",
+        "text": "Pata zawadi kwa tokeni za Hive na upokee michango kwa tokeni yetu ya Speak."
+      },
+      "community": {
+        "title": "Jenga jumuiya",
+        "text": "Unda tokeni zako, masoko, na uchumi wako ili kuunga mkono jumuiya zako."
+      }
+    },
+    "features": {
+      "title": "Vipengele",
+      "rewards": {
+        "title": "ZAWADI",
+        "text": "Kwa kutumia jukwaa, watumiaji hupata zawadi kwa tokeni za Hive na wanaweza kupokea michango kwa tokeni yetu ya Speak. Kadiri unavyoshikilia tokeni hizi zaidi, ndivyo unavyopata mapendeleo zaidi katika mfumo ikolojia."
+      },
+      "p2p": {
+        "title": "P2P",
+        "text": "Teknolojia ya blockchain inayotumiwa na tovuti inahakikisha kwamba watayarishaji wa maudhui wana muunganisho wa kweli wa P2P na watumiaji wao, bila watu wa kati."
+      },
+      "tokenisation": {
+        "title": "TOKENI",
+        "text": "Watayarishaji wa maudhui wanaweza pia kuunda kwa urahisi tokeni zao, masoko, zawadi zinazotegemea stake na uchumi ili kuunga mkono jumuiya zao."
+      },
+      "freeSpeech": {
+        "title": "UHURU WA KUJIELEZA",
+        "text": "Sera yetu ni kwamba uwezo wa kuchukiza ndio msingi wa Uhuru wa Kujieleza, na kwa upande wake Uhuru wa Kujieleza hulinda jamii zisiporomoke katika machafuko na vita vya wenyewe kwa wenyewe."
+      },
+      "journalism": {
+        "title": "UANDISHI WA HABARI WA RAIA",
+        "text": "Tunawahimiza waandishi wa habari raia wajiunge nasi na wachapishe aina ya maudhui ambayo mara nyingi hupuuzwa. Tunaamini kwamba waandishi wa habari raia ndio siku zijazo."
+      }
+    },
+    "hive": {
+      "title": "Inaendeshwa na blockchain ya Hive",
+      "decentralized": {
+        "title": "Iliyogatuliwa",
+        "text": "Hakuna sehemu moja ya kushindwa wala udhibiti"
+      },
+      "fast": {
+        "title": "Haraka na bure",
+        "text": "Hakuna ada za miamala na vitalu vya sekunde 3"
+      },
+      "community": {
+        "title": "Inamilikiwa na jumuiya",
+        "text": "Inaongozwa na wadau, si mashirika"
+      },
+      "description": "3Speak imejengwa juu ya blockchain ya Hive, ikihakikisha ugatuzi wa kweli, ustahimilivu dhidi ya udhibiti, na umiliki wa jumuiya. Mfumo ikolojia wa Hive unatoa miundombinu ya zawadi, utawala, na umiliki wa mali inayoifanya 3Speak kuwa ya kimapinduzi."
+    },
+    "guidelines": {
+      "title": "Miongozo yetu",
+      "subtitle": "Tunaamini Uhuru wa Kujieleza ni kamili, pamoja na sera zilizo wazi na za haki",
+      "support": {
+        "title": "Tunachokiunga mkono",
+        "religion": "Kukosoa dini, imani, vikundi, na watu",
+        "politics": "Siasa mbadala na mijadala ya nadharia za njama",
+        "governments": "Kukosoa serikali na viongozi wa dunia",
+        "pseudonyms": "Kutumia majina bandia kwa ajili ya faragha",
+        "jokes": "Utani wa kuchukiza (ukiwekwa alama wazi hivyo)"
+      },
+      "restrict": {
+        "title": "Tunachokizuia",
+        "violence": "Kutoa wito au kuchochea vurugu",
+        "gore": "Kuonyesha umwagaji damu uliopita kiasi au maudhui ya ngono",
+        "slander": "Kashfa na maudhui ya kuchafua jina",
+        "illegal": "Shughuli au maudhui haramu"
+      }
+    },
+    "faqSection": {
+      "title": "Maswali yanayoulizwa mara kwa mara",
+      "subtitle": "Kila kitu unachohitaji kujua kuhusu 3Speak"
+    },
+    "quotesTitle": "Sauti za uhuru",
+    "cta": {
+      "title": "Uko tayari kumiliki maudhui yako?",
+      "subtitle": "Jiunge na maelfu ya watayarishaji ambao tayari wamechukua udhibiti wa mali zao za kidijitali."
+    },
+    "connect": "Ungana na 3Speak",
+    "logoAlt": "Nembo ya 3Speak"
+  },
+  "legal": {
+    "pageTitle": "Jinsi 3Speak inavyoshughulikia data yako · 3Speak",
+    "englishOnly": "Ukurasa huu unapatikana kwa Kiingereza tu. Toleo la Kiingereza ndilo linalofunga kisheria.",
+    "back": "← Rudi 3Speak"
+  },
+  "notFound": {
+    "imageAlt": "404",
+    "title": "SAMAHANI! UKURASA HAUKUPATIKANA",
+    "message": "Kwa bahati mbaya, ukurasa unaoutafuta haupatikani.",
+    "goHome": "NENDA KWENYE UKURASA WA NYUMBANI"
+  }
+}

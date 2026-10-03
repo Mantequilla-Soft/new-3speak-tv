@@ -2,8 +2,10 @@ import React from 'react'
 import "./Auth_modal.scss"
 import { KeychainSDK, KeychainKeyTypes} from 'keychain-sdk';
 import { useAppStore } from '../../lib/store';
+import { useTranslation } from 'react-i18next';
 
 function Auth_modal({isOpenAuth, closeAuth, onSuccess}) {
+    const { t } = useTranslation();
     const {user} = useAppStore();
   const  handleAuth3speak = async ()=>{
     try
@@ -40,14 +42,14 @@ function Auth_modal({isOpenAuth, closeAuth, onSuccess}) {
         onClick={(e) => e.stopPropagation()} // Prevent click on modal from closing it
       >
         <div className="modal-header auth-bg">
-          <h2>Authorize 3Speak!</h2>
+          <h2>{t('modals.auth.title')}</h2>
           <button className="close-btn auth-bg" onClick={closeAuth}>
             &times;
           </button>
         </div>
         <div className="modal-body auth-bg">
-          <p>To upload video on 3peak we require your posting authority. This allows us to publish your uploaded videos to hive. You only have to grant us posting authority once.</p>
-          <button onClick={handleAuth3speak}>Authorize</button>
+          <p>{t('modals.auth.text')}</p>
+          <button onClick={handleAuth3speak}>{t('modals.auth.authorize')}</button>
           
         </div>
       </div>

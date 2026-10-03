@@ -17,12 +17,14 @@
  * remember "no" without writing down "no".
  */
 import { useEffect, useState } from 'react';
+import { useTranslation, Trans } from 'react-i18next';
 import { hasDecided, setConsent } from '../../lib/consent';
 import { notifyAdConsentChanged, subscribeToCmp } from '../../lib/thirdPartyAds';
 import { ENABLE_THIRDPARTY_ADS } from '../../utils/config';
 import './CookieConsent.scss';
 
 export default function CookieConsent() {
+  const { t } = useTranslation();
   const [open, setOpen] = useState(false);
   const [details, setDetails] = useState(false);
   // Both start off. Nothing optional is ever pre-ticked.
@@ -34,8 +36,8 @@ export default function CookieConsent() {
     // gate the banner does, and the ad loader stays shut until it arrives.
     subscribeToCmp();
     // Defer a tick so it doesn't fight the first paint.
-    const t = setTimeout(() => setOpen(!hasDecided()), 600);
-    return () => clearTimeout(t);
+    const timer = setTimeout(() => setOpen(!hasDecided()), 600);
+    return () => clearTimeout(timer);
   }, []);
 
   if (!open) return null;
@@ -47,35 +49,25 @@ export default function CookieConsent() {
   };
 
   return (
-    <div className="cookie-consent" role="dialog" aria-live="polite" aria-label="Cookie and storage settings">
+    <div className="cookie-consent" role="dialog" aria-live="polite" aria-label={t('consent.ariaLabel')}>
       <div className="cookie-consent-inner">
         <div className="cookie-consent-text">
-          <h4>Cookies &amp; browser storage</h4>
+          <h4>{t('consent.title')}</h4>
 
           {ENABLE_THIRDPARTY_ADS ? (
             <>
+              <p>{t('consent.withAds.intro')}</p>
               <p>
-                3Speak keeps your login and the settings you choose in your browser. That is what
-                makes the site work, and it stays on your device. Two things are optional, and both
-                are off unless you turn them on below.
-              </p>
-              <p>
-                One of them is <strong>advertising</strong>. When it is on, an outside advertising
-                company loads its own code on the page and can store things we do not control. That
-                is why it is a separate choice and never bundled with anything else.
+                <Trans i18nKey="consent.withAds.advertising" components={{ b: <strong /> }} />
               </p>
             </>
           ) : (
             <>
               <p>
-                3Speak keeps your login and the settings you choose in your browser — that's what makes
-                the site work. We use <strong>no tracking cookies, no advertising and no third-party
-                analytics</strong>. The only thing watching a video can save to your device is where you
-                left off — and that's the one optional choice below.
+                <Trans i18nKey="consent.noAds.intro" components={{ b: <strong /> }} />
               </p>
               <p>
-                The one optional thing: we can remember <strong>where you left off in each video</strong>{' '}
-                so playback resumes. It never leaves your device.
+                <Trans i18nKey="consent.noAds.optional" components={{ b: <strong /> }} />
               </p>
             </>
           )}
@@ -83,31 +75,28 @@ export default function CookieConsent() {
           {details && (
             <div className="cookie-consent-details">
               <div className="cookie-consent-cat">
-                <span className="cookie-consent-cat-title">Essential — always on</span>
+                <span className="cookie-consent-cat-title">{t('consent.details.essentialTitle')}</span>
                 <ul>
-                  <li>Your login session</li>
-                  <li>Settings you set: theme, volume, language, subtitles, feed preferences</li>
-                  <li>Resuming an interrupted upload, and drafts of posts you're writing</li>
-                  <li>The app itself, for offline use once installed</li>
-                  <li>Your answer to this banner</li>
+                  <li>{t('consent.details.essential.login')}</li>
+                  <li>{t('consent.details.essential.settings')}</li>
+                  <li>{t('consent.details.essential.uploads')}</li>
+                  <li>{t('consent.details.essential.offline')}</li>
+                  <li>{t('consent.details.essential.answer')}</li>
                 </ul>
               </div>
               <div className="cookie-consent-cat">
-                <span className="cookie-consent-cat-title">Optional — your choice</span>
+                <span className="cookie-consent-cat-title">{t('consent.details.optionalTitle')}</span>
                 <ul>
-                  <li>Playback position per video, so you can pick up where you left off</li>
+                  <li>{t('consent.details.optional.playback')}</li>
                   {ENABLE_THIRDPARTY_ADS && (
-                    <li>
-                      Advertising: an outside advertising company's code, and whatever it stores on
-                      your device to count and cap the ads you are shown
-                    </li>
+                    <li>{t('consent.details.optional.advertising')}</li>
                   )}
                 </ul>
               </div>
               <p className="cookie-consent-note">
                 {ENABLE_THIRDPARTY_ADS
-                  ? 'Leaving these off stops playback positions from being saved and deletes any already stored, and means no advertising code is loaded at all. You can change your mind any time.'
-                  : 'Choosing “Essential only” stops playback positions from being saved and deletes any already stored. You can change your mind any time — choosing “Accept” turns it back on straight away.'}
+                  ? t('consent.details.noteWithAds')
+                  : t('consent.details.noteNoAds')}
               </p>
             </div>
           )}
@@ -124,8 +113,8 @@ export default function CookieConsent() {
                   onChange={(e) => setFunctionalOn(e.target.checked)}
                 />
                 <span>
-                  <strong>Resume playback</strong>
-                  Remember where you left off in each video. Stays on your device.
+                  <strong>{t('consent.toggles.resumeTitle')}</strong>
+                  {t('consent.toggles.resumeDesc')}
                 </span>
               </label>
               <label className="cookie-consent-toggle">
@@ -135,8 +124,8 @@ export default function CookieConsent() {
                   onChange={(e) => setAdvertisingOn(e.target.checked)}
                 />
                 <span>
-                  <strong>Advertising</strong>
-                  Let an outside advertising company load its code and store what it needs.
+                  <strong>{t('consent.toggles.advertisingTitle')}</strong>
+                  {t('consent.toggles.advertisingDesc')}
                 </span>
               </label>
             </div>
@@ -147,7 +136,7 @@ export default function CookieConsent() {
             className="cookie-consent-link"
             onClick={() => setDetails((d) => !d)}
           >
-            {details ? 'Hide details' : 'What exactly is stored?'}
+            {details ? t('consent.hideDetails') : t('consent.whatIsStored')}
           </button>
         </div>
 
@@ -157,7 +146,7 @@ export default function CookieConsent() {
             className="cookie-consent-btn secondary"
             onClick={() => decide({ functional: false, advertising: false })}
           >
-            Essential only
+            {t('consent.essentialOnly')}
           </button>
           {ENABLE_THIRDPARTY_ADS && (
             <button
@@ -165,7 +154,7 @@ export default function CookieConsent() {
               className="cookie-consent-btn secondary"
               onClick={() => decide({ functional: functionalOn, advertising: advertisingOn })}
             >
-              Save choices
+              {t('consent.saveChoices')}
             </button>
           )}
           <button
@@ -173,7 +162,7 @@ export default function CookieConsent() {
             className="cookie-consent-btn primary"
             onClick={() => decide({ functional: true, advertising: ENABLE_THIRDPARTY_ADS })}
           >
-            {ENABLE_THIRDPARTY_ADS ? 'Accept all' : 'Accept'}
+            {ENABLE_THIRDPARTY_ADS ? t('consent.acceptAll') : t('common.actions.accept')}
           </button>
         </div>
       </div>

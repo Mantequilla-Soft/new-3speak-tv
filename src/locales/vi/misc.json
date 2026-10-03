@@ -1,0 +1,241 @@
+{
+  "leaderboard": {
+    "windows": {
+      "7d": "7 ngày",
+      "30d": "30 ngày",
+      "365d": "Năm",
+      "all": "Mọi lúc"
+    },
+    "windowsInSentence": {
+      "7d": "7 ngày",
+      "30d": "30 ngày",
+      "365d": "năm",
+      "all": "mọi lúc"
+    },
+    "metrics": {
+      "video_uploads": "Video",
+      "short_uploads": "Shorts",
+      "video_watch_secs": "Thời gian xem video",
+      "short_watch_secs": "Thời gian xem Shorts",
+      "tags_given": "Thẻ",
+      "streams": "Buổi phát",
+      "stream_secs": "Thời gian trực tiếp",
+      "stream_peak_viewers": "Người xem cao nhất",
+      "stream_viewers": "Lượt vào xem",
+      "boosts_received": "Boost đã nhận",
+      "boost_amount_received": "Số tiền đã nhận",
+      "boosts_given": "Boost đã gửi",
+      "boost_amount_given": "Số tiền đã gửi"
+    },
+    "metricsInSentence": {
+      "video_uploads": "video",
+      "short_uploads": "Shorts",
+      "video_watch_secs": "thời gian xem video",
+      "short_watch_secs": "thời gian xem Shorts",
+      "tags_given": "thẻ",
+      "streams": "buổi phát",
+      "stream_secs": "thời gian trực tiếp",
+      "stream_peak_viewers": "người xem cao nhất",
+      "stream_viewers": "lượt vào xem",
+      "boosts_received": "boost đã nhận",
+      "boost_amount_received": "số tiền đã nhận",
+      "boosts_given": "boost đã gửi",
+      "boost_amount_given": "số tiền đã gửi"
+    },
+    "blurbs": {
+      "video_uploads": "Video đã tải lên",
+      "short_uploads": "Shorts đã tải lên",
+      "video_watch_secs": "Số giây video của họ được xem",
+      "short_watch_secs": "Số giây Shorts của họ được xem",
+      "tags_given": "Thẻ đã gắn cho video khác",
+      "streams": "Số buổi phát đã bắt đầu",
+      "stream_secs": "Tổng thời gian trực tiếp (chỉ tính buổi phát đã kết thúc)",
+      "stream_peak_viewers": "Số người xem đồng thời cao nhất (mức đỉnh, không phải tổng)",
+      "stream_viewers": "Số lượt vào xem (tổng lượt, không phải số người duy nhất)",
+      "boosts_received": "Boost được gửi đến buổi phát của họ",
+      "boost_amount_received": "Tổng số tiền boost đã nhận",
+      "boosts_given": "Boost họ đã gửi cho người phát khác",
+      "boost_amount_given": "Tổng số tiền boost họ đã gửi"
+    },
+    "blurbsInSentence": {
+      "video_uploads": "video đã tải lên",
+      "short_uploads": "Shorts đã tải lên",
+      "video_watch_secs": "số giây video của họ được xem",
+      "short_watch_secs": "số giây Shorts của họ được xem",
+      "tags_given": "thẻ đã gắn cho video khác",
+      "streams": "số buổi phát đã bắt đầu",
+      "stream_secs": "tổng thời gian trực tiếp (chỉ tính buổi phát đã kết thúc)",
+      "stream_peak_viewers": "số người xem đồng thời cao nhất (mức đỉnh, không phải tổng)",
+      "stream_viewers": "số lượt vào xem (tổng lượt, không phải số người duy nhất)",
+      "boosts_received": "boost được gửi đến buổi phát của họ",
+      "boost_amount_received": "tổng số tiền boost đã nhận",
+      "boosts_given": "boost họ đã gửi cho người phát khác",
+      "boost_amount_given": "tổng số tiền boost họ đã gửi"
+    },
+    "groups": {
+      "video": "Video",
+      "streaming": "Phát trực tiếp"
+    },
+    "badgeNouns": {
+      "video_uploads": "Video",
+      "short_uploads": "Shorts",
+      "video_watch_secs": "Lượt xem",
+      "short_watch_secs": "Lượt xem Shorts",
+      "tags_given": "Gắn thẻ"
+    },
+    "badgeLabel": "{{noun}} {{tier}}",
+    "badgeTitleAllTime": "Hạng #{{rank}} về {{what}} mọi thời đại",
+    "badgeTitleWindow": "Hạng #{{rank}} về {{what}} trong {{window}} qua"
+  },
+  "duration": {
+    "hoursMinutes": "{{h}} giờ {{m}} phút",
+    "minutesSeconds": "{{m}} phút {{s}} giây",
+    "seconds": "{{s}} giây",
+    "aMoment": "một lát",
+    "lessThanMinute": "chưa đến một phút"
+  },
+  "surf": {
+    "community": "Cộng đồng",
+    "allOf": "Toàn bộ {{label}}"
+  },
+  "social": {
+    "signingCancelled": "Đã hủy ký",
+    "youtube": {
+      "placeholder": "@handle hoặc UCxxxxxxxxxxxxxxxxxxxxxx",
+      "help": "Dán @handle YouTube hoặc ID kênh UC… của bạn. Chúng tôi sẽ chuẩn hóa về ID kênh."
+    },
+    "soundcloud": {
+      "placeholder": "your-profile hoặc https://soundcloud.com/your-profile",
+      "help": "Dán URL hồ sơ SoundCloud của bạn hoặc chỉ tên người dùng trong đó. Đặt mã hash ở bất kỳ đâu trong phần giới thiệu hồ sơ."
+    }
+  },
+  "snaps": {
+    "retrying": "Chưa tìm thấy bài chứa Snaps — đang thử lại (lần {{attempt}})...",
+    "unreachable": "Không thể kết nối với node Hive nào để tìm bài chứa Snaps. Vui lòng kiểm tra kết nối và thử lại.",
+    "unreachableWithError": "Không thể kết nối với node Hive nào để tìm bài chứa Snaps (lỗi gần nhất — {{error}}). Vui lòng kiểm tra kết nối và thử lại."
+  },
+  "embed": {
+    "responsive": "Tự co giãn"
+  },
+  "incubation": {
+    "requestFailed": "Yêu cầu thất bại ({{status}})",
+    "contactLoadFailed": "Không thể tải thông tin liên hệ của bạn",
+    "contactSaveFailed": "Không thể lưu thông tin liên hệ của bạn",
+    "onlyButrauthBacklog": "Chỉ tài khoản Butter Auth mới có thể có video tồn đọng trong giai đoạn khởi động",
+    "publishFailed": "Xuất bản thất bại ({{status}})"
+  },
+  "routeError": {
+    "title": "Trang này không tải được",
+    "body": "Một phần của ứng dụng không tải xuống được. Điều này thường do có phiên bản mới được phát hành trong lúc tab này đang mở. Tải lại trang sẽ cập nhật phiên bản mới.",
+    "reload": "Tải lại",
+    "goHome": "Về trang chủ"
+  },
+  "seo": {
+    "defaultTitle": "3Speak - Nền tảng video phi tập trung",
+    "defaultDescription": "3Speak là nền tảng chia sẻ video phi tập trung được xây dựng trên công nghệ blockchain. Xem, tải lên và chia sẻ video đồng thời nhận phần thưởng tiền mã hóa."
+  },
+  "uploadLinks": {
+    "regularVideo": "Video thường",
+    "verticalShort": "Shorts dọc",
+    "musicAudio": "Nhạc / Âm thanh",
+    "groupChat": "Chat nhóm",
+    "communitySnap": "Snap cộng đồng",
+    "shortsEditor": "Trình chỉnh sửa Shorts",
+    "goLive": "Phát trực tiếp",
+    "streamStudio": "Studio phát trực tiếp",
+    "headings": {
+      "upload": "Tải lên",
+      "live": "Trực tiếp",
+      "others": "Khác"
+    }
+  },
+  "chat": {
+    "connectFailed": "Không thể kết nối với chat.",
+    "loginFirst": "Hãy đăng nhập trước để dùng chat.",
+    "roomNameRequired": "Cần có tên phòng."
+  },
+  "hiveAuth": {
+    "waiting": "Đang chờ chấp thuận trên HiveAuth...",
+    "title": "Cần chấp thuận qua HiveAuth",
+    "hint": "Vui lòng kiểm tra ứng dụng HiveAuth để chấp thuận giao dịch này"
+  },
+  "hiveApi": {
+    "keychainNotSigned": "Keychain đã không ký giao dịch",
+    "loginToCreateCommunity": "Vui lòng đăng nhập để tạo cộng đồng",
+    "loginFirst": "Vui lòng đăng nhập trước",
+    "cancelled": "Đã hủy thao tác"
+  },
+  "openpod": {
+    "announced": "Đã thông báo phiên trực tiếp trên Hive!",
+    "announceFailed": "OpenPod đã bắt đầu, nhưng không thể đăng thông báo lên Hive."
+  },
+  "appUpdate": {
+    "updating": "Đang cập nhật lên phiên bản mới nhất ({{version}})…",
+    "reloadingForUpload": "Đang tải lại để lượt tải lên của bạn chạy trên bản dựng mới nhất."
+  },
+  "auth": {
+    "switched": "Đã chuyển sang {{username}}!",
+    "keychainLoginTitle": "Đăng nhập bằng Hive"
+  },
+  "streamVod": {
+    "uploadKeyMissing": "Buổi phát đã kết thúc, nhưng không thể tải video lên (thiếu khóa tải lên).",
+    "uploading": "Đang tải video buổi phát lên… {{pct}}%",
+    "uploaded": "Đã tải video buổi phát lên — video sẽ thay thế buổi phát trực tiếp khi mã hóa xong.",
+    "uploadFailed": "Buổi phát đã kết thúc, nhưng tải video lên thất bại.",
+    "saving": "Đang lưu video buổi phát…",
+    "encoding": "Đã tải lên — bộ mã hóa đang xử lý video của bạn…",
+    "saved": "Đã lưu video buổi phát — video sẽ thay thế buổi phát trực tiếp khi mã hóa xong.",
+    "saveFailed": "Buổi phát đã kết thúc, nhưng không thể lưu video: {{error}}.",
+    "uploadFailedShort": "tải lên thất bại",
+    "stillProcessing": "Buổi phát đã kết thúc — video vẫn đang được xử lý; hãy kiểm tra hồ sơ của bạn sau ít phút."
+  },
+  "embedPlayer": {
+    "unavailable": "Video không khả dụng"
+  },
+  "followFeed": {
+    "title": "Bảng tin theo dõi",
+    "error": "Lỗi khi tải video"
+  },
+  "groups": {
+    "title": "Nhóm",
+    "badges": "Huy hiệu",
+    "subtitle": "Các cộng đồng bạn có thể tham gia và huy hiệu mọi người đang có, tất cả ở một nơi."
+  },
+  "watched": {
+    "removed": "Đã xóa khỏi lịch sử xem",
+    "removeFailed": "Không thể xóa khỏi lịch sử xem",
+    "title": "Đã xem",
+    "count_other": "Đã xem {{count}}",
+    "trackHistory": "Ghi lịch sử",
+    "videosTab": "Video ({{count}})",
+    "shortsTab": "Shorts ({{count}})",
+    "loadFailed": "Không tải được lịch sử xem. Vui lòng thử lại.",
+    "emptyShorts": "Chưa xem Shorts nào",
+    "emptyVideos": "Chưa xem video nào",
+    "removeTitle": "Xóa khỏi lịch sử xem",
+    "watchedAt": "Đã xem {{when}}"
+  },
+  "watchStream": {
+    "saySomething": "Nói gì đó…",
+    "waitingWallet": "Đang chờ ví của bạn…",
+    "signInToChat": "Đăng nhập để chat",
+    "sendMessage": "Gửi tin nhắn",
+    "notLive": "Buổi phát này hiện không trực tiếp.",
+    "notFound": "Không tìm thấy buổi phát trực tiếp nào cho đường liên kết này.",
+    "browse": "Xem các buổi phát trực tiếp",
+    "back": "Quay lại 3Speak",
+    "seoTitle": "{{title}} (TRỰC TIẾP)",
+    "swipeNext": "Vuốt để xem buổi phát trực tiếp tiếp theo",
+    "chat": "Chat",
+    "watchingNow": "👁 {{count}} người đang xem",
+    "signInRaiseHand": "Đăng nhập để giơ tay",
+    "copyLink": "Sao chép đường liên kết buổi phát",
+    "notAvailableLive": "Không khả dụng cho buổi phát trực tiếp",
+    "vote": "Vote",
+    "comment": "Bình luận",
+    "liveChat": "Chat trực tiếp",
+    "signInToJoin": "🔒 Đăng nhập để tham gia chat.",
+    "moreTag": "Thêm #{{tag}}",
+    "moreVideos": "Thêm video"
+  }
+}

@@ -1,0 +1,69 @@
+{
+  "buckets": {
+    "today": "오늘",
+    "yesterday": "어제",
+    "thisWeek": "이번 주",
+    "thisMonth": "이번 달",
+    "older": "이전"
+  },
+  "loginRequired": "알림을 보려면 로그인해 주세요.",
+  "unreadChip_other": "새 알림 {{count}}개",
+  "markAllTitle": "모두 읽음으로 표시",
+  "marking": "표시 중…",
+  "markAllRead": "모두 읽음",
+  "refreshing": "새로고침 중…",
+  "categories": {
+    "all": "전체",
+    "replies": "답글",
+    "mentions": "멘션",
+    "votes": "투표",
+    "reblogs": "리블로그",
+    "follows": "팔로우",
+    "transfers": "송금"
+  },
+  "unread": "읽지 않음",
+  "summary": {
+    "title": "활동",
+    "today": "오늘",
+    "week": "이번 주",
+    "month": "이번 달",
+    "emptyToday": "오늘은 아직 활동이 없어요.",
+    "emptyWeek": "이번 주에는 아직 활동이 없어요.",
+    "stillLoading": "이전 알림을 불러오는 중…",
+    "emptyMonth": "이번 달에는 활동이 없어요."
+  },
+  "loadError": "알림을 불러오지 못했어요.",
+  "empty": {
+    "all": "아직 알림이 없어요.",
+    "unread": "읽지 않은 알림이 없어요.",
+    "replies": "아직 답글이 없어요.",
+    "mentions": "아직 멘션이 없어요.",
+    "votes": "아직 투표가 없어요.",
+    "reblogs": "아직 리블로그가 없어요.",
+    "follows": "아직 팔로우가 없어요.",
+    "transfers": "아직 송금 내역이 없어요."
+  },
+  "threeSpeakVideo": "3Speak 동영상",
+  "end": "모두 확인했어요.",
+  "cards": {
+    "votes": "투표",
+    "voters_other": "투표자 {{count}}명",
+    "replies": "답글",
+    "newFollowers": "새 팔로워",
+    "mentions": "멘션",
+    "reblogs": "리블로그",
+    "transfers": "송금"
+  },
+  "group": {
+    "voteOne": "@{{user}}님이 내 게시물에 투표했어요",
+    "voteTwo": "@{{user}}님과 @{{user2}}님이 내 게시물에 투표했어요",
+    "voteMany_other": "@{{user}}님 외 {{count}}명이 내 게시물에 투표했어요",
+    "followOne": "@{{user}}님이 나를 팔로우했어요",
+    "followTwo": "@{{user}}님과 @{{user2}}님이 나를 팔로우했어요",
+    "followMany_other": "@{{user}}님 외 {{count}}명이 나를 팔로우했어요",
+    "generic_other": "{{type}} 알림 {{count}}개",
+    "typeCount_other": "{{type}} {{count}}개",
+    "collapse": "▾ 접기",
+    "expand": "▸ 펼치기"
+  }
+}

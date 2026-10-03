@@ -1,0 +1,112 @@
+{
+  "theme": {
+    "switchToLight": "Beralih ke mode terang",
+    "switchToDark": "Beralih ke mode gelap"
+  },
+  "bottom": {
+    "feeds": "Feed",
+    "groups": "Grup",
+    "audio": "Audio",
+    "login": "Masuk"
+  },
+  "installApp": "Instal Aplikasi",
+  "iosInstallHint": "Ketuk <b>Bagikan</b> lalu <b>Tambahkan ke Layar Utama</b>",
+  "playlists": {
+    "tooltip": "Playlist yang kamu simpan atau buat",
+    "label": "Playlist",
+    "watchLater": "Tonton Nanti",
+    "watchLaterCount": "Tonton Nanti ({{n}})",
+    "watchHistory": "Riwayat Tontonan",
+    "all": "Semua Playlist"
+  },
+  "advertise": "Pasang Iklan",
+  "hidePages": "Sembunyikan halaman",
+  "showPages": "Tampilkan halaman",
+  "tabs": {
+    "overviewTooltip": "Semua yang baru di 3Speak, plus yang menurut kami akan kamu suka",
+    "overview": "Ringkasan",
+    "shortsTooltip": "Video vertikal pendek, satu demi satu",
+    "audioTooltip": "Podcast, musik, dan audio lain yang diterbitkan di 3Speak",
+    "groupsTooltip": "Komunitas yang bisa kamu ikuti, dan lencana yang dianugerahkan ke orang-orang",
+    "rankingsTooltip": "Kreator yang paling banyak menghasilkan dan ditonton saat ini"
+  },
+  "aboutLink": "Tentang 3Speak",
+  "profile": {
+    "accountMenu": "Menu akun",
+    "myChannelAria": "Channel-ku",
+    "vpTooltip": "Voting Power: seberapa besar bobot vote-mu berikutnya",
+    "rcTooltip": "Resource Credits: biaya aksi-aksimu di Hive",
+    "myChannel": "Channel-ku",
+    "publishBacklog": "Terbitkan antrean",
+    "analytics": "Analitik",
+    "inviteLinks": "Tautan undangan",
+    "iosInstallToast": "Ketuk tombol Bagikan di Safari, lalu \"Tambahkan ke Layar Utama\"",
+    "changeAccount": "Ganti akun",
+    "logout": "Keluar",
+    "onDiscord": "3Speak di Discord",
+    "onX": "3Speak di X",
+    "onTelegram": "3Speak di Telegram"
+  },
+  "notifications": {
+    "pushOff": "Notifikasi dimatikan untuk perangkat ini",
+    "pushOn": "Kamu akan diberi tahu saat kreator yang kamu ikuti memposting",
+    "pushFailed": "Pengaturan notifikasi tidak dapat diubah",
+    "ariaUnread": "Notifikasi ({{count}} belum dibaca)",
+    "pushBlocked": "Notifikasi untuk situs ini diblokir di pengaturan browsermu",
+    "pushNoWorker": "Build ini tidak punya service worker, jadi notifikasi tidak bisa didaftarkan di sini",
+    "pushStop": "Berhenti memberi notifikasi ke perangkat ini",
+    "pushStart": "Dapatkan notifikasi saat kreator yang kamu ikuti memposting",
+    "on": "Aktif",
+    "notifyMe": "Beri tahu aku",
+    "empty": "Kamu belum punya notifikasi.",
+    "threeSpeakVideo": "Video 3Speak",
+    "group": {
+      "voteOne": "@{{a}} memberi vote pada postinganmu",
+      "voteTwo": "@{{a}} dan @{{b}} memberi vote pada postinganmu",
+      "voteMany_other": "@{{a}} dan {{count}} lainnya memberi vote pada postinganmu",
+      "withValue": "{{label}} (${{value}})",
+      "followOne": "@{{a}} mengikutimu",
+      "followTwo": "@{{a}} dan @{{b}} mengikutimu",
+      "followMany_other": "@{{a}} dan {{count}} lainnya mengikutimu",
+      "other": "{{count}} notifikasi {{type}}",
+      "typeCount": "{{count}} {{type}}",
+      "includesWhale": "Termasuk akun 🐋 whale",
+      "includesOrca": "Termasuk akun 🐬 orca",
+      "andMore": "dan {{count}} lainnya…"
+    }
+  },
+  "search": {
+    "types": {
+      "users": "Pengguna",
+      "communities": "Komunitas",
+      "videos": "Video",
+      "shorts": "Shorts",
+      "audio": "Audio",
+      "playlists": "Playlist"
+    },
+    "dates": {
+      "today": "Hari ini",
+      "thisWeek": "Minggu ini",
+      "thisMonth": "Bulan ini",
+      "thisYear": "Tahun ini"
+    },
+    "contentType": "Jenis konten",
+    "boostRecent": "Utamakan terbaru",
+    "dateRange": "Rentang tanggal",
+    "tag": "Tag",
+    "tagPlaceholder": "mis. crypto, gaming...",
+    "community": "Komunitas",
+    "communityPlaceholder": "Cari komunitas...",
+    "clearFilters": "Hapus semua filter",
+    "allHidden": "Semua jenis konten disembunyikan.",
+    "reenableFilters": "Aktifkan lagi semua filter",
+    "noResultsFor": "Tidak ada hasil untuk “{{term}}”",
+    "searchFor": "Cari “{{term}}”",
+    "authors_other": "{{count}} penulis",
+    "subscribers_other": "{{count}} anggota",
+    "views_other": "{{formatted}} tayangan",
+    "tags": "Tag",
+    "titles": "Judul",
+    "placeholder": "Cari..."
+  }
+}

@@ -1,0 +1,200 @@
+{
+  "loaders": {
+    "wifi": "Wifi 加载动画"
+  },
+  "supportBlock": {
+    "banned": {
+      "title": "你的账号已被封禁",
+      "body": "你的 3Speak 账号已被封禁，因此无法登录。如果你认为这是误判，请联系 3Speak 客服。"
+    },
+    "upload": {
+      "title": "你的账号已被禁止上传",
+      "body": "你的 3Speak 账号目前不允许上传。如果你认为这是误判，请联系 3Speak 客服。"
+    }
+  },
+  "emergency": {
+    "title": "我们的基础设施出现了一些问题",
+    "body": "我们的团队正在全力处理，尽快恢复 3Speak。加入我们的 Discord 联系我们并获取实时进展——感谢你的耐心。",
+    "joinDiscord": "加入我们的 Discord"
+  },
+  "changelog": {
+    "title": "我们发布了更新！",
+    "subtitle": "v{{version}} 的新内容",
+    "previousUpdates": "更早的更新",
+    "newerUpdates": "较新的更新",
+    "readTheCode": "查看代码",
+    "gotIt": "知道了"
+  },
+  "routes": {
+    "homeFeed": "首页推荐",
+    "followFeed": "关注动态",
+    "discover": "发现",
+    "newVideos": "最新视频",
+    "firstUploads": "首次上传",
+    "rankings": "排行榜",
+    "groups": "圈子",
+    "badges": "徽章",
+    "audioBy": "@{{author}} 的音频",
+    "audio": "音频",
+    "playlist": "播放列表",
+    "watchHistory": "观看记录 — @{{username}}",
+    "postBy": "@{{author}} 的帖子",
+    "myProfile": "我的主页",
+    "uploadStudio": "上传工作室",
+    "drafts": "草稿",
+    "editVideo": "编辑视频",
+    "editScheduledPost": "编辑定时帖子",
+    "chat": "聊天",
+    "about": "关于",
+    "login": "登录",
+    "brandFallback": "3Speak - 去中心化视频平台"
+  },
+  "invite": {
+    "title": "<who>@{{referrer}}</who> 邀请你加入 3Speak",
+    "incubatingFastTrack": "你现在就可以把 <b>@{{handle}}</b> 变成你自己的 Hive 账号，无需完成预热。",
+    "incubatingKeepGoing": "继续完成你的预热吧。<b>@{{referrer}}</b> 会被记为邀请你的人。",
+    "signUpFastTrack": "注册后立即拥有自己的 Hive 账号：一个登录即可使用 3Speak 和其他所有 Hive 应用，密钥只掌握在你自己手中。大约只需一分钟。",
+    "signUpFree": "注册后先从 3Speak 上的免费个人主页开始。你的邀请已保存，<b>@{{referrer}}</b> 会获得邀请记录。",
+    "createHiveAccount": "创建我的 Hive 账号",
+    "createAccount": "创建我的账号",
+    "lookAround": "我只想随便看看"
+  },
+  "interests": {
+    "saved": "兴趣已保存——随时可以在设置中修改",
+    "saveFailed": "无法保存兴趣",
+    "title": "你喜欢什么？",
+    "body": "选几个你喜欢的话题，我们会为你推荐更多喜欢的内容。你随时可以在<b>设置</b>中修改。",
+    "notNow": "以后再说",
+    "save": "保存兴趣"
+  },
+  "emojiGif": {
+    "emoji": "表情",
+    "searchEmoji": "搜索表情",
+    "searchGifs": "搜索 GIF…",
+    "noGifs": "没有找到 GIF。",
+    "poweredBy": "由 GIPHY 提供"
+  },
+  "welcome": {
+    "things": {
+      "postVideos": {
+        "title": "发布视频",
+        "text": "上传始终属于你的长视频，它存放在一条没有人能悄悄删除内容的链上。"
+      },
+      "filmShorts": {
+        "title": "拍短视频",
+        "text": "简短、竖屏、方便分享。非常适合吸引你的第一批观众。"
+      },
+      "goLive": {
+        "title": "开直播",
+        "text": "为你的粉丝直播，邀请嘉宾上台，结束后还能保留录像。"
+      },
+      "buildCommunity": {
+        "title": "打造社区",
+        "text": "围绕你在乎的事情建立一个空间，或者加入一个已经很热闹的社区。"
+      },
+      "makeFriends": {
+        "title": "结交真朋友",
+        "text": "和真正互相支持的真人评论、聊天、合作。"
+      },
+      "getInspired": {
+        "title": "获取灵感，参与其中",
+        "text": "发现创作者，支持你喜欢的人，同时还能赚取收益。"
+      }
+    },
+    "advertiserThings": {
+      "bookAds": {
+        "title": "在 3Speak 全站投放广告",
+        "text": "视频广告位、短视频广告位、播放器横幅、滚动字幕和上传前广告位，投放时长从一天到三个月。"
+      },
+      "payFromWallet": {
+        "title": "用你自己的钱包付款",
+        "text": "使用 HBD 或 HIVE，直接从这个账号支付。无需银行卡，没有中间商。"
+      },
+      "chooseWhere": {
+        "title": "选择投放位置",
+        "text": "选择广告形式、在视频中的位置以及投放天数。"
+      },
+      "seeDelivered": {
+        "title": "查看投放效果",
+        "text": "每笔预订的播放和点击数据，如果预订未达标还会返还额度。"
+      },
+      "talkToCustomers": {
+        "title": "与你的客户交流",
+        "text": "如果你愿意：以品牌名义发布视频、回复评论、关注他人。"
+      },
+      "oneAccount": {
+        "title": "一个账号，处处通用",
+        "text": "在所有 Hive 应用中使用同一个品牌和登录，密钥只掌握在你自己手中。"
+      }
+    },
+    "profileLive": "你的个人主页已上线。欢迎来到 3Speak！",
+    "brandProfileLive": "你的品牌主页已上线。欢迎来到 3Speak！",
+    "title": "欢迎来到 3Speak",
+    "titleNamed": "欢迎来到 3Speak，{{name}}",
+    "advertiserReady": "你的广告主账号 <b>@{{user}}</b> 已准备就绪。你将用这个账号预订广告并付款。",
+    "heyUser": "嗨 <b>@{{user}}</b>，你来啦。3Speak 构建在 Hive 之上，所以你的账号、你的观众和你的内容都属于你自己。",
+    "noteAdvertiser": "首先，快速看一下你的品牌主页：观众会在你的广告旁边看到它。",
+    "note": "开始之前还有最后一件事：让大家知道他们在看谁。",
+    "maybeLater": "以后再说",
+    "checkBrandProfile": "查看我的品牌主页",
+    "setUpProfile": "设置我的主页",
+    "brandProfileTitle": "你的品牌主页",
+    "profileTitle": "让大家认识你",
+    "brandProfileHint": "已从你的预热阶段带过来。保存后会写入你的 Hive 账号；你随时可以修改。",
+    "profileHint": "这是大家在你个人主页上看到的内容。你随时可以修改。",
+    "skipForNow": "暂时跳过",
+    "saveAndBook": "保存并预订我的第一个广告",
+    "uploading": "上传中…",
+    "interestsHint": "我们会根据这些选择你首页显示的内容。想选多少都可以，也可以一个都不选，随时都能修改。",
+    "interestsFineprint": "保存到你的 Hive 账号，因此所有 Hive 应用都会显示相同的主页和兴趣。",
+    "saveAndExplore": "保存并开始探索"
+  },
+  "profileEdit": {
+    "updated": "个人资料已更新",
+    "title": "编辑个人资料",
+    "subtitle": "你的头像、名字和简介会显示在你的主页上，以及你发布的所有内容旁边。",
+    "loading": "正在加载你的个人资料…",
+    "fineprint": "保存到你的 Hive 账号，因此所有 Hive 应用都会显示相同的个人资料。",
+    "saveChanges": "保存更改"
+  },
+  "profileFields": {
+    "chooseImage": "请选择一个图片文件",
+    "imageTooLarge": "这张图片超过 8MB，请选一张小一点的",
+    "uploadFailed": "无法上传这张图片",
+    "saved": "个人资料已保存",
+    "saveFailed": "无法保存你的个人资料",
+    "uploadBanner": "上传主页横幅",
+    "changeBanner": "更换横幅",
+    "addBanner": "添加横幅",
+    "bannerHint": "最佳尺寸为 <b>2800 × 684</b> 像素（或任意 4:1 的图片）。把重要内容放在中间：窄屏上两侧会被裁掉，你的名字会显示在左下方。",
+    "uploadPicture": "上传头像",
+    "pictureLabel": "头像",
+    "pictureHint": "人像或 Logo 效果最好。正方形，400 × 400 像素或更大，最大 8MB。",
+    "displayName": "显示名称",
+    "namePlaceholderUser": "我们该怎么称呼你？（@{{username}}）",
+    "namePlaceholder": "我们该怎么称呼你？",
+    "shortBio": "简介",
+    "bioPlaceholder": "你创作什么内容？大家可以期待你带来什么？",
+    "location": "所在地",
+    "optional": "可选",
+    "locationPlaceholder": "你在世界的哪个角落？"
+  },
+  "auth": {
+    "sessionExpired": "你的会话已过期，请重新登录",
+    "loggedOut": "已成功退出登录",
+    "loginSuccess": "登录成功！",
+    "switchedTo": "已切换到 @{{user}}",
+    "butrauthFailed": "Butter Auth 登录失败：{{error}}",
+    "signedInAs": "已以 @{{user}} 登录",
+    "loggedInViaButrauth": "已通过 Butter Auth 以 @{{user}} 登录",
+    "tokenExpired": "会话已过期",
+    "loginFailed": "登录失败：{{error}}",
+    "unknownError": "未知错误",
+    "loginTitle": "登录 3Speak"
+  },
+  "update": {
+    "available": "有新版本（{{version}}）可用",
+    "description": "刷新即可获取最新更新。"
+  },
+  "toastsRegion": "通知"
+}

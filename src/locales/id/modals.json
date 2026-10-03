@@ -1,0 +1,172 @@
+{
+  "addTag": {
+    "loginRequired": "Masuk untuk memberi tag video ini",
+    "pickTopic": "Pilih topik dulu",
+    "tagged": "Diberi tag “{{label}}”",
+    "failed": "Tag gagal: {{error}}",
+    "pleaseTryAgain": "silakan coba lagi",
+    "title": "Beri tag video ini",
+    "question": "Video ini tentang apa?",
+    "existing": "Kamu memberi tag <b>{{label}}</b> pada video ini — memilih yang lain akan menggantinya.",
+    "submit": "Kirim tag"
+  },
+  "addAccount": {
+    "usernameRequired": "Nama pengguna wajib diisi untuk melanjutkan.",
+    "hiveAuthExpired": "Permintaan autentikasi HiveAuth kedaluwarsa",
+    "loginSuccess": "Berhasil masuk!",
+    "loginFailed": "Login gagal: {{error}}",
+    "logoAlt": "Logo 3Speak",
+    "title": "Masuk dengan nama penggunamu",
+    "usernamePlaceholder": "Nama pengguna"
+  },
+  "socialLink": {
+    "hashCopied": "Hash tersalin",
+    "copyFailed": "Tidak dapat menyalin ke clipboard",
+    "enterHandle": "Masukkan handle atau ID platformmu",
+    "verified": "Akun terverifikasi dan tertaut",
+    "errors": {
+      "hashNotFound": "Hash belum ditemukan di profil. Pastikan perubahannya disimpan secara publik, lalu coba lagi.",
+      "alreadyLinked": "Channel ini sudah diverifikasi oleh pengguna Hive lain (@{{user}}).",
+      "tooMany": "Kamu sudah mencapai batas maksimal akun yang ditautkan.",
+      "notFound": "Channel itu tidak ada di platform tersebut.",
+      "badSignature": "Tanda tangan tidak dapat diverifikasi. Pastikan kamu masuk dengan posting key-mu.",
+      "rateLimited": "Terlalu banyak permintaan. Tunggu sebentar lalu coba lagi.",
+      "lookupFailed": "Pencarian di platform gagal. Coba lagi sebentar lagi.",
+      "verifyFailed": "Verifikasi gagal",
+      "stillPresent": "Hash masih ada di profilmu — hapus dulu.",
+      "unlinkFailed": "Gagal melepas tautan",
+      "noSuchLink": "Tautan itu tidak ada untuk dihapus."
+    },
+    "confirmUnlink": "Hapus tautan {{platform}}-mu? Pastikan hash verifikasi sudah tidak ada di profil publikmu, jika tidak, pelepasan tautan akan ditolak.",
+    "removed": "Tautan dihapus",
+    "title": "Profil eksternal yang ditautkan",
+    "intro": "Buktikan bahwa kamu pemilik channel YouTube (atau lainnya) dengan menempelkan hash 3Speak unikmu ke deskripsi profil publikmu, lalu verifikasi di sini.",
+    "openProfile": "Buka profil",
+    "removeLink": "Hapus tautan",
+    "empty": "Belum ada profil eksternal yang ditautkan.",
+    "addPlatform": "Tambah platform baru",
+    "flowTitle": "Tautkan channel {{platform}}-mu",
+    "step1": "Salin hash verifikasi unikmu:",
+    "step2": "<strong>Tempel ke deskripsi profil {{platform}} publikmu</strong> (di mana saja — about / bio / deskripsi boleh). Simpan perubahannya.",
+    "step3": "Masukkan identitas {{platform}}-mu:",
+    "verifying": "Memverifikasi…",
+    "verify": "Verifikasi"
+  },
+  "auth": {
+    "title": "Beri izin 3Speak!",
+    "text": "Untuk mengunggah video di 3Speak, kami butuh otoritas posting-mu. Ini memungkinkan kami menerbitkan video yang kamu unggah ke Hive. Kamu cukup memberi kami otoritas posting sekali saja.",
+    "authorize": "Beri izin"
+  },
+  "beneficiary": {
+    "errors": {
+      "emptyUsername": "Nama pengguna tidak boleh kosong.",
+      "sameUser": "Penerima manfaat tidak boleh pengguna yang sama",
+      "greaterThanZero": "Persentase reward harus lebih dari 0.",
+      "exceedsRemaining": "Persentase reward melebihi sisa alokasi {{percent}}%.",
+      "validNumber": "Masukkan angka yang valid",
+      "validPercent": "Masukkan persentase reward yang valid.",
+      "duplicate": "Akun ini sudah ada di daftar.",
+      "invalidAccount": "Nama pengguna atau ID komunitas tidak valid.",
+      "cannotIncrease": "Tidak bisa dinaikkan melebihi sisa {{percent}}%",
+      "pendingRow": "@{{account}} belum ditambahkan — klik + untuk menambahkannya, atau kosongkan kolomnya.",
+      "atLeastOne": "Persentase reward minimal 1%"
+    },
+    "title": "Penerima manfaat",
+    "intro": "Tambahkan pengguna yang akan otomatis menerima sebagian reward dari postingan ini.",
+    "minPercent": "% (min {{percent}}%)",
+    "usernamePlaceholder": "Masukkan nama pengguna",
+    "minimumReward": "Reward minimal <strong>1%</strong>",
+    "checking": "Memeriksa <strong>@{{account}}</strong> di Hive…",
+    "notExisting": "⚠️ <strong>@{{account}}</strong> bukan akun Hive yang ada.",
+    "notAdded": "⚠️ <strong>@{{account}}</strong> belum ditambahkan — klik <strong>+</strong> untuk menambahkannya, atau kosongkan kolomnya.",
+    "infrastructure": "10% === Infrastruktur",
+    "videoEncoding": "Encoding Video === 1%",
+    "defaults": "Penerima Manfaat Default ({{count}})"
+  },
+  "qr": {
+    "scan": "Pindai QR ini di Hive Keychain:",
+    "click": "Klik QR untuk membuka di aplikasi Keychain"
+  },
+  "editVideoHint": {
+    "title": "Edit videomu kapan saja",
+    "text": "Buka salah satu videomu dan cari <strong>tombol pena</strong> di bilah aksi di bawah pemutar. Klik untuk mengubah judul, deskripsi, thumbnail, tag, dan lainnya.",
+    "penTitle": "Edit detail video",
+    "tip": "Tip",
+    "caption": "Tombol pena inilah yang kamu cari",
+    "gotIt": "Mengerti"
+  },
+  "verifyAuth": {
+    "title": "Memverifikasi Otorisasi",
+    "text": "Mohon tunggu, kami sedang memverifikasi bahwa otorisasi sudah diberikan..."
+  },
+  "editor": {
+    "confirmLeave": "Editor masih terbuka. Meninggalkan halaman ini akan menutup editor dan perubahan yang belum disimpan akan hilang.\n\nOK = Tutup editor & keluar\nBatal = Tetap di halaman ini",
+    "confirmClose": "Yakin ingin menutup editor? Perubahan yang belum disimpan akan hilang.",
+    "iframeTitle": "Editor Video 3Speak",
+    "finding": "Mencari editor yang tersedia...",
+    "loading": "Memuat editor...",
+    "unavailable": "Saat ini tidak ada server editor yang tersedia. Silakan coba lagi nanti.",
+    "sending": "Mengirim ke layanan render...",
+    "rendering": "Merender... {{percent}}%",
+    "complete": "Render selesai!",
+    "useVideo": "Gunakan Video",
+    "preparing": "Menyiapkan video untuk diunggah...",
+    "renderUnavailable": "Layanan render belum tersedia. Data timeline dicatat ke konsol.",
+    "backToEditor": "Kembali ke Editor",
+    "postError": "Gagal menyiapkan video untuk diunggah. Silakan coba unduh saja."
+  },
+  "profile": {
+    "mustLogin": "Kamu harus masuk dulu",
+    "followed": "Diikuti",
+    "unfollowed": "Berhenti diikuti",
+    "followFailed": "Gagal mengikuti: {{error}}",
+    "unfollowFailed": "Gagal berhenti mengikuti: {{error}}",
+    "avatarAlt": "Profil",
+    "posts": "Postingan",
+    "followers": "Pengikut",
+    "joined": "Bergabung {{date}}",
+    "about": "Tentang",
+    "noBio": "Tidak ada bio"
+  },
+  "report": {
+    "reasons": {
+      "spamMisleading": "Spam atau menyesatkan",
+      "harassment": "Pelecehan atau perundungan",
+      "hateSpeech": "Ujaran kebencian",
+      "violence": "Konten kekerasan atau sadis",
+      "sexual": "Konten seksual",
+      "copyright": "Pelanggaran hak cipta",
+      "scam": "Penipuan",
+      "other": "Lainnya",
+      "spam": "Spam",
+      "impersonation": "Peniruan identitas",
+      "spamAccount": "Akun spam"
+    },
+    "selectReasonError": "Silakan pilih alasan",
+    "loginRequired": "Kamu harus masuk untuk melapor",
+    "submitted": "Laporan terkirim. Terima kasih.",
+    "failed": "Gagal mengirim laporan",
+    "titles": {
+      "user": "Laporkan Pengguna",
+      "comment": "Laporkan Komentar",
+      "short": "Laporkan Shorts",
+      "post": "Laporkan Postingan",
+      "video": "Laporkan Video"
+    },
+    "reason": "Alasan",
+    "selectReason": "Pilih alasan...",
+    "details": "Detail tambahan (opsional)",
+    "detailsPlaceholder": "Berikan konteks lebih lanjut...",
+    "submitting": "Mengirim...",
+    "submit": "Kirim Laporan"
+  },
+  "upload": {
+    "missingInfo": "Informasi video atau thumbnail tidak lengkap.",
+    "updateFailed": "Gagal memperbarui info video. Silakan coba lagi.",
+    "title": "Unggah Video dan Thumbnail",
+    "selectVideo": "Pilih Video",
+    "thumbnail": "Thumbnail",
+    "clickThumbnail": "Klik untuk mengunggah thumbnail",
+    "updateInfo": "Perbarui Info Video"
+  }
+}

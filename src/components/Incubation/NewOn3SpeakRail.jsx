@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from 'react';
 import Card3 from '../Cards/Card3';
 import { fetchIncubationFeed } from '../../lib/incubation';
 import { useAppStore } from '../../lib/store';
+import { useTranslation } from 'react-i18next';
 import './NewOn3SpeakRail.scss';
 
 /**
@@ -21,6 +22,7 @@ import './NewOn3SpeakRail.scss';
  * and no layout until incubating users actually exist.
  */
 export default function NewOn3SpeakRail({ limit = 8 }) {
+  const { t } = useTranslation();
   const [items, setItems] = useState([]);
   // Their own posts are not a discovery: this rail exists to put NEW people in
   // front of everyone else, and seeing yourself in it is both useless and a
@@ -59,10 +61,10 @@ export default function NewOn3SpeakRail({ limit = 8 }) {
   if (!videos.length) return null;
 
   return (
-    <section className="new3s-rail" aria-label="New on 3Speak">
+    <section className="new3s-rail" aria-label={t('incubation.rail.aria')}>
       <header className="new3s-rail-head">
-        <h3>Just getting started</h3>
-        <p>New here, not on Hive yet. These posts live on 3Speak. Give them a warm welcome before they join Hive.</p>
+        <h3>{t('incubation.rail.title')}</h3>
+        <p>{t('incubation.rail.body')}</p>
       </header>
       <Card3 videos={videos} />
     </section>

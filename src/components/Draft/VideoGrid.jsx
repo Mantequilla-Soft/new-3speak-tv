@@ -5,12 +5,14 @@ import FilterBar from './FilterBar';
 import { toastIn } from '../../utils/toast';
 import 'react-toastify/dist/ReactToastify.css';
 import "./VideoGrid.scss"
+import { useTranslation } from 'react-i18next';
 
 // Every toast from this module is headed "Video"; the message becomes the
 // line under it. See utils/toast.js.
 const toast = toastIn('Video');
 
 const VideoGrid = ({ videos }) => {
+  const { t } = useTranslation();
   const [filter, setFilter] = useState('all');
 
   const filteredVideos = videos.filter(video => {
@@ -23,19 +25,19 @@ const VideoGrid = ({ videos }) => {
   };
 
   const handleEdit = (id) => {
-    toast.info(`Editing video coming soon`);
+    toast.info(t('upload.drafts.comingSoon.edit'));
   };
 
   const handleView = (id) => {
-    toast.info(`Viewing video coming soon`);
+    toast.info(t('upload.drafts.comingSoon.view'));
   };
 
   const handleDelete = (id) => {
-    toast.error(`Deleting video coming soon`);
+    toast.error(t('upload.drafts.comingSoon.delete'));
   };
 
   const handlePublish = (id) => {
-    toast.success(`Publishing video coming soon`);
+    toast.success(t('upload.drafts.comingSoon.publish'));
   };
 
   // console.log(filteredVideos)
@@ -46,7 +48,7 @@ const VideoGrid = ({ videos }) => {
       
       {filteredVideos.length === 0 ? (
         <div className="no-videos fade-in">
-          <p>No videos found with the selected filter.</p>
+          <p>{t('upload.drafts.emptyFiltered')}</p>
         </div>
       ) : (
         <div className="video-grid">

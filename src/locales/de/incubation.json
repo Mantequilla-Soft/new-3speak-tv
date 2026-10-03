@@ -1,0 +1,569 @@
+{
+  "tracks": {
+    "viewer": {
+      "title": "Vor allem Zuschauer",
+      "body": "Ich bin hier, um zuzuschauen, zu kommentieren und Creatorn zu folgen."
+    },
+    "creator": {
+      "title": "Vor allem Creator",
+      "body": "Ich will Videos und Shorts veröffentlichen und einen Kanal aufbauen."
+    },
+    "advertiser": {
+      "title": "Werbekunde",
+      "body": "Ich vertrete eine Marke und will 3Speak-Zuschauer erreichen."
+    }
+  },
+  "tips": {
+    "shortsCamera": {
+      "title": "Shorts sind ein Tab, keine eigene App",
+      "body": "Öffne Shorts über die obere Leiste, um zuzuschauen, oder nutze Teilen, um einen zu posten. Hochformat-Clips von deinem Handy funktionieren so, wie sie sind.",
+      "cta": "Shorts öffnen"
+    },
+    "searchSlash": {
+      "title": "Drück / zum Suchen",
+      "body": "Von überall auf der Seite springt die Slash-Taste ins Suchfeld. Durchsucht werden Videos, Creator und Communitys."
+    },
+    "communities": {
+      "title": "Communitys bringen Leute zu einem Thema zusammen",
+      "body": "Tritt ein paar bei, und ihre Videos erscheinen in deinen Feeds. Du kannst auch in eine Community posten, damit die richtigen Leute es sehen.",
+      "cta": "Communitys durchsuchen"
+    },
+    "followFeed": {
+      "title": "Wem du folgst, hat einen eigenen Feed",
+      "body": "Sobald du ein paar Creatorn folgst, zeigt der Folge-ich-Feed nur deren Videos. So hörst du am schnellsten auf, an Dingen vorbeizuscrollen, die dich nicht interessieren.",
+      "cta": "Ansehen"
+    },
+    "interests": {
+      "title": "Sag uns, was dich interessiert",
+      "body": "Wähle in den Einstellungen ein paar Themen, und die Startseiten-Feeds richten sich sofort stärker danach aus. Das funktioniert besser als noch so viel Scrollen."
+    },
+    "hideWatched": {
+      "title": "Angesehene Videos können aus den Feeds verschwinden",
+      "body": "In den Einstellungen gibt es den standardmäßig aktiven Schalter \"Angesehene ausblenden\", damit dir dasselbe Video nicht mehr hinterherläuft, wenn du es schon gesehen hast."
+    },
+    "timestamps": {
+      "title": "Kommentiere einen genauen Moment",
+      "body": "Während ein Video läuft, kann ein Kommentar den Zeitstempel enthalten, an dem du warst. Leser bekommen einen Link direkt zu dieser Sekunde."
+    },
+    "badges": {
+      "title": "Badges werden verliehen, nicht beansprucht",
+      "body": "Leute auf Hive bekommen Badges für Events und Meilensteine verliehen. Öffne eines, um alle zu sehen, die es haben, und was sie veröffentlichen.",
+      "cta": "Badges ansehen"
+    },
+    "audio": {
+      "title": "Auf 3Speak gibt es auch Audio",
+      "body": "Podcasts und Musik findest du unter Audio in der oberen Leiste, mit eigenem Player. Audio veröffentlichst du genauso wie Videos.",
+      "cta": "Audio öffnen"
+    },
+    "backlog": {
+      "title": "Nichts, was du jetzt postest, ist verschwendet",
+      "body": "Alles, was du während deines Warm-ups veröffentlichst, kann unter deinem eigenen Namen erneut auf Hive veröffentlicht werden, sobald dein Konto da ist, und du entscheidest, was mitkommt."
+    }
+  },
+  "trackChooser": {
+    "saveFailed": "Das wurde nicht gespeichert. Bitte versuch es nochmal.",
+    "saving": "Wird gespeichert..."
+  },
+  "trackQuestion": {
+    "title": "Was führt dich zu 3Speak?",
+    "intro": "Davon hängt dein Weg zu einem Hive-Konto ab: Zuschauer schauen zu und machen mit, Creator veröffentlichen, und Werbekunden richten ihre Marke ein."
+  },
+  "tipCard": {
+    "aria": "Tipp",
+    "dismiss": "Tipp schließen",
+    "takeALook": "Ansehen"
+  },
+  "progress": {
+    "tasks": {
+      "video": {
+        "label_one": "Ein Video hochladen",
+        "label_other": "{{count}} Videos hochladen",
+        "hint": "Teile etwas über dich und darüber, worum es auf deinem Kanal gehen wird.",
+        "why": "Das ist das Erste, was sich das Team bei der Prüfung ansieht, und das Erste, was Besucher sehen, wenn sie deinen Kanal öffnen.",
+        "counts": {
+          "0": "Jedes Video, das du über das Upload-Studio veröffentlichst.",
+          "1": "Es bleibt deins. Wenn du hochgestuft wirst, wählst du, welche dieser Posts unter deinem eigenen Namen auf Hive veröffentlicht werden."
+        },
+        "cta": "Video hochladen"
+      },
+      "short": {
+        "label_one": "Einen Short posten",
+        "label_other": "{{count}} Shorts posten",
+        "hint": "Mach bei 3Speak Shorts mit und lade ein paar Momente aus deinem Alltag oder Geschichten hoch, die du teilen willst.",
+        "why": "Mit Shorts wirst du am schnellsten gefunden. Sie laufen in einem Feed mit Creatorn, denen die Leute noch nicht folgen, und erreichen so mehr als nur deinen eigenen Kanal.",
+        "counts": {
+          "0": "Hochformat-Videos, gepostet über den Shorts-Uploader.",
+          "1": "Zu jedem Thema, das du magst."
+        },
+        "cta": "Short posten"
+      },
+      "follow": {
+        "label_one": "Einem Creator folgen",
+        "label_other": "{{count}} Creatorn folgen",
+        "hint": "Bau dir ein Netzwerk aus Gleichgesinnten oder Creatorn auf, die du spannend findest.",
+        "why": "Erst deine Folge-Liste macht den Startseiten-Feed zu deinem Feed. Sie kommt mit zu Hive, wenn du hochgestuft wirst.",
+        "counts": {
+          "0": "Creator, denen du gerade folgst.",
+          "1": "Wenn du jemandem entfolgst, sinkt der Zähler wieder. Gezählt wird also, wem du wirklich folgst, nicht wie oft du auf Buttons gedrückt hast."
+        },
+        "cta": "Creator finden"
+      },
+      "comment": {
+        "label_one": "Einen Kommentar schreiben",
+        "label_other": "{{count}} Kommentare schreiben",
+        "why": "Über Kommentare finden dich Leute, bevor du ein Publikum hast. Eine echte Antwort unter dem Video von jemand anderem bringt dir mehr als ein Upload, den noch niemand gesehen hat.",
+        "cta": "Etwas zum Antworten finden",
+        "hint_one": "Kommentare zählen ab {{count}} Zeichen. Ein echter Gedanke, nicht nur „nice“.",
+        "hint_other": "Kommentare zählen ab {{count}} Zeichen. Ein echter Gedanke, nicht nur „nice“.",
+        "counts": {
+          "minChars_one": "Mindestens {{count}} Zeichen in deinen eigenen Worten.",
+          "minChars_other": "Mindestens {{count}} Zeichen in deinen eigenen Worten.",
+          "realThought": "Ein echter Gedanke statt eines einzelnen Worts.",
+          "othersPost": "Unter dem Post von jemand anderem. Antworten unter deinen eigenen Videos oder auf deine eigenen Kommentare sind ein Gespräch mit dir selbst und zählen nicht."
+        }
+      },
+      "watch": {
+        "labelHours_one": "Eine Stunde auf 3Speak zuschauen",
+        "labelHours_other": "{{count}} Stunden auf 3Speak zuschauen",
+        "labelMinutes_one": "Eine Minute auf 3Speak zuschauen",
+        "labelMinutes_other": "{{count}} Minuten auf 3Speak zuschauen",
+        "hint": "Beliebige Videos. Gezählt wird, solange du wirklich zuschaust.",
+        "why": "Zuschauen zeigt, dass du hier bist, um mitzumachen, und nicht nur, um zu posten. Dieses Ziel erreichen die meisten, ohne es zu versuchen.",
+        "counts": {
+          "0": "Zeit auf 3Speak selbst. Dasselbe Video, auf einer anderen Seite eingebettet, zählt nicht.",
+          "1": "Einmal pro Video. Erneutes Ansehen erhöht seine Bestzeit, addiert aber nie etwas dazu, und kein einzelnes Video kann alles allein liefern.",
+          "2": "Echte Wiedergabezeit, daher wird schnelleres Abspielen nicht bestraft, und langsameres Abspielen streckt die Stunde nicht.",
+          "3": "Auf dem Bildschirm. Ein Video, das in einem Hintergrund-Tab läuft, zählt nicht zur Stunde.",
+          "4": "Nicht deine eigenen Videos.",
+          "5": "Im privaten Modus wird beim Zuschauen nichts erfasst."
+        },
+        "cta": "Etwas ansehen"
+      },
+      "time": {
+        "label_one": "Einen Tag dabei sein",
+        "label_other": "{{count}} Tage dabei sein",
+        "hint": "Das erledigt sich von selbst. Du musst nichts tun.",
+        "why": "Ein Konto, das vor einer Stunde aufgetaucht ist, und eins, das schon ein paar Tage da ist, sehen auf dem Papier gleich aus. Erst die Tage unterscheiden sie, deshalb warten alle dieselbe kurze Zeit.",
+        "counts": {
+          "fullDays_one": "Ein ganzer Tag ab dem Tag deiner Registrierung.",
+          "fullDays_other": "{{count}} ganze Tage ab dem Tag deiner Registrierung.",
+          "forYouWhen": "Für dich ist das {{when}}. Die anderen Ziele kannst du alle schon vorher erreichen.",
+          "otherGoals": "Die anderen Ziele kannst du alle schon vorher erreichen.",
+          "keepsCounting": "Es zählt weiter, egal ob du hier bist oder nicht, du musst also nichts dafür tun."
+        }
+      },
+      "subscription": {
+        "label_one": "Einer Community beitreten",
+        "label_other": "{{count}} Communitys beitreten",
+        "hint": "Finde Communitys zu den Dingen, die du gern ansiehst oder machst.",
+        "why": "Communitys bündeln die Videos zu einem Thema und die Leute, denen es wichtig ist. Wenn du einer beitrittst, füllt sich dein Feed mit mehr von dem, was du magst, und für Creator findet ein neuer Kanal dort seine ersten Zuschauer.",
+        "counts": {
+          "0": "Communitys, in denen du gerade Mitglied bist.",
+          "1": "Wenn du eine verlässt, sinkt der Zähler wieder."
+        },
+        "cta": "Communitys durchsuchen"
+      },
+      "profile": {
+        "label_one": "Markenprofil einrichten",
+        "label_other": "Markenprofil einrichten",
+        "hint": "Dein Markenname, was du machst, und dein Logo.",
+        "why": "Zuschauer und das Team, das dich prüft, sehen vor allem anderen, wer hinter einer Werbung steckt. Ein vollständiges Profil macht eine Marke erkennbar und vertrauenswürdig."
+      },
+      "contact": {
+        "label_one": "Geschäftskontakt hinzufügen",
+        "label_other": "Geschäftskontakt hinzufügen",
+        "hint": "Eine E-Mail-Adresse plus deine Anschrift oder eine Website.",
+        "why": "Bevor eine Werbung läuft, braucht das Team einen echten Weg, das Unternehmen dahinter zu erreichen. Deine E-Mail-Adresse und Anschrift sind privat: Sie werden nie auf der Blockchain gespeichert oder irgendwo angezeigt.",
+        "counts": {
+          "0": "E-Mail: erforderlich.",
+          "1": "Anschrift: optional.",
+          "2": "Du brauchst deine Anschrift ODER eine Website in deinem Markenprofil oben, mindestens eins von beiden."
+        }
+      }
+    },
+    "duration": {
+      "s": "{{s}} s",
+      "hm": "{{h}} Std. {{m}} Min.",
+      "h": "{{h}} Std.",
+      "m": "{{m}} Min."
+    },
+    "title": "Dein Weg zu einem Hive-Konto",
+    "needsTrack": "Deine Liste mit Aufgaben hängt davon ab, was dich zu 3Speak führt.",
+    "choosePath": "Wähle deinen Weg",
+    "doneCount": "{{done}} von {{total}} erledigt",
+    "overallAria": "Gesamtfortschritt",
+    "hideDetails": "Details ausblenden",
+    "showLeft": "Zeigen, was noch fehlt",
+    "whatCounts": "Was zählt",
+    "reviewDone": "Alles erledigt. Das Team prüft deinen Kanal und stuft dich hoch. Du musst nichts mehr tun.",
+    "reviewPending": "Sobald du all das erledigt hast, prüft das Team deinen Kanal und stuft dich hoch."
+  },
+  "navProgress": {
+    "chooseTitle": "Sag uns, was dich zu 3Speak führt, um deinen Weg zu einem Hive-Konto zu sehen.",
+    "titleComplete_one": "{{count}} Ziel erledigt (100 %). Das Team prüft deinen Kanal.",
+    "titleComplete_other": "Alle {{count}} Ziele erledigt (100 %). Das Team prüft deinen Kanal.",
+    "titleProgress_one": "{{pct}} % auf dem Weg zu deinem Hive-Konto. {{done}} von {{count}} Ziel komplett erledigt.",
+    "titleProgress_other": "{{pct}} % auf dem Weg zu deinem Hive-Konto. {{done}} von {{count}} Zielen komplett erledigt.",
+    "ariaComplete_one": "Dein Fortschritt: 100 %, {{count}} Ziel erledigt",
+    "ariaComplete_other": "Dein Fortschritt: 100 %, alle {{count}} Ziele erledigt",
+    "ariaProgress_one": "Dein Fortschritt: {{pct}} %, {{done}} von {{count}} Ziel komplett erledigt",
+    "ariaProgress_other": "Dein Fortschritt: {{pct}} %, {{done}} von {{count}} Zielen komplett erledigt",
+    "celebrate": "Alle Ziele auf dem Weg zu deinem Hive-Konto erledigt."
+  },
+  "welcome": {
+    "what": {
+      "title": "Willkommen bei 3Speak",
+      "p1": "3Speak ist eine Videoplattform auf Basis von <b>Hive</b>, einer öffentlichen Blockchain. Die Videos hier gehören nicht uns: Sie gehören den Leuten, die sie posten, und können echte Belohnungen von den Leuten einbringen, die sie ansehen."
+    },
+    "warmup": {
+      "title": "Du bist in deinem Warm-up",
+      "p1": "Ein Hive-Konto ist echt und dauerhaft, und jemand muss dafür bezahlen. Statt also vorab etwas von dir zu verlangen, haben wir dir sofort einen Namen und einen Ort zum Veröffentlichen gegeben.",
+      "p2": "Alles, was du während des Warm-ups erstellst, liegt auf 3Speak. Wenn du so weit bist, prüft das Team deinen Kanal und gibt dir kostenlos ein eigenes Hive-Konto. Deine Videos, Shorts und Follows kommen dann unter deinem eigenen Namen auf die Blockchain, und du entscheidest, was mitkommt."
+    },
+    "do": {
+      "title": "Was du jetzt schon tun kannst",
+      "upload": "Videos hochladen, genau wie alle anderen hier.",
+      "shorts": "Shorts vom Handy oder Desktop posten.",
+      "comment": "Alles kommentieren, auch Videos von Leuten, die schon auf Hive sind.",
+      "follow": "Creatorn folgen und Communitys beitreten.",
+      "watch": "Zuschauen. Dein Verlauf und dein Feed gehören dir vom ersten Tag an.",
+      "aside": "Ein paar Dinge warten auf dein Konto: Belohnungen verdienen und Trinkgeld geben. Dabei geht es um echtes Geld, deshalb braucht es dafür ein Konto, das wirklich dir gehört."
+    },
+    "path": {
+      "p1": "Dein Profil zeigt eine kurze Liste mit Aufgaben, und die hängt davon ab, wofür du hier bist: Zuschauer schauen zu und machen mit, Creator veröffentlichen, und Werbekunden richten ihre Marke ein.",
+      "p2": "Das ist kein Test. So können wir einfach ein echtes Konto von einem leeren oder böswilligen unterscheiden. Sobald die Liste erledigt ist, prüft dich das Team und stuft dich so schnell wie möglich hoch.",
+      "perkEarn": "Posts, die verdienen",
+      "perkKeys": "Schlüssel, die nur du hast",
+      "perkNetwork": "Das ganze Hive-Netzwerk"
+    },
+    "showList": "Zeig mir meine Liste",
+    "decideLater": "Später entscheiden"
+  },
+  "profile": {
+    "unlocks": {
+      "earn": {
+        "title": "Deine Posts fangen an zu verdienen.",
+        "body": "Videos auf Hive können von allen, die sie ansehen, mit HIVE und HBD belohnt werden, und sie können Werbung enthalten, an der du beteiligt bist."
+      },
+      "publish": {
+        "title": "Veröffentliche alles, was du hier gemacht hast.",
+        "body": "Die Videos, Shorts und Follows auf dieser Seite können unter deinem eigenen Namen auf die Chain gepostet werden, und du wählst, welche."
+      },
+      "buttons": {
+        "title": "Voten, Trinkgeld geben, folgen und Playlists erstellen.",
+        "body": "All die Buttons, die heute für dich noch ausgegraut sind."
+      },
+      "keys": {
+        "title": "Schlüssel, die nur du hast.",
+        "body": "Niemand kann dich aussperren, und derselbe Login funktioniert in allen Hive-Apps, nicht nur auf 3Speak."
+      },
+      "ecosystem": {
+        "title": "Werde Teil des globalen Hive-Ökosystems.",
+        "body": "3Speak ist eine App in einem ganzen Netzwerk: Blogs, Communitys, Spiele, Marktplätze und mehr, alle mit demselben Konto und derselben Folge-Liste."
+      }
+    },
+    "advertiserUnlocks": {
+      "book": {
+        "title": "Werbung auf ganz 3Speak buchen.",
+        "body": "Video-Spots, Shorts-Spots, Player-Banner, Ticker und Pre-Upload-Spots, von einem Tag bis zu drei Monaten."
+      },
+      "pay": {
+        "title": "Aus deiner eigenen Wallet bezahlen.",
+        "body": "In HBD oder HIVE, direkt von deinem Konto. Keine Karte und kein Mittelsmann."
+      },
+      "results": {
+        "title": "Sieh, was deine Werbung gebracht hat.",
+        "body": "Wiedergaben und Klicks für jede Buchung und eine Gutschrift auf deine nächste, falls eine Buchung hinter den Erwartungen bleibt."
+      },
+      "customers": {
+        "title": "Sprich mit deinen Kunden, wenn du willst.",
+        "body": "Poste Videos, beantworte Kommentare und folge Leuten unter dem Namen deiner Marke."
+      },
+      "keys": {
+        "title": "Schlüssel, die nur du hast.",
+        "body": "Niemand kann dich aussperren, und derselbe Login funktioniert in allen Hive-Apps, nicht nur auf 3Speak."
+      }
+    },
+    "loadFailed": "Dieses Profil konnte nicht geladen werden.",
+    "badge": {
+      "onHive": "Auf Hive",
+      "advertiser": "Werbekunde · Einstieg",
+      "gettingStarted": "Einstieg"
+    },
+    "stats": {
+      "posts_one": "<b>{{count}}</b>Post",
+      "posts_other": "<b>{{count}}</b>Posts",
+      "followers_one": "<b>{{count}}</b>Follower",
+      "followers_other": "<b>{{count}}</b>Follower",
+      "following_one": "<b>{{count}}</b>folgt",
+      "following_other": "<b>{{count}}</b>folgt"
+    },
+    "editProfile": "Profil bearbeiten",
+    "note": {
+      "graduated": "Jetzt auf Hive als <userLink>@{{user}}</userLink>. Alles unten wurde davor erstellt.",
+      "advertiser": "Das ist die Seite deiner Marke auf 3Speak. Erledige die Schritte unten, dann prüft das Team deine Marke. Nach der Freigabe bekommst du ein Hive-Konto: Das ist dein Werbekonto, mit dem du Werbung buchst und bezahlst.",
+      "own": "So sehen dich andere. Deine Posts liegen auf 3Speak und noch nicht auf der Hive-Blockchain, daher verdienen sie keine Belohnungen. Das ändert sich, wenn du dein Konto bekommst, nachdem du alle Aufgaben unten erledigt hast.",
+      "visitor": "Neu hier, noch nicht auf Hive. Diese Posts liegen auf 3Speak und verdienen deshalb vorerst keine Belohnungen. Folge und kommentiere trotzdem: Frühe Ermutigung trägt jemanden durch die ersten Wochen. Wenn die Person ihr Hive-Konto bekommt, sagen wir dir Bescheid, damit du ihr auch dort folgen kannst."
+    },
+    "tabs": {
+      "aria": "Profilbereiche",
+      "goals": "Deine Ziele",
+      "uploads": "Uploads",
+      "comments": "Kommentare",
+      "followers": "Follower",
+      "following": "Folgt"
+    },
+    "videosAndShorts": "Videos und Shorts",
+    "market": {
+      "audience": "Das Publikum, das auf deine Werbung wartet",
+      "format": "Wähle das Format, das zu deiner Botschaft passt"
+    },
+    "brandVideos": "Die Videos deiner Marke",
+    "optional": "optional",
+    "empty": {
+      "advertiser": "Videos hier sind dafür da, mit Kunden zu sprechen, wenn du willst. Werbung wird separat auf der Seite „Werben“ gebucht und braucht keine Videos.",
+      "own": "Noch nichts. Dein erster Upload hakt den Punkt auf der Liste daneben ab.",
+      "visitor": "Noch nichts veröffentlicht."
+    },
+    "videos": "Videos",
+    "unlocksTitleAdvertiser": "Was dir dein Werbekonto bringt",
+    "unlocksTitle": "Was dir ein Hive-Konto bringt",
+    "fineprint": "In deinem 3Speak-Profil gespeichert. Es kommt mit allem anderen zu Hive, wenn du dein Konto bekommst."
+  },
+  "activity": {
+    "empty": {
+      "comments": "Noch nichts gesagt.",
+      "followers": "Noch folgt niemand.",
+      "following": "Folgt noch niemandem."
+    },
+    "loadFailed": "Das konnte nicht geladen werden.",
+    "publishedToHive": "auf Hive veröffentlicht",
+    "onHive": "auf Hive"
+  },
+  "bell": {
+    "unreadAria_one": "Benachrichtigungen, {{count}} ungelesen",
+    "unreadAria_other": "Benachrichtigungen, {{count}} ungelesen",
+    "empty": "Noch nichts. Wenn jemand auf deine Videos antwortet oder sie liked, erscheint das hier.",
+    "replied": "<b>@{{name}}</b> hat auf deinen Post geantwortet",
+    "liked": "<b>@{{name}}</b> gefällt dein Post"
+  },
+  "rail": {
+    "aria": "Neu auf 3Speak",
+    "title": "Gerade erst gestartet",
+    "body": "Neu hier, noch nicht auf Hive. Diese Posts liegen auf 3Speak. Heiß sie herzlich willkommen, bevor sie zu Hive kommen."
+  },
+  "sessionSync": {
+    "signedInAs": "Du bist als @{{name}} angemeldet",
+    "caughtUp": "Dein Hive-Konto ist bereit, daher wurde dieses Gerät auf den neuesten Stand gebracht.",
+    "openFailed": "Butter Auth konnte nicht geöffnet werden",
+    "title": "Sitzung neu verbinden",
+    "lede": "Dieses Gerät hat die Verbindung zu deinem Konto verloren, daher kann 3Speak deine Posts, deinen Fortschritt und deine Benachrichtigungen nicht laden, bis sie wiederhergestellt ist.",
+    "text": "Es ist nichts verloren. Alles, was du erstellt hast, liegt in deinem Konto, nicht in diesem Browser. Das Neuverbinden dauert meist nur eine Sekunde und ohne Tippen.",
+    "opening": "Wird geöffnet…",
+    "reconnect": "Neu verbinden"
+  },
+  "admin": {
+    "title": "Admin-Ansicht",
+    "note": "Nur 3Speak-Admins sehen diesen Bereich.",
+    "brandProfile": "Markenprofil",
+    "public": "öffentlich",
+    "fields": {
+      "handle": "Handle",
+      "brandName": "Markenname",
+      "logo": "Logo",
+      "about": "Info",
+      "website": "Website",
+      "location": "Standort",
+      "interests": "Interessen",
+      "activity": "Aktivität",
+      "email": "E-Mail",
+      "address": "Anschrift",
+      "contactGoal": "Kontaktziel",
+      "firstSaved": "Zuerst gespeichert",
+      "lastChanged": "Zuletzt geändert",
+      "butrauthUser": "ButrAuth-Nutzer"
+    },
+    "activityLine": "{{posts}} Posts · {{followers}} Follower · folgt {{following}}",
+    "notSet": "nicht festgelegt",
+    "none": "keine",
+    "privateContact": "Privater Kontakt",
+    "privateNote": "nur für Admins, nie auf der Chain",
+    "notGiven": "nicht angegeben",
+    "met": "Erfüllt",
+    "notMet": "Noch nicht erfüllt",
+    "unknown": "unbekannt",
+    "noContact": "Noch kein Geschäftskontakt gespeichert."
+  },
+  "contact": {
+    "savedComplete": "Gespeichert. Nur das 3Speak-Team kann das sehen.",
+    "savedIncomplete": "Gespeichert. Füg deine Anschrift oder eine Website in deinem Profil hinzu, um diesen Schritt abzuschließen.",
+    "privateNote": "<b>Privat.</b> Deine E-Mail-Adresse und Anschrift werden nie auf der Blockchain gespeichert und nie in deinem Profil oder anderswo angezeigt. Nur das 3Speak-Team sieht sie, um dich wegen deiner Werbung zu kontaktieren.",
+    "email": "E-Mail",
+    "required": "erforderlich",
+    "emailPlaceholder": "du@deinemarke.com",
+    "address": "Anschrift",
+    "addressOptional": "optional, sofern dein Profil eine Website hat",
+    "ph": {
+      "line1": "Straße und Hausnummer",
+      "line2": "Adresszeile 2",
+      "postalCode": "Postleitzahl",
+      "city": "Stadt",
+      "region": "Bundesland oder Region",
+      "country": "Land"
+    },
+    "addressHint": "Eine Anschrift zählt, sobald Straße, Stadt und Land ausgefüllt sind. Keine Anschrift? Füg stattdessen eine Website zu deinem Markenprofil hinzu.",
+    "save": "Kontaktdaten speichern"
+  },
+  "brand": {
+    "saved": "Markenprofil gespeichert",
+    "name": "Markenname",
+    "namePlaceholder": "Deine Marke oder dein Unternehmen",
+    "about": "Was deine Marke macht",
+    "aboutPlaceholder": "Ein oder zwei Sätze, die Zuschauer verstehen.",
+    "logo": "Logo",
+    "uploading": "Wird hochgeladen…",
+    "replaceLogo": "Logo ersetzen",
+    "uploadLogo": "Logo hochladen",
+    "logoHint": "Wird als Kreis neben deiner Werbung angezeigt, daher eignet sich ein quadratisches Bild am besten.",
+    "website": "Website",
+    "websiteOptional": "optional, wenn du uns deine Anschrift gibst",
+    "websitePlaceholder": "https://deinemarke.com",
+    "websiteInvalid": "Verwende eine vollständige Adresse, die mit https:// beginnt",
+    "save": "Markenprofil speichern"
+  },
+  "createAccount": {
+    "started": "Lass uns dein Hive-Konto einrichten",
+    "openFailed": "Die Kontoeinrichtung konnte nicht geöffnet werden. Bitte versuch es nochmal.",
+    "readyAdvertiser": "Dein Werbekonto ist bereit",
+    "ready": "Dein Hive-Konto ist bereit",
+    "approvedAdvertiser": "Das Team hat deine Marke freigegeben. Erstelle kostenlos dein Hive-Konto, um Werbung zu buchen und zu bezahlen.",
+    "approved": "Das Team hat dich freigegeben. Erstelle kostenlos dein Hive-Konto: Es gehört allein dir.",
+    "createAdvertiser": "Mein Werbekonto erstellen",
+    "create": "Mein Hive-Konto erstellen"
+  },
+  "graduatedFollows": {
+    "message": "@{{handle}} hat jetzt ein Hive-Konto als @{{hiveUsername}}.",
+    "title": "Jemand, dem du folgst, wurde hochgestuft",
+    "followForReal": "Richtig folgen",
+    "gotIt": "Verstanden",
+    "nowFollowing": "Du folgst jetzt @{{hiveUsername}} auf Hive",
+    "followFailed": "Folgen fehlgeschlagen"
+  },
+  "backlog": {
+    "title": "Deine früheren Posts sind noch da",
+    "lede_one": "Du hast <b>{{count}} Sache</b> erstellt, bevor du ein Hive-Konto hattest. Sie liegt nur auf 3Speak. Du kannst sie jederzeit als <b>@{{user}}</b> auf Hive stellen.",
+    "lede_other": "Du hast <b>{{count}} Sachen</b> erstellt, bevor du ein Hive-Konto hattest. Sie liegen nur auf 3Speak. Du kannst sie jederzeit als <b>@{{user}}</b> auf Hive stellen.",
+    "text": "Du wählst einzeln aus, was rübergeht. Alles, was du nicht auswählst, bleibt genau so auf 3Speak, und du kannst jederzeit zum Rest zurückkommen.",
+    "later": "Später"
+  },
+  "graduation": {
+    "items": {
+      "video_one": "{{count}} Video",
+      "video_other": "{{count}} Videos",
+      "short_one": "{{count}} Short",
+      "short_other": "{{count}} Shorts",
+      "comment_one": "{{count}} Kommentar",
+      "comment_other": "{{count}} Kommentare",
+      "follow_one": "{{count}} Follow",
+      "follow_other": "{{count}} Follows",
+      "like_one": "{{count}} Like",
+      "like_other": "{{count}} Likes",
+      "creator_one": "{{count}} Creator",
+      "creator_other": "{{count}} Creatorn"
+    },
+    "listAnd": "{{rest}} und {{last}}",
+    "listSep": ", ",
+    "viewerDone": {
+      "watched": "{{time}} zugeschaut",
+      "written": "{{items}} geschrieben",
+      "followed": "{{items}} gefolgt"
+    },
+    "advertiser": {
+      "lede": "Das Team hat <b>{{name}}</b> geprüft. Erstelle kostenlos dein <b>Hive-Konto</b>: Es wird dein Werbekonto.",
+      "text": "Damit buchst du Werbung auf ganz 3Speak, von Video-Spots und Bannern bis zu Tickern, und bezahlst sie direkt aus dessen Wallet, in HBD oder HIVE. Der Schlüssel gehört allein dir, also kann dich niemand aussperren.",
+      "note": "Dein Markenprofil kommt mit. Deine geschäftliche E-Mail-Adresse und Anschrift bleiben privat bei 3Speak und kommen nie auf die Blockchain.",
+      "noteMoving": "Deine <b>{{moving}}</b> kommen auch mit und werden nach und nach über ein paar Tage veröffentlicht."
+    },
+    "viewer": {
+      "title": "Dein eigenes Konto ist bereit",
+      "ledeDone": "Als <b>@{{handle}}</b> hast du {{done}}. Mach daraus kostenlos ein <b>Hive-Konto</b>, das dir gehört.",
+      "lede": "Mach aus <b>@{{handle}}</b> kostenlos ein <b>Hive-Konto</b>, das dir gehört.",
+      "text": "Damit kannst du für Videos, die dir gefallen, voten und Trinkgeld geben, mit deinen Kommentaren verdienen, dich für Zuschauer-Belohnungen für das, was du ansiehst, anmelden und Playlists erstellen. Derselbe Login und dieselben Follows funktionieren in allen Hive-Apps, und der Schlüssel gehört allein dir."
+    },
+    "createMyAccount": "Mein Konto erstellen",
+    "creator": {
+      "title": "Du kannst jetzt dein eigenes Konto erstellen",
+      "lede": "Du hast als <b>@{{handle}}</b> gepostet. Mach daraus kostenlos ein echtes <b>Hive-Konto</b>, das dir gehört.",
+      "text": "Ein Hive-Konto ist ein Schlüssel, den nur du hast. Niemand kann dich aussperren, deine Posts fangen an zu verdienen, und derselbe Login funktioniert in allen Hive-Apps, nicht nur auf 3Speak."
+    },
+    "note": {
+      "moving": "Deine <b>{{moving}}</b> kommen mit.",
+      "everything": "Alles, was du hier erstellt hast, kommt mit.",
+      "gradual": "Die Veröffentlichung erfolgt nach und nach über ein paar Tage, weil ein brandneues Konto mit einem kleinen Posting-Kontingent startet.",
+      "waiting_one": "Eins davon wartet, bis der Post, auf den es antwortet, zuerst veröffentlicht ist.",
+      "waiting_other": "{{count}} davon warten, bis die Posts, auf die sie antworten, zuerst veröffentlicht sind."
+    },
+    "notYet": "Noch nicht"
+  },
+  "handleTaken": {
+    "openFailed": "Die Namensauswahl konnte nicht geöffnet werden",
+    "title": "Der Name @{{handle}} ist vergeben",
+    "lede": "Jemand hat ihn auf <b>Hive</b> registriert, daher kann er nicht dein Konto werden, wenn du so weit bist. Einen neuen zu wählen dauert jetzt nur einen Moment.",
+    "text": "Einen Namen hier zu wählen hat ihn nie reserviert. Hive kann einen Namen nur halten, indem das Konto erstellt wird, und genau diesen Schritt hast du noch nicht bezahlt – darum geht es ja gerade, wenn man ohne Konto startet.",
+    "note": "Nichts, was du erstellt hast, geht verloren. Deine Videos, Shorts, Kommentare und Follows bleiben bei dir und kommen unter dem Namen mit, den du wählst.",
+    "pick": "Neuen Namen wählen"
+  },
+  "backfill": {
+    "rcError": "Noch nicht genug Resource Credits. Sie füllen sich von selbst wieder auf; versuch es gleich nochmal.",
+    "today": "Heute",
+    "yesterday": "Gestern",
+    "groups": {
+      "video": "Videos",
+      "videoNote": "Eins alle 5 Minuten – das ist der langsame Teil.",
+      "short": "Shorts",
+      "comment": "Kommentare",
+      "vote": "Likes",
+      "follow": "Follows",
+      "other": "Alles andere"
+    },
+    "status": {
+      "done": "Veröffentlicht",
+      "publishing": "Wird veröffentlicht…",
+      "error": "Fehlgeschlagen",
+      "idle": "Nur auf 3Speak"
+    },
+    "wait": {
+      "ms": "{{m}} Min. {{s}} Sek.",
+      "s": "{{s}} Sek."
+    },
+    "noDate": "Kein Datum",
+    "waitToast": "Hive erlaubt einen Post alle 5 Minuten. Der nächste in {{wait}}.",
+    "publishedToast_one": "Auf Hive veröffentlicht",
+    "publishedToast_other": "{{count}} Einträge auf Hive veröffentlicht",
+    "loading": "Deine Posts werden geladen…",
+    "emptyTitle": "Nichts mehr zu veröffentlichen",
+    "emptyText": "Alles, was du vor deinem Hive-Konto erstellt hast, wurde entweder veröffentlicht oder lässt sich nicht erneut veröffentlichen.",
+    "title": "Veröffentliche, was du früher erstellt hast",
+    "intro": "Du hast das auf 3Speak erstellt, bevor du ein Hive-Konto hattest, daher existiert es nur hier. Wähle, was du als <b>@{{user}}</b> öffentlich haben willst, und veröffentliche es. Alles, was du nicht auswählst, bleibt genau so auf 3Speak.",
+    "note": "<b>Das Veröffentlichen dauert eine Weile, und das ist normal.</b> Hive erlaubt einen Post alle 5 Minuten pro Konto, und ein brandneues Konto hat ein kleines Posting-Kontingent, das sich über ein paar Tage wieder auffüllt. Follows, Likes und dein Profil sind günstig und gehen schnell durch. Veröffentliche ein paar auf einmal und komm wieder.",
+    "groupBy": "Liste gruppieren nach",
+    "timeline": "Zeitleiste",
+    "byType": "Nach Typ",
+    "rcBlockedIn": "<b>Deinem Konto sind die Resource Credits gerade ausgegangen.</b> Hive gibt jedem Konto ein kleines Kontingent zum Posten, das sich von selbst wieder auffüllt. Es geht nichts verloren: Komm in etwa {{wait}} wieder und mach da weiter, wo du aufgehört hast.",
+    "rcBlockedLater": "<b>Deinem Konto sind die Resource Credits gerade ausgegangen.</b> Hive gibt jedem Konto ein kleines Kontingent zum Posten, das sich von selbst wieder auffüllt. Es geht nichts verloren: Komm etwas später wieder und mach da weiter, wo du aufgehört hast.",
+    "selected": "<b>{{count}}</b> ausgewählt",
+    "rootPostsTime_one": "{{count}} Video, das dauert also etwa {{minutes}} Minuten",
+    "rootPostsTime_other": "{{count}} Videos, das dauert also etwa {{minutes}} Minuten",
+    "nextVideo": "Das nächste Video kann in {{wait}} raus. Follows, Likes und Profil sind nicht betroffen.",
+    "selectAll": "Alle auswählen",
+    "clear": "Leeren",
+    "publishSelected": "Ausgewählte veröffentlichen",
+    "selectItem": "{{label}} auswählen",
+    "fiveMin": "5 Min.",
+    "waitingTitle": "Wartet auf etwas anderes",
+    "waitingText": "Diese werden von selbst veröffentlicht, sobald der Post, auf den sie verweisen, auf Hive erscheint. Bis dahin geht nichts verloren.",
+    "waitingFor": "<b>{{label}}</b> – wartet auf {{target}}",
+    "andMore": "und {{count}} weitere",
+    "excludedTitle": "Kommt nicht mit"
+  }
+}

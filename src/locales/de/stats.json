@@ -1,0 +1,119 @@
+{
+  "ranges": {
+    "d7": "7 T",
+    "d28": "28 T",
+    "d90": "90 T",
+    "all": "Alle"
+  },
+  "content": {
+    "all": "Alle",
+    "videos": "Videos",
+    "shorts": "Shorts"
+  },
+  "metrics": {
+    "watchTime": "Wiedergabezeit",
+    "views": "Aufrufe",
+    "avgPct": "Ø %",
+    "votes": "Votes",
+    "comments": "Kommentare",
+    "payout": "Auszahlung"
+  },
+  "days": {
+    "short": {
+      "sun": "So",
+      "mon": "Mo",
+      "tue": "Di",
+      "wed": "Mi",
+      "thu": "Do",
+      "fri": "Fr",
+      "sat": "Sa"
+    },
+    "initial": {
+      "sun": "S",
+      "mon": "M",
+      "tue": "D",
+      "wed": "M",
+      "thu": "D",
+      "fri": "F",
+      "sat": "S"
+    }
+  },
+  "sources": {
+    "threespeak": "3Speak",
+    "player": "Embed-Player"
+  },
+  "trend": {
+    "empty": "In diesem Zeitraum noch keine Wiedergabezeit.",
+    "tip_one": "{{count}} Aufruf · {{date}}",
+    "tip_other": "{{count}} Aufrufe · {{date}}"
+  },
+  "noData": "Noch keine Daten.",
+  "demo": {
+    "viewerLocations": "Standorte der Zuschauer",
+    "mapBubble_one": "{{country}} – {{count}} Sitzung",
+    "mapBubble_other": "{{country}} – {{count}} Sitzungen",
+    "empty": "In diesem Zeitraum noch keine Zuschauerdaten.",
+    "breakdown": "Aufschlüsselung",
+    "map": "Karte",
+    "countries": "Länder",
+    "devices": "Geräte",
+    "browsers": "Browser",
+    "whereTitle": "Wo sie zuschauen",
+    "whereSub": "3Speak vs. Embed-Player",
+    "newVsReturning": "Neu vs. wiederkehrend",
+    "new": "Neu",
+    "returning": "Wiederkehrend",
+    "located": "{{located}} von {{total}} Wiedergabesitzungen lokalisiert."
+  },
+  "when": {
+    "title": "Wann deine Zuschauer schauen",
+    "sub": "UTC · dunkler = mehr Aufrufe",
+    "cellTitle_one": "{{day}} {{hour}}:00 – {{count}} Aufruf",
+    "cellTitle_other": "{{day}} {{hour}}:00 – {{count}} Aufrufe",
+    "hour": "{{hour}} Uhr"
+  },
+  "detail": {
+    "summary": "{{votes}} Votes · {{comments}} Kommentare · ${{payout}}"
+  },
+  "compare": {
+    "notEnough": "Nicht genug Daten für einen Vergleich.",
+    "start": "Anfang",
+    "axis": "Zuschauerbindung über das Video",
+    "end": "Ende",
+    "title": "Videos vergleichen",
+    "pickA": "Video auswählen…",
+    "vs": "vs.",
+    "pickB": "Weiteres auswählen…"
+  },
+  "loadError": "Deine Statistiken konnten gerade nicht geladen werden.",
+  "emptyRange": "In diesem Zeitraum noch keine Wiedergabedaten – probier „Alle“ oder warte, bis Leute deine Videos ansehen.",
+  "tiles": {
+    "avgViewDuration": "Ø Wiedergabedauer",
+    "avgWatched": "Ø angesehen",
+    "reactionsPerView": "Reaktionen / Aufruf"
+  },
+  "subtotals": "{{videos}} Videos · {{votes}} Votes · {{comments}} Kommentare · ${{payout}} · Ø Geschwindigkeit {{rate}}×",
+  "sections": {
+    "trend": "Wiedergabezeit im Verlauf",
+    "best": "Beste Leistung",
+    "audience": "Dein Publikum"
+  },
+  "openInNewTab": "Video in neuem Tab öffnen",
+  "footnote": "Die Wiedergabestatistiken stammen aus dem Vorschau-Tracking und sind nur für dich sichtbar.",
+  "video": {
+    "noData": "Noch keine Daten",
+    "empty": "Für dieses Video noch keine Wiedergabedaten.",
+    "uniqueViewers": "Einzelne Zuschauer",
+    "avgSpeed": "Ø Geschwindigkeit",
+    "mostDropOff": "📉 Die meisten steigen bei <b>{{time}}</b> aus",
+    "earlyDrop": "⚡ <b>{{pct}}%</b> sind in den ersten 3 s gegangen",
+    "replayed": "🔁 Wiederholt:",
+    "retentionTitle": "Zuschauerbindung",
+    "retentionSub": "Anteil der Zuschauer, die an jeder Stelle noch zuschauen",
+    "pctWatching": "{{pct}}% schauen zu",
+    "replayTitle": "Am häufigsten wiederholt",
+    "replaySub": "Abschnitte, die Zuschauer am meisten ansehen und wiederholen",
+    "hotSpot": "Hotspot",
+    "notEnoughReplays": "Noch nicht genug Wiederholungen"
+  }
+}

@@ -1,0 +1,106 @@
+{
+  "controls": {
+    "rewind10": "10 sn geri",
+    "forward10": "10 sn ileri",
+    "reactToMoment": "Bu ana tepki ver",
+    "mute": "Sesi kapat",
+    "unmute": "Sesi aç",
+    "playerSize": "Oynatıcı boyutu: {{size}}",
+    "sizeStandard": "Standart",
+    "pip": "Resim içinde Resim",
+    "autoplayOn": "Otomatik oynatma: açık",
+    "autoplayOff": "Otomatik oynatma: kapalı",
+    "ambientSubtle": "Ortam ışığı: hafif",
+    "ambientVivid": "Ortam ışığı: canlı",
+    "ambientOff": "Ortam ışığı: kapalı",
+    "playbackSpeed": "Oynatma hızı",
+    "speedNormal": "Normal",
+    "quality": "Kalite",
+    "qualityAuto": "Otomatik",
+    "fullscreen": "Tam ekran",
+    "exitFullscreen": "Tam ekrandan çık",
+    "markerReplies_one": "({{count}} yanıt)",
+    "markerReplies_other": "({{count}} yanıt)"
+  },
+  "subtitles": {
+    "title": "Altyazılar",
+    "off": "Kapalı",
+    "font": "Yazı tipi",
+    "size": "Boyut",
+    "textColor": "Metin Rengi",
+    "textBorder": "Metin Kenarlığı",
+    "borderColor": "Kenarlık Rengi",
+    "background": "Arka plan",
+    "none": "Yok",
+    "fonts": {
+      "sansSerif": "Sans-serif",
+      "serif": "Serif",
+      "monospace": "Eş aralıklı"
+    }
+  },
+  "mini": {
+    "untitled": "Video"
+  },
+  "playlist": {
+    "previous": "Önceki video",
+    "next": "Sonraki video",
+    "close": "Oynatma listesini kapat"
+  },
+  "overlay": {
+    "replay": "Tekrar oynat"
+  },
+  "reactions": {
+    "translation": "Çeviri",
+    "translationFailed": "Çeviri başarısız",
+    "videoReaction": "Video Tepkisi",
+    "comment": "Yorum",
+    "previous": "Önceki",
+    "next": "Sonraki",
+    "hide": "Tepkileri gizle",
+    "hideShort": "Gizle",
+    "loadingReplies": "Yanıtlar yükleniyor...",
+    "sizeTitle": "Boyut: {{size}}",
+    "sizes": {
+      "small": "K",
+      "medium": "O",
+      "standard": "Std",
+      "big": "Büyük",
+      "cinema": "Sin"
+    },
+    "sizeNames": {
+      "small": "Küçük",
+      "medium": "Orta",
+      "standard": "Standart",
+      "big": "Büyük",
+      "cinema": "Sinema"
+    }
+  },
+  "reactionUpload": {
+    "authorized": "@threespeak yetkilendirildi, artık tepkini paylaşabilirsin",
+    "authFailed": "Yetkilendirme başarısız. Lütfen tekrar dene.",
+    "webcamDenied": "Web kamerasına erişilemedi",
+    "shortTooLong": "Shorts en fazla {{max}} olmalı. \"3Speak Shorts'ta göster\" seçeneğinin işaretini kaldır ya da daha kısa bir video kullan.",
+    "uploadingVideo": "Video yükleniyor...",
+    "noEmbedUrl": "Yükleme başarılı ama gömme URL'si dönmedi",
+    "publishingComment": "Yorum yayınlanıyor...",
+    "posted": "Video tepkisi paylaşıldı!",
+    "postFailed": "Yorum paylaşılamadı",
+    "uploadFailed": "Yükleme başarısız",
+    "uploadVideo": "Video Yükle",
+    "recordVideo": "Video Kaydet",
+    "startRecording": "Kaydı Başlat",
+    "stopRecording": "Kaydı Durdur",
+    "recordedVideo": "Kaydedilen video",
+    "descriptionPlaceholder": "Video tepkine bir açıklama ekle...",
+    "showInShorts": "3Speak Shorts'ta göster",
+    "authNote": "<b>@threespeak</b> hesabının tepkini senin adına paylaşmasına izin ver.",
+    "authorizing": "Yetkilendiriliyor…",
+    "authorize": "@threespeak'i yetkilendir",
+    "uploading": "Yükleniyor...",
+    "postReaction": "Tepkiyi Paylaş"
+  },
+  "inline": {
+    "cantPlay": "Bu video burada oynatılamıyor.",
+    "openOnSite": "3Speak'te aç"
+  }
+}

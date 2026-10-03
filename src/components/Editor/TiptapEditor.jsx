@@ -20,6 +20,7 @@ import { GoTasklist } from "react-icons/go";
 import {Markdown} from "@tiptap/markdown";
 
 import EmojiPicker from "./EmojiPicker";
+import { useTranslation } from "react-i18next";
 
 import {
   FaAlignCenter,
@@ -84,6 +85,7 @@ const parseMarkdownImages = (content) => {
 };
 
 export default function TiptapEditor({ value, onChange }) {
+  const { t } = useTranslation();
 
   const [showEmoji, setShowEmoji] = useState(false);
   const [uploading, setUploading] = useState(false);
@@ -108,7 +110,7 @@ export default function TiptapEditor({ value, onChange }) {
       Link,
       TaskList,
       TaskItem,
-      Placeholder.configure({ placeholder: "Write your content here..." }),
+      Placeholder.configure({ placeholder: t("editor.placeholder") }),
       TextAlign.configure({ types: ["heading", "paragraph"] }),
       Mention.configure({ HTMLAttributes: { class: "mention-tag" } }),
       MarkdownImagePaste,
@@ -169,7 +171,7 @@ export default function TiptapEditor({ value, onChange }) {
       editor.chain().focus().setImage({ src: url }).run();
     } catch (err) {
       console.error("Upload failed:", err);
-      alert(`Upload failed: ${err.message}`);
+      alert(t("editor.uploadFailed", { message: err.message }));
     } finally {
       setUploading(false);
     }
@@ -284,7 +286,7 @@ export default function TiptapEditor({ value, onChange }) {
                 }}
                 className={editor?.isActive("underline") ? "active" : ""}
               >
-              <span className="wrap-in-btn"><MdFormatUnderlined />  <span>Underline</span></span>
+              <span className="wrap-in-btn"><MdFormatUnderlined />  <span>{t("editor.format.underline")}</span></span>
               </button>
 
               {/* Strike */}
@@ -295,7 +297,7 @@ export default function TiptapEditor({ value, onChange }) {
                 }}
                 className={editor?.isActive("strike") ? "active" : ""}
               >
-                <span className="wrap-in-btn"><MdOutlineStrikethroughS />  <span>Strike</span></span>
+                <span className="wrap-in-btn"><MdOutlineStrikethroughS />  <span>{t("editor.format.strike")}</span></span>
               </button>
 
               {/* Highlight */}
@@ -306,7 +308,7 @@ export default function TiptapEditor({ value, onChange }) {
                 }}
                 className={editor?.isActive("highlight") ? "active" : ""}
               >
-                <span className="wrap-in-btn"><AiOutlineHighlight />  <span>Highlight</span></span>
+                <span className="wrap-in-btn"><AiOutlineHighlight />  <span>{t("editor.format.highlight")}</span></span>
               </button>
 
               {/* Bullet List */}
@@ -317,7 +319,7 @@ export default function TiptapEditor({ value, onChange }) {
                 }}
                 className={editor?.isActive("bulletList") ? "active" : ""}
               >
-                <span className="wrap-in-btn"><HiMiniListBullet />  <span>Bullet List</span></span>
+                <span className="wrap-in-btn"><HiMiniListBullet />  <span>{t("editor.format.bulletList")}</span></span>
               </button>
 
               {/* Ordered List */}
@@ -328,7 +330,7 @@ export default function TiptapEditor({ value, onChange }) {
                 }}
                 className={editor?.isActive("orderedList") ? "active" : ""}
               >
-                <span className="wrap-in-btn"><GoListOrdered />  <span>Ordered List</span></span>
+                <span className="wrap-in-btn"><GoListOrdered />  <span>{t("editor.format.orderedList")}</span></span>
               </button>
 
               {/* Task List */}
@@ -339,7 +341,7 @@ export default function TiptapEditor({ value, onChange }) {
                 }}
                 className={editor?.isActive("taskList") ? "active" : ""}
               >
-                <span className="wrap-in-btn"><GoTasklist />  <span>Task List</span></span>
+                <span className="wrap-in-btn"><GoTasklist />  <span>{t("editor.format.taskList")}</span></span>
               </button>
 
             </div>
@@ -355,7 +357,7 @@ export default function TiptapEditor({ value, onChange }) {
 
       </div>
 
-      {uploading && <div className="uploading">Uploading image...</div>}
+      {uploading && <div className="uploading">{t("editor.uploadingImage")}</div>}
 
     
         <EditorContent editor={editor} className="editor-content" />

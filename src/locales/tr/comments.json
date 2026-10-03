@@ -1,0 +1,100 @@
+{
+  "review": {
+    "fabAria": "Geri bildirim ver",
+    "fab": "Geri bildirim",
+    "aspects": {
+      "upload": "Yükleme",
+      "playback": "Oynatma",
+      "live": "Canlı yayın",
+      "discovery": "Keşfet / akış",
+      "design": "Tasarım / UX",
+      "performance": "Hız",
+      "mobile": "Mobil",
+      "other": "Başka bir şey"
+    },
+    "titles": {
+      "upload": "Yüklemen nasıl geçti?",
+      "stream": "Canlı yayının nasıl geçti?",
+      "watch": "3Speak'te izlemek nasıldı?",
+      "global": "3Speak deneyimin nasıl?",
+      "fallback": "3Speak'i daha iyi yapmamıza yardım et"
+    },
+    "stars": {
+      "poor": "Kötü",
+      "fair": "İdare eder",
+      "good": "İyi",
+      "great": "Çok iyi",
+      "amazing": "Harika"
+    },
+    "errors": {
+      "pickStars": "Lütfen bir yıldız puanı seç",
+      "sendFailed": "Değerlendirmen gönderilemedi. Lütfen tekrar dene."
+    },
+    "thanks": "Geri bildirimin için teşekkürler! 🙏",
+    "sendFeedback": "Geri bildirim gönder",
+    "subtitle": "Geri bildirimin 3Speak'i daha iyi yapmamıza yardımcı olur.",
+    "starRating": "Yıldız puanı",
+    "starsAria_one": "{{count}} yıldız",
+    "starsAria_other": "{{count}} yıldız",
+    "aboutLabel": "Konu ne? <opt>(isteğe bağlı)</opt>",
+    "recommendLabel": "3Speak'i tavsiye eder misin? <opt>(isteğe bağlı)</opt>",
+    "moreLabel": "Biraz daha anlat <opt>(isteğe bağlı)</opt>",
+    "placeholder": "Neyi beğendin? Ne daha iyi olabilir?",
+    "notNow": "Şimdi değil",
+    "sending": "Gönderiliyor…"
+  },
+  "tabs": {
+    "reactions": "Tepkiler",
+    "transcript": "Döküm"
+  },
+  "live": {
+    "vodProcessing": "Kayıt işleniyor…",
+    "vodProcessingHint": "Bu yayın sona erdi. Kodlama biter bitmez video burada yerini alacak; sayfayı yenilemene gerek yok.",
+    "watching_one": "👁 {{count}} izleyici",
+    "watching_other": "👁 {{count}} izleyici",
+    "signInRaiseHand": "El kaldırmak için giriş yap",
+    "signInChat": "Sohbet için giriş yap",
+    "signInJoinChat": "🔒 Sohbete katılmak için giriş yap."
+  },
+  "transcript": {
+    "title": "Döküm",
+    "languageAria": "Döküm dili",
+    "copyingWithTimes": "Zaman kodlarıyla kopyalanıyor",
+    "copyingTextOnly": "Yalnızca metin kopyalanıyor",
+    "timecodes": "Zaman kodları",
+    "copyWithTimes": "Dökümü zaman kodlarıyla kopyala",
+    "copyText": "Döküm metnini kopyala",
+    "jumpTo": "{{time}} anına git",
+    "hide": "Dökümü gizle",
+    "show": "Dökümü göster",
+    "showWithCount_one": "Dökümü göster ({{count}} satır)",
+    "showWithCount_other": "Dökümü göster ({{count}} satır)"
+  },
+  "blog": {
+    "noContent": "İçerik yok",
+    "loadError": "İçerik yüklenirken hata oluştu.",
+    "processError": "İçerik işlenirken hata oluştu.",
+    "rendererError": "Görüntüleyici yüklenirken hata oluştu."
+  },
+  "section": {
+    "posted": "Yorum paylaşıldı!",
+    "postFailed": "Yorum gönderilemedi, lütfen tekrar dene",
+    "editFailed": "Düzenleme başarısız, lütfen tekrar dene",
+    "updated": "Yorum güncellendi",
+    "commentTab": "Yorum",
+    "reactTab": "Tepki",
+    "at": "şu anda:",
+    "atTime": "{{time}} anında",
+    "commentPlaceholder": "Yorumunu buraya yaz...",
+    "replyPlaceholder": "Yanıtını buraya yaz...",
+    "commentButton": "Yorum yap",
+    "count_one": "{{count}} Yorum",
+    "count_other": "{{count}} Yorum",
+    "edited": "(düzenlendi)",
+    "saving": "Kaydediliyor...",
+    "translation": "Çeviri",
+    "translationFailed": "Çeviri başarısız. Çeviri servisi çalışıyor mu?",
+    "reportComment": "Yorumu bildir",
+    "openInShorts": "Shorts'ta aç"
+  }
+}

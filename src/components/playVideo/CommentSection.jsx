@@ -9,6 +9,7 @@ import { TailChase } from 'ldrs/react';
 import { MdVideocam, MdComment, MdKeyboardArrowUp, MdTranslate, MdFlag } from 'react-icons/md';
 import ReportModal, { isReported } from '../modal/ReportModal';
 import useTranslation from '../../hooks/useTranslation';
+import { useTranslation as useI18n } from 'react-i18next';
 import TranslateButton from '../TranslateButton/TranslateButton';
 import ReactVideoTab from '../ReactVideoModal/ReactVideoModal';
 import dayjs from 'dayjs';
@@ -79,6 +80,7 @@ function splitRepliedTo(body) {
 }
 
 function CommentSection({ videoDetails, author, permlink, currentTime, duration, onSeek, onPause, onRefreshReactions }) {
+  const { t } = useI18n();
   const { user, incubationHandle } = useAppStore();
   // The name to SHOW. For an incubating user there is no Hive account, so
   // `user` is null and the handle is all there is.
@@ -305,7 +307,7 @@ function CommentSection({ videoDetails, author, permlink, currentTime, duration,
             username: comment.author,
             profile: {
               images: {
-                avatar: `https://images.hive.blog/u/${comment.author}/avatar/small`,
+                avatar: `/img/u/${comment.author}/avatar/small`,
               },
             },
           },
@@ -423,7 +425,7 @@ function CommentSection({ videoDetails, author, permlink, currentTime, duration,
       }
 
       if (result.success) {
-        toast.success('Comment posted successfully!');
+        toast.success(t('comments.section.posted'));
         const newComment = {
           author: {
             username: displayName,
@@ -434,7 +436,7 @@ function CommentSection({ videoDetails, author, permlink, currentTime, duration,
                 // it renders broken.
                 avatar: incubationHandle
                   ? handleAvatar(incubationHandle)
-                  : `https://images.hive.blog/u/${user}/avatar/small`,
+                  : `/img/u/${user}/avatar/small`,
               },
             },
           },
@@ -496,11 +498,11 @@ function CommentSection({ videoDetails, author, permlink, currentTime, duration,
         setReplyToComment(null);
         onRefreshReactions?.();
       } else {
-        toast.error('Comment failed, please try again');
+        toast.error(t('comments.section.postFailed'));
       }
     } catch (err) {
       console.error('Comment failed:', err);
-      toast.error(err.message || 'Comment failed, please try again');
+      toast.error(err.message || t('comments.section.postFailed'));
     }
   };
 
@@ -531,7 +533,7 @@ function CommentSection({ videoDetails, author, permlink, currentTime, duration,
         comment.jsonMetadata || { app: '3speak/new-version' },
       );
       if (!result?.success) {
-        toast.error('Edit failed, please try again');
+        toast.error(t('comments.section.editFailed'));
         return false;
       }
       const applyEdit = (comments) =>
@@ -546,11 +548,11 @@ function CommentSection({ videoDetails, author, permlink, currentTime, duration,
         const render = await getHiveRenderer();
         setRenderedBodies((prev) => ({ ...prev, [comment.permlink]: render(stripTimestampEmbeds(body)) }));
       } catch { /* falls back to the raw body until the next fetch */ }
-      toast.success('Comment updated');
+      toast.success(t('comments.section.updated'));
       return true;
     } catch (err) {
       console.error('Comment edit failed:', err);
-      toast.error(err.message || 'Edit failed, please try again');
+      toast.error(err.message || t('comments.section.editFailed'));
       return false;
     }
   };
@@ -612,18 +614,18 @@ function CommentSection({ videoDetails, author, permlink, currentTime, duration,
             onClick={() => setActiveTab('comment')}
           >
             <MdComment size={14} />
-            Comment
+            {t('comments.section.commentTab')}
           </button>
           <button
             className={`comment-tab${activeTab === 'react' ? ' active' : ''}`}
             onClick={() => setActiveTab('react')}
           >
             <MdVideocam size={14} />
-            React
+            {t('comments.section.reactTab')}
           </button>
         </div>
         <div className="comment-timestamp">
-          <span className="comment-timestamp-label">at</span>
+          <span className="comment-timestamp-label">{t('comments.section.at')}</span>
           <input
             type="text"
             className="comment-timestamp-input"
@@ -640,7 +642,7 @@ function CommentSection({ videoDetails, author, permlink, currentTime, duration,
         <div className="add-comment-wrap">
           <textarea
             ref={commentInputRef}
-            placeholder="Write your comment here..."
+            placeholder={t('comments.section.commentPlaceholder')}
             className="textarea-box"
             value={commentInfo}
             onChange={(e) => {
@@ -656,11 +658,11 @@ function CommentSection({ videoDetails, author, permlink, currentTime, duration,
               onPickGif={(url) => insertAtCursor(commentInputRef.current, commentInfo, gifMarkdown(url), setCommentInfo)}
             />
             <div className="btn-wrap">
-              <Button text="Cancel" onClick={() => {
+              <Button text={t('common.actions.cancel')} onClick={() => {
                 setCommentInfo('');
                 setReplyToComment(null);
               }} />
-              <Button text="Comment" prominent onClick={() => {
+              <Button text={t('comments.section.commentButton')} prominent onClick={() => {
                 setReplyToComment(null);
                 handlePostComment();
               }} />
@@ -683,7 +685,7 @@ function CommentSection({ videoDetails, author, permlink, currentTime, duration,
         </div>
       )}
 
-      <h4>{countComments(commentList)} Comments</h4>
+      <h4>{t('comments.section.count', { count: countComments(commentList) })}</h4>
 
       {loadingComments ? (
         <div className="comments-loading">
@@ -776,6 +778,7 @@ function Comment({
       editableBy,
       onEditComment,
 }) {
+  const { t } = useI18n();
   const isReplying = activeReply === comment.permlink;
   const replyInputRef = useRef(null);
   const editInputRef = useRef(null);
@@ -858,9 +861,9 @@ function Comment({
           <div className="comment-header">
             <AuthorBadge author={comment?.author?.username} reputation={comment?.author?.reputation} noLink />
             <span className="comment-date"><TimeAgo date={comment?.created_at} /></span>
-            {comment?.edited && <span className="comment-edited">(edited)</span>}
+            {comment?.edited && <span className="comment-edited">{t('comments.section.edited')}</span>}
             {comment?.parentTimestamp != null && (
-              <span className="comment-timestamp-badge" onClick={() => onSeek?.(comment.parentTimestamp)}>at {formatTimeInput(comment.parentTimestamp)}</span>
+              <span className="comment-timestamp-badge" onClick={() => onSeek?.(comment.parentTimestamp)}>{t('comments.section.atTime', { time: formatTimeInput(comment.parentTimestamp) })}</span>
             )}
             <span className="comment-collapse-chevron" onClick={() => setCollapsed(true)}><MdKeyboardArrowUp size={18} /></span>
           </div>
@@ -883,9 +886,9 @@ function Comment({
                   onPickGif={(url) => insertAtCursor(editInputRef.current, editText, gifMarkdown(url), setEditText)}
                 />
                 <div className="btn-wrap">
-                  <Button text="Cancel" onClick={() => setEditing(false)} />
+                  <Button text={t('common.actions.cancel')} onClick={() => setEditing(false)} />
                   <Button
-                    text={savingEdit ? 'Saving...' : 'Save'}
+                    text={savingEdit ? t('comments.section.saving') : t('common.actions.save')}
                     prominent
                     onClick={saveEdit}
                   />
@@ -899,7 +902,7 @@ function Comment({
             <div className="comment-translation">
               <div className="comment-translation-header">
                 <MdTranslate size={13} />
-                <span>Translation</span>
+                <span>{t('comments.section.translation')}</span>
                 <button className="comment-translation-dismiss" onClick={handleDismissTranslation}>&times;</button>
               </div>
               <p>{translatedText}</p>
@@ -907,7 +910,7 @@ function Comment({
           )}
           {translateError && (
             <div className="comment-translation comment-translation--error">
-              <p>Translation failed. Is the translation service running?</p>
+              <p>{t('comments.section.translationFailed')}</p>
             </div>
           )}
           <div className="comment-action">
@@ -922,7 +925,7 @@ function Comment({
                 type="button"
                 className={`comment-report-btn${isReported('comment', `${comment.author?.username}/${comment.permlink}`) ? ' reported' : ''}`}
                 onClick={() => setIsReportOpen(true)}
-                title="Report comment"
+                title={t('comments.section.reportComment')}
               >
                 <MdFlag size={14} />
               </button>
@@ -936,13 +939,13 @@ function Comment({
                   className="comment-shorts-link"
                 >
                   <MdVideocam size={13} />
-                  <span className="comment-btn-label">Open in Shorts</span>
+                  <span className="comment-btn-label">{t('comments.section.openInShorts')}</span>
                 </Link>
               )}
               {canEdit && !editing && (
-                <Button text="Edit" onClick={startEdit} />
+                <Button text={t('common.actions.edit')} onClick={startEdit} />
               )}
-              <Button text="Reply" onClick={() => {
+              <Button text={t('common.actions.reply')} onClick={() => {
                   setCommentInfo("");
                   setReplyText("")
                   setActiveReply(comment.permlink);
@@ -985,19 +988,19 @@ function Comment({
                 onClick={() => setReplyTab('comment')}
               >
                 <MdComment size={14} />
-                Comment
+                {t('comments.section.commentTab')}
               </button>
               <button
                 className={`comment-tab${replyTab === 'react' ? ' active' : ''}`}
                 onClick={() => setReplyTab('react')}
               >
                 <MdVideocam size={14} />
-                React
+                {t('comments.section.reactTab')}
               </button>
             </div>
             {replyTimestamp != null && (
               <div className="comment-timestamp">
-                <span className="comment-timestamp-label">at {formatTimeInput(replyTimestamp)}</span>
+                <span className="comment-timestamp-label">{t('comments.section.atTime', { time: formatTimeInput(replyTimestamp) })}</span>
               </div>
             )}
           </div>
@@ -1007,7 +1010,7 @@ function Comment({
             <>
               <textarea
                 ref={replyInputRef}
-                placeholder="Write your reply here..."
+                placeholder={t('comments.section.replyPlaceholder')}
                 className="textarea-box sub"
                 value={replyText}
                 onChange={(e) => {
@@ -1022,8 +1025,8 @@ function Comment({
                   onPickGif={(url) => insertAtCursor(replyInputRef.current, replyText, gifMarkdown(url), setReplyText)}
                 />
                 <div className="btn-wrap">
-                  <Button text="Cancel" onClick={() => {setReplyText(""); setActiveReply(null)}} />
-                  <Button text="Comment" prominent onClick={() => handlePostComment(replyTimestamp)} />
+                  <Button text={t('common.actions.cancel')} onClick={() => {setReplyText(""); setActiveReply(null)}} />
+                  <Button text={t('comments.section.commentButton')} prominent onClick={() => handlePostComment(replyTimestamp)} />
                 </div>
               </div>
             </>

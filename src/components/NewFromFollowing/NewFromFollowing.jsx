@@ -5,6 +5,7 @@ import { FaChevronLeft, FaChevronRight } from 'react-icons/fa';
 import { NEW_FROM_FOLLOWING_URL } from '../../utils/config';
 import { useAppStore } from '../../lib/store';
 import AuthorBadge from '../AuthorBadge/AuthorBadge';
+import { useTranslation } from 'react-i18next';
 import './NewFromFollowing.scss';
 
 /**
@@ -22,14 +23,15 @@ import './NewFromFollowing.scss';
 const REFRESH_MS = 5 * 60 * 1000;
 
 // "3 shorts / 2 videos", dropping whichever side is zero, singular when it's one.
-function countsLabel({ shorts = 0, videos = 0 }) {
+function countsLabel({ shorts = 0, videos = 0 }, t) {
   const parts = [];
-  if (shorts) parts.push(`${shorts} short${shorts === 1 ? '' : 's'}`);
-  if (videos) parts.push(`${videos} video${videos === 1 ? '' : 's'}`);
+  if (shorts) parts.push(t('feeds.newFromFollowing.shorts', { count: shorts }));
+  if (videos) parts.push(t('common.units.videos', { count: videos }));
   return parts.join(' / ');
 }
 
 export default function NewFromFollowing() {
+  const { t } = useTranslation();
   const authenticated = useAppStore((s) => s.authenticated);
   const user = useAppStore((s) => s.user);
   const showNsfw = useAppStore((s) => s.showNsfw);
@@ -88,15 +90,15 @@ export default function NewFromFollowing() {
   // No visible heading by request — the badges speak for themselves. The
   // aria-label keeps the section named for screen readers.
   return (
-    <section className="new-from-following" aria-label="New from creators you follow">
+    <section className="new-from-following" aria-label={t('feeds.newFromFollowing.aria')}>
       <div className="nff-wrapper">
         {showLeft && (
-          <button type="button" className="nff-scroll-btn left" onClick={() => scroll('left')} aria-label="Scroll left">
+          <button type="button" className="nff-scroll-btn left" onClick={() => scroll('left')} aria-label={t('feeds.scrollLeft')}>
             <FaChevronLeft />
           </button>
         )}
         {showRight && (
-          <button type="button" className="nff-scroll-btn right" onClick={() => scroll('right')} aria-label="Scroll right">
+          <button type="button" className="nff-scroll-btn right" onClick={() => scroll('right')} aria-label={t('feeds.scrollRight')}>
             <FaChevronRight />
           </button>
         )}
@@ -105,7 +107,7 @@ export default function NewFromFollowing() {
           <AuthorBadge
             key={c.username}
             author={c.username}
-            subtitle={countsLabel(c)}
+            subtitle={countsLabel(c, t)}
             // Straight to the tab that holds the new work when it's all shorts.
             tabHint={c.videos ? undefined : 'shorts'}
           />

@@ -1,0 +1,237 @@
+{
+  "aiBadge": {
+    "title": "Natukoy na AI-generated",
+    "label": "AI"
+  },
+  "translate": {
+    "titleButton": "Isalin ang pamagat",
+    "original": "Original",
+    "translate": "Isalin",
+    "translating": "Isinasalin..."
+  },
+  "summary": {
+    "title": "Buod",
+    "close": "Isara ang buod",
+    "showingOriginal": "Ipinapakita ang original",
+    "translatedTo": "Isinalin sa {{language}}",
+    "showLanguage": "Ipakita sa {{language}}",
+    "showOriginal": "Ipakita ang original",
+    "buttonTitle": "AI na buod ng video na ito"
+  },
+  "errors": {
+    "notAvailable": "Hindi available ang video na ito.",
+    "goHome": "Pumunta sa Home",
+    "scheduledNotFound": "Hindi nahanap ang naka-schedule na post — baka na-publish na o na-cancel.",
+    "network": "Network error. Tingnan ang koneksyon mo.",
+    "notFound": "Hindi nahanap o hindi ma-load ang video.",
+    "backToProfile": "Bumalik sa profile"
+  },
+  "gated": {
+    "title": "Para sa supporters lang",
+    "checkFailed": "Hindi namin makumpirma ang subscription mo ngayon. Subukan ulit maya-maya.",
+    "preview": "Libreng preview ang pinapanood mo. Buong video ang mapapanood gamit ang 3Speak Pro.",
+    "subscribersOnly": "Available ang video na ito sa mga 3Speak Pro subscriber.",
+    "cta": "Kumuha ng 3Speak Pro"
+  },
+  "reactions": {
+    "show": "Ipakita ang mga Reaction",
+    "add": "Magdagdag ng Reaction"
+  },
+  "liveChat": "Live chat",
+  "moreVideos": "Iba pang video",
+  "vote": {
+    "saveFailed": "Hindi ma-save ang vote mo"
+  },
+  "locked": {
+    "noAccount": "Mabubuksan kapag nagawa mo na ang Hive account mo",
+    "offChainPost": "Hindi pa available: wala pa sa Hive ang post na ito"
+  },
+  "interests": {
+    "loginRequired": "Mag-log in para mag-save ng mga interes",
+    "added": "Naidagdag ang “{{tag}}” sa mga interes mo",
+    "saveFailed": "Hindi ma-save ang mga interes"
+  },
+  "watchLater": {
+    "removed": "Inalis sa Panoorin Mamaya",
+    "removeFailed": "Hindi maalis: {{error}}",
+    "removeTitle": "Alisin sa Panoorin Mamaya"
+  },
+  "reshare": {
+    "loginRequired": "Mag-log in para mag-reshare",
+    "success": "Na-reshare!",
+    "failed": "Hindi ma-reshare",
+    "reshared": "Na-reshare",
+    "reshare": "Reshare",
+    "reshareWithCount": "Reshare ({{count}})"
+  },
+  "clip": {
+    "noVideoUrlRemix": "Hindi makuha ang video URL para sa remix",
+    "noVideoUrl": "Hindi makuha ang video URL",
+    "startHint": "Pumunta sa simula ng clip mo, tapos i-click ang \"Itakda ang Simula\"",
+    "endHint": "Ngayon, pumunta sa dulo ng clip mo at i-click ang \"Itakda ang Dulo\"",
+    "endBeforeStart": "Dapat nasa pagkatapos ng simula ang dulo",
+    "trimmed": "Ginawang 1 minuto ang clip — tatabasin namin ang clip sa dulo ng timeline.",
+    "set": "Naitakda ang clip: {{start}} – {{end}}. I-click na ang \"Gumawa ng Clip\"",
+    "loginRequired": "Mag-log in para mag-clip",
+    "cancel": "Kanselahin ang clip",
+    "clipVideo": "I-clip ang video",
+    "label": "I-clip ang Video",
+    "clip": "Clip",
+    "seekToStart": "Pumunta sa simula",
+    "setStart": "Itakda ang Simula",
+    "setEnd": "Itakda ang Dulo",
+    "createClip": "Gumawa ng Clip",
+    "barStart": "Pumunta sa simula ng clip mo",
+    "barEnd": "Simula: {{start}} — Pumunta na sa dulo",
+    "barDone": "Clip: {{start}} – {{end}}"
+  },
+  "share": {
+    "defaultTitle": "3Speak Video",
+    "linkCopied": "Nakopya ang link sa clipboard!",
+    "failed": "Hindi ma-share"
+  },
+  "follow": {
+    "loginRequired": "Mag-log in para mag-follow ng users",
+    "followed": "Fina-follow mo na si @{{user}}",
+    "failed": "Hindi ma-follow: {{error}}"
+  },
+  "ad": {
+    "countdown": "Ad sa loob ng {{seconds}}"
+  },
+  "media": {
+    "unavailableTitle": "Hindi na available ang video na ito",
+    "unavailableBody": "Hindi mahanap sa network ang media ng lumang upload na ito. Nasa blockchain pa rin ang post, pero hindi na mapapanood ang video.",
+    "blockedTitle": "Hindi ma-load ang video ngayon",
+    "blockedBody": "Hindi sumagot ang isa sa mga video server namin. Ayos lang ang video mismo, kaya subukan ulit."
+  },
+  "tipNudge": {
+    "text": "Nagustuhan mo ba?<hide> Padalhan si <b>@{{author}}</b> ng tip!</hide>",
+    "dismiss": "Isara"
+  },
+  "community": {
+    "members_one": "{{count}} Member",
+    "members_other": "{{count}} Members"
+  },
+  "tags": {
+    "curated": "Curated"
+  },
+  "topics": {
+    "taggedBy": "“{{label}}” · tinag ng {{count}}",
+    "viewers_one": "“{{label}}” · {{count}} viewer",
+    "viewers_other": "“{{label}}” · {{count}} viewers",
+    "autoNoVotes": "Auto-tagged — wala pang vote ng viewer",
+    "noVotes": "Wala pang vote ng viewer",
+    "inInterests": "✓ Nasa mga interes mo",
+    "addToInterests": "+ Idagdag sa mga interes ko",
+    "openTagFeed": "Buksan ang tag feed"
+  },
+  "scheduled": {
+    "notice": "Naka-schedule sa <b>{{date}}</b> — hindi pa naka-publish.",
+    "futureDate": "isang petsa sa hinaharap",
+    "edit": "I-edit, i-reschedule o i-cancel",
+    "editTitle": "I-edit ang naka-schedule na post (detalye, petsa, o i-cancel)"
+  },
+  "actions": {
+    "voteOffChain": "I-vote ang video na ito. Naka-save ito sa 3Speak at walang ibinibigay na rewards.",
+    "signInToVote": "Mag-sign in para mag-vote",
+    "tagVideo": "I-tag ang video na ito",
+    "voteVideo": "I-vote ang video na ito",
+    "tag": "Tag",
+    "vote": "Vote",
+    "analyticsTitle": "Analytics ng video",
+    "analytics": "Analytics",
+    "videoStats": "Stats ng video",
+    "promoteTitle": "I-promote ang video na ito",
+    "promote": "I-promote",
+    "editTitle": "I-edit ang detalye ng video",
+    "reportTitle": "I-report ang video",
+    "addToPlaylist": "Idagdag sa playlist",
+    "playlist": "Playlist",
+    "tipTitle": "I-tip ang creator",
+    "tip": "Tip",
+    "details": "Detalye",
+    "toggleDetails": "Ipakita/itago ang detalye",
+    "followCreator": "I-follow ang creator",
+    "closeMenu": "Isara ang menu",
+    "openActions": "Buksan ang mga aksyon"
+  },
+  "description": {
+    "hide": "Itago ang description",
+    "show": "Ipakita ang description"
+  },
+  "edit": {
+    "title": "I-edit ang Video",
+    "loading": "Naglo-load ng kasalukuyang post…",
+    "videoFile": "Video file",
+    "replaceVideo": "Palitan ang video",
+    "replaceHint": "Papalitan ang video file ng post na ito. Mananatili ang lahat ng iba pa: ang likes, payout, comments, petsa ng upload ng post at ang puwesto nito sa profile mo. Hayaan lang ito kung gusto mong panatilihin ang kasalukuyang video.",
+    "uploadingTo": "Ina-upload sa <b>{{host}}</b>… {{pct}}%",
+    "choosingServer": "Pumipili ng upload server…",
+    "uploadedTo": "Na-upload sa <b>{{host}}</b>. Pindutin ang Save para ipalit ito.",
+    "uploaded": "Na-upload na. Pindutin ang Save para ipalit ito.",
+    "cancelUpload": "Kanselahin ang upload",
+    "keepCurrent": "Panatilihin ang kasalukuyang video",
+    "encodeHint": "Pagkatapos mong i-save, kailangan pa nito ng ilang minuto para ma-encode, at magpe-play pa rin ang lumang video hanggang handa na ito. Hindi nagbago ang thumbnail mo, kaya i-update ito sa itaas kung hindi na ito tugma.",
+    "thumbnail": "Thumbnail",
+    "thumbPreviewAlt": "Preview ng thumbnail",
+    "uploadImage": "Mag-upload ng larawan",
+    "uploading": "Ina-upload…",
+    "thumbHint": "Mag-upload ng larawan o mag-paste ng direktang URL. Hayaan lang kung gusto mong panatilihin ang kasalukuyang thumbnail.",
+    "titleLabel": "Pamagat",
+    "titleMin": "min {{min}}",
+    "tags": "Tags",
+    "tagsPlaceholder": "hiwalay sa space",
+    "autoTag": "Awtomatikong idinagdag — hindi puwedeng alisin",
+    "tagCount_one": "{{count}}/{{max}} tag",
+    "tagCount_other": "{{count}}/{{max}} tags",
+    "tagCountRequired_one": "{{count}}/{{max}} tag · kailangan ng kahit 1",
+    "tagCountRequired_other": "{{count}}/{{max}} tags · kailangan ng kahit 1",
+    "description": "Description",
+    "descriptionPlaceholder": "Ikuwento sa mga viewer ang tungkol sa video mo…",
+    "markdownHint": "Puwede ang markdown.",
+    "listed": "Listed",
+    "unlistedLabel": "Unlisted",
+    "listedHint": "Makikita sa feeds, search at sa profile mo.",
+    "unlistedHint": "Nakatago sa feeds at search — napapanood pa rin gamit ang direktang link, nananatili sa profile mo (may badge).",
+    "allowRemix": "Payagan ang Remix/Clip",
+    "remixOn": "Puwedeng gumawa ang iba ng remix/clip; ikaw ang kikilalaning original author.",
+    "remixOff": "Hindi puwedeng i-remix o i-clip ng iba ang video na ito.",
+    "trailer": "Channel trailer",
+    "trailerOn": "Kusang magpe-play sa itaas ng Overview tab ng profile mo, at papalitan ang anumang trailer na itinakda mo dati.",
+    "trailerOff": "Gawin itong video na kusang magpe-play sa itaas ng Overview tab ng profile mo.",
+    "nsfw": "Adult / NSFW",
+    "notNsfw": "Hindi adult",
+    "nsfwHint": "Nakatago sa feeds at search maliban kung in-enable ng viewer ang NSFW; naka-tag na nsfw sa Hive.",
+    "notNsfwHint": "Normal na content, makikita ng lahat.",
+    "promoted": "Naka-promote",
+    "promote": "I-promote ang video",
+    "saveChanges": "I-save ang mga pagbabago",
+    "noChanges": "Walang pagbabagong ise-save.",
+    "thumbUploaded": "Na-upload ang thumbnail.",
+    "videoUploaded": "Na-upload ang bagong video. I-save para ma-apply ito sa post na ito.",
+    "relisted": "Na-relist ang video.",
+    "unlisted": "Na-unlist ang video.",
+    "trailerSet": "Itinakda bilang channel trailer mo.",
+    "trailerRemoved": "Inalis bilang channel trailer mo.",
+    "updatedEncoding": "Na-update ang video! Kailangan pa ng ilang sandali para matapos ang encoding ng bagong file.",
+    "updated": "Na-update ang video!",
+    "errors": {
+      "notFound": "Hindi mahanap sa Hive ang post na ito.",
+      "loadFailed": "Hindi ma-load ang post mula sa Hive. Subukan ulit.",
+      "notImage": "Pumili ng image file.",
+      "imageTooLarge": "Masyadong malaki ang larawan (max 10 MB).",
+      "thumbUploadFailed": "Pumalya ang upload ng thumbnail.",
+      "notVideo": "Pumili ng video file.",
+      "videoTooLarge": "Masyadong malaki ang video (max 5 GB).",
+      "noVideoEntry": "Walang video entry na papalitan sa post na ito — walang tinutukoy ang metadata nito.",
+      "notInLibrary": "Wala na sa library ang video ng post na ito, kaya hindi na mapapalitan ang file nito.",
+      "notOwner": "Sa sarili mong video ka lang puwedeng magpalit ng file.",
+      "videoUploadFailed": "Pumalya ang upload ng video.",
+      "noEmbedEntry": "Walang embed video entry na papalitan sa post na ito — walang tinutukoy ang metadata nito.",
+      "broadcastFailed": "Pumalya ang broadcast",
+      "listingFailed": "Hindi ma-update ang listing.",
+      "trailerFailed": "Hindi ma-update ang channel trailer mo.",
+      "saveFailed": "Hindi ma-save ang mga pagbabago."
+    }
+  }
+}

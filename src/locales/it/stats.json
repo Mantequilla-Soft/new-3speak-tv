@@ -1,0 +1,122 @@
+{
+  "ranges": {
+    "d7": "7 g",
+    "d28": "28 g",
+    "d90": "90 g",
+    "all": "Tutto"
+  },
+  "content": {
+    "all": "Tutti",
+    "videos": "Video",
+    "shorts": "Shorts"
+  },
+  "metrics": {
+    "watchTime": "Tempo di visione",
+    "views": "Visualizzazioni",
+    "avgPct": "% media",
+    "votes": "Voti",
+    "comments": "Commenti",
+    "payout": "Guadagni"
+  },
+  "days": {
+    "short": {
+      "sun": "Dom",
+      "mon": "Lun",
+      "tue": "Mar",
+      "wed": "Mer",
+      "thu": "Gio",
+      "fri": "Ven",
+      "sat": "Sab"
+    },
+    "initial": {
+      "sun": "D",
+      "mon": "L",
+      "tue": "M",
+      "wed": "M",
+      "thu": "G",
+      "fri": "V",
+      "sat": "S"
+    }
+  },
+  "sources": {
+    "threespeak": "3Speak",
+    "player": "Player incorporato"
+  },
+  "trend": {
+    "empty": "Ancora nessun tempo di visione in questo periodo.",
+    "tip_one": "{{count}} visualizzazione · {{date}}",
+    "tip_many": "{{count}} visualizzazioni · {{date}}",
+    "tip_other": "{{count}} visualizzazioni · {{date}}"
+  },
+  "noData": "Ancora nessun dato.",
+  "demo": {
+    "viewerLocations": "Provenienza degli spettatori",
+    "mapBubble_one": "{{country}} — {{count}} sessione",
+    "mapBubble_many": "{{country}} — {{count}} sessioni",
+    "mapBubble_other": "{{country}} — {{count}} sessioni",
+    "empty": "Ancora nessun dato sugli spettatori in questo periodo.",
+    "breakdown": "Dettaglio",
+    "map": "Mappa",
+    "countries": "Paesi",
+    "devices": "Dispositivi",
+    "browsers": "Browser",
+    "whereTitle": "Dove guardano",
+    "whereSub": "3speak vs player incorporato",
+    "newVsReturning": "Nuovi vs abituali",
+    "new": "Nuovi",
+    "returning": "Abituali",
+    "located": "{{located}} sessioni di visione su {{total}} localizzate."
+  },
+  "when": {
+    "title": "Quando guardano i tuoi spettatori",
+    "sub": "UTC · più scuro = più visualizzazioni",
+    "cellTitle_one": "{{day}} {{hour}}:00 — {{count}} visualizzazione",
+    "cellTitle_many": "{{day}} {{hour}}:00 — {{count}} visualizzazioni",
+    "cellTitle_other": "{{day}} {{hour}}:00 — {{count}} visualizzazioni",
+    "hour": "{{hour}}h"
+  },
+  "detail": {
+    "summary": "{{votes}} voti · {{comments}} commenti · ${{payout}}"
+  },
+  "compare": {
+    "notEnough": "Dati insufficienti per il confronto.",
+    "start": "Inizio",
+    "axis": "Fidelizzazione lungo il video",
+    "end": "Fine",
+    "title": "Confronta video",
+    "pickA": "Scegli un video…",
+    "vs": "vs",
+    "pickB": "Scegline un altro…"
+  },
+  "loadError": "Impossibile caricare le tue statistiche in questo momento.",
+  "emptyRange": "Ancora nessun dato di visione in questo periodo — prova “Tutto”, o aspetta che qualcuno guardi i tuoi video.",
+  "tiles": {
+    "avgViewDuration": "Durata media di visione",
+    "avgWatched": "Media guardata",
+    "reactionsPerView": "Reazioni / visualizzazione"
+  },
+  "subtotals": "{{videos}} video · {{votes}} voti · {{comments}} commenti · ${{payout}} · velocità media {{rate}}×",
+  "sections": {
+    "trend": "Tempo di visione nel tempo",
+    "best": "I migliori",
+    "audience": "Il tuo pubblico"
+  },
+  "openInNewTab": "Apri il video in una nuova scheda",
+  "footnote": "Le statistiche di visione provengono dal tracciamento di anteprima e sono visibili solo a te.",
+  "video": {
+    "noData": "Ancora nessun dato",
+    "empty": "Ancora nessun dato di visione per questo video.",
+    "uniqueViewers": "Spettatori unici",
+    "avgSpeed": "Velocità media",
+    "mostDropOff": "📉 La maggior parte abbandona a <b>{{time}}</b>",
+    "earlyDrop": "⚡ Il <b>{{pct}}%</b> esce nei primi 3 s",
+    "replayed": "🔁 Riguardato:",
+    "retentionTitle": "Fidelizzazione del pubblico",
+    "retentionSub": "quota di spettatori che sta ancora guardando in ogni momento",
+    "pctWatching": "{{pct}}% sta guardando",
+    "replayTitle": "Parti più riguardate",
+    "replaySub": "le sezioni che gli spettatori guardano e riguardano di più",
+    "hotSpot": "punto caldo",
+    "notEnoughReplays": "Non ci sono ancora abbastanza riproduzioni ripetute"
+  }
+}

@@ -2,6 +2,7 @@ import { createPortal } from 'react-dom';
 import { IoClose } from 'react-icons/io5';
 import { MdShare, MdEdit, MdFlag, MdPlaylistAdd } from 'react-icons/md';
 import { Repeat2 } from 'lucide-react';
+import { useTranslation, Trans } from 'react-i18next';
 import './EditVideoHintModal.scss';
 
 /**
@@ -17,20 +18,19 @@ import './EditVideoHintModal.scss';
  *   onClose    () => void
  */
 export default function EditVideoHintModal({ isOpen, onClose }) {
+  const { t } = useTranslation();
   if (!isOpen) return null;
 
   return createPortal(
     <div className="evh-overlay" onClick={onClose}>
       <div className="evh-content" onClick={(e) => e.stopPropagation()}>
-        <button className="evh-close" onClick={onClose} aria-label="Close">
+        <button className="evh-close" onClick={onClose} aria-label={t('common.actions.close')}>
           <IoClose size={22} />
         </button>
 
-        <h3 className="evh-title">Edit any of your videos</h3>
+        <h3 className="evh-title">{t('modals.editVideoHint.title')}</h3>
         <p className="evh-text">
-          Open one of your own videos and look for the <strong>pen button</strong>{' '}
-          in the action bar under the player. Click it to change the title,
-          description, thumbnail, tags and more.
+          <Trans i18nKey="modals.editVideoHint.text" components={{ strong: <strong /> }} />
         </p>
 
         {/* Mock of the real watch-page action row (.info-buttons-right). These
@@ -39,23 +39,23 @@ export default function EditVideoHintModal({ isOpen, onClose }) {
           <span className="evh-btn"><MdShare size={16} /></span>
           <span className="evh-btn"><Repeat2 size={16} /></span>
 
-          <span className="evh-btn evh-btn--pen" title="Edit video details">
+          <span className="evh-btn evh-btn--pen" title={t('modals.editVideoHint.penTitle')}>
             <MdEdit size={17} />
             <span className="evh-shimmer" />
           </span>
 
           <span className="evh-btn"><MdFlag size={16} /></span>
           <span className="evh-btn"><MdPlaylistAdd size={18} /></span>
-          <span className="evh-btn evh-btn--tip">Tip</span>
+          <span className="evh-btn evh-btn--tip">{t('modals.editVideoHint.tip')}</span>
         </div>
 
         <p className="evh-caption">
-          <span className="evh-caption-dot" /> This pen button is what you&apos;re looking for
+          <span className="evh-caption-dot" /> {t('modals.editVideoHint.caption')}
         </p>
 
         <div className="evh-actions">
           <button type="button" className="evh-cta evh-cta--primary" onClick={onClose}>
-            Got it
+            {t('modals.editVideoHint.gotIt')}
           </button>
         </div>
       </div>

@@ -1,0 +1,108 @@
+{
+  "review": {
+    "fabAria": "Przekaż opinię",
+    "fab": "Opinia",
+    "aspects": {
+      "upload": "Przesyłanie",
+      "playback": "Odtwarzanie",
+      "live": "Transmisje na żywo",
+      "discovery": "Odkrywanie / kanał",
+      "design": "Wygląd / UX",
+      "performance": "Szybkość",
+      "mobile": "Wersja mobilna",
+      "other": "Coś innego"
+    },
+    "titles": {
+      "upload": "Jak poszło przesyłanie?",
+      "stream": "Jak poszła transmisja na żywo?",
+      "watch": "Jak ci się oglądało na 3Speak?",
+      "global": "Jak oceniasz 3Speak?",
+      "fallback": "Pomóż nam ulepszyć 3Speak"
+    },
+    "stars": {
+      "poor": "Słabo",
+      "fair": "Może być",
+      "good": "Dobrze",
+      "great": "Świetnie",
+      "amazing": "Rewelacja"
+    },
+    "errors": {
+      "pickStars": "Wybierz liczbę gwiazdek",
+      "sendFailed": "Nie udało się wysłać opinii. Spróbuj ponownie."
+    },
+    "thanks": "Dziękujemy za opinię! 🙏",
+    "sendFeedback": "Wyślij opinię",
+    "subtitle": "Twoja opinia pomaga nam ulepszać 3Speak.",
+    "starRating": "Ocena w gwiazdkach",
+    "starsAria_one": "{{count}} gwiazdka",
+    "starsAria_few": "{{count}} gwiazdki",
+    "starsAria_many": "{{count}} gwiazdek",
+    "starsAria_other": "{{count}} gwiazdki",
+    "aboutLabel": "Czego to dotyczy? <opt>(opcjonalnie)</opt>",
+    "recommendLabel": "Czy polecisz 3Speak? <opt>(opcjonalnie)</opt>",
+    "moreLabel": "Napisz więcej <opt>(opcjonalnie)</opt>",
+    "placeholder": "Co ci się podobało? Co można poprawić?",
+    "notNow": "Nie teraz",
+    "sending": "Wysyłanie…"
+  },
+  "tabs": {
+    "reactions": "Reakcje",
+    "transcript": "Transkrypcja"
+  },
+  "live": {
+    "vodProcessing": "Nagranie jest przetwarzane…",
+    "vodProcessingHint": "Ta transmisja się zakończyła. Film pojawi się tutaj, gdy tylko enkoder skończy pracę — nie trzeba odświeżać.",
+    "watching_one": "👁 {{count}} ogląda",
+    "watching_few": "👁 {{count}} oglądają",
+    "watching_many": "👁 {{count}} ogląda",
+    "watching_other": "👁 {{count}} ogląda",
+    "signInRaiseHand": "Zaloguj się, aby podnieść rękę",
+    "signInChat": "Zaloguj się, aby czatować",
+    "signInJoinChat": "🔒 Zaloguj się, aby dołączyć do czatu."
+  },
+  "transcript": {
+    "title": "Transkrypcja",
+    "languageAria": "Język transkrypcji",
+    "copyingWithTimes": "Kopiowanie ze znacznikami czasu",
+    "copyingTextOnly": "Kopiowanie samego tekstu",
+    "timecodes": "Znaczniki czasu",
+    "copyWithTimes": "Kopiuj transkrypcję ze znacznikami czasu",
+    "copyText": "Kopiuj tekst transkrypcji",
+    "jumpTo": "Przejdź do {{time}}",
+    "hide": "Ukryj transkrypcję",
+    "show": "Pokaż transkrypcję",
+    "showWithCount_one": "Pokaż transkrypcję ({{count}} wiersz)",
+    "showWithCount_few": "Pokaż transkrypcję ({{count}} wiersze)",
+    "showWithCount_many": "Pokaż transkrypcję ({{count}} wierszy)",
+    "showWithCount_other": "Pokaż transkrypcję ({{count}} wiersza)"
+  },
+  "blog": {
+    "noContent": "Brak treści",
+    "loadError": "Błąd wczytywania treści.",
+    "processError": "Błąd przetwarzania treści.",
+    "rendererError": "Błąd wczytywania renderera."
+  },
+  "section": {
+    "posted": "Komentarz opublikowany!",
+    "postFailed": "Nie udało się dodać komentarza, spróbuj ponownie",
+    "editFailed": "Edycja nie powiodła się, spróbuj ponownie",
+    "updated": "Komentarz zaktualizowany",
+    "commentTab": "Komentarz",
+    "reactTab": "Reakcja",
+    "at": "o",
+    "atTime": "o {{time}}",
+    "commentPlaceholder": "Napisz tu swój komentarz...",
+    "replyPlaceholder": "Napisz tu swoją odpowiedź...",
+    "commentButton": "Skomentuj",
+    "count_one": "{{count}} komentarz",
+    "count_few": "{{count}} komentarze",
+    "count_many": "{{count}} komentarzy",
+    "count_other": "{{count}} komentarza",
+    "edited": "(edytowano)",
+    "saving": "Zapisywanie...",
+    "translation": "Tłumaczenie",
+    "translationFailed": "Tłumaczenie nie powiodło się. Czy usługa tłumaczeń działa?",
+    "reportComment": "Zgłoś komentarz",
+    "openInShorts": "Otwórz w Shorts"
+  }
+}

@@ -25,6 +25,7 @@ import UpvoteCount from '../UpvoteCount/UpvoteCount';
 import AuthorBadge from '../AuthorBadge/AuthorBadge';
 import CommentVoteTooltip from '../tooltip/CommentVoteTooltip';
 import BarLoader from '../Loader/BarLoader';
+import { useTranslation } from 'react-i18next';
 import './CommunitySnaps.scss';
 
 // Every toast from this module is headed "Post"; the message becomes the
@@ -119,6 +120,7 @@ function usePendingReplies(fetched, refetch) {
 // navigation (used on the Overview page, where the card is too short a preview
 // to expand inline — "Read more" instead jumps to the full Community tab).
 function SnapBody({ body, maxVh = 0.33, onReadMore }) {
+  const { t } = useTranslation();
   const [html, setHtml] = useState('');
   const [expanded, setExpanded] = useState(false);
   const [overflowing, setOverflowing] = useState(false);
@@ -165,7 +167,7 @@ function SnapBody({ body, maxVh = 0.33, onReadMore }) {
       />
       {overflowing && (
         <button type="button" className="snap-readmore" onClick={onReadMore || (() => setExpanded((e) => !e))}>
-          {onReadMore ? 'Read more' : (expanded ? 'Show less' : 'Read more')}
+          {onReadMore ? t('profile.snaps.readMore') : (expanded ? t('common.actions.showLess') : t('profile.snaps.readMore'))}
         </button>
       )}
     </div>
@@ -177,6 +179,7 @@ function SnapBody({ body, maxVh = 0.33, onReadMore }) {
 // onPosted fires right after it with the new reply, so the thread can show it
 // before any node returns it (see usePendingReplies).
 function ReplyBox({ parentAuthor, parentPermlink, onPosted, onSigned, autoFocus = false }) {
+  const { t } = useTranslation();
   const user = useAppStore((s) => s.user);
   const incubationHandle = useAppStore((s) => s.incubationHandle);
   const [reply, setReply] = useState('');
@@ -194,7 +197,7 @@ function ReplyBox({ parentAuthor, parentPermlink, onPosted, onSigned, autoFocus 
     try {
       const rp = `re-${parentPermlink}-${Date.now() % 1000000}`.toLowerCase().replace(/[^a-z0-9-]/g, '').slice(0, 250);
       await commentWithAioha(parentAuthor, parentPermlink, rp, '', text, { app: '3speak/snap', format: 'markdown' }, null);
-      toast.success('Comment posted!');
+      toast.success(t('profile.snaps.commentPosted'));
       // What was just written, in the shape the thread renders, so it can be
       // shown before any node returns it (see usePendingReplies).
       const local = {
@@ -210,7 +213,7 @@ function ReplyBox({ parentAuthor, parentPermlink, onPosted, onSigned, autoFocus 
       setReply('');
       onPosted?.(local);
     } catch (e) {
-      toast.error(e?.message || 'Could not post the comment');
+      toast.error(e?.message || t('profile.snaps.commentFailed'));
     } finally {
       setPosting(false);
     }
@@ -220,7 +223,7 @@ function ReplyBox({ parentAuthor, parentPermlink, onPosted, onSigned, autoFocus 
     <div className="snap-reply-box">
       <textarea
         ref={replyRef}
-        placeholder="Write a comment…"
+        placeholder={t('profile.snaps.commentPlaceholder')}
         value={reply}
         onChange={(e) => setReply(e.target.value)}
         rows={2}
@@ -232,7 +235,7 @@ function ReplyBox({ parentAuthor, parentPermlink, onPosted, onSigned, autoFocus 
           onPickGif={(url) => insertAtCursor(replyRef.current, reply, gifMarkdown(url), setReply)}
         />
         <button type="button" onClick={submit} disabled={posting || !reply.trim()}>
-          {posting ? 'Posting…' : 'Reply'}
+          {posting ? t('profile.snaps.posting') : t('common.actions.reply')}
         </button>
       </div>
     </div>
@@ -241,6 +244,7 @@ function ReplyBox({ parentAuthor, parentPermlink, onPosted, onSigned, autoFocus 
 
 // A single comment — recursive, so replies-on-replies work.
 function SnapComment({ comment }) {
+  const { t } = useTranslation();
   const user = useAppStore((s) => s.user);
   const incubationHandle = useAppStore((s) => s.incubationHandle);
   const [html, setHtml] = useState('');
@@ -273,11 +277,11 @@ function SnapComment({ comment }) {
       <div className="snap-comment-body markdown-body" dangerouslySetInnerHTML={{ __html: html }} />
       <div className="snap-comment-actions">
         {(user || incubationHandle) && (
-          <button type="button" onClick={() => setReplying((v) => !v)}>{replying ? 'Cancel' : 'Reply'}</button>
+          <button type="button" onClick={() => setReplying((v) => !v)}>{replying ? t('common.actions.cancel') : t('common.actions.reply')}</button>
         )}
         {shownCount > 0 && (
           <button type="button" onClick={() => setShowReplies((v) => !v)}>
-            {showReplies ? 'Hide replies' : `${shownCount} ${shownCount > 1 ? 'replies' : 'reply'}`}
+            {showReplies ? t('profile.snaps.hideReplies') : t('profile.snaps.replies', { count: shownCount })}
           </button>
         )}
       </div>
@@ -299,6 +303,7 @@ function SnapComment({ comment }) {
 }
 
 function SnapComments({ owner, permlink, onCommented, autoFocus = false }) {
+  const { t } = useTranslation();
   const { data: fetched = [], isLoading, refetch } = useQuery({
     queryKey: ['snap-comments', owner, permlink],
     queryFn: () => fetchReplies(owner, permlink),
@@ -310,9 +315,9 @@ function SnapComments({ owner, permlink, onCommented, autoFocus = false }) {
     <div className="snap-comments">
       <ReplyBox parentAuthor={owner} parentPermlink={permlink} onSigned={onCommented} onPosted={addPending} autoFocus={autoFocus} />
       {isLoading && comments.length === 0 ? (
-        <div className="snap-comments-status">Loading comments…</div>
+        <div className="snap-comments-status">{t('profile.snaps.loadingComments')}</div>
       ) : comments.length === 0 ? (
-        <div className="snap-comments-status">No comments yet.</div>
+        <div className="snap-comments-status">{t('profile.snaps.noComments')}</div>
       ) : (
         <ul className="snap-comment-list">
           {comments.map((c) => <SnapComment key={`${c.author}/${c.permlink}`} comment={c} />)}
@@ -324,6 +329,7 @@ function SnapComments({ owner, permlink, onCommented, autoFocus = false }) {
 
 // Card3-style ⋮ menu, but hides go to the SNAP hide list only (not video hides).
 function SnapOptionsMenu({ owner, permlink, onHidden }) {
+  const { t } = useTranslation();
   const user = useAppStore((s) => s.user);
   const [open, setOpen] = useState(false);
   const [pos, setPos] = useState({ top: 0, left: 0 });
@@ -354,29 +360,29 @@ function SnapOptionsMenu({ owner, permlink, onHidden }) {
     onHidden?.();
     try {
       await hideSnap(user, owner, permlink);
-      toast('Post hidden', { action: { label: 'Undo', onClick: () => unhideSnap(user, owner, permlink).catch(() => {}) } });
-    } catch { toast.error('Could not hide the post'); }
+      toast(t('profile.snaps.postHidden'), { action: { label: t('profile.snaps.undo'), onClick: () => unhideSnap(user, owner, permlink).catch(() => {}) } });
+    } catch { toast.error(t('profile.snaps.hidePostFailed')); }
   };
   const hideCreator = async () => {
     setOpen(false);
     onHidden?.();
     try {
       await hideSnapCreator(user, owner);
-      toast(`Hiding @${owner}'s community posts`, { action: { label: 'Undo', onClick: () => unhideSnapCreator(user, owner).catch(() => {}) } });
-    } catch { toast.error('Could not hide the creator'); }
+      toast(t('profile.snaps.hidingCreator', { user: owner }), { action: { label: t('profile.snaps.undo'), onClick: () => unhideSnapCreator(user, owner).catch(() => {}) } });
+    } catch { toast.error(t('profile.snaps.hideCreatorFailed')); }
   };
 
   return (
     <>
-      <button ref={btnRef} type="button" className="snap-menu-btn" onClick={toggle} aria-label="Post options">
+      <button ref={btnRef} type="button" className="snap-menu-btn" onClick={toggle} aria-label={t('profile.snaps.postOptions')}>
         <MdMoreVert />
       </button>
       {open && createPortal(
         <>
           <div className="snap-menu-backdrop" onClick={() => setOpen(false)} />
           <div className="snap-menu" style={{ top: pos.top, left: pos.left }}>
-            <button type="button" onClick={hidePost}>Not interested</button>
-            <button type="button" onClick={hideCreator}>Don’t show this creator</button>
+            <button type="button" onClick={hidePost}>{t('profile.snaps.notInterested')}</button>
+            <button type="button" onClick={hideCreator}>{t('profile.snaps.dontShowCreator')}</button>
           </div>
         </>,
         document.body,
@@ -389,6 +395,7 @@ function SnapOptionsMenu({ owner, permlink, onHidden }) {
 // styles. Rewards and beneficiaries stay as originally posted (Hive only allows
 // changing comment_options before the first vote), so they're not shown here.
 function SnapEditForm({ owner, permlink, initialBody, initialTags, initialNsfw, onCancel, onSaved }) {
+  const { t } = useTranslation();
   const user = useAppStore((s) => s.user);
   const [body, setBody] = useState(initialBody || '');
   const [tags, setTags] = useState(initialTags || []);
@@ -397,30 +404,30 @@ function SnapEditForm({ owner, permlink, initialBody, initialTags, initialNsfw, 
   const [saving, setSaving] = useState(false);
 
   const addTag = (raw) => {
-    const t = String(raw || '').toLowerCase().replace(/^#/, '').trim();
-    if (!t || t === SNAP_TAG || tags.includes(t)) return;
-    if (tags.length >= MAX_USER_TAGS) { toast.error(`Up to ${MAX_USER_TAGS} tags`); return; }
-    setTags((prev) => [...prev, t]);
+    const tag = String(raw || '').toLowerCase().replace(/^#/, '').trim();
+    if (!tag || tag === SNAP_TAG || tags.includes(tag)) return;
+    if (tags.length >= MAX_USER_TAGS) { toast.error(t('profile.snaps.tagLimit', { max: MAX_USER_TAGS })); return; }
+    setTags((prev) => [...prev, tag]);
   };
   const onTagKeyDown = (e) => {
     if (e.key === 'Enter' || e.key === ' ' || e.key === ',') { e.preventDefault(); addTag(tagInput); setTagInput(''); }
     else if (e.key === 'Backspace' && !tagInput && tags.length) setTags(tags.slice(0, -1));
   };
-  const removeTag = (t) => setTags(tags.filter((x) => x !== t));
+  const removeTag = (tag) => setTags(tags.filter((x) => x !== tag));
 
   const save = async () => {
     const text = body.trim();
-    if (!text) { toast.error('Write something first'); return; }
-    if (!user || user !== owner) { toast.error('Only the author can edit this post'); return; }
+    if (!text) { toast.error(t('profile.snaps.writeSomething')); return; }
+    if (!user || user !== owner) { toast.error(t('profile.snaps.onlyAuthor')); return; }
     setSaving(true);
     try {
       // Don't lose a half-typed tag left in the input.
       const pending = tagInput.trim() ? [...tags, tagInput.trim().toLowerCase().replace(/^#/, '')] : tags;
       await updateSnap({ user, permlink, body: text, tags: pending, nsfw });
-      toast.success('Post updated!');
+      toast.success(t('profile.snaps.postUpdated'));
       onSaved({ body: text, tags: [SNAP_TAG, ...pending, ...(nsfw ? ['nsfw'] : [])] });
     } catch (e) {
-      toast.error(e?.message || 'Could not update the post');
+      toast.error(e?.message || t('profile.snaps.updateFailed'));
     } finally {
       setSaving(false);
     }
@@ -428,11 +435,11 @@ function SnapEditForm({ owner, permlink, initialBody, initialTags, initialNsfw, 
 
   return (
     <div className="snap-composer snap-edit-form">
-      <MarkdownComposer value={body} onChange={setBody} placeholder="Edit your community post…" previewContext="snap" />
+      <MarkdownComposer value={body} onChange={setBody} placeholder={t('profile.snaps.editPlaceholder')} previewContext="snap" />
       <div className="snap-composer-row">
         <input
           className="snap-tags-input"
-          placeholder={tags.length >= MAX_USER_TAGS ? 'Tag limit reached' : 'Add a tag, then space or enter…'}
+          placeholder={tags.length >= MAX_USER_TAGS ? t('profile.snaps.tagLimitReached') : t('profile.snaps.tagPlaceholder')}
           value={tagInput}
           onChange={(e) => setTagInput(e.target.value)}
           onKeyDown={onTagKeyDown}
@@ -444,19 +451,19 @@ function SnapEditForm({ owner, permlink, initialBody, initialTags, initialNsfw, 
         </label>
       </div>
       <div className="snap-tag-chips">
-        <span className="snap-tag-chip built-in" title="Added to every community post">{SNAP_TAG}</span>
-        {tags.map((t) => (
-          <span key={t} className="snap-tag-chip">
-            {t}
-            <button type="button" onClick={() => removeTag(t)} aria-label={`Remove ${t}`}><MdClose /></button>
+        <span className="snap-tag-chip built-in" title={t('profile.snaps.builtInTag')}>{SNAP_TAG}</span>
+        {tags.map((tag) => (
+          <span key={tag} className="snap-tag-chip">
+            {tag}
+            <button type="button" onClick={() => removeTag(tag)} aria-label={t('profile.snaps.removeTag', { tag })}><MdClose /></button>
           </span>
         ))}
         <span className="snap-tag-count">{tags.length}/{MAX_USER_TAGS}</span>
       </div>
       <div className="snap-composer-actions">
-        <button type="button" className="snap-cancel-btn" onClick={onCancel} disabled={saving}>Cancel</button>
+        <button type="button" className="snap-cancel-btn" onClick={onCancel} disabled={saving}>{t('common.actions.cancel')}</button>
         <button type="button" className="snap-post-btn" disabled={saving || !body.trim()} onClick={save}>
-          {saving ? 'Saving…' : 'Save changes'}
+          {saving ? t('common.actions.saving') : t('profile.snaps.saveChanges')}
         </button>
       </div>
     </div>
@@ -468,6 +475,7 @@ function SnapEditForm({ owner, permlink, initialBody, initialTags, initialNsfw, 
 // (the app-wide popup convention). The community-snaps/snap-card classes are only
 // there so the nested .snap-comments styles apply inside the portal.
 function SnapCommentsModal({ owner, permlink, onClose, onCommented }) {
+  const { t } = useTranslation();
   useEffect(() => {
     const onKey = (e) => { if (e.key === 'Escape') onClose(); };
     document.addEventListener('keydown', onKey);
@@ -483,8 +491,8 @@ function SnapCommentsModal({ owner, permlink, onClose, onCommented }) {
     <div className="snap-comments-modal-backdrop" onClick={onClose}>
       <div className="community-snaps snap-comments-modal" onClick={(e) => e.stopPropagation()}>
         <div className="snap-comments-modal-head">
-          <span>Comments on @{owner}’s post</span>
-          <button type="button" onClick={onClose} aria-label="Close"><MdClose /></button>
+          <span>{t('profile.snaps.commentsOn', { user: owner })}</span>
+          <button type="button" onClick={onClose} aria-label={t('common.actions.close')}><MdClose /></button>
         </div>
         <div className="snap-card snap-comments-modal-scroll">
           <SnapComments owner={owner} permlink={permlink} onCommented={onCommented} />
@@ -508,6 +516,7 @@ function SnapCommentsModal({ owner, permlink, onClose, onCommented }) {
 // behaviour otherwise (inline comments, full clamp) — a community Discussion tab
 // is a list of many authors that is still a page of its own, not a feed rail.
 export function SnapCard({ snap, feedMode = false, showAuthor = false, onRemove, onOpenTab, maxVh, autoOpenComments = false }) {
+  const { t } = useTranslation();
   const user = useAppStore((s) => s.user);
   const incubationHandle = useAppStore((s) => s.incubationHandle);
   // Whoever is reading this card, by whichever identity they have. The off-chain
@@ -602,7 +611,7 @@ export function SnapCard({ snap, feedMode = false, showAuthor = false, onRemove,
   const votes = meta?.votes ?? 0;
   const voted = meta?.voted ?? false;
   const comments = meta?.comments ?? 0;
-  const tags = effTags.filter((t) => t && t !== 'nsfw' && t !== SNAP_TAG);
+  const tags = effTags.filter((tag) => tag && tag !== 'nsfw' && tag !== SNAP_TAG);
 
   return (
     <article className={`snap-card${autoOpenComments ? ' snap-card--highlighted' : ''}`} ref={cardRef}>
@@ -613,16 +622,16 @@ export function SnapCard({ snap, feedMode = false, showAuthor = false, onRemove,
         {(feedMode || showAuthor) && (
           <AuthorBadge author={snap.owner} showFollow compact tabHint="community" />
         )}
-        {feedMode && <span className="snap-feed-title">Community snap</span>}
+        {feedMode && <span className="snap-feed-title">{t('profile.snaps.communitySnap')}</span>}
         <Link
           className="snap-time"
           to={feedMode ? `/p/${snap.owner}?tab=community` : `/post/${snap.owner}/${snap.permlink}`}
-          title={feedMode ? `View @${snap.owner}'s community` : 'View post'}
+          title={feedMode ? t('profile.snaps.viewCommunity', { user: snap.owner }) : t('profile.snaps.viewPost')}
         >
           {hiveTime(snap.created)}
         </Link>
         {isOwn && !editing && (
-          <button type="button" className="snap-menu-btn snap-edit-btn" onClick={() => setEditing(true)} title="Edit post" aria-label="Edit post">
+          <button type="button" className="snap-menu-btn snap-edit-btn" onClick={() => setEditing(true)} title={t('profile.snaps.editPost')} aria-label={t('profile.snaps.editPost')}>
             <MdEdit />
           </button>
         )}
@@ -636,7 +645,7 @@ export function SnapCard({ snap, feedMode = false, showAuthor = false, onRemove,
           owner={snap.owner}
           permlink={snap.permlink}
           initialBody={effBody}
-          initialTags={effTags.filter((t) => t && t !== SNAP_TAG && t !== 'nsfw')}
+          initialTags={effTags.filter((tag) => tag && tag !== SNAP_TAG && tag !== 'nsfw')}
           initialNsfw={effTags.includes('nsfw') || !!snap.nsfw}
           onCancel={() => setEditing(false)}
           onSaved={(edit) => { setLocalEdit(edit); setEditing(false); }}
@@ -651,7 +660,7 @@ export function SnapCard({ snap, feedMode = false, showAuthor = false, onRemove,
 
       {!editing && tags.length > 0 && (
         <div className="snap-tags">
-          {tags.map((t) => <Link key={t} to={`/t/${t}`} className="snap-tag">{t}</Link>)}
+          {tags.map((tag) => <Link key={tag} to={`/t/${tag}`} className="snap-tag">{tag}</Link>)}
         </div>
       )}
 
@@ -725,6 +734,7 @@ export function SnapCard({ snap, feedMode = false, showAuthor = false, onRemove,
 // author's snaps filed under that community, cards name their author (showAuthor),
 // and the composer (still gated by canPost) files new posts there.
 export default function CommunitySnaps({ user, community = '', canPost = false, limit = 0, hideEmpty = false, targetPermlink = null, openComments = false, onOpenTab = null }) {
+  const { t } = useTranslation();
   const [optimistic, setOptimistic] = useState([]);
   const queryClient = useQueryClient();
 
@@ -758,7 +768,7 @@ export default function CommunitySnaps({ user, community = '', canPost = false, 
         <SnapComposer
           onPosted={onPosted}
           community={community}
-          {...(community ? { placeholder: 'Start a discussion in this community…' } : {})}
+          {...(community ? { placeholder: t('profile.snaps.discussionPlaceholder') } : {})}
         />
       )}
 
@@ -768,8 +778,8 @@ export default function CommunitySnaps({ user, community = '', canPost = false, 
         hideEmpty ? null : (
           <div className="snap-empty">
             {community
-              ? (canPost ? 'No discussions yet. Start the first one above.' : 'No discussions yet. Log in to start one.')
-              : (canPost ? 'No community posts yet — share your first update above.' : 'No community posts yet.')}
+              ? (canPost ? t('profile.snaps.emptyDiscussionCanPost') : t('profile.snaps.emptyDiscussion'))
+              : (canPost ? t('profile.snaps.emptyOwn') : t('profile.snaps.empty'))}
           </div>
         )
       ) : (

@@ -1,0 +1,237 @@
+{
+  "aiBadge": {
+    "title": "Imegunduliwa kuwa imetengenezwa na AI",
+    "label": "AI"
+  },
+  "translate": {
+    "titleButton": "Tafsiri kichwa",
+    "original": "Asili",
+    "translate": "Tafsiri",
+    "translating": "Inatafsiri..."
+  },
+  "summary": {
+    "title": "Muhtasari",
+    "close": "Funga muhtasari",
+    "showingOriginal": "Inaonyesha asili",
+    "translatedTo": "Imetafsiriwa kwa {{language}}",
+    "showLanguage": "Onyesha {{language}}",
+    "showOriginal": "Onyesha asili",
+    "buttonTitle": "Muhtasari wa AI wa video hii"
+  },
+  "errors": {
+    "notAvailable": "Video hii haipatikani.",
+    "goHome": "Nenda nyumbani",
+    "scheduledNotFound": "Chapisho lililoratibiwa halikupatikana — huenda limeshachapishwa au kughairiwa.",
+    "network": "Hitilafu ya mtandao. Tafadhali kagua muunganisho wako.",
+    "notFound": "Video haikupatikana au imeshindwa kupakia.",
+    "backToProfile": "Rudi kwenye wasifu"
+  },
+  "gated": {
+    "title": "Kwa wafadhili tu",
+    "checkFailed": "Hatukuweza kuthibitisha usajili wako sasa hivi. Jaribu tena baada ya muda mfupi.",
+    "preview": "Unatazama onyesho la bure. 3Speak Pro hufungua video nzima.",
+    "subscribersOnly": "Video hii inapatikana kwa wanachama wa 3Speak Pro.",
+    "cta": "Pata 3Speak Pro"
+  },
+  "reactions": {
+    "show": "Onyesha miitikio",
+    "add": "Ongeza mwitikio"
+  },
+  "liveChat": "Gumzo mubashara",
+  "moreVideos": "Video zaidi",
+  "vote": {
+    "saveFailed": "Imeshindwa kuhifadhi kura yako"
+  },
+  "locked": {
+    "noAccount": "Hufunguka baada ya kufungua akaunti yako ya Hive",
+    "offChainPost": "Bado haipatikani: chapisho hili haliko kwenye Hive"
+  },
+  "interests": {
+    "loginRequired": "Ingia ili kuhifadhi mambo unayopenda",
+    "added": "“{{tag}}” imeongezwa kwenye mambo unayopenda",
+    "saveFailed": "Imeshindwa kuhifadhi mambo unayopenda"
+  },
+  "watchLater": {
+    "removed": "Imeondolewa kwenye Tazama Baadaye",
+    "removeFailed": "Imeshindwa kuondoa: {{error}}",
+    "removeTitle": "Ondoa kwenye Tazama Baadaye"
+  },
+  "reshare": {
+    "loginRequired": "Ingia ili kushiriki tena",
+    "success": "Imeshirikiwa tena!",
+    "failed": "Imeshindwa kushiriki tena",
+    "reshared": "Imeshirikiwa tena",
+    "reshare": "Shiriki tena",
+    "reshareWithCount": "Shiriki tena ({{count}})"
+  },
+  "clip": {
+    "noVideoUrlRemix": "Imeshindwa kupata URL ya video kwa ajili ya remix",
+    "noVideoUrl": "Imeshindwa kupata URL ya video",
+    "startHint": "Nenda kwenye mwanzo wa klipu yako, kisha bofya \"Weka mwanzo\"",
+    "endHint": "Sasa nenda kwenye mwisho wa klipu yako na ubofye \"Weka mwisho\"",
+    "endBeforeStart": "Muda wa mwisho lazima uwe baada ya muda wa mwanzo",
+    "trimmed": "Klipu imepunguzwa hadi dakika 1 — tutakata klipu mwishoni mwa ratiba.",
+    "set": "Klipu imewekwa: {{start}} – {{end}}. Sasa bofya \"Tengeneza klipu\"",
+    "loginRequired": "Ingia ili kukata klipu",
+    "cancel": "Ghairi klipu",
+    "clipVideo": "Kata klipu ya video",
+    "label": "Kata klipu ya video",
+    "clip": "Klipu",
+    "seekToStart": "Nenda mwanzo",
+    "setStart": "Weka mwanzo",
+    "setEnd": "Weka mwisho",
+    "createClip": "Tengeneza klipu",
+    "barStart": "Nenda kwenye mwanzo wa klipu yako",
+    "barEnd": "Mwanzo: {{start}} — Sasa nenda kwenye mwisho",
+    "barDone": "Klipu: {{start}} – {{end}}"
+  },
+  "share": {
+    "defaultTitle": "Video ya 3Speak",
+    "linkCopied": "Kiungo kimenakiliwa!",
+    "failed": "Imeshindwa kushiriki"
+  },
+  "follow": {
+    "loginRequired": "Tafadhali ingia ili kufuata watumiaji",
+    "followed": "Umemfuata @{{user}}",
+    "failed": "Imeshindwa kufuata: {{error}}"
+  },
+  "ad": {
+    "countdown": "Tangazo baada ya {{seconds}}"
+  },
+  "media": {
+    "unavailableTitle": "Video hii haipatikani tena",
+    "unavailableBody": "Faili ya upakiaji huu wa zamani haikuweza kupatikana kwenye mtandao. Chapisho bado lipo kwenye blockchain, lakini video haiwezi kuchezwa tena.",
+    "blockedTitle": "Imeshindwa kupakia video kwa sasa",
+    "blockedBody": "Mojawapo ya seva zetu za video haikujibu. Video yenyewe iko salama, kwa hivyo tafadhali jaribu tena."
+  },
+  "tipNudge": {
+    "text": "Umeifurahia?<hide> Mtumie <b>@{{author}}</b> bakshishi!</hide>",
+    "dismiss": "Funga"
+  },
+  "community": {
+    "members_one": "Mwanachama {{count}}",
+    "members_other": "Wanachama {{count}}"
+  },
+  "tags": {
+    "curated": "Imeteuliwa"
+  },
+  "topics": {
+    "taggedBy": "“{{label}}” · imewekwa lebo na {{count}}",
+    "viewers_one": "“{{label}}” · mtazamaji {{count}}",
+    "viewers_other": "“{{label}}” · watazamaji {{count}}",
+    "autoNoVotes": "Lebo ya kiotomatiki — bado hakuna kura za watazamaji",
+    "noVotes": "Bado hakuna kura za watazamaji",
+    "inInterests": "✓ Imo kwenye mambo unayopenda",
+    "addToInterests": "+ Ongeza kwenye mambo ninayopenda",
+    "openTagFeed": "Fungua mlisho wa lebo"
+  },
+  "scheduled": {
+    "notice": "Imeratibiwa kwa <b>{{date}}</b> — bado haijachapishwa.",
+    "futureDate": "tarehe ijayo",
+    "edit": "Hariri, panga upya au ghairi",
+    "editTitle": "Hariri chapisho lililoratibiwa (maelezo, tarehe, au ghairi)"
+  },
+  "actions": {
+    "voteOffChain": "Pigia kura video hii. Kura inahifadhiwa kwenye 3Speak na hailipi zawadi.",
+    "signInToVote": "Ingia ili kupiga kura",
+    "tagVideo": "Weka lebo kwenye video hii",
+    "voteVideo": "Pigia kura video hii",
+    "tag": "Lebo",
+    "vote": "Kura",
+    "analyticsTitle": "Takwimu za video",
+    "analytics": "Takwimu",
+    "videoStats": "Takwimu za video",
+    "promoteTitle": "Tangaza video hii",
+    "promote": "Tangaza",
+    "editTitle": "Hariri maelezo ya video",
+    "reportTitle": "Ripoti video",
+    "addToPlaylist": "Ongeza kwenye orodha ya kucheza",
+    "playlist": "Orodha",
+    "tipTitle": "Mpe mtayarishaji bakshishi",
+    "tip": "Bakshishi",
+    "details": "Maelezo",
+    "toggleDetails": "Onyesha/ficha maelezo",
+    "followCreator": "Mfuate mtayarishaji",
+    "closeMenu": "Funga menyu",
+    "openActions": "Fungua vitendo"
+  },
+  "description": {
+    "hide": "Ficha maelezo",
+    "show": "Onyesha maelezo"
+  },
+  "edit": {
+    "title": "Hariri video",
+    "loading": "Inapakia chapisho la sasa…",
+    "videoFile": "Faili ya video",
+    "replaceVideo": "Badilisha video",
+    "replaceHint": "Inabadilisha faili ya video kwenye chapisho hili. Kila kitu kingine kinabaki kama kilivyo: chapisho linabaki na kura zake, malipo, maoni, tarehe ya upakiaji na nafasi yake kwenye wasifu wako. Usiguse hapa ili kubaki na video ya sasa.",
+    "uploadingTo": "Inapakia kwenye <b>{{host}}</b>… {{pct}}%",
+    "choosingServer": "Inachagua seva ya upakiaji…",
+    "uploadedTo": "Imepakiwa kwenye <b>{{host}}</b>. Bonyeza Hifadhi ili kuiweka.",
+    "uploaded": "Imepakiwa. Bonyeza Hifadhi ili kuiweka.",
+    "cancelUpload": "Ghairi upakiaji",
+    "keepCurrent": "Baki na video ya sasa",
+    "encodeHint": "Baada ya kuhifadhi bado inahitaji dakika chache kusimbwa, na video ya zamani inaendelea kucheza hadi mpya iwe tayari. Picha yako ndogo haibadiliki, kwa hivyo isasishe hapo juu ikiwa hailingani tena.",
+    "thumbnail": "Picha ndogo",
+    "thumbPreviewAlt": "Onyesho la picha ndogo",
+    "uploadImage": "Pakia picha",
+    "uploading": "Inapakia…",
+    "thumbHint": "Pakia picha au bandika URL ya moja kwa moja. Usibadilishe ili kubaki na picha ndogo ya sasa.",
+    "titleLabel": "Kichwa",
+    "titleMin": "angalau {{min}}",
+    "tags": "Lebo",
+    "tagsPlaceholder": "zilizotenganishwa kwa nafasi",
+    "autoTag": "Imeongezwa kiotomatiki — haiwezi kuondolewa",
+    "tagCount_one": "lebo {{count}}/{{max}}",
+    "tagCount_other": "lebo {{count}}/{{max}}",
+    "tagCountRequired_one": "lebo {{count}}/{{max}} · angalau 1 inahitajika",
+    "tagCountRequired_other": "lebo {{count}}/{{max}} · angalau 1 inahitajika",
+    "description": "Maelezo",
+    "descriptionPlaceholder": "Waambie watazamaji kuhusu video yako…",
+    "markdownHint": "Inakubali markdown.",
+    "listed": "Imeorodheshwa",
+    "unlistedLabel": "Haijaorodheshwa",
+    "listedHint": "Inaonyeshwa kwenye milisho, utafutaji na kwenye wasifu wako.",
+    "unlistedHint": "Imefichwa kwenye milisho na utafutaji — bado inacheza kwa kiungo cha moja kwa moja, inabaki kwenye wasifu wako (ikiwa na alama).",
+    "allowRemix": "Ruhusu Remix/Klipu",
+    "remixOn": "Wengine wanaweza kutengeneza remix/klipu; wewe unatajwa kama mwandishi asili.",
+    "remixOff": "Wengine hawawezi kufanya remix wala kukata klipu ya video hii.",
+    "trailer": "Trela ya chaneli",
+    "trailerOn": "Inacheza kiotomatiki juu ya kichupo cha Muhtasari kwenye wasifu wako, ikichukua nafasi ya trela yoyote uliyoweka awali.",
+    "trailerOff": "Ifanye hii kuwa video inayocheza kiotomatiki juu ya kichupo cha Muhtasari kwenye wasifu wako.",
+    "nsfw": "Watu wazima / NSFW",
+    "notNsfw": "Si ya watu wazima",
+    "nsfwHint": "Imefichwa kwenye milisho na utafutaji isipokuwa mtazamaji amewasha NSFW; imewekwa lebo nsfw kwenye Hive.",
+    "notNsfwHint": "Maudhui ya kawaida, yanaonyeshwa kwa kila mtu.",
+    "promoted": "Imetangazwa",
+    "promote": "Tangaza video",
+    "saveChanges": "Hifadhi mabadiliko",
+    "noChanges": "Hakuna mabadiliko ya kuhifadhi.",
+    "thumbUploaded": "Picha ndogo imepakiwa.",
+    "videoUploaded": "Video mpya imepakiwa. Hifadhi ili kuitumia kwenye chapisho hili.",
+    "relisted": "Video imeorodheshwa tena.",
+    "unlisted": "Video imeondolewa kwenye orodha.",
+    "trailerSet": "Imewekwa kama trela ya chaneli yako.",
+    "trailerRemoved": "Imeondolewa kama trela ya chaneli yako.",
+    "updatedEncoding": "Video imesasishwa! Faili mpya inahitaji muda kidogo kumaliza kusimbwa.",
+    "updated": "Video imesasishwa!",
+    "errors": {
+      "notFound": "Imeshindwa kupata chapisho hili kwenye Hive.",
+      "loadFailed": "Imeshindwa kupakia chapisho kutoka Hive. Tafadhali jaribu tena.",
+      "notImage": "Tafadhali chagua faili ya picha.",
+      "imageTooLarge": "Picha ni kubwa mno (juu kabisa 10 MB).",
+      "thumbUploadFailed": "Kupakia picha ndogo kumeshindwa.",
+      "notVideo": "Tafadhali chagua faili ya video.",
+      "videoTooLarge": "Video ni kubwa mno (juu kabisa 5 GB).",
+      "noVideoEntry": "Chapisho hili halina video ya kubadilisha — metadata yake haitaji yoyote.",
+      "notInLibrary": "Video ya chapisho hili haipo tena kwenye maktaba, kwa hivyo faili yake haiwezi kubadilishwa.",
+      "notOwner": "Unaweza kubadilisha faili ya video yako mwenyewe tu.",
+      "videoUploadFailed": "Upakiaji wa video umeshindwa.",
+      "noEmbedEntry": "Chapisho hili halina video iliyopachikwa ya kubadilisha — metadata yake haitaji yoyote.",
+      "broadcastFailed": "Kutangaza kumeshindwa",
+      "listingFailed": "Imeshindwa kusasisha uorodheshaji.",
+      "trailerFailed": "Imeshindwa kusasisha trela ya chaneli yako.",
+      "saveFailed": "Imeshindwa kuhifadhi mabadiliko."
+    }
+  }
+}

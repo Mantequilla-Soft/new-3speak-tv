@@ -1,10 +1,12 @@
 import { Check } from "lucide-react";
 import "./StepProgress.scss";
+import { useTranslation } from "react-i18next";
 
 
 export const StepProgress = ({ step }) => {
   // Default values if none are provided
-  const defaultSteps = ["Select Video", "Choose Thumbnail", "Add Details", "Preview & Upload"];
+  const { t } = useTranslation();
+  const defaultSteps = [t("upload.steps.selectVideo"), t("upload.steps.chooseThumbnail"), t("upload.steps.addDetails"), t("upload.steps.previewUpload")];
   const safeSteps =  defaultSteps;
   const safeTotalSteps = safeSteps.length;
   const safeCurrentStep = step;

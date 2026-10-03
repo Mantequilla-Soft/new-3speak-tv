@@ -1,0 +1,119 @@
+{
+  "loadingMore": "Đang tải thêm…",
+  "promoted": "Được quảng bá",
+  "scrollLeft": "Cuộn sang trái",
+  "scrollRight": "Cuộn sang phải",
+  "errors": {
+    "fetchVideos": "Lỗi khi tải video",
+    "loadVideos": "Không tải được video",
+    "loadShorts": "Không tải được Shorts"
+  },
+  "tabs": {
+    "all": "Tất cả",
+    "videos": "Video",
+    "shorts": "Shorts",
+    "videosCount": "Video ({{count}})",
+    "shortsCount": "Shorts ({{count}})"
+  },
+  "dateFilters": {
+    "all": "Mọi lúc",
+    "today": "Hôm nay",
+    "week": "Tuần này",
+    "month": "Tháng này",
+    "justNow": "Vừa xong"
+  },
+  "live": {
+    "title": "Đang trực tiếp",
+    "badge": "● TRỰC TIẾP"
+  },
+  "newFromFollowing": {
+    "aria": "Mới từ các nhà sáng tạo bạn theo dõi",
+    "shorts_other": "{{count}} Shorts"
+  },
+  "firstUploads": {
+    "title": "Lần đầu tải lên"
+  },
+  "newVideos": {
+    "title": "Video mới"
+  },
+  "home": {
+    "sections": {
+      "discover": "Khám phá",
+      "home": "Bảng tin chính",
+      "follow": "Bảng tin theo dõi",
+      "new": "Nội dung mới",
+      "interests": "Sở thích"
+    },
+    "empty": "Chưa có gì để hiển thị ở đây.",
+    "viewAll": "Xem tất cả",
+    "dragToReorder": "Kéo để sắp xếp lại",
+    "surfTitle": "Lướt kênh: chọn một chủ đề và xem như xem TV",
+    "zapping": "Đang chuyển kênh"
+  },
+  "surf": {
+    "pageTitle": "Lướt kênh",
+    "intro": "Chọn một kênh và thư giãn. Chúng tôi xếp lần lượt những video hay nhất về chủ đề đó. Chán rồi? Bấm <b>Chuyển</b>. Muốn xem thứ khác? Đổi kênh.",
+    "backTo": "Quay lại CH {{number}} {{emoji}} {{title}}",
+    "surprise": "Gây bất ngờ cho tôi",
+    "yourChannels": "Kênh của bạn",
+    "nothingOnAir": "Hiện không có gì phát trên {{channel}}",
+    "tuneFailed": "Không thể dò kênh. Hãy thử lại sau giây lát.",
+    "remoteAria": "Điều khiển Lướt kênh",
+    "openGuide": "Mở danh mục kênh",
+    "ch": "CH {{number}}",
+    "chLabel": "CH",
+    "channelHint": "CH {{number}}: {{title}}",
+    "channelHintKey": "CH {{number}}: {{title}} ({{key}})",
+    "tuningShort": "Đang dò",
+    "tuning": "Đang dò kênh…",
+    "onAir": "Đang phát",
+    "changeChannel": "Đổi kênh",
+    "nextChannel": "Kênh tiếp theo",
+    "prevChannel": "Kênh trước",
+    "nextVideo": "Video tiếp theo",
+    "nextVideoKey": "Video tiếp theo (→)",
+    "zap": "Chuyển",
+    "findingNext": "Đang tìm video tiếp theo…",
+    "stop": "Dừng lướt kênh",
+    "stopTitle": "Dừng lướt kênh (vẫn tiếp tục phát video này)",
+    "guide": "Danh mục kênh"
+  },
+  "discover": {
+    "searchPlaceholder": "Tìm video, Shorts, âm thanh, cộng đồng...",
+    "clearSearch": "Xóa tìm kiếm",
+    "searchFor": "Tìm “{{term}}”",
+    "noResultsFor": "Không tìm thấy kết quả cho “{{term}}”",
+    "types": {
+      "user": "Người dùng",
+      "community": "Cộng đồng",
+      "video": "Video",
+      "short": "Shorts",
+      "audio": "Âm thanh",
+      "playlist": "Danh sách phát"
+    },
+    "suggest": {
+      "tags": "Thẻ",
+      "titles": "Tiêu đề"
+    },
+    "dates": {
+      "today": "Hôm nay",
+      "week": "Tuần này",
+      "month": "Tháng này",
+      "year": "Năm nay"
+    },
+    "boostRecent": "Ưu tiên nội dung mới",
+    "filters": "Bộ lọc",
+    "date": "Ngày",
+    "tag": "Thẻ",
+    "tagPlaceholder": "ví dụ crypto, gaming...",
+    "community": "Cộng đồng",
+    "communityPlaceholder": "Tìm cộng đồng...",
+    "clearAllFilters": "Xóa tất cả bộ lọc",
+    "allHidden": "Tất cả loại nội dung đang bị ẩn.",
+    "reenableFilters": "Bật lại tất cả bộ lọc",
+    "groupTitle": "{{label}} ({{count}})",
+    "subscribers_other": "{{count}} người đăng ký",
+    "authors_other": "{{count}} tác giả",
+    "views_other": "{{views}} lượt xem"
+  }
+}

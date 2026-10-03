@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { createPortal } from 'react-dom';
 import { MdVideocam } from 'react-icons/md';
+import { useTranslation, Trans } from 'react-i18next';
 import { toastIn } from '../../utils/toast';
 import { saveCreatorAdSettings } from '../../utils/adSettings';
 
@@ -19,6 +20,7 @@ const toast = toastIn('Advertising');
 // to onClick handlers, which would hand a click event to a `saved` argument and
 // make every dismissal look like a save.
 export default function AdSettingsDialog({ user, split, initialAdsEnabled, onSaved, onDismiss }) {
+  const { t } = useTranslation();
   const [step, setStep] = useState(0);
   const [adsEnabled, setAdsEnabled] = useState(initialAdsEnabled !== false);
   // Seeded from the server's own default community share rather than a constant
@@ -49,16 +51,16 @@ export default function AdSettingsDialog({ user, split, initialAdsEnabled, onSav
         communitySharePct: community,
       });
       if (res.chainSaved) {
-        toast.success('Ad settings saved to your Hive account');
+        toast.success(t('ads.prompt.savedToHive'));
       } else {
         // The setting DID take effect — only the creator's own on-chain copy is
         // missing. Saying "saved" flatly would hide that; saying "failed" would be
         // a lie that has people set it twice.
-        toast.warning('Saved on 3Speak. Could not write it to your Hive account, try again from Settings.');
+        toast.warning(t('ads.prompt.savedOnlyOn3speak'));
       }
       onSaved();
     } catch (err) {
-      toast.error((err && err.message) || 'Could not save your ad settings');
+      toast.error((err && err.message) || t('ads.prompt.saveFailed'));
     } finally {
       setSaving(false);
     }
@@ -79,21 +81,19 @@ export default function AdSettingsDialog({ user, split, initialAdsEnabled, onSav
         <header className="ads-prompt-head">
           <MdVideocam className="ads-prompt-head-icon" aria-hidden="true" />
           <div>
-            <h3 className="ads-prompt-title">Ads on your videos</h3>
+            <h3 className="ads-prompt-title">{t('ads.prompt.title')}</h3>
             <p className="ads-prompt-lede">
-              Ads run on your videos and you earn a share of what they make, along with
-              the community you posted in.
+              {t('ads.prompt.lede')}
             </p>
           </div>
         </header>
 
-        <span className="ads-prompt-step">Step {step + 1} of 2</span>
+        <span className="ads-prompt-step">{t('ads.prompt.stepOf', { step: step + 1, total: 2 })}</span>
 
         {step === 0 ? (
           <>
             <p className="ads-prompt-text">
-              3Speak can play a short sponsor spot in your videos. Here is the whole
-              arrangement, with nothing behind it.
+              {t('ads.prompt.intro')}
             </p>
 
             {/* The numbers moved out of the bar and into the key below it when the
@@ -108,69 +108,60 @@ export default function AdSettingsDialog({ user, split, initialAdsEnabled, onSav
               <span className="ads-prompt-bar-platform" />
             </div>
             <ul className="ads-prompt-bar-key">
-              <li className="is-creators"><span>Creator side</span><b>{pool}%</b></li>
+              <li className="is-creators"><span>{t('ads.prompt.creatorSide')}</span><b>{pool}%</b></li>
               {viewers > 0 ? (
-                <li className="is-viewers"><span>People watching</span><b>{viewers}%</b></li>
+                <li className="is-viewers"><span>{t('ads.prompt.peopleWatching')}</span><b>{viewers}%</b></li>
               ) : null}
               <li className="is-platform">
-                <span>Keeping 3Speak running</span><b>{platform}%</b>
+                <span>{t('ads.prompt.keeping3speak')}</span><b>{platform}%</b>
               </li>
             </ul>
 
             <ul className="ads-prompt-points">
               <li>
-                <strong>{pool}% of what an ad earns goes to the creator side.</strong> The
-                other {100 - pool}% pays the people watching and keeps 3Speak thriving:
-                encoding, storage, bandwidth and the people who keep it up.
+                <Trans i18nKey="ads.prompt.pointPool" values={{ pool, rest: 100 - pool }} components={{ b: <strong /> }} />
               </li>
               <li>
-                <strong>That {pool}% is yours to divide.</strong> You can pass part of it to
-                the community the video was posted into, so the community carrying your
-                work earns from it too. Keep all {pool}% if you would rather.
+                <Trans i18nKey="ads.prompt.pointDivide" values={{ pool }} components={{ b: <strong /> }} />
               </li>
               {viewers > 0 ? (
                 <li>
-                  <strong>Viewers earn {viewers}% too, and not out of your share.</strong>{' '}
-                  People who opt in are paid for the videos they actually watch, out of
-                  3Speak&apos;s end of the split rather than yours. Your {pool}% is the
-                  same either way.
+                  <Trans i18nKey="ads.prompt.pointViewers" values={{ viewers, pool }} components={{ b: <strong /> }} />
                 </li>
               ) : null}
               <li>
-                <strong>You can say no.</strong> Turn ads off and your videos carry none at
-                all. They are also withdrawn from what we offer advertisers, so nothing
-                is sold that you opted out of.
+                <Trans i18nKey="ads.prompt.pointSayNo" components={{ b: <strong /> }} />
               </li>
             </ul>
 
             <div className="ads-prompt-actions">
               <button type="button" className="ads-prompt-ghost" onClick={() => onDismiss()}>
-                Not now
+                {t('ads.prompt.notNow')}
               </button>
               <button type="button" className="ads-prompt-primary" onClick={() => setStep(1)}>
-                Next
+                {t('common.actions.next')}
               </button>
             </div>
           </>
         ) : (
           <>
-            <h4 className="ads-prompt-title">Your choice</h4>
+            <h4 className="ads-prompt-title">{t('ads.prompt.yourChoice')}</h4>
             <p className="ads-prompt-text">
-              You can change either of these at any time in <strong>Settings</strong>.
+              <Trans i18nKey="ads.prompt.changeAnytime" components={{ b: <strong /> }} />
             </p>
 
             <div className="ads-prompt-row">
               <div className="ads-prompt-row-text">
-                <span className="ads-prompt-row-title">Allow ads on my videos</span>
+                <span className="ads-prompt-row-title">{t('ads.prompt.allowAds')}</span>
                 <span className="ads-prompt-row-desc">
-                  On by default. Off means no ads on anything you post, and no share.
+                  {t('ads.prompt.allowAdsDesc')}
                 </span>
               </div>
               <button
                 type="button"
                 role="switch"
                 aria-checked={adsEnabled}
-                aria-label="Allow ads on my videos"
+                aria-label={t('ads.prompt.allowAds')}
                 className={`ads-prompt-switch${adsEnabled ? ' is-on' : ''}`}
                 onClick={() => setAdsEnabled((v) => !v)}
                 disabled={saving}
@@ -182,10 +173,10 @@ export default function AdSettingsDialog({ user, split, initialAdsEnabled, onSav
             {adsEnabled && (
               <div className="ads-prompt-share">
                 <label className="ads-prompt-row-title" htmlFor="ads-prompt-community">
-                  Share with the community
+                  {t('ads.prompt.shareCommunity')}
                 </label>
                 <span className="ads-prompt-row-desc">
-                  How much of the {pool}% goes to the community you posted the video into.
+                  {t('ads.prompt.shareCommunityDesc', { pool })}
                 </span>
                 <input
                   id="ads-prompt-community"
@@ -201,10 +192,10 @@ export default function AdSettingsDialog({ user, split, initialAdsEnabled, onSav
                     number in this dialog that reads differently depending on
                     whether you think it is a share of the pool or of everything. */}
                 <div className="ads-prompt-breakdown">
-                  <span><b>{mine}%</b> you</span>
-                  <span><b>{community}%</b> community</span>
+                  <span><Trans i18nKey="ads.prompt.breakdownYou" values={{ pct: mine }} components={{ b: <b /> }} /></span>
+                  <span><Trans i18nKey="ads.prompt.breakdownCommunity" values={{ pct: community }} components={{ b: <b /> }} /></span>
                   {viewers > 0 ? (
-                    <span className="muted"><b>{viewers}%</b> viewers</span>
+                    <span className="muted"><Trans i18nKey="ads.prompt.breakdownViewers" values={{ pct: viewers }} components={{ b: <b /> }} /></span>
                   ) : null}
                   <span className="muted"><b>{platform}%</b> 3Speak</span>
                 </div>
@@ -218,7 +209,7 @@ export default function AdSettingsDialog({ user, split, initialAdsEnabled, onSav
                 onClick={() => setStep(0)}
                 disabled={saving}
               >
-                Back
+                {t('common.actions.back')}
               </button>
               <button
                 type="button"
@@ -226,12 +217,11 @@ export default function AdSettingsDialog({ user, split, initialAdsEnabled, onSav
                 onClick={save}
                 disabled={saving}
               >
-                {saving ? 'Saving…' : 'Save'}
+                {saving ? t('common.actions.saving') : t('common.actions.save')}
               </button>
             </div>
             <p className="ads-prompt-note">
-              Saving stores this on your own Hive account, so the choice is yours and
-              travels with you.
+              {t('ads.prompt.savingNote')}
             </p>
           </>
         )}

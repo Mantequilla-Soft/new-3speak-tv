@@ -1,0 +1,102 @@
+{
+  "tip": {
+    "successTitle": "Чайові надіслано!",
+    "successMessage": "Ви надіслали {{amount}} {{currency}} як чайові. Дякуємо за підтримку!",
+    "errors": {
+      "allRequired": "Заповніть усі поля",
+      "loginRequired": "Увійдіть, щоб надіслати чайові",
+      "insufficientBalance": "Недостатньо коштів",
+      "invalidUsername": "Неправильне ім'я користувача",
+      "transferFailed": "Не вдалося виконати переказ: {{message}}"
+    },
+    "heading": "Надіслати чайові @{{recipient}}",
+    "amountLabel": "Сума: ",
+    "amountPlaceholder": "напр. 1.000",
+    "currencyLabel": "Валюта:",
+    "availableBalance": "Доступний баланс: {{currency}}",
+    "memoLabel": "Примітка (необов'язково):",
+    "memoPlaceholder": "напр. Дякую за чудовий контент!",
+    "send": "Надіслати чайові"
+  },
+  "cardMenu": {
+    "loginToPersonalize": "Увійдіть, щоб налаштувати свою стрічку",
+    "notInterestedToast": "Не цікавить — ми приховаємо це відео",
+    "undo": "Скасувати",
+    "cantHideOwn": "Не можна приховати власні відео",
+    "hidingCreatorToast": "Приховуємо відео від @{{author}}",
+    "loginForPlaylists": "Увійдіть, щоб додавати відео до плейлистів",
+    "loginToTag": "Увійдіть, щоб додавати теги до відео",
+    "moreOptions": "Інші дії",
+    "addToPlaylist": "Додати до плейлиста",
+    "addTag": "Додати тег",
+    "notInterested": "Не цікавить",
+    "dontShowCreator": "Не показувати @{{author}}"
+  },
+  "guestList": {
+    "loadFailed": "Не вдалося завантажити поточний список гостей",
+    "saved_one": "Це може дивитися {{count}} гість",
+    "saved_few": "Це можуть дивитися {{count}} гості",
+    "saved_many": "Це можуть дивитися {{count}} гостей",
+    "saved_other": "Це можуть дивитися {{count}} гостя",
+    "cleared": "Список гостей очищено",
+    "saveFailed": "Не вдалося зберегти список гостей",
+    "invalidAccounts": "Недійсні акаунти Hive: {{names}}",
+    "title": "🔒 Список гостей",
+    "hint": "Ці акаунти можуть дивитися без 3Speak Pro. Список зберігається приватно на наших серверах і ніколи не публікується у вашому дописі.",
+    "notRegistered": "Це відео ще обробляється. Ви зможете змінити список, коли обробку буде завершено.",
+    "placeholder": "username, another.user",
+    "empty": "Поки нікого. Дивитися можуть лише підписники Pro.",
+    "removeAria": "Прибрати {{name}}"
+  },
+  "voters": {
+    "pinnedTitle_one": "Голоси ({{count}})",
+    "pinnedTitle_few": "Голоси ({{count}})",
+    "pinnedTitle_many": "Голоси ({{count}})",
+    "pinnedTitle_other": "Голоси ({{count}})",
+    "topVoters": "Найбільші голоси",
+    "noVotes": "Голосів ще немає"
+  },
+  "payout": {
+    "breakdown": "Розподіл виплати",
+    "estimatedBreakdown": "Орієнтовний розподіл",
+    "beneficiaries": "Бенефіціари",
+    "curators": "Куратори (50%)",
+    "author": "Автор",
+    "total": "Разом",
+    "totalEstimated": "Разом (орієнт.)"
+  },
+  "vote": {
+    "loginRequired": "Увійдіть, щоб виконати цю дію",
+    "fetchPostFailed": "Не вдалося отримати дані допису",
+    "sameWeight": "Ви вже проголосували з такою вагою. Виберіть інше значення.",
+    "failed": "Не вдалося проголосувати: {{message}}",
+    "pleaseTryAgain": "спробуйте ще раз",
+    "weight": "Вага голосу: {{weight}}%",
+    "success": "Голос зараховано! Вартість: ${{value}}",
+    "successTagged": "Голос зараховано! Тег «{{tag}}». Вартість: ${{value}}",
+    "tagged": "Тег «{{tag}}» додано.",
+    "vote": "Голосувати",
+    "tagThisVideo": "Додати тег до відео",
+    "tagOptional": "— необов'язково —",
+    "pickTopicFirst": "Спочатку виберіть тему",
+    "taggedNoDot": "Тег «{{tag}}» додано",
+    "tagFailed": "Не вдалося додати тег: {{message}}",
+    "taggedAlreadyVoted": "Тег «{{tag}}» додано — ваш голос на {{weight}}% уже зараховано.",
+    "votingClosed": "Голосування закрито — додайте тег до відео",
+    "youTagged": "Ви позначили це як <b>{{tag}}</b>.",
+    "pickTopic": "Виберіть тему (зараховується як голос на 100%)",
+    "submitTag": "Надіслати тег",
+    "tagThisVideoFull": "Додати тег до відео (зараховується як голос на 100%)",
+    "justTag": "Без голосу — лише тег"
+  },
+  "tagsPicker": {
+    "autoTagged": "Автоматичні теги: {{tags}}",
+    "searchPlaceholder": "Пошук тем…",
+    "searchAria": "Пошук тем",
+    "noMatches": "Немає тем за запитом «{{query}}».",
+    "allSelected": "Вибрано всю категорію {{category}}. Додавайте окремі теми, лише щоб звузити вибір:",
+    "orPickTopics": "Або виберіть окремі теми:",
+    "goodEnough": "Цього достатньо — або уточніть (необов'язково):",
+    "moreSpecific": "Точніше:"
+  }
+}

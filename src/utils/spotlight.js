@@ -15,6 +15,7 @@ import {
 
 import { getAccounts } from '../hive-api/hiveApi';
 import { broadcastWithAioha, KeyTypes } from '../hive-api/aioha';
+import { t } from '../i18n';
 
 // Spotlight lives ON-CHAIN in the user's posting_json_metadata under the shared
 // `3speak` namespace (alongside interests) — no database. Writes go through the
@@ -42,8 +43,8 @@ export function readSpotlightFromAccount(account) {
 // Curated icon set. Backend stores only the slug (validated /^[a-z0-9-]{1,40}$/);
 // unknown slugs fall back to the generic link icon.
 export const SPOTLIGHT_ICONS = [
-  { slug: 'link', label: 'Link', Icon: FaLink },
-  { slug: 'globe', label: 'Website', Icon: FaGlobe },
+  { slug: 'link', labelKey: 'spotlight.icons.link', Icon: FaLink },
+  { slug: 'globe', labelKey: 'spotlight.icons.globe', Icon: FaGlobe },
   { slug: 'youtube', label: 'YouTube', Icon: FaYoutube },
   { slug: 'x', label: 'X', Icon: FaXTwitter },
   { slug: 'instagram', label: 'Instagram', Icon: FaInstagram },
@@ -66,59 +67,59 @@ export const SPOTLIGHT_ICONS = [
   { slug: 'pinterest', label: 'Pinterest', Icon: FaPinterest },
   { slug: 'snapchat', label: 'Snapchat', Icon: FaSnapchat },
   { slug: 'vimeo', label: 'Vimeo', Icon: FaVimeo },
-  { slug: 'podcast', label: 'Podcast', Icon: FaPodcast },
+  { slug: 'podcast', labelKey: 'spotlight.icons.podcast', Icon: FaPodcast },
   { slug: 'apple', label: 'Apple', Icon: FaApple },
   { slug: 'android', label: 'Android', Icon: FaAndroid },
   { slug: 'google', label: 'Google', Icon: FaGoogle },
   { slug: 'bitcoin', label: 'Bitcoin', Icon: FaBitcoin },
   { slug: 'ethereum', label: 'Ethereum', Icon: FaEthereum },
   { slug: 'paypal', label: 'PayPal', Icon: FaPaypal },
-  { slug: 'email', label: 'Email', Icon: FaEnvelope },
-  { slug: 'phone', label: 'Phone', Icon: FaPhone },
-  { slug: 'rss', label: 'RSS', Icon: FaRss },
-  { slug: 'qrcode', label: 'QR code', Icon: FaQrcode },
-  { slug: 'shop', label: 'Shop', Icon: FaCartShopping },
-  { slug: 'bag', label: 'Store', Icon: FaBagShopping },
-  { slug: 'dollar', label: 'Money', Icon: FaDollarSign },
-  { slug: 'gift', label: 'Gift', Icon: FaGift },
-  { slug: 'heart', label: 'Support', Icon: FaHeart },
-  { slug: 'star', label: 'Star', Icon: FaStar },
-  { slug: 'thumbsup', label: 'Like', Icon: FaThumbsUp },
-  { slug: 'fire', label: 'Fire', Icon: FaFire },
-  { slug: 'bolt', label: 'Bolt', Icon: FaBolt },
-  { slug: 'music', label: 'Music', Icon: FaMusic },
-  { slug: 'headphones', label: 'Audio', Icon: FaHeadphones },
-  { slug: 'mic', label: 'Mic', Icon: FaMicrophone },
-  { slug: 'video', label: 'Video', Icon: FaVideo },
-  { slug: 'film', label: 'Film', Icon: FaFilm },
-  { slug: 'tv', label: 'TV', Icon: FaTv },
-  { slug: 'play', label: 'Play', Icon: FaPlay },
-  { slug: 'camera', label: 'Photo', Icon: FaCamera },
-  { slug: 'image', label: 'Image', Icon: FaImage },
-  { slug: 'palette', label: 'Art', Icon: FaPalette },
-  { slug: 'pen', label: 'Write', Icon: FaPen },
-  { slug: 'book', label: 'Book', Icon: FaBook },
-  { slug: 'newspaper', label: 'News', Icon: FaNewspaper },
-  { slug: 'graduation', label: 'Course', Icon: FaGraduationCap },
-  { slug: 'code', label: 'Code', Icon: FaCode },
-  { slug: 'gamepad', label: 'Gaming', Icon: FaGamepad },
-  { slug: 'briefcase', label: 'Work', Icon: FaBriefcase },
-  { slug: 'home', label: 'Home', Icon: FaHouse },
-  { slug: 'location', label: 'Location', Icon: FaLocationDot },
-  { slug: 'map', label: 'Map', Icon: FaMap },
-  { slug: 'calendar', label: 'Calendar', Icon: FaCalendarDays },
-  { slug: 'clock', label: 'Clock', Icon: FaClock },
-  { slug: 'bell', label: 'Alerts', Icon: FaBell },
-  { slug: 'tag', label: 'Tag', Icon: FaTag },
-  { slug: 'download', label: 'Download', Icon: FaDownload },
-  { slug: 'file', label: 'File', Icon: FaFile },
-  { slug: 'users', label: 'Community', Icon: FaUsers },
-  { slug: 'comment', label: 'Comment', Icon: FaComment },
-  { slug: 'share', label: 'Share', Icon: FaShareNodes },
-  { slug: 'coffee', label: 'Coffee', Icon: FaMugHot },
-  { slug: 'wallet', label: 'Wallet', Icon: FaWallet },
-  { slug: 'plus', label: 'More', Icon: FaPlus },
-  { slug: 'check', label: 'Check', Icon: FaCheck },
+  { slug: 'email', labelKey: 'spotlight.icons.email', Icon: FaEnvelope },
+  { slug: 'phone', labelKey: 'spotlight.icons.phone', Icon: FaPhone },
+  { slug: 'rss', labelKey: 'spotlight.icons.rss', Icon: FaRss },
+  { slug: 'qrcode', labelKey: 'spotlight.icons.qrcode', Icon: FaQrcode },
+  { slug: 'shop', labelKey: 'spotlight.icons.shop', Icon: FaCartShopping },
+  { slug: 'bag', labelKey: 'spotlight.icons.bag', Icon: FaBagShopping },
+  { slug: 'dollar', labelKey: 'spotlight.icons.dollar', Icon: FaDollarSign },
+  { slug: 'gift', labelKey: 'spotlight.icons.gift', Icon: FaGift },
+  { slug: 'heart', labelKey: 'spotlight.icons.heart', Icon: FaHeart },
+  { slug: 'star', labelKey: 'spotlight.icons.star', Icon: FaStar },
+  { slug: 'thumbsup', labelKey: 'spotlight.icons.thumbsup', Icon: FaThumbsUp },
+  { slug: 'fire', labelKey: 'spotlight.icons.fire', Icon: FaFire },
+  { slug: 'bolt', labelKey: 'spotlight.icons.bolt', Icon: FaBolt },
+  { slug: 'music', labelKey: 'spotlight.icons.music', Icon: FaMusic },
+  { slug: 'headphones', labelKey: 'spotlight.icons.headphones', Icon: FaHeadphones },
+  { slug: 'mic', labelKey: 'spotlight.icons.mic', Icon: FaMicrophone },
+  { slug: 'video', labelKey: 'spotlight.icons.video', Icon: FaVideo },
+  { slug: 'film', labelKey: 'spotlight.icons.film', Icon: FaFilm },
+  { slug: 'tv', labelKey: 'spotlight.icons.tv', Icon: FaTv },
+  { slug: 'play', labelKey: 'spotlight.icons.play', Icon: FaPlay },
+  { slug: 'camera', labelKey: 'spotlight.icons.camera', Icon: FaCamera },
+  { slug: 'image', labelKey: 'spotlight.icons.image', Icon: FaImage },
+  { slug: 'palette', labelKey: 'spotlight.icons.palette', Icon: FaPalette },
+  { slug: 'pen', labelKey: 'spotlight.icons.pen', Icon: FaPen },
+  { slug: 'book', labelKey: 'spotlight.icons.book', Icon: FaBook },
+  { slug: 'newspaper', labelKey: 'spotlight.icons.newspaper', Icon: FaNewspaper },
+  { slug: 'graduation', labelKey: 'spotlight.icons.graduation', Icon: FaGraduationCap },
+  { slug: 'code', labelKey: 'spotlight.icons.code', Icon: FaCode },
+  { slug: 'gamepad', labelKey: 'spotlight.icons.gamepad', Icon: FaGamepad },
+  { slug: 'briefcase', labelKey: 'spotlight.icons.briefcase', Icon: FaBriefcase },
+  { slug: 'home', labelKey: 'spotlight.icons.home', Icon: FaHouse },
+  { slug: 'location', labelKey: 'spotlight.icons.location', Icon: FaLocationDot },
+  { slug: 'map', labelKey: 'spotlight.icons.map', Icon: FaMap },
+  { slug: 'calendar', labelKey: 'spotlight.icons.calendar', Icon: FaCalendarDays },
+  { slug: 'clock', labelKey: 'spotlight.icons.clock', Icon: FaClock },
+  { slug: 'bell', labelKey: 'spotlight.icons.bell', Icon: FaBell },
+  { slug: 'tag', labelKey: 'spotlight.icons.tag', Icon: FaTag },
+  { slug: 'download', labelKey: 'spotlight.icons.download', Icon: FaDownload },
+  { slug: 'file', labelKey: 'spotlight.icons.file', Icon: FaFile },
+  { slug: 'users', labelKey: 'spotlight.icons.users', Icon: FaUsers },
+  { slug: 'comment', labelKey: 'spotlight.icons.comment', Icon: FaComment },
+  { slug: 'share', labelKey: 'spotlight.icons.share', Icon: FaShareNodes },
+  { slug: 'coffee', labelKey: 'spotlight.icons.coffee', Icon: FaMugHot },
+  { slug: 'wallet', labelKey: 'spotlight.icons.wallet', Icon: FaWallet },
+  { slug: 'plus', labelKey: 'spotlight.icons.plus', Icon: FaPlus },
+  { slug: 'check', labelKey: 'spotlight.icons.check', Icon: FaCheck },
 ];
 
 const ICON_BY_SLUG = new Map(SPOTLIGHT_ICONS.map((i) => [i.slug, i.Icon]));
@@ -213,37 +214,37 @@ export const DEFAULT_THEME = {
 };
 
 export const FONT_OPTIONS = [
-  { value: 'system', label: 'System' },
-  { value: 'rounded', label: 'Rounded' },
-  { value: 'serif', label: 'Serif' },
-  { value: 'mono', label: 'Mono' },
-  { value: 'display', label: 'Display' },
-  { value: 'condensed', label: 'Condensed' },
-  { value: 'handwriting', label: 'Handwriting' },
-  { value: 'grotesk', label: 'Grotesk' },
-  { value: 'humanist', label: 'Humanist' },
-  { value: 'geometric', label: 'Geometric' },
-  { value: 'slab', label: 'Slab' },
-  { value: 'elegant', label: 'Elegant' },
-  { value: 'typewriter', label: 'Typewriter' },
-  { value: 'marker', label: 'Marker' },
-  { value: 'brush', label: 'Brush' },
-  { value: 'palatino', label: 'Palatino' },
-  { value: 'wide', label: 'Wide' },
+  { value: 'system', labelKey: 'spotlight.fonts.system' },
+  { value: 'rounded', labelKey: 'spotlight.fonts.rounded' },
+  { value: 'serif', labelKey: 'spotlight.fonts.serif' },
+  { value: 'mono', labelKey: 'spotlight.fonts.mono' },
+  { value: 'display', labelKey: 'spotlight.fonts.display' },
+  { value: 'condensed', labelKey: 'spotlight.fonts.condensed' },
+  { value: 'handwriting', labelKey: 'spotlight.fonts.handwriting' },
+  { value: 'grotesk', labelKey: 'spotlight.fonts.grotesk' },
+  { value: 'humanist', labelKey: 'spotlight.fonts.humanist' },
+  { value: 'geometric', labelKey: 'spotlight.fonts.geometric' },
+  { value: 'slab', labelKey: 'spotlight.fonts.slab' },
+  { value: 'elegant', labelKey: 'spotlight.fonts.elegant' },
+  { value: 'typewriter', labelKey: 'spotlight.fonts.typewriter' },
+  { value: 'marker', labelKey: 'spotlight.fonts.marker' },
+  { value: 'brush', labelKey: 'spotlight.fonts.brush' },
+  { value: 'palatino', labelKey: 'spotlight.fonts.palatino' },
+  { value: 'wide', labelKey: 'spotlight.fonts.wide' },
 ];
 
 // Looping "slight movement" animation types (shared by blocks + avatar).
 export const ANIM_TYPES = [
-  { value: 'none', label: 'None' },
-  { value: 'float', label: 'Float' },
-  { value: 'sway', label: 'Sway' },
-  { value: 'pulse', label: 'Pulse' },
-  { value: 'wobble', label: 'Wobble' },
-  { value: 'bounce', label: 'Bounce' },
-  { value: 'tilt', label: 'Tilt 3D' },
-  { value: 'spin', label: 'Spin' },
-  { value: 'shake', label: 'Shake' },
-  { value: 'breathe', label: 'Breathe' },
+  { value: 'none', labelKey: 'spotlight.motion.none' },
+  { value: 'float', labelKey: 'spotlight.motion.float' },
+  { value: 'sway', labelKey: 'spotlight.motion.sway' },
+  { value: 'pulse', labelKey: 'spotlight.motion.pulse' },
+  { value: 'wobble', labelKey: 'spotlight.motion.wobble' },
+  { value: 'bounce', labelKey: 'spotlight.motion.bounce' },
+  { value: 'tilt', labelKey: 'spotlight.motion.tilt' },
+  { value: 'spin', labelKey: 'spotlight.motion.spin' },
+  { value: 'shake', labelKey: 'spotlight.motion.shake' },
+  { value: 'breathe', labelKey: 'spotlight.motion.breathe' },
 ];
 
 export const emptyLayout = () => ({ headline: '', theme: { ...DEFAULT_THEME }, sections: [] });
@@ -266,11 +267,11 @@ export function newSection(type) {
 }
 
 export const SECTION_TYPES = [
-  { type: 'link', label: 'Link', Icon: FaLink },
-  { type: 'video', label: '3Speak content', Icon: FaVideo },
-  { type: 'embed', label: 'Rich link', Icon: FaShareNodes },
-  { type: 'image', label: 'Image', Icon: FaCamera },
-  { type: 'header', label: 'Title / text', Icon: FaStar },
+  { type: 'link', labelKey: 'spotlight.sectionTypes.link', Icon: FaLink },
+  { type: 'video', labelKey: 'spotlight.sectionTypes.video', Icon: FaVideo },
+  { type: 'embed', labelKey: 'spotlight.sectionTypes.embed', Icon: FaShareNodes },
+  { type: 'image', labelKey: 'spotlight.sectionTypes.image', Icon: FaCamera },
+  { type: 'header', labelKey: 'spotlight.sectionTypes.header', Icon: FaStar },
 ];
 
 // Ensure every section has a client id (docs from the server have id:null).
@@ -340,7 +341,7 @@ export async function fetchSpotlight(username) {
 // the user's wallet otherwise. Section `id`s are client-only, stripped before store.
 export async function saveSpotlight(username, layout) {
   const u = cleanUser(username);
-  if (!u) throw new Error('Not logged in');
+  if (!u) throw new Error(t('spotlight.errors.notLoggedIn'));
   const clean = {
     headline: layout.headline || '',
     theme: layout.theme,
@@ -360,6 +361,6 @@ export async function saveSpotlight(username, layout) {
     extensions: [],
   }];
   const result = await broadcastWithAioha([op], KeyTypes.Posting);
-  if (!result || !result.success) throw new Error('Could not save to Hive');
+  if (!result || !result.success) throw new Error(t('spotlight.errors.couldNotSaveToHive'));
   return clean;
 }

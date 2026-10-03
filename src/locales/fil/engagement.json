@@ -1,0 +1,98 @@
+{
+  "tip": {
+    "successTitle": "Naipadala na ang Tip!",
+    "successMessage": "Matagumpay mong naipadala ang {{amount}} {{currency}} bilang tip. Salamat sa suporta mo!",
+    "errors": {
+      "allRequired": "Kailangan punan lahat ng field",
+      "loginRequired": "Mag-log in para makapagpadala ng tip",
+      "insufficientBalance": "Kulang ang balance",
+      "invalidUsername": "Invalid na username",
+      "transferFailed": "Pumalya ang transfer: {{message}}"
+    },
+    "heading": "Magpadala ng Tip kay @{{recipient}}",
+    "amountLabel": "Halaga: ",
+    "amountPlaceholder": "hal. 1.000",
+    "currencyLabel": "Currency:",
+    "availableBalance": "Available na balance: {{currency}}",
+    "memoLabel": "Memo (opsyonal):",
+    "memoPlaceholder": "hal. Salamat sa astig na content na ito!",
+    "send": "Ipadala ang Tip"
+  },
+  "cardMenu": {
+    "loginToPersonalize": "Mag-log in para i-personalize ang feed mo",
+    "notInterestedToast": "Hindi interesado — itatago namin ang video na ito",
+    "undo": "I-undo",
+    "cantHideOwn": "Hindi mo puwedeng itago ang sarili mong mga video",
+    "hidingCreatorToast": "Itinatago ang mga video ni @{{author}}",
+    "loginForPlaylists": "Mag-log in para magdagdag ng video sa playlist",
+    "loginToTag": "Mag-log in para mag-tag ng video",
+    "moreOptions": "Iba pang opsyon",
+    "addToPlaylist": "Idagdag sa playlist",
+    "addTag": "Magdagdag ng tag",
+    "notInterested": "Hindi interesado",
+    "dontShowCreator": "Huwag ipakita si @{{author}}"
+  },
+  "guestList": {
+    "loadFailed": "Hindi ma-load ang kasalukuyang guest list",
+    "saved_one": "{{count}} guest ang puwedeng manood nito",
+    "saved_other": "{{count}} guests ang puwedeng manood nito",
+    "cleared": "Na-clear ang guest list",
+    "saveFailed": "Hindi ma-save ang guest list",
+    "invalidAccounts": "Hindi valid na Hive account: {{names}}",
+    "title": "🔒 Guest list",
+    "hint": "Puwedeng manood ang mga account na ito kahit walang 3Speak Pro. Pribado itong nakatago sa mga server namin, at hindi kailanman ipa-publish sa post mo.",
+    "notRegistered": "Hindi pa tapos ang pagproseso ng video na ito. Puwede mo pa ring i-edit ang listahan kapag tapos na.",
+    "placeholder": "username, another.user",
+    "empty": "Wala pa. Mga Pro subscriber lang ang puwedeng manood nito.",
+    "removeAria": "Alisin si {{name}}"
+  },
+  "voters": {
+    "pinnedTitle_one": "Mga Voter ({{count}})",
+    "pinnedTitle_other": "Mga Voter ({{count}})",
+    "topVoters": "Mga Top Voter",
+    "noVotes": "Wala pang vote"
+  },
+  "payout": {
+    "breakdown": "Breakdown ng Payout",
+    "estimatedBreakdown": "Tantyang Breakdown",
+    "beneficiaries": "Mga Beneficiary",
+    "curators": "Mga Curator (50%)",
+    "author": "Author",
+    "total": "Kabuuan",
+    "totalEstimated": "Kabuuan (tantya)"
+  },
+  "vote": {
+    "loginRequired": "Mag-log in para matapos ang operasyong ito",
+    "fetchPostFailed": "Hindi makuha ang data ng post",
+    "sameWeight": "Naka-vote ka na gamit ang weight na ito. Pumili ng ibang value.",
+    "failed": "Pumalya ang vote: {{message}}",
+    "pleaseTryAgain": "subukan ulit",
+    "weight": "Vote Weight: {{weight}}%",
+    "success": "Matagumpay ang vote! Value: ${{value}}",
+    "successTagged": "Matagumpay ang vote! Na-tag na “{{tag}}”. Value: ${{value}}",
+    "tagged": "Na-tag na “{{tag}}”.",
+    "vote": "Vote",
+    "tagThisVideo": "I-tag ang video na ito",
+    "tagOptional": "— opsyonal —",
+    "pickTopicFirst": "Pumili muna ng paksa",
+    "taggedNoDot": "Na-tag na “{{tag}}”",
+    "tagFailed": "Pumalya ang tag: {{message}}",
+    "taggedAlreadyVoted": "Na-tag na “{{tag}}” — naibigay mo na ang {{weight}}% vote mo.",
+    "votingClosed": "Sarado na ang voting — i-tag ang video na ito",
+    "youTagged": "Na-tag mo ito bilang <b>{{tag}}</b>.",
+    "pickTopic": "Pumili ng paksa (bilang 100% vote)",
+    "submitTag": "Isumite ang tag",
+    "tagThisVideoFull": "I-tag ang video na ito (bilang 100% vote)",
+    "justTag": "Huwag mag-vote — tag lang"
+  },
+  "tagsPicker": {
+    "autoTagged": "Auto-tagged: {{tags}}",
+    "searchPlaceholder": "Maghanap ng paksa…",
+    "searchAria": "Maghanap ng paksa",
+    "noMatches": "Walang paksang tugma sa “{{query}}”.",
+    "allSelected": "Napili na lahat ng {{category}}. Magdagdag lang ng isa-isang paksa kung gusto mong mas tiyak:",
+    "orPickTopics": "O pumili ng isa-isang paksa:",
+    "goodEnough": "Puwede na — o gawing mas tiyak (opsyonal):",
+    "moreSpecific": "Mas tiyak:"
+  }
+}

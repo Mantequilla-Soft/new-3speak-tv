@@ -1,0 +1,241 @@
+{
+  "leaderboard": {
+    "windows": {
+      "7d": "7 วัน",
+      "30d": "30 วัน",
+      "365d": "ปี",
+      "all": "ตลอดเวลา"
+    },
+    "windowsInSentence": {
+      "7d": "7 วัน",
+      "30d": "30 วัน",
+      "365d": "ปี",
+      "all": "ตลอดเวลา"
+    },
+    "metrics": {
+      "video_uploads": "วิดีโอ",
+      "short_uploads": "Shorts",
+      "video_watch_secs": "เวลาดูวิดีโอ",
+      "short_watch_secs": "เวลาดู Shorts",
+      "tags_given": "แท็ก",
+      "streams": "ไลฟ์",
+      "stream_secs": "เวลาไลฟ์",
+      "stream_peak_viewers": "ผู้ชมสูงสุด",
+      "stream_viewers": "การเข้าชม",
+      "boosts_received": "บูสต์ที่ได้รับ",
+      "boost_amount_received": "ยอดที่ได้รับ",
+      "boosts_given": "บูสต์ที่ให้",
+      "boost_amount_given": "ยอดที่ให้"
+    },
+    "metricsInSentence": {
+      "video_uploads": "วิดีโอ",
+      "short_uploads": "Shorts",
+      "video_watch_secs": "เวลาดูวิดีโอ",
+      "short_watch_secs": "เวลาดู Shorts",
+      "tags_given": "แท็ก",
+      "streams": "ไลฟ์",
+      "stream_secs": "เวลาไลฟ์",
+      "stream_peak_viewers": "ผู้ชมสูงสุด",
+      "stream_viewers": "การเข้าชม",
+      "boosts_received": "บูสต์ที่ได้รับ",
+      "boost_amount_received": "ยอดที่ได้รับ",
+      "boosts_given": "บูสต์ที่ให้",
+      "boost_amount_given": "ยอดที่ให้"
+    },
+    "blurbs": {
+      "video_uploads": "วิดีโอที่อัปโหลด",
+      "short_uploads": "Shorts ที่อัปโหลด",
+      "video_watch_secs": "จำนวนวินาทีที่วิดีโอถูกดู",
+      "short_watch_secs": "จำนวนวินาทีที่ Shorts ถูกดู",
+      "tags_given": "แท็กที่ให้กับวิดีโออื่น",
+      "streams": "จำนวนเซสชันไลฟ์ที่เริ่ม",
+      "stream_secs": "เวลาไลฟ์รวม (เฉพาะไลฟ์ที่จบแล้ว)",
+      "stream_peak_viewers": "ผู้ชมพร้อมกันสูงสุด (ค่าสูงสุด ไม่ใช่ผลรวม)",
+      "stream_viewers": "จำนวนครั้งที่ผู้ชมเข้าร่วม (ปริมาณ ไม่ใช่การเข้าถึงที่ไม่ซ้ำ)",
+      "boosts_received": "บูสต์ที่ส่งมายังไลฟ์",
+      "boost_amount_received": "ยอดรวมของบูสต์ที่ได้รับ",
+      "boosts_given": "บูสต์ที่ส่งให้สตรีมเมอร์คนอื่น",
+      "boost_amount_given": "ยอดรวมของบูสต์ที่ให้"
+    },
+    "blurbsInSentence": {
+      "video_uploads": "วิดีโอที่อัปโหลด",
+      "short_uploads": "Shorts ที่อัปโหลด",
+      "video_watch_secs": "จำนวนวินาทีที่วิดีโอถูกดู",
+      "short_watch_secs": "จำนวนวินาทีที่ Shorts ถูกดู",
+      "tags_given": "แท็กที่ให้กับวิดีโออื่น",
+      "streams": "จำนวนเซสชันไลฟ์ที่เริ่ม",
+      "stream_secs": "เวลาไลฟ์รวม (เฉพาะไลฟ์ที่จบแล้ว)",
+      "stream_peak_viewers": "ผู้ชมพร้อมกันสูงสุด (ค่าสูงสุด ไม่ใช่ผลรวม)",
+      "stream_viewers": "จำนวนครั้งที่ผู้ชมเข้าร่วม (ปริมาณ ไม่ใช่การเข้าถึงที่ไม่ซ้ำ)",
+      "boosts_received": "บูสต์ที่ส่งมายังไลฟ์",
+      "boost_amount_received": "ยอดรวมของบูสต์ที่ได้รับ",
+      "boosts_given": "บูสต์ที่ส่งให้สตรีมเมอร์คนอื่น",
+      "boost_amount_given": "ยอดรวมของบูสต์ที่ให้"
+    },
+    "groups": {
+      "video": "วิดีโอ",
+      "streaming": "ไลฟ์"
+    },
+    "badgeNouns": {
+      "video_uploads": "วิดีโอ",
+      "short_uploads": "Shorts",
+      "video_watch_secs": "ยอดดู",
+      "short_watch_secs": "ยอดดู Shorts",
+      "tags_given": "นักติดแท็ก"
+    },
+    "badgeLabel": "{{noun}} {{tier}}",
+    "badgeTitleAllTime": "อันดับ #{{rank}} ด้าน{{what}} ตลอดเวลา",
+    "badgeTitleWindow": "อันดับ #{{rank}} ด้าน{{what}} ในช่วง {{window}} ที่ผ่านมา"
+  },
+  "duration": {
+    "hoursMinutes": "{{h}} ชม. {{m}} นาที",
+    "minutesSeconds": "{{m}} นาที {{s}} วิ",
+    "seconds": "{{s}} วิ",
+    "aMoment": "สักครู่",
+    "lessThanMinute": "ไม่ถึงนาที"
+  },
+  "surf": {
+    "community": "ชุมชน",
+    "allOf": "{{label}} ทั้งหมด"
+  },
+  "social": {
+    "signingCancelled": "ยกเลิกการลงนามแล้ว",
+    "youtube": {
+      "placeholder": "@handle หรือ UCxxxxxxxxxxxxxxxxxxxxxx",
+      "help": "วาง @handle ของ YouTube หรือ ID ช่องที่ขึ้นต้นด้วย UC… เราจะแปลงเป็น ID ช่องให้"
+    },
+    "soundcloud": {
+      "placeholder": "your-profile หรือ https://soundcloud.com/your-profile",
+      "help": "วาง URL โปรไฟล์ SoundCloud หรือเฉพาะชื่อผู้ใช้จาก URL นั้น ใส่แฮชไว้ตรงไหนก็ได้ในไบโอโปรไฟล์"
+    }
+  },
+  "snaps": {
+    "retrying": "ยังไม่พบคอนเทนเนอร์ Snaps — กำลังลองใหม่ (ครั้งที่ {{attempt}})...",
+    "unreachable": "เชื่อมต่อโหนด Hive ใดๆ เพื่อหาคอนเทนเนอร์ Snaps ไม่ได้ โปรดตรวจสอบการเชื่อมต่อแล้วลองอีกครั้ง",
+    "unreachableWithError": "เชื่อมต่อโหนด Hive ใดๆ เพื่อหาคอนเทนเนอร์ Snaps ไม่ได้ (ข้อผิดพลาดล่าสุด — {{error}}) โปรดตรวจสอบการเชื่อมต่อแล้วลองอีกครั้ง"
+  },
+  "embed": {
+    "responsive": "ปรับขนาดอัตโนมัติ"
+  },
+  "incubation": {
+    "requestFailed": "คำขอล้มเหลว ({{status}})",
+    "contactLoadFailed": "โหลดข้อมูลติดต่อของคุณไม่ได้",
+    "contactSaveFailed": "บันทึกข้อมูลติดต่อของคุณไม่ได้",
+    "onlyButrauthBacklog": "เฉพาะบัญชี Butter Auth เท่านั้นที่มีรายการค้างจากช่วงวอร์มอัปได้",
+    "publishFailed": "เผยแพร่ไม่สำเร็จ ({{status}})"
+  },
+  "routeError": {
+    "title": "หน้านี้โหลดไม่สำเร็จ",
+    "body": "ดาวน์โหลดบางส่วนของแอปไม่สำเร็จ มักหมายความว่ามีเวอร์ชันใหม่ออกมาขณะที่แท็บนี้เปิดอยู่ โหลดหน้าใหม่เพื่อรับเวอร์ชันล่าสุด",
+    "reload": "โหลดใหม่",
+    "goHome": "ไปหน้าแรก"
+  },
+  "seo": {
+    "defaultTitle": "3Speak - แพลตฟอร์มวิดีโอแบบกระจายศูนย์",
+    "defaultDescription": "3Speak คือแพลตฟอร์มแชร์วิดีโอแบบกระจายศูนย์ที่สร้างบนเทคโนโลยีบล็อกเชน ดู อัปโหลด และแชร์วิดีโอ พร้อมรับรางวัลเป็นคริปโทเคอร์เรนซี"
+  },
+  "uploadLinks": {
+    "regularVideo": "วิดีโอทั่วไป",
+    "verticalShort": "Shorts แนวตั้ง",
+    "musicAudio": "เพลง / เสียง",
+    "groupChat": "แชตกลุ่ม",
+    "communitySnap": "Snap ชุมชน",
+    "shortsEditor": "ตัวแก้ไข Shorts",
+    "goLive": "เริ่มไลฟ์",
+    "streamStudio": "สตูดิโอไลฟ์",
+    "headings": {
+      "upload": "อัปโหลด",
+      "live": "ไลฟ์",
+      "others": "อื่นๆ"
+    }
+  },
+  "chat": {
+    "connectFailed": "เชื่อมต่อแชตไม่ได้",
+    "loginFirst": "เข้าสู่ระบบก่อนเพื่อใช้แชต",
+    "roomNameRequired": "ต้องระบุชื่อห้อง"
+  },
+  "hiveAuth": {
+    "waiting": "กำลังรอการอนุมัติใน HiveAuth...",
+    "title": "ต้องอนุมัติใน HiveAuth",
+    "hint": "โปรดตรวจสอบแอป HiveAuth เพื่ออนุมัติธุรกรรมนี้"
+  },
+  "hiveApi": {
+    "keychainNotSigned": "Keychain ไม่ได้ลงนามธุรกรรม",
+    "loginToCreateCommunity": "โปรดเข้าสู่ระบบเพื่อสร้างชุมชน",
+    "loginFirst": "โปรดเข้าสู่ระบบก่อน",
+    "cancelled": "ยกเลิกการดำเนินการแล้ว"
+  },
+  "openpod": {
+    "announced": "ประกาศเซสชันไลฟ์บน Hive แล้ว!",
+    "announceFailed": "เริ่ม OpenPod แล้ว แต่โพสต์ประกาศบน Hive ไม่ได้"
+  },
+  "appUpdate": {
+    "updating": "กำลังอัปเดตเป็นเวอร์ชันล่าสุด ({{version}})…",
+    "reloadingForUpload": "กำลังโหลดใหม่เพื่อให้การอัปโหลดของคุณทำงานบนบิลด์ล่าสุด"
+  },
+  "auth": {
+    "switched": "สลับไปที่ {{username}} สำเร็จ!",
+    "keychainLoginTitle": "เข้าสู่ระบบด้วย Hive"
+  },
+  "streamVod": {
+    "uploadKeyMissing": "ไลฟ์จบแล้ว แต่อัปโหลดวิดีโอไม่ได้ (ไม่มีคีย์อัปโหลด)",
+    "uploading": "กำลังอัปโหลดวิดีโอไลฟ์ของคุณ… {{pct}}%",
+    "uploaded": "อัปโหลดวิดีโอไลฟ์แล้ว — วิดีโอจะมาแทนที่ไลฟ์เมื่อเข้ารหัสเสร็จ",
+    "uploadFailed": "ไลฟ์จบแล้ว แต่อัปโหลดวิดีโอไม่สำเร็จ",
+    "saving": "กำลังบันทึกวิดีโอไลฟ์ของคุณ…",
+    "encoding": "อัปโหลดแล้ว — ตัวเข้ารหัสกำลังประมวลผลวิดีโอของคุณ…",
+    "saved": "บันทึกวิดีโอไลฟ์แล้ว — วิดีโอจะมาแทนที่ไลฟ์เมื่อเข้ารหัสเสร็จ",
+    "saveFailed": "ไลฟ์จบแล้ว แต่บันทึกวิดีโอไม่ได้: {{error}}",
+    "uploadFailedShort": "อัปโหลดไม่สำเร็จ",
+    "stillProcessing": "ไลฟ์จบแล้ว — วิดีโอยังประมวลผลอยู่ ตรวจดูโปรไฟล์ของคุณอีกครั้งในไม่ช้า"
+  },
+  "embedPlayer": {
+    "unavailable": "วิดีโอไม่พร้อมใช้งาน"
+  },
+  "followFeed": {
+    "title": "ฟีดที่ติดตาม",
+    "error": "ดึงวิดีโอไม่สำเร็จ"
+  },
+  "groups": {
+    "title": "กลุ่ม",
+    "badges": "ตราสัญลักษณ์",
+    "subtitle": "ชุมชนที่คุณเข้าร่วมได้และตราสัญลักษณ์ที่ผู้คนถืออยู่ รวมไว้ในที่เดียว"
+  },
+  "watched": {
+    "removed": "นำออกจากประวัติการดูแล้ว",
+    "removeFailed": "นำออกจากประวัติการดูไม่สำเร็จ",
+    "title": "ดูแล้ว",
+    "count_other": "ดูแล้ว {{count}} รายการ",
+    "trackHistory": "บันทึกประวัติ",
+    "videosTab": "วิดีโอ ({{count}})",
+    "shortsTab": "Shorts ({{count}})",
+    "loadFailed": "โหลดประวัติการดูไม่สำเร็จ โปรดลองอีกครั้ง",
+    "emptyShorts": "ยังไม่มี Shorts ที่ดูแล้ว",
+    "emptyVideos": "ยังไม่มีวิดีโอที่ดูแล้ว",
+    "removeTitle": "นำออกจากประวัติการดู",
+    "watchedAt": "ดูเมื่อ {{when}}"
+  },
+  "watchStream": {
+    "saySomething": "พูดอะไรสักหน่อย…",
+    "waitingWallet": "กำลังรอกระเป๋าเงินของคุณ…",
+    "signInToChat": "เข้าสู่ระบบเพื่อแชต",
+    "sendMessage": "ส่งข้อความ",
+    "notLive": "ขณะนี้ไลฟ์นี้ไม่ได้ออกอากาศ",
+    "notFound": "ไม่พบไลฟ์สำหรับลิงก์นี้",
+    "browse": "เรียกดูไลฟ์",
+    "back": "กลับไปที่ 3Speak",
+    "seoTitle": "{{title}} (ไลฟ์)",
+    "swipeNext": "ปัดเพื่อดูไลฟ์ถัดไป",
+    "chat": "แชต",
+    "watchingNow": "👁 กำลังดู {{count}} คน",
+    "signInRaiseHand": "เข้าสู่ระบบเพื่อยกมือ",
+    "copyLink": "คัดลอกลิงก์ไลฟ์",
+    "notAvailableLive": "ใช้ไม่ได้กับไลฟ์",
+    "vote": "โหวต",
+    "comment": "ความคิดเห็น",
+    "liveChat": "แชตสด",
+    "signInToJoin": "🔒 เข้าสู่ระบบเพื่อร่วมแชต",
+    "moreTag": "#{{tag}} เพิ่มเติม",
+    "moreVideos": "วิดีโอเพิ่มเติม"
+  }
+}

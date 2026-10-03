@@ -4,6 +4,7 @@ import { MdClose, MdLightbulbOutline } from 'react-icons/md';
 import { useAppStore } from '../../lib/store';
 import { isAnyPromptActive } from '../../utils/welcomeGate';
 import { TIPS } from './incubationTips';
+import { useTranslation } from 'react-i18next';
 import './IncubationTips.scss';
 
 const SEEN_KEY = '3speak_incubation_tips_seen';
@@ -43,6 +44,7 @@ const lastShownAt = () => {
  * years does not need to be told what a community is.
  */
 export default function IncubationTips() {
+  const { t } = useTranslation();
   const incubationHandle = useAppStore((s) => s.incubationHandle);
   const authenticated = useAppStore((s) => s.authenticated);
   const [tip, setTip] = useState(null);
@@ -51,7 +53,7 @@ export default function IncubationTips() {
     if (!authenticated || !incubationHandle) return undefined;
     if (Date.now() - lastShownAt() < MIN_GAP_MS) return undefined;
 
-    const t = setTimeout(() => {
+    const timer = setTimeout(() => {
       // Checked at fire time, not when the timer was set: a prompt may have
       // opened in those two minutes.
       if (isAnyPromptActive()) return;
@@ -62,7 +64,7 @@ export default function IncubationTips() {
       if (next) setTip(next);
     }, FIRST_DELAY_MS);
 
-    return () => clearTimeout(t);
+    return () => clearTimeout(timer);
   }, [authenticated, incubationHandle]);
 
   const dismiss = useCallback(() => {
@@ -73,17 +75,17 @@ export default function IncubationTips() {
   if (!tip) return null;
 
   return (
-    <aside className="inct" role="note" aria-label="Tip">
-      <button type="button" className="inct-close" onClick={dismiss} aria-label="Dismiss tip">
+    <aside className="inct" role="note" aria-label={t('incubation.tipCard.aria')}>
+      <button type="button" className="inct-close" onClick={dismiss} aria-label={t('incubation.tipCard.dismiss')}>
         <MdClose size={16} />
       </button>
       <div className="inct-icon" aria-hidden="true"><MdLightbulbOutline size={18} /></div>
       <div className="inct-text">
-        <strong>{tip.title}</strong>
-        <p>{tip.body}</p>
+        <strong>{t(tip.titleKey)}</strong>
+        <p>{t(tip.bodyKey)}</p>
         {tip.to && (
           <Link to={tip.to} className="inct-cta" onClick={dismiss}>
-            {tip.cta || 'Take a look'}
+            {tip.ctaKey ? t(tip.ctaKey) : t('incubation.tipCard.takeALook')}
           </Link>
         )}
       </div>

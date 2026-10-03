@@ -1,0 +1,172 @@
+{
+  "addTag": {
+    "loginRequired": "登录后给这个视频打标签",
+    "pickTopic": "请先选择一个话题",
+    "tagged": "已标记为“{{label}}”",
+    "failed": "打标签失败：{{error}}",
+    "pleaseTryAgain": "请重试",
+    "title": "给这个视频打标签",
+    "question": "这个视频是关于什么的？",
+    "existing": "你已把它标记为 <b>{{label}}</b>——选择其他话题会替换它。",
+    "submit": "提交标签"
+  },
+  "addAccount": {
+    "usernameRequired": "需要填写用户名才能继续。",
+    "hiveAuthExpired": "HiveAuth 验证请求已过期",
+    "loginSuccess": "登录成功！",
+    "loginFailed": "登录失败：{{error}}",
+    "logoAlt": "3Speak Logo",
+    "title": "使用用户名登录",
+    "usernamePlaceholder": "用户名"
+  },
+  "socialLink": {
+    "hashCopied": "哈希已复制",
+    "copyFailed": "无法复制到剪贴板",
+    "enterHandle": "输入你在该平台的账号名或 ID",
+    "verified": "账号已验证并关联",
+    "errors": {
+      "hashNotFound": "还没有在主页上找到哈希。请确认修改已公开保存，然后重试。",
+      "alreadyLinked": "此频道已被另一位 Hive 用户（@{{user}}）验证。",
+      "tooMany": "你关联的账号数量已达上限。",
+      "notFound": "该平台上不存在这个频道。",
+      "badSignature": "无法验证签名。请确认你是用 posting 密钥登录的。",
+      "rateLimited": "请求过于频繁。请等一分钟后重试。",
+      "lookupFailed": "平台查询失败，请稍后再试。",
+      "verifyFailed": "验证失败",
+      "stillPresent": "哈希仍在你的主页上——请先把它删除。",
+      "unlinkFailed": "取消关联失败",
+      "noSuchLink": "没有可移除的关联。"
+    },
+    "confirmUnlink": "要移除你的 {{platform}} 关联吗？请确认验证哈希已不在你的公开主页上，否则取消关联会被拒绝。",
+    "removed": "关联已移除",
+    "title": "已关联的外部主页",
+    "intro": "将你专属的 3Speak 哈希粘贴到你公开主页的简介中，然后在这里验证，即可证明你拥有某个 YouTube（或其他平台）频道。",
+    "openProfile": "打开主页",
+    "removeLink": "移除关联",
+    "empty": "还没有关联任何外部主页。",
+    "addPlatform": "添加新平台",
+    "flowTitle": "关联你的 {{platform}} 频道",
+    "step1": "复制你专属的验证哈希：",
+    "step2": "<strong>把它粘贴到你公开的 {{platform}} 主页简介中</strong>（任何位置都可以——关于 / 简介 / 描述均可）。保存修改。",
+    "step3": "输入你的 {{platform}} 标识：",
+    "verifying": "验证中…",
+    "verify": "验证"
+  },
+  "auth": {
+    "title": "授权 3Speak！",
+    "text": "要在 3Speak 上传视频，我们需要你的 posting 权限，这样我们才能把你上传的视频发布到 Hive。你只需要授予一次 posting 权限。",
+    "authorize": "授权"
+  },
+  "beneficiary": {
+    "errors": {
+      "emptyUsername": "用户名不能为空。",
+      "sameUser": "受益人不能设置为你自己",
+      "greaterThanZero": "奖励百分比必须大于 0。",
+      "exceedsRemaining": "奖励百分比超过了剩余的 {{percent}}% 可分配额度。",
+      "validNumber": "请输入有效的数字",
+      "validPercent": "请输入有效的奖励百分比。",
+      "duplicate": "此账号已在列表中。",
+      "invalidAccount": "用户名或社区 ID 无效。",
+      "cannotIncrease": "不能超过剩余的 {{percent}}%",
+      "pendingRow": "@{{account}} 还没有添加——点击 + 添加，或清空该字段。",
+      "atLeastOne": "奖励百分比至少为 1%"
+    },
+    "title": "受益人",
+    "intro": "添加一位用户，让其自动获得这篇帖子的一部分奖励。",
+    "minPercent": "%（最少 {{percent}}%）",
+    "usernamePlaceholder": "输入用户名",
+    "minimumReward": "最低奖励为 <strong>1%</strong>",
+    "checking": "正在 Hive 上检查 <strong>@{{account}}</strong>…",
+    "notExisting": "⚠️ <strong>@{{account}}</strong> 不是已存在的 Hive 账号。",
+    "notAdded": "⚠️ <strong>@{{account}}</strong> 还没有添加——点击 <strong>+</strong> 添加，或清空该字段。",
+    "infrastructure": "10% === 基础设施",
+    "videoEncoding": "视频编码 === 1%",
+    "defaults": "默认受益人（{{count}}）"
+  },
+  "qr": {
+    "scan": "在 Hive Keychain 中扫描此二维码：",
+    "click": "点击二维码在 Keychain App 中打开"
+  },
+  "editVideoHint": {
+    "title": "编辑你的任意视频",
+    "text": "打开你自己的一个视频，在播放器下方的操作栏中找到<strong>笔形按钮</strong>。点击它即可修改标题、简介、缩略图、标签等。",
+    "penTitle": "编辑视频详情",
+    "tip": "提示",
+    "caption": "你要找的就是这个笔形按钮",
+    "gotIt": "知道了"
+  },
+  "verifyAuth": {
+    "title": "正在验证授权",
+    "text": "请稍候，我们正在确认授权是否已成功授予..."
+  },
+  "editor": {
+    "confirmLeave": "编辑器仍处于打开状态。离开此页面将关闭编辑器，未保存的更改将会丢失。\n\n确定 = 关闭编辑器并离开\n取消 = 留在此页面",
+    "confirmClose": "确定要关闭编辑器吗？未保存的更改将会丢失。",
+    "iframeTitle": "3Speak 视频编辑器",
+    "finding": "正在寻找可用的编辑器...",
+    "loading": "正在加载编辑器...",
+    "unavailable": "目前没有可用的编辑器服务器，请稍后再试。",
+    "sending": "正在发送到渲染服务...",
+    "rendering": "渲染中... {{percent}}%",
+    "complete": "渲染完成！",
+    "useVideo": "使用视频",
+    "preparing": "正在准备上传视频...",
+    "renderUnavailable": "渲染服务暂不可用。时间线数据已输出到控制台。",
+    "backToEditor": "返回编辑器",
+    "postError": "无法准备上传视频，请尝试改为下载。"
+  },
+  "profile": {
+    "mustLogin": "你需要先登录",
+    "followed": "已关注",
+    "unfollowed": "已取消关注",
+    "followFailed": "关注失败：{{error}}",
+    "unfollowFailed": "取消关注失败：{{error}}",
+    "avatarAlt": "头像",
+    "posts": "帖子",
+    "followers": "粉丝",
+    "joined": "{{date}} 加入",
+    "about": "简介",
+    "noBio": "暂无简介"
+  },
+  "report": {
+    "reasons": {
+      "spamMisleading": "垃圾信息或误导性内容",
+      "harassment": "骚扰或霸凌",
+      "hateSpeech": "仇恨言论",
+      "violence": "暴力或血腥内容",
+      "sexual": "色情内容",
+      "copyright": "侵犯版权",
+      "scam": "诈骗或欺诈",
+      "other": "其他",
+      "spam": "垃圾信息",
+      "impersonation": "冒充他人",
+      "spamAccount": "垃圾账号"
+    },
+    "selectReasonError": "请选择一个原因",
+    "loginRequired": "你需要登录后才能举报",
+    "submitted": "举报已提交，谢谢。",
+    "failed": "举报提交失败",
+    "titles": {
+      "user": "举报用户",
+      "comment": "举报评论",
+      "short": "举报短视频",
+      "post": "举报帖子",
+      "video": "举报视频"
+    },
+    "reason": "原因",
+    "selectReason": "选择一个原因...",
+    "details": "补充说明（可选）",
+    "detailsPlaceholder": "提供更多背景信息...",
+    "submitting": "提交中...",
+    "submit": "提交举报"
+  },
+  "upload": {
+    "missingInfo": "缺少视频或缩略图信息。",
+    "updateFailed": "视频信息更新失败，请重试。",
+    "title": "上传视频和缩略图",
+    "selectVideo": "选择视频",
+    "thumbnail": "缩略图",
+    "clickThumbnail": "点击上传缩略图",
+    "updateInfo": "更新视频信息"
+  }
+}

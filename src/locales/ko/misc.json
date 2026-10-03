@@ -1,0 +1,241 @@
+{
+  "leaderboard": {
+    "windows": {
+      "7d": "7일",
+      "30d": "30일",
+      "365d": "1년",
+      "all": "전체 기간"
+    },
+    "windowsInSentence": {
+      "7d": "7일",
+      "30d": "30일",
+      "365d": "1년",
+      "all": "전체 기간"
+    },
+    "metrics": {
+      "video_uploads": "동영상",
+      "short_uploads": "쇼츠",
+      "video_watch_secs": "동영상 시청 시간",
+      "short_watch_secs": "쇼츠 시청 시간",
+      "tags_given": "태그",
+      "streams": "방송",
+      "stream_secs": "방송 시간",
+      "stream_peak_viewers": "최고 동시 시청자",
+      "stream_viewers": "시청자 입장",
+      "boosts_received": "받은 부스트",
+      "boost_amount_received": "받은 금액",
+      "boosts_given": "보낸 부스트",
+      "boost_amount_given": "보낸 금액"
+    },
+    "metricsInSentence": {
+      "video_uploads": "동영상",
+      "short_uploads": "쇼츠",
+      "video_watch_secs": "동영상 시청 시간",
+      "short_watch_secs": "쇼츠 시청 시간",
+      "tags_given": "태그",
+      "streams": "방송",
+      "stream_secs": "방송 시간",
+      "stream_peak_viewers": "최고 동시 시청자",
+      "stream_viewers": "시청자 입장",
+      "boosts_received": "받은 부스트",
+      "boost_amount_received": "받은 금액",
+      "boosts_given": "보낸 부스트",
+      "boost_amount_given": "보낸 금액"
+    },
+    "blurbs": {
+      "video_uploads": "업로드한 동영상",
+      "short_uploads": "업로드한 쇼츠",
+      "video_watch_secs": "동영상이 시청된 시간(초)",
+      "short_watch_secs": "쇼츠가 시청된 시간(초)",
+      "tags_given": "다른 동영상에 단 태그",
+      "streams": "시작한 방송 세션",
+      "stream_secs": "총 방송 시간(종료된 방송만)",
+      "stream_peak_viewers": "최고 동시 시청자 수(합계가 아닌 최고치)",
+      "stream_viewers": "시청자 입장 횟수(순 도달 수가 아닌 총량)",
+      "boosts_received": "방송에 받은 부스트",
+      "boost_amount_received": "받은 부스트 합계 금액",
+      "boosts_given": "다른 스트리머에게 보낸 부스트",
+      "boost_amount_given": "보낸 부스트 합계 금액"
+    },
+    "blurbsInSentence": {
+      "video_uploads": "업로드한 동영상",
+      "short_uploads": "업로드한 쇼츠",
+      "video_watch_secs": "동영상이 시청된 시간(초)",
+      "short_watch_secs": "쇼츠가 시청된 시간(초)",
+      "tags_given": "다른 동영상에 단 태그",
+      "streams": "시작한 방송 세션",
+      "stream_secs": "총 방송 시간(종료된 방송만)",
+      "stream_peak_viewers": "최고 동시 시청자 수(합계가 아닌 최고치)",
+      "stream_viewers": "시청자 입장 횟수(순 도달 수가 아닌 총량)",
+      "boosts_received": "방송에 받은 부스트",
+      "boost_amount_received": "받은 부스트 합계 금액",
+      "boosts_given": "다른 스트리머에게 보낸 부스트",
+      "boost_amount_given": "보낸 부스트 합계 금액"
+    },
+    "groups": {
+      "video": "동영상",
+      "streaming": "스트리밍"
+    },
+    "badgeNouns": {
+      "video_uploads": "동영상",
+      "short_uploads": "쇼츠",
+      "video_watch_secs": "시청",
+      "short_watch_secs": "쇼츠 시청",
+      "tags_given": "태거"
+    },
+    "badgeLabel": "{{tier}} {{noun}}",
+    "badgeTitleAllTime": "전체 기간 {{what}} 부문 {{rank}}위",
+    "badgeTitleWindow": "최근 {{window}} {{what}} 부문 {{rank}}위"
+  },
+  "duration": {
+    "hoursMinutes": "{{h}}시간 {{m}}분",
+    "minutesSeconds": "{{m}}분 {{s}}초",
+    "seconds": "{{s}}초",
+    "aMoment": "잠시",
+    "lessThanMinute": "1분 미만"
+  },
+  "surf": {
+    "community": "커뮤니티",
+    "allOf": "{{label}} 전체"
+  },
+  "social": {
+    "signingCancelled": "서명이 취소되었어요",
+    "youtube": {
+      "placeholder": "@handle 또는 UCxxxxxxxxxxxxxxxxxxxxxx",
+      "help": "YouTube @핸들이나 UC…로 시작하는 채널 ID를 붙여넣으세요. 채널 ID로 자동 변환돼요."
+    },
+    "soundcloud": {
+      "placeholder": "your-profile 또는 https://soundcloud.com/your-profile",
+      "help": "SoundCloud 프로필 URL이나 사용자 이름만 붙여넣으세요. 해시는 프로필 소개 어디에든 넣으면 돼요."
+    }
+  },
+  "snaps": {
+    "retrying": "아직 Snaps 컨테이너를 찾지 못했어요. 다시 시도하는 중({{attempt}}번째)...",
+    "unreachable": "Snaps 컨테이너를 찾기 위해 Hive 노드에 연결하지 못했어요. 연결 상태를 확인하고 다시 시도해 주세요.",
+    "unreachableWithError": "Snaps 컨테이너를 찾기 위해 Hive 노드에 연결하지 못했어요(마지막 오류 — {{error}}). 연결 상태를 확인하고 다시 시도해 주세요."
+  },
+  "embed": {
+    "responsive": "반응형"
+  },
+  "incubation": {
+    "requestFailed": "요청 실패({{status}})",
+    "contactLoadFailed": "연락처 정보를 불러오지 못했어요",
+    "contactSaveFailed": "연락처 정보를 저장하지 못했어요",
+    "onlyButrauthBacklog": "Butter Auth 계정만 인큐베이션 미게시 목록을 가질 수 있어요",
+    "publishFailed": "게시 실패({{status}})"
+  },
+  "routeError": {
+    "title": "페이지를 불러오지 못했어요",
+    "body": "앱의 일부를 다운로드하지 못했어요. 보통 이 탭을 열어 둔 동안 새 버전이 출시되었기 때문이에요. 새로고침하면 적용돼요.",
+    "reload": "새로고침",
+    "goHome": "홈으로"
+  },
+  "seo": {
+    "defaultTitle": "3Speak - 탈중앙화 동영상 플랫폼",
+    "defaultDescription": "3Speak는 블록체인 기술 기반의 탈중앙화 동영상 공유 플랫폼이에요. 동영상을 시청하고, 업로드하고, 공유하면서 암호화폐 보상을 받으세요."
+  },
+  "uploadLinks": {
+    "regularVideo": "일반 동영상",
+    "verticalShort": "세로 쇼츠",
+    "musicAudio": "음악 / 오디오",
+    "groupChat": "그룹 채팅",
+    "communitySnap": "커뮤니티 Snap",
+    "shortsEditor": "쇼츠 편집기",
+    "goLive": "라이브 시작",
+    "streamStudio": "방송 스튜디오",
+    "headings": {
+      "upload": "업로드",
+      "live": "라이브",
+      "others": "기타"
+    }
+  },
+  "chat": {
+    "connectFailed": "채팅에 연결하지 못했어요.",
+    "loginFirst": "채팅을 사용하려면 먼저 로그인하세요.",
+    "roomNameRequired": "방 이름이 필요해요."
+  },
+  "hiveAuth": {
+    "waiting": "HiveAuth에서 승인을 기다리는 중...",
+    "title": "HiveAuth 승인 필요",
+    "hint": "HiveAuth 앱에서 이 트랜잭션을 승인해 주세요"
+  },
+  "hiveApi": {
+    "keychainNotSigned": "Keychain이 트랜잭션에 서명하지 않았어요",
+    "loginToCreateCommunity": "커뮤니티를 만들려면 로그인해 주세요",
+    "loginFirst": "먼저 로그인해 주세요",
+    "cancelled": "작업이 취소되었어요"
+  },
+  "openpod": {
+    "announced": "Hive에 라이브 세션을 공지했어요!",
+    "announceFailed": "OpenPod은 시작되었지만 Hive 공지를 게시하지 못했어요."
+  },
+  "appUpdate": {
+    "updating": "최신 버전({{version}})으로 업데이트하는 중…",
+    "reloadingForUpload": "최신 빌드에서 업로드되도록 새로고침하는 중이에요."
+  },
+  "auth": {
+    "switched": "{{username}}(으)로 전환했어요!",
+    "keychainLoginTitle": "Hive로 로그인"
+  },
+  "streamVod": {
+    "uploadKeyMissing": "방송은 종료되었지만 동영상을 업로드하지 못했어요(업로드 키 없음).",
+    "uploading": "방송 동영상 업로드 중… {{pct}}%",
+    "uploaded": "방송 동영상을 업로드했어요. 인코딩이 끝나면 라이브 방송을 대체해요.",
+    "uploadFailed": "방송은 종료되었지만 동영상 업로드에 실패했어요.",
+    "saving": "방송 동영상 저장 중…",
+    "encoding": "업로드 완료 — 인코더가 동영상을 처리하는 중이에요…",
+    "saved": "방송 동영상을 저장했어요. 인코딩이 끝나면 라이브 방송을 대체해요.",
+    "saveFailed": "방송은 종료되었지만 동영상을 저장하지 못했어요: {{error}}.",
+    "uploadFailedShort": "업로드 실패",
+    "stillProcessing": "방송 종료 — 동영상을 아직 처리하는 중이에요. 잠시 후 프로필을 확인하세요."
+  },
+  "embedPlayer": {
+    "unavailable": "동영상을 사용할 수 없어요"
+  },
+  "followFeed": {
+    "title": "팔로우 피드",
+    "error": "동영상을 불러오는 중 오류가 발생했어요"
+  },
+  "groups": {
+    "title": "그룹",
+    "badges": "배지",
+    "subtitle": "가입할 수 있는 커뮤니티와 사람들이 보유한 배지를 한곳에서 확인하세요."
+  },
+  "watched": {
+    "removed": "시청 기록에서 삭제했어요",
+    "removeFailed": "시청 기록에서 삭제하지 못했어요",
+    "title": "시청한 동영상",
+    "count_other": "{{count}}개 시청함",
+    "trackHistory": "기록 저장",
+    "videosTab": "동영상({{count}})",
+    "shortsTab": "쇼츠({{count}})",
+    "loadFailed": "시청 기록을 불러오지 못했어요. 다시 시도해 주세요.",
+    "emptyShorts": "아직 시청한 쇼츠가 없어요",
+    "emptyVideos": "아직 시청한 동영상이 없어요",
+    "removeTitle": "시청 기록에서 삭제",
+    "watchedAt": "{{when}} 시청함"
+  },
+  "watchStream": {
+    "saySomething": "메시지를 입력하세요…",
+    "waitingWallet": "지갑 응답을 기다리는 중…",
+    "signInToChat": "채팅하려면 로그인하세요",
+    "sendMessage": "메시지 보내기",
+    "notLive": "지금은 라이브 방송 중이 아니에요.",
+    "notFound": "이 링크에 해당하는 라이브 방송이 없어요.",
+    "browse": "라이브 방송 둘러보기",
+    "back": "3Speak로 돌아가기",
+    "seoTitle": "{{title}} (LIVE)",
+    "swipeNext": "스와이프해서 다음 라이브 방송 보기",
+    "chat": "채팅",
+    "watchingNow": "👁 {{count}}명 시청 중",
+    "signInRaiseHand": "손을 들려면 로그인하세요",
+    "copyLink": "방송 링크 복사",
+    "notAvailableLive": "라이브 방송에서는 사용할 수 없어요",
+    "vote": "투표",
+    "comment": "댓글",
+    "liveChat": "라이브 채팅",
+    "signInToJoin": "🔒 채팅에 참여하려면 로그인하세요.",
+    "moreTag": "#{{tag}} 더보기",
+    "moreVideos": "동영상 더보기"
+  }
+}

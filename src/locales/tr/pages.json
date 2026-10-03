@@ -1,0 +1,139 @@
+{
+  "about": {
+    "quotes": {
+      "q1": "Özgürlük bir anlam taşıyorsa, o da insanlara duymak istemediklerini söyleme hakkıdır.",
+      "q2": "Söylediklerine katılmıyorum ama bunları söyleme hakkını ölümüne savunacağım.",
+      "q3": "İfade özgürlüğü hakkı ile hiç gücenmeme yönündeki gerçekçi olmayan beklenti bir arada var olamaz.",
+      "q4": "İfade özgürlüğü hiçbir zaman, bir insanın çekiçle başparmağına vurduğu andaki kadar değerli değildir.",
+      "q5": "İfade özgürlüğü, nefret ettiğin kişiler için de özgürlük ve en aşağılık görüşleri dile getirme özgürlüğü demektir.",
+      "q6": "Cahilce ifade özgürlüğü çoğu zaman konuşanın aleyhine işler. Bastırılmak yerine serbest bırakılması gerekmesinin birkaç nedeninden biri budur.",
+      "q7": "İfade özgürlüğü, insanları gücendirme özgürlüğünü de kapsar.",
+      "q8": "İfade özgürlüğü ile nefret söylemi arasında ince bir çizgi vardır. İfade özgürlüğü tartışmayı teşvik eder, nefret söylemi ise şiddete kışkırtır.",
+      "q9": "İfade özgürlüğü, insanlara sahip oldukları ya da dile getirdikleri görüşler veya söyledikleri ya da yazdıkları sözler nedeniyle bir şey yapılmaması demektir."
+    },
+    "faq": {
+      "what": {
+        "question": "3Speak nedir?",
+        "answer": "3Speak, içerik üreticilerinin sitedeki varlıklarına ve topluluklarına doğrudan sahip olduğu bir yerdir. Blokzincir teknolojisi sayesinde bu varlıkların ve toplulukların sahipliği 3Speak'e değil, içerik üreticisine ve kullanıcıya aittir. Bu yüzden blokzincir teknolojisi kullanan başka uygulamalara taşınabilirler. Yani topluluğa ve içerik üreticilerine en iyi şekilde hizmet etmezsek, ürettikleri varlıkları alıp başka bir uygulamaya geçebilirler. Sonuç olarak 3Speak sansüre dirençlidir, varlıklarını elinden alamaz ve topluluklarını silemez."
+      },
+      "upvote": {
+        "question": "3Speak neden bana upvote vermiyor?",
+        "answer": "3Speak kendi takdirine göre oy verir ve belirli bir kritere bağlı değildir. Dikkatimizi çekmenin en iyi yolu yüksek kaliteli içerik yüklemek ve 3Speak'e izleyici ve topluluk çekmektir."
+      },
+      "missing": {
+        "question": "Bazı videolarım neden yeni akışında görünmüyor?",
+        "answer": "İstediğin kadar video yüklemene izin veriyoruz! Bu da bazen tek bir kullanıcının akışları yalnızca kendi içeriğiyle doldurabileceği anlamına gelir. Bunu önlemek için her yüklemede tek bir içerik üreticisinden gösterilebilecek video sayısını sınırlıyoruz."
+      },
+      "creator": {
+        "question": "Nasıl içerik üreticisi olurum?",
+        "answer": "Hive hesabı edinmenin en hızlı yolu, gezinme panelindeki \"Kaydol\" düğmesine basıp talimatları izlemektir (anahtarlarını kaybetme!). Ardından Hive hesabınla giriş yapıp \"içerik stüdyosu\" / yükle'ye tıklaman gerekir. Her şey hazır, başlayabilirsin!"
+      },
+      "rewards": {
+        "question": "Yorum yaparak nasıl ödül kazanırım?",
+        "answer": "Ödül kazanmak için bir Hive blokzincir hesabına ihtiyacın var. Hive'dan (https://signup.hive.io) ücretsiz alabilir, bir Hive kullanıcı rehberi satın alabilir ya da başka bir Hive kullanıcısından sana hesap açmasını isteyebilirsin. Hesabın olduktan sonra Hivesigner ile giriş yap ve ilk girişte ACTIVE anahtarını gir. Ardından kripto para ödülü kazanabilecek yorumlar paylaşabilirsin."
+      }
+    },
+    "hero": {
+      "tagline1": "İÇERİĞİNİ KORU",
+      "tagline2": "TOPLULUĞUNU TOKENLAŞTIR",
+      "cta": "Devrime Katıl",
+      "description": "3Speak, Hive blokzinciri üzerine kuruludur; gerçek merkeziyetsizlik, sansüre direnç ve topluluk sahipliği sağlar."
+    },
+    "how": {
+      "title": "3Speak Nasıl Çalışır",
+      "subtitle": "Blokzincir teknolojisiyle gerçek içerik sahipliğini deneyimle",
+      "create": {
+        "title": "İçerik Oluştur",
+        "text": "Videolarını yükle ve blokzincirde gerçekten sana ait içerikler oluştur."
+      },
+      "earn": {
+        "title": "Ödül Kazan",
+        "text": "Hive token'larıyla ödüllendiril ve kendi Speak token'ımızla bağış al."
+      },
+      "community": {
+        "title": "Topluluk Kur",
+        "text": "Topluluklarını desteklemek için kendi token'larını, pazar yerlerini ve ekonomilerini oluştur."
+      }
+    },
+    "features": {
+      "title": "Özellikler",
+      "rewards": {
+        "title": "ÖDÜLLER",
+        "text": "Platformu kullanan kullanıcılar Hive token'larıyla ödüllendirilir ve kendi Speak token'ımızla bağış alabilir. Bu token'lardan ne kadar çok tutarsan ekosistemde o kadar çok ayrıcalığın olur."
+      },
+      "p2p": {
+        "title": "P2P",
+        "text": "Sitenin kullandığı blokzincir teknolojisi, içerik üreticilerinin kitleleriyle hiçbir aracı olmadan gerçek P2P bağlantı kurmasını sağlar."
+      },
+      "tokenisation": {
+        "title": "TOKENLAŞTIRMA",
+        "text": "İçerik üreticileri, topluluklarını desteklemek için kolayca kendi token'larını, pazar yerlerini, stake tabanlı ödüllerini ve ekonomilerini de oluşturabilir."
+      },
+      "freeSpeech": {
+        "title": "İFADE ÖZGÜRLÜĞÜ",
+        "text": "Politikamız şudur: gücendirici olabilme yeteneği İfade Özgürlüğünün temelidir ve İfade Özgürlüğü de toplumları kaosa ve iç savaşa sürüklenmekten korur."
+      },
+      "journalism": {
+        "title": "YURTTAŞ GAZETECİLİĞİ",
+        "text": "Yurttaş gazetecileri bize katılmaya ve çoğu zaman göz ardı edilen türde içerikler paylaşmaya davet ediyoruz. Yurttaş gazetecilerin gelecek olduğuna inanıyoruz."
+      }
+    },
+    "hive": {
+      "title": "Hive Blokzinciri ile Güçlendirildi",
+      "decentralized": {
+        "title": "Merkeziyetsiz",
+        "text": "Tek bir arıza ya da kontrol noktası yok"
+      },
+      "fast": {
+        "title": "Hızlı ve Ücretsiz",
+        "text": "Sıfır işlem ücreti ve 3 saniyelik bloklar"
+      },
+      "community": {
+        "title": "Topluluğa Ait",
+        "text": "Şirketler tarafından değil, paydaşlar tarafından yönetilir"
+      },
+      "description": "3Speak, Hive blokzinciri üzerine kuruludur; gerçek merkeziyetsizlik, sansüre direnç ve topluluk sahipliği sağlar. Hive ekosistemi, 3Speak'i devrim niteliğinde kılan ödüller, yönetişim ve varlık sahipliği altyapısını sunar."
+    },
+    "guidelines": {
+      "title": "Kurallarımız",
+      "subtitle": "İfade Özgürlüğünün mutlak olduğuna inanıyoruz; açık ve adil politikalarla",
+      "support": {
+        "title": "Desteklediklerimiz",
+        "religion": "Dinleri, inançları, grupları ve kişileri eleştirmek",
+        "politics": "Alternatif siyaset ve komplo tartışmaları",
+        "governments": "Hükümetleri ve dünya liderlerini eleştirmek",
+        "pseudonyms": "Gizlilik için takma ad kullanmak",
+        "jokes": "Gücendirici şakalar (açıkça öyle belirtildiğinde)"
+      },
+      "restrict": {
+        "title": "Kısıtladıklarımız",
+        "violence": "Şiddete çağrı veya kışkırtma",
+        "gore": "Aşırı kan ve vahşet ya da pornografik içerik göstermek",
+        "slander": "İftira ve karalayıcı içerik",
+        "illegal": "Yasa dışı faaliyetler veya içerik"
+      }
+    },
+    "faqSection": {
+      "title": "Sıkça Sorulan Sorular",
+      "subtitle": "3Speak hakkında bilmen gereken her şey"
+    },
+    "quotesTitle": "Özgürlüğün Sesleri",
+    "cta": {
+      "title": "İçeriğinin Sahibi Olmaya Hazır mısın?",
+      "subtitle": "Dijital varlıklarının kontrolünü çoktan ele almış binlerce içerik üreticisine katıl."
+    },
+    "connect": "3Speak ile bağlantıda kal",
+    "logoAlt": "3Speak Logosu"
+  },
+  "legal": {
+    "pageTitle": "3Speak verilerini nasıl işler · 3Speak",
+    "englishOnly": "Bu sayfa yalnızca İngilizce olarak mevcuttur. Bağlayıcı olan İngilizce sürümdür.",
+    "back": "← 3Speak'e dön"
+  },
+  "notFound": {
+    "imageAlt": "404",
+    "title": "ÜZGÜNÜZ! SAYFA BULUNAMADI",
+    "message": "Maalesef aradığın sayfa mevcut değil.",
+    "goHome": "ANA SAYFAYA GİT"
+  }
+}

@@ -1,0 +1,172 @@
+{
+  "addTag": {
+    "loginRequired": "Bu videoyu etiketlemek için giriş yap",
+    "pickTopic": "Önce bir konu seç",
+    "tagged": "“{{label}}” olarak etiketlendi",
+    "failed": "Etiketleme başarısız: {{error}}",
+    "pleaseTryAgain": "lütfen tekrar dene",
+    "title": "Bu videoyu etiketle",
+    "question": "Bu video ne hakkında?",
+    "existing": "Bunu <b>{{label}}</b> olarak etiketledin; başka birini seçersen onun yerini alır.",
+    "submit": "Etiketi gönder"
+  },
+  "addAccount": {
+    "usernameRequired": "Devam etmek için kullanıcı adı gerekli.",
+    "hiveAuthExpired": "HiveAuth kimlik doğrulama isteğinin süresi doldu",
+    "loginSuccess": "Giriş başarılı!",
+    "loginFailed": "Giriş başarısız: {{error}}",
+    "logoAlt": "3Speak Logosu",
+    "title": "Kullanıcı adınla giriş yap",
+    "usernamePlaceholder": "Kullanıcı adı"
+  },
+  "socialLink": {
+    "hashCopied": "Hash kopyalandı",
+    "copyFailed": "Panoya kopyalanamadı",
+    "enterHandle": "Platformdaki kullanıcı adını veya kimliğini gir",
+    "verified": "Hesap doğrulandı ve bağlandı",
+    "errors": {
+      "hashNotFound": "Hash henüz profilde bulunamadı. Değişikliğin herkese açık olarak kaydedildiğinden emin ol ve tekrar dene.",
+      "alreadyLinked": "Bu kanal zaten başka bir Hive kullanıcısı (@{{user}}) tarafından doğrulanmış.",
+      "tooMany": "Bağlanabilecek en fazla hesap sayısına ulaştın.",
+      "notFound": "Bu kanal platformda mevcut değil.",
+      "badSignature": "İmza doğrulanamadı. Posting anahtarınla giriş yaptığından emin ol.",
+      "rateLimited": "Çok fazla istek. Lütfen bir dakika bekle ve tekrar dene.",
+      "lookupFailed": "Platform sorgusu başarısız. Birazdan tekrar dene.",
+      "verifyFailed": "Doğrulama başarısız",
+      "stillPresent": "Hash hâlâ profilinde, önce onu kaldır.",
+      "unlinkFailed": "Bağlantı kaldırılamadı",
+      "noSuchLink": "Kaldırılacak böyle bir bağlantı yok."
+    },
+    "confirmUnlink": "{{platform}} bağlantın kaldırılsın mı? Doğrulama hash'inin artık herkese açık profilinde olmadığından emin ol, yoksa bağlantı kaldırma reddedilir.",
+    "removed": "Bağlantı kaldırıldı",
+    "title": "Bağlı harici profiller",
+    "intro": "Bir YouTube (veya başka bir) kanalın sahibi olduğunu kanıtlamak için sana özel 3Speak hash'ini herkese açık profil açıklamana yapıştır, sonra burada doğrula.",
+    "openProfile": "Profili aç",
+    "removeLink": "Bağlantıyı kaldır",
+    "empty": "Henüz bağlı harici profil yok.",
+    "addPlatform": "Yeni platform ekle",
+    "flowTitle": "{{platform}} kanalını bağla",
+    "step1": "Sana özel doğrulama hash'ini kopyala:",
+    "step2": "<strong>Bunu herkese açık {{platform}} profil açıklamana yapıştır</strong> (herhangi bir yere; hakkında / bio / açıklama olur). Değişikliği kaydet.",
+    "step3": "{{platform}} kimliğini gir:",
+    "verifying": "Doğrulanıyor…",
+    "verify": "Doğrula"
+  },
+  "auth": {
+    "title": "3Speak'i yetkilendir!",
+    "text": "3Speak'e video yükleyebilmen için posting yetkine ihtiyacımız var. Bu, yüklediğin videoları Hive'da yayınlamamızı sağlar. Posting yetkisini yalnızca bir kez vermen yeterli.",
+    "authorize": "Yetkilendir"
+  },
+  "beneficiary": {
+    "errors": {
+      "emptyUsername": "Kullanıcı adı boş olamaz.",
+      "sameUser": "Lehtar aynı kullanıcı olarak ayarlanamaz",
+      "greaterThanZero": "Ödül yüzdesi 0'dan büyük olmalı.",
+      "exceedsRemaining": "Ödül yüzdesi kalan %{{percent}} payı aşıyor.",
+      "validNumber": "Geçerli bir sayı gir",
+      "validPercent": "Geçerli bir ödül yüzdesi gir.",
+      "duplicate": "Bu hesap zaten listede.",
+      "invalidAccount": "Geçersiz kullanıcı adı veya topluluk kimliği.",
+      "cannotIncrease": "Kalan %{{percent}} payın ötesine çıkılamaz",
+      "pendingRow": "@{{account}} henüz eklenmedi; eklemek için + düğmesine tıkla ya da alanı temizle.",
+      "atLeastOne": "Ödül yüzdesi en az %1 olmalı"
+    },
+    "title": "Lehtarlar",
+    "intro": "Bu gönderinin ödüllerinden otomatik olarak pay almasını istediğin bir kullanıcı ekle.",
+    "minPercent": "% (en az %{{percent}})",
+    "usernamePlaceholder": "Kullanıcı adını gir",
+    "minimumReward": "En düşük ödül <strong>%1</strong>",
+    "checking": "<strong>@{{account}}</strong> Hive'da kontrol ediliyor…",
+    "notExisting": "⚠️ <strong>@{{account}}</strong> mevcut bir Hive hesabı değil.",
+    "notAdded": "⚠️ <strong>@{{account}}</strong> henüz eklenmedi; eklemek için <strong>+</strong> düğmesine tıkla ya da alanı temizle.",
+    "infrastructure": "%10 === Altyapı",
+    "videoEncoding": "Video Kodlama === %1",
+    "defaults": "Varsayılan Lehtarlar ({{count}})"
+  },
+  "qr": {
+    "scan": "Bu QR kodunu Hive Keychain'de tara:",
+    "click": "Keychain uygulamasında açmak için QR koda tıkla"
+  },
+  "editVideoHint": {
+    "title": "Videolarından herhangi birini düzenle",
+    "text": "Kendi videolarından birini aç ve oynatıcının altındaki işlem çubuğunda <strong>kalem düğmesini</strong> bul. Başlığı, açıklamayı, küçük resmi, etiketleri ve daha fazlasını değiştirmek için ona tıkla.",
+    "penTitle": "Video ayrıntılarını düzenle",
+    "tip": "İpucu",
+    "caption": "Aradığın kalem düğmesi bu",
+    "gotIt": "Anladım"
+  },
+  "verifyAuth": {
+    "title": "Yetki Doğrulanıyor",
+    "text": "Yetkinin verildiğini doğrularken lütfen bekle..."
+  },
+  "editor": {
+    "confirmLeave": "Düzenleyici hâlâ açık. Bu sayfadan ayrılırsan düzenleyici kapanır ve kaydedilmemiş değişiklikler kaybolur.\n\nTamam = Düzenleyiciyi kapat ve ayrıl\nİptal = Bu sayfada kal",
+    "confirmClose": "Düzenleyiciyi kapatmak istediğinden emin misin? Kaydedilmemiş değişiklikler kaybolacak.",
+    "iframeTitle": "3Speak Video Düzenleyici",
+    "finding": "Uygun düzenleyici aranıyor...",
+    "loading": "Düzenleyici yükleniyor...",
+    "unavailable": "Şu an kullanılabilir düzenleyici sunucusu yok. Lütfen daha sonra tekrar dene.",
+    "sending": "İşleme servisine gönderiliyor...",
+    "rendering": "İşleniyor... %{{percent}}",
+    "complete": "İşleme tamamlandı!",
+    "useVideo": "Videoyu Kullan",
+    "preparing": "Video yüklemeye hazırlanıyor...",
+    "renderUnavailable": "İşleme servisi henüz kullanılamıyor. Zaman çizelgesi verisi konsola yazıldı.",
+    "backToEditor": "Düzenleyiciye Dön",
+    "postError": "Video yüklemeye hazırlanamadı. Lütfen bunun yerine indirmeyi dene."
+  },
+  "profile": {
+    "mustLogin": "Önce giriş yapmalısın",
+    "followed": "Takip edildi",
+    "unfollowed": "Takip bırakıldı",
+    "followFailed": "Takip edilemedi: {{error}}",
+    "unfollowFailed": "Takip bırakılamadı: {{error}}",
+    "avatarAlt": "Profil",
+    "posts": "Gönderiler",
+    "followers": "Takipçiler",
+    "joined": "Katılma: {{date}}",
+    "about": "Hakkında",
+    "noBio": "Biyografi yok"
+  },
+  "report": {
+    "reasons": {
+      "spamMisleading": "Spam veya yanıltıcı",
+      "harassment": "Taciz veya zorbalık",
+      "hateSpeech": "Nefret söylemi",
+      "violence": "Şiddet içeren veya rahatsız edici içerik",
+      "sexual": "Cinsel içerik",
+      "copyright": "Telif hakkı ihlali",
+      "scam": "Dolandırıcılık",
+      "other": "Diğer",
+      "spam": "Spam",
+      "impersonation": "Kimliğe bürünme",
+      "spamAccount": "Spam hesap"
+    },
+    "selectReasonError": "Lütfen bir neden seç",
+    "loginRequired": "Bildirmek için giriş yapmalısın",
+    "submitted": "Bildirim gönderildi. Teşekkürler.",
+    "failed": "Bildirim gönderilemedi",
+    "titles": {
+      "user": "Kullanıcıyı Bildir",
+      "comment": "Yorumu Bildir",
+      "short": "Shorts Videosunu Bildir",
+      "post": "Gönderiyi Bildir",
+      "video": "Videoyu Bildir"
+    },
+    "reason": "Neden",
+    "selectReason": "Bir neden seç...",
+    "details": "Ek ayrıntılar (isteğe bağlı)",
+    "detailsPlaceholder": "Biraz daha bilgi ver...",
+    "submitting": "Gönderiliyor...",
+    "submit": "Bildirimi Gönder"
+  },
+  "upload": {
+    "missingInfo": "Video veya küçük resim bilgisi eksik.",
+    "updateFailed": "Video bilgileri güncellenemedi. Lütfen tekrar dene.",
+    "title": "Video ve Küçük Resim Yükle",
+    "selectVideo": "Video Seç",
+    "thumbnail": "Küçük resim",
+    "clickThumbnail": "Küçük resim yüklemek için tıkla",
+    "updateInfo": "Video Bilgilerini Güncelle"
+  }
+}

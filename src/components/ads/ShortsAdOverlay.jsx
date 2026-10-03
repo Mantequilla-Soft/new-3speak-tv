@@ -1,4 +1,5 @@
 import PropTypes from 'prop-types';
+import { useTranslation } from 'react-i18next';
 import './ShortsAdOverlay.scss';
 
 /**
@@ -22,6 +23,7 @@ import './ShortsAdOverlay.scss';
  * the thing at risk, not the impression, which is the right way round.
  */
 export default function ShortsAdOverlay({ brand, secondsLeft, loading }) {
+  const { t } = useTranslation();
   if (!brand) return null;
   return (
     <div className={`mkt-shortad${loading ? ' is-loading' : ''}`}>
@@ -39,7 +41,7 @@ export default function ShortsAdOverlay({ brand, secondsLeft, loading }) {
       )}
 
       <div className="mkt-shortad-top">
-        <span className="mkt-shortad-tag">Ad</span>
+        <span className="mkt-shortad-tag">{t('ads.overlay.adTag')}</span>
         {Number.isFinite(secondsLeft) && secondsLeft > 0 && (
           <span className="mkt-shortad-count">{secondsLeft}s</span>
         )}

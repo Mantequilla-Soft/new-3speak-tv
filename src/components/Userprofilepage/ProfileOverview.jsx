@@ -6,6 +6,7 @@ import ChannelTrailer from './ChannelTrailer';
 import CommunitySnaps from './CommunitySnaps';
 import ProfileLinksPanel from './ProfileLinksPanel';
 import ProfilePlaylistRails from './ProfilePlaylistRails';
+import { useTranslation } from 'react-i18next';
 import './ProfileOverview.scss';
 
 /**
@@ -33,6 +34,7 @@ const MOBILE_COUNT = 4;
 const RAIL_COUNT = 20;
 
 function Section({ title, count, onViewMore, children }) {
+  const { t } = useTranslation();
   if (!count) return null;
   return (
     <section className="pov-section">
@@ -40,7 +42,7 @@ function Section({ title, count, onViewMore, children }) {
         <h3>{title}</h3>
         {onViewMore ? (
           <button type="button" className="pov-more" onClick={onViewMore}>
-            View more
+            {t('profile.overview.viewMore')}
           </button>
         ) : null}
       </div>
@@ -61,6 +63,7 @@ export default function ProfileOverview({
   isWatched,
   getViewCount,
 }) {
+  const { t } = useTranslation();
   // Still responsive for the sections that are not video rails (playlists,
   // audio, snaps), which stay short previews.
   const [perRow, setPerRow] = useState(
@@ -99,7 +102,7 @@ export default function ProfileOverview({
       <div className="pov-main">
         <ChannelTrailer username={username} isOwnProfile={isOwnProfile} onOpenCommunityTab={openCommunityTab} />
 
-        <Section title="Videos" count={videoSlice.length} onViewMore={() => onOpenTab('video')}>
+        <Section title={t('profile.overview.videos')} count={videoSlice.length} onViewMore={() => onOpenTab('video')}>
           <Card3
             videos={videoSlice}
             getContentForVideo={getContentForVideo}
@@ -108,7 +111,7 @@ export default function ProfileOverview({
           />
         </Section>
 
-        <Section title="Shorts" count={shortSlice.length} onViewMore={() => onOpenTab('shorts')}>
+        <Section title={t('profile.overview.shorts')} count={shortSlice.length} onViewMore={() => onOpenTab('shorts')}>
           <Card3
             videos={shortSlice}
             shortsGrid
@@ -121,8 +124,8 @@ export default function ProfileOverview({
             rendered limited rather than sliced here, and hide when empty. */}
         <section className="pov-section pov-section--audio">
           <div className="pov-head">
-            <h3>Audio</h3>
-            <button type="button" className="pov-more" onClick={() => onOpenTab('audio')}>View more</button>
+            <h3>{t('profile.overview.audio')}</h3>
+            <button type="button" className="pov-more" onClick={() => onOpenTab('audio')}>{t('profile.overview.viewMore')}</button>
           </div>
           <UserAudioList user={username} limit={perRow} />
         </section>
@@ -130,8 +133,8 @@ export default function ProfileOverview({
         {snapCount > 0 && (
           <section className="pov-section">
             <div className="pov-head">
-              <h3>Community</h3>
-              <button type="button" className="pov-more" onClick={() => onOpenTab('community')}>View more</button>
+              <h3>{t('profile.overview.community')}</h3>
+              <button type="button" className="pov-more" onClick={() => onOpenTab('community')}>{t('profile.overview.viewMore')}</button>
             </div>
             <CommunitySnaps user={username} limit={perRow} hideEmpty onOpenTab={openCommunityTab} />
           </section>
@@ -146,7 +149,7 @@ export default function ProfileOverview({
           getViewCount={getViewCount}
         />
 
-        <Section title="Playlists" count={playlistSlice.length} onViewMore={() => onOpenTab('playlists')}>
+        <Section title={t('profile.overview.playlists')} count={playlistSlice.length} onViewMore={() => onOpenTab('playlists')}>
           <PlaylistCard playlists={playlistSlice} />
         </Section>
       </div>

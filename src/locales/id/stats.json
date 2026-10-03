@@ -1,0 +1,116 @@
+{
+  "ranges": {
+    "d7": "7h",
+    "d28": "28h",
+    "d90": "90h",
+    "all": "Semua"
+  },
+  "content": {
+    "all": "Semua",
+    "videos": "Video",
+    "shorts": "Shorts"
+  },
+  "metrics": {
+    "watchTime": "Waktu tonton",
+    "views": "Tayangan",
+    "avgPct": "Rata-rata %",
+    "votes": "Vote",
+    "comments": "Komentar",
+    "payout": "Payout"
+  },
+  "days": {
+    "short": {
+      "sun": "Min",
+      "mon": "Sen",
+      "tue": "Sel",
+      "wed": "Rab",
+      "thu": "Kam",
+      "fri": "Jum",
+      "sat": "Sab"
+    },
+    "initial": {
+      "sun": "M",
+      "mon": "S",
+      "tue": "S",
+      "wed": "R",
+      "thu": "K",
+      "fri": "J",
+      "sat": "S"
+    }
+  },
+  "sources": {
+    "threespeak": "3Speak",
+    "player": "Pemutar embed"
+  },
+  "trend": {
+    "empty": "Belum ada waktu tonton di rentang ini.",
+    "tip_other": "{{count}} tayangan · {{date}}"
+  },
+  "noData": "Belum ada data.",
+  "demo": {
+    "viewerLocations": "Lokasi penonton",
+    "mapBubble_other": "{{country}} — {{count}} sesi",
+    "empty": "Belum ada data penonton di rentang ini.",
+    "breakdown": "Rincian",
+    "map": "Peta",
+    "countries": "Negara",
+    "devices": "Perangkat",
+    "browsers": "Browser",
+    "whereTitle": "Di mana mereka menonton",
+    "whereSub": "3speak vs pemutar embed",
+    "newVsReturning": "Baru vs kembali",
+    "new": "Baru",
+    "returning": "Kembali",
+    "located": "{{located}} dari {{total}} sesi tonton berhasil dilacak lokasinya."
+  },
+  "when": {
+    "title": "Kapan penontonmu menonton",
+    "sub": "UTC · makin gelap = makin banyak tayangan",
+    "cellTitle_other": "{{day}} {{hour}}:00 — {{count}} tayangan",
+    "hour": "{{hour}}j"
+  },
+  "detail": {
+    "summary": "{{votes}} vote · {{comments}} komentar · ${{payout}}"
+  },
+  "compare": {
+    "notEnough": "Data belum cukup untuk dibandingkan.",
+    "start": "Awal",
+    "axis": "Retensi sepanjang video",
+    "end": "Akhir",
+    "title": "Bandingkan video",
+    "pickA": "Pilih video…",
+    "vs": "vs",
+    "pickB": "Pilih yang lain…"
+  },
+  "loadError": "Statistikmu tidak dapat dimuat saat ini.",
+  "emptyRange": "Belum ada data tonton di rentang ini — coba “Semua”, atau tunggu orang menonton videomu.",
+  "tiles": {
+    "avgViewDuration": "Rata-rata durasi tonton",
+    "avgWatched": "Rata-rata ditonton",
+    "reactionsPerView": "Reaksi / tayangan"
+  },
+  "subtotals": "{{videos}} video · {{votes}} vote · {{comments}} komentar · ${{payout}} · kecepatan rata-rata {{rate}}×",
+  "sections": {
+    "trend": "Waktu tonton dari waktu ke waktu",
+    "best": "Performa terbaik",
+    "audience": "Penontonmu"
+  },
+  "openInNewTab": "Buka video di tab baru",
+  "footnote": "Statistik tonton berasal dari pelacakan pratinjau dan hanya terlihat olehmu.",
+  "video": {
+    "noData": "Belum ada data",
+    "empty": "Belum ada data tonton untuk video ini.",
+    "uniqueViewers": "Penonton unik",
+    "avgSpeed": "Kecepatan rata-rata",
+    "mostDropOff": "📉 Paling banyak berhenti di <b>{{time}}</b>",
+    "earlyDrop": "⚡ <b>{{pct}}%</b> pergi di 3 detik pertama",
+    "replayed": "🔁 Diputar ulang:",
+    "retentionTitle": "Retensi penonton",
+    "retentionSub": "persentase penonton yang masih menonton di setiap momen",
+    "pctWatching": "{{pct}}% menonton",
+    "replayTitle": "Paling sering diputar ulang",
+    "replaySub": "bagian yang paling banyak ditonton dan ditonton ulang",
+    "hotSpot": "titik panas",
+    "notEnoughReplays": "Belum cukup putar ulang"
+  }
+}

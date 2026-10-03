@@ -1,0 +1,119 @@
+{
+  "loading": "Завантаження Shorts...",
+  "pleaseTryAgain": "спробуйте ще раз",
+  "rotateDevice": "Поверніть пристрій вертикально",
+  "pageTitle": {
+    "byAuthor": "3S | Shorts від @{{author}}",
+    "default": "3S | Shorts"
+  },
+  "stories": {
+    "you": "Ви"
+  },
+  "errors": {
+    "votingUnavailable": "Для цього допису голосування недоступне",
+    "loginToVote": "Увійдіть, щоб проголосувати",
+    "loginToComplete": "Увійдіть, щоб виконати цю дію"
+  },
+  "feed": {
+    "ariaLabel": "Стрічка Shorts",
+    "discover": "Відкривайте",
+    "myInterests": "Мої інтереси",
+    "interestsTitle": "Лише Shorts за вашими інтересами",
+    "pickInterestsFirst": "Спочатку виберіть інтереси",
+    "noInterests": "Ви ще не вибрали інтереси — зробіть це в налаштуваннях",
+    "interestsExhausted": "Це всі Shorts за вашими інтересами — показуємо «Відкривайте»",
+    "noInterestMatches": "Зараз немає Shorts за вашими інтересами.",
+    "switchToDiscover": "Перейти до «Відкривайте»",
+    "empty": "Немає доступних Shorts",
+    "loadError": "Помилка завантаження Shorts: {{error}}"
+  },
+  "glow": {
+    "subtle": "Фонове підсвічування: м'яке",
+    "vivid": "Фонове підсвічування: яскраве",
+    "off": "Фонове підсвічування: вимк."
+  },
+  "playbackMode": {
+    "autoReplay": "Автоповтор",
+    "autoSwipe": "Автогортання",
+    "manual": "Вручну"
+  },
+  "subtitles": {
+    "off": "Вимк."
+  },
+  "chain": {
+    "originalVideo": "Оригінальне відео",
+    "snap": "Snap",
+    "openShort": "Відкрити Shorts",
+    "watch": "Дивитися",
+    "openSnap": "Відкрити snap",
+    "comment": "Коментар",
+    "reaction": "Реакція",
+    "thisVideo": "Це відео",
+    "remix": "Ремікс",
+    "show": "показати ланцюжок реакцій"
+  },
+  "caption": {
+    "curatedBy": "Добірка від Mantequilla",
+    "curated": "Добірка",
+    "showOriginal": "Показати оригінал",
+    "more": "ще"
+  },
+  "actions": {
+    "remix": "Ремікс",
+    "promote": "Просувати"
+  },
+  "share": {
+    "defaultTitle": "3Speak Shorts",
+    "text": "Подивіться це коротке відео від {{user}} на 3Speak!",
+    "shared": "Успішно поширено!",
+    "linkCopied": "Посилання скопійовано в буфер обміну!",
+    "failed": "Не вдалося поділитися"
+  },
+  "reshare": {
+    "loginRequired": "Увійдіть, щоб зробити репост",
+    "unavailable": "Для цього допису репост недоступний",
+    "done": "Репост зроблено!",
+    "failed": "Не вдалося зробити репост"
+  },
+  "remix": {
+    "noUrl": "Не вдалося визначити URL відео для реміксу",
+    "loadFailed": "Не вдалося завантажити відео для реміксу"
+  },
+  "watchLater": {
+    "loginRequired": "Увійдіть, щоб зберігати Shorts",
+    "cantSave": "Це відео не можна зберегти",
+    "removed": "Прибрано з «Переглянути пізніше»",
+    "saved": "Збережено в «Переглянути пізніше»",
+    "failed": "Помилка: {{message}}"
+  },
+  "comments": {
+    "title": "Коментарі",
+    "loading": "Завантаження коментарів...",
+    "closed": "Коментарі закрито",
+    "none": "Коментарів ще немає",
+    "postRemoved": "Допис у Hive, на якому базується це відео, видалено, тому його більше не можна коментувати чи голосувати за нього.",
+    "beFirst": "Залиште перший коментар!",
+    "unavailable": "Для цього допису коментарі недоступні",
+    "addPlaceholder": "Додайте коментар...",
+    "addPlaceholderBar": "Додайте коментар…",
+    "loginPlaceholder": "Увійдіть, щоб коментувати",
+    "send": "Надіслати коментар",
+    "enterComment": "Введіть коментар",
+    "loginToComment": "Увійдіть, щоб коментувати",
+    "justNow": "Щойно",
+    "posted": "Коментар опубліковано!",
+    "failed": "Не вдалося опублікувати коментар: {{message}}",
+    "translation": "Переклад",
+    "translationFailed": "Не вдалося перекласти",
+    "reportComment": "Поскаржитися на коментар",
+    "replyPlaceholder": "Напишіть відповідь...",
+    "viewReplies_one": "Переглянути {{count}} відповідь",
+    "viewReplies_few": "Переглянути {{count}} відповіді",
+    "viewReplies_many": "Переглянути {{count}} відповідей",
+    "viewReplies_other": "Переглянути {{count}} відповіді",
+    "hideReplies_one": "Сховати {{count}} відповідь",
+    "hideReplies_few": "Сховати {{count}} відповіді",
+    "hideReplies_many": "Сховати {{count}} відповідей",
+    "hideReplies_other": "Сховати {{count}} відповіді"
+  }
+}

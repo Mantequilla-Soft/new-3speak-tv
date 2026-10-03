@@ -1,0 +1,98 @@
+{
+  "backToOpenPods": "Volver a OpenPods",
+  "modal": {
+    "leaveConfirm": "¿Salir de este OpenPod? Puedes volver a unirte desde el lobby cuando quieras.",
+    "yourStreamEnded": "Tu transmisión terminó",
+    "thisStreamEnded": "Esta transmisión terminó",
+    "noLongerLive": "Ya no está en vivo. Inicia una nueva cuando estés listo.",
+    "recordingProcessing": "¡Muy bien! Tu grabación se está procesando y aparecerá pronto en la publicación del anuncio.",
+    "thanksForLive": "¡Muy bien, gracias por transmitir en vivo!",
+    "backHome": "Volver al inicio",
+    "howWasStream": "¿Qué tal tu transmisión?",
+    "connecting": "Conectando con OpenPods…",
+    "authenticating": "Autenticando con OpenPods…"
+  },
+  "strip": {
+    "liveNow_one": "<n>{{count}}</n> OpenPod en vivo ahora",
+    "liveNow_many": "<n>{{count}}</n> OpenPods en vivo ahora",
+    "liveNow_other": "<n>{{count}}</n> OpenPods en vivo ahora",
+    "viewAll": "Ver todo",
+    "joinAria": "Unirse al OpenPod: {{title}}"
+  },
+  "announce": {
+    "selectCommunity": "Elegir comunidad",
+    "shareToggle": "📣 Compartir esta transmisión en Hive y 3Speak cuando empiece",
+    "community": "Comunidad",
+    "rewards": "Recompensas",
+    "rewardDefault": "Predeterminado 50/50",
+    "rewardPowerup": "Power up 100%",
+    "rewardDecline": "Rechazar pago",
+    "beneficiaries": "Beneficiarios",
+    "beneProHint": "Tienes 3Speak Pro: sin comisión de la plataforma. Agrega repartos si quieres.",
+    "beneLockedHint": "El 10% para @threespeakfund es fijo. Puedes agregar más."
+  },
+  "boost": {
+    "label": "Impulso",
+    "sendTo": "Enviar un impulso a @{{user}}",
+    "send": "Enviar un impulso"
+  },
+  "clip": {
+    "saved": "Clip guardado en tus descargas.",
+    "slowDown": "Espera un momento y vuelve a hacer el clip.",
+    "failed": "No se pudo crear el clip. Inténtalo de nuevo en unos segundos.",
+    "title": "Hacer clip de los últimos 30 segundos",
+    "label": "30 s",
+    "clipping": "Creando clip…"
+  },
+  "report": {
+    "reasons": {
+      "harassment": "Acoso u odio",
+      "sexual": "Contenido sexual o explícito",
+      "violence": "Violencia o actos peligrosos",
+      "selfharm": "Autolesiones",
+      "illegal": "Contenido ilegal",
+      "spam": "Spam o estafa",
+      "other": "Otra cosa"
+    },
+    "sent": "Gracias: esta transmisión fue reportada a nuestro equipo.",
+    "failed": "No se pudo enviar el reporte. Inténtalo de nuevo.",
+    "title": "Reportar esta transmisión",
+    "reporting": "Reportando a <b>@{{host}}</b>.",
+    "intro": "Cuéntanos qué pasa; nuestro equipo revisa cada reporte.",
+    "detailPlaceholder": "Agrega detalles (opcional)",
+    "sending": "Enviando…",
+    "submit": "Enviar reporte"
+  },
+  "signIn": {
+    "waitingWallet": "Esperando tu billetera…"
+  },
+  "publish": {
+    "errors": {
+      "noTitle": "Agrega un título",
+      "noAudio": "No se encontró la URL del audio",
+      "failed": "No se pudo publicar. Inténtalo de nuevo."
+    },
+    "published": "¡Grabación publicada en Hive!",
+    "loginGate": "Inicia sesión para publicar tu grabación.",
+    "heading": "Publicar grabación de OpenPod",
+    "previewLabel": "Vista previa de la grabación",
+    "previewHint": "Revisa el audio antes de publicar. Es el mismo reproductor que verán los lectores en la publicación.",
+    "recordingFallback": "Grabación de OpenPod",
+    "title": "Título",
+    "titlePlaceholder": "Ponle un título a tu grabación",
+    "description": "Descripción",
+    "optional": "(opcional)",
+    "descriptionPlaceholder": "¿De qué hablaron? Agrega notas del programa, enlaces o un resumen...",
+    "tags": "Etiquetas",
+    "tagsPlaceholder": "Etiquetas separadas por espacios",
+    "declinePayout": "Rechazar pago",
+    "publishing": "Publicando…",
+    "submit": "Publicar grabación"
+  },
+  "lobby": {
+    "descriptionPlaceholder": "¿De qué trata esta sesión? Agrega notas del programa, enlaces o un resumen…",
+    "enableHosting": "Activar modo anfitrión y para hablar",
+    "handoverFailed": "No se pudo activar el modo anfitrión automáticamente. OpenPods publica en tu nombre mediante @threespeak; verifica que le hayas dado autoridad de publicación (posting) y vuelve a intentarlo.",
+    "signInToHost": "Inicia sesión con Hive para ser anfitrión o hablar"
+  }
+}

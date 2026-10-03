@@ -3,6 +3,7 @@ import axios from 'axios';
 import { Link } from 'react-router-dom';
 import Card3 from '../Cards/Card3';
 import { MY_VIDEOS_URL } from '../../utils/config';
+import { useTranslation } from 'react-i18next';
 import './ProfileStreams.scss';
 
 const HANGOUTS_API = (import.meta.env.VITE_HANGOUTS_API_URL || '').replace(/\/$/, '');
@@ -35,6 +36,7 @@ async function fetchStreamVods(username) {
  * filtered view, not a move.
  */
 export default function ProfileStreams({ user, getViewCount }) {
+  const { t } = useTranslation();
   const { data: liveRooms = [] } = useQuery({
     queryKey: ['profile-streams-live', user],
     queryFn: () => fetchHostStreams(user),
@@ -51,11 +53,11 @@ export default function ProfileStreams({ user, getViewCount }) {
   });
 
   if (isLoading && !liveRooms.length) {
-    return <div className="profile-streams__empty">Loading streams…</div>;
+    return <div className="profile-streams__empty">{t('profile.streams.loading')}</div>;
   }
 
   if (!liveRooms.length && !vods.length) {
-    return <div className="profile-streams__empty">No streams yet.</div>;
+    return <div className="profile-streams__empty">{t('profile.streams.empty')}</div>;
   }
 
   return (
@@ -63,7 +65,7 @@ export default function ProfileStreams({ user, getViewCount }) {
       {liveRooms.length > 0 && (
         <>
           <h3 className="profile-streams__heading">
-            {liveRooms.some((r) => r.live) ? 'Live now' : 'Upcoming session'}
+            {liveRooms.some((r) => r.live) ? t('profile.streams.liveNow') : t('profile.streams.upcoming')}
           </h3>
           <div className="profile-streams__live">
             {liveRooms.map((room) => (
@@ -73,7 +75,7 @@ export default function ProfileStreams({ user, getViewCount }) {
                   style={room.thumbnail ? { backgroundImage: `url(${room.thumbnail})` } : undefined}
                 >
                   <span className={`profile-streams__badge${room.live ? '' : ' profile-streams__badge--off'}`}>
-                    {room.live ? '● LIVE' : '○ STANDBY'}
+                    {room.live ? `● ${t('profile.streams.live')}` : `○ ${t('profile.streams.standby')}`}
                   </span>
                 </div>
                 <span className="profile-streams__room-title">{room.title || room.name}</span>
@@ -85,7 +87,7 @@ export default function ProfileStreams({ user, getViewCount }) {
 
       {vods.length > 0 && (
         <>
-          <h3 className="profile-streams__heading">Past streams</h3>
+          <h3 className="profile-streams__heading">{t('profile.streams.past')}</h3>
           <Card3 videos={vods} getViewCount={getViewCount} />
         </>
       )}

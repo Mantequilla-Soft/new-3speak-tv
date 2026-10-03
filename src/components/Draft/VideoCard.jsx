@@ -5,8 +5,10 @@ import utc from 'dayjs/plugin/utc';
 import {  useNavigate } from 'react-router-dom';
 import { fixVideoThumbnail } from '../../utils/fixThumbnails';
 import fallbackImg from '../../assets/image/speak.jpg';
+import { useTranslation } from 'react-i18next';
 dayjs.extend(utc);
 const VideoCard = ({  video, onEdit, onView, onDelete, onPublish}) => {
+  const { t } = useTranslation();
   const navigate = useNavigate()
   const handleNavigate = ()=>{
     navigate(`/watch?v=${video?.owner}/${video.permlink ?? "unknown"}`)
@@ -14,12 +16,12 @@ const VideoCard = ({  video, onEdit, onView, onDelete, onPublish}) => {
   const getStatusLabel = (status) => {
   switch (status) {
     case 'published':
-      return 'Published';
+      return t('upload.drafts.status.published');
     case 'scheduled':
-      return 'Scheduled';
+      return t('upload.drafts.status.scheduled');
     case 'failed':
     case 'publish_manual':
-      return 'Failed';
+      return t('upload.drafts.status.failed');
     default:
       return status;
   }
@@ -43,7 +45,7 @@ const VideoCard = ({  video, onEdit, onView, onDelete, onPublish}) => {
         </div>
         {video.status === 'scheduled' && video.publish_data && (
           <div className="scheduled-date">
-            Publishes {dayjs(typeof video.publish_data === 'number' ? video.publish_data * 1000 : video.publish_data).format('MMM D, YYYY [at] h:mm A')}
+            {t('upload.drafts.publishesAt', { date: dayjs(typeof video.publish_data === 'number' ? video.publish_data * 1000 : video.publish_data).format('MMM D, YYYY [at] h:mm A') })}
           </div>
         )}
         <div className="actions">
@@ -57,7 +59,7 @@ const VideoCard = ({  video, onEdit, onView, onDelete, onPublish}) => {
                   <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
                   <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" />
                 </svg>
-                Edit
+                {t('common.actions.edit')}
               </button>
               {/* Scheduled posts don't have a public URL yet, so only show "View" for published. */}
               {video.status === 'published' && (
@@ -69,7 +71,7 @@ const VideoCard = ({  video, onEdit, onView, onDelete, onPublish}) => {
                     <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
                     <circle cx="12" cy="12" r="3" />
                   </svg>
-                  View
+                  {t('common.actions.view')}
                 </button>
               )}
               {/* <button 

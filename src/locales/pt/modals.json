@@ -1,0 +1,172 @@
+{
+  "addTag": {
+    "loginRequired": "Entre para marcar este vídeo",
+    "pickTopic": "Escolha um tema primeiro",
+    "tagged": "Tag “{{label}}” adicionada",
+    "failed": "Falha ao marcar: {{error}}",
+    "pleaseTryAgain": "tente de novo",
+    "title": "Marcar este vídeo",
+    "question": "Sobre o que é este vídeo?",
+    "existing": "Você marcou isto como <b>{{label}}</b> — escolher outro substitui a tag.",
+    "submit": "Enviar tag"
+  },
+  "addAccount": {
+    "usernameRequired": "O nome de usuário é obrigatório para continuar.",
+    "hiveAuthExpired": "A solicitação de autenticação do HiveAuth expirou",
+    "loginSuccess": "Login feito!",
+    "loginFailed": "Falha no login: {{error}}",
+    "logoAlt": "Logo do 3Speak",
+    "title": "Entre com seu nome de usuário",
+    "usernamePlaceholder": "Nome de usuário"
+  },
+  "socialLink": {
+    "hashCopied": "Hash copiado",
+    "copyFailed": "Não foi possível copiar",
+    "enterHandle": "Digite seu nome de usuário ou ID na plataforma",
+    "verified": "Conta verificada e vinculada",
+    "errors": {
+      "hashNotFound": "O hash ainda não foi encontrado no perfil. Verifique se a alteração foi salva publicamente e tente de novo.",
+      "alreadyLinked": "Este canal já foi verificado por outro usuário da Hive (@{{user}}).",
+      "tooMany": "Você atingiu o número máximo de contas vinculadas.",
+      "notFound": "Esse canal não existe na plataforma.",
+      "badSignature": "Não foi possível verificar a assinatura. Verifique se você entrou com sua chave de postagem.",
+      "rateLimited": "Muitas solicitações. Aguarde um minuto e tente de novo.",
+      "lookupFailed": "A consulta à plataforma falhou. Tente de novo daqui a pouco.",
+      "verifyFailed": "Falha na verificação",
+      "stillPresent": "O hash ainda está no seu perfil — remova-o primeiro.",
+      "unlinkFailed": "Não foi possível desvincular",
+      "noSuchLink": "Esse vínculo não existe."
+    },
+    "confirmUnlink": "Remover seu vínculo com {{platform}}? Verifique se o hash de verificação não está mais no seu perfil público, senão a desvinculação será recusada.",
+    "removed": "Vínculo removido",
+    "title": "Perfis externos vinculados",
+    "intro": "Prove que você é dono de um canal do YouTube (ou outro) colando seu hash único do 3Speak na descrição do seu perfil público e verificando aqui.",
+    "openProfile": "Abrir perfil",
+    "removeLink": "Remover vínculo",
+    "empty": "Nenhum perfil externo vinculado ainda.",
+    "addPlatform": "Adicionar uma nova plataforma",
+    "flowTitle": "Vincular seu canal do {{platform}}",
+    "step1": "Copie seu hash de verificação único:",
+    "step2": "<strong>Cole-o na descrição do seu perfil público do {{platform}}</strong> (em qualquer lugar — sobre / bio / descrição serve). Salve a alteração.",
+    "step3": "Digite seu identificador do {{platform}}:",
+    "verifying": "Verificando…",
+    "verify": "Verificar"
+  },
+  "auth": {
+    "title": "Autorize o 3Speak!",
+    "text": "Para enviar vídeos no 3Speak, precisamos da sua autoridade de postagem. Isso nos permite publicar na Hive os vídeos que você envia. Você só precisa conceder a autoridade de postagem uma vez.",
+    "authorize": "Autorizar"
+  },
+  "beneficiary": {
+    "errors": {
+      "emptyUsername": "O nome de usuário não pode ficar vazio.",
+      "sameUser": "Você não pode definir a si mesmo como beneficiário",
+      "greaterThanZero": "A porcentagem da recompensa deve ser maior que 0.",
+      "exceedsRemaining": "A porcentagem da recompensa passa do restante disponível de {{percent}}%.",
+      "validNumber": "Digite um número válido",
+      "validPercent": "Digite uma porcentagem de recompensa válida.",
+      "duplicate": "Esta conta já está na lista.",
+      "invalidAccount": "Nome de usuário ou ID de comunidade inválido.",
+      "cannotIncrease": "Não é possível passar dos {{percent}}% restantes",
+      "pendingRow": "@{{account}} ainda não foi adicionado — clique em + para adicionar ou limpe o campo.",
+      "atLeastOne": "A porcentagem da recompensa deve ser de pelo menos 1%"
+    },
+    "title": "Beneficiários",
+    "intro": "Adicione um usuário que deve receber automaticamente parte das recompensas deste post.",
+    "minPercent": "% (mín. {{percent}}%)",
+    "usernamePlaceholder": "Digite o nome de usuário",
+    "minimumReward": "A recompensa mínima é <strong>1%</strong>",
+    "checking": "Verificando <strong>@{{account}}</strong> na Hive…",
+    "notExisting": "⚠️ <strong>@{{account}}</strong> não é uma conta da Hive existente.",
+    "notAdded": "⚠️ <strong>@{{account}}</strong> ainda não foi adicionado — clique em <strong>+</strong> para adicionar ou limpe o campo.",
+    "infrastructure": "10% === Infraestrutura",
+    "videoEncoding": "Codificação de vídeo === 1%",
+    "defaults": "Beneficiários padrão ({{count}})"
+  },
+  "qr": {
+    "scan": "Escaneie este QR no Hive Keychain:",
+    "click": "Clique no QR para abrir no app Keychain"
+  },
+  "editVideoHint": {
+    "title": "Edite qualquer um dos seus vídeos",
+    "text": "Abra um dos seus vídeos e procure o <strong>botão de caneta</strong> na barra de ações abaixo do player. Clique nele para mudar o título, a descrição, a miniatura, as tags e mais.",
+    "penTitle": "Editar detalhes do vídeo",
+    "tip": "Dica",
+    "caption": "É este botão de caneta que você procura",
+    "gotIt": "Entendi"
+  },
+  "verifyAuth": {
+    "title": "Verificando autorização",
+    "text": "Aguarde enquanto verificamos se a autorização foi concedida..."
+  },
+  "editor": {
+    "confirmLeave": "O editor ainda está aberto. Sair desta página vai fechar o editor e as alterações não salvas serão perdidas.\n\nOK = Fechar editor e sair\nCancelar = Ficar nesta página",
+    "confirmClose": "Tem certeza de que quer fechar o editor? As alterações não salvas serão perdidas.",
+    "iframeTitle": "Editor de vídeo do 3Speak",
+    "finding": "Procurando um editor disponível...",
+    "loading": "Carregando editor...",
+    "unavailable": "Nenhum servidor de edição está disponível no momento. Tente de novo mais tarde.",
+    "sending": "Enviando para o serviço de renderização...",
+    "rendering": "Renderizando... {{percent}}%",
+    "complete": "Renderização concluída!",
+    "useVideo": "Usar vídeo",
+    "preparing": "Preparando o vídeo para envio...",
+    "renderUnavailable": "O serviço de renderização ainda não está disponível. Os dados da linha do tempo foram registrados no console.",
+    "backToEditor": "Voltar ao editor",
+    "postError": "Não foi possível preparar o vídeo para envio. Tente baixá-lo em vez disso."
+  },
+  "profile": {
+    "mustLogin": "Você precisa entrar na sua conta primeiro",
+    "followed": "Seguindo",
+    "unfollowed": "Você deixou de seguir",
+    "followFailed": "Não foi possível seguir: {{error}}",
+    "unfollowFailed": "Não foi possível deixar de seguir: {{error}}",
+    "avatarAlt": "Perfil",
+    "posts": "Posts",
+    "followers": "Seguidores",
+    "joined": "Entrou em {{date}}",
+    "about": "Sobre",
+    "noBio": "Sem bio"
+  },
+  "report": {
+    "reasons": {
+      "spamMisleading": "Spam ou enganoso",
+      "harassment": "Assédio ou bullying",
+      "hateSpeech": "Discurso de ódio",
+      "violence": "Conteúdo violento ou explícito",
+      "sexual": "Conteúdo sexual",
+      "copyright": "Violação de direitos autorais",
+      "scam": "Golpe ou fraude",
+      "other": "Outro",
+      "spam": "Spam",
+      "impersonation": "Falsidade ideológica",
+      "spamAccount": "Conta de spam"
+    },
+    "selectReasonError": "Selecione um motivo",
+    "loginRequired": "Você precisa entrar na sua conta para denunciar",
+    "submitted": "Denúncia enviada. Obrigado.",
+    "failed": "Não foi possível enviar a denúncia",
+    "titles": {
+      "user": "Denunciar usuário",
+      "comment": "Denunciar comentário",
+      "short": "Denunciar Short",
+      "post": "Denunciar post",
+      "video": "Denunciar vídeo"
+    },
+    "reason": "Motivo",
+    "selectReason": "Selecione um motivo...",
+    "details": "Detalhes adicionais (opcional)",
+    "detailsPlaceholder": "Dê mais contexto...",
+    "submitting": "Enviando...",
+    "submit": "Enviar denúncia"
+  },
+  "upload": {
+    "missingInfo": "Faltam informações do vídeo ou da miniatura.",
+    "updateFailed": "Não foi possível atualizar as informações do vídeo. Tente de novo.",
+    "title": "Enviar vídeo e miniatura",
+    "selectVideo": "Selecionar vídeo",
+    "thumbnail": "Miniatura",
+    "clickThumbnail": "Clique para enviar a miniatura",
+    "updateInfo": "Atualizar informações do vídeo"
+  }
+}

@@ -1,0 +1,113 @@
+{
+  "loading": "쇼츠 불러오는 중...",
+  "pleaseTryAgain": "다시 시도해 주세요",
+  "rotateDevice": "기기를 세로 모드로 돌려 주세요",
+  "pageTitle": {
+    "byAuthor": "3S | @{{author}}님의 쇼츠",
+    "default": "3S | 쇼츠"
+  },
+  "stories": {
+    "you": "나"
+  },
+  "errors": {
+    "votingUnavailable": "이 게시물에는 투표할 수 없어요",
+    "loginToVote": "투표하려면 로그인하세요",
+    "loginToComplete": "이 작업을 완료하려면 로그인하세요"
+  },
+  "feed": {
+    "ariaLabel": "쇼츠 피드",
+    "discover": "탐색",
+    "myInterests": "내 관심사",
+    "interestsTitle": "내 관심사에 맞는 쇼츠만",
+    "pickInterestsFirst": "먼저 관심사를 선택하세요",
+    "noInterests": "아직 관심사를 선택하지 않았어요. 설정에서 선택하세요",
+    "interestsExhausted": "관심사에 맞는 쇼츠를 모두 봤어요. 탐색을 표시할게요",
+    "noInterestMatches": "지금은 관심사에 맞는 쇼츠가 없어요.",
+    "switchToDiscover": "탐색으로 전환",
+    "empty": "볼 수 있는 쇼츠가 없어요",
+    "loadError": "쇼츠 불러오기 오류: {{error}}"
+  },
+  "glow": {
+    "subtle": "앰비언트 조명: 은은하게",
+    "vivid": "앰비언트 조명: 선명하게",
+    "off": "앰비언트 조명: 꺼짐"
+  },
+  "playbackMode": {
+    "autoReplay": "자동 반복",
+    "autoSwipe": "자동 넘기기",
+    "manual": "수동"
+  },
+  "subtitles": {
+    "off": "끄기"
+  },
+  "chain": {
+    "originalVideo": "원본 동영상",
+    "snap": "Snap",
+    "openShort": "쇼츠 열기",
+    "watch": "보기",
+    "openSnap": "Snap 열기",
+    "comment": "댓글",
+    "reaction": "리액션",
+    "thisVideo": "이 동영상",
+    "remix": "리믹스",
+    "show": "리액션 체인 보기"
+  },
+  "caption": {
+    "curatedBy": "Mantequilla 큐레이션",
+    "curated": "큐레이션",
+    "showOriginal": "원문 보기",
+    "more": "더보기"
+  },
+  "actions": {
+    "remix": "리믹스",
+    "promote": "프로모션"
+  },
+  "share": {
+    "defaultTitle": "3Speak 쇼츠",
+    "text": "3Speak에서 {{user}}님의 쇼츠를 확인해 보세요!",
+    "shared": "공유했어요!",
+    "linkCopied": "링크를 클립보드에 복사했어요!",
+    "failed": "공유하지 못했어요"
+  },
+  "reshare": {
+    "loginRequired": "다시 공유하려면 로그인하세요",
+    "unavailable": "이 게시물은 다시 공유할 수 없어요",
+    "done": "다시 공유했어요!",
+    "failed": "다시 공유하지 못했어요"
+  },
+  "remix": {
+    "noUrl": "리믹스할 동영상 URL을 확인하지 못했어요",
+    "loadFailed": "리믹스할 동영상을 불러오지 못했어요"
+  },
+  "watchLater": {
+    "loginRequired": "쇼츠를 저장하려면 로그인하세요",
+    "cantSave": "이 쇼츠는 저장할 수 없어요",
+    "removed": "나중에 볼 동영상에서 제거했어요",
+    "saved": "나중에 볼 동영상에 저장했어요",
+    "failed": "실패: {{message}}"
+  },
+  "comments": {
+    "title": "댓글",
+    "loading": "댓글 불러오는 중...",
+    "closed": "댓글이 닫혀 있어요",
+    "none": "아직 댓글이 없어요",
+    "postRemoved": "이 쇼츠의 Hive 게시물이 삭제되어 더 이상 댓글이나 투표를 받을 수 없어요.",
+    "beFirst": "첫 댓글을 남겨 보세요!",
+    "unavailable": "이 게시물에는 댓글을 달 수 없어요",
+    "addPlaceholder": "댓글 추가...",
+    "addPlaceholderBar": "댓글 추가…",
+    "loginPlaceholder": "댓글을 달려면 로그인하세요",
+    "send": "댓글 보내기",
+    "enterComment": "댓글을 입력해 주세요",
+    "loginToComment": "댓글을 달려면 로그인해 주세요",
+    "justNow": "방금 전",
+    "posted": "댓글이 게시되었어요!",
+    "failed": "댓글 실패: {{message}}",
+    "translation": "번역",
+    "translationFailed": "번역 실패",
+    "reportComment": "댓글 신고",
+    "replyPlaceholder": "답글 작성...",
+    "viewReplies_other": "답글 {{count}}개 보기",
+    "hideReplies_other": "답글 {{count}}개 숨기기"
+  }
+}

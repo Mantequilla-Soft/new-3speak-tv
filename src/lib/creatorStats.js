@@ -4,6 +4,7 @@
 // block requests matching that word (filename AND URL path), which broke the
 // whole app for users with such extensions. Keep this name generic.
 import { CHECKER_URL } from '../utils/config';
+import { formatTimeAgo, formatNumber } from '../i18n';
 
 async function get(path) {
   const r = await fetch(`${CHECKER_URL}${path}`);
@@ -60,22 +61,11 @@ export function fmtDuration(totalSeconds) {
 export function timeAgo(dateString) {
   if (!dateString) return '';
   const hasTz = /[Zz]|[+-]\d{2}:\d{2}$/.test(dateString);
-  const t = new Date(hasTz ? dateString : `${dateString}Z`).getTime();
-  if (isNaN(t)) return '';
-  const s = Math.floor((Date.now() - t) / 1000);
-  if (s < 60) return 'just now';
-  if (s < 3600) return `${Math.floor(s / 60)}m ago`;
-  if (s < 86400) return `${Math.floor(s / 3600)}h ago`;
-  if (s < 2592000) return `${Math.floor(s / 86400)}d ago`;
-  if (s < 31536000) return `${Math.floor(s / 2592000)}mo ago`;
-  return `${Math.floor(s / 31536000)}y ago`;
+  return formatTimeAgo(hasTz ? dateString : `${dateString}Z`, { style: 'narrow' });
 }
 
 export function fmtCount(n) {
-  n = Number(n) || 0;
-  if (n >= 1_000_000) return `${(n / 1_000_000).toFixed(1)}M`;
-  if (n >= 1_000) return `${(n / 1_000).toFixed(1)}K`;
-  return String(n);
+  return formatNumber(n, { compact: true });
 }
 
 // ISO 3166-1 alpha-2 → flag emoji (for the demographics list).

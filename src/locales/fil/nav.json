@@ -1,0 +1,117 @@
+{
+  "theme": {
+    "switchToLight": "Lumipat sa light mode",
+    "switchToDark": "Lumipat sa dark mode"
+  },
+  "bottom": {
+    "feeds": "Feeds",
+    "groups": "Groups",
+    "audio": "Audio",
+    "login": "Login"
+  },
+  "installApp": "I-install ang App",
+  "iosInstallHint": "I-tap ang <b>Share</b> tapos <b>Add to Home Screen</b>",
+  "playlists": {
+    "tooltip": "Mga playlist na na-save o ginawa mo",
+    "label": "Mga Playlist",
+    "watchLater": "Panoorin Mamaya",
+    "watchLaterCount": "Panoorin Mamaya ({{n}})",
+    "watchHistory": "Watch History",
+    "all": "Lahat ng Playlist"
+  },
+  "advertise": "Mag-advertise",
+  "hidePages": "Itago ang mga page",
+  "showPages": "Ipakita ang mga page",
+  "tabs": {
+    "overviewTooltip": "Lahat ng bago sa 3Speak, kasama ang mga sa tingin namin ay magugustuhan mo",
+    "overview": "Overview",
+    "shortsTooltip": "Maiikling vertical na video, sunud-sunod",
+    "audioTooltip": "Mga podcast, musika at iba pang audio na naka-publish sa 3Speak",
+    "groupsTooltip": "Mga komunidad na puwede mong salihan, at mga badge na ibinibigay sa mga tao",
+    "rankingsTooltip": "Ang mga creator na pinakamaraming kinikita at pinapanood ngayon"
+  },
+  "aboutLink": "Tungkol sa 3Speak",
+  "profile": {
+    "accountMenu": "Account menu",
+    "myChannelAria": "Channel ko",
+    "vpTooltip": "Voting Power: gaano kabigat ang susunod mong vote",
+    "rcTooltip": "Resource Credits: ang gastos ng mga aksyon mo sa Hive",
+    "myChannel": "Channel Ko",
+    "publishBacklog": "I-publish ang backlog",
+    "analytics": "Analytics",
+    "inviteLinks": "Invite links",
+    "iosInstallToast": "I-tap ang Share button sa Safari, tapos \"Add to Home Screen\"",
+    "changeAccount": "Palitan ang account",
+    "logout": "Mag-log out",
+    "onDiscord": "3Speak sa Discord",
+    "onX": "3Speak sa X",
+    "onTelegram": "3Speak sa Telegram"
+  },
+  "notifications": {
+    "pushOff": "Naka-off ang mga notification sa device na ito",
+    "pushOn": "Aabisuhan ka kapag nag-post ang mga creator na fina-follow mo",
+    "pushFailed": "Hindi mabago ang notification settings",
+    "ariaUnread": "Mga Notification ({{count}} hindi pa nababasa)",
+    "pushBlocked": "Naka-block ang mga notification para sa site na ito sa browser settings mo",
+    "pushNoWorker": "Walang service worker ang build na ito, kaya hindi ma-register dito ang mga notification",
+    "pushStop": "Itigil ang pag-abiso sa device na ito",
+    "pushStart": "Maabisuhan kapag nag-post ang mga creator na fina-follow mo",
+    "on": "On",
+    "notifyMe": "Abisuhan ako",
+    "empty": "Wala ka pang notification.",
+    "threeSpeakVideo": "3Speak video",
+    "group": {
+      "voteOne": "Nag-vote si @{{a}} sa post mo",
+      "voteTwo": "Nag-vote sina @{{a}} at @{{b}} sa post mo",
+      "voteMany_one": "Nag-vote si @{{a}} at {{count}} pa sa post mo",
+      "voteMany_other": "Nag-vote si @{{a}} at {{count}} pa sa post mo",
+      "withValue": "{{label}} (${{value}})",
+      "followOne": "Fina-follow ka na ni @{{a}}",
+      "followTwo": "Fina-follow ka na nina @{{a}} at @{{b}}",
+      "followMany_one": "Fina-follow ka na ni @{{a}} at {{count}} pa",
+      "followMany_other": "Fina-follow ka na ni @{{a}} at {{count}} pa",
+      "other": "{{count}} {{type}} notification",
+      "typeCount": "{{count}} {{type}}",
+      "includesWhale": "May kasamang 🐋 whale account",
+      "includesOrca": "May kasamang 🐬 orca account",
+      "andMore": "at {{count}} pa…"
+    }
+  },
+  "search": {
+    "types": {
+      "users": "Mga User",
+      "communities": "Mga Komunidad",
+      "videos": "Mga Video",
+      "shorts": "Shorts",
+      "audio": "Audio",
+      "playlists": "Mga Playlist"
+    },
+    "dates": {
+      "today": "Ngayong araw",
+      "thisWeek": "Ngayong linggo",
+      "thisMonth": "Ngayong buwan",
+      "thisYear": "Ngayong taon"
+    },
+    "contentType": "Uri ng content",
+    "boostRecent": "Unahin ang bago",
+    "dateRange": "Saklaw ng petsa",
+    "tag": "Tag",
+    "tagPlaceholder": "hal. crypto, gaming...",
+    "community": "Komunidad",
+    "communityPlaceholder": "Maghanap ng komunidad...",
+    "clearFilters": "I-clear lahat ng filter",
+    "allHidden": "Nakatago lahat ng uri ng content.",
+    "reenableFilters": "I-enable ulit lahat ng filter",
+    "noResultsFor": "Walang resulta para sa “{{term}}”",
+    "searchFor": "Hanapin ang “{{term}}”",
+    "authors_one": "{{count}} author",
+    "authors_other": "{{count}} authors",
+    "subscribers_one": "{{count}} subscriber",
+    "subscribers_other": "{{count}} subscribers",
+    "views_one": "{{formatted}} view",
+    "views_other": "{{formatted}} views",
+    "tags": "Tags",
+    "titles": "Mga Pamagat",
+    "placeholder": "Maghanap..."
+  }
+}

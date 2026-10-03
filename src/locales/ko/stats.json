@@ -1,0 +1,116 @@
+{
+  "ranges": {
+    "d7": "7일",
+    "d28": "28일",
+    "d90": "90일",
+    "all": "전체"
+  },
+  "content": {
+    "all": "전체",
+    "videos": "동영상",
+    "shorts": "쇼츠"
+  },
+  "metrics": {
+    "watchTime": "시청 시간",
+    "views": "조회수",
+    "avgPct": "평균 %",
+    "votes": "투표",
+    "comments": "댓글",
+    "payout": "보상"
+  },
+  "days": {
+    "short": {
+      "sun": "일",
+      "mon": "월",
+      "tue": "화",
+      "wed": "수",
+      "thu": "목",
+      "fri": "금",
+      "sat": "토"
+    },
+    "initial": {
+      "sun": "일",
+      "mon": "월",
+      "tue": "화",
+      "wed": "수",
+      "thu": "목",
+      "fri": "금",
+      "sat": "토"
+    }
+  },
+  "sources": {
+    "threespeak": "3Speak",
+    "player": "임베드 플레이어"
+  },
+  "trend": {
+    "empty": "이 기간에는 아직 시청 시간이 없어요.",
+    "tip_other": "조회수 {{count}}회 · {{date}}"
+  },
+  "noData": "아직 데이터가 없어요.",
+  "demo": {
+    "viewerLocations": "시청자 위치",
+    "mapBubble_other": "{{country}} — 세션 {{count}}회",
+    "empty": "이 기간에는 아직 시청자 데이터가 없어요.",
+    "breakdown": "세부 분석",
+    "map": "지도",
+    "countries": "국가",
+    "devices": "기기",
+    "browsers": "브라우저",
+    "whereTitle": "시청 위치",
+    "whereSub": "3Speak vs 임베드 플레이어",
+    "newVsReturning": "신규 vs 재방문",
+    "new": "신규",
+    "returning": "재방문",
+    "located": "시청 세션 {{total}}회 중 {{located}}회의 위치 확인됨."
+  },
+  "when": {
+    "title": "시청자가 시청하는 시간대",
+    "sub": "UTC · 진할수록 조회수 많음",
+    "cellTitle_other": "{{day}} {{hour}}:00 — 조회수 {{count}}회",
+    "hour": "{{hour}}시"
+  },
+  "detail": {
+    "summary": "투표 {{votes}}개 · 댓글 {{comments}}개 · ${{payout}}"
+  },
+  "compare": {
+    "notEnough": "비교할 데이터가 부족해요.",
+    "start": "시작",
+    "axis": "동영상 전체 시청 지속률",
+    "end": "끝",
+    "title": "동영상 비교",
+    "pickA": "동영상 선택…",
+    "vs": "vs",
+    "pickB": "다른 동영상 선택…"
+  },
+  "loadError": "지금은 통계를 불러올 수 없어요.",
+  "emptyRange": "이 기간에는 아직 시청 데이터가 없어요. “전체”를 선택하거나 시청자가 동영상을 볼 때까지 기다려 주세요.",
+  "tiles": {
+    "avgViewDuration": "평균 시청 지속 시간",
+    "avgWatched": "평균 시청 비율",
+    "reactionsPerView": "조회당 리액션"
+  },
+  "subtotals": "동영상 {{videos}}개 · 투표 {{votes}}개 · 댓글 {{comments}}개 · ${{payout}} · 평균 속도 {{rate}}×",
+  "sections": {
+    "trend": "시간별 시청 시간",
+    "best": "실적 상위",
+    "audience": "내 시청자"
+  },
+  "openInNewTab": "새 탭에서 동영상 열기",
+  "footnote": "시청 통계는 미리보기 추적 데이터이며 나에게만 표시돼요.",
+  "video": {
+    "noData": "아직 데이터 없음",
+    "empty": "이 동영상에는 아직 시청 데이터가 없어요.",
+    "uniqueViewers": "순 시청자",
+    "avgSpeed": "평균 속도",
+    "mostDropOff": "📉 <b>{{time}}</b>에 가장 많이 이탈",
+    "earlyDrop": "⚡ <b>{{pct}}%</b>가 처음 3초 안에 이탈",
+    "replayed": "🔁 다시 본 구간:",
+    "retentionTitle": "시청 지속률",
+    "retentionSub": "각 시점에 계속 시청 중인 시청자 비율",
+    "pctWatching": "{{pct}}% 시청 중",
+    "replayTitle": "가장 많이 다시 본 구간",
+    "replaySub": "시청자가 가장 많이 보고 다시 본 구간",
+    "hotSpot": "인기 구간",
+    "notEnoughReplays": "아직 다시 보기 데이터가 부족해요"
+  }
+}

@@ -1,0 +1,267 @@
+{
+  "untitled": "无标题",
+  "categories": {
+    "podcast": "播客",
+    "voice": "语音",
+    "music": "音乐",
+    "audiobook": "有声书",
+    "interview": "访谈"
+  },
+  "inline": {
+    "defaultTitle": "OpenPod 录音",
+    "defaultSubtitle": "录制于 3Speak OpenPods 直播",
+    "kickerPreview": "音频预览",
+    "kickerOpenPod": "OpenPod"
+  },
+  "tile": {
+    "artistAlbum": "艺人专辑",
+    "listenerPlaylist": "听众歌单",
+    "bpm": "{{bpm}} bpm",
+    "queue": "队列",
+    "playlist": "播放列表",
+    "plays_other": "{{count}} 次播放"
+  },
+  "author": {
+    "followed": "已关注 @{{author}}",
+    "unfollowed": "已取消关注 @{{author}}",
+    "failed": "失败",
+    "tracks_other": "{{count}} 首曲目"
+  },
+  "player": {
+    "openPost": "打开音频帖子",
+    "playlist": "播放列表",
+    "transcript": "文字稿",
+    "volume": "音量",
+    "queue": "队列",
+    "closePlayer": "关闭播放器",
+    "curated": "精选",
+    "noCues": "没有字幕。",
+    "clearQueue": "清空队列",
+    "clearAll": "全部清空",
+    "queueEmpty": "队列为空。"
+  },
+  "share": {
+    "failed": "失败",
+    "copyPeakd": "复制 PeakD 链接",
+    "copiedPeakd": "PeakD 链接已复制！",
+    "copy3speak": "复制 3Speak 链接",
+    "copied3speak": "3Speak 链接已复制！",
+    "copyAudioPlayer": "复制音频播放器链接",
+    "copiedAudioPlayer": "音频播放器链接已复制！",
+    "searchingHive": "正在搜索 Hive…"
+  },
+  "post": {
+    "notFound": "找不到帖子",
+    "loadFailed": "无法加载这条音频帖子",
+    "loadFailedFull": "无法加载这条音频帖子。",
+    "backToAudio": "← 返回音频",
+    "untitled": "（无标题）",
+    "addedToQueue": "已加入队列",
+    "signInToVote": "登录后点赞",
+    "voted": "已点赞",
+    "vote": "点赞",
+    "signInToTip": "登录后打赏",
+    "tip": "打赏",
+    "stillIndexing": "这条帖子的音频仍在索引中——请几分钟后再试。"
+  },
+  "page": {
+    "sections": {
+      "popular": "热门",
+      "recent": "新发布",
+      "podcasts": "播客",
+      "songs": "歌曲",
+      "audiobooks": "有声书",
+      "interviews": "访谈"
+    },
+    "dates": {
+      "today": "今天",
+      "thisWeek": "本周",
+      "thisMonth": "本月",
+      "thisYear": "今年"
+    },
+    "duration": {
+      "label": "时长",
+      "min": "最短时长",
+      "max": "最长时长",
+      "seconds": "{{value}} 秒",
+      "minutes": "{{value}} 分钟",
+      "hours": "{{value}} 小时"
+    },
+    "all": "全部",
+    "musicGenre": "音乐流派",
+    "anyGenre": "任意流派",
+    "tracks_other": "{{count}} 首曲目",
+    "noTracks": "没有找到曲目。",
+    "creators": "创作者",
+    "albumsPlaylists": "专辑与播放列表",
+    "noAudioForFilters": "没有符合这些筛选条件的音频。"
+  },
+  "upload": {
+    "title": "上传音频",
+    "publishing": "发布中…",
+    "failed": "失败",
+    "unknown": "未知",
+    "unknownError": "未知错误",
+    "recorded": "录制的",
+    "uploaded": "上传的",
+    "steps": {
+      "source": "来源",
+      "mode": "方式",
+      "playlist": "播放列表",
+      "post": "帖子",
+      "mainpost": "主帖",
+      "tracks": "曲目",
+      "review": "确认"
+    },
+    "trackTypes": {
+      "voiceSnap": "语音 / Snap"
+    },
+    "toasts": {
+      "pickImage": "请选择一个图片文件",
+      "thumbFailed": "缩略图上传失败：{{error}}",
+      "appliedToAll": "已应用到所有曲目",
+      "micDenied": "麦克风访问被拒绝",
+      "signInFirst": "请先登录",
+      "enterPlaylistName": "请输入播放列表名称",
+      "creatingPlaylist": "正在创建播放列表“{{name}}”…",
+      "playlistCreated": "播放列表已创建",
+      "failedWithError": "失败：{{error}}",
+      "authorized": "已授权 @threespeak——现在可以发布了",
+      "authFailed": "授权失败，请重试。",
+      "couldntPublishMain": "无法发布主帖：{{error}}",
+      "couldntResolveContainer": "无法解析 peak.snaps 容器：{{error}}",
+      "published_other": "已发布 {{count}} 首曲目",
+      "someFailed": "部分曲目发布失败——打开失败的曲目重试"
+    },
+    "gate": {
+      "checking": "检查中…",
+      "allowThreespeak": "要发布音频，请允许 <b>@threespeak</b> 代你发帖。",
+      "authorizing": "授权中…",
+      "authorize": "授权 @threespeak",
+      "notEnoughRc": "你的账号目前没有足够的<b>资源积分（Resource Credits）</b>来发布帖子。",
+      "whyCantUpload": "为什么我无法上传？"
+    },
+    "discard": {
+      "title": "放弃上传？",
+      "body_other": "你已添加 {{count}} 首曲目。关闭后它们将被丢弃。",
+      "bodyRecording_other": "你已添加 {{count}} 首曲目，并且有一段录音正在进行。关闭后它们将被丢弃。",
+      "keepEditing": "继续编辑",
+      "discard": "放弃"
+    },
+    "source": {
+      "dropHere": "把音频文件拖到这里，或点击浏览",
+      "formats": "MP3、WAV、OGG、WEBM、M4A、FLAC、AAC——可选多个",
+      "stop": "停止",
+      "orRecord": "或者现场录制",
+      "recordLimit": "每段录音最长 {{minutes}} 分钟",
+      "record": "录制",
+      "added": "已添加（{{count}}）"
+    },
+    "titles": {
+      "help": "为每首曲目填写标题并选择类型。音乐曲目会有流派和 BPM 字段。"
+    },
+    "fields": {
+      "trackTitle": "曲目标题",
+      "genre": "流派",
+      "bpm": "BPM",
+      "descriptionOptional": "简介（可选）"
+    },
+    "playlist": {
+      "helpRequired": "必填——选择或创建一个播放列表。专辑帖子位于播放列表中，这样它的曲目会集中在一张 3Speak 专辑里。这有助于提高曝光，并在音频页面获得更显眼的位置。",
+      "helpOptional": "可选——把所有曲目添加到一个播放列表。",
+      "none": "不加入播放列表",
+      "noneHint": "曲目不会被归组",
+      "creatingPending": "创建中…（等待索引器）",
+      "loading": "正在加载播放列表…",
+      "empty": "你还没有任何播放列表。",
+      "items_other": "{{count}} 项",
+      "newPlaylist": "新建音频播放列表",
+      "namePlaceholder": "播放列表名称",
+      "public": "公开",
+      "private": "私密",
+      "musicStylePlaceholder": "音乐风格 / 流派（可选，例如 Electronic）",
+      "creditsPlaceholder": "制作人员（可选）",
+      "yearPlaceholder": "年份",
+      "labelPlaceholder": "厂牌（可选）",
+      "thumbAlt": "专辑缩略图",
+      "removeThumb": "移除缩略图",
+      "creating": "创建中…",
+      "create": "创建"
+    },
+    "thumb": {
+      "uploading": "上传中…",
+      "addCover": "添加封面图片",
+      "hint": "点击或拖放——JPG / PNG / WebP",
+      "coverAlt": "封面",
+      "removeCover": "移除封面"
+    },
+    "mode": {
+      "help_other": "已添加 {{count}} 首曲目。选择发布方式。",
+      "howPublished": "要如何发布？",
+      "snapsTitle": "Snap 评论",
+      "snapsDesc": "每段音频作为回复发布在最新的 peak.snaps 容器下——显示在 Snaps 信息流中（默认）。",
+      "singleTitle": "独立帖子",
+      "singleTitleSingleOnly": "独立帖子（仅限单个文件）",
+      "singleDesc": "一段音频单独发布为一条顶层 Hive 帖子，带有标题、社区、标签和封面。",
+      "albumTitle": "专辑帖子",
+      "albumTitleNeeds2": "专辑帖子（需要 2 个以上文件）",
+      "albumDesc": "一条主帖（不含音频）作为落地页；每首曲目以评论回复的形式发布，各自拥有封面、简介、收益设置和受益人。",
+      "howEarn": "这段音频要如何获得收益？",
+      "postRewardsTitle": "帖子奖励（一次性）",
+      "postRewardsDesc": "你会获得正常的 Hive 作者收益——一次性发放，约在发布后 7 天。",
+      "pplTitle": "按收听付费（永久）",
+      "pplDesc": "所有音频帖子的奖励都归 @{{account}}。你不会收到一次性收益，而是由 3Speak 的计划在曲目的整个生命周期内按收听次数向你付费。"
+    },
+    "reward": {
+      "distribution": "奖励分配",
+      "default": "默认（50% HBD / 50% HP）",
+      "powerup": "100% Power up",
+      "decline": "放弃收益",
+      "beneficiaries": "受益人",
+      "beneficiariesCount": "受益人（{{count}}）"
+    },
+    "mainPost": {
+      "helpAlbum": "主帖的详细信息——即专辑的落地页。它不含音频；每首曲目都是你接下来配置的评论回复。",
+      "helpSingle": "你的独立帖子的详细信息。",
+      "titlePlaceholder": "标题（必填）",
+      "selectCommunity": "选择社区",
+      "change": "更改",
+      "tagsPlaceholder": "标签——用空格或逗号分隔（可选）",
+      "whatKind": "这是什么类型的音频？"
+    },
+    "tracks": {
+      "helpAlbum": "每首曲目都会作为主帖下的评论发布。共享的设置只需填写一次并应用到全部，然后再按曲目单独修改。",
+      "helpSnaps": "每首曲目都会作为单独的 Snap 发布。共享的设置只需填写一次并应用到全部，然后再按曲目单独修改。",
+      "applyToAllHeading": "应用到所有曲目",
+      "sharedDescription": "共享简介（可选）",
+      "sharedCover": "共享封面图片",
+      "applyToAll_other": "应用到全部 {{count}} 首曲目",
+      "hide": "隐藏"
+    },
+    "review": {
+      "standalone": "独立帖子",
+      "standaloneIn": "发布在 {{community}} 的独立帖子",
+      "album_other": "专辑——1 条主帖 + {{count}} 条曲目评论",
+      "albumIn_other": "专辑——1 条发布在 {{community}} 的主帖 + {{count}} 条曲目评论",
+      "snapComments_other": "{{count}} 条 Snap 评论",
+      "ready_other": "准备发布 {{count}} 首曲目。",
+      "readyToPlaylist_other": "准备将 {{count}} 首曲目发布到播放列表“{{name}}”。",
+      "publishAs": "发布为：",
+      "earnings": "收益：",
+      "earningsPpl": "按收听付费（@{{account}}）",
+      "earningsNormal": "普通帖子奖励",
+      "playlist": "播放列表：",
+      "failedCount_other": "{{count}} 首曲目失败。",
+      "retryAllFailed": "重试所有失败项",
+      "failedDuringUpload": "上传音频文件时失败：{{message}}",
+      "failedDuringPost": "发布到 Hive 时失败：{{message}}",
+      "failedWithMessage": "失败：{{message}}"
+    },
+    "stage": {
+      "upload": "正在上传音频文件",
+      "post": "正在发布到 Hive",
+      "uploadingFallback": "上传中",
+      "published": "已发布"
+    }
+  }
+}

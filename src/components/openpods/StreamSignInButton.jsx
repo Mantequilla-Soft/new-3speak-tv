@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import './StreamSignInButton.scss';
 
 /**
@@ -8,6 +9,7 @@ import './StreamSignInButton.scss';
  * which takes a moment, hence the busy state.
  */
 export default function StreamSignInButton({ label, onSignIn, busy = false, variant = 'inline' }) {
+  const { t } = useTranslation();
   return (
     <button
       type="button"
@@ -15,7 +17,7 @@ export default function StreamSignInButton({ label, onSignIn, busy = false, vari
       onClick={(e) => { e.stopPropagation(); onSignIn?.(); }}
       disabled={busy}
     >
-      {busy ? 'Waiting for your wallet…' : label}
+      {busy ? t('live.signIn.waitingWallet') : label}
     </button>
   );
 }

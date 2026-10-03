@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useId, useMemo, useRef, useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
+import { useTranslation, Trans } from 'react-i18next';
 import { MdCampaign, MdInfoOutline, MdCheckCircle, MdSchedule, MdCancel } from 'react-icons/md';
 import { FaRocket, FaLayerGroup, FaUsers, FaVideo, FaTv } from 'react-icons/fa';
 import { toastIn } from '../utils/toast';
@@ -52,7 +53,7 @@ import {
   flightPrice,
   hivePayable,
   hiveEquivalent,
-  suppliesFor,
+  youSupply,
   bannerAdvice,
   savingAt,
   groupByFormat,
@@ -69,11 +70,11 @@ const toast = toastIn('Advertising');
 const INVENTORY_STALE_MS = 10 * 60 * 1000;
 
 /** The enrollment steps, in the order they have to happen. */
-const WIZARD_STEPS = ['Your product', 'Your ad', 'Book a slot'];
+const WIZARD_STEPS = ['ads.wizardSteps.product', 'ads.wizardSteps.ad', 'ads.wizardSteps.book']; // i18n keys
 
 /* Booking, for a product that already exists. Same three things the enrollment
    wizard ends on, minus registering the product itself. */
-const BOOK_STEPS = ['Your ad', 'The booking', 'Pay'];
+const BOOK_STEPS = ['ads.bookSteps.ad', 'ads.bookSteps.booking', 'ads.bookSteps.pay']; // i18n keys
 
 const EMPTY_FORM = {
   projectName: '',
@@ -102,11 +103,12 @@ const EMPTY_FORM = {
  * format added on the server appears without a frontend change.
  */
 function FormatPicker({ formats, value, onChange }) {
+  const { t } = useTranslation();
   if (!formats?.length) return null;
   return (
     <fieldset className="mkt-group mkt-formats">
-      <legend>What you are buying</legend>
-      <div className="mkt-format-list" role="radiogroup" aria-label="Ad type">
+      <legend>{t('ads.form.whatBuying')}</legend>
+      <div className="mkt-format-list" role="radiogroup" aria-label={t('ads.form.adType')}>
         {formats.map((f) => {
           const on = f.key === value;
           return (
@@ -122,18 +124,18 @@ function FormatPicker({ formats, value, onChange }) {
                 <span className="mkt-format-name">{f.label}</span>
                 <span className="mkt-format-rate">
                   {f.ratePerSecondDayHbd} HBD
-                  <span className="mkt-format-rate-unit"> /sec /day</span>
+                  <span className="mkt-format-rate-unit">{t('ads.rateCard.perSecDay')}</span>
                 </span>
               </span>
               <span className="mkt-format-blurb">{f.blurb}</span>
               <span className="mkt-format-meta">
-                {`You supply ${suppliesFor(f).toLowerCase()}`}
-                {' · up to '}{f.maxSeconds}s
+                {youSupply(f)}
+                {t('ads.form.upToSeconds', { seconds: f.maxSeconds })}
                 {/* Said at the point of CHOOSING, not only in the rate card below it.
                     Reach is part of what separates these formats, and a difference an
                     advertiser only meets after picking is one they meet too late. */}
-                {SITE_ONLY_SURFACES.has(f.surface) ? ' · 3speak.tv only' : null}
-                {f.rateIsCustom ? ' · your agreed rate' : null}
+                {SITE_ONLY_SURFACES.has(f.surface) ? t('ads.form.siteOnlySuffix') : null}
+                {f.rateIsCustom ? t('ads.form.agreedRateSuffix') : null}
               </span>
             </button>
           );
@@ -162,13 +164,13 @@ function FormatPicker({ formats, value, onChange }) {
  * nobody thinks about a ten minute video as 600. Shown alongside rather than replacing
  * the input: converting the field itself would make "601" impossible to type.
  */
-function inMinutes(raw) {
+function inMinutes(raw, t) {
   const n = parseInt(raw, 10);
   if (!Number.isFinite(n) || n <= 0) return null;
   const mins = Math.floor(n / 60);
   const secs = n % 60;
-  if (!mins) return `${secs} sec`;
-  return secs ? `${mins} min ${secs} sec` : `${mins} min`;
+  if (!mins) return t('ads.units.sec', { secs });
+  return secs ? t('ads.units.minSec', { mins, secs }) : t('ads.units.min', { mins });
 }
 
 /**
@@ -190,6 +192,7 @@ function inMinutes(raw) {
  * outright, and the value is on screen either way, so a refusal is not worth an error.
  */
 function CopyButton({ value }) {
+  const { t } = useTranslation();
   const [done, setDone] = useState(false);
   const timer = useRef(null);
   useEffect(() => () => clearTimeout(timer.current), []);
@@ -197,7 +200,7 @@ function CopyButton({ value }) {
     <button
       type="button"
       className={`mkt-copy${done ? ' done' : ''}`}
-      title="Copy the memo"
+      title={t('ads.pay.copyMemo')}
       onClick={async () => {
         try {
           await navigator.clipboard.writeText(String(value));
@@ -209,16 +212,17 @@ function CopyButton({ value }) {
         }
       }}
     >
-      {done ? 'Copied' : 'Copy'}
+      {done ? t('common.actions.copied') : t('common.actions.copy')}
     </button>
   );
 }
 
 function StatusBadge({ status }) {
+  const { t } = useTranslation();
   const map = {
-    pending: { Icon: MdSchedule, label: 'Under review' },
-    approved: { Icon: MdCheckCircle, label: 'Approved' },
-    rejected: { Icon: MdCancel, label: 'Not accepted' },
+    pending: { Icon: MdSchedule, label: t('ads.status.underReview') },
+    approved: { Icon: MdCheckCircle, label: t('ads.status.approved') },
+    rejected: { Icon: MdCancel, label: t('ads.status.notAccepted') },
   };
   const { Icon, label } = map[status] || map.pending;
   return (
@@ -248,17 +252,17 @@ const AD_TYPE_FORMAT = { video: 'video_roll', banner: 'video_banner', shorts: 's
 const isSpotType = (t) => t === 'video' || t === 'shorts' || t === 'upload';
 
 /**
- * What "Your ad" still needs before the booking makes sense, as a sentence, or null when
+ * What "Your ad" still needs before the booking makes sense, as an i18n key, or null when
  * it is complete. Read from the creatives on record, so a rejected one does not count,
  * and for a video spot "have us make it" with a usable brief counts as the video.
  */
 function adStepMissing(type, creatives, production) {
   const live = (creatives || []).filter((c) => c.status !== 'rejected');
   const has = (...kinds) => live.some((c) => kinds.includes(c.kind || 'video'));
-  if (type === 'ticker') return has('text') ? null : 'Save your ticker first.';
-  if (type === 'banner') return has('image', 'video') ? null : 'Upload your banner first.';
+  if (type === 'ticker') return has('text') ? null : 'ads.missing.ticker';
+  if (type === 'banner') return has('image', 'video') ? null : 'ads.missing.banner';
   const briefOk = !!production?.wanted && String(production?.brief || '').trim().length >= 20;
-  return has('video') || briefOk ? null : 'Upload your ad video, or ask us to make it.';
+  return has('video') || briefOk ? null : 'ads.missing.video';
 }
 
 /**
@@ -270,30 +274,31 @@ function adStepMissing(type, creatives, production) {
  * testers (the page asks for beta formats only for them).
  */
 function AdTypePicker({ value, onChange, pricing }) {
+  const { t } = useTranslation();
   const options = [
     {
       id: 'video',
-      title: 'A video ad',
+      title: t('ads.adType.video.title'),
       // From the rate card, not typed in: this number moved from 15 to 30 and the two
       // places it had been written by hand did not move with it.
       blurb: pricing?.maxCreativeSeconds
-        ? `Plays inside the video, up to ${pricing.maxCreativeSeconds} seconds.`
-        : 'Plays inside the video.',
+        ? t('ads.adType.video.blurbMax', { seconds: pricing.maxCreativeSeconds })
+        : t('ads.adType.video.blurb'),
     },
-    { id: 'banner', title: 'A player banner', blurb: 'A still shown over the video while it plays.' },
-    { id: 'shorts', title: 'A shorts spot', blurb: 'Plays full screen between shorts. Upright video only.' },
-    { id: 'ticker', title: 'A ticker', blurb: 'A line of text that crawls along the top of the video. No file needed.' },
-    { id: 'upload', title: 'A pre-upload spot', blurb: 'A video creators watch before they can upload. Landscape, like a video ad.' },
+    { id: 'banner', title: t('ads.adType.banner.title'), blurb: t('ads.adType.banner.blurb') },
+    { id: 'shorts', title: t('ads.adType.shorts.title'), blurb: t('ads.adType.shorts.blurb') },
+    { id: 'ticker', title: t('ads.adType.ticker.title'), blurb: t('ads.adType.ticker.blurb') },
+    { id: 'upload', title: t('ads.adType.upload.title'), blurb: t('ads.adType.upload.blurb') },
   // Only what the rate card offers right now (a beta format only to its testers).
   ].filter((o) => !pricing?.formats?.length || pricing.formats.some((f) => f.key === AD_TYPE_FORMAT[o.id]));
   const name = `mkt-adtype-${useId()}`;
   return (
     <>
       <div className="mkt-field mkt-field-wide mkt-adtype">
-        <span className="mkt-label">What are you running?</span>
+        <span className="mkt-label">{t('ads.adType.question')}</span>
         {groupByFormat(options, (o) => AD_TYPE_FORMAT[o.id]).map((g) => (
         <div key={g.id} className="mkt-adtype-group">
-        <span className="mkt-adtype-group-title">{g.title}</span>
+        <span className="mkt-adtype-group-title">{t(g.title)}</span>
         <div className="mkt-adtype-row">
           {g.items.map((o) => (
             <label key={o.id} className={`mkt-adtype-opt${value === o.id ? ' selected' : ''}`}>
@@ -316,14 +321,14 @@ function AdTypePicker({ value, onChange, pricing }) {
       </div>
       <p className="mkt-fine">
         {value === 'ticker'
-          ? 'Write the message and the link. Your avatar, @name and product name are added for you.'
+          ? t('ads.adType.hint.ticker')
           : value === 'upload'
-            ? 'Upload the landscape video creators will watch before their upload starts, or ask us to make it.'
+            ? t('ads.adType.hint.upload')
           : value === 'banner'
-            ? 'Upload the image that will be shown over the video.'
+            ? t('ads.adType.hint.banner')
             : (value === 'shorts'
-              ? 'Upload the upright video that will play between shorts. It has to be portrait, because a landscape spot plays small with black bars either side. 1080x1920 works well.'
-              : 'Upload the video that will play, or ask us to make it. This is also where the logo and slogan shown over your ad are set.')}
+              ? t('ads.adType.hint.shorts')
+              : t('ads.adType.hint.video'))}
       </p>
     </>
   );
@@ -345,6 +350,7 @@ function CampaignPanel({
   account = null,
   productName = null,
 }) {
+  const { t } = useTranslation();
   const [campaigns, setCampaigns] = useState([]);
   const [days, setDays] = useState(pricing?.minDays || 1);
   // When it should start. Optional: blank means "as soon as it is approved and paid",
@@ -413,8 +419,8 @@ function CampaignPanel({
   const awaitingEncode = creatives.some((c) => (c.kind || 'video') === 'video' && !c.encoded);
   useEffect(() => {
     if (!awaitingEncode) return undefined;
-    const t = setInterval(refresh, 15000);
-    return () => clearInterval(t);
+    const timer = setInterval(refresh, 15000);
+    return () => clearInterval(timer);
   }, [awaitingEncode, refresh]);
 
   const formats = pricing?.formats || [];
@@ -584,17 +590,17 @@ function CampaignPanel({
     const ccy = ccyFor(c, owed);
     const amount = ccy === 'HIVE' ? hivePayable(owed, pricing?.hbdPerHive) : owed;
     if (amount == null) {
-      setPayError('We cannot read the HIVE price right now. Pay in HBD, or try again shortly.');
+      setPayError(t('ads.pay.noHivePrice'));
       return;
     }
     setPayError(null);
     const signer = getOperationUser();
     if (!signer) {
-      setPayError('Log in with the account this flight is booked under to pay from your wallet.');
+      setPayError(t('ads.pay.loginAsBooker'));
       return;
     }
     if (c.payFrom && signer.toLowerCase() !== String(c.payFrom).toLowerCase()) {
-      setPayError(`This flight is booked under @${c.payFrom}, and only a payment from that account buys it. You are signed in as @${signer}, so a transfer from here would be returned to you. Switch account, or send it manually from @${c.payFrom}.`);
+      setPayError(t('ads.pay.wrongAccount', { payFrom: c.payFrom, signer }));
       return;
     }
     setPayBusy(c.id);
@@ -607,12 +613,12 @@ function CampaignPanel({
       await onCheckPayment(c.id, { afterPay: true });
     } catch (err) {
       // A cancelled signature is not an error worth shouting about, but a failed one is.
-      const msg = String(err?.message || err || 'Transfer failed');
+      const msg = String(err?.message || err || t('ads.pay.transferFailed'));
       setPayError(/cancel|reject|denied/i.test(msg) ? null : msg);
     } finally {
       setPayBusy(null);
     }
-  }, [onCheckPayment, ccyFor, pricing?.hbdPerHive]);
+  }, [onCheckPayment, ccyFor, pricing?.hbdPerHive, t]);
   const autoOn = autoLength && autoAvailable;
 
   /* The ticker message this booking is for: the newest one not turned down. A ticker
@@ -721,8 +727,8 @@ function CampaignPanel({
       // there may be nothing left to send. Telling someone to pay when they do not
       // have to would send them looking for a payment step that is not there.
       toast.success(res?.payment?.alreadyCovered
-        ? 'Booked and scheduled, covered in full by your credit'
-        : 'Booked. Send the payment to start it');
+        ? t('ads.book.bookedCovered')
+        : t('ads.book.bookedPay'));
       refresh();
       if (!creatives.length) onNeedCreative?.();
       if (res?.campaign?.id) {
@@ -731,7 +737,7 @@ function CampaignPanel({
       }
       return res;
     } catch (err) {
-      setError(err.message || 'Could not make that booking');
+      setError(err.message || t('ads.book.bookFailed'));
     } finally { setBusy(false); }
     return null;
   }
@@ -785,19 +791,19 @@ function CampaignPanel({
       const r = await claimWithRetry(
         id,
         afterPay ? CLAIM_POLL_MS : CLAIM_ONCE_MS,
-        (n, of) => setPayWaiting(`Confirming your payment on chain… (${n}/${of})`),
+        (n, of) => setPayWaiting(t('ads.pay.confirming', { n, of })),
       );
       setPayWaiting(null);
-      toast.success(r.message || 'Payment found');
+      toast.success(r.message || t('ads.pay.found'));
       refresh();
     } catch (err) {
       setPayWaiting(null);
       // A missing payment is the normal case right after booking, not a failure.
       setError(err.status === 404
         ? (afterPay
-          ? 'Your transfer has not shown up on chain yet. It is signed, so it will arrive — press "Manually sent" in a moment and it will be picked up. Do not pay again.'
-          : 'No matching transfer found yet. It can take a moment to appear on chain.')
-        : (err.message || 'Could not check'));
+          ? t('ads.pay.notYetSigned')
+          : t('ads.pay.notYet'))
+        : (err.message || t('ads.pay.checkFailed')));
     }
   }
 
@@ -819,11 +825,11 @@ function CampaignPanel({
       await attachCreative(cr?.kind === 'image'
         ? { reference, campaignId: id, imageUrl: cr.imageUrl }
         : { reference, campaignId: id, embedId: value });
-      toast.success(cr?.kind === 'image' ? 'Banner saved' : (cr?.kind === 'text' ? 'Ticker saved' : 'Spot saved'));
+      toast.success(cr?.kind === 'image' ? t('ads.book.bannerSaved') : (cr?.kind === 'text' ? t('ads.book.tickerSaved') : t('ads.book.spotSaved')));
       setPicked((p) => { const n = { ...p }; delete n[id]; return n; });
       refresh();
     } catch (err) {
-      setError(err.message || 'Could not use that creative');
+      setError(err.message || t('ads.book.attachFailed'));
     } finally { setSaving(null); }
   }
 
@@ -889,7 +895,7 @@ function CampaignPanel({
 
   return (
     <div className="mkt-campaigns">
-      {view === 'all' ? <h3>Your bookings</h3> : null}
+      {view === 'all' ? <h3>{t('ads.book.yourBookings')}</h3> : null}
       {showBooking && (
         <>
 
@@ -903,11 +909,9 @@ function CampaignPanel({
         <p className="mkt-note">
           <MdInfoOutline aria-hidden="true" />
           <span>
-            You can book now, while we review you. Booking holds the position
-            {pricing?.slotHoldHours ? ` for ${pricing.slotHoldHours} hours` : ''}, so it
-            is yours if your payment arrives in that time. If it does not, the hold
-            lapses and the slot goes back on sale. Nothing runs and nothing is charged
-            until you pay.
+            {pricing?.slotHoldHours
+              ? t('ads.book.awaitingApprovalHours', { hours: pricing.slotHoldHours })
+              : t('ads.book.awaitingApproval')}
           </span>
         </p>
       )}
@@ -918,8 +922,11 @@ function CampaignPanel({
             position is even yours to choose. */}
         {lockFormat ? (
           <p className="mkt-fine mkt-locked-format">
-            Booking a <strong>{fmt?.label || lockFormat}</strong>, the type you chose in <em>Your ad</em>.
-            {' '}Go back a step to change it.
+            <Trans
+              i18nKey="ads.book.lockedFormat"
+              values={{ format: fmt?.label || lockFormat }}
+              components={{ b: <strong />, em: <em /> }}
+            />
           </p>
         ) : (
           <FormatPicker formats={offered} value={fmt?.key} onChange={(k) => { setFormatKey(k); setSlotPct(null); setSpotSeconds(null); }} />
@@ -929,25 +936,25 @@ function CampaignPanel({
             booking itself; the two duration fields are about the videos it may run
             on, which is a different question and was reading as more booking fields. */}
         <fieldset className="mkt-group">
-          <legend>The booking</legend>
+          <legend>{t('ads.bookSteps.booking')}</legend>
         <div className="mkt-field">
-          <label htmlFor="mkt-days">Days</label>
+          <label htmlFor="mkt-days">{t('ads.book.days')}</label>
           <input
             id="mkt-days" type="number" min={pricing?.minDays || 1} max={pricing?.maxDays || 90}
             value={days} onChange={(e) => setDays(e.target.value)}
           />
           <span className="mkt-hint">
-            How long it runs. {pricing?.minDays || 1} to {pricing?.maxDays || 90}.
+            {t('ads.book.daysHint', { min: pricing?.minDays || 1, max: pricing?.maxDays || 90 })}
             {/* The nudge, at the moment the number is being chosen. Once they are past
                 a month there is little left to sell them, so it stops rather than
                 badgering — and it never appears at all if the curve is off. */}
-            {daysSaving ? ` At ${days} days you pay about ${daysSaving}% less per day than a single day.` : ''}
-            {nextStep ? ` ${nextStep.days} days would make it about ${nextStep.saving}% less.` : ''}
+            {daysSaving ? ` ${t('ads.book.daysSaving', { days, saving: daysSaving })}` : ''}
+            {nextStep ? ` ${t('ads.book.nextStep', { days: nextStep.days, saving: nextStep.saving })}` : ''}
           </span>
         </div>
 
         <div className="mkt-field">
-          <label htmlFor="mkt-start">Starts <span className="mkt-optional">optional</span></label>
+          <label htmlFor="mkt-start">{t('ads.wizard.starts')} <span className="mkt-optional">{t('ads.book.optional')}</span></label>
           <input
             id="mkt-start"
             type="date"
@@ -957,15 +964,15 @@ function CampaignPanel({
           />
           <span className={startOk ? 'mkt-hint' : 'mkt-upload-error'}>
             {!startOk
-              ? 'That date has passed. Pick today or later.'
+              ? t('ads.book.datePassed')
               : runsUntil
-                ? `Runs to ${runsUntil}.`
-                : 'Leave blank, or pick today, to start as soon as it is approved and paid.'}
+                ? t('ads.book.runsTo', { date: runsUntil })
+                : t('ads.book.startBlank')}
           </span>
         </div>
         <div className="mkt-field">
           <label htmlFor="mkt-length">
-            {isBanner ? 'How long it shows' : 'Ad length'}
+            {isBanner ? t('ads.book.howLongShows') : t('ads.book.adLength')}
           </label>
           <div className="mkt-length-row">
             <input
@@ -984,8 +991,8 @@ function CampaignPanel({
                 title={autoAvailable
                   ? ''
                   : (tooManySpots
-                    ? 'You have more than one ad video, so we cannot tell which length to use. Enter it yourself.'
-                    : 'Upload your ad video first')}
+                    ? t('ads.book.tooManySpots')
+                    : t('ads.book.uploadFirst'))}
               >
                 <input
                   type="checkbox"
@@ -1000,27 +1007,27 @@ function CampaignPanel({
                     setAutoLength(e.target.checked);
                   }}
                 />
-                <span>Automatic</span>
+                <span>{t('ads.book.automatic')}</span>
               </label>
             )}
           </div>
           <span className={`mkt-hint${lengthOk ? '' : ' mkt-hint-short'}`}>
             {autoTooLong
-              ? `Your spot is ${chosenLength}s, longer than this format allows. Upload a shorter one, or pick a format that takes it.`
+              ? t('ads.book.autoTooLong', { seconds: chosenLength })
               : (
                 <>
-                  Seconds, {minSpot} to {maxSpot}.{' '}
+                  {t('ads.book.secondsRange', { min: minSpot, max: maxSpot })}{' '}
                   {autoOn
-                    ? 'Taken from the ad video you uploaded.'
+                    ? t('ads.book.lengthFromVideo')
                     : (isTicker
                       ? (tickerTooShort
-                        ? `Your message needs at least ${tickerNeeds}s to be read. Shorter and it moves too fast.`
-                        : `How long the ticker takes to cross the screen once.${tickerNeeds ? ` At least ${tickerNeeds}s for your message; longer is slower and easier to read.` : ''}`)
+                        ? t('ads.book.tickerTooShort', { seconds: tickerNeeds })
+                        : `${t('ads.book.tickerCross')}${tickerNeeds ? ` ${t('ads.book.tickerAtLeast', { seconds: tickerNeeds })}` : ''}`)
                       : isBanner
-                      ? 'How long the banner stays on screen. A video banner has to be at least this long.'
+                      ? t('ads.book.bannerOnScreen')
                       : (tooManySpots
-                        ? 'More than one ad video uploaded, so enter the length of the one you are booking.'
-                        : 'Your ad video has to fit inside this.'))}
+                        ? t('ads.book.enterLength')
+                        : t('ads.book.mustFit')))}
                 </>
               )}
           </span>
@@ -1040,9 +1047,9 @@ function CampaignPanel({
         <div className="mkt-group-col">
         {fmt?.positioned ? (
         <fieldset className="mkt-group">
-          <legend>Placement</legend>
+          <legend>{t('ads.inventory.placement')}</legend>
         <div className="mkt-field">
-          <label htmlFor="mkt-slot">When in the video</label>
+          <label htmlFor="mkt-slot">{t('ads.book.whenInVideo')}</label>
           <select id="mkt-slot" value={chosenSlot} onChange={(e) => setSlotPct(Number(e.target.value))}>
             {slots.map((p) => (
               <option key={p} value={p} disabled={slotTaken(p)}>
@@ -1051,24 +1058,21 @@ function CampaignPanel({
                     is not that — it appears with the video, so the caveat does not
                     apply and neither does the wording. */}
                 {p === 0 && !isBanner
-                  ? 'Before the video (not recommended)'
+                  ? t('ads.book.beforeNotRecommended')
                   : slotLabel({ percent: p, banner: isBanner })}
                 {slotTaken(p)
-                  ? ' (full for these dates)'
-                  : (sharingWith(p) > 0 ? ` (${sharesLeft(p)} of ${slotRow(p).sharesTotal} places left)` : '')}
+                  ? t('ads.book.slotFull')
+                  : (sharingWith(p) > 0 ? t('ads.book.placesLeft', { left: sharesLeft(p), total: slotRow(p).sharesTotal }) : '')}
               </option>
             ))}
           </select>
           <span className="mkt-hint">
             {/* A position is sold to one advertiser at a time, across every format —
                 so this says what is actually for sale, not what exists. */}
-            How far into each video it runs. Later reaches fewer people, but reaches
-            them watching.
+            {t('ads.book.slotHint')}
             {sharingWith(chosenSlot) > 0
-              ? ` You would share this position with ${sharingWith(chosenSlot)} other `
-                + `${sharingWith(chosenSlot) === 1 ? 'advertiser' : 'advertisers'}, taking turns, `
-                + 'so the forecast on your booking is your share of it rather than the whole position.'
-              : ` A position carries up to ${slotRow(chosenSlot)?.sharesTotal || 3} advertisers at a time, taking turns.`}
+              ? ` ${t('ads.book.sharePosition', { count: sharingWith(chosenSlot) })}`
+              : ` ${t('ads.book.positionCarries', { count: slotRow(chosenSlot)?.sharesTotal || 3 })}`}
           </span>
         </div>
         </fieldset>
@@ -1080,29 +1084,29 @@ function CampaignPanel({
             underneath. The pre-upload spot runs in the upload flow. */}
         {fmt?.surface === 'watch' ? (
         <fieldset className="mkt-group">
-          <legend>Videos to run on <span className="mkt-optional">optional</span></legend>
+          <legend>{t('ads.book.videosToRunOn')} <span className="mkt-optional">{t('ads.book.optional')}</span></legend>
         <div className="mkt-field">
-          <label htmlFor="mkt-minvid">Shortest video</label>
+          <label htmlFor="mkt-minvid">{t('ads.book.shortestVideo')}</label>
           <input
-            id="mkt-minvid" type="number" min="0" step="1" placeholder="any"
+            id="mkt-minvid" type="number" min="0" step="1" placeholder={t('ads.book.any')}
             value={minVideo} onChange={(e) => setMinVideo(e.target.value)}
           />
-          <span className="mkt-hint">Seconds. Blank for no minimum.</span>
-          {inMinutes(minVideo) ? <span className="mkt-mins">{inMinutes(minVideo)}</span> : null}
+          <span className="mkt-hint">{t('ads.book.noMinimum')}</span>
+          {inMinutes(minVideo, t) ? <span className="mkt-mins">{inMinutes(minVideo, t)}</span> : null}
         </div>
 
         <div className="mkt-field">
-          <label htmlFor="mkt-maxvid">Longest video</label>
+          <label htmlFor="mkt-maxvid">{t('ads.book.longestVideo')}</label>
           <input
-            id="mkt-maxvid" type="number" min="0" step="1" placeholder="any"
+            id="mkt-maxvid" type="number" min="0" step="1" placeholder={t('ads.book.any')}
             value={maxVideo} onChange={(e) => setMaxVideo(e.target.value)}
           />
           <span className={`mkt-hint${videoRangeOk ? '' : ' mkt-hint-short'}`}>
             {videoRangeOk
-              ? 'Seconds. Blank for no maximum.'
-              : 'The longest cannot be shorter than the shortest.'}
+              ? t('ads.book.noMaximum')
+              : t('ads.book.rangeInvalid')}
           </span>
-          {inMinutes(maxVideo) ? <span className="mkt-mins">{inMinutes(maxVideo)}</span> : null}
+          {inMinutes(maxVideo, t) ? <span className="mkt-mins">{inMinutes(maxVideo, t)}</span> : null}
         </div>
         </fieldset>
         ) : null}
@@ -1116,29 +1120,29 @@ function CampaignPanel({
             message={tickerCreative.message}
             seconds={Number.isInteger(chosenLength) && chosenLength > 0 ? Math.min(chosenLength, maxSpot) : defaultLength}
             tickerStyle={tickerCreative.tickerStyle === 'hold' ? 'hold' : 'crawl'}
-            caption={`Your ticker at ${chosenLength}s, as viewers will see it`}
+            caption={t('ads.ticker.previewCaption', { seconds: chosenLength })}
           />
         ) : null}
         <div className="mkt-book-total">
           {total != null ? (
             <span>
-              <strong>{total} HBD</strong> total
+              <Trans i18nKey="ads.book.total" values={{ total }} components={{ b: <strong /> }} />
               {hiveEquivalent(total, pricing?.hbdPerHive) != null ? (
                 <span className="mkt-hint">
-                  {' '}(about {hiveEquivalent(total, pricing.hbdPerHive)} HIVE)
+                  {' '}{t('ads.book.aboutHive', { hive: hiveEquivalent(total, pricing.hbdPerHive) })}
                 </span>
               ) : null}
-              {productionFee > 0 ? <span className="mkt-hint"> ({flight} booking + {productionFee} production)</span> : null}
+              {productionFee > 0 ? <span className="mkt-hint"> {t('ads.book.feeSplit', { flight, fee: productionFee })}</span> : null}
               {/* ⚠️ This used to read "{chosenLength}s x {days} days at {rate} HBD per
                   second per day", which is a multiplication that no longer reproduces
                   the total: the day rate falls with the length of the flight. Quoting
                   the EFFECTIVE day rate keeps the line arithmetically honest and shows
                   the discount at the same time. */}
               <span className="mkt-hint">
-                {' '}· {fmt ? `${fmt.label}, ` : ''}{chosenLength}s over {days} day{Number(days) === 1 ? '' : 's'}
-                {fmt?.rateIsCustom ? ' at your agreed rate, ' : ', '}
-                {effectiveDayRate != null ? `${effectiveDayRate} HBD per second per day` : `${rate} HBD per second per day`}
-                {daysSaving ? ` — ${rate} on a single day, ${daysSaving}% less at this length` : ''}
+                {' '}· {fmt ? `${fmt.label}, ` : ''}{t('ads.book.secondsOverDays', { seconds: chosenLength, count: Number(days) })}
+                {fmt?.rateIsCustom ? t('ads.book.atAgreedRate') : ', '}
+                {t('ads.book.perSecondPerDay', { rate: effectiveDayRate != null ? effectiveDayRate : rate })}
+                {daysSaving ? t('ads.book.singleDayRate', { rate, saving: daysSaving }) : ''}
               </span>
               {/* What they will actually be asked to transfer. The server spends the
                   balance when the campaign is created, so quoting only the total
@@ -1147,10 +1151,11 @@ function CampaignPanel({
                   because priceHbd there is likewise flight + production fee. */}
               {balanceHbd > 0 ? (
                 <span className="mkt-hint">
-                  {' '}· {Math.min(balanceHbd, total)} HBD credit applied, so you send{' '}
-                  <strong>
-                    {Math.round(Math.max(0, total - balanceHbd) * 1000) / 1000} HBD
-                  </strong>
+                  {' '}· <Trans
+                    i18nKey="ads.book.creditApplied"
+                    values={{ credit: Math.min(balanceHbd, total), send: Math.round(Math.max(0, total - balanceHbd) * 1000) / 1000 }}
+                    components={{ b: <strong /> }}
+                  />
                 </span>
               ) : null}
             </span>
@@ -1161,7 +1166,7 @@ function CampaignPanel({
             disabled={busy || briefTooShort || !lengthOk || !videoRangeOk || !startOk
               || (fmt?.positioned && slotTaken(chosenSlot))}
           >
-            {busy ? 'Booking…' : 'Book this ad'}
+            {busy ? t('ads.book.booking') : t('ads.book.bookThis')}
           </button>
         </div>
       </form>
@@ -1175,16 +1180,15 @@ function CampaignPanel({
           sending it back. It comes off the next booking on its own. */}
       {showBalance && balanceHbd > 0 && (
         <p className="mkt-balance">
-          You have <strong>{balanceHbd} HBD</strong> in credit from flights that
-          under-delivered. It comes off your next booking automatically.
+          <Trans i18nKey="ads.book.creditBalance" values={{ balance: balanceHbd }} components={{ b: <strong /> }} />
         </p>
       )}
 
       {(view === 'active' || view === 'history') && listed.length === 0 && (
         <p className="mkt-fine">
           {view === 'active'
-            ? 'No live bookings. Anything you book shows up here until it finishes.'
-            : 'Nothing here yet. Flights land here once they finish or are called off.'}
+            ? t('ads.book.noLive')
+            : t('ads.book.noHistory')}
         </p>
       )}
 
@@ -1197,18 +1201,18 @@ function CampaignPanel({
                 <span className="mkt-creative-status">{c.status.replace(/_/g, ' ')}</span>
               </div>
               <div className="mkt-creative-meta">
-                {c.days} days · {c.spotSeconds ? `${c.spotSeconds}s · ` : ''}
+                {t('ads.wizard.days', { count: c.days })} · {c.spotSeconds ? `${c.spotSeconds}s · ` : ''}
                 {slotLabel({
                   percent: c.slotPercent,
                   position: c.slotPosition,
                   banner: c.format === 'video_banner',
                 })} · {c.priceHbd} HBD
-                {c.forecast != null ? ` · forecast ${formatCount(c.forecast)} play${c.forecast === 1 ? '' : 's'}` : ''}
+                {c.forecast != null ? t('ads.book.forecastPlays', { count: c.forecast, plays: formatCount(c.forecast) }) : ''}
               </div>
 
               {c.production && (
                 <div className="mkt-campaign-blocked">
-                  We are making the video · {c.production.status}
+                  {t('ads.book.makingVideo')} · {c.production.status}
                   {c.productionFeeHbd ? ` · ${c.productionFeeHbd} HBD` : ''}
                 </div>
               )}
@@ -1224,8 +1228,8 @@ function CampaignPanel({
                    someone who has done their part that they have not is how a paid
                    advertiser ends up wondering what they missed. */
                 const label = (c.blockedBy === 'no_creative' && awaitingUs(c))
-                  ? 'The team will review your ad file soon. We attach it for you once it passes, and get in touch if there is a choice to make.'
-                  : (BLOCKED_REASON[c.blockedBy] || c.blockedBy);
+                  ? t('ads.book.teamWillReview')
+                  : (BLOCKED_REASON[c.blockedBy] ? t(BLOCKED_REASON[c.blockedBy]) : c.blockedBy);
                 return <div className="mkt-campaign-blocked">{label}</div>;
               })()}
 
@@ -1238,7 +1242,7 @@ function CampaignPanel({
                     const shown = ccy === 'HIVE' ? inHive : owed;
                     return (
                       <>
-                        <div className="mkt-pay-ccy" role="group" aria-label="Pay with">
+                        <div className="mkt-pay-ccy" role="group" aria-label={t('ads.promote.payWith')}>
                           {['HBD', 'HIVE'].map((k) => (
                             <button
                               key={k}
@@ -1257,10 +1261,12 @@ function CampaignPanel({
                         {/* After the choice, because it describes what that choice
                             means: the amount and the asset both change with it. */}
                         <p className="mkt-pay-line">
-                          Send <strong>{shown != null ? shown.toFixed(3) : '—'} {ccy}</strong> to{' '}
-                          <strong>@{c.payTo}</strong> with the memo <code>{c.memo}</code>{' '}
-                          <CopyButton value={c.memo} />.
-                          {ccy === 'HIVE' ? ' HIVE is valued at the on-chain price when it arrives, so this covers the price at today\u2019s.' : ''}
+                          <Trans
+                            i18nKey="ads.pay.sendLine"
+                            values={{ amount: shown != null ? shown.toFixed(3) : '—', ccy, payTo: c.payTo, memo: c.memo }}
+                            components={{ b: <strong />, code: <code />, copy: <CopyButton value={c.memo} /> }}
+                          />
+                          {ccy === 'HIVE' ? ` ${t('ads.pay.hiveValued')}` : ''}
                         </p>
                       </>
                     );
@@ -1270,8 +1276,7 @@ function CampaignPanel({
                       discount. Say where the difference went. */}
                   {c.creditAppliedHbd > 0 && (
                     <p className="mkt-hint">
-                      {c.priceHbd} HBD less {c.creditAppliedHbd} HBD credit from an earlier
-                      flight that under-delivered.
+                      {t('ads.pay.lessCredit', { price: c.priceHbd, credit: c.creditAppliedHbd })}
                     </p>
                   )}
                   <div className="mkt-pay-actions">
@@ -1282,11 +1287,11 @@ function CampaignPanel({
                       onClick={() => payWithWallet(c)}
                     >
                       {payBusy === c.id
-                        ? (payWaiting ? 'Confirming payment…' : 'Waiting for your wallet…')
-                        : 'Send with wallet'}
+                        ? (payWaiting ? t('ads.pay.confirmingShort') : t('ads.pay.waitingWallet'))
+                        : t('ads.pay.sendWithWallet')}
                     </button>
                     <button type="button" className="mkt-secondary" onClick={() => onCheckPayment(c.id)}>
-                      Manually sent
+                      {t('ads.pay.manuallySent')}
                     </button>
                   </div>
                   {payWaiting && <p className="mkt-fine">{payWaiting}</p>}
@@ -1313,12 +1318,18 @@ function CampaignPanel({
                     <div className="mkt-pay">
                       <p className="mkt-hint">
                         {wantsText
-                          ? 'This is a ticker flight, so it needs an approved ticker message.'
+                          ? t('ads.attach.needsTicker')
                           : canImage && canVideo
-                          ? `This is a ${c.formatLabel || 'banner'} flight, so it needs an approved banner, either an image${c.creativeSpec ? ` (${c.creativeSpec.recommended}, between ${c.creativeSpec.minAspect}:1 and ${c.creativeSpec.maxAspect}:1)` : ''} or a video.`
+                          ? t('ads.attach.needsBannerEither', {
+                            format: c.formatLabel || t('ads.attach.banner'),
+                            spec: c.creativeSpec ? t('ads.attach.specRange', { recommended: c.creativeSpec.recommended, min: c.creativeSpec.minAspect, max: c.creativeSpec.maxAspect }) : '',
+                          })
                           : wantsImage
-                            ? `This is a ${c.formatLabel || 'banner'} flight, so it needs an approved banner image${c.creativeSpec ? ` (${c.creativeSpec.recommended}, between ${c.creativeSpec.minAspect}:1 and ${c.creativeSpec.maxAspect}:1)` : ''}.`
-                            : 'This flight needs an approved ad video.'}
+                            ? t('ads.attach.needsBannerImage', {
+                              format: c.formatLabel || t('ads.attach.banner'),
+                              spec: c.creativeSpec ? t('ads.attach.specRange', { recommended: c.creativeSpec.recommended, min: c.creativeSpec.minAspect, max: c.creativeSpec.maxAspect }) : '',
+                            })
+                            : t('ads.attach.needsVideo')}
                       </p>
                     </div>
                   ) : null;
@@ -1327,10 +1338,10 @@ function CampaignPanel({
                 <div className="mkt-pay">
                   <label className="mkt-hint" htmlFor={`attach-${c.id}`}>
                     {wantsText
-                      ? 'Use one of your approved ticker messages'
+                      ? t('ads.attach.useTicker')
                       : canImage && canVideo
-                      ? 'Use one of your approved banners or ad videos'
-                      : wantsImage ? 'Use one of your approved banners' : 'Use one of your approved ad videos'}
+                      ? t('ads.attach.useBannerOrVideo')
+                      : wantsImage ? t('ads.attach.useBanner') : t('ads.attach.useVideo')}
                   </label>
                   <div className="mkt-attach-row">
                     <select
@@ -1338,15 +1349,15 @@ function CampaignPanel({
                       value={picked[c.id] || ''}
                       onChange={(e) => setPicked((p) => ({ ...p, [c.id]: e.target.value }))}
                     >
-                      <option value="" disabled>Choose one</option>
+                      <option value="" disabled>{t('ads.attach.chooseOne')}</option>
                       {usable.map((cr) => (
                         <option key={cr.embedId} value={cr.permlink || cr.embedId}>
                           {/* A still has no duration — "0s ad" was what it used to say. */}
                           {cr.kind === 'image'
-                            ? `Banner${cr.imageWidth ? ` · ${cr.imageWidth}×${cr.imageHeight}` : ''}`
+                            ? `${t('ads.attach.bannerOption')}${cr.imageWidth ? ` · ${cr.imageWidth}×${cr.imageHeight}` : ''}`
                             : cr.kind === 'text'
-                              ? `Ticker · ${cr.message.length > 48 ? `${cr.message.slice(0, 47)}…` : cr.message}`
-                              : `${cr.durationSeconds}s ad`}
+                              ? `${t('ads.attach.tickerOption')} · ${cr.message.length > 48 ? `${cr.message.slice(0, 47)}…` : cr.message}`
+                              : t('ads.attach.secondsAd', { seconds: cr.durationSeconds })}
                         </option>
                       ))}
                     </select>
@@ -1356,7 +1367,7 @@ function CampaignPanel({
                       disabled={!picked[c.id] || saving === c.id}
                       onClick={() => onAttach(c.id)}
                     >
-                      {saving === c.id ? 'Saving…' : 'Save'}
+                      {saving === c.id ? t('common.actions.saving') : t('common.actions.save')}
                     </button>
                   </div>
                 </div>
@@ -1365,8 +1376,11 @@ function CampaignPanel({
 
               {(c.delivered > 0 || c.status === 'complete') && (
                 <div className="mkt-delivery">
-                  <span><strong>{formatCount(c.delivered)}</strong> play{c.delivered === 1 ? '' : 's'} delivered
-                    {c.forecast ? ` of ${formatCount(c.forecast)} forecast` : ''}</span>
+                  <span>
+                    {c.forecast
+                      ? <Trans i18nKey="ads.delivery.deliveredOf" count={c.delivered} values={{ delivered: formatCount(c.delivered), forecast: formatCount(c.forecast) }} components={{ b: <strong /> }} />
+                      : <Trans i18nKey="ads.delivery.delivered" count={c.delivered} values={{ delivered: formatCount(c.delivered) }} components={{ b: <strong /> }} />}
+                  </span>
                   {/* A shortfall against forecast is settled as credit toward the
                       next booking, not as a transfer back. Saying "we will send it"
                       would leave them waiting for money that is not coming. */}
@@ -1376,13 +1390,13 @@ function CampaignPanel({
                   {c.refundHbd > 0 && (
                     <span className={c.refundStatus === 'credited' ? 'mkt-credit-earned' : 'mkt-refund'}>
                       {c.refundStatus === 'credited'
-                        ? `${c.creditHbd ?? c.refundHbd} HBD credited to you for under-delivery. It comes off your next booking`
-                        : `${c.refundHbd} HBD short of forecast. We are looking at this one`}
+                        ? t('ads.delivery.credited', { amount: c.creditHbd ?? c.refundHbd })
+                        : t('ads.delivery.short', { amount: c.refundHbd })}
                     </span>
                   )}
                   {c.creditAppliedHbd > 0 && (
                     <span className="mkt-credit-used">
-                      {c.creditAppliedHbd} HBD of credit went into this booking
+                      {t('ads.delivery.creditUsed', { amount: c.creditAppliedHbd })}
                     </span>
                   )}
                 </div>
@@ -1395,11 +1409,12 @@ function CampaignPanel({
   );
 }
 
+// Values are i18n keys.
 const CREATIVE_STATUS = {
-  pending: 'Encoding',
-  review: 'Waiting for review',
-  ready: 'Approved',
-  rejected: 'Not accepted',
+  pending: 'ads.creativeStatus.pending',
+  review: 'ads.creativeStatus.review',
+  ready: 'ads.creativeStatus.ready',
+  rejected: 'ads.creativeStatus.rejected',
 };
 
 /* A creative still waiting on something (our review, or its encode) changes on the
@@ -1413,10 +1428,11 @@ const CREATIVE_STATUS = {
  * thing the advertiser needs to act on was the easiest to miss. */
 const rejectedWithNote = (c) => c.status === 'rejected' && !!c.note;
 function CreativeStatus({ c }) {
-  const label = CREATIVE_STATUS[c.status] || c.status;
+  const { t } = useTranslation();
+  const label = CREATIVE_STATUS[c.status] ? t(CREATIVE_STATUS[c.status]) : c.status;
   return (
     <span className={`mkt-creative-status mkt-creative-${c.status}${rejectedWithNote(c) ? ' has-note' : ''}`}>
-      {rejectedWithNote(c) ? <>{label}: <span className="mkt-creative-note">{c.note}</span></> : label}
+      {rejectedWithNote(c) ? <>{t('ads.creativeStatus.withNote', { label })}<span className="mkt-creative-note">{c.note}</span></> : label}
     </span>
   );
 }
@@ -1428,9 +1444,9 @@ function usePollWhileUnsettled(list, refresh) {
   useEffect(() => {
     if (!waiting) return undefined;
     const tick = () => { if (document.visibilityState === 'visible') refresh(); };
-    const t = setInterval(tick, CREATIVE_POLL_MS);
+    const timer = setInterval(tick, CREATIVE_POLL_MS);
     document.addEventListener('visibilitychange', tick);
-    return () => { clearInterval(t); document.removeEventListener('visibilitychange', tick); };
+    return () => { clearInterval(timer); document.removeEventListener('visibilitychange', tick); };
   }, [waiting, refresh]);
 }
 
@@ -1457,6 +1473,7 @@ function usePollWhileUnsettled(list, refresh) {
  * not change between one video and the next.
  */
 function BrandPanel({ reference, account, productName, initialLogoUrl, initialSlogan }) {
+  const { t } = useTranslation();
   const [logoUrl, setLogoUrl] = useState(initialLogoUrl || null);
   const [slogan, setSlogan] = useState(initialSlogan || '');
   const [savedSlogan, setSavedSlogan] = useState(initialSlogan || '');
@@ -1471,9 +1488,9 @@ function BrandPanel({ reference, account, productName, initialLogoUrl, initialSl
     try {
       const res = await uploadLogo({ file, reference });
       setLogoUrl(res.logoUrl);
-      toast.success('Logo saved');
+      toast.success(t('ads.brand.logoSaved'));
     } catch (err) {
-      setError(err.message || 'Could not save that logo');
+      setError(err.message || t('ads.brand.logoFailed'));
     } finally {
       setBusy(false);
       if (logoInput.current) logoInput.current.value = '';   // let the same file be retried
@@ -1485,9 +1502,9 @@ function BrandPanel({ reference, account, productName, initialLogoUrl, initialSl
     try {
       const res = await saveBranding({ reference, slogan: slogan.trim() });
       setSavedSlogan(res.slogan || '');
-      toast.success('Slogan saved');
+      toast.success(t('ads.brand.sloganSaved'));
     } catch (err) {
-      setError(err.message || 'Could not save that slogan');
+      setError(err.message || t('ads.brand.sloganFailed'));
     } finally { setBusy(false); }
   }
 
@@ -1496,15 +1513,15 @@ function BrandPanel({ reference, account, productName, initialLogoUrl, initialSl
 
   return (
     <div className="mkt-brand">
-      <h3>How your ad is labelled</h3>
+      <h3>{t('ads.brand.title')}</h3>
       <p className="mkt-fine">
-        While your ad plays we show who it is from, over the video. This is what it says.
+        {t('ads.brand.intro')}
       </p>
 
       <div className="mkt-brand-row">
         <div className="mkt-brand-fields">
           <div className="mkt-field">
-            <span className="mkt-label">Logo</span>
+            <span className="mkt-label">{t('ads.brand.logo')}</span>
             <input
               ref={logoInput}
               id={`mkt-logo-${reference}`}
@@ -1515,34 +1532,34 @@ function BrandPanel({ reference, account, productName, initialLogoUrl, initialSl
               className="mkt-visually-hidden"
             />
             <label htmlFor={`mkt-logo-${reference}`} className={`mkt-secondary mkt-upload-btn${busy ? ' disabled' : ''}`}>
-              {logoUrl ? 'Replace logo' : 'Upload a logo'}
+              {logoUrl ? t('ads.brand.replaceLogo') : t('ads.brand.uploadLogo')}
             </label>
-            <span className="mkt-hint">Shown as a circle, so a square image works best.</span>
+            <span className="mkt-hint">{t('ads.brand.logoHint')}</span>
           </div>
 
           <div className="mkt-field mkt-field-wide">
-            <label htmlFor={`mkt-slogan-${reference}`}>Slogan</label>
+            <label htmlFor={`mkt-slogan-${reference}`}>{t('ads.brand.slogan')}</label>
             <input
               id={`mkt-slogan-${reference}`}
               value={slogan}
               maxLength={SLOGAN_MAX}
               onChange={(e) => setSlogan(e.target.value)}
-              placeholder="One line about what you do"
+              placeholder={t('ads.brand.sloganPlaceholder')}
             />
             <span className={`mkt-hint${over ? ' mkt-hint-short' : ''}`}>
-              {slogan.trim().length}/{SLOGAN_MAX} characters. Two lines at most in the overlay.
+              {t('ads.brand.sloganCount', { length: slogan.trim().length, max: SLOGAN_MAX })}
             </span>
           </div>
 
           <div className="mkt-field">
-            <span className="mkt-label mkt-visually-hidden">Save</span>
+            <span className="mkt-label mkt-visually-hidden">{t('common.actions.save')}</span>
             <button
               type="button"
               className="mkt-secondary"
               onClick={onSaveSlogan}
               disabled={busy || over || !dirty}
             >
-              {busy ? 'Saving…' : (dirty ? 'Save slogan' : 'Saved')}
+              {busy ? t('common.actions.saving') : (dirty ? t('ads.brand.saveSlogan') : t('common.actions.saved'))}
             </button>
           </div>
         </div>
@@ -1551,7 +1568,7 @@ function BrandPanel({ reference, account, productName, initialLogoUrl, initialSl
             putting it here answered a question nobody was asking: what matters is
             how the label itself reads, at the size it is drawn. */}
         <div className="mkt-brand-preview">
-          <span className="mkt-preview-cap">Top left of your ad</span>
+          <span className="mkt-preview-cap">{t('ads.brand.previewCap')}</span>
           <AdOverlay
             account={account}
             brand={{ productName, slogan: slogan.trim(), logoUrl }}
@@ -1572,9 +1589,10 @@ function BrandPanel({ reference, account, productName, initialLogoUrl, initialSl
  * same review as an image or a video. Editing a word makes a new one that has to be
  * reviewed again, which the server enforces by keying the creative on its content.
  */
+// title/blurb are i18n keys.
 const TICKER_STYLES = [
-  { id: 'crawl', title: 'Crawl across', blurb: 'Enters on the right and leaves on the left in one smooth pass.' },
-  { id: 'hold', title: 'Slide in, pause, slide out', blurb: 'Glides in and stops in the middle so it can be read standing still. A line longer than the screen pans slowly from its start to its end instead.' },
+  { id: 'crawl', title: 'ads.tickerStyle.crawl.title', blurb: 'ads.tickerStyle.crawl.blurb' },
+  { id: 'hold', title: 'ads.tickerStyle.hold.title', blurb: 'ads.tickerStyle.hold.blurb' },
 ];
 
 /* The ticker as a viewer will get it: the same TickerCrawl the watch page draws, at the
@@ -1584,14 +1602,15 @@ const TICKER_STYLES = [
  * Keyed on everything that changes the run, so a new length or style restarts it from
  * the first frame instead of jumping to wherever the old animation had got to. */
 function TickerPreview({ account, productName, message, seconds, tickerStyle = 'crawl', caption }) {
+  const { t } = useTranslation();
   const [device, setDevice] = useState('desktop');
   const compact = device === 'phone';
   return (
-    <div className="mkt-ticker-preview" aria-label="Preview">
+    <div className="mkt-ticker-preview" aria-label={t('ads.ticker.preview')}>
       <div className="mkt-ticker-preview-head">
         <span className="mkt-preview-cap">{caption}</span>
-        <div className="mkt-pay-ccy" role="group" aria-label="Screen size">
-          {[['desktop', 'Desktop'], ['phone', 'Phone']].map(([k, label]) => (
+        <div className="mkt-pay-ccy" role="group" aria-label={t('ads.ticker.screenSize')}>
+          {[['desktop', t('ads.ticker.desktop')], ['phone', t('ads.ticker.phone')]].map(([k, label]) => (
             <button
               key={k}
               type="button"
@@ -1621,6 +1640,7 @@ function TickerPreview({ account, productName, message, seconds, tickerStyle = '
 }
 
 function TickerPanel({ reference, account, productName, format = null, onCreatives }) {
+  const { t } = useTranslation();
   const spec = format?.creativeSpec;
   const maxChars = spec?.maxChars || 140;
   const maxSeconds = format?.maxSeconds || 20;
@@ -1663,34 +1683,34 @@ function TickerPanel({ reference, account, productName, format = null, onCreativ
     setBusy(true); setError(null);
     try {
       await saveTickerCreative({ reference, message: message.trim(), clickUrl: link.trim(), style: tickerStyle });
-      toast.success('Ticker saved. We will review it before it runs');
+      toast.success(t('ads.ticker.savedReview'));
       refresh();
     } catch (err) {
-      setError(err.message || 'Could not save the ticker');
+      setError(err.message || t('ads.ticker.saveFailed'));
     } finally { setBusy(false); }
   }
 
   return (
     <div className="mkt-creatives">
-      <h3>Your ticker</h3>
+      <h3>{t('ads.ticker.yourTicker')}</h3>
       <div className="mkt-field mkt-field-wide">
-        <label htmlFor="mkt-ticker-msg">Message</label>
+        <label htmlFor="mkt-ticker-msg">{t('ads.market.spec.message')}</label>
         <textarea
           id="mkt-ticker-msg"
           rows={2}
           value={message}
           onChange={(e) => setMessage(e.target.value)}
-          placeholder="What should viewers read? One or two sentences and a reason to click."
+          placeholder={t('ads.ticker.messagePlaceholder')}
         />
         <span className={`mkt-hint${length > maxChars || tooSlowToRead ? ' mkt-hint-short' : ''}`}>
-          {length} / {maxChars} characters · {words} word{words === 1 ? '' : 's'}
+          {t('ads.ticker.charCount', { length, max: maxChars })} · {t('ads.ticker.words', { count: words })}
           {tooSlowToRead
-            ? ` · needs about ${needs}s to read, and a ticker runs at most ${maxSeconds}s. Shorten it a little.`
-            : ` · book at least ${needs}s so it can be read`}
+            ? t('ads.ticker.tooSlow', { needs, max: maxSeconds })
+            : t('ads.ticker.bookAtLeast', { needs })}
         </span>
       </div>
       <div className="mkt-field mkt-field-wide mkt-adtype">
-        <span className="mkt-label">How it moves</span>
+        <span className="mkt-label">{t('ads.ticker.howMoves')}</span>
         <div className="mkt-adtype-row">
           {TICKER_STYLES.map((o) => (
             <label key={o.id} className={`mkt-adtype-opt${tickerStyle === o.id ? ' selected' : ''}`}>
@@ -1702,15 +1722,15 @@ function TickerPanel({ reference, account, productName, format = null, onCreativ
                 onChange={() => setTickerStyle(o.id)}
               />
               <span>
-                <strong>{o.title}</strong>
-                <span className="mkt-hint">{o.blurb}</span>
+                <strong>{t(o.title)}</strong>
+                <span className="mkt-hint">{t(o.blurb)}</span>
               </span>
             </label>
           ))}
         </div>
       </div>
       <div className="mkt-field mkt-field-wide">
-        <label htmlFor="mkt-ticker-link">Link</label>
+        <label htmlFor="mkt-ticker-link">{t('ads.market.spec.link')}</label>
         <input
           id="mkt-ticker-link"
           type="url"
@@ -1719,24 +1739,24 @@ function TickerPanel({ reference, account, productName, format = null, onCreativ
           onChange={(e) => setLink(e.target.value)}
         />
         <span className={`mkt-hint${link.trim() && link.trim() !== 'https://' && !linkOk ? ' mkt-hint-short' : ''}`}>
-          Where a click goes. A full https:// address.
+          {t('ads.ticker.linkHint')}
         </span>
       </div>
 
       <TickerPreview
         account={account}
         productName={productName}
-        message={message.trim() || 'Your message crawls along here.'}
+        message={message.trim() || t('ads.ticker.placeholderMessage')}
         // At the shortest booking that is allowed, so this is the FASTEST it will ever
         // run. Booking longer only slows it down.
         seconds={Math.min(needs, maxSeconds)}
         tickerStyle={tickerStyle}
-        caption={`Along the top of the video, at ${Math.min(needs, maxSeconds)}s (the shortest you can book)`}
+        caption={t('ads.ticker.alongTop', { seconds: Math.min(needs, maxSeconds) })}
       />
 
       <div className="mkt-upload-row">
         <button type="button" className="mkt-outline" disabled={!canSave} onClick={onSave}>
-          {busy ? 'Saving…' : (alreadySaved ? 'Saved' : 'Save ticker')}
+          {busy ? t('common.actions.saving') : (alreadySaved ? t('common.actions.saved') : t('ads.ticker.saveTicker'))}
         </button>
       </div>
       {error ? <p className="mkt-upload-error">{error}</p> : null}
@@ -1748,11 +1768,11 @@ function TickerPanel({ reference, account, productName, format = null, onCreativ
               <CreativeStatus c={c} />
               <span className="mkt-creative-meta">
                 {c.message}
-                {` · ${c.tickerStyle === 'hold' ? 'slides in and pauses' : 'crawls'}`}
-                {c.minSeconds ? `, at least ${c.minSeconds}s` : ''}
+                {` · ${c.tickerStyle === 'hold' ? t('ads.ticker.styleHold') : t('ads.ticker.styleCrawl')}`}
+                {c.minSeconds ? t('ads.ticker.atLeastSeconds', { seconds: c.minSeconds }) : ''}
                 {c.note && !rejectedWithNote(c) ? ` · ${c.note}` : ''}
               </span>
-              <a href={c.clickUrl} target="_blank" rel="noopener noreferrer">Check the link</a>
+              <a href={c.clickUrl} target="_blank" rel="noopener noreferrer">{t('ads.ticker.checkLink')}</a>
             </li>
           ))}
         </ul>
@@ -1762,6 +1782,7 @@ function TickerPanel({ reference, account, productName, format = null, onCreativ
 }
 
 function CreativePanel({ reference, account, maxSeconds, bannerSpec, onCreatives, pending, production, offer, brand, adType = null, single = false }) {
+  const { t } = useTranslation();
   const [creatives, setCreatives] = useState([]);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState(null);
@@ -1805,20 +1826,20 @@ function CreativePanel({ reference, account, maxSeconds, bannerSpec, onCreatives
         // false. Whether THIS still is banner-shaped is decided when it is attached
         // to a flight, by the one rule that governs it.
         await uploadImageAsset({ file, reference });
-        toast.success('Image saved. Use it as a player banner, or we can build an ad video around it');
+        toast.success(t('ads.creative.imageSaved'));
       } else {
         // Checked here as well as on the server so a too-long spot fails in a second
         // rather than after an upload.
         const durationSeconds = await readVideoDuration(file);
         if (durationSeconds && maxSeconds && durationSeconds > maxSeconds) {
-          throw new Error(`That video is ${durationSeconds} seconds. The most an ad can run is ${maxSeconds}.`);
+          throw new Error(t('ads.creative.tooLong', { seconds: durationSeconds, max: maxSeconds }));
         }
         await uploadCreative({ file, account, reference, durationSeconds });
-        toast.success('Spot uploaded. We will review it before it runs');
+        toast.success(t('ads.creative.spotUploaded'));
       }
       refresh();
     } catch (err) {
-      setError(err.message || 'Upload failed');
+      setError(err.message || t('ads.creative.uploadFailed'));
     } finally {
       setBusy(false);
       if (inputRef.current) inputRef.current.value = '';   // let the same file be retried
@@ -1839,14 +1860,12 @@ function CreativePanel({ reference, account, maxSeconds, bannerSpec, onCreatives
       )}
 
       <h3>
-        {adType === 'banner' ? 'Your banner' : (isVideoAd(adType) ? 'Your ad video' : 'Your ad creatives')}
+        {adType === 'banner' ? t('ads.creative.yourBanner') : (isVideoAd(adType) ? t('ads.creative.yourVideo') : t('ads.creative.yourCreatives'))}
       </h3>
       {adType !== 'banner' && (
         <p className="mkt-fine">
-          Upload the video you want to run. It is never posted to Hive and never appears
-          in any feed &mdash; it goes through the same encoder as everything else so it
-          plays cleanly inside a break, and then waits for us to watch it.
-          {maxSeconds ? ` Up to ${maxSeconds} seconds.` : null}
+          {t('ads.creative.uploadIntro')}
+          {maxSeconds ? ` ${t('ads.creative.upToSeconds', { seconds: maxSeconds })}` : null}
         </p>
       )}
       <p className="mkt-fine">
@@ -1856,27 +1875,21 @@ function CreativePanel({ reference, account, maxSeconds, bannerSpec, onCreatives
         {adType === 'banner'
           ? (
             <>
-              A player banner is a still or a short video, shown over the video while it
-              plays. A video banner is played once, so it has to be at least as long as
-              the banner runs.
+              {t('ads.creative.bannerIntro')}
               {` ${bannerAdvice(bannerSpec)}`}
             </>
           )
           : (
             <>
-              Images too. A still is what a <strong>player banner</strong> is made of.
+              <Trans i18nKey="ads.creative.imagesToo" components={{ b: <strong /> }} />
               {` ${bannerAdvice(bannerSpec)}`}
-              {' '}A logo or key art that is not that shape is still worth uploading: we can
-              build an ad video around it.
+              {' '}{t('ads.creative.logoWorth')}
             </>
           )}
       </p>
       {pending && !production && (
         <p className="mkt-fine">
-          You can do this now, while your product is being reviewed. It is the quickest way
-          to show us what you have in mind, and nothing here runs until both your product and
-          the ad video are approved and a booking is paid for. If you would rather we made
-          the video, say so on the form and skip this.
+          {t('ads.creative.pendingNote')}
         </p>
       )}
       {production && adType !== 'banner' && (
@@ -1884,9 +1897,7 @@ function CreativePanel({ reference, account, maxSeconds, bannerSpec, onCreatives
         // the wrong instruction to leave standing. What we want from them is raw
         // material, and only if they have any.
         <p className="mkt-fine">
-          You have asked us to make the ad video, so there is nothing you need to upload here.
-          If you have a logo, key art or footage you want us to work from, this is where to
-          put it.
+          {t('ads.creative.productionNote')}
         </p>
       )}
 
@@ -1910,11 +1921,11 @@ function CreativePanel({ reference, account, maxSeconds, bannerSpec, onCreatives
           aria-disabled={atLimit ? 'true' : undefined}
         >
           {busy
-            ? 'Uploading…'
+            ? t('ads.creative.uploading')
             : (atLimit
-              ? 'Replace it below to change it'
-              : (adType === 'banner' ? 'Upload your banner'
-                : (isVideoAd(adType) ? 'Upload your ad video' : 'Upload a video or image')))}
+              ? t('ads.creative.replaceBelow')
+              : (adType === 'banner' ? t('ads.creative.uploadBanner')
+                : (isVideoAd(adType) ? t('ads.creative.uploadVideo') : t('ads.creative.uploadAny'))))}
         </label>
       </div>
       {error ? <p className="mkt-upload-error">{error}</p> : null}
@@ -1932,26 +1943,26 @@ function CreativePanel({ reference, account, maxSeconds, bannerSpec, onCreatives
               onChange={(e) => offer.onChange({ wanted: e.target.checked, brief: offer.brief })}
             />
             <span>
-              <strong>No ad video? Have us make it for you.</strong>
+              <strong>{t('ads.production.offer')}</strong>
               {offer.feeHbd
-                ? <> A one-off <strong>{offer.feeHbd} HBD</strong>, added to your booking.</>
+                ? <> <Trans i18nKey="ads.production.fee" values={{ fee: offer.feeHbd }} components={{ b: <strong /> }} /></>
                 : null}
             </span>
           </label>
           {offer.wanted && (
             <div className="mkt-field mkt-field-wide">
-              <label htmlFor="mkt-spot-brief">What should the ad say?</label>
+              <label htmlFor="mkt-spot-brief">{t('ads.production.briefLabel')}</label>
               <textarea
                 id="mkt-spot-brief"
                 rows={4}
                 value={offer.brief}
                 onChange={(e) => offer.onChange({ wanted: true, brief: e.target.value })}
-                placeholder="What you are advertising, who it is for, the one thing a viewer should remember, and anything you want us to avoid. Upload a logo or stills above and we will use them."
+                placeholder={t('ads.production.briefPlaceholder')}
               />
               <span className={`mkt-hint${offer.brief.trim().length < 20 ? ' mkt-hint-short' : ''}`}>
                 {offer.brief.trim().length < 20
-                  ? `${20 - offer.brief.trim().length} more characters, we cannot make an ad from a blank brief`
-                  : 'Enough to work from, thanks'}
+                  ? t('ads.production.moreChars', { count: 20 - offer.brief.trim().length })
+                  : t('ads.production.enough')}
               </span>
             </div>
           )}
@@ -1969,10 +1980,10 @@ function CreativePanel({ reference, account, maxSeconds, bannerSpec, onCreatives
                     the single definition, and restating it here would be a second
                     copy of the rule to drift out of step. */}
                 {c.kind === 'image'
-                  ? `Image${c.imageWidth ? ` · ${c.imageWidth}×${c.imageHeight}` : ''}`
+                  ? `${t('ads.creative.image')}${c.imageWidth ? ` · ${c.imageWidth}×${c.imageHeight}` : ''}`
                   : c.kind === 'text'
-                    ? `Ticker · ${c.message}`
-                    : (c.durationSeconds ? `${c.durationSeconds}s` : 'duration unknown')}
+                    ? `${t('ads.attach.tickerOption')} · ${c.message}`
+                    : (c.durationSeconds ? `${c.durationSeconds}s` : t('ads.creative.durationUnknown'))}
                 {c.note && !rejectedWithNote(c) ? ` · ${c.note}` : ''}
               </span>
               {c.kind === 'image' ? (
@@ -1986,15 +1997,15 @@ function CreativePanel({ reference, account, maxSeconds, bannerSpec, onCreatives
                   href={c.imageUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  title="Open the full size"
+                  title={t('ads.creative.openFull')}
                 >
-                  <img src={c.imageUrl} alt="Your banner" loading="lazy" />
+                  <img src={c.imageUrl} alt={t('ads.creative.yourBanner')} loading="lazy" />
                 </a>
               ) : c.kind === 'text' ? (
-                <a href={c.clickUrl} target="_blank" rel="noopener noreferrer">Check the link</a>
+                <a href={c.clickUrl} target="_blank" rel="noopener noreferrer">{t('ads.ticker.checkLink')}</a>
               ) : c.previewUrl && c.encoded ? (
-                <a href={c.previewUrl} target="_blank" rel="noopener noreferrer">Watch it back</a>
-              ) : <span className="mkt-creative-meta">still encoding</span>}
+                <a href={c.previewUrl} target="_blank" rel="noopener noreferrer">{t('ads.creative.watchBack')}</a>
+              ) : <span className="mkt-creative-meta">{t('ads.creative.stillEncoding')}</span>}
             </li>
           ))}
         </ul>
@@ -2007,6 +2018,7 @@ function CreativePanel({ reference, account, maxSeconds, bannerSpec, onCreatives
 // in place matters here: the /login route redirects home first, and this is a page
 // people arrive at from outside 3Speak, so bouncing them off it loses the visit.
 export default function Advertise({ openLoginModal }) {
+  const { t } = useTranslation();
   const user = useAppStore((s) => s.user);
   const [form, setForm] = useState(EMPTY_FORM);
   const [submitting, setSubmitting] = useState(false);
@@ -2189,15 +2201,15 @@ export default function Advertise({ openLoginModal }) {
   // What a product's "Book a spot" is booking, chosen first in step 1. See AdTypePicker.
   const [bookType, setBookType] = useState('video');
   const TABS = [
-    { id: 'general', label: 'General' },
-    { id: 'wizard', label: 'Enroll your ad' },
-    { id: 'mine', label: 'My products' },
+    { id: 'general', label: t('ads.tabs.general') },
+    { id: 'wizard', label: t('ads.tabs.wizard') },
+    { id: 'mine', label: t('ads.tabs.mine') },
   ];
 
   const PRODUCT_TABS = [
-    { id: 'book', label: 'Book a spot' },
-    { id: 'active', label: 'Active spots' },
-    { id: 'history', label: 'Booking history' },
+    { id: 'book', label: t('ads.productTabs.book') },
+    { id: 'active', label: t('ads.productTabs.active') },
+    { id: 'history', label: t('ads.productTabs.history') },
   ];
 
   const toggleMarket = (code) => setForm((f) => ({
@@ -2250,7 +2262,7 @@ export default function Advertise({ openLoginModal }) {
       rememberWizard(hiveAccount, res.reference, 2);
       setReceipt({ ...res, hiveAccount, production: form.wantProduction, projectName: form.projectName });
       setForm(EMPTY_FORM);
-      toast.success('Product registered. We will review it');
+      toast.success(t('ads.apply.registered'));
     } catch (err) {
       // The backend returns the reference on a duplicate, which is exactly what
       // someone re-submitting has lost — surface it instead of a bare error.
@@ -2260,7 +2272,7 @@ export default function Advertise({ openLoginModal }) {
         setReceipt({ reference: err.body.reference, status: err.body.status, message: err.message, hiveAccount });
         toast.info(err.message);
       } else {
-        toast.error(err.message || 'Could not register that product');
+        toast.error(err.message || t('ads.apply.registerFailed'));
       }
     } finally {
       setSubmitting(false);
@@ -2279,46 +2291,45 @@ export default function Advertise({ openLoginModal }) {
                 and which wallet the booking is paid from. Stated plainly instead, so
                 nobody has to guess which account they are applying as. */}
             <div className="mkt-field mkt-field-wide mkt-asaccount">
-              <span className="mkt-label">Applying as</span>
+              <span className="mkt-label">{t('ads.apply.applyingAs')}</span>
               <strong>@{user}</strong>
               <span className="mkt-hint">
-                The account the booking will be paid from. Log in as a different account to
-                apply as that one.
+                {t('ads.apply.applyingAsHint')}
               </span>
             </div>
 
             <div className="mkt-field">
-              <label htmlFor="mkt-project">Product name</label>
+              <label htmlFor="mkt-project">{t('ads.apply.productName')}</label>
               <input id="mkt-project" value={form.projectName} onChange={set('projectName')} required />
             </div>
 
             <div className="mkt-field">
-              <label htmlFor="mkt-website">Website <span className="mkt-optional">optional</span></label>
+              <label htmlFor="mkt-website">{t('ads.apply.website')} <span className="mkt-optional">{t('ads.book.optional')}</span></label>
               <input id="mkt-website" type="url" value={form.website} onChange={set('website')} placeholder="https://" />
-              <span className="mkt-hint">Where viewers land when they click your ad.</span>
+              <span className="mkt-hint">{t('ads.apply.websiteHint')}</span>
             </div>
 
             <div className="mkt-field">
-              <label htmlFor="mkt-contact">How we reach you</label>
+              <label htmlFor="mkt-contact">{t('ads.apply.contact')}</label>
               <input
                 id="mkt-contact"
                 value={form.contact}
                 onChange={set('contact')}
-                placeholder="Discord, Telegram, email, whatever you actually read"
+                placeholder={t('ads.apply.contactPlaceholder')}
                 required
               />
             </div>
 
             <div className="mkt-field">
-              <label htmlFor="mkt-category">Category</label>
+              <label htmlFor="mkt-category">{t('ads.apply.category')}</label>
               <select id="mkt-category" value={form.category} onChange={set('category')} required>
-                <option value="" disabled>Choose one</option>
-                {AD_CATEGORIES.map((c) => <option key={c.id} value={c.id}>{c.label}</option>)}
+                <option value="" disabled>{t('ads.attach.chooseOne')}</option>
+                {AD_CATEGORIES.map((c) => <option key={c.id} value={c.id}>{t(c.labelKey)}</option>)}
               </select>
             </div>
 
             <div className="mkt-field">
-              <label htmlFor="mkt-budget">Budget in HBD <span className="mkt-optional">optional</span></label>
+              <label htmlFor="mkt-budget">{t('ads.apply.budget')} <span className="mkt-optional">{t('ads.book.optional')}</span></label>
               <input
                 id="mkt-budget"
                 type="number"
@@ -2329,12 +2340,12 @@ export default function Advertise({ openLoginModal }) {
                 onChange={set('budgetHbd')}
                 placeholder="250"
               />
-              <span className="mkt-hint">A rough figure is enough.</span>
+              <span className="mkt-hint">{t('ads.apply.budgetHint')}</span>
             </div>
 
             {marketOptions.length > 0 && (
               <div className="mkt-field mkt-field-wide">
-                <span className="mkt-label">Markets <span className="mkt-optional">optional</span></span>
+                <span className="mkt-label">{t('ads.apply.markets')} <span className="mkt-optional">{t('ads.book.optional')}</span></span>
                 <div className="mkt-chips">
                   {marketOptions.map((c) => (
                     <button
@@ -2348,22 +2359,22 @@ export default function Advertise({ openLoginModal }) {
                     </button>
                   ))}
                 </div>
-                <span className="mkt-hint">Leave all unselected to run everywhere.</span>
+                <span className="mkt-hint">{t('ads.apply.marketsHint')}</span>
               </div>
             )}
 
             <div className="mkt-field mkt-field-wide">
-              <label htmlFor="mkt-concept">What do you want to run?</label>
+              <label htmlFor="mkt-concept">{t('ads.apply.concept')}</label>
               <textarea
                 id="mkt-concept"
                 rows={5}
                 value={form.creativeConcept}
                 onChange={set('creativeConcept')}
-                placeholder="The spot itself, who it is aimed at, and roughly when you would want it live."
+                placeholder={t('ads.apply.conceptPlaceholder')}
                 required
               />
               <span className={`mkt-hint${conceptLeft > 0 ? ' mkt-hint-short' : ''}`}>
-                {conceptLeft > 0 ? `${conceptLeft} more characters` : 'Enough to go on, thanks'}
+                {conceptLeft > 0 ? t('ads.apply.moreChars', { count: conceptLeft }) : t('ads.apply.enough')}
               </span>
             </div>
 
@@ -2375,45 +2386,41 @@ export default function Advertise({ openLoginModal }) {
                   onChange={(e) => setForm((f) => ({ ...f, wantProduction: e.target.checked }))}
                 />
                 <span>
-                  <strong>Have us make the video for you.</strong> Tick this if you do not
-                  have a spot yet
                   {pricing?.productionFeeHbd
-                    ? <>. A one-off <strong>{pricing.productionFeeHbd} HBD</strong>, quoted with
-                      your booking and charged only when you book, so applying costs nothing.</>
-                    : '.'}
+                    ? <Trans i18nKey="ads.apply.productionFee" values={{ fee: pricing.productionFeeHbd }} components={{ b: <strong /> }} />
+                    : <Trans i18nKey="ads.apply.production" components={{ b: <strong /> }} />}
                 </span>
               </label>
               {form.wantProduction && (
                 <div className="mkt-field mkt-field-wide">
-                  <label htmlFor="mkt-apply-brief">What should the spot say?</label>
+                  <label htmlFor="mkt-apply-brief">{t('ads.apply.briefLabel')}</label>
                   <textarea
                     id="mkt-apply-brief"
                     rows={4}
                     value={form.productionBrief}
                     onChange={set('productionBrief')}
-                    placeholder="What you are advertising, who it is for, the one thing a viewer should remember, and anything you want us to avoid. You can send us a logo and stills once your product is registered."
+                    placeholder={t('ads.apply.briefPlaceholder')}
                     required
                   />
                   <span className={`mkt-hint${briefLeft > 0 ? ' mkt-hint-short' : ''}`}>
                     {briefLeft > 0
-                      ? `${briefLeft} more characters, we cannot make a spot from a blank brief`
-                      : 'Enough to work from, thanks'}
+                      ? t('ads.apply.briefMore', { count: briefLeft })
+                      : t('ads.production.enough')}
                   </span>
                 </div>
               )}
               {!form.wantProduction && (
                 <span className="mkt-hint">
-                  Already have the video? Leave this unticked. You can upload it as soon as
-                  you have your reference, without waiting to be approved.
+                  {t('ads.apply.haveVideo')}
                 </span>
               )}
             </div>
 
             <div className="mkt-actions">
               <button type="submit" className="mkt-outline" disabled={submitting || briefLeft > 0}>
-                {submitting ? 'Sending…' : 'Register this product'}
+                {submitting ? t('ads.apply.sending') : t('ads.apply.register')}
               </button>
-              <span className="mkt-fine">Reviewed by a person. We do not accept every product.</span>
+              <span className="mkt-fine">{t('ads.apply.reviewedByPerson')}</span>
             </div>
           </form>
   );
@@ -2421,17 +2428,16 @@ export default function Advertise({ openLoginModal }) {
   return (
     <div className="mkt-page">
       <SEOHead
-        title="Advertise on 3Speak videos"
-        description="Put a short ad inside videos on 3Speak, paid in HBD or HIVE. Every advertiser is reviewed by hand."
+        title={t('ads.page.title')}
+        description={t('ads.page.description')}
         url="https://3speak.tv/advertise"
       />
       <header className="mkt-header">
         <MdCampaign className="mkt-header-icon" aria-hidden="true" />
         <div>
-          <h1>Advertise on 3Speak videos</h1>
+          <h1>{t('ads.page.title')}</h1>
           <p className="mkt-lede">
-            Your ad plays <strong>inside</strong> the video rather than in a box beside it, so
-            it reaches people whether or not they run an ad blocker.
+            <Trans i18nKey="ads.page.lede" components={{ b: <strong /> }} />
           </p>
         </div>
       </header>
@@ -2439,20 +2445,20 @@ export default function Advertise({ openLoginModal }) {
       {/* Only for a signed-in account with an empty wallet: where HIVE comes from. */}
       <FundsNotice user={user} hbdPerHive={pricing?.hbdPerHive} />
 
-      <div className="mkt-tabs" role="tablist" aria-label="Advertising">
-        {TABS.map((t) => (
+      <div className="mkt-tabs" role="tablist" aria-label={t('ads.page.tablistLabel')}>
+        {TABS.map((tb) => (
           <button
-            key={t.id}
+            key={tb.id}
             type="button"
             role="tab"
-            id={`mkt-tab-${t.id}`}
-            aria-selected={tab === t.id}
-            aria-controls={`mkt-panel-${t.id}`}
-            className={`mkt-tab${tab === t.id ? ' selected' : ''}`}
-            onClick={() => setTab(t.id)}
+            id={`mkt-tab-${tb.id}`}
+            aria-selected={tab === tb.id}
+            aria-controls={`mkt-panel-${tb.id}`}
+            className={`mkt-tab${tab === tb.id ? ' selected' : ''}`}
+            onClick={() => setTab(tb.id)}
           >
-            {t.label}
-            {t.id === 'mine' && myApps?.length ? (
+            {tb.label}
+            {tb.id === 'mine' && myApps?.length ? (
               <span className="mkt-tab-count">{myApps.length}</span>
             ) : null}
           </button>
@@ -2471,42 +2477,39 @@ export default function Advertise({ openLoginModal }) {
           whether they were filling in a product, a video or a booking. Numbered
           because the order is real: no booking without a product. */}
       <section className="mkt-intro">
-        <h2><FaRocket aria-hidden="true" /> Your ad, live in three steps</h2>
+        <h2><FaRocket aria-hidden="true" /> {t('ads.general.stepsTitle')}</h2>
         <p className="mkt-intro-lede">
-          Three things, and each one holds the next.
+          {t('ads.general.stepsLede')}
         </p>
         <ol className="mkt-steps">
           <li>
-            <strong>Your product</strong>
-            <span>Whatever you want to advertise.</span>
+            <strong>{t('ads.general.product.title')}</strong>
+            <span>{t('ads.general.product.what')}</span>
             <span className="mkt-step-detail">
-              Tell us once and a person reads it. Something different later means a new
-              product.
+              {t('ads.general.product.detail')}
             </span>
           </li>
           <li>
-            <strong>Your ads</strong>
+            <strong>{t('ads.general.ads.title')}</strong>
             <span>
-              What viewers see: a video, a banner or a line of text.
+              {t('ads.general.ads.what')}
             </span>
             <span className="mkt-step-detail">
-              Upload a video{pricing?.maxCreativeSeconds ? ` (up to ${pricing.maxCreativeSeconds} seconds)` : ''} or an
-              image, write a ticker message, or ask us to make a video for you. We check each
-              one before it runs.
+              {pricing?.maxCreativeSeconds
+                ? t('ads.general.ads.detailMax', { seconds: pricing.maxCreativeSeconds })
+                : t('ads.general.ads.detail')}
             </span>
           </li>
           <li>
-            <strong>Your bookings</strong>
-            <span>Which format, when it runs, where it falls, and what it costs.</span>
+            <strong>{t('ads.general.bookings.title')}</strong>
+            <span>{t('ads.general.bookings.what')}</span>
             <span className="mkt-step-detail">
-              Book as many as you like. Each runs one of your approved ads and starts when
-              your payment lands.
+              {t('ads.general.bookings.detail')}
             </span>
           </li>
         </ol>
         <p className="mkt-fine">
-          Priced per second of ad, per day. Nothing runs until your product and your ad are
-          both approved.
+          {t('ads.general.pricedNote')}
         </p>
       </section>
 
@@ -2514,34 +2517,43 @@ export default function Advertise({ openLoginModal }) {
           starts it, so it sits above the detail rather than under it. */}
       <button type="button" className="mkt-enroll-cta" onClick={() => { setWizStep(wizRef ? 2 : 1); setTab('wizard'); }}>
         <MdCampaign aria-hidden="true" />
-        Enroll your ad on 3Speak
+        {t('ads.general.enrollCta')}
       </button>
 
       <section className="mkt-section">
-        <h2><FaLayerGroup aria-hidden="true" /> Pick the format that fits your message</h2>
+        <h2><FaLayerGroup aria-hidden="true" /> {t('ads.general.formatsTitle')}</h2>
         {pricing?.formats?.length ? (
           <p className="mkt-intro-lede">
-            Every spot is priced per second of ad, per day it runs, and the day rate
-            falls the longer you book
+            {savingAt(7, pricing)
+              ? t('ads.general.pricingIntroSaving', { week: savingAt(7, pricing), month: savingAt(30, pricing) })
+              : t('ads.general.pricingIntro')}
             {/* Named in real numbers rather than described. "Cheaper for longer" is a
                 claim every rate card makes; a week at 25% off is a reason to book a
                 week. Both figures come from the server's own curve, so they cannot
                 drift from what the booking form will quote. */}
-            {savingAt(7, pricing) ? ` — a week costs about ${savingAt(7, pricing)}% less per day than a single day, a month about ${savingAt(30, pricing)}% less` : ''}.
-            {' '}Examples use a
-            {' '}{EXAMPLE_SECONDS}-second spot over {Math.max(EXAMPLE_DAYS, pricing.minDays || 0)} days
-            {pricing.minDays ? `; you can book from ${pricing.minDays} day${pricing.minDays === 1 ? '' : 's'}` : ''}
-            {pricing.maxDays ? ` up to ${pricing.maxDays}` : ''}.
+            {' '}{t(pricing.minDays
+              ? (pricing.maxDays ? 'ads.general.examplesFromTo' : 'ads.general.examplesFrom')
+              : (pricing.maxDays ? 'ads.general.examplesTo' : 'ads.general.examples'), {
+              seconds: EXAMPLE_SECONDS,
+              days: Math.max(EXAMPLE_DAYS, pricing.minDays || 0),
+              count: pricing.minDays || 0,
+              max: pricing.maxDays,
+            })}
           </p>
         ) : pricing?.pricePerSecondDayHbd ? (
           // Fallback for a checker too old to send the rate card: one product, one price.
           <p className="mkt-headline-price">
-            <strong>{pricing.pricePerSecondDayHbd} HBD</strong> per second of spot, per day
+            <Trans i18nKey="ads.general.headlinePrice" values={{ price: pricing.pricePerSecondDayHbd }} components={{ b: <strong /> }} />
             {pricing.minDays && pricing.maxCreativeSeconds ? (
               <span className="mkt-hint">
-                {' '}· a {pricing.maxCreativeSeconds}s spot for the {pricing.minDays}-day minimum
-                  is {flightPrice(pricing.minDays, pricing.pricePerSecondDayHbd, pricing.maxCreativeSeconds, pricing.dayCurveK)} HBD{hiveEquivalent(flightPrice(pricing.minDays, pricing.pricePerSecondDayHbd, pricing.maxCreativeSeconds, pricing.dayCurveK), pricing.hbdPerHive) != null ? ` (about ${hiveEquivalent(flightPrice(pricing.minDays, pricing.pricePerSecondDayHbd, pricing.maxCreativeSeconds, pricing.dayCurveK), pricing.hbdPerHive)} HIVE)` : ''},
-                and a shorter spot costs proportionally less
+                {' '}· {t('ads.general.headlineExample', {
+                  seconds: pricing.maxCreativeSeconds,
+                  minDays: pricing.minDays,
+                  price: flightPrice(pricing.minDays, pricing.pricePerSecondDayHbd, pricing.maxCreativeSeconds, pricing.dayCurveK),
+                  hive: hiveEquivalent(flightPrice(pricing.minDays, pricing.pricePerSecondDayHbd, pricing.maxCreativeSeconds, pricing.dayCurveK), pricing.hbdPerHive) != null
+                    ? ` ${t('ads.book.aboutHive', { hive: hiveEquivalent(flightPrice(pricing.minDays, pricing.pricePerSecondDayHbd, pricing.maxCreativeSeconds, pricing.dayCurveK), pricing.hbdPerHive) })}`
+                    : '',
+                })}
               </span>
             ) : null}
           </p>
@@ -2550,17 +2562,15 @@ export default function Advertise({ openLoginModal }) {
             hardcoded price is a promise the server has no idea it made. */}
         <RateCard pricing={pricing} />
         <p>
-          A flat booking: your spot runs across the network for a fixed period at a fixed
-          price. No CPM, so nobody has a reason to pad the count.
+          {t('ads.general.flatBooking')}
         </p>
         <p>
-          You are quoted against the forecast below and reported against what actually
-          played. Fall short and the difference comes back as credit on your next booking.
+          {t('ads.general.quotedForecast')}
         </p>
       </section>
 
       <section className="mkt-section">
-        <h2><FaUsers aria-hidden="true" /> The audience waiting for your ad</h2>
+        <h2><FaUsers aria-hidden="true" /> {t('ads.general.audienceTitle')}</h2>
         <InventoryPanel data={inventory} isLoading={isLoading} error={error} />
       </section>
 
@@ -2569,25 +2579,22 @@ export default function Advertise({ openLoginModal }) {
           advertiser reading this page should see that the money goes somewhere real. */}
       <div className="mkt-audience-pair">
         <section className="mkt-section mkt-creators">
-          <h2><FaVideo aria-hidden="true" /> If you are a creator</h2>
+          <h2><FaVideo aria-hidden="true" /> {t('ads.general.creatorTitle')}</h2>
           <p>
-            Ads run on your videos and you earn a share of what they make, along with the
-            community you posted in.
+            {t('ads.prompt.lede')}
           </p>
           <p className="mkt-fine">
-            Switch them off any time in Settings. Your videos are then removed from what we
-            offer advertisers too.
+            {t('ads.general.creatorNote')}
           </p>
         </section>
 
         <section className="mkt-section mkt-viewers">
-          <h2><FaTv aria-hidden="true" /> If you are a viewer</h2>
+          <h2><FaTv aria-hidden="true" /> {t('ads.general.viewerTitle')}</h2>
           <p>
-            You earn a share too, for the videos you actually watch. Paid in HBD or HIVE,
-            same as everyone else.
+            {t('ads.general.viewerText')}
           </p>
           <p className="mkt-fine">
-            Opt in from Settings. We only count a video once you have watched most of it.
+            {t('ads.general.viewerNote')}
           </p>
         </section>
       </div>
@@ -2610,7 +2617,7 @@ export default function Advertise({ openLoginModal }) {
               return (
                 <li key={label} className={`mkt-wiz-step${state}`} aria-current={n === wizStep ? 'step' : undefined}>
                   <span className="mkt-wiz-num">{n < wizStep ? '✓' : n}</span>
-                  <span>{label}</span>
+                  <span>{t(label)}</span>
                 </li>
               );
             })}
@@ -2619,10 +2626,10 @@ export default function Advertise({ openLoginModal }) {
           {wizRef && (
             <div className="mkt-wiz-cancel">
               <span className="mkt-fine">
-                Working on <strong>{wizRef.projectName || 'your product'}</strong>
+                <Trans i18nKey="ads.wiz.workingOn" values={{ name: wizRef.projectName || t('ads.wiz.yourProduct') }} components={{ b: <strong /> }} />
               </span>
               <button type="button" className="mkt-linkish" onClick={() => setWizKill(true)}>
-                Cancel and delete
+                {t('ads.wiz.cancelDelete')}
               </button>
             </div>
           )}
@@ -2632,10 +2639,7 @@ export default function Advertise({ openLoginModal }) {
             // and says exactly what goes.
             <div className="mkt-panel mkt-panel-muted mkt-wiz-exit">
               <p style={{ margin: 0 }}>
-                <strong>Delete this enrollment?</strong> The product, its bookings and the ad
-                videos attached to it are removed. Anything you uploaded stays on the upload
-                service, unlisted and earning nothing, but it is no longer attached to a
-                product. This cannot be undone.
+                <Trans i18nKey="ads.wiz.deleteConfirm" components={{ b: <strong /> }} />
               </p>
               <div className="mkt-wiz-actions">
                 <button
@@ -2652,16 +2656,16 @@ export default function Advertise({ openLoginModal }) {
                       setWizStep(1);
                       setRefsVersion((v) => v + 1);
                       setWizKill(false);
-                      toast.success('Enrollment deleted');
+                      toast.success(t('ads.wiz.deleted'));
                     } catch (err) {
-                      toast.error(err.message || 'Could not delete that enrollment');
+                      toast.error(err.message || t('ads.wiz.deleteFailed'));
                     } finally { setWizKilling(false); }
                   }}
                 >
-                  {wizKilling ? 'Deleting…' : 'Yes, delete it'}
+                  {wizKilling ? t('ads.wiz.deleting') : t('ads.wiz.yesDelete')}
                 </button>
                 <button type="button" className="mkt-secondary" onClick={() => setWizKill(false)}>
-                  Keep it
+                  {t('ads.wiz.keepIt')}
                 </button>
               </div>
             </div>
@@ -2670,8 +2674,7 @@ export default function Advertise({ openLoginModal }) {
           {!user ? (
             <div className="mkt-panel mkt-panel-muted">
               <p style={{ margin: 0 }}>
-                Log in with the Hive account you want to advertise from. Your product is tied
-                to that account, and it is the wallet the booking is paid from.
+                {t('ads.wiz.loginPrompt')}
               </p>
               {/* Sign up rides the same ENABLE_BUTRAUTH gate as the one in the nav, so
                   the two never disagree about whether an account can be made yet. With
@@ -2682,7 +2685,7 @@ export default function Advertise({ openLoginModal }) {
                   className={ENABLE_BUTRAUTH ? 'mkt-secondary' : 'mkt-primary'}
                   onClick={() => openLoginModal?.('login')}
                 >
-                  Log in
+                  {t('common.actions.login')}
                 </button>
                 {ENABLE_BUTRAUTH && (
                   <button
@@ -2690,7 +2693,7 @@ export default function Advertise({ openLoginModal }) {
                     className="mkt-primary"
                     onClick={() => openLoginModal?.('signup')}
                   >
-                    Sign up
+                    {t('common.actions.signUp')}
                   </button>
                 )}
               </div>
@@ -2699,9 +2702,9 @@ export default function Advertise({ openLoginModal }) {
             <>
               {wizAt === 1 && (
                 <>
-                  <h2>Tell us about your product</h2>
+                  <h2>{t('ads.wiz.tellUs')}</h2>
                   <p className="mkt-fine">
-                    Whatever you want to advertise. A person reads every one of these.
+                    {t('ads.wiz.tellUsHint')}
                   </p>
                   {productForm}
                 </>
@@ -2709,12 +2712,12 @@ export default function Advertise({ openLoginModal }) {
 
               {wizAt === 2 && wizRef && (
                 <>
-                  <h2>Your ad</h2>
+                  <h2>{t('ads.wizardSteps.ad')}</h2>
 
                   <AdTypePicker
                     value={wizType}
                     pricing={pricing}
-                    onChange={(t) => { setWizType(t); if (wizRef?.reference) rememberWizard(user, wizRef.reference, wizAt, t); }}
+                    onChange={(type) => { setWizType(type); if (wizRef?.reference) rememberWizard(user, wizRef.reference, wizAt, type); }}
                   />
                   {wizType === 'ticker' ? (
                     <TickerPanel
@@ -2750,16 +2753,16 @@ export default function Advertise({ openLoginModal }) {
                       disabled={!!adStepMissing(wizType, wizCreativeList, bookProduction)}
                       onClick={() => goStep(3)}
                     >
-                      Next: book a slot
+                      {t('ads.wiz.nextBook')}
                     </button>
                     {adStepMissing(wizType, wizCreativeList, bookProduction)
-                      ? <span className="mkt-hint">{adStepMissing(wizType, wizCreativeList, bookProduction)}</span>
+                      ? <span className="mkt-hint">{t(adStepMissing(wizType, wizCreativeList, bookProduction))}</span>
                       : null}
                     {/* Stopping here is a legitimate ending, not a failure — but it is
                         not a booked ad, and saying so now is kinder than letting them
                         find out when nothing ever runs. */}
                     <button type="button" className="mkt-linkish" onClick={() => setWizExit(true)}>
-                      Finish later
+                      {t('ads.wiz.finishLater')}
                     </button>
                   </div>
                 </>
@@ -2767,7 +2770,7 @@ export default function Advertise({ openLoginModal }) {
 
               {wizAt === 3 && wizRef && (
                 <>
-                  <h2>Book a slot</h2>
+                  <h2>{t('ads.wizardSteps.book')}</h2>
                   <CampaignPanel
                     reference={wizRef.reference}
                     pricing={pricing}
@@ -2782,7 +2785,7 @@ export default function Advertise({ openLoginModal }) {
                   />
                   <div className="mkt-wiz-actions">
                     <button type="button" className="mkt-secondary" onClick={() => goStep(2)}>
-                      Back to your ad
+                      {t('ads.wiz.backToAd')}
                     </button>
                   </div>
                 </>
@@ -2791,17 +2794,14 @@ export default function Advertise({ openLoginModal }) {
               {wizExit && (
                 <div className="mkt-panel mkt-panel-muted mkt-wiz-exit">
                   <p style={{ margin: 0 }}>
-                    <strong>Saved, but not finished.</strong> Your product and anything you
-                    uploaded are saved to your account. Nothing
-                    will run until you book a slot and pay for it, and we cannot review a
-                    booking that does not exist yet.
+                    <Trans i18nKey="ads.wiz.savedNotFinished" components={{ b: <strong /> }} />
                   </p>
                   <p className="mkt-fine">
-                    Pick it up any time from <strong>My products</strong> on this page.
+                    <Trans i18nKey="ads.wiz.pickUp" components={{ b: <strong /> }} />
                   </p>
                   <div className="mkt-wiz-actions">
                     <button type="button" className="mkt-primary" onClick={() => { setWizExit(false); goStep(3); }}>
-                      Book a slot now
+                      {t('ads.wiz.bookNow')}
                     </button>
                     <button
                       type="button"
@@ -2812,7 +2812,7 @@ export default function Advertise({ openLoginModal }) {
                         setTab('mine');
                       }}
                     >
-                      Leave it for now
+                      {t('ads.wiz.leaveForNow')}
                     </button>
                   </div>
                 </div>
@@ -2834,7 +2834,7 @@ export default function Advertise({ openLoginModal }) {
         <div className="mkt-stack">
           <div className="mkt-products">
             <div className="mkt-split-head">
-              <h2>Your products</h2>
+              <h2>{t('ads.mine.title')}</h2>
               <div className="mkt-head-actions">
               {user && (() => {
                 /* The server allows many products but only ONE application under review
@@ -2848,8 +2848,8 @@ export default function Advertise({ openLoginModal }) {
                   className="mkt-newproduct"
                   disabled={!!pending}
                   title={pending
-                    ? `${pending.projectName || 'A product'} is still under review. We come back to you on that one before you start another.`
-                    : 'Register another product'}
+                    ? t('ads.mine.pendingTitle', { name: pending.projectName || t('ads.mine.aProduct') })
+                    : t('ads.mine.registerAnother')}
                   onClick={() => {
                     /* A second product is a fresh enrollment, so the wizard has to be
                        genuinely empty. Clearing storage alone is not enough: `receipt`
@@ -2864,7 +2864,7 @@ export default function Advertise({ openLoginModal }) {
                     setTab('wizard');
                   }}
                 >
-                  <span aria-hidden="true">+</span> New
+                  <span aria-hidden="true">+</span> {t('ads.mine.new')}
                 </button>
                 );
               })()}
@@ -2874,41 +2874,40 @@ export default function Advertise({ openLoginModal }) {
             {/* Said in the panel too, not only in a tooltip nobody hovers on a phone. */}
             {user && (myApps || []).some((a) => a.status === 'pending') && (
               <p className="mkt-fine">
-                One product is under review. We come back to you on that one before you
-                start another.
+                {t('ads.mine.onePending')}
               </p>
             )}
 
             {!user && (
               <div className="mkt-panel mkt-panel-muted">
                 <p style={{ margin: 0 }}>
-                  Log in to see the products registered to your Hive account.
+                  {t('ads.mine.loginPrompt')}
                 </p>
                 <button type="button" className="mkt-secondary" onClick={() => openLoginModal?.('login')}>
-                  Log in
+                  {t('common.actions.login')}
                 </button>
               </div>
             )}
 
-            {mineBusy && !myApps && <p className="mkt-fine">Looking…</p>}
+            {mineBusy && !myApps && <p className="mkt-fine">{t('ads.mine.looking')}</p>}
 
             {mineError && (
               <div className="mkt-panel mkt-panel-muted">
-                <p style={{ margin: 0 }}>{mineError.message || 'Could not load your products'}</p>
+                <p style={{ margin: 0 }}>{mineError.message || t('ads.mine.loadFailed')}</p>
                 {/* The way back. Without it the only control left was a code nobody has. */}
                 <button
                   type="button"
                   className="mkt-secondary"
                   onClick={() => { if (forceSigned) refetchMine(); else setForceSigned(true); }}
                 >
-                  Show my products
+                  {t('ads.mine.showMine')}
                 </button>
               </div>
             )}
 
             {myApps && myApps.length === 0 && !mineBusy && (
               <p className="mkt-fine">
-                Nothing yet under @{user}. Register a product and it will show up here.
+                {t('ads.mine.empty', { user })}
               </p>
             )}
 
@@ -2928,7 +2927,7 @@ export default function Advertise({ openLoginModal }) {
                         <strong>{a.projectName}</strong>
                         <span className="mkt-mine-meta">
                           <code>{a.reference}</code>
-                          {a.production?.requested ? ' · we are making it' : null}
+                          {a.production?.requested ? t('ads.mine.makingIt') : null}
                         </span>
                       </span>
                       <StatusBadge status={a.status} />
@@ -2945,20 +2944,19 @@ export default function Advertise({ openLoginModal }) {
             {user && !myApps && !mineBusy && !mineError && (
               <>
                 <p className="mkt-fine">
-                  Sign once to list every product registered to your account. We remember it on
-                  this device afterwards, so you will not be asked again here.
+                  {t('ads.mine.signOnce')}
                 </p>
                 <button type="button" className="mkt-secondary" onClick={() => setForceSigned(true)}>
-                  Show my products
+                  {t('ads.mine.showMine')}
                 </button>
               </>
             )}
 
             {myApps && myApps.length > 0 && (
               <p className="mkt-fine">
-                Registered one on another browser?{' '}
+                {t('ads.mine.otherBrowser')}{' '}
                 <button type="button" className="mkt-linkish" onClick={() => setForceSigned(true)}>
-                  Fetch the full list
+                  {t('ads.mine.fetchFull')}
                 </button>
               </p>
             )}
@@ -2980,17 +2978,17 @@ export default function Advertise({ openLoginModal }) {
                 {lookup.note ? <p className="mkt-lookup-note">{lookup.note}</p> : null}
 
                 {(lookup.status === 'pending' || lookup.status === 'approved') && (
-                  <div className="mkt-ptabs" role="tablist" aria-label="This product">
-                    {PRODUCT_TABS.map((t) => (
+                  <div className="mkt-ptabs" role="tablist" aria-label={t('ads.mine.thisProduct')}>
+                    {PRODUCT_TABS.map((tb) => (
                       <button
-                        key={t.id}
+                        key={tb.id}
                         type="button"
                         role="tab"
-                        aria-selected={ptab === t.id}
-                        className={`mkt-ptab${ptab === t.id ? ' selected' : ''}`}
-                        onClick={() => setPtab(t.id)}
+                        aria-selected={ptab === tb.id}
+                        className={`mkt-ptab${ptab === tb.id ? ' selected' : ''}`}
+                        onClick={() => setPtab(tb.id)}
                       >
-                        {t.label}
+                        {tb.label}
                       </button>
                     ))}
                   </div>
@@ -3008,7 +3006,7 @@ export default function Advertise({ openLoginModal }) {
                           aria-current={n === bookStep ? 'step' : undefined}
                         >
                           <span className="mkt-wiz-num">{n < bookStep ? '✓' : n}</span>
-                          <span>{label}</span>
+                          <span>{t(label)}</span>
                         </li>
                       );
                     })}
@@ -3097,15 +3095,15 @@ export default function Advertise({ openLoginModal }) {
                             disabled={!!missing}
                             onClick={() => setBookStep(2)}
                           >
-                            Next: the booking
+                            {t('ads.mine.nextBooking')}
                           </button>
-                          {missing ? <span className="mkt-hint">{missing}</span> : null}
+                          {missing ? <span className="mkt-hint">{t(missing)}</span> : null}
                         </>
                       );
                     })()}
                     {bookStep === 2 && (
                       <button type="button" className="mkt-outline" onClick={() => setBookStep(1)}>
-                        Back to your ad
+                        {t('ads.wiz.backToAd')}
                       </button>
                     )}
                     {bookStep === 3 && (
@@ -3115,10 +3113,10 @@ export default function Advertise({ openLoginModal }) {
                           className="mkt-primary"
                           onClick={() => { setPtab('active'); setBookStep(1); }}
                         >
-                          Done
+                          {t('common.actions.done')}
                         </button>
                         <button type="button" className="mkt-outline" onClick={() => setBookStep(2)}>
-                          Book another
+                          {t('ads.mine.bookAnother')}
                         </button>
                       </>
                     )}
@@ -3129,8 +3127,8 @@ export default function Advertise({ openLoginModal }) {
               <div className="mkt-panel mkt-panel-muted mkt-split-empty">
                 <p style={{ margin: 0 }}>
                   {myApps?.length
-                    ? 'Pick a product to see its ad videos and bookings.'
-                    : 'Your products, their ad videos and bookings show up here once they load.'}
+                    ? t('ads.mine.pickProduct')
+                    : t('ads.mine.showUpHere')}
                 </p>
               </div>
             )}

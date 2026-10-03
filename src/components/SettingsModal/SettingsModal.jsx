@@ -1,5 +1,6 @@
 import { useState, useEffect, useLayoutEffect, useMemo, useRef } from 'react';
 import { createPortal } from 'react-dom';
+import { useTranslation } from 'react-i18next';
 import { IoClose } from 'react-icons/io5';
 import { toastIn } from '../../utils/toast';
 import { useAppStore } from '../../lib/store';
@@ -19,6 +20,7 @@ import {
 } from '../../utils/postingAuthority';
 import TagsV2Picker from '../tooltip/TagsV2Picker';
 import DataRequestForm from './DataRequestForm';
+import LanguagePicker from '../LanguagePicker/LanguagePicker';
 import './SettingsModal.scss';
 
 // Every toast from this module is headed "Settings"; the message becomes the
@@ -31,6 +33,7 @@ const sameSet = (a, b) =>
 // Interests picker — canonical copy lives in the user's Hive posting_json_metadata.
 // Rendered only while the modal is open, so its hooks mount/unmount with it.
 function InterestsSection() {
+  const { t } = useTranslation();
   const { interests, setInterests, user } = useAppStore();
   const [hydrating, setHydrating] = useState(false);
   const [saving, setSaving] = useState(false);
@@ -64,9 +67,9 @@ function InterestsSection() {
       savedRef.current = list;
       setInterests(list);
       setJustSaved(true);
-      toast.success('Interests saved to your Hive profile');
+      toast.success(t('settings.interests.savedToast'));
     } catch (e) {
-      toast.error(e?.message || 'Could not save interests');
+      toast.error(e?.message || t('settings.interests.saveFailed'));
     } finally {
       setSaving(false);
     }
@@ -75,11 +78,11 @@ function InterestsSection() {
   return (
     <div className="settings-section">
       <h4 className="settings-section-title">
-        Interests{hydrating && <span className="settings-interests-status"> · loading…</span>}
+        {t('settings.interests.title')}{hydrating && <span className="settings-interests-status"> · {t('settings.interests.loading')}</span>}
       </h4>
       <p className="settings-interests-hint">
-        Pick the topics you care about — we’ll use them to show you more of the content you like.
-        {!user && ' Log in to choose your interests.'}
+        {t('settings.interests.hint')}
+        {!user && ` ${t('settings.interests.loginHint')}`}
       </p>
       <TagsV2Picker
         multi
@@ -98,7 +101,7 @@ function InterestsSection() {
             onClick={save}
             disabled={!dirty || saving}
           >
-            {saving ? 'Saving…' : dirty ? 'Save interests' : 'Saved'}
+            {saving ? t('common.actions.saving') : dirty ? t('settings.interests.save') : t('common.actions.saved')}
           </button>
         </div>
       )}
@@ -112,6 +115,7 @@ function InterestsSection() {
 // HiveSigner and Butter Auth, which cannot sign in the browser (the data layer
 // falls back to a delegated @threespeak signature for those).
 function AdsSection() {
+  const { t } = useTranslation();
   const user = useAppStore((s) => s.user);
   const [adsEnabled, setAdsEnabled] = useState(true);
   // Placeholder only — the real split (and the platform default for a creator who
@@ -158,11 +162,11 @@ function AdsSection() {
       });
       if (res.split) { setSplit(res.split); setDraftCommunity(String(res.split.communityPct)); }
       if (!res.chainSaved) {
-        setError('Saved on 3Speak, but not on your Hive account. Try again to store it there too.');
+        setError(t('settings.ads.chainNotSaved'));
       }
       return true;
     } catch (err) {
-      setError(err.message || 'Could not save the setting.');
+      setError(err.message || t('settings.ads.saveFailed'));
       return false;
     } finally {
       setSaving(false);
@@ -173,7 +177,7 @@ function AdsSection() {
     const previous = adsEnabled;
     setAdsEnabled(next);          // optimistic — a toggle that lags feels broken
     const ok = await save(next, split ? split.communityPct : undefined);
-    if (ok) toast.success(next ? 'Ads are on for your videos' : 'Ads are off for your videos');
+    if (ok) toast.success(next ? t('settings.ads.onToast') : t('settings.ads.offToast'));
     else setAdsEnabled(previous); // put it back; the setting did not change
   }
 
@@ -184,48 +188,43 @@ function AdsSection() {
 
   async function onSaveShare() {
     if (!draftChanged) return;
-    if (await save(adsEnabled, parsedDraft)) toast.success('Revenue split saved');
+    if (await save(adsEnabled, parsedDraft)) toast.success(t('settings.ads.splitSaved'));
   }
 
   if (!user || !visible) return null;
 
   return (
     <div className="settings-section">
-      <h4 className="settings-section-title">Ads on your videos</h4>
+      <h4 className="settings-section-title">{t('settings.ads.title')}</h4>
       <div className="settings-modal-row">
         <div className="settings-row-text">
-          <span className="settings-row-title">Allow ads</span>
+          <span className="settings-row-title">{t('settings.ads.allow')}</span>
           <span className="settings-row-desc">
-            A short sponsor spot can play inside your videos. You get a share of what it
-            earns, and so does the community you posted in. Turn this off and your videos
-            carry no ads at all &mdash; they are also removed from what we offer
-            advertisers, so nothing is sold that you have opted out of.
+            {t('settings.ads.allowDesc')}
           </span>
         </div>
         <Switch
           checked={adsEnabled}
           onChange={onToggle}
-          ariaLabel="Allow ads on your videos"
+          ariaLabel={t('settings.ads.allowAria')}
         />
       </div>
       {adsEnabled && split && (
         <div className="settings-modal-row settings-ads-split">
           <div className="settings-row-text">
-            <span className="settings-row-title">Share with the community</span>
+            <span className="settings-row-title">{t('settings.ads.shareTitle')}</span>
             <span className="settings-row-desc">
-              {split.poolPct}% of what an ad earns is split between you and the community
-              you posted in. Choose how much of it the community gets &mdash; leave it at
-              zero and you keep all {split.poolPct}%.
+              {t('settings.ads.shareDesc', { pool: split.poolPct })}
             </span>
             <span className="settings-ads-breakdown">
-              You {draftValid ? split.poolPct - parsedDraft : split.creatorPct}%
+              {t('settings.ads.youPct', { pct: draftValid ? split.poolPct - parsedDraft : split.creatorPct })}
               <span aria-hidden="true"> · </span>
-              Community {draftValid ? parsedDraft : split.communityPct}%
+              {t('settings.ads.communityPct', { pct: draftValid ? parsedDraft : split.communityPct })}
             </span>
           </div>
           <div className="settings-ads-share-control">
             <label className="settings-visually-hidden" htmlFor="settings-community-share">
-              Community share, percent
+              {t('settings.ads.shareInputLabel')}
             </label>
             <div className="settings-ads-input">
               <input
@@ -244,7 +243,7 @@ function AdsSection() {
             </div>
             {draftChanged && (
               <button type="button" className="settings-ads-save" onClick={onSaveShare} disabled={saving}>
-                Save
+                {t('common.actions.save')}
               </button>
             )}
           </div>
@@ -253,8 +252,8 @@ function AdsSection() {
       {(loading || saving || error || (split && !draftValid)) && (
         <p className={`settings-ads-status${(error || (split && !draftValid)) ? ' error' : ''}`}>
           {error
-            || (split && !draftValid ? `Enter a whole number between 0 and ${split.poolPct}.` : null)
-            || (saving ? 'Saving\u2026' : 'Loading your current setting\u2026')}
+            || (split && !draftValid ? t('settings.ads.invalidPct', { max: split.poolPct }) : null)
+            || (saving ? t('common.actions.saving') : t('settings.ads.loadingSetting'))}
         </p>
       )}
     </div>
@@ -272,6 +271,7 @@ function AdsSection() {
  * says that plainly rather than hiding it behind the word "rewards".
  */
 function ViewerRewardsSection() {
+  const { t } = useTranslation();
   const user = useAppStore((s) => s.user);
   const [enabled, setEnabled] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -303,11 +303,11 @@ function ViewerRewardsSection() {
     try {
       await setViewerAdPrefs(user, { rewardsEnabled: next });
       toast.success(next
-        ? 'Viewer rewards on'
-        : 'Viewer rewards off, and your watch data has been deleted');
+        ? t('settings.viewerRewards.onToast')
+        : t('settings.viewerRewards.offToast'));
     } catch (err) {
       setEnabled(previous);
-      setError(err.message || 'Could not save that setting.');
+      setError(err.message || t('settings.viewerRewards.saveFailed'));
     } finally {
       setSaving(false);
     }
@@ -315,28 +315,23 @@ function ViewerRewardsSection() {
 
   return (
     <div className="settings-modal-section">
-      <h3 className="settings-section-title">Earn while you watch</h3>
+      <h3 className="settings-section-title">{t('settings.viewerRewards.title')}</h3>
       <div className="settings-modal-row">
         <div className="settings-row-text">
-          <span className="settings-row-title">Viewer rewards</span>
+          <span className="settings-row-title">{t('settings.viewerRewards.rowTitle')}</span>
           <span className="settings-row-desc">
-            Earn a share of ad revenue for what you watch, paid in HBD or HIVE. You are
-            paid on videos watched, whether or not an ad played, so it rewards watching
-            rather than sitting through ads. Ads themselves play for everyone except
-            3Speak Pro subscribers. We record how much of each video you watched, on top
-            of the watch history the Watched page already keeps, and delete it the moment
-            you turn this off.
+            {t('settings.viewerRewards.desc')}
           </span>
         </div>
         <Switch
           checked={enabled}
           onChange={onToggle}
-          ariaLabel="Earn a share of ad revenue for what you watch"
+          ariaLabel={t('settings.viewerRewards.aria')}
         />
       </div>
       {(loading || saving || error) && (
         <p className={`settings-ads-status${error ? ' error' : ''}`}>
-          {error || (saving ? 'Saving…' : 'Loading your current setting…')}
+          {error || (saving ? t('common.actions.saving') : t('settings.ads.loadingSetting'))}
         </p>
       )}
     </div>
@@ -351,6 +346,7 @@ function ViewerRewardsSection() {
  * Both directions are an account_update2 signed with the ACTIVE key.
  */
 function PostingAuthoritySection() {
+  const { t } = useTranslation();
   const user = useAppStore((s) => s.user);
   // null = checking, true/false = on chain, 'unavailable' = no Hive account to read
   const [granted, setGranted] = useState(null);
@@ -382,7 +378,7 @@ function PostingAuthoritySection() {
       if (add) await addThreespeakToPostingAuth(user, { signWindow });
       else await removeThreespeakFromPostingAuth(user, { signWindow });
     } catch (err) {
-      setError(err.message || 'Could not update your posting authority.');
+      setError(err.message || t('settings.postingAuth.updateFailed'));
       setBusy(false);
       try { signWindow?.close(); } catch { /* ignore */ }
       return;
@@ -396,37 +392,34 @@ function PostingAuthoritySection() {
     setGranted(now);
     setBusy(false);
     if (now === add) {
-      toast.success(add ? '@threespeak added to your posting authority' : '@threespeak removed from your posting authority');
+      toast.success(add ? t('settings.postingAuth.addedToast') : t('settings.postingAuth.removedToast'));
     } else {
       setError(add
-        ? 'Signed, but @threespeak does not show up on your account yet. Reopen settings in a minute to check again.'
-        : 'Signed, but @threespeak is still on your account. Reopen settings in a minute to check again.');
+        ? t('settings.postingAuth.notYetAdded')
+        : t('settings.postingAuth.stillThere'));
     }
   }
 
   return (
     <div className="settings-section">
-      <h4 className="settings-section-title">Posting authority</h4>
+      <h4 className="settings-section-title">{t('settings.postingAuth.title')}</h4>
       <div className="settings-modal-row">
         <div className="settings-row-text">
           <span className="settings-row-title">
-            @threespeak {granted === true ? 'can post for you' : granted === false ? 'cannot post for you' : '\u2026'}
+            {granted === true ? t('settings.postingAuth.canPost') : granted === false ? t('settings.postingAuth.cannotPost') : t('settings.postingAuth.checkingStatus')}
           </span>
           <span className="settings-row-desc">
-            Lets 3Speak publish your uploads and scheduled posts on your behalf, and save
-            some settings without a wallet prompt each time. It can only post, vote and
-            comment; it can never move funds or change your keys. Without it, uploads ask
-            you to add it again. Changing this needs your active key.
+            {t('settings.postingAuth.desc')}
           </span>
         </div>
         {granted === true && (
           <button type="button" className="settings-auth-btn" onClick={() => change(false)} disabled={busy}>
-            {busy === 'confirming' ? 'Checking\u2026' : busy ? 'Removing\u2026' : 'Remove'}
+            {busy === 'confirming' ? t('settings.postingAuth.checking') : busy ? t('settings.postingAuth.removing') : t('common.actions.remove')}
           </button>
         )}
         {granted === false && (
           <button type="button" className="settings-auth-btn settings-auth-add" onClick={() => change(true)} disabled={busy}>
-            {busy === 'confirming' ? 'Checking\u2026' : busy ? 'Adding\u2026' : 'Add'}
+            {busy === 'confirming' ? t('settings.postingAuth.checking') : busy ? t('settings.postingAuth.adding') : t('common.actions.add')}
           </button>
         )}
       </div>
@@ -460,24 +453,25 @@ function Switch({ checked, onChange, ariaLabel }) {
  * phone, so the per-kind switches stay visible and editable either way.
  */
 const KIND_COPY = {
-  videos: { title: 'New videos', desc: 'When a creator you follow publishes a video.' },
-  shorts: { title: 'New shorts', desc: 'When a creator you follow posts a short.' },
-  audio: { title: 'New audio', desc: 'When a creator you follow uploads a track or episode.' },
-  replies: { title: 'Replies', desc: 'When someone replies to your post or comment.' },
-  mentions: { title: 'Mentions', desc: 'When someone mentions you by name.' },
-  follows: { title: 'New followers', desc: 'When someone follows you.' },
-  votes: { title: 'Upvotes', desc: 'When someone upvotes your post. Off by default — a popular post is a lot of buzzes.' },
-  reblogs: { title: 'Reblogs', desc: 'When someone reblogs your post.' },
+  videos: { titleKey: 'settings.notifications.kinds.videos.title', descKey: 'settings.notifications.kinds.videos.desc' },
+  shorts: { titleKey: 'settings.notifications.kinds.shorts.title', descKey: 'settings.notifications.kinds.shorts.desc' },
+  audio: { titleKey: 'settings.notifications.kinds.audio.title', descKey: 'settings.notifications.kinds.audio.desc' },
+  replies: { titleKey: 'settings.notifications.kinds.replies.title', descKey: 'settings.notifications.kinds.replies.desc' },
+  mentions: { titleKey: 'settings.notifications.kinds.mentions.title', descKey: 'settings.notifications.kinds.mentions.desc' },
+  follows: { titleKey: 'settings.notifications.kinds.follows.title', descKey: 'settings.notifications.kinds.follows.desc' },
+  votes: { titleKey: 'settings.notifications.kinds.votes.title', descKey: 'settings.notifications.kinds.votes.desc' },
+  reblogs: { titleKey: 'settings.notifications.kinds.reblogs.title', descKey: 'settings.notifications.kinds.reblogs.desc' },
 };
 
 // The two groups answer different questions: what other people published, and
 // what happened to you.
 const KIND_GROUPS = [
-  { label: 'From creators you follow', kinds: ['videos', 'shorts', 'audio'] },
-  { label: 'About you', kinds: ['replies', 'mentions', 'follows', 'votes', 'reblogs'] },
+  { labelKey: 'settings.notifications.groups.creators', kinds: ['videos', 'shorts', 'audio'] },
+  { labelKey: 'settings.notifications.groups.aboutYou', kinds: ['replies', 'mentions', 'follows', 'votes', 'reblogs'] },
 ];
 
 function NotificationsSection() {
+  const { t } = useTranslation();
   const user = useAppStore((s) => s.user);
   const [state, setState] = useState({ supported: false, worker: true, permission: 'default', subscribed: false });
   const [kinds, setKinds] = useState([]);
@@ -498,14 +492,14 @@ function NotificationsSection() {
     try {
       if (state.subscribed) {
         await disablePush(user);
-        toast.success('This device will no longer be notified');
+        toast.success(t('settings.notifications.deviceOffToast'));
       } else {
         await enablePush(user);
-        toast.success('This device will be notified');
+        toast.success(t('settings.notifications.deviceOnToast'));
       }
       setState(await getPushState());
     } catch (err) {
-      toast.error(err.message || 'Could not change notifications');
+      toast.error(err.message || t('settings.notifications.changeFailed'));
     } finally {
       setBusy(false);
     }
@@ -518,15 +512,15 @@ function NotificationsSection() {
       setPrefs(await setPushPrefs(user, next));
     } catch (err) {
       setPrefs(prefs);                                // put it back rather than lie
-      toast.error(err.message || 'Could not save that');
+      toast.error(err.message || t('settings.notifications.saveFailed'));
     }
   };
 
   if (!user) {
     return (
       <div className="settings-section">
-        <h4 className="settings-section-title">Notifications</h4>
-        <p className="settings-note">Log in to choose what you get notified about.</p>
+        <h4 className="settings-section-title">{t('common.nav.notifications')}</h4>
+        <p className="settings-note">{t('settings.notifications.loginHint')}</p>
       </div>
     );
   }
@@ -536,39 +530,39 @@ function NotificationsSection() {
 
   return (
     <div className="settings-section">
-      <h4 className="settings-section-title">Notifications</h4>
+      <h4 className="settings-section-title">{t('common.nav.notifications')}</h4>
 
       {!pushSupported() ? (
-        <p className="settings-note">This browser can’t show notifications. On iPhone and iPad they only work once 3Speak is added to the Home Screen.</p>
+        <p className="settings-note">{t('settings.notifications.unsupported')}</p>
       ) : (
         <>
           <Row
-            title="Notify this device"
+            title={t('settings.notifications.device')}
             desc={blocked
-              ? 'Blocked in your browser settings for this site — allow notifications there first.'
+              ? t('settings.notifications.deviceBlocked')
               : noWorker
-                ? 'Not available on this build.'
-                : 'Get a notification even when 3Speak isn’t open. Applies to this browser only.'}
+                ? t('settings.notifications.deviceNoWorker')
+                : t('settings.notifications.deviceDesc')}
             checked={state.subscribed}
             onChange={busy || blocked || noWorker ? () => {} : toggleDevice}
           />
 
           <p className="settings-note">
-            What to be notified about. These apply to every device you’ve turned on.
+            {t('settings.notifications.whatHint')}
           </p>
-          {KIND_GROUPS.map(({ label, kinds: group }) => {
+          {KIND_GROUPS.map(({ labelKey, kinds: group }) => {
             // Only offer what the server actually supports, so an older backend
             // can't leave dead switches on the page.
             const available = group.filter((k) => !kinds.length || kinds.includes(k));
             if (!available.length) return null;
             return (
-              <div key={label} className="settings-kind-group">
-                <span className="settings-kind-group-label">{label}</span>
+              <div key={labelKey} className="settings-kind-group">
+                <span className="settings-kind-group-label">{t(labelKey)}</span>
                 {available.map((k) => (
                   <Row
                     key={k}
-                    title={KIND_COPY[k].title}
-                    desc={KIND_COPY[k].desc}
+                    title={t(KIND_COPY[k].titleKey)}
+                    desc={t(KIND_COPY[k].descKey)}
                     checked={prefs[k] !== false}
                     onChange={(v) => toggleKind(k, v)}
                   />
@@ -595,28 +589,28 @@ function Row({ title, desc, checked, onChange }) {
 }
 
 const TABS = [
-  { id: 'general', label: 'General' },
+  { id: 'general', labelKey: 'settings.tabs.general' },
   // Shorts and Interests are sub-tabs of this one now. Seven top-level tabs
   // overflowed the row even on desktop, and the three of them were all answering
   // "what shows up in my feeds" from separate pages.
-  { id: 'content', label: 'Content' },
+  { id: 'content', labelKey: 'settings.tabs.content' },
   // Hive accounts only: every setting behind it is about notifications that come
   // from the chain, so for anyone else it was a page of switches that could not
   // do anything.
-  { id: 'notifications', label: 'Notifications' },
+  { id: 'notifications', labelKey: 'common.nav.notifications' },
   // Its own page rather than a tail on Content. Both halves are about money moving
   // between advertisers, creators and viewers, and they were the two longest things on
   // a page otherwise made of one-line switches. Only shown to those who have it.
-  { id: 'rewards', label: 'Ads & rewards' },
-  { id: 'about', label: 'About / Version' },
+  { id: 'rewards', labelKey: 'settings.tabs.rewards' },
+  { id: 'about', labelKey: 'settings.tabs.about' },
 ];
 
 // The three panels behind Content. Kept as data so the sub-tab bar and the
 // panels below cannot fall out of step.
 const CONTENT_TABS = [
-  { id: 'feed', label: 'Feed' },
-  { id: 'shorts', label: 'Shorts' },
-  { id: 'interests', label: 'Interests' },
+  { id: 'feed', labelKey: 'settings.contentTabs.feed' },
+  { id: 'shorts', labelKey: 'common.nav.shorts' },
+  { id: 'interests', labelKey: 'settings.interests.title' },
 ];
 
 /**
@@ -624,6 +618,7 @@ const CONTENT_TABS = [
  * side menu, now grouped with headers + explanations and compact switches.
  */
 export default function SettingsModal({ isOpen, onClose }) {
+  const { t } = useTranslation();
   const { theme, showNsfw, setShowNsfw, toggleTheme, homeCardSize, setHomeCardSize, previewEnabled, setPreviewEnabled, shortsCommentBar, setShortsCommentBar, openShortsOnStart, setOpenShortsOnStart, inlineShorts, setInlineShorts, hideWatched, setHideWatched, hideAi, setHideAi, privateMode, setPrivateMode, simpleFeed, setSimpleFeed } = useAppStore();
   /* Whether the Ads & rewards page exists at all.
    *
@@ -656,9 +651,9 @@ export default function SettingsModal({ isOpen, onClose }) {
   // switches that could not take effect.
   const notificationsVisible = !!settingsUser;
   const visibleTabs = useMemo(
-    () => TABS.filter((t) => {
-      if (t.id === 'rewards') return rewardsVisible;
-      if (t.id === 'notifications') return notificationsVisible;
+    () => TABS.filter((tb) => {
+      if (tb.id === 'rewards') return rewardsVisible;
+      if (tb.id === 'notifications') return notificationsVisible;
       return true;
     }),
     [rewardsVisible, notificationsVisible],
@@ -703,7 +698,7 @@ export default function SettingsModal({ isOpen, onClose }) {
     if (s.count >= 5) {
       s.count = 0;
       localStorage.setItem('butrauth_unlocked', 'true');
-      toast.success('Butter Auth unlocked');
+      toast.success(t('settings.butrauthUnlocked'));
       setTimeout(() => window.location.reload(), 600);
     }
   };
@@ -754,14 +749,14 @@ export default function SettingsModal({ isOpen, onClose }) {
         } : undefined}
       >
         <div className="settings-modal-header">
-          <h3>Settings</h3>
-          <button className="settings-modal-close" onClick={onClose} aria-label="Close">
+          <h3>{t('common.nav.settings')}</h3>
+          <button className="settings-modal-close" onClick={onClose} aria-label={t('common.actions.close')}>
             <IoClose size={20} />
           </button>
         </div>
 
         <div className="settings-tabs" role="tablist">
-          {visibleTabs.map(({ id, label }) => (
+          {visibleTabs.map(({ id, labelKey }) => (
             <button
               key={id}
               type="button"
@@ -770,37 +765,42 @@ export default function SettingsModal({ isOpen, onClose }) {
               className={`settings-tab${tab === id ? ' active' : ''}`}
               onClick={() => setTab(id)}
             >
-              {label}
+              {t(labelKey)}
             </button>
           ))}
         </div>
 
         {tab === 'general' && (
           <div className="settings-section">
-            <h4 className="settings-section-title">Appearance</h4>
+            <LanguagePicker onNavigate={onClose} />
+          </div>
+        )}
+        {tab === 'general' && (
+          <div className="settings-section">
+            <h4 className="settings-section-title">{t('settings.appearance.title')}</h4>
             <Row
-              title="Dark mode"
-              desc="Use the dark colour theme across the app."
+              title={t('settings.appearance.darkMode.title')}
+              desc={t('settings.appearance.darkMode.desc')}
               checked={theme === 'dark'}
               onChange={(wantDark) => { if ((theme === 'dark') !== wantDark) toggleTheme(); }}
             />
             <Row
-              title="Large cards"
-              desc="Show bigger video cards on the home, profile and playlist pages. Turn off for smaller, more compact cards."
+              title={t('settings.appearance.largeCards.title')}
+              desc={t('settings.appearance.largeCards.desc')}
               checked={homeCardSize === 'large'}
               onChange={(large) => setHomeCardSize(large ? 'large' : 'small')}
             />
             {showPreviewSetting && (
               <Row
-                title="Video previews"
-                desc="Play a muted preview when you hover a video card (and, on mobile in large mode, the centred card auto-plays as you scroll)."
+                title={t('settings.appearance.previews.title')}
+                desc={t('settings.appearance.previews.desc')}
                 checked={previewEnabled !== false}
                 onChange={(v) => setPreviewEnabled(v)}
               />
             )}
             <Row
-              title="Simple feeds"
-              desc="Turn off the recommendation algorithm — Discover, Interests and Trending become plain newest-first lists instead of ranked ones."
+              title={t('settings.appearance.simpleFeeds.title')}
+              desc={t('settings.appearance.simpleFeeds.desc')}
               checked={!!simpleFeed}
               onChange={(v) => setSimpleFeed(v)}
             />
@@ -809,17 +809,17 @@ export default function SettingsModal({ isOpen, onClose }) {
         {tab === 'general' && <PostingAuthoritySection />}
 
         {tab === 'content' && (
-          <div className="settings-subtabs" role="tablist" aria-label="Content settings">
-            {CONTENT_TABS.map((t) => (
+          <div className="settings-subtabs" role="tablist" aria-label={t('settings.contentTabs.aria')}>
+            {CONTENT_TABS.map((ct) => (
               <button
-                key={t.id}
+                key={ct.id}
                 type="button"
                 role="tab"
-                aria-selected={contentTab === t.id}
-                className={`settings-subtab${contentTab === t.id ? ' is-active' : ''}`}
-                onClick={() => setContentTab(t.id)}
+                aria-selected={contentTab === ct.id}
+                className={`settings-subtab${contentTab === ct.id ? ' is-active' : ''}`}
+                onClick={() => setContentTab(ct.id)}
               >
-                {t.label}
+                {t(ct.labelKey)}
               </button>
             ))}
           </div>
@@ -827,25 +827,25 @@ export default function SettingsModal({ isOpen, onClose }) {
 
         {tab === 'content' && contentTab === 'shorts' && (
           <div className="settings-section">
-            <h4 className="settings-section-title">Shorts</h4>
+            <h4 className="settings-section-title">{t('common.nav.shorts')}</h4>
             {/* Comment bar is only rendered under 768px, so it's hidden on desktop. */}
             {showShortsCommentBarSetting && (
               <Row
-                title="Comment bar on shorts"
-                desc="Show a comment input under a short. Off by default — you can always open the comments panel with the comment button."
+                title={t('settings.shorts.commentBar.title')}
+                desc={t('settings.shorts.commentBar.desc')}
                 checked={!!shortsCommentBar}
                 onChange={(v) => setShortsCommentBar(v)}
               />
             )}
             <Row
-              title="Open shorts on start"
-              desc="Go straight to Shorts when you open 3Speak, instead of the home feed."
+              title={t('settings.shorts.openOnStart.title')}
+              desc={t('settings.shorts.openOnStart.desc')}
               checked={!!openShortsOnStart}
               onChange={(v) => setOpenShortsOnStart(v)}
             />
             <Row
-              title="Shorts inside the feeds"
-              desc="Show rows of shorts between the videos in the home feeds and the recommendations on a watch page. Turn off to keep those lists videos-only."
+              title={t('settings.shorts.inFeeds.title')}
+              desc={t('settings.shorts.inFeeds.desc')}
               checked={inlineShorts !== false}
               onChange={(v) => setInlineShorts(v)}
             />
@@ -855,28 +855,28 @@ export default function SettingsModal({ isOpen, onClose }) {
         {tab === 'content' && contentTab === 'feed' && (
           <>
           <div className="settings-section">
-            <h4 className="settings-section-title">Feed</h4>
+            <h4 className="settings-section-title">{t('settings.contentTabs.feed')}</h4>
             <Row
-              title="Show NSFW content"
-              desc="Display videos and audio marked not-safe-for-work. Off by default."
+              title={t('settings.feed.nsfw.title')}
+              desc={t('settings.feed.nsfw.desc')}
               checked={showNsfw}
               onChange={(v) => setShowNsfw(v)}
             />
             <Row
-              title="Hide watched videos"
-              desc="Leave out videos you've already watched from the home, trending and recommended feeds."
+              title={t('settings.feed.hideWatched.title')}
+              desc={t('settings.feed.hideWatched.desc')}
               checked={!!hideWatched}
               onChange={(v) => setHideWatched(v)}
             />
             <Row
-              title="Hide AI-generated videos"
-              desc="Leave out videos and shorts marked AI-generated, in every feed. The mark comes from an automatic check, so some may slip through."
+              title={t('settings.feed.hideAi.title')}
+              desc={t('settings.feed.hideAi.desc')}
               checked={!!hideAi}
               onChange={(v) => setHideAi(v)}
             />
             <Row
-              title="Private mode"
-              desc="Keep your country out of creators' statistics. We never store your IP address — for anyone. It's turned into a country code the moment you press play and then discarded. With this on, not even that country is recorded for your views."
+              title={t('settings.feed.privateMode.title')}
+              desc={t('settings.feed.privateMode.desc')}
               checked={!!privateMode}
               onChange={(v) => setPrivateMode(v)}
             />
@@ -897,33 +897,33 @@ export default function SettingsModal({ isOpen, onClose }) {
         {tab === 'about' && (
           <>
             <div className="settings-section">
-              <h4 className="settings-section-title">About</h4>
+              <h4 className="settings-section-title">{t('settings.about.title')}</h4>
               <div className="settings-modal-row">
                 <div className="settings-row-text">
-                  <span className="settings-row-title">App version</span>
+                  <span className="settings-row-title">{t('settings.about.version')}</span>
                   <span className="settings-row-desc">v{APP_VERSION}</span>
                 </div>
               </div>
               <div className="settings-modal-row" onClick={handleButrUnlockTap}>
                 <div className="settings-row-text">
-                  <span className="settings-row-title">Hive RPC node</span>
+                  <span className="settings-row-title">{t('settings.about.rpcNode')}</span>
                   <span className="settings-row-desc">{getHiveUrl()}</span>
                 </div>
               </div>
             </div>
 
             <div className="settings-section">
-              <h4 className="settings-section-title">Your data</h4>
+              <h4 className="settings-section-title">{t('settings.about.yourData')}</h4>
               <DataRequestForm />
             </div>
 
             <div className="settings-section">
               <div className="settings-modal-row">
                 <div className="settings-row-text">
-                  <span className="settings-row-title">Your data</span>
+                  <span className="settings-row-title">{t('settings.about.yourData')}</span>
                   <span className="settings-row-desc">
                     <a href="/privacy" target="_blank" rel="noopener noreferrer">
-                      How 3Speak handles your data
+                      {t('settings.about.privacyLink')}
                     </a>
                   </span>
                 </div>

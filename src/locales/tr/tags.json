@@ -1,0 +1,43 @@
+{
+  "labels": {
+    "tech-science": "Teknoloji ve Bilim",
+    "technology": "Teknoloji",
+    "education": "Eğitim",
+    "science": "Bilim",
+    "programming": "Programlama",
+    "crypto-finance": "Kripto ve Finans",
+    "cryptocurrency": "Kripto Para",
+    "finance": "Finans",
+    "business": "İş Dünyası",
+    "entertainment": "Eğlence",
+    "music": "Müzik",
+    "gaming": "Oyun",
+    "film-tv": "Film ve TV",
+    "lifestyle": "Yaşam Tarzı",
+    "vlog": "Vlog",
+    "comedy": "Komedi",
+    "story-time": "Hikâye Zamanı",
+    "commercial": "Reklam",
+    "arts-diy": "Sanat ve Kendin Yap",
+    "art": "Sanat",
+    "diy-crafts": "Kendin Yap ve El İşi",
+    "photography": "Fotoğrafçılık",
+    "food-outdoor": "Yemek ve Doğa",
+    "nature": "Doğa",
+    "travel": "Seyahat",
+    "food": "Yemek",
+    "pets": "Evcil Hayvanlar",
+    "gardening": "Bahçecilik",
+    "sports-health": "Spor ve Sağlık",
+    "sports": "Spor",
+    "health": "Sağlık",
+    "fitness": "Fitness",
+    "life-society": "Yaşam ve Toplum",
+    "news": "Haberler",
+    "spirituality": "Maneviyat",
+    "politics": "Siyaset"
+  },
+  "display": {
+    "cryptocurrency": "kripto"
+  }
+}

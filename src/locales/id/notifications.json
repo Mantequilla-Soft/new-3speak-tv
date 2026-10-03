@@ -1,0 +1,69 @@
+{
+  "buckets": {
+    "today": "Hari Ini",
+    "yesterday": "Kemarin",
+    "thisWeek": "Minggu Ini",
+    "thisMonth": "Bulan Ini",
+    "older": "Lebih Lama"
+  },
+  "loginRequired": "Silakan masuk untuk melihat notifikasimu.",
+  "unreadChip_other": "{{count}} baru",
+  "markAllTitle": "Tandai semua sudah dibaca",
+  "marking": "Menandai…",
+  "markAllRead": "Tandai semua dibaca",
+  "refreshing": "Memuat ulang…",
+  "categories": {
+    "all": "Semua",
+    "replies": "Balasan",
+    "mentions": "Sebutan",
+    "votes": "Vote",
+    "reblogs": "Reblog",
+    "follows": "Pengikut",
+    "transfers": "Transfer"
+  },
+  "unread": "Belum dibaca",
+  "summary": {
+    "title": "Aktivitas",
+    "today": "Hari Ini",
+    "week": "Minggu Ini",
+    "month": "Bulan Ini",
+    "emptyToday": "Belum ada aktivitas hari ini.",
+    "emptyWeek": "Belum ada aktivitas minggu ini.",
+    "stillLoading": "Masih memuat notifikasi lama…",
+    "emptyMonth": "Tidak ada aktivitas bulan ini."
+  },
+  "loadError": "Notifikasi tidak dapat dimuat.",
+  "empty": {
+    "all": "Kamu belum punya notifikasi.",
+    "unread": "Tidak ada notifikasi yang belum dibaca.",
+    "replies": "Belum ada balasan.",
+    "mentions": "Belum ada sebutan.",
+    "votes": "Belum ada vote.",
+    "reblogs": "Belum ada reblog.",
+    "follows": "Belum ada pengikut baru.",
+    "transfers": "Belum ada transfer."
+  },
+  "threeSpeakVideo": "Video 3Speak",
+  "end": "Kamu sudah sampai di akhir.",
+  "cards": {
+    "votes": "Vote",
+    "voters_other": "{{count}} pemberi vote",
+    "replies": "Balasan",
+    "newFollowers": "Pengikut Baru",
+    "mentions": "Sebutan",
+    "reblogs": "Reblog",
+    "transfers": "Transfer"
+  },
+  "group": {
+    "voteOne": "@{{user}} memberi vote pada postinganmu",
+    "voteTwo": "@{{user}} dan @{{user2}} memberi vote pada postinganmu",
+    "voteMany_other": "@{{user}} dan {{count}} lainnya memberi vote pada postinganmu",
+    "followOne": "@{{user}} mengikutimu",
+    "followTwo": "@{{user}} dan @{{user2}} mengikutimu",
+    "followMany_other": "@{{user}} dan {{count}} lainnya mengikutimu",
+    "generic_other": "{{count}} notifikasi {{type}}",
+    "typeCount_other": "{{count}} {{type}}",
+    "collapse": "▾ ciutkan",
+    "expand": "▸ bentangkan"
+  }
+}

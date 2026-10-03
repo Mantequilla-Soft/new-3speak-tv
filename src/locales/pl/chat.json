@@ -1,0 +1,154 @@
+{
+  "button": {
+    "label": "Czat"
+  },
+  "tools": {
+    "emoji": "Emoji",
+    "searchEmoji": "Szukaj emoji",
+    "searchGifs": "Szukaj GIF-ów…",
+    "noGifs": "Nie znaleziono GIF-ów.",
+    "poweredByGiphy": "Dostarczane przez GIPHY"
+  },
+  "lightbox": {
+    "openInNewTab": "Otwórz obraz w nowej karcie"
+  },
+  "linkCard": {
+    "loadingPreview": "Wczytywanie podglądu…",
+    "community": "Społeczność",
+    "communityWithSubscribers_one": "Społeczność · {{formatted}} subskrybent",
+    "communityWithSubscribers_other": "Społeczność · {{formatted}} subskrybenta",
+    "commentFallback": "(komentarz)",
+    "play": "Odtwórz {{title}}",
+    "communityWithSubscribers_few": "Społeczność · {{formatted}} subskrybentów",
+    "communityWithSubscribers_many": "Społeczność · {{formatted}} subskrybentów"
+  },
+  "share": {
+    "embedCopied": "Skopiowano kod osadzenia",
+    "pressToCopy": "Naciśnij Ctrl/Cmd + C, aby skopiować zaznaczony kod",
+    "embedTitle": "Osadź ten film",
+    "embedHint": "Wklej to na dowolnej stronie lub w poście na blogu.",
+    "embedSize": "Rozmiar osadzenia",
+    "embedCode": "Kod osadzenia",
+    "copyEmbed": "Kopiuj kod osadzenia",
+    "responsiveSub": "Dopasowuje się do strony, na której się znajduje",
+    "fixedSub": "Iframe o stałym rozmiarze",
+    "sendInChat": "Wyślij na czacie 3Speak",
+    "sendInChatSub": "Wyślij to komuś na 3Speak",
+    "embedOnWebsite": "Osadź na stronie",
+    "embedOnWebsiteSub": "Skopiuj HTML na swoją stronę lub bloga",
+    "generalShare": "Udostępnij / kopiuj link",
+    "generalShareSub": "Inne aplikacje lub skopiuj link"
+  },
+  "gate": {
+    "connectTitle": "Połącz z czatem 3Speak",
+    "connectBody": "Czat działa dzięki Snapie. Połączenie podpisuje jednorazowe wyzwanie logowania twoim kluczem posting Hive — bez transakcji i bez kosztów.",
+    "connecting": "Łączenie…",
+    "connectButton": "Połącz czat",
+    "cannotSign": "Twoja obecna metoda logowania nie może podpisać wyzwania czatu. Użyj Keychain, HiveAuth, PeakVault lub Ledger.",
+    "needsAccountTitle": "Czat wymaga konta Hive",
+    "needsAccountBody": "Wiadomości są podpisywane kluczami twojego konta, więc czat odblokuje się razem ze wszystkim innym, gdy twoje konto będzie gotowe. Wykonaj cele na swoim profilu, a zespół zajmie się resztą.",
+    "loginTitle": "Zaloguj się, aby korzystać z czatu",
+    "loginBody": "Zaloguj się kontem Hive, aby wysyłać i odbierać wiadomości.",
+    "connectingToChat": "Łączenie z czatem…"
+  },
+  "errors": {
+    "notHiveAccount": "@{{user}} nie jest kontem Hive.",
+    "openConversation": "Nie udało się otworzyć tej rozmowy.",
+    "verifyAccount": "Nie udało się zweryfikować tego konta.",
+    "createRoom": "Nie udało się utworzyć pokoju.",
+    "joinChannel": "Nie udało się dołączyć do tego kanału."
+  },
+  "newDm": {
+    "placeholder": "Napisz do użytkownika Hive…",
+    "start": "Rozpocznij czat"
+  },
+  "newRoom": {
+    "toggle": "Nowy prywatny pokój",
+    "namePlaceholder": "Nazwa pokoju…",
+    "removeMember": "Usuń @{{user}}",
+    "addMore": "Dodaj więcej…",
+    "invitePlaceholder": "Zaproś użytkowników Hive (opcjonalnie)…",
+    "create": "Utwórz"
+  },
+  "channels": {
+    "browse": "Przeglądaj kanały",
+    "publicTitle": "Kanały publiczne",
+    "closeBrowser": "Zamknij przeglądarkę kanałów",
+    "loading": "Wczytywanie kanałów…",
+    "empty": "Brak dostępnych kanałów.",
+    "join": "Dołącz"
+  },
+  "markRead": {
+    "nothingToClear": "Brak rozmów do wyczyszczenia. Licznik mógł utknąć po stronie serwera.",
+    "requestFailed": "żądanie nie powiodło się",
+    "allCaughtUp": "Wszystko przeczytane",
+    "stillUnread_one": "Nadal {{total}} nieprzeczytanych po wyczyszczeniu {{count}} czatu.",
+    "stillUnread_other": "Nadal {{total}} nieprzeczytanych po wyczyszczeniu {{count}} czatu.",
+    "stillUnreadNoMatch_one": "Nadal {{total}} nieprzeczytanych po wyczyszczeniu {{count}} czatu. Serwer zgłasza licznik, ale żadnej pasującej rozmowy.",
+    "stillUnreadNoMatch_other": "Nadal {{total}} nieprzeczytanych po wyczyszczeniu {{count}} czatu. Serwer zgłasza licznik, ale żadnej pasującej rozmowy.",
+    "notSignedIn": "Czat nie jest zalogowany. Połącz czat ponownie i spróbuj jeszcze raz.",
+    "sessionExpired": "Sesja czatu wygasła podczas czyszczenia. Połącz czat ponownie i spróbuj jeszcze raz.",
+    "serverRejectedVisible_one": "Serwer odrzucił {{count}} żądanie (ID z widocznej listy)",
+    "serverRejectedVisible_other": "Serwer odrzucił wszystkie {{count}} żądania (ID z widocznej listy)",
+    "serverRejectedServerMap_one": "Serwer odrzucił {{count}} żądanie (ID z serwerowej mapy nieprzeczytanych)",
+    "serverRejectedServerMap_other": "Serwer odrzucił wszystkie {{count}} żądania (ID z serwerowej mapy nieprzeczytanych)",
+    "failed": "Nie udało się oznaczyć wszystkiego jako przeczytane",
+    "marking": "Oznaczanie jako przeczytane…",
+    "button": "Oznacz wszystko jako przeczytane",
+    "buttonCount": "Oznacz wszystko jako przeczytane ({{count}})",
+    "stillUnread_few": "Nadal {{total}} nieprzeczytanych po wyczyszczeniu {{count}} czatów.",
+    "stillUnread_many": "Nadal {{total}} nieprzeczytanych po wyczyszczeniu {{count}} czatów.",
+    "stillUnreadNoMatch_few": "Nadal {{total}} nieprzeczytanych po wyczyszczeniu {{count}} czatów. Serwer zgłasza licznik, ale żadnej pasującej rozmowy.",
+    "stillUnreadNoMatch_many": "Nadal {{total}} nieprzeczytanych po wyczyszczeniu {{count}} czatów. Serwer zgłasza licznik, ale żadnej pasującej rozmowy.",
+    "serverRejectedVisible_few": "Serwer odrzucił wszystkie {{count}} żądania (ID z widocznej listy)",
+    "serverRejectedVisible_many": "Serwer odrzucił wszystkie {{count}} żądań (ID z widocznej listy)",
+    "serverRejectedServerMap_few": "Serwer odrzucił wszystkie {{count}} żądania (ID z serwerowej mapy nieprzeczytanych)",
+    "serverRejectedServerMap_many": "Serwer odrzucił wszystkie {{count}} żądań (ID z serwerowej mapy nieprzeczytanych)"
+  },
+  "list": {
+    "chooseTarget": "Wybierz czat, do którego chcesz wysłać",
+    "loading": "Wczytywanie rozmów…",
+    "empty": "Brak rozmów. Rozpocznij nową powyżej, wpisując nazwę użytkownika Hive."
+  },
+  "leave": {
+    "confirmRoom": "Opuścić ten pokój?",
+    "confirmChannel": "Opuścić ten kanał?",
+    "errorRoom": "Nie udało się opuścić pokoju.",
+    "errorChannel": "Nie udało się opuścić kanału.",
+    "titleRoom": "Opuść pokój",
+    "titleChannel": "Opuść kanał",
+    "button": "Opuść"
+  },
+  "thread": {
+    "editError": "Nie udało się edytować wiadomości.",
+    "deleteConfirm": "Usunąć tę wiadomość? Zostanie zastąpiona tekstem „[usunięto]”.",
+    "deleteError": "Nie udało się usunąć wiadomości.",
+    "back": "Wróć do rozmów",
+    "loading": "Wczytywanie wiadomości…",
+    "empty": "Brak wiadomości — przywitaj się 👋",
+    "editedSuffix": " · edytowano",
+    "messageActions": "Akcje wiadomości",
+    "quote": "Cytuj",
+    "forward": "Przekaż dalej",
+    "typing_one": "{{users}} pisze…",
+    "typing_other": "{{users}} piszą…",
+    "editing": "Edytowanie wiadomości",
+    "cancelEdit": "Anuluj edycję",
+    "quoting": "Cytujesz @{{user}}",
+    "cancelQuote": "Anuluj cytat",
+    "removeImage": "Usuń obraz",
+    "placeholder": "Napisz wiadomość…",
+    "typing_few": "{{users}} piszą…",
+    "typing_many": "{{users}} piszą…"
+  },
+  "page": {
+    "chooseTarget": "Wybierz czat, do którego chcesz wysłać.",
+    "selectConversation": "Wybierz rozmowę albo rozpocznij nową."
+  },
+  "overlay": {
+    "fullscreen": "Pełny ekran",
+    "exitFullscreen": "Zamknij pełny ekran",
+    "close": "Zamknij czat",
+    "sendInChat": "Wyślij na czacie"
+  }
+}

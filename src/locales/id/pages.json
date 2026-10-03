@@ -1,0 +1,139 @@
+{
+  "about": {
+    "quotes": {
+      "q1": "Jika kebebasan berarti sesuatu, maka itu adalah hak untuk mengatakan kepada orang apa yang tidak ingin mereka dengar.",
+      "q2": "Aku tidak setuju dengan apa yang kamu katakan, tetapi aku akan membela sampai mati hakmu untuk mengatakannya.",
+      "q3": "Hak atas kebebasan berbicara dan harapan tak realistis untuk tidak pernah tersinggung tidak bisa hidup berdampingan.",
+      "q4": "Tidak ada saat di mana kebebasan berbicara lebih berharga daripada ketika seseorang memukul jempolnya dengan palu.",
+      "q5": "Kebebasan berbicara berarti kebebasan bagi orang yang kamu benci, dan kebebasan untuk mengungkapkan pandangan yang paling tercela.",
+      "q6": "Kebebasan berbicara yang bodoh sering kali merugikan pembicaranya sendiri. Itulah salah satu dari beberapa alasan mengapa ia harus diberi ruang, bukan ditekan.",
+      "q7": "Kebebasan berbicara mencakup kebebasan untuk menyinggung orang.",
+      "q8": "Ada garis tipis antara kebebasan berbicara dan ujaran kebencian. Kebebasan berbicara mendorong perdebatan, sedangkan ujaran kebencian menghasut kekerasan.",
+      "q9": "Kebebasan berbicara berarti kamu tidak boleh melakukan sesuatu terhadap orang karena pandangan yang mereka miliki, pandangan yang mereka ungkapkan, atau kata-kata yang mereka ucapkan atau tulis."
+    },
+    "faq": {
+      "what": {
+        "question": "Apa itu 3Speak?",
+        "answer": "3Speak adalah tempat di mana kreator konten secara langsung memiliki aset dan komunitas mereka di situs ini. Dengan teknologi blockchain, kepemilikan aset dan komunitas ini melekat pada kreator dan pengguna, bukan pada 3Speak. Karena itu, aset dan komunitas tersebut dapat dipindahkan ke aplikasi lain yang menggunakan teknologi blockchain. Artinya, jika kami tidak melayani komunitas dan kreator dengan sebaik-baiknya, mereka dapat membawa aset yang telah mereka hasilkan dan pindah ke aplikasi lain. Hasilnya, 3Speak tahan sensor, tidak dapat mengambil asetmu, atau menghapus komunitasmu."
+      },
+      "upvote": {
+        "question": "Mengapa aku tidak di-upvote oleh 3Speak?",
+        "answer": "3Speak memberi vote atas kebijakan kami sendiri dan tidak mengikuti kriteria tertentu. Cara terbaik untuk menarik perhatian kami adalah mengunggah konten berkualitas tinggi dan membawa penonton serta komunitas ke 3Speak."
+      },
+      "missing": {
+        "question": "Mengapa beberapa videoku tidak muncul di feed terbaru?",
+        "answer": "Kamu boleh mengunggah video sebanyak yang kamu mau! Artinya, kadang satu pengguna bisa memenuhi feed hanya dengan kontennya sendiri. Untuk mengatasinya, kami membatasi jumlah video dari satu kreator yang dapat ditampilkan per muatan."
+      },
+      "creator": {
+        "question": "Bagaimana cara menjadi kreator konten?",
+        "answer": "Cara tercepat mendapatkan akun Hive adalah menekan tombol \"Daftar\" di panel navigasi dan mengikuti petunjuknya. (jangan sampai kehilangan key-mu!). Selanjutnya, masuk dengan akun Hive-mu dan klik \"creator studio\" / unggah. Kamu sudah siap!"
+      },
+      "rewards": {
+        "question": "Bagaimana cara mendapatkan reward dari berkomentar?",
+        "answer": "Untuk mendapatkan reward, kamu butuh akun blockchain Hive. Kamu bisa mendapatkannya gratis dari Hive (https://signup.hive.io), membeli panduan pengguna Hive, atau meminta pengguna Hive lain membuatkannya untukmu. Setelah punya akun, masuk dengan Hivesigner dan berikan key ACTIVE-mu saat login pertama. Setelah itu kamu bisa memposting komentar yang dapat menghasilkan reward mata uang kripto."
+      }
+    },
+    "hero": {
+      "tagline1": "LINDUNGI KONTENMU",
+      "tagline2": "TOKENISASI KOMUNITASMU",
+      "cta": "Ikut Revolusinya",
+      "description": "3Speak dibangun di atas blockchain Hive, yang menjamin desentralisasi sejati, ketahanan terhadap sensor, dan kepemilikan oleh komunitas."
+    },
+    "how": {
+      "title": "Cara Kerja 3Speak",
+      "subtitle": "Rasakan kepemilikan konten yang sesungguhnya lewat teknologi blockchain",
+      "create": {
+        "title": "Buat Konten",
+        "text": "Unggah videomu dan buat konten yang benar-benar milikmu di blockchain."
+      },
+      "earn": {
+        "title": "Dapatkan Reward",
+        "text": "Dapatkan reward dalam token Hive dan terima donasi dalam token Speak milik kami."
+      },
+      "community": {
+        "title": "Bangun Komunitas",
+        "text": "Buat token, marketplace, dan ekonomimu sendiri untuk mendukung komunitasmu."
+      }
+    },
+    "features": {
+      "title": "Fitur",
+      "rewards": {
+        "title": "REWARD",
+        "text": "Dengan menggunakan platform ini, pengguna mendapat reward dalam token Hive dan bisa menerima donasi dalam token Speak milik kami. Makin banyak token yang kamu pegang, makin banyak hak istimewa yang kamu miliki di ekosistem."
+      },
+      "p2p": {
+        "title": "P2P",
+        "text": "Teknologi blockchain yang digunakan situs ini memastikan kreator konten memiliki koneksi P2P sejati dengan basis penggunanya, tanpa pihak perantara."
+      },
+      "tokenisation": {
+        "title": "TOKENISASI",
+        "text": "Kreator konten juga bisa dengan mudah membuat token, marketplace, reward berbasis stake, dan ekonomi mereka sendiri untuk mendukung komunitasnya."
+      },
+      "freeSpeech": {
+        "title": "KEBEBASAN BERBICARA",
+        "text": "Kebijakan kami adalah bahwa kemampuan untuk menyinggung merupakan fondasi Kebebasan Berbicara, dan pada gilirannya Kebebasan Berbicara melindungi masyarakat agar tidak terjerumus ke dalam kekacauan dan perang saudara."
+      },
+      "journalism": {
+        "title": "JURNALISME WARGA",
+        "text": "Kami mengajak jurnalis warga untuk bergabung dan memposting jenis konten yang sering diabaikan. Kami percaya jurnalis warga adalah masa depan."
+      }
+    },
+    "hive": {
+      "title": "Didukung oleh Blockchain Hive",
+      "decentralized": {
+        "title": "Terdesentralisasi",
+        "text": "Tidak ada satu titik kegagalan atau kendali"
+      },
+      "fast": {
+        "title": "Cepat & Gratis",
+        "text": "Tanpa biaya transaksi dan blok setiap 3 detik"
+      },
+      "community": {
+        "title": "Milik Komunitas",
+        "text": "Diatur oleh pemangku kepentingan, bukan korporasi"
+      },
+      "description": "3Speak dibangun di atas blockchain Hive, yang menjamin desentralisasi sejati, ketahanan terhadap sensor, dan kepemilikan oleh komunitas. Ekosistem Hive menyediakan infrastruktur untuk reward, tata kelola, dan kepemilikan aset yang membuat 3Speak revolusioner."
+    },
+    "guidelines": {
+      "title": "Pedoman Kami",
+      "subtitle": "Kami percaya Kebebasan Berbicara itu mutlak, dengan kebijakan yang jelas dan adil",
+      "support": {
+        "title": "Yang Kami Dukung",
+        "religion": "Mengkritik agama, keyakinan, kelompok, dan orang",
+        "politics": "Politik alternatif dan diskusi teori konspirasi",
+        "governments": "Mengkritik pemerintah dan pemimpin dunia",
+        "pseudonyms": "Menggunakan nama samaran demi privasi",
+        "jokes": "Lelucon yang menyinggung (jika ditandai dengan jelas)"
+      },
+      "restrict": {
+        "title": "Yang Kami Batasi",
+        "violence": "Menyerukan atau menghasut kekerasan",
+        "gore": "Menampilkan konten sadis berlebihan atau pornografi",
+        "slander": "Fitnah dan konten yang mencemarkan nama baik",
+        "illegal": "Aktivitas atau konten ilegal"
+      }
+    },
+    "faqSection": {
+      "title": "Pertanyaan yang Sering Diajukan",
+      "subtitle": "Semua yang perlu kamu ketahui tentang 3Speak"
+    },
+    "quotesTitle": "Suara Kebebasan",
+    "cta": {
+      "title": "Siap Memiliki Kontenmu?",
+      "subtitle": "Bergabunglah dengan ribuan kreator yang sudah mengendalikan aset digital mereka."
+    },
+    "connect": "Terhubung dengan 3Speak",
+    "logoAlt": "Logo 3Speak"
+  },
+  "legal": {
+    "pageTitle": "Cara 3Speak menangani datamu · 3Speak",
+    "englishOnly": "Halaman ini hanya tersedia dalam bahasa Inggris. Versi bahasa Inggris adalah versi yang mengikat.",
+    "back": "← Kembali ke 3Speak"
+  },
+  "notFound": {
+    "imageAlt": "404",
+    "title": "MAAF! HALAMAN TIDAK DITEMUKAN",
+    "message": "Sayangnya, halaman yang kamu cari tidak tersedia.",
+    "goHome": "KE BERANDA"
+  }
+}

@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { MdTv } from 'react-icons/md';
+import { useTranslation, Trans } from 'react-i18next';
 import { toastIn } from '../../utils/toast';
 import { useAppStore } from '../../lib/store';
 import { adsEnabledFor, adsBetaUserFor } from '../../utils/config';
@@ -26,6 +27,7 @@ const toast = toastIn('Advertising');
  * that we record and then respect. There is no third showing.
  */
 export default function ViewerRewardsPrompt() {
+  const { t } = useTranslation();
   const user = useAppStore((s) => s.user);
   const authenticated = useAppStore((s) => s.authenticated);
 
@@ -87,13 +89,13 @@ export default function ViewerRewardsPrompt() {
     try {
       await setViewerAdPrefs(user, { rewardsEnabled });
       toast.success(rewardsEnabled
-        ? 'You will earn a share of ad revenue for what you watch'
-        : 'No problem, you stay anonymous');
+        ? t('ads.viewerPrompt.savedYes')
+        : t('ads.viewerPrompt.savedNo'));
       close();
     } catch (err) {
       // Left open on failure: an unrecorded answer must not look like a recorded
       // one, or we would never ask again and never pay them either.
-      toast.error(err.message || 'Could not save that. Try again.');
+      toast.error(err.message || t('ads.viewerPrompt.saveFailed'));
     } finally {
       setSaving(false);
     }
@@ -110,31 +112,25 @@ export default function ViewerRewardsPrompt() {
         <header className="ads-prompt-head">
           <MdTv className="ads-prompt-head-icon" aria-hidden="true" />
           <div>
-            <h3 className="ads-prompt-title" id="viewer-rewards-title">Get paid for watching</h3>
+            <h3 className="ads-prompt-title" id="viewer-rewards-title">{t('ads.viewerPrompt.title')}</h3>
             <p className="ads-prompt-lede">
-              You earn a share of what the ads make, for the videos you actually watch.
-              Paid in <strong>HBD or HIVE</strong>, same as everyone else.
+              <Trans i18nKey="ads.viewerPrompt.lede" components={{ b: <strong /> }} />
             </p>
           </div>
         </header>
 
         <p className="ads-prompt-text">
-          Ads on 3Speak pay the creator, their community, and now you. Your share comes
-          out of what the advertiser paid, in whatever they paid with, for videos you were
-          going to watch anyway.
+          {t('ads.viewerPrompt.text')}
         </p>
         <p className="ads-prompt-note">
-          3Speak already keeps your watch history so you can find things again. This lets
-          us use it to work out what you are owed, and keeps a record of how much of each
-          video you actually watched. Say no and nothing changes. You can switch it off
-          any time in Settings, and that deletes what we kept for rewards.
+          {t('ads.viewerPrompt.note')}
         </p>
         <div className="ads-prompt-actions">
           <button type="button" className="ads-prompt-ghost" onClick={() => answer(false)} disabled={saving}>
-            No thanks
+            {t('ads.viewerPrompt.noThanks')}
           </button>
           <button type="button" className="ads-prompt-primary" onClick={() => answer(true)} disabled={saving}>
-            {saving ? 'Saving\u2026' : 'Yes, pay me'}
+            {saving ? t('common.actions.saving') : t('ads.viewerPrompt.yes')}
           </button>
         </div>
       </div>

@@ -1,0 +1,349 @@
+{
+  "icons": {
+    "link": "Kiungo",
+    "globe": "Tovuti",
+    "podcast": "Podikasti",
+    "email": "Barua pepe",
+    "phone": "Simu",
+    "rss": "RSS",
+    "qrcode": "Msimbo wa QR",
+    "shop": "Duka",
+    "bag": "Duka",
+    "dollar": "Pesa",
+    "gift": "Zawadi",
+    "heart": "Msaada",
+    "star": "Nyota",
+    "thumbsup": "Penda",
+    "fire": "Moto",
+    "bolt": "Radi",
+    "music": "Muziki",
+    "headphones": "Sauti",
+    "mic": "Maikrofoni",
+    "video": "Video",
+    "film": "Filamu",
+    "tv": "TV",
+    "play": "Cheza",
+    "camera": "Picha",
+    "image": "Picha",
+    "palette": "Sanaa",
+    "pen": "Andika",
+    "book": "Kitabu",
+    "newspaper": "Habari",
+    "graduation": "Kozi",
+    "code": "Msimbo",
+    "gamepad": "Michezo ya video",
+    "briefcase": "Kazi",
+    "home": "Nyumbani",
+    "location": "Mahali",
+    "map": "Ramani",
+    "calendar": "Kalenda",
+    "clock": "Saa",
+    "bell": "Arifa",
+    "tag": "Lebo",
+    "download": "Pakua",
+    "file": "Faili",
+    "users": "Jumuiya",
+    "comment": "Maoni",
+    "share": "Shiriki",
+    "coffee": "Kahawa",
+    "wallet": "Pochi",
+    "plus": "Zaidi",
+    "check": "Tiki"
+  },
+  "fonts": {
+    "system": "Mfumo",
+    "rounded": "Mviringo",
+    "serif": "Serif",
+    "mono": "Mono",
+    "display": "Display",
+    "condensed": "Iliyobanwa",
+    "handwriting": "Mwandiko wa mkono",
+    "grotesk": "Grotesk",
+    "humanist": "Humanist",
+    "geometric": "Kijiometri",
+    "slab": "Slab",
+    "elegant": "Maridadi",
+    "typewriter": "Taipureta",
+    "marker": "Kalamu ya alama",
+    "brush": "Brashi",
+    "palatino": "Palatino",
+    "wide": "Pana"
+  },
+  "motion": {
+    "none": "Hakuna",
+    "float": "Elea",
+    "sway": "Yumba",
+    "pulse": "Pigo",
+    "wobble": "Tetemeka",
+    "bounce": "Ruka ruka",
+    "tilt": "Inama 3D",
+    "spin": "Zunguka",
+    "shake": "Tikisa",
+    "breathe": "Pumua"
+  },
+  "sectionTypes": {
+    "link": "Kiungo",
+    "video": "Maudhui ya 3Speak",
+    "embed": "Kiungo chenye onyesho",
+    "image": "Picha",
+    "header": "Kichwa / maandishi"
+  },
+  "blockNames": {
+    "link": "kiungo",
+    "header": "kichwa",
+    "image": "picha",
+    "video": "video",
+    "embed": "kilichopachikwa"
+  },
+  "blockNamesPlural": {
+    "link": "viungo",
+    "header": "vichwa",
+    "image": "picha",
+    "video": "video",
+    "embed": "vilivyopachikwa"
+  },
+  "templates": {
+    "minimal": {
+      "name": "Minimal",
+      "niche": "Safi na rahisi"
+    },
+    "neon": {
+      "name": "Neon Nights",
+      "niche": "Mtayarishaji / mtiririshaji"
+    },
+    "crypto": {
+      "name": "On-Chain",
+      "niche": "Crypto / Web3"
+    },
+    "gamer": {
+      "name": "Player One",
+      "niche": "Michezo ya video"
+    },
+    "photographer": {
+      "name": "Exposure",
+      "niche": "Upigaji picha"
+    },
+    "podcaster": {
+      "name": "On Air",
+      "niche": "Podikasti"
+    },
+    "fitness": {
+      "name": "Peak Form",
+      "niche": "Mazoezi / kocha"
+    },
+    "writer": {
+      "name": "Longform",
+      "niche": "Mwandishi / mwanablogu"
+    },
+    "chef": {
+      "name": "Mise en Place",
+      "niche": "Chakula / upishi"
+    },
+    "travel": {
+      "name": "Wanderlust",
+      "niche": "Mazingira / safari"
+    },
+    "business": {
+      "name": "Boardroom",
+      "niche": "Biashara / kitaaluma"
+    },
+    "artist": {
+      "name": "Palette",
+      "niche": "Msanii / sanaa ya kuona"
+    },
+    "ocean": {
+      "name": "Tidewater",
+      "niche": "Utulivu / mtindo wa maisha"
+    },
+    "musician": {
+      "name": "Amplified",
+      "niche": "Muziki / bendi"
+    },
+    "developer": {
+      "name": "Terminal",
+      "niche": "Msanidi / teknolojia"
+    },
+    "sports": {
+      "name": "Game Day",
+      "niche": "Michezo / mwanamichezo"
+    }
+  },
+  "errors": {
+    "notLoggedIn": "Hujaingia",
+    "couldNotSaveToHive": "Imeshindwa kuhifadhi kwenye Hive"
+  },
+  "arrange": {
+    "title": "Kichwa",
+    "video": "Video",
+    "latestPosts": "Machapisho ya karibuni",
+    "latestPostsBy": "Machapisho ya karibuni · @{{account}}",
+    "dragToArrange": "Buruta ili kupanga"
+  },
+  "page": {
+    "latestPosts": "Machapisho ya karibuni",
+    "seeNewestPosts": "Ona machapisho mapya zaidi ya @{{user}} →",
+    "openLink": "Fungua kiungo",
+    "empty": "@{{user}} bado hajaongeza viungo vyovyote.",
+    "viewProfile": "Tazama wasifu wa 3Speak →",
+    "poweredBy": "Inaendeshwa na 3Speak"
+  },
+  "editor": {
+    "resetToDefault": "Rudisha chaguo-msingi",
+    "motion": "Mwendo",
+    "speed": "Kasi {{value}}",
+    "loop": "Rudia",
+    "runSeconds": "Endesha sek {{value}}",
+    "picker": {
+      "videoLabel": "Chagua kutoka kwenye video zangu",
+      "videoLoading": "Inapakia video zako…",
+      "videoEmpty": "Hakuna video za karibuni za 3Speak zilizopatikana.",
+      "shortLabel": "Chagua kutoka kwenye Shorts zangu",
+      "shortLoading": "Inapakia Shorts zako…",
+      "shortEmpty": "Hakuna Shorts za karibuni za 3Speak zilizopatikana.",
+      "noChannel": "Hakuna chaneli iliyogunduliwa (umeingia?)",
+      "loadFailed": "Imeshindwa kupakia: {{error}}"
+    },
+    "toasts": {
+      "unfurlFailed": "Imeshindwa kupata onyesho la kiungo",
+      "imageUploadFailed": "Kupakia picha kumeshindwa: {{error}}",
+      "tryAgain": "jaribu tena",
+      "styleApplied": "Mtindo umetumika kwa vizuizi vyote vya {{type}}",
+      "templateApplied": "“{{name}}” imetumika — irekebishe au Tendua",
+      "reverted": "Imerudi kwenye muundo wako wa awali",
+      "saved": "Spotlight imehifadhiwa kwenye wasifu wako wa Hive",
+      "saveFailed": "Imeshindwa kuhifadhi",
+      "linkCopied": "Kiungo kimenakiliwa",
+      "uploadFailed": "Upakiaji umeshindwa"
+    },
+    "link": {
+      "labelPlaceholder": "Lebo (k.m. YouTube yangu)",
+      "type": "Aina ya kiungo",
+      "typeGroup": "Aina",
+      "website": "Tovuti / URL",
+      "email": "Barua pepe",
+      "phone": "Simu",
+      "platformGroup": "Jukwaa",
+      "yourname": "jinalako",
+      "platformIconHint": "Ikoni ni nembo ya {{platform}} — badili kwenda “Tovuti / URL” ili kuchagua ikoni maalum.",
+      "icon": "Ikoni",
+      "iconColor": "Rangi ya ikoni",
+      "iconBg": "Mandharinyuma ya ikoni"
+    },
+    "header": {
+      "text": "Maandishi",
+      "size": "Ukubwa",
+      "large": "Kubwa",
+      "medium": "Wastani",
+      "small": "Ndogo",
+      "align": "Panga",
+      "left": "Kushoto",
+      "center": "Katikati",
+      "right": "Kulia"
+    },
+    "image": {
+      "uploading": "Inapakia…",
+      "upload": "Pakia picha",
+      "urlPlaceholder": "…au URL ya picha",
+      "linkPlaceholder": "Kiungo inapobofywa (si lazima)"
+    },
+    "video": {
+      "contentType": "Aina ya maudhui",
+      "video": "Video",
+      "short": "Short",
+      "orPaste": "au bandika kiungo",
+      "pastePlaceholder": "Bandika kiungo cha video ya 3Speak au author/permlink",
+      "titlePlaceholder": "Kichwa kinachoonyeshwa juu ya video (kinaelekeza 3Speak)",
+      "hint": "Maudhui uliyochagua yatapachikwa na kucheza kwenye ukurasa wako."
+    },
+    "embed": {
+      "source": "Chanzo",
+      "sourceLink": "Kiungo (chenye onyesho)",
+      "sourceHiveRecent": "Machapisho yangu ya karibuni ya Hive",
+      "accountPlaceholder": "Jina la mtumiaji la Hive (acha tupu kwa lako)",
+      "showPosts_one": "Onyesha chapisho {{count}}",
+      "showPosts_other": "Onyesha machapisho {{count}}",
+      "perRow": "{{value}} kwa kila safu",
+      "hiveRecentHint": "Machapisho yako ya karibuni ya ngazi ya juu (bila reblogs wala machapisho mtambuka). Husasishwa kiotomatiki.",
+      "linkPlaceholder": "Bandika kiungo chochote — chapisho la Hive, Instagram, X, YouTube, makala…",
+      "fetching": "Inapata onyesho…",
+      "noPreview": "Hakuna onyesho lililopatikana — bado kitaonyeshwa kama kadi ya kiungo.",
+      "pasteHint": "Bandika kiungo na tutaleta kichwa, maelezo na picha yake."
+    },
+    "style": {
+      "title": "Mtindo",
+      "applyAllTitle": "Tumia mtindo huu kwa kila kizuizi cha {{type}}",
+      "applyAll": "Tumia kwa {{types}} zote",
+      "background": "Mandharinyuma",
+      "text": "Maandishi",
+      "backgroundPct": "Mandharinyuma {{value}}%",
+      "radius": "Mviringo {{value}}",
+      "fontSizePct": "Ukubwa wa fonti {{value}}%",
+      "paddingPx": "Nafasi ya ndani {{value}}px",
+      "thumbnailPct": "Picha ndogo {{value}}%",
+      "border": "Mpaka",
+      "thicknessPx": "Unene {{value}}px",
+      "opacityPct": "Uangavu {{value}}%",
+      "shadow": "Kivuli",
+      "strengthPct": "Nguvu {{value}}%",
+      "color": "Rangi",
+      "blur": "Ukungu {{value}}",
+      "spread": "Kuenea {{value}}",
+      "inset": "Ndani",
+      "cardDelayMs": "Kuchelewa kwa kadi {{value}}ms"
+    },
+    "tagline": "Viungo na video zako kwenye ukurasa mmoja",
+    "openPage": "Fungua ukurasa",
+    "templates": {
+      "title": "Violezo",
+      "hint": "Chagua muundo ili kujaza kila kitu — bio yako inabaki, na unaweza Kutendua.",
+      "undo": "Tendua kiolezo — rudi kwenye muundo wangu"
+    },
+    "profile": {
+      "title": "Wasifu",
+      "headlinePlaceholder": "Kichwa kifupi / bio (si lazima)",
+      "avatarSizePct": "Ukubwa wa picha ya wasifu {{value}}%",
+      "avatarShadowPct": "Kivuli cha picha ya wasifu {{value}}%",
+      "avatarGlow": "Mng'ao wa picha ya wasifu",
+      "glowSize": "Ukubwa wa mng'ao {{value}}",
+      "channelButtonText": "Maandishi ya kitufe cha chaneli"
+    },
+    "page": {
+      "title": "Mtindo wa ukurasa",
+      "solid": "Rangi moja",
+      "gradient": "Mchanganyiko wa rangi",
+      "image": "Picha",
+      "color2": "Rangi ya 2",
+      "angle": "Pembe {{value}}°",
+      "uploadBackground": "Pakia mandharinyuma",
+      "imageSet": "Picha imewekwa ✓",
+      "overlay": "Tabaka",
+      "overlay2": "Tabaka la 2",
+      "none": "Hakuna",
+      "overlayOpacityPct": "Uangavu wa tabaka {{value}}%",
+      "overlayAngle": "Pembe ya tabaka {{value}}°",
+      "colors": "Rangi",
+      "buttonBg": "Mandharinyuma ya kitufe",
+      "buttonText": "Maandishi ya kitufe",
+      "buttons": "Vitufe",
+      "buttonStyle": "Mtindo wa kitufe",
+      "soft": "Laini",
+      "fill": "Imejaa",
+      "outline": "Mstari wa nje",
+      "cornerRadius": "Mviringo wa pembe {{value}}",
+      "textStyle": "Mtindo wa maandishi (jina, bio na vizuizi vya maandishi)",
+      "font": "Fonti",
+      "normal": "Kawaida",
+      "italic": "Italiki",
+      "bold": "Nzito",
+      "boldItalic": "Nzito Italiki",
+      "strong": "Imara",
+      "textBorderPx": "Mpaka wa maandishi {{value}}px",
+      "borderColor": "Rangi ya mpaka"
+    },
+    "addBlock": "Ongeza kizuizi",
+    "empty": "Ongeza kiungo, video au picha yako ya kwanza hapo juu.",
+    "arrangeHint": "Buruta <grip></grip> ili kupanga · dondosha kizuizi juu ya kingine ili viwe kando kwa kando · bofya kizuizi ili ukihariri hapa hapa",
+    "livePreview": "Onyesho la moja kwa moja",
+    "previewTitle": "Onyesho la Spotlight"
+  }
+}

@@ -1,0 +1,267 @@
+{
+  "untitled": "Không có tiêu đề",
+  "categories": {
+    "podcast": "Podcast",
+    "voice": "Giọng nói",
+    "music": "Âm nhạc",
+    "audiobook": "Sách nói",
+    "interview": "Phỏng vấn"
+  },
+  "inline": {
+    "defaultTitle": "Bản ghi OpenPod",
+    "defaultSubtitle": "Ghi trực tiếp trên 3Speak OpenPods",
+    "kickerPreview": "Nghe thử",
+    "kickerOpenPod": "OpenPod"
+  },
+  "tile": {
+    "artistAlbum": "Album nghệ sĩ",
+    "listenerPlaylist": "Danh sách phát của người nghe",
+    "bpm": "{{bpm}} bpm",
+    "queue": "Hàng đợi",
+    "playlist": "Danh sách phát",
+    "plays_other": "{{count}} lượt nghe"
+  },
+  "author": {
+    "followed": "Đã theo dõi @{{author}}",
+    "unfollowed": "Đã bỏ theo dõi @{{author}}",
+    "failed": "Thất bại",
+    "tracks_other": "{{count}} bản nhạc"
+  },
+  "player": {
+    "openPost": "Mở bài đăng âm thanh",
+    "playlist": "Danh sách phát",
+    "transcript": "Bản ghi lời",
+    "volume": "Âm lượng",
+    "queue": "Hàng đợi",
+    "closePlayer": "Đóng trình phát",
+    "curated": "Tuyển chọn",
+    "noCues": "Không có lời.",
+    "clearQueue": "Xóa hàng đợi",
+    "clearAll": "Xóa tất cả",
+    "queueEmpty": "Hàng đợi trống."
+  },
+  "share": {
+    "failed": "Thất bại",
+    "copyPeakd": "Sao chép đường liên kết PeakD",
+    "copiedPeakd": "Đã sao chép đường liên kết PeakD!",
+    "copy3speak": "Sao chép đường liên kết 3Speak",
+    "copied3speak": "Đã sao chép đường liên kết 3Speak!",
+    "copyAudioPlayer": "Sao chép đường liên kết trình phát âm thanh",
+    "copiedAudioPlayer": "Đã sao chép đường liên kết trình phát âm thanh!",
+    "searchingHive": "Đang tìm trên Hive…"
+  },
+  "post": {
+    "notFound": "Không tìm thấy bài đăng",
+    "loadFailed": "Không thể tải bài đăng âm thanh này",
+    "loadFailedFull": "Không thể tải bài đăng âm thanh này.",
+    "backToAudio": "← Quay lại Âm thanh",
+    "untitled": "(chưa có tiêu đề)",
+    "addedToQueue": "Đã thêm vào hàng đợi",
+    "signInToVote": "Đăng nhập để vote",
+    "voted": "Đã vote",
+    "vote": "Vote",
+    "signInToTip": "Đăng nhập để gửi tip",
+    "tip": "Tip",
+    "stillIndexing": "Âm thanh của bài đăng này vẫn đang được lập chỉ mục — hãy thử lại sau vài phút."
+  },
+  "page": {
+    "sections": {
+      "popular": "Phổ biến",
+      "recent": "Mới phát hành",
+      "podcasts": "Podcast",
+      "songs": "Bài hát",
+      "audiobooks": "Sách nói",
+      "interviews": "Phỏng vấn"
+    },
+    "dates": {
+      "today": "Hôm nay",
+      "thisWeek": "Tuần này",
+      "thisMonth": "Tháng này",
+      "thisYear": "Năm nay"
+    },
+    "duration": {
+      "label": "Thời lượng",
+      "min": "Thời lượng tối thiểu",
+      "max": "Thời lượng tối đa",
+      "seconds": "{{value}} giây",
+      "minutes": "{{value}} phút",
+      "hours": "{{value}} giờ"
+    },
+    "all": "Tất cả",
+    "musicGenre": "Thể loại nhạc",
+    "anyGenre": "Mọi thể loại",
+    "tracks_other": "{{count}} bản nhạc",
+    "noTracks": "Không tìm thấy bản nhạc nào.",
+    "creators": "Nhà sáng tạo",
+    "albumsPlaylists": "Album & danh sách phát",
+    "noAudioForFilters": "Không tìm thấy âm thanh nào với các bộ lọc này."
+  },
+  "upload": {
+    "title": "Tải âm thanh lên",
+    "publishing": "Đang xuất bản…",
+    "failed": "Thất bại",
+    "unknown": "không rõ",
+    "unknownError": "lỗi không xác định",
+    "recorded": "Đã ghi âm",
+    "uploaded": "Đã tải lên",
+    "steps": {
+      "source": "Nguồn",
+      "mode": "Chế độ",
+      "playlist": "Danh sách phát",
+      "post": "Bài đăng",
+      "mainpost": "Bài chính",
+      "tracks": "Bản nhạc",
+      "review": "Xem lại"
+    },
+    "trackTypes": {
+      "voiceSnap": "Giọng nói / Snap"
+    },
+    "toasts": {
+      "pickImage": "Chọn một tệp hình ảnh",
+      "thumbFailed": "Tải hình thu nhỏ lên thất bại: {{error}}",
+      "appliedToAll": "Đã áp dụng cho tất cả bản nhạc",
+      "micDenied": "Quyền truy cập micrô bị từ chối",
+      "signInFirst": "Hãy đăng nhập trước",
+      "enterPlaylistName": "Nhập tên danh sách phát",
+      "creatingPlaylist": "Đang tạo danh sách phát \"{{name}}\"…",
+      "playlistCreated": "Đã tạo danh sách phát",
+      "failedWithError": "Thất bại: {{error}}",
+      "authorized": "Đã cấp quyền cho @threespeak — giờ bạn có thể xuất bản",
+      "authFailed": "Cấp quyền thất bại. Vui lòng thử lại.",
+      "couldntPublishMain": "Không thể xuất bản bài chính: {{error}}",
+      "couldntResolveContainer": "Không thể xác định bài chứa peak.snaps: {{error}}",
+      "published_other": "Đã xuất bản {{count}} bản nhạc",
+      "someFailed": "Một số bản nhạc thất bại — mở bản nhạc lỗi để thử lại"
+    },
+    "gate": {
+      "checking": "Đang kiểm tra…",
+      "allowThreespeak": "Để xuất bản âm thanh, hãy cho phép <b>@threespeak</b> đăng bài thay bạn.",
+      "authorizing": "Đang cấp quyền…",
+      "authorize": "Cấp quyền cho @threespeak",
+      "notEnoughRc": "Tài khoản của bạn hiện không đủ <b>Resource Credits</b> để đăng bài.",
+      "whyCantUpload": "Tại sao tôi không thể tải lên?"
+    },
+    "discard": {
+      "title": "Hủy lượt tải lên?",
+      "body_other": "Bạn đã thêm {{count}} bản nhạc. Nếu đóng, chúng sẽ bị hủy.",
+      "bodyRecording_other": "Bạn đã thêm {{count}} bản nhạc và đang ghi âm. Nếu đóng, tất cả sẽ bị hủy.",
+      "keepEditing": "Tiếp tục chỉnh sửa",
+      "discard": "Hủy bỏ"
+    },
+    "source": {
+      "dropHere": "Thả tệp âm thanh vào đây, hoặc nhấn để chọn",
+      "formats": "MP3, WAV, OGG, WEBM, M4A, FLAC, AAC — cho phép nhiều tệp",
+      "stop": "Dừng",
+      "orRecord": "Hoặc ghi âm trực tiếp",
+      "recordLimit": "Tối đa {{minutes}} phút mỗi lần ghi",
+      "record": "Ghi âm",
+      "added": "Đã thêm ({{count}})"
+    },
+    "titles": {
+      "help": "Đặt tiêu đề cho từng bản nhạc và chọn loại. Bản nhạc thuộc loại âm nhạc có thêm trường thể loại + BPM."
+    },
+    "fields": {
+      "trackTitle": "Tiêu đề bản nhạc",
+      "genre": "Thể loại",
+      "bpm": "BPM",
+      "descriptionOptional": "Mô tả (không bắt buộc)"
+    },
+    "playlist": {
+      "helpRequired": "Bắt buộc — chọn hoặc tạo một danh sách phát. Bài đăng album nằm trong một danh sách phát để các bản nhạc được nhóm lại trong một album 3Speak. Điều này giúp tăng khả năng tiếp cận và vị trí nổi bật hơn trên trang âm thanh.",
+      "helpOptional": "Không bắt buộc — thêm tất cả bản nhạc vào một danh sách phát.",
+      "none": "Không có danh sách phát",
+      "noneHint": "Các bản nhạc sẽ không được nhóm lại",
+      "creatingPending": "đang tạo… (chờ bộ lập chỉ mục)",
+      "loading": "Đang tải danh sách phát…",
+      "empty": "Bạn chưa có danh sách phát nào.",
+      "items_other": "{{count}} mục",
+      "newPlaylist": "Danh sách phát âm thanh mới",
+      "namePlaceholder": "Tên danh sách phát",
+      "public": "Công khai",
+      "private": "Riêng tư",
+      "musicStylePlaceholder": "Phong cách / thể loại nhạc (không bắt buộc, ví dụ Electronic)",
+      "creditsPlaceholder": "Thực hiện (không bắt buộc)",
+      "yearPlaceholder": "Năm",
+      "labelPlaceholder": "Hãng đĩa (không bắt buộc)",
+      "thumbAlt": "Hình thu nhỏ album",
+      "removeThumb": "Gỡ hình thu nhỏ",
+      "creating": "Đang tạo…",
+      "create": "Tạo"
+    },
+    "thumb": {
+      "uploading": "Đang tải lên…",
+      "addCover": "Thêm ảnh bìa",
+      "hint": "Nhấn hoặc kéo thả — JPG / PNG / WebP",
+      "coverAlt": "ảnh bìa",
+      "removeCover": "Gỡ ảnh bìa"
+    },
+    "mode": {
+      "help_other": "Đã thêm {{count}} bản nhạc. Chọn cách đăng chúng.",
+      "howPublished": "Bạn muốn xuất bản như thế nào?",
+      "snapsTitle": "Bình luận Snap",
+      "snapsDesc": "Mỗi âm thanh được đăng dưới dạng phản hồi trong bài chứa peak.snaps mới nhất — hiển thị trong bảng tin Snaps (mặc định).",
+      "singleTitle": "Bài đăng độc lập",
+      "singleTitleSingleOnly": "Bài đăng độc lập (chỉ một tệp)",
+      "singleDesc": "Một âm thanh trong bài đăng Hive cấp cao nhất của riêng nó, với tiêu đề, cộng đồng, thẻ và ảnh bìa.",
+      "albumTitle": "Bài đăng album",
+      "albumTitleNeeds2": "Bài đăng album (cần từ 2 tệp trở lên)",
+      "albumDesc": "Một bài chính (không có âm thanh) làm trang giới thiệu; mỗi bản nhạc được xuất bản dưới dạng bình luận phản hồi với ảnh bìa, mô tả, phần thưởng và người thụ hưởng riêng.",
+      "howEarn": "Âm thanh này nên kiếm thu nhập thế nào?",
+      "postRewardsTitle": "Phần thưởng bài đăng (một lần)",
+      "postRewardsDesc": "Bạn nhận phần thưởng tác giả Hive thông thường — trả một lần, khoảng 7 ngày sau khi xuất bản.",
+      "pplTitle": "Trả theo lượt nghe (trọn đời)",
+      "pplDesc": "Toàn bộ phần thưởng bài đăng âm thanh được chuyển cho @{{account}}. Thay vì một khoản thanh toán duy nhất, một chương trình của 3Speak trả cho bạn theo từng lượt nghe trong suốt vòng đời của bản nhạc."
+    },
+    "reward": {
+      "distribution": "Phân chia phần thưởng",
+      "default": "Mặc định (50% HBD / 50% HP)",
+      "powerup": "Power up 100%",
+      "decline": "Từ chối phần thưởng",
+      "beneficiaries": "Người thụ hưởng",
+      "beneficiariesCount": "Người thụ hưởng ({{count}})"
+    },
+    "mainPost": {
+      "helpAlbum": "Thông tin cho bài chính — trang giới thiệu album. Bài này không chứa âm thanh; mỗi bản nhạc là một bình luận phản hồi mà bạn thiết lập ở bước tiếp theo.",
+      "helpSingle": "Thông tin cho bài đăng độc lập của bạn.",
+      "titlePlaceholder": "Tiêu đề (bắt buộc)",
+      "selectCommunity": "Chọn cộng đồng",
+      "change": "Thay đổi",
+      "tagsPlaceholder": "Thẻ — phân cách bằng dấu cách hoặc dấu phẩy (không bắt buộc)",
+      "whatKind": "Đây là loại âm thanh nào?"
+    },
+    "tracks": {
+      "helpAlbum": "Mỗi bản nhạc được xuất bản dưới dạng bình luận trong bài chính. Đặt giá trị chung một lần và áp dụng cho tất cả, rồi chỉnh riêng cho từng bản nhạc.",
+      "helpSnaps": "Mỗi bản nhạc được xuất bản thành một snap riêng. Đặt giá trị chung một lần và áp dụng cho tất cả, rồi chỉnh riêng cho từng bản nhạc.",
+      "applyToAllHeading": "Áp dụng cho tất cả bản nhạc",
+      "sharedDescription": "Mô tả chung (không bắt buộc)",
+      "sharedCover": "Ảnh bìa chung",
+      "applyToAll_other": "Áp dụng cho tất cả {{count}} bản nhạc",
+      "hide": "Ẩn"
+    },
+    "review": {
+      "standalone": "Bài đăng độc lập",
+      "standaloneIn": "Bài đăng độc lập trong {{community}}",
+      "album_other": "Album — 1 bài chính + {{count}} bình luận bản nhạc",
+      "albumIn_other": "Album — 1 bài chính trong {{community}} + {{count}} bình luận bản nhạc",
+      "snapComments_other": "{{count}} bình luận snap",
+      "ready_other": "Sẵn sàng xuất bản {{count}} bản nhạc.",
+      "readyToPlaylist_other": "Sẵn sàng xuất bản {{count}} bản nhạc vào danh sách phát \"{{name}}\".",
+      "publishAs": "Xuất bản dưới dạng:",
+      "earnings": "Thu nhập:",
+      "earningsPpl": "Trả theo lượt nghe (@{{account}})",
+      "earningsNormal": "Phần thưởng bài đăng thông thường",
+      "playlist": "Danh sách phát:",
+      "failedCount_other": "{{count}} bản nhạc thất bại.",
+      "retryAllFailed": "Thử lại tất cả bản lỗi",
+      "failedDuringUpload": "Thất bại khi tải tệp âm thanh lên: {{message}}",
+      "failedDuringPost": "Thất bại khi đăng lên Hive: {{message}}",
+      "failedWithMessage": "Thất bại: {{message}}"
+    },
+    "stage": {
+      "upload": "Đang tải tệp âm thanh lên",
+      "post": "Đang đăng lên Hive",
+      "uploadingFallback": "Đang tải lên",
+      "published": "Đã xuất bản"
+    }
+  }
+}

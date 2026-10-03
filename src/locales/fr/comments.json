@@ -1,0 +1,104 @@
+{
+  "review": {
+    "fabAria": "Donner votre avis",
+    "fab": "Avis",
+    "aspects": {
+      "upload": "Mise en ligne",
+      "playback": "Lecture",
+      "live": "Diffusion en direct",
+      "discovery": "Découverte / fil",
+      "design": "Design / UX",
+      "performance": "Rapidité",
+      "mobile": "Mobile",
+      "other": "Autre chose"
+    },
+    "titles": {
+      "upload": "Comment s'est passée votre mise en ligne ?",
+      "stream": "Comment s'est passé votre live ?",
+      "watch": "Comment s'est passé votre visionnage sur 3Speak ?",
+      "global": "Que pensez-vous de 3Speak ?",
+      "fallback": "Aidez-nous à améliorer 3Speak"
+    },
+    "stars": {
+      "poor": "Mauvais",
+      "fair": "Passable",
+      "good": "Bien",
+      "great": "Très bien",
+      "amazing": "Génial"
+    },
+    "errors": {
+      "pickStars": "Veuillez choisir une note",
+      "sendFailed": "Impossible d'envoyer votre avis. Veuillez réessayer."
+    },
+    "thanks": "Merci pour votre avis ! 🙏",
+    "sendFeedback": "Envoyer mon avis",
+    "subtitle": "Votre avis nous aide à améliorer 3Speak.",
+    "starRating": "Note",
+    "starsAria_one": "{{count}} étoile",
+    "starsAria_many": "{{count}} étoiles",
+    "starsAria_other": "{{count}} étoiles",
+    "aboutLabel": "À quel sujet ? <opt>(facultatif)</opt>",
+    "recommendLabel": "Recommanderiez-vous 3Speak ? <opt>(facultatif)</opt>",
+    "moreLabel": "Dites-nous en plus <opt>(facultatif)</opt>",
+    "placeholder": "Qu'avez-vous aimé ? Qu'est-ce qui pourrait être mieux ?",
+    "notNow": "Pas maintenant",
+    "sending": "Envoi…"
+  },
+  "tabs": {
+    "reactions": "Réactions",
+    "transcript": "Transcription"
+  },
+  "live": {
+    "vodProcessing": "L'enregistrement est en cours de traitement…",
+    "vodProcessingHint": "Ce live est terminé. La vidéo le remplacera ici dès la fin de l'encodage — inutile de recharger.",
+    "watching_one": "👁 {{count}} spectateur",
+    "watching_many": "👁 {{count}} spectateurs",
+    "watching_other": "👁 {{count}} spectateurs",
+    "signInRaiseHand": "Connectez-vous pour lever la main",
+    "signInChat": "Connectez-vous pour discuter",
+    "signInJoinChat": "🔒 Connectez-vous pour rejoindre le chat."
+  },
+  "transcript": {
+    "title": "Transcription",
+    "languageAria": "Langue de la transcription",
+    "copyingWithTimes": "Copie avec horodatage",
+    "copyingTextOnly": "Copie du texte seul",
+    "timecodes": "Horodatage",
+    "copyWithTimes": "Copier la transcription avec horodatage",
+    "copyText": "Copier le texte de la transcription",
+    "jumpTo": "Aller à {{time}}",
+    "hide": "Masquer la transcription",
+    "show": "Afficher la transcription",
+    "showWithCount_one": "Afficher la transcription ({{count}} ligne)",
+    "showWithCount_many": "Afficher la transcription ({{count}} lignes)",
+    "showWithCount_other": "Afficher la transcription ({{count}} lignes)"
+  },
+  "blog": {
+    "noContent": "Aucun contenu disponible",
+    "loadError": "Erreur de chargement du contenu.",
+    "processError": "Erreur de traitement du contenu.",
+    "rendererError": "Erreur de chargement de l'affichage."
+  },
+  "section": {
+    "posted": "Commentaire publié !",
+    "postFailed": "Échec du commentaire, veuillez réessayer",
+    "editFailed": "Échec de la modification, veuillez réessayer",
+    "updated": "Commentaire mis à jour",
+    "commentTab": "Commenter",
+    "reactTab": "Réagir",
+    "at": "à",
+    "atTime": "à {{time}}",
+    "commentPlaceholder": "Écrivez votre commentaire ici...",
+    "replyPlaceholder": "Écrivez votre réponse ici...",
+    "commentButton": "Commenter",
+    "count_one": "{{count}} commentaire",
+    "count_many": "{{count}} commentaires",
+    "count_other": "{{count}} commentaires",
+    "edited": "(modifié)",
+    "saving": "Enregistrement...",
+    "translation": "Traduction",
+    "translationFailed": "La traduction a échoué. Le service de traduction est-il actif ?",
+    "reportComment": "Signaler le commentaire",
+    "openInShorts": "Ouvrir dans Shorts"
+  }
+}

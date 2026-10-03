@@ -1,0 +1,117 @@
+{
+  "theme": {
+    "switchToLight": "Badili kwenda hali ya mwanga",
+    "switchToDark": "Badili kwenda hali ya giza"
+  },
+  "bottom": {
+    "feeds": "Milisho",
+    "groups": "Vikundi",
+    "audio": "Sauti",
+    "login": "Ingia"
+  },
+  "installApp": "Sakinisha programu",
+  "iosInstallHint": "Gusa <b>Shiriki</b> kisha <b>Ongeza kwenye Skrini ya Nyumbani</b>",
+  "playlists": {
+    "tooltip": "Orodha za kucheza ulizohifadhi au kutengeneza",
+    "label": "Orodha za kucheza",
+    "watchLater": "Tazama Baadaye",
+    "watchLaterCount": "Tazama Baadaye ({{n}})",
+    "watchHistory": "Historia ya kutazama",
+    "all": "Orodha zote za kucheza"
+  },
+  "advertise": "Tangaza",
+  "hidePages": "Ficha kurasa",
+  "showPages": "Onyesha kurasa",
+  "tabs": {
+    "overviewTooltip": "Kila kitu kipya kwenye 3Speak, pamoja na tunachodhani utakipenda",
+    "overview": "Muhtasari",
+    "shortsTooltip": "Video fupi wima, moja baada ya nyingine",
+    "audioTooltip": "Podikasti, muziki na sauti nyingine zilizochapishwa kwenye 3Speak",
+    "groupsTooltip": "Jumuiya unazoweza kujiunga nazo, na beji ambazo watu hutunukiwa",
+    "rankingsTooltip": "Watayarishaji wanaopata zaidi na kutazamwa zaidi kwa sasa"
+  },
+  "aboutLink": "Kuhusu 3Speak",
+  "profile": {
+    "accountMenu": "Menyu ya akaunti",
+    "myChannelAria": "Chaneli yangu",
+    "vpTooltip": "Nguvu ya kura: uzito wa kura yako inayofuata",
+    "rcTooltip": "Resource Credits: gharama ya vitendo vyako kwenye Hive",
+    "myChannel": "Chaneli yangu",
+    "publishBacklog": "Chapisha zilizosubiri",
+    "analytics": "Takwimu",
+    "inviteLinks": "Viungo vya mwaliko",
+    "iosInstallToast": "Gusa kitufe cha Shiriki kwenye Safari, kisha \"Ongeza kwenye Skrini ya Nyumbani\"",
+    "changeAccount": "Badilisha akaunti",
+    "logout": "Toka",
+    "onDiscord": "3Speak kwenye Discord",
+    "onX": "3Speak kwenye X",
+    "onTelegram": "3Speak kwenye Telegram"
+  },
+  "notifications": {
+    "pushOff": "Arifa zimezimwa kwa kifaa hiki",
+    "pushOn": "Utaarifiwa watayarishaji unaowafuata wakichapisha",
+    "pushFailed": "Imeshindwa kubadilisha mipangilio ya arifa",
+    "ariaUnread": "Arifa ({{count}} hazijasomwa)",
+    "pushBlocked": "Arifa za tovuti hii zimezuiwa kwenye mipangilio ya kivinjari chako",
+    "pushNoWorker": "Toleo hili halina service worker, kwa hivyo arifa haziwezi kusajiliwa hapa",
+    "pushStop": "Acha kuarifu kifaa hiki",
+    "pushStart": "Pata arifa watayarishaji unaowafuata wakichapisha",
+    "on": "Imewashwa",
+    "notifyMe": "Niarifu",
+    "empty": "Bado huna arifa.",
+    "threeSpeakVideo": "Video ya 3Speak",
+    "group": {
+      "voteOne": "@{{a}} amepigia kura chapisho lako",
+      "voteTwo": "@{{a}} na @{{b}} wamepigia kura chapisho lako",
+      "voteMany_one": "@{{a}} na mwingine {{count}} wamepigia kura chapisho lako",
+      "voteMany_other": "@{{a}} na wengine {{count}} wamepigia kura chapisho lako",
+      "withValue": "{{label}} (${{value}})",
+      "followOne": "@{{a}} amekufuata",
+      "followTwo": "@{{a}} na @{{b}} wamekufuata",
+      "followMany_one": "@{{a}} na mwingine {{count}} wamekufuata",
+      "followMany_other": "@{{a}} na wengine {{count}} wamekufuata",
+      "other": "Arifa {{count}} za {{type}}",
+      "typeCount": "{{count}} {{type}}",
+      "includesWhale": "Inajumuisha akaunti ya/za 🐋 nyangumi",
+      "includesOrca": "Inajumuisha akaunti ya/za 🐬 orca",
+      "andMore": "na {{count}} zaidi…"
+    }
+  },
+  "search": {
+    "types": {
+      "users": "Watumiaji",
+      "communities": "Jumuiya",
+      "videos": "Video",
+      "shorts": "Shorts",
+      "audio": "Sauti",
+      "playlists": "Orodha za kucheza"
+    },
+    "dates": {
+      "today": "Leo",
+      "thisWeek": "Wiki hii",
+      "thisMonth": "Mwezi huu",
+      "thisYear": "Mwaka huu"
+    },
+    "contentType": "Aina ya maudhui",
+    "boostRecent": "Pendelea mpya",
+    "dateRange": "Kipindi cha tarehe",
+    "tag": "Lebo",
+    "tagPlaceholder": "k.m. crypto, gaming...",
+    "community": "Jumuiya",
+    "communityPlaceholder": "Tafuta jumuiya...",
+    "clearFilters": "Futa vichujio vyote",
+    "allHidden": "Aina zote za maudhui zimefichwa.",
+    "reenableFilters": "Washa vichujio vyote tena",
+    "noResultsFor": "Hakuna matokeo ya “{{term}}”",
+    "searchFor": "Tafuta “{{term}}”",
+    "authors_one": "mwandishi {{count}}",
+    "authors_other": "waandishi {{count}}",
+    "subscribers_one": "mwanachama {{count}}",
+    "subscribers_other": "wanachama {{count}}",
+    "views_one": "mtazamo {{formatted}}",
+    "views_other": "mitazamo {{formatted}}",
+    "tags": "Lebo",
+    "titles": "Vichwa",
+    "placeholder": "Tafuta..."
+  }
+}

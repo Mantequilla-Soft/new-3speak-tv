@@ -1,0 +1,112 @@
+{
+  "theme": {
+    "switchToLight": "ライトモードに切り替え",
+    "switchToDark": "ダークモードに切り替え"
+  },
+  "bottom": {
+    "feeds": "フィード",
+    "groups": "グループ",
+    "audio": "音声",
+    "login": "ログイン"
+  },
+  "installApp": "アプリをインストール",
+  "iosInstallHint": "<b>共有</b>をタップしてから<b>ホーム画面に追加</b>を選んでください",
+  "playlists": {
+    "tooltip": "保存または作成した再生リスト",
+    "label": "再生リスト",
+    "watchLater": "後で見る",
+    "watchLaterCount": "後で見る（{{n}}）",
+    "watchHistory": "再生履歴",
+    "all": "すべての再生リスト"
+  },
+  "advertise": "広告を出す",
+  "hidePages": "ページを隠す",
+  "showPages": "ページを表示",
+  "tabs": {
+    "overviewTooltip": "3Speak のすべての新着と、あなたが気に入りそうなもの",
+    "overview": "概要",
+    "shortsTooltip": "縦型の短い動画を次々に",
+    "audioTooltip": "3Speak で公開されたポッドキャスト、音楽、その他の音声",
+    "groupsTooltip": "参加できるコミュニティと、授与されたバッジ",
+    "rankingsTooltip": "今いちばん稼いでいて、よく見られているクリエイター"
+  },
+  "aboutLink": "3Speak について",
+  "profile": {
+    "accountMenu": "アカウントメニュー",
+    "myChannelAria": "マイチャンネル",
+    "vpTooltip": "投票パワー: 次の投票にどれだけの重みがあるか",
+    "rcTooltip": "リソースクレジット: Hive での操作にかかるコスト",
+    "myChannel": "マイチャンネル",
+    "publishBacklog": "バックログを公開",
+    "analytics": "アナリティクス",
+    "inviteLinks": "招待リンク",
+    "iosInstallToast": "Safari の共有ボタンをタップしてから「ホーム画面に追加」を選んでください",
+    "changeAccount": "アカウントを変更",
+    "logout": "ログアウト",
+    "onDiscord": "Discord の 3Speak",
+    "onX": "X の 3Speak",
+    "onTelegram": "Telegram の 3Speak"
+  },
+  "notifications": {
+    "pushOff": "この端末の通知をオフにしました",
+    "pushOn": "フォロー中のクリエイターが投稿すると通知が届きます",
+    "pushFailed": "通知設定を変更できませんでした",
+    "ariaUnread": "通知（未読 {{count}} 件）",
+    "pushBlocked": "ブラウザの設定で、このサイトの通知がブロックされています",
+    "pushNoWorker": "このビルドには Service Worker がないため、ここでは通知を登録できません",
+    "pushStop": "この端末への通知をやめる",
+    "pushStart": "フォロー中のクリエイターが投稿したら通知を受け取る",
+    "on": "オン",
+    "notifyMe": "通知を受け取る",
+    "empty": "まだ通知はありません。",
+    "threeSpeakVideo": "3Speak の動画",
+    "group": {
+      "voteOne": "@{{a}} さんがあなたの投稿に投票しました",
+      "voteTwo": "@{{a}} さんと @{{b}} さんがあなたの投稿に投票しました",
+      "voteMany_other": "@{{a}} さんとほか {{count}} 人があなたの投稿に投票しました",
+      "withValue": "{{label}}（${{value}}）",
+      "followOne": "@{{a}} さんがあなたをフォローしました",
+      "followTwo": "@{{a}} さんと @{{b}} さんがあなたをフォローしました",
+      "followMany_other": "@{{a}} さんとほか {{count}} 人があなたをフォローしました",
+      "other": "{{type}} の通知 {{count}} 件",
+      "typeCount": "{{type}} {{count}} 件",
+      "includesWhale": "🐋 クジラアカウントを含みます",
+      "includesOrca": "🐬 シャチアカウントを含みます",
+      "andMore": "ほか {{count}} 件…"
+    }
+  },
+  "search": {
+    "types": {
+      "users": "ユーザー",
+      "communities": "コミュニティ",
+      "videos": "動画",
+      "shorts": "ショート",
+      "audio": "音声",
+      "playlists": "再生リスト"
+    },
+    "dates": {
+      "today": "今日",
+      "thisWeek": "今週",
+      "thisMonth": "今月",
+      "thisYear": "今年"
+    },
+    "contentType": "コンテンツの種類",
+    "boostRecent": "新しいものを優先",
+    "dateRange": "期間",
+    "tag": "タグ",
+    "tagPlaceholder": "例: crypto, gaming...",
+    "community": "コミュニティ",
+    "communityPlaceholder": "コミュニティを検索...",
+    "clearFilters": "すべてのフィルターをクリア",
+    "allHidden": "すべてのコンテンツタイプが非表示になっています。",
+    "reenableFilters": "すべてのフィルターを再度有効にする",
+    "noResultsFor": "「{{term}}」の検索結果はありません",
+    "searchFor": "「{{term}}」を検索",
+    "authors_other": "投稿者 {{count}} 人",
+    "subscribers_other": "登録者 {{count}} 人",
+    "views_other": "{{formatted}} 回視聴",
+    "tags": "タグ",
+    "titles": "タイトル",
+    "placeholder": "検索..."
+  }
+}

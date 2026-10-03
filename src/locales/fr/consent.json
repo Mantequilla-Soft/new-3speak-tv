@@ -1,0 +1,40 @@
+{
+  "ariaLabel": "Paramètres des cookies et du stockage",
+  "title": "Cookies et stockage du navigateur",
+  "withAds": {
+    "intro": "3Speak conserve votre connexion et les paramètres que vous choisissez dans votre navigateur. C'est ce qui fait fonctionner le site, et ces données restent sur votre appareil. Deux éléments sont facultatifs, et tous deux sont désactivés tant que vous ne les activez pas ci-dessous.",
+    "advertising": "L'un d'eux est la <b>publicité</b>. Lorsqu'elle est activée, une régie publicitaire externe charge son propre code sur la page et peut stocker des données que nous ne contrôlons pas. C'est pourquoi il s'agit d'un choix séparé, jamais associé à autre chose."
+  },
+  "noAds": {
+    "intro": "3Speak conserve votre connexion et les paramètres que vous choisissez dans votre navigateur — c'est ce qui fait fonctionner le site. Nous n'utilisons <b>aucun cookie de suivi, aucune publicité et aucun outil d'analyse tiers</b>. La seule chose que regarder une vidéo peut enregistrer sur votre appareil, c'est l'endroit où vous vous êtes arrêté — et c'est le seul choix facultatif ci-dessous.",
+    "optional": "Le seul élément facultatif : nous pouvons mémoriser <b>où vous vous êtes arrêté dans chaque vidéo</b> pour reprendre la lecture. Cette information ne quitte jamais votre appareil."
+  },
+  "details": {
+    "essentialTitle": "Essentiel — toujours activé",
+    "essential": {
+      "login": "Votre session de connexion",
+      "settings": "Les paramètres que vous définissez : thème, volume, langue, sous-titres, préférences du fil",
+      "uploads": "La reprise d'une mise en ligne interrompue et les brouillons des publications que vous rédigez",
+      "offline": "L'application elle-même, pour une utilisation hors ligne une fois installée",
+      "answer": "Votre réponse à cette bannière"
+    },
+    "optionalTitle": "Facultatif — à vous de choisir",
+    "optional": {
+      "playback": "La position de lecture de chaque vidéo, pour reprendre là où vous vous êtes arrêté",
+      "advertising": "Publicité : le code d'une régie publicitaire externe, et tout ce qu'elle stocke sur votre appareil pour compter et limiter les publicités qui vous sont affichées"
+    },
+    "noteWithAds": "Si vous les laissez désactivés, les positions de lecture ne sont plus enregistrées, celles déjà stockées sont supprimées, et aucun code publicitaire n'est chargé. Vous pouvez changer d'avis à tout moment.",
+    "noteNoAds": "Choisir « Essentiel uniquement » arrête l'enregistrement des positions de lecture et supprime celles déjà stockées. Vous pouvez changer d'avis à tout moment — choisir « Accepter » le réactive immédiatement."
+  },
+  "toggles": {
+    "resumeTitle": "Reprendre la lecture",
+    "resumeDesc": "Mémoriser où vous vous êtes arrêté dans chaque vidéo. Reste sur votre appareil.",
+    "advertisingTitle": "Publicité",
+    "advertisingDesc": "Autoriser une régie publicitaire externe à charger son code et à stocker ce dont elle a besoin."
+  },
+  "hideDetails": "Masquer les détails",
+  "whatIsStored": "Qu'est-ce qui est stocké exactement ?",
+  "essentialOnly": "Essentiel uniquement",
+  "saveChoices": "Enregistrer mes choix",
+  "acceptAll": "Tout accepter"
+}

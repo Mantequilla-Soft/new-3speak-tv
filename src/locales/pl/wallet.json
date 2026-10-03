@@ -1,0 +1,50 @@
+{
+  "tabs": {
+    "overview": "Przegląd",
+    "transactions": "Transakcje",
+    "aria": "Sekcje portfela"
+  },
+  "errors": {
+    "fetchBalances": "Nie udało się pobrać sald",
+    "needKeychain": "Do wykonania przelewu potrzebujesz rozszerzenia Keychain"
+  },
+  "header": {
+    "mine": "MÓJ portfel",
+    "ofUser": "Portfel {{user}}"
+  },
+  "assets": "Aktywa",
+  "transfer": "Przelew",
+  "transferModal": {
+    "loginRequired": "Zaloguj się, aby wykonać przelew",
+    "insufficient": "Niewystarczające saldo",
+    "invalidUsername": "Nieprawidłowa nazwa użytkownika",
+    "success": "Przelew wykonany!",
+    "failed": "Przelew nie powiódł się: {{error}}",
+    "title": "Przelej {{coin}}",
+    "amountLabel": "Kwota ({{coin}})",
+    "balance": "Saldo {{balance}}",
+    "max": "Maks.",
+    "recipientLabel": "Nazwa użytkownika odbiorcy",
+    "recipientPlaceholder": "Wpisz nazwę użytkownika Hive",
+    "memoLabel": "Notatka",
+    "memoPlaceholder": "Wpisz notatkę",
+    "confirm": "Potwierdź przelew"
+  },
+  "history": {
+    "loadFailed": "Nie udało się wczytać transakcji",
+    "title": "Historia transakcji",
+    "cols": {
+      "type": "Typ",
+      "amount": "Kwota",
+      "account": "Konto",
+      "date": "Data",
+      "memo": "Notatka"
+    },
+    "types": {
+      "transfer": "Przelew",
+      "claim": "Odbiór nagrody",
+      "received": "Otrzymano"
+    },
+    "claimedRewards": "Odebrane nagrody"
+  }
+}

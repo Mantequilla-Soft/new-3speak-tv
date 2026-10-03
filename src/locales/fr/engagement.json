@@ -1,0 +1,100 @@
+{
+  "tip": {
+    "successTitle": "Pourboire envoyé !",
+    "successMessage": "Vous avez envoyé {{amount}} {{currency}} en pourboire. Merci pour votre soutien !",
+    "errors": {
+      "allRequired": "Tous les champs sont obligatoires",
+      "loginRequired": "Connectez-vous pour envoyer un pourboire",
+      "insufficientBalance": "Solde insuffisant",
+      "invalidUsername": "Nom d'utilisateur invalide",
+      "transferFailed": "Échec du transfert : {{message}}"
+    },
+    "heading": "Envoyer un pourboire à @{{recipient}}",
+    "amountLabel": "Montant : ",
+    "amountPlaceholder": "ex. 1.000",
+    "currencyLabel": "Devise :",
+    "availableBalance": "Solde disponible : {{currency}}",
+    "memoLabel": "Mémo (facultatif) :",
+    "memoPlaceholder": "ex. Merci pour ce super contenu !",
+    "send": "Envoyer le pourboire"
+  },
+  "cardMenu": {
+    "loginToPersonalize": "Connectez-vous pour personnaliser votre fil",
+    "notInterestedToast": "Pas intéressé — nous masquerons cette vidéo",
+    "undo": "Annuler",
+    "cantHideOwn": "Vous ne pouvez pas masquer vos propres vidéos",
+    "hidingCreatorToast": "Vidéos de @{{author}} masquées",
+    "loginForPlaylists": "Connectez-vous pour ajouter des vidéos à vos playlists",
+    "loginToTag": "Connectez-vous pour taguer des vidéos",
+    "moreOptions": "Plus d'options",
+    "addToPlaylist": "Ajouter à une playlist",
+    "addTag": "Ajouter un tag",
+    "notInterested": "Pas intéressé",
+    "dontShowCreator": "Ne plus afficher @{{author}}"
+  },
+  "guestList": {
+    "loadFailed": "Impossible de charger la liste d'invités actuelle",
+    "saved_one": "{{count}} invité peut regarder cette vidéo",
+    "saved_many": "{{count}} invités peuvent regarder cette vidéo",
+    "saved_other": "{{count}} invités peuvent regarder cette vidéo",
+    "cleared": "Liste d'invités vidée",
+    "saveFailed": "Impossible d'enregistrer la liste d'invités",
+    "invalidAccounts": "Comptes Hive non valides : {{names}}",
+    "title": "🔒 Liste d'invités",
+    "hint": "Ces comptes peuvent regarder sans 3Speak Pro. Conservée en privé sur nos serveurs, jamais publiée dans votre publication.",
+    "notRegistered": "Le traitement de cette vidéo n'est pas encore terminé. Vous pourrez modifier la liste une fois qu'il le sera.",
+    "placeholder": "utilisateur, autre.utilisateur",
+    "empty": "Personne pour l'instant. Seuls les abonnés Pro peuvent regarder.",
+    "removeAria": "Retirer {{name}}"
+  },
+  "voters": {
+    "pinnedTitle_one": "Votants ({{count}})",
+    "pinnedTitle_many": "Votants ({{count}})",
+    "pinnedTitle_other": "Votants ({{count}})",
+    "topVoters": "Meilleurs votants",
+    "noVotes": "Aucun vote pour l'instant"
+  },
+  "payout": {
+    "breakdown": "Détail des gains",
+    "estimatedBreakdown": "Détail estimé",
+    "beneficiaries": "Bénéficiaires",
+    "curators": "Curateurs (50 %)",
+    "author": "Auteur",
+    "total": "Total",
+    "totalEstimated": "Total (est.)"
+  },
+  "vote": {
+    "loginRequired": "Connectez-vous pour effectuer cette opération",
+    "fetchPostFailed": "Impossible de récupérer les données de la publication",
+    "sameWeight": "Vous avez déjà voté avec ce poids. Choisissez une autre valeur.",
+    "failed": "Échec du vote : {{message}}",
+    "pleaseTryAgain": "veuillez réessayer",
+    "weight": "Poids du vote : {{weight}} %",
+    "success": "Vote enregistré ! Valeur : ${{value}}",
+    "successTagged": "Vote enregistré ! Tagué « {{tag}} ». Valeur : ${{value}}",
+    "tagged": "Tagué « {{tag}} ».",
+    "vote": "Voter",
+    "tagThisVideo": "Taguer cette vidéo",
+    "tagOptional": "— facultatif —",
+    "pickTopicFirst": "Choisissez d'abord un sujet",
+    "taggedNoDot": "Tagué « {{tag}} »",
+    "tagFailed": "Échec du tag : {{message}}",
+    "taggedAlreadyVoted": "Tagué « {{tag}} » — votre vote à {{weight}} % était déjà enregistré.",
+    "votingClosed": "Votes clos — taguez cette vidéo",
+    "youTagged": "Vous avez tagué cette vidéo <b>{{tag}}</b>.",
+    "pickTopic": "Choisissez un sujet (compte comme un vote à 100 %)",
+    "submitTag": "Valider le tag",
+    "tagThisVideoFull": "Taguer cette vidéo (compte comme un vote à 100 %)",
+    "justTag": "Ne pas voter — juste taguer"
+  },
+  "tagsPicker": {
+    "autoTagged": "Tags automatiques : {{tags}}",
+    "searchPlaceholder": "Rechercher des sujets…",
+    "searchAria": "Rechercher des sujets",
+    "noMatches": "Aucun sujet ne correspond à « {{query}} ».",
+    "allSelected": "Toute la catégorie {{category}} est sélectionnée. Ajoutez des sujets individuels seulement pour affiner :",
+    "orPickTopics": "Ou choisissez des sujets individuels :",
+    "goodEnough": "C'est suffisant — ou soyez plus précis (facultatif) :",
+    "moreSpecific": "Plus précis :"
+  }
+}

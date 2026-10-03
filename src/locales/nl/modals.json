@@ -1,0 +1,172 @@
+{
+  "addTag": {
+    "loginRequired": "Log in om deze video te taggen",
+    "pickTopic": "Kies eerst een onderwerp",
+    "tagged": "Getagd als “{{label}}”",
+    "failed": "Taggen mislukt: {{error}}",
+    "pleaseTryAgain": "probeer het opnieuw",
+    "title": "Tag deze video",
+    "question": "Waar gaat deze video over?",
+    "existing": "Je hebt dit getagd als <b>{{label}}</b> — als je een ander kiest, wordt die vervangen.",
+    "submit": "Tag versturen"
+  },
+  "addAccount": {
+    "usernameRequired": "Een gebruikersnaam is nodig om verder te gaan.",
+    "hiveAuthExpired": "Aanmeldverzoek van HiveAuth is verlopen",
+    "loginSuccess": "Inloggen gelukt!",
+    "loginFailed": "Inloggen mislukt: {{error}}",
+    "logoAlt": "3Speak-logo",
+    "title": "Inloggen met je gebruikersnaam",
+    "usernamePlaceholder": "Gebruikersnaam"
+  },
+  "socialLink": {
+    "hashCopied": "Hash gekopieerd",
+    "copyFailed": "Kopiëren naar klembord mislukt",
+    "enterHandle": "Vul je gebruikersnaam of ID op het platform in",
+    "verified": "Account geverifieerd en gekoppeld",
+    "errors": {
+      "hashNotFound": "Hash nog niet gevonden op het profiel. Zorg dat de wijziging openbaar is opgeslagen en probeer het opnieuw.",
+      "alreadyLinked": "Dit kanaal is al geverifieerd door een andere Hive-gebruiker (@{{user}}).",
+      "tooMany": "Je hebt het maximumaantal gekoppelde accounts bereikt.",
+      "notFound": "Dat kanaal bestaat niet op het platform.",
+      "badSignature": "Handtekening kon niet worden geverifieerd. Zorg dat je bent ingelogd met je posting key.",
+      "rateLimited": "Te veel verzoeken. Wacht een minuut en probeer het opnieuw.",
+      "lookupFailed": "Opzoeken op het platform mislukt. Probeer het zo opnieuw.",
+      "verifyFailed": "Verificatie mislukt",
+      "stillPresent": "De hash staat nog op je profiel — verwijder hem eerst.",
+      "unlinkFailed": "Ontkoppelen mislukt",
+      "noSuchLink": "Deze koppeling bestaat niet."
+    },
+    "confirmUnlink": "Je {{platform}}-koppeling verwijderen? Zorg dat de verificatiehash niet meer op je openbare profiel staat, anders wordt het ontkoppelen geweigerd.",
+    "removed": "Koppeling verwijderd",
+    "title": "Gekoppelde externe profielen",
+    "intro": "Bewijs dat een YouTube-kanaal (of ander kanaal) van jou is door je unieke 3Speak-hash in de beschrijving van je openbare profiel te plakken en het hier te verifiëren.",
+    "openProfile": "Profiel openen",
+    "removeLink": "Koppeling verwijderen",
+    "empty": "Nog geen externe profielen gekoppeld.",
+    "addPlatform": "Nieuw platform toevoegen",
+    "flowTitle": "Je {{platform}}-kanaal koppelen",
+    "step1": "Kopieer je unieke verificatiehash:",
+    "step2": "<strong>Plak hem in de beschrijving van je openbare {{platform}}-profiel</strong> (maakt niet uit waar — over / bio / beschrijving is prima). Sla de wijziging op.",
+    "step3": "Vul je {{platform}}-ID in:",
+    "verifying": "Verifiëren…",
+    "verify": "Verifiëren"
+  },
+  "auth": {
+    "title": "Autoriseer 3Speak!",
+    "text": "Om video's op 3Speak te uploaden hebben we je posting-autoriteit nodig. Daarmee kunnen we je geüploade video's op Hive publiceren. Je hoeft ons maar één keer posting-autoriteit te geven.",
+    "authorize": "Autoriseren"
+  },
+  "beneficiary": {
+    "errors": {
+      "emptyUsername": "Gebruikersnaam mag niet leeg zijn.",
+      "sameUser": "Je kunt jezelf niet als begunstigde instellen",
+      "greaterThanZero": "Het beloningspercentage moet groter zijn dan 0.",
+      "exceedsRemaining": "Het beloningspercentage is hoger dan de resterende {{percent}}%.",
+      "validNumber": "Vul een geldig getal in",
+      "validPercent": "Vul een geldig beloningspercentage in.",
+      "duplicate": "Dit account staat al in de lijst.",
+      "invalidAccount": "Ongeldige gebruikersnaam of community-ID.",
+      "cannotIncrease": "Kan niet hoger dan de resterende {{percent}}%",
+      "pendingRow": "@{{account}} is nog niet toegevoegd — klik op + om het toe te voegen, of maak het veld leeg.",
+      "atLeastOne": "Het beloningspercentage moet minstens 1% zijn"
+    },
+    "title": "Begunstigden",
+    "intro": "Voeg een gebruiker toe die automatisch een deel van de beloningen van deze post moet krijgen.",
+    "minPercent": "% (min. {{percent}}%)",
+    "usernamePlaceholder": "Gebruikersnaam invullen",
+    "minimumReward": "Minimale beloning is <strong>1%</strong>",
+    "checking": "<strong>@{{account}}</strong> controleren op Hive…",
+    "notExisting": "⚠️ <strong>@{{account}}</strong> is geen bestaand Hive-account.",
+    "notAdded": "⚠️ <strong>@{{account}}</strong> is nog niet toegevoegd — klik op <strong>+</strong> om het toe te voegen, of maak het veld leeg.",
+    "infrastructure": "10% === Infrastructuur",
+    "videoEncoding": "Video-encoding === 1%",
+    "defaults": "Standaardbegunstigden ({{count}})"
+  },
+  "qr": {
+    "scan": "Scan deze QR in Hive Keychain:",
+    "click": "Klik op de QR om hem in de Keychain-app te openen"
+  },
+  "editVideoHint": {
+    "title": "Bewerk al je video's",
+    "text": "Open een van je eigen video's en zoek de <strong>penknop</strong> in de actiebalk onder de speler. Klik erop om de titel, beschrijving, thumbnail, tags en meer te wijzigen.",
+    "penTitle": "Videogegevens bewerken",
+    "tip": "Tip",
+    "caption": "Deze penknop is wat je zoekt",
+    "gotIt": "Begrepen"
+  },
+  "verifyAuth": {
+    "title": "Autorisatie controleren",
+    "text": "Even geduld terwijl we controleren of de autorisatie is gegeven..."
+  },
+  "editor": {
+    "confirmLeave": "De editor is nog open. Als je deze pagina verlaat, wordt de editor gesloten en gaan niet-opgeslagen wijzigingen verloren.\n\nOK = Editor sluiten & weggaan\nAnnuleren = Op deze pagina blijven",
+    "confirmClose": "Weet je zeker dat je de editor wilt sluiten? Niet-opgeslagen wijzigingen gaan verloren.",
+    "iframeTitle": "3Speak-video-editor",
+    "finding": "Beschikbare editor zoeken...",
+    "loading": "Editor laden...",
+    "unavailable": "Er is momenteel geen editorserver beschikbaar. Probeer het later opnieuw.",
+    "sending": "Versturen naar renderdienst...",
+    "rendering": "Renderen... {{percent}}%",
+    "complete": "Renderen klaar!",
+    "useVideo": "Video gebruiken",
+    "preparing": "Video voorbereiden voor upload...",
+    "renderUnavailable": "Renderdienst nog niet beschikbaar. Tijdlijngegevens zijn naar de console gelogd.",
+    "backToEditor": "Terug naar editor",
+    "postError": "Video voorbereiden voor upload mislukt. Probeer hem in plaats daarvan te downloaden."
+  },
+  "profile": {
+    "mustLogin": "Je moet eerst inloggen",
+    "followed": "Gevolgd",
+    "unfollowed": "Ontvolgd",
+    "followFailed": "Volgen mislukt: {{error}}",
+    "unfollowFailed": "Ontvolgen mislukt: {{error}}",
+    "avatarAlt": "Profiel",
+    "posts": "Posts",
+    "followers": "Volgers",
+    "joined": "Lid sinds {{date}}",
+    "about": "Over",
+    "noBio": "Geen bio beschikbaar"
+  },
+  "report": {
+    "reasons": {
+      "spamMisleading": "Spam of misleidend",
+      "harassment": "Intimidatie of pesten",
+      "hateSpeech": "Haatzaaien",
+      "violence": "Gewelddadige of schokkende inhoud",
+      "sexual": "Seksuele inhoud",
+      "copyright": "Inbreuk op auteursrecht",
+      "scam": "Oplichting of fraude",
+      "other": "Overig",
+      "spam": "Spam",
+      "impersonation": "Imitatie van iemand anders",
+      "spamAccount": "Spamaccount"
+    },
+    "selectReasonError": "Kies een reden",
+    "loginRequired": "Je moet ingelogd zijn om te melden",
+    "submitted": "Melding verstuurd. Bedankt.",
+    "failed": "Melding versturen mislukt",
+    "titles": {
+      "user": "Gebruiker melden",
+      "comment": "Reactie melden",
+      "short": "Short melden",
+      "post": "Post melden",
+      "video": "Video melden"
+    },
+    "reason": "Reden",
+    "selectReason": "Kies een reden...",
+    "details": "Extra details (optioneel)",
+    "detailsPlaceholder": "Geef meer context...",
+    "submitting": "Versturen...",
+    "submit": "Melding versturen"
+  },
+  "upload": {
+    "missingInfo": "Video- of thumbnailgegevens ontbreken.",
+    "updateFailed": "Videogegevens bijwerken mislukt. Probeer het opnieuw.",
+    "title": "Video en thumbnail uploaden",
+    "selectVideo": "Video kiezen",
+    "thumbnail": "Thumbnail",
+    "clickThumbnail": "Klik om een thumbnail te uploaden",
+    "updateInfo": "Videogegevens bijwerken"
+  }
+}

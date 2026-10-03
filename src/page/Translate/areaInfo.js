@@ -1,0 +1,44 @@
+// Where each translation area shows up in the app, for translators.
+//
+// English on purpose and NOT run through t(): this is guidance for the people
+// doing the translating, and it must stay readable while the editor itself is
+// switched to a half-finished language. One line per file in src/locales/en/.
+// A new area file needs a line here too (the editor shows nothing for a missing one).
+export const AREA_INFO = {
+  ads: 'Advertising: the /advertise page (booking ads, prices, payments, campaign stats), ad overlays and skip buttons on videos, the ticker banner, and the "Promote" wizard.',
+  app: 'App-wide bits: page titles in the browser tab, the "What\'s new" update popup, loading and error screens, welcome and interest prompts, the support popup, and app-level toasts.',
+  audio: 'Audio and podcasts: the audio upload window, the audio page and audio posts, the mini audio player at the bottom, and audio tiles in feeds.',
+  auth: 'Signing in: the login window, wallet approval popups (Keychain, HiveAuth, ...), the login return pages, and invite links.',
+  badges: 'Badges and rankings: badge pages, awarding a badge, profile badge chips, and the Leaderboard page (/leaderboard).',
+  cards: 'Video cards in every feed: thumbnail labels, duration, "scheduled" and "live" tags, and playlist cards.',
+  chat: '3Speak Chat (/chat and the floating chat panel): conversations, channels, sharing a video into chat, link previews.',
+  comments: 'Under a video: the comments section, replies, the Comments / Transcript / Description tabs, live chat on streams, and the review popup.',
+  common: 'Words used all over the app: buttons like Save, Cancel, Close, Follow, Share; "Loading…", counts like "12 views", menu names, and the language picker.',
+  communities: 'Communities and groups: the community directory (/communities), community pages, joining, and creating a community or badge.',
+  consent: 'The cookie and browser-storage banner every new visitor sees, and its settings. Legal wording: translate precisely.',
+  editor: 'The rich-text editor used when writing a post or description (toolbar, image upload, preview).',
+  engagement: 'Votes, tips and payouts: the upvote slider and tooltips, who voted, payout details, beneficiaries, tipping, the "..." menu on cards, and tag picking.',
+  feeds: 'The home page and feeds: Home, New, Trending, Discover, tag pages, the feed filter bar, "New from people you follow", live-stream rows, and Channel Surfing (/surf).',
+  incubation: 'New accounts that are not on Hive yet ("warm-up"): the progress panel, tasks to unlock things, tips, the graduation popup, and the advertiser warm-up pages.',
+  live: 'Livestreaming (OpenPods): the live strip, going live, boosting a stream, clipping, reporting, and publishing a recording.',
+  misc: 'Smaller pages and shared helpers: Channel Surfing names, the leaderboard metrics, the Following feed, error boundaries, the Groups page, and other one-offs.',
+  modals: 'Assorted popups: report a video, add a tag, QR code, add a social link, beneficiaries, verify account, edit-video hints, and the profile popup.',
+  nav: 'The top bar and menus: search, the notification bell, the profile menu (top right), the sidebar, and the bottom bar on phones.',
+  notifications: 'The Notifications page (/notifications): every notification line ("@x upvoted your video"), the categories and the filters.',
+  pages: 'Static pages: About / FAQ (/about), the 404 "page not found" screen, and the frame around the legal pages (the legal text itself stays English).',
+  player: 'The video player itself: play, pause, volume, speed, subtitles, fullscreen, the mini player, the playlist bar, and reaction videos.',
+  playlists: 'Playlists: "Add to playlist", the playlist page, Watch Later, and Watched.',
+  posts: 'Text posts and editing: the post page, editing a video\'s post, and the image uploader.',
+  profile: 'Channel / profile pages (/@user): the header, stats, tabs (Videos, Shorts, Snaps, ...), followers, links, the channel trailer, and creator suggestions.',
+  settings: 'The Settings window (gear icon): appearance, feed and Shorts options, notifications, ads and viewer rewards, posting authority, and "Your data".',
+  shorts: 'Shorts (/shorts): the vertical video feed, its buttons, comments on shorts, and the Shorts row on the home page.',
+  spotlight: 'Spotlight link pages: the page editor (blocks, themes, templates, fonts) and the public Spotlight page.',
+  stats: 'Creator analytics (Profile → Analytics): views, watch time, traffic sources, countries, and per-video stats.',
+  studio: 'Creator studio: drafts, scheduled posts, the schedule picker, and the markdown composer.',
+  tags: 'Topic and category names (Gaming, Music, Crypto, ...) shown on tag chips, the topic picker, Channel Surfing and the leaderboard.',
+  toastCategories: 'The small bold heading on pop-up notifications ("toasts"), e.g. "Upload" above "File is too large". One word or two.',
+  translator: 'This translation editor (/translate). Only translators see it.',
+  upload: 'Uploading a video: choosing or recording a file, details (title, tags, community, rewards), thumbnail, progress, publishing, drafts and scheduling.',
+  wallet: 'The wallet (/wallet/<user>): balances, transfers, the transaction history, and 3Speak Pro.',
+  watch: 'The video watch page: title, description, AI summary and translate buttons, gated videos, reactions, watch-later, and editing your own video.',
+};

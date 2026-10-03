@@ -1,0 +1,98 @@
+{
+  "tip": {
+    "successTitle": "Bahşiş Gönderildi!",
+    "successMessage": "Bahşiş olarak {{amount}} {{currency}} gönderdin. Desteğin için teşekkürler!",
+    "errors": {
+      "allRequired": "Tüm alanlar zorunlu",
+      "loginRequired": "Bahşiş göndermek için giriş yapmalısın",
+      "insufficientBalance": "Yetersiz bakiye",
+      "invalidUsername": "Geçersiz kullanıcı adı",
+      "transferFailed": "Transfer başarısız: {{message}}"
+    },
+    "heading": "@{{recipient}} kullanıcısına bahşiş gönder",
+    "amountLabel": "Miktar: ",
+    "amountPlaceholder": "örn. 1.000",
+    "currencyLabel": "Para birimi:",
+    "availableBalance": "Kullanılabilir bakiye: {{currency}}",
+    "memoLabel": "Not (isteğe bağlı):",
+    "memoPlaceholder": "örn. Bu harika içerik için teşekkürler!",
+    "send": "Bahşiş Gönder"
+  },
+  "cardMenu": {
+    "loginToPersonalize": "Akışını kişiselleştirmek için giriş yap",
+    "notInterestedToast": "İlgilenmiyorsun, bu videoyu gizleyeceğiz",
+    "undo": "Geri al",
+    "cantHideOwn": "Kendi videolarını gizleyemezsin",
+    "hidingCreatorToast": "@{{author}} kullanıcısının videoları gizleniyor",
+    "loginForPlaylists": "Oynatma listelerine video eklemek için giriş yap",
+    "loginToTag": "Videoları etiketlemek için giriş yap",
+    "moreOptions": "Diğer seçenekler",
+    "addToPlaylist": "Oynatma listesine ekle",
+    "addTag": "Etiket ekle",
+    "notInterested": "İlgilenmiyorum",
+    "dontShowCreator": "@{{author}} gösterilmesin"
+  },
+  "guestList": {
+    "loadFailed": "Mevcut misafir listesi yüklenemedi",
+    "saved_one": "{{count}} misafir bunu izleyebilir",
+    "saved_other": "{{count}} misafir bunu izleyebilir",
+    "cleared": "Misafir listesi temizlendi",
+    "saveFailed": "Misafir listesi kaydedilemedi",
+    "invalidAccounts": "Geçerli Hive hesabı değil: {{names}}",
+    "title": "🔒 Misafir listesi",
+    "hint": "Bu hesaplar 3Speak Pro olmadan izleyebilir. Sunucularımızda gizli tutulur, gönderinde asla yayınlanmaz.",
+    "notRegistered": "Bu videonun işlenmesi henüz bitmedi. Bittiğinde listeyi yine düzenleyebilirsin.",
+    "placeholder": "kullaniciadi, baska.kullanici",
+    "empty": "Henüz kimse yok. Bunu yalnızca Pro aboneleri izleyebilir.",
+    "removeAria": "{{name}} kaldır"
+  },
+  "voters": {
+    "pinnedTitle_one": "Oy verenler ({{count}})",
+    "pinnedTitle_other": "Oy verenler ({{count}})",
+    "topVoters": "En Çok Oy Verenler",
+    "noVotes": "Henüz oy yok"
+  },
+  "payout": {
+    "breakdown": "Ödeme Dağılımı",
+    "estimatedBreakdown": "Tahmini Dağılım",
+    "beneficiaries": "Lehtarlar",
+    "curators": "Küratörler (%50)",
+    "author": "Yazar",
+    "total": "Toplam",
+    "totalEstimated": "Toplam (tahmini)"
+  },
+  "vote": {
+    "loginRequired": "Bu işlemi tamamlamak için giriş yap",
+    "fetchPostFailed": "Gönderi verisi alınamadı",
+    "sameWeight": "Bu ağırlıkla zaten oy verdin. Farklı bir değer seç.",
+    "failed": "Oy başarısız: {{message}}",
+    "pleaseTryAgain": "lütfen tekrar dene",
+    "weight": "Oy Ağırlığı: %{{weight}}",
+    "success": "Oy verildi! Değer: ${{value}}",
+    "successTagged": "Oy verildi! “{{tag}}” olarak etiketlendi. Değer: ${{value}}",
+    "tagged": "“{{tag}}” olarak etiketlendi.",
+    "vote": "Oy ver",
+    "tagThisVideo": "Bu videoyu etiketle",
+    "tagOptional": "isteğe bağlı",
+    "pickTopicFirst": "Önce bir konu seç",
+    "taggedNoDot": "“{{tag}}” olarak etiketlendi",
+    "tagFailed": "Etiketleme başarısız: {{message}}",
+    "taggedAlreadyVoted": "“{{tag}}” olarak etiketlendi. %{{weight}} oyun zaten verilmişti.",
+    "votingClosed": "Oylama kapandı, bu videoyu etiketle",
+    "youTagged": "Bunu <b>{{tag}}</b> olarak etiketledin.",
+    "pickTopic": "Bir konu seç (%100 oy sayılır)",
+    "submitTag": "Etiketi gönder",
+    "tagThisVideoFull": "Bu videoyu etiketle (%100 oy sayılır)",
+    "justTag": "Oy verme, sadece etiketle"
+  },
+  "tagsPicker": {
+    "autoTagged": "Otomatik etiketlendi: {{tags}}",
+    "searchPlaceholder": "Konu ara…",
+    "searchAria": "Konu ara",
+    "noMatches": "“{{query}}” ile eşleşen konu yok.",
+    "allSelected": "{{category}} kategorisinin tamamı seçili. Daraltmak için yalnızca tek tek konular ekle:",
+    "orPickTopics": "Ya da tek tek konular seç:",
+    "goodEnough": "Bu kadarı yeterli, ya da daha ayrıntılı seç (isteğe bağlı):",
+    "moreSpecific": "Daha ayrıntılı:"
+  }
+}

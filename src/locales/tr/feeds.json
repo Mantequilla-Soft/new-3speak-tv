@@ -1,0 +1,123 @@
+{
+  "loadingMore": "Daha fazlası yükleniyor…",
+  "promoted": "Öne çıkarılan",
+  "scrollLeft": "Sola kaydır",
+  "scrollRight": "Sağa kaydır",
+  "errors": {
+    "fetchVideos": "Videolar alınırken hata oluştu",
+    "loadVideos": "Videolar yüklenemedi",
+    "loadShorts": "Shorts yüklenemedi"
+  },
+  "tabs": {
+    "all": "Tümü",
+    "videos": "Videolar",
+    "shorts": "Shorts",
+    "videosCount": "Videolar ({{count}})",
+    "shortsCount": "Shorts ({{count}})"
+  },
+  "dateFilters": {
+    "all": "Tüm Zamanlar",
+    "today": "Bugün",
+    "week": "Bu Hafta",
+    "month": "Bu Ay",
+    "justNow": "Az önce"
+  },
+  "live": {
+    "title": "Şu an canlı",
+    "badge": "● CANLI"
+  },
+  "newFromFollowing": {
+    "aria": "Takip ettiğin içerik üreticilerinden yeni",
+    "shorts_one": "{{count}} short",
+    "shorts_other": "{{count}} short"
+  },
+  "firstUploads": {
+    "title": "İlk Yüklemeler"
+  },
+  "newVideos": {
+    "title": "Yeni Videolar"
+  },
+  "home": {
+    "sections": {
+      "discover": "Keşfet",
+      "home": "Ana Akış",
+      "follow": "Takip Akışı",
+      "new": "Yeni İçerik",
+      "interests": "İlgi Alanları"
+    },
+    "empty": "Burada henüz gösterilecek bir şey yok.",
+    "viewAll": "Tümünü gör",
+    "dragToReorder": "Sıralamak için sürükle",
+    "surfTitle": "Kanal Gezintisi: bir konu seç ve TV gibi izle",
+    "zapping": "Zapping"
+  },
+  "surf": {
+    "pageTitle": "Kanal Gezintisi",
+    "intro": "Bir kanal seç ve arkana yaslan. O konudaki en iyi videoları art arda sıralıyoruz. Sıkıldın mı? <b>Zap</b>'a bas. Başka bir şey mi istiyorsun? Kanalı değiştir.",
+    "backTo": "KNL {{number}} {{emoji}} {{title}} kanalına dön",
+    "surprise": "Beni şaşırt",
+    "yourChannels": "Kanalların",
+    "nothingOnAir": "{{channel}} kanalında şu an yayında bir şey yok",
+    "tuneFailed": "Kanal açılamadı. Birazdan tekrar dene.",
+    "remoteAria": "Kanal Gezintisi kumandası",
+    "openGuide": "Kanal rehberini aç",
+    "ch": "KNL {{number}}",
+    "chLabel": "KNL",
+    "channelHint": "KNL {{number}}: {{title}}",
+    "channelHintKey": "KNL {{number}}: {{title}} ({{key}})",
+    "tuningShort": "Ayarlanıyor",
+    "tuning": "Ayarlanıyor…",
+    "onAir": "Yayında",
+    "changeChannel": "Kanalı değiştir",
+    "nextChannel": "Sonraki kanal",
+    "prevChannel": "Önceki kanal",
+    "nextVideo": "Sonraki video",
+    "nextVideoKey": "Sonraki video (→)",
+    "zap": "Zap",
+    "findingNext": "Sıradaki bulunuyor…",
+    "stop": "Gezintiyi bitir",
+    "stopTitle": "Gezintiyi bitir (bu video oynamaya devam eder)",
+    "guide": "Kanal rehberi"
+  },
+  "discover": {
+    "searchPlaceholder": "Video, Shorts, ses, topluluk ara...",
+    "clearSearch": "Aramayı temizle",
+    "searchFor": "“{{term}}” ara",
+    "noResultsFor": "“{{term}}” için sonuç bulunamadı",
+    "types": {
+      "user": "Kullanıcılar",
+      "community": "Topluluklar",
+      "video": "Videolar",
+      "short": "Shorts",
+      "audio": "Ses",
+      "playlist": "Oynatma listeleri"
+    },
+    "suggest": {
+      "tags": "Etiketler",
+      "titles": "Başlıklar"
+    },
+    "dates": {
+      "today": "Bugün",
+      "week": "Bu hafta",
+      "month": "Bu ay",
+      "year": "Bu yıl"
+    },
+    "boostRecent": "Yenileri öne çıkar",
+    "filters": "Filtreler",
+    "date": "Tarih",
+    "tag": "Etiket",
+    "tagPlaceholder": "örn. kripto, oyun...",
+    "community": "Topluluk",
+    "communityPlaceholder": "Topluluk ara...",
+    "clearAllFilters": "Tüm filtreleri temizle",
+    "allHidden": "Tüm içerik türleri gizli.",
+    "reenableFilters": "Tüm filtreleri yeniden aç",
+    "groupTitle": "{{label}} ({{count}})",
+    "subscribers_one": "{{count}} abone",
+    "subscribers_other": "{{count}} abone",
+    "authors_one": "{{count}} yazar",
+    "authors_other": "{{count}} yazar",
+    "views_one": "{{views}} görüntülenme",
+    "views_other": "{{views}} görüntülenme"
+  }
+}

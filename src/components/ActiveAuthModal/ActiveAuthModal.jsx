@@ -4,6 +4,7 @@ import { createPortal } from 'react-dom';
 import { Client, PrivateKey } from '@hiveio/dhive';
 import { KeyTypes, Providers } from '@aioha/aioha';
 import { IoClose } from 'react-icons/io5';
+import { useTranslation, Trans } from 'react-i18next';
 import aioha, { setActiveAuthHandler } from '../../hive-api/aioha';
 import { HIVE_API_NODES } from '../../utils/config';
 import './ActiveAuthModal.scss';
@@ -11,25 +12,27 @@ import './ActiveAuthModal.scss';
 const client = getHiveClient();
 
 // Human-readable summary of what the user is about to sign.
-function describeOps(operations) {
+function describeOps(operations, t) {
   try {
     return operations.map(([name, payload]) => {
       if (name === 'transfer') {
-        return `Transfer ${payload.amount} to @${payload.to}${payload.memo ? ` — "${payload.memo}"` : ''}`;
+        return payload.memo
+          ? t('auth.activeAuth.ops.transferMemo', { amount: payload.amount, to: payload.to, memo: payload.memo })
+          : t('auth.activeAuth.ops.transfer', { amount: payload.amount, to: payload.to });
       }
       if (name === 'transfer_to_vesting') {
-        return `Power up ${payload.amount}`;
+        return t('auth.activeAuth.ops.powerUp', { amount: payload.amount });
       }
       if (name === 'custom_json') {
-        return `Custom action: ${payload.id}`;
+        return t('auth.activeAuth.ops.customJson', { id: payload.id });
       }
       if (name === 'account_create' || name === 'create_claimed_account') {
-        return `Create account @${payload.new_account_name}`;
+        return t('auth.activeAuth.ops.createAccount', { name: payload.new_account_name });
       }
       return name.replace(/_/g, ' ');
     });
   } catch {
-    return ['Active-authority transaction'];
+    return [t('auth.activeAuth.ops.fallback')];
   }
 }
 
@@ -45,6 +48,7 @@ function describeOps(operations) {
  * never stored).
  */
 export default function ActiveAuthModal() {
+  const { t } = useTranslation();
   // { operations, resolve, reject } while a request is in flight, else null
   const pending = useRef(null);
   const [ops, setOps] = useState(null);
@@ -62,7 +66,7 @@ export default function ActiveAuthModal() {
   const WALLET_LABELS = {
     [Providers.Keychain]: 'Hive Keychain',
     [Providers.PeakVault]: 'PeakVault',
-    [Providers.HiveAuth]: 'HiveAuth (mobile app)',
+    [Providers.HiveAuth]: t('auth.activeAuth.hiveAuthMobile'),
     [Providers.Ledger]: 'Ledger',
     [Providers.HiveSigner]: 'HiveSigner',
   };
@@ -96,7 +100,7 @@ export default function ActiveAuthModal() {
     pending.current = null;
     setOps(null);
     setActiveKey('');
-    if (p) p.reject(new Error('Signing cancelled'));
+    if (p) p.reject(new Error(t('auth.activeAuth.errors.cancelled')));
   }
 
   // Broadcast the pending ops with whatever wallet aioha is now logged into.
@@ -108,10 +112,10 @@ export default function ActiveAuthModal() {
       if (res?.success) {
         settleResolve(res.result);
       } else {
-        throw new Error(res?.error || 'The wallet rejected the transaction');
+        throw new Error(res?.error || t('auth.activeAuth.errors.walletRejected'));
       }
     } catch (e) {
-      setError(e.message || 'Wallet signing failed');
+      setError(e.message || t('auth.activeAuth.errors.walletFailed'));
       setBusy(false);
     }
   }
@@ -130,39 +134,39 @@ export default function ActiveAuthModal() {
 
   async function loginWithProvider(provider) {
     setError('');
-    if (!username) { setError('Could not determine your Hive username. Please log in again.'); return; }
+    if (!username) { setError(t('auth.activeAuth.errors.noUsername')); return; }
     setBusy(true);
     try {
       const res = await aioha.login(provider, username, {
         msg: 'Authorize active transaction',
         keyType: KeyTypes.Active,
       });
-      if (!res?.success) throw new Error(res?.error || 'Could not connect that wallet');
+      if (!res?.success) throw new Error(res?.error || t('auth.activeAuth.errors.connectFailed'));
       await signWithAioha();
     } catch (e) {
-      setError(e.message || 'Could not connect that wallet');
+      setError(e.message || t('auth.activeAuth.errors.connectFailed'));
       setBusy(false);
     }
   }
 
   async function signWithKey() {
     setError('');
-    if (!username) { setError('Could not determine your Hive username. Please log in again.'); return; }
+    if (!username) { setError(t('auth.activeAuth.errors.noUsername')); return; }
     let key;
     try {
       key = PrivateKey.fromString(activeKey.trim());
     } catch {
-      setError('That does not look like a valid private key.');
+      setError(t('auth.activeAuth.errors.invalidKey'));
       return;
     }
     setBusy(true);
     try {
       const [acct] = await client.database.getAccounts([username]);
-      if (!acct) throw new Error(`Account @${username} not found on chain.`);
+      if (!acct) throw new Error(t('auth.activeAuth.errors.accountNotFound', { username }));
       const pub = key.createPublic().toString();
       const activeKeys = (acct.active?.key_auths || []).map(([k]) => k);
       if (!activeKeys.includes(pub)) {
-        throw new Error('That key is not the active key for @' + username + '. (Tip: do not paste your master password or posting key.)');
+        throw new Error(t('auth.activeAuth.errors.notActiveKey', { username }));
       }
       const result = await client.broadcast.sendOperations(pending.current.operations, key);
       // Drop the key reference as soon as the broadcast resolves.
@@ -170,7 +174,7 @@ export default function ActiveAuthModal() {
       setActiveKey('');
       settleResolve(result);
     } catch (e) {
-      setError(e.message || 'Broadcast failed');
+      setError(e.message || t('auth.activeAuth.errors.broadcastFailed'));
       setBusy(false);
     }
   }
@@ -180,19 +184,17 @@ export default function ActiveAuthModal() {
   return createPortal(
     <div className="aauth-overlay" onClick={busy ? undefined : close}>
       <div className="aauth-content" onClick={(e) => e.stopPropagation()}>
-        <button className="aauth-close" onClick={close} disabled={busy} aria-label="Cancel">
+        <button className="aauth-close" onClick={close} disabled={busy} aria-label={t('common.actions.cancel')}>
           <IoClose size={22} />
         </button>
 
-        <h3 className="aauth-title">Confirm with your Hive wallet</h3>
+        <h3 className="aauth-title">{t('auth.activeAuth.title')}</h3>
         <p className="aauth-desc">
-          You're signed in with <strong>Butter Auth</strong>, which only grants
-          <strong> posting</strong> permission. This action needs your
-          <strong> active</strong> authority, so please approve it yourself.
+          <Trans i18nKey="auth.activeAuth.desc" components={{ b: <strong /> }} />
         </p>
 
         <div className="aauth-ops">
-          {describeOps(ops).map((line, i) => (
+          {describeOps(ops, t).map((line, i) => (
             <div key={i} className="aauth-op">{line}</div>
           ))}
         </div>
@@ -202,10 +204,10 @@ export default function ActiveAuthModal() {
         {!method && (
           <div className="aauth-choices">
             <button className="aauth-btn primary" onClick={startWalletSign}>
-              Sign with Hive Wallet
+              {t('auth.activeAuth.signWithWallet')}
             </button>
             <button className="aauth-btn" onClick={() => { setError(''); setMethod('key'); }}>
-              Sign with a private active key
+              {t('auth.activeAuth.signWithKey')}
             </button>
           </div>
         )}
@@ -213,8 +215,7 @@ export default function ActiveAuthModal() {
         {method === 'wallet' && (
           <div className="aauth-panel">
             <p className="aauth-hint">
-              Connecting as <strong>@{username}</strong>. Pick your wallet — it
-              will ask you to approve this transaction.
+              <Trans i18nKey="auth.activeAuth.connectingAs" values={{ username }} components={{ b: <strong /> }} />
             </p>
             {wallets.map((p) => (
               <button
@@ -226,9 +227,9 @@ export default function ActiveAuthModal() {
                 {WALLET_LABELS[p]}
               </button>
             ))}
-            {busy && <p className="aauth-hint">Waiting for your wallet…</p>}
+            {busy && <p className="aauth-hint">{t('auth.activeAuth.waitingWallet')}</p>}
             <button className="aauth-link" disabled={busy} onClick={() => setMethod(null)}>
-              ← Choose another method
+              {t('auth.activeAuth.chooseAnother')}
             </button>
           </div>
         )}
@@ -236,15 +237,14 @@ export default function ActiveAuthModal() {
         {method === 'key' && (
           <div className="aauth-panel">
             <p className="aauth-hint">
-              Paste the <strong>private active key</strong> for @{username}. It's
-              used once to sign this transaction and never stored or sent anywhere.
+              <Trans i18nKey="auth.activeAuth.pasteKey" values={{ username }} components={{ b: <strong /> }} />
             </p>
             <input
               type="password"
               className="aauth-input"
               autoComplete="off"
               spellCheck={false}
-              placeholder="5K… (private active key)"
+              placeholder={t('auth.activeAuth.keyPlaceholder')}
               value={activeKey}
               onChange={(e) => setActiveKey(e.target.value)}
             />
@@ -253,10 +253,10 @@ export default function ActiveAuthModal() {
               disabled={busy || !activeKey.trim()}
               onClick={signWithKey}
             >
-              {busy ? 'Broadcasting…' : 'Sign & broadcast'}
+              {busy ? t('auth.activeAuth.broadcasting') : t('auth.activeAuth.signBroadcast')}
             </button>
             <button className="aauth-link" disabled={busy} onClick={() => setMethod(null)}>
-              ← Choose another method
+              {t('auth.activeAuth.chooseAnother')}
             </button>
           </div>
         )}

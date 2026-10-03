@@ -1,0 +1,106 @@
+{
+  "controls": {
+    "rewind10": "10 s terug",
+    "forward10": "10 s vooruit",
+    "reactToMoment": "Reageer op dit moment",
+    "mute": "Dempen",
+    "unmute": "Dempen opheffen",
+    "playerSize": "Spelergrootte: {{size}}",
+    "sizeStandard": "Standaard",
+    "pip": "Beeld-in-beeld",
+    "autoplayOn": "Automatisch afspelen: aan",
+    "autoplayOff": "Automatisch afspelen: uit",
+    "ambientSubtle": "Sfeerverlichting: subtiel",
+    "ambientVivid": "Sfeerverlichting: fel",
+    "ambientOff": "Sfeerverlichting: uit",
+    "playbackSpeed": "Afspeelsnelheid",
+    "speedNormal": "Normaal",
+    "quality": "Kwaliteit",
+    "qualityAuto": "Auto",
+    "fullscreen": "Volledig scherm",
+    "exitFullscreen": "Volledig scherm sluiten",
+    "markerReplies_one": "({{count}} reactie)",
+    "markerReplies_other": "({{count}} reacties)"
+  },
+  "subtitles": {
+    "title": "Ondertitels",
+    "off": "Uit",
+    "font": "Lettertype",
+    "size": "Grootte",
+    "textColor": "Tekstkleur",
+    "textBorder": "Tekstrand",
+    "borderColor": "Randkleur",
+    "background": "Achtergrond",
+    "none": "Geen",
+    "fonts": {
+      "sansSerif": "Schreefloos",
+      "serif": "Schreef",
+      "monospace": "Monospace"
+    }
+  },
+  "mini": {
+    "untitled": "Video"
+  },
+  "playlist": {
+    "previous": "Vorige video",
+    "next": "Volgende video",
+    "close": "Playlist sluiten"
+  },
+  "overlay": {
+    "replay": "Opnieuw afspelen"
+  },
+  "reactions": {
+    "translation": "Vertaling",
+    "translationFailed": "Vertalen mislukt",
+    "videoReaction": "Video-reactie",
+    "comment": "Reactie",
+    "previous": "Vorige",
+    "next": "Volgende",
+    "hide": "Reacties verbergen",
+    "hideShort": "Verbergen",
+    "loadingReplies": "Reacties laden...",
+    "sizeTitle": "Grootte: {{size}}",
+    "sizes": {
+      "small": "S",
+      "medium": "M",
+      "standard": "Std",
+      "big": "Groot",
+      "cinema": "Bios"
+    },
+    "sizeNames": {
+      "small": "Klein",
+      "medium": "Middel",
+      "standard": "Standaard",
+      "big": "Groot",
+      "cinema": "Bioscoop"
+    }
+  },
+  "reactionUpload": {
+    "authorized": "@threespeak geautoriseerd — je kunt nu je reactie plaatsen",
+    "authFailed": "Autorisatie mislukt. Probeer het opnieuw.",
+    "webcamDenied": "Geen toegang tot de webcam",
+    "shortTooLong": "Shorts mogen maximaal {{max}} duren. Vink \"Tonen in 3Speak Shorts\" uit of gebruik een kortere video.",
+    "uploadingVideo": "Video uploaden...",
+    "noEmbedUrl": "Upload gelukt, maar er is geen embed-URL teruggekomen",
+    "publishingComment": "Reactie publiceren...",
+    "posted": "Video-reactie geplaatst!",
+    "postFailed": "Reactie plaatsen mislukt",
+    "uploadFailed": "Uploaden mislukt",
+    "uploadVideo": "Video uploaden",
+    "recordVideo": "Video opnemen",
+    "startRecording": "Opname starten",
+    "stopRecording": "Opname stoppen",
+    "recordedVideo": "Opgenomen video",
+    "descriptionPlaceholder": "Voeg een beschrijving toe aan je video-reactie...",
+    "showInShorts": "Tonen in 3Speak Shorts",
+    "authNote": "Sta <b>@threespeak</b> toe om je reactie namens jou te plaatsen.",
+    "authorizing": "Autoriseren…",
+    "authorize": "@threespeak autoriseren",
+    "uploading": "Uploaden...",
+    "postReaction": "Reactie plaatsen"
+  },
+  "inline": {
+    "cantPlay": "Deze video kan hier niet worden afgespeeld.",
+    "openOnSite": "Openen op 3Speak"
+  }
+}

@@ -1,0 +1,50 @@
+{
+  "tabs": {
+    "overview": "Muhtasari",
+    "transactions": "Miamala",
+    "aria": "Sehemu za pochi"
+  },
+  "errors": {
+    "fetchBalances": "Imeshindwa kupata salio",
+    "needKeychain": "Unahitaji kiendelezi cha Keychain ili kutuma"
+  },
+  "header": {
+    "mine": "Pochi YANGU",
+    "ofUser": "Pochi ya {{user}}"
+  },
+  "assets": "Mali",
+  "transfer": "Tuma",
+  "transferModal": {
+    "loginRequired": "Tafadhali ingia ili kutuma",
+    "insufficient": "Salio halitoshi",
+    "invalidUsername": "Jina la mtumiaji si sahihi",
+    "success": "Umetuma kwa mafanikio!",
+    "failed": "Kutuma kumeshindwa: {{error}}",
+    "title": "Tuma {{coin}}",
+    "amountLabel": "Kiasi ({{coin}})",
+    "balance": "Salio {{balance}}",
+    "max": "Yote",
+    "recipientLabel": "Jina la mtumiaji wa mpokeaji",
+    "recipientPlaceholder": "Weka jina la mtumiaji la Hive",
+    "memoLabel": "Memo",
+    "memoPlaceholder": "Andika memo",
+    "confirm": "Thibitisha kutuma"
+  },
+  "history": {
+    "loadFailed": "Imeshindwa kupakia miamala",
+    "title": "Historia ya miamala",
+    "cols": {
+      "type": "Aina",
+      "amount": "Kiasi",
+      "account": "Akaunti",
+      "date": "Tarehe",
+      "memo": "Memo"
+    },
+    "types": {
+      "transfer": "Uhamisho",
+      "claim": "Dai zawadi",
+      "received": "Imepokelewa"
+    },
+    "claimedRewards": "Zawadi zilizodaiwa"
+  }
+}

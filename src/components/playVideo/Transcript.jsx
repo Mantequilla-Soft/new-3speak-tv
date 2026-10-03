@@ -7,6 +7,7 @@ import {
   loadSubtitleCues,
   pickSubtitleLang,
 } from '../../hooks/useSubtitles';
+import { useTranslation } from 'react-i18next';
 import './Transcript.scss';
 
 /**
@@ -44,6 +45,7 @@ const stamp = (seconds) => {
 };
 
 export default function Transcript({ author, permlink, currentTime = 0, onSeek, embedded = false }) {
+  const { t } = useTranslation();
   const [languages, setLanguages] = useState([]);
   const [lang, setLang] = useState(null);
   const [cues, setCues] = useState([]);
@@ -151,14 +153,14 @@ export default function Transcript({ author, permlink, currentTime = 0, onSeek, 
   return (
     <section className={`transcript${expanded ? ' expanded' : ''}${embedded ? ' embedded' : ''}`}>
       <div className="transcript-head">
-        {embedded ? null : <h3>Transcript</h3>}
+        {embedded ? null : <h3>{t('comments.transcript.title')}</h3>}
         <div className="transcript-actions">
           {languages.length > 1 && (
             <select
               className="transcript-lang"
               value={lang || ''}
               onChange={(e) => setLang(e.target.value)}
-              aria-label="Transcript language"
+              aria-label={t('comments.transcript.languageAria')}
             >
               {languages.map((l) => <option key={l.lang} value={l.lang}>{l.label || l.lang}</option>)}
             </select>
@@ -168,17 +170,17 @@ export default function Transcript({ author, permlink, currentTime = 0, onSeek, 
             className={`transcript-times${withTimes ? ' active' : ''}`}
             onClick={toggleTimes}
             aria-pressed={withTimes}
-            title={withTimes ? 'Copying with timecodes' : 'Copying text only'}
+            title={withTimes ? t('comments.transcript.copyingWithTimes') : t('comments.transcript.copyingTextOnly')}
           >
-            <MdSchedule size={15} /> <span className="transcript-times-label">Timecodes</span>
+            <MdSchedule size={15} /> <span className="transcript-times-label">{t('comments.transcript.timecodes')}</span>
           </button>
           <button
             type="button"
             className="transcript-copy"
             onClick={copy}
-            title={withTimes ? 'Copy transcript with timecodes' : 'Copy transcript text'}
+            title={withTimes ? t('comments.transcript.copyWithTimes') : t('comments.transcript.copyText')}
           >
-            <MdContentCopy size={15} /> {copied ? 'Copied' : 'Copy'}
+            <MdContentCopy size={15} /> {copied ? t('common.actions.copied') : t('common.actions.copy')}
           </button>
         </div>
       </div>
@@ -195,7 +197,7 @@ export default function Transcript({ author, permlink, currentTime = 0, onSeek, 
             data-cue={i}
             className={`transcript-line${i === activeIndex ? ' active' : ''}`}
             onClick={() => onSeek?.(cue.start)}
-            title={`Jump to ${stamp(cue.start)}`}
+            title={t('comments.transcript.jumpTo', { time: stamp(cue.start) })}
           >
             <span className="transcript-time">{stamp(cue.start)}</span>
             <span className="transcript-text">{cue.text}</span>
@@ -206,8 +208,8 @@ export default function Transcript({ author, permlink, currentTime = 0, onSeek, 
       {embedded ? null : (
         <button type="button" className="transcript-toggle" onClick={() => setExpanded((v) => !v)}>
           {expanded
-            ? <><MdKeyboardArrowUp size={18} /> Hide transcript</>
-            : <><MdKeyboardArrowDown size={18} /> Show transcript{cues.length ? ` (${cues.length} lines)` : ''}</>}
+            ? <><MdKeyboardArrowUp size={18} /> {t('comments.transcript.hide')}</>
+            : <><MdKeyboardArrowDown size={18} /> {cues.length ? t('comments.transcript.showWithCount', { count: cues.length }) : t('comments.transcript.show')}</>}
         </button>
       )}
     </section>

@@ -1,5 +1,6 @@
 import React, { useRef, useLayoutEffect, useState, useEffect } from 'react'
 import { createPortal } from 'react-dom'
+import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 import { IoClose } from 'react-icons/io5'
 import HiveAvatar from '../HiveAvatar/HiveAvatar'
@@ -12,8 +13,9 @@ import "./ToolTip.scss"
 // `footer` renders a pinned-only action row (e.g. an "Open tag feed" button).
 function ToolTip({
   tooltipVoters, anchorRef, pinned, onClose,
-  title, pinnedTitle, emptyText = 'No votes yet', footer,
+  title, pinnedTitle, emptyText, footer,
 }) {
+  const { t } = useTranslation();
   const tipRef = useRef(null);
   const navigate = useNavigate();
   const [pos, setPos] = useState(null);
@@ -60,8 +62,8 @@ function ToolTip({
       <div className="votes-tooltip-header">
         <span>
           {pinned
-            ? (pinnedTitle || `Voters (${tooltipVoters.length})`)
-            : (title || 'Top Voters')}
+            ? (pinnedTitle || t('engagement.voters.pinnedTitle', { count: tooltipVoters.length }))
+            : (title || t('engagement.voters.topVoters'))}
         </span>
         {pinned && (
           <button className="votes-tooltip-close" onClick={onClose}>
@@ -95,7 +97,7 @@ function ToolTip({
           </div>
         ))}
         {tooltipVoters.length === 0 && (
-          <div className="votes-tooltip-empty">{emptyText}</div>
+          <div className="votes-tooltip-empty">{emptyText === undefined ? t('engagement.voters.noVotes') : emptyText}</div>
         )}
       </div>
       {pinned && footer && (

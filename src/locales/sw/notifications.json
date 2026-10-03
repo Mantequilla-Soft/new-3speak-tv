@@ -1,0 +1,75 @@
+{
+  "buckets": {
+    "today": "Leo",
+    "yesterday": "Jana",
+    "thisWeek": "Wiki hii",
+    "thisMonth": "Mwezi huu",
+    "older": "Za zamani"
+  },
+  "loginRequired": "Tafadhali ingia ili uone arifa zako.",
+  "unreadChip_one": "{{count}} mpya",
+  "unreadChip_other": "{{count}} mpya",
+  "markAllTitle": "Weka zote kuwa zimesomwa",
+  "marking": "Inaweka alama…",
+  "markAllRead": "Zote zimesomwa",
+  "refreshing": "Inaonyesha upya…",
+  "categories": {
+    "all": "Zote",
+    "replies": "Majibu",
+    "mentions": "Kutajwa",
+    "votes": "Kura",
+    "reblogs": "Reblogs",
+    "follows": "Wafuasi",
+    "transfers": "Uhamisho"
+  },
+  "unread": "Hazijasomwa",
+  "summary": {
+    "title": "Shughuli",
+    "today": "Leo",
+    "week": "Wiki hii",
+    "month": "Mwezi huu",
+    "emptyToday": "Bado hakuna shughuli leo.",
+    "emptyWeek": "Bado hakuna shughuli wiki hii.",
+    "stillLoading": "Bado inapakia arifa za zamani…",
+    "emptyMonth": "Hakuna shughuli mwezi huu."
+  },
+  "loadError": "Imeshindwa kupakia arifa.",
+  "empty": {
+    "all": "Bado huna arifa.",
+    "unread": "Hakuna arifa ambazo hazijasomwa.",
+    "replies": "Bado hakuna majibu.",
+    "mentions": "Bado hujatajwa.",
+    "votes": "Bado hakuna kura.",
+    "reblogs": "Bado hakuna reblogs.",
+    "follows": "Bado hakuna wafuasi wapya.",
+    "transfers": "Bado hakuna uhamisho."
+  },
+  "threeSpeakVideo": "Video ya 3Speak",
+  "end": "Umefika mwisho.",
+  "cards": {
+    "votes": "Kura",
+    "voters_one": "mpiga kura {{count}}",
+    "voters_other": "wapiga kura {{count}}",
+    "replies": "Majibu",
+    "newFollowers": "Wafuasi wapya",
+    "mentions": "Kutajwa",
+    "reblogs": "Reblogs",
+    "transfers": "Uhamisho"
+  },
+  "group": {
+    "voteOne": "@{{user}} amepigia kura chapisho lako",
+    "voteTwo": "@{{user}} na @{{user2}} wamepigia kura chapisho lako",
+    "voteMany_one": "@{{user}} na mwingine {{count}} wamepigia kura chapisho lako",
+    "voteMany_other": "@{{user}} na wengine {{count}} wamepigia kura chapisho lako",
+    "followOne": "@{{user}} amekufuata",
+    "followTwo": "@{{user}} na @{{user2}} wamekufuata",
+    "followMany_one": "@{{user}} na mwingine {{count}} wamekufuata",
+    "followMany_other": "@{{user}} na wengine {{count}} wamekufuata",
+    "generic_one": "Arifa {{count}} ya {{type}}",
+    "generic_other": "Arifa {{count}} za {{type}}",
+    "typeCount_one": "{{count}} {{type}}",
+    "typeCount_other": "{{count}} {{type}}",
+    "collapse": "▾ kunja",
+    "expand": "▸ panua"
+  }
+}

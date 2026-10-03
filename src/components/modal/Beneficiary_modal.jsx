@@ -7,6 +7,7 @@ import { Client } from '@hiveio/dhive';
 import { useAppStore } from '../../lib/store';
 import { usePremiumStatus } from '../../hooks/usePremiumStatus';
 import { HIVE_API_NODES } from '../../utils/config';
+import { useTranslation, Trans } from 'react-i18next';
 
 const client = getHiveClient();
 
@@ -17,6 +18,7 @@ function Beneficiary_modal({ isOpen, close, setBeneficiaries, setBeneficiaryList
   // The row handlers below mutate the parent's list as you type, so dismissing
   // the dialog used to keep half-finished edits. Snapshot on open, restore on
   // cancel, and only OK leaves the changes in place.
+  const { t } = useTranslation();
   const snapshotRef = React.useRef(null);
 
   React.useEffect(() => {
@@ -68,13 +70,13 @@ function Beneficiary_modal({ isOpen, close, setBeneficiaries, setBeneficiaryList
     if (!name) { setAcctStatus('idle'); return undefined; }
     setAcctStatus('checking');
     let alive = true;
-    const t = setTimeout(async () => {
+    const timer = setTimeout(async () => {
       try {
         const ok = await isAccountValid(name);
         if (alive) setAcctStatus(ok ? 'valid' : 'invalid');
       } catch { if (alive) setAcctStatus('idle'); }
     }, 450);
-    return () => { alive = false; clearTimeout(t); };
+    return () => { alive = false; clearTimeout(timer); };
   }, [account]);
 
   // Anything typed into the row that hasn't been committed with "+" yet.
@@ -85,30 +87,30 @@ function Beneficiary_modal({ isOpen, close, setBeneficiaries, setBeneficiaryList
     
 
     if (account.trim() === '') {
-        setError('Username cannot be empty.');
+        setError(t('modals.beneficiary.errors.emptyUsername'));
         return;
       }
       if (account ===  user){
-        setError("Beneficiary can't be set to same user" )
+        setError(t('modals.beneficiary.errors.sameUser'))
         return;
       }
     
       if (percent <= 0) {
-        setError('Reward percentage must be greater than 0.');
+        setError(t('modals.beneficiary.errors.greaterThanZero'));
         return;
       }
     
       if (percent > remaingPercent) {
-        setError(`Reward percentage exceeds remaining allocation of ${remaingPercent}%.`);
+        setError(t('modals.beneficiary.errors.exceedsRemaining', { percent: remaingPercent }));
         return;
       }
     if (percent < 1) return
     if (percent === "") {
-      setError("Enter a valid number")
+      setError(t('modals.beneficiary.errors.validNumber'))
       return;
     }
     if (!percent || isNaN(percent)) {
-      setError("Enter a valid reward percent.");
+      setError(t('modals.beneficiary.errors.validPercent'));
       return;
     }
 
@@ -120,14 +122,14 @@ function Beneficiary_modal({ isOpen, close, setBeneficiaries, setBeneficiaryList
     // Check if the account already exists in the list
     const isDuplicate = list.some((item) => item.account === account.trim());
     if (isDuplicate) {
-      setError('This account is already added to the list.');
+      setError(t('modals.beneficiary.errors.duplicate'));
       return;
     }
 
     // Validate account
     const isValid = await isAccountValid(account);
     if (!isValid) {
-      setError('Invalid username or community ID.');
+      setError(t('modals.beneficiary.errors.invalidAccount'));
       return;
     }
 
@@ -137,7 +139,7 @@ function Beneficiary_modal({ isOpen, close, setBeneficiaries, setBeneficiaryList
     setRemaingPercent(total)
 
     if (percent > remaingPercent) {
-      setError(`Reward percentage exceeds remaining allocation of ${remaingPercent}%.`);
+      setError(t('modals.beneficiary.errors.exceedsRemaining', { percent: remaingPercent }));
       return;
     }
 
@@ -167,7 +169,7 @@ function Beneficiary_modal({ isOpen, close, setBeneficiaries, setBeneficiaryList
     const value = Math.max(minP, parseFloat(newPercent) || minP);
     const diff = value - item.percent;
     if (diff > remaingPercent) {
-      setError(`Cannot increase beyond remaining ${remaingPercent}%`);
+      setError(t('modals.beneficiary.errors.cannotIncrease', { percent: remaingPercent }));
       return;
     }
     setError('');
@@ -179,7 +181,7 @@ function Beneficiary_modal({ isOpen, close, setBeneficiaries, setBeneficiaryList
   const handleSave = () => {
     // Don't quietly discard a half-entered beneficiary.
     if (hasPendingRow) {
-      setError(`@${account.trim()} hasn't been added yet — click + to add it, or clear the field.`);
+      setError(t('modals.beneficiary.errors.pendingRow', { account: account.trim() }));
       return;
     }
     // Map the list to the required format
@@ -207,15 +209,14 @@ function Beneficiary_modal({ isOpen, close, setBeneficiaries, setBeneficiaryList
         onClick={(e) => e.stopPropagation()}
       >
         <div className="modal-header">
-          <h2>Beneficiaries</h2>
+          <h2>{t('modals.beneficiary.title')}</h2>
           <button type="button" className="close-btn" onClick={cancel}>
             &times;
           </button>
         </div>
 
         <p className="bene-text">
-          Add a user you want to automatically receive a portion of the rewards
-          for this post.
+          {t('modals.beneficiary.intro')}
         </p>
 
         {error && <span className="error">{error}</span>}
@@ -240,7 +241,7 @@ function Beneficiary_modal({ isOpen, close, setBeneficiaries, setBeneficiaryList
                       style={{ width: '62px', textAlign: 'center' }}
                       onChange={(e) => handleLockedPercentChange(index, e.target.value)}
                     />
-                    <span>% (min {item.minPercent}%)</span>
+                    <span>{t('modals.beneficiary.minPercent', { percent: item.minPercent })}</span>
                   </>
                 ) : (
                   <>
@@ -261,7 +262,7 @@ function Beneficiary_modal({ isOpen, close, setBeneficiaries, setBeneficiaryList
               <input
                 type="text"
                 value={account}
-                placeholder='Enter username'
+                placeholder={t('modals.beneficiary.usernamePlaceholder')}
                 onChange={(e) => setAccount(e.target.value.toLowerCase())}
               />
             </div>
@@ -278,7 +279,7 @@ function Beneficiary_modal({ isOpen, close, setBeneficiaries, setBeneficiaryList
 
                     if (value < 1) {
                       setPercent(value);
-                      setError("Reward percent must be at least 1%");
+                      setError(t('modals.beneficiary.errors.atLeastOne'));
                     } else {
                       setError("");
                       setPercent(value);
@@ -288,7 +289,7 @@ function Beneficiary_modal({ isOpen, close, setBeneficiaries, setBeneficiaryList
 
                 {percent > 0 && percent < 1 && (
                   <div className="tooltip">
-                    Minimum reward is <strong>1%</strong>
+                    <Trans i18nKey="modals.beneficiary.minimumReward" components={{ strong: <strong /> }} />
                   </div>
                 )}
               </div>
@@ -304,10 +305,10 @@ function Beneficiary_modal({ isOpen, close, setBeneficiaries, setBeneficiaryList
               empty. */}
           {hasPendingRow && (
             <div className={`bene-pending${acctStatus === 'invalid' ? ' bene-pending--bad' : ''}`}>
-              {acctStatus === 'checking' && <>Checking <strong>@{account.trim()}</strong> on Hive…</>}
-              {acctStatus === 'invalid' && <>⚠️ <strong>@{account.trim()}</strong> is not an existing Hive account.</>}
+              {acctStatus === 'checking' && <Trans i18nKey="modals.beneficiary.checking" values={{ account: account.trim() }} components={{ strong: <strong /> }} />}
+              {acctStatus === 'invalid' && <Trans i18nKey="modals.beneficiary.notExisting" values={{ account: account.trim() }} components={{ strong: <strong /> }} />}
               {(acctStatus === 'valid' || acctStatus === 'idle') && (
-                <>⚠️ <strong>@{account.trim()}</strong> is not added yet — click <strong>+</strong> to add it, or clear the field.</>
+                <Trans i18nKey="modals.beneficiary.notAdded" values={{ account: account.trim() }} components={{ strong: <strong /> }} />
               )}
             </div>
           )}
@@ -328,7 +329,7 @@ function Beneficiary_modal({ isOpen, close, setBeneficiaries, setBeneficiaryList
 
           <div className="last-btn-wrap">
             {/* <button onClick={close}>Cancel</button> */}
-            <button type="button" onClick={handleSave}>OK</button>
+            <button type="button" onClick={handleSave}>{t('common.actions.ok')}</button>
           </div>
 
           {(() => {
@@ -339,7 +340,7 @@ function Beneficiary_modal({ isOpen, close, setBeneficiaries, setBeneficiaryList
             // (no encoding pipeline for audio posts).
             const entries = [];
             if (!isPremium) {
-              entries.push(<div key="fund" className="wrap"><span>threespeakfund</span> <span>10% === Infrastructure</span></div>);
+              entries.push(<div key="fund" className="wrap"><span>threespeakfund</span> <span>{t('modals.beneficiary.infrastructure')}</span></div>);
             }
             // 'stream' = an OpenPods session announcement: nothing goes
             // through the video encoder, so the 1% split never applies (the
@@ -350,12 +351,12 @@ function Beneficiary_modal({ isOpen, close, setBeneficiaries, setBeneficiaryList
                 ? false
                 : !isPremium;
             if (keepEncoder) {
-              entries.push(<div key="enc" className="wrap"><span> Video Encoding === 1%</span></div>);
+              entries.push(<div key="enc" className="wrap"><span> {t('modals.beneficiary.videoEncoding')}</span></div>);
             }
             if (entries.length === 0) return null;
             return (
               <div className="default-bene-wrap">
-                <p>Default Beneficiaries ({entries.length})</p>
+                <p>{t('modals.beneficiary.defaults', { count: entries.length })}</p>
                 {entries}
               </div>
             );

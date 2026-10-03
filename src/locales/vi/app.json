@@ -1,0 +1,200 @@
+{
+  "loaders": {
+    "wifi": "Biểu tượng tải Wifi"
+  },
+  "supportBlock": {
+    "banned": {
+      "title": "Tài khoản của bạn đã bị cấm",
+      "body": "Tài khoản 3Speak của bạn đã bị cấm, nên bạn không thể đăng nhập. Nếu bạn nghĩ đây là nhầm lẫn, vui lòng liên hệ bộ phận hỗ trợ của 3Speak."
+    },
+    "upload": {
+      "title": "Tính năng tải lên đã bị tắt cho tài khoản của bạn",
+      "body": "Tài khoản 3Speak của bạn hiện không được phép tải lên. Nếu bạn nghĩ đây là nhầm lẫn, vui lòng liên hệ bộ phận hỗ trợ của 3Speak."
+    }
+  },
+  "emergency": {
+    "title": "Hệ thống của chúng tôi đang gặp sự cố",
+    "body": "Đội ngũ của chúng tôi đang khắc phục để đưa 3Speak hoạt động trở lại ngay. Tham gia Discord của chúng tôi để liên hệ và nhận cập nhật trực tiếp — cảm ơn bạn đã kiên nhẫn.",
+    "joinDiscord": "Tham gia Discord"
+  },
+  "changelog": {
+    "title": "Chúng tôi vừa ra mắt bản cập nhật!",
+    "subtitle": "Có gì mới trong v{{version}}",
+    "previousUpdates": "Các bản cập nhật trước",
+    "newerUpdates": "Các bản cập nhật mới hơn",
+    "readTheCode": "Xem mã nguồn",
+    "gotIt": "Đã hiểu"
+  },
+  "routes": {
+    "homeFeed": "Bảng tin chính",
+    "followFeed": "Bảng tin theo dõi",
+    "discover": "Khám phá",
+    "newVideos": "Video mới",
+    "firstUploads": "Lần đầu tải lên",
+    "rankings": "Bảng xếp hạng",
+    "groups": "Nhóm",
+    "badges": "Huy hiệu",
+    "audioBy": "Âm thanh của @{{author}}",
+    "audio": "Âm thanh",
+    "playlist": "Danh sách phát",
+    "watchHistory": "Lịch sử xem — @{{username}}",
+    "postBy": "Bài đăng của @{{author}}",
+    "myProfile": "Hồ sơ của tôi",
+    "uploadStudio": "Studio tải lên",
+    "drafts": "Bản nháp",
+    "editVideo": "Chỉnh sửa video",
+    "editScheduledPost": "Chỉnh sửa bài đăng đã lên lịch",
+    "chat": "Chat",
+    "about": "Giới thiệu",
+    "login": "Đăng nhập",
+    "brandFallback": "3Speak - Nền tảng video phi tập trung"
+  },
+  "invite": {
+    "title": "<who>@{{referrer}}</who> đã mời bạn tham gia 3Speak",
+    "incubatingFastTrack": "Bạn có thể chuyển <b>@{{handle}}</b> thành tài khoản Hive của riêng mình ngay bây giờ, không cần hoàn thành giai đoạn khởi động.",
+    "incubatingKeepGoing": "Tiếp tục giai đoạn khởi động của bạn. <b>@{{referrer}}</b> được ghi nhận là người đã mời bạn.",
+    "signUpFastTrack": "Đăng ký và nhận ngay tài khoản Hive của riêng bạn: một lần đăng nhập cho 3Speak và mọi ứng dụng Hive khác, với các khóa chỉ mình bạn nắm giữ. Chỉ mất khoảng một phút.",
+    "signUpFree": "Đăng ký và bắt đầu với hồ sơ miễn phí trên 3Speak. Lời mời của bạn đã được lưu, nên <b>@{{referrer}}</b> sẽ được ghi nhận.",
+    "createHiveAccount": "Tạo tài khoản Hive của tôi",
+    "createAccount": "Tạo tài khoản của tôi",
+    "lookAround": "Tôi chỉ muốn xem qua"
+  },
+  "interests": {
+    "saved": "Đã lưu sở thích — bạn có thể đổi bất cứ lúc nào trong Cài đặt",
+    "saveFailed": "Không thể lưu sở thích",
+    "title": "Bạn thích gì?",
+    "body": "Chọn vài chủ đề bạn yêu thích và chúng tôi sẽ cho bạn xem nhiều nội dung bạn thích hơn. Bạn có thể đổi bất cứ lúc nào trong <b>Cài đặt</b>.",
+    "notNow": "Để sau",
+    "save": "Lưu sở thích"
+  },
+  "emojiGif": {
+    "emoji": "Emoji",
+    "searchEmoji": "Tìm emoji",
+    "searchGifs": "Tìm GIF…",
+    "noGifs": "Không tìm thấy GIF nào.",
+    "poweredBy": "Cung cấp bởi GIPHY"
+  },
+  "welcome": {
+    "things": {
+      "postVideos": {
+        "title": "Đăng video",
+        "text": "Tải lên video dài vẫn mãi thuộc về bạn, trên một chuỗi khối mà không ai có thể lặng lẽ xóa đi."
+      },
+      "filmShorts": {
+        "title": "Quay Shorts",
+        "text": "Nhanh gọn, dọc và dễ chia sẻ. Rất hợp để tìm những người xem đầu tiên."
+      },
+      "goLive": {
+        "title": "Phát trực tiếp",
+        "text": "Phát trực tiếp cho người hâm mộ, mời khách lên sân khấu và giữ lại bản ghi sau đó."
+      },
+      "buildCommunity": {
+        "title": "Xây dựng cộng đồng",
+        "text": "Tạo một không gian xoay quanh điều bạn quan tâm, hoặc tham gia một cộng đồng đang sôi nổi."
+      },
+      "makeFriends": {
+        "title": "Kết bạn thật sự",
+        "text": "Bình luận, chat và hợp tác với những con người thật luôn ủng hộ lẫn nhau."
+      },
+      "getInspired": {
+        "title": "Tìm cảm hứng, cùng tham gia",
+        "text": "Khám phá nhà sáng tạo, ủng hộ những người bạn yêu thích, và kiếm thu nhập trong lúc đó."
+      }
+    },
+    "advertiserThings": {
+      "bookAds": {
+        "title": "Đặt quảng cáo trên khắp 3Speak",
+        "text": "Quảng cáo video, quảng cáo Shorts, banner trình phát, ticker và quảng cáo trước khi tải lên, từ một ngày đến ba tháng."
+      },
+      "payFromWallet": {
+        "title": "Thanh toán từ ví của chính bạn",
+        "text": "Bằng HBD hoặc HIVE, trực tiếp từ tài khoản này. Không cần thẻ, không qua trung gian."
+      },
+      "chooseWhere": {
+        "title": "Chọn nơi hiển thị",
+        "text": "Chọn định dạng, vị trí trong video và số ngày chạy quảng cáo."
+      },
+      "seeDelivered": {
+        "title": "Xem kết quả mang lại",
+        "text": "Lượt phát và lượt nhấp cho mỗi lần đặt, và được hoàn tín dụng nếu một lần đặt không đạt yêu cầu."
+      },
+      "talkToCustomers": {
+        "title": "Trò chuyện với khách hàng",
+        "text": "Nếu bạn muốn: đăng video, trả lời bình luận và theo dõi mọi người dưới thương hiệu của bạn."
+      },
+      "oneAccount": {
+        "title": "Một tài khoản cho mọi nơi",
+        "text": "Cùng một thương hiệu và thông tin đăng nhập trên mọi ứng dụng Hive, với khóa chỉ mình bạn nắm giữ."
+      }
+    },
+    "profileLive": "Hồ sơ của bạn đã hoạt động. Chào mừng đến với 3Speak!",
+    "brandProfileLive": "Hồ sơ thương hiệu của bạn đã hoạt động. Chào mừng đến với 3Speak!",
+    "title": "Chào mừng đến với 3Speak",
+    "titleNamed": "Chào mừng {{name}} đến với 3Speak",
+    "advertiserReady": "Tài khoản nhà quảng cáo <b>@{{user}}</b> của bạn đã sẵn sàng. Đây là tài khoản bạn dùng để đặt quảng cáo và thanh toán.",
+    "heyUser": "Chào <b>@{{user}}</b>, bạn đã vào được rồi. 3Speak được xây dựng trên Hive, nên tài khoản, khán giả và nội dung của bạn đều thuộc về bạn.",
+    "noteAdvertiser": "Trước tiên, hãy xem qua hồ sơ thương hiệu của bạn: đây là những gì người xem thấy bên cạnh quảng cáo của bạn.",
+    "note": "Một điều cuối cùng trước khi bắt đầu: cho mọi người biết họ đang xem ai.",
+    "maybeLater": "Để sau",
+    "checkBrandProfile": "Xem hồ sơ thương hiệu",
+    "setUpProfile": "Thiết lập hồ sơ",
+    "brandProfileTitle": "Hồ sơ thương hiệu của bạn",
+    "profileTitle": "Cho mọi người biết bạn là ai",
+    "brandProfileHint": "Được chuyển từ giai đoạn khởi động. Khi lưu, hồ sơ sẽ được ghi lên tài khoản Hive của bạn; bạn có thể thay đổi bất cứ lúc nào.",
+    "profileHint": "Đây là những gì mọi người thấy trên hồ sơ của bạn. Bạn có thể thay đổi bất cứ lúc nào.",
+    "skipForNow": "Bỏ qua lúc này",
+    "saveAndBook": "Lưu và đặt quảng cáo đầu tiên",
+    "uploading": "Đang tải lên…",
+    "interestsHint": "Chúng tôi dùng các mục này để chọn nội dung hiển thị trên trang chủ của bạn. Chọn bao nhiêu tùy thích, hoặc không chọn, và thay đổi bất cứ khi nào bạn muốn.",
+    "interestsFineprint": "Được lưu vào tài khoản Hive của bạn, nên mọi ứng dụng Hive đều hiển thị cùng một hồ sơ và cùng sở thích.",
+    "saveAndExplore": "Lưu và bắt đầu khám phá"
+  },
+  "profileEdit": {
+    "updated": "Đã cập nhật hồ sơ",
+    "title": "Chỉnh sửa hồ sơ",
+    "subtitle": "Ảnh, tên và tiểu sử của bạn hiển thị trên hồ sơ và bên cạnh mọi thứ bạn đăng.",
+    "loading": "Đang tải hồ sơ của bạn…",
+    "fineprint": "Được lưu vào tài khoản Hive của bạn, nên mọi ứng dụng Hive đều hiển thị cùng một hồ sơ.",
+    "saveChanges": "Lưu thay đổi"
+  },
+  "profileFields": {
+    "chooseImage": "Vui lòng chọn một tệp hình ảnh",
+    "imageTooLarge": "Ảnh đó lớn hơn 8MB, vui lòng chọn ảnh nhỏ hơn",
+    "uploadFailed": "Không thể tải ảnh đó lên",
+    "saved": "Đã lưu hồ sơ",
+    "saveFailed": "Không thể lưu hồ sơ của bạn",
+    "uploadBanner": "Tải lên ảnh bìa hồ sơ",
+    "changeBanner": "Đổi ảnh bìa",
+    "addBanner": "Thêm ảnh bìa",
+    "bannerHint": "Đẹp nhất ở <b>2800 × 684</b> px (hoặc bất kỳ ảnh 4:1 nào). Giữ phần quan trọng ở giữa: hai bên sẽ bị cắt trên màn hình hẹp và tên của bạn nằm ở góc dưới bên trái.",
+    "uploadPicture": "Tải lên ảnh đại diện",
+    "pictureLabel": "Ảnh đại diện",
+    "pictureHint": "Khuôn mặt hoặc logo là đẹp nhất. Hình vuông, 400 × 400 px trở lên. Tối đa 8MB.",
+    "displayName": "Tên hiển thị",
+    "namePlaceholderUser": "Chúng tôi nên gọi bạn là gì? (@{{username}})",
+    "namePlaceholder": "Chúng tôi nên gọi bạn là gì?",
+    "shortBio": "Tiểu sử ngắn",
+    "bioPlaceholder": "Bạn làm nội dung gì, và mọi người có thể mong đợi gì từ bạn?",
+    "location": "Vị trí",
+    "optional": "không bắt buộc",
+    "locationPlaceholder": "Bạn đang ở đâu trên thế giới?"
+  },
+  "auth": {
+    "sessionExpired": "Phiên của bạn đã hết hạn — vui lòng đăng nhập lại",
+    "loggedOut": "Đã đăng xuất",
+    "loginSuccess": "Đăng nhập thành công!",
+    "switchedTo": "Đã chuyển sang @{{user}}",
+    "butrauthFailed": "Đăng nhập Butter Auth thất bại: {{error}}",
+    "signedInAs": "Đã đăng nhập với tư cách @{{user}}",
+    "loggedInViaButrauth": "Đã đăng nhập với tư cách @{{user}} qua Butter Auth",
+    "tokenExpired": "Phiên đã hết hạn",
+    "loginFailed": "Đăng nhập thất bại: {{error}}",
+    "unknownError": "Lỗi không xác định",
+    "loginTitle": "Đăng nhập vào 3Speak"
+  },
+  "update": {
+    "available": "Đã có phiên bản mới ({{version}})",
+    "description": "Làm mới trang để nhận các cập nhật mới nhất."
+  },
+  "toastsRegion": "Thông báo"
+}

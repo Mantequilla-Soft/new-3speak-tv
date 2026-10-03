@@ -1,6 +1,7 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { createPortal } from 'react-dom';
 import axios from 'axios';
+import { useTranslation, Trans } from 'react-i18next';
 import { Megaphone, X, ArrowLeft, Check, Loader2 } from 'lucide-react';
 import { toastIn } from '../../utils/toast';
 import { CHECKER_URL } from '../../utils/config';
@@ -28,6 +29,7 @@ const todayISO = () => new Date().toISOString().slice(0, 10);
  * nothing behind: no campaign, no advertiser record, nothing in anyone's queue.
  */
 export default function AdWizardModal({ open, onClose, author, permlink }) {
+  const { t } = useTranslation();
   const { user } = useAppStore();
   const me = user || getOperationUser();
 
@@ -68,11 +70,11 @@ export default function AdWizardModal({ open, onClose, author, permlink }) {
           setSeconds(Math.min(15, first.maxSeconds));
         }
       })
-      .catch(() => { if (!cancelled) setOptions({ success: false, eligible: false, reason: 'We could not load ad options right now.' }); })
+      .catch(() => { if (!cancelled) setOptions({ success: false, eligible: false, reason: t('ads.wizard.optionsFailed') }); })
       .finally(() => { if (!cancelled) setLoading(false); });
     if (me) fetchBalances(me).then((b) => { if (!cancelled && b) setBalances({ hbd: b.hbd, hive: b.hive }); }).catch(() => {});
     return () => { cancelled = true; };
-  }, [open, me, author, permlink]);
+  }, [open, me, author, permlink, t]);
 
   const fmt = useMemo(
     () => (options?.formats || []).find((f) => f.key === format) || null,
@@ -97,11 +99,11 @@ export default function AdWizardModal({ open, onClose, author, permlink }) {
   const eligible = !!me && options?.eligible === true;
   // One place that answers "why can't I do this", whether the answer came from us
   // or from the server.
-  const refusal = !me ? 'Log in to run your video as an ad.' : (options?.reason || 'This video cannot run as an ad.');
+  const refusal = !me ? t('ads.wizard.loginRequired') : (options?.reason || t('ads.wizard.notEligible'));
   const showLoading = loading && !!me;
 
   const pay = async () => {
-    if (!isLoggedIn() && !me) { toast.error('Please log in first.'); return; }
+    if (!isLoggedIn() && !me) { toast.error(t('common.status.loginRequired')); return; }
     setBusy(true);
     try {
       // Book first: the campaign id is what the payment memo has to name, so there
@@ -118,11 +120,11 @@ export default function AdWizardModal({ open, onClose, author, permlink }) {
         maxVideoSeconds: maxMinutes ? Math.round(Number(maxMinutes) * 60) : null,
       });
       const b = res.data;
-      if (!b?.success) throw new Error(b?.error || 'Could not create the booking.');
+      if (!b?.success) throw new Error(b?.error || t('ads.wizard.bookingFailed'));
 
       const payAmount = currency === 'HBD' || !hbdPerHive ? b.totalHbd : b.totalHbd / hbdPerHive;
       await transferWithAioha(b.payTo, Number(payAmount.toFixed(3)), currency, b.memo);
-      toast.message('Payment sent, verifying on chain…');
+      toast.message(t('ads.wizard.verifying'));
 
       // Same retry shape as the promotion flow: account history lags a second or two.
       let credited = null;
@@ -136,7 +138,7 @@ export default function AdWizardModal({ open, onClose, author, permlink }) {
       setBooked({ ...b, credited: !!credited });
       setStep(4);
     } catch (err) {
-      const msg = err?.response?.data?.error || err?.message || 'Something went wrong.';
+      const msg = err?.response?.data?.error || err?.message || t('ads.wizard.genericError');
       if (!/cancel|reject|denied/i.test(msg)) toast.error(msg);
     } finally {
       setBusy(false);
@@ -148,13 +150,13 @@ export default function AdWizardModal({ open, onClose, author, permlink }) {
   return createPortal(
     <div className="adw-overlay" onClick={onClose}>
       <div className="adw-modal" onClick={(e) => e.stopPropagation()}>
-        <button className="adw-close" onClick={onClose} aria-label="Close"><X size={18} /></button>
+        <button className="adw-close" onClick={onClose} aria-label={t('common.actions.close')}><X size={18} /></button>
         <div className="adw-head">
           {step > 1 && step < 4 && (
-            <button className="adw-back" onClick={back} aria-label="Back"><ArrowLeft size={16} /></button>
+            <button className="adw-back" onClick={back} aria-label={t('common.actions.back')}><ArrowLeft size={16} /></button>
           )}
           <Megaphone size={18} />
-          <h3>{step === 4 ? 'Your ad is booked' : 'Run this video as an ad'}</h3>
+          <h3>{step === 4 ? t('ads.wizard.bookedTitle') : t('ads.wizard.title')}</h3>
         </div>
 
         {step < 4 && (
@@ -163,7 +165,7 @@ export default function AdWizardModal({ open, onClose, author, permlink }) {
           </div>
         )}
 
-        {showLoading && <div className="adw-loading"><Loader2 size={20} className="adw-spin" /><span>Checking this video…</span></div>}
+        {showLoading && <div className="adw-loading"><Loader2 size={20} className="adw-spin" /><span>{t('ads.wizard.checking')}</span></div>}
 
         {!showLoading && !eligible && step < 4 && (
           <div className="adw-note">
@@ -174,11 +176,10 @@ export default function AdWizardModal({ open, onClose, author, permlink }) {
         {!showLoading && eligible && step === 1 && (
           <>
             <p className="adw-intro">
-              Your video plays as a paid spot across 3Speak. We use your channel for the
-              advert itself: your display name, your avatar, and “{options.slogan || 'Content Creator on 3Speak'}”.
+              {t('ads.wizard.intro', { slogan: options.slogan || 'Content Creator on 3Speak' })}
             </p>
             <div className="adw-field">
-              <label>Where it runs</label>
+              <label>{t('ads.wizard.whereRuns')}</label>
               <div className="adw-formats">
                 {options.formats.map((f) => (
                   <button
@@ -186,35 +187,35 @@ export default function AdWizardModal({ open, onClose, author, permlink }) {
                     className={`adw-format${format === f.key ? ' on' : ''}`}
                     onClick={() => { setFormat(f.key); setSeconds(Math.min(seconds, f.maxSeconds)); }}
                   >
-                    <strong>{f.key === 'shorts_roll' ? 'Shorts spot' : 'Video roll'}</strong>
-                    <span>{f.key === 'shorts_roll' ? 'Between shorts in the feed' : 'Inside other people’s videos'}</span>
+                    <strong>{f.key === 'shorts_roll' ? t('ads.wizard.shortsSpot') : t('ads.wizard.videoRoll')}</strong>
+                    <span>{f.key === 'shorts_roll' ? t('ads.wizard.shortsSpotDesc') : t('ads.wizard.videoRollDesc')}</span>
                   </button>
                 ))}
               </div>
             </div>
             <div className="adw-field">
-              <label>How much of it plays: <strong>{seconds}s</strong></label>
+              <label><Trans i18nKey="ads.wizard.howMuchPlays" values={{ seconds }} components={{ b: <strong /> }} /></label>
               <input
                 type="range" min={1} max={fmt ? fmt.maxSeconds : 15} step={1}
                 value={seconds} onChange={(e) => setSeconds(Number(e.target.value))}
               />
-              <p className="adw-hint">The opening {seconds} seconds of your video become the spot.</p>
+              <p className="adw-hint">{t('ads.wizard.openingSeconds', { count: seconds })}</p>
             </div>
-            <button className="adw-cta" onClick={() => setStep(2)} disabled={!format}>Continue</button>
+            <button className="adw-cta" onClick={() => setStep(2)} disabled={!format}>{t('common.actions.continue')}</button>
           </>
         )}
 
         {!showLoading && eligible && step === 2 && (
           <>
             <div className="adw-field">
-              <label htmlFor="adw-start">Start date</label>
+              <label htmlFor="adw-start">{t('ads.wizard.startDate')}</label>
               <input
                 id="adw-start" type="date" value={startAt} min={todayISO()}
                 onChange={(e) => setStartAt(e.target.value)}
               />
             </div>
             <div className="adw-field">
-              <label>Run for: <strong>{days} {days === 1 ? 'day' : 'days'}</strong></label>
+              <label><Trans i18nKey="ads.wizard.runFor" count={days} components={{ b: <strong /> }} /></label>
               <input
                 type="range" min={options.minDays || 1} max={options.maxDays || 90} step={1}
                 value={days} onChange={(e) => setDays(Number(e.target.value))}
@@ -222,50 +223,49 @@ export default function AdWizardModal({ open, onClose, author, permlink }) {
               <div className="adw-ends"><span>{options.minDays || 1}d</span><span>{options.maxDays || 90}d</span></div>
             </div>
             <div className="adw-field">
-              <label>Only on videos this long <span className="adw-optional">(optional)</span></label>
+              <label>{t('ads.wizard.onlyLength')} <span className="adw-optional">{t('ads.wizard.optional')}</span></label>
               <div className="adw-minmax">
-                <input type="number" min="0" placeholder="min" value={minMinutes} onChange={(e) => setMinMinutes(e.target.value)} />
-                <span>to</span>
-                <input type="number" min="0" placeholder="max" value={maxMinutes} onChange={(e) => setMaxMinutes(e.target.value)} />
-                <span className="adw-unit">minutes</span>
+                <input type="number" min="0" placeholder={t('ads.wizard.min')} value={minMinutes} onChange={(e) => setMinMinutes(e.target.value)} />
+                <span>{t('ads.wizard.to')}</span>
+                <input type="number" min="0" placeholder={t('ads.wizard.max')} value={maxMinutes} onChange={(e) => setMaxMinutes(e.target.value)} />
+                <span className="adw-unit">{t('ads.wizard.minutes')}</span>
               </div>
-              <p className="adw-hint">Leave both empty to run on everything.</p>
+              <p className="adw-hint">{t('ads.wizard.leaveEmpty')}</p>
             </div>
-            <button className="adw-cta" onClick={() => setStep(3)}>Continue</button>
+            <button className="adw-cta" onClick={() => setStep(3)}>{t('common.actions.continue')}</button>
           </>
         )}
 
         {!showLoading && eligible && step === 3 && (
           <>
             <div className="adw-summary">
-              <div><span>Format</span><strong>{format === 'shorts_roll' ? 'Shorts spot' : 'Video roll'}</strong></div>
-              <div><span>Spot length</span><strong>{seconds}s</strong></div>
-              <div><span>Starts</span><strong>{new Date(startAt).toLocaleDateString()}</strong></div>
-              <div><span>Runs for</span><strong>{days} {days === 1 ? 'day' : 'days'}</strong></div>
+              <div><span>{t('ads.wizard.format')}</span><strong>{format === 'shorts_roll' ? t('ads.wizard.shortsSpot') : t('ads.wizard.videoRoll')}</strong></div>
+              <div><span>{t('ads.wizard.spotLength')}</span><strong>{seconds}s</strong></div>
+              <div><span>{t('ads.wizard.starts')}</span><strong>{new Date(startAt).toLocaleDateString()}</strong></div>
+              <div><span>{t('ads.wizard.runsFor')}</span><strong>{t('ads.wizard.days', { count: days })}</strong></div>
             </div>
             <div className="adw-field">
-              <label>Pay with</label>
+              <label>{t('ads.promote.payWith')}</label>
               <div className="adw-currency">
                 <button className={currency === 'HBD' ? 'on' : ''} onClick={() => setCurrency('HBD')} disabled={busy}>HBD</button>
                 <button className={currency === 'HIVE' ? 'on' : ''} onClick={() => setCurrency('HIVE')} disabled={busy || !hbdPerHive}>HIVE</button>
               </div>
             </div>
             <div className="adw-total">
-              <span>Total</span>
+              <span>{t('ads.promote.total')}</span>
               <strong>{amount ? amount.toFixed(3) : '—'} {currency}</strong>
             </div>
             <div className="adw-balance">
-              <span>Your balance</span>
+              <span>{t('ads.promote.yourBalance')}</span>
               <span className={insufficient ? 'low' : ''}>
                 {walletBalance != null ? `${walletBalance.toFixed(3)} ${currency}` : '…'}
               </span>
             </div>
             <button className="adw-cta" onClick={pay} disabled={busy || insufficient}>
-              {busy ? 'Working…' : insufficient ? `Not enough ${currency}` : `Pay ${amount ? amount.toFixed(3) : ''} ${currency}`}
+              {busy ? t('ads.wizard.working') : insufficient ? t('ads.promote.notEnough', { currency }) : t('ads.wizard.pay', { amount: amount ? amount.toFixed(3) : '', currency })}
             </button>
             <p className="adw-hint adw-foot">
-              You sign one transfer to @{options.payTo} with your own wallet. Your ad goes
-              live once we have checked the video.
+              {t('ads.wizard.signNote', { account: options.payTo })}
             </p>
           </>
         )}
@@ -273,24 +273,21 @@ export default function AdWizardModal({ open, onClose, author, permlink }) {
         {step === 4 && booked && (
           <div className="adw-done">
             <div className="adw-tick"><Check size={22} /></div>
-            <p><strong>Payment {booked.credited ? 'confirmed' : 'sent'}.</strong></p>
+            <p><strong>{booked.credited ? t('ads.wizard.paymentConfirmed') : t('ads.wizard.paymentSent')}</strong></p>
             <p className="adw-hint">
-              Your spot is with our reviewers. Once it is approved it runs
-              {' '}{booked.days} {booked.days === 1 ? 'day' : 'days'} from
-              {' '}{new Date(booked.startAt).toLocaleDateString()}.
+              {t('ads.wizard.withReviewers', { count: booked.days, date: new Date(booked.startAt).toLocaleDateString() })}
             </p>
             {!booked.credited && (
               <p className="adw-hint">
-                The payment can take a minute to show up on chain. Nothing else is needed from you.
+                {t('ads.wizard.paymentLag')}
               </p>
             )}
             {options?.limitedToOwners?.length > 0 && (
               <p className="adw-hint adw-beta">
-                While self-promotion is in beta, these spots only appear on
-                {' '}{options.limitedToOwners.map((o) => `@${o}`).join(', ')}’s content.
+                {t('ads.wizard.betaLimited', { owners: options.limitedToOwners.map((o) => `@${o}`).join(', ') })}
               </p>
             )}
-            <button className="adw-cta" onClick={onClose}>Done</button>
+            <button className="adw-cta" onClick={onClose}>{t('common.actions.done')}</button>
           </div>
         )}
       </div>

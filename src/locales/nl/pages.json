@@ -1,0 +1,139 @@
+{
+  "about": {
+    "quotes": {
+      "q1": "Als vrijheid überhaupt iets betekent, dan is het het recht om mensen te vertellen wat ze niet willen horen.",
+      "q2": "Ik keur af wat je zegt, maar ik zal je recht om het te zeggen tot de dood verdedigen.",
+      "q3": "Het recht op vrije meningsuiting en de onrealistische verwachting nooit beledigd te worden kunnen niet samengaan.",
+      "q4": "Vrijheid van meningsuiting is nooit kostbaarder dan wanneer iemand met een hamer op zijn duim slaat.",
+      "q5": "Vrijheid van meningsuiting betekent vrijheid voor degenen die je veracht, en vrijheid om de meest verachtelijke opvattingen te uiten.",
+      "q6": "Onwetende vrije meningsuiting werkt vaak tegen de spreker. Dat is een van de redenen waarom ze de vrije loop moet krijgen in plaats van onderdrukt te worden.",
+      "q7": "Vrijheid van meningsuiting omvat de vrijheid om mensen te beledigen.",
+      "q8": "Er is een dunne lijn tussen vrije meningsuiting en haatzaaien. Vrije meningsuiting moedigt debat aan, terwijl haatzaaien aanzet tot geweld.",
+      "q9": "Vrijheid van meningsuiting betekent dat je mensen niets aandoet vanwege de opvattingen die ze hebben, de opvattingen die ze uiten, of de woorden die ze spreken of schrijven."
+    },
+    "faq": {
+      "what": {
+        "question": "Wat is 3Speak?",
+        "answer": "3Speak is een plek waar contentmakers rechtstreeks eigenaar zijn van hun bezittingen op de site en van hun community's. Dankzij blockchaintechnologie ligt het eigendom van deze bezittingen en community's bij de maker en de gebruiker, niet bij 3Speak. Ze zijn daardoor over te zetten naar andere apps die blockchaintechnologie gebruiken. Als wij de community en makers niet zo goed mogelijk dienen, kunnen ze de bezittingen die ze hebben opgebouwd meenemen naar een andere app. Het resultaat is dat 3Speak censuurbestendig is en je bezittingen niet kan afpakken of je community's kan verwijderen."
+      },
+      "upvote": {
+        "question": "Waarom krijg ik geen upvote van 3Speak?",
+        "answer": "3Speak votet naar eigen inzicht en volgt geen specifieke criteria. De beste manier om onze aandacht te trekken is content van hoge kwaliteit uploaden en publiek en community's naar 3speak halen."
+      },
+      "missing": {
+        "question": "Waarom ontbreken sommige van mijn video's in de nieuw-feed?",
+        "answer": "Je mag zoveel video's uploaden als je wilt! Daardoor kan één gebruiker soms feeds volledig vullen met alleen zijn eigen content. Om dat tegen te gaan, beperken we het aantal video's per maker dat per keer laden wordt getoond."
+      },
+      "creator": {
+        "question": "Hoe word ik contentmaker?",
+        "answer": "De snelste manier om een Hive-account te krijgen is op de knop \"Registreren\" in het navigatiepaneel te drukken en de instructies te volgen (raak je keys niet kwijt!). Log daarna in met je Hive-account en klik op \"creator studio\" / uploaden. Je bent er helemaal klaar voor!"
+      },
+      "rewards": {
+        "question": "Hoe verdien ik beloningen met reageren?",
+        "answer": "Om beloningen te verdienen heb je een account op de Hive-blockchain nodig. Je kunt er gratis een krijgen via Hive (https://signup.hive.io), een Hive-gebruikershandleiding kopen, of een andere Hive-gebruiker vragen er een voor je te maken. Zodra je een account hebt, log je in met Hivesigner en geef je bij de eerste keer inloggen je ACTIVE key op. Daarna kun je reacties plaatsen die cryptovaluta als beloning kunnen opleveren."
+      }
+    },
+    "hero": {
+      "tagline1": "BESCHERM JE CONTENT",
+      "tagline2": "TOKENISEER JE COMMUNITY",
+      "cta": "Doe mee met de revolutie",
+      "description": "3Speak is gebouwd op de Hive-blockchain, wat zorgt voor echte decentralisatie, censuurbestendigheid en eigendom bij de community."
+    },
+    "how": {
+      "title": "Zo werkt 3Speak",
+      "subtitle": "Ervaar echt eigendom van je content dankzij blockchaintechnologie",
+      "create": {
+        "title": "Maak content",
+        "text": "Upload je video's en maak content die echt van jou is op de blockchain."
+      },
+      "earn": {
+        "title": "Verdien beloningen",
+        "text": "Word beloond in Hive-tokens en ontvang donaties in onze eigen Speak-token."
+      },
+      "community": {
+        "title": "Bouw een community",
+        "text": "Maak je eigen tokens, marktplaatsen en economieën om je community's te ondersteunen."
+      }
+    },
+    "features": {
+      "title": "Functies",
+      "rewards": {
+        "title": "BELONINGEN",
+        "text": "Door het platform te gebruiken worden gebruikers beloond in Hive-tokens en kunnen ze donaties ontvangen in onze eigen Speak-token. Hoe meer van deze tokens je hebt, hoe meer privileges je hebt in het ecosysteem."
+      },
+      "p2p": {
+        "title": "P2P",
+        "text": "De blockchaintechnologie die de site gebruikt, zorgt ervoor dat contentmakers echte P2P-verbindingen hebben met hun publiek, zonder tussenpartijen."
+      },
+      "tokenisation": {
+        "title": "TOKENISATIE",
+        "text": "Contentmakers kunnen ook eenvoudig hun eigen tokens, marktplaatsen, stake-gedreven beloningen en economieën maken om hun community's te ondersteunen."
+      },
+      "freeSpeech": {
+        "title": "VRIJE MENINGSUITING",
+        "text": "Ons beleid is dat de mogelijkheid om te beledigen het fundament is van de vrijheid van meningsuiting, en dat de vrijheid van meningsuiting op haar beurt samenlevingen beschermt tegen het afglijden naar chaos en burgeroorlog."
+      },
+      "journalism": {
+        "title": "BURGERJOURNALISTIEK",
+        "text": "We moedigen burgerjournalisten aan om zich bij ons aan te sluiten en het soort content te plaatsen dat vaak wordt genegeerd. Wij geloven dat burgerjournalisten de toekomst zijn."
+      }
+    },
+    "hive": {
+      "title": "Aangedreven door de Hive-blockchain",
+      "decentralized": {
+        "title": "Gedecentraliseerd",
+        "text": "Geen enkel centraal punt van falen of controle"
+      },
+      "fast": {
+        "title": "Snel & gratis",
+        "text": "Geen transactiekosten en blokken van 3 seconden"
+      },
+      "community": {
+        "title": "Van de community",
+        "text": "Bestuurd door stakeholders, niet door bedrijven"
+      },
+      "description": "3Speak is gebouwd op de Hive-blockchain, wat zorgt voor echte decentralisatie, censuurbestendigheid en eigendom bij de community. Het Hive-ecosysteem levert de infrastructuur voor beloningen, bestuur en eigendom van bezittingen die 3Speak revolutionair maakt."
+    },
+    "guidelines": {
+      "title": "Onze richtlijnen",
+      "subtitle": "Wij geloven dat vrijheid van meningsuiting absoluut is, met duidelijk en eerlijk beleid",
+      "support": {
+        "title": "Wat we toestaan",
+        "religion": "Kritiek op religie, overtuigingen, groepen en mensen",
+        "politics": "Alternatieve politiek en discussies over complottheorieën",
+        "governments": "Kritiek op overheden en wereldleiders",
+        "pseudonyms": "Pseudoniemen gebruiken voor privacy",
+        "jokes": "Aanstootgevende grappen (mits duidelijk als zodanig aangegeven)"
+      },
+      "restrict": {
+        "title": "Wat we beperken",
+        "violence": "Oproepen of aanzetten tot geweld",
+        "gore": "Overmatig bloederige of pornografische inhoud tonen",
+        "slander": "Laster en smadelijke inhoud",
+        "illegal": "Illegale activiteiten of inhoud"
+      }
+    },
+    "faqSection": {
+      "title": "Veelgestelde vragen",
+      "subtitle": "Alles wat je moet weten over 3Speak"
+    },
+    "quotesTitle": "Stemmen van vrijheid",
+    "cta": {
+      "title": "Klaar om eigenaar te worden van je content?",
+      "subtitle": "Sluit je aan bij duizenden makers die al de controle over hun digitale bezittingen hebben genomen."
+    },
+    "connect": "Volg 3Speak",
+    "logoAlt": "3Speak-logo"
+  },
+  "legal": {
+    "pageTitle": "Hoe 3Speak met je gegevens omgaat · 3Speak",
+    "englishOnly": "Deze pagina is alleen beschikbaar in het Engels. De Engelse versie is bindend.",
+    "back": "← Terug naar 3Speak"
+  },
+  "notFound": {
+    "imageAlt": "404",
+    "title": "SORRY! PAGINA NIET GEVONDEN",
+    "message": "Helaas is de pagina die je zoekt niet beschikbaar.",
+    "goHome": "NAAR DE STARTPAGINA"
+  }
+}

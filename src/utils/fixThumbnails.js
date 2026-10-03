@@ -34,11 +34,17 @@ const PROXY_REFUSES = /^https?:\/\/(?:images|img)\.3speak\.tv\//i;
 /** True for an image URL images.hive.blog cannot fetch on our behalf. */
 export const hiveProxyRefuses = (url) => PROXY_REFUSES.test(String(url || ''));
 
+/* Images from Hive's proxy are fetched through OUR cache (/img/h/, nginx
+ * conf.d/3speak-img.conf): same origin, kept on our disk, so a viewer never opens a
+ * connection to Hive's proxy and a cold resize is paid once, not per viewer. Only
+ * for showing on the page: never write one of these into a post. */
+export const viaImageCache = (url) => String(url || '').replace(/^https:\/\/images\.hive\.blog\//i, '/img/h/');
+
 // Downscale any absolute image URL through Hive's resize proxy.
 export const hiveProxy = (url, size) => (
   PROXY_REFUSES.test(url)
     ? url
-    : `https://images.hive.blog/p/${bs58.encode(Buffer.from(url))}?format=jpeg&mode=cover&width=${size.w}&height=${size.h}`
+    : `/img/h/p/${bs58.encode(Buffer.from(url))}?format=jpeg&mode=cover&width=${size.w}&height=${size.h}`
 );
 
 export function fixVideoThumbnail(video, portrait = false) {
@@ -87,9 +93,9 @@ export function fixVideoThumbnail(video, portrait = false) {
     // For shorts, re-request the proxied image at portrait dimensions (the
     // baked-in params are landscape). The /p/<hash> form re-proxies the original.
     if (portrait && cleanThumbnail.includes("images.hive.blog/p/")) {
-      return `${cleanThumbnail.split('?')[0]}?format=jpeg&mode=cover&width=${size.w}&height=${size.h}`;
+      return viaImageCache(`${cleanThumbnail.split('?')[0]}?format=jpeg&mode=cover&width=${size.w}&height=${size.h}`);
     }
-    return cleanThumbnail;
+    return viaImageCache(cleanThumbnail);
   }
 
   // ⚠️ images.hive.blog's resize proxy 403s on ecency-hosted sources. Route them
@@ -114,11 +120,15 @@ export function fixVideoThumbnail(video, portrait = false) {
     return FALLBACK_THUMBNAIL;
   }
 
-  // ⚠️ images.hive.blog's resize proxy 403s on OUR OWN image host too, exactly
-  // as it does on ecency's. Verified: proxying an images.3speak.tv URL returns
-  // 403, so every thumbnail routed through it rendered blank. Served directly
-  // instead — these are already thumbnail-sized webp written by the uploader,
-  // so there is nothing to downscale.
+  // Our own image host (images.3speak.tv), which Hive's resize proxy cannot fetch
+  // (it 403s). These are NOT thumbnail-sized: new uploads store the full frame,
+  // 1280x720 and ~70-200 KB, from a US box with no CDN. So they go through our own
+  // /img/t/ route (nginx, conf.d/3speak-img.conf): cropped once to the card shape
+  // (640x360, or 360x640 for shorts), kept on our disk, served same-origin.
+  const ownImage = cleanThumbnail.match(/^https?:\/\/images\.3speak\.tv\/(.+)$/i);
+  if (ownImage) {
+    return `/img/t/${ownImage[1].split('?')[0]}${portrait ? '?s=p' : ''}`;
+  }
   if (cleanThumbnail.includes("images.3speak.tv")) {
     return cleanThumbnail;
   }

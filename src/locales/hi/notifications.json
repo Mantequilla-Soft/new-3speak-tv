@@ -1,0 +1,75 @@
+{
+  "buckets": {
+    "today": "आज",
+    "yesterday": "कल",
+    "thisWeek": "इस हफ़्ते",
+    "thisMonth": "इस महीने",
+    "older": "पुरानी"
+  },
+  "loginRequired": "अपनी सूचनाएँ देखने के लिए कृपया लॉग इन करें।",
+  "unreadChip_one": "{{count}} नई",
+  "unreadChip_other": "{{count}} नई",
+  "markAllTitle": "सभी को पढ़ा हुआ मार्क करें",
+  "marking": "मार्क हो रहा है…",
+  "markAllRead": "सभी पढ़ी गईं",
+  "refreshing": "रीफ़्रेश हो रहा है…",
+  "categories": {
+    "all": "सभी",
+    "replies": "जवाब",
+    "mentions": "मेंशन",
+    "votes": "वोट",
+    "reblogs": "रीब्लॉग",
+    "follows": "फ़ॉलो",
+    "transfers": "ट्रांसफ़र"
+  },
+  "unread": "अनपढ़ी",
+  "summary": {
+    "title": "एक्टिविटी",
+    "today": "आज",
+    "week": "इस हफ़्ते",
+    "month": "इस महीने",
+    "emptyToday": "आज अभी तक कोई एक्टिविटी नहीं।",
+    "emptyWeek": "इस हफ़्ते अभी तक कोई एक्टिविटी नहीं।",
+    "stillLoading": "पुरानी सूचनाएँ अभी लोड हो रही हैं…",
+    "emptyMonth": "इस महीने कोई एक्टिविटी नहीं।"
+  },
+  "loadError": "सूचनाएँ लोड नहीं हो सकीं।",
+  "empty": {
+    "all": "आपके पास अभी कोई सूचना नहीं है।",
+    "unread": "कोई अनपढ़ी सूचना नहीं।",
+    "replies": "अभी कोई जवाब नहीं।",
+    "mentions": "अभी कोई मेंशन नहीं।",
+    "votes": "अभी कोई वोट नहीं।",
+    "reblogs": "अभी कोई रीब्लॉग नहीं।",
+    "follows": "अभी कोई फ़ॉलो नहीं।",
+    "transfers": "अभी कोई ट्रांसफ़र नहीं।"
+  },
+  "threeSpeakVideo": "3Speak वीडियो",
+  "end": "आप आखिर तक पहुँच गए।",
+  "cards": {
+    "votes": "वोट",
+    "voters_one": "{{count}} वोटर",
+    "voters_other": "{{count}} वोटर",
+    "replies": "जवाब",
+    "newFollowers": "नए फ़ॉलोअर्स",
+    "mentions": "मेंशन",
+    "reblogs": "रीब्लॉग",
+    "transfers": "ट्रांसफ़र"
+  },
+  "group": {
+    "voteOne": "@{{user}} ने आपकी पोस्ट पर वोट किया",
+    "voteTwo": "@{{user}} और @{{user2}} ने आपकी पोस्ट पर वोट किया",
+    "voteMany_one": "@{{user}} और {{count}} अन्य ने आपकी पोस्ट पर वोट किया",
+    "voteMany_other": "@{{user}} और {{count}} अन्य ने आपकी पोस्ट पर वोट किया",
+    "followOne": "@{{user}} ने आपको फ़ॉलो किया",
+    "followTwo": "@{{user}} और @{{user2}} ने आपको फ़ॉलो किया",
+    "followMany_one": "@{{user}} और {{count}} अन्य ने आपको फ़ॉलो किया",
+    "followMany_other": "@{{user}} और {{count}} अन्य ने आपको फ़ॉलो किया",
+    "generic_one": "{{count}} {{type}} सूचना",
+    "generic_other": "{{count}} {{type}} सूचनाएँ",
+    "typeCount_one": "{{count}} {{type}}",
+    "typeCount_other": "{{count}} {{type}}",
+    "collapse": "▾ छोटा करें",
+    "expand": "▸ बड़ा करें"
+  }
+}

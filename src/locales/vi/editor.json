@@ -1,0 +1,19 @@
+{
+  "placeholder": "Viết nội dung của bạn tại đây...",
+  "uploadFailed": "Tải lên thất bại: {{message}}",
+  "uploadingImage": "Đang tải ảnh lên...",
+  "format": {
+    "underline": "Gạch chân",
+    "strike": "Gạch ngang",
+    "highlight": "Tô sáng",
+    "bulletList": "Danh sách dấu đầu dòng",
+    "orderedList": "Danh sách đánh số",
+    "taskList": "Danh sách việc cần làm"
+  },
+  "emoji": {
+    "searchPlaceholder": "Tìm emoji"
+  },
+  "preview": {
+    "renderError": "Lỗi hiển thị nội dung"
+  }
+}

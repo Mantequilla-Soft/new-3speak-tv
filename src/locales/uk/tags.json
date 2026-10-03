@@ -1,0 +1,43 @@
+{
+  "labels": {
+    "tech-science": "Техніка й наука",
+    "technology": "Технології",
+    "education": "Освіта",
+    "science": "Наука",
+    "programming": "Програмування",
+    "crypto-finance": "Крипто й фінанси",
+    "cryptocurrency": "Криптовалюта",
+    "finance": "Фінанси",
+    "business": "Бізнес",
+    "entertainment": "Розваги",
+    "music": "Музика",
+    "gaming": "Ігри",
+    "film-tv": "Кіно й ТБ",
+    "lifestyle": "Стиль життя",
+    "vlog": "Влог",
+    "comedy": "Гумор",
+    "story-time": "Історії",
+    "commercial": "Реклама",
+    "arts-diy": "Мистецтво й DIY",
+    "art": "Мистецтво",
+    "diy-crafts": "DIY і рукоділля",
+    "photography": "Фотографія",
+    "food-outdoor": "Їжа й природа",
+    "nature": "Природа",
+    "travel": "Подорожі",
+    "food": "Їжа",
+    "pets": "Домашні тварини",
+    "gardening": "Садівництво",
+    "sports-health": "Спорт і здоров'я",
+    "sports": "Спорт",
+    "health": "Здоров'я",
+    "fitness": "Фітнес",
+    "life-society": "Життя й суспільство",
+    "news": "Новини",
+    "spirituality": "Духовність",
+    "politics": "Політика"
+  },
+  "display": {
+    "cryptocurrency": "крипто"
+  }
+}

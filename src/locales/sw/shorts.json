@@ -1,0 +1,115 @@
+{
+  "loading": "Inapakia Shorts...",
+  "pleaseTryAgain": "tafadhali jaribu tena",
+  "rotateDevice": "Tafadhali geuza kifaa chako kiwe wima",
+  "pageTitle": {
+    "byAuthor": "3S | Short ya @{{author}}",
+    "default": "3S | Shorts"
+  },
+  "stories": {
+    "you": "Wewe"
+  },
+  "errors": {
+    "votingUnavailable": "Kupiga kura hakupatikani kwa chapisho hili",
+    "loginToVote": "Ingia ili kupiga kura",
+    "loginToComplete": "Ingia ili kukamilisha kitendo hiki"
+  },
+  "feed": {
+    "ariaLabel": "Mlisho wa Shorts",
+    "discover": "Gundua",
+    "myInterests": "Ninayopenda",
+    "interestsTitle": "Shorts zinazolingana na mambo unayopenda tu",
+    "pickInterestsFirst": "Chagua mambo unayopenda kwanza",
+    "noInterests": "Bado hujachagua mambo unayopenda — yachague kwenye Mipangilio",
+    "interestsExhausted": "Hizo ndizo Shorts zote za mambo unayopenda — sasa inaonyesha Gundua",
+    "noInterestMatches": "Hakuna Shorts zinazolingana na mambo unayopenda kwa sasa.",
+    "switchToDiscover": "Badili kwenda Gundua",
+    "empty": "Hakuna Shorts zinazopatikana",
+    "loadError": "Hitilafu katika kupakia Shorts: {{error}}"
+  },
+  "glow": {
+    "subtle": "Mwanga wa mazingira: hafifu",
+    "vivid": "Mwanga wa mazingira: angavu",
+    "off": "Mwanga wa mazingira: umezimwa"
+  },
+  "playbackMode": {
+    "autoReplay": "Rudia kiotomatiki",
+    "autoSwipe": "Telezesha kiotomatiki",
+    "manual": "Kwa mkono"
+  },
+  "subtitles": {
+    "off": "Zima"
+  },
+  "chain": {
+    "originalVideo": "Video asili",
+    "snap": "Snap",
+    "openShort": "Fungua short",
+    "watch": "Tazama",
+    "openSnap": "Fungua snap",
+    "comment": "Maoni",
+    "reaction": "Mwitikio",
+    "thisVideo": "Video hii",
+    "remix": "Remix",
+    "show": "onyesha mnyororo wa miitikio"
+  },
+  "caption": {
+    "curatedBy": "Imeteuliwa na Mantequilla",
+    "curated": "Imeteuliwa",
+    "showOriginal": "Onyesha asili",
+    "more": "zaidi"
+  },
+  "actions": {
+    "remix": "Remix",
+    "promote": "Tangaza"
+  },
+  "share": {
+    "defaultTitle": "Short ya 3Speak",
+    "text": "Tazama short hii ya {{user}} kwenye 3Speak!",
+    "shared": "Imeshirikiwa!",
+    "linkCopied": "Kiungo kimenakiliwa!",
+    "failed": "Imeshindwa kushiriki"
+  },
+  "reshare": {
+    "loginRequired": "Ingia ili kushiriki tena",
+    "unavailable": "Kushiriki tena hakupatikani kwa chapisho hili",
+    "done": "Imeshirikiwa tena!",
+    "failed": "Imeshindwa kushiriki tena"
+  },
+  "remix": {
+    "noUrl": "Imeshindwa kupata URL ya video kwa ajili ya remix",
+    "loadFailed": "Imeshindwa kupakia video kwa ajili ya remix"
+  },
+  "watchLater": {
+    "loginRequired": "Ingia ili kuhifadhi Shorts",
+    "cantSave": "Short hii haiwezi kuhifadhiwa",
+    "removed": "Imeondolewa kwenye Tazama Baadaye",
+    "saved": "Imehifadhiwa kwenye Tazama Baadaye",
+    "failed": "Imeshindwa: {{message}}"
+  },
+  "comments": {
+    "title": "Maoni",
+    "loading": "Inapakia maoni...",
+    "closed": "Maoni yamefungwa",
+    "none": "Bado hakuna maoni",
+    "postRemoved": "Chapisho la Hive linalohusiana na short hii limeondolewa, kwa hivyo haiwezi tena kupokea maoni wala kura.",
+    "beFirst": "Kuwa wa kwanza kutoa maoni!",
+    "unavailable": "Maoni hayapatikani kwa chapisho hili",
+    "addPlaceholder": "Ongeza maoni...",
+    "addPlaceholderBar": "Ongeza maoni…",
+    "loginPlaceholder": "Ingia ili kutoa maoni",
+    "send": "Tuma maoni",
+    "enterComment": "Tafadhali andika maoni",
+    "loginToComment": "Tafadhali ingia ili kutoa maoni",
+    "justNow": "Sasa hivi",
+    "posted": "Maoni yamechapishwa!",
+    "failed": "Maoni yameshindwa: {{message}}",
+    "translation": "Tafsiri",
+    "translationFailed": "Tafsiri imeshindwa",
+    "reportComment": "Ripoti maoni",
+    "replyPlaceholder": "Andika jibu...",
+    "viewReplies_one": "Tazama jibu {{count}}",
+    "viewReplies_other": "Tazama majibu {{count}}",
+    "hideReplies_one": "Ficha jibu {{count}}",
+    "hideReplies_other": "Ficha majibu {{count}}"
+  }
+}

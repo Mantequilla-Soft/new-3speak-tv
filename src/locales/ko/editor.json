@@ -1,0 +1,19 @@
+{
+  "placeholder": "여기에 내용을 작성하세요...",
+  "uploadFailed": "업로드 실패: {{message}}",
+  "uploadingImage": "이미지 업로드 중...",
+  "format": {
+    "underline": "밑줄",
+    "strike": "취소선",
+    "highlight": "강조",
+    "bulletList": "글머리 기호 목록",
+    "orderedList": "번호 매기기 목록",
+    "taskList": "할 일 목록"
+  },
+  "emoji": {
+    "searchPlaceholder": "이모지 검색"
+  },
+  "preview": {
+    "renderError": "콘텐츠를 표시하는 중 오류가 발생했어요"
+  }
+}

@@ -14,11 +14,13 @@ import CardSkeleton from "../Cards/CardSkeleton";
 import { useContentBatch } from "../../hooks/useContentBatch";
 import { useWatchHistory } from "../../hooks/useWatchHistory";
 import useViewCounts from "../../hooks/useViewCounts";
+import { useTranslation, Trans } from "react-i18next";
+import { formatNumber, formatDate } from "../../i18n";
 import "./BadgePage.scss";
 
 const LIMIT = 30;
 
-const fmtNum = (n) => (typeof n === 'number' ? n.toLocaleString('en-US') : '—');
+const fmtNum = (n) => (typeof n === 'number' ? formatNumber(n) : '—');
 
 /**
  * A badge account's page: who holds the badge, and what they publish here.
@@ -44,6 +46,7 @@ function BadgePage() {
 }
 
 function BadgeView({ account }) {
+  const { t } = useTranslation();
   const [badge, setBadge] = useState(null);
   const [loadError, setLoadError] = useState(false);
   const [tab, setTab] = useState('videos');           // 'videos' | 'recipients'
@@ -57,7 +60,7 @@ function BadgeView({ account }) {
   // The tab title is the badge's own name, never the account id: "badge-030021"
   // tells a reader nothing. This route is listed in RouteTitle's SELF_TITLED so
   // nothing competes for the tag.
-  const badgeTitle = badge?.title || 'Badge';
+  const badgeTitle = badge?.title || t('badges.page.fallbackTitle');
 
   useEffect(() => {
     if (!account) return undefined;
@@ -134,13 +137,13 @@ function BadgeView({ account }) {
   const createdLabel = (() => {
     if (!badge?.created) return '—';
     const d = new Date(String(badge.created).replace(' ', 'T') + 'Z');
-    return isNaN(d) ? '—' : d.toLocaleDateString('en-US', { month: 'short', year: 'numeric' });
+    return isNaN(d) ? '—' : formatDate(d, { month: 'short', year: 'numeric' });
   })();
 
   const kpis = badge ? [
-    { key: 'recipients', icon: <Award size={16} />, label: 'Recipients', value: fmtNum(badge.recipients) },
-    { key: 'videos', icon: <Video size={16} />, label: 'Recent videos', value: fmtNum(videoTotal) },
-    { key: 'since', icon: <CalendarDays size={16} />, label: 'Issued', value: createdLabel },
+    { key: 'recipients', icon: <Award size={16} />, label: t('badges.page.kpis.recipients'), value: fmtNum(badge.recipients) },
+    { key: 'videos', icon: <Video size={16} />, label: t('badges.page.kpis.recentVideos'), value: fmtNum(videoTotal) },
+    { key: 'since', icon: <CalendarDays size={16} />, label: t('badges.page.kpis.issued'), value: createdLabel },
   ] : [];
 
   const kpiBlock = kpis.length ? (
@@ -164,7 +167,12 @@ function BadgeView({ account }) {
     <div className="badge-meta">
       {badge.creator ? (
         <span className="badge-meta-row">
-          <Award size={14} /> Issued by <Link to={`/p/${badge.creator}`}>@{badge.creator}</Link>
+          <Award size={14} />{' '}
+          <Trans
+            i18nKey="badges.page.issuedBy"
+            values={{ creator: badge.creator }}
+            components={{ creatorLink: <Link to={`/p/${badge.creator}`} /> }}
+          />
         </span>
       ) : null}
       {badge.location ? (
@@ -185,9 +193,9 @@ function BadgeView({ account }) {
     return (
       <div className="badge-page-wrap">
         <div className="badge-empty">
-          <h2>Badge not found</h2>
-          <p>No Hive account named @{account} could be read right now.</p>
-          <Link className="badge-empty-link" to="/badges">Browse all badges</Link>
+          <h2>{t('badges.page.notFoundTitle')}</h2>
+          <p>{t('badges.page.notFoundBody', { account })}</p>
+          <Link className="badge-empty-link" to="/badges">{t('badges.page.browseAll')}</Link>
         </div>
       </div>
     );
@@ -229,7 +237,7 @@ function BadgeView({ account }) {
           onClick={() => setTab('videos')}
         >
           <span className="badge-tab-icon"><Video size={16} /></span>
-          <span className="badge-tab-label">Videos</span>
+          <span className="badge-tab-label">{t('badges.page.tabs.videos')}</span>
         </button>
         <button
           type="button"
@@ -240,7 +248,9 @@ function BadgeView({ account }) {
         >
           <span className="badge-tab-icon"><Award size={16} /></span>
           <span className="badge-tab-label">
-            Recipients{badge?.recipients ? ` (${fmtNum(badge.recipients)})` : ''}
+            {badge?.recipients
+              ? t('badges.page.tabs.recipientsWithCount', { num: fmtNum(badge.recipients) })
+              : t('badges.page.tabs.recipients')}
           </span>
         </button>
       </div>
@@ -251,17 +261,17 @@ function BadgeView({ account }) {
             isLoading ? (
               <CardSkeleton />
             ) : isError ? (
-              <p>Error fetching videos</p>
+              <p>{t('badges.page.errorVideos')}</p>
             ) : videos.length === 0 ? (
               // A badge with no recipients, or recipients who have not posted
               // here, gets this. It must never fall through to the global feed,
               // which is why the checker's badge feed has the fallback off.
               <div className="badge-empty">
-                <h2>No videos yet</h2>
+                <h2>{t('badges.page.noVideosTitle')}</h2>
                 <p>
                   {feedType === 'empty'
-                    ? 'Nobody holds this badge yet.'
-                    : 'Nobody holding this badge has published a video on 3Speak yet.'}
+                    ? t('badges.page.noHolders')
+                    : t('badges.page.noHolderVideos')}
                 </p>
               </div>
             ) : (
@@ -278,7 +288,7 @@ function BadgeView({ account }) {
           )}
 
           {tab === 'videos' && isFetchingNextPage && (
-            <p style={{ textAlign: "center" }}>Loading more...</p>
+            <p style={{ textAlign: "center" }}>{t('badges.page.loadingMore')}</p>
           )}
         </div>
 
@@ -297,13 +307,14 @@ function BadgeView({ account }) {
  * an alphabetical wall of avatars.
  */
 function RecipientList({ data, error }) {
-  if (error) return <p>Could not load recipients</p>;
-  if (!data) return <p className="badge-recipients-loading">Loading recipients...</p>;
+  const { t } = useTranslation();
+  if (error) return <p>{t('badges.page.recipientsError')}</p>;
+  if (!data) return <p className="badge-recipients-loading">{t('badges.page.recipientsLoading')}</p>;
   if (!data.recipients?.length) {
     return (
       <div className="badge-empty">
-        <h2>No recipients yet</h2>
-        <p>Nobody has been awarded this badge so far.</p>
+        <h2>{t('badges.page.noRecipientsTitle')}</h2>
+        <p>{t('badges.page.noRecipientsBody')}</p>
       </div>
     );
   }
@@ -311,8 +322,9 @@ function RecipientList({ data, error }) {
   return (
     <>
       <p className="badge-recipients-summary">
-        {fmtNum(data.total)} {data.total === 1 ? 'recipient' : 'recipients'}
-        {data.withVideos > 0 ? `, ${fmtNum(data.withVideos)} publishing on 3Speak` : ''}
+        {data.withVideos > 0
+          ? t('badges.page.recipientsSummaryWithVideos', { count: data.total, num: fmtNum(data.total), publishing: fmtNum(data.withVideos) })
+          : t('badges.page.recipientsSummary', { count: data.total, num: fmtNum(data.total) })}
       </p>
       <div className="badge-recipients">
         {data.recipients.map(r => (
@@ -323,7 +335,7 @@ function RecipientList({ data, error }) {
               <span className="badge-recipient-handle">@{r.account}</span>
             </span>
             <span className="badge-recipient-count">
-              {r.videos > 0 ? `${fmtNum(r.videos)} ${r.videos === 1 ? 'video' : 'videos'}` : 'No videos'}
+              {r.videos > 0 ? t('badges.page.recipientVideos', { count: r.videos, num: fmtNum(r.videos) }) : t('badges.page.recipientNoVideos')}
             </span>
           </Link>
         ))}

@@ -9,6 +9,7 @@ import {
 } from 'react'
 import { ChatProvider as SdkChatProvider } from '@snapie/chat-client/react'
 import { useAppStore } from '../lib/store'
+import { t } from '../i18n'
 import {
   getChatClient,
   authenticateChat,
@@ -43,6 +44,12 @@ export function ChatProvider({ children }) {
   // clears it via setShareDraft(null).
   const [shareDraft, setShareDraft] = useState(null)
 
+  // Desktop/tablet overlay panel (phones use the /chat page instead, see
+  // useOpenChat). `pendingDm` is a DM to open once the client is ready, for
+  // entry points like the profile "Message" button that fire before connect.
+  const [overlayOpen, setOverlayOpen] = useState(false)
+  const [pendingDm, setPendingDm] = useState(null)
+
   // Username we've already auto-attempted, so the silent background connect
   // fires once per login (not on every render).
   const autoTriedRef = useRef(null)
@@ -60,7 +67,7 @@ export function ChatProvider({ children }) {
     } catch (e) {
       // Silent auto attempts don't surface an error (expected when the user
       // hasn't granted @threespeak and can't sign client-side).
-      if (allowClientFallback) setError(e?.message || 'Could not connect to chat.')
+      if (allowClientFallback) setError(e?.message || t('misc.chat.connectFailed'))
       setReady(false)
       return false
     } finally {
@@ -77,6 +84,8 @@ export function ChatProvider({ children }) {
       setReady(false)
       setError(null)
       setActiveConversation(null)
+      setOverlayOpen(false)
+      setPendingDm(null)
       autoTriedRef.current = null
       return
     }
@@ -98,7 +107,7 @@ export function ChatProvider({ children }) {
   // Manual connect (from the fallback gate): may use a wallet signature.
   const connect = useCallback(async () => {
     if (!authenticated || !user) {
-      setError('Log in first to use chat.')
+      setError(t('misc.chat.loginFirst'))
       return false
     }
     return runAuthenticate(user, { allowClientFallback: true })
@@ -136,7 +145,7 @@ export function ChatProvider({ children }) {
   const createPrivateRoom = useCallback(
     async ({ name, description = '', members = [] } = {}) => {
       const roomName = String(name || '').trim()
-      if (!roomName) throw new Error('A room name is required.')
+      if (!roomName) throw new Error(t('misc.chat.roomNameRequired'))
       const cleanMembers = (members || [])
         .map((m) => String(m || '').trim().replace(/^@/, '').toLowerCase())
         .filter(Boolean)
@@ -217,6 +226,20 @@ export function ChatProvider({ children }) {
     [leaveGroup, leaveChannel]
   )
 
+  const openOverlay = useCallback(({ dm } = {}) => {
+    if (dm) setPendingDm(String(dm).trim().replace(/^@/, '').toLowerCase())
+    setOverlayOpen(true)
+  }, [])
+  const closeOverlay = useCallback(() => setOverlayOpen(false), [])
+
+  // Open a queued DM as soon as the client can.
+  useEffect(() => {
+    if (!ready || !pendingDm) return
+    const handle = pendingDm
+    setPendingDm(null)
+    openDmWith(handle).catch(() => {})
+  }, [ready, pendingDm, openDmWith])
+
   const value = useMemo(
     () => ({
       client,
@@ -236,8 +259,14 @@ export function ChatProvider({ children }) {
       leaveConversation,
       shareDraft,
       setShareDraft,
+      overlayOpen,
+      openOverlay,
+      closeOverlay,
     }),
     [
+      overlayOpen,
+      openOverlay,
+      closeOverlay,
       client,
       ready,
       connecting,

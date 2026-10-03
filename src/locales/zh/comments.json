@@ -1,0 +1,96 @@
+{
+  "review": {
+    "fabAria": "提供反馈",
+    "fab": "反馈",
+    "aspects": {
+      "upload": "上传",
+      "playback": "播放",
+      "live": "直播",
+      "discovery": "发现 / 信息流",
+      "design": "设计 / 体验",
+      "performance": "速度",
+      "mobile": "手机端",
+      "other": "其他"
+    },
+    "titles": {
+      "upload": "这次上传体验如何？",
+      "stream": "这次直播体验如何？",
+      "watch": "在 3Speak 上观看体验如何？",
+      "global": "你对 3Speak 的体验如何？",
+      "fallback": "帮助我们把 3Speak 做得更好"
+    },
+    "stars": {
+      "poor": "很差",
+      "fair": "一般",
+      "good": "不错",
+      "great": "很好",
+      "amazing": "超赞"
+    },
+    "errors": {
+      "pickStars": "请选择星级评分",
+      "sendFailed": "评价发送失败，请重试。"
+    },
+    "thanks": "感谢你的反馈！🙏",
+    "sendFeedback": "发送反馈",
+    "subtitle": "你的反馈能帮助我们把 3Speak 做得更好。",
+    "starRating": "星级评分",
+    "starsAria_other": "{{count}} 星",
+    "aboutLabel": "关于哪方面？<opt>（可选）</opt>",
+    "recommendLabel": "你会推荐 3Speak 吗？<opt>（可选）</opt>",
+    "moreLabel": "详细说说 <opt>（可选）</opt>",
+    "placeholder": "你喜欢什么？哪里可以做得更好？",
+    "notNow": "以后再说",
+    "sending": "发送中…"
+  },
+  "tabs": {
+    "reactions": "回应",
+    "transcript": "文字稿"
+  },
+  "live": {
+    "vodProcessing": "录像正在处理中…",
+    "vodProcessingHint": "本场直播已结束。编码完成后，视频会直接在这里替换，无需刷新。",
+    "watching_other": "👁 {{count}} 人在看",
+    "signInRaiseHand": "登录后举手",
+    "signInChat": "登录后聊天",
+    "signInJoinChat": "🔒 登录后加入聊天。"
+  },
+  "transcript": {
+    "title": "文字稿",
+    "languageAria": "文字稿语言",
+    "copyingWithTimes": "复制时包含时间码",
+    "copyingTextOnly": "仅复制文字",
+    "timecodes": "时间码",
+    "copyWithTimes": "复制带时间码的文字稿",
+    "copyText": "复制文字稿",
+    "jumpTo": "跳转到 {{time}}",
+    "hide": "隐藏文字稿",
+    "show": "显示文字稿",
+    "showWithCount_other": "显示文字稿（{{count}} 行）"
+  },
+  "blog": {
+    "noContent": "暂无内容",
+    "loadError": "内容加载出错。",
+    "processError": "内容处理出错。",
+    "rendererError": "渲染器加载出错。"
+  },
+  "section": {
+    "posted": "评论发布成功！",
+    "postFailed": "评论失败，请重试",
+    "editFailed": "编辑失败，请重试",
+    "updated": "评论已更新",
+    "commentTab": "评论",
+    "reactTab": "回应",
+    "at": "于",
+    "atTime": "于 {{time}}",
+    "commentPlaceholder": "在这里写下你的评论...",
+    "replyPlaceholder": "在这里写下你的回复...",
+    "commentButton": "评论",
+    "count_other": "{{count}} 条评论",
+    "edited": "（已编辑）",
+    "saving": "保存中...",
+    "translation": "翻译",
+    "translationFailed": "翻译失败。翻译服务是否在运行？",
+    "reportComment": "举报评论",
+    "openInShorts": "在短视频中打开"
+  }
+}

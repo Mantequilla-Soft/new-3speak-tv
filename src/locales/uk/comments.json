@@ -1,0 +1,108 @@
+{
+  "review": {
+    "fabAria": "Залишити відгук",
+    "fab": "Відгук",
+    "aspects": {
+      "upload": "Завантаження",
+      "playback": "Відтворення",
+      "live": "Трансляції",
+      "discovery": "Рекомендації / стрічка",
+      "design": "Дизайн / UX",
+      "performance": "Швидкість",
+      "mobile": "Мобільна версія",
+      "other": "Інше"
+    },
+    "titles": {
+      "upload": "Як пройшло завантаження?",
+      "stream": "Як пройшла ваша трансляція?",
+      "watch": "Як вам перегляд на 3Speak?",
+      "global": "Як вам 3Speak?",
+      "fallback": "Допоможіть нам покращити 3Speak"
+    },
+    "stars": {
+      "poor": "Погано",
+      "fair": "Так собі",
+      "good": "Добре",
+      "great": "Чудово",
+      "amazing": "Неймовірно"
+    },
+    "errors": {
+      "pickStars": "Виберіть оцінку в зірках",
+      "sendFailed": "Не вдалося надіслати відгук. Спробуйте ще раз."
+    },
+    "thanks": "Дякуємо за відгук! 🙏",
+    "sendFeedback": "Надіслати відгук",
+    "subtitle": "Ваш відгук допомагає нам покращувати 3Speak.",
+    "starRating": "Оцінка в зірках",
+    "starsAria_one": "{{count}} зірка",
+    "starsAria_few": "{{count}} зірки",
+    "starsAria_many": "{{count}} зірок",
+    "starsAria_other": "{{count}} зірки",
+    "aboutLabel": "Чого це стосується? <opt>(необов'язково)</opt>",
+    "recommendLabel": "Чи порадили б ви 3Speak? <opt>(необов'язково)</opt>",
+    "moreLabel": "Розкажіть більше <opt>(необов'язково)</opt>",
+    "placeholder": "Що вам сподобалося? Що можна покращити?",
+    "notNow": "Не зараз",
+    "sending": "Надсилання…"
+  },
+  "tabs": {
+    "reactions": "Реакції",
+    "transcript": "Транскрипт"
+  },
+  "live": {
+    "vodProcessing": "Запис обробляється…",
+    "vodProcessingHint": "Цю трансляцію завершено. Відео з'явиться тут, щойно кодувальник закінчить роботу — перезавантажувати сторінку не потрібно.",
+    "watching_one": "👁 {{count}} глядач",
+    "watching_few": "👁 {{count}} глядачі",
+    "watching_many": "👁 {{count}} глядачів",
+    "watching_other": "👁 {{count}} глядача",
+    "signInRaiseHand": "Увійдіть, щоб підняти руку",
+    "signInChat": "Увійдіть, щоб писати в чат",
+    "signInJoinChat": "🔒 Увійдіть, щоб приєднатися до чату."
+  },
+  "transcript": {
+    "title": "Транскрипт",
+    "languageAria": "Мова транскрипту",
+    "copyingWithTimes": "Копіювання з таймкодами",
+    "copyingTextOnly": "Копіювання лише тексту",
+    "timecodes": "Таймкоди",
+    "copyWithTimes": "Копіювати транскрипт із таймкодами",
+    "copyText": "Копіювати текст транскрипту",
+    "jumpTo": "Перейти до {{time}}",
+    "hide": "Сховати транскрипт",
+    "show": "Показати транскрипт",
+    "showWithCount_one": "Показати транскрипт ({{count}} рядок)",
+    "showWithCount_few": "Показати транскрипт ({{count}} рядки)",
+    "showWithCount_many": "Показати транскрипт ({{count}} рядків)",
+    "showWithCount_other": "Показати транскрипт ({{count}} рядка)"
+  },
+  "blog": {
+    "noContent": "Немає вмісту",
+    "loadError": "Помилка завантаження вмісту.",
+    "processError": "Помилка обробки вмісту.",
+    "rendererError": "Помилка завантаження рендерера."
+  },
+  "section": {
+    "posted": "Коментар опубліковано!",
+    "postFailed": "Не вдалося опублікувати коментар, спробуйте ще раз",
+    "editFailed": "Не вдалося змінити, спробуйте ще раз",
+    "updated": "Коментар оновлено",
+    "commentTab": "Коментар",
+    "reactTab": "Реакція",
+    "at": "на",
+    "atTime": "на {{time}}",
+    "commentPlaceholder": "Напишіть коментар...",
+    "replyPlaceholder": "Напишіть відповідь...",
+    "commentButton": "Коментувати",
+    "count_one": "{{count}} коментар",
+    "count_few": "{{count}} коментарі",
+    "count_many": "{{count}} коментарів",
+    "count_other": "{{count}} коментаря",
+    "edited": "(змінено)",
+    "saving": "Збереження...",
+    "translation": "Переклад",
+    "translationFailed": "Не вдалося перекласти. Чи працює сервіс перекладу?",
+    "reportComment": "Поскаржитися на коментар",
+    "openInShorts": "Відкрити в Shorts"
+  }
+}

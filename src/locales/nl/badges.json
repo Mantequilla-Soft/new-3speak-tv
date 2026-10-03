@@ -1,0 +1,98 @@
+{
+  "page": {
+    "fallbackTitle": "Badge",
+    "kpis": {
+      "recipients": "Ontvangers",
+      "recentVideos": "Recente video's",
+      "issued": "Uitgereikt"
+    },
+    "issuedBy": "Uitgereikt door <creatorLink>@{{creator}}</creatorLink>",
+    "notFoundTitle": "Badge niet gevonden",
+    "notFoundBody": "Er kon nu geen Hive-account met de naam @{{account}} worden gelezen.",
+    "browseAll": "Alle badges bekijken",
+    "tabs": {
+      "videos": "Video's",
+      "recipients": "Ontvangers",
+      "recipientsWithCount": "Ontvangers ({{num}})"
+    },
+    "errorVideos": "Fout bij het ophalen van video's",
+    "noVideosTitle": "Nog geen video's",
+    "noHolders": "Nog niemand heeft deze badge.",
+    "noHolderVideos": "Nog niemand met deze badge heeft een video op 3Speak gepubliceerd.",
+    "loadingMore": "Meer laden...",
+    "recipientsError": "Ontvangers konden niet worden geladen",
+    "recipientsLoading": "Ontvangers laden...",
+    "noRecipientsTitle": "Nog geen ontvangers",
+    "noRecipientsBody": "Deze badge is tot nu toe aan niemand uitgereikt.",
+    "recipientsSummary_one": "{{num}} ontvanger",
+    "recipientsSummary_other": "{{num}} ontvangers",
+    "recipientsSummaryWithVideos_one": "{{num}} ontvanger, {{publishing}} publiceert op 3Speak",
+    "recipientsSummaryWithVideos_other": "{{num}} ontvangers, {{publishing}} publiceren op 3Speak",
+    "recipientVideos_one": "{{num}} video",
+    "recipientVideos_other": "{{num}} video's",
+    "recipientNoVideos": "Geen video's"
+  },
+  "directory": {
+    "title": "Badges",
+    "intro": "Badges zijn onderscheidingen die je op Hive <b>van anderen krijgt</b>, voor evenementen, bijdragen en mijlpalen. Je kunt er niet zelf lid van worden: iemand reikt ze uit. Open een badge om te zien wat de ontvangers hier publiceren.",
+    "searchPlaceholder": "Badges zoeken...",
+    "sort": {
+      "recipients": "Ontvangers",
+      "created": "Aangemaakt",
+      "name": "Naam"
+    },
+    "createLocked": "Voor het maken van een badge heb je een Hive-account nodig. Dit wordt ontgrendeld zodra het jouwe klaar is.",
+    "create": "Badge maken",
+    "loadError": "Badges konden nu niet worden geladen.",
+    "noMatch": "Geen badge gevonden voor die zoekopdracht.",
+    "held": "In bezit",
+    "recipients_one": "{{num}} ontvanger",
+    "recipients_other": "{{num}} ontvangers"
+  },
+  "award": {
+    "success": "@{{username}} heeft nu {{title}}",
+    "failed": "Die badge kon niet worden uitgereikt",
+    "dialogLabel": "Een badge uitreiken aan {{username}}",
+    "title": "Badge uitreiken",
+    "toUser": "aan @{{username}}",
+    "awarding": "Uitreiken…",
+    "held": "In bezit",
+    "award": "Uitreiken",
+    "note": "De badge volgt diegene op Hive, en dat is wat het hebben van een badge betekent. Je kunt hem terugnemen op de pagina van de badge zelf."
+  },
+  "hive": {
+    "dragToReorder": "Sleep om de volgorde te wijzigen",
+    "orderSaved": "Badgevolgorde opgeslagen in je Hive-profiel",
+    "orderSaveFailed": "Je badgevolgorde kon niet worden opgeslagen",
+    "dialogLabel": "Badges van @{{username}}",
+    "title": "Badges",
+    "arrangeHint": "Sleep je badges in de volgorde waarin je ze wilt tonen.",
+    "earnedCount_one": "{{count}} badge verdiend door @{{username}} op Hive",
+    "earnedCount_other": "{{count}} badges verdiend door @{{username}} op Hive",
+    "alwaysFirst": "Altijd als eerste getoond",
+    "saveOrder": "Volgorde opslaan",
+    "arrange": "Ordenen",
+    "arrangeTitle": "Kies de volgorde waarin je badges verschijnen",
+    "showAll_one": "{{count}} badge tonen",
+    "showAll_other": "Alle {{count}} badges tonen",
+    "awardTitle": "Reik een van je badges uit aan @{{username}}"
+  },
+  "leaderboardBadges": {
+    "proTitle": "Deze maker steunt 3Speak met een Pro-abonnement"
+  },
+  "leaderboard": {
+    "watchNotice": "Kijktijd wordt pas bijgehouden sinds {{since}}, dus langere periodes tonen nog dezelfde korte geschiedenis.",
+    "unclaimed": "Niet geclaimd",
+    "noActivity": "Nog geen activiteit in deze periode",
+    "otherTopics": "Overig",
+    "title": "Ranglijsten",
+    "subtitle": "{{blurb}} — topmakers op 3Speak.",
+    "subtitleTopic": "{{blurb}} — topmakers in {{topic}}.",
+    "allTopics": "Alle onderwerpen",
+    "finding": "@{{user}} zoeken op deze ranglijst…",
+    "notInTop": "@{{user}} staat niet in de top {{n}} van deze ranglijst.",
+    "loading": "Ranglijst laden…",
+    "loadError": "De ranglijst kon niet worden geladen. Probeer het zo opnieuw.",
+    "empty": "Nog niemand heeft {{metric}} in deze periode."
+  }
+}

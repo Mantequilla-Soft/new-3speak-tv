@@ -1,0 +1,43 @@
+{
+  "labels": {
+    "tech-science": "Tech & Science",
+    "technology": "Technology",
+    "education": "Education",
+    "science": "Science",
+    "programming": "Programming",
+    "crypto-finance": "Crypto & Finance",
+    "cryptocurrency": "Cryptocurrency",
+    "finance": "Finance",
+    "business": "Business",
+    "entertainment": "Entertainment",
+    "music": "Music",
+    "gaming": "Gaming",
+    "film-tv": "Film & TV",
+    "lifestyle": "Lifestyle",
+    "vlog": "Vlog",
+    "comedy": "Comedy",
+    "story-time": "Story Time",
+    "commercial": "Commercial",
+    "arts-diy": "Arts & DIY",
+    "art": "Art",
+    "diy-crafts": "DIY & Crafts",
+    "photography": "Photography",
+    "food-outdoor": "Food & Outdoors",
+    "nature": "Nature",
+    "travel": "Travel",
+    "food": "Food",
+    "pets": "Pets",
+    "gardening": "Gardening",
+    "sports-health": "Sports & Health",
+    "sports": "Sports",
+    "health": "Health",
+    "fitness": "Fitness",
+    "life-society": "Life & Society",
+    "news": "News",
+    "spirituality": "Spirituality",
+    "politics": "Politics"
+  },
+  "display": {
+    "cryptocurrency": "crypto"
+  }
+}

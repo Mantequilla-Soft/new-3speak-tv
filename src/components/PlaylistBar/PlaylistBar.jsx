@@ -1,11 +1,13 @@
 import { useRef, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { MdPlaylistPlay, MdSkipPrevious, MdSkipNext } from 'react-icons/md';
 import { IoClose } from 'react-icons/io5';
 import { fixVideoThumbnail, fallbackImg } from '../../utils/fixThumbnails';
 import './PlaylistBar.scss';
 
 function PlaylistBar({ playlist, videos, currentIndex, onClose }) {
+  const { t } = useTranslation();
   const scrollContainerRef = useRef(null);
   const currentItemRef = useRef(null);
   const navigate = useNavigate();
@@ -69,7 +71,7 @@ function PlaylistBar({ playlist, videos, currentIndex, onClose }) {
             className="nav-btn"
             onClick={handlePrevious}
             disabled={currentIndex === 0}
-            title="Previous video"
+            title={t('player.playlist.previous')}
           >
             <MdSkipPrevious />
           </button>
@@ -77,11 +79,11 @@ function PlaylistBar({ playlist, videos, currentIndex, onClose }) {
             className="nav-btn"
             onClick={handleNext}
             disabled={currentIndex === videos.length - 1}
-            title="Next video"
+            title={t('player.playlist.next')}
           >
             <MdSkipNext />
           </button>
-          <button className="close-btn" onClick={onClose} title="Close playlist">
+          <button className="close-btn" onClick={onClose} title={t('player.playlist.close')}>
             <IoClose />
           </button>
         </div>

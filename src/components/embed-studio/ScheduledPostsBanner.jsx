@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import './ScheduledPostsBanner.scss';
+import { useTranslation, Trans } from 'react-i18next';
 
 const CHECKER_BASE =
   import.meta.env.VITE_SCHEDULED_POSTS_API_URL || 'https://prod-checker.okinoko.io';
@@ -18,6 +19,7 @@ function fmtWhen(iso) {
  * @param {{ username: string }} props
  */
 export default function ScheduledPostsBanner({ username }) {
+  const { t } = useTranslation();
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -56,7 +58,7 @@ export default function ScheduledPostsBanner({ username }) {
   return (
     <div className="scheduled-posts-banner">
       <h3 className="scheduled-posts-banner__title">
-        Scheduled posts <span className="scheduled-posts-banner__count">({items.length})</span>
+        {t('upload.scheduled.bannerTitle')} <span className="scheduled-posts-banner__count">({items.length})</span>
       </h3>
       <div className="scheduled-posts-banner__list">
         {items.map((p) => (
@@ -67,9 +69,9 @@ export default function ScheduledPostsBanner({ username }) {
               <div className="scheduled-posts-banner__thumb scheduled-posts-banner__thumb--placeholder" />
             )}
             <div className="scheduled-posts-banner__meta">
-              <div className="scheduled-posts-banner__heading">{p.title || '(untitled)'}</div>
+              <div className="scheduled-posts-banner__heading">{p.title || t('upload.scheduled.untitled')}</div>
               <div className="scheduled-posts-banner__when">
-                Scheduled on <strong>{fmtWhen(p.scheduledOn)}</strong>
+                <Trans i18nKey="upload.scheduled.scheduledOn" values={{ when: fmtWhen(p.scheduledOn) }} components={{ b: <strong /> }} />
               </div>
               {p.description ? (
                 <div className="scheduled-posts-banner__desc">{p.description}</div>

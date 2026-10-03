@@ -1,0 +1,50 @@
+{
+  "tabs": {
+    "overview": "Огляд",
+    "transactions": "Транзакції",
+    "aria": "Розділи гаманця"
+  },
+  "errors": {
+    "fetchBalances": "Не вдалося отримати баланси",
+    "needKeychain": "Для переказу потрібне розширення Keychain"
+  },
+  "header": {
+    "mine": "МІЙ гаманець",
+    "ofUser": "Гаманець {{user}}"
+  },
+  "assets": "Активи",
+  "transfer": "Переказ",
+  "transferModal": {
+    "loginRequired": "Увійдіть, щоб зробити переказ",
+    "insufficient": "Недостатньо коштів",
+    "invalidUsername": "Неправильне ім'я користувача",
+    "success": "Переказ виконано!",
+    "failed": "Не вдалося виконати переказ: {{error}}",
+    "title": "Переказ {{coin}}",
+    "amountLabel": "Сума ({{coin}})",
+    "balance": "Баланс {{balance}}",
+    "max": "Макс.",
+    "recipientLabel": "Ім'я отримувача",
+    "recipientPlaceholder": "Введіть ім'я користувача Hive",
+    "memoLabel": "Примітка",
+    "memoPlaceholder": "Введіть примітку",
+    "confirm": "Підтвердити переказ"
+  },
+  "history": {
+    "loadFailed": "Не вдалося завантажити транзакції",
+    "title": "Історія транзакцій",
+    "cols": {
+      "type": "Тип",
+      "amount": "Сума",
+      "account": "Акаунт",
+      "date": "Дата",
+      "memo": "Примітка"
+    },
+    "types": {
+      "transfer": "Переказ",
+      "claim": "Отримання винагороди",
+      "received": "Отримано"
+    },
+    "claimedRewards": "Отримані винагороди"
+  }
+}

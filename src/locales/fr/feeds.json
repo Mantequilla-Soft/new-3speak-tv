@@ -1,0 +1,127 @@
+{
+  "loadingMore": "Chargement…",
+  "promoted": "Sponsorisé",
+  "scrollLeft": "Défiler vers la gauche",
+  "scrollRight": "Défiler vers la droite",
+  "errors": {
+    "fetchVideos": "Erreur lors de la récupération des vidéos",
+    "loadVideos": "Impossible de charger les vidéos",
+    "loadShorts": "Impossible de charger les Shorts"
+  },
+  "tabs": {
+    "all": "Tout",
+    "videos": "Vidéos",
+    "shorts": "Shorts",
+    "videosCount": "Vidéos ({{count}})",
+    "shortsCount": "Shorts ({{count}})"
+  },
+  "dateFilters": {
+    "all": "Toutes les dates",
+    "today": "Aujourd'hui",
+    "week": "Cette semaine",
+    "month": "Ce mois-ci",
+    "justNow": "À l'instant"
+  },
+  "live": {
+    "title": "En direct",
+    "badge": "● LIVE"
+  },
+  "newFromFollowing": {
+    "aria": "Nouveautés des créateurs que vous suivez",
+    "shorts_one": "{{count}} Short",
+    "shorts_many": "{{count}} Shorts",
+    "shorts_other": "{{count}} Shorts"
+  },
+  "firstUploads": {
+    "title": "Premières vidéos"
+  },
+  "newVideos": {
+    "title": "Nouvelles vidéos"
+  },
+  "home": {
+    "sections": {
+      "discover": "Découvrir",
+      "home": "Fil d'accueil",
+      "follow": "Fil des abonnements",
+      "new": "Nouveaux contenus",
+      "interests": "Centres d'intérêt"
+    },
+    "empty": "Rien à afficher pour l'instant.",
+    "viewAll": "Tout voir",
+    "dragToReorder": "Glisser pour réorganiser",
+    "surfTitle": "Zapping : choisissez un thème et regardez-le comme la télé",
+    "zapping": "Zapping"
+  },
+  "surf": {
+    "pageTitle": "Zapping",
+    "intro": "Choisissez une chaîne et installez-vous. Nous enchaînons les meilleures vidéos sur ce thème. Vous vous ennuyez ? Appuyez sur <b>Zap</b>. Envie d'autre chose ? Changez de chaîne.",
+    "backTo": "Retour à CH {{number}} {{emoji}} {{title}}",
+    "surprise": "Surprenez-moi",
+    "yourChannels": "Vos chaînes",
+    "nothingOnAir": "Rien à l'antenne sur {{channel}} pour le moment",
+    "tuneFailed": "Impossible de se connecter à la chaîne. Réessayez dans un instant.",
+    "remoteAria": "Télécommande du zapping",
+    "openGuide": "Ouvrir le guide des chaînes",
+    "ch": "CH {{number}}",
+    "chLabel": "CH",
+    "channelHint": "CH {{number}} : {{title}}",
+    "channelHintKey": "CH {{number}} : {{title}} ({{key}})",
+    "tuningShort": "Réglage",
+    "tuning": "Réglage…",
+    "onAir": "À l'antenne",
+    "changeChannel": "Changer de chaîne",
+    "nextChannel": "Chaîne suivante",
+    "prevChannel": "Chaîne précédente",
+    "nextVideo": "Vidéo suivante",
+    "nextVideoKey": "Vidéo suivante (→)",
+    "zap": "Zap",
+    "findingNext": "Recherche de la suivante…",
+    "stop": "Arrêter le zapping",
+    "stopTitle": "Arrêter le zapping (la vidéo continue)",
+    "guide": "Guide des chaînes"
+  },
+  "discover": {
+    "searchPlaceholder": "Rechercher des vidéos, Shorts, audios, communautés...",
+    "clearSearch": "Effacer la recherche",
+    "searchFor": "Rechercher « {{term}} »",
+    "noResultsFor": "Aucun résultat pour « {{term}} »",
+    "types": {
+      "user": "Utilisateurs",
+      "community": "Communautés",
+      "video": "Vidéos",
+      "short": "Shorts",
+      "audio": "Audio",
+      "playlist": "Playlists"
+    },
+    "suggest": {
+      "tags": "Tags",
+      "titles": "Titres"
+    },
+    "dates": {
+      "today": "Aujourd'hui",
+      "week": "Cette semaine",
+      "month": "Ce mois-ci",
+      "year": "Cette année"
+    },
+    "boostRecent": "Favoriser les récents",
+    "filters": "Filtres",
+    "date": "Date",
+    "tag": "Tag",
+    "tagPlaceholder": "ex. crypto, gaming...",
+    "community": "Communauté",
+    "communityPlaceholder": "Rechercher des communautés...",
+    "clearAllFilters": "Effacer tous les filtres",
+    "allHidden": "Tous les types de contenu sont masqués.",
+    "reenableFilters": "Réactiver tous les filtres",
+    "groupTitle": "{{label}} ({{count}})",
+    "subscribers_one": "{{count}} membre",
+    "subscribers_many": "{{count}} membres",
+    "subscribers_other": "{{count}} membres",
+    "authors_one": "{{count}} auteur",
+    "authors_many": "{{count}} auteurs",
+    "authors_other": "{{count}} auteurs",
+    "views_one": "{{views}} vue",
+    "views_many": "{{views}} vues",
+    "views_other": "{{views}} vues"
+  }
+}

@@ -1,0 +1,200 @@
+{
+  "loaders": {
+    "wifi": "Chargement Wi-Fi"
+  },
+  "supportBlock": {
+    "banned": {
+      "title": "Votre compte est banni",
+      "body": "Votre compte 3Speak a été banni : vous ne pouvez donc pas vous connecter. Si vous pensez qu'il s'agit d'une erreur, contactez le support 3Speak."
+    },
+    "upload": {
+      "title": "La mise en ligne est désactivée pour votre compte",
+      "body": "Votre compte 3Speak n'est pas autorisé à mettre en ligne pour le moment. Si vous pensez qu'il s'agit d'une erreur, contactez le support 3Speak."
+    }
+  },
+  "emergency": {
+    "title": "Nous rencontrons des problèmes d'infrastructure",
+    "body": "Notre équipe est dessus et travaille à remettre 3Speak en ligne dès maintenant. Rejoignez notre Discord pour nous contacter et suivre l'évolution en direct — merci de votre patience.",
+    "joinDiscord": "Rejoindre notre Discord"
+  },
+  "changelog": {
+    "title": "Nouvelle mise à jour !",
+    "subtitle": "Voici les nouveautés de la v{{version}}",
+    "previousUpdates": "Mises à jour précédentes",
+    "newerUpdates": "Mises à jour plus récentes",
+    "readTheCode": "Lire le code",
+    "gotIt": "Compris"
+  },
+  "routes": {
+    "homeFeed": "Fil d'accueil",
+    "followFeed": "Fil des abonnements",
+    "discover": "Découvrir",
+    "newVideos": "Nouvelles vidéos",
+    "firstUploads": "Premières vidéos",
+    "rankings": "Classements",
+    "groups": "Groupes",
+    "badges": "Badges",
+    "audioBy": "Audio de @{{author}}",
+    "audio": "Audio",
+    "playlist": "Playlist",
+    "watchHistory": "Historique — @{{username}}",
+    "postBy": "Publication de @{{author}}",
+    "myProfile": "Mon profil",
+    "uploadStudio": "Studio de mise en ligne",
+    "drafts": "Brouillons",
+    "editVideo": "Modifier la vidéo",
+    "editScheduledPost": "Modifier la publication programmée",
+    "chat": "Chat",
+    "about": "À propos",
+    "login": "Connexion",
+    "brandFallback": "3Speak - Plateforme vidéo décentralisée"
+  },
+  "invite": {
+    "title": "<who>@{{referrer}}</who> vous invite sur 3Speak",
+    "incubatingFastTrack": "Vous pouvez transformer <b>@{{handle}}</b> en votre propre compte Hive dès maintenant, sans terminer la phase de démarrage.",
+    "incubatingKeepGoing": "Poursuivez votre phase de démarrage. <b>@{{referrer}}</b> est enregistré comme la personne qui vous a invité.",
+    "signUpFastTrack": "Inscrivez-vous et obtenez tout de suite votre propre compte Hive : un seul identifiant pour 3Speak et toutes les autres apps Hive, avec des clés que vous seul détenez. Cela prend environ une minute.",
+    "signUpFree": "Inscrivez-vous et commencez avec un profil gratuit sur 3Speak. Votre invitation est enregistrée : <b>@{{referrer}}</b> en aura le crédit.",
+    "createHiveAccount": "Créer mon compte Hive",
+    "createAccount": "Créer mon compte",
+    "lookAround": "Je veux juste jeter un œil"
+  },
+  "interests": {
+    "saved": "Centres d'intérêt enregistrés — modifiables à tout moment dans les Paramètres",
+    "saveFailed": "Impossible d'enregistrer les centres d'intérêt",
+    "title": "Qu'est-ce qui vous intéresse ?",
+    "body": "Choisissez quelques sujets que vous aimez et nous vous montrerons davantage de contenus qui vous plaisent. Vous pouvez les modifier à tout moment dans les <b>Paramètres</b>.",
+    "notNow": "Pas maintenant",
+    "save": "Enregistrer"
+  },
+  "emojiGif": {
+    "emoji": "Emoji",
+    "searchEmoji": "Rechercher un emoji",
+    "searchGifs": "Rechercher des GIF…",
+    "noGifs": "Aucun GIF trouvé.",
+    "poweredBy": "Propulsé par GIPHY"
+  },
+  "welcome": {
+    "things": {
+      "postVideos": {
+        "title": "Publiez des vidéos",
+        "text": "Mettez en ligne des vidéos longues qui restent les vôtres, sur une chaîne d'où personne ne peut les supprimer en douce."
+      },
+      "filmShorts": {
+        "title": "Tournez des Shorts",
+        "text": "Quelque chose de rapide, vertical et facile à partager. Idéal pour trouver vos premiers spectateurs."
+      },
+      "goLive": {
+        "title": "Passez en live",
+        "text": "Diffusez pour votre public, invitez des participants sur scène et gardez l'enregistrement ensuite."
+      },
+      "buildCommunity": {
+        "title": "Créez une communauté",
+        "text": "Lancez un espace autour de ce qui vous passionne, ou rejoignez-en un qui est déjà animé."
+      },
+      "makeFriends": {
+        "title": "Faites-vous de vrais amis",
+        "text": "Commentez, discutez et collaborez avec de vraies personnes qui se soutiennent."
+      },
+      "getInspired": {
+        "title": "Inspirez-vous, impliquez-vous",
+        "text": "Découvrez des créateurs, soutenez ceux que vous aimez, et gagnez des récompenses au passage."
+      }
+    },
+    "advertiserThings": {
+      "bookAds": {
+        "title": "Réservez des pubs sur 3Speak",
+        "text": "Spots vidéo, spots Shorts, bannières du lecteur, bandeaux défilants et spots avant mise en ligne, d'un jour à trois mois."
+      },
+      "payFromWallet": {
+        "title": "Payez depuis votre propre portefeuille",
+        "text": "En HBD ou en HIVE, directement depuis ce compte. Sans carte et sans intermédiaire."
+      },
+      "chooseWhere": {
+        "title": "Choisissez où elle passe",
+        "text": "Choisissez le format, la position dans la vidéo et le nombre de jours de diffusion."
+      },
+      "seeDelivered": {
+        "title": "Voyez les résultats",
+        "text": "Lectures et clics pour chaque réservation, et un avoir si une réservation n'atteint pas son objectif."
+      },
+      "talkToCustomers": {
+        "title": "Parlez à vos clients",
+        "text": "Si vous le souhaitez : publiez des vidéos, répondez aux commentaires et suivez des personnes au nom de votre marque."
+      },
+      "oneAccount": {
+        "title": "Un seul compte partout",
+        "text": "La même marque et le même identifiant sur toutes les apps Hive, avec une clé que vous seul détenez."
+      }
+    },
+    "profileLive": "Votre profil est en ligne. Bienvenue sur 3Speak !",
+    "brandProfileLive": "Le profil de votre marque est en ligne. Bienvenue sur 3Speak !",
+    "title": "Bienvenue sur 3Speak",
+    "titleNamed": "Bienvenue sur 3Speak, {{name}}",
+    "advertiserReady": "Votre compte annonceur <b>@{{user}}</b> est prêt. C'est avec ce compte que vous réservez et payez vos pubs.",
+    "heyUser": "Bonjour <b>@{{user}}</b>, vous y êtes. 3Speak repose sur Hive : votre compte, votre audience et votre contenu vous appartiennent.",
+    "noteAdvertiser": "D'abord, un coup d'œil rapide au profil de votre marque : c'est ce que les spectateurs voient à côté de vos pubs.",
+    "note": "Une dernière chose avant de commencer : faites savoir aux gens qui ils regardent.",
+    "maybeLater": "Plus tard",
+    "checkBrandProfile": "Vérifier le profil de ma marque",
+    "setUpProfile": "Configurer mon profil",
+    "brandProfileTitle": "Le profil de votre marque",
+    "profileTitle": "Présentez-vous",
+    "brandProfileHint": "Repris de votre phase de démarrage. L'enregistrer l'ajoute à votre compte Hive ; vous pouvez le modifier à tout moment.",
+    "profileHint": "C'est ce que les gens voient sur votre profil. Vous pouvez le modifier à tout moment.",
+    "skipForNow": "Passer pour l'instant",
+    "saveAndBook": "Enregistrer et réserver ma première pub",
+    "uploading": "Envoi…",
+    "interestsHint": "Nous les utilisons pour choisir ce qui s'affiche sur votre page d'accueil. Choisissez-en autant que vous voulez, ou aucun, et modifiez-les quand vous le souhaitez.",
+    "interestsFineprint": "Enregistré dans votre compte Hive : toutes les apps Hive affichent ainsi le même profil et les mêmes centres d'intérêt.",
+    "saveAndExplore": "Enregistrer et commencer à explorer"
+  },
+  "profileEdit": {
+    "updated": "Profil mis à jour",
+    "title": "Modifier votre profil",
+    "subtitle": "Votre photo, votre nom et votre bio s'affichent sur votre profil et à côté de tout ce que vous publiez.",
+    "loading": "Chargement de votre profil…",
+    "fineprint": "Enregistré dans votre compte Hive : toutes les apps Hive affichent ainsi le même profil.",
+    "saveChanges": "Enregistrer"
+  },
+  "profileFields": {
+    "chooseImage": "Veuillez choisir un fichier image",
+    "imageTooLarge": "Cette image dépasse 8 Mo, choisissez-en une plus légère",
+    "uploadFailed": "Impossible d'envoyer cette image",
+    "saved": "Profil enregistré",
+    "saveFailed": "Impossible d'enregistrer votre profil",
+    "uploadBanner": "Envoyer une bannière de profil",
+    "changeBanner": "Changer la bannière",
+    "addBanner": "Ajouter une bannière",
+    "bannerHint": "Idéal en <b>2800 × 684</b> px (ou toute image 4:1). Gardez l'essentiel au centre : les côtés sont rognés sur les écrans étroits et votre nom s'affiche en bas à gauche.",
+    "uploadPicture": "Envoyer une photo de profil",
+    "pictureLabel": "Photo de profil",
+    "pictureHint": "Un visage ou un logo fonctionne le mieux. Carrée, 400 × 400 px ou plus. Jusqu'à 8 Mo.",
+    "displayName": "Nom affiché",
+    "namePlaceholderUser": "Comment devons-nous vous appeler ? (@{{username}})",
+    "namePlaceholder": "Comment devons-nous vous appeler ?",
+    "shortBio": "Courte bio",
+    "bioPlaceholder": "Que créez-vous, et à quoi les gens peuvent-ils s'attendre de votre part ?",
+    "location": "Localisation",
+    "optional": "facultatif",
+    "locationPlaceholder": "Où êtes-vous dans le monde ?"
+  },
+  "auth": {
+    "sessionExpired": "Votre session a expiré — veuillez vous reconnecter",
+    "loggedOut": "Déconnexion réussie",
+    "loginSuccess": "Connexion réussie !",
+    "switchedTo": "Compte changé : @{{user}}",
+    "butrauthFailed": "Échec de la connexion Butter Auth : {{error}}",
+    "signedInAs": "Connecté en tant que @{{user}}",
+    "loggedInViaButrauth": "Connecté en tant que @{{user}} via Butter Auth",
+    "tokenExpired": "Session expirée",
+    "loginFailed": "Échec de la connexion : {{error}}",
+    "unknownError": "Erreur inconnue",
+    "loginTitle": "Connexion à 3Speak"
+  },
+  "update": {
+    "available": "Une nouvelle version ({{version}}) est disponible",
+    "description": "Actualisez pour obtenir les dernières nouveautés."
+  },
+  "toastsRegion": "Notifications"
+}

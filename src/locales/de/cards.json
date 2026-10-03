@@ -1,0 +1,46 @@
+{
+  "loading": "Wird geladen...",
+  "error": "Fehler: {{error}}",
+  "thumbnailAlt": "Thumbnail",
+  "topicTitle": "Thema: {{topic}}",
+  "watchingNow_one": "{{count}} schaut gerade zu",
+  "watchingNow_other": "{{count}} schauen gerade zu",
+  "badges": {
+    "gatedTitle": "Nur für Unterstützer – 3Speak Pro schaltet das ganze Video frei",
+    "pro": "PRO",
+    "new": "NEU",
+    "live": "● LIVE",
+    "liveChat": "● LIVE-CHAT"
+  },
+  "status": {
+    "scheduled": "Geplant",
+    "mobile": "Mobil",
+    "mobileTitle": "Über die mobile App hochgeladen",
+    "processing": "In Verarbeitung",
+    "processingTitle": "Video wird verarbeitet",
+    "draft": "Entwurf",
+    "draftTitle": "Entwurf – noch nicht veröffentlicht",
+    "deleted": "Gelöscht",
+    "deletedTitle": "Dieses Video wurde gelöscht",
+    "failed": "Fehlgeschlagen",
+    "failedTitle": "Videoverarbeitung fehlgeschlagen",
+    "unlisted": "Nicht gelistet",
+    "unlistedTitle": "Nicht gelistet – nicht in Feeds & Suche, nur per Direktlink erreichbar"
+  },
+  "playlist": {
+    "loading": "Playlists werden geladen...",
+    "items_one": "{{count}} Eintrag",
+    "items_other": "{{count}} Einträge",
+    "openAria": "Playlist {{name}} öffnen",
+    "tag": "Playlist",
+    "updated": "Aktualisiert {{when}}"
+  },
+  "watchLater": {
+    "title": "Später ansehen",
+    "subtitle": "Videos, die du später ansehen willst"
+  },
+  "watched": {
+    "title": "Angesehen",
+    "subtitle": "Dein Wiedergabeverlauf"
+  }
+}

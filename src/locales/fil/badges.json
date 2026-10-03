@@ -1,0 +1,98 @@
+{
+  "page": {
+    "fallbackTitle": "Badge",
+    "kpis": {
+      "recipients": "Mga Tumanggap",
+      "recentVideos": "Mga bagong video",
+      "issued": "Naibigay"
+    },
+    "issuedBy": "Ibinigay ni <creatorLink>@{{creator}}</creatorLink>",
+    "notFoundTitle": "Hindi nahanap ang badge",
+    "notFoundBody": "Walang Hive account na @{{account}} ang mabasa ngayon.",
+    "browseAll": "Tingnan lahat ng badge",
+    "tabs": {
+      "videos": "Mga Video",
+      "recipients": "Mga Tumanggap",
+      "recipientsWithCount": "Mga Tumanggap ({{num}})"
+    },
+    "errorVideos": "Error sa pagkuha ng mga video",
+    "noVideosTitle": "Wala pang video",
+    "noHolders": "Wala pang may hawak ng badge na ito.",
+    "noHolderVideos": "Wala pang may hawak ng badge na ito ang nag-publish ng video sa 3Speak.",
+    "loadingMore": "Naglo-load pa...",
+    "recipientsError": "Hindi ma-load ang mga tumanggap",
+    "recipientsLoading": "Naglo-load ng mga tumanggap...",
+    "noRecipientsTitle": "Wala pang tumanggap",
+    "noRecipientsBody": "Wala pang nabigyan ng badge na ito.",
+    "recipientsSummary_one": "{{num}} tumanggap",
+    "recipientsSummary_other": "{{num}} tumanggap",
+    "recipientsSummaryWithVideos_one": "{{num}} tumanggap, {{publishing}} ang nagpa-publish sa 3Speak",
+    "recipientsSummaryWithVideos_other": "{{num}} tumanggap, {{publishing}} ang nagpa-publish sa 3Speak",
+    "recipientVideos_one": "{{num}} video",
+    "recipientVideos_other": "{{num}} videos",
+    "recipientNoVideos": "Walang video"
+  },
+  "directory": {
+    "title": "Mga Badge",
+    "intro": "Ang mga badge ay parangal na <b>ibinibigay sa iyo ng iba</b> sa Hive, para sa mga event, kontribusyon at milestone. Hindi ka puwedeng sumali sa isa: may magbibigay nito sa iyo. Magbukas ng badge para mapanood ang mga pinapublish dito ng mga tumanggap nito.",
+    "searchPlaceholder": "Maghanap ng badge...",
+    "sort": {
+      "recipients": "Mga Tumanggap",
+      "created": "Ginawa",
+      "name": "Pangalan"
+    },
+    "createLocked": "Kailangan ng Hive account para gumawa ng badge. Mabubuksan ito kapag handa na ang account mo.",
+    "create": "Gumawa ng badge",
+    "loadError": "Hindi ma-load ang mga badge ngayon.",
+    "noMatch": "Walang badge na tugma sa hinanap mo.",
+    "held": "Hawak mo",
+    "recipients_one": "{{num}} tumanggap",
+    "recipients_other": "{{num}} tumanggap"
+  },
+  "award": {
+    "success": "Hawak na ni @{{username}} ang {{title}}",
+    "failed": "Hindi maibigay ang badge na iyon",
+    "dialogLabel": "Magbigay ng badge kay {{username}}",
+    "title": "Magbigay ng badge",
+    "toUser": "kay @{{username}}",
+    "awarding": "Ibinibigay…",
+    "held": "Hawak na",
+    "award": "Ibigay",
+    "note": "Ifo-follow sila ng badge sa Hive, at iyon ang ibig sabihin ng paghawak nito. Puwede mo itong bawiin mula sa sariling page ng badge."
+  },
+  "hive": {
+    "dragToReorder": "I-drag para ayusin ang pagkakasunod",
+    "orderSaved": "Na-save sa Hive profile mo ang pagkakasunod ng mga badge",
+    "orderSaveFailed": "Hindi ma-save ang pagkakasunod ng mga badge mo",
+    "dialogLabel": "Mga badge na hawak ni @{{username}}",
+    "title": "Mga Badge",
+    "arrangeHint": "I-drag ang mga badge mo sa pagkakasunod na gusto mong ipakita.",
+    "earnedCount_one": "{{count}} badge na nakuha ni @{{username}} sa Hive",
+    "earnedCount_other": "{{count}} badges na nakuha ni @{{username}} sa Hive",
+    "alwaysFirst": "Laging unang ipinapakita",
+    "saveOrder": "I-save ang pagkakasunod",
+    "arrange": "Ayusin",
+    "arrangeTitle": "Piliin ang pagkakasunod ng paglabas ng mga badge mo",
+    "showAll_one": "Ipakita ang {{count}} badge",
+    "showAll_other": "Ipakita lahat ng {{count}} badges",
+    "awardTitle": "Ibigay ang isa sa mga badge mo kay @{{username}}"
+  },
+  "leaderboardBadges": {
+    "proTitle": "Sinusuportahan ng creator na ito ang 3Speak gamit ang Pro subscription"
+  },
+  "leaderboard": {
+    "watchNotice": "Mula {{since}} lang sinusukat ang watch time, kaya parehong maikling history pa rin ang lumalabas sa mas mahahabang panahon.",
+    "unclaimed": "Hindi pa na-claim",
+    "noActivity": "Wala pang activity sa panahong ito",
+    "otherTopics": "Iba pa",
+    "title": "Rankings",
+    "subtitle": "{{blurb}} — mga top creator sa 3Speak.",
+    "subtitleTopic": "{{blurb}} — mga top creator sa {{topic}}.",
+    "allTopics": "Lahat ng paksa",
+    "finding": "Hinahanap si @{{user}} sa board na ito…",
+    "notInTop": "Wala si @{{user}} sa top {{n}} ng board na ito.",
+    "loading": "Naglo-load ng leaderboard…",
+    "loadError": "Hindi ma-load ang leaderboard. Subukan ulit mamaya.",
+    "empty": "Wala pang may {{metric}} sa panahong ito."
+  }
+}

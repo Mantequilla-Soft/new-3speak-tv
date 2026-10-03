@@ -6,6 +6,7 @@ import ShortsIcon from '../icons/ShortsIcon';
 import { getCreatorSettings, isUploadBlocked } from '../../utils/creatorSettings';
 import { useSupportBlock } from '../../lib/supportBlockStore';
 import { useAppStore } from '../../lib/store';
+import { useTranslation } from 'react-i18next';
 import './ProfileEmptyState.scss';
 
 /**
@@ -22,47 +23,48 @@ import './ProfileEmptyState.scss';
 const KINDS = {
   video: {
     Icon: IoCloudUploadSharp,
-    title: 'No videos yet',
-    text: 'Upload your first video and it lands right here.',
-    cta: 'Upload a video',
+    titleKey: 'profile.empty.video.title',
+    textKey: 'profile.empty.video.text',
+    ctaKey: 'profile.empty.video.cta',
     go: (navigate) => navigate('/embed-studio'),
-    visitor: (u) => `@${u} hasn't published any videos yet.`,
+    visitorKey: 'profile.empty.video.visitor',
   },
   shorts: {
     Icon: ShortsIcon,
-    title: 'No shorts yet',
-    text: 'Shorts are vertical videos, made for a quick scroll.',
-    cta: 'Upload a short',
+    titleKey: 'profile.empty.shorts.title',
+    textKey: 'profile.empty.shorts.text',
+    ctaKey: 'profile.empty.shorts.cta',
     go: (navigate) => navigate('/embed-studio?from=shorts'),
-    visitor: (u) => `@${u} hasn't published any shorts yet.`,
+    visitorKey: 'profile.empty.shorts.visitor',
   },
   audio: {
     Icon: MdGraphicEq,
-    title: 'No audio yet',
-    text: 'Music, podcasts and mixes live on your profile too.',
-    cta: 'Upload audio',
+    titleKey: 'profile.empty.audio.title',
+    textKey: 'profile.empty.audio.text',
+    ctaKey: 'profile.empty.audio.cta',
     go: () => window.dispatchEvent(new CustomEvent('open-audio-upload')),
-    visitor: (u) => `@${u} hasn't published any audio yet.`,
+    visitorKey: 'profile.empty.audio.visitor',
   },
   playlists: {
     Icon: IoMdAdd,
-    title: 'No playlists yet',
-    text: 'Group your videos into a playlist people can watch in order.',
-    cta: 'Create your first playlist',
+    titleKey: 'profile.empty.playlists.title',
+    textKey: 'profile.empty.playlists.text',
+    ctaKey: 'profile.empty.playlists.cta',
     // Opens a modal the page owns, so it isn't an upload and isn't gated.
     gated: false,
-    visitor: (u) => `@${u} has no public playlists.`,
+    visitorKey: 'profile.empty.playlists.visitor',
   },
 };
 
 export default function ProfileEmptyState({ kind = 'video', isOwnProfile = false, username, onAction }) {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const cfg = KINDS[kind] || KINDS.video;
 
   if (!isOwnProfile) {
     return (
       <div className="profile-empty">
-        <p className="pe-line">{cfg.visitor(username)}</p>
+        <p className="pe-line">{t(cfg.visitorKey, { user: username })}</p>
       </div>
     );
   }
@@ -83,9 +85,9 @@ export default function ProfileEmptyState({ kind = 'video', isOwnProfile = false
   return (
     <div className="profile-empty profile-empty--own">
       <span className="pe-icon"><Icon size={22} /></span>
-      <strong className="pe-title">{cfg.title}</strong>
-      <span className="pe-text">{cfg.text}</span>
-      <button type="button" className="pe-btn" onClick={onClick}>{cfg.cta}</button>
+      <strong className="pe-title">{t(cfg.titleKey)}</strong>
+      <span className="pe-text">{t(cfg.textKey)}</span>
+      <button type="button" className="pe-btn" onClick={onClick}>{t(cfg.ctaKey)}</button>
     </div>
   );
 }

@@ -7,12 +7,14 @@ import "ldrs/react/TailChase.css";
 import { StepProgress } from "../legacy-studio/StepProgress";
 import { Navigate, useNavigate } from "react-router-dom";
 import { useEmbedUpload } from "../../context/EmbedUploadContext";
+import { useTranslation } from "react-i18next";
 
 // Every toast from this module is headed "Upload"; the message becomes the
 // line under it. See utils/toast.js.
 const toast = toastIn('Upload');
 
 function EmbedThumbnail() {
+  const { t } = useTranslation();
   const {
     generatedThumbnail,
     thumbnailFile,
@@ -81,7 +83,7 @@ function EmbedThumbnail() {
   const processThumbnailFile = (file) => {
     if (!file) return;
     if (!file.type.startsWith("image/")) {
-      toast.error("Please select a valid image file");
+      toast.error(t("upload.thumbnail.invalidImage"));
       return;
     }
     const reader = new FileReader();
@@ -111,7 +113,7 @@ function EmbedThumbnail() {
 
   const uploadThumbnail = () => {
     if (!selectedThumbnail || !thumbnailFile) {
-      toast.error("Please select a thumbnail first.");
+      toast.error(t("upload.thumbnail.selectFirst"));
       return;
     }
 
@@ -123,7 +125,7 @@ function EmbedThumbnail() {
     <>
       <div className="studio-main-container">
         <div className="studio-page-header">
-          <h1>{fromStories ? "Share a Short" : "Share a Video"}</h1>
+          <h1>{fromStories ? t("upload.page.shareShort") : t("upload.page.shareVideo")}</h1>
         </div>
 
         <StepProgress step={step} />
@@ -131,9 +133,9 @@ function EmbedThumbnail() {
         <div className="studio-page-content">
           <div className="upload-step">
             <div className="upload-step__header">
-              <h2 className="upload-step__title">Choose Thumbnail</h2>
+              <h2 className="upload-step__title">{t("upload.thumbnail.title")}</h2>
               <p className="upload-step__subtitle">
-                Select a thumbnail for your video or upload your own
+                {t("upload.thumbnail.subtitle")}
               </p>
             </div>
 
@@ -146,7 +148,7 @@ function EmbedThumbnail() {
                   {loading ? (
                     <TailChase size="20" speed="1.75" color="white" />
                   ) : (
-                    "Proceed to Details"
+                    t("upload.thumbnail.proceed")
                   )}
                 </button>
               </div>
@@ -181,7 +183,7 @@ function EmbedThumbnail() {
                     <div className="content">
                       <img
                         src={thumbnail}
-                        alt={`Thumbnail ${index + 1}`}
+                        alt={t("upload.thumbnail.thumbAlt", { n: index + 1 })}
                         className="image"
                       />
                       {selectedIndex === index && (
@@ -190,7 +192,7 @@ function EmbedThumbnail() {
                         </div>
                       )}
                       {index >= generatedThumbnail.length && (
-                        <div className="badge">Custom</div>
+                        <div className="badge">{t("upload.thumbnail.customBadge")}</div>
                       )}
                     </div>
                   </div>
@@ -219,10 +221,10 @@ function EmbedThumbnail() {
                         <Upload className="w-4 h-4" />
                       </div>
                       <span className="thumbnail-upload__label">
-                        Upload Custom
+                        {t("upload.thumbnail.uploadCustom")}
                       </span>
                       <span className="thumbnail-upload__hint">
-                        or drag &amp; drop
+                        {t("upload.thumbnail.orDragDrop")}
                       </span>
                     </label>
                   </div>

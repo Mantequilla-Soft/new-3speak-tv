@@ -1,0 +1,119 @@
+{
+  "ranges": {
+    "d7": "7 दिन",
+    "d28": "28 दिन",
+    "d90": "90 दिन",
+    "all": "सभी"
+  },
+  "content": {
+    "all": "सभी",
+    "videos": "वीडियो",
+    "shorts": "शॉर्ट्स"
+  },
+  "metrics": {
+    "watchTime": "वॉच टाइम",
+    "views": "व्यू",
+    "avgPct": "औसत %",
+    "votes": "वोट",
+    "comments": "कमेंट",
+    "payout": "पेआउट"
+  },
+  "days": {
+    "short": {
+      "sun": "रवि",
+      "mon": "सोम",
+      "tue": "मंगल",
+      "wed": "बुध",
+      "thu": "गुरु",
+      "fri": "शुक्र",
+      "sat": "शनि"
+    },
+    "initial": {
+      "sun": "र",
+      "mon": "सो",
+      "tue": "मं",
+      "wed": "बु",
+      "thu": "गु",
+      "fri": "शु",
+      "sat": "श"
+    }
+  },
+  "sources": {
+    "threespeak": "3Speak",
+    "player": "एम्बेड प्लेयर"
+  },
+  "trend": {
+    "empty": "इस अवधि में अभी कोई वॉच टाइम नहीं।",
+    "tip_one": "{{count}} व्यू · {{date}}",
+    "tip_other": "{{count}} व्यू · {{date}}"
+  },
+  "noData": "अभी कोई डेटा नहीं।",
+  "demo": {
+    "viewerLocations": "दर्शकों की लोकेशन",
+    "mapBubble_one": "{{country}} — {{count}} सेशन",
+    "mapBubble_other": "{{country}} — {{count}} सेशन",
+    "empty": "इस अवधि में अभी दर्शकों का कोई डेटा नहीं।",
+    "breakdown": "ब्योरा",
+    "map": "मैप",
+    "countries": "देश",
+    "devices": "डिवाइस",
+    "browsers": "ब्राउज़र",
+    "whereTitle": "वे कहाँ देखते हैं",
+    "whereSub": "3speak बनाम एम्बेड प्लेयर",
+    "newVsReturning": "नए बनाम लौटने वाले",
+    "new": "नए",
+    "returning": "लौटने वाले",
+    "located": "{{total}} में से {{located}} वॉच सेशन की लोकेशन मिली।"
+  },
+  "when": {
+    "title": "आपके दर्शक कब देखते हैं",
+    "sub": "UTC · गहरा रंग = ज़्यादा व्यू",
+    "cellTitle_one": "{{day}} {{hour}}:00 — {{count}} व्यू",
+    "cellTitle_other": "{{day}} {{hour}}:00 — {{count}} व्यू",
+    "hour": "{{hour}} बजे"
+  },
+  "detail": {
+    "summary": "{{votes}} वोट · {{comments}} कमेंट · ${{payout}}"
+  },
+  "compare": {
+    "notEnough": "तुलना के लिए काफ़ी डेटा नहीं है।",
+    "start": "शुरुआत",
+    "axis": "पूरे वीडियो में रिटेंशन",
+    "end": "अंत",
+    "title": "वीडियो की तुलना करें",
+    "pickA": "कोई वीडियो चुनें…",
+    "vs": "बनाम",
+    "pickB": "दूसरा चुनें…"
+  },
+  "loadError": "अभी आपके आँकड़े लोड नहीं हो सके।",
+  "emptyRange": "इस अवधि में अभी कोई वॉच डेटा नहीं — “सभी” आज़माएँ, या लोगों के आपके वीडियो देखने का इंतज़ार करें।",
+  "tiles": {
+    "avgViewDuration": "औसत व्यू अवधि",
+    "avgWatched": "औसत देखा गया",
+    "reactionsPerView": "रिएक्शन / व्यू"
+  },
+  "subtotals": "{{videos}} वीडियो · {{votes}} वोट · {{comments}} कमेंट · ${{payout}} · औसत स्पीड {{rate}}×",
+  "sections": {
+    "trend": "समय के साथ वॉच टाइम",
+    "best": "सबसे अच्छा प्रदर्शन",
+    "audience": "आपके दर्शक"
+  },
+  "openInNewTab": "वीडियो नए टैब में खोलें",
+  "footnote": "वॉच आँकड़े प्रीव्यू ट्रैकिंग से हैं और सिर्फ़ आपको दिखते हैं।",
+  "video": {
+    "noData": "अभी कोई डेटा नहीं",
+    "empty": "इस वीडियो का अभी कोई वॉच डेटा नहीं।",
+    "uniqueViewers": "यूनिक दर्शक",
+    "avgSpeed": "औसत स्पीड",
+    "mostDropOff": "📉 सबसे ज़्यादा लोग <b>{{time}}</b> पर छोड़ते हैं",
+    "earlyDrop": "⚡ <b>{{pct}}%</b> ने पहले 3 सेकंड में छोड़ा",
+    "replayed": "🔁 दोबारा देखा गया:",
+    "retentionTitle": "दर्शक रिटेंशन",
+    "retentionSub": "हर पल पर अभी भी देख रहे दर्शकों का हिस्सा",
+    "pctWatching": "{{pct}}% देख रहे हैं",
+    "replayTitle": "सबसे ज़्यादा दोबारा देखा गया",
+    "replaySub": "वे हिस्से जिन्हें दर्शक सबसे ज़्यादा देखते और दोबारा देखते हैं",
+    "hotSpot": "हॉट स्पॉट",
+    "notEnoughReplays": "अभी काफ़ी रीप्ले नहीं हैं"
+  }
+}

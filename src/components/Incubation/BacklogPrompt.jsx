@@ -4,6 +4,7 @@ import { MdUploadFile } from 'react-icons/md';
 import { useAppStore } from '../../lib/store';
 import { usePromptsActive, setPromptActive } from '../../utils/welcomeGate';
 import { fetchBackfillSummary, claimAssetsOnce } from '../../lib/incubation';
+import { useTranslation, Trans } from 'react-i18next';
 import '../AdsPrompt/AdsPrompt.scss';
 
 const SNOOZE_KEY = 'backlog_prompt_snoozed_until';
@@ -19,6 +20,7 @@ const SNOOZE_MS = 3 * 24 * 60 * 60 * 1000;
  * someone's permanent public record is their choice item by item.
  */
 export default function BacklogPrompt() {
+  const { t } = useTranslation();
   const user = useAppStore((s) => s.user);
   const authenticated = useAppStore((s) => s.authenticated);
   const navigate = useNavigate();
@@ -74,29 +76,26 @@ export default function BacklogPrompt() {
           <MdUploadFile className="ads-prompt-head-icon" aria-hidden="true" />
           <div>
             <h3 className="ads-prompt-title" id="backlog-title">
-              Your earlier posts are still here
+              {t('incubation.backlog.title')}
             </h3>
             <p className="ads-prompt-lede">
-              You made <strong>{n} {n === 1 ? 'thing' : 'things'}</strong> before you had a
-              Hive account. They live on 3Speak only. You can put them on Hive as
-              <strong> @{user}</strong> whenever you like.
+              <Trans i18nKey="incubation.backlog.lede" count={n} values={{ user }} components={{ b: <strong /> }} />
             </p>
           </div>
         </header>
 
         <p className="ads-prompt-text">
-          You pick what goes across, one by one. Anything you leave stays on 3Speak
-          exactly as it is, and you can come back to the rest any time.
+          {t('incubation.backlog.text')}
         </p>
 
         <div className="ads-prompt-actions">
-          <button type="button" className="ads-prompt-ghost" onClick={close}>Later</button>
+          <button type="button" className="ads-prompt-ghost" onClick={close}>{t('incubation.backlog.later')}</button>
           <button
             type="button"
             className="ads-prompt-primary"
             onClick={() => { close(); navigate('/publish-backlog'); }}
           >
-            Take a look
+            {t('incubation.tipCard.takeALook')}
           </button>
         </div>
       </div>

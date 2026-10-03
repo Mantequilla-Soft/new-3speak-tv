@@ -1,0 +1,100 @@
+{
+  "review": {
+    "fabAria": "Feedback geven",
+    "fab": "Feedback",
+    "aspects": {
+      "upload": "Uploaden",
+      "playback": "Afspelen",
+      "live": "Livestreamen",
+      "discovery": "Ontdekken / feed",
+      "design": "Design / UX",
+      "performance": "Snelheid",
+      "mobile": "Mobiel",
+      "other": "Iets anders"
+    },
+    "titles": {
+      "upload": "Hoe ging je upload?",
+      "stream": "Hoe ging je livestream?",
+      "watch": "Hoe was het kijken op 3Speak?",
+      "global": "Hoe bevalt 3Speak je?",
+      "fallback": "Help ons 3Speak beter te maken"
+    },
+    "stars": {
+      "poor": "Slecht",
+      "fair": "Matig",
+      "good": "Goed",
+      "great": "Heel goed",
+      "amazing": "Geweldig"
+    },
+    "errors": {
+      "pickStars": "Kies een aantal sterren",
+      "sendFailed": "Je review kon niet worden verstuurd. Probeer het opnieuw."
+    },
+    "thanks": "Bedankt voor je feedback! 🙏",
+    "sendFeedback": "Feedback versturen",
+    "subtitle": "Met jouw feedback maken we 3Speak beter.",
+    "starRating": "Sterrenbeoordeling",
+    "starsAria_one": "{{count}} ster",
+    "starsAria_other": "{{count}} sterren",
+    "aboutLabel": "Waar gaat het over? <opt>(optioneel)</opt>",
+    "recommendLabel": "Zou je 3Speak aanraden? <opt>(optioneel)</opt>",
+    "moreLabel": "Vertel ons meer <opt>(optioneel)</opt>",
+    "placeholder": "Wat vond je goed? Wat kan beter?",
+    "notNow": "Niet nu",
+    "sending": "Versturen…"
+  },
+  "tabs": {
+    "reactions": "Reacties",
+    "transcript": "Transcript"
+  },
+  "live": {
+    "vodProcessing": "De opname wordt verwerkt…",
+    "vodProcessingHint": "Deze stream is afgelopen. De video verschijnt hier zodra de encoder klaar is — je hoeft niet te herladen.",
+    "watching_one": "👁 {{count}} kijkt",
+    "watching_other": "👁 {{count}} kijken",
+    "signInRaiseHand": "Log in om je hand op te steken",
+    "signInChat": "Log in om te chatten",
+    "signInJoinChat": "🔒 Log in om mee te chatten."
+  },
+  "transcript": {
+    "title": "Transcript",
+    "languageAria": "Taal van het transcript",
+    "copyingWithTimes": "Kopiëren met tijdcodes",
+    "copyingTextOnly": "Alleen tekst kopiëren",
+    "timecodes": "Tijdcodes",
+    "copyWithTimes": "Transcript met tijdcodes kopiëren",
+    "copyText": "Tekst van transcript kopiëren",
+    "jumpTo": "Naar {{time}} springen",
+    "hide": "Transcript verbergen",
+    "show": "Transcript tonen",
+    "showWithCount_one": "Transcript tonen ({{count}} regel)",
+    "showWithCount_other": "Transcript tonen ({{count}} regels)"
+  },
+  "blog": {
+    "noContent": "Geen inhoud beschikbaar",
+    "loadError": "Fout bij het laden van de inhoud.",
+    "processError": "Fout bij het verwerken van de inhoud.",
+    "rendererError": "Fout bij het laden van de renderer."
+  },
+  "section": {
+    "posted": "Reactie geplaatst!",
+    "postFailed": "Reactie mislukt, probeer het opnieuw",
+    "editFailed": "Bewerken mislukt, probeer het opnieuw",
+    "updated": "Reactie bijgewerkt",
+    "commentTab": "Reageren",
+    "reactTab": "Video-reactie",
+    "at": "op",
+    "atTime": "op {{time}}",
+    "commentPlaceholder": "Schrijf hier je reactie...",
+    "replyPlaceholder": "Schrijf hier je antwoord...",
+    "commentButton": "Reageren",
+    "count_one": "{{count}} reactie",
+    "count_other": "{{count}} reacties",
+    "edited": "(bewerkt)",
+    "saving": "Opslaan...",
+    "translation": "Vertaling",
+    "translationFailed": "Vertalen mislukt. Draait de vertaaldienst?",
+    "reportComment": "Reactie melden",
+    "openInShorts": "Openen in Shorts"
+  }
+}

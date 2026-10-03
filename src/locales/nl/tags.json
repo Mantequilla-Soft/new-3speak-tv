@@ -1,0 +1,43 @@
+{
+  "labels": {
+    "tech-science": "Tech & wetenschap",
+    "technology": "Technologie",
+    "education": "Onderwijs",
+    "science": "Wetenschap",
+    "programming": "Programmeren",
+    "crypto-finance": "Crypto & financiën",
+    "cryptocurrency": "Cryptovaluta",
+    "finance": "Financiën",
+    "business": "Zakelijk",
+    "entertainment": "Entertainment",
+    "music": "Muziek",
+    "gaming": "Gaming",
+    "film-tv": "Film & tv",
+    "lifestyle": "Lifestyle",
+    "vlog": "Vlog",
+    "comedy": "Comedy",
+    "story-time": "Verhalen",
+    "commercial": "Commercieel",
+    "arts-diy": "Kunst & DIY",
+    "art": "Kunst",
+    "diy-crafts": "DIY & knutselen",
+    "photography": "Fotografie",
+    "food-outdoor": "Eten & buiten",
+    "nature": "Natuur",
+    "travel": "Reizen",
+    "food": "Eten",
+    "pets": "Huisdieren",
+    "gardening": "Tuinieren",
+    "sports-health": "Sport & gezondheid",
+    "sports": "Sport",
+    "health": "Gezondheid",
+    "fitness": "Fitness",
+    "life-society": "Leven & maatschappij",
+    "news": "Nieuws",
+    "spirituality": "Spiritualiteit",
+    "politics": "Politiek"
+  },
+  "display": {
+    "cryptocurrency": "crypto"
+  }
+}

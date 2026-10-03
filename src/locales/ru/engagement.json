@@ -1,0 +1,102 @@
+{
+  "tip": {
+    "successTitle": "Чаевые отправлены!",
+    "successMessage": "Вы отправили {{amount}} {{currency}} в качестве чаевых. Спасибо за поддержку!",
+    "errors": {
+      "allRequired": "Заполните все поля",
+      "loginRequired": "Войдите, чтобы отправить чаевые",
+      "insufficientBalance": "Недостаточно средств",
+      "invalidUsername": "Неверное имя пользователя",
+      "transferFailed": "Перевод не удался: {{message}}"
+    },
+    "heading": "Чаевые для @{{recipient}}",
+    "amountLabel": "Сумма: ",
+    "amountPlaceholder": "напр. 1.000",
+    "currencyLabel": "Валюта:",
+    "availableBalance": "Доступный баланс: {{currency}}",
+    "memoLabel": "Мемо (необязательно):",
+    "memoPlaceholder": "напр. Спасибо за отличный контент!",
+    "send": "Отправить чаевые"
+  },
+  "cardMenu": {
+    "loginToPersonalize": "Войдите, чтобы настроить ленту под себя",
+    "notInterestedToast": "Не интересно — мы скроем это видео",
+    "undo": "Отменить",
+    "cantHideOwn": "Нельзя скрыть свои собственные видео",
+    "hidingCreatorToast": "Скрываем видео от @{{author}}",
+    "loginForPlaylists": "Войдите, чтобы добавлять видео в плейлисты",
+    "loginToTag": "Войдите, чтобы ставить теги видео",
+    "moreOptions": "Ещё",
+    "addToPlaylist": "Добавить в плейлист",
+    "addTag": "Добавить тег",
+    "notInterested": "Не интересно",
+    "dontShowCreator": "Не показывать @{{author}}"
+  },
+  "guestList": {
+    "loadFailed": "Не удалось загрузить текущий список гостей",
+    "saved_one": "Это видео может смотреть {{count}} гость",
+    "saved_few": "Это видео могут смотреть {{count}} гостя",
+    "saved_many": "Это видео могут смотреть {{count}} гостей",
+    "saved_other": "Это видео могут смотреть {{count}} гостя",
+    "cleared": "Список гостей очищен",
+    "saveFailed": "Не удалось сохранить список гостей",
+    "invalidAccounts": "Это не аккаунты Hive: {{names}}",
+    "title": "🔒 Список гостей",
+    "hint": "Эти аккаунты могут смотреть без 3Speak Pro. Список хранится приватно на наших серверах и никогда не публикуется в вашем посте.",
+    "notRegistered": "Это видео ещё обрабатывается. Список можно будет изменить, когда обработка завершится.",
+    "placeholder": "username, another.user",
+    "empty": "Пока никого. Смотреть могут только подписчики Pro.",
+    "removeAria": "Убрать {{name}}"
+  },
+  "voters": {
+    "pinnedTitle_one": "Проголосовали ({{count}})",
+    "pinnedTitle_few": "Проголосовали ({{count}})",
+    "pinnedTitle_many": "Проголосовали ({{count}})",
+    "pinnedTitle_other": "Проголосовали ({{count}})",
+    "topVoters": "Топ голосующих",
+    "noVotes": "Голосов пока нет"
+  },
+  "payout": {
+    "breakdown": "Распределение выплаты",
+    "estimatedBreakdown": "Примерное распределение",
+    "beneficiaries": "Бенефициары",
+    "curators": "Кураторы (50%)",
+    "author": "Автор",
+    "total": "Итого",
+    "totalEstimated": "Итого (примерно)"
+  },
+  "vote": {
+    "loginRequired": "Войдите, чтобы выполнить это действие",
+    "fetchPostFailed": "Не удалось получить данные поста",
+    "sameWeight": "Вы уже проголосовали с этим весом. Выберите другое значение.",
+    "failed": "Голос не учтён: {{message}}",
+    "pleaseTryAgain": "попробуйте ещё раз",
+    "weight": "Вес голоса: {{weight}}%",
+    "success": "Голос учтён! Стоимость: ${{value}}",
+    "successTagged": "Голос учтён! Тег «{{tag}}». Стоимость: ${{value}}",
+    "tagged": "Тег «{{tag}}» добавлен.",
+    "vote": "Голосовать",
+    "tagThisVideo": "Добавить тег к видео",
+    "tagOptional": "— необязательно —",
+    "pickTopicFirst": "Сначала выберите тему",
+    "taggedNoDot": "Тег «{{tag}}» добавлен",
+    "tagFailed": "Не удалось добавить тег: {{message}}",
+    "taggedAlreadyVoted": "Тег «{{tag}}» добавлен — ваш голос {{weight}}% уже был учтён.",
+    "votingClosed": "Голосование закрыто — добавьте тег к видео",
+    "youTagged": "Вы отметили это как <b>{{tag}}</b>.",
+    "pickTopic": "Выберите тему (считается как голос 100%)",
+    "submitTag": "Отправить тег",
+    "tagThisVideoFull": "Добавить тег к видео (считается как голос 100%)",
+    "justTag": "Не голосовать — только тег"
+  },
+  "tagsPicker": {
+    "autoTagged": "Теги добавлены автоматически: {{tags}}",
+    "searchPlaceholder": "Поиск тем…",
+    "searchAria": "Поиск тем",
+    "noMatches": "Нет тем по запросу «{{query}}».",
+    "allSelected": "Выбрана вся категория «{{category}}». Добавляйте отдельные темы, только чтобы сузить выбор:",
+    "orPickTopics": "Или выберите отдельные темы:",
+    "goodEnough": "Этого достаточно — или уточните (необязательно):",
+    "moreSpecific": "Точнее:"
+  }
+}

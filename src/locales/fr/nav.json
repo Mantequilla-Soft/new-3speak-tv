@@ -1,0 +1,122 @@
+{
+  "theme": {
+    "switchToLight": "Passer en mode clair",
+    "switchToDark": "Passer en mode sombre"
+  },
+  "bottom": {
+    "feeds": "Fils",
+    "groups": "Groupes",
+    "audio": "Audio",
+    "login": "Connexion"
+  },
+  "installApp": "Installer l'app",
+  "iosInstallHint": "Touchez <b>Partager</b> puis <b>Sur l'écran d'accueil</b>",
+  "playlists": {
+    "tooltip": "Les playlists que vous avez enregistrées ou créées",
+    "label": "Playlists",
+    "watchLater": "À regarder plus tard",
+    "watchLaterCount": "À regarder plus tard ({{n}})",
+    "watchHistory": "Historique",
+    "all": "Toutes les playlists"
+  },
+  "advertise": "Faire de la pub",
+  "hidePages": "Masquer les pages",
+  "showPages": "Afficher les pages",
+  "tabs": {
+    "overviewTooltip": "Toutes les nouveautés de 3Speak, et ce qui devrait vous plaire",
+    "overview": "Aperçu",
+    "shortsTooltip": "Des vidéos verticales courtes, l'une après l'autre",
+    "audioTooltip": "Podcasts, musique et autres contenus audio publiés sur 3Speak",
+    "groupsTooltip": "Les communautés que vous pouvez rejoindre, et les badges décernés aux membres",
+    "rankingsTooltip": "Les créateurs qui gagnent le plus et sont les plus regardés en ce moment"
+  },
+  "aboutLink": "À propos de 3Speak",
+  "profile": {
+    "accountMenu": "Menu du compte",
+    "myChannelAria": "Ma chaîne",
+    "vpTooltip": "Voting Power : le poids de votre prochain vote",
+    "rcTooltip": "Resource Credits : ce que coûtent vos actions sur Hive",
+    "myChannel": "Ma chaîne",
+    "publishBacklog": "Publier les vidéos en attente",
+    "analytics": "Statistiques",
+    "inviteLinks": "Liens d'invitation",
+    "iosInstallToast": "Touchez le bouton Partager dans Safari, puis « Sur l'écran d'accueil »",
+    "changeAccount": "Changer de compte",
+    "logout": "Se déconnecter",
+    "onDiscord": "3Speak sur Discord",
+    "onX": "3Speak sur X",
+    "onTelegram": "3Speak sur Telegram"
+  },
+  "notifications": {
+    "pushOff": "Notifications désactivées sur cet appareil",
+    "pushOn": "Vous serez prévenu quand les créateurs que vous suivez publient",
+    "pushFailed": "Impossible de modifier les paramètres de notification",
+    "ariaUnread": "Notifications ({{count}} non lues)",
+    "pushBlocked": "Les notifications sont bloquées pour ce site dans les paramètres de votre navigateur",
+    "pushNoWorker": "Cette version n'a pas de service worker : les notifications ne peuvent pas être activées ici",
+    "pushStop": "Ne plus notifier cet appareil",
+    "pushStart": "Être prévenu quand les créateurs que vous suivez publient",
+    "on": "Activées",
+    "notifyMe": "M'avertir",
+    "empty": "Vous n'avez pas encore de notifications.",
+    "threeSpeakVideo": "Vidéo 3Speak",
+    "group": {
+      "voteOne": "@{{a}} a voté pour votre publication",
+      "voteTwo": "@{{a}} et @{{b}} ont voté pour votre publication",
+      "voteMany_one": "@{{a}} et {{count}} autre personne ont voté pour votre publication",
+      "voteMany_many": "@{{a}} et {{count}} autres personnes ont voté pour votre publication",
+      "voteMany_other": "@{{a}} et {{count}} autres personnes ont voté pour votre publication",
+      "withValue": "{{label}} (${{value}})",
+      "followOne": "@{{a}} a commencé à vous suivre",
+      "followTwo": "@{{a}} et @{{b}} ont commencé à vous suivre",
+      "followMany_one": "@{{a}} et {{count}} autre personne ont commencé à vous suivre",
+      "followMany_many": "@{{a}} et {{count}} autres personnes ont commencé à vous suivre",
+      "followMany_other": "@{{a}} et {{count}} autres personnes ont commencé à vous suivre",
+      "other": "{{count}} notifications {{type}}",
+      "typeCount": "{{count}} {{type}}",
+      "includesWhale": "Inclut un ou plusieurs comptes 🐋 baleine",
+      "includesOrca": "Inclut un ou plusieurs comptes 🐬 orque",
+      "andMore": "et {{count}} de plus…"
+    }
+  },
+  "search": {
+    "types": {
+      "users": "Utilisateurs",
+      "communities": "Communautés",
+      "videos": "Vidéos",
+      "shorts": "Shorts",
+      "audio": "Audio",
+      "playlists": "Playlists"
+    },
+    "dates": {
+      "today": "Aujourd'hui",
+      "thisWeek": "Cette semaine",
+      "thisMonth": "Ce mois-ci",
+      "thisYear": "Cette année"
+    },
+    "contentType": "Type de contenu",
+    "boostRecent": "Favoriser les récents",
+    "dateRange": "Période",
+    "tag": "Tag",
+    "tagPlaceholder": "ex. crypto, gaming...",
+    "community": "Communauté",
+    "communityPlaceholder": "Rechercher des communautés...",
+    "clearFilters": "Effacer tous les filtres",
+    "allHidden": "Tous les types de contenu sont masqués.",
+    "reenableFilters": "Réactiver tous les filtres",
+    "noResultsFor": "Aucun résultat pour « {{term}} »",
+    "searchFor": "Rechercher « {{term}} »",
+    "authors_one": "{{count}} auteur",
+    "authors_many": "{{count}} auteurs",
+    "authors_other": "{{count}} auteurs",
+    "subscribers_one": "{{count}} membre",
+    "subscribers_many": "{{count}} membres",
+    "subscribers_other": "{{count}} membres",
+    "views_one": "{{formatted}} vue",
+    "views_many": "{{formatted}} vues",
+    "views_other": "{{formatted}} vues",
+    "tags": "Tags",
+    "titles": "Titres",
+    "placeholder": "Rechercher..."
+  }
+}

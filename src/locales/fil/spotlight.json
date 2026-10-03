@@ -1,0 +1,349 @@
+{
+  "icons": {
+    "link": "Link",
+    "globe": "Website",
+    "podcast": "Podcast",
+    "email": "Email",
+    "phone": "Telepono",
+    "rss": "RSS",
+    "qrcode": "QR code",
+    "shop": "Shop",
+    "bag": "Tindahan",
+    "dollar": "Pera",
+    "gift": "Regalo",
+    "heart": "Suporta",
+    "star": "Star",
+    "thumbsup": "Like",
+    "fire": "Apoy",
+    "bolt": "Kidlat",
+    "music": "Musika",
+    "headphones": "Audio",
+    "mic": "Mic",
+    "video": "Video",
+    "film": "Pelikula",
+    "tv": "TV",
+    "play": "Play",
+    "camera": "Litrato",
+    "image": "Larawan",
+    "palette": "Sining",
+    "pen": "Pagsusulat",
+    "book": "Libro",
+    "newspaper": "Balita",
+    "graduation": "Kurso",
+    "code": "Code",
+    "gamepad": "Gaming",
+    "briefcase": "Trabaho",
+    "home": "Home",
+    "location": "Lokasyon",
+    "map": "Mapa",
+    "calendar": "Kalendaryo",
+    "clock": "Orasan",
+    "bell": "Alerts",
+    "tag": "Tag",
+    "download": "Download",
+    "file": "File",
+    "users": "Komunidad",
+    "comment": "Comment",
+    "share": "Share",
+    "coffee": "Kape",
+    "wallet": "Wallet",
+    "plus": "Iba pa",
+    "check": "Check"
+  },
+  "fonts": {
+    "system": "System",
+    "rounded": "Rounded",
+    "serif": "Serif",
+    "mono": "Mono",
+    "display": "Display",
+    "condensed": "Condensed",
+    "handwriting": "Sulat-kamay",
+    "grotesk": "Grotesk",
+    "humanist": "Humanist",
+    "geometric": "Geometric",
+    "slab": "Slab",
+    "elegant": "Elegante",
+    "typewriter": "Makinilya",
+    "marker": "Marker",
+    "brush": "Brush",
+    "palatino": "Palatino",
+    "wide": "Malapad"
+  },
+  "motion": {
+    "none": "Wala",
+    "float": "Lutang",
+    "sway": "Ugoy",
+    "pulse": "Pulso",
+    "wobble": "Gewang",
+    "bounce": "Talbog",
+    "tilt": "Tilt 3D",
+    "spin": "Ikot",
+    "shake": "Yanig",
+    "breathe": "Hinga"
+  },
+  "sectionTypes": {
+    "link": "Link",
+    "video": "3Speak content",
+    "embed": "Rich link",
+    "image": "Larawan",
+    "header": "Pamagat / text"
+  },
+  "blockNames": {
+    "link": "link",
+    "header": "header",
+    "image": "larawan",
+    "video": "video",
+    "embed": "embed"
+  },
+  "blockNamesPlural": {
+    "link": "links",
+    "header": "headers",
+    "image": "larawan",
+    "video": "videos",
+    "embed": "embeds"
+  },
+  "templates": {
+    "minimal": {
+      "name": "Minimal",
+      "niche": "Malinis at simple"
+    },
+    "neon": {
+      "name": "Neon Nights",
+      "niche": "Creator / streamer"
+    },
+    "crypto": {
+      "name": "On-Chain",
+      "niche": "Crypto / Web3"
+    },
+    "gamer": {
+      "name": "Player One",
+      "niche": "Gaming"
+    },
+    "photographer": {
+      "name": "Exposure",
+      "niche": "Photography"
+    },
+    "podcaster": {
+      "name": "On Air",
+      "niche": "Podcast"
+    },
+    "fitness": {
+      "name": "Peak Form",
+      "niche": "Fitness / coach"
+    },
+    "writer": {
+      "name": "Longform",
+      "niche": "Manunulat / blogger"
+    },
+    "chef": {
+      "name": "Mise en Place",
+      "niche": "Pagkain / pagluluto"
+    },
+    "travel": {
+      "name": "Wanderlust",
+      "niche": "Kalikasan / travel"
+    },
+    "business": {
+      "name": "Boardroom",
+      "niche": "Negosyo / pro"
+    },
+    "artist": {
+      "name": "Palette",
+      "niche": "Artist / visual"
+    },
+    "ocean": {
+      "name": "Tidewater",
+      "niche": "Chill / lifestyle"
+    },
+    "musician": {
+      "name": "Amplified",
+      "niche": "Musika / banda"
+    },
+    "developer": {
+      "name": "Terminal",
+      "niche": "Developer / tech"
+    },
+    "sports": {
+      "name": "Game Day",
+      "niche": "Sports / atleta"
+    }
+  },
+  "errors": {
+    "notLoggedIn": "Hindi naka-log in",
+    "couldNotSaveToHive": "Hindi ma-save sa Hive"
+  },
+  "arrange": {
+    "title": "Pamagat",
+    "video": "Video",
+    "latestPosts": "Mga pinakabagong post",
+    "latestPostsBy": "Mga pinakabagong post · @{{account}}",
+    "dragToArrange": "I-drag para ayusin"
+  },
+  "page": {
+    "latestPosts": "Mga pinakabagong post",
+    "seeNewestPosts": "Tingnan ang mga pinakabagong post ni @{{user}} →",
+    "openLink": "Buksan ang link",
+    "empty": "Wala pang naidagdag na link si @{{user}}.",
+    "viewProfile": "Tingnan ang 3Speak profile →",
+    "poweredBy": "Powered by 3Speak"
+  },
+  "editor": {
+    "resetToDefault": "I-reset sa default",
+    "motion": "Galaw",
+    "speed": "Bilis {{value}}",
+    "loop": "Loop",
+    "runSeconds": "Tumakbo nang {{value}}s",
+    "picker": {
+      "videoLabel": "Pumili mula sa mga video ko",
+      "videoLoading": "Naglo-load ng mga video mo…",
+      "videoEmpty": "Walang nahanap na bagong 3Speak video.",
+      "shortLabel": "Pumili mula sa Shorts ko",
+      "shortLoading": "Naglo-load ng Shorts mo…",
+      "shortEmpty": "Walang nahanap na bagong 3Speak Shorts.",
+      "noChannel": "Walang natukoy na channel (naka-log in ka ba?)",
+      "loadFailed": "Hindi ma-load: {{error}}"
+    },
+    "toasts": {
+      "unfurlFailed": "Hindi makuha ang preview ng link",
+      "imageUploadFailed": "Pumalya ang upload ng larawan: {{error}}",
+      "tryAgain": "subukan ulit",
+      "styleApplied": "Na-apply ang style sa lahat ng {{type}} block",
+      "templateApplied": "Na-apply ang “{{name}}” — baguhin o i-Undo",
+      "reverted": "Ibinalik sa dati mong design",
+      "saved": "Na-save sa Hive profile mo ang Spotlight",
+      "saveFailed": "Hindi ma-save",
+      "linkCopied": "Nakopya ang link",
+      "uploadFailed": "Pumalya ang upload"
+    },
+    "link": {
+      "labelPlaceholder": "Label (hal. YouTube Ko)",
+      "type": "Uri ng link",
+      "typeGroup": "Uri",
+      "website": "Website / URL",
+      "email": "Email",
+      "phone": "Telepono",
+      "platformGroup": "Platform",
+      "yourname": "yourname",
+      "platformIconHint": "Ang icon ay ang logo ng {{platform}} — lumipat sa “Website / URL” para pumili ng custom na icon.",
+      "icon": "Icon",
+      "iconColor": "Kulay ng icon",
+      "iconBg": "Bg ng icon"
+    },
+    "header": {
+      "text": "Text",
+      "size": "Laki",
+      "large": "Malaki",
+      "medium": "Katamtaman",
+      "small": "Maliit",
+      "align": "Align",
+      "left": "Kaliwa",
+      "center": "Gitna",
+      "right": "Kanan"
+    },
+    "image": {
+      "uploading": "Ina-upload…",
+      "upload": "Mag-upload ng larawan",
+      "urlPlaceholder": "…o URL ng larawan",
+      "linkPlaceholder": "Link kapag na-click (opsyonal)"
+    },
+    "video": {
+      "contentType": "Uri ng content",
+      "video": "Video",
+      "short": "Short",
+      "orPaste": "o mag-paste ng link",
+      "pastePlaceholder": "Mag-paste ng 3Speak video link o author/permlink",
+      "titlePlaceholder": "Pamagat na makikita sa itaas ng video (naka-link sa 3Speak)",
+      "hint": "Ie-embed at ipe-play sa page mo ang napiling content."
+    },
+    "embed": {
+      "source": "Source",
+      "sourceLink": "Isang link (rich preview)",
+      "sourceHiveRecent": "Mga pinakabago kong Hive post",
+      "accountPlaceholder": "Hive username (iwanang blangko para sa sarili mo)",
+      "showPosts_one": "Ipakita ang {{count}} post",
+      "showPosts_other": "Ipakita ang {{count}} posts",
+      "perRow": "{{value}} bawat hanay",
+      "hiveRecentHint": "Ang mga pinakabago mong top-level na post (walang reblogs o cross-posts). Kusang nag-a-update.",
+      "linkPlaceholder": "Mag-paste ng kahit anong link — Hive post, Instagram, X, YouTube, artikulo…",
+      "fetching": "Kinukuha ang preview…",
+      "noPreview": "Walang nahanap na preview — lalabas pa rin ito bilang link card.",
+      "pasteHint": "Mag-paste ng link at kukunin namin ang pamagat, description at larawan nito."
+    },
+    "style": {
+      "title": "Style",
+      "applyAllTitle": "I-apply ang style na ito sa bawat {{type}} block",
+      "applyAll": "I-apply sa lahat ng {{types}}",
+      "background": "Background",
+      "text": "Text",
+      "backgroundPct": "Background {{value}}%",
+      "radius": "Radius {{value}}",
+      "fontSizePct": "Laki ng font {{value}}%",
+      "paddingPx": "Padding {{value}}px",
+      "thumbnailPct": "Thumbnail {{value}}%",
+      "border": "Border",
+      "thicknessPx": "Kapal {{value}}px",
+      "opacityPct": "Opacity {{value}}%",
+      "shadow": "Anino",
+      "strengthPct": "Lakas {{value}}%",
+      "color": "Kulay",
+      "blur": "Blur {{value}}",
+      "spread": "Spread {{value}}",
+      "inset": "Inset",
+      "cardDelayMs": "Delay ng card {{value}}ms"
+    },
+    "tagline": "Ang links at videos mo sa iisang page",
+    "openPage": "Buksan ang page",
+    "templates": {
+      "title": "Mga Template",
+      "hint": "Pumili ng design para mapunan lahat — mananatili ang bio mo, at puwede kang mag-Undo.",
+      "undo": "I-undo ang template — bumalik sa design ko"
+    },
+    "profile": {
+      "title": "Profile",
+      "headlinePlaceholder": "Maikling headline / bio (opsyonal)",
+      "avatarSizePct": "Laki ng avatar {{value}}%",
+      "avatarShadowPct": "Anino ng avatar {{value}}%",
+      "avatarGlow": "Glow ng avatar",
+      "glowSize": "Laki ng glow {{value}}",
+      "channelButtonText": "Text ng channel button"
+    },
+    "page": {
+      "title": "Style ng page",
+      "solid": "Solid",
+      "gradient": "Gradient",
+      "image": "Larawan",
+      "color2": "Kulay 2",
+      "angle": "Anggulo {{value}}°",
+      "uploadBackground": "Mag-upload ng background",
+      "imageSet": "Naitakda ang larawan ✓",
+      "overlay": "Overlay",
+      "overlay2": "Overlay 2",
+      "none": "Wala",
+      "overlayOpacityPct": "Opacity ng overlay {{value}}%",
+      "overlayAngle": "Anggulo ng overlay {{value}}°",
+      "colors": "Mga Kulay",
+      "buttonBg": "Bg ng button",
+      "buttonText": "Text ng button",
+      "buttons": "Mga Button",
+      "buttonStyle": "Style ng button",
+      "soft": "Soft",
+      "fill": "Fill",
+      "outline": "Outline",
+      "cornerRadius": "Radius ng sulok {{value}}",
+      "textStyle": "Style ng text (pangalan, bio at text blocks)",
+      "font": "Font",
+      "normal": "Normal",
+      "italic": "Italic",
+      "bold": "Bold",
+      "boldItalic": "Bold Italic",
+      "strong": "Strong",
+      "textBorderPx": "Border ng text {{value}}px",
+      "borderColor": "Kulay ng border"
+    },
+    "addBlock": "Magdagdag ng block",
+    "empty": "Idagdag ang una mong link, video o larawan sa itaas.",
+    "arrangeHint": "I-drag ang <grip></grip> para ayusin · i-drop ang isang block sa isa pa para magkatabi sila · i-click ang block para i-edit ito dito mismo",
+    "livePreview": "Live preview",
+    "previewTitle": "Preview ng Spotlight"
+  }
+}

@@ -13,8 +13,10 @@ import { HIVE_API_URL } from "../../utils/config";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useState } from "react";
 import { generateVideoThumbnails } from "../../utils/videoThumbnails";
+import { useTranslation } from "react-i18next";
 
 function EmbedStudioPage() {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const location = useLocation();
   const [isVerifying, setIsVerifying] = useState(false);
@@ -233,7 +235,7 @@ function EmbedStudioPage() {
     <>
       <div className="studio-main-container">
         <div className="studio-page-header">
-          <h1>{fromStories ? "Share a Short" : "Share a Video"}</h1>
+          <h1>{fromStories ? t("upload.page.shareShort") : t("upload.page.shareVideo")}</h1>
         </div>
         <StepProgress step={step} />
         <div className="studio-page-content">

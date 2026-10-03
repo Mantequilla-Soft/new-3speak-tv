@@ -5,6 +5,7 @@ import {
   fetchIncubationUserContent,
 } from '../../lib/incubation';
 import { batchGetContent } from '../../utils/hiveUtils';
+import { useTranslation } from 'react-i18next';
 import './IncubatingActivity.scss';
 
 const LOADERS = {
@@ -18,10 +19,10 @@ const LOADERS = {
 // pass; a page of replies is realistically two or three people.
 const MAX_OFFCHAIN_AUTHORS = 6;
 
-const EMPTY = {
-  comments: 'Nothing said yet.',
-  followers: 'Nobody follows them yet.',
-  following: 'They are not following anyone yet.',
+const EMPTY_KEY = {
+  comments: 'incubation.activity.empty.comments',
+  followers: 'incubation.activity.empty.followers',
+  following: 'incubation.activity.empty.following',
 };
 
 /**
@@ -63,6 +64,7 @@ const when = (d) => (d ? new Date(d).toLocaleDateString() : '');
  * looked at.
  */
 export default function IncubatingActivity({ handle, tab, onCount }) {
+  const { t } = useTranslation();
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
@@ -80,12 +82,12 @@ export default function IncubatingActivity({ handle, tab, onCount }) {
         setItems(d.items || []);
         if (typeof d.total === 'number') onCount?.(tab, d.total);
       })
-      .catch(() => { if (alive) setError('Could not load that.'); })
+      .catch(() => { if (alive) setError(t('incubation.activity.loadFailed')); })
       .finally(() => { if (alive) setLoading(false); });
     return () => { alive = false; };
     // onCount is deliberately out: the parent passes a fresh closure on every
     // render, and including it would refetch the tab in a loop.
-  }, [handle, tab]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [handle, tab, t]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // What each comment was a reply to, so a row can say "on «Single hand rows»"
   // instead of "on @meno".
@@ -150,9 +152,9 @@ export default function IncubatingActivity({ handle, tab, onCount }) {
     return () => { alive = false; };
   }, [tab, items]);
 
-  if (loading) return <p className="desc">Loading…</p>;
+  if (loading) return <p className="desc">{t('common.status.loading')}</p>;
   if (error) return <p className="desc">{error}</p>;
-  if (items.length === 0) return <p className="desc">{EMPTY[tab]}</p>;
+  if (items.length === 0) return <p className="desc">{t(EMPTY_KEY[tab])}</p>;
 
   if (tab === 'comments') {
     return (
@@ -181,7 +183,7 @@ export default function IncubatingActivity({ handle, tab, onCount }) {
               <p className="inc-comment-body">{plainPreview(c.body)}</p>
               <p className="inc-activity-meta">
                 {when(c.createdAt)}
-                {c.published && c.publishedAs ? ' · published to Hive' : ''}
+                {c.published && c.publishedAs ? ` · ${t('incubation.activity.publishedToHive')}` : ''}
               </p>
             </li>
           );
@@ -200,7 +202,7 @@ export default function IncubatingActivity({ handle, tab, onCount }) {
               it is the interesting half of the answer. Somebody incubating
               being followed by real accounts says something a raw count does
               not. */}
-          {f.kind === 'hive' && <span className="inc-activity-tag">on Hive</span>}
+          {f.kind === 'hive' && <span className="inc-activity-tag">{t('incubation.activity.onHive')}</span>}
           <span className="inc-activity-meta">{when(f.since)}</span>
         </li>
       ))}

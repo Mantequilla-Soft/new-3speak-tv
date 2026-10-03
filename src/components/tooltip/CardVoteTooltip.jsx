@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { createPortal } from 'react-dom';
+import { useTranslation } from 'react-i18next';
 import './UpvoteTooltip.scss';
 import { useAppStore } from '../../lib/store';
 import { IoChevronUpCircleOutline } from 'react-icons/io5';
@@ -29,6 +30,7 @@ const CardVoteTooltip = ({
   setVoteStatus,
   tooltipVariant = "default"
 }) => {
+  const { t } = useTranslation();
   const { user, authenticated } = useAppStore();
   const [weight, setWeight] = useState(100);
   const [accountData, setAccountData] = useState(null);
@@ -106,7 +108,7 @@ const CardVoteTooltip = ({
 
   const handleVote = async () => {
     if (!authenticated || !isLoggedIn()) {
-      toast.error('Login to complete this operation');
+      toast.error(t('engagement.vote.loginRequired'));
       return;
     }
 
@@ -117,7 +119,7 @@ const CardVoteTooltip = ({
       const data = await getUersContent(author, permlink);
       
       if (!data) {
-        toast.error('Could not fetch post data');
+        toast.error(t('engagement.vote.fetchPostFailed'));
         setIsLoading(false);
         return;
       }
@@ -126,7 +128,7 @@ const CardVoteTooltip = ({
 
       if (existingVote) {
         if (existingVote.percent === voteWeight) {
-          toast.info('You already voted with this weight. Choose a different value.');
+          toast.info(t('engagement.vote.sameWeight'));
           setIsLoading(false);
           return;
         }
@@ -135,7 +137,7 @@ const CardVoteTooltip = ({
       // Use aioha for client-side voting
       await voteWithAioha(author, permlink, voteWeight);
 
-      toast.success(`Vote successful! Value: $${voteValue}`);
+      toast.success(t('engagement.vote.success', { value: voteValue }));
       const postKey = `${author}/${permlink}`;
       // Optimistically mark as voted
       setVoteStatus((prev) => ({
@@ -146,7 +148,7 @@ const CardVoteTooltip = ({
       setShowTooltip(false);
     } catch (err) {
       console.error('Vote failed:', err);
-      toast.error('Vote failed: ' + (err.message || 'please try again'));
+      toast.error(t('engagement.vote.failed', { message: err.message || t('engagement.vote.pleaseTryAgain') }));
     } finally {
       setIsLoading(false);
     }
@@ -165,7 +167,7 @@ const CardVoteTooltip = ({
             <X size={18} />
           </button>
 
-          <p className="vote-popup-label">Vote Weight: {weight}%</p>
+          <p className="vote-popup-label">{t('engagement.vote.weight', { weight })}</p>
 
           <input
             type="range"
@@ -185,7 +187,7 @@ const CardVoteTooltip = ({
             {isLoading ? (
               <TailChase size="18" speed="1.5" color="white" />
             ) : (
-              <><ChevronUp size={20} /> Vote</>
+              <><ChevronUp size={20} /> {t('engagement.vote.vote')}</>
             )}
           </button>
         </div>
@@ -199,7 +201,7 @@ const CardVoteTooltip = ({
     <div className="upvote-tooltip-wrap" ref={tooltipRef} onClick={(e) => e.preventDefault()}>
       {showTooltip && (
         <div className={`tooltip-box cap ${tooltipVariant}`}>
-          <p>Vote Weight: {weight}%</p>
+          <p>{t('engagement.vote.weight', { weight })}</p>
           <div className="wrap">
             {isLoading ? (
               <div className='wrap-circle'>

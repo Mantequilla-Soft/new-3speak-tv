@@ -1,6 +1,7 @@
 import axios from 'axios';
 import aioha, { KeyTypes } from '../hive-api/aioha';
 import { SOCIAL_VERIFIER_URL } from './config';
+import { t } from '../i18n';
 
 const client = axios.create({ baseURL: SOCIAL_VERIFIER_URL });
 
@@ -20,7 +21,7 @@ async function signedParams({ action, hive_username, platform, platform_username
   const message = buildMessage({ action, hive_username, platform, platform_username, timestamp });
   const result = await aioha.signMessage(message, KeyTypes.Posting);
   if (!result || result.error || !result.result) {
-    throw new Error(result?.error || 'Signing was cancelled');
+    throw new Error(result?.error || t('misc.social.signingCancelled'));
   }
   return { signature: result.result, timestamp };
 }
@@ -64,18 +65,19 @@ export async function unlinkLink({ hive_username, platform, platform_username })
 
 // Client-side metadata for each supported platform: how to render a clickable
 // outbound link, what to call it, and what to tell the user to type in.
+// inputPlaceholderKey / inputHelpKey are i18n keys (translate at render).
 export const PLATFORMS = {
   youtube: {
     label: 'YouTube',
     profileUrl: (canonical) => `https://www.youtube.com/channel/${canonical}`,
-    inputPlaceholder: '@handle or UCxxxxxxxxxxxxxxxxxxxxxx',
-    inputHelp: 'Paste your YouTube @handle or your UC… channel ID. We canonicalize to the channel ID.',
+    inputPlaceholderKey: 'misc.social.youtube.placeholder',
+    inputHelpKey: 'misc.social.youtube.help',
   },
   soundcloud: {
     label: 'SoundCloud',
     profileUrl: (canonical) => `https://soundcloud.com/${canonical}`,
-    inputPlaceholder: 'your-profile or https://soundcloud.com/your-profile',
-    inputHelp: 'Paste your SoundCloud profile URL or just the username from it. Put the hash anywhere in your profile bio.',
+    inputPlaceholderKey: 'misc.social.soundcloud.placeholder',
+    inputHelpKey: 'misc.social.soundcloud.help',
   },
 };
 

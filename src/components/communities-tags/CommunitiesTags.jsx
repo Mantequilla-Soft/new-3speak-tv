@@ -4,6 +4,7 @@ import "./CommunitriesTags.scss"
 import { FaVideo } from 'react-icons/fa'
 import { useAppStore } from "../../lib/store";
 import { toastIn } from '../../utils/toast';
+import { useTranslation } from 'react-i18next';
 import 'react-toastify/dist/ReactToastify.css';
 
 // Every toast from this module is headed "Community"; the message becomes the
@@ -11,6 +12,7 @@ import 'react-toastify/dist/ReactToastify.css';
 const toast = toastIn('Community');
 
 function CommunitiesTags() {
+  const { t } = useTranslation();
   const { authenticated } = useAppStore();
   const navigate = useNavigate();
   const handleSelectTag = (tag, name) => {
@@ -18,7 +20,7 @@ function CommunitiesTags() {
   };
   const handleNavigate = ()=>{
     if(!authenticated){
-      toast.error("Login to upload video")
+      toast.error(t('communities.tags.loginToUpload'))
     }else{
       navigate(`/embed-studio`)
     }

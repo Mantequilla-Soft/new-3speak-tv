@@ -9,8 +9,10 @@ import { FaTelegramPlane } from "react-icons/fa";
 import spk_network from "../../assets/image/spk_network.png"
 import { Link, useNavigate } from 'react-router-dom';
 import { useAppStore } from '../../lib/store';
+import { useTranslation } from 'react-i18next';
 import hive from "../../assets/image/hive-1.jpeg"
 const AboutPage = () => {
+  const { t } = useTranslation();
   const [isVisible, setIsVisible] = useState(false);
   const [openFaq, setOpenFaq] = useState(null);
   const {   user,  } = useAppStore();
@@ -35,63 +37,63 @@ const AboutPage = () => {
 
   const quotes = [
     {
-      text: "If liberty means anything at all, it means the right to tell people what they do not want to hear.",
+      text: t('pages.about.quotes.q1'),
       author: "George Orwell"
     },
     {
-      text: "I disapprove of what you say, but I will defend to the death your right to say it.",
+      text: t('pages.about.quotes.q2'),
       author: "Voltaire"
     },
     {
-      text: "The right to free speech and the unrealistic expectation to never be offended can not coexist.",
+      text: t('pages.about.quotes.q3'),
       author: "Philip Sharp"
     },
     {
-      text: "At no time is freedom of speech more precious than when a man hits his thumb with a hammer.",
+      text: t('pages.about.quotes.q4'),
       author: "Marshall Lumsden"
     },
     {
-      text: "Freedom of speech means freedom for those who you despise, and freedom to express the most despicable views.",
+      text: t('pages.about.quotes.q5'),
       author: "Alan Dershowitz"
     },
     {
-      text: "Ignorant free speech often works against the speaker. That is one of several reasons why it must be given rein instead of suppressed.",
+      text: t('pages.about.quotes.q6'),
       author: "Anna Quindlen"
     },
     {
-      text: "Freedom of speech includes the freedom to offend people.",
+      text: t('pages.about.quotes.q7'),
       author: "Brad Thor"
     },
     {
-      text: "There is a fine line between free speech and hate speech. Free speech encourages debate whereas hate speech incites violence.",
+      text: t('pages.about.quotes.q8'),
       author: "Newton Lee"
     },
     {
-      text: "Freedom of speech means that you shall not do something to people either for the views they have, or the views they express, or the words they speak or write.",
+      text: t('pages.about.quotes.q9'),
       author: "Hugo L. Black"
     }
   ];
 
   const faqs = [
     {
-      question: "What is 3Speak?",
-      answer: "3Speak is a place where content creators directly own their onsite assets and their communities. Using blockchain technology, the ownership of these assets and communities are intrinsic to the creator and the user, not 3 Speak. They are therefore transferable to other apps that use blockchain technology. This means that if we do not serve the community and creators in the best possible way, they can take the assets they have generated and move them to another app. The result is that 3Speak is censorship resistant, cannot take your assets away or delete your communities."
+      question: t('pages.about.faq.what.question'),
+      answer: t('pages.about.faq.what.answer')
     },
     {
-      question: "Why am I not upvoted by 3Speak?",
-      answer: "3Speak will vote at our own discretion and do not follow any specific criteria. The best way to attract our attention is to upload high-quality content and draw audiences and communities to 3speak."
+      question: t('pages.about.faq.upvote.question'),
+      answer: t('pages.about.faq.upvote.answer')
     },
     {
-      question: "Why are some of my videos missing from the new feed?",
-      answer: "We allow you to upload as many videos as you want! This means that sometimes one user could fill up feeds with just their content, to combat this, we limit the videos by any one creator that can be displayed per load."
+      question: t('pages.about.faq.missing.question'),
+      answer: t('pages.about.faq.missing.answer')
     },
     {
-      question: "How do I become a content creator?",
-      answer: "The quickest way to get a hive account is to press the \"Sign up\" button in the navigation panel and follow the instructions. (don't lose your keys!). Next you will need to log in with your hive account and click on the \"creator studio\" / upload. You're all set up and ready to go!"
+      question: t('pages.about.faq.creator.question'),
+      answer: t('pages.about.faq.creator.answer')
     },
     {
-      question: "How do I earn rewards for commenting?",
-      answer: "In order to earn rewards, you need a Hive blockchain account. You can get one for free from Hive (https://signup.hive.io), purchase a Hive user guide, or get another Hive user to give you one. Once you have an account, login with Hivesigner and provide your ACTIVE key on first login. Then you can post comments which can earn cryptocurrency rewards."
+      question: t('pages.about.faq.rewards.question'),
+      answer: t('pages.about.faq.rewards.answer')
     }
   ];
 
@@ -102,18 +104,18 @@ const AboutPage = () => {
         <div className={`hero-content ${isVisible ? 'visible' : ''}`}>
           <h1 className="main-title">
             <span className="brand-name">3SPEAK</span>
-            <span className="tagline">PROTECT YOUR CONTENT</span>
-            <span className="tagline">TOKENISE YOUR COMMUNITY</span>
+            <span className="tagline">{t('pages.about.hero.tagline1')}</span>
+            <span className="tagline">{t('pages.about.hero.tagline2')}</span>
           </h1>
           <p className="description">
             {/* 3Speak is a place where content creators directly own their onsite assets and their communities. 
             Using blockchain technology, the ownership of these assets and communities are intrinsic to the 
             creator and the user, not 3 Speak. */}
 
-            3Speak is built on the Hive blockchain, ensuring true decentralization, censorship resistance, and community ownership.
+            {t('pages.about.hero.description')}
           </p>
           <button onClick={iflogin} className="cta-button">
-            Join the Revolution
+            {t('pages.about.hero.cta')}
           </button>
         </div>
       </section>
@@ -122,9 +124,9 @@ const AboutPage = () => {
       <section className="section dark-bg">
         <div className="container-ab">
           <div className="section-header">
-            <h2 className="section-title">How 3Speak Works</h2>
+            <h2 className="section-title">{t('pages.about.how.title')}</h2>
             <p className="section-subtitle">
-              Experience true content ownership through blockchain technology
+              {t('pages.about.how.subtitle')}
             </p>
           </div>
           <div className="grid grid-3">
@@ -134,20 +136,20 @@ const AboutPage = () => {
                   <Video className="text-red-400" />
                 </div>
               </div>
-              <h3 className="feature-title red-text">Create Content</h3>
-              <p className="feature-description">Upload your videos and create content that truly belongs to you on the blockchain.</p>
+              <h3 className="feature-title red-text">{t('pages.about.how.create.title')}</h3>
+              <p className="feature-description">{t('pages.about.how.create.text')}</p>
             </div>
             <div className="feature-card blue-accent">
               <div className="feature-icon">
                 <div className="icon-container-ab blue-border">
                   <img 
                     src={speak}
-                    alt="3Speak Logo" 
+                    alt={t('pages.about.logoAlt')} 
                   />
                 </div>
               </div>
-              <h3 className="feature-title blue-text">Earn Rewards</h3>
-              <p className="feature-description">Get rewarded in Hive tokens and receive donations in our proprietary Speak token.</p>
+              <h3 className="feature-title blue-text">{t('pages.about.how.earn.title')}</h3>
+              <p className="feature-description">{t('pages.about.how.earn.text')}</p>
             </div>
             <div className="feature-card">
               <div className="feature-icon">
@@ -155,8 +157,8 @@ const AboutPage = () => {
                   <Users className="text-red-400" />
                 </div>
               </div>
-              <h3 className="feature-title red-text">Build Community</h3>
-              <p className="feature-description">Create your own tokens, marketplaces, and economies to back your communities.</p>
+              <h3 className="feature-title red-text">{t('pages.about.how.community.title')}</h3>
+              <p className="feature-description">{t('pages.about.how.community.text')}</p>
             </div>
           </div>
         </div>
@@ -164,7 +166,7 @@ const AboutPage = () => {
 
       {/* Features Section */}
       <section className="section dark-bg">
-        <h1 className="feature-title-ns red-text">Features</h1>
+        <h1 className="feature-title-ns red-text">{t('pages.about.features.title')}</h1>
         <div className="container-ab">
           <div className="grid grid-3">
             <div className="feature-card">
@@ -173,11 +175,9 @@ const AboutPage = () => {
                   <Zap className="text-red-400" />
                 </div>
               </div>
-              <h3 className="feature-title red-text">REWARDS</h3>
+              <h3 className="feature-title red-text">{t('pages.about.features.rewards.title')}</h3>
               <p className="feature-description">
-                By using the platform, users get rewarded in Hive tokens and can receive donations 
-                in our proprietary Speak token. The more of these tokens you hold, the more privileges 
-                you have in the eco system.
+                {t('pages.about.features.rewards.text')}
               </p>
             </div>
 
@@ -187,10 +187,9 @@ const AboutPage = () => {
                   <Users className="text-blue-400" />
                 </div>
               </div>
-              <h3 className="feature-title blue-text">P2P</h3>
+              <h3 className="feature-title blue-text">{t('pages.about.features.p2p.title')}</h3>
               <p className="feature-description">
-                The blockchain technology that the site uses ensures that content creators have 
-                true P2P connections to their user base, without any middle parties.
+                {t('pages.about.features.p2p.text')}
               </p>
             </div>
 
@@ -199,14 +198,13 @@ const AboutPage = () => {
                 <div className="icon-container-ab">
                   <img 
                     src={speak}
-                    alt="3Speak Logo" 
+                    alt={t('pages.about.logoAlt')} 
                   />
                 </div>
               </div>
-              <h3 className="feature-title red-text">TOKENISATION</h3>
+              <h3 className="feature-title red-text">{t('pages.about.features.tokenisation.title')}</h3>
               <p className="feature-description">
-                Content creators can also easily create their own tokens, market places, 
-                stake driven rewards and economies to back their communities.
+                {t('pages.about.features.tokenisation.text')}
               </p>
             </div>
 
@@ -216,10 +214,9 @@ const AboutPage = () => {
                   <Shield className="text-blue-400" />
                 </div>
               </div>
-              <h3 className="feature-title blue-text">FREE SPEECH</h3>
+              <h3 className="feature-title blue-text">{t('pages.about.features.freeSpeech.title')}</h3>
               <p className="feature-description">
-                Our policy is that the ability to be offensive is the bedrock of Freedom of Speech, 
-                and in turn Freedom of Speech protects societies from descending into chaos and civil war.
+                {t('pages.about.features.freeSpeech.text')}
               </p>
             </div>
 
@@ -229,10 +226,9 @@ const AboutPage = () => {
                   <MessageCircle className="text-red-400" />
                 </div>
               </div>
-              <h3 className="feature-title red-text">CITIZEN JOURNALISM</h3>
+              <h3 className="feature-title red-text">{t('pages.about.features.journalism.title')}</h3>
               <p className="feature-description">
-                We encourage citizen journalists to join us and post the kind of content which is 
-                often ignored. We believe that citizen journalists are the future.
+                {t('pages.about.features.journalism.text')}
               </p>
             </div>
           </div>
@@ -245,14 +241,14 @@ const AboutPage = () => {
       <section className="section dark-bg hive-section">
         <div className="container-ab">
           <div className="section-header">
-            <h2 className="section-title">Powered by Hive Blockchain</h2>
+            <h2 className="section-title">{t('pages.about.hive.title')}</h2>
           </div>
           <div className="hive-logo-container-ab">
             <div className="logo-box">
               <div className="logo-content">
                 <img 
                   src={speak}
-                  alt="3Speak Logo" 
+                  alt={t('pages.about.logoAlt')} 
                 />
                 <div className="times-symbol">×</div>
                 <div className="hive-logo">
@@ -263,22 +259,20 @@ const AboutPage = () => {
             </div>
           </div>
           <p className="section-subtitle-ns">
-            3Speak is built on the Hive blockchain, ensuring true decentralization, censorship resistance, 
-            and community ownership. The Hive ecosystem provides the infrastructure for rewards, governance, 
-            and asset ownership that makes 3Speak revolutionary.
+            {t('pages.about.hive.description')}
           </p>
           <div className="grid grid-3">
             <div className="feature-card">
-              <h3 className="feature-title red-text">Decentralized</h3>
-              <p className="feature-description">No single point of failure or control</p>
+              <h3 className="feature-title red-text">{t('pages.about.hive.decentralized.title')}</h3>
+              <p className="feature-description">{t('pages.about.hive.decentralized.text')}</p>
             </div>
             <div className="feature-card blue-accent">
-              <h3 className="feature-title blue-text">Fast & Free</h3>
-              <p className="feature-description">Zero transaction fees and 3-second blocks</p>
+              <h3 className="feature-title blue-text">{t('pages.about.hive.fast.title')}</h3>
+              <p className="feature-description">{t('pages.about.hive.fast.text')}</p>
             </div>
             <div className="feature-card">
-              <h3 className="feature-title red-text">Community Owned</h3>
-              <p className="feature-description">Governed by stakeholders, not corporations</p>
+              <h3 className="feature-title red-text">{t('pages.about.hive.community.title')}</h3>
+              <p className="feature-description">{t('pages.about.hive.community.text')}</p>
             </div>
           </div>
         </div>
@@ -288,29 +282,29 @@ const AboutPage = () => {
       <section className="section darker-bg">
         <div className="container-ab">
           <div className="section-header">
-            <h2 className="section-title">Our Guidelines</h2>
+            <h2 className="section-title">{t('pages.about.guidelines.title')}</h2>
             <p className="section-subtitle">
-              We believe Freedom of Speech is absolute, with clear and fair policies
+              {t('pages.about.guidelines.subtitle')}
             </p>
           </div>
           <div className="guidelines-grid">
             <div className="guideline-card">
-              <h3 className="guideline-title red-text">What We Support</h3>
+              <h3 className="guideline-title red-text">{t('pages.about.guidelines.support.title')}</h3>
               <ul className="guideline-list">
-                <li>Criticising religion, beliefs, groups, and people</li>
-                <li>Alternative politics and conspiracy discussions</li>
-                <li>Criticizing governments and world leaders</li>
-                <li>Using pseudonyms for privacy</li>
-                <li>Offensive jokes (when clearly marked as such)</li>
+                <li>{t('pages.about.guidelines.support.religion')}</li>
+                <li>{t('pages.about.guidelines.support.politics')}</li>
+                <li>{t('pages.about.guidelines.support.governments')}</li>
+                <li>{t('pages.about.guidelines.support.pseudonyms')}</li>
+                <li>{t('pages.about.guidelines.support.jokes')}</li>
               </ul>
             </div>
             <div className="guideline-card blue-border">
-              <h3 className="guideline-title blue-text">What We Restrict</h3>
+              <h3 className="guideline-title blue-text">{t('pages.about.guidelines.restrict.title')}</h3>
               <ul className="guideline-list">
-                <li className="blue-bullet">Calling for or incitement to violence</li>
-                <li className="blue-bullet">Showing excessive gore or pornographic content</li>
-                <li className="blue-bullet">Slander and defamatory content</li>
-                <li className="blue-bullet">Illegal activities or content</li>
+                <li className="blue-bullet">{t('pages.about.guidelines.restrict.violence')}</li>
+                <li className="blue-bullet">{t('pages.about.guidelines.restrict.gore')}</li>
+                <li className="blue-bullet">{t('pages.about.guidelines.restrict.slander')}</li>
+                <li className="blue-bullet">{t('pages.about.guidelines.restrict.illegal')}</li>
               </ul>
             </div>
           </div>
@@ -321,9 +315,9 @@ const AboutPage = () => {
       <section className="section dark-bg">
         <div className="faq-container-ab">
           <div className="section-header">
-            <h2 className="section-title">Frequently Asked Questions</h2>
+            <h2 className="section-title">{t('pages.about.faqSection.title')}</h2>
             <p className="section-subtitle">
-              Everything you need to know about 3Speak
+              {t('pages.about.faqSection.subtitle')}
             </p>
           </div>
           <div>
@@ -354,7 +348,7 @@ const AboutPage = () => {
       <section className="section darker-bg">
         <div className="container-ab">
           <div className="section-header">
-            <h2 className="section-title">Voices of Freedom</h2>
+            <h2 className="section-title">{t('pages.about.quotesTitle')}</h2>
           </div>
           <div className="quotes-grid">
             {quotes.map((quote, index) => (
@@ -375,9 +369,9 @@ const AboutPage = () => {
       <section className="section gradient-bg">
         <div className="container-ab">
           <div className="section-header">
-            <h2 className="section-title">Ready to Own Your Content?</h2>
+            <h2 className="section-title">{t('pages.about.cta.title')}</h2>
             <p className="section-subtitle">
-              Join thousands of creators who have already taken control of their digital assets.
+              {t('pages.about.cta.subtitle')}
             </p>
             {/* <button className="cta-button">
               Get Started Today
@@ -386,7 +380,7 @@ const AboutPage = () => {
           
           <div style={{ borderTop: '1px solid #374151', paddingTop: '2rem', marginTop: '3rem' }}>
             <h3 style={{ fontSize: '1.25rem', fontWeight: '600', color: 'var(--text-primary)', marginBottom: '1.5rem', textAlign: 'center' }}>
-              Connect with 3Speak
+              {t('pages.about.connect')}
             </h3>
             <div className="social-icons">
               <a href="https://t.me/threespeak?utm_source=3speak.tv" className="social-link red-accent" target="_blank" rel="noopener noreferrer">

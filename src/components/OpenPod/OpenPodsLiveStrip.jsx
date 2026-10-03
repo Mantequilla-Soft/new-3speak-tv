@@ -1,6 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 import { HangoutsApiClient } from '@snapie/hangouts-core';
 import { Link, useNavigate } from 'react-router-dom';
+import { useTranslation, Trans } from 'react-i18next';
 import { useHangout } from '../../context/HangoutContext';
 import { useAppStore } from '../../lib/store';
 import { MdMic } from 'react-icons/md';
@@ -13,6 +14,7 @@ const client = HANGOUTS_API_URL
   : null;
 
 export default function OpenPodsLiveStrip() {
+  const { t } = useTranslation();
   const { openRoom } = useHangout();
   const { authenticated } = useAppStore();
   const navigate = useNavigate();
@@ -47,10 +49,9 @@ export default function OpenPodsLiveStrip() {
       <div className="strip-header">
         <MdMic className="strip-mic-icon" />
         <span className="strip-label">
-          <span className="strip-count">{rooms.length}</span>
-          {' '}OpenPod{rooms.length !== 1 ? 's' : ''} live now
+          <Trans i18nKey="live.strip.liveNow" count={rooms.length} components={{ n: <span className="strip-count" /> }} />
         </span>
-        <Link to="/openpods" className="strip-view-all">View all</Link>
+        <Link to="/openpods" className="strip-view-all">{t('live.strip.viewAll')}</Link>
       </div>
 
       <div className="strip-cards">
@@ -59,7 +60,7 @@ export default function OpenPodsLiveStrip() {
             key={room.name}
             className="strip-card"
             onClick={() => handleJoinRoom(room.name)}
-            aria-label={`Join OpenPod: ${room.title}`}
+            aria-label={t('live.strip.joinAria', { title: room.title })}
           >
             <HiveAvatar
               username={room.host}

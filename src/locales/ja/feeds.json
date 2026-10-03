@@ -1,0 +1,119 @@
+{
+  "loadingMore": "さらに読み込み中…",
+  "promoted": "プロモーション",
+  "scrollLeft": "左にスクロール",
+  "scrollRight": "右にスクロール",
+  "errors": {
+    "fetchVideos": "動画の取得中にエラーが発生しました",
+    "loadVideos": "動画を読み込めませんでした",
+    "loadShorts": "ショートを読み込めませんでした"
+  },
+  "tabs": {
+    "all": "すべて",
+    "videos": "動画",
+    "shorts": "ショート",
+    "videosCount": "動画（{{count}}）",
+    "shortsCount": "ショート（{{count}}）"
+  },
+  "dateFilters": {
+    "all": "全期間",
+    "today": "今日",
+    "week": "今週",
+    "month": "今月",
+    "justNow": "たった今"
+  },
+  "live": {
+    "title": "ライブ配信中",
+    "badge": "● LIVE"
+  },
+  "newFromFollowing": {
+    "aria": "フォロー中のクリエイターの新着",
+    "shorts_other": "ショート {{count}} 本"
+  },
+  "firstUploads": {
+    "title": "初投稿"
+  },
+  "newVideos": {
+    "title": "新着動画"
+  },
+  "home": {
+    "sections": {
+      "discover": "発見",
+      "home": "ホームフィード",
+      "follow": "フォローフィード",
+      "new": "新着コンテンツ",
+      "interests": "興味のあるトピック"
+    },
+    "empty": "まだ表示するものがありません。",
+    "viewAll": "すべて表示",
+    "dragToReorder": "ドラッグして並べ替え",
+    "surfTitle": "チャンネルサーフィン: トピックを選んでテレビのように見る",
+    "zapping": "ザッピング"
+  },
+  "surf": {
+    "pageTitle": "チャンネルサーフィン",
+    "intro": "チャンネルを選んで、くつろいでください。そのトピックのおすすめ動画を次々に流します。飽きたら<b>ザップ</b>を押してください。別のものが見たいならチャンネルを変えましょう。",
+    "backTo": "CH {{number}} {{emoji}} {{title}} に戻る",
+    "surprise": "おまかせ",
+    "yourChannels": "あなたのチャンネル",
+    "nothingOnAir": "現在 {{channel}} で放送中のものはありません",
+    "tuneFailed": "チャンネルを合わせられませんでした。少ししてからお試しください。",
+    "remoteAria": "チャンネルサーフィンのリモコン",
+    "openGuide": "番組表を開く",
+    "ch": "CH {{number}}",
+    "chLabel": "CH",
+    "channelHint": "CH {{number}}: {{title}}",
+    "channelHintKey": "CH {{number}}: {{title}}（{{key}}）",
+    "tuningShort": "受信中",
+    "tuning": "受信中…",
+    "onAir": "放送中",
+    "changeChannel": "チャンネルを変える",
+    "nextChannel": "次のチャンネル",
+    "prevChannel": "前のチャンネル",
+    "nextVideo": "次の動画",
+    "nextVideoKey": "次の動画（→）",
+    "zap": "ザップ",
+    "findingNext": "次の動画を探しています…",
+    "stop": "サーフィンをやめる",
+    "stopTitle": "サーフィンをやめる（この動画は再生を続けます）",
+    "guide": "番組表"
+  },
+  "discover": {
+    "searchPlaceholder": "動画、ショート、音声、コミュニティを検索...",
+    "clearSearch": "検索をクリア",
+    "searchFor": "「{{term}}」を検索",
+    "noResultsFor": "「{{term}}」の検索結果はありません",
+    "types": {
+      "user": "ユーザー",
+      "community": "コミュニティ",
+      "video": "動画",
+      "short": "ショート",
+      "audio": "音声",
+      "playlist": "再生リスト"
+    },
+    "suggest": {
+      "tags": "タグ",
+      "titles": "タイトル"
+    },
+    "dates": {
+      "today": "今日",
+      "week": "今週",
+      "month": "今月",
+      "year": "今年"
+    },
+    "boostRecent": "新しいものを優先",
+    "filters": "フィルター",
+    "date": "日付",
+    "tag": "タグ",
+    "tagPlaceholder": "例: crypto, gaming...",
+    "community": "コミュニティ",
+    "communityPlaceholder": "コミュニティを検索...",
+    "clearAllFilters": "すべてのフィルターをクリア",
+    "allHidden": "すべてのコンテンツタイプが非表示になっています。",
+    "reenableFilters": "すべてのフィルターを再度有効にする",
+    "groupTitle": "{{label}}（{{count}}）",
+    "subscribers_other": "登録者 {{count}} 人",
+    "authors_other": "投稿者 {{count}} 人",
+    "views_other": "{{views}} 回視聴"
+  }
+}

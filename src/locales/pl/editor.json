@@ -1,0 +1,19 @@
+{
+  "placeholder": "Napisz tu swoją treść...",
+  "uploadFailed": "Przesyłanie nie powiodło się: {{message}}",
+  "uploadingImage": "Przesyłanie obrazu...",
+  "format": {
+    "underline": "Podkreślenie",
+    "strike": "Przekreślenie",
+    "highlight": "Wyróżnienie",
+    "bulletList": "Lista punktowana",
+    "orderedList": "Lista numerowana",
+    "taskList": "Lista zadań"
+  },
+  "emoji": {
+    "searchPlaceholder": "Szukaj emoji"
+  },
+  "preview": {
+    "renderError": "Błąd wyświetlania treści"
+  }
+}

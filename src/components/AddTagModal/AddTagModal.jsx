@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
 import PropTypes from 'prop-types';
+import { useTranslation, Trans } from 'react-i18next';
 import { X } from 'lucide-react';
 import { toastIn } from '../../utils/toast';
 import { TailChase } from 'ldrs/react';
@@ -37,6 +38,7 @@ const TAG_WEIGHT = 10000;
  * is why we preselect whatever they chose before.
  */
 function AddTagModal({ isOpen, onClose, author, permlink, title }) {
+  const { t } = useTranslation();
   const user = useAppStore((s) => s.user);
   const [tag, setTag] = useState('');
   const [tagPct, setTagPct] = useState({});
@@ -94,11 +96,11 @@ function AddTagModal({ isOpen, onClose, author, permlink, title }) {
 
   const submit = async () => {
     if (!isLoggedIn() || !user) {
-      toast.error('Login to tag this video');
+      toast.error(t('modals.addTag.loginRequired'));
       return;
     }
     if (!tag) {
-      toast.error('Pick a topic first');
+      toast.error(t('modals.addTag.pickTopic'));
       return;
     }
     setSaving(true);
@@ -107,11 +109,11 @@ function AddTagModal({ isOpen, onClose, author, permlink, title }) {
       // Mirror into the checker (best-effort — the on-chain custom_json is the
       // source of truth, so a failed mirror must not report the tag as failed).
       await recordViewerTag(user, author, permlink, tag, TAG_WEIGHT);
-      toast.success(`Tagged “${getTagLabel(tag)}”`);
+      toast.success(t('modals.addTag.tagged', { label: getTagLabel(tag) }));
       onClose();
     } catch (err) {
       console.error('Tag failed:', err);
-      toast.error('Tag failed: ' + (err.message || 'please try again'));
+      toast.error(t('modals.addTag.failed', { error: err.message || t('modals.addTag.pleaseTryAgain') }));
     } finally {
       setSaving(false);
     }
@@ -128,7 +130,7 @@ function AddTagModal({ isOpen, onClose, author, permlink, title }) {
           <X size={18} />
         </button>
 
-        <p className="vote-popup-label">Tag this video</p>
+        <p className="vote-popup-label">{t('modals.addTag.title')}</p>
         {title && <p className="add-tag-title">{title}</p>}
 
         {existing === undefined ? (
@@ -138,7 +140,7 @@ function AddTagModal({ isOpen, onClose, author, permlink, title }) {
         ) : (
           <>
             <div className="viewer-tag-select" onClick={(e) => e.stopPropagation()}>
-              <span>What is this video about?</span>
+              <span>{t('modals.addTag.question')}</span>
               <TagsV2Picker
                 value={tag}
                 onChange={setTag}
@@ -150,7 +152,7 @@ function AddTagModal({ isOpen, onClose, author, permlink, title }) {
 
             {existing && (
               <p className="vote-popup-note">
-                You tagged this as <b>{getTagLabel(existing)}</b> — picking another replaces it.
+                <Trans i18nKey="modals.addTag.existing" values={{ label: getTagLabel(existing) }} components={{ b: <b /> }} />
               </p>
             )}
 
@@ -159,7 +161,7 @@ function AddTagModal({ isOpen, onClose, author, permlink, title }) {
               onClick={submit}
               disabled={saving || !tag}
             >
-              {saving ? <TailChase size="18" speed="1.5" color="white" /> : 'Submit tag'}
+              {saving ? <TailChase size="18" speed="1.5" color="white" /> : t('modals.addTag.submit')}
             </button>
           </>
         )}

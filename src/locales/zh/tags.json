@@ -1,0 +1,43 @@
+{
+  "labels": {
+    "tech-science": "科技与科学",
+    "technology": "科技",
+    "education": "教育",
+    "science": "科学",
+    "programming": "编程",
+    "crypto-finance": "加密与财经",
+    "cryptocurrency": "加密货币",
+    "finance": "财经",
+    "business": "商业",
+    "entertainment": "娱乐",
+    "music": "音乐",
+    "gaming": "游戏",
+    "film-tv": "影视",
+    "lifestyle": "生活方式",
+    "vlog": "Vlog",
+    "comedy": "搞笑",
+    "story-time": "讲故事",
+    "commercial": "广告",
+    "arts-diy": "艺术与手工",
+    "art": "艺术",
+    "diy-crafts": "DIY 手工",
+    "photography": "摄影",
+    "food-outdoor": "美食与户外",
+    "nature": "自然",
+    "travel": "旅行",
+    "food": "美食",
+    "pets": "宠物",
+    "gardening": "园艺",
+    "sports-health": "运动与健康",
+    "sports": "体育",
+    "health": "健康",
+    "fitness": "健身",
+    "life-society": "生活与社会",
+    "news": "新闻",
+    "spirituality": "心灵",
+    "politics": "政治"
+  },
+  "display": {
+    "cryptocurrency": "加密"
+  }
+}

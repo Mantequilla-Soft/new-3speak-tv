@@ -12,6 +12,7 @@ import { useWatchHistory } from '../hooks/useWatchHistory';
 import useViewCounts from '../hooks/useViewCounts';
 import PullToRefresh from '../components/PullToRefresh/PullToRefresh';
 import { FirstUploadIcon } from '../components/FeedIcons';
+import { useTranslation } from 'react-i18next';
 
 const fetchVideos = async ({ pageParam = 1 }) => {
   // Checker /feeds/firstUploads is page-based (1,2,…) and returns
@@ -22,6 +23,7 @@ const fetchVideos = async ({ pageParam = 1 }) => {
 };
 
 const FirstUploads = () => {
+  const { t } = useTranslation();
   const queryClient = useQueryClient();
   const hideWatched = useAppStore(s => s.hideWatched);
   const user = useAppStore(s => s.user);
@@ -54,12 +56,12 @@ const FirstUploads = () => {
     <div className='firstupload-container'>
         <div className='feed-page-header'>
           <FirstUploadIcon />
-          <h2>First Time Uploads</h2>
+          <h2>{t('feeds.firstUploads.title')}</h2>
         </div>
         {isLoading ? <CardSkeleton /> :  <Card3 videos={videos} loading={isFetchingNextPage} getContentForVideo={getContentForVideo} isWatched={isWatched} getViewCount={getViewCount} />}
-    {isError && <p>Error fetching videos</p>}
+    {isError && <p>{t('feeds.errors.fetchVideos')}</p>}
       {isFetchingNextPage && (
-        <p style={{ textAlign: "center" }}>Loading more...</p>
+        <p style={{ textAlign: "center" }}>{t('feeds.loadingMore')}</p>
       )}
     </div>
     </PullToRefresh>

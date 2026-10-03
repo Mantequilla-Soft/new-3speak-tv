@@ -1,0 +1,117 @@
+{
+  "theme": {
+    "switchToLight": "Switch to light mode",
+    "switchToDark": "Switch to dark mode"
+  },
+  "bottom": {
+    "feeds": "Feeds",
+    "groups": "Groups",
+    "audio": "Audio",
+    "login": "Login"
+  },
+  "installApp": "Install App",
+  "iosInstallHint": "Tap <b>Share</b> then <b>Add to Home Screen</b>",
+  "playlists": {
+    "tooltip": "Playlists you have saved or built",
+    "label": "Playlists",
+    "watchLater": "Watch Later",
+    "watchLaterCount": "Watch Later ({{n}})",
+    "watchHistory": "Watch History",
+    "all": "All Playlists"
+  },
+  "advertise": "Advertise",
+  "hidePages": "Hide pages",
+  "showPages": "Show pages",
+  "tabs": {
+    "overviewTooltip": "Everything new on 3Speak, plus what we think you will like",
+    "overview": "Overview",
+    "shortsTooltip": "Short vertical videos, one after another",
+    "audioTooltip": "Podcasts, music and other audio published on 3Speak",
+    "groupsTooltip": "Communities you can join, and badges people are awarded",
+    "rankingsTooltip": "The creators earning and being watched most right now"
+  },
+  "aboutLink": "About 3Speak",
+  "profile": {
+    "accountMenu": "Account menu",
+    "myChannelAria": "My channel",
+    "vpTooltip": "Voting Power: how much weight your next vote carries",
+    "rcTooltip": "Resource Credits: what your actions on Hive cost",
+    "myChannel": "My Channel",
+    "publishBacklog": "Publish backlog",
+    "analytics": "Analytics",
+    "inviteLinks": "Invite links",
+    "iosInstallToast": "Tap the Share button in Safari, then \"Add to Home Screen\"",
+    "changeAccount": "Change account",
+    "logout": "Logout",
+    "onDiscord": "3Speak on Discord",
+    "onX": "3Speak on X",
+    "onTelegram": "3Speak on Telegram"
+  },
+  "notifications": {
+    "pushOff": "Notifications turned off for this device",
+    "pushOn": "You will be notified when creators you follow post",
+    "pushFailed": "Could not change notification settings",
+    "ariaUnread": "Notifications ({{count}} unread)",
+    "pushBlocked": "Notifications are blocked for this site in your browser settings",
+    "pushNoWorker": "This build has no service worker, so notifications cannot be registered here",
+    "pushStop": "Stop notifying this device",
+    "pushStart": "Get notified when creators you follow post",
+    "on": "On",
+    "notifyMe": "Notify me",
+    "empty": "You have no notifications yet.",
+    "threeSpeakVideo": "3Speak video",
+    "group": {
+      "voteOne": "@{{a}} voted on your post",
+      "voteTwo": "@{{a}} and @{{b}} voted on your post",
+      "voteMany_one": "@{{a}} and {{count}} other voted on your post",
+      "voteMany_other": "@{{a}} and {{count}} others voted on your post",
+      "withValue": "{{label}} (${{value}})",
+      "followOne": "@{{a}} followed you",
+      "followTwo": "@{{a}} and @{{b}} followed you",
+      "followMany_one": "@{{a}} and {{count}} other followed you",
+      "followMany_other": "@{{a}} and {{count}} others followed you",
+      "other": "{{count}} {{type}} notifications",
+      "typeCount": "{{count}} {{type}}s",
+      "includesWhale": "Includes 🐋 whale account(s)",
+      "includesOrca": "Includes 🐬 orca account(s)",
+      "andMore": "and {{count}} more…"
+    }
+  },
+  "search": {
+    "types": {
+      "users": "Users",
+      "communities": "Communities",
+      "videos": "Videos",
+      "shorts": "Shorts",
+      "audio": "Audio",
+      "playlists": "Playlists"
+    },
+    "dates": {
+      "today": "Today",
+      "thisWeek": "This week",
+      "thisMonth": "This month",
+      "thisYear": "This year"
+    },
+    "contentType": "Content type",
+    "boostRecent": "Boost recent",
+    "dateRange": "Date range",
+    "tag": "Tag",
+    "tagPlaceholder": "e.g. crypto, gaming...",
+    "community": "Community",
+    "communityPlaceholder": "Search communities...",
+    "clearFilters": "Clear all filters",
+    "allHidden": "All content types are hidden.",
+    "reenableFilters": "Re-enable all filters",
+    "noResultsFor": "No results found for “{{term}}”",
+    "searchFor": "Search “{{term}}”",
+    "authors_one": "{{count}} author",
+    "authors_other": "{{count}} authors",
+    "subscribers_one": "{{count}} subscriber",
+    "subscribers_other": "{{count}} subscribers",
+    "views_one": "{{formatted}} view",
+    "views_other": "{{formatted}} views",
+    "tags": "Tags",
+    "titles": "Titles",
+    "placeholder": "Search..."
+  }
+}

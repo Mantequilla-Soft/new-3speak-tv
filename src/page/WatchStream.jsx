@@ -27,6 +27,7 @@ import { MdShare } from 'react-icons/md';
 import '../page/Watch.scss';
 import '../page/WatchV2.scss';
 import '../components/playVideo/PlayVideo.scss';
+import { useTranslation } from 'react-i18next';
 import './WatchStream.scss';
 
 const API_URL = (import.meta.env.VITE_HANGOUTS_API_URL || '').replace(/\/$/, '');
@@ -42,6 +43,7 @@ function StreamChatBar({ canChat, needsSignIn = false, onSignIn, signingIn = fal
   // The SDK's chat hook — ChatPanel renders what THIS publishes. LiveKit's
   // own useChat is a different transport; sending on it meant neither the
   // viewer nor the streamer ever saw the message.
+  const { t } = useTranslation();
   const { sendMessage } = useChat();
   const [text, setText] = useState('');
   const submit = (e) => {
@@ -56,7 +58,7 @@ function StreamChatBar({ canChat, needsSignIn = false, onSignIn, signingIn = fal
     <form className="shortsBottomComment ws-shorts__bar" onSubmit={submit}>
       <textarea
         rows={1}
-        placeholder={canChat ? 'Say something…' : (signingIn ? 'Waiting for your wallet…' : 'Sign in to chat')}
+        placeholder={canChat ? t('misc.watchStream.saySomething') : (signingIn ? t('misc.watchStream.waitingWallet') : t('misc.watchStream.signInToChat'))}
         value={text}
         // Signed in to 3Speak but not to the room yet: tapping the box is the
         // "I want to chat" moment, so that is when the wallet is asked.
@@ -66,7 +68,7 @@ function StreamChatBar({ canChat, needsSignIn = false, onSignIn, signingIn = fal
         onChange={(e) => setText(e.target.value)}
         onKeyDown={(e) => { if (e.key === 'Enter' && !e.shiftKey) submit(e); }}
       />
-      <button className="sendCommentBtn" type="submit" disabled={!canChat || !text.trim()} aria-label="Send message">
+      <button className="sendCommentBtn" type="submit" disabled={!canChat || !text.trim()} aria-label={t('misc.watchStream.sendMessage')}>
         <Send size={18} />
       </button>
     </form>
@@ -74,6 +76,7 @@ function StreamChatBar({ canChat, needsSignIn = false, onSignIn, signingIn = fal
 }
 
 export default function WatchStream() {
+  const { t } = useTranslation();
   const { streamId } = useParams();
   const navigate = useNavigate();
   const { aioha, sessionToken, hangoutsUser, connectReady, joinKey, needsSignIn, canInteract, signIn, signingIn } = useStreamSession();
@@ -196,14 +199,14 @@ export default function WatchStream() {
   if (state.status !== 'live') {
     return (
       <div className="ws-error">
-        <p>{state.status === 'notlive' ? 'This stream isn’t live right now.' : 'No live stream found for this link.'}</p>
-        <button className="ws-error-btn" onClick={() => navigate('/openpods')}>Browse live streams</button>
+        <p>{state.status === 'notlive' ? t('misc.watchStream.notLive') : t('misc.watchStream.notFound')}</p>
+        <button className="ws-error-btn" onClick={() => navigate('/openpods')}>{t('misc.watchStream.browse')}</button>
         {/* Same floating back affordance the live view has (.shortBackBtn),
             so leaving a dead link works exactly like leaving a live one. */}
         <button
           className="shortBackBtn ws-error-back"
           onClick={() => navigate('/')}
-          title="Back to 3Speak"
+          title={t('misc.watchStream.back')}
         >
           <ArrowLeft size={18} />
         </button>
@@ -235,7 +238,7 @@ export default function WatchStream() {
   if (mobileLayout) {
     return (
       <>
-        <SEOHead title={`${title} (LIVE)`} author={host} url={window.location.href} />
+        <SEOHead title={t('misc.watchStream.seoTitle', { title })} author={host} url={window.location.href} />
         <HangoutsProvider
           apiBaseUrl={API_URL}
           livekitServerUrl={LK_URL}
@@ -255,7 +258,7 @@ export default function WatchStream() {
                     <button
                       className="shortBackBtn"
                       onClick={(e) => { e.stopPropagation(); navigate('/'); }}
-                      title="Back to 3Speak"
+                      title={t('misc.watchStream.back')}
                     >
                       <ArrowLeft size={18} />
                     </button>
@@ -267,13 +270,13 @@ export default function WatchStream() {
 
                     {hasNextLive && (
                       <div className="ws-shorts__next-hint" aria-hidden="true">
-                        Swipe for the next live stream
+                        {t('misc.watchStream.swipeNext')}
                       </div>
                     )}
 
                     <div className="bottomOverlay">
                       <div className="ws-shorts__live">
-                        <span className="ws-live-tag">● LIVE</span>
+                        <span className="ws-live-tag">{t('feeds.live.badge')}</span>
                         <StreamViewerCount render={(c) => <span className="ws-shorts__watching">👁 {c}</span>} />
                       </div>
                       <div className="userRow" onClick={(e) => e.stopPropagation()}>
@@ -290,13 +293,13 @@ export default function WatchStream() {
                         <div className={`actionButton${chatOverlayOn ? ' liked' : ''}`}>
                           <MessageSquare size={24} />
                         </div>
-                        <span className="actionLabel">Chat</span>
+                        <span className="actionLabel">{t('misc.watchStream.chat')}</span>
                       </div>
                       <CollabRequest variant="rail" canRequest={canInteract} />
                       <StreamBoostButton variant="rail" />
                       <div className="actionItem" onClick={copyLink}>
                         <div className="actionButton"><Share2 size={24} /></div>
-                        <span className="actionLabel">{copied ? 'Copied' : 'Share'}</span>
+                        <span className="actionLabel">{copied ? t('common.actions.copied') : t('common.actions.share')}</span>
                       </div>
                       <StreamClipButton roomName={streamId} variant="sidebar" />
                       <StreamReportButton roomName={streamId} host={host} variant="sidebar" />
@@ -321,7 +324,7 @@ export default function WatchStream() {
 
   return (
     <div className="play-container watch-v2 ws-page">
-      <SEOHead title={`${title} (LIVE)`} author={host} url={window.location.href} />
+      <SEOHead title={t('misc.watchStream.seoTitle', { title })} author={host} url={window.location.href} />
       <HangoutsProvider
         apiBaseUrl={API_URL}
         livekitServerUrl={LK_URL}
@@ -347,9 +350,9 @@ export default function WatchStream() {
                   <div className="video-title-row">
                     <div className="video-title-col">
                       <div className="video-title-line">
-                        <span className="ws-live-tag">● LIVE</span>
+                        <span className="ws-live-tag">{t('feeds.live.badge')}</span>
                         <h3>{title}</h3>
-                        <StreamViewerCount render={(c) => <span className="ws-watching">👁 {c} watching now</span>} />
+                        <StreamViewerCount render={(c) => <span className="ws-watching">{t('misc.watchStream.watchingNow', { count: c })}</span>} />
                       </div>
                     </div>
                   </div>
@@ -367,8 +370,8 @@ export default function WatchStream() {
                   {tags.length > 0 && (
                     <div className="community-tags-row">
                       <div className="tag-wrapper">
-                        {tags.map((t, i) => (
-                          <span key={i} onClick={() => navigate(`/t/${t}`)}>{t}</span>
+                        {tags.map((tag, i) => (
+                          <span key={i} onClick={() => navigate(`/t/${tag}`)}>{tag}</span>
                         ))}
                       </div>
                     </div>
@@ -378,20 +381,20 @@ export default function WatchStream() {
                     <div className="info-buttons-row">
                       <div className="info-buttons-right">
                         {needsSignIn
-                          ? <StreamSignInButton variant="overlay" label="Sign in to raise your hand" onSignIn={signIn} busy={signingIn} />
+                          ? <StreamSignInButton variant="overlay" label={t('misc.watchStream.signInRaiseHand')} onSignIn={signIn} busy={signingIn} />
                           : <CollabRequest canRequest={canInteract} />}
                         <StreamBoostButton />
-                        <button type="button" className="pv-btn share-btn" onClick={copyLink} title="Copy the stream link">
-                          <MdShare size={16} /><span>{copied ? 'Copied' : 'Share'}</span>
+                        <button type="button" className="pv-btn share-btn" onClick={copyLink} title={t('misc.watchStream.copyLink')}>
+                          <MdShare size={16} /><span>{copied ? t('common.actions.copied') : t('common.actions.share')}</span>
                         </button>
-                        <button type="button" className="pv-btn vote-btn" disabled title="Not available for live streams">
-                          <FaThumbsUp size={14} /><span>Vote</span>
+                        <button type="button" className="pv-btn vote-btn" disabled title={t('misc.watchStream.notAvailableLive')}>
+                          <FaThumbsUp size={14} /><span>{t('misc.watchStream.vote')}</span>
                         </button>
-                        <button type="button" className="pv-btn" disabled title="Not available for live streams">
-                          <FaRegCommentAlt size={14} /><span>Comment</span>
+                        <button type="button" className="pv-btn" disabled title={t('misc.watchStream.notAvailableLive')}>
+                          <FaRegCommentAlt size={14} /><span>{t('misc.watchStream.comment')}</span>
                         </button>
-                        <button type="button" className="pv-btn" disabled title="Not available for live streams">
-                          <FaBookmark size={14} /><span>Save</span>
+                        <button type="button" className="pv-btn" disabled title={t('misc.watchStream.notAvailableLive')}>
+                          <FaBookmark size={14} /><span>{t('common.actions.save')}</span>
                         </button>
                         <StreamClipButton roomName={streamId} />
                         <StreamReportButton roomName={streamId} host={host} />
@@ -411,19 +414,19 @@ export default function WatchStream() {
             {/* Side column: chat + recommended */}
             <div className="ws-col-side">
               <div className="ws-chat">
-                <div className="ws-chat-head">Live chat</div>
+                <div className="ws-chat-head">{t('misc.watchStream.liveChat')}</div>
                 <ChatPanel
                   readOnly={!canInteract}
                   readOnlyNotice={needsSignIn
-                    ? <StreamSignInButton label="Sign in to chat" onSignIn={signIn} busy={signingIn} />
-                    : '🔒 Sign in to join the chat.'}
+                    ? <StreamSignInButton label={t('misc.watchStream.signInToChat')} onSignIn={signIn} busy={signingIn} />
+                    : t('misc.watchStream.signInToJoin')}
                   onMessageSent={mirrorChatToHive}
                 />
               </div>
 
               {(recommended.loading || recommended.videos.length > 0) && (
                 <div className="ws-recommended">
-                  <h3 className="ws-recommended-head">More {tags[0] ? `#${tags[0]}` : 'videos'}</h3>
+                  <h3 className="ws-recommended-head">{tags[0] ? t('misc.watchStream.moreTag', { tag: tags[0] }) : t('misc.watchStream.moreVideos')}</h3>
                   <Card3 videos={recommended.videos} loading={recommended.loading} />
                 </div>
               )}

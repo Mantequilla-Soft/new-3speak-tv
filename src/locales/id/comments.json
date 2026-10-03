@@ -1,0 +1,96 @@
+{
+  "review": {
+    "fabAria": "Beri masukan",
+    "fab": "Masukan",
+    "aspects": {
+      "upload": "Mengunggah",
+      "playback": "Pemutaran",
+      "live": "Siaran langsung",
+      "discovery": "Penemuan / feed",
+      "design": "Desain / UX",
+      "performance": "Kecepatan",
+      "mobile": "Seluler",
+      "other": "Hal lain"
+    },
+    "titles": {
+      "upload": "Bagaimana unggahanmu?",
+      "stream": "Bagaimana siaran langsungmu?",
+      "watch": "Bagaimana pengalaman menonton di 3Speak?",
+      "global": "Bagaimana pengalamanmu di 3Speak?",
+      "fallback": "Bantu kami membuat 3Speak lebih baik"
+    },
+    "stars": {
+      "poor": "Buruk",
+      "fair": "Cukup",
+      "good": "Bagus",
+      "great": "Hebat",
+      "amazing": "Luar biasa"
+    },
+    "errors": {
+      "pickStars": "Silakan pilih rating bintang",
+      "sendFailed": "Ulasanmu tidak dapat dikirim. Silakan coba lagi."
+    },
+    "thanks": "Terima kasih atas masukanmu! 🙏",
+    "sendFeedback": "Kirim masukan",
+    "subtitle": "Masukanmu membantu kami membuat 3Speak lebih baik.",
+    "starRating": "Rating bintang",
+    "starsAria_other": "{{count}} bintang",
+    "aboutLabel": "Tentang apa ini? <opt>(opsional)</opt>",
+    "recommendLabel": "Apakah kamu akan merekomendasikan 3Speak? <opt>(opsional)</opt>",
+    "moreLabel": "Ceritakan lebih lanjut <opt>(opsional)</opt>",
+    "placeholder": "Apa yang kamu suka? Apa yang bisa lebih baik?",
+    "notNow": "Nanti saja",
+    "sending": "Mengirim…"
+  },
+  "tabs": {
+    "reactions": "Reaksi",
+    "transcript": "Transkrip"
+  },
+  "live": {
+    "vodProcessing": "Rekaman sedang diproses…",
+    "vodProcessingHint": "Siaran ini sudah berakhir. Videonya akan menggantikannya di sini begitu encoder selesai — tidak perlu memuat ulang.",
+    "watching_other": "👁 {{count}} menonton",
+    "signInRaiseHand": "Masuk untuk angkat tangan",
+    "signInChat": "Masuk untuk chat",
+    "signInJoinChat": "🔒 Masuk untuk ikut chat."
+  },
+  "transcript": {
+    "title": "Transkrip",
+    "languageAria": "Bahasa transkrip",
+    "copyingWithTimes": "Menyalin dengan kode waktu",
+    "copyingTextOnly": "Menyalin teks saja",
+    "timecodes": "Kode waktu",
+    "copyWithTimes": "Salin transkrip dengan kode waktu",
+    "copyText": "Salin teks transkrip",
+    "jumpTo": "Lompat ke {{time}}",
+    "hide": "Sembunyikan transkrip",
+    "show": "Tampilkan transkrip",
+    "showWithCount_other": "Tampilkan transkrip ({{count}} baris)"
+  },
+  "blog": {
+    "noContent": "Tidak ada konten",
+    "loadError": "Gagal memuat konten.",
+    "processError": "Gagal memproses konten.",
+    "rendererError": "Gagal memuat renderer."
+  },
+  "section": {
+    "posted": "Komentar berhasil dikirim!",
+    "postFailed": "Komentar gagal, silakan coba lagi",
+    "editFailed": "Edit gagal, silakan coba lagi",
+    "updated": "Komentar diperbarui",
+    "commentTab": "Komentar",
+    "reactTab": "Reaksi",
+    "at": "pada",
+    "atTime": "pada {{time}}",
+    "commentPlaceholder": "Tulis komentarmu di sini...",
+    "replyPlaceholder": "Tulis balasanmu di sini...",
+    "commentButton": "Komentar",
+    "count_other": "{{count}} Komentar",
+    "edited": "(diedit)",
+    "saving": "Menyimpan...",
+    "translation": "Terjemahan",
+    "translationFailed": "Terjemahan gagal. Apakah layanan terjemahan sedang berjalan?",
+    "reportComment": "Laporkan komentar",
+    "openInShorts": "Buka di Shorts"
+  }
+}

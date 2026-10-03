@@ -1,0 +1,119 @@
+{
+  "ranges": {
+    "d7": "7d",
+    "d28": "28d",
+    "d90": "90d",
+    "all": "All"
+  },
+  "content": {
+    "all": "All",
+    "videos": "Videos",
+    "shorts": "Shorts"
+  },
+  "metrics": {
+    "watchTime": "Watch time",
+    "views": "Views",
+    "avgPct": "Avg %",
+    "votes": "Votes",
+    "comments": "Comments",
+    "payout": "Payout"
+  },
+  "days": {
+    "short": {
+      "sun": "Sun",
+      "mon": "Mon",
+      "tue": "Tue",
+      "wed": "Wed",
+      "thu": "Thu",
+      "fri": "Fri",
+      "sat": "Sat"
+    },
+    "initial": {
+      "sun": "S",
+      "mon": "M",
+      "tue": "T",
+      "wed": "W",
+      "thu": "T",
+      "fri": "F",
+      "sat": "S"
+    }
+  },
+  "sources": {
+    "threespeak": "3Speak",
+    "player": "Embed player"
+  },
+  "trend": {
+    "empty": "No watch time in this range yet.",
+    "tip_one": "{{count}} view · {{date}}",
+    "tip_other": "{{count}} views · {{date}}"
+  },
+  "noData": "No data yet.",
+  "demo": {
+    "viewerLocations": "Viewer locations",
+    "mapBubble_one": "{{country}} — {{count}} session",
+    "mapBubble_other": "{{country}} — {{count}} sessions",
+    "empty": "No viewer data in this range yet.",
+    "breakdown": "Breakdown",
+    "map": "Map",
+    "countries": "Countries",
+    "devices": "Devices",
+    "browsers": "Browsers",
+    "whereTitle": "Where they watch",
+    "whereSub": "3speak vs embed player",
+    "newVsReturning": "New vs returning",
+    "new": "New",
+    "returning": "Returning",
+    "located": "{{located}} of {{total}} watch sessions located."
+  },
+  "when": {
+    "title": "When your viewers watch",
+    "sub": "UTC · darker = more views",
+    "cellTitle_one": "{{day}} {{hour}}:00 — {{count}} view",
+    "cellTitle_other": "{{day}} {{hour}}:00 — {{count}} views",
+    "hour": "{{hour}}h"
+  },
+  "detail": {
+    "summary": "{{votes}} votes · {{comments}} comments · ${{payout}}"
+  },
+  "compare": {
+    "notEnough": "Not enough data to compare.",
+    "start": "Start",
+    "axis": "Retention across the video",
+    "end": "End",
+    "title": "Compare videos",
+    "pickA": "Pick a video…",
+    "vs": "vs",
+    "pickB": "Pick another…"
+  },
+  "loadError": "Couldn’t load your stats right now.",
+  "emptyRange": "No watch data in this range yet — try “All”, or wait for people to watch your videos.",
+  "tiles": {
+    "avgViewDuration": "Avg view duration",
+    "avgWatched": "Avg watched",
+    "reactionsPerView": "Reactions / view"
+  },
+  "subtotals": "{{videos}} videos · {{votes}} votes · {{comments}} comments · ${{payout}} · avg speed {{rate}}×",
+  "sections": {
+    "trend": "Watch time over time",
+    "best": "Best performing",
+    "audience": "Your audience"
+  },
+  "openInNewTab": "Open the video in a new tab",
+  "footnote": "Watch stats are from preview tracking and visible only to you.",
+  "video": {
+    "noData": "No data yet",
+    "empty": "No watch data for this video yet.",
+    "uniqueViewers": "Unique viewers",
+    "avgSpeed": "Avg speed",
+    "mostDropOff": "📉 Most drop off at <b>{{time}}</b>",
+    "earlyDrop": "⚡ <b>{{pct}}%</b> left in the first 3s",
+    "replayed": "🔁 Replayed:",
+    "retentionTitle": "Audience retention",
+    "retentionSub": "share of viewers still watching at each moment",
+    "pctWatching": "{{pct}}% watching",
+    "replayTitle": "Most replayed",
+    "replaySub": "sections viewers watch and rewatch most",
+    "hotSpot": "hot spot",
+    "notEnoughReplays": "Not enough replays yet"
+  }
+}

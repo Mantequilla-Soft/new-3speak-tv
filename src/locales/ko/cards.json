@@ -1,0 +1,44 @@
+{
+  "loading": "불러오는 중...",
+  "error": "오류: {{error}}",
+  "thumbnailAlt": "썸네일",
+  "topicTitle": "주제: {{topic}}",
+  "watchingNow_other": "{{count}}명 시청 중",
+  "badges": {
+    "gatedTitle": "후원자 전용 — 3Speak Pro로 전체 동영상을 볼 수 있어요",
+    "pro": "PRO",
+    "new": "NEW",
+    "live": "● LIVE",
+    "liveChat": "● 라이브 채팅"
+  },
+  "status": {
+    "scheduled": "예약됨",
+    "mobile": "모바일",
+    "mobileTitle": "모바일 앱으로 업로드됨",
+    "processing": "처리 중",
+    "processingTitle": "동영상을 처리하는 중이에요",
+    "draft": "임시저장",
+    "draftTitle": "임시저장 - 아직 게시되지 않음",
+    "deleted": "삭제됨",
+    "deletedTitle": "삭제된 동영상이에요",
+    "failed": "실패",
+    "failedTitle": "동영상 처리에 실패했어요",
+    "unlisted": "일부 공개",
+    "unlistedTitle": "일부 공개 — 피드와 검색에 표시되지 않고 링크로만 볼 수 있어요"
+  },
+  "playlist": {
+    "loading": "재생목록 불러오는 중...",
+    "items_other": "{{count}}개 항목",
+    "openAria": "재생목록 {{name}} 열기",
+    "tag": "재생목록",
+    "updated": "{{when}} 업데이트됨"
+  },
+  "watchLater": {
+    "title": "나중에 볼 동영상",
+    "subtitle": "나중에 볼 동영상"
+  },
+  "watched": {
+    "title": "시청한 동영상",
+    "subtitle": "내 시청 기록"
+  }
+}

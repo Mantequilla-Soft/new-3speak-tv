@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { X } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import { fetchProfile } from '../../utils/profileMeta';
 import { reconcileAvatarOverride } from '../../utils/avatarCache';
 import ProfileFields, { useProfileEditor } from './ProfileFields';
@@ -20,8 +21,9 @@ export default function ProfileEditModal({
   // the same form rather than a second one built to drift from this.
   loadProfile = null,
   onSave = null,
-  fineprint = 'Saved to your Hive account, so every Hive app shows the same profile.',
+  fineprint = null,
 }) {
+  const { t } = useTranslation();
   const { form, seed, setField, pickImage, uploading, saving, save } = useProfileEditor(username, { onSave });
   const [loading, setLoading] = useState(false);
 
@@ -56,7 +58,7 @@ export default function ProfileEditModal({
   if (!open) return null;
 
   const submit = async () => {
-    const ok = await save('Profile updated');
+    const ok = await save(t('app.profileEdit.updated'));
     if (ok) {
       if (onSaved) onSaved(form);
       if (onClose) onClose();
@@ -68,7 +70,7 @@ export default function ProfileEditModal({
       className="welcome-overlay"
       role="dialog"
       aria-modal="true"
-      aria-label="Edit your profile"
+      aria-label={t('app.profileEdit.title')}
       onClick={() => { if (!saving && onClose) onClose(); }}
     >
       <div className="welcome-modal" onClick={(e) => e.stopPropagation()}>
@@ -77,20 +79,20 @@ export default function ProfileEditModal({
           className="welcome-close"
           onClick={() => onClose && onClose()}
           disabled={saving}
-          aria-label="Close"
+          aria-label={t('common.actions.close')}
         >
           <X size={18} />
         </button>
 
         <div className="welcome-head">
-          <h2>Edit your profile</h2>
+          <h2>{t('app.profileEdit.title')}</h2>
           <p>
-            Your picture, name and bio show on your profile and next to everything you post.
+            {t('app.profileEdit.subtitle')}
           </p>
         </div>
 
         {loading ? (
-          <p className="welcome-loading">Loading your profile…</p>
+          <p className="welcome-loading">{t('app.profileEdit.loading')}</p>
         ) : (
           <ProfileFields
             username={username}
@@ -102,11 +104,11 @@ export default function ProfileEditModal({
           />
         )}
 
-        <p className="welcome-fineprint">{fineprint}</p>
+        <p className="welcome-fineprint">{fineprint ?? t('app.profileEdit.fineprint')}</p>
 
         <div className="welcome-actions">
           <button type="button" className="welcome-skip" onClick={() => onClose && onClose()} disabled={saving}>
-            Cancel
+            {t('common.actions.cancel')}
           </button>
           <button
             type="button"
@@ -114,7 +116,7 @@ export default function ProfileEditModal({
             onClick={submit}
             disabled={saving || uploading || loading}
           >
-            {saving ? 'Saving…' : 'Save changes'}
+            {saving ? t('common.actions.saving') : t('app.profileEdit.saveChanges')}
           </button>
         </div>
       </div>

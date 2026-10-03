@@ -1,0 +1,172 @@
+{
+  "addTag": {
+    "loginRequired": "Connectez-vous pour taguer cette vidéo",
+    "pickTopic": "Choisissez d'abord un sujet",
+    "tagged": "Tagué « {{label}} »",
+    "failed": "Échec du tag : {{error}}",
+    "pleaseTryAgain": "veuillez réessayer",
+    "title": "Taguer cette vidéo",
+    "question": "De quoi parle cette vidéo ?",
+    "existing": "Vous avez tagué cette vidéo <b>{{label}}</b> — en choisir un autre le remplace.",
+    "submit": "Valider le tag"
+  },
+  "addAccount": {
+    "usernameRequired": "Le nom d'utilisateur est requis pour continuer.",
+    "hiveAuthExpired": "La demande d'authentification HiveAuth a expiré",
+    "loginSuccess": "Connexion réussie !",
+    "loginFailed": "Échec de la connexion : {{error}}",
+    "logoAlt": "Logo 3Speak",
+    "title": "Connexion avec votre nom d'utilisateur",
+    "usernamePlaceholder": "Nom d'utilisateur"
+  },
+  "socialLink": {
+    "hashCopied": "Hash copié",
+    "copyFailed": "Impossible de copier dans le presse-papiers",
+    "enterHandle": "Saisissez votre identifiant ou ID sur la plateforme",
+    "verified": "Compte vérifié et associé",
+    "errors": {
+      "hashNotFound": "Hash introuvable sur le profil pour l'instant. Vérifiez que la modification est enregistrée publiquement, puis réessayez.",
+      "alreadyLinked": "Cette chaîne est déjà vérifiée par un autre utilisateur Hive (@{{user}}).",
+      "tooMany": "Vous avez atteint le nombre maximal de comptes associés.",
+      "notFound": "Cette chaîne n'existe pas sur la plateforme.",
+      "badSignature": "Impossible de vérifier la signature. Assurez-vous d'être connecté avec votre clé de publication.",
+      "rateLimited": "Trop de requêtes. Patientez une minute puis réessayez.",
+      "lookupFailed": "Échec de la recherche sur la plateforme. Réessayez dans un instant.",
+      "verifyFailed": "Échec de la vérification",
+      "stillPresent": "Le hash est toujours sur votre profil — retirez-le d'abord.",
+      "unlinkFailed": "Échec de la dissociation",
+      "noSuchLink": "Aucune association de ce type à retirer."
+    },
+    "confirmUnlink": "Retirer votre lien {{platform}} ? Assurez-vous que le hash de vérification n'est plus sur votre profil public, sinon la dissociation sera refusée.",
+    "removed": "Lien retiré",
+    "title": "Profils externes associés",
+    "intro": "Prouvez que vous possédez une chaîne YouTube (ou autre) en collant votre hash 3Speak unique dans la description publique de votre profil, puis en le vérifiant ici.",
+    "openProfile": "Ouvrir le profil",
+    "removeLink": "Retirer le lien",
+    "empty": "Aucun profil externe associé pour l'instant.",
+    "addPlatform": "Ajouter une plateforme",
+    "flowTitle": "Associer votre chaîne {{platform}}",
+    "step1": "Copiez votre hash de vérification unique :",
+    "step2": "<strong>Collez-le dans la description publique de votre profil {{platform}}</strong> (n'importe où — à propos / bio / description, peu importe). Enregistrez la modification.",
+    "step3": "Saisissez votre identifiant {{platform}} :",
+    "verifying": "Vérification…",
+    "verify": "Vérifier"
+  },
+  "auth": {
+    "title": "Autorisez 3Speak !",
+    "text": "Pour mettre en ligne des vidéos sur 3Speak, nous avons besoin de votre autorité de publication. Elle nous permet de publier vos vidéos sur Hive. Vous ne devez nous l'accorder qu'une seule fois.",
+    "authorize": "Autoriser"
+  },
+  "beneficiary": {
+    "errors": {
+      "emptyUsername": "Le nom d'utilisateur ne peut pas être vide.",
+      "sameUser": "Vous ne pouvez pas vous désigner comme bénéficiaire",
+      "greaterThanZero": "Le pourcentage de récompense doit être supérieur à 0.",
+      "exceedsRemaining": "Le pourcentage de récompense dépasse la part restante de {{percent}} %.",
+      "validNumber": "Saisissez un nombre valide",
+      "validPercent": "Saisissez un pourcentage de récompense valide.",
+      "duplicate": "Ce compte est déjà dans la liste.",
+      "invalidAccount": "Nom d'utilisateur ou ID de communauté invalide.",
+      "cannotIncrease": "Impossible de dépasser les {{percent}} % restants",
+      "pendingRow": "@{{account}} n'a pas encore été ajouté — cliquez sur + pour l'ajouter, ou videz le champ.",
+      "atLeastOne": "Le pourcentage de récompense doit être d'au moins 1 %"
+    },
+    "title": "Bénéficiaires",
+    "intro": "Ajoutez un utilisateur qui recevra automatiquement une partie des récompenses de cette publication.",
+    "minPercent": "% (min {{percent}} %)",
+    "usernamePlaceholder": "Nom d'utilisateur",
+    "minimumReward": "La récompense minimale est de <strong>1 %</strong>",
+    "checking": "Vérification de <strong>@{{account}}</strong> sur Hive…",
+    "notExisting": "⚠️ <strong>@{{account}}</strong> n'est pas un compte Hive existant.",
+    "notAdded": "⚠️ <strong>@{{account}}</strong> n'est pas encore ajouté — cliquez sur <strong>+</strong> pour l'ajouter, ou videz le champ.",
+    "infrastructure": "10 % === Infrastructure",
+    "videoEncoding": "Encodage vidéo === 1 %",
+    "defaults": "Bénéficiaires par défaut ({{count}})"
+  },
+  "qr": {
+    "scan": "Scannez ce QR code dans Hive Keychain :",
+    "click": "Cliquez sur le QR code pour l'ouvrir dans l'app Keychain"
+  },
+  "editVideoHint": {
+    "title": "Modifiez n'importe laquelle de vos vidéos",
+    "text": "Ouvrez l'une de vos vidéos et cherchez le <strong>bouton crayon</strong> dans la barre d'actions sous le lecteur. Cliquez dessus pour modifier le titre, la description, la miniature, les tags et plus encore.",
+    "penTitle": "Modifier les détails de la vidéo",
+    "tip": "Astuce",
+    "caption": "C'est ce bouton crayon que vous cherchez",
+    "gotIt": "Compris"
+  },
+  "verifyAuth": {
+    "title": "Vérification de l'autorisation",
+    "text": "Veuillez patienter pendant que nous vérifions que l'autorisation a été accordée..."
+  },
+  "editor": {
+    "confirmLeave": "L'éditeur est encore ouvert. Quitter cette page fermera l'éditeur et les modifications non enregistrées seront perdues.\n\nOK = Fermer l'éditeur et quitter\nAnnuler = Rester sur cette page",
+    "confirmClose": "Voulez-vous vraiment fermer l'éditeur ? Les modifications non enregistrées seront perdues.",
+    "iframeTitle": "Éditeur vidéo 3Speak",
+    "finding": "Recherche d'un éditeur disponible...",
+    "loading": "Chargement de l'éditeur...",
+    "unavailable": "Aucun serveur d'édition n'est disponible pour le moment. Veuillez réessayer plus tard.",
+    "sending": "Envoi au service de rendu...",
+    "rendering": "Rendu... {{percent}} %",
+    "complete": "Rendu terminé !",
+    "useVideo": "Utiliser la vidéo",
+    "preparing": "Préparation de la vidéo pour la mise en ligne...",
+    "renderUnavailable": "Le service de rendu n'est pas encore disponible. Les données de la timeline ont été envoyées dans la console.",
+    "backToEditor": "Retour à l'éditeur",
+    "postError": "Impossible de préparer la vidéo pour la mise en ligne. Essayez plutôt de la télécharger."
+  },
+  "profile": {
+    "mustLogin": "Vous devez d'abord vous connecter",
+    "followed": "Vous suivez ce compte",
+    "unfollowed": "Vous ne suivez plus ce compte",
+    "followFailed": "Impossible de suivre : {{error}}",
+    "unfollowFailed": "Impossible de ne plus suivre : {{error}}",
+    "avatarAlt": "Profil",
+    "posts": "Publications",
+    "followers": "Abonnés",
+    "joined": "Inscrit {{date}}",
+    "about": "À propos",
+    "noBio": "Aucune bio"
+  },
+  "report": {
+    "reasons": {
+      "spamMisleading": "Spam ou contenu trompeur",
+      "harassment": "Harcèlement ou intimidation",
+      "hateSpeech": "Discours haineux",
+      "violence": "Contenu violent ou choquant",
+      "sexual": "Contenu sexuel",
+      "copyright": "Violation du droit d'auteur",
+      "scam": "Arnaque ou fraude",
+      "other": "Autre",
+      "spam": "Spam",
+      "impersonation": "Usurpation d'identité",
+      "spamAccount": "Compte de spam"
+    },
+    "selectReasonError": "Veuillez choisir un motif",
+    "loginRequired": "Vous devez être connecté pour signaler",
+    "submitted": "Signalement envoyé. Merci.",
+    "failed": "Impossible d'envoyer le signalement",
+    "titles": {
+      "user": "Signaler l'utilisateur",
+      "comment": "Signaler le commentaire",
+      "short": "Signaler le Short",
+      "post": "Signaler la publication",
+      "video": "Signaler la vidéo"
+    },
+    "reason": "Motif",
+    "selectReason": "Choisissez un motif...",
+    "details": "Détails supplémentaires (facultatif)",
+    "detailsPlaceholder": "Donnez plus de contexte...",
+    "submitting": "Envoi...",
+    "submit": "Envoyer le signalement"
+  },
+  "upload": {
+    "missingInfo": "Informations sur la vidéo ou la miniature manquantes.",
+    "updateFailed": "Impossible de mettre à jour les informations de la vidéo. Veuillez réessayer.",
+    "title": "Mettre en ligne la vidéo et la miniature",
+    "selectVideo": "Choisir une vidéo",
+    "thumbnail": "Miniature",
+    "clickThumbnail": "Cliquez pour envoyer une miniature",
+    "updateInfo": "Mettre à jour les infos"
+  }
+}

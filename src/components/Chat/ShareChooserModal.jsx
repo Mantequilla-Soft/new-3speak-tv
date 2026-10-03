@@ -1,11 +1,12 @@
 import { useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
 import { ArrowLeft, Code2, Copy, MessageCircle, Share2, X } from 'lucide-react'
-import { useNavigate } from 'react-router-dom'
 import { toastIn } from '../../utils/toast';
 import { useChat } from '../../context/ChatContext'
+import { useOpenChat } from '../../hooks/useOpenChat'
 import { EMBED_SIZES, buildEmbedHtml } from '../../utils/embedCode'
 import './shareChooser.scss'
+import { useTranslation } from 'react-i18next'
 
 // Every toast from this module is headed "Chat"; the message becomes the
 // line under it. See utils/toast.js.
@@ -28,8 +29,9 @@ const toast = toastIn('Chat');
  *  - onGeneralShare: () => void  — the page's existing share handler
  */
 export default function ShareChooserModal({ open, url, title, embed, onClose, onGeneralShare }) {
-  const navigate = useNavigate()
-  const { setShareDraft } = useChat()
+  const { t } = useTranslation()
+  const openChat = useOpenChat()
+  const { setShareDraft, backToList } = useChat()
   // 'menu' | 'embed'. The component stays mounted between opens (the parent just
   // flips `open`), so the view is reset explicitly rather than on mount.
   const [view, setView] = useState('menu')
@@ -53,8 +55,11 @@ export default function ShareChooserModal({ open, url, title, embed, onClose, on
   const sendInChat = () => {
     // Just the link — the chat renders a rich card (title/author/thumb) from it.
     setShareDraft(url)
+    // Back to the list so the user picks a target; an already-open thread would
+    // never see the draft (it prefills on open only).
+    backToList()
     onClose?.()
-    navigate('/chat')
+    openChat()
   }
 
   const generalShare = () => {
@@ -65,33 +70,33 @@ export default function ShareChooserModal({ open, url, title, embed, onClose, on
   const copyEmbed = async () => {
     try {
       await navigator.clipboard.writeText(embedCode)
-      toast.success('Embed code copied')
+      toast.success(t('chat.share.embedCopied'))
     } catch {
       // Clipboard denied (or an older browser): select it so the user can copy
       // by hand rather than being told nothing happened.
       codeRef.current?.focus()
       codeRef.current?.select()
-      toast.info('Press Ctrl/Cmd + C to copy the selected code')
+      toast.info(t('chat.share.pressToCopy'))
     }
   }
 
   return createPortal(
     <div className="share-chooser-overlay" onClick={onClose}>
-      <div className="share-chooser" role="dialog" aria-label="Share" onClick={(e) => e.stopPropagation()}>
+      <div className="share-chooser" role="dialog" aria-label={t('common.actions.share')} onClick={(e) => e.stopPropagation()}>
         {view === 'embed' && (
-          <button className="share-chooser-back" onClick={() => setView('menu')} aria-label="Back">
+          <button className="share-chooser-back" onClick={() => setView('menu')} aria-label={t('common.actions.back')}>
             <ArrowLeft size={18} />
           </button>
         )}
-        <button className="share-chooser-close" onClick={onClose} aria-label="Close">
+        <button className="share-chooser-close" onClick={onClose} aria-label={t('common.actions.close')}>
           <X size={18} />
         </button>
 
         {view === 'embed' ? (
           <>
-            <h3 className="share-chooser-title">Embed this video</h3>
-            <p className="share-embed-hint">Paste this into any website or blog post.</p>
-            <div className="share-embed-sizes" role="group" aria-label="Embed size">
+            <h3 className="share-chooser-title">{t('chat.share.embedTitle')}</h3>
+            <p className="share-embed-hint">{t('chat.share.embedHint')}</p>
+            <div className="share-embed-sizes" role="group" aria-label={t('chat.share.embedSize')}>
               {EMBED_SIZES.map((s) => (
                 <button
                   key={s.id}
@@ -100,7 +105,7 @@ export default function ShareChooserModal({ open, url, title, embed, onClose, on
                   aria-pressed={size === s.id}
                   onClick={() => setSize(s.id)}
                 >
-                  {s.label}
+                  {s.labelKey ? t(s.labelKey) : s.label}
                 </button>
               ))}
             </div>
@@ -112,42 +117,42 @@ export default function ShareChooserModal({ open, url, title, embed, onClose, on
               spellCheck={false}
               value={embedCode}
               onFocus={(e) => e.target.select()}
-              aria-label="Embed code"
+              aria-label={t('chat.share.embedCode')}
             />
             <button className="share-chooser-opt share-embed-copy" onClick={copyEmbed}>
               <Copy size={20} />
               <span>
-                <span className="share-chooser-opt-title">Copy embed code</span>
+                <span className="share-chooser-opt-title">{t('chat.share.copyEmbed')}</span>
                 <span className="share-chooser-opt-sub">
-                  {size === 'responsive' ? 'Scales to fit the page it sits on' : 'Fixed size iframe'}
+                  {size === 'responsive' ? t('chat.share.responsiveSub') : t('chat.share.fixedSub')}
                 </span>
               </span>
             </button>
           </>
         ) : (
           <>
-            <h3 className="share-chooser-title">Share</h3>
+            <h3 className="share-chooser-title">{t('common.actions.share')}</h3>
             <button className="share-chooser-opt" onClick={sendInChat}>
               <MessageCircle size={20} />
               <span>
-                <span className="share-chooser-opt-title">Send in 3Speak Chat</span>
-                <span className="share-chooser-opt-sub">Message it to someone on 3Speak</span>
+                <span className="share-chooser-opt-title">{t('chat.share.sendInChat')}</span>
+                <span className="share-chooser-opt-sub">{t('chat.share.sendInChatSub')}</span>
               </span>
             </button>
             {canEmbed && (
               <button className="share-chooser-opt" onClick={() => setView('embed')}>
                 <Code2 size={20} />
                 <span>
-                  <span className="share-chooser-opt-title">Embed on a website</span>
-                  <span className="share-chooser-opt-sub">Copy the HTML for your own site or blog</span>
+                  <span className="share-chooser-opt-title">{t('chat.share.embedOnWebsite')}</span>
+                  <span className="share-chooser-opt-sub">{t('chat.share.embedOnWebsiteSub')}</span>
                 </span>
               </button>
             )}
             <button className="share-chooser-opt" onClick={generalShare}>
               <Share2 size={20} />
               <span>
-                <span className="share-chooser-opt-title">Share / copy link</span>
-                <span className="share-chooser-opt-sub">Other apps, or copy the link</span>
+                <span className="share-chooser-opt-title">{t('chat.share.generalShare')}</span>
+                <span className="share-chooser-opt-sub">{t('chat.share.generalShareSub')}</span>
               </span>
             </button>
           </>

@@ -4,6 +4,7 @@ import { IoClose } from 'react-icons/io5';
 import { toastIn } from '../../utils/toast';
 import { useAppStore } from '../../lib/store';
 import { REPORT_API_URL, REPORT_API_SECRET } from '../../utils/config';
+import { useTranslation } from 'react-i18next';
 import './ReportModal.scss';
 
 // Every toast from this module is headed "Report"; the message becomes the
@@ -21,39 +22,39 @@ export function isReported(objectType, objectId) {
 
 const REPORT_REASONS = {
   post: [
-    { value: 'spam', label: 'Spam or misleading' },
-    { value: 'harassment', label: 'Harassment or bullying' },
-    { value: 'hate_speech', label: 'Hate speech' },
-    { value: 'violence', label: 'Violent or graphic content' },
-    { value: 'sexual', label: 'Sexual content' },
-    { value: 'copyright', label: 'Copyright infringement' },
-    { value: 'scam', label: 'Scam or fraud' },
-    { value: 'other', label: 'Other' },
+    { value: 'spam', labelKey: 'modals.report.reasons.spamMisleading' },
+    { value: 'harassment', labelKey: 'modals.report.reasons.harassment' },
+    { value: 'hate_speech', labelKey: 'modals.report.reasons.hateSpeech' },
+    { value: 'violence', labelKey: 'modals.report.reasons.violence' },
+    { value: 'sexual', labelKey: 'modals.report.reasons.sexual' },
+    { value: 'copyright', labelKey: 'modals.report.reasons.copyright' },
+    { value: 'scam', labelKey: 'modals.report.reasons.scam' },
+    { value: 'other', labelKey: 'modals.report.reasons.other' },
   ],
   video: [
-    { value: 'spam', label: 'Spam or misleading' },
-    { value: 'harassment', label: 'Harassment or bullying' },
-    { value: 'hate_speech', label: 'Hate speech' },
-    { value: 'violence', label: 'Violent or graphic content' },
-    { value: 'sexual', label: 'Sexual content' },
-    { value: 'copyright', label: 'Copyright infringement' },
-    { value: 'scam', label: 'Scam or fraud' },
-    { value: 'other', label: 'Other' },
+    { value: 'spam', labelKey: 'modals.report.reasons.spamMisleading' },
+    { value: 'harassment', labelKey: 'modals.report.reasons.harassment' },
+    { value: 'hate_speech', labelKey: 'modals.report.reasons.hateSpeech' },
+    { value: 'violence', labelKey: 'modals.report.reasons.violence' },
+    { value: 'sexual', labelKey: 'modals.report.reasons.sexual' },
+    { value: 'copyright', labelKey: 'modals.report.reasons.copyright' },
+    { value: 'scam', labelKey: 'modals.report.reasons.scam' },
+    { value: 'other', labelKey: 'modals.report.reasons.other' },
   ],
   comment: [
-    { value: 'spam', label: 'Spam' },
-    { value: 'harassment', label: 'Harassment or bullying' },
-    { value: 'hate_speech', label: 'Hate speech' },
-    { value: 'impersonation', label: 'Impersonation' },
-    { value: 'other', label: 'Other' },
+    { value: 'spam', labelKey: 'modals.report.reasons.spam' },
+    { value: 'harassment', labelKey: 'modals.report.reasons.harassment' },
+    { value: 'hate_speech', labelKey: 'modals.report.reasons.hateSpeech' },
+    { value: 'impersonation', labelKey: 'modals.report.reasons.impersonation' },
+    { value: 'other', labelKey: 'modals.report.reasons.other' },
   ],
   user: [
-    { value: 'spam', label: 'Spam account' },
-    { value: 'harassment', label: 'Harassment or bullying' },
-    { value: 'hate_speech', label: 'Hate speech' },
-    { value: 'impersonation', label: 'Impersonation' },
-    { value: 'scam', label: 'Scam or fraud' },
-    { value: 'other', label: 'Other' },
+    { value: 'spam', labelKey: 'modals.report.reasons.spamAccount' },
+    { value: 'harassment', labelKey: 'modals.report.reasons.harassment' },
+    { value: 'hate_speech', labelKey: 'modals.report.reasons.hateSpeech' },
+    { value: 'impersonation', labelKey: 'modals.report.reasons.impersonation' },
+    { value: 'scam', labelKey: 'modals.report.reasons.scam' },
+    { value: 'other', labelKey: 'modals.report.reasons.other' },
   ],
 };
 
@@ -66,6 +67,7 @@ const REPORT_REASONS = {
  * @param {{ author: string, permlink?: string }} target - what is being reported
  */
 export default function ReportModal({ isOpen, onClose, type = 'video', target }) {
+  const { t } = useTranslation();
   const { user } = useAppStore();
   const [reason, setReason] = useState('');
   const [comment, setComment] = useState('');
@@ -76,11 +78,11 @@ export default function ReportModal({ isOpen, onClose, type = 'video', target })
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!reason) {
-      toast.error('Please select a reason');
+      toast.error(t('modals.report.selectReasonError'));
       return;
     }
     if (!user) {
-      toast.error('You must be logged in to report');
+      toast.error(t('modals.report.loginRequired'));
       return;
     }
 
@@ -119,11 +121,11 @@ export default function ReportModal({ isOpen, onClose, type = 'video', target })
         // Ignore storage failures; the report itself was accepted.
       }
 
-      toast.success('Report submitted. Thank you.');
+      toast.success(t('modals.report.submitted'));
       handleClose();
     } catch (err) {
       console.error('Report failed:', err);
-      toast.error('Failed to submit report');
+      toast.error(t('modals.report.failed'));
     } finally {
       setSubmitting(false);
     }
@@ -137,7 +139,7 @@ export default function ReportModal({ isOpen, onClose, type = 'video', target })
 
   if (!isOpen) return null;
 
-  const typeLabel = type === 'user' ? 'User' : type === 'comment' ? 'Comment' : type === 'short' ? 'Short' : type === 'post' ? 'Post' : 'Video';
+  const title = type === 'user' ? t('modals.report.titles.user') : type === 'comment' ? t('modals.report.titles.comment') : type === 'short' ? t('modals.report.titles.short') : type === 'post' ? t('modals.report.titles.post') : t('modals.report.titles.video');
 
   return createPortal(
     <div className="report-modal-overlay" onClick={handleClose}>
@@ -146,7 +148,7 @@ export default function ReportModal({ isOpen, onClose, type = 'video', target })
           <IoClose size={22} />
         </button>
 
-        <h3 className="report-modal-title">Report {typeLabel}</h3>
+        <h3 className="report-modal-title">{title}</h3>
 
         {target?.author && (
           <p className="report-target">
@@ -155,24 +157,24 @@ export default function ReportModal({ isOpen, onClose, type = 'video', target })
         )}
 
         <form onSubmit={handleSubmit} className="report-form">
-          <label className="report-label">Reason</label>
+          <label className="report-label">{t('modals.report.reason')}</label>
           <select
             className="report-select"
             value={reason}
             onChange={(e) => setReason(e.target.value)}
           >
-            <option value="">Select a reason...</option>
+            <option value="">{t('modals.report.selectReason')}</option>
             {reasons.map((r) => (
-              <option key={r.value} value={r.value}>{r.label}</option>
+              <option key={r.value} value={r.value}>{t(r.labelKey)}</option>
             ))}
           </select>
 
-          <label className="report-label">Additional details (optional)</label>
+          <label className="report-label">{t('modals.report.details')}</label>
           <textarea
             className="report-textarea"
             value={comment}
             onChange={(e) => setComment(e.target.value)}
-            placeholder="Provide more context..."
+            placeholder={t('modals.report.detailsPlaceholder')}
             rows={3}
             maxLength={500}
           />
@@ -182,7 +184,7 @@ export default function ReportModal({ isOpen, onClose, type = 'video', target })
             className="report-submit-btn"
             disabled={submitting || !reason}
           >
-            {submitting ? 'Submitting...' : 'Submit Report'}
+            {submitting ? t('modals.report.submitting') : t('modals.report.submit')}
           </button>
         </form>
       </div>

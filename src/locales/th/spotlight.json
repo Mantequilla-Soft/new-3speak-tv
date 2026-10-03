@@ -1,0 +1,348 @@
+{
+  "icons": {
+    "link": "ลิงก์",
+    "globe": "เว็บไซต์",
+    "podcast": "พอดแคสต์",
+    "email": "อีเมล",
+    "phone": "โทรศัพท์",
+    "rss": "RSS",
+    "qrcode": "QR code",
+    "shop": "ร้านค้า",
+    "bag": "สโตร์",
+    "dollar": "เงิน",
+    "gift": "ของขวัญ",
+    "heart": "สนับสนุน",
+    "star": "ดาว",
+    "thumbsup": "ถูกใจ",
+    "fire": "ไฟ",
+    "bolt": "สายฟ้า",
+    "music": "เพลง",
+    "headphones": "เสียง",
+    "mic": "ไมค์",
+    "video": "วิดีโอ",
+    "film": "ภาพยนตร์",
+    "tv": "ทีวี",
+    "play": "เล่น",
+    "camera": "ภาพถ่าย",
+    "image": "รูปภาพ",
+    "palette": "ศิลปะ",
+    "pen": "เขียน",
+    "book": "หนังสือ",
+    "newspaper": "ข่าว",
+    "graduation": "คอร์ส",
+    "code": "โค้ด",
+    "gamepad": "เกม",
+    "briefcase": "งาน",
+    "home": "บ้าน",
+    "location": "ตำแหน่ง",
+    "map": "แผนที่",
+    "calendar": "ปฏิทิน",
+    "clock": "นาฬิกา",
+    "bell": "การแจ้งเตือน",
+    "tag": "แท็ก",
+    "download": "ดาวน์โหลด",
+    "file": "ไฟล์",
+    "users": "ชุมชน",
+    "comment": "ความคิดเห็น",
+    "share": "แชร์",
+    "coffee": "กาแฟ",
+    "wallet": "กระเป๋าเงิน",
+    "plus": "เพิ่มเติม",
+    "check": "เครื่องหมายถูก"
+  },
+  "fonts": {
+    "system": "ระบบ",
+    "rounded": "ขอบมน",
+    "serif": "Serif",
+    "mono": "Mono",
+    "display": "Display",
+    "condensed": "แบบแคบ",
+    "handwriting": "ลายมือ",
+    "grotesk": "Grotesk",
+    "humanist": "Humanist",
+    "geometric": "เรขาคณิต",
+    "slab": "Slab",
+    "elegant": "หรูหรา",
+    "typewriter": "พิมพ์ดีด",
+    "marker": "ปากกาเมจิก",
+    "brush": "พู่กัน",
+    "palatino": "Palatino",
+    "wide": "แบบกว้าง"
+  },
+  "motion": {
+    "none": "ไม่มี",
+    "float": "ลอย",
+    "sway": "แกว่ง",
+    "pulse": "เต้นเป็นจังหวะ",
+    "wobble": "โยกเยก",
+    "bounce": "เด้ง",
+    "tilt": "เอียง 3D",
+    "spin": "หมุน",
+    "shake": "สั่น",
+    "breathe": "หายใจ"
+  },
+  "sectionTypes": {
+    "link": "ลิงก์",
+    "video": "คอนเทนต์ 3Speak",
+    "embed": "ลิงก์แบบมีตัวอย่าง",
+    "image": "รูปภาพ",
+    "header": "ชื่อเรื่อง / ข้อความ"
+  },
+  "blockNames": {
+    "link": "ลิงก์",
+    "header": "หัวข้อ",
+    "image": "รูปภาพ",
+    "video": "วิดีโอ",
+    "embed": "ฝัง"
+  },
+  "blockNamesPlural": {
+    "link": "ลิงก์",
+    "header": "หัวข้อ",
+    "image": "รูปภาพ",
+    "video": "วิดีโอ",
+    "embed": "รายการฝัง"
+  },
+  "templates": {
+    "minimal": {
+      "name": "Minimal",
+      "niche": "สะอาดและเรียบง่าย"
+    },
+    "neon": {
+      "name": "Neon Nights",
+      "niche": "ครีเอเตอร์ / สตรีมเมอร์"
+    },
+    "crypto": {
+      "name": "On-Chain",
+      "niche": "คริปโต / Web3"
+    },
+    "gamer": {
+      "name": "Player One",
+      "niche": "เกม"
+    },
+    "photographer": {
+      "name": "Exposure",
+      "niche": "การถ่ายภาพ"
+    },
+    "podcaster": {
+      "name": "On Air",
+      "niche": "พอดแคสต์"
+    },
+    "fitness": {
+      "name": "Peak Form",
+      "niche": "ฟิตเนส / โค้ช"
+    },
+    "writer": {
+      "name": "Longform",
+      "niche": "นักเขียน / บล็อกเกอร์"
+    },
+    "chef": {
+      "name": "Mise en Place",
+      "niche": "อาหาร / ทำอาหาร"
+    },
+    "travel": {
+      "name": "Wanderlust",
+      "niche": "ธรรมชาติ / ท่องเที่ยว"
+    },
+    "business": {
+      "name": "Boardroom",
+      "niche": "ธุรกิจ / มืออาชีพ"
+    },
+    "artist": {
+      "name": "Palette",
+      "niche": "ศิลปิน / ภาพ"
+    },
+    "ocean": {
+      "name": "Tidewater",
+      "niche": "ชิลล์ / ไลฟ์สไตล์"
+    },
+    "musician": {
+      "name": "Amplified",
+      "niche": "ดนตรี / วง"
+    },
+    "developer": {
+      "name": "Terminal",
+      "niche": "นักพัฒนา / เทค"
+    },
+    "sports": {
+      "name": "Game Day",
+      "niche": "กีฬา / นักกีฬา"
+    }
+  },
+  "errors": {
+    "notLoggedIn": "ยังไม่ได้เข้าสู่ระบบ",
+    "couldNotSaveToHive": "บันทึกไปยัง Hive ไม่ได้"
+  },
+  "arrange": {
+    "title": "ชื่อเรื่อง",
+    "video": "วิดีโอ",
+    "latestPosts": "โพสต์ล่าสุด",
+    "latestPostsBy": "โพสต์ล่าสุด · @{{account}}",
+    "dragToArrange": "ลากเพื่อจัดเรียง"
+  },
+  "page": {
+    "latestPosts": "โพสต์ล่าสุด",
+    "seeNewestPosts": "ดูโพสต์ใหม่ล่าสุดของ @{{user}} →",
+    "openLink": "เปิดลิงก์",
+    "empty": "@{{user}} ยังไม่ได้เพิ่มลิงก์",
+    "viewProfile": "ดูโปรไฟล์ 3Speak →",
+    "poweredBy": "ขับเคลื่อนโดย 3Speak"
+  },
+  "editor": {
+    "resetToDefault": "รีเซ็ตเป็นค่าเริ่มต้น",
+    "motion": "การเคลื่อนไหว",
+    "speed": "ความเร็ว {{value}}",
+    "loop": "วนซ้ำ",
+    "runSeconds": "เล่น {{value}} วิ",
+    "picker": {
+      "videoLabel": "เลือกจากวิดีโอของฉัน",
+      "videoLoading": "กำลังโหลดวิดีโอของคุณ…",
+      "videoEmpty": "ไม่พบวิดีโอ 3Speak ล่าสุด",
+      "shortLabel": "เลือกจาก Shorts ของฉัน",
+      "shortLoading": "กำลังโหลด Shorts ของคุณ…",
+      "shortEmpty": "ไม่พบ Shorts 3Speak ล่าสุด",
+      "noChannel": "ไม่พบช่อง (คุณเข้าสู่ระบบอยู่หรือไม่?)",
+      "loadFailed": "โหลดไม่ได้: {{error}}"
+    },
+    "toasts": {
+      "unfurlFailed": "ดึงตัวอย่างลิงก์ไม่ได้",
+      "imageUploadFailed": "อัปโหลดรูปภาพไม่สำเร็จ: {{error}}",
+      "tryAgain": "ลองอีกครั้ง",
+      "styleApplied": "ใช้สไตล์กับบล็อก {{type}} ทั้งหมดแล้ว",
+      "templateApplied": "ใช้ “{{name}}” แล้ว — ปรับแต่งหรือเลิกทำได้",
+      "reverted": "กลับไปใช้ดีไซน์ก่อนหน้าของคุณแล้ว",
+      "saved": "บันทึก Spotlight ลงในโปรไฟล์ Hive ของคุณแล้ว",
+      "saveFailed": "บันทึกไม่ได้",
+      "linkCopied": "คัดลอกลิงก์แล้ว",
+      "uploadFailed": "อัปโหลดไม่สำเร็จ"
+    },
+    "link": {
+      "labelPlaceholder": "ป้ายกำกับ (เช่น YouTube ของฉัน)",
+      "type": "ประเภทลิงก์",
+      "typeGroup": "ประเภท",
+      "website": "เว็บไซต์ / URL",
+      "email": "อีเมล",
+      "phone": "โทรศัพท์",
+      "platformGroup": "แพลตฟอร์ม",
+      "yourname": "yourname",
+      "platformIconHint": "ไอคอนคือโลโก้ {{platform}} — เปลี่ยนเป็น “เว็บไซต์ / URL” เพื่อเลือกไอคอนเอง",
+      "icon": "ไอคอน",
+      "iconColor": "สีไอคอน",
+      "iconBg": "พื้นหลังไอคอน"
+    },
+    "header": {
+      "text": "ข้อความ",
+      "size": "ขนาด",
+      "large": "ใหญ่",
+      "medium": "กลาง",
+      "small": "เล็ก",
+      "align": "จัดแนว",
+      "left": "ซ้าย",
+      "center": "กลาง",
+      "right": "ขวา"
+    },
+    "image": {
+      "uploading": "กำลังอัปโหลด…",
+      "upload": "อัปโหลดรูปภาพ",
+      "urlPlaceholder": "…หรือ URL รูปภาพ",
+      "linkPlaceholder": "ลิงก์เมื่อคลิก (ไม่บังคับ)"
+    },
+    "video": {
+      "contentType": "ประเภทเนื้อหา",
+      "video": "วิดีโอ",
+      "short": "Shorts",
+      "orPaste": "หรือวางลิงก์",
+      "pastePlaceholder": "วางลิงก์วิดีโอ 3Speak หรือ author/permlink",
+      "titlePlaceholder": "ชื่อเรื่องที่แสดงเหนือวิดีโอ (ลิงก์ไปยัง 3Speak)",
+      "hint": "เนื้อหาที่เลือกจะฝังและเล่นบนหน้าของคุณ"
+    },
+    "embed": {
+      "source": "แหล่งที่มา",
+      "sourceLink": "ลิงก์ (แสดงตัวอย่าง)",
+      "sourceHiveRecent": "โพสต์ Hive ล่าสุดของฉัน",
+      "accountPlaceholder": "ชื่อผู้ใช้ Hive (เว้นว่างไว้เพื่อใช้ของคุณเอง)",
+      "showPosts_other": "แสดง {{count}} โพสต์",
+      "perRow": "{{value}} ต่อแถว",
+      "hiveRecentHint": "โพสต์หลักล่าสุดของคุณ (ไม่รวมรีบล็อกหรือ cross-post) อัปเดตอัตโนมัติ",
+      "linkPlaceholder": "วางลิงก์อะไรก็ได้ — โพสต์ Hive, Instagram, X, YouTube, บทความ…",
+      "fetching": "กำลังดึงตัวอย่าง…",
+      "noPreview": "ไม่พบตัวอย่าง — จะยังแสดงเป็นการ์ดลิงก์",
+      "pasteHint": "วางลิงก์ แล้วเราจะดึงชื่อเรื่อง คำอธิบาย และรูปภาพมาให้"
+    },
+    "style": {
+      "title": "สไตล์",
+      "applyAllTitle": "ใช้สไตล์นี้กับบล็อก {{type}} ทุกบล็อก",
+      "applyAll": "ใช้กับ{{types}}ทั้งหมด",
+      "background": "พื้นหลัง",
+      "text": "ข้อความ",
+      "backgroundPct": "พื้นหลัง {{value}}%",
+      "radius": "ความโค้ง {{value}}",
+      "fontSizePct": "ขนาดตัวอักษร {{value}}%",
+      "paddingPx": "ระยะขอบใน {{value}}px",
+      "thumbnailPct": "ภาพขนาดย่อ {{value}}%",
+      "border": "เส้นขอบ",
+      "thicknessPx": "ความหนา {{value}}px",
+      "opacityPct": "ความทึบ {{value}}%",
+      "shadow": "เงา",
+      "strengthPct": "ความเข้ม {{value}}%",
+      "color": "สี",
+      "blur": "เบลอ {{value}}",
+      "spread": "การกระจาย {{value}}",
+      "inset": "เงาด้านใน",
+      "cardDelayMs": "หน่วงการ์ด {{value}}ms"
+    },
+    "tagline": "ลิงก์และวิดีโอของคุณในหน้าเดียว",
+    "openPage": "เปิดหน้า",
+    "templates": {
+      "title": "เทมเพลต",
+      "hint": "เลือกดีไซน์เพื่อเติมทุกอย่าง — ไบโอของคุณจะยังอยู่ และเลิกทำได้",
+      "undo": "เลิกใช้เทมเพลต — กลับไปที่ดีไซน์ของฉัน"
+    },
+    "profile": {
+      "title": "โปรไฟล์",
+      "headlinePlaceholder": "พาดหัว / ไบโอสั้นๆ (ไม่บังคับ)",
+      "avatarSizePct": "ขนาดรูปโปรไฟล์ {{value}}%",
+      "avatarShadowPct": "เงารูปโปรไฟล์ {{value}}%",
+      "avatarGlow": "แสงเรืองรอบรูปโปรไฟล์",
+      "glowSize": "ขนาดแสงเรือง {{value}}",
+      "channelButtonText": "ข้อความปุ่มช่อง"
+    },
+    "page": {
+      "title": "สไตล์หน้า",
+      "solid": "สีเดียว",
+      "gradient": "ไล่สี",
+      "image": "รูปภาพ",
+      "color2": "สีที่ 2",
+      "angle": "มุม {{value}}°",
+      "uploadBackground": "อัปโหลดพื้นหลัง",
+      "imageSet": "ตั้งรูปภาพแล้ว ✓",
+      "overlay": "เลเยอร์ซ้อน",
+      "overlay2": "เลเยอร์ซ้อน 2",
+      "none": "ไม่มี",
+      "overlayOpacityPct": "ความทึบเลเยอร์ซ้อน {{value}}%",
+      "overlayAngle": "มุมเลเยอร์ซ้อน {{value}}°",
+      "colors": "สี",
+      "buttonBg": "พื้นหลังปุ่ม",
+      "buttonText": "ข้อความปุ่ม",
+      "buttons": "ปุ่ม",
+      "buttonStyle": "สไตล์ปุ่ม",
+      "soft": "นุ่มนวล",
+      "fill": "ทึบ",
+      "outline": "เส้นขอบ",
+      "cornerRadius": "ความโค้งมุม {{value}}",
+      "textStyle": "สไตล์ข้อความ (ชื่อ ไบโอ และบล็อกข้อความ)",
+      "font": "แบบอักษร",
+      "normal": "ปกติ",
+      "italic": "ตัวเอียง",
+      "bold": "ตัวหนา",
+      "boldItalic": "ตัวหนาเอียง",
+      "strong": "เข้ม",
+      "textBorderPx": "ขอบข้อความ {{value}}px",
+      "borderColor": "สีขอบ"
+    },
+    "addBlock": "เพิ่มบล็อก",
+    "empty": "เพิ่มลิงก์ วิดีโอ หรือรูปภาพแรกของคุณด้านบน",
+    "arrangeHint": "ลาก <grip></grip> เพื่อจัดเรียง · วางบล็อกลงบนอีกบล็อกเพื่อวางเคียงกัน · คลิกบล็อกเพื่อแก้ไขตรงนี้ได้เลย",
+    "livePreview": "ตัวอย่างสด",
+    "previewTitle": "ตัวอย่าง Spotlight"
+  }
+}

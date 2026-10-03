@@ -19,6 +19,7 @@ import { enforceLockedBeneficiaries, getLockedBeneficiaries, chargesEncoder, LOC
 import { oaEnvelope, threespeakVideo, probeVideoOrientation, OA_ARTICLE, OA_MICROPOST, OA_COMMENT } from '../utils/openAttribute';
 import axios from 'axios';
 import { isWeakLinkForced } from '../utils/uploadFaults';
+import { useTranslation } from 'react-i18next';
 
 // Every toast from this module is headed "Upload"; the message becomes the
 // line under it. See utils/toast.js.
@@ -92,6 +93,7 @@ export function useEmbedUpload() {
 }
 
 export function EmbedUploadProvider({ children }) {
+  const { t } = useTranslation();
   const { user, incubationHandle } = useAppStore();
   // Who the uploaded ASSET belongs to.
   //
@@ -449,8 +451,8 @@ export function EmbedUploadProvider({ children }) {
     setUploadProgress(0);
     setStatusText('');
     setUploadDetail(null);
-    toast.message('Upload cancelled.');
-  }, [videoFile, resetEarlyUpload]);
+    toast.message(t('upload.progress.cancelled'));
+  }, [videoFile, resetEarlyUpload, t]);
 
   // The raw TUS upload of `videoFile` to the embed service. Shared by the
   // background (early) upload and the publish fallback. `uploadEndpoint` is the
@@ -579,7 +581,7 @@ export function EmbedUploadProvider({ children }) {
     let watchdog = setTimeout(() => {
       if (!firstAck) {
         try { upload.abort(); } catch { /* ignore */ }
-        rejectDone(Object.assign(new Error('PATCH appears blocked (no chunk acknowledged)'), { code: 'PATCH_BLOCKED' }));
+        rejectDone(Object.assign(new Error(t('upload.errors.patchBlocked')), { code: 'PATCH_BLOCKED' }));
       }
     }, WATCHDOG_MS);
     const clearWatchdog = () => { if (watchdog) { clearTimeout(watchdog); watchdog = null; } };
@@ -599,7 +601,7 @@ export function EmbedUploadProvider({ children }) {
         const status = err?.originalResponse?.getStatus?.() ?? 0;
         const willRetry = status === 0 || status === 409 || status === 423 ||
           status === 429 || status >= 500;
-        if (willRetry) setStatusText('Connection unstable — retrying…');
+        if (willRetry) setStatusText(t('upload.progress.connectionUnstable'));
         return willRetry;
       },
       headers: tusToken
@@ -631,15 +633,15 @@ export function EmbedUploadProvider({ children }) {
         // Distinct from onProgress below, which is only "pushed into the socket" —
         // the gap between the two is exactly what a black-holing proxy looks like,
         // so show both.
-        patchUploadDetail({ acked: totalAcked(), phase: 'Uploading' });
+        patchUploadDetail({ acked: totalAcked(), phase: t('upload.progress.phase.uploading') });
       },
       onProgress: (bytesUploaded, bytesTotal) => {
         const pct = Math.round((bytesUploaded / bytesTotal) * 100);
         setUploadProgress(pct);
-        setStatusText(`Uploading video... ${pct}%`);
+        setStatusText(t('upload.progress.uploadingVideoPct', { pct }));
         patchUploadDetail({
           method: 'resumable',
-          phase: firstAck ? 'Uploading' : 'Waiting for first server ack…',
+          phase: firstAck ? t('upload.progress.phase.uploading') : t('upload.progress.phase.waitingFirstAck'),
           // Keep the spinner up through the pre-ack window even though bytes are
           // leaving: that gap is exactly where a PATCH-eating proxy hides, so
           // "sending, nothing acknowledged" must not look like healthy progress.
@@ -683,7 +685,7 @@ export function EmbedUploadProvider({ children }) {
     upload.start();
     await done;
     return { embedUrl: capturedEmbedUrl, deferral };
-  }, [videoFile, user, fromStories, videoDuration, gated, gatedAllowlist, captureDeferral]);
+  }, [videoFile, user, fromStories, videoDuration, gated, gatedAllowlist, captureDeferral, t]);
 
   // Preflight-free multipart POST helper for the chunked protocol. No custom
   // request headers (FormData sets multipart/form-data itself) so the browser
@@ -746,7 +748,7 @@ export function EmbedUploadProvider({ children }) {
             // request may never dispatch ANY event, so the watchdog cannot depend
             // on abort() producing one.
             done();
-            reject(Object.assign(new Error('Upload stalled — no data moved'), { code: 'STALLED', retryable: true }));
+            reject(Object.assign(new Error(t('upload.errors.stalled')), { code: 'STALLED', retryable: true }));
           }
         }, 2000);
       }
@@ -756,7 +758,7 @@ export function EmbedUploadProvider({ children }) {
         xhr.timeout = opts.timeoutMs;
         xhr.ontimeout = () => {
           done();
-          reject(Object.assign(new Error('Request timed out'), { code: 'TIMEOUT', retryable: true }));
+          reject(Object.assign(new Error(t('upload.errors.timedOut')), { code: 'TIMEOUT', retryable: true }));
         };
         // `xhr.timeout` only starts counting once send() actually dispatches the
         // request. A middlebox that swallows the request whole never lets it get
@@ -774,7 +776,7 @@ export function EmbedUploadProvider({ children }) {
           selfAborted = 'TIMEOUT';
           try { xhr.abort(); } catch { /* already gone */ }
           done();
-          reject(Object.assign(new Error('Request timed out'), { code: 'TIMEOUT', retryable: true }));
+          reject(Object.assign(new Error(t('upload.errors.timedOut')), { code: 'TIMEOUT', retryable: true }));
         }, opts.timeoutMs + 1000);
       }
       xhr.onload = () => {
@@ -786,22 +788,22 @@ export function EmbedUploadProvider({ children }) {
       };
       xhr.onerror = () => {
         done();
-        reject(Object.assign(new Error('Network error'), { code: 'NETWORK', retryable: true }));
+        reject(Object.assign(new Error(t('upload.errors.network')), { code: 'NETWORK', retryable: true }));
       };
       xhr.onabort = () => {
         done();
         if (selfAborted) {
           const msg = selfAborted === 'TIMEOUT'
-            ? 'Request timed out'
-            : 'Upload stalled — no data moved';
+            ? t('upload.errors.timedOut')
+            : t('upload.errors.stalled');
           reject(Object.assign(new Error(msg), { code: selfAborted, retryable: true }));
         } else {
-          reject(Object.assign(new Error('Aborted'), { code: 'ABORTED' }));
+          reject(Object.assign(new Error(t('upload.errors.aborted')), { code: 'ABORTED' }));
         }
       };
       xhr.send(form);
     });
-  }, []);
+  }, [t]);
 
   // Resumable, parallel, PATCH-free chunked upload — the fallback for clients
   // where the TUS PATCH flow is blocked. Mints a single-use token, opens a
@@ -817,10 +819,10 @@ export function EmbedUploadProvider({ children }) {
   // The host is therefore chosen once, up front, and kept.
   const runChunkedUpload = useCallback(async () => {
     const base = (EMBED_API_URL || '').replace(/\/+$/, '');
-    if (!base) throw new Error('No embed host configured');
+    if (!base) throw new Error(t('upload.errors.noHost'));
     const file = videoFile;
     const size = file.size || 0;
-    if (!size) throw new Error('Empty file');
+    if (!size) throw new Error(t('upload.errors.emptyFile'));
 
     const MB = 1024 * 1024;
 
@@ -851,10 +853,10 @@ export function EmbedUploadProvider({ children }) {
     // Worker count is NOT decided here. It is derived from the settled chunkSize
     // further down, so the two cannot come from different passes.
     const measureChunkSize = async () => {
-      setStatusText('Checking your connection...');
+      setStatusText(t('upload.progress.checkingConnection'));
       patchUploadDetail({
         method: 'reliable',
-        phase: 'Measuring connection',
+        phase: t('upload.progress.phase.measuring'),
         waitingOn: 'POST /upload/probe',
         sent: 0,
         total: size,
@@ -928,7 +930,7 @@ export function EmbedUploadProvider({ children }) {
       );
       const token = tokenRes.data?.token;
       embedFromServer = tokenRes.data?.embed_url || '';
-      if (!token) throw new Error('Failed to obtain upload token');
+      if (!token) throw new Error(t('upload.errors.noToken'));
       // 🔐 Refuse to continue if we asked for a gated upload and the embed
       // instance did not confirm it. An older instance returns a perfectly valid
       // token with the flag silently dropped, and uploading against it would
@@ -936,10 +938,7 @@ export function EmbedUploadProvider({ children }) {
       // withdrawn, so failing loudly here is the only safe response.
       deferral = captureDeferral(tokenRes.data);
       if (gated && tokenRes.data?.gated !== true) {
-        throw new Error(
-          'This upload server does not support supporters-only videos yet. ' +
-          'Nothing was uploaded. Turn the toggle off to publish publicly, or try again later.'
-        );
+        throw new Error(t('upload.errors.gatedUnsupported'));
       }
 
 
@@ -961,11 +960,11 @@ export function EmbedUploadProvider({ children }) {
         // deadline elapses with the bar frozen at 0% and no status change, which
         // reads exactly like the hang this guard was added to prevent.
         setStatusText(attempt === 0
-          ? 'Starting upload…'
-          : `Connection unstable — retrying… (${attempt + 1}/${CREATE_ATTEMPTS})`);
+          ? t('upload.progress.startingUpload')
+          : t('upload.progress.connectionUnstableAttempt', { attempt: attempt + 1, attempts: CREATE_ATTEMPTS }));
         patchUploadDetail({
           method: 'reliable',
-          phase: attempt === 0 ? 'Opening upload session' : 'Retrying upload session',
+          phase: attempt === 0 ? t('upload.progress.phase.openingSession') : t('upload.progress.phase.retryingSession'),
           waitingOn: `POST /upload/chunk/create — ${CREATE_TIMEOUT_MS / 1000}s deadline`,
           attempt: attempt + 1,
           attempts: CREATE_ATTEMPTS,
@@ -997,7 +996,7 @@ export function EmbedUploadProvider({ children }) {
         }
       }
       if (!created) {
-        throw createErr || new Error('Could not start the upload — please retry');
+        throw createErr || new Error(t('upload.errors.couldNotStart'));
       }
       sessionId = created.sessionId;
       totalChunks = created.totalChunks;
@@ -1052,10 +1051,10 @@ export function EmbedUploadProvider({ children }) {
       const live = serverBytes + [...inflight.values()].reduce((a, b) => a + b, 0);
       const pct = size ? Math.min(99, Math.floor((live / size) * 100)) : 0;
       setUploadProgress(pct);
-      setStatusText(`Uploading video... ${pct}%`);
+      setStatusText(t('upload.progress.uploadingVideoPct', { pct }));
       patchUploadDetail({
         method: 'reliable',
-        phase: 'Uploading',
+        phase: t('upload.progress.phase.uploading'),
         waitingOn: undefined,   // session is open; we are moving, not waiting
         attempt: undefined,
         attempts: undefined,
@@ -1100,7 +1099,7 @@ export function EmbedUploadProvider({ children }) {
         for (let attempt = 0; !ok && !failed; attempt++) {
           if (attempt > 0 && Date.now() - chunkStartedAt > CHUNK_BUDGET_MS) break;
           if (attempt > 0) {
-            setStatusText('Connection unstable — retrying…');
+            setStatusText(t('upload.progress.connectionUnstable'));
             // Clamp: the loop now runs past the end of the ladder, and an
             // undefined delay would make setTimeout fire immediately and spin.
             await sleepUntilVisible(RETRY_DELAYS[Math.min(attempt, RETRY_DELAYS.length - 1)]);
@@ -1135,7 +1134,7 @@ export function EmbedUploadProvider({ children }) {
             // caller start a fresh session rather than spinning.
             if (e?.status === 404) {
               try { localStorage.removeItem(fpKey); } catch { /* ignore */ }
-              failed = Object.assign(new Error('Upload session expired — please retry'), { code: 'SESSION_GONE' });
+              failed = Object.assign(new Error(t('upload.errors.sessionExpired')), { code: 'SESSION_GONE' });
               return;
             }
             lastErr = e;
@@ -1160,7 +1159,7 @@ export function EmbedUploadProvider({ children }) {
             }
           } catch { /* status unreachable — fall through to the failure below */ }
         }
-        if (!ok) { failed = lastErr || new Error(`Chunk ${index} failed`); return; }
+        if (!ok) { failed = lastErr || new Error(t('upload.errors.chunkFailed', { index })); return; }
       }
     };
 
@@ -1185,7 +1184,7 @@ export function EmbedUploadProvider({ children }) {
       deferral = { finalizeToken: null, permlink: finPermlink, gated: deferral.gated, lost: true };
     }
     return { embedUrl: fin.embed_url || embedFromServer || '', deferral };
-  }, [user, fromStories, gated, gatedAllowlist, videoFile, videoDuration, postForm]);
+  }, [user, fromStories, gated, gatedAllowlist, videoFile, videoDuration, postForm, t]);
 
   // TIER 3, last resort: ONE multipart POST carrying the whole file.
   //
@@ -1203,13 +1202,13 @@ export function EmbedUploadProvider({ children }) {
   const runSimpleUpload = useCallback(async () => {
     const base = (EMBED_API_URL || '').replace(/\/+$/, '');
     const file = videoFile;
-    if (!file) throw new Error('No video selected');
+    if (!file) throw new Error(t('upload.errors.noVideoSelected'));
     const size = file.size;
 
-    setStatusText('Trying one last method — sending in a single request…');
+    setStatusText(t('upload.progress.tryingSingleRequest'));
     patchUploadDetail({
       method: 'single-shot',
-      phase: 'Sending whole file in one request (no resume)',
+      phase: t('upload.progress.phase.singleRequest'),
       waitingOn: 'POST /upload/simple',
       attempt: undefined,
       attempts: undefined,
@@ -1226,7 +1225,7 @@ export function EmbedUploadProvider({ children }) {
       { headers: { 'X-API-Key': EMBED_API_KEY, 'Content-Type': 'application/json' } },
     );
     const token = tokenRes.data?.token;
-    if (!token) throw new Error('Failed to obtain upload token');
+    if (!token) throw new Error(t('upload.errors.noToken'));
     // 🔐 Refuse to continue if we asked for a gated upload and the embed
     // instance did not confirm it. An older instance returns a perfectly valid
     // token with the flag silently dropped, and uploading against it would
@@ -1234,10 +1233,7 @@ export function EmbedUploadProvider({ children }) {
     // withdrawn, so failing loudly here is the only safe response.
     const deferral = captureDeferral(tokenRes.data);
     if (gated && tokenRes.data?.gated !== true) {
-      throw new Error(
-        'This upload server does not support supporters-only videos yet. ' +
-        'Nothing was uploaded. Turn the toggle off to publish publicly, or try again later.'
-      );
+      throw new Error(t('upload.errors.gatedUnsupported'));
     }
 
 
@@ -1255,7 +1251,7 @@ export function EmbedUploadProvider({ children }) {
         onProgress: (loaded) => {
           const pct = size ? Math.min(99, Math.floor((loaded / size) * 100)) : 0;
           setUploadProgress(pct);
-          setStatusText(`Uploading in a single request… ${pct}%`);
+          setStatusText(t('upload.progress.uploadingSinglePct', { pct }));
           patchUploadDetail({
             sent: loaded,
             total: size,
@@ -1265,9 +1261,9 @@ export function EmbedUploadProvider({ children }) {
       },
     );
 
-    if (!res || !res.embed_url) throw new Error('Single-request upload did not return an embed URL');
+    if (!res || !res.embed_url) throw new Error(t('upload.errors.singleNoEmbedUrl'));
     return { embedUrl: res.embed_url, deferral };
-  }, [user, fromStories, gated, gatedAllowlist, videoFile, videoDuration, postForm]);
+  }, [user, fromStories, gated, gatedAllowlist, videoFile, videoDuration, postForm, t]);
 
   // Upload with automatic fallback. Primary path is TUS on the least-busy host;
   // if the user forced the reliable path (checkbox) or PATCH was already detected
@@ -1288,7 +1284,7 @@ export function EmbedUploadProvider({ children }) {
       } catch (chunkErr) {
         if (chunkErr?.code === 'ABORTED') throw chunkErr;
         console.warn('Chunked upload failed — trying single-request fallback', chunkErr);
-        toast.message('Still stuck — trying one last upload method.');
+        toast.message(t('upload.progress.stillStuck'));
         return await runSimpleUpload();
       }
     };
@@ -1314,8 +1310,8 @@ export function EmbedUploadProvider({ children }) {
       if (err?.code === 'PATCH_BLOCKED') {
         sessionForcedReliableRef.current = true;   // stick to reliable this session
         console.warn('PATCH blocked — switching to chunked upload fallback');
-        toast.message('Your network blocked the resumable upload — switching to a more compatible method.');
-        setStatusText('Switching upload method…');
+        toast.message(t('upload.progress.patchBlockedSwitching'));
+        setStatusText(t('upload.progress.switchingMethod'));
         setUploadProgress(0);
         chosenEmbedBaseRef.current = reliableBase;
         setSelectedEndpoint(reliableBase);
@@ -1323,7 +1319,7 @@ export function EmbedUploadProvider({ children }) {
       }
       throw err;
     }
-  }, [gated, runTusUpload, runChunkedUpload, runSimpleUpload]);
+  }, [gated, runTusUpload, runChunkedUpload, runSimpleUpload, t]);
 
   // Kick off the background upload (called when the user reaches "Add details").
   // Idempotent: only starts once per selected video. The embed asset gets its own
@@ -1343,7 +1339,7 @@ export function EmbedUploadProvider({ children }) {
     earlyUploadedFileRef.current = videoFile;
     setVideoUploadStatus('uploading');
     setUploadProgress(0);
-    setStatusText('Uploading video in the background…');
+    setStatusText(t('upload.progress.uploadingBackground'));
     // Snapshot what the browser claims about the link at kickoff. It is not used
     // to size anything any more (the probe does that), but it is the first thing
     // worth seeing on a screenshot of an upload that went wrong.
@@ -1364,7 +1360,7 @@ export function EmbedUploadProvider({ children }) {
         if (await reloadIfStale()) return { embedUrl: '', deferral: null };   // page is reloading — bail out
         // TUS on the least-busy host, auto-falling back to chunked if PATCH is blocked.
         const { embedUrl: url, deferral } = await runUploadWithFallback('');
-        if (!url) throw new Error('No embed URL returned');
+        if (!url) throw new Error(t('upload.errors.noEmbedUrl'));
         earlyEmbedUrlRef.current = url;
         // Pin the deferral to THIS upload. Whatever else starts and mints a
         // token later cannot move the target the encode gets commissioned at.
@@ -1384,13 +1380,13 @@ export function EmbedUploadProvider({ children }) {
         // Say WHY, in the bar the user is actually looking at. Without this the
         // last thing on screen stays "retrying…" forever, which is
         // indistinguishable from the hang these guards exist to prevent.
-        setStatusText(err?.message || 'Upload failed — please retry');
-        toast.error(err?.message || 'Upload failed — please retry');
+        setStatusText(err?.message || t('upload.errors.uploadFailedRetry'));
+        toast.error(err?.message || t('upload.errors.uploadFailedRetry'));
         return { embedUrl: '', deferral: null };
       }
     })();
     earlyUploadPromiseRef.current = p;
-  }, [prefilled, videoFile, runUploadWithFallback, resetEarlyUpload, patchUploadDetail]);
+  }, [prefilled, videoFile, runUploadWithFallback, resetEarlyUpload, patchUploadDetail, t]);
 
   /**
    * publishToEmbed — the 3-step publish:
@@ -1404,7 +1400,7 @@ export function EmbedUploadProvider({ children }) {
     // uploader with "User not logged in", which is not what had happened: they
     // are logged in, they simply have no Hive account yet.
     if (!assetOwner) {
-      toast.error('User not logged in');
+      toast.error(t('upload.errors.notLoggedIn'));
       return;
     }
     // Fail fast on a stale/expired wallet session (e.g. an expired HiveSigner
@@ -1413,25 +1409,25 @@ export function EmbedUploadProvider({ children }) {
     // only the final Hive broadcast fails with "Not logged in". isLoggedIn()
     // is true for an aioha session OR a ManteAuth/ButrAuth login.
     if (!isLoggedIn()) {
-      toast.error('Your session expired — please log in again before uploading');
+      toast.error(t('upload.errors.sessionExpiredLogin'));
       return;
     }
     // For non-prefilled flows we need a local file. Prefilled flows already
     // have the embed URL handed over from an external uploader.
     if (!prefilled && !videoFile) {
-      toast.error('No video file');
+      toast.error(t('upload.errors.noVideoFile'));
       return;
     }
     if (!fromStories && !title?.trim()) {
-      toast.error('Title is required');
+      toast.error(t('upload.details.errors.titleRequired'));
       return;
     }
     if (!description?.trim()) {
-      toast.error('Description is required');
+      toast.error(t('upload.details.errors.descriptionRequired'));
       return;
     }
     if (!fromStories && (!tagsPreview || tagsPreview.length === 0)) {
-      toast.error('Please add at least one tag');
+      toast.error(t('upload.details.errors.tagRequired'));
       return;
     }
 
@@ -1456,7 +1452,7 @@ export function EmbedUploadProvider({ children }) {
     let deferral = earlyDeferralRef.current;
     if (!prefilled && !earlyUrl && earlyUploadPromiseRef.current) {
       setUploading(true);
-      setStatusText('Finishing video upload…');
+      setStatusText(t('upload.publishing.finishingUpload'));
       try {
         const early = await earlyUploadPromiseRef.current;
         earlyUrl = early?.embedUrl || '';
@@ -1467,8 +1463,8 @@ export function EmbedUploadProvider({ children }) {
 
     setUploading(true);
     setUploadProgress(alreadyUploaded ? 100 : 0);
-    setStatusText(prefilled ? 'Preparing publish...' : (alreadyUploaded ? 'Finalizing…' : 'Uploading video...'));
-    addMessage(prefilled ? 'Using pre-uploaded video' : (alreadyUploaded ? 'Video already uploaded' : 'Starting video upload...'));
+    setStatusText(prefilled ? t('upload.publishing.preparing') : (alreadyUploaded ? t('upload.publishing.finalizing') : t('upload.publishing.uploadingVideo')));
+    addMessage(prefilled ? t('upload.publishing.log.usingPreuploaded') : (alreadyUploaded ? t('upload.publishing.log.alreadyUploaded') : t('upload.publishing.log.startingUpload')));
 
     try {
       // For prefilled flows, the permlink was decided by whoever uploaded the
@@ -1493,18 +1489,18 @@ export function EmbedUploadProvider({ children }) {
         // Nothing to upload — the file was already pushed to embed.3speak.tv
         // by an external uploader. Skip straight to thumbnail + Hive linking.
         setUploadProgress(100);
-        addMessage('Pre-uploaded video ready');
+        addMessage(t('upload.publishing.log.preuploadedReady'));
       } else if (alreadyUploaded) {
         // Background upload (from the details step) already produced the embed URL.
         setUploadProgress(100);
-        addMessage('Video uploaded in the background');
+        addMessage(t('upload.publishing.log.uploadedInBackground'));
       } else if (EMBED_DEBUG) {
         // Debug mode: simulate upload progress without actually uploading
         addMessage('[DEBUG] Simulating upload...');
         for (let pct = 0; pct <= 100; pct += 5) {
           await new Promise(r => setTimeout(r, 150));
           setUploadProgress(pct);
-          setStatusText(`Uploading video... ${pct}%`);
+          setStatusText(t('upload.progress.uploadingVideoPct', { pct }));
         }
         capturedEmbedUrl = `https://embed.okinoko.io/embed?v=debug/${Date.now()}`;
         addMessage('[DEBUG] Simulated upload complete');
@@ -1522,11 +1518,11 @@ export function EmbedUploadProvider({ children }) {
       }
 
       if (!capturedEmbedUrl) {
-        throw new Error('Upload succeeded but no embed URL was returned');
+        throw new Error(t('upload.errors.noEmbedUrlAfterUpload'));
       }
 
       setEmbedUrl(capturedEmbedUrl);
-      addMessage('Video uploaded successfully');
+      addMessage(t('upload.publishing.log.uploaded'));
 
       // 🔐 Commission the encode now that the gated choice is final.
       //
@@ -1540,16 +1536,12 @@ export function EmbedUploadProvider({ children }) {
         // (a session resumed from an older build, or a token bound to a
         // different permlink). Commissioning is impossible, and posting to Hive
         // anyway would publish a video that stays parked and never encodes.
-        throw new Error(
-          'This upload could not be finalised because its upload session was '
-          + 'interrupted. Nothing was published. Please re-select the video and '
-          + 'upload it again.'
-        );
+        throw new Error(t('upload.errors.deferralLost'));
       }
 
       if (deferral?.finalizeToken && deferral?.permlink) {
         const finalizeBase = (chosenEmbedBaseRef.current || EMBED_API_URL || '').replace(/\/+$/, '');
-        addMessage(gated ? 'Starting encrypted encode…' : 'Starting encode…');
+        addMessage(gated ? t('upload.publishing.log.startingEncryptedEncode') : t('upload.publishing.log.startingEncode'));
         // The upload's success response comes back BEFORE the server has pinned
         // the file: post-finish answers immediately and then pins on setImmediate,
         // so for a while the video is still `uploading` and commissioning replies
@@ -1580,7 +1572,7 @@ export function EmbedUploadProvider({ children }) {
             const notReady = encErr?.response?.status === 409
               && (code === 'not_awaiting_encode' || code === 'not_pinned');
             if (!notReady || attempt >= FINALIZE_RETRY_MS.length) throw encErr;
-            setStatusText('Finishing upload on the server…');
+            setStatusText(t('upload.publishing.finishingOnServer'));
             await new Promise(r => setTimeout(r, FINALIZE_RETRY_MS[attempt]));
           }
         }
@@ -1589,26 +1581,22 @@ export function EmbedUploadProvider({ children }) {
         // upload is already committed as public; encoding it now would publish
         // it in the clear, and IPFS content cannot be withdrawn. Stop before the
         // Hive post exists rather than after.
-        throw new Error(
-          'Supporters-only was switched on after the upload had already started, and this '
-          + 'upload server cannot apply it afterwards. Nothing was published. Please re-select '
-          + 'the video and turn supporters-only on before continuing.'
-        );
+        throw new Error(t('upload.errors.gatedTooLate'));
       }
 
       // ─── Upload thumbnail if available ───
       let thumbnailUrl = null;
       if (thumbnailFile) {
         try {
-          setStatusText('Uploading thumbnail...');
-          addMessage('Uploading thumbnail...');
+          setStatusText(t('upload.publishing.uploadingThumbnail'));
+          addMessage(t('upload.publishing.uploadingThumbnail'));
           // Embed posts are broadcast by @threespeak, so the thumbnail goes
           // straight to the 3Speak image server (static key) — no user signature.
           thumbnailUrl = await uploadThumbnail(thumbnailFile, user, { preferStatic: true });
-          addMessage('Thumbnail uploaded');
+          addMessage(t('upload.publishing.log.thumbnailUploaded'));
         } catch (thumbErr) {
           console.warn('Thumbnail upload failed:', thumbErr);
-          addMessage('Warning: Thumbnail upload failed (non-critical)', 'warning');
+          addMessage(t('upload.publishing.log.thumbnailFailed'), 'warning');
         }
       }
 
@@ -1620,8 +1608,8 @@ export function EmbedUploadProvider({ children }) {
         return;
       }
 
-      setStatusText('Posting to Hive...');
-      addMessage('Publishing to Hive blockchain...');
+      setStatusText(t('upload.publishing.postingToHive'));
+      addMessage(t('upload.publishing.log.publishingToHive'));
 
       // ─── Step 2: Post to Hive via aioha ───
       // Normally the app's generated permlink, which a Hive upload also hands to
@@ -1674,9 +1662,9 @@ export function EmbedUploadProvider({ children }) {
       // When marked adult, append the canonical Hive `nsfw` tag so the whole Hive
       // ecosystem (and our hive_tags filter) treats it as NSFW.
       const userTags = [
-        ...tagsPreview.filter(t => !baseTags.includes(t)),
+        ...tagsPreview.filter(tag => !baseTags.includes(tag)),
         ...(isNsfw ? ['nsfw'] : []),
-      ].filter((t, i, a) => a.indexOf(t) === i);
+      ].filter((tag, i, a) => a.indexOf(tag) === i);
 
       // Embed ASSET owner/permlink (…/embed?v=owner/permlink) — this is what the
       // `video.info` block below carries so peakd/ecency render the player.
@@ -1818,10 +1806,10 @@ export function EmbedUploadProvider({ children }) {
         // Remix of an existing short → post as comment under the original
         parentAuthor = originalAuthor;
         parentPermlink = originalPermlink;
-        addMessage(`Replying to @${parentAuthor}/${parentPermlink}`);
+        addMessage(t('upload.publishing.log.replyingTo', { author: parentAuthor, permlink: parentPermlink }));
       } else if (fromStories) {
-        addMessage('Finding snaps container post...');
-        setStatusText('Finding snaps container post...');
+        addMessage(t('upload.publishing.findingSnapsContainer'));
+        setStatusText(t('upload.publishing.findingSnapsContainer'));
         try {
           // @peak.snaps always has a live container (a new one every ~8-13h,
           // and the previous one keeps accepting replies), so a failure here
@@ -1833,10 +1821,10 @@ export function EmbedUploadProvider({ children }) {
           });
           parentAuthor = container.author;
           parentPermlink = container.permlink;
-          addMessage(`Replying to @${parentAuthor}/${parentPermlink}`);
+          addMessage(t('upload.publishing.log.replyingTo', { author: parentAuthor, permlink: parentPermlink }));
         } catch (snapErr) {
           console.error('Failed to fetch snaps container:', snapErr);
-          throw new Error(snapErr?.message || 'Could not find a snaps container post to reply to');
+          throw new Error(snapErr?.message || t('upload.errors.noSnapsContainer'));
         }
       }
 
@@ -1848,14 +1836,14 @@ export function EmbedUploadProvider({ children }) {
       // cron that broadcasts due posts as @threespeak on the user's behalf.
       if (isScheduled && scheduleDateTime && !fromStories) {
         try {
-          setStatusText('Checking @threespeak posting authority...');
-          addMessage('Checking @threespeak posting authority...');
+          setStatusText(t('upload.publishing.checkingAuthority'));
+          addMessage(t('upload.publishing.checkingAuthority'));
           const hasAuth = await hasThreespeakPostingAuth(user);
           if (!hasAuth) {
-            setStatusText('Authorizing @threespeak (sign with active key)...');
-            addMessage('Authorizing @threespeak to post on your behalf...');
+            setStatusText(t('upload.publishing.authorizingStatus'));
+            addMessage(t('upload.publishing.log.authorizing'));
             await addThreespeakToPostingAuth(user);
-            addMessage('@threespeak authorized');
+            addMessage(t('upload.publishing.log.authorized'));
           }
 
           // The HTML datetime-local string is local-tz; convert to a real ISO UTC.
@@ -1880,8 +1868,8 @@ export function EmbedUploadProvider({ children }) {
             if (v) embedPermlink = v.split('/').pop() || null;
           } catch { /* leave null — link step in cron is best-effort */ }
 
-          setStatusText('Saving scheduled post...');
-          addMessage('Saving scheduled post...');
+          setStatusText(t('upload.publishing.savingScheduled'));
+          addMessage(t('upload.publishing.savingScheduled'));
           const resp = await axios.post(url, {
             owner: assetOwner,
             permlink: hivePermlink,
@@ -1902,23 +1890,23 @@ export function EmbedUploadProvider({ children }) {
           });
 
           if (resp.status !== 201 || !resp.data?.success) {
-            throw new Error(resp.data?.error || 'Failed to save scheduled post');
+            throw new Error(resp.data?.error || t('upload.errors.scheduleSaveFailed'));
           }
 
           // We deliberately SKIP the regular Hive broadcast and the embed-link
           // step here — the cron does both at publish time.
-          setStatusText(`Scheduled for ${new Date(scheduledOnIso).toLocaleString()}`);
-          addMessage(`Scheduled for ${new Date(scheduledOnIso).toLocaleString()}`, 'success');
-          toast.success('Post scheduled!');
+          setStatusText(t('upload.publishing.scheduledFor', { when: new Date(scheduledOnIso).toLocaleString() }));
+          addMessage(t('upload.publishing.scheduledFor', { when: new Date(scheduledOnIso).toLocaleString() }), 'success');
+          toast.success(t('upload.publishing.scheduled'));
           setCompleted(true);
           setUploading(false);
           setUploadProgress(100);
           return;
         } catch (schedErr) {
           console.error('Scheduled-post error:', schedErr);
-          const msg = schedErr?.response?.data?.error || schedErr?.message || 'Could not schedule post';
-          addMessage(`Schedule failed: ${msg}`, 'error');
-          toast.error(`Schedule failed: ${msg}`);
+          const msg = schedErr?.response?.data?.error || schedErr?.message || t('upload.errors.couldNotSchedule');
+          addMessage(t('upload.errors.scheduleFailed', { msg }), 'error');
+          toast.error(t('upload.errors.scheduleFailed', { msg }));
           throw schedErr;
         }
       }
@@ -1931,7 +1919,7 @@ export function EmbedUploadProvider({ children }) {
       // null) keeps its own cookie-authenticated server path via commentWithAioha.
       const useThreespeakProxy = !!getCurrentProvider();
       if (useThreespeakProxy) {
-        addMessage('Posting via @threespeak (delegated posting authority)');
+        addMessage(t('upload.publishing.log.viaThreespeak'));
       }
 
       let result;
@@ -1942,7 +1930,7 @@ export function EmbedUploadProvider({ children }) {
       // a courtesy notification, not the upload itself.
       if (originalAuthor && originalPermlink && !fromStories && !incubationHandle) {
         // Dual post (non-short remix): video post + comment on original video
-        addMessage('Creating post and comment on original video...');
+        addMessage(t('upload.publishing.log.creatingRemixPost'));
 
         const mainPostOp = ['comment', {
           parent_author: parentAuthor,
@@ -2006,11 +1994,11 @@ export function EmbedUploadProvider({ children }) {
       }
 
       if (!result.success) {
-        throw new Error('Failed to post to Hive');
+        throw new Error(t('upload.errors.hivePostFailed'));
       }
 
-      addMessage('Posted to Hive successfully');
-      setStatusText('Linking embed video...');
+      addMessage(t('upload.publishing.log.postedToHive'));
+      setStatusText(t('upload.publishing.linkingEmbed'));
 
       // ─── Step 3: Link embed video to Hive post ───
       const vParam = new URL(capturedEmbedUrl).searchParams.get('v');
@@ -2038,11 +2026,11 @@ export function EmbedUploadProvider({ children }) {
               hive_tags: ['3speak', ...tagsPreview],
             }),
           });
-          addMessage('Embed video linked to Hive post');
+          addMessage(t('upload.publishing.log.embedLinked'));
         }
       } catch (linkErr) {
         console.warn('Failed to link embed video to Hive post:', linkErr);
-        addMessage('Warning: Could not link embed video (non-critical)', 'warning');
+        addMessage(t('upload.publishing.log.embedLinkFailed'), 'warning');
       }
 
       // ─── Step 4: Update thumbnail on embed service ───
@@ -2056,10 +2044,10 @@ export function EmbedUploadProvider({ children }) {
             },
             body: JSON.stringify({ thumbnail_url: thumbnailUrl }),
           });
-          addMessage('Thumbnail linked to embed video');
+          addMessage(t('upload.publishing.log.thumbnailLinked'));
         } catch (thumbLinkErr) {
           console.warn('Failed to set embed thumbnail:', thumbLinkErr);
-          addMessage('Warning: Could not set embed thumbnail (non-critical)', 'warning');
+          addMessage(t('upload.publishing.log.thumbnailLinkFailed'), 'warning');
         }
       }
 
@@ -2070,28 +2058,28 @@ export function EmbedUploadProvider({ children }) {
       if (isChannelTrailer) {
         try {
           await setChannelTrailer(user, hivePermlink, { author: user });
-          addMessage('Set as your channel trailer', 'success');
+          addMessage(t('upload.publishing.log.trailerSet'), 'success');
         } catch (trailerErr) {
           console.warn('Failed to set channel trailer:', trailerErr);
-          addMessage('Published, but could not set it as your channel trailer', 'warning');
+          addMessage(t('upload.publishing.log.trailerFailed'), 'warning');
           // Surfaced, not just logged into the status list: the video publishes
           // fine either way, so a quiet failure looks like the toggle did nothing.
-          toast.error('Published, but could not set it as your channel trailer.');
+          toast.error(t('upload.publishing.trailerFailedToast'));
         }
       }
 
       // ─── Done ───
-      setStatusText('Completed');
+      setStatusText(t('upload.publishing.completed'));
       setPublishedPermlink(hivePermlink);
       setCompleted(true);
       setUploading(false);
-      addMessage('Video successfully published!', 'success');
-      toast.success('Video published successfully!');
+      addMessage(t('upload.publishing.log.published'), 'success');
+      toast.success(t('upload.publishing.publishedToast'));
 
     } catch (err) {
       console.error('Publish error:', err);
-      addMessage('Upload failed: ' + err.message, 'error');
-      toast.error('Upload failed: ' + err.message);
+      addMessage(t('upload.errors.uploadFailedWith', { msg: err.message }), 'error');
+      toast.error(t('upload.errors.uploadFailedWith', { msg: err.message }));
       setUploading(false);
       setStatusText('');
     }

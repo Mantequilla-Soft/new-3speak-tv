@@ -1,0 +1,172 @@
+{
+  "addTag": {
+    "loginRequired": "Login to tag this video",
+    "pickTopic": "Pick a topic first",
+    "tagged": "Tagged “{{label}}”",
+    "failed": "Tag failed: {{error}}",
+    "pleaseTryAgain": "please try again",
+    "title": "Tag this video",
+    "question": "What is this video about?",
+    "existing": "You tagged this as <b>{{label}}</b> — picking another replaces it.",
+    "submit": "Submit tag"
+  },
+  "addAccount": {
+    "usernameRequired": "Username is required to proceed.",
+    "hiveAuthExpired": "HiveAuth authentication request expired",
+    "loginSuccess": "Login successful!",
+    "loginFailed": "Login failed: {{error}}",
+    "logoAlt": "3Speak Logo",
+    "title": "Login with your username",
+    "usernamePlaceholder": "Username"
+  },
+  "socialLink": {
+    "hashCopied": "Hash copied",
+    "copyFailed": "Could not copy to clipboard",
+    "enterHandle": "Enter your platform handle or ID",
+    "verified": "Account verified and linked",
+    "errors": {
+      "hashNotFound": "Hash not found on the profile yet. Make sure the change is saved publicly, then try again.",
+      "alreadyLinked": "This channel is already verified by another Hive user (@{{user}}).",
+      "tooMany": "You have reached the maximum number of linked accounts.",
+      "notFound": "That channel does not exist on the platform.",
+      "badSignature": "Signature could not be verified. Make sure you are logged in with your posting key.",
+      "rateLimited": "Too many requests. Please wait a minute and try again.",
+      "lookupFailed": "Platform lookup failed. Try again in a moment.",
+      "verifyFailed": "Verification failed",
+      "stillPresent": "Hash is still on your profile — remove it first.",
+      "unlinkFailed": "Unlink failed",
+      "noSuchLink": "No such link to remove."
+    },
+    "confirmUnlink": "Remove your {{platform}} link? Make sure the verification hash is no longer on your public profile, otherwise the unlink will be rejected.",
+    "removed": "Link removed",
+    "title": "Linked external profiles",
+    "intro": "Prove you own a YouTube (or other) channel by pasting your unique 3Speak hash into your public profile description, then verifying it here.",
+    "openProfile": "Open profile",
+    "removeLink": "Remove link",
+    "empty": "No external profiles linked yet.",
+    "addPlatform": "Add a new platform",
+    "flowTitle": "Link your {{platform}} channel",
+    "step1": "Copy your unique verification hash:",
+    "step2": "<strong>Paste it into your public {{platform}} profile description</strong> (anywhere — about / bio / description is fine). Save the change.",
+    "step3": "Enter your {{platform}} identifier:",
+    "verifying": "Verifying…",
+    "verify": "Verify"
+  },
+  "auth": {
+    "title": "Authorize 3Speak!",
+    "text": "To upload video on 3peak we require your posting authority. This allows us to publish your uploaded videos to hive. You only have to grant us posting authority once.",
+    "authorize": "Authorize"
+  },
+  "beneficiary": {
+    "errors": {
+      "emptyUsername": "Username cannot be empty.",
+      "sameUser": "Beneficiary can't be set to same user",
+      "greaterThanZero": "Reward percentage must be greater than 0.",
+      "exceedsRemaining": "Reward percentage exceeds remaining allocation of {{percent}}%.",
+      "validNumber": "Enter a valid number",
+      "validPercent": "Enter a valid reward percent.",
+      "duplicate": "This account is already added to the list.",
+      "invalidAccount": "Invalid username or community ID.",
+      "cannotIncrease": "Cannot increase beyond remaining {{percent}}%",
+      "pendingRow": "@{{account}} hasn't been added yet — click + to add it, or clear the field.",
+      "atLeastOne": "Reward percent must be at least 1%"
+    },
+    "title": "Beneficiaries",
+    "intro": "Add a user you want to automatically receive a portion of the rewards for this post.",
+    "minPercent": "% (min {{percent}}%)",
+    "usernamePlaceholder": "Enter username",
+    "minimumReward": "Minimum reward is <strong>1%</strong>",
+    "checking": "Checking <strong>@{{account}}</strong> on Hive…",
+    "notExisting": "⚠️ <strong>@{{account}}</strong> is not an existing Hive account.",
+    "notAdded": "⚠️ <strong>@{{account}}</strong> is not added yet — click <strong>+</strong> to add it, or clear the field.",
+    "infrastructure": "10% === Infrastructure",
+    "videoEncoding": "Video Encoding === 1%",
+    "defaults": "Default Beneficiaries ({{count}})"
+  },
+  "qr": {
+    "scan": "Scan this QR in Hive Keychain:",
+    "click": "Click QR to open in Keychain app"
+  },
+  "editVideoHint": {
+    "title": "Edit any of your videos",
+    "text": "Open one of your own videos and look for the <strong>pen button</strong> in the action bar under the player. Click it to change the title, description, thumbnail, tags and more.",
+    "penTitle": "Edit video details",
+    "tip": "Tip",
+    "caption": "This pen button is what you're looking for",
+    "gotIt": "Got it"
+  },
+  "verifyAuth": {
+    "title": "Verifying Authorization",
+    "text": "Please wait while we verify that authorization was granted..."
+  },
+  "editor": {
+    "confirmLeave": "The editor is still open. Leaving this page will close the editor and unsaved changes will be lost.\n\nOK = Close editor & leave\nCancel = Stay on this page",
+    "confirmClose": "Are you sure you want to close the editor? Unsaved changes will be lost.",
+    "iframeTitle": "3Speak Video Editor",
+    "finding": "Finding available editor...",
+    "loading": "Loading editor...",
+    "unavailable": "No editor server is currently available. Please try again later.",
+    "sending": "Sending to render service...",
+    "rendering": "Rendering... {{percent}}%",
+    "complete": "Render complete!",
+    "useVideo": "Use Video",
+    "preparing": "Preparing video for upload...",
+    "renderUnavailable": "Render service not available yet. Timeline data logged to console.",
+    "backToEditor": "Back to Editor",
+    "postError": "Failed to prepare video for upload. Please try downloading instead."
+  },
+  "profile": {
+    "mustLogin": "You must login first",
+    "followed": "Followed",
+    "unfollowed": "Unfollowed",
+    "followFailed": "Failed to follow: {{error}}",
+    "unfollowFailed": "Failed to unfollow: {{error}}",
+    "avatarAlt": "Profile",
+    "posts": "Posts",
+    "followers": "Followers",
+    "joined": "Joined {{date}}",
+    "about": "About",
+    "noBio": "No bio available"
+  },
+  "report": {
+    "reasons": {
+      "spamMisleading": "Spam or misleading",
+      "harassment": "Harassment or bullying",
+      "hateSpeech": "Hate speech",
+      "violence": "Violent or graphic content",
+      "sexual": "Sexual content",
+      "copyright": "Copyright infringement",
+      "scam": "Scam or fraud",
+      "other": "Other",
+      "spam": "Spam",
+      "impersonation": "Impersonation",
+      "spamAccount": "Spam account"
+    },
+    "selectReasonError": "Please select a reason",
+    "loginRequired": "You must be logged in to report",
+    "submitted": "Report submitted. Thank you.",
+    "failed": "Failed to submit report",
+    "titles": {
+      "user": "Report User",
+      "comment": "Report Comment",
+      "short": "Report Short",
+      "post": "Report Post",
+      "video": "Report Video"
+    },
+    "reason": "Reason",
+    "selectReason": "Select a reason...",
+    "details": "Additional details (optional)",
+    "detailsPlaceholder": "Provide more context...",
+    "submitting": "Submitting...",
+    "submit": "Submit Report"
+  },
+  "upload": {
+    "missingInfo": "Missing video or thumbnail information.",
+    "updateFailed": "Failed to update video info. Please try again.",
+    "title": "Upload Video and Thumbnail",
+    "selectVideo": "Select Video",
+    "thumbnail": "Thumbnail",
+    "clickThumbnail": "Click to upload thumbnail",
+    "updateInfo": "Update Video Info"
+  }
+}

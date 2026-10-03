@@ -1,0 +1,200 @@
+{
+  "loaders": {
+    "wifi": "Wifi Yükleyici"
+  },
+  "supportBlock": {
+    "banned": {
+      "title": "Hesabın yasaklandı",
+      "body": "3Speak hesabın yasaklandı, bu yüzden giriş yapamazsın. Bunun bir hata olduğunu düşünüyorsan lütfen 3Speak destek ekibiyle iletişime geç."
+    },
+    "upload": {
+      "title": "Hesabın için yükleme devre dışı",
+      "body": "3Speak hesabının şu an yükleme yapmasına izin verilmiyor. Bunun bir hata olduğunu düşünüyorsan lütfen 3Speak destek ekibiyle iletişime geç."
+    }
+  },
+  "emergency": {
+    "title": "Altyapı sorunları yaşıyoruz",
+    "body": "Ekibimiz konunun üzerinde ve 3Speak'i şu an geri getirmek için çalışıyor. Bize ulaşmak ve canlı güncellemeler almak için Discord'umuza katıl; sabrın için teşekkürler.",
+    "joinDiscord": "Discord'umuza katıl"
+  },
+  "changelog": {
+    "title": "Bir güncelleme yayınladık!",
+    "subtitle": "v{{version}} sürümündeki yenilikler",
+    "previousUpdates": "Önceki güncellemeler",
+    "newerUpdates": "Daha yeni güncellemeler",
+    "readTheCode": "Kodu oku",
+    "gotIt": "Anladım"
+  },
+  "routes": {
+    "homeFeed": "Ana Akış",
+    "followFeed": "Takip Akışı",
+    "discover": "Keşfet",
+    "newVideos": "Yeni Videolar",
+    "firstUploads": "İlk Yüklemeler",
+    "rankings": "Sıralamalar",
+    "groups": "Gruplar",
+    "badges": "Rozetler",
+    "audioBy": "@{{author}} ses kaydı",
+    "audio": "Ses",
+    "playlist": "Oynatma listesi",
+    "watchHistory": "İzleme geçmişi: @{{username}}",
+    "postBy": "@{{author}} gönderisi",
+    "myProfile": "Profilim",
+    "uploadStudio": "Yükleme Stüdyosu",
+    "drafts": "Taslaklar",
+    "editVideo": "Videoyu Düzenle",
+    "editScheduledPost": "Planlanmış Gönderiyi Düzenle",
+    "chat": "Sohbet",
+    "about": "Hakkında",
+    "login": "Giriş",
+    "brandFallback": "3Speak - Merkeziyetsiz Video Platformu"
+  },
+  "invite": {
+    "title": "<who>@{{referrer}}</who> seni 3Speak'e davet etti",
+    "incubatingFastTrack": "Isınma aşamasını bitirmeden <b>@{{handle}}</b> adını hemen kendi Hive hesabına dönüştürebilirsin.",
+    "incubatingKeepGoing": "Isınma aşamana devam et. Seni davet eden kişi olarak <b>@{{referrer}}</b> gösteriliyor.",
+    "signUpFastTrack": "Kaydol ve hemen kendi Hive hesabını al: 3Speak ve diğer tüm Hive uygulamaları için tek giriş, anahtarları yalnızca sende. Yaklaşık bir dakika sürer.",
+    "signUpFree": "Kaydol ve 3Speak'te ücretsiz bir profille başla. Davetin kaydedildi, böylece <b>@{{referrer}}</b> hakkını alır.",
+    "createHiveAccount": "Hive hesabımı oluştur",
+    "createAccount": "Hesabımı oluştur",
+    "lookAround": "Sadece etrafa bakmak istiyorum"
+  },
+  "interests": {
+    "saved": "İlgi alanları kaydedildi; istediğin zaman Ayarlar'dan değiştirebilirsin",
+    "saveFailed": "İlgi alanları kaydedilemedi",
+    "title": "Nelerden hoşlanırsın?",
+    "body": "Sevdiğin birkaç konu seç, sana beğendiğin türden daha çok içerik gösterelim. Bunları istediğin zaman <b>Ayarlar</b>'dan değiştirebilirsin.",
+    "notNow": "Şimdi değil",
+    "save": "İlgi alanlarını kaydet"
+  },
+  "emojiGif": {
+    "emoji": "Emoji",
+    "searchEmoji": "Emoji ara",
+    "searchGifs": "GIF ara…",
+    "noGifs": "GIF bulunamadı.",
+    "poweredBy": "GIPHY desteğiyle"
+  },
+  "welcome": {
+    "things": {
+      "postVideos": {
+        "title": "Video paylaş",
+        "text": "Uzun videolar yükle; senin kalsınlar, kimsenin sessizce silemeyeceği bir zincirde."
+      },
+      "filmShorts": {
+        "title": "Shorts çek",
+        "text": "Hızlı, dikey ve paylaşması kolay bir şey. İlk izleyicilerini bulmak için harika."
+      },
+      "goLive": {
+        "title": "Canlı yayın yap",
+        "text": "Kitlene yayın yap, sahneye konuk al ve kaydı sonrasında sakla."
+      },
+      "buildCommunity": {
+        "title": "Topluluk kur",
+        "text": "Önem verdiğin şey etrafında bir alan aç ya da zaten hareketli olan birine katıl."
+      },
+      "makeFriends": {
+        "title": "Gerçek arkadaşlar edin",
+        "text": "Birbirine destek olan gerçek insanlarla yorumlaş, sohbet et ve iş birliği yap."
+      },
+      "getInspired": {
+        "title": "İlham al, dahil ol",
+        "text": "İçerik üreticilerini keşfet, sevdiklerini destekle ve bu arada kazan."
+      }
+    },
+    "advertiserThings": {
+      "bookAds": {
+        "title": "3Speak genelinde reklam ver",
+        "text": "Video spotları, Shorts spotları, oynatıcı bannerları, kayan yazılar ve yükleme öncesi spotlar; bir günden üç aya kadar."
+      },
+      "payFromWallet": {
+        "title": "Kendi cüzdanından öde",
+        "text": "HBD veya HIVE ile, doğrudan bu hesaptan. Kart yok, aracı yok."
+      },
+      "chooseWhere": {
+        "title": "Nerede yayınlanacağını seç",
+        "text": "Formatı, videodaki konumu ve kaç gün yayınlanacağını seç."
+      },
+      "seeDelivered": {
+        "title": "Ne sağladığını gör",
+        "text": "Her rezervasyon için oynatma ve tıklama sayıları; bir rezervasyon eksik kalırsa kredi iadesi."
+      },
+      "talkToCustomers": {
+        "title": "Müşterilerinle konuş",
+        "text": "İstersen: markan adına video paylaş, yorumları yanıtla ve insanları takip et."
+      },
+      "oneAccount": {
+        "title": "Her yerde tek hesap",
+        "text": "Tüm Hive uygulamalarında aynı marka ve giriş, anahtarı yalnızca sende."
+      }
+    },
+    "profileLive": "Profilin yayında. 3Speak'e hoş geldin!",
+    "brandProfileLive": "Marka profilin yayında. 3Speak'e hoş geldin!",
+    "title": "3Speak'e hoş geldin",
+    "titleNamed": "3Speak'e hoş geldin, {{name}}",
+    "advertiserReady": "Reklamveren hesabın <b>@{{user}}</b> hazır. Reklam rezervasyonu yapacağın ve ödeme yapacağın hesap bu.",
+    "heyUser": "Selam <b>@{{user}}</b>, başardın. 3Speak, Hive üzerine kurulu; bu yüzden hesabın, kitlen ve içeriğin sana ait.",
+    "noteAdvertiser": "Önce marka profiline hızlıca bir bakalım: izleyicilerin reklamlarının yanında gördüğü şey bu.",
+    "note": "Başlamadan önce son bir şey: insanlara kimi izlediklerini anlat.",
+    "maybeLater": "Belki sonra",
+    "checkBrandProfile": "Marka profilimi kontrol et",
+    "setUpProfile": "Profilimi oluştur",
+    "brandProfileTitle": "Marka profilin",
+    "profileTitle": "İnsanlara kim olduğunu anlat",
+    "brandProfileHint": "Isınma aşamandan aktarıldı. Kaydetmek bunu Hive hesabına yazar; istediğin zaman değiştirebilirsin.",
+    "profileHint": "İnsanların profilinde gördüğü şey bu. İstediğin zaman değiştirebilirsin.",
+    "skipForNow": "Şimdilik atla",
+    "saveAndBook": "Kaydet ve ilk reklamımı ver",
+    "uploading": "Yükleniyor…",
+    "interestsHint": "Ana sayfanda neyin görüneceğini seçmek için bunları kullanırız. İstediğin kadar seç ya da hiç seçme, istediğin zaman değiştir.",
+    "interestsFineprint": "Hive hesabına kaydedilir, böylece tüm Hive uygulamaları aynı profili ve aynı ilgi alanlarını gösterir.",
+    "saveAndExplore": "Kaydet ve keşfetmeye başla"
+  },
+  "profileEdit": {
+    "updated": "Profil güncellendi",
+    "title": "Profilini düzenle",
+    "subtitle": "Fotoğrafın, adın ve biyografin profilinde ve paylaştığın her şeyin yanında görünür.",
+    "loading": "Profilin yükleniyor…",
+    "fineprint": "Hive hesabına kaydedilir, böylece tüm Hive uygulamaları aynı profili gösterir.",
+    "saveChanges": "Değişiklikleri kaydet"
+  },
+  "profileFields": {
+    "chooseImage": "Lütfen bir görsel dosyası seç",
+    "imageTooLarge": "Bu görsel 8MB'den büyük, lütfen daha küçük bir tane seç",
+    "uploadFailed": "Bu görsel yüklenemedi",
+    "saved": "Profil kaydedildi",
+    "saveFailed": "Profilin kaydedilemedi",
+    "uploadBanner": "Profil kapağı yükle",
+    "changeBanner": "Kapağı değiştir",
+    "addBanner": "Kapak ekle",
+    "bannerHint": "En iyisi <b>2800 × 684</b> px (veya herhangi bir 4:1 görsel). Önemli kısmı ortada tut: dar ekranlarda kenarlar kırpılır ve adın sol alt köşenin üzerinde durur.",
+    "uploadPicture": "Profil fotoğrafı yükle",
+    "pictureLabel": "Profil fotoğrafı",
+    "pictureHint": "Bir yüz veya logo en iyi sonucu verir. Kare, 400 × 400 px veya daha büyük. En fazla 8MB.",
+    "displayName": "Görünen ad",
+    "namePlaceholderUser": "Sana nasıl hitap edelim? (@{{username}})",
+    "namePlaceholder": "Sana nasıl hitap edelim?",
+    "shortBio": "Kısa biyografi",
+    "bioPlaceholder": "Ne üretiyorsun ve insanlar senden ne beklemeli?",
+    "location": "Konum",
+    "optional": "isteğe bağlı",
+    "locationPlaceholder": "Dünyanın neresindesin?"
+  },
+  "auth": {
+    "sessionExpired": "Oturumunun süresi doldu, lütfen yeniden giriş yap",
+    "loggedOut": "Çıkış yapıldı",
+    "loginSuccess": "Giriş başarılı!",
+    "switchedTo": "@{{user}} hesabına geçildi",
+    "butrauthFailed": "Butter Auth ile giriş başarısız: {{error}}",
+    "signedInAs": "@{{user}} olarak giriş yapıldı",
+    "loggedInViaButrauth": "Butter Auth ile @{{user}} olarak giriş yapıldı",
+    "tokenExpired": "Oturumun süresi doldu",
+    "loginFailed": "Giriş başarısız: {{error}}",
+    "unknownError": "Bilinmeyen hata",
+    "loginTitle": "3Speak'e giriş yap"
+  },
+  "update": {
+    "available": "Yeni bir sürüm ({{version}}) mevcut",
+    "description": "En son güncellemeleri almak için yenile."
+  },
+  "toastsRegion": "Bildirimler"
+}

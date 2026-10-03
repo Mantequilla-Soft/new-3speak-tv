@@ -1,0 +1,131 @@
+{
+  "loadingMore": "Завантажуємо ще…",
+  "promoted": "Реклама",
+  "scrollLeft": "Прокрутити ліворуч",
+  "scrollRight": "Прокрутити праворуч",
+  "errors": {
+    "fetchVideos": "Помилка отримання відео",
+    "loadVideos": "Не вдалося завантажити відео",
+    "loadShorts": "Не вдалося завантажити Shorts"
+  },
+  "tabs": {
+    "all": "Усе",
+    "videos": "Відео",
+    "shorts": "Shorts",
+    "videosCount": "Відео ({{count}})",
+    "shortsCount": "Shorts ({{count}})"
+  },
+  "dateFilters": {
+    "all": "За весь час",
+    "today": "Сьогодні",
+    "week": "Цього тижня",
+    "month": "Цього місяця",
+    "justNow": "Щойно"
+  },
+  "live": {
+    "title": "Зараз наживо",
+    "badge": "● НАЖИВО"
+  },
+  "newFromFollowing": {
+    "aria": "Нове від авторів, на яких ви підписані",
+    "shorts_one": "{{count}} Shorts",
+    "shorts_few": "{{count}} Shorts",
+    "shorts_many": "{{count}} Shorts",
+    "shorts_other": "{{count}} Shorts"
+  },
+  "firstUploads": {
+    "title": "Перші завантаження"
+  },
+  "newVideos": {
+    "title": "Нові відео"
+  },
+  "home": {
+    "sections": {
+      "discover": "Відкривайте",
+      "home": "Головна стрічка",
+      "follow": "Стрічка підписок",
+      "new": "Новий контент",
+      "interests": "Інтереси"
+    },
+    "empty": "Тут поки нічого немає.",
+    "viewAll": "Усі",
+    "dragToReorder": "Перетягніть, щоб змінити порядок",
+    "surfTitle": "Перемикання каналів: виберіть тему й дивіться, як телевізор",
+    "zapping": "Перемикання"
+  },
+  "surf": {
+    "pageTitle": "Перемикання каналів",
+    "intro": "Виберіть канал і відпочивайте. Ми ставимо найкращі відео на цю тему одне за одним. Набридло? Натисніть <b>Далі</b>. Хочеться іншого? Перемкніть канал.",
+    "backTo": "Назад до КАН {{number}} {{emoji}} {{title}}",
+    "surprise": "Здивуй мене",
+    "yourChannels": "Ваші канали",
+    "nothingOnAir": "На каналі {{channel}} зараз нічого немає в ефірі",
+    "tuneFailed": "Не вдалося налаштуватися. Спробуйте ще раз за мить.",
+    "remoteAria": "Пульт перемикання каналів",
+    "openGuide": "Відкрити програму каналів",
+    "ch": "КАН {{number}}",
+    "chLabel": "КАН",
+    "channelHint": "КАН {{number}}: {{title}}",
+    "channelHintKey": "КАН {{number}}: {{title}} ({{key}})",
+    "tuningShort": "Налаштування",
+    "tuning": "Налаштування…",
+    "onAir": "В ефірі",
+    "changeChannel": "Змінити канал",
+    "nextChannel": "Наступний канал",
+    "prevChannel": "Попередній канал",
+    "nextVideo": "Наступне відео",
+    "nextVideoKey": "Наступне відео (→)",
+    "zap": "Далі",
+    "findingNext": "Шукаємо наступне…",
+    "stop": "Зупинити перемикання",
+    "stopTitle": "Зупинити перемикання (це відео продовжить грати)",
+    "guide": "Програма каналів"
+  },
+  "discover": {
+    "searchPlaceholder": "Пошук відео, Shorts, аудіо, спільнот...",
+    "clearSearch": "Очистити пошук",
+    "searchFor": "Шукати «{{term}}»",
+    "noResultsFor": "Нічого не знайдено за запитом «{{term}}»",
+    "types": {
+      "user": "Користувачі",
+      "community": "Спільноти",
+      "video": "Відео",
+      "short": "Shorts",
+      "audio": "Аудіо",
+      "playlist": "Плейлисти"
+    },
+    "suggest": {
+      "tags": "Теги",
+      "titles": "Назви"
+    },
+    "dates": {
+      "today": "Сьогодні",
+      "week": "Цього тижня",
+      "month": "Цього місяця",
+      "year": "Цього року"
+    },
+    "boostRecent": "Спершу новіші",
+    "filters": "Фільтри",
+    "date": "Дата",
+    "tag": "Тег",
+    "tagPlaceholder": "напр. crypto, gaming...",
+    "community": "Спільнота",
+    "communityPlaceholder": "Пошук спільнот...",
+    "clearAllFilters": "Скинути всі фільтри",
+    "allHidden": "Усі типи контенту приховано.",
+    "reenableFilters": "Знову ввімкнути всі фільтри",
+    "groupTitle": "{{label}} ({{count}})",
+    "subscribers_one": "{{count}} учасник",
+    "subscribers_few": "{{count}} учасники",
+    "subscribers_many": "{{count}} учасників",
+    "subscribers_other": "{{count}} учасника",
+    "authors_one": "{{count}} автор",
+    "authors_few": "{{count}} автори",
+    "authors_many": "{{count}} авторів",
+    "authors_other": "{{count}} автора",
+    "views_one": "{{views}} перегляд",
+    "views_few": "{{views}} перегляди",
+    "views_many": "{{views}} переглядів",
+    "views_other": "{{views}} перегляду"
+  }
+}

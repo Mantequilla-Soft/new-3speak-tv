@@ -1,0 +1,205 @@
+{
+  "interests": {
+    "savedToast": "Interesses opgeslagen in je Hive-profiel",
+    "saveFailed": "Interesses konden niet worden opgeslagen",
+    "title": "Interesses",
+    "loading": "laden…",
+    "hint": "Kies de onderwerpen die je belangrijk vindt — we gebruiken ze om je meer content te laten zien die je leuk vindt.",
+    "loginHint": "Log in om je interesses te kiezen.",
+    "save": "Interesses opslaan"
+  },
+  "ads": {
+    "chainNotSaved": "Opgeslagen op 3Speak, maar niet op je Hive-account. Probeer het opnieuw om het daar ook op te slaan.",
+    "saveFailed": "De instelling kon niet worden opgeslagen.",
+    "onToast": "Advertenties staan aan voor je video's",
+    "offToast": "Advertenties staan uit voor je video's",
+    "splitSaved": "Opbrengstverdeling opgeslagen",
+    "title": "Advertenties in je video's",
+    "allow": "Advertenties toestaan",
+    "allowDesc": "Er kan een korte sponsorspot in je video's worden afgespeeld. Jij krijgt een deel van wat die oplevert, en de community waarin je hebt gepost ook. Zet je dit uit, dan bevatten je video's helemaal geen advertenties — ze worden dan ook verwijderd uit wat we aan adverteerders aanbieden, zodat er niets wordt verkocht waarvoor je je hebt afgemeld.",
+    "allowAria": "Advertenties in je video's toestaan",
+    "shareTitle": "Delen met de community",
+    "shareDesc": "{{pool}}% van wat een advertentie oplevert wordt verdeeld tussen jou en de community waarin je hebt gepost. Kies hoeveel daarvan de community krijgt — laat het op nul staan en je houdt de volledige {{pool}}%.",
+    "youPct": "Jij {{pct}}%",
+    "communityPct": "Community {{pct}}%",
+    "shareInputLabel": "Aandeel community, procent",
+    "invalidPct": "Vul een heel getal in tussen 0 en {{max}}.",
+    "loadingSetting": "Je huidige instelling laden…"
+  },
+  "viewerRewards": {
+    "onToast": "Kijkbeloningen aan",
+    "offToast": "Kijkbeloningen uit, en je kijkgegevens zijn verwijderd",
+    "saveFailed": "Die instelling kon niet worden opgeslagen.",
+    "title": "Verdien terwijl je kijkt",
+    "rowTitle": "Kijkbeloningen",
+    "desc": "Verdien een deel van de advertentie-inkomsten voor wat je kijkt, uitbetaald in HBD of HIVE. Je wordt betaald voor bekeken video's, of er nu een advertentie werd afgespeeld of niet, dus het beloont kijken en niet het uitzitten van advertenties. Advertenties zelf worden afgespeeld voor iedereen behalve 3Speak Pro-abonnees. We leggen vast hoeveel je van elke video hebt bekeken, bovenop de kijkgeschiedenis die de pagina Bekeken al bijhoudt, en verwijderen dit zodra je dit uitzet.",
+    "aria": "Verdien een deel van de advertentie-inkomsten voor wat je kijkt"
+  },
+  "postingAuth": {
+    "updateFailed": "Je posting-autoriteit kon niet worden bijgewerkt.",
+    "addedToast": "@threespeak toegevoegd aan je posting-autoriteit",
+    "removedToast": "@threespeak verwijderd uit je posting-autoriteit",
+    "notYetAdded": "Ondertekend, maar @threespeak staat nog niet op je account. Open de instellingen over een minuut opnieuw om het te controleren.",
+    "stillThere": "Ondertekend, maar @threespeak staat nog op je account. Open de instellingen over een minuut opnieuw om het te controleren.",
+    "title": "Posting-autoriteit",
+    "canPost": "@threespeak kan namens jou posten",
+    "cannotPost": "@threespeak kan niet namens jou posten",
+    "checkingStatus": "@threespeak …",
+    "desc": "Hiermee kan 3Speak je uploads en ingeplande posts namens jou publiceren en sommige instellingen opslaan zonder dat je wallet elke keer om bevestiging vraagt. Het kan alleen posten, voten en reageren; het kan nooit geld verplaatsen of je keys wijzigen. Zonder dit vragen uploads je om het opnieuw toe te voegen. Voor het wijzigen hiervan is je active key nodig.",
+    "checking": "Controleren…",
+    "removing": "Verwijderen…",
+    "adding": "Toevoegen…"
+  },
+  "notifications": {
+    "kinds": {
+      "videos": {
+        "title": "Nieuwe video's",
+        "desc": "Als een maker die je volgt een video publiceert."
+      },
+      "shorts": {
+        "title": "Nieuwe Shorts",
+        "desc": "Als een maker die je volgt een short plaatst."
+      },
+      "audio": {
+        "title": "Nieuwe audio",
+        "desc": "Als een maker die je volgt een track of aflevering uploadt."
+      },
+      "replies": {
+        "title": "Reacties",
+        "desc": "Als iemand reageert op je post of reactie."
+      },
+      "mentions": {
+        "title": "Vermeldingen",
+        "desc": "Als iemand je bij naam noemt."
+      },
+      "follows": {
+        "title": "Nieuwe volgers",
+        "desc": "Als iemand je volgt."
+      },
+      "votes": {
+        "title": "Upvotes",
+        "desc": "Als iemand je post upvotet. Standaard uit — een populaire post levert heel wat meldingen op."
+      },
+      "reblogs": {
+        "title": "Reblogs",
+        "desc": "Als iemand je post reblogt."
+      }
+    },
+    "groups": {
+      "creators": "Van makers die je volgt",
+      "aboutYou": "Over jou"
+    },
+    "deviceOffToast": "Dit apparaat krijgt geen meldingen meer",
+    "deviceOnToast": "Dit apparaat krijgt meldingen",
+    "changeFailed": "Meldingen konden niet worden gewijzigd",
+    "saveFailed": "Dat kon niet worden opgeslagen",
+    "loginHint": "Log in om te kiezen waarover je meldingen krijgt.",
+    "unsupported": "Deze browser kan geen meldingen tonen. Op iPhone en iPad werken ze alleen als 3Speak op het beginscherm is gezet.",
+    "device": "Meldingen op dit apparaat",
+    "deviceBlocked": "Geblokkeerd in je browserinstellingen voor deze site — sta daar eerst meldingen toe.",
+    "deviceNoWorker": "Niet beschikbaar in deze build.",
+    "deviceDesc": "Krijg een melding, ook als 3Speak niet open is. Geldt alleen voor deze browser.",
+    "whatHint": "Waarover je meldingen krijgt. Dit geldt voor elk apparaat dat je hebt ingeschakeld."
+  },
+  "tabs": {
+    "general": "Algemeen",
+    "content": "Content",
+    "rewards": "Advertenties & beloningen",
+    "about": "Over / versie"
+  },
+  "contentTabs": {
+    "feed": "Feed",
+    "aria": "Contentinstellingen"
+  },
+  "butrauthUnlocked": "Butter Auth ontgrendeld",
+  "appearance": {
+    "title": "Weergave",
+    "darkMode": {
+      "title": "Donkere modus",
+      "desc": "Gebruik het donkere kleurthema in de hele app."
+    },
+    "largeCards": {
+      "title": "Grote kaarten",
+      "desc": "Toon grotere videokaarten op de home-, profiel- en playlistpagina's. Zet uit voor kleinere, compactere kaarten."
+    },
+    "previews": {
+      "title": "Videovoorbeelden",
+      "desc": "Speel een voorbeeld zonder geluid af als je over een videokaart beweegt (en op mobiel in de grote modus speelt de middelste kaart automatisch af terwijl je scrollt)."
+    },
+    "simpleFeeds": {
+      "title": "Eenvoudige feeds",
+      "desc": "Zet het aanbevelingsalgoritme uit — Ontdekken, Interesses en Trending worden gewone lijsten met het nieuwste eerst in plaats van gerangschikte lijsten."
+    }
+  },
+  "shorts": {
+    "commentBar": {
+      "title": "Reactiebalk bij Shorts",
+      "desc": "Toon een reactieveld onder een short. Standaard uit — je kunt het reactiepaneel altijd openen met de reactieknop."
+    },
+    "openOnStart": {
+      "title": "Shorts openen bij start",
+      "desc": "Ga meteen naar Shorts als je 3Speak opent, in plaats van naar de home-feed."
+    },
+    "inFeeds": {
+      "title": "Shorts in de feeds",
+      "desc": "Toon rijen Shorts tussen de video's in de home-feeds en de aanbevelingen op een videopagina. Zet uit om die lijsten alleen video's te laten bevatten."
+    }
+  },
+  "feed": {
+    "nsfw": {
+      "title": "NSFW-content tonen",
+      "desc": "Toon video's en audio die als not-safe-for-work zijn gemarkeerd. Standaard uit."
+    },
+    "hideWatched": {
+      "title": "Bekeken video's verbergen",
+      "desc": "Laat video's die je al hebt bekeken weg uit de home-, trending- en aanbevolen feeds."
+    },
+    "hideAi": {
+      "title": "AI-gegenereerde video's verbergen",
+      "desc": "Laat video's en Shorts die als AI-gegenereerd zijn gemarkeerd weg, in elke feed. De markering komt van een automatische controle, dus sommige kunnen erdoorheen glippen."
+    },
+    "privateMode": {
+      "title": "Privémodus",
+      "desc": "Houd je land buiten de statistieken van makers. We slaan je IP-adres nooit op — van niemand. Het wordt omgezet in een landcode op het moment dat je op afspelen drukt en daarna weggegooid. Met deze optie aan wordt zelfs dat land niet vastgelegd voor jouw weergaven."
+    }
+  },
+  "about": {
+    "title": "Over",
+    "version": "App-versie",
+    "rpcNode": "Hive RPC-node",
+    "yourData": "Je gegevens",
+    "privacyLink": "Hoe 3Speak met je gegevens omgaat"
+  },
+  "dataRequest": {
+    "emailRequired": "Vul een e-mailadres in zodat we kunnen antwoorden",
+    "confirmRequired": "Bevestig dat je begrijpt wat wel en niet kan worden verwijderd",
+    "requestFailed": "Verzoek mislukt ({{status}})",
+    "deletionReceived": "Verwijderverzoek ontvangen",
+    "dataReceived": "Gegevensverzoek ontvangen",
+    "sendFailed": "Je verzoek kon niet worden verstuurd",
+    "doneTitle": "Verzoek ontvangen",
+    "doneBody": "Je referentie is <b>{{ref}}</b>. We antwoorden uiterlijk op <b>{{dueBy}}</b> naar <b>{{contact}}</b>.",
+    "keepRef": "Bewaar de referentie voor het geval je later contact moet opnemen.",
+    "signIn": "Log in om je gegevens op te vragen of te laten verwijderen — een verzoek geldt voor het account waarmee je bent ingelogd.",
+    "requestFor": "Verzoek voor <b>@{{username}}</b>",
+    "typeAria": "Soort verzoek",
+    "getData": "Mijn gegevens opvragen",
+    "deleteData": "Mijn accountgegevens verwijderen",
+    "ledeDelete": "We verwijderen alles wat 3Speak in onze eigen database over je bewaart.",
+    "ledeExport": "We sturen je alles wat 3Speak in onze eigen database over je bewaart, als JSON-bestand.",
+    "covers": "Dit omvat:",
+    "cannotTitle": "Wat we niet kunnen",
+    "cannotBody": "3Speak is gebouwd op de <b>Hive-blockchain</b>. Je posts, reacties, votes en reshares zijn ondertekend met je eigen keys en verzonden naar een <b>openbaar, permanent grootboek</b> waar wij geen controle over hebben en dat we niet kunnen bewerken.",
+    "cannotDelete": "We kunnen onze kopieën verwijderen en stoppen met het tonen van je content op 3Speak. We kunnen het niet van de blockchain wissen — niemand kan dat, jij ook niet. Iedereen die een Hive-node draait, heeft het nog steeds.",
+    "cannotExport": "Je on-chain gegevens zijn al openbaar en machineleesbaar via elke Hive-API — we wijzen je de weg ernaartoe. Wat we je sturen is wat we daarnaast bewaren.",
+    "emailLabel": "E-mailadres voor ons antwoord",
+    "emailPlaceholder": "jij@voorbeeld.nl",
+    "messageLabel": "Nog iets toe te voegen? (optioneel)",
+    "messagePlaceholder": "Optionele details over je verzoek",
+    "confirmLabel": "Ik begrijp dat mijn content op de Hive-blockchain permanent is en niet door 3Speak of door iemand anders kan worden verwijderd.",
+    "sending": "Versturen…",
+    "requestDeletion": "Verwijdering aanvragen",
+    "requestData": "Mijn gegevens aanvragen",
+    "foot": "We antwoorden binnen een maand. Je kunt ook rechtstreeks mailen naar <mail>privacy@3speak.tv</mail>."
+  }
+}

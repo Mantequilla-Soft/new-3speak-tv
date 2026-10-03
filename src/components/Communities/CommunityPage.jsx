@@ -2,6 +2,8 @@ import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { getHiveClient } from '../../utils/hiveNode';
 import { Link, useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
+import { useTranslation } from "react-i18next";
+import { formatNumber, formatDate } from "../../i18n";
 import { toastIn } from '../../utils/toast';
 import { Clock, TrendingUp, Trophy, MessagesSquare, Users, PenLine, FileText, Coins, CalendarDays, Check, Plus, Tv, Upload } from 'lucide-react';
 import "./CommunityPage.scss";
@@ -29,22 +31,22 @@ const toast = toastIn('Community');
 // Hive client
 const client = getHiveClient();
 
-const fmtNum = (n) => (typeof n === 'number' ? n.toLocaleString('en-US') : '—');
+const fmtNum = (n) => (typeof n === 'number' ? formatNumber(n) : '—');
 
 // Checker caps a community feed page at 100.
 const PAGE_LIMIT = 100;
 
 const TABS = [
-  { key: 'new', label: 'New', icon: <Clock size={16} /> },
-  { key: 'trending', label: 'Trending', icon: <TrendingUp size={16} /> },
-  { key: 'top', label: 'Top', icon: <Trophy size={16} /> },
-  { key: 'discussion', label: 'Discussion', icon: <MessagesSquare size={16} /> },
+  { key: 'new', labelKey: 'communities.page.tabs.new', icon: <Clock size={16} /> },
+  { key: 'trending', labelKey: 'communities.page.tabs.trending', icon: <TrendingUp size={16} /> },
+  { key: 'top', labelKey: 'communities.page.tabs.top', icon: <Trophy size={16} /> },
+  { key: 'discussion', labelKey: 'communities.page.tabs.discussion', icon: <MessagesSquare size={16} /> },
 ];
 const TOP_WINDOWS = [
-  { key: '7d', label: 'This week' },
-  { key: '30d', label: 'This month' },
-  { key: '365d', label: 'This year' },
-  { key: 'all', label: 'All time' },
+  { key: '7d', labelKey: 'communities.page.windows.week' },
+  { key: '30d', labelKey: 'communities.page.windows.month' },
+  { key: '365d', labelKey: 'communities.page.windows.year' },
+  { key: 'all', labelKey: 'communities.page.windows.all' },
 ];
 
 // "New since your last visit". The baseline is when the viewer was last here; a
@@ -69,6 +71,7 @@ function useLastVisit(id) {
 const createdMs = (v) => new Date(v?.created || v?.created_at || 0).getTime();
 
 function CommunityPage() {
+  const { t } = useTranslation();
   const { communityName: id } = useParams();
   const [dataMain, setDataMain] = useState(null);
 
@@ -76,10 +79,10 @@ function CommunityPage() {
   // the raw Hive id (hive-181335), which tells a reader nothing. RouteTitle lists
   // this route as self-titled, so nothing competes for the tag. Until the bridge
   // call returns we say "Community" rather than showing the id we are avoiding.
-  const communityTitle = dataMain?.title || 'Community';
+  const communityTitle = dataMain?.title || t('communities.page.fallbackTitle');
   // ?tab= so a Discussion or Top link can be shared; New is the default.
   const [searchParams, setSearchParams] = useSearchParams();
-  const tab = TABS.some((t) => t.key === searchParams.get('tab')) ? searchParams.get('tab') : 'new';
+  const tab = TABS.some((x) => x.key === searchParams.get('tab')) ? searchParams.get('tab') : 'new';
   const topWindow = TOP_WINDOWS.some((w) => w.key === searchParams.get('window')) ? searchParams.get('window') : '30d';
   const setTab = (key, extra = {}) => {
     const next = new URLSearchParams(searchParams);
@@ -143,7 +146,7 @@ function CommunityPage() {
     // Testing it alone told the one group who cannot subscribe on chain to log
     // in, while they were already logged in.
     if (!authenticated || (!incubationHandle && !isLoggedIn())) {
-      toast.error('Log in to subscribe');
+      toast.error(t('communities.page.loginToSubscribe'));
       return;
     }
     const next = !subscribed;
@@ -157,7 +160,7 @@ function CommunityPage() {
         // The subscriber count is Hive's, and this subscription is not on Hive
         // yet, so it is left alone rather than shown a number that no other
         // client would agree with.
-        toast.success(next ? `Subscribed to ${label}` : `Unsubscribed from ${label}`);
+        toast.success(next ? t('communities.page.subscribedTo', { label }) : t('communities.page.unsubscribedFrom', { label }));
         setSubLoading(false);
         return;
       }
@@ -166,14 +169,14 @@ function CommunityPage() {
         KeyTypes.Posting,
         'community',
         json,
-        next ? `Subscribe to ${label}` : `Unsubscribe from ${label}`
+        next ? t('communities.page.subscribeTo', { label }) : t('communities.page.unsubscribeFrom', { label })
       );
       setSubscribed(next);
       setSubCount((c) => (typeof c === 'number' ? Math.max(0, c + (next ? 1 : -1)) : c));
-      toast.success(next ? `Subscribed to ${label}` : `Unsubscribed from ${label}`);
+      toast.success(next ? t('communities.page.subscribedTo', { label }) : t('communities.page.unsubscribedFrom', { label }));
     } catch (err) {
       console.error('Community subscribe error:', err);
-      toast.error('Subscription failed: ' + (err.message || 'Unknown error'));
+      toast.error(t('communities.page.subscriptionFailed', { error: err.message || t('communities.page.unknownError') }));
     } finally {
       setSubLoading(false);
     }
@@ -259,9 +262,9 @@ function CommunityPage() {
     try {
       const v = await findNextOnChannel(id);
       if (v) navigate(surfUrl(v, id));
-      else toast('Nothing to surf here yet');
+      else toast(t('communities.page.nothingToSurf'));
     } catch {
-      toast.error('Could not start surfing');
+      toast.error(t('communities.page.surfFailed'));
     } finally {
       setSurfing(false);
     }
@@ -282,17 +285,17 @@ function CommunityPage() {
   const createdLabel = (() => {
     if (!dataMain?.created_at) return '—';
     const d = new Date(String(dataMain.created_at).replace(' ', 'T') + 'Z');
-    return isNaN(d) ? '—' : d.toLocaleDateString('en-US', { month: 'short', year: 'numeric' });
+    return isNaN(d) ? '—' : formatDate(d, { month: 'short', year: 'numeric' });
   })();
 
   const kpis = dataMain ? [
-    { key: 'subs', icon: <Users size={16} />, label: 'Subscribers', value: fmtNum(subCount ?? dataMain.subscribers) },
-    { key: 'authors', icon: <PenLine size={16} />, label: 'Active posters', value: fmtNum(dataMain.num_authors) },
+    { key: 'subs', icon: <Users size={16} />, label: t('communities.page.kpis.subscribers'), value: fmtNum(subCount ?? dataMain.subscribers) },
+    { key: 'authors', icon: <PenLine size={16} />, label: t('communities.page.kpis.authors'), value: fmtNum(dataMain.num_authors) },
     // num_pending counts posts still inside Hive's 7-day payout window, not the
     // community's whole history.
-    { key: 'posts', icon: <FileText size={16} />, label: 'Posts this week', value: fmtNum(dataMain.num_pending) },
-    { key: 'rewards', icon: <Coins size={16} />, label: 'Pending rewards', value: typeof dataMain.sum_pending === 'number' ? `$${dataMain.sum_pending}` : '—' },
-    { key: 'since', icon: <CalendarDays size={16} />, label: 'Created', value: createdLabel },
+    { key: 'posts', icon: <FileText size={16} />, label: t('communities.page.kpis.posts'), value: fmtNum(dataMain.num_pending) },
+    { key: 'rewards', icon: <Coins size={16} />, label: t('communities.page.kpis.rewards'), value: typeof dataMain.sum_pending === 'number' ? `$${dataMain.sum_pending}` : '—' },
+    { key: 'since', icon: <CalendarDays size={16} />, label: t('communities.page.kpis.created'), value: createdLabel },
   ] : [];
 
   // Rendered in two spots: the desktop sidebar, and — on mobile — beside the
@@ -335,10 +338,10 @@ function CommunityPage() {
               disabled={subLoading}
             >
               {subLoading
-                ? 'Loading…'
+                ? t('common.status.loading')
                 : subscribed
-                  ? <><Check size={16} /> Subscribed</>
-                  : <><Plus size={16} /> Subscribe</>}
+                  ? <><Check size={16} /> {t('communities.page.subscribed')}</>
+                  : <><Plus size={16} /> {t('common.actions.subscribe')}</>}
             </button>
           ) : null
         }
@@ -371,12 +374,12 @@ function CommunityPage() {
       ) : null}
 
       <div className="community-actions">
-        <button type="button" className="community-action" onClick={startSurf} disabled={surfing} title="Channel Surfing through this community's videos">
-          <Tv size={16} /> {surfing ? 'Tuning…' : 'Surf this community'}
+        <button type="button" className="community-action" onClick={startSurf} disabled={surfing} title={t('communities.page.surfTitle')}>
+          <Tv size={16} /> {surfing ? t('communities.page.tuning') : t('communities.page.surf')}
         </button>
         {canUpload && (
           <Link className="community-action" to={uploadHref}>
-            <Upload size={16} /> Upload here
+            <Upload size={16} /> {t('communities.page.uploadHere')}
           </Link>
         )}
       </div>
@@ -385,26 +388,26 @@ function CommunityPage() {
 
       {/* Real tabs, matching the home feed tab bar. */}
       <div className="community-tabs" role="tablist">
-        {TABS.map((t) => (
+        {TABS.map((tb) => (
           <button
-            key={t.key}
+            key={tb.key}
             type="button"
             role="tab"
-            aria-selected={tab === t.key}
-            className={`community-tab${tab === t.key ? ' active' : ''}`}
-            onClick={() => setTab(t.key)}
+            aria-selected={tab === tb.key}
+            className={`community-tab${tab === tb.key ? ' active' : ''}`}
+            onClick={() => setTab(tb.key)}
           >
-            <span className="community-tab-icon">{t.icon}</span>
-            <span className="community-tab-label">{t.label}</span>
-            {t.key === 'new' && newCount > 0 && (
-              <span className="community-tab-count" title="New since your last visit">{newCount}</span>
+            <span className="community-tab-icon">{tb.icon}</span>
+            <span className="community-tab-label">{t(tb.labelKey)}</span>
+            {tb.key === 'new' && newCount > 0 && (
+              <span className="community-tab-count" title={t('communities.page.newSinceVisit')}>{newCount}</span>
             )}
           </button>
         ))}
       </div>
 
       {tab === 'top' && (
-        <div className="community-windows" role="group" aria-label="Time range">
+        <div className="community-windows" role="group" aria-label={t('communities.page.timeRange')}>
           {TOP_WINDOWS.map((w) => (
             <button
               key={w.key}
@@ -413,7 +416,7 @@ function CommunityPage() {
               aria-pressed={topWindow === w.key}
               onClick={() => setTab('top', { window: w.key })}
             >
-              {w.label}
+              {t(w.labelKey)}
             </button>
           ))}
         </div>
@@ -432,10 +435,10 @@ function CommunityPage() {
           ) : isLoading ? (
             <CardSkeleton />
           ) : isError ? (
-            <p>Error fetching videos</p>
+            <p>{t('communities.page.errorVideos')}</p>
           ) : videos.length === 0 ? (
             <p className="community-empty">
-              {tab === 'top' ? 'No videos in this time range yet.' : 'No videos here yet.'}
+              {tab === 'top' ? t('communities.page.emptyRange') : t('communities.page.empty')}
             </p>
           ) : (
             <Card3
@@ -448,7 +451,7 @@ function CommunityPage() {
             />
           )}
 
-          {videoTab && isFetchingNextPage && <p style={{ textAlign: "center" }}>Loading more...</p>}
+          {videoTab && isFetchingNextPage && <p style={{ textAlign: "center" }}>{t('communities.page.loadingMore')}</p>}
         </div>
 
         <aside className="community-side">

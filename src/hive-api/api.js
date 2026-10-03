@@ -4,6 +4,7 @@ import { getHiveClient, getHiveUrl } from '../utils/hiveNode';
 import axios from "axios";
 import { broadcastWithAioha, isLoggedIn, KeyTypes } from "./aioha";
 import { HIVE_API_URL, HIVE_API_NODES } from "../utils/config";
+import { t } from "../i18n";
 
 const client = getHiveClient();
   const bridgeApiCall = (endpoint, params) =>
@@ -210,7 +211,7 @@ export const getRelationshipBetweenAccounts = async (follower , following) => {
       const operation = buildAccountCreateOp(username, communityName, keys);
       kc.requestBroadcast(username, [operation], "Active", async (resp) => {
         if (!resp || resp.success !== true) {
-          reject(new Error(resp?.message || "Keychain did not sign the transaction"));
+          reject(new Error(resp?.message || t('misc.hiveApi.keychainNotSigned')));
           return;
         }
         // Best-effort convenience, exactly as the aioha path does it.
@@ -237,7 +238,7 @@ export const getRelationshipBetweenAccounts = async (follower , following) => {
     const operation = buildAccountCreateOp(username, communityName, keys);
 
     if (!isLoggedIn()) {
-      throw new Error("Please login to create a community");
+      throw new Error(t('misc.hiveApi.loginToCreateCommunity'));
     }
 
     try {
@@ -410,7 +411,7 @@ export const getRelationshipBetweenAccounts = async (follower , following) => {
 
   export const createHiveCommunityX = async (user, communityName, communityKeys) => {
     if (!isLoggedIn()) {
-      throw new Error("Please login to create a community");
+      throw new Error(t('misc.hiveApi.loginToCreateCommunity'));
     }
 
     const customJsonOp = ["custom_json", {
@@ -437,7 +438,7 @@ export const keychainBroadcast = async (account, operations, key, rpc = null) =>
   console.warn('keychainBroadcast is deprecated. Use broadcastWithAioha from aioha.js instead.');
 
   if (!isLoggedIn()) {
-    throw new Error("Please login first");
+    throw new Error(t('misc.hiveApi.loginFirst'));
   }
 
   // Map key type string to aioha KeyTypes
@@ -455,7 +456,7 @@ export const addAccountTokeychain = (username, keys) => new Promise((resolve, re
   if (window.hive_keychain) {
       window.hive_keychain.requestAddAccount(username, keys, (resp) => {
           if (!resp.success) {
-              reject({ message: "Operation cancelled" });
+              reject({ message: t('misc.hiveApi.cancelled') });
           }
           resolve(resp);
       });

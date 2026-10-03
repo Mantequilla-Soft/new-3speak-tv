@@ -10,6 +10,7 @@
 // currentHandle() below, which is deliberately a separate key from `user_id`.
 
 import { CHECKER_URL } from '../utils/config';
+import { t as translate } from '../i18n';
 
 const HANDLE_KEY = 'incubation_handle';
 
@@ -66,7 +67,7 @@ export function handleAvatar(handle) {
 async function json(res) {
   if (!res.ok) {
     const body = await res.json().catch(() => ({}));
-    const err = new Error(body.error || `Request failed (${res.status})`);
+    const err = new Error(body.error || translate('misc.incubation.requestFailed', { status: res.status }));
     err.status = res.status;
     err.reason = body.reason || null;
     throw err;
@@ -339,7 +340,7 @@ export function notifyIncubationProgress() {
 export async function fetchWarmupContact() {
   const res = await fetch('/api/warmup/contact', { credentials: 'include' });
   const data = await res.json().catch(() => ({}));
-  if (!res.ok) throw new Error(data.error || 'Could not load your contact details');
+  if (!res.ok) throw new Error(data.error || translate('misc.incubation.contactLoadFailed'));
   return data;
 }
 
@@ -366,7 +367,7 @@ export async function saveWarmupContact({ email, address }) {
     body: JSON.stringify({ email, address }),
   });
   const data = await res.json().catch(() => ({}));
-  if (!res.ok) throw new Error(data.error || 'Could not save your contact details');
+  if (!res.ok) throw new Error(data.error || translate('misc.incubation.contactSaveFailed'));
   // The goal may have just been met.
   notifyIncubationProgress();
   return data;
@@ -574,7 +575,7 @@ export function isAwaitingApproval(status) {
 async function backfill(path) {
   const { isManteAuthLogin } = await import('../hive-api/aioha');
   if (!isManteAuthLogin()) {
-    const err = new Error('Only a Butter Auth account can have an incubation backlog');
+    const err = new Error(translate('misc.incubation.onlyButrauthBacklog'));
     err.status = 401;
     err.reason = 'not_butrauth';
     throw err;
@@ -657,7 +658,7 @@ export async function publishBackfill(items, onProgress = () => {}) {
         body: JSON.stringify({ operations: [item.op] })
       });
       const body = await res.json().catch(() => ({}));
-      if (!res.ok) throw new Error(body.error || `Publish failed (${res.status})`);
+      if (!res.ok) throw new Error(body.error || translate('misc.incubation.publishFailed', { status: res.status }));
 
       const permlink = item.op?.[1]?.permlink || null;
       await markBackfilled(item.type, item.id, permlink);

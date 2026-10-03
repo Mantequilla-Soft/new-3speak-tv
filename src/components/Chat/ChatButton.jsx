@@ -1,9 +1,11 @@
-import { NavLink } from 'react-router-dom'
+import { useLocation } from 'react-router-dom'
 import { MessageCircle } from 'lucide-react'
 import { useServerUnread } from '../../hooks/useServerUnread'
 import { useChat } from '../../context/ChatContext'
 import { useAppStore } from '../../lib/store'
+import { useOpenChat } from '../../hooks/useOpenChat'
 import './ChatButton.scss'
+import { useTranslation } from 'react-i18next'
 
 // Split out so the unread subscription only mounts once chat is connected —
 // the SDK hook keys its subscription on the client, not on auth state, so we
@@ -20,8 +22,13 @@ function UnreadDot() {
 }
 
 export default function ChatButton() {
-  const { ready } = useChat()
+  const { t } = useTranslation()
+  const { ready, overlayOpen, closeOverlay } = useChat()
   const incubationHandle = useAppStore((s) => s.incubationHandle)
+  const openChat = useOpenChat()
+  const { pathname } = useLocation()
+  const onChatPage = pathname === '/chat'
+  const isOpen = onChatPage || overlayOpen
 
   // Chat is a Hive-account feature end to end: Snapie authenticates it with a
   // posting-key signMessage challenge, so there is nothing to sign for someone
@@ -30,14 +37,18 @@ export default function ChatButton() {
   if (incubationHandle) return null
 
   return (
-    <NavLink
-      to="/chat"
-      className={({ isActive }) => `chat-nav-btn${isActive ? ' open' : ''}`}
-      aria-label="Chat"
-      title="Chat"
+    // A toggle for the overlay on wider screens, a link to /chat on phones
+    // (useOpenChat picks).
+    <button
+      type="button"
+      className={`chat-nav-btn${isOpen ? ' open' : ''}`}
+      aria-label={t('chat.button.label')}
+      aria-expanded={!onChatPage ? overlayOpen : undefined}
+      title={t('chat.button.label')}
+      onClick={() => (overlayOpen && !onChatPage ? closeOverlay() : openChat())}
     >
       <MessageCircle size={21} />
       {ready && <UnreadDot />}
-    </NavLink>
+    </button>
   )
 }

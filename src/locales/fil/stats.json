@@ -1,0 +1,119 @@
+{
+  "ranges": {
+    "d7": "7a",
+    "d28": "28a",
+    "d90": "90a",
+    "all": "Lahat"
+  },
+  "content": {
+    "all": "Lahat",
+    "videos": "Mga Video",
+    "shorts": "Shorts"
+  },
+  "metrics": {
+    "watchTime": "Watch time",
+    "views": "Views",
+    "avgPct": "Avg %",
+    "votes": "Votes",
+    "comments": "Comments",
+    "payout": "Payout"
+  },
+  "days": {
+    "short": {
+      "sun": "Lin",
+      "mon": "Lun",
+      "tue": "Mar",
+      "wed": "Miy",
+      "thu": "Huw",
+      "fri": "Biy",
+      "sat": "Sab"
+    },
+    "initial": {
+      "sun": "L",
+      "mon": "L",
+      "tue": "M",
+      "wed": "M",
+      "thu": "H",
+      "fri": "B",
+      "sat": "S"
+    }
+  },
+  "sources": {
+    "threespeak": "3Speak",
+    "player": "Embed player"
+  },
+  "trend": {
+    "empty": "Wala pang watch time sa panahong ito.",
+    "tip_one": "{{count}} view · {{date}}",
+    "tip_other": "{{count}} views · {{date}}"
+  },
+  "noData": "Wala pang data.",
+  "demo": {
+    "viewerLocations": "Lokasyon ng mga viewer",
+    "mapBubble_one": "{{country}} — {{count}} session",
+    "mapBubble_other": "{{country}} — {{count}} sessions",
+    "empty": "Wala pang viewer data sa panahong ito.",
+    "breakdown": "Breakdown",
+    "map": "Mapa",
+    "countries": "Mga Bansa",
+    "devices": "Mga Device",
+    "browsers": "Mga Browser",
+    "whereTitle": "Saan sila nanonood",
+    "whereSub": "3speak vs embed player",
+    "newVsReturning": "Bago vs bumabalik",
+    "new": "Bago",
+    "returning": "Bumabalik",
+    "located": "{{located}} sa {{total}} watch session ang may lokasyon."
+  },
+  "when": {
+    "title": "Kailan nanonood ang mga viewer mo",
+    "sub": "UTC · mas madilim = mas maraming views",
+    "cellTitle_one": "{{day}} {{hour}}:00 — {{count}} view",
+    "cellTitle_other": "{{day}} {{hour}}:00 — {{count}} views",
+    "hour": "{{hour}}h"
+  },
+  "detail": {
+    "summary": "{{votes}} votes · {{comments}} comments · ${{payout}}"
+  },
+  "compare": {
+    "notEnough": "Kulang ang data para ikumpara.",
+    "start": "Simula",
+    "axis": "Retention sa buong video",
+    "end": "Dulo",
+    "title": "Ikumpara ang mga video",
+    "pickA": "Pumili ng video…",
+    "vs": "vs",
+    "pickB": "Pumili ng isa pa…"
+  },
+  "loadError": "Hindi ma-load ang stats mo ngayon.",
+  "emptyRange": "Wala pang watch data sa panahong ito — subukan ang “Lahat”, o hintaying may manood ng mga video mo.",
+  "tiles": {
+    "avgViewDuration": "Avg na tagal ng view",
+    "avgWatched": "Avg na napanood",
+    "reactionsPerView": "Reactions / view"
+  },
+  "subtotals": "{{videos}} videos · {{votes}} votes · {{comments}} comments · ${{payout}} · avg na bilis {{rate}}×",
+  "sections": {
+    "trend": "Watch time sa paglipas ng panahon",
+    "best": "Pinakamahusay",
+    "audience": "Ang audience mo"
+  },
+  "openInNewTab": "Buksan ang video sa bagong tab",
+  "footnote": "Galing sa preview tracking ang watch stats at ikaw lang ang nakakakita.",
+  "video": {
+    "noData": "Wala pang data",
+    "empty": "Wala pang watch data para sa video na ito.",
+    "uniqueViewers": "Unique viewers",
+    "avgSpeed": "Avg na bilis",
+    "mostDropOff": "📉 Pinakamaraming umalis sa <b>{{time}}</b>",
+    "earlyDrop": "⚡ <b>{{pct}}%</b> ang umalis sa unang 3s",
+    "replayed": "🔁 Inulit:",
+    "retentionTitle": "Audience retention",
+    "retentionSub": "bahagi ng mga viewer na nanonood pa sa bawat sandali",
+    "pctWatching": "{{pct}}% nanonood",
+    "replayTitle": "Pinakamadalas ulitin",
+    "replaySub": "mga bahaging pinakamadalas panoorin at ulitin ng mga viewer",
+    "hotSpot": "hot spot",
+    "notEnoughReplays": "Kulang pa ang replays"
+  }
+}

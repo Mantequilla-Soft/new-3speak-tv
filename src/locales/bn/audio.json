@@ -1,0 +1,282 @@
+{
+  "untitled": "শিরোনামহীন",
+  "categories": {
+    "podcast": "পডকাস্ট",
+    "voice": "ভয়েস",
+    "music": "সংগীত",
+    "audiobook": "অডিওবুক",
+    "interview": "সাক্ষাৎকার"
+  },
+  "inline": {
+    "defaultTitle": "OpenPod রেকর্ডিং",
+    "defaultSubtitle": "3Speak OpenPods-এ লাইভ রেকর্ড করা",
+    "kickerPreview": "অডিও প্রিভিউ",
+    "kickerOpenPod": "OpenPod"
+  },
+  "tile": {
+    "artistAlbum": "শিল্পীর অ্যালবাম",
+    "listenerPlaylist": "শ্রোতার প্লেলিস্ট",
+    "bpm": "{{bpm}} bpm",
+    "queue": "কিউ",
+    "playlist": "প্লেলিস্ট",
+    "plays_one": "{{count}} বার শোনা",
+    "plays_other": "{{count}} বার শোনা"
+  },
+  "author": {
+    "followed": "@{{author}}-কে ফলো করেছেন",
+    "unfollowed": "@{{author}}-কে আনফলো করেছেন",
+    "failed": "ব্যর্থ",
+    "tracks_one": "{{count}}টি ট্র্যাক",
+    "tracks_other": "{{count}}টি ট্র্যাক"
+  },
+  "player": {
+    "openPost": "অডিও পোস্ট খুলুন",
+    "playlist": "প্লেলিস্ট",
+    "transcript": "ট্রান্সক্রিপ্ট",
+    "volume": "ভলিউম",
+    "queue": "কিউ",
+    "closePlayer": "প্লেয়ার বন্ধ করুন",
+    "curated": "বাছাই করা",
+    "noCues": "কোনো কিউ নেই।",
+    "clearQueue": "কিউ খালি করুন",
+    "clearAll": "সব মুছুন",
+    "queueEmpty": "কিউ খালি।"
+  },
+  "share": {
+    "failed": "ব্যর্থ",
+    "copyPeakd": "PeakD লিংক কপি করুন",
+    "copiedPeakd": "PeakD লিংক কপি হয়েছে!",
+    "copy3speak": "3Speak লিংক কপি করুন",
+    "copied3speak": "3Speak লিংক কপি হয়েছে!",
+    "copyAudioPlayer": "অডিও প্লেয়ারের লিংক কপি করুন",
+    "copiedAudioPlayer": "অডিও প্লেয়ারের লিংক কপি হয়েছে!",
+    "searchingHive": "Hive-এ খোঁজা হচ্ছে…"
+  },
+  "post": {
+    "notFound": "পোস্ট পাওয়া যায়নি",
+    "loadFailed": "এই অডিও পোস্টটি লোড করা যায়নি",
+    "loadFailedFull": "এই অডিও পোস্টটি লোড করা যায়নি।",
+    "backToAudio": "← অডিওতে ফিরে যান",
+    "untitled": "(শিরোনামহীন)",
+    "addedToQueue": "কিউতে যোগ হয়েছে",
+    "signInToVote": "ভোট দিতে সাইন ইন করুন",
+    "voted": "ভোট দিয়েছেন",
+    "vote": "ভোট",
+    "signInToTip": "টিপ দিতে সাইন ইন করুন",
+    "tip": "টিপ",
+    "stillIndexing": "এই পোস্টের অডিও এখনো ইনডেক্স হচ্ছে — কয়েক মিনিট পরে আবার চেষ্টা করুন।"
+  },
+  "page": {
+    "sections": {
+      "popular": "জনপ্রিয়",
+      "recent": "নতুন রিলিজ",
+      "podcasts": "পডকাস্ট",
+      "songs": "গান",
+      "audiobooks": "অডিওবুক",
+      "interviews": "সাক্ষাৎকার"
+    },
+    "dates": {
+      "today": "আজ",
+      "thisWeek": "এই সপ্তাহ",
+      "thisMonth": "এই মাস",
+      "thisYear": "এই বছর"
+    },
+    "duration": {
+      "label": "দৈর্ঘ্য",
+      "min": "সর্বনিম্ন দৈর্ঘ্য",
+      "max": "সর্বোচ্চ দৈর্ঘ্য",
+      "seconds": "{{value}} সে",
+      "minutes": "{{value}} মি",
+      "hours": "{{value}} ঘ"
+    },
+    "all": "সব",
+    "musicGenre": "গানের ধরন",
+    "anyGenre": "যেকোনো ধরন",
+    "tracks_one": "{{count}}টি ট্র্যাক",
+    "tracks_other": "{{count}}টি ট্র্যাক",
+    "noTracks": "কোনো ট্র্যাক পাওয়া যায়নি।",
+    "creators": "ক্রিয়েটর",
+    "albumsPlaylists": "অ্যালবাম ও প্লেলিস্ট",
+    "noAudioForFilters": "এই ফিল্টারগুলোতে কোনো অডিও পাওয়া যায়নি।"
+  },
+  "upload": {
+    "title": "অডিও আপলোড করুন",
+    "publishing": "প্রকাশ হচ্ছে…",
+    "failed": "ব্যর্থ",
+    "unknown": "অজানা",
+    "unknownError": "অজানা ত্রুটি",
+    "recorded": "রেকর্ড করা",
+    "uploaded": "আপলোড করা",
+    "steps": {
+      "source": "উৎস",
+      "mode": "মোড",
+      "playlist": "প্লেলিস্ট",
+      "post": "পোস্ট",
+      "mainpost": "মূল পোস্ট",
+      "tracks": "ট্র্যাক",
+      "review": "পর্যালোচনা"
+    },
+    "trackTypes": {
+      "voiceSnap": "ভয়েস / Snap"
+    },
+    "toasts": {
+      "pickImage": "একটি ছবির ফাইল বেছে নিন",
+      "thumbFailed": "থাম্বনেইল আপলোড ব্যর্থ: {{error}}",
+      "appliedToAll": "সব ট্র্যাকে প্রয়োগ করা হয়েছে",
+      "micDenied": "মাইক্রোফোন ব্যবহারের অনুমতি পাওয়া যায়নি",
+      "signInFirst": "আগে সাইন ইন করুন",
+      "enterPlaylistName": "প্লেলিস্টের একটি নাম দিন",
+      "creatingPlaylist": "\"{{name}}\" প্লেলিস্ট তৈরি হচ্ছে…",
+      "playlistCreated": "প্লেলিস্ট তৈরি হয়েছে",
+      "failedWithError": "ব্যর্থ: {{error}}",
+      "authorized": "@threespeak অনুমোদিত — এখন আপনি প্রকাশ করতে পারবেন",
+      "authFailed": "অনুমোদন ব্যর্থ হয়েছে। আবার চেষ্টা করুন।",
+      "couldntPublishMain": "মূল পোস্ট প্রকাশ করা যায়নি: {{error}}",
+      "couldntResolveContainer": "peak.snaps কন্টেইনার পাওয়া যায়নি: {{error}}",
+      "published_one": "{{count}}টি ট্র্যাক প্রকাশিত হয়েছে",
+      "published_other": "{{count}}টি ট্র্যাক প্রকাশিত হয়েছে",
+      "someFailed": "কিছু ট্র্যাক ব্যর্থ হয়েছে — আবার চেষ্টা করতে ব্যর্থ ট্র্যাকটি খুলুন"
+    },
+    "gate": {
+      "checking": "যাচাই হচ্ছে…",
+      "allowThreespeak": "অডিও প্রকাশ করতে <b>@threespeak</b>-কে আপনার হয়ে পোস্ট করার অনুমতি দিন।",
+      "authorizing": "অনুমোদন হচ্ছে…",
+      "authorize": "@threespeak অনুমোদন করুন",
+      "notEnoughRc": "এই মুহূর্তে পোস্ট প্রকাশ করার মতো যথেষ্ট <b>Resource Credits</b> আপনার অ্যাকাউন্টে নেই।",
+      "whyCantUpload": "কেন আপলোড করতে পারছি না?"
+    },
+    "discard": {
+      "title": "আপলোড বাতিল করবেন?",
+      "body_one": "আপনি {{count}}টি ট্র্যাক যোগ করেছেন। বন্ধ করলে সেগুলো বাতিল হয়ে যাবে।",
+      "body_other": "আপনি {{count}}টি ট্র্যাক যোগ করেছেন। বন্ধ করলে সেগুলো বাতিল হয়ে যাবে।",
+      "bodyRecording_one": "আপনি {{count}}টি ট্র্যাক যোগ করেছেন এবং একটি রেকর্ডিং চলছে। বন্ধ করলে সেগুলো বাতিল হয়ে যাবে।",
+      "bodyRecording_other": "আপনি {{count}}টি ট্র্যাক যোগ করেছেন এবং একটি রেকর্ডিং চলছে। বন্ধ করলে সেগুলো বাতিল হয়ে যাবে।",
+      "keepEditing": "এডিট চালিয়ে যান",
+      "discard": "বাতিল করুন"
+    },
+    "source": {
+      "dropHere": "অডিও ফাইল এখানে ছাড়ুন, অথবা ক্লিক করে বাছাই করুন",
+      "formats": "MP3, WAV, OGG, WEBM, M4A, FLAC, AAC — একাধিক চলবে",
+      "stop": "থামান",
+      "orRecord": "অথবা লাইভ রেকর্ড করুন",
+      "recordLimit": "প্রতি রেকর্ডিং সর্বোচ্চ {{minutes}} মিনিট",
+      "record": "রেকর্ড",
+      "added": "যোগ করা ({{count}})"
+    },
+    "titles": {
+      "help": "প্রতিটি ট্র্যাকের শিরোনাম দিন এবং একটি ধরন বেছে নিন। সংগীত ট্র্যাকে ধরন + BPM ঘর থাকে।"
+    },
+    "fields": {
+      "trackTitle": "ট্র্যাকের শিরোনাম",
+      "genre": "ধরন",
+      "bpm": "BPM",
+      "descriptionOptional": "বিবরণ (ঐচ্ছিক)"
+    },
+    "playlist": {
+      "helpRequired": "আবশ্যক — একটি প্লেলিস্ট বেছে নিন বা তৈরি করুন। অ্যালবাম পোস্ট একটি প্লেলিস্টের ভেতরে থাকে, যাতে এর ট্র্যাকগুলো একটি 3Speak অ্যালবামের মধ্যে একসাথে থাকে। এতে অডিও পেজে বেশি দেখা যায় ও ভালো জায়গা পায়।",
+      "helpOptional": "ঐচ্ছিক — সব ট্র্যাক একটি প্লেলিস্টে যোগ করুন।",
+      "none": "কোনো প্লেলিস্ট নয়",
+      "noneHint": "ট্র্যাকগুলো একসাথে রাখা হবে না",
+      "creatingPending": "তৈরি হচ্ছে… (ইনডেক্সারের অপেক্ষায়)",
+      "loading": "প্লেলিস্ট লোড হচ্ছে…",
+      "empty": "আপনার এখনো কোনো প্লেলিস্ট নেই।",
+      "items_one": "{{count}}টি আইটেম",
+      "items_other": "{{count}}টি আইটেম",
+      "newPlaylist": "নতুন অডিও প্লেলিস্ট",
+      "namePlaceholder": "প্লেলিস্টের নাম",
+      "public": "পাবলিক",
+      "private": "প্রাইভেট",
+      "musicStylePlaceholder": "গানের স্টাইল / ধরন (ঐচ্ছিক, যেমন Electronic)",
+      "creditsPlaceholder": "ক্রেডিট (ঐচ্ছিক)",
+      "yearPlaceholder": "বছর",
+      "labelPlaceholder": "লেবেল (ঐচ্ছিক)",
+      "thumbAlt": "অ্যালবামের থাম্বনেইল",
+      "removeThumb": "থাম্বনেইল সরান",
+      "creating": "তৈরি হচ্ছে…",
+      "create": "তৈরি করুন"
+    },
+    "thumb": {
+      "uploading": "আপলোড হচ্ছে…",
+      "addCover": "কভার ছবি যোগ করুন",
+      "hint": "ক্লিক করুন বা টেনে এনে ছাড়ুন — JPG / PNG / WebP",
+      "coverAlt": "কভার",
+      "removeCover": "কভার সরান"
+    },
+    "mode": {
+      "help_one": "{{count}}টি ট্র্যাক যোগ হয়েছে। কীভাবে প্রকাশ হবে বেছে নিন।",
+      "help_other": "{{count}}টি ট্র্যাক যোগ হয়েছে। কীভাবে প্রকাশ হবে বেছে নিন।",
+      "howPublished": "এটি কীভাবে প্রকাশ করা হবে?",
+      "snapsTitle": "Snap কমেন্ট",
+      "snapsDesc": "প্রতিটি অডিও সর্বশেষ peak.snaps কন্টেইনারের নিচে রিপ্লাই হিসেবে পোস্ট হয় — Snaps ফিডে দেখা যায় (ডিফল্ট)।",
+      "singleTitle": "আলাদা পোস্ট",
+      "singleTitleSingleOnly": "আলাদা পোস্ট (শুধু একটি ফাইল)",
+      "singleDesc": "একটি অডিও তার নিজের মূল Hive পোস্টে, শিরোনাম, কমিউনিটি, ট্যাগ ও কভারসহ।",
+      "albumTitle": "অ্যালবাম পোস্ট",
+      "albumTitleNeeds2": "অ্যালবাম পোস্ট (2+ ফাইল লাগবে)",
+      "albumDesc": "একটি মূল পোস্ট (অডিও ছাড়া) ল্যান্ডিং পেজ হিসেবে কাজ করে; প্রতিটি ট্র্যাক নিজস্ব কভার, বিবরণ, পেআউট ও বেনিফিশিয়ারিসহ কমেন্ট রিপ্লাই হিসেবে প্রকাশিত হয়।",
+      "howEarn": "এই অডিও কীভাবে আয় করবে?",
+      "postRewardsTitle": "পোস্ট রিওয়ার্ড (একবার)",
+      "postRewardsDesc": "আপনি সাধারণ Hive লেখক পেআউট পাবেন — একবারই দেওয়া হয়, প্রকাশের ~7 দিন পরে।",
+      "pplTitle": "প্রতি শোনায় পেমেন্ট (আজীবন)",
+      "pplDesc": "অডিও পোস্টের সব রিওয়ার্ড @{{account}}-এ যায়। একবারের পেআউটের বদলে, একটি 3Speak প্রোগ্রাম ট্র্যাকের পুরো জীবনকাল ধরে প্রতিবার শোনার জন্য আপনাকে পেমেন্ট দেয়।"
+    },
+    "reward": {
+      "distribution": "রিওয়ার্ড বণ্টন",
+      "default": "ডিফল্ট (50% HBD / 50% HP)",
+      "powerup": "100% পাওয়ার আপ",
+      "decline": "পেআউট প্রত্যাখ্যান",
+      "beneficiaries": "বেনিফিশিয়ারি",
+      "beneficiariesCount": "বেনিফিশিয়ারি ({{count}})"
+    },
+    "mainPost": {
+      "helpAlbum": "মূল পোস্টের বিস্তারিত — অ্যালবামের ল্যান্ডিং পেজ। এতে কোনো অডিও থাকে না; প্রতিটি ট্র্যাক একটি কমেন্ট রিপ্লাই, যা আপনি এরপর সেট করবেন।",
+      "helpSingle": "আপনার আলাদা পোস্টের বিস্তারিত।",
+      "titlePlaceholder": "শিরোনাম (আবশ্যক)",
+      "selectCommunity": "কমিউনিটি বাছাই করুন",
+      "change": "বদলান",
+      "tagsPlaceholder": "ট্যাগ — স্পেস বা কমা দিয়ে আলাদা করুন (ঐচ্ছিক)",
+      "whatKind": "এটি কী ধরনের অডিও?"
+    },
+    "tracks": {
+      "helpAlbum": "প্রতিটি ট্র্যাক মূল পোস্টের নিচে একটি কমেন্ট হিসেবে প্রকাশিত হয়। সাধারণ মানগুলো একবার সেট করে সবগুলোতে প্রয়োগ করুন, তারপর প্রতিটি ট্র্যাকে আলাদা করে বদলান।",
+      "helpSnaps": "প্রতিটি ট্র্যাক নিজস্ব Snap হিসেবে প্রকাশিত হয়। সাধারণ মানগুলো একবার সেট করে সবগুলোতে প্রয়োগ করুন, তারপর প্রতিটি ট্র্যাকে আলাদা করে বদলান।",
+      "applyToAllHeading": "সব ট্র্যাকে প্রয়োগ করুন",
+      "sharedDescription": "সাধারণ বিবরণ (ঐচ্ছিক)",
+      "sharedCover": "সাধারণ কভার ছবি",
+      "applyToAll_one": "সব {{count}}টি ট্র্যাকে প্রয়োগ করুন",
+      "applyToAll_other": "সব {{count}}টি ট্র্যাকে প্রয়োগ করুন",
+      "hide": "লুকান"
+    },
+    "review": {
+      "standalone": "আলাদা পোস্ট",
+      "standaloneIn": "{{community}}-এ আলাদা পোস্ট",
+      "album_one": "অ্যালবাম — 1টি মূল পোস্ট + {{count}}টি ট্র্যাক কমেন্ট",
+      "album_other": "অ্যালবাম — 1টি মূল পোস্ট + {{count}}টি ট্র্যাক কমেন্ট",
+      "albumIn_one": "অ্যালবাম — {{community}}-এ 1টি মূল পোস্ট + {{count}}টি ট্র্যাক কমেন্ট",
+      "albumIn_other": "অ্যালবাম — {{community}}-এ 1টি মূল পোস্ট + {{count}}টি ট্র্যাক কমেন্ট",
+      "snapComments_one": "{{count}}টি Snap কমেন্ট",
+      "snapComments_other": "{{count}}টি Snap কমেন্ট",
+      "ready_one": "{{count}}টি ট্র্যাক প্রকাশের জন্য প্রস্তুত।",
+      "ready_other": "{{count}}টি ট্র্যাক প্রকাশের জন্য প্রস্তুত।",
+      "readyToPlaylist_one": "\"{{name}}\" প্লেলিস্টে {{count}}টি ট্র্যাক প্রকাশের জন্য প্রস্তুত।",
+      "readyToPlaylist_other": "\"{{name}}\" প্লেলিস্টে {{count}}টি ট্র্যাক প্রকাশের জন্য প্রস্তুত।",
+      "publishAs": "যেভাবে প্রকাশ হবে:",
+      "earnings": "আয়:",
+      "earningsPpl": "প্রতি শোনায় পেমেন্ট (@{{account}})",
+      "earningsNormal": "সাধারণ পোস্ট রিওয়ার্ড",
+      "playlist": "প্লেলিস্ট:",
+      "failedCount_one": "{{count}}টি ট্র্যাক ব্যর্থ হয়েছে।",
+      "failedCount_other": "{{count}}টি ট্র্যাক ব্যর্থ হয়েছে।",
+      "retryAllFailed": "সব ব্যর্থগুলো আবার চেষ্টা করুন",
+      "failedDuringUpload": "অডিও ফাইল আপলোডের সময় ব্যর্থ: {{message}}",
+      "failedDuringPost": "Hive-এ পোস্ট করার সময় ব্যর্থ: {{message}}",
+      "failedWithMessage": "ব্যর্থ: {{message}}"
+    },
+    "stage": {
+      "upload": "অডিও ফাইল আপলোড হচ্ছে",
+      "post": "Hive-এ পোস্ট হচ্ছে",
+      "uploadingFallback": "আপলোড হচ্ছে",
+      "published": "প্রকাশিত"
+    }
+  }
+}

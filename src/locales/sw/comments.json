@@ -1,0 +1,100 @@
+{
+  "review": {
+    "fabAria": "Toa maoni",
+    "fab": "Maoni",
+    "aspects": {
+      "upload": "Upakiaji",
+      "playback": "Uchezaji",
+      "live": "Utiririshaji mubashara",
+      "discovery": "Ugunduzi / mlisho",
+      "design": "Muundo / UX",
+      "performance": "Kasi",
+      "mobile": "Simu",
+      "other": "Kitu kingine"
+    },
+    "titles": {
+      "upload": "Upakiaji wako ulikuwaje?",
+      "stream": "Mtiririko wako mubashara ulikuwaje?",
+      "watch": "Kutazama kwenye 3Speak kulikuwaje?",
+      "global": "Uzoefu wako wa 3Speak ukoje?",
+      "fallback": "Tusaidie kuboresha 3Speak"
+    },
+    "stars": {
+      "poor": "Mbaya",
+      "fair": "Wastani",
+      "good": "Nzuri",
+      "great": "Nzuri sana",
+      "amazing": "Bora kabisa"
+    },
+    "errors": {
+      "pickStars": "Tafadhali chagua idadi ya nyota",
+      "sendFailed": "Imeshindwa kutuma tathmini yako. Tafadhali jaribu tena."
+    },
+    "thanks": "Asante kwa maoni yako! 🙏",
+    "sendFeedback": "Tuma maoni",
+    "subtitle": "Maoni yako yanatusaidia kuboresha 3Speak.",
+    "starRating": "Ukadiriaji wa nyota",
+    "starsAria_one": "nyota {{count}}",
+    "starsAria_other": "nyota {{count}}",
+    "aboutLabel": "Hii inahusu nini? <opt>(si lazima)</opt>",
+    "recommendLabel": "Je, ungependekeza 3Speak? <opt>(si lazima)</opt>",
+    "moreLabel": "Tuambie zaidi <opt>(si lazima)</opt>",
+    "placeholder": "Ulipenda nini? Nini kingeweza kuwa bora?",
+    "notNow": "Si sasa",
+    "sending": "Inatuma…"
+  },
+  "tabs": {
+    "reactions": "Miitikio",
+    "transcript": "Nakala"
+  },
+  "live": {
+    "vodProcessing": "Rekodi inachakatwa…",
+    "vodProcessingHint": "Mtiririko huu umekwisha. Video itachukua nafasi yake hapa mara tu kisimbaji kitakapomaliza — hakuna haja ya kupakia upya.",
+    "watching_one": "👁 {{count}} anatazama",
+    "watching_other": "👁 {{count}} wanatazama",
+    "signInRaiseHand": "Ingia ili kunyoosha mkono",
+    "signInChat": "Ingia ili kuchati",
+    "signInJoinChat": "🔒 Ingia ili ujiunge na gumzo."
+  },
+  "transcript": {
+    "title": "Nakala",
+    "languageAria": "Lugha ya nakala",
+    "copyingWithTimes": "Inanakili pamoja na nyakati",
+    "copyingTextOnly": "Inanakili maandishi tu",
+    "timecodes": "Nyakati",
+    "copyWithTimes": "Nakili nakala pamoja na nyakati",
+    "copyText": "Nakili maandishi ya nakala",
+    "jumpTo": "Ruka hadi {{time}}",
+    "hide": "Ficha nakala",
+    "show": "Onyesha nakala",
+    "showWithCount_one": "Onyesha nakala (mstari {{count}})",
+    "showWithCount_other": "Onyesha nakala (mistari {{count}})"
+  },
+  "blog": {
+    "noContent": "Hakuna maudhui",
+    "loadError": "Hitilafu katika kupakia maudhui.",
+    "processError": "Hitilafu katika kuchakata maudhui.",
+    "rendererError": "Hitilafu katika kupakia kionyeshi."
+  },
+  "section": {
+    "posted": "Maoni yamechapishwa!",
+    "postFailed": "Maoni yameshindwa, tafadhali jaribu tena",
+    "editFailed": "Kuhariri kumeshindwa, tafadhali jaribu tena",
+    "updated": "Maoni yamesasishwa",
+    "commentTab": "Maoni",
+    "reactTab": "Itikia",
+    "at": "saa",
+    "atTime": "saa {{time}}",
+    "commentPlaceholder": "Andika maoni yako hapa...",
+    "replyPlaceholder": "Andika jibu lako hapa...",
+    "commentButton": "Toa maoni",
+    "count_one": "Maoni {{count}}",
+    "count_other": "Maoni {{count}}",
+    "edited": "(imehaririwa)",
+    "saving": "Inahifadhi...",
+    "translation": "Tafsiri",
+    "translationFailed": "Tafsiri imeshindwa. Je, huduma ya tafsiri inafanya kazi?",
+    "reportComment": "Ripoti maoni",
+    "openInShorts": "Fungua kwenye Shorts"
+  }
+}

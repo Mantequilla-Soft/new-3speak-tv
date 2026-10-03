@@ -1,0 +1,148 @@
+{
+  "button": {
+    "label": "Chat"
+  },
+  "tools": {
+    "emoji": "Emoji",
+    "searchEmoji": "Buscar emoji",
+    "searchGifs": "Buscar GIFs…",
+    "noGifs": "No se encontraron GIFs.",
+    "poweredByGiphy": "Con tecnología de GIPHY"
+  },
+  "lightbox": {
+    "openInNewTab": "Abrir imagen en una pestaña nueva"
+  },
+  "linkCard": {
+    "loadingPreview": "Cargando vista previa…",
+    "community": "Comunidad",
+    "communityWithSubscribers_one": "Comunidad · {{formatted}} suscriptor",
+    "communityWithSubscribers_other": "Comunidad · {{formatted}} suscriptores",
+    "commentFallback": "(comentario)",
+    "play": "Reproducir {{title}}",
+    "communityWithSubscribers_many": "Comunidad · {{formatted}} suscriptores"
+  },
+  "share": {
+    "embedCopied": "Código de inserción copiado",
+    "pressToCopy": "Presiona Ctrl/Cmd + C para copiar el código seleccionado",
+    "embedTitle": "Insertar este video",
+    "embedHint": "Pégalo en cualquier sitio web o blog.",
+    "embedSize": "Tamaño",
+    "embedCode": "Código de inserción",
+    "copyEmbed": "Copiar código de inserción",
+    "responsiveSub": "Se adapta a la página donde está",
+    "fixedSub": "Iframe de tamaño fijo",
+    "sendInChat": "Enviar por el chat de 3Speak",
+    "sendInChatSub": "Envíaselo a alguien en 3Speak",
+    "embedOnWebsite": "Insertar en un sitio web",
+    "embedOnWebsiteSub": "Copia el HTML para tu sitio o blog",
+    "generalShare": "Compartir / copiar enlace",
+    "generalShareSub": "Otras apps, o copia el enlace"
+  },
+  "gate": {
+    "connectTitle": "Conéctate al chat de 3Speak",
+    "connectBody": "El chat funciona con Snapie. Para conectarte, firmas un desafío de inicio de sesión único con tu clave de publicación de Hive: sin transacción, sin costo.",
+    "connecting": "Conectando…",
+    "connectButton": "Conectar chat",
+    "cannotSign": "Tu inicio de sesión actual no puede firmar el desafío del chat. Usa Keychain, HiveAuth, PeakVault o Ledger.",
+    "needsAccountTitle": "El chat necesita una cuenta de Hive",
+    "needsAccountBody": "Los mensajes se firman con las claves de tu propia cuenta, así que el chat se desbloquea junto con todo lo demás cuando tu cuenta esté lista. Completa los objetivos en tu perfil y el equipo te ayudará a llegar.",
+    "loginTitle": "Inicia sesión para usar el chat",
+    "loginBody": "Inicia sesión con tu cuenta de Hive para enviar y recibir mensajes.",
+    "connectingToChat": "Conectando al chat…"
+  },
+  "errors": {
+    "notHiveAccount": "@{{user}} no es una cuenta de Hive.",
+    "openConversation": "No se pudo abrir esa conversación.",
+    "verifyAccount": "No se pudo verificar esa cuenta.",
+    "createRoom": "No se pudo crear la sala.",
+    "joinChannel": "No se pudo unir a ese canal."
+  },
+  "newDm": {
+    "placeholder": "Escríbele a un usuario de Hive…",
+    "start": "Iniciar chat"
+  },
+  "newRoom": {
+    "toggle": "Nueva sala privada",
+    "namePlaceholder": "Nombre de la sala…",
+    "removeMember": "Quitar a @{{user}}",
+    "addMore": "Agregar más…",
+    "invitePlaceholder": "Invita usuarios de Hive (opcional)…",
+    "create": "Crear"
+  },
+  "channels": {
+    "browse": "Explorar canales",
+    "publicTitle": "Canales públicos",
+    "closeBrowser": "Cerrar explorador de canales",
+    "loading": "Cargando canales…",
+    "empty": "No hay canales disponibles.",
+    "join": "Unirse"
+  },
+  "markRead": {
+    "nothingToClear": "No hay conversaciones para limpiar. Puede que el contador esté trabado en el servidor.",
+    "requestFailed": "falló la solicitud",
+    "allCaughtUp": "Todo al día",
+    "stillUnread_one": "Aún se muestran {{total}} sin leer después de limpiar {{count}} chat.",
+    "stillUnread_other": "Aún se muestran {{total}} sin leer después de limpiar {{count}} chats.",
+    "stillUnreadNoMatch_one": "Aún se muestran {{total}} sin leer después de limpiar {{count}} chat. El servidor reporta un contador pero ninguna conversación que coincida.",
+    "stillUnreadNoMatch_other": "Aún se muestran {{total}} sin leer después de limpiar {{count}} chats. El servidor reporta un contador pero ninguna conversación que coincida.",
+    "notSignedIn": "El chat no tiene sesión iniciada. Vuelve a conectar el chat e inténtalo de nuevo.",
+    "sessionExpired": "La sesión del chat expiró mientras se limpiaba. Vuelve a conectar el chat e inténtalo de nuevo.",
+    "serverRejectedVisible_one": "El servidor rechazó {{count}} solicitud (ids de la lista visible)",
+    "serverRejectedVisible_other": "El servidor rechazó las {{count}} solicitudes (ids de la lista visible)",
+    "serverRejectedServerMap_one": "El servidor rechazó {{count}} solicitud (ids del propio mapa de no leídos del servidor)",
+    "serverRejectedServerMap_other": "El servidor rechazó las {{count}} solicitudes (ids del propio mapa de no leídos del servidor)",
+    "failed": "No se pudo marcar todo como leído",
+    "marking": "Marcando como leído…",
+    "button": "Marcar todo como leído",
+    "buttonCount": "Marcar todo como leído ({{count}})",
+    "stillUnread_many": "Aún se muestran {{total}} sin leer después de limpiar {{count}} chats.",
+    "stillUnreadNoMatch_many": "Aún se muestran {{total}} sin leer después de limpiar {{count}} chats. El servidor reporta un contador pero ninguna conversación que coincida.",
+    "serverRejectedVisible_many": "El servidor rechazó las {{count}} solicitudes (ids de la lista visible)",
+    "serverRejectedServerMap_many": "El servidor rechazó las {{count}} solicitudes (ids del propio mapa de no leídos del servidor)"
+  },
+  "list": {
+    "chooseTarget": "Elige un chat al que enviarlo",
+    "loading": "Cargando conversaciones…",
+    "empty": "Aún no hay conversaciones. Inicia una arriba escribiendo un usuario de Hive."
+  },
+  "leave": {
+    "confirmRoom": "¿Salir de esta sala?",
+    "confirmChannel": "¿Salir de este canal?",
+    "errorRoom": "No se pudo salir de la sala.",
+    "errorChannel": "No se pudo salir del canal.",
+    "titleRoom": "Salir de la sala",
+    "titleChannel": "Salir del canal",
+    "button": "Salir"
+  },
+  "thread": {
+    "editError": "No se pudo editar el mensaje.",
+    "deleteConfirm": "¿Eliminar este mensaje? Se reemplazará por “[eliminado]”.",
+    "deleteError": "No se pudo eliminar el mensaje.",
+    "back": "Volver a las conversaciones",
+    "loading": "Cargando mensajes…",
+    "empty": "Aún no hay mensajes: saluda 👋",
+    "editedSuffix": " · editado",
+    "messageActions": "Acciones del mensaje",
+    "quote": "Citar",
+    "forward": "Reenviar",
+    "typing_one": "{{users}} está escribiendo…",
+    "typing_other": "{{users}} están escribiendo…",
+    "editing": "Editando mensaje",
+    "cancelEdit": "Cancelar edición",
+    "quoting": "Citando a @{{user}}",
+    "cancelQuote": "Cancelar cita",
+    "removeImage": "Quitar imagen",
+    "placeholder": "Escribe un mensaje…",
+    "typing_many": "{{users}} están escribiendo…"
+  },
+  "page": {
+    "chooseTarget": "Elige un chat al que enviarlo.",
+    "selectConversation": "Selecciona una conversación o inicia una nueva."
+  },
+  "overlay": {
+    "fullscreen": "Pantalla completa",
+    "exitFullscreen": "Salir de pantalla completa",
+    "close": "Cerrar chat",
+    "sendInChat": "Enviar en el chat"
+  }
+}

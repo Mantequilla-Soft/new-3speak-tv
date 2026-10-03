@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { getHiveClient } from '../utils/hiveNode';
 import { fetchSpotlight, iconForSlug, bgToCss } from '../utils/spotlight';
 import HiveAvatar from '../components/HiveAvatar/HiveAvatar';
@@ -110,6 +111,7 @@ function VideoBlock({ section, radius, fx, theme }) {
 // Rich-link card (mirrors the standalone `.emb`). `username` is the page owner, used
 // to link a "My latest posts" block to their profile (this fallback doesn't live-fetch).
 function EmbedBlock({ section, theme, username }) {
+  const { t } = useTranslation();
   const radius = section.radius ?? theme.radius;
   const bg = safeColor(section.bg) || safeColor(theme.sectionBg);
   const text = safeColor(section.text) || safeColor(theme.sectionText);
@@ -118,7 +120,7 @@ function EmbedBlock({ section, theme, username }) {
     const who = cleanUser(section.account || username);
     return (
       <a className="sp-embed" href={`/@${who}`} style={style}>
-        <div className="sp-embed-b"><div className="sp-embed-s">Latest posts</div><div className="sp-embed-t">See @{who}’s newest posts →</div></div>
+        <div className="sp-embed-b"><div className="sp-embed-s">{t('spotlight.page.latestPosts')}</div><div className="sp-embed-t">{t('spotlight.page.seeNewestPosts', { user: who })}</div></div>
       </a>
     );
   }
@@ -131,7 +133,7 @@ function EmbedBlock({ section, theme, username }) {
       {img ? <div className="sp-embed-img"><img src={img} alt="" loading="lazy" /></div> : null}
       <div className="sp-embed-b">
         {(section.siteName || domain) ? <div className="sp-embed-s">{section.siteName || domain}</div> : null}
-        <div className="sp-embed-t">{section.title || domain || 'Open link'}</div>
+        <div className="sp-embed-t">{section.title || domain || t('spotlight.page.openLink')}</div>
         {section.description ? <div className="sp-embed-d">{section.description}</div> : null}
       </div>
     </a>
@@ -190,6 +192,7 @@ function Section({ section, theme, username }) {
 }
 
 export default function Spotlight() {
+  const { t } = useTranslation();
   const { handle } = useParams();
   const username = cleanUser(String(handle || '').replace(/^@/, ''));
 
@@ -255,11 +258,11 @@ export default function Spotlight() {
             ))}
           </div>
         ) : (
-          <p className="sp-empty">@{username} hasn’t added any links yet.</p>
+          <p className="sp-empty">{t('spotlight.page.empty', { user: username })}</p>
         )}
 
-        <Link to={`/p/${username}`} className="sp-profile-link">View 3Speak profile →</Link>
-        <div className="sp-brand"><Link to="/">Powered by 3Speak</Link></div>
+        <Link to={`/p/${username}`} className="sp-profile-link">{t('spotlight.page.viewProfile')}</Link>
+        <div className="sp-brand"><Link to="/">{t('spotlight.page.poweredBy')}</Link></div>
       </div>
     </div>
   );

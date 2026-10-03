@@ -1,0 +1,105 @@
+{
+  "controls": {
+    "rewind10": "后退 10 秒",
+    "forward10": "前进 10 秒",
+    "reactToMoment": "回应这一刻",
+    "mute": "静音",
+    "unmute": "取消静音",
+    "playerSize": "播放器大小：{{size}}",
+    "sizeStandard": "标准",
+    "pip": "画中画",
+    "autoplayOn": "自动播放：开",
+    "autoplayOff": "自动播放：关",
+    "ambientSubtle": "氛围光：柔和",
+    "ambientVivid": "氛围光：鲜艳",
+    "ambientOff": "氛围光：关",
+    "playbackSpeed": "播放速度",
+    "speedNormal": "正常",
+    "quality": "画质",
+    "qualityAuto": "自动",
+    "fullscreen": "全屏",
+    "exitFullscreen": "退出全屏",
+    "markerReplies_other": "（{{count}} 条回复）"
+  },
+  "subtitles": {
+    "title": "字幕",
+    "off": "关",
+    "font": "字体",
+    "size": "大小",
+    "textColor": "文字颜色",
+    "textBorder": "文字描边",
+    "borderColor": "描边颜色",
+    "background": "背景",
+    "none": "无",
+    "fonts": {
+      "sansSerif": "无衬线",
+      "serif": "衬线",
+      "monospace": "等宽"
+    }
+  },
+  "mini": {
+    "untitled": "视频"
+  },
+  "playlist": {
+    "previous": "上一个视频",
+    "next": "下一个视频",
+    "close": "关闭播放列表"
+  },
+  "overlay": {
+    "replay": "重播"
+  },
+  "reactions": {
+    "translation": "翻译",
+    "translationFailed": "翻译失败",
+    "videoReaction": "视频回应",
+    "comment": "评论",
+    "previous": "上一个",
+    "next": "下一个",
+    "hide": "隐藏回应",
+    "hideShort": "隐藏",
+    "loadingReplies": "正在加载回复...",
+    "sizeTitle": "大小：{{size}}",
+    "sizes": {
+      "small": "小",
+      "medium": "中",
+      "standard": "标准",
+      "big": "大",
+      "cinema": "影院"
+    },
+    "sizeNames": {
+      "small": "小",
+      "medium": "中",
+      "standard": "标准",
+      "big": "大",
+      "cinema": "影院"
+    }
+  },
+  "reactionUpload": {
+    "authorized": "已授权 @threespeak——你现在可以发布回应了",
+    "authFailed": "授权失败，请重试。",
+    "webcamDenied": "无法访问摄像头",
+    "shortTooLong": "短视频不能超过 {{max}}。请取消勾选“在 3Speak 短视频中显示”，或使用更短的视频。",
+    "uploadingVideo": "正在上传视频...",
+    "noEmbedUrl": "上传成功，但没有返回嵌入 URL",
+    "publishingComment": "正在发布评论...",
+    "posted": "视频回应已发布！",
+    "postFailed": "评论发布失败",
+    "uploadFailed": "上传失败",
+    "uploadVideo": "上传视频",
+    "recordVideo": "录制视频",
+    "startRecording": "开始录制",
+    "stopRecording": "停止录制",
+    "recordedVideo": "已录制的视频",
+    "descriptionPlaceholder": "为你的视频回应添加描述...",
+    "showInShorts": "在 3Speak 短视频中显示",
+    "authNote": "允许 <b>@threespeak</b> 代你发布回应。",
+    "authorizing": "授权中…",
+    "authorize": "授权 @threespeak",
+    "uploading": "上传中...",
+    "postReaction": "发布回应"
+  },
+  "inline": {
+    "cantPlay": "此视频无法在这里播放。",
+    "openOnSite": "在 3Speak 打开"
+  }
+}

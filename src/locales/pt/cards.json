@@ -1,0 +1,48 @@
+{
+  "loading": "Carregando...",
+  "error": "Erro: {{error}}",
+  "thumbnailAlt": "miniatura",
+  "topicTitle": "Tema: {{topic}}",
+  "watchingNow_one": "{{count}} assistindo agora",
+  "watchingNow_many": "{{count}} assistindo agora",
+  "watchingNow_other": "{{count}} assistindo agora",
+  "badges": {
+    "gatedTitle": "Só para apoiadores — o 3Speak Pro libera o vídeo completo",
+    "pro": "PRO",
+    "new": "NOVO",
+    "live": "● AO VIVO",
+    "liveChat": "● CHAT AO VIVO"
+  },
+  "status": {
+    "scheduled": "Agendado",
+    "mobile": "Celular",
+    "mobileTitle": "Enviado pelo app de celular",
+    "processing": "Processando",
+    "processingTitle": "O vídeo está sendo processado",
+    "draft": "Rascunho",
+    "draftTitle": "Rascunho - ainda não publicado",
+    "deleted": "Excluído",
+    "deletedTitle": "Este vídeo foi excluído",
+    "failed": "Falhou",
+    "failedTitle": "Falha no processamento do vídeo",
+    "unlisted": "Não listado",
+    "unlistedTitle": "Não listado — oculto dos feeds e da busca, acessível só pelo link direto"
+  },
+  "playlist": {
+    "loading": "Carregando playlists...",
+    "items_one": "{{count}} item",
+    "items_many": "{{count}} itens",
+    "items_other": "{{count}} itens",
+    "openAria": "Abrir playlist {{name}}",
+    "tag": "Playlist",
+    "updated": "Atualizada {{when}}"
+  },
+  "watchLater": {
+    "title": "Assistir mais tarde",
+    "subtitle": "Vídeos para assistir depois"
+  },
+  "watched": {
+    "title": "Assistidos",
+    "subtitle": "Seu histórico de vídeos"
+  }
+}

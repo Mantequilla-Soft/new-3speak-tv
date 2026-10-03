@@ -1,0 +1,349 @@
+{
+  "icons": {
+    "link": "লিংক",
+    "globe": "ওয়েবসাইট",
+    "podcast": "পডকাস্ট",
+    "email": "ইমেইল",
+    "phone": "ফোন",
+    "rss": "RSS",
+    "qrcode": "QR কোড",
+    "shop": "শপ",
+    "bag": "স্টোর",
+    "dollar": "টাকা",
+    "gift": "উপহার",
+    "heart": "সমর্থন",
+    "star": "স্টার",
+    "thumbsup": "লাইক",
+    "fire": "আগুন",
+    "bolt": "বিদ্যুৎ",
+    "music": "সংগীত",
+    "headphones": "অডিও",
+    "mic": "মাইক",
+    "video": "ভিডিও",
+    "film": "ফিল্ম",
+    "tv": "টিভি",
+    "play": "প্লে",
+    "camera": "ছবি",
+    "image": "ইমেজ",
+    "palette": "শিল্প",
+    "pen": "লেখা",
+    "book": "বই",
+    "newspaper": "খবর",
+    "graduation": "কোর্স",
+    "code": "কোড",
+    "gamepad": "গেমিং",
+    "briefcase": "কাজ",
+    "home": "হোম",
+    "location": "অবস্থান",
+    "map": "ম্যাপ",
+    "calendar": "ক্যালেন্ডার",
+    "clock": "ঘড়ি",
+    "bell": "অ্যালার্ট",
+    "tag": "ট্যাগ",
+    "download": "ডাউনলোড",
+    "file": "ফাইল",
+    "users": "কমিউনিটি",
+    "comment": "কমেন্ট",
+    "share": "শেয়ার",
+    "coffee": "কফি",
+    "wallet": "ওয়ালেট",
+    "plus": "আরও",
+    "check": "চেক"
+  },
+  "fonts": {
+    "system": "সিস্টেম",
+    "rounded": "গোলাকার",
+    "serif": "Serif",
+    "mono": "Mono",
+    "display": "Display",
+    "condensed": "Condensed",
+    "handwriting": "হাতের লেখা",
+    "grotesk": "Grotesk",
+    "humanist": "Humanist",
+    "geometric": "Geometric",
+    "slab": "Slab",
+    "elegant": "এলিগ্যান্ট",
+    "typewriter": "টাইপরাইটার",
+    "marker": "মার্কার",
+    "brush": "ব্রাশ",
+    "palatino": "Palatino",
+    "wide": "চওড়া"
+  },
+  "motion": {
+    "none": "কিছু না",
+    "float": "ভাসা",
+    "sway": "দোলা",
+    "pulse": "পালস",
+    "wobble": "টলমল",
+    "bounce": "লাফানো",
+    "tilt": "3D কাত",
+    "spin": "ঘোরা",
+    "shake": "কাঁপা",
+    "breathe": "শ্বাস"
+  },
+  "sectionTypes": {
+    "link": "লিংক",
+    "video": "3Speak কনটেন্ট",
+    "embed": "রিচ লিংক",
+    "image": "ছবি",
+    "header": "শিরোনাম / লেখা"
+  },
+  "blockNames": {
+    "link": "লিংক",
+    "header": "হেডার",
+    "image": "ছবি",
+    "video": "ভিডিও",
+    "embed": "এমবেড"
+  },
+  "blockNamesPlural": {
+    "link": "লিংক",
+    "header": "হেডার",
+    "image": "ছবি",
+    "video": "ভিডিও",
+    "embed": "এমবেড"
+  },
+  "templates": {
+    "minimal": {
+      "name": "Minimal",
+      "niche": "পরিষ্কার ও সাধারণ"
+    },
+    "neon": {
+      "name": "Neon Nights",
+      "niche": "ক্রিয়েটর / স্ট্রিমার"
+    },
+    "crypto": {
+      "name": "On-Chain",
+      "niche": "ক্রিপ্টো / Web3"
+    },
+    "gamer": {
+      "name": "Player One",
+      "niche": "গেমিং"
+    },
+    "photographer": {
+      "name": "Exposure",
+      "niche": "ফটোগ্রাফি"
+    },
+    "podcaster": {
+      "name": "On Air",
+      "niche": "পডকাস্ট"
+    },
+    "fitness": {
+      "name": "Peak Form",
+      "niche": "ফিটনেস / কোচ"
+    },
+    "writer": {
+      "name": "Longform",
+      "niche": "লেখক / ব্লগার"
+    },
+    "chef": {
+      "name": "Mise en Place",
+      "niche": "খাবার / রান্না"
+    },
+    "travel": {
+      "name": "Wanderlust",
+      "niche": "প্রকৃতি / ভ্রমণ"
+    },
+    "business": {
+      "name": "Boardroom",
+      "niche": "ব্যবসা / পেশাদার"
+    },
+    "artist": {
+      "name": "Palette",
+      "niche": "শিল্পী / ভিজ্যুয়াল"
+    },
+    "ocean": {
+      "name": "Tidewater",
+      "niche": "চিল / লাইফস্টাইল"
+    },
+    "musician": {
+      "name": "Amplified",
+      "niche": "সংগীত / ব্যান্ড"
+    },
+    "developer": {
+      "name": "Terminal",
+      "niche": "ডেভেলপার / টেক"
+    },
+    "sports": {
+      "name": "Game Day",
+      "niche": "খেলা / ক্রীড়াবিদ"
+    }
+  },
+  "errors": {
+    "notLoggedIn": "লগ ইন করা নেই",
+    "couldNotSaveToHive": "Hive-এ সেভ করা যায়নি"
+  },
+  "arrange": {
+    "title": "শিরোনাম",
+    "video": "ভিডিও",
+    "latestPosts": "সর্বশেষ পোস্ট",
+    "latestPostsBy": "সর্বশেষ পোস্ট · @{{account}}",
+    "dragToArrange": "সাজাতে টেনে আনুন"
+  },
+  "page": {
+    "latestPosts": "সর্বশেষ পোস্ট",
+    "seeNewestPosts": "@{{user}}-এর নতুন পোস্ট দেখুন →",
+    "openLink": "লিংক খুলুন",
+    "empty": "@{{user}} এখনো কোনো লিংক যোগ করেননি।",
+    "viewProfile": "3Speak প্রোফাইল দেখুন →",
+    "poweredBy": "Powered by 3Speak"
+  },
+  "editor": {
+    "resetToDefault": "ডিফল্টে ফেরান",
+    "motion": "মোশন",
+    "speed": "গতি {{value}}",
+    "loop": "লুপ",
+    "runSeconds": "চলবে {{value}} সেকেন্ড",
+    "picker": {
+      "videoLabel": "আমার ভিডিও থেকে বাছাই করুন",
+      "videoLoading": "আপনার ভিডিও লোড হচ্ছে…",
+      "videoEmpty": "সাম্প্রতিক কোনো 3Speak ভিডিও পাওয়া যায়নি।",
+      "shortLabel": "আমার শর্টস থেকে বাছাই করুন",
+      "shortLoading": "আপনার শর্টস লোড হচ্ছে…",
+      "shortEmpty": "সাম্প্রতিক কোনো 3Speak শর্টস পাওয়া যায়নি।",
+      "noChannel": "কোনো চ্যানেল পাওয়া যায়নি (আপনি কি লগ ইন করেছেন?)",
+      "loadFailed": "লোড করা যায়নি: {{error}}"
+    },
+    "toasts": {
+      "unfurlFailed": "লিংকের প্রিভিউ আনা যায়নি",
+      "imageUploadFailed": "ছবি আপলোড ব্যর্থ: {{error}}",
+      "tryAgain": "আবার চেষ্টা করুন",
+      "styleApplied": "সব {{type}} ব্লকে স্টাইল প্রয়োগ হয়েছে",
+      "templateApplied": "“{{name}}” প্রয়োগ হয়েছে — নিজের মতো বদলান বা আগের অবস্থায় ফেরান",
+      "reverted": "আপনার আগের ডিজাইনে ফেরানো হয়েছে",
+      "saved": "স্পটলাইট আপনার Hive প্রোফাইলে সেভ হয়েছে",
+      "saveFailed": "সেভ করা যায়নি",
+      "linkCopied": "লিংক কপি হয়েছে",
+      "uploadFailed": "আপলোড ব্যর্থ হয়েছে"
+    },
+    "link": {
+      "labelPlaceholder": "লেবেল (যেমন আমার YouTube)",
+      "type": "লিংকের ধরন",
+      "typeGroup": "ধরন",
+      "website": "ওয়েবসাইট / URL",
+      "email": "ইমেইল",
+      "phone": "ফোন",
+      "platformGroup": "প্ল্যাটফর্ম",
+      "yourname": "yourname",
+      "platformIconHint": "আইকনটি {{platform}}-এর লোগো — নিজস্ব আইকন বাছতে “ওয়েবসাইট / URL”-এ যান।",
+      "icon": "আইকন",
+      "iconColor": "আইকনের রং",
+      "iconBg": "আইকনের ব্যাকগ্রাউন্ড"
+    },
+    "header": {
+      "text": "লেখা",
+      "size": "সাইজ",
+      "large": "বড়",
+      "medium": "মাঝারি",
+      "small": "ছোট",
+      "align": "সারিবদ্ধতা",
+      "left": "বাম",
+      "center": "মাঝখান",
+      "right": "ডান"
+    },
+    "image": {
+      "uploading": "আপলোড হচ্ছে…",
+      "upload": "ছবি আপলোড করুন",
+      "urlPlaceholder": "…অথবা ছবির URL",
+      "linkPlaceholder": "ক্লিক করলে লিংক (ঐচ্ছিক)"
+    },
+    "video": {
+      "contentType": "কনটেন্টের ধরন",
+      "video": "ভিডিও",
+      "short": "শর্ট",
+      "orPaste": "অথবা একটি লিংক পেস্ট করুন",
+      "pastePlaceholder": "একটি 3Speak ভিডিও লিংক বা author/permlink পেস্ট করুন",
+      "titlePlaceholder": "ভিডিওর উপরে দেখানো শিরোনাম (3Speak-এ লিংক করে)",
+      "hint": "বাছাই করা কনটেন্ট আপনার পেজে এমবেড হয়ে চলবে।"
+    },
+    "embed": {
+      "source": "উৎস",
+      "sourceLink": "একটি লিংক (রিচ প্রিভিউ)",
+      "sourceHiveRecent": "আমার সর্বশেষ Hive পোস্ট",
+      "accountPlaceholder": "Hive ইউজারনেম (নিজেরটার জন্য খালি রাখুন)",
+      "showPosts_one": "{{count}}টি পোস্ট দেখান",
+      "showPosts_other": "{{count}}টি পোস্ট দেখান",
+      "perRow": "প্রতি সারিতে {{value}}টি",
+      "hiveRecentHint": "আপনার সাম্প্রতিকতম মূল পোস্টগুলো (রিব্লগ বা ক্রস-পোস্ট নয়)। স্বয়ংক্রিয়ভাবে আপডেট হয়।",
+      "linkPlaceholder": "যেকোনো লিংক পেস্ট করুন — Hive পোস্ট, Instagram, X, YouTube, আর্টিকেল…",
+      "fetching": "প্রিভিউ আনা হচ্ছে…",
+      "noPreview": "কোনো প্রিভিউ পাওয়া যায়নি — তবুও এটি একটি লিংক কার্ড হিসেবে দেখাবে।",
+      "pasteHint": "একটি লিংক পেস্ট করুন, আমরা এর শিরোনাম, বিবরণ ও ছবি নিয়ে আসবো।"
+    },
+    "style": {
+      "title": "স্টাইল",
+      "applyAllTitle": "এই স্টাইলটি প্রতিটি {{type}} ব্লকে প্রয়োগ করুন",
+      "applyAll": "সব {{types}}-এ প্রয়োগ করুন",
+      "background": "ব্যাকগ্রাউন্ড",
+      "text": "লেখা",
+      "backgroundPct": "ব্যাকগ্রাউন্ড {{value}}%",
+      "radius": "কোণের গোলাই {{value}}",
+      "fontSizePct": "ফন্ট সাইজ {{value}}%",
+      "paddingPx": "প্যাডিং {{value}}px",
+      "thumbnailPct": "থাম্বনেইল {{value}}%",
+      "border": "বর্ডার",
+      "thicknessPx": "পুরুত্ব {{value}}px",
+      "opacityPct": "অস্বচ্ছতা {{value}}%",
+      "shadow": "ছায়া",
+      "strengthPct": "তীব্রতা {{value}}%",
+      "color": "রং",
+      "blur": "ঝাপসা {{value}}",
+      "spread": "বিস্তার {{value}}",
+      "inset": "ভেতরে",
+      "cardDelayMs": "কার্ডের বিলম্ব {{value}}ms"
+    },
+    "tagline": "আপনার লিংক ও ভিডিও এক পেজে",
+    "openPage": "পেজ খুলুন",
+    "templates": {
+      "title": "টেমপ্লেট",
+      "hint": "সবকিছু পূরণ করতে একটি ডিজাইন বেছে নিন — আপনার বায়ো রাখা হয়, আর আপনি আগের অবস্থায় ফেরাতে পারবেন।",
+      "undo": "টেমপ্লেট বাতিল — আমার ডিজাইনে ফিরে যান"
+    },
+    "profile": {
+      "title": "প্রোফাইল",
+      "headlinePlaceholder": "একটি ছোট শিরোনাম / বায়ো (ঐচ্ছিক)",
+      "avatarSizePct": "অ্যাভাটারের সাইজ {{value}}%",
+      "avatarShadowPct": "অ্যাভাটারের ছায়া {{value}}%",
+      "avatarGlow": "অ্যাভাটারের আভা",
+      "glowSize": "আভার সাইজ {{value}}",
+      "channelButtonText": "চ্যানেল বাটনের লেখা"
+    },
+    "page": {
+      "title": "পেজের স্টাইল",
+      "solid": "একরঙা",
+      "gradient": "গ্রেডিয়েন্ট",
+      "image": "ছবি",
+      "color2": "রং 2",
+      "angle": "কোণ {{value}}°",
+      "uploadBackground": "ব্যাকগ্রাউন্ড আপলোড করুন",
+      "imageSet": "ছবি সেট ✓",
+      "overlay": "ওভারলে",
+      "overlay2": "ওভারলে 2",
+      "none": "কিছু না",
+      "overlayOpacityPct": "ওভারলের অস্বচ্ছতা {{value}}%",
+      "overlayAngle": "ওভারলের কোণ {{value}}°",
+      "colors": "রং",
+      "buttonBg": "বাটনের ব্যাকগ্রাউন্ড",
+      "buttonText": "বাটনের লেখা",
+      "buttons": "বাটন",
+      "buttonStyle": "বাটনের স্টাইল",
+      "soft": "নরম",
+      "fill": "ভরাট",
+      "outline": "আউটলাইন",
+      "cornerRadius": "কোণের গোলাই {{value}}",
+      "textStyle": "লেখার স্টাইল (নাম, বায়ো ও লেখার ব্লক)",
+      "font": "ফন্ট",
+      "normal": "সাধারণ",
+      "italic": "ইটালিক",
+      "bold": "বোল্ড",
+      "boldItalic": "বোল্ড ইটালিক",
+      "strong": "গাঢ়",
+      "textBorderPx": "লেখার বর্ডার {{value}}px",
+      "borderColor": "বর্ডারের রং"
+    },
+    "addBlock": "একটি ব্লক যোগ করুন",
+    "empty": "উপরে আপনার প্রথম লিংক, ভিডিও বা ছবি যোগ করুন।",
+    "arrangeHint": "সাজাতে <grip></grip> টেনে আনুন · পাশাপাশি রাখতে একটি ব্লক আরেকটির উপর ছাড়ুন · এখানেই এডিট করতে একটি ব্লকে ক্লিক করুন",
+    "livePreview": "লাইভ প্রিভিউ",
+    "previewTitle": "স্পটলাইট প্রিভিউ"
+  }
+}

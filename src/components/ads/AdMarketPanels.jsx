@@ -24,6 +24,7 @@ import {
   groupByFormat,
 } from '../../lib/adMarket';
 import '../../page/Advertise.scss';
+import { useTranslation, Trans } from 'react-i18next';
 
 function StatTile({ value, label, note }) {
   return (
@@ -36,7 +37,8 @@ function StatTile({ value, label, note }) {
 }
 
 export function InventoryPanel({ data, isLoading, error }) {
-  if (isLoading) return <div className="mkt-panel mkt-panel-muted">Loading current availability…</div>;
+  const { t } = useTranslation();
+  if (isLoading) return <div className="mkt-panel mkt-panel-muted">{t('ads.inventory.loading')}</div>;
 
   if (error) {
     // A 503 means the forecast job has not produced a snapshot yet — that is a
@@ -48,15 +50,15 @@ export function InventoryPanel({ data, isLoading, error }) {
     if (error.status === 404) {
       return (
         <div className="mkt-panel mkt-panel-muted">
-          Advertising is switched off at the moment. Nothing here will submit until it is turned back on.
+          {t('ads.inventory.switchedOff')}
         </div>
       );
     }
     return (
       <div className="mkt-panel mkt-panel-muted">
         {error.status === 503
-          ? 'Availability figures are being recalculated. Apply below and we will send you the current numbers with your quote.'
-          : 'Availability figures are temporarily unavailable. The form below still works.'}
+          ? t('ads.inventory.recalculating')
+          : t('ads.inventory.unavailable')}
       </div>
     );
   }
@@ -74,23 +76,23 @@ export function InventoryPanel({ data, isLoading, error }) {
   return (
     <div className="mkt-inventory">
       <div className="mkt-stats">
-        <StatTile value={formatCount(audience?.sessionsPerDay)} label="Watch sessions a day" note="Trailing 7 days, after filtering" />
+        <StatTile value={formatCount(audience?.sessionsPerDay)} label={t('ads.inventory.sessionsPerDay')} note={t('ads.inventory.sessionsNote')} />
         {/* Distinct videos with at least one counted watch in the window (adInventory.js),
             not uploads and not plays. "In the pool" read as either. */}
-        <StatTile value={formatCount(audience?.videos)} label="Videos watched" note={`Different videos with real viewers, last ${data.windowDays} days`} />
-        <StatTile value={formatCount(audience?.watchHours)} label="Watch hours" note={`Last ${data.windowDays} days`} />
+        <StatTile value={formatCount(audience?.videos)} label={t('ads.inventory.videosWatched')} note={t('ads.inventory.videosNote', { days: data.windowDays })} />
+        <StatTile value={formatCount(audience?.watchHours)} label={t('ads.inventory.watchHours')} note={t('ads.inventory.lastDays', { days: data.windowDays })} />
       </div>
 
       <div className="mkt-slots">
-        <h3>Where an ad can run</h3>
+        <h3>{t('ads.inventory.whereTitle')}</h3>
         <div className="mkt-table-wrap">
           <table className="mkt-table">
             <thead>
               <tr>
-                <th>Placement</th>
-                <th className="num">Plays a day</th>
-                <th className="num">Plays a month</th>
-                <th className="num">Reach</th>
+                <th>{t('ads.inventory.placement')}</th>
+                <th className="num">{t('ads.inventory.playsDay')}</th>
+                <th className="num">{t('ads.inventory.playsMonth')}</th>
+                <th className="num">{t('ads.inventory.reach')}</th>
               </tr>
             </thead>
             <tbody>
@@ -98,7 +100,7 @@ export function InventoryPanel({ data, isLoading, error }) {
                 <tr key={s.percent}>
                   <td>
                     {slotLabel(s)}
-                    {s.percent === 0 ? <span className="mkt-tag">not recommended</span> : null}
+                    {s.percent === 0 ? <span className="mkt-tag">{t('ads.inventory.notRecommendedTag')}</span> : null}
                   </td>
                   <td className="num">{formatCount(s.perDay)}</td>
                   <td className="num">{formatCount(s.perMonth)}</td>
@@ -109,17 +111,13 @@ export function InventoryPanel({ data, isLoading, error }) {
           </table>
         </div>
         <p className="mkt-fine">
-          <strong>Not recommended:</strong> an ad before the video reaches more sessions on
-          paper, but almost half of all
-          watching here stops inside fifteen seconds, so most of those plays land on
-          someone who was already leaving. An ad placed further in is counted only when
-          the viewer actually got there.
+          <Trans i18nKey="ads.inventory.notRecommendedNote" components={{ b: <strong /> }} />
         </p>
       </div>
 
       {SHOW_MARKETS && topCountries.length > 0 && (
         <div className="mkt-countries">
-          <h3>Who watches</h3>
+          <h3>{t('ads.inventory.whoWatches')}</h3>
           <ul className="mkt-country-list">
             {topCountries.map((c) => (
               <li key={c.code}>
@@ -137,9 +135,11 @@ export function InventoryPanel({ data, isLoading, error }) {
       {quality && (
         <p className="mkt-note">
           <span>
-            <strong>{quality.removedPct}% of raw traffic is excluded</strong> from these
-            figures: sessions under {quality.minEngagedSeconds} seconds, accounts too fast to
-            be real viewers, and videos whose creator opted out. What is left is what we sell.
+            <Trans
+              i18nKey="ads.inventory.qualityNote"
+              values={{ pct: quality.removedPct, seconds: quality.minEngagedSeconds }}
+              components={{ b: <strong /> }}
+            />
           </span>
         </p>
       )}
@@ -162,6 +162,7 @@ export function InventoryPanel({ data, isLoading, error }) {
  * per-second-per-day rate is a number nobody can price a campaign from in their head.
  */
 export function RateCard({ pricing }) {
+  const { t } = useTranslation();
   const formats = pricing?.formats || [];
   if (!formats.length) return null;
   const days = Math.max(EXAMPLE_DAYS, pricing?.minDays || 0) || null;
@@ -169,9 +170,9 @@ export function RateCard({ pricing }) {
   return (
     <div className="mkt-format-groups">
     {groupByFormat(formats, (f) => f.key).map((g) => (
-    <section key={g.id} className="mkt-format-group" aria-label={g.title}>
-      <h3 className="mkt-group-title">{g.title}</h3>
-      {g.note ? <p className="mkt-group-note">{g.note}</p> : null}
+    <section key={g.id} className="mkt-format-group" aria-label={t(g.title)}>
+      <h3 className="mkt-group-title">{t(g.title)}</h3>
+      {g.note ? <p className="mkt-group-note">{t(g.note)}</p> : null}
     <ul className="mkt-ratecard">
       {g.items.map((f) => {
         // Quoted at one length across every tile, so they compare the SPOTS rather
@@ -203,7 +204,7 @@ export function RateCard({ pricing }) {
               <h3>{f.label}</h3>
               <span className="mkt-rc-rate">
                 {f.ratePerSecondDayHbd} HBD
-                <span className="mkt-rc-unit"> /sec /day</span>
+                <span className="mkt-rc-unit">{t('ads.rateCard.perSecDay')}</span>
               </span>
             </div>
 
@@ -214,23 +215,23 @@ export function RateCard({ pricing }) {
                 picked a format to care about. Native <details>, so it opens from the
                 keyboard and is announced without any state of ours. */}
             <details className="mkt-rc-more">
-            <summary>Details</summary>
+            <summary>{t('ads.rateCard.details')}</summary>
             <dl className="mkt-rc-facts">
               <div>
-                <dt>Where it runs</dt>
-                <dd>{SURFACE_LABEL[f.surface] || f.surface}</dd>
+                <dt>{t('ads.rateCard.whereRuns')}</dt>
+                <dd>{SURFACE_LABEL[f.surface] ? t(SURFACE_LABEL[f.surface]) : f.surface}</dd>
               </div>
               {SITE_ONLY_SURFACES.has(f.surface) ? (
                 <div>
-                  <dt>Seen on</dt>
-                  <dd>3speak.tv only</dd>
+                  <dt>{t('ads.rateCard.seenOn')}</dt>
+                  <dd>{t('ads.rateCard.siteOnly')}</dd>
                 </div>
               ) : null}
               <div>
-                <dt>You supply</dt>
+                <dt>{t('ads.rateCard.youSupply')}</dt>
                 <dd>
                   {suppliesFor(f)}
-                  {f.maxSeconds ? `, up to ${f.maxSeconds}s` : null}
+                  {f.maxSeconds ? t('ads.rateCard.upToSeconds', { seconds: f.maxSeconds }) : null}
                 </dd>
               </div>
               {specFor(f).rows.map((r) => (
@@ -250,17 +251,20 @@ export function RateCard({ pricing }) {
                   {example} HBD
                   {hiveEquivalent(example, pricing?.hbdPerHive) != null ? (
                     <span className="mkt-rc-example-hive">
-                      {' '}or about {hiveEquivalent(example, pricing.hbdPerHive)} HIVE
+                      {' '}{t('ads.rateCard.orAboutHive', { hive: hiveEquivalent(example, pricing.hbdPerHive) })}
                     </span>
                   ) : null}
                 </span>
                 <span className="mkt-rc-example-note">
-                  for a {seconds}s spot over {days} days
+                  {t('ads.rateCard.forSpotOver', { seconds, days })}
                   {longer ? (
                     <>
                       {'; '}
-                      <strong>{longer.price} HBD</strong> for {longer.days} days, about
-                      {' '}{longer.saving}% less per day
+                      <Trans
+                        i18nKey="ads.rateCard.longerOffer"
+                        values={{ price: longer.price, days: longer.days, saving: longer.saving }}
+                        components={{ b: <strong /> }}
+                      />
                     </>
                   ) : null}
                 </span>
@@ -268,7 +272,7 @@ export function RateCard({ pricing }) {
             ) : null}
             </details>
 
-            {f.rateIsCustom ? <span className="mkt-tag">your agreed rate</span> : null}
+            {f.rateIsCustom ? <span className="mkt-tag">{t('ads.rateCard.agreedRate')}</span> : null}
           </li>
         );
       })}

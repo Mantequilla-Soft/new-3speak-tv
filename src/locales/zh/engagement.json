@@ -1,0 +1,96 @@
+{
+  "tip": {
+    "successTitle": "打赏成功！",
+    "successMessage": "你已成功打赏 {{amount}} {{currency}}。感谢你的支持！",
+    "errors": {
+      "allRequired": "所有字段均为必填",
+      "loginRequired": "请登录后再打赏",
+      "insufficientBalance": "余额不足",
+      "invalidUsername": "用户名无效",
+      "transferFailed": "转账失败：{{message}}"
+    },
+    "heading": "打赏 @{{recipient}}",
+    "amountLabel": "金额：",
+    "amountPlaceholder": "例如 1.000",
+    "currencyLabel": "币种：",
+    "availableBalance": "可用余额：{{currency}}",
+    "memoLabel": "备注（可选）：",
+    "memoPlaceholder": "例如：感谢这么棒的内容！",
+    "send": "打赏"
+  },
+  "cardMenu": {
+    "loginToPersonalize": "请登录以个性化你的信息流",
+    "notInterestedToast": "不感兴趣——我们会隐藏这个视频",
+    "undo": "撤销",
+    "cantHideOwn": "你不能隐藏自己的视频",
+    "hidingCreatorToast": "将不再显示 @{{author}} 的视频",
+    "loginForPlaylists": "请登录后再将视频添加到播放列表",
+    "loginToTag": "请登录后再给视频打标签",
+    "moreOptions": "更多选项",
+    "addToPlaylist": "添加到播放列表",
+    "addTag": "添加标签",
+    "notInterested": "不感兴趣",
+    "dontShowCreator": "不再显示 @{{author}}"
+  },
+  "guestList": {
+    "loadFailed": "无法加载当前的嘉宾名单",
+    "saved_other": "{{count}} 位嘉宾可以观看此视频",
+    "cleared": "嘉宾名单已清空",
+    "saveFailed": "无法保存嘉宾名单",
+    "invalidAccounts": "无效的 Hive 账号：{{names}}",
+    "title": "🔒 嘉宾名单",
+    "hint": "这些账号无需 3Speak Pro 即可观看。名单私密保存在我们的服务器上，绝不会发布到你的帖子中。",
+    "notRegistered": "此视频尚未处理完成。处理完成后你仍可编辑名单。",
+    "placeholder": "username, another.user",
+    "empty": "暂时没有人。只有 Pro 订阅者可以观看。",
+    "removeAria": "移除 {{name}}"
+  },
+  "voters": {
+    "pinnedTitle_other": "点赞者（{{count}}）",
+    "topVoters": "主要点赞者",
+    "noVotes": "还没有点赞"
+  },
+  "payout": {
+    "breakdown": "收益明细",
+    "estimatedBreakdown": "预估明细",
+    "beneficiaries": "受益人",
+    "curators": "策展人（50%）",
+    "author": "作者",
+    "total": "合计",
+    "totalEstimated": "合计（预估）"
+  },
+  "vote": {
+    "loginRequired": "登录后才能完成此操作",
+    "fetchPostFailed": "无法获取帖子数据",
+    "sameWeight": "你已经用这个权重点过赞了，请选择其他数值。",
+    "failed": "点赞失败：{{message}}",
+    "pleaseTryAgain": "请重试",
+    "weight": "点赞权重：{{weight}}%",
+    "success": "点赞成功！价值：${{value}}",
+    "successTagged": "点赞成功！已标记为“{{tag}}”。价值：${{value}}",
+    "tagged": "已标记为“{{tag}}”。",
+    "vote": "点赞",
+    "tagThisVideo": "给这个视频打标签",
+    "tagOptional": "— 可选 —",
+    "pickTopicFirst": "请先选择一个话题",
+    "taggedNoDot": "已标记为“{{tag}}”",
+    "tagFailed": "打标签失败：{{message}}",
+    "taggedAlreadyVoted": "已标记为“{{tag}}”——你的 {{weight}}% 点赞此前已经投出。",
+    "votingClosed": "点赞已关闭——给这个视频打标签",
+    "youTagged": "你把它标记为 <b>{{tag}}</b>。",
+    "pickTopic": "选择一个话题（计为 100% 点赞）",
+    "submitTag": "提交标签",
+    "tagThisVideoFull": "给这个视频打标签（计为 100% 点赞）",
+    "justTag": "不点赞——只打标签"
+  },
+  "tagsPicker": {
+    "autoTagged": "自动标记：{{tags}}",
+    "searchPlaceholder": "搜索话题…",
+    "searchAria": "搜索话题",
+    "noMatches": "没有与“{{query}}”匹配的话题。",
+    "allSelected": "已选中整个{{category}}分类。只有想进一步细分时才需要添加单个话题：",
+    "orPickTopics": "或者选择单个话题：",
+    "goodEnough": "这样就可以了——也可以更具体（可选）：",
+    "moreSpecific": "更具体："
+  }
+}

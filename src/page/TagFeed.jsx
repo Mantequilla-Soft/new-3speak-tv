@@ -13,11 +13,13 @@ import useViewCounts from '../hooks/useViewCounts';
 import PullToRefresh from '../components/PullToRefresh/PullToRefresh';
 import { getSinceTimestamp } from '../utils/dateFilters';
 import { FeedToolbar, Pagination } from '../components/FeedToolbar/FeedToolbar';
+import { useTranslation } from 'react-i18next';
 import './TagFeed.scss';
 
 const LIMIT = 20;
 
 function TagFeed() {
+  const { t } = useTranslation();
   const { tag } = useParams();
   const queryClient = useQueryClient();
 
@@ -68,9 +70,9 @@ function TagFeed() {
   const totalPages = Math.max(1, Math.ceil(total / LIMIT));
 
   const tabs = useMemo(() => [
-    { key: 'videos', label: counts ? `Videos (${counts.videos})` : 'Videos' },
-    { key: 'shorts', label: counts ? `Shorts (${counts.shorts})` : 'Shorts' },
-  ], [counts]);
+    { key: 'videos', label: counts ? t('feeds.tabs.videosCount', { count: counts.videos }) : t('feeds.tabs.videos') },
+    { key: 'shorts', label: counts ? t('feeds.tabs.shortsCount', { count: counts.shorts }) : t('feeds.tabs.shorts') },
+  ], [counts, t]);
 
   const { getContentForVideo } = useContentBatch(allItems);
   const { isWatched } = useWatchHistory(allItems);
@@ -84,7 +86,7 @@ function TagFeed() {
   const renderVideos = (items) => (
     <Card3
       videos={items}
-      error={isError ? 'Failed to load videos' : ''}
+      error={isError ? t('feeds.errors.loadVideos') : ''}
       loading={isFetching}
       getContentForVideo={getContentForVideo}
       isWatched={isWatched}
@@ -95,7 +97,7 @@ function TagFeed() {
   const renderShorts = (items) => (
     <Card3
       videos={items}
-      error={isError ? 'Failed to load shorts' : ''}
+      error={isError ? t('feeds.errors.loadShorts') : ''}
       loading={isFetching}
       getContentForVideo={getContentForVideo}
       isWatched={isWatched}

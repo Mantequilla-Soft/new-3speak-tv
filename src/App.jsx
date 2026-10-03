@@ -31,6 +31,8 @@ import AddAccount_modal from "./components/modal/AddAccount_modal";
 // import TestingLogin from "./page/Login/TestingLogin";
 import { Toaster } from 'sonner';
 import { toastIn } from './utils/toast';
+import { useTranslation } from 'react-i18next';
+import { t } from './i18n';
 import { CircleCheck, CircleX, TriangleAlert, Info } from 'lucide-react'
 import './toast.css'
 import { fetchNewerVersion, reloadForUpdate } from './utils/checkLatestVersion'
@@ -51,6 +53,7 @@ import { EmbedUploadProvider } from "./context/EmbedUploadContext";
 import { HiveAuthProvider } from "./context/HiveAuthContext";
 import { HangoutContextProvider, useHangout } from "./context/HangoutContext";
 import { ChatProvider } from "./context/ChatContext";
+import ChatOverlay from "./components/Chat/ChatOverlay";
 const OpenPodModal = lazyRoute(() => import("./components/OpenPod/OpenPodModal"), "./components/OpenPod/OpenPodModal");
 const ObsOverlay = lazyRoute(() => import("./page/ObsOverlay"), "./page/ObsOverlay");
 
@@ -117,6 +120,7 @@ const Wallet = lazyRoute(() => import("./page/Wallet"), "./page/Wallet");
 const Watch = lazyRoute(() => import("./page/Watch"), "./page/Watch");
 const WatchStream = lazyRoute(() => import("./page/WatchStream"), "./page/WatchStream");
 const WatchedView = lazyRoute(() => import("./page/WatchedView"), "./page/WatchedView");
+const Translate = lazyRoute(() => import("./page/Translate/Translate"), "./page/Translate/Translate");
 
 function OpenPodModalMounter() {
   const { activeRoom, closeRoom, sessionToken, hangoutsUser } = useHangout();
@@ -208,6 +212,9 @@ const LoginRedirect = ({ openLoginModal }) => {
 let updatePromptShown = false;
 
 function App() {
+  // Subscribes App to language changes; strings use the module `t` (current
+  // language at call time), which also keeps long-lived effect closures fresh.
+  useTranslation();
   const location = useLocation();
   const { initializeAuth, initializeTheme, authenticated, LogOut, setUser, user: appUser } = useAppStore();
   const sessionExpired = useAppStore((s) => s.sessionExpired);
@@ -296,7 +303,7 @@ function App() {
   useEffect(() => {
     if (sessionExpired && !sessionExpiredHandled.current) {
       sessionExpiredHandled.current = true;
-      toast.error("Your session expired — please log in again");
+      toast.error(t('app.auth.sessionExpired'));
       setLoginModalOpen(true);
       clearSessionExpired();
     }
@@ -333,10 +340,10 @@ function App() {
       const newer = await fetchNewerVersion();
       if (!newer) return;
       updatePromptShown = true;
-      toast(`A new version (${newer}) is available`, {
-        description: 'Refresh to get the latest updates.',
+      toast(t('app.update.available', { version: newer }), {
+        description: t('app.update.description'),
         duration: Infinity,
-        action: { label: 'Refresh', onClick: () => reloadForUpdate() },
+        action: { label: t('common.actions.refresh'), onClick: () => reloadForUpdate() },
       });
     };
     promptIfNewer();
@@ -368,7 +375,7 @@ function App() {
       // Aioha logged out - log out of 3Speak too
       console.log("Aioha logged out, logging out of 3Speak");
       LogOut(appUser);
-      toast.success("Logged out successfully");
+      toast.success(t('app.auth.loggedOut'));
     } else if (aiohaUser && aiohaUser !== appUser && loginModalOpen) {
       // Account switch: modal is open and user clicked an existing account
       // Only sync aiohaUser when modal is open — when closed, handleAiohaLogin
@@ -378,7 +385,7 @@ function App() {
       localStorage.setItem(LOCAL_STORAGE_USER_ID_KEY, aiohaUser);
       setUser(aiohaUser);
       setLoginModalOpen(false);
-      toast.success("Login successful!");
+      toast.success(t('app.auth.loginSuccess'));
     }
   }, [aiohaUser]);
 
@@ -399,7 +406,7 @@ function App() {
       setUser(aiohaUser);
       setLoginModalOpen(false);
       fetch('/api/manteauth/logout', { method: 'POST', credentials: 'include' }).catch(() => {});
-      toast.success(`Switched to @${aiohaUser}`);
+      toast.success(t('app.auth.switchedTo', { user: aiohaUser }));
     }
   }, [loginModalOpen, aiohaUser]);
 
@@ -418,7 +425,7 @@ function App() {
       try { window.__butrauthLoginPopup?.close(); } catch { /* ignore */ }
       window.__butrauthLoginPopup = null;
       if (payload?.error) {
-        toast.error('Butter Auth login failed: ' + payload.error);
+        toast.error(t('app.auth.butrauthFailed', { error: payload.error }));
         return;
       }
       // An incubating login has NO username by design — that is the whole
@@ -427,13 +434,13 @@ function App() {
       if (payload?.incubation && payload?.handle) {
         useAppStore.getState().setIncubationUser(payload.handle);
         setLoginModalOpen(false);
-        toast.success(`Signed in as @${payload.handle}`);
+        toast.success(t('app.auth.signedInAs', { user: payload.handle }));
         return;
       }
       if (payload?.username) {
         useAppStore.getState().setUser(payload.username); // sets user + authenticated
         setLoginModalOpen(false);
-        toast.success(`Logged in as @${payload.username} via Butter Auth`);
+        toast.success(t('app.auth.loggedInViaButrauth', { user: payload.username }));
       }
     };
     window.addEventListener('storage', onStorage);
@@ -470,7 +477,7 @@ function App() {
     const isExpired = decoded.exp * 1000 < Date.now();
     if (isExpired) {
           // console.warn("Token expired — logging out user");
-          toast.error("Secssion expired")
+          toast.error(t('app.auth.tokenExpired'))
           LogOut(decoded.user_id); // this will already remove the token
           return false;
         }
@@ -518,7 +525,7 @@ function App() {
     console.log("Aioha login result:", loginResult);
 
     if (!loginResult || loginResult.error) {
-      toast.error("Login failed: " + (loginResult?.error || "Unknown error"));
+      toast.error(t('app.auth.loginFailed', { error: loginResult?.error || t('app.auth.unknownError') }));
       loginInProgress.current = false;
       return;
     }
@@ -533,7 +540,7 @@ function App() {
     setUser(loginResult.username);
     setLoginModalOpen(false);
     loginInProgress.current = false;
-    toast.success("Login successful!");
+    toast.success(t('app.auth.loginSuccess'));
   }
 
   // Bare, chrome-free player route (iframed by the Spotlight /links page). Rendered
@@ -582,6 +589,7 @@ function App() {
            bar instead of a hardcoded guess that goes wrong the moment it reflows. */
         offset={{ top: 'calc(var(--nav-top-offset, 50px) + 12px)', right: '16px' }}
         mobileOffset={{ top: 'calc(var(--nav-top-offset, 50px) + 8px)', right: '8px', left: '8px' }}
+        containerAriaLabel={t('app.toastsRegion')}
         expand
         visibleToasts={6}
         gap={12}
@@ -704,6 +712,8 @@ function App() {
               <Route path="/badge/:account" element={<BadgePage />} />
               <Route path="/t/:tag" element={<TagFeed />} />
               <Route path="/leaderboard" element={<Leaderboard />} />
+              {/* In-app translation editor; translators only (server-checked). */}
+              <Route path="/translate" element={<Translate />} />
               <Route path="/surf" element={<Surf />} />
               <Route path="/advertise" element={<Advertise openLoginModal={openLoginModal} />} />
               {/* Invite links (Butter Auth referral fast-track): the landing page a
@@ -752,7 +762,7 @@ function App() {
           intent={loginIntent}
           onLogin={handleAiohaLogin}
           onClose={closeLoginModal}
-          loginTitle="Login to 3Speak"
+          loginTitle={t('app.auth.loginTitle')}
           loginOptions={{
             msg: `${loginProof}`,
             keyType: KeyTypes.Posting
@@ -785,6 +795,9 @@ function App() {
         {/* Before the prompts have anything to say: if this device is
             behind and the account already exists, none of them apply. */}
         <IncubationSessionSync />
+        {/* Chat as a floating panel on tablet/desktop; renders nothing until
+            the nav chat button opens it (phones go to /chat instead). */}
+        <ChatOverlay />
         {FEATURE_EDITOR && (
           <EditorModal
             isOpen={editorModalOpen}

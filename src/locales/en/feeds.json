@@ -1,0 +1,123 @@
+{
+  "loadingMore": "Loading more…",
+  "promoted": "Promoted",
+  "scrollLeft": "Scroll left",
+  "scrollRight": "Scroll right",
+  "errors": {
+    "fetchVideos": "Error fetching videos",
+    "loadVideos": "Failed to load videos",
+    "loadShorts": "Failed to load shorts"
+  },
+  "tabs": {
+    "all": "All",
+    "videos": "Videos",
+    "shorts": "Shorts",
+    "videosCount": "Videos ({{count}})",
+    "shortsCount": "Shorts ({{count}})"
+  },
+  "dateFilters": {
+    "all": "All Time",
+    "today": "Today",
+    "week": "This Week",
+    "month": "This Month",
+    "justNow": "Just now"
+  },
+  "live": {
+    "title": "Live now",
+    "badge": "● LIVE"
+  },
+  "newFromFollowing": {
+    "aria": "New from creators you follow",
+    "shorts_one": "{{count}} short",
+    "shorts_other": "{{count}} shorts"
+  },
+  "firstUploads": {
+    "title": "First Time Uploads"
+  },
+  "newVideos": {
+    "title": "New Videos"
+  },
+  "home": {
+    "sections": {
+      "discover": "Discover",
+      "home": "Home Feed",
+      "follow": "Follow Feed",
+      "new": "New Content",
+      "interests": "Interests"
+    },
+    "empty": "Nothing to show here yet.",
+    "viewAll": "View all",
+    "dragToReorder": "Drag to reorder",
+    "surfTitle": "Channel Surfing: pick a topic and watch it like TV",
+    "zapping": "Zapping"
+  },
+  "surf": {
+    "pageTitle": "Channel Surfing",
+    "intro": "Pick a channel and lean back. We line up the best videos on that topic one after another. Bored? Hit <b>Zap</b>. Want something else? Change the channel.",
+    "backTo": "Back to CH {{number}} {{emoji}} {{title}}",
+    "surprise": "Surprise me",
+    "yourChannels": "Your channels",
+    "nothingOnAir": "Nothing on air on {{channel}} right now",
+    "tuneFailed": "Could not tune in. Try again in a moment.",
+    "remoteAria": "Channel Surfing remote",
+    "openGuide": "Open the channel guide",
+    "ch": "CH {{number}}",
+    "chLabel": "CH",
+    "channelHint": "CH {{number}}: {{title}}",
+    "channelHintKey": "CH {{number}}: {{title}} ({{key}})",
+    "tuningShort": "Tuning",
+    "tuning": "Tuning…",
+    "onAir": "On air",
+    "changeChannel": "Change channel",
+    "nextChannel": "Next channel",
+    "prevChannel": "Previous channel",
+    "nextVideo": "Next video",
+    "nextVideoKey": "Next video (→)",
+    "zap": "Zap",
+    "findingNext": "Finding the next one…",
+    "stop": "Stop surfing",
+    "stopTitle": "Stop surfing (keeps this video playing)",
+    "guide": "Channel guide"
+  },
+  "discover": {
+    "searchPlaceholder": "Search videos, shorts, audio, communities...",
+    "clearSearch": "Clear search",
+    "searchFor": "Search “{{term}}”",
+    "noResultsFor": "No results found for “{{term}}”",
+    "types": {
+      "user": "Users",
+      "community": "Communities",
+      "video": "Videos",
+      "short": "Shorts",
+      "audio": "Audio",
+      "playlist": "Playlists"
+    },
+    "suggest": {
+      "tags": "Tags",
+      "titles": "Titles"
+    },
+    "dates": {
+      "today": "Today",
+      "week": "This week",
+      "month": "This month",
+      "year": "This year"
+    },
+    "boostRecent": "Boost recent",
+    "filters": "Filters",
+    "date": "Date",
+    "tag": "Tag",
+    "tagPlaceholder": "e.g. crypto, gaming...",
+    "community": "Community",
+    "communityPlaceholder": "Search communities...",
+    "clearAllFilters": "Clear all filters",
+    "allHidden": "All content types are hidden.",
+    "reenableFilters": "Re-enable all filters",
+    "groupTitle": "{{label}} ({{count}})",
+    "subscribers_one": "{{count}} subscriber",
+    "subscribers_other": "{{count}} subscribers",
+    "authors_one": "{{count}} author",
+    "authors_other": "{{count}} authors",
+    "views_one": "{{views}} view",
+    "views_other": "{{views}} views"
+  }
+}

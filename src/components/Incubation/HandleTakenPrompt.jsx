@@ -6,6 +6,7 @@ import { handleStateOnHive } from '../../hive-api/api';
 import { fetchGraduationStatus } from '../../lib/incubation';
 import { openButrauthPopup } from '../../utils/butrauthPopup';
 import { toastIn } from '../../utils/toast';
+import { useTranslation, Trans } from 'react-i18next';
 // Reuses the shared dialog shape rather than duplicating it, as the graduation
 // prompt does. That file is the app's one modal-dialog shape.
 import '../AdsPrompt/AdsPrompt.scss';
@@ -34,6 +35,7 @@ let dismissedThisVisit = false;
  * nothing, or a Hive hiccup would tell every warm-up user their name was gone.
  */
 export default function HandleTakenPrompt() {
+  const { t } = useTranslation();
   const user = useAppStore((s) => s.user);
   const incubationHandle = useAppStore((s) => s.incubationHandle);
   const otherPromptOpen = usePromptsActive('handle-taken');
@@ -89,7 +91,7 @@ export default function HandleTakenPrompt() {
     try {
       await openButrauthPopup({ changeHandle: true });
     } catch (err) {
-      toast.error(err?.message || 'Could not open the name picker');
+      toast.error(err?.message || t('incubation.handleTaken.openFailed'));
       setBusy(false);
     }
   };
@@ -112,34 +114,30 @@ export default function HandleTakenPrompt() {
           <MdPersonOff className="ads-prompt-head-icon" aria-hidden="true" />
           <div>
             <h3 className="ads-prompt-title" id="handle-taken-title">
-              The name @{incubationHandle} has been taken
+              {t('incubation.handleTaken.title', { handle: incubationHandle })}
             </h3>
             <p className="ads-prompt-lede">
-              Somebody registered it on <strong>Hive</strong>, so it cannot become your
-              account when you are ready. Picking a new one now takes a moment.
+              <Trans i18nKey="incubation.handleTaken.lede" components={{ b: <strong /> }} />
             </p>
           </div>
         </header>
 
         <p className="ads-prompt-text">
-          Choosing a name here never reserved it. Hive has no way to hold a name short of
-          creating the account, and that is the step you have not paid for yet, which is
-          the whole point of starting without one.
+          {t('incubation.handleTaken.text')}
         </p>
 
         {/* Said plainly, because the thing people fear here is losing what they
             made under the old name. */}
         <p className="ads-prompt-note">
-          Nothing you have made is lost. Your videos, shorts, comments and follows stay
-          with you and come across under whichever name you choose.
+          {t('incubation.handleTaken.note')}
         </p>
 
         <div className="ads-prompt-actions">
           <button type="button" className="ads-prompt-ghost" onClick={later}>
-            Later
+            {t('incubation.backlog.later')}
           </button>
           <button type="button" className="ads-prompt-primary" onClick={goChange} disabled={busy}>
-            {busy ? 'Opening…' : 'Pick a new name'}
+            {busy ? t('incubation.sessionSync.opening') : t('incubation.handleTaken.pick')}
           </button>
         </div>
       </div>

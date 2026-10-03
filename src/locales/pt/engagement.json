@@ -1,0 +1,100 @@
+{
+  "tip": {
+    "successTitle": "Gorjeta enviada!",
+    "successMessage": "Você enviou {{amount}} {{currency}} de gorjeta. Obrigado pelo apoio!",
+    "errors": {
+      "allRequired": "Todos os campos são obrigatórios",
+      "loginRequired": "Entre na sua conta para enviar uma gorjeta",
+      "insufficientBalance": "Saldo insuficiente",
+      "invalidUsername": "Nome de usuário inválido",
+      "transferFailed": "Falha na transferência: {{message}}"
+    },
+    "heading": "Enviar gorjeta para @{{recipient}}",
+    "amountLabel": "Valor: ",
+    "amountPlaceholder": "ex.: 1.000",
+    "currencyLabel": "Moeda:",
+    "availableBalance": "Saldo disponível: {{currency}}",
+    "memoLabel": "Memo (opcional):",
+    "memoPlaceholder": "ex.: Valeu por esse conteúdo incrível!",
+    "send": "Enviar gorjeta"
+  },
+  "cardMenu": {
+    "loginToPersonalize": "Entre na sua conta para personalizar seu feed",
+    "notInterestedToast": "Sem interesse — vamos ocultar este vídeo",
+    "undo": "Desfazer",
+    "cantHideOwn": "Você não pode ocultar seus próprios vídeos",
+    "hidingCreatorToast": "Ocultando vídeos de @{{author}}",
+    "loginForPlaylists": "Entre na sua conta para adicionar vídeos a playlists",
+    "loginToTag": "Entre na sua conta para marcar vídeos com tags",
+    "moreOptions": "Mais opções",
+    "addToPlaylist": "Adicionar à playlist",
+    "addTag": "Adicionar tag",
+    "notInterested": "Não tenho interesse",
+    "dontShowCreator": "Não mostrar @{{author}}"
+  },
+  "guestList": {
+    "loadFailed": "Não foi possível carregar a lista de convidados atual",
+    "saved_one": "{{count}} convidado pode assistir",
+    "saved_many": "{{count}} convidados podem assistir",
+    "saved_other": "{{count}} convidados podem assistir",
+    "cleared": "Lista de convidados limpa",
+    "saveFailed": "Não foi possível salvar a lista de convidados",
+    "invalidAccounts": "Contas da Hive inválidas: {{names}}",
+    "title": "🔒 Lista de convidados",
+    "hint": "Essas contas podem assistir sem o 3Speak Pro. A lista fica privada nos nossos servidores e nunca é publicada no seu post.",
+    "notRegistered": "Este vídeo ainda não terminou de ser processado. Você poderá editar a lista quando terminar.",
+    "placeholder": "usuario, outro.usuario",
+    "empty": "Ninguém ainda. Só assinantes Pro podem assistir.",
+    "removeAria": "Remover {{name}}"
+  },
+  "voters": {
+    "pinnedTitle_one": "Votantes ({{count}})",
+    "pinnedTitle_many": "Votantes ({{count}})",
+    "pinnedTitle_other": "Votantes ({{count}})",
+    "topVoters": "Principais votantes",
+    "noVotes": "Nenhum voto ainda"
+  },
+  "payout": {
+    "breakdown": "Detalhes do pagamento",
+    "estimatedBreakdown": "Detalhes estimados",
+    "beneficiaries": "Beneficiários",
+    "curators": "Curadores (50%)",
+    "author": "Autor",
+    "total": "Total",
+    "totalEstimated": "Total (est.)"
+  },
+  "vote": {
+    "loginRequired": "Entre na sua conta para concluir esta ação",
+    "fetchPostFailed": "Não foi possível carregar os dados do post",
+    "sameWeight": "Você já votou com esse peso. Escolha outro valor.",
+    "failed": "Falha no voto: {{message}}",
+    "pleaseTryAgain": "tente de novo",
+    "weight": "Peso do voto: {{weight}}%",
+    "success": "Voto registrado! Valor: ${{value}}",
+    "successTagged": "Voto registrado! Tag “{{tag}}”. Valor: ${{value}}",
+    "tagged": "Tag “{{tag}}” adicionada.",
+    "vote": "Votar",
+    "tagThisVideo": "Marcar este vídeo",
+    "tagOptional": "— opcional —",
+    "pickTopicFirst": "Escolha um tema primeiro",
+    "taggedNoDot": "Tag “{{tag}}” adicionada",
+    "tagFailed": "Falha ao marcar: {{message}}",
+    "taggedAlreadyVoted": "Tag “{{tag}}” adicionada — seu voto de {{weight}}% já tinha sido dado.",
+    "votingClosed": "Votação encerrada — marque este vídeo",
+    "youTagged": "Você marcou isto como <b>{{tag}}</b>.",
+    "pickTopic": "Escolha um tema (conta como um voto de 100%)",
+    "submitTag": "Enviar tag",
+    "tagThisVideoFull": "Marcar este vídeo (conta como um voto de 100%)",
+    "justTag": "Não votar — só marcar"
+  },
+  "tagsPicker": {
+    "autoTagged": "Tags automáticas: {{tags}}",
+    "searchPlaceholder": "Pesquisar temas…",
+    "searchAria": "Pesquisar temas",
+    "noMatches": "Nenhum tema corresponde a “{{query}}”.",
+    "allSelected": "Todo o tema {{category}} está selecionado. Adicione temas específicos só se quiser restringir mais:",
+    "orPickTopics": "Ou escolha temas específicos:",
+    "goodEnough": "Já está bom — ou seja mais específico (opcional):",
+    "moreSpecific": "Mais específico:"
+  }
+}

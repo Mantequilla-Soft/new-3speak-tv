@@ -1,0 +1,96 @@
+{
+  "backToOpenPods": "Quay lại OpenPods",
+  "modal": {
+    "leaveConfirm": "Rời OpenPod này? Bạn có thể tham gia lại từ sảnh bất cứ lúc nào.",
+    "yourStreamEnded": "Buổi phát trực tiếp của bạn đã kết thúc",
+    "thisStreamEnded": "Buổi phát trực tiếp này đã kết thúc",
+    "noLongerLive": "Buổi phát không còn trực tiếp nữa. Hãy bắt đầu buổi mới bất cứ khi nào bạn sẵn sàng.",
+    "recordingProcessing": "Tuyệt lắm! Bản ghi của bạn đang được xử lý và sẽ sớm xuất hiện trên bài thông báo.",
+    "thanksForLive": "Tuyệt lắm — cảm ơn bạn đã phát trực tiếp!",
+    "backHome": "Về trang chủ",
+    "howWasStream": "Buổi phát trực tiếp của bạn thế nào?",
+    "connecting": "Đang kết nối với OpenPods…",
+    "authenticating": "Đang xác thực với OpenPods…"
+  },
+  "strip": {
+    "liveNow_other": "<n>{{count}}</n> OpenPod đang trực tiếp",
+    "viewAll": "Xem tất cả",
+    "joinAria": "Tham gia OpenPod: {{title}}"
+  },
+  "announce": {
+    "selectCommunity": "Chọn cộng đồng",
+    "shareToggle": "📣 Chia sẻ buổi phát này lên Hive và 3Speak khi bắt đầu",
+    "community": "Cộng đồng",
+    "rewards": "Phần thưởng",
+    "rewardDefault": "Mặc định 50/50",
+    "rewardPowerup": "Power up 100%",
+    "rewardDecline": "Từ chối phần thưởng",
+    "beneficiaries": "Người thụ hưởng",
+    "beneProHint": "Bạn đang dùng 3Speak Pro — không mất phí nền tảng. Bạn có thể thêm phần chia nếu muốn.",
+    "beneLockedHint": "10% cho @threespeakfund được khóa cố định. Bạn có thể thêm người khác."
+  },
+  "boost": {
+    "label": "Boost",
+    "sendTo": "Gửi boost cho @{{user}}",
+    "send": "Gửi boost"
+  },
+  "clip": {
+    "saved": "Đã lưu clip vào thư mục tải xuống của bạn.",
+    "slowDown": "Chậm lại một chút rồi cắt clip lại.",
+    "failed": "Không thể tạo clip. Hãy thử lại sau vài giây.",
+    "title": "Cắt clip 30 giây vừa qua",
+    "label": "30 giây",
+    "clipping": "Đang cắt clip…"
+  },
+  "report": {
+    "reasons": {
+      "harassment": "Quấy rối hoặc thù ghét",
+      "sexual": "Nội dung tình dục hoặc khiêu dâm",
+      "violence": "Bạo lực hoặc hành vi nguy hiểm",
+      "selfharm": "Tự gây hại",
+      "illegal": "Nội dung bất hợp pháp",
+      "spam": "Spam hoặc lừa đảo",
+      "other": "Khác"
+    },
+    "sent": "Cảm ơn bạn — buổi phát này đã được báo cáo cho đội ngũ của chúng tôi.",
+    "failed": "Không thể gửi báo cáo. Vui lòng thử lại.",
+    "title": "Báo cáo buổi phát này",
+    "reporting": "Đang báo cáo <b>@{{host}}</b>.",
+    "intro": "Cho chúng tôi biết có vấn đề gì — đội ngũ của chúng tôi xem xét mọi báo cáo.",
+    "detailPlaceholder": "Thêm chi tiết (không bắt buộc)",
+    "sending": "Đang gửi…",
+    "submit": "Gửi báo cáo"
+  },
+  "signIn": {
+    "waitingWallet": "Đang chờ ví của bạn…"
+  },
+  "publish": {
+    "errors": {
+      "noTitle": "Vui lòng thêm tiêu đề",
+      "noAudio": "Không tìm thấy URL âm thanh",
+      "failed": "Xuất bản thất bại. Vui lòng thử lại."
+    },
+    "published": "Đã xuất bản bản ghi lên Hive!",
+    "loginGate": "Đăng nhập để xuất bản bản ghi của bạn.",
+    "heading": "Xuất bản bản ghi OpenPod",
+    "previewLabel": "Xem trước bản ghi",
+    "previewHint": "Nghe lại âm thanh trước khi xuất bản. Đây là trình phát mà người đọc sẽ thấy trên bài đăng.",
+    "recordingFallback": "Bản ghi OpenPod",
+    "title": "Tiêu đề",
+    "titlePlaceholder": "Đặt tiêu đề cho bản ghi của bạn",
+    "description": "Mô tả",
+    "optional": "(không bắt buộc)",
+    "descriptionPlaceholder": "Bạn đã nói về điều gì? Thêm ghi chú chương trình, đường liên kết hoặc tóm tắt...",
+    "tags": "Thẻ",
+    "tagsPlaceholder": "Các thẻ cách nhau bằng dấu cách",
+    "declinePayout": "Từ chối phần thưởng",
+    "publishing": "Đang xuất bản…",
+    "submit": "Xuất bản bản ghi"
+  },
+  "lobby": {
+    "descriptionPlaceholder": "Phiên này nói về điều gì? Thêm ghi chú chương trình, đường liên kết hoặc tóm tắt…",
+    "enableHosting": "Bật quyền dẫn và phát biểu",
+    "handoverFailed": "Không thể tự động bật quyền dẫn. OpenPods đăng bài thay bạn qua @threespeak — hãy kiểm tra xem bạn đã cấp quyền posting cho tài khoản này chưa, rồi thử lại.",
+    "signInToHost": "Đăng nhập bằng Hive để dẫn hoặc phát biểu"
+  }
+}

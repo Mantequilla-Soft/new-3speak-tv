@@ -1,0 +1,75 @@
+{
+  "buckets": {
+    "today": "Today",
+    "yesterday": "Yesterday",
+    "thisWeek": "This Week",
+    "thisMonth": "This Month",
+    "older": "Older"
+  },
+  "loginRequired": "Please log in to view your notifications.",
+  "unreadChip_one": "{{count}} new",
+  "unreadChip_other": "{{count}} new",
+  "markAllTitle": "Mark all as read",
+  "marking": "Marking…",
+  "markAllRead": "Mark all read",
+  "refreshing": "Refreshing…",
+  "categories": {
+    "all": "All",
+    "replies": "Replies",
+    "mentions": "Mentions",
+    "votes": "Votes",
+    "reblogs": "Reblogs",
+    "follows": "Follows",
+    "transfers": "Transfers"
+  },
+  "unread": "Unread",
+  "summary": {
+    "title": "Activity",
+    "today": "Today",
+    "week": "This Week",
+    "month": "This Month",
+    "emptyToday": "No activity today yet.",
+    "emptyWeek": "No activity this week yet.",
+    "stillLoading": "Still loading older notifications…",
+    "emptyMonth": "No activity this month."
+  },
+  "loadError": "Could not load notifications.",
+  "empty": {
+    "all": "You have no notifications yet.",
+    "unread": "No unread notifications.",
+    "replies": "No replies yet.",
+    "mentions": "No mentions yet.",
+    "votes": "No votes yet.",
+    "reblogs": "No reblogs yet.",
+    "follows": "No follows yet.",
+    "transfers": "No transfers yet."
+  },
+  "threeSpeakVideo": "3Speak video",
+  "end": "You've reached the end.",
+  "cards": {
+    "votes": "Votes",
+    "voters_one": "{{count}} voter",
+    "voters_other": "{{count}} voters",
+    "replies": "Replies",
+    "newFollowers": "New Followers",
+    "mentions": "Mentions",
+    "reblogs": "Reblogs",
+    "transfers": "Transfers"
+  },
+  "group": {
+    "voteOne": "@{{user}} voted on your post",
+    "voteTwo": "@{{user}} and @{{user2}} voted on your post",
+    "voteMany_one": "@{{user}} and {{count}} other voted on your post",
+    "voteMany_other": "@{{user}} and {{count}} others voted on your post",
+    "followOne": "@{{user}} followed you",
+    "followTwo": "@{{user}} and @{{user2}} followed you",
+    "followMany_one": "@{{user}} and {{count}} other followed you",
+    "followMany_other": "@{{user}} and {{count}} others followed you",
+    "generic_one": "{{count}} {{type}} notification",
+    "generic_other": "{{count}} {{type}} notifications",
+    "typeCount_one": "{{count}} {{type}}",
+    "typeCount_other": "{{count}} {{type}}s",
+    "collapse": "▾ collapse",
+    "expand": "▸ expand"
+  }
+}

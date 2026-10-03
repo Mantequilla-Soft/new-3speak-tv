@@ -26,7 +26,8 @@ const ALLOW = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyrosc
 // Offered in the share menu. `responsive` is first because it is what a blog or
 // CMS almost always wants: the 56.25% padding box keeps 16:9 at any width.
 export const EMBED_SIZES = [
-  { id: 'responsive', label: 'Responsive' },
+  // labelKey = i18n key (translate at render); fixed sizes keep a literal label.
+  { id: 'responsive', labelKey: 'misc.embed.responsive' },
   { id: 'small', label: '560 × 315', width: 560, height: 315 },
   { id: 'medium', label: '854 × 480', width: 854, height: 480 },
   { id: 'large', label: '1280 × 720', width: 1280, height: 720 },

@@ -17,6 +17,7 @@ import {
 } from '../hive-api/aioha';
 import { CHECKER_URL, EMBED_API_KEY, EMBED_API_URL } from '../utils/config';
 import { uploadThumbnail } from '../utils/uploadThumbnail';
+import { t } from '../i18n';
 
 // preview-3speak's own backend — same base aioha and the chat client use.
 const THREESPEAK_API = import.meta.env.VITE_THREESPEAK_API || '/api';
@@ -25,26 +26,27 @@ const BASE = `${CHECKER_URL}/advertise`;
 
 // The categories the backend accepts (utils/config.js AD_CATEGORIES). Kept in the
 // same order so the select reads sensibly rather than alphabetically.
+// `labelKey` is an i18n key; translate at render.
 export const AD_CATEGORIES = [
-  { id: 'defi', label: 'DeFi' },
-  { id: 'dapp', label: 'dApp' },
-  { id: 'exchange', label: 'Exchange' },
-  { id: 'gaming', label: 'Gaming' },
-  { id: 'nft', label: 'NFT' },
-  { id: 'infrastructure', label: 'Infrastructure' },
-  { id: 'dao', label: 'DAO / community' },
-  { id: 'media', label: 'Media' },
-  { id: 'education', label: 'Education' },
-  { id: 'event', label: 'Event' },
-  { id: 'tooling', label: 'Tooling' },
-  { id: 'other', label: 'Something else' },
+  { id: 'defi', labelKey: 'ads.categories.defi' },
+  { id: 'dapp', labelKey: 'ads.categories.dapp' },
+  { id: 'exchange', labelKey: 'ads.categories.exchange' },
+  { id: 'gaming', labelKey: 'ads.categories.gaming' },
+  { id: 'nft', labelKey: 'ads.categories.nft' },
+  { id: 'infrastructure', labelKey: 'ads.categories.infrastructure' },
+  { id: 'dao', labelKey: 'ads.categories.dao' },
+  { id: 'media', labelKey: 'ads.categories.media' },
+  { id: 'education', labelKey: 'ads.categories.education' },
+  { id: 'event', labelKey: 'ads.categories.event' },
+  { id: 'tooling', labelKey: 'ads.categories.tooling' },
+  { id: 'other', labelKey: 'ads.categories.other' },
 ];
 
 async function readJson(res) {
   let body = null;
   try { body = await res.json(); } catch { /* non-JSON error page */ }
   if (!res.ok) {
-    const err = new Error((body && body.error) || `Request failed (${res.status})`);
+    const err = new Error((body && body.error) || t('ads.errors.requestFailed', { status: res.status }));
     err.status = res.status;
     err.body = body;
     throw err;
@@ -97,8 +99,7 @@ function assertSignedForUs(data, account) {
   const want = String(account || '').toLowerCase();
   if (signedFor && want && signedFor !== want) {
     throw new Error(
-      `You are signed in as @${signedFor} on the server but acting as @${want}. `
-      + 'Log out and back in, then try again.',
+      t('ads.errors.signedInAsOther', { signedFor, want }),
     );
   }
 }
@@ -168,7 +169,7 @@ async function signViaThreespeak(adsEnabled, communitySharePct, account) {
 
     if (provider === Providers.HiveSigner) {
       const token = localStorage.getItem('hivesignerToken');
-      if (!token) throw new Error('Your HiveSigner session expired — reconnect and try again.');
+      if (!token) throw new Error(t('ads.errors.hivesignerExpired'));
       headers.Authorization = `Bearer ${token}`;
     } else if (!isManteAuthLogin()) {
       headers['X-API-Key'] = EMBED_API_KEY;
@@ -211,7 +212,7 @@ async function signViaThreespeak(adsEnabled, communitySharePct, account) {
     // A 403 here means exactly one thing: @threespeak holds no posting authority on
     // this account, so it cannot sign for them. The message the server sends back
     // already says so in words, and is what a login that cannot sign locally shows.
-    throw new Error(data.error || 'Could not save the setting. Please try again.');
+    throw new Error(data.error || t('ads.errors.saveSettingFailed'));
   }
   assertSignedForUs(data, account);
   return { signature: data.signature, timestamp: data.timestamp };
@@ -222,9 +223,9 @@ async function signLocally(account, adsEnabled, communitySharePct) {
   const res = await signMessageWithAioha(
     prefsMessage(account, adsEnabled, communitySharePct, timestamp),
     KeyTypes.Posting,
-    adsEnabled ? 'Save your ad settings' : 'Turn ads off on your videos',
+    adsEnabled ? t('ads.wallet.saveAdSettings') : t('ads.wallet.turnAdsOff'),
   );
-  if (!res?.success || !res.result) throw new Error('Signature was rejected.');
+  if (!res?.success || !res.result) throw new Error(t('ads.errors.signatureRejected'));
   return { signature: res.result, timestamp };
 }
 
@@ -309,8 +310,8 @@ export async function fetchWatchToken(owner, permlink) {
     if (!owner || !permlink) return null;
     const headers = { 'Content-Type': 'application/json' };
     if (getCurrentProvider() === Providers.HiveSigner) {
-      const t = localStorage.getItem('hivesignerToken');
-      if (t) headers.Authorization = `Bearer ${t}`;
+      const tok = localStorage.getItem('hivesignerToken');
+      if (tok) headers.Authorization = `Bearer ${tok}`;
     }
     const r = await fetch(`${THREESPEAK_API}/watch/token`, {
       method: 'POST', headers, credentials: 'include',
@@ -333,7 +334,7 @@ async function signViewerViaThreespeak(rewardsEnabled, account) {
     const body = { rewardsEnabled };
     if (provider === Providers.HiveSigner) {
       const token = localStorage.getItem('hivesignerToken');
-      if (!token) throw new Error('Your HiveSigner session expired — reconnect and try again.');
+      if (!token) throw new Error(t('ads.errors.hivesignerExpired'));
       headers.Authorization = `Bearer ${token}`;
     } else if (!isManteAuthLogin()) {
       headers['X-API-Key'] = EMBED_API_KEY;
@@ -364,7 +365,7 @@ async function signViewerViaThreespeak(rewardsEnabled, account) {
     ({ r: res, d: data } = await doPost());
   }
   if (!res.ok || !data.signature) {
-    throw new Error(data.error || 'Could not save the setting. Please try again.');
+    throw new Error(data.error || t('ads.errors.saveSettingFailed'));
   }
   assertSignedForUs(data, account);
   return { signature: data.signature, timestamp: data.timestamp };
@@ -390,11 +391,11 @@ export async function setViewerAdPrefs(account, { rewardsEnabled }) {
     const res = await signMessageWithAioha(
       viewerPrefsMessage(account, rewardsEnabled, timestamp),
       KeyTypes.Posting,
-      rewardsEnabled ? 'Turn on viewer rewards' : 'Turn off viewer rewards',
+      rewardsEnabled ? t('ads.wallet.rewardsOn') : t('ads.wallet.rewardsOff'),
     );
     // `cause` carries the delegated-signing failure that sent us down the wallet
     // path, so a rejected prompt does not erase why we asked for one.
-    if (!res?.success || !res.result) throw new Error('Signature was rejected.', { cause: err });
+    if (!res?.success || !res.result) throw new Error(t('ads.errors.signatureRejected'), { cause: err });
     signed = { signature: res.result, timestamp };
   }
   const { signature, timestamp } = signed;
@@ -489,7 +490,7 @@ async function identityViaThreespeak(account) {
   const headers = { 'Content-Type': 'application/json' };
   if (getCurrentProvider() === Providers.HiveSigner) {
     const token = localStorage.getItem('hivesignerToken');
-    if (!token) throw new Error('Your HiveSigner session expired — reconnect and try again.');
+    if (!token) throw new Error(t('ads.errors.hivesignerExpired'));
     headers.Authorization = `Bearer ${token}`;
   }
   const res = await fetch(`${THREESPEAK_API}/ads/identity-signature`, {
@@ -500,13 +501,13 @@ async function identityViaThreespeak(account) {
   });
   const data = await res.json().catch(() => ({}));
   if (!res.ok || !data.signature) {
-    throw new Error(data.error || 'Could not confirm who you are logged in as.');
+    throw new Error(data.error || t('ads.errors.confirmIdentity'));
   }
   // The server signed for the account ITS session resolves to, which is the only
   // one it can vouch for. If that is not who the page thinks is logged in, the
   // honest thing is to stop rather than ask the checker about somebody else.
   if (account && data.username && data.username !== String(account).toLowerCase()) {
-    throw new Error('Your session is for a different account. Log out and back in.');
+    throw new Error(t('ads.errors.sessionOtherAccount'));
   }
   return {
     signature: data.signature,
@@ -535,7 +536,7 @@ export async function fetchMyApplications(account, { prompt = false } = {}) {
     proof = await identityViaThreespeak(name);
   } catch (err) {
     if (!canSignLocally()) throw err;
-    if (!prompt) throw new Error('Confirm your login once to list your products.', { cause: err });
+    if (!prompt) throw new Error(t('ads.errors.confirmLoginToList'), { cause: err });
     if (await establishWalletSession(name).catch(() => false)) {
       proof = await identityViaThreespeak(name).catch(() => null);
     }
@@ -544,9 +545,9 @@ export async function fetchMyApplications(account, { prompt = false } = {}) {
       const res = await signMessageWithAioha(
         mineMessage(name, timestamp),
         KeyTypes.Posting,
-        'Show your advertising applications',
+        t('ads.wallet.showApplications'),
       );
-      if (!res?.success || !res.result) throw new Error('Signature was rejected.', { cause: err });
+      if (!res?.success || !res.result) throw new Error(t('ads.errors.signatureRejected'), { cause: err });
       proof = { signature: res.result, timestamp, vouched: false };
     }
   }
@@ -606,23 +607,23 @@ export function slotLabel(slot) {
   // starts with the video rather than playing before it. Calling that "before the
   // video" describes a roll, and would have an advertiser expecting their banner to
   // show while the video had not started.
-  const zeroLabel = slot && slot.banner ? 'At the beginning of the video' : 'Before the video';
+  const zeroLabel = slot && slot.banner ? t('ads.slot.atBeginning') : t('ads.slot.beforeVideo');
   if (!slot) return zeroLabel;
 
   if (slot.percent != null) {
     if (slot.percent === 0) return zeroLabel;
-    if (slot.percent === 25) return 'A quarter of the way in';
-    if (slot.percent === 50) return 'Halfway through';
-    if (slot.percent === 75) return 'Three quarters in';
-    return `${slot.percent}% in`;
+    if (slot.percent === 25) return t('ads.slot.quarter');
+    if (slot.percent === 50) return t('ads.slot.half');
+    if (slot.percent === 75) return t('ads.slot.threeQuarters');
+    return t('ads.slot.percentIn', { percent: slot.percent });
   }
 
   // Legacy, in seconds.
   if (slot.position === 0 || slot.position == null) return zeroLabel;
-  if (slot.position < 60) return `${slot.position} seconds in`;
+  if (slot.position < 60) return t('ads.slot.secondsIn', { count: slot.position });
   const mins = slot.position / 60;
   const shown = Number.isInteger(mins) ? mins : mins.toFixed(1);
-  return `${shown} ${String(shown) === '1' ? 'minute' : 'minutes'} in`;
+  return String(shown) === '1' ? t('ads.slot.oneMinuteIn') : t('ads.slot.minutesIn', { minutes: shown });
 }
 
 // Region names from the browser, falling back to the raw code. Avoids shipping a
@@ -632,7 +633,7 @@ const regionNames = typeof Intl !== 'undefined' && Intl.DisplayNames
   : null;
 
 export function countryName(code) {
-  if (!code || code === 'unknown') return 'Unplaced';
+  if (!code || code === 'unknown') return t('ads.market.unplaced');
   try { return (regionNames && regionNames.of(code)) || code; } catch { return code; }
 }
 
@@ -687,7 +688,7 @@ export async function uploadImageAsset({ file, reference }) {
   // wallet-signing prompt in front of someone uploading a logo, and it cannot run
   // at all for the logins that have no client-side key.
   const url = await uploadThumbnail(file, null, { preferStatic: true });
-  if (!url) throw new Error('Image upload failed');
+  if (!url) throw new Error(t('ads.errors.imageUploadFailed'));
 
   return readJson(await fetch(`${BASE}/creatives`, {
     method: 'POST',
@@ -727,7 +728,7 @@ export async function saveBranding({ reference, logoUrl, slogan }) {
  */
 export async function uploadLogo({ file, reference }) {
   const url = await uploadThumbnail(file, null, { preferStatic: true });
-  if (!url) throw new Error('Logo upload failed');
+  if (!url) throw new Error(t('ads.errors.logoUploadFailed'));
   return saveBranding({ reference, logoUrl: url });
 }
 
@@ -746,7 +747,7 @@ export async function uploadCreative({ file, account, reference, durationSeconds
   });
   const upJson = await up.json().catch(() => ({}));
   if (!up.ok || !upJson.permlink) {
-    throw new Error(upJson.error || `Upload failed (${up.status})`);
+    throw new Error(upJson.error || t('ads.errors.uploadFailedStatus', { status: up.status }));
   }
 
   // Claim the upload as an ad creative. Separate call on purpose: the upload
@@ -851,18 +852,18 @@ export async function attachCreative({ reference, campaignId, embedId, imageUrl 
   }));
 }
 
-/** Plain-English answer to "why isn't my campaign running". */
+/** Plain-English answer to "why isn't my campaign running". Values are i18n keys. */
 export const BLOCKED_REASON = {
-  unpaid: 'Waiting for your payment',
-  no_creative: 'No spot attached yet',
-  creative_pending: 'Your spot is still encoding',
-  creative_review: 'Waiting for us to review your spot',
-  creative_rejected: 'Your spot was not accepted',
-  creative_not_encoded: 'Your spot is still encoding',
-  not_started: 'Scheduled, not started yet',
-  ended: 'This flight has ended',
-  paused: 'Paused',
-  cancelled: 'Cancelled',
-  complete: 'Finished',
-  not_submitted: 'Not submitted',
+  unpaid: 'ads.blocked.unpaid',
+  no_creative: 'ads.blocked.no_creative',
+  creative_pending: 'ads.blocked.creative_pending',
+  creative_review: 'ads.blocked.creative_review',
+  creative_rejected: 'ads.blocked.creative_rejected',
+  creative_not_encoded: 'ads.blocked.creative_not_encoded',
+  not_started: 'ads.blocked.not_started',
+  ended: 'ads.blocked.ended',
+  paused: 'ads.blocked.paused',
+  cancelled: 'ads.blocked.cancelled',
+  complete: 'ads.blocked.complete',
+  not_submitted: 'ads.blocked.not_submitted',
 };

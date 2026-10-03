@@ -1,0 +1,19 @@
+{
+  "placeholder": "Écrivez votre contenu ici...",
+  "uploadFailed": "Échec de l'envoi : {{message}}",
+  "uploadingImage": "Envoi de l'image...",
+  "format": {
+    "underline": "Souligné",
+    "strike": "Barré",
+    "highlight": "Surligné",
+    "bulletList": "Liste à puces",
+    "orderedList": "Liste numérotée",
+    "taskList": "Liste de tâches"
+  },
+  "emoji": {
+    "searchPlaceholder": "Rechercher un emoji"
+  },
+  "preview": {
+    "renderError": "Erreur d'affichage du contenu"
+  }
+}

@@ -4,6 +4,7 @@ import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 import { getHiveUrl } from '../../utils/hiveNode';
 import Card3 from '../Cards/Card3';
+import { useTranslation } from 'react-i18next';
 
 /**
  * The playlists' actual contents at the foot of the Overview tab: one rail of
@@ -76,6 +77,7 @@ async function fetchPlaylistVideos(items) {
 }
 
 function PlaylistRail({ playlist, getContentForVideo, isWatched, getViewCount }) {
+  const { t } = useTranslation();
   const ref = useRef(null);
   const [near, setNear] = useState(false);
 
@@ -107,7 +109,7 @@ function PlaylistRail({ playlist, getContentForVideo, isWatched, getViewCount })
         <section className="pov-section">
           <div className="pov-head">
             <h3>{playlist.name}</h3>
-            <Link className="pov-more" to={`/playlist/${playlist.id}`}>View all</Link>
+            <Link className="pov-more" to={`/playlist/${playlist.id}`}>{t('profile.overview.viewAll')}</Link>
           </div>
           <Card3
             videos={videos}

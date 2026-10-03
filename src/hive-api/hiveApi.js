@@ -5,6 +5,7 @@
  */
 
 import axios from "axios";
+import { t, formatTimeAgo, formatNumber as formatLocaleNumber } from '../i18n';
 import { getHiveUrl } from '../utils/hiveNode';
 import { isSnapsContainer } from '../utils/snapsContainer';
 
@@ -211,7 +212,7 @@ export function parseEmbedUrl(embedUrl) {
 
 export function parseUserAvatar(account) {
   if (!account) {
-    return "https://images.hive.blog/u/null/avatar/small";
+    return "/img/u/null/avatar/small";
   }
 
   try {
@@ -234,32 +235,17 @@ export function parseUserAvatar(account) {
     }
   } catch (_) { }
 
-  return `https://images.hive.blog/u/${account.name}/avatar/small`;
+  return `/img/u/${account.name}/avatar/small`;
 }
 
 export function formatNumber(num) {
-  if (!num) return "0";
-  if (num >= 1_000_000) return (num / 1_000_000).toFixed(1) + "M";
-  if (num >= 1_000) return (num / 1_000).toFixed(1) + "K";
-  return num.toString();
+  return formatLocaleNumber(num, { compact: true });
 }
 
+// Hive timestamps carry no timezone; they are UTC. Compact, localized: "3d ago".
 export function timeAgo(dateString) {
-  if (!dateString) return "Just now";
-
-  // Append "Z" only if the string has no timezone indicator already
-  const hasTimezone = /[Zz]|[+-]\d{2}:\d{2}$/.test(dateString);
-  const parsed = new Date(hasTimezone ? dateString : dateString + "Z");
-  const seconds = Math.floor((Date.now() - parsed) / 1000);
-  if (isNaN(seconds)) return "";
-
-  if (seconds < 60) return "Just now";
-  if (seconds < 3600) return `${Math.floor(seconds / 60)}m ago`;
-  if (seconds < 86400) return `${Math.floor(seconds / 3600)}h ago`;
-  if (seconds < 604800) return `${Math.floor(seconds / 86400)}d ago`;
-  if (seconds < 2592000) return `${Math.floor(seconds / 604800)}w ago`;
-  if (seconds < 31536000) return `${Math.floor(seconds / 2592000)}mo ago`;
-  return `${Math.floor(seconds / 31536000)}y ago`;
+  if (!dateString) return t('common.time.justNow');
+  return formatTimeAgo(/[Zz]|[+-]\d{2}:\d{2}$/.test(dateString) ? dateString : dateString + "Z", { style: 'narrow' });
 }
 
 /* -----------------------------
@@ -297,7 +283,7 @@ export async function fetchCompleteShortData(shortItem, loggedInUser = null) {
     caption: embed_title || "",
     user: {
       username: `@${author}`,
-      avatar: `https://images.hive.blog/u/${author}/avatar/small`,
+      avatar: `/img/u/${author}/avatar/small`,
       isSubscribed: false
     },
     stats: {
@@ -646,7 +632,7 @@ async function loadNestedComments(comments, loggedInUser = null) {
         },
         user: {
           username: `@${comment.author}`,
-          avatar: `https://images.hive.blog/u/${comment.author}/avatar/small`
+          avatar: `/img/u/${comment.author}/avatar/small`
         }
       };
     })
@@ -762,7 +748,7 @@ export async function fetchShortsWithDetails(page = 1, limit = 10, loggedInUser 
       sound: s.hive_sound || null,
       user: {
         username: `@${finalAuthor}`,
-        avatar: `https://images.hive.blog/u/${finalAuthor}/avatar/small`,
+        avatar: `/img/u/${finalAuthor}/avatar/small`,
         isSubscribed: false,
         followersCount: s.hive_followers ?? null,
         reputation: s.hive_author_reputation ?? null,
@@ -841,7 +827,7 @@ export async function fetchUserShortsWithDetails(username, page = 1, limit = 20,
       sound: s.hive_sound || null,
       user: {
         username: `@${finalAuthor}`,
-        avatar: `https://images.hive.blog/u/${finalAuthor}/avatar/small`,
+        avatar: `/img/u/${finalAuthor}/avatar/small`,
         isSubscribed: false,
         followersCount: s.hive_followers ?? null,
         reputation: s.hive_author_reputation ?? null,

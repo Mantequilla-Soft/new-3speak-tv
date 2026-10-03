@@ -9,9 +9,11 @@ import { useEmbedUpload } from '../../context/EmbedUploadContext';
 import { usePremiumStatus } from '../../hooks/usePremiumStatus';
 import { getLockedBeneficiaries } from '../../utils/beneficiaries';
 import { sanitizeMusicCredits, soundAuthorsOf } from '../../utils/soundCredits';
+import { useTranslation } from 'react-i18next';
 import './EditorModal.scss';
 
 function EditorModal({ isOpen, onClose, videoUrl, videoName, videoType, clipStart, clipEnd, originalAuthor, originalPermlink, originalShortPermlink }) {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const { setVideoFile, setPrevVideoFile, setGeneratedThumbnail, setVideoDuration, setOriginalAuthor, setOriginalPermlink, setOriginalShortPermlink, setMusicCredits, setFromStories, setList, setRemaingPercent } = useEmbedUpload();
   const iframeRef = useRef(null);
@@ -146,8 +148,8 @@ function EditorModal({ isOpen, onClose, videoUrl, videoName, videoType, clipStar
   useEffect(() => {
     if (!isOpen) return;
     const onKeyDown = (e) => {
-      const t = e.target;
-      const editable = t?.tagName === 'INPUT' || t?.tagName === 'TEXTAREA' || t?.tagName === 'SELECT' || t?.isContentEditable;
+      const el = e.target;
+      const editable = el?.tagName === 'INPUT' || el?.tagName === 'TEXTAREA' || el?.tagName === 'SELECT' || el?.isContentEditable;
       e.stopImmediatePropagation();
       if (editable) return;
       if (e.key === ' ' || e.code === 'Space') {
@@ -184,7 +186,7 @@ function EditorModal({ isOpen, onClose, videoUrl, videoName, videoType, clipStar
       if (!href || href.startsWith('#') || href.startsWith('http') || href.startsWith('mailto:')) return;
 
       const leave = window.confirm(
-        'The editor is still open. Leaving this page will close the editor and unsaved changes will be lost.\n\nOK = Close editor & leave\nCancel = Stay on this page'
+        t('modals.editor.confirmLeave')
       );
 
       if (!leave) {
@@ -201,7 +203,7 @@ function EditorModal({ isOpen, onClose, videoUrl, videoName, videoType, clipStar
       window.removeEventListener('beforeunload', handleBeforeUnload);
       document.removeEventListener('click', handleClick, true);
     };
-  }, [isOpen, editorReady]);
+  }, [isOpen, editorReady, t]);
 
   // Handle render request from editor
   const handleRenderRequest = async (timeline) => {
@@ -370,7 +372,7 @@ function EditorModal({ isOpen, onClose, videoUrl, videoName, videoType, clipStar
   }, []);
 
   const handleClose = (opts) => {
-    if (editorReady && opts?.confirmed !== true && !window.confirm('Are you sure you want to close the editor? Unsaved changes will be lost.')) {
+    if (editorReady && opts?.confirmed !== true && !window.confirm(t('modals.editor.confirmClose'))) {
       return;
     }
     setEditorReady(false);
@@ -419,7 +421,7 @@ function EditorModal({ isOpen, onClose, videoUrl, videoName, videoType, clipStar
               className="editor-iframe"
               allow="cross-origin-isolated; camera; microphone; fullscreen"
               allowFullScreen
-              title="3Speak Video Editor"
+              title={t('modals.editor.iframeTitle')}
             />
           )}
 
@@ -427,16 +429,16 @@ function EditorModal({ isOpen, onClose, videoUrl, videoName, videoType, clipStar
           {(resolving || (!editorReady && !resolveError)) && (
             <div className="editor-loading-overlay">
               <Loader2 size={40} className="spinner" />
-              <span>{resolving ? 'Finding available editor...' : 'Loading editor...'}</span>
+              <span>{resolving ? t('modals.editor.finding') : t('modals.editor.loading')}</span>
             </div>
           )}
 
           {/* Error: no editor available */}
           {resolveError && (
             <div className="editor-loading-overlay">
-              <span>No editor server is currently available. Please try again later.</span>
+              <span>{t('modals.editor.unavailable')}</span>
               <button className="render-btn" onClick={handleClose} style={{ marginTop: 16 }}>
-                Close
+                {t('common.actions.close')}
               </button>
             </div>
           )}
@@ -447,7 +449,7 @@ function EditorModal({ isOpen, onClose, videoUrl, videoName, videoType, clipStar
               {renderStatus === 'sending' && (
                 <div className="render-status">
                   <Loader2 size={32} className="spinner" />
-                  <span>Sending to render service...</span>
+                  <span>{t('modals.editor.sending')}</span>
                 </div>
               )}
               {renderStatus === 'rendering' && (
@@ -455,36 +457,36 @@ function EditorModal({ isOpen, onClose, videoUrl, videoName, videoType, clipStar
                   <div className="render-progress-bar">
                     <div className="render-progress-fill" style={{ width: `${renderProgress}%` }} />
                   </div>
-                  <span>Rendering... {Math.round(renderProgress)}%</span>
+                  <span>{t('modals.editor.rendering', { percent: Math.round(renderProgress) })}</span>
                 </div>
               )}
               {renderStatus === 'complete' && (
                 <div className="render-status">
-                  <span>Render complete!</span>
+                  <span>{t('modals.editor.complete')}</span>
                   <button className="render-btn" onClick={handleUseRenderedVideo}>
-                    Use Video
+                    {t('modals.editor.useVideo')}
                   </button>
                 </div>
               )}
               {renderStatus === 'preparing' && (
                 <div className="render-status">
                   <Loader2 size={32} className="spinner" />
-                  <span>Preparing video for upload...</span>
+                  <span>{t('modals.editor.preparing')}</span>
                 </div>
               )}
               {renderStatus === 'error' && (
                 <div className="render-status render-error">
-                  <span>Render service not available yet. Timeline data logged to console.</span>
+                  <span>{t('modals.editor.renderUnavailable')}</span>
                   <button className="render-btn" onClick={() => setRenderStatus(null)}>
-                    Back to Editor
+                    {t('modals.editor.backToEditor')}
                   </button>
                 </div>
               )}
               {renderStatus === 'post-error' && (
                 <div className="render-status render-error">
-                  <span>Failed to prepare video for upload. Please try downloading instead.</span>
+                  <span>{t('modals.editor.postError')}</span>
                   <button className="render-btn" onClick={() => setRenderStatus(null)}>
-                    Back to Editor
+                    {t('modals.editor.backToEditor')}
                   </button>
                 </div>
               )}

@@ -1,0 +1,136 @@
+{
+  "button": {
+    "label": "채팅"
+  },
+  "tools": {
+    "emoji": "이모지",
+    "searchEmoji": "이모지 검색",
+    "searchGifs": "GIF 검색…",
+    "noGifs": "GIF를 찾을 수 없어요.",
+    "poweredByGiphy": "Powered by GIPHY"
+  },
+  "lightbox": {
+    "openInNewTab": "새 탭에서 이미지 열기"
+  },
+  "linkCard": {
+    "loadingPreview": "미리보기 불러오는 중…",
+    "community": "커뮤니티",
+    "communityWithSubscribers_other": "커뮤니티 · 구독자 {{formatted}}명",
+    "commentFallback": "(댓글)",
+    "play": "{{title}} 재생"
+  },
+  "share": {
+    "embedCopied": "임베드 코드를 복사했어요",
+    "pressToCopy": "Ctrl/Cmd + C를 눌러 선택한 코드를 복사하세요",
+    "embedTitle": "이 동영상 임베드",
+    "embedHint": "웹사이트나 블로그 게시물에 붙여넣으세요.",
+    "embedSize": "임베드 크기",
+    "embedCode": "임베드 코드",
+    "copyEmbed": "임베드 코드 복사",
+    "responsiveSub": "페이지 크기에 맞게 조절돼요",
+    "fixedSub": "고정 크기 iframe",
+    "sendInChat": "3Speak 채팅으로 보내기",
+    "sendInChatSub": "3Speak의 다른 사용자에게 메시지로 보내기",
+    "embedOnWebsite": "웹사이트에 임베드",
+    "embedOnWebsiteSub": "내 사이트나 블로그용 HTML 복사",
+    "generalShare": "공유 / 링크 복사",
+    "generalShareSub": "다른 앱으로 공유하거나 링크 복사"
+  },
+  "gate": {
+    "connectTitle": "3Speak 채팅에 연결",
+    "connectBody": "채팅은 Snapie로 운영돼요. 연결하면 Hive 포스팅 키로 일회성 로그인 요청에 서명해요. 트랜잭션도 비용도 없어요.",
+    "connecting": "연결 중…",
+    "connectButton": "채팅 연결",
+    "cannotSign": "현재 로그인 방식으로는 채팅 요청에 서명할 수 없어요. Keychain, HiveAuth, PeakVault 또는 Ledger를 사용하세요.",
+    "needsAccountTitle": "채팅에는 Hive 계정이 필요해요",
+    "needsAccountBody": "메시지는 내 계정 키로 서명되기 때문에, 계정이 준비되면 다른 기능과 함께 채팅도 사용할 수 있어요. 프로필의 목표를 완료하면 팀이 도와드릴게요.",
+    "loginTitle": "채팅을 사용하려면 로그인하세요",
+    "loginBody": "Hive 계정으로 로그인해 메시지를 주고받으세요.",
+    "connectingToChat": "채팅에 연결하는 중…"
+  },
+  "errors": {
+    "notHiveAccount": "@{{user}}은(는) Hive 계정이 아니에요.",
+    "openConversation": "대화를 열지 못했어요.",
+    "verifyAccount": "계정을 확인하지 못했어요.",
+    "createRoom": "방을 만들지 못했어요.",
+    "joinChannel": "채널에 참여하지 못했어요."
+  },
+  "newDm": {
+    "placeholder": "Hive 사용자에게 메시지 보내기…",
+    "start": "채팅 시작"
+  },
+  "newRoom": {
+    "toggle": "새 비공개 방",
+    "namePlaceholder": "방 이름…",
+    "removeMember": "@{{user}} 제거",
+    "addMore": "더 추가…",
+    "invitePlaceholder": "Hive 사용자 초대(선택)…",
+    "create": "만들기"
+  },
+  "channels": {
+    "browse": "채널 둘러보기",
+    "publicTitle": "공개 채널",
+    "closeBrowser": "채널 목록 닫기",
+    "loading": "채널 불러오는 중…",
+    "empty": "사용할 수 있는 채널이 없어요.",
+    "join": "참여"
+  },
+  "markRead": {
+    "nothingToClear": "정리할 대화가 없어요. 서버 쪽 카운트가 멈춰 있을 수 있어요.",
+    "requestFailed": "요청 실패",
+    "allCaughtUp": "모두 확인했어요",
+    "stillUnread_other": "채팅 {{count}}개를 정리했지만 여전히 읽지 않음 {{total}}개가 표시돼요.",
+    "stillUnreadNoMatch_other": "채팅 {{count}}개를 정리했지만 여전히 읽지 않음 {{total}}개가 표시돼요. 서버가 카운트를 보고하지만 일치하는 대화가 없어요.",
+    "notSignedIn": "채팅에 로그인되어 있지 않아요. 채팅을 다시 연결한 뒤 시도해 주세요.",
+    "sessionExpired": "정리하는 동안 채팅 세션이 만료되었어요. 채팅을 다시 연결한 뒤 시도해 주세요.",
+    "serverRejectedVisible_other": "서버가 요청 {{count}}개를 모두 거부했어요(표시된 목록의 ID)",
+    "serverRejectedServerMap_other": "서버가 요청 {{count}}개를 모두 거부했어요(서버 자체의 읽지 않음 목록 ID)",
+    "failed": "모두 읽음으로 표시하지 못했어요",
+    "marking": "읽음으로 표시하는 중…",
+    "button": "모두 읽음으로 표시",
+    "buttonCount": "모두 읽음으로 표시({{count}})"
+  },
+  "list": {
+    "chooseTarget": "보낼 채팅을 선택하세요",
+    "loading": "대화 불러오는 중…",
+    "empty": "아직 대화가 없어요. 위에 Hive 사용자 이름을 입력해 대화를 시작하세요."
+  },
+  "leave": {
+    "confirmRoom": "이 방에서 나갈까요?",
+    "confirmChannel": "이 채널에서 나갈까요?",
+    "errorRoom": "방에서 나가지 못했어요.",
+    "errorChannel": "채널에서 나가지 못했어요.",
+    "titleRoom": "방 나가기",
+    "titleChannel": "채널 나가기",
+    "button": "나가기"
+  },
+  "thread": {
+    "editError": "메시지를 수정하지 못했어요.",
+    "deleteConfirm": "이 메시지를 삭제할까요? “[삭제됨]”으로 바뀌어요.",
+    "deleteError": "메시지를 삭제하지 못했어요.",
+    "back": "대화 목록으로 돌아가기",
+    "loading": "메시지 불러오는 중…",
+    "empty": "아직 메시지가 없어요 — 인사해 보세요 👋",
+    "editedSuffix": " · 수정됨",
+    "messageActions": "메시지 작업",
+    "quote": "인용",
+    "forward": "전달",
+    "typing_other": "{{users}}님이 입력 중…",
+    "editing": "메시지 수정 중",
+    "cancelEdit": "수정 취소",
+    "quoting": "@{{user}}님 인용 중",
+    "cancelQuote": "인용 취소",
+    "removeImage": "이미지 제거",
+    "placeholder": "메시지 입력…"
+  },
+  "page": {
+    "chooseTarget": "보낼 채팅을 선택하세요.",
+    "selectConversation": "대화를 선택하거나 새 대화를 시작하세요."
+  },
+  "overlay": {
+    "fullscreen": "전체 화면",
+    "exitFullscreen": "전체 화면 종료",
+    "close": "채팅 닫기",
+    "sendInChat": "채팅으로 보내기"
+  }
+}

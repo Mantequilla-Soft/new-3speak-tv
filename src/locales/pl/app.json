@@ -1,0 +1,200 @@
+{
+  "loaders": {
+    "wifi": "Wskaźnik ładowania Wi-Fi"
+  },
+  "supportBlock": {
+    "banned": {
+      "title": "Twoje konto jest zablokowane",
+      "body": "Twoje konto 3Speak zostało zablokowane, więc nie możesz się zalogować. Jeśli uważasz, że to pomyłka, skontaktuj się z pomocą techniczną 3Speak."
+    },
+    "upload": {
+      "title": "Przesyłanie jest wyłączone dla twojego konta",
+      "body": "Twoje konto 3Speak nie może teraz przesyłać filmów. Jeśli uważasz, że to pomyłka, skontaktuj się z pomocą techniczną 3Speak."
+    }
+  },
+  "emergency": {
+    "title": "Mamy problemy z infrastrukturą",
+    "body": "Nasz zespół już nad tym pracuje i stara się jak najszybciej przywrócić 3Speak. Dołącz do naszego Discorda, aby się z nami skontaktować i otrzymywać bieżące informacje — dziękujemy za cierpliwość.",
+    "joinDiscord": "Dołącz do naszego Discorda"
+  },
+  "changelog": {
+    "title": "Wydaliśmy aktualizację!",
+    "subtitle": "Oto co nowego w v{{version}}",
+    "previousUpdates": "Poprzednie aktualizacje",
+    "newerUpdates": "Nowsze aktualizacje",
+    "readTheCode": "Zobacz kod",
+    "gotIt": "Rozumiem"
+  },
+  "routes": {
+    "homeFeed": "Kanał główny",
+    "followFeed": "Obserwowani",
+    "discover": "Odkrywaj",
+    "newVideos": "Nowe filmy",
+    "firstUploads": "Pierwsze filmy",
+    "rankings": "Rankingi",
+    "groups": "Grupy",
+    "badges": "Odznaki",
+    "audioBy": "Audio od @{{author}}",
+    "audio": "Audio",
+    "playlist": "Playlista",
+    "watchHistory": "Historia oglądania — @{{username}}",
+    "postBy": "Post od @{{author}}",
+    "myProfile": "Mój profil",
+    "uploadStudio": "Studio przesyłania",
+    "drafts": "Szkice",
+    "editVideo": "Edytuj film",
+    "editScheduledPost": "Edytuj zaplanowany post",
+    "chat": "Czat",
+    "about": "O nas",
+    "login": "Logowanie",
+    "brandFallback": "3Speak - zdecentralizowana platforma wideo"
+  },
+  "invite": {
+    "title": "<who>@{{referrer}}</who> zaprasza cię do 3Speak",
+    "incubatingFastTrack": "Możesz od razu zamienić <b>@{{handle}}</b> we własne konto Hive, bez kończenia rozgrzewki.",
+    "incubatingKeepGoing": "Kontynuuj rozgrzewkę. <b>@{{referrer}}</b> jest zapisany jako osoba, która cię zaprosiła.",
+    "signUpFastTrack": "Zarejestruj się i od razu otrzymaj własne konto Hive: jedno logowanie do 3Speak i każdej innej aplikacji Hive, z kluczami, które masz tylko ty. Zajmuje to około minuty.",
+    "signUpFree": "Zarejestruj się i zacznij od darmowego profilu na 3Speak. Twoje zaproszenie zostało zapisane, więc <b>@{{referrer}}</b> otrzyma za nie uznanie.",
+    "createHiveAccount": "Utwórz moje konto Hive",
+    "createAccount": "Utwórz moje konto",
+    "lookAround": "Chcę się tylko rozejrzeć"
+  },
+  "interests": {
+    "saved": "Zainteresowania zapisane — możesz je zmienić w każdej chwili w Ustawieniach",
+    "saveFailed": "Nie udało się zapisać zainteresowań",
+    "title": "Co cię interesuje?",
+    "body": "Wybierz kilka ulubionych tematów, a pokażemy ci więcej treści, które lubisz. Możesz je zmienić w każdej chwili w <b>Ustawieniach</b>.",
+    "notNow": "Nie teraz",
+    "save": "Zapisz zainteresowania"
+  },
+  "emojiGif": {
+    "emoji": "Emoji",
+    "searchEmoji": "Szukaj emoji",
+    "searchGifs": "Szukaj GIF-ów…",
+    "noGifs": "Nie znaleziono GIF-ów.",
+    "poweredBy": "Dostarczane przez GIPHY"
+  },
+  "welcome": {
+    "things": {
+      "postVideos": {
+        "title": "Publikuj filmy",
+        "text": "Przesyłaj długie filmy, które pozostają twoje, na blockchainie, z którego nikt nie może ich po cichu usunąć."
+      },
+      "filmShorts": {
+        "title": "Nagrywaj Shorts",
+        "text": "Coś krótkiego, pionowego i łatwego do udostępnienia. Świetny sposób na zdobycie pierwszych widzów."
+      },
+      "goLive": {
+        "title": "Nadawaj na żywo",
+        "text": "Transmituj dla swoich ludzi, zapraszaj gości na scenę i zachowaj nagranie na później."
+      },
+      "buildCommunity": {
+        "title": "Zbuduj społeczność",
+        "text": "Stwórz miejsce wokół tego, co jest dla ciebie ważne, albo dołącz do takiego, które już tętni życiem."
+      },
+      "makeFriends": {
+        "title": "Poznaj prawdziwych przyjaciół",
+        "text": "Komentuj, czatuj i współpracuj z prawdziwymi ludźmi, którzy się wzajemnie wspierają."
+      },
+      "getInspired": {
+        "title": "Zainspiruj się, zaangażuj się",
+        "text": "Odkrywaj twórców, wspieraj tych, których lubisz, i zarabiaj przy okazji."
+      }
+    },
+    "advertiserThings": {
+      "bookAds": {
+        "title": "Rezerwuj reklamy w całym 3Speak",
+        "text": "Spoty w filmach, spoty w Shorts, banery w odtwarzaczu, paski i spoty przed przesyłaniem, od jednego dnia do trzech miesięcy."
+      },
+      "payFromWallet": {
+        "title": "Płać z własnego portfela",
+        "text": "W HBD lub HIVE, bezpośrednio z tego konta. Bez karty i bez pośredników."
+      },
+      "chooseWhere": {
+        "title": "Wybierz, gdzie się wyświetla",
+        "text": "Wybierz format, miejsce w filmie i liczbę dni emisji."
+      },
+      "seeDelivered": {
+        "title": "Zobacz, co przyniosła",
+        "text": "Odtworzenia i kliknięcia dla każdej rezerwacji oraz zwrot środków, jeśli rezerwacja nie osiągnie celu."
+      },
+      "talkToCustomers": {
+        "title": "Rozmawiaj z klientami",
+        "text": "Jeśli chcesz: publikuj filmy, odpowiadaj na komentarze i obserwuj ludzi pod swoją marką."
+      },
+      "oneAccount": {
+        "title": "Jedno konto wszędzie",
+        "text": "Ta sama marka i logowanie w każdej aplikacji Hive, z kluczem, który masz tylko ty."
+      }
+    },
+    "profileLive": "Twój profil jest już widoczny. Witaj w 3Speak!",
+    "brandProfileLive": "Profil twojej marki jest już widoczny. Witaj w 3Speak!",
+    "title": "Witaj w 3Speak",
+    "titleNamed": "Witaj w 3Speak, {{name}}",
+    "advertiserReady": "Twoje konto reklamodawcy <b>@{{user}}</b> jest gotowe. Za jego pomocą rezerwujesz reklamy i za nie płacisz.",
+    "heyUser": "Cześć <b>@{{user}}</b>, udało się. 3Speak działa na Hive, więc twoje konto, twoi widzowie i twoje treści należą do ciebie.",
+    "noteAdvertiser": "Najpierw szybki rzut oka na profil twojej marki: to właśnie widzowie widzą obok twoich reklam.",
+    "note": "Jeszcze jedno, zanim zaczniesz: pokaż ludziom, kogo oglądają.",
+    "maybeLater": "Może później",
+    "checkBrandProfile": "Sprawdź profil mojej marki",
+    "setUpProfile": "Skonfiguruj mój profil",
+    "brandProfileTitle": "Profil twojej marki",
+    "profileTitle": "Pokaż ludziom, kim jesteś",
+    "brandProfileHint": "Przeniesiony z twojej rozgrzewki. Zapisanie umieści go na twoim koncie Hive; możesz go zmienić w każdej chwili.",
+    "profileHint": "To właśnie ludzie widzą na twoim profilu. Możesz to zmienić w każdej chwili.",
+    "skipForNow": "Na razie pomiń",
+    "saveAndBook": "Zapisz i zarezerwuj pierwszą reklamę",
+    "uploading": "Przesyłanie…",
+    "interestsHint": "Na tej podstawie wybieramy, co pojawia się na twojej stronie głównej. Wybierz dowolnie wiele albo nic i zmieniaj, kiedy chcesz.",
+    "interestsFineprint": "Zapisane na twoim koncie Hive, więc każda aplikacja Hive pokazuje ten sam profil i te same zainteresowania.",
+    "saveAndExplore": "Zapisz i zacznij odkrywać"
+  },
+  "profileEdit": {
+    "updated": "Profil zaktualizowany",
+    "title": "Edytuj profil",
+    "subtitle": "Twoje zdjęcie, nazwa i opis są widoczne na twoim profilu i obok wszystkiego, co publikujesz.",
+    "loading": "Wczytywanie profilu…",
+    "fineprint": "Zapisane na twoim koncie Hive, więc każda aplikacja Hive pokazuje ten sam profil.",
+    "saveChanges": "Zapisz zmiany"
+  },
+  "profileFields": {
+    "chooseImage": "Wybierz plik obrazu",
+    "imageTooLarge": "Ten obraz ma ponad 8MB, wybierz mniejszy",
+    "uploadFailed": "Nie udało się przesłać tego obrazu",
+    "saved": "Profil zapisany",
+    "saveFailed": "Nie udało się zapisać profilu",
+    "uploadBanner": "Prześlij baner profilu",
+    "changeBanner": "Zmień baner",
+    "addBanner": "Dodaj baner",
+    "bannerHint": "Najlepiej <b>2800 × 684</b> px (lub dowolny obraz 4:1). Najważniejsze elementy umieść na środku: boki są przycinane na wąskich ekranach, a twoja nazwa wyświetla się w lewym dolnym rogu.",
+    "uploadPicture": "Prześlij zdjęcie profilowe",
+    "pictureLabel": "Zdjęcie profilowe",
+    "pictureHint": "Najlepiej sprawdza się twarz lub logo. Kwadrat, 400 × 400 px lub większy. Do 8MB.",
+    "displayName": "Wyświetlana nazwa",
+    "namePlaceholderUser": "Jak mamy się do ciebie zwracać? (@{{username}})",
+    "namePlaceholder": "Jak mamy się do ciebie zwracać?",
+    "shortBio": "Krótki opis",
+    "bioPlaceholder": "Co tworzysz i czego ludzie mogą się po tobie spodziewać?",
+    "location": "Lokalizacja",
+    "optional": "opcjonalnie",
+    "locationPlaceholder": "W jakim miejscu świata jesteś?"
+  },
+  "auth": {
+    "sessionExpired": "Twoja sesja wygasła — zaloguj się ponownie",
+    "loggedOut": "Wylogowano",
+    "loginSuccess": "Zalogowano!",
+    "switchedTo": "Przełączono na @{{user}}",
+    "butrauthFailed": "Logowanie przez Butter Auth nie powiodło się: {{error}}",
+    "signedInAs": "Zalogowano jako @{{user}}",
+    "loggedInViaButrauth": "Zalogowano jako @{{user}} przez Butter Auth",
+    "tokenExpired": "Sesja wygasła",
+    "loginFailed": "Logowanie nie powiodło się: {{error}}",
+    "unknownError": "Nieznany błąd",
+    "loginTitle": "Zaloguj się do 3Speak"
+  },
+  "update": {
+    "available": "Dostępna jest nowa wersja ({{version}})",
+    "description": "Odśwież, aby pobrać najnowsze aktualizacje."
+  },
+  "toastsRegion": "Powiadomienia"
+}

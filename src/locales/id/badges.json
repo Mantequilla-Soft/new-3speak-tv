@@ -1,0 +1,92 @@
+{
+  "page": {
+    "fallbackTitle": "Lencana",
+    "kpis": {
+      "recipients": "Penerima",
+      "recentVideos": "Video terbaru",
+      "issued": "Diterbitkan"
+    },
+    "issuedBy": "Diterbitkan oleh <creatorLink>@{{creator}}</creatorLink>",
+    "notFoundTitle": "Lencana tidak ditemukan",
+    "notFoundBody": "Akun Hive bernama @{{account}} tidak dapat dibaca saat ini.",
+    "browseAll": "Jelajahi semua lencana",
+    "tabs": {
+      "videos": "Video",
+      "recipients": "Penerima",
+      "recipientsWithCount": "Penerima ({{num}})"
+    },
+    "errorVideos": "Gagal memuat video",
+    "noVideosTitle": "Belum ada video",
+    "noHolders": "Belum ada yang memegang lencana ini.",
+    "noHolderVideos": "Belum ada pemegang lencana ini yang menerbitkan video di 3Speak.",
+    "loadingMore": "Memuat lagi...",
+    "recipientsError": "Penerima tidak dapat dimuat",
+    "recipientsLoading": "Memuat penerima...",
+    "noRecipientsTitle": "Belum ada penerima",
+    "noRecipientsBody": "Sejauh ini belum ada yang dianugerahi lencana ini.",
+    "recipientsSummary_other": "{{num}} penerima",
+    "recipientsSummaryWithVideos_other": "{{num}} penerima, {{publishing}} menerbitkan di 3Speak",
+    "recipientVideos_other": "{{num}} video",
+    "recipientNoVideos": "Tidak ada video"
+  },
+  "directory": {
+    "title": "Lencana",
+    "intro": "Lencana adalah penghargaan yang <b>diberikan orang lain kepadamu</b> di Hive, untuk acara, kontribusi, dan pencapaian. Kamu tidak bisa bergabung ke lencana: seseorang yang menganugerahkannya. Buka lencana untuk menonton apa yang diterbitkan para penerimanya di sini.",
+    "searchPlaceholder": "Cari lencana...",
+    "sort": {
+      "recipients": "Penerima",
+      "created": "Dibuat",
+      "name": "Nama"
+    },
+    "createLocked": "Membuat lencana butuh akun Hive. Fitur ini terbuka saat akunmu siap.",
+    "create": "Buat lencana",
+    "loadError": "Lencana tidak dapat dimuat saat ini.",
+    "noMatch": "Tidak ada lencana yang cocok dengan pencarian itu.",
+    "held": "Dimiliki",
+    "recipients_other": "{{num}} penerima"
+  },
+  "award": {
+    "success": "@{{username}} kini memegang {{title}}",
+    "failed": "Lencana itu tidak dapat dianugerahkan",
+    "dialogLabel": "Anugerahkan lencana ke {{username}}",
+    "title": "Anugerahkan lencana",
+    "toUser": "ke @{{username}}",
+    "awarding": "Menganugerahkan…",
+    "held": "Dimiliki",
+    "award": "Anugerahkan",
+    "note": "Lencana itu akan mengikuti mereka di Hive, dan itulah arti memegangnya. Kamu bisa menariknya kembali dari halaman lencana itu sendiri."
+  },
+  "hive": {
+    "dragToReorder": "Seret untuk mengatur urutan",
+    "orderSaved": "Urutan lencana disimpan ke profil Hive-mu",
+    "orderSaveFailed": "Urutan lencanamu tidak dapat disimpan",
+    "dialogLabel": "Lencana milik @{{username}}",
+    "title": "Lencana",
+    "arrangeHint": "Seret lencanamu ke urutan yang kamu inginkan.",
+    "earnedCount_other": "{{count}} lencana diraih @{{username}} di Hive",
+    "alwaysFirst": "Selalu tampil pertama",
+    "saveOrder": "Simpan urutan",
+    "arrange": "Atur",
+    "arrangeTitle": "Pilih urutan tampilan lencanamu",
+    "showAll_other": "Tampilkan semua {{count}} lencana",
+    "awardTitle": "Anugerahkan salah satu lencanamu ke @{{username}}"
+  },
+  "leaderboardBadges": {
+    "proTitle": "Kreator ini mendukung 3Speak dengan langganan Pro"
+  },
+  "leaderboard": {
+    "watchNotice": "Waktu tonton baru dilacak sejak {{since}}, jadi rentang waktu yang lebih panjang masih menampilkan riwayat singkat yang sama.",
+    "unclaimed": "Belum diklaim",
+    "noActivity": "Belum ada aktivitas di rentang waktu ini",
+    "otherTopics": "Lainnya",
+    "title": "Peringkat",
+    "subtitle": "{{blurb}} — kreator teratas di 3Speak.",
+    "subtitleTopic": "{{blurb}} — kreator teratas di {{topic}}.",
+    "allTopics": "Semua topik",
+    "finding": "Mencari @{{user}} di papan ini…",
+    "notInTop": "@{{user}} tidak ada di {{n}} teratas papan ini.",
+    "loading": "Memuat papan peringkat…",
+    "loadError": "Papan peringkat tidak dapat dimuat. Coba lagi sebentar lagi.",
+    "empty": "Belum ada yang punya {{metric}} di rentang waktu ini."
+  }
+}
