@@ -587,6 +587,7 @@ function App() {
            bar instead of a hardcoded guess that goes wrong the moment it reflows. */
         offset={{ top: 'calc(var(--nav-top-offset, 50px) + 12px)', right: '16px' }}
         mobileOffset={{ top: 'calc(var(--nav-top-offset, 50px) + 8px)', right: '8px', left: '8px' }}
+        containerAriaLabel={t('app.toastsRegion')}
         expand
         visibleToasts={6}
         gap={12}

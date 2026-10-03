@@ -196,5 +196,6 @@
   "update": {
     "available": "Uma nova versão ({{version}}) está disponível",
     "description": "Atualize a página para receber as novidades."
-  }
+  },
+  "toastsRegion": "Notificações"
 }
