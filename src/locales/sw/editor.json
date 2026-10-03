@@ -1,0 +1,19 @@
+{
+  "placeholder": "Andika maudhui yako hapa...",
+  "uploadFailed": "Upakiaji umeshindwa: {{message}}",
+  "uploadingImage": "Inapakia picha...",
+  "format": {
+    "underline": "Pigia mstari",
+    "strike": "Kata mstari",
+    "highlight": "Angazia",
+    "bulletList": "Orodha ya vitone",
+    "orderedList": "Orodha ya namba",
+    "taskList": "Orodha ya kazi"
+  },
+  "emoji": {
+    "searchPlaceholder": "Tafuta emoji"
+  },
+  "preview": {
+    "renderError": "Hitilafu katika kuonyesha maudhui"
+  }
+}

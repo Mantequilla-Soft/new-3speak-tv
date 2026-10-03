@@ -1,0 +1,98 @@
+{
+  "tip": {
+    "successTitle": "Bakshishi imetumwa!",
+    "successMessage": "Umetuma {{amount}} {{currency}} kama bakshishi. Asante kwa msaada wako!",
+    "errors": {
+      "allRequired": "Sehemu zote zinahitajika",
+      "loginRequired": "Tafadhali ingia ili kutuma bakshishi",
+      "insufficientBalance": "Salio halitoshi",
+      "invalidUsername": "Jina la mtumiaji si sahihi",
+      "transferFailed": "Kutuma kumeshindwa: {{message}}"
+    },
+    "heading": "Tuma bakshishi kwa @{{recipient}}",
+    "amountLabel": "Kiasi: ",
+    "amountPlaceholder": "k.m. 1.000",
+    "currencyLabel": "Sarafu:",
+    "availableBalance": "Salio linalopatikana: {{currency}}",
+    "memoLabel": "Memo (si lazima):",
+    "memoPlaceholder": "k.m. Asante kwa maudhui haya mazuri!",
+    "send": "Tuma bakshishi"
+  },
+  "cardMenu": {
+    "loginToPersonalize": "Tafadhali ingia ili kubinafsisha mlisho wako",
+    "notInterestedToast": "Huvutiwi — tutaficha video hii",
+    "undo": "Tendua",
+    "cantHideOwn": "Huwezi kuficha video zako mwenyewe",
+    "hidingCreatorToast": "Inaficha video za @{{author}}",
+    "loginForPlaylists": "Tafadhali ingia ili kuongeza video kwenye orodha za kucheza",
+    "loginToTag": "Tafadhali ingia ili kuweka lebo kwenye video",
+    "moreOptions": "Chaguo zaidi",
+    "addToPlaylist": "Ongeza kwenye orodha ya kucheza",
+    "addTag": "Ongeza lebo",
+    "notInterested": "Sivutiwi",
+    "dontShowCreator": "Usionyeshe @{{author}}"
+  },
+  "guestList": {
+    "loadFailed": "Imeshindwa kupakia orodha ya wageni ya sasa",
+    "saved_one": "Mgeni {{count}} anaweza kutazama hii",
+    "saved_other": "Wageni {{count}} wanaweza kutazama hii",
+    "cleared": "Orodha ya wageni imefutwa",
+    "saveFailed": "Imeshindwa kuhifadhi orodha ya wageni",
+    "invalidAccounts": "Si akaunti halali za Hive: {{names}}",
+    "title": "🔒 Orodha ya wageni",
+    "hint": "Akaunti hizi zinaweza kutazama bila 3Speak Pro. Huhifadhiwa kwa siri kwenye seva zetu, hazichapishwi kamwe kwenye chapisho lako.",
+    "notRegistered": "Video hii bado haijamaliza kuchakatwa. Bado utaweza kuhariri orodha ikishamaliza.",
+    "placeholder": "jina, mtumiaji.mwingine",
+    "empty": "Bado hakuna mtu. Wanachama wa Pro pekee ndio wanaweza kutazama hii.",
+    "removeAria": "Ondoa {{name}}"
+  },
+  "voters": {
+    "pinnedTitle_one": "Wapiga kura ({{count}})",
+    "pinnedTitle_other": "Wapiga kura ({{count}})",
+    "topVoters": "Wapiga kura wakuu",
+    "noVotes": "Bado hakuna kura"
+  },
+  "payout": {
+    "breakdown": "Mgawanyo wa malipo",
+    "estimatedBreakdown": "Mgawanyo unaokadiriwa",
+    "beneficiaries": "Wanufaika",
+    "curators": "Wateuzi (50%)",
+    "author": "Mwandishi",
+    "total": "Jumla",
+    "totalEstimated": "Jumla (makadirio)"
+  },
+  "vote": {
+    "loginRequired": "Ingia ili kukamilisha kitendo hiki",
+    "fetchPostFailed": "Imeshindwa kupata data ya chapisho",
+    "sameWeight": "Tayari umepiga kura kwa uzito huu. Chagua thamani tofauti.",
+    "failed": "Kura imeshindwa: {{message}}",
+    "pleaseTryAgain": "tafadhali jaribu tena",
+    "weight": "Uzito wa kura: {{weight}}%",
+    "success": "Kura imefaulu! Thamani: ${{value}}",
+    "successTagged": "Kura imefaulu! Lebo “{{tag}}”. Thamani: ${{value}}",
+    "tagged": "Lebo “{{tag}}” imewekwa.",
+    "vote": "Piga kura",
+    "tagThisVideo": "Weka lebo kwenye video hii",
+    "tagOptional": "— si lazima —",
+    "pickTopicFirst": "Chagua mada kwanza",
+    "taggedNoDot": "Lebo “{{tag}}” imewekwa",
+    "tagFailed": "Kuweka lebo kumeshindwa: {{message}}",
+    "taggedAlreadyVoted": "Lebo “{{tag}}” imewekwa — kura yako ya {{weight}}% ilikuwa imeshapigwa.",
+    "votingClosed": "Upigaji kura umefungwa — weka lebo kwenye video hii",
+    "youTagged": "Umeweka lebo hii kama <b>{{tag}}</b>.",
+    "pickTopic": "Chagua mada (inahesabiwa kama kura ya 100%)",
+    "submitTag": "Wasilisha lebo",
+    "tagThisVideoFull": "Weka lebo kwenye video hii (inahesabiwa kama kura ya 100%)",
+    "justTag": "Usipige kura — weka lebo tu"
+  },
+  "tagsPicker": {
+    "autoTagged": "Lebo za kiotomatiki: {{tags}}",
+    "searchPlaceholder": "Tafuta mada…",
+    "searchAria": "Tafuta mada",
+    "noMatches": "Hakuna mada inayolingana na “{{query}}”.",
+    "allSelected": "{{category}} yote imechaguliwa. Ongeza mada moja moja ili tu kubana zaidi:",
+    "orPickTopics": "Au chagua mada moja moja:",
+    "goodEnough": "Inatosha — au kuwa mahususi zaidi (si lazima):",
+    "moreSpecific": "Mahususi zaidi:"
+  }
+}

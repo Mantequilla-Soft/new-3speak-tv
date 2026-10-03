@@ -1,0 +1,106 @@
+{
+  "controls": {
+    "rewind10": "Rudi nyuma sek 10",
+    "forward10": "Songa mbele sek 10",
+    "reactToMoment": "Itikia wakati huu",
+    "mute": "Zima sauti",
+    "unmute": "Washa sauti",
+    "playerSize": "Ukubwa wa kicheza: {{size}}",
+    "sizeStandard": "Kawaida",
+    "pip": "Picha ndani ya Picha",
+    "autoplayOn": "Cheza kiotomatiki: imewashwa",
+    "autoplayOff": "Cheza kiotomatiki: imezimwa",
+    "ambientSubtle": "Mwanga wa mazingira: hafifu",
+    "ambientVivid": "Mwanga wa mazingira: angavu",
+    "ambientOff": "Mwanga wa mazingira: umezimwa",
+    "playbackSpeed": "Kasi ya uchezaji",
+    "speedNormal": "Kawaida",
+    "quality": "Ubora",
+    "qualityAuto": "Otomatiki",
+    "fullscreen": "Skrini nzima",
+    "exitFullscreen": "Toka kwenye skrini nzima",
+    "markerReplies_one": "(jibu {{count}})",
+    "markerReplies_other": "(majibu {{count}})"
+  },
+  "subtitles": {
+    "title": "Manukuu",
+    "off": "Zima",
+    "font": "Fonti",
+    "size": "Ukubwa",
+    "textColor": "Rangi ya maandishi",
+    "textBorder": "Mpaka wa maandishi",
+    "borderColor": "Rangi ya mpaka",
+    "background": "Mandharinyuma",
+    "none": "Hakuna",
+    "fonts": {
+      "sansSerif": "Sans-serif",
+      "serif": "Serif",
+      "monospace": "Monospace"
+    }
+  },
+  "mini": {
+    "untitled": "Video"
+  },
+  "playlist": {
+    "previous": "Video iliyotangulia",
+    "next": "Video inayofuata",
+    "close": "Funga orodha ya kucheza"
+  },
+  "overlay": {
+    "replay": "Cheza tena"
+  },
+  "reactions": {
+    "translation": "Tafsiri",
+    "translationFailed": "Tafsiri imeshindwa",
+    "videoReaction": "Mwitikio wa video",
+    "comment": "Maoni",
+    "previous": "Iliyotangulia",
+    "next": "Inayofuata",
+    "hide": "Ficha miitikio",
+    "hideShort": "Ficha",
+    "loadingReplies": "Inapakia majibu...",
+    "sizeTitle": "Ukubwa: {{size}}",
+    "sizes": {
+      "small": "Dg",
+      "medium": "Wst",
+      "standard": "Kaw",
+      "big": "Kbw",
+      "cinema": "Sin"
+    },
+    "sizeNames": {
+      "small": "Ndogo",
+      "medium": "Wastani",
+      "standard": "Kawaida",
+      "big": "Kubwa",
+      "cinema": "Sinema"
+    }
+  },
+  "reactionUpload": {
+    "authorized": "@threespeak imeidhinishwa — sasa unaweza kuchapisha mwitikio wako",
+    "authFailed": "Uidhinishaji umeshindwa. Tafadhali jaribu tena.",
+    "webcamDenied": "Imeshindwa kufikia kamera ya wavuti",
+    "shortTooLong": "Shorts lazima ziwe {{max}} au chini. Ondoa tiki kwenye \"Onyesha kwenye 3Speak Shorts\" au tumia video fupi zaidi.",
+    "uploadingVideo": "Inapakia video...",
+    "noEmbedUrl": "Upakiaji umefaulu lakini hakuna URL ya kupachika iliyorudishwa",
+    "publishingComment": "Inachapisha maoni...",
+    "posted": "Mwitikio wa video umechapishwa!",
+    "postFailed": "Imeshindwa kuchapisha maoni",
+    "uploadFailed": "Upakiaji umeshindwa",
+    "uploadVideo": "Pakia video",
+    "recordVideo": "Rekodi video",
+    "startRecording": "Anza kurekodi",
+    "stopRecording": "Acha kurekodi",
+    "recordedVideo": "Video iliyorekodiwa",
+    "descriptionPlaceholder": "Ongeza maelezo ya mwitikio wako wa video...",
+    "showInShorts": "Onyesha kwenye 3Speak Shorts",
+    "authNote": "Ruhusu <b>@threespeak</b> kuchapisha mwitikio wako kwa niaba yako.",
+    "authorizing": "Inaidhinisha…",
+    "authorize": "Idhinisha @threespeak",
+    "uploading": "Inapakia...",
+    "postReaction": "Chapisha mwitikio"
+  },
+  "inline": {
+    "cantPlay": "Video hii haiwezi kucheza hapa.",
+    "openOnSite": "Fungua kwenye 3Speak"
+  }
+}

@@ -1,0 +1,43 @@
+{
+  "labels": {
+    "tech-science": "Teknolojia na Sayansi",
+    "technology": "Teknolojia",
+    "education": "Elimu",
+    "science": "Sayansi",
+    "programming": "Uprogramu",
+    "crypto-finance": "Crypto na Fedha",
+    "cryptocurrency": "Sarafu za kidijitali",
+    "finance": "Fedha",
+    "business": "Biashara",
+    "entertainment": "Burudani",
+    "music": "Muziki",
+    "gaming": "Michezo ya video",
+    "film-tv": "Filamu na TV",
+    "lifestyle": "Mtindo wa maisha",
+    "vlog": "Vlog",
+    "comedy": "Vichekesho",
+    "story-time": "Hadithi",
+    "commercial": "Kibiashara",
+    "arts-diy": "Sanaa na DIY",
+    "art": "Sanaa",
+    "diy-crafts": "DIY na Kazi za mikono",
+    "photography": "Upigaji picha",
+    "food-outdoor": "Chakula na Nje",
+    "nature": "Mazingira",
+    "travel": "Safari",
+    "food": "Chakula",
+    "pets": "Wanyama vipenzi",
+    "gardening": "Bustani",
+    "sports-health": "Michezo na Afya",
+    "sports": "Michezo",
+    "health": "Afya",
+    "fitness": "Mazoezi",
+    "life-society": "Maisha na Jamii",
+    "news": "Habari",
+    "spirituality": "Imani",
+    "politics": "Siasa"
+  },
+  "display": {
+    "cryptocurrency": "crypto"
+  }
+}

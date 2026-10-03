@@ -1,0 +1,119 @@
+{
+  "ranges": {
+    "d7": "Siku 7",
+    "d28": "Siku 28",
+    "d90": "Siku 90",
+    "all": "Zote"
+  },
+  "content": {
+    "all": "Zote",
+    "videos": "Video",
+    "shorts": "Shorts"
+  },
+  "metrics": {
+    "watchTime": "Muda wa kutazama",
+    "views": "Mitazamo",
+    "avgPct": "Wastani %",
+    "votes": "Kura",
+    "comments": "Maoni",
+    "payout": "Malipo"
+  },
+  "days": {
+    "short": {
+      "sun": "Jpi",
+      "mon": "Jtt",
+      "tue": "Jnn",
+      "wed": "Jtn",
+      "thu": "Alh",
+      "fri": "Ijm",
+      "sat": "Jms"
+    },
+    "initial": {
+      "sun": "J2",
+      "mon": "J3",
+      "tue": "J4",
+      "wed": "J5",
+      "thu": "Al",
+      "fri": "Ij",
+      "sat": "J1"
+    }
+  },
+  "sources": {
+    "threespeak": "3Speak",
+    "player": "Kicheza kilichopachikwa"
+  },
+  "trend": {
+    "empty": "Bado hakuna muda wa kutazama katika kipindi hiki.",
+    "tip_one": "mtazamo {{count}} · {{date}}",
+    "tip_other": "mitazamo {{count}} · {{date}}"
+  },
+  "noData": "Bado hakuna data.",
+  "demo": {
+    "viewerLocations": "Maeneo ya watazamaji",
+    "mapBubble_one": "{{country}} — kipindi {{count}}",
+    "mapBubble_other": "{{country}} — vipindi {{count}}",
+    "empty": "Bado hakuna data ya watazamaji katika kipindi hiki.",
+    "breakdown": "Mchanganuo",
+    "map": "Ramani",
+    "countries": "Nchi",
+    "devices": "Vifaa",
+    "browsers": "Vivinjari",
+    "whereTitle": "Wanapotazama",
+    "whereSub": "3speak dhidi ya kicheza kilichopachikwa",
+    "newVsReturning": "Wapya dhidi ya wanaorudi",
+    "new": "Wapya",
+    "returning": "Wanaorudi",
+    "located": "Vipindi {{located}} kati ya {{total}} vya kutazama vimepatikana mahali."
+  },
+  "when": {
+    "title": "Watazamaji wako wanapotazama",
+    "sub": "UTC · rangi nzito = mitazamo zaidi",
+    "cellTitle_one": "{{day}} {{hour}}:00 — mtazamo {{count}}",
+    "cellTitle_other": "{{day}} {{hour}}:00 — mitazamo {{count}}",
+    "hour": "saa {{hour}}"
+  },
+  "detail": {
+    "summary": "kura {{votes}} · maoni {{comments}} · ${{payout}}"
+  },
+  "compare": {
+    "notEnough": "Hakuna data ya kutosha kulinganisha.",
+    "start": "Mwanzo",
+    "axis": "Uhifadhi wa watazamaji katika video",
+    "end": "Mwisho",
+    "title": "Linganisha video",
+    "pickA": "Chagua video…",
+    "vs": "dhidi ya",
+    "pickB": "Chagua nyingine…"
+  },
+  "loadError": "Imeshindwa kupakia takwimu zako kwa sasa.",
+  "emptyRange": "Bado hakuna data ya kutazama katika kipindi hiki — jaribu “Zote”, au subiri watu watazame video zako.",
+  "tiles": {
+    "avgViewDuration": "Wastani wa muda wa kutazama",
+    "avgWatched": "Wastani uliotazamwa",
+    "reactionsPerView": "Miitikio / mtazamo"
+  },
+  "subtotals": "video {{videos}} · kura {{votes}} · maoni {{comments}} · ${{payout}} · kasi ya wastani {{rate}}×",
+  "sections": {
+    "trend": "Muda wa kutazama kadiri muda unavyokwenda",
+    "best": "Zinazofanya vizuri zaidi",
+    "audience": "Hadhira yako"
+  },
+  "openInNewTab": "Fungua video kwenye kichupo kipya",
+  "footnote": "Takwimu za kutazama zinatoka kwenye ufuatiliaji wa majaribio na zinaonekana kwako tu.",
+  "video": {
+    "noData": "Bado hakuna data",
+    "empty": "Bado hakuna data ya kutazama kwa video hii.",
+    "uniqueViewers": "Watazamaji wa kipekee",
+    "avgSpeed": "Kasi ya wastani",
+    "mostDropOff": "📉 Wengi wanaondoka saa <b>{{time}}</b>",
+    "earlyDrop": "⚡ <b>{{pct}}%</b> waliondoka katika sekunde 3 za kwanza",
+    "replayed": "🔁 Ilichezwa tena:",
+    "retentionTitle": "Uhifadhi wa hadhira",
+    "retentionSub": "sehemu ya watazamaji ambao bado wanatazama katika kila wakati",
+    "pctWatching": "{{pct}}% wanatazama",
+    "replayTitle": "Zilizochezwa tena zaidi",
+    "replaySub": "sehemu ambazo watazamaji hutazama na kurudia zaidi",
+    "hotSpot": "sehemu maarufu",
+    "notEnoughReplays": "Bado hakuna marudio ya kutosha"
+  }
+}

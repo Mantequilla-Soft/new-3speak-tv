@@ -1,0 +1,172 @@
+{
+  "addTag": {
+    "loginRequired": "Ingia ili kuweka lebo kwenye video hii",
+    "pickTopic": "Chagua mada kwanza",
+    "tagged": "Lebo “{{label}}” imewekwa",
+    "failed": "Kuweka lebo kumeshindwa: {{error}}",
+    "pleaseTryAgain": "tafadhali jaribu tena",
+    "title": "Weka lebo kwenye video hii",
+    "question": "Video hii inahusu nini?",
+    "existing": "Uliweka lebo hii kama <b>{{label}}</b> — ukichagua nyingine itachukua nafasi yake.",
+    "submit": "Wasilisha lebo"
+  },
+  "addAccount": {
+    "usernameRequired": "Jina la mtumiaji linahitajika ili kuendelea.",
+    "hiveAuthExpired": "Ombi la uthibitishaji la HiveAuth limeisha muda",
+    "loginSuccess": "Umeingia!",
+    "loginFailed": "Kuingia kumeshindwa: {{error}}",
+    "logoAlt": "Nembo ya 3Speak",
+    "title": "Ingia kwa jina lako la mtumiaji",
+    "usernamePlaceholder": "Jina la mtumiaji"
+  },
+  "socialLink": {
+    "hashCopied": "Hash imenakiliwa",
+    "copyFailed": "Imeshindwa kunakili",
+    "enterHandle": "Weka jina au kitambulisho chako cha jukwaa",
+    "verified": "Akaunti imethibitishwa na kuunganishwa",
+    "errors": {
+      "hashNotFound": "Hash bado haijapatikana kwenye wasifu. Hakikisha badiliko limehifadhiwa hadharani, kisha ujaribu tena.",
+      "alreadyLinked": "Chaneli hii tayari imethibitishwa na mtumiaji mwingine wa Hive (@{{user}}).",
+      "tooMany": "Umefikia idadi ya juu ya akaunti zilizounganishwa.",
+      "notFound": "Chaneli hiyo haipo kwenye jukwaa hilo.",
+      "badSignature": "Sahihi haikuweza kuthibitishwa. Hakikisha umeingia kwa posting key yako.",
+      "rateLimited": "Maombi mengi mno. Tafadhali subiri dakika moja kisha ujaribu tena.",
+      "lookupFailed": "Kutafuta kwenye jukwaa kumeshindwa. Jaribu tena baada ya muda mfupi.",
+      "verifyFailed": "Uthibitishaji umeshindwa",
+      "stillPresent": "Hash bado iko kwenye wasifu wako — iondoe kwanza.",
+      "unlinkFailed": "Kutenganisha kumeshindwa",
+      "noSuchLink": "Hakuna kiungo kama hicho cha kuondoa."
+    },
+    "confirmUnlink": "Ondoa kiungo chako cha {{platform}}? Hakikisha hash ya uthibitishaji haipo tena kwenye wasifu wako wa umma, vinginevyo kutenganisha kutakataliwa.",
+    "removed": "Kiungo kimeondolewa",
+    "title": "Wasifu wa nje uliounganishwa",
+    "intro": "Thibitisha kwamba unamiliki chaneli ya YouTube (au nyingine) kwa kubandika hash yako ya kipekee ya 3Speak kwenye maelezo ya wasifu wako wa umma, kisha uithibitishe hapa.",
+    "openProfile": "Fungua wasifu",
+    "removeLink": "Ondoa kiungo",
+    "empty": "Bado hakuna wasifu wa nje uliounganishwa.",
+    "addPlatform": "Ongeza jukwaa jipya",
+    "flowTitle": "Unganisha chaneli yako ya {{platform}}",
+    "step1": "Nakili hash yako ya kipekee ya uthibitishaji:",
+    "step2": "<strong>Ibandike kwenye maelezo ya wasifu wako wa umma wa {{platform}}</strong> (popote — kuhusu / bio / maelezo ni sawa). Hifadhi badiliko.",
+    "step3": "Weka kitambulisho chako cha {{platform}}:",
+    "verifying": "Inathibitisha…",
+    "verify": "Thibitisha"
+  },
+  "auth": {
+    "title": "Idhinisha 3Speak!",
+    "text": "Ili kupakia video kwenye 3Speak tunahitaji mamlaka yako ya posting. Hii inaturuhusu kuchapisha video ulizopakia kwenye Hive. Unahitaji kutupa mamlaka ya posting mara moja tu.",
+    "authorize": "Idhinisha"
+  },
+  "beneficiary": {
+    "errors": {
+      "emptyUsername": "Jina la mtumiaji haliwezi kuwa tupu.",
+      "sameUser": "Mnufaika hawezi kuwa mtumiaji yule yule",
+      "greaterThanZero": "Asilimia ya zawadi lazima iwe zaidi ya 0.",
+      "exceedsRemaining": "Asilimia ya zawadi inazidi mgao uliobaki wa {{percent}}%.",
+      "validNumber": "Weka namba halali",
+      "validPercent": "Weka asilimia halali ya zawadi.",
+      "duplicate": "Akaunti hii tayari imeongezwa kwenye orodha.",
+      "invalidAccount": "Jina la mtumiaji au kitambulisho cha jumuiya si sahihi.",
+      "cannotIncrease": "Haiwezi kuongezeka zaidi ya {{percent}}% iliyobaki",
+      "pendingRow": "@{{account}} bado haijaongezwa — bofya + ili kuiongeza, au futa sehemu hiyo.",
+      "atLeastOne": "Asilimia ya zawadi lazima iwe angalau 1%"
+    },
+    "title": "Wanufaika",
+    "intro": "Ongeza mtumiaji unayetaka apokee kiotomatiki sehemu ya zawadi za chapisho hili.",
+    "minPercent": "% (angalau {{percent}}%)",
+    "usernamePlaceholder": "Weka jina la mtumiaji",
+    "minimumReward": "Zawadi ya chini ni <strong>1%</strong>",
+    "checking": "Inakagua <strong>@{{account}}</strong> kwenye Hive…",
+    "notExisting": "⚠️ <strong>@{{account}}</strong> si akaunti iliyopo ya Hive.",
+    "notAdded": "⚠️ <strong>@{{account}}</strong> bado haijaongezwa — bofya <strong>+</strong> ili kuiongeza, au futa sehemu hiyo.",
+    "infrastructure": "10% === Miundombinu",
+    "videoEncoding": "Usimbaji wa video === 1%",
+    "defaults": "Wanufaika chaguo-msingi ({{count}})"
+  },
+  "qr": {
+    "scan": "Changanua QR hii kwenye Hive Keychain:",
+    "click": "Bofya QR ili kufungua kwenye programu ya Keychain"
+  },
+  "editVideoHint": {
+    "title": "Hariri video zako zozote",
+    "text": "Fungua mojawapo ya video zako na utafute <strong>kitufe cha kalamu</strong> kwenye upau wa vitendo chini ya kicheza. Kibofye ili kubadilisha kichwa, maelezo, picha ndogo, lebo na zaidi.",
+    "penTitle": "Hariri maelezo ya video",
+    "tip": "Dokezo",
+    "caption": "Kitufe hiki cha kalamu ndicho unachokitafuta",
+    "gotIt": "Nimeelewa"
+  },
+  "verifyAuth": {
+    "title": "Inathibitisha uidhinishaji",
+    "text": "Tafadhali subiri tunapothibitisha kwamba uidhinishaji ulitolewa..."
+  },
+  "editor": {
+    "confirmLeave": "Kihariri bado kiko wazi. Kuondoka kwenye ukurasa huu kutafunga kihariri na mabadiliko ambayo hayajahifadhiwa yatapotea.\n\nSawa = Funga kihariri na uondoke\nGhairi = Baki kwenye ukurasa huu",
+    "confirmClose": "Una uhakika unataka kufunga kihariri? Mabadiliko ambayo hayajahifadhiwa yatapotea.",
+    "iframeTitle": "Kihariri cha video cha 3Speak",
+    "finding": "Inatafuta kihariri kinachopatikana...",
+    "loading": "Inapakia kihariri...",
+    "unavailable": "Hakuna seva ya kihariri inayopatikana kwa sasa. Tafadhali jaribu tena baadaye.",
+    "sending": "Inatuma kwa huduma ya kutengeneza video...",
+    "rendering": "Inatengeneza... {{percent}}%",
+    "complete": "Utengenezaji umekamilika!",
+    "useVideo": "Tumia video",
+    "preparing": "Inaandaa video kwa ajili ya kupakia...",
+    "renderUnavailable": "Huduma ya kutengeneza video bado haipatikani. Data ya ratiba imeandikwa kwenye console.",
+    "backToEditor": "Rudi kwenye kihariri",
+    "postError": "Imeshindwa kuandaa video kwa ajili ya kupakia. Tafadhali jaribu kuipakua badala yake."
+  },
+  "profile": {
+    "mustLogin": "Lazima uingie kwanza",
+    "followed": "Umemfuata",
+    "unfollowed": "Umeacha kumfuata",
+    "followFailed": "Imeshindwa kufuata: {{error}}",
+    "unfollowFailed": "Imeshindwa kuacha kufuata: {{error}}",
+    "avatarAlt": "Wasifu",
+    "posts": "Machapisho",
+    "followers": "Wafuasi",
+    "joined": "Alijiunga {{date}}",
+    "about": "Kuhusu",
+    "noBio": "Hakuna bio"
+  },
+  "report": {
+    "reasons": {
+      "spamMisleading": "Barua taka au upotoshaji",
+      "harassment": "Unyanyasaji au uonevu",
+      "hateSpeech": "Matamshi ya chuki",
+      "violence": "Maudhui ya vurugu au ya kutisha",
+      "sexual": "Maudhui ya ngono",
+      "copyright": "Ukiukaji wa hakimiliki",
+      "scam": "Utapeli au udanganyifu",
+      "other": "Nyingine",
+      "spam": "Barua taka",
+      "impersonation": "Kujifanya mtu mwingine",
+      "spamAccount": "Akaunti ya barua taka"
+    },
+    "selectReasonError": "Tafadhali chagua sababu",
+    "loginRequired": "Lazima uingie ili kuripoti",
+    "submitted": "Ripoti imewasilishwa. Asante.",
+    "failed": "Imeshindwa kuwasilisha ripoti",
+    "titles": {
+      "user": "Ripoti mtumiaji",
+      "comment": "Ripoti maoni",
+      "short": "Ripoti short",
+      "post": "Ripoti chapisho",
+      "video": "Ripoti video"
+    },
+    "reason": "Sababu",
+    "selectReason": "Chagua sababu...",
+    "details": "Maelezo zaidi (si lazima)",
+    "detailsPlaceholder": "Toa maelezo zaidi...",
+    "submitting": "Inawasilisha...",
+    "submit": "Wasilisha ripoti"
+  },
+  "upload": {
+    "missingInfo": "Taarifa za video au picha ndogo zinakosekana.",
+    "updateFailed": "Imeshindwa kusasisha taarifa za video. Tafadhali jaribu tena.",
+    "title": "Pakia video na picha ndogo",
+    "selectVideo": "Chagua video",
+    "thumbnail": "Picha ndogo",
+    "clickThumbnail": "Bofya ili kupakia picha ndogo",
+    "updateInfo": "Sasisha taarifa za video"
+  }
+}

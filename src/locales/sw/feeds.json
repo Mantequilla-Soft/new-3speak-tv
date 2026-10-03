@@ -1,0 +1,123 @@
+{
+  "loadingMore": "Inapakia zaidi…",
+  "promoted": "Imetangazwa",
+  "scrollLeft": "Sogeza kushoto",
+  "scrollRight": "Sogeza kulia",
+  "errors": {
+    "fetchVideos": "Hitilafu katika kupata video",
+    "loadVideos": "Imeshindwa kupakia video",
+    "loadShorts": "Imeshindwa kupakia Shorts"
+  },
+  "tabs": {
+    "all": "Zote",
+    "videos": "Video",
+    "shorts": "Shorts",
+    "videosCount": "Video ({{count}})",
+    "shortsCount": "Shorts ({{count}})"
+  },
+  "dateFilters": {
+    "all": "Muda wote",
+    "today": "Leo",
+    "week": "Wiki hii",
+    "month": "Mwezi huu",
+    "justNow": "Sasa hivi"
+  },
+  "live": {
+    "title": "Mubashara sasa",
+    "badge": "● MUBASHARA"
+  },
+  "newFromFollowing": {
+    "aria": "Mpya kutoka kwa watayarishaji unaowafuata",
+    "shorts_one": "short {{count}}",
+    "shorts_other": "Shorts {{count}}"
+  },
+  "firstUploads": {
+    "title": "Upakiaji wa kwanza"
+  },
+  "newVideos": {
+    "title": "Video mpya"
+  },
+  "home": {
+    "sections": {
+      "discover": "Gundua",
+      "home": "Mlisho wa nyumbani",
+      "follow": "Mlisho wa unaowafuata",
+      "new": "Maudhui mapya",
+      "interests": "Mambo unayopenda"
+    },
+    "empty": "Bado hakuna cha kuonyesha hapa.",
+    "viewAll": "Tazama zote",
+    "dragToReorder": "Buruta ili kupanga upya",
+    "surfTitle": "Kuvinjari chaneli: chagua mada na uitazame kama TV",
+    "zapping": "Inabadilisha"
+  },
+  "surf": {
+    "pageTitle": "Kuvinjari chaneli",
+    "intro": "Chagua chaneli na utulie. Tunapanga video bora za mada hiyo moja baada ya nyingine. Umechoka? Bonyeza <b>Zap</b>. Unataka kitu kingine? Badilisha chaneli.",
+    "backTo": "Rudi kwenye CH {{number}} {{emoji}} {{title}}",
+    "surprise": "Nishangaze",
+    "yourChannels": "Chaneli zako",
+    "nothingOnAir": "Hakuna kinachorushwa kwenye {{channel}} kwa sasa",
+    "tuneFailed": "Imeshindwa kuunganisha. Jaribu tena baada ya muda mfupi.",
+    "remoteAria": "Rimoti ya kuvinjari chaneli",
+    "openGuide": "Fungua mwongozo wa chaneli",
+    "ch": "CH {{number}}",
+    "chLabel": "CH",
+    "channelHint": "CH {{number}}: {{title}}",
+    "channelHintKey": "CH {{number}}: {{title}} ({{key}})",
+    "tuningShort": "Inaunganisha",
+    "tuning": "Inaunganisha…",
+    "onAir": "Hewani",
+    "changeChannel": "Badilisha chaneli",
+    "nextChannel": "Chaneli inayofuata",
+    "prevChannel": "Chaneli iliyotangulia",
+    "nextVideo": "Video inayofuata",
+    "nextVideoKey": "Video inayofuata (→)",
+    "zap": "Zap",
+    "findingNext": "Inatafuta inayofuata…",
+    "stop": "Acha kuvinjari",
+    "stopTitle": "Acha kuvinjari (video hii itaendelea kucheza)",
+    "guide": "Mwongozo wa chaneli"
+  },
+  "discover": {
+    "searchPlaceholder": "Tafuta video, Shorts, sauti, jumuiya...",
+    "clearSearch": "Futa utafutaji",
+    "searchFor": "Tafuta “{{term}}”",
+    "noResultsFor": "Hakuna matokeo ya “{{term}}”",
+    "types": {
+      "user": "Watumiaji",
+      "community": "Jumuiya",
+      "video": "Video",
+      "short": "Shorts",
+      "audio": "Sauti",
+      "playlist": "Orodha za kucheza"
+    },
+    "suggest": {
+      "tags": "Lebo",
+      "titles": "Vichwa"
+    },
+    "dates": {
+      "today": "Leo",
+      "week": "Wiki hii",
+      "month": "Mwezi huu",
+      "year": "Mwaka huu"
+    },
+    "boostRecent": "Pendelea mpya",
+    "filters": "Vichujio",
+    "date": "Tarehe",
+    "tag": "Lebo",
+    "tagPlaceholder": "k.m. crypto, gaming...",
+    "community": "Jumuiya",
+    "communityPlaceholder": "Tafuta jumuiya...",
+    "clearAllFilters": "Futa vichujio vyote",
+    "allHidden": "Aina zote za maudhui zimefichwa.",
+    "reenableFilters": "Washa vichujio vyote tena",
+    "groupTitle": "{{label}} ({{count}})",
+    "subscribers_one": "mwanachama {{count}}",
+    "subscribers_other": "wanachama {{count}}",
+    "authors_one": "mwandishi {{count}}",
+    "authors_other": "waandishi {{count}}",
+    "views_one": "mtazamo {{views}}",
+    "views_other": "mitazamo {{views}}"
+  }
+}

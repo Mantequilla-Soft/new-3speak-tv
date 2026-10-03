@@ -1,0 +1,97 @@
+{
+  "backToOpenPods": "Rudi kwenye OpenPods",
+  "modal": {
+    "leaveConfirm": "Ondoka kwenye OpenPod hii? Unaweza kujiunga tena kutoka ukumbini wakati wowote.",
+    "yourStreamEnded": "Mtiririko wako umekwisha",
+    "thisStreamEnded": "Mtiririko huu umekwisha",
+    "noLongerLive": "Haupo mubashara tena. Anzisha mwingine wakati wowote ukiwa tayari.",
+    "recordingProcessing": "Vizuri sana! Rekodi yako inachakatwa na itaonekana kwenye chapisho la tangazo hivi karibuni.",
+    "thanksForLive": "Vizuri sana — asante kwa kwenda mubashara!",
+    "backHome": "Rudi Nyumbani",
+    "howWasStream": "Mtiririko wako ulikuwaje?",
+    "connecting": "Inaunganisha na OpenPods…",
+    "authenticating": "Inathibitisha na OpenPods…"
+  },
+  "strip": {
+    "liveNow_one": "OpenPod <n>{{count}}</n> iko mubashara sasa",
+    "liveNow_other": "OpenPods <n>{{count}}</n> ziko mubashara sasa",
+    "viewAll": "Tazama zote",
+    "joinAria": "Jiunge na OpenPod: {{title}}"
+  },
+  "announce": {
+    "selectCommunity": "Chagua jumuiya",
+    "shareToggle": "📣 Shiriki mtiririko huu kwenye Hive na 3Speak utakapoanza",
+    "community": "Jumuiya",
+    "rewards": "Zawadi",
+    "rewardDefault": "Chaguo-msingi 50/50",
+    "rewardPowerup": "Power up 100%",
+    "rewardDecline": "Kataa malipo",
+    "beneficiaries": "Wanufaika",
+    "beneProHint": "Uko kwenye 3Speak Pro — hakuna ada ya jukwaa. Ongeza migawanyo ukipenda.",
+    "beneLockedHint": "10% kwa @threespeakfund imefungwa. Unaweza kuongeza zaidi."
+  },
+  "boost": {
+    "label": "Boost",
+    "sendTo": "Tuma boost kwa @{{user}}",
+    "send": "Tuma boost"
+  },
+  "clip": {
+    "saved": "Klipu imehifadhiwa kwenye vipakuliwa vyako.",
+    "slowDown": "Punguza kasi kidogo, kisha ukate klipu tena.",
+    "failed": "Imeshindwa kutengeneza klipu. Jaribu tena baada ya sekunde chache.",
+    "title": "Kata klipu ya sekunde 30 za mwisho",
+    "label": "sek 30",
+    "clipping": "Inakata klipu…"
+  },
+  "report": {
+    "reasons": {
+      "harassment": "Unyanyasaji au chuki",
+      "sexual": "Maudhui ya ngono au machafu",
+      "violence": "Vurugu au vitendo hatari",
+      "selfharm": "Kujidhuru",
+      "illegal": "Maudhui haramu",
+      "spam": "Barua taka au utapeli",
+      "other": "Kitu kingine"
+    },
+    "sent": "Asante — mtiririko huu umeripotiwa kwa timu yetu.",
+    "failed": "Imeshindwa kutuma ripoti. Tafadhali jaribu tena.",
+    "title": "Ripoti mtiririko huu",
+    "reporting": "Unaripoti <b>@{{host}}</b>.",
+    "intro": "Tuambie tatizo ni nini — timu yetu hukagua kila ripoti.",
+    "detailPlaceholder": "Ongeza maelezo yoyote (si lazima)",
+    "sending": "Inatuma…",
+    "submit": "Wasilisha ripoti"
+  },
+  "signIn": {
+    "waitingWallet": "Inasubiri pochi yako…"
+  },
+  "publish": {
+    "errors": {
+      "noTitle": "Tafadhali ongeza kichwa",
+      "noAudio": "Hakuna URL ya sauti iliyopatikana",
+      "failed": "Imeshindwa kuchapisha. Tafadhali jaribu tena."
+    },
+    "published": "Rekodi imechapishwa kwenye Hive!",
+    "loginGate": "Ingia ili kuchapisha rekodi yako.",
+    "heading": "Chapisha rekodi ya OpenPod",
+    "previewLabel": "Onyesho la awali la rekodi",
+    "previewHint": "Kagua sauti kabla ya kuchapisha. Hiki ndicho kicheza kile kile wasomaji wataona kwenye chapisho.",
+    "recordingFallback": "Rekodi ya OpenPod",
+    "title": "Kichwa",
+    "titlePlaceholder": "Ipe rekodi yako kichwa",
+    "description": "Maelezo",
+    "optional": "(si lazima)",
+    "descriptionPlaceholder": "Mlizungumza kuhusu nini? Ongeza maelezo ya kipindi, viungo, au muhtasari...",
+    "tags": "Lebo",
+    "tagsPlaceholder": "Lebo zilizotenganishwa kwa nafasi",
+    "declinePayout": "Kataa malipo",
+    "publishing": "Inachapisha…",
+    "submit": "Chapisha rekodi"
+  },
+  "lobby": {
+    "descriptionPlaceholder": "Kipindi hiki kinahusu nini? Ongeza maelezo ya kipindi, viungo, au muhtasari…",
+    "enableHosting": "Washa uendeshaji na uzungumzaji",
+    "handoverFailed": "Imeshindwa kuwasha uendeshaji kiotomatiki. OpenPods huchapisha kwa niaba yako kupitia @threespeak — hakikisha umeipa mamlaka ya kuchapisha, kisha ujaribu tena.",
+    "signInToHost": "Ingia kwa Hive ili kuendesha au kuzungumza"
+  }
+}

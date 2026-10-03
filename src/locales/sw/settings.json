@@ -1,0 +1,205 @@
+{
+  "interests": {
+    "savedToast": "Mambo unayopenda yamehifadhiwa kwenye wasifu wako wa Hive",
+    "saveFailed": "Imeshindwa kuhifadhi mambo unayopenda",
+    "title": "Mambo unayopenda",
+    "loading": "inapakia…",
+    "hint": "Chagua mada unazojali — tutazitumia kukuonyesha zaidi maudhui unayopenda.",
+    "loginHint": "Ingia ili uchague mambo unayopenda.",
+    "save": "Hifadhi mambo unayopenda"
+  },
+  "ads": {
+    "chainNotSaved": "Imehifadhiwa kwenye 3Speak, lakini si kwenye akaunti yako ya Hive. Jaribu tena ili ihifadhiwe huko pia.",
+    "saveFailed": "Imeshindwa kuhifadhi mpangilio.",
+    "onToast": "Matangazo yamewashwa kwa video zako",
+    "offToast": "Matangazo yamezimwa kwa video zako",
+    "splitSaved": "Mgawanyo wa mapato umehifadhiwa",
+    "title": "Matangazo kwenye video zako",
+    "allow": "Ruhusu matangazo",
+    "allowDesc": "Tangazo fupi la mfadhili linaweza kucheza ndani ya video zako. Unapata sehemu ya mapato yake, na vivyo hivyo jumuiya uliyochapisha ndani yake. Ukizima hili, video zako hazitakuwa na matangazo yoyote — pia zinaondolewa kwenye kile tunachowapa watangazaji, kwa hivyo hakuna kinachouzwa ambacho umechagua kujiondoa.",
+    "allowAria": "Ruhusu matangazo kwenye video zako",
+    "shareTitle": "Gawana na jumuiya",
+    "shareDesc": "{{pool}}% ya mapato ya tangazo hugawanywa kati yako na jumuiya uliyochapisha ndani yake. Chagua kiasi gani jumuiya inapata — ukiacha sifuri, unabaki na {{pool}}% yote.",
+    "youPct": "Wewe {{pct}}%",
+    "communityPct": "Jumuiya {{pct}}%",
+    "shareInputLabel": "Sehemu ya jumuiya, asilimia",
+    "invalidPct": "Weka namba kamili kati ya 0 na {{max}}.",
+    "loadingSetting": "Inapakia mpangilio wako wa sasa…"
+  },
+  "viewerRewards": {
+    "onToast": "Zawadi za watazamaji zimewashwa",
+    "offToast": "Zawadi za watazamaji zimezimwa, na data yako ya kutazama imefutwa",
+    "saveFailed": "Imeshindwa kuhifadhi mpangilio huo.",
+    "title": "Pata mapato unapotazama",
+    "rowTitle": "Zawadi za watazamaji",
+    "desc": "Pata sehemu ya mapato ya matangazo kwa kile unachotazama, inayolipwa kwa HBD au HIVE. Unalipwa kwa video ulizotazama, iwe tangazo lilicheza au la, kwa hivyo inazawadia kutazama badala ya kuvumilia matangazo. Matangazo yenyewe hucheza kwa kila mtu isipokuwa wanachama wa 3Speak Pro. Tunarekodi kiasi ulichotazama cha kila video, juu ya historia ya kutazama ambayo ukurasa wa Ulizotazama tayari unahifadhi, na tunaifuta mara tu unapozima hili.",
+    "aria": "Pata sehemu ya mapato ya matangazo kwa kile unachotazama"
+  },
+  "postingAuth": {
+    "updateFailed": "Imeshindwa kusasisha mamlaka yako ya posting.",
+    "addedToast": "@threespeak imeongezwa kwenye mamlaka yako ya posting",
+    "removedToast": "@threespeak imeondolewa kwenye mamlaka yako ya posting",
+    "notYetAdded": "Imesainiwa, lakini @threespeak bado haionekani kwenye akaunti yako. Fungua mipangilio tena baada ya dakika moja ili kukagua tena.",
+    "stillThere": "Imesainiwa, lakini @threespeak bado iko kwenye akaunti yako. Fungua mipangilio tena baada ya dakika moja ili kukagua tena.",
+    "title": "Mamlaka ya posting",
+    "canPost": "@threespeak inaweza kuchapisha kwa niaba yako",
+    "cannotPost": "@threespeak haiwezi kuchapisha kwa niaba yako",
+    "checkingStatus": "@threespeak …",
+    "desc": "Inaruhusu 3Speak kuchapisha upakiaji wako na machapisho yaliyoratibiwa kwa niaba yako, na kuhifadhi baadhi ya mipangilio bila pochi kukuuliza kila mara. Inaweza tu kuchapisha, kupiga kura na kutoa maoni; haiwezi kamwe kuhamisha fedha au kubadilisha funguo zako. Bila hiyo, upakiaji utakuomba uiongeze tena. Kubadilisha hili kunahitaji active key yako.",
+    "checking": "Inakagua…",
+    "removing": "Inaondoa…",
+    "adding": "Inaongeza…"
+  },
+  "notifications": {
+    "kinds": {
+      "videos": {
+        "title": "Video mpya",
+        "desc": "Mtayarishaji unayemfuata anapochapisha video."
+      },
+      "shorts": {
+        "title": "Shorts mpya",
+        "desc": "Mtayarishaji unayemfuata anapochapisha short."
+      },
+      "audio": {
+        "title": "Sauti mpya",
+        "desc": "Mtayarishaji unayemfuata anapopakia wimbo au kipindi."
+      },
+      "replies": {
+        "title": "Majibu",
+        "desc": "Mtu anapojibu chapisho au maoni yako."
+      },
+      "mentions": {
+        "title": "Kutajwa",
+        "desc": "Mtu anapokutaja kwa jina."
+      },
+      "follows": {
+        "title": "Wafuasi wapya",
+        "desc": "Mtu anapokufuata."
+      },
+      "votes": {
+        "title": "Kura",
+        "desc": "Mtu anapopigia kura chapisho lako. Imezimwa kwa chaguo-msingi — chapisho maarufu huleta arifa nyingi sana."
+      },
+      "reblogs": {
+        "title": "Reblogs",
+        "desc": "Mtu anapo-reblog chapisho lako."
+      }
+    },
+    "groups": {
+      "creators": "Kutoka kwa watayarishaji unaowafuata",
+      "aboutYou": "Kukuhusu wewe"
+    },
+    "deviceOffToast": "Kifaa hiki hakitaarifiwa tena",
+    "deviceOnToast": "Kifaa hiki kitaarifiwa",
+    "changeFailed": "Imeshindwa kubadilisha arifa",
+    "saveFailed": "Imeshindwa kuhifadhi hilo",
+    "loginHint": "Ingia ili uchague unachotaka kuarifiwa kuhusu.",
+    "unsupported": "Kivinjari hiki hakiwezi kuonyesha arifa. Kwenye iPhone na iPad zinafanya kazi tu baada ya 3Speak kuongezwa kwenye Skrini ya Nyumbani.",
+    "device": "Arifu kifaa hiki",
+    "deviceBlocked": "Zimezuiwa kwenye mipangilio ya kivinjari chako kwa tovuti hii — ruhusu arifa huko kwanza.",
+    "deviceNoWorker": "Haipatikani kwenye toleo hili.",
+    "deviceDesc": "Pata arifa hata wakati 3Speak haijafunguliwa. Inahusu kivinjari hiki tu.",
+    "whatHint": "Mambo ya kuarifiwa kuhusu. Haya yanahusu kila kifaa ulichowasha."
+  },
+  "tabs": {
+    "general": "Jumla",
+    "content": "Maudhui",
+    "rewards": "Matangazo na zawadi",
+    "about": "Kuhusu / Toleo"
+  },
+  "contentTabs": {
+    "feed": "Mlisho",
+    "aria": "Mipangilio ya maudhui"
+  },
+  "butrauthUnlocked": "Butter Auth imefunguliwa",
+  "appearance": {
+    "title": "Mwonekano",
+    "darkMode": {
+      "title": "Hali ya giza",
+      "desc": "Tumia mandhari ya rangi nyeusi kote kwenye programu."
+    },
+    "largeCards": {
+      "title": "Kadi kubwa",
+      "desc": "Onyesha kadi kubwa za video kwenye kurasa za nyumbani, wasifu na orodha za kucheza. Zima ili kupata kadi ndogo zilizobanwa zaidi."
+    },
+    "previews": {
+      "title": "Maonyesho ya video",
+      "desc": "Cheza onyesho lisilo na sauti unapoelea juu ya kadi ya video (na, kwenye simu katika hali kubwa, kadi iliyo katikati hucheza yenyewe unaposogeza)."
+    },
+    "simpleFeeds": {
+      "title": "Milisho rahisi",
+      "desc": "Zima algorithm ya mapendekezo — Gundua, Mambo unayopenda na Zinazovuma zinakuwa orodha za kawaida za mpya kwanza badala ya zilizopangwa kwa viwango."
+    }
+  },
+  "shorts": {
+    "commentBar": {
+      "title": "Upau wa maoni kwenye Shorts",
+      "desc": "Onyesha sehemu ya kuandika maoni chini ya short. Imezimwa kwa chaguo-msingi — unaweza kufungua paneli ya maoni kila wakati kwa kitufe cha maoni."
+    },
+    "openOnStart": {
+      "title": "Fungua Shorts mwanzoni",
+      "desc": "Nenda moja kwa moja kwenye Shorts unapofungua 3Speak, badala ya mlisho wa nyumbani."
+    },
+    "inFeeds": {
+      "title": "Shorts ndani ya milisho",
+      "desc": "Onyesha safu za Shorts kati ya video kwenye milisho ya nyumbani na mapendekezo kwenye ukurasa wa kutazama. Zima ili orodha hizo ziwe na video tu."
+    }
+  },
+  "feed": {
+    "nsfw": {
+      "title": "Onyesha maudhui ya NSFW",
+      "desc": "Onyesha video na sauti zilizowekwa alama kuwa si salama kwa kazini. Imezimwa kwa chaguo-msingi."
+    },
+    "hideWatched": {
+      "title": "Ficha video ulizotazama",
+      "desc": "Ondoa video ambazo tayari umetazama kwenye milisho ya nyumbani, zinazovuma na zinazopendekezwa."
+    },
+    "hideAi": {
+      "title": "Ficha video zilizotengenezwa na AI",
+      "desc": "Ondoa video na Shorts zilizowekwa alama kuwa zimetengenezwa na AI, katika kila mlisho. Alama hutokana na ukaguzi wa kiotomatiki, kwa hivyo baadhi zinaweza kupenya."
+    },
+    "privateMode": {
+      "title": "Hali ya faragha",
+      "desc": "Usiweke nchi yako kwenye takwimu za watayarishaji. Hatuhifadhi kamwe anwani yako ya IP — ya mtu yeyote. Inageuzwa kuwa msimbo wa nchi mara tu unapobonyeza cheza na kisha kutupwa. Hili likiwashwa, hata nchi hiyo hairekodiwi kwa mitazamo yako."
+    }
+  },
+  "about": {
+    "title": "Kuhusu",
+    "version": "Toleo la programu",
+    "rpcNode": "Nodi ya RPC ya Hive",
+    "yourData": "Data yako",
+    "privacyLink": "Jinsi 3Speak inavyoshughulikia data yako"
+  },
+  "dataRequest": {
+    "emailRequired": "Weka anwani ya barua pepe ili tuweze kukujibu",
+    "confirmRequired": "Tafadhali thibitisha kwamba unaelewa kinachoweza na kisichoweza kufutwa",
+    "requestFailed": "Ombi limeshindwa ({{status}})",
+    "deletionReceived": "Ombi la kufuta limepokelewa",
+    "dataReceived": "Ombi la data limepokelewa",
+    "sendFailed": "Imeshindwa kutuma ombi lako",
+    "doneTitle": "Ombi limepokelewa",
+    "doneBody": "Namba yako ya kumbukumbu ni <b>{{ref}}</b>. Tutakujibu kwenye <b>{{contact}}</b> ifikapo <b>{{dueBy}}</b> hivi punde.",
+    "keepRef": "Hifadhi namba ya kumbukumbu iwapo utahitaji kufuatilia.",
+    "signIn": "Tafadhali ingia ili kuomba au kufuta data yako — ombi linahusu akaunti uliyoingia nayo.",
+    "requestFor": "Ombi la <b>@{{username}}</b>",
+    "typeAria": "Aina ya ombi",
+    "getData": "Pata data yangu",
+    "deleteData": "Futa data ya akaunti yangu",
+    "ledeDelete": "Tutafuta kila kitu ambacho 3Speak huhifadhi kukuhusu kwenye hifadhidata yetu wenyewe.",
+    "ledeExport": "Tutakutumia kila kitu ambacho 3Speak huhifadhi kukuhusu kwenye hifadhidata yetu wenyewe, kama faili ya JSON.",
+    "covers": "Hii inajumuisha:",
+    "cannotTitle": "Tusichoweza kufanya",
+    "cannotBody": "3Speak imejengwa juu ya <b>blockchain ya Hive</b>. Machapisho, maoni, kura na ushirikishaji wako upya ulisainiwa kwa funguo zako mwenyewe na kutangazwa kwenye <b>daftari la umma la kudumu</b> ambalo hatulidhibiti na hatuwezi kulihariri.",
+    "cannotDelete": "Tunaweza kufuta nakala zetu na kuacha kuonyesha maudhui yako kwenye 3Speak. Hatuwezi kuyafuta kwenye blockchain — hakuna anayeweza, ukiwemo wewe. Yeyote anayeendesha nodi ya Hive bado atakuwa nayo.",
+    "cannotExport": "Data yako iliyo kwenye mnyororo tayari ni ya umma na inasomeka na mashine kupitia API yoyote ya Hive — tutakuelekeza kwake. Tunachokutumia ni kile tunachohifadhi pamoja na hiyo.",
+    "emailLabel": "Barua pepe ya kujibiwa",
+    "emailPlaceholder": "wewe@mfano.com",
+    "messageLabel": "Kuna la kuongeza? (si lazima)",
+    "messagePlaceholder": "Maelezo ya hiari kuhusu ombi lako",
+    "confirmLabel": "Ninaelewa kwamba maudhui yangu kwenye blockchain ya Hive ni ya kudumu na hayawezi kufutwa na 3Speak wala na mtu mwingine yeyote.",
+    "sending": "Inatuma…",
+    "requestDeletion": "Omba kufutwa",
+    "requestData": "Omba data yangu",
+    "foot": "Tunajibu ndani ya mwezi mmoja. Unaweza pia kutuma barua pepe moja kwa moja kwa <mail>privacy@3speak.tv</mail>."
+  }
+}

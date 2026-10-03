@@ -1,0 +1,282 @@
+{
+  "untitled": "Bila kichwa",
+  "categories": {
+    "podcast": "Podikasti",
+    "voice": "Sauti ya mazungumzo",
+    "music": "Muziki",
+    "audiobook": "Kitabu cha kusikiliza",
+    "interview": "Mahojiano"
+  },
+  "inline": {
+    "defaultTitle": "Rekodi ya OpenPod",
+    "defaultSubtitle": "Imerekodiwa mubashara kwenye 3Speak OpenPods",
+    "kickerPreview": "Onyesho la sauti",
+    "kickerOpenPod": "OpenPod"
+  },
+  "tile": {
+    "artistAlbum": "Albamu ya msanii",
+    "listenerPlaylist": "Orodha ya msikilizaji",
+    "bpm": "{{bpm}} bpm",
+    "queue": "Foleni",
+    "playlist": "Orodha ya kucheza",
+    "plays_one": "uchezaji {{count}}",
+    "plays_other": "michezo {{count}}"
+  },
+  "author": {
+    "followed": "Umemfuata @{{author}}",
+    "unfollowed": "Umeacha kumfuata @{{author}}",
+    "failed": "Imeshindwa",
+    "tracks_one": "wimbo {{count}}",
+    "tracks_other": "nyimbo {{count}}"
+  },
+  "player": {
+    "openPost": "Fungua chapisho la sauti",
+    "playlist": "Orodha ya kucheza",
+    "transcript": "Nakala",
+    "volume": "Kiwango cha sauti",
+    "queue": "Foleni",
+    "closePlayer": "Funga kicheza",
+    "curated": "Imeteuliwa",
+    "noCues": "Hakuna vidokezo.",
+    "clearQueue": "Futa foleni",
+    "clearAll": "Futa zote",
+    "queueEmpty": "Foleni iko tupu."
+  },
+  "share": {
+    "failed": "Imeshindwa",
+    "copyPeakd": "Nakili kiungo cha PeakD",
+    "copiedPeakd": "Kiungo cha PeakD kimenakiliwa!",
+    "copy3speak": "Nakili kiungo cha 3Speak",
+    "copied3speak": "Kiungo cha 3Speak kimenakiliwa!",
+    "copyAudioPlayer": "Nakili kiungo cha kicheza sauti",
+    "copiedAudioPlayer": "Kiungo cha kicheza sauti kimenakiliwa!",
+    "searchingHive": "Inatafuta kwenye Hive…"
+  },
+  "post": {
+    "notFound": "Chapisho halikupatikana",
+    "loadFailed": "Imeshindwa kupakia chapisho hili la sauti",
+    "loadFailedFull": "Imeshindwa kupakia chapisho hili la sauti.",
+    "backToAudio": "← Rudi kwenye Sauti",
+    "untitled": "(bila kichwa)",
+    "addedToQueue": "Imeongezwa kwenye foleni",
+    "signInToVote": "Ingia ili kupiga kura",
+    "voted": "Umepiga kura",
+    "vote": "Piga kura",
+    "signInToTip": "Ingia ili kutoa bakshishi",
+    "tip": "Bakshishi",
+    "stillIndexing": "Sauti ya chapisho hili bado inaorodheshwa — jaribu tena baada ya dakika chache."
+  },
+  "page": {
+    "sections": {
+      "popular": "Maarufu",
+      "recent": "Matoleo mapya",
+      "podcasts": "Podikasti",
+      "songs": "Nyimbo",
+      "audiobooks": "Vitabu vya kusikiliza",
+      "interviews": "Mahojiano"
+    },
+    "dates": {
+      "today": "Leo",
+      "thisWeek": "Wiki hii",
+      "thisMonth": "Mwezi huu",
+      "thisYear": "Mwaka huu"
+    },
+    "duration": {
+      "label": "Muda",
+      "min": "Muda wa chini",
+      "max": "Muda wa juu",
+      "seconds": "sek {{value}}",
+      "minutes": "dk {{value}}",
+      "hours": "saa {{value}}"
+    },
+    "all": "Zote",
+    "musicGenre": "Aina ya muziki",
+    "anyGenre": "Aina yoyote",
+    "tracks_one": "wimbo {{count}}",
+    "tracks_other": "nyimbo {{count}}",
+    "noTracks": "Hakuna nyimbo zilizopatikana.",
+    "creators": "Watayarishaji",
+    "albumsPlaylists": "Albamu na orodha za kucheza",
+    "noAudioForFilters": "Hakuna sauti iliyopatikana kwa vichujio hivi."
+  },
+  "upload": {
+    "title": "Pakia sauti",
+    "publishing": "Inachapisha…",
+    "failed": "Imeshindwa",
+    "unknown": "haijulikani",
+    "unknownError": "hitilafu isiyojulikana",
+    "recorded": "Imerekodiwa",
+    "uploaded": "Imepakiwa",
+    "steps": {
+      "source": "Chanzo",
+      "mode": "Njia",
+      "playlist": "Orodha ya kucheza",
+      "post": "Chapisho",
+      "mainpost": "Chapisho kuu",
+      "tracks": "Nyimbo",
+      "review": "Kagua"
+    },
+    "trackTypes": {
+      "voiceSnap": "Sauti / Snap"
+    },
+    "toasts": {
+      "pickImage": "Chagua faili ya picha",
+      "thumbFailed": "Kupakia picha ndogo kumeshindwa: {{error}}",
+      "appliedToAll": "Imetumika kwa nyimbo zote",
+      "micDenied": "Ufikiaji wa maikrofoni umekataliwa",
+      "signInFirst": "Ingia kwanza",
+      "enterPlaylistName": "Weka jina la orodha ya kucheza",
+      "creatingPlaylist": "Inaunda orodha ya kucheza \"{{name}}\"…",
+      "playlistCreated": "Orodha ya kucheza imeundwa",
+      "failedWithError": "Imeshindwa: {{error}}",
+      "authorized": "@threespeak imeidhinishwa — sasa unaweza kuchapisha",
+      "authFailed": "Uidhinishaji umeshindwa. Tafadhali jaribu tena.",
+      "couldntPublishMain": "Imeshindwa kuchapisha chapisho kuu: {{error}}",
+      "couldntResolveContainer": "Imeshindwa kupata kontena la peak.snaps: {{error}}",
+      "published_one": "Wimbo {{count}} umechapishwa",
+      "published_other": "Nyimbo {{count}} zimechapishwa",
+      "someFailed": "Baadhi ya nyimbo zimeshindwa — fungua wimbo ulioshindwa ili ujaribu tena"
+    },
+    "gate": {
+      "checking": "Inakagua…",
+      "allowThreespeak": "Ili kuchapisha sauti, ruhusu <b>@threespeak</b> ichapishe kwa niaba yako.",
+      "authorizing": "Inaidhinisha…",
+      "authorize": "Idhinisha @threespeak",
+      "notEnoughRc": "Akaunti yako haina <b>Resource Credits</b> za kutosha kuchapisha chapisho kwa sasa.",
+      "whyCantUpload": "Kwa nini siwezi kupakia?"
+    },
+    "discard": {
+      "title": "Tupa upakiaji?",
+      "body_one": "Umeongeza wimbo {{count}}. Kufunga kutautupa.",
+      "body_other": "Umeongeza nyimbo {{count}}. Kufunga kutazitupa.",
+      "bodyRecording_one": "Umeongeza wimbo {{count}} na kuna rekodi inayoendelea. Kufunga kutavitupa.",
+      "bodyRecording_other": "Umeongeza nyimbo {{count}} na kuna rekodi inayoendelea. Kufunga kutavitupa.",
+      "keepEditing": "Endelea kuhariri",
+      "discard": "Tupa"
+    },
+    "source": {
+      "dropHere": "Dondosha faili za sauti hapa, au bofya ili kuvinjari",
+      "formats": "MP3, WAV, OGG, WEBM, M4A, FLAC, AAC — nyingi zinaruhusiwa",
+      "stop": "Simamisha",
+      "orRecord": "Au rekodi moja kwa moja",
+      "recordLimit": "Hadi dakika {{minutes}} kwa kila rekodi",
+      "record": "Rekodi",
+      "added": "Zimeongezwa ({{count}})"
+    },
+    "titles": {
+      "help": "Ipe kila wimbo kichwa na uchague aina. Nyimbo za muziki zina sehemu za aina ya muziki + BPM."
+    },
+    "fields": {
+      "trackTitle": "Kichwa cha wimbo",
+      "genre": "Aina ya muziki",
+      "bpm": "BPM",
+      "descriptionOptional": "Maelezo (si lazima)"
+    },
+    "playlist": {
+      "helpRequired": "Inahitajika — chagua au unda orodha ya kucheza. Machapisho ya albamu huishi ndani ya orodha ya kucheza ili nyimbo zake zibaki pamoja ndani ya albamu ya 3Speak. Hii husaidia kuonekana zaidi na kupata nafasi maarufu zaidi kwenye ukurasa wa sauti.",
+      "helpOptional": "Si lazima — ongeza nyimbo zote kwenye orodha ya kucheza.",
+      "none": "Hakuna orodha ya kucheza",
+      "noneHint": "Nyimbo hazitawekwa pamoja",
+      "creatingPending": "inaunda… (inasubiri kiorodheshaji)",
+      "loading": "Inapakia orodha za kucheza…",
+      "empty": "Bado huna orodha za kucheza.",
+      "items_one": "kipengee {{count}}",
+      "items_other": "vipengee {{count}}",
+      "newPlaylist": "Orodha mpya ya kucheza ya sauti",
+      "namePlaceholder": "Jina la orodha ya kucheza",
+      "public": "Ya umma",
+      "private": "Binafsi",
+      "musicStylePlaceholder": "Mtindo / aina ya muziki (si lazima, k.m. Electronic)",
+      "creditsPlaceholder": "Wahusika (si lazima)",
+      "yearPlaceholder": "Mwaka",
+      "labelPlaceholder": "Lebo ya muziki (si lazima)",
+      "thumbAlt": "Picha ndogo ya albamu",
+      "removeThumb": "Ondoa picha ndogo",
+      "creating": "Inaunda…",
+      "create": "Unda"
+    },
+    "thumb": {
+      "uploading": "Inapakia…",
+      "addCover": "Ongeza picha ya jalada",
+      "hint": "Bofya au buruta na udondoshe — JPG / PNG / WebP",
+      "coverAlt": "jalada",
+      "removeCover": "Ondoa jalada"
+    },
+    "mode": {
+      "help_one": "Wimbo {{count}} umeongezwa. Chagua jinsi utakavyotoka.",
+      "help_other": "Nyimbo {{count}} zimeongezwa. Chagua jinsi zitakavyotoka.",
+      "howPublished": "Hii ichapishwe vipi?",
+      "snapsTitle": "Maoni ya Snap",
+      "snapsDesc": "Kila sauti huchapishwa kama jibu chini ya kontena la karibuni la peak.snaps — huonekana kwenye mlisho wa Snaps (chaguo-msingi).",
+      "singleTitle": "Chapisho la kujitegemea",
+      "singleTitleSingleOnly": "Chapisho la kujitegemea (faili moja tu)",
+      "singleDesc": "Sauti moja katika chapisho lake la Hive la ngazi ya juu, pamoja na kichwa, jumuiya, lebo na jalada.",
+      "albumTitle": "Chapisho la albamu",
+      "albumTitleNeeds2": "Chapisho la albamu (linahitaji faili 2+)",
+      "albumDesc": "Chapisho kuu moja (bila sauti) linalotumika kama ukurasa wa kutua; kila wimbo huchapishwa kama jibu la maoni lenye jalada, maelezo, malipo na wanufaika wake.",
+      "howEarn": "Sauti hii ipate mapato vipi?",
+      "postRewardsTitle": "Zawadi za chapisho (mara moja)",
+      "postRewardsDesc": "Unapokea malipo ya kawaida ya mwandishi wa Hive — yanalipwa mara moja, takriban siku 7 baada ya kuchapisha.",
+      "pplTitle": "Malipo kwa kila usikilizaji (maisha yote)",
+      "pplDesc": "Zawadi zote za machapisho ya sauti huenda kwa @{{account}}. Badala ya malipo ya mara moja, programu ya 3Speak inakulipa kwa kila usikilizaji katika maisha yote ya wimbo."
+    },
+    "reward": {
+      "distribution": "Mgawanyo wa zawadi",
+      "default": "Chaguo-msingi (50% HBD / 50% HP)",
+      "powerup": "Power up 100%",
+      "decline": "Kataa malipo",
+      "beneficiaries": "Wanufaika",
+      "beneficiariesCount": "Wanufaika ({{count}})"
+    },
+    "mainPost": {
+      "helpAlbum": "Maelezo ya chapisho kuu — ukurasa wa kutua wa albamu. Halina sauti; kila wimbo ni jibu la maoni utakaloweka baadaye.",
+      "helpSingle": "Maelezo ya chapisho lako la kujitegemea.",
+      "titlePlaceholder": "Kichwa (kinahitajika)",
+      "selectCommunity": "Chagua jumuiya",
+      "change": "Badilisha",
+      "tagsPlaceholder": "Lebo — zilizotenganishwa kwa nafasi au koma (si lazima)",
+      "whatKind": "Hii ni sauti ya aina gani?"
+    },
+    "tracks": {
+      "helpAlbum": "Kila wimbo huchapishwa kama maoni chini ya chapisho kuu. Weka thamani za pamoja mara moja na uzitumie kwa zote, kisha ubadilishe kwa kila wimbo.",
+      "helpSnaps": "Kila wimbo huchapishwa kama snap yake. Weka thamani za pamoja mara moja na uzitumie kwa zote, kisha ubadilishe kwa kila wimbo.",
+      "applyToAllHeading": "Tumia kwa nyimbo zote",
+      "sharedDescription": "Maelezo ya pamoja (si lazima)",
+      "sharedCover": "Picha ya jalada ya pamoja",
+      "applyToAll_one": "Tumia kwa wimbo {{count}}",
+      "applyToAll_other": "Tumia kwa nyimbo zote {{count}}",
+      "hide": "Ficha"
+    },
+    "review": {
+      "standalone": "Chapisho la kujitegemea",
+      "standaloneIn": "Chapisho la kujitegemea katika {{community}}",
+      "album_one": "Albamu — chapisho kuu 1 + maoni {{count}} ya wimbo",
+      "album_other": "Albamu — chapisho kuu 1 + maoni {{count}} ya nyimbo",
+      "albumIn_one": "Albamu — chapisho kuu 1 katika {{community}} + maoni {{count}} ya wimbo",
+      "albumIn_other": "Albamu — chapisho kuu 1 katika {{community}} + maoni {{count}} ya nyimbo",
+      "snapComments_one": "maoni {{count}} ya snap",
+      "snapComments_other": "maoni {{count}} ya snap",
+      "ready_one": "Tayari kuchapisha wimbo {{count}}.",
+      "ready_other": "Tayari kuchapisha nyimbo {{count}}.",
+      "readyToPlaylist_one": "Tayari kuchapisha wimbo {{count}} kwenye orodha ya kucheza \"{{name}}\".",
+      "readyToPlaylist_other": "Tayari kuchapisha nyimbo {{count}} kwenye orodha ya kucheza \"{{name}}\".",
+      "publishAs": "Chapisha kama:",
+      "earnings": "Mapato:",
+      "earningsPpl": "Malipo kwa kila usikilizaji (@{{account}})",
+      "earningsNormal": "Zawadi za kawaida za chapisho",
+      "playlist": "Orodha ya kucheza:",
+      "failedCount_one": "Wimbo {{count}} umeshindwa.",
+      "failedCount_other": "Nyimbo {{count}} zimeshindwa.",
+      "retryAllFailed": "Jaribu tena zote zilizoshindwa",
+      "failedDuringUpload": "Imeshindwa wakati wa kupakia faili ya sauti: {{message}}",
+      "failedDuringPost": "Imeshindwa wakati wa kuchapisha kwenye Hive: {{message}}",
+      "failedWithMessage": "Imeshindwa: {{message}}"
+    },
+    "stage": {
+      "upload": "Inapakia faili ya sauti",
+      "post": "Inachapisha kwenye Hive",
+      "uploadingFallback": "Inapakia",
+      "published": "Imechapishwa"
+    }
+  }
+}

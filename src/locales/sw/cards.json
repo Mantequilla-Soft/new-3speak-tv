@@ -1,0 +1,46 @@
+{
+  "loading": "Inapakia...",
+  "error": "Hitilafu: {{error}}",
+  "thumbnailAlt": "picha ndogo",
+  "topicTitle": "Mada: {{topic}}",
+  "watchingNow_one": "{{count}} anatazama sasa",
+  "watchingNow_other": "{{count}} wanatazama sasa",
+  "badges": {
+    "gatedTitle": "Kwa wafadhili tu — 3Speak Pro hufungua video nzima",
+    "pro": "PRO",
+    "new": "MPYA",
+    "live": "● MUBASHARA",
+    "liveChat": "● GUMZO MUBASHARA"
+  },
+  "status": {
+    "scheduled": "Imeratibiwa",
+    "mobile": "Simu",
+    "mobileTitle": "Imepakiwa kupitia programu ya simu",
+    "processing": "Inachakatwa",
+    "processingTitle": "Video inachakatwa",
+    "draft": "Rasimu",
+    "draftTitle": "Rasimu - bado haijachapishwa",
+    "deleted": "Imefutwa",
+    "deletedTitle": "Video hii imefutwa",
+    "failed": "Imeshindwa",
+    "failedTitle": "Uchakataji wa video umeshindwa",
+    "unlisted": "Haijaorodheshwa",
+    "unlistedTitle": "Haijaorodheshwa — imefichwa kwenye milisho na utafutaji, inafikiwa kwa kiungo cha moja kwa moja tu"
+  },
+  "playlist": {
+    "loading": "Inapakia orodha za kucheza...",
+    "items_one": "kipengee {{count}}",
+    "items_other": "vipengee {{count}}",
+    "openAria": "Fungua orodha ya kucheza {{name}}",
+    "tag": "Orodha ya kucheza",
+    "updated": "Imesasishwa {{when}}"
+  },
+  "watchLater": {
+    "title": "Tazama Baadaye",
+    "subtitle": "Video za kutazama baadaye"
+  },
+  "watched": {
+    "title": "Ulizotazama",
+    "subtitle": "Historia yako ya kutazama"
+  }
+}
