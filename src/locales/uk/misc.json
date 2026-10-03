@@ -1,0 +1,244 @@
+{
+  "leaderboard": {
+    "windows": {
+      "7d": "7 днів",
+      "30d": "30 днів",
+      "365d": "Рік",
+      "all": "За весь час"
+    },
+    "windowsInSentence": {
+      "7d": "останні 7 днів",
+      "30d": "останні 30 днів",
+      "365d": "останній рік",
+      "all": "увесь час"
+    },
+    "metrics": {
+      "video_uploads": "Відео",
+      "short_uploads": "Shorts",
+      "video_watch_secs": "Час перегляду відео",
+      "short_watch_secs": "Час перегляду Shorts",
+      "tags_given": "Теги",
+      "streams": "Трансляції",
+      "stream_secs": "Час в ефірі",
+      "stream_peak_viewers": "Пік глядачів",
+      "stream_viewers": "Входи глядачів",
+      "boosts_received": "Отримані бусти",
+      "boost_amount_received": "Отримана сума",
+      "boosts_given": "Надіслані бусти",
+      "boost_amount_given": "Надіслана сума"
+    },
+    "metricsInSentence": {
+      "video_uploads": "відео",
+      "short_uploads": "Shorts",
+      "video_watch_secs": "час перегляду відео",
+      "short_watch_secs": "час перегляду Shorts",
+      "tags_given": "теги",
+      "streams": "трансляції",
+      "stream_secs": "час в ефірі",
+      "stream_peak_viewers": "пік глядачів",
+      "stream_viewers": "входи глядачів",
+      "boosts_received": "отримані бусти",
+      "boost_amount_received": "отримана сума",
+      "boosts_given": "надіслані бусти",
+      "boost_amount_given": "надіслана сума"
+    },
+    "blurbs": {
+      "video_uploads": "Завантажені відео",
+      "short_uploads": "Завантажені Shorts",
+      "video_watch_secs": "Скільки секунд переглядали їхні відео",
+      "short_watch_secs": "Скільки секунд переглядали їхні Shorts",
+      "tags_given": "Теги, додані до інших відео",
+      "streams": "Розпочаті трансляції",
+      "stream_secs": "Загальний час в ефірі (лише завершені трансляції)",
+      "stream_peak_viewers": "Найбільше глядачів одночасно (пікове значення, а не сума)",
+      "stream_viewers": "Входи глядачів (обсяг, а не унікальне охоплення)",
+      "boosts_received": "Бусти, надіслані на їхні трансляції",
+      "boost_amount_received": "Загальна сума отриманих бустів",
+      "boosts_given": "Бусти, які вони надіслали іншим стрімерам",
+      "boost_amount_given": "Загальна сума бустів, які вони надіслали"
+    },
+    "blurbsInSentence": {
+      "video_uploads": "завантажені відео",
+      "short_uploads": "завантажені Shorts",
+      "video_watch_secs": "секунди перегляду їхніх відео",
+      "short_watch_secs": "секунди перегляду їхніх Shorts",
+      "tags_given": "теги, додані до інших відео",
+      "streams": "розпочаті трансляції",
+      "stream_secs": "загальний час в ефірі (лише завершені трансляції)",
+      "stream_peak_viewers": "найбільше глядачів одночасно (пікове значення, а не сума)",
+      "stream_viewers": "входи глядачів (обсяг, а не унікальне охоплення)",
+      "boosts_received": "бусти, надіслані на їхні трансляції",
+      "boost_amount_received": "загальна сума отриманих бустів",
+      "boosts_given": "бусти, надіслані іншим стрімерам",
+      "boost_amount_given": "загальна сума надісланих бустів"
+    },
+    "groups": {
+      "video": "Відео",
+      "streaming": "Трансляції"
+    },
+    "badgeNouns": {
+      "video_uploads": "Відео",
+      "short_uploads": "Shorts",
+      "video_watch_secs": "Перегляди",
+      "short_watch_secs": "Перегляди Shorts",
+      "tags_given": "Теги"
+    },
+    "badgeLabel": "{{tier}} {{noun}}",
+    "badgeTitleAllTime": "№{{rank}} за показником «{{what}}» за весь час",
+    "badgeTitleWindow": "№{{rank}} за показником «{{what}}» за {{window}}"
+  },
+  "duration": {
+    "hoursMinutes": "{{h}} год {{m}} хв",
+    "minutesSeconds": "{{m}} хв {{s}} с",
+    "seconds": "{{s}} с",
+    "aMoment": "мить",
+    "lessThanMinute": "менше хвилини"
+  },
+  "surf": {
+    "community": "Спільнота",
+    "allOf": "Усе з {{label}}"
+  },
+  "social": {
+    "signingCancelled": "Підписання скасовано",
+    "youtube": {
+      "placeholder": "@handle або UCxxxxxxxxxxxxxxxxxxxxxx",
+      "help": "Вставте свій @handle YouTube або ID каналу UC…. Ми перетворимо його на ID каналу."
+    },
+    "soundcloud": {
+      "placeholder": "your-profile або https://soundcloud.com/your-profile",
+      "help": "Вставте URL свого профілю SoundCloud або лише ім'я користувача з нього. Розмістіть хеш будь-де в біо профілю."
+    }
+  },
+  "snaps": {
+    "retrying": "Контейнер Snaps ще не знайдено — повторюємо (спроба {{attempt}})...",
+    "unreachable": "Не вдалося зв'язатися з жодним вузлом Hive, щоб знайти контейнер Snaps. Перевірте з'єднання й спробуйте ще раз.",
+    "unreachableWithError": "Не вдалося зв'язатися з жодним вузлом Hive, щоб знайти контейнер Snaps (остання помилка — {{error}}). Перевірте з'єднання й спробуйте ще раз."
+  },
+  "embed": {
+    "responsive": "Адаптивний"
+  },
+  "incubation": {
+    "requestFailed": "Запит не вдався ({{status}})",
+    "contactLoadFailed": "Не вдалося завантажити ваші контактні дані",
+    "contactSaveFailed": "Не вдалося зберегти ваші контактні дані",
+    "onlyButrauthBacklog": "Архів інкубації може мати лише акаунт Butter Auth",
+    "publishFailed": "Не вдалося опублікувати ({{status}})"
+  },
+  "routeError": {
+    "title": "Ця сторінка не завантажилася",
+    "body": "Частину застосунку не вдалося завантажити. Зазвичай це означає, що поки ця вкладка була відкрита, вийшла нова версія. Перезавантаження її підтягне.",
+    "reload": "Перезавантажити",
+    "goHome": "На головну"
+  },
+  "seo": {
+    "defaultTitle": "3Speak — децентралізована відеоплатформа",
+    "defaultDescription": "3Speak — це децентралізована платформа для обміну відео, побудована на технології блокчейну. Дивіться, завантажуйте й поширюйте відео та отримуйте винагороди в криптовалюті."
+  },
+  "uploadLinks": {
+    "regularVideo": "Звичайне відео",
+    "verticalShort": "Вертикальне Shorts",
+    "musicAudio": "Музика / аудіо",
+    "groupChat": "Груповий чат",
+    "communitySnap": "Snap у спільноті",
+    "shortsEditor": "Редактор Shorts",
+    "goLive": "Почати трансляцію",
+    "streamStudio": "Студія трансляцій",
+    "headings": {
+      "upload": "Завантаження",
+      "live": "Наживо",
+      "others": "Інше"
+    }
+  },
+  "chat": {
+    "connectFailed": "Не вдалося підключитися до чату.",
+    "loginFirst": "Спочатку увійдіть, щоб користуватися чатом.",
+    "roomNameRequired": "Потрібна назва кімнати."
+  },
+  "hiveAuth": {
+    "waiting": "Очікуємо на схвалення в HiveAuth...",
+    "title": "Потрібне схвалення в HiveAuth",
+    "hint": "Перевірте застосунок HiveAuth, щоб схвалити цю транзакцію"
+  },
+  "hiveApi": {
+    "keychainNotSigned": "Keychain не підписав транзакцію",
+    "loginToCreateCommunity": "Увійдіть, щоб створити спільноту",
+    "loginFirst": "Спочатку увійдіть",
+    "cancelled": "Операцію скасовано"
+  },
+  "openpod": {
+    "announced": "Трансляцію анонсовано в Hive!",
+    "announceFailed": "OpenPod запущено, але не вдалося опублікувати анонс у Hive."
+  },
+  "appUpdate": {
+    "updating": "Оновлюємо до найновішої версії ({{version}})…",
+    "reloadingForUpload": "Перезавантажуємо, щоб ваше завантаження працювало на найновішій збірці."
+  },
+  "auth": {
+    "switched": "Ви перейшли на {{username}}!",
+    "keychainLoginTitle": "Вхід через Hive"
+  },
+  "streamVod": {
+    "uploadKeyMissing": "Трансляцію завершено, але відео не вдалося завантажити (немає ключа завантаження).",
+    "uploading": "Завантажуємо відео трансляції… {{pct}}%",
+    "uploaded": "Відео трансляції завантажено — воно замінить пряму трансляцію, щойно закінчиться кодування.",
+    "uploadFailed": "Трансляцію завершено, але відео не вдалося завантажити.",
+    "saving": "Зберігаємо відео трансляції…",
+    "encoding": "Завантажено — кодувальник обробляє ваше відео…",
+    "saved": "Відео трансляції збережено — воно замінить пряму трансляцію, щойно закінчиться кодування.",
+    "saveFailed": "Трансляцію завершено, але відео не вдалося зберегти: {{error}}.",
+    "uploadFailedShort": "не вдалося завантажити",
+    "stillProcessing": "Трансляцію завершено — відео ще обробляється; незабаром перевірте свій профіль."
+  },
+  "embedPlayer": {
+    "unavailable": "Відео недоступне"
+  },
+  "followFeed": {
+    "title": "Стрічка підписок",
+    "error": "Помилка отримання відео"
+  },
+  "groups": {
+    "title": "Групи",
+    "badges": "Значки",
+    "subtitle": "Спільноти, до яких можна приєднатися, і значки, які мають люди, — в одному місці."
+  },
+  "watched": {
+    "removed": "Прибрано з історії переглядів",
+    "removeFailed": "Не вдалося прибрати з історії переглядів",
+    "title": "Переглянуте",
+    "count_one": "Переглянуто: {{count}}",
+    "count_few": "Переглянуто: {{count}}",
+    "count_many": "Переглянуто: {{count}}",
+    "count_other": "Переглянуто: {{count}}",
+    "trackHistory": "Зберігати історію",
+    "videosTab": "Відео ({{count}})",
+    "shortsTab": "Shorts ({{count}})",
+    "loadFailed": "Не вдалося завантажити історію переглядів. Спробуйте ще раз.",
+    "emptyShorts": "Переглянутих Shorts ще немає",
+    "emptyVideos": "Переглянутих відео ще немає",
+    "removeTitle": "Прибрати з історії переглядів",
+    "watchedAt": "Переглянуто {{when}}"
+  },
+  "watchStream": {
+    "saySomething": "Напишіть щось…",
+    "waitingWallet": "Очікуємо на ваш гаманець…",
+    "signInToChat": "Увійдіть, щоб писати в чат",
+    "sendMessage": "Надіслати повідомлення",
+    "notLive": "Ця трансляція зараз не в ефірі.",
+    "notFound": "За цим посиланням трансляцію не знайдено.",
+    "browse": "Переглянути трансляції",
+    "back": "Назад до 3Speak",
+    "seoTitle": "{{title}} (НАЖИВО)",
+    "swipeNext": "Проведіть до наступної трансляції",
+    "chat": "Чат",
+    "watchingNow": "👁 Зараз дивляться: {{count}}",
+    "signInRaiseHand": "Увійдіть, щоб підняти руку",
+    "copyLink": "Копіювати посилання на трансляцію",
+    "notAvailableLive": "Недоступно для трансляцій",
+    "vote": "Голосувати",
+    "comment": "Коментувати",
+    "liveChat": "Чат наживо",
+    "signInToJoin": "🔒 Увійдіть, щоб приєднатися до чату.",
+    "moreTag": "Більше #{{tag}}",
+    "moreVideos": "Більше відео"
+  }
+}

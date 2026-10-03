@@ -1,0 +1,108 @@
+{
+  "controls": {
+    "rewind10": "Назад на 10 с",
+    "forward10": "Вперед на 10 с",
+    "reactToMoment": "Відреагувати на цей момент",
+    "mute": "Вимкнути звук",
+    "unmute": "Увімкнути звук",
+    "playerSize": "Розмір плеєра: {{size}}",
+    "sizeStandard": "Стандартний",
+    "pip": "Картинка в картинці",
+    "autoplayOn": "Автовідтворення: увімк.",
+    "autoplayOff": "Автовідтворення: вимк.",
+    "ambientSubtle": "Фонове підсвічування: м'яке",
+    "ambientVivid": "Фонове підсвічування: яскраве",
+    "ambientOff": "Фонове підсвічування: вимк.",
+    "playbackSpeed": "Швидкість відтворення",
+    "speedNormal": "Звичайна",
+    "quality": "Якість",
+    "qualityAuto": "Авто",
+    "fullscreen": "На весь екран",
+    "exitFullscreen": "Вийти з повноекранного режиму",
+    "markerReplies_one": "({{count}} відповідь)",
+    "markerReplies_few": "({{count}} відповіді)",
+    "markerReplies_many": "({{count}} відповідей)",
+    "markerReplies_other": "({{count}} відповіді)"
+  },
+  "subtitles": {
+    "title": "Субтитри",
+    "off": "Вимк.",
+    "font": "Шрифт",
+    "size": "Розмір",
+    "textColor": "Колір тексту",
+    "textBorder": "Контур тексту",
+    "borderColor": "Колір контуру",
+    "background": "Фон",
+    "none": "Немає",
+    "fonts": {
+      "sansSerif": "Без засічок",
+      "serif": "Із засічками",
+      "monospace": "Моноширинний"
+    }
+  },
+  "mini": {
+    "untitled": "Відео"
+  },
+  "playlist": {
+    "previous": "Попереднє відео",
+    "next": "Наступне відео",
+    "close": "Закрити плейлист"
+  },
+  "overlay": {
+    "replay": "Повторити"
+  },
+  "reactions": {
+    "translation": "Переклад",
+    "translationFailed": "Не вдалося перекласти",
+    "videoReaction": "Відеореакція",
+    "comment": "Коментар",
+    "previous": "Попередня",
+    "next": "Наступна",
+    "hide": "Сховати реакції",
+    "hideShort": "Сховати",
+    "loadingReplies": "Завантаження відповідей...",
+    "sizeTitle": "Розмір: {{size}}",
+    "sizes": {
+      "small": "S",
+      "medium": "M",
+      "standard": "Станд.",
+      "big": "Вел.",
+      "cinema": "Кіно"
+    },
+    "sizeNames": {
+      "small": "Малий",
+      "medium": "Середній",
+      "standard": "Стандартний",
+      "big": "Великий",
+      "cinema": "Кінотеатр"
+    }
+  },
+  "reactionUpload": {
+    "authorized": "@threespeak авторизовано — тепер ви можете опублікувати реакцію",
+    "authFailed": "Не вдалося авторизувати. Спробуйте ще раз.",
+    "webcamDenied": "Немає доступу до вебкамери",
+    "shortTooLong": "Shorts мають тривати не більше {{max}}. Зніміть позначку «Показувати в 3Speak Shorts» або використайте коротше відео.",
+    "uploadingVideo": "Завантаження відео...",
+    "noEmbedUrl": "Завантаження вдалося, але URL для вбудовування не отримано",
+    "publishingComment": "Публікація коментаря...",
+    "posted": "Відеореакцію опубліковано!",
+    "postFailed": "Не вдалося опублікувати коментар",
+    "uploadFailed": "Не вдалося завантажити",
+    "uploadVideo": "Завантажити відео",
+    "recordVideo": "Записати відео",
+    "startRecording": "Почати запис",
+    "stopRecording": "Зупинити запис",
+    "recordedVideo": "Записане відео",
+    "descriptionPlaceholder": "Додайте опис до своєї відеореакції...",
+    "showInShorts": "Показувати в 3Speak Shorts",
+    "authNote": "Дозвольте <b>@threespeak</b> публікувати реакцію від вашого імені.",
+    "authorizing": "Авторизація…",
+    "authorize": "Авторизувати @threespeak",
+    "uploading": "Завантаження...",
+    "postReaction": "Опублікувати реакцію"
+  },
+  "inline": {
+    "cantPlay": "Це відео не можна відтворити тут.",
+    "openOnSite": "Відкрити на 3Speak"
+  }
+}

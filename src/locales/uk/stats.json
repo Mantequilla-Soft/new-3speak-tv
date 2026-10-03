@@ -1,0 +1,125 @@
+{
+  "ranges": {
+    "d7": "7 дн.",
+    "d28": "28 дн.",
+    "d90": "90 дн.",
+    "all": "Усе"
+  },
+  "content": {
+    "all": "Усе",
+    "videos": "Відео",
+    "shorts": "Shorts"
+  },
+  "metrics": {
+    "watchTime": "Час перегляду",
+    "views": "Перегляди",
+    "avgPct": "Сер. %",
+    "votes": "Голоси",
+    "comments": "Коментарі",
+    "payout": "Виплата"
+  },
+  "days": {
+    "short": {
+      "sun": "Нд",
+      "mon": "Пн",
+      "tue": "Вт",
+      "wed": "Ср",
+      "thu": "Чт",
+      "fri": "Пт",
+      "sat": "Сб"
+    },
+    "initial": {
+      "sun": "Н",
+      "mon": "П",
+      "tue": "В",
+      "wed": "С",
+      "thu": "Ч",
+      "fri": "П",
+      "sat": "С"
+    }
+  },
+  "sources": {
+    "threespeak": "3Speak",
+    "player": "Вбудований плеєр"
+  },
+  "trend": {
+    "empty": "За цей період ще немає часу перегляду.",
+    "tip_one": "{{count}} перегляд · {{date}}",
+    "tip_few": "{{count}} перегляди · {{date}}",
+    "tip_many": "{{count}} переглядів · {{date}}",
+    "tip_other": "{{count}} перегляду · {{date}}"
+  },
+  "noData": "Даних ще немає.",
+  "demo": {
+    "viewerLocations": "Звідки глядачі",
+    "mapBubble_one": "{{country}} — {{count}} сеанс",
+    "mapBubble_few": "{{country}} — {{count}} сеанси",
+    "mapBubble_many": "{{country}} — {{count}} сеансів",
+    "mapBubble_other": "{{country}} — {{count}} сеансу",
+    "empty": "За цей період ще немає даних про глядачів.",
+    "breakdown": "Розподіл",
+    "map": "Карта",
+    "countries": "Країни",
+    "devices": "Пристрої",
+    "browsers": "Браузери",
+    "whereTitle": "Де дивляться",
+    "whereSub": "3speak чи вбудований плеєр",
+    "newVsReturning": "Нові й постійні",
+    "new": "Нові",
+    "returning": "Постійні",
+    "located": "Місцезнаходження визначено для {{located}} з {{total}} сеансів перегляду."
+  },
+  "when": {
+    "title": "Коли дивляться ваші глядачі",
+    "sub": "UTC · темніше = більше переглядів",
+    "cellTitle_one": "{{day}} {{hour}}:00 — {{count}} перегляд",
+    "cellTitle_few": "{{day}} {{hour}}:00 — {{count}} перегляди",
+    "cellTitle_many": "{{day}} {{hour}}:00 — {{count}} переглядів",
+    "cellTitle_other": "{{day}} {{hour}}:00 — {{count}} перегляду",
+    "hour": "{{hour}} год"
+  },
+  "detail": {
+    "summary": "Голоси: {{votes}} · коментарі: {{comments}} · ${{payout}}"
+  },
+  "compare": {
+    "notEnough": "Замало даних для порівняння.",
+    "start": "Початок",
+    "axis": "Утримання впродовж відео",
+    "end": "Кінець",
+    "title": "Порівняти відео",
+    "pickA": "Виберіть відео…",
+    "vs": "проти",
+    "pickB": "Виберіть інше…"
+  },
+  "loadError": "Не вдалося завантажити вашу статистику.",
+  "emptyRange": "За цей період ще немає даних про перегляди — спробуйте «Усе» або зачекайте, поки люди подивляться ваші відео.",
+  "tiles": {
+    "avgViewDuration": "Сер. тривалість перегляду",
+    "avgWatched": "Сер. переглянуто",
+    "reactionsPerView": "Реакції / перегляд"
+  },
+  "subtotals": "Відео: {{videos}} · голоси: {{votes}} · коментарі: {{comments}} · ${{payout}} · сер. швидкість {{rate}}×",
+  "sections": {
+    "trend": "Час перегляду в динаміці",
+    "best": "Найкращі результати",
+    "audience": "Ваша аудиторія"
+  },
+  "openInNewTab": "Відкрити відео в новій вкладці",
+  "footnote": "Статистика переглядів — з попереднього відстеження, і її бачите лише ви.",
+  "video": {
+    "noData": "Даних ще немає",
+    "empty": "Для цього відео ще немає даних про перегляди.",
+    "uniqueViewers": "Унікальні глядачі",
+    "avgSpeed": "Сер. швидкість",
+    "mostDropOff": "📉 Найбільше глядачів іде на <b>{{time}}</b>",
+    "earlyDrop": "⚡ <b>{{pct}}%</b> пішли в перші 3 с",
+    "replayed": "🔁 Переглянуто повторно:",
+    "retentionTitle": "Утримання аудиторії",
+    "retentionSub": "частка глядачів, які ще дивляться в кожен момент",
+    "pctWatching": "Дивляться {{pct}}%",
+    "replayTitle": "Найчастіше повторюване",
+    "replaySub": "фрагменти, які глядачі дивляться й передивляються найбільше",
+    "hotSpot": "гаряча точка",
+    "notEnoughReplays": "Ще замало повторних переглядів"
+  }
+}
