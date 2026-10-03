@@ -2,6 +2,8 @@ import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 import { CHECKER_URL } from '../../utils/config';
 import { getAccounts } from '../../hive-api/hiveApi';
+import { useTranslation, Trans } from 'react-i18next';
+import { formatNumber } from '../../i18n';
 import './ProfileStats.scss';
 
 /**
@@ -18,14 +20,10 @@ import './ProfileStats.scss';
  * index picked him up. Hence the honest label, "on Hive since".
  */
 
-const fmt = (n) => {
-  const v = Number(n) || 0;
-  if (v >= 1_000_000) return `${(v / 1_000_000).toFixed(1).replace(/\.0$/, '')}M`;
-  if (v >= 1_000) return `${(v / 1_000).toFixed(1).replace(/\.0$/, '')}K`;
-  return String(v);
-};
+const fmt = (n) => formatNumber(Number(n) || 0, { compact: true });
 
 export default function ProfileStats({ username, followers, onFollowersClick }) {
+  const { t } = useTranslation();
   const { data } = useQuery({
     queryKey: ['profile-counts', username],
     enabled: !!username,
@@ -55,18 +53,19 @@ export default function ProfileStats({ username, followers, onFollowersClick }) 
   // zeroes says less than a shorter row.
   // Every number here is abbreviated ("3.8K"), so each carries the exact figure
   // in its tooltip — the short form is for scanning, not a loss of detail.
-  const exact = (n) => Number(n || 0).toLocaleString();
+  const exact = (n) => formatNumber(Number(n || 0));
   const items = [
     followers != null && {
       key: 'followers',
       value: fmt(followers),
-      label: followers === 1 ? 'follower' : 'followers',
-      title: `${exact(followers)} followers`,
+      count: followers,
+      labelKey: 'profile.stats.followers',
+      title: t('profile.stats.followersTitle', { count: followers, num: exact(followers) }),
       onClick: onFollowersClick,
     },
-    data.videos > 0 && { key: 'videos', value: fmt(data.videos), label: data.videos === 1 ? 'video' : 'videos', title: `${exact(data.videos)} videos` },
-    data.shorts > 0 && { key: 'shorts', value: fmt(data.shorts), label: data.shorts === 1 ? 'short' : 'shorts', title: `${exact(data.shorts)} shorts` },
-    data.views > 0 && { key: 'views', value: fmt(data.views), label: data.views === 1 ? 'view' : 'views', title: `${exact(data.views)} views` },
+    data.videos > 0 && { key: 'videos', value: fmt(data.videos), count: data.videos, labelKey: 'profile.stats.videos', title: t('profile.stats.videosTitle', { count: data.videos, num: exact(data.videos) }) },
+    data.shorts > 0 && { key: 'shorts', value: fmt(data.shorts), count: data.shorts, labelKey: 'profile.stats.shorts', title: t('profile.stats.shortsTitle', { count: data.shorts, num: exact(data.shorts) }) },
+    data.views > 0 && { key: 'views', value: fmt(data.views), count: data.views, labelKey: 'profile.stats.views', title: t('profile.stats.viewsTitle', { count: data.views, num: exact(data.views) }) },
   ].filter(Boolean);
 
   if (!items.length) return null;
@@ -85,10 +84,10 @@ export default function ProfileStats({ username, followers, onFollowersClick }) 
             onKeyDown: (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); i.onClick(); } },
           } : {})}
         >
-          <strong>{i.value}</strong> {i.label}
+          <Trans i18nKey={i.labelKey} count={i.count} values={{ value: i.value }} components={{ b: <strong /> }} />
         </span>
       ))}
-      {since ? <span className="profile-stat profile-stat--since">on Hive since {since}</span> : null}
+      {since ? <span className="profile-stat profile-stat--since">{t('profile.stats.onHiveSince', { year: since })}</span> : null}
     </div>
   );
 }

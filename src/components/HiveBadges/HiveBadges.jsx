@@ -14,6 +14,7 @@ import { fetchHiveBadges, isThreeSpeakBadge, saveBadgeOrder } from '../../utils/
 import { listAwardableBadges } from '../../utils/badgeAwards';
 import { useAppStore } from '../../lib/store';
 import AwardBadgeModal from './AwardBadgeModal';
+import { useTranslation } from 'react-i18next';
 import './HiveBadges.scss';
 
 // Every toast from this module is headed "Profile"; the message becomes the
@@ -55,6 +56,7 @@ function BadgeRowBody({ badge }) {
 // A badge the creator can drag. Each row is both the drag source and a drop
 // target, so dropping onto a row inserts at that row's position.
 function MovableRow({ badge }) {
+  const { t } = useTranslation();
   const { setNodeRef: dragRef, listeners, attributes, isDragging } = useDraggable({ id: badge.account });
   const { setNodeRef: dropRef, isOver } = useDroppable({ id: badge.account });
   const ref = (node) => { dragRef(node); dropRef(node); };
@@ -64,7 +66,7 @@ function MovableRow({ badge }) {
       ref={ref}
       className={`hbadges-row hbadges-row--movable${isDragging ? ' dragging' : ''}${isOver ? ' over' : ''}`}
     >
-      <span className="hbadges-grip" {...listeners} {...attributes} title="Drag to reorder">
+      <span className="hbadges-grip" {...listeners} {...attributes} title={t('badges.hive.dragToReorder')}>
         <RxDragHandleDots2 size={16} />
       </span>
       <BadgeRowBody badge={badge} />
@@ -92,6 +94,7 @@ function moveBadge(list, activeId, overId) {
  * badges sit above the draggable block and can't be moved.
  */
 function AllBadgesModal({ username, badges, canArrange, startArranging, onClose, onSaved }) {
+  const { t } = useTranslation();
   const pinned = badges.filter(isThreeSpeakBadge);
   const [arranging, setArranging] = useState(startArranging);
   const [draft, setDraft] = useState(() => badges.filter((b) => !isThreeSpeakBadge(b)));
@@ -116,10 +119,10 @@ function AllBadgesModal({ username, badges, canArrange, startArranging, onClose,
     try {
       await saveBadgeOrder(username, draft.map((b) => b.account));
       onSaved([...pinned, ...draft]);
-      toast.success('Badge order saved to your Hive profile');
+      toast.success(t('badges.hive.orderSaved'));
       setArranging(false);
     } catch (err) {
-      toast.error(err?.message || 'Could not save your badge order');
+      toast.error(err?.message || t('badges.hive.orderSaveFailed'));
     } finally {
       setSaving(false);
     }
@@ -133,17 +136,17 @@ function AllBadgesModal({ username, badges, canArrange, startArranging, onClose,
         className="hbadges-modal"
         role="dialog"
         aria-modal="true"
-        aria-label={`Badges held by @${username}`}
+        aria-label={t('badges.hive.dialogLabel', { username })}
         onClick={(e) => e.stopPropagation()}
       >
-        <button className="hbadges-close" onClick={onClose} aria-label="Close">
+        <button className="hbadges-close" onClick={onClose} aria-label={t('common.actions.close')}>
           <IoClose size={22} />
         </button>
-        <h3 className="hbadges-title">Badges</h3>
+        <h3 className="hbadges-title">{t('badges.hive.title')}</h3>
         <p className="hbadges-sub">
           {arranging
-            ? 'Drag your badges into the order you want them shown.'
-            : `${badges.length} ${badges.length === 1 ? 'badge' : 'badges'} earned by @${username} on Hive`}
+            ? t('badges.hive.arrangeHint')
+            : t('badges.hive.earnedCount', { count: badges.length, username })}
         </p>
 
         <div className="hbadges-list">
@@ -152,7 +155,7 @@ function AllBadgesModal({ username, badges, canArrange, startArranging, onClose,
           {pinned.map((badge) => (
             arranging ? (
               <div key={badge.account} className="hbadges-row hbadges-row--pinned">
-                <span className="hbadges-grip hbadges-grip--locked" title="Always shown first">
+                <span className="hbadges-grip hbadges-grip--locked" title={t('badges.hive.alwaysFirst')}>
                   <MdLock size={13} />
                 </span>
                 <BadgeRowBody badge={badge} />
@@ -217,15 +220,15 @@ function AllBadgesModal({ username, badges, canArrange, startArranging, onClose,
                   }}
                   disabled={saving}
                 >
-                  Cancel
+                  {t('common.actions.cancel')}
                 </button>
                 <button type="button" className="hbadges-btn hbadges-btn--primary" onClick={save} disabled={saving}>
-                  {saving ? 'Saving…' : 'Save order'}
+                  {saving ? t('common.actions.saving') : t('badges.hive.saveOrder')}
                 </button>
               </>
             ) : (
               <button type="button" className="hbadges-btn" onClick={() => setArranging(true)}>
-                <RxDragHandleDots2 size={15} /> Arrange
+                <RxDragHandleDots2 size={15} /> {t('badges.hive.arrange')}
               </button>
             )}
           </div>
@@ -255,6 +258,7 @@ function AllBadgesModal({ username, badges, canArrange, startArranging, onClose,
  *   canArrange  Viewer owns this profile, so they get the arrange controls.
  */
 function HiveBadges({ username, canArrange = false }) {
+  const { t } = useTranslation();
   const viewer = useAppStore((st) => st.user);
   const [awarding, setAwarding] = useState(false);
   // Store WHICH profile the popup was opened for rather than a plain boolean:
@@ -319,10 +323,10 @@ function HiveBadges({ username, canArrange = false }) {
           className="hive-badge hive-badge-more"
           onClick={() => setPopup({ user: username, arranging: arrangeOnly })}
           title={arrangeOnly
-            ? 'Choose the order your badges appear in'
-            : `Show all ${badges.length} badges`}
+            ? t('badges.hive.arrangeTitle')
+            : t('badges.hive.showAll', { count: badges.length })}
         >
-          {arrangeOnly ? 'Arrange' : 'Show more'}
+          {arrangeOnly ? t('badges.hive.arrange') : t('common.actions.showMore')}
         </button>
       )}
 
@@ -334,10 +338,10 @@ function HiveBadges({ username, canArrange = false }) {
           type="button"
           className="hive-badge hive-badge-award"
           onClick={() => setAwarding(true)}
-          title={`Award one of your badges to @${username}`}
+          title={t('badges.hive.awardTitle', { username })}
         >
           <MdAdd className="hive-badge-award-icon" aria-hidden="true" />
-          <span className="hive-badge-name">Award</span>
+          <span className="hive-badge-name">{t('badges.award.award')}</span>
         </button>
       )}
 

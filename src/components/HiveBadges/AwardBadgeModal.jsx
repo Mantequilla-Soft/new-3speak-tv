@@ -5,6 +5,7 @@ import { FaCheck } from 'react-icons/fa';
 import { toastIn } from '../../utils/toast';
 import { awardBadgeWithAioha } from '../../hive-api/aioha';
 import { badgeHolders } from '../../utils/badgeAwards';
+import { useTranslation, Trans } from 'react-i18next';
 import './AwardBadgeModal.scss';
 
 // Every toast from this module is headed "Badges"; the message becomes the line
@@ -23,6 +24,7 @@ const toast = toastIn('Badges');
  * rows would leave someone hunting for a badge that is simply already awarded.
  */
 export default function AwardBadgeModal({ username, badges, onClose, onAwarded }) {
+  const { t } = useTranslation();
   const [held, setHeld] = useState(null); // null = still looking
   const [busy, setBusy] = useState('');
 
@@ -50,10 +52,10 @@ export default function AwardBadgeModal({ username, badges, onClose, onAwarded }
     try {
       await awardBadgeWithAioha(badge.account, username, true);
       setHeld((prev) => ({ ...prev, [badge.account]: true }));
-      toast.success(`@${username} now holds ${badge.title}`);
+      toast.success(t('badges.award.success', { username, title: badge.title }));
       onAwarded?.(badge);
     } catch (err) {
-      toast.error(err?.message || 'Could not award that badge');
+      toast.error(err?.message || t('badges.award.failed'));
     } finally {
       setBusy('');
     }
@@ -65,15 +67,15 @@ export default function AwardBadgeModal({ username, badges, onClose, onAwarded }
         className="award-modal"
         role="dialog"
         aria-modal="true"
-        aria-label={`Award a badge to ${username}`}
+        aria-label={t('badges.award.dialogLabel', { username })}
         onClick={(e) => e.stopPropagation()}
       >
         <header className="award-head">
           <div>
-            <h3>Award a badge</h3>
-            <p>to @{username}</p>
+            <h3>{t('badges.award.title')}</h3>
+            <p>{t('badges.award.toUser', { username })}</p>
           </div>
-          <button type="button" className="award-close" onClick={onClose} aria-label="Close">
+          <button type="button" className="award-close" onClick={onClose} aria-label={t('common.actions.close')}>
             <IoClose size={20} />
           </button>
         </header>
@@ -99,7 +101,7 @@ export default function AwardBadgeModal({ username, badges, onClose, onAwarded }
                     <span>{badge.account}</span>
                   </span>
                   <span className="award-item-state">
-                    {working ? 'Awarding…' : has ? <><FaCheck /> Held</> : held === null ? '…' : 'Award'}
+                    {working ? t('badges.award.awarding') : has ? <><FaCheck /> {t('badges.award.held')}</> : held === null ? '…' : t('badges.award.award')}
                   </span>
                 </button>
               </li>
@@ -108,8 +110,7 @@ export default function AwardBadgeModal({ username, badges, onClose, onAwarded }
         </ul>
 
         <p className="award-note">
-          The badge follows them on Hive, which is what holding it means. You can
-          take it back from the badge&rsquo;s own page.
+          {t('badges.award.note')}
         </p>
       </div>
     </div>,

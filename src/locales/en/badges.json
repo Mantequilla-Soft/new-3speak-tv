@@ -1,0 +1,98 @@
+{
+  "page": {
+    "fallbackTitle": "Badge",
+    "kpis": {
+      "recipients": "Recipients",
+      "recentVideos": "Recent videos",
+      "issued": "Issued"
+    },
+    "issuedBy": "Issued by <creatorLink>@{{creator}}</creatorLink>",
+    "notFoundTitle": "Badge not found",
+    "notFoundBody": "No Hive account named @{{account}} could be read right now.",
+    "browseAll": "Browse all badges",
+    "tabs": {
+      "videos": "Videos",
+      "recipients": "Recipients",
+      "recipientsWithCount": "Recipients ({{num}})"
+    },
+    "errorVideos": "Error fetching videos",
+    "noVideosTitle": "No videos yet",
+    "noHolders": "Nobody holds this badge yet.",
+    "noHolderVideos": "Nobody holding this badge has published a video on 3Speak yet.",
+    "loadingMore": "Loading more...",
+    "recipientsError": "Could not load recipients",
+    "recipientsLoading": "Loading recipients...",
+    "noRecipientsTitle": "No recipients yet",
+    "noRecipientsBody": "Nobody has been awarded this badge so far.",
+    "recipientsSummary_one": "{{num}} recipient",
+    "recipientsSummary_other": "{{num}} recipients",
+    "recipientsSummaryWithVideos_one": "{{num}} recipient, {{publishing}} publishing on 3Speak",
+    "recipientsSummaryWithVideos_other": "{{num}} recipients, {{publishing}} publishing on 3Speak",
+    "recipientVideos_one": "{{num}} video",
+    "recipientVideos_other": "{{num}} videos",
+    "recipientNoVideos": "No videos"
+  },
+  "directory": {
+    "title": "Badges",
+    "intro": "Badges are awards <b>given to you by others</b> on Hive, for events, contributions and milestones. You cannot join one: someone awards it. Open a badge to watch what its recipients publish here.",
+    "searchPlaceholder": "Search badges...",
+    "sort": {
+      "recipients": "Recipients",
+      "created": "Created",
+      "name": "Name"
+    },
+    "createLocked": "Creating a badge needs a Hive account. This unlocks when yours is ready.",
+    "create": "Create badge",
+    "loadError": "Could not load badges right now.",
+    "noMatch": "No badge matches that search.",
+    "held": "Held",
+    "recipients_one": "{{num}} recipient",
+    "recipients_other": "{{num}} recipients"
+  },
+  "award": {
+    "success": "@{{username}} now holds {{title}}",
+    "failed": "Could not award that badge",
+    "dialogLabel": "Award a badge to {{username}}",
+    "title": "Award a badge",
+    "toUser": "to @{{username}}",
+    "awarding": "Awarding…",
+    "held": "Held",
+    "award": "Award",
+    "note": "The badge follows them on Hive, which is what holding it means. You can take it back from the badge’s own page."
+  },
+  "hive": {
+    "dragToReorder": "Drag to reorder",
+    "orderSaved": "Badge order saved to your Hive profile",
+    "orderSaveFailed": "Could not save your badge order",
+    "dialogLabel": "Badges held by @{{username}}",
+    "title": "Badges",
+    "arrangeHint": "Drag your badges into the order you want them shown.",
+    "earnedCount_one": "{{count}} badge earned by @{{username}} on Hive",
+    "earnedCount_other": "{{count}} badges earned by @{{username}} on Hive",
+    "alwaysFirst": "Always shown first",
+    "saveOrder": "Save order",
+    "arrange": "Arrange",
+    "arrangeTitle": "Choose the order your badges appear in",
+    "showAll_one": "Show all {{count}} badge",
+    "showAll_other": "Show all {{count}} badges",
+    "awardTitle": "Award one of your badges to @{{username}}"
+  },
+  "leaderboardBadges": {
+    "proTitle": "This creator supports 3Speak with a Pro subscription"
+  },
+  "leaderboard": {
+    "watchNotice": "Watch time has only been tracked since {{since}}, so longer windows still show the same short history.",
+    "unclaimed": "Unclaimed",
+    "noActivity": "No activity in this window yet",
+    "otherTopics": "Other",
+    "title": "Rankings",
+    "subtitle": "{{blurb}} — top creators on 3Speak.",
+    "subtitleTopic": "{{blurb}} — top creators in {{topic}}.",
+    "allTopics": "All topics",
+    "finding": "Finding @{{user}} on this board…",
+    "notInTop": "@{{user}} isn’t in the top {{n}} of this board.",
+    "loading": "Loading leaderboard…",
+    "loadError": "Couldn’t load the leaderboard. Try again shortly.",
+    "empty": "No one has any {{metric}} in this window yet."
+  }
+}

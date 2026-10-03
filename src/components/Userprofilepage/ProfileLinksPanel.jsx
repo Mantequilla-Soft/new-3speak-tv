@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { FiChevronLeft, FiChevronRight, FiEdit2 } from 'react-icons/fi';
 import { fetchSpotlight } from '../../utils/spotlight';
+import { useTranslation } from 'react-i18next';
 import './ProfileLinksPanel.scss';
 
 // Collapse is a preference, not a per-profile state: someone who folds the
@@ -82,6 +83,7 @@ function applyHostTheme(frame) {
  * that gave no sign of itself would simply be lost).
  */
 export default function ProfileLinksPanel({ username, isOwnProfile = false, onOpenTab }) {
+  const { t } = useTranslation();
   const [state, setState] = useState({ loading: true, exists: false });
   const [collapsed, setCollapsed] = useState(readCollapsed);
   const frameRef = useRef(null);
@@ -121,8 +123,8 @@ export default function ProfileLinksPanel({ username, isOwnProfile = false, onOp
     return (
       <aside className="profile-links-panel profile-links-panel--empty">
         <div className="plp-inner">
-          <p className="plp-hint">Add your socials, shop or newsletter — they show here and on your public links page.</p>
-          <button type="button" className="plp-btn" onClick={() => onOpenTab?.('links')}>Add links</button>
+          <p className="plp-hint">{t('profile.links.emptyHint')}</p>
+          <button type="button" className="plp-btn" onClick={() => onOpenTab?.('links')}>{t('profile.links.add')}</button>
         </div>
       </aside>
     );
@@ -135,8 +137,8 @@ export default function ProfileLinksPanel({ username, isOwnProfile = false, onOp
           type="button"
           className="plp-handle"
           onClick={() => setFolded(false)}
-          title={`Show @${username}'s links`}
-          aria-label={`Show @${username}'s links`}
+          title={t('profile.links.show', { user: username })}
+          aria-label={t('profile.links.show', { user: username })}
         >
           <FiChevronLeft size={18} />
         </button>
@@ -152,8 +154,8 @@ export default function ProfileLinksPanel({ username, isOwnProfile = false, onOp
           type="button"
           className="plp-hide"
           onClick={() => setFolded(true)}
-          title="Hide links"
-          aria-label="Hide links"
+          title={t('profile.links.hide')}
+          aria-label={t('profile.links.hide')}
         >
           <FiChevronRight size={16} />
         </button>
@@ -164,8 +166,8 @@ export default function ProfileLinksPanel({ username, isOwnProfile = false, onOp
             type="button"
             className="plp-edit"
             onClick={() => onOpenTab?.('links')}
-            title="Edit links"
-            aria-label="Edit links"
+            title={t('profile.links.edit')}
+            aria-label={t('profile.links.edit')}
           >
             <FiEdit2 size={14} />
           </button>
@@ -177,7 +179,7 @@ export default function ProfileLinksPanel({ username, isOwnProfile = false, onOp
           ref={frameRef}
           className="plp-frame"
           src={`/links/${username}`}
-          title={`@${username} links`}
+          title={t('profile.links.frameTitle', { user: username })}
           loading="lazy"
           onLoad={themeFrame}
         />
@@ -186,7 +188,7 @@ export default function ProfileLinksPanel({ username, isOwnProfile = false, onOp
           {/* A plain anchor, not a router Link: /links/<user> is served as
               standalone HTML by nginx (the React route is only a fallback). */}
           <a className="plp-open" href={`/links/${username}`} target="_blank" rel="noreferrer">
-            Open links page →
+            {t('profile.links.open')}
           </a>
         </div>
       </div>

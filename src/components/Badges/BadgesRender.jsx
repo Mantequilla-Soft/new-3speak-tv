@@ -8,6 +8,8 @@ import { useAppStore } from '../../lib/store';
 import fetchHiveBadges from '../../utils/hiveBadges';
 import CreateCommunity from '../modal/CreateCommunity';
 import SkeletonLoader from '../Communities/SkeletonLoader';
+import { useTranslation, Trans } from 'react-i18next';
+import { formatNumber } from '../../i18n';
 import './BadgesRender.scss';
 
 /**
@@ -20,6 +22,7 @@ import './BadgesRender.scss';
  * than a second list only 3Speak knows about.
  */
 function BadgesRender() {
+  const { t } = useTranslation();
   const [badges, setBadges] = useState([]);
   // Recipients first, most-held first: the closest thing a badge list has to
   // "biggest", and the order that puts the recognisable ones at the top.
@@ -45,9 +48,9 @@ function BadgesRender() {
   // Everything here comes from the registry response, so offering these costs
   // no extra request.
   const SORTS = [
-    { id: 'recipients', label: 'Recipients', value: (b) => b.recipients },
-    { id: 'created', label: 'Created', value: (b) => (b.created ? Date.parse(b.created) : null) },
-    { id: 'title', label: 'Name', value: (b) => b.title, text: true },
+    { id: 'recipients', label: t('badges.directory.sort.recipients'), value: (b) => b.recipients },
+    { id: 'created', label: t('badges.directory.sort.created'), value: (b) => (b.created ? Date.parse(b.created) : null) },
+    { id: 'title', label: t('badges.directory.sort.name'), value: (b) => b.title, text: true },
   ];
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
@@ -75,11 +78,9 @@ function BadgesRender() {
   return (
     <div className="badges-render">
       <div className="badges-head">
-        <h1>Badges</h1>
+        <h1>{t('badges.directory.title')}</h1>
         <p>
-          Badges are awards <strong>given to you by others</strong> on Hive, for
-          events, contributions and milestones. You cannot join one: someone
-          awards it. Open a badge to watch what its recipients publish here.
+          <Trans i18nKey="badges.directory.intro" components={{ b: <strong /> }} />
         </p>
       </div>
 
@@ -88,7 +89,7 @@ function BadgesRender() {
         <div className="search-wrapper">
           <input
             type="text"
-            placeholder="Search badges..."
+            placeholder={t('badges.directory.searchPlaceholder')}
             value={query}
             onChange={(e) => setQuery(e.target.value)}
           />
@@ -109,10 +110,10 @@ function BadgesRender() {
             onClick={incubationHandle ? undefined : () => setCreating(true)}
             aria-disabled={incubationHandle ? true : undefined}
             title={incubationHandle
-              ? 'Creating a badge needs a Hive account. This unlocks when yours is ready.'
+              ? t('badges.directory.createLocked')
               : undefined}
           >
-            <MdAdd size={17} /> Create badge
+            <MdAdd size={17} /> {t('badges.directory.create')}
           </button>
         </div>
       </div>
@@ -120,9 +121,9 @@ function BadgesRender() {
       {loading ? (
         <SkeletonLoader />
       ) : error ? (
-        <p className="badges-error">Could not load badges right now.</p>
+        <p className="badges-error">{t('badges.directory.loadError')}</p>
       ) : filtered.length === 0 ? (
-        <p className="badges-error">No badge matches that search.</p>
+        <p className="badges-error">{t('badges.directory.noMatch')}</p>
       ) : (
         <div className="badges-grid">
           {sortBy(filtered, SORTS, sortField, sortDir, { ids: mine, idOf: (b) => b.account }).map(badge => (
@@ -144,13 +145,13 @@ function BadgesRender() {
                 {badge.title}
                 {/* Says why it is at the top, and it is the right word: a badge
                     is awarded, never joined. */}
-                {mine.has(badge.account) && <span className="badge-mine">Held</span>}
+                {mine.has(badge.account) && <span className="badge-mine">{t('badges.directory.held')}</span>}
               </h3>
               {badge.description ? (
                 <p className="badge-card-desc">{badge.description}</p>
               ) : null}
               <span className="badge-card-count">
-                {badge.recipients.toLocaleString('en-US')} recipients
+                {t('badges.directory.recipients', { count: badge.recipients, num: formatNumber(badge.recipients) })}
               </span>
             </Link>
           ))}

@@ -19,6 +19,8 @@ import {
   fetchUserLeaderboardStats,
   formatMetric,
 } from '../lib/leaderboardData';
+import { useTranslation } from 'react-i18next';
+import { t as tNow, formatDate } from '../i18n';
 import './Leaderboard.scss';
 
 const PAGE_SIZE = 50;
@@ -34,8 +36,8 @@ function watchNotice(sinceIso) {
   const d = new Date(sinceIso);
   const since = Number.isNaN(d.getTime())
     ? sinceIso
-    : d.toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' });
-  return `Watch time has only been tracked since ${since}, so longer windows still show the same short history.`;
+    : formatDate(d, { month: 'short', day: 'numeric', year: 'numeric' });
+  return tNow('badges.leaderboard.watchNotice', { since });
 }
 
 // Top 3 get the podium; everyone else falls through to the ranked rows below.
@@ -43,6 +45,7 @@ function watchNotice(sinceIso) {
 // full three-slot podium, with the unclaimed places shown as empty placeholders
 // rather than collapsing the winner into a plain list row.
 function Podium({ entries, metric, focusUser }) {
+  const { t } = useTranslation();
   if (!entries.length) return null;
   const slot = (rank) => entries[rank - 1] || { rank, placeholder: true };
   // Visual order puts the winner in the middle: 2nd, 1st, 3rd.
@@ -57,7 +60,7 @@ function Podium({ entries, metric, focusUser }) {
         >
           <span className="lb-podium-medal">{e.rank}</span>
           <span className="lb-podium-avatar-empty" />
-          <span className="lb-podium-user">Unclaimed</span>
+          <span className="lb-podium-user">{t('badges.leaderboard.unclaimed')}</span>
           <span className="lb-podium-value">—</span>
           <span className="lb-podium-metric">{metric.label}</span>
         </div>
@@ -98,6 +101,7 @@ function Row({ entry, metric, isMe, focused }) {
 // to scroll for it. A user with no activity in the window has no row at all —
 // the checker reports that as zeros with a null rank.
 function MyStanding({ user, window, metric }) {
+  const { t } = useTranslation();
   const { data } = useQuery({
     queryKey: ['leaderboard-me', user, window],
     queryFn: () => fetchUserLeaderboardStats(user, window),
@@ -117,12 +121,13 @@ function MyStanding({ user, window, metric }) {
         {formatMetric(value, metric.unit)}
         <small>{metric.label}</small>
       </span>
-      {!rank && <span className="lb-me-empty">No activity in this window yet</span>}
+      {!rank && <span className="lb-me-empty">{t('badges.leaderboard.noActivity')}</span>}
     </div>
   );
 }
 
 function Leaderboard() {
+  const { t } = useTranslation();
   const user = useAppStore((s) => s.user);
   // Profile badges deep-link to the exact board they were earned on.
   const [searchParams, setSearchParams] = useSearchParams();
@@ -168,25 +173,25 @@ function Leaderboard() {
       label: c.label,
       emoji: c.emoji,
       self: topicSet.has(c.slug),
-      topics: c.topics.filter((t) => topicSet.has(t.slug)),
+      topics: c.topics.filter((tp) => topicSet.has(tp.slug)),
     })).filter((g) => g.self || g.topics.length > 0);
 
-    const known = new Set(TAG_CATEGORIES.flatMap((c) => [c.slug, ...c.topics.map((t) => t.slug)]));
-    const other = topics.filter((t) => !known.has(t));
+    const known = new Set(TAG_CATEGORIES.flatMap((c) => [c.slug, ...c.topics.map((tp) => tp.slug)]));
+    const other = topics.filter((tp) => !known.has(tp));
     if (other.length) {
       gs.push({
-        slug: '__other', label: 'Other', emoji: '🏷️', self: false,
-        topics: other.map((t) => ({ slug: t, label: t })),
+        slug: '__other', label: t('badges.leaderboard.otherTopics'), emoji: '🏷️', self: false,
+        topics: other.map((tp) => ({ slug: tp, label: tp })),
       });
     }
     return gs;
-  }, [topics, topicSet]);
+  }, [topics, topicSet, t]);
 
   // Which category is expanded. Follows the active topic so a deep-linked board
   // opens on the right branch; the user can override by clicking another.
   const [openCat, setOpenCat] = useState(null);
   const activeCat = getCategoryOf(activeTopic)
-    || groups.find((g) => g.topics.some((t) => t.slug === activeTopic))?.slug
+    || groups.find((g) => g.topics.some((tp) => tp.slug === activeTopic))?.slug
     || null;
   const shownCat = openCat || activeCat;
   const openGroup = groups.find((g) => g.slug === shownCat) || null;
@@ -206,7 +211,7 @@ function Leaderboard() {
   };
   const setWindow = (w) => select({ window: w });
   const setMetricId = (m) => select({ metric: m });
-  const setTopic = (t) => select({ topic: t });
+  const setTopic = (tp) => select({ topic: tp });
 
   const {
     data,
@@ -262,10 +267,11 @@ function Leaderboard() {
       <header className="lb-header">
         <MdOutlineLeaderboard className="lb-header-icon" />
         <div>
-          <h1>Rankings</h1>
+          <h1>{t('badges.leaderboard.title')}</h1>
           <p>
-            {metric.blurb} — top creators
-            {activeTopic ? ` in ${activeTopic}` : ' on 3Speak'}.
+            {activeTopic
+              ? t('badges.leaderboard.subtitleTopic', { blurb: metric.blurb, topic: activeTopic })
+              : t('badges.leaderboard.subtitle', { blurb: metric.blurb })}
           </p>
         </div>
       </header>
@@ -312,7 +318,7 @@ function Leaderboard() {
               className={`lb-tab lb-topic${!activeTopic ? ' active' : ''}`}
               onClick={() => { setTopic(''); setOpenCat(null); }}
             >
-              All topics
+              {t('badges.leaderboard.allTopics')}
             </button>
             {groups.map((g) => (
               <button
@@ -332,14 +338,14 @@ function Leaderboard() {
 
           {openGroup && (
             <div className="lb-tabs lb-topics lb-subtopics">
-              {openGroup.topics.map((t) => (
+              {openGroup.topics.map((tp) => (
                 <button
-                  key={t.slug}
+                  key={tp.slug}
                   type="button"
-                  className={`lb-tab lb-topic${activeTopic === t.slug ? ' active' : ''}`}
-                  onClick={() => setTopic(t.slug)}
+                  className={`lb-tab lb-topic${activeTopic === tp.slug ? ' active' : ''}`}
+                  onClick={() => setTopic(tp.slug)}
                 >
-                  {t.label}
+                  {tp.label}
                 </button>
               ))}
             </div>
@@ -354,12 +360,12 @@ function Leaderboard() {
       )}
 
       {seeking && (
-        <div className="lb-state">Finding @{focusUser} on this board…</div>
+        <div className="lb-state">{t('badges.leaderboard.finding', { user: focusUser })}</div>
       )}
       {unreachable && (
         <div className="lb-notice">
           <MdInfoOutline />
-          <span>@{focusUser} isn’t in the top {MAX_AUTO_PAGES * PAGE_SIZE} of this board.</span>
+          <span>{t('badges.leaderboard.notInTop', { user: focusUser, n: MAX_AUTO_PAGES * PAGE_SIZE })}</span>
         </div>
       )}
 
@@ -367,11 +373,11 @@ function Leaderboard() {
           covers the five global metrics, not the per-topic boards. */}
       {user && !activeTopic && <MyStanding user={user} window={window} metric={metric} />}
 
-      {isLoading && <div className="lb-state">Loading leaderboard…</div>}
-      {isError && <div className="lb-state error">Couldn’t load the leaderboard. Try again shortly.</div>}
+      {isLoading && <div className="lb-state">{t('badges.leaderboard.loading')}</div>}
+      {isError && <div className="lb-state error">{t('badges.leaderboard.loadError')}</div>}
 
       {!isLoading && !isError && entries.length === 0 && (
-        <div className="lb-state">No one has any {metric.label.toLowerCase()} in this window yet.</div>
+        <div className="lb-state">{t('badges.leaderboard.empty', { metric: metric.label.toLowerCase() })}</div>
       )}
 
       {!isLoading && !isError && entries.length > 0 && (
@@ -399,7 +405,7 @@ function Leaderboard() {
               onClick={() => fetchNextPage()}
               disabled={isFetchingNextPage}
             >
-              {isFetchingNextPage ? 'Loading…' : 'Load more'}
+              {isFetchingNextPage ? t('common.status.loading') : t('common.actions.loadMore')}
             </button>
           )}
         </>

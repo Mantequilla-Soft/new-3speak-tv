@@ -9,6 +9,7 @@ import {
   badgeLabel,
   badgeTitle,
 } from '../../lib/leaderboardData';
+import { useTranslation } from 'react-i18next';
 import './LeaderboardBadges.scss';
 
 // One icon per topic, so the shortened label doesn't have to carry the meaning.
@@ -30,6 +31,7 @@ const BADGE_ICONS = {
  * empty row would just add noise to the profile header.
  */
 function LeaderboardBadges({ username }) {
+  const { t } = useTranslation();
   const { data } = useQuery({
     queryKey: ['leaderboard-badges', username],
     queryFn: () => fetchLeaderboardBadges(username),
@@ -50,7 +52,7 @@ function LeaderboardBadges({ username }) {
   return (
     <div className="lb-badges">
       {isPro && (
-        <span className="lb-badge lb-badge-pro" title="This creator supports 3Speak with a Pro subscription">
+        <span className="lb-badge lb-badge-pro" title={t('badges.leaderboardBadges.proTitle')}>
           <MdRocketLaunch className="lb-badge-icon" />
           <span>3Speak Pro</span>
         </span>

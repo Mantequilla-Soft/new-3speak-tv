@@ -8,6 +8,7 @@ import {
   platformProfileUrl,
   platformLabel,
 } from '../../utils/socialVerifier';
+import { useTranslation } from 'react-i18next';
 import './SocialLinks.scss';
 
 // Every toast from this module is headed "Profile"; the message becomes the
@@ -20,6 +21,7 @@ const PLATFORM_ICONS = {
 };
 
 export default function SocialLinks({ hiveUsername, refreshKey = 0, canDelete = false, onChange }) {
+  const { t } = useTranslation();
   const [links, setLinks] = useState([]);
   const [removingKey, setRemovingKey] = useState(null);
 
@@ -35,7 +37,7 @@ export default function SocialLinks({ hiveUsername, refreshKey = 0, canDelete = 
   const handleRemove = async (link) => {
     const label = platformLabel(link.platform);
     const ok = window.confirm(
-      `Remove your ${label} link? Make sure the verification hash is no longer on your public ${label} profile, otherwise the unlink will be rejected.`
+      t('profile.social.confirmRemove', { platform: label })
     );
     if (!ok) return;
     const key = `${link.platform}:${link.platform_username}`;
@@ -47,25 +49,25 @@ export default function SocialLinks({ hiveUsername, refreshKey = 0, canDelete = 
         platform_username: link.platform_username,
       });
       if (result?.deleted) {
-        toast.success('Link removed');
+        toast.success(t('profile.social.removed'));
         setLinks((prev) => prev.filter((l) => `${l.platform}:${l.platform_username}` !== key));
         onChange?.();
       } else if (result?.still_present) {
-        toast.error('Hash is still on your profile — remove it first.');
+        toast.error(t('profile.social.hashStillPresent'));
       } else {
-        toast.error(result?.error || 'Unlink failed');
+        toast.error(result?.error || t('profile.social.unlinkFailed'));
       }
     } catch (err) {
       const data = err?.response?.data;
       if (data?.still_present) {
-        toast.error('Hash is still on your profile — remove it first.');
+        toast.error(t('profile.social.hashStillPresent'));
       } else if (err?.response?.status === 404) {
-        toast.error('No such link to remove.');
+        toast.error(t('profile.social.noSuchLink'));
         onChange?.();
       } else if (err?.response?.status === 401) {
-        toast.error('Could not verify signature — please re-login.');
+        toast.error(t('profile.social.signatureFailed'));
       } else {
-        toast.error(data?.error || err.message || 'Unlink failed');
+        toast.error(data?.error || err.message || t('profile.social.unlinkFailed'));
       }
     } finally {
       setRemovingKey(null);
@@ -89,7 +91,7 @@ export default function SocialLinks({ hiveUsername, refreshKey = 0, canDelete = 
               href={url}
               target="_blank"
               rel="noopener noreferrer"
-              title={`${platformLabel(link.platform)} (verified)`}
+              title={t('profile.social.verified', { platform: platformLabel(link.platform) })}
             >
               <Icon />
             </a>
@@ -103,8 +105,8 @@ export default function SocialLinks({ hiveUsername, refreshKey = 0, canDelete = 
                   handleRemove(link);
                 }}
                 disabled={removing}
-                title={`Remove ${platformLabel(link.platform)} link`}
-                aria-label={`Remove ${platformLabel(link.platform)} link`}
+                title={t('profile.social.removeLink', { platform: platformLabel(link.platform) })}
+                aria-label={t('profile.social.removeLink', { platform: platformLabel(link.platform) })}
               >
                 <IoClose />
               </button>

@@ -3,6 +3,7 @@ import { createPortal } from 'react-dom';
 import { useNavigate } from 'react-router-dom';
 import { IoClose } from 'react-icons/io5';
 import { CHECKER_URL } from '../../utils/config';
+import { useTranslation } from 'react-i18next';
 import './SubscriberTicker.scss';
 
 const avatar = (u) => `https://images.hive.blog/u/${u}/avatar/small`;
@@ -12,6 +13,7 @@ const avatar = (u) => `https://images.hive.blog/u/${u}/avatar/small`;
  * with the full list. Renders nothing until at least one subscriber loads.
  */
 export default function SubscriberTicker() {
+  const { t } = useTranslation();
   const [subs, setSubs] = useState([]);
   const [open, setOpen] = useState(false);
   const navigate = useNavigate();
@@ -43,13 +45,13 @@ export default function SubscriberTicker() {
       <div
         className="sub-ticker"
         onClick={() => setOpen(true)}
-        title="See all 3Speak Pro subscribers"
+        title={t('profile.subscriberTicker.seeAll')}
         role="button"
         tabIndex={0}
         onKeyDown={(e) => { if (e.key === 'Enter') setOpen(true); }}
       >
         <span className="sub-ticker-label">
-          <i className="fa-solid fa-crown" /> {subs.length} Pro subscriber{subs.length !== 1 ? 's' : ''}
+          <i className="fa-solid fa-crown" /> {t('profile.subscriberTicker.count', { count: subs.length })}
         </span>
         <div className="sub-ticker-viewport">
           <div
@@ -70,8 +72,8 @@ export default function SubscriberTicker() {
         <div className="sub-modal-overlay" onClick={() => setOpen(false)}>
           <div className="sub-modal" onClick={(e) => e.stopPropagation()}>
             <div className="sub-modal-header">
-              <h3><i className="fa-solid fa-crown" /> 3Speak Pro subscribers ({subs.length})</h3>
-              <button className="sub-modal-close" onClick={() => setOpen(false)} aria-label="Close">
+              <h3><i className="fa-solid fa-crown" /> {t('profile.subscriberTicker.modalTitle', { n: subs.length })}</h3>
+              <button className="sub-modal-close" onClick={() => setOpen(false)} aria-label={t('common.actions.close')}>
                 <IoClose size={20} />
               </button>
             </div>
