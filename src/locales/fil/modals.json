@@ -1,0 +1,172 @@
+{
+  "addTag": {
+    "loginRequired": "Mag-log in para i-tag ang video na ito",
+    "pickTopic": "Pumili muna ng paksa",
+    "tagged": "Na-tag na “{{label}}”",
+    "failed": "Pumalya ang tag: {{error}}",
+    "pleaseTryAgain": "subukan ulit",
+    "title": "I-tag ang video na ito",
+    "question": "Tungkol saan ang video na ito?",
+    "existing": "Na-tag mo ito bilang <b>{{label}}</b> — papalitan ito kapag pumili ka ng iba.",
+    "submit": "Isumite ang tag"
+  },
+  "addAccount": {
+    "usernameRequired": "Kailangan ang username para magpatuloy.",
+    "hiveAuthExpired": "Nag-expire ang HiveAuth authentication request",
+    "loginSuccess": "Matagumpay ang login!",
+    "loginFailed": "Pumalya ang login: {{error}}",
+    "logoAlt": "3Speak Logo",
+    "title": "Mag-log in gamit ang username mo",
+    "usernamePlaceholder": "Username"
+  },
+  "socialLink": {
+    "hashCopied": "Nakopya ang hash",
+    "copyFailed": "Hindi makopya sa clipboard",
+    "enterHandle": "Ilagay ang handle o ID mo sa platform",
+    "verified": "Na-verify at na-link ang account",
+    "errors": {
+      "hashNotFound": "Wala pa ang hash sa profile. Siguraduhing naka-save nang public ang pagbabago, tapos subukan ulit.",
+      "alreadyLinked": "Na-verify na ng ibang Hive user (@{{user}}) ang channel na ito.",
+      "tooMany": "Naabot mo na ang maximum na bilang ng naka-link na account.",
+      "notFound": "Wala sa platform ang channel na iyon.",
+      "badSignature": "Hindi ma-verify ang signature. Siguraduhing naka-log in ka gamit ang posting key mo.",
+      "rateLimited": "Masyadong maraming request. Maghintay ng isang minuto at subukan ulit.",
+      "lookupFailed": "Pumalya ang lookup sa platform. Subukan ulit maya-maya.",
+      "verifyFailed": "Pumalya ang verification",
+      "stillPresent": "Nasa profile mo pa ang hash — alisin muna ito.",
+      "unlinkFailed": "Pumalya ang pag-unlink",
+      "noSuchLink": "Walang ganoong link na aalisin."
+    },
+    "confirmUnlink": "Alisin ang {{platform}} link mo? Siguraduhing wala na ang verification hash sa public profile mo, kung hindi ay tatanggihan ang pag-unlink.",
+    "removed": "Inalis ang link",
+    "title": "Mga naka-link na external profile",
+    "intro": "Patunayan na sa iyo ang isang YouTube (o iba pang) channel sa pag-paste ng natatanging 3Speak hash mo sa public profile description mo, tapos i-verify ito dito.",
+    "openProfile": "Buksan ang profile",
+    "removeLink": "Alisin ang link",
+    "empty": "Wala pang naka-link na external profile.",
+    "addPlatform": "Magdagdag ng bagong platform",
+    "flowTitle": "I-link ang {{platform}} channel mo",
+    "step1": "Kopyahin ang natatanging verification hash mo:",
+    "step2": "<strong>I-paste ito sa public {{platform}} profile description mo</strong> (kahit saan — puwede sa about / bio / description). I-save ang pagbabago.",
+    "step3": "Ilagay ang {{platform}} identifier mo:",
+    "verifying": "Vine-verify…",
+    "verify": "I-verify"
+  },
+  "auth": {
+    "title": "I-authorize ang 3Speak!",
+    "text": "Para makapag-upload ng video sa 3Speak, kailangan namin ang posting authority mo. Dahil dito, mapa-publish namin sa Hive ang mga in-upload mong video. Isang beses mo lang kailangang ibigay sa amin ang posting authority.",
+    "authorize": "I-authorize"
+  },
+  "beneficiary": {
+    "errors": {
+      "emptyUsername": "Hindi puwedeng walang laman ang username.",
+      "sameUser": "Hindi puwedeng ang sarili mo ang gawing beneficiary",
+      "greaterThanZero": "Dapat higit sa 0 ang reward percentage.",
+      "exceedsRemaining": "Lampas ang reward percentage sa natitirang {{percent}}%.",
+      "validNumber": "Maglagay ng valid na numero",
+      "validPercent": "Maglagay ng valid na reward percent.",
+      "duplicate": "Nasa listahan na ang account na ito.",
+      "invalidAccount": "Invalid na username o community ID.",
+      "cannotIncrease": "Hindi puwedeng lumampas sa natitirang {{percent}}%",
+      "pendingRow": "Hindi pa naidagdag si @{{account}} — i-click ang + para idagdag, o i-clear ang field.",
+      "atLeastOne": "Dapat hindi bababa sa 1% ang reward percent"
+    },
+    "title": "Mga Beneficiary",
+    "intro": "Magdagdag ng user na awtomatikong makakatanggap ng bahagi ng rewards ng post na ito.",
+    "minPercent": "% (min {{percent}}%)",
+    "usernamePlaceholder": "Ilagay ang username",
+    "minimumReward": "Ang minimum na reward ay <strong>1%</strong>",
+    "checking": "Tinitingnan si <strong>@{{account}}</strong> sa Hive…",
+    "notExisting": "⚠️ Walang Hive account na <strong>@{{account}}</strong>.",
+    "notAdded": "⚠️ Hindi pa naidagdag si <strong>@{{account}}</strong> — i-click ang <strong>+</strong> para idagdag, o i-clear ang field.",
+    "infrastructure": "10% === Infrastructure",
+    "videoEncoding": "Video Encoding === 1%",
+    "defaults": "Mga Default na Beneficiary ({{count}})"
+  },
+  "qr": {
+    "scan": "I-scan ang QR na ito sa Hive Keychain:",
+    "click": "I-click ang QR para buksan sa Keychain app"
+  },
+  "editVideoHint": {
+    "title": "I-edit ang alinman sa mga video mo",
+    "text": "Buksan ang isa sa sarili mong video at hanapin ang <strong>pen button</strong> sa action bar sa ilalim ng player. I-click ito para baguhin ang pamagat, description, thumbnail, tags at iba pa.",
+    "penTitle": "I-edit ang detalye ng video",
+    "tip": "Tip",
+    "caption": "Ito ang pen button na hinahanap mo",
+    "gotIt": "Sige"
+  },
+  "verifyAuth": {
+    "title": "Vine-verify ang Authorization",
+    "text": "Sandali lang habang vine-verify namin na naibigay ang authorization..."
+  },
+  "editor": {
+    "confirmLeave": "Bukas pa ang editor. Kapag umalis ka sa page na ito, magsasara ang editor at mawawala ang mga hindi na-save na pagbabago.\n\nOK = Isara ang editor at umalis\nCancel = Manatili sa page na ito",
+    "confirmClose": "Sigurado ka bang isasara ang editor? Mawawala ang mga hindi na-save na pagbabago.",
+    "iframeTitle": "3Speak Video Editor",
+    "finding": "Naghahanap ng available na editor...",
+    "loading": "Naglo-load ng editor...",
+    "unavailable": "Walang available na editor server ngayon. Subukan ulit mamaya.",
+    "sending": "Ipinapadala sa render service...",
+    "rendering": "Nire-render... {{percent}}%",
+    "complete": "Tapos na ang render!",
+    "useVideo": "Gamitin ang Video",
+    "preparing": "Inihahanda ang video para i-upload...",
+    "renderUnavailable": "Hindi pa available ang render service. Naka-log sa console ang timeline data.",
+    "backToEditor": "Bumalik sa Editor",
+    "postError": "Hindi maihanda ang video para i-upload. Subukang i-download na lang."
+  },
+  "profile": {
+    "mustLogin": "Kailangan mo munang mag-log in",
+    "followed": "Fina-follow na",
+    "unfollowed": "In-unfollow na",
+    "followFailed": "Hindi ma-follow: {{error}}",
+    "unfollowFailed": "Hindi ma-unfollow: {{error}}",
+    "avatarAlt": "Profile",
+    "posts": "Mga Post",
+    "followers": "Followers",
+    "joined": "Sumali {{date}}",
+    "about": "Tungkol",
+    "noBio": "Walang bio"
+  },
+  "report": {
+    "reasons": {
+      "spamMisleading": "Spam o nakakalinlang",
+      "harassment": "Harassment o pambu-bully",
+      "hateSpeech": "Hate speech",
+      "violence": "Marahas o graphic na content",
+      "sexual": "Sekswal na content",
+      "copyright": "Paglabag sa copyright",
+      "scam": "Scam o panloloko",
+      "other": "Iba pa",
+      "spam": "Spam",
+      "impersonation": "Pagpapanggap",
+      "spamAccount": "Spam account"
+    },
+    "selectReasonError": "Pumili ng dahilan",
+    "loginRequired": "Kailangan mong naka-log in para mag-report",
+    "submitted": "Naisumite ang report. Salamat.",
+    "failed": "Hindi maisumite ang report",
+    "titles": {
+      "user": "I-report ang User",
+      "comment": "I-report ang Comment",
+      "short": "I-report ang Short",
+      "post": "I-report ang Post",
+      "video": "I-report ang Video"
+    },
+    "reason": "Dahilan",
+    "selectReason": "Pumili ng dahilan...",
+    "details": "Karagdagang detalye (opsyonal)",
+    "detailsPlaceholder": "Magbigay ng dagdag na konteksto...",
+    "submitting": "Isinusumite...",
+    "submit": "Isumite ang Report"
+  },
+  "upload": {
+    "missingInfo": "Kulang ang impormasyon ng video o thumbnail.",
+    "updateFailed": "Hindi ma-update ang info ng video. Subukan ulit.",
+    "title": "I-upload ang Video at Thumbnail",
+    "selectVideo": "Pumili ng Video",
+    "thumbnail": "Thumbnail",
+    "clickThumbnail": "I-click para mag-upload ng thumbnail",
+    "updateInfo": "I-update ang Info ng Video"
+  }
+}

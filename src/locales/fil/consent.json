@@ -1,0 +1,40 @@
+{
+  "ariaLabel": "Settings ng cookie at storage",
+  "title": "Cookies at browser storage",
+  "withAds": {
+    "intro": "Sine-save ng 3Speak sa browser mo ang login mo at ang mga setting na pinili mo. Iyon ang nagpapagana sa site, at nananatili ito sa device mo. Dalawang bagay ang opsyonal, at parehong naka-off maliban kung i-on mo ang mga ito sa ibaba.",
+    "advertising": "Isa sa mga ito ang <b>advertising</b>. Kapag naka-on ito, naglo-load ang isang panlabas na advertising company ng sarili nitong code sa page at puwede itong mag-store ng mga bagay na hindi namin kontrolado. Kaya ito hiwalay na pagpipilian at hindi kailanman isinasama sa iba pa."
+  },
+  "noAds": {
+    "intro": "Sine-save ng 3Speak sa browser mo ang login mo at ang mga setting na pinili mo — iyon ang nagpapagana sa site. <b>Wala kaming tracking cookies, walang advertising at walang third-party analytics</b>. Ang tanging puwedeng ma-save sa device mo kapag nanonood ng video ay kung saan ka huminto — at iyon ang nag-iisang opsyonal na pagpipilian sa ibaba.",
+    "optional": "Ang nag-iisang opsyonal: puwede naming tandaan <b>kung saan ka huminto sa bawat video</b> para tuloy-tuloy ang panonood. Hindi ito kailanman umaalis sa device mo."
+  },
+  "details": {
+    "essentialTitle": "Essential — laging naka-on",
+    "essential": {
+      "login": "Ang login session mo",
+      "settings": "Mga setting na itinakda mo: theme, volume, wika, subtitles, mga preference sa feed",
+      "uploads": "Pagtuloy ng naputol na upload, at mga draft ng post na sinusulat mo",
+      "offline": "Ang app mismo, para magamit offline kapag na-install na",
+      "answer": "Ang sagot mo sa banner na ito"
+    },
+    "optionalTitle": "Opsyonal — ikaw ang bahala",
+    "optional": {
+      "playback": "Posisyon ng playback sa bawat video, para maituloy mo kung saan ka huminto",
+      "advertising": "Advertising: ang code ng isang panlabas na advertising company, at anumang sine-save nito sa device mo para bilangin at limitahan ang mga ad na ipinapakita sa iyo"
+    },
+    "noteWithAds": "Kapag naka-off ang mga ito, hindi na mase-save ang mga posisyon ng playback at mabubura ang anumang naka-save na, at walang anumang advertising code na ilo-load. Puwede mong baguhin ang pasya mo anumang oras.",
+    "noteNoAds": "Kapag pinili mo ang “Essential lang”, hindi na mase-save ang mga posisyon ng playback at mabubura ang anumang naka-save na. Puwede mong baguhin ang pasya mo anumang oras — kapag pinili mo ang “Tanggapin”, agad itong mao-on ulit."
+  },
+  "toggles": {
+    "resumeTitle": "Ituloy ang playback",
+    "resumeDesc": "Tandaan kung saan ka huminto sa bawat video. Nananatili sa device mo.",
+    "advertisingTitle": "Advertising",
+    "advertisingDesc": "Payagan ang isang panlabas na advertising company na mag-load ng code nito at mag-store ng kailangan nito."
+  },
+  "hideDetails": "Itago ang detalye",
+  "whatIsStored": "Ano mismo ang sine-save?",
+  "essentialOnly": "Essential lang",
+  "saveChoices": "I-save ang mga pinili",
+  "acceptAll": "Tanggapin lahat"
+}

@@ -1,0 +1,569 @@
+{
+  "tracks": {
+    "viewer": {
+      "title": "Kadalasan ay viewer",
+      "body": "Nandito ako para manood, mag-comment at mag-follow ng mga creator."
+    },
+    "creator": {
+      "title": "Kadalasan ay creator",
+      "body": "Gusto kong mag-publish ng mga video at Shorts at bumuo ng channel."
+    },
+    "advertiser": {
+      "title": "Advertiser",
+      "body": "Kinakatawan ko ang isang brand at gusto kong maabot ang mga viewer ng 3Speak."
+    }
+  },
+  "tips": {
+    "shortsCamera": {
+      "title": "Tab ang Shorts, hindi ibang app",
+      "body": "Buksan ang Shorts mula sa top bar para manood, o gamitin ang Share para mag-post. Puwede na agad ang mga vertical clip mula sa phone mo.",
+      "cta": "Buksan ang Shorts"
+    },
+    "searchSlash": {
+      "title": "Pindutin ang / para maghanap",
+      "body": "Kahit nasaan ka sa site, dadalhin ka ng slash key sa search box. Hinahanap nito ang mga video, creator at komunidad."
+    },
+    "communities": {
+      "title": "Pinagsasama-sama ng mga komunidad ang mga tao sa iisang paksa",
+      "body": "Sumali sa ilan at magsisimulang lumabas sa feeds mo ang kanilang mga video. Puwede ka ring mag-post sa isang komunidad, para makita ito ng mga tamang tao.",
+      "cta": "Mag-browse ng komunidad"
+    },
+    "followFeed": {
+      "title": "May sariling feed ang mga fina-follow mo",
+      "body": "Kapag naka-follow ka na sa ilang creator, ang follow feed ay mga video lang nila. Ito ang pinakamabilis na paraan para hindi ka na mag-scroll sa mga bagay na wala kang pakialam.",
+      "cta": "Tingnan"
+    },
+    "interests": {
+      "title": "Sabihin sa amin ang hilig mo",
+      "body": "Pumili ng ilang paksa sa Settings at agad na iaangkop ng home feeds ang mga ito. Mas epektibo ito kaysa sa kahit gaano karaming pag-scroll."
+    },
+    "hideWatched": {
+      "title": "Puwedeng mawala sa feeds ang mga napanood na video",
+      "body": "May \"hide watched\" switch sa Settings, naka-on bilang default, kaya hindi ka na susundan ng parehong video matapos mo itong mapanood."
+    },
+    "timestamps": {
+      "title": "Mag-comment sa eksaktong sandali",
+      "body": "Habang nagpe-play ang video, puwedeng dalhin ng comment ang timestamp kung nasaan ka. Makakakuha ang mga mambabasa ng link diretso sa segundong iyon."
+    },
+    "badges": {
+      "title": "Ibinibigay ang mga badge, hindi kinukuha",
+      "body": "Binibigyan ng badge ang mga tao sa Hive para sa mga event at milestone. Magbukas ng isa para makita ang lahat ng may hawak nito at ang mga pinapublish nila.",
+      "cta": "Tingnan ang mga badge"
+    },
+    "audio": {
+      "title": "May audio rin ang 3Speak",
+      "body": "Nasa Audio sa top bar ang mga podcast at musika, na may sariling player. Puwede kang mag-publish ng audio sa parehong paraan ng pag-publish ng video.",
+      "cta": "Buksan ang Audio"
+    },
+    "backlog": {
+      "title": "Walang masasayang sa mga ipo-post mo ngayon",
+      "body": "Lahat ng ipa-publish mo habang nasa warm-up ka ay puwedeng i-republish sa Hive sa sarili mong pangalan kapag dumating na ang account mo, at ikaw ang pipili kung ano ang isasama."
+    }
+  },
+  "trackChooser": {
+    "saveFailed": "Hindi iyon na-save. Subukan ulit.",
+    "saving": "Sine-save..."
+  },
+  "trackQuestion": {
+    "title": "Ano ang nagdala sa iyo sa 3Speak?",
+    "intro": "Nakadepende rito ang daan mo papunta sa Hive account: nanonood at nakikisali ang mga viewer, nagpa-publish ang mga creator, at sine-set up ng mga advertiser ang kanilang brand."
+  },
+  "tipCard": {
+    "aria": "Tip",
+    "dismiss": "Isara ang tip",
+    "takeALook": "Silipin"
+  },
+  "progress": {
+    "tasks": {
+      "video": {
+        "label_one": "Mag-upload ng video",
+        "label_other": "Mag-upload ng {{count}} video",
+        "hint": "Mag-share ng tungkol sa iyo at kung tungkol saan ang magiging channel mo.",
+        "why": "Ito ang unang tinitingnan ng team kapag nire-review ka nila, at ang unang nakikita ng bisita kapag binuksan nila ang channel mo.",
+        "counts": {
+          "0": "Anumang video na ipa-publish mo mula sa upload studio.",
+          "1": "Mananatili itong sa iyo. Kapag na-upgrade ka, ikaw ang pipili kung alin sa mga post na ito ang ipa-publish sa Hive sa sarili mong pangalan."
+        },
+        "cta": "Mag-upload ng video"
+      },
+      "short": {
+        "label_one": "Mag-post ng short",
+        "label_other": "Mag-post ng {{count}} Shorts",
+        "hint": "Makisali sa 3Speak Shorts at mag-upload ng ilang sandali ng araw-araw mong buhay o mga kuwentong gusto mong i-share.",
+        "why": "Ang Shorts ang pinakamabilis na paraan para mapansin. Nagpe-play ang mga ito sa feed ng mga creator na hindi pa fina-follow ng mga tao, kaya umaabot ang isang short lampas sa sarili mong channel.",
+        "counts": {
+          "0": "Mga vertical na video na pinost mula sa Shorts uploader.",
+          "1": "Kahit anong paksa ang gusto mo."
+        },
+        "cta": "Mag-post ng short"
+      },
+      "follow": {
+        "label_one": "Mag-follow ng creator",
+        "label_other": "Mag-follow ng {{count}} creator",
+        "hint": "Bumuo ng network ng mga taong kapareho mo ng hilig, o ng mga creator na nakaka-excite para sa iyo.",
+        "why": "Ang listahan ng fina-follow mo ang nagpapabago sa home feed para maging feed mo. Sasama ito sa iyo sa Hive kapag na-upgrade ka.",
+        "counts": {
+          "0": "Mga creator na fina-follow mo ngayon.",
+          "1": "Kapag nag-unfollow ka, bababa ulit ang bilang, kaya sinusukat nito kung sino talaga ang fina-follow mo at hindi kung ilang button ang pinindot mo."
+        },
+        "cta": "Maghanap ng mga creator"
+      },
+      "comment": {
+        "label_one": "Sumulat ng comment",
+        "label_other": "Sumulat ng {{count}} comment",
+        "why": "Sa mga comment ka nahahanap ng mga tao bago ka pa magkaroon ng audience. Mas malaki ang maitutulong ng isang totoong reply sa video ng iba kaysa sa isang upload na wala pang nakakakita.",
+        "cta": "Maghanap ng masasagot",
+        "hint_one": "Bibilangin ang comment kapag may hindi bababa sa {{count}} character ito. Totoong saloobin, hindi lang “nice”.",
+        "hint_other": "Bibilangin ang comment kapag may hindi bababa sa {{count}} characters ito. Totoong saloobin, hindi lang “nice”.",
+        "counts": {
+          "minChars_one": "Hindi bababa sa {{count}} character ng sarili mong salita.",
+          "minChars_other": "Hindi bababa sa {{count}} characters ng sarili mong salita.",
+          "realThought": "Totoong saloobin at hindi lang isang salita.",
+          "othersPost": "Sa post ng ibang tao. Ang mga reply sa sarili mong video, o sa sarili mong comment, ay pakikipag-usap sa sarili at hindi bibilangin."
+        }
+      },
+      "watch": {
+        "labelHours_one": "Manood nang isang oras sa 3Speak",
+        "labelHours_other": "Manood nang {{count}} oras sa 3Speak",
+        "labelMinutes_one": "Manood nang isang minuto sa 3Speak",
+        "labelMinutes_other": "Manood nang {{count}} minuto sa 3Speak",
+        "hint": "Kahit anong video. Binibilang habang talagang nanonood ka.",
+        "why": "Ipinapakita ng panonood na nandito ka para makisali at hindi lang para mag-post. Ito ang goal na natatapos ng karamihan nang hindi sinusubukan.",
+        "counts": {
+          "0": "Oras sa mismong 3Speak. Hindi bibilangin ang parehong video na naka-embed sa ibang site.",
+          "1": "Isang beses bawat video. Kapag inulit mo ang isa, tataas ang pinakamahusay nitong oras, hindi ito madadagdagan, at walang iisang video na makakapagbigay ng lahat ng ito nang mag-isa.",
+          "2": "Totoong oras ng pag-play, kaya hindi pinaparusahan ang pagpapabilis ng video at hindi napapahaba ang oras sa pagpapabagal nito.",
+          "3": "Nasa screen. Hindi bibilangin ang video na naiwang nagpe-play sa background tab.",
+          "4": "Hindi ang sarili mong mga video.",
+          "5": "Walang nire-record habang nanonood ka sa private mode."
+        },
+        "cta": "Manood ng kahit ano"
+      },
+      "time": {
+        "label_one": "Manatili dito nang isang araw",
+        "label_other": "Manatili dito nang {{count}} araw",
+        "hint": "Kusang matatapos ito. Wala kang kailangang gawin.",
+        "why": "Pareho ang itsura sa papel ng account na lumabas isang oras ang nakalipas at ng account na ilang araw nang nandito. Ang mga araw ang nagpapakita ng pagkakaiba, kaya pare-parehong maikling panahon ang hinihintay ng lahat.",
+        "counts": {
+          "fullDays_one": "Isang buong araw mula sa araw ng pag-sign up mo.",
+          "fullDays_other": "{{count}} buong araw mula sa araw ng pag-sign up mo.",
+          "forYouWhen": "Para sa iyo, iyon ay {{when}}. Puwede mong matapos lahat ng ibang goal bago iyon.",
+          "otherGoals": "Puwede mong matapos lahat ng ibang goal bago iyon.",
+          "keepsCounting": "Patuloy itong bumibilang nandito ka man o wala, kaya wala kang kailangang habulin."
+        }
+      },
+      "subscription": {
+        "label_one": "Sumali sa komunidad",
+        "label_other": "Sumali sa {{count}} komunidad",
+        "hint": "Maghanap ng mga komunidad tungkol sa mga bagay na gusto mong panoorin o gawin.",
+        "why": "Pinagsasama-sama ng mga komunidad ang mga video sa iisang paksa at ang mga taong interesado rito. Kapag sumali ka, mapupuno ang feed mo ng mas marami pang gusto mo, at para sa mga creator, dito nakakahanap ang bagong channel ng mga una nitong viewer.",
+        "counts": {
+          "0": "Mga komunidad na kasapi ka ngayon.",
+          "1": "Kapag umalis ka sa isa, bababa ulit ang bilang."
+        },
+        "cta": "Mag-browse ng komunidad"
+      },
+      "profile": {
+        "label_one": "I-set up ang brand profile mo",
+        "label_other": "I-set up ang brand profile mo",
+        "hint": "Ang pangalan ng brand mo, ang ginagawa mo at ang logo mo.",
+        "why": "Bago ang lahat, nakikita muna ng mga viewer, at ng team na nagre-review sa iyo, kung sino ang nasa likod ng isang ad. Ang kumpletong profile ang nagpapakilala at nagpapakatiwala sa isang brand."
+      },
+      "contact": {
+        "label_one": "Idagdag ang business contact mo",
+        "label_other": "Idagdag ang business contact mo",
+        "hint": "Isang email, kasama ang address mo o isang website.",
+        "why": "Bago tumakbo ang isang ad, kailangan ng team ng totoong paraan para makontak ang negosyong nasa likod nito. Pribado ang email at address mo: hindi kailanman ise-save ang mga ito sa blockchain o ipapakita kahit saan.",
+        "counts": {
+          "0": "Email: kailangan.",
+          "1": "Address: opsyonal.",
+          "2": "Kailangan mo ang address mo O isang website sa brand profile mo sa itaas, kahit isa sa dalawa."
+        }
+      }
+    },
+    "duration": {
+      "s": "{{s}}s",
+      "hm": "{{h}}h {{m}}m",
+      "h": "{{h}}h",
+      "m": "{{m}}m"
+    },
+    "title": "Ang daan mo papunta sa Hive account",
+    "needsTrack": "Nakadepende ang listahan ng mga gagawin mo sa kung ano ang nagdala sa iyo sa 3Speak.",
+    "choosePath": "Piliin ang daan mo",
+    "doneCount": "{{done}} sa {{total}} ang tapos",
+    "overallAria": "Kabuuang progreso",
+    "hideDetails": "Itago ang detalye",
+    "showLeft": "Ipakita ang natitira",
+    "whatCounts": "Ano ang binibilang",
+    "reviewDone": "Tapos na lahat. Ire-review ng team ang channel mo at ia-upgrade ka. Wala ka nang kailangang gawin.",
+    "reviewPending": "Kapag natapos mo na lahat ng ito, ire-review ng team ang channel mo at ia-upgrade ka."
+  },
+  "navProgress": {
+    "chooseTitle": "Sabihin sa amin kung ano ang nagdala sa iyo sa 3Speak para makita ang daan mo papunta sa Hive account.",
+    "titleComplete_one": "Tapos na ang {{count}} goal (100%). Ire-review ng team ang channel mo.",
+    "titleComplete_other": "Tapos na lahat ng {{count}} goal (100%). Ire-review ng team ang channel mo.",
+    "titleProgress_one": "{{pct}}% papunta sa Hive account mo. {{done}} sa {{count}} goal ang buong tapos.",
+    "titleProgress_other": "{{pct}}% papunta sa Hive account mo. {{done}} sa {{count}} goal ang buong tapos.",
+    "ariaComplete_one": "Progreso mo: 100%, tapos na ang {{count}} goal",
+    "ariaComplete_other": "Progreso mo: 100%, tapos na lahat ng {{count}} goal",
+    "ariaProgress_one": "Progreso mo: {{pct}}%, {{done}} sa {{count}} goal ang buong tapos",
+    "ariaProgress_other": "Progreso mo: {{pct}}%, {{done}} sa {{count}} goal ang buong tapos",
+    "celebrate": "Tapos na lahat ng goal papunta sa Hive account mo."
+  },
+  "welcome": {
+    "what": {
+      "title": "Welcome sa 3Speak",
+      "p1": "Ang 3Speak ay video platform na nakatayo sa <b>Hive</b>, isang public blockchain. Hindi kami ang may-ari ng mga video dito: pag-aari ito ng mga taong nagpo-post ng mga ito, at puwede itong kumita ng totoong rewards mula sa mga nanonood."
+    },
+    "warmup": {
+      "title": "Nasa warm-up ka",
+      "p1": "Totoo at permanente ang isang Hive account, at may kailangang magbayad para rito. Kaya sa halip na humingi sa iyo ng kahit ano sa simula, binigyan ka namin agad ng pangalan at lugar kung saan ka makakapag-publish.",
+      "p2": "Lahat ng gagawin mo habang nasa warm-up ay nasa 3Speak. Kapag handa ka na, ire-review ng team ang channel mo at bibigyan ka ng sarili mong Hive account, nang libre. Mapupunta sa blockchain ang mga video, Shorts at follows mo sa sarili mong pangalan, at ikaw ang pipili kung ano ang isasama."
+    },
+    "do": {
+      "title": "Ang puwede mong gawin ngayon",
+      "upload": "Mag-upload ng video, tulad ng ginagawa ng iba rito.",
+      "shorts": "Mag-post ng Shorts mula sa phone o desktop mo.",
+      "comment": "Mag-comment sa kahit ano, kasama ang mga video ng mga taong nasa Hive na.",
+      "follow": "Mag-follow ng mga creator at sumali sa mga komunidad.",
+      "watch": "Manood. Sa iyo ang history at feed mo mula sa unang araw.",
+      "aside": "May ilang bagay na naghihintay sa account mo: pagkita ng rewards at pag-tip. Gumagalaw ang mga ito ng totoong pera, kaya kailangan ng account na talagang sa iyo."
+    },
+    "path": {
+      "p1": "Nagpapakita ang profile mo ng maikling listahan ng mga gagawin, at nakadepende ito sa kung para saan ka nandito: nanonood at nakikisali ang mga viewer, nagpa-publish ang mga creator, at sine-set up ng mga advertiser ang kanilang brand.",
+      "p2": "Hindi ito test. Ito lang ang paraan namin para makilala ang totoong account mula sa walang laman o mapanirang account. Kapag tapos na ang listahan, ire-review ka ng team at ia-upgrade ka sa lalong madaling panahon.",
+      "perkEarn": "Mga post na kumikita",
+      "perkKeys": "Keys na ikaw lang ang may hawak",
+      "perkNetwork": "Ang buong Hive network"
+    },
+    "showList": "Ipakita ang listahan ko",
+    "decideLater": "Mamaya na lang"
+  },
+  "profile": {
+    "unlocks": {
+      "earn": {
+        "title": "Magsisimulang kumita ang mga post mo.",
+        "body": "Ang mga video sa Hive ay puwedeng gantimpalaan ng HIVE at HBD ng sinumang nanonood, at puwede silang magdala ng ads na may bahagi ka."
+      },
+      "publish": {
+        "title": "I-publish lahat ng ginawa mo rito.",
+        "body": "Ang mga video, Shorts at follows sa page na ito ay puwedeng i-post sa chain sa sarili mong pangalan, at ikaw ang pipili kung alin."
+      },
+      "buttons": {
+        "title": "Mag-vote, mag-tip, mag-follow at gumawa ng playlist.",
+        "body": "Lahat ng button na naka-gray para sa iyo ngayon."
+      },
+      "keys": {
+        "title": "Keys na ikaw lang ang may hawak.",
+        "body": "Walang makaka-lock out sa iyo, at gumagana ang parehong login sa bawat Hive app, hindi lang sa 3Speak."
+      },
+      "ecosystem": {
+        "title": "Maging bahagi ng global na Hive ecosystem.",
+        "body": "Isang app lang ang 3Speak sa buong network ng mga app: blogs, komunidad, games, marketplaces at iba pa, lahat ay gumagamit ng iisang account at parehong listahan ng fina-follow."
+      }
+    },
+    "advertiserUnlocks": {
+      "book": {
+        "title": "Mag-book ng ads sa buong 3Speak.",
+        "body": "Video spots, Shorts spots, player banners, tickers at pre-upload spots, mula isang araw hanggang tatlong buwan."
+      },
+      "pay": {
+        "title": "Magbayad mula sa sarili mong wallet.",
+        "body": "Sa HBD o HIVE, diretso mula sa account mo. Walang card at walang middleman."
+      },
+      "results": {
+        "title": "Tingnan ang naging resulta ng ads mo.",
+        "body": "Plays at clicks para sa bawat booking, at credit sa susunod mong booking kung kulang ang naibigay ng isang booking."
+      },
+      "customers": {
+        "title": "Kausapin ang mga customer mo, kung gusto mo.",
+        "body": "Mag-post ng video, sumagot sa mga comment at mag-follow ng mga tao sa pangalan ng brand mo."
+      },
+      "keys": {
+        "title": "Keys na ikaw lang ang may hawak.",
+        "body": "Walang makaka-lock out sa iyo, at gumagana ang parehong login sa bawat Hive app, hindi lang sa 3Speak."
+      }
+    },
+    "loadFailed": "Hindi ma-load ang profile na ito.",
+    "badge": {
+      "onHive": "Nasa Hive",
+      "advertiser": "Advertiser · nagsisimula pa lang",
+      "gettingStarted": "Nagsisimula pa lang"
+    },
+    "stats": {
+      "posts_one": "<b>{{count}}</b>post",
+      "posts_other": "<b>{{count}}</b>posts",
+      "followers_one": "<b>{{count}}</b>follower",
+      "followers_other": "<b>{{count}}</b>followers",
+      "following_one": "<b>{{count}}</b>fina-follow",
+      "following_other": "<b>{{count}}</b>fina-follow"
+    },
+    "editProfile": "I-edit ang profile",
+    "note": {
+      "graduated": "Nasa Hive na bilang <userLink>@{{user}}</userLink>. Ginawa bago iyon ang lahat ng nasa ibaba.",
+      "advertiser": "Ito ang brand page mo sa 3Speak. Tapusin ang mga hakbang sa ibaba at ire-review ng team ang brand mo. Kapag naaprubahan, makakakuha ka ng Hive account: iyon ang advertiser account mo, ang gagamitin mo sa pag-book at pagbayad ng ads.",
+      "own": "Ganito ka nakikita ng iba. Nasa 3Speak ang mga post mo at wala pa sa Hive blockchain, kaya hindi pa sila kumikita ng rewards. Magbabago iyan kapag nakuha mo na ang account mo matapos makumpleto lahat ng task sa ibaba.",
+      "visitor": "Bago rito, wala pa sa Hive. Nasa 3Speak ang mga post na ito, kaya wala pa silang kinikitang rewards sa ngayon. Mag-follow at mag-comment pa rin: ang maagang suporta ang nagdadala sa isang tao sa mga una niyang linggo. Kapag nakuha na nila ang Hive account nila, sasabihan ka namin, para ma-follow mo rin sila roon."
+    },
+    "tabs": {
+      "aria": "Mga seksyon ng profile",
+      "goals": "Mga goal mo",
+      "uploads": "Mga Upload",
+      "comments": "Mga Comment",
+      "followers": "Followers",
+      "following": "Fina-follow"
+    },
+    "videosAndShorts": "Mga Video at Shorts",
+    "market": {
+      "audience": "Ang audience na naghihintay sa ad mo",
+      "format": "Piliin ang format na bagay sa mensahe mo"
+    },
+    "brandVideos": "Mga video ng brand mo",
+    "optional": "opsyonal",
+    "empty": {
+      "advertiser": "Ang mga video dito ay para makipag-usap sa mga customer, kung gusto mo. Hiwalay na bino-book ang ads sa Advertise page at hindi nangangailangan ng mga ito.",
+      "own": "Wala pa. Matitik-an ng una mong upload ang listahang katabi nito.",
+      "visitor": "Wala pang na-publish."
+    },
+    "videos": "Mga Video",
+    "unlocksTitleAdvertiser": "Ang makukuha mo sa advertiser account mo",
+    "unlocksTitle": "Ang makukuha mo sa isang Hive account",
+    "fineprint": "Naka-save sa 3Speak profile mo. Mapupunta ito sa Hive kasama ang lahat ng iba pa kapag nakuha mo na ang account mo."
+  },
+  "activity": {
+    "empty": {
+      "comments": "Wala pang nasasabi.",
+      "followers": "Wala pang nagfa-follow sa kanila.",
+      "following": "Wala pa silang fina-follow."
+    },
+    "loadFailed": "Hindi ma-load iyon.",
+    "publishedToHive": "na-publish sa Hive",
+    "onHive": "nasa Hive"
+  },
+  "bell": {
+    "unreadAria_one": "Mga Notification, {{count}} hindi pa nababasa",
+    "unreadAria_other": "Mga Notification, {{count}} hindi pa nababasa",
+    "empty": "Wala pa. Kapag may sumagot o nag-like sa mga video mo, lalabas ito dito.",
+    "replied": "Sumagot si <b>@{{name}}</b> sa post mo",
+    "liked": "Ni-like ni <b>@{{name}}</b> ang post mo"
+  },
+  "rail": {
+    "aria": "Bago sa 3Speak",
+    "title": "Nagsisimula pa lang",
+    "body": "Bago rito, wala pa sa Hive. Nasa 3Speak ang mga post na ito. Bigyan sila ng mainit na pagtanggap bago sila sumali sa Hive."
+  },
+  "sessionSync": {
+    "signedInAs": "Naka-sign in ka bilang @{{name}}",
+    "caughtUp": "Handa na ang Hive account mo, kaya na-update na ang device na ito.",
+    "openFailed": "Hindi mabuksan ang Butter Auth",
+    "title": "Ikonekta ulit ang session mo",
+    "lede": "Nawala ang koneksyon ng device na ito sa account mo, kaya hindi ma-load ng 3Speak ang mga post, progreso o notification mo hangga't hindi ito bumabalik.",
+    "text": "Walang nawala. Lahat ng ginawa mo ay nasa account mo, hindi sa browser na ito. Kadalasan, isang segundo lang ang pag-reconnect at walang kailangang i-type.",
+    "opening": "Binubuksan…",
+    "reconnect": "Ikonekta ulit"
+  },
+  "admin": {
+    "title": "Admin view",
+    "note": "Mga admin lang ng 3Speak ang nakakakita ng panel na ito.",
+    "brandProfile": "Brand profile",
+    "public": "public",
+    "fields": {
+      "handle": "Handle",
+      "brandName": "Pangalan ng brand",
+      "logo": "Logo",
+      "about": "Tungkol",
+      "website": "Website",
+      "location": "Lokasyon",
+      "interests": "Mga Interes",
+      "activity": "Activity",
+      "email": "Email",
+      "address": "Address",
+      "contactGoal": "Contact goal",
+      "firstSaved": "Unang na-save",
+      "lastChanged": "Huling binago",
+      "butrauthUser": "ButrAuth user"
+    },
+    "activityLine": "{{posts}} posts · {{followers}} followers · {{following}} fina-follow",
+    "notSet": "hindi naka-set",
+    "none": "wala",
+    "privateContact": "Pribadong contact",
+    "privateNote": "mga admin lang, hindi kailanman sa chain",
+    "notGiven": "hindi ibinigay",
+    "met": "Natupad",
+    "notMet": "Hindi pa natutupad",
+    "unknown": "hindi alam",
+    "noContact": "Wala pang naka-save na business contact."
+  },
+  "contact": {
+    "savedComplete": "Na-save. Ang 3Speak team lang ang makakakita nito.",
+    "savedIncomplete": "Na-save. Idagdag ang address mo, o isang website sa profile mo, para matapos ang hakbang na ito.",
+    "privateNote": "<b>Pribado.</b> Hindi kailanman ise-save sa blockchain ang email at address mo at hindi kailanman ipapakita sa profile mo o kahit saan. Ang 3Speak team lang ang makakakita ng mga ito, para makontak ka tungkol sa ads mo.",
+    "email": "Email",
+    "required": "kailangan",
+    "emailPlaceholder": "you@yourbrand.com",
+    "address": "Address",
+    "addressOptional": "opsyonal, maliban kung walang website ang profile mo",
+    "ph": {
+      "line1": "Kalye at numero",
+      "line2": "Address line 2",
+      "postalCode": "Postal code",
+      "city": "Lungsod",
+      "region": "Probinsya o rehiyon",
+      "country": "Bansa"
+    },
+    "addressHint": "Bibilangin ang address kapag napunan na ang kalye, lungsod at bansa. Walang address? Magdagdag na lang ng website sa brand profile mo.",
+    "save": "I-save ang contact details"
+  },
+  "brand": {
+    "saved": "Na-save ang brand profile",
+    "name": "Pangalan ng brand",
+    "namePlaceholder": "Ang brand o kumpanya mo",
+    "about": "Ang ginagawa ng brand mo",
+    "aboutPlaceholder": "Isa o dalawang pangungusap na maiintindihan ng mga viewer.",
+    "logo": "Logo",
+    "uploading": "Ina-upload…",
+    "replaceLogo": "Palitan ang logo",
+    "uploadLogo": "Mag-upload ng logo",
+    "logoHint": "Ipapakita bilang bilog katabi ng ads mo, kaya pinakamaganda ang square na larawan.",
+    "website": "Website",
+    "websiteOptional": "opsyonal kung ibibigay mo sa amin ang address mo",
+    "websitePlaceholder": "https://yourbrand.com",
+    "websiteInvalid": "Gumamit ng buong address na nagsisimula sa https://",
+    "save": "I-save ang brand profile"
+  },
+  "createAccount": {
+    "started": "I-set up natin ang Hive account mo",
+    "openFailed": "Hindi mabuksan ang account setup. Subukan ulit.",
+    "readyAdvertiser": "Handa na ang advertiser account mo",
+    "ready": "Handa na ang Hive account mo",
+    "approvedAdvertiser": "Inaprubahan ng team ang brand mo. Gawin ang Hive account mo, nang libre, para makapag-book at makapagbayad ng ads.",
+    "approved": "Inaprubahan ka ng team. Gawin ang Hive account mo, nang libre: sa iyo lang ito.",
+    "createAdvertiser": "Gawin ang advertiser account ko",
+    "create": "Gawin ang Hive account ko"
+  },
+  "graduatedFollows": {
+    "message": "May Hive account na si @{{handle}} bilang @{{hiveUsername}}.",
+    "title": "Na-upgrade ang isang fina-follow mo",
+    "followForReal": "I-follow nang totohanan",
+    "gotIt": "Sige",
+    "nowFollowing": "Fina-follow mo na si @{{hiveUsername}} sa Hive",
+    "followFailed": "Hindi sila ma-follow"
+  },
+  "backlog": {
+    "title": "Nandito pa ang mga dati mong post",
+    "lede_one": "Gumawa ka ng <b>{{count}} bagay</b> bago ka nagkaroon ng Hive account. Nasa 3Speak lang ito. Puwede mo itong ilagay sa Hive bilang <b>@{{user}}</b> kahit kailan mo gusto.",
+    "lede_other": "Gumawa ka ng <b>{{count}} bagay</b> bago ka nagkaroon ng Hive account. Nasa 3Speak lang ang mga ito. Puwede mo silang ilagay sa Hive bilang <b>@{{user}}</b> kahit kailan mo gusto.",
+    "text": "Ikaw ang pipili kung ano ang ililipat, isa-isa. Mananatili sa 3Speak nang eksakto ang anumang iiwan mo, at puwede mong balikan ang iba anumang oras.",
+    "later": "Mamaya na"
+  },
+  "graduation": {
+    "items": {
+      "video_one": "{{count}} video",
+      "video_other": "{{count}} videos",
+      "short_one": "{{count}} short",
+      "short_other": "{{count}} shorts",
+      "comment_one": "{{count}} comment",
+      "comment_other": "{{count}} comments",
+      "follow_one": "{{count}} follow",
+      "follow_other": "{{count}} follows",
+      "like_one": "{{count}} like",
+      "like_other": "{{count}} likes",
+      "creator_one": "{{count}} creator",
+      "creator_other": "{{count}} creators"
+    },
+    "listAnd": "{{rest}} at {{last}}",
+    "listSep": ", ",
+    "viewerDone": {
+      "watched": "nanood nang {{time}}",
+      "written": "sumulat ng {{items}}",
+      "followed": "nag-follow ng {{items}}"
+    },
+    "advertiser": {
+      "lede": "Na-review na ng team ang <b>{{name}}</b>. Gawin ang <b>Hive account</b> mo, nang libre: ito ang magiging advertiser account mo.",
+      "text": "Gamit ito, makakapag-book ka ng ads sa buong 3Speak, mula video spots at banners hanggang tickers, at mababayaran mo ang mga ito diretso mula sa wallet nito, sa HBD o HIVE. Sa iyo lang ang key, kaya walang makaka-lock out sa iyo.",
+      "note": "Sasama sa iyo ang brand profile mo. Mananatiling pribado sa 3Speak ang business email at address mo at hindi kailanman mapupunta sa blockchain.",
+      "noteMoving": "Sasama rin ang <b>{{moving}}</b> mo, unti-unting ipa-publish sa loob ng ilang araw."
+    },
+    "viewer": {
+      "title": "Handa na ang sarili mong account",
+      "ledeDone": "Bilang <b>@{{handle}}</b>, ikaw ay {{done}}. Gawin iyan na isang <b>Hive account</b> na sa iyo, nang libre.",
+      "lede": "Gawing <b>Hive account</b> na sa iyo ang <b>@{{handle}}</b>, nang libre.",
+      "text": "Gamit ito, puwede kang mag-vote at mag-tip sa mga video na gusto mo, kumita mula sa mga comment mo, sumali sa viewer rewards para sa mga pinapanood mo, at gumawa ng playlist. Gumagana ang parehong login at parehong follows sa bawat Hive app, at sa iyo lang ang key."
+    },
+    "createMyAccount": "Gawin ang account ko",
+    "creator": {
+      "title": "Puwede mo nang gawin ang sarili mong account",
+      "lede": "Nagpo-post ka bilang <b>@{{handle}}</b>. Gawin iyan na isang totoong <b>Hive account</b> na sa iyo, nang libre.",
+      "text": "Ang Hive account ay isang key na ikaw lang ang may hawak. Walang makaka-lock out sa iyo, magsisimulang kumita ang mga post mo, at gumagana ang parehong login sa bawat Hive app, hindi lang sa 3Speak."
+    },
+    "note": {
+      "moving": "Sasama sa iyo ang <b>{{moving}}</b> mo.",
+      "everything": "Sasama sa iyo ang lahat ng ginawa mo rito.",
+      "gradual": "Unti-unti ang pag-publish sa loob ng ilang araw, dahil maliit ang posting allowance ng bagong account.",
+      "waiting_one": "Ang isa sa mga ito ay naghihintay na ma-publish muna ang post na sinasagot nito.",
+      "waiting_other": "{{count}} sa mga ito ang naghihintay na ma-publish muna ang mga post na sinasagot nila."
+    },
+    "notYet": "Hindi pa"
+  },
+  "handleTaken": {
+    "openFailed": "Hindi mabuksan ang name picker",
+    "title": "May kumuha na ng pangalang @{{handle}}",
+    "lede": "May nag-register nito sa <b>Hive</b>, kaya hindi na ito puwedeng maging account mo kapag handa ka na. Sandali lang ang pagpili ng bago ngayon.",
+    "text": "Hindi ito na-reserve nang piliin mo ang pangalan dito. Walang paraan ang Hive para i-hold ang isang pangalan maliban sa paggawa ng account, at iyon ang hakbang na hindi mo pa nababayaran, na siyang buong punto ng pagsisimula nang wala nito.",
+    "note": "Walang nawala sa mga ginawa mo. Mananatili sa iyo ang mga video, Shorts, comment at follows mo at sasama ang mga ito sa anumang pangalang pipiliin mo.",
+    "pick": "Pumili ng bagong pangalan"
+  },
+  "backfill": {
+    "rcError": "Kulang pa ang resource credits. Kusa itong napupuno; subukan ulit maya-maya.",
+    "today": "Ngayong araw",
+    "yesterday": "Kahapon",
+    "groups": {
+      "video": "Mga Video",
+      "videoNote": "Isa bawat 5 minuto — ito ang mabagal na bahagi.",
+      "short": "Shorts",
+      "comment": "Mga Comment",
+      "vote": "Mga Like",
+      "follow": "Mga Follow",
+      "other": "Lahat ng iba pa"
+    },
+    "status": {
+      "done": "Na-publish",
+      "publishing": "Pine-publish…",
+      "error": "Pumalya",
+      "idle": "Sa 3Speak lang"
+    },
+    "wait": {
+      "ms": "{{m}}m {{s}}s",
+      "s": "{{s}}s"
+    },
+    "noDate": "Walang petsa",
+    "waitToast": "Isang post bawat 5 minuto ang pinapayagan ng Hive. Ang susunod ay sa loob ng {{wait}}.",
+    "publishedToast_one": "Na-publish sa Hive",
+    "publishedToast_other": "Na-publish ang {{count}} item sa Hive",
+    "loading": "Naglo-load ng mga post mo…",
+    "emptyTitle": "Wala nang ipa-publish",
+    "emptyText": "Lahat ng ginawa mo bago ka nagkaroon ng Hive account ay na-publish na o hindi puwedeng i-republish.",
+    "title": "I-publish ang mga ginawa mo dati",
+    "intro": "Ginawa mo ang mga ito sa 3Speak bago ka nagkaroon ng Hive account, kaya dito lang sila umiiral. Piliin ang gusto mong ilagay sa public record mo bilang <b>@{{user}}</b> at i-publish. Mananatili sa 3Speak nang eksakto ang anumang iiwan mo.",
+    "note": "<b>Matagal ang pag-publish, at normal iyon.</b> Isang post bawat 5 minuto bawat account ang pinapayagan ng Hive, at maliit ang posting allowance ng bagong account na napupuno sa loob ng ilang araw. Mura at mabilis ang follows, likes at profile mo. Mag-publish ng ilan muna at bumalik.",
+    "groupBy": "I-group ang listahan ayon sa",
+    "timeline": "Timeline",
+    "byType": "Ayon sa uri",
+    "rcBlockedIn": "<b>Ubos na muna ang resource credits ng account mo.</b> Binibigyan ng Hive ang bawat account ng maliit na allowance para sa pag-post, at kusa itong napupuno. Walang nawala: bumalik pagkalipas ng mga {{wait}} at ituloy kung saan ka huminto.",
+    "rcBlockedLater": "<b>Ubos na muna ang resource credits ng account mo.</b> Binibigyan ng Hive ang bawat account ng maliit na allowance para sa pag-post, at kusa itong napupuno. Walang nawala: bumalik maya-maya at ituloy kung saan ka huminto.",
+    "selected": "<b>{{count}}</b> ang napili",
+    "rootPostsTime_one": "{{count}} video, kaya kailangan nito ng mga {{minutes}} minuto",
+    "rootPostsTime_other": "{{count}} videos, kaya kailangan nito ng mga {{minutes}} minuto",
+    "nextVideo": "Puwedeng lumabas ang susunod na video sa loob ng {{wait}}. Hindi apektado ang follows, likes at profile.",
+    "selectAll": "Piliin lahat",
+    "clear": "I-clear",
+    "publishSelected": "I-publish ang napili",
+    "selectItem": "Piliin ang {{label}}",
+    "fiveMin": "5 min",
+    "waitingTitle": "Naghihintay sa iba",
+    "waitingText": "Kusang ipa-publish ang mga ito kapag nasa Hive na ang post na tinutukoy nila. Walang mawawala habang naghihintay.",
+    "waitingFor": "<b>{{label}}</b> — hinihintay ang {{target}}",
+    "andMore": "at {{count}} pa",
+    "excludedTitle": "Hindi isasama"
+  }
+}

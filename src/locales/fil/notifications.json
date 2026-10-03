@@ -1,0 +1,75 @@
+{
+  "buckets": {
+    "today": "Ngayong Araw",
+    "yesterday": "Kahapon",
+    "thisWeek": "Ngayong Linggo",
+    "thisMonth": "Ngayong Buwan",
+    "older": "Mas Luma"
+  },
+  "loginRequired": "Mag-log in para makita ang mga notification mo.",
+  "unreadChip_one": "{{count}} bago",
+  "unreadChip_other": "{{count}} bago",
+  "markAllTitle": "Markahan lahat bilang nabasa",
+  "marking": "Minamarkahan…",
+  "markAllRead": "Nabasa na lahat",
+  "refreshing": "Nire-refresh…",
+  "categories": {
+    "all": "Lahat",
+    "replies": "Mga Reply",
+    "mentions": "Mga Mention",
+    "votes": "Mga Vote",
+    "reblogs": "Mga Reblog",
+    "follows": "Mga Follow",
+    "transfers": "Mga Transfer"
+  },
+  "unread": "Hindi pa nababasa",
+  "summary": {
+    "title": "Activity",
+    "today": "Ngayong Araw",
+    "week": "Ngayong Linggo",
+    "month": "Ngayong Buwan",
+    "emptyToday": "Wala pang activity ngayong araw.",
+    "emptyWeek": "Wala pang activity ngayong linggo.",
+    "stillLoading": "Naglo-load pa ang mga mas lumang notification…",
+    "emptyMonth": "Walang activity ngayong buwan."
+  },
+  "loadError": "Hindi ma-load ang mga notification.",
+  "empty": {
+    "all": "Wala ka pang notification.",
+    "unread": "Walang hindi pa nababasang notification.",
+    "replies": "Wala pang reply.",
+    "mentions": "Wala pang mention.",
+    "votes": "Wala pang vote.",
+    "reblogs": "Wala pang reblog.",
+    "follows": "Wala pang follow.",
+    "transfers": "Wala pang transfer."
+  },
+  "threeSpeakVideo": "3Speak video",
+  "end": "Nasa dulo ka na.",
+  "cards": {
+    "votes": "Mga Vote",
+    "voters_one": "{{count}} voter",
+    "voters_other": "{{count}} voters",
+    "replies": "Mga Reply",
+    "newFollowers": "Mga Bagong Follower",
+    "mentions": "Mga Mention",
+    "reblogs": "Mga Reblog",
+    "transfers": "Mga Transfer"
+  },
+  "group": {
+    "voteOne": "Nag-vote si @{{user}} sa post mo",
+    "voteTwo": "Nag-vote sina @{{user}} at @{{user2}} sa post mo",
+    "voteMany_one": "Nag-vote si @{{user}} at {{count}} pa sa post mo",
+    "voteMany_other": "Nag-vote si @{{user}} at {{count}} pa sa post mo",
+    "followOne": "Fina-follow ka na ni @{{user}}",
+    "followTwo": "Fina-follow ka na nina @{{user}} at @{{user2}}",
+    "followMany_one": "Fina-follow ka na ni @{{user}} at {{count}} pa",
+    "followMany_other": "Fina-follow ka na ni @{{user}} at {{count}} pa",
+    "generic_one": "{{count}} {{type}} notification",
+    "generic_other": "{{count}} {{type}} notifications",
+    "typeCount_one": "{{count}} {{type}}",
+    "typeCount_other": "{{count}} {{type}}",
+    "collapse": "▾ itiklop",
+    "expand": "▸ palawakin"
+  }
+}

@@ -1,0 +1,142 @@
+{
+  "button": {
+    "label": "Chat"
+  },
+  "tools": {
+    "emoji": "Emoji",
+    "searchEmoji": "Maghanap ng emoji",
+    "searchGifs": "Maghanap ng GIF…",
+    "noGifs": "Walang nahanap na GIF.",
+    "poweredByGiphy": "Powered by GIPHY"
+  },
+  "lightbox": {
+    "openInNewTab": "Buksan ang larawan sa bagong tab"
+  },
+  "linkCard": {
+    "loadingPreview": "Naglo-load ng preview…",
+    "community": "Komunidad",
+    "communityWithSubscribers_one": "Komunidad · {{formatted}} subscriber",
+    "communityWithSubscribers_other": "Komunidad · {{formatted}} subscribers",
+    "commentFallback": "(comment)",
+    "play": "I-play ang {{title}}"
+  },
+  "share": {
+    "embedCopied": "Nakopya ang embed code",
+    "pressToCopy": "Pindutin ang Ctrl/Cmd + C para kopyahin ang napiling code",
+    "embedTitle": "I-embed ang video na ito",
+    "embedHint": "I-paste ito sa anumang website o blog post.",
+    "embedSize": "Laki ng embed",
+    "embedCode": "Embed code",
+    "copyEmbed": "Kopyahin ang embed code",
+    "responsiveSub": "Umaangkop sa laki ng page na kinalalagyan nito",
+    "fixedSub": "Iframe na fixed ang laki",
+    "sendInChat": "Ipadala sa 3Speak Chat",
+    "sendInChatSub": "I-message ito sa isang tao sa 3Speak",
+    "embedOnWebsite": "I-embed sa website",
+    "embedOnWebsiteSub": "Kopyahin ang HTML para sa sarili mong site o blog",
+    "generalShare": "I-share / kopyahin ang link",
+    "generalShareSub": "Ibang app, o kopyahin ang link"
+  },
+  "gate": {
+    "connectTitle": "Kumonekta sa 3Speak Chat",
+    "connectBody": "Pinapagana ng Snapie ang chat. Sa pagkonekta, magsa-sign ka ng isang beses na login challenge gamit ang Hive posting key mo — walang transaksyon, walang bayad.",
+    "connecting": "Kumokonekta…",
+    "connectButton": "Ikonekta ang chat",
+    "cannotSign": "Hindi kayang i-sign ng kasalukuyang login mo ang chat challenge. Gamitin ang Keychain, HiveAuth, PeakVault o Ledger.",
+    "needsAccountTitle": "Kailangan ng Hive account para sa chat",
+    "needsAccountBody": "Sina-sign ang mga mensahe gamit ang sarili mong account keys, kaya mabubuksan ang chat kasabay ng lahat ng iba pa kapag handa na ang account mo. Tapusin ang mga goal sa profile mo at tutulungan ka ng team na makarating doon.",
+    "loginTitle": "Mag-log in para gamitin ang chat",
+    "loginBody": "Mag-sign in gamit ang Hive account mo para magpadala at tumanggap ng mensahe.",
+    "connectingToChat": "Kumokonekta sa chat…"
+  },
+  "errors": {
+    "notHiveAccount": "Hindi Hive account si @{{user}}.",
+    "openConversation": "Hindi mabuksan ang conversation na iyon.",
+    "verifyAccount": "Hindi ma-verify ang account na iyon.",
+    "createRoom": "Hindi magawa ang room.",
+    "joinChannel": "Hindi makasali sa channel na iyon."
+  },
+  "newDm": {
+    "placeholder": "Mag-message sa isang Hive user…",
+    "start": "Simulan ang chat"
+  },
+  "newRoom": {
+    "toggle": "Bagong private room",
+    "namePlaceholder": "Pangalan ng room…",
+    "removeMember": "Alisin si @{{user}}",
+    "addMore": "Magdagdag pa…",
+    "invitePlaceholder": "Mag-invite ng Hive users (opsyonal)…",
+    "create": "Gumawa"
+  },
+  "channels": {
+    "browse": "Mag-browse ng channel",
+    "publicTitle": "Mga public channel",
+    "closeBrowser": "Isara ang channel browser",
+    "loading": "Naglo-load ng mga channel…",
+    "empty": "Walang available na channel.",
+    "join": "Sumali"
+  },
+  "markRead": {
+    "nothingToClear": "Walang conversation na ike-clear. Baka naipit ang bilang sa server.",
+    "requestFailed": "pumalya ang request",
+    "allCaughtUp": "Nabasa mo na lahat",
+    "stillUnread_one": "{{total}} pa rin ang hindi nababasa matapos i-clear ang {{count}} chat.",
+    "stillUnread_other": "{{total}} pa rin ang hindi nababasa matapos i-clear ang {{count}} chats.",
+    "stillUnreadNoMatch_one": "{{total}} pa rin ang hindi nababasa matapos i-clear ang {{count}} chat. May bilang na iniuulat ang server pero walang katugmang conversation.",
+    "stillUnreadNoMatch_other": "{{total}} pa rin ang hindi nababasa matapos i-clear ang {{count}} chats. May bilang na iniuulat ang server pero walang katugmang conversation.",
+    "notSignedIn": "Hindi naka-sign in ang chat. Ikonekta ulit ang chat at subukan ulit.",
+    "sessionExpired": "Nag-expire ang chat session habang nagki-clear. Ikonekta ulit ang chat at subukan ulit.",
+    "serverRejectedVisible_one": "Tinanggihan ng server ang {{count}} request (mga id mula sa nakikitang listahan)",
+    "serverRejectedVisible_other": "Tinanggihan ng server lahat ng {{count}} request (mga id mula sa nakikitang listahan)",
+    "serverRejectedServerMap_one": "Tinanggihan ng server ang {{count}} request (mga id mula sa sariling unread map ng server)",
+    "serverRejectedServerMap_other": "Tinanggihan ng server lahat ng {{count}} request (mga id mula sa sariling unread map ng server)",
+    "failed": "Hindi mamarkahan lahat bilang nabasa",
+    "marking": "Minamarkahan bilang nabasa…",
+    "button": "Markahan lahat bilang nabasa",
+    "buttonCount": "Markahan lahat bilang nabasa ({{count}})"
+  },
+  "list": {
+    "chooseTarget": "Pumili ng chat na padadalhan",
+    "loading": "Naglo-load ng mga conversation…",
+    "empty": "Wala pang conversation. Magsimula ng isa sa itaas sa paglagay ng Hive username."
+  },
+  "leave": {
+    "confirmRoom": "Aalis sa room na ito?",
+    "confirmChannel": "Aalis sa channel na ito?",
+    "errorRoom": "Hindi makaalis sa room.",
+    "errorChannel": "Hindi makaalis sa channel.",
+    "titleRoom": "Umalis sa room",
+    "titleChannel": "Umalis sa channel",
+    "button": "Umalis"
+  },
+  "thread": {
+    "editError": "Hindi ma-edit ang mensahe.",
+    "deleteConfirm": "Burahin ang mensaheng ito? Papalitan ito ng “[binura]”.",
+    "deleteError": "Hindi mabura ang mensahe.",
+    "back": "Bumalik sa mga conversation",
+    "loading": "Naglo-load ng mga mensahe…",
+    "empty": "Wala pang mensahe — mag-hi ka 👋",
+    "editedSuffix": " · na-edit",
+    "messageActions": "Mga aksyon sa mensahe",
+    "quote": "I-quote",
+    "forward": "I-forward",
+    "typing_one": "Nagta-type si {{users}}…",
+    "typing_other": "Nagta-type sina {{users}}…",
+    "editing": "Ine-edit ang mensahe",
+    "cancelEdit": "Kanselahin ang edit",
+    "quoting": "Kino-quote si @{{user}}",
+    "cancelQuote": "Kanselahin ang quote",
+    "removeImage": "Alisin ang larawan",
+    "placeholder": "Mag-type ng mensahe…"
+  },
+  "page": {
+    "chooseTarget": "Pumili ng chat na padadalhan.",
+    "selectConversation": "Pumili ng conversation, o magsimula ng bago."
+  },
+  "overlay": {
+    "fullscreen": "Fullscreen",
+    "exitFullscreen": "Lumabas sa fullscreen",
+    "close": "Isara ang chat",
+    "sendInChat": "Ipadala sa chat"
+  }
+}

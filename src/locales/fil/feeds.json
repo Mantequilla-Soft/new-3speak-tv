@@ -1,0 +1,123 @@
+{
+  "loadingMore": "Naglo-load pa…",
+  "promoted": "Promoted",
+  "scrollLeft": "Mag-scroll pakaliwa",
+  "scrollRight": "Mag-scroll pakanan",
+  "errors": {
+    "fetchVideos": "Error sa pagkuha ng mga video",
+    "loadVideos": "Hindi ma-load ang mga video",
+    "loadShorts": "Hindi ma-load ang Shorts"
+  },
+  "tabs": {
+    "all": "Lahat",
+    "videos": "Mga Video",
+    "shorts": "Shorts",
+    "videosCount": "Mga Video ({{count}})",
+    "shortsCount": "Shorts ({{count}})"
+  },
+  "dateFilters": {
+    "all": "Lahat ng Panahon",
+    "today": "Ngayong Araw",
+    "week": "Ngayong Linggo",
+    "month": "Ngayong Buwan",
+    "justNow": "Ngayon lang"
+  },
+  "live": {
+    "title": "Live ngayon",
+    "badge": "● LIVE"
+  },
+  "newFromFollowing": {
+    "aria": "Bago mula sa mga creator na fina-follow mo",
+    "shorts_one": "{{count}} short",
+    "shorts_other": "{{count}} shorts"
+  },
+  "firstUploads": {
+    "title": "Mga Unang Upload"
+  },
+  "newVideos": {
+    "title": "Mga Bagong Video"
+  },
+  "home": {
+    "sections": {
+      "discover": "Discover",
+      "home": "Home Feed",
+      "follow": "Follow Feed",
+      "new": "Bagong Content",
+      "interests": "Mga Interes"
+    },
+    "empty": "Wala pang maipapakita dito.",
+    "viewAll": "Tingnan lahat",
+    "dragToReorder": "I-drag para ayusin ang pagkakasunod",
+    "surfTitle": "Channel Surfing: pumili ng paksa at panoorin na parang TV",
+    "zapping": "Zapping"
+  },
+  "surf": {
+    "pageTitle": "Channel Surfing",
+    "intro": "Pumili ng channel at mag-relax. Isa-isa naming ipapalabas ang pinakamagagandang video sa paksang iyon. Na-bore? Pindutin ang <b>Zap</b>. Gusto ng iba? Lumipat ng channel.",
+    "backTo": "Bumalik sa CH {{number}} {{emoji}} {{title}}",
+    "surprise": "Sorpresahin mo ako",
+    "yourChannels": "Mga channel mo",
+    "nothingOnAir": "Walang palabas sa {{channel}} ngayon",
+    "tuneFailed": "Hindi ma-tune in. Subukan ulit maya-maya.",
+    "remoteAria": "Remote ng Channel Surfing",
+    "openGuide": "Buksan ang channel guide",
+    "ch": "CH {{number}}",
+    "chLabel": "CH",
+    "channelHint": "CH {{number}}: {{title}}",
+    "channelHintKey": "CH {{number}}: {{title}} ({{key}})",
+    "tuningShort": "Nagtu-tune",
+    "tuning": "Nagtu-tune…",
+    "onAir": "On air",
+    "changeChannel": "Lumipat ng channel",
+    "nextChannel": "Susunod na channel",
+    "prevChannel": "Nakaraang channel",
+    "nextVideo": "Susunod na video",
+    "nextVideoKey": "Susunod na video (→)",
+    "zap": "Zap",
+    "findingNext": "Hinahanap ang susunod…",
+    "stop": "Itigil ang surfing",
+    "stopTitle": "Itigil ang surfing (tuloy ang video na ito)",
+    "guide": "Channel guide"
+  },
+  "discover": {
+    "searchPlaceholder": "Maghanap ng video, shorts, audio, komunidad...",
+    "clearSearch": "I-clear ang search",
+    "searchFor": "Hanapin ang “{{term}}”",
+    "noResultsFor": "Walang resulta para sa “{{term}}”",
+    "types": {
+      "user": "Mga User",
+      "community": "Mga Komunidad",
+      "video": "Mga Video",
+      "short": "Shorts",
+      "audio": "Audio",
+      "playlist": "Mga Playlist"
+    },
+    "suggest": {
+      "tags": "Tags",
+      "titles": "Mga Pamagat"
+    },
+    "dates": {
+      "today": "Ngayong araw",
+      "week": "Ngayong linggo",
+      "month": "Ngayong buwan",
+      "year": "Ngayong taon"
+    },
+    "boostRecent": "Unahin ang bago",
+    "filters": "Mga Filter",
+    "date": "Petsa",
+    "tag": "Tag",
+    "tagPlaceholder": "hal. crypto, gaming...",
+    "community": "Komunidad",
+    "communityPlaceholder": "Maghanap ng komunidad...",
+    "clearAllFilters": "I-clear lahat ng filter",
+    "allHidden": "Nakatago lahat ng uri ng content.",
+    "reenableFilters": "I-enable ulit lahat ng filter",
+    "groupTitle": "{{label}} ({{count}})",
+    "subscribers_one": "{{count}} subscriber",
+    "subscribers_other": "{{count}} subscribers",
+    "authors_one": "{{count}} author",
+    "authors_other": "{{count}} authors",
+    "views_one": "{{views}} view",
+    "views_other": "{{views}} views"
+  }
+}

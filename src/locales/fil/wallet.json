@@ -1,0 +1,50 @@
+{
+  "tabs": {
+    "overview": "Overview",
+    "transactions": "Mga Transaksyon",
+    "aria": "Mga seksyon ng wallet"
+  },
+  "errors": {
+    "fetchBalances": "Hindi makuha ang mga balance",
+    "needKeychain": "Kailangan mo ang Keychain extension para makapag-transfer"
+  },
+  "header": {
+    "mine": "AKING Wallet",
+    "ofUser": "Wallet ni {{user}}"
+  },
+  "assets": "Mga Asset",
+  "transfer": "Transfer",
+  "transferModal": {
+    "loginRequired": "Mag-log in para makapag-transfer",
+    "insufficient": "Kulang ang balance",
+    "invalidUsername": "Invalid na username",
+    "success": "Matagumpay ang transfer!",
+    "failed": "Pumalya ang transfer: {{error}}",
+    "title": "I-transfer ang {{coin}}",
+    "amountLabel": "Halaga ({{coin}})",
+    "balance": "Balance {{balance}}",
+    "max": "Max",
+    "recipientLabel": "Username ng Tatanggap",
+    "recipientPlaceholder": "Ilagay ang Hive username",
+    "memoLabel": "Memo",
+    "memoPlaceholder": "Ilagay ang Memo",
+    "confirm": "Kumpirmahin ang Transfer"
+  },
+  "history": {
+    "loadFailed": "Hindi ma-load ang mga transaksyon",
+    "title": "History ng Transaksyon",
+    "cols": {
+      "type": "Uri",
+      "amount": "Halaga",
+      "account": "Account",
+      "date": "Petsa",
+      "memo": "Memo"
+    },
+    "types": {
+      "transfer": "Transfer",
+      "claim": "I-claim ang Reward",
+      "received": "Natanggap"
+    },
+    "claimedRewards": "Na-claim na Rewards"
+  }
+}

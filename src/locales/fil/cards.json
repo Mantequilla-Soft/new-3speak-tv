@@ -1,0 +1,46 @@
+{
+  "loading": "Naglo-load...",
+  "error": "Error: {{error}}",
+  "thumbnailAlt": "thumbnail",
+  "topicTitle": "Paksa: {{topic}}",
+  "watchingNow_one": "{{count}} ang nanonood ngayon",
+  "watchingNow_other": "{{count}} ang nanonood ngayon",
+  "badges": {
+    "gatedTitle": "Para sa supporters lang — buong video ang mapapanood gamit ang 3Speak Pro",
+    "pro": "PRO",
+    "new": "BAGO",
+    "live": "● LIVE",
+    "liveChat": "● LIVE CHAT"
+  },
+  "status": {
+    "scheduled": "Naka-schedule",
+    "mobile": "Mobile",
+    "mobileTitle": "In-upload gamit ang mobile app",
+    "processing": "Pinoproseso",
+    "processingTitle": "Pinoproseso pa ang video",
+    "draft": "Draft",
+    "draftTitle": "Draft - hindi pa naka-publish",
+    "deleted": "Binura",
+    "deletedTitle": "Binura na ang video na ito",
+    "failed": "Pumalya",
+    "failedTitle": "Pumalya ang pagproseso ng video",
+    "unlisted": "Unlisted",
+    "unlistedTitle": "Unlisted — nakatago sa feeds at search, mabubuksan lang gamit ang direktang link"
+  },
+  "playlist": {
+    "loading": "Naglo-load ng mga playlist...",
+    "items_one": "{{count}} item",
+    "items_other": "{{count}} items",
+    "openAria": "Buksan ang playlist na {{name}}",
+    "tag": "Playlist",
+    "updated": "Na-update {{when}}"
+  },
+  "watchLater": {
+    "title": "Panoorin Mamaya",
+    "subtitle": "Mga video na papanoorin mamaya"
+  },
+  "watched": {
+    "title": "Napanood",
+    "subtitle": "Ang watch history mo"
+  }
+}
