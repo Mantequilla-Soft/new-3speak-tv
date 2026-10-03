@@ -1,0 +1,123 @@
+{
+  "loadingMore": "Mehr wird geladen…",
+  "promoted": "Beworben",
+  "scrollLeft": "Nach links scrollen",
+  "scrollRight": "Nach rechts scrollen",
+  "errors": {
+    "fetchVideos": "Fehler beim Abrufen der Videos",
+    "loadVideos": "Videos konnten nicht geladen werden",
+    "loadShorts": "Shorts konnten nicht geladen werden"
+  },
+  "tabs": {
+    "all": "Alle",
+    "videos": "Videos",
+    "shorts": "Shorts",
+    "videosCount": "Videos ({{count}})",
+    "shortsCount": "Shorts ({{count}})"
+  },
+  "dateFilters": {
+    "all": "Gesamter Zeitraum",
+    "today": "Heute",
+    "week": "Diese Woche",
+    "month": "Diesen Monat",
+    "justNow": "Gerade eben"
+  },
+  "live": {
+    "title": "Jetzt live",
+    "badge": "● LIVE"
+  },
+  "newFromFollowing": {
+    "aria": "Neues von Creatorn, denen du folgst",
+    "shorts_one": "{{count}} Short",
+    "shorts_other": "{{count}} Shorts"
+  },
+  "firstUploads": {
+    "title": "Erste Uploads"
+  },
+  "newVideos": {
+    "title": "Neue Videos"
+  },
+  "home": {
+    "sections": {
+      "discover": "Entdecken",
+      "home": "Startseiten-Feed",
+      "follow": "Folge-ich-Feed",
+      "new": "Neue Inhalte",
+      "interests": "Interessen"
+    },
+    "empty": "Hier gibt es noch nichts zu sehen.",
+    "viewAll": "Alle ansehen",
+    "dragToReorder": "Zum Sortieren ziehen",
+    "surfTitle": "Channel Surfing: Wähl ein Thema und schau es wie Fernsehen",
+    "zapping": "Zappen"
+  },
+  "surf": {
+    "pageTitle": "Channel Surfing",
+    "intro": "Wähl einen Kanal und lehn dich zurück. Wir reihen die besten Videos zu diesem Thema nacheinander auf. Langweilig? Drück <b>Zap</b>. Lust auf was anderes? Schalt um.",
+    "backTo": "Zurück zu CH {{number}} {{emoji}} {{title}}",
+    "surprise": "Überrasch mich",
+    "yourChannels": "Deine Kanäle",
+    "nothingOnAir": "Auf {{channel}} läuft gerade nichts",
+    "tuneFailed": "Einschalten fehlgeschlagen. Versuch es gleich nochmal.",
+    "remoteAria": "Channel-Surfing-Fernbedienung",
+    "openGuide": "Programmführer öffnen",
+    "ch": "CH {{number}}",
+    "chLabel": "CH",
+    "channelHint": "CH {{number}}: {{title}}",
+    "channelHintKey": "CH {{number}}: {{title}} ({{key}})",
+    "tuningShort": "Einschalten",
+    "tuning": "Wird eingeschaltet…",
+    "onAir": "Auf Sendung",
+    "changeChannel": "Umschalten",
+    "nextChannel": "Nächster Kanal",
+    "prevChannel": "Vorheriger Kanal",
+    "nextVideo": "Nächstes Video",
+    "nextVideoKey": "Nächstes Video (→)",
+    "zap": "Zap",
+    "findingNext": "Das nächste wird gesucht…",
+    "stop": "Surfen beenden",
+    "stopTitle": "Surfen beenden (dieses Video läuft weiter)",
+    "guide": "Programmführer"
+  },
+  "discover": {
+    "searchPlaceholder": "Videos, Shorts, Audio, Communitys suchen...",
+    "clearSearch": "Suche löschen",
+    "searchFor": "Nach „{{term}}“ suchen",
+    "noResultsFor": "Keine Ergebnisse für „{{term}}“",
+    "types": {
+      "user": "Nutzer",
+      "community": "Communitys",
+      "video": "Videos",
+      "short": "Shorts",
+      "audio": "Audio",
+      "playlist": "Playlists"
+    },
+    "suggest": {
+      "tags": "Tags",
+      "titles": "Titel"
+    },
+    "dates": {
+      "today": "Heute",
+      "week": "Diese Woche",
+      "month": "Diesen Monat",
+      "year": "Dieses Jahr"
+    },
+    "boostRecent": "Neueres bevorzugen",
+    "filters": "Filter",
+    "date": "Datum",
+    "tag": "Tag",
+    "tagPlaceholder": "z. B. crypto, gaming...",
+    "community": "Community",
+    "communityPlaceholder": "Communitys suchen...",
+    "clearAllFilters": "Alle Filter löschen",
+    "allHidden": "Alle Inhaltstypen sind ausgeblendet.",
+    "reenableFilters": "Alle Filter wieder aktivieren",
+    "groupTitle": "{{label}} ({{count}})",
+    "subscribers_one": "{{count}} Abonnent",
+    "subscribers_other": "{{count}} Abonnenten",
+    "authors_one": "{{count}} Autor",
+    "authors_other": "{{count}} Autoren",
+    "views_one": "{{views}} Aufruf",
+    "views_other": "{{views}} Aufrufe"
+  }
+}

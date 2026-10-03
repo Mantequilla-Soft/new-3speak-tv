@@ -1,0 +1,242 @@
+{
+  "leaderboard": {
+    "windows": {
+      "7d": "7 Tage",
+      "30d": "30 Tage",
+      "365d": "Jahr",
+      "all": "Gesamter Zeitraum"
+    },
+    "windowsInSentence": {
+      "7d": "letzte 7 Tage",
+      "30d": "letzte 30 Tage",
+      "365d": "letztes Jahr",
+      "all": "gesamter Zeitraum"
+    },
+    "metrics": {
+      "video_uploads": "Videos",
+      "short_uploads": "Shorts",
+      "video_watch_secs": "Video-Wiedergabezeit",
+      "short_watch_secs": "Shorts-Wiedergabezeit",
+      "tags_given": "Tags",
+      "streams": "Streams",
+      "stream_secs": "Zeit live",
+      "stream_peak_viewers": "Höchste Zuschauerzahl",
+      "stream_viewers": "Zuschauer-Beitritte",
+      "boosts_received": "Erhaltene Boosts",
+      "boost_amount_received": "Erhaltener Betrag",
+      "boosts_given": "Vergebene Boosts",
+      "boost_amount_given": "Vergebener Betrag"
+    },
+    "metricsInSentence": {
+      "video_uploads": "Videos",
+      "short_uploads": "Shorts",
+      "video_watch_secs": "Video-Wiedergabezeit",
+      "short_watch_secs": "Shorts-Wiedergabezeit",
+      "tags_given": "Tags",
+      "streams": "Streams",
+      "stream_secs": "Zeit live",
+      "stream_peak_viewers": "Höchste Zuschauerzahl",
+      "stream_viewers": "Zuschauer-Beitritte",
+      "boosts_received": "Erhaltene Boosts",
+      "boost_amount_received": "Erhaltener Betrag",
+      "boosts_given": "Vergebene Boosts",
+      "boost_amount_given": "Vergebener Betrag"
+    },
+    "blurbs": {
+      "video_uploads": "Hochgeladene Videos",
+      "short_uploads": "Hochgeladene Shorts",
+      "video_watch_secs": "Sekunden, die ihre Videos angesehen wurden",
+      "short_watch_secs": "Sekunden, die ihre Shorts angesehen wurden",
+      "tags_given": "An andere Videos vergebene Tags",
+      "streams": "Gestartete Stream-Sessions",
+      "stream_secs": "Gesamte Zeit live (nur beendete Streams)",
+      "stream_peak_viewers": "Höchste gleichzeitige Zuschauerzahl (ein Höchstwert, keine Summe)",
+      "stream_viewers": "Zuschauer-Beitritte (Menge, keine einzelnen Personen)",
+      "boosts_received": "Boosts an ihre Streams",
+      "boost_amount_received": "Summe der erhaltenen Boosts",
+      "boosts_given": "Boosts, die sie an andere Streamer gesendet haben",
+      "boost_amount_given": "Summe der vergebenen Boosts"
+    },
+    "blurbsInSentence": {
+      "video_uploads": "Hochgeladene Videos",
+      "short_uploads": "Hochgeladene Shorts",
+      "video_watch_secs": "Sekunden, die ihre Videos angesehen wurden",
+      "short_watch_secs": "Sekunden, die ihre Shorts angesehen wurden",
+      "tags_given": "An andere Videos vergebene Tags",
+      "streams": "Gestartete Stream-Sessions",
+      "stream_secs": "Gesamte Zeit live (nur beendete Streams)",
+      "stream_peak_viewers": "Höchste gleichzeitige Zuschauerzahl (ein Höchstwert, keine Summe)",
+      "stream_viewers": "Zuschauer-Beitritte (Menge, keine einzelnen Personen)",
+      "boosts_received": "Boosts an ihre Streams",
+      "boost_amount_received": "Summe der erhaltenen Boosts",
+      "boosts_given": "Boosts, die sie an andere Streamer gesendet haben",
+      "boost_amount_given": "Summe der vergebenen Boosts"
+    },
+    "groups": {
+      "video": "Video",
+      "streaming": "Streaming"
+    },
+    "badgeNouns": {
+      "video_uploads": "Videos",
+      "short_uploads": "Shorts",
+      "video_watch_secs": "Angesehen",
+      "short_watch_secs": "Shorts angesehen",
+      "tags_given": "Tagger"
+    },
+    "badgeLabel": "{{tier}} {{noun}}",
+    "badgeTitleAllTime": "Platz {{rank}} bei „{{what}}“ über den gesamten Zeitraum",
+    "badgeTitleWindow": "Platz {{rank}} bei „{{what}}“ (Zeitraum: {{window}})"
+  },
+  "duration": {
+    "hoursMinutes": "{{h}} Std. {{m}} Min.",
+    "minutesSeconds": "{{m}} Min. {{s}} Sek.",
+    "seconds": "{{s}} Sek.",
+    "aMoment": "einen Moment",
+    "lessThanMinute": "weniger als eine Minute"
+  },
+  "surf": {
+    "community": "Community",
+    "allOf": "Alles aus {{label}}"
+  },
+  "social": {
+    "signingCancelled": "Signieren wurde abgebrochen",
+    "youtube": {
+      "placeholder": "@handle oder UCxxxxxxxxxxxxxxxxxxxxxx",
+      "help": "Füge deinen YouTube-@handle oder deine UC…-Kanal-ID ein. Wir wandeln sie in die Kanal-ID um."
+    },
+    "soundcloud": {
+      "placeholder": "dein-profil oder https://soundcloud.com/dein-profil",
+      "help": "Füge die URL deines SoundCloud-Profils oder nur den Benutzernamen daraus ein. Setz den Hash irgendwo in deine Profil-Bio."
+    }
+  },
+  "snaps": {
+    "retrying": "Snaps-Container noch nicht gefunden – neuer Versuch (Versuch {{attempt}})...",
+    "unreachable": "Kein Hive-Node erreichbar, um den Snaps-Container zu finden. Bitte prüfe deine Verbindung und versuch es nochmal.",
+    "unreachableWithError": "Kein Hive-Node erreichbar, um den Snaps-Container zu finden (letzter Fehler – {{error}}). Bitte prüfe deine Verbindung und versuch es nochmal."
+  },
+  "embed": {
+    "responsive": "Responsiv"
+  },
+  "incubation": {
+    "requestFailed": "Anfrage fehlgeschlagen ({{status}})",
+    "contactLoadFailed": "Deine Kontaktdaten konnten nicht geladen werden",
+    "contactSaveFailed": "Deine Kontaktdaten konnten nicht gespeichert werden",
+    "onlyButrauthBacklog": "Nur ein Butter-Auth-Konto kann einen Inkubations-Rückstand haben",
+    "publishFailed": "Veröffentlichen fehlgeschlagen ({{status}})"
+  },
+  "routeError": {
+    "title": "Diese Seite wurde nicht geladen",
+    "body": "Ein Teil der App konnte nicht heruntergeladen werden. Das heißt meist, dass eine neue Version erschienen ist, während dieser Tab offen war. Neu laden holt sie.",
+    "reload": "Neu laden",
+    "goHome": "Zur Startseite"
+  },
+  "seo": {
+    "defaultTitle": "3Speak – Dezentrale Videoplattform",
+    "defaultDescription": "3Speak ist eine dezentrale Videoplattform auf Blockchain-Basis. Schau, lade hoch und teile Videos und verdiene dabei Kryptowährungs-Belohnungen."
+  },
+  "uploadLinks": {
+    "regularVideo": "Normales Video",
+    "verticalShort": "Hochformat-Short",
+    "musicAudio": "Musik / Audio",
+    "groupChat": "Gruppenchat",
+    "communitySnap": "Community-Snap",
+    "shortsEditor": "Shorts-Editor",
+    "goLive": "Live gehen",
+    "streamStudio": "Stream-Studio",
+    "headings": {
+      "upload": "Hochladen",
+      "live": "Live",
+      "others": "Sonstiges"
+    }
+  },
+  "chat": {
+    "connectFailed": "Verbindung zum Chat fehlgeschlagen.",
+    "loginFirst": "Melde dich zuerst an, um den Chat zu nutzen.",
+    "roomNameRequired": "Ein Raumname ist erforderlich."
+  },
+  "hiveAuth": {
+    "waiting": "Warte auf Bestätigung in HiveAuth...",
+    "title": "HiveAuth-Bestätigung erforderlich",
+    "hint": "Bitte sieh in deiner HiveAuth-App nach, um diese Transaktion zu bestätigen"
+  },
+  "hiveApi": {
+    "keychainNotSigned": "Keychain hat die Transaktion nicht signiert",
+    "loginToCreateCommunity": "Bitte melde dich an, um eine Community zu erstellen",
+    "loginFirst": "Bitte melde dich zuerst an",
+    "cancelled": "Vorgang abgebrochen"
+  },
+  "openpod": {
+    "announced": "Live-Session auf Hive angekündigt!",
+    "announceFailed": "OpenPod gestartet, aber die Ankündigung auf Hive konnte nicht gepostet werden."
+  },
+  "appUpdate": {
+    "updating": "Update auf die neueste Version ({{version}})…",
+    "reloadingForUpload": "Wird neu geladen, damit dein Upload mit der neuesten Version läuft."
+  },
+  "auth": {
+    "switched": "Erfolgreich zu {{username}} gewechselt!",
+    "keychainLoginTitle": "Mit Hive anmelden"
+  },
+  "streamVod": {
+    "uploadKeyMissing": "Stream beendet, aber das Video konnte nicht hochgeladen werden (Upload-Schlüssel fehlt).",
+    "uploading": "Dein Stream-Video wird hochgeladen… {{pct}}%",
+    "uploaded": "Stream-Video hochgeladen – es ersetzt den Livestream, sobald das Encoding fertig ist.",
+    "uploadFailed": "Stream beendet, aber der Video-Upload ist fehlgeschlagen.",
+    "saving": "Dein Stream-Video wird gespeichert…",
+    "encoding": "Hochgeladen – der Encoder verarbeitet dein Video…",
+    "saved": "Stream-Video gespeichert – es ersetzt den Livestream, sobald das Encoding fertig ist.",
+    "saveFailed": "Stream beendet, aber das Video konnte nicht gespeichert werden: {{error}}.",
+    "uploadFailedShort": "Upload fehlgeschlagen",
+    "stillProcessing": "Stream beendet – das Video wird noch verarbeitet; sieh gleich in deinem Profil nach."
+  },
+  "embedPlayer": {
+    "unavailable": "Video nicht verfügbar"
+  },
+  "followFeed": {
+    "title": "Folge-ich-Feed",
+    "error": "Fehler beim Abrufen der Videos"
+  },
+  "groups": {
+    "title": "Gruppen",
+    "badges": "Badges",
+    "subtitle": "Die Communitys, denen du beitreten kannst, und die Badges, die Leute haben – an einem Ort."
+  },
+  "watched": {
+    "removed": "Aus dem Wiedergabeverlauf entfernt",
+    "removeFailed": "Konnte nicht aus dem Wiedergabeverlauf entfernt werden",
+    "title": "Angesehen",
+    "count_one": "{{count}} angesehen",
+    "count_other": "{{count}} angesehen",
+    "trackHistory": "Verlauf speichern",
+    "videosTab": "Videos ({{count}})",
+    "shortsTab": "Shorts ({{count}})",
+    "loadFailed": "Wiedergabeverlauf konnte nicht geladen werden. Bitte versuch es nochmal.",
+    "emptyShorts": "Noch keine angesehenen Shorts",
+    "emptyVideos": "Noch keine angesehenen Videos",
+    "removeTitle": "Aus dem Wiedergabeverlauf entfernen",
+    "watchedAt": "Angesehen {{when}}"
+  },
+  "watchStream": {
+    "saySomething": "Sag etwas…",
+    "waitingWallet": "Warte auf deine Wallet…",
+    "signInToChat": "Melde dich an, um zu chatten",
+    "sendMessage": "Nachricht senden",
+    "notLive": "Dieser Stream ist gerade nicht live.",
+    "notFound": "Für diesen Link wurde kein Livestream gefunden.",
+    "browse": "Livestreams durchsuchen",
+    "back": "Zurück zu 3Speak",
+    "seoTitle": "{{title}} (LIVE)",
+    "swipeNext": "Wische zum nächsten Livestream",
+    "chat": "Chat",
+    "watchingNow": "👁 {{count}} schauen gerade zu",
+    "signInRaiseHand": "Melde dich an, um die Hand zu heben",
+    "copyLink": "Stream-Link kopieren",
+    "notAvailableLive": "Für Livestreams nicht verfügbar",
+    "vote": "Voten",
+    "comment": "Kommentieren",
+    "liveChat": "Live-Chat",
+    "signInToJoin": "🔒 Melde dich an, um am Chat teilzunehmen.",
+    "moreTag": "Mehr #{{tag}}",
+    "moreVideos": "Mehr Videos"
+  }
+}

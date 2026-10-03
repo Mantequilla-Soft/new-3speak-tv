@@ -1,0 +1,97 @@
+{
+  "backToOpenPods": "Zurück zu OpenPods",
+  "modal": {
+    "leaveConfirm": "Diesen OpenPod verlassen? Du kannst jederzeit über die Lobby wieder beitreten.",
+    "yourStreamEnded": "Dein Stream ist beendet",
+    "thisStreamEnded": "Dieser Stream ist beendet",
+    "noLongerLive": "Er ist nicht mehr live. Starte einen neuen, wann immer du bereit bist.",
+    "recordingProcessing": "Stark! Deine Aufnahme wird verarbeitet und erscheint gleich im Ankündigungspost.",
+    "thanksForLive": "Stark – danke, dass du live gegangen bist!",
+    "backHome": "Zurück zur Startseite",
+    "howWasStream": "Wie war dein Stream?",
+    "connecting": "Verbindung zu OpenPods wird hergestellt…",
+    "authenticating": "Anmeldung bei OpenPods…"
+  },
+  "strip": {
+    "liveNow_one": "<n>{{count}}</n> OpenPod jetzt live",
+    "liveNow_other": "<n>{{count}}</n> OpenPods jetzt live",
+    "viewAll": "Alle ansehen",
+    "joinAria": "OpenPod beitreten: {{title}}"
+  },
+  "announce": {
+    "selectCommunity": "Community auswählen",
+    "shareToggle": "📣 Diesen Stream beim Start auf Hive und 3Speak teilen",
+    "community": "Community",
+    "rewards": "Belohnungen",
+    "rewardDefault": "Standard 50/50",
+    "rewardPowerup": "100 % Power-up",
+    "rewardDecline": "Auszahlung ablehnen",
+    "beneficiaries": "Begünstigte",
+    "beneProHint": "Du hast 3Speak Pro – keine Plattformgebühr. Füg Aufteilungen hinzu, wenn du möchtest.",
+    "beneLockedHint": "10 % an @threespeakfund sind fest. Du kannst weitere hinzufügen."
+  },
+  "boost": {
+    "label": "Boost",
+    "sendTo": "Boost an @{{user}} senden",
+    "send": "Boost senden"
+  },
+  "clip": {
+    "saved": "Clip in deinen Downloads gespeichert.",
+    "slowDown": "Warte kurz und clippe dann nochmal.",
+    "failed": "Clip konnte nicht erstellt werden. Versuch es in ein paar Sekunden nochmal.",
+    "title": "Die letzten 30 Sekunden clippen",
+    "label": "30 s",
+    "clipping": "Wird geclippt…"
+  },
+  "report": {
+    "reasons": {
+      "harassment": "Belästigung oder Hass",
+      "sexual": "Sexuelle oder explizite Inhalte",
+      "violence": "Gewalt oder gefährliche Handlungen",
+      "selfharm": "Selbstverletzung",
+      "illegal": "Illegale Inhalte",
+      "spam": "Spam oder Betrug",
+      "other": "Etwas anderes"
+    },
+    "sent": "Danke – dieser Stream wurde an unser Team gemeldet.",
+    "failed": "Meldung konnte nicht gesendet werden. Bitte versuch es nochmal.",
+    "title": "Diesen Stream melden",
+    "reporting": "Du meldest <b>@{{host}}</b>.",
+    "intro": "Sag uns, was nicht stimmt – unser Team prüft jede Meldung.",
+    "detailPlaceholder": "Weitere Details (optional)",
+    "sending": "Wird gesendet…",
+    "submit": "Meldung senden"
+  },
+  "signIn": {
+    "waitingWallet": "Warte auf deine Wallet…"
+  },
+  "publish": {
+    "errors": {
+      "noTitle": "Bitte gib einen Titel ein",
+      "noAudio": "Keine Audio-URL gefunden",
+      "failed": "Veröffentlichen fehlgeschlagen. Bitte versuch es nochmal."
+    },
+    "published": "Aufnahme auf Hive veröffentlicht!",
+    "loginGate": "Melde dich an, um deine Aufnahme zu veröffentlichen.",
+    "heading": "OpenPod-Aufnahme veröffentlichen",
+    "previewLabel": "Vorschau der Aufnahme",
+    "previewHint": "Hör dir das Audio vor dem Veröffentlichen an. Das ist derselbe Player, den Leser im Post sehen.",
+    "recordingFallback": "OpenPod-Aufnahme",
+    "title": "Titel",
+    "titlePlaceholder": "Gib deiner Aufnahme einen Titel",
+    "description": "Beschreibung",
+    "optional": "(optional)",
+    "descriptionPlaceholder": "Worüber habt ihr gesprochen? Füg Shownotes, Links oder eine Zusammenfassung hinzu...",
+    "tags": "Tags",
+    "tagsPlaceholder": "Tags durch Leerzeichen getrennt",
+    "declinePayout": "Auszahlung ablehnen",
+    "publishing": "Wird veröffentlicht…",
+    "submit": "Aufnahme veröffentlichen"
+  },
+  "lobby": {
+    "descriptionPlaceholder": "Worum geht es in dieser Session? Füg Shownotes, Links oder eine Zusammenfassung hinzu…",
+    "enableHosting": "Hosten & Sprechen aktivieren",
+    "handoverFailed": "Hosten konnte nicht automatisch aktiviert werden. OpenPods postet über @threespeak in deinem Namen – prüfe, ob du die Posting-Berechtigung erteilt hast, und versuch es dann nochmal.",
+    "signInToHost": "Melde dich mit Hive an, um zu hosten oder zu sprechen"
+  }
+}

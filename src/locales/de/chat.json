@@ -1,0 +1,135 @@
+{
+  "button": {
+    "label": "Chat"
+  },
+  "tools": {
+    "emoji": "Emoji",
+    "searchEmoji": "Emoji suchen",
+    "searchGifs": "GIFs suchen…",
+    "noGifs": "Keine GIFs gefunden.",
+    "poweredByGiphy": "Powered by GIPHY"
+  },
+  "lightbox": {
+    "openInNewTab": "Bild in neuem Tab öffnen"
+  },
+  "linkCard": {
+    "loadingPreview": "Vorschau wird geladen…",
+    "community": "Community",
+    "communityWithSubscribers_one": "Community · {{formatted}} Abonnent",
+    "communityWithSubscribers_other": "Community · {{formatted}} Abonnenten",
+    "commentFallback": "(Kommentar)"
+  },
+  "share": {
+    "embedCopied": "Embed-Code kopiert",
+    "pressToCopy": "Drück Strg/Cmd + C, um den markierten Code zu kopieren",
+    "embedTitle": "Dieses Video einbetten",
+    "embedHint": "Füge das in eine beliebige Website oder einen Blogpost ein.",
+    "embedSize": "Embed-Größe",
+    "embedCode": "Embed-Code",
+    "copyEmbed": "Embed-Code kopieren",
+    "responsiveSub": "Passt sich an die Seite an, auf der es eingebettet ist",
+    "fixedSub": "Iframe mit fester Größe",
+    "sendInChat": "Im 3Speak-Chat senden",
+    "sendInChatSub": "Schick es jemandem auf 3Speak",
+    "embedOnWebsite": "Auf einer Website einbetten",
+    "embedOnWebsiteSub": "Kopiere das HTML für deine eigene Website oder deinen Blog",
+    "generalShare": "Teilen / Link kopieren",
+    "generalShareSub": "Andere Apps oder Link kopieren"
+  },
+  "gate": {
+    "connectTitle": "Mit dem 3Speak-Chat verbinden",
+    "connectBody": "Der Chat läuft über Snapie. Beim Verbinden wird eine einmalige Login-Challenge mit deinem Hive Posting Key signiert – keine Transaktion, keine Kosten.",
+    "connecting": "Wird verbunden…",
+    "connectButton": "Chat verbinden",
+    "cannotSign": "Mit deiner aktuellen Anmeldung kann die Chat-Challenge nicht signiert werden. Nutze Keychain, HiveAuth, PeakVault oder Ledger.",
+    "needsAccountTitle": "Für den Chat brauchst du ein Hive-Konto",
+    "needsAccountBody": "Nachrichten werden mit den Schlüsseln deines eigenen Kontos signiert, daher wird der Chat zusammen mit allem anderen freigeschaltet, sobald dein Konto bereit ist. Erfülle die Ziele in deinem Profil, und das Team bringt dich dorthin.",
+    "loginTitle": "Melde dich an, um den Chat zu nutzen",
+    "loginBody": "Melde dich mit deinem Hive-Konto an, um Nachrichten zu senden und zu empfangen.",
+    "connectingToChat": "Verbindung zum Chat wird hergestellt…"
+  },
+  "errors": {
+    "notHiveAccount": "@{{user}} ist kein Hive-Konto.",
+    "openConversation": "Diese Unterhaltung konnte nicht geöffnet werden.",
+    "verifyAccount": "Dieses Konto konnte nicht überprüft werden.",
+    "createRoom": "Der Raum konnte nicht erstellt werden.",
+    "joinChannel": "Diesem Kanal konnte nicht beigetreten werden."
+  },
+  "newDm": {
+    "placeholder": "Hive-Nutzer anschreiben…",
+    "start": "Chat starten"
+  },
+  "newRoom": {
+    "toggle": "Neuer privater Raum",
+    "namePlaceholder": "Name des Raums…",
+    "removeMember": "@{{user}} entfernen",
+    "addMore": "Weitere hinzufügen…",
+    "invitePlaceholder": "Hive-Nutzer einladen (optional)…",
+    "create": "Erstellen"
+  },
+  "channels": {
+    "browse": "Kanäle durchsuchen",
+    "publicTitle": "Öffentliche Kanäle",
+    "closeBrowser": "Kanalübersicht schließen",
+    "loading": "Kanäle werden geladen…",
+    "empty": "Keine Kanäle verfügbar.",
+    "join": "Beitreten"
+  },
+  "markRead": {
+    "nothingToClear": "Keine Unterhaltungen zum Leeren. Der Zähler hängt eventuell auf dem Server fest.",
+    "requestFailed": "Anfrage fehlgeschlagen",
+    "allCaughtUp": "Alles gelesen",
+    "stillUnread_one": "Nach dem Leeren von {{count}} Chat werden immer noch {{total}} ungelesene angezeigt.",
+    "stillUnread_other": "Nach dem Leeren von {{count}} Chats werden immer noch {{total}} ungelesene angezeigt.",
+    "stillUnreadNoMatch_one": "Nach dem Leeren von {{count}} Chat werden immer noch {{total}} ungelesene angezeigt. Der Server meldet einen Zähler, aber keine passende Unterhaltung.",
+    "stillUnreadNoMatch_other": "Nach dem Leeren von {{count}} Chats werden immer noch {{total}} ungelesene angezeigt. Der Server meldet einen Zähler, aber keine passende Unterhaltung.",
+    "notSignedIn": "Der Chat ist nicht angemeldet. Verbinde den Chat neu und versuch es nochmal.",
+    "sessionExpired": "Die Chat-Sitzung ist beim Leeren abgelaufen. Verbinde den Chat neu und versuch es nochmal.",
+    "serverRejectedVisible_one": "Der Server hat {{count}} Anfrage abgelehnt (IDs aus der sichtbaren Liste)",
+    "serverRejectedVisible_other": "Der Server hat alle {{count}} Anfragen abgelehnt (IDs aus der sichtbaren Liste)",
+    "serverRejectedServerMap_one": "Der Server hat {{count}} Anfrage abgelehnt (IDs aus der eigenen Ungelesen-Liste des Servers)",
+    "serverRejectedServerMap_other": "Der Server hat alle {{count}} Anfragen abgelehnt (IDs aus der eigenen Ungelesen-Liste des Servers)",
+    "failed": "Es konnte nicht alles als gelesen markiert werden",
+    "marking": "Wird als gelesen markiert…",
+    "button": "Alle als gelesen markieren",
+    "buttonCount": "Alle als gelesen markieren ({{count}})"
+  },
+  "list": {
+    "chooseTarget": "Wähle einen Chat zum Senden",
+    "loading": "Unterhaltungen werden geladen…",
+    "empty": "Noch keine Unterhaltungen. Starte oben eine, indem du einen Hive-Benutzernamen eingibst."
+  },
+  "leave": {
+    "confirmRoom": "Diesen Raum verlassen?",
+    "confirmChannel": "Diesen Kanal verlassen?",
+    "errorRoom": "Der Raum konnte nicht verlassen werden.",
+    "errorChannel": "Der Kanal konnte nicht verlassen werden.",
+    "titleRoom": "Raum verlassen",
+    "titleChannel": "Kanal verlassen",
+    "button": "Verlassen"
+  },
+  "thread": {
+    "editError": "Die Nachricht konnte nicht bearbeitet werden.",
+    "deleteConfirm": "Diese Nachricht löschen? Sie wird durch „[gelöscht]“ ersetzt.",
+    "deleteError": "Die Nachricht konnte nicht gelöscht werden.",
+    "back": "Zurück zu den Unterhaltungen",
+    "loading": "Nachrichten werden geladen…",
+    "empty": "Noch keine Nachrichten – sag hallo 👋",
+    "editedSuffix": " · bearbeitet",
+    "messageActions": "Nachrichtenaktionen",
+    "quote": "Zitieren",
+    "forward": "Weiterleiten",
+    "typing_one": "{{users}} schreibt…",
+    "typing_other": "{{users}} schreiben…",
+    "editing": "Nachricht wird bearbeitet",
+    "cancelEdit": "Bearbeiten abbrechen",
+    "quoting": "@{{user}} zitieren",
+    "cancelQuote": "Zitat abbrechen",
+    "removeImage": "Bild entfernen",
+    "placeholder": "Nachricht schreiben…"
+  },
+  "page": {
+    "chooseTarget": "Wähle einen Chat zum Senden.",
+    "selectConversation": "Wähle eine Unterhaltung aus oder starte eine neue."
+  }
+}

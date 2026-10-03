@@ -1,0 +1,102 @@
+{
+  "controls": {
+    "rewind10": "10 s zurück",
+    "forward10": "10 s vor",
+    "reactToMoment": "Auf diesen Moment reagieren",
+    "mute": "Stummschalten",
+    "unmute": "Ton an",
+    "playerSize": "Playergröße: {{size}}",
+    "sizeStandard": "Standard",
+    "pip": "Bild-im-Bild",
+    "autoplayOn": "Autoplay: an",
+    "autoplayOff": "Autoplay: aus",
+    "ambientSubtle": "Umgebungslicht: dezent",
+    "ambientVivid": "Umgebungslicht: kräftig",
+    "ambientOff": "Umgebungslicht: aus",
+    "playbackSpeed": "Wiedergabegeschwindigkeit",
+    "speedNormal": "Normal",
+    "quality": "Qualität",
+    "qualityAuto": "Automatisch",
+    "fullscreen": "Vollbild",
+    "exitFullscreen": "Vollbild beenden",
+    "markerReplies_one": "({{count}} Antwort)",
+    "markerReplies_other": "({{count}} Antworten)"
+  },
+  "subtitles": {
+    "title": "Untertitel",
+    "off": "Aus",
+    "font": "Schriftart",
+    "size": "Größe",
+    "textColor": "Textfarbe",
+    "textBorder": "Textrand",
+    "borderColor": "Randfarbe",
+    "background": "Hintergrund",
+    "none": "Keiner",
+    "fonts": {
+      "sansSerif": "Serifenlos",
+      "serif": "Serif",
+      "monospace": "Monospace"
+    }
+  },
+  "mini": {
+    "untitled": "Video"
+  },
+  "playlist": {
+    "previous": "Vorheriges Video",
+    "next": "Nächstes Video",
+    "close": "Playlist schließen"
+  },
+  "overlay": {
+    "replay": "Nochmal abspielen"
+  },
+  "reactions": {
+    "translation": "Übersetzung",
+    "translationFailed": "Übersetzung fehlgeschlagen",
+    "videoReaction": "Videoreaktion",
+    "comment": "Kommentar",
+    "previous": "Zurück",
+    "next": "Weiter",
+    "hide": "Reaktionen ausblenden",
+    "hideShort": "Ausblenden",
+    "loadingReplies": "Antworten werden geladen...",
+    "sizeTitle": "Größe: {{size}}",
+    "sizes": {
+      "small": "S",
+      "medium": "M",
+      "standard": "Std",
+      "big": "L",
+      "cinema": "Kino"
+    },
+    "sizeNames": {
+      "small": "Klein",
+      "medium": "Mittel",
+      "standard": "Standard",
+      "big": "Groß",
+      "cinema": "Kino"
+    }
+  },
+  "reactionUpload": {
+    "authorized": "@threespeak autorisiert – du kannst jetzt deine Reaktion posten",
+    "authFailed": "Autorisierung fehlgeschlagen. Bitte versuch es nochmal.",
+    "webcamDenied": "Kein Zugriff auf die Webcam",
+    "shortTooLong": "Shorts dürfen höchstens {{max}} lang sein. Entferne den Haken bei \"In 3Speak Shorts anzeigen\" oder nimm ein kürzeres Video.",
+    "uploadingVideo": "Video wird hochgeladen...",
+    "noEmbedUrl": "Upload erfolgreich, aber es wurde keine Embed-URL zurückgegeben",
+    "publishingComment": "Kommentar wird veröffentlicht...",
+    "posted": "Videoreaktion gepostet!",
+    "postFailed": "Kommentar konnte nicht gepostet werden",
+    "uploadFailed": "Upload fehlgeschlagen",
+    "uploadVideo": "Video hochladen",
+    "recordVideo": "Video aufnehmen",
+    "startRecording": "Aufnahme starten",
+    "stopRecording": "Aufnahme stoppen",
+    "recordedVideo": "Aufgenommenes Video",
+    "descriptionPlaceholder": "Füg eine Beschreibung für deine Videoreaktion hinzu...",
+    "showInShorts": "In 3Speak Shorts anzeigen",
+    "authNote": "Erlaube <b>@threespeak</b>, deine Reaktion in deinem Namen zu posten.",
+    "authorizing": "Wird autorisiert…",
+    "authorize": "@threespeak autorisieren",
+    "uploading": "Wird hochgeladen...",
+    "postReaction": "Reaktion posten"
+  }
+}

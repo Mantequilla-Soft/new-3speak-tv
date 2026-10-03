@@ -1,0 +1,75 @@
+{
+  "buckets": {
+    "today": "Heute",
+    "yesterday": "Gestern",
+    "thisWeek": "Diese Woche",
+    "thisMonth": "Diesen Monat",
+    "older": "Älter"
+  },
+  "loginRequired": "Bitte melde dich an, um deine Benachrichtigungen zu sehen.",
+  "unreadChip_one": "{{count}} neu",
+  "unreadChip_other": "{{count}} neu",
+  "markAllTitle": "Alle als gelesen markieren",
+  "marking": "Wird markiert…",
+  "markAllRead": "Alle gelesen",
+  "refreshing": "Wird aktualisiert…",
+  "categories": {
+    "all": "Alle",
+    "replies": "Antworten",
+    "mentions": "Erwähnungen",
+    "votes": "Votes",
+    "reblogs": "Reblogs",
+    "follows": "Follows",
+    "transfers": "Überweisungen"
+  },
+  "unread": "Ungelesen",
+  "summary": {
+    "title": "Aktivität",
+    "today": "Heute",
+    "week": "Diese Woche",
+    "month": "Diesen Monat",
+    "emptyToday": "Heute noch keine Aktivität.",
+    "emptyWeek": "Diese Woche noch keine Aktivität.",
+    "stillLoading": "Ältere Benachrichtigungen werden noch geladen…",
+    "emptyMonth": "Diesen Monat keine Aktivität."
+  },
+  "loadError": "Benachrichtigungen konnten nicht geladen werden.",
+  "empty": {
+    "all": "Du hast noch keine Benachrichtigungen.",
+    "unread": "Keine ungelesenen Benachrichtigungen.",
+    "replies": "Noch keine Antworten.",
+    "mentions": "Noch keine Erwähnungen.",
+    "votes": "Noch keine Votes.",
+    "reblogs": "Noch keine Reblogs.",
+    "follows": "Noch keine Follows.",
+    "transfers": "Noch keine Überweisungen."
+  },
+  "threeSpeakVideo": "3Speak-Video",
+  "end": "Du bist am Ende angekommen.",
+  "cards": {
+    "votes": "Votes",
+    "voters_one": "{{count}} Voter",
+    "voters_other": "{{count}} Voter",
+    "replies": "Antworten",
+    "newFollowers": "Neue Follower",
+    "mentions": "Erwähnungen",
+    "reblogs": "Reblogs",
+    "transfers": "Überweisungen"
+  },
+  "group": {
+    "voteOne": "@{{user}} hat für deinen Post gevotet",
+    "voteTwo": "@{{user}} und @{{user2}} haben für deinen Post gevotet",
+    "voteMany_one": "@{{user}} und {{count}} weitere Person haben für deinen Post gevotet",
+    "voteMany_other": "@{{user}} und {{count}} weitere haben für deinen Post gevotet",
+    "followOne": "@{{user}} folgt dir jetzt",
+    "followTwo": "@{{user}} und @{{user2}} folgen dir jetzt",
+    "followMany_one": "@{{user}} und {{count}} weitere Person folgen dir jetzt",
+    "followMany_other": "@{{user}} und {{count}} weitere folgen dir jetzt",
+    "generic_one": "{{count}} {{type}}-Benachrichtigung",
+    "generic_other": "{{count}} {{type}}-Benachrichtigungen",
+    "typeCount_one": "{{count}} {{type}}",
+    "typeCount_other": "{{count}} {{type}}",
+    "collapse": "▾ einklappen",
+    "expand": "▸ ausklappen"
+  }
+}

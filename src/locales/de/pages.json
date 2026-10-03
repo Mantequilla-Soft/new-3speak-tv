@@ -1,0 +1,139 @@
+{
+  "about": {
+    "quotes": {
+      "q1": "Wenn Freiheit überhaupt etwas bedeutet, dann das Recht, den Leuten zu sagen, was sie nicht hören wollen.",
+      "q2": "Ich missbillige, was du sagst, aber ich werde bis zum Tod dein Recht verteidigen, es zu sagen.",
+      "q3": "Das Recht auf freie Rede und die unrealistische Erwartung, nie gekränkt zu werden, können nicht nebeneinander bestehen.",
+      "q4": "Nie ist die Redefreiheit kostbarer als in dem Moment, in dem man sich mit dem Hammer auf den Daumen haut.",
+      "q5": "Redefreiheit bedeutet Freiheit für die, die du verachtest, und die Freiheit, die verachtenswertesten Ansichten zu äußern.",
+      "q6": "Unwissende freie Rede wendet sich oft gegen den Redner. Das ist einer von mehreren Gründen, warum man ihr freien Lauf lassen muss, statt sie zu unterdrücken.",
+      "q7": "Zur Redefreiheit gehört auch die Freiheit, Menschen zu kränken.",
+      "q8": "Zwischen freier Rede und Hassrede verläuft ein schmaler Grat. Freie Rede fördert die Debatte, Hassrede dagegen stachelt zu Gewalt an.",
+      "q9": "Redefreiheit bedeutet, dass man Menschen nichts antun darf – weder für die Ansichten, die sie haben, noch für die Ansichten, die sie äußern, noch für die Worte, die sie sprechen oder schreiben."
+    },
+    "faq": {
+      "what": {
+        "question": "Was ist 3Speak?",
+        "answer": "3Speak ist ein Ort, an dem Content Creator ihre Assets auf der Plattform und ihre Communitys direkt besitzen. Dank Blockchain-Technologie gehören diese Assets und Communitys dem Creator und dem Nutzer, nicht 3Speak. Deshalb lassen sie sich auf andere Apps übertragen, die Blockchain-Technologie nutzen. Wenn wir der Community und den Creatorn also nicht bestmöglich dienen, können sie die Assets, die sie erzeugt haben, mitnehmen und in eine andere App umziehen. Das Ergebnis: 3Speak ist zensurresistent und kann dir weder deine Assets wegnehmen noch deine Communitys löschen."
+      },
+      "upvote": {
+        "question": "Warum bekomme ich keine Upvotes von 3Speak?",
+        "answer": "3Speak votet nach eigenem Ermessen und folgt dabei keinen bestimmten Kriterien. Am besten machst du auf dich aufmerksam, indem du hochwertige Inhalte hochlädst und Publikum und Communitys zu 3Speak bringst."
+      },
+      "missing": {
+        "question": "Warum fehlen einige meiner Videos im Neu-Feed?",
+        "answer": "Du kannst so viele Videos hochladen, wie du willst! Das bedeutet aber, dass ein einzelner Nutzer manchmal die Feeds mit seinen Inhalten füllen könnte. Um das zu verhindern, begrenzen wir die Anzahl der Videos eines Creators, die pro Ladevorgang angezeigt werden."
+      },
+      "creator": {
+        "question": "Wie werde ich Content Creator?",
+        "answer": "Am schnellsten bekommst du ein Hive-Konto, indem du in der Navigation auf \"Registrieren\" klickst und den Anweisungen folgst (verlier deine Schlüssel nicht!). Danach meldest du dich mit deinem Hive-Konto an und klickst auf \"Creator Studio\" / Hochladen. Schon kann es losgehen!"
+      },
+      "rewards": {
+        "question": "Wie verdiene ich Belohnungen fürs Kommentieren?",
+        "answer": "Um Belohnungen zu verdienen, brauchst du ein Konto auf der Hive-Blockchain. Du kannst dir kostenlos eins bei Hive holen (https://signup.hive.io), einen Hive-Nutzerguide kaufen oder dir von einem anderen Hive-Nutzer eins geben lassen. Sobald du ein Konto hast, melde dich mit HiveSigner an und gib bei der ersten Anmeldung deinen ACTIVE Key an. Dann kannst du Kommentare posten, die Kryptowährungs-Belohnungen einbringen können."
+      }
+    },
+    "hero": {
+      "tagline1": "SCHÜTZE DEINE INHALTE",
+      "tagline2": "TOKENISIERE DEINE COMMUNITY",
+      "cta": "Sei Teil der Revolution",
+      "description": "3Speak basiert auf der Hive-Blockchain und sorgt so für echte Dezentralisierung, Zensurresistenz und Community-Eigentum."
+    },
+    "how": {
+      "title": "So funktioniert 3Speak",
+      "subtitle": "Erlebe echtes Eigentum an deinen Inhalten dank Blockchain-Technologie",
+      "create": {
+        "title": "Inhalte erstellen",
+        "text": "Lade deine Videos hoch und erstelle Inhalte, die auf der Blockchain wirklich dir gehören."
+      },
+      "earn": {
+        "title": "Belohnungen verdienen",
+        "text": "Werde in Hive-Token belohnt und erhalte Spenden in unserem eigenen Speak-Token."
+      },
+      "community": {
+        "title": "Community aufbauen",
+        "text": "Erstelle eigene Token, Marktplätze und Ökonomien, um deine Communitys zu stützen."
+      }
+    },
+    "features": {
+      "title": "Features",
+      "rewards": {
+        "title": "BELOHNUNGEN",
+        "text": "Wer die Plattform nutzt, wird in Hive-Token belohnt und kann Spenden in unserem eigenen Speak-Token erhalten. Je mehr dieser Token du hältst, desto mehr Privilegien hast du im Ökosystem."
+      },
+      "p2p": {
+        "title": "P2P",
+        "text": "Die Blockchain-Technologie der Seite sorgt dafür, dass Content Creator echte P2P-Verbindungen zu ihrem Publikum haben – ohne Mittelsmänner."
+      },
+      "tokenisation": {
+        "title": "TOKENISIERUNG",
+        "text": "Content Creator können außerdem ganz einfach eigene Token, Marktplätze, Staking-basierte Belohnungen und Ökonomien erstellen, um ihre Communitys zu stützen."
+      },
+      "freeSpeech": {
+        "title": "REDEFREIHEIT",
+        "text": "Unser Grundsatz: Die Möglichkeit, anstößig zu sein, ist das Fundament der Redefreiheit, und die Redefreiheit wiederum bewahrt Gesellschaften davor, in Chaos und Bürgerkrieg abzugleiten."
+      },
+      "journalism": {
+        "title": "BÜRGERJOURNALISMUS",
+        "text": "Wir laden Bürgerjournalisten ein, bei uns mitzumachen und die Art von Inhalten zu posten, die oft ignoriert werden. Wir glauben, dass Bürgerjournalisten die Zukunft sind."
+      }
+    },
+    "hive": {
+      "title": "Angetrieben von der Hive-Blockchain",
+      "decentralized": {
+        "title": "Dezentral",
+        "text": "Kein Single Point of Failure, keine zentrale Kontrolle"
+      },
+      "fast": {
+        "title": "Schnell & kostenlos",
+        "text": "Keine Transaktionsgebühren und 3-Sekunden-Blöcke"
+      },
+      "community": {
+        "title": "Im Besitz der Community",
+        "text": "Gesteuert von Stakeholdern, nicht von Konzernen"
+      },
+      "description": "3Speak basiert auf der Hive-Blockchain und sorgt so für echte Dezentralisierung, Zensurresistenz und Community-Eigentum. Das Hive-Ökosystem liefert die Infrastruktur für Belohnungen, Governance und Eigentum an Assets, die 3Speak revolutionär macht."
+    },
+    "guidelines": {
+      "title": "Unsere Richtlinien",
+      "subtitle": "Für uns ist Redefreiheit absolut – mit klaren und fairen Regeln",
+      "support": {
+        "title": "Was wir unterstützen",
+        "religion": "Kritik an Religion, Überzeugungen, Gruppen und Personen",
+        "politics": "Alternative Politik und Diskussionen über Verschwörungstheorien",
+        "governments": "Kritik an Regierungen und Staatsoberhäuptern",
+        "pseudonyms": "Pseudonyme zum Schutz der Privatsphäre",
+        "jokes": "Anstößige Witze (wenn sie klar als solche gekennzeichnet sind)"
+      },
+      "restrict": {
+        "title": "Was wir einschränken",
+        "violence": "Aufrufe oder Anstiftung zu Gewalt",
+        "gore": "Übermäßig blutige oder pornografische Inhalte",
+        "slander": "Verleumdung und diffamierende Inhalte",
+        "illegal": "Illegale Aktivitäten oder Inhalte"
+      }
+    },
+    "faqSection": {
+      "title": "Häufige Fragen",
+      "subtitle": "Alles, was du über 3Speak wissen musst"
+    },
+    "quotesTitle": "Stimmen der Freiheit",
+    "cta": {
+      "title": "Bereit, deine Inhalte zu besitzen?",
+      "subtitle": "Schließ dich Tausenden von Creatorn an, die bereits die Kontrolle über ihre digitalen Assets übernommen haben."
+    },
+    "connect": "Vernetz dich mit 3Speak",
+    "logoAlt": "3Speak-Logo"
+  },
+  "legal": {
+    "pageTitle": "Wie 3Speak mit deinen Daten umgeht · 3Speak",
+    "englishOnly": "Diese Seite ist nur auf Englisch verfügbar. Die englische Fassung ist die verbindliche.",
+    "back": "← Zurück zu 3Speak"
+  },
+  "notFound": {
+    "imageAlt": "404",
+    "title": "SORRY! SEITE NICHT GEFUNDEN",
+    "message": "Die Seite, die du suchst, ist leider nicht verfügbar.",
+    "goHome": "ZUR STARTSEITE"
+  }
+}

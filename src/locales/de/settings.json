@@ -1,0 +1,205 @@
+{
+  "interests": {
+    "savedToast": "Interessen in deinem Hive-Profil gespeichert",
+    "saveFailed": "Interessen konnten nicht gespeichert werden",
+    "title": "Interessen",
+    "loading": "wird geladen…",
+    "hint": "Wähle die Themen, die dich interessieren – wir zeigen dir damit mehr von den Inhalten, die du magst.",
+    "loginHint": "Melde dich an, um deine Interessen auszuwählen.",
+    "save": "Interessen speichern"
+  },
+  "ads": {
+    "chainNotSaved": "Auf 3Speak gespeichert, aber nicht in deinem Hive-Konto. Versuch es nochmal, um es auch dort zu speichern.",
+    "saveFailed": "Die Einstellung konnte nicht gespeichert werden.",
+    "onToast": "Werbung ist für deine Videos aktiviert",
+    "offToast": "Werbung ist für deine Videos deaktiviert",
+    "splitSaved": "Aufteilung der Einnahmen gespeichert",
+    "title": "Werbung in deinen Videos",
+    "allow": "Werbung erlauben",
+    "allowDesc": "In deinen Videos kann ein kurzer Sponsor-Spot laufen. Du bekommst einen Anteil an den Einnahmen, und die Community, in der du gepostet hast, ebenfalls. Schaltest du das aus, enthalten deine Videos überhaupt keine Werbung – sie werden dann auch aus dem Angebot für Werbekunden entfernt, sodass nichts verkauft wird, dem du widersprochen hast.",
+    "allowAria": "Werbung in deinen Videos erlauben",
+    "shareTitle": "Mit der Community teilen",
+    "shareDesc": "{{pool}} % der Werbeeinnahmen werden zwischen dir und der Community, in der du gepostet hast, aufgeteilt. Wähle, wie viel davon die Community bekommt – lässt du es bei null, behältst du die vollen {{pool}} %.",
+    "youPct": "Du {{pct}} %",
+    "communityPct": "Community {{pct}} %",
+    "shareInputLabel": "Community-Anteil in Prozent",
+    "invalidPct": "Gib eine ganze Zahl zwischen 0 und {{max}} ein.",
+    "loadingSetting": "Deine aktuelle Einstellung wird geladen…"
+  },
+  "viewerRewards": {
+    "onToast": "Zuschauer-Belohnungen aktiviert",
+    "offToast": "Zuschauer-Belohnungen deaktiviert, und deine Wiedergabedaten wurden gelöscht",
+    "saveFailed": "Diese Einstellung konnte nicht gespeichert werden.",
+    "title": "Verdienen beim Zuschauen",
+    "rowTitle": "Zuschauer-Belohnungen",
+    "desc": "Verdiene einen Anteil an den Werbeeinnahmen für das, was du ansiehst, ausgezahlt in HBD oder HIVE. Bezahlt wirst du für angesehene Videos, egal ob dabei Werbung lief oder nicht – belohnt wird also das Zuschauen, nicht das Durchhalten von Werbung. Die Werbung selbst läuft für alle außer 3Speak-Pro-Abonnenten. Wir speichern, wie viel du von jedem Video angesehen hast, zusätzlich zum Wiedergabeverlauf, den die Seite „Angesehen“ ohnehin führt, und löschen diese Daten in dem Moment, in dem du das ausschaltest.",
+    "aria": "Einen Anteil an den Werbeeinnahmen für das verdienen, was du ansiehst"
+  },
+  "postingAuth": {
+    "updateFailed": "Deine Posting-Berechtigung konnte nicht aktualisiert werden.",
+    "addedToast": "@threespeak zu deiner Posting-Berechtigung hinzugefügt",
+    "removedToast": "@threespeak aus deiner Posting-Berechtigung entfernt",
+    "notYetAdded": "Signiert, aber @threespeak erscheint noch nicht in deinem Konto. Öffne die Einstellungen in einer Minute erneut, um nochmal nachzusehen.",
+    "stillThere": "Signiert, aber @threespeak ist noch in deinem Konto. Öffne die Einstellungen in einer Minute erneut, um nochmal nachzusehen.",
+    "title": "Posting-Berechtigung",
+    "canPost": "@threespeak kann für dich posten",
+    "cannotPost": "@threespeak kann nicht für dich posten",
+    "checkingStatus": "@threespeak …",
+    "desc": "Erlaubt 3Speak, deine Uploads und geplanten Posts in deinem Namen zu veröffentlichen und manche Einstellungen ohne jedes Mal eine Wallet-Abfrage zu speichern. Damit kann nur gepostet, gevotet und kommentiert werden; Guthaben bewegen oder deine Schlüssel ändern ist niemals möglich. Ohne diese Berechtigung wirst du bei Uploads gebeten, sie erneut hinzuzufügen. Zum Ändern brauchst du deinen Active Key.",
+    "checking": "Wird geprüft…",
+    "removing": "Wird entfernt…",
+    "adding": "Wird hinzugefügt…"
+  },
+  "notifications": {
+    "kinds": {
+      "videos": {
+        "title": "Neue Videos",
+        "desc": "Wenn ein Creator, dem du folgst, ein Video veröffentlicht."
+      },
+      "shorts": {
+        "title": "Neue Shorts",
+        "desc": "Wenn ein Creator, dem du folgst, einen Short postet."
+      },
+      "audio": {
+        "title": "Neues Audio",
+        "desc": "Wenn ein Creator, dem du folgst, einen Track oder eine Folge hochlädt."
+      },
+      "replies": {
+        "title": "Antworten",
+        "desc": "Wenn jemand auf deinen Post oder Kommentar antwortet."
+      },
+      "mentions": {
+        "title": "Erwähnungen",
+        "desc": "Wenn dich jemand namentlich erwähnt."
+      },
+      "follows": {
+        "title": "Neue Follower",
+        "desc": "Wenn dir jemand folgt."
+      },
+      "votes": {
+        "title": "Upvotes",
+        "desc": "Wenn jemand deinen Post upvotet. Standardmäßig aus – ein beliebter Post bedeutet sehr viel Gesumme."
+      },
+      "reblogs": {
+        "title": "Reblogs",
+        "desc": "Wenn jemand deinen Post rebloggt."
+      }
+    },
+    "groups": {
+      "creators": "Von Creatorn, denen du folgst",
+      "aboutYou": "Über dich"
+    },
+    "deviceOffToast": "Dieses Gerät wird nicht mehr benachrichtigt",
+    "deviceOnToast": "Dieses Gerät wird benachrichtigt",
+    "changeFailed": "Benachrichtigungen konnten nicht geändert werden",
+    "saveFailed": "Das konnte nicht gespeichert werden",
+    "loginHint": "Melde dich an, um auszuwählen, worüber du benachrichtigt wirst.",
+    "unsupported": "Dieser Browser kann keine Benachrichtigungen anzeigen. Auf iPhone und iPad funktionieren sie nur, wenn 3Speak zum Home-Bildschirm hinzugefügt wurde.",
+    "device": "Dieses Gerät benachrichtigen",
+    "deviceBlocked": "In deinen Browsereinstellungen für diese Seite blockiert – erlaube dort zuerst Benachrichtigungen.",
+    "deviceNoWorker": "In diesem Build nicht verfügbar.",
+    "deviceDesc": "Erhalte eine Benachrichtigung, auch wenn 3Speak nicht geöffnet ist. Gilt nur für diesen Browser.",
+    "whatHint": "Worüber du benachrichtigt wirst. Das gilt für alle Geräte, die du aktiviert hast."
+  },
+  "tabs": {
+    "general": "Allgemein",
+    "content": "Inhalte",
+    "rewards": "Werbung & Belohnungen",
+    "about": "Info / Version"
+  },
+  "contentTabs": {
+    "feed": "Feed",
+    "aria": "Inhaltseinstellungen"
+  },
+  "butrauthUnlocked": "Butter Auth freigeschaltet",
+  "appearance": {
+    "title": "Darstellung",
+    "darkMode": {
+      "title": "Dunkler Modus",
+      "desc": "Das dunkle Farbschema in der ganzen App verwenden."
+    },
+    "largeCards": {
+      "title": "Große Karten",
+      "desc": "Größere Videokarten auf Startseite, Profil- und Playlist-Seiten anzeigen. Ausschalten für kleinere, kompaktere Karten."
+    },
+    "previews": {
+      "title": "Videovorschauen",
+      "desc": "Eine stumme Vorschau abspielen, wenn du über eine Videokarte fährst (und auf dem Handy im großen Modus startet die mittlere Karte beim Scrollen automatisch)."
+    },
+    "simpleFeeds": {
+      "title": "Einfache Feeds",
+      "desc": "Den Empfehlungsalgorithmus ausschalten – Entdecken, Interessen und Trends werden zu einfachen Listen mit dem Neuesten zuerst statt gerankter Listen."
+    }
+  },
+  "shorts": {
+    "commentBar": {
+      "title": "Kommentarleiste bei Shorts",
+      "desc": "Ein Kommentarfeld unter einem Short anzeigen. Standardmäßig aus – den Kommentarbereich kannst du jederzeit über den Kommentar-Button öffnen."
+    },
+    "openOnStart": {
+      "title": "Shorts beim Start öffnen",
+      "desc": "Beim Öffnen von 3Speak direkt zu den Shorts statt zum Startseiten-Feed."
+    },
+    "inFeeds": {
+      "title": "Shorts in den Feeds",
+      "desc": "Reihen mit Shorts zwischen den Videos in den Startseiten-Feeds und den Empfehlungen auf der Wiedergabeseite anzeigen. Ausschalten, damit diese Listen nur Videos enthalten."
+    }
+  },
+  "feed": {
+    "nsfw": {
+      "title": "NSFW-Inhalte anzeigen",
+      "desc": "Videos und Audio anzeigen, die als NSFW (nicht jugendfrei) markiert sind. Standardmäßig aus."
+    },
+    "hideWatched": {
+      "title": "Angesehene Videos ausblenden",
+      "desc": "Videos, die du schon angesehen hast, aus Startseiten-, Trend- und Empfehlungs-Feeds weglassen."
+    },
+    "hideAi": {
+      "title": "KI-generierte Videos ausblenden",
+      "desc": "Als KI-generiert markierte Videos und Shorts in allen Feeds weglassen. Die Markierung stammt aus einer automatischen Prüfung, daher können einige durchrutschen."
+    },
+    "privateMode": {
+      "title": "Privater Modus",
+      "desc": "Dein Land aus den Statistiken der Creator heraushalten. Wir speichern deine IP-Adresse nie – bei niemandem. Sie wird in dem Moment, in dem du auf Play drückst, in einen Ländercode umgewandelt und dann verworfen. Ist das aktiviert, wird nicht einmal dieses Land für deine Aufrufe erfasst."
+    }
+  },
+  "about": {
+    "title": "Info",
+    "version": "App-Version",
+    "rpcNode": "Hive-RPC-Node",
+    "yourData": "Deine Daten",
+    "privacyLink": "Wie 3Speak mit deinen Daten umgeht"
+  },
+  "dataRequest": {
+    "emailRequired": "Gib eine E-Mail-Adresse ein, damit wir antworten können",
+    "confirmRequired": "Bitte bestätige, dass du verstehst, was gelöscht werden kann und was nicht",
+    "requestFailed": "Anfrage fehlgeschlagen ({{status}})",
+    "deletionReceived": "Löschanfrage erhalten",
+    "dataReceived": "Datenanfrage erhalten",
+    "sendFailed": "Deine Anfrage konnte nicht gesendet werden",
+    "doneTitle": "Anfrage erhalten",
+    "doneBody": "Deine Referenz ist <b>{{ref}}</b>. Wir antworten an <b>{{contact}}</b> spätestens bis <b>{{dueBy}}</b>.",
+    "keepRef": "Bewahre die Referenz auf, falls du nachfragen musst.",
+    "signIn": "Bitte melde dich an, um deine Daten anzufordern oder zu löschen – eine Anfrage gilt für das Konto, mit dem du angemeldet bist.",
+    "requestFor": "Anfrage für <b>@{{username}}</b>",
+    "typeAria": "Art der Anfrage",
+    "getData": "Meine Daten anfordern",
+    "deleteData": "Meine Kontodaten löschen",
+    "ledeDelete": "Wir löschen alles, was 3Speak in unserer eigenen Datenbank über dich speichert.",
+    "ledeExport": "Wir senden dir alles, was 3Speak in unserer eigenen Datenbank über dich speichert, als JSON-Datei.",
+    "covers": "Das umfasst:",
+    "cannotTitle": "Was wir nicht tun können",
+    "cannotBody": "3Speak basiert auf der <b>Hive-Blockchain</b>. Deine Posts, Kommentare, Votes und Reshares wurden mit deinen eigenen Schlüsseln signiert und an ein <b>öffentliches, dauerhaftes Register</b> übertragen, das wir nicht kontrollieren und nicht bearbeiten können.",
+    "cannotDelete": "Wir können unsere Kopien löschen und deine Inhalte nicht mehr auf 3Speak anzeigen. Wir können sie nicht von der Blockchain entfernen – das kann niemand, auch du nicht. Jeder, der einen Hive-Node betreibt, hat sie weiterhin.",
+    "cannotExport": "Deine On-Chain-Daten sind bereits öffentlich und über jede Hive-API maschinenlesbar – wir zeigen dir, wo. Was wir dir senden, ist das, was wir darüber hinaus speichern.",
+    "emailLabel": "E-Mail für die Antwort",
+    "emailPlaceholder": "du@example.com",
+    "messageLabel": "Möchtest du noch etwas hinzufügen? (optional)",
+    "messagePlaceholder": "Optionale Details zu deiner Anfrage",
+    "confirmLabel": "Ich verstehe, dass meine Inhalte auf der Hive-Blockchain dauerhaft sind und weder von 3Speak noch von irgendjemand anderem gelöscht werden können.",
+    "sending": "Wird gesendet…",
+    "requestDeletion": "Löschung beantragen",
+    "requestData": "Meine Daten anfordern",
+    "foot": "Wir antworten innerhalb eines Monats. Du kannst auch direkt an <mail>privacy@3speak.tv</mail> schreiben."
+  }
+}
