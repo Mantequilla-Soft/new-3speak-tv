@@ -1,0 +1,19 @@
+{
+  "placeholder": "Write your content here...",
+  "uploadFailed": "Upload failed: {{message}}",
+  "uploadingImage": "Uploading image...",
+  "format": {
+    "underline": "Underline",
+    "strike": "Strike",
+    "highlight": "Highlight",
+    "bulletList": "Bullet List",
+    "orderedList": "Ordered List",
+    "taskList": "Task List"
+  },
+  "emoji": {
+    "searchPlaceholder": "Search emoji"
+  },
+  "preview": {
+    "renderError": "Error rendering content"
+  }
+}
