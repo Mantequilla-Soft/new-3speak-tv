@@ -18,23 +18,25 @@ import { MdMusicNote, MdVideoLibrary, MdGroup, MdCheck, MdPerson, MdClose, MdCal
 import { RiMovieLine } from "react-icons/ri";
 import { fixVideoThumbnail, fallbackImg } from "../utils/fixThumbnails";
 import TimeAgo from "../components/TimeAgo/TimeAgo";
+import { useTranslation } from "react-i18next";
+import { formatNumber } from "../i18n";
 
 const LIMIT = 50;
 
 const SEARCH_TYPES = [
-  { key: 'user', label: 'Users', icon: <MdPerson size={16} /> },
-  { key: 'community', label: 'Communities', icon: <MdGroup size={16} /> },
-  { key: 'video', label: 'Videos', icon: <MdVideoLibrary size={16} /> },
-  { key: 'short', label: 'Shorts', icon: <RiMovieLine size={16} /> },
-  { key: 'audio', label: 'Audio', icon: <MdMusicNote size={16} /> },
-  { key: 'playlist', label: 'Playlists', icon: <MdPlaylistPlay size={16} /> },
+  { key: 'user', labelKey: 'feeds.discover.types.user', icon: <MdPerson size={16} /> },
+  { key: 'community', labelKey: 'feeds.discover.types.community', icon: <MdGroup size={16} /> },
+  { key: 'video', labelKey: 'feeds.discover.types.video', icon: <MdVideoLibrary size={16} /> },
+  { key: 'short', labelKey: 'feeds.discover.types.short', icon: <RiMovieLine size={16} /> },
+  { key: 'audio', labelKey: 'feeds.discover.types.audio', icon: <MdMusicNote size={16} /> },
+  { key: 'playlist', labelKey: 'feeds.discover.types.playlist', icon: <MdPlaylistPlay size={16} /> },
 ];
 
 const DATE_PRESETS = [
-  { label: 'Today', days: 1 },
-  { label: 'This week', days: 7 },
-  { label: 'This month', days: 30 },
-  { label: 'This year', days: 365 },
+  { labelKey: 'feeds.discover.dates.today', days: 1 },
+  { labelKey: 'feeds.discover.dates.week', days: 7 },
+  { labelKey: 'feeds.discover.dates.month', days: 30 },
+  { labelKey: 'feeds.discover.dates.year', days: 365 },
 ];
 
 const fetchVideos = async ({ pageParam = 1 }) => {
@@ -72,7 +74,7 @@ const formatDuration = (seconds) => {
 };
 
 const STORAGE_KEY = 'discover-search-state';
-const defaultExcluded = SEARCH_TYPES.reduce((acc, t) => ({ ...acc, [t.key]: false }), {});
+const defaultExcluded = SEARCH_TYPES.reduce((acc, type) => ({ ...acc, [type.key]: false }), {});
 
 function loadState() {
   try {
@@ -87,6 +89,7 @@ function saveState(state) {
 }
 
 const Discover = () => {
+  const { t } = useTranslation();
   const showNsfw = useAppStore(s => s.showNsfw);
   const hideWatched = useAppStore(s => s.hideWatched);
   const feedUser = useAppStore(s => s.user);
@@ -160,7 +163,7 @@ const Discover = () => {
 
   // Active type keys (non-excluded)
   const activeTypes = useMemo(
-    () => SEARCH_TYPES.filter(t => !excludedFilters[t.key]).map(t => t.key),
+    () => SEARCH_TYPES.filter(type => !excludedFilters[type.key]).map(type => type.key),
     [excludedFilters]
   );
 
@@ -268,12 +271,12 @@ const Discover = () => {
   const toggleFilter = useCallback((key) => {
     setExcludedFilters(prev => {
       const wasActive = !prev[key];
-      const activeCount = SEARCH_TYPES.filter(t => !prev[t.key]).length;
+      const activeCount = SEARCH_TYPES.filter(type => !prev[type.key]).length;
 
       // If all are active (default state), solo-select this one
       if (activeCount === SEARCH_TYPES.length) {
         const next = {};
-        for (const t of SEARCH_TYPES) next[t.key] = t.key !== key;
+        for (const type of SEARCH_TYPES) next[type.key] = type.key !== key;
         return next;
       }
 
@@ -373,7 +376,7 @@ const Discover = () => {
             onChange={(e) => { setSearchTerm(e.target.value); setShowSuggestions(true); }}
             onFocus={() => setShowSuggestions(true)}
             type="text"
-            placeholder="Search videos, shorts, audio, communities..."
+            placeholder={t('feeds.discover.searchPlaceholder')}
             className="discover-search-input"
           />
           {searchTerm && (
@@ -381,7 +384,7 @@ const Discover = () => {
               type="button"
               className="discover-search-clear"
               onClick={() => { setSearchTerm(''); searchInputRef.current?.focus(); }}
-              aria-label="Clear search"
+              aria-label={t('feeds.discover.clearSearch')}
             >
               <MdClose size={18} />
             </button>
@@ -391,12 +394,12 @@ const Discover = () => {
             <div className="discover-suggest-dropdown">
               <button className="discover-suggest-item discover-suggest-search-term" onMouseDown={() => setShowSuggestions(false)}>
                 <MdSearch size={16} className="discover-suggest-icon" />
-                <span className="discover-suggest-primary">Search &ldquo;{debouncedTerm}&rdquo;</span>
+                <span className="discover-suggest-primary">{t('feeds.discover.searchFor', { term: debouncedTerm })}</span>
               </button>
 
               {groupedSuggestions.user?.length > 0 && (
                 <div className="discover-suggest-group">
-                  <span className="discover-suggest-group-label">Users</span>
+                  <span className="discover-suggest-group-label">{t('feeds.discover.types.user')}</span>
                   <div className="discover-suggest-badges">
                     {groupedSuggestions.user.map((s, i) => (
                       <button key={i} className="discover-suggest-badge" onMouseDown={() => selectSuggestion(s)}>
@@ -412,7 +415,7 @@ const Discover = () => {
 
               {groupedSuggestions.tag?.length > 0 && (
                 <div className="discover-suggest-group">
-                  <span className="discover-suggest-group-label">Tags</span>
+                  <span className="discover-suggest-group-label">{t('feeds.discover.suggest.tags')}</span>
                   <div className="discover-suggest-badges">
                     {groupedSuggestions.tag.map((s, i) => (
                       <button key={i} className="discover-suggest-badge" onMouseDown={() => selectSuggestion(s)}>
@@ -426,7 +429,7 @@ const Discover = () => {
 
               {groupedSuggestions.community?.length > 0 && (
                 <div className="discover-suggest-group">
-                  <span className="discover-suggest-group-label">Communities</span>
+                  <span className="discover-suggest-group-label">{t('feeds.discover.types.community')}</span>
                   <div className="discover-suggest-badges">
                     {groupedSuggestions.community.map((s, i) => (
                       <button key={i} className="discover-suggest-badge" onMouseDown={() => selectSuggestion(s)}>
@@ -442,7 +445,7 @@ const Discover = () => {
 
               {groupedSuggestions.playlist?.length > 0 && (
                 <div className="discover-suggest-group">
-                  <span className="discover-suggest-group-label">Playlists</span>
+                  <span className="discover-suggest-group-label">{t('feeds.discover.types.playlist')}</span>
                   <div className="discover-suggest-badges">
                     {groupedSuggestions.playlist.map((s, i) => (
                       <button key={i} className="discover-suggest-badge" onMouseDown={() => selectSuggestion(s)}>
@@ -457,7 +460,7 @@ const Discover = () => {
 
               {groupedSuggestions.title?.length > 0 && (
                 <div className="discover-suggest-group">
-                  <span className="discover-suggest-group-label">Titles</span>
+                  <span className="discover-suggest-group-label">{t('feeds.discover.suggest.titles')}</span>
                   {groupedSuggestions.title.map((s, i) => (
                     <button key={i} className="discover-suggest-item" onMouseDown={() => selectSuggestion(s)}>
                       <MdSearch size={16} className="discover-suggest-icon" />
@@ -472,15 +475,15 @@ const Discover = () => {
 
         {isSearching && (
           <div className="discover-filters">
-            {SEARCH_TYPES.filter(t => !communityFilter || (t.key !== 'user' && t.key !== 'community')).map(t => (
-              <label key={t.key} className={`discover-filter-chip${excludedFilters[t.key] ? ' excluded' : ''}`}>
+            {SEARCH_TYPES.filter(type => !communityFilter || (type.key !== 'user' && type.key !== 'community')).map(type => (
+              <label key={type.key} className={`discover-filter-chip${excludedFilters[type.key] ? ' excluded' : ''}`}>
                 <input
                   type="checkbox"
-                  checked={!excludedFilters[t.key]}
-                  onChange={() => toggleFilter(t.key)}
+                  checked={!excludedFilters[type.key]}
+                  onChange={() => toggleFilter(type.key)}
                 />
-                {t.icon}
-                <span>{t.label}</span>
+                {type.icon}
+                <span>{t(type.labelKey)}</span>
               </label>
             ))}
             <label className={`discover-filter-chip boost${boostRecent ? ' active' : ''}`}>
@@ -490,7 +493,7 @@ const Discover = () => {
                 onChange={() => setBoostRecent(prev => !prev)}
               />
               <MdCheck size={14} className="discover-filter-check" />
-              <span>Boost recent</span>
+              <span>{t('feeds.discover.boostRecent')}</span>
             </label>
             <button
               type="button"
@@ -498,7 +501,7 @@ const Discover = () => {
               onClick={() => setShowAdvanced(prev => !prev)}
             >
               <MdCalendarToday size={14} />
-              <span>Filters{hasAdvancedFilters ? ' *' : ''}</span>
+              <span>{t('feeds.discover.filters')}{hasAdvancedFilters ? ' *' : ''}</span>
             </button>
           </div>
         )}
@@ -508,7 +511,7 @@ const Discover = () => {
             <div className="discover-advanced-row">
               <label className="discover-advanced-label">
                 <MdCalendarToday size={14} />
-                <span>Date</span>
+                <span>{t('feeds.discover.date')}</span>
               </label>
               <div className="discover-date-presets">
                 {DATE_PRESETS.map(p => (
@@ -518,7 +521,7 @@ const Discover = () => {
                     className={`discover-date-btn${datePreset === p.days ? ' active' : ''}`}
                     onClick={() => setDatePreset(prev => prev === p.days ? null : p.days)}
                   >
-                    {p.label}
+                    {t(p.labelKey)}
                   </button>
                 ))}
               </div>
@@ -527,12 +530,12 @@ const Discover = () => {
             <div className="discover-advanced-row">
               <label className="discover-advanced-label">
                 <MdLabel size={14} />
-                <span>Tag</span>
+                <span>{t('feeds.discover.tag')}</span>
               </label>
               <input
                 type="text"
                 className="discover-advanced-input"
-                placeholder="e.g. crypto, gaming..."
+                placeholder={t('feeds.discover.tagPlaceholder')}
                 value={tagFilter}
                 onChange={(e) => setTagFilter(e.target.value.trim().toLowerCase())}
               />
@@ -546,7 +549,7 @@ const Discover = () => {
             <div className="discover-advanced-row">
               <label className="discover-advanced-label">
                 <MdGroup size={14} />
-                <span>Community</span>
+                <span>{t('feeds.discover.community')}</span>
               </label>
               <div className="discover-community-search" ref={communityWrapRef}>
                 {communityFilter ? (
@@ -564,7 +567,7 @@ const Discover = () => {
                     <input
                       type="text"
                       className="discover-advanced-input"
-                      placeholder="Search communities..."
+                      placeholder={t('feeds.discover.communityPlaceholder')}
                       value={communitySearch}
                       onChange={(e) => { setCommunitySearch(e.target.value); setShowCommunityDropdown(true); }}
                       onFocus={() => setShowCommunityDropdown(true)}
@@ -588,7 +591,7 @@ const Discover = () => {
                             </div>
                             <div className="discover-suggest-text">
                               <span className="discover-suggest-primary">{c.title || c.name}</span>
-                              <span className="discover-suggest-secondary">{c.subscribers} subscribers</span>
+                              <span className="discover-suggest-secondary">{t('feeds.discover.subscribers', { count: c.subscribers })}</span>
                             </div>
                           </button>
                         ))}
@@ -602,7 +605,7 @@ const Discover = () => {
             {hasAdvancedFilters && (
               <button type="button" className="discover-clear-advanced" onClick={clearAdvancedFilters}>
                 <MdClose size={14} />
-                Clear all filters
+                {t('feeds.discover.clearAllFilters')}
               </button>
             )}
           </div>
@@ -628,28 +631,28 @@ const Discover = () => {
 
             {!searchLoading && allExcluded && (
               <p className="discover-no-results">
-                All content types are hidden.{' '}
+                {t('feeds.discover.allHidden')}{' '}
                 <button className="discover-reset-filters" onClick={() => setExcludedFilters(defaultExcluded)}>
-                  Re-enable all filters
+                  {t('feeds.discover.reenableFilters')}
                 </button>
               </p>
             )}
 
             {!searchLoading && !allExcluded && !hasResults && (
-              <p className="discover-no-results">No results found for &ldquo;{debouncedTerm}&rdquo;</p>
+              <p className="discover-no-results">{t('feeds.discover.noResultsFor', { term: debouncedTerm })}</p>
             )}
 
-            {SEARCH_TYPES.filter(t => !communityFilter || (t.key !== 'user' && t.key !== 'community')).map(t => {
-              const items = grouped[t.key];
+            {SEARCH_TYPES.filter(type => !communityFilter || (type.key !== 'user' && type.key !== 'community')).map(type => {
+              const items = grouped[type.key];
               if (!items || items.length === 0) return null;
-              const isCollapsed = !!collapsedGroups[t.key];
+              const isCollapsed = !!collapsedGroups[type.key];
               return (
-                <div key={t.key} className="discover-result-group">
-                  <h3 className="discover-group-title" onClick={() => toggleGroup(t.key)}>
-                    {t.icon} {t.label} ({items.length})
+                <div key={type.key} className="discover-result-group">
+                  <h3 className="discover-group-title" onClick={() => toggleGroup(type.key)}>
+                    {type.icon} {t('feeds.discover.groupTitle', { label: t(type.labelKey), count: items.length })}
                     {isCollapsed ? <MdExpandMore size={18} className="discover-group-toggle" /> : <MdExpandLess size={18} className="discover-group-toggle" />}
                   </h3>
-                  {!isCollapsed && (t.key === 'community' ? (
+                  {!isCollapsed && (type.key === 'community' ? (
                     <div className="discover-community-list">
                       {items.map(c => (
                         <Link to={`/community/${c.name}`} key={c.name} className="discover-community-card">
@@ -661,13 +664,13 @@ const Discover = () => {
                             <span className="discover-community-about">{c.about}</span>
                           </div>
                           <div className="discover-community-stats">
-                            <span>{c.subscribers} subscribers</span>
-                            <span>{c.num_authors} authors</span>
+                            <span>{t('feeds.discover.subscribers', { count: c.subscribers })}</span>
+                            <span>{t('feeds.discover.authors', { count: c.num_authors })}</span>
                           </div>
                         </Link>
                       ))}
                     </div>
-                  ) : t.key === 'user' ? (
+                  ) : type.key === 'user' ? (
                     <div className="discover-user-list">
                       {items.map(u => (
                         <Link to={`/p/${u.username}`} key={u.username} className="discover-user-card">
@@ -686,7 +689,7 @@ const Discover = () => {
                         </Link>
                       ))}
                     </div>
-                  ) : t.key === 'playlist' ? (
+                  ) : type.key === 'playlist' ? (
                     <div className="discover-playlist-list">
                       {items.map(p => (
                         <Link to={`/playlist/${p.id}`} key={p.id} className="discover-playlist-card">
@@ -695,7 +698,7 @@ const Discover = () => {
                           </div>
                           <div className="discover-playlist-info">
                             <span className="discover-playlist-name">{p.name}</span>
-                            <span className="discover-playlist-meta">@{p.owner} &middot; {p.video_count} video{p.video_count !== 1 ? 's' : ''}</span>
+                            <span className="discover-playlist-meta">@{p.owner} &middot; {t('common.units.videos', { count: p.video_count })}</span>
                           </div>
                         </Link>
                       ))}
@@ -704,7 +707,7 @@ const Discover = () => {
                     <div className="discover-media-list">
                       {items.map((item, i) => (
                         <Link
-                          to={t.key === 'short' ? `/shorts?v=${item.author}/${item.permlink}` : `/watch?v=${item.author}/${item.permlink}`}
+                          to={type.key === 'short' ? `/shorts?v=${item.author}/${item.permlink}` : `/watch?v=${item.author}/${item.permlink}`}
                           key={`${item.author}-${item.permlink}-${i}`}
                           className="discover-media-card"
                         >
@@ -720,7 +723,7 @@ const Discover = () => {
                             <span className="discover-media-title">{item.title}</span>
                             <span className="discover-media-author">@{item.author || item.owner}</span>
                             <span className="discover-media-meta">
-                              {item.views > 0 && <span>{item.views.toLocaleString()} views</span>}
+                              {item.views > 0 && <span>{t('feeds.discover.views', { count: item.views, views: formatNumber(item.views) })}</span>}
                               {item.created_at && <TimeAgo date={item.created_at} short />}
                             </span>
                           </div>
@@ -744,9 +747,9 @@ const Discover = () => {
           ) : (
             <Card3 videos={[...liveStreams, ...videos]} loading={isFetchingNextPage} getContentForVideo={getContentForVideo} isWatched={isWatched} getViewCount={getViewCount} />
           )}
-          {isError && <p>Error fetching videos</p>}
+          {isError && <p>{t('feeds.errors.fetchVideos')}</p>}
           {isFetchingNextPage && (
-            <p style={{ textAlign: "center" }}>Loading more...</p>
+            <p style={{ textAlign: "center" }}>{t('feeds.loadingMore')}</p>
           )}
         </>
       )}

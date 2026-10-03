@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import PropTypes from "prop-types";
+import { useTranslation } from "react-i18next";
 
 // How long to wait before showing the branded fallback for an image that has
 // produced NOTHING yet (no bytes decoded, no error). This is now purely COSMETIC:
@@ -29,7 +30,8 @@ const DECODE_POLL_MS = 120;
  * Off-screen lazy images don't arm the watchdog, so they never fall back or spin
  * before they even try to load.
  */
-function CardThumbnail({ src, fallback, alt = "thumbnail", eager = false, className, ...rest }) {
+function CardThumbnail({ src, fallback, alt, eager = false, className, ...rest }) {
+  const { t } = useTranslation();
   const [loaded, setLoaded] = useState(false); // real image has renderable content
   const [failed, setFailed] = useState(false); // real image errored
   const [slow, setSlow] = useState(false);      // nothing decoded yet after watchdog
@@ -80,7 +82,7 @@ function CardThumbnail({ src, fallback, alt = "thumbnail", eager = false, classN
       <img
         ref={imgRef}
         src={src}
-        alt={alt}
+        alt={alt ?? t("cards.thumbnailAlt")}
         className={className}
         style={{ position: "relative", zIndex: 1, opacity: loaded && !failed ? 1 : 0, transition: "opacity 0.2s ease" }}
         onLoad={() => { done(); setLoaded(true); }}

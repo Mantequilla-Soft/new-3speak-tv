@@ -2,8 +2,10 @@ import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { MdWatchLater, MdLock } from 'react-icons/md';
 import './WatchLaterPlaylistCard.scss';
+import { useTranslation } from 'react-i18next';
 
 function WatchLaterPlaylistCard({ playlist, username }) {
+  const { t } = useTranslation();
   const count = playlist?.items?.length || 0;
 
   return (
@@ -21,18 +23,18 @@ function WatchLaterPlaylistCard({ playlist, username }) {
           </div>
         </div>
 
-        <h2>Watch Later</h2>
+        <h2>{t('cards.watchLater.title')}</h2>
 
         <div className="playlist-meta">
           <span className="owner">@{username}</span>
           <span className="separator">-</span>
           <span className="item-count">
-            {count} {count === 1 ? 'video' : 'videos'}
+            {t('common.units.videos', { count })}
           </span>
         </div>
 
         <div className="bottom-info">
-          <p>Videos to watch later</p>
+          <p>{t('cards.watchLater.subtitle')}</p>
         </div>
       </Link>
     </div>

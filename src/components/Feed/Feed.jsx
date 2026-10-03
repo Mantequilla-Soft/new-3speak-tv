@@ -13,6 +13,7 @@ import Card3 from "../Cards/Card3"
 import { useContentBatch } from "../../hooks/useContentBatch"
 import { useWatchHistory } from "../../hooks/useWatchHistory"
 import useViewCounts from "../../hooks/useViewCounts"
+import { useTranslation } from "react-i18next"
 
 
 
@@ -38,6 +39,7 @@ const fetchHomeVideos = async ({ pageParam = 0 }) => {
 };
 
 function Feed() {
+  const { t } = useTranslation()
   const [isOpen, setIsOpen] = useState(false)
   const {authenticated, user, showNsfw, hideWatched} = useAppStore();
 
@@ -116,9 +118,9 @@ function Feed() {
     <CommunitiesTags />
 
     {isLoading ? <CardSkeleton /> :  <Card3 videos={videos} loading={isFetchingNextPage} getContentForVideo={getContentForVideo} isWatched={isWatched} hideWatched={hideWatched} watchedVersion={watchedVersion} getViewCount={getViewCount} />}
-    {isError && <p>Error fetching videos</p>}
+    {isError && <p>{t('feeds.errors.fetchVideos')}</p>}
       {isFetchingNextPage && (
-        <p style={{ textAlign: "center" }}>Loading more...</p>
+        <p style={{ textAlign: "center" }}>{t('feeds.loadingMore')}</p>
       )}
     </>
     {/* {isOpen && <Auth_modal  isOpen={isOpen} close={toggleUploadModal} />} */}

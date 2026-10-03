@@ -1,6 +1,8 @@
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import utc from 'dayjs/plugin/utc';
+import { useTranslation } from 'react-i18next';
+import { formatTimeAgo } from '../../i18n';
 import './TimeAgo.scss';
 
 dayjs.extend(relativeTime);
@@ -17,41 +19,14 @@ function toUtc(date) {
   return dayjs(date).utc();
 }
 
-function shortTime(date) {
-  const now = dayjs.utc();
-  const d = toUtc(date);
-  const seconds = now.diff(d, 'second');
-  if (seconds < 60) return `${seconds}s ago`;
-  const minutes = now.diff(d, 'minute');
-  if (minutes < 60) return `${minutes}m ago`;
-  const hours = now.diff(d, 'hour');
-  if (hours < 24) return `${hours}h ago`;
-  const days = now.diff(d, 'day');
-  if (days < 30) return `${days}d ago`;
-  const months = now.diff(d, 'month');
-  if (months < 12) return `${months}mo ago`;
-  const years = now.diff(d, 'year');
-  return `${years}y ago`;
-}
-
-function longTime(date) {
-  const now = dayjs.utc();
-  const d = toUtc(date);
-  const seconds = now.diff(d, 'second');
-  if (seconds < 60) return 'just now';
-  const minutes = now.diff(d, 'minute');
-  if (minutes < 60) return `${minutes} minute${minutes !== 1 ? 's' : ''} ago`;
-  const hours = now.diff(d, 'hour');
-  if (hours < 24) return `${hours} hour${hours !== 1 ? 's' : ''} ago`;
-  const days = now.diff(d, 'day');
-  if (days < 30) return `${days} day${days !== 1 ? 's' : ''} ago`;
-  const months = now.diff(d, 'month');
-  if (months < 12) return `${months} month${months !== 1 ? 's' : ''} ago`;
-  const years = now.diff(d, 'year');
-  return `${years} year${years !== 1 ? 's' : ''} ago`;
-}
+// Locale-aware relative time ("3d ago" / "3 days ago" in English). The dates are
+// normalised to UTC first, then handed to Intl via formatTimeAgo.
+const shortTime = (d) => formatTimeAgo(d.toDate(), { style: 'narrow' });
+const longTime = (d) => formatTimeAgo(d.toDate());
 
 function TimeAgo({ date, unix, short }) {
+  // Subscribes to language changes so the label re-renders in the new language.
+  useTranslation();
   const d = unix ? dayjs.unix(date).utc() : toUtc(date);
   if (short) return <span>{shortTime(d)}</span>;
   return (

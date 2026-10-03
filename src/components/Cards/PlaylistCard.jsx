@@ -6,12 +6,14 @@ import relativeTime from 'dayjs/plugin/relativeTime';
 import { getPlaylistThumbnail } from '../../hooks/useUserPlaylists';
 import img from '../../assets/image/speak.jpg';
 import './PlaylistCard.scss';
+import { useTranslation } from 'react-i18next';
 
 dayjs.extend(relativeTime);
 
 function PlaylistCard({ playlists = [], loading = false, error = null, showPrivacyBadge = false }) {
-  if (loading && playlists.length === 0) return <div>Loading playlists...</div>;
-  if (error) return <div>Error: {error}</div>;
+  const { t } = useTranslation();
+  if (loading && playlists.length === 0) return <div>{t('cards.playlist.loading')}</div>;
+  if (error) return <div>{t('cards.error', { error })}</div>;
   if (playlists.length === 0) return null;
 
   return (
@@ -54,7 +56,7 @@ function PlaylistCard({ playlists = [], loading = false, error = null, showPriva
               <span className="owner">@{playlist.owner}</span>
               <span className="separator">•</span>
               <span className="item-count">
-                {itemCount} {itemCount === 1 ? 'item' : 'items'}
+                {t('cards.playlist.items', { count: itemCount })}
               </span>
             </div>
 

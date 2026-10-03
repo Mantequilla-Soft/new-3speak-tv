@@ -9,6 +9,7 @@ import { getHiveUrl } from '../../utils/hiveNode';
 import AuthorBadge from '../AuthorBadge/AuthorBadge';
 import fallback from '../../assets/image/speak.jpg';
 import './PlaylistFeedCard.scss';
+import { useTranslation } from 'react-i18next';
 
 dayjs.extend(relativeTime);
 
@@ -37,6 +38,7 @@ async function fetchFirstItemThumb(author, permlink) {
  * thumbnail (lazy, cached) → the owner's Hive avatar → bundled fallback.
  */
 function PlaylistFeedCard({ playlist }) {
+  const { t } = useTranslation();
   const { id, name, owner, itemCount, thumbnail, firstItem, updated_at: updatedAt } = playlist;
 
   const { data: resolvedThumb } = useQuery({
@@ -53,7 +55,7 @@ function PlaylistFeedCard({ playlist }) {
 
   return (
     <article className="playlist-feed-card">
-      <Link to={`/playlist/${id}`} className="pfc-cover" aria-label={`Open playlist ${name}`}>
+      <Link to={`/playlist/${id}`} className="pfc-cover" aria-label={t('cards.playlist.openAria', { name })}>
         <img
           src={cover}
           alt={name}
@@ -64,7 +66,7 @@ function PlaylistFeedCard({ playlist }) {
           <MdPlaylistPlay />
           {itemCount}
         </span>
-        <span className="pfc-tag">Playlist</span>
+        <span className="pfc-tag">{t('cards.playlist.tag')}</span>
       </Link>
 
       <div className="pfc-body">
@@ -72,7 +74,7 @@ function PlaylistFeedCard({ playlist }) {
         <div className="pfc-owner">
           <AuthorBadge author={owner} showFollow compact tabHint="playlists" />
         </div>
-        {changed && <p className="pfc-changed">Updated {changed}</p>}
+        {changed && <p className="pfc-changed">{t('cards.playlist.updated', { when: changed })}</p>}
       </div>
     </article>
   );

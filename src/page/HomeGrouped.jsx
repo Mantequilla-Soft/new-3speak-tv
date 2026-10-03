@@ -25,6 +25,7 @@ import { fetchPlaylistsFeed } from "../lib/playlistsFeed";
 import PlaylistFeedCard from "../components/Cards/PlaylistFeedCard";
 import { SHORTS_API_URL } from "../utils/config";
 import { Rocket, Compass, Users, Tags, Clock, GripVertical, Tv } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 // Extra feed params for the logged-in user: interests (checker weights the feed
 // toward them), currentuser (needed for BOTH the always-on dismissals and
@@ -205,6 +206,7 @@ const applyTabOrder = (sections, order) => {
 // Bottom-of-list sentinel — fires onLoadMore when it scrolls into view (600px
 // early) so the next page is fetched before the user hits the actual end.
 function InfiniteSentinel({ hasMore, loading, onLoadMore }) {
+  const { t } = useTranslation();
   const ref = useRef(null);
   useEffect(() => {
     if (!hasMore) return undefined;
@@ -217,7 +219,7 @@ function InfiniteSentinel({ hasMore, loading, onLoadMore }) {
     return () => io.disconnect();
   }, [hasMore, loading, onLoadMore]);
   if (!hasMore) return null;
-  return <div ref={ref} className="home-tab-sentinel">{loading && <span className="home-tab-loading">Loading more…</span>}</div>;
+  return <div ref={ref} className="home-tab-sentinel">{loading && <span className="home-tab-loading">{t('feeds.loadingMore')}</span>}</div>;
 }
 
 // Tracks which cards (by their data-vidkey) have scrolled near the viewport, so
@@ -249,6 +251,7 @@ function useVisibleKeys(rootRef, sig, count) {
 }
 
 const HomeGrouped = () => {
+  const { t } = useTranslation();
   const { authenticated, user, showNsfw, homeCardSize, hideWatched, interests, simpleFeed } = useAppStore();
   // Who is looking, for feature gates that are keyed on a name. A warm-up user
   // has a handle and no Hive username, so `user` alone is null for them.
@@ -369,13 +372,13 @@ const HomeGrouped = () => {
 
   // ── Build the section list (natural order), then apply the user's saved order ──
   const baseSections = [
-    { key: 'discover', title: 'Discover', videos: withLive(liveAll, leadWithPromoted(discoverData)), isLoading: discoverLoading, priority: true },
-    { key: 'home', title: authenticated ? 'Follow Feed' : 'Home Feed', videos: withLive(authenticated ? liveFollowing : liveAll, leadWithPromoted(homeData)), linkTo: authenticated ? '/follow-feed' : '/home-feed', isLoading: homeLoading, priority: true },
-    { key: 'new', title: 'New Content', videos: withLive(liveAll, leadWithPromoted(deduplicateVideos(newContentData || []))), linkTo: '/new', isLoading: newContentLoading },
+    { key: 'discover', title: 'Discover', label: t('feeds.home.sections.discover'), videos: withLive(liveAll, leadWithPromoted(discoverData)), isLoading: discoverLoading, priority: true },
+    { key: 'home', title: authenticated ? 'Follow Feed' : 'Home Feed', label: authenticated ? t('feeds.home.sections.follow') : t('feeds.home.sections.home'), videos: withLive(authenticated ? liveFollowing : liveAll, leadWithPromoted(homeData)), linkTo: authenticated ? '/follow-feed' : '/home-feed', isLoading: homeLoading, priority: true },
+    { key: 'new', title: 'New Content', label: t('feeds.home.sections.new'), videos: withLive(liveAll, leadWithPromoted(deduplicateVideos(newContentData || []))), linkTo: '/new', isLoading: newContentLoading },
   ];
   // Interests row (logged-in + has interests): between the follow feed and New.
   if (authenticated && hasInterests) {
-    baseSections.splice(2, 0, { key: 'interests', title: 'Interests', videos: withLive(liveFollowing, leadWithPromoted(interestsData)), isLoading: interestsLoading, priority: true });
+    baseSections.splice(2, 0, { key: 'interests', title: 'Interests', label: t('feeds.home.sections.interests'), videos: withLive(liveFollowing, leadWithPromoted(interestsData)), isLoading: interestsLoading, priority: true });
   }
   if (authenticated) {
   }
@@ -755,7 +758,7 @@ const HomeGrouped = () => {
       return <div className="home-tab-skeletons">{Array.from({ length: 12 }).map((_, i) => <CardSkeleton key={i} />)}</div>;
     }
     if (!s.videos || s.videos.length === 0) {
-      return <div className="home-tab-empty">Nothing to show here yet.</div>;
+      return <div className="home-tab-empty">{t('feeds.home.empty')}</div>;
     }
     const q = queryByKey[s.key];
     // Only interest-having users get the "follow these" rail (it's interest-matched).
@@ -797,7 +800,7 @@ const HomeGrouped = () => {
           />
         )}
         {(!q || !q.hasNextPage) && s.linkTo && (
-          <div className="home-tab-viewall"><Link to={s.linkTo} className="view-all">View all</Link></div>
+          <div className="home-tab-viewall"><Link to={s.linkTo} className="view-all">{t('feeds.home.viewAll')}</Link></div>
         )}
       </>
     );
@@ -819,20 +822,20 @@ const HomeGrouped = () => {
             data-tab-key={s.key}
             aria-selected={s.key === activeSection?.key}
             className={`home-tab${s.key === activeSection?.key ? ' active' : ''}${drag?.key === s.key ? ' dragging' : ''}`}
-            aria-label={s.title}
-            title={s.title}
+            aria-label={s.label}
+            title={s.label}
             onPointerDown={onTabPointerDown(s.key)}
           >
-            <span className="home-tab-handle" aria-hidden="true" title="Drag to reorder"><GripVertical size={14} /></span>
+            <span className="home-tab-handle" aria-hidden="true" title={t('feeds.home.dragToReorder')}><GripVertical size={14} /></span>
             <span className="home-tab-icon">{iconsByTitle[s.title]}</span>
-            <span className="home-tab-label">{s.title}</span>
+            <span className="home-tab-label">{s.label}</span>
           </button>
         ))}
         {/* Channel Surfing lives here rather than in the top menu. A link, not a
             tab: it leaves the page, and the reorder drag only hit-tests
             `.home-tab`, so it can never be dragged in among the feeds. */}
-        <Link to="/surf" className="home-tab-surf" title="Channel Surfing: pick a topic and watch it like TV">
-          <Tv size={16} aria-hidden="true" /> <span>Zapping</span>
+        <Link to="/surf" className="home-tab-surf" title={t('feeds.home.surfTitle')}>
+          <Tv size={16} aria-hidden="true" /> <span>{t('feeds.home.zapping')}</span>
         </Link>
       </div>
 

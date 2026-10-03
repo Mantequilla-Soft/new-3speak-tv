@@ -1,12 +1,22 @@
 import { IoChevronBack, IoChevronForward } from 'react-icons/io5';
 import { DATE_FILTERS } from '../../utils/dateFilters';
+import { useTranslation } from 'react-i18next';
 import './FeedToolbar.scss';
 
 const DEFAULT_TABS = [
-  { key: 'all', label: 'All' },
-  { key: 'videos', label: 'Videos' },
-  { key: 'shorts', label: 'Shorts' },
+  { key: 'all', labelKey: 'feeds.tabs.all' },
+  { key: 'videos', labelKey: 'feeds.tabs.videos' },
+  { key: 'shorts', labelKey: 'feeds.tabs.shorts' },
 ];
+
+// DATE_FILTERS (utils/dateFilters) carries English labels; translate by key here
+// and fall back to its label for any key not listed.
+const DATE_FILTER_KEYS = {
+  all: 'feeds.dateFilters.all',
+  today: 'feeds.dateFilters.today',
+  week: 'feeds.dateFilters.week',
+  month: 'feeds.dateFilters.month',
+};
 
 export function Pagination({ page, totalPages, onPageChange }) {
   if (totalPages <= 1) return null;
@@ -58,16 +68,17 @@ export function Pagination({ page, totalPages, onPageChange }) {
 }
 
 export function FeedToolbar({ activeTab, onTabChange, dateFilter, onDateFilterChange, tabs = DEFAULT_TABS, page, totalPages, onPageChange }) {
+  const { t } = useTranslation();
   return (
     <div className="feed-toolbar-wrap">
       <div className="feed-toolbar-tabs">
-        {tabs.map(t => (
+        {tabs.map(tab => (
           <button
-            key={t.key}
-            className={`tab-btn ${activeTab === t.key ? 'active' : ''}`}
-            onClick={() => onTabChange(t.key)}
+            key={tab.key}
+            className={`tab-btn ${activeTab === tab.key ? 'active' : ''}`}
+            onClick={() => onTabChange(tab.key)}
           >
-            {t.label}
+            {tab.labelKey ? t(tab.labelKey) : tab.label}
           </button>
         ))}
       </div>
@@ -79,7 +90,7 @@ export function FeedToolbar({ activeTab, onTabChange, dateFilter, onDateFilterCh
               className={`date-filter-btn ${dateFilter === f.key ? 'active' : ''}`}
               onClick={() => onDateFilterChange(f.key)}
             >
-              {f.label}
+              {f.labelKey ? t(f.labelKey) : DATE_FILTER_KEYS[f.key] ? t(DATE_FILTER_KEYS[f.key]) : f.label}
             </button>
           ))}
         </div>
