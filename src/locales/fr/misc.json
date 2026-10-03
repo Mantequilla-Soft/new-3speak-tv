@@ -1,0 +1,243 @@
+{
+  "leaderboard": {
+    "windows": {
+      "7d": "7 jours",
+      "30d": "30 jours",
+      "365d": "Année",
+      "all": "Depuis toujours"
+    },
+    "windowsInSentence": {
+      "7d": "7 jours",
+      "30d": "30 jours",
+      "365d": "année",
+      "all": "depuis toujours"
+    },
+    "metrics": {
+      "video_uploads": "Vidéos",
+      "short_uploads": "Shorts",
+      "video_watch_secs": "Visionnage vidéos",
+      "short_watch_secs": "Visionnage Shorts",
+      "tags_given": "Tags",
+      "streams": "Lives",
+      "stream_secs": "Temps en live",
+      "stream_peak_viewers": "Pic de spectateurs",
+      "stream_viewers": "Arrivées de spectateurs",
+      "boosts_received": "Boosts reçus",
+      "boost_amount_received": "Montant reçu",
+      "boosts_given": "Boosts donnés",
+      "boost_amount_given": "Montant donné"
+    },
+    "metricsInSentence": {
+      "video_uploads": "vidéos",
+      "short_uploads": "Shorts",
+      "video_watch_secs": "durée de visionnage des vidéos",
+      "short_watch_secs": "durée de visionnage des Shorts",
+      "tags_given": "tags",
+      "streams": "lives",
+      "stream_secs": "temps en live",
+      "stream_peak_viewers": "pic de spectateurs",
+      "stream_viewers": "arrivées de spectateurs",
+      "boosts_received": "boosts reçus",
+      "boost_amount_received": "montant reçu",
+      "boosts_given": "boosts donnés",
+      "boost_amount_given": "montant donné"
+    },
+    "blurbs": {
+      "video_uploads": "Vidéos mises en ligne",
+      "short_uploads": "Shorts mis en ligne",
+      "video_watch_secs": "Secondes de visionnage de leurs vidéos",
+      "short_watch_secs": "Secondes de visionnage de leurs Shorts",
+      "tags_given": "Tags attribués à d'autres vidéos",
+      "streams": "Sessions de live lancées",
+      "stream_secs": "Temps total en live (lives terminés uniquement)",
+      "stream_peak_viewers": "Record de spectateurs simultanés (un pic, pas une somme)",
+      "stream_viewers": "Arrivées de spectateurs (volume, pas audience unique)",
+      "boosts_received": "Boosts envoyés à leurs lives",
+      "boost_amount_received": "Montant cumulé des boosts reçus",
+      "boosts_given": "Boosts envoyés à d'autres streamers",
+      "boost_amount_given": "Montant cumulé des boosts donnés"
+    },
+    "blurbsInSentence": {
+      "video_uploads": "vidéos mises en ligne",
+      "short_uploads": "Shorts mis en ligne",
+      "video_watch_secs": "secondes de visionnage de leurs vidéos",
+      "short_watch_secs": "secondes de visionnage de leurs Shorts",
+      "tags_given": "tags attribués à d'autres vidéos",
+      "streams": "sessions de live lancées",
+      "stream_secs": "temps total en live (lives terminés uniquement)",
+      "stream_peak_viewers": "record de spectateurs simultanés (un pic, pas une somme)",
+      "stream_viewers": "arrivées de spectateurs (volume, pas audience unique)",
+      "boosts_received": "boosts envoyés à leurs lives",
+      "boost_amount_received": "montant cumulé des boosts reçus",
+      "boosts_given": "boosts envoyés à d'autres streamers",
+      "boost_amount_given": "montant cumulé des boosts donnés"
+    },
+    "groups": {
+      "video": "Vidéo",
+      "streaming": "Live"
+    },
+    "badgeNouns": {
+      "video_uploads": "Vidéos",
+      "short_uploads": "Shorts",
+      "video_watch_secs": "Visionnage",
+      "short_watch_secs": "Visionnage Shorts",
+      "tags_given": "Tagueur"
+    },
+    "badgeLabel": "{{tier}} {{noun}}",
+    "badgeTitleAllTime": "Classé n°{{rank}} pour {{what}} depuis toujours",
+    "badgeTitleWindow": "Classé n°{{rank}} pour {{what}} sur les derniers {{window}}"
+  },
+  "duration": {
+    "hoursMinutes": "{{h}} h {{m}} min",
+    "minutesSeconds": "{{m}} min {{s}} s",
+    "seconds": "{{s}} s",
+    "aMoment": "un instant",
+    "lessThanMinute": "moins d'une minute"
+  },
+  "surf": {
+    "community": "Communauté",
+    "allOf": "Tout {{label}}"
+  },
+  "social": {
+    "signingCancelled": "La signature a été annulée",
+    "youtube": {
+      "placeholder": "@identifiant ou UCxxxxxxxxxxxxxxxxxxxxxx",
+      "help": "Collez votre @identifiant YouTube ou l'ID de votre chaîne (UC…). Nous le convertissons en ID de chaîne."
+    },
+    "soundcloud": {
+      "placeholder": "votre-profil ou https://soundcloud.com/votre-profil",
+      "help": "Collez l'URL de votre profil SoundCloud ou simplement le nom d'utilisateur qu'elle contient. Placez le hash n'importe où dans la bio de votre profil."
+    }
+  },
+  "snaps": {
+    "retrying": "Conteneur Snaps introuvable pour l'instant — nouvelle tentative ({{attempt}})...",
+    "unreachable": "Impossible de joindre un nœud Hive pour trouver le conteneur Snaps. Vérifiez votre connexion et réessayez.",
+    "unreachableWithError": "Impossible de joindre un nœud Hive pour trouver le conteneur Snaps (dernière erreur — {{error}}). Vérifiez votre connexion et réessayez."
+  },
+  "embed": {
+    "responsive": "Adaptatif"
+  },
+  "incubation": {
+    "requestFailed": "Échec de la requête ({{status}})",
+    "contactLoadFailed": "Impossible de charger vos coordonnées",
+    "contactSaveFailed": "Impossible d'enregistrer vos coordonnées",
+    "onlyButrauthBacklog": "Seul un compte Butter Auth peut avoir des publications d'incubation en attente",
+    "publishFailed": "Échec de la publication ({{status}})"
+  },
+  "routeError": {
+    "title": "Cette page ne s'est pas chargée",
+    "body": "Une partie de l'app n'a pas pu être téléchargée. Cela signifie généralement qu'une nouvelle version est sortie pendant que cet onglet était ouvert. Recharger la page la récupère.",
+    "reload": "Recharger",
+    "goHome": "Accueil"
+  },
+  "seo": {
+    "defaultTitle": "3Speak - Plateforme vidéo décentralisée",
+    "defaultDescription": "3Speak est une plateforme de partage vidéo décentralisée basée sur la blockchain. Regardez, mettez en ligne et partagez des vidéos tout en gagnant des récompenses en cryptomonnaie."
+  },
+  "uploadLinks": {
+    "regularVideo": "Vidéo classique",
+    "verticalShort": "Short vertical",
+    "musicAudio": "Musique / Audio",
+    "groupChat": "Chat de groupe",
+    "communitySnap": "Snap de communauté",
+    "shortsEditor": "Éditeur de Shorts",
+    "goLive": "Passer en live",
+    "streamStudio": "Studio live",
+    "headings": {
+      "upload": "Mettre en ligne",
+      "live": "Live",
+      "others": "Autres"
+    }
+  },
+  "chat": {
+    "connectFailed": "Impossible de se connecter au chat.",
+    "loginFirst": "Connectez-vous d'abord pour utiliser le chat.",
+    "roomNameRequired": "Un nom de salon est requis."
+  },
+  "hiveAuth": {
+    "waiting": "En attente de validation sur HiveAuth...",
+    "title": "Validation HiveAuth requise",
+    "hint": "Ouvrez votre app HiveAuth pour approuver cette transaction"
+  },
+  "hiveApi": {
+    "keychainNotSigned": "Keychain n'a pas signé la transaction",
+    "loginToCreateCommunity": "Connectez-vous pour créer une communauté",
+    "loginFirst": "Veuillez d'abord vous connecter",
+    "cancelled": "Opération annulée"
+  },
+  "openpod": {
+    "announced": "Session live annoncée sur Hive !",
+    "announceFailed": "L'OpenPod a démarré, mais l'annonce sur Hive n'a pas pu être publiée."
+  },
+  "appUpdate": {
+    "updating": "Mise à jour vers la dernière version ({{version}})…",
+    "reloadingForUpload": "Rechargement pour que votre mise en ligne utilise la version la plus récente."
+  },
+  "auth": {
+    "switched": "Compte changé : {{username}}",
+    "keychainLoginTitle": "Connexion avec Hive"
+  },
+  "streamVod": {
+    "uploadKeyMissing": "Le live est terminé, mais la vidéo n'a pas pu être mise en ligne (clé de mise en ligne manquante).",
+    "uploading": "Mise en ligne de la vidéo de votre live… {{pct}} %",
+    "uploaded": "Vidéo du live mise en ligne — elle remplacera le live une fois l'encodage terminé.",
+    "uploadFailed": "Le live est terminé, mais la mise en ligne de la vidéo a échoué.",
+    "saving": "Enregistrement de la vidéo de votre live…",
+    "encoding": "Mise en ligne terminée — l'encodeur traite votre vidéo…",
+    "saved": "Vidéo du live enregistrée — elle remplacera le live une fois l'encodage terminé.",
+    "saveFailed": "Le live est terminé, mais la vidéo n'a pas pu être enregistrée : {{error}}.",
+    "uploadFailedShort": "échec de la mise en ligne",
+    "stillProcessing": "Le live est terminé — la vidéo est encore en traitement ; consultez votre profil d'ici peu."
+  },
+  "embedPlayer": {
+    "unavailable": "Vidéo indisponible"
+  },
+  "followFeed": {
+    "title": "Fil des abonnements",
+    "error": "Erreur lors de la récupération des vidéos"
+  },
+  "groups": {
+    "title": "Groupes",
+    "badges": "Badges",
+    "subtitle": "Les communautés que vous pouvez rejoindre et les badges que les gens détiennent, au même endroit."
+  },
+  "watched": {
+    "removed": "Retiré de l'historique",
+    "removeFailed": "Impossible de retirer de l'historique",
+    "title": "Déjà vues",
+    "count_one": "{{count}} vue",
+    "count_many": "{{count}} vues",
+    "count_other": "{{count}} vues",
+    "trackHistory": "Enregistrer l'historique",
+    "videosTab": "Vidéos ({{count}})",
+    "shortsTab": "Shorts ({{count}})",
+    "loadFailed": "Impossible de charger l'historique. Veuillez réessayer.",
+    "emptyShorts": "Aucun Short vu pour l'instant",
+    "emptyVideos": "Aucune vidéo vue pour l'instant",
+    "removeTitle": "Retirer de l'historique",
+    "watchedAt": "Vu {{when}}"
+  },
+  "watchStream": {
+    "saySomething": "Dites quelque chose…",
+    "waitingWallet": "En attente de votre portefeuille…",
+    "signInToChat": "Connectez-vous pour discuter",
+    "sendMessage": "Envoyer le message",
+    "notLive": "Ce live n'est pas en cours pour le moment.",
+    "notFound": "Aucun live trouvé pour ce lien.",
+    "browse": "Parcourir les lives",
+    "back": "Retour à 3Speak",
+    "seoTitle": "{{title}} (EN DIRECT)",
+    "swipeNext": "Balayez pour le live suivant",
+    "chat": "Chat",
+    "watchingNow": "👁 {{count}} spectateurs en ce moment",
+    "signInRaiseHand": "Connectez-vous pour lever la main",
+    "copyLink": "Copier le lien du live",
+    "notAvailableLive": "Non disponible pour les lives",
+    "vote": "Voter",
+    "comment": "Commenter",
+    "liveChat": "Chat live",
+    "signInToJoin": "🔒 Connectez-vous pour rejoindre le chat.",
+    "moreTag": "Plus de #{{tag}}",
+    "moreVideos": "Plus de vidéos"
+  }
+}

@@ -1,0 +1,241 @@
+{
+  "aiBadge": {
+    "title": "Détecté comme généré par IA",
+    "label": "IA"
+  },
+  "translate": {
+    "titleButton": "Traduire le titre",
+    "original": "Original",
+    "translate": "Traduire",
+    "translating": "Traduction..."
+  },
+  "summary": {
+    "title": "Résumé",
+    "close": "Fermer le résumé",
+    "showingOriginal": "Affichage de l'original",
+    "translatedTo": "Traduit en {{language}}",
+    "showLanguage": "Afficher en {{language}}",
+    "showOriginal": "Afficher l'original",
+    "buttonTitle": "Résumé IA de cette vidéo"
+  },
+  "errors": {
+    "notAvailable": "Cette vidéo n'est pas disponible.",
+    "goHome": "Accueil",
+    "scheduledNotFound": "Publication programmée introuvable — elle a peut-être déjà été publiée ou annulée.",
+    "network": "Erreur réseau. Vérifiez votre connexion.",
+    "notFound": "Vidéo introuvable ou impossible à charger.",
+    "backToProfile": "Retour au profil"
+  },
+  "gated": {
+    "title": "Réservé aux soutiens",
+    "checkFailed": "Nous n'avons pas pu confirmer votre abonnement pour le moment. Réessayez dans un instant.",
+    "preview": "Vous regardez un aperçu gratuit. 3Speak Pro débloque la vidéo complète.",
+    "subscribersOnly": "Cette vidéo est réservée aux abonnés 3Speak Pro.",
+    "cta": "Obtenir 3Speak Pro"
+  },
+  "reactions": {
+    "show": "Afficher les réactions",
+    "add": "Ajouter une réaction"
+  },
+  "liveChat": "Chat live",
+  "moreVideos": "Plus de vidéos",
+  "vote": {
+    "saveFailed": "Impossible d'enregistrer votre vote"
+  },
+  "locked": {
+    "noAccount": "Débloqué une fois votre compte Hive créé",
+    "offChainPost": "Pas encore disponible : cette publication n'est pas sur Hive"
+  },
+  "interests": {
+    "loginRequired": "Connectez-vous pour enregistrer vos centres d'intérêt",
+    "added": "« {{tag}} » ajouté à vos centres d'intérêt",
+    "saveFailed": "Impossible d'enregistrer les centres d'intérêt"
+  },
+  "watchLater": {
+    "removed": "Retiré de « À regarder plus tard »",
+    "removeFailed": "Impossible de retirer : {{error}}",
+    "removeTitle": "Retirer de « À regarder plus tard »"
+  },
+  "reshare": {
+    "loginRequired": "Connectez-vous pour repartager",
+    "success": "Repartagé !",
+    "failed": "Échec du repartage",
+    "reshared": "Repartagé",
+    "reshare": "Repartager",
+    "reshareWithCount": "Repartager ({{count}})"
+  },
+  "clip": {
+    "noVideoUrlRemix": "Impossible de trouver l'URL de la vidéo pour le remix",
+    "noVideoUrl": "Impossible de trouver l'URL de la vidéo",
+    "startHint": "Placez-vous au début de votre clip, puis cliquez sur « Définir le début »",
+    "endHint": "Placez-vous maintenant à la fin de votre clip et cliquez sur « Définir la fin »",
+    "endBeforeStart": "La fin doit être après le début",
+    "trimmed": "Clip réduit à 1 minute — nous couperons le clip à la fin de la timeline.",
+    "set": "Clip défini : {{start}} – {{end}}. Cliquez maintenant sur « Créer le clip »",
+    "loginRequired": "Connectez-vous pour créer un clip",
+    "cancel": "Annuler le clip",
+    "clipVideo": "Créer un clip",
+    "label": "Créer un clip",
+    "clip": "Clip",
+    "seekToStart": "Placez-vous au début",
+    "setStart": "Définir le début",
+    "setEnd": "Définir la fin",
+    "createClip": "Créer le clip",
+    "barStart": "Placez-vous au début de votre clip",
+    "barEnd": "Début : {{start}} — placez-vous maintenant à la fin",
+    "barDone": "Clip : {{start}} – {{end}}"
+  },
+  "share": {
+    "defaultTitle": "Vidéo 3Speak",
+    "linkCopied": "Lien copié dans le presse-papiers !",
+    "failed": "Échec du partage"
+  },
+  "follow": {
+    "loginRequired": "Connectez-vous pour suivre des utilisateurs",
+    "followed": "Vous suivez @{{user}}",
+    "failed": "Impossible de suivre : {{error}}"
+  },
+  "ad": {
+    "countdown": "Pub dans {{seconds}}"
+  },
+  "media": {
+    "unavailableTitle": "Cette vidéo n'est plus disponible",
+    "unavailableBody": "Le média de cette ancienne mise en ligne est introuvable sur le réseau. La publication existe toujours sur la blockchain, mais la vidéo ne peut plus être lue.",
+    "blockedTitle": "Impossible de charger la vidéo pour le moment",
+    "blockedBody": "L'un de nos serveurs vidéo n'a pas répondu. La vidéo elle-même n'a rien, réessayez donc."
+  },
+  "tipNudge": {
+    "text": "Ça vous a plu ?<hide> Envoyez un pourboire à <b>@{{author}}</b> !</hide>",
+    "dismiss": "Fermer"
+  },
+  "community": {
+    "members_one": "{{count}} membre",
+    "members_many": "{{count}} membres",
+    "members_other": "{{count}} membres"
+  },
+  "tags": {
+    "curated": "Sélection"
+  },
+  "topics": {
+    "taggedBy": "« {{label}} » · tagué par {{count}}",
+    "viewers_one": "« {{label}} » · {{count}} spectateur",
+    "viewers_many": "« {{label}} » · {{count}} spectateurs",
+    "viewers_other": "« {{label}} » · {{count}} spectateurs",
+    "autoNoVotes": "Tag automatique — aucun vote de spectateur pour l'instant",
+    "noVotes": "Aucun vote de spectateur pour l'instant",
+    "inInterests": "✓ Dans vos centres d'intérêt",
+    "addToInterests": "+ Ajouter à mes centres d'intérêt",
+    "openTagFeed": "Ouvrir le fil du tag"
+  },
+  "scheduled": {
+    "notice": "Programmée pour le <b>{{date}}</b> — pas encore publiée.",
+    "futureDate": "une date future",
+    "edit": "Modifier, reprogrammer ou annuler",
+    "editTitle": "Modifier la publication programmée (détails, date ou annulation)"
+  },
+  "actions": {
+    "voteOffChain": "Votez pour cette vidéo. Le vote est enregistré sur 3Speak et ne rapporte aucune récompense.",
+    "signInToVote": "Connectez-vous pour voter",
+    "tagVideo": "Taguer cette vidéo",
+    "voteVideo": "Voter pour cette vidéo",
+    "tag": "Taguer",
+    "vote": "Voter",
+    "analyticsTitle": "Statistiques de la vidéo",
+    "analytics": "Statistiques",
+    "videoStats": "Stats de la vidéo",
+    "promoteTitle": "Promouvoir cette vidéo",
+    "promote": "Promouvoir",
+    "editTitle": "Modifier les détails de la vidéo",
+    "reportTitle": "Signaler la vidéo",
+    "addToPlaylist": "Ajouter à une playlist",
+    "playlist": "Playlist",
+    "tipTitle": "Envoyer un pourboire au créateur",
+    "tip": "Pourboire",
+    "details": "Détails",
+    "toggleDetails": "Afficher/masquer les détails",
+    "followCreator": "Suivre le créateur",
+    "closeMenu": "Fermer le menu",
+    "openActions": "Ouvrir les actions"
+  },
+  "description": {
+    "hide": "Masquer la description",
+    "show": "Afficher la description"
+  },
+  "edit": {
+    "title": "Modifier la vidéo",
+    "loading": "Chargement de la publication…",
+    "videoFile": "Fichier vidéo",
+    "replaceVideo": "Remplacer la vidéo",
+    "replaceHint": "Remplace le fichier vidéo de cette publication. Tout le reste est conservé : la publication garde ses votes, ses gains, ses commentaires, sa date de mise en ligne et sa place sur votre profil. Ne touchez à rien pour garder la vidéo actuelle.",
+    "uploadingTo": "Mise en ligne sur <b>{{host}}</b>… {{pct}} %",
+    "choosingServer": "Choix d'un serveur de mise en ligne…",
+    "uploadedTo": "Mise en ligne sur <b>{{host}}</b> terminée. Appuyez sur Enregistrer pour l'appliquer.",
+    "uploaded": "Mise en ligne terminée. Appuyez sur Enregistrer pour l'appliquer.",
+    "cancelUpload": "Annuler la mise en ligne",
+    "keepCurrent": "Garder la vidéo actuelle",
+    "encodeHint": "Après l'enregistrement, quelques minutes d'encodage sont encore nécessaires, et l'ancienne vidéo continue d'être lue jusqu'à ce que la nouvelle soit prête. Votre miniature ne change pas : mettez-la à jour ci-dessus si elle ne correspond plus.",
+    "thumbnail": "Miniature",
+    "thumbPreviewAlt": "Aperçu de la miniature",
+    "uploadImage": "Envoyer une image",
+    "uploading": "Envoi…",
+    "thumbHint": "Envoyez une image ou collez une URL directe. Ne changez rien pour garder la miniature actuelle.",
+    "titleLabel": "Titre",
+    "titleMin": "min. {{min}}",
+    "tags": "Tags",
+    "tagsPlaceholder": "séparés par des espaces",
+    "autoTag": "Ajouté automatiquement — ne peut pas être retiré",
+    "tagCount_one": "{{count}}/{{max}} tag",
+    "tagCount_many": "{{count}}/{{max}} tags",
+    "tagCount_other": "{{count}}/{{max}} tags",
+    "tagCountRequired_one": "{{count}}/{{max}} tag · au moins 1 requis",
+    "tagCountRequired_many": "{{count}}/{{max}} tags · au moins 1 requis",
+    "tagCountRequired_other": "{{count}}/{{max}} tags · au moins 1 requis",
+    "description": "Description",
+    "descriptionPlaceholder": "Présentez votre vidéo aux spectateurs…",
+    "markdownHint": "Markdown pris en charge.",
+    "listed": "Répertoriée",
+    "unlistedLabel": "Non répertoriée",
+    "listedHint": "Affichée dans les fils, la recherche et sur votre profil.",
+    "unlistedHint": "Masquée des fils et de la recherche — reste lisible par lien direct et visible sur votre profil (avec un badge).",
+    "allowRemix": "Autoriser remix/clip",
+    "remixOn": "D'autres peuvent créer des remix/clips ; vous êtes crédité comme auteur original.",
+    "remixOff": "Personne ne peut remixer ni clipper cette vidéo.",
+    "trailer": "Bande-annonce de la chaîne",
+    "trailerOn": "Se lance automatiquement en haut de l'onglet Aperçu de votre profil, en remplaçant toute bande-annonce définie auparavant.",
+    "trailerOff": "Faites-en la vidéo lancée automatiquement en haut de l'onglet Aperçu de votre profil.",
+    "nsfw": "Adulte / NSFW",
+    "notNsfw": "Tout public",
+    "nsfwHint": "Masquée des fils et de la recherche sauf si le spectateur a activé le NSFW ; taguée nsfw sur Hive.",
+    "notNsfwHint": "Contenu normal, visible par tous.",
+    "promoted": "Promue",
+    "promote": "Promouvoir la vidéo",
+    "saveChanges": "Enregistrer",
+    "noChanges": "Aucune modification à enregistrer.",
+    "thumbUploaded": "Miniature envoyée.",
+    "videoUploaded": "Nouvelle vidéo mise en ligne. Enregistrez pour l'appliquer à cette publication.",
+    "relisted": "Vidéo à nouveau répertoriée.",
+    "unlisted": "Vidéo non répertoriée.",
+    "trailerSet": "Définie comme bande-annonce de votre chaîne.",
+    "trailerRemoved": "Retirée comme bande-annonce de votre chaîne.",
+    "updatedEncoding": "Vidéo mise à jour ! Le nouveau fichier a besoin de quelques instants pour terminer l'encodage.",
+    "updated": "Vidéo mise à jour !",
+    "errors": {
+      "notFound": "Impossible de trouver cette publication sur Hive.",
+      "loadFailed": "Impossible de charger la publication depuis Hive. Veuillez réessayer.",
+      "notImage": "Veuillez choisir un fichier image.",
+      "imageTooLarge": "Image trop lourde (10 Mo max.).",
+      "thumbUploadFailed": "Échec de l'envoi de la miniature.",
+      "notVideo": "Veuillez choisir un fichier vidéo.",
+      "videoTooLarge": "Vidéo trop lourde (5 Go max.).",
+      "noVideoEntry": "Cette publication n'a pas de vidéo à remplacer — ses métadonnées n'en référencent aucune.",
+      "notInLibrary": "La vidéo de cette publication n'est plus dans la bibliothèque : son fichier ne peut donc pas être remplacé.",
+      "notOwner": "Vous ne pouvez remplacer le fichier que de vos propres vidéos.",
+      "videoUploadFailed": "Échec de la mise en ligne de la vidéo.",
+      "noEmbedEntry": "Cette publication n'a pas de vidéo intégrée à remplacer — ses métadonnées n'en référencent aucune.",
+      "broadcastFailed": "Échec de la diffusion",
+      "listingFailed": "Impossible de mettre à jour la visibilité.",
+      "trailerFailed": "Impossible de mettre à jour la bande-annonce de votre chaîne.",
+      "saveFailed": "Impossible d'enregistrer les modifications."
+    }
+  }
+}
