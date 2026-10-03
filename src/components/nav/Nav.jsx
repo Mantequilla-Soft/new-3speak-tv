@@ -176,6 +176,7 @@ function Nav({ toggleProfileNav, openLoginModal }) {
   const { t } = useTranslation();
   const { authenticated, LogOut, user, initializeTheme } = useAppStore();
   const incubationHandle = useAppStore((s) => s.incubationHandle);
+  const authChecked = useAppStore((s) => s.authChecked);
   const signupPossible = useSignupPossible();
   // Shows a just-uploaded profile picture immediately instead of the cached
   // hive proxy copy (utils/avatarCache).
@@ -470,11 +471,16 @@ function Nav({ toggleProfileNav, openLoginModal }) {
             <MdOutlineSearch size={19} />
           </Link>
           <Link to="/about" className="nav-guest-about">{t('nav.aboutLink')}</Link>
+          {/* No guest buttons until the stored session has been read: a logged-in
+              refresh otherwise flashes Log in before the avatar replaces it. */}
+          {authChecked && (<>
           {/* Sign up is dropped when Butter Auth says no account can be created
               from this address, leaving the single Log in button the
               butrauth-disabled build shows -- so the bar has no gap where a
-              button used to be. Fails open: a failed check still offers it. */}
-          {ENABLE_BUTRAUTH && signupPossible.possible ? (
+              button used to be. Fails open: a failed check still offers it.
+              Not shown while the check is in flight: for someone it refuses
+              (a VPN, say) it flashed in on every load and then vanished. */}
+          {ENABLE_BUTRAUTH && !signupPossible.loading && signupPossible.possible ? (
             <>
               <button className="nav-guest-login nav-guest-login--secondary" onClick={() => openLoginModal('login')}><FiLogIn /> {t('common.actions.login')}</button>
               <button className="nav-guest-signup" onClick={() => openLoginModal('signup')}>{t('common.actions.signUp')}</button>
@@ -482,6 +488,7 @@ function Nav({ toggleProfileNav, openLoginModal }) {
           ) : (
             <button className="nav-guest-login" onClick={() => openLoginModal('login')}><FiLogIn /> {t('common.actions.login')}</button>
           )}
+          </>)}
           <FiSettings size={19} className="nav-settings-btn" onClick={() => setSettingsOpen(true)} title={t('common.nav.settings')} />
         </div>
       )}

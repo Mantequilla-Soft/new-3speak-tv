@@ -37,6 +37,10 @@ export const createAuthUserSlice = (set) => ({
   // prompt a re-login. Kept in the store (not component state) so it survives
   // React StrictMode's mount/unmount/remount in dev.
   sessionExpired: false,
+  // False until initializeAuth has run once. `authenticated` starts false and is
+  // only settled in an App effect, after the first paint, so without this the
+  // nav painted the guest Log in button for every logged-in refresh.
+  authChecked: false,
 
 
 
@@ -51,7 +55,7 @@ export const createAuthUserSlice = (set) => ({
       // below (which keys off user_id) would never see it and the branch after
       // it would set authenticated:false — logging them out on every reload.
       if (!userId && handle) {
-        set({ authenticated: true, user: null, userId: null, incubationHandle: handle });
+        set({ authenticated: true, user: null, userId: null, incubationHandle: handle, authChecked: true });
         return;
       }
 
@@ -67,15 +71,15 @@ export const createAuthUserSlice = (set) => ({
       if (userId && !hasLiveSession()) {
         window.localStorage.removeItem(LOCAL_STORAGE_USER_ID_KEY);
         window.localStorage.removeItem("access_token");
-        set({ authenticated: false, user: null, sessionExpired: true });
+        set({ authenticated: false, user: null, sessionExpired: true, authChecked: true });
         return;
       }
 
       if (userId) {
         window.localStorage.setItem(LOCAL_STORAGE_USER_ID_KEY, userId);
-        set({ authenticated: true, user: userId, incubationHandle: null });
+        set({ authenticated: true, user: userId, incubationHandle: null, authChecked: true });
       } else {
-        set({ authenticated: false, user: null, incubationHandle: null });
+        set({ authenticated: false, user: null, incubationHandle: null, authChecked: true });
       }
     }
   },

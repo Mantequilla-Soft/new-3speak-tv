@@ -558,7 +558,11 @@
       line-height: 1;
     }
   }
-  > .nav-right button:not(.notif-bell-btn):not(.chat-nav-btn) {
+  // 🚨 Every :not(.x) adds a class's worth of specificity, so this rule OUTRANKS
+  // `button.nav-guest-login` below whatever the source order. The guest buttons are
+  // excluded here instead of relying on order: the second :not() is what turned
+  // Log in into a grey 5px box.
+  > .nav-right button:not(.notif-bell-btn):not(.chat-nav-btn):not(.nav-guest-login):not(.nav-guest-signup) {
     padding: 7px 25px;
     border-radius: 5px;
     font-weight: 500;
@@ -578,7 +582,7 @@
   }
 
   // Login button (desktop only): pill shape, transparent bg, door/login icon in front.
-  // Placed after the generic button rule so it wins on equal specificity.
+  // The generic button rule above excludes it, see the note there.
   > .nav-right button.nav-guest-login {
     display: inline-flex;
     align-items: center;
