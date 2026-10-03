@@ -1,0 +1,348 @@
+{
+  "icons": {
+    "link": "링크",
+    "globe": "웹사이트",
+    "podcast": "팟캐스트",
+    "email": "이메일",
+    "phone": "전화",
+    "rss": "RSS",
+    "qrcode": "QR 코드",
+    "shop": "쇼핑",
+    "bag": "스토어",
+    "dollar": "돈",
+    "gift": "선물",
+    "heart": "후원",
+    "star": "별",
+    "thumbsup": "좋아요",
+    "fire": "불꽃",
+    "bolt": "번개",
+    "music": "음악",
+    "headphones": "오디오",
+    "mic": "마이크",
+    "video": "동영상",
+    "film": "영화",
+    "tv": "TV",
+    "play": "재생",
+    "camera": "사진",
+    "image": "이미지",
+    "palette": "아트",
+    "pen": "글쓰기",
+    "book": "책",
+    "newspaper": "뉴스",
+    "graduation": "강좌",
+    "code": "코드",
+    "gamepad": "게임",
+    "briefcase": "업무",
+    "home": "홈",
+    "location": "위치",
+    "map": "지도",
+    "calendar": "캘린더",
+    "clock": "시계",
+    "bell": "알림",
+    "tag": "태그",
+    "download": "다운로드",
+    "file": "파일",
+    "users": "커뮤니티",
+    "comment": "댓글",
+    "share": "공유",
+    "coffee": "커피",
+    "wallet": "지갑",
+    "plus": "더보기",
+    "check": "체크"
+  },
+  "fonts": {
+    "system": "시스템",
+    "rounded": "둥근",
+    "serif": "세리프",
+    "mono": "고정폭",
+    "display": "디스플레이",
+    "condensed": "좁은",
+    "handwriting": "손글씨",
+    "grotesk": "그로테스크",
+    "humanist": "휴머니스트",
+    "geometric": "기하학",
+    "slab": "슬랩",
+    "elegant": "우아한",
+    "typewriter": "타자기",
+    "marker": "마커",
+    "brush": "붓글씨",
+    "palatino": "Palatino",
+    "wide": "넓은"
+  },
+  "motion": {
+    "none": "없음",
+    "float": "둥실",
+    "sway": "흔들흔들",
+    "pulse": "맥박",
+    "wobble": "흔들림",
+    "bounce": "통통",
+    "tilt": "3D 기울기",
+    "spin": "회전",
+    "shake": "떨림",
+    "breathe": "숨쉬기"
+  },
+  "sectionTypes": {
+    "link": "링크",
+    "video": "3Speak 콘텐츠",
+    "embed": "리치 링크",
+    "image": "이미지",
+    "header": "제목 / 텍스트"
+  },
+  "blockNames": {
+    "link": "링크",
+    "header": "제목",
+    "image": "이미지",
+    "video": "동영상",
+    "embed": "임베드"
+  },
+  "blockNamesPlural": {
+    "link": "링크",
+    "header": "제목",
+    "image": "이미지",
+    "video": "동영상",
+    "embed": "임베드"
+  },
+  "templates": {
+    "minimal": {
+      "name": "미니멀",
+      "niche": "깔끔하고 단순하게"
+    },
+    "neon": {
+      "name": "Neon Nights",
+      "niche": "크리에이터 / 스트리머"
+    },
+    "crypto": {
+      "name": "On-Chain",
+      "niche": "암호화폐 / Web3"
+    },
+    "gamer": {
+      "name": "Player One",
+      "niche": "게임"
+    },
+    "photographer": {
+      "name": "Exposure",
+      "niche": "사진"
+    },
+    "podcaster": {
+      "name": "On Air",
+      "niche": "팟캐스트"
+    },
+    "fitness": {
+      "name": "Peak Form",
+      "niche": "피트니스 / 코치"
+    },
+    "writer": {
+      "name": "Longform",
+      "niche": "작가 / 블로거"
+    },
+    "chef": {
+      "name": "Mise en Place",
+      "niche": "음식 / 요리"
+    },
+    "travel": {
+      "name": "Wanderlust",
+      "niche": "자연 / 여행"
+    },
+    "business": {
+      "name": "Boardroom",
+      "niche": "비즈니스 / 전문가"
+    },
+    "artist": {
+      "name": "Palette",
+      "niche": "아티스트 / 비주얼"
+    },
+    "ocean": {
+      "name": "Tidewater",
+      "niche": "힐링 / 라이프스타일"
+    },
+    "musician": {
+      "name": "Amplified",
+      "niche": "음악 / 밴드"
+    },
+    "developer": {
+      "name": "Terminal",
+      "niche": "개발자 / 기술"
+    },
+    "sports": {
+      "name": "Game Day",
+      "niche": "스포츠 / 운동선수"
+    }
+  },
+  "errors": {
+    "notLoggedIn": "로그인되어 있지 않아요",
+    "couldNotSaveToHive": "Hive에 저장하지 못했어요"
+  },
+  "arrange": {
+    "title": "제목",
+    "video": "동영상",
+    "latestPosts": "최신 게시물",
+    "latestPostsBy": "최신 게시물 · @{{account}}",
+    "dragToArrange": "드래그해서 정렬"
+  },
+  "page": {
+    "latestPosts": "최신 게시물",
+    "seeNewestPosts": "@{{user}}님의 최신 게시물 보기 →",
+    "openLink": "링크 열기",
+    "empty": "@{{user}}님은 아직 링크를 추가하지 않았어요.",
+    "viewProfile": "3Speak 프로필 보기 →",
+    "poweredBy": "Powered by 3Speak"
+  },
+  "editor": {
+    "resetToDefault": "기본값으로 초기화",
+    "motion": "모션",
+    "speed": "속도 {{value}}",
+    "loop": "반복",
+    "runSeconds": "{{value}}초 실행",
+    "picker": {
+      "videoLabel": "내 동영상에서 선택",
+      "videoLoading": "동영상 불러오는 중…",
+      "videoEmpty": "최근 3Speak 동영상이 없어요.",
+      "shortLabel": "내 쇼츠에서 선택",
+      "shortLoading": "쇼츠 불러오는 중…",
+      "shortEmpty": "최근 3Speak 쇼츠가 없어요.",
+      "noChannel": "채널이 감지되지 않았어요(로그인했나요?)",
+      "loadFailed": "불러오지 못했어요: {{error}}"
+    },
+    "toasts": {
+      "unfurlFailed": "링크 미리보기를 가져오지 못했어요",
+      "imageUploadFailed": "이미지 업로드 실패: {{error}}",
+      "tryAgain": "다시 시도해 주세요",
+      "styleApplied": "모든 {{type}} 블록에 스타일을 적용했어요",
+      "templateApplied": "“{{name}}” 적용됨 — 수정하거나 실행 취소하세요",
+      "reverted": "이전 디자인으로 되돌렸어요",
+      "saved": "스포트라이트를 Hive 프로필에 저장했어요",
+      "saveFailed": "저장하지 못했어요",
+      "linkCopied": "링크를 복사했어요",
+      "uploadFailed": "업로드 실패"
+    },
+    "link": {
+      "labelPlaceholder": "라벨(예: 내 YouTube)",
+      "type": "링크 유형",
+      "typeGroup": "유형",
+      "website": "웹사이트 / URL",
+      "email": "이메일",
+      "phone": "전화",
+      "platformGroup": "플랫폼",
+      "yourname": "yourname",
+      "platformIconHint": "아이콘은 {{platform}} 로고예요. 원하는 아이콘을 고르려면 “웹사이트 / URL”로 바꾸세요.",
+      "icon": "아이콘",
+      "iconColor": "아이콘 색상",
+      "iconBg": "아이콘 배경"
+    },
+    "header": {
+      "text": "텍스트",
+      "size": "크기",
+      "large": "크게",
+      "medium": "중간",
+      "small": "작게",
+      "align": "정렬",
+      "left": "왼쪽",
+      "center": "가운데",
+      "right": "오른쪽"
+    },
+    "image": {
+      "uploading": "업로드 중…",
+      "upload": "이미지 업로드",
+      "urlPlaceholder": "…또는 이미지 URL",
+      "linkPlaceholder": "클릭 시 이동할 링크(선택)"
+    },
+    "video": {
+      "contentType": "콘텐츠 유형",
+      "video": "동영상",
+      "short": "쇼츠",
+      "orPaste": "또는 링크 붙여넣기",
+      "pastePlaceholder": "3Speak 동영상 링크 또는 author/permlink 붙여넣기",
+      "titlePlaceholder": "동영상 위에 표시될 제목(3Speak로 연결)",
+      "hint": "선택한 콘텐츠가 내 페이지에 임베드되어 재생돼요."
+    },
+    "embed": {
+      "source": "소스",
+      "sourceLink": "링크(리치 미리보기)",
+      "sourceHiveRecent": "내 최신 Hive 게시물",
+      "accountPlaceholder": "Hive 사용자 이름(비워 두면 내 계정)",
+      "showPosts_other": "게시물 {{count}}개 표시",
+      "perRow": "한 줄에 {{value}}개",
+      "hiveRecentHint": "최근 최상위 게시물(리블로그나 크로스포스트 제외)이에요. 자동으로 업데이트돼요.",
+      "linkPlaceholder": "아무 링크나 붙여넣으세요 — Hive 게시물, Instagram, X, YouTube, 기사…",
+      "fetching": "미리보기 가져오는 중…",
+      "noPreview": "미리보기를 찾지 못했어요. 링크 카드로는 표시돼요.",
+      "pasteHint": "링크를 붙여넣으면 제목, 설명, 이미지를 가져와요."
+    },
+    "style": {
+      "title": "스타일",
+      "applyAllTitle": "모든 {{type}} 블록에 이 스타일 적용",
+      "applyAll": "모든 {{types}}에 적용",
+      "background": "배경",
+      "text": "텍스트",
+      "backgroundPct": "배경 {{value}}%",
+      "radius": "모서리 {{value}}",
+      "fontSizePct": "글자 크기 {{value}}%",
+      "paddingPx": "여백 {{value}}px",
+      "thumbnailPct": "썸네일 {{value}}%",
+      "border": "테두리",
+      "thicknessPx": "두께 {{value}}px",
+      "opacityPct": "불투명도 {{value}}%",
+      "shadow": "그림자",
+      "strengthPct": "강도 {{value}}%",
+      "color": "색상",
+      "blur": "흐림 {{value}}",
+      "spread": "퍼짐 {{value}}",
+      "inset": "안쪽",
+      "cardDelayMs": "카드 지연 {{value}}ms"
+    },
+    "tagline": "내 링크와 동영상을 한 페이지에",
+    "openPage": "페이지 열기",
+    "templates": {
+      "title": "템플릿",
+      "hint": "디자인을 고르면 모든 항목이 채워져요. 소개는 유지되며 실행 취소할 수 있어요.",
+      "undo": "템플릿 실행 취소 — 내 디자인으로 돌아가기"
+    },
+    "profile": {
+      "title": "프로필",
+      "headlinePlaceholder": "짧은 헤드라인 / 소개(선택)",
+      "avatarSizePct": "아바타 크기 {{value}}%",
+      "avatarShadowPct": "아바타 그림자 {{value}}%",
+      "avatarGlow": "아바타 광채",
+      "glowSize": "광채 크기 {{value}}",
+      "channelButtonText": "채널 버튼 텍스트"
+    },
+    "page": {
+      "title": "페이지 스타일",
+      "solid": "단색",
+      "gradient": "그라데이션",
+      "image": "이미지",
+      "color2": "색상 2",
+      "angle": "각도 {{value}}°",
+      "uploadBackground": "배경 업로드",
+      "imageSet": "이미지 설정됨 ✓",
+      "overlay": "오버레이",
+      "overlay2": "오버레이 2",
+      "none": "없음",
+      "overlayOpacityPct": "오버레이 불투명도 {{value}}%",
+      "overlayAngle": "오버레이 각도 {{value}}°",
+      "colors": "색상",
+      "buttonBg": "버튼 배경",
+      "buttonText": "버튼 텍스트",
+      "buttons": "버튼",
+      "buttonStyle": "버튼 스타일",
+      "soft": "부드럽게",
+      "fill": "채우기",
+      "outline": "외곽선",
+      "cornerRadius": "모서리 둥글기 {{value}}",
+      "textStyle": "텍스트 스타일(이름, 소개, 텍스트 블록)",
+      "font": "글꼴",
+      "normal": "보통",
+      "italic": "기울임",
+      "bold": "굵게",
+      "boldItalic": "굵은 기울임",
+      "strong": "강하게",
+      "textBorderPx": "글자 테두리 {{value}}px",
+      "borderColor": "테두리 색상"
+    },
+    "addBlock": "블록 추가",
+    "empty": "위에서 첫 링크, 동영상 또는 이미지를 추가하세요.",
+    "arrangeHint": "<grip></grip>을 드래그해서 정렬 · 블록을 다른 블록 위에 놓으면 나란히 배치 · 블록을 클릭하면 여기서 바로 수정",
+    "livePreview": "실시간 미리보기",
+    "previewTitle": "스포트라이트 미리보기"
+  }
+}

@@ -1,6 +1,8 @@
 import { useEffect, useRef, useState, useCallback, useMemo } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { Link, useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
+import { formatNumber } from "../../i18n";
 import axios from "axios";
 import { MdMusicNote, MdVideoLibrary, MdGroup, MdCheck, MdPerson, MdClose, MdCalendarToday, MdLabel, MdSearch, MdPlaylistPlay, MdExpandMore, MdExpandLess } from "react-icons/md";
 import { RiMovieLine } from "react-icons/ri";
@@ -13,22 +15,22 @@ import "./NavSearch.scss";
 const LIMIT = 50;
 
 const SEARCH_TYPES = [
-  { key: 'user', label: 'Users', icon: <MdPerson size={16} /> },
-  { key: 'community', label: 'Communities', icon: <MdGroup size={16} /> },
-  { key: 'video', label: 'Videos', icon: <MdVideoLibrary size={16} /> },
-  { key: 'short', label: 'Shorts', icon: <RiMovieLine size={16} /> },
-  { key: 'audio', label: 'Audio', icon: <MdMusicNote size={16} /> },
-  { key: 'playlist', label: 'Playlists', icon: <MdPlaylistPlay size={16} /> },
+  { key: 'user', labelKey: 'nav.search.types.users', icon: <MdPerson size={16} /> },
+  { key: 'community', labelKey: 'nav.search.types.communities', icon: <MdGroup size={16} /> },
+  { key: 'video', labelKey: 'nav.search.types.videos', icon: <MdVideoLibrary size={16} /> },
+  { key: 'short', labelKey: 'nav.search.types.shorts', icon: <RiMovieLine size={16} /> },
+  { key: 'audio', labelKey: 'nav.search.types.audio', icon: <MdMusicNote size={16} /> },
+  { key: 'playlist', labelKey: 'nav.search.types.playlists', icon: <MdPlaylistPlay size={16} /> },
 ];
 
 const DATE_PRESETS = [
-  { label: 'Today', days: 1 },
-  { label: 'This week', days: 7 },
-  { label: 'This month', days: 30 },
-  { label: 'This year', days: 365 },
+  { labelKey: 'nav.search.dates.today', days: 1 },
+  { labelKey: 'nav.search.dates.thisWeek', days: 7 },
+  { labelKey: 'nav.search.dates.thisMonth', days: 30 },
+  { labelKey: 'nav.search.dates.thisYear', days: 365 },
 ];
 
-const defaultExcluded = SEARCH_TYPES.reduce((acc, t) => ({ ...acc, [t.key]: false }), {});
+const defaultExcluded = SEARCH_TYPES.reduce((acc, st) => ({ ...acc, [st.key]: false }), {});
 
 const fetchSearch = async (query, boostRecent, activeTypes, { tag, dateFrom, community } = {}, nsfw = false) => {
   const params = { q: query, limit: activeTypes.length * LIMIT };
@@ -57,6 +59,7 @@ const formatDuration = (seconds) => {
 };
 
 function NavSearch() {
+  const { t } = useTranslation();
   const showNsfw = useAppStore(s => s.showNsfw);
   const [searchTerm, setSearchTerm] = useState('');
   const [debouncedTerm, setDebouncedTerm] = useState('');
@@ -128,7 +131,7 @@ function NavSearch() {
   }, []);
 
   const activeTypes = useMemo(
-    () => SEARCH_TYPES.filter(t => !excludedFilters[t.key]).map(t => t.key),
+    () => SEARCH_TYPES.filter(st => !excludedFilters[st.key]).map(st => st.key),
     [excludedFilters]
   );
 
@@ -176,12 +179,12 @@ function NavSearch() {
   const toggleFilter = useCallback((key) => {
     setExcludedFilters(prev => {
       const wasActive = !prev[key];
-      const activeCount = SEARCH_TYPES.filter(t => !prev[t.key]).length;
+      const activeCount = SEARCH_TYPES.filter(st => !prev[st.key]).length;
 
       // If all are active (default state), solo-select this one
       if (activeCount === SEARCH_TYPES.length) {
         const next = {};
-        for (const t of SEARCH_TYPES) next[t.key] = t.key !== key;
+        for (const st of SEARCH_TYPES) next[st.key] = st.key !== key;
         return next;
       }
 
@@ -294,7 +297,7 @@ function NavSearch() {
           onFocus={() => setShowSuggestions(true)}
           onKeyDown={(e) => { if (e.key === 'Enter') openPanel(); }}
           type="text"
-          placeholder="Search..."
+          placeholder={t('nav.search.placeholder')}
           className="navsearch-input"
         />
         {!searchTerm && (
@@ -310,12 +313,12 @@ function NavSearch() {
           <div className="navsearch-suggest-dropdown">
             <button className="discover-suggest-item discover-suggest-search-term" onMouseDown={(e) => { e.stopPropagation(); openPanel(); }}>
               <MdSearch size={16} className="discover-suggest-icon" />
-              <span className="discover-suggest-primary">Search &ldquo;{debouncedTerm}&rdquo;</span>
+              <span className="discover-suggest-primary">{t('nav.search.searchFor', { term: debouncedTerm })}</span>
             </button>
 
             {groupedSuggestions.user?.length > 0 && (
               <div className="discover-suggest-group">
-                <span className="discover-suggest-group-label">Users</span>
+                <span className="discover-suggest-group-label">{t('nav.search.types.users')}</span>
                 <div className="discover-suggest-badges">
                   {groupedSuggestions.user.map((s, i) => (
                     <button key={i} className="discover-suggest-badge" onMouseDown={(e) => { e.stopPropagation(); selectSuggestion(s); }}>
@@ -331,7 +334,7 @@ function NavSearch() {
 
             {groupedSuggestions.tag?.length > 0 && (
               <div className="discover-suggest-group">
-                <span className="discover-suggest-group-label">Tags</span>
+                <span className="discover-suggest-group-label">{t('nav.search.tags')}</span>
                 <div className="discover-suggest-badges">
                   {groupedSuggestions.tag.map((s, i) => (
                     <button key={i} className="discover-suggest-badge" onMouseDown={(e) => { e.stopPropagation(); selectSuggestion(s); }}>
@@ -345,12 +348,12 @@ function NavSearch() {
 
             {groupedSuggestions.community?.length > 0 && (
               <div className="discover-suggest-group">
-                <span className="discover-suggest-group-label">Communities</span>
+                <span className="discover-suggest-group-label">{t('nav.search.types.communities')}</span>
                 <div className="discover-suggest-badges">
                   {groupedSuggestions.community.map((s, i) => (
                     <button key={i} className="discover-suggest-badge" onMouseDown={(e) => { e.stopPropagation(); selectSuggestion(s); }}>
                       <div className="discover-suggest-badge-avatar">
-                        <img src={`https://images.hive.blog/u/${s.name}/avatar/small`} alt="" onError={(e) => { e.target.style.display = 'none'; }} />
+                        <img src={`/img/u/${s.name}/avatar/small`} alt="" onError={(e) => { e.target.style.display = 'none'; }} />
                       </div>
                       <span>{s.title || s.name}</span>
                     </button>
@@ -361,7 +364,7 @@ function NavSearch() {
 
             {groupedSuggestions.playlist?.length > 0 && (
               <div className="discover-suggest-group">
-                <span className="discover-suggest-group-label">Playlists</span>
+                <span className="discover-suggest-group-label">{t('nav.search.types.playlists')}</span>
                 <div className="discover-suggest-badges">
                   {groupedSuggestions.playlist.map((s, i) => (
                     <button key={i} className="discover-suggest-badge" onMouseDown={(e) => { e.stopPropagation(); selectSuggestion(s); }}>
@@ -376,7 +379,7 @@ function NavSearch() {
 
             {groupedSuggestions.title?.length > 0 && (
               <div className="discover-suggest-group">
-                <span className="discover-suggest-group-label">Titles</span>
+                <span className="discover-suggest-group-label">{t('nav.search.titles')}</span>
                 {groupedSuggestions.title.map((s, i) => (
                   <button key={i} className="discover-suggest-item" onMouseDown={(e) => { e.stopPropagation(); selectSuggestion(s); }}>
                     <MdSearch size={16} className="discover-suggest-icon" />
@@ -400,7 +403,7 @@ function NavSearch() {
                   type="text"
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  placeholder="Search..."
+                  placeholder={t('nav.search.placeholder')}
                   className="navsearch-panel-search-input"
                   autoFocus
                 />
@@ -416,13 +419,13 @@ function NavSearch() {
               {/* Left sidebar: filters */}
               <div className="navsearch-sidebar">
                 <div className="navsearch-sidebar-section">
-                  <h4>Content type</h4>
+                  <h4>{t('nav.search.contentType')}</h4>
                   <div className="navsearch-type-filters">
-                    {SEARCH_TYPES.filter(t => !communityFilter || (t.key !== 'user' && t.key !== 'community')).map(t => (
-                      <label key={t.key} className={`discover-filter-chip${excludedFilters[t.key] ? ' excluded' : ''}`}>
-                        <input type="checkbox" checked={!excludedFilters[t.key]} onChange={() => toggleFilter(t.key)} />
-                        {t.icon}
-                        <span>{t.label}</span>
+                    {SEARCH_TYPES.filter(st => !communityFilter || (st.key !== 'user' && st.key !== 'community')).map(st => (
+                      <label key={st.key} className={`discover-filter-chip${excludedFilters[st.key] ? ' excluded' : ''}`}>
+                        <input type="checkbox" checked={!excludedFilters[st.key]} onChange={() => toggleFilter(st.key)} />
+                        {st.icon}
+                        <span>{t(st.labelKey)}</span>
                       </label>
                     ))}
                   </div>
@@ -432,12 +435,12 @@ function NavSearch() {
                   <label className={`discover-filter-chip boost${boostRecent ? ' active' : ''}`}>
                     <input type="checkbox" checked={boostRecent} onChange={() => setBoostRecent(prev => !prev)} />
                     <MdCheck size={14} className="discover-filter-check" />
-                    <span>Boost recent</span>
+                    <span>{t('nav.search.boostRecent')}</span>
                   </label>
                 </div>
 
                 <div className="navsearch-sidebar-section">
-                  <h4>Date range</h4>
+                  <h4>{t('nav.search.dateRange')}</h4>
                   <div className="navsearch-date-presets">
                     {DATE_PRESETS.map(p => (
                       <button
@@ -446,19 +449,19 @@ function NavSearch() {
                         className={`discover-date-btn${datePreset === p.days ? ' active' : ''}`}
                         onClick={() => setDatePreset(prev => prev === p.days ? null : p.days)}
                       >
-                        {p.label}
+                        {t(p.labelKey)}
                       </button>
                     ))}
                   </div>
                 </div>
 
                 <div className="navsearch-sidebar-section">
-                  <h4>Tag</h4>
+                  <h4>{t('nav.search.tag')}</h4>
                   <div className="navsearch-tag-row">
                     <input
                       type="text"
                       className="discover-advanced-input"
-                      placeholder="e.g. crypto, gaming..."
+                      placeholder={t('nav.search.tagPlaceholder')}
                       value={tagFilter}
                       onChange={(e) => setTagFilter(e.target.value.trim().toLowerCase())}
                     />
@@ -471,12 +474,12 @@ function NavSearch() {
                 </div>
 
                 <div className="navsearch-sidebar-section">
-                  <h4>Community</h4>
+                  <h4>{t('nav.search.community')}</h4>
                   <div className="discover-community-search" ref={communityWrapRef}>
                     {communityFilter ? (
                       <div className="discover-community-selected">
                         <div className="discover-community-selected-avatar">
-                          <img src={`https://images.hive.blog/u/${communityFilter}/avatar/small`} alt="" onError={(e) => { e.target.style.display = 'none'; }} />
+                          <img src={`/img/u/${communityFilter}/avatar/small`} alt="" onError={(e) => { e.target.style.display = 'none'; }} />
                         </div>
                         <span>{communityLabel || communityFilter}</span>
                         <button type="button" className="discover-advanced-clear" onClick={() => { setCommunityFilter(''); setCommunityLabel(''); setCommunitySearch(''); }}>
@@ -488,7 +491,7 @@ function NavSearch() {
                         <input
                           type="text"
                           className="discover-advanced-input"
-                          placeholder="Search communities..."
+                          placeholder={t('nav.search.communityPlaceholder')}
                           value={communitySearch}
                           onChange={(e) => { setCommunitySearch(e.target.value); setShowCommunityDropdown(true); }}
                           onFocus={() => setShowCommunityDropdown(true)}
@@ -509,11 +512,11 @@ function NavSearch() {
                                 }}
                               >
                                 <div className="discover-suggest-avatar">
-                                  <img src={`https://images.hive.blog/u/${c.name}/avatar/small`} alt="" onError={(e) => { e.target.style.display = 'none'; }} />
+                                  <img src={`/img/u/${c.name}/avatar/small`} alt="" onError={(e) => { e.target.style.display = 'none'; }} />
                                 </div>
                                 <div className="discover-suggest-text">
                                   <span className="discover-suggest-primary">{c.title || c.name}</span>
-                                  <span className="discover-suggest-secondary">{c.subscribers} subscribers</span>
+                                  <span className="discover-suggest-secondary">{t('nav.search.subscribers', { count: c.subscribers })}</span>
                                 </div>
                               </button>
                             ))}
@@ -527,7 +530,7 @@ function NavSearch() {
                 {hasAdvancedFilters && (
                   <button type="button" className="discover-clear-advanced" onClick={clearAdvancedFilters}>
                     <MdClose size={14} />
-                    Clear all filters
+                    {t('nav.search.clearFilters')}
                   </button>
                 )}
               </div>
@@ -550,46 +553,46 @@ function NavSearch() {
 
                 {!searchLoading && allExcluded && (
                   <p className="discover-no-results">
-                    All content types are hidden.{' '}
+                    {t('nav.search.allHidden')}{' '}
                     <button className="discover-reset-filters" onClick={() => setExcludedFilters(defaultExcluded)}>
-                      Re-enable all filters
+                      {t('nav.search.reenableFilters')}
                     </button>
                   </p>
                 )}
 
                 {!searchLoading && !allExcluded && !hasResults && (
-                  <p className="discover-no-results">No results found for &ldquo;{debouncedTerm}&rdquo;</p>
+                  <p className="discover-no-results">{t('nav.search.noResultsFor', { term: debouncedTerm })}</p>
                 )}
 
-                {SEARCH_TYPES.filter(t => !communityFilter || (t.key !== 'user' && t.key !== 'community')).map(t => {
-                  const items = grouped[t.key];
+                {SEARCH_TYPES.filter(st => !communityFilter || (st.key !== 'user' && st.key !== 'community')).map(st => {
+                  const items = grouped[st.key];
                   if (!items || items.length === 0) return null;
-                  const isCollapsed = !!collapsedGroups[t.key];
+                  const isCollapsed = !!collapsedGroups[st.key];
                   return (
-                    <div key={t.key} className="discover-result-group">
-                      <h3 className="discover-group-title" onClick={() => toggleGroup(t.key)}>
-                        {t.icon} {t.label} ({items.length})
+                    <div key={st.key} className="discover-result-group">
+                      <h3 className="discover-group-title" onClick={() => toggleGroup(st.key)}>
+                        {st.icon} {t(st.labelKey)} ({items.length})
                         {isCollapsed ? <MdExpandMore size={18} className="discover-group-toggle" /> : <MdExpandLess size={18} className="discover-group-toggle" />}
                       </h3>
-                      {!isCollapsed && (t.key === 'community' ? (
+                      {!isCollapsed && (st.key === 'community' ? (
                         <div className="discover-community-list">
                           {items.map(c => (
                             <Link to={`/community/${c.name}`} key={c.name} className="discover-community-card" onClick={closePanel}>
                               <div className="discover-community-avatar">
-                                <img src={`https://images.hive.blog/u/${c.name}/avatar/small`} alt="" loading="lazy" onError={(e) => { e.target.style.display = 'none'; }} />
+                                <img src={`/img/u/${c.name}/avatar/small`} alt="" loading="lazy" onError={(e) => { e.target.style.display = 'none'; }} />
                               </div>
                               <div className="discover-community-info">
                                 <span className="discover-community-name">{c.title || c.name}</span>
                                 <span className="discover-community-about">{c.about}</span>
                               </div>
                               <div className="discover-community-stats">
-                                <span>{c.subscribers} subscribers</span>
-                                <span>{c.num_authors} authors</span>
+                                <span>{t('nav.search.subscribers', { count: c.subscribers })}</span>
+                                <span>{t('nav.search.authors', { count: c.num_authors })}</span>
                               </div>
                             </Link>
                           ))}
                         </div>
-                      ) : t.key === 'user' ? (
+                      ) : st.key === 'user' ? (
                         <div className="discover-user-list">
                           {items.map(u => (
                             <Link to={`/p/${u.username}`} key={u.username} className="discover-user-card" onClick={closePanel}>
@@ -604,7 +607,7 @@ function NavSearch() {
                             </Link>
                           ))}
                         </div>
-                      ) : t.key === 'playlist' ? (
+                      ) : st.key === 'playlist' ? (
                         <div className="discover-playlist-list">
                           {items.map(p => (
                             <Link to={`/playlist/${p.id}`} key={p.id} className="discover-playlist-card" onClick={closePanel}>
@@ -613,7 +616,7 @@ function NavSearch() {
                               </div>
                               <div className="discover-playlist-info">
                                 <span className="discover-playlist-name">{p.name}</span>
-                                <span className="discover-playlist-meta">@{p.owner} &middot; {p.video_count} video{p.video_count !== 1 ? 's' : ''}</span>
+                                <span className="discover-playlist-meta">@{p.owner} &middot; {t('common.units.videos', { count: p.video_count })}</span>
                               </div>
                             </Link>
                           ))}
@@ -622,7 +625,7 @@ function NavSearch() {
                         <div className="discover-media-list">
                           {items.map((item, i) => (
                             <Link
-                              to={t.key === 'short' ? `/shorts?v=${item.author}/${item.permlink}` : `/watch?v=${item.author}/${item.permlink}`}
+                              to={st.key === 'short' ? `/shorts?v=${item.author}/${item.permlink}` : `/watch?v=${item.author}/${item.permlink}`}
                               key={`${item.author}-${item.permlink}-${i}`}
                               className="discover-media-card"
                               onClick={closePanel}
@@ -639,7 +642,7 @@ function NavSearch() {
                                 <span className="discover-media-title">{item.title}</span>
                                 <span className="discover-media-author">@{item.author || item.owner}</span>
                                 <span className="discover-media-meta">
-                                  {item.views > 0 && <span>{item.views.toLocaleString()} views</span>}
+                                  {item.views > 0 && <span>{t('nav.search.views', { count: item.views, formatted: formatNumber(item.views) })}</span>}
                                   {item.created_at && <TimeAgo date={item.created_at} short />}
                                 </span>
                               </div>

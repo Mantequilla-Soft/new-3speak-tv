@@ -1,0 +1,98 @@
+{
+  "page": {
+    "fallbackTitle": "Beji",
+    "kpis": {
+      "recipients": "Wapokeaji",
+      "recentVideos": "Video za karibuni",
+      "issued": "Ilitolewa"
+    },
+    "issuedBy": "Imetolewa na <creatorLink>@{{creator}}</creatorLink>",
+    "notFoundTitle": "Beji haikupatikana",
+    "notFoundBody": "Hakuna akaunti ya Hive inayoitwa @{{account}} iliyoweza kusomwa kwa sasa.",
+    "browseAll": "Vinjari beji zote",
+    "tabs": {
+      "videos": "Video",
+      "recipients": "Wapokeaji",
+      "recipientsWithCount": "Wapokeaji ({{num}})"
+    },
+    "errorVideos": "Hitilafu katika kupata video",
+    "noVideosTitle": "Bado hakuna video",
+    "noHolders": "Bado hakuna aliye na beji hii.",
+    "noHolderVideos": "Bado hakuna mwenye beji hii aliyechapisha video kwenye 3Speak.",
+    "loadingMore": "Inapakia zaidi...",
+    "recipientsError": "Imeshindwa kupakia wapokeaji",
+    "recipientsLoading": "Inapakia wapokeaji...",
+    "noRecipientsTitle": "Bado hakuna wapokeaji",
+    "noRecipientsBody": "Hadi sasa hakuna aliyetunukiwa beji hii.",
+    "recipientsSummary_one": "mpokeaji {{num}}",
+    "recipientsSummary_other": "wapokeaji {{num}}",
+    "recipientsSummaryWithVideos_one": "mpokeaji {{num}}, {{publishing}} wanachapisha kwenye 3Speak",
+    "recipientsSummaryWithVideos_other": "wapokeaji {{num}}, {{publishing}} wanachapisha kwenye 3Speak",
+    "recipientVideos_one": "video {{num}}",
+    "recipientVideos_other": "video {{num}}",
+    "recipientNoVideos": "Hakuna video"
+  },
+  "directory": {
+    "title": "Beji",
+    "intro": "Beji ni tuzo <b>unazopewa na wengine</b> kwenye Hive, kwa matukio, michango na hatua muhimu. Huwezi kujiunga na beji: mtu anakutunuku. Fungua beji ili utazame kile wapokeaji wake wanachapisha hapa.",
+    "searchPlaceholder": "Tafuta beji...",
+    "sort": {
+      "recipients": "Wapokeaji",
+      "created": "Iliundwa",
+      "name": "Jina"
+    },
+    "createLocked": "Kuunda beji kunahitaji akaunti ya Hive. Hii itafunguka akaunti yako ikiwa tayari.",
+    "create": "Unda beji",
+    "loadError": "Imeshindwa kupakia beji kwa sasa.",
+    "noMatch": "Hakuna beji inayolingana na utafutaji huo.",
+    "held": "Unayo",
+    "recipients_one": "mpokeaji {{num}}",
+    "recipients_other": "wapokeaji {{num}}"
+  },
+  "award": {
+    "success": "@{{username}} sasa ana {{title}}",
+    "failed": "Imeshindwa kutunuku beji hiyo",
+    "dialogLabel": "Mtunuku {{username}} beji",
+    "title": "Tunuku beji",
+    "toUser": "kwa @{{username}}",
+    "awarding": "Inatunuku…",
+    "held": "Anayo",
+    "award": "Tunuku",
+    "note": "Beji inamfuata kwenye Hive, na hiyo ndiyo maana ya kuwa nayo. Unaweza kuirudisha kutoka kwenye ukurasa wa beji yenyewe."
+  },
+  "hive": {
+    "dragToReorder": "Buruta ili kupanga upya",
+    "orderSaved": "Mpangilio wa beji umehifadhiwa kwenye wasifu wako wa Hive",
+    "orderSaveFailed": "Imeshindwa kuhifadhi mpangilio wa beji zako",
+    "dialogLabel": "Beji za @{{username}}",
+    "title": "Beji",
+    "arrangeHint": "Buruta beji zako kwa mpangilio unaotaka zionyeshwe.",
+    "earnedCount_one": "Beji {{count}} aliyopata @{{username}} kwenye Hive",
+    "earnedCount_other": "Beji {{count}} alizopata @{{username}} kwenye Hive",
+    "alwaysFirst": "Huonyeshwa kwanza kila wakati",
+    "saveOrder": "Hifadhi mpangilio",
+    "arrange": "Panga",
+    "arrangeTitle": "Chagua mpangilio wa beji zako zinavyoonekana",
+    "showAll_one": "Onyesha beji {{count}}",
+    "showAll_other": "Onyesha beji zote {{count}}",
+    "awardTitle": "Mtunuku @{{username}} mojawapo ya beji zako"
+  },
+  "leaderboardBadges": {
+    "proTitle": "Mtayarishaji huyu anaiunga mkono 3Speak kwa usajili wa Pro"
+  },
+  "leaderboard": {
+    "watchNotice": "Muda wa kutazama umefuatiliwa tangu {{since}} tu, kwa hivyo vipindi virefu bado vinaonyesha historia ile ile fupi.",
+    "unclaimed": "Haijadaiwa",
+    "noActivity": "Bado hakuna shughuli katika kipindi hiki",
+    "otherTopics": "Nyingine",
+    "title": "Viwango",
+    "subtitle": "{{blurb}} — watayarishaji bora kwenye 3Speak.",
+    "subtitleTopic": "{{blurb}} — watayarishaji bora katika {{topic}}.",
+    "allTopics": "Mada zote",
+    "finding": "Inamtafuta @{{user}} kwenye jedwali hili…",
+    "notInTop": "@{{user}} hayumo kwenye {{n}} bora wa jedwali hili.",
+    "loading": "Inapakia jedwali la viwango…",
+    "loadError": "Imeshindwa kupakia jedwali la viwango. Jaribu tena baada ya muda mfupi.",
+    "empty": "Bado hakuna mwenye {{metric}} yoyote katika kipindi hiki."
+  }
+}

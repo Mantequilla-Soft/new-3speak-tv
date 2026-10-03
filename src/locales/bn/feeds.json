@@ -1,0 +1,123 @@
+{
+  "loadingMore": "আরও লোড হচ্ছে…",
+  "promoted": "প্রমোটেড",
+  "scrollLeft": "বাঁয়ে স্ক্রল করুন",
+  "scrollRight": "ডানে স্ক্রল করুন",
+  "errors": {
+    "fetchVideos": "ভিডিও আনতে সমস্যা হয়েছে",
+    "loadVideos": "ভিডিও লোড করা যায়নি",
+    "loadShorts": "শর্টস লোড করা যায়নি"
+  },
+  "tabs": {
+    "all": "সব",
+    "videos": "ভিডিও",
+    "shorts": "শর্টস",
+    "videosCount": "ভিডিও ({{count}})",
+    "shortsCount": "শর্টস ({{count}})"
+  },
+  "dateFilters": {
+    "all": "সব সময়",
+    "today": "আজ",
+    "week": "এই সপ্তাহ",
+    "month": "এই মাস",
+    "justNow": "এইমাত্র"
+  },
+  "live": {
+    "title": "এখন লাইভ",
+    "badge": "● লাইভ"
+  },
+  "newFromFollowing": {
+    "aria": "আপনার ফলো করা ক্রিয়েটরদের নতুন কনটেন্ট",
+    "shorts_one": "{{count}}টি শর্ট",
+    "shorts_other": "{{count}}টি শর্টস"
+  },
+  "firstUploads": {
+    "title": "প্রথমবারের আপলোড"
+  },
+  "newVideos": {
+    "title": "নতুন ভিডিও"
+  },
+  "home": {
+    "sections": {
+      "discover": "আবিষ্কার করুন",
+      "home": "হোম ফিড",
+      "follow": "ফলো ফিড",
+      "new": "নতুন কনটেন্ট",
+      "interests": "আগ্রহের বিষয়"
+    },
+    "empty": "এখানে এখনো দেখানোর মতো কিছু নেই।",
+    "viewAll": "সব দেখুন",
+    "dragToReorder": "ক্রম বদলাতে টেনে আনুন",
+    "surfTitle": "চ্যানেল সার্ফিং: একটি বিষয় বেছে নিন আর টিভির মতো দেখুন",
+    "zapping": "জ্যাপিং"
+  },
+  "surf": {
+    "pageTitle": "চ্যানেল সার্ফিং",
+    "intro": "একটি চ্যানেল বেছে নিন আর আরাম করে বসুন। ওই বিষয়ের সেরা ভিডিওগুলো আমরা একটার পর একটা সাজিয়ে দিই। বোর লাগছে? <b>Zap</b> চাপুন। অন্য কিছু চান? চ্যানেল বদলান।",
+    "backTo": "CH {{number}} {{emoji}} {{title}}-এ ফিরে যান",
+    "surprise": "সারপ্রাইজ দিন",
+    "yourChannels": "আপনার চ্যানেল",
+    "nothingOnAir": "এই মুহূর্তে {{channel}}-এ কিছু চলছে না",
+    "tuneFailed": "টিউন করা যায়নি। একটু পরে আবার চেষ্টা করুন।",
+    "remoteAria": "চ্যানেল সার্ফিং রিমোট",
+    "openGuide": "চ্যানেল গাইড খুলুন",
+    "ch": "CH {{number}}",
+    "chLabel": "CH",
+    "channelHint": "CH {{number}}: {{title}}",
+    "channelHintKey": "CH {{number}}: {{title}} ({{key}})",
+    "tuningShort": "টিউন হচ্ছে",
+    "tuning": "টিউন হচ্ছে…",
+    "onAir": "অন এয়ার",
+    "changeChannel": "চ্যানেল বদলান",
+    "nextChannel": "পরের চ্যানেল",
+    "prevChannel": "আগের চ্যানেল",
+    "nextVideo": "পরের ভিডিও",
+    "nextVideoKey": "পরের ভিডিও (→)",
+    "zap": "Zap",
+    "findingNext": "পরেরটা খোঁজা হচ্ছে…",
+    "stop": "সার্ফিং বন্ধ করুন",
+    "stopTitle": "সার্ফিং বন্ধ করুন (এই ভিডিওটি চলতে থাকবে)",
+    "guide": "চ্যানেল গাইড"
+  },
+  "discover": {
+    "searchPlaceholder": "ভিডিও, শর্টস, অডিও, কমিউনিটি খুঁজুন...",
+    "clearSearch": "সার্চ মুছুন",
+    "searchFor": "“{{term}}” খুঁজুন",
+    "noResultsFor": "“{{term}}”-এর জন্য কোনো ফলাফল পাওয়া যায়নি",
+    "types": {
+      "user": "ইউজার",
+      "community": "কমিউনিটি",
+      "video": "ভিডিও",
+      "short": "শর্টস",
+      "audio": "অডিও",
+      "playlist": "প্লেলিস্ট"
+    },
+    "suggest": {
+      "tags": "ট্যাগ",
+      "titles": "শিরোনাম"
+    },
+    "dates": {
+      "today": "আজ",
+      "week": "এই সপ্তাহ",
+      "month": "এই মাস",
+      "year": "এই বছর"
+    },
+    "boostRecent": "নতুনগুলো আগে",
+    "filters": "ফিল্টার",
+    "date": "তারিখ",
+    "tag": "ট্যাগ",
+    "tagPlaceholder": "যেমন crypto, gaming...",
+    "community": "কমিউনিটি",
+    "communityPlaceholder": "কমিউনিটি খুঁজুন...",
+    "clearAllFilters": "সব ফিল্টার মুছুন",
+    "allHidden": "সব ধরনের কনটেন্ট লুকানো আছে।",
+    "reenableFilters": "সব ফিল্টার আবার চালু করুন",
+    "groupTitle": "{{label}} ({{count}})",
+    "subscribers_one": "{{count}} জন সাবস্ক্রাইবার",
+    "subscribers_other": "{{count}} জন সাবস্ক্রাইবার",
+    "authors_one": "{{count}} জন লেখক",
+    "authors_other": "{{count}} জন লেখক",
+    "views_one": "{{views}} ভিউ",
+    "views_other": "{{views}} ভিউ"
+  }
+}

@@ -1,6 +1,7 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { createPortal } from 'react-dom';
 import axios from 'axios';
+import { useTranslation, Trans } from 'react-i18next';
 import { toastIn } from '../../utils/toast';
 import { Rocket, X, Megaphone, ChevronRight } from 'lucide-react';
 import { CHECKER_URL, CHECKER_API_KEY, selfPromoEnabledFor } from '../../utils/config';
@@ -30,6 +31,7 @@ export default function PromoteModal({ open, onClose, author, permlink, promoted
    *
    * null = the chooser. Reset every time the modal opens, so closing on the ad
    * wizard does not reopen into it. */
+  const { t } = useTranslation();
   const [mode, setMode] = useState(null);
   const [quote, setQuote] = useState(null); // { account, costPer24hHbd, maxDays, hbdPerHive }
   const [days, setDays] = useState(1);
@@ -51,7 +53,7 @@ export default function PromoteModal({ open, onClose, author, permlink, promoted
     setBalances(null);
     axios.get(`${CHECKER_URL}/promote/quote`)
       .then(res => { if (!cancelled && res.data?.success) setQuote(res.data); })
-      .catch(() => { if (!cancelled) toast.error('Could not load promotion pricing.'); });
+      .catch(() => { if (!cancelled) toast.error(t('ads.promote.pricingFailed')); });
     // Authoritative current status (blocks promoting while still active everywhere).
     if (author && permlink) {
       axios.get(`${CHECKER_URL}/promote/status/${author}/${permlink}`)
@@ -65,7 +67,7 @@ export default function PromoteModal({ open, onClose, author, permlink, promoted
         .catch(() => {});
     }
     return () => { cancelled = true; };
-  }, [open, author, permlink, promotedUntil, me]);
+  }, [open, author, permlink, promotedUntil, me, t]);
 
   const maxDays = quote?.maxDays || 7;
   const costHbd = useMemo(() => (quote ? days * quote.costPer24hHbd : 0), [quote, days]);
@@ -85,14 +87,14 @@ export default function PromoteModal({ open, onClose, author, permlink, promoted
   }
 
   const handlePromote = async () => {
-    if (!isLoggedIn()) { toast.error('Please log in to promote.'); return; }
+    if (!isLoggedIn()) { toast.error(t('ads.promote.loginRequired')); return; }
     if (!quote) return;
-    if (insufficient) { toast.error(`Not enough ${currency} — your balance is ${walletBalance.toFixed(3)} ${currency}.`); return; }
+    if (insufficient) { toast.error(t('ads.promote.notEnoughBalance', { currency, balance: walletBalance.toFixed(3) })); return; }
     setBusy(true);
     try {
       const memo = `promote:${author}/${permlink}`;
       await transferWithAioha(quote.account, Number(amount.toFixed(3)), currency, memo);
-      toast.message('Payment sent — verifying on-chain…');
+      toast.message(t('ads.promote.verifying'));
 
       // Verify + credit. Retry a few times: account history can lag a second or two.
       let credited = null;
@@ -109,15 +111,15 @@ export default function PromoteModal({ open, onClose, author, permlink, promoted
       }
 
       if (credited) {
-        toast.success(`Promoted until ${new Date(credited.promotedUntil).toLocaleString()}`);
+        toast.success(t('ads.promote.promotedUntil', { date: new Date(credited.promotedUntil).toLocaleString() }));
         onPromoted?.(credited.promotedUntil);
         onClose?.();
       } else {
-        toast.info('Payment sent. It can take a moment to verify — your promotion will activate shortly.');
+        toast.info(t('ads.promote.paymentSentPending'));
         onClose?.();
       }
     } catch (err) {
-      const msg = err?.message || 'Promotion failed';
+      const msg = err?.message || t('ads.promote.failed');
       if (!/cancel|reject|denied/i.test(msg)) toast.error(msg);
     } finally {
       setBusy(false);
@@ -127,10 +129,10 @@ export default function PromoteModal({ open, onClose, author, permlink, promoted
   return createPortal(
     <div className="promote-overlay" onClick={onClose}>
       <div className="promote-modal" onClick={e => e.stopPropagation()}>
-        <button className="promote-modal__close" onClick={onClose} aria-label="Close"><X size={18} /></button>
+        <button className="promote-modal__close" onClick={onClose} aria-label={t('common.actions.close')}><X size={18} /></button>
         <div className="promote-modal__head">
           <Rocket size={20} />
-          <h3>Promote this video</h3>
+          <h3>{t('ads.promote.title')}</h3>
         </div>
 
         {mode === null ? (
@@ -138,8 +140,8 @@ export default function PromoteModal({ open, onClose, author, permlink, promoted
             <button className="promote-choice" onClick={() => setMode('boost')}>
               <Rocket size={18} />
               <span>
-                <strong>Boost in feeds</strong>
-                <em>Show it first in recommendations and the Promoted row on 3Speak.</em>
+                <strong>{t('ads.promote.boostTitle')}</strong>
+                <em>{t('ads.promote.boostDesc')}</em>
               </span>
               <ChevronRight size={16} />
             </button>
@@ -150,8 +152,8 @@ export default function PromoteModal({ open, onClose, author, permlink, promoted
               <button className="promote-choice" onClick={() => setMode('ad')}>
                 <Megaphone size={18} />
                 <span>
-                  <strong>Run it as an ad</strong>
-                  <em>Your video plays as a paid spot inside other videos and shorts.</em>
+                  <strong>{t('ads.promote.adTitle')}</strong>
+                  <em>{t('ads.promote.adDesc')}</em>
                 </span>
                 <ChevronRight size={16} />
               </button>
@@ -159,19 +161,18 @@ export default function PromoteModal({ open, onClose, author, permlink, promoted
           </div>
         ) : isActive ? (
           <div className="promote-active">
-            <p>This video is already promoted until</p>
+            <p>{t('ads.promote.alreadyUntil')}</p>
             <strong>{new Date(activeUntil).toLocaleString()}</strong>
-            <p className="promote-muted">You can promote it again once the current promotion ends.</p>
+            <p className="promote-muted">{t('ads.promote.againLater')}</p>
           </div>
         ) : (
           <>
             <p className="promote-intro">
-              A promoted video appears first in recommendations and in the home Promoted section.
-              Pay with your own wallet — {quote ? quote.costPer24hHbd : '…'} HBD buys 24h.
+              {t('ads.promote.intro', { cost: quote ? quote.costPer24hHbd : '…' })}
             </p>
 
             <div className="promote-field">
-              <label>Duration: <strong>{days} {days === 1 ? 'day' : 'days'}</strong></label>
+              <label><Trans i18nKey="ads.promote.duration" count={days} components={{ b: <strong /> }} /></label>
               <input
                 type="range" min={1} max={maxDays} step={1}
                 value={days} onChange={e => setDays(Number(e.target.value))}
@@ -181,7 +182,7 @@ export default function PromoteModal({ open, onClose, author, permlink, promoted
             </div>
 
             <div className="promote-field">
-              <label>Pay with</label>
+              <label>{t('ads.promote.payWith')}</label>
               <div className="promote-currency">
                 <button className={currency === 'HBD' ? 'active' : ''} onClick={() => setCurrency('HBD')} disabled={busy}>HBD</button>
                 <button className={currency === 'HIVE' ? 'active' : ''} onClick={() => setCurrency('HIVE')} disabled={busy}>HIVE</button>
@@ -189,22 +190,22 @@ export default function PromoteModal({ open, onClose, author, permlink, promoted
             </div>
 
             <div className="promote-total">
-              <span>Total</span>
+              <span>{t('ads.promote.total')}</span>
               <strong>{amount ? amount.toFixed(3) : '—'} {currency}</strong>
             </div>
 
             <div className="promote-balance">
-              <span>Your balance</span>
+              <span>{t('ads.promote.yourBalance')}</span>
               <span className={insufficient ? 'promote-balance--low' : ''}>
                 {walletBalance != null ? `${walletBalance.toFixed(3)} ${currency}` : '…'}
               </span>
             </div>
 
             <button className="promote-cta" onClick={handlePromote} disabled={busy || !quote || insufficient}>
-              {busy ? 'Processing…' : insufficient ? `Not enough ${currency}` : `Promote for ${amount ? amount.toFixed(3) : ''} ${currency}`}
+              {busy ? t('common.status.processing') : insufficient ? t('ads.promote.notEnough', { currency }) : t('ads.promote.promoteFor', { amount: amount ? amount.toFixed(3) : '', currency })}
             </button>
             <p className="promote-muted promote-foot">
-              You'll sign a transfer to @{quote?.account || 'threespeakfund'} with your wallet (active key).
+              {t('ads.promote.signNote', { account: quote?.account || 'threespeakfund' })}
             </p>
           </>
         )}

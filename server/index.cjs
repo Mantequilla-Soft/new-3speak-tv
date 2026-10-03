@@ -110,6 +110,16 @@ app.use(cors({
   credentials: true
 }))
 
+// Community translation editor (/translate in the app). Mounted BEFORE the global
+// JSON parser because its saves may be up to 256kb and that parser stops at 100kb;
+// it parses its own bodies and cookies. Identity comes from resolveProvenViewer
+// (ButrAuth / SIWH wallet session / verified HiveSigner token), NEVER the legacy
+// app-key path. See server/i18n-editor.cjs for the full security model.
+app.use('/api/i18n', require('./i18n-editor.cjs').createI18nRouter({
+  resolveUser: (req, res) => resolveProvenViewer(req, res),
+  allowedOrigins: ALLOWED_ORIGINS
+}))
+
 app.use(express.json({ limit: '100kb' }))
 app.use(cookieParser())
 

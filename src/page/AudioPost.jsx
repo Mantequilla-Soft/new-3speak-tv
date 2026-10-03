@@ -2,6 +2,8 @@ import { useEffect, useMemo, useState } from 'react';
 import { getHiveUrl } from '../utils/hiveNode';
 import { useParams, Link } from 'react-router-dom';
 import axios from 'axios';
+import { useTranslation } from 'react-i18next';
+import { formatTimeAgo } from '../i18n';
 import { MdPlayArrow, MdPause, MdQueueMusic, MdThumbUp } from 'react-icons/md';
 import { BiDollar } from 'react-icons/bi';
 import { LuTimer } from 'react-icons/lu';
@@ -33,29 +35,20 @@ function fmt(sec) {
 function formatRelativeTime(dateString) {
   if (!dateString) return '';
   const date = new Date(dateString + (dateString.endsWith('Z') ? '' : 'Z'));
-  const diff = Math.floor((Date.now() - date.getTime()) / 1000);
-  if (diff < 60) return `${diff}s ago`;
-  const m = Math.floor(diff / 60);
-  if (m < 60) return `${m}m ago`;
-  const h = Math.floor(m / 60);
-  if (h < 24) return `${h}h ago`;
-  const d = Math.floor(h / 24);
-  if (d < 30) return `${d}d ago`;
-  const mo = Math.floor(d / 30);
-  if (mo < 12) return `${mo}mo ago`;
-  return `${Math.floor(mo / 12)}y ago`;
+  return formatTimeAgo(date, { style: 'narrow' });
 }
 
 function audioCover(item) {
   if (!item) return fallbackImg;
   const fixed = fixVideoThumbnail({ thumbnail_url: item.thumbnail_url, thumbnail: item.thumbnail_url });
   if (!fixed || fixed === fallbackImg || fixed === '/images/speak.jpg') {
-    return `https://images.hive.blog/u/${item.owner}/avatar/small`;
+    return `/img/u/${item.owner}/avatar/small`;
   }
   return fixed;
 }
 
 function AudioPost() {
+  const { t } = useTranslation();
   const params = useParams();
   const author = (params.author || '').replace(/^@/, '');
   const permlink = params.permlink || '';
@@ -118,7 +111,7 @@ function AudioPost() {
           });
           p = fb.data?.result;
         }
-        if (!p?.author) throw new Error('Post not found');
+        if (!p?.author) throw new Error(t('audio.post.notFound'));
 
         // Find the audio doc whose post_permlink matches this Hive permlink.
         // Prefer that, else extract from the body (handles cases the audioHiveSync
@@ -144,14 +137,14 @@ function AudioPost() {
         setPost(p);
         setAudioDoc(doc || null);
       } catch (err) {
-        if (!cancelled) setError(err?.message || 'Could not load this audio post');
+        if (!cancelled) setError(err?.message || t('audio.post.loadFailed'));
       } finally {
         if (!cancelled) setLoading(false);
       }
     })();
 
     return () => { cancelled = true; };
-  }, [author, permlink]);
+  }, [author, permlink, t]);
 
   const isThisCurrent = audioDoc && audioCurrent?._id === audioDoc._id;
   const isThisPlaying = isThisCurrent && audioIsPlaying;
@@ -167,8 +160,8 @@ function AudioPost() {
   const onSeek = (e) => {
     if (!isThisCurrent || !total) return;
     const rect = e.currentTarget.getBoundingClientRect();
-    const t = ((e.clientX - rect.left) / rect.width) * total;
-    audioRequestSeek(t);
+    const time = ((e.clientX - rect.left) / rect.width) * total;
+    audioRequestSeek(time);
   };
 
   // Build a videoDetails-shaped object so CommentSection can consume it
@@ -184,7 +177,7 @@ function AudioPost() {
       body: post.body,
       author: {
         id: post.author, username: post.author,
-        profile: { name: post.author, images: { avatar: `https://images.hive.blog/u/${post.author}/avatar/small` } },
+        profile: { name: post.author, images: { avatar: `/img/u/${post.author}/avatar/small` } },
       },
       stats: {
         num_comments: post.children || 0,
@@ -207,15 +200,15 @@ function AudioPost() {
     return (
       <div className="audio-post-page">
         <div className="audio-post-error">
-          <p>{error || 'Could not load this audio post.'}</p>
-          <Link to="/audio">← Back to Audio</Link>
+          <p>{error || t('audio.post.loadFailedFull')}</p>
+          <Link to="/audio">{t('audio.post.backToAudio')}</Link>
         </div>
       </div>
     );
   }
 
   const tags = videoDetails?.tags?.slice(0, 7) || [];
-  const cover = audioDoc ? audioCover(audioDoc) : `https://images.hive.blog/u/${author}/avatar/small`;
+  const cover = audioDoc ? audioCover(audioDoc) : `/img/u/${author}/avatar/small`;
   const pct = total > 0 ? (elapsed / total) * 100 : 0;
 
   return (
@@ -224,16 +217,16 @@ function AudioPost() {
       <div className="audio-post-hero">
         <img className="audio-post-cover" src={cover} alt="" onError={(e) => { e.currentTarget.src = fallbackImg; }} />
         <div className="audio-post-hero-body">
-          <h1 className="audio-post-title">{post.title || (audioDoc?.title) || '(untitled)'}</h1>
+          <h1 className="audio-post-title">{post.title || (audioDoc?.title) || t('audio.post.untitled')}</h1>
           <div className="audio-post-author-row">
             <AuthorBadge author={author} showFollow tabHint="audio" />
           </div>
           <div className="audio-post-meta-row">
             <span className="audio-post-meta-item"><LuTimer /> {formatRelativeTime(post.created)}</span>
             <span className="audio-post-meta-item"><PayoutAmount amount={videoDetails.stats.total_hive_reward} size={13} /></span>
-            <span className="audio-post-meta-item">{videoDetails.stats.num_votes} votes</span>
-            <span className="audio-post-meta-item">{videoDetails.stats.num_comments} comments</span>
-            {audioDoc?.plays > 0 && <span className="audio-post-meta-item">{audioDoc.plays} plays</span>}
+            <span className="audio-post-meta-item">{t('common.units.votes', { count: videoDetails.stats.num_votes })}</span>
+            <span className="audio-post-meta-item">{t('common.units.comments', { count: videoDetails.stats.num_comments })}</span>
+            {audioDoc?.plays > 0 && <span className="audio-post-meta-item">{t('audio.tile.plays', { count: audioDoc.plays })}</span>}
           </div>
 
           {audioDoc ? (
@@ -242,7 +235,7 @@ function AudioPost() {
                 <button
                   className={`audio-post-play-btn${isThisPlaying ? ' is-playing' : ''}`}
                   onClick={onTogglePlay}
-                  aria-label={isThisPlaying ? 'Pause' : 'Play'}
+                  aria-label={isThisPlaying ? t('common.actions.pause') : t('common.actions.play')}
                 >
                   {isThisPlaying ? <MdPause size={36} /> : <MdPlayArrow size={36} />}
                 </button>
@@ -261,42 +254,42 @@ function AudioPost() {
                   className="audio-post-action-btn"
                   onClick={() => {
                     audioAddToQueue(audioDoc);
-                    toast.success('Added to queue');
+                    toast.success(t('audio.post.addedToQueue'));
                   }}
                 >
-                  <MdQueueMusic size={18} /> Queue
+                  <MdQueueMusic size={18} /> {t('audio.player.queue')}
                 </button>
                 <button
                   type="button"
                   className={`audio-post-action-btn${voted ? ' is-voted' : ''}`}
                   onClick={() => {
-                    if (!loggedIn) { toast.error('Sign in to vote'); return; }
+                    if (!loggedIn) { toast.error(t('audio.post.signInToVote')); return; }
                     setShowVoteTooltip((v) => !v);
                   }}
                 >
-                  <MdThumbUp size={16} /> {voted ? 'Voted' : 'Vote'}
+                  <MdThumbUp size={16} /> {voted ? t('audio.post.voted') : t('audio.post.vote')}
                   {voteCount > 0 && <span className="audio-post-action-count">{voteCount}</span>}
                 </button>
                 <button
                   type="button"
                   className="audio-post-action-btn"
                   onClick={() => {
-                    if (!loggedIn) { toast.error('Sign in to tip'); return; }
+                    if (!loggedIn) { toast.error(t('audio.post.signInToTip')); return; }
                     setIsTipOpen(true);
                   }}
                 >
-                  <BiDollar size={18} /> Tip
+                  <BiDollar size={18} /> {t('audio.post.tip')}
                 </button>
               </div>
             </>
           ) : (
-            <p className="audio-post-no-audio">Audio for this post is still being indexed — try again in a few minutes.</p>
+            <p className="audio-post-no-audio">{t('audio.post.stillIndexing')}</p>
           )}
 
           {tags.length > 0 && (
             <div className="audio-post-tags">
-              {tags.map((t) => (
-                <Link key={t} to={`/t/${t}`} className="audio-post-tag">#{t}</Link>
+              {tags.map((tag) => (
+                <Link key={tag} to={`/t/${tag}`} className="audio-post-tag">#{tag}</Link>
               ))}
             </div>
           )}

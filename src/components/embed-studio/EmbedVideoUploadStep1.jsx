@@ -16,12 +16,14 @@ import { checkPostingRc } from '../../utils/rcCheck';
 import RcInsufficientModal from './RcInsufficientModal';
 import { SHORTS_MAX_DURATION_SEC, shortsMaxDurationLabel, cameraRecordEnabledFor } from '../../utils/config';
 import { isChromium } from '../../utils/browser';
+import { useTranslation, Trans } from 'react-i18next';
 
 // Every toast from this module is headed "Upload"; the message becomes the
 // line under it. See utils/toast.js.
 const toast = toastIn('Upload');
 
 function EmbedVideoUploadStep1() {
+  const { t } = useTranslation();
   const {
     setVideoDuration,
     videoFile,
@@ -142,10 +144,10 @@ function EmbedVideoUploadStep1() {
     try {
       await addThreespeakToPostingAuth(user, { signWindow }); // HiveSigner signs in the popup; others sign with the active key
       setNeedsAuth(false);
-      toast.success('@threespeak authorized — you can now select a video');
+      toast.success(t('upload.select.authorized'));
     } catch (e) {
       try { signWindow?.close(); } catch { /* ignore */ }
-      toast.error(e?.message || 'Authorization failed. Please try again.');
+      toast.error(e?.message || t('upload.select.authorizationFailed'));
     } finally {
       setAuthorizing(false);
     }
@@ -196,14 +198,14 @@ function EmbedVideoUploadStep1() {
     }
 
     if (!file.type.startsWith("video/")) {
-      toast.error("Please select a valid video file");
+      toast.error(t("upload.select.invalidVideo"));
       return;
     }
 
     // Embed uploads are capped at 5GB (enforced server-side too).
     const MAX_FILE_SIZE = 5 * 1024 * 1024 * 1024; // 5GB
     if (file.size > MAX_FILE_SIZE) {
-      toast.error("Video is too large. Maximum allowed size is 5GB.");
+      toast.error(t("upload.select.tooLarge"));
       return;
     }
 
@@ -217,12 +219,12 @@ function EmbedVideoUploadStep1() {
       // Shorts checks only run when we could actually read the metadata — a
       // metadata-less file shouldn't be blocked here (the server validates too).
       if (fromStories && hasDuration && duration > SHORTS_MAX_DURATION_SEC) {
-        toast.error(`Shorts must be ${shortsMaxDurationLabel()} or less. Your video is ${Math.round(duration)}s.`);
+        toast.error(t('upload.select.shortTooLong', { max: shortsMaxDurationLabel(), seconds: Math.round(duration) }));
         setLoading(false);
         return;
       }
       if (fromStories && hasDimensions && width > height) {
-        toast.error("Shorts must be recorded in vertical (portrait) format. Your video appears to be horizontal.");
+        toast.error(t("upload.select.shortNotVertical"));
         setLoading(false);
         return;
       }
@@ -235,7 +237,7 @@ function EmbedVideoUploadStep1() {
         thumbs = await generateVideoThumbnails(file, 2, "url");
       } catch (thumbErr) {
         console.warn("Thumbnail generation failed; continuing without a preview", thumbErr);
-        toast("Couldn't auto-generate a thumbnail for this file — you can upload your own on the next step.");
+        toast(t("upload.select.thumbnailGenFailed"));
       }
       setGeneratedThumbnail(thumbs);
 
@@ -247,7 +249,7 @@ function EmbedVideoUploadStep1() {
 
     } catch (err) {
       console.error(err);
-      toast.error(err.message || "Failed to process video.");
+      toast.error(err.message || t("upload.select.processFailed"));
     }
 
     setLoading(false);
@@ -255,7 +257,7 @@ function EmbedVideoUploadStep1() {
 
   const uploadVideo = () => {
     if (!videoFile) {
-      toast.error("Please select a video file first.");
+      toast.error(t("upload.select.selectFirst"));
       return;
     }
 
@@ -301,10 +303,10 @@ function EmbedVideoUploadStep1() {
                 style={{ cursor: (needsAuth || rcInsufficient) ? 'not-allowed' : 'pointer' }}
                 title={
                   rcInsufficient
-                    ? 'Not enough Resource Credits to post yet'
+                    ? t('upload.select.iconTitleNoRc')
                     : needsAuth
-                      ? 'Authorize @threespeak first'
-                      : 'Click to select a video file'
+                      ? t('upload.select.iconTitleNeedsAuth')
+                      : t('upload.select.iconTitle')
                 }
               >
                 <Upload className="w-8 h-8" />
@@ -312,16 +314,16 @@ function EmbedVideoUploadStep1() {
 
               {!videoFile && !needsAuth && !rcInsufficient && (
                 <div className="text">
-                  <h3 className="title">{isMobile ? "Pick or Record a Video" : "Choose a video file"}</h3>
+                  <h3 className="title">{isMobile ? t("upload.select.pickOrRecord") : t("upload.select.chooseFile")}</h3>
                   {!isMobile && (
-                    <p className="formats drag-hint">Click to browse, or drag &amp; drop your video here</p>
+                    <p className="formats drag-hint">{t("upload.select.dragHint")}</p>
                   )}
                   <p className="formats">
-                    Supports: MP4, AVI, MOV, WMV (Max size: 5GB)
+                    {t("upload.select.formats")}
                   </p>
                   {fromStories && (
                     <p className="formats short-hint">
-                      Shorts must be under {shortsMaxDurationLabel()} and recorded vertically.
+                      {t("upload.select.shortHint", { max: shortsMaxDurationLabel() })}
                     </p>
                   )}
                 </div>
@@ -329,9 +331,9 @@ function EmbedVideoUploadStep1() {
 
               {videoFile && (
                 <div className='isselected-wrap'>
-                  <span>Video Selected. Proceed to upload thumbnail</span>
+                  <span>{t("upload.select.selected")}</span>
                   <div className="upload-info-note">
-                    Info: Your video starts uploading in the background once you reach the details step.
+                    {t("upload.select.backgroundInfo")}
                   </div>
                   {faultsAllowed && (
                     <div
@@ -423,20 +425,19 @@ function EmbedVideoUploadStep1() {
               ) : rcInsufficient ? (
                 <div className="threespeak-auth-gate">
                   <p className="formats">
-                    Your account doesn&apos;t have enough <strong>Resource Credits</strong> to
-                    publish a post right now.
+                    <Trans i18nKey="upload.select.noRc" components={{ b: <strong /> }} />
                   </p>
                   <button type="button" className="button" onClick={() => setRcModalOpen(true)}>
-                    Why can&apos;t I upload?
+                    {t("upload.select.whyCantUpload")}
                   </button>
                 </div>
               ) : needsAuth ? (
                 <div className="threespeak-auth-gate">
                   <p className="formats">
-                    To upload, allow <strong>@threespeak</strong> to post on your behalf.
+                    <Trans i18nKey="upload.select.needsAuth" components={{ b: <strong /> }} />
                   </p>
                   <button type="button" className="button" onClick={handleAuthorize} disabled={authorizing}>
-                    {authorizing ? 'Authorizing…' : 'Authorize @threespeak'}
+                    {authorizing ? t('upload.select.authorizing') : t('upload.select.authorize')}
                   </button>
                 </div>
               ) : loading ? (
@@ -447,7 +448,7 @@ function EmbedVideoUploadStep1() {
                   // the front camera with a voice-driven teleprompter, or pick a file.
                   <div className="button-group">
                     <label htmlFor="embed-video-upload" className="button">
-                      Select a Video
+                      {t("upload.select.selectVideo")}
                     </label>
                     <button
                       type="button"
@@ -455,22 +456,22 @@ function EmbedVideoUploadStep1() {
                       onClick={() => navigate(fromStories ? '/embed-studio/record?from=stories' : '/embed-studio/record')}
                     >
                       <Video className="w-4 h-4" style={{ display: 'inline', verticalAlign: 'middle', marginRight: 6 }} />
-                      Selfie teleprompter
-                      <span className="beta-badge">beta</span>
+                      {t("upload.select.selfieTeleprompter")}
+                      <span className="beta-badge">{t("upload.select.beta")}</span>
                     </button>
                   </div>
                 ) : (
                   <label htmlFor="embed-video-upload" className="button">
-                    {isMobile ? "Select a Video" : "Browse Files"}
+                    {isMobile ? t("upload.select.selectVideo") : t("upload.select.browseFiles")}
                   </label>
                 )
               ) : (
                 <div className="button-group">
                   <label onClick={uploadVideo} className="button">
-                    Proceed to Thumbnails
+                    {t("upload.select.proceed")}
                   </label>
                   <label htmlFor="embed-video-upload" className="button button--outline">
-                    Replace Video
+                    {t("upload.select.replace")}
                   </label>
                 </div>
               )}
@@ -484,10 +485,7 @@ function EmbedVideoUploadStep1() {
               <div className="video-preview-fallback">
                 <FileVideo className="video-preview-fallback-icon" />
                 <p>
-                  Your browser can't preview this video — this is common for
-                  HEVC/H.265 clips (e.g. iPhone “High Efficiency” recordings).
-                  That's fine: it will still upload and be converted so it plays
-                  for everyone.
+                  {t("upload.preview.cannotPreviewHevc")}
                 </p>
               </div>
             ) : (

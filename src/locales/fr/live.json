@@ -1,0 +1,98 @@
+{
+  "backToOpenPods": "Retour à OpenPods",
+  "modal": {
+    "leaveConfirm": "Quitter cet OpenPod ? Vous pourrez revenir depuis le salon à tout moment.",
+    "yourStreamEnded": "Votre live est terminé",
+    "thisStreamEnded": "Ce live est terminé",
+    "noLongerLive": "Il n'est plus en direct. Lancez-en un nouveau quand vous voulez.",
+    "recordingProcessing": "Bravo ! Votre enregistrement est en cours de traitement et apparaîtra bientôt sur la publication d'annonce.",
+    "thanksForLive": "Bravo — merci d'avoir fait un live !",
+    "backHome": "Retour à l'accueil",
+    "howWasStream": "Comment s'est passé votre live ?",
+    "connecting": "Connexion à OpenPods…",
+    "authenticating": "Authentification auprès d'OpenPods…"
+  },
+  "strip": {
+    "liveNow_one": "<n>{{count}}</n> OpenPod en direct",
+    "liveNow_many": "<n>{{count}}</n> OpenPods en direct",
+    "liveNow_other": "<n>{{count}}</n> OpenPods en direct",
+    "viewAll": "Tout voir",
+    "joinAria": "Rejoindre l'OpenPod : {{title}}"
+  },
+  "announce": {
+    "selectCommunity": "Choisir une communauté",
+    "shareToggle": "📣 Partager ce live sur Hive et 3Speak au démarrage",
+    "community": "Communauté",
+    "rewards": "Récompenses",
+    "rewardDefault": "Par défaut 50/50",
+    "rewardPowerup": "Power up 100 %",
+    "rewardDecline": "Refuser les gains",
+    "beneficiaries": "Bénéficiaires",
+    "beneProHint": "Vous êtes sur 3Speak Pro — aucuns frais de plateforme. Ajoutez des partages si vous le souhaitez.",
+    "beneLockedHint": "10 % pour @threespeakfund sont fixes. Vous pouvez en ajouter d'autres."
+  },
+  "boost": {
+    "label": "Boost",
+    "sendTo": "Envoyer un boost à @{{user}}",
+    "send": "Envoyer un boost"
+  },
+  "clip": {
+    "saved": "Clip enregistré dans vos téléchargements.",
+    "slowDown": "Patientez un instant, puis refaites un clip.",
+    "failed": "Impossible de créer un clip. Réessayez dans quelques secondes.",
+    "title": "Clipper les 30 dernières secondes",
+    "label": "30 s",
+    "clipping": "Création du clip…"
+  },
+  "report": {
+    "reasons": {
+      "harassment": "Harcèlement ou haine",
+      "sexual": "Contenu sexuel ou explicite",
+      "violence": "Violence ou actes dangereux",
+      "selfharm": "Automutilation",
+      "illegal": "Contenu illégal",
+      "spam": "Spam ou arnaque",
+      "other": "Autre chose"
+    },
+    "sent": "Merci — ce live a été signalé à notre équipe.",
+    "failed": "Impossible d'envoyer le signalement. Veuillez réessayer.",
+    "title": "Signaler ce live",
+    "reporting": "Signalement de <b>@{{host}}</b>.",
+    "intro": "Dites-nous ce qui ne va pas — notre équipe examine chaque signalement.",
+    "detailPlaceholder": "Ajoutez des détails (facultatif)",
+    "sending": "Envoi…",
+    "submit": "Envoyer le signalement"
+  },
+  "signIn": {
+    "waitingWallet": "En attente de votre portefeuille…"
+  },
+  "publish": {
+    "errors": {
+      "noTitle": "Veuillez ajouter un titre",
+      "noAudio": "Aucune URL audio trouvée",
+      "failed": "Échec de la publication. Veuillez réessayer."
+    },
+    "published": "Enregistrement publié sur Hive !",
+    "loginGate": "Connectez-vous pour publier votre enregistrement.",
+    "heading": "Publier l'enregistrement OpenPod",
+    "previewLabel": "Aperçu de l'enregistrement",
+    "previewHint": "Écoutez l'audio avant de publier. C'est le même lecteur que verront les visiteurs de la publication.",
+    "recordingFallback": "Enregistrement OpenPod",
+    "title": "Titre",
+    "titlePlaceholder": "Donnez un titre à votre enregistrement",
+    "description": "Description",
+    "optional": "(facultatif)",
+    "descriptionPlaceholder": "De quoi avez-vous parlé ? Ajoutez des notes, des liens ou un résumé...",
+    "tags": "Tags",
+    "tagsPlaceholder": "Tags séparés par des espaces",
+    "declinePayout": "Refuser les gains",
+    "publishing": "Publication…",
+    "submit": "Publier l'enregistrement"
+  },
+  "lobby": {
+    "descriptionPlaceholder": "De quoi parle cette session ? Ajoutez des notes, des liens ou un résumé…",
+    "enableHosting": "Activer l'animation et la prise de parole",
+    "handoverFailed": "Impossible d'activer l'animation automatiquement. OpenPods publie en votre nom via @threespeak — vérifiez que vous lui avez accordé l'autorité de publication, puis réessayez.",
+    "signInToHost": "Connectez-vous avec Hive pour animer ou prendre la parole"
+  }
+}

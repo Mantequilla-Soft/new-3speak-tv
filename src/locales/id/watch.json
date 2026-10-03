@@ -1,0 +1,233 @@
+{
+  "aiBadge": {
+    "title": "Terdeteksi sebagai buatan AI",
+    "label": "AI"
+  },
+  "translate": {
+    "titleButton": "Terjemahkan judul",
+    "original": "Asli",
+    "translate": "Terjemahkan",
+    "translating": "Menerjemahkan..."
+  },
+  "summary": {
+    "title": "Ringkasan",
+    "close": "Tutup ringkasan",
+    "showingOriginal": "Menampilkan versi asli",
+    "translatedTo": "Diterjemahkan ke {{language}}",
+    "showLanguage": "Tampilkan {{language}}",
+    "showOriginal": "Tampilkan asli",
+    "buttonTitle": "Ringkasan AI untuk video ini"
+  },
+  "errors": {
+    "notAvailable": "Video ini tidak tersedia.",
+    "goHome": "Ke Beranda",
+    "scheduledNotFound": "Postingan terjadwal tidak ditemukan — mungkin sudah diterbitkan atau dibatalkan.",
+    "network": "Kesalahan jaringan. Periksa koneksimu.",
+    "notFound": "Video tidak ditemukan atau gagal dimuat.",
+    "backToProfile": "Kembali ke profil"
+  },
+  "gated": {
+    "title": "Khusus pendukung",
+    "checkFailed": "Kami belum bisa mengonfirmasi langgananmu. Coba lagi sebentar lagi.",
+    "preview": "Kamu sedang menonton pratinjau gratis. 3Speak Pro membuka video lengkapnya.",
+    "subscribersOnly": "Video ini tersedia untuk pelanggan 3Speak Pro.",
+    "cta": "Dapatkan 3Speak Pro"
+  },
+  "reactions": {
+    "show": "Tampilkan Reaksi",
+    "add": "Tambah Reaksi"
+  },
+  "liveChat": "Chat live",
+  "moreVideos": "Video lainnya",
+  "vote": {
+    "saveFailed": "Vote-mu tidak dapat disimpan"
+  },
+  "locked": {
+    "noAccount": "Terbuka setelah kamu membuat akun Hive",
+    "offChainPost": "Belum tersedia: postingan ini tidak ada di Hive"
+  },
+  "interests": {
+    "loginRequired": "Masuk untuk menyimpan minat",
+    "added": "“{{tag}}” ditambahkan ke minatmu",
+    "saveFailed": "Minat tidak dapat disimpan"
+  },
+  "watchLater": {
+    "removed": "Dihapus dari Tonton Nanti",
+    "removeFailed": "Gagal menghapus: {{error}}",
+    "removeTitle": "Hapus dari Tonton Nanti"
+  },
+  "reshare": {
+    "loginRequired": "Masuk untuk membagikan ulang",
+    "success": "Berhasil dibagikan ulang!",
+    "failed": "Gagal membagikan ulang",
+    "reshared": "Sudah dibagikan ulang",
+    "reshare": "Bagikan ulang",
+    "reshareWithCount": "Bagikan ulang ({{count}})"
+  },
+  "clip": {
+    "noVideoUrlRemix": "URL video untuk remix tidak dapat ditemukan",
+    "noVideoUrl": "URL video tidak dapat ditemukan",
+    "startHint": "Geser ke awal klipmu, lalu klik \"Atur Awal\"",
+    "endHint": "Sekarang geser ke akhir klipmu dan klik \"Atur Akhir\"",
+    "endBeforeStart": "Waktu akhir harus setelah waktu awal",
+    "trimmed": "Klip dipangkas jadi 1 menit — kami akan memangkas klip di akhir timeline.",
+    "set": "Klip diatur: {{start}} – {{end}}. Sekarang klik \"Buat Klip\"",
+    "loginRequired": "Masuk untuk membuat klip",
+    "cancel": "Batalkan klip",
+    "clipVideo": "Klip video",
+    "label": "Klip Video",
+    "clip": "Klip",
+    "seekToStart": "Geser ke awal",
+    "setStart": "Atur Awal",
+    "setEnd": "Atur Akhir",
+    "createClip": "Buat Klip",
+    "barStart": "Geser ke awal klipmu",
+    "barEnd": "Awal: {{start}} — Sekarang geser ke akhir",
+    "barDone": "Klip: {{start}} – {{end}}"
+  },
+  "share": {
+    "defaultTitle": "Video 3Speak",
+    "linkCopied": "Tautan tersalin ke clipboard!",
+    "failed": "Gagal membagikan"
+  },
+  "follow": {
+    "loginRequired": "Silakan masuk untuk mengikuti pengguna",
+    "followed": "Mengikuti @{{user}}",
+    "failed": "Gagal mengikuti: {{error}}"
+  },
+  "ad": {
+    "countdown": "Iklan dalam {{seconds}}"
+  },
+  "media": {
+    "unavailableTitle": "Video ini sudah tidak tersedia",
+    "unavailableBody": "Media untuk unggahan lama ini tidak ditemukan di jaringan. Postingannya masih ada di blockchain, tetapi videonya tidak bisa diputar lagi.",
+    "blockedTitle": "Video tidak dapat dimuat saat ini",
+    "blockedBody": "Salah satu server video kami tidak merespons. Videonya sendiri baik-baik saja, jadi silakan coba lagi."
+  },
+  "tipNudge": {
+    "text": "Suka video ini?<hide> Kirim tip ke <b>@{{author}}</b>!</hide>",
+    "dismiss": "Tutup"
+  },
+  "community": {
+    "members_other": "{{count}} Anggota"
+  },
+  "tags": {
+    "curated": "Dikurasi"
+  },
+  "topics": {
+    "taggedBy": "“{{label}}” · diberi tag oleh {{count}}",
+    "viewers_other": "“{{label}}” · {{count}} penonton",
+    "autoNoVotes": "Tag otomatis — belum ada vote dari penonton",
+    "noVotes": "Belum ada vote dari penonton",
+    "inInterests": "✓ Ada di minatmu",
+    "addToInterests": "+ Tambahkan ke minatku",
+    "openTagFeed": "Buka feed tag"
+  },
+  "scheduled": {
+    "notice": "Dijadwalkan pada <b>{{date}}</b> — belum diterbitkan.",
+    "futureDate": "tanggal mendatang",
+    "edit": "Edit, jadwalkan ulang, atau batalkan",
+    "editTitle": "Edit postingan terjadwal (detail, tanggal, atau batalkan)"
+  },
+  "actions": {
+    "voteOffChain": "Vote video ini. Vote disimpan di 3Speak dan tidak memberi reward.",
+    "signInToVote": "Masuk untuk vote",
+    "tagVideo": "Beri tag video ini",
+    "voteVideo": "Vote video ini",
+    "tag": "Tag",
+    "vote": "Vote",
+    "analyticsTitle": "Analitik video",
+    "analytics": "Analitik",
+    "videoStats": "Statistik video",
+    "promoteTitle": "Promosikan video ini",
+    "promote": "Promosikan",
+    "editTitle": "Edit detail video",
+    "reportTitle": "Laporkan video",
+    "addToPlaylist": "Tambahkan ke playlist",
+    "playlist": "Playlist",
+    "tipTitle": "Beri tip kreator",
+    "tip": "Tip",
+    "details": "Detail",
+    "toggleDetails": "Tampilkan/sembunyikan detail",
+    "followCreator": "Ikuti kreator",
+    "closeMenu": "Tutup menu",
+    "openActions": "Buka aksi"
+  },
+  "description": {
+    "hide": "Sembunyikan deskripsi",
+    "show": "Tampilkan deskripsi"
+  },
+  "edit": {
+    "title": "Edit Video",
+    "loading": "Memuat postingan saat ini…",
+    "videoFile": "File video",
+    "replaceVideo": "Ganti video",
+    "replaceHint": "Mengganti file video di postingan ini. Semua hal lain tetap seperti semula: postingan tetap mempertahankan like, payout, komentar, tanggal unggah, dan posisinya di profilmu. Biarkan saja jika ingin mempertahankan video saat ini.",
+    "uploadingTo": "Mengunggah ke <b>{{host}}</b>… {{pct}}%",
+    "choosingServer": "Memilih server unggah…",
+    "uploadedTo": "Terunggah ke <b>{{host}}</b>. Tekan Simpan untuk menggantinya.",
+    "uploaded": "Terunggah. Tekan Simpan untuk menggantinya.",
+    "cancelUpload": "Batalkan unggahan",
+    "keepCurrent": "Pertahankan video saat ini",
+    "encodeHint": "Setelah disimpan, video masih butuh beberapa menit untuk di-encode, dan video lama tetap diputar sampai yang baru siap. Thumbnail-mu tidak berubah, jadi perbarui di atas jika sudah tidak cocok.",
+    "thumbnail": "Thumbnail",
+    "thumbPreviewAlt": "Pratinjau thumbnail",
+    "uploadImage": "Unggah gambar",
+    "uploading": "Mengunggah…",
+    "thumbHint": "Unggah gambar atau tempel URL langsung. Biarkan saja untuk mempertahankan thumbnail saat ini.",
+    "titleLabel": "Judul",
+    "titleMin": "min {{min}}",
+    "tags": "Tag",
+    "tagsPlaceholder": "dipisahkan spasi",
+    "autoTag": "Ditambahkan otomatis — tidak bisa dihapus",
+    "tagCount_other": "{{count}}/{{max}} tag",
+    "tagCountRequired_other": "{{count}}/{{max}} tag · minimal 1 wajib",
+    "description": "Deskripsi",
+    "descriptionPlaceholder": "Ceritakan videomu ke penonton…",
+    "markdownHint": "Mendukung markdown.",
+    "listed": "Publik",
+    "unlistedLabel": "Tidak publik",
+    "listedHint": "Tampil di feed, pencarian, dan di profilmu.",
+    "unlistedHint": "Tersembunyi dari feed & pencarian — tetap bisa diputar lewat tautan langsung, tetap ada di profilmu (dengan label).",
+    "allowRemix": "Izinkan Remix/Klip",
+    "remixOn": "Orang lain bisa membuat remix/klip; kamu dicantumkan sebagai pembuat aslinya.",
+    "remixOff": "Orang lain tidak bisa me-remix atau membuat klip dari video ini.",
+    "trailer": "Trailer channel",
+    "trailerOn": "Diputar otomatis di bagian atas tab Ringkasan profilmu, menggantikan trailer yang kamu atur sebelumnya.",
+    "trailerOff": "Jadikan video ini yang diputar otomatis di bagian atas tab Ringkasan profilmu.",
+    "nsfw": "Dewasa / NSFW",
+    "notNsfw": "Bukan dewasa",
+    "nsfwHint": "Tersembunyi dari feed & pencarian kecuali penonton mengaktifkan NSFW; diberi tag nsfw di Hive.",
+    "notNsfwHint": "Konten biasa, ditampilkan ke semua orang.",
+    "promoted": "Dipromosikan",
+    "promote": "Promosikan video",
+    "saveChanges": "Simpan perubahan",
+    "noChanges": "Tidak ada perubahan untuk disimpan.",
+    "thumbUploaded": "Thumbnail diunggah.",
+    "videoUploaded": "Video baru diunggah. Simpan untuk menerapkannya ke postingan ini.",
+    "relisted": "Video dipublikasikan lagi.",
+    "unlisted": "Video dijadikan tidak publik.",
+    "trailerSet": "Dijadikan trailer channel-mu.",
+    "trailerRemoved": "Tidak lagi menjadi trailer channel-mu.",
+    "updatedEncoding": "Video diperbarui! File baru butuh sebentar untuk menyelesaikan encoding.",
+    "updated": "Video diperbarui!",
+    "errors": {
+      "notFound": "Postingan ini tidak ditemukan di Hive.",
+      "loadFailed": "Gagal memuat postingan dari Hive. Silakan coba lagi.",
+      "notImage": "Silakan pilih file gambar.",
+      "imageTooLarge": "Gambar terlalu besar (maks 10 MB).",
+      "thumbUploadFailed": "Gagal mengunggah thumbnail.",
+      "notVideo": "Silakan pilih file video.",
+      "videoTooLarge": "Video terlalu besar (maks 5 GB).",
+      "noVideoEntry": "Postingan ini tidak punya entri video untuk diganti — metadatanya tidak merujuk ke entri apa pun.",
+      "notInLibrary": "Video postingan ini sudah tidak ada di pustaka, jadi file-nya tidak bisa diganti.",
+      "notOwner": "Kamu hanya bisa mengganti file di videomu sendiri.",
+      "videoUploadFailed": "Gagal mengunggah video.",
+      "noEmbedEntry": "Postingan ini tidak punya entri video embed untuk diganti — metadatanya tidak merujuk ke entri apa pun.",
+      "broadcastFailed": "Broadcast gagal",
+      "listingFailed": "Status publikasi tidak dapat diperbarui.",
+      "trailerFailed": "Trailer channel-mu tidak dapat diperbarui.",
+      "saveFailed": "Gagal menyimpan perubahan."
+    }
+  }
+}

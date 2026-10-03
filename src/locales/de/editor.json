@@ -1,0 +1,19 @@
+{
+  "placeholder": "Schreib hier deinen Inhalt...",
+  "uploadFailed": "Upload fehlgeschlagen: {{message}}",
+  "uploadingImage": "Bild wird hochgeladen...",
+  "format": {
+    "underline": "Unterstrichen",
+    "strike": "Durchgestrichen",
+    "highlight": "Hervorheben",
+    "bulletList": "Aufzählung",
+    "orderedList": "Nummerierte Liste",
+    "taskList": "Aufgabenliste"
+  },
+  "emoji": {
+    "searchPlaceholder": "Emoji suchen"
+  },
+  "preview": {
+    "renderError": "Fehler beim Anzeigen des Inhalts"
+  }
+}

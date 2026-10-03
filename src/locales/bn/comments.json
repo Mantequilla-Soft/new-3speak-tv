@@ -1,0 +1,100 @@
+{
+  "review": {
+    "fabAria": "মতামত দিন",
+    "fab": "মতামত",
+    "aspects": {
+      "upload": "আপলোড",
+      "playback": "প্লেব্যাক",
+      "live": "লাইভ স্ট্রিমিং",
+      "discovery": "খোঁজা / ফিড",
+      "design": "ডিজাইন / UX",
+      "performance": "গতি",
+      "mobile": "মোবাইল",
+      "other": "অন্য কিছু"
+    },
+    "titles": {
+      "upload": "আপনার আপলোড কেমন হলো?",
+      "stream": "আপনার লাইভস্ট্রিম কেমন হলো?",
+      "watch": "3Speak-এ দেখা কেমন লাগলো?",
+      "global": "3Speak আপনার কেমন লাগছে?",
+      "fallback": "3Speak আরও ভালো করতে আমাদের সাহায্য করুন"
+    },
+    "stars": {
+      "poor": "খারাপ",
+      "fair": "মোটামুটি",
+      "good": "ভালো",
+      "great": "দারুণ",
+      "amazing": "অসাধারণ"
+    },
+    "errors": {
+      "pickStars": "একটি স্টার রেটিং বেছে নিন",
+      "sendFailed": "আপনার রিভিউ পাঠানো যায়নি। আবার চেষ্টা করুন।"
+    },
+    "thanks": "আপনার মতামতের জন্য ধন্যবাদ! 🙏",
+    "sendFeedback": "মতামত পাঠান",
+    "subtitle": "আপনার মতামত 3Speak আরও ভালো করতে আমাদের সাহায্য করে।",
+    "starRating": "স্টার রেটিং",
+    "starsAria_one": "{{count}} স্টার",
+    "starsAria_other": "{{count}} স্টার",
+    "aboutLabel": "এটা কী বিষয়ে? <opt>(ঐচ্ছিক)</opt>",
+    "recommendLabel": "আপনি কি 3Speak অন্যদের সুপারিশ করবেন? <opt>(ঐচ্ছিক)</opt>",
+    "moreLabel": "আরও বলুন <opt>(ঐচ্ছিক)</opt>",
+    "placeholder": "কী ভালো লেগেছে? কী আরও ভালো হতে পারতো?",
+    "notNow": "এখন না",
+    "sending": "পাঠানো হচ্ছে…"
+  },
+  "tabs": {
+    "reactions": "প্রতিক্রিয়া",
+    "transcript": "ট্রান্সক্রিপ্ট"
+  },
+  "live": {
+    "vodProcessing": "রেকর্ডিংটি প্রসেস হচ্ছে…",
+    "vodProcessingHint": "এই স্ট্রিমটি শেষ হয়েছে। এনকোডার কাজ শেষ করলেই ভিডিওটি এখানে চলে আসবে — রিলোড করার দরকার নেই।",
+    "watching_one": "👁 {{count}} জন দেখছেন",
+    "watching_other": "👁 {{count}} জন দেখছেন",
+    "signInRaiseHand": "হাত তুলতে সাইন ইন করুন",
+    "signInChat": "চ্যাট করতে সাইন ইন করুন",
+    "signInJoinChat": "🔒 চ্যাটে যোগ দিতে সাইন ইন করুন।"
+  },
+  "transcript": {
+    "title": "ট্রান্সক্রিপ্ট",
+    "languageAria": "ট্রান্সক্রিপ্টের ভাষা",
+    "copyingWithTimes": "টাইমকোডসহ কপি হচ্ছে",
+    "copyingTextOnly": "শুধু লেখা কপি হচ্ছে",
+    "timecodes": "টাইমকোড",
+    "copyWithTimes": "টাইমকোডসহ ট্রান্সক্রিপ্ট কপি করুন",
+    "copyText": "ট্রান্সক্রিপ্টের লেখা কপি করুন",
+    "jumpTo": "{{time}}-এ যান",
+    "hide": "ট্রান্সক্রিপ্ট লুকান",
+    "show": "ট্রান্সক্রিপ্ট দেখান",
+    "showWithCount_one": "ট্রান্সক্রিপ্ট দেখান ({{count}} লাইন)",
+    "showWithCount_other": "ট্রান্সক্রিপ্ট দেখান ({{count}} লাইন)"
+  },
+  "blog": {
+    "noContent": "কোনো কনটেন্ট নেই",
+    "loadError": "কনটেন্ট লোড করতে সমস্যা হয়েছে।",
+    "processError": "কনটেন্ট প্রসেস করতে সমস্যা হয়েছে।",
+    "rendererError": "রেন্ডারার লোড করতে সমস্যা হয়েছে।"
+  },
+  "section": {
+    "posted": "কমেন্ট সফলভাবে পোস্ট হয়েছে!",
+    "postFailed": "কমেন্ট করা যায়নি, আবার চেষ্টা করুন",
+    "editFailed": "এডিট করা যায়নি, আবার চেষ্টা করুন",
+    "updated": "কমেন্ট আপডেট হয়েছে",
+    "commentTab": "কমেন্ট",
+    "reactTab": "রিঅ্যাক্ট",
+    "at": "সময়",
+    "atTime": "{{time}}-এ",
+    "commentPlaceholder": "এখানে আপনার কমেন্ট লিখুন...",
+    "replyPlaceholder": "এখানে আপনার রিপ্লাই লিখুন...",
+    "commentButton": "কমেন্ট",
+    "count_one": "{{count}}টি কমেন্ট",
+    "count_other": "{{count}}টি কমেন্ট",
+    "edited": "(এডিট করা)",
+    "saving": "সেভ হচ্ছে...",
+    "translation": "অনুবাদ",
+    "translationFailed": "অনুবাদ ব্যর্থ হয়েছে। অনুবাদ সার্ভিস কি চালু আছে?",
+    "reportComment": "কমেন্ট রিপোর্ট করুন",
+    "openInShorts": "শর্টস-এ খুলুন"
+  }
+}

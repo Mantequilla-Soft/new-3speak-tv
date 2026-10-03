@@ -40,3 +40,6 @@ internal-docs/server/.env
 
 # Backups of .env — same secrets, and NOT covered by the .env rule above.
 .env.bak*
+
+# Community translation editor data (server/i18n-editor.cjs file store)
+server/data/

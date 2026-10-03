@@ -20,6 +20,8 @@ import { isLoggedIn } from '../hive-api/aioha';
 import { LuTimer } from 'react-icons/lu';
 import { Repeat2 } from 'lucide-react';
 import { MdAttachMoney, MdComment, MdFlag, MdShare } from 'react-icons/md';
+import { useTranslation } from 'react-i18next';
+import { formatTimeAgo } from '../i18n';
 import './PostView.scss';
 
 // Every toast from this module is headed "Post"; the message becomes the
@@ -37,20 +39,12 @@ function parseAudioPermlink(audioUrl) {
 function formatRelativeTime(dateString) {
   if (!dateString) return '';
   const date = new Date(dateString.endsWith('Z') ? dateString : dateString + 'Z');
-  const diff = Math.floor((Date.now() - date.getTime()) / 1000);
-  if (diff < 60) return `${diff}s ago`;
-  const m = Math.floor(diff / 60);
-  if (m < 60) return `${m}m ago`;
-  const h = Math.floor(m / 60);
-  if (h < 24) return `${h}h ago`;
-  const d = Math.floor(h / 24);
-  if (d < 30) return `${d}d ago`;
-  const mo = Math.floor(d / 30);
-  if (mo < 12) return `${mo}mo ago`;
-  return `${Math.floor(mo / 12)}y ago`;
+  // "3m ago" / "2d ago" in the current language.
+  return formatTimeAgo(date, { style: 'narrow' });
 }
 
 function PostView() {
+  const { t } = useTranslation();
   const params = useParams();
   const { state } = useLocation();
   const { authenticated, user: currentUser } = useAppStore();
@@ -163,11 +157,12 @@ function PostView() {
     return () => { cancelled = true; };
   }, [author, permlink, currentUser, incubationHandle]);
 
+  // `action` is 'vote' or 'tip' (a key suffix, not display text).
   const requireLogin = useCallback((action) => {
     if (authenticated && currentUser && isLoggedIn()) return true;
-    toast.error(`Log in to ${action}`);
+    toast.error(t(`posts.view.loginTo.${action}`));
     return false;
-  }, [authenticated, currentUser]);
+  }, [authenticated, currentUser, t]);
 
   const toggleVoteTooltip = useCallback(() => {
     if (!requireLogin('vote')) return;
@@ -176,34 +171,34 @@ function PostView() {
 
   const handleShare = useCallback(async () => {
     const shareUrl = `${window.location.origin}/post/${author}/${permlink}`;
-    const shareData = { title: post?.title || '3Speak Post', url: shareUrl };
+    const shareData = { title: post?.title || t('posts.view.shareTitleFallback'), url: shareUrl };
     try {
       if (navigator.share && navigator.canShare?.(shareData)) {
         await navigator.share(shareData);
       } else {
         await navigator.clipboard.writeText(shareUrl);
-        toast.success('Link copied to clipboard!');
+        toast.success(t('posts.view.linkCopied'));
       }
     } catch (err) {
       if (err.name !== 'AbortError') {
         try {
           await navigator.clipboard.writeText(shareUrl);
-          toast.success('Link copied to clipboard!');
+          toast.success(t('posts.view.linkCopied'));
         } catch {
-          toast.error('Failed to share');
+          toast.error(t('posts.view.shareFailed'));
         }
       }
     }
-  }, [author, permlink, post?.title]);
+  }, [author, permlink, post?.title, t]);
 
   const handleReshare = useCallback(async () => {
     const asWho = currentUser || incubationHandle;
     if (!authenticated || !asWho) {
-      toast.error('Log in to reblog');
+      toast.error(t('posts.view.loginToReblog'));
       return;
     }
     if (hasReshared) {
-      toast.info('Already reblogged');
+      toast.info(t('posts.view.alreadyReblogged'));
       return;
     }
 
@@ -211,11 +206,11 @@ function PostView() {
     if (result) {
       setHasReshared(true);
       setReshareCount(prev => prev + 1);
-      toast.success('Reblogged!');
+      toast.success(t('posts.view.reblogged'));
     } else {
-      toast.error('Failed to reblog');
+      toast.error(t('posts.view.reblogFailed'));
     }
-  }, [authenticated, hasReshared, currentUser, incubationHandle, author, permlink]);
+  }, [authenticated, hasReshared, currentUser, incubationHandle, author, permlink, t]);
 
   const handleReply = useCallback(() => {
     const commentBox = document.querySelector('.post-view-comments .add-comment-wrap .textarea-box');
@@ -295,7 +290,7 @@ function PostView() {
       author: {
         id: post.author,
         username: post.author,
-        profile: { name: post.author, images: { avatar: `https://images.hive.blog/u/${post.author}/avatar/small` } },
+        profile: { name: post.author, images: { avatar: `/img/u/${post.author}/avatar/small` } },
       },
       stats: {
         num_comments: post.children || 0,
@@ -364,8 +359,8 @@ function PostView() {
     return (
       <div className="post-view-page">
         <div className="post-view-error">
-          <p>Could not load this post.</p>
-          <Link to="/notifications">← Back to notifications</Link>
+          <p>{t('posts.view.loadFailed')}</p>
+          <Link to="/notifications">{t('posts.view.backToNotifications')}</Link>
         </div>
       </div>
     );
@@ -392,17 +387,17 @@ function PostView() {
         <div className="post-view-nav-buttons">
           {resolvingRoot && (
             <span className="post-view-nav-btn post-view-nav-btn-secondary">
-              <i className="fa-solid fa-spinner fa-spin" /> Resolving…
+              <i className="fa-solid fa-spinner fa-spin" /> {t('posts.view.resolving')}
             </span>
           )}
           {!resolvingRoot && rootPost && (
             rootPost.is3Speak ? (
               <Link to={`/watch?v=${rootPost.author}/${rootPost.permlink}`} className="post-view-nav-btn">
-                <i className="fa-solid fa-play" /> Show Video
+                <i className="fa-solid fa-play" /> {t('posts.view.showVideo')}
               </Link>
             ) : (
               <Link to={`/post/${rootPost.author}/${rootPost.permlink}`} className="post-view-nav-btn">
-                <i className="fa-solid fa-file-lines" /> Show Post
+                <i className="fa-solid fa-file-lines" /> {t('posts.view.showPost')}
               </Link>
             )
           )}
@@ -411,20 +406,20 @@ function PostView() {
               to={`/post/${post.parent_author}/${post.parent_permlink}`}
               className="post-view-nav-btn post-view-nav-btn-secondary"
             >
-              <i className="fa-solid fa-reply" /> Show Parent Comment
+              <i className="fa-solid fa-reply" /> {t('posts.view.showParent')}
             </Link>
           )}
         </div>
       )}
 
       <div className="post-view-inner">
-        <h1 className="post-view-title">{post.title || '(untitled reply)'}</h1>
+        <h1 className="post-view-title">{post.title || t('posts.view.untitledReply')}</h1>
 
         <div className="post-view-author-row">
           <AuthorBadge author={post.author} showFollow />
           {videoDetails.community && (
             <Link to={`/c/${videoDetails.community._id}`} className="post-view-community">
-              in {videoDetails.community.title}
+              {t('posts.view.inCommunity', { community: videoDetails.community.title })}
             </Link>
           )}
         </div>
@@ -437,17 +432,17 @@ function PostView() {
             <PayoutAmount amount={videoDetails.stats.total_hive_reward} size={13} />
           </span>
           <span className="post-view-meta-item">
-            {videoDetails.stats.num_votes} votes
+            {t('common.units.votes', { count: videoDetails.stats.num_votes })}
           </span>
           <span className="post-view-meta-item">
-            {videoDetails.stats.num_comments} comments
+            {t('common.units.comments', { count: videoDetails.stats.num_comments })}
           </span>
         </div>
 
         {tags.length > 0 && (
           <div className="post-view-tags">
-            {tags.map((t) => (
-              <Link key={t} to={`/t/${t}`} className="post-view-tag">#{t}</Link>
+            {tags.map((tag) => (
+              <Link key={tag} to={`/t/${tag}`} className="post-view-tag">#{tag}</Link>
             ))}
           </div>
         )}
@@ -465,7 +460,7 @@ function PostView() {
               type="button"
               className={`post-action-btn post-action-btn-vote${isVoted ? ' active' : ''}`}
               onClick={toggleVoteTooltip}
-              title={isVoted ? 'Adjust vote' : 'Upvote'}
+              title={isVoted ? t('posts.view.adjustVote') : t('posts.view.upvote')}
             >
               <UpvoteCount
                 count={voteCount}
@@ -473,14 +468,14 @@ function PostView() {
                 size={15}
               />
             </button>
-            <button type="button" className="post-action-btn" onClick={handleReply} title="Reply">
+            <button type="button" className="post-action-btn" onClick={handleReply} title={t('common.actions.reply')}>
               <MdComment size={17} />
-              <span>Reply</span>
+              <span>{t('common.actions.reply')}</span>
             </button>
           </div>
 
           <div className="post-view-actions-secondary">
-            <button type="button" className="post-icon-action" onClick={handleShare} title="Share">
+            <button type="button" className="post-icon-action" onClick={handleShare} title={t('common.actions.share')}>
               <MdShare size={17} />
             </button>
             <button
@@ -490,13 +485,13 @@ function PostView() {
               // isLoggedIn() is the wallet check, which an incubating user
               // never passes. The reshare itself does not need one.
               disabled={!authenticated || (!isLoggedIn() && !incubationHandle)}
-              title={!authenticated ? 'Log in to reblog' : hasReshared ? 'Reblogged' : 'Reblog'}
+              title={!authenticated ? t('posts.view.loginToReblog') : hasReshared ? t('posts.view.rebloggedState') : t('posts.view.reblog')}
             >
               <Repeat2 size={16} />
               {reshareCount > 0 && <span>{reshareCount}</span>}
             </button>
             {authenticated && currentUser !== post.author && (
-              <button type="button" className="post-icon-action post-tip-action" onClick={handleTip} title="Tip creator">
+              <button type="button" className="post-icon-action post-tip-action" onClick={handleTip} title={t('posts.view.tipCreator')}>
                 <MdAttachMoney size={17} />
               </button>
             )}
@@ -504,7 +499,7 @@ function PostView() {
               type="button"
               className={`post-icon-action post-report-action${isReported('post', `${author}/${permlink}`) ? ' reported' : ''}`}
               onClick={() => setIsReportOpen(true)}
-              title="Report post"
+              title={t('posts.view.reportPost')}
             >
               <MdFlag size={17} />
             </button>

@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { useProfileEditor } from '../WelcomePrompt/ProfileFields';
 import { fetchMyIncubationProfile, saveIncubationProfile, handleAvatar, currentHandle } from '../../lib/incubation';
+import { useTranslation } from 'react-i18next';
 import './AdvertiserContactForm.scss';
 
 /**
@@ -21,6 +22,7 @@ import './AdvertiserContactForm.scss';
  * at graduation. Private details (email, address) live in AdvertiserContactForm.
  */
 export default function BrandProfileForm() {
+  const { t } = useTranslation();
   const interestsRef = useRef([]);
   const [loaded, setLoaded] = useState(false);
   const { form, seed, setField, pickImage, uploading, saving, save } = useProfileEditor(null, {
@@ -46,55 +48,55 @@ export default function BrandProfileForm() {
   async function onSubmit(e) {
     e.preventDefault();
     if (!loaded || saving || uploading || !websiteOk) return;
-    await save('Brand profile saved');
+    await save(t('incubation.brand.saved'));
   }
 
   return (
     <form className="inc-contact" onSubmit={onSubmit}>
       <label className="inc-contact-field">
-        <span>Brand name</span>
-        <input value={form.name} onChange={setField('name')} placeholder="Your brand or company" maxLength={60} disabled={!loaded} />
+        <span>{t('incubation.brand.name')}</span>
+        <input value={form.name} onChange={setField('name')} placeholder={t('incubation.brand.namePlaceholder')} maxLength={60} disabled={!loaded} />
       </label>
 
       <label className="inc-contact-field">
-        <span>What your brand does</span>
+        <span>{t('incubation.brand.about')}</span>
         <textarea
           rows={3}
           value={form.about}
           onChange={setField('about')}
-          placeholder="One or two sentences viewers will understand."
+          placeholder={t('incubation.brand.aboutPlaceholder')}
           maxLength={300}
           disabled={!loaded}
         />
       </label>
 
       <div className="inc-contact-field">
-        <span>Logo</span>
+        <span>{t('incubation.brand.logo')}</span>
         <div className="inc-brand-logo">
           <img src={form.profile_image || handleAvatar(currentHandle())} alt="" />
           <label className="inc-task-cta inc-brand-upload">
-            {uploading ? 'Uploading…' : (form.profile_image ? 'Replace logo' : 'Upload logo')}
+            {uploading ? t('incubation.brand.uploading') : (form.profile_image ? t('incubation.brand.replaceLogo') : t('incubation.brand.uploadLogo'))}
             <input type="file" accept="image/*" onChange={pickImage('profile_image')} disabled={!loaded || uploading} hidden />
           </label>
         </div>
-        <span className="inc-contact-hint">Shown as a circle next to your ads, so a square image works best.</span>
+        <span className="inc-contact-hint">{t('incubation.brand.logoHint')}</span>
       </div>
 
       <label className="inc-contact-field">
-        <span>Website <em>optional if you give us your address</em></span>
+        <span>{t('incubation.brand.website')} <em>{t('incubation.brand.websiteOptional')}</em></span>
         <input
           type="url"
           inputMode="url"
           value={form.website}
           onChange={setField('website')}
-          placeholder="https://yourbrand.com"
+          placeholder={t('incubation.brand.websitePlaceholder')}
           disabled={!loaded}
         />
-        {!websiteOk ? <span className="inc-contact-error">Use a full address starting with https://</span> : null}
+        {!websiteOk ? <span className="inc-contact-error">{t('incubation.brand.websiteInvalid')}</span> : null}
       </label>
 
       <button type="submit" className="inc-task-cta" disabled={!loaded || saving || uploading || !websiteOk}>
-        {saving ? 'Saving…' : 'Save brand profile'}
+        {saving ? t('common.actions.saving') : t('incubation.brand.save')}
       </button>
     </form>
   );

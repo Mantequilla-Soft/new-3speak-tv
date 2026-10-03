@@ -1,0 +1,122 @@
+{
+  "ranges": {
+    "d7": "7 j",
+    "d28": "28 j",
+    "d90": "90 j",
+    "all": "Tout"
+  },
+  "content": {
+    "all": "Tout",
+    "videos": "Vidéos",
+    "shorts": "Shorts"
+  },
+  "metrics": {
+    "watchTime": "Durée de visionnage",
+    "views": "Vues",
+    "avgPct": "Moy. %",
+    "votes": "Votes",
+    "comments": "Commentaires",
+    "payout": "Gains"
+  },
+  "days": {
+    "short": {
+      "sun": "Dim",
+      "mon": "Lun",
+      "tue": "Mar",
+      "wed": "Mer",
+      "thu": "Jeu",
+      "fri": "Ven",
+      "sat": "Sam"
+    },
+    "initial": {
+      "sun": "D",
+      "mon": "L",
+      "tue": "M",
+      "wed": "M",
+      "thu": "J",
+      "fri": "V",
+      "sat": "S"
+    }
+  },
+  "sources": {
+    "threespeak": "3Speak",
+    "player": "Lecteur intégré"
+  },
+  "trend": {
+    "empty": "Aucune durée de visionnage sur cette période pour l'instant.",
+    "tip_one": "{{count}} vue · {{date}}",
+    "tip_many": "{{count}} vues · {{date}}",
+    "tip_other": "{{count}} vues · {{date}}"
+  },
+  "noData": "Pas encore de données.",
+  "demo": {
+    "viewerLocations": "Localisation des spectateurs",
+    "mapBubble_one": "{{country}} — {{count}} session",
+    "mapBubble_many": "{{country}} — {{count}} sessions",
+    "mapBubble_other": "{{country}} — {{count}} sessions",
+    "empty": "Aucune donnée spectateur sur cette période pour l'instant.",
+    "breakdown": "Répartition",
+    "map": "Carte",
+    "countries": "Pays",
+    "devices": "Appareils",
+    "browsers": "Navigateurs",
+    "whereTitle": "Où ils regardent",
+    "whereSub": "3speak vs lecteur intégré",
+    "newVsReturning": "Nouveaux vs habitués",
+    "new": "Nouveaux",
+    "returning": "Habitués",
+    "located": "{{located}} sessions sur {{total}} localisées."
+  },
+  "when": {
+    "title": "Quand vos spectateurs regardent",
+    "sub": "UTC · plus foncé = plus de vues",
+    "cellTitle_one": "{{day}} {{hour}}h — {{count}} vue",
+    "cellTitle_many": "{{day}} {{hour}}h — {{count}} vues",
+    "cellTitle_other": "{{day}} {{hour}}h — {{count}} vues",
+    "hour": "{{hour}}h"
+  },
+  "detail": {
+    "summary": "{{votes}} votes · {{comments}} commentaires · ${{payout}}"
+  },
+  "compare": {
+    "notEnough": "Pas assez de données pour comparer.",
+    "start": "Début",
+    "axis": "Rétention sur la durée de la vidéo",
+    "end": "Fin",
+    "title": "Comparer des vidéos",
+    "pickA": "Choisir une vidéo…",
+    "vs": "vs",
+    "pickB": "Choisir une autre…"
+  },
+  "loadError": "Impossible de charger vos statistiques pour le moment.",
+  "emptyRange": "Aucune donnée de visionnage sur cette période — essayez « Tout », ou attendez que des gens regardent vos vidéos.",
+  "tiles": {
+    "avgViewDuration": "Durée moy. de visionnage",
+    "avgWatched": "Moy. regardée",
+    "reactionsPerView": "Réactions / vue"
+  },
+  "subtotals": "{{videos}} vidéos · {{votes}} votes · {{comments}} commentaires · ${{payout}} · vitesse moy. {{rate}}×",
+  "sections": {
+    "trend": "Durée de visionnage dans le temps",
+    "best": "Meilleures performances",
+    "audience": "Votre audience"
+  },
+  "openInNewTab": "Ouvrir la vidéo dans un nouvel onglet",
+  "footnote": "Les statistiques de visionnage proviennent d'un suivi en aperçu et ne sont visibles que par vous.",
+  "video": {
+    "noData": "Pas encore de données",
+    "empty": "Aucune donnée de visionnage pour cette vidéo pour l'instant.",
+    "uniqueViewers": "Spectateurs uniques",
+    "avgSpeed": "Vitesse moy.",
+    "mostDropOff": "📉 La plupart décrochent à <b>{{time}}</b>",
+    "earlyDrop": "⚡ <b>{{pct}} %</b> partent dans les 3 premières secondes",
+    "replayed": "🔁 Revu :",
+    "retentionTitle": "Rétention de l'audience",
+    "retentionSub": "part des spectateurs encore présents à chaque instant",
+    "pctWatching": "{{pct}} % regardent",
+    "replayTitle": "Les plus revus",
+    "replaySub": "passages que les spectateurs regardent et revoient le plus",
+    "hotSpot": "moment fort",
+    "notEnoughReplays": "Pas encore assez de revisionnages"
+  }
+}

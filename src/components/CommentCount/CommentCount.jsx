@@ -1,5 +1,6 @@
 import { FaRegComment } from 'react-icons/fa';
 import PropTypes from 'prop-types';
+import { useTranslation } from 'react-i18next';
 import './CommentCount.scss';
 
 /**
@@ -8,6 +9,7 @@ import './CommentCount.scss';
  * shouldn't leave a bare icon or a stray "0" implying there are no replies.
  */
 function CommentCount({ count, size, title }) {
+  const { t } = useTranslation();
   if (count == null) return null;
   const iconSize = size ? Math.round(size * 1.02) : undefined;
 
@@ -15,7 +17,7 @@ function CommentCount({ count, size, title }) {
     <div
       className="comment-count-badge"
       style={size ? { fontSize: size } : undefined}
-      title={title ?? `${count} comment${count === 1 ? '' : 's'}`}
+      title={title ?? t('common.units.comments', { count })}
     >
       <FaRegComment className="comment-count-icon" size={iconSize || undefined} />
       <span>{count}</span>

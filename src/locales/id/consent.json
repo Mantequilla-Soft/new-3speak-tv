@@ -1,0 +1,40 @@
+{
+  "ariaLabel": "Pengaturan cookie dan penyimpanan",
+  "title": "Cookie & penyimpanan browser",
+  "withAds": {
+    "intro": "3Speak menyimpan sesi login dan pengaturan yang kamu pilih di browsermu. Itulah yang membuat situs ini berfungsi, dan semuanya tetap di perangkatmu. Ada dua hal yang opsional, dan keduanya nonaktif kecuali kamu mengaktifkannya di bawah.",
+    "advertising": "Salah satunya adalah <b>iklan</b>. Jika aktif, perusahaan periklanan pihak luar memuat kodenya sendiri di halaman ini dan dapat menyimpan hal-hal yang tidak kami kendalikan. Karena itu, ini menjadi pilihan terpisah dan tidak pernah digabung dengan hal lain."
+  },
+  "noAds": {
+    "intro": "3Speak menyimpan sesi login dan pengaturan yang kamu pilih di browsermu — itulah yang membuat situs ini berfungsi. Kami <b>tidak memakai cookie pelacak, iklan, maupun analitik pihak ketiga</b>. Satu-satunya hal yang bisa disimpan ke perangkatmu saat menonton video adalah posisi terakhir tontonanmu — dan itulah satu pilihan opsional di bawah.",
+    "optional": "Satu hal opsional: kami bisa mengingat <b>posisi terakhir tontonanmu di setiap video</b> agar pemutaran bisa dilanjutkan. Data ini tidak pernah keluar dari perangkatmu."
+  },
+  "details": {
+    "essentialTitle": "Wajib — selalu aktif",
+    "essential": {
+      "login": "Sesi login-mu",
+      "settings": "Pengaturan yang kamu atur: tema, volume, bahasa, subtitle, preferensi feed",
+      "uploads": "Melanjutkan unggahan yang terputus, dan draf postingan yang sedang kamu tulis",
+      "offline": "Aplikasinya sendiri, untuk penggunaan offline setelah diinstal",
+      "answer": "Jawabanmu untuk banner ini"
+    },
+    "optionalTitle": "Opsional — pilihanmu",
+    "optional": {
+      "playback": "Posisi pemutaran per video, agar kamu bisa melanjutkan dari posisi terakhir",
+      "advertising": "Iklan: kode dari perusahaan periklanan pihak luar, beserta apa pun yang disimpannya di perangkatmu untuk menghitung dan membatasi iklan yang ditampilkan kepadamu"
+    },
+    "noteWithAds": "Jika keduanya dibiarkan nonaktif, posisi pemutaran tidak akan disimpan dan yang sudah tersimpan akan dihapus, serta tidak ada kode iklan yang dimuat sama sekali. Kamu bisa berubah pikiran kapan saja.",
+    "noteNoAds": "Memilih “Wajib saja” menghentikan penyimpanan posisi pemutaran dan menghapus yang sudah tersimpan. Kamu bisa berubah pikiran kapan saja — memilih “Terima” langsung mengaktifkannya kembali."
+  },
+  "toggles": {
+    "resumeTitle": "Lanjutkan pemutaran",
+    "resumeDesc": "Ingat posisi terakhir tontonanmu di setiap video. Tetap di perangkatmu.",
+    "advertisingTitle": "Iklan",
+    "advertisingDesc": "Izinkan perusahaan periklanan pihak luar memuat kodenya dan menyimpan apa yang dibutuhkannya."
+  },
+  "hideDetails": "Sembunyikan detail",
+  "whatIsStored": "Apa saja yang disimpan?",
+  "essentialOnly": "Wajib saja",
+  "saveChoices": "Simpan pilihan",
+  "acceptAll": "Terima semua"
+}

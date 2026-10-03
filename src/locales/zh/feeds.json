@@ -1,0 +1,119 @@
+{
+  "loadingMore": "正在加载更多…",
+  "promoted": "推广",
+  "scrollLeft": "向左滚动",
+  "scrollRight": "向右滚动",
+  "errors": {
+    "fetchVideos": "获取视频出错",
+    "loadVideos": "视频加载失败",
+    "loadShorts": "短视频加载失败"
+  },
+  "tabs": {
+    "all": "全部",
+    "videos": "视频",
+    "shorts": "短视频",
+    "videosCount": "视频（{{count}}）",
+    "shortsCount": "短视频（{{count}}）"
+  },
+  "dateFilters": {
+    "all": "全部时间",
+    "today": "今天",
+    "week": "本周",
+    "month": "本月",
+    "justNow": "刚刚"
+  },
+  "live": {
+    "title": "正在直播",
+    "badge": "● 直播中"
+  },
+  "newFromFollowing": {
+    "aria": "你关注的创作者的新内容",
+    "shorts_other": "{{count}} 个短视频"
+  },
+  "firstUploads": {
+    "title": "首次上传"
+  },
+  "newVideos": {
+    "title": "最新视频"
+  },
+  "home": {
+    "sections": {
+      "discover": "发现",
+      "home": "首页推荐",
+      "follow": "关注动态",
+      "new": "最新内容",
+      "interests": "兴趣"
+    },
+    "empty": "这里暂时没有内容。",
+    "viewAll": "查看全部",
+    "dragToReorder": "拖动以调整顺序",
+    "surfTitle": "随心换台：选个话题，像看电视一样看",
+    "zapping": "换台中"
+  },
+  "surf": {
+    "pageTitle": "随心换台",
+    "intro": "选一个频道，然后放松看吧。我们会把这个话题下最好的视频一个接一个排好。看腻了？点 <b>换一个</b>。想看别的？换个频道。",
+    "backTo": "返回 CH {{number}} {{emoji}} {{title}}",
+    "surprise": "给我惊喜",
+    "yourChannels": "你的频道",
+    "nothingOnAir": "{{channel}} 目前没有节目",
+    "tuneFailed": "无法调台，请稍后再试。",
+    "remoteAria": "随心换台遥控器",
+    "openGuide": "打开频道指南",
+    "ch": "CH {{number}}",
+    "chLabel": "CH",
+    "channelHint": "CH {{number}}：{{title}}",
+    "channelHintKey": "CH {{number}}：{{title}}（{{key}}）",
+    "tuningShort": "调台",
+    "tuning": "调台中…",
+    "onAir": "播出中",
+    "changeChannel": "换频道",
+    "nextChannel": "下一个频道",
+    "prevChannel": "上一个频道",
+    "nextVideo": "下一个视频",
+    "nextVideoKey": "下一个视频（→）",
+    "zap": "换一个",
+    "findingNext": "正在找下一个…",
+    "stop": "停止换台",
+    "stopTitle": "停止换台（当前视频继续播放）",
+    "guide": "频道指南"
+  },
+  "discover": {
+    "searchPlaceholder": "搜索视频、短视频、音频、社区...",
+    "clearSearch": "清除搜索",
+    "searchFor": "搜索“{{term}}”",
+    "noResultsFor": "没有找到与“{{term}}”相关的结果",
+    "types": {
+      "user": "用户",
+      "community": "社区",
+      "video": "视频",
+      "short": "短视频",
+      "audio": "音频",
+      "playlist": "播放列表"
+    },
+    "suggest": {
+      "tags": "标签",
+      "titles": "标题"
+    },
+    "dates": {
+      "today": "今天",
+      "week": "本周",
+      "month": "本月",
+      "year": "今年"
+    },
+    "boostRecent": "优先显示最新",
+    "filters": "筛选",
+    "date": "日期",
+    "tag": "标签",
+    "tagPlaceholder": "例如 crypto、gaming...",
+    "community": "社区",
+    "communityPlaceholder": "搜索社区...",
+    "clearAllFilters": "清除所有筛选",
+    "allHidden": "所有内容类型都已隐藏。",
+    "reenableFilters": "重新启用所有筛选",
+    "groupTitle": "{{label}}（{{count}}）",
+    "subscribers_other": "{{count}} 位订阅者",
+    "authors_other": "{{count}} 位作者",
+    "views_other": "{{views}} 次观看"
+  }
+}

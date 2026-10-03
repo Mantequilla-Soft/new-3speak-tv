@@ -1,0 +1,348 @@
+{
+  "icons": {
+    "link": "Liên kết",
+    "globe": "Trang web",
+    "podcast": "Podcast",
+    "email": "Email",
+    "phone": "Điện thoại",
+    "rss": "RSS",
+    "qrcode": "Mã QR",
+    "shop": "Cửa hàng",
+    "bag": "Cửa hiệu",
+    "dollar": "Tiền",
+    "gift": "Quà tặng",
+    "heart": "Ủng hộ",
+    "star": "Ngôi sao",
+    "thumbsup": "Thích",
+    "fire": "Lửa",
+    "bolt": "Tia sét",
+    "music": "Âm nhạc",
+    "headphones": "Âm thanh",
+    "mic": "Micrô",
+    "video": "Video",
+    "film": "Phim",
+    "tv": "TV",
+    "play": "Phát",
+    "camera": "Ảnh",
+    "image": "Hình ảnh",
+    "palette": "Nghệ thuật",
+    "pen": "Viết",
+    "book": "Sách",
+    "newspaper": "Tin tức",
+    "graduation": "Khóa học",
+    "code": "Mã",
+    "gamepad": "Trò chơi",
+    "briefcase": "Công việc",
+    "home": "Nhà",
+    "location": "Vị trí",
+    "map": "Bản đồ",
+    "calendar": "Lịch",
+    "clock": "Đồng hồ",
+    "bell": "Thông báo",
+    "tag": "Thẻ",
+    "download": "Tải xuống",
+    "file": "Tệp",
+    "users": "Cộng đồng",
+    "comment": "Bình luận",
+    "share": "Chia sẻ",
+    "coffee": "Cà phê",
+    "wallet": "Ví",
+    "plus": "Thêm",
+    "check": "Dấu tích"
+  },
+  "fonts": {
+    "system": "Hệ thống",
+    "rounded": "Bo tròn",
+    "serif": "Serif",
+    "mono": "Mono",
+    "display": "Tiêu đề",
+    "condensed": "Hẹp",
+    "handwriting": "Viết tay",
+    "grotesk": "Grotesk",
+    "humanist": "Humanist",
+    "geometric": "Hình học",
+    "slab": "Slab",
+    "elegant": "Thanh lịch",
+    "typewriter": "Máy đánh chữ",
+    "marker": "Bút dạ",
+    "brush": "Cọ vẽ",
+    "palatino": "Palatino",
+    "wide": "Rộng"
+  },
+  "motion": {
+    "none": "Không có",
+    "float": "Lơ lửng",
+    "sway": "Đung đưa",
+    "pulse": "Nhịp đập",
+    "wobble": "Lắc lư",
+    "bounce": "Nảy",
+    "tilt": "Nghiêng 3D",
+    "spin": "Xoay",
+    "shake": "Rung",
+    "breathe": "Thở"
+  },
+  "sectionTypes": {
+    "link": "Liên kết",
+    "video": "Nội dung 3Speak",
+    "embed": "Liên kết xem trước",
+    "image": "Hình ảnh",
+    "header": "Tiêu đề / văn bản"
+  },
+  "blockNames": {
+    "link": "liên kết",
+    "header": "tiêu đề",
+    "image": "hình ảnh",
+    "video": "video",
+    "embed": "nhúng"
+  },
+  "blockNamesPlural": {
+    "link": "liên kết",
+    "header": "tiêu đề",
+    "image": "hình ảnh",
+    "video": "video",
+    "embed": "khối nhúng"
+  },
+  "templates": {
+    "minimal": {
+      "name": "Minimal",
+      "niche": "Gọn gàng & đơn giản"
+    },
+    "neon": {
+      "name": "Neon Nights",
+      "niche": "Nhà sáng tạo / streamer"
+    },
+    "crypto": {
+      "name": "On-Chain",
+      "niche": "Crypto / Web3"
+    },
+    "gamer": {
+      "name": "Player One",
+      "niche": "Trò chơi"
+    },
+    "photographer": {
+      "name": "Exposure",
+      "niche": "Nhiếp ảnh"
+    },
+    "podcaster": {
+      "name": "On Air",
+      "niche": "Podcast"
+    },
+    "fitness": {
+      "name": "Peak Form",
+      "niche": "Thể hình / huấn luyện viên"
+    },
+    "writer": {
+      "name": "Longform",
+      "niche": "Nhà văn / blogger"
+    },
+    "chef": {
+      "name": "Mise en Place",
+      "niche": "Ẩm thực / nấu ăn"
+    },
+    "travel": {
+      "name": "Wanderlust",
+      "niche": "Thiên nhiên / du lịch"
+    },
+    "business": {
+      "name": "Boardroom",
+      "niche": "Kinh doanh / chuyên nghiệp"
+    },
+    "artist": {
+      "name": "Palette",
+      "niche": "Nghệ sĩ / thị giác"
+    },
+    "ocean": {
+      "name": "Tidewater",
+      "niche": "Thư giãn / phong cách sống"
+    },
+    "musician": {
+      "name": "Amplified",
+      "niche": "Âm nhạc / ban nhạc"
+    },
+    "developer": {
+      "name": "Terminal",
+      "niche": "Lập trình viên / công nghệ"
+    },
+    "sports": {
+      "name": "Game Day",
+      "niche": "Thể thao / vận động viên"
+    }
+  },
+  "errors": {
+    "notLoggedIn": "Chưa đăng nhập",
+    "couldNotSaveToHive": "Không thể lưu lên Hive"
+  },
+  "arrange": {
+    "title": "Tiêu đề",
+    "video": "Video",
+    "latestPosts": "Bài đăng mới nhất",
+    "latestPostsBy": "Bài đăng mới nhất · @{{account}}",
+    "dragToArrange": "Kéo để sắp xếp"
+  },
+  "page": {
+    "latestPosts": "Bài đăng mới nhất",
+    "seeNewestPosts": "Xem các bài đăng mới nhất của @{{user}} →",
+    "openLink": "Mở liên kết",
+    "empty": "@{{user}} chưa thêm liên kết nào.",
+    "viewProfile": "Xem hồ sơ 3Speak →",
+    "poweredBy": "Vận hành bởi 3Speak"
+  },
+  "editor": {
+    "resetToDefault": "Đặt lại mặc định",
+    "motion": "Chuyển động",
+    "speed": "Tốc độ {{value}}",
+    "loop": "Lặp lại",
+    "runSeconds": "Chạy {{value}} giây",
+    "picker": {
+      "videoLabel": "Chọn từ video của tôi",
+      "videoLoading": "Đang tải video của bạn…",
+      "videoEmpty": "Không tìm thấy video 3Speak gần đây nào.",
+      "shortLabel": "Chọn từ Shorts của tôi",
+      "shortLoading": "Đang tải Shorts của bạn…",
+      "shortEmpty": "Không tìm thấy Shorts 3Speak gần đây nào.",
+      "noChannel": "Không phát hiện kênh nào (bạn đã đăng nhập chưa?)",
+      "loadFailed": "Không thể tải: {{error}}"
+    },
+    "toasts": {
+      "unfurlFailed": "Không thể tải bản xem trước liên kết",
+      "imageUploadFailed": "Tải ảnh lên thất bại: {{error}}",
+      "tryAgain": "thử lại",
+      "styleApplied": "Đã áp dụng kiểu cho tất cả khối {{type}}",
+      "templateApplied": "Đã áp dụng “{{name}}” — hãy tinh chỉnh hoặc Hoàn tác",
+      "reverted": "Đã quay lại thiết kế trước của bạn",
+      "saved": "Đã lưu Spotlight vào hồ sơ Hive của bạn",
+      "saveFailed": "Không thể lưu",
+      "linkCopied": "Đã sao chép liên kết",
+      "uploadFailed": "Tải lên thất bại"
+    },
+    "link": {
+      "labelPlaceholder": "Nhãn (ví dụ YouTube của tôi)",
+      "type": "Loại liên kết",
+      "typeGroup": "Loại",
+      "website": "Trang web / URL",
+      "email": "Email",
+      "phone": "Điện thoại",
+      "platformGroup": "Nền tảng",
+      "yourname": "tencuaban",
+      "platformIconHint": "Biểu tượng là logo {{platform}} — chuyển sang “Trang web / URL” để chọn biểu tượng tùy chỉnh.",
+      "icon": "Biểu tượng",
+      "iconColor": "Màu biểu tượng",
+      "iconBg": "Nền biểu tượng"
+    },
+    "header": {
+      "text": "Văn bản",
+      "size": "Kích thước",
+      "large": "Lớn",
+      "medium": "Vừa",
+      "small": "Nhỏ",
+      "align": "Căn lề",
+      "left": "Trái",
+      "center": "Giữa",
+      "right": "Phải"
+    },
+    "image": {
+      "uploading": "Đang tải lên…",
+      "upload": "Tải ảnh lên",
+      "urlPlaceholder": "…hoặc URL ảnh",
+      "linkPlaceholder": "Liên kết khi nhấn vào (không bắt buộc)"
+    },
+    "video": {
+      "contentType": "Loại nội dung",
+      "video": "Video",
+      "short": "Short",
+      "orPaste": "hoặc dán liên kết",
+      "pastePlaceholder": "Dán liên kết video 3Speak hoặc author/permlink",
+      "titlePlaceholder": "Tiêu đề hiển thị phía trên video (liên kết đến 3Speak)",
+      "hint": "Nội dung được chọn sẽ được nhúng và phát trên trang của bạn."
+    },
+    "embed": {
+      "source": "Nguồn",
+      "sourceLink": "Một liên kết (xem trước đầy đủ)",
+      "sourceHiveRecent": "Bài đăng Hive mới nhất của tôi",
+      "accountPlaceholder": "Tên người dùng Hive (để trống để dùng tài khoản của bạn)",
+      "showPosts_other": "Hiện {{count}} bài đăng",
+      "perRow": "{{value}} mỗi hàng",
+      "hiveRecentHint": "Các bài đăng cấp cao nhất gần đây nhất của bạn (không gồm reblog hay bài đăng chéo). Tự động cập nhật.",
+      "linkPlaceholder": "Dán bất kỳ liên kết nào — bài đăng Hive, Instagram, X, YouTube, bài báo…",
+      "fetching": "Đang tải bản xem trước…",
+      "noPreview": "Không tìm thấy bản xem trước — liên kết vẫn sẽ hiển thị dưới dạng thẻ liên kết.",
+      "pasteHint": "Dán liên kết và chúng tôi sẽ lấy tiêu đề, mô tả & hình ảnh của nó."
+    },
+    "style": {
+      "title": "Kiểu",
+      "applyAllTitle": "Áp dụng kiểu này cho mọi khối {{type}}",
+      "applyAll": "Áp dụng cho tất cả {{types}}",
+      "background": "Nền",
+      "text": "Chữ",
+      "backgroundPct": "Nền {{value}}%",
+      "radius": "Bo góc {{value}}",
+      "fontSizePct": "Cỡ chữ {{value}}%",
+      "paddingPx": "Khoảng đệm {{value}}px",
+      "thumbnailPct": "Hình thu nhỏ {{value}}%",
+      "border": "Viền",
+      "thicknessPx": "Độ dày {{value}}px",
+      "opacityPct": "Độ mờ đục {{value}}%",
+      "shadow": "Bóng đổ",
+      "strengthPct": "Cường độ {{value}}%",
+      "color": "Màu",
+      "blur": "Làm mờ {{value}}",
+      "spread": "Độ lan {{value}}",
+      "inset": "Bóng trong",
+      "cardDelayMs": "Độ trễ thẻ {{value}}ms"
+    },
+    "tagline": "Liên kết & video của bạn trên một trang",
+    "openPage": "Mở trang",
+    "templates": {
+      "title": "Mẫu",
+      "hint": "Chọn một thiết kế để điền mọi thứ — tiểu sử của bạn được giữ nguyên, và bạn có thể Hoàn tác.",
+      "undo": "Hoàn tác mẫu — quay lại thiết kế của tôi"
+    },
+    "profile": {
+      "title": "Hồ sơ",
+      "headlinePlaceholder": "Dòng giới thiệu / tiểu sử ngắn (không bắt buộc)",
+      "avatarSizePct": "Kích thước ảnh đại diện {{value}}%",
+      "avatarShadowPct": "Bóng ảnh đại diện {{value}}%",
+      "avatarGlow": "Hào quang ảnh đại diện",
+      "glowSize": "Kích thước hào quang {{value}}",
+      "channelButtonText": "Chữ trên nút kênh"
+    },
+    "page": {
+      "title": "Kiểu trang",
+      "solid": "Màu đơn",
+      "gradient": "Chuyển màu",
+      "image": "Hình ảnh",
+      "color2": "Màu 2",
+      "angle": "Góc {{value}}°",
+      "uploadBackground": "Tải ảnh nền lên",
+      "imageSet": "Đã đặt ảnh ✓",
+      "overlay": "Lớp phủ",
+      "overlay2": "Lớp phủ 2",
+      "none": "Không có",
+      "overlayOpacityPct": "Độ mờ đục lớp phủ {{value}}%",
+      "overlayAngle": "Góc lớp phủ {{value}}°",
+      "colors": "Màu sắc",
+      "buttonBg": "Nền nút",
+      "buttonText": "Chữ nút",
+      "buttons": "Nút",
+      "buttonStyle": "Kiểu nút",
+      "soft": "Nhạt",
+      "fill": "Tô đầy",
+      "outline": "Viền ngoài",
+      "cornerRadius": "Bo góc {{value}}",
+      "textStyle": "Kiểu chữ (tên, tiểu sử & khối văn bản)",
+      "font": "Phông chữ",
+      "normal": "Thường",
+      "italic": "Nghiêng",
+      "bold": "Đậm",
+      "boldItalic": "Đậm nghiêng",
+      "strong": "Nổi bật",
+      "textBorderPx": "Viền chữ {{value}}px",
+      "borderColor": "Màu viền"
+    },
+    "addBlock": "Thêm khối",
+    "empty": "Thêm liên kết, video hoặc hình ảnh đầu tiên của bạn ở trên.",
+    "arrangeHint": "Kéo <grip></grip> để sắp xếp · thả một khối lên khối khác để đặt chúng cạnh nhau · nhấn vào một khối để chỉnh sửa ngay tại đây",
+    "livePreview": "Xem trước trực tiếp",
+    "previewTitle": "Xem trước Spotlight"
+  }
+}

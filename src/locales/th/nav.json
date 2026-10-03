@@ -1,0 +1,112 @@
+{
+  "theme": {
+    "switchToLight": "เปลี่ยนเป็นโหมดสว่าง",
+    "switchToDark": "เปลี่ยนเป็นโหมดมืด"
+  },
+  "bottom": {
+    "feeds": "ฟีด",
+    "groups": "กลุ่ม",
+    "audio": "เสียง",
+    "login": "เข้าสู่ระบบ"
+  },
+  "installApp": "ติดตั้งแอป",
+  "iosInstallHint": "แตะ <b>แชร์</b> แล้วเลือก <b>เพิ่มไปยังหน้าจอโฮม</b>",
+  "playlists": {
+    "tooltip": "เพลย์ลิสต์ที่คุณบันทึกหรือสร้างไว้",
+    "label": "เพลย์ลิสต์",
+    "watchLater": "ดูภายหลัง",
+    "watchLaterCount": "ดูภายหลัง ({{n}})",
+    "watchHistory": "ประวัติการดู",
+    "all": "เพลย์ลิสต์ทั้งหมด"
+  },
+  "advertise": "ลงโฆษณา",
+  "hidePages": "ซ่อนหน้า",
+  "showPages": "แสดงหน้า",
+  "tabs": {
+    "overviewTooltip": "ทุกอย่างที่ใหม่บน 3Speak พร้อมสิ่งที่เราคิดว่าคุณจะชอบ",
+    "overview": "ภาพรวม",
+    "shortsTooltip": "วิดีโอสั้นแนวตั้ง เล่นต่อกันไปเรื่อยๆ",
+    "audioTooltip": "พอดแคสต์ เพลง และเสียงอื่นๆ ที่เผยแพร่บน 3Speak",
+    "groupsTooltip": "ชุมชนที่คุณเข้าร่วมได้ และตราสัญลักษณ์ที่ผู้คนได้รับ",
+    "rankingsTooltip": "ครีเอเตอร์ที่มีรายได้และยอดดูสูงสุดในตอนนี้"
+  },
+  "aboutLink": "เกี่ยวกับ 3Speak",
+  "profile": {
+    "accountMenu": "เมนูบัญชี",
+    "myChannelAria": "ช่องของฉัน",
+    "vpTooltip": "Voting Power: น้ำหนักของโหวตครั้งถัดไปของคุณ",
+    "rcTooltip": "Resource Credits: ต้นทุนของการดำเนินการของคุณบน Hive",
+    "myChannel": "ช่องของฉัน",
+    "publishBacklog": "เผยแพร่รายการค้าง",
+    "analytics": "การวิเคราะห์",
+    "inviteLinks": "ลิงก์เชิญ",
+    "iosInstallToast": "แตะปุ่มแชร์ใน Safari แล้วเลือก \"เพิ่มไปยังหน้าจอโฮม\"",
+    "changeAccount": "เปลี่ยนบัญชี",
+    "logout": "ออกจากระบบ",
+    "onDiscord": "3Speak บน Discord",
+    "onX": "3Speak บน X",
+    "onTelegram": "3Speak บน Telegram"
+  },
+  "notifications": {
+    "pushOff": "ปิดการแจ้งเตือนสำหรับอุปกรณ์นี้แล้ว",
+    "pushOn": "คุณจะได้รับการแจ้งเตือนเมื่อครีเอเตอร์ที่คุณติดตามโพสต์",
+    "pushFailed": "เปลี่ยนการตั้งค่าการแจ้งเตือนไม่ได้",
+    "ariaUnread": "การแจ้งเตือน (ยังไม่อ่าน {{count}})",
+    "pushBlocked": "การแจ้งเตือนของเว็บไซต์นี้ถูกบล็อกในการตั้งค่าเบราว์เซอร์ของคุณ",
+    "pushNoWorker": "บิลด์นี้ไม่มี service worker จึงลงทะเบียนการแจ้งเตือนที่นี่ไม่ได้",
+    "pushStop": "หยุดแจ้งเตือนอุปกรณ์นี้",
+    "pushStart": "รับการแจ้งเตือนเมื่อครีเอเตอร์ที่คุณติดตามโพสต์",
+    "on": "เปิด",
+    "notifyMe": "แจ้งเตือนฉัน",
+    "empty": "คุณยังไม่มีการแจ้งเตือน",
+    "threeSpeakVideo": "วิดีโอ 3Speak",
+    "group": {
+      "voteOne": "@{{a}} โหวตโพสต์ของคุณ",
+      "voteTwo": "@{{a}} และ @{{b}} โหวตโพสต์ของคุณ",
+      "voteMany_other": "@{{a}} และอีก {{count}} คนโหวตโพสต์ของคุณ",
+      "withValue": "{{label}} (${{value}})",
+      "followOne": "@{{a}} ติดตามคุณแล้ว",
+      "followTwo": "@{{a}} และ @{{b}} ติดตามคุณแล้ว",
+      "followMany_other": "@{{a}} และอีก {{count}} คนติดตามคุณแล้ว",
+      "other": "การแจ้งเตือน {{type}} {{count}} รายการ",
+      "typeCount": "{{type}} {{count}} รายการ",
+      "includesWhale": "รวมบัญชี 🐋 วาฬ",
+      "includesOrca": "รวมบัญชี 🐬 ออร์กา",
+      "andMore": "และอีก {{count}} รายการ…"
+    }
+  },
+  "search": {
+    "types": {
+      "users": "ผู้ใช้",
+      "communities": "ชุมชน",
+      "videos": "วิดีโอ",
+      "shorts": "Shorts",
+      "audio": "เสียง",
+      "playlists": "เพลย์ลิสต์"
+    },
+    "dates": {
+      "today": "วันนี้",
+      "thisWeek": "สัปดาห์นี้",
+      "thisMonth": "เดือนนี้",
+      "thisYear": "ปีนี้"
+    },
+    "contentType": "ประเภทเนื้อหา",
+    "boostRecent": "เน้นรายการล่าสุด",
+    "dateRange": "ช่วงวันที่",
+    "tag": "แท็ก",
+    "tagPlaceholder": "เช่น crypto, gaming...",
+    "community": "ชุมชน",
+    "communityPlaceholder": "ค้นหาชุมชน...",
+    "clearFilters": "ล้างตัวกรองทั้งหมด",
+    "allHidden": "ซ่อนเนื้อหาทุกประเภทอยู่",
+    "reenableFilters": "เปิดตัวกรองทั้งหมดอีกครั้ง",
+    "noResultsFor": "ไม่พบผลลัพธ์สำหรับ “{{term}}”",
+    "searchFor": "ค้นหา “{{term}}”",
+    "authors_other": "ผู้เขียน {{count}} คน",
+    "subscribers_other": "สมาชิก {{count}} คน",
+    "views_other": "การดู {{formatted}} ครั้ง",
+    "tags": "แท็ก",
+    "titles": "ชื่อเรื่อง",
+    "placeholder": "ค้นหา..."
+  }
+}

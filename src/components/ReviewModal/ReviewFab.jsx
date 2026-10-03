@@ -1,4 +1,5 @@
 import { useLocation } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { MdOutlineRateReview } from 'react-icons/md';
 import { useReviewModal } from '../../lib/reviewStore';
 import { useAppStore } from '../../lib/store';
@@ -8,6 +9,7 @@ import './ReviewModal.scss';
 // main/home page ('/') for now; later it is replaced by the one-time "initial
 // review" auto-prompt for every user.
 export default function ReviewFab() {
+  const { t } = useTranslation();
   const location = useLocation();
   const openReview = useReviewModal((s) => s.openReview);
   const user = useAppStore((s) => s.user);
@@ -21,10 +23,10 @@ export default function ReviewFab() {
     <button
       className={`review-fab${miniPlayer ? ' review-fab--mini' : ''}`}
       onClick={() => openReview({ area: 'global', username: user || null, permlink: null })}
-      aria-label="Give feedback"
+      aria-label={t('comments.review.fabAria')}
     >
       <MdOutlineRateReview />
-      <span>Feedback</span>
+      <span>{t('comments.review.fab')}</span>
     </button>
   );
 }

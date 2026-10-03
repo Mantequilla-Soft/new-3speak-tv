@@ -1,0 +1,136 @@
+{
+  "button": {
+    "label": "聊天"
+  },
+  "tools": {
+    "emoji": "表情",
+    "searchEmoji": "搜索表情",
+    "searchGifs": "搜索 GIF…",
+    "noGifs": "没有找到 GIF。",
+    "poweredByGiphy": "由 GIPHY 提供"
+  },
+  "lightbox": {
+    "openInNewTab": "在新标签页中打开图片"
+  },
+  "linkCard": {
+    "loadingPreview": "正在加载预览…",
+    "community": "社区",
+    "communityWithSubscribers_other": "社区 · {{formatted}} 位订阅者",
+    "commentFallback": "（评论）",
+    "play": "播放 {{title}}"
+  },
+  "share": {
+    "embedCopied": "嵌入代码已复制",
+    "pressToCopy": "按 Ctrl/Cmd + C 复制选中的代码",
+    "embedTitle": "嵌入此视频",
+    "embedHint": "粘贴到任意网站或博客文章中。",
+    "embedSize": "嵌入尺寸",
+    "embedCode": "嵌入代码",
+    "copyEmbed": "复制嵌入代码",
+    "responsiveSub": "自动适应所在页面的大小",
+    "fixedSub": "固定尺寸的 iframe",
+    "sendInChat": "通过 3Speak 聊天发送",
+    "sendInChatSub": "发消息给 3Speak 上的某人",
+    "embedOnWebsite": "嵌入到网站",
+    "embedOnWebsiteSub": "复制 HTML 用于你自己的网站或博客",
+    "generalShare": "分享 / 复制链接",
+    "generalShareSub": "其他应用，或复制链接"
+  },
+  "gate": {
+    "connectTitle": "连接 3Speak 聊天",
+    "connectBody": "聊天由 Snapie 提供支持。连接时会用你的 Hive posting 密钥签署一次性登录验证——不产生交易，也没有费用。",
+    "connecting": "连接中…",
+    "connectButton": "连接聊天",
+    "cannotSign": "你当前的登录方式无法签署聊天验证。请使用 Keychain、HiveAuth、PeakVault 或 Ledger。",
+    "needsAccountTitle": "聊天需要 Hive 账号",
+    "needsAccountBody": "消息由你自己的账号密钥签名，所以等你的账号准备好后，聊天会和其他功能一起解锁。完成个人主页上的目标，团队会帮你完成剩下的步骤。",
+    "loginTitle": "登录后使用聊天",
+    "loginBody": "使用你的 Hive 账号登录，即可收发消息。",
+    "connectingToChat": "正在连接聊天…"
+  },
+  "errors": {
+    "notHiveAccount": "@{{user}} 不是 Hive 账号。",
+    "openConversation": "无法打开该会话。",
+    "verifyAccount": "无法验证该账号。",
+    "createRoom": "无法创建房间。",
+    "joinChannel": "无法加入该频道。"
+  },
+  "newDm": {
+    "placeholder": "给 Hive 用户发消息…",
+    "start": "开始聊天"
+  },
+  "newRoom": {
+    "toggle": "新建私密房间",
+    "namePlaceholder": "房间名称…",
+    "removeMember": "移除 @{{user}}",
+    "addMore": "添加更多…",
+    "invitePlaceholder": "邀请 Hive 用户（可选）…",
+    "create": "创建"
+  },
+  "channels": {
+    "browse": "浏览频道",
+    "publicTitle": "公开频道",
+    "closeBrowser": "关闭频道浏览",
+    "loading": "正在加载频道…",
+    "empty": "暂无可用频道。",
+    "join": "加入"
+  },
+  "markRead": {
+    "nothingToClear": "没有可清除的会话。未读数可能卡在了服务器端。",
+    "requestFailed": "请求失败",
+    "allCaughtUp": "全部已读",
+    "stillUnread_other": "已清除 {{count}} 个聊天，但仍显示 {{total}} 条未读。",
+    "stillUnreadNoMatch_other": "已清除 {{count}} 个聊天，但仍显示 {{total}} 条未读。服务器报告了未读数，但没有对应的会话。",
+    "notSignedIn": "聊天未登录。请重新连接聊天后重试。",
+    "sessionExpired": "清除过程中聊天会话已过期。请重新连接聊天后重试。",
+    "serverRejectedVisible_other": "服务器拒绝了全部 {{count}} 个请求（ID 来自可见列表）",
+    "serverRejectedServerMap_other": "服务器拒绝了全部 {{count}} 个请求（ID 来自服务器自己的未读列表）",
+    "failed": "无法全部标为已读",
+    "marking": "正在标为已读…",
+    "button": "全部标为已读",
+    "buttonCount": "全部标为已读（{{count}}）"
+  },
+  "list": {
+    "chooseTarget": "选择要发送到的聊天",
+    "loading": "正在加载会话…",
+    "empty": "还没有会话。在上方输入 Hive 用户名即可开始聊天。"
+  },
+  "leave": {
+    "confirmRoom": "要离开这个房间吗？",
+    "confirmChannel": "要离开这个频道吗？",
+    "errorRoom": "无法离开房间。",
+    "errorChannel": "无法离开频道。",
+    "titleRoom": "离开房间",
+    "titleChannel": "离开频道",
+    "button": "离开"
+  },
+  "thread": {
+    "editError": "无法编辑消息。",
+    "deleteConfirm": "删除这条消息？它将被替换为“[已删除]”。",
+    "deleteError": "无法删除消息。",
+    "back": "返回会话列表",
+    "loading": "正在加载消息…",
+    "empty": "还没有消息——打个招呼吧 👋",
+    "editedSuffix": " · 已编辑",
+    "messageActions": "消息操作",
+    "quote": "引用",
+    "forward": "转发",
+    "typing_other": "{{users}} 正在输入…",
+    "editing": "正在编辑消息",
+    "cancelEdit": "取消编辑",
+    "quoting": "正在引用 @{{user}}",
+    "cancelQuote": "取消引用",
+    "removeImage": "移除图片",
+    "placeholder": "输入消息…"
+  },
+  "page": {
+    "chooseTarget": "选择要发送到的聊天。",
+    "selectConversation": "选择一个会话，或开始新的会话。"
+  },
+  "overlay": {
+    "fullscreen": "全屏",
+    "exitFullscreen": "退出全屏",
+    "close": "关闭聊天",
+    "sendInChat": "在聊天中发送"
+  }
+}

@@ -1,6 +1,7 @@
 import MarkdownView from '../common/MarkdownView';
 import React, { useEffect, useState, useRef } from "react";
 import { createRoot } from "react-dom/client";
+import { useTranslation } from "react-i18next";
 import { getUersContent } from "../../utils/hiveUtils";
 import "./BlogContent.scss";
 import { FaChevronDown, FaChevronUp } from "react-icons/fa";
@@ -11,6 +12,7 @@ import { getPostBodyRenderer } from "../../lib/hiveRenderer";
 const THRESHOLD_HEIGHT = 100;
 
 const BlogContent = ({ author, permlink, description, alwaysExpanded = false }) => {
+  const { t } = useTranslation();
   const [content, setContent] = useState("");
   const [renderedContent, setRenderedContent] = useState("");
   const [loading, setLoading] = useState(false);
@@ -90,15 +92,15 @@ const BlogContent = ({ author, permlink, description, alwaysExpanded = false }) 
           setContent(description);
         } else if (author && permlink) {
           const postContent = await getPostDescription(author, permlink);
-          setContent(postContent || "No content available");
+          setContent(postContent || t('comments.blog.noContent'));
         }
       } catch (err) {
         console.error('Failed fetching post content:', err);
-        setContent('Error loading content.');
+        setContent(t('comments.blog.loadError'));
       }
     }
     fetchContent();
-  }, [author, permlink, description]);
+  }, [author, permlink, description, t]);
 
   useEffect(() => {
     if (!content) return;
@@ -133,15 +135,15 @@ const BlogContent = ({ author, permlink, description, alwaysExpanded = false }) 
           setRenderedContent(renderedHTML);
         } catch (error) {
           console.error("Error rendering post body:", error);
-          setRenderedContent("Error processing content.");
+          setRenderedContent(t('comments.blog.processError'));
         }
       })
       .catch((error) => {
         console.error("Error loading renderer:", error);
-        setRenderedContent("Error loading renderer.");
+        setRenderedContent(t('comments.blog.rendererError'));
       })
       .finally(() => setLoading(false));
-  }, [content]);
+  }, [content, t]);
 
   // Mount native React audio players into the slots left by the renderer
   useEffect(() => {
@@ -200,7 +202,7 @@ const BlogContent = ({ author, permlink, description, alwaysExpanded = false }) 
 
       {needsExpansion && (
         <div className="expand-toggle" onClick={toggleExpand}>
-          <span>{isExpanded ? "Show less" : "Show more"}</span>
+          <span>{isExpanded ? t('common.actions.showLess') : t('common.actions.showMore')}</span>
           {isExpanded ? <FaChevronUp /> : <FaChevronDown />}
         </div>
       )}

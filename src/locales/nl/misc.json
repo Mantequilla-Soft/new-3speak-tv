@@ -1,0 +1,242 @@
+{
+  "leaderboard": {
+    "windows": {
+      "7d": "7 dagen",
+      "30d": "30 dagen",
+      "365d": "Jaar",
+      "all": "Altijd"
+    },
+    "windowsInSentence": {
+      "7d": "de afgelopen 7 dagen",
+      "30d": "de afgelopen 30 dagen",
+      "365d": "het afgelopen jaar",
+      "all": "altijd"
+    },
+    "metrics": {
+      "video_uploads": "Video's",
+      "short_uploads": "Shorts",
+      "video_watch_secs": "Kijktijd video's",
+      "short_watch_secs": "Kijktijd Shorts",
+      "tags_given": "Tags",
+      "streams": "Streams",
+      "stream_secs": "Tijd live",
+      "stream_peak_viewers": "Piek aantal kijkers",
+      "stream_viewers": "Kijkers die instapten",
+      "boosts_received": "Ontvangen boosts",
+      "boost_amount_received": "Ontvangen bedrag",
+      "boosts_given": "Gegeven boosts",
+      "boost_amount_given": "Gegeven bedrag"
+    },
+    "metricsInSentence": {
+      "video_uploads": "video's",
+      "short_uploads": "Shorts",
+      "video_watch_secs": "kijktijd video's",
+      "short_watch_secs": "kijktijd Shorts",
+      "tags_given": "tags",
+      "streams": "streams",
+      "stream_secs": "tijd live",
+      "stream_peak_viewers": "piek aantal kijkers",
+      "stream_viewers": "kijkers die instapten",
+      "boosts_received": "ontvangen boosts",
+      "boost_amount_received": "ontvangen bedrag",
+      "boosts_given": "gegeven boosts",
+      "boost_amount_given": "gegeven bedrag"
+    },
+    "blurbs": {
+      "video_uploads": "Geüploade video's",
+      "short_uploads": "Geüploade Shorts",
+      "video_watch_secs": "Seconden dat hun video's werden bekeken",
+      "short_watch_secs": "Seconden dat hun Shorts werden bekeken",
+      "tags_given": "Tags gegeven aan andere video's",
+      "streams": "Gestarte streamsessies",
+      "stream_secs": "Totale tijd live (alleen afgelopen streams)",
+      "stream_peak_viewers": "Meeste gelijktijdige kijkers (een piekwaarde, geen som)",
+      "stream_viewers": "Keren dat kijkers instapten (volume, geen uniek bereik)",
+      "boosts_received": "Boosts gestuurd naar hun streams",
+      "boost_amount_received": "Opgeteld bedrag van ontvangen boosts",
+      "boosts_given": "Boosts die ze naar andere streamers stuurden",
+      "boost_amount_given": "Opgeteld bedrag van gegeven boosts"
+    },
+    "blurbsInSentence": {
+      "video_uploads": "geüploade video's",
+      "short_uploads": "geüploade Shorts",
+      "video_watch_secs": "seconden dat hun video's werden bekeken",
+      "short_watch_secs": "seconden dat hun Shorts werden bekeken",
+      "tags_given": "tags gegeven aan andere video's",
+      "streams": "gestarte streamsessies",
+      "stream_secs": "totale tijd live (alleen afgelopen streams)",
+      "stream_peak_viewers": "meeste gelijktijdige kijkers (een piekwaarde, geen som)",
+      "stream_viewers": "keren dat kijkers instapten (volume, geen uniek bereik)",
+      "boosts_received": "boosts gestuurd naar hun streams",
+      "boost_amount_received": "opgeteld bedrag van ontvangen boosts",
+      "boosts_given": "boosts die ze naar andere streamers stuurden",
+      "boost_amount_given": "opgeteld bedrag van gegeven boosts"
+    },
+    "groups": {
+      "video": "Video",
+      "streaming": "Streaming"
+    },
+    "badgeNouns": {
+      "video_uploads": "Video's",
+      "short_uploads": "Shorts",
+      "video_watch_secs": "Bekeken",
+      "short_watch_secs": "Shorts bekeken",
+      "tags_given": "Tagger"
+    },
+    "badgeLabel": "{{tier}} {{noun}}",
+    "badgeTitleAllTime": "Nr. {{rank}} voor {{what}} aller tijden",
+    "badgeTitleWindow": "Nr. {{rank}} voor {{what}} in {{window}}"
+  },
+  "duration": {
+    "hoursMinutes": "{{h}}u {{m}}m",
+    "minutesSeconds": "{{m}}m {{s}}s",
+    "seconds": "{{s}}s",
+    "aMoment": "even",
+    "lessThanMinute": "minder dan een minuut"
+  },
+  "surf": {
+    "community": "Community",
+    "allOf": "Heel {{label}}"
+  },
+  "social": {
+    "signingCancelled": "Ondertekenen geannuleerd",
+    "youtube": {
+      "placeholder": "@handle of UCxxxxxxxxxxxxxxxxxxxxxx",
+      "help": "Plak je YouTube-@handle of je kanaal-ID die begint met UC…. We zetten het om naar het kanaal-ID."
+    },
+    "soundcloud": {
+      "placeholder": "jouw-profiel of https://soundcloud.com/jouw-profiel",
+      "help": "Plak de URL van je SoundCloud-profiel of alleen de gebruikersnaam daaruit. Zet de hash ergens in de bio van je profiel."
+    }
+  },
+  "snaps": {
+    "retrying": "Snaps-container nog niet gevonden — opnieuw proberen (poging {{attempt}})...",
+    "unreachable": "Geen enkele Hive-node bereikbaar om de Snaps-container te vinden. Controleer je verbinding en probeer het opnieuw.",
+    "unreachableWithError": "Geen enkele Hive-node bereikbaar om de Snaps-container te vinden (laatste fout — {{error}}). Controleer je verbinding en probeer het opnieuw."
+  },
+  "embed": {
+    "responsive": "Responsief"
+  },
+  "incubation": {
+    "requestFailed": "Verzoek mislukt ({{status}})",
+    "contactLoadFailed": "Je contactgegevens konden niet worden geladen",
+    "contactSaveFailed": "Je contactgegevens konden niet worden opgeslagen",
+    "onlyButrauthBacklog": "Alleen een Butter Auth-account kan een incubatie-achterstand hebben",
+    "publishFailed": "Publiceren mislukt ({{status}})"
+  },
+  "routeError": {
+    "title": "Deze pagina is niet geladen",
+    "body": "Een deel van de app kon niet worden gedownload. Dat betekent meestal dat er een nieuwe versie is uitgebracht terwijl dit tabblad openstond. Herladen lost het op.",
+    "reload": "Herladen",
+    "goHome": "Naar home"
+  },
+  "seo": {
+    "defaultTitle": "3Speak - Gedecentraliseerd videoplatform",
+    "defaultDescription": "3Speak is een gedecentraliseerd platform voor het delen van video's, gebouwd op blockchaintechnologie. Bekijk, upload en deel video's en verdien ondertussen cryptovaluta als beloning."
+  },
+  "uploadLinks": {
+    "regularVideo": "Gewone video",
+    "verticalShort": "Verticale short",
+    "musicAudio": "Muziek / audio",
+    "groupChat": "Groepschat",
+    "communitySnap": "Community-Snap",
+    "shortsEditor": "Shorts-editor",
+    "goLive": "Live gaan",
+    "streamStudio": "Streamstudio",
+    "headings": {
+      "upload": "Uploaden",
+      "live": "Live",
+      "others": "Overig"
+    }
+  },
+  "chat": {
+    "connectFailed": "Kon geen verbinding maken met chat.",
+    "loginFirst": "Log eerst in om te chatten.",
+    "roomNameRequired": "Een naam voor de ruimte is verplicht."
+  },
+  "hiveAuth": {
+    "waiting": "Wachten op goedkeuring in HiveAuth...",
+    "title": "Goedkeuring in HiveAuth nodig",
+    "hint": "Kijk in je HiveAuth-app om deze transactie goed te keuren"
+  },
+  "hiveApi": {
+    "keychainNotSigned": "Keychain heeft de transactie niet ondertekend",
+    "loginToCreateCommunity": "Log in om een community te maken",
+    "loginFirst": "Log eerst in",
+    "cancelled": "Actie geannuleerd"
+  },
+  "openpod": {
+    "announced": "Livesessie aangekondigd op Hive!",
+    "announceFailed": "OpenPod gestart, maar de aankondiging op Hive kon niet worden geplaatst."
+  },
+  "appUpdate": {
+    "updating": "Bijwerken naar de nieuwste versie ({{version}})…",
+    "reloadingForUpload": "Herladen zodat je upload op de nieuwste build draait."
+  },
+  "auth": {
+    "switched": "Overgeschakeld naar {{username}}!",
+    "keychainLoginTitle": "Inloggen met Hive"
+  },
+  "streamVod": {
+    "uploadKeyMissing": "Stream afgelopen, maar de video kon niet worden geüpload (uploadsleutel ontbreekt).",
+    "uploading": "Je streamvideo uploaden… {{pct}}%",
+    "uploaded": "Streamvideo geüpload — hij vervangt de livestream zodra het encoderen klaar is.",
+    "uploadFailed": "Stream afgelopen, maar het uploaden van de video is mislukt.",
+    "saving": "Je streamvideo opslaan…",
+    "encoding": "Geüpload — de encoder verwerkt je video…",
+    "saved": "Streamvideo opgeslagen — hij vervangt de livestream zodra het encoderen klaar is.",
+    "saveFailed": "Stream afgelopen, maar de video kon niet worden opgeslagen: {{error}}.",
+    "uploadFailedShort": "uploaden mislukt",
+    "stillProcessing": "Stream afgelopen — de video wordt nog verwerkt; kijk straks op je profiel."
+  },
+  "embedPlayer": {
+    "unavailable": "Video niet beschikbaar"
+  },
+  "followFeed": {
+    "title": "Volgend-feed",
+    "error": "Fout bij het ophalen van video's"
+  },
+  "groups": {
+    "title": "Groepen",
+    "badges": "Badges",
+    "subtitle": "De community's waar je lid van kunt worden en de badges die mensen hebben, op één plek."
+  },
+  "watched": {
+    "removed": "Verwijderd uit kijkgeschiedenis",
+    "removeFailed": "Verwijderen uit kijkgeschiedenis mislukt",
+    "title": "Bekeken",
+    "count_one": "{{count}} bekeken",
+    "count_other": "{{count}} bekeken",
+    "trackHistory": "Geschiedenis bijhouden",
+    "videosTab": "Video's ({{count}})",
+    "shortsTab": "Shorts ({{count}})",
+    "loadFailed": "Kijkgeschiedenis laden mislukt. Probeer het opnieuw.",
+    "emptyShorts": "Nog geen bekeken Shorts",
+    "emptyVideos": "Nog geen bekeken video's",
+    "removeTitle": "Verwijderen uit kijkgeschiedenis",
+    "watchedAt": "Bekeken {{when}}"
+  },
+  "watchStream": {
+    "saySomething": "Zeg iets…",
+    "waitingWallet": "Wachten op je wallet…",
+    "signInToChat": "Log in om te chatten",
+    "sendMessage": "Bericht versturen",
+    "notLive": "Deze stream is nu niet live.",
+    "notFound": "Geen livestream gevonden voor deze link.",
+    "browse": "Livestreams bekijken",
+    "back": "Terug naar 3Speak",
+    "seoTitle": "{{title}} (LIVE)",
+    "swipeNext": "Swipe voor de volgende livestream",
+    "chat": "Chat",
+    "watchingNow": "👁 {{count}} kijken nu",
+    "signInRaiseHand": "Log in om je hand op te steken",
+    "copyLink": "Streamlink kopiëren",
+    "notAvailableLive": "Niet beschikbaar voor livestreams",
+    "vote": "Voten",
+    "comment": "Reageren",
+    "liveChat": "Livechat",
+    "signInToJoin": "🔒 Log in om mee te chatten.",
+    "moreTag": "Meer #{{tag}}",
+    "moreVideos": "Meer video's"
+  }
+}

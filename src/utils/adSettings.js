@@ -1,6 +1,7 @@
 import { getAccounts } from '../hive-api/hiveApi';
 import { broadcastWithAioha, KeyTypes } from '../hive-api/aioha';
 import { fetchCreatorAdPrefs, setCreatorAdPrefs } from '../lib/advertiseData';
+import { t } from '../i18n';
 
 // The creator's ad settings, mirrored onto their own Hive account.
 //
@@ -81,7 +82,7 @@ export async function fetchAdSettingsFromHive(username) {
  */
 export async function saveAdSettingsToHive(username, { adsEnabled, communitySharePct }) {
   const u = clean(username);
-  if (!u) throw new Error('Not logged in');
+  if (!u) throw new Error(t('ads.errors.notLoggedIn'));
 
   const [account] = await getAccounts([u]);
   const meta = parsePostingMeta(account);
@@ -103,7 +104,7 @@ export async function saveAdSettingsToHive(username, { adsEnabled, communityShar
     extensions: [],
   }];
   const result = await broadcastWithAioha([op], KeyTypes.Posting);
-  if (!result || !result.success) throw new Error('Could not save your ad settings to Hive');
+  if (!result || !result.success) throw new Error(t('ads.errors.saveSettingsHive'));
   return ads;
 }
 
@@ -163,7 +164,7 @@ export async function saveCreatorAdSettings(username, { adsEnabled, communitySha
     await saveAdSettingsToHive(username, { adsEnabled, communitySharePct: pct });
     chainSaved = true;
   } catch (err) {
-    chainError = (err && err.message) || 'Could not save to your Hive account';
+    chainError = (err && err.message) || t('ads.errors.saveToHiveAccount');
   }
 
   return { ...res, chainSaved, chainError };

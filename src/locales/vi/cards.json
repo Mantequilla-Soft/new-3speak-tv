@@ -1,0 +1,44 @@
+{
+  "loading": "Đang tải...",
+  "error": "Lỗi: {{error}}",
+  "thumbnailAlt": "hình thu nhỏ",
+  "topicTitle": "Chủ đề: {{topic}}",
+  "watchingNow_other": "{{count}} người đang xem",
+  "badges": {
+    "gatedTitle": "Chỉ dành cho người ủng hộ — 3Speak Pro mở khóa toàn bộ video",
+    "pro": "PRO",
+    "new": "MỚI",
+    "live": "● TRỰC TIẾP",
+    "liveChat": "● CHAT TRỰC TIẾP"
+  },
+  "status": {
+    "scheduled": "Đã lên lịch",
+    "mobile": "Di động",
+    "mobileTitle": "Đã tải lên qua ứng dụng di động",
+    "processing": "Đang xử lý",
+    "processingTitle": "Video đang được xử lý",
+    "draft": "Bản nháp",
+    "draftTitle": "Bản nháp - chưa xuất bản",
+    "deleted": "Đã xóa",
+    "deletedTitle": "Video này đã bị xóa",
+    "failed": "Thất bại",
+    "failedTitle": "Xử lý video thất bại",
+    "unlisted": "Không công khai",
+    "unlistedTitle": "Không công khai — ẩn khỏi bảng tin và tìm kiếm, chỉ xem được qua đường liên kết trực tiếp"
+  },
+  "playlist": {
+    "loading": "Đang tải danh sách phát...",
+    "items_other": "{{count}} mục",
+    "openAria": "Mở danh sách phát {{name}}",
+    "tag": "Danh sách phát",
+    "updated": "Cập nhật {{when}}"
+  },
+  "watchLater": {
+    "title": "Xem sau",
+    "subtitle": "Video để xem sau"
+  },
+  "watched": {
+    "title": "Đã xem",
+    "subtitle": "Lịch sử xem của bạn"
+  }
+}

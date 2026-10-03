@@ -1,0 +1,50 @@
+{
+  "tabs": {
+    "overview": "Übersicht",
+    "transactions": "Transaktionen",
+    "aria": "Wallet-Bereiche"
+  },
+  "errors": {
+    "fetchBalances": "Guthaben konnten nicht geladen werden",
+    "needKeychain": "Für Überweisungen brauchst du die Keychain-Erweiterung"
+  },
+  "header": {
+    "mine": "MEINE Wallet",
+    "ofUser": "Wallet von {{user}}"
+  },
+  "assets": "Assets",
+  "transfer": "Überweisen",
+  "transferModal": {
+    "loginRequired": "Bitte melde dich an, um zu überweisen",
+    "insufficient": "Guthaben reicht nicht aus",
+    "invalidUsername": "Ungültiger Benutzername",
+    "success": "Überweisung erfolgreich!",
+    "failed": "Überweisung fehlgeschlagen: {{error}}",
+    "title": "{{coin}} überweisen",
+    "amountLabel": "Betrag ({{coin}})",
+    "balance": "Guthaben {{balance}}",
+    "max": "Max",
+    "recipientLabel": "Benutzername des Empfängers",
+    "recipientPlaceholder": "Hive-Benutzername eingeben",
+    "memoLabel": "Memo",
+    "memoPlaceholder": "Memo eingeben",
+    "confirm": "Überweisung bestätigen"
+  },
+  "history": {
+    "loadFailed": "Transaktionen konnten nicht geladen werden",
+    "title": "Transaktionsverlauf",
+    "cols": {
+      "type": "Typ",
+      "amount": "Betrag",
+      "account": "Konto",
+      "date": "Datum",
+      "memo": "Memo"
+    },
+    "types": {
+      "transfer": "Überweisung",
+      "claim": "Belohnung abholen",
+      "received": "Empfangen"
+    },
+    "claimedRewards": "Abgeholte Belohnungen"
+  }
+}

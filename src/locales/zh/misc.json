@@ -1,0 +1,241 @@
+{
+  "leaderboard": {
+    "windows": {
+      "7d": "7 天",
+      "30d": "30 天",
+      "365d": "一年",
+      "all": "全部时间"
+    },
+    "windowsInSentence": {
+      "7d": "7 天",
+      "30d": "30 天",
+      "365d": "一年",
+      "all": "全部时间"
+    },
+    "metrics": {
+      "video_uploads": "视频",
+      "short_uploads": "短视频",
+      "video_watch_secs": "视频观看时长",
+      "short_watch_secs": "短视频观看时长",
+      "tags_given": "标签",
+      "streams": "直播",
+      "stream_secs": "直播时长",
+      "stream_peak_viewers": "最高观众数",
+      "stream_viewers": "观众加入次数",
+      "boosts_received": "收到的助力",
+      "boost_amount_received": "收到的金额",
+      "boosts_given": "送出的助力",
+      "boost_amount_given": "送出的金额"
+    },
+    "metricsInSentence": {
+      "video_uploads": "视频",
+      "short_uploads": "短视频",
+      "video_watch_secs": "视频观看时长",
+      "short_watch_secs": "短视频观看时长",
+      "tags_given": "标签",
+      "streams": "直播",
+      "stream_secs": "直播时长",
+      "stream_peak_viewers": "最高观众数",
+      "stream_viewers": "观众加入次数",
+      "boosts_received": "收到的助力",
+      "boost_amount_received": "收到的金额",
+      "boosts_given": "送出的助力",
+      "boost_amount_given": "送出的金额"
+    },
+    "blurbs": {
+      "video_uploads": "上传的视频",
+      "short_uploads": "上传的短视频",
+      "video_watch_secs": "其视频被观看的秒数",
+      "short_watch_secs": "其短视频被观看的秒数",
+      "tags_given": "给其他视频打的标签",
+      "streams": "开始的直播场次",
+      "stream_secs": "总直播时长（仅统计已结束的直播）",
+      "stream_peak_viewers": "最高同时在线观众数（峰值，不是总和）",
+      "stream_viewers": "观众加入次数（总量，而非独立观众数）",
+      "boosts_received": "其直播收到的助力",
+      "boost_amount_received": "收到的助力总金额",
+      "boosts_given": "送给其他主播的助力",
+      "boost_amount_given": "送出的助力总金额"
+    },
+    "blurbsInSentence": {
+      "video_uploads": "上传的视频",
+      "short_uploads": "上传的短视频",
+      "video_watch_secs": "其视频被观看的秒数",
+      "short_watch_secs": "其短视频被观看的秒数",
+      "tags_given": "给其他视频打的标签",
+      "streams": "开始的直播场次",
+      "stream_secs": "总直播时长（仅统计已结束的直播）",
+      "stream_peak_viewers": "最高同时在线观众数（峰值，不是总和）",
+      "stream_viewers": "观众加入次数（总量，而非独立观众数）",
+      "boosts_received": "其直播收到的助力",
+      "boost_amount_received": "收到的助力总金额",
+      "boosts_given": "送给其他主播的助力",
+      "boost_amount_given": "送出的助力总金额"
+    },
+    "groups": {
+      "video": "视频",
+      "streaming": "直播"
+    },
+    "badgeNouns": {
+      "video_uploads": "视频",
+      "short_uploads": "短视频",
+      "video_watch_secs": "观看",
+      "short_watch_secs": "短视频观看",
+      "tags_given": "标签达人"
+    },
+    "badgeLabel": "{{tier}} {{noun}}",
+    "badgeTitleAllTime": "{{what}} 历史总榜第 {{rank}} 名",
+    "badgeTitleWindow": "最近 {{window}} {{what}} 排名第 {{rank}}"
+  },
+  "duration": {
+    "hoursMinutes": "{{h}} 小时 {{m}} 分",
+    "minutesSeconds": "{{m}} 分 {{s}} 秒",
+    "seconds": "{{s}} 秒",
+    "aMoment": "片刻",
+    "lessThanMinute": "不到一分钟"
+  },
+  "surf": {
+    "community": "社区",
+    "allOf": "{{label}} 全部"
+  },
+  "social": {
+    "signingCancelled": "已取消签名",
+    "youtube": {
+      "placeholder": "@handle 或 UCxxxxxxxxxxxxxxxxxxxxxx",
+      "help": "粘贴你的 YouTube @handle 或以 UC 开头的频道 ID。我们会统一转换为频道 ID。"
+    },
+    "soundcloud": {
+      "placeholder": "your-profile 或 https://soundcloud.com/your-profile",
+      "help": "粘贴你的 SoundCloud 主页 URL，或只填其中的用户名。把哈希放在你主页简介的任意位置。"
+    }
+  },
+  "snaps": {
+    "retrying": "尚未找到 Snaps 容器——正在重试（第 {{attempt}} 次）...",
+    "unreachable": "无法连接任何 Hive 节点来查找 Snaps 容器。请检查网络连接后重试。",
+    "unreachableWithError": "无法连接任何 Hive 节点来查找 Snaps 容器（最后的错误——{{error}}）。请检查网络连接后重试。"
+  },
+  "embed": {
+    "responsive": "自适应"
+  },
+  "incubation": {
+    "requestFailed": "请求失败（{{status}}）",
+    "contactLoadFailed": "无法加载你的联系信息",
+    "contactSaveFailed": "无法保存你的联系信息",
+    "onlyButrauthBacklog": "只有 Butter Auth 账号才能有孵化期待发布内容",
+    "publishFailed": "发布失败（{{status}}）"
+  },
+  "routeError": {
+    "title": "此页面没有加载出来",
+    "body": "应用的一部分下载失败。这通常是因为在此标签页打开期间发布了新版本。重新加载即可获取新版本。",
+    "reload": "重新加载",
+    "goHome": "返回首页"
+  },
+  "seo": {
+    "defaultTitle": "3Speak - 去中心化视频平台",
+    "defaultDescription": "3Speak 是一个基于区块链技术的去中心化视频分享平台。观看、上传和分享视频，同时赚取加密货币奖励。"
+  },
+  "uploadLinks": {
+    "regularVideo": "普通视频",
+    "verticalShort": "竖屏短视频",
+    "musicAudio": "音乐 / 音频",
+    "groupChat": "群聊",
+    "communitySnap": "社区 Snap",
+    "shortsEditor": "短视频编辑器",
+    "goLive": "开直播",
+    "streamStudio": "直播工作室",
+    "headings": {
+      "upload": "上传",
+      "live": "直播",
+      "others": "其他"
+    }
+  },
+  "chat": {
+    "connectFailed": "无法连接聊天。",
+    "loginFirst": "请先登录再使用聊天。",
+    "roomNameRequired": "需要填写房间名称。"
+  },
+  "hiveAuth": {
+    "waiting": "正在等待 HiveAuth 批准...",
+    "title": "需要 HiveAuth 批准",
+    "hint": "请在你的 HiveAuth App 中批准这笔交易"
+  },
+  "hiveApi": {
+    "keychainNotSigned": "Keychain 没有签署这笔交易",
+    "loginToCreateCommunity": "请登录后再创建社区",
+    "loginFirst": "请先登录",
+    "cancelled": "操作已取消"
+  },
+  "openpod": {
+    "announced": "直播已在 Hive 上公告！",
+    "announceFailed": "OpenPod 已开始，但 Hive 公告未能发布。"
+  },
+  "appUpdate": {
+    "updating": "正在更新到最新版本（{{version}}）…",
+    "reloadingForUpload": "正在重新加载，以便你的上传在最新版本上运行。"
+  },
+  "auth": {
+    "switched": "已成功切换到 {{username}}！",
+    "keychainLoginTitle": "使用 Hive 登录"
+  },
+  "streamVod": {
+    "uploadKeyMissing": "直播已结束，但视频无法上传（缺少上传密钥）。",
+    "uploading": "正在上传你的直播视频… {{pct}}%",
+    "uploaded": "直播视频已上传——编码完成后将替换直播。",
+    "uploadFailed": "直播已结束，但视频上传失败。",
+    "saving": "正在保存你的直播视频…",
+    "encoding": "已上传——编码器正在处理你的视频…",
+    "saved": "直播视频已保存——编码完成后将替换直播。",
+    "saveFailed": "直播已结束，但视频无法保存：{{error}}。",
+    "uploadFailedShort": "上传失败",
+    "stillProcessing": "直播已结束——视频仍在处理中，请稍后查看你的主页。"
+  },
+  "embedPlayer": {
+    "unavailable": "视频不可用"
+  },
+  "followFeed": {
+    "title": "关注动态",
+    "error": "获取视频出错"
+  },
+  "groups": {
+    "title": "圈子",
+    "badges": "徽章",
+    "subtitle": "你可以加入的社区和大家拥有的徽章，都在这里。"
+  },
+  "watched": {
+    "removed": "已从观看记录中移除",
+    "removeFailed": "从观看记录中移除失败",
+    "title": "已观看",
+    "count_other": "已观看 {{count}} 个",
+    "trackHistory": "记录观看历史",
+    "videosTab": "视频（{{count}}）",
+    "shortsTab": "短视频（{{count}}）",
+    "loadFailed": "观看记录加载失败，请重试。",
+    "emptyShorts": "还没有看过的短视频",
+    "emptyVideos": "还没有看过的视频",
+    "removeTitle": "从观看记录中移除",
+    "watchedAt": "观看于 {{when}}"
+  },
+  "watchStream": {
+    "saySomething": "说点什么…",
+    "waitingWallet": "正在等待你的钱包…",
+    "signInToChat": "登录后聊天",
+    "sendMessage": "发送消息",
+    "notLive": "这场直播目前没有在播。",
+    "notFound": "找不到这个链接对应的直播。",
+    "browse": "浏览直播",
+    "back": "返回 3Speak",
+    "seoTitle": "{{title}}（直播中）",
+    "swipeNext": "滑动观看下一个直播",
+    "chat": "聊天",
+    "watchingNow": "👁 {{count}} 人正在观看",
+    "signInRaiseHand": "登录后举手",
+    "copyLink": "复制直播链接",
+    "notAvailableLive": "直播不支持此功能",
+    "vote": "点赞",
+    "comment": "评论",
+    "liveChat": "直播聊天",
+    "signInToJoin": "🔒 登录后加入聊天。",
+    "moreTag": "更多 #{{tag}}",
+    "moreVideos": "更多视频"
+  }
+}

@@ -1,0 +1,98 @@
+{
+  "page": {
+    "fallbackTitle": "बैज",
+    "kpis": {
+      "recipients": "पाने वाले",
+      "recentVideos": "हाल के वीडियो",
+      "issued": "जारी किया"
+    },
+    "issuedBy": "<creatorLink>@{{creator}}</creatorLink> द्वारा जारी",
+    "notFoundTitle": "बैज नहीं मिला",
+    "notFoundBody": "@{{account}} नाम का कोई Hive अकाउंट अभी पढ़ा नहीं जा सका।",
+    "browseAll": "सभी बैज देखें",
+    "tabs": {
+      "videos": "वीडियो",
+      "recipients": "पाने वाले",
+      "recipientsWithCount": "पाने वाले ({{num}})"
+    },
+    "errorVideos": "वीडियो लाने में त्रुटि",
+    "noVideosTitle": "अभी कोई वीडियो नहीं",
+    "noHolders": "यह बैज अभी किसी के पास नहीं है।",
+    "noHolderVideos": "इस बैज वाले किसी भी व्यक्ति ने अभी तक 3Speak पर वीडियो पब्लिश नहीं किया है।",
+    "loadingMore": "और लोड हो रहा है...",
+    "recipientsError": "पाने वालों की लिस्ट लोड नहीं हो सकी",
+    "recipientsLoading": "पाने वालों की लिस्ट लोड हो रही है...",
+    "noRecipientsTitle": "अभी कोई पाने वाला नहीं",
+    "noRecipientsBody": "अब तक यह बैज किसी को नहीं दिया गया है।",
+    "recipientsSummary_one": "{{num}} पाने वाला",
+    "recipientsSummary_other": "{{num}} पाने वाले",
+    "recipientsSummaryWithVideos_one": "{{num}} पाने वाला, {{publishing}} 3Speak पर पब्लिश कर रहे हैं",
+    "recipientsSummaryWithVideos_other": "{{num}} पाने वाले, {{publishing}} 3Speak पर पब्लिश कर रहे हैं",
+    "recipientVideos_one": "{{num}} वीडियो",
+    "recipientVideos_other": "{{num}} वीडियो",
+    "recipientNoVideos": "कोई वीडियो नहीं"
+  },
+  "directory": {
+    "title": "बैज",
+    "intro": "बैज वे सम्मान हैं जो Hive पर <b>दूसरे लोग आपको देते हैं</b>, इवेंट, योगदान और उपलब्धियों के लिए। आप खुद इनमें शामिल नहीं हो सकते: कोई और इसे आपको देता है। कोई बैज खोलें और देखें कि उसे पाने वाले यहाँ क्या पब्लिश करते हैं।",
+    "searchPlaceholder": "बैज खोजें...",
+    "sort": {
+      "recipients": "पाने वाले",
+      "created": "बनाया गया",
+      "name": "नाम"
+    },
+    "createLocked": "बैज बनाने के लिए Hive अकाउंट चाहिए। आपका अकाउंट तैयार होते ही यह खुल जाएगा।",
+    "create": "बैज बनाएँ",
+    "loadError": "अभी बैज लोड नहीं हो सके।",
+    "noMatch": "इस सर्च से कोई बैज मेल नहीं खाता।",
+    "held": "आपके पास है",
+    "recipients_one": "{{num}} पाने वाला",
+    "recipients_other": "{{num}} पाने वाले"
+  },
+  "award": {
+    "success": "@{{username}} के पास अब {{title}} है",
+    "failed": "वह बैज नहीं दिया जा सका",
+    "dialogLabel": "{{username}} को बैज दें",
+    "title": "बैज दें",
+    "toUser": "@{{username}} को",
+    "awarding": "दिया जा रहा है…",
+    "held": "पहले से है",
+    "award": "दें",
+    "note": "बैज अकाउंट उन्हें Hive पर फ़ॉलो करता है, और बैज होने का यही मतलब है। आप बैज के अपने पेज से इसे वापस ले सकते हैं।"
+  },
+  "hive": {
+    "dragToReorder": "क्रम बदलने के लिए खींचें",
+    "orderSaved": "बैज का क्रम आपकी Hive प्रोफ़ाइल में सेव हो गया",
+    "orderSaveFailed": "आपके बैज का क्रम सेव नहीं हो सका",
+    "dialogLabel": "@{{username}} के बैज",
+    "title": "बैज",
+    "arrangeHint": "अपने बैज को उस क्रम में खींचें जिसमें आप उन्हें दिखाना चाहते हैं।",
+    "earnedCount_one": "@{{username}} ने Hive पर {{count}} बैज कमाया",
+    "earnedCount_other": "@{{username}} ने Hive पर {{count}} बैज कमाए",
+    "alwaysFirst": "हमेशा सबसे पहले दिखता है",
+    "saveOrder": "क्रम सेव करें",
+    "arrange": "क्रम बदलें",
+    "arrangeTitle": "चुनें कि आपके बैज किस क्रम में दिखें",
+    "showAll_one": "सभी {{count}} बैज दिखाएँ",
+    "showAll_other": "सभी {{count}} बैज दिखाएँ",
+    "awardTitle": "अपना कोई बैज @{{username}} को दें"
+  },
+  "leaderboardBadges": {
+    "proTitle": "यह क्रिएटर Pro सब्सक्रिप्शन से 3Speak को सपोर्ट करता है"
+  },
+  "leaderboard": {
+    "watchNotice": "वॉच टाइम सिर्फ़ {{since}} से ट्रैक हो रहा है, इसलिए लंबी अवधि में भी वही छोटी हिस्ट्री दिखती है।",
+    "unclaimed": "क्लेम नहीं हुआ",
+    "noActivity": "इस अवधि में अभी कोई एक्टिविटी नहीं",
+    "otherTopics": "अन्य",
+    "title": "रैंकिंग",
+    "subtitle": "{{blurb}} — 3Speak के टॉप क्रिएटर्स।",
+    "subtitleTopic": "{{blurb}} — {{topic}} के टॉप क्रिएटर्स।",
+    "allTopics": "सभी विषय",
+    "finding": "इस बोर्ड पर @{{user}} को ढूँढ रहे हैं…",
+    "notInTop": "@{{user}} इस बोर्ड के टॉप {{n}} में नहीं है।",
+    "loading": "लीडरबोर्ड लोड हो रहा है…",
+    "loadError": "लीडरबोर्ड लोड नहीं हो सका। थोड़ी देर में फिर से कोशिश करें।",
+    "empty": "इस अवधि में अभी किसी के पास कोई {{metric}} नहीं है।"
+  }
+}

@@ -12,6 +12,8 @@ import { useAppStore } from '../../lib/store';
 import {
   fetchBackfillItems, publishBackfill, rootPostWaitMs, claimAssetsOnce
 } from '../../lib/incubation';
+import { useTranslation, Trans } from 'react-i18next';
+import { formatDate } from '../../i18n';
 import './BackfillTable.scss';
 
 const toast = toastIn('Publish to Hive');
@@ -29,9 +31,9 @@ function isRcError(detail) {
 }
 
 /** The same failure, said to a person. */
-function friendlyError(detail) {
+function friendlyError(detail, t) {
   if (isRcError(detail)) {
-    return 'Not enough resource credits yet. They refill on their own; try again shortly.';
+    return t('incubation.backfill.rcError');
   }
   return detail;
 }
@@ -55,15 +57,15 @@ function previewHref(item, username) {
 const MODE_KEY = 'backfill_group_mode';
 
 /** "Today" / "Yesterday" / "4 September 2026" for a YYYY-MM-DD key. */
-function dayLabel(key) {
+function dayLabel(key, t) {
   const d = new Date(`${key}T00:00:00`);
   if (Number.isNaN(d.getTime())) return key;
   const today = new Date();
   const startOfDay = (x) => new Date(x.getFullYear(), x.getMonth(), x.getDate()).getTime();
   const diffDays = Math.round((startOfDay(today) - startOfDay(d)) / 86400000);
-  if (diffDays === 0) return 'Today';
-  if (diffDays === 1) return 'Yesterday';
-  return d.toLocaleDateString(undefined, { day: 'numeric', month: 'long', year: 'numeric' });
+  if (diffDays === 0) return t('incubation.backfill.today');
+  if (diffDays === 1) return t('incubation.backfill.yesterday');
+  return formatDate(d, { day: 'numeric', month: 'long', year: 'numeric' });
 }
 
 /**
@@ -81,25 +83,25 @@ function dayLabel(key) {
  * container, so anything keying off `kind` files shorts under comments.
  */
 const GROUPS = [
-  { id: 'video', title: 'Videos', Icon: FaFilm, match: i => i.contentType === 'video',
-    note: 'One every 5 minutes — this is the slow part.' },
-  { id: 'short', title: 'Shorts', Icon: FaBolt, match: i => i.contentType === 'short' },
-  { id: 'comment', title: 'Comments', Icon: FaRegCommentDots, match: i => i.contentType === 'comment' },
-  { id: 'vote', title: 'Likes', Icon: FaThumbsUp, match: i => i.type === 'vote' },
-  { id: 'follow', title: 'Follows', Icon: FaUserPlus, match: i => i.type === 'follow' },
+  { id: 'video', titleKey: 'incubation.backfill.groups.video', Icon: FaFilm, match: i => i.contentType === 'video',
+    noteKey: 'incubation.backfill.groups.videoNote' },
+  { id: 'short', titleKey: 'incubation.backfill.groups.short', Icon: FaBolt, match: i => i.contentType === 'short' },
+  { id: 'comment', titleKey: 'incubation.backfill.groups.comment', Icon: FaRegCommentDots, match: i => i.contentType === 'comment' },
+  { id: 'vote', titleKey: 'incubation.backfill.groups.vote', Icon: FaThumbsUp, match: i => i.type === 'vote' },
+  { id: 'follow', titleKey: 'incubation.backfill.groups.follow', Icon: FaUserPlus, match: i => i.type === 'follow' },
 ];
 
-const STATUS_TEXT = {
-  done: 'Published',
-  publishing: 'Publishing…',
-  error: 'Failed',
-  idle: 'On 3Speak only',
+const STATUS_KEY = {
+  done: 'incubation.backfill.status.done',
+  publishing: 'incubation.backfill.status.publishing',
+  error: 'incubation.backfill.status.error',
+  idle: 'incubation.backfill.status.idle',
 };
 
-function fmtWait(ms) {
+function fmtWait(ms, t) {
   const s = Math.ceil(ms / 1000);
   const m = Math.floor(s / 60);
-  return m > 0 ? `${m}m ${s % 60}s` : `${s}s`;
+  return m > 0 ? t('incubation.backfill.wait.ms', { m, s: s % 60 }) : t('incubation.backfill.wait.s', { s });
 }
 
 /**
@@ -113,6 +115,7 @@ function fmtWait(ms) {
  * button.
  */
 export default function BackfillTable() {
+  const { t } = useTranslation();
   const user = useAppStore((s) => s.user);
 
   const [state, setState] = useState('loading'); // loading | ready | empty | error
@@ -199,7 +202,7 @@ export default function BackfillTable() {
       return { ...g, rows };
     }).filter(g => g.rows.length > 0);
     const rest = items.filter(i => !seen.has(i.id));
-    if (rest.length) out.push({ id: 'other', title: 'Everything else', Icon: FaCheck, rows: rest });
+    if (rest.length) out.push({ id: 'other', titleKey: 'incubation.backfill.groups.other', Icon: FaCheck, rows: rest });
     return out;
   }, [items]);
 
@@ -226,11 +229,11 @@ export default function BackfillTable() {
     ));
     return keys.map(key => ({
       id: key,
-      title: key === 'unknown' ? 'No date' : dayLabel(key),
+      title: key === 'unknown' ? t('incubation.backfill.noDate') : dayLabel(key, t),
       Icon: FaRegClock,
       rows: buckets.get(key).sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt)),
     }));
-  }, [items]);
+  }, [items, t]);
 
   const grouped = mode === 'day' ? byDay : byType;
 
@@ -259,7 +262,7 @@ export default function BackfillTable() {
       setStatus(prev => ({ ...prev, [item.id]: s }));
       if (s === 'done') { published += 1; setWait(rootPostWaitMs()); }
       if (s === 'error') {
-        setErrors(prev => ({ ...prev, [item.id]: friendlyError(detail) }));
+        setErrors(prev => ({ ...prev, [item.id]: friendlyError(detail, t) }));
         // A refusal for RC is not a per-item problem: everything after it will
         // fail the same way, so re-read and let the banner explain.
         if (isRcError(detail)) refreshRc();
@@ -267,13 +270,13 @@ export default function BackfillTable() {
       if (s === 'waiting') {
         setWait(detail);
         setStatus(prev => ({ ...prev, [item.id]: undefined }));
-        toast.info(`Hive allows one post every 5 minutes. Next one in ${fmtWait(detail)}.`);
+        toast.info(t('incubation.backfill.waitToast', { wait: fmtWait(detail, t) }));
       }
     });
     setRunning(false);
     refreshRc();
     if (published) {
-      toast.success(published === 1 ? 'Published to Hive' : `Published ${published} items to Hive`);
+      toast.success(t('incubation.backfill.publishedToast', { count: published }));
       setSelected(new Set());
     }
   }
@@ -285,7 +288,7 @@ export default function BackfillTable() {
     return (
       <div className="backfill backfill-state">
         <BarLoader />
-        <p className="desc">Loading your posts…</p>
+        <p className="desc">{t('incubation.backfill.loading')}</p>
       </div>
     );
   }
@@ -305,10 +308,9 @@ export default function BackfillTable() {
             <FaCheck />
           </span>
           <div className="backfill-hero-text">
-          <h2>Nothing left to publish</h2>
+          <h2>{t('incubation.backfill.emptyTitle')}</h2>
           <p className="desc">
-            Everything you made before you had a Hive account has either been published
-            or was not something that can be republished.
+            {t('incubation.backfill.emptyText')}
           </p>
           </div>
         </header>
@@ -325,11 +327,9 @@ export default function BackfillTable() {
           <FaCloudUploadAlt />
         </span>
         <div className="backfill-hero-text">
-        <h2>Publish what you made earlier</h2>
+        <h2>{t('incubation.backfill.title')}</h2>
         <p className="desc">
-          You made these on 3Speak before you had a Hive account, so they only exist here.
-          Pick what you want on your public record as <strong>@{user}</strong> and publish it.
-          Anything you leave stays on 3Speak exactly as it is.
+          <Trans i18nKey="incubation.backfill.intro" values={{ user }} components={{ b: <strong /> }} />
         </p>
         </div>
       </header>
@@ -337,15 +337,12 @@ export default function BackfillTable() {
       {/* The cost, stated before they click rather than discovered as errors.
           Both limits are consensus rules, not our policy. */}
       <div className="backfill-note">
-        <strong>Publishing takes a while, and that is normal.</strong> Hive allows one
-        post every 5 minutes per account, and a brand new account has a small posting
-        allowance that refills over a few days. Follows, likes and your profile are cheap
-        and go through quickly. Publish a few at a time and come back.
+        <Trans i18nKey="incubation.backfill.note" components={{ b: <strong /> }} />
       </div>
 
       {/* Sticky: the list is long enough to scroll past, and the count and the
           publish button are what the reader is scrolling in service of. */}
-      <div className="backfill-modes" role="tablist" aria-label="Group the list by">
+      <div className="backfill-modes" role="tablist" aria-label={t('incubation.backfill.groupBy')}>
         <button
           type="button"
           role="tab"
@@ -353,7 +350,7 @@ export default function BackfillTable() {
           className={`backfill-mode${mode === 'day' ? ' is-on' : ''}`}
           onClick={() => chooseMode('day')}
         >
-          <FaRegClock aria-hidden="true" /> Timeline
+          <FaRegClock aria-hidden="true" /> {t('incubation.backfill.timeline')}
         </button>
         <button
           type="button"
@@ -362,30 +359,28 @@ export default function BackfillTable() {
           className={`backfill-mode${mode === 'type' ? ' is-on' : ''}`}
           onClick={() => chooseMode('type')}
         >
-          <FaLayerGroup aria-hidden="true" /> By type
+          <FaLayerGroup aria-hidden="true" /> {t('incubation.backfill.byType')}
         </button>
       </div>
 
       {rcBlocked ? (
         <div className="backfill-rc">
-          <strong>Your account is out of resource credits for the moment.</strong>
-          {' '}Hive gives every account a small allowance for posting, and it refills
-          on its own. Nothing is lost: come back
-          {rcWait ? ` in about ${rcWait}` : ' a little later'} and carry on where you
-          left off.
+          {rcWait
+            ? <Trans i18nKey="incubation.backfill.rcBlockedIn" values={{ wait: rcWait }} components={{ b: <strong /> }} />
+            : <Trans i18nKey="incubation.backfill.rcBlockedLater" components={{ b: <strong /> }} />}
         </div>
       ) : (
       <div className="backfill-bar">
         <div className="backfill-bar-count">
-          <strong>{chosen.length}</strong> selected
+          <Trans i18nKey="incubation.backfill.selected" values={{ count: chosen.length }} components={{ b: <strong /> }} />
           {chosenRootPosts > 1 && (
             <span className="backfill-bar-sub">
-              {chosenRootPosts} videos, so this needs about {chosenRootPosts * 5} minutes
+              {t('incubation.backfill.rootPostsTime', { count: chosenRootPosts, minutes: chosenRootPosts * 5 })}
             </span>
           )}
           {wait > 0 && (
             <span className="backfill-bar-sub">
-              Next video can go out in {fmtWait(wait)}. Follows, likes and profile are not affected.
+              {t('incubation.backfill.nextVideo', { wait: fmtWait(wait, t) })}
             </span>
           )}
         </div>
@@ -396,7 +391,7 @@ export default function BackfillTable() {
             onClick={() => setSelected(new Set(pending.map(i => i.id)))}
             disabled={running}
           >
-            Select all
+            {t('incubation.backfill.selectAll')}
           </button>
           <button
             type="button"
@@ -404,7 +399,7 @@ export default function BackfillTable() {
             onClick={() => setSelected(new Set())}
             disabled={running || !selected.size}
           >
-            Clear
+            {t('incubation.backfill.clear')}
           </button>
           <button
             type="button"
@@ -412,7 +407,7 @@ export default function BackfillTable() {
             onClick={run}
             disabled={running || !chosen.length}
           >
-            {running ? 'Publishing…' : 'Publish selected'}
+            {running ? t('incubation.backfill.status.publishing') : t('incubation.backfill.publishSelected')}
           </button>
         </div>
       </div>
@@ -425,9 +420,9 @@ export default function BackfillTable() {
           <section key={group.id} className="backfill-group">
             <header className="backfill-group-head">
               <group.Icon aria-hidden="true" />
-              <h3>{group.title}</h3>
+              <h3>{group.titleKey ? t(group.titleKey) : group.title}</h3>
               <span className="backfill-group-count">{group.rows.length}</span>
-              {group.note && <span className="backfill-group-note">{group.note}</span>}
+              {group.noteKey && <span className="backfill-group-note">{t(group.noteKey)}</span>}
               {selectable.length > 0 && (
                 <button
                   type="button"
@@ -435,7 +430,7 @@ export default function BackfillTable() {
                   onClick={() => setGroup(selectable, !allOn)}
                   disabled={running}
                 >
-                  {allOn ? 'Clear' : 'Select all'}
+                  {allOn ? t('incubation.backfill.clear') : t('incubation.backfill.selectAll')}
                 </button>
               )}
             </header>
@@ -453,7 +448,7 @@ export default function BackfillTable() {
                         checked={selected.has(item.id)}
                         onChange={() => toggle(item.id)}
                         disabled={running || done}
-                        aria-label={`Select ${item.label}`}
+                        aria-label={t('incubation.backfill.selectItem', { label: item.label })}
                       />
                       {/* A face beats another line of "Follow @name": the
                           decision is about a person, and people are recognised
@@ -495,7 +490,7 @@ export default function BackfillTable() {
                         )}
                         <span className="backfill-row-meta">
                           {item.createdAt ? new Date(item.createdAt).toLocaleDateString() : '—'}
-                          {item.isRootPost && <span className="backfill-tag">5 min</span>}
+                          {item.isRootPost && <span className="backfill-tag">{t('incubation.backfill.fiveMin')}</span>}
                         </span>
                         {errors[item.id] && (
                           <span className="backfill-row-error">{errors[item.id]}</span>
@@ -503,7 +498,7 @@ export default function BackfillTable() {
                       </span>
                       <span className={`backfill-status is-${st}`}>
                         {done && <FaCheck aria-hidden="true" />}
-                        {STATUS_TEXT[st]}
+                        {t(STATUS_KEY[st])}
                       </span>
                     </label>
                   </li>
@@ -526,20 +521,20 @@ export default function BackfillTable() {
    whose parent is not there. Listing them as "not coming across" would be a
    lie; leaving them out entirely would look like data loss. */
 function Waiting({ waiting }) {
+  const { t } = useTranslation();
   return (
     <div className="backfill-excluded">
-      <h3>Waiting on someone else</h3>
+      <h3>{t('incubation.backfill.waitingTitle')}</h3>
       <p className="desc">
-        These publish by themselves once the post they point at goes up on Hive.
-        Nothing is lost in the meantime.
+        {t('incubation.backfill.waitingText')}
       </p>
       <ul>
         {waiting.slice(0, 10).map(w => (
           <li key={w.id}>
-            <strong>{w.label}</strong>{' — waiting for '}{w.waitingFor}
+            <Trans i18nKey="incubation.backfill.waitingFor" values={{ label: w.label, target: w.waitingFor }} components={{ b: <strong /> }} />
           </li>
         ))}
-        {waiting.length > 10 && <li>and {waiting.length - 10} more</li>}
+        {waiting.length > 10 && <li>{t('incubation.backfill.andMore', { count: waiting.length - 10 })}</li>}
       </ul>
     </div>
   );
@@ -548,13 +543,14 @@ function Waiting({ waiting }) {
 /* Said out loud rather than left as an absence. Someone who cast 40 likes will
    notice they are gone and should not have to guess why. */
 function Excluded({ excluded }) {
+  const { t } = useTranslation();
   return (
     <div className="backfill-excluded">
-      <h3>Not coming across</h3>
+      <h3>{t('incubation.backfill.excludedTitle')}</h3>
       <ul>
         {excluded.map(e => (
           <li key={e.type}>
-            <strong>{e.count} {e.type === 'vote' ? (e.count === 1 ? 'like' : 'likes') : e.type}</strong>
+            <strong>{e.type === 'vote' ? t('incubation.graduation.items.like', { count: e.count }) : `${e.count} ${e.type}`}</strong>
             {' — '}{e.reason}
           </li>
         ))}

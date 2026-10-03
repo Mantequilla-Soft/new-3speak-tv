@@ -7,6 +7,7 @@ import { setResolvedAvatar } from '../../utils/avatarCache';
 import { useImageLuminance } from '../../utils/imageLuminance';
 import defaultCover from '../../assets/image/default-cover.svg';
 import { hiveProxyRefuses } from '../../utils/fixThumbnails';
+import { useTranslation } from 'react-i18next';
 import './ProfileHeader.scss';
 
 /**
@@ -51,6 +52,7 @@ export default function ProfileHeader({
   avatarUrl,
   coverUrl: coverUrlProp,
 }) {
+  const { t } = useTranslation();
   const [hiveBio, setHiveBio] = useState('');
   const [hiveName, setHiveName] = useState('');
   const [hiveLocation, setHiveLocation] = useState('');
@@ -188,7 +190,7 @@ export default function ProfileHeader({
               {...(avatarClickable ? {
                 role: 'button',
                 tabIndex: 0,
-                title: 'Edit your profile',
+                title: t('profile.header.editProfile'),
                 onClick: onAvatarClick,
                 onKeyDown: (e) => {
                   if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onAvatarClick(); }
@@ -198,7 +200,7 @@ export default function ProfileHeader({
               <HiveAvatar
                 username={username}
                 size={null}
-                alt={`${heading} avatar`}
+                alt={t('profile.header.avatarAlt', { name: heading })}
                 badgeSize={avatarBadgeSize}
                 srcOverride={avatarUrl}
               />
@@ -217,7 +219,7 @@ export default function ProfileHeader({
               {bioText ? <p className="profile-bio">{bioText}</p> : null}
               {locationText ? (
                 <p className="profile-location">
-                  <span className="profile-location-label">Location:</span> {locationText}
+                  <span className="profile-location-label">{t('profile.header.location')}</span> {locationText}
                 </p>
               ) : null}
               {meta}

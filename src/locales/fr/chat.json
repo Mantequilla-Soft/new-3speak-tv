@@ -1,0 +1,148 @@
+{
+  "button": {
+    "label": "Chat"
+  },
+  "tools": {
+    "emoji": "Emoji",
+    "searchEmoji": "Rechercher un emoji",
+    "searchGifs": "Rechercher des GIF…",
+    "noGifs": "Aucun GIF trouvé.",
+    "poweredByGiphy": "Propulsé par GIPHY"
+  },
+  "lightbox": {
+    "openInNewTab": "Ouvrir l'image dans un nouvel onglet"
+  },
+  "linkCard": {
+    "loadingPreview": "Chargement de l'aperçu…",
+    "community": "Communauté",
+    "communityWithSubscribers_one": "Communauté · {{formatted}} membre",
+    "communityWithSubscribers_other": "Communauté · {{formatted}} membres",
+    "commentFallback": "(commentaire)",
+    "play": "Lire {{title}}",
+    "communityWithSubscribers_many": "Communauté · {{formatted}} membres"
+  },
+  "share": {
+    "embedCopied": "Code d'intégration copié",
+    "pressToCopy": "Appuyez sur Ctrl/Cmd + C pour copier le code sélectionné",
+    "embedTitle": "Intégrer cette vidéo",
+    "embedHint": "Collez ceci dans n'importe quel site ou article de blog.",
+    "embedSize": "Taille d'intégration",
+    "embedCode": "Code d'intégration",
+    "copyEmbed": "Copier le code d'intégration",
+    "responsiveSub": "S'adapte à la page qui l'accueille",
+    "fixedSub": "Iframe de taille fixe",
+    "sendInChat": "Envoyer dans le chat 3Speak",
+    "sendInChatSub": "Envoyez-la à quelqu'un sur 3Speak",
+    "embedOnWebsite": "Intégrer sur un site",
+    "embedOnWebsiteSub": "Copiez le HTML pour votre site ou blog",
+    "generalShare": "Partager / copier le lien",
+    "generalShareSub": "Autres apps, ou copier le lien"
+  },
+  "gate": {
+    "connectTitle": "Se connecter au chat 3Speak",
+    "connectBody": "Le chat est propulsé par Snapie. La connexion signe un défi de connexion unique avec votre clé de publication Hive — aucune transaction, aucun coût.",
+    "connecting": "Connexion…",
+    "connectButton": "Connecter le chat",
+    "cannotSign": "Votre connexion actuelle ne peut pas signer le défi du chat. Utilisez Keychain, HiveAuth, PeakVault ou Ledger.",
+    "needsAccountTitle": "Le chat nécessite un compte Hive",
+    "needsAccountBody": "Les messages sont signés avec les clés de votre propre compte : le chat se débloque donc avec tout le reste une fois votre compte prêt. Remplissez les objectifs de votre profil et l'équipe s'occupera du reste.",
+    "loginTitle": "Connectez-vous pour utiliser le chat",
+    "loginBody": "Connectez-vous avec votre compte Hive pour envoyer et recevoir des messages.",
+    "connectingToChat": "Connexion au chat…"
+  },
+  "errors": {
+    "notHiveAccount": "@{{user}} n'est pas un compte Hive.",
+    "openConversation": "Impossible d'ouvrir cette conversation.",
+    "verifyAccount": "Impossible de vérifier ce compte.",
+    "createRoom": "Impossible de créer le salon.",
+    "joinChannel": "Impossible de rejoindre ce canal."
+  },
+  "newDm": {
+    "placeholder": "Écrire à un utilisateur Hive…",
+    "start": "Démarrer le chat"
+  },
+  "newRoom": {
+    "toggle": "Nouveau salon privé",
+    "namePlaceholder": "Nom du salon…",
+    "removeMember": "Retirer @{{user}}",
+    "addMore": "Ajouter…",
+    "invitePlaceholder": "Inviter des utilisateurs Hive (facultatif)…",
+    "create": "Créer"
+  },
+  "channels": {
+    "browse": "Parcourir les canaux",
+    "publicTitle": "Canaux publics",
+    "closeBrowser": "Fermer la liste des canaux",
+    "loading": "Chargement des canaux…",
+    "empty": "Aucun canal disponible.",
+    "join": "Rejoindre"
+  },
+  "markRead": {
+    "nothingToClear": "Aucune conversation à effacer. Le compteur est peut-être bloqué côté serveur.",
+    "requestFailed": "échec de la requête",
+    "allCaughtUp": "Vous êtes à jour",
+    "stillUnread_one": "Encore {{total}} non lus après avoir effacé {{count}} chat.",
+    "stillUnread_other": "Encore {{total}} non lus après avoir effacé {{count}} chats.",
+    "stillUnreadNoMatch_one": "Encore {{total}} non lus après avoir effacé {{count}} chat. Le serveur indique un compteur mais aucune conversation correspondante.",
+    "stillUnreadNoMatch_other": "Encore {{total}} non lus après avoir effacé {{count}} chats. Le serveur indique un compteur mais aucune conversation correspondante.",
+    "notSignedIn": "Le chat n'est pas connecté. Reconnectez le chat et réessayez.",
+    "sessionExpired": "La session de chat a expiré pendant l'effacement. Reconnectez le chat et réessayez.",
+    "serverRejectedVisible_one": "Le serveur a rejeté la requête ({{count}}) (identifiants de la liste visible)",
+    "serverRejectedVisible_other": "Le serveur a rejeté les {{count}} requêtes (identifiants de la liste visible)",
+    "serverRejectedServerMap_one": "Le serveur a rejeté la requête ({{count}}) (identifiants de sa propre liste de non-lus)",
+    "serverRejectedServerMap_other": "Le serveur a rejeté les {{count}} requêtes (identifiants de sa propre liste de non-lus)",
+    "failed": "Impossible de tout marquer comme lu",
+    "marking": "Marquage comme lu…",
+    "button": "Tout marquer comme lu",
+    "buttonCount": "Tout marquer comme lu ({{count}})",
+    "stillUnread_many": "Encore {{total}} non lus après avoir effacé {{count}} chats.",
+    "stillUnreadNoMatch_many": "Encore {{total}} non lus après avoir effacé {{count}} chats. Le serveur indique un compteur mais aucune conversation correspondante.",
+    "serverRejectedVisible_many": "Le serveur a rejeté les {{count}} requêtes (identifiants de la liste visible)",
+    "serverRejectedServerMap_many": "Le serveur a rejeté les {{count}} requêtes (identifiants de sa propre liste de non-lus)"
+  },
+  "list": {
+    "chooseTarget": "Choisissez un chat de destination",
+    "loading": "Chargement des conversations…",
+    "empty": "Aucune conversation pour l'instant. Lancez-en une ci-dessus en saisissant un nom d'utilisateur Hive."
+  },
+  "leave": {
+    "confirmRoom": "Quitter ce salon ?",
+    "confirmChannel": "Quitter ce canal ?",
+    "errorRoom": "Impossible de quitter le salon.",
+    "errorChannel": "Impossible de quitter le canal.",
+    "titleRoom": "Quitter le salon",
+    "titleChannel": "Quitter le canal",
+    "button": "Quitter"
+  },
+  "thread": {
+    "editError": "Impossible de modifier le message.",
+    "deleteConfirm": "Supprimer ce message ? Il sera remplacé par « [supprimé] ».",
+    "deleteError": "Impossible de supprimer le message.",
+    "back": "Retour aux conversations",
+    "loading": "Chargement des messages…",
+    "empty": "Aucun message pour l'instant — dites bonjour 👋",
+    "editedSuffix": " · modifié",
+    "messageActions": "Actions du message",
+    "quote": "Citer",
+    "forward": "Transférer",
+    "typing_one": "{{users}} est en train d'écrire…",
+    "typing_other": "{{users}} sont en train d'écrire…",
+    "editing": "Modification du message",
+    "cancelEdit": "Annuler la modification",
+    "quoting": "Citation de @{{user}}",
+    "cancelQuote": "Annuler la citation",
+    "removeImage": "Retirer l'image",
+    "placeholder": "Écrivez un message…",
+    "typing_many": "{{users}} sont en train d'écrire…"
+  },
+  "page": {
+    "chooseTarget": "Choisissez un chat de destination.",
+    "selectConversation": "Sélectionnez une conversation, ou lancez-en une nouvelle."
+  },
+  "overlay": {
+    "fullscreen": "Plein écran",
+    "exitFullscreen": "Quitter le plein écran",
+    "close": "Fermer le chat",
+    "sendInChat": "Envoyer dans le chat"
+  }
+}

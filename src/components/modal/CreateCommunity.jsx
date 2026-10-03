@@ -12,6 +12,8 @@ import "./CreateCommunity.scss"
 import { MdOutlineContentCopy } from "react-icons/md";
 import { FaDownload, FaCheck } from "react-icons/fa";
 import { toastIn } from '../../utils/toast';
+import { useTranslation, Trans } from 'react-i18next';
+import { getLanguage } from '../../i18n';
 
 // Every toast from this module is headed "Community"; the message becomes the
 // line under it. See utils/toast.js.
@@ -33,9 +35,8 @@ const CreateCommunity = ({ isOpen, close, kind = 'community'}) => {
   // `badge-<digits>` instead of `hive-1<digits>`, and it is not registered as a
   // community afterwards. Duplicating 400 lines to change a prefix and a noun
   // would have been two flows to keep in step.
+  const { t } = useTranslation();
   const isBadge = kind === 'badge';
-  const noun = isBadge ? 'badge' : 'community';
-  const Noun = isBadge ? 'Badge' : 'Community';
 
   const [communityTitle, setCommunityTitle] = useState("");
   const [aboutCommunity, setAboutCommunity] = useState("");
@@ -81,7 +82,7 @@ const CreateCommunity = ({ isOpen, close, kind = 'community'}) => {
       const keys = getPrivateKeys(communityName, password);
       setCommunityKeys(keys);
     } catch (error) {
-      toast.error("Failed to generate community info");
+      toast.error(t('communities.create.errors.generateInfo'));
     }
   };
 
@@ -92,11 +93,11 @@ const CreateCommunity = ({ isOpen, close, kind = 'community'}) => {
     e.target.value = "";
     if (!file) return;
     if (!file.type.startsWith("image/")) {
-      toast.error("Please choose an image file");
+      toast.error(t('communities.create.errors.notImage'));
       return;
     }
     if (file.size > 8 * 1024 * 1024) {
-      toast.error("That image is over 8MB, please pick a smaller one");
+      toast.error(t('communities.create.errors.imageTooBig'));
       return;
     }
     setUploading(which);
@@ -104,7 +105,7 @@ const CreateCommunity = ({ isOpen, close, kind = 'community'}) => {
       const url = await uploadThumbnail(file, user, { preferStatic: true });
       if (which === "avatar") setAvatar(url); else setBanner(url);
     } catch (err) {
-      toast.error(err?.message || "Could not upload that image");
+      toast.error(err?.message || t('communities.create.errors.uploadFailed'));
     } finally {
       setUploading("");
     }
@@ -131,7 +132,7 @@ const CreateCommunity = ({ isOpen, close, kind = 'community'}) => {
     } catch (err) {
       // The account exists and is paid for; only its decoration failed.
       console.error("Could not write the new account's profile:", err);
-      toast.error(`Created, but the ${noun} profile could not be saved. You can set it later.`);
+      toast.error(isBadge ? t('communities.create.badge.profileSaveFailed') : t('communities.create.community.profileSaveFailed'));
     }
   };
 
@@ -141,20 +142,18 @@ const CreateCommunity = ({ isOpen, close, kind = 'community'}) => {
   // actually thinking about how it should look.
   const missingFields = () => {
     const missing = [];
-    if (!communityTitle.trim()) missing.push('a name');
-    if (!aboutCommunity.trim()) missing.push('a description');
-    if (!avatar) missing.push('a picture');
+    if (!communityTitle.trim()) missing.push(t('communities.create.missing.name'));
+    if (!aboutCommunity.trim()) missing.push(t('communities.create.missing.description'));
+    if (!avatar) missing.push(t('communities.create.missing.picture'));
     return missing;
   };
 
   const handleCommuntiyInfo = () => {
     const missing = missingFields();
     if (missing.length) {
-      const list = missing.length === 1
-        ? missing[0]
-        : `${missing.slice(0, -1).join(', ')} and ${missing[missing.length - 1]}`;
-      setError(`Please add ${list}`);
-      toast.error(`Please add ${list}`);
+      const list = new Intl.ListFormat(getLanguage(), { type: 'conjunction' }).format(missing);
+      setError(t('communities.create.errors.pleaseAdd', { list }));
+      toast.error(t('communities.create.errors.pleaseAdd', { list }));
       return;
     }
     setError("");
@@ -163,8 +162,8 @@ const CreateCommunity = ({ isOpen, close, kind = 'community'}) => {
 
   const handleCreateCommuntiyWithKey = async () => {
     if (!aboutCommunity || !communityTitle) {
-      setError("Please fill in the required fields");
-      toast.error("Please fill in the required fields");
+      setError(t('communities.create.errors.requiredFields'));
+      toast.error(t('communities.create.errors.requiredFields'));
       return;
     }
 
@@ -175,16 +174,16 @@ const CreateCommunity = ({ isOpen, close, kind = 'community'}) => {
         setError("");
         await applyProfile();
         setStep(4);
-        toast.success(`${Noun} created successfully!`);
+        toast.success(isBadge ? t('communities.create.badge.createdSuccess') : t('communities.create.community.createdSuccess'));
       } else {
         setStep(4);
         setError(response.message);
-        toast.error(`Failed to create community: ${response.message}`);
+        toast.error(t('communities.create.errors.createFailed', { error: response.message }));
       }
     } catch (error) {
       setStep(4);
-      setError(error.message || "An error occurred");
-      toast.error(`Error: ${error.message || "An error occurred"}`);
+      setError(error.message || t('communities.create.errors.generic'));
+      toast.error(t('communities.create.errors.withMessage', { error: error.message || t('communities.create.errors.generic') }));
     } finally {
       setIsLoading(false);
     }
@@ -214,7 +213,7 @@ const CreateCommunity = ({ isOpen, close, kind = 'community'}) => {
    */
   const signWithProvider = async (provider) => {
     if (!isDownloaded) {
-      toast.error("Please download your keys before proceeding");
+      toast.error(t('communities.create.errors.downloadFirst'));
       return;
     }
     if (currentProvider === provider) {
@@ -233,23 +232,23 @@ const CreateCommunity = ({ isOpen, close, kind = 'community'}) => {
           if (isBadge) rememberCreatedBadge(user, communityName);
           else indexNewCommunity(communityName);
           setStep(4);
-          toast.success(`${Noun} created successfully!`);
+          toast.success(isBadge ? t('communities.create.badge.createdSuccess') : t('communities.create.community.createdSuccess'));
         }
       } catch (err) {
-        toast.error(err?.message || "Could not sign with Keychain");
+        toast.error(err?.message || t('communities.create.errors.keychainFailed'));
       } finally {
         setIsLoading(false);
       }
       return;
     }
-    toast.error(`Sign in with ${provider} first, or paste your key below.`);
+    toast.error(t('communities.create.errors.signInFirst', { provider }));
   };
 
   const createCommunityKc = async () => {
     setIsLoading(true);
     if (!isDownloaded) {
       setIsLoading(false);
-      toast.error("Please download your keys before proceeding");
+      toast.error(t('communities.create.errors.downloadFirst'));
       return;
     }
 
@@ -261,7 +260,7 @@ const CreateCommunity = ({ isOpen, close, kind = 'community'}) => {
         if (isBadge) rememberCreatedBadge(user, communityName);
         else indexNewCommunity(communityName);
         setStep(4);
-        toast.success(`${Noun} created successfully!`);
+        toast.success(isBadge ? t('communities.create.badge.createdSuccess') : t('communities.create.community.createdSuccess'));
         setIsLoading(false);
       }
     } catch (error) {
@@ -269,7 +268,7 @@ const CreateCommunity = ({ isOpen, close, kind = 'community'}) => {
         setStep(4);
         setIsLoading(false);
         setError(error.message);
-        toast.error(`Error: ${error.message}`);
+        toast.error(t('communities.create.errors.withMessage', { error: error.message }));
       }
     }
   };
@@ -310,7 +309,7 @@ const CreateCommunity = ({ isOpen, close, kind = 'community'}) => {
     textArea.select();
     document.execCommand("copy");
     document.body.removeChild(textArea);
-    toast.info("Password copied to clipboard");
+    toast.info(t('communities.create.passwordCopied'));
   };
 
   const downloadKeys = async () => {
@@ -351,7 +350,7 @@ const CreateCommunity = ({ isOpen, close, kind = 'community'}) => {
     element.click();
     document.body.removeChild(element);
     setIsDownloaded(true);
-    toast.success("Keys downloaded successfully. Please store them securely.");
+    toast.success(t('communities.create.keysDownloaded'));
   };
  
 
@@ -380,11 +379,9 @@ const CreateCommunity = ({ isOpen, close, kind = 'community'}) => {
             {step === 1 && (
               <div className="cc-step">
                 <header className="cc-head">
-                  <h2>{`Create a ${noun}`}</h2>
+                  <h2>{isBadge ? t('communities.create.badge.title') : t('communities.create.community.title')}</h2>
                   <p>
-                    {isBadge
-                      ? 'A badge is a Hive account you award to people. Give it a look and a name now, while you hold its keys.'
-                      : 'A community is a Hive account other people can join. Give it a look and a name now, while you hold its keys.'}
+                    {isBadge ? t('communities.create.badge.intro') : t('communities.create.community.intro')}
                   </p>
                 </header>
 
@@ -400,7 +397,7 @@ const CreateCommunity = ({ isOpen, close, kind = 'community'}) => {
                 >
                   <span className="cc-banner-action">
                     {uploading === 'banner' ? <Loader2 size={15} className="cc-spin" /> : <Camera size={15} />}
-                    {banner ? 'Change banner' : 'Add a banner'}
+                    {banner ? t('communities.create.changeBanner') : t('communities.create.addBanner')}
                   </span>
                 </button>
                 <input ref={bannerInput} type="file" accept="image/*" onChange={pickImage('banner')} hidden />
@@ -411,7 +408,7 @@ const CreateCommunity = ({ isOpen, close, kind = 'community'}) => {
                     className="cc-avatar"
                     onClick={() => avatarInput.current?.click()}
                     disabled={!!uploading}
-                    aria-label="Upload a picture"
+                    aria-label={t('communities.create.uploadPicture')}
                   >
                     {avatar ? <img src={avatar} alt="" /> : null}
                     <span className="cc-avatar-badge">
@@ -419,57 +416,55 @@ const CreateCommunity = ({ isOpen, close, kind = 'community'}) => {
                     </span>
                   </button>
                   <div className="cc-avatar-text">
-                    <strong>Picture</strong>
-                    <span>Square, 400 x 400 px or larger. Up to 8MB.</span>
+                    <strong>{t('communities.create.picture')}</strong>
+                    <span>{t('communities.create.pictureHint')}</span>
                   </div>
                   <input ref={avatarInput} type="file" accept="image/*" onChange={pickImage('avatar')} hidden />
                 </div>
 
                 <label className="cc-field">
-                  <span className="cc-label">Name</span>
+                  <span className="cc-label">{t('communities.create.name')}</span>
                   <input
                     type="text"
                     value={communityTitle}
                     maxLength={32}
-                    placeholder={isBadge ? 'Early Supporter' : 'Creators Corner'}
+                    placeholder={isBadge ? t('communities.create.badge.namePlaceholder') : t('communities.create.community.namePlaceholder')}
                     onChange={(e) => setCommunityTitle(e.target.value)}
                   />
                 </label>
 
                 <label className="cc-field">
-                  <span className="cc-label">Description</span>
+                  <span className="cc-label">{t('communities.create.description')}</span>
                   <input
                     type="text"
                     value={aboutCommunity}
                     maxLength={120}
-                    placeholder={isBadge ? 'Awarded to people who helped out early' : 'A place to share what you make and talk about it'}
+                    placeholder={isBadge ? t('communities.create.badge.descriptionPlaceholder') : t('communities.create.community.descriptionPlaceholder')}
                     onChange={(e) => setAboutCommunity(e.target.value)}
                   />
-                  <span className="cc-hint">One line. This is what shows in the directory.</span>
+                  <span className="cc-hint">{t('communities.create.descriptionHint')}</span>
                 </label>
 
                 <label className="cc-field">
-                  <span className="cc-label">Bio <em>optional</em></span>
+                  <span className="cc-label"><Trans i18nKey="communities.create.bioLabel" components={{ em: <em /> }} /></span>
                   <textarea
                     rows={4}
                     value={bio}
                     maxLength={1000}
-                    placeholder={isBadge
-                      ? 'How this badge is earned, and who awards it.'
-                      : 'What this community is for, and how people should use it.'}
+                    placeholder={isBadge ? t('communities.create.badge.bioPlaceholder') : t('communities.create.community.bioPlaceholder')}
                     onChange={(e) => setBio(e.target.value)}
                   />
                 </label>
 
                 <div className="cc-actions">
-                  <button type="button" className="cc-secondary" onClick={close}>Cancel</button>
+                  <button type="button" className="cc-secondary" onClick={close}>{t('common.actions.cancel')}</button>
                   <button
                     type="button"
                     className="cc-primary"
                     onClick={() => handleCommuntiyInfo()}
                     disabled={!!uploading}
                   >
-                    Continue
+                    {t('common.actions.continue')}
                   </button>
                 </div>
               </div>
@@ -477,29 +472,28 @@ const CreateCommunity = ({ isOpen, close, kind = 'community'}) => {
             {step === 2 && (
               <div className="cc-step">
                 <header className="cc-head">
-                  <h2>Save the keys</h2>
+                  <h2>{t('communities.create.saveKeysTitle')}</h2>
                   <p>
-                    This password is the only way into the {noun} account. It is shown
-                    once and stored nowhere, so download it before you go on.
+                    {isBadge ? t('communities.create.badge.saveKeysText') : t('communities.create.community.saveKeysText')}
                   </p>
                 </header>
 
                 <div className="cc-meta">
                   <div className="cc-meta-item">
-                    <span className="cc-label">Creator</span>
+                    <span className="cc-label">{t('communities.create.creator')}</span>
                     <span className="cc-meta-value">
-                      <img src={`https://images.hive.blog/u/${user}/avatar/small`} alt="" />
+                      <img src={`/img/u/${user}/avatar/small`} alt="" />
                       @{user}
                     </span>
                   </div>
                   <div className="cc-meta-item">
-                    <span className="cc-label">Creation fee</span>
+                    <span className="cc-label">{t('communities.create.creationFee')}</span>
                     <span className="cc-meta-value">3.000 HIVE</span>
                   </div>
                 </div>
 
                 <label className="cc-field">
-                  <span className="cc-label">{`${Noun} username`}</span>
+                  <span className="cc-label">{isBadge ? t('communities.create.badge.username') : t('communities.create.community.username')}</span>
                   <input
                     type="text"
                     value={communityName}
@@ -509,21 +503,21 @@ const CreateCommunity = ({ isOpen, close, kind = 'community'}) => {
                       #f9f9f9 are not the same green. */}
                   {check && (
                     <span className={`cc-check${check === 'Available' ? ' is-ok' : ' is-bad'}`}>
-                      {check}
+                      {check === 'Available' ? t('communities.create.available') : t('communities.create.notAvailable')}
                     </span>
                   )}
                 </label>
 
                 <div className="cc-field">
-                  <span className="cc-label">{`${Noun} password`}</span>
+                  <span className="cc-label">{isBadge ? t('communities.create.badge.password') : t('communities.create.community.password')}</span>
                   <div className="cc-copy-row">
                     <input type="text" value={communityPassword} readOnly />
                     <button
                       type="button"
                       className="cc-copy"
                       onClick={() => copyToClipboard(communityPassword)}
-                      aria-label="Copy password"
-                      title="Copy password"
+                      aria-label={t('communities.create.copyPassword')}
+                      title={t('communities.create.copyPassword')}
                     >
                       <MdOutlineContentCopy size={16} />
                     </button>
@@ -535,8 +529,7 @@ const CreateCommunity = ({ isOpen, close, kind = 'community'}) => {
                 <div className="cc-warn">
                   <TriangleAlert size={18} aria-hidden="true" />
                   <span>
-                    Copy and download this password before continuing. Nobody can
-                    recover it for you, not even 3Speak.
+                    {t('communities.create.passwordWarning')}
                   </span>
                 </div>
 
@@ -546,12 +539,12 @@ const CreateCommunity = ({ isOpen, close, kind = 'community'}) => {
                   onClick={downloadKeys}
                   disabled={!!error}
                 >
-                  <FaDownload /> Download keys
+                  <FaDownload /> {t('communities.create.downloadKeys')}
                 </button>
 
                 <div className="cc-actions">
                   <button type="button" className="cc-secondary" onClick={() => setStep(1)}>
-                    Back
+                    {t('common.actions.back')}
                   </button>
                   <button
                     type="button"
@@ -559,7 +552,7 @@ const CreateCommunity = ({ isOpen, close, kind = 'community'}) => {
                     disabled={!isDownloaded}
                     onClick={() => setStep(3)}
                   >
-                    Continue
+                    {t('common.actions.continue')}
                   </button>
                 </div>
               </div>
@@ -567,10 +560,9 @@ const CreateCommunity = ({ isOpen, close, kind = 'community'}) => {
             {step === 3 && (
               <div className="cc-step">
                 <header className="cc-head">
-                  <h2>Sign the creation</h2>
+                  <h2>{t('communities.create.signTitle')}</h2>
                   <p>
-                    Creating the account costs <strong>3.000 HIVE</strong> from @{user} and
-                    needs your <strong>active</strong> key. Pick the wallet holding it.
+                    <Trans i18nKey="communities.create.signText" values={{ user }} components={{ strong: <strong /> }} />
                   </p>
                 </header>
 
@@ -586,24 +578,24 @@ const CreateCommunity = ({ isOpen, close, kind = 'community'}) => {
                       key={prov.id}
                       className={`cc-provider${currentProvider === prov.id ? ' is-current' : ''}`}
                       disabled={isLoading || !isDownloaded || !canSignWith(prov.id)}
-                      title={canSignWith(prov.id) ? undefined : `Sign in with ${prov.label} to use it here`}
+                      title={canSignWith(prov.id) ? undefined : t('communities.create.signInToUse', { provider: prov.label })}
                       onClick={() => signWithProvider(prov.id)}
                     >
                       <span className="cc-provider-name">{prov.label}</span>
                       {currentProvider === prov.id && (
-                        <span className="cc-provider-tag">signed in</span>
+                        <span className="cc-provider-tag">{t('communities.create.signedIn')}</span>
                       )}
                       {currentProvider !== prov.id && prov.id === Providers.Keychain && hasKeychain && (
-                        <span className="cc-provider-tag">installed</span>
+                        <span className="cc-provider-tag">{t('communities.create.installed')}</span>
                       )}
                     </button>
                   ))}
                 </div>
 
-                <div className="cc-or"><span>or</span></div>
+                <div className="cc-or"><span>{t('communities.create.or')}</span></div>
 
                 <label className="cc-field">
-                  <span className="cc-label">Paste the active or owner key</span>
+                  <span className="cc-label">{t('communities.create.pasteKey')}</span>
                   <div className="cc-copy-row">
                     <input
                       type="password"
@@ -617,18 +609,17 @@ const CreateCommunity = ({ isOpen, close, kind = 'community'}) => {
                       disabled={isLoading || !selectedKey.trim()}
                       onClick={() => handleCreateCommuntiyWithKey()}
                     >
-                      Sign
+                      {t('communities.create.sign')}
                     </button>
                   </div>
                   <span className="cc-hint">
-                    Typed here it stays in this browser and is used once, for this
-                    transaction. A wallet above is safer.
+                    {t('communities.create.pasteKeyHint')}
                   </span>
                 </label>
 
                 <div className="cc-actions">
                   <button type="button" className="cc-secondary" onClick={() => setStep(2)}>
-                    Back
+                    {t('common.actions.back')}
                   </button>
                 </div>
               </div>
@@ -638,35 +629,31 @@ const CreateCommunity = ({ isOpen, close, kind = 'community'}) => {
                 <span className="cc-done-icon" aria-hidden="true"><FaCheck /></span>
                 {/* `Noun`, not the word "community": this same modal makes badges,
                     and it congratulated people on a community they had not made. */}
-                <h2>{`${Noun} created`}</h2>
+                <h2>{isBadge ? t('communities.create.badge.created') : t('communities.create.community.created')}</h2>
                 <p className="cc-done-name">@{communityName}</p>
 
                 {isBadge ? (
                   <p className="cc-done-text">
-                    You hold <strong>posting authority</strong> over this badge, so you can
-                    award it to people straight from their profile on 3Speak. No switching
-                    accounts, and no keys to dig out.
+                    <Trans i18nKey="communities.create.badge.doneText" components={{ strong: <strong /> }} />
                   </p>
                 ) : (
                   <p className="cc-done-text">
-                    You hold <strong>posting authority</strong> over this community, so you
-                    can post and moderate in it as yourself, without switching accounts.
+                    <Trans i18nKey="communities.create.community.doneText" components={{ strong: <strong /> }} />
                   </p>
                 )}
 
                 <p className="cc-done-note">
-                  Keep the password you downloaded. It is the only way back in if you ever
-                  need the account itself, and nobody can reissue it for you.
+                  {t('communities.create.doneNote')}
                 </p>
 
                 <div className="cc-actions">
-                  <button type="button" className="cc-secondary" onClick={close}>Close</button>
+                  <button type="button" className="cc-secondary" onClick={close}>{t('common.actions.close')}</button>
                   <Link
                     className="cc-primary cc-primary-link"
                     to={isBadge ? `/b/${communityName}` : `/community/${communityName}`}
                     onClick={close}
                   >
-                    {isBadge ? 'Open the badge' : 'Open the community'}
+                    {isBadge ? t('communities.create.badge.open') : t('communities.create.community.open')}
                   </Link>
                 </div>
               </div>
@@ -674,15 +661,14 @@ const CreateCommunity = ({ isOpen, close, kind = 'community'}) => {
             {step === 4 && error && (
               <div className="cc-step cc-done">
                 <span className="cc-done-icon is-bad" aria-hidden="true"><TriangleAlert /></span>
-                <h2>{`Could not create the ${noun}`}</h2>
+                <h2>{isBadge ? t('communities.create.badge.createFailed') : t('communities.create.community.createFailed')}</h2>
                 <p className="cc-done-text">
-                  Nothing was created and no fee was taken. The keys you downloaded belong
-                  to a name that does not exist, so you can discard them.
+                  {t('communities.create.failedText')}
                 </p>
                 <div className="cc-actions">
-                  <button type="button" className="cc-secondary" onClick={close}>Close</button>
+                  <button type="button" className="cc-secondary" onClick={close}>{t('common.actions.close')}</button>
                   <button type="button" className="cc-primary" onClick={() => setStep(1)}>
-                    Try again
+                    {t('common.actions.tryAgain')}
                   </button>
                 </div>
               </div>

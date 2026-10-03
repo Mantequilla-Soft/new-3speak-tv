@@ -1,0 +1,105 @@
+{
+  "controls": {
+    "rewind10": "Tua lại 10 giây",
+    "forward10": "Tua tới 10 giây",
+    "reactToMoment": "Phản ứng với khoảnh khắc này",
+    "mute": "Tắt tiếng",
+    "unmute": "Bật tiếng",
+    "playerSize": "Kích thước trình phát: {{size}}",
+    "sizeStandard": "Tiêu chuẩn",
+    "pip": "Hình trong hình",
+    "autoplayOn": "Tự động phát: bật",
+    "autoplayOff": "Tự động phát: tắt",
+    "ambientSubtle": "Ánh sáng nền: nhẹ",
+    "ambientVivid": "Ánh sáng nền: rực rỡ",
+    "ambientOff": "Ánh sáng nền: tắt",
+    "playbackSpeed": "Tốc độ phát",
+    "speedNormal": "Bình thường",
+    "quality": "Chất lượng",
+    "qualityAuto": "Tự động",
+    "fullscreen": "Toàn màn hình",
+    "exitFullscreen": "Thoát toàn màn hình",
+    "markerReplies_other": "({{count}} phản hồi)"
+  },
+  "subtitles": {
+    "title": "Phụ đề",
+    "off": "Tắt",
+    "font": "Phông chữ",
+    "size": "Cỡ chữ",
+    "textColor": "Màu chữ",
+    "textBorder": "Viền chữ",
+    "borderColor": "Màu viền",
+    "background": "Nền",
+    "none": "Không có",
+    "fonts": {
+      "sansSerif": "Sans-serif",
+      "serif": "Serif",
+      "monospace": "Monospace"
+    }
+  },
+  "mini": {
+    "untitled": "Video"
+  },
+  "playlist": {
+    "previous": "Video trước",
+    "next": "Video tiếp theo",
+    "close": "Đóng danh sách phát"
+  },
+  "overlay": {
+    "replay": "Phát lại"
+  },
+  "reactions": {
+    "translation": "Bản dịch",
+    "translationFailed": "Dịch thất bại",
+    "videoReaction": "Video phản ứng",
+    "comment": "Bình luận",
+    "previous": "Trước",
+    "next": "Tiếp",
+    "hide": "Ẩn phản ứng",
+    "hideShort": "Ẩn",
+    "loadingReplies": "Đang tải phản hồi...",
+    "sizeTitle": "Kích thước: {{size}}",
+    "sizes": {
+      "small": "N",
+      "medium": "V",
+      "standard": "TC",
+      "big": "Lớn",
+      "cinema": "RP"
+    },
+    "sizeNames": {
+      "small": "Nhỏ",
+      "medium": "Vừa",
+      "standard": "Tiêu chuẩn",
+      "big": "Lớn",
+      "cinema": "Rạp phim"
+    }
+  },
+  "reactionUpload": {
+    "authorized": "Đã cấp quyền cho @threespeak — giờ bạn có thể đăng phản ứng",
+    "authFailed": "Cấp quyền thất bại. Vui lòng thử lại.",
+    "webcamDenied": "Không thể truy cập webcam",
+    "shortTooLong": "Shorts phải dài tối đa {{max}}. Bỏ chọn \"Hiển thị trong 3Speak Shorts\" hoặc dùng video ngắn hơn.",
+    "uploadingVideo": "Đang tải video lên...",
+    "noEmbedUrl": "Tải lên thành công nhưng không nhận được URL nhúng",
+    "publishingComment": "Đang đăng bình luận...",
+    "posted": "Đã đăng video phản ứng!",
+    "postFailed": "Không thể đăng bình luận",
+    "uploadFailed": "Tải lên thất bại",
+    "uploadVideo": "Tải video lên",
+    "recordVideo": "Quay video",
+    "startRecording": "Bắt đầu quay",
+    "stopRecording": "Dừng quay",
+    "recordedVideo": "Video đã quay",
+    "descriptionPlaceholder": "Thêm mô tả cho video phản ứng của bạn...",
+    "showInShorts": "Hiển thị trong 3Speak Shorts",
+    "authNote": "Cho phép <b>@threespeak</b> đăng phản ứng thay bạn.",
+    "authorizing": "Đang cấp quyền…",
+    "authorize": "Cấp quyền cho @threespeak",
+    "uploading": "Đang tải lên...",
+    "postReaction": "Đăng phản ứng"
+  },
+  "inline": {
+    "cantPlay": "Không thể phát video này tại đây.",
+    "openOnSite": "Mở trên 3Speak"
+  }
+}

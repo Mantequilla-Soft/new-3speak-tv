@@ -1,9 +1,10 @@
 import { Helmet } from 'react-helmet-async';
 import PropTypes from 'prop-types';
+import { useTranslation } from 'react-i18next';
 
 const SEOHead = ({
-  title = '3Speak - Decentralized Video Platform',
-  description = '3Speak is a decentralized video sharing platform built on blockchain technology. Watch, upload, and share videos while earning cryptocurrency rewards.',
+  title = null,
+  description = null,
   image = 'https://3speak.tv/3speak.jpeg',
   url = 'https://3speak.tv/',
   type = 'website',
@@ -16,23 +17,23 @@ const SEOHead = ({
   // "3S" matches the logo and leads, so the platform is the part that survives a
   // narrow tab. The brand default passes through untouched rather than being
   // branded twice.
-  const fullTitle = title === '3Speak - Decentralized Video Platform'
-    ? title
-    : `3S | ${title}`;
+  const { t } = useTranslation();
+  const fullTitle = title ? `3S | ${title}` : t('misc.seo.defaultTitle');
+  const desc = description || t('misc.seo.defaultDescription');
 
   return (
     <Helmet>
       {/* Primary Meta Tags */}
       <title>{fullTitle}</title>
       <meta name="title" content={fullTitle} />
-      <meta name="description" content={description} />
+      <meta name="description" content={desc} />
       <link rel="canonical" href={url} />
 
       {/* Open Graph / Facebook */}
       <meta property="og:type" content={type} />
       <meta property="og:url" content={url} />
       <meta property="og:title" content={fullTitle} />
-      <meta property="og:description" content={description} />
+      <meta property="og:description" content={desc} />
       <meta property="og:image" content={image} />
       <meta property="og:image:width" content="1200" />
       <meta property="og:image:height" content="630" />
@@ -54,7 +55,7 @@ const SEOHead = ({
       <meta property="twitter:card" content="summary_large_image" />
       <meta property="twitter:url" content={url} />
       <meta property="twitter:title" content={fullTitle} />
-      <meta property="twitter:description" content={description} />
+      <meta property="twitter:description" content={desc} />
       <meta property="twitter:image" content={image} />
       <meta name="twitter:site" content="@3speaktv" />
       <meta name="twitter:creator" content="@3speaktv" />

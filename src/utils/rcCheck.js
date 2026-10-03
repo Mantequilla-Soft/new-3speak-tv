@@ -19,6 +19,7 @@
 
 import { getHiveClient } from './hiveNode';
 import { POST_RC_COST } from './config';
+import { t, getLanguage } from '../i18n';
 
 const client = getHiveClient();
 
@@ -187,14 +188,17 @@ export async function checkPostingRc(username) {
 
 /** Human-friendly duration, e.g. "about 2 hours 15 minutes" / "about 8 minutes". */
 export function formatDuration(seconds) {
-  if (!Number.isFinite(seconds) || seconds <= 0) return 'a moment';
+  if (!Number.isFinite(seconds) || seconds <= 0) return t('misc.duration.aMoment');
   const d = Math.floor(seconds / 86400);
   const h = Math.floor((seconds % 86400) / 3600);
   const m = Math.floor((seconds % 3600) / 60);
+  // Intl unit formatting: "2 days 3 hours" in English, localised elsewhere.
+  const lang = getLanguage();
+  const unit = (u, n) => new Intl.NumberFormat(lang, { style: 'unit', unit: u, unitDisplay: 'long' }).format(n);
   const parts = [];
-  if (d) parts.push(`${d} day${d > 1 ? 's' : ''}`);
-  if (h) parts.push(`${h} hour${h > 1 ? 's' : ''}`);
-  if (m && !d) parts.push(`${m} minute${m > 1 ? 's' : ''}`);
-  if (!parts.length) parts.push('less than a minute');
-  return parts.join(' ');
+  if (d) parts.push(unit('day', d));
+  if (h) parts.push(unit('hour', h));
+  if (m && !d) parts.push(unit('minute', m));
+  if (!parts.length) return t('misc.duration.lessThanMinute');
+  return new Intl.ListFormat(lang, { type: 'unit', style: 'narrow' }).format(parts);
 }

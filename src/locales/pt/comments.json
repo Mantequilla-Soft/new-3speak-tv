@@ -1,0 +1,104 @@
+{
+  "review": {
+    "fabAria": "Enviar feedback",
+    "fab": "Feedback",
+    "aspects": {
+      "upload": "Envio",
+      "playback": "Reprodução",
+      "live": "Transmissão ao vivo",
+      "discovery": "Descoberta / feed",
+      "design": "Design / UX",
+      "performance": "Velocidade",
+      "mobile": "Celular",
+      "other": "Outra coisa"
+    },
+    "titles": {
+      "upload": "Como foi seu envio?",
+      "stream": "Como foi sua live?",
+      "watch": "Como foi assistir no 3Speak?",
+      "global": "Como está sendo sua experiência no 3Speak?",
+      "fallback": "Ajude a melhorar o 3Speak"
+    },
+    "stars": {
+      "poor": "Ruim",
+      "fair": "Regular",
+      "good": "Bom",
+      "great": "Ótimo",
+      "amazing": "Incrível"
+    },
+    "errors": {
+      "pickStars": "Escolha uma nota em estrelas",
+      "sendFailed": "Não foi possível enviar sua avaliação. Tente de novo."
+    },
+    "thanks": "Obrigado pelo feedback! 🙏",
+    "sendFeedback": "Enviar feedback",
+    "subtitle": "Seu feedback nos ajuda a melhorar o 3Speak.",
+    "starRating": "Nota em estrelas",
+    "starsAria_one": "{{count}} estrela",
+    "starsAria_many": "{{count}} estrelas",
+    "starsAria_other": "{{count}} estrelas",
+    "aboutLabel": "Sobre o que é? <opt>(opcional)</opt>",
+    "recommendLabel": "Você recomendaria o 3Speak? <opt>(opcional)</opt>",
+    "moreLabel": "Conte mais <opt>(opcional)</opt>",
+    "placeholder": "Do que você gostou? O que poderia ser melhor?",
+    "notNow": "Agora não",
+    "sending": "Enviando…"
+  },
+  "tabs": {
+    "reactions": "Reações",
+    "transcript": "Transcrição"
+  },
+  "live": {
+    "vodProcessing": "A gravação está sendo processada…",
+    "vodProcessingHint": "Esta transmissão terminou. O vídeo vai aparecer aqui assim que o encoder terminar — não precisa recarregar.",
+    "watching_one": "👁 {{count}} assistindo",
+    "watching_many": "👁 {{count}} assistindo",
+    "watching_other": "👁 {{count}} assistindo",
+    "signInRaiseHand": "Entre para levantar a mão",
+    "signInChat": "Entre para conversar",
+    "signInJoinChat": "🔒 Entre para participar do chat."
+  },
+  "transcript": {
+    "title": "Transcrição",
+    "languageAria": "Idioma da transcrição",
+    "copyingWithTimes": "Copiando com marcações de tempo",
+    "copyingTextOnly": "Copiando só o texto",
+    "timecodes": "Marcações de tempo",
+    "copyWithTimes": "Copiar transcrição com marcações de tempo",
+    "copyText": "Copiar texto da transcrição",
+    "jumpTo": "Ir para {{time}}",
+    "hide": "Ocultar transcrição",
+    "show": "Mostrar transcrição",
+    "showWithCount_one": "Mostrar transcrição ({{count}} linha)",
+    "showWithCount_many": "Mostrar transcrição ({{count}} linhas)",
+    "showWithCount_other": "Mostrar transcrição ({{count}} linhas)"
+  },
+  "blog": {
+    "noContent": "Nenhum conteúdo disponível",
+    "loadError": "Erro ao carregar o conteúdo.",
+    "processError": "Erro ao processar o conteúdo.",
+    "rendererError": "Erro ao carregar o renderizador."
+  },
+  "section": {
+    "posted": "Comentário publicado!",
+    "postFailed": "Falha ao comentar, tente de novo",
+    "editFailed": "Falha ao editar, tente de novo",
+    "updated": "Comentário atualizado",
+    "commentTab": "Comentar",
+    "reactTab": "Reagir",
+    "at": "em",
+    "atTime": "em {{time}}",
+    "commentPlaceholder": "Escreva seu comentário aqui...",
+    "replyPlaceholder": "Escreva sua resposta aqui...",
+    "commentButton": "Comentar",
+    "count_one": "{{count}} comentário",
+    "count_many": "{{count}} comentários",
+    "count_other": "{{count}} comentários",
+    "edited": "(editado)",
+    "saving": "Salvando...",
+    "translation": "Tradução",
+    "translationFailed": "Falha na tradução. O serviço de tradução está funcionando?",
+    "reportComment": "Denunciar comentário",
+    "openInShorts": "Abrir nos Shorts"
+  }
+}

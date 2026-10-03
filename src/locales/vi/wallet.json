@@ -1,0 +1,50 @@
+{
+  "tabs": {
+    "overview": "Tổng quan",
+    "transactions": "Giao dịch",
+    "aria": "Các mục của ví"
+  },
+  "errors": {
+    "fetchBalances": "Không tải được số dư",
+    "needKeychain": "Bạn cần tiện ích Keychain để chuyển tiền"
+  },
+  "header": {
+    "mine": "Ví CỦA TÔI",
+    "ofUser": "Ví của {{user}}"
+  },
+  "assets": "Tài sản",
+  "transfer": "Chuyển",
+  "transferModal": {
+    "loginRequired": "Vui lòng đăng nhập để chuyển",
+    "insufficient": "Số dư không đủ",
+    "invalidUsername": "Tên người dùng không hợp lệ",
+    "success": "Chuyển thành công!",
+    "failed": "Chuyển thất bại: {{error}}",
+    "title": "Chuyển {{coin}}",
+    "amountLabel": "Số lượng ({{coin}})",
+    "balance": "Số dư {{balance}}",
+    "max": "Tối đa",
+    "recipientLabel": "Tên người nhận",
+    "recipientPlaceholder": "Nhập tên người dùng Hive",
+    "memoLabel": "Ghi chú",
+    "memoPlaceholder": "Nhập ghi chú",
+    "confirm": "Xác nhận chuyển"
+  },
+  "history": {
+    "loadFailed": "Không tải được giao dịch",
+    "title": "Lịch sử giao dịch",
+    "cols": {
+      "type": "Loại",
+      "amount": "Số lượng",
+      "account": "Tài khoản",
+      "date": "Ngày",
+      "memo": "Ghi chú"
+    },
+    "types": {
+      "transfer": "Chuyển",
+      "claim": "Nhận thưởng",
+      "received": "Đã nhận"
+    },
+    "claimedRewards": "Phần thưởng đã nhận"
+  }
+}

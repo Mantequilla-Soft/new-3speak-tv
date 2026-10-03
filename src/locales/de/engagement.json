@@ -1,0 +1,98 @@
+{
+  "tip": {
+    "successTitle": "Trinkgeld erfolgreich gesendet!",
+    "successMessage": "Du hast erfolgreich {{amount}} {{currency}} als Trinkgeld gesendet. Danke für deine Unterstützung!",
+    "errors": {
+      "allRequired": "Alle Felder sind Pflichtfelder",
+      "loginRequired": "Bitte melde dich an, um Trinkgeld zu senden",
+      "insufficientBalance": "Guthaben reicht nicht aus",
+      "invalidUsername": "Ungültiger Benutzername",
+      "transferFailed": "Überweisung fehlgeschlagen: {{message}}"
+    },
+    "heading": "Trinkgeld an @{{recipient}} senden",
+    "amountLabel": "Betrag: ",
+    "amountPlaceholder": "z. B. 1.000",
+    "currencyLabel": "Währung:",
+    "availableBalance": "Verfügbares Guthaben: {{currency}}",
+    "memoLabel": "Memo (optional):",
+    "memoPlaceholder": "z. B. Danke für diesen tollen Inhalt!",
+    "send": "Trinkgeld senden"
+  },
+  "cardMenu": {
+    "loginToPersonalize": "Bitte melde dich an, um deinen Feed zu personalisieren",
+    "notInterestedToast": "Kein Interesse – wir blenden dieses Video aus",
+    "undo": "Rückgängig",
+    "cantHideOwn": "Du kannst deine eigenen Videos nicht ausblenden",
+    "hidingCreatorToast": "Videos von @{{author}} werden ausgeblendet",
+    "loginForPlaylists": "Bitte melde dich an, um Videos zu Playlists hinzuzufügen",
+    "loginToTag": "Bitte melde dich an, um Videos zu taggen",
+    "moreOptions": "Weitere Optionen",
+    "addToPlaylist": "Zur Playlist hinzufügen",
+    "addTag": "Tag hinzufügen",
+    "notInterested": "Kein Interesse",
+    "dontShowCreator": "@{{author}} nicht mehr anzeigen"
+  },
+  "guestList": {
+    "loadFailed": "Die aktuelle Gästeliste konnte nicht geladen werden",
+    "saved_one": "{{count}} Gast kann das ansehen",
+    "saved_other": "{{count}} Gäste können das ansehen",
+    "cleared": "Gästeliste geleert",
+    "saveFailed": "Die Gästeliste konnte nicht gespeichert werden",
+    "invalidAccounts": "Keine gültigen Hive-Konten: {{names}}",
+    "title": "🔒 Gästeliste",
+    "hint": "Diese Konten können ohne 3Speak Pro zuschauen. Die Liste bleibt privat auf unseren Servern und wird nie in deinem Post veröffentlicht.",
+    "notRegistered": "Dieses Video ist noch nicht fertig verarbeitet. Sobald es so weit ist, kannst du die Liste trotzdem bearbeiten.",
+    "placeholder": "benutzername, anderer.nutzer",
+    "empty": "Noch niemand. Nur Pro-Abonnenten können das ansehen.",
+    "removeAria": "{{name}} entfernen"
+  },
+  "voters": {
+    "pinnedTitle_one": "Voter ({{count}})",
+    "pinnedTitle_other": "Voter ({{count}})",
+    "topVoters": "Top-Voter",
+    "noVotes": "Noch keine Votes"
+  },
+  "payout": {
+    "breakdown": "Aufschlüsselung der Auszahlung",
+    "estimatedBreakdown": "Geschätzte Aufschlüsselung",
+    "beneficiaries": "Begünstigte",
+    "curators": "Kuratoren (50 %)",
+    "author": "Autor",
+    "total": "Gesamt",
+    "totalEstimated": "Gesamt (geschätzt)"
+  },
+  "vote": {
+    "loginRequired": "Melde dich an, um diese Aktion auszuführen",
+    "fetchPostFailed": "Postdaten konnten nicht abgerufen werden",
+    "sameWeight": "Du hast bereits mit dieser Gewichtung gevotet. Wähle einen anderen Wert.",
+    "failed": "Vote fehlgeschlagen: {{message}}",
+    "pleaseTryAgain": "bitte versuch es nochmal",
+    "weight": "Vote-Gewichtung: {{weight}}%",
+    "success": "Vote erfolgreich! Wert: ${{value}}",
+    "successTagged": "Vote erfolgreich! Getaggt mit „{{tag}}“. Wert: ${{value}}",
+    "tagged": "Getaggt mit „{{tag}}“.",
+    "vote": "Voten",
+    "tagThisVideo": "Dieses Video taggen",
+    "tagOptional": "– optional –",
+    "pickTopicFirst": "Wähle zuerst ein Thema",
+    "taggedNoDot": "Getaggt mit „{{tag}}“",
+    "tagFailed": "Taggen fehlgeschlagen: {{message}}",
+    "taggedAlreadyVoted": "Getaggt mit „{{tag}}“ – dein {{weight}}%-Vote wurde bereits abgegeben.",
+    "votingClosed": "Voting geschlossen – tagge dieses Video",
+    "youTagged": "Du hast das als <b>{{tag}}</b> getaggt.",
+    "pickTopic": "Wähle ein Thema (zählt als 100%-Vote)",
+    "submitTag": "Tag senden",
+    "tagThisVideoFull": "Dieses Video taggen (zählt als 100%-Vote)",
+    "justTag": "Nicht voten – nur taggen"
+  },
+  "tagsPicker": {
+    "autoTagged": "Automatisch getaggt: {{tags}}",
+    "searchPlaceholder": "Themen suchen…",
+    "searchAria": "Themen suchen",
+    "noMatches": "Keine Themen passen zu „{{query}}“.",
+    "allSelected": "{{category}} ist komplett ausgewählt. Füge einzelne Themen nur hinzu, um es weiter einzugrenzen:",
+    "orPickTopics": "Oder wähle einzelne Themen:",
+    "goodEnough": "Passt so – oder werde genauer (optional):",
+    "moreSpecific": "Genauer:"
+  }
+}

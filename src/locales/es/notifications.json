@@ -1,0 +1,81 @@
+{
+  "buckets": {
+    "today": "Hoy",
+    "yesterday": "Ayer",
+    "thisWeek": "Esta semana",
+    "thisMonth": "Este mes",
+    "older": "Anteriores"
+  },
+  "loginRequired": "Inicia sesión para ver tus notificaciones.",
+  "unreadChip_one": "{{count}} nueva",
+  "unreadChip_many": "{{count}} nuevas",
+  "unreadChip_other": "{{count}} nuevas",
+  "markAllTitle": "Marcar todo como leído",
+  "marking": "Marcando…",
+  "markAllRead": "Marcar todo leído",
+  "refreshing": "Actualizando…",
+  "categories": {
+    "all": "Todo",
+    "replies": "Respuestas",
+    "mentions": "Menciones",
+    "votes": "Votos",
+    "reblogs": "Reblogs",
+    "follows": "Seguidores",
+    "transfers": "Transferencias"
+  },
+  "unread": "No leídas",
+  "summary": {
+    "title": "Actividad",
+    "today": "Hoy",
+    "week": "Esta semana",
+    "month": "Este mes",
+    "emptyToday": "Aún no hay actividad hoy.",
+    "emptyWeek": "Aún no hay actividad esta semana.",
+    "stillLoading": "Cargando notificaciones anteriores…",
+    "emptyMonth": "Sin actividad este mes."
+  },
+  "loadError": "No se pudieron cargar las notificaciones.",
+  "empty": {
+    "all": "Aún no tienes notificaciones.",
+    "unread": "No hay notificaciones sin leer.",
+    "replies": "Aún no hay respuestas.",
+    "mentions": "Aún no hay menciones.",
+    "votes": "Aún no hay votos.",
+    "reblogs": "Aún no hay reblogs.",
+    "follows": "Aún no hay nuevos seguidores.",
+    "transfers": "Aún no hay transferencias."
+  },
+  "threeSpeakVideo": "Video de 3Speak",
+  "end": "Llegaste al final.",
+  "cards": {
+    "votes": "Votos",
+    "voters_one": "{{count}} votante",
+    "voters_many": "{{count}} votantes",
+    "voters_other": "{{count}} votantes",
+    "replies": "Respuestas",
+    "newFollowers": "Nuevos seguidores",
+    "mentions": "Menciones",
+    "reblogs": "Reblogs",
+    "transfers": "Transferencias"
+  },
+  "group": {
+    "voteOne": "@{{user}} votó tu publicación",
+    "voteTwo": "@{{user}} y @{{user2}} votaron tu publicación",
+    "voteMany_one": "@{{user}} y {{count}} persona más votaron tu publicación",
+    "voteMany_many": "@{{user}} y {{count}} personas más votaron tu publicación",
+    "voteMany_other": "@{{user}} y {{count}} personas más votaron tu publicación",
+    "followOne": "@{{user}} te siguió",
+    "followTwo": "@{{user}} y @{{user2}} te siguieron",
+    "followMany_one": "@{{user}} y {{count}} persona más te siguieron",
+    "followMany_many": "@{{user}} y {{count}} personas más te siguieron",
+    "followMany_other": "@{{user}} y {{count}} personas más te siguieron",
+    "generic_one": "{{count}} notificación de {{type}}",
+    "generic_many": "{{count}} notificaciones de {{type}}",
+    "generic_other": "{{count}} notificaciones de {{type}}",
+    "typeCount_one": "{{count}} {{type}}",
+    "typeCount_many": "{{count}} {{type}}",
+    "typeCount_other": "{{count}} {{type}}",
+    "collapse": "▾ contraer",
+    "expand": "▸ expandir"
+  }
+}

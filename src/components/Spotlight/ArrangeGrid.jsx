@@ -4,29 +4,31 @@ import {
   PointerSensor, KeyboardSensor, useSensor, useSensors, pointerWithin,
 } from '@dnd-kit/core';
 import { RxDragHandleDots2 } from 'react-icons/rx';
+import { useTranslation } from 'react-i18next';
 import { iconForSlug, layoutToRows, rowsToSections, SECTION_TYPES } from '../../utils/spotlight';
 
 // Compact representation of a block for the arrange tiles.
 function TileMini({ s }) {
+  const { t } = useTranslation();
   if (s.type === 'link') {
     const Icon = iconForSlug(s.icon);
-    return <><span className="ag-mini-ic"><Icon size={13} /></span><span className="ag-mini-lbl">{s.title || s.url || 'Link'}</span></>;
+    return <><span className="ag-mini-ic"><Icon size={13} /></span><span className="ag-mini-lbl">{s.title || s.url || t('spotlight.sectionTypes.link')}</span></>;
   }
-  if (s.type === 'header') return <span className="ag-mini-lbl ag-mini-hd">{s.text || 'Title'}</span>;
+  if (s.type === 'header') return <span className="ag-mini-lbl ag-mini-hd">{s.text || t('spotlight.arrange.title')}</span>;
   if (s.type === 'image') return s.src
     ? <img className="ag-mini-thumb" src={s.src} alt="" />
-    : <span className="ag-mini-lbl">Image</span>;
+    : <span className="ag-mini-lbl">{t('spotlight.sectionTypes.image')}</span>;
   if (s.type === 'video') return (
     <span className="ag-mini-vid">
-      {s.thumbnail ? <img className="ag-mini-thumb" src={s.thumbnail} alt="" /> : <span className="ag-mini-lbl">{s.title || 'Video'}</span>}
+      {s.thumbnail ? <img className="ag-mini-thumb" src={s.thumbnail} alt="" /> : <span className="ag-mini-lbl">{s.title || t('spotlight.arrange.video')}</span>}
       <span className="ag-mini-play">▶</span>
     </span>
   );
   if (s.type === 'embed') {
-    const EIcon = (SECTION_TYPES.find((t) => t.type === 'embed') || SECTION_TYPES[0]).Icon;
+    const EIcon = (SECTION_TYPES.find((st) => st.type === 'embed') || SECTION_TYPES[0]).Icon;
     const label = s.source === 'hive-recent'
-      ? `Latest posts${s.account ? ` · @${s.account}` : ''}`
-      : (s.title || s.siteName || 'Rich link');
+      ? (s.account ? t('spotlight.arrange.latestPostsBy', { account: s.account }) : t('spotlight.arrange.latestPosts'))
+      : (s.title || s.siteName || t('spotlight.sectionTypes.embed'));
     return (
       <>
         {s.image && s.source !== 'hive-recent' ? <img className="ag-mini-thumb" src={s.image} alt="" /> : <span className="ag-mini-ic"><EIcon size={13} /></span>}
@@ -34,11 +36,12 @@ function TileMini({ s }) {
       </>
     );
   }
-  const T = (SECTION_TYPES.find((t) => t.type === s.type) || SECTION_TYPES[0]).Icon;
-  return <span className="ag-mini-lbl"><T size={13} /> {s.type}</span>;
+  const T = (SECTION_TYPES.find((st) => st.type === s.type) || SECTION_TYPES[0]).Icon;
+  return <span className="ag-mini-lbl"><T size={13} /> {t(`spotlight.blockNames.${s.type}`, { defaultValue: s.type })}</span>;
 }
 
 function Tile({ s, selected, onSelect }) {
+  const { t } = useTranslation();
   const { setNodeRef: dragRef, listeners, attributes, isDragging } = useDraggable({ id: s.id });
   const { setNodeRef: dropRef, isOver } = useDroppable({ id: s.id });
   const ref = (n) => { dragRef(n); dropRef(n); };
@@ -46,7 +49,7 @@ function Tile({ s, selected, onSelect }) {
     <div ref={ref}
       className={`ag-tile ag-tile--${s.type}${isDragging ? ' dragging' : ''}${isOver ? ' over' : ''}${selected ? ' selected' : ''}`}
       onClick={() => onSelect(selected ? null : s.id)}>
-      <span className="ag-grip" {...listeners} {...attributes} title="Drag to arrange" onClick={(e) => e.stopPropagation()}>
+      <span className="ag-grip" {...listeners} {...attributes} title={t('spotlight.arrange.dragToArrange')} onClick={(e) => e.stopPropagation()}>
         <RxDragHandleDots2 size={15} />
       </span>
       <TileMini s={s} />

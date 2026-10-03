@@ -1,0 +1,99 @@
+{
+  "backToOpenPods": "Wróć do OpenPods",
+  "modal": {
+    "leaveConfirm": "Opuścić ten OpenPod? Możesz wrócić z lobby w każdej chwili.",
+    "yourStreamEnded": "Twoja transmisja się zakończyła",
+    "thisStreamEnded": "Ta transmisja się zakończyła",
+    "noLongerLive": "Nie jest już na żywo. Rozpocznij nową, kiedy tylko zechcesz.",
+    "recordingProcessing": "Świetna robota! Twoje nagranie jest przetwarzane i wkrótce pojawi się w poście z zapowiedzią.",
+    "thanksForLive": "Świetna robota — dzięki za transmisję!",
+    "backHome": "Wróć na stronę główną",
+    "howWasStream": "Jak poszła transmisja?",
+    "connecting": "Łączenie z OpenPods…",
+    "authenticating": "Uwierzytelnianie w OpenPods…"
+  },
+  "strip": {
+    "liveNow_one": "<n>{{count}}</n> OpenPod teraz na żywo",
+    "liveNow_few": "<n>{{count}}</n> OpenPods teraz na żywo",
+    "liveNow_many": "<n>{{count}}</n> OpenPods teraz na żywo",
+    "liveNow_other": "<n>{{count}}</n> OpenPods teraz na żywo",
+    "viewAll": "Zobacz wszystkie",
+    "joinAria": "Dołącz do OpenPod: {{title}}"
+  },
+  "announce": {
+    "selectCommunity": "Wybierz społeczność",
+    "shareToggle": "📣 Udostępnij tę transmisję na Hive i 3Speak, gdy się rozpocznie",
+    "community": "Społeczność",
+    "rewards": "Nagrody",
+    "rewardDefault": "Domyślnie 50/50",
+    "rewardPowerup": "Power up 100%",
+    "rewardDecline": "Odrzuć wypłatę",
+    "beneficiaries": "Beneficjenci",
+    "beneProHint": "Masz 3Speak Pro — bez opłaty platformy. Jeśli chcesz, dodaj podziały.",
+    "beneLockedHint": "10% dla @threespeakfund jest zablokowane. Możesz dodać więcej."
+  },
+  "boost": {
+    "label": "Boost",
+    "sendTo": "Wyślij boost do @{{user}}",
+    "send": "Wyślij boost"
+  },
+  "clip": {
+    "saved": "Klip zapisany w pobranych.",
+    "slowDown": "Zwolnij na chwilę, potem utwórz klip ponownie.",
+    "failed": "Nie udało się utworzyć klipu. Spróbuj za kilka sekund.",
+    "title": "Utwórz klip z ostatnich 30 sekund",
+    "label": "30 s",
+    "clipping": "Tworzenie klipu…"
+  },
+  "report": {
+    "reasons": {
+      "harassment": "Nękanie lub nienawiść",
+      "sexual": "Treści seksualne lub dosadne",
+      "violence": "Przemoc lub niebezpieczne działania",
+      "selfharm": "Samookaleczenie",
+      "illegal": "Nielegalne treści",
+      "spam": "Spam lub oszustwo",
+      "other": "Coś innego"
+    },
+    "sent": "Dzięki — ta transmisja została zgłoszona naszemu zespołowi.",
+    "failed": "Nie udało się wysłać zgłoszenia. Spróbuj ponownie.",
+    "title": "Zgłoś tę transmisję",
+    "reporting": "Zgłaszasz <b>@{{host}}</b>.",
+    "intro": "Napisz, co jest nie tak — nasz zespół sprawdza każde zgłoszenie.",
+    "detailPlaceholder": "Dodaj szczegóły (opcjonalnie)",
+    "sending": "Wysyłanie…",
+    "submit": "Wyślij zgłoszenie"
+  },
+  "signIn": {
+    "waitingWallet": "Czekam na portfel…"
+  },
+  "publish": {
+    "errors": {
+      "noTitle": "Dodaj tytuł",
+      "noAudio": "Nie znaleziono adresu URL audio",
+      "failed": "Publikacja nie powiodła się. Spróbuj ponownie."
+    },
+    "published": "Nagranie opublikowane na Hive!",
+    "loginGate": "Zaloguj się, aby opublikować nagranie.",
+    "heading": "Opublikuj nagranie OpenPod",
+    "previewLabel": "Podgląd nagrania",
+    "previewHint": "Odsłuchaj audio przed publikacją. Czytelnicy zobaczą w poście ten sam odtwarzacz.",
+    "recordingFallback": "Nagranie OpenPod",
+    "title": "Tytuł",
+    "titlePlaceholder": "Nadaj nagraniu tytuł",
+    "description": "Opis",
+    "optional": "(opcjonalnie)",
+    "descriptionPlaceholder": "O czym była rozmowa? Dodaj notatki, linki lub podsumowanie...",
+    "tags": "Tagi",
+    "tagsPlaceholder": "Tagi oddzielone spacjami",
+    "declinePayout": "Odrzuć wypłatę",
+    "publishing": "Publikowanie…",
+    "submit": "Opublikuj nagranie"
+  },
+  "lobby": {
+    "descriptionPlaceholder": "O czym jest ta sesja? Dodaj notatki, linki lub podsumowanie…",
+    "enableHosting": "Włącz prowadzenie i mówienie",
+    "handoverFailed": "Nie udało się automatycznie włączyć prowadzenia. OpenPods publikuje w twoim imieniu przez @threespeak — sprawdź, czy przyznano mu uprawnienia posting, i spróbuj ponownie.",
+    "signInToHost": "Zaloguj się przez Hive, aby prowadzić lub mówić"
+  }
+}

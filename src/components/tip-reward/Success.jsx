@@ -2,11 +2,13 @@ import React, { useEffect } from 'react';
 import confetti from 'canvas-confetti';
 // import { Button } from "@/components/ui/button";
 import { Check } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import './Success.scss';
 
 
 
 const Success = ({ amount, currency, onClose }) => {
+  const { t } = useTranslation();
   useEffect(() => {
     const duration = 3000;
     const end = Date.now() + duration;
@@ -41,15 +43,15 @@ const Success = ({ amount, currency, onClose }) => {
         <div className="icon">
           <Check size={40} />
         </div>
-        <h1 className="title">Tip Sent Successfully!</h1>
+        <h1 className="title">{t('engagement.tip.successTitle')}</h1>
         <p className="message">
-          You have successfully sent {amount} {currency} as a tip. Thank you for your support!
+          {t('engagement.tip.successMessage', { amount, currency })}
         </p>
         <button 
           onClick={onClose}
           className="button"
         >
-          Close
+          {t('common.actions.close')}
         </button>
       </div>
   );

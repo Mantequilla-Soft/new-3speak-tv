@@ -1,0 +1,19 @@
+{
+  "placeholder": "Напишіть тут свій текст...",
+  "uploadFailed": "Не вдалося завантажити: {{message}}",
+  "uploadingImage": "Завантаження зображення...",
+  "format": {
+    "underline": "Підкреслений",
+    "strike": "Закреслений",
+    "highlight": "Виділення",
+    "bulletList": "Маркований список",
+    "orderedList": "Нумерований список",
+    "taskList": "Список завдань"
+  },
+  "emoji": {
+    "searchPlaceholder": "Пошук емодзі"
+  },
+  "preview": {
+    "renderError": "Помилка відображення вмісту"
+  }
+}

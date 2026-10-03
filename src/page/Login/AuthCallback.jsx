@@ -3,6 +3,7 @@ import { jwtDecode } from "jwt-decode";
 import { useNavigate } from "react-router-dom";
 import { toastIn } from '../../utils/toast';
 import axios from "axios";
+import { useTranslation } from "react-i18next";
 import { useAppStore } from "../../lib/store";
 import { Helix} from 'ldrs/react';
 import 'ldrs/react/Helix.css'
@@ -16,6 +17,7 @@ import {
 const toast = toastIn('Sign in');
 
 const AuthCallback = () => {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const { initializeAuth } = useAppStore();
   const hasRun = useRef(false); // ✅ persist between renders
@@ -34,7 +36,7 @@ const AuthCallback = () => {
         const decoded = jwtDecode(accessToken);
         const userID = decoded?.user_id;
         if (!userID) {
-          toast.error("Invalid token: missing user ID.");
+          toast.error(t('auth.callback.invalidToken'));
           return;
         }
 
@@ -45,16 +47,16 @@ const AuthCallback = () => {
         localStorage.setItem(LOCAL_STORAGE_USER_ID_KEY, userData);
 
         initializeAuth();
-        toast.success("Login successful!");
+        toast.success(t('auth.callback.loginSuccess'));
         navigate("/");
       } catch (error) {
         console.error("Authentication failed:", error);
-        toast.error("Authentication failed. Please try again.");
+        toast.error(t('auth.callback.authFailed'));
       }
     };
 
     handleAuth();
-  }, [navigate, initializeAuth]);
+  }, [navigate, initializeAuth, t]);
 
   return (
     <div
@@ -69,7 +71,7 @@ const AuthCallback = () => {
  <h2 style={{
     marginBottom: "20px",
     color: "red"
-  }}>Processing login</h2>
+  }}>{t('auth.callback.processing')}</h2>
   <Helix size="100" speed="2.5" color="red" />
 </div>
 

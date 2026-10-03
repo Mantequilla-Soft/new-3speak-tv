@@ -6,12 +6,14 @@ import "./ProfileModal.scss";
 import { useNavigate } from "react-router-dom";
 import { toastIn } from '../../utils/toast';
 import { followWithAioha, isLoggedIn } from "../../hive-api/aioha";
+import { useTranslation } from "react-i18next";
 
 // Every toast from this module is headed "Profile"; the message becomes the
 // line under it. See utils/toast.js.
 const toast = toastIn('Profile');
 
 function ProfileModal({ username = "kesolink", onClose }) {
+  const { t } = useTranslation();
   const [profile, setProfile] = useState(null);
   const [loading, setLoading] = useState(false);
   const [isFollowing, setIsFollowing] = useState(false);
@@ -65,12 +67,12 @@ function ProfileModal({ username = "kesolink", onClose }) {
 
  const handleFollow = async () => {
   if (!isLoggedIn()) {
-    toast.error("Please login first");
+    toast.error(t('common.status.loginRequired'));
     return;
   }
 
   if (!activeUser) {
-    toast.error("You must login first");
+    toast.error(t('modals.profile.mustLogin'));
     return;
   }
 
@@ -78,7 +80,7 @@ function ProfileModal({ username = "kesolink", onClose }) {
 
   try {
     await followWithAioha(username, isFollow);
-    toast.success(isFollow ? "Followed" : "Unfollowed");
+    toast.success(isFollow ? t('modals.profile.followed') : t('modals.profile.unfollowed'));
     setIsFollowing(isFollow);
 
     // re-check real follow status after blockchain confirms
@@ -88,7 +90,7 @@ function ProfileModal({ username = "kesolink", onClose }) {
     }, 2000);
   } catch (error) {
     console.error("Follow error:", error);
-    toast.error(`Failed to ${isFollow ? 'follow' : 'unfollow'}: ${error.message}`);
+    toast.error(isFollow ? t('modals.profile.followFailed', { error: error.message }) : t('modals.profile.unfollowFailed', { error: error.message }));
   }
 };
 
@@ -179,7 +181,7 @@ function ProfileModal({ username = "kesolink", onClose }) {
                 <div className="avatar">
                   <img
                     src={profile?.metadata?.profile?.profile_image || "/default.png"}
-                    alt="Profile"
+                    alt={t('modals.profile.avatarAlt')}
                   />
                 </div>
               </div>
@@ -197,29 +199,29 @@ function ProfileModal({ username = "kesolink", onClose }) {
                   <span>({Math.floor(profile?.reputation || 0)})</span>
                 </div>
                 {activeUser && activeUser.toLowerCase() !== username?.toLowerCase() && (
-                  <button className="btn-follow" onClick={handleFollow}>{isFollowing ? "Unfollow" : "Follow"}</button>
+                  <button className="btn-follow" onClick={handleFollow}>{isFollowing ? t('common.actions.unfollow') : t('common.actions.follow')}</button>
                 )}
               </div>
 
               <div className="stats-grid">
                 <div className="stat">
                   <span className="value">{profile?.post_count}</span>
-                  <span className="label">Posts</span>
+                  <span className="label">{t('modals.profile.posts')}</span>
                 </div>
                 <div className="stat">
                   <span className="value">{profile?.stats?.followers}</span>
-                  <span className="label">Followers</span>
+                  <span className="label">{t('modals.profile.followers')}</span>
                 </div>
                 <div className="stat">
                   <span className="value">{profile?.stats?.following}</span>
-                  <span className="label">Following</span>
+                  <span className="label">{t('common.actions.following')}</span>
                 </div>
               </div>
 
               <div className="meta-info">
                 <div className="meta-item">
                   <CiCalendarDate />
-                  <span>Joined {profile?.created?.substring(0, 10)}</span>
+                  <span>{t('modals.profile.joined', { date: profile?.created?.substring(0, 10) })}</span>
                 </div>
                 {profile?.metadata?.profile?.location && (
                   <div className="meta-item">
@@ -230,9 +232,9 @@ function ProfileModal({ username = "kesolink", onClose }) {
               </div>
 
               <div className="about">
-                <h3>About</h3>
+                <h3>{t('modals.profile.about')}</h3>
                 <div className="text">
-                  {profile?.metadata?.profile?.about || "No bio available"}
+                  {profile?.metadata?.profile?.about || t('modals.profile.noBio')}
                 </div>
               </div>
             </div>

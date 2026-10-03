@@ -3,6 +3,7 @@ import { createPortal } from 'react-dom';
 import { IoClose } from 'react-icons/io5';
 import { BsLightningChargeFill } from 'react-icons/bs';
 import { formatDuration } from '../../utils/rcCheck';
+import { useTranslation, Trans } from 'react-i18next';
 import './RcInsufficientModal.scss';
 
 /**
@@ -18,6 +19,7 @@ import './RcInsufficientModal.scss';
  *   rechecking   boolean
  */
 export default function RcInsufficientModal({ isOpen, onClose, status, onRecheck, rechecking }) {
+  const { t } = useTranslation();
   // Live countdown so the "ready in ~X" estimate ticks down while the modal is open.
   const [remaining, setRemaining] = useState(status?.secondsUntilEnough ?? 0);
 
@@ -41,7 +43,7 @@ export default function RcInsufficientModal({ isOpen, onClose, status, onRecheck
   return createPortal(
     <div className="rc-modal-overlay" onClick={onClose}>
       <div className="rc-modal-content" onClick={(e) => e.stopPropagation()}>
-        <button className="rc-close-btn" onClick={onClose} aria-label="Close">
+        <button className="rc-close-btn" onClick={onClose} aria-label={t('common.actions.close')}>
           <IoClose size={22} />
         </button>
 
@@ -49,42 +51,34 @@ export default function RcInsufficientModal({ isOpen, onClose, status, onRecheck
           <BsLightningChargeFill />
         </div>
 
-        <h3 className="rc-modal-title">Not enough Resource Credits</h3>
+        <h3 className="rc-modal-title">{t('upload.rc.title')}</h3>
 
         <p className="rc-modal-text">
-          Every post on the Hive blockchain costs a small amount of{' '}
-          <strong>Resource Credits (RC)</strong> — a free allowance that refills
-          on its own over time. Right now your account doesn&apos;t have enough RC
-          to publish this video, so the upload can&apos;t be finished yet.
+          <Trans i18nKey="upload.rc.explanation" components={{ b: <strong /> }} />
         </p>
 
-        <div className="rc-meter" aria-label={`Resource credits ${pct.toFixed(0)} percent`}>
+        <div className="rc-meter" aria-label={t('upload.rc.meterAria', { percent: pct.toFixed(0) })}>
           <div className="rc-meter-bar">
             <div className="rc-meter-fill" style={{ width: `${pct}%` }} />
           </div>
-          <span className="rc-meter-label">{pct.toFixed(0)}% RC available</span>
+          <span className="rc-meter-label">{t('upload.rc.available', { percent: pct.toFixed(0) })}</span>
         </div>
 
         {canEverAfford ? (
           <div className="rc-eta">
-            <span className="rc-eta-label">Estimated ready in</span>
+            <span className="rc-eta-label">{t('upload.rc.estimatedReadyIn')}</span>
             <span className="rc-eta-value">{formatDuration(remaining)}</span>
             <span className="rc-eta-hint">
-              Your RC refills automatically — just check back later, or come back
-              when it&apos;s topped up.
+              {t('upload.rc.refillsHint')}
             </span>
           </div>
         ) : (
           <div className="rc-eta rc-eta--blocked">
             <span className="rc-eta-hint">
-              Even at a full bar your account doesn&apos;t have enough RC for a
-              post yet. This usually means very little Hive Power. Powering up a
-              little HP — or receiving an RC delegation — will fix it. New to
-              Hive? Reach out on the{' '}
-              <a href="https://discord.com/invite/NSFS2VGj83" target="_blank" rel="noopener noreferrer">
-                3Speak Discord
-              </a>{' '}
-              and we&apos;ll help you get started.
+              <Trans
+                i18nKey="upload.rc.blockedHint"
+                components={{ discordLink: <a href="https://discord.com/invite/NSFS2VGj83" target="_blank" rel="noopener noreferrer" /> }}
+              />
             </span>
           </div>
         )}
@@ -97,11 +91,11 @@ export default function RcInsufficientModal({ isOpen, onClose, status, onRecheck
               onClick={onRecheck}
               disabled={rechecking}
             >
-              {rechecking ? 'Checking…' : 'Re-check now'}
+              {rechecking ? t('upload.rc.checking') : t('upload.rc.recheck')}
             </button>
           )}
           <button type="button" className="rc-btn rc-btn--ghost" onClick={onClose}>
-            Close
+            {t('common.actions.close')}
           </button>
         </div>
       </div>

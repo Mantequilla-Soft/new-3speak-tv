@@ -7,6 +7,31 @@
 // 1.0.0 — that way they see all of these when develop is pushed to production.
 export const CHANGELOG = [
   {
+    version: '1.79.48',
+    date: '2026-10-03',
+    summary:
+      '3Speak now speaks your language! Choose from 21 languages in Settings → General.',
+  },
+  {
+    version: '1.79.47',
+    date: '2026-10-03',
+    summary:
+      'Videos shared in chat now play right in the conversation, and sharing into chat no longer adds the link twice.',
+  },
+  {
+    version: '1.79.46',
+    date: '2026-10-03',
+    summary:
+      'Chat now opens as a floating panel on tablet and desktop, so you can keep watching while you message, '
+      + 'and the expand button makes it bigger. Phones still get the full chat page.',
+  },
+  {
+    version: '1.79.45',
+    date: '2026-10-03',
+    summary:
+      'Video thumbnails and profile pictures load much faster: 3Speak now keeps small copies.',
+  },
+  {
     version: '1.79.44',
     date: '2026-10-03',
     summary:

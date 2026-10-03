@@ -1,0 +1,44 @@
+{
+  "loading": "読み込み中...",
+  "error": "エラー: {{error}}",
+  "thumbnailAlt": "サムネイル",
+  "topicTitle": "トピック: {{topic}}",
+  "watchingNow_other": "{{count}} 人が視聴中",
+  "badges": {
+    "gatedTitle": "サポーター限定 — 3Speak Pro で動画全編が見られます",
+    "pro": "PRO",
+    "new": "NEW",
+    "live": "● LIVE",
+    "liveChat": "● LIVE チャット"
+  },
+  "status": {
+    "scheduled": "予約済み",
+    "mobile": "モバイル",
+    "mobileTitle": "モバイルアプリからアップロード",
+    "processing": "処理中",
+    "processingTitle": "動画を処理しています",
+    "draft": "下書き",
+    "draftTitle": "下書き - まだ公開されていません",
+    "deleted": "削除済み",
+    "deletedTitle": "この動画は削除されました",
+    "failed": "失敗",
+    "failedTitle": "動画の処理に失敗しました",
+    "unlisted": "限定公開",
+    "unlistedTitle": "限定公開 — フィードや検索には表示されず、リンクを知っている人だけが見られます"
+  },
+  "playlist": {
+    "loading": "再生リストを読み込み中...",
+    "items_other": "{{count}} 件",
+    "openAria": "再生リスト {{name}} を開く",
+    "tag": "再生リスト",
+    "updated": "{{when}} に更新"
+  },
+  "watchLater": {
+    "title": "後で見る",
+    "subtitle": "後で見る動画"
+  },
+  "watched": {
+    "title": "視聴済み",
+    "subtitle": "再生履歴"
+  }
+}

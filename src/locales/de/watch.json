@@ -1,0 +1,237 @@
+{
+  "aiBadge": {
+    "title": "Als KI-generiert erkannt",
+    "label": "KI"
+  },
+  "translate": {
+    "titleButton": "Titel übersetzen",
+    "original": "Original",
+    "translate": "Übersetzen",
+    "translating": "Wird übersetzt..."
+  },
+  "summary": {
+    "title": "Zusammenfassung",
+    "close": "Zusammenfassung schließen",
+    "showingOriginal": "Original wird angezeigt",
+    "translatedTo": "Übersetzung: {{language}}",
+    "showLanguage": "{{language}} anzeigen",
+    "showOriginal": "Original anzeigen",
+    "buttonTitle": "KI-Zusammenfassung dieses Videos"
+  },
+  "errors": {
+    "notAvailable": "Dieses Video ist nicht verfügbar.",
+    "goHome": "Zur Startseite",
+    "scheduledNotFound": "Geplanter Post nicht gefunden – er wurde eventuell schon veröffentlicht oder abgebrochen.",
+    "network": "Netzwerkfehler. Bitte prüfe deine Verbindung.",
+    "notFound": "Video nicht gefunden oder konnte nicht geladen werden.",
+    "backToProfile": "Zurück zum Profil"
+  },
+  "gated": {
+    "title": "Nur für Unterstützer",
+    "checkFailed": "Wir konnten dein Abo gerade nicht bestätigen. Versuch es gleich nochmal.",
+    "preview": "Du siehst eine kostenlose Vorschau. 3Speak Pro schaltet das ganze Video frei.",
+    "subscribersOnly": "Dieses Video ist für 3Speak-Pro-Abonnenten verfügbar.",
+    "cta": "3Speak Pro holen"
+  },
+  "reactions": {
+    "show": "Reaktionen anzeigen",
+    "add": "Reaktion hinzufügen"
+  },
+  "liveChat": "Live-Chat",
+  "moreVideos": "Mehr Videos",
+  "vote": {
+    "saveFailed": "Dein Vote konnte nicht gespeichert werden"
+  },
+  "locked": {
+    "noAccount": "Wird freigeschaltet, sobald du dein Hive-Konto erstellt hast",
+    "offChainPost": "Noch nicht verfügbar: Dieser Post ist nicht auf Hive"
+  },
+  "interests": {
+    "loginRequired": "Melde dich an, um Interessen zu speichern",
+    "added": "„{{tag}}“ zu deinen Interessen hinzugefügt",
+    "saveFailed": "Interessen konnten nicht gespeichert werden"
+  },
+  "watchLater": {
+    "removed": "Aus „Später ansehen“ entfernt",
+    "removeFailed": "Entfernen fehlgeschlagen: {{error}}",
+    "removeTitle": "Aus „Später ansehen“ entfernen"
+  },
+  "reshare": {
+    "loginRequired": "Melde dich an, um zu teilen",
+    "success": "Geteilt!",
+    "failed": "Erneutes Teilen fehlgeschlagen",
+    "reshared": "Geteilt",
+    "reshare": "Erneut teilen",
+    "reshareWithCount": "Erneut teilen ({{count}})"
+  },
+  "clip": {
+    "noVideoUrlRemix": "Video-URL für den Remix konnte nicht ermittelt werden",
+    "noVideoUrl": "Video-URL konnte nicht ermittelt werden",
+    "startHint": "Spul zum Anfang deines Clips und klicke dann auf \"Start setzen\"",
+    "endHint": "Spul jetzt zum Ende deines Clips und klicke auf \"Ende setzen\"",
+    "endBeforeStart": "Das Ende muss nach dem Start liegen",
+    "trimmed": "Clip auf 1 Minute gekürzt – wir kürzen den Clip am Ende der Timeline.",
+    "set": "Clip festgelegt: {{start}} – {{end}}. Klicke jetzt auf \"Clip erstellen\"",
+    "loginRequired": "Melde dich an, um zu clippen",
+    "cancel": "Clip abbrechen",
+    "clipVideo": "Video clippen",
+    "label": "Video clippen",
+    "clip": "Clip",
+    "seekToStart": "Zum Anfang spulen",
+    "setStart": "Start setzen",
+    "setEnd": "Ende setzen",
+    "createClip": "Clip erstellen",
+    "barStart": "Spul zum Anfang deines Clips",
+    "barEnd": "Start: {{start}} – jetzt zum Ende spulen",
+    "barDone": "Clip: {{start}} – {{end}}"
+  },
+  "share": {
+    "defaultTitle": "3Speak-Video",
+    "linkCopied": "Link in die Zwischenablage kopiert!",
+    "failed": "Teilen fehlgeschlagen"
+  },
+  "follow": {
+    "loginRequired": "Bitte melde dich an, um Nutzern zu folgen",
+    "followed": "Du folgst jetzt @{{user}}",
+    "failed": "Folgen fehlgeschlagen: {{error}}"
+  },
+  "ad": {
+    "countdown": "Werbung in {{seconds}}"
+  },
+  "media": {
+    "unavailableTitle": "Dieses Video ist nicht mehr verfügbar",
+    "unavailableBody": "Die Mediendatei dieses älteren Uploads wurde im Netzwerk nicht gefunden. Der Post existiert weiterhin auf der Blockchain, aber das Video kann nicht mehr abgespielt werden.",
+    "blockedTitle": "Das Video konnte gerade nicht geladen werden",
+    "blockedBody": "Einer unserer Videoserver hat nicht geantwortet. Mit dem Video selbst ist alles in Ordnung, also versuch es bitte nochmal."
+  },
+  "tipNudge": {
+    "text": "Hat's dir gefallen?<hide> Schick <b>@{{author}}</b> ein Trinkgeld!</hide>",
+    "dismiss": "Schließen"
+  },
+  "community": {
+    "members_one": "{{count}} Mitglied",
+    "members_other": "{{count}} Mitglieder"
+  },
+  "tags": {
+    "curated": "Kuratiert"
+  },
+  "topics": {
+    "taggedBy": "„{{label}}“ · getaggt von {{count}}",
+    "viewers_one": "„{{label}}“ · {{count}} Zuschauer",
+    "viewers_other": "„{{label}}“ · {{count}} Zuschauer",
+    "autoNoVotes": "Automatisch getaggt – noch keine Votes von Zuschauern",
+    "noVotes": "Noch keine Votes von Zuschauern",
+    "inInterests": "✓ In deinen Interessen",
+    "addToInterests": "+ Zu meinen Interessen hinzufügen",
+    "openTagFeed": "Tag-Feed öffnen"
+  },
+  "scheduled": {
+    "notice": "Geplant für <b>{{date}}</b> – noch nicht veröffentlicht.",
+    "futureDate": "ein zukünftiges Datum",
+    "edit": "Bearbeiten, verschieben oder abbrechen",
+    "editTitle": "Geplanten Post bearbeiten (Details, Datum oder abbrechen)"
+  },
+  "actions": {
+    "voteOffChain": "Für dieses Video voten. Der Vote wird auf 3Speak gespeichert und bringt keine Belohnungen.",
+    "signInToVote": "Melde dich an, um zu voten",
+    "tagVideo": "Dieses Video taggen",
+    "voteVideo": "Für dieses Video voten",
+    "tag": "Taggen",
+    "vote": "Voten",
+    "analyticsTitle": "Video-Statistiken",
+    "analytics": "Statistiken",
+    "videoStats": "Videostatistiken",
+    "promoteTitle": "Dieses Video bewerben",
+    "promote": "Bewerben",
+    "editTitle": "Videodetails bearbeiten",
+    "reportTitle": "Video melden",
+    "addToPlaylist": "Zur Playlist hinzufügen",
+    "playlist": "Playlist",
+    "tipTitle": "Dem Creator Trinkgeld geben",
+    "tip": "Trinkgeld",
+    "details": "Details",
+    "toggleDetails": "Details ein-/ausblenden",
+    "followCreator": "Creator folgen",
+    "closeMenu": "Menü schließen",
+    "openActions": "Aktionen öffnen"
+  },
+  "description": {
+    "hide": "Beschreibung ausblenden",
+    "show": "Beschreibung anzeigen"
+  },
+  "edit": {
+    "title": "Video bearbeiten",
+    "loading": "Aktueller Post wird geladen…",
+    "videoFile": "Videodatei",
+    "replaceVideo": "Video ersetzen",
+    "replaceHint": "Tauscht die Videodatei in diesem Post aus. Alles andere bleibt, wie es ist: Der Post behält seine Likes, Auszahlung, Kommentare, sein Upload-Datum und seinen Platz in deinem Profil. Lass das hier unverändert, um das aktuelle Video zu behalten.",
+    "uploadingTo": "Wird auf <b>{{host}}</b> hochgeladen… {{pct}}%",
+    "choosingServer": "Upload-Server wird ausgewählt…",
+    "uploadedTo": "Auf <b>{{host}}</b> hochgeladen. Klicke auf Speichern, um es auszutauschen.",
+    "uploaded": "Hochgeladen. Klicke auf Speichern, um es auszutauschen.",
+    "cancelUpload": "Upload abbrechen",
+    "keepCurrent": "Aktuelles Video behalten",
+    "encodeHint": "Nach dem Speichern braucht es noch ein paar Minuten zum Encoden, und das alte Video läuft weiter, bis es fertig ist. Dein Thumbnail bleibt unverändert, also aktualisiere es oben, falls es nicht mehr passt.",
+    "thumbnail": "Thumbnail",
+    "thumbPreviewAlt": "Thumbnail-Vorschau",
+    "uploadImage": "Bild hochladen",
+    "uploading": "Wird hochgeladen…",
+    "thumbHint": "Lade ein Bild hoch oder füge eine direkte URL ein. Lass es unverändert, um das aktuelle Thumbnail zu behalten.",
+    "titleLabel": "Titel",
+    "titleMin": "min. {{min}}",
+    "tags": "Tags",
+    "tagsPlaceholder": "durch Leerzeichen getrennt",
+    "autoTag": "Automatisch hinzugefügt – kann nicht entfernt werden",
+    "tagCount_one": "{{count}}/{{max}} Tag",
+    "tagCount_other": "{{count}}/{{max}} Tags",
+    "tagCountRequired_one": "{{count}}/{{max}} Tag · mindestens 1 erforderlich",
+    "tagCountRequired_other": "{{count}}/{{max}} Tags · mindestens 1 erforderlich",
+    "description": "Beschreibung",
+    "descriptionPlaceholder": "Erzähl den Zuschauern von deinem Video…",
+    "markdownHint": "Markdown wird unterstützt.",
+    "listed": "Gelistet",
+    "unlistedLabel": "Nicht gelistet",
+    "listedHint": "Wird in Feeds, in der Suche und auf deinem Profil angezeigt.",
+    "unlistedHint": "Nicht in Feeds & Suche – lässt sich per Direktlink abspielen und bleibt auf deinem Profil (mit Kennzeichnung).",
+    "allowRemix": "Remix/Clip erlauben",
+    "remixOn": "Andere können Remixe/Clips erstellen; du wirst als Originalautor genannt.",
+    "remixOff": "Andere können dieses Video nicht remixen oder clippen.",
+    "trailer": "Kanaltrailer",
+    "trailerOn": "Startet automatisch oben im Übersicht-Tab deines Profils und ersetzt jeden Trailer, den du vorher festgelegt hast.",
+    "trailerOff": "Mach dieses Video zu dem, das oben im Übersicht-Tab deines Profils automatisch startet.",
+    "nsfw": "Ab 18 / NSFW",
+    "notNsfw": "Nicht ab 18",
+    "nsfwHint": "Nicht in Feeds & Suche, außer der Zuschauer hat NSFW aktiviert; auf Hive mit nsfw getaggt.",
+    "notNsfwHint": "Normaler Inhalt, für alle sichtbar.",
+    "promoted": "Beworben",
+    "promote": "Video bewerben",
+    "saveChanges": "Änderungen speichern",
+    "noChanges": "Keine Änderungen zum Speichern.",
+    "thumbUploaded": "Thumbnail hochgeladen.",
+    "videoUploaded": "Neues Video hochgeladen. Speichere, um es auf diesen Post anzuwenden.",
+    "relisted": "Video wieder gelistet.",
+    "unlisted": "Video nicht mehr gelistet.",
+    "trailerSet": "Als Kanaltrailer festgelegt.",
+    "trailerRemoved": "Als Kanaltrailer entfernt.",
+    "updatedEncoding": "Video aktualisiert! Die neue Datei braucht noch einen Moment zum Encoden.",
+    "updated": "Video aktualisiert!",
+    "errors": {
+      "notFound": "Dieser Post wurde auf Hive nicht gefunden.",
+      "loadFailed": "Post konnte nicht von Hive geladen werden. Bitte versuch es nochmal.",
+      "notImage": "Bitte wähle eine Bilddatei.",
+      "imageTooLarge": "Bild zu groß (max. 10 MB).",
+      "thumbUploadFailed": "Thumbnail-Upload fehlgeschlagen.",
+      "notVideo": "Bitte wähle eine Videodatei.",
+      "videoTooLarge": "Video zu groß (max. 5 GB).",
+      "noVideoEntry": "Dieser Post hat keinen Videoeintrag zum Ersetzen – seine Metadaten verweisen auf keinen.",
+      "notInLibrary": "Das Video dieses Posts ist nicht mehr in der Bibliothek, daher kann die Datei nicht ersetzt werden.",
+      "notOwner": "Du kannst nur die Datei deiner eigenen Videos ersetzen.",
+      "videoUploadFailed": "Video-Upload fehlgeschlagen.",
+      "noEmbedEntry": "Dieser Post hat keinen Embed-Videoeintrag zum Ersetzen – seine Metadaten verweisen auf keinen.",
+      "broadcastFailed": "Übertragung fehlgeschlagen",
+      "listingFailed": "Die Sichtbarkeit konnte nicht geändert werden.",
+      "trailerFailed": "Dein Kanaltrailer konnte nicht aktualisiert werden.",
+      "saveFailed": "Änderungen konnten nicht gespeichert werden."
+    }
+  }
+}

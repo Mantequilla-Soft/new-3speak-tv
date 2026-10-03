@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { FaUserShield } from 'react-icons/fa';
 import { fetchAdvertiserAdminView } from '../../lib/incubation';
+import { useTranslation } from 'react-i18next';
 
 const when = (d) => (d ? new Date(d).toLocaleString() : null);
 
@@ -16,6 +17,7 @@ const when = (d) => (d ? new Date(d).toLocaleString() : null);
  * the page would not be enough; the data never reaches a non-admin browser.
  */
 export default function AdvertiserAdminPanel({ handle, profile = {}, interests = [], counts = {} }) {
+  const { t } = useTranslation();
   const website = profile.website || null;
   const [data, setData] = useState(null);
 
@@ -35,46 +37,46 @@ export default function AdvertiserAdminPanel({ handle, profile = {}, interests =
   ].filter((l) => l && String(l).trim());
 
   return (
-    <section className="inc-panel inc-admin" aria-label="Admin view">
-      <h2><FaUserShield size={14} aria-hidden="true" /> Admin view</h2>
-      <p className="inc-admin-note">Only 3Speak admins see this panel.</p>
+    <section className="inc-panel inc-admin" aria-label={t('incubation.admin.title')}>
+      <h2><FaUserShield size={14} aria-hidden="true" /> {t('incubation.admin.title')}</h2>
+      <p className="inc-admin-note">{t('incubation.admin.note')}</p>
       {/* Public on the left, private on the right; stacked on narrow screens. */}
       <div className="inc-admin-cols">
       <div>
-      <h3 className="inc-admin-sub">Brand profile <span>public</span></h3>
+      <h3 className="inc-admin-sub">{t('incubation.admin.brandProfile')} <span>{t('incubation.admin.public')}</span></h3>
       <dl>
-        <div><dt>Handle</dt><dd>@{handle}</dd></div>
-        <div><dt>Brand name</dt><dd>{profile.name || <em>not set</em>}</dd></div>
+        <div><dt>{t('incubation.admin.fields.handle')}</dt><dd>@{handle}</dd></div>
+        <div><dt>{t('incubation.admin.fields.brandName')}</dt><dd>{profile.name || <em>{t('incubation.admin.notSet')}</em>}</dd></div>
         <div>
-          <dt>Logo</dt>
+          <dt>{t('incubation.admin.fields.logo')}</dt>
           <dd>{profile.profile_image
             ? <img className="inc-admin-logo" src={profile.profile_image} alt="" />
-            : <em>not set</em>}</dd>
+            : <em>{t('incubation.admin.notSet')}</em>}</dd>
         </div>
-        <div><dt>About</dt><dd className="inc-admin-about">{profile.about || <em>not set</em>}</dd></div>
-        <div><dt>Website</dt><dd>{website ? <a href={website} target="_blank" rel="noopener noreferrer">{website}</a> : <em>none</em>}</dd></div>
-        {profile.location ? <div><dt>Location</dt><dd>{profile.location}</dd></div> : null}
-        {interests.length > 0 ? <div><dt>Interests</dt><dd>{interests.join(', ')}</dd></div> : null}
-        <div><dt>Activity</dt><dd>{counts.posts ?? 0} posts · {counts.followers ?? 0} followers · {counts.following ?? 0} following</dd></div>
+        <div><dt>{t('incubation.admin.fields.about')}</dt><dd className="inc-admin-about">{profile.about || <em>{t('incubation.admin.notSet')}</em>}</dd></div>
+        <div><dt>{t('incubation.admin.fields.website')}</dt><dd>{website ? <a href={website} target="_blank" rel="noopener noreferrer">{website}</a> : <em>{t('incubation.admin.none')}</em>}</dd></div>
+        {profile.location ? <div><dt>{t('incubation.admin.fields.location')}</dt><dd>{profile.location}</dd></div> : null}
+        {interests.length > 0 ? <div><dt>{t('incubation.admin.fields.interests')}</dt><dd>{interests.join(', ')}</dd></div> : null}
+        <div><dt>{t('incubation.admin.fields.activity')}</dt><dd>{t('incubation.admin.activityLine', { posts: counts.posts ?? 0, followers: counts.followers ?? 0, following: counts.following ?? 0 })}</dd></div>
       </dl>
       </div>
 
       <div>
-      <h3 className="inc-admin-sub">Private contact <span>admins only, never on chain</span></h3>
+      <h3 className="inc-admin-sub">{t('incubation.admin.privateContact')} <span>{t('incubation.admin.privateNote')}</span></h3>
       {c ? (
         <dl>
-          <div><dt>Email</dt><dd><a href={`mailto:${c.email}`}>{c.email}</a></dd></div>
+          <div><dt>{t('incubation.admin.fields.email')}</dt><dd><a href={`mailto:${c.email}`}>{c.email}</a></dd></div>
           <div>
-            <dt>Address</dt>
-            <dd>{addressLines.length ? addressLines.map((l) => <span key={l}>{l}</span>) : <em>not given</em>}</dd>
+            <dt>{t('incubation.admin.fields.address')}</dt>
+            <dd>{addressLines.length ? addressLines.map((l) => <span key={l}>{l}</span>) : <em>{t('incubation.admin.notGiven')}</em>}</dd>
           </div>
-          <div><dt>Contact goal</dt><dd>{c.email && (c.addressComplete || website) ? 'Met' : 'Not met yet'}</dd></div>
-          <div><dt>First saved</dt><dd>{when(c.firstSavedAt) || <em>unknown</em>}</dd></div>
-          <div><dt>Last changed</dt><dd>{when(c.updatedAt) || <em>unknown</em>}</dd></div>
-          <div><dt>ButrAuth user</dt><dd><code>{c.butrauthUserId}</code></dd></div>
+          <div><dt>{t('incubation.admin.fields.contactGoal')}</dt><dd>{c.email && (c.addressComplete || website) ? t('incubation.admin.met') : t('incubation.admin.notMet')}</dd></div>
+          <div><dt>{t('incubation.admin.fields.firstSaved')}</dt><dd>{when(c.firstSavedAt) || <em>{t('incubation.admin.unknown')}</em>}</dd></div>
+          <div><dt>{t('incubation.admin.fields.lastChanged')}</dt><dd>{when(c.updatedAt) || <em>{t('incubation.admin.unknown')}</em>}</dd></div>
+          <div><dt>{t('incubation.admin.fields.butrauthUser')}</dt><dd><code>{c.butrauthUserId}</code></dd></div>
         </dl>
       ) : (
-        <p className="inc-admin-empty">No business contact saved yet.</p>
+        <p className="inc-admin-empty">{t('incubation.admin.noContact')}</p>
       )}
       </div>
       </div>

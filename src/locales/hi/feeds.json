@@ -1,0 +1,123 @@
+{
+  "loadingMore": "और लोड हो रहा है…",
+  "promoted": "प्रमोटेड",
+  "scrollLeft": "बाएँ स्क्रॉल करें",
+  "scrollRight": "दाएँ स्क्रॉल करें",
+  "errors": {
+    "fetchVideos": "वीडियो लाने में त्रुटि",
+    "loadVideos": "वीडियो लोड नहीं हो सके",
+    "loadShorts": "शॉर्ट्स लोड नहीं हो सके"
+  },
+  "tabs": {
+    "all": "सभी",
+    "videos": "वीडियो",
+    "shorts": "शॉर्ट्स",
+    "videosCount": "वीडियो ({{count}})",
+    "shortsCount": "शॉर्ट्स ({{count}})"
+  },
+  "dateFilters": {
+    "all": "हर समय",
+    "today": "आज",
+    "week": "इस हफ़्ते",
+    "month": "इस महीने",
+    "justNow": "अभी-अभी"
+  },
+  "live": {
+    "title": "अभी लाइव",
+    "badge": "● लाइव"
+  },
+  "newFromFollowing": {
+    "aria": "आपके फ़ॉलो किए क्रिएटर्स से नया",
+    "shorts_one": "{{count}} शॉर्ट",
+    "shorts_other": "{{count}} शॉर्ट्स"
+  },
+  "firstUploads": {
+    "title": "पहली बार के अपलोड"
+  },
+  "newVideos": {
+    "title": "नए वीडियो"
+  },
+  "home": {
+    "sections": {
+      "discover": "डिस्कवर",
+      "home": "होम फ़ीड",
+      "follow": "फ़ॉलो फ़ीड",
+      "new": "नया कंटेंट",
+      "interests": "रुचियाँ"
+    },
+    "empty": "यहाँ दिखाने के लिए अभी कुछ नहीं है।",
+    "viewAll": "सभी देखें",
+    "dragToReorder": "क्रम बदलने के लिए खींचें",
+    "surfTitle": "चैनल सर्फ़िंग: कोई विषय चुनें और टीवी की तरह देखें",
+    "zapping": "ज़ैपिंग"
+  },
+  "surf": {
+    "pageTitle": "चैनल सर्फ़िंग",
+    "intro": "एक चैनल चुनें और आराम से देखें। हम उस विषय के सबसे अच्छे वीडियो एक के बाद एक लगाते हैं। बोर हो गए? <b>ज़ैप</b> दबाएँ। कुछ और देखना है? चैनल बदलें।",
+    "backTo": "CH {{number}} {{emoji}} {{title}} पर वापस",
+    "surprise": "कुछ भी चलाएँ",
+    "yourChannels": "आपके चैनल",
+    "nothingOnAir": "{{channel}} पर अभी कुछ नहीं चल रहा",
+    "tuneFailed": "चैनल ट्यून नहीं हो सका। थोड़ी देर में फिर से कोशिश करें।",
+    "remoteAria": "चैनल सर्फ़िंग रिमोट",
+    "openGuide": "चैनल गाइड खोलें",
+    "ch": "CH {{number}}",
+    "chLabel": "CH",
+    "channelHint": "CH {{number}}: {{title}}",
+    "channelHintKey": "CH {{number}}: {{title}} ({{key}})",
+    "tuningShort": "ट्यूनिंग",
+    "tuning": "ट्यून हो रहा है…",
+    "onAir": "ऑन एयर",
+    "changeChannel": "चैनल बदलें",
+    "nextChannel": "अगला चैनल",
+    "prevChannel": "पिछला चैनल",
+    "nextVideo": "अगला वीडियो",
+    "nextVideoKey": "अगला वीडियो (→)",
+    "zap": "ज़ैप",
+    "findingNext": "अगला वीडियो ढूँढ रहे हैं…",
+    "stop": "सर्फ़िंग बंद करें",
+    "stopTitle": "सर्फ़िंग बंद करें (यह वीडियो चलता रहेगा)",
+    "guide": "चैनल गाइड"
+  },
+  "discover": {
+    "searchPlaceholder": "वीडियो, शॉर्ट्स, ऑडियो, कम्युनिटी खोजें...",
+    "clearSearch": "सर्च साफ़ करें",
+    "searchFor": "“{{term}}” खोजें",
+    "noResultsFor": "“{{term}}” के लिए कोई नतीजा नहीं मिला",
+    "types": {
+      "user": "यूज़र",
+      "community": "कम्युनिटी",
+      "video": "वीडियो",
+      "short": "शॉर्ट्स",
+      "audio": "ऑडियो",
+      "playlist": "प्लेलिस्ट"
+    },
+    "suggest": {
+      "tags": "टैग",
+      "titles": "टाइटल"
+    },
+    "dates": {
+      "today": "आज",
+      "week": "इस हफ़्ते",
+      "month": "इस महीने",
+      "year": "इस साल"
+    },
+    "boostRecent": "नए को प्राथमिकता",
+    "filters": "फ़िल्टर",
+    "date": "तारीख",
+    "tag": "टैग",
+    "tagPlaceholder": "जैसे crypto, gaming...",
+    "community": "कम्युनिटी",
+    "communityPlaceholder": "कम्युनिटी खोजें...",
+    "clearAllFilters": "सभी फ़िल्टर हटाएँ",
+    "allHidden": "सभी तरह का कंटेंट छिपा हुआ है।",
+    "reenableFilters": "सभी फ़िल्टर फिर से चालू करें",
+    "groupTitle": "{{label}} ({{count}})",
+    "subscribers_one": "{{count}} सब्सक्राइबर",
+    "subscribers_other": "{{count}} सब्सक्राइबर",
+    "authors_one": "{{count}} लेखक",
+    "authors_other": "{{count}} लेखक",
+    "views_one": "{{views}} व्यू",
+    "views_other": "{{views}} व्यू"
+  }
+}

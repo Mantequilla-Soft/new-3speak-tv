@@ -1,0 +1,297 @@
+{
+  "untitled": "Senza titolo",
+  "categories": {
+    "podcast": "Podcast",
+    "voice": "Voce",
+    "music": "Musica",
+    "audiobook": "Audiolibro",
+    "interview": "Intervista"
+  },
+  "inline": {
+    "defaultTitle": "Registrazione OpenPod",
+    "defaultSubtitle": "Registrato in diretta su 3Speak OpenPods",
+    "kickerPreview": "Anteprima audio",
+    "kickerOpenPod": "OpenPod"
+  },
+  "tile": {
+    "artistAlbum": "Album dell'artista",
+    "listenerPlaylist": "Playlist di un ascoltatore",
+    "bpm": "{{bpm}} bpm",
+    "queue": "In coda",
+    "playlist": "Playlist",
+    "plays_one": "{{count}} ascolto",
+    "plays_many": "{{count}} ascolti",
+    "plays_other": "{{count}} ascolti"
+  },
+  "author": {
+    "followed": "Ora segui @{{author}}",
+    "unfollowed": "Non segui più @{{author}}",
+    "failed": "Non riuscito",
+    "tracks_one": "{{count}} traccia",
+    "tracks_many": "{{count}} tracce",
+    "tracks_other": "{{count}} tracce"
+  },
+  "player": {
+    "openPost": "Apri il post audio",
+    "playlist": "Playlist",
+    "transcript": "Trascrizione",
+    "volume": "Volume",
+    "queue": "Coda",
+    "closePlayer": "Chiudi player",
+    "curated": "Selezionato",
+    "noCues": "Nessun riferimento.",
+    "clearQueue": "Svuota coda",
+    "clearAll": "Svuota tutto",
+    "queueEmpty": "La coda è vuota."
+  },
+  "share": {
+    "failed": "Non riuscito",
+    "copyPeakd": "Copia link PeakD",
+    "copiedPeakd": "Link PeakD copiato!",
+    "copy3speak": "Copia link 3Speak",
+    "copied3speak": "Link 3Speak copiato!",
+    "copyAudioPlayer": "Copia link del player audio",
+    "copiedAudioPlayer": "Link del player audio copiato!",
+    "searchingHive": "Ricerca su Hive…"
+  },
+  "post": {
+    "notFound": "Post non trovato",
+    "loadFailed": "Impossibile caricare questo post audio",
+    "loadFailedFull": "Impossibile caricare questo post audio.",
+    "backToAudio": "← Torna ad Audio",
+    "untitled": "(senza titolo)",
+    "addedToQueue": "Aggiunto alla coda",
+    "signInToVote": "Accedi per votare",
+    "voted": "Votato",
+    "vote": "Vota",
+    "signInToTip": "Accedi per inviare una mancia",
+    "tip": "Mancia",
+    "stillIndexing": "L'audio di questo post è ancora in fase di indicizzazione — riprova tra qualche minuto."
+  },
+  "page": {
+    "sections": {
+      "popular": "Popolari",
+      "recent": "Nuove uscite",
+      "podcasts": "Podcast",
+      "songs": "Brani",
+      "audiobooks": "Audiolibri",
+      "interviews": "Interviste"
+    },
+    "dates": {
+      "today": "Oggi",
+      "thisWeek": "Questa settimana",
+      "thisMonth": "Questo mese",
+      "thisYear": "Quest'anno"
+    },
+    "duration": {
+      "label": "Durata",
+      "min": "Durata minima",
+      "max": "Durata massima",
+      "seconds": "{{value}} s",
+      "minutes": "{{value}} min",
+      "hours": "{{value}} h"
+    },
+    "all": "Tutti",
+    "musicGenre": "Genere musicale",
+    "anyGenre": "Qualsiasi genere",
+    "tracks_one": "{{count}} traccia",
+    "tracks_many": "{{count}} tracce",
+    "tracks_other": "{{count}} tracce",
+    "noTracks": "Nessuna traccia trovata.",
+    "creators": "Creator",
+    "albumsPlaylists": "Album e playlist",
+    "noAudioForFilters": "Nessun audio trovato con questi filtri."
+  },
+  "upload": {
+    "title": "Carica audio",
+    "publishing": "Pubblicazione…",
+    "failed": "Non riuscito",
+    "unknown": "sconosciuto",
+    "unknownError": "errore sconosciuto",
+    "recorded": "Registrato",
+    "uploaded": "Caricato",
+    "steps": {
+      "source": "Origine",
+      "mode": "Modalità",
+      "playlist": "Playlist",
+      "post": "Post",
+      "mainpost": "Post principale",
+      "tracks": "Tracce",
+      "review": "Riepilogo"
+    },
+    "trackTypes": {
+      "voiceSnap": "Voce / Snap"
+    },
+    "toasts": {
+      "pickImage": "Scegli un file immagine",
+      "thumbFailed": "Caricamento della miniatura non riuscito: {{error}}",
+      "appliedToAll": "Applicato a tutte le tracce",
+      "micDenied": "Accesso al microfono negato",
+      "signInFirst": "Prima accedi",
+      "enterPlaylistName": "Inserisci un nome per la playlist",
+      "creatingPlaylist": "Creazione della playlist \"{{name}}\"…",
+      "playlistCreated": "Playlist creata",
+      "failedWithError": "Non riuscito: {{error}}",
+      "authorized": "@threespeak autorizzato — ora puoi pubblicare",
+      "authFailed": "Autorizzazione non riuscita. Riprova.",
+      "couldntPublishMain": "Impossibile pubblicare il post principale: {{error}}",
+      "couldntResolveContainer": "Impossibile trovare il contenitore peak.snaps: {{error}}",
+      "published_one": "{{count}} traccia pubblicata",
+      "published_many": "{{count}} tracce pubblicate",
+      "published_other": "{{count}} tracce pubblicate",
+      "someFailed": "Alcune tracce non sono riuscite — apri la traccia non riuscita per riprovare"
+    },
+    "gate": {
+      "checking": "Verifica…",
+      "allowThreespeak": "Per pubblicare audio, consenti a <b>@threespeak</b> di pubblicare per tuo conto.",
+      "authorizing": "Autorizzazione…",
+      "authorize": "Autorizza @threespeak",
+      "notEnoughRc": "Al momento il tuo account non ha abbastanza <b>Resource Credits</b> per pubblicare un post.",
+      "whyCantUpload": "Perché non posso caricare?"
+    },
+    "discard": {
+      "title": "Scartare il caricamento?",
+      "body_one": "Hai aggiunto {{count}} traccia. Chiudendo verrà scartata.",
+      "body_many": "Hai aggiunto {{count}} tracce. Chiudendo verranno scartate.",
+      "body_other": "Hai aggiunto {{count}} tracce. Chiudendo verranno scartate.",
+      "bodyRecording_one": "Hai aggiunto {{count}} traccia e c'è una registrazione in corso. Chiudendo verranno scartate.",
+      "bodyRecording_many": "Hai aggiunto {{count}} tracce e c'è una registrazione in corso. Chiudendo verranno scartate.",
+      "bodyRecording_other": "Hai aggiunto {{count}} tracce e c'è una registrazione in corso. Chiudendo verranno scartate.",
+      "keepEditing": "Continua a modificare",
+      "discard": "Scarta"
+    },
+    "source": {
+      "dropHere": "Trascina qui i file audio, o fai clic per sfogliare",
+      "formats": "MP3, WAV, OGG, WEBM, M4A, FLAC, AAC — anche più file",
+      "stop": "Stop",
+      "orRecord": "Oppure registra dal vivo",
+      "recordLimit": "Fino a {{minutes}} min per registrazione",
+      "record": "Registra",
+      "added": "Aggiunti ({{count}})"
+    },
+    "titles": {
+      "help": "Dai un titolo a ogni traccia e scegli un tipo. Le tracce musicali hanno i campi genere + BPM."
+    },
+    "fields": {
+      "trackTitle": "Titolo della traccia",
+      "genre": "Genere",
+      "bpm": "BPM",
+      "descriptionOptional": "Descrizione (facoltativa)"
+    },
+    "playlist": {
+      "helpRequired": "Obbligatorio — scegli o crea una playlist. I post album vivono dentro una playlist, così le tracce restano raggruppate in un album 3Speak. Questo aiuta la visibilità e dà una posizione più in evidenza nella pagina Audio.",
+      "helpOptional": "Facoltativo — aggiungi tutte le tracce a una playlist.",
+      "none": "Nessuna playlist",
+      "noneHint": "Le tracce non verranno raggruppate",
+      "creatingPending": "creazione… (in attesa dell'indicizzatore)",
+      "loading": "Caricamento playlist…",
+      "empty": "Non hai ancora playlist.",
+      "items_one": "{{count}} elemento",
+      "items_many": "{{count}} elementi",
+      "items_other": "{{count}} elementi",
+      "newPlaylist": "Nuova playlist audio",
+      "namePlaceholder": "Nome della playlist",
+      "public": "Pubblica",
+      "private": "Privata",
+      "musicStylePlaceholder": "Stile / genere musicale (facoltativo, es. Elettronica)",
+      "creditsPlaceholder": "Crediti (facoltativo)",
+      "yearPlaceholder": "Anno",
+      "labelPlaceholder": "Etichetta (facoltativa)",
+      "thumbAlt": "Miniatura dell'album",
+      "removeThumb": "Rimuovi miniatura",
+      "creating": "Creazione…",
+      "create": "Crea"
+    },
+    "thumb": {
+      "uploading": "Caricamento…",
+      "addCover": "Aggiungi immagine di copertina",
+      "hint": "Fai clic o trascina — JPG / PNG / WebP",
+      "coverAlt": "copertina",
+      "removeCover": "Rimuovi copertina"
+    },
+    "mode": {
+      "help_one": "{{count}} traccia aggiunta. Scegli come pubblicarla.",
+      "help_many": "{{count}} tracce aggiunte. Scegli come pubblicarle.",
+      "help_other": "{{count}} tracce aggiunte. Scegli come pubblicarle.",
+      "howPublished": "Come vuoi pubblicarlo?",
+      "snapsTitle": "Commenti snap",
+      "snapsDesc": "Ogni audio viene pubblicato come risposta sotto l'ultimo contenitore peak.snaps — compare nel feed degli Snaps (predefinito).",
+      "singleTitle": "Post singolo",
+      "singleTitleSingleOnly": "Post singolo (solo un file)",
+      "singleDesc": "Un audio nel proprio post Hive principale, con titolo, community, tag e copertina.",
+      "albumTitle": "Post album",
+      "albumTitleNeeds2": "Post album (servono 2+ file)",
+      "albumDesc": "Un post principale (senza audio) che fa da pagina di presentazione; ogni traccia viene pubblicata come commento di risposta con copertina, descrizione, pagamento e beneficiari propri.",
+      "howEarn": "Come deve guadagnare questo audio?",
+      "postRewardsTitle": "Ricompense del post (una tantum)",
+      "postRewardsDesc": "Ricevi il normale pagamento Hive per l'autore — erogato una sola volta, circa 7 giorni dopo la pubblicazione.",
+      "pplTitle": "Pagamento per ascolto (a vita)",
+      "pplDesc": "Tutte le ricompense del post audio vanno a @{{account}}. Invece di un pagamento unico, un programma di 3Speak ti paga per ogni ascolto per tutta la vita della traccia."
+    },
+    "reward": {
+      "distribution": "Distribuzione delle ricompense",
+      "default": "Predefinito (50% HBD / 50% HP)",
+      "powerup": "Power up 100%",
+      "decline": "Rifiuta il pagamento",
+      "beneficiaries": "Beneficiari",
+      "beneficiariesCount": "Beneficiari ({{count}})"
+    },
+    "mainPost": {
+      "helpAlbum": "Dettagli del post principale — la pagina di presentazione dell'album. Non contiene audio; ogni traccia è un commento di risposta che configuri dopo.",
+      "helpSingle": "Dettagli del tuo post singolo.",
+      "titlePlaceholder": "Titolo (obbligatorio)",
+      "selectCommunity": "Seleziona community",
+      "change": "Cambia",
+      "tagsPlaceholder": "Tag — separati da spazi o virgole (facoltativo)",
+      "whatKind": "Che tipo di audio è?"
+    },
+    "tracks": {
+      "helpAlbum": "Ogni traccia viene pubblicata come commento sotto il post principale. Imposta i valori comuni una volta, applicali a tutte e poi personalizzali per singola traccia.",
+      "helpSnaps": "Ogni traccia viene pubblicata come snap a sé. Imposta i valori comuni una volta, applicali a tutte e poi personalizzali per singola traccia.",
+      "applyToAllHeading": "Applica a tutte le tracce",
+      "sharedDescription": "Descrizione comune (facoltativa)",
+      "sharedCover": "Copertina comune",
+      "applyToAll_one": "Applica a {{count}} traccia",
+      "applyToAll_many": "Applica a tutte le {{count}} tracce",
+      "applyToAll_other": "Applica a tutte le {{count}} tracce",
+      "hide": "Nascondi"
+    },
+    "review": {
+      "standalone": "Post singolo",
+      "standaloneIn": "Post singolo in {{community}}",
+      "album_one": "Album — 1 post principale + {{count}} commento traccia",
+      "album_many": "Album — 1 post principale + {{count}} commenti traccia",
+      "album_other": "Album — 1 post principale + {{count}} commenti traccia",
+      "albumIn_one": "Album — 1 post principale in {{community}} + {{count}} commento traccia",
+      "albumIn_many": "Album — 1 post principale in {{community}} + {{count}} commenti traccia",
+      "albumIn_other": "Album — 1 post principale in {{community}} + {{count}} commenti traccia",
+      "snapComments_one": "{{count}} commento snap",
+      "snapComments_many": "{{count}} commenti snap",
+      "snapComments_other": "{{count}} commenti snap",
+      "ready_one": "Pronto a pubblicare {{count}} traccia.",
+      "ready_many": "Pronto a pubblicare {{count}} tracce.",
+      "ready_other": "Pronto a pubblicare {{count}} tracce.",
+      "readyToPlaylist_one": "Pronto a pubblicare {{count}} traccia nella playlist \"{{name}}\".",
+      "readyToPlaylist_many": "Pronto a pubblicare {{count}} tracce nella playlist \"{{name}}\".",
+      "readyToPlaylist_other": "Pronto a pubblicare {{count}} tracce nella playlist \"{{name}}\".",
+      "publishAs": "Pubblica come:",
+      "earnings": "Guadagni:",
+      "earningsPpl": "Pagamento per ascolto (@{{account}})",
+      "earningsNormal": "Normali ricompense del post",
+      "playlist": "Playlist:",
+      "failedCount_one": "{{count}} traccia non riuscita.",
+      "failedCount_many": "{{count}} tracce non riuscite.",
+      "failedCount_other": "{{count}} tracce non riuscite.",
+      "retryAllFailed": "Riprova tutte quelle non riuscite",
+      "failedDuringUpload": "Errore durante il caricamento del file audio: {{message}}",
+      "failedDuringPost": "Errore durante la pubblicazione su Hive: {{message}}",
+      "failedWithMessage": "Non riuscito: {{message}}"
+    },
+    "stage": {
+      "upload": "Caricamento del file audio",
+      "post": "Pubblicazione su Hive",
+      "uploadingFallback": "Caricamento",
+      "published": "Pubblicato"
+    }
+  }
+}

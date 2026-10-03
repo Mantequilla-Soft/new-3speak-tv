@@ -1,0 +1,46 @@
+{
+  "loading": "লোড হচ্ছে...",
+  "error": "ত্রুটি: {{error}}",
+  "thumbnailAlt": "থাম্বনেইল",
+  "topicTitle": "বিষয়: {{topic}}",
+  "watchingNow_one": "এখন {{count}} জন দেখছেন",
+  "watchingNow_other": "এখন {{count}} জন দেখছেন",
+  "badges": {
+    "gatedTitle": "শুধু সাপোর্টারদের জন্য — 3Speak Pro-তে পুরো ভিডিও খুলবে",
+    "pro": "PRO",
+    "new": "নতুন",
+    "live": "● লাইভ",
+    "liveChat": "● লাইভ চ্যাট"
+  },
+  "status": {
+    "scheduled": "নির্ধারিত",
+    "mobile": "মোবাইল",
+    "mobileTitle": "মোবাইল অ্যাপ থেকে আপলোড করা",
+    "processing": "প্রসেস হচ্ছে",
+    "processingTitle": "ভিডিওটি প্রসেস হচ্ছে",
+    "draft": "ড্রাফট",
+    "draftTitle": "ড্রাফট - এখনো প্রকাশিত হয়নি",
+    "deleted": "মুছে ফেলা",
+    "deletedTitle": "এই ভিডিওটি মুছে ফেলা হয়েছে",
+    "failed": "ব্যর্থ",
+    "failedTitle": "ভিডিও প্রসেসিং ব্যর্থ হয়েছে",
+    "unlisted": "আনলিস্টেড",
+    "unlistedTitle": "আনলিস্টেড — ফিড ও সার্চে লুকানো, শুধু সরাসরি লিংকে দেখা যায়"
+  },
+  "playlist": {
+    "loading": "প্লেলিস্ট লোড হচ্ছে...",
+    "items_one": "{{count}}টি আইটেম",
+    "items_other": "{{count}}টি আইটেম",
+    "openAria": "প্লেলিস্ট {{name}} খুলুন",
+    "tag": "প্লেলিস্ট",
+    "updated": "আপডেট হয়েছে {{when}}"
+  },
+  "watchLater": {
+    "title": "পরে দেখুন",
+    "subtitle": "পরে দেখার ভিডিও"
+  },
+  "watched": {
+    "title": "দেখা হয়েছে",
+    "subtitle": "আপনার দেখার ইতিহাস"
+  }
+}

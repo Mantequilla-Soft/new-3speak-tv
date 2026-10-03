@@ -1,0 +1,40 @@
+{
+  "ariaLabel": "Cookie and storage settings",
+  "title": "Cookies & browser storage",
+  "withAds": {
+    "intro": "3Speak keeps your login and the settings you choose in your browser. That is what makes the site work, and it stays on your device. Two things are optional, and both are off unless you turn them on below.",
+    "advertising": "One of them is <b>advertising</b>. When it is on, an outside advertising company loads its own code on the page and can store things we do not control. That is why it is a separate choice and never bundled with anything else."
+  },
+  "noAds": {
+    "intro": "3Speak keeps your login and the settings you choose in your browser — that's what makes the site work. We use <b>no tracking cookies, no advertising and no third-party analytics</b>. The only thing watching a video can save to your device is where you left off — and that's the one optional choice below.",
+    "optional": "The one optional thing: we can remember <b>where you left off in each video</b> so playback resumes. It never leaves your device."
+  },
+  "details": {
+    "essentialTitle": "Essential — always on",
+    "essential": {
+      "login": "Your login session",
+      "settings": "Settings you set: theme, volume, language, subtitles, feed preferences",
+      "uploads": "Resuming an interrupted upload, and drafts of posts you're writing",
+      "offline": "The app itself, for offline use once installed",
+      "answer": "Your answer to this banner"
+    },
+    "optionalTitle": "Optional — your choice",
+    "optional": {
+      "playback": "Playback position per video, so you can pick up where you left off",
+      "advertising": "Advertising: an outside advertising company's code, and whatever it stores on your device to count and cap the ads you are shown"
+    },
+    "noteWithAds": "Leaving these off stops playback positions from being saved and deletes any already stored, and means no advertising code is loaded at all. You can change your mind any time.",
+    "noteNoAds": "Choosing “Essential only” stops playback positions from being saved and deletes any already stored. You can change your mind any time — choosing “Accept” turns it back on straight away."
+  },
+  "toggles": {
+    "resumeTitle": "Resume playback",
+    "resumeDesc": "Remember where you left off in each video. Stays on your device.",
+    "advertisingTitle": "Advertising",
+    "advertisingDesc": "Let an outside advertising company load its code and store what it needs."
+  },
+  "hideDetails": "Hide details",
+  "whatIsStored": "What exactly is stored?",
+  "essentialOnly": "Essential only",
+  "saveChoices": "Save choices",
+  "acceptAll": "Accept all"
+}

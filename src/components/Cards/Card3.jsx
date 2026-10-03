@@ -26,6 +26,8 @@ import useHoverPreview from "../../hooks/useHoverPreview";
 import { AiPill } from "../AiBadge/AiBadge";
 import { aiKey, isAiFlagged, useAiFlags } from "../../utils/aiFlags";
 import { useAppStore } from "../../lib/store";
+import { useTranslation } from "react-i18next";
+import { formatDate } from "../../i18n";
 
 
 /**
@@ -92,6 +94,7 @@ const isAiCard = (v) => !v._liveStream
   && (isAiFlagged(cardAuthorOf(v), v.permlink) || (!!v.owner && isAiFlagged(v.owner, v.permlink)));
 
 function Card3({ videos = [], loading = false, error = null, interleaveEvery = 0, renderInterleave = null, communityEvery = 0, renderCommunity = null, creatorsEvery = 0, renderCreators = null, getContentForVideo = null, isWatched = null, getViewCount = null, isNew = null, linkPrefix = '/watch', linkQuery = '', shortTimeAgo = true, shortsGrid = false, priority = false, hideWatched = false, watchedVersion = 0 }) {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const [modalUser, setModalUser] = useState(null);
 
@@ -187,8 +190,8 @@ function Card3({ videos = [], loading = false, error = null, interleaveEvery = 0
     // this recompute when answers arrive.
   }, [videos, shortsGrid, dismissed, deadVideos, hideWatched, isWatched, watchedVersion, hideAi, aiVersion]);
 
-  if (loading && videos.length === 0) return <div>Loading...</div>;
-  if (error) return <div>Error: {error}</div>;
+  if (loading && videos.length === 0) return <div>{t('cards.loading')}</div>;
+  if (error) return <div>{t('cards.error', { error })}</div>;
 
   return (
     <div
@@ -244,8 +247,8 @@ function Card3({ videos = [], loading = false, error = null, interleaveEvery = 0
                   manifest and key request, so hiding this badge would not grant
                   anyone access. Shorts are never gated. */}
               {video.gated && !isShortCard(video, shortsGrid) && (
-                <div className="card-gated-badge" title="Supporters only — 3Speak Pro unlocks the full video">
-                  <span aria-hidden="true">🔒</span> PRO
+                <div className="card-gated-badge" title={t('cards.badges.gatedTitle')}>
+                  <span aria-hidden="true">🔒</span> {t('cards.badges.pro')}
                 </div>
               )}
 
@@ -253,7 +256,7 @@ function Card3({ videos = [], loading = false, error = null, interleaveEvery = 0
                   Top-left like the PRO badge, and below it when both apply. */}
               {isNew?.(video) && (
                 <div className={`card-new-badge${video.gated && !isShortCard(video, shortsGrid) ? ' card-new-badge--below' : ''}`}>
-                  NEW
+                  {t('cards.badges.new')}
                 </div>
               )}
 
@@ -263,7 +266,7 @@ function Card3({ videos = [], loading = false, error = null, interleaveEvery = 0
               {/* Live tile → badge (top-right). A group-chat (conference) room
                   reads "LIVE CHAT"; a standalone stream reads "LIVE". */}
               {video._liveStream && (
-                <div className="card-live-badge">{video._openpodRoom ? '● LIVE CHAT' : '● LIVE'}</div>
+                <div className="card-live-badge">{video._openpodRoom ? t('cards.badges.liveChat') : t('cards.badges.live')}</div>
               )}
 
               {/* Options menu (playlist / not interested / hide creator).
@@ -285,51 +288,51 @@ function Card3({ videos = [], loading = false, error = null, interleaveEvery = 0
                   <IoCalendarOutline size={18} />
                   <span>
                     {video.publish_data
-                      ? dayjs(typeof video.publish_data === 'number' ? video.publish_data * 1000 : video.publish_data).format('MMM D, h:mm A')
-                      : 'Scheduled'}
+                      ? formatDate(typeof video.publish_data === 'number' ? video.publish_data * 1000 : video.publish_data, { month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' })
+                      : t('cards.status.scheduled')}
                   </span>
                 </div>
               )}
 
               {video.publish_type === 'publish_manual' && (
-                <div className="status-badge manual" title="Uploaded via mobile app">
+                <div className="status-badge manual" title={t('cards.status.mobileTitle')}>
                   <MdPhoneIphone size={18} />
-                  <span>Mobile</span>
+                  <span>{t('cards.status.mobile')}</span>
                 </div>
               )}
 
               {video.status === 'encoding' && (
-                <div className="status-badge encoding" title="Video is being processed">
+                <div className="status-badge encoding" title={t('cards.status.processingTitle')}>
                   <FaCog size={16} className="spin-icon" />
-                  <span>Processing</span>
+                  <span>{t('cards.status.processing')}</span>
                 </div>
               )}
 
               {video.status === 'draft' && (
-                <div className="status-badge draft" title="Draft - not published yet">
+                <div className="status-badge draft" title={t('cards.status.draftTitle')}>
                   <FaFileAlt size={16} />
-                  <span>Draft</span>
+                  <span>{t('cards.status.draft')}</span>
                 </div>
               )}
 
               {video.status === 'deleted' && (
-                <div className="status-badge deleted" title="This video has been deleted">
+                <div className="status-badge deleted" title={t('cards.status.deletedTitle')}>
                   <MdDelete size={18} />
-                  <span>Deleted</span>
+                  <span>{t('cards.status.deleted')}</span>
                 </div>
               )}
 
               {video.status === 'failed' && (
-                <div className="status-badge failed" title="Video processing failed">
+                <div className="status-badge failed" title={t('cards.status.failedTitle')}>
                   <MdError size={18} />
-                  <span>Failed</span>
+                  <span>{t('cards.status.failed')}</span>
                 </div>
               )}
 
               {video.unlisted && (
-                <div className="status-badge unlisted" title="Unlisted — hidden from feeds & search, only reachable by direct link">
+                <div className="status-badge unlisted" title={t('cards.status.unlistedTitle')}>
                   <MdVisibilityOff size={18} />
-                  <span>Unlisted</span>
+                  <span>{t('cards.status.unlisted')}</span>
                 </div>
               )}
             </div>
@@ -352,7 +355,7 @@ function Card3({ videos = [], loading = false, error = null, interleaveEvery = 0
                 const cat = getCategoryOf(video.tag_v2);
                 if (!cat) return null;
                 return (
-                  <span className="card-topic-chip" title={`Topic: ${getTagLabel(cat)}`}>
+                  <span className="card-topic-chip" title={t('cards.topicTitle', { topic: getTagLabel(cat) })}>
                     {getTagLabel(cat)}
                   </span>
                 );
@@ -375,7 +378,7 @@ function Card3({ videos = [], loading = false, error = null, interleaveEvery = 0
                        NOW, not lifetime views — say so on hover, since the bare
                        number next to a LIVE badge reads as either. */
                     title={video._liveStream
-                      ? `${resolvedViews} watching now`
+                      ? t('cards.watchingNow', { count: resolvedViews })
                       : undefined}
                   />
                 );

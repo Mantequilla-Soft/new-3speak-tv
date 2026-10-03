@@ -1,0 +1,349 @@
+{
+  "icons": {
+    "link": "Link",
+    "globe": "Website",
+    "podcast": "Podcast",
+    "email": "Email",
+    "phone": "Phone",
+    "rss": "RSS",
+    "qrcode": "QR code",
+    "shop": "Shop",
+    "bag": "Store",
+    "dollar": "Money",
+    "gift": "Gift",
+    "heart": "Support",
+    "star": "Star",
+    "thumbsup": "Like",
+    "fire": "Fire",
+    "bolt": "Bolt",
+    "music": "Music",
+    "headphones": "Audio",
+    "mic": "Mic",
+    "video": "Video",
+    "film": "Film",
+    "tv": "TV",
+    "play": "Play",
+    "camera": "Photo",
+    "image": "Image",
+    "palette": "Art",
+    "pen": "Write",
+    "book": "Book",
+    "newspaper": "News",
+    "graduation": "Course",
+    "code": "Code",
+    "gamepad": "Gaming",
+    "briefcase": "Work",
+    "home": "Home",
+    "location": "Location",
+    "map": "Map",
+    "calendar": "Calendar",
+    "clock": "Clock",
+    "bell": "Alerts",
+    "tag": "Tag",
+    "download": "Download",
+    "file": "File",
+    "users": "Community",
+    "comment": "Comment",
+    "share": "Share",
+    "coffee": "Coffee",
+    "wallet": "Wallet",
+    "plus": "More",
+    "check": "Check"
+  },
+  "fonts": {
+    "system": "System",
+    "rounded": "Rounded",
+    "serif": "Serif",
+    "mono": "Mono",
+    "display": "Display",
+    "condensed": "Condensed",
+    "handwriting": "Handwriting",
+    "grotesk": "Grotesk",
+    "humanist": "Humanist",
+    "geometric": "Geometric",
+    "slab": "Slab",
+    "elegant": "Elegant",
+    "typewriter": "Typewriter",
+    "marker": "Marker",
+    "brush": "Brush",
+    "palatino": "Palatino",
+    "wide": "Wide"
+  },
+  "motion": {
+    "none": "None",
+    "float": "Float",
+    "sway": "Sway",
+    "pulse": "Pulse",
+    "wobble": "Wobble",
+    "bounce": "Bounce",
+    "tilt": "Tilt 3D",
+    "spin": "Spin",
+    "shake": "Shake",
+    "breathe": "Breathe"
+  },
+  "sectionTypes": {
+    "link": "Link",
+    "video": "3Speak content",
+    "embed": "Rich link",
+    "image": "Image",
+    "header": "Title / text"
+  },
+  "blockNames": {
+    "link": "link",
+    "header": "header",
+    "image": "image",
+    "video": "video",
+    "embed": "embed"
+  },
+  "blockNamesPlural": {
+    "link": "links",
+    "header": "headers",
+    "image": "images",
+    "video": "videos",
+    "embed": "embeds"
+  },
+  "templates": {
+    "minimal": {
+      "name": "Minimal",
+      "niche": "Clean & simple"
+    },
+    "neon": {
+      "name": "Neon Nights",
+      "niche": "Creator / streamer"
+    },
+    "crypto": {
+      "name": "On-Chain",
+      "niche": "Crypto / Web3"
+    },
+    "gamer": {
+      "name": "Player One",
+      "niche": "Gaming"
+    },
+    "photographer": {
+      "name": "Exposure",
+      "niche": "Photography"
+    },
+    "podcaster": {
+      "name": "On Air",
+      "niche": "Podcast"
+    },
+    "fitness": {
+      "name": "Peak Form",
+      "niche": "Fitness / coach"
+    },
+    "writer": {
+      "name": "Longform",
+      "niche": "Writer / blogger"
+    },
+    "chef": {
+      "name": "Mise en Place",
+      "niche": "Food / cooking"
+    },
+    "travel": {
+      "name": "Wanderlust",
+      "niche": "Nature / travel"
+    },
+    "business": {
+      "name": "Boardroom",
+      "niche": "Business / pro"
+    },
+    "artist": {
+      "name": "Palette",
+      "niche": "Artist / visual"
+    },
+    "ocean": {
+      "name": "Tidewater",
+      "niche": "Chill / lifestyle"
+    },
+    "musician": {
+      "name": "Amplified",
+      "niche": "Music / band"
+    },
+    "developer": {
+      "name": "Terminal",
+      "niche": "Developer / tech"
+    },
+    "sports": {
+      "name": "Game Day",
+      "niche": "Sports / athlete"
+    }
+  },
+  "errors": {
+    "notLoggedIn": "Not logged in",
+    "couldNotSaveToHive": "Could not save to Hive"
+  },
+  "arrange": {
+    "title": "Title",
+    "video": "Video",
+    "latestPosts": "Latest posts",
+    "latestPostsBy": "Latest posts · @{{account}}",
+    "dragToArrange": "Drag to arrange"
+  },
+  "page": {
+    "latestPosts": "Latest posts",
+    "seeNewestPosts": "See @{{user}}’s newest posts →",
+    "openLink": "Open link",
+    "empty": "@{{user}} hasn’t added any links yet.",
+    "viewProfile": "View 3Speak profile →",
+    "poweredBy": "Powered by 3Speak"
+  },
+  "editor": {
+    "resetToDefault": "Reset to default",
+    "motion": "Motion",
+    "speed": "Speed {{value}}",
+    "loop": "Loop",
+    "runSeconds": "Run {{value}}s",
+    "picker": {
+      "videoLabel": "Choose from my videos",
+      "videoLoading": "Loading your videos…",
+      "videoEmpty": "No recent 3Speak videos found.",
+      "shortLabel": "Choose from my shorts",
+      "shortLoading": "Loading your shorts…",
+      "shortEmpty": "No recent 3Speak shorts found.",
+      "noChannel": "No channel detected (are you logged in?)",
+      "loadFailed": "Couldn’t load: {{error}}"
+    },
+    "toasts": {
+      "unfurlFailed": "Could not fetch link preview",
+      "imageUploadFailed": "Image upload failed: {{error}}",
+      "tryAgain": "try again",
+      "styleApplied": "Style applied to all {{type}} blocks",
+      "templateApplied": "“{{name}}” applied — tweak or Undo",
+      "reverted": "Reverted to your previous design",
+      "saved": "Spotlight saved to your Hive profile",
+      "saveFailed": "Could not save",
+      "linkCopied": "Link copied",
+      "uploadFailed": "Upload failed"
+    },
+    "link": {
+      "labelPlaceholder": "Label (e.g. My YouTube)",
+      "type": "Link type",
+      "typeGroup": "Type",
+      "website": "Website / URL",
+      "email": "Email",
+      "phone": "Phone",
+      "platformGroup": "Platform",
+      "yourname": "yourname",
+      "platformIconHint": "Icon is the {{platform}} logo — switch to “Website / URL” to choose a custom icon.",
+      "icon": "Icon",
+      "iconColor": "Icon color",
+      "iconBg": "Icon bg"
+    },
+    "header": {
+      "text": "Text",
+      "size": "Size",
+      "large": "Large",
+      "medium": "Medium",
+      "small": "Small",
+      "align": "Align",
+      "left": "Left",
+      "center": "Center",
+      "right": "Right"
+    },
+    "image": {
+      "uploading": "Uploading…",
+      "upload": "Upload image",
+      "urlPlaceholder": "…or image URL",
+      "linkPlaceholder": "Link when clicked (optional)"
+    },
+    "video": {
+      "contentType": "Content type",
+      "video": "Video",
+      "short": "Short",
+      "orPaste": "or paste a link",
+      "pastePlaceholder": "Paste a 3Speak video link or author/permlink",
+      "titlePlaceholder": "Title shown above the video (links to 3Speak)",
+      "hint": "Selected content will embed and play on your page."
+    },
+    "embed": {
+      "source": "Source",
+      "sourceLink": "A link (rich preview)",
+      "sourceHiveRecent": "My latest Hive posts",
+      "accountPlaceholder": "Hive username (leave blank for your own)",
+      "showPosts_one": "Show {{count}} post",
+      "showPosts_other": "Show {{count}} posts",
+      "perRow": "{{value}} per row",
+      "hiveRecentHint": "Your most recent top-level posts (no reblogs or cross-posts). Updates automatically.",
+      "linkPlaceholder": "Paste any link — Hive post, Instagram, X, YouTube, article…",
+      "fetching": "Fetching preview…",
+      "noPreview": "No preview found — it’ll still show as a link card.",
+      "pasteHint": "Paste a link and we’ll pull in its title, description & image."
+    },
+    "style": {
+      "title": "Style",
+      "applyAllTitle": "Apply this style to every {{type}} block",
+      "applyAll": "Apply to all {{types}}",
+      "background": "Background",
+      "text": "Text",
+      "backgroundPct": "Background {{value}}%",
+      "radius": "Radius {{value}}",
+      "fontSizePct": "Font size {{value}}%",
+      "paddingPx": "Padding {{value}}px",
+      "thumbnailPct": "Thumbnail {{value}}%",
+      "border": "Border",
+      "thicknessPx": "Thickness {{value}}px",
+      "opacityPct": "Opacity {{value}}%",
+      "shadow": "Shadow",
+      "strengthPct": "Strength {{value}}%",
+      "color": "Color",
+      "blur": "Blur {{value}}",
+      "spread": "Spread {{value}}",
+      "inset": "Inset",
+      "cardDelayMs": "Card delay {{value}}ms"
+    },
+    "tagline": "Your links & videos on one page",
+    "openPage": "Open page",
+    "templates": {
+      "title": "Templates",
+      "hint": "Pick a design to fill everything in — your bio is kept, and you can Undo.",
+      "undo": "Undo template — back to my design"
+    },
+    "profile": {
+      "title": "Profile",
+      "headlinePlaceholder": "A short headline / bio (optional)",
+      "avatarSizePct": "Avatar size {{value}}%",
+      "avatarShadowPct": "Avatar shadow {{value}}%",
+      "avatarGlow": "Avatar glow",
+      "glowSize": "Glow size {{value}}",
+      "channelButtonText": "Channel button text"
+    },
+    "page": {
+      "title": "Page style",
+      "solid": "Solid",
+      "gradient": "Gradient",
+      "image": "Image",
+      "color2": "Color 2",
+      "angle": "Angle {{value}}°",
+      "uploadBackground": "Upload background",
+      "imageSet": "Image set ✓",
+      "overlay": "Overlay",
+      "overlay2": "Overlay 2",
+      "none": "None",
+      "overlayOpacityPct": "Overlay opacity {{value}}%",
+      "overlayAngle": "Overlay angle {{value}}°",
+      "colors": "Colors",
+      "buttonBg": "Button bg",
+      "buttonText": "Button text",
+      "buttons": "Buttons",
+      "buttonStyle": "Button style",
+      "soft": "Soft",
+      "fill": "Fill",
+      "outline": "Outline",
+      "cornerRadius": "Corner radius {{value}}",
+      "textStyle": "Text style (name, bio & text blocks)",
+      "font": "Font",
+      "normal": "Normal",
+      "italic": "Italic",
+      "bold": "Bold",
+      "boldItalic": "Bold Italic",
+      "strong": "Strong",
+      "textBorderPx": "Text border {{value}}px",
+      "borderColor": "Border color"
+    },
+    "addBlock": "Add a block",
+    "empty": "Add your first link, video or image above.",
+    "arrangeHint": "Drag <grip></grip> to arrange · drop a block onto another to put them side by side · click a block to edit it right here",
+    "livePreview": "Live preview",
+    "previewTitle": "Spotlight preview"
+  }
+}

@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { TRANSLATE_API_URL } from './config';
+import { getLanguage } from '../i18n';
 
 const STORAGE_KEY = '3speak-translate-lang';
 
@@ -41,7 +42,9 @@ export const SUPPORTED_LANGUAGES = [
 ];
 
 export function getTargetLanguage() {
-  return localStorage.getItem(STORAGE_KEY) || 'en';
+  // Until someone picks a translation language, translate into the language
+  // they read the interface in.
+  return localStorage.getItem(STORAGE_KEY) || getLanguage();
 }
 
 export function setTargetLanguage(code) {

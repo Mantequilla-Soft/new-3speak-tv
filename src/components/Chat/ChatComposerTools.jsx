@@ -2,12 +2,14 @@ import { useState, useRef, useEffect, useCallback } from 'react'
 import { Smile, Loader2 } from 'lucide-react'
 import EmojiPicker from 'emoji-picker-react'
 import { useAppStore } from '../../lib/store'
+import { useTranslation } from 'react-i18next'
 
 // Giphy API key — set VITE_GIPHY_API_KEY per environment (it's a client-side
 // key, baked into the bundle). Without it, GIF search returns nothing.
 const GIPHY_KEY = import.meta.env.VITE_GIPHY_API_KEY || ''
 
 export default function ChatComposerTools({ onPickEmoji, onPickGif }) {
+  const { t } = useTranslation()
   const [open, setOpen] = useState(null) // 'emoji' | 'gif' | null
   const [query, setQuery] = useState('')
   const [gifs, setGifs] = useState([])
@@ -49,8 +51,8 @@ export default function ChatComposerTools({ onPickEmoji, onPickGif }) {
   // response from overwriting a later (search) one.
   useEffect(() => {
     if (open !== 'gif') return
-    const t = setTimeout(() => loadGifs(query), query.trim() ? 350 : 0)
-    return () => clearTimeout(t)
+    const timer = setTimeout(() => loadGifs(query), query.trim() ? 350 : 0)
+    return () => clearTimeout(timer)
   }, [open, query, loadGifs])
 
   const pickGif = (g) => {
@@ -68,8 +70,8 @@ export default function ChatComposerTools({ onPickEmoji, onPickGif }) {
         type="button"
         className={`chat-tool-btn${open === 'emoji' ? ' active' : ''}`}
         onClick={() => setOpen(open === 'emoji' ? null : 'emoji')}
-        aria-label="Emoji"
-        title="Emoji"
+        aria-label={t('chat.tools.emoji')}
+        title={t('chat.tools.emoji')}
       >
         <Smile size={20} />
       </button>
@@ -92,7 +94,7 @@ export default function ChatComposerTools({ onPickEmoji, onPickGif }) {
             width="100%"
             height={420}
             previewConfig={{ showPreview: false }}
-            searchPlaceholder="Search emoji"
+            searchPlaceholder={t('chat.tools.searchEmoji')}
           />
         </div>
       )}
@@ -102,21 +104,21 @@ export default function ChatComposerTools({ onPickEmoji, onPickGif }) {
           <input
             className="chat-gif-search"
             type="text"
-            placeholder="Search GIFs…"
+            placeholder={t('chat.tools.searchGifs')}
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             autoFocus
           />
           <div className="chat-gif-grid">
             {loading && <div className="chat-gif-loading"><Loader2 size={20} className="chat-spin" /></div>}
-            {!loading && gifs.length === 0 && <div className="chat-gif-empty">No GIFs found.</div>}
+            {!loading && gifs.length === 0 && <div className="chat-gif-empty">{t('chat.tools.noGifs')}</div>}
             {!loading && gifs.map((g) => (
               <button key={g.id} type="button" className="chat-gif-item" onClick={() => pickGif(g)}>
                 <img src={g.images?.fixed_height?.url || g.images?.fixed_height_small?.url} alt={g.title || 'gif'} loading="lazy" />
               </button>
             ))}
           </div>
-          <div className="chat-gif-attribution">Powered by GIPHY</div>
+          <div className="chat-gif-attribution">{t('chat.tools.poweredByGiphy')}</div>
         </div>
       )}
     </div>

@@ -1,0 +1,50 @@
+{
+  "tabs": {
+    "overview": "概览",
+    "transactions": "交易记录",
+    "aria": "钱包分区"
+  },
+  "errors": {
+    "fetchBalances": "获取余额失败",
+    "needKeychain": "转账需要安装 Keychain 扩展"
+  },
+  "header": {
+    "mine": "我的钱包",
+    "ofUser": "{{user}} 的钱包"
+  },
+  "assets": "资产",
+  "transfer": "转账",
+  "transferModal": {
+    "loginRequired": "请登录后再转账",
+    "insufficient": "余额不足",
+    "invalidUsername": "用户名无效",
+    "success": "转账成功！",
+    "failed": "转账失败：{{error}}",
+    "title": "转账 {{coin}}",
+    "amountLabel": "金额（{{coin}}）",
+    "balance": "余额 {{balance}}",
+    "max": "最大",
+    "recipientLabel": "收款人用户名",
+    "recipientPlaceholder": "输入 Hive 用户名",
+    "memoLabel": "备注",
+    "memoPlaceholder": "输入备注",
+    "confirm": "确认转账"
+  },
+  "history": {
+    "loadFailed": "交易记录加载失败",
+    "title": "交易记录",
+    "cols": {
+      "type": "类型",
+      "amount": "金额",
+      "account": "账号",
+      "date": "日期",
+      "memo": "备注"
+    },
+    "types": {
+      "transfer": "转账",
+      "claim": "领取奖励",
+      "received": "收到"
+    },
+    "claimedRewards": "已领取的奖励"
+  }
+}

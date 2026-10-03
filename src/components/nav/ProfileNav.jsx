@@ -6,6 +6,7 @@ import { useGetMyQuery } from '../../hooks/getUserDetails';
 import { MdSettings, MdTrendingUp, MdCampaign, MdCloudUpload, MdPersonAdd } from "react-icons/md";
 import { ImPower } from "react-icons/im";
 import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { FaDiscord, FaLanguage } from 'react-icons/fa';
 import { IoPower } from 'react-icons/io5';
 import { FaCheckToSlot, FaJxl, FaSquareXTwitter } from 'react-icons/fa6';
@@ -27,6 +28,7 @@ import { usePwaInstall } from '../../utils/pwaInstall';
 import { MdOutlineDownload } from 'react-icons/md';
 import { FaMedal } from 'react-icons/fa6';
 import { toastIn } from '../../utils/toast';
+import { isTranslatorName } from '../../lib/translatorApi';
 
 // Headed "Install", the same as the bottom bar's install hint.
 const installToast = toastIn('Install');
@@ -35,6 +37,7 @@ const installToast = toastIn('Install');
 
 
 function ProfileNav({ isVisible, onclose, toggleAddAccount, openLoginModal }) {
+  const { t } = useTranslation();
   const location = useLocation();
   const navigate = useNavigate()
   const { user, showNsfw, setShowNsfw, toggleTheme, LogOut } = useAppStore();
@@ -67,6 +70,14 @@ function ProfileNav({ isVisible, onclose, toggleAddAccount, openLoginModal }) {
   // the same reasoning as the backlog entry above. Any failure (signed out,
   // Butter Auth unreachable) just means no entry.
   const [inviteLinkCount, setInviteLinkCount] = useState(0);
+  // Translators (TRANSLATORS on the server) get a Translate entry in this menu.
+  const [isTranslator, setIsTranslator] = useState(false);
+  useEffect(() => {
+    if (!user) { setIsTranslator(false); return undefined; }
+    let alive = true;
+    isTranslatorName(user).then((ok) => { if (alive) setIsTranslator(ok); });
+    return () => { alive = false; };
+  }, [user]);
   useEffect(() => {
     if (!user) { setInviteLinkCount(0); return undefined; }
     let alive = true;
@@ -141,9 +152,9 @@ function ProfileNav({ isVisible, onclose, toggleAddAccount, openLoginModal }) {
     // top was dropped on purpose: it was the loudest thing on screen and said
     // nothing about what the menu does.
     <div className={`profilenav-container ${isVisible ? 'visible' : ''}`} onClick={onclose}>
-      <div className="profile-wrap" role="menu" aria-label="Account menu" onClick={(e) => e.stopPropagation()}>
+      <div className="profile-wrap" role="menu" aria-label={t('nav.profile.accountMenu')} onClick={(e) => e.stopPropagation()}>
         <div className="pn-header">
-          <Link to="/profile" className="pn-avatar-link" onClick={onclose} aria-label="My channel">
+          <Link to="/profile" className="pn-avatar-link" onClick={onclose} aria-label={t('nav.profile.myChannelAria')}>
             <img className="pn-avatar" src={myAvatar} alt="" />
           </Link>
           <div className="pn-identity">
@@ -164,12 +175,12 @@ function ProfileNav({ isVisible, onclose, toggleAddAccount, openLoginModal }) {
 
         {!isIncubating && (
           <div className="pn-meters">
-            <div className="pn-meter" title="Voting Power: how much weight your next vote carries">
+            <div className="pn-meter" title={t('nav.profile.vpTooltip')}>
               <span className="pn-meter-label">VP</span>
               <div className="pn-meter-track"><div className="pn-meter-fill" style={{ width: `${Math.min(100, Number(votingPower) || 0)}%` }} /></div>
               <strong>{votingPower}%</strong>
             </div>
-            <div className="pn-meter" title="Resource Credits: what your actions on Hive cost">
+            <div className="pn-meter" title={t('nav.profile.rcTooltip')}>
               <span className="pn-meter-label">RC</span>
               <div className="pn-meter-track"><div className="pn-meter-fill" style={{ width: `${Math.min(100, Number(rc) || 0)}%` }} /></div>
               <strong>{rc}%</strong>
@@ -179,49 +190,54 @@ function ProfileNav({ isVisible, onclose, toggleAddAccount, openLoginModal }) {
 
         <div className="pn-section">
           <Link to="/profile" className="pn-item" role="menuitem" onClick={onclose}>
-            <IoMdPerson className="pn-icon" /> <span>My Channel</span>
+            <IoMdPerson className="pn-icon" /> <span>{t('nav.profile.myChannel')}</span>
           </Link>
           {backlogPending > 0 && (
             <Link to="/publish-backlog" className="pn-item" role="menuitem" onClick={onclose}>
               <MdCloudUpload className="pn-icon" />
-              <span>Publish backlog</span>
+              <span>{t('nav.profile.publishBacklog')}</span>
               <span className="profilenav-count">{backlogPending}</span>
             </Link>
           )}
           {!isIncubating && (
             <button type="button" className="pn-item" role="menuitem" onClick={() => { handlewallletNavigation(); onclose() }}>
-              <RiWallet3Fill className="pn-icon" /> <span>Wallet</span>
+              <RiWallet3Fill className="pn-icon" /> <span>{t('common.nav.wallet')}</span>
             </button>
           )}
           <button type="button" className="pn-item" role="menuitem" onClick={() => { setSettingsOpen(true); onclose(); }}>
-            <MdSettings className="pn-icon" /> <span>Settings</span>
+            <MdSettings className="pn-icon" /> <span>{t('common.nav.settings')}</span>
           </button>
         </div>
 
         <div className="pn-section">
           {!isIncubating && (
             <Link to="/profile?tab=stats" className="pn-item" role="menuitem" onClick={onclose}>
-              <MdTrendingUp className="pn-icon" /> <span>Analytics</span>
+              <MdTrendingUp className="pn-icon" /> <span>{t('nav.profile.analytics')}</span>
             </Link>
           )}
           {/* Closed testing. Same gate as the /advertise page itself, so the menu can
               never offer a link to a page that would answer with a 404. */}
           {!isIncubating && adsEnabledFor(user) && (
             <Link to="/advertise" className="pn-item" role="menuitem" onClick={onclose}>
-              <MdCampaign className="pn-icon" /> <span>Advertise</span>
+              <MdCampaign className="pn-icon" /> <span>{t('nav.advertise')}</span>
             </Link>
           )}
           {inviteLinkCount > 0 && (
             <Link to="/invite-links" className="pn-item" role="menuitem" onClick={onclose}>
-              <MdPersonAdd className="pn-icon" /> <span>Invite links</span>
+              <MdPersonAdd className="pn-icon" /> <span>{t('nav.profile.inviteLinks')}</span>
+            </Link>
+          )}
+          {isTranslator && (
+            <Link to="/translate" className="pn-item" role="menuitem" onClick={onclose}>
+              <FaLanguage className="pn-icon" /> <span>{t('translator.title')}</span>
             </Link>
           )}
           {/* Phone only: on desktop the sidebar already links the rankings. */}
           <Link to="/leaderboard" className="pn-item pn-phone-only" role="menuitem" onClick={onclose}>
-            <FaMedal className="pn-icon" /> <span>Rankings</span>
+            <FaMedal className="pn-icon" /> <span>{t('app.routes.rankings')}</span>
           </Link>
           <Link to="/about" className="pn-item" role="menuitem" onClick={onclose}>
-            <HiInformationCircle className="pn-icon" /> <span>About 3Speak</span>
+            <HiInformationCircle className="pn-icon" /> <span>{t('nav.aboutLink')}</span>
           </Link>
           {/* Phone only, and only where the app can actually be installed. iOS
               has no install prompt, so it gets the Share-sheet instructions. */}
@@ -233,10 +249,10 @@ function ProfileNav({ isVisible, onclose, toggleAddAccount, openLoginModal }) {
               onClick={() => {
                 onclose();
                 if (canInstallPrompt) promptInstall();
-                else if (isIOS) installToast('Tap the Share button in Safari, then "Add to Home Screen"', { icon: '📲' });
+                else if (isIOS) installToast(t('nav.profile.iosInstallToast'), { icon: '📲' });
               }}
             >
-              <MdOutlineDownload className="pn-icon" /> <span>Install App</span>
+              <MdOutlineDownload className="pn-icon" /> <span>{t('nav.installApp')}</span>
             </button>
           )}
         </div>
@@ -248,12 +264,12 @@ function ProfileNav({ isVisible, onclose, toggleAddAccount, openLoginModal }) {
               would just strand the user. */}
           {!isManteAuth && (
             <button type="button" className="pn-item" role="menuitem" onClick={() => { onclose(); openLoginModal(); }}>
-              <IoPower className="pn-icon" /> <span>Change account</span>
+              <IoPower className="pn-icon" /> <span>{t('nav.profile.changeAccount')}</span>
             </button>
           )}
           {isManteAuth && (
             <button type="button" className="pn-item" role="menuitem" onClick={() => { LogOut(user); onclose(); navigate('/'); }}>
-              <IoPower className="pn-icon" /> <span>Logout</span>
+              <IoPower className="pn-icon" /> <span>{t('nav.profile.logout')}</span>
             </button>
           )}
         </div>
@@ -264,13 +280,13 @@ function ProfileNav({ isVisible, onclose, toggleAddAccount, openLoginModal }) {
             <span className="rpc-node-host">{rpcHost}</span>
           </div>
           <div className="support-wrap">
-            <a href="https://discord.com/invite/NSFS2VGj83" className="social-link" target="_blank" rel="noopener noreferrer" aria-label="3Speak on Discord">
+            <a href="https://discord.com/invite/NSFS2VGj83" className="social-link" target="_blank" rel="noopener noreferrer" aria-label={t('nav.profile.onDiscord')}>
               <FaDiscord />
             </a>
-            <a href="https://x.com/3speaktv?utm_source=3speak.tv " className="social-link" target="_blank" rel="noopener noreferrer" aria-label="3Speak on X">
+            <a href="https://x.com/3speaktv?utm_source=3speak.tv " className="social-link" target="_blank" rel="noopener noreferrer" aria-label={t('nav.profile.onX')}>
               <FaSquareXTwitter />
             </a>
-            <a href="https://t.me/threespeak?utm_source=3speak.tv" className="social-link" target="_blank" rel="noopener noreferrer" aria-label="3Speak on Telegram">
+            <a href="https://t.me/threespeak?utm_source=3speak.tv" className="social-link" target="_blank" rel="noopener noreferrer" aria-label={t('nav.profile.onTelegram')}>
               <SiTelegram />
             </a>
           </div>

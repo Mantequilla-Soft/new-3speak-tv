@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useTranslation, Trans } from 'react-i18next';
 import axios from 'axios';
 import { Flag } from 'lucide-react';
 import { toastIn } from '../../utils/toast';
@@ -15,13 +16,13 @@ const toast = toastIn('Live');
 // collection (processed:false) for moderator triage — same triage pattern as
 // the feedback reviews. Reasons mirror the checker's accepted set.
 const REASONS = [
-  { value: 'harassment', label: 'Harassment or hate' },
-  { value: 'sexual', label: 'Sexual or explicit content' },
-  { value: 'violence', label: 'Violence or dangerous acts' },
-  { value: 'selfharm', label: 'Self-harm' },
-  { value: 'illegal', label: 'Illegal content' },
-  { value: 'spam', label: 'Spam or scam' },
-  { value: 'other', label: 'Something else' },
+  { value: 'harassment', labelKey: 'live.report.reasons.harassment' },
+  { value: 'sexual', labelKey: 'live.report.reasons.sexual' },
+  { value: 'violence', labelKey: 'live.report.reasons.violence' },
+  { value: 'selfharm', labelKey: 'live.report.reasons.selfharm' },
+  { value: 'illegal', labelKey: 'live.report.reasons.illegal' },
+  { value: 'spam', labelKey: 'live.report.reasons.spam' },
+  { value: 'other', labelKey: 'live.report.reasons.other' },
 ];
 
 /**
@@ -30,6 +31,7 @@ const REASONS = [
  * @param {string} [variant] – 'sidebar' (mobile action rail) | 'inline' (default)
  */
 export default function StreamReportButton({ roomName, host, variant = 'inline' }) {
+  const { t } = useTranslation();
   const [open, setOpen] = useState(false);
   const [reason, setReason] = useState('');
   const [detail, setDetail] = useState('');
@@ -53,10 +55,10 @@ export default function StreamReportButton({ roomName, host, variant = 'inline' 
         app_version: APP_VERSION,
         path: typeof window !== 'undefined' ? window.location.pathname : null,
       });
-      toast.success('Thanks — this stream has been reported to our team.');
+      toast.success(t('live.report.sent'));
       setOpen(false); setReason(''); setDetail('');
     } catch (e) {
-      toast.error('Could not send the report. Please try again.');
+      toast.error(t('live.report.failed'));
     } finally {
       setSending(false);
     }
@@ -65,26 +67,26 @@ export default function StreamReportButton({ roomName, host, variant = 'inline' 
   return (
     <>
       {variant === 'sidebar' ? (
-        <div className="actionItem" onClick={() => setOpen(true)} role="button" title="Report this stream">
+        <div className="actionItem" onClick={() => setOpen(true)} role="button" title={t('live.report.title')}>
           <div className="actionButton"><Flag size={22} /></div>
-          <span className="actionLabel">Report</span>
+          <span className="actionLabel">{t('common.actions.report')}</span>
         </div>
       ) : (
-        <button type="button" className="stream-report-trigger" onClick={() => setOpen(true)} title="Report this stream">
-          <Flag size={16} /> <span>Report</span>
+        <button type="button" className="stream-report-trigger" onClick={() => setOpen(true)} title={t('live.report.title')}>
+          <Flag size={16} /> <span>{t('common.actions.report')}</span>
         </button>
       )}
 
       {open && (
-        <div className="stream-report" role="dialog" aria-label="Report this stream" aria-modal="true">
+        <div className="stream-report" role="dialog" aria-label={t('live.report.title')} aria-modal="true">
           <div className="stream-report__backdrop" onClick={close} />
           <div className="stream-report__card">
             <div className="stream-report__head">
-              <strong>Report this stream</strong>
-              <button className="stream-report__close" onClick={close} aria-label="Close">✕</button>
+              <strong>{t('live.report.title')}</strong>
+              <button className="stream-report__close" onClick={close} aria-label={t('common.actions.close')}>✕</button>
             </div>
             <p className="stream-report__sub">
-              {host ? <>Reporting <b>@{host}</b>. </> : null}Tell us what's wrong — our team reviews every report.
+              {host ? <><Trans i18nKey="live.report.reporting" values={{ host }} components={{ b: <b /> }} />{' '}</> : null}{t('live.report.intro')}
             </p>
 
             <div className="stream-report__reasons">
@@ -96,23 +98,23 @@ export default function StreamReportButton({ roomName, host, variant = 'inline' 
                   onClick={() => setReason(r.value)}
                   aria-pressed={reason === r.value}
                 >
-                  {r.label}
+                  {t(r.labelKey)}
                 </button>
               ))}
             </div>
 
             <textarea
               className="stream-report__detail"
-              placeholder="Add any details (optional)"
+              placeholder={t('live.report.detailPlaceholder')}
               value={detail}
               maxLength={4000}
               onChange={(e) => setDetail(e.target.value)}
             />
 
             <div className="stream-report__actions">
-              <button className="stream-report__cancel" onClick={close} disabled={sending}>Cancel</button>
+              <button className="stream-report__cancel" onClick={close} disabled={sending}>{t('common.actions.cancel')}</button>
               <button className="stream-report__submit" onClick={submit} disabled={!reason || sending}>
-                {sending ? 'Sending…' : 'Submit report'}
+                {sending ? t('live.report.sending') : t('live.report.submit')}
               </button>
             </div>
           </div>

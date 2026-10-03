@@ -8,7 +8,9 @@ import {
 import AdvertiserContactForm from './AdvertiserContactForm';
 import BrandProfileForm from './BrandProfileForm';
 import { TRACK_QUESTION_ID } from './TrackQuestion';
-import { trackTitle } from './tracks';
+import { trackTitleKey } from './tracks';
+import { useTranslation } from 'react-i18next';
+import { formatDate } from '../../i18n';
 import {
   fetchIncubationProgress, progressHue, progressFraction, taskFraction, onIncubationProgress,
   fetchGraduationStatus, canCreateAccount,
@@ -25,119 +27,124 @@ import {
 
 // Plural wording from the goal's own number, which the server decides per track
 // (a creator posts 1 short, say): so the label can never promise a different
-// number from the one that is counted.
-const plural = (n, one, many) => (n === 1 ? one : many.replace('#', n));
+// number from the one that is counted. Each `labelKey` has _one/_other forms
+// and is translated with { count: need }.
 
 // Watch time as a person would say it: "an hour", "20 minutes".
-function watchWords(seconds) {
-  if (seconds >= 3600 && seconds % 3600 === 0) return plural(seconds / 3600, 'an hour', '# hours');
-  return plural(Math.round(seconds / 60), 'a minute', '# minutes');
+function watchLabel(seconds, t) {
+  if (seconds >= 3600 && seconds % 3600 === 0) return t('incubation.progress.tasks.watch.labelHours', { count: seconds / 3600 });
+  return t('incubation.progress.tasks.watch.labelMinutes', { count: Math.round(seconds / 60) });
 }
 
-// `label` is a function of the goal's `need`.
+// Text is stored as i18n keys (translated at render): `labelKey` takes the
+// goal's `need` as its count, `countsKeys` are the "what counts" bullets.
 const TASK_COPY = {
   video: {
     Icon: FaVideo,
-    label: (n) => plural(n, 'Upload a video', 'Upload # videos'),
-    hint: 'Share something about you and what your channel will be about.',
-    why: 'This is the first thing the team looks at when they review you, and the first thing a visitor sees when they open your channel.',
-    counts: [
-      'Any video you publish from the upload studio.',
-      'It stays yours. When you are upgraded you pick which of these posts get published to Hive under your own name.',
+    labelKey: 'incubation.progress.tasks.video.label',
+    hintKey: 'incubation.progress.tasks.video.hint',
+    whyKey: 'incubation.progress.tasks.video.why',
+    countsKeys: [
+      'incubation.progress.tasks.video.counts.0',
+      'incubation.progress.tasks.video.counts.1',
     ],
-    cta: { label: 'Upload a video', to: '/embed-studio' },
+    cta: { labelKey: 'incubation.progress.tasks.video.cta', to: '/embed-studio' },
   },
   short: {
     Icon: FaMobileAlt,
-    label: (n) => plural(n, 'Post a short', 'Post # shorts'),
-    hint: 'Participate in 3Speak Shorts and upload some moments of your daily life or some stories you want to share.',
-    why: 'Shorts are the fastest way to be found. They play in a feed of creators people do not follow yet, so a short reaches past your own channel.',
-    counts: [
-      'Vertical videos posted from the shorts uploader.',
-      'On any subject you like.',
+    labelKey: 'incubation.progress.tasks.short.label',
+    hintKey: 'incubation.progress.tasks.short.hint',
+    whyKey: 'incubation.progress.tasks.short.why',
+    countsKeys: [
+      'incubation.progress.tasks.short.counts.0',
+      'incubation.progress.tasks.short.counts.1',
     ],
-    cta: { label: 'Post a short', to: '/embed-studio?from=shorts' },
+    cta: { labelKey: 'incubation.progress.tasks.short.cta', to: '/embed-studio?from=shorts' },
   },
   follow: {
     Icon: FaUserPlus,
-    label: (n) => plural(n, 'Follow a creator', 'Follow # creators'),
-    hint: 'Build up a network of likeminded people, or creators you find exciting.',
-    why: 'Your following list is what turns the home feed into your feed. It travels with you to Hive when you are upgraded.',
-    counts: [
-      'Creators you follow right now.',
-      'Unfollowing someone lowers the count again, so this tracks who you actually follow rather than how many buttons you pressed.',
+    labelKey: 'incubation.progress.tasks.follow.label',
+    hintKey: 'incubation.progress.tasks.follow.hint',
+    whyKey: 'incubation.progress.tasks.follow.why',
+    countsKeys: [
+      'incubation.progress.tasks.follow.counts.0',
+      'incubation.progress.tasks.follow.counts.1',
     ],
-    cta: { label: 'Find creators', to: '/discover' },
+    cta: { labelKey: 'incubation.progress.tasks.follow.cta', to: '/discover' },
   },
   // No hint here: this one states the length floor, which is the server's
   // number, so it is built in taskHint below rather than written twice. Its
   // "what counts" list is built in taskCounts for the same reason.
   comment: {
     Icon: FaComments,
-    label: (n) => plural(n, 'Write a comment', 'Write # comments'),
-    why: 'Comments are how people find you before you have an audience. One real reply under somebody else\u2019s video will do more for you than an upload nobody has seen yet.',
-    cta: { label: 'Find something to reply to', to: '/discover' },
+    labelKey: 'incubation.progress.tasks.comment.label',
+    whyKey: 'incubation.progress.tasks.comment.why',
+    cta: { labelKey: 'incubation.progress.tasks.comment.cta', to: '/discover' },
   },
   watch: {
     Icon: FaClock,
-    label: (n) => `Watch ${watchWords(n)} on 3Speak`,
-    hint: 'Any videos. Counted while you are really watching.',
-    why: 'Watching says you are here to take part and not only to post. It is the goal most people finish without trying.',
-    counts: [
-      'Time on 3Speak itself. The same video embedded on another site cannot count.',
-      'Once per video. Rewatching one raises its best time, it never adds to it, and no single video can supply all of it on its own.',
-      'Real playing time, so speeding a video up is not punished and slowing it down does not stretch the hour.',
-      'On screen. A video left playing in a background tab does not build the hour.',
-      'Not your own videos.',
-      'Nothing is recorded while you watch in private mode.',
+    // Label built by watchLabel (hours or minutes).
+    hintKey: 'incubation.progress.tasks.watch.hint',
+    whyKey: 'incubation.progress.tasks.watch.why',
+    countsKeys: [
+      'incubation.progress.tasks.watch.counts.0',
+      'incubation.progress.tasks.watch.counts.1',
+      'incubation.progress.tasks.watch.counts.2',
+      'incubation.progress.tasks.watch.counts.3',
+      'incubation.progress.tasks.watch.counts.4',
+      'incubation.progress.tasks.watch.counts.5',
     ],
-    cta: { label: 'Watch something', to: '/' },
+    cta: { labelKey: 'incubation.progress.tasks.watch.cta', to: '/' },
   },
   // The only goal with no call to action, deliberately: there is nothing to go
   // and do, which is the whole point of it. Its "what counts" list is built in
   // taskCounts so it can name the actual date from the server.
   time: {
     Icon: FaHourglassHalf,
-    label: (n) => plural(n, 'Be here for a day', 'Be here for # days'),
-    hint: 'This one finishes on its own. Nothing to do.',
-    why: 'An account that appeared an hour ago and one that has been here a few days look the same on paper. The days are what tell them apart, so everyone waits the same short while.',
+    labelKey: 'incubation.progress.tasks.time.label',
+    hintKey: 'incubation.progress.tasks.time.hint',
+    whyKey: 'incubation.progress.tasks.time.why',
   },
   subscription: {
     Icon: FaUsers,
-    label: (n) => plural(n, 'Join a community', 'Join # communities'),
-    hint: 'Find communities about the things you like to watch or make.',
-    why: 'Communities gather the videos on one subject and the people who care about it. Joining one fills your feed with more of what you like, and for creators it is where a new channel finds its first viewers.',
-    counts: [
-      'Communities you are a member of right now.',
-      'Leaving one lowers the count again.',
+    labelKey: 'incubation.progress.tasks.subscription.label',
+    hintKey: 'incubation.progress.tasks.subscription.hint',
+    whyKey: 'incubation.progress.tasks.subscription.why',
+    countsKeys: [
+      'incubation.progress.tasks.subscription.counts.0',
+      'incubation.progress.tasks.subscription.counts.1',
     ],
-    cta: { label: 'Browse communities', to: '/groups' },
+    cta: { labelKey: 'incubation.progress.tasks.subscription.cta', to: '/groups' },
   },
   // For advertisers: a brand is judged by its profile. The three fields are the
   // ones server/warmup.cjs counts; whether they fit the brand is the team's call.
   // Filled in right inside the goal (BrandProfileForm).
   profile: {
     Icon: FaIdCard,
-    label: () => 'Set up your brand profile',
-    hint: 'Your brand name, what you do and your logo.',
-    why: 'Viewers, and the team reviewing you, see who is behind an ad before anything else. A complete profile is what makes a brand recognisable and trustworthy.',
+    labelKey: 'incubation.progress.tasks.profile.label',
+    hintKey: 'incubation.progress.tasks.profile.hint',
+    whyKey: 'incubation.progress.tasks.profile.why',
   },
   // For advertisers: how the team reaches the business. Email and address are
   // PRIVATE and off-chain; the form says so (AdvertiserContactForm).
   contact: {
     Icon: FaEnvelope,
-    label: () => 'Add your business contact',
-    hint: 'An email, plus your address or a website.',
-    why: 'Before an ad runs, the team needs a real way to reach the business behind it. Your email and address are private: they are never stored on the blockchain or shown anywhere.',
-    counts: [
-      'Email: required.',
-      'Address: optional.',
-      'You need your address OR a website in your brand profile above, at least one of the two.',
+    labelKey: 'incubation.progress.tasks.contact.label',
+    hintKey: 'incubation.progress.tasks.contact.hint',
+    whyKey: 'incubation.progress.tasks.contact.why',
+    countsKeys: [
+      'incubation.progress.tasks.contact.counts.0',
+      'incubation.progress.tasks.contact.counts.1',
+      'incubation.progress.tasks.contact.counts.2',
     ],
   },
 };
 
-const labelOf = (t) => TASK_COPY[t.type]?.label?.(t.need) || t.type;
+const labelOf = (task, t) => {
+  if (task.type === 'watch') return watchLabel(task.need, t);
+  const key = TASK_COPY[task.type]?.labelKey;
+  return key ? t(key, { count: task.need }) : task.type;
+};
 
 /**
  * Seconds as a duration a person would say out loud.
@@ -145,14 +152,14 @@ const labelOf = (t) => TASK_COPY[t.type]?.label?.(t.need) || t.type;
  * Driven by the task's `unit`, not by its name, so the server decides which
  * numbers are durations and this only decides how they read.
  */
-function asDuration(seconds) {
+function asDuration(seconds, t) {
   const total = Math.max(0, Math.round(seconds));
-  if (total < 60) return `${total}s`;
+  if (total < 60) return t('incubation.progress.duration.s', { s: total });
   const h = Math.floor(total / 3600);
   const m = Math.round((total % 3600) / 60);
-  if (h && m) return `${h}h ${m}m`;
-  if (h) return `${h}h`;
-  return `${m}m`;
+  if (h && m) return t('incubation.progress.duration.hm', { h, m });
+  if (h) return t('incubation.progress.duration.h', { h });
+  return t('incubation.progress.duration.m', { m });
 }
 
 /**
@@ -163,11 +170,12 @@ function asDuration(seconds) {
  * reading "1/10" needs it right there, not in a footnote they have already
  * scrolled past.
  */
-function taskHint(t, minCommentChars) {
-  if (t.type === 'comment' && minCommentChars > 0) {
-    return `Comments count once they are at least ${minCommentChars} characters. A real thought, not just “nice”.`;
+function taskHint(task, minCommentChars, t) {
+  if (task.type === 'comment' && minCommentChars > 0) {
+    return t('incubation.progress.tasks.comment.hint', { count: minCommentChars });
   }
-  return TASK_COPY[t.type]?.hint || '';
+  const key = TASK_COPY[task.type]?.hintKey;
+  return key ? t(key) : '';
 }
 
 /**
@@ -178,26 +186,26 @@ function taskHint(t, minCommentChars) {
  * server actually enforces in the query -- someone who has written five replies
  * under their own video and sees 0/10 deserves to be able to find out why.
  */
-function taskCounts(t, minCommentChars) {
-  if (t.type === 'time') {
-    const when = t.readyAt ? asDate(t.readyAt) : null;
+function taskCounts(task, minCommentChars, t) {
+  if (task.type === 'time') {
+    const when = task.readyAt ? asDate(task.readyAt) : null;
     return [
-      `${plural(t.need, 'A full day', '# full days')} from the day you signed up.`,
+      t('incubation.progress.tasks.time.counts.fullDays', { count: task.need }),
       when
-        ? `For you that is ${when}. The other goals can all be finished before then.`
-        : 'The other goals can all be finished before then.',
-      'It keeps counting whether you are here or not, so there is nothing to keep up.',
+        ? t('incubation.progress.tasks.time.counts.forYouWhen', { when })
+        : t('incubation.progress.tasks.time.counts.otherGoals'),
+      t('incubation.progress.tasks.time.counts.keepsCounting'),
     ];
   }
-  if (t.type === 'comment') {
+  if (task.type === 'comment') {
     return [
       minCommentChars > 0
-        ? `At least ${minCommentChars} characters of your own words.`
-        : 'A real thought rather than a single word.',
-      'On somebody else\u2019s post. Replies under your own videos, or to your own comments, are a conversation with yourself and do not count.',
+        ? t('incubation.progress.tasks.comment.counts.minChars', { count: minCommentChars })
+        : t('incubation.progress.tasks.comment.counts.realThought'),
+      t('incubation.progress.tasks.comment.counts.othersPost'),
     ];
   }
-  return TASK_COPY[t.type]?.counts || [];
+  return (TASK_COPY[task.type]?.countsKeys || []).map((k) => t(k));
 }
 
 /** How far along one task is, 0-100, for the fill behind its card. */
@@ -208,8 +216,8 @@ function taskPct(t) {
   return Math.max(0, Math.min(100, taskFraction(t) * 100));
 }
 
-function taskAmount(t) {
-  if (t.unit === 'seconds') return `${asDuration(Math.min(t.have, t.need))} / ${asDuration(t.need)}`;
+function taskAmount(task, t) {
+  if (task.unit === 'seconds') return `${asDuration(Math.min(task.have, task.need), t)} / ${asDuration(task.need, t)}`;
   // A percentage, not a day count. The server floors days so that "three days"
   // means three WHOLE days, which is right for deciding whether the goal is met
   // and useless for showing progress: it reads 0 of 3 for a whole day, then 1 of
@@ -218,11 +226,11 @@ function taskAmount(t) {
   //
   // Rounded DOWN, and never to 100 until the server says done: rounding 99.7 up
   // would show a finished goal beside an unfinished tick.
-  if (t.unit === 'days') {
-    const pct = taskFraction(t) * 100;
-    return t.done ? '100%' : `${Math.min(99, Math.floor(pct))}%`;
+  if (task.unit === 'days') {
+    const pct = taskFraction(task) * 100;
+    return task.done ? '100%' : `${Math.min(99, Math.floor(pct))}%`;
   }
-  return `${Math.min(t.have, t.need)}/${t.need}`;
+  return `${Math.min(task.have, task.need)}/${task.need}`;
 }
 
 /**
@@ -234,7 +242,7 @@ function taskAmount(t) {
 function asDate(iso) {
   const d = new Date(iso);
   if (Number.isNaN(d.getTime())) return null;
-  return d.toLocaleDateString(undefined, { day: 'numeric', month: 'long' });
+  return formatDate(d, { day: 'numeric', month: 'long' });
 }
 
 // Remembered per browser so the list does not spring open on every visit once
@@ -247,6 +255,7 @@ function readOpen() {
 }
 
 export default function IncubationProgressPanel() {
+  const { t } = useTranslation();
   const [progress, setProgress] = useState(null);
   const [tasksOpen, setTasksOpen] = useState(readOpen);
   // Which goals have their detail open. Several may be, and it is session-only
@@ -277,7 +286,7 @@ export default function IncubationProgressPanel() {
         setProgress(p);
         if (!autoOpened.current && p?.tasks) {
           autoOpened.current = true;
-          const first = p.tasks.find((t) => (t.type === 'profile' || t.type === 'contact') && !t.done);
+          const first = p.tasks.find((task) => (task.type === 'profile' || task.type === 'contact') && !task.done);
           if (first) setOpenTasks(new Set([first.type]));
         }
       })
@@ -314,23 +323,23 @@ export default function IncubationProgressPanel() {
     return (
       <section className="inc-panel inc-progress">
         <header>
-          <h2><FaRocket size={14} aria-hidden="true" /> Your path to a Hive account</h2>
+          <h2><FaRocket size={14} aria-hidden="true" /> {t('incubation.progress.title')}</h2>
         </header>
         <p className="inc-track-intro">
-          Your list of things to do depends on what brings you to 3Speak.
+          {t('incubation.progress.needsTrack')}
         </p>
         <button
           type="button"
           className="inc-task-cta"
           onClick={() => document.getElementById(TRACK_QUESTION_ID)?.scrollIntoView({ behavior: 'smooth', block: 'center' })}
         >
-          Choose your path
+          {t('incubation.progress.choosePath')}
         </button>
       </section>
     );
   }
 
-  const doneCount = progress.tasks.filter((t) => t.done).length;
+  const doneCount = progress.tasks.filter((task) => task.done).length;
   const totalTasks = progress.tasks.length;
   // Each goal is worth an equal share and partial progress inside one counts, so
   // the bar creeps forward as they go rather than jumping a fifth at a time.
@@ -339,15 +348,15 @@ export default function IncubationProgressPanel() {
   return (
     <section className="inc-panel inc-progress">
       <header>
-        <h2><FaRocket size={14} aria-hidden="true" /> Your path to a Hive account</h2>
+        <h2><FaRocket size={14} aria-hidden="true" /> {t('incubation.progress.title')}</h2>
         {progress.track && (
-          <span className="inc-track-current">{trackTitle(progress.track)}</span>
+          <span className="inc-track-current">{trackTitleKey(progress.track) ? t(trackTitleKey(progress.track)) : null}</span>
         )}
         <span
           className="inc-progress-count"
           style={{ '--bar-hue': progressHue(filled) }}
         >
-          {doneCount} of {totalTasks} done
+          {t('incubation.progress.doneCount', { done: doneCount, total: totalTasks })}
         </span>
       </header>
       {/* The bar stays put whatever the list does: it is the one thing
@@ -364,7 +373,7 @@ export default function IncubationProgressPanel() {
       <div
         className="inc-progress-bar"
         role="progressbar"
-        aria-label="Overall progress"
+        aria-label={t('incubation.progress.overallAria')}
         aria-valuenow={Math.round(filled * 100)}
         aria-valuemin={0}
         aria-valuemax={100}
@@ -385,24 +394,24 @@ export default function IncubationProgressPanel() {
         aria-controls="inc-task-list"
       >
         <MdExpandMore size={18} aria-hidden="true" />
-        {tasksOpen ? 'Hide the details' : 'Show what is left'}
+        {tasksOpen ? t('incubation.progress.hideDetails') : t('incubation.progress.showLeft')}
       </button>
 
       {tasksOpen && (
         <div id="inc-task-list">
           <ul className="inc-tasks">
-            {progress.tasks.map((t) => {
-              const copy = TASK_COPY[t.type] || {};
+            {progress.tasks.map((task) => {
+              const copy = TASK_COPY[task.type] || {};
               const Icon = copy.Icon;
-              const open = openTasks.has(t.type);
-              const counts = taskCounts(t, progress.minCommentChars);
+              const open = openTasks.has(task.type);
+              const counts = taskCounts(task, progress.minCommentChars, t);
               return (
                 <li
-                  key={t.type}
-                  className={`${t.done ? 'is-done' : ''}${open ? ' is-open' : ''}`.trim()}
+                  key={task.type}
+                  className={`${task.done ? 'is-done' : ''}${open ? ' is-open' : ''}`.trim()}
                   // Read by the fill behind the card, so a part-done
                   // goal is visible as a quantity, not only as a number.
-                  style={{ '--task-fill': `${taskPct(t)}%` }}
+                  style={{ '--task-fill': `${taskPct(task)}%` }}
                 >
                   {/* The whole row is the control, not just the
                       chevron: a 18px target is a poor one on a phone,
@@ -410,29 +419,29 @@ export default function IncubationProgressPanel() {
                   <button
                     type="button"
                     className="inc-task-head"
-                    onClick={() => toggleTask(t.type)}
+                    onClick={() => toggleTask(task.type)}
                     aria-expanded={open}
-                    aria-controls={`inc-task-${t.type}`}
+                    aria-controls={`inc-task-${task.type}`}
                   >
-                    {t.done ? <MdCheckCircle size={20} className="inc-task-icon done" />
+                    {task.done ? <MdCheckCircle size={20} className="inc-task-icon done" />
                       : <MdRadioButtonUnchecked size={20} className="inc-task-icon" />}
                     <span className="inc-task-text">
                       <strong>
                         {Icon ? <Icon size={12} aria-hidden="true" /> : null}
-                        {labelOf(t)}
+                        {labelOf(task, t)}
                       </strong>
-                      <span>{taskHint(t, progress.minCommentChars)}</span>
+                      <span>{taskHint(task, progress.minCommentChars, t)}</span>
                     </span>
-                    <span className="inc-task-count">{taskAmount(t)}</span>
+                    <span className="inc-task-count">{taskAmount(task, t)}</span>
                     <MdExpandMore size={18} className="inc-task-chevron" aria-hidden="true" />
                   </button>
 
                   {open && (
-                    <div className="inc-task-detail" id={`inc-task-${t.type}`}>
-                      {copy.why && <p className="inc-task-why">{copy.why}</p>}
+                    <div className="inc-task-detail" id={`inc-task-${task.type}`}>
+                      {copy.whyKey && <p className="inc-task-why">{t(copy.whyKey)}</p>}
                       {counts.length > 0 && (
                         <>
-                          <h5>What counts</h5>
+                          <h5>{t('incubation.progress.whatCounts')}</h5>
                           <ul>
                             {counts.map((c) => <li key={c}>{c}</li>)}
                           </ul>
@@ -441,13 +450,13 @@ export default function IncubationProgressPanel() {
                       {/* The contact goal is filled in right here: there is no
                           other page for private details. Kept open when done, so
                           they can still be corrected. */}
-                      {t.type === 'profile' && <BrandProfileForm />}
-                      {t.type === 'contact' && <AdvertiserContactForm />}
+                      {task.type === 'profile' && <BrandProfileForm />}
+                      {task.type === 'contact' && <AdvertiserContactForm />}
                       {/* No call to action on a finished goal: it would
                           invite work that earns nothing. */}
-                      {copy.cta && !t.done && (
+                      {copy.cta && !task.done && (
                         <Link className="inc-task-cta" to={copy.cta.to}>
-                          {copy.cta.label}
+                          {t(copy.cta.labelKey)}
                         </Link>
                       )}
                     </div>
@@ -461,8 +470,8 @@ export default function IncubationProgressPanel() {
           {!approved && (
           <p className="inc-review">
             {progress.complete
-              ? 'All done. The team will review your channel and upgrade you. Nothing more for you to do.'
-              : 'Once you have completed all of these, the team will review your channel and upgrade you.'}
+              ? t('incubation.progress.reviewDone')
+              : t('incubation.progress.reviewPending')}
           </p>
           )}
         </div>

@@ -6,6 +6,7 @@ import {persist} from "zustand/middleware"
 import aioha, { isLoggedIn as hasLiveSession } from "../../hive-api/aioha";
 
 import { toastIn } from '../../utils/toast';
+import { t } from '../../i18n';
 
 // Every toast from this module is headed "Sign in"; the message becomes the
 // line under it. See utils/toast.js.
@@ -100,7 +101,7 @@ export const createAuthUserSlice = (set) => ({
       localStorage.setItem("access_token", account.access_token);
       localStorage.setItem("user_id", account.username);
     }
-    toast.success(`Switched to ${username} successfully!`)
+    toast.success(t('misc.auth.switched', { username }))
   },
 
   // Set user directly without calling aioha.switchUser (for when aioha already switched)
@@ -262,7 +263,7 @@ export const createAuthUserSlice = (set) => ({
         "Posting",
         request.callback,
         null,
-        "Login using Hive",
+        t('misc.auth.keychainLoginTitle'),
         (response) => {
           console.log("response", response);
         }

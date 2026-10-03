@@ -2,6 +2,7 @@ import mark from "../../assets/image/3S_mark.svg";
 import { useSignupPossible } from '../../utils/signupPossible';
 import "./nav.scss";
 import { Link, NavLink, useLocation } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import { useAppStore } from "../../lib/store";
 import { IoCloudUploadSharp } from "react-icons/io5";
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
@@ -25,6 +26,7 @@ import { useAvatarUrl } from "../../utils/avatarCache";
 import { isRememberedAdvertiser, rememberAdvertiserAccount, hasAdvertiserProduct } from "../../utils/advertiserAccount";
 
 function NavPlaylistsDropdown({ user, scrollerRef }) {
+  const { t } = useTranslation();
   const [open, setOpen] = useState(false);
   const [pos, setPos] = useState({ top: 0, left: 0 });
   const ref = useRef(null);
@@ -73,9 +75,9 @@ function NavPlaylistsDropdown({ user, scrollerRef }) {
 
   return (
     <div className="nav-playlists-wrapper" ref={ref}>
-      <button type="button" title="Playlists you have saved or built" className={`nav-tab nav-playlists-trigger${open ? ' open' : ''}`} onClick={() => setOpen((v) => !v)}>
+      <button type="button" title={t('nav.playlists.tooltip')} className={`nav-tab nav-playlists-trigger${open ? ' open' : ''}`} onClick={() => setOpen((v) => !v)}>
         <MdPlaylistPlay className="nav-tab-icon" />
-        <span>Playlists</span>
+        <span>{t('nav.playlists.label')}</span>
         <MdKeyboardArrowDown className={`nav-playlists-chevron${open ? ' open' : ''}`} size={16} />
       </button>
       {open && createPortal(
@@ -87,17 +89,17 @@ function NavPlaylistsDropdown({ user, scrollerRef }) {
         >
           <Link to={watchLaterLink} className="nav-playlists-flyout-item">
             <MdWatchLater className="nav-playlists-flyout-icon" />
-            <span>Watch Later{watchLater?.items?.length > 0 ? ` (${watchLater.items.length})` : ''}</span>
+            <span>{watchLater?.items?.length > 0 ? t('nav.playlists.watchLaterCount', { n: watchLater.items.length }) : t('nav.playlists.watchLater')}</span>
           </Link>
           {user && (
             <Link to={`/watched/${user}`} className="nav-playlists-flyout-item">
               <MdHistory className="nav-playlists-flyout-icon" />
-              <span>Watch History</span>
+              <span>{t('nav.playlists.watchHistory')}</span>
             </Link>
           )}
           <Link to="/profile?tab=playlists" className="nav-playlists-flyout-item">
             <MdPlaylistPlay className="nav-playlists-flyout-icon" />
-            <span>All Playlists</span>
+            <span>{t('nav.playlists.all')}</span>
           </Link>
         </div>,
         document.body
@@ -112,6 +114,7 @@ function NavPlaylistsDropdown({ user, scrollerRef }) {
  * Nothing for anyone else, and nothing while we cannot tell.
  */
 function NavAdvertiseButton({ user }) {
+  const { t } = useTranslation();
   const [show, setShow] = useState(() => isRememberedAdvertiser(user));
   useEffect(() => {
     let alive = true;
@@ -126,14 +129,15 @@ function NavAdvertiseButton({ user }) {
   }, [user]);
   if (!show) return null;
   return (
-    <Link to="/advertise" className="nav-advertise-btn" title="Advertise">
+    <Link to="/advertise" className="nav-advertise-btn" title={t('nav.advertise')}>
       <MdCampaign size={18} aria-hidden="true" />
-      <span className="nav-advertise-label">Advertise</span>
+      <span className="nav-advertise-label">{t('nav.advertise')}</span>
     </Link>
   );
 }
 
 function NavUploadDropdown() {
+  const { t } = useTranslation();
   const [open, setOpen] = useState(false);
   const ref = useRef(null);
 
@@ -150,10 +154,10 @@ function NavUploadDropdown() {
       {/* Two icons, one shown per breakpoint: the labelled cloud button on
           desktop, a bare "+" on mobile where this replaces the bottom bar's
           centre item and has to fit next to the avatar. */}
-      <div className="nav-upload-btn" onClick={() => setOpen(!open)} title="Share">
+      <div className="nav-upload-btn" onClick={() => setOpen(!open)} title={t('common.actions.share')}>
         <IoCloudUploadSharp size={18} className="nav-upload-icon-desktop" />
         <MdAdd size={21} className="nav-upload-icon-mobile" />
-        <span className="nav-upload-label">Share</span>
+        <span className="nav-upload-label">{t('common.actions.share')}</span>
       </div>
       {open && (
         <div className="nav-upload-flyout" onClick={() => setOpen(false)}>
@@ -169,6 +173,7 @@ function NavUploadDropdown() {
 const NAV_TABS_KEY = '3speak_nav_tabs_open';
 
 function Nav({ toggleProfileNav, openLoginModal }) {
+  const { t } = useTranslation();
   const { authenticated, LogOut, user, initializeTheme } = useAppStore();
   const incubationHandle = useAppStore((s) => s.incubationHandle);
   const signupPossible = useSignupPossible();
@@ -387,7 +392,7 @@ function Nav({ toggleProfileNav, openLoginModal }) {
           className={`nav-logo-btn${tabsOpen ? ' is-open' : ''}`}
           aria-expanded={tabsOpen}
           aria-controls="nav-tabs"
-          title={tabsOpen ? 'Hide pages' : 'Show pages'}
+          title={tabsOpen ? t('nav.hidePages') : t('nav.showPages')}
           onClick={toggleTabs}
         >
           <img className="logo" src={mark} alt="3Speak" />
@@ -403,28 +408,28 @@ function Nav({ toggleProfileNav, openLoginModal }) {
       <div className="nav-tabs flex-dev" id="nav-tabs" ref={navTabsRef}>
         {/* What the logo used to do. First in the row, so the way home is the
             first thing under the cursor once the group opens. */}
-        <NavLink to="/" end title="Everything new on 3Speak, plus what we think you will like" className={({ isActive }) => `nav-tab${isActive ? ' active' : ''}`}>
-          <MdHomeFilled className="nav-tab-icon" /> <span>Overview</span>
+        <NavLink to="/" end title={t('nav.tabs.overviewTooltip')} className={({ isActive }) => `nav-tab${isActive ? ' active' : ''}`}>
+          <MdHomeFilled className="nav-tab-icon" /> <span>{t('nav.tabs.overview')}</span>
         </NavLink>
-        <NavLink to="/shorts" title="Short vertical videos, one after another" className={({ isActive }) => `nav-tab${isActive ? ' active' : ''}`}>
-          <ShortsIcon className="nav-tab-icon" outlineWidth={30} /> <span>Shorts</span>
+        <NavLink to="/shorts" title={t('nav.tabs.shortsTooltip')} className={({ isActive }) => `nav-tab${isActive ? ' active' : ''}`}>
+          <ShortsIcon className="nav-tab-icon" outlineWidth={30} /> <span>{t('common.nav.shorts')}</span>
         </NavLink>
-        <NavLink to="/audio" title="Podcasts, music and other audio published on 3Speak" className={({ isActive }) => `nav-tab${isActive ? ' active' : ''}`}>
-          <MdGraphicEq className="nav-tab-icon" /> <span>Audio</span>
+        <NavLink to="/audio" title={t('nav.tabs.audioTooltip')} className={({ isActive }) => `nav-tab${isActive ? ' active' : ''}`}>
+          <MdGraphicEq className="nav-tab-icon" /> <span>{t('nav.bottom.audio')}</span>
         </NavLink>
         {/* Groups, not Badges: badges are one tab of it, alongside communities.
             Both lost their menu entry when the sidebar went, and one word in the
             bar covers what were two. */}
-        <NavLink to="/groups" title="Communities you can join, and badges people are awarded" className={({ isActive }) => `nav-tab${isActive ? ' active' : ''}`}>
+        <NavLink to="/groups" title={t('nav.tabs.groupsTooltip')} className={({ isActive }) => `nav-tab${isActive ? ' active' : ''}`}>
           {/* A group of people, not the badge medal this tab inherited when it
               was the Badges tab: badges are one thing inside it now. */}
-          <MdGroups className="nav-tab-icon" /> <span>Groups</span>
+          <MdGroups className="nav-tab-icon" /> <span>{t('nav.bottom.groups')}</span>
         </NavLink>
         {/* "Rankings" rather than "Leaderboard": the page ranks creators by
             several measures, and the route keeps its old name so existing links
             still work. */}
-        <NavLink to="/leaderboard" title="The creators earning and being watched most right now" className={({ isActive }) => `nav-tab${isActive ? ' active' : ''}`}>
-          <FaMedal className="nav-tab-icon nav-tab-icon--medal" /> <span>Rankings</span>
+        <NavLink to="/leaderboard" title={t('nav.tabs.rankingsTooltip')} className={({ isActive }) => `nav-tab${isActive ? ' active' : ''}`}>
+          <FaMedal className="nav-tab-icon nav-tab-icon--medal" /> <span>{t('app.routes.rankings')}</span>
         </NavLink>
         {/* Last, and only when signed in: it is the one tab that lists YOUR
             things rather than the site's. */}
@@ -445,7 +450,7 @@ function Nav({ toggleProfileNav, openLoginModal }) {
           {/* Hive accounts only: an incubating user cannot book ads yet. */}
           {!incubationHandle && <NavAdvertiseButton user={user} />}
           <NavUploadDropdown />
-          <Link to="/discover" className="nav-mobile-discover" title="Discover">
+          <Link to="/discover" className="nav-mobile-discover" title={t('app.routes.discover')}>
             <MdOutlineSearch size={19} />
           </Link>
           <ChatButton />
@@ -453,7 +458,7 @@ function Nav({ toggleProfileNav, openLoginModal }) {
               so an incubating user's bell reads from the incubation service
               instead of showing them a permanently empty one. */}
           {incubationHandle ? <IncubationBell /> : <NotificationBell />}
-          <FiSettings size={19} className="nav-settings-btn" onClick={() => setSettingsOpen(true)} title="Settings" />
+          <FiSettings size={19} className="nav-settings-btn" onClick={() => setSettingsOpen(true)} title={t('common.nav.settings')} />
           <span className="nav-avatar-wrap" onClick={toggleProfileNav}>
             <img src={myAvatar} alt="" />
             <PremiumBadge username={user} size={10} className="nav-avatar-premium" />
@@ -461,23 +466,23 @@ function Nav({ toggleProfileNav, openLoginModal }) {
         </div>
       ) : (
         <div className="nav-right flex-div" onClickCapture={hideToastLayer}>
-          <Link to="/discover" className="nav-mobile-discover" title="Discover">
+          <Link to="/discover" className="nav-mobile-discover" title={t('app.routes.discover')}>
             <MdOutlineSearch size={19} />
           </Link>
-          <Link to="/about" className="nav-guest-about">About 3Speak</Link>
+          <Link to="/about" className="nav-guest-about">{t('nav.aboutLink')}</Link>
           {/* Sign up is dropped when Butter Auth says no account can be created
               from this address, leaving the single Log in button the
               butrauth-disabled build shows -- so the bar has no gap where a
               button used to be. Fails open: a failed check still offers it. */}
           {ENABLE_BUTRAUTH && signupPossible.possible ? (
             <>
-              <button className="nav-guest-login nav-guest-login--secondary" onClick={() => openLoginModal('login')}><FiLogIn /> Log in</button>
-              <button className="nav-guest-signup" onClick={() => openLoginModal('signup')}>Sign up</button>
+              <button className="nav-guest-login nav-guest-login--secondary" onClick={() => openLoginModal('login')}><FiLogIn /> {t('common.actions.login')}</button>
+              <button className="nav-guest-signup" onClick={() => openLoginModal('signup')}>{t('common.actions.signUp')}</button>
             </>
           ) : (
-            <button className="nav-guest-login" onClick={() => openLoginModal('login')}><FiLogIn /> Log in</button>
+            <button className="nav-guest-login" onClick={() => openLoginModal('login')}><FiLogIn /> {t('common.actions.login')}</button>
           )}
-          <FiSettings size={19} className="nav-settings-btn" onClick={() => setSettingsOpen(true)} title="Settings" />
+          <FiSettings size={19} className="nav-settings-btn" onClick={() => setSettingsOpen(true)} title={t('common.nav.settings')} />
         </div>
       )}
 

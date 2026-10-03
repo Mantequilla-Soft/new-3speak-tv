@@ -5,6 +5,7 @@ import { toastIn } from '../../utils/toast';
 import { openButrauthPopup } from '../../utils/butrauthPopup';
 // Reuses the app's one modal-dialog shape rather than inventing a second.
 import '../AdsPrompt/AdsPrompt.scss';
+import { useTranslation } from 'react-i18next';
 
 // Every toast from this module is headed "Your account"; the message becomes
 // the line under it. See utils/toast.js.
@@ -29,6 +30,7 @@ const toast = toastIn('Your account');
  * them out with no route back. That mistake has been made once already.
  */
 export default function IncubationSessionSync() {
+  const { t } = useTranslation();
   const incubationHandle = useAppStore((s) => s.incubationHandle);
   const promoteFromIncubation = useAppStore((s) => s.promoteFromIncubation);
   // The session is gone and only butrauth can hand back a new one.
@@ -63,10 +65,10 @@ export default function IncubationSessionSync() {
 
     promoted.current = true;
     promoteFromIncubation(name);
-    toast.success(`You are signed in as @${name}`, {
-      description: 'Your Hive account is ready, so this device has caught up with it.',
+    toast.success(t('incubation.sessionSync.signedInAs', { name }), {
+      description: t('incubation.sessionSync.caughtUp'),
     });
-  }, [incubationHandle, promoteFromIncubation]);
+  }, [incubationHandle, promoteFromIncubation, t]);
 
   useEffect(() => {
     if (!incubationHandle) {
@@ -95,7 +97,7 @@ export default function IncubationSessionSync() {
       // it still holds their login the popup closes on its own almost at once.
       await openButrauthPopup({});
     } catch (err) {
-      toast.error(err?.message || 'Could not open Butter Auth');
+      toast.error(err?.message || t('incubation.sessionSync.openFailed'));
     } finally {
       setBusy(false);
     }
@@ -112,23 +114,21 @@ export default function IncubationSessionSync() {
         <header className="ads-prompt-head">
           <div>
             <h3 className="ads-prompt-title" id="reconnect-title">
-              Reconnect your session
+              {t('incubation.sessionSync.title')}
             </h3>
             <p className="ads-prompt-lede">
-              This device lost its connection to your account, so 3Speak cannot load
-              your posts, progress or notifications until it is back.
+              {t('incubation.sessionSync.lede')}
             </p>
           </div>
         </header>
 
         <p className="ads-prompt-text">
-          Nothing has been lost. Everything you have made lives on your account, not in
-          this browser. Reconnecting usually takes a second and no typing.
+          {t('incubation.sessionSync.text')}
         </p>
 
         <div className="ads-prompt-actions">
           <button type="button" className="ads-prompt-primary" onClick={reconnect} disabled={busy}>
-            {busy ? 'Opening…' : 'Reconnect'}
+            {busy ? t('incubation.sessionSync.opening') : t('incubation.sessionSync.reconnect')}
           </button>
         </div>
       </div>

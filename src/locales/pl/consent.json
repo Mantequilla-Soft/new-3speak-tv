@@ -1,0 +1,40 @@
+{
+  "ariaLabel": "Ustawienia plików cookie i pamięci przeglądarki",
+  "title": "Pliki cookie i pamięć przeglądarki",
+  "withAds": {
+    "intro": "3Speak przechowuje twoje logowanie i wybrane przez ciebie ustawienia w przeglądarce. Dzięki temu strona działa, a dane zostają na twoim urządzeniu. Dwie rzeczy są opcjonalne i obie są wyłączone, dopóki nie włączysz ich poniżej.",
+    "advertising": "Jedną z nich są <b>reklamy</b>. Gdy są włączone, zewnętrzna firma reklamowa wczytuje na stronie własny kod i może zapisywać dane, nad którymi nie mamy kontroli. Dlatego jest to osobny wybór, nigdy niepołączony z niczym innym."
+  },
+  "noAds": {
+    "intro": "3Speak przechowuje twoje logowanie i wybrane przez ciebie ustawienia w przeglądarce — dzięki temu strona działa. Nie używamy <b>śledzących plików cookie, reklam ani analityki firm trzecich</b>. Jedyne, co oglądanie filmu może zapisać na twoim urządzeniu, to miejsce, w którym przerwano oglądanie — i to jest jedyny opcjonalny wybór poniżej.",
+    "optional": "Jedyna opcjonalna rzecz: możemy zapamiętywać, <b>w którym miejscu przerwano oglądanie każdego filmu</b>, aby odtwarzanie było wznawiane. Te dane nigdy nie opuszczają twojego urządzenia."
+  },
+  "details": {
+    "essentialTitle": "Niezbędne — zawsze włączone",
+    "essential": {
+      "login": "Twoja sesja logowania",
+      "settings": "Wybrane przez ciebie ustawienia: motyw, głośność, język, napisy, preferencje kanału",
+      "uploads": "Wznawianie przerwanego przesyłania oraz szkice pisanych postów",
+      "offline": "Sama aplikacja, do użytku offline po zainstalowaniu",
+      "answer": "Twoja odpowiedź na ten baner"
+    },
+    "optionalTitle": "Opcjonalne — twój wybór",
+    "optional": {
+      "playback": "Pozycja odtwarzania każdego filmu, aby można było wrócić do miejsca, w którym przerwano oglądanie",
+      "advertising": "Reklamy: kod zewnętrznej firmy reklamowej i wszystko, co zapisuje on na twoim urządzeniu, aby liczyć i ograniczać wyświetlane ci reklamy"
+    },
+    "noteWithAds": "Pozostawienie tych opcji wyłączonych sprawia, że pozycje odtwarzania nie są zapisywane, a już zapisane zostają usunięte, i oznacza, że żaden kod reklamowy nie jest w ogóle wczytywany. Możesz zmienić zdanie w każdej chwili.",
+    "noteNoAds": "Wybranie „Tylko niezbędne” sprawia, że pozycje odtwarzania nie są zapisywane, a już zapisane zostają usunięte. Możesz zmienić zdanie w każdej chwili — wybranie „Akceptuj” od razu ponownie to włącza."
+  },
+  "toggles": {
+    "resumeTitle": "Wznawianie odtwarzania",
+    "resumeDesc": "Zapamiętuj, w którym miejscu przerwano oglądanie każdego filmu. Zostaje na twoim urządzeniu.",
+    "advertisingTitle": "Reklamy",
+    "advertisingDesc": "Pozwól zewnętrznej firmie reklamowej wczytać swój kod i zapisać to, czego potrzebuje."
+  },
+  "hideDetails": "Ukryj szczegóły",
+  "whatIsStored": "Co dokładnie jest zapisywane?",
+  "essentialOnly": "Tylko niezbędne",
+  "saveChoices": "Zapisz wybór",
+  "acceptAll": "Akceptuj wszystko"
+}

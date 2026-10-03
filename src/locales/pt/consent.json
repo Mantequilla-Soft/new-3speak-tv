@@ -1,0 +1,40 @@
+{
+  "ariaLabel": "Configurações de cookies e armazenamento",
+  "title": "Cookies e armazenamento do navegador",
+  "withAds": {
+    "intro": "O 3Speak guarda seu login e as configurações que você escolhe no seu navegador. É isso que faz o site funcionar, e esses dados ficam no seu dispositivo. Duas coisas são opcionais, e ambas ficam desativadas a menos que você as ative abaixo.",
+    "advertising": "Uma delas é a <b>publicidade</b>. Quando ativada, uma empresa de publicidade externa carrega o próprio código na página e pode armazenar dados que não controlamos. Por isso ela é uma escolha separada e nunca vem junto com outra coisa."
+  },
+  "noAds": {
+    "intro": "O 3Speak guarda seu login e as configurações que você escolhe no seu navegador — é isso que faz o site funcionar. Não usamos <b>cookies de rastreamento, publicidade nem análises de terceiros</b>. A única coisa que assistir a um vídeo pode salvar no seu dispositivo é onde você parou — e essa é a única escolha opcional abaixo.",
+    "optional": "A única opção: podemos lembrar <b>onde você parou em cada vídeo</b> para retomar a reprodução. Isso nunca sai do seu dispositivo."
+  },
+  "details": {
+    "essentialTitle": "Essencial — sempre ativado",
+    "essential": {
+      "login": "Sua sessão de login",
+      "settings": "As configurações que você define: tema, volume, idioma, legendas, preferências do feed",
+      "uploads": "Retomar um envio interrompido e os rascunhos dos posts que você está escrevendo",
+      "offline": "O próprio app, para uso offline depois de instalado",
+      "answer": "Sua resposta a este aviso"
+    },
+    "optionalTitle": "Opcional — você escolhe",
+    "optional": {
+      "playback": "Posição de reprodução de cada vídeo, para você continuar de onde parou",
+      "advertising": "Publicidade: o código de uma empresa de publicidade externa e o que ela armazenar no seu dispositivo para contar e limitar os anúncios exibidos a você"
+    },
+    "noteWithAds": "Deixar essas opções desativadas impede que as posições de reprodução sejam salvas, apaga as que já estiverem armazenadas e significa que nenhum código de publicidade é carregado. Você pode mudar de ideia a qualquer momento.",
+    "noteNoAds": "Escolher “Só o essencial” impede que as posições de reprodução sejam salvas e apaga as que já estiverem armazenadas. Você pode mudar de ideia a qualquer momento — escolher “Aceitar” reativa isso na hora."
+  },
+  "toggles": {
+    "resumeTitle": "Retomar reprodução",
+    "resumeDesc": "Lembrar onde você parou em cada vídeo. Fica no seu dispositivo.",
+    "advertisingTitle": "Publicidade",
+    "advertisingDesc": "Permitir que uma empresa de publicidade externa carregue o código dela e armazene o que precisar."
+  },
+  "hideDetails": "Ocultar detalhes",
+  "whatIsStored": "O que exatamente é armazenado?",
+  "essentialOnly": "Só o essencial",
+  "saveChoices": "Salvar escolhas",
+  "acceptAll": "Aceitar tudo"
+}

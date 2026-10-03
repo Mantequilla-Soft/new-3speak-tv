@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import { TailChase } from 'ldrs/react';
 import logo from '../../assets/image/3S_logo.svg';
 import logoDark from '../../assets/image/3S_logodark.png';
@@ -20,6 +21,7 @@ export const EMERGENCY_MODE = false;
  *   the scary "infrastructure issues" copy.
  */
 export default function EmergencyScreen({ variant = 'down' }) {
+  const { t } = useTranslation();
   const theme = useAppStore((s) => s.theme);
   const isDark = theme !== 'light'; // dark is the default
   const checking = variant === 'checking';
@@ -50,7 +52,7 @@ export default function EmergencyScreen({ variant = 'down' }) {
       {!checking && (
       <div style={{ maxWidth: '460px' }}>
         <h1 style={{ fontSize: 'clamp(20px, 4.5vw, 27px)', fontWeight: 700, margin: '0 0 12px' }}>
-          We&rsquo;re having some infrastructure issues
+          {t('app.emergency.title')}
         </h1>
         <p
           style={{
@@ -60,8 +62,7 @@ export default function EmergencyScreen({ variant = 'down' }) {
             color: 'var(--text-secondary, #9aa0a6)',
           }}
         >
-          Our team is on it and working to bring 3Speak back right now. Join our
-          Discord to reach us and get live updates &mdash; thanks for your patience.
+          {t('app.emergency.body')}
         </p>
       </div>
       )}
@@ -88,7 +89,7 @@ export default function EmergencyScreen({ variant = 'down' }) {
         <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
           <path d="M20.317 4.369A19.79 19.79 0 0 0 15.885 3c-.2.36-.43.842-.59 1.226a18.27 18.27 0 0 0-5.487 0A12.6 12.6 0 0 0 9.21 3a19.74 19.74 0 0 0-4.435 1.37C1.9 8.64 1.12 12.8 1.51 16.9a19.9 19.9 0 0 0 6.06 3.06c.49-.67.93-1.38 1.3-2.12-.71-.27-1.4-.6-2.04-.99.17-.13.34-.26.5-.4a14.2 14.2 0 0 0 12.34 0c.16.14.33.27.5.4-.65.39-1.33.72-2.05.99.38.74.81 1.45 1.3 2.12a19.85 19.85 0 0 0 6.06-3.06c.46-4.72-.79-8.85-3.26-12.53ZM8.52 14.35c-1.19 0-2.16-1.1-2.16-2.44 0-1.35.95-2.45 2.16-2.45 1.21 0 2.18 1.1 2.16 2.45 0 1.34-.95 2.44-2.16 2.44Zm6.97 0c-1.19 0-2.16-1.1-2.16-2.44 0-1.35.95-2.45 2.16-2.45 1.21 0 2.18 1.1 2.16 2.45 0 1.34-.94 2.44-2.16 2.44Z" />
         </svg>
-        Join our Discord
+        {t('app.emergency.joinDiscord')}
       </a>
       )}
 

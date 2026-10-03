@@ -11,6 +11,7 @@ import { toastIn } from '../utils/toast';
 import { HIVE_API_NODES, ENABLE_SUBS } from '../utils/config';
 import { IS_VSC_TESTNET, HIVE_TESTNET_NODES } from '../utils/vscContract';
 import { getHiveClient } from '../utils/hiveNode';
+import { useTranslation } from 'react-i18next';
 
 // Every toast from this module is headed "Wallet"; the message becomes the
 // line under it. See utils/toast.js.
@@ -22,11 +23,12 @@ const client = IS_VSC_TESTNET
   : getHiveClient();
 
 const WALLET_TABS = [
-  { id: 'overview', label: 'Overview' },
-  { id: 'transactions', label: 'Transactions' },
+  { id: 'overview', labelKey: 'wallet.tabs.overview' },
+  { id: 'transactions', labelKey: 'wallet.tabs.transactions' },
 ];
 
 function Wallet() {
+  const { t } = useTranslation();
   const { user: currentUser } = useAppStore();
   const [activeTab, setActiveTab] = useState('overview');
   const {user} = useParams()
@@ -89,7 +91,7 @@ function Wallet() {
       });
 
     } catch (err) {
-      setError('Failed to fetch balances');
+      setError(t('wallet.errors.fetchBalances'));
       console.error(err);
     } finally {
       setIsLoading(false);
@@ -145,21 +147,21 @@ function Wallet() {
     <div className="wallet-container">
       <div className="main-content">
         <div className="wallet-header">
-          <div className="wrap">{user === currentUser ?<h1>MY</h1>: <h1>{user}</h1>}<h1> Wallet</h1></div>
+          <div className="wrap"><h1>{user === currentUser ? t('wallet.header.mine') : t('wallet.header.ofUser', { user })}</h1></div>
         </div>
 
-        <div className="wallet-tabs" role="tablist" aria-label="Wallet sections">
-          {WALLET_TABS.map((t) => (
+        <div className="wallet-tabs" role="tablist" aria-label={t('wallet.tabs.aria')}>
+          {WALLET_TABS.map((tab) => (
             <button
-              key={t.id}
+              key={tab.id}
               type="button"
               role="tab"
-              id={`wallet-tab-${t.id}`}
-              aria-selected={activeTab === t.id}
-              aria-controls={`wallet-panel-${t.id}`}
-              tabIndex={activeTab === t.id ? 0 : -1}
-              className={`wallet-tab${activeTab === t.id ? ' wallet-tab--active' : ''}`}
-              onClick={() => setActiveTab(t.id)}
+              id={`wallet-tab-${tab.id}`}
+              aria-selected={activeTab === tab.id}
+              aria-controls={`wallet-panel-${tab.id}`}
+              tabIndex={activeTab === tab.id ? 0 : -1}
+              className={`wallet-tab${activeTab === tab.id ? ' wallet-tab--active' : ''}`}
+              onClick={() => setActiveTab(tab.id)}
               onKeyDown={(e) => {
                 const d = e.key === 'ArrowRight' ? 1 : e.key === 'ArrowLeft' ? -1 : 0;
                 if (!d) return;
@@ -170,14 +172,14 @@ function Wallet() {
                 document.getElementById(`wallet-tab-${next.id}`)?.focus();
               }}
             >
-              {t.label}
+              {t(tab.labelKey)}
             </button>
           ))}
         </div>
 
         {activeTab === 'overview' && (
         <div id="wallet-panel-overview" role="tabpanel" aria-labelledby="wallet-tab-overview">
-        <h2 className="wallet-section-title">Assets</h2>
+        <h2 className="wallet-section-title">{t('wallet.assets')}</h2>
         <div className="coins-grid">
           {coins.map((coin) => (
             <div key={coin.name} className="coin-card">
@@ -190,13 +192,13 @@ function Wallet() {
                     className="transfer-btn"
                     onClick={() => {
                       if (!hasKeychain) {
-                        toast.error('You need Keychain extension to make transfer');
+                        toast.error(t('wallet.errors.needKeychain'));
                         return;
                       }
                       handleTransfer(coin.name);
                     }}
                   >
-                    Transfer
+                    {t('wallet.transfer')}
                   </button>
                 )}
               </div>

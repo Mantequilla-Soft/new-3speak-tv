@@ -50,6 +50,7 @@ import ProfileOverview from "../components/Userprofilepage/ProfileOverview";
 import ProfileEmptyState from "../components/Userprofilepage/ProfileEmptyState";
 import ProfileEditModal from "../components/WelcomePrompt/ProfileEditModal";
 import { FiEdit2 } from "react-icons/fi";
+import { useTranslation } from "react-i18next";
 
 // Every toast from this module is headed "Profile"; the message becomes the
 // line under it. See utils/toast.js.
@@ -59,6 +60,7 @@ const toast = toastIn('Profile');
 const WATCH_LATER_NAME = 'Watch Later';
 
 function ProfilePage() {
+  const { t } = useTranslation();
 
   const { user, authenticated } = useAppStore();
   const navigate = useNavigate();
@@ -135,14 +137,14 @@ function ProfilePage() {
   // Handle create playlist
   const handleCreatePlaylist = async () => {
     if (!newPlaylistName.trim()) {
-      toast.error('Please enter a playlist name');
+      toast.error(t('profile.playlists.enterName'));
       return;
     }
 
     setIsCreating(true);
     try {
       await createPlaylist(newPlaylistName.trim(), newPlaylistAccess, null, newPlaylistTags);
-      toast.success('Playlist created! It may take a moment to appear.');
+      toast.success(t('profile.playlists.created'));
       setShowCreateModal(false);
       setNewPlaylistName('');
       setNewPlaylistAccess('public');
@@ -153,7 +155,7 @@ function ProfilePage() {
         queryClient.invalidateQueries(['myPlaylists', user]);
       }, 3000);
     } catch (error) {
-      toast.error('Failed to create playlist: ' + error.message);
+      toast.error(t('profile.playlists.createFailed', { error: error.message }));
     } finally {
       setIsCreating(false);
     }
@@ -285,7 +287,7 @@ function ProfilePage() {
       return filteredVideos;
     } catch (error) {
       console.error('Failed to fetch videos:', error.response?.status, error.response?.data);
-      toast.error('Failed to load videos');
+      toast.error(t('profile.page.loadVideosFailed'));
       return [];
     }
   };
@@ -496,7 +498,7 @@ function ProfilePage() {
   =============================== */
   const handleUploadNavigate = () => {
     if (!authenticated) {
-      toast.error("Login to upload video");
+      toast.error(t('profile.page.loginToUpload'));
     } else {
       navigate("/embed-studio");
     }
@@ -531,9 +533,9 @@ function ProfilePage() {
                 type="button"
                 className="add-social-link-btn"
                 onClick={() => setShowSocialLinkModal(true)}
-                title="Link an external profile"
+                title={t('profile.page.linkExternalTitle')}
               >
-                <FaPlus /> Add profile
+                <FaPlus /> {t('profile.page.addProfile')}
               </button>
             </div>
           </>
@@ -543,9 +545,9 @@ function ProfilePage() {
             <button
               className="btn btn-secondary"
               onClick={() => setEditProfileOpen(true)}
-              title="Edit your picture, name, bio and location"
+              title={t('profile.page.editTitle')}
             >
-              <FiEdit2 className="icon" /> Edit
+              <FiEdit2 className="icon" /> {t('common.actions.edit')}
             </button>
 
             {/* Follower pill removed — the count in the stat line under the bio
@@ -554,18 +556,18 @@ function ProfilePage() {
               className="btn btn-secondary"
               onClick={async () => {
                 const profileUrl = `${window.location.origin}/@${user}`;
-                const shareData = { title: `${user} on 3Speak`, url: profileUrl };
+                const shareData = { title: t('profile.page.onThreeSpeak', { user }), url: profileUrl };
                 try {
                   if (navigator.share && navigator.canShare?.(shareData)) {
                     await navigator.share(shareData);
                   } else {
                     await navigator.clipboard.writeText(profileUrl);
-                    toast.success('Profile link copied to clipboard!');
+                    toast.success(t('profile.page.linkCopied'));
                   }
                 } catch (err) {
                   if (err.name !== 'AbortError') {
                     await navigator.clipboard.writeText(profileUrl);
-                    toast.success('Profile link copied to clipboard!');
+                    toast.success(t('profile.page.linkCopied'));
                   }
                 }
               }}
@@ -579,38 +581,38 @@ function ProfilePage() {
       {/* ================= TOGGLE ================= */}
       <div className="toggle-wrap">
         <div className="wrap">
-          <span className={show === "overview" ? "active" : ""} onClick={() => selectTab("overview")}>Overview</span>
+          <span className={show === "overview" ? "active" : ""} onClick={() => selectTab("overview")}>{t('profile.tabs.overview')}</span>
           <span className={show === "video" ? "active" : ""} onClick={() => selectTab("video")}>
-            Videos {videoCount > 0 && `(${videoCount})`}
+            {t('profile.tabs.videos')} {videoCount > 0 && `(${videoCount})`}
           </span>
           <span className={show === "shorts" ? "active" : ""} onClick={() => selectTab("shorts")}>
-            Shorts {shortsCount > 0 && `(${shortsCount})`}
+            {t('profile.tabs.shorts')} {shortsCount > 0 && `(${shortsCount})`}
           </span>
           <span className={show === "audio" ? "active" : ""} onClick={() => selectTab("audio")}>
-            Audio {audioCount > 0 && `(${audioCount})`}
+            {t('profile.tabs.audio')} {audioCount > 0 && `(${audioCount})`}
           </span>
           {hasGated && (
             <span className={show === "supporters" ? "active" : ""} onClick={() => selectTab("supporters")}>
-              🔒 Supporters ({gatedVideos.length})
+              🔒 {t('profile.tabs.supporters')} ({gatedVideos.length})
             </span>
           )}
           {streamCount > 0 && (
             <span className={show === "streams" ? "active" : ""} onClick={() => selectTab("streams")}>
-              Streams ({streamCount})
+              {t('profile.tabs.streams')} ({streamCount})
             </span>
           )}
           <span className={show === "community" ? "active" : ""} onClick={() => selectTab("community")}>
-            Community {snapCount > 0 && `(${snapCount})`}
+            {t('profile.tabs.community')} {snapCount > 0 && `(${snapCount})`}
           </span>
           <span className={show === "playlists" ? "active" : ""} onClick={() => selectTab("playlists")}>
-            Playlists
+            {t('profile.tabs.playlists')}
           </span>
-          <span className={show === "links" ? "active" : ""} onClick={() => selectTab("links")}>Links</span>
-          <span className={show === "stats" ? "active" : ""} onClick={() => selectTab("stats")}>Analytics</span>
+          <span className={show === "links" ? "active" : ""} onClick={() => selectTab("links")}>{t('profile.tabs.links')}</span>
+          <span className={show === "stats" ? "active" : ""} onClick={() => selectTab("stats")}>{t('profile.tabs.analytics')}</span>
         </div>
 
         <div className="wrap-in">
-          <span onClick={() => navigate(`/wallet/${user}`)}>Wallet</span>
+          <span onClick={() => navigate(`/wallet/${user}`)}>{t('common.nav.wallet')}</span>
         </div>
       </div>
 
@@ -625,10 +627,10 @@ function ProfilePage() {
             <div className="icon">▶</div>
             <div className="info">
               <h3>{video.title}</h3>
-              <p className="sub">🎬 Processing your videos</p>
+              <p className="sub">🎬 {t('profile.uploads.processing')}</p>
               <div className="meta">
                 <span className="status">{video.status_label}</span>
-                <span className="time">{video.elapsed_minutes} min ago</span>
+                <span className="time">{t('profile.uploads.minAgo', { count: video.elapsed_minutes })}</span>
               </div>
             </div>
           </div>
@@ -707,7 +709,7 @@ function ProfilePage() {
         ) : show === "playlists" ? (
           <>
             <button className="create-playlist-btn" onClick={() => setShowCreateModal(true)}>
-              <IoMdAdd /> Create Playlist
+              <IoMdAdd /> {t('profile.playlists.create')}
             </button>
             {playlistsLoading && watchedCountLoading ? (
               <BarLoader />
@@ -750,44 +752,44 @@ function ProfilePage() {
       {showCreateModal && (
         <div className="create-playlist-modal-overlay" onClick={() => setShowCreateModal(false)}>
           <div className="create-playlist-modal" onClick={(e) => e.stopPropagation()}>
-            <h3>Create New Playlist</h3>
+            <h3>{t('profile.playlists.modalTitle')}</h3>
             <div className="form-group">
-              <label>Playlist Name</label>
+              <label>{t('profile.playlists.nameLabel')}</label>
               <input
                 type="text"
                 value={newPlaylistName}
                 onChange={(e) => setNewPlaylistName(e.target.value)}
-                placeholder="Enter playlist name"
+                placeholder={t('profile.playlists.namePlaceholder')}
                 autoFocus
               />
             </div>
             <div className="form-group">
-              <label>Visibility</label>
+              <label>{t('profile.playlists.visibility')}</label>
               <div className="privacy-buttons">
                 <button
                   type="button"
                   className={`privacy-btn ${newPlaylistAccess === 'public' ? 'active' : ''}`}
                   onClick={() => setNewPlaylistAccess('public')}
                 >
-                  <MdPublic /> Public
+                  <MdPublic /> {t('profile.playlists.public')}
                 </button>
                 <button
                   type="button"
                   className={`privacy-btn ${newPlaylistAccess === 'private' ? 'active' : ''}`}
                   onClick={() => setNewPlaylistAccess('private')}
                 >
-                  <MdLock /> Private
+                  <MdLock /> {t('profile.playlists.private')}
                 </button>
               </div>
             </div>
             <div className="form-group">
-              <label>Tags</label>
+              <label>{t('profile.playlists.tags')}</label>
               <div className="tags-input-wrap">
                 <div className="tags-list">
                   {newPlaylistTags.map((tag) => (
                     <span key={tag} className="tag-chip">
                       {tag}
-                      <button type="button" onClick={() => setNewPlaylistTags(prev => prev.filter(t => t !== tag))}>
+                      <button type="button" onClick={() => setNewPlaylistTags(prev => prev.filter(x => x !== tag))}>
                         <MdClose />
                       </button>
                     </span>
@@ -809,16 +811,16 @@ function ProfilePage() {
                       setNewPlaylistTags(prev => prev.slice(0, -1));
                     }
                   }}
-                  placeholder={newPlaylistTags.length === 0 ? 'Type a tag and press Enter' : 'Add more...'}
+                  placeholder={newPlaylistTags.length === 0 ? t('profile.playlists.tagPlaceholder') : t('profile.playlists.tagMore')}
                 />
               </div>
             </div>
             <div className="modal-actions">
               <button className="btn-cancel" onClick={() => setShowCreateModal(false)} disabled={isCreating}>
-                Cancel
+                {t('common.actions.cancel')}
               </button>
               <button className="btn-create" onClick={handleCreatePlaylist} disabled={isCreating}>
-                {isCreating ? 'Creating...' : 'Create Playlist'}
+                {isCreating ? t('profile.playlists.creating') : t('profile.playlists.create')}
               </button>
             </div>
           </div>

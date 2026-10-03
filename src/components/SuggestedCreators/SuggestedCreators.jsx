@@ -13,6 +13,8 @@ import { followWithAioha, isLoggedIn } from '../../hive-api/aioha';
 import { useAppStore } from '../../lib/store';
 import { getTagLabel, getTagEmoji } from '../../utils/tagsV2';
 import HiveAvatar from '../HiveAvatar/HiveAvatar';
+import { useTranslation } from 'react-i18next';
+import { formatNumber } from '../../i18n';
 import './SuggestedCreators.scss';
 
 // Every toast from this module is headed "Following"; the message becomes the
@@ -24,9 +26,7 @@ const MAX_SHOWN = 15;     // how many tiles the scroller holds
 
 const fmtFollowers = (n) => {
   if (n == null) return null;
-  if (n >= 1_000_000) return `${(n / 1_000_000).toFixed(1).replace(/\.0$/, '')}M`;
-  if (n >= 1_000) return `${(n / 1_000).toFixed(1).replace(/\.0$/, '')}K`;
-  return String(n);
+  return formatNumber(n, { compact: true });
 };
 
 // Small seeded shuffle so the discover tab's slice is random but STABLE within a
@@ -57,6 +57,7 @@ function seededShuffle(arr, seed) {
  * and prev/next arrows on desktop (mobile uses swipe). Hidden entirely when logged out.
  */
 export default function SuggestedCreators({ variant = 'discover' }) {
+  const { t } = useTranslation();
   const user = useAppStore((s) => s.user);
   const interests = useAppStore((s) => s.interests);
   const hasInterests = Array.isArray(interests) && interests.length > 0;
@@ -157,7 +158,7 @@ export default function SuggestedCreators({ variant = 'discover' }) {
 
   const handleFollow = useCallback(async (name) => {
     if (!isLoggedIn() || !user) {
-      toast.error('Please login to follow creators');
+      toast.error(t('profile.creators.loginRequired'));
       return;
     }
     setPending((p) => ({ ...p, [name]: true }));
@@ -165,13 +166,13 @@ export default function SuggestedCreators({ variant = 'discover' }) {
       await followWithAioha(name, true);
       setJustFollowed((f) => ({ ...f, [name]: true }));
       setFollowSet((s) => new Set([...(s || []), name]));
-      toast.success(`Following @${name}`);
+      toast.success(t('profile.creators.following', { user: name }));
     } catch (err) {
-      toast.error(`Could not follow @${name}: ${err?.message || 'please try again'}`);
+      toast.error(t('profile.creators.followFailed', { user: name, error: err?.message || t('profile.creators.pleaseTryAgain') }));
     } finally {
       setPending((p) => ({ ...p, [name]: false }));
     }
-  }, [user]);
+  }, [user, t]);
 
   // Hide entirely when logged out (interests can linger in the persisted store).
   if (!user || !hasInterests || !creators.length) return null;
@@ -180,7 +181,7 @@ export default function SuggestedCreators({ variant = 'discover' }) {
     <section className="suggested-creators">
       <div className="sc-scroll-wrapper">
         {showLeft && (
-          <button className="sc-scroll-btn left" onClick={() => scroll('left')} aria-label="Scroll left">
+          <button className="sc-scroll-btn left" onClick={() => scroll('left')} aria-label={t('profile.creators.scrollLeft')}>
             <FaChevronLeft />
           </button>
         )}
@@ -196,13 +197,13 @@ export default function SuggestedCreators({ variant = 'discover' }) {
                 </Link>
                 <Link to={`/p/${c.name}`} className="sc-name" title={`@${c.name}`}>@{c.name}</Link>
                 {c.basis && (
-                  <span className="sc-basis" title={`Mostly posts ${getTagLabel(c.basis)}`}>
+                  <span className="sc-basis" title={t('profile.creators.mostlyPosts', { topic: getTagLabel(c.basis) })}>
                     <span className="sc-basis-emoji">{getTagEmoji(c.basis)}</span>
                     {getTagLabel(c.basis)}
                   </span>
                 )}
                 <span className="sc-followers">
-                  {followers != null ? `${followers} follower${followers === '1' ? '' : 's'}` : ' '}
+                  {followers != null ? t('profile.creators.followers', { count: followerCounts[c.name], num: followers }) : ' '}
                 </span>
                 <button
                   type="button"
@@ -210,7 +211,7 @@ export default function SuggestedCreators({ variant = 'discover' }) {
                   onClick={() => !followed && handleFollow(c.name)}
                   disabled={followed || !!pending[c.name]}
                 >
-                  {followed ? 'Following' : (pending[c.name] ? '…' : 'Follow')}
+                  {followed ? t('common.actions.following') : (pending[c.name] ? '…' : t('common.actions.follow'))}
                 </button>
               </div>
             );
@@ -218,7 +219,7 @@ export default function SuggestedCreators({ variant = 'discover' }) {
         </div>
 
         {showRight && (
-          <button className="sc-scroll-btn right" onClick={() => scroll('right')} aria-label="Scroll right">
+          <button className="sc-scroll-btn right" onClick={() => scroll('right')} aria-label={t('profile.creators.scrollRight')}>
             <FaChevronRight />
           </button>
         )}

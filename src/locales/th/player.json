@@ -1,0 +1,105 @@
+{
+  "controls": {
+    "rewind10": "ย้อนกลับ 10 วิ",
+    "forward10": "ข้ามไป 10 วิ",
+    "reactToMoment": "รีแอ็กช่วงนี้",
+    "mute": "ปิดเสียง",
+    "unmute": "เปิดเสียง",
+    "playerSize": "ขนาดเครื่องเล่น: {{size}}",
+    "sizeStandard": "มาตรฐาน",
+    "pip": "การแสดงภาพซ้อนภาพ",
+    "autoplayOn": "เล่นอัตโนมัติ: เปิด",
+    "autoplayOff": "เล่นอัตโนมัติ: ปิด",
+    "ambientSubtle": "แสงรอบข้าง: อ่อน",
+    "ambientVivid": "แสงรอบข้าง: สดใส",
+    "ambientOff": "แสงรอบข้าง: ปิด",
+    "playbackSpeed": "ความเร็วในการเล่น",
+    "speedNormal": "ปกติ",
+    "quality": "คุณภาพ",
+    "qualityAuto": "อัตโนมัติ",
+    "fullscreen": "เต็มหน้าจอ",
+    "exitFullscreen": "ออกจากโหมดเต็มหน้าจอ",
+    "markerReplies_other": "({{count}} การตอบกลับ)"
+  },
+  "subtitles": {
+    "title": "คำบรรยาย",
+    "off": "ปิด",
+    "font": "แบบอักษร",
+    "size": "ขนาด",
+    "textColor": "สีข้อความ",
+    "textBorder": "ขอบข้อความ",
+    "borderColor": "สีขอบ",
+    "background": "พื้นหลัง",
+    "none": "ไม่มี",
+    "fonts": {
+      "sansSerif": "Sans-serif",
+      "serif": "Serif",
+      "monospace": "Monospace"
+    }
+  },
+  "mini": {
+    "untitled": "วิดีโอ"
+  },
+  "playlist": {
+    "previous": "วิดีโอก่อนหน้า",
+    "next": "วิดีโอถัดไป",
+    "close": "ปิดเพลย์ลิสต์"
+  },
+  "overlay": {
+    "replay": "เล่นอีกครั้ง"
+  },
+  "reactions": {
+    "translation": "คำแปล",
+    "translationFailed": "แปลไม่สำเร็จ",
+    "videoReaction": "วิดีโอรีแอ็กชัน",
+    "comment": "ความคิดเห็น",
+    "previous": "ก่อนหน้า",
+    "next": "ถัดไป",
+    "hide": "ซ่อนรีแอ็กชัน",
+    "hideShort": "ซ่อน",
+    "loadingReplies": "กำลังโหลดการตอบกลับ...",
+    "sizeTitle": "ขนาด: {{size}}",
+    "sizes": {
+      "small": "S",
+      "medium": "M",
+      "standard": "Std",
+      "big": "L",
+      "cinema": "Cin"
+    },
+    "sizeNames": {
+      "small": "เล็ก",
+      "medium": "กลาง",
+      "standard": "มาตรฐาน",
+      "big": "ใหญ่",
+      "cinema": "โรงภาพยนตร์"
+    }
+  },
+  "reactionUpload": {
+    "authorized": "อนุญาต @threespeak แล้ว — ตอนนี้คุณโพสต์รีแอ็กชันได้แล้ว",
+    "authFailed": "การอนุญาตไม่สำเร็จ โปรดลองอีกครั้ง",
+    "webcamDenied": "เข้าถึงเว็บแคมไม่ได้",
+    "shortTooLong": "Shorts ต้องยาวไม่เกิน {{max}} ยกเลิกการเลือก \"แสดงใน 3Speak Shorts\" หรือใช้วิดีโอที่สั้นกว่า",
+    "uploadingVideo": "กำลังอัปโหลดวิดีโอ...",
+    "noEmbedUrl": "อัปโหลดสำเร็จแต่ไม่ได้รับ URL สำหรับฝัง",
+    "publishingComment": "กำลังเผยแพร่ความคิดเห็น...",
+    "posted": "โพสต์วิดีโอรีแอ็กชันแล้ว!",
+    "postFailed": "โพสต์ความคิดเห็นไม่สำเร็จ",
+    "uploadFailed": "อัปโหลดไม่สำเร็จ",
+    "uploadVideo": "อัปโหลดวิดีโอ",
+    "recordVideo": "บันทึกวิดีโอ",
+    "startRecording": "เริ่มบันทึก",
+    "stopRecording": "หยุดบันทึก",
+    "recordedVideo": "วิดีโอที่บันทึกไว้",
+    "descriptionPlaceholder": "เพิ่มคำอธิบายสำหรับวิดีโอรีแอ็กชันของคุณ...",
+    "showInShorts": "แสดงใน 3Speak Shorts",
+    "authNote": "อนุญาตให้ <b>@threespeak</b> โพสต์รีแอ็กชันแทนคุณ",
+    "authorizing": "กำลังอนุญาต…",
+    "authorize": "อนุญาต @threespeak",
+    "uploading": "กำลังอัปโหลด...",
+    "postReaction": "โพสต์รีแอ็กชัน"
+  },
+  "inline": {
+    "cantPlay": "วิดีโอนี้เล่นที่นี่ไม่ได้",
+    "openOnSite": "เปิดบน 3Speak"
+  }
+}

@@ -1,0 +1,50 @@
+{
+  "tabs": {
+    "overview": "Ringkasan",
+    "transactions": "Transaksi",
+    "aria": "Bagian dompet"
+  },
+  "errors": {
+    "fetchBalances": "Gagal memuat saldo",
+    "needKeychain": "Kamu perlu ekstensi Keychain untuk melakukan transfer"
+  },
+  "header": {
+    "mine": "Dompet SAYA",
+    "ofUser": "Dompet {{user}}"
+  },
+  "assets": "Aset",
+  "transfer": "Transfer",
+  "transferModal": {
+    "loginRequired": "Silakan masuk untuk transfer",
+    "insufficient": "Saldo tidak cukup",
+    "invalidUsername": "Nama pengguna tidak valid",
+    "success": "Transfer berhasil!",
+    "failed": "Transfer gagal: {{error}}",
+    "title": "Transfer {{coin}}",
+    "amountLabel": "Jumlah ({{coin}})",
+    "balance": "Saldo {{balance}}",
+    "max": "Maks",
+    "recipientLabel": "Nama Pengguna Penerima",
+    "recipientPlaceholder": "Masukkan nama pengguna Hive",
+    "memoLabel": "Memo",
+    "memoPlaceholder": "Masukkan memo",
+    "confirm": "Konfirmasi Transfer"
+  },
+  "history": {
+    "loadFailed": "Gagal memuat transaksi",
+    "title": "Riwayat Transaksi",
+    "cols": {
+      "type": "Jenis",
+      "amount": "Jumlah",
+      "account": "Akun",
+      "date": "Tanggal",
+      "memo": "Memo"
+    },
+    "types": {
+      "transfer": "Transfer",
+      "claim": "Klaim Reward",
+      "received": "Diterima"
+    },
+    "claimedRewards": "Reward yang Diklaim"
+  }
+}

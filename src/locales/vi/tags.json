@@ -1,0 +1,43 @@
+{
+  "labels": {
+    "tech-science": "Công nghệ & Khoa học",
+    "technology": "Công nghệ",
+    "education": "Giáo dục",
+    "science": "Khoa học",
+    "programming": "Lập trình",
+    "crypto-finance": "Crypto & Tài chính",
+    "cryptocurrency": "Tiền mã hóa",
+    "finance": "Tài chính",
+    "business": "Kinh doanh",
+    "entertainment": "Giải trí",
+    "music": "Âm nhạc",
+    "gaming": "Trò chơi",
+    "film-tv": "Phim & TV",
+    "lifestyle": "Phong cách sống",
+    "vlog": "Vlog",
+    "comedy": "Hài hước",
+    "story-time": "Kể chuyện",
+    "commercial": "Thương mại",
+    "arts-diy": "Nghệ thuật & DIY",
+    "art": "Nghệ thuật",
+    "diy-crafts": "DIY & Thủ công",
+    "photography": "Nhiếp ảnh",
+    "food-outdoor": "Ẩm thực & Ngoài trời",
+    "nature": "Thiên nhiên",
+    "travel": "Du lịch",
+    "food": "Ẩm thực",
+    "pets": "Thú cưng",
+    "gardening": "Làm vườn",
+    "sports-health": "Thể thao & Sức khỏe",
+    "sports": "Thể thao",
+    "health": "Sức khỏe",
+    "fitness": "Thể hình",
+    "life-society": "Đời sống & Xã hội",
+    "news": "Tin tức",
+    "spirituality": "Tâm linh",
+    "politics": "Chính trị"
+  },
+  "display": {
+    "cryptocurrency": "crypto"
+  }
+}

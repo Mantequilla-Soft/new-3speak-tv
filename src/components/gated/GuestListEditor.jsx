@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import { useTranslation } from 'react-i18next';
 import { toastIn } from '../../utils/toast';
 import './GuestListEditor.scss';
 
@@ -22,6 +23,7 @@ const HIVE_USER_RE = /^[a-z][a-z0-9.-]{2,15}$/;
  * private video deserves to know where that list ends up.
  */
 export default function GuestListEditor({ permlink }) {
+  const { t } = useTranslation();
   const [guests, setGuests] = useState([]);
   const [draft, setDraft] = useState('');
   const [loading, setLoading] = useState(true);
@@ -41,11 +43,11 @@ export default function GuestListEditor({ permlink }) {
       .catch(() => {
         // Not fatal: the editor still works, it just starts from an unknown
         // state, and saving replaces the list wholesale anyway.
-        if (!cancelled) toast.error('Could not load the current guest list');
+        if (!cancelled) toast.error(t('engagement.guestList.loadFailed'));
       })
       .finally(() => !cancelled && setLoading(false));
     return () => { cancelled = true; };
-  }, [permlink]);
+  }, [permlink, t]);
 
   const save = async (next) => {
     setSaving(true);
@@ -56,11 +58,11 @@ export default function GuestListEditor({ permlink }) {
         { withCredentials: true },
       );
       setGuests(data?.allowlist ?? next);
-      toast.success(next.length ? `${next.length} guest${next.length === 1 ? '' : 's'} can watch this` : 'Guest list cleared');
+      toast.success(next.length ? t('engagement.guestList.saved', { count: next.length }) : t('engagement.guestList.cleared'));
     } catch (err) {
       // Show the server's reason: it knows things the client does not, like the
       // video not being registered with the gate yet.
-      toast.error(err?.response?.data?.error || 'Could not save the guest list');
+      toast.error(err?.response?.data?.error || t('engagement.guestList.saveFailed'));
     } finally {
       setSaving(false);
     }
@@ -73,7 +75,7 @@ export default function GuestListEditor({ permlink }) {
       .filter(Boolean);
     const valid = names.filter((n) => HIVE_USER_RE.test(n));
     const rejected = names.filter((n) => !valid.includes(n));
-    if (rejected.length) toast.error(`Not valid Hive accounts: ${rejected.join(', ')}`);
+    if (rejected.length) toast.error(t('engagement.guestList.invalidAccounts', { names: rejected.join(', ') }));
     if (!valid.length) return;
 
     const next = [...new Set([...guests, ...valid])];
@@ -86,16 +88,15 @@ export default function GuestListEditor({ permlink }) {
   return (
     <div className="guest-list-editor">
       <div className="guest-list-editor__head">
-        <span className="guest-list-editor__title">🔒 Guest list</span>
+        <span className="guest-list-editor__title">{t('engagement.guestList.title')}</span>
         <span className="guest-list-editor__hint">
-          These accounts can watch without 3Speak Pro. Kept private on our servers,
-          never published to your post.
+          {t('engagement.guestList.hint')}
         </span>
       </div>
 
       {!registered && (
         <p className="guest-list-editor__warn">
-          This video has not finished processing yet. You can still edit the list once it has.
+          {t('engagement.guestList.notRegistered')}
         </p>
       )}
 
@@ -103,26 +104,26 @@ export default function GuestListEditor({ permlink }) {
         <input
           type="text"
           value={draft}
-          placeholder="username, another.user"
+          placeholder={t('engagement.guestList.placeholder')}
           disabled={loading || saving}
           onChange={(e) => setDraft(e.target.value)}
           onKeyDown={(e) => { if (e.key === 'Enter') { e.preventDefault(); addNames(); } }}
         />
         <button type="button" onClick={addNames} disabled={loading || saving || !draft.trim()}>
-          {saving ? 'Saving…' : 'Add'}
+          {saving ? t('common.actions.saving') : t('common.actions.add')}
         </button>
       </div>
 
       {loading ? (
-        <p className="guest-list-editor__empty">Loading…</p>
+        <p className="guest-list-editor__empty">{t('common.status.loading')}</p>
       ) : guests.length === 0 ? (
-        <p className="guest-list-editor__empty">Nobody yet. Only Pro subscribers can watch this.</p>
+        <p className="guest-list-editor__empty">{t('engagement.guestList.empty')}</p>
       ) : (
         <div className="guest-list-editor__chips">
           {guests.map((name) => (
             <span className="guest-list-editor__chip" key={name}>
               @{name}
-              <button type="button" aria-label={`Remove ${name}`} disabled={saving} onClick={() => remove(name)}>×</button>
+              <button type="button" aria-label={t('engagement.guestList.removeAria', { name })} disabled={saving} onClick={() => remove(name)}>×</button>
             </span>
           ))}
         </div>

@@ -15,6 +15,7 @@ import { feedParams } from './feedParams';
 import { TAG_CATEGORIES } from './tagsV2';
 import { aiKey, isAiFlagged, loadAiFlags } from './aiFlags';
 import { useAppStore } from '../lib/store';
+import { t as translate } from '../i18n';
 
 export const SURF_PARAM = 'surf';
 
@@ -22,7 +23,7 @@ export const SURF_PARAM = 'surf';
 // picker offers. Numbers walk the tree (each category, then its topics), so
 // "CH 07" is always the same channel for everyone.
 export const CHANNELS = TAG_CATEGORIES.flatMap((c) => [
-  { slug: c.slug, label: c.label, emoji: c.emoji, isCategory: true, topics: c.topics.map((t) => t.slug) },
+  { slug: c.slug, labelKey: c.labelKey, emoji: c.emoji, isCategory: true, topics: c.topics.map((t) => t.slug) },
   ...c.topics.map((t) => ({ ...t, isCategory: false, category: c.slug })),
 ]).map((c, i) => ({ ...c, number: i + 1 }));
 const BY_SLUG = new Map(CHANNELS.map((c) => [c.slug, c]));
@@ -49,11 +50,16 @@ export const getChannel = (slug) => {
   const hit = BY_SLUG.get(slug);
   if (hit) return hit;
   if (!COMMUNITY_SLUG.test(slug || '')) return null;
-  return { slug, label: loadCommunityTitles()[slug] || 'Community', emoji: '👥', isCommunity: true, isCategory: false };
+  // A remembered title is user content (shown as-is); without one, labelKey.
+  const title = loadCommunityTitles()[slug] || null;
+  return { slug, label: title, labelKey: title ? null : 'misc.surf.community', emoji: '👥', isCommunity: true, isCategory: false };
 };
 
+/** Display name of a channel in the current language. */
+export const channelLabel = (ch) => (ch?.label || (ch?.labelKey ? translate(ch.labelKey) : ''));
+
 export const channelNumber = (ch) => (ch?.isCommunity ? 'CM' : String(ch?.number ?? 0).padStart(2, '0'));
-export const channelTitle = (ch) => (ch?.isCategory ? `All of ${ch.label}` : ch?.label || '');
+export const channelTitle = (ch) => (ch?.isCategory ? translate('misc.surf.allOf', { label: channelLabel(ch) }) : channelLabel(ch));
 
 /** The channel `step` places away from `slug`, wrapping at both ends. */
 export function stepChannel(slug, step) {

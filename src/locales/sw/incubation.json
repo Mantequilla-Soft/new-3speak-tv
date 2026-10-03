@@ -1,0 +1,569 @@
+{
+  "tracks": {
+    "viewer": {
+      "title": "Zaidi ni mtazamaji",
+      "body": "Niko hapa kutazama, kutoa maoni na kufuata watayarishaji."
+    },
+    "creator": {
+      "title": "Zaidi ni mtayarishaji",
+      "body": "Nataka kuchapisha video na Shorts na kujenga chaneli."
+    },
+    "advertiser": {
+      "title": "Mtangazaji",
+      "body": "Ninawakilisha chapa na nataka kuwafikia watazamaji wa 3Speak."
+    }
+  },
+  "tips": {
+    "shortsCamera": {
+      "title": "Shorts ni kichupo, si programu tofauti",
+      "body": "Fungua Shorts kutoka upau wa juu ili kutazama, au tumia Shiriki ili kuchapisha moja. Klipu wima kutoka kwenye simu yako zinafanya kazi kama zilivyo.",
+      "cta": "Fungua Shorts"
+    },
+    "searchSlash": {
+      "title": "Bonyeza / ili kutafuta",
+      "body": "Ukiwa popote kwenye tovuti, kitufe cha mkwaju kinakupeleka moja kwa moja kwenye kisanduku cha utafutaji. Hutafuta video, watayarishaji na jumuiya."
+    },
+    "communities": {
+      "title": "Jumuiya hukusanya watu kuhusu mada moja",
+      "body": "Jiunge na chache na video zao zitaanza kuonekana kwenye milisho yako. Unaweza pia kuchapisha ndani ya jumuiya, ili watu sahihi waone.",
+      "cta": "Vinjari jumuiya"
+    },
+    "followFeed": {
+      "title": "Unaowafuata wana mlisho wao",
+      "body": "Ukishafuata watayarishaji wachache, mlisho wa unaowafuata una video zao tu. Ndiyo njia ya haraka zaidi ya kuacha kupita vitu usivyovijali.",
+      "cta": "Uone"
+    },
+    "interests": {
+      "title": "Tuambie unapenda nini",
+      "body": "Chagua mada chache kwenye Mipangilio na milisho ya nyumbani itazipa uzito papo hapo. Inafanya kazi vizuri kuliko kusogeza kwa muda wowote."
+    },
+    "hideWatched": {
+      "title": "Video ulizotazama zinaweza kutoweka kwenye milisho",
+      "body": "Mipangilio ina kitufe cha \"ficha ulizotazama\", kimewashwa kwa chaguo-msingi, ili video ile ile iache kukufuata baada ya kuiona."
+    },
+    "timestamps": {
+      "title": "Toa maoni kuhusu wakati kamili",
+      "body": "Video ikicheza, maoni yanaweza kubeba muda uliokuwa umefika. Wasomaji wanapata kiungo cha moja kwa moja hadi sekunde hiyo."
+    },
+    "badges": {
+      "title": "Beji hutolewa, hazidaiwi",
+      "body": "Watu kwenye Hive hutunukiwa beji kwa matukio na hatua muhimu. Fungua moja ili uone kila mtu aliye nayo na wanachochapisha.",
+      "cta": "Angalia beji"
+    },
+    "audio": {
+      "title": "3Speak ina sauti pia",
+      "body": "Podikasti na muziki viko chini ya Sauti kwenye upau wa juu, pamoja na kicheza chake. Unaweza kuchapisha sauti kwa njia ile ile unavyochapisha video.",
+      "cta": "Fungua Sauti"
+    },
+    "backlog": {
+      "title": "Hakuna unachochapisha sasa kinachopotea",
+      "body": "Kila kitu unachochapisha wakati wa kipindi chako cha maandalizi kinaweza kuchapishwa tena kwenye Hive kwa jina lako mwenyewe akaunti yako ikifika, na wewe unachagua kipi kiende nawe."
+    }
+  },
+  "trackChooser": {
+    "saveFailed": "Hilo halikuhifadhiwa. Tafadhali jaribu tena.",
+    "saving": "Inahifadhi..."
+  },
+  "trackQuestion": {
+    "title": "Nini kimekuleta 3Speak?",
+    "intro": "Njia yako ya kupata akaunti ya Hive inategemea hilo: watazamaji hutazama na kushiriki, watayarishaji huchapisha, na watangazaji huandaa chapa yao."
+  },
+  "tipCard": {
+    "aria": "Dokezo",
+    "dismiss": "Funga dokezo",
+    "takeALook": "Angalia"
+  },
+  "progress": {
+    "tasks": {
+      "video": {
+        "label_one": "Pakia video",
+        "label_other": "Pakia video {{count}}",
+        "hint": "Shiriki kitu kukuhusu na chaneli yako itahusu nini.",
+        "why": "Hiki ndicho kitu cha kwanza timu inachoangalia inapokukagua, na kitu cha kwanza mgeni anachoona anapofungua chaneli yako.",
+        "counts": {
+          "0": "Video yoyote unayochapisha kutoka studio ya upakiaji.",
+          "1": "Inabaki kuwa yako. Ukipandishwa daraja unachagua machapisho yapi kati ya haya yachapishwe kwenye Hive kwa jina lako mwenyewe."
+        },
+        "cta": "Pakia video"
+      },
+      "short": {
+        "label_one": "Chapisha short",
+        "label_other": "Chapisha Shorts {{count}}",
+        "hint": "Shiriki kwenye 3Speak Shorts na upakie matukio ya maisha yako ya kila siku au hadithi unazotaka kushiriki.",
+        "why": "Shorts ndiyo njia ya haraka zaidi ya kugunduliwa. Zinacheza kwenye mlisho wa watayarishaji ambao watu bado hawajawafuata, kwa hivyo short inafika mbali zaidi ya chaneli yako.",
+        "counts": {
+          "0": "Video wima zilizochapishwa kutoka kipakiaji cha Shorts.",
+          "1": "Kuhusu mada yoyote unayopenda."
+        },
+        "cta": "Chapisha short"
+      },
+      "follow": {
+        "label_one": "Fuata mtayarishaji",
+        "label_other": "Fuata watayarishaji {{count}}",
+        "hint": "Jenga mtandao wa watu wenye mawazo kama yako, au watayarishaji unaowaona wa kusisimua.",
+        "why": "Orodha ya unaowafuata ndiyo inayogeuza mlisho wa nyumbani kuwa mlisho wako. Inaenda nawe kwenye Hive ukipandishwa daraja.",
+        "counts": {
+          "0": "Watayarishaji unaowafuata kwa sasa.",
+          "1": "Kuacha kumfuata mtu kunapunguza hesabu tena, kwa hivyo hii inafuatilia unaowafuata kweli badala ya idadi ya vitufe ulivyobonyeza."
+        },
+        "cta": "Tafuta watayarishaji"
+      },
+      "comment": {
+        "label_one": "Andika maoni",
+        "label_other": "Andika maoni {{count}}",
+        "why": "Maoni ndiyo njia watu wanavyokupata kabla hujawa na hadhira. Jibu moja la kweli chini ya video ya mtu mwingine litakufaa zaidi kuliko upakiaji ambao bado hakuna aliyeuona.",
+        "cta": "Tafuta kitu cha kujibu",
+        "hint_one": "Maoni yanahesabiwa yakiwa na angalau herufi {{count}}. Wazo la kweli, si “nzuri” tu.",
+        "hint_other": "Maoni yanahesabiwa yakiwa na angalau herufi {{count}}. Wazo la kweli, si “nzuri” tu.",
+        "counts": {
+          "minChars_one": "Angalau herufi {{count}} za maneno yako mwenyewe.",
+          "minChars_other": "Angalau herufi {{count}} za maneno yako mwenyewe.",
+          "realThought": "Wazo la kweli badala ya neno moja.",
+          "othersPost": "Kwenye chapisho la mtu mwingine. Majibu chini ya video zako, au kwa maoni yako mwenyewe, ni mazungumzo na nafsi yako na hayahesabiwi."
+        }
+      },
+      "watch": {
+        "labelHours_one": "Tazama saa moja kwenye 3Speak",
+        "labelHours_other": "Tazama saa {{count}} kwenye 3Speak",
+        "labelMinutes_one": "Tazama dakika moja kwenye 3Speak",
+        "labelMinutes_other": "Tazama dakika {{count}} kwenye 3Speak",
+        "hint": "Video zozote. Inahesabiwa unapotazama kweli.",
+        "why": "Kutazama kunaonyesha uko hapa kushiriki na si kuchapisha tu. Ni lengo ambalo watu wengi hulimaliza bila kujaribu.",
+        "counts": {
+          "0": "Muda kwenye 3Speak yenyewe. Video ile ile iliyopachikwa kwenye tovuti nyingine haiwezi kuhesabiwa.",
+          "1": "Mara moja kwa kila video. Kuitazama tena kunapandisha muda wake bora, hakuuongezi kamwe, na hakuna video moja inayoweza kutoa muda wote peke yake.",
+          "2": "Muda halisi wa kucheza, kwa hivyo kuongeza kasi ya video hakuadhibiwi na kuipunguza kasi hakurefushi saa.",
+          "3": "Kwenye skrini. Video iliyoachwa ikicheza kwenye kichupo cha nyuma haijengi saa.",
+          "4": "Si video zako mwenyewe.",
+          "5": "Hakuna kinachorekodiwa unapotazama katika hali ya faragha."
+        },
+        "cta": "Tazama kitu"
+      },
+      "time": {
+        "label_one": "Kaa hapa kwa siku moja",
+        "label_other": "Kaa hapa kwa siku {{count}}",
+        "hint": "Hili hukamilika lenyewe. Hakuna cha kufanya.",
+        "why": "Akaunti iliyotokea saa moja iliyopita na iliyokaa hapa siku chache zinaonekana sawa kwenye karatasi. Siku ndizo zinazozitofautisha, kwa hivyo kila mtu husubiri muda ule ule mfupi.",
+        "counts": {
+          "fullDays_one": "Siku moja kamili tangu siku uliyojisajili.",
+          "fullDays_other": "Siku {{count}} kamili tangu siku uliyojisajili.",
+          "forYouWhen": "Kwako hiyo ni {{when}}. Malengo mengine yote yanaweza kukamilika kabla ya hapo.",
+          "otherGoals": "Malengo mengine yote yanaweza kukamilika kabla ya hapo.",
+          "keepsCounting": "Inaendelea kuhesabu uwe hapa au usiwe, kwa hivyo hakuna cha kudumisha."
+        }
+      },
+      "subscription": {
+        "label_one": "Jiunge na jumuiya",
+        "label_other": "Jiunge na jumuiya {{count}}",
+        "hint": "Tafuta jumuiya kuhusu mambo unayopenda kutazama au kutengeneza.",
+        "why": "Jumuiya hukusanya video za mada moja na watu wanaoijali. Kujiunga na moja kunajaza mlisho wako na zaidi ya unachopenda, na kwa watayarishaji ndipo chaneli mpya inapopata watazamaji wake wa kwanza.",
+        "counts": {
+          "0": "Jumuiya ambazo wewe ni mwanachama kwa sasa.",
+          "1": "Kujiondoa kwenye moja kunapunguza hesabu tena."
+        },
+        "cta": "Vinjari jumuiya"
+      },
+      "profile": {
+        "label_one": "Andaa wasifu wa chapa yako",
+        "label_other": "Andaa wasifu wa chapa yako",
+        "hint": "Jina la chapa yako, unachofanya na nembo yako.",
+        "why": "Watazamaji, na timu inayokukagua, huona aliye nyuma ya tangazo kabla ya kitu kingine chochote. Wasifu kamili ndio unaofanya chapa itambulike na iaminike."
+      },
+      "contact": {
+        "label_one": "Ongeza mawasiliano ya biashara yako",
+        "label_other": "Ongeza mawasiliano ya biashara yako",
+        "hint": "Barua pepe, pamoja na anwani yako au tovuti.",
+        "why": "Kabla tangazo halijaonyeshwa, timu inahitaji njia halisi ya kuifikia biashara iliyo nyuma yake. Barua pepe na anwani yako ni za siri: hazihifadhiwi kamwe kwenye blockchain wala kuonyeshwa popote.",
+        "counts": {
+          "0": "Barua pepe: inahitajika.",
+          "1": "Anwani: si lazima.",
+          "2": "Unahitaji anwani yako AU tovuti kwenye wasifu wa chapa yako hapo juu, angalau kimoja kati ya hivyo viwili."
+        }
+      }
+    },
+    "duration": {
+      "s": "sek {{s}}",
+      "hm": "saa {{h}} dk {{m}}",
+      "h": "saa {{h}}",
+      "m": "dk {{m}}"
+    },
+    "title": "Njia yako ya kupata akaunti ya Hive",
+    "needsTrack": "Orodha yako ya mambo ya kufanya inategemea kile kilichokuleta 3Speak.",
+    "choosePath": "Chagua njia yako",
+    "doneCount": "{{done}} kati ya {{total}} zimekamilika",
+    "overallAria": "Maendeleo kwa jumla",
+    "hideDetails": "Ficha maelezo",
+    "showLeft": "Onyesha kilichobaki",
+    "whatCounts": "Kinachohesabiwa",
+    "reviewDone": "Yote yamekamilika. Timu itakagua chaneli yako na kukupandisha daraja. Hakuna zaidi cha kufanya.",
+    "reviewPending": "Ukishakamilisha yote haya, timu itakagua chaneli yako na kukupandisha daraja."
+  },
+  "navProgress": {
+    "chooseTitle": "Tuambie nini kimekuleta 3Speak ili uone njia yako ya kupata akaunti ya Hive.",
+    "titleComplete_one": "Lengo {{count}} limekamilika (100%). Timu itakagua chaneli yako.",
+    "titleComplete_other": "Malengo yote {{count}} yamekamilika (100%). Timu itakagua chaneli yako.",
+    "titleProgress_one": "{{pct}}% kuelekea akaunti yako ya Hive. {{done}} kati ya lengo {{count}} limekamilika kabisa.",
+    "titleProgress_other": "{{pct}}% kuelekea akaunti yako ya Hive. {{done}} kati ya malengo {{count}} yamekamilika kabisa.",
+    "ariaComplete_one": "Maendeleo yako: 100%, lengo {{count}} limekamilika",
+    "ariaComplete_other": "Maendeleo yako: 100%, malengo yote {{count}} yamekamilika",
+    "ariaProgress_one": "Maendeleo yako: {{pct}}%, {{done}} kati ya lengo {{count}} limekamilika kabisa",
+    "ariaProgress_other": "Maendeleo yako: {{pct}}%, {{done}} kati ya malengo {{count}} yamekamilika kabisa",
+    "celebrate": "Malengo yote kuelekea akaunti yako ya Hive yamekamilika."
+  },
+  "welcome": {
+    "what": {
+      "title": "Karibu 3Speak",
+      "p1": "3Speak ni jukwaa la video lililojengwa juu ya <b>Hive</b>, blockchain ya umma. Video hapa hazimilikiwi na sisi: ni mali ya watu wanaozichapisha, na zinaweza kupata zawadi halisi kutoka kwa watu wanaozitazama."
+    },
+    "warmup": {
+      "title": "Uko kwenye kipindi chako cha maandalizi",
+      "p1": "Akaunti ya Hive ni halisi na ya kudumu, na mtu lazima aigharamie. Kwa hivyo badala ya kukuomba chochote mapema, tulikupa jina na mahali pa kuchapisha papo hapo.",
+      "p2": "Kila kitu unachotengeneza wakati wa kipindi cha maandalizi kinaishi kwenye 3Speak. Ukiwa tayari, timu inakagua chaneli yako na kukupa akaunti yako mwenyewe ya Hive, bure. Video, Shorts na unaowafuata kisha huenda kwenye blockchain kwa jina lako mwenyewe, na wewe unachagua kipi kiende nawe."
+    },
+    "do": {
+      "title": "Unachoweza kufanya sasa hivi",
+      "upload": "Pakia video, kama kila mtu mwingine hapa anavyofanya.",
+      "shorts": "Chapisha Shorts kutoka kwenye simu au kompyuta yako.",
+      "comment": "Toa maoni kuhusu chochote, ikiwemo video za watu walio tayari kwenye Hive.",
+      "follow": "Fuata watayarishaji na ujiunge na jumuiya.",
+      "watch": "Tazama. Historia yako na mlisho wako ni vyako tangu siku ya kwanza.",
+      "aside": "Mambo machache yanasubiri akaunti yako: kupata zawadi na kutoa bakshishi. Hayo yanahamisha pesa halisi, kwa hivyo yanahitaji akaunti ambayo ni yako kweli."
+    },
+    "path": {
+      "p1": "Wasifu wako unaonyesha orodha fupi ya mambo ya kufanya, na inategemea uko hapa kwa ajili ya nini: watazamaji hutazama na kushiriki, watayarishaji huchapisha, na watangazaji huandaa chapa yao.",
+      "p2": "Si mtihani. Ni njia tu ya sisi kutofautisha akaunti halisi na akaunti tupu au yenye nia mbaya. Orodha ikikamilika timu inakukagua na kukupandisha daraja haraka iwezekanavyo.",
+      "perkEarn": "Machapisho yanayopata mapato",
+      "perkKeys": "Funguo ambazo wewe pekee unazo",
+      "perkNetwork": "Mtandao mzima wa Hive"
+    },
+    "showList": "Nionyeshe orodha yangu",
+    "decideLater": "Amua baadaye"
+  },
+  "profile": {
+    "unlocks": {
+      "earn": {
+        "title": "Machapisho yako yanaanza kupata mapato.",
+        "body": "Video kwenye Hive zinaweza kupewa zawadi za HIVE na HBD na yeyote anayezitazama, na zinaweza kubeba matangazo ambayo unapata sehemu yake."
+      },
+      "publish": {
+        "title": "Chapisha kila kitu ulichotengeneza hapa.",
+        "body": "Video, Shorts na unaowafuata kwenye ukurasa huu vinaweza kuchapishwa kwenye mnyororo kwa jina lako mwenyewe, na wewe unachagua vipi."
+      },
+      "buttons": {
+        "title": "Piga kura, toa bakshishi, fuata na tengeneza orodha za kucheza.",
+        "body": "Vitufe vyote ambavyo leo vimefifishwa kwako."
+      },
+      "keys": {
+        "title": "Funguo ambazo wewe pekee unazo.",
+        "body": "Hakuna anayeweza kukufungia nje, na kuingia kule kule kunafanya kazi kwenye kila programu ya Hive, si 3Speak tu."
+      },
+      "ecosystem": {
+        "title": "Kuwa sehemu ya mfumo ikolojia wa Hive duniani.",
+        "body": "3Speak ni programu moja kwenye mtandao mzima wa programu: blogu, jumuiya, michezo, masoko na zaidi, zote zikishiriki akaunti moja na orodha ile ile ya unaowafuata."
+      }
+    },
+    "advertiserUnlocks": {
+      "book": {
+        "title": "Weka matangazo kote 3Speak.",
+        "body": "Nafasi za video, nafasi za Shorts, mabango ya kicheza, tika na nafasi za kabla ya upakiaji, kuanzia siku moja hadi miezi mitatu."
+      },
+      "pay": {
+        "title": "Lipa kutoka kwenye pochi yako.",
+        "body": "Kwa HBD au HIVE, moja kwa moja kutoka kwenye akaunti yako. Hakuna kadi wala mtu wa kati."
+      },
+      "results": {
+        "title": "Ona matangazo yako yalicholeta.",
+        "body": "Uchezaji na mibofyo kwa kila agizo, na salio hurudishwa kwenye agizo lako lijalo ikiwa agizo halikufikia lengo."
+      },
+      "customers": {
+        "title": "Zungumza na wateja wako, ukitaka.",
+        "body": "Chapisha video, jibu maoni na ufuate watu kwa jina la chapa yako."
+      },
+      "keys": {
+        "title": "Funguo ambazo wewe pekee unazo.",
+        "body": "Hakuna anayeweza kukufungia nje, na kuingia kule kule kunafanya kazi kwenye kila programu ya Hive, si 3Speak tu."
+      }
+    },
+    "loadFailed": "Imeshindwa kupakia wasifu huu.",
+    "badge": {
+      "onHive": "Kwenye Hive",
+      "advertiser": "Mtangazaji · anaanza",
+      "gettingStarted": "Anaanza"
+    },
+    "stats": {
+      "posts_one": "<b>{{count}}</b>chapisho",
+      "posts_other": "<b>{{count}}</b>machapisho",
+      "followers_one": "<b>{{count}}</b>mfuasi",
+      "followers_other": "<b>{{count}}</b>wafuasi",
+      "following_one": "<b>{{count}}</b>anaowafuata",
+      "following_other": "<b>{{count}}</b>anaowafuata"
+    },
+    "editProfile": "Hariri wasifu",
+    "note": {
+      "graduated": "Sasa yuko kwenye Hive kama <userLink>@{{user}}</userLink>. Chochote kilicho hapa chini kilitengenezwa kabla ya hapo.",
+      "advertiser": "Huu ni ukurasa wa chapa yako kwenye 3Speak. Kamilisha hatua zilizo hapa chini na timu itakagua chapa yako. Ikishaidhinishwa unapata akaunti ya Hive: hiyo ndiyo akaunti yako ya mtangazaji, unayotumia kuweka matangazo na kulipia.",
+      "own": "Hivi ndivyo wengine wanavyokuona. Machapisho yako yanaishi kwenye 3Speak na bado hayako kwenye blockchain ya Hive, kwa hivyo hayapati zawadi. Hilo linabadilika utakapopata akaunti yako baada ya kukamilisha kazi zote zilizo hapa chini.",
+      "visitor": "Mgeni hapa, bado hayuko kwenye Hive. Machapisho haya yanaishi kwenye 3Speak, kwa hivyo kwa sasa hayapati zawadi. Mfuate na utoe maoni hata hivyo: kutiwa moyo mapema ndiko kunakomvusha mtu katika wiki zake za kwanza. Akipata akaunti yake ya Hive tutakujulisha, ili uweze kumfuata huko pia."
+    },
+    "tabs": {
+      "aria": "Sehemu za wasifu",
+      "goals": "Malengo yako",
+      "uploads": "Upakiaji",
+      "comments": "Maoni",
+      "followers": "Wafuasi",
+      "following": "Anaowafuata"
+    },
+    "videosAndShorts": "Video na Shorts",
+    "market": {
+      "audience": "Hadhira inayosubiri tangazo lako",
+      "format": "Chagua muundo unaofaa ujumbe wako"
+    },
+    "brandVideos": "Video za chapa yako",
+    "optional": "si lazima",
+    "empty": {
+      "advertiser": "Video hapa ni za kuzungumza na wateja, ukitaka. Matangazo huwekwa kando kwenye ukurasa wa Tangaza na hayahitaji video yoyote.",
+      "own": "Bado hakuna kitu. Upakiaji wako wa kwanza unatia tiki kwenye orodha iliyo kando ya hii.",
+      "visitor": "Bado hakuna kilichochapishwa."
+    },
+    "videos": "Video",
+    "unlocksTitleAdvertiser": "Akaunti yako ya mtangazaji inakupa nini",
+    "unlocksTitle": "Akaunti ya Hive inakupa nini",
+    "fineprint": "Huhifadhiwa kwenye wasifu wako wa 3Speak. Huenda kwenye Hive pamoja na kila kitu kingine utakapopata akaunti yako."
+  },
+  "activity": {
+    "empty": {
+      "comments": "Bado hajasema kitu.",
+      "followers": "Bado hakuna anayemfuata.",
+      "following": "Bado hamfuati mtu yeyote."
+    },
+    "loadFailed": "Imeshindwa kupakia hicho.",
+    "publishedToHive": "imechapishwa kwenye Hive",
+    "onHive": "kwenye Hive"
+  },
+  "bell": {
+    "unreadAria_one": "Arifa, {{count}} haijasomwa",
+    "unreadAria_other": "Arifa, {{count}} hazijasomwa",
+    "empty": "Bado hakuna kitu. Mtu akijibu video zako au akizipenda, itaonekana hapa.",
+    "replied": "<b>@{{name}}</b> amejibu chapisho lako",
+    "liked": "<b>@{{name}}</b> amependa chapisho lako"
+  },
+  "rail": {
+    "aria": "Wapya kwenye 3Speak",
+    "title": "Wanaanza tu",
+    "body": "Wageni hapa, bado hawako kwenye Hive. Machapisho haya yanaishi kwenye 3Speak. Wakaribishe kwa uchangamfu kabla hawajajiunga na Hive."
+  },
+  "sessionSync": {
+    "signedInAs": "Umeingia kama @{{name}}",
+    "caughtUp": "Akaunti yako ya Hive iko tayari, kwa hivyo kifaa hiki kimesawazishwa nayo.",
+    "openFailed": "Imeshindwa kufungua Butter Auth",
+    "title": "Unganisha kipindi chako tena",
+    "lede": "Kifaa hiki kimepoteza muunganisho na akaunti yako, kwa hivyo 3Speak haiwezi kupakia machapisho, maendeleo au arifa zako hadi urudi.",
+    "text": "Hakuna kilichopotea. Kila kitu ulichotengeneza kinaishi kwenye akaunti yako, si kwenye kivinjari hiki. Kuunganisha tena kwa kawaida huchukua sekunde moja na hakuhitaji kuandika chochote.",
+    "opening": "Inafungua…",
+    "reconnect": "Unganisha tena"
+  },
+  "admin": {
+    "title": "Mwonekano wa msimamizi",
+    "note": "Ni wasimamizi wa 3Speak pekee wanaoona paneli hii.",
+    "brandProfile": "Wasifu wa chapa",
+    "public": "ya umma",
+    "fields": {
+      "handle": "Jina",
+      "brandName": "Jina la chapa",
+      "logo": "Nembo",
+      "about": "Kuhusu",
+      "website": "Tovuti",
+      "location": "Mahali",
+      "interests": "Mambo anayopenda",
+      "activity": "Shughuli",
+      "email": "Barua pepe",
+      "address": "Anwani",
+      "contactGoal": "Lengo la mawasiliano",
+      "firstSaved": "Ilihifadhiwa kwanza",
+      "lastChanged": "Ilibadilishwa mwisho",
+      "butrauthUser": "Mtumiaji wa ButrAuth"
+    },
+    "activityLine": "machapisho {{posts}} · wafuasi {{followers}} · anawafuata {{following}}",
+    "notSet": "haijawekwa",
+    "none": "hakuna",
+    "privateContact": "Mawasiliano ya siri",
+    "privateNote": "wasimamizi tu, kamwe si kwenye mnyororo",
+    "notGiven": "haijatolewa",
+    "met": "Limefikiwa",
+    "notMet": "Bado halijafikiwa",
+    "unknown": "haijulikani",
+    "noContact": "Bado hakuna mawasiliano ya biashara yaliyohifadhiwa."
+  },
+  "contact": {
+    "savedComplete": "Imehifadhiwa. Ni timu ya 3Speak pekee inayoweza kuyaona.",
+    "savedIncomplete": "Imehifadhiwa. Ongeza anwani yako, au tovuti kwenye wasifu wako, ili kukamilisha hatua hii.",
+    "privateNote": "<b>Siri.</b> Barua pepe na anwani yako hazihifadhiwi kamwe kwenye blockchain na hazionyeshwi kamwe kwenye wasifu wako wala popote pengine. Ni timu ya 3Speak pekee inayoziona, ili kukufikia kuhusu matangazo yako.",
+    "email": "Barua pepe",
+    "required": "inahitajika",
+    "emailPlaceholder": "wewe@chapayako.com",
+    "address": "Anwani",
+    "addressOptional": "si lazima, isipokuwa wasifu wako hauna tovuti",
+    "ph": {
+      "line1": "Mtaa na namba",
+      "line2": "Mstari wa 2 wa anwani",
+      "postalCode": "Msimbo wa posta",
+      "city": "Mji",
+      "region": "Mkoa au eneo",
+      "country": "Nchi"
+    },
+    "addressHint": "Anwani inahesabiwa mtaa, mji na nchi vikishajazwa. Huna anwani? Ongeza tovuti kwenye wasifu wa chapa yako badala yake.",
+    "save": "Hifadhi maelezo ya mawasiliano"
+  },
+  "brand": {
+    "saved": "Wasifu wa chapa umehifadhiwa",
+    "name": "Jina la chapa",
+    "namePlaceholder": "Chapa au kampuni yako",
+    "about": "Chapa yako inafanya nini",
+    "aboutPlaceholder": "Sentensi moja au mbili ambazo watazamaji wataelewa.",
+    "logo": "Nembo",
+    "uploading": "Inapakia…",
+    "replaceLogo": "Badilisha nembo",
+    "uploadLogo": "Pakia nembo",
+    "logoHint": "Huonyeshwa kama duara kando ya matangazo yako, kwa hivyo picha ya mraba inafaa zaidi.",
+    "website": "Tovuti",
+    "websiteOptional": "si lazima ukitupa anwani yako",
+    "websitePlaceholder": "https://chapayako.com",
+    "websiteInvalid": "Tumia anwani kamili inayoanza na https://",
+    "save": "Hifadhi wasifu wa chapa"
+  },
+  "createAccount": {
+    "started": "Tuandae akaunti yako ya Hive",
+    "openFailed": "Imeshindwa kufungua maandalizi ya akaunti. Tafadhali jaribu tena.",
+    "readyAdvertiser": "Akaunti yako ya mtangazaji iko tayari",
+    "ready": "Akaunti yako ya Hive iko tayari",
+    "approvedAdvertiser": "Timu imeidhinisha chapa yako. Fungua akaunti yako ya Hive, bure, ili kuweka na kulipia matangazo.",
+    "approved": "Timu imekuidhinisha. Fungua akaunti yako ya Hive, bure: ni yako peke yako.",
+    "createAdvertiser": "Fungua akaunti yangu ya mtangazaji",
+    "create": "Fungua akaunti yangu ya Hive"
+  },
+  "graduatedFollows": {
+    "message": "@{{handle}} sasa ana akaunti ya Hive kama @{{hiveUsername}}.",
+    "title": "Mtu unayemfuata amepandishwa daraja",
+    "followForReal": "Mfuate kweli",
+    "gotIt": "Nimeelewa",
+    "nowFollowing": "Sasa unamfuata @{{hiveUsername}} kwenye Hive",
+    "followFailed": "Imeshindwa kumfuata"
+  },
+  "backlog": {
+    "title": "Machapisho yako ya awali bado yako hapa",
+    "lede_one": "Ulitengeneza <b>kitu {{count}}</b> kabla ya kuwa na akaunti ya Hive. Kinaishi kwenye 3Speak tu. Unaweza kukiweka kwenye Hive kama <b>@{{user}}</b> wakati wowote unapotaka.",
+    "lede_other": "Ulitengeneza <b>vitu {{count}}</b> kabla ya kuwa na akaunti ya Hive. Vinaishi kwenye 3Speak tu. Unaweza kuviweka kwenye Hive kama <b>@{{user}}</b> wakati wowote unapotaka.",
+    "text": "Unachagua kinachohamishwa, kimoja kimoja. Chochote unachoacha kinabaki kwenye 3Speak kama kilivyo, na unaweza kurudi kwa vilivyobaki wakati wowote.",
+    "later": "Baadaye"
+  },
+  "graduation": {
+    "items": {
+      "video_one": "video {{count}}",
+      "video_other": "video {{count}}",
+      "short_one": "short {{count}}",
+      "short_other": "Shorts {{count}}",
+      "comment_one": "maoni {{count}}",
+      "comment_other": "maoni {{count}}",
+      "follow_one": "ufuatiliaji {{count}}",
+      "follow_other": "ufuatiliaji {{count}}",
+      "like_one": "kupenda {{count}}",
+      "like_other": "kupenda {{count}}",
+      "creator_one": "mtayarishaji {{count}}",
+      "creator_other": "watayarishaji {{count}}"
+    },
+    "listAnd": "{{rest}} na {{last}}",
+    "listSep": ", ",
+    "viewerDone": {
+      "watched": "umetazama {{time}}",
+      "written": "umeandika {{items}}",
+      "followed": "umefuata {{items}}"
+    },
+    "advertiser": {
+      "lede": "Timu imekagua <b>{{name}}</b>. Fungua <b>akaunti yako ya Hive</b>, bure: inakuwa akaunti yako ya mtangazaji.",
+      "text": "Kwayo unaweka matangazo kote 3Speak, kuanzia nafasi za video na mabango hadi tika, na unayalipia moja kwa moja kutoka kwenye pochi yake, kwa HBD au HIVE. Ufunguo ni wako peke yako, kwa hivyo hakuna anayeweza kukufungia nje.",
+      "note": "Wasifu wa chapa yako unahamia pamoja nawe. Barua pepe na anwani ya biashara yako zinabaki siri kwa 3Speak na haziendi kamwe kwenye blockchain.",
+      "noteMoving": "<b>{{moving}}</b> zako zinahamia pia, zikichapishwa taratibu kwa siku chache."
+    },
+    "viewer": {
+      "title": "Akaunti yako mwenyewe iko tayari",
+      "ledeDone": "Kama <b>@{{handle}}</b> {{done}}. Geuza hilo kuwa <b>akaunti ya Hive</b> ambayo ni mali yako, bure.",
+      "lede": "Geuza <b>@{{handle}}</b> kuwa <b>akaunti ya Hive</b> ambayo ni mali yako, bure.",
+      "text": "Kwayo unaweza kupigia kura na kutoa bakshishi kwa video unazopenda, kupata mapato kutoka kwa maoni yako, kujiunga na zawadi za watazamaji kwa kile unachotazama, na kutengeneza orodha za kucheza. Kuingia kule kule na unaowafuata wale wale vinafanya kazi kwenye kila programu ya Hive, na ufunguo ni wako peke yako."
+    },
+    "createMyAccount": "Fungua akaunti yangu",
+    "creator": {
+      "title": "Sasa unaweza kufungua akaunti yako mwenyewe",
+      "lede": "Umekuwa ukichapisha kama <b>@{{handle}}</b>. Geuza hilo kuwa <b>akaunti halisi ya Hive</b> ambayo ni mali yako, bure.",
+      "text": "Akaunti ya Hive ni ufunguo ambao wewe pekee unao. Hakuna anayeweza kukufungia nje, machapisho yako yanaanza kupata mapato, na kuingia kule kule kunafanya kazi kwenye kila programu ya Hive, si 3Speak tu."
+    },
+    "note": {
+      "moving": "<b>{{moving}}</b> zako zinahamia pamoja nawe.",
+      "everything": "Kila kitu ulichotengeneza hapa kinahamia pamoja nawe.",
+      "gradual": "Kuchapisha hufanyika taratibu kwa siku chache, kwa sababu akaunti mpya kabisa huanza na posho ndogo ya kuchapisha.",
+      "waiting_one": "Kimoja kati yake kinasubiri chapisho kinachojibu lichapishwe kwanza.",
+      "waiting_other": "{{count}} kati yake vinasubiri machapisho vinavyojibu yachapishwe kwanza."
+    },
+    "notYet": "Bado"
+  },
+  "handleTaken": {
+    "openFailed": "Imeshindwa kufungua kichaguzi cha jina",
+    "title": "Jina @{{handle}} limeshachukuliwa",
+    "lede": "Mtu amelisajili kwenye <b>Hive</b>, kwa hivyo haliwezi kuwa akaunti yako ukiwa tayari. Kuchagua jipya sasa kunachukua muda mfupi tu.",
+    "text": "Kuchagua jina hapa hakukulihifadhi kamwe. Hive haina njia ya kushikilia jina isipokuwa kwa kufungua akaunti, na hiyo ndiyo hatua ambayo bado hujailipia, ambayo ndiyo sababu nzima ya kuanza bila akaunti.",
+    "note": "Hakuna ulichotengeneza kinachopotea. Video, Shorts, maoni na unaowafuata vinabaki nawe na vinahamia chini ya jina lolote utakalochagua.",
+    "pick": "Chagua jina jipya"
+  },
+  "backfill": {
+    "rcError": "Bado hakuna Resource Credits za kutosha. Hujijaza zenyewe; jaribu tena baada ya muda mfupi.",
+    "today": "Leo",
+    "yesterday": "Jana",
+    "groups": {
+      "video": "Video",
+      "videoNote": "Moja kila dakika 5 — hii ndiyo sehemu ya polepole.",
+      "short": "Shorts",
+      "comment": "Maoni",
+      "vote": "Kupenda",
+      "follow": "Ufuatiliaji",
+      "other": "Kila kitu kingine"
+    },
+    "status": {
+      "done": "Imechapishwa",
+      "publishing": "Inachapisha…",
+      "error": "Imeshindwa",
+      "idle": "Kwenye 3Speak tu"
+    },
+    "wait": {
+      "ms": "dk {{m}} sek {{s}}",
+      "s": "sek {{s}}"
+    },
+    "noDate": "Hakuna tarehe",
+    "waitToast": "Hive inaruhusu chapisho moja kila dakika 5. Linalofuata baada ya {{wait}}.",
+    "publishedToast_one": "Imechapishwa kwenye Hive",
+    "publishedToast_other": "Vipengee {{count}} vimechapishwa kwenye Hive",
+    "loading": "Inapakia machapisho yako…",
+    "emptyTitle": "Hakuna kilichobaki cha kuchapisha",
+    "emptyText": "Kila kitu ulichotengeneza kabla ya kuwa na akaunti ya Hive kimeshachapishwa au hakikuwa kitu kinachoweza kuchapishwa tena.",
+    "title": "Chapisha ulichotengeneza awali",
+    "intro": "Ulitengeneza haya kwenye 3Speak kabla ya kuwa na akaunti ya Hive, kwa hivyo yanapatikana hapa tu. Chagua unachotaka kwenye rekodi yako ya umma kama <b>@{{user}}</b> na ukichapishe. Chochote unachoacha kinabaki kwenye 3Speak kama kilivyo.",
+    "note": "<b>Kuchapisha kunachukua muda, na hilo ni la kawaida.</b> Hive inaruhusu chapisho moja kila dakika 5 kwa kila akaunti, na akaunti mpya kabisa ina posho ndogo ya kuchapisha inayojijaza kwa siku chache. Ufuatiliaji, kupenda na wasifu wako ni nafuu na hupita haraka. Chapisha vichache kwa wakati mmoja kisha urudi.",
+    "groupBy": "Panga orodha kwa",
+    "timeline": "Mfuatano wa muda",
+    "byType": "Kwa aina",
+    "rcBlockedIn": "<b>Akaunti yako imeishiwa na Resource Credits kwa sasa.</b> Hive inaipa kila akaunti posho ndogo ya kuchapisha, na hujijaza yenyewe. Hakuna kilichopotea: rudi baada ya takriban {{wait}} na uendelee ulipoishia.",
+    "rcBlockedLater": "<b>Akaunti yako imeishiwa na Resource Credits kwa sasa.</b> Hive inaipa kila akaunti posho ndogo ya kuchapisha, na hujijaza yenyewe. Hakuna kilichopotea: rudi baadaye kidogo na uendelee ulipoishia.",
+    "selected": "<b>{{count}}</b> zimechaguliwa",
+    "rootPostsTime_one": "video {{count}}, kwa hivyo hii inahitaji takriban dakika {{minutes}}",
+    "rootPostsTime_other": "video {{count}}, kwa hivyo hii inahitaji takriban dakika {{minutes}}",
+    "nextVideo": "Video inayofuata inaweza kutoka baada ya {{wait}}. Ufuatiliaji, kupenda na wasifu haviathiriki.",
+    "selectAll": "Chagua zote",
+    "clear": "Futa",
+    "publishSelected": "Chapisha zilizochaguliwa",
+    "selectItem": "Chagua {{label}}",
+    "fiveMin": "dk 5",
+    "waitingTitle": "Inamsubiri mtu mwingine",
+    "waitingText": "Hivi huchapishwa vyenyewe mara chapisho vinavyoelekeza likiwekwa kwenye Hive. Hakuna kinachopotea wakati huo.",
+    "waitingFor": "<b>{{label}}</b> — inasubiri {{target}}",
+    "andMore": "na {{count}} zaidi",
+    "excludedTitle": "Havitahamishwa"
+  }
+}

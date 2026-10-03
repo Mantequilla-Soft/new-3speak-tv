@@ -1,0 +1,200 @@
+{
+  "loaders": {
+    "wifi": "Kipakiaji cha Wifi"
+  },
+  "supportBlock": {
+    "banned": {
+      "title": "Akaunti yako imefungiwa",
+      "body": "Akaunti yako ya 3Speak imefungiwa, kwa hivyo huwezi kuingia. Ikiwa unadhani hili ni kosa, tafadhali wasiliana na huduma kwa wateja ya 3Speak."
+    },
+    "upload": {
+      "title": "Upakiaji umezimwa kwa akaunti yako",
+      "body": "Akaunti yako ya 3Speak hairuhusiwi kupakia kwa sasa. Ikiwa unadhani hili ni kosa, tafadhali wasiliana na huduma kwa wateja ya 3Speak."
+    }
+  },
+  "emergency": {
+    "title": "Tuna matatizo fulani ya miundombinu",
+    "body": "Timu yetu inalishughulikia na inafanya kazi kurejesha 3Speak sasa hivi. Jiunge na Discord yetu ili kutufikia na kupata taarifa mubashara — asante kwa uvumilivu wako.",
+    "joinDiscord": "Jiunge na Discord yetu"
+  },
+  "changelog": {
+    "title": "Tumetoa sasisho!",
+    "subtitle": "Haya ndiyo mapya katika v{{version}}",
+    "previousUpdates": "Masasisho ya awali",
+    "newerUpdates": "Masasisho mapya zaidi",
+    "readTheCode": "Soma msimbo",
+    "gotIt": "Nimeelewa"
+  },
+  "routes": {
+    "homeFeed": "Mlisho wa nyumbani",
+    "followFeed": "Mlisho wa unaowafuata",
+    "discover": "Gundua",
+    "newVideos": "Video mpya",
+    "firstUploads": "Upakiaji wa kwanza",
+    "rankings": "Viwango",
+    "groups": "Vikundi",
+    "badges": "Beji",
+    "audioBy": "Sauti ya @{{author}}",
+    "audio": "Sauti",
+    "playlist": "Orodha ya kucheza",
+    "watchHistory": "Historia ya kutazama — @{{username}}",
+    "postBy": "Chapisho la @{{author}}",
+    "myProfile": "Wasifu wangu",
+    "uploadStudio": "Studio ya upakiaji",
+    "drafts": "Rasimu",
+    "editVideo": "Hariri video",
+    "editScheduledPost": "Hariri chapisho lililoratibiwa",
+    "chat": "Gumzo",
+    "about": "Kuhusu",
+    "login": "Ingia",
+    "brandFallback": "3Speak - Jukwaa la video lililogatuliwa"
+  },
+  "invite": {
+    "title": "<who>@{{referrer}}</who> amekualika 3Speak",
+    "incubatingFastTrack": "Unaweza kugeuza <b>@{{handle}}</b> kuwa akaunti yako mwenyewe ya Hive sasa hivi, bila kumaliza kipindi cha maandalizi.",
+    "incubatingKeepGoing": "Endelea na kipindi chako cha maandalizi. <b>@{{referrer}}</b> anatambuliwa kama mtu aliyekualika.",
+    "signUpFastTrack": "Jisajili na upate akaunti yako mwenyewe ya Hive papo hapo: kuingia kumoja kwa 3Speak na kila programu nyingine ya Hive, pamoja na funguo ambazo wewe pekee unazo. Inachukua takriban dakika moja.",
+    "signUpFree": "Jisajili na uanze na wasifu wa bure kwenye 3Speak. Mwaliko wako umehifadhiwa, kwa hivyo <b>@{{referrer}}</b> anapata sifa.",
+    "createHiveAccount": "Fungua akaunti yangu ya Hive",
+    "createAccount": "Fungua akaunti yangu",
+    "lookAround": "Nataka tu kuangalia kwanza"
+  },
+  "interests": {
+    "saved": "Mambo unayopenda yamehifadhiwa — yabadilishe wakati wowote kwenye Mipangilio",
+    "saveFailed": "Imeshindwa kuhifadhi mambo unayopenda",
+    "title": "Unapenda nini?",
+    "body": "Chagua mada chache unazofurahia na tutakuonyesha zaidi maudhui unayopenda. Unaweza kubadilisha hizi wakati wowote kwenye <b>Mipangilio</b>.",
+    "notNow": "Si sasa",
+    "save": "Hifadhi mambo unayopenda"
+  },
+  "emojiGif": {
+    "emoji": "Emoji",
+    "searchEmoji": "Tafuta emoji",
+    "searchGifs": "Tafuta GIF…",
+    "noGifs": "Hakuna GIF zilizopatikana.",
+    "poweredBy": "Inaendeshwa na GIPHY"
+  },
+  "welcome": {
+    "things": {
+      "postVideos": {
+        "title": "Chapisha video",
+        "text": "Pakia video ndefu zinazobaki kuwa zako, kwenye mnyororo ambao hakuna anayeweza kuzifuta kimya kimya."
+      },
+      "filmShorts": {
+        "title": "Rekodi Shorts",
+        "text": "Kitu cha haraka, wima na rahisi kushiriki. Nzuri kwa kupata watazamaji wako wa kwanza."
+      },
+      "goLive": {
+        "title": "Nenda mubashara",
+        "text": "Tiririsha kwa watu wako, walete wageni jukwaani, na ubaki na rekodi baadaye."
+      },
+      "buildCommunity": {
+        "title": "Jenga jumuiya",
+        "text": "Anzisha sehemu kuhusu kile unachokijali, au jiunge na iliyokwisha changamka."
+      },
+      "makeFriends": {
+        "title": "Pata marafiki wa kweli",
+        "text": "Toa maoni, chati na shirikiana na binadamu halisi wanaosaidiana."
+      },
+      "getInspired": {
+        "title": "Pata hamasa, shiriki",
+        "text": "Gundua watayarishaji, waunge mkono unaowapenda, na upate mapato ukiwa hapo."
+      }
+    },
+    "advertiserThings": {
+      "bookAds": {
+        "title": "Weka matangazo kote 3Speak",
+        "text": "Nafasi za video, nafasi za Shorts, mabango ya kicheza, tika na nafasi za kabla ya upakiaji, kuanzia siku moja hadi miezi mitatu."
+      },
+      "payFromWallet": {
+        "title": "Lipa kutoka kwenye pochi yako",
+        "text": "Kwa HBD au HIVE, moja kwa moja kutoka kwenye akaunti hii. Hakuna kadi wala mtu wa kati."
+      },
+      "chooseWhere": {
+        "title": "Chagua yanapoonyeshwa",
+        "text": "Chagua muundo, nafasi ndani ya video na idadi ya siku yatakayoonyeshwa."
+      },
+      "seeDelivered": {
+        "title": "Ona yalicholeta",
+        "text": "Uchezaji na mibofyo kwa kila agizo, na salio hurudishwa ikiwa agizo halikufikia lengo."
+      },
+      "talkToCustomers": {
+        "title": "Zungumza na wateja wako",
+        "text": "Ukitaka: chapisha video, jibu maoni na ufuate watu chini ya chapa yako."
+      },
+      "oneAccount": {
+        "title": "Akaunti moja kila mahali",
+        "text": "Chapa ile ile na kuingia kule kule kwenye kila programu ya Hive, pamoja na ufunguo ambao wewe pekee unao."
+      }
+    },
+    "profileLive": "Wasifu wako uko hewani. Karibu 3Speak!",
+    "brandProfileLive": "Wasifu wa chapa yako uko hewani. Karibu 3Speak!",
+    "title": "Karibu 3Speak",
+    "titleNamed": "Karibu 3Speak, {{name}}",
+    "advertiserReady": "Akaunti yako ya mtangazaji <b>@{{user}}</b> iko tayari. Hii ndiyo akaunti unayotumia kuweka matangazo na kulipia.",
+    "heyUser": "Habari <b>@{{user}}</b>, umefika. 3Speak imejengwa juu ya Hive, kwa hivyo akaunti yako, hadhira yako na maudhui yako ni mali yako.",
+    "noteAdvertiser": "Kwanza, angalia haraka wasifu wa chapa yako: ndio watazamaji wanaouona karibu na matangazo yako.",
+    "note": "Jambo moja la mwisho kabla ya kuanza: waambie watu wanamtazama nani.",
+    "maybeLater": "Labda baadaye",
+    "checkBrandProfile": "Angalia wasifu wa chapa yangu",
+    "setUpProfile": "Andaa wasifu wangu",
+    "brandProfileTitle": "Wasifu wa chapa yako",
+    "profileTitle": "Waambie watu wewe ni nani",
+    "brandProfileHint": "Umehamishwa kutoka kwenye kipindi chako cha maandalizi. Kuhifadhi kunauweka kwenye akaunti yako ya Hive; unaweza kuubadilisha wakati wowote.",
+    "profileHint": "Hiki ndicho watu wanachoona kwenye wasifu wako. Unaweza kukibadilisha wakati wowote.",
+    "skipForNow": "Ruka kwa sasa",
+    "saveAndBook": "Hifadhi na uweke tangazo langu la kwanza",
+    "uploading": "Inapakia…",
+    "interestsHint": "Tunatumia haya kuchagua kinachoonekana kwenye ukurasa wako wa nyumbani. Chagua mengi kadiri unavyopenda, au usichague lolote, na uyabadilishe wakati wowote unapotaka.",
+    "interestsFineprint": "Huhifadhiwa kwenye akaunti yako ya Hive, kwa hivyo kila programu ya Hive inaonyesha wasifu ule ule na mambo yale yale unayopenda.",
+    "saveAndExplore": "Hifadhi na uanze kuvinjari"
+  },
+  "profileEdit": {
+    "updated": "Wasifu umesasishwa",
+    "title": "Hariri wasifu wako",
+    "subtitle": "Picha, jina na bio yako huonekana kwenye wasifu wako na karibu na kila kitu unachochapisha.",
+    "loading": "Inapakia wasifu wako…",
+    "fineprint": "Huhifadhiwa kwenye akaunti yako ya Hive, kwa hivyo kila programu ya Hive inaonyesha wasifu ule ule.",
+    "saveChanges": "Hifadhi mabadiliko"
+  },
+  "profileFields": {
+    "chooseImage": "Tafadhali chagua faili ya picha",
+    "imageTooLarge": "Picha hiyo inazidi 8MB, tafadhali chagua ndogo zaidi",
+    "uploadFailed": "Imeshindwa kupakia picha hiyo",
+    "saved": "Wasifu umehifadhiwa",
+    "saveFailed": "Imeshindwa kuhifadhi wasifu wako",
+    "uploadBanner": "Pakia bango la wasifu",
+    "changeBanner": "Badilisha bango",
+    "addBanner": "Ongeza bango",
+    "bannerHint": "Bora kwa <b>2800 × 684</b> px (au picha yoyote ya 4:1). Weka sehemu muhimu katikati: pembeni hukatwa kwenye skrini nyembamba na jina lako hukaa juu ya sehemu ya chini kushoto.",
+    "uploadPicture": "Pakia picha ya wasifu",
+    "pictureLabel": "Picha ya wasifu",
+    "pictureHint": "Uso au nembo hufanya kazi vizuri zaidi. Mraba, 400 × 400 px au zaidi. Hadi 8MB.",
+    "displayName": "Jina la kuonyesha",
+    "namePlaceholderUser": "Tukuiteje? (@{{username}})",
+    "namePlaceholder": "Tukuiteje?",
+    "shortBio": "Bio fupi",
+    "bioPlaceholder": "Unatengeneza nini, na watu watarajie nini kutoka kwako?",
+    "location": "Mahali",
+    "optional": "si lazima",
+    "locationPlaceholder": "Uko wapi duniani?"
+  },
+  "auth": {
+    "sessionExpired": "Kipindi chako kimeisha — tafadhali ingia tena",
+    "loggedOut": "Umetoka",
+    "loginSuccess": "Umeingia!",
+    "switchedTo": "Umebadili kwenda @{{user}}",
+    "butrauthFailed": "Kuingia kwa Butter Auth kumeshindwa: {{error}}",
+    "signedInAs": "Umeingia kama @{{user}}",
+    "loggedInViaButrauth": "Umeingia kama @{{user}} kupitia Butter Auth",
+    "tokenExpired": "Kipindi kimeisha",
+    "loginFailed": "Kuingia kumeshindwa: {{error}}",
+    "unknownError": "Hitilafu isiyojulikana",
+    "loginTitle": "Ingia kwenye 3Speak"
+  },
+  "update": {
+    "available": "Toleo jipya ({{version}}) linapatikana",
+    "description": "Onyesha upya ili upate masasisho ya karibuni."
+  },
+  "toastsRegion": "Arifa"
+}

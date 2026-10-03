@@ -1,0 +1,282 @@
+{
+  "untitled": "Başlıksız",
+  "categories": {
+    "podcast": "Podcast",
+    "voice": "Ses",
+    "music": "Müzik",
+    "audiobook": "Sesli kitap",
+    "interview": "Röportaj"
+  },
+  "inline": {
+    "defaultTitle": "OpenPod Kaydı",
+    "defaultSubtitle": "3Speak OpenPods'ta canlı kaydedildi",
+    "kickerPreview": "Ses önizlemesi",
+    "kickerOpenPod": "OpenPod"
+  },
+  "tile": {
+    "artistAlbum": "Sanatçı albümü",
+    "listenerPlaylist": "Dinleyici oynatma listesi",
+    "bpm": "{{bpm}} bpm",
+    "queue": "Sıraya ekle",
+    "playlist": "Oynatma listesi",
+    "plays_one": "{{count}} dinlenme",
+    "plays_other": "{{count}} dinlenme"
+  },
+  "author": {
+    "followed": "@{{author}} takip edildi",
+    "unfollowed": "@{{author}} takipten çıkarıldı",
+    "failed": "Başarısız",
+    "tracks_one": "{{count}} parça",
+    "tracks_other": "{{count}} parça"
+  },
+  "player": {
+    "openPost": "Ses gönderisini aç",
+    "playlist": "Oynatma listesi",
+    "transcript": "Döküm",
+    "volume": "Ses düzeyi",
+    "queue": "Sıra",
+    "closePlayer": "Oynatıcıyı kapat",
+    "curated": "Seçildi",
+    "noCues": "İşaret yok.",
+    "clearQueue": "Sırayı temizle",
+    "clearAll": "Tümünü temizle",
+    "queueEmpty": "Sıra boş."
+  },
+  "share": {
+    "failed": "Başarısız",
+    "copyPeakd": "PeakD bağlantısını kopyala",
+    "copiedPeakd": "PeakD bağlantısı kopyalandı!",
+    "copy3speak": "3Speak bağlantısını kopyala",
+    "copied3speak": "3Speak bağlantısı kopyalandı!",
+    "copyAudioPlayer": "Ses oynatıcı bağlantısını kopyala",
+    "copiedAudioPlayer": "Ses oynatıcı bağlantısı kopyalandı!",
+    "searchingHive": "Hive'da aranıyor…"
+  },
+  "post": {
+    "notFound": "Gönderi bulunamadı",
+    "loadFailed": "Bu ses gönderisi yüklenemedi",
+    "loadFailedFull": "Bu ses gönderisi yüklenemedi.",
+    "backToAudio": "← Ses'e dön",
+    "untitled": "(başlıksız)",
+    "addedToQueue": "Sıraya eklendi",
+    "signInToVote": "Oy vermek için giriş yap",
+    "voted": "Oy verildi",
+    "vote": "Oy ver",
+    "signInToTip": "Bahşiş göndermek için giriş yap",
+    "tip": "Bahşiş",
+    "stillIndexing": "Bu gönderinin sesi hâlâ dizinleniyor; birkaç dakika sonra tekrar dene."
+  },
+  "page": {
+    "sections": {
+      "popular": "Popüler",
+      "recent": "Yeni Çıkanlar",
+      "podcasts": "Podcast'ler",
+      "songs": "Şarkılar",
+      "audiobooks": "Sesli Kitaplar",
+      "interviews": "Röportajlar"
+    },
+    "dates": {
+      "today": "Bugün",
+      "thisWeek": "Bu hafta",
+      "thisMonth": "Bu ay",
+      "thisYear": "Bu yıl"
+    },
+    "duration": {
+      "label": "Süre",
+      "min": "En kısa süre",
+      "max": "En uzun süre",
+      "seconds": "{{value}}sn",
+      "minutes": "{{value}}dk",
+      "hours": "{{value}}sa"
+    },
+    "all": "Tümü",
+    "musicGenre": "Müzik türü",
+    "anyGenre": "Tüm türler",
+    "tracks_one": "{{count}} parça",
+    "tracks_other": "{{count}} parça",
+    "noTracks": "Parça bulunamadı.",
+    "creators": "İçerik üreticileri",
+    "albumsPlaylists": "Albümler ve Oynatma Listeleri",
+    "noAudioForFilters": "Bu filtrelerle ses bulunamadı."
+  },
+  "upload": {
+    "title": "Ses yükle",
+    "publishing": "Yayınlanıyor…",
+    "failed": "Başarısız",
+    "unknown": "bilinmiyor",
+    "unknownError": "bilinmeyen hata",
+    "recorded": "Kaydedildi",
+    "uploaded": "Yüklendi",
+    "steps": {
+      "source": "Kaynak",
+      "mode": "Mod",
+      "playlist": "Oynatma listesi",
+      "post": "Gönderi",
+      "mainpost": "Ana gönderi",
+      "tracks": "Parçalar",
+      "review": "Gözden geçir"
+    },
+    "trackTypes": {
+      "voiceSnap": "Ses / Snap"
+    },
+    "toasts": {
+      "pickImage": "Bir görsel dosyası seç",
+      "thumbFailed": "Küçük resim yüklenemedi: {{error}}",
+      "appliedToAll": "Tüm parçalara uygulandı",
+      "micDenied": "Mikrofon erişimi reddedildi",
+      "signInFirst": "Önce giriş yap",
+      "enterPlaylistName": "Bir oynatma listesi adı gir",
+      "creatingPlaylist": "\"{{name}}\" oynatma listesi oluşturuluyor…",
+      "playlistCreated": "Oynatma listesi oluşturuldu",
+      "failedWithError": "Başarısız: {{error}}",
+      "authorized": "@threespeak yetkilendirildi, artık yayınlayabilirsin",
+      "authFailed": "Yetkilendirme başarısız. Lütfen tekrar dene.",
+      "couldntPublishMain": "Ana gönderi yayınlanamadı: {{error}}",
+      "couldntResolveContainer": "peak.snaps kapsayıcısı çözümlenemedi: {{error}}",
+      "published_one": "{{count}} parça yayınlandı",
+      "published_other": "{{count}} parça yayınlandı",
+      "someFailed": "Bazı parçalar başarısız oldu; yeniden denemek için başarısız parçayı aç"
+    },
+    "gate": {
+      "checking": "Kontrol ediliyor…",
+      "allowThreespeak": "Ses yayınlamak için <b>@threespeak</b> hesabının senin adına paylaşım yapmasına izin ver.",
+      "authorizing": "Yetkilendiriliyor…",
+      "authorize": "@threespeak'i yetkilendir",
+      "notEnoughRc": "Hesabında şu an gönderi yayınlamak için yeterli <b>Resource Credits</b> yok.",
+      "whyCantUpload": "Neden yükleyemiyorum?"
+    },
+    "discard": {
+      "title": "Yükleme iptal edilsin mi?",
+      "body_one": "{{count}} parça ekledin. Kapatırsan silinecekler.",
+      "body_other": "{{count}} parça ekledin. Kapatırsan silinecekler.",
+      "bodyRecording_one": "{{count}} parça ekledin ve devam eden bir kayıt var. Kapatırsan silinecekler.",
+      "bodyRecording_other": "{{count}} parça ekledin ve devam eden bir kayıt var. Kapatırsan silinecekler.",
+      "keepEditing": "Düzenlemeye devam et",
+      "discard": "Vazgeç"
+    },
+    "source": {
+      "dropHere": "Ses dosyalarını buraya bırak ya da göz atmak için tıkla",
+      "formats": "MP3, WAV, OGG, WEBM, M4A, FLAC, AAC; birden fazla dosya olabilir",
+      "stop": "Durdur",
+      "orRecord": "Ya da canlı kaydet",
+      "recordLimit": "Kayıt başına en fazla {{minutes}} dk",
+      "record": "Kaydet",
+      "added": "Eklenenler ({{count}})"
+    },
+    "titles": {
+      "help": "Her parçaya bir başlık ver ve bir tür seç. Müzik parçalarında tür + BPM alanları olur."
+    },
+    "fields": {
+      "trackTitle": "Parça başlığı",
+      "genre": "Tür",
+      "bpm": "BPM",
+      "descriptionOptional": "Açıklama (isteğe bağlı)"
+    },
+    "playlist": {
+      "helpRequired": "Zorunlu: bir oynatma listesi seç veya oluştur. Albüm gönderileri bir oynatma listesinin içinde durur, böylece parçaları bir 3Speak albümünde gruplanmış kalır. Bu, daha fazla görünürlük ve ses sayfasında daha öne çıkan bir yer sağlar.",
+      "helpOptional": "İsteğe bağlı: tüm parçaları bir oynatma listesine ekle.",
+      "none": "Oynatma listesi yok",
+      "noneHint": "Parçalar gruplanmaz",
+      "creatingPending": "oluşturuluyor… (dizinleyici bekleniyor)",
+      "loading": "Oynatma listeleri yükleniyor…",
+      "empty": "Henüz hiç oynatma listen yok.",
+      "items_one": "{{count}} öğe",
+      "items_other": "{{count}} öğe",
+      "newPlaylist": "Yeni ses oynatma listesi",
+      "namePlaceholder": "Oynatma listesi adı",
+      "public": "Herkese açık",
+      "private": "Gizli",
+      "musicStylePlaceholder": "Müzik tarzı / türü (isteğe bağlı, örn. Elektronik)",
+      "creditsPlaceholder": "Emeği geçenler (isteğe bağlı)",
+      "yearPlaceholder": "Yıl",
+      "labelPlaceholder": "Plak şirketi (isteğe bağlı)",
+      "thumbAlt": "Albüm küçük resmi",
+      "removeThumb": "Küçük resmi kaldır",
+      "creating": "Oluşturuluyor…",
+      "create": "Oluştur"
+    },
+    "thumb": {
+      "uploading": "Yükleniyor…",
+      "addCover": "Kapak görseli ekle",
+      "hint": "Tıkla ya da sürükleyip bırak: JPG / PNG / WebP",
+      "coverAlt": "kapak",
+      "removeCover": "Kapağı kaldır"
+    },
+    "mode": {
+      "help_one": "{{count}} parça eklendi. Nasıl yayınlanacaklarını seç.",
+      "help_other": "{{count}} parça eklendi. Nasıl yayınlanacaklarını seç.",
+      "howPublished": "Bu nasıl yayınlansın?",
+      "snapsTitle": "Snap yorumları",
+      "snapsDesc": "Her ses, en son peak.snaps kapsayıcısının altında bir yanıt olarak paylaşılır ve Snaps akışında görünür (varsayılan).",
+      "singleTitle": "Bağımsız gönderi",
+      "singleTitleSingleOnly": "Bağımsız gönderi (yalnızca tek dosya)",
+      "singleDesc": "Başlık, topluluk, etiketler ve kapakla kendi üst düzey Hive gönderisinde tek bir ses.",
+      "albumTitle": "Albüm gönderisi",
+      "albumTitleNeeds2": "Albüm gönderisi (2+ dosya gerekir)",
+      "albumDesc": "Açılış sayfası görevi gören bir ana gönderi (ses yok); her parça kendi kapağı, açıklaması, ödemesi ve lehtarlarıyla bir yorum yanıtı olarak yayınlanır.",
+      "howEarn": "Bu ses nasıl kazansın?",
+      "postRewardsTitle": "Gönderi ödülleri (tek seferlik)",
+      "postRewardsDesc": "Normal Hive yazar ödemesini alırsın; yayınlandıktan yaklaşık 7 gün sonra bir kez ödenir.",
+      "pplTitle": "Dinleme başına ödeme (ömür boyu)",
+      "pplDesc": "Tüm ses gönderisi ödülleri @{{account}} hesabına gider. Tek bir ödeme yerine, bir 3Speak programı parçanın ömrü boyunca sana dinleme başına ödeme yapar."
+    },
+    "reward": {
+      "distribution": "Ödül dağılımı",
+      "default": "Varsayılan (%50 HBD / %50 HP)",
+      "powerup": "%100 Power up",
+      "decline": "Ödemeyi reddet",
+      "beneficiaries": "Lehtarlar",
+      "beneficiariesCount": "Lehtarlar ({{count}})"
+    },
+    "mainPost": {
+      "helpAlbum": "Ana gönderinin, yani albüm açılış sayfasının ayrıntıları. Ses içermez; her parça bir sonraki adımda ayarlayacağın bir yorum yanıtıdır.",
+      "helpSingle": "Bağımsız gönderinin ayrıntıları.",
+      "titlePlaceholder": "Başlık (zorunlu)",
+      "selectCommunity": "Topluluk seç",
+      "change": "Değiştir",
+      "tagsPlaceholder": "Etiketler: boşluk veya virgülle ayrılmış (isteğe bağlı)",
+      "whatKind": "Bu ne tür bir ses?"
+    },
+    "tracks": {
+      "helpAlbum": "Her parça ana gönderinin altında bir yorum olarak yayınlanır. Ortak değerleri bir kez ayarlayıp hepsine uygula, sonra parça bazında değiştir.",
+      "helpSnaps": "Her parça kendi snap'i olarak yayınlanır. Ortak değerleri bir kez ayarlayıp hepsine uygula, sonra parça bazında değiştir.",
+      "applyToAllHeading": "Tüm parçalara uygula",
+      "sharedDescription": "Ortak açıklama (isteğe bağlı)",
+      "sharedCover": "Ortak kapak görseli",
+      "applyToAll_one": "{{count}} parçanın tümüne uygula",
+      "applyToAll_other": "{{count}} parçanın tümüne uygula",
+      "hide": "Gizle"
+    },
+    "review": {
+      "standalone": "Bağımsız gönderi",
+      "standaloneIn": "{{community}} içinde bağımsız gönderi",
+      "album_one": "Albüm: 1 ana gönderi + {{count}} parça yorumu",
+      "album_other": "Albüm: 1 ana gönderi + {{count}} parça yorumu",
+      "albumIn_one": "Albüm: {{community}} içinde 1 ana gönderi + {{count}} parça yorumu",
+      "albumIn_other": "Albüm: {{community}} içinde 1 ana gönderi + {{count}} parça yorumu",
+      "snapComments_one": "{{count}} snap yorumu",
+      "snapComments_other": "{{count}} snap yorumu",
+      "ready_one": "{{count}} parça yayınlanmaya hazır.",
+      "ready_other": "{{count}} parça yayınlanmaya hazır.",
+      "readyToPlaylist_one": "{{count}} parça \"{{name}}\" oynatma listesine yayınlanmaya hazır.",
+      "readyToPlaylist_other": "{{count}} parça \"{{name}}\" oynatma listesine yayınlanmaya hazır.",
+      "publishAs": "Yayınlama biçimi:",
+      "earnings": "Kazanç:",
+      "earningsPpl": "Dinleme başına ödeme (@{{account}})",
+      "earningsNormal": "Normal gönderi ödülleri",
+      "playlist": "Oynatma listesi:",
+      "failedCount_one": "{{count}} parça başarısız oldu.",
+      "failedCount_other": "{{count}} parça başarısız oldu.",
+      "retryAllFailed": "Başarısızların hepsini yeniden dene",
+      "failedDuringUpload": "Ses dosyası yüklenirken başarısız oldu: {{message}}",
+      "failedDuringPost": "Hive'a gönderilirken başarısız oldu: {{message}}",
+      "failedWithMessage": "Başarısız: {{message}}"
+    },
+    "stage": {
+      "upload": "Ses dosyası yükleniyor",
+      "post": "Hive'a gönderiliyor",
+      "uploadingFallback": "Yükleniyor",
+      "published": "Yayınlandı"
+    }
+  }
+}

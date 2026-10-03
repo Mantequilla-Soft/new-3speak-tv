@@ -1,0 +1,115 @@
+{
+  "loading": "Shorts laden...",
+  "pleaseTryAgain": "probeer het opnieuw",
+  "rotateDevice": "Draai je apparaat naar staande stand",
+  "pageTitle": {
+    "byAuthor": "3S | Short van @{{author}}",
+    "default": "3S | Shorts"
+  },
+  "stories": {
+    "you": "Jij"
+  },
+  "errors": {
+    "votingUnavailable": "Voten is niet mogelijk voor deze post",
+    "loginToVote": "Log in om te voten",
+    "loginToComplete": "Log in om dit af te ronden"
+  },
+  "feed": {
+    "ariaLabel": "Shorts-feed",
+    "discover": "Ontdekken",
+    "myInterests": "Mijn interesses",
+    "interestsTitle": "Alleen Shorts die passen bij je interesses",
+    "pickInterestsFirst": "Kies eerst een paar interesses",
+    "noInterests": "Je hebt nog geen interesses gekozen — kies ze in Instellingen",
+    "interestsExhausted": "Dat waren alle Shorts voor je interesses — we tonen nu Ontdekken",
+    "noInterestMatches": "Er zijn nu geen Shorts die passen bij je interesses.",
+    "switchToDiscover": "Naar Ontdekken",
+    "empty": "Geen Shorts beschikbaar",
+    "loadError": "Fout bij het laden van Shorts: {{error}}"
+  },
+  "glow": {
+    "subtle": "Sfeerverlichting: subtiel",
+    "vivid": "Sfeerverlichting: fel",
+    "off": "Sfeerverlichting: uit"
+  },
+  "playbackMode": {
+    "autoReplay": "Automatisch herhalen",
+    "autoSwipe": "Automatisch swipen",
+    "manual": "Handmatig"
+  },
+  "subtitles": {
+    "off": "Uit"
+  },
+  "chain": {
+    "originalVideo": "Originele video",
+    "snap": "Snap",
+    "openShort": "Short openen",
+    "watch": "Bekijken",
+    "openSnap": "Snap openen",
+    "comment": "Reactie",
+    "reaction": "Video-reactie",
+    "thisVideo": "Deze video",
+    "remix": "Remix",
+    "show": "reactieketen tonen"
+  },
+  "caption": {
+    "curatedBy": "Geselecteerd door Mantequilla",
+    "curated": "Geselecteerd",
+    "showOriginal": "Origineel tonen",
+    "more": "meer"
+  },
+  "actions": {
+    "remix": "Remix",
+    "promote": "Promoten"
+  },
+  "share": {
+    "defaultTitle": "3Speak Short",
+    "text": "Bekijk deze short van {{user}} op 3Speak!",
+    "shared": "Gedeeld!",
+    "linkCopied": "Link gekopieerd naar klembord!",
+    "failed": "Delen mislukt"
+  },
+  "reshare": {
+    "loginRequired": "Log in om opnieuw te delen",
+    "unavailable": "Opnieuw delen is niet mogelijk voor deze post",
+    "done": "Opnieuw gedeeld!",
+    "failed": "Opnieuw delen mislukt"
+  },
+  "remix": {
+    "noUrl": "Video-URL voor de remix kon niet worden gevonden",
+    "loadFailed": "Video laden voor remix mislukt"
+  },
+  "watchLater": {
+    "loginRequired": "Log in om Shorts op te slaan",
+    "cantSave": "Deze short kan niet worden opgeslagen",
+    "removed": "Verwijderd uit Later bekijken",
+    "saved": "Opgeslagen in Later bekijken",
+    "failed": "Mislukt: {{message}}"
+  },
+  "comments": {
+    "title": "Reacties",
+    "loading": "Reacties laden...",
+    "closed": "Reacties zijn gesloten",
+    "none": "Nog geen reacties",
+    "postRemoved": "De Hive-post achter deze short is verwijderd, dus er kunnen geen reacties of votes meer bij.",
+    "beFirst": "Reageer als eerste!",
+    "unavailable": "Reacties zijn niet beschikbaar voor deze post",
+    "addPlaceholder": "Voeg een reactie toe...",
+    "addPlaceholderBar": "Voeg een reactie toe…",
+    "loginPlaceholder": "Log in om te reageren",
+    "send": "Reactie versturen",
+    "enterComment": "Schrijf een reactie",
+    "loginToComment": "Log in om te reageren",
+    "justNow": "Zojuist",
+    "posted": "Reactie geplaatst!",
+    "failed": "Reactie mislukt: {{message}}",
+    "translation": "Vertaling",
+    "translationFailed": "Vertalen mislukt",
+    "reportComment": "Reactie melden",
+    "replyPlaceholder": "Schrijf een antwoord...",
+    "viewReplies_one": "{{count}} antwoord bekijken",
+    "viewReplies_other": "{{count}} antwoorden bekijken",
+    "hideReplies_one": "{{count}} antwoord verbergen",
+    "hideReplies_other": "{{count}} antwoorden verbergen"
+  }
+}

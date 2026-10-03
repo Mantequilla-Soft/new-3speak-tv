@@ -1,0 +1,92 @@
+{
+  "page": {
+    "fallbackTitle": "배지",
+    "kpis": {
+      "recipients": "받은 사람",
+      "recentVideos": "최근 동영상",
+      "issued": "발급일"
+    },
+    "issuedBy": "발급: <creatorLink>@{{creator}}</creatorLink>",
+    "notFoundTitle": "배지를 찾을 수 없어요",
+    "notFoundBody": "지금은 @{{account}} Hive 계정을 읽을 수 없어요.",
+    "browseAll": "모든 배지 보기",
+    "tabs": {
+      "videos": "동영상",
+      "recipients": "받은 사람",
+      "recipientsWithCount": "받은 사람({{num}})"
+    },
+    "errorVideos": "동영상을 불러오는 중 오류가 발생했어요",
+    "noVideosTitle": "아직 동영상이 없어요",
+    "noHolders": "아직 이 배지를 가진 사람이 없어요.",
+    "noHolderVideos": "이 배지를 가진 사람 중 아직 3Speak에 동영상을 게시한 사람이 없어요.",
+    "loadingMore": "더 불러오는 중...",
+    "recipientsError": "받은 사람 목록을 불러오지 못했어요",
+    "recipientsLoading": "받은 사람 목록 불러오는 중...",
+    "noRecipientsTitle": "아직 받은 사람이 없어요",
+    "noRecipientsBody": "아직 이 배지를 받은 사람이 없어요.",
+    "recipientsSummary_other": "받은 사람 {{num}}명",
+    "recipientsSummaryWithVideos_other": "받은 사람 {{num}}명, 그중 {{publishing}}명이 3Speak에서 활동 중",
+    "recipientVideos_other": "동영상 {{num}}개",
+    "recipientNoVideos": "동영상 없음"
+  },
+  "directory": {
+    "title": "배지",
+    "intro": "배지는 이벤트, 기여, 기념할 만한 성과에 대해 Hive에서 <b>다른 사람이 수여하는</b> 상이에요. 직접 가입할 수는 없고, 누군가가 수여해야 해요. 배지를 열면 받은 사람들이 이곳에 게시한 콘텐츠를 볼 수 있어요.",
+    "searchPlaceholder": "배지 검색...",
+    "sort": {
+      "recipients": "받은 사람",
+      "created": "생성일",
+      "name": "이름"
+    },
+    "createLocked": "배지를 만들려면 Hive 계정이 필요해요. 계정이 준비되면 사용할 수 있어요.",
+    "create": "배지 만들기",
+    "loadError": "지금은 배지를 불러올 수 없어요.",
+    "noMatch": "검색과 일치하는 배지가 없어요.",
+    "held": "보유 중",
+    "recipients_other": "받은 사람 {{num}}명"
+  },
+  "award": {
+    "success": "@{{username}}님이 이제 {{title}} 배지를 보유해요",
+    "failed": "배지를 수여하지 못했어요",
+    "dialogLabel": "{{username}}님에게 배지 수여",
+    "title": "배지 수여",
+    "toUser": "받는 사람: @{{username}}",
+    "awarding": "수여 중…",
+    "held": "보유 중",
+    "award": "수여",
+    "note": "배지 계정이 Hive에서 상대방을 팔로우하며, 이것이 배지를 보유한다는 의미예요. 배지 페이지에서 언제든지 회수할 수 있어요."
+  },
+  "hive": {
+    "dragToReorder": "드래그해서 순서 변경",
+    "orderSaved": "배지 순서를 Hive 프로필에 저장했어요",
+    "orderSaveFailed": "배지 순서를 저장하지 못했어요",
+    "dialogLabel": "@{{username}}님이 보유한 배지",
+    "title": "배지",
+    "arrangeHint": "배지를 드래그해서 표시할 순서를 정하세요.",
+    "earnedCount_other": "@{{username}}님이 Hive에서 받은 배지 {{count}}개",
+    "alwaysFirst": "항상 맨 앞에 표시",
+    "saveOrder": "순서 저장",
+    "arrange": "정렬",
+    "arrangeTitle": "배지가 표시될 순서 선택",
+    "showAll_other": "배지 {{count}}개 모두 보기",
+    "awardTitle": "내 배지 중 하나를 @{{username}}님에게 수여"
+  },
+  "leaderboardBadges": {
+    "proTitle": "Pro 구독으로 3Speak를 후원하는 크리에이터예요"
+  },
+  "leaderboard": {
+    "watchNotice": "시청 시간은 {{since}}부터 집계되었기 때문에, 더 긴 기간을 선택해도 같은 짧은 기록이 표시돼요.",
+    "unclaimed": "미수령",
+    "noActivity": "이 기간에는 아직 활동이 없어요",
+    "otherTopics": "기타",
+    "title": "순위",
+    "subtitle": "{{blurb}} — 3Speak 상위 크리에이터.",
+    "subtitleTopic": "{{blurb}} — {{topic}} 분야 상위 크리에이터.",
+    "allTopics": "모든 주제",
+    "finding": "순위표에서 @{{user}}님을 찾는 중…",
+    "notInTop": "@{{user}}님은 이 순위표의 상위 {{n}}위 안에 없어요.",
+    "loading": "순위표 불러오는 중…",
+    "loadError": "순위표를 불러오지 못했어요. 잠시 후 다시 시도해 주세요.",
+    "empty": "이 기간에는 아직 {{metric}} 기록이 있는 사람이 없어요."
+  }
+}

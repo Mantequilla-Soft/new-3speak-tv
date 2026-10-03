@@ -8,19 +8,20 @@ import BarLoader from '../Loader/BarLoader';
 import { useAppStore } from '../../lib/store';
 import { useInfiniteQuery, useQuery } from '@tanstack/react-query';
 import { MY_VIDEOS_URL } from '../../utils/config';
+import { useTranslation } from 'react-i18next';
 
 const CHECKER_BASE =
   import.meta.env.VITE_SCHEDULED_POSTS_API_URL || 'https://prod-checker.okinoko.io';
 
 // Map a scheduled-posts doc (from the checker) into the shape VideoCard expects.
 // VideoCard already has built-in handling for status='scheduled' + publish_data.
-function normalizeScheduledDoc(doc) {
+function normalizeScheduledDoc(doc, untitledLabel) {
   return {
     _id: `scheduled:${doc.id}`,         // unique React key, distinct from my-videos _ids
     id: doc.id,
     permlink: doc.permlink,
     owner: doc.owner,
-    title: doc.title || '(untitled)',
+    title: doc.title || untitledLabel,
     description: doc.description || '',
     thumbnail: doc.thumbnail || null,
     status: 'scheduled',
@@ -31,6 +32,7 @@ function normalizeScheduledDoc(doc) {
 }
 
 const DraftStudio = () => {
+  const { t } = useTranslation();
   const { user, authenticated } = useAppStore();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
@@ -107,7 +109,7 @@ const DraftStudio = () => {
     staleTime: 30 * 1000,
   });
 
-  const scheduledItems = (scheduledData || []).map(normalizeScheduledDoc);
+  const scheduledItems = (scheduledData || []).map((doc) => normalizeScheduledDoc(doc, t('studio.drafts.untitled')));
   const publishedItems = data?.pages.flat() || [];
 
   // Filter visibility for scheduled items: show on "all" + "scheduled" tabs;
@@ -166,7 +168,7 @@ const DraftStudio = () => {
 
       {videos.length === 0 ? (
         <div className="no-videos fade-in">
-          <p>No videos found with the selected filter.</p>
+          <p>{t('studio.drafts.empty')}</p>
         </div>
       ) : (
         <div className="video-grid">

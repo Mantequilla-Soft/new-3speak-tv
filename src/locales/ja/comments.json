@@ -1,0 +1,96 @@
+{
+  "review": {
+    "fabAria": "フィードバックを送る",
+    "fab": "フィードバック",
+    "aspects": {
+      "upload": "アップロード",
+      "playback": "再生",
+      "live": "ライブ配信",
+      "discovery": "発見 / フィード",
+      "design": "デザイン / UX",
+      "performance": "速度",
+      "mobile": "モバイル",
+      "other": "その他"
+    },
+    "titles": {
+      "upload": "アップロードはいかがでしたか？",
+      "stream": "ライブ配信はいかがでしたか？",
+      "watch": "3Speak での視聴はいかがでしたか？",
+      "global": "3Speak の使い心地はいかがですか？",
+      "fallback": "3Speak の改善にご協力ください"
+    },
+    "stars": {
+      "poor": "悪い",
+      "fair": "まあまあ",
+      "good": "良い",
+      "great": "とても良い",
+      "amazing": "最高"
+    },
+    "errors": {
+      "pickStars": "星の数を選んでください",
+      "sendFailed": "レビューを送信できませんでした。もう一度お試しください。"
+    },
+    "thanks": "フィードバックありがとうございます！🙏",
+    "sendFeedback": "フィードバックを送信",
+    "subtitle": "いただいたフィードバックは 3Speak の改善に役立てます。",
+    "starRating": "星の評価",
+    "starsAria_other": "星 {{count}} つ",
+    "aboutLabel": "何についてですか？ <opt>（任意）</opt>",
+    "recommendLabel": "3Speak を人に勧めたいですか？ <opt>（任意）</opt>",
+    "moreLabel": "詳しく教えてください <opt>（任意）</opt>",
+    "placeholder": "良かった点や改善してほしい点は？",
+    "notNow": "今はしない",
+    "sending": "送信中…"
+  },
+  "tabs": {
+    "reactions": "リアクション",
+    "transcript": "文字起こし"
+  },
+  "live": {
+    "vodProcessing": "録画を処理しています…",
+    "vodProcessingHint": "この配信は終了しました。エンコードが終わり次第、ここに動画が表示されます。再読み込みは不要です。",
+    "watching_other": "👁 {{count}} 人が視聴中",
+    "signInRaiseHand": "挙手するにはログイン",
+    "signInChat": "チャットするにはログイン",
+    "signInJoinChat": "🔒 チャットに参加するにはログインしてください。"
+  },
+  "transcript": {
+    "title": "文字起こし",
+    "languageAria": "文字起こしの言語",
+    "copyingWithTimes": "タイムコード付きでコピー",
+    "copyingTextOnly": "テキストのみコピー",
+    "timecodes": "タイムコード",
+    "copyWithTimes": "文字起こしをタイムコード付きでコピー",
+    "copyText": "文字起こしのテキストをコピー",
+    "jumpTo": "{{time}} に移動",
+    "hide": "文字起こしを非表示",
+    "show": "文字起こしを表示",
+    "showWithCount_other": "文字起こしを表示（{{count}} 行）"
+  },
+  "blog": {
+    "noContent": "コンテンツがありません",
+    "loadError": "コンテンツの読み込み中にエラーが発生しました。",
+    "processError": "コンテンツの処理中にエラーが発生しました。",
+    "rendererError": "表示エンジンの読み込み中にエラーが発生しました。"
+  },
+  "section": {
+    "posted": "コメントを投稿しました！",
+    "postFailed": "コメントに失敗しました。もう一度お試しください",
+    "editFailed": "編集に失敗しました。もう一度お試しください",
+    "updated": "コメントを更新しました",
+    "commentTab": "コメント",
+    "reactTab": "リアクション",
+    "at": "時点",
+    "atTime": "{{time}} 時点",
+    "commentPlaceholder": "コメントを入力...",
+    "replyPlaceholder": "返信を入力...",
+    "commentButton": "コメント",
+    "count_other": "{{count}} 件のコメント",
+    "edited": "（編集済み）",
+    "saving": "保存中...",
+    "translation": "翻訳",
+    "translationFailed": "翻訳に失敗しました。翻訳サービスは動作していますか？",
+    "reportComment": "コメントを報告",
+    "openInShorts": "ショートで開く"
+  }
+}

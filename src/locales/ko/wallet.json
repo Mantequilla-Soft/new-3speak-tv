@@ -1,0 +1,50 @@
+{
+  "tabs": {
+    "overview": "개요",
+    "transactions": "거래 내역",
+    "aria": "지갑 섹션"
+  },
+  "errors": {
+    "fetchBalances": "잔액을 불러오지 못했어요",
+    "needKeychain": "송금하려면 Keychain 확장 프로그램이 필요해요"
+  },
+  "header": {
+    "mine": "내 지갑",
+    "ofUser": "{{user}}님의 지갑"
+  },
+  "assets": "자산",
+  "transfer": "송금",
+  "transferModal": {
+    "loginRequired": "송금하려면 로그인해 주세요",
+    "insufficient": "잔액이 부족해요",
+    "invalidUsername": "잘못된 사용자 이름이에요",
+    "success": "송금 완료!",
+    "failed": "송금 실패: {{error}}",
+    "title": "{{coin}} 송금",
+    "amountLabel": "금액({{coin}})",
+    "balance": "잔액 {{balance}}",
+    "max": "최대",
+    "recipientLabel": "받는 사람 사용자 이름",
+    "recipientPlaceholder": "Hive 사용자 이름 입력",
+    "memoLabel": "메모",
+    "memoPlaceholder": "메모 입력",
+    "confirm": "송금 확인"
+  },
+  "history": {
+    "loadFailed": "거래 내역을 불러오지 못했어요",
+    "title": "거래 내역",
+    "cols": {
+      "type": "유형",
+      "amount": "금액",
+      "account": "계정",
+      "date": "날짜",
+      "memo": "메모"
+    },
+    "types": {
+      "transfer": "송금",
+      "claim": "보상 수령",
+      "received": "받음"
+    },
+    "claimedRewards": "수령한 보상"
+  }
+}

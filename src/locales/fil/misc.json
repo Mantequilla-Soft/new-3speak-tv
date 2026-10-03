@@ -1,0 +1,242 @@
+{
+  "leaderboard": {
+    "windows": {
+      "7d": "7 araw",
+      "30d": "30 araw",
+      "365d": "Taon",
+      "all": "Lahat ng panahon"
+    },
+    "windowsInSentence": {
+      "7d": "7 araw",
+      "30d": "30 araw",
+      "365d": "taon",
+      "all": "lahat ng panahon"
+    },
+    "metrics": {
+      "video_uploads": "Mga Video",
+      "short_uploads": "Shorts",
+      "video_watch_secs": "Watch time ng video",
+      "short_watch_secs": "Watch time ng Shorts",
+      "tags_given": "Tags",
+      "streams": "Streams",
+      "stream_secs": "Oras na live",
+      "stream_peak_viewers": "Peak viewers",
+      "stream_viewers": "Mga sumaling viewer",
+      "boosts_received": "Natanggap na boosts",
+      "boost_amount_received": "Halagang natanggap",
+      "boosts_given": "Ibinigay na boosts",
+      "boost_amount_given": "Halagang ibinigay"
+    },
+    "metricsInSentence": {
+      "video_uploads": "video",
+      "short_uploads": "shorts",
+      "video_watch_secs": "watch time ng video",
+      "short_watch_secs": "watch time ng Shorts",
+      "tags_given": "tags",
+      "streams": "streams",
+      "stream_secs": "oras na live",
+      "stream_peak_viewers": "peak viewers",
+      "stream_viewers": "sumaling viewer",
+      "boosts_received": "natanggap na boosts",
+      "boost_amount_received": "halagang natanggap",
+      "boosts_given": "ibinigay na boosts",
+      "boost_amount_given": "halagang ibinigay"
+    },
+    "blurbs": {
+      "video_uploads": "Mga video na in-upload",
+      "short_uploads": "Shorts na in-upload",
+      "video_watch_secs": "Mga segundong pinanood ang kanilang video",
+      "short_watch_secs": "Mga segundong pinanood ang kanilang Shorts",
+      "tags_given": "Mga tag na ibinigay sa ibang video",
+      "streams": "Mga sinimulang stream session",
+      "stream_secs": "Kabuuang oras na live (mga natapos na stream lang)",
+      "stream_peak_viewers": "Pinakamaraming sabay-sabay na viewer (pinakamataas na marka, hindi kabuuan)",
+      "stream_viewers": "Mga pagsali ng viewer (dami, hindi unique na abot)",
+      "boosts_received": "Mga boost na ipinadala sa kanilang stream",
+      "boost_amount_received": "Kabuuang halaga ng natanggap na boosts",
+      "boosts_given": "Mga boost na ipinadala nila sa ibang streamer",
+      "boost_amount_given": "Kabuuang halaga ng mga boost na ibinigay nila"
+    },
+    "blurbsInSentence": {
+      "video_uploads": "mga video na in-upload",
+      "short_uploads": "Shorts na in-upload",
+      "video_watch_secs": "mga segundong pinanood ang kanilang video",
+      "short_watch_secs": "mga segundong pinanood ang kanilang Shorts",
+      "tags_given": "mga tag na ibinigay sa ibang video",
+      "streams": "mga sinimulang stream session",
+      "stream_secs": "kabuuang oras na live (mga natapos na stream lang)",
+      "stream_peak_viewers": "pinakamaraming sabay-sabay na viewer (pinakamataas na marka, hindi kabuuan)",
+      "stream_viewers": "mga pagsali ng viewer (dami, hindi unique na abot)",
+      "boosts_received": "mga boost na ipinadala sa kanilang stream",
+      "boost_amount_received": "kabuuang halaga ng natanggap na boosts",
+      "boosts_given": "mga boost na ipinadala nila sa ibang streamer",
+      "boost_amount_given": "kabuuang halaga ng mga boost na ibinigay nila"
+    },
+    "groups": {
+      "video": "Video",
+      "streaming": "Streaming"
+    },
+    "badgeNouns": {
+      "video_uploads": "Videos",
+      "short_uploads": "Shorts",
+      "video_watch_secs": "Napanood",
+      "short_watch_secs": "Shorts na Napanood",
+      "tags_given": "Tagger"
+    },
+    "badgeLabel": "{{tier}} {{noun}}",
+    "badgeTitleAllTime": "Rank #{{rank}} sa {{what}} sa lahat ng panahon",
+    "badgeTitleWindow": "Rank #{{rank}} sa {{what}} sa nakaraang {{window}}"
+  },
+  "duration": {
+    "hoursMinutes": "{{h}}h {{m}}m",
+    "minutesSeconds": "{{m}}m {{s}}s",
+    "seconds": "{{s}}s",
+    "aMoment": "sandali",
+    "lessThanMinute": "wala pang isang minuto"
+  },
+  "surf": {
+    "community": "Komunidad",
+    "allOf": "Lahat ng {{label}}"
+  },
+  "social": {
+    "signingCancelled": "Na-cancel ang pag-sign",
+    "youtube": {
+      "placeholder": "@handle o UCxxxxxxxxxxxxxxxxxxxxxx",
+      "help": "I-paste ang YouTube @handle mo o ang UC… channel ID mo. Gagawin namin itong channel ID."
+    },
+    "soundcloud": {
+      "placeholder": "your-profile o https://soundcloud.com/your-profile",
+      "help": "I-paste ang SoundCloud profile URL mo o ang username lang mula rito. Ilagay ang hash kahit saan sa profile bio mo."
+    }
+  },
+  "snaps": {
+    "retrying": "Hindi pa nahahanap ang Snaps container — sinusubukan ulit (attempt {{attempt}})...",
+    "unreachable": "Walang maabot na Hive node para hanapin ang snaps container. Tingnan ang koneksyon mo at subukan ulit.",
+    "unreachableWithError": "Walang maabot na Hive node para hanapin ang snaps container (huling error — {{error}}). Tingnan ang koneksyon mo at subukan ulit."
+  },
+  "embed": {
+    "responsive": "Responsive"
+  },
+  "incubation": {
+    "requestFailed": "Pumalya ang request ({{status}})",
+    "contactLoadFailed": "Hindi ma-load ang contact details mo",
+    "contactSaveFailed": "Hindi ma-save ang contact details mo",
+    "onlyButrauthBacklog": "Butter Auth account lang ang puwedeng magkaroon ng incubation backlog",
+    "publishFailed": "Pumalya ang pag-publish ({{status}})"
+  },
+  "routeError": {
+    "title": "Hindi nag-load ang page na ito",
+    "body": "Hindi na-download ang isang bahagi ng app. Kadalasan, ibig sabihin nito ay may bagong bersyon na lumabas habang bukas ang tab na ito. Kapag nag-reload ka, makukuha mo ito.",
+    "reload": "I-reload",
+    "goHome": "Pumunta sa Home"
+  },
+  "seo": {
+    "defaultTitle": "3Speak - Decentralized na Video Platform",
+    "defaultDescription": "Ang 3Speak ay decentralized na video sharing platform na nakatayo sa blockchain technology. Manood, mag-upload, at mag-share ng video habang kumikita ng cryptocurrency rewards."
+  },
+  "uploadLinks": {
+    "regularVideo": "Regular na Video",
+    "verticalShort": "Vertical na Short",
+    "musicAudio": "Musika / Audio",
+    "groupChat": "Group Chat",
+    "communitySnap": "Community Snap",
+    "shortsEditor": "Shorts Editor",
+    "goLive": "Mag-live",
+    "streamStudio": "Stream Studio",
+    "headings": {
+      "upload": "Upload",
+      "live": "Live",
+      "others": "Iba pa"
+    }
+  },
+  "chat": {
+    "connectFailed": "Hindi makakonekta sa chat.",
+    "loginFirst": "Mag-log in muna para magamit ang chat.",
+    "roomNameRequired": "Kailangan ng pangalan ng room."
+  },
+  "hiveAuth": {
+    "waiting": "Hinihintay ang approval sa HiveAuth...",
+    "title": "Kailangan ng HiveAuth Approval",
+    "hint": "Tingnan ang HiveAuth app mo para aprubahan ang transaksyong ito"
+  },
+  "hiveApi": {
+    "keychainNotSigned": "Hindi na-sign ng Keychain ang transaksyon",
+    "loginToCreateCommunity": "Mag-log in para gumawa ng komunidad",
+    "loginFirst": "Mag-log in muna",
+    "cancelled": "Na-cancel ang operasyon"
+  },
+  "openpod": {
+    "announced": "Na-announce na sa Hive ang live session!",
+    "announceFailed": "Nagsimula na ang OpenPod, pero hindi ma-post ang announcement sa Hive."
+  },
+  "appUpdate": {
+    "updating": "Nag-a-update sa pinakabagong bersyon ({{version}})…",
+    "reloadingForUpload": "Nagre-reload para tumakbo ang upload mo sa pinakabagong build."
+  },
+  "auth": {
+    "switched": "Matagumpay na lumipat kay {{username}}!",
+    "keychainLoginTitle": "Mag-login gamit ang Hive"
+  },
+  "streamVod": {
+    "uploadKeyMissing": "Tapos na ang stream, pero hindi ma-upload ang video (walang upload key).",
+    "uploading": "Ina-upload ang stream video mo… {{pct}}%",
+    "uploaded": "Na-upload ang stream video — papalitan nito ang live stream kapag tapos na ang encoding.",
+    "uploadFailed": "Tapos na ang stream, pero pumalya ang upload ng video.",
+    "saving": "Sine-save ang stream video mo…",
+    "encoding": "Na-upload na — pinoproseso ng encoder ang video mo…",
+    "saved": "Na-save ang stream video — papalitan nito ang live stream kapag tapos na ang encoding.",
+    "saveFailed": "Tapos na ang stream, pero hindi ma-save ang video: {{error}}.",
+    "uploadFailedShort": "pumalya ang upload",
+    "stillProcessing": "Tapos na ang stream — pinoproseso pa ang video; tingnan ang profile mo maya-maya."
+  },
+  "embedPlayer": {
+    "unavailable": "Hindi available ang video"
+  },
+  "followFeed": {
+    "title": "Follow Feed",
+    "error": "Error sa pagkuha ng mga video"
+  },
+  "groups": {
+    "title": "Groups",
+    "badges": "Mga Badge",
+    "subtitle": "Ang mga komunidad na puwede mong salihan at ang mga badge na hawak ng mga tao, nasa iisang lugar."
+  },
+  "watched": {
+    "removed": "Inalis sa watch history",
+    "removeFailed": "Hindi maalis sa watch history",
+    "title": "Napanood",
+    "count_one": "{{count}} napanood",
+    "count_other": "{{count}} napanood",
+    "trackHistory": "I-track ang history",
+    "videosTab": "Mga Video ({{count}})",
+    "shortsTab": "Shorts ({{count}})",
+    "loadFailed": "Hindi ma-load ang watch history. Subukan ulit.",
+    "emptyShorts": "Wala ka pang napanood na Shorts",
+    "emptyVideos": "Wala ka pang napanood na video",
+    "removeTitle": "Alisin sa watch history",
+    "watchedAt": "Napanood {{when}}"
+  },
+  "watchStream": {
+    "saySomething": "Magsabi ng kahit ano…",
+    "waitingWallet": "Hinihintay ang wallet mo…",
+    "signInToChat": "Mag-sign in para mag-chat",
+    "sendMessage": "Ipadala ang mensahe",
+    "notLive": "Hindi live ang stream na ito ngayon.",
+    "notFound": "Walang nahanap na live stream para sa link na ito.",
+    "browse": "Mag-browse ng live streams",
+    "back": "Bumalik sa 3Speak",
+    "seoTitle": "{{title}} (LIVE)",
+    "swipeNext": "Mag-swipe para sa susunod na live stream",
+    "chat": "Chat",
+    "watchingNow": "👁 {{count}} ang nanonood ngayon",
+    "signInRaiseHand": "Mag-sign in para magtaas ng kamay",
+    "copyLink": "Kopyahin ang link ng stream",
+    "notAvailableLive": "Hindi available sa live streams",
+    "vote": "Vote",
+    "comment": "Comment",
+    "liveChat": "Live chat",
+    "signInToJoin": "🔒 Mag-sign in para sumali sa chat.",
+    "moreTag": "Iba pang #{{tag}}",
+    "moreVideos": "Iba pang video"
+  }
+}

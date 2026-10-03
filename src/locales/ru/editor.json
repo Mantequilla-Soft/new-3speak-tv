@@ -1,0 +1,19 @@
+{
+  "placeholder": "Напишите текст здесь...",
+  "uploadFailed": "Не удалось загрузить: {{message}}",
+  "uploadingImage": "Загрузка изображения...",
+  "format": {
+    "underline": "Подчёркнутый",
+    "strike": "Зачёркнутый",
+    "highlight": "Выделение",
+    "bulletList": "Маркированный список",
+    "orderedList": "Нумерованный список",
+    "taskList": "Список задач"
+  },
+  "emoji": {
+    "searchPlaceholder": "Поиск эмодзи"
+  },
+  "preview": {
+    "renderError": "Ошибка отображения содержимого"
+  }
+}

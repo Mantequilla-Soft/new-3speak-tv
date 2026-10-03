@@ -1,0 +1,282 @@
+{
+  "untitled": "Zonder titel",
+  "categories": {
+    "podcast": "Podcast",
+    "voice": "Stem",
+    "music": "Muziek",
+    "audiobook": "Luisterboek",
+    "interview": "Interview"
+  },
+  "inline": {
+    "defaultTitle": "OpenPod-opname",
+    "defaultSubtitle": "Live opgenomen op 3Speak OpenPods",
+    "kickerPreview": "Audiovoorbeeld",
+    "kickerOpenPod": "OpenPod"
+  },
+  "tile": {
+    "artistAlbum": "Album van artiest",
+    "listenerPlaylist": "Playlist van luisteraar",
+    "bpm": "{{bpm}} bpm",
+    "queue": "Wachtrij",
+    "playlist": "Playlist",
+    "plays_one": "{{count}} keer afgespeeld",
+    "plays_other": "{{count}} keer afgespeeld"
+  },
+  "author": {
+    "followed": "Je volgt @{{author}}",
+    "unfollowed": "@{{author}} ontvolgd",
+    "failed": "Mislukt",
+    "tracks_one": "{{count}} track",
+    "tracks_other": "{{count}} tracks"
+  },
+  "player": {
+    "openPost": "Audiopost openen",
+    "playlist": "Playlist",
+    "transcript": "Transcript",
+    "volume": "Volume",
+    "queue": "Wachtrij",
+    "closePlayer": "Speler sluiten",
+    "curated": "Geselecteerd",
+    "noCues": "Geen cues.",
+    "clearQueue": "Wachtrij wissen",
+    "clearAll": "Alles wissen",
+    "queueEmpty": "Wachtrij is leeg."
+  },
+  "share": {
+    "failed": "Mislukt",
+    "copyPeakd": "PeakD-link kopiëren",
+    "copiedPeakd": "PeakD-link gekopieerd!",
+    "copy3speak": "3Speak-link kopiëren",
+    "copied3speak": "3Speak-link gekopieerd!",
+    "copyAudioPlayer": "Link naar audiospeler kopiëren",
+    "copiedAudioPlayer": "Link naar audiospeler gekopieerd!",
+    "searchingHive": "Hive doorzoeken…"
+  },
+  "post": {
+    "notFound": "Post niet gevonden",
+    "loadFailed": "Deze audiopost kon niet worden geladen",
+    "loadFailedFull": "Deze audiopost kon niet worden geladen.",
+    "backToAudio": "← Terug naar Audio",
+    "untitled": "(zonder titel)",
+    "addedToQueue": "Toegevoegd aan wachtrij",
+    "signInToVote": "Log in om te voten",
+    "voted": "Gevotet",
+    "vote": "Voten",
+    "signInToTip": "Log in om een fooi te geven",
+    "tip": "Fooi",
+    "stillIndexing": "De audio van deze post wordt nog geïndexeerd — probeer het over een paar minuten opnieuw."
+  },
+  "page": {
+    "sections": {
+      "popular": "Populair",
+      "recent": "Nieuwe releases",
+      "podcasts": "Podcasts",
+      "songs": "Nummers",
+      "audiobooks": "Luisterboeken",
+      "interviews": "Interviews"
+    },
+    "dates": {
+      "today": "Vandaag",
+      "thisWeek": "Deze week",
+      "thisMonth": "Deze maand",
+      "thisYear": "Dit jaar"
+    },
+    "duration": {
+      "label": "Duur",
+      "min": "Minimale duur",
+      "max": "Maximale duur",
+      "seconds": "{{value}}s",
+      "minutes": "{{value}}m",
+      "hours": "{{value}}u"
+    },
+    "all": "Alles",
+    "musicGenre": "Muziekgenre",
+    "anyGenre": "Elk genre",
+    "tracks_one": "{{count}} track",
+    "tracks_other": "{{count}} tracks",
+    "noTracks": "Geen tracks gevonden.",
+    "creators": "Makers",
+    "albumsPlaylists": "Albums & playlists",
+    "noAudioForFilters": "Geen audio gevonden voor deze filters."
+  },
+  "upload": {
+    "title": "Audio uploaden",
+    "publishing": "Publiceren…",
+    "failed": "Mislukt",
+    "unknown": "onbekend",
+    "unknownError": "onbekende fout",
+    "recorded": "Opgenomen",
+    "uploaded": "Geüpload",
+    "steps": {
+      "source": "Bron",
+      "mode": "Modus",
+      "playlist": "Playlist",
+      "post": "Post",
+      "mainpost": "Hoofdpost",
+      "tracks": "Tracks",
+      "review": "Controleren"
+    },
+    "trackTypes": {
+      "voiceSnap": "Stem / Snap"
+    },
+    "toasts": {
+      "pickImage": "Kies een afbeeldingsbestand",
+      "thumbFailed": "Thumbnail uploaden mislukt: {{error}}",
+      "appliedToAll": "Toegepast op alle tracks",
+      "micDenied": "Geen toegang tot de microfoon",
+      "signInFirst": "Log eerst in",
+      "enterPlaylistName": "Vul een naam voor de playlist in",
+      "creatingPlaylist": "Playlist \"{{name}}\" aanmaken…",
+      "playlistCreated": "Playlist aangemaakt",
+      "failedWithError": "Mislukt: {{error}}",
+      "authorized": "@threespeak geautoriseerd — je kunt nu publiceren",
+      "authFailed": "Autorisatie mislukt. Probeer het opnieuw.",
+      "couldntPublishMain": "De hoofdpost kon niet worden gepubliceerd: {{error}}",
+      "couldntResolveContainer": "peak.snaps-container kon niet worden gevonden: {{error}}",
+      "published_one": "{{count}} track gepubliceerd",
+      "published_other": "{{count}} tracks gepubliceerd",
+      "someFailed": "Sommige tracks zijn mislukt — open de mislukte track om het opnieuw te proberen"
+    },
+    "gate": {
+      "checking": "Controleren…",
+      "allowThreespeak": "Sta <b>@threespeak</b> toe om namens jou te posten om audio te publiceren.",
+      "authorizing": "Autoriseren…",
+      "authorize": "@threespeak autoriseren",
+      "notEnoughRc": "Je account heeft op dit moment niet genoeg <b>Resource Credits</b> om een post te publiceren.",
+      "whyCantUpload": "Waarom kan ik niet uploaden?"
+    },
+    "discard": {
+      "title": "Upload weggooien?",
+      "body_one": "Je hebt {{count}} track toegevoegd. Als je sluit, wordt die weggegooid.",
+      "body_other": "Je hebt {{count}} tracks toegevoegd. Als je sluit, worden ze weggegooid.",
+      "bodyRecording_one": "Je hebt {{count}} track toegevoegd en er loopt een opname. Als je sluit, wordt alles weggegooid.",
+      "bodyRecording_other": "Je hebt {{count}} tracks toegevoegd en er loopt een opname. Als je sluit, wordt alles weggegooid.",
+      "keepEditing": "Verder bewerken",
+      "discard": "Weggooien"
+    },
+    "source": {
+      "dropHere": "Zet audiobestanden hier neer, of klik om te bladeren",
+      "formats": "MP3, WAV, OGG, WEBM, M4A, FLAC, AAC — meerdere toegestaan",
+      "stop": "Stoppen",
+      "orRecord": "Of neem live op",
+      "recordLimit": "Maximaal {{minutes}} min per opname",
+      "record": "Opnemen",
+      "added": "Toegevoegd ({{count}})"
+    },
+    "titles": {
+      "help": "Geef elke track een titel en kies een soort. Muziektracks krijgen velden voor genre en BPM."
+    },
+    "fields": {
+      "trackTitle": "Titel van de track",
+      "genre": "Genre",
+      "bpm": "BPM",
+      "descriptionOptional": "Beschrijving (optioneel)"
+    },
+    "playlist": {
+      "helpRequired": "Verplicht — kies of maak een playlist. Albumposts staan in een playlist, zodat de tracks gegroepeerd blijven in een 3Speak-album. Dat zorgt voor meer zichtbaarheid en een prominentere plek op de audiopagina.",
+      "helpOptional": "Optioneel — voeg alle tracks toe aan een playlist.",
+      "none": "Geen playlist",
+      "noneHint": "Tracks worden niet gegroepeerd",
+      "creatingPending": "aanmaken… (wachten op indexer)",
+      "loading": "Playlists laden…",
+      "empty": "Je hebt nog geen playlists.",
+      "items_one": "{{count}} item",
+      "items_other": "{{count}} items",
+      "newPlaylist": "Nieuwe audioplaylist",
+      "namePlaceholder": "Naam van de playlist",
+      "public": "Openbaar",
+      "private": "Privé",
+      "musicStylePlaceholder": "Muziekstijl / genre (optioneel, bijv. elektronisch)",
+      "creditsPlaceholder": "Credits (optioneel)",
+      "yearPlaceholder": "Jaar",
+      "labelPlaceholder": "Label (optioneel)",
+      "thumbAlt": "Albumthumbnail",
+      "removeThumb": "Thumbnail verwijderen",
+      "creating": "Aanmaken…",
+      "create": "Aanmaken"
+    },
+    "thumb": {
+      "uploading": "Uploaden…",
+      "addCover": "Coverafbeelding toevoegen",
+      "hint": "Klik of sleep hierheen — JPG / PNG / WebP",
+      "coverAlt": "cover",
+      "removeCover": "Cover verwijderen"
+    },
+    "mode": {
+      "help_one": "{{count}} track toegevoegd. Kies hoe hij gepubliceerd wordt.",
+      "help_other": "{{count}} tracks toegevoegd. Kies hoe ze gepubliceerd worden.",
+      "howPublished": "Hoe moet dit worden gepubliceerd?",
+      "snapsTitle": "Snap-reacties",
+      "snapsDesc": "Elke audio wordt geplaatst als reactie onder de nieuwste peak.snaps-container — verschijnt in de Snaps-feed (standaard).",
+      "singleTitle": "Losse post",
+      "singleTitleSingleOnly": "Losse post (alleen één bestand)",
+      "singleDesc": "Eén audio in een eigen Hive-hoofdpost, met titel, community, tags en cover.",
+      "albumTitle": "Albumpost",
+      "albumTitleNeeds2": "Albumpost (2+ bestanden nodig)",
+      "albumDesc": "Eén hoofdpost (zonder audio) die als landingspagina dient; elke track wordt gepubliceerd als reactie met een eigen cover, beschrijving, uitbetaling en begunstigden.",
+      "howEarn": "Hoe moet deze audio verdienen?",
+      "postRewardsTitle": "Postbeloningen (eenmalig)",
+      "postRewardsDesc": "Je ontvangt de normale Hive-auteursuitbetaling — eenmalig uitbetaald, ~7 dagen na publicatie.",
+      "pplTitle": "Betalen per luisterbeurt (levenslang)",
+      "pplDesc": "Alle beloningen van de audiopost gaan naar @{{account}}. In plaats van één uitbetaling betaalt een 3Speak-programma je per luisterbeurt, zolang de track bestaat."
+    },
+    "reward": {
+      "distribution": "Verdeling van beloningen",
+      "default": "Standaard (50% HBD / 50% HP)",
+      "powerup": "Power up 100%",
+      "decline": "Uitbetaling weigeren",
+      "beneficiaries": "Begunstigden",
+      "beneficiariesCount": "Begunstigden ({{count}})"
+    },
+    "mainPost": {
+      "helpAlbum": "Details voor de hoofdpost — de landingspagina van het album. Die bevat geen audio; elke track is een reactie die je hierna instelt.",
+      "helpSingle": "Details voor je losse post.",
+      "titlePlaceholder": "Titel (verplicht)",
+      "selectCommunity": "Kies een community",
+      "change": "Wijzigen",
+      "tagsPlaceholder": "Tags — gescheiden door spatie of komma (optioneel)",
+      "whatKind": "Wat voor audio is dit?"
+    },
+    "tracks": {
+      "helpAlbum": "Elke track wordt gepubliceerd als reactie onder de hoofdpost. Stel gedeelde waarden één keer in en pas ze op alles toe, en pas ze daarna per track aan.",
+      "helpSnaps": "Elke track wordt gepubliceerd als een eigen snap. Stel gedeelde waarden één keer in en pas ze op alles toe, en pas ze daarna per track aan.",
+      "applyToAllHeading": "Toepassen op alle tracks",
+      "sharedDescription": "Gedeelde beschrijving (optioneel)",
+      "sharedCover": "Gedeelde coverafbeelding",
+      "applyToAll_one": "Toepassen op {{count}} track",
+      "applyToAll_other": "Toepassen op alle {{count}} tracks",
+      "hide": "Verbergen"
+    },
+    "review": {
+      "standalone": "Losse post",
+      "standaloneIn": "Losse post in {{community}}",
+      "album_one": "Album — 1 hoofdpost + {{count}} trackreactie",
+      "album_other": "Album — 1 hoofdpost + {{count}} trackreacties",
+      "albumIn_one": "Album — 1 hoofdpost in {{community}} + {{count}} trackreactie",
+      "albumIn_other": "Album — 1 hoofdpost in {{community}} + {{count}} trackreacties",
+      "snapComments_one": "{{count}} snap-reactie",
+      "snapComments_other": "{{count}} snap-reacties",
+      "ready_one": "Klaar om {{count}} track te publiceren.",
+      "ready_other": "Klaar om {{count}} tracks te publiceren.",
+      "readyToPlaylist_one": "Klaar om {{count}} track te publiceren in playlist \"{{name}}\".",
+      "readyToPlaylist_other": "Klaar om {{count}} tracks te publiceren in playlist \"{{name}}\".",
+      "publishAs": "Publiceren als:",
+      "earnings": "Inkomsten:",
+      "earningsPpl": "Betalen per luisterbeurt (@{{account}})",
+      "earningsNormal": "Normale postbeloningen",
+      "playlist": "Playlist:",
+      "failedCount_one": "{{count}} track mislukt.",
+      "failedCount_other": "{{count}} tracks mislukt.",
+      "retryAllFailed": "Alle mislukte opnieuw proberen",
+      "failedDuringUpload": "Mislukt tijdens het uploaden van het audiobestand: {{message}}",
+      "failedDuringPost": "Mislukt tijdens het posten op Hive: {{message}}",
+      "failedWithMessage": "Mislukt: {{message}}"
+    },
+    "stage": {
+      "upload": "Audiobestand uploaden",
+      "post": "Posten op Hive",
+      "uploadingFallback": "Uploaden",
+      "published": "Gepubliceerd"
+    }
+  }
+}

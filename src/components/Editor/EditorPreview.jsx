@@ -1,8 +1,10 @@
 import React, { useMemo, useState, useEffect } from "react";
 import { getPostBodyRenderer } from '../../lib/hiveRenderer';
 import "./EditorPreview.scss";
+import { useTranslation } from "react-i18next";
 
 const EditorPreview = ({ content }) => {
+  const { t } = useTranslation();
   const [renderedContent, setRenderedContent] = useState("");
 
   useEffect(() => {
@@ -16,10 +18,10 @@ const EditorPreview = ({ content }) => {
         setRenderedContent(render(content));
       } catch (error) {
         console.error("Error rendering content:", error);
-        setRenderedContent("<p>Error rendering content</p>");
+        setRenderedContent(`<p>${t("editor.preview.renderError")}</p>`);
       }
     });
-  }, [content]);
+  }, [content, t]);
 
   return (
     <div className="editor-preview">

@@ -1,0 +1,105 @@
+{
+  "controls": {
+    "rewind10": "10 秒戻る",
+    "forward10": "10 秒進む",
+    "reactToMoment": "この場面にリアクション",
+    "mute": "ミュート",
+    "unmute": "ミュート解除",
+    "playerSize": "プレーヤーのサイズ: {{size}}",
+    "sizeStandard": "標準",
+    "pip": "ピクチャー イン ピクチャー",
+    "autoplayOn": "自動再生: オン",
+    "autoplayOff": "自動再生: オフ",
+    "ambientSubtle": "アンビエントライト: 控えめ",
+    "ambientVivid": "アンビエントライト: 鮮やか",
+    "ambientOff": "アンビエントライト: オフ",
+    "playbackSpeed": "再生速度",
+    "speedNormal": "標準",
+    "quality": "画質",
+    "qualityAuto": "自動",
+    "fullscreen": "全画面",
+    "exitFullscreen": "全画面を終了",
+    "markerReplies_other": "（返信 {{count}} 件）"
+  },
+  "subtitles": {
+    "title": "字幕",
+    "off": "オフ",
+    "font": "フォント",
+    "size": "サイズ",
+    "textColor": "文字の色",
+    "textBorder": "文字の縁取り",
+    "borderColor": "縁取りの色",
+    "background": "背景",
+    "none": "なし",
+    "fonts": {
+      "sansSerif": "ゴシック体",
+      "serif": "明朝体",
+      "monospace": "等幅"
+    }
+  },
+  "mini": {
+    "untitled": "動画"
+  },
+  "playlist": {
+    "previous": "前の動画",
+    "next": "次の動画",
+    "close": "再生リストを閉じる"
+  },
+  "overlay": {
+    "replay": "もう一度再生"
+  },
+  "reactions": {
+    "translation": "翻訳",
+    "translationFailed": "翻訳に失敗しました",
+    "videoReaction": "動画リアクション",
+    "comment": "コメント",
+    "previous": "前へ",
+    "next": "次へ",
+    "hide": "リアクションを隠す",
+    "hideShort": "隠す",
+    "loadingReplies": "返信を読み込み中...",
+    "sizeTitle": "サイズ: {{size}}",
+    "sizes": {
+      "small": "小",
+      "medium": "中",
+      "standard": "標準",
+      "big": "大",
+      "cinema": "シネマ"
+    },
+    "sizeNames": {
+      "small": "小",
+      "medium": "中",
+      "standard": "標準",
+      "big": "大",
+      "cinema": "シネマ"
+    }
+  },
+  "reactionUpload": {
+    "authorized": "@threespeak を承認しました。リアクションを投稿できます",
+    "authFailed": "承認に失敗しました。もう一度お試しください。",
+    "webcamDenied": "Web カメラにアクセスできませんでした",
+    "shortTooLong": "ショートは {{max}} 以下にする必要があります。「3Speak ショートに表示」のチェックを外すか、短い動画を使ってください。",
+    "uploadingVideo": "動画をアップロード中...",
+    "noEmbedUrl": "アップロードは成功しましたが、埋め込み URL が返されませんでした",
+    "publishingComment": "コメントを公開中...",
+    "posted": "動画リアクションを投稿しました！",
+    "postFailed": "コメントを投稿できませんでした",
+    "uploadFailed": "アップロードに失敗しました",
+    "uploadVideo": "動画をアップロード",
+    "recordVideo": "動画を録画",
+    "startRecording": "録画を開始",
+    "stopRecording": "録画を停止",
+    "recordedVideo": "録画した動画",
+    "descriptionPlaceholder": "動画リアクションの説明を追加...",
+    "showInShorts": "3Speak ショートに表示",
+    "authNote": "<b>@threespeak</b> があなたの代わりにリアクションを投稿することを許可します。",
+    "authorizing": "承認中…",
+    "authorize": "@threespeak を承認",
+    "uploading": "アップロード中...",
+    "postReaction": "リアクションを投稿"
+  },
+  "inline": {
+    "cantPlay": "この動画はここでは再生できません。",
+    "openOnSite": "3Speakで開く"
+  }
+}

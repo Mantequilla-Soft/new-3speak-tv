@@ -1,0 +1,349 @@
+{
+  "icons": {
+    "link": "Bağlantı",
+    "globe": "Web sitesi",
+    "podcast": "Podcast",
+    "email": "E-posta",
+    "phone": "Telefon",
+    "rss": "RSS",
+    "qrcode": "QR kod",
+    "shop": "Mağaza",
+    "bag": "Dükkân",
+    "dollar": "Para",
+    "gift": "Hediye",
+    "heart": "Destek",
+    "star": "Yıldız",
+    "thumbsup": "Beğeni",
+    "fire": "Ateş",
+    "bolt": "Şimşek",
+    "music": "Müzik",
+    "headphones": "Ses",
+    "mic": "Mikrofon",
+    "video": "Video",
+    "film": "Film",
+    "tv": "TV",
+    "play": "Oynat",
+    "camera": "Fotoğraf",
+    "image": "Görsel",
+    "palette": "Sanat",
+    "pen": "Yazı",
+    "book": "Kitap",
+    "newspaper": "Haber",
+    "graduation": "Kurs",
+    "code": "Kod",
+    "gamepad": "Oyun",
+    "briefcase": "İş",
+    "home": "Ev",
+    "location": "Konum",
+    "map": "Harita",
+    "calendar": "Takvim",
+    "clock": "Saat",
+    "bell": "Uyarılar",
+    "tag": "Etiket",
+    "download": "İndir",
+    "file": "Dosya",
+    "users": "Topluluk",
+    "comment": "Yorum",
+    "share": "Paylaş",
+    "coffee": "Kahve",
+    "wallet": "Cüzdan",
+    "plus": "Daha fazla",
+    "check": "Onay"
+  },
+  "fonts": {
+    "system": "Sistem",
+    "rounded": "Yuvarlak",
+    "serif": "Serif",
+    "mono": "Mono",
+    "display": "Başlık",
+    "condensed": "Dar",
+    "handwriting": "El yazısı",
+    "grotesk": "Grotesk",
+    "humanist": "Hümanist",
+    "geometric": "Geometrik",
+    "slab": "Slab",
+    "elegant": "Zarif",
+    "typewriter": "Daktilo",
+    "marker": "Keçeli kalem",
+    "brush": "Fırça",
+    "palatino": "Palatino",
+    "wide": "Geniş"
+  },
+  "motion": {
+    "none": "Yok",
+    "float": "Süzülme",
+    "sway": "Salınma",
+    "pulse": "Nabız",
+    "wobble": "Sallanma",
+    "bounce": "Zıplama",
+    "tilt": "3B Eğim",
+    "spin": "Dönme",
+    "shake": "Titreme",
+    "breathe": "Nefes"
+  },
+  "sectionTypes": {
+    "link": "Bağlantı",
+    "video": "3Speak içeriği",
+    "embed": "Zengin bağlantı",
+    "image": "Görsel",
+    "header": "Başlık / metin"
+  },
+  "blockNames": {
+    "link": "bağlantı",
+    "header": "başlık",
+    "image": "görsel",
+    "video": "video",
+    "embed": "gömülü içerik"
+  },
+  "blockNamesPlural": {
+    "link": "bağlantılar",
+    "header": "başlıklar",
+    "image": "görseller",
+    "video": "videolar",
+    "embed": "gömülü içerikler"
+  },
+  "templates": {
+    "minimal": {
+      "name": "Minimal",
+      "niche": "Sade ve basit"
+    },
+    "neon": {
+      "name": "Neon Geceler",
+      "niche": "İçerik üreticisi / yayıncı"
+    },
+    "crypto": {
+      "name": "Zincir Üstü",
+      "niche": "Kripto / Web3"
+    },
+    "gamer": {
+      "name": "Birinci Oyuncu",
+      "niche": "Oyun"
+    },
+    "photographer": {
+      "name": "Pozlama",
+      "niche": "Fotoğrafçılık"
+    },
+    "podcaster": {
+      "name": "Yayında",
+      "niche": "Podcast"
+    },
+    "fitness": {
+      "name": "Zirve Form",
+      "niche": "Fitness / koç"
+    },
+    "writer": {
+      "name": "Uzun Soluklu",
+      "niche": "Yazar / blog yazarı"
+    },
+    "chef": {
+      "name": "Mise en Place",
+      "niche": "Yemek / mutfak"
+    },
+    "travel": {
+      "name": "Gezgin",
+      "niche": "Doğa / seyahat"
+    },
+    "business": {
+      "name": "Yönetim Kurulu",
+      "niche": "İş / profesyonel"
+    },
+    "artist": {
+      "name": "Palet",
+      "niche": "Sanatçı / görsel"
+    },
+    "ocean": {
+      "name": "Gelgit",
+      "niche": "Sakin / yaşam tarzı"
+    },
+    "musician": {
+      "name": "Amfi",
+      "niche": "Müzik / grup"
+    },
+    "developer": {
+      "name": "Terminal",
+      "niche": "Geliştirici / teknoloji"
+    },
+    "sports": {
+      "name": "Maç Günü",
+      "niche": "Spor / sporcu"
+    }
+  },
+  "errors": {
+    "notLoggedIn": "Giriş yapılmadı",
+    "couldNotSaveToHive": "Hive'a kaydedilemedi"
+  },
+  "arrange": {
+    "title": "Başlık",
+    "video": "Video",
+    "latestPosts": "Son gönderiler",
+    "latestPostsBy": "Son gönderiler · @{{account}}",
+    "dragToArrange": "Düzenlemek için sürükle"
+  },
+  "page": {
+    "latestPosts": "Son gönderiler",
+    "seeNewestPosts": "@{{user}} kullanıcısının en yeni gönderilerini gör →",
+    "openLink": "Bağlantıyı aç",
+    "empty": "@{{user}} henüz bağlantı eklemedi.",
+    "viewProfile": "3Speak profilini gör →",
+    "poweredBy": "3Speak altyapısıyla"
+  },
+  "editor": {
+    "resetToDefault": "Varsayılana sıfırla",
+    "motion": "Hareket",
+    "speed": "Hız {{value}}",
+    "loop": "Döngü",
+    "runSeconds": "Süre {{value}}sn",
+    "picker": {
+      "videoLabel": "Videolarımdan seç",
+      "videoLoading": "Videoların yükleniyor…",
+      "videoEmpty": "Yakın tarihli 3Speak videosu bulunamadı.",
+      "shortLabel": "Shorts videolarımdan seç",
+      "shortLoading": "Shorts videoların yükleniyor…",
+      "shortEmpty": "Yakın tarihli 3Speak Shorts videosu bulunamadı.",
+      "noChannel": "Kanal algılanmadı (giriş yaptın mı?)",
+      "loadFailed": "Yüklenemedi: {{error}}"
+    },
+    "toasts": {
+      "unfurlFailed": "Bağlantı önizlemesi alınamadı",
+      "imageUploadFailed": "Görsel yüklenemedi: {{error}}",
+      "tryAgain": "tekrar dene",
+      "styleApplied": "Stil tüm {{type}} bloklarına uygulandı",
+      "templateApplied": "“{{name}}” uygulandı; ince ayar yap ya da Geri Al",
+      "reverted": "Önceki tasarımına geri dönüldü",
+      "saved": "Spotlight Hive profiline kaydedildi",
+      "saveFailed": "Kaydedilemedi",
+      "linkCopied": "Bağlantı kopyalandı",
+      "uploadFailed": "Yükleme başarısız"
+    },
+    "link": {
+      "labelPlaceholder": "Etiket (örn. YouTube kanalım)",
+      "type": "Bağlantı türü",
+      "typeGroup": "Tür",
+      "website": "Web sitesi / URL",
+      "email": "E-posta",
+      "phone": "Telefon",
+      "platformGroup": "Platform",
+      "yourname": "kullaniciadin",
+      "platformIconHint": "Simge {{platform}} logosu; özel bir simge seçmek için “Web sitesi / URL” seçeneğine geç.",
+      "icon": "Simge",
+      "iconColor": "Simge rengi",
+      "iconBg": "Simge arka planı"
+    },
+    "header": {
+      "text": "Metin",
+      "size": "Boyut",
+      "large": "Büyük",
+      "medium": "Orta",
+      "small": "Küçük",
+      "align": "Hizalama",
+      "left": "Sol",
+      "center": "Orta",
+      "right": "Sağ"
+    },
+    "image": {
+      "uploading": "Yükleniyor…",
+      "upload": "Görsel yükle",
+      "urlPlaceholder": "…ya da görsel URL'si",
+      "linkPlaceholder": "Tıklanınca açılacak bağlantı (isteğe bağlı)"
+    },
+    "video": {
+      "contentType": "İçerik türü",
+      "video": "Video",
+      "short": "Shorts",
+      "orPaste": "ya da bir bağlantı yapıştır",
+      "pastePlaceholder": "Bir 3Speak video bağlantısı veya author/permlink yapıştır",
+      "titlePlaceholder": "Videonun üstünde gösterilen başlık (3Speak'e bağlanır)",
+      "hint": "Seçilen içerik sayfanda gömülü olarak oynar."
+    },
+    "embed": {
+      "source": "Kaynak",
+      "sourceLink": "Bir bağlantı (zengin önizleme)",
+      "sourceHiveRecent": "Son Hive gönderilerim",
+      "accountPlaceholder": "Hive kullanıcı adı (kendin için boş bırak)",
+      "showPosts_one": "{{count}} gönderi göster",
+      "showPosts_other": "{{count}} gönderi göster",
+      "perRow": "Satır başına {{value}}",
+      "hiveRecentHint": "En son üst düzey gönderilerin (reblog veya çapraz paylaşım yok). Otomatik güncellenir.",
+      "linkPlaceholder": "Herhangi bir bağlantı yapıştır: Hive gönderisi, Instagram, X, YouTube, makale…",
+      "fetching": "Önizleme alınıyor…",
+      "noPreview": "Önizleme bulunamadı; yine de bağlantı kartı olarak görünecek.",
+      "pasteHint": "Bir bağlantı yapıştır, başlığını, açıklamasını ve görselini biz çekelim."
+    },
+    "style": {
+      "title": "Stil",
+      "applyAllTitle": "Bu stili tüm {{type}} bloklarına uygula",
+      "applyAll": "Tüm {{types}} için uygula",
+      "background": "Arka plan",
+      "text": "Metin",
+      "backgroundPct": "Arka plan %{{value}}",
+      "radius": "Köşe {{value}}",
+      "fontSizePct": "Yazı boyutu %{{value}}",
+      "paddingPx": "İç boşluk {{value}}px",
+      "thumbnailPct": "Küçük resim %{{value}}",
+      "border": "Kenarlık",
+      "thicknessPx": "Kalınlık {{value}}px",
+      "opacityPct": "Opaklık %{{value}}",
+      "shadow": "Gölge",
+      "strengthPct": "Yoğunluk %{{value}}",
+      "color": "Renk",
+      "blur": "Bulanıklık {{value}}",
+      "spread": "Yayılma {{value}}",
+      "inset": "İç gölge",
+      "cardDelayMs": "Kart gecikmesi {{value}}ms"
+    },
+    "tagline": "Bağlantıların ve videoların tek sayfada",
+    "openPage": "Sayfayı aç",
+    "templates": {
+      "title": "Şablonlar",
+      "hint": "Her şeyi doldurmak için bir tasarım seç; biyografin korunur ve Geri Al yapabilirsin.",
+      "undo": "Şablonu geri al, tasarımıma dön"
+    },
+    "profile": {
+      "title": "Profil",
+      "headlinePlaceholder": "Kısa bir başlık / biyografi (isteğe bağlı)",
+      "avatarSizePct": "Avatar boyutu %{{value}}",
+      "avatarShadowPct": "Avatar gölgesi %{{value}}",
+      "avatarGlow": "Avatar parıltısı",
+      "glowSize": "Parıltı boyutu {{value}}",
+      "channelButtonText": "Kanal düğmesi metni"
+    },
+    "page": {
+      "title": "Sayfa stili",
+      "solid": "Düz",
+      "gradient": "Gradyan",
+      "image": "Görsel",
+      "color2": "Renk 2",
+      "angle": "Açı {{value}}°",
+      "uploadBackground": "Arka plan yükle",
+      "imageSet": "Görsel ayarlandı ✓",
+      "overlay": "Kaplama",
+      "overlay2": "Kaplama 2",
+      "none": "Yok",
+      "overlayOpacityPct": "Kaplama opaklığı %{{value}}",
+      "overlayAngle": "Kaplama açısı {{value}}°",
+      "colors": "Renkler",
+      "buttonBg": "Düğme arka planı",
+      "buttonText": "Düğme metni",
+      "buttons": "Düğmeler",
+      "buttonStyle": "Düğme stili",
+      "soft": "Yumuşak",
+      "fill": "Dolgu",
+      "outline": "Çerçeve",
+      "cornerRadius": "Köşe yuvarlaklığı {{value}}",
+      "textStyle": "Metin stili (ad, biyografi ve metin blokları)",
+      "font": "Yazı tipi",
+      "normal": "Normal",
+      "italic": "İtalik",
+      "bold": "Kalın",
+      "boldItalic": "Kalın İtalik",
+      "strong": "Güçlü",
+      "textBorderPx": "Metin kenarlığı {{value}}px",
+      "borderColor": "Kenarlık rengi"
+    },
+    "addBlock": "Blok ekle",
+    "empty": "İlk bağlantını, videonu veya görselini yukarıdan ekle.",
+    "arrangeHint": "Düzenlemek için <grip></grip> sürükle · yan yana koymak için bir bloğu diğerinin üzerine bırak · burada düzenlemek için bir bloğa tıkla",
+    "livePreview": "Canlı önizleme",
+    "previewTitle": "Spotlight önizlemesi"
+  }
+}

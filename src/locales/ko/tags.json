@@ -1,0 +1,43 @@
+{
+  "labels": {
+    "tech-science": "기술 및 과학",
+    "technology": "기술",
+    "education": "교육",
+    "science": "과학",
+    "programming": "프로그래밍",
+    "crypto-finance": "암호화폐 및 금융",
+    "cryptocurrency": "암호화폐",
+    "finance": "금융",
+    "business": "비즈니스",
+    "entertainment": "엔터테인먼트",
+    "music": "음악",
+    "gaming": "게임",
+    "film-tv": "영화 및 TV",
+    "lifestyle": "라이프스타일",
+    "vlog": "브이로그",
+    "comedy": "코미디",
+    "story-time": "썰 풀기",
+    "commercial": "광고",
+    "arts-diy": "예술 및 DIY",
+    "art": "예술",
+    "diy-crafts": "DIY 및 공예",
+    "photography": "사진",
+    "food-outdoor": "음식 및 아웃도어",
+    "nature": "자연",
+    "travel": "여행",
+    "food": "음식",
+    "pets": "반려동물",
+    "gardening": "원예",
+    "sports-health": "스포츠 및 건강",
+    "sports": "스포츠",
+    "health": "건강",
+    "fitness": "피트니스",
+    "life-society": "생활 및 사회",
+    "news": "뉴스",
+    "spirituality": "영성",
+    "politics": "정치"
+  },
+  "display": {
+    "cryptocurrency": "암호화폐"
+  }
+}

@@ -1,0 +1,349 @@
+{
+  "icons": {
+    "link": "लिंक",
+    "globe": "वेबसाइट",
+    "podcast": "पॉडकास्ट",
+    "email": "ईमेल",
+    "phone": "फ़ोन",
+    "rss": "RSS",
+    "qrcode": "QR कोड",
+    "shop": "शॉप",
+    "bag": "स्टोर",
+    "dollar": "पैसे",
+    "gift": "गिफ़्ट",
+    "heart": "सपोर्ट",
+    "star": "स्टार",
+    "thumbsup": "लाइक",
+    "fire": "फ़ायर",
+    "bolt": "बिजली",
+    "music": "संगीत",
+    "headphones": "ऑडियो",
+    "mic": "माइक",
+    "video": "वीडियो",
+    "film": "फ़िल्म",
+    "tv": "टीवी",
+    "play": "प्ले",
+    "camera": "फ़ोटो",
+    "image": "इमेज",
+    "palette": "आर्ट",
+    "pen": "लिखें",
+    "book": "किताब",
+    "newspaper": "न्यूज़",
+    "graduation": "कोर्स",
+    "code": "कोड",
+    "gamepad": "गेमिंग",
+    "briefcase": "काम",
+    "home": "होम",
+    "location": "लोकेशन",
+    "map": "मैप",
+    "calendar": "कैलेंडर",
+    "clock": "घड़ी",
+    "bell": "अलर्ट",
+    "tag": "टैग",
+    "download": "डाउनलोड",
+    "file": "फ़ाइल",
+    "users": "कम्युनिटी",
+    "comment": "कमेंट",
+    "share": "शेयर",
+    "coffee": "कॉफ़ी",
+    "wallet": "वॉलेट",
+    "plus": "और",
+    "check": "चेक"
+  },
+  "fonts": {
+    "system": "सिस्टम",
+    "rounded": "गोल",
+    "serif": "Serif",
+    "mono": "Mono",
+    "display": "डिस्प्ले",
+    "condensed": "कंडेंस्ड",
+    "handwriting": "हस्तलिखित",
+    "grotesk": "Grotesk",
+    "humanist": "Humanist",
+    "geometric": "ज्यामितीय",
+    "slab": "Slab",
+    "elegant": "एलिगेंट",
+    "typewriter": "टाइपराइटर",
+    "marker": "मार्कर",
+    "brush": "ब्रश",
+    "palatino": "Palatino",
+    "wide": "चौड़ा"
+  },
+  "motion": {
+    "none": "कोई नहीं",
+    "float": "तैरना",
+    "sway": "झूलना",
+    "pulse": "पल्स",
+    "wobble": "डगमगाना",
+    "bounce": "उछलना",
+    "tilt": "3D झुकाव",
+    "spin": "घूमना",
+    "shake": "हिलना",
+    "breathe": "साँस"
+  },
+  "sectionTypes": {
+    "link": "लिंक",
+    "video": "3Speak कंटेंट",
+    "embed": "रिच लिंक",
+    "image": "इमेज",
+    "header": "टाइटल / टेक्स्ट"
+  },
+  "blockNames": {
+    "link": "लिंक",
+    "header": "हेडर",
+    "image": "इमेज",
+    "video": "वीडियो",
+    "embed": "एम्बेड"
+  },
+  "blockNamesPlural": {
+    "link": "लिंक",
+    "header": "हेडर",
+    "image": "इमेज",
+    "video": "वीडियो",
+    "embed": "एम्बेड"
+  },
+  "templates": {
+    "minimal": {
+      "name": "Minimal",
+      "niche": "साफ़ और सादा"
+    },
+    "neon": {
+      "name": "Neon Nights",
+      "niche": "क्रिएटर / स्ट्रीमर"
+    },
+    "crypto": {
+      "name": "On-Chain",
+      "niche": "क्रिप्टो / Web3"
+    },
+    "gamer": {
+      "name": "Player One",
+      "niche": "गेमिंग"
+    },
+    "photographer": {
+      "name": "Exposure",
+      "niche": "फ़ोटोग्राफ़ी"
+    },
+    "podcaster": {
+      "name": "On Air",
+      "niche": "पॉडकास्ट"
+    },
+    "fitness": {
+      "name": "Peak Form",
+      "niche": "फ़िटनेस / कोच"
+    },
+    "writer": {
+      "name": "Longform",
+      "niche": "लेखक / ब्लॉगर"
+    },
+    "chef": {
+      "name": "Mise en Place",
+      "niche": "खाना / कुकिंग"
+    },
+    "travel": {
+      "name": "Wanderlust",
+      "niche": "प्रकृति / ट्रैवल"
+    },
+    "business": {
+      "name": "Boardroom",
+      "niche": "बिज़नेस / प्रोफ़ेशनल"
+    },
+    "artist": {
+      "name": "Palette",
+      "niche": "आर्टिस्ट / विज़ुअल"
+    },
+    "ocean": {
+      "name": "Tidewater",
+      "niche": "चिल / लाइफ़स्टाइल"
+    },
+    "musician": {
+      "name": "Amplified",
+      "niche": "संगीत / बैंड"
+    },
+    "developer": {
+      "name": "Terminal",
+      "niche": "डेवलपर / टेक"
+    },
+    "sports": {
+      "name": "Game Day",
+      "niche": "खेल / एथलीट"
+    }
+  },
+  "errors": {
+    "notLoggedIn": "लॉग इन नहीं है",
+    "couldNotSaveToHive": "Hive पर सेव नहीं हो सका"
+  },
+  "arrange": {
+    "title": "टाइटल",
+    "video": "वीडियो",
+    "latestPosts": "नई पोस्ट",
+    "latestPostsBy": "नई पोस्ट · @{{account}}",
+    "dragToArrange": "क्रम बदलने के लिए खींचें"
+  },
+  "page": {
+    "latestPosts": "नई पोस्ट",
+    "seeNewestPosts": "@{{user}} की सबसे नई पोस्ट देखें →",
+    "openLink": "लिंक खोलें",
+    "empty": "@{{user}} ने अभी कोई लिंक नहीं जोड़ा है।",
+    "viewProfile": "3Speak प्रोफ़ाइल देखें →",
+    "poweredBy": "3Speak द्वारा संचालित"
+  },
+  "editor": {
+    "resetToDefault": "डिफ़ॉल्ट पर रीसेट करें",
+    "motion": "मोशन",
+    "speed": "स्पीड {{value}}",
+    "loop": "लूप",
+    "runSeconds": "{{value}} सेकंड चलाएँ",
+    "picker": {
+      "videoLabel": "मेरे वीडियो में से चुनें",
+      "videoLoading": "आपके वीडियो लोड हो रहे हैं…",
+      "videoEmpty": "हाल का कोई 3Speak वीडियो नहीं मिला।",
+      "shortLabel": "मेरे शॉर्ट्स में से चुनें",
+      "shortLoading": "आपके शॉर्ट्स लोड हो रहे हैं…",
+      "shortEmpty": "हाल का कोई 3Speak शॉर्ट नहीं मिला।",
+      "noChannel": "कोई चैनल नहीं मिला (क्या आप लॉग इन हैं?)",
+      "loadFailed": "लोड नहीं हो सका: {{error}}"
+    },
+    "toasts": {
+      "unfurlFailed": "लिंक प्रीव्यू नहीं मिल सका",
+      "imageUploadFailed": "इमेज अपलोड फ़ेल हुआ: {{error}}",
+      "tryAgain": "फिर से कोशिश करें",
+      "styleApplied": "स्टाइल सभी {{type}} ब्लॉक पर लागू हुआ",
+      "templateApplied": "“{{name}}” लागू हुआ — बदलाव करें या पहले जैसा करें",
+      "reverted": "आपके पिछले डिज़ाइन पर लौटा दिया गया",
+      "saved": "Spotlight आपकी Hive प्रोफ़ाइल में सेव हो गया",
+      "saveFailed": "सेव नहीं हो सका",
+      "linkCopied": "लिंक कॉपी हो गया",
+      "uploadFailed": "अपलोड फ़ेल हुआ"
+    },
+    "link": {
+      "labelPlaceholder": "लेबल (जैसे मेरा YouTube)",
+      "type": "लिंक का प्रकार",
+      "typeGroup": "प्रकार",
+      "website": "वेबसाइट / URL",
+      "email": "ईमेल",
+      "phone": "फ़ोन",
+      "platformGroup": "प्लेटफ़ॉर्म",
+      "yourname": "yourname",
+      "platformIconHint": "आइकन {{platform}} का लोगो है — अपना आइकन चुनने के लिए “वेबसाइट / URL” पर जाएँ।",
+      "icon": "आइकन",
+      "iconColor": "आइकन का रंग",
+      "iconBg": "आइकन बैकग्राउंड"
+    },
+    "header": {
+      "text": "टेक्स्ट",
+      "size": "साइज़",
+      "large": "बड़ा",
+      "medium": "मीडियम",
+      "small": "छोटा",
+      "align": "अलाइन",
+      "left": "बाएँ",
+      "center": "बीच में",
+      "right": "दाएँ"
+    },
+    "image": {
+      "uploading": "अपलोड हो रहा है…",
+      "upload": "इमेज अपलोड करें",
+      "urlPlaceholder": "…या इमेज URL",
+      "linkPlaceholder": "क्लिक करने पर लिंक (वैकल्पिक)"
+    },
+    "video": {
+      "contentType": "कंटेंट का प्रकार",
+      "video": "वीडियो",
+      "short": "शॉर्ट",
+      "orPaste": "या लिंक पेस्ट करें",
+      "pastePlaceholder": "3Speak वीडियो लिंक या author/permlink पेस्ट करें",
+      "titlePlaceholder": "वीडियो के ऊपर दिखने वाला टाइटल (3Speak से लिंक होता है)",
+      "hint": "चुना गया कंटेंट आपके पेज पर एम्बेड होकर चलेगा।"
+    },
+    "embed": {
+      "source": "सोर्स",
+      "sourceLink": "एक लिंक (रिच प्रीव्यू)",
+      "sourceHiveRecent": "मेरी नई Hive पोस्ट",
+      "accountPlaceholder": "Hive यूज़रनेम (अपने लिए खाली छोड़ें)",
+      "showPosts_one": "{{count}} पोस्ट दिखाएँ",
+      "showPosts_other": "{{count}} पोस्ट दिखाएँ",
+      "perRow": "हर पंक्ति में {{value}}",
+      "hiveRecentHint": "आपकी सबसे नई टॉप-लेवल पोस्ट (रीब्लॉग या क्रॉस-पोस्ट नहीं)। अपने-आप अपडेट होती हैं।",
+      "linkPlaceholder": "कोई भी लिंक पेस्ट करें — Hive पोस्ट, Instagram, X, YouTube, आर्टिकल…",
+      "fetching": "प्रीव्यू लाया जा रहा है…",
+      "noPreview": "कोई प्रीव्यू नहीं मिला — यह फिर भी लिंक कार्ड के रूप में दिखेगा।",
+      "pasteHint": "लिंक पेस्ट करें, हम उसका टाइटल, विवरण और इमेज ले आएँगे।"
+    },
+    "style": {
+      "title": "स्टाइल",
+      "applyAllTitle": "यह स्टाइल हर {{type}} ब्लॉक पर लागू करें",
+      "applyAll": "सभी {{types}} पर लागू करें",
+      "background": "बैकग्राउंड",
+      "text": "टेक्स्ट",
+      "backgroundPct": "बैकग्राउंड {{value}}%",
+      "radius": "रेडियस {{value}}",
+      "fontSizePct": "फ़ॉन्ट साइज़ {{value}}%",
+      "paddingPx": "पैडिंग {{value}}px",
+      "thumbnailPct": "थंबनेल {{value}}%",
+      "border": "बॉर्डर",
+      "thicknessPx": "मोटाई {{value}}px",
+      "opacityPct": "अपारदर्शिता {{value}}%",
+      "shadow": "शैडो",
+      "strengthPct": "तीव्रता {{value}}%",
+      "color": "रंग",
+      "blur": "ब्लर {{value}}",
+      "spread": "फैलाव {{value}}",
+      "inset": "इनसेट",
+      "cardDelayMs": "कार्ड डिले {{value}}ms"
+    },
+    "tagline": "आपके लिंक और वीडियो एक ही पेज पर",
+    "openPage": "पेज खोलें",
+    "templates": {
+      "title": "टेम्पलेट",
+      "hint": "सब कुछ भरने के लिए कोई डिज़ाइन चुनें — आपका बायो बना रहता है, और आप पहले जैसा कर सकते हैं।",
+      "undo": "टेम्पलेट हटाएँ — मेरे डिज़ाइन पर वापस"
+    },
+    "profile": {
+      "title": "प्रोफ़ाइल",
+      "headlinePlaceholder": "छोटी हेडलाइन / बायो (वैकल्पिक)",
+      "avatarSizePct": "अवतार साइज़ {{value}}%",
+      "avatarShadowPct": "अवतार शैडो {{value}}%",
+      "avatarGlow": "अवतार ग्लो",
+      "glowSize": "ग्लो साइज़ {{value}}",
+      "channelButtonText": "चैनल बटन का टेक्स्ट"
+    },
+    "page": {
+      "title": "पेज स्टाइल",
+      "solid": "सॉलिड",
+      "gradient": "ग्रेडिएंट",
+      "image": "इमेज",
+      "color2": "रंग 2",
+      "angle": "कोण {{value}}°",
+      "uploadBackground": "बैकग्राउंड अपलोड करें",
+      "imageSet": "इमेज सेट ✓",
+      "overlay": "ओवरले",
+      "overlay2": "ओवरले 2",
+      "none": "कोई नहीं",
+      "overlayOpacityPct": "ओवरले अपारदर्शिता {{value}}%",
+      "overlayAngle": "ओवरले कोण {{value}}°",
+      "colors": "रंग",
+      "buttonBg": "बटन बैकग्राउंड",
+      "buttonText": "बटन टेक्स्ट",
+      "buttons": "बटन",
+      "buttonStyle": "बटन स्टाइल",
+      "soft": "सॉफ़्ट",
+      "fill": "फ़िल",
+      "outline": "आउटलाइन",
+      "cornerRadius": "कोने का रेडियस {{value}}",
+      "textStyle": "टेक्स्ट स्टाइल (नाम, बायो और टेक्स्ट ब्लॉक)",
+      "font": "फ़ॉन्ट",
+      "normal": "सामान्य",
+      "italic": "इटैलिक",
+      "bold": "बोल्ड",
+      "boldItalic": "बोल्ड इटैलिक",
+      "strong": "गहरा",
+      "textBorderPx": "टेक्स्ट बॉर्डर {{value}}px",
+      "borderColor": "बॉर्डर का रंग"
+    },
+    "addBlock": "ब्लॉक जोड़ें",
+    "empty": "ऊपर अपना पहला लिंक, वीडियो या इमेज जोड़ें।",
+    "arrangeHint": "क्रम बदलने के लिए <grip></grip> खींचें · दो ब्लॉक साथ-साथ रखने के लिए एक ब्लॉक को दूसरे पर छोड़ें · किसी ब्लॉक को यहीं एडिट करने के लिए उस पर क्लिक करें",
+    "livePreview": "लाइव प्रीव्यू",
+    "previewTitle": "Spotlight प्रीव्यू"
+  }
+}

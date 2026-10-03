@@ -1,0 +1,46 @@
+{
+  "loading": "Loading...",
+  "error": "Error: {{error}}",
+  "thumbnailAlt": "thumbnail",
+  "topicTitle": "Topic: {{topic}}",
+  "watchingNow_one": "{{count}} watching now",
+  "watchingNow_other": "{{count}} watching now",
+  "badges": {
+    "gatedTitle": "Supporters only — 3Speak Pro unlocks the full video",
+    "pro": "PRO",
+    "new": "NEW",
+    "live": "● LIVE",
+    "liveChat": "● LIVE CHAT"
+  },
+  "status": {
+    "scheduled": "Scheduled",
+    "mobile": "Mobile",
+    "mobileTitle": "Uploaded via mobile app",
+    "processing": "Processing",
+    "processingTitle": "Video is being processed",
+    "draft": "Draft",
+    "draftTitle": "Draft - not published yet",
+    "deleted": "Deleted",
+    "deletedTitle": "This video has been deleted",
+    "failed": "Failed",
+    "failedTitle": "Video processing failed",
+    "unlisted": "Unlisted",
+    "unlistedTitle": "Unlisted — hidden from feeds & search, only reachable by direct link"
+  },
+  "playlist": {
+    "loading": "Loading playlists...",
+    "items_one": "{{count}} item",
+    "items_other": "{{count}} items",
+    "openAria": "Open playlist {{name}}",
+    "tag": "Playlist",
+    "updated": "Updated {{when}}"
+  },
+  "watchLater": {
+    "title": "Watch Later",
+    "subtitle": "Videos to watch later"
+  },
+  "watched": {
+    "title": "Watched",
+    "subtitle": "Your watch history"
+  }
+}

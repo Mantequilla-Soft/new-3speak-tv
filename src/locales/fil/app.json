@@ -1,0 +1,200 @@
+{
+  "loaders": {
+    "wifi": "Wifi Loader"
+  },
+  "supportBlock": {
+    "banned": {
+      "title": "Naka-ban ang account mo",
+      "body": "Na-ban ang 3Speak account mo, kaya hindi ka makakapag-log in. Kung sa tingin mo ay pagkakamali ito, kontakin ang 3Speak support."
+    },
+    "upload": {
+      "title": "Naka-disable ang pag-upload sa account mo",
+      "body": "Hindi pinapayagang mag-upload ang 3Speak account mo ngayon. Kung sa tingin mo ay pagkakamali ito, kontakin ang 3Speak support."
+    }
+  },
+  "emergency": {
+    "title": "May ilang problema kami sa infrastructure",
+    "body": "Inaayos na ito ng team namin para maibalik agad ang 3Speak. Sumali sa Discord namin para makausap kami at makakuha ng live updates — salamat sa pasensya mo.",
+    "joinDiscord": "Sumali sa Discord namin"
+  },
+  "changelog": {
+    "title": "May bago kaming update!",
+    "subtitle": "Ito ang bago sa v{{version}}",
+    "previousUpdates": "Mga nakaraang update",
+    "newerUpdates": "Mga mas bagong update",
+    "readTheCode": "Basahin ang code",
+    "gotIt": "Sige"
+  },
+  "routes": {
+    "homeFeed": "Home Feed",
+    "followFeed": "Follow Feed",
+    "discover": "Discover",
+    "newVideos": "Mga Bagong Video",
+    "firstUploads": "Mga Unang Upload",
+    "rankings": "Rankings",
+    "groups": "Groups",
+    "badges": "Mga Badge",
+    "audioBy": "Audio ni @{{author}}",
+    "audio": "Audio",
+    "playlist": "Playlist",
+    "watchHistory": "Watch history — @{{username}}",
+    "postBy": "Post ni @{{author}}",
+    "myProfile": "Profile Ko",
+    "uploadStudio": "Upload Studio",
+    "drafts": "Mga Draft",
+    "editVideo": "I-edit ang Video",
+    "editScheduledPost": "I-edit ang Naka-schedule na Post",
+    "chat": "Chat",
+    "about": "Tungkol",
+    "login": "Login",
+    "brandFallback": "3Speak - Decentralized na Video Platform"
+  },
+  "invite": {
+    "title": "Inimbitahan ka ni <who>@{{referrer}}</who> sa 3Speak",
+    "incubatingFastTrack": "Puwede mo nang gawing sarili mong Hive account ang <b>@{{handle}}</b> ngayon din, kahit hindi pa tapos ang warm-up.",
+    "incubatingKeepGoing": "Ituloy lang ang warm-up mo. Si <b>@{{referrer}}</b> ang kikilalaning nag-imbita sa iyo.",
+    "signUpFastTrack": "Mag-sign up at magkaroon agad ng sariling Hive account: iisang login para sa 3Speak at sa lahat ng iba pang Hive app, na may keys na ikaw lang ang may hawak. Mga isang minuto lang ito.",
+    "signUpFree": "Mag-sign up at magsimula sa libreng profile sa 3Speak. Naka-save ang invite mo, kaya kay <b>@{{referrer}}</b> mapupunta ang credit.",
+    "createHiveAccount": "Gawin ang Hive account ko",
+    "createAccount": "Gawin ang account ko",
+    "lookAround": "Gusto ko lang tumingin-tingin"
+  },
+  "interests": {
+    "saved": "Na-save ang mga interes — puwede mong baguhin anumang oras sa Settings",
+    "saveFailed": "Hindi ma-save ang mga interes",
+    "title": "Ano ang hilig mo?",
+    "body": "Pumili ng ilang paksang gusto mo at magpapakita kami ng mas maraming content na magugustuhan mo. Puwede mo itong baguhin anumang oras sa <b>Settings</b>.",
+    "notNow": "Hindi muna",
+    "save": "I-save ang mga interes"
+  },
+  "emojiGif": {
+    "emoji": "Emoji",
+    "searchEmoji": "Maghanap ng emoji",
+    "searchGifs": "Maghanap ng GIF…",
+    "noGifs": "Walang nahanap na GIF.",
+    "poweredBy": "Powered by GIPHY"
+  },
+  "welcome": {
+    "things": {
+      "postVideos": {
+        "title": "Mag-post ng video",
+        "text": "Mag-upload ng long-form na video na mananatiling sa iyo, sa chain na walang makakapagbura nito nang palihim."
+      },
+      "filmShorts": {
+        "title": "Gumawa ng Shorts",
+        "text": "Mabilis, vertical at madaling i-share. Swak para makuha ang mga una mong viewer."
+      },
+      "goLive": {
+        "title": "Mag-live",
+        "text": "Mag-stream para sa mga tao mo, magdala ng guests sa stage, at itago ang recording pagkatapos."
+      },
+      "buildCommunity": {
+        "title": "Bumuo ng komunidad",
+        "text": "Magsimula ng espasyo tungkol sa mga bagay na mahalaga sa iyo, o sumali sa isang buhay na buhay na."
+      },
+      "makeFriends": {
+        "title": "Magkaroon ng totoong kaibigan",
+        "text": "Mag-comment, mag-chat at makipag-collab sa mga totoong tao na nagdadamayan."
+      },
+      "getInspired": {
+        "title": "Ma-inspire, makisali",
+        "text": "Tumuklas ng mga creator, suportahan ang mga gusto mo, at kumita habang ginagawa mo ito."
+      }
+    },
+    "advertiserThings": {
+      "bookAds": {
+        "title": "Mag-book ng ads sa buong 3Speak",
+        "text": "Video spots, Shorts spots, player banners, tickers at pre-upload spots, mula isang araw hanggang tatlong buwan."
+      },
+      "payFromWallet": {
+        "title": "Magbayad mula sa sarili mong wallet",
+        "text": "Sa HBD o HIVE, diretso mula sa account na ito. Walang card at walang middleman."
+      },
+      "chooseWhere": {
+        "title": "Piliin kung saan ito lalabas",
+        "text": "Piliin ang format, ang posisyon sa video at kung ilang araw ito tatakbo."
+      },
+      "seeDelivered": {
+        "title": "Tingnan ang naging resulta",
+        "text": "Plays at clicks para sa bawat booking, at credit pabalik kung kulang ang naibigay ng isang booking."
+      },
+      "talkToCustomers": {
+        "title": "Kausapin ang mga customer mo",
+        "text": "Kung gusto mo: mag-post ng video, sumagot sa mga comment at mag-follow ng mga tao sa ilalim ng brand mo."
+      },
+      "oneAccount": {
+        "title": "Iisang account kahit saan",
+        "text": "Parehong brand at login sa lahat ng Hive app, na may key na ikaw lang ang may hawak."
+      }
+    },
+    "profileLive": "Live na ang profile mo. Welcome sa 3Speak!",
+    "brandProfileLive": "Live na ang brand profile mo. Welcome sa 3Speak!",
+    "title": "Welcome sa 3Speak",
+    "titleNamed": "Welcome sa 3Speak, {{name}}",
+    "advertiserReady": "Handa na ang advertiser account mo na <b>@{{user}}</b>. Ito ang account na gagamitin mo sa pag-book at pagbayad ng ads.",
+    "heyUser": "Hi <b>@{{user}}</b>, nakarating ka na. Nakatayo ang 3Speak sa Hive, kaya sa iyo ang account mo, ang audience mo at ang content mo.",
+    "noteAdvertiser": "Una, silipin muna ang brand profile mo: ito ang nakikita ng mga viewer katabi ng mga ad mo.",
+    "note": "Isang huling bagay bago ka magsimula: ipakilala ang sarili mo sa mga manonood.",
+    "maybeLater": "Mamaya na lang",
+    "checkBrandProfile": "Tingnan ang brand profile ko",
+    "setUpProfile": "I-set up ang profile ko",
+    "brandProfileTitle": "Ang brand profile mo",
+    "profileTitle": "Ipakilala ang sarili mo",
+    "brandProfileHint": "Galing sa warm-up mo. Kapag nag-save ka, mapupunta ito sa Hive account mo; puwede mo itong baguhin anumang oras.",
+    "profileHint": "Ito ang nakikita ng mga tao sa profile mo. Puwede mo itong baguhin anumang oras.",
+    "skipForNow": "Laktawan muna",
+    "saveAndBook": "I-save at i-book ang una kong ad",
+    "uploading": "Ina-upload…",
+    "interestsHint": "Ginagamit namin ang mga ito para piliin ang lalabas sa home page mo. Pumili ng kahit ilan, o wala, at baguhin kahit kailan mo gusto.",
+    "interestsFineprint": "Naka-save sa Hive account mo, kaya pareho ang profile at mga interes na makikita sa lahat ng Hive app.",
+    "saveAndExplore": "I-save at magsimulang mag-explore"
+  },
+  "profileEdit": {
+    "updated": "Na-update ang profile",
+    "title": "I-edit ang profile mo",
+    "subtitle": "Lumalabas ang larawan, pangalan at bio mo sa profile mo at katabi ng lahat ng pino-post mo.",
+    "loading": "Naglo-load ng profile mo…",
+    "fineprint": "Naka-save sa Hive account mo, kaya pareho ang profile na makikita sa lahat ng Hive app.",
+    "saveChanges": "I-save ang mga pagbabago"
+  },
+  "profileFields": {
+    "chooseImage": "Pumili ng image file",
+    "imageTooLarge": "Lampas 8MB ang larawang iyan, pumili ng mas maliit",
+    "uploadFailed": "Hindi ma-upload ang larawang iyan",
+    "saved": "Na-save ang profile",
+    "saveFailed": "Hindi ma-save ang profile mo",
+    "uploadBanner": "Mag-upload ng profile banner",
+    "changeBanner": "Palitan ang banner",
+    "addBanner": "Magdagdag ng banner",
+    "bannerHint": "Pinakamaganda sa <b>2800 × 684</b> px (o anumang 4:1 na larawan). Ilagay sa gitna ang mahalagang bahagi: nata-trim ang mga gilid sa makikitid na screen at nasa ibabang kaliwa ang pangalan mo.",
+    "uploadPicture": "Mag-upload ng profile picture",
+    "pictureLabel": "Profile picture",
+    "pictureHint": "Pinakamaganda ang mukha o logo. Square, 400 × 400 px o mas malaki. Hanggang 8MB.",
+    "displayName": "Display name",
+    "namePlaceholderUser": "Ano ang itatawag namin sa iyo? (@{{username}})",
+    "namePlaceholder": "Ano ang itatawag namin sa iyo?",
+    "shortBio": "Maikling bio",
+    "bioPlaceholder": "Ano ang ginagawa mo, at ano ang aasahan ng mga tao sa iyo?",
+    "location": "Lokasyon",
+    "optional": "opsyonal",
+    "locationPlaceholder": "Saan ka sa mundo?"
+  },
+  "auth": {
+    "sessionExpired": "Nag-expire ang session mo — mag-log in ulit",
+    "loggedOut": "Matagumpay na naka-log out",
+    "loginSuccess": "Matagumpay ang login!",
+    "switchedTo": "Lumipat kay @{{user}}",
+    "butrauthFailed": "Pumalya ang login sa Butter Auth: {{error}}",
+    "signedInAs": "Naka-sign in bilang @{{user}}",
+    "loggedInViaButrauth": "Naka-log in bilang @{{user}} gamit ang Butter Auth",
+    "tokenExpired": "Nag-expire ang session",
+    "loginFailed": "Pumalya ang login: {{error}}",
+    "unknownError": "Hindi kilalang error",
+    "loginTitle": "Mag-login sa 3Speak"
+  },
+  "update": {
+    "available": "May bagong bersyon ({{version}})",
+    "description": "Mag-refresh para makuha ang pinakabagong update."
+  },
+  "toastsRegion": "Mga Notification"
+}

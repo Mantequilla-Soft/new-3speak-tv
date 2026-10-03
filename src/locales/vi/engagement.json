@@ -1,0 +1,96 @@
+{
+  "tip": {
+    "successTitle": "Đã gửi tip thành công!",
+    "successMessage": "Bạn đã gửi {{amount}} {{currency}} làm tip. Cảm ơn bạn đã ủng hộ!",
+    "errors": {
+      "allRequired": "Vui lòng điền tất cả các trường",
+      "loginRequired": "Vui lòng đăng nhập để gửi tip",
+      "insufficientBalance": "Số dư không đủ",
+      "invalidUsername": "Tên người dùng không hợp lệ",
+      "transferFailed": "Chuyển thất bại: {{message}}"
+    },
+    "heading": "Gửi tip cho @{{recipient}}",
+    "amountLabel": "Số lượng: ",
+    "amountPlaceholder": "ví dụ 1.000",
+    "currencyLabel": "Loại tiền:",
+    "availableBalance": "Số dư khả dụng: {{currency}}",
+    "memoLabel": "Ghi chú (không bắt buộc):",
+    "memoPlaceholder": "ví dụ Cảm ơn vì nội dung tuyệt vời này!",
+    "send": "Gửi tip"
+  },
+  "cardMenu": {
+    "loginToPersonalize": "Vui lòng đăng nhập để cá nhân hóa bảng tin của bạn",
+    "notInterestedToast": "Không quan tâm — chúng tôi sẽ ẩn video này",
+    "undo": "Hoàn tác",
+    "cantHideOwn": "Bạn không thể ẩn video của chính mình",
+    "hidingCreatorToast": "Đang ẩn video từ @{{author}}",
+    "loginForPlaylists": "Vui lòng đăng nhập để thêm video vào danh sách phát",
+    "loginToTag": "Vui lòng đăng nhập để gắn thẻ video",
+    "moreOptions": "Tùy chọn khác",
+    "addToPlaylist": "Thêm vào danh sách phát",
+    "addTag": "Thêm thẻ",
+    "notInterested": "Không quan tâm",
+    "dontShowCreator": "Không hiển thị @{{author}}"
+  },
+  "guestList": {
+    "loadFailed": "Không thể tải danh sách khách hiện tại",
+    "saved_other": "{{count}} khách có thể xem video này",
+    "cleared": "Đã xóa danh sách khách",
+    "saveFailed": "Không thể lưu danh sách khách",
+    "invalidAccounts": "Không phải tài khoản Hive hợp lệ: {{names}}",
+    "title": "🔒 Danh sách khách",
+    "hint": "Các tài khoản này có thể xem mà không cần 3Speak Pro. Danh sách được giữ riêng tư trên máy chủ của chúng tôi, không bao giờ được công bố trong bài đăng của bạn.",
+    "notRegistered": "Video này chưa xử lý xong. Bạn vẫn có thể chỉnh sửa danh sách sau khi xử lý xong.",
+    "placeholder": "username, another.user",
+    "empty": "Chưa có ai. Chỉ người đăng ký Pro mới có thể xem video này.",
+    "removeAria": "Gỡ {{name}}"
+  },
+  "voters": {
+    "pinnedTitle_other": "Người vote ({{count}})",
+    "topVoters": "Người vote hàng đầu",
+    "noVotes": "Chưa có lượt vote nào"
+  },
+  "payout": {
+    "breakdown": "Chi tiết phần thưởng",
+    "estimatedBreakdown": "Chi tiết ước tính",
+    "beneficiaries": "Người thụ hưởng",
+    "curators": "Người curate (50%)",
+    "author": "Tác giả",
+    "total": "Tổng",
+    "totalEstimated": "Tổng (ước tính)"
+  },
+  "vote": {
+    "loginRequired": "Đăng nhập để hoàn tất thao tác này",
+    "fetchPostFailed": "Không thể tải dữ liệu bài đăng",
+    "sameWeight": "Bạn đã vote với mức này rồi. Hãy chọn một giá trị khác.",
+    "failed": "Vote thất bại: {{message}}",
+    "pleaseTryAgain": "vui lòng thử lại",
+    "weight": "Mức vote: {{weight}}%",
+    "success": "Vote thành công! Giá trị: ${{value}}",
+    "successTagged": "Vote thành công! Đã gắn thẻ “{{tag}}”. Giá trị: ${{value}}",
+    "tagged": "Đã gắn thẻ “{{tag}}”.",
+    "vote": "Vote",
+    "tagThisVideo": "Gắn thẻ video này",
+    "tagOptional": "— không bắt buộc —",
+    "pickTopicFirst": "Hãy chọn một chủ đề trước",
+    "taggedNoDot": "Đã gắn thẻ “{{tag}}”",
+    "tagFailed": "Gắn thẻ thất bại: {{message}}",
+    "taggedAlreadyVoted": "Đã gắn thẻ “{{tag}}” — lượt vote {{weight}}% của bạn đã được ghi nhận trước đó.",
+    "votingClosed": "Đã hết hạn vote — hãy gắn thẻ video này",
+    "youTagged": "Bạn đã gắn thẻ video này là <b>{{tag}}</b>.",
+    "pickTopic": "Chọn một chủ đề (tính là một lượt vote 100%)",
+    "submitTag": "Gửi thẻ",
+    "tagThisVideoFull": "Gắn thẻ video này (tính là một lượt vote 100%)",
+    "justTag": "Không vote — chỉ gắn thẻ"
+  },
+  "tagsPicker": {
+    "autoTagged": "Tự động gắn thẻ: {{tags}}",
+    "searchPlaceholder": "Tìm chủ đề…",
+    "searchAria": "Tìm chủ đề",
+    "noMatches": "Không có chủ đề nào khớp với “{{query}}”.",
+    "allSelected": "Đã chọn toàn bộ {{category}}. Chỉ thêm từng chủ đề nếu muốn thu hẹp hơn:",
+    "orPickTopics": "Hoặc chọn từng chủ đề:",
+    "goodEnough": "Vậy là đủ — hoặc chọn cụ thể hơn (không bắt buộc):",
+    "moreSpecific": "Cụ thể hơn:"
+  }
+}

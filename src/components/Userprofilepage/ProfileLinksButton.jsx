@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { FaLink } from 'react-icons/fa6';
 import { fetchSpotlight } from '../../utils/spotlight';
+import { useTranslation } from 'react-i18next';
 import './ProfileLinksButton.scss';
 
 /**
@@ -19,6 +20,7 @@ import './ProfileLinksButton.scss';
  * own class only places it in the row below.
  */
 export default function ProfileLinksButton({ username }) {
+  const { t } = useTranslation();
   const [isNarrow, setIsNarrow] = useState(
     () => typeof window !== 'undefined' && window.matchMedia('(max-width: 1024px)').matches,
   );
@@ -45,7 +47,7 @@ export default function ProfileLinksButton({ username }) {
   // nginx, and it carries its own way back to the profile.
   return (
     <a className="btn btn-hero-message profile-links-btn" href={`/links/${username}`}>
-      <FaLink /> Links
+      <FaLink /> {t('profile.links.button')}
     </a>
   );
 }

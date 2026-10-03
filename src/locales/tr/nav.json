@@ -1,0 +1,117 @@
+{
+  "theme": {
+    "switchToLight": "Açık moda geç",
+    "switchToDark": "Koyu moda geç"
+  },
+  "bottom": {
+    "feeds": "Akışlar",
+    "groups": "Gruplar",
+    "audio": "Ses",
+    "login": "Giriş"
+  },
+  "installApp": "Uygulamayı Yükle",
+  "iosInstallHint": "<b>Paylaş</b>'a, ardından <b>Ana Ekrana Ekle</b>'ye dokun",
+  "playlists": {
+    "tooltip": "Kaydettiğin veya oluşturduğun oynatma listeleri",
+    "label": "Oynatma listeleri",
+    "watchLater": "Sonra İzle",
+    "watchLaterCount": "Sonra İzle ({{n}})",
+    "watchHistory": "İzleme Geçmişi",
+    "all": "Tüm Oynatma Listeleri"
+  },
+  "advertise": "Reklam ver",
+  "hidePages": "Sayfaları gizle",
+  "showPages": "Sayfaları göster",
+  "tabs": {
+    "overviewTooltip": "3Speak'teki tüm yenilikler ve beğeneceğini düşündüklerimiz",
+    "overview": "Genel Bakış",
+    "shortsTooltip": "Art arda kısa dikey videolar",
+    "audioTooltip": "3Speak'te yayınlanan podcast'ler, müzik ve diğer sesler",
+    "groupsTooltip": "Katılabileceğin topluluklar ve insanlara verilen rozetler",
+    "rankingsTooltip": "Şu an en çok kazanan ve en çok izlenen içerik üreticileri"
+  },
+  "aboutLink": "3Speak Hakkında",
+  "profile": {
+    "accountMenu": "Hesap menüsü",
+    "myChannelAria": "Kanalım",
+    "vpTooltip": "Oy Gücü: bir sonraki oyunun ne kadar ağırlık taşıdığı",
+    "rcTooltip": "Resource Credits: Hive'daki işlemlerinin maliyeti",
+    "myChannel": "Kanalım",
+    "publishBacklog": "Bekleyenleri yayınla",
+    "analytics": "Analiz",
+    "inviteLinks": "Davet bağlantıları",
+    "iosInstallToast": "Safari'de Paylaş düğmesine, ardından \"Ana Ekrana Ekle\"ye dokun",
+    "changeAccount": "Hesap değiştir",
+    "logout": "Çıkış yap",
+    "onDiscord": "Discord'da 3Speak",
+    "onX": "X'te 3Speak",
+    "onTelegram": "Telegram'da 3Speak"
+  },
+  "notifications": {
+    "pushOff": "Bu cihaz için bildirimler kapatıldı",
+    "pushOn": "Takip ettiğin içerik üreticileri paylaşım yaptığında bildirim alacaksın",
+    "pushFailed": "Bildirim ayarları değiştirilemedi",
+    "ariaUnread": "Bildirimler ({{count}} okunmamış)",
+    "pushBlocked": "Bu site için bildirimler tarayıcı ayarlarında engellenmiş",
+    "pushNoWorker": "Bu sürümde service worker yok, bu yüzden burada bildirim kaydedilemez",
+    "pushStop": "Bu cihaza bildirim göndermeyi durdur",
+    "pushStart": "Takip ettiğin içerik üreticileri paylaşım yaptığında bildirim al",
+    "on": "Açık",
+    "notifyMe": "Bana bildir",
+    "empty": "Henüz bildirimin yok.",
+    "threeSpeakVideo": "3Speak videosu",
+    "group": {
+      "voteOne": "@{{a}} gönderine oy verdi",
+      "voteTwo": "@{{a}} ve @{{b}} gönderine oy verdi",
+      "voteMany_one": "@{{a}} ve {{count}} kişi daha gönderine oy verdi",
+      "voteMany_other": "@{{a}} ve {{count}} kişi daha gönderine oy verdi",
+      "withValue": "{{label}} (${{value}})",
+      "followOne": "@{{a}} seni takip etti",
+      "followTwo": "@{{a}} ve @{{b}} seni takip etti",
+      "followMany_one": "@{{a}} ve {{count}} kişi daha seni takip etti",
+      "followMany_other": "@{{a}} ve {{count}} kişi daha seni takip etti",
+      "other": "{{count}} {{type}} bildirimi",
+      "typeCount": "{{count}} {{type}}",
+      "includesWhale": "🐋 balina hesap(lar) içerir",
+      "includesOrca": "🐬 orka hesap(lar) içerir",
+      "andMore": "ve {{count}} tane daha…"
+    }
+  },
+  "search": {
+    "types": {
+      "users": "Kullanıcılar",
+      "communities": "Topluluklar",
+      "videos": "Videolar",
+      "shorts": "Shorts",
+      "audio": "Ses",
+      "playlists": "Oynatma listeleri"
+    },
+    "dates": {
+      "today": "Bugün",
+      "thisWeek": "Bu hafta",
+      "thisMonth": "Bu ay",
+      "thisYear": "Bu yıl"
+    },
+    "contentType": "İçerik türü",
+    "boostRecent": "Yenileri öne çıkar",
+    "dateRange": "Tarih aralığı",
+    "tag": "Etiket",
+    "tagPlaceholder": "örn. kripto, oyun...",
+    "community": "Topluluk",
+    "communityPlaceholder": "Topluluk ara...",
+    "clearFilters": "Tüm filtreleri temizle",
+    "allHidden": "Tüm içerik türleri gizli.",
+    "reenableFilters": "Tüm filtreleri yeniden aç",
+    "noResultsFor": "“{{term}}” için sonuç bulunamadı",
+    "searchFor": "“{{term}}” ara",
+    "authors_one": "{{count}} yazar",
+    "authors_other": "{{count}} yazar",
+    "subscribers_one": "{{count}} abone",
+    "subscribers_other": "{{count}} abone",
+    "views_one": "{{formatted}} görüntülenme",
+    "views_other": "{{formatted}} görüntülenme",
+    "tags": "Etiketler",
+    "titles": "Başlıklar",
+    "placeholder": "Ara..."
+  }
+}

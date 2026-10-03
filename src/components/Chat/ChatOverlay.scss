@@ -1,0 +1,122 @@
+// Floating chat panel (tablet/desktop). Loaded with the always-on overlay host,
+// so the frame is styled before the lazy chat chunk (chat.scss) arrives.
+@use "../../mixins.scss" as mix;
+
+$overlay-width: 380px;
+$overlay-gap: 12px;
+
+.chat-overlay {
+  position: fixed;
+  // Docked bottom-right, messenger style: below the nav menus and the toasts
+  // (both top-right), and it grows up from where a thread's newest messages
+  // and composer are anyway.
+  right: $overlay-gap;
+  bottom: $overlay-gap;
+  width: $overlay-width;
+  max-width: calc(100vw - #{$overlay-gap * 2});
+  // Never taller than the space under the nav bar (--nav-top-offset is its
+  // measured height, set by Nav.jsx).
+  height: min(640px, calc(100dvh - var(--nav-top-offset, 60px) - #{$overlay-gap * 2}));
+  // Below the nav (1000) so its own dropdowns still open over the panel.
+  z-index: 990;
+  display: flex;
+  flex-direction: column;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-light);
+  border-radius: 14px;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.35);
+  overflow: hidden;
+
+  // Tablet also has the fixed BottomNav; stop above it.
+  @include mix.respond(tab) {
+    bottom: calc(var(--bottom-nav-height, 56px) + #{$overlay-gap});
+    height: min(640px, calc(100dvh - var(--nav-top-offset, 60px) - var(--bottom-nav-height, 56px) - #{$overlay-gap * 2}));
+  }
+  // Phones use the /chat page (useOpenChat). If a window is narrowed with the
+  // panel open, get out of the way rather than squeezing it.
+  @include mix.respond(phone) {
+    display: none;
+  }
+}
+
+.chat-overlay-loading {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-muted);
+}
+.chat-overlay-spin { animation: chat-overlay-spin 0.8s linear infinite; }
+@keyframes chat-overlay-spin { to { transform: rotate(360deg); } }
+
+// Fullscreen: everything under the nav bar, which stays visible and usable
+// (z-index stays below its 1000, so its menus still open over the chat).
+.chat-overlay--expanded {
+  top: var(--nav-top-offset, 60px);
+  right: 0;
+  bottom: 0;
+  left: 0;
+  width: auto;
+  max-width: none;
+  height: auto;
+  border: none;
+  border-top: 1px solid var(--border-light);
+  border-radius: 0;
+  box-shadow: none;
+
+  // Tablet: keep the BottomNav visible too.
+  @include mix.respond(tab) {
+    bottom: var(--bottom-nav-height, 56px);
+    height: auto;
+  }
+}
+
+// ---- Chat inside the panel ----
+.chat-overlay .chat-page--overlay {
+  height: 100%;
+  flex: 1;
+  min-height: 0;
+  flex-direction: column;
+  background: transparent;
+
+  .chat-page-panes {
+    flex: 1;
+    min-height: 0;
+    display: flex;
+  }
+}
+
+// Small panel: one pane at a time, so the thread always needs its way back.
+.chat-overlay .chat-page--single {
+  .chat-thread-back { display: inline-flex; }
+  .chat-thread-header { padding: 8px 8px 8px 6px; gap: 8px; }
+  .chat-thread-title { flex: 1; min-width: 0; }
+
+  // Popovers hang off the composer tools, so keep them inside the panel's
+  // clipped box.
+  .chat-emoji-popover,
+  .chat-gif-popover { width: min(340px, calc(#{$overlay-width} - 24px)); }
+}
+
+.chat-overlay-head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 8px 8px 14px;
+  border-bottom: 1px solid var(--border-light);
+  flex: 0 0 auto;
+}
+.chat-overlay-title {
+  flex: 1;
+  min-width: 0;
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+.chat-overlay-actions {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  margin-left: auto;
+  flex: 0 0 auto;
+}

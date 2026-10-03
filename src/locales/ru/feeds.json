@@ -1,0 +1,131 @@
+{
+  "loadingMore": "Загружаем ещё…",
+  "promoted": "Продвигается",
+  "scrollLeft": "Прокрутить влево",
+  "scrollRight": "Прокрутить вправо",
+  "errors": {
+    "fetchVideos": "Ошибка получения видео",
+    "loadVideos": "Не удалось загрузить видео",
+    "loadShorts": "Не удалось загрузить Shorts"
+  },
+  "tabs": {
+    "all": "Все",
+    "videos": "Видео",
+    "shorts": "Shorts",
+    "videosCount": "Видео ({{count}})",
+    "shortsCount": "Shorts ({{count}})"
+  },
+  "dateFilters": {
+    "all": "За всё время",
+    "today": "Сегодня",
+    "week": "На этой неделе",
+    "month": "В этом месяце",
+    "justNow": "Только что"
+  },
+  "live": {
+    "title": "Сейчас в эфире",
+    "badge": "● ЭФИР"
+  },
+  "newFromFollowing": {
+    "aria": "Новое от авторов, на которых вы подписаны",
+    "shorts_one": "{{count}} ролик Shorts",
+    "shorts_few": "{{count}} ролика Shorts",
+    "shorts_many": "{{count}} роликов Shorts",
+    "shorts_other": "{{count}} ролика Shorts"
+  },
+  "firstUploads": {
+    "title": "Первые загрузки"
+  },
+  "newVideos": {
+    "title": "Новые видео"
+  },
+  "home": {
+    "sections": {
+      "discover": "Обзор",
+      "home": "Главная лента",
+      "follow": "Лента подписок",
+      "new": "Новое",
+      "interests": "Интересы"
+    },
+    "empty": "Здесь пока нечего показать.",
+    "viewAll": "Смотреть все",
+    "dragToReorder": "Перетащите, чтобы изменить порядок",
+    "surfTitle": "Переключение каналов: выберите тему и смотрите как ТВ",
+    "zapping": "Переключаем"
+  },
+  "surf": {
+    "pageTitle": "Переключение каналов",
+    "intro": "Выберите канал и расслабьтесь. Мы подберём лучшие видео на эту тему одно за другим. Скучно? Нажмите <b>Дальше</b>. Хотите другое? Переключите канал.",
+    "backTo": "Назад к CH {{number}} {{emoji}} {{title}}",
+    "surprise": "Удивите меня",
+    "yourChannels": "Ваши каналы",
+    "nothingOnAir": "Сейчас на {{channel}} ничего не идёт",
+    "tuneFailed": "Не удалось настроиться. Попробуйте чуть позже.",
+    "remoteAria": "Пульт переключения каналов",
+    "openGuide": "Открыть телепрограмму",
+    "ch": "CH {{number}}",
+    "chLabel": "CH",
+    "channelHint": "CH {{number}}: {{title}}",
+    "channelHintKey": "CH {{number}}: {{title}} ({{key}})",
+    "tuningShort": "Настройка",
+    "tuning": "Настройка…",
+    "onAir": "В эфире",
+    "changeChannel": "Сменить канал",
+    "nextChannel": "Следующий канал",
+    "prevChannel": "Предыдущий канал",
+    "nextVideo": "Следующее видео",
+    "nextVideoKey": "Следующее видео (→)",
+    "zap": "Дальше",
+    "findingNext": "Ищем следующее…",
+    "stop": "Выключить",
+    "stopTitle": "Выключить переключение (это видео продолжит играть)",
+    "guide": "Телепрограмма"
+  },
+  "discover": {
+    "searchPlaceholder": "Поиск видео, Shorts, аудио, сообществ...",
+    "clearSearch": "Очистить поиск",
+    "searchFor": "Искать «{{term}}»",
+    "noResultsFor": "По запросу «{{term}}» ничего не найдено",
+    "types": {
+      "user": "Пользователи",
+      "community": "Сообщества",
+      "video": "Видео",
+      "short": "Shorts",
+      "audio": "Аудио",
+      "playlist": "Плейлисты"
+    },
+    "suggest": {
+      "tags": "Теги",
+      "titles": "Названия"
+    },
+    "dates": {
+      "today": "Сегодня",
+      "week": "На этой неделе",
+      "month": "В этом месяце",
+      "year": "В этом году"
+    },
+    "boostRecent": "Сначала свежее",
+    "filters": "Фильтры",
+    "date": "Дата",
+    "tag": "Тег",
+    "tagPlaceholder": "напр. crypto, gaming...",
+    "community": "Сообщество",
+    "communityPlaceholder": "Поиск сообществ...",
+    "clearAllFilters": "Сбросить все фильтры",
+    "allHidden": "Все типы контента скрыты.",
+    "reenableFilters": "Включить все фильтры",
+    "groupTitle": "{{label}} ({{count}})",
+    "subscribers_one": "{{count}} подписчик",
+    "subscribers_few": "{{count}} подписчика",
+    "subscribers_many": "{{count}} подписчиков",
+    "subscribers_other": "{{count}} подписчика",
+    "authors_one": "{{count}} автор",
+    "authors_few": "{{count}} автора",
+    "authors_many": "{{count}} авторов",
+    "authors_other": "{{count}} автора",
+    "views_one": "{{views}} просмотр",
+    "views_few": "{{views}} просмотра",
+    "views_many": "{{views}} просмотров",
+    "views_other": "{{views}} просмотра"
+  }
+}

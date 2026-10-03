@@ -1,0 +1,40 @@
+{
+  "ariaLabel": "Cookie- und Speichereinstellungen",
+  "title": "Cookies & Browserspeicher",
+  "withAds": {
+    "intro": "3Speak speichert deine Anmeldung und die von dir gewählten Einstellungen in deinem Browser. Erst dadurch funktioniert die Seite, und diese Daten bleiben auf deinem Gerät. Zwei Dinge sind optional, und beide sind aus, solange du sie unten nicht einschaltest.",
+    "advertising": "Eines davon ist <b>Werbung</b>. Wenn sie eingeschaltet ist, lädt ein externes Werbeunternehmen seinen eigenen Code auf der Seite und kann Daten speichern, die wir nicht kontrollieren. Deshalb ist das eine eigene Entscheidung und wird nie mit etwas anderem gebündelt."
+  },
+  "noAds": {
+    "intro": "3Speak speichert deine Anmeldung und die von dir gewählten Einstellungen in deinem Browser – erst dadurch funktioniert die Seite. Wir verwenden <b>keine Tracking-Cookies, keine Werbung und keine Analyse-Tools von Drittanbietern</b>. Das Einzige, was das Ansehen eines Videos auf deinem Gerät speichern kann, ist die Stelle, an der du aufgehört hast – und das ist die eine optionale Wahl unten.",
+    "optional": "Die eine optionale Sache: Wir können uns merken, <b>wo du in jedem Video aufgehört hast</b>, damit die Wiedergabe dort weitergeht. Diese Daten verlassen nie dein Gerät."
+  },
+  "details": {
+    "essentialTitle": "Notwendig – immer aktiv",
+    "essential": {
+      "login": "Deine Anmeldesitzung",
+      "settings": "Deine Einstellungen: Design, Lautstärke, Sprache, Untertitel, Feed-Einstellungen",
+      "uploads": "Fortsetzen eines unterbrochenen Uploads und Entwürfe von Posts, die du gerade schreibst",
+      "offline": "Die App selbst, für die Offline-Nutzung nach der Installation",
+      "answer": "Deine Antwort auf diesen Hinweis"
+    },
+    "optionalTitle": "Optional – deine Wahl",
+    "optional": {
+      "playback": "Wiedergabeposition pro Video, damit du dort weitermachen kannst, wo du aufgehört hast",
+      "advertising": "Werbung: der Code eines externen Werbeunternehmens und alles, was es auf deinem Gerät speichert, um die dir angezeigten Anzeigen zu zählen und zu begrenzen"
+    },
+    "noteWithAds": "Wenn du diese Optionen ausgeschaltet lässt, werden keine Wiedergabepositionen mehr gespeichert, bereits gespeicherte werden gelöscht, und es wird überhaupt kein Werbecode geladen. Du kannst deine Meinung jederzeit ändern.",
+    "noteNoAds": "Mit „Nur notwendige“ werden keine Wiedergabepositionen mehr gespeichert und bereits gespeicherte gelöscht. Du kannst deine Meinung jederzeit ändern – mit „Annehmen“ wird es sofort wieder eingeschaltet."
+  },
+  "toggles": {
+    "resumeTitle": "Wiedergabe fortsetzen",
+    "resumeDesc": "Merkt sich, wo du in jedem Video aufgehört hast. Bleibt auf deinem Gerät.",
+    "advertisingTitle": "Werbung",
+    "advertisingDesc": "Erlaubt einem externen Werbeunternehmen, seinen Code zu laden und zu speichern, was es braucht."
+  },
+  "hideDetails": "Details ausblenden",
+  "whatIsStored": "Was genau wird gespeichert?",
+  "essentialOnly": "Nur notwendige",
+  "saveChoices": "Auswahl speichern",
+  "acceptAll": "Alle akzeptieren"
+}

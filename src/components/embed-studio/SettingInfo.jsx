@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
 import './SettingInfo.scss';
+import { useTranslation } from 'react-i18next';
 
 /**
  * The (i) beside a setting's short description, holding the long explanation.
@@ -27,6 +28,7 @@ import './SettingInfo.scss';
  * locked while open.
  */
 export function SettingSheet({ title, open, onClose, children }) {
+  const { t } = useTranslation();
   useEffect(() => {
     if (!open) return undefined;
     const onKey = (e) => { if (e.key === 'Escape') onClose(); };
@@ -52,7 +54,7 @@ export function SettingSheet({ title, open, onClose, children }) {
       >
         <div className="setting-info__head">
           <strong>{title}</strong>
-          <button type="button" aria-label="Close" onClick={(e) => { e.stopPropagation(); onClose(); }}>×</button>
+          <button type="button" aria-label={t('common.actions.close')} onClick={(e) => { e.stopPropagation(); onClose(); }}>×</button>
         </div>
         <div className="setting-info__body">{children}</div>
       </div>
@@ -62,6 +64,7 @@ export function SettingSheet({ title, open, onClose, children }) {
 }
 
 export default function SettingInfo({ title, children }) {
+  const { t } = useTranslation();
   const [open, setOpen] = useState(false);
 
   // Escape closes it, and the background must not scroll underneath a sheet.
@@ -82,8 +85,8 @@ export default function SettingInfo({ title, children }) {
       <button
         type="button"
         className="setting-info__trigger"
-        aria-label={`More about ${title}`}
-        title={`More about ${title}`}
+        aria-label={t('upload.settingInfo.moreAbout', { title })}
+        title={t('upload.settingInfo.moreAbout', { title })}
         onClick={(e) => {
           // The tile itself is not clickable today, but stop this anyway so the
           // (i) never doubles as a toggle if that changes.
@@ -106,7 +109,7 @@ export default function SettingInfo({ title, children }) {
           >
             <div className="setting-info__head">
               <strong>{title}</strong>
-              <button type="button" aria-label="Close" onClick={(e) => { e.stopPropagation(); setOpen(false); }}>×</button>
+              <button type="button" aria-label={t('common.actions.close')} onClick={(e) => { e.stopPropagation(); setOpen(false); }}>×</button>
             </div>
             <div className="setting-info__body">{children}</div>
           </div>

@@ -6,6 +6,7 @@ import { getFollowers, getRelationshipBetweenAccounts, isAccountValid } from '..
 import { isCreatorHidden as isModeratedCreatorHidden } from '../../utils/hiddenCreators';
 import { followWithAioha, isLoggedIn } from '../../hive-api/aioha';
 import { useLocation, useNavigate, useParams, useSearchParams } from 'react-router-dom';
+import { useOpenChat } from '../../hooks/useOpenChat';
 import "./UserProfilePage.scss"
 import BarLoader from '../Loader/BarLoader';
 import { Quantum } from 'ldrs/react'
@@ -48,15 +49,18 @@ import ProfileStats from '../ProfileHeader/ProfileStats';
 import ProfileOverview from './ProfileOverview';
 import ProfileLinksButton from './ProfileLinksButton';
 import ProfileEmptyState from './ProfileEmptyState';
+import { useTranslation, Trans } from 'react-i18next';
 
 // Every toast from this module is headed "Profile"; the message becomes the
 // line under it. See utils/toast.js.
 const toast = toastIn('Profile');
 
 function UserProfilePage() {
+    const { t } = useTranslation();
     const { user } = useParams();
     const [searchParams] = useSearchParams();
     const navigate = useNavigate()
+    const openChat = useOpenChat()
     const location = useLocation();
     const queryClient = useReactQueryClient();
     const { user: authenticatedUser, authenticated } = useAppStore();
@@ -227,7 +231,7 @@ function UserProfilePage() {
         : await hideCreator(authenticatedUser, user);
       setHideLoading(false);
       if (!ok) {
-        toast.error('Could not update. Please try again.');
+        toast.error(t('profile.page.hideUpdateFailed'));
         return;
       }
       // Refresh the toggle itself, then every feed that filters on it.
@@ -238,11 +242,11 @@ function UserProfilePage() {
 
       toast.success(
         isCreatorHidden
-          ? `@${user}'s videos will show in your feeds again`
-          : `Hiding @${user}'s videos from your feeds`,
+          ? t('profile.page.unhiddenToast', { user })
+          : t('profile.page.hiddenToast', { user }),
         {
           action: {
-            label: 'Undo',
+            label: t('profile.snaps.undo'),
             onClick: async () => {
               if (isCreatorHidden) await hideCreator(authenticatedUser, user);
               else await unhideCreator(authenticatedUser, user);
@@ -251,7 +255,7 @@ function UserProfilePage() {
           },
         }
       );
-    }, [authenticatedUser, user, isOwnProfile, isCreatorHidden, rqClient]);
+    }, [authenticatedUser, user, isOwnProfile, isCreatorHidden, rqClient, t]);
 
     // Redirect to /profile if viewing own profile
     useEffect(() => {
@@ -290,14 +294,14 @@ function UserProfilePage() {
     // Handle create playlist
     const handleCreatePlaylist = async () => {
       if (!newPlaylistName.trim()) {
-        toast.error('Please enter a playlist name');
+        toast.error(t('profile.playlists.enterName'));
         return;
       }
 
       setIsCreating(true);
       try {
         await createPlaylist(newPlaylistName.trim(), newPlaylistAccess);
-        toast.success('Playlist created! It may take a moment to appear.');
+        toast.success(t('profile.playlists.created'));
         setShowCreateModal(false);
         setNewPlaylistName('');
         setNewPlaylistAccess('public');
@@ -307,7 +311,7 @@ function UserProfilePage() {
           queryClient.invalidateQueries(['userPlaylists', user]);
         }, 3000);
       } catch (error) {
-        toast.error('Failed to create playlist: ' + error.message);
+        toast.error(t('profile.playlists.createFailed', { error: error.message }));
       } finally {
         setIsCreating(false);
       }
@@ -477,7 +481,7 @@ const {
         // Follow is the point of a profile, so the button shows to signed-out
         // visitors too — it just asks them to sign in (same as AuthorBadge).
         if (!authenticated) {
-          toast.error('Please login to follow users');
+          toast.error(t('profile.follow.loginRequired'));
           return;
         }
         if (followLoading) return;
@@ -487,10 +491,10 @@ const {
           setIsFollowing(!isFollowing);
           // Refresh follower count
           getFollowersCount(user);
-          toast.success(isFollowing ? `Unfollowed @${user}` : `Now following @${user}`);
+          toast.success(isFollowing ? t('profile.follow.unfollowed', { user }) : t('profile.follow.nowFollowing', { user }));
         } catch (err) {
           console.error('Follow error:', err);
-          toast.error('Follow action failed: ' + (err.message || 'Unknown error'));
+          toast.error(t('profile.follow.actionFailed', { error: err.message || t('profile.follow.unknownError') }));
         } finally {
           setFollowLoading(false);
         }
@@ -510,10 +514,10 @@ const {
         <div className="empty-wrap" style={{ padding: '4rem 1rem', textAlign: 'center' }}>
           <h2 style={{ fontSize: '3rem', marginBottom: '0.5rem' }}>404</h2>
           <p style={{ fontSize: '1.2rem', color: 'var(--text-secondary)', marginBottom: '1rem' }}>
-            User <strong>@{user}</strong> does not exist
+            <Trans i18nKey="profile.page.userNotFound" values={{ user }} components={{ b: <strong /> }} />
           </p>
           <button onClick={() => navigate('/')} style={{ padding: '10px 24px', borderRadius: '8px', background: 'var(--accent-primary, #e53935)', color: '#fff', border: 'none', cursor: 'pointer', fontSize: '14px' }}>
-            Go Home
+            {t('profile.page.goHome')}
           </button>
         </div>
       </div>
@@ -526,10 +530,10 @@ const {
       <div className="profile-page-container">
         <div className="empty-wrap" style={{ padding: '4rem 1rem', textAlign: 'center' }}>
           <p style={{ fontSize: '1.2rem', color: 'var(--text-secondary)', marginBottom: '1rem' }}>
-            This profile is not available.
+            {t('profile.page.notAvailable')}
           </p>
           <button onClick={() => navigate('/')} style={{ padding: '10px 24px', borderRadius: '8px', background: 'var(--accent-primary, #e53935)', color: '#fff', border: 'none', cursor: 'pointer', fontSize: '14px' }}>
-            Go Home
+            {t('profile.page.goHome')}
           </button>
         </div>
       </div>
@@ -554,17 +558,17 @@ const {
               onClick={handleFollowToggle}
               disabled={followLoading}
             >
-              {followLoading ? 'Loading...' : isFollowing ? 'Following' : 'Follow'}
+              {followLoading ? t('common.status.loading') : isFollowing ? t('common.actions.following') : t('common.actions.follow')}
             </button>
             <button
               className="btn btn-hero-message"
-              title={`Message @${user}`}
+              title={t('profile.page.messageTitle', { user })}
               onClick={() => {
-                if (!authenticated) { toast.error('Please login to send a message'); return; }
-                navigate(`/chat?dm=${encodeURIComponent(user)}`);
+                if (!authenticated) { toast.error(t('profile.page.messageLogin')); return; }
+                openChat({ dm: user });
               }}
             >
-              <MdChatBubbleOutline /> Message
+              <MdChatBubbleOutline /> {t('profile.page.message')}
             </button>
             {/* Narrow screens only: below 1025px the framed links page beside
                 Overview isn't rendered, so this is the way through to it. It
@@ -592,14 +596,14 @@ const {
                 onClick={handleHideToggle}
                 disabled={hideLoading}
                 title={isCreatorHidden
-                  ? `Show @${user}'s videos in your feeds again`
-                  : `Hide @${user}'s videos from all your feeds`}
+                  ? t('profile.page.unhideTitle', { user })
+                  : t('profile.page.hideTitle', { user })}
               >
                 {hideLoading
-                  ? 'Loading...'
+                  ? t('common.status.loading')
                   : isCreatorHidden
-                    ? <><IoEyeOutline /> Unhide</>
-                    : <><IoBanOutline /> Hide</>}
+                    ? <><IoEyeOutline /> {t('profile.page.unhide')}</>
+                    : <><IoBanOutline /> {t('profile.page.hide')}</>}
               </button>
             )}
             {/* Podcast / RSS feed for the channel. React 19 hoists the <link>
@@ -609,7 +613,7 @@ const {
             <link
               rel="alternate"
               type="application/rss+xml"
-              title={`${user} on 3Speak`}
+              title={t('profile.page.onThreeSpeak', { user })}
               href={`${window.location.origin}/rss/${user}.xml`}
             />
             <a
@@ -617,7 +621,7 @@ const {
               href={`/rss/${user}.xml`}
               target="_blank"
               rel="noreferrer"
-              title={`Podcast feed for @${user} — subscribe in any podcast app or RSS reader`}
+              title={t('profile.page.podcastFeedTitle', { user })}
             >
               <MdRssFeed />
             </a>
@@ -625,18 +629,18 @@ const {
               className="btn btn-secondary"
               onClick={async () => {
                 const profileUrl = `${window.location.origin}/@${user}`;
-                const shareData = { title: `${user} on 3Speak`, text: `Follow ${user} on 3Speak`, url: profileUrl };
+                const shareData = { title: t('profile.page.onThreeSpeak', { user }), text: t('profile.page.shareText', { user }), url: profileUrl };
                 try {
                   if (navigator.share && navigator.canShare?.(shareData)) {
                     await navigator.share(shareData);
                   } else {
                     await navigator.clipboard.writeText(profileUrl);
-                    toast.success('Profile link copied to clipboard!');
+                    toast.success(t('profile.page.linkCopied'));
                   }
                 } catch (err) {
                   if (err.name !== 'AbortError') {
                     await navigator.clipboard.writeText(profileUrl);
-                    toast.success('Profile link copied to clipboard!');
+                    toast.success(t('profile.page.linkCopied'));
                   }
                 }
               }}
@@ -646,7 +650,7 @@ const {
             <button
               className={`btn btn-secondary${isReported('user', user) ? ' reported' : ''}`}
               onClick={() => setIsReportOpen(true)}
-              title="Report user"
+              title={t('profile.page.reportUser')}
             >
               <MdFlag />
             </button>
@@ -655,42 +659,42 @@ const {
       />
       <div className="toggle-wrap">
         <div className="wrap" ref={tabsRef}>
-          <span className={show === "overview" ? "active" : ""} onClick={() => selectTab("overview")}>Overview</span>
+          <span className={show === "overview" ? "active" : ""} onClick={() => selectTab("overview")}>{t('profile.tabs.overview')}</span>
           <span className={show === "video" ? "active" : ""} onClick={() => selectTab("video")}>
-            Videos {videoCount > 0 && `(${videoCount})`}
+            {t('profile.tabs.videos')} {videoCount > 0 && `(${videoCount})`}
           </span>
           <span className={show === "shorts" ? "active" : ""} onClick={() => selectTab("shorts")}>
-            Shorts {shortsCount > 0 && `(${shortsCount})`}
+            {t('profile.tabs.shorts')} {shortsCount > 0 && `(${shortsCount})`}
           </span>
           <span className={show === "audio" ? "active" : ""} onClick={() => selectTab("audio")}>
-            Audio {audioCount > 0 && `(${audioCount})`}
+            {t('profile.tabs.audio')} {audioCount > 0 && `(${audioCount})`}
           </span>
           {hasGated && (
             <span className={show === "supporters" ? "active" : ""} onClick={() => selectTab("supporters")}>
-              🔒 Supporters ({gatedVideos.length})
+              🔒 {t('profile.tabs.supporters')} ({gatedVideos.length})
             </span>
           )}
           {streamCount > 0 && (
             <span className={show === "streams" ? "active" : ""} onClick={() => selectTab("streams")}>
-              Streams ({streamCount})
+              {t('profile.tabs.streams')} ({streamCount})
             </span>
           )}
           <span className={show === "community" ? "active" : ""} onClick={() => selectTab("community")}>
-            Community {snapCount > 0 && `(${snapCount})`}
+            {t('profile.tabs.community')} {snapCount > 0 && `(${snapCount})`}
           </span>
           <span className={show === "playlists" ? "active" : ""} onClick={() => selectTab("playlists")}>
-            Playlists {playlists.length > 0 && `(${playlists.length})`}
+            {t('profile.tabs.playlists')} {playlists.length > 0 && `(${playlists.length})`}
           </span>
           {isOwnProfile && (
-            <span className={show === "links" ? "active" : ""} onClick={() => selectTab("links")}>Links</span>
+            <span className={show === "links" ? "active" : ""} onClick={() => selectTab("links")}>{t('profile.tabs.links')}</span>
           )}
           {canSeeStats && (
-            <span className={show === "stats" ? "active" : ""} onClick={() => selectTab("stats")}>Analytics</span>
+            <span className={show === "stats" ? "active" : ""} onClick={() => selectTab("stats")}>{t('profile.tabs.analytics')}</span>
           )}
           {/* Wallet navigates away rather than switching tabs, but it lives IN
               the tab flow: floated outside it, it took its own line on a phone
               and pushed the last tab onto a third. */}
-          <span className="tab-wallet" onClick={()=>{handleWalletNavigate(user)}}>Wallet</span>
+          <span className="tab-wallet" onClick={()=>{handleWalletNavigate(user)}}>{t('common.nav.wallet')}</span>
         </div>
       </div>
       <div className="container-video">
@@ -739,7 +743,7 @@ const {
     <>
       {isOwnProfile && (
         <button className="create-playlist-btn" onClick={() => setShowCreateModal(true)}>
-          <IoMdAdd /> Create Playlist
+          <IoMdAdd /> {t('profile.playlists.create')}
         </button>
       )}
       {playlistsLoading ? (
@@ -764,33 +768,33 @@ const {
       {showCreateModal && (
         <div className="create-playlist-modal-overlay" onClick={() => setShowCreateModal(false)}>
           <div className="create-playlist-modal" onClick={(e) => e.stopPropagation()}>
-            <h3>Create New Playlist</h3>
+            <h3>{t('profile.playlists.modalTitle')}</h3>
             <div className="form-group">
-              <label>Playlist Name</label>
+              <label>{t('profile.playlists.nameLabel')}</label>
               <input
                 type="text"
                 value={newPlaylistName}
                 onChange={(e) => setNewPlaylistName(e.target.value)}
-                placeholder="Enter playlist name"
+                placeholder={t('profile.playlists.namePlaceholder')}
                 autoFocus
               />
             </div>
             <div className="form-group">
-              <label>Visibility</label>
+              <label>{t('profile.playlists.visibility')}</label>
               <select
                 value={newPlaylistAccess}
                 onChange={(e) => setNewPlaylistAccess(e.target.value)}
               >
-                <option value="public">Public</option>
-                <option value="private">Private</option>
+                <option value="public">{t('profile.playlists.public')}</option>
+                <option value="private">{t('profile.playlists.private')}</option>
               </select>
             </div>
             <div className="modal-actions">
               <button className="btn-cancel" onClick={() => setShowCreateModal(false)} disabled={isCreating}>
-                Cancel
+                {t('common.actions.cancel')}
               </button>
               <button className="btn-create" onClick={handleCreatePlaylist} disabled={isCreating}>
-                {isCreating ? 'Creating...' : 'Create Playlist'}
+                {isCreating ? t('profile.playlists.creating') : t('profile.playlists.create')}
               </button>
             </div>
           </div>
@@ -818,13 +822,13 @@ const {
                 {authenticated && isLoggedIn() && (
                   <div className="profile-fab-action">
                     <span className="profile-fab-action-label">
-                      {isFollowing ? 'Unfollow' : 'Follow'}
+                      {isFollowing ? t('common.actions.unfollow') : t('common.actions.follow')}
                     </span>
                     <button
                       className={`profile-fab-action-btn${isFollowing ? ' profile-fab-action-btn--active' : ''}`}
                       onClick={() => { handleFollowToggle(); setFabOpen(false); }}
                       disabled={followLoading}
-                      aria-label={isFollowing ? 'Unfollow' : 'Follow'}
+                      aria-label={isFollowing ? t('common.actions.unfollow') : t('common.actions.follow')}
                     >
                       {isFollowing ? <RiUserUnfollowLine size={20} /> : <RiUserFollowLine size={20} />}
                     </button>
@@ -833,11 +837,11 @@ const {
 
                 {authenticated && isLoggedIn() && (
                   <div className="profile-fab-action">
-                    <span className="profile-fab-action-label">Tip</span>
+                    <span className="profile-fab-action-label">{t('profile.fab.tip')}</span>
                     <button
                       className="profile-fab-action-btn"
                       onClick={() => { setIsTipModalOpen(true); setFabOpen(false); }}
-                      aria-label="Tip creator"
+                      aria-label={t('profile.fab.tipCreator')}
                     >
                       <BiDollar size={20} />
                     </button>
@@ -846,14 +850,14 @@ const {
 
                 {latestVideo && (
                   <div className="profile-fab-action">
-                    <span className="profile-fab-action-label">Latest Video</span>
+                    <span className="profile-fab-action-label">{t('profile.fab.latestVideo')}</span>
                     <button
                       className="profile-fab-action-btn"
                       onClick={() => {
                         setFabOpen(false);
                         navigate(`/watch?v=${latestVideo.author}/${latestVideo.permlink}`);
                       }}
-                      aria-label="Watch latest video"
+                      aria-label={t('profile.fab.watchLatestVideo')}
                     >
                       <MdPlayArrow size={22} />
                     </button>
@@ -862,14 +866,14 @@ const {
 
                 {latestShort && (
                   <div className="profile-fab-action">
-                    <span className="profile-fab-action-label">Latest Short</span>
+                    <span className="profile-fab-action-label">{t('profile.fab.latestShort')}</span>
                     <button
                       className="profile-fab-action-btn"
                       onClick={() => {
                         setFabOpen(false);
                         navigate(`/shorts?v=${latestShort.author}/${latestShort.permlink}&user=${user}`);
                       }}
-                      aria-label="Watch latest short"
+                      aria-label={t('profile.fab.watchLatestShort')}
                     >
                       <ShortsIcon className="profile-fab-shorts-icon" outlineWidth={30} />
                     </button>
@@ -881,7 +885,7 @@ const {
             <button
               className="profile-fab-main"
               onClick={() => setFabOpen(prev => !prev)}
-              aria-label={fabOpen ? 'Close menu' : 'Open actions'}
+              aria-label={fabOpen ? t('profile.fab.closeMenu') : t('profile.fab.openActions')}
             >
               {fabOpen ? <MdClose size={24} /> : <MdAdd size={24} />}
             </button>

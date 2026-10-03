@@ -1,0 +1,81 @@
+{
+  "buckets": {
+    "today": "Aujourd'hui",
+    "yesterday": "Hier",
+    "thisWeek": "Cette semaine",
+    "thisMonth": "Ce mois-ci",
+    "older": "Plus anciennes"
+  },
+  "loginRequired": "Connectez-vous pour voir vos notifications.",
+  "unreadChip_one": "{{count}} nouvelle",
+  "unreadChip_many": "{{count}} nouvelles",
+  "unreadChip_other": "{{count}} nouvelles",
+  "markAllTitle": "Tout marquer comme lu",
+  "marking": "Marquage…",
+  "markAllRead": "Tout marquer comme lu",
+  "refreshing": "Actualisation…",
+  "categories": {
+    "all": "Tout",
+    "replies": "Réponses",
+    "mentions": "Mentions",
+    "votes": "Votes",
+    "reblogs": "Reblogs",
+    "follows": "Abonnements",
+    "transfers": "Transferts"
+  },
+  "unread": "Non lues",
+  "summary": {
+    "title": "Activité",
+    "today": "Aujourd'hui",
+    "week": "Cette semaine",
+    "month": "Ce mois-ci",
+    "emptyToday": "Aucune activité aujourd'hui pour l'instant.",
+    "emptyWeek": "Aucune activité cette semaine pour l'instant.",
+    "stillLoading": "Chargement des notifications plus anciennes…",
+    "emptyMonth": "Aucune activité ce mois-ci."
+  },
+  "loadError": "Impossible de charger les notifications.",
+  "empty": {
+    "all": "Vous n'avez pas encore de notifications.",
+    "unread": "Aucune notification non lue.",
+    "replies": "Aucune réponse pour l'instant.",
+    "mentions": "Aucune mention pour l'instant.",
+    "votes": "Aucun vote pour l'instant.",
+    "reblogs": "Aucun reblog pour l'instant.",
+    "follows": "Aucun abonnement pour l'instant.",
+    "transfers": "Aucun transfert pour l'instant."
+  },
+  "threeSpeakVideo": "Vidéo 3Speak",
+  "end": "Vous êtes arrivé à la fin.",
+  "cards": {
+    "votes": "Votes",
+    "voters_one": "{{count}} votant",
+    "voters_many": "{{count}} votants",
+    "voters_other": "{{count}} votants",
+    "replies": "Réponses",
+    "newFollowers": "Nouveaux abonnés",
+    "mentions": "Mentions",
+    "reblogs": "Reblogs",
+    "transfers": "Transferts"
+  },
+  "group": {
+    "voteOne": "@{{user}} a voté pour votre publication",
+    "voteTwo": "@{{user}} et @{{user2}} ont voté pour votre publication",
+    "voteMany_one": "@{{user}} et {{count}} autre personne ont voté pour votre publication",
+    "voteMany_many": "@{{user}} et {{count}} autres personnes ont voté pour votre publication",
+    "voteMany_other": "@{{user}} et {{count}} autres personnes ont voté pour votre publication",
+    "followOne": "@{{user}} a commencé à vous suivre",
+    "followTwo": "@{{user}} et @{{user2}} ont commencé à vous suivre",
+    "followMany_one": "@{{user}} et {{count}} autre personne ont commencé à vous suivre",
+    "followMany_many": "@{{user}} et {{count}} autres personnes ont commencé à vous suivre",
+    "followMany_other": "@{{user}} et {{count}} autres personnes ont commencé à vous suivre",
+    "generic_one": "{{count}} notification {{type}}",
+    "generic_many": "{{count}} notifications {{type}}",
+    "generic_other": "{{count}} notifications {{type}}",
+    "typeCount_one": "{{count}} {{type}}",
+    "typeCount_many": "{{count}} {{type}}",
+    "typeCount_other": "{{count}} {{type}}",
+    "collapse": "▾ réduire",
+    "expand": "▸ développer"
+  }
+}

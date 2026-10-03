@@ -3,6 +3,7 @@ import { getHiveUrl } from '../../utils/hiveNode';
 import { createPortal } from 'react-dom';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import {
   MdPlayArrow, MdPause, MdSkipNext, MdSkipPrevious,
   MdQueueMusic, MdPlaylistPlay, MdClose, MdDragIndicator, MdDelete,
@@ -67,7 +68,7 @@ function audioThumb(item) {
   if (!item) return fallbackImg;
   const fixed = fixVideoThumbnail({ thumbnail_url: item.thumbnail_url, thumbnail: item.thumbnail_url });
   if (!fixed || fixed === fallbackImg || fixed === '/images/speak.jpg') {
-    return `https://images.hive.blog/u/${item.owner}/avatar/small`;
+    return `/img/u/${item.owner}/avatar/small`;
   }
   return fixed;
 }
@@ -99,6 +100,7 @@ function srtT(t) {
 }
 
 function GlobalAudioPlayer() {
+  const { t } = useTranslation();
   const {
     audioCurrent, audioQueue, audioAutoplayList,
     audioIsPlaying, audioCurrentTime, audioDuration,
@@ -273,9 +275,9 @@ function GlobalAudioPlayer() {
     const onError = () => {
       const i = AUDIO_GATEWAYS.findIndex(g => el.src === `${g}/${cid}`);
       if (i < 0 || i + 1 >= AUDIO_GATEWAYS.length) return;
-      const t = el.currentTime;
+      const pos = el.currentTime;
       el.src = `${AUDIO_GATEWAYS[i + 1]}/${cid}`;
-      if (t) el.currentTime = t;
+      if (pos) el.currentTime = pos;
       el.play().catch(() => {});
     };
     el.addEventListener('error', onError);
@@ -334,7 +336,7 @@ function GlobalAudioPlayer() {
 
       try {
         const meta = JSON.parse(data.json_metadata || '{}');
-        setNpTags(Array.isArray(meta.tags) ? meta.tags.filter(t => t && typeof t === 'string') : []);
+        setNpTags(Array.isArray(meta.tags) ? meta.tags.filter(tag => tag && typeof tag === 'string') : []);
         setNpMantecurated(meta.tags?.includes('mantecurated') || false);
       } catch {
         setNpTags([]); setNpMantecurated(false);
@@ -435,9 +437,9 @@ function GlobalAudioPlayer() {
                 navigate(`/audio/${nowPlaying.owner}/${nowPlaying.post_permlink}`);
                 audioSetExpanded(false);
               }}
-              title={nowPlaying.post_permlink ? 'Open audio post' : ''}
+              title={nowPlaying.post_permlink ? t('audio.player.openPost') : ''}
             >
-              <span className="audio-np-title-text">{nowPlaying.title || 'Untitled'}</span>
+              <span className="audio-np-title-text">{nowPlaying.title || t('audio.untitled')}</span>
               {nowPlaying.post_permlink && (
                 <MdOpenInNew className="audio-np-title-icon" size={12} aria-hidden />
               )}
@@ -453,12 +455,12 @@ function GlobalAudioPlayer() {
           </div>
 
           <div className="audio-np-extras">
-            {loggedIn && <button className="audio-np-playlist-btn" onClick={() => setPlaylistTarget({ author: nowPlaying.owner, permlink: nowPlaying.post_permlink || nowPlaying.permlink, title: nowPlaying.title })} title="Playlist"><MdPlaylistPlay size={20} /></button>}
+            {loggedIn && <button className="audio-np-playlist-btn" onClick={() => setPlaylistTarget({ author: nowPlaying.owner, permlink: nowPlaying.post_permlink || nowPlaying.permlink, title: nowPlaying.title })} title={t('audio.player.playlist')}><MdPlaylistPlay size={20} /></button>}
             <div className="audio-np-share-wrap">
-              <button className="audio-np-share-btn" onClick={() => setShareTarget(shareTarget?._id === nowPlaying._id ? null : nowPlaying)} title="Share"><MdShare size={16} /></button>
+              <button className="audio-np-share-btn" onClick={() => setShareTarget(shareTarget?._id === nowPlaying._id ? null : nowPlaying)} title={t('common.actions.share')}><MdShare size={16} /></button>
               {shareTarget?._id === nowPlaying._id && <AudioShareDropdown item={nowPlaying} onClose={() => setShareTarget(null)} />}
             </div>
-            {subtitleData && <button className={`audio-np-sub-btn${showSubtitles ? ' active' : ''}`} onClick={() => setShowSubtitles(!showSubtitles)} title="Transcript"><MdSubtitles size={18} /></button>}
+            {subtitleData && <button className={`audio-np-sub-btn${showSubtitles ? ' active' : ''}`} onClick={() => setShowSubtitles(!showSubtitles)} title={t('audio.player.transcript')}><MdSubtitles size={18} /></button>}
             <span className="audio-np-time">{fmt(audioCurrentTime)} / {fmt(audioDuration)}</span>
           </div>
 
@@ -473,12 +475,12 @@ function GlobalAudioPlayer() {
               className="audio-np-btn audio-np-vol-btn"
               onClick={openVol}
               onDoubleClick={() => setMuted(m => !m)}
-              title="Volume"
+              title={t('audio.player.volume')}
             >
               {muted || volume === 0 ? <MdVolumeOff size={20} /> : <MdVolumeUp size={20} />}
             </button>
           </div>
-          <button className="audio-np-queue-btn" onClick={() => audioSetShowQueue(v => !v)} title="Queue">
+          <button className="audio-np-queue-btn" onClick={() => audioSetShowQueue(v => !v)} title={t('audio.player.queue')}>
             <MdQueueMusic size={20} />
             {audioQueue.length > 0 && <span className="audio-np-queue-badge">{audioQueue.length}</span>}
           </button>
@@ -494,7 +496,7 @@ function GlobalAudioPlayer() {
               }
               audioStop();
             }}
-            title="Close player"
+            title={t('audio.player.closePlayer')}
           ><MdClose size={18} /></button>
         </div>
 
@@ -505,12 +507,12 @@ function GlobalAudioPlayer() {
               {nowPlaying.post_permlink && (
                 <UpvoteCount count={npVoteCount} voted={npIsVoted} onClick={() => { if (!loggedIn) return; setVoteTarget({ author: nowPlaying.owner, permlink: nowPlaying.post_permlink }); setShowVoteTooltip(!showVoteTooltip); }} size={12} />
               )}
-              {loggedIn && <button className="audio-np-playlist-btn" onClick={() => setPlaylistTarget({ author: nowPlaying.owner, permlink: nowPlaying.post_permlink || nowPlaying.permlink, title: nowPlaying.title })} title="Playlist"><MdPlaylistPlay size={18} /></button>}
+              {loggedIn && <button className="audio-np-playlist-btn" onClick={() => setPlaylistTarget({ author: nowPlaying.owner, permlink: nowPlaying.post_permlink || nowPlaying.permlink, title: nowPlaying.title })} title={t('audio.player.playlist')}><MdPlaylistPlay size={18} /></button>}
               <div className="audio-np-share-wrap">
-                <button className="audio-np-share-btn" onClick={() => setShareTarget(shareTarget?._id === nowPlaying._id ? null : nowPlaying)} title="Share"><MdShare size={16} /></button>
+                <button className="audio-np-share-btn" onClick={() => setShareTarget(shareTarget?._id === nowPlaying._id ? null : nowPlaying)} title={t('common.actions.share')}><MdShare size={16} /></button>
                 {shareTarget?._id === nowPlaying._id && <AudioShareDropdown item={nowPlaying} onClose={() => setShareTarget(null)} />}
               </div>
-              {subtitleData && <button className={`audio-np-sub-btn${showSubtitles ? ' active' : ''}`} onClick={() => setShowSubtitles(!showSubtitles)} title="Transcript"><MdSubtitles size={16} /></button>}
+              {subtitleData && <button className={`audio-np-sub-btn${showSubtitles ? ' active' : ''}`} onClick={() => setShowSubtitles(!showSubtitles)} title={t('audio.player.transcript')}><MdSubtitles size={16} /></button>}
               <span className="audio-np-time">{fmt(audioCurrentTime)} / {fmt(audioDuration)}</span>
             </div>
 
@@ -530,9 +532,9 @@ function GlobalAudioPlayer() {
               <>
                 {(npTags.length > 0 || npMantecurated) && (
                   <div className="audio-np-tags">
-                    {npMantecurated && <span className="audio-np-curated-badge"><img src={mantequillaLogo} alt="" /> Curated</span>}
-                    {npTags.filter(t => t !== 'mantecurated').slice(0, 8).map(t => (
-                      <span key={t} className="audio-np-tag" onClick={() => { navigate(`/audio?tag=${encodeURIComponent(t)}`); audioSetExpanded(false); }}>#{t}</span>
+                    {npMantecurated && <span className="audio-np-curated-badge"><img src={mantequillaLogo} alt="" /> {t('audio.player.curated')}</span>}
+                    {npTags.filter(tag => tag !== 'mantecurated').slice(0, 8).map(tag => (
+                      <span key={tag} className="audio-np-tag" onClick={() => { navigate(`/audio?tag=${encodeURIComponent(tag)}`); audioSetExpanded(false); }}>#{tag}</span>
                     ))}
                   </div>
                 )}
@@ -550,7 +552,7 @@ function GlobalAudioPlayer() {
         {showSubtitles && subtitleData?.subtitles && (
           <div className="audio-transcript-panel">
             <div className="audio-transcript-header">
-              <span className="audio-transcript-label"><MdSubtitles size={14} /> Transcript</span>
+              <span className="audio-transcript-label"><MdSubtitles size={14} /> {t('audio.player.transcript')}</span>
               <div className="audio-transcript-langs">
                 {Object.keys(subtitleData.subtitles).map(l => (
                   <button key={l} className={`audio-lang-btn${selectedLang === l ? ' active' : ''}`} onClick={() => setSelectedLang(l)}>{l.toUpperCase()}</button>
@@ -558,7 +560,7 @@ function GlobalAudioPlayer() {
               </div>
             </div>
             {loadingSubs ? (
-              <div className="audio-transcript-loading">Loading…</div>
+              <div className="audio-transcript-loading">{t('common.status.loading')}</div>
             ) : subtitleCues.length > 0 ? (
               <div className="audio-transcript-cues">
                 {subtitleCues.map((cue, idx) => (
@@ -570,7 +572,7 @@ function GlobalAudioPlayer() {
                   </div>
                 ))}
               </div>
-            ) : <div className="audio-transcript-loading">No cues.</div>}
+            ) : <div className="audio-transcript-loading">{t('audio.player.noCues')}</div>}
           </div>
         )}
       </div>
@@ -579,25 +581,25 @@ function GlobalAudioPlayer() {
         <div className="audio-queue-overlay" onClick={() => audioSetShowQueue(false)}>
           <div className="audio-queue-panel" onClick={e => e.stopPropagation()}>
             <div className="audio-queue-header">
-              <h3>Queue <span className="audio-queue-count">{audioQueue.length}</span></h3>
+              <h3>{t('audio.player.queue')} <span className="audio-queue-count">{audioQueue.length}</span></h3>
               <div className="audio-queue-header-actions">
                 {audioQueue.length > 0 && (
-                  <button className="audio-queue-clear" onClick={audioClearQueue} title="Clear queue">
-                    <MdDelete size={16} /> Clear all
+                  <button className="audio-queue-clear" onClick={audioClearQueue} title={t('audio.player.clearQueue')}>
+                    <MdDelete size={16} /> {t('audio.player.clearAll')}
                   </button>
                 )}
                 <button className="audio-queue-close" onClick={() => audioSetShowQueue(false)}><MdClose size={20} /></button>
               </div>
             </div>
             {audioQueue.length === 0 ? (
-              <p className="audio-queue-empty">Queue is empty.</p>
+              <p className="audio-queue-empty">{t('audio.player.queueEmpty')}</p>
             ) : (
               <ul className="audio-queue-list">{audioQueue.map((item, idx) => (
                 <li key={item._id} className={`audio-queue-item${audioCurrent?._id === item._id ? ' current' : ''}`}>
                   <span className="audio-queue-drag"><MdDragIndicator size={16} /></span>
                   <img className="audio-queue-thumb" src={audioThumb(item)} alt="" onError={e => { e.currentTarget.src = fallbackImg; }} />
                   <div className="audio-queue-info" onClick={() => audioPlay(item)}>
-                    <span className="audio-queue-title">{item.title || 'Untitled'}</span>
+                    <span className="audio-queue-title">{item.title || t('audio.untitled')}</span>
                     <span className="audio-queue-author">@{item.owner} · {fmt(item.duration)}</span>
                   </div>
                   <div className="audio-queue-actions">
@@ -658,7 +660,7 @@ function GlobalAudioPlayer() {
               if (v > 0 && muted) setMuted(false);
               if (v === 0) setMuted(true);
             }}
-            aria-label="Volume"
+            aria-label={t('audio.player.volume')}
           />
         </div>,
         document.body
@@ -668,6 +670,7 @@ function GlobalAudioPlayer() {
 }
 
 export function AudioShareDropdown({ item, onClose }) {
+  const { t } = useTranslation();
   const ref = useRef(null);
   const author = item?.owner;
   const threeSpeakUrl = `${window.location.origin}/audio?play=${author}/${item?.permlink}`;
@@ -695,19 +698,19 @@ export function AudioShareDropdown({ item, onClose }) {
     return () => document.removeEventListener('mousedown', h);
   }, [onClose]);
 
-  const copy = (text, label) => {
+  const copy = (text, successMsg) => {
     navigator.clipboard.writeText(text).then(() => {
-      import('sonner').then(({ toast }) => toast.success(`${label} link copied!`));
-    }).catch(() => import('sonner').then(({ toast }) => toast.error('Failed')));
+      import('sonner').then(({ toast }) => toast.success(successMsg));
+    }).catch(() => import('sonner').then(({ toast }) => toast.error(t('audio.share.failed'))));
     onClose();
   };
 
   return (
     <div className="audio-share-dropdown" ref={ref}>
-      {hivePermlink && <button className="audio-share-option" onClick={() => copy(`https://peakd.com/@${author}/${hivePermlink}`, 'PeakD')}><MdContentCopy size={14} /><span>Copy PeakD link</span></button>}
-      {searching && !hivePermlink && <span className="audio-share-loading">Searching Hive…</span>}
-      <button className="audio-share-option" onClick={() => copy(threeSpeakUrl, '3Speak')}><MdContentCopy size={14} /><span>Copy 3Speak link</span></button>
-      <button className="audio-share-option" onClick={() => copy(audioPlayerUrl, 'Audio player')}><MdContentCopy size={14} /><span>Copy audio player link</span></button>
+      {hivePermlink && <button className="audio-share-option" onClick={() => copy(`https://peakd.com/@${author}/${hivePermlink}`, t('audio.share.copiedPeakd'))}><MdContentCopy size={14} /><span>{t('audio.share.copyPeakd')}</span></button>}
+      {searching && !hivePermlink && <span className="audio-share-loading">{t('audio.share.searchingHive')}</span>}
+      <button className="audio-share-option" onClick={() => copy(threeSpeakUrl, t('audio.share.copied3speak'))}><MdContentCopy size={14} /><span>{t('audio.share.copy3speak')}</span></button>
+      <button className="audio-share-option" onClick={() => copy(audioPlayerUrl, t('audio.share.copiedAudioPlayer'))}><MdContentCopy size={14} /><span>{t('audio.share.copyAudioPlayer')}</span></button>
     </div>
   );
 }

@@ -1,0 +1,96 @@
+{
+  "backToOpenPods": "Kembali ke OpenPods",
+  "modal": {
+    "leaveConfirm": "Keluar dari OpenPod ini? Kamu bisa bergabung lagi dari lobi kapan saja.",
+    "yourStreamEnded": "Siaranmu sudah berakhir",
+    "thisStreamEnded": "Siaran ini sudah berakhir",
+    "noLongerLive": "Siaran ini sudah tidak live. Mulai yang baru kapan pun kamu siap.",
+    "recordingProcessing": "Mantap! Rekamanmu sedang diproses dan akan segera muncul di postingan pengumuman.",
+    "thanksForLive": "Mantap — terima kasih sudah live!",
+    "backHome": "Kembali ke Beranda",
+    "howWasStream": "Bagaimana siaranmu?",
+    "connecting": "Menghubungkan ke OpenPods…",
+    "authenticating": "Mengautentikasi dengan OpenPods…"
+  },
+  "strip": {
+    "liveNow_other": "<n>{{count}}</n> OpenPods sedang live",
+    "viewAll": "Lihat semua",
+    "joinAria": "Gabung OpenPod: {{title}}"
+  },
+  "announce": {
+    "selectCommunity": "Pilih Komunitas",
+    "shareToggle": "📣 Bagikan siaran ini di Hive dan 3Speak saat dimulai",
+    "community": "Komunitas",
+    "rewards": "Reward",
+    "rewardDefault": "Default 50/50",
+    "rewardPowerup": "Power up 100%",
+    "rewardDecline": "Tolak payout",
+    "beneficiaries": "Penerima manfaat",
+    "beneProHint": "Kamu pakai 3Speak Pro — tanpa biaya platform. Tambahkan pembagian jika mau.",
+    "beneLockedHint": "10% untuk @threespeakfund terkunci. Kamu bisa menambahkan lagi."
+  },
+  "boost": {
+    "label": "Boost",
+    "sendTo": "Kirim boost ke @{{user}}",
+    "send": "Kirim boost"
+  },
+  "clip": {
+    "saved": "Klip disimpan ke unduhanmu.",
+    "slowDown": "Tunggu sebentar, lalu klip lagi.",
+    "failed": "Klip tidak dapat dibuat. Coba lagi dalam beberapa detik.",
+    "title": "Klip 30 detik terakhir",
+    "label": "30 dtk",
+    "clipping": "Membuat klip…"
+  },
+  "report": {
+    "reasons": {
+      "harassment": "Pelecehan atau kebencian",
+      "sexual": "Konten seksual atau eksplisit",
+      "violence": "Kekerasan atau tindakan berbahaya",
+      "selfharm": "Menyakiti diri sendiri",
+      "illegal": "Konten ilegal",
+      "spam": "Spam atau penipuan",
+      "other": "Hal lain"
+    },
+    "sent": "Terima kasih — siaran ini sudah dilaporkan ke tim kami.",
+    "failed": "Laporan tidak dapat dikirim. Silakan coba lagi.",
+    "title": "Laporkan siaran ini",
+    "reporting": "Melaporkan <b>@{{host}}</b>.",
+    "intro": "Beri tahu kami apa masalahnya — tim kami meninjau setiap laporan.",
+    "detailPlaceholder": "Tambahkan detail (opsional)",
+    "sending": "Mengirim…",
+    "submit": "Kirim laporan"
+  },
+  "signIn": {
+    "waitingWallet": "Menunggu dompetmu…"
+  },
+  "publish": {
+    "errors": {
+      "noTitle": "Silakan tambahkan judul",
+      "noAudio": "URL audio tidak ditemukan",
+      "failed": "Gagal menerbitkan. Silakan coba lagi."
+    },
+    "published": "Rekaman diterbitkan ke Hive!",
+    "loginGate": "Masuk untuk menerbitkan rekamanmu.",
+    "heading": "Terbitkan Rekaman OpenPod",
+    "previewLabel": "Pratinjau rekaman",
+    "previewHint": "Periksa audionya sebelum diterbitkan. Ini pemutar yang sama dengan yang akan dilihat pembaca di postingan.",
+    "recordingFallback": "Rekaman OpenPod",
+    "title": "Judul",
+    "titlePlaceholder": "Beri judul rekamanmu",
+    "description": "Deskripsi",
+    "optional": "(opsional)",
+    "descriptionPlaceholder": "Kalian membahas apa? Tambahkan catatan acara, tautan, atau ringkasan...",
+    "tags": "Tag",
+    "tagsPlaceholder": "Tag dipisahkan spasi",
+    "declinePayout": "Tolak Payout",
+    "publishing": "Menerbitkan…",
+    "submit": "Terbitkan Rekaman"
+  },
+  "lobby": {
+    "descriptionPlaceholder": "Sesi ini tentang apa? Tambahkan catatan acara, tautan, atau ringkasan…",
+    "enableHosting": "Aktifkan hosting & berbicara",
+    "handoverFailed": "Hosting tidak dapat diaktifkan secara otomatis. OpenPods memposting atas namamu lewat @threespeak — pastikan kamu sudah memberinya otoritas posting, lalu coba lagi.",
+    "signInToHost": "Masuk dengan Hive untuk menjadi host atau berbicara"
+  }
+}

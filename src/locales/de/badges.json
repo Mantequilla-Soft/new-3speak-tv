@@ -1,0 +1,98 @@
+{
+  "page": {
+    "fallbackTitle": "Badge",
+    "kpis": {
+      "recipients": "Empfänger",
+      "recentVideos": "Neueste Videos",
+      "issued": "Vergeben"
+    },
+    "issuedBy": "Vergeben von <creatorLink>@{{creator}}</creatorLink>",
+    "notFoundTitle": "Badge nicht gefunden",
+    "notFoundBody": "Ein Hive-Konto namens @{{account}} konnte gerade nicht gelesen werden.",
+    "browseAll": "Alle Badges durchsuchen",
+    "tabs": {
+      "videos": "Videos",
+      "recipients": "Empfänger",
+      "recipientsWithCount": "Empfänger ({{num}})"
+    },
+    "errorVideos": "Fehler beim Abrufen der Videos",
+    "noVideosTitle": "Noch keine Videos",
+    "noHolders": "Noch niemand hat dieses Badge.",
+    "noHolderVideos": "Noch niemand mit diesem Badge hat ein Video auf 3Speak veröffentlicht.",
+    "loadingMore": "Mehr wird geladen...",
+    "recipientsError": "Empfänger konnten nicht geladen werden",
+    "recipientsLoading": "Empfänger werden geladen...",
+    "noRecipientsTitle": "Noch keine Empfänger",
+    "noRecipientsBody": "Dieses Badge wurde bisher an niemanden verliehen.",
+    "recipientsSummary_one": "{{num}} Empfänger",
+    "recipientsSummary_other": "{{num}} Empfänger",
+    "recipientsSummaryWithVideos_one": "{{num}} Empfänger, {{publishing}} veröffentlichen auf 3Speak",
+    "recipientsSummaryWithVideos_other": "{{num}} Empfänger, {{publishing}} veröffentlichen auf 3Speak",
+    "recipientVideos_one": "{{num}} Video",
+    "recipientVideos_other": "{{num}} Videos",
+    "recipientNoVideos": "Keine Videos"
+  },
+  "directory": {
+    "title": "Badges",
+    "intro": "Badges sind Auszeichnungen, die <b>dir von anderen</b> auf Hive verliehen werden – für Events, Beiträge und Meilensteine. Du kannst keinem Badge beitreten: Jemand verleiht es dir. Öffne ein Badge, um zu sehen, was seine Empfänger hier veröffentlichen.",
+    "searchPlaceholder": "Badges suchen...",
+    "sort": {
+      "recipients": "Empfänger",
+      "created": "Erstellt",
+      "name": "Name"
+    },
+    "createLocked": "Um ein Badge zu erstellen, brauchst du ein Hive-Konto. Das wird freigeschaltet, sobald deins bereit ist.",
+    "create": "Badge erstellen",
+    "loadError": "Badges konnten gerade nicht geladen werden.",
+    "noMatch": "Kein Badge passt zu dieser Suche.",
+    "held": "Erhalten",
+    "recipients_one": "{{num}} Empfänger",
+    "recipients_other": "{{num}} Empfänger"
+  },
+  "award": {
+    "success": "@{{username}} hat jetzt {{title}}",
+    "failed": "Dieses Badge konnte nicht verliehen werden",
+    "dialogLabel": "Badge an {{username}} verleihen",
+    "title": "Badge verleihen",
+    "toUser": "an @{{username}}",
+    "awarding": "Wird verliehen…",
+    "held": "Erhalten",
+    "award": "Verleihen",
+    "note": "Das Badge folgt der Person auf Hive – genau das bedeutet es, ein Badge zu haben. Du kannst es auf der Seite des Badges wieder entziehen."
+  },
+  "hive": {
+    "dragToReorder": "Zum Sortieren ziehen",
+    "orderSaved": "Badge-Reihenfolge in deinem Hive-Profil gespeichert",
+    "orderSaveFailed": "Deine Badge-Reihenfolge konnte nicht gespeichert werden",
+    "dialogLabel": "Badges von @{{username}}",
+    "title": "Badges",
+    "arrangeHint": "Zieh deine Badges in die Reihenfolge, in der sie angezeigt werden sollen.",
+    "earnedCount_one": "{{count}} Badge von @{{username}} auf Hive erhalten",
+    "earnedCount_other": "{{count}} Badges von @{{username}} auf Hive erhalten",
+    "alwaysFirst": "Wird immer zuerst angezeigt",
+    "saveOrder": "Reihenfolge speichern",
+    "arrange": "Anordnen",
+    "arrangeTitle": "Wähle die Reihenfolge deiner Badges",
+    "showAll_one": "{{count}} Badge anzeigen",
+    "showAll_other": "Alle {{count}} Badges anzeigen",
+    "awardTitle": "Eines deiner Badges an @{{username}} verleihen"
+  },
+  "leaderboardBadges": {
+    "proTitle": "Dieser Creator unterstützt 3Speak mit einem Pro-Abo"
+  },
+  "leaderboard": {
+    "watchNotice": "Die Wiedergabezeit wird erst seit {{since}} erfasst, daher zeigen längere Zeiträume noch denselben kurzen Verlauf.",
+    "unclaimed": "Nicht beansprucht",
+    "noActivity": "In diesem Zeitraum noch keine Aktivität",
+    "otherTopics": "Sonstige",
+    "title": "Rankings",
+    "subtitle": "{{blurb}} – Top-Creator auf 3Speak.",
+    "subtitleTopic": "{{blurb}} – Top-Creator in {{topic}}.",
+    "allTopics": "Alle Themen",
+    "finding": "@{{user}} wird in dieser Rangliste gesucht…",
+    "notInTop": "@{{user}} ist nicht in den Top {{n}} dieser Rangliste.",
+    "loading": "Rangliste wird geladen…",
+    "loadError": "Die Rangliste konnte nicht geladen werden. Versuch es gleich nochmal.",
+    "empty": "In diesem Zeitraum gibt es noch keine Werte für {{metric}}."
+  }
+}

@@ -1,0 +1,48 @@
+{
+  "loading": "Caricamento...",
+  "error": "Errore: {{error}}",
+  "thumbnailAlt": "miniatura",
+  "topicTitle": "Argomento: {{topic}}",
+  "watchingNow_one": "{{count}} spettatore ora",
+  "watchingNow_many": "{{count}} spettatori ora",
+  "watchingNow_other": "{{count}} spettatori ora",
+  "badges": {
+    "gatedTitle": "Solo per i sostenitori — 3Speak Pro sblocca il video completo",
+    "pro": "PRO",
+    "new": "NUOVO",
+    "live": "● LIVE",
+    "liveChat": "● CHAT LIVE"
+  },
+  "status": {
+    "scheduled": "Programmato",
+    "mobile": "Mobile",
+    "mobileTitle": "Caricato dall'app mobile",
+    "processing": "In elaborazione",
+    "processingTitle": "Il video è in elaborazione",
+    "draft": "Bozza",
+    "draftTitle": "Bozza - non ancora pubblicata",
+    "deleted": "Eliminato",
+    "deletedTitle": "Questo video è stato eliminato",
+    "failed": "Non riuscito",
+    "failedTitle": "Elaborazione del video non riuscita",
+    "unlisted": "Non in elenco",
+    "unlistedTitle": "Non in elenco — nascosto da feed e ricerca, raggiungibile solo tramite link diretto"
+  },
+  "playlist": {
+    "loading": "Caricamento playlist...",
+    "items_one": "{{count}} elemento",
+    "items_many": "{{count}} elementi",
+    "items_other": "{{count}} elementi",
+    "openAria": "Apri la playlist {{name}}",
+    "tag": "Playlist",
+    "updated": "Aggiornata {{when}}"
+  },
+  "watchLater": {
+    "title": "Guarda più tardi",
+    "subtitle": "Video da guardare più tardi"
+  },
+  "watched": {
+    "title": "Guardati",
+    "subtitle": "La tua cronologia"
+  }
+}

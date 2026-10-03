@@ -1,0 +1,44 @@
+{
+  "loading": "加载中...",
+  "error": "错误：{{error}}",
+  "thumbnailAlt": "缩略图",
+  "topicTitle": "话题：{{topic}}",
+  "watchingNow_other": "{{count}} 人正在观看",
+  "badges": {
+    "gatedTitle": "仅限支持者 — 3Speak Pro 可解锁完整视频",
+    "pro": "PRO",
+    "new": "新",
+    "live": "● 直播中",
+    "liveChat": "● 直播聊天"
+  },
+  "status": {
+    "scheduled": "定时发布",
+    "mobile": "手机",
+    "mobileTitle": "通过手机 App 上传",
+    "processing": "处理中",
+    "processingTitle": "视频正在处理中",
+    "draft": "草稿",
+    "draftTitle": "草稿 - 尚未发布",
+    "deleted": "已删除",
+    "deletedTitle": "该视频已被删除",
+    "failed": "失败",
+    "failedTitle": "视频处理失败",
+    "unlisted": "不公开",
+    "unlistedTitle": "不公开 — 不会出现在信息流和搜索中，只能通过链接直接访问"
+  },
+  "playlist": {
+    "loading": "正在加载播放列表...",
+    "items_other": "{{count}} 项",
+    "openAria": "打开播放列表 {{name}}",
+    "tag": "播放列表",
+    "updated": "更新于 {{when}}"
+  },
+  "watchLater": {
+    "title": "稍后观看",
+    "subtitle": "想稍后再看的视频"
+  },
+  "watched": {
+    "title": "已观看",
+    "subtitle": "你的观看记录"
+  }
+}

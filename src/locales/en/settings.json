@@ -1,0 +1,205 @@
+{
+  "interests": {
+    "savedToast": "Interests saved to your Hive profile",
+    "saveFailed": "Could not save interests",
+    "title": "Interests",
+    "loading": "loading…",
+    "hint": "Pick the topics you care about — we’ll use them to show you more of the content you like.",
+    "loginHint": "Log in to choose your interests.",
+    "save": "Save interests"
+  },
+  "ads": {
+    "chainNotSaved": "Saved on 3Speak, but not on your Hive account. Try again to store it there too.",
+    "saveFailed": "Could not save the setting.",
+    "onToast": "Ads are on for your videos",
+    "offToast": "Ads are off for your videos",
+    "splitSaved": "Revenue split saved",
+    "title": "Ads on your videos",
+    "allow": "Allow ads",
+    "allowDesc": "A short sponsor spot can play inside your videos. You get a share of what it earns, and so does the community you posted in. Turn this off and your videos carry no ads at all — they are also removed from what we offer advertisers, so nothing is sold that you have opted out of.",
+    "allowAria": "Allow ads on your videos",
+    "shareTitle": "Share with the community",
+    "shareDesc": "{{pool}}% of what an ad earns is split between you and the community you posted in. Choose how much of it the community gets — leave it at zero and you keep all {{pool}}%.",
+    "youPct": "You {{pct}}%",
+    "communityPct": "Community {{pct}}%",
+    "shareInputLabel": "Community share, percent",
+    "invalidPct": "Enter a whole number between 0 and {{max}}.",
+    "loadingSetting": "Loading your current setting…"
+  },
+  "viewerRewards": {
+    "onToast": "Viewer rewards on",
+    "offToast": "Viewer rewards off, and your watch data has been deleted",
+    "saveFailed": "Could not save that setting.",
+    "title": "Earn while you watch",
+    "rowTitle": "Viewer rewards",
+    "desc": "Earn a share of ad revenue for what you watch, paid in HBD or HIVE. You are paid on videos watched, whether or not an ad played, so it rewards watching rather than sitting through ads. Ads themselves play for everyone except 3Speak Pro subscribers. We record how much of each video you watched, on top of the watch history the Watched page already keeps, and delete it the moment you turn this off.",
+    "aria": "Earn a share of ad revenue for what you watch"
+  },
+  "postingAuth": {
+    "updateFailed": "Could not update your posting authority.",
+    "addedToast": "@threespeak added to your posting authority",
+    "removedToast": "@threespeak removed from your posting authority",
+    "notYetAdded": "Signed, but @threespeak does not show up on your account yet. Reopen settings in a minute to check again.",
+    "stillThere": "Signed, but @threespeak is still on your account. Reopen settings in a minute to check again.",
+    "title": "Posting authority",
+    "canPost": "@threespeak can post for you",
+    "cannotPost": "@threespeak cannot post for you",
+    "checkingStatus": "@threespeak …",
+    "desc": "Lets 3Speak publish your uploads and scheduled posts on your behalf, and save some settings without a wallet prompt each time. It can only post, vote and comment; it can never move funds or change your keys. Without it, uploads ask you to add it again. Changing this needs your active key.",
+    "checking": "Checking…",
+    "removing": "Removing…",
+    "adding": "Adding…"
+  },
+  "notifications": {
+    "kinds": {
+      "videos": {
+        "title": "New videos",
+        "desc": "When a creator you follow publishes a video."
+      },
+      "shorts": {
+        "title": "New shorts",
+        "desc": "When a creator you follow posts a short."
+      },
+      "audio": {
+        "title": "New audio",
+        "desc": "When a creator you follow uploads a track or episode."
+      },
+      "replies": {
+        "title": "Replies",
+        "desc": "When someone replies to your post or comment."
+      },
+      "mentions": {
+        "title": "Mentions",
+        "desc": "When someone mentions you by name."
+      },
+      "follows": {
+        "title": "New followers",
+        "desc": "When someone follows you."
+      },
+      "votes": {
+        "title": "Upvotes",
+        "desc": "When someone upvotes your post. Off by default — a popular post is a lot of buzzes."
+      },
+      "reblogs": {
+        "title": "Reblogs",
+        "desc": "When someone reblogs your post."
+      }
+    },
+    "groups": {
+      "creators": "From creators you follow",
+      "aboutYou": "About you"
+    },
+    "deviceOffToast": "This device will no longer be notified",
+    "deviceOnToast": "This device will be notified",
+    "changeFailed": "Could not change notifications",
+    "saveFailed": "Could not save that",
+    "loginHint": "Log in to choose what you get notified about.",
+    "unsupported": "This browser can’t show notifications. On iPhone and iPad they only work once 3Speak is added to the Home Screen.",
+    "device": "Notify this device",
+    "deviceBlocked": "Blocked in your browser settings for this site — allow notifications there first.",
+    "deviceNoWorker": "Not available on this build.",
+    "deviceDesc": "Get a notification even when 3Speak isn’t open. Applies to this browser only.",
+    "whatHint": "What to be notified about. These apply to every device you’ve turned on."
+  },
+  "tabs": {
+    "general": "General",
+    "content": "Content",
+    "rewards": "Ads & rewards",
+    "about": "About / Version"
+  },
+  "contentTabs": {
+    "feed": "Feed",
+    "aria": "Content settings"
+  },
+  "butrauthUnlocked": "Butter Auth unlocked",
+  "appearance": {
+    "title": "Appearance",
+    "darkMode": {
+      "title": "Dark mode",
+      "desc": "Use the dark colour theme across the app."
+    },
+    "largeCards": {
+      "title": "Large cards",
+      "desc": "Show bigger video cards on the home, profile and playlist pages. Turn off for smaller, more compact cards."
+    },
+    "previews": {
+      "title": "Video previews",
+      "desc": "Play a muted preview when you hover a video card (and, on mobile in large mode, the centred card auto-plays as you scroll)."
+    },
+    "simpleFeeds": {
+      "title": "Simple feeds",
+      "desc": "Turn off the recommendation algorithm — Discover, Interests and Trending become plain newest-first lists instead of ranked ones."
+    }
+  },
+  "shorts": {
+    "commentBar": {
+      "title": "Comment bar on shorts",
+      "desc": "Show a comment input under a short. Off by default — you can always open the comments panel with the comment button."
+    },
+    "openOnStart": {
+      "title": "Open shorts on start",
+      "desc": "Go straight to Shorts when you open 3Speak, instead of the home feed."
+    },
+    "inFeeds": {
+      "title": "Shorts inside the feeds",
+      "desc": "Show rows of shorts between the videos in the home feeds and the recommendations on a watch page. Turn off to keep those lists videos-only."
+    }
+  },
+  "feed": {
+    "nsfw": {
+      "title": "Show NSFW content",
+      "desc": "Display videos and audio marked not-safe-for-work. Off by default."
+    },
+    "hideWatched": {
+      "title": "Hide watched videos",
+      "desc": "Leave out videos you've already watched from the home, trending and recommended feeds."
+    },
+    "hideAi": {
+      "title": "Hide AI-generated videos",
+      "desc": "Leave out videos and shorts marked AI-generated, in every feed. The mark comes from an automatic check, so some may slip through."
+    },
+    "privateMode": {
+      "title": "Private mode",
+      "desc": "Keep your country out of creators' statistics. We never store your IP address — for anyone. It's turned into a country code the moment you press play and then discarded. With this on, not even that country is recorded for your views."
+    }
+  },
+  "about": {
+    "title": "About",
+    "version": "App version",
+    "rpcNode": "Hive RPC node",
+    "yourData": "Your data",
+    "privacyLink": "How 3Speak handles your data"
+  },
+  "dataRequest": {
+    "emailRequired": "Enter an email address so we can reply",
+    "confirmRequired": "Please confirm you understand what can and cannot be deleted",
+    "requestFailed": "Request failed ({{status}})",
+    "deletionReceived": "Deletion request received",
+    "dataReceived": "Data request received",
+    "sendFailed": "Could not send your request",
+    "doneTitle": "Request received",
+    "doneBody": "Your reference is <b>{{ref}}</b>. We will reply to <b>{{contact}}</b> by <b>{{dueBy}}</b> at the latest.",
+    "keepRef": "Keep the reference in case you need to follow up.",
+    "signIn": "Please log in to request or delete your data — a request applies to the account you're signed in as.",
+    "requestFor": "Request for <b>@{{username}}</b>",
+    "typeAria": "Request type",
+    "getData": "Get my data",
+    "deleteData": "Delete my account data",
+    "ledeDelete": "We will delete everything 3Speak stores about you in our own database.",
+    "ledeExport": "We will send you everything 3Speak stores about you in our own database, as a JSON file.",
+    "covers": "This covers:",
+    "cannotTitle": "What we cannot do",
+    "cannotBody": "3Speak is built on the <b>Hive blockchain</b>. Your posts, comments, votes and reshares were signed with your own keys and broadcast to a <b>public, permanent ledger</b> that we do not control and cannot edit.",
+    "cannotDelete": "We can delete our copies and stop showing your content on 3Speak. We cannot erase it from the blockchain — nobody can, including you. Anyone running a Hive node will still have it.",
+    "cannotExport": "Your on-chain data is already public and machine-readable via any Hive API — we will point you to it. What we send you is what we hold in addition to that.",
+    "emailLabel": "Email to reply to",
+    "emailPlaceholder": "you@example.com",
+    "messageLabel": "Anything to add? (optional)",
+    "messagePlaceholder": "Optional details about your request",
+    "confirmLabel": "I understand my content on the Hive blockchain is permanent and cannot be deleted by 3Speak or by anyone else.",
+    "sending": "Sending…",
+    "requestDeletion": "Request deletion",
+    "requestData": "Request my data",
+    "foot": "We reply within one month. You can also email <mail>privacy@3speak.tv</mail> directly."
+  }
+}

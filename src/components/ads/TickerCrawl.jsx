@@ -1,5 +1,6 @@
 import { useLayoutEffect, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
+import { useTranslation } from 'react-i18next';
 import './TickerCrawl.scss';
 
 /**
@@ -70,7 +71,7 @@ export default function TickerCrawl({
   account = null,
   productName = null,
   message,
-  label = 'Ad',
+  label,
   clickUrl = null,
   durationSeconds = 15,
   paused = false,
@@ -83,6 +84,7 @@ export default function TickerCrawl({
   // The phone-sized strip regardless of the viewport, for the /advertise preview.
   compact = false,
 }) {
+  const { t } = useTranslation();
   const windowRef = useRef(null);
   const contentRef = useRef(null);
   // Measured sizes for 'hold'; null until measured.
@@ -117,7 +119,7 @@ export default function TickerCrawl({
         {account ? (
           <img
             className="ticker-avatar"
-            src={`https://images.hive.blog/u/${account}/avatar/small`}
+            src={`/img/u/${account}/avatar/small`}
             alt=""
             loading="lazy"
           />
@@ -131,7 +133,7 @@ export default function TickerCrawl({
 
   return (
     <div className={`watch-ticker${compact ? ' is-compact' : ''}`} style={hidden ? { ...style, display: 'none' } : style} aria-hidden={hidden || undefined}>
-      <span className="ticker-label">{label}</span>
+      <span className="ticker-label">{label === undefined ? t('ads.overlay.adTag') : label}</span>
       {clickUrl ? (
         <a
           ref={windowRef}
@@ -139,7 +141,7 @@ export default function TickerCrawl({
           href={clickUrl}
           target="_blank"
           rel="noopener noreferrer sponsored"
-          title={productName ? `Open ${productName}` : 'Open the advertiser’s link'}
+          title={productName ? t('ads.ticker.openProduct', { name: productName }) : t('ads.ticker.openLink')}
           // Never let the click reach the play/pause surface underneath.
           onClick={(e) => e.stopPropagation()}
         >

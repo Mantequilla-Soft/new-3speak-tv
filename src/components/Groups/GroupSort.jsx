@@ -1,4 +1,5 @@
 import { MdArrowDownward, MdArrowUpward } from 'react-icons/md';
+import { useTranslation } from 'react-i18next';
 import './GroupSort.scss';
 
 /**
@@ -9,11 +10,12 @@ import './GroupSort.scss';
  * a directory people browse to discover something.
  */
 export default function GroupSort({ options, field, direction, onFieldChange, onDirectionChange }) {
+  const { t } = useTranslation();
   const current = options.find((o) => o.id === field) || options[0];
 
   return (
     <div className="group-sort">
-      <label className="group-sort-label" htmlFor="group-sort-field">Sort by</label>
+      <label className="group-sort-label" htmlFor="group-sort-field">{t('communities.sort.sortBy')}</label>
       <select
         id="group-sort-field"
         className="group-sort-select"
@@ -28,10 +30,10 @@ export default function GroupSort({ options, field, direction, onFieldChange, on
         onClick={() => onDirectionChange(direction === 'desc' ? 'asc' : 'desc')}
         // The label says what the button WILL do, the title says what you are
         // looking at now: an arrow on its own reads as either.
-        aria-label={direction === 'desc' ? 'Sort ascending' : 'Sort descending'}
+        aria-label={direction === 'desc' ? t('communities.sort.ascending') : t('communities.sort.descending')}
         title={direction === 'desc'
-          ? `Highest ${current.label.toLowerCase()} first`
-          : `Lowest ${current.label.toLowerCase()} first`}
+          ? t('communities.sort.highestFirst', { label: current.label })
+          : t('communities.sort.lowestFirst', { label: current.label })}
       >
         {direction === 'desc' ? <MdArrowDownward size={16} /> : <MdArrowUpward size={16} />}
       </button>

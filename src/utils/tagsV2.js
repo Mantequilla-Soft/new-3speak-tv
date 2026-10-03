@@ -20,93 +20,95 @@
 // helpers plus displayTag, which falls back to this taxonomy.
 import axios from 'axios';
 import { CHECKER_URL } from './config';
+import { t as translate } from '../i18n';
 
 export const TAG_CATEGORIES = [
   {
-    slug: 'tech-science', label: 'Tech & Science', emoji: '🔬',
+    slug: 'tech-science', labelKey: 'tags.labels.tech-science', emoji: '🔬',
     topics: [
-      { slug: 'technology', label: 'Technology', emoji: '💻' },
-      { slug: 'education', label: 'Education', emoji: '🎓' },
-      { slug: 'science', label: 'Science', emoji: '🧪' },
-      { slug: 'programming', label: 'Programming', emoji: '⌨️' },
+      { slug: 'technology', labelKey: 'tags.labels.technology', emoji: '💻' },
+      { slug: 'education', labelKey: 'tags.labels.education', emoji: '🎓' },
+      { slug: 'science', labelKey: 'tags.labels.science', emoji: '🧪' },
+      { slug: 'programming', labelKey: 'tags.labels.programming', emoji: '⌨️' },
     ],
   },
   {
-    slug: 'crypto-finance', label: 'Crypto & Finance', emoji: '💰',
+    slug: 'crypto-finance', labelKey: 'tags.labels.crypto-finance', emoji: '💰',
     topics: [
-      { slug: 'cryptocurrency', label: 'Cryptocurrency', emoji: '🪙' },
-      { slug: 'finance', label: 'Finance', emoji: '📈' },
-      { slug: 'business', label: 'Business', emoji: '💼' },
+      { slug: 'cryptocurrency', labelKey: 'tags.labels.cryptocurrency', emoji: '🪙' },
+      { slug: 'finance', labelKey: 'tags.labels.finance', emoji: '📈' },
+      { slug: 'business', labelKey: 'tags.labels.business', emoji: '💼' },
     ],
   },
   {
-    slug: 'entertainment', label: 'Entertainment', emoji: '🎬',
+    slug: 'entertainment', labelKey: 'tags.labels.entertainment', emoji: '🎬',
     topics: [
-      { slug: 'music', label: 'Music', emoji: '🎵' },
-      { slug: 'gaming', label: 'Gaming', emoji: '🎮' },
-      { slug: 'film-tv', label: 'Film & TV', emoji: '🎞️' },
-      { slug: 'lifestyle', label: 'Lifestyle', emoji: '✨' },
+      { slug: 'music', labelKey: 'tags.labels.music', emoji: '🎵' },
+      { slug: 'gaming', labelKey: 'tags.labels.gaming', emoji: '🎮' },
+      { slug: 'film-tv', labelKey: 'tags.labels.film-tv', emoji: '🎞️' },
+      { slug: 'lifestyle', labelKey: 'tags.labels.lifestyle', emoji: '✨' },
       // Viewer-only addition (see VIEWER_EXTRA_TAGS below) — carried over from the
       // v1 interest list because people tag a lot of content as "vlog".
-      { slug: 'vlog', label: 'Vlog', emoji: '🎥' },
-      { slug: 'comedy', label: 'Comedy', emoji: '😂' },
-      { slug: 'story-time', label: 'Story Time', emoji: '📖' },
-      { slug: 'commercial', label: 'Commercial', emoji: '📺' },
+      { slug: 'vlog', labelKey: 'tags.labels.vlog', emoji: '🎥' },
+      { slug: 'comedy', labelKey: 'tags.labels.comedy', emoji: '😂' },
+      { slug: 'story-time', labelKey: 'tags.labels.story-time', emoji: '📖' },
+      { slug: 'commercial', labelKey: 'tags.labels.commercial', emoji: '📺' },
     ],
   },
   {
-    slug: 'arts-diy', label: 'Arts & DIY', emoji: '🎨',
+    slug: 'arts-diy', labelKey: 'tags.labels.arts-diy', emoji: '🎨',
     topics: [
-      { slug: 'art', label: 'Art', emoji: '🖼️' },
-      { slug: 'diy-crafts', label: 'DIY & Crafts', emoji: '🛠️' },
-      { slug: 'photography', label: 'Photography', emoji: '📷' },
+      { slug: 'art', labelKey: 'tags.labels.art', emoji: '🖼️' },
+      { slug: 'diy-crafts', labelKey: 'tags.labels.diy-crafts', emoji: '🛠️' },
+      { slug: 'photography', labelKey: 'tags.labels.photography', emoji: '📷' },
     ],
   },
   {
-    slug: 'food-outdoor', label: 'Food & Outdoors', emoji: '🌿',
+    slug: 'food-outdoor', labelKey: 'tags.labels.food-outdoor', emoji: '🌿',
     topics: [
-      { slug: 'nature', label: 'Nature', emoji: '🌲' },
-      { slug: 'travel', label: 'Travel', emoji: '✈️' },
-      { slug: 'food', label: 'Food', emoji: '🍜' },
-      { slug: 'pets', label: 'Pets', emoji: '🐾' },
-      { slug: 'gardening', label: 'Gardening', emoji: '🌱' },
+      { slug: 'nature', labelKey: 'tags.labels.nature', emoji: '🌲' },
+      { slug: 'travel', labelKey: 'tags.labels.travel', emoji: '✈️' },
+      { slug: 'food', labelKey: 'tags.labels.food', emoji: '🍜' },
+      { slug: 'pets', labelKey: 'tags.labels.pets', emoji: '🐾' },
+      { slug: 'gardening', labelKey: 'tags.labels.gardening', emoji: '🌱' },
     ],
   },
   {
-    slug: 'sports-health', label: 'Sports & Health', emoji: '🏅',
+    slug: 'sports-health', labelKey: 'tags.labels.sports-health', emoji: '🏅',
     topics: [
-      { slug: 'sports', label: 'Sports', emoji: '⚽' },
-      { slug: 'health', label: 'Health', emoji: '🩺' },
-      { slug: 'fitness', label: 'Fitness', emoji: '💪' },
+      { slug: 'sports', labelKey: 'tags.labels.sports', emoji: '⚽' },
+      { slug: 'health', labelKey: 'tags.labels.health', emoji: '🩺' },
+      { slug: 'fitness', labelKey: 'tags.labels.fitness', emoji: '💪' },
     ],
   },
   {
-    slug: 'life-society', label: 'Life & Society', emoji: '🌍',
+    slug: 'life-society', labelKey: 'tags.labels.life-society', emoji: '🌍',
     topics: [
-      { slug: 'news', label: 'News', emoji: '📰' },
-      { slug: 'spirituality', label: 'Spirituality', emoji: '🕊️' },
-      { slug: 'politics', label: 'Politics', emoji: '🏛️' },
+      { slug: 'news', labelKey: 'tags.labels.news', emoji: '📰' },
+      { slug: 'spirituality', labelKey: 'tags.labels.spirituality', emoji: '🕊️' },
+      { slug: 'politics', labelKey: 'tags.labels.politics', emoji: '🏛️' },
     ],
   },
 ];
 
 /** Every topic, flattened (categories excluded) — for flat pickers like Interests. */
 export const ALL_TOPICS = TAG_CATEGORIES.flatMap((c) =>
-  c.topics.map((t) => ({ ...t, category: c.slug, categoryLabel: c.label })));
+  c.topics.map((t) => ({ ...t, category: c.slug, categoryLabelKey: c.labelKey })));
 
 export const ALL_TOPIC_SLUGS = ALL_TOPICS.map((t) => t.slug);
 
-/** Flat option list shaped like the retired v1 INTERESTS ({ id, label, emoji }),
+/** Flat option list shaped like the retired v1 INTERESTS ({ id, labelKey, emoji }),
  *  so flat pickers (Interests) can use the v2 vocabulary unchanged. */
 export const TAG_OPTIONS = ALL_TOPICS.map((t) => ({
-  id: t.slug, label: t.label, emoji: t.emoji, category: t.category,
+  id: t.slug, labelKey: t.labelKey, emoji: t.emoji, category: t.category,
 }));
 
 // Slugs the VIEWER can pick that the auto-tagger never emits. Everything else in
 // the tree above mirrors the backend vocabulary exactly.
 export const VIEWER_EXTRA_TAGS = new Set(['vlog']);
 
-// slug → { slug, label, emoji, isCategory, category } for every pickable slug.
+// slug → { slug, labelKey, emoji, isCategory, category } for every pickable slug.
+// Labels are i18n KEYS (translate at render: t(x.labelKey)); slugs are on-chain data.
 const BY_SLUG = new Map();
 for (const cat of TAG_CATEGORIES) {
   BY_SLUG.set(cat.slug, { ...cat, isCategory: true, category: cat.slug });
@@ -125,7 +127,10 @@ export const isCategorySlug = (slug) => BY_SLUG.get(slug)?.isCategory === true;
 export const isKnownTag = (slug) => BY_SLUG.has(slug);
 
 /** Display label for a slug. Falls back to the raw slug so unknown values still render. */
-export const getTagLabel = (slug) => BY_SLUG.get(slug)?.label || slug;
+export const getTagLabel = (slug) => {
+  const key = BY_SLUG.get(slug)?.labelKey;
+  return key ? translate(key) : slug;
+};
 
 export const getTagEmoji = (slug) => BY_SLUG.get(slug)?.emoji || '';
 

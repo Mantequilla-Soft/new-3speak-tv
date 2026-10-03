@@ -1,0 +1,97 @@
+{
+  "backToOpenPods": "Terug naar OpenPods",
+  "modal": {
+    "leaveConfirm": "Deze OpenPod verlaten? Je kunt altijd weer meedoen vanuit de lobby.",
+    "yourStreamEnded": "Je stream is afgelopen",
+    "thisStreamEnded": "Deze stream is afgelopen",
+    "noLongerLive": "Hij is niet meer live. Start een nieuwe wanneer je er klaar voor bent.",
+    "recordingProcessing": "Goed gedaan! Je opname wordt verwerkt en verschijnt zo bij de aankondigingspost.",
+    "thanksForLive": "Goed gedaan — bedankt dat je live ging!",
+    "backHome": "Terug naar Home",
+    "howWasStream": "Hoe ging je stream?",
+    "connecting": "Verbinden met OpenPods…",
+    "authenticating": "Aanmelden bij OpenPods…"
+  },
+  "strip": {
+    "liveNow_one": "<n>{{count}}</n> OpenPod nu live",
+    "liveNow_other": "<n>{{count}}</n> OpenPods nu live",
+    "viewAll": "Alles bekijken",
+    "joinAria": "Meedoen met OpenPod: {{title}}"
+  },
+  "announce": {
+    "selectCommunity": "Kies een community",
+    "shareToggle": "📣 Deel deze stream op Hive en 3Speak zodra hij begint",
+    "community": "Community",
+    "rewards": "Beloningen",
+    "rewardDefault": "Standaard 50/50",
+    "rewardPowerup": "Power up 100%",
+    "rewardDecline": "Uitbetaling weigeren",
+    "beneficiaries": "Begunstigden",
+    "beneProHint": "Je hebt 3Speak Pro — geen platformkosten. Voeg verdelingen toe als je wilt.",
+    "beneLockedHint": "10% naar @threespeakfund staat vast. Je kunt er meer toevoegen."
+  },
+  "boost": {
+    "label": "Boost",
+    "sendTo": "Stuur een boost naar @{{user}}",
+    "send": "Boost sturen"
+  },
+  "clip": {
+    "saved": "Clip opgeslagen in je downloads.",
+    "slowDown": "Even rustig aan, clip daarna opnieuw.",
+    "failed": "Clip maken mislukt. Probeer het over een paar seconden opnieuw.",
+    "title": "Clip de laatste 30 seconden",
+    "label": "30 s",
+    "clipping": "Clippen…"
+  },
+  "report": {
+    "reasons": {
+      "harassment": "Intimidatie of haat",
+      "sexual": "Seksuele of expliciete inhoud",
+      "violence": "Geweld of gevaarlijke acties",
+      "selfharm": "Zelfbeschadiging",
+      "illegal": "Illegale inhoud",
+      "spam": "Spam of oplichting",
+      "other": "Iets anders"
+    },
+    "sent": "Bedankt — deze stream is gemeld bij ons team.",
+    "failed": "Melding versturen mislukt. Probeer het opnieuw.",
+    "title": "Deze stream melden",
+    "reporting": "Je meldt <b>@{{host}}</b>.",
+    "intro": "Vertel ons wat er mis is — ons team bekijkt elke melding.",
+    "detailPlaceholder": "Voeg details toe (optioneel)",
+    "sending": "Versturen…",
+    "submit": "Melding versturen"
+  },
+  "signIn": {
+    "waitingWallet": "Wachten op je wallet…"
+  },
+  "publish": {
+    "errors": {
+      "noTitle": "Voeg een titel toe",
+      "noAudio": "Geen audio-URL gevonden",
+      "failed": "Publiceren mislukt. Probeer het opnieuw."
+    },
+    "published": "Opname gepubliceerd op Hive!",
+    "loginGate": "Log in om je opname te publiceren.",
+    "heading": "OpenPod-opname publiceren",
+    "previewLabel": "Voorbeeld van de opname",
+    "previewHint": "Luister de audio terug voordat je publiceert. Dit is dezelfde speler die lezers bij de post zien.",
+    "recordingFallback": "OpenPod-opname",
+    "title": "Titel",
+    "titlePlaceholder": "Geef je opname een titel",
+    "description": "Beschrijving",
+    "optional": "(optioneel)",
+    "descriptionPlaceholder": "Waar ging het over? Voeg shownotes, links of een samenvatting toe...",
+    "tags": "Tags",
+    "tagsPlaceholder": "Tags gescheiden door spaties",
+    "declinePayout": "Uitbetaling weigeren",
+    "publishing": "Publiceren…",
+    "submit": "Opname publiceren"
+  },
+  "lobby": {
+    "descriptionPlaceholder": "Waar gaat deze sessie over? Voeg shownotes, links of een samenvatting toe…",
+    "enableHosting": "Hosten en spreken inschakelen",
+    "handoverFailed": "Hosten kon niet automatisch worden ingeschakeld. OpenPods post namens jou via @threespeak — controleer of je het posting-autoriteit hebt gegeven en probeer het opnieuw.",
+    "signInToHost": "Log in met Hive om te hosten of te spreken"
+  }
+}

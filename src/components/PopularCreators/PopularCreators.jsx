@@ -10,6 +10,8 @@ import { getFollowers } from '../../hive-api/api';
 import { followWithAioha, isLoggedIn } from '../../hive-api/aioha';
 import { useAppStore } from '../../lib/store';
 import HiveAvatar from '../HiveAvatar/HiveAvatar';
+import { useTranslation } from 'react-i18next';
+import { formatNumber } from '../../i18n';
 import './PopularCreators.scss';
 
 // Every toast from this module is headed "Following"; the message becomes the
@@ -22,9 +24,7 @@ const TRENDING_SAMPLE = 100;
 
 const fmtFollowers = (n) => {
   if (n == null) return null;
-  if (n >= 1_000_000) return `${(n / 1_000_000).toFixed(1).replace(/\.0$/, '')}M`;
-  if (n >= 1_000) return `${(n / 1_000).toFixed(1).replace(/\.0$/, '')}K`;
-  return String(n);
+  return formatNumber(n, { compact: true });
 };
 
 /**
@@ -37,6 +37,7 @@ const fmtFollowers = (n) => {
  * yanking it out from under the click.
  */
 export default function PopularCreators() {
+  const { t } = useTranslation();
   const user = useAppStore((s) => s.user);
   const [followSet, setFollowSet] = useState(null); // null = not resolved yet
   const [justFollowed, setJustFollowed] = useState({}); // name -> true
@@ -104,7 +105,7 @@ export default function PopularCreators() {
 
   const handleFollow = useCallback(async (name) => {
     if (!isLoggedIn() || !user) {
-      toast.error('Please login to follow creators');
+      toast.error(t('profile.creators.loginRequired'));
       return;
     }
     setPending((p) => ({ ...p, [name]: true }));
@@ -112,19 +113,19 @@ export default function PopularCreators() {
       await followWithAioha(name, true);
       setJustFollowed((f) => ({ ...f, [name]: true }));
       setFollowSet((s) => new Set([...(s || []), name]));
-      toast.success(`Following @${name}`);
+      toast.success(t('profile.creators.following', { user: name }));
     } catch (err) {
-      toast.error(`Could not follow @${name}: ${err?.message || 'please try again'}`);
+      toast.error(t('profile.creators.followFailed', { user: name, error: err?.message || t('profile.creators.pleaseTryAgain') }));
     } finally {
       setPending((p) => ({ ...p, [name]: false }));
     }
-  }, [user]);
+  }, [user, t]);
 
   if (!creators.length) return null;
 
   return (
     <section className="popular-creators">
-      <h3 className="pc-title">Popular creators</h3>
+      <h3 className="pc-title">{t('profile.creators.popularTitle')}</h3>
       <div className="pc-row">
         {creators.map((c) => {
           const followed = !!justFollowed[c.name];
@@ -136,7 +137,7 @@ export default function PopularCreators() {
               </Link>
               <Link to={`/p/${c.name}`} className="pc-name" title={`@${c.name}`}>@{c.name}</Link>
               <span className="pc-followers">
-                {followers != null ? `${followers} follower${followers === '1' ? '' : 's'}` : ' '}
+                {followers != null ? t('profile.creators.followers', { count: followerCounts[c.name], num: followers }) : ' '}
               </span>
               <button
                 type="button"
@@ -144,7 +145,7 @@ export default function PopularCreators() {
                 onClick={() => !followed && handleFollow(c.name)}
                 disabled={followed || !!pending[c.name]}
               >
-                {followed ? 'Following' : (pending[c.name] ? '…' : 'Follow')}
+                {followed ? t('common.actions.following') : (pending[c.name] ? '…' : t('common.actions.follow'))}
               </button>
             </div>
           );

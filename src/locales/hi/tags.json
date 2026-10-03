@@ -1,0 +1,43 @@
+{
+  "labels": {
+    "tech-science": "टेक और साइंस",
+    "technology": "टेक्नोलॉजी",
+    "education": "शिक्षा",
+    "science": "विज्ञान",
+    "programming": "प्रोग्रामिंग",
+    "crypto-finance": "क्रिप्टो और फ़ाइनेंस",
+    "cryptocurrency": "क्रिप्टोकरेंसी",
+    "finance": "फ़ाइनेंस",
+    "business": "बिज़नेस",
+    "entertainment": "मनोरंजन",
+    "music": "संगीत",
+    "gaming": "गेमिंग",
+    "film-tv": "फ़िल्म और टीवी",
+    "lifestyle": "लाइफ़स्टाइल",
+    "vlog": "व्लॉग",
+    "comedy": "कॉमेडी",
+    "story-time": "स्टोरी टाइम",
+    "commercial": "कमर्शियल",
+    "arts-diy": "आर्ट और DIY",
+    "art": "आर्ट",
+    "diy-crafts": "DIY और क्राफ़्ट",
+    "photography": "फ़ोटोग्राफ़ी",
+    "food-outdoor": "खाना और आउटडोर",
+    "nature": "प्रकृति",
+    "travel": "ट्रैवल",
+    "food": "खाना",
+    "pets": "पालतू जानवर",
+    "gardening": "बागवानी",
+    "sports-health": "खेल और सेहत",
+    "sports": "खेल",
+    "health": "सेहत",
+    "fitness": "फ़िटनेस",
+    "life-society": "जीवन और समाज",
+    "news": "न्यूज़",
+    "spirituality": "आध्यात्म",
+    "politics": "राजनीति"
+  },
+  "display": {
+    "cryptocurrency": "क्रिप्टो"
+  }
+}

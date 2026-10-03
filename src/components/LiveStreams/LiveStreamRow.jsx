@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useAppStore } from '../../lib/store';
 import { getFollowing } from '../../utils/hiveUtils';
+import { useTranslation } from 'react-i18next';
 import './LiveStreamRow.scss';
 
 const API_URL = (import.meta.env.VITE_HANGOUTS_API_URL || '').replace(/\/$/, '');
@@ -15,7 +16,8 @@ const API_URL = (import.meta.env.VITE_HANGOUTS_API_URL || '').replace(/\/$/, '')
  * Follow feed). For now the /streams endpoint includes unlisted streams so
  * they can be tested; production will filter to public.
  */
-export default function LiveStreamRow({ title = 'Live now', following = false }) {
+export default function LiveStreamRow({ title, following = false }) {
+  const { t } = useTranslation();
   const [streams, setStreams] = useState([]);
   const [followSet, setFollowSet] = useState(null); // null = not loaded yet
   const user = useAppStore((s) => s.user);
@@ -43,8 +45,8 @@ export default function LiveStreamRow({ title = 'Live now', following = false })
         .catch(() => { if (alive) setStreams([]); });
     };
     load();
-    const t = setInterval(load, 30000); // refresh live status
-    return () => { alive = false; clearInterval(t); };
+    const timer = setInterval(load, 30000); // refresh live status
+    return () => { alive = false; clearInterval(timer); };
   }, []);
 
   const visible = useMemo(() => {
@@ -57,16 +59,16 @@ export default function LiveStreamRow({ title = 'Live now', following = false })
 
   return (
     <div className="live-row">
-      <h2 className="live-row-title"><span className="live-row-dot" /> {title}</h2>
+      <h2 className="live-row-title"><span className="live-row-dot" /> {title ?? t('feeds.live.title')}</h2>
       <div className="live-row-grid">
         {visible.map((s) => (
           <Link key={s.name} to={`/watch/${s.name}`} className="live-card" title={s.title}>
             <div className="live-card-thumb" style={s.thumbnail ? { backgroundImage: `url(${s.thumbnail})` } : undefined}>
               {!s.thumbnail && <span className="live-card-thumb-fallback">{s.title}</span>}
-              <span className="live-card-badge">● LIVE</span>
+              <span className="live-card-badge">{t('feeds.live.badge')}</span>
             </div>
             <div className="live-card-info">
-              <img className="live-card-avatar" src={`https://images.hive.blog/u/${s.host}/avatar/small`} alt={s.host} loading="lazy" />
+              <img className="live-card-avatar" src={`/img/u/${s.host}/avatar/small`} alt={s.host} loading="lazy" />
               <div className="live-card-text">
                 <span className="live-card-name">{s.title}</span>
                 <span className="live-card-host">@{s.host}</span>

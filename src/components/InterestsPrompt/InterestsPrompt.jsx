@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { createPortal } from 'react-dom';
+import { useTranslation, Trans } from 'react-i18next';
 import { useQueryClient } from '@tanstack/react-query';
 import { toastIn } from '../../utils/toast';
 import { useAppStore } from '../../lib/store';
@@ -35,6 +36,7 @@ const markPrompted = (username) => {
  * Mounted once at the app root. Shows at most once per account per browser.
  */
 export default function InterestsPrompt() {
+  const { t } = useTranslation();
   const user = useAppStore((s) => s.user);
   const incubationHandle = useAppStore((s) => s.incubationHandle);
   const authenticated = useAppStore((s) => s.authenticated);
@@ -58,7 +60,7 @@ export default function InterestsPrompt() {
     if (promptsActive) return;
     let alive = true;
     // Small delay so we don't collide with the login flow / other modals.
-    const t = setTimeout(async () => {
+    const timer = setTimeout(async () => {
       const server = incubationHandle
         ? await fetchMyIncubationProfile().then((d) => d.interests || []).catch(() => null)
         : await fetchUserInterests(user);
@@ -78,7 +80,7 @@ export default function InterestsPrompt() {
       setPromptActive('interests', true);
       setOpen(true);
     }, 1200);
-    return () => { alive = false; clearTimeout(t); };
+    return () => { alive = false; clearTimeout(timer); };
   }, [authenticated, user, incubationHandle, promptsActive]);
 
   // Release the slot however this unmounts, so a prompt waiting on it is not
@@ -120,7 +122,7 @@ export default function InterestsPrompt() {
       }
       setInterests(list);
       if (who) markPrompted(who);
-      toast.success('Interests saved — change them anytime in Settings');
+      toast.success(t('app.interests.saved'));
       setOpen(false);
       setPromptActive('interests', false);
       // Refetch the home feeds in place (no page reload) so they immediately
@@ -128,7 +130,7 @@ export default function InterestsPrompt() {
       // read the fresh list from the store.
       refreshHomeFeeds(queryClient, { authenticated, user });
     } catch (e) {
-      toast.error(e?.message || 'Could not save interests');
+      toast.error(e?.message || t('app.interests.saveFailed'));
     } finally {
       setSaving(false);
     }
@@ -137,10 +139,9 @@ export default function InterestsPrompt() {
   return createPortal(
     <div className="interests-prompt-overlay" onClick={close}>
       <div className="interests-prompt" onClick={(e) => e.stopPropagation()}>
-        <h3 className="interests-prompt-title">What are you into?</h3>
+        <h3 className="interests-prompt-title">{t('app.interests.title')}</h3>
         <p className="interests-prompt-text">
-          Pick a few topics you enjoy and we’ll show you more of the content you like.
-          You can change these anytime in <strong>Settings</strong>.
+          <Trans i18nKey="app.interests.body" components={{ b: <strong /> }} />
         </p>
         {/* Same picker (and search box) as Settings → Interests, so the two
             screens look and behave identically. Values are topic slugs. */}
@@ -153,7 +154,7 @@ export default function InterestsPrompt() {
         />
         <div className="interests-prompt-actions">
           <button type="button" className="interests-prompt-cancel" onClick={decline} disabled={saving}>
-            Not now
+            {t('app.interests.notNow')}
           </button>
           <button
             type="button"
@@ -161,7 +162,7 @@ export default function InterestsPrompt() {
             onClick={save}
             disabled={saving || selected.length === 0}
           >
-            {saving ? 'Saving…' : 'Save interests'}
+            {saving ? t('common.actions.saving') : t('app.interests.save')}
           </button>
         </div>
       </div>

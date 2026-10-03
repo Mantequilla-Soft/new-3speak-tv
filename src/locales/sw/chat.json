@@ -1,0 +1,142 @@
+{
+  "button": {
+    "label": "Gumzo"
+  },
+  "tools": {
+    "emoji": "Emoji",
+    "searchEmoji": "Tafuta emoji",
+    "searchGifs": "Tafuta GIF…",
+    "noGifs": "Hakuna GIF zilizopatikana.",
+    "poweredByGiphy": "Inaendeshwa na GIPHY"
+  },
+  "lightbox": {
+    "openInNewTab": "Fungua picha kwenye kichupo kipya"
+  },
+  "linkCard": {
+    "loadingPreview": "Inapakia onyesho…",
+    "community": "Jumuiya",
+    "communityWithSubscribers_one": "Jumuiya · mwanachama {{formatted}}",
+    "communityWithSubscribers_other": "Jumuiya · wanachama {{formatted}}",
+    "commentFallback": "(maoni)",
+    "play": "Cheza {{title}}"
+  },
+  "share": {
+    "embedCopied": "Msimbo wa kupachika umenakiliwa",
+    "pressToCopy": "Bonyeza Ctrl/Cmd + C ili kunakili msimbo uliochaguliwa",
+    "embedTitle": "Pachika video hii",
+    "embedHint": "Bandika hii kwenye tovuti au chapisho lolote la blogu.",
+    "embedSize": "Ukubwa wa kupachika",
+    "embedCode": "Msimbo wa kupachika",
+    "copyEmbed": "Nakili msimbo wa kupachika",
+    "responsiveSub": "Hujirekebisha kutoshea ukurasa ulipo",
+    "fixedSub": "iframe ya ukubwa usiobadilika",
+    "sendInChat": "Tuma kwenye Gumzo la 3Speak",
+    "sendInChatSub": "Mtumie mtu kwenye 3Speak",
+    "embedOnWebsite": "Pachika kwenye tovuti",
+    "embedOnWebsiteSub": "Nakili HTML kwa tovuti au blogu yako",
+    "generalShare": "Shiriki / nakili kiungo",
+    "generalShareSub": "Programu nyingine, au nakili kiungo"
+  },
+  "gate": {
+    "connectTitle": "Unganisha na Gumzo la 3Speak",
+    "connectBody": "Gumzo linaendeshwa na Snapie. Kuunganisha kunasaini changamoto ya kuingia ya mara moja kwa posting key yako ya Hive — hakuna muamala, hakuna gharama.",
+    "connecting": "Inaunganisha…",
+    "connectButton": "Unganisha gumzo",
+    "cannotSign": "Njia yako ya sasa ya kuingia haiwezi kusaini changamoto ya gumzo. Tumia Keychain, HiveAuth, PeakVault au Ledger.",
+    "needsAccountTitle": "Gumzo linahitaji akaunti ya Hive",
+    "needsAccountBody": "Ujumbe husainiwa kwa funguo za akaunti yako mwenyewe, kwa hivyo gumzo hufunguka pamoja na kila kitu kingine akaunti yako ikiwa tayari. Kamilisha malengo kwenye wasifu wako na timu itakufikisha huko.",
+    "loginTitle": "Ingia ili kutumia gumzo",
+    "loginBody": "Ingia kwa akaunti yako ya Hive ili kutuma na kupokea ujumbe.",
+    "connectingToChat": "Inaunganisha na gumzo…"
+  },
+  "errors": {
+    "notHiveAccount": "@{{user}} si akaunti ya Hive.",
+    "openConversation": "Imeshindwa kufungua mazungumzo hayo.",
+    "verifyAccount": "Imeshindwa kuthibitisha akaunti hiyo.",
+    "createRoom": "Imeshindwa kuunda chumba.",
+    "joinChannel": "Imeshindwa kujiunga na chaneli hiyo."
+  },
+  "newDm": {
+    "placeholder": "Mtumie ujumbe mtumiaji wa Hive…",
+    "start": "Anza gumzo"
+  },
+  "newRoom": {
+    "toggle": "Chumba kipya cha faragha",
+    "namePlaceholder": "Jina la chumba…",
+    "removeMember": "Ondoa @{{user}}",
+    "addMore": "Ongeza zaidi…",
+    "invitePlaceholder": "Alika watumiaji wa Hive (si lazima)…",
+    "create": "Unda"
+  },
+  "channels": {
+    "browse": "Vinjari chaneli",
+    "publicTitle": "Chaneli za umma",
+    "closeBrowser": "Funga kivinjari cha chaneli",
+    "loading": "Inapakia chaneli…",
+    "empty": "Hakuna chaneli zinazopatikana.",
+    "join": "Jiunge"
+  },
+  "markRead": {
+    "nothingToClear": "Hakuna mazungumzo ya kufuta. Huenda hesabu imekwama upande wa seva.",
+    "requestFailed": "ombi limeshindwa",
+    "allCaughtUp": "Umesoma zote",
+    "stillUnread_one": "Bado inaonyesha {{total}} ambazo hazijasomwa baada ya kufuta gumzo {{count}}.",
+    "stillUnread_other": "Bado inaonyesha {{total}} ambazo hazijasomwa baada ya kufuta magumzo {{count}}.",
+    "stillUnreadNoMatch_one": "Bado inaonyesha {{total}} ambazo hazijasomwa baada ya kufuta gumzo {{count}}. Seva inaripoti hesabu lakini hakuna mazungumzo yanayolingana.",
+    "stillUnreadNoMatch_other": "Bado inaonyesha {{total}} ambazo hazijasomwa baada ya kufuta magumzo {{count}}. Seva inaripoti hesabu lakini hakuna mazungumzo yanayolingana.",
+    "notSignedIn": "Hujaingia kwenye gumzo. Unganisha gumzo tena kisha ujaribu tena.",
+    "sessionExpired": "Kipindi cha gumzo kimeisha wakati wa kufuta. Unganisha gumzo tena kisha ujaribu tena.",
+    "serverRejectedVisible_one": "Seva imekataa ombi {{count}} (vitambulisho kutoka kwenye orodha inayoonekana)",
+    "serverRejectedVisible_other": "Seva imekataa maombi yote {{count}} (vitambulisho kutoka kwenye orodha inayoonekana)",
+    "serverRejectedServerMap_one": "Seva imekataa ombi {{count}} (vitambulisho kutoka kwenye ramani ya seva ya ambazo hazijasomwa)",
+    "serverRejectedServerMap_other": "Seva imekataa maombi yote {{count}} (vitambulisho kutoka kwenye ramani ya seva ya ambazo hazijasomwa)",
+    "failed": "Imeshindwa kuweka zote kuwa zimesomwa",
+    "marking": "Inaweka kuwa zimesomwa…",
+    "button": "Weka zote kuwa zimesomwa",
+    "buttonCount": "Weka zote kuwa zimesomwa ({{count}})"
+  },
+  "list": {
+    "chooseTarget": "Chagua gumzo la kutuma",
+    "loading": "Inapakia mazungumzo…",
+    "empty": "Bado hakuna mazungumzo. Anzisha moja hapo juu kwa kuweka jina la mtumiaji la Hive."
+  },
+  "leave": {
+    "confirmRoom": "Ondoka kwenye chumba hiki?",
+    "confirmChannel": "Ondoka kwenye chaneli hii?",
+    "errorRoom": "Imeshindwa kuondoka kwenye chumba.",
+    "errorChannel": "Imeshindwa kuondoka kwenye chaneli.",
+    "titleRoom": "Ondoka kwenye chumba",
+    "titleChannel": "Ondoka kwenye chaneli",
+    "button": "Ondoka"
+  },
+  "thread": {
+    "editError": "Imeshindwa kuhariri ujumbe.",
+    "deleteConfirm": "Futa ujumbe huu? Utabadilishwa na “[imefutwa]”.",
+    "deleteError": "Imeshindwa kufuta ujumbe.",
+    "back": "Rudi kwenye mazungumzo",
+    "loading": "Inapakia ujumbe…",
+    "empty": "Bado hakuna ujumbe — sema habari 👋",
+    "editedSuffix": " · imehaririwa",
+    "messageActions": "Vitendo vya ujumbe",
+    "quote": "Nukuu",
+    "forward": "Sambaza",
+    "typing_one": "{{users}} anaandika…",
+    "typing_other": "{{users}} wanaandika…",
+    "editing": "Unahariri ujumbe",
+    "cancelEdit": "Ghairi uhariri",
+    "quoting": "Unamnukuu @{{user}}",
+    "cancelQuote": "Ghairi nukuu",
+    "removeImage": "Ondoa picha",
+    "placeholder": "Andika ujumbe…"
+  },
+  "page": {
+    "chooseTarget": "Chagua gumzo la kutuma.",
+    "selectConversation": "Chagua mazungumzo, au anzisha mapya."
+  },
+  "overlay": {
+    "fullscreen": "Skrini nzima",
+    "exitFullscreen": "Toka kwenye skrini nzima",
+    "close": "Funga gumzo",
+    "sendInChat": "Tuma kwenye gumzo"
+  }
+}

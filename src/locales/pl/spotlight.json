@@ -1,0 +1,351 @@
+{
+  "icons": {
+    "link": "Link",
+    "globe": "Strona WWW",
+    "podcast": "Podcast",
+    "email": "E-mail",
+    "phone": "Telefon",
+    "rss": "RSS",
+    "qrcode": "Kod QR",
+    "shop": "Sklep",
+    "bag": "Sklep",
+    "dollar": "Pieniądze",
+    "gift": "Prezent",
+    "heart": "Wsparcie",
+    "star": "Gwiazdka",
+    "thumbsup": "Polubienie",
+    "fire": "Ogień",
+    "bolt": "Błyskawica",
+    "music": "Muzyka",
+    "headphones": "Audio",
+    "mic": "Mikrofon",
+    "video": "Wideo",
+    "film": "Film",
+    "tv": "TV",
+    "play": "Odtwórz",
+    "camera": "Zdjęcie",
+    "image": "Obraz",
+    "palette": "Sztuka",
+    "pen": "Pisanie",
+    "book": "Książka",
+    "newspaper": "Wiadomości",
+    "graduation": "Kurs",
+    "code": "Kod",
+    "gamepad": "Gry",
+    "briefcase": "Praca",
+    "home": "Dom",
+    "location": "Lokalizacja",
+    "map": "Mapa",
+    "calendar": "Kalendarz",
+    "clock": "Zegar",
+    "bell": "Alerty",
+    "tag": "Tag",
+    "download": "Pobierz",
+    "file": "Plik",
+    "users": "Społeczność",
+    "comment": "Komentarz",
+    "share": "Udostępnij",
+    "coffee": "Kawa",
+    "wallet": "Portfel",
+    "plus": "Więcej",
+    "check": "Odhaczone"
+  },
+  "fonts": {
+    "system": "Systemowa",
+    "rounded": "Zaokrąglona",
+    "serif": "Szeryfowa",
+    "mono": "Mono",
+    "display": "Ozdobna",
+    "condensed": "Wąska",
+    "handwriting": "Odręczna",
+    "grotesk": "Groteska",
+    "humanist": "Humanistyczna",
+    "geometric": "Geometryczna",
+    "slab": "Slab",
+    "elegant": "Elegancka",
+    "typewriter": "Maszynowa",
+    "marker": "Marker",
+    "brush": "Pędzel",
+    "palatino": "Palatino",
+    "wide": "Szeroka"
+  },
+  "motion": {
+    "none": "Brak",
+    "float": "Unoszenie",
+    "sway": "Kołysanie",
+    "pulse": "Pulsowanie",
+    "wobble": "Chybotanie",
+    "bounce": "Podskakiwanie",
+    "tilt": "Przechył 3D",
+    "spin": "Obrót",
+    "shake": "Drżenie",
+    "breathe": "Oddychanie"
+  },
+  "sectionTypes": {
+    "link": "Link",
+    "video": "Treść z 3Speak",
+    "embed": "Rozbudowany link",
+    "image": "Obraz",
+    "header": "Tytuł / tekst"
+  },
+  "blockNames": {
+    "link": "link",
+    "header": "nagłówek",
+    "image": "obraz",
+    "video": "film",
+    "embed": "osadzenie"
+  },
+  "blockNamesPlural": {
+    "link": "linków",
+    "header": "nagłówków",
+    "image": "obrazów",
+    "video": "filmów",
+    "embed": "osadzeń"
+  },
+  "templates": {
+    "minimal": {
+      "name": "Minimal",
+      "niche": "Czysto i prosto"
+    },
+    "neon": {
+      "name": "Neon Nights",
+      "niche": "Twórca / streamer"
+    },
+    "crypto": {
+      "name": "On-Chain",
+      "niche": "Krypto / Web3"
+    },
+    "gamer": {
+      "name": "Player One",
+      "niche": "Gry"
+    },
+    "photographer": {
+      "name": "Exposure",
+      "niche": "Fotografia"
+    },
+    "podcaster": {
+      "name": "On Air",
+      "niche": "Podcast"
+    },
+    "fitness": {
+      "name": "Peak Form",
+      "niche": "Fitness / trener"
+    },
+    "writer": {
+      "name": "Longform",
+      "niche": "Pisarz / bloger"
+    },
+    "chef": {
+      "name": "Mise en Place",
+      "niche": "Jedzenie / gotowanie"
+    },
+    "travel": {
+      "name": "Wanderlust",
+      "niche": "Natura / podróże"
+    },
+    "business": {
+      "name": "Boardroom",
+      "niche": "Biznes / profesjonalnie"
+    },
+    "artist": {
+      "name": "Palette",
+      "niche": "Artysta / sztuki wizualne"
+    },
+    "ocean": {
+      "name": "Tidewater",
+      "niche": "Chill / styl życia"
+    },
+    "musician": {
+      "name": "Amplified",
+      "niche": "Muzyka / zespół"
+    },
+    "developer": {
+      "name": "Terminal",
+      "niche": "Programista / tech"
+    },
+    "sports": {
+      "name": "Game Day",
+      "niche": "Sport / sportowiec"
+    }
+  },
+  "errors": {
+    "notLoggedIn": "Nie zalogowano",
+    "couldNotSaveToHive": "Nie udało się zapisać na Hive"
+  },
+  "arrange": {
+    "title": "Tytuł",
+    "video": "Film",
+    "latestPosts": "Najnowsze posty",
+    "latestPostsBy": "Najnowsze posty · @{{account}}",
+    "dragToArrange": "Przeciągnij, aby ułożyć"
+  },
+  "page": {
+    "latestPosts": "Najnowsze posty",
+    "seeNewestPosts": "Zobacz najnowsze posty @{{user}} →",
+    "openLink": "Otwórz link",
+    "empty": "@{{user}} nie ma jeszcze żadnych linków.",
+    "viewProfile": "Zobacz profil na 3Speak →",
+    "poweredBy": "Napędzane przez 3Speak"
+  },
+  "editor": {
+    "resetToDefault": "Przywróć domyślne",
+    "motion": "Ruch",
+    "speed": "Szybkość {{value}}",
+    "loop": "Pętla",
+    "runSeconds": "Czas {{value}} s",
+    "picker": {
+      "videoLabel": "Wybierz z moich filmów",
+      "videoLoading": "Wczytywanie twoich filmów…",
+      "videoEmpty": "Nie znaleziono ostatnich filmów 3Speak.",
+      "shortLabel": "Wybierz z moich Shorts",
+      "shortLoading": "Wczytywanie twoich Shorts…",
+      "shortEmpty": "Nie znaleziono ostatnich Shorts 3Speak.",
+      "noChannel": "Nie wykryto kanału (sprawdź, czy się zalogowano)",
+      "loadFailed": "Nie udało się wczytać: {{error}}"
+    },
+    "toasts": {
+      "unfurlFailed": "Nie udało się pobrać podglądu linku",
+      "imageUploadFailed": "Przesyłanie obrazu nie powiodło się: {{error}}",
+      "tryAgain": "spróbuj ponownie",
+      "styleApplied": "Styl zastosowano do wszystkich bloków typu {{type}}",
+      "templateApplied": "Zastosowano „{{name}}” — dopracuj lub cofnij",
+      "reverted": "Przywrócono twój poprzedni wygląd",
+      "saved": "Spotlight zapisany w twoim profilu Hive",
+      "saveFailed": "Nie udało się zapisać",
+      "linkCopied": "Skopiowano link",
+      "uploadFailed": "Przesyłanie nie powiodło się"
+    },
+    "link": {
+      "labelPlaceholder": "Etykieta (np. Mój YouTube)",
+      "type": "Typ linku",
+      "typeGroup": "Typ",
+      "website": "Strona WWW / URL",
+      "email": "E-mail",
+      "phone": "Telefon",
+      "platformGroup": "Platforma",
+      "yourname": "twojanazwa",
+      "platformIconHint": "Ikona to logo {{platform}} — przełącz na „Strona WWW / URL”, aby wybrać własną ikonę.",
+      "icon": "Ikona",
+      "iconColor": "Kolor ikony",
+      "iconBg": "Tło ikony"
+    },
+    "header": {
+      "text": "Tekst",
+      "size": "Rozmiar",
+      "large": "Duży",
+      "medium": "Średni",
+      "small": "Mały",
+      "align": "Wyrównanie",
+      "left": "Do lewej",
+      "center": "Do środka",
+      "right": "Do prawej"
+    },
+    "image": {
+      "uploading": "Przesyłanie…",
+      "upload": "Prześlij obraz",
+      "urlPlaceholder": "…lub URL obrazu",
+      "linkPlaceholder": "Link po kliknięciu (opcjonalnie)"
+    },
+    "video": {
+      "contentType": "Typ treści",
+      "video": "Film",
+      "short": "Short",
+      "orPaste": "lub wklej link",
+      "pastePlaceholder": "Wklej link do filmu 3Speak lub autor/permlink",
+      "titlePlaceholder": "Tytuł nad filmem (prowadzi do 3Speak)",
+      "hint": "Wybrana treść zostanie osadzona i będzie odtwarzana na twojej stronie."
+    },
+    "embed": {
+      "source": "Źródło",
+      "sourceLink": "Link (rozbudowany podgląd)",
+      "sourceHiveRecent": "Moje najnowsze posty Hive",
+      "accountPlaceholder": "Nazwa użytkownika Hive (zostaw puste dla własnej)",
+      "showPosts_one": "Pokaż {{count}} post",
+      "showPosts_few": "Pokaż {{count}} posty",
+      "showPosts_many": "Pokaż {{count}} postów",
+      "showPosts_other": "Pokaż {{count}} posta",
+      "perRow": "{{value}} w rzędzie",
+      "hiveRecentHint": "Twoje najnowsze posty główne (bez reblogów i cross-postów). Aktualizują się automatycznie.",
+      "linkPlaceholder": "Wklej dowolny link — post Hive, Instagram, X, YouTube, artykuł…",
+      "fetching": "Pobieranie podglądu…",
+      "noPreview": "Nie znaleziono podglądu — nadal wyświetli się jako karta linku.",
+      "pasteHint": "Wklej link, a pobierzemy jego tytuł, opis i obraz."
+    },
+    "style": {
+      "title": "Styl",
+      "applyAllTitle": "Zastosuj ten styl do każdego bloku typu {{type}}",
+      "applyAll": "Zastosuj do wszystkich {{types}}",
+      "background": "Tło",
+      "text": "Tekst",
+      "backgroundPct": "Tło {{value}}%",
+      "radius": "Zaokrąglenie {{value}}",
+      "fontSizePct": "Rozmiar czcionki {{value}}%",
+      "paddingPx": "Odstęp {{value}}px",
+      "thumbnailPct": "Miniatura {{value}}%",
+      "border": "Obramowanie",
+      "thicknessPx": "Grubość {{value}}px",
+      "opacityPct": "Krycie {{value}}%",
+      "shadow": "Cień",
+      "strengthPct": "Siła {{value}}%",
+      "color": "Kolor",
+      "blur": "Rozmycie {{value}}",
+      "spread": "Rozproszenie {{value}}",
+      "inset": "Wewnętrzny",
+      "cardDelayMs": "Opóźnienie karty {{value}} ms"
+    },
+    "tagline": "Twoje linki i filmy na jednej stronie",
+    "openPage": "Otwórz stronę",
+    "templates": {
+      "title": "Szablony",
+      "hint": "Wybierz wygląd, który wypełni wszystko — twój opis zostanie zachowany, a zmianę można cofnąć.",
+      "undo": "Cofnij szablon — wróć do mojego wyglądu"
+    },
+    "profile": {
+      "title": "Profil",
+      "headlinePlaceholder": "Krótki nagłówek / opis (opcjonalnie)",
+      "avatarSizePct": "Rozmiar awatara {{value}}%",
+      "avatarShadowPct": "Cień awatara {{value}}%",
+      "avatarGlow": "Poświata awatara",
+      "glowSize": "Rozmiar poświaty {{value}}",
+      "channelButtonText": "Tekst przycisku kanału"
+    },
+    "page": {
+      "title": "Styl strony",
+      "solid": "Jednolity",
+      "gradient": "Gradient",
+      "image": "Obraz",
+      "color2": "Kolor 2",
+      "angle": "Kąt {{value}}°",
+      "uploadBackground": "Prześlij tło",
+      "imageSet": "Obraz ustawiony ✓",
+      "overlay": "Nakładka",
+      "overlay2": "Nakładka 2",
+      "none": "Brak",
+      "overlayOpacityPct": "Krycie nakładki {{value}}%",
+      "overlayAngle": "Kąt nakładki {{value}}°",
+      "colors": "Kolory",
+      "buttonBg": "Tło przycisku",
+      "buttonText": "Tekst przycisku",
+      "buttons": "Przyciski",
+      "buttonStyle": "Styl przycisków",
+      "soft": "Miękki",
+      "fill": "Wypełniony",
+      "outline": "Kontur",
+      "cornerRadius": "Zaokrąglenie rogów {{value}}",
+      "textStyle": "Styl tekstu (nazwa, opis i bloki tekstu)",
+      "font": "Czcionka",
+      "normal": "Normalny",
+      "italic": "Kursywa",
+      "bold": "Pogrubiony",
+      "boldItalic": "Pogrubiona kursywa",
+      "strong": "Mocny",
+      "textBorderPx": "Obramowanie tekstu {{value}}px",
+      "borderColor": "Kolor obramowania"
+    },
+    "addBlock": "Dodaj blok",
+    "empty": "Dodaj powyżej swój pierwszy link, film lub obraz.",
+    "arrangeHint": "Przeciągnij <grip></grip>, aby ułożyć · upuść blok na inny, aby umieścić je obok siebie · kliknij blok, aby edytować go tutaj",
+    "livePreview": "Podgląd na żywo",
+    "previewTitle": "Podgląd Spotlight"
+  }
+}

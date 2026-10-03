@@ -1,4 +1,5 @@
 import { toastIn } from './toast';
+import { t } from '../i18n';
 import { commentWithAioha } from '../hive-api/aioha';
 import { enforceLockedBeneficiaries } from './beneficiaries';
 import {
@@ -236,14 +237,14 @@ export async function postOpenPodAnnouncement({ room, options, user, isPremium, 
   try {
     if (announceType === 'post') {
       await postFullPost({ room, user, isPremium, orientation });
-      toast.success('Live session announced on Hive!');
+      toast.success(t('misc.openpod.announced'));
     } else {
       await postSnap(room, watchUrl, orientation, host);
     }
   } catch (err) {
     // Non-blocking — the pod is live regardless of whether the post landed.
     console.error('OpenPod announcement failed:', err);
-    toast.error('OpenPod started, but the Hive announcement could not be posted.');
+    toast.error(t('misc.openpod.announceFailed'));
   }
 }
 

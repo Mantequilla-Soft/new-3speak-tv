@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
+import { useTranslation } from 'react-i18next';
 import { getRelationshipBetweenAccounts } from '../hive-api/api';
 import { followWithAioha, isLoggedIn } from '../hive-api/aioha';
 import { useAppStore } from '../lib/store';
@@ -14,6 +15,7 @@ const toast = toastIn('Profile');
  * Layout: avatar left | username + follow button + track count right
  */
 function AudioAuthorBadge({ author, tracks, isFollowing: isFollowingProp, onClick }) {
+  const { t } = useTranslation();
   const { user } = useAppStore();
   const [following, setFollowing] = useState(isFollowingProp ?? false);
   const [loading, setLoading] = useState(false);
@@ -37,10 +39,10 @@ function AudioAuthorBadge({ author, tracks, isFollowing: isFollowingProp, onClic
     setFollowing(willFollow);
 
     followWithAioha(author, willFollow)
-      .then(() => toast.success(willFollow ? `Followed @${author}` : `Unfollowed @${author}`))
-      .catch(err => { setFollowing(!willFollow); toast.error(err.message || 'Failed'); })
+      .then(() => toast.success(willFollow ? t('audio.author.followed', { author }) : t('audio.author.unfollowed', { author })))
+      .catch(err => { setFollowing(!willFollow); toast.error(err.message || t('audio.author.failed')); })
       .finally(() => setLoading(false));
-  }, [author, following, loading, user]);
+  }, [author, following, loading, user, t]);
 
   const showFollowBtn = user && author !== user;
 
@@ -62,10 +64,10 @@ function AudioAuthorBadge({ author, tracks, isFollowing: isFollowingProp, onClic
             onClick={handleFollow}
             disabled={loading}
           >
-            {loading ? '...' : following ? 'Following' : 'Follow'}
+            {loading ? '...' : following ? t('common.actions.following') : t('common.actions.follow')}
           </button>
         )}
-        {tracks != null && <span className="audio-author-tracks">{tracks} tracks</span>}
+        {tracks != null && <span className="audio-author-tracks">{t('audio.author.tracks', { count: tracks })}</span>}
       </div>
     </div>
   );

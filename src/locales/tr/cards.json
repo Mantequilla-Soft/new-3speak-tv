@@ -1,0 +1,46 @@
+{
+  "loading": "Yükleniyor...",
+  "error": "Hata: {{error}}",
+  "thumbnailAlt": "küçük resim",
+  "topicTitle": "Konu: {{topic}}",
+  "watchingNow_one": "Şu an {{count}} kişi izliyor",
+  "watchingNow_other": "Şu an {{count}} kişi izliyor",
+  "badges": {
+    "gatedTitle": "Yalnızca destekçilere: 3Speak Pro videonun tamamını açar",
+    "pro": "PRO",
+    "new": "YENİ",
+    "live": "● CANLI",
+    "liveChat": "● CANLI SOHBET"
+  },
+  "status": {
+    "scheduled": "Planlandı",
+    "mobile": "Mobil",
+    "mobileTitle": "Mobil uygulamadan yüklendi",
+    "processing": "İşleniyor",
+    "processingTitle": "Video işleniyor",
+    "draft": "Taslak",
+    "draftTitle": "Taslak - henüz yayınlanmadı",
+    "deleted": "Silindi",
+    "deletedTitle": "Bu video silindi",
+    "failed": "Başarısız",
+    "failedTitle": "Video işlenemedi",
+    "unlisted": "Liste dışı",
+    "unlistedTitle": "Liste dışı: akışlarda ve aramada gizli, yalnızca doğrudan bağlantıyla açılır"
+  },
+  "playlist": {
+    "loading": "Oynatma listeleri yükleniyor...",
+    "items_one": "{{count}} öğe",
+    "items_other": "{{count}} öğe",
+    "openAria": "{{name}} oynatma listesini aç",
+    "tag": "Oynatma listesi",
+    "updated": "Güncellendi: {{when}}"
+  },
+  "watchLater": {
+    "title": "Sonra İzle",
+    "subtitle": "Sonra izlenecek videolar"
+  },
+  "watched": {
+    "title": "İzlenenler",
+    "subtitle": "İzleme geçmişin"
+  }
+}

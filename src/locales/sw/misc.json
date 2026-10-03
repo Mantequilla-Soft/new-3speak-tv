@@ -1,0 +1,242 @@
+{
+  "leaderboard": {
+    "windows": {
+      "7d": "Siku 7",
+      "30d": "Siku 30",
+      "365d": "Mwaka",
+      "all": "Muda wote"
+    },
+    "windowsInSentence": {
+      "7d": "siku 7",
+      "30d": "siku 30",
+      "365d": "mwaka",
+      "all": "muda wote"
+    },
+    "metrics": {
+      "video_uploads": "Video",
+      "short_uploads": "Shorts",
+      "video_watch_secs": "Muda wa kutazama video",
+      "short_watch_secs": "Muda wa kutazama Shorts",
+      "tags_given": "Lebo",
+      "streams": "Mitiririko",
+      "stream_secs": "Muda mubashara",
+      "stream_peak_viewers": "Kilele cha watazamaji",
+      "stream_viewers": "Watazamaji waliojiunga",
+      "boosts_received": "Boosts zilizopokelewa",
+      "boost_amount_received": "Kiasi kilichopokelewa",
+      "boosts_given": "Boosts zilizotolewa",
+      "boost_amount_given": "Kiasi kilichotolewa"
+    },
+    "metricsInSentence": {
+      "video_uploads": "video",
+      "short_uploads": "Shorts",
+      "video_watch_secs": "muda wa kutazama video",
+      "short_watch_secs": "muda wa kutazama Shorts",
+      "tags_given": "lebo",
+      "streams": "mitiririko",
+      "stream_secs": "muda mubashara",
+      "stream_peak_viewers": "kilele cha watazamaji",
+      "stream_viewers": "watazamaji waliojiunga",
+      "boosts_received": "boosts zilizopokelewa",
+      "boost_amount_received": "kiasi kilichopokelewa",
+      "boosts_given": "boosts zilizotolewa",
+      "boost_amount_given": "kiasi kilichotolewa"
+    },
+    "blurbs": {
+      "video_uploads": "Video zilizopakiwa",
+      "short_uploads": "Shorts zilizopakiwa",
+      "video_watch_secs": "Sekunde ambazo video zao zilitazamwa",
+      "short_watch_secs": "Sekunde ambazo Shorts zao zilitazamwa",
+      "tags_given": "Lebo zilizowekwa kwenye video nyingine",
+      "streams": "Vipindi vya mitiririko vilivyoanzishwa",
+      "stream_secs": "Jumla ya muda mubashara (mitiririko iliyokwisha tu)",
+      "stream_peak_viewers": "Watazamaji wengi zaidi kwa wakati mmoja (kilele, si jumla)",
+      "stream_viewers": "Matukio ya watazamaji kujiunga (idadi, si watu wa kipekee)",
+      "boosts_received": "Boosts zilizotumwa kwa mitiririko yao",
+      "boost_amount_received": "Jumla ya kiasi cha boosts zilizopokelewa",
+      "boosts_given": "Boosts walizotuma kwa watiririshaji wengine",
+      "boost_amount_given": "Jumla ya kiasi cha boosts walizotoa"
+    },
+    "blurbsInSentence": {
+      "video_uploads": "video zilizopakiwa",
+      "short_uploads": "Shorts zilizopakiwa",
+      "video_watch_secs": "sekunde ambazo video zao zilitazamwa",
+      "short_watch_secs": "sekunde ambazo Shorts zao zilitazamwa",
+      "tags_given": "lebo zilizowekwa kwenye video nyingine",
+      "streams": "vipindi vya mitiririko vilivyoanzishwa",
+      "stream_secs": "jumla ya muda mubashara (mitiririko iliyokwisha tu)",
+      "stream_peak_viewers": "watazamaji wengi zaidi kwa wakati mmoja (kilele, si jumla)",
+      "stream_viewers": "matukio ya watazamaji kujiunga (idadi, si watu wa kipekee)",
+      "boosts_received": "boosts zilizotumwa kwa mitiririko yao",
+      "boost_amount_received": "jumla ya kiasi cha boosts zilizopokelewa",
+      "boosts_given": "boosts walizotuma kwa watiririshaji wengine",
+      "boost_amount_given": "jumla ya kiasi cha boosts walizotoa"
+    },
+    "groups": {
+      "video": "Video",
+      "streaming": "Utiririshaji"
+    },
+    "badgeNouns": {
+      "video_uploads": "Video",
+      "short_uploads": "Shorts",
+      "video_watch_secs": "Zilizotazamwa",
+      "short_watch_secs": "Shorts zilizotazamwa",
+      "tags_given": "Mweka lebo"
+    },
+    "badgeLabel": "{{tier}} {{noun}}",
+    "badgeTitleAllTime": "Nafasi ya #{{rank}} kwa {{what}} katika muda wote",
+    "badgeTitleWindow": "Nafasi ya #{{rank}} kwa {{what}} katika kipindi cha {{window}} kilichopita"
+  },
+  "duration": {
+    "hoursMinutes": "saa {{h}} dk {{m}}",
+    "minutesSeconds": "dk {{m}} sek {{s}}",
+    "seconds": "sek {{s}}",
+    "aMoment": "muda mfupi",
+    "lessThanMinute": "chini ya dakika moja"
+  },
+  "surf": {
+    "community": "Jumuiya",
+    "allOf": "{{label}} yote"
+  },
+  "social": {
+    "signingCancelled": "Kusaini kumeghairiwa",
+    "youtube": {
+      "placeholder": "@jina au UCxxxxxxxxxxxxxxxxxxxxxx",
+      "help": "Bandika @jina lako la YouTube au kitambulisho chako cha chaneli kinachoanza na UC…. Tunakigeuza kuwa kitambulisho cha chaneli."
+    },
+    "soundcloud": {
+      "placeholder": "wasifu-wako au https://soundcloud.com/wasifu-wako",
+      "help": "Bandika URL ya wasifu wako wa SoundCloud au jina la mtumiaji kutoka humo tu. Weka hash popote kwenye bio ya wasifu wako."
+    }
+  },
+  "snaps": {
+    "retrying": "Kontena la Snaps bado halijapatikana — inajaribu tena (jaribio {{attempt}})...",
+    "unreachable": "Imeshindwa kufikia nodi yoyote ya Hive ili kupata kontena la Snaps. Tafadhali kagua muunganisho wako kisha ujaribu tena.",
+    "unreachableWithError": "Imeshindwa kufikia nodi yoyote ya Hive ili kupata kontena la Snaps (hitilafu ya mwisho — {{error}}). Tafadhali kagua muunganisho wako kisha ujaribu tena."
+  },
+  "embed": {
+    "responsive": "Inayojirekebisha"
+  },
+  "incubation": {
+    "requestFailed": "Ombi limeshindwa ({{status}})",
+    "contactLoadFailed": "Imeshindwa kupakia maelezo yako ya mawasiliano",
+    "contactSaveFailed": "Imeshindwa kuhifadhi maelezo yako ya mawasiliano",
+    "onlyButrauthBacklog": "Ni akaunti ya Butter Auth pekee inayoweza kuwa na machapisho yanayosubiri ya maandalizi",
+    "publishFailed": "Kuchapisha kumeshindwa ({{status}})"
+  },
+  "routeError": {
+    "title": "Ukurasa huu haukupakia",
+    "body": "Sehemu ya programu imeshindwa kupakuliwa. Kwa kawaida hii inamaanisha toleo jipya lilitolewa wakati kichupo hiki kilikuwa wazi. Kupakia upya kutalileta.",
+    "reload": "Pakia upya",
+    "goHome": "Nenda nyumbani"
+  },
+  "seo": {
+    "defaultTitle": "3Speak - Jukwaa la video lililogatuliwa",
+    "defaultDescription": "3Speak ni jukwaa la kushiriki video lililogatuliwa lililojengwa kwa teknolojia ya blockchain. Tazama, pakia na shiriki video huku ukipata zawadi za sarafu za kidijitali."
+  },
+  "uploadLinks": {
+    "regularVideo": "Video ya kawaida",
+    "verticalShort": "Short wima",
+    "musicAudio": "Muziki / Sauti",
+    "groupChat": "Gumzo la kikundi",
+    "communitySnap": "Snap ya jumuiya",
+    "shortsEditor": "Kihariri cha Shorts",
+    "goLive": "Nenda mubashara",
+    "streamStudio": "Studio ya utiririshaji",
+    "headings": {
+      "upload": "Pakia",
+      "live": "Mubashara",
+      "others": "Nyingine"
+    }
+  },
+  "chat": {
+    "connectFailed": "Imeshindwa kuunganisha na gumzo.",
+    "loginFirst": "Ingia kwanza ili kutumia gumzo.",
+    "roomNameRequired": "Jina la chumba linahitajika."
+  },
+  "hiveAuth": {
+    "waiting": "Inasubiri idhini kwenye HiveAuth...",
+    "title": "Idhini ya HiveAuth inahitajika",
+    "hint": "Tafadhali angalia programu yako ya HiveAuth ili kuidhinisha muamala huu"
+  },
+  "hiveApi": {
+    "keychainNotSigned": "Keychain haikusaini muamala",
+    "loginToCreateCommunity": "Tafadhali ingia ili kuunda jumuiya",
+    "loginFirst": "Tafadhali ingia kwanza",
+    "cancelled": "Kitendo kimeghairiwa"
+  },
+  "openpod": {
+    "announced": "Kipindi mubashara kimetangazwa kwenye Hive!",
+    "announceFailed": "OpenPod imeanza, lakini tangazo la Hive halikuweza kuchapishwa."
+  },
+  "appUpdate": {
+    "updating": "Inasasisha kwenda toleo jipya zaidi ({{version}})…",
+    "reloadingForUpload": "Inapakia upya ili upakiaji wako uendeshwe kwenye toleo jipya zaidi."
+  },
+  "auth": {
+    "switched": "Umebadili kwenda {{username}}!",
+    "keychainLoginTitle": "Ingia kwa Hive"
+  },
+  "streamVod": {
+    "uploadKeyMissing": "Mtiririko umekwisha, lakini video haikuweza kupakiwa (ufunguo wa upakiaji unakosekana).",
+    "uploading": "Inapakia video ya mtiririko wako… {{pct}}%",
+    "uploaded": "Video ya mtiririko imepakiwa — itachukua nafasi ya mtiririko mubashara usimbaji ukikamilika.",
+    "uploadFailed": "Mtiririko umekwisha, lakini upakiaji wa video umeshindwa.",
+    "saving": "Inahifadhi video ya mtiririko wako…",
+    "encoding": "Imepakiwa — kisimbaji kinachakata video yako…",
+    "saved": "Video ya mtiririko imehifadhiwa — itachukua nafasi ya mtiririko mubashara usimbaji ukikamilika.",
+    "saveFailed": "Mtiririko umekwisha, lakini video haikuweza kuhifadhiwa: {{error}}.",
+    "uploadFailedShort": "upakiaji umeshindwa",
+    "stillProcessing": "Mtiririko umekwisha — video bado inachakatwa; angalia wasifu wako baada ya muda mfupi."
+  },
+  "embedPlayer": {
+    "unavailable": "Video haipatikani"
+  },
+  "followFeed": {
+    "title": "Mlisho wa unaowafuata",
+    "error": "Hitilafu katika kupata video"
+  },
+  "groups": {
+    "title": "Vikundi",
+    "badges": "Beji",
+    "subtitle": "Jumuiya unazoweza kujiunga nazo na beji ambazo watu wanazo, mahali pamoja."
+  },
+  "watched": {
+    "removed": "Imeondolewa kwenye historia ya kutazama",
+    "removeFailed": "Imeshindwa kuondoa kwenye historia ya kutazama",
+    "title": "Ulizotazama",
+    "count_one": "{{count}} imetazamwa",
+    "count_other": "{{count}} zimetazamwa",
+    "trackHistory": "Fuatilia historia",
+    "videosTab": "Video ({{count}})",
+    "shortsTab": "Shorts ({{count}})",
+    "loadFailed": "Imeshindwa kupakia historia ya kutazama. Tafadhali jaribu tena.",
+    "emptyShorts": "Bado hakuna Shorts ulizotazama",
+    "emptyVideos": "Bado hakuna video ulizotazama",
+    "removeTitle": "Ondoa kwenye historia ya kutazama",
+    "watchedAt": "Ilitazamwa {{when}}"
+  },
+  "watchStream": {
+    "saySomething": "Sema kitu…",
+    "waitingWallet": "Inasubiri pochi yako…",
+    "signInToChat": "Ingia ili kuchati",
+    "sendMessage": "Tuma ujumbe",
+    "notLive": "Mtiririko huu hauko mubashara kwa sasa.",
+    "notFound": "Hakuna mtiririko mubashara uliopatikana kwa kiungo hiki.",
+    "browse": "Vinjari mitiririko mubashara",
+    "back": "Rudi 3Speak",
+    "seoTitle": "{{title}} (MUBASHARA)",
+    "swipeNext": "Telezesha kwa mtiririko mubashara unaofuata",
+    "chat": "Gumzo",
+    "watchingNow": "👁 {{count}} wanatazama sasa",
+    "signInRaiseHand": "Ingia ili kunyoosha mkono",
+    "copyLink": "Nakili kiungo cha mtiririko",
+    "notAvailableLive": "Haipatikani kwa mitiririko mubashara",
+    "vote": "Piga kura",
+    "comment": "Maoni",
+    "liveChat": "Gumzo mubashara",
+    "signInToJoin": "🔒 Ingia ili ujiunge na gumzo.",
+    "moreTag": "Zaidi #{{tag}}",
+    "moreVideos": "Video zaidi"
+  }
+}

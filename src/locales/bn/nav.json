@@ -1,0 +1,117 @@
+{
+  "theme": {
+    "switchToLight": "লাইট মোডে যান",
+    "switchToDark": "ডার্ক মোডে যান"
+  },
+  "bottom": {
+    "feeds": "ফিড",
+    "groups": "গ্রুপ",
+    "audio": "অডিও",
+    "login": "লগ ইন"
+  },
+  "installApp": "অ্যাপ ইনস্টল করুন",
+  "iosInstallHint": "<b>Share</b> চাপুন, তারপর <b>Add to Home Screen</b>",
+  "playlists": {
+    "tooltip": "আপনার সেভ করা বা বানানো প্লেলিস্ট",
+    "label": "প্লেলিস্ট",
+    "watchLater": "পরে দেখুন",
+    "watchLaterCount": "পরে দেখুন ({{n}})",
+    "watchHistory": "দেখার ইতিহাস",
+    "all": "সব প্লেলিস্ট"
+  },
+  "advertise": "বিজ্ঞাপন দিন",
+  "hidePages": "পেজ লুকান",
+  "showPages": "পেজ দেখান",
+  "tabs": {
+    "overviewTooltip": "3Speak-এ যা কিছু নতুন, আর আমাদের মনে হয় যা আপনার ভালো লাগবে",
+    "overview": "সারসংক্ষেপ",
+    "shortsTooltip": "ছোট ভার্টিক্যাল ভিডিও, একটার পর একটা",
+    "audioTooltip": "3Speak-এ প্রকাশিত পডকাস্ট, গান ও অন্যান্য অডিও",
+    "groupsTooltip": "যেসব কমিউনিটিতে যোগ দিতে পারেন, আর মানুষ যেসব ব্যাজ পায়",
+    "rankingsTooltip": "এই মুহূর্তে সবচেয়ে বেশি আয় করা ও দেখা ক্রিয়েটররা"
+  },
+  "aboutLink": "3Speak সম্পর্কে",
+  "profile": {
+    "accountMenu": "অ্যাকাউন্ট মেনু",
+    "myChannelAria": "আমার চ্যানেল",
+    "vpTooltip": "ভোটিং পাওয়ার: আপনার পরের ভোটের ওজন কতটা",
+    "rcTooltip": "রিসোর্স ক্রেডিট: Hive-এ আপনার কাজের খরচ",
+    "myChannel": "আমার চ্যানেল",
+    "publishBacklog": "জমে থাকা প্রকাশ",
+    "analytics": "অ্যানালিটিক্স",
+    "inviteLinks": "ইনভাইট লিংক",
+    "iosInstallToast": "Safari-তে Share বাটন চাপুন, তারপর \"Add to Home Screen\"",
+    "changeAccount": "অ্যাকাউন্ট বদলান",
+    "logout": "লগ আউট",
+    "onDiscord": "Discord-এ 3Speak",
+    "onX": "X-এ 3Speak",
+    "onTelegram": "Telegram-এ 3Speak"
+  },
+  "notifications": {
+    "pushOff": "এই ডিভাইসে নোটিফিকেশন বন্ধ করা হয়েছে",
+    "pushOn": "আপনার ফলো করা ক্রিয়েটররা পোস্ট করলে আপনাকে জানানো হবে",
+    "pushFailed": "নোটিফিকেশন সেটিংস বদলানো যায়নি",
+    "ariaUnread": "নোটিফিকেশন ({{count}}টি অপঠিত)",
+    "pushBlocked": "আপনার ব্রাউজার সেটিংসে এই সাইটের নোটিফিকেশন ব্লক করা আছে",
+    "pushNoWorker": "এই বিল্ডে কোনো সার্ভিস ওয়ার্কার নেই, তাই এখানে নোটিফিকেশন চালু করা যাবে না",
+    "pushStop": "এই ডিভাইসে নোটিফিকেশন বন্ধ করুন",
+    "pushStart": "আপনার ফলো করা ক্রিয়েটররা পোস্ট করলে নোটিফিকেশন পান",
+    "on": "চালু",
+    "notifyMe": "আমাকে জানান",
+    "empty": "আপনার এখনো কোনো নোটিফিকেশন নেই।",
+    "threeSpeakVideo": "3Speak ভিডিও",
+    "group": {
+      "voteOne": "@{{a}} আপনার পোস্টে ভোট দিয়েছেন",
+      "voteTwo": "@{{a}} ও @{{b}} আপনার পোস্টে ভোট দিয়েছেন",
+      "voteMany_one": "@{{a}} ও আরও {{count}} জন আপনার পোস্টে ভোট দিয়েছেন",
+      "voteMany_other": "@{{a}} ও আরও {{count}} জন আপনার পোস্টে ভোট দিয়েছেন",
+      "withValue": "{{label}} (${{value}})",
+      "followOne": "@{{a}} আপনাকে ফলো করেছেন",
+      "followTwo": "@{{a}} ও @{{b}} আপনাকে ফলো করেছেন",
+      "followMany_one": "@{{a}} ও আরও {{count}} জন আপনাকে ফলো করেছেন",
+      "followMany_other": "@{{a}} ও আরও {{count}} জন আপনাকে ফলো করেছেন",
+      "other": "{{count}}টি {{type}} নোটিফিকেশন",
+      "typeCount": "{{count}}টি {{type}}",
+      "includesWhale": "🐋 হোয়েল অ্যাকাউন্টও আছে",
+      "includesOrca": "🐬 অর্কা অ্যাকাউন্টও আছে",
+      "andMore": "আরও {{count}}টি…"
+    }
+  },
+  "search": {
+    "types": {
+      "users": "ইউজার",
+      "communities": "কমিউনিটি",
+      "videos": "ভিডিও",
+      "shorts": "শর্টস",
+      "audio": "অডিও",
+      "playlists": "প্লেলিস্ট"
+    },
+    "dates": {
+      "today": "আজ",
+      "thisWeek": "এই সপ্তাহ",
+      "thisMonth": "এই মাস",
+      "thisYear": "এই বছর"
+    },
+    "contentType": "কনটেন্টের ধরন",
+    "boostRecent": "নতুনগুলো আগে",
+    "dateRange": "তারিখের সীমা",
+    "tag": "ট্যাগ",
+    "tagPlaceholder": "যেমন crypto, gaming...",
+    "community": "কমিউনিটি",
+    "communityPlaceholder": "কমিউনিটি খুঁজুন...",
+    "clearFilters": "সব ফিল্টার মুছুন",
+    "allHidden": "সব ধরনের কনটেন্ট লুকানো আছে।",
+    "reenableFilters": "সব ফিল্টার আবার চালু করুন",
+    "noResultsFor": "“{{term}}”-এর জন্য কোনো ফলাফল পাওয়া যায়নি",
+    "searchFor": "“{{term}}” খুঁজুন",
+    "authors_one": "{{count}} জন লেখক",
+    "authors_other": "{{count}} জন লেখক",
+    "subscribers_one": "{{count}} জন সাবস্ক্রাইবার",
+    "subscribers_other": "{{count}} জন সাবস্ক্রাইবার",
+    "views_one": "{{formatted}} ভিউ",
+    "views_other": "{{formatted}} ভিউ",
+    "tags": "ট্যাগ",
+    "titles": "শিরোনাম",
+    "placeholder": "সার্চ করুন..."
+  }
+}

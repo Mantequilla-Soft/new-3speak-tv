@@ -1,0 +1,136 @@
+{
+  "button": {
+    "label": "แชต"
+  },
+  "tools": {
+    "emoji": "อีโมจิ",
+    "searchEmoji": "ค้นหาอีโมจิ",
+    "searchGifs": "ค้นหา GIF…",
+    "noGifs": "ไม่พบ GIF",
+    "poweredByGiphy": "Powered by GIPHY"
+  },
+  "lightbox": {
+    "openInNewTab": "เปิดรูปภาพในแท็บใหม่"
+  },
+  "linkCard": {
+    "loadingPreview": "กำลังโหลดตัวอย่าง…",
+    "community": "ชุมชน",
+    "communityWithSubscribers_other": "ชุมชน · สมาชิก {{formatted}} คน",
+    "commentFallback": "(ความคิดเห็น)",
+    "play": "เล่น {{title}}"
+  },
+  "share": {
+    "embedCopied": "คัดลอกโค้ดฝังแล้ว",
+    "pressToCopy": "กด Ctrl/Cmd + C เพื่อคัดลอกโค้ดที่เลือก",
+    "embedTitle": "ฝังวิดีโอนี้",
+    "embedHint": "วางโค้ดนี้ลงในเว็บไซต์หรือโพสต์บล็อกใดก็ได้",
+    "embedSize": "ขนาดที่ฝัง",
+    "embedCode": "โค้ดฝัง",
+    "copyEmbed": "คัดลอกโค้ดฝัง",
+    "responsiveSub": "ปรับขนาดให้พอดีกับหน้าที่วางไว้",
+    "fixedSub": "iframe ขนาดคงที่",
+    "sendInChat": "ส่งในแชต 3Speak",
+    "sendInChatSub": "ส่งข้อความหาใครสักคนบน 3Speak",
+    "embedOnWebsite": "ฝังในเว็บไซต์",
+    "embedOnWebsiteSub": "คัดลอก HTML สำหรับเว็บไซต์หรือบล็อกของคุณ",
+    "generalShare": "แชร์ / คัดลอกลิงก์",
+    "generalShareSub": "แอปอื่นๆ หรือคัดลอกลิงก์"
+  },
+  "gate": {
+    "connectTitle": "เชื่อมต่อแชต 3Speak",
+    "connectBody": "แชตขับเคลื่อนโดย Snapie การเชื่อมต่อจะลงนามคำท้าทายเข้าสู่ระบบครั้งเดียวด้วย posting key ของ Hive — ไม่มีธุรกรรม ไม่มีค่าใช้จ่าย",
+    "connecting": "กำลังเชื่อมต่อ…",
+    "connectButton": "เชื่อมต่อแชต",
+    "cannotSign": "การเข้าสู่ระบบปัจจุบันของคุณลงนามคำท้าทายของแชตไม่ได้ ใช้ Keychain, HiveAuth, PeakVault หรือ Ledger",
+    "needsAccountTitle": "แชตต้องใช้บัญชี Hive",
+    "needsAccountBody": "ข้อความจะถูกลงนามด้วยคีย์บัญชีของคุณเอง แชตจึงปลดล็อกพร้อมกับทุกอย่างเมื่อบัญชีของคุณพร้อม ทำเป้าหมายในโปรไฟล์ให้ครบ แล้วทีมงานจะพาคุณไปถึง",
+    "loginTitle": "เข้าสู่ระบบเพื่อใช้แชต",
+    "loginBody": "เข้าสู่ระบบด้วยบัญชี Hive ของคุณเพื่อส่งและรับข้อความ",
+    "connectingToChat": "กำลังเชื่อมต่อแชต…"
+  },
+  "errors": {
+    "notHiveAccount": "@{{user}} ไม่ใช่บัญชี Hive",
+    "openConversation": "เปิดการสนทนานั้นไม่ได้",
+    "verifyAccount": "ยืนยันบัญชีนั้นไม่ได้",
+    "createRoom": "สร้างห้องไม่ได้",
+    "joinChannel": "เข้าร่วมแชนเนลนั้นไม่ได้"
+  },
+  "newDm": {
+    "placeholder": "ส่งข้อความหาผู้ใช้ Hive…",
+    "start": "เริ่มแชต"
+  },
+  "newRoom": {
+    "toggle": "ห้องส่วนตัวใหม่",
+    "namePlaceholder": "ชื่อห้อง…",
+    "removeMember": "นำ @{{user}} ออก",
+    "addMore": "เพิ่มอีก…",
+    "invitePlaceholder": "เชิญผู้ใช้ Hive (ไม่บังคับ)…",
+    "create": "สร้าง"
+  },
+  "channels": {
+    "browse": "เรียกดูแชนเนล",
+    "publicTitle": "แชนเนลสาธารณะ",
+    "closeBrowser": "ปิดรายการแชนเนล",
+    "loading": "กำลังโหลดแชนเนล…",
+    "empty": "ไม่มีแชนเนล",
+    "join": "เข้าร่วม"
+  },
+  "markRead": {
+    "nothingToClear": "ไม่มีการสนทนาให้ล้าง จำนวนอาจค้างอยู่ที่ฝั่งเซิร์ฟเวอร์",
+    "requestFailed": "คำขอล้มเหลว",
+    "allCaughtUp": "อ่านครบหมดแล้ว",
+    "stillUnread_other": "ยังแสดงว่ายังไม่อ่าน {{total}} รายการ หลังจากล้างแชต {{count}} รายการแล้ว",
+    "stillUnreadNoMatch_other": "ยังแสดงว่ายังไม่อ่าน {{total}} รายการ หลังจากล้างแชต {{count}} รายการแล้ว เซิร์ฟเวอร์รายงานจำนวน แต่ไม่มีการสนทนาที่ตรงกัน",
+    "notSignedIn": "แชตยังไม่ได้เข้าสู่ระบบ เชื่อมต่อแชตอีกครั้งแล้วลองใหม่",
+    "sessionExpired": "เซสชันแชตหมดอายุระหว่างการล้าง เชื่อมต่อแชตอีกครั้งแล้วลองใหม่",
+    "serverRejectedVisible_other": "เซิร์ฟเวอร์ปฏิเสธคำขอทั้งหมด {{count}} รายการ (ID จากรายการที่มองเห็น)",
+    "serverRejectedServerMap_other": "เซิร์ฟเวอร์ปฏิเสธคำขอทั้งหมด {{count}} รายการ (ID จากรายการที่ยังไม่อ่านของเซิร์ฟเวอร์เอง)",
+    "failed": "ทำเครื่องหมายทั้งหมดว่าอ่านแล้วไม่ได้",
+    "marking": "กำลังทำเครื่องหมายว่าอ่านแล้ว…",
+    "button": "ทำเครื่องหมายทั้งหมดว่าอ่านแล้ว",
+    "buttonCount": "ทำเครื่องหมายทั้งหมดว่าอ่านแล้ว ({{count}})"
+  },
+  "list": {
+    "chooseTarget": "เลือกแชตที่จะส่ง",
+    "loading": "กำลังโหลดการสนทนา…",
+    "empty": "ยังไม่มีการสนทนา เริ่มต้นด้านบนโดยกรอกชื่อผู้ใช้ Hive"
+  },
+  "leave": {
+    "confirmRoom": "ออกจากห้องนี้ไหม?",
+    "confirmChannel": "ออกจากแชนเนลนี้ไหม?",
+    "errorRoom": "ออกจากห้องไม่ได้",
+    "errorChannel": "ออกจากแชนเนลไม่ได้",
+    "titleRoom": "ออกจากห้อง",
+    "titleChannel": "ออกจากแชนเนล",
+    "button": "ออก"
+  },
+  "thread": {
+    "editError": "แก้ไขข้อความไม่ได้",
+    "deleteConfirm": "ลบข้อความนี้ไหม? ข้อความจะถูกแทนที่ด้วย “[ลบแล้ว]”",
+    "deleteError": "ลบข้อความไม่ได้",
+    "back": "กลับไปที่การสนทนา",
+    "loading": "กำลังโหลดข้อความ…",
+    "empty": "ยังไม่มีข้อความ — ทักทายเลย 👋",
+    "editedSuffix": " · แก้ไขแล้ว",
+    "messageActions": "การทำงานกับข้อความ",
+    "quote": "อ้างอิง",
+    "forward": "ส่งต่อ",
+    "typing_other": "{{users}} กำลังพิมพ์…",
+    "editing": "กำลังแก้ไขข้อความ",
+    "cancelEdit": "ยกเลิกการแก้ไข",
+    "quoting": "กำลังอ้างอิง @{{user}}",
+    "cancelQuote": "ยกเลิกการอ้างอิง",
+    "removeImage": "นำรูปภาพออก",
+    "placeholder": "พิมพ์ข้อความ…"
+  },
+  "page": {
+    "chooseTarget": "เลือกแชตที่จะส่ง",
+    "selectConversation": "เลือกการสนทนา หรือเริ่มการสนทนาใหม่"
+  },
+  "overlay": {
+    "fullscreen": "เต็มหน้าจอ",
+    "exitFullscreen": "ออกจากโหมดเต็มหน้าจอ",
+    "close": "ปิดแชต",
+    "sendInChat": "ส่งในแชต"
+  }
+}

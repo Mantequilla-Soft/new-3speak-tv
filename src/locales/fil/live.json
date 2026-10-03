@@ -1,0 +1,97 @@
+{
+  "backToOpenPods": "Bumalik sa OpenPods",
+  "modal": {
+    "leaveConfirm": "Aalis sa OpenPod na ito? Puwede kang bumalik mula sa lobby anumang oras.",
+    "yourStreamEnded": "Tapos na ang stream mo",
+    "thisStreamEnded": "Tapos na ang stream na ito",
+    "noLongerLive": "Hindi na ito live. Magsimula ng bago kapag handa ka na.",
+    "recordingProcessing": "Ang galing! Pinoproseso na ang recording mo at lalabas ito sa announcement post maya-maya.",
+    "thanksForLive": "Ang galing — salamat sa pag-live!",
+    "backHome": "Bumalik sa Home",
+    "howWasStream": "Kumusta ang stream mo?",
+    "connecting": "Kumokonekta sa OpenPods…",
+    "authenticating": "Nag-a-authenticate sa OpenPods…"
+  },
+  "strip": {
+    "liveNow_one": "<n>{{count}}</n> OpenPod ang live ngayon",
+    "liveNow_other": "<n>{{count}}</n> OpenPods ang live ngayon",
+    "viewAll": "Tingnan lahat",
+    "joinAria": "Sumali sa OpenPod: {{title}}"
+  },
+  "announce": {
+    "selectCommunity": "Pumili ng Komunidad",
+    "shareToggle": "📣 I-share ang stream na ito sa Hive at 3Speak kapag nagsimula na",
+    "community": "Komunidad",
+    "rewards": "Rewards",
+    "rewardDefault": "Default 50/50",
+    "rewardPowerup": "Power up 100%",
+    "rewardDecline": "Tanggihan ang payout",
+    "beneficiaries": "Mga Beneficiary",
+    "beneProHint": "Naka-3Speak Pro ka — walang platform fee. Magdagdag ng split kung gusto mo.",
+    "beneLockedHint": "Naka-lock ang 10% para kay @threespeakfund. Puwede kang magdagdag pa."
+  },
+  "boost": {
+    "label": "Boost",
+    "sendTo": "Magpadala ng boost kay @{{user}}",
+    "send": "Magpadala ng boost"
+  },
+  "clip": {
+    "saved": "Na-save ang clip sa downloads mo.",
+    "slowDown": "Dahan-dahan lang, tapos mag-clip ulit.",
+    "failed": "Hindi makagawa ng clip. Subukan ulit pagkalipas ng ilang segundo.",
+    "title": "I-clip ang huling 30 segundo",
+    "label": "30 seg",
+    "clipping": "Kina-clip…"
+  },
+  "report": {
+    "reasons": {
+      "harassment": "Harassment o hate",
+      "sexual": "Sekswal o malaswang content",
+      "violence": "Karahasan o mapanganib na gawain",
+      "selfharm": "Pananakit sa sarili",
+      "illegal": "Ilegal na content",
+      "spam": "Spam o scam",
+      "other": "Iba pa"
+    },
+    "sent": "Salamat — nai-report na sa team namin ang stream na ito.",
+    "failed": "Hindi maipadala ang report. Subukan ulit.",
+    "title": "I-report ang stream na ito",
+    "reporting": "Nire-report si <b>@{{host}}</b>.",
+    "intro": "Sabihin sa amin kung ano ang mali — sinusuri ng team namin ang bawat report.",
+    "detailPlaceholder": "Magdagdag ng detalye (opsyonal)",
+    "sending": "Ipinapadala…",
+    "submit": "Isumite ang report"
+  },
+  "signIn": {
+    "waitingWallet": "Hinihintay ang wallet mo…"
+  },
+  "publish": {
+    "errors": {
+      "noTitle": "Magdagdag ng pamagat",
+      "noAudio": "Walang nahanap na audio URL",
+      "failed": "Hindi ma-publish. Subukan ulit."
+    },
+    "published": "Na-publish na sa Hive ang recording!",
+    "loginGate": "Mag-log in para i-publish ang recording mo.",
+    "heading": "I-publish ang OpenPod Recording",
+    "previewLabel": "Preview ng recording",
+    "previewHint": "Pakinggan muna ang audio bago i-publish. Ito rin ang player na makikita ng mga mambabasa sa post.",
+    "recordingFallback": "OpenPod Recording",
+    "title": "Pamagat",
+    "titlePlaceholder": "Bigyan ng pamagat ang recording mo",
+    "description": "Description",
+    "optional": "(opsyonal)",
+    "descriptionPlaceholder": "Ano ang pinag-usapan ninyo? Magdagdag ng show notes, link, o buod...",
+    "tags": "Tags",
+    "tagsPlaceholder": "Mga tag na hiwalay sa space",
+    "declinePayout": "Tanggihan ang Payout",
+    "publishing": "Pine-publish…",
+    "submit": "I-publish ang Recording"
+  },
+  "lobby": {
+    "descriptionPlaceholder": "Tungkol saan ang session na ito? Magdagdag ng show notes, link, o buod…",
+    "enableHosting": "I-enable ang hosting at pagsasalita",
+    "handoverFailed": "Hindi ma-enable nang awtomatiko ang hosting. Nagpo-post ang OpenPods para sa iyo gamit si @threespeak — siguraduhing nabigyan mo ito ng posting authority, tapos subukan ulit.",
+    "signInToHost": "Mag-sign in gamit ang Hive para mag-host o magsalita"
+  }
+}

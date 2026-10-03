@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect, useCallback } from "react";
 import { createPortal } from "react-dom";
+import { useTranslation } from "react-i18next";
 import { MdPlaylistAdd, MdMoreVert } from "react-icons/md";
 import { IoBanOutline, IoEyeOffOutline, IoPricetagOutline } from "react-icons/io5";
 import { toastIn } from '../../utils/toast';
@@ -27,6 +28,7 @@ const toast = toastIn('Video');
  * the server-side filter only takes effect on the next feed fetch.
  */
 function CardOptionsMenu({ author, permlink, title, onDismiss, onOpenChange, className = "" }) {
+  const { t } = useTranslation();
   const [open, setOpen] = useState(false);
   const [playlistOpen, setPlaylistOpen] = useState(false);
   const [tagOpen, setTagOpen] = useState(false);
@@ -84,7 +86,7 @@ function CardOptionsMenu({ author, permlink, title, onDismiss, onOpenChange, cla
 
   const requireLogin = () => {
     if (isLoggedIn() && user) return true;
-    toast.error("Please login to personalize your feed");
+    toast.error(t('engagement.cardMenu.loginToPersonalize'));
     return false;
   };
 
@@ -99,9 +101,9 @@ function CardOptionsMenu({ author, permlink, title, onDismiss, onOpenChange, cla
     if (!requireLogin()) return;
     onDismiss?.("video", { owner: author, permlink });
     hideVideo(user, author, permlink);
-    toast.success("Not interested — we'll hide this video", {
+    toast.success(t('engagement.cardMenu.notInterestedToast'), {
       action: {
-        label: "Undo",
+        label: t('engagement.cardMenu.undo'),
         onClick: () => {
           unhideVideo(user, author, permlink);
           onDismiss?.("undo-video", { owner: author, permlink });
@@ -113,14 +115,14 @@ function CardOptionsMenu({ author, permlink, title, onDismiss, onOpenChange, cla
   const onHideCreator = () => {
     if (!requireLogin()) return;
     if (user?.toLowerCase() === String(author).toLowerCase()) {
-      toast.error("You can't hide your own videos");
+      toast.error(t('engagement.cardMenu.cantHideOwn'));
       return;
     }
     onDismiss?.("creator", { owner: author });
     hideCreator(user, author);
-    toast.success(`Hiding videos from @${author}`, {
+    toast.success(t('engagement.cardMenu.hidingCreatorToast', { author }), {
       action: {
-        label: "Undo",
+        label: t('engagement.cardMenu.undo'),
         onClick: () => {
           unhideCreator(user, author);
           onDismiss?.("undo-creator", { owner: author });
@@ -131,7 +133,7 @@ function CardOptionsMenu({ author, permlink, title, onDismiss, onOpenChange, cla
 
   const onAddToPlaylist = () => {
     if (!isLoggedIn()) {
-      toast.error("Please login to add videos to playlists");
+      toast.error(t('engagement.cardMenu.loginForPlaylists'));
       return;
     }
     setPlaylistOpen(true);
@@ -140,7 +142,7 @@ function CardOptionsMenu({ author, permlink, title, onDismiss, onOpenChange, cla
   // Tagging broadcasts a signed custom_json, so it needs a logged-in account.
   const onAddTag = () => {
     if (!isLoggedIn() || !user) {
-      toast.error("Please login to tag videos");
+      toast.error(t('engagement.cardMenu.loginToTag'));
       return;
     }
     setTagOpen(true);
@@ -155,7 +157,7 @@ function CardOptionsMenu({ author, permlink, title, onDismiss, onOpenChange, cla
         onMouseDown={(e) => e.stopPropagation()}
         aria-haspopup="menu"
         aria-expanded={open}
-        title="More options"
+        title={t('engagement.cardMenu.moreOptions')}
       >
         <MdMoreVert size={20} />
       </button>
@@ -170,16 +172,16 @@ function CardOptionsMenu({ author, permlink, title, onDismiss, onOpenChange, cla
           onMouseDown={(e) => e.stopPropagation()}
         >
           <button role="menuitem" onClick={(e) => act(e, onAddToPlaylist)}>
-            <MdPlaylistAdd size={19} /> Add to playlist
+            <MdPlaylistAdd size={19} /> {t('engagement.cardMenu.addToPlaylist')}
           </button>
           <button role="menuitem" onClick={(e) => act(e, onAddTag)}>
-            <IoPricetagOutline size={17} /> Add tag
+            <IoPricetagOutline size={17} /> {t('engagement.cardMenu.addTag')}
           </button>
           <button role="menuitem" onClick={(e) => act(e, onNotInterested)}>
-            <IoEyeOffOutline size={17} /> Not interested
+            <IoEyeOffOutline size={17} /> {t('engagement.cardMenu.notInterested')}
           </button>
           <button role="menuitem" onClick={(e) => act(e, onHideCreator)}>
-            <IoBanOutline size={17} /> Don&apos;t show @{author}
+            <IoBanOutline size={17} /> {t('engagement.cardMenu.dontShowCreator', { author })}
           </button>
         </div>,
         document.body

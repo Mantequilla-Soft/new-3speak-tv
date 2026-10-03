@@ -1,5 +1,7 @@
 import { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
+import { formatTimeAgo } from '../../i18n';
 import { MdPlayArrow, MdPlaylistPlay, MdShare, MdAdd } from 'react-icons/md';
 import { useAppStore } from '../../lib/store';
 import PayoutAmount from '../PayoutAmount/PayoutAmount';
@@ -17,7 +19,7 @@ function audioThumb(item) {
   // Fall back to the cover of the first playlist this audio was published into
   // (set by the checker via $lookup against the playlists collection).
   if (item.playlist_thumbnail) return item.playlist_thumbnail;
-  return `https://images.hive.blog/u/${item.owner}/avatar/small`;
+  return `/img/u/${item.owner}/avatar/small`;
 }
 
 function fmt(sec) {
@@ -29,37 +31,33 @@ function fmt(sec) {
 
 function fmtAgo(ds) {
   if (!ds) return '';
-  const d = Math.floor((Date.now() - new Date(ds).getTime()) / 1000);
-  if (d < 60) return 'now';
-  if (d < 3600) return `${Math.floor(d / 60)}m`;
-  if (d < 86400) return `${Math.floor(d / 3600)}h`;
-  if (d < 2592000) return `${Math.floor(d / 86400)}d`;
-  return `${Math.floor(d / 2592000)}mo`;
+  return formatTimeAgo(ds, { style: 'narrow' });
 }
 
-const CATEGORY_LABELS = {
-  podcast: 'Podcast',
-  voice_message: 'Voice',
-  song: 'Music',
-  audiobook: 'Audiobook',
-  interview: 'Interview',
+// i18n keys, translated at render (never call t() at module level).
+const CATEGORY_LABEL_KEYS = {
+  podcast: 'audio.categories.podcast',
+  voice_message: 'audio.categories.voice',
+  song: 'audio.categories.music',
+  audiobook: 'audio.categories.audiobook',
+  interview: 'audio.categories.interview',
 };
 
 // Build a one-line metadata summary shown beneath the username:
 //   - For music tracks with a genre, the genre replaces the type label
 //   - Audio with no category falls back to "Voice"
 //   - bpm is appended when present
-function getMetaLine(item) {
+function getMetaLine(item, t) {
   const parts = [];
   const isMusic = item.category === 'song' || item.category === 'music';
   if (isMusic && item.genre) {
     parts.push(String(item.genre));
-  } else if (item.category && CATEGORY_LABELS[item.category]) {
-    parts.push(CATEGORY_LABELS[item.category]);
+  } else if (item.category && CATEGORY_LABEL_KEYS[item.category]) {
+    parts.push(t(CATEGORY_LABEL_KEYS[item.category]));
   } else {
-    parts.push(CATEGORY_LABELS.voice_message);
+    parts.push(t(CATEGORY_LABEL_KEYS.voice_message));
   }
-  if (item.bpm) parts.push(`${item.bpm} bpm`);
+  if (item.bpm) parts.push(t('audio.tile.bpm', { bpm: item.bpm }));
   return parts.join(' · ');
 }
 
@@ -87,6 +85,7 @@ function AudioTile({
   onVote, // eslint-disable-line no-unused-vars
   loggedIn = false,
 }) {
+  const { t } = useTranslation();
   const audioCurrent = useAppStore((s) => s.audioCurrent);
   const audioIsPlaying = useAppStore((s) => s.audioIsPlaying);
   const audioPlay = useAppStore((s) => s.audioPlay);
@@ -182,16 +181,16 @@ function AudioTile({
   };
 
   const thumb = audioThumb(item);
-  const metaLine = getMetaLine(item);
+  const metaLine = getMetaLine(item, t);
 
   const actions = (
     <div className="audio-tile-actions" onClick={(e) => e.stopPropagation()}>
-      <button className="audio-tile-action-btn" onClick={handleQueue} title="Queue"><MdAdd size={14} /></button>
+      <button className="audio-tile-action-btn" onClick={handleQueue} title={t('audio.tile.queue')}><MdAdd size={14} /></button>
       {loggedIn && onAddToPlaylist && (
-        <button className="audio-tile-action-btn" onClick={(e) => { e.stopPropagation(); onAddToPlaylist(); }} title="Playlist"><MdPlaylistPlay size={14} /></button>
+        <button className="audio-tile-action-btn" onClick={(e) => { e.stopPropagation(); onAddToPlaylist(); }} title={t('audio.tile.playlist')}><MdPlaylistPlay size={14} /></button>
       )}
       {onShare && (
-        <button className="audio-tile-action-btn" onClick={(e) => { e.stopPropagation(); onShare(); }} title="Share"><MdShare size={14} /></button>
+        <button className="audio-tile-action-btn" onClick={(e) => { e.stopPropagation(); onShare(); }} title={t('common.actions.share')}><MdShare size={14} /></button>
       )}
     </div>
   );
@@ -216,13 +215,13 @@ function AudioTile({
 
   const body = (
     <div className="audio-tile-body">
-      <span className="audio-tile-title" onClick={handlePlay}>{item.title || 'Untitled'}</span>
+      <span className="audio-tile-title" onClick={handlePlay}>{item.title || t('audio.untitled')}</span>
       <AuthorBadge author={item.owner} showFollow={inView} compact tabHint="audio" onClick={onAuthorClick} />
       {metaLine && <span className="audio-tile-meta"><i className={`audio-tile-meta-icon ${audioCategoryIcon(item.category)}`} /> {metaLine}</span>}
       <div className="audio-tile-footer">
         <div className="audio-tile-footer-left">
           {item.stats?.total_hive_reward > 0 && <PayoutAmount amount={item.stats.total_hive_reward} size={10} />}
-          {item.plays > 0 && <span>{item.plays} plays</span>}
+          {item.plays > 0 && <span>{t('audio.tile.plays', { count: item.plays })}</span>}
         </div>
         <span className="audio-tile-time">{fmtAgo(item.createdAt)}</span>
       </div>

@@ -1,6 +1,7 @@
 import { useState, useEffect, useMemo, useRef } from 'react';
 import { getHiveClient } from '../../utils/hiveNode';
 import { createPortal } from 'react-dom';
+import { useTranslation, Trans } from 'react-i18next';
 import { IoClose } from 'react-icons/io5';
 import { MdImage, MdUpload } from 'react-icons/md';
 import { toastIn } from '../../utils/toast';
@@ -106,6 +107,7 @@ function recombinePostBody(header, middle, footer) {
  * @param {(changes: { title, body, tags, thumbnail }) => void} onSaved
  */
 export default function EditVideoModal({ isOpen, onClose, author, permlink, onSaved, isShort = false }) {
+  const { t } = useTranslation();
   const [loading, setLoading] = useState(false);
   const [saving, setSaving] = useState(false);
   const [loadError, setLoadError] = useState(null);
@@ -177,7 +179,7 @@ export default function EditVideoModal({ isOpen, onClose, author, permlink, onSa
         const post = await hiveClient.call('condenser_api', 'get_content', [author, permlink]);
         if (cancelled) return;
         if (!post || !post.author) {
-          setLoadError('Could not find this post on Hive.');
+          setLoadError(t('watch.edit.errors.notFound'));
           setLoading(false);
           return;
         }
@@ -207,18 +209,18 @@ export default function EditVideoModal({ isOpen, onClose, author, permlink, onSa
         setBody(middle);
         setBodyHeader(header);
         setBodyFooter(footer);
-        const tagNsfw = metaTags.some((t) => String(t).toLowerCase() === 'nsfw');
+        const tagNsfw = metaTags.some((tag) => String(tag).toLowerCase() === 'nsfw');
         // Separate the auto-added taxonomy (3speak, community/category, short)
         // and the nsfw flag from the user's own tags, so the count/limit here
         // matches the uploader (which validates only the user tags and prepends
         // the taxonomy). The taxonomy is preserved and re-added on save.
         const category = String(post.category || '').toLowerCase();
-        const isSystemTag = (t) => {
-          const lc = String(t).toLowerCase();
+        const isSystemTag = (tag) => {
+          const lc = String(tag).toLowerCase();
           return lc === '3speak' || lc === 'short' || lc === 'nsfw' || lc === category;
         };
-        setSystemTags(metaTags.filter((t) => isSystemTag(t) && String(t).toLowerCase() !== 'nsfw'));
-        setTagsInput(metaTags.filter((t) => !isSystemTag(t)).join(' '));
+        setSystemTags(metaTags.filter((tag) => isSystemTag(tag) && String(tag).toLowerCase() !== 'nsfw'));
+        setTagsInput(metaTags.filter((tag) => !isSystemTag(tag)).join(' '));
         setThumbnailUrl(currentThumb);
         initialThumbRef.current = currentThumb;
         const metaReusable = meta.video?.reusable !== false;
@@ -232,7 +234,7 @@ export default function EditVideoModal({ isOpen, onClose, author, permlink, onSa
           if (!cancelled && doc) {
             const isListed = doc.listed_on_3speak !== false;
             const nsfw = doc.isNsfwContent === true || tagNsfw
-              || (Array.isArray(doc.hive_tags) && doc.hive_tags.some((t) => String(t).toLowerCase() === 'nsfw'));
+              || (Array.isArray(doc.hive_tags) && doc.hive_tags.some((tag) => String(tag).toLowerCase() === 'nsfw'));
             setListed(isListed);
             setIsNsfw(nsfw);
             setPromotedUntil(doc.promotedUntil || null);
@@ -269,7 +271,7 @@ export default function EditVideoModal({ isOpen, onClose, author, permlink, onSa
       } catch (err) {
         if (cancelled) return;
         console.error('Failed to load post for edit:', err);
-        setLoadError('Failed to load post from Hive. Please try again.');
+        setLoadError(t('watch.edit.errors.loadFailed'));
         setLoading(false);
       }
     })();
@@ -310,7 +312,7 @@ export default function EditVideoModal({ isOpen, onClose, author, permlink, onSa
     const raw = tagsInput
       .toLowerCase()
       .split(/[\s,]+/)
-      .map((t) => t.trim())
+      .map((tag) => tag.trim())
       .filter(Boolean);
     return [...new Set(raw)];
   }, [tagsInput]);
@@ -334,8 +336,8 @@ export default function EditVideoModal({ isOpen, onClose, author, permlink, onSa
   // `nsfw` tag when marked adult (deduped, taxonomy first — same shape the
   // uploader produces).
   const finalTags = useMemo(() => {
-    const sys = systemTags.filter((t) => String(t).toLowerCase() !== 'nsfw');
-    const user = parsedTags.filter((t) => t !== 'nsfw');
+    const sys = systemTags.filter((tag) => String(tag).toLowerCase() !== 'nsfw');
+    const user = parsedTags.filter((tag) => tag !== 'nsfw');
     const combined = [...new Set([...sys, ...user])];
     return isNsfw ? [...combined, 'nsfw'] : combined;
   }, [systemTags, parsedTags, isNsfw]);
@@ -347,8 +349,8 @@ export default function EditVideoModal({ isOpen, onClose, author, permlink, onSa
     const origThumb = (() => {
       const sm = original.meta.video?.info?.sourceMap;
       if (Array.isArray(sm)) {
-        const t = sm.find((s) => s.type === 'thumbnail');
-        if (t?.url) return t.url;
+        const thumb = sm.find((s) => s.type === 'thumbnail');
+        if (thumb?.url) return thumb.url;
       }
       return Array.isArray(original.meta.image) ? (original.meta.image[0] || '') : '';
     })();
@@ -378,22 +380,22 @@ export default function EditVideoModal({ isOpen, onClose, author, permlink, onSa
     e.target.value = ''; // allow re-picking the same file
     if (!file) return;
     if (!file.type.startsWith('image/')) {
-      toast.error('Please select an image file.');
+      toast.error(t('watch.edit.errors.notImage'));
       return;
     }
     // 10 MB cap — same ballpark as the uploader
     if (file.size > 10 * 1024 * 1024) {
-      toast.error('Image too large (max 10 MB).');
+      toast.error(t('watch.edit.errors.imageTooLarge'));
       return;
     }
     setThumbUploading(true);
     try {
       const url = await uploadThumbnail(file);
       setThumbnailUrl(url);
-      toast.success('Thumbnail uploaded.');
+      toast.success(t('watch.edit.thumbUploaded'));
     } catch (err) {
       console.error('Thumbnail upload failed:', err);
-      toast.error(err?.message || 'Thumbnail upload failed.');
+      toast.error(err?.message || t('watch.edit.errors.thumbUploadFailed'));
     } finally {
       setThumbUploading(false);
     }
@@ -404,12 +406,12 @@ export default function EditVideoModal({ isOpen, onClose, author, permlink, onSa
     e.target.value = ''; // allow re-picking the same file
     if (!file) return;
     if (!file.type.startsWith('video/')) {
-      toast.error('Please select a video file.');
+      toast.error(t('watch.edit.errors.notVideo'));
       return;
     }
     // Same 5GB ceiling the embed studio enforces (and the server enforces too).
     if (file.size > 5 * 1024 * 1024 * 1024) {
-      toast.error('Video too large (max 5 GB).');
+      toast.error(t('watch.edit.errors.videoTooLarge'));
       return;
     }
 
@@ -422,18 +424,18 @@ export default function EditVideoModal({ isOpen, onClose, author, permlink, onSa
     // no Hive post). One request up front turns all of that into a sentence.
     const originalAssetPermlink = original?.meta?.video?.info?.permlink;
     if (!originalAssetPermlink) {
-      toast.error("This post has no video entry to replace — its metadata doesn't reference one.");
+      toast.error(t('watch.edit.errors.noVideoEntry'));
       return;
     }
     const target = await fetchReplaceTarget(originalAssetPermlink);
     // `null` means no host could answer. That's a health problem, not a verdict
     // on this video, so don't block the upload on it.
     if (target?.found === false) {
-      toast.error("This post's video is no longer in the library, so its file can't be replaced.");
+      toast.error(t('watch.edit.errors.notInLibrary'));
       return;
     }
     if (target?.owner && target.owner !== author) {
-      toast.error('You can only replace the file on your own video.');
+      toast.error(t('watch.edit.errors.notOwner'));
       return;
     }
 
@@ -453,10 +455,10 @@ export default function EditVideoModal({ isOpen, onClose, author, permlink, onSa
         onEndpoint: setUploadHost,
       });
       setNewAsset(asset);
-      toast.success('New video uploaded. Save to apply it to this post.');
+      toast.success(t('watch.edit.videoUploaded'));
     } catch (err) {
       console.error('Video replacement upload failed:', err);
-      toast.error(err?.message || 'Video upload failed.');
+      toast.error(err?.message || t('watch.edit.errors.videoUploadFailed'));
       setNewVideoFile(null);
       setNewDuration(0);
     } finally {
@@ -480,7 +482,7 @@ export default function EditVideoModal({ isOpen, onClose, author, permlink, onSa
     e?.preventDefault?.();
     if (!canSave) return;
     if (!isDirty) {
-      toast.info('No changes to save.');
+      toast.info(t('watch.edit.noChanges'));
       return;
     }
 
@@ -496,7 +498,7 @@ export default function EditVideoModal({ isOpen, onClose, author, permlink, onSa
       if (newAsset?.permlink) {
         const originalAssetPermlink = meta.video?.info?.permlink;
         if (!originalAssetPermlink) {
-          throw new Error("This post has no embed video entry to replace — its metadata doesn't reference one.");
+          throw new Error(t('watch.edit.errors.noEmbedEntry'));
         }
         await registerMediaReplacement(newAsset.permlink, originalAssetPermlink);
         // A fresh, playable source means any "deleted"/unavailable shadow-ban no
@@ -560,7 +562,7 @@ export default function EditVideoModal({ isOpen, onClose, author, permlink, onSa
           null // don't touch comment_options on edit
         );
         if (!result?.success) {
-          throw new Error(result?.error || 'Broadcast failed');
+          throw new Error(result?.error || t('watch.edit.errors.broadcastFailed'));
         }
 
         // Reflect the new thumbnail in Mongo immediately (best-effort).
@@ -592,10 +594,10 @@ export default function EditVideoModal({ isOpen, onClose, author, permlink, onSa
           await axios.put(`${CHECKER_URL}/video/listing`, { owner: author, permlink, listed },
             { headers: { Authorization: `Bearer ${CHECKER_API_KEY}` } });
           initialListedRef.current = listed;
-          toast.success(listed ? 'Video re-listed.' : 'Video unlisted.');
+          toast.success(listed ? t('watch.edit.relisted') : t('watch.edit.unlisted'));
         } catch (e) {
           console.warn('Listing update failed:', e?.message);
-          toast.error('Could not update the listing.');
+          toast.error(t('watch.edit.errors.listingFailed'));
         }
       }
 
@@ -608,11 +610,11 @@ export default function EditVideoModal({ isOpen, onClose, author, permlink, onSa
           await setChannelTrailer(author, isTrailer ? permlink : null, { author });
           initialTrailerRef.current = isTrailer;
           toast.success(isTrailer
-            ? 'Set as your channel trailer.'
-            : 'Removed as your channel trailer.');
+            ? t('watch.edit.trailerSet')
+            : t('watch.edit.trailerRemoved'));
         } catch (e) {
           console.warn('Channel trailer update failed:', e?.message);
-          toast.error('Could not update your channel trailer.');
+          toast.error(t('watch.edit.errors.trailerFailed'));
         }
       }
 
@@ -620,9 +622,9 @@ export default function EditVideoModal({ isOpen, onClose, author, permlink, onSa
       // needs the encoding caveat: the save succeeded, but the new video will
       // not play for a few minutes yet — without saying so it reads as broken.
       if (videoDirty) {
-        toast.success('Video updated! The new file needs a few moments to finish encoding.');
+        toast.success(t('watch.edit.updatedEncoding'));
       } else if (contentDirty) {
-        toast.success('Video updated!');
+        toast.success(t('watch.edit.updated'));
       }
 
       onSaved?.({
@@ -634,7 +636,7 @@ export default function EditVideoModal({ isOpen, onClose, author, permlink, onSa
       onClose();
     } catch (err) {
       console.error('Edit save failed:', err);
-      toast.error(err?.message || 'Failed to save changes.');
+      toast.error(err?.message || t('watch.edit.errors.saveFailed'));
     } finally {
       setSaving(false);
     }
@@ -645,15 +647,15 @@ export default function EditVideoModal({ isOpen, onClose, author, permlink, onSa
   return createPortal(
     <div className="edit-video-modal-overlay" onClick={onClose}>
       <div className="edit-video-modal-content" onClick={(e) => e.stopPropagation()}>
-        <button className="edit-video-close-btn" onClick={onClose} aria-label="Close">
+        <button className="edit-video-close-btn" onClick={onClose} aria-label={t('common.actions.close')}>
           <IoClose size={22} />
         </button>
 
-        <h3 className="edit-video-title">Edit Video</h3>
+        <h3 className="edit-video-title">{t('watch.edit.title')}</h3>
         <p className="edit-video-subtitle">@{author}/{permlink}</p>
 
         {loading && (
-          <div className="edit-video-loading">Loading current post…</div>
+          <div className="edit-video-loading">{t('watch.edit.loading')}</div>
         )}
 
         {loadError && !loading && (
@@ -663,13 +665,13 @@ export default function EditVideoModal({ isOpen, onClose, author, permlink, onSa
         {!loading && !loadError && original && (
           <form className="edit-video-form" onSubmit={handleSave}>
             {/* Video file — swap the media without touching the post itself. */}
-            <label className="edit-video-label">Video file</label>
+            <label className="edit-video-label">{t('watch.edit.videoFile')}</label>
             <div className="evm-video-replace">
               {!newVideoFile && (
                 <>
                   <label className="evm-video-pick">
                     <MdUpload size={18} />
-                    <span>Replace video</span>
+                    <span>{t('watch.edit.replaceVideo')}</span>
                     <input
                       type="file"
                       accept="video/*"
@@ -678,9 +680,7 @@ export default function EditVideoModal({ isOpen, onClose, author, permlink, onSa
                     />
                   </label>
                   <p className="edit-video-hint">
-                    Swaps the video file on this post. Everything else stays as it is: the
-                    post keeps its likes, payout, comments, upload date and its place in
-                    your profile. Leave this alone to keep the current video.
+                    {t('watch.edit.replaceHint')}
                   </p>
                 </>
               )}
@@ -698,15 +698,17 @@ export default function EditVideoModal({ isOpen, onClose, author, permlink, onSa
                       </div>
                       <div className="evm-video-staged__status">
                         {uploadHost
-                          ? <>Uploading to <b>{uploadHost}</b>… {videoUploadPct}%</>
-                          : <>Choosing an upload server…</>}
+                          ? <Trans i18nKey="watch.edit.uploadingTo" values={{ host: uploadHost, pct: videoUploadPct }} components={{ b: <b /> }} />
+                          : t('watch.edit.choosingServer')}
                       </div>
                     </>
                   )}
 
                   {!videoUploading && newAsset && (
                     <div className="evm-video-staged__status evm-video-staged__status--ok">
-                      Uploaded{uploadHost ? <> to <b>{uploadHost}</b></> : null}. Press Save to swap it in.
+                      {uploadHost
+                        ? <Trans i18nKey="watch.edit.uploadedTo" values={{ host: uploadHost }} components={{ b: <b /> }} />
+                        : t('watch.edit.uploaded')}
                     </div>
                   )}
 
@@ -715,14 +717,12 @@ export default function EditVideoModal({ isOpen, onClose, author, permlink, onSa
                     className="evm-video-cancel"
                     onClick={cancelVideoReplacement}
                   >
-                    {videoUploading ? 'Cancel upload' : 'Keep the current video'}
+                    {videoUploading ? t('watch.edit.cancelUpload') : t('watch.edit.keepCurrent')}
                   </button>
 
                   {!videoUploading && newAsset && (
                     <p className="edit-video-hint">
-                      After you save it still needs a few minutes to encode, and the old
-                      video keeps playing until it is ready. Your thumbnail is unchanged, so
-                      update it above if it no longer matches.
+                      {t('watch.edit.encodeHint')}
                     </p>
                   )}
                 </div>
@@ -730,13 +730,13 @@ export default function EditVideoModal({ isOpen, onClose, author, permlink, onSa
             </div>
 
             {/* Thumbnail */}
-            <label className="edit-video-label">Thumbnail</label>
+            <label className="edit-video-label">{t('watch.edit.thumbnail')}</label>
             <div className="edit-video-thumb-row">
               {thumbnailUrl ? (
                 <img
                   className="edit-video-thumb-preview"
                   src={thumbnailUrl}
-                  alt="Thumbnail preview"
+                  alt={t('watch.edit.thumbPreviewAlt')}
                   onError={(e) => { e.currentTarget.style.visibility = 'hidden'; }}
                   onLoad={(e) => { e.currentTarget.style.visibility = 'visible'; }}
                 />
@@ -757,10 +757,10 @@ export default function EditVideoModal({ isOpen, onClose, author, permlink, onSa
                   className="edit-video-upload-btn"
                   onClick={() => thumbInputRef.current?.click()}
                   disabled={thumbUploading || saving}
-                  title="Upload an image"
+                  title={t('watch.edit.uploadImage')}
                 >
                   <MdUpload size={16} />
-                  {thumbUploading ? 'Uploading…' : 'Upload'}
+                  {thumbUploading ? t('watch.edit.uploading') : t('common.actions.upload')}
                 </button>
                 <input
                   ref={thumbInputRef}
@@ -772,12 +772,12 @@ export default function EditVideoModal({ isOpen, onClose, author, permlink, onSa
               </div>
             </div>
             <span className="edit-video-hint">
-              Upload an image or paste a direct URL. Leave unchanged to keep the current thumbnail.
+              {t('watch.edit.thumbHint')}
             </span>
 
             {/* Title — hidden for shorts (they use their caption/description). */}
             {!isShort && <>
-            <label className="edit-video-label">Title</label>
+            <label className="edit-video-label">{t('watch.edit.titleLabel')}</label>
             <input
               type="text"
               className="edit-video-input"
@@ -786,48 +786,48 @@ export default function EditVideoModal({ isOpen, onClose, author, permlink, onSa
               maxLength={TITLE_MAX}
             />
             <span className={`edit-video-hint${!titleValid && title ? ' error' : ''}`}>
-              {titleLen}/{TITLE_MAX}{isShort ? '' : ` · min ${TITLE_MIN}`}
+              {titleLen}/{TITLE_MAX}{isShort ? '' : ` · ${t('watch.edit.titleMin', { min: TITLE_MIN })}`}
             </span>
             </>}
 
             {/* Tags */}
-            <label className="edit-video-label">Tags</label>
+            <label className="edit-video-label">{t('watch.edit.tags')}</label>
             <input
               type="text"
               className="edit-video-input"
               value={tagsInput}
               onChange={(e) => setTagsInput(e.target.value)}
-              placeholder="space-separated"
+              placeholder={t('watch.edit.tagsPlaceholder')}
             />
             <div className="edit-video-tags-preview">
               {/* Auto-added taxonomy (community/category) — shown pinned and can't
                   be removed; it's always preserved on save. */}
-              {systemTags.map((t) => (
+              {systemTags.map((tag) => (
                 <span
-                  key={`sys-${t}`}
+                  key={`sys-${tag}`}
                   className="tag--auto"
-                  title="Added automatically — can't be removed"
+                  title={t('watch.edit.autoTag')}
                   style={{ opacity: 0.7, fontStyle: 'italic' }}
                 >
-                  {t}
+                  {tag}
                 </span>
               ))}
-              {parsedTags.map((t) => <span key={t}>{t}</span>)}
+              {parsedTags.map((tag) => <span key={tag}>{tag}</span>)}
             </div>
             <span className={`edit-video-hint${!tagsValid && parsedTags.length ? ' error' : ''}`}>
-              {parsedTags.length}/{userTagLimit} tags{isShort ? '' : ' · at least 1 required'}
+              {isShort ? t('watch.edit.tagCount', { count: parsedTags.length, max: userTagLimit }) : t('watch.edit.tagCountRequired', { count: parsedTags.length, max: userTagLimit })}
             </span>
 
             {/* Body */}
-            <label className="edit-video-label">Description</label>
+            <label className="edit-video-label">{t('watch.edit.description')}</label>
             <textarea
               className="edit-video-textarea"
               value={body}
               onChange={(e) => setBody(e.target.value)}
               rows={10}
-              placeholder="Tell viewers about your video…"
+              placeholder={t('watch.edit.descriptionPlaceholder')}
             />
-            <span className="edit-video-hint">Supports markdown.</span>
+            <span className="edit-video-hint">{t('watch.edit.markdownHint')}</span>
 
             {/* Listing / Remix / NSFW toggles + Promote */}
             <div className="evm-toggle-row">
@@ -841,8 +841,8 @@ export default function EditVideoModal({ isOpen, onClose, author, permlink, onSa
               >
                 <span className="evm-switch__track"><span className="evm-switch__thumb" /></span>
                 <span className="evm-switch__label">
-                  <strong>{listed ? 'Listed' : 'Unlisted'}</strong>
-                  <small>{listed ? 'Shown in feeds, search and on your profile.' : 'Hidden from feeds & search — still plays by direct link, stays on your profile (badged).'}</small>
+                  <strong>{listed ? t('watch.edit.listed') : t('watch.edit.unlistedLabel')}</strong>
+                  <small>{listed ? t('watch.edit.listedHint') : t('watch.edit.unlistedHint')}</small>
                 </span>
               </button>
 
@@ -857,8 +857,8 @@ export default function EditVideoModal({ isOpen, onClose, author, permlink, onSa
               >
                 <span className="evm-switch__track"><span className="evm-switch__thumb" /></span>
                 <span className="evm-switch__label">
-                  <strong>Allow Remix/Clip</strong>
-                  <small>{reusable ? 'Others can create remixes/clips; you are credited as original author.' : 'Others cannot remix or clip this video.'}</small>
+                  <strong>{t('watch.edit.allowRemix')}</strong>
+                  <small>{reusable ? t('watch.edit.remixOn') : t('watch.edit.remixOff')}</small>
                 </span>
               </button>
               )}
@@ -875,10 +875,10 @@ export default function EditVideoModal({ isOpen, onClose, author, permlink, onSa
               >
                 <span className="evm-switch__track"><span className="evm-switch__thumb" /></span>
                 <span className="evm-switch__label">
-                  <strong>Channel trailer</strong>
+                  <strong>{t('watch.edit.trailer')}</strong>
                   <small>{isTrailer
-                    ? 'Autoplays at the top of your profile\u2019s Overview tab, replacing any trailer you set before.'
-                    : 'Make this the video that autoplays at the top of your profile\u2019s Overview tab.'}</small>
+                    ? t('watch.edit.trailerOn')
+                    : t('watch.edit.trailerOff')}</small>
                 </span>
               </button>
               )}
@@ -893,8 +893,8 @@ export default function EditVideoModal({ isOpen, onClose, author, permlink, onSa
               >
                 <span className="evm-switch__track"><span className="evm-switch__thumb" /></span>
                 <span className="evm-switch__label">
-                  <strong>{isNsfw ? 'Adult / NSFW' : 'Not adult'}</strong>
-                  <small>{isNsfw ? 'Hidden from feeds & search unless the viewer enabled NSFW; tagged nsfw on Hive.' : 'Normal content, shown to everyone.'}</small>
+                  <strong>{isNsfw ? t('watch.edit.nsfw') : t('watch.edit.notNsfw')}</strong>
+                  <small>{isNsfw ? t('watch.edit.nsfwHint') : t('watch.edit.notNsfwHint')}</small>
                 </span>
               </button>
 
@@ -906,7 +906,7 @@ export default function EditVideoModal({ isOpen, onClose, author, permlink, onSa
                 disabled={saving}
               >
                 <Rocket size={16} />
-                {promotedUntil && new Date(promotedUntil).getTime() > Date.now() ? 'Promoted' : 'Promote video'}
+                {promotedUntil && new Date(promotedUntil).getTime() > Date.now() ? t('watch.edit.promoted') : t('watch.edit.promote')}
               </button>
               )}
             </div>
@@ -918,14 +918,14 @@ export default function EditVideoModal({ isOpen, onClose, author, permlink, onSa
                 onClick={onClose}
                 disabled={saving}
               >
-                Cancel
+                {t('common.actions.cancel')}
               </button>
               <button
                 type="submit"
                 className="edit-video-btn-primary"
                 disabled={!canSave || !isDirty}
               >
-                {saving ? 'Saving…' : 'Save changes'}
+                {saving ? t('common.actions.saving') : t('watch.edit.saveChanges')}
               </button>
             </div>
           </form>

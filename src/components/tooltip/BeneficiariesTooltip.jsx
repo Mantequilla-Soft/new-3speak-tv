@@ -1,5 +1,6 @@
 import React, { useRef, useLayoutEffect, useState, useEffect } from 'react'
 import { createPortal } from 'react-dom'
+import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 import { IoClose } from 'react-icons/io5'
 import HiveAvatar from '../HiveAvatar/HiveAvatar'
@@ -26,6 +27,7 @@ async function fetchHivePrice() {
 }
 
 function BeneficiariesTooltip({ beneficiaries, payoutInfo, displayTotal, anchorRef, pinned, onClose }) {
+  const { t } = useTranslation();
   const tipRef = useRef(null);
   const navigate = useNavigate();
   const [pos, setPos] = useState(null);
@@ -103,8 +105,8 @@ function BeneficiariesTooltip({ beneficiaries, payoutInfo, displayTotal, anchorR
       <div className="beneficiaries-tooltip-header">
         <span>
           {showBreakdown
-            ? isPaidOut ? 'Payout Breakdown' : 'Estimated Breakdown'
-            : 'Beneficiaries'}
+            ? isPaidOut ? t('engagement.payout.breakdown') : t('engagement.payout.estimatedBreakdown')
+            : t('engagement.payout.beneficiaries')}
         </span>
         {pinned && (
           <button type="button" className="beneficiaries-tooltip-close" onClick={onClose}>
@@ -116,13 +118,13 @@ function BeneficiariesTooltip({ beneficiaries, payoutInfo, displayTotal, anchorR
       {showBreakdown && (
         <div className="beneficiaries-tooltip-breakdown">
           <div className="beneficiaries-tooltip-breakdown-row">
-            <span className="beneficiaries-tooltip-breakdown-label">Curators (50%)</span>
+            <span className="beneficiaries-tooltip-breakdown-label">{t('engagement.payout.curators')}</span>
             <span className="beneficiaries-tooltip-breakdown-value">
               {!isPaidOut && '~'}${curatorPayout.toFixed(2)}
             </span>
           </div>
           <div className="beneficiaries-tooltip-breakdown-row">
-            <span className="beneficiaries-tooltip-breakdown-label">Author</span>
+            <span className="beneficiaries-tooltip-breakdown-label">{t('engagement.payout.author')}</span>
             <span className="beneficiaries-tooltip-breakdown-value">
               {!isPaidOut && '~'}${authorNet.toFixed(2)}
             </span>
@@ -145,7 +147,7 @@ function BeneficiariesTooltip({ beneficiaries, payoutInfo, displayTotal, anchorR
 
       <div className="beneficiaries-tooltip-list">
         {showBreakdown && beneficiaries.length > 0 && (
-          <div className="beneficiaries-tooltip-section-label">Beneficiaries</div>
+          <div className="beneficiaries-tooltip-section-label">{t('engagement.payout.beneficiaries')}</div>
         )}
         {beneficiaries.map((b, index) => (
           <div key={index} className="beneficiaries-tooltip-row">
@@ -177,7 +179,7 @@ function BeneficiariesTooltip({ beneficiaries, payoutInfo, displayTotal, anchorR
 
       {showBreakdown && (
         <div className="beneficiaries-tooltip-total">
-          <span>Total{!isPaidOut && ' (est.)'}</span>
+          <span>{isPaidOut ? t('engagement.payout.total') : t('engagement.payout.totalEstimated')}</span>
           <span>{!isPaidOut && '~'}${totalPayout.toFixed(2)}</span>
         </div>
       )}

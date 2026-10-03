@@ -1,0 +1,237 @@
+{
+  "aiBadge": {
+    "title": "Yapay zekâ ile üretilmiş olarak algılandı",
+    "label": "YZ"
+  },
+  "translate": {
+    "titleButton": "Başlığı çevir",
+    "original": "Orijinal",
+    "translate": "Çevir",
+    "translating": "Çevriliyor..."
+  },
+  "summary": {
+    "title": "Özet",
+    "close": "Özeti kapat",
+    "showingOriginal": "Orijinali gösteriliyor",
+    "translatedTo": "Çeviri dili: {{language}}",
+    "showLanguage": "{{language}} göster",
+    "showOriginal": "Orijinali göster",
+    "buttonTitle": "Bu videonun yapay zekâ özeti"
+  },
+  "errors": {
+    "notAvailable": "Bu video kullanılamıyor.",
+    "goHome": "Ana Sayfaya Git",
+    "scheduledNotFound": "Planlanmış gönderi bulunamadı; zaten yayınlanmış ya da iptal edilmiş olabilir.",
+    "network": "Ağ hatası. Lütfen bağlantını kontrol et.",
+    "notFound": "Video bulunamadı veya yüklenemedi.",
+    "backToProfile": "Profile dön"
+  },
+  "gated": {
+    "title": "Yalnızca destekçilere",
+    "checkFailed": "Aboneliğini şu an doğrulayamadık. Birazdan tekrar dene.",
+    "preview": "Ücretsiz bir önizleme izliyorsun. 3Speak Pro videonun tamamını açar.",
+    "subscribersOnly": "Bu video 3Speak Pro abonelerine açık.",
+    "cta": "3Speak Pro'yu al"
+  },
+  "reactions": {
+    "show": "Tepkileri Göster",
+    "add": "Tepki Ekle"
+  },
+  "liveChat": "Canlı sohbet",
+  "moreVideos": "Daha fazla video",
+  "vote": {
+    "saveFailed": "Oyun kaydedilemedi"
+  },
+  "locked": {
+    "noAccount": "Hive hesabını oluşturduğunda açılır",
+    "offChainPost": "Henüz kullanılamıyor: bu gönderi Hive'da değil"
+  },
+  "interests": {
+    "loginRequired": "İlgi alanlarını kaydetmek için giriş yap",
+    "added": "“{{tag}}” ilgi alanlarına eklendi",
+    "saveFailed": "İlgi alanları kaydedilemedi"
+  },
+  "watchLater": {
+    "removed": "Sonra İzle listesinden kaldırıldı",
+    "removeFailed": "Kaldırılamadı: {{error}}",
+    "removeTitle": "Sonra İzle listesinden kaldır"
+  },
+  "reshare": {
+    "loginRequired": "Yeniden paylaşmak için giriş yap",
+    "success": "Yeniden paylaşıldı!",
+    "failed": "Yeniden paylaşılamadı",
+    "reshared": "Yeniden paylaşıldı",
+    "reshare": "Yeniden paylaş",
+    "reshareWithCount": "Yeniden paylaş ({{count}})"
+  },
+  "clip": {
+    "noVideoUrlRemix": "Remix için video URL'si çözümlenemedi",
+    "noVideoUrl": "Video URL'si çözümlenemedi",
+    "startHint": "Klibinin başlangıcına git, sonra \"Başlangıcı Ayarla\"ya tıkla",
+    "endHint": "Şimdi klibinin sonuna git ve \"Sonu Ayarla\"ya tıkla",
+    "endBeforeStart": "Bitiş zamanı başlangıç zamanından sonra olmalı",
+    "trimmed": "Klip 1 dakikaya kısaltıldı; klibi zaman çizelgesinin sonunda kırpacağız.",
+    "set": "Klip ayarlandı: {{start}} – {{end}}. Şimdi \"Klip Oluştur\"a tıkla",
+    "loginRequired": "Klip almak için giriş yap",
+    "cancel": "Klibi iptal et",
+    "clipVideo": "Videodan klip al",
+    "label": "Videodan Klip Al",
+    "clip": "Klip",
+    "seekToStart": "Başlangıca git",
+    "setStart": "Başlangıcı Ayarla",
+    "setEnd": "Sonu Ayarla",
+    "createClip": "Klip Oluştur",
+    "barStart": "Klibinin başlangıcına git",
+    "barEnd": "Başlangıç: {{start}}. Şimdi sona git",
+    "barDone": "Klip: {{start}} – {{end}}"
+  },
+  "share": {
+    "defaultTitle": "3Speak Videosu",
+    "linkCopied": "Bağlantı panoya kopyalandı!",
+    "failed": "Paylaşılamadı"
+  },
+  "follow": {
+    "loginRequired": "Kullanıcıları takip etmek için giriş yap",
+    "followed": "@{{user}} takip edildi",
+    "failed": "Takip edilemedi: {{error}}"
+  },
+  "ad": {
+    "countdown": "Reklam {{seconds}} içinde"
+  },
+  "media": {
+    "unavailableTitle": "Bu video artık kullanılamıyor",
+    "unavailableBody": "Bu eski yüklemenin medyası ağda bulunamadı. Gönderi blokzincirde hâlâ duruyor ama video artık oynatılamıyor.",
+    "blockedTitle": "Video şu an yüklenemedi",
+    "blockedBody": "Video sunucularımızdan biri yanıt vermedi. Videonun kendisinde sorun yok, lütfen tekrar dene."
+  },
+  "tipNudge": {
+    "text": "Beğendin mi?<hide> <b>@{{author}}</b> kullanıcısına bahşiş gönder!</hide>",
+    "dismiss": "Kapat"
+  },
+  "community": {
+    "members_one": "{{count}} Üye",
+    "members_other": "{{count}} Üye"
+  },
+  "tags": {
+    "curated": "Seçildi"
+  },
+  "topics": {
+    "taggedBy": "“{{label}}” · {{count}} kişi etiketledi",
+    "viewers_one": "“{{label}}” · {{count}} izleyici",
+    "viewers_other": "“{{label}}” · {{count}} izleyici",
+    "autoNoVotes": "Otomatik etiketlendi, henüz izleyici oyu yok",
+    "noVotes": "Henüz izleyici oyu yok",
+    "inInterests": "✓ İlgi alanlarında",
+    "addToInterests": "+ İlgi alanlarıma ekle",
+    "openTagFeed": "Etiket akışını aç"
+  },
+  "scheduled": {
+    "notice": "<b>{{date}}</b> için planlandı, henüz yayınlanmadı.",
+    "futureDate": "ileri bir tarih",
+    "edit": "Düzenle, yeniden planla veya iptal et",
+    "editTitle": "Planlanmış gönderiyi düzenle (ayrıntılar, tarih veya iptal)"
+  },
+  "actions": {
+    "voteOffChain": "Bu videoya oy ver. Oy 3Speak'e kaydedilir ve ödül ödemez.",
+    "signInToVote": "Oy vermek için giriş yap",
+    "tagVideo": "Bu videoyu etiketle",
+    "voteVideo": "Bu videoya oy ver",
+    "tag": "Etiketle",
+    "vote": "Oy ver",
+    "analyticsTitle": "Video analizi",
+    "analytics": "Analiz",
+    "videoStats": "Video istatistikleri",
+    "promoteTitle": "Bu videoyu öne çıkar",
+    "promote": "Öne çıkar",
+    "editTitle": "Video ayrıntılarını düzenle",
+    "reportTitle": "Videoyu bildir",
+    "addToPlaylist": "Oynatma listesine ekle",
+    "playlist": "Oynatma listesi",
+    "tipTitle": "İçerik üreticisine bahşiş gönder",
+    "tip": "Bahşiş",
+    "details": "Ayrıntılar",
+    "toggleDetails": "Ayrıntıları aç/kapat",
+    "followCreator": "İçerik üreticisini takip et",
+    "closeMenu": "Menüyü kapat",
+    "openActions": "İşlemleri aç"
+  },
+  "description": {
+    "hide": "Açıklamayı gizle",
+    "show": "Açıklamayı göster"
+  },
+  "edit": {
+    "title": "Videoyu Düzenle",
+    "loading": "Mevcut gönderi yükleniyor…",
+    "videoFile": "Video dosyası",
+    "replaceVideo": "Videoyu değiştir",
+    "replaceHint": "Bu gönderideki video dosyasını değiştirir. Diğer her şey olduğu gibi kalır: gönderi beğenilerini, ödemesini, yorumlarını, yükleme tarihini ve profilindeki yerini korur. Mevcut videoyu korumak için buna dokunma.",
+    "uploadingTo": "<b>{{host}}</b> sunucusuna yükleniyor… %{{pct}}",
+    "choosingServer": "Yükleme sunucusu seçiliyor…",
+    "uploadedTo": "<b>{{host}}</b> sunucusuna yüklendi. Değiştirmek için Kaydet'e bas.",
+    "uploaded": "Yüklendi. Değiştirmek için Kaydet'e bas.",
+    "cancelUpload": "Yüklemeyi iptal et",
+    "keepCurrent": "Mevcut videoyu koru",
+    "encodeHint": "Kaydettikten sonra kodlanması birkaç dakika sürer; hazır olana kadar eski video oynamaya devam eder. Küçük resmin değişmez, artık uymuyorsa yukarıdan güncelle.",
+    "thumbnail": "Küçük resim",
+    "thumbPreviewAlt": "Küçük resim önizlemesi",
+    "uploadImage": "Görsel yükle",
+    "uploading": "Yükleniyor…",
+    "thumbHint": "Bir görsel yükle ya da doğrudan URL yapıştır. Mevcut küçük resmi korumak için değiştirme.",
+    "titleLabel": "Başlık",
+    "titleMin": "en az {{min}}",
+    "tags": "Etiketler",
+    "tagsPlaceholder": "boşlukla ayrılmış",
+    "autoTag": "Otomatik eklendi, kaldırılamaz",
+    "tagCount_one": "{{count}}/{{max}} etiket",
+    "tagCount_other": "{{count}}/{{max}} etiket",
+    "tagCountRequired_one": "{{count}}/{{max}} etiket · en az 1 gerekli",
+    "tagCountRequired_other": "{{count}}/{{max}} etiket · en az 1 gerekli",
+    "description": "Açıklama",
+    "descriptionPlaceholder": "İzleyicilere videondan bahset…",
+    "markdownHint": "Markdown desteklenir.",
+    "listed": "Listelenmiş",
+    "unlistedLabel": "Liste dışı",
+    "listedHint": "Akışlarda, aramada ve profilinde gösterilir.",
+    "unlistedHint": "Akışlarda ve aramada gizli; doğrudan bağlantıyla yine oynar, profilinde (rozetli) kalır.",
+    "allowRemix": "Remix/Klibe İzin Ver",
+    "remixOn": "Başkaları remix/klip oluşturabilir; orijinal yazar olarak sen gösterilirsin.",
+    "remixOff": "Başkaları bu videodan remix veya klip oluşturamaz.",
+    "trailer": "Kanal fragmanı",
+    "trailerOn": "Profilinin Genel Bakış sekmesinin en üstünde otomatik oynar ve daha önce ayarladığın fragmanın yerini alır.",
+    "trailerOff": "Bunu profilinin Genel Bakış sekmesinin en üstünde otomatik oynayan video yap.",
+    "nsfw": "Yetişkin / NSFW",
+    "notNsfw": "Yetişkin değil",
+    "nsfwHint": "İzleyici NSFW'yi açmadıkça akışlarda ve aramada gizlenir; Hive'da nsfw olarak etiketlenir.",
+    "notNsfwHint": "Normal içerik, herkese gösterilir.",
+    "promoted": "Öne çıkarıldı",
+    "promote": "Videoyu öne çıkar",
+    "saveChanges": "Değişiklikleri kaydet",
+    "noChanges": "Kaydedilecek değişiklik yok.",
+    "thumbUploaded": "Küçük resim yüklendi.",
+    "videoUploaded": "Yeni video yüklendi. Bu gönderiye uygulamak için kaydet.",
+    "relisted": "Video yeniden listelendi.",
+    "unlisted": "Video liste dışı yapıldı.",
+    "trailerSet": "Kanal fragmanın olarak ayarlandı.",
+    "trailerRemoved": "Kanal fragmanından kaldırıldı.",
+    "updatedEncoding": "Video güncellendi! Yeni dosyanın kodlanmasının bitmesi birkaç dakika sürebilir.",
+    "updated": "Video güncellendi!",
+    "errors": {
+      "notFound": "Bu gönderi Hive'da bulunamadı.",
+      "loadFailed": "Gönderi Hive'dan yüklenemedi. Lütfen tekrar dene.",
+      "notImage": "Lütfen bir görsel dosyası seç.",
+      "imageTooLarge": "Görsel çok büyük (en fazla 10 MB).",
+      "thumbUploadFailed": "Küçük resim yüklenemedi.",
+      "notVideo": "Lütfen bir video dosyası seç.",
+      "videoTooLarge": "Video çok büyük (en fazla 5 GB).",
+      "noVideoEntry": "Bu gönderide değiştirilecek bir video kaydı yok; meta verileri herhangi bir videoya işaret etmiyor.",
+      "notInLibrary": "Bu gönderinin videosu artık kütüphanede değil, bu yüzden dosyası değiştirilemez.",
+      "notOwner": "Yalnızca kendi videonun dosyasını değiştirebilirsin.",
+      "videoUploadFailed": "Video yüklenemedi.",
+      "noEmbedEntry": "Bu gönderide değiştirilecek bir gömülü video kaydı yok; meta verileri herhangi bir videoya işaret etmiyor.",
+      "broadcastFailed": "Yayınlama başarısız",
+      "listingFailed": "Listeleme güncellenemedi.",
+      "trailerFailed": "Kanal fragmanın güncellenemedi.",
+      "saveFailed": "Değişiklikler kaydedilemedi."
+    }
+  }
+}

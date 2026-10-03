@@ -1,0 +1,44 @@
+{
+  "loading": "Memuat...",
+  "error": "Error: {{error}}",
+  "thumbnailAlt": "thumbnail",
+  "topicTitle": "Topik: {{topic}}",
+  "watchingNow_other": "{{count}} sedang menonton",
+  "badges": {
+    "gatedTitle": "Khusus pendukung — 3Speak Pro membuka video lengkapnya",
+    "pro": "PRO",
+    "new": "BARU",
+    "live": "● LIVE",
+    "liveChat": "● CHAT LIVE"
+  },
+  "status": {
+    "scheduled": "Terjadwal",
+    "mobile": "Seluler",
+    "mobileTitle": "Diunggah lewat aplikasi seluler",
+    "processing": "Diproses",
+    "processingTitle": "Video sedang diproses",
+    "draft": "Draf",
+    "draftTitle": "Draf - belum diterbitkan",
+    "deleted": "Dihapus",
+    "deletedTitle": "Video ini sudah dihapus",
+    "failed": "Gagal",
+    "failedTitle": "Pemrosesan video gagal",
+    "unlisted": "Tidak publik",
+    "unlistedTitle": "Tidak publik — tersembunyi dari feed & pencarian, hanya bisa dibuka lewat tautan langsung"
+  },
+  "playlist": {
+    "loading": "Memuat playlist...",
+    "items_other": "{{count}} item",
+    "openAria": "Buka playlist {{name}}",
+    "tag": "Playlist",
+    "updated": "Diperbarui {{when}}"
+  },
+  "watchLater": {
+    "title": "Tonton Nanti",
+    "subtitle": "Video untuk ditonton nanti"
+  },
+  "watched": {
+    "title": "Sudah Ditonton",
+    "subtitle": "Riwayat tontonanmu"
+  }
+}

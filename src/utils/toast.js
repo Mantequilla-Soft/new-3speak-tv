@@ -1,4 +1,5 @@
 import { toast as sonner } from 'sonner';
+import { t } from '../i18n';
 
 /**
  * Toasts with a category header.
@@ -36,9 +37,16 @@ const TEXT_METHODS = ['success', 'error', 'warning', 'info', 'loading', 'message
 /**
  * Bind a category, and get back something shaped exactly like sonner's `toast`.
  *
+ * The heading is translated when each toast is shown, from
+ * src/locales/<lang>/toastCategories.json (keyed by the English category), so a
+ * module keeps its plain `toastIn('Upload')` and still speaks the reader's
+ * language. A category missing there just shows in English.
+ *
  * @param {string} category Heading shown above every message from this module.
  */
-export function toastIn(category) {
+export function toastIn(englishCategory) {
+  const heading = () => t(`toastCategories.${englishCategory}`, { defaultValue: englishCategory });
+
   const headed = (send) => (message, options) => {
     const opts = options || {};
 
@@ -48,7 +56,7 @@ export function toastIn(category) {
 
     // `title` is the per-call escape hatch for a module that spans two areas.
     const { title, ...rest } = opts;
-    return send(title || category, { ...rest, description: message });
+    return send(title || heading(), { ...rest, description: message });
   };
 
   const api = headed((message, options) => sonner(message, options));

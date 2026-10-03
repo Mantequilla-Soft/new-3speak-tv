@@ -1,0 +1,513 @@
+@use "../../mixins.scss" as mix;
+
+// In-app translation editor (/translate).
+.translate-page {
+  // Full width on desktop: four columns (key, English, translation, proofread)
+  // need the room, and translators work here for long stretches.
+  max-width: none;
+  margin: 0 auto;
+  padding: 20px 16px 24px;
+  color: var(--text-primary);
+
+  @include mix.respond(phone) {
+    padding: 12px 10px 0;
+  }
+
+  h1 {
+    margin: 0 0 4px;
+    font-size: 22px;
+    font-weight: 700;
+  }
+}
+
+.translate-muted {
+  color: var(--text-muted, var(--text-secondary));
+  font-size: 14px;
+  margin: 0;
+
+  &.small { font-size: 12px; margin-top: 4px; }
+}
+
+.translate-error {
+  display: block;
+  color: #e53935;
+  font-size: 12px;
+  margin: 4px 0 0;
+}
+
+.translate-gate {
+  max-width: 560px;
+  padding-top: 48px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  align-items: flex-start;
+
+  p { margin: 0; color: var(--text-secondary); line-height: 1.5; }
+  a { color: var(--accent-primary); }
+}
+
+.translate-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 8px 16px;
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
+  background: transparent;
+  color: var(--text-primary);
+  font: inherit;
+  font-size: 14px;
+  cursor: pointer;
+
+  &:hover:not(:disabled) { background: var(--bg-hover); }
+  &:disabled { opacity: 0.55; cursor: default; }
+
+  // Red buttons are outlined, never filled.
+  &.primary {
+    border-color: var(--accent-primary);
+    color: var(--accent-primary);
+    font-weight: 600;
+  }
+
+  &.danger {
+    border-color: #e53935;
+    color: #e53935;
+  }
+
+  &.small {
+    padding: 3px 10px;
+    font-size: 12px;
+  }
+}
+
+.translate-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 16px;
+  margin-bottom: 16px;
+
+  @include mix.respond(phone) {
+    flex-direction: column;
+    align-items: stretch;
+  }
+}
+
+.translate-lang {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 240px;
+
+  label { font-size: 12px; color: var(--text-secondary); }
+}
+
+.translate-lang select,
+.translate-areas-select,
+.translate-search,
+.translate-modal input:not([type="checkbox"]) {
+  width: 100%;
+  padding: 8px 10px;
+  border-radius: 8px;
+  border: 1px solid var(--input-border, var(--border-color));
+  background: var(--input-bg, transparent);
+  color: var(--text-primary);
+  font: inherit;
+  font-size: 14px;
+
+  &:focus-visible {
+    outline: 2px solid var(--accent-primary);
+    outline-offset: 1px;
+  }
+}
+
+.translate-layout {
+  display: grid;
+  grid-template-columns: 220px minmax(0, 1fr);
+  gap: 20px;
+
+  @media (max-width: 900px) {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 12px;
+  }
+}
+
+.translate-areas {
+  .translate-areas-select { display: none; }
+
+  @media (max-width: 900px) {
+    .translate-areas-select { display: block; }
+    .translate-areas-list { display: none; }
+  }
+}
+
+.translate-areas-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  position: sticky;
+  top: 70px;
+  max-height: calc(100vh - 160px);
+  overflow-y: auto;
+
+  button {
+    width: 100%;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 2px 8px;
+    padding: 6px 10px;
+    border: 0;
+    border-radius: 8px;
+    background: transparent;
+    color: var(--text-primary);
+    font: inherit;
+    font-size: 13px;
+    text-align: start;
+    cursor: pointer;
+
+    &:hover { background: var(--bg-hover); }
+    &.is-active { background: var(--bg-tertiary, var(--bg-hover)); font-weight: 600; }
+  }
+}
+
+.translate-area-name { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.translate-area-pct { color: var(--text-secondary); font-size: 12px; }
+.translate-area-bar {
+  grid-column: 1 / -1;
+  height: 3px;
+  border-radius: 2px;
+  background: var(--border-color);
+  overflow: hidden;
+
+  span { display: block; height: 100%; background: var(--accent-primary); }
+}
+
+.translate-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 16px;
+  align-items: center;
+  margin-bottom: 12px;
+
+  .translate-search { flex: 1 1 260px; width: auto; }
+}
+
+.translate-check {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 14px;
+  color: var(--text-primary);
+  cursor: pointer;
+
+  input { accent-color: var(--accent-primary); }
+}
+
+.translate-rows {
+  display: flex;
+  flex-direction: column;
+  border-top: 1px solid var(--border-color);
+}
+
+.translate-row {
+  display: grid;
+  grid-template-columns: minmax(140px, 0.8fr) minmax(0, 1.2fr) minmax(0, 1.5fr);
+  gap: 12px;
+  padding: 10px 4px;
+  border-bottom: 1px solid var(--border-color);
+  align-items: start;
+
+  &.is-dirty { box-shadow: inset 3px 0 0 var(--accent-primary); }
+  &.has-error { box-shadow: inset 3px 0 0 #e53935; }
+
+  // Stacked on phones: key, then English, then the editor, full width.
+  @media (max-width: 767px) {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 6px;
+    padding: 12px 4px 12px 8px;
+  }
+}
+
+.translate-row-head {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+
+  @media (max-width: 767px) { display: none; }
+}
+
+.translate-key {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  align-items: center;
+  min-width: 0;
+
+  code {
+    font-size: 12px;
+    color: var(--text-secondary);
+    overflow-wrap: anywhere;
+  }
+}
+
+.translate-tag {
+  font-size: 11px;
+  padding: 1px 6px;
+  border-radius: 999px;
+  border: 1px solid var(--border-color);
+  color: var(--text-secondary);
+
+  &.is-community {
+    border-color: var(--accent-primary);
+    color: var(--accent-primary);
+  }
+}
+
+.translate-english {
+  font-size: 14px;
+  line-height: 1.45;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  color: var(--text-primary);
+}
+
+.translate-cell { min-width: 0; }
+
+.translate-input {
+  width: 100%;
+  min-height: 36px;
+  resize: vertical;
+  overflow: hidden;
+  padding: 7px 9px;
+  border-radius: 8px;
+  border: 1px solid var(--input-border, var(--border-color));
+  background: var(--input-bg, transparent);
+  color: var(--text-primary);
+  font: inherit;
+  font-size: 14px;
+  line-height: 1.45;
+  box-sizing: border-box;
+
+  &:focus-visible {
+    outline: 2px solid var(--accent-primary);
+    outline-offset: 1px;
+  }
+
+  &.is-invalid { border-color: #e53935; }
+}
+
+.translate-row-actions {
+  display: flex;
+  gap: 6px;
+  margin-top: 4px;
+
+  &:empty { display: none; }
+}
+
+.translate-more {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 16px 0;
+}
+
+.translate-savebar {
+  position: sticky;
+  bottom: 0;
+  z-index: 5;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 12px;
+  margin-top: 12px;
+  padding: 10px 16px;
+  background: var(--bg-primary);
+  border-top: 1px solid var(--border-color);
+
+  @include mix.respond(phone) {
+    bottom: var(--bottom-nav-height, 56px);
+    margin: 12px -10px 0;
+    padding: 10px;
+  }
+}
+
+// Dialog: centred on desktop, a bottom sheet on phones (the app's popup style).
+.translate-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  background: var(--overlay-bg, rgba(0, 0, 0, 0.55));
+
+  @include mix.respond(phone) {
+    align-items: flex-end;
+    padding: 0;
+  }
+}
+
+.translate-modal {
+  width: 100%;
+  max-width: 440px;
+  max-height: 90vh;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 20px;
+  border-radius: 14px;
+  background: var(--bg-elevated, var(--bg-secondary));
+  color: var(--text-primary);
+  box-shadow: var(--shadow-lg);
+
+  @include mix.respond(phone) {
+    max-width: none;
+    border-radius: 16px 16px 0 0;
+    padding: 18px 16px calc(18px + env(safe-area-inset-bottom));
+  }
+
+  h2 { margin: 0; font-size: 18px; }
+
+  > label:not(.translate-check) {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+
+    > span { font-size: 13px; font-weight: 600; }
+  }
+}
+
+.translate-modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+// ---- Proofreading ----
+// The app has no shared "success" token; green, readable on light and dark.
+.translate-page { --translate-proof: #2e9d5b; }
+
+.translate-sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+.translate-proof-progress {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px 12px;
+  margin-bottom: 16px;
+  font-size: 14px;
+  color: var(--text-secondary);
+
+  > span:first-child { font-variant-numeric: tabular-nums; }
+}
+
+.translate-proof-bar {
+  flex: 1 1 200px;
+  height: 6px;
+  border-radius: 3px;
+  background: var(--border-color);
+  overflow: hidden;
+
+  span { display: block; height: 100%; background: var(--translate-proof); }
+}
+
+.translate-area-bar.is-proof span { background: var(--translate-proof); }
+.translate-area-pct.is-proof { grid-column: 2; grid-row: 3; }
+.translate-area-bar.is-proof { grid-column: 1; grid-row: 3; align-self: center; }
+
+.translate-area-head {
+  margin: 0 0 10px;
+
+  h2 {
+    margin: 0;
+    font-size: 16px;
+    font-weight: 700;
+  }
+}
+
+.translate-area-info {
+  margin: 2px 0 0;
+  font-size: 13px;
+  line-height: 1.45;
+  color: var(--text-secondary);
+  overflow-wrap: anywhere;
+}
+
+.translate-row-actions {
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+// The checkbox row is a full tap target (36px tall, 44px on touch screens).
+.translate-proof {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 36px;
+  margin-inline-end: auto;
+  padding: 0 10px 0 6px;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  font-size: 13px;
+  color: var(--text-secondary);
+  cursor: pointer;
+  user-select: none;
+
+  input {
+    width: 18px;
+    height: 18px;
+    margin: 0;
+    accent-color: var(--translate-proof);
+    cursor: inherit;
+  }
+
+  &.is-checked {
+    border-color: var(--translate-proof);
+    color: var(--text-primary);
+  }
+
+  &:has(input:disabled) { opacity: 0.55; cursor: default; }
+  &:has(input:focus-visible) { outline: 2px solid var(--accent-primary); outline-offset: 1px; }
+
+  @media (pointer: coarse) {
+    min-height: 44px;
+    padding: 0 12px 0 10px;
+
+    input { width: 22px; height: 22px; }
+  }
+}
+
+.translate-tag.is-stale {
+  border-color: #f0a020;
+  color: #c27c00;
+}
+
+// Proofread checkbox as its own column, in the same row as the text.
+.translate-rows.has-proof .translate-row {
+  grid-template-columns: minmax(140px, 0.7fr) minmax(0, 1.2fr) minmax(0, 1.6fr) auto;
+
+  @media (max-width: 767px) { grid-template-columns: minmax(0, 1fr); }
+}
+
+.translate-proof-cell {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 6px;
+
+  .translate-proof { margin-inline-end: 0; }
+}

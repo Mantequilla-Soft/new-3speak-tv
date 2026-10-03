@@ -2,8 +2,10 @@ import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { MdHistory } from 'react-icons/md';
 import './WatchedPlaylistCard.scss';
+import { useTranslation } from 'react-i18next';
 
 function WatchedPlaylistCard({ count, username }) {
+  const { t } = useTranslation();
   return (
     <div className="watched-playlist-card-container">
       <Link to={`/watched/${username}`} className="watched-playlist-card">
@@ -16,18 +18,18 @@ function WatchedPlaylistCard({ count, username }) {
           </div>
         </div>
 
-        <h2>Watched</h2>
+        <h2>{t('cards.watched.title')}</h2>
 
         <div className="playlist-meta">
           <span className="owner">@{username}</span>
           <span className="separator">-</span>
           <span className="item-count">
-            {count} {count === 1 ? 'video' : 'videos'}
+            {t('common.units.videos', { count })}
           </span>
         </div>
 
         <div className="bottom-info">
-          <p>Your watch history</p>
+          <p>{t('cards.watched.subtitle')}</p>
         </div>
       </Link>
     </div>

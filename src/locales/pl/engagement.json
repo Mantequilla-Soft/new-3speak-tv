@@ -1,0 +1,102 @@
+{
+  "tip": {
+    "successTitle": "Napiwek wysłany!",
+    "successMessage": "Wysłano {{amount}} {{currency}} jako napiwek. Dziękujemy za wsparcie!",
+    "errors": {
+      "allRequired": "Wszystkie pola są wymagane",
+      "loginRequired": "Zaloguj się, aby wysłać napiwek",
+      "insufficientBalance": "Niewystarczające saldo",
+      "invalidUsername": "Nieprawidłowa nazwa użytkownika",
+      "transferFailed": "Przelew nie powiódł się: {{message}}"
+    },
+    "heading": "Wyślij napiwek do @{{recipient}}",
+    "amountLabel": "Kwota: ",
+    "amountPlaceholder": "np. 1.000",
+    "currencyLabel": "Waluta:",
+    "availableBalance": "Dostępne saldo: {{currency}}",
+    "memoLabel": "Notatka (opcjonalnie):",
+    "memoPlaceholder": "np. Dzięki za świetne treści!",
+    "send": "Wyślij napiwek"
+  },
+  "cardMenu": {
+    "loginToPersonalize": "Zaloguj się, aby spersonalizować swój kanał",
+    "notInterestedToast": "Nie interesuje cię — ukryjemy ten film",
+    "undo": "Cofnij",
+    "cantHideOwn": "Nie możesz ukryć własnych filmów",
+    "hidingCreatorToast": "Ukrywamy filmy od @{{author}}",
+    "loginForPlaylists": "Zaloguj się, aby dodawać filmy do playlist",
+    "loginToTag": "Zaloguj się, aby tagować filmy",
+    "moreOptions": "Więcej opcji",
+    "addToPlaylist": "Dodaj do playlisty",
+    "addTag": "Dodaj tag",
+    "notInterested": "Nie interesuje mnie",
+    "dontShowCreator": "Nie pokazuj @{{author}}"
+  },
+  "guestList": {
+    "loadFailed": "Nie udało się wczytać obecnej listy gości",
+    "saved_one": "{{count}} gość może to obejrzeć",
+    "saved_few": "{{count}} gości może to obejrzeć",
+    "saved_many": "{{count}} gości może to obejrzeć",
+    "saved_other": "{{count}} gościa może to obejrzeć",
+    "cleared": "Lista gości wyczyszczona",
+    "saveFailed": "Nie udało się zapisać listy gości",
+    "invalidAccounts": "Nieprawidłowe konta Hive: {{names}}",
+    "title": "🔒 Lista gości",
+    "hint": "Te konta mogą oglądać bez 3Speak Pro. Lista jest przechowywana prywatnie na naszych serwerach i nigdy nie jest publikowana w twoim poście.",
+    "notRegistered": "Ten film nie został jeszcze przetworzony. Listę możesz edytować, gdy to nastąpi.",
+    "placeholder": "nazwa_użytkownika, inny.użytkownik",
+    "empty": "Nikogo jeszcze nie ma. Tylko subskrybenci Pro mogą to obejrzeć.",
+    "removeAria": "Usuń {{name}}"
+  },
+  "voters": {
+    "pinnedTitle_one": "Głosujący ({{count}})",
+    "pinnedTitle_few": "Głosujący ({{count}})",
+    "pinnedTitle_many": "Głosujący ({{count}})",
+    "pinnedTitle_other": "Głosujący ({{count}})",
+    "topVoters": "Najwięksi głosujący",
+    "noVotes": "Brak głosów"
+  },
+  "payout": {
+    "breakdown": "Podział wypłaty",
+    "estimatedBreakdown": "Szacunkowy podział",
+    "beneficiaries": "Beneficjenci",
+    "curators": "Kuratorzy (50%)",
+    "author": "Autor",
+    "total": "Razem",
+    "totalEstimated": "Razem (szac.)"
+  },
+  "vote": {
+    "loginRequired": "Zaloguj się, aby wykonać tę operację",
+    "fetchPostFailed": "Nie udało się pobrać danych posta",
+    "sameWeight": "Już zagłosowano z tą wagą. Wybierz inną wartość.",
+    "failed": "Głosowanie nie powiodło się: {{message}}",
+    "pleaseTryAgain": "spróbuj ponownie",
+    "weight": "Waga głosu: {{weight}}%",
+    "success": "Zagłosowano! Wartość: ${{value}}",
+    "successTagged": "Zagłosowano! Otagowano jako „{{tag}}”. Wartość: ${{value}}",
+    "tagged": "Otagowano jako „{{tag}}”.",
+    "vote": "Zagłosuj",
+    "tagThisVideo": "Otaguj ten film",
+    "tagOptional": "— opcjonalnie —",
+    "pickTopicFirst": "Najpierw wybierz temat",
+    "taggedNoDot": "Otagowano jako „{{tag}}”",
+    "tagFailed": "Tagowanie nie powiodło się: {{message}}",
+    "taggedAlreadyVoted": "Otagowano jako „{{tag}}” — twój głos {{weight}}% został już oddany.",
+    "votingClosed": "Głosowanie zamknięte — otaguj ten film",
+    "youTagged": "Otagowano to jako <b>{{tag}}</b>.",
+    "pickTopic": "Wybierz temat (liczy się jako głos 100%)",
+    "submitTag": "Zapisz tag",
+    "tagThisVideoFull": "Otaguj ten film (liczy się jako głos 100%)",
+    "justTag": "Nie głosuj — tylko otaguj"
+  },
+  "tagsPicker": {
+    "autoTagged": "Automatyczne tagi: {{tags}}",
+    "searchPlaceholder": "Szukaj tematów…",
+    "searchAria": "Szukaj tematów",
+    "noMatches": "Brak tematów pasujących do „{{query}}”.",
+    "allSelected": "Wybrano całą kategorię {{category}}. Dodaj pojedyncze tematy tylko po to, by zawęzić wybór:",
+    "orPickTopics": "Albo wybierz pojedyncze tematy:",
+    "goodEnough": "Wystarczy — albo doprecyzuj (opcjonalnie):",
+    "moreSpecific": "Bardziej szczegółowo:"
+  }
+}

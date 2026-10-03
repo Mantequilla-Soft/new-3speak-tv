@@ -1,0 +1,115 @@
+{
+  "loading": "শর্টস লোড হচ্ছে...",
+  "pleaseTryAgain": "আবার চেষ্টা করুন",
+  "rotateDevice": "আপনার ডিভাইসটি পোর্ট্রেট মোডে ঘোরান",
+  "pageTitle": {
+    "byAuthor": "3S | @{{author}}-এর শর্ট",
+    "default": "3S | শর্টস"
+  },
+  "stories": {
+    "you": "আপনি"
+  },
+  "errors": {
+    "votingUnavailable": "এই পোস্টে ভোট দেওয়া যাচ্ছে না",
+    "loginToVote": "ভোট দিতে লগ ইন করুন",
+    "loginToComplete": "এই কাজটি সম্পন্ন করতে লগ ইন করুন"
+  },
+  "feed": {
+    "ariaLabel": "শর্টস ফিড",
+    "discover": "আবিষ্কার করুন",
+    "myInterests": "আমার আগ্রহ",
+    "interestsTitle": "শুধু আপনার আগ্রহের সাথে মেলে এমন শর্টস",
+    "pickInterestsFirst": "আগে কিছু আগ্রহের বিষয় বেছে নিন",
+    "noInterests": "আপনি এখনো কোনো আগ্রহের বিষয় বেছে নেননি — সেটিংসে গিয়ে বেছে নিন",
+    "interestsExhausted": "আপনার আগ্রহের সব শর্টস দেখা শেষ — আবিষ্কার দেখানো হচ্ছে",
+    "noInterestMatches": "এই মুহূর্তে আপনার আগ্রহের সাথে মেলে এমন কোনো শর্টস নেই।",
+    "switchToDiscover": "আবিষ্কারে যান",
+    "empty": "কোনো শর্টস নেই",
+    "loadError": "শর্টস লোড করতে সমস্যা: {{error}}"
+  },
+  "glow": {
+    "subtle": "অ্যাম্বিয়েন্ট লাইট: হালকা",
+    "vivid": "অ্যাম্বিয়েন্ট লাইট: উজ্জ্বল",
+    "off": "অ্যাম্বিয়েন্ট লাইট: বন্ধ"
+  },
+  "playbackMode": {
+    "autoReplay": "অটো-রিপ্লে",
+    "autoSwipe": "অটো-সোয়াইপ",
+    "manual": "ম্যানুয়াল"
+  },
+  "subtitles": {
+    "off": "বন্ধ"
+  },
+  "chain": {
+    "originalVideo": "মূল ভিডিও",
+    "snap": "Snap",
+    "openShort": "শর্ট খুলুন",
+    "watch": "দেখুন",
+    "openSnap": "Snap খুলুন",
+    "comment": "কমেন্ট",
+    "reaction": "রিঅ্যাকশন",
+    "thisVideo": "এই ভিডিও",
+    "remix": "রিমিক্স",
+    "show": "রিঅ্যাকশন চেইন দেখান"
+  },
+  "caption": {
+    "curatedBy": "Mantequilla-র বাছাই",
+    "curated": "বাছাই করা",
+    "showOriginal": "মূল লেখা দেখান",
+    "more": "আরও"
+  },
+  "actions": {
+    "remix": "রিমিক্স",
+    "promote": "প্রমোট করুন"
+  },
+  "share": {
+    "defaultTitle": "3Speak শর্ট",
+    "text": "3Speak-এ {{user}}-এর এই শর্টটি দেখুন!",
+    "shared": "সফলভাবে শেয়ার হয়েছে!",
+    "linkCopied": "লিংক ক্লিপবোর্ডে কপি হয়েছে!",
+    "failed": "শেয়ার করা যায়নি"
+  },
+  "reshare": {
+    "loginRequired": "রিশেয়ার করতে লগ ইন করুন",
+    "unavailable": "এই পোস্টটি রিশেয়ার করা যাচ্ছে না",
+    "done": "রিশেয়ার হয়েছে!",
+    "failed": "রিশেয়ার করা যায়নি"
+  },
+  "remix": {
+    "noUrl": "রিমিক্সের জন্য ভিডিও URL পাওয়া যায়নি",
+    "loadFailed": "রিমিক্সের জন্য ভিডিও লোড করা যায়নি"
+  },
+  "watchLater": {
+    "loginRequired": "শর্টস সেভ করতে লগ ইন করুন",
+    "cantSave": "এই শর্টটি সেভ করা যাচ্ছে না",
+    "removed": "পরে দেখুন থেকে সরানো হয়েছে",
+    "saved": "পরে দেখুন-এ সেভ হয়েছে",
+    "failed": "ব্যর্থ: {{message}}"
+  },
+  "comments": {
+    "title": "কমেন্ট",
+    "loading": "কমেন্ট লোড হচ্ছে...",
+    "closed": "কমেন্ট বন্ধ",
+    "none": "এখনো কোনো কমেন্ট নেই",
+    "postRemoved": "এই শর্টের পেছনের Hive পোস্টটি সরিয়ে ফেলা হয়েছে, তাই এতে আর কমেন্ট বা ভোট দেওয়া যাবে না।",
+    "beFirst": "প্রথম কমেন্টটি আপনিই করুন!",
+    "unavailable": "এই পোস্টে কমেন্ট করা যাচ্ছে না",
+    "addPlaceholder": "একটি কমেন্ট লিখুন...",
+    "addPlaceholderBar": "একটি কমেন্ট লিখুন…",
+    "loginPlaceholder": "কমেন্ট করতে লগ ইন করুন",
+    "send": "কমেন্ট পাঠান",
+    "enterComment": "একটি কমেন্ট লিখুন",
+    "loginToComment": "কমেন্ট করতে লগ ইন করুন",
+    "justNow": "এইমাত্র",
+    "posted": "কমেন্ট সফলভাবে পোস্ট হয়েছে!",
+    "failed": "কমেন্ট ব্যর্থ: {{message}}",
+    "translation": "অনুবাদ",
+    "translationFailed": "অনুবাদ ব্যর্থ হয়েছে",
+    "reportComment": "কমেন্ট রিপোর্ট করুন",
+    "replyPlaceholder": "একটি রিপ্লাই লিখুন...",
+    "viewReplies_one": "{{count}}টি রিপ্লাই দেখুন",
+    "viewReplies_other": "{{count}}টি রিপ্লাই দেখুন",
+    "hideReplies_one": "{{count}}টি রিপ্লাই লুকান",
+    "hideReplies_other": "{{count}}টি রিপ্লাই লুকান"
+  }
+}

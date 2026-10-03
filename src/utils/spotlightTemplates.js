@@ -3,8 +3,10 @@
 // (the previous layout is snapshotted so it can be undone). Backgrounds are either
 // self-contained CSS gradients or Unsplash-licensed wallpapers (free to use).
 //
-// Each template: { id, name, niche, emoji, theme, sections }. `sections` use the same
-// shapes as newSection() (no ids — the editor assigns them on apply). A `hive-recent`
+// Each template: { id, nameKey, nicheKey, emoji, theme, sections }. The name/niche
+// are picker UI (i18n keys, translated at render); the theme text and sample
+// `sections` are starter CONTENT saved to the creator's page, so they stay English.
+// `sections` use the same shapes as newSection() (no ids — the editor assigns them on apply). A `hive-recent`
 // embed auto-fills with the creator's own latest posts, so most templates come alive
 // with real content the moment they're applied.
 
@@ -16,8 +18,8 @@ const latest = (count = 3, imgSize = 55, perRow = 1) => ({ type: 'embed', source
 export const TEMPLATES = [
   {
     id: 'minimal',
-    name: 'Minimal',
-    niche: 'Clean & simple',
+    nameKey: 'spotlight.templates.minimal.name',
+    nicheKey: 'spotlight.templates.minimal.niche',
     emoji: '⚪',
     theme: {
       bg: { type: 'gradient', color: '#f7f8fc', color2: '#e9ebf3', angle: 160, overlayType: 'none' },
@@ -35,8 +37,8 @@ export const TEMPLATES = [
   },
   {
     id: 'neon',
-    name: 'Neon Nights',
-    niche: 'Creator / streamer',
+    nameKey: 'spotlight.templates.neon.name',
+    nicheKey: 'spotlight.templates.neon.niche',
     emoji: '🌃',
     theme: {
       bg: { type: 'gradient', color: '#0a0016', color2: '#20003a', angle: 165, overlayType: 'none' },
@@ -55,8 +57,8 @@ export const TEMPLATES = [
   },
   {
     id: 'crypto',
-    name: 'On-Chain',
-    niche: 'Crypto / Web3',
+    nameKey: 'spotlight.templates.crypto.name',
+    nicheKey: 'spotlight.templates.crypto.niche',
     emoji: '🪙',
     theme: {
       bg: { type: 'image', image: uns('photo-1451187580459-43490279c0fa'), overlayType: 'gradient', overlayColor: '#050b1f', overlayColor2: '#0b1e3a', overlayAngle: 160, overlayOpacity: 78 },
@@ -75,8 +77,8 @@ export const TEMPLATES = [
   },
   {
     id: 'gamer',
-    name: 'Player One',
-    niche: 'Gaming',
+    nameKey: 'spotlight.templates.gamer.name',
+    nicheKey: 'spotlight.templates.gamer.niche',
     emoji: '🎮',
     theme: {
       bg: { type: 'gradient', color: '#120a24', color2: '#07231e', angle: 150, overlayType: 'none' },
@@ -96,8 +98,8 @@ export const TEMPLATES = [
   },
   {
     id: 'photographer',
-    name: 'Exposure',
-    niche: 'Photography',
+    nameKey: 'spotlight.templates.photographer.name',
+    nicheKey: 'spotlight.templates.photographer.niche',
     emoji: '📷',
     theme: {
       bg: { type: 'gradient', color: '#151515', color2: '#242424', angle: 170, overlayType: 'none' },
@@ -115,8 +117,8 @@ export const TEMPLATES = [
   },
   {
     id: 'podcaster',
-    name: 'On Air',
-    niche: 'Podcast',
+    nameKey: 'spotlight.templates.podcaster.name',
+    nicheKey: 'spotlight.templates.podcaster.niche',
     emoji: '🎙️',
     theme: {
       bg: { type: 'gradient', color: '#2a1b4a', color2: '#b8452e', angle: 155, overlayType: 'none' },
@@ -135,8 +137,8 @@ export const TEMPLATES = [
   },
   {
     id: 'fitness',
-    name: 'Peak Form',
-    niche: 'Fitness / coach',
+    nameKey: 'spotlight.templates.fitness.name',
+    nicheKey: 'spotlight.templates.fitness.niche',
     emoji: '💪',
     theme: {
       bg: { type: 'gradient', color: '#ff4d2e', color2: '#ffb300', angle: 145, overlayType: 'none' },
@@ -154,8 +156,8 @@ export const TEMPLATES = [
   },
   {
     id: 'writer',
-    name: 'Longform',
-    niche: 'Writer / blogger',
+    nameKey: 'spotlight.templates.writer.name',
+    nicheKey: 'spotlight.templates.writer.niche',
     emoji: '✍️',
     theme: {
       bg: { type: 'gradient', color: '#f6f0e2', color2: '#e7dcc4', angle: 165, overlayType: 'none' },
@@ -172,8 +174,8 @@ export const TEMPLATES = [
   },
   {
     id: 'chef',
-    name: 'Mise en Place',
-    niche: 'Food / cooking',
+    nameKey: 'spotlight.templates.chef.name',
+    nicheKey: 'spotlight.templates.chef.niche',
     emoji: '🍳',
     theme: {
       bg: { type: 'image', image: uns('photo-1504674900247-0877df9cc836'), overlayType: 'gradient', overlayColor: '#1a0e06', overlayColor2: '#3a1d0a', overlayAngle: 160, overlayOpacity: 62 },
@@ -191,8 +193,8 @@ export const TEMPLATES = [
   },
   {
     id: 'travel',
-    name: 'Wanderlust',
-    niche: 'Nature / travel',
+    nameKey: 'spotlight.templates.travel.name',
+    nicheKey: 'spotlight.templates.travel.niche',
     emoji: '🏔️',
     theme: {
       bg: { type: 'image', image: uns('photo-1506905925346-21bda4d32df4'), overlayType: 'gradient', overlayColor: '#06231f', overlayColor2: '#0a3348', overlayAngle: 170, overlayOpacity: 55 },
@@ -210,8 +212,8 @@ export const TEMPLATES = [
   },
   {
     id: 'business',
-    name: 'Boardroom',
-    niche: 'Business / pro',
+    nameKey: 'spotlight.templates.business.name',
+    nicheKey: 'spotlight.templates.business.niche',
     emoji: '💼',
     theme: {
       bg: { type: 'gradient', color: '#0f172a', color2: '#1e293b', angle: 160, overlayType: 'none' },
@@ -229,8 +231,8 @@ export const TEMPLATES = [
   },
   {
     id: 'artist',
-    name: 'Palette',
-    niche: 'Artist / visual',
+    nameKey: 'spotlight.templates.artist.name',
+    nicheKey: 'spotlight.templates.artist.niche',
     emoji: '🎨',
     theme: {
       bg: { type: 'gradient', color: '#ff6ec4', color2: '#7873f5', angle: 135, overlayType: 'none' },
@@ -249,8 +251,8 @@ export const TEMPLATES = [
   },
   {
     id: 'ocean',
-    name: 'Tidewater',
-    niche: 'Chill / lifestyle',
+    nameKey: 'spotlight.templates.ocean.name',
+    nicheKey: 'spotlight.templates.ocean.niche',
     emoji: '🌊',
     theme: {
       bg: { type: 'image', image: uns('photo-1507525428034-b723cf961d3e'), overlayType: 'gradient', overlayColor: '#04263a', overlayColor2: '#0a4a5c', overlayAngle: 175, overlayOpacity: 50 },
@@ -268,8 +270,8 @@ export const TEMPLATES = [
   },
   {
     id: 'musician',
-    name: 'Amplified',
-    niche: 'Music / band',
+    nameKey: 'spotlight.templates.musician.name',
+    nicheKey: 'spotlight.templates.musician.niche',
     emoji: '🎵',
     theme: {
       bg: { type: 'gradient', color: '#1a0b2e', color2: '#4a1259', angle: 155, overlayType: 'none' },
@@ -289,8 +291,8 @@ export const TEMPLATES = [
   },
   {
     id: 'developer',
-    name: 'Terminal',
-    niche: 'Developer / tech',
+    nameKey: 'spotlight.templates.developer.name',
+    nicheKey: 'spotlight.templates.developer.niche',
     emoji: '💻',
     theme: {
       bg: { type: 'gradient', color: '#0d1117', color2: '#161b22', angle: 165, overlayType: 'none' },
@@ -309,8 +311,8 @@ export const TEMPLATES = [
   },
   {
     id: 'sports',
-    name: 'Game Day',
-    niche: 'Sports / athlete',
+    nameKey: 'spotlight.templates.sports.name',
+    nicheKey: 'spotlight.templates.sports.niche',
     emoji: '🏅',
     theme: {
       bg: { type: 'gradient', color: '#0b3d2e', color2: '#0a6e3f', angle: 150, overlayType: 'none' },

@@ -1,0 +1,233 @@
+{
+  "aiBadge": {
+    "title": "检测为 AI 生成",
+    "label": "AI"
+  },
+  "translate": {
+    "titleButton": "翻译标题",
+    "original": "原文",
+    "translate": "翻译",
+    "translating": "翻译中..."
+  },
+  "summary": {
+    "title": "摘要",
+    "close": "关闭摘要",
+    "showingOriginal": "正在显示原文",
+    "translatedTo": "已翻译为{{language}}",
+    "showLanguage": "显示{{language}}",
+    "showOriginal": "显示原文",
+    "buttonTitle": "这个视频的 AI 摘要"
+  },
+  "errors": {
+    "notAvailable": "该视频不可用。",
+    "goHome": "返回首页",
+    "scheduledNotFound": "找不到定时帖子——它可能已发布或已取消。",
+    "network": "网络错误，请检查你的网络连接。",
+    "notFound": "找不到视频或加载失败。",
+    "backToProfile": "返回主页"
+  },
+  "gated": {
+    "title": "仅限支持者",
+    "checkFailed": "暂时无法确认你的订阅，请稍后再试。",
+    "preview": "你正在观看免费预览。3Speak Pro 可解锁完整视频。",
+    "subscribersOnly": "此视频仅向 3Speak Pro 订阅者开放。",
+    "cta": "获取 3Speak Pro"
+  },
+  "reactions": {
+    "show": "显示回应",
+    "add": "添加回应"
+  },
+  "liveChat": "直播聊天",
+  "moreVideos": "更多视频",
+  "vote": {
+    "saveFailed": "无法保存你的点赞"
+  },
+  "locked": {
+    "noAccount": "创建 Hive 账号后解锁",
+    "offChainPost": "暂不可用：此帖子不在 Hive 上"
+  },
+  "interests": {
+    "loginRequired": "登录后保存兴趣",
+    "added": "已将“{{tag}}”添加到你的兴趣",
+    "saveFailed": "无法保存兴趣"
+  },
+  "watchLater": {
+    "removed": "已从稍后观看中移除",
+    "removeFailed": "移除失败：{{error}}",
+    "removeTitle": "从稍后观看中移除"
+  },
+  "reshare": {
+    "loginRequired": "登录后转发",
+    "success": "已转发！",
+    "failed": "转发失败",
+    "reshared": "已转发",
+    "reshare": "转发",
+    "reshareWithCount": "转发（{{count}}）"
+  },
+  "clip": {
+    "noVideoUrlRemix": "无法获取用于二创的视频 URL",
+    "noVideoUrl": "无法获取视频 URL",
+    "startHint": "拖到片段的起点，然后点击“设为起点”",
+    "endHint": "现在拖到片段的终点，然后点击“设为终点”",
+    "endBeforeStart": "结束时间必须晚于开始时间",
+    "trimmed": "片段已裁剪为 1 分钟——我们会在时间线末尾裁剪片段。",
+    "set": "片段已设置：{{start}} – {{end}}。现在点击“创建片段”",
+    "loginRequired": "登录后剪辑",
+    "cancel": "取消剪辑",
+    "clipVideo": "剪辑视频",
+    "label": "剪辑视频",
+    "clip": "剪辑",
+    "seekToStart": "跳到起点",
+    "setStart": "设为起点",
+    "setEnd": "设为终点",
+    "createClip": "创建片段",
+    "barStart": "拖到片段的起点",
+    "barEnd": "起点：{{start}}——现在拖到终点",
+    "barDone": "片段：{{start}} – {{end}}"
+  },
+  "share": {
+    "defaultTitle": "3Speak 视频",
+    "linkCopied": "链接已复制到剪贴板！",
+    "failed": "分享失败"
+  },
+  "follow": {
+    "loginRequired": "请登录后再关注用户",
+    "followed": "已关注 @{{user}}",
+    "failed": "关注失败：{{error}}"
+  },
+  "ad": {
+    "countdown": "{{seconds}} 秒后播放广告"
+  },
+  "media": {
+    "unavailableTitle": "该视频已不可用",
+    "unavailableBody": "在网络上找不到这个较早上传视频的媒体文件。帖子仍然存在于区块链上，但视频已无法播放。",
+    "blockedTitle": "暂时无法加载视频",
+    "blockedBody": "我们的一台视频服务器没有响应。视频本身没有问题，请重试。"
+  },
+  "tipNudge": {
+    "text": "喜欢吗？<hide>给 <b>@{{author}}</b> 打个赏吧！</hide>",
+    "dismiss": "关闭"
+  },
+  "community": {
+    "members_other": "{{count}} 位成员"
+  },
+  "tags": {
+    "curated": "精选"
+  },
+  "topics": {
+    "taggedBy": "“{{label}}” · {{count}} 人标记",
+    "viewers_other": "“{{label}}” · {{count}} 位观众",
+    "autoNoVotes": "自动标记——还没有观众投票",
+    "noVotes": "还没有观众投票",
+    "inInterests": "✓ 已在你的兴趣中",
+    "addToInterests": "+ 添加到我的兴趣",
+    "openTagFeed": "打开标签信息流"
+  },
+  "scheduled": {
+    "notice": "定时于 <b>{{date}}</b> 发布——尚未发布。",
+    "futureDate": "未来某个日期",
+    "edit": "编辑、改期或取消",
+    "editTitle": "编辑定时帖子（详情、日期或取消）"
+  },
+  "actions": {
+    "voteOffChain": "给这个视频点赞。点赞保存在 3Speak 上，不产生奖励。",
+    "signInToVote": "登录后点赞",
+    "tagVideo": "给这个视频打标签",
+    "voteVideo": "给这个视频点赞",
+    "tag": "标签",
+    "vote": "点赞",
+    "analyticsTitle": "视频数据分析",
+    "analytics": "数据分析",
+    "videoStats": "视频数据",
+    "promoteTitle": "推广这个视频",
+    "promote": "推广",
+    "editTitle": "编辑视频详情",
+    "reportTitle": "举报视频",
+    "addToPlaylist": "添加到播放列表",
+    "playlist": "播放列表",
+    "tipTitle": "打赏创作者",
+    "tip": "打赏",
+    "details": "详情",
+    "toggleDetails": "展开/收起详情",
+    "followCreator": "关注创作者",
+    "closeMenu": "关闭菜单",
+    "openActions": "打开操作"
+  },
+  "description": {
+    "hide": "隐藏简介",
+    "show": "显示简介"
+  },
+  "edit": {
+    "title": "编辑视频",
+    "loading": "正在加载当前帖子…",
+    "videoFile": "视频文件",
+    "replaceVideo": "替换视频",
+    "replaceHint": "替换此帖子的视频文件。其他一切保持不变：帖子保留其点赞、收益、评论、上传日期以及在你主页中的位置。不做改动即保留当前视频。",
+    "uploadingTo": "正在上传到 <b>{{host}}</b>… {{pct}}%",
+    "choosingServer": "正在选择上传服务器…",
+    "uploadedTo": "已上传到 <b>{{host}}</b>。点击保存即可替换。",
+    "uploaded": "已上传。点击保存即可替换。",
+    "cancelUpload": "取消上传",
+    "keepCurrent": "保留当前视频",
+    "encodeHint": "保存后仍需几分钟进行编码，在新视频准备好之前会继续播放旧视频。你的缩略图不会改变，如果不再匹配，请在上方更新。",
+    "thumbnail": "缩略图",
+    "thumbPreviewAlt": "缩略图预览",
+    "uploadImage": "上传图片",
+    "uploading": "上传中…",
+    "thumbHint": "上传图片或粘贴图片的直链 URL。不做改动即保留当前缩略图。",
+    "titleLabel": "标题",
+    "titleMin": "至少 {{min}} 个字符",
+    "tags": "标签",
+    "tagsPlaceholder": "用空格分隔",
+    "autoTag": "自动添加——无法移除",
+    "tagCount_other": "{{count}}/{{max}} 个标签",
+    "tagCountRequired_other": "{{count}}/{{max}} 个标签 · 至少需要 1 个",
+    "description": "简介",
+    "descriptionPlaceholder": "向观众介绍你的视频…",
+    "markdownHint": "支持 Markdown。",
+    "listed": "公开",
+    "unlistedLabel": "不公开",
+    "listedHint": "显示在信息流、搜索和你的个人主页中。",
+    "unlistedHint": "不会出现在信息流和搜索中——仍可通过链接直接播放，并保留在你的个人主页上（带标记）。",
+    "allowRemix": "允许二创/剪辑",
+    "remixOn": "其他人可以进行二创或剪辑；你会被署名为原作者。",
+    "remixOff": "其他人不能二创或剪辑这个视频。",
+    "trailer": "频道预告片",
+    "trailerOn": "在你个人主页“概览”标签页顶部自动播放，并替换你之前设置的预告片。",
+    "trailerOff": "把这个视频设为在你个人主页“概览”标签页顶部自动播放的视频。",
+    "nsfw": "成人 / NSFW",
+    "notNsfw": "非成人内容",
+    "nsfwHint": "除非观众开启了 NSFW，否则不会出现在信息流和搜索中；在 Hive 上标记 nsfw 标签。",
+    "notNsfwHint": "普通内容，所有人可见。",
+    "promoted": "推广中",
+    "promote": "推广视频",
+    "saveChanges": "保存更改",
+    "noChanges": "没有需要保存的更改。",
+    "thumbUploaded": "缩略图已上传。",
+    "videoUploaded": "新视频已上传。保存后即可应用到此帖子。",
+    "relisted": "视频已恢复公开。",
+    "unlisted": "视频已设为不公开。",
+    "trailerSet": "已设为你的频道预告片。",
+    "trailerRemoved": "已取消频道预告片。",
+    "updatedEncoding": "视频已更新！新文件需要一点时间完成编码。",
+    "updated": "视频已更新！",
+    "errors": {
+      "notFound": "在 Hive 上找不到此帖子。",
+      "loadFailed": "无法从 Hive 加载帖子，请重试。",
+      "notImage": "请选择一个图片文件。",
+      "imageTooLarge": "图片太大（最大 10 MB）。",
+      "thumbUploadFailed": "缩略图上传失败。",
+      "notVideo": "请选择一个视频文件。",
+      "videoTooLarge": "视频太大（最大 5 GB）。",
+      "noVideoEntry": "此帖子没有可替换的视频条目——它的元数据中没有引用视频。",
+      "notInLibrary": "此帖子的视频已不在库中，因此无法替换其文件。",
+      "notOwner": "你只能替换自己视频的文件。",
+      "videoUploadFailed": "视频上传失败。",
+      "noEmbedEntry": "此帖子没有可替换的嵌入视频条目——它的元数据中没有引用视频。",
+      "broadcastFailed": "广播失败",
+      "listingFailed": "无法更新公开状态。",
+      "trailerFailed": "无法更新你的频道预告片。",
+      "saveFailed": "保存更改失败。"
+    }
+  }
+}

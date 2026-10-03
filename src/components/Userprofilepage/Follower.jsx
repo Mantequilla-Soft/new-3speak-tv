@@ -3,6 +3,8 @@ import { getFollowers, getFollowing } from '../../utils/hiveUtils';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { CHECKER_URL, HIVE_API_URL } from '../../utils/config';
+import { useTranslation } from 'react-i18next';
+import { formatNumber } from '../../i18n';
 import './Follower.scss';
 
 const PAGE = 100;
@@ -49,6 +51,7 @@ async function fetchDetails(names) {
  * demand rather than showing the first 100 and calling it done.
  */
 function Follower({ count = {}, username }) {
+  const { t } = useTranslation();
   const [lists, setLists] = useState({ followers: [], following: [] });
   const [done, setDone] = useState({ followers: false, following: false });
   const [activeTab, setActiveTab] = useState('followers');
@@ -124,29 +127,29 @@ function Follower({ count = {}, username }) {
 
   const users = lists[activeTab];
   const total = activeTab === 'followers' ? count.follower_count : count.following_count;
-  const avatar = (u) => `https://images.hive.blog/u/${u}/avatar/small`;
-  const compact = (n) => (n >= 1000 ? `${(n / 1000).toFixed(n >= 10000 ? 0 : 1).replace(/\.0$/, '')}K` : String(n));
+  const avatar = (u) => `/img/u/${u}/avatar/small`;
+  const compact = (n) => formatNumber(n, { compact: true, maximumFractionDigits: n >= 10000 ? 0 : 1 });
 
   const TABS = [
-    { id: 'followers', label: 'Followers', n: count.follower_count },
-    { id: 'following', label: 'Following', n: count.following_count },
+    { id: 'followers', label: t('profile.followers.tabFollowers'), n: count.follower_count },
+    { id: 'following', label: t('profile.followers.tabFollowing'), n: count.following_count },
   ];
 
   return (
     <div className="followers-page">
       {/* Same treatment as the profile's own tabs: plain text with an accent
           underline, no button chrome. */}
-      <div className="follower-tabs" role="tablist" aria-label="Followers and following">
-        {TABS.map((t) => (
+      <div className="follower-tabs" role="tablist" aria-label={t('profile.followers.tablistLabel')}>
+        {TABS.map((tab) => (
           <button
-            key={t.id}
+            key={tab.id}
             type="button"
             role="tab"
-            aria-selected={activeTab === t.id}
-            className={`follower-tab${activeTab === t.id ? ' active' : ''}`}
-            onClick={() => setActiveTab(t.id)}
+            aria-selected={activeTab === tab.id}
+            className={`follower-tab${activeTab === tab.id ? ' active' : ''}`}
+            onClick={() => setActiveTab(tab.id)}
           >
-            {t.label}{typeof t.n === 'number' ? ` (${t.n.toLocaleString()})` : ''}
+            {tab.label}{typeof tab.n === 'number' ? ` (${formatNumber(tab.n)})` : ''}
           </button>
         ))}
       </div>
@@ -155,7 +158,7 @@ function Follower({ count = {}, username }) {
         <div className="follower-loading"><div className="spinner" /></div>
       ) : users.length === 0 ? (
         <p className="follower-empty">
-          {activeTab === 'followers' ? 'No followers yet.' : 'Not following anyone yet.'}
+          {activeTab === 'followers' ? t('profile.followers.noFollowers') : t('profile.followers.noFollowing')}
         </p>
       ) : (
         <>
@@ -181,9 +184,9 @@ function Follower({ count = {}, username }) {
                   {details[u] ? (
                     <span className="user-stats">
                       {typeof details[u].followers === 'number'
-                        ? <span>{compact(details[u].followers)} followers</span> : null}
-                      {details[u].videos > 0 ? <span>{compact(details[u].videos)} videos</span> : null}
-                      {details[u].shorts > 0 ? <span>{compact(details[u].shorts)} shorts</span> : null}
+                        ? <span>{t('profile.followers.followersCount', { count: details[u].followers, num: compact(details[u].followers) })}</span> : null}
+                      {details[u].videos > 0 ? <span>{t('profile.followers.videosCount', { count: details[u].videos, num: compact(details[u].videos) })}</span> : null}
+                      {details[u].shorts > 0 ? <span>{t('profile.followers.shortsCount', { count: details[u].shorts, num: compact(details[u].shorts) })}</span> : null}
                     </span>
                   ) : null}
                 </span>
@@ -193,15 +196,16 @@ function Follower({ count = {}, username }) {
 
           <div className="follower-more">
             {done[activeTab] ? (
-              <span className="follower-count-note">Showing all {users.length.toLocaleString()}</span>
+              <span className="follower-count-note">{t('profile.followers.showingAll', { num: formatNumber(users.length) })}</span>
             ) : (
               <>
                 <button type="button" className="follower-more-btn" onClick={loadMore} disabled={loadingMore}>
-                  {loadingMore ? 'Loading…' : 'Load more'}
+                  {loadingMore ? t('common.status.loading') : t('common.actions.loadMore')}
                 </button>
                 <span className="follower-count-note">
-                  Showing {users.length.toLocaleString()}
-                  {typeof total === 'number' ? ` of ${total.toLocaleString()}` : ''}
+                  {typeof total === 'number'
+                    ? t('profile.followers.showingOf', { num: formatNumber(users.length), total: formatNumber(total) })
+                    : t('profile.followers.showing', { num: formatNumber(users.length) })}
                 </span>
               </>
             )}

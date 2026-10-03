@@ -1,0 +1,40 @@
+{
+  "ariaLabel": "Çerez ve depolama ayarları",
+  "title": "Çerezler ve tarayıcı depolaması",
+  "withAds": {
+    "intro": "3Speak, oturumunu ve seçtiğin ayarları tarayıcında saklar. Sitenin çalışmasını sağlayan budur ve cihazında kalır. İki şey isteğe bağlıdır ve aşağıdan açmadığın sürece ikisi de kapalıdır.",
+    "advertising": "Bunlardan biri <b>reklamcılık</b>. Açık olduğunda, dışarıdan bir reklam şirketi sayfaya kendi kodunu yükler ve bizim kontrol etmediğimiz şeyleri depolayabilir. Bu yüzden ayrı bir seçimdir ve asla başka bir şeyle birlikte sunulmaz."
+  },
+  "noAds": {
+    "intro": "3Speak, oturumunu ve seçtiğin ayarları tarayıcında saklar; sitenin çalışmasını sağlayan budur. <b>İzleme çerezi, reklam ve üçüncü taraf analitiği kullanmıyoruz</b>. Video izlemenin cihazına kaydedebileceği tek şey nerede kaldığındır ve bu da aşağıdaki tek isteğe bağlı seçimdir.",
+    "optional": "Tek isteğe bağlı şey: oynatmanın kaldığı yerden devam etmesi için <b>her videoda nerede kaldığını</b> hatırlayabiliriz. Bu bilgi cihazından asla çıkmaz."
+  },
+  "details": {
+    "essentialTitle": "Zorunlu: her zaman açık",
+    "essential": {
+      "login": "Oturumun",
+      "settings": "Belirlediğin ayarlar: tema, ses düzeyi, dil, altyazılar, akış tercihleri",
+      "uploads": "Yarıda kalan bir yüklemeye devam etme ve yazdığın gönderilerin taslakları",
+      "offline": "Yüklendikten sonra çevrimdışı kullanım için uygulamanın kendisi",
+      "answer": "Bu bildirime verdiğin yanıt"
+    },
+    "optionalTitle": "İsteğe bağlı: senin seçimin",
+    "optional": {
+      "playback": "Kaldığın yerden devam edebilmen için her videonun oynatma konumu",
+      "advertising": "Reklamcılık: dışarıdan bir reklam şirketinin kodu ve sana gösterilen reklamları saymak ve sınırlamak için cihazında depoladığı her şey"
+    },
+    "noteWithAds": "Bunları kapalı bırakırsan oynatma konumları kaydedilmez ve önceden kaydedilenler silinir; ayrıca hiçbir reklam kodu yüklenmez. Fikrini istediğin zaman değiştirebilirsin.",
+    "noteNoAds": "“Yalnızca zorunlu” seçeneği oynatma konumlarının kaydedilmesini durdurur ve önceden kaydedilenleri siler. Fikrini istediğin zaman değiştirebilirsin; “Kabul et” seçeneği bunu hemen yeniden açar."
+  },
+  "toggles": {
+    "resumeTitle": "Oynatmaya devam et",
+    "resumeDesc": "Her videoda nerede kaldığını hatırla. Cihazında kalır.",
+    "advertisingTitle": "Reklamcılık",
+    "advertisingDesc": "Dışarıdan bir reklam şirketinin kodunu yüklemesine ve ihtiyaç duyduğu şeyleri depolamasına izin ver."
+  },
+  "hideDetails": "Ayrıntıları gizle",
+  "whatIsStored": "Tam olarak ne depolanıyor?",
+  "essentialOnly": "Yalnızca zorunlu",
+  "saveChoices": "Seçimleri kaydet",
+  "acceptAll": "Tümünü kabul et"
+}

@@ -13,16 +13,12 @@ import {
 // the nav decides to render.
 import '../nav/NotificationBell.scss';
 import './IncubationBell.scss';
+import { useTranslation, Trans } from 'react-i18next';
+import { formatTimeAgo } from '../../i18n';
 
 const REFRESH_MS = 60 * 1000;
 
-function when(at) {
-  const secs = Math.max(0, (Date.now() - new Date(at).getTime()) / 1000);
-  if (secs < 60) return 'just now';
-  if (secs < 3600) return `${Math.floor(secs / 60)}m ago`;
-  if (secs < 86400) return `${Math.floor(secs / 3600)}h ago`;
-  return `${Math.floor(secs / 86400)}d ago`;
-}
+const when = (at) => formatTimeAgo(at, { style: 'narrow' });
 
 /**
  * The notification bell for someone with no Hive account.
@@ -37,6 +33,7 @@ function when(at) {
  * everyone else.
  */
 export default function IncubationBell() {
+  const { t } = useTranslation();
   const incubationHandle = useAppStore((s) => s.incubationHandle);
   const [data, setData] = useState({ items: [], unread: 0 });
   const [open, setOpen] = useState(false);
@@ -52,8 +49,8 @@ export default function IncubationBell() {
 
   useEffect(() => {
     load();
-    const t = setInterval(load, REFRESH_MS);
-    return () => clearInterval(t);
+    const timer = setInterval(load, REFRESH_MS);
+    return () => clearInterval(timer);
   }, [load, location.pathname]);
 
   useEffect(() => {
@@ -81,9 +78,9 @@ export default function IncubationBell() {
       <button
         type="button"
         className="notif-bell-btn"
-        title="Notifications"
+        title={t('common.nav.notifications')}
         onClick={toggle}
-        aria-label={data.unread ? `Notifications, ${data.unread} unread` : 'Notifications'}
+        aria-label={data.unread ? t('incubation.bell.unreadAria', { count: data.unread }) : t('common.nav.notifications')}
       >
         <IoIosNotifications size={22} />
         {data.unread > 0 && <span className="inc-bell-dot">{data.unread > 9 ? '9+' : data.unread}</span>}
@@ -91,10 +88,10 @@ export default function IncubationBell() {
 
       {open && (
         <div className="inc-bell-menu">
-          <header>Notifications</header>
+          <header>{t('common.nav.notifications')}</header>
           {data.items.length === 0 ? (
             <p className="inc-bell-empty">
-              Nothing yet. When someone replies to your videos or likes them, it shows up here.
+              {t('incubation.bell.empty')}
             </p>
           ) : (
             <ul>
@@ -106,7 +103,7 @@ export default function IncubationBell() {
                   >
                     <img
                       src={n.actor.onChain
-                        ? `https://images.hive.blog/u/${n.actor.name}/avatar/small`
+                        ? `/img/u/${n.actor.name}/avatar/small`
                         : handleAvatar(n.actor.name)}
                       alt=""
                       onError={(e) => { e.target.src = handleAvatar(n.actor.name); }}
@@ -116,8 +113,11 @@ export default function IncubationBell() {
                         {n.type === 'reply'
                           ? <FaReply size={11} aria-hidden="true" />
                           : <FaHeart size={11} aria-hidden="true" />}
-                        <strong>@{n.actor.name}</strong>
-                        {n.type === 'reply' ? ' replied to your post' : ' liked your post'}
+                        <Trans
+                          i18nKey={n.type === 'reply' ? 'incubation.bell.replied' : 'incubation.bell.liked'}
+                          values={{ name: n.actor.name }}
+                          components={{ b: <strong /> }}
+                        />
                       </span>
                       {n.excerpt && <span className="inc-bell-excerpt">{n.excerpt}</span>}
                       <span className="inc-bell-when">{when(n.at)}</span>

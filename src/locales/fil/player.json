@@ -1,0 +1,106 @@
+{
+  "controls": {
+    "rewind10": "Atras 10s",
+    "forward10": "Abante 10s",
+    "reactToMoment": "Mag-react sa sandaling ito",
+    "mute": "I-mute",
+    "unmute": "I-unmute",
+    "playerSize": "Laki ng player: {{size}}",
+    "sizeStandard": "Standard",
+    "pip": "Picture-in-Picture",
+    "autoplayOn": "Autoplay: on",
+    "autoplayOff": "Autoplay: off",
+    "ambientSubtle": "Ambient light: banayad",
+    "ambientVivid": "Ambient light: matingkad",
+    "ambientOff": "Ambient light: off",
+    "playbackSpeed": "Bilis ng playback",
+    "speedNormal": "Normal",
+    "quality": "Quality",
+    "qualityAuto": "Auto",
+    "fullscreen": "Fullscreen",
+    "exitFullscreen": "Lumabas sa Fullscreen",
+    "markerReplies_one": "({{count}} reply)",
+    "markerReplies_other": "({{count}} replies)"
+  },
+  "subtitles": {
+    "title": "Subtitles",
+    "off": "Off",
+    "font": "Font",
+    "size": "Laki",
+    "textColor": "Kulay ng Text",
+    "textBorder": "Border ng Text",
+    "borderColor": "Kulay ng Border",
+    "background": "Background",
+    "none": "Wala",
+    "fonts": {
+      "sansSerif": "Sans-serif",
+      "serif": "Serif",
+      "monospace": "Monospace"
+    }
+  },
+  "mini": {
+    "untitled": "Video"
+  },
+  "playlist": {
+    "previous": "Nakaraang video",
+    "next": "Susunod na video",
+    "close": "Isara ang playlist"
+  },
+  "overlay": {
+    "replay": "Panoorin ulit"
+  },
+  "reactions": {
+    "translation": "Salin",
+    "translationFailed": "Pumalya ang pagsasalin",
+    "videoReaction": "Video Reaction",
+    "comment": "Comment",
+    "previous": "Nakaraan",
+    "next": "Susunod",
+    "hide": "Itago ang mga reaction",
+    "hideShort": "Itago",
+    "loadingReplies": "Naglo-load ng mga reply...",
+    "sizeTitle": "Laki: {{size}}",
+    "sizes": {
+      "small": "S",
+      "medium": "M",
+      "standard": "Std",
+      "big": "L",
+      "cinema": "Cin"
+    },
+    "sizeNames": {
+      "small": "Maliit",
+      "medium": "Katamtaman",
+      "standard": "Standard",
+      "big": "Malaki",
+      "cinema": "Cinema"
+    }
+  },
+  "reactionUpload": {
+    "authorized": "Na-authorize na si @threespeak — puwede mo nang i-post ang reaction mo",
+    "authFailed": "Pumalya ang authorization. Subukan ulit.",
+    "webcamDenied": "Hindi ma-access ang webcam",
+    "shortTooLong": "Dapat {{max}} o mas maikli ang Shorts. Alisin ang check sa \"Ipakita sa 3Speak Shorts\" o gumamit ng mas maikling video.",
+    "uploadingVideo": "Ina-upload ang video...",
+    "noEmbedUrl": "Tagumpay ang upload pero walang ibinalik na embed URL",
+    "publishingComment": "Pine-publish ang comment...",
+    "posted": "Na-post na ang video reaction!",
+    "postFailed": "Hindi ma-post ang comment",
+    "uploadFailed": "Pumalya ang upload",
+    "uploadVideo": "Mag-upload ng Video",
+    "recordVideo": "Mag-record ng Video",
+    "startRecording": "Simulan ang Recording",
+    "stopRecording": "Itigil ang Recording",
+    "recordedVideo": "Na-record na video",
+    "descriptionPlaceholder": "Magdagdag ng description para sa video reaction mo...",
+    "showInShorts": "Ipakita sa 3Speak Shorts",
+    "authNote": "Payagan si <b>@threespeak</b> na i-post ang reaction mo para sa iyo.",
+    "authorizing": "Ina-authorize…",
+    "authorize": "I-authorize si @threespeak",
+    "uploading": "Ina-upload...",
+    "postReaction": "I-post ang Reaction"
+  },
+  "inline": {
+    "cantPlay": "Hindi mapapanood dito ang video na ito.",
+    "openOnSite": "Buksan sa 3Speak"
+  }
+}

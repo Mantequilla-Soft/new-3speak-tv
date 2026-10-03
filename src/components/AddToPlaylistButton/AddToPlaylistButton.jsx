@@ -2,6 +2,7 @@ import { useState } from "react";
 import { MdPlaylistAdd } from "react-icons/md";
 import { toastIn } from '../../utils/toast';
 import PropTypes from "prop-types";
+import { useTranslation } from "react-i18next";
 import { isLoggedIn } from "../../hive-api/aioha";
 import AddToPlaylistModal from "../AddToPlaylistModal/AddToPlaylistModal";
 import "./AddToPlaylistButton.scss";
@@ -11,13 +12,14 @@ import "./AddToPlaylistButton.scss";
 const toast = toastIn('Playlist');
 
 function AddToPlaylistButton({ author, permlink, title, size = 20, className = "" }) {
+  const { t } = useTranslation();
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const handleClick = (e) => {
     e.preventDefault();
     e.stopPropagation();
     if (!isLoggedIn()) {
-      toast.error("Please login to add videos to playlists");
+      toast.error(t('playlists.loginToAdd'));
       return;
     }
     setIsModalOpen(true);
@@ -29,7 +31,7 @@ function AddToPlaylistButton({ author, permlink, title, size = 20, className = "
         className={`add-to-playlist-btn ${className}`}
         onClick={handleClick}
         onMouseDown={(e) => e.stopPropagation()}
-        title="Add to playlist"
+        title={t('playlists.addToPlaylist')}
       >
         <MdPlaylistAdd size={size} />
       </button>

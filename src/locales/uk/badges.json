@@ -1,0 +1,110 @@
+{
+  "page": {
+    "fallbackTitle": "Значок",
+    "kpis": {
+      "recipients": "Отримувачі",
+      "recentVideos": "Нещодавні відео",
+      "issued": "Видано"
+    },
+    "issuedBy": "Видає <creatorLink>@{{creator}}</creatorLink>",
+    "notFoundTitle": "Значок не знайдено",
+    "notFoundBody": "Зараз не вдається прочитати акаунт Hive @{{account}}.",
+    "browseAll": "Переглянути всі значки",
+    "tabs": {
+      "videos": "Відео",
+      "recipients": "Отримувачі",
+      "recipientsWithCount": "Отримувачі ({{num}})"
+    },
+    "errorVideos": "Помилка отримання відео",
+    "noVideosTitle": "Відео ще немає",
+    "noHolders": "Цей значок ще ніхто не має.",
+    "noHolderVideos": "Ніхто з власників цього значка ще не опублікував відео на 3Speak.",
+    "loadingMore": "Завантажуємо ще...",
+    "recipientsError": "Не вдалося завантажити отримувачів",
+    "recipientsLoading": "Завантаження отримувачів...",
+    "noRecipientsTitle": "Отримувачів ще немає",
+    "noRecipientsBody": "Цей значок ще нікому не вручали.",
+    "recipientsSummary_one": "{{num}} отримувач",
+    "recipientsSummary_few": "{{num}} отримувачі",
+    "recipientsSummary_many": "{{num}} отримувачів",
+    "recipientsSummary_other": "{{num}} отримувача",
+    "recipientsSummaryWithVideos_one": "{{num}} отримувач, публікуються на 3Speak: {{publishing}}",
+    "recipientsSummaryWithVideos_few": "{{num}} отримувачі, публікуються на 3Speak: {{publishing}}",
+    "recipientsSummaryWithVideos_many": "{{num}} отримувачів, публікуються на 3Speak: {{publishing}}",
+    "recipientsSummaryWithVideos_other": "{{num}} отримувача, публікуються на 3Speak: {{publishing}}",
+    "recipientVideos_one": "{{num}} відео",
+    "recipientVideos_few": "{{num}} відео",
+    "recipientVideos_many": "{{num}} відео",
+    "recipientVideos_other": "{{num}} відео",
+    "recipientNoVideos": "Немає відео"
+  },
+  "directory": {
+    "title": "Значки",
+    "intro": "Значки — це нагороди, які <b>вам вручають інші</b> в Hive за події, внесок і досягнення. До значка не можна приєднатися: його хтось вручає. Відкрийте значок, щоб дивитися, що публікують тут його отримувачі.",
+    "searchPlaceholder": "Пошук значків...",
+    "sort": {
+      "recipients": "Отримувачі",
+      "created": "Створено",
+      "name": "Назва"
+    },
+    "createLocked": "Щоб створити значок, потрібен акаунт Hive. Ця можливість відкриється, щойно ваш акаунт буде готовий.",
+    "create": "Створити значок",
+    "loadError": "Зараз не вдалося завантажити значки.",
+    "noMatch": "Жоден значок не відповідає запиту.",
+    "held": "Є у вас",
+    "recipients_one": "{{num}} отримувач",
+    "recipients_few": "{{num}} отримувачі",
+    "recipients_many": "{{num}} отримувачів",
+    "recipients_other": "{{num}} отримувача"
+  },
+  "award": {
+    "success": "@{{username}} тепер має {{title}}",
+    "failed": "Не вдалося вручити цей значок",
+    "dialogLabel": "Вручити значок {{username}}",
+    "title": "Вручити значок",
+    "toUser": "для @{{username}}",
+    "awarding": "Вручаємо…",
+    "held": "Уже має",
+    "award": "Вручити",
+    "note": "Значок підписується на отримувача в Hive — саме це й означає мати значок. Забрати його можна на сторінці самого значка."
+  },
+  "hive": {
+    "dragToReorder": "Перетягніть, щоб змінити порядок",
+    "orderSaved": "Порядок значків збережено у вашому профілі Hive",
+    "orderSaveFailed": "Не вдалося зберегти порядок значків",
+    "dialogLabel": "Значки @{{username}}",
+    "title": "Значки",
+    "arrangeHint": "Перетягніть значки в тому порядку, у якому хочете їх показувати.",
+    "earnedCount_one": "{{count}} значок, отриманий @{{username}} у Hive",
+    "earnedCount_few": "{{count}} значки, отримані @{{username}} у Hive",
+    "earnedCount_many": "{{count}} значків, отриманих @{{username}} у Hive",
+    "earnedCount_other": "{{count}} значка, отриманих @{{username}} у Hive",
+    "alwaysFirst": "Завжди показується першим",
+    "saveOrder": "Зберегти порядок",
+    "arrange": "Упорядкувати",
+    "arrangeTitle": "Виберіть порядок показу значків",
+    "showAll_one": "Показати всі значки ({{count}})",
+    "showAll_few": "Показати всі {{count}} значки",
+    "showAll_many": "Показати всі {{count}} значків",
+    "showAll_other": "Показати всі {{count}} значка",
+    "awardTitle": "Вручити один зі своїх значків @{{username}}"
+  },
+  "leaderboardBadges": {
+    "proTitle": "Цей автор підтримує 3Speak підпискою Pro"
+  },
+  "leaderboard": {
+    "watchNotice": "Час перегляду відстежується лише з {{since}}, тож довші періоди поки показують ту саму коротку історію.",
+    "unclaimed": "Не отримано",
+    "noActivity": "За цей період активності ще немає",
+    "otherTopics": "Інше",
+    "title": "Рейтинги",
+    "subtitle": "{{blurb}} — найкращі автори на 3Speak.",
+    "subtitleTopic": "{{blurb}} — найкращі автори в темі {{topic}}.",
+    "allTopics": "Усі теми",
+    "finding": "Шукаємо @{{user}} у цьому рейтингу…",
+    "notInTop": "@{{user}} немає в топ-{{n}} цього рейтингу.",
+    "loading": "Завантаження рейтингу…",
+    "loadError": "Не вдалося завантажити рейтинг. Спробуйте трохи згодом.",
+    "empty": "За цей період ще ні в кого немає показника «{{metric}}»."
+  }
+}

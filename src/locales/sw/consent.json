@@ -1,0 +1,40 @@
+{
+  "ariaLabel": "Mipangilio ya vidakuzi na hifadhi",
+  "title": "Vidakuzi na hifadhi ya kivinjari",
+  "withAds": {
+    "intro": "3Speak huhifadhi kuingia kwako na mipangilio unayochagua kwenye kivinjari chako. Hicho ndicho kinachowezesha tovuti kufanya kazi, na hubaki kwenye kifaa chako. Mambo mawili ni ya hiari, na yote mawili yamezimwa isipokuwa uyawashe hapa chini.",
+    "advertising": "Mojawapo ni <b>matangazo</b>. Yakiwashwa, kampuni ya nje ya matangazo hupakia msimbo wake kwenye ukurasa na inaweza kuhifadhi vitu ambavyo hatuvidhibiti. Ndiyo sababu ni chaguo tofauti na haliunganishwi kamwe na kitu kingine chochote."
+  },
+  "noAds": {
+    "intro": "3Speak huhifadhi kuingia kwako na mipangilio unayochagua kwenye kivinjari chako — hicho ndicho kinachowezesha tovuti kufanya kazi. Hatutumii <b>vidakuzi vya ufuatiliaji, matangazo wala takwimu za wahusika wengine</b>. Kitu pekee ambacho kutazama video kunaweza kuhifadhi kwenye kifaa chako ni mahali ulipoishia — na hilo ndilo chaguo moja la hiari hapa chini.",
+    "optional": "Kitu kimoja cha hiari: tunaweza kukumbuka <b>ulipoishia katika kila video</b> ili uchezaji uendelee kutoka hapo. Hakitoki kamwe kwenye kifaa chako."
+  },
+  "details": {
+    "essentialTitle": "Muhimu — huwashwa kila wakati",
+    "essential": {
+      "login": "Kipindi chako cha kuingia",
+      "settings": "Mipangilio unayoweka: mandhari, sauti, lugha, manukuu, mapendeleo ya mlisho",
+      "uploads": "Kuendeleza upakiaji uliokatizwa, na rasimu za machapisho unayoandika",
+      "offline": "Programu yenyewe, kwa matumizi bila mtandao baada ya kusakinishwa",
+      "answer": "Jibu lako kwa bango hili"
+    },
+    "optionalTitle": "Hiari — chaguo lako",
+    "optional": {
+      "playback": "Mahali pa uchezaji kwa kila video, ili uweze kuendelea ulipoishia",
+      "advertising": "Matangazo: msimbo wa kampuni ya nje ya matangazo, na chochote inachohifadhi kwenye kifaa chako ili kuhesabu na kupunguza idadi ya matangazo unayoonyeshwa"
+    },
+    "noteWithAds": "Ukiyaacha yamezimwa, mahali pa uchezaji hapatahifadhiwa na yaliyokwisha hifadhiwa yatafutwa, na hakuna msimbo wowote wa matangazo utakaopakiwa. Unaweza kubadilisha uamuzi wako wakati wowote.",
+    "noteNoAds": "Kuchagua “Muhimu tu” huzuia mahali pa uchezaji kuhifadhiwa na hufuta yaliyokwisha hifadhiwa. Unaweza kubadilisha uamuzi wako wakati wowote — kuchagua “Kubali” hukiwasha tena papo hapo."
+  },
+  "toggles": {
+    "resumeTitle": "Endeleza uchezaji",
+    "resumeDesc": "Kumbuka ulipoishia katika kila video. Hubaki kwenye kifaa chako.",
+    "advertisingTitle": "Matangazo",
+    "advertisingDesc": "Ruhusu kampuni ya nje ya matangazo kupakia msimbo wake na kuhifadhi kile inachohitaji."
+  },
+  "hideDetails": "Ficha maelezo",
+  "whatIsStored": "Ni nini hasa kinachohifadhiwa?",
+  "essentialOnly": "Muhimu tu",
+  "saveChoices": "Hifadhi machaguo",
+  "acceptAll": "Kubali yote"
+}

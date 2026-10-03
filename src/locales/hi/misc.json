@@ -1,0 +1,242 @@
+{
+  "leaderboard": {
+    "windows": {
+      "7d": "7 दिन",
+      "30d": "30 दिन",
+      "365d": "साल",
+      "all": "हर समय"
+    },
+    "windowsInSentence": {
+      "7d": "7 दिन",
+      "30d": "30 दिन",
+      "365d": "साल",
+      "all": "हर समय"
+    },
+    "metrics": {
+      "video_uploads": "वीडियो",
+      "short_uploads": "शॉर्ट्स",
+      "video_watch_secs": "वीडियो वॉच टाइम",
+      "short_watch_secs": "शॉर्ट्स वॉच टाइम",
+      "tags_given": "टैग",
+      "streams": "स्ट्रीम",
+      "stream_secs": "लाइव समय",
+      "stream_peak_viewers": "पीक दर्शक",
+      "stream_viewers": "दर्शकों का जुड़ना",
+      "boosts_received": "मिले बूस्ट",
+      "boost_amount_received": "मिली राशि",
+      "boosts_given": "दिए गए बूस्ट",
+      "boost_amount_given": "दी गई राशि"
+    },
+    "metricsInSentence": {
+      "video_uploads": "वीडियो",
+      "short_uploads": "शॉर्ट्स",
+      "video_watch_secs": "वीडियो वॉच टाइम",
+      "short_watch_secs": "शॉर्ट्स वॉच टाइम",
+      "tags_given": "टैग",
+      "streams": "स्ट्रीम",
+      "stream_secs": "लाइव समय",
+      "stream_peak_viewers": "पीक दर्शक",
+      "stream_viewers": "दर्शकों का जुड़ना",
+      "boosts_received": "मिले बूस्ट",
+      "boost_amount_received": "मिली राशि",
+      "boosts_given": "दिए गए बूस्ट",
+      "boost_amount_given": "दी गई राशि"
+    },
+    "blurbs": {
+      "video_uploads": "अपलोड किए गए वीडियो",
+      "short_uploads": "अपलोड किए गए शॉर्ट्स",
+      "video_watch_secs": "उनके वीडियो कितने सेकंड देखे गए",
+      "short_watch_secs": "उनके शॉर्ट्स कितने सेकंड देखे गए",
+      "tags_given": "दूसरे वीडियो को दिए गए टैग",
+      "streams": "शुरू किए गए स्ट्रीम सेशन",
+      "stream_secs": "कुल लाइव समय (सिर्फ़ खत्म हो चुकी स्ट्रीम)",
+      "stream_peak_viewers": "एक साथ सबसे ज़्यादा दर्शक (सबसे ऊँचा स्तर, कुल जोड़ नहीं)",
+      "stream_viewers": "दर्शकों के जुड़ने के इवेंट (कुल संख्या, यूनिक पहुँच नहीं)",
+      "boosts_received": "उनकी स्ट्रीम को भेजे गए बूस्ट",
+      "boost_amount_received": "मिले बूस्ट की कुल राशि",
+      "boosts_given": "उनके द्वारा दूसरे स्ट्रीमर्स को भेजे गए बूस्ट",
+      "boost_amount_given": "उनके द्वारा दिए गए बूस्ट की कुल राशि"
+    },
+    "blurbsInSentence": {
+      "video_uploads": "अपलोड किए गए वीडियो",
+      "short_uploads": "अपलोड किए गए शॉर्ट्स",
+      "video_watch_secs": "उनके वीडियो कितने सेकंड देखे गए",
+      "short_watch_secs": "उनके शॉर्ट्स कितने सेकंड देखे गए",
+      "tags_given": "दूसरे वीडियो को दिए गए टैग",
+      "streams": "शुरू किए गए स्ट्रीम सेशन",
+      "stream_secs": "कुल लाइव समय (सिर्फ़ खत्म हो चुकी स्ट्रीम)",
+      "stream_peak_viewers": "एक साथ सबसे ज़्यादा दर्शक (सबसे ऊँचा स्तर, कुल जोड़ नहीं)",
+      "stream_viewers": "दर्शकों के जुड़ने के इवेंट (कुल संख्या, यूनिक पहुँच नहीं)",
+      "boosts_received": "उनकी स्ट्रीम को भेजे गए बूस्ट",
+      "boost_amount_received": "मिले बूस्ट की कुल राशि",
+      "boosts_given": "उनके द्वारा दूसरे स्ट्रीमर्स को भेजे गए बूस्ट",
+      "boost_amount_given": "उनके द्वारा दिए गए बूस्ट की कुल राशि"
+    },
+    "groups": {
+      "video": "वीडियो",
+      "streaming": "स्ट्रीमिंग"
+    },
+    "badgeNouns": {
+      "video_uploads": "वीडियो",
+      "short_uploads": "शॉर्ट्स",
+      "video_watch_secs": "देखे गए",
+      "short_watch_secs": "शॉर्ट्स देखे गए",
+      "tags_given": "टैगर"
+    },
+    "badgeLabel": "{{tier}} {{noun}}",
+    "badgeTitleAllTime": "हर समय के {{what}} में #{{rank}} रैंक",
+    "badgeTitleWindow": "पिछले {{window}} के {{what}} में #{{rank}} रैंक"
+  },
+  "duration": {
+    "hoursMinutes": "{{h}} घं {{m}} मि",
+    "minutesSeconds": "{{m}} मि {{s}} से",
+    "seconds": "{{s}} से",
+    "aMoment": "एक पल",
+    "lessThanMinute": "एक मिनट से कम"
+  },
+  "surf": {
+    "community": "कम्युनिटी",
+    "allOf": "पूरा {{label}}"
+  },
+  "social": {
+    "signingCancelled": "साइनिंग रद्द हो गई",
+    "youtube": {
+      "placeholder": "@handle या UCxxxxxxxxxxxxxxxxxxxxxx",
+      "help": "अपना YouTube @handle या UC… चैनल ID पेस्ट करें। हम इसे चैनल ID में बदल देते हैं।"
+    },
+    "soundcloud": {
+      "placeholder": "your-profile या https://soundcloud.com/your-profile",
+      "help": "अपना SoundCloud प्रोफ़ाइल URL या उसमें से सिर्फ़ यूज़रनेम पेस्ट करें। हैश को अपनी प्रोफ़ाइल बायो में कहीं भी डालें।"
+    }
+  },
+  "snaps": {
+    "retrying": "Snaps कंटेनर अभी नहीं मिला — फिर से कोशिश कर रहे हैं (प्रयास {{attempt}})...",
+    "unreachable": "Snaps कंटेनर ढूँढने के लिए किसी भी Hive नोड तक नहीं पहुँच सके। कृपया अपना कनेक्शन जाँचें और फिर से कोशिश करें।",
+    "unreachableWithError": "Snaps कंटेनर ढूँढने के लिए किसी भी Hive नोड तक नहीं पहुँच सके (आखिरी त्रुटि — {{error}})। कृपया अपना कनेक्शन जाँचें और फिर से कोशिश करें।"
+  },
+  "embed": {
+    "responsive": "रिस्पॉन्सिव"
+  },
+  "incubation": {
+    "requestFailed": "रिक्वेस्ट फ़ेल हुई ({{status}})",
+    "contactLoadFailed": "आपकी संपर्क जानकारी लोड नहीं हो सकी",
+    "contactSaveFailed": "आपकी संपर्क जानकारी सेव नहीं हो सकी",
+    "onlyButrauthBacklog": "सिर्फ़ Butter Auth अकाउंट का ही इनक्यूबेशन बैकलॉग हो सकता है",
+    "publishFailed": "पब्लिश फ़ेल हुआ ({{status}})"
+  },
+  "routeError": {
+    "title": "यह पेज लोड नहीं हुआ",
+    "body": "ऐप का एक हिस्सा डाउनलोड नहीं हो सका। आमतौर पर इसका मतलब है कि यह टैब खुला रहते हुए नया वर्शन जारी हुआ। रीलोड करने से वह मिल जाएगा।",
+    "reload": "रीलोड करें",
+    "goHome": "होम पर जाएँ"
+  },
+  "seo": {
+    "defaultTitle": "3Speak - विकेंद्रीकृत वीडियो प्लेटफ़ॉर्म",
+    "defaultDescription": "3Speak ब्लॉकचेन टेक्नोलॉजी पर बना एक विकेंद्रीकृत वीडियो शेयरिंग प्लेटफ़ॉर्म है। वीडियो देखें, अपलोड करें और शेयर करें, और साथ में क्रिप्टोकरेंसी रिवॉर्ड कमाएँ।"
+  },
+  "uploadLinks": {
+    "regularVideo": "सामान्य वीडियो",
+    "verticalShort": "वर्टिकल शॉर्ट",
+    "musicAudio": "संगीत / ऑडियो",
+    "groupChat": "ग्रुप चैट",
+    "communitySnap": "कम्युनिटी Snap",
+    "shortsEditor": "शॉर्ट्स एडिटर",
+    "goLive": "लाइव जाएँ",
+    "streamStudio": "स्ट्रीम स्टूडियो",
+    "headings": {
+      "upload": "अपलोड",
+      "live": "लाइव",
+      "others": "अन्य"
+    }
+  },
+  "chat": {
+    "connectFailed": "चैट से कनेक्ट नहीं हो सका।",
+    "loginFirst": "चैट इस्तेमाल करने के लिए पहले लॉग इन करें।",
+    "roomNameRequired": "रूम का नाम ज़रूरी है।"
+  },
+  "hiveAuth": {
+    "waiting": "HiveAuth पर मंज़ूरी का इंतज़ार है...",
+    "title": "HiveAuth मंज़ूरी ज़रूरी है",
+    "hint": "इस ट्रांज़ैक्शन को मंज़ूर करने के लिए कृपया अपना HiveAuth ऐप देखें"
+  },
+  "hiveApi": {
+    "keychainNotSigned": "Keychain ने ट्रांज़ैक्शन साइन नहीं किया",
+    "loginToCreateCommunity": "कम्युनिटी बनाने के लिए कृपया लॉग इन करें",
+    "loginFirst": "कृपया पहले लॉग इन करें",
+    "cancelled": "ऑपरेशन रद्द हो गया"
+  },
+  "openpod": {
+    "announced": "लाइव सेशन की घोषणा Hive पर हो गई!",
+    "announceFailed": "OpenPod शुरू हो गया, लेकिन Hive पर घोषणा पोस्ट नहीं हो सकी।"
+  },
+  "appUpdate": {
+    "updating": "नए वर्शन ({{version}}) पर अपडेट हो रहा है…",
+    "reloadingForUpload": "रीलोड हो रहा है ताकि आपका अपलोड सबसे नए बिल्ड पर चले।"
+  },
+  "auth": {
+    "switched": "{{username}} पर स्विच हो गया!",
+    "keychainLoginTitle": "Hive से लॉग इन करें"
+  },
+  "streamVod": {
+    "uploadKeyMissing": "स्ट्रीम खत्म हो गई, लेकिन वीडियो अपलोड नहीं हो सका (अपलोड की नहीं है)।",
+    "uploading": "आपकी स्ट्रीम का वीडियो अपलोड हो रहा है… {{pct}}%",
+    "uploaded": "स्ट्रीम वीडियो अपलोड हो गया — एनकोडिंग पूरी होने पर यह लाइव स्ट्रीम की जगह ले लेगा।",
+    "uploadFailed": "स्ट्रीम खत्म हो गई, लेकिन वीडियो अपलोड फ़ेल हो गया।",
+    "saving": "आपकी स्ट्रीम का वीडियो सेव हो रहा है…",
+    "encoding": "अपलोड हो गया — एनकोडर आपका वीडियो प्रोसेस कर रहा है…",
+    "saved": "स्ट्रीम वीडियो सेव हो गया — एनकोडिंग पूरी होने पर यह लाइव स्ट्रीम की जगह ले लेगा।",
+    "saveFailed": "स्ट्रीम खत्म हो गई, लेकिन वीडियो सेव नहीं हो सका: {{error}}।",
+    "uploadFailedShort": "अपलोड फ़ेल हुआ",
+    "stillProcessing": "स्ट्रीम खत्म हो गई — वीडियो अभी प्रोसेस हो रहा है; थोड़ी देर में अपनी प्रोफ़ाइल देखें।"
+  },
+  "embedPlayer": {
+    "unavailable": "वीडियो उपलब्ध नहीं है"
+  },
+  "followFeed": {
+    "title": "फ़ॉलो फ़ीड",
+    "error": "वीडियो लाने में त्रुटि"
+  },
+  "groups": {
+    "title": "ग्रुप",
+    "badges": "बैज",
+    "subtitle": "जिन कम्युनिटी से आप जुड़ सकते हैं और जो बैज लोगों के पास हैं, सब एक ही जगह।"
+  },
+  "watched": {
+    "removed": "वॉच हिस्ट्री से हटाया गया",
+    "removeFailed": "वॉच हिस्ट्री से हटाया नहीं जा सका",
+    "title": "देखे गए",
+    "count_one": "{{count}} देखा गया",
+    "count_other": "{{count}} देखे गए",
+    "trackHistory": "हिस्ट्री ट्रैक करें",
+    "videosTab": "वीडियो ({{count}})",
+    "shortsTab": "शॉर्ट्स ({{count}})",
+    "loadFailed": "वॉच हिस्ट्री लोड नहीं हो सकी। कृपया फिर से कोशिश करें।",
+    "emptyShorts": "अभी कोई शॉर्ट नहीं देखा",
+    "emptyVideos": "अभी कोई वीडियो नहीं देखा",
+    "removeTitle": "वॉच हिस्ट्री से हटाएँ",
+    "watchedAt": "{{when}} देखा"
+  },
+  "watchStream": {
+    "saySomething": "कुछ कहें…",
+    "waitingWallet": "आपके वॉलेट का इंतज़ार है…",
+    "signInToChat": "चैट करने के लिए साइन इन करें",
+    "sendMessage": "मैसेज भेजें",
+    "notLive": "यह स्ट्रीम अभी लाइव नहीं है।",
+    "notFound": "इस लिंक के लिए कोई लाइव स्ट्रीम नहीं मिली।",
+    "browse": "लाइव स्ट्रीम देखें",
+    "back": "3Speak पर वापस",
+    "seoTitle": "{{title}} (लाइव)",
+    "swipeNext": "अगली लाइव स्ट्रीम के लिए स्वाइप करें",
+    "chat": "चैट",
+    "watchingNow": "👁 {{count}} अभी देख रहे हैं",
+    "signInRaiseHand": "हाथ उठाने के लिए साइन इन करें",
+    "copyLink": "स्ट्रीम का लिंक कॉपी करें",
+    "notAvailableLive": "लाइव स्ट्रीम के लिए उपलब्ध नहीं",
+    "vote": "वोट",
+    "comment": "कमेंट",
+    "liveChat": "लाइव चैट",
+    "signInToJoin": "🔒 चैट में शामिल होने के लिए साइन इन करें।",
+    "moreTag": "और #{{tag}}",
+    "moreVideos": "और वीडियो"
+  }
+}

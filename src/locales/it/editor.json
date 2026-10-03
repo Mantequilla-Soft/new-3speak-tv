@@ -1,0 +1,19 @@
+{
+  "placeholder": "Scrivi qui il tuo contenuto...",
+  "uploadFailed": "Caricamento non riuscito: {{message}}",
+  "uploadingImage": "Caricamento immagine...",
+  "format": {
+    "underline": "Sottolineato",
+    "strike": "Barrato",
+    "highlight": "Evidenzia",
+    "bulletList": "Elenco puntato",
+    "orderedList": "Elenco numerato",
+    "taskList": "Elenco attività"
+  },
+  "emoji": {
+    "searchPlaceholder": "Cerca emoji"
+  },
+  "preview": {
+    "renderError": "Errore nella visualizzazione del contenuto"
+  }
+}

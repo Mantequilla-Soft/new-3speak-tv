@@ -1,0 +1,108 @@
+{
+  "review": {
+    "fabAria": "Оставить отзыв",
+    "fab": "Отзыв",
+    "aspects": {
+      "upload": "Загрузка",
+      "playback": "Воспроизведение",
+      "live": "Прямые эфиры",
+      "discovery": "Поиск / лента",
+      "design": "Дизайн / UX",
+      "performance": "Скорость",
+      "mobile": "Мобильная версия",
+      "other": "Другое"
+    },
+    "titles": {
+      "upload": "Как прошла загрузка?",
+      "stream": "Как прошёл ваш эфир?",
+      "watch": "Как вам просмотр на 3Speak?",
+      "global": "Как вам 3Speak?",
+      "fallback": "Помогите нам сделать 3Speak лучше"
+    },
+    "stars": {
+      "poor": "Плохо",
+      "fair": "Так себе",
+      "good": "Хорошо",
+      "great": "Отлично",
+      "amazing": "Потрясающе"
+    },
+    "errors": {
+      "pickStars": "Выберите оценку в звёздах",
+      "sendFailed": "Не удалось отправить отзыв. Попробуйте ещё раз."
+    },
+    "thanks": "Спасибо за отзыв! 🙏",
+    "sendFeedback": "Отправить отзыв",
+    "subtitle": "Ваш отзыв помогает нам делать 3Speak лучше.",
+    "starRating": "Оценка в звёздах",
+    "starsAria_one": "{{count}} звезда",
+    "starsAria_few": "{{count}} звезды",
+    "starsAria_many": "{{count}} звёзд",
+    "starsAria_other": "{{count}} звезды",
+    "aboutLabel": "О чём отзыв? <opt>(необязательно)</opt>",
+    "recommendLabel": "Порекомендуете 3Speak? <opt>(необязательно)</opt>",
+    "moreLabel": "Расскажите подробнее <opt>(необязательно)</opt>",
+    "placeholder": "Что понравилось? Что можно улучшить?",
+    "notNow": "Не сейчас",
+    "sending": "Отправка…"
+  },
+  "tabs": {
+    "reactions": "Реакции",
+    "transcript": "Транскрипт"
+  },
+  "live": {
+    "vodProcessing": "Запись обрабатывается…",
+    "vodProcessingHint": "Этот эфир завершён. Видео появится здесь, как только кодировщик закончит работу, — перезагружать страницу не нужно.",
+    "watching_one": "👁 {{count}} зритель",
+    "watching_few": "👁 {{count}} зрителя",
+    "watching_many": "👁 {{count}} зрителей",
+    "watching_other": "👁 {{count}} зрителя",
+    "signInRaiseHand": "Войдите, чтобы поднять руку",
+    "signInChat": "Войдите, чтобы писать в чат",
+    "signInJoinChat": "🔒 Войдите, чтобы присоединиться к чату."
+  },
+  "transcript": {
+    "title": "Транскрипт",
+    "languageAria": "Язык транскрипта",
+    "copyingWithTimes": "Копирование с таймкодами",
+    "copyingTextOnly": "Копирование только текста",
+    "timecodes": "Таймкоды",
+    "copyWithTimes": "Копировать транскрипт с таймкодами",
+    "copyText": "Копировать текст транскрипта",
+    "jumpTo": "Перейти к {{time}}",
+    "hide": "Скрыть транскрипт",
+    "show": "Показать транскрипт",
+    "showWithCount_one": "Показать транскрипт ({{count}} строка)",
+    "showWithCount_few": "Показать транскрипт ({{count}} строки)",
+    "showWithCount_many": "Показать транскрипт ({{count}} строк)",
+    "showWithCount_other": "Показать транскрипт ({{count}} строки)"
+  },
+  "blog": {
+    "noContent": "Нет содержимого",
+    "loadError": "Ошибка загрузки содержимого.",
+    "processError": "Ошибка обработки содержимого.",
+    "rendererError": "Ошибка загрузки модуля отображения."
+  },
+  "section": {
+    "posted": "Комментарий опубликован!",
+    "postFailed": "Не удалось отправить комментарий, попробуйте ещё раз",
+    "editFailed": "Не удалось изменить, попробуйте ещё раз",
+    "updated": "Комментарий обновлён",
+    "commentTab": "Комментарий",
+    "reactTab": "Реакция",
+    "at": "на",
+    "atTime": "на {{time}}",
+    "commentPlaceholder": "Напишите комментарий...",
+    "replyPlaceholder": "Напишите ответ...",
+    "commentButton": "Комментировать",
+    "count_one": "{{count}} комментарий",
+    "count_few": "{{count}} комментария",
+    "count_many": "{{count}} комментариев",
+    "count_other": "{{count}} комментария",
+    "edited": "(изменено)",
+    "saving": "Сохранение...",
+    "translation": "Перевод",
+    "translationFailed": "Не удалось перевести. Сервис перевода запущен?",
+    "reportComment": "Пожаловаться на комментарий",
+    "openInShorts": "Открыть в Shorts"
+  }
+}

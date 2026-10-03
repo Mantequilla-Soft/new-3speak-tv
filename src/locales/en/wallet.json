@@ -1,0 +1,50 @@
+{
+  "tabs": {
+    "overview": "Overview",
+    "transactions": "Transactions",
+    "aria": "Wallet sections"
+  },
+  "errors": {
+    "fetchBalances": "Failed to fetch balances",
+    "needKeychain": "You need Keychain extension to make transfer"
+  },
+  "header": {
+    "mine": "MY Wallet",
+    "ofUser": "{{user}} Wallet"
+  },
+  "assets": "Assets",
+  "transfer": "Transfer",
+  "transferModal": {
+    "loginRequired": "Please login to transfer",
+    "insufficient": "Insufficient balance",
+    "invalidUsername": "Invalid username",
+    "success": "Transfer successful!",
+    "failed": "Transfer failed: {{error}}",
+    "title": "Transfer {{coin}}",
+    "amountLabel": "Amount ({{coin}})",
+    "balance": "Balance {{balance}}",
+    "max": "Max",
+    "recipientLabel": "Recipient Username",
+    "recipientPlaceholder": "Enter Hive username",
+    "memoLabel": "Memo",
+    "memoPlaceholder": "Enter Memo",
+    "confirm": "Confirm Transfer"
+  },
+  "history": {
+    "loadFailed": "Failed to load transactions",
+    "title": "Transaction History",
+    "cols": {
+      "type": "Type",
+      "amount": "Amount",
+      "account": "Account",
+      "date": "Date",
+      "memo": "Memo"
+    },
+    "types": {
+      "transfer": "Transfer",
+      "claim": "Claim Reward",
+      "received": "Received"
+    },
+    "claimedRewards": "Claimed Rewards"
+  }
+}

@@ -1,0 +1,142 @@
+{
+  "button": {
+    "label": "চ্যাট"
+  },
+  "tools": {
+    "emoji": "ইমোজি",
+    "searchEmoji": "ইমোজি খুঁজুন",
+    "searchGifs": "GIF খুঁজুন…",
+    "noGifs": "কোনো GIF পাওয়া যায়নি।",
+    "poweredByGiphy": "Powered by GIPHY"
+  },
+  "lightbox": {
+    "openInNewTab": "ছবিটি নতুন ট্যাবে খুলুন"
+  },
+  "linkCard": {
+    "loadingPreview": "প্রিভিউ লোড হচ্ছে…",
+    "community": "কমিউনিটি",
+    "communityWithSubscribers_one": "কমিউনিটি · {{formatted}} জন সাবস্ক্রাইবার",
+    "communityWithSubscribers_other": "কমিউনিটি · {{formatted}} জন সাবস্ক্রাইবার",
+    "commentFallback": "(কমেন্ট)",
+    "play": "{{title}} চালান"
+  },
+  "share": {
+    "embedCopied": "এমবেড কোড কপি হয়েছে",
+    "pressToCopy": "বাছাই করা কোড কপি করতে Ctrl/Cmd + C চাপুন",
+    "embedTitle": "এই ভিডিওটি এমবেড করুন",
+    "embedHint": "এটি যেকোনো ওয়েবসাইট বা ব্লগ পোস্টে পেস্ট করুন।",
+    "embedSize": "এমবেড সাইজ",
+    "embedCode": "এমবেড কোড",
+    "copyEmbed": "এমবেড কোড কপি করুন",
+    "responsiveSub": "যে পেজে থাকে সেই অনুযায়ী মানিয়ে নেয়",
+    "fixedSub": "নির্দিষ্ট সাইজের iframe",
+    "sendInChat": "3Speak চ্যাটে পাঠান",
+    "sendInChatSub": "3Speak-এ কাউকে মেসেজ করে পাঠান",
+    "embedOnWebsite": "ওয়েবসাইটে এমবেড করুন",
+    "embedOnWebsiteSub": "আপনার নিজের সাইট বা ব্লগের জন্য HTML কপি করুন",
+    "generalShare": "শেয়ার / লিংক কপি",
+    "generalShareSub": "অন্য অ্যাপ, অথবা লিংক কপি করুন"
+  },
+  "gate": {
+    "connectTitle": "3Speak চ্যাটে কানেক্ট করুন",
+    "connectBody": "চ্যাট চলে Snapie দিয়ে। কানেক্ট করলে আপনার Hive posting key দিয়ে একবারের একটি লগইন চ্যালেঞ্জ সাইন করা হয় — কোনো ট্রানজ্যাকশন নয়, কোনো খরচ নেই।",
+    "connecting": "কানেক্ট হচ্ছে…",
+    "connectButton": "চ্যাট কানেক্ট করুন",
+    "cannotSign": "আপনার বর্তমান লগইন চ্যাট চ্যালেঞ্জ সাইন করতে পারে না। Keychain, HiveAuth, PeakVault বা Ledger ব্যবহার করুন।",
+    "needsAccountTitle": "চ্যাটের জন্য একটি Hive অ্যাকাউন্ট লাগবে",
+    "needsAccountBody": "মেসেজগুলো আপনার নিজের অ্যাকাউন্টের কী দিয়ে সাইন করা হয়, তাই আপনার অ্যাকাউন্ট প্রস্তুত হলে বাকি সবকিছুর সাথে চ্যাটও চালু হবে। আপনার প্রোফাইলের লক্ষ্যগুলো পূরণ করুন, টিম আপনাকে সেখানে পৌঁছে দেবে।",
+    "loginTitle": "চ্যাট ব্যবহার করতে লগ ইন করুন",
+    "loginBody": "মেসেজ পাঠাতে ও পেতে আপনার Hive অ্যাকাউন্ট দিয়ে সাইন ইন করুন।",
+    "connectingToChat": "চ্যাটে কানেক্ট হচ্ছে…"
+  },
+  "errors": {
+    "notHiveAccount": "@{{user}} কোনো Hive অ্যাকাউন্ট নয়।",
+    "openConversation": "কথোপকথনটি খোলা যায়নি।",
+    "verifyAccount": "অ্যাকাউন্টটি যাচাই করা যায়নি।",
+    "createRoom": "রুমটি তৈরি করা যায়নি।",
+    "joinChannel": "চ্যানেলটিতে যোগ দেওয়া যায়নি।"
+  },
+  "newDm": {
+    "placeholder": "একজন Hive ইউজারকে মেসেজ করুন…",
+    "start": "চ্যাট শুরু করুন"
+  },
+  "newRoom": {
+    "toggle": "নতুন প্রাইভেট রুম",
+    "namePlaceholder": "রুমের নাম…",
+    "removeMember": "@{{user}}-কে সরান",
+    "addMore": "আরও যোগ করুন…",
+    "invitePlaceholder": "Hive ইউজারদের আমন্ত্রণ জানান (ঐচ্ছিক)…",
+    "create": "তৈরি করুন"
+  },
+  "channels": {
+    "browse": "চ্যানেল দেখুন",
+    "publicTitle": "পাবলিক চ্যানেল",
+    "closeBrowser": "চ্যানেল তালিকা বন্ধ করুন",
+    "loading": "চ্যানেল লোড হচ্ছে…",
+    "empty": "কোনো চ্যানেল নেই।",
+    "join": "যোগ দিন"
+  },
+  "markRead": {
+    "nothingToClear": "পরিষ্কার করার মতো কোনো কথোপকথন নেই। সংখ্যাটি হয়তো সার্ভারে আটকে আছে।",
+    "requestFailed": "রিকোয়েস্ট ব্যর্থ হয়েছে",
+    "allCaughtUp": "সব পড়া হয়ে গেছে",
+    "stillUnread_one": "{{count}}টি চ্যাট পরিষ্কার করার পরও {{total}}টি অপঠিত দেখাচ্ছে।",
+    "stillUnread_other": "{{count}}টি চ্যাট পরিষ্কার করার পরও {{total}}টি অপঠিত দেখাচ্ছে।",
+    "stillUnreadNoMatch_one": "{{count}}টি চ্যাট পরিষ্কার করার পরও {{total}}টি অপঠিত দেখাচ্ছে। সার্ভার একটি সংখ্যা দেখাচ্ছে কিন্তু মিলে যাওয়া কোনো কথোপকথন নেই।",
+    "stillUnreadNoMatch_other": "{{count}}টি চ্যাট পরিষ্কার করার পরও {{total}}টি অপঠিত দেখাচ্ছে। সার্ভার একটি সংখ্যা দেখাচ্ছে কিন্তু মিলে যাওয়া কোনো কথোপকথন নেই।",
+    "notSignedIn": "চ্যাটে সাইন ইন করা নেই। চ্যাট আবার কানেক্ট করে চেষ্টা করুন।",
+    "sessionExpired": "পরিষ্কার করার সময় চ্যাট সেশনের মেয়াদ শেষ হয়ে গেছে। চ্যাট আবার কানেক্ট করে চেষ্টা করুন।",
+    "serverRejectedVisible_one": "সার্ভার {{count}}টি রিকোয়েস্টই প্রত্যাখ্যান করেছে (দৃশ্যমান তালিকার id)",
+    "serverRejectedVisible_other": "সার্ভার {{count}}টি রিকোয়েস্টের সবগুলোই প্রত্যাখ্যান করেছে (দৃশ্যমান তালিকার id)",
+    "serverRejectedServerMap_one": "সার্ভার {{count}}টি রিকোয়েস্টই প্রত্যাখ্যান করেছে (সার্ভারের নিজস্ব অপঠিত তালিকার id)",
+    "serverRejectedServerMap_other": "সার্ভার {{count}}টি রিকোয়েস্টের সবগুলোই প্রত্যাখ্যান করেছে (সার্ভারের নিজস্ব অপঠিত তালিকার id)",
+    "failed": "সবকিছু পড়া হয়েছে হিসেবে চিহ্নিত করা যায়নি",
+    "marking": "পড়া হয়েছে হিসেবে চিহ্নিত হচ্ছে…",
+    "button": "সব পড়া হয়েছে হিসেবে চিহ্নিত করুন",
+    "buttonCount": "সব পড়া হয়েছে হিসেবে চিহ্নিত করুন ({{count}})"
+  },
+  "list": {
+    "chooseTarget": "কোন চ্যাটে পাঠাবেন বেছে নিন",
+    "loading": "কথোপকথন লোড হচ্ছে…",
+    "empty": "এখনো কোনো কথোপকথন নেই। উপরে একটি Hive ইউজারনেম লিখে শুরু করুন।"
+  },
+  "leave": {
+    "confirmRoom": "এই রুম ছেড়ে যাবেন?",
+    "confirmChannel": "এই চ্যানেল ছেড়ে যাবেন?",
+    "errorRoom": "রুম ছাড়া যায়নি।",
+    "errorChannel": "চ্যানেল ছাড়া যায়নি।",
+    "titleRoom": "রুম ছাড়ুন",
+    "titleChannel": "চ্যানেল ছাড়ুন",
+    "button": "ছাড়ুন"
+  },
+  "thread": {
+    "editError": "মেসেজটি এডিট করা যায়নি।",
+    "deleteConfirm": "এই মেসেজটি মুছবেন? এর জায়গায় “[deleted]” দেখাবে।",
+    "deleteError": "মেসেজটি মোছা যায়নি।",
+    "back": "কথোপকথনে ফিরে যান",
+    "loading": "মেসেজ লোড হচ্ছে…",
+    "empty": "এখনো কোনো মেসেজ নেই — হাই বলুন 👋",
+    "editedSuffix": " · এডিট করা",
+    "messageActions": "মেসেজ অপশন",
+    "quote": "উদ্ধৃত করুন",
+    "forward": "ফরোয়ার্ড",
+    "typing_one": "{{users}} লিখছেন…",
+    "typing_other": "{{users}} লিখছেন…",
+    "editing": "মেসেজ এডিট হচ্ছে",
+    "cancelEdit": "এডিট বাতিল",
+    "quoting": "@{{user}}-কে উদ্ধৃত করা হচ্ছে",
+    "cancelQuote": "উদ্ধৃতি বাতিল",
+    "removeImage": "ছবি সরান",
+    "placeholder": "একটি মেসেজ লিখুন…"
+  },
+  "page": {
+    "chooseTarget": "কোন চ্যাটে পাঠাবেন বেছে নিন।",
+    "selectConversation": "একটি কথোপকথন বেছে নিন, অথবা নতুন একটি শুরু করুন।"
+  },
+  "overlay": {
+    "fullscreen": "ফুলস্ক্রিন",
+    "exitFullscreen": "ফুলস্ক্রিন থেকে বের হন",
+    "close": "চ্যাট বন্ধ করুন",
+    "sendInChat": "চ্যাটে পাঠান"
+  }
+}

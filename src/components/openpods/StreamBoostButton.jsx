@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Rocket } from 'lucide-react';
 import { SendBoostDialog, useStreamContext } from '@snapie/hangouts-react';
 import { useAppStore } from '../../lib/store';
@@ -23,6 +24,7 @@ import './StreamBoostButton.scss';
  *   - `overlay` floats over the player, next to the viewer count
  */
 export default function StreamBoostButton({ variant = 'button' }) {
+  const { t } = useTranslation();
   const { roomName, boostConfig, isGuest } = useStreamContext();
   const authenticated = useAppStore((s) => s.authenticated);
   const [open, setOpen] = useState(false);
@@ -32,7 +34,7 @@ export default function StreamBoostButton({ variant = 'button' }) {
   // stream reads as a bug.
   if (boostConfig?.enabled === false || !authenticated || isGuest) return null;
 
-  const label = 'Boost';
+  const label = t('live.boost.label');
   return (
     <>
       {variant === 'rail' ? (
@@ -45,12 +47,12 @@ export default function StreamBoostButton({ variant = 'button' }) {
           type="button"
           className="stream-boost-btn stream-boost-btn--overlay"
           onClick={() => setOpen(true)}
-          title={`Send a boost to @${roomName.split('-')[0]}`}
+          title={t('live.boost.sendTo', { user: roomName.split('-')[0] })}
         >
           <Rocket size={15} /><span>{label}</span>
         </button>
       ) : (
-        <button type="button" className="pv-btn stream-boost-btn" onClick={() => setOpen(true)} title="Send a boost">
+        <button type="button" className="pv-btn stream-boost-btn" onClick={() => setOpen(true)} title={t('live.boost.send')}>
           <Rocket size={14} /><span>{label}</span>
         </button>
       )}

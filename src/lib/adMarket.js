@@ -3,6 +3,7 @@
  * page and the market panels (components/ads/AdMarketPanels.jsx). Plain values and
  * functions only, so the component files stay components (fast refresh).
  */
+import { t } from '../i18n';
 
 // Country breakdown and per-market targeting, hidden for now. The numbers behind
 // them are real but thin at this scale — a market with a 4% share is a handful of
@@ -30,10 +31,11 @@ export const SITE_ONLY_SURFACES = new Set(['shorts', 'upload']);
 // Where each format actually runs, in the reader's terms. Keyed off `surface`,
 // which is the server's own word for it, so a format on a new surface shows the
 // raw key rather than being silently mislabelled as one of these.
+// Values are i18n keys; translate at render with t().
 export const SURFACE_LABEL = {
-  watch: 'Inside videos',
-  shorts: 'Between shorts',
-  upload: 'Before an upload',
+  watch: 'ads.market.surface.watch',
+  shorts: 'ads.market.surface.shorts',
+  upload: 'ads.market.surface.upload',
 };
 
 export const EXAMPLE_SECONDS = 10;
@@ -99,13 +101,22 @@ export function hiveEquivalent(hbd, hbdPerHive) {
  * banner takes either and saying "an image" would turn away somebody who has a video
  * ready. Falls back to the singular for a checker too old to send the list.
  */
-export function suppliesFor(f) {
+export function suppliesKey(f) {
   const kinds = f?.creativeKinds?.length ? f.creativeKinds : (f ? [f.creativeKind] : []);
-  if (kinds.includes('text')) return 'A short message and a link';
+  if (kinds.includes('text')) return 'text';
   const image = kinds.includes('image');
   const video = kinds.includes('video');
-  if (image && video) return 'An image or a video';
-  return image ? 'An image' : 'A video';
+  if (image && video) return 'imageOrVideo';
+  return image ? 'image' : 'video';
+}
+
+export function suppliesFor(f) {
+  return t(`ads.market.supplies.${suppliesKey(f)}`);
+}
+
+/** "You supply …" as one translated sentence. */
+export function youSupply(f) {
+  return t(`ads.market.youSupply.${suppliesKey(f)}`);
 }
 
 /**
@@ -141,9 +152,10 @@ export function bannerShape(spec) {
 /** The banner size advice as one sentence, for the upload panel. */
 export function bannerAdvice(spec) {
   const shape = bannerShape(spec);
-  if (!shape) return 'It needs to be a wide strip.';
-  return `Make it ${spec.recommended.replace('x', '×')}, or any other size in the same `
-    + `${shape.ratio}:1 shape, such as ${shape.smallest}.`;
+  if (!shape) return t('ads.market.bannerAdvice.wideStrip');
+  return t('ads.market.bannerAdvice.makeIt', {
+    size: spec.recommended.replace('x', '×'), ratio: shape.ratio, smallest: shape.smallest,
+  });
 }
 
 /* How long a ticker has to run for its message to be readable. The same formula the
@@ -171,18 +183,18 @@ export function specFor(f) {
       rows: [
         // The note is the readability scale: a longer message has to be booked for
         // longer, or it crosses the screen faster than anyone can read it.
-        { label: 'Message', value: `Up to ${spec?.maxChars || 140} characters`, note: `10 words need ${tickerMinSeconds(10, spec)}s, 20 words ${tickerMinSeconds(20, spec)}s` },
-        { label: 'Link', value: 'Any https:// page', note: 'your avatar and product name are added' },
+        { label: t('ads.market.spec.message'), value: t('ads.market.spec.upToChars', { count: spec?.maxChars || 140 }), note: t('ads.market.spec.wordsNeed', { s10: tickerMinSeconds(10, spec), s20: tickerMinSeconds(20, spec) }) },
+        { label: t('ads.market.spec.link'), value: t('ads.market.spec.anyHttps'), note: t('ads.market.spec.avatarAdded') },
       ],
     };
   }
   const files = kinds.includes('image') && kinds.includes('video')
-    ? 'PNG, JPG or MP4'
-    : (kinds.includes('image') ? 'PNG or JPG' : 'MP4 (H.264)');
+    ? t('ads.market.spec.filesAny')
+    : (kinds.includes('image') ? t('ads.market.spec.filesImage') : 'MP4 (H.264)');
   const x = (s) => String(s || '').replace('x', '×');
-  const rows = (size, note) => ({ rows: [{ label: 'Best size', value: size, note }, { label: 'File', value: files }] });
+  const rows = (size, note) => ({ rows: [{ label: t('ads.market.spec.bestSize'), value: size, note }, { label: t('ads.market.spec.file'), value: files }] });
   if (spec?.shape === 'portrait') {
-    return rows(`${x(spec.recommended)}, 9:16`, `upright, at least ${spec.minWidth}px wide`);
+    return rows(`${x(spec.recommended)}, 9:16`, t('ads.market.spec.uprightMinWidth', { width: spec.minWidth }));
   }
   if (spec) {
     // Recommend the recommended SHAPE, not the 3:1 to 12:1 range the server will merely
@@ -190,10 +202,10 @@ export function specFor(f) {
     const shape = bannerShape(spec);
     return rows(
       x(spec.recommended),
-      shape ? `or any ${shape.ratio}:1 size, e.g. ${shape.smallest}` : `at least ${spec.minWidth}px wide`,
+      shape ? t('ads.market.spec.orAnyRatio', { ratio: shape.ratio, smallest: shape.smallest }) : t('ads.market.spec.minWidth', { width: spec.minWidth }),
     );
   }
-  return rows('1920×1080, 16:9', 'landscape, like the player');
+  return rows('1920×1080, 16:9', t('ads.market.spec.landscape'));
 }
 
 export function savingAt(days, pricing) {
@@ -211,20 +223,21 @@ export function savingAt(days, pricing) {
 export const FORMAT_GROUPS = [
   {
     id: 'screen',
-    title: 'Takes the screen',
-    note: 'Plays instead of the video for a few seconds, so it has the viewer\u2019s full attention.',
+    // title/note are i18n keys; translate at render.
+    title: 'ads.market.groups.screen.title',
+    note: 'ads.market.groups.screen.note',
     keys: ['video_roll', 'shorts_roll'],
   },
   {
     id: 'overlay',
-    title: 'Over the picture',
-    note: 'Shown while the video keeps playing. Nothing is interrupted. Not on shorts yet.',
+    title: 'ads.market.groups.overlay.title',
+    note: 'ads.market.groups.overlay.note',
     keys: ['video_banner', 'video_ticker'],
   },
   {
     id: 'creators',
-    title: 'Before an upload',
-    note: 'Seen by creators about to publish, on any upload like a video or a short.',
+    title: 'ads.market.groups.creators.title',
+    note: 'ads.market.groups.creators.note',
     keys: ['upload_gate'],
   },
 ];
@@ -236,6 +249,6 @@ export function groupByFormat(items, keyOf) {
     .map((g) => ({ ...g, items: g.keys.map((k) => items.find((it) => keyOf(it) === k)).filter(Boolean) }))
     .filter((g) => g.items.length);
   const rest = items.filter((it) => !placed.has(keyOf(it)));
-  if (rest.length) groups.push({ id: 'more', title: 'More formats', note: null, items: rest });
+  if (rest.length) groups.push({ id: 'more', title: 'ads.market.groups.more.title', note: null, items: rest });
   return groups;
 }

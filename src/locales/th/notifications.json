@@ -1,0 +1,69 @@
+{
+  "buckets": {
+    "today": "วันนี้",
+    "yesterday": "เมื่อวาน",
+    "thisWeek": "สัปดาห์นี้",
+    "thisMonth": "เดือนนี้",
+    "older": "เก่ากว่า"
+  },
+  "loginRequired": "โปรดเข้าสู่ระบบเพื่อดูการแจ้งเตือนของคุณ",
+  "unreadChip_other": "ใหม่ {{count}}",
+  "markAllTitle": "ทำเครื่องหมายทั้งหมดว่าอ่านแล้ว",
+  "marking": "กำลังทำเครื่องหมาย…",
+  "markAllRead": "อ่านทั้งหมดแล้ว",
+  "refreshing": "กำลังรีเฟรช…",
+  "categories": {
+    "all": "ทั้งหมด",
+    "replies": "การตอบกลับ",
+    "mentions": "การกล่าวถึง",
+    "votes": "โหวต",
+    "reblogs": "รีบล็อก",
+    "follows": "การติดตาม",
+    "transfers": "การโอน"
+  },
+  "unread": "ยังไม่อ่าน",
+  "summary": {
+    "title": "กิจกรรม",
+    "today": "วันนี้",
+    "week": "สัปดาห์นี้",
+    "month": "เดือนนี้",
+    "emptyToday": "ยังไม่มีกิจกรรมวันนี้",
+    "emptyWeek": "ยังไม่มีกิจกรรมสัปดาห์นี้",
+    "stillLoading": "กำลังโหลดการแจ้งเตือนที่เก่ากว่า…",
+    "emptyMonth": "ไม่มีกิจกรรมเดือนนี้"
+  },
+  "loadError": "โหลดการแจ้งเตือนไม่ได้",
+  "empty": {
+    "all": "คุณยังไม่มีการแจ้งเตือน",
+    "unread": "ไม่มีการแจ้งเตือนที่ยังไม่อ่าน",
+    "replies": "ยังไม่มีการตอบกลับ",
+    "mentions": "ยังไม่มีการกล่าวถึง",
+    "votes": "ยังไม่มีโหวต",
+    "reblogs": "ยังไม่มีรีบล็อก",
+    "follows": "ยังไม่มีการติดตาม",
+    "transfers": "ยังไม่มีการโอน"
+  },
+  "threeSpeakVideo": "วิดีโอ 3Speak",
+  "end": "คุณดูถึงรายการสุดท้ายแล้ว",
+  "cards": {
+    "votes": "โหวต",
+    "voters_other": "ผู้โหวต {{count}} คน",
+    "replies": "การตอบกลับ",
+    "newFollowers": "ผู้ติดตามใหม่",
+    "mentions": "การกล่าวถึง",
+    "reblogs": "รีบล็อก",
+    "transfers": "การโอน"
+  },
+  "group": {
+    "voteOne": "@{{user}} โหวตโพสต์ของคุณ",
+    "voteTwo": "@{{user}} และ @{{user2}} โหวตโพสต์ของคุณ",
+    "voteMany_other": "@{{user}} และอีก {{count}} คนโหวตโพสต์ของคุณ",
+    "followOne": "@{{user}} ติดตามคุณแล้ว",
+    "followTwo": "@{{user}} และ @{{user2}} ติดตามคุณแล้ว",
+    "followMany_other": "@{{user}} และอีก {{count}} คนติดตามคุณแล้ว",
+    "generic_other": "การแจ้งเตือน {{type}} {{count}} รายการ",
+    "typeCount_other": "{{type}} {{count}} รายการ",
+    "collapse": "▾ ยุบ",
+    "expand": "▸ ขยาย"
+  }
+}

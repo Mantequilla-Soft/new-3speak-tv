@@ -1,0 +1,50 @@
+{
+  "tabs": {
+    "overview": "Aperçu",
+    "transactions": "Transactions",
+    "aria": "Sections du portefeuille"
+  },
+  "errors": {
+    "fetchBalances": "Impossible de récupérer les soldes",
+    "needKeychain": "L'extension Keychain est nécessaire pour effectuer un transfert"
+  },
+  "header": {
+    "mine": "MON portefeuille",
+    "ofUser": "Portefeuille de {{user}}"
+  },
+  "assets": "Actifs",
+  "transfer": "Transférer",
+  "transferModal": {
+    "loginRequired": "Connectez-vous pour effectuer un transfert",
+    "insufficient": "Solde insuffisant",
+    "invalidUsername": "Nom d'utilisateur invalide",
+    "success": "Transfert réussi !",
+    "failed": "Échec du transfert : {{error}}",
+    "title": "Transférer des {{coin}}",
+    "amountLabel": "Montant ({{coin}})",
+    "balance": "Solde {{balance}}",
+    "max": "Max",
+    "recipientLabel": "Nom d'utilisateur du destinataire",
+    "recipientPlaceholder": "Nom d'utilisateur Hive",
+    "memoLabel": "Mémo",
+    "memoPlaceholder": "Saisissez un mémo",
+    "confirm": "Confirmer le transfert"
+  },
+  "history": {
+    "loadFailed": "Impossible de charger les transactions",
+    "title": "Historique des transactions",
+    "cols": {
+      "type": "Type",
+      "amount": "Montant",
+      "account": "Compte",
+      "date": "Date",
+      "memo": "Mémo"
+    },
+    "types": {
+      "transfer": "Transfert",
+      "claim": "Récompense réclamée",
+      "received": "Reçu"
+    },
+    "claimedRewards": "Récompenses réclamées"
+  }
+}

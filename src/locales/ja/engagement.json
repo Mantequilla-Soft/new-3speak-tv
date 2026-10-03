@@ -1,0 +1,96 @@
+{
+  "tip": {
+    "successTitle": "投げ銭を送りました！",
+    "successMessage": "{{amount}} {{currency}} を投げ銭として送りました。応援ありがとうございます！",
+    "errors": {
+      "allRequired": "すべての項目を入力してください",
+      "loginRequired": "投げ銭を送るにはログインしてください",
+      "insufficientBalance": "残高が不足しています",
+      "invalidUsername": "無効なユーザー名です",
+      "transferFailed": "送金に失敗しました: {{message}}"
+    },
+    "heading": "@{{recipient}} さんに投げ銭を送る",
+    "amountLabel": "金額: ",
+    "amountPlaceholder": "例: 1.000",
+    "currencyLabel": "通貨:",
+    "availableBalance": "利用可能な残高: {{currency}}",
+    "memoLabel": "メモ（任意）:",
+    "memoPlaceholder": "例: 素晴らしいコンテンツをありがとう！",
+    "send": "投げ銭を送る"
+  },
+  "cardMenu": {
+    "loginToPersonalize": "フィードをカスタマイズするにはログインしてください",
+    "notInterestedToast": "興味なし — この動画を非表示にします",
+    "undo": "元に戻す",
+    "cantHideOwn": "自分の動画は非表示にできません",
+    "hidingCreatorToast": "@{{author}} さんの動画を非表示にします",
+    "loginForPlaylists": "再生リストに動画を追加するにはログインしてください",
+    "loginToTag": "動画にタグを付けるにはログインしてください",
+    "moreOptions": "その他のオプション",
+    "addToPlaylist": "再生リストに追加",
+    "addTag": "タグを追加",
+    "notInterested": "興味なし",
+    "dontShowCreator": "@{{author}} さんを表示しない"
+  },
+  "guestList": {
+    "loadFailed": "現在のゲストリストを読み込めませんでした",
+    "saved_other": "{{count}} 人のゲストが視聴できます",
+    "cleared": "ゲストリストを消去しました",
+    "saveFailed": "ゲストリストを保存できませんでした",
+    "invalidAccounts": "有効な Hive アカウントではありません: {{names}}",
+    "title": "🔒 ゲストリスト",
+    "hint": "これらのアカウントは 3Speak Pro なしで視聴できます。リストは私たちのサーバーで非公開に保管され、投稿に公開されることはありません。",
+    "notRegistered": "この動画はまだ処理が終わっていません。処理が終わればリストを編集できます。",
+    "placeholder": "username, another.user",
+    "empty": "まだ誰もいません。Pro 登録者のみ視聴できます。",
+    "removeAria": "{{name}} を削除"
+  },
+  "voters": {
+    "pinnedTitle_other": "投票者（{{count}}）",
+    "topVoters": "上位の投票者",
+    "noVotes": "まだ投票はありません"
+  },
+  "payout": {
+    "breakdown": "報酬の内訳",
+    "estimatedBreakdown": "推定内訳",
+    "beneficiaries": "受益者",
+    "curators": "キュレーター（50%）",
+    "author": "投稿者",
+    "total": "合計",
+    "totalEstimated": "合計（推定）"
+  },
+  "vote": {
+    "loginRequired": "この操作を完了するにはログインしてください",
+    "fetchPostFailed": "投稿データを取得できませんでした",
+    "sameWeight": "この重みですでに投票しています。別の値を選んでください。",
+    "failed": "投票に失敗しました: {{message}}",
+    "pleaseTryAgain": "もう一度お試しください",
+    "weight": "投票の重み: {{weight}}%",
+    "success": "投票しました！価値: ${{value}}",
+    "successTagged": "投票しました！「{{tag}}」のタグを付けました。価値: ${{value}}",
+    "tagged": "「{{tag}}」のタグを付けました。",
+    "vote": "投票",
+    "tagThisVideo": "この動画にタグを付ける",
+    "tagOptional": "— 任意 —",
+    "pickTopicFirst": "先にトピックを選んでください",
+    "taggedNoDot": "「{{tag}}」のタグを付けました",
+    "tagFailed": "タグ付けに失敗しました: {{message}}",
+    "taggedAlreadyVoted": "「{{tag}}」のタグを付けました。{{weight}}% の投票はすでに完了しています。",
+    "votingClosed": "投票は締め切られました — この動画にタグを付ける",
+    "youTagged": "この動画に <b>{{tag}}</b> のタグを付けました。",
+    "pickTopic": "トピックを選ぶ（100% の投票として扱われます）",
+    "submitTag": "タグを送信",
+    "tagThisVideoFull": "この動画にタグを付ける（100% の投票として扱われます）",
+    "justTag": "投票せずにタグだけ付ける"
+  },
+  "tagsPicker": {
+    "autoTagged": "自動タグ: {{tags}}",
+    "searchPlaceholder": "トピックを検索…",
+    "searchAria": "トピックを検索",
+    "noMatches": "「{{query}}」に一致するトピックはありません。",
+    "allSelected": "{{category}} のすべてが選択されています。さらに絞り込む場合のみ、個別のトピックを追加してください:",
+    "orPickTopics": "または個別のトピックを選ぶ:",
+    "goodEnough": "これで十分です。さらに絞り込むこともできます（任意）:",
+    "moreSpecific": "さらに詳しく:"
+  }
+}

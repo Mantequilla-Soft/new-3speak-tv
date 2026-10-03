@@ -1,0 +1,19 @@
+{
+  "placeholder": "Schrijf hier je tekst...",
+  "uploadFailed": "Uploaden mislukt: {{message}}",
+  "uploadingImage": "Afbeelding uploaden...",
+  "format": {
+    "underline": "Onderstrepen",
+    "strike": "Doorhalen",
+    "highlight": "Markeren",
+    "bulletList": "Opsommingslijst",
+    "orderedList": "Genummerde lijst",
+    "taskList": "Takenlijst"
+  },
+  "emoji": {
+    "searchPlaceholder": "Emoji zoeken"
+  },
+  "preview": {
+    "renderError": "Fout bij het weergeven van de inhoud"
+  }
+}

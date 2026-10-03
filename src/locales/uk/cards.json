@@ -1,0 +1,50 @@
+{
+  "loading": "Завантаження...",
+  "error": "Помилка: {{error}}",
+  "thumbnailAlt": "мініатюра",
+  "topicTitle": "Тема: {{topic}}",
+  "watchingNow_one": "Зараз дивиться {{count}}",
+  "watchingNow_few": "Зараз дивляться {{count}}",
+  "watchingNow_many": "Зараз дивляться {{count}}",
+  "watchingNow_other": "Зараз дивляться {{count}}",
+  "badges": {
+    "gatedTitle": "Лише для підписників — 3Speak Pro відкриває повне відео",
+    "pro": "PRO",
+    "new": "НОВЕ",
+    "live": "● НАЖИВО",
+    "liveChat": "● ЧАТ НАЖИВО"
+  },
+  "status": {
+    "scheduled": "Заплановано",
+    "mobile": "Мобільне",
+    "mobileTitle": "Завантажено з мобільного застосунку",
+    "processing": "Обробка",
+    "processingTitle": "Відео обробляється",
+    "draft": "Чернетка",
+    "draftTitle": "Чернетка — ще не опубліковано",
+    "deleted": "Видалено",
+    "deletedTitle": "Це відео видалено",
+    "failed": "Помилка",
+    "failedTitle": "Не вдалося обробити відео",
+    "unlisted": "За посиланням",
+    "unlistedTitle": "За посиланням — приховано зі стрічок і пошуку, доступно лише за прямим посиланням"
+  },
+  "playlist": {
+    "loading": "Завантаження плейлистів...",
+    "items_one": "{{count}} елемент",
+    "items_few": "{{count}} елементи",
+    "items_many": "{{count}} елементів",
+    "items_other": "{{count}} елемента",
+    "openAria": "Відкрити плейлист {{name}}",
+    "tag": "Плейлист",
+    "updated": "Оновлено {{when}}"
+  },
+  "watchLater": {
+    "title": "Переглянути пізніше",
+    "subtitle": "Відео, щоб переглянути пізніше"
+  },
+  "watched": {
+    "title": "Переглянуте",
+    "subtitle": "Ваша історія переглядів"
+  }
+}

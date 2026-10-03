@@ -1,6 +1,7 @@
 import { useState, useRef, useCallback, useEffect } from 'react';
 import { MdUploadFile, MdVideocam, MdStop, MdFiberManualRecord } from 'react-icons/md';
 import * as tus from 'tus-js-client';
+import { useTranslation, Trans } from 'react-i18next';
 import { toastIn } from '../../utils/toast';
 import { EMBED_UPLOAD_URL, EMBED_API_URL, EMBED_API_KEY, SHORTS_MAX_DURATION_SEC, shortsMaxDurationLabel } from '../../utils/config';
 import { commentWithAioha, broadcastViaThreespeak, getCurrentProvider, Providers } from '../../hive-api/aioha';
@@ -19,6 +20,7 @@ const toast = toastIn('Video');
  * then uploads via TUS and publishes as a comment under the parent post.
  */
 function ReactVideoTab({ author, permlink, currentTime, formatTime, onPosted, onRecordStart }) {
+  const { t } = useTranslation();
   const { user } = useAppStore();
 
   // Source selection
@@ -57,7 +59,7 @@ function ReactVideoTab({ author, permlink, currentTime, formatTime, onPosted, on
   // -- Cleanup helpers --
   const stopStream = useCallback(() => {
     if (stream) {
-      stream.getTracks().forEach(t => t.stop());
+      stream.getTracks().forEach(track => track.stop());
       setStream(null);
     }
   }, [stream]);
@@ -66,7 +68,7 @@ function ReactVideoTab({ author, permlink, currentTime, formatTime, onPosted, on
   useEffect(() => {
     return () => {
       // eslint-disable-next-line react-hooks/exhaustive-deps
-      if (stream) stream.getTracks().forEach(t => t.stop());
+      if (stream) stream.getTracks().forEach(track => track.stop());
     };
   }, []);
 
@@ -101,10 +103,10 @@ function ReactVideoTab({ author, permlink, currentTime, formatTime, onPosted, on
     try {
       await addThreespeakToPostingAuth(user, { signWindow });
       setNeedsAuth(false);
-      toast.success('@threespeak authorized — you can now post your reaction');
+      toast.success(t('player.reactionUpload.authorized'));
     } catch (e) {
       try { signWindow?.close(); } catch { /* ignore */ }
-      toast.error(e?.message || 'Authorization failed. Please try again.');
+      toast.error(e?.message || t('player.reactionUpload.authFailed'));
     } finally {
       setAuthorizing(false);
     }
@@ -161,7 +163,7 @@ function ReactVideoTab({ author, permlink, currentTime, formatTime, onPosted, on
       setStream(mediaStream);
     } catch (err) {
       console.error('Webcam access denied:', err);
-      toast.error('Could not access webcam');
+      toast.error(t('player.reactionUpload.webcamDenied'));
       setSource(null);
     }
   }, [videoPreviewUrl, recordedUrl]);
@@ -189,7 +191,7 @@ function ReactVideoTab({ author, permlink, currentTime, formatTime, onPosted, on
       setVideoDuration(dur);
       setIsShort(dur <= SHORTS_MAX_DURATION_SEC);
       // Stop webcam
-      stream.getTracks().forEach(t => t.stop());
+      stream.getTracks().forEach(track => track.stop());
       setStream(null);
     };
     recorderRef.current = recorder;
@@ -211,12 +213,12 @@ function ReactVideoTab({ author, permlink, currentTime, formatTime, onPosted, on
     if (!file || !user) return;
 
     if (isShort && videoDuration > SHORTS_MAX_DURATION_SEC) {
-      toast.error(`Shorts must be ${shortsMaxDurationLabel()} or less. Uncheck "Show in 3Speak Shorts" or use a shorter video.`);
+      toast.error(t('player.reactionUpload.shortTooLong', { max: shortsMaxDurationLabel() }));
       return;
     }
 
     setUploading(true);
-    setStatusText('Uploading video...');
+    setStatusText(t('player.reactionUpload.uploadingVideo'));
     setUploadProgress(0);
 
     try {
@@ -273,10 +275,10 @@ function ReactVideoTab({ author, permlink, currentTime, formatTime, onPosted, on
       }
 
       if (!embedUrl) {
-        throw new Error('Upload succeeded but no embed URL was returned');
+        throw new Error(t('player.reactionUpload.noEmbedUrl'));
       }
 
-      setStatusText('Publishing comment...');
+      setStatusText(t('player.reactionUpload.publishingComment'));
 
       // 2. Post Hive comment with video embed URL
       const timestampSec = currentTime ? Math.round(currentTime) : 0;
@@ -359,8 +361,8 @@ function ReactVideoTab({ author, permlink, currentTime, formatTime, onPosted, on
           console.warn('Failed to link embed video to Hive post:', linkErr);
         }
 
-        toast.success('Video reaction posted!');
-        setStatusText('Done!');
+        toast.success(t('player.reactionUpload.posted'));
+        setStatusText(t('common.status.success'));
         if (onPosted) onPosted();
         // Reset
         setVideoFile(null);
@@ -373,11 +375,11 @@ function ReactVideoTab({ author, permlink, currentTime, formatTime, onPosted, on
         setRecordedUrl(null);
         setRecordedBlob(null);
       } else {
-        throw new Error('Failed to post comment');
+        throw new Error(t('player.reactionUpload.postFailed'));
       }
     } catch (err) {
       console.error('React upload failed:', err);
-      toast.error(err.message || 'Upload failed');
+      toast.error(err.message || t('player.reactionUpload.uploadFailed'));
       setStatusText('');
     } finally {
       setUploading(false);
@@ -397,7 +399,7 @@ function ReactVideoTab({ author, permlink, currentTime, formatTime, onPosted, on
           disabled={uploading}
         >
           <MdUploadFile size={24} />
-          <span>Upload Video</span>
+          <span>{t('player.reactionUpload.uploadVideo')}</span>
         </button>
         <button
           className={`rvt-source-card${source === 'record' ? ' active' : ''}`}
@@ -405,7 +407,7 @@ function ReactVideoTab({ author, permlink, currentTime, formatTime, onPosted, on
           disabled={uploading}
         >
           <MdVideocam size={24} />
-          <span>Record Video</span>
+          <span>{t('player.reactionUpload.recordVideo')}</span>
         </button>
       </div>
 
@@ -433,12 +435,12 @@ function ReactVideoTab({ author, permlink, currentTime, formatTime, onPosted, on
             {!recording ? (
               <button className="rvt-rec-btn rvt-rec-btn--start" onClick={startRecording}>
                 <MdFiberManualRecord size={16} />
-                Start Recording
+                {t('player.reactionUpload.startRecording')}
               </button>
             ) : (
               <button className="rvt-rec-btn rvt-rec-btn--stop" onClick={stopRecording}>
                 <MdStop size={16} />
-                Stop Recording
+                {t('player.reactionUpload.stopRecording')}
               </button>
             )}
           </div>
@@ -448,7 +450,7 @@ function ReactVideoTab({ author, permlink, currentTime, formatTime, onPosted, on
       {source === 'record' && recordedBlob && recordedUrl && (
         <div className="rvt-preview">
           <video src={recordedUrl} controls className="rvt-video" />
-          <p className="rvt-filename">Recorded video</p>
+          <p className="rvt-filename">{t('player.reactionUpload.recordedVideo')}</p>
         </div>
       )}
 
@@ -456,7 +458,7 @@ function ReactVideoTab({ author, permlink, currentTime, formatTime, onPosted, on
       {hasVideo && (
         <textarea
           className="rvt-description"
-          placeholder="Add a description for your video reaction..."
+          placeholder={t('player.reactionUpload.descriptionPlaceholder')}
           value={description}
           onChange={(e) => setDescription(e.target.value)}
           disabled={uploading}
@@ -472,7 +474,7 @@ function ReactVideoTab({ author, permlink, currentTime, formatTime, onPosted, on
             onChange={(e) => setIsShort(e.target.checked)}
             disabled={uploading}
           />
-          <span className="rvt-toggle-label">Show in 3Speak Shorts</span>
+          <span className="rvt-toggle-label">{t('player.reactionUpload.showInShorts')}</span>
         </label>
       )}
 
@@ -491,15 +493,15 @@ function ReactVideoTab({ author, permlink, currentTime, formatTime, onPosted, on
         needsAuth ? (
           <div className="rvt-auth-gate">
             <p className="rvt-auth-note">
-              Allow <strong>@threespeak</strong> to post your reaction on your behalf.
+              <Trans i18nKey="player.reactionUpload.authNote" components={{ b: <strong /> }} />
             </p>
             <button className="rvt-submit" onClick={handleAuthorize} disabled={authorizing}>
-              {authorizing ? 'Authorizing…' : 'Authorize @threespeak'}
+              {authorizing ? t('player.reactionUpload.authorizing') : t('player.reactionUpload.authorize')}
             </button>
           </div>
         ) : (
           <button className="rvt-submit" onClick={handleSubmit} disabled={!canSubmit}>
-            {uploading ? 'Uploading...' : 'Post Reaction'}
+            {uploading ? t('player.reactionUpload.uploading') : t('player.reactionUpload.postReaction')}
           </button>
         )
       )}

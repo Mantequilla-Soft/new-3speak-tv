@@ -1,0 +1,100 @@
+{
+  "review": {
+    "fabAria": "Magbigay ng feedback",
+    "fab": "Feedback",
+    "aspects": {
+      "upload": "Pag-upload",
+      "playback": "Playback",
+      "live": "Live streaming",
+      "discovery": "Discovery / feed",
+      "design": "Design / UX",
+      "performance": "Bilis",
+      "mobile": "Mobile",
+      "other": "Iba pa"
+    },
+    "titles": {
+      "upload": "Kumusta ang upload mo?",
+      "stream": "Kumusta ang livestream mo?",
+      "watch": "Kumusta ang panonood sa 3Speak?",
+      "global": "Kumusta ang experience mo sa 3Speak?",
+      "fallback": "Tulungan mo kaming pagandahin ang 3Speak"
+    },
+    "stars": {
+      "poor": "Pangit",
+      "fair": "Puwede na",
+      "good": "Maganda",
+      "great": "Napakaganda",
+      "amazing": "Astig"
+    },
+    "errors": {
+      "pickStars": "Pumili ng star rating",
+      "sendFailed": "Hindi maipadala ang review mo. Subukan ulit."
+    },
+    "thanks": "Salamat sa feedback mo! 🙏",
+    "sendFeedback": "Ipadala ang feedback",
+    "subtitle": "Nakakatulong ang feedback mo para mapaganda namin ang 3Speak.",
+    "starRating": "Star rating",
+    "starsAria_one": "{{count}} star",
+    "starsAria_other": "{{count}} stars",
+    "aboutLabel": "Tungkol saan ito? <opt>(opsyonal)</opt>",
+    "recommendLabel": "Irerekomenda mo ba ang 3Speak? <opt>(opsyonal)</opt>",
+    "moreLabel": "Magkuwento pa <opt>(opsyonal)</opt>",
+    "placeholder": "Ano ang nagustuhan mo? Ano pa ang puwedeng gumanda?",
+    "notNow": "Hindi muna",
+    "sending": "Ipinapadala…"
+  },
+  "tabs": {
+    "reactions": "Mga Reaction",
+    "transcript": "Transcript"
+  },
+  "live": {
+    "vodProcessing": "Pinoproseso pa ang recording…",
+    "vodProcessingHint": "Tapos na ang stream na ito. Papalitan ito ng video dito sa sandaling matapos ang encoder — hindi na kailangang mag-reload.",
+    "watching_one": "👁 {{count}} nanonood",
+    "watching_other": "👁 {{count}} nanonood",
+    "signInRaiseHand": "Mag-sign in para magtaas ng kamay",
+    "signInChat": "Mag-sign in para mag-chat",
+    "signInJoinChat": "🔒 Mag-sign in para sumali sa chat."
+  },
+  "transcript": {
+    "title": "Transcript",
+    "languageAria": "Wika ng transcript",
+    "copyingWithTimes": "Kinokopya kasama ang timecodes",
+    "copyingTextOnly": "Text lang ang kinokopya",
+    "timecodes": "Timecodes",
+    "copyWithTimes": "Kopyahin ang transcript kasama ang timecodes",
+    "copyText": "Kopyahin ang text ng transcript",
+    "jumpTo": "Pumunta sa {{time}}",
+    "hide": "Itago ang transcript",
+    "show": "Ipakita ang transcript",
+    "showWithCount_one": "Ipakita ang transcript ({{count}} linya)",
+    "showWithCount_other": "Ipakita ang transcript ({{count}} linya)"
+  },
+  "blog": {
+    "noContent": "Walang available na content",
+    "loadError": "Error sa pag-load ng content.",
+    "processError": "Error sa pagproseso ng content.",
+    "rendererError": "Error sa pag-load ng renderer."
+  },
+  "section": {
+    "posted": "Na-post na ang comment mo!",
+    "postFailed": "Pumalya ang comment, subukan ulit",
+    "editFailed": "Pumalya ang pag-edit, subukan ulit",
+    "updated": "Na-update ang comment",
+    "commentTab": "Comment",
+    "reactTab": "React",
+    "at": "sa",
+    "atTime": "sa {{time}}",
+    "commentPlaceholder": "Isulat dito ang comment mo...",
+    "replyPlaceholder": "Isulat dito ang reply mo...",
+    "commentButton": "Mag-comment",
+    "count_one": "{{count}} Comment",
+    "count_other": "{{count}} Comments",
+    "edited": "(na-edit)",
+    "saving": "Sine-save...",
+    "translation": "Salin",
+    "translationFailed": "Pumalya ang pagsasalin. Tumatakbo ba ang translation service?",
+    "reportComment": "I-report ang comment",
+    "openInShorts": "Buksan sa Shorts"
+  }
+}

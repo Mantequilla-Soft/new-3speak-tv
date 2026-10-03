@@ -1,4 +1,5 @@
 import { useCallback, useRef, useState } from 'react';
+import { useTranslation, Trans } from 'react-i18next';
 import { toastIn } from '../../utils/toast';
 import { Camera, MapPin, Loader2 } from 'lucide-react';
 import { saveProfileToHive } from '../../utils/profileMeta';
@@ -32,6 +33,7 @@ const FIELDS = ['name', 'about', 'location', 'profile_image', 'cover_image'];
  * a second place for these fields to drift.
  */
 export function useProfileEditor(username, { onSave = null } = {}) {
+  const { t } = useTranslation();
   const [form, setForm] = useState(EMPTY);
   // Kept beside the form rather than inside it: interests are a list on the
   // same metadata document, not a profile text field, and saveProfileToHive
@@ -66,11 +68,11 @@ export function useProfileEditor(username, { onSave = null } = {}) {
     e.target.value = '';
     if (!file) return;
     if (!file.type.startsWith('image/')) {
-      toast.error('Please choose an image file');
+      toast.error(t('app.profileFields.chooseImage'));
       return;
     }
     if (file.size > MAX_IMAGE_BYTES) {
-      toast.error('That image is over 8MB, please pick a smaller one');
+      toast.error(t('app.profileFields.imageTooLarge'));
       return;
     }
     setUploading(true);
@@ -80,15 +82,15 @@ export function useProfileEditor(username, { onSave = null } = {}) {
       const url = await uploadThumbnail(file, username, { preferStatic: true });
       setForm((f) => ({ ...f, [field]: url }));
     } catch (err) {
-      toast.error(err?.message || 'Could not upload that image');
+      toast.error(err?.message || t('app.profileFields.uploadFailed'));
     } finally {
       setUploading(false);
     }
-  }, [username]);
+  }, [username, t]);
 
   const hasAnything = FIELDS.some((k) => String(form[k] || '').trim());
 
-  const save = useCallback(async (successMessage = 'Profile saved') => {
+  const save = useCallback(async (successMessage = null) => {
     if (!onSave && !username) return false;
     setSaving(true);
     try {
@@ -103,15 +105,15 @@ export function useProfileEditor(username, { onSave = null } = {}) {
         if (form.profile_image) setAvatarOverride(username, form.profile_image);
         else clearAvatarOverride(username);
       }
-      toast.success(successMessage);
+      toast.success(successMessage ?? t('app.profileFields.saved'));
       return true;
     } catch (e) {
-      toast.error(e?.message || 'Could not save your profile');
+      toast.error(e?.message || t('app.profileFields.saveFailed'));
       return false;
     } finally {
       setSaving(false);
     }
-  }, [username, form, interests, onSave]);
+  }, [username, form, interests, onSave, t]);
 
   return {
     form, seed, setForm, setField, pickImage, uploading, saving, hasAnything, save,
@@ -120,6 +122,7 @@ export function useProfileEditor(username, { onSave = null } = {}) {
 }
 
 export default function ProfileFields({ username, form, setField, pickImage, uploading, saving }) {
+  const { t } = useTranslation();
   const fileRef = useRef(null);
   const coverRef = useRef(null);
   // useAvatarUrl answers a null account with the 3Speak mark, so someone with
@@ -138,17 +141,16 @@ export default function ProfileFields({ username, form, setField, pickImage, upl
           className="welcome-cover"
           onClick={() => coverRef.current && coverRef.current.click()}
           disabled={uploading || saving}
-          aria-label="Upload a profile banner"
+          aria-label={t('app.profileFields.uploadBanner')}
           style={{ backgroundImage: `url(${cover})` }}
         >
           <span className="welcome-cover-action">
             {uploading ? <Loader2 size={15} className="welcome-spin" /> : <Camera size={15} />}
-            {form.cover_image ? 'Change banner' : 'Add a banner'}
+            {form.cover_image ? t('app.profileFields.changeBanner') : t('app.profileFields.addBanner')}
           </span>
         </button>
         <span className="welcome-cover-hint">
-          Best at <strong>2800 × 684</strong> px (or any 4:1 image). Keep the important part
-          centred: the sides crop on narrow screens and your name sits over the lower left.
+          <Trans i18nKey="app.profileFields.bannerHint" components={{ b: <strong /> }} />
         </span>
         <input
           ref={coverRef}
@@ -165,7 +167,7 @@ export default function ProfileFields({ username, form, setField, pickImage, upl
           className="welcome-avatar"
           onClick={() => fileRef.current && fileRef.current.click()}
           disabled={uploading || saving}
-          aria-label="Upload a profile picture"
+          aria-label={t('app.profileFields.uploadPicture')}
         >
           <img src={avatar} alt="" onError={(e) => { e.target.style.visibility = 'hidden'; }} />
           <span className="welcome-avatar-badge">
@@ -173,32 +175,32 @@ export default function ProfileFields({ username, form, setField, pickImage, upl
           </span>
         </button>
         <div className="welcome-avatar-text">
-          <strong>Profile picture</strong>
+          <strong>{t('app.profileFields.pictureLabel')}</strong>
           <span>
             {uploading
-              ? 'Uploading…'
-              : 'A face or a logo works best. Square, 400 × 400 px or larger. Up to 8MB.'}
+              ? t('app.welcome.uploading')
+              : t('app.profileFields.pictureHint')}
           </span>
         </div>
         <input ref={fileRef} type="file" accept="image/*" onChange={pickImage('profile_image')} style={{ display: 'none' }} />
       </div>
 
       <label className="welcome-field">
-        <span className="welcome-label">Display name</span>
+        <span className="welcome-label">{t('app.profileFields.displayName')}</span>
         <input
           type="text"
           value={form.name}
           onChange={setField('name')}
           maxLength={NAME_MAX}
           // A warm-up user has no Hive name yet, so there is no @name to show.
-          placeholder={username ? `How should we call you? (@${username})` : 'How should we call you?'}
+          placeholder={username ? t('app.profileFields.namePlaceholderUser', { username }) : t('app.profileFields.namePlaceholder')}
           disabled={saving}
         />
       </label>
 
       <label className="welcome-field">
         <span className="welcome-label">
-          Short bio
+          {t('app.profileFields.shortBio')}
           <em>{form.about.length}/{ABOUT_MAX}</em>
         </span>
         <textarea
@@ -206,13 +208,13 @@ export default function ProfileFields({ username, form, setField, pickImage, upl
           value={form.about}
           onChange={setField('about')}
           maxLength={ABOUT_MAX}
-          placeholder="What do you make, and what should people expect from you?"
+          placeholder={t('app.profileFields.bioPlaceholder')}
           disabled={saving}
         />
       </label>
 
       <label className="welcome-field">
-        <span className="welcome-label">Location <em>optional</em></span>
+        <span className="welcome-label">{t('app.profileFields.location')} <em>{t('app.profileFields.optional')}</em></span>
         <div className="welcome-input-icon">
           <MapPin size={15} />
           <input
@@ -220,7 +222,7 @@ export default function ProfileFields({ username, form, setField, pickImage, upl
             value={form.location}
             onChange={setField('location')}
             maxLength={LOCATION_MAX}
-            placeholder="Where in the world are you?"
+            placeholder={t('app.profileFields.locationPlaceholder')}
             disabled={saving}
           />
         </div>

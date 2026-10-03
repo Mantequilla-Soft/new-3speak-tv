@@ -1,0 +1,233 @@
+{
+  "aiBadge": {
+    "title": "AI 생성 콘텐츠로 감지됨",
+    "label": "AI"
+  },
+  "translate": {
+    "titleButton": "제목 번역",
+    "original": "원문",
+    "translate": "번역",
+    "translating": "번역 중..."
+  },
+  "summary": {
+    "title": "요약",
+    "close": "요약 닫기",
+    "showingOriginal": "원문 표시 중",
+    "translatedTo": "{{language}}(으)로 번역됨",
+    "showLanguage": "{{language}}(으)로 보기",
+    "showOriginal": "원문 보기",
+    "buttonTitle": "이 동영상의 AI 요약"
+  },
+  "errors": {
+    "notAvailable": "이 동영상은 사용할 수 없어요.",
+    "goHome": "홈으로",
+    "scheduledNotFound": "예약 게시물을 찾을 수 없어요. 이미 게시되었거나 취소되었을 수 있어요.",
+    "network": "네트워크 오류예요. 연결 상태를 확인해 주세요.",
+    "notFound": "동영상을 찾을 수 없거나 불러오지 못했어요.",
+    "backToProfile": "프로필로 돌아가기"
+  },
+  "gated": {
+    "title": "후원자 전용",
+    "checkFailed": "지금은 구독을 확인할 수 없어요. 잠시 후 다시 시도하세요.",
+    "preview": "무료 미리보기를 시청 중이에요. 3Speak Pro로 전체 동영상을 볼 수 있어요.",
+    "subscribersOnly": "3Speak Pro 구독자만 볼 수 있는 동영상이에요.",
+    "cta": "3Speak Pro 시작하기"
+  },
+  "reactions": {
+    "show": "리액션 보기",
+    "add": "리액션 추가"
+  },
+  "liveChat": "라이브 채팅",
+  "moreVideos": "동영상 더보기",
+  "vote": {
+    "saveFailed": "투표를 저장하지 못했어요"
+  },
+  "locked": {
+    "noAccount": "Hive 계정을 만들면 사용할 수 있어요",
+    "offChainPost": "아직 사용할 수 없어요: 이 게시물은 Hive에 없어요"
+  },
+  "interests": {
+    "loginRequired": "관심사를 저장하려면 로그인하세요",
+    "added": "“{{tag}}”을(를) 관심사에 추가했어요",
+    "saveFailed": "관심사를 저장하지 못했어요"
+  },
+  "watchLater": {
+    "removed": "나중에 볼 동영상에서 제거했어요",
+    "removeFailed": "제거 실패: {{error}}",
+    "removeTitle": "나중에 볼 동영상에서 제거"
+  },
+  "reshare": {
+    "loginRequired": "다시 공유하려면 로그인하세요",
+    "success": "다시 공유했어요!",
+    "failed": "다시 공유하지 못했어요",
+    "reshared": "공유됨",
+    "reshare": "다시 공유",
+    "reshareWithCount": "다시 공유({{count}})"
+  },
+  "clip": {
+    "noVideoUrlRemix": "리믹스할 동영상 URL을 확인하지 못했어요",
+    "noVideoUrl": "동영상 URL을 확인하지 못했어요",
+    "startHint": "클립 시작 지점으로 이동한 다음 \"시작 설정\"을 클릭하세요",
+    "endHint": "이제 클립 끝 지점으로 이동한 다음 \"끝 설정\"을 클릭하세요",
+    "endBeforeStart": "끝 시간은 시작 시간보다 뒤여야 해요",
+    "trimmed": "클립을 1분으로 잘랐어요. 타임라인 끝에서 클립을 자를게요.",
+    "set": "클립 설정: {{start}} – {{end}}. 이제 \"클립 만들기\"를 클릭하세요",
+    "loginRequired": "클립을 만들려면 로그인하세요",
+    "cancel": "클립 취소",
+    "clipVideo": "동영상 클립",
+    "label": "동영상 클립",
+    "clip": "클립",
+    "seekToStart": "시작 지점으로 이동",
+    "setStart": "시작 설정",
+    "setEnd": "끝 설정",
+    "createClip": "클립 만들기",
+    "barStart": "클립 시작 지점으로 이동하세요",
+    "barEnd": "시작: {{start}} — 이제 끝 지점으로 이동하세요",
+    "barDone": "클립: {{start}} – {{end}}"
+  },
+  "share": {
+    "defaultTitle": "3Speak 동영상",
+    "linkCopied": "링크를 클립보드에 복사했어요!",
+    "failed": "공유하지 못했어요"
+  },
+  "follow": {
+    "loginRequired": "사용자를 팔로우하려면 로그인해 주세요",
+    "followed": "@{{user}}님을 팔로우했어요",
+    "failed": "팔로우 실패: {{error}}"
+  },
+  "ad": {
+    "countdown": "{{seconds}} 후 광고"
+  },
+  "media": {
+    "unavailableTitle": "더 이상 볼 수 없는 동영상이에요",
+    "unavailableBody": "오래된 업로드라 네트워크에서 미디어를 찾을 수 없어요. 게시물은 블록체인에 남아 있지만 동영상은 더 이상 재생할 수 없어요.",
+    "blockedTitle": "지금은 동영상을 불러올 수 없어요",
+    "blockedBody": "동영상 서버 중 하나가 응답하지 않았어요. 동영상 자체에는 문제가 없으니 다시 시도해 주세요."
+  },
+  "tipNudge": {
+    "text": "재미있게 보셨나요?<hide> <b>@{{author}}</b>님에게 팁을 보내 보세요!</hide>",
+    "dismiss": "닫기"
+  },
+  "community": {
+    "members_other": "멤버 {{count}}명"
+  },
+  "tags": {
+    "curated": "큐레이션"
+  },
+  "topics": {
+    "taggedBy": "“{{label}}” · {{count}}명이 태그함",
+    "viewers_other": "“{{label}}” · 시청자 {{count}}명",
+    "autoNoVotes": "자동 태그 — 아직 시청자 투표 없음",
+    "noVotes": "아직 시청자 투표 없음",
+    "inInterests": "✓ 내 관심사에 있음",
+    "addToInterests": "+ 내 관심사에 추가",
+    "openTagFeed": "태그 피드 열기"
+  },
+  "scheduled": {
+    "notice": "<b>{{date}}</b>에 게시 예약됨 — 아직 게시되지 않았어요.",
+    "futureDate": "미래의 날짜",
+    "edit": "수정, 일정 변경 또는 취소",
+    "editTitle": "예약 게시물 수정(세부 정보, 날짜 또는 취소)"
+  },
+  "actions": {
+    "voteOffChain": "이 동영상에 투표하세요. 투표는 3Speak에 저장되며 보상은 지급되지 않아요.",
+    "signInToVote": "투표하려면 로그인하세요",
+    "tagVideo": "이 동영상에 태그 달기",
+    "voteVideo": "이 동영상에 투표",
+    "tag": "태그",
+    "vote": "투표",
+    "analyticsTitle": "동영상 분석",
+    "analytics": "분석",
+    "videoStats": "동영상 통계",
+    "promoteTitle": "이 동영상 프로모션",
+    "promote": "프로모션",
+    "editTitle": "동영상 정보 수정",
+    "reportTitle": "동영상 신고",
+    "addToPlaylist": "재생목록에 추가",
+    "playlist": "재생목록",
+    "tipTitle": "크리에이터에게 팁 보내기",
+    "tip": "팁",
+    "details": "세부정보",
+    "toggleDetails": "세부정보 펼치기/접기",
+    "followCreator": "크리에이터 팔로우",
+    "closeMenu": "메뉴 닫기",
+    "openActions": "작업 열기"
+  },
+  "description": {
+    "hide": "설명 숨기기",
+    "show": "설명 보기"
+  },
+  "edit": {
+    "title": "동영상 수정",
+    "loading": "현재 게시물 불러오는 중…",
+    "videoFile": "동영상 파일",
+    "replaceVideo": "동영상 교체",
+    "replaceHint": "이 게시물의 동영상 파일을 교체해요. 나머지는 그대로 유지돼요: 좋아요, 보상, 댓글, 업로드 날짜, 프로필 내 위치가 모두 유지돼요. 현재 동영상을 유지하려면 그대로 두세요.",
+    "uploadingTo": "<b>{{host}}</b>에 업로드 중… {{pct}}%",
+    "choosingServer": "업로드 서버 선택 중…",
+    "uploadedTo": "<b>{{host}}</b>에 업로드했어요. 저장을 누르면 교체돼요.",
+    "uploaded": "업로드했어요. 저장을 누르면 교체돼요.",
+    "cancelUpload": "업로드 취소",
+    "keepCurrent": "현재 동영상 유지",
+    "encodeHint": "저장한 후에도 인코딩에 몇 분이 걸리며, 준비될 때까지 이전 동영상이 계속 재생돼요. 썸네일은 그대로이니 더 이상 맞지 않으면 위에서 바꿔 주세요.",
+    "thumbnail": "썸네일",
+    "thumbPreviewAlt": "썸네일 미리보기",
+    "uploadImage": "이미지 업로드",
+    "uploading": "업로드 중…",
+    "thumbHint": "이미지를 업로드하거나 직접 URL을 붙여넣으세요. 현재 썸네일을 유지하려면 그대로 두세요.",
+    "titleLabel": "제목",
+    "titleMin": "최소 {{min}}자",
+    "tags": "태그",
+    "tagsPlaceholder": "공백으로 구분",
+    "autoTag": "자동으로 추가됨 — 제거할 수 없어요",
+    "tagCount_other": "태그 {{count}}/{{max}}개",
+    "tagCountRequired_other": "태그 {{count}}/{{max}}개 · 최소 1개 필요",
+    "description": "설명",
+    "descriptionPlaceholder": "시청자에게 동영상을 소개하세요…",
+    "markdownHint": "마크다운을 지원해요.",
+    "listed": "공개",
+    "unlistedLabel": "일부 공개",
+    "listedHint": "피드, 검색, 내 프로필에 표시돼요.",
+    "unlistedHint": "피드와 검색에서 숨겨져요. 링크로는 계속 재생되고 프로필에도 (배지와 함께) 남아 있어요.",
+    "allowRemix": "리믹스/클립 허용",
+    "remixOn": "다른 사람이 리믹스나 클립을 만들 수 있으며, 원작자로 내 이름이 표시돼요.",
+    "remixOff": "다른 사람이 이 동영상을 리믹스하거나 클립으로 만들 수 없어요.",
+    "trailer": "채널 트레일러",
+    "trailerOn": "프로필 개요 탭 상단에서 자동 재생되며, 이전에 설정한 트레일러를 대체해요.",
+    "trailerOff": "이 동영상을 프로필 개요 탭 상단에서 자동 재생되도록 설정해요.",
+    "nsfw": "성인 / NSFW",
+    "notNsfw": "성인용 아님",
+    "nsfwHint": "시청자가 NSFW를 켜지 않으면 피드와 검색에서 숨겨지며, Hive에 nsfw 태그가 붙어요.",
+    "notNsfwHint": "일반 콘텐츠로, 모든 사람에게 표시돼요.",
+    "promoted": "프로모션 중",
+    "promote": "동영상 프로모션",
+    "saveChanges": "변경 사항 저장",
+    "noChanges": "저장할 변경 사항이 없어요.",
+    "thumbUploaded": "썸네일을 업로드했어요.",
+    "videoUploaded": "새 동영상을 업로드했어요. 저장하면 이 게시물에 적용돼요.",
+    "relisted": "동영상을 다시 공개했어요.",
+    "unlisted": "동영상을 일부 공개로 바꿨어요.",
+    "trailerSet": "채널 트레일러로 설정했어요.",
+    "trailerRemoved": "채널 트레일러에서 제거했어요.",
+    "updatedEncoding": "동영상을 업데이트했어요! 새 파일의 인코딩이 끝나기까지 잠시 걸려요.",
+    "updated": "동영상을 업데이트했어요!",
+    "errors": {
+      "notFound": "Hive에서 이 게시물을 찾을 수 없어요.",
+      "loadFailed": "Hive에서 게시물을 불러오지 못했어요. 다시 시도해 주세요.",
+      "notImage": "이미지 파일을 선택해 주세요.",
+      "imageTooLarge": "이미지가 너무 커요(최대 10MB).",
+      "thumbUploadFailed": "썸네일 업로드 실패.",
+      "notVideo": "동영상 파일을 선택해 주세요.",
+      "videoTooLarge": "동영상이 너무 커요(최대 5GB).",
+      "noVideoEntry": "이 게시물에는 교체할 동영상 항목이 없어요. 메타데이터에서 동영상을 참조하지 않아요.",
+      "notInLibrary": "이 게시물의 동영상이 더 이상 라이브러리에 없어서 파일을 교체할 수 없어요.",
+      "notOwner": "내 동영상의 파일만 교체할 수 있어요.",
+      "videoUploadFailed": "동영상 업로드 실패.",
+      "noEmbedEntry": "이 게시물에는 교체할 임베드 동영상 항목이 없어요. 메타데이터에서 참조하지 않아요.",
+      "broadcastFailed": "브로드캐스트 실패",
+      "listingFailed": "공개 상태를 변경하지 못했어요.",
+      "trailerFailed": "채널 트레일러를 변경하지 못했어요.",
+      "saveFailed": "변경 사항을 저장하지 못했어요."
+    }
+  }
+}

@@ -1,0 +1,100 @@
+{
+  "tip": {
+    "successTitle": "Mancia inviata!",
+    "successMessage": "Hai inviato {{amount}} {{currency}} come mancia. Grazie per il tuo sostegno!",
+    "errors": {
+      "allRequired": "Tutti i campi sono obbligatori",
+      "loginRequired": "Accedi per inviare una mancia",
+      "insufficientBalance": "Saldo insufficiente",
+      "invalidUsername": "Nome utente non valido",
+      "transferFailed": "Trasferimento non riuscito: {{message}}"
+    },
+    "heading": "Invia una mancia a @{{recipient}}",
+    "amountLabel": "Importo: ",
+    "amountPlaceholder": "es. 1.000",
+    "currencyLabel": "Valuta:",
+    "availableBalance": "Saldo disponibile: {{currency}}",
+    "memoLabel": "Memo (facoltativo):",
+    "memoPlaceholder": "es. Grazie per questo contenuto fantastico!",
+    "send": "Invia mancia"
+  },
+  "cardMenu": {
+    "loginToPersonalize": "Accedi per personalizzare il tuo feed",
+    "notInterestedToast": "Non ti interessa — nasconderemo questo video",
+    "undo": "Annulla",
+    "cantHideOwn": "Non puoi nascondere i tuoi video",
+    "hidingCreatorToast": "Nascondiamo i video di @{{author}}",
+    "loginForPlaylists": "Accedi per aggiungere video alle playlist",
+    "loginToTag": "Accedi per taggare i video",
+    "moreOptions": "Altre opzioni",
+    "addToPlaylist": "Aggiungi a playlist",
+    "addTag": "Aggiungi tag",
+    "notInterested": "Non mi interessa",
+    "dontShowCreator": "Non mostrare @{{author}}"
+  },
+  "guestList": {
+    "loadFailed": "Impossibile caricare l'elenco ospiti attuale",
+    "saved_one": "{{count}} ospite può guardarlo",
+    "saved_many": "{{count}} ospiti possono guardarlo",
+    "saved_other": "{{count}} ospiti possono guardarlo",
+    "cleared": "Elenco ospiti svuotato",
+    "saveFailed": "Impossibile salvare l'elenco ospiti",
+    "invalidAccounts": "Account Hive non validi: {{names}}",
+    "title": "🔒 Elenco ospiti",
+    "hint": "Questi account possono guardare senza 3Speak Pro. L'elenco resta privato sui nostri server e non viene mai pubblicato nel tuo post.",
+    "notRegistered": "Questo video non ha ancora finito l'elaborazione. Potrai modificare l'elenco quando sarà pronto.",
+    "placeholder": "nomeutente, altro.utente",
+    "empty": "Ancora nessuno. Solo gli abbonati Pro possono guardarlo.",
+    "removeAria": "Rimuovi {{name}}"
+  },
+  "voters": {
+    "pinnedTitle_one": "Votanti ({{count}})",
+    "pinnedTitle_many": "Votanti ({{count}})",
+    "pinnedTitle_other": "Votanti ({{count}})",
+    "topVoters": "Migliori votanti",
+    "noVotes": "Ancora nessun voto"
+  },
+  "payout": {
+    "breakdown": "Dettaglio del pagamento",
+    "estimatedBreakdown": "Dettaglio stimato",
+    "beneficiaries": "Beneficiari",
+    "curators": "Curatori (50%)",
+    "author": "Autore",
+    "total": "Totale",
+    "totalEstimated": "Totale (stimato)"
+  },
+  "vote": {
+    "loginRequired": "Accedi per completare questa operazione",
+    "fetchPostFailed": "Impossibile recuperare i dati del post",
+    "sameWeight": "Hai già votato con questo peso. Scegli un valore diverso.",
+    "failed": "Voto non riuscito: {{message}}",
+    "pleaseTryAgain": "riprova",
+    "weight": "Peso del voto: {{weight}}%",
+    "success": "Voto riuscito! Valore: ${{value}}",
+    "successTagged": "Voto riuscito! Taggato “{{tag}}”. Valore: ${{value}}",
+    "tagged": "Taggato “{{tag}}”.",
+    "vote": "Vota",
+    "tagThisVideo": "Tagga questo video",
+    "tagOptional": "— facoltativo —",
+    "pickTopicFirst": "Prima scegli un argomento",
+    "taggedNoDot": "Taggato “{{tag}}”",
+    "tagFailed": "Tag non riuscito: {{message}}",
+    "taggedAlreadyVoted": "Taggato “{{tag}}” — il tuo voto al {{weight}}% era già stato espresso.",
+    "votingClosed": "Votazioni chiuse — tagga questo video",
+    "youTagged": "Hai taggato questo video come <b>{{tag}}</b>.",
+    "pickTopic": "Scegli un argomento (vale come voto al 100%)",
+    "submitTag": "Invia tag",
+    "tagThisVideoFull": "Tagga questo video (vale come voto al 100%)",
+    "justTag": "Non votare — tagga e basta"
+  },
+  "tagsPicker": {
+    "autoTagged": "Tag automatici: {{tags}}",
+    "searchPlaceholder": "Cerca argomenti…",
+    "searchAria": "Cerca argomenti",
+    "noMatches": "Nessun argomento corrisponde a “{{query}}”.",
+    "allSelected": "Tutta la categoria {{category}} è selezionata. Aggiungi singoli argomenti solo per restringere:",
+    "orPickTopics": "Oppure scegli singoli argomenti:",
+    "goodEnough": "Va bene così — oppure sii più specifico (facoltativo):",
+    "moreSpecific": "Più specifico:"
+  }
+}

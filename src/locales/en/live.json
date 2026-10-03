@@ -1,0 +1,97 @@
+{
+  "backToOpenPods": "Back to OpenPods",
+  "modal": {
+    "leaveConfirm": "Leave this OpenPod? You can rejoin from the lobby anytime.",
+    "yourStreamEnded": "Your stream has ended",
+    "thisStreamEnded": "This stream has ended",
+    "noLongerLive": "It is no longer live. Start a new one whenever you are ready.",
+    "recordingProcessing": "Nice one! Your recording is being processed and will appear on the announcement post shortly.",
+    "thanksForLive": "Nice one — thanks for going live!",
+    "backHome": "Back to Home",
+    "howWasStream": "How was your stream?",
+    "connecting": "Connecting to OpenPods…",
+    "authenticating": "Authenticating with OpenPods…"
+  },
+  "strip": {
+    "liveNow_one": "<n>{{count}}</n> OpenPod live now",
+    "liveNow_other": "<n>{{count}}</n> OpenPods live now",
+    "viewAll": "View all",
+    "joinAria": "Join OpenPod: {{title}}"
+  },
+  "announce": {
+    "selectCommunity": "Select Community",
+    "shareToggle": "📣 Share this stream on Hive and 3Speak when it starts",
+    "community": "Community",
+    "rewards": "Rewards",
+    "rewardDefault": "Default 50/50",
+    "rewardPowerup": "Power up 100%",
+    "rewardDecline": "Decline payout",
+    "beneficiaries": "Beneficiaries",
+    "beneProHint": "You’re on 3Speak Pro — no platform fee. Add splits if you like.",
+    "beneLockedHint": "10% to @threespeakfund is locked. You can add more."
+  },
+  "boost": {
+    "label": "Boost",
+    "sendTo": "Send a boost to @{{user}}",
+    "send": "Send a boost"
+  },
+  "clip": {
+    "saved": "Clip saved to your downloads.",
+    "slowDown": "Slow down a moment, then clip again.",
+    "failed": "Could not make a clip. Try again in a few seconds.",
+    "title": "Clip the last 30 seconds",
+    "label": "30 sec",
+    "clipping": "Clipping…"
+  },
+  "report": {
+    "reasons": {
+      "harassment": "Harassment or hate",
+      "sexual": "Sexual or explicit content",
+      "violence": "Violence or dangerous acts",
+      "selfharm": "Self-harm",
+      "illegal": "Illegal content",
+      "spam": "Spam or scam",
+      "other": "Something else"
+    },
+    "sent": "Thanks — this stream has been reported to our team.",
+    "failed": "Could not send the report. Please try again.",
+    "title": "Report this stream",
+    "reporting": "Reporting <b>@{{host}}</b>.",
+    "intro": "Tell us what's wrong — our team reviews every report.",
+    "detailPlaceholder": "Add any details (optional)",
+    "sending": "Sending…",
+    "submit": "Submit report"
+  },
+  "signIn": {
+    "waitingWallet": "Waiting for your wallet…"
+  },
+  "publish": {
+    "errors": {
+      "noTitle": "Please add a title",
+      "noAudio": "No audio URL found",
+      "failed": "Failed to publish. Please try again."
+    },
+    "published": "Recording published to Hive!",
+    "loginGate": "Log in to publish your recording.",
+    "heading": "Publish OpenPod Recording",
+    "previewLabel": "Recording preview",
+    "previewHint": "Review the audio before publishing. This is the same player readers will see on the post.",
+    "recordingFallback": "OpenPod Recording",
+    "title": "Title",
+    "titlePlaceholder": "Give your recording a title",
+    "description": "Description",
+    "optional": "(optional)",
+    "descriptionPlaceholder": "What did you talk about? Add show notes, links, or a summary...",
+    "tags": "Tags",
+    "tagsPlaceholder": "Space-separated tags",
+    "declinePayout": "Decline Payout",
+    "publishing": "Publishing…",
+    "submit": "Publish Recording"
+  },
+  "lobby": {
+    "descriptionPlaceholder": "What's this session about? Add show notes, links, or a summary…",
+    "enableHosting": "Enable hosting & speaking",
+    "handoverFailed": "Couldn’t enable hosting automatically. OpenPods posts on your behalf via @threespeak — check that you’ve granted it posting authority, then try again.",
+    "signInToHost": "Sign in with Hive to host or speak"
+  }
+}

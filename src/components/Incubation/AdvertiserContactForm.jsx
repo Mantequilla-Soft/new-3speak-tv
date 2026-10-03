@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { FaLock } from 'react-icons/fa';
 import { fetchWarmupContact, saveWarmupContact } from '../../lib/incubation';
 import { toastIn } from '../../utils/toast';
+import { useTranslation, Trans } from 'react-i18next';
 import './AdvertiserContactForm.scss';
 
 const toast = toastIn('Business contact');
@@ -23,6 +24,7 @@ const EMAIL_RE = /^[^\s@]{1,64}@[^\s@]+\.[^\s@]{2,}$/;
  * website on the profile; the website is edited on the profile because it is public.
  */
 export default function AdvertiserContactForm() {
+  const { t } = useTranslation();
   const [email, setEmail] = useState('');
   const [address, setAddress] = useState(EMPTY_ADDRESS);
   const [loaded, setLoaded] = useState(false);
@@ -52,8 +54,8 @@ export default function AdvertiserContactForm() {
     try {
       const saved = await saveWarmupContact({ email: email.trim(), address });
       toast.success(saved.addressComplete
-        ? 'Saved. Only the 3Speak team can see it.'
-        : 'Saved. Add your address, or a website on your profile, to finish this step.');
+        ? t('incubation.contact.savedComplete')
+        : t('incubation.contact.savedIncomplete'));
     } catch (err) {
       setError(err.message);
     } finally { setBusy(false); }
@@ -64,46 +66,43 @@ export default function AdvertiserContactForm() {
       <p className="inc-contact-private">
         <FaLock aria-hidden="true" />
         <span>
-          <strong>Private.</strong> Your email and address are never stored on the blockchain
-          and never shown on your profile or anywhere else. Only the 3Speak team sees them, to
-          reach you about your ads.
+          <Trans i18nKey="incubation.contact.privateNote" components={{ b: <strong /> }} />
         </span>
       </p>
 
       <label className="inc-contact-field">
-        <span>Email <em>required</em></span>
+        <span>{t('incubation.contact.email')} <em>{t('incubation.contact.required')}</em></span>
         <input
           type="email"
           autoComplete="email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          placeholder="you@yourbrand.com"
+          placeholder={t('incubation.contact.emailPlaceholder')}
           required
           disabled={!loaded}
         />
       </label>
 
       <fieldset className="inc-contact-address" disabled={!loaded}>
-        <legend>Address <em>optional, unless your profile has no website</em></legend>
-        <input autoComplete="address-line1" placeholder="Street and number" value={address.line1} onChange={set('line1')} />
-        <input autoComplete="address-line2" placeholder="Address line 2" value={address.line2} onChange={set('line2')} />
+        <legend>{t('incubation.contact.address')} <em>{t('incubation.contact.addressOptional')}</em></legend>
+        <input autoComplete="address-line1" placeholder={t('incubation.contact.ph.line1')} value={address.line1} onChange={set('line1')} />
+        <input autoComplete="address-line2" placeholder={t('incubation.contact.ph.line2')} value={address.line2} onChange={set('line2')} />
         <div className="inc-contact-row">
-          <input autoComplete="postal-code" placeholder="Postal code" value={address.postalCode} onChange={set('postalCode')} />
-          <input autoComplete="address-level2" placeholder="City" value={address.city} onChange={set('city')} />
+          <input autoComplete="postal-code" placeholder={t('incubation.contact.ph.postalCode')} value={address.postalCode} onChange={set('postalCode')} />
+          <input autoComplete="address-level2" placeholder={t('incubation.contact.ph.city')} value={address.city} onChange={set('city')} />
         </div>
         <div className="inc-contact-row">
-          <input autoComplete="address-level1" placeholder="State or region" value={address.region} onChange={set('region')} />
-          <input autoComplete="country-name" placeholder="Country" value={address.country} onChange={set('country')} />
+          <input autoComplete="address-level1" placeholder={t('incubation.contact.ph.region')} value={address.region} onChange={set('region')} />
+          <input autoComplete="country-name" placeholder={t('incubation.contact.ph.country')} value={address.country} onChange={set('country')} />
         </div>
         <span className="inc-contact-hint">
-          An address counts once street, city and country are filled in. No address? Add a
-          website to your brand profile instead.
+          {t('incubation.contact.addressHint')}
         </span>
       </fieldset>
 
       {error ? <p className="inc-contact-error">{error}</p> : null}
       <button type="submit" className="inc-task-cta" disabled={!emailOk || busy || !loaded}>
-        {busy ? 'Saving…' : 'Save contact details'}
+        {busy ? t('common.actions.saving') : t('incubation.contact.save')}
       </button>
     </form>
   );

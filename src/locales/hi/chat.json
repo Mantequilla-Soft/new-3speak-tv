@@ -1,0 +1,142 @@
+{
+  "button": {
+    "label": "चैट"
+  },
+  "tools": {
+    "emoji": "इमोजी",
+    "searchEmoji": "इमोजी खोजें",
+    "searchGifs": "GIF खोजें…",
+    "noGifs": "कोई GIF नहीं मिला।",
+    "poweredByGiphy": "GIPHY द्वारा संचालित"
+  },
+  "lightbox": {
+    "openInNewTab": "इमेज नए टैब में खोलें"
+  },
+  "linkCard": {
+    "loadingPreview": "प्रीव्यू लोड हो रहा है…",
+    "community": "कम्युनिटी",
+    "communityWithSubscribers_one": "कम्युनिटी · {{formatted}} सब्सक्राइबर",
+    "communityWithSubscribers_other": "कम्युनिटी · {{formatted}} सब्सक्राइबर",
+    "commentFallback": "(कमेंट)",
+    "play": "{{title}} चलाएँ"
+  },
+  "share": {
+    "embedCopied": "एम्बेड कोड कॉपी हो गया",
+    "pressToCopy": "चुना हुआ कोड कॉपी करने के लिए Ctrl/Cmd + C दबाएँ",
+    "embedTitle": "यह वीडियो एम्बेड करें",
+    "embedHint": "इसे किसी भी वेबसाइट या ब्लॉग पोस्ट में पेस्ट करें।",
+    "embedSize": "एम्बेड का साइज़",
+    "embedCode": "एम्बेड कोड",
+    "copyEmbed": "एम्बेड कोड कॉपी करें",
+    "responsiveSub": "जिस पेज पर है उसके हिसाब से साइज़ बदलता है",
+    "fixedSub": "फ़िक्स्ड साइज़ iframe",
+    "sendInChat": "3Speak चैट में भेजें",
+    "sendInChatSub": "3Speak पर किसी को मैसेज करें",
+    "embedOnWebsite": "वेबसाइट पर एम्बेड करें",
+    "embedOnWebsiteSub": "अपनी साइट या ब्लॉग के लिए HTML कॉपी करें",
+    "generalShare": "शेयर करें / लिंक कॉपी करें",
+    "generalShareSub": "दूसरे ऐप, या लिंक कॉपी करें"
+  },
+  "gate": {
+    "connectTitle": "3Speak चैट से कनेक्ट करें",
+    "connectBody": "चैट Snapie से चलती है। कनेक्ट करने पर आपकी Hive पोस्टिंग की से एक बार का लॉगिन चैलेंज साइन होता है — कोई ट्रांज़ैक्शन नहीं, कोई खर्च नहीं।",
+    "connecting": "कनेक्ट हो रहा है…",
+    "connectButton": "चैट कनेक्ट करें",
+    "cannotSign": "आपका मौजूदा लॉगिन चैट चैलेंज साइन नहीं कर सकता। Keychain, HiveAuth, PeakVault या Ledger इस्तेमाल करें।",
+    "needsAccountTitle": "चैट के लिए Hive अकाउंट चाहिए",
+    "needsAccountBody": "मैसेज आपके अपने अकाउंट की keys से साइन होते हैं, इसलिए आपका अकाउंट तैयार होते ही बाकी सब के साथ चैट भी खुल जाएगी। अपनी प्रोफ़ाइल पर दिए गोल पूरे करें, टीम आपको वहाँ तक पहुँचा देगी।",
+    "loginTitle": "चैट इस्तेमाल करने के लिए लॉग इन करें",
+    "loginBody": "मैसेज भेजने और पाने के लिए अपने Hive अकाउंट से साइन इन करें।",
+    "connectingToChat": "चैट से कनेक्ट हो रहा है…"
+  },
+  "errors": {
+    "notHiveAccount": "@{{user}} कोई Hive अकाउंट नहीं है।",
+    "openConversation": "वह बातचीत खोली नहीं जा सकी।",
+    "verifyAccount": "उस अकाउंट की पुष्टि नहीं हो सकी।",
+    "createRoom": "रूम नहीं बन सका।",
+    "joinChannel": "उस चैनल से नहीं जुड़ सके।"
+  },
+  "newDm": {
+    "placeholder": "किसी Hive यूज़र को मैसेज करें…",
+    "start": "चैट शुरू करें"
+  },
+  "newRoom": {
+    "toggle": "नया प्राइवेट रूम",
+    "namePlaceholder": "रूम का नाम…",
+    "removeMember": "@{{user}} को हटाएँ",
+    "addMore": "और जोड़ें…",
+    "invitePlaceholder": "Hive यूज़र्स को इनवाइट करें (वैकल्पिक)…",
+    "create": "बनाएँ"
+  },
+  "channels": {
+    "browse": "चैनल ब्राउज़ करें",
+    "publicTitle": "पब्लिक चैनल",
+    "closeBrowser": "चैनल ब्राउज़र बंद करें",
+    "loading": "चैनल लोड हो रहे हैं…",
+    "empty": "कोई चैनल उपलब्ध नहीं।",
+    "join": "जुड़ें"
+  },
+  "markRead": {
+    "nothingToClear": "साफ़ करने के लिए कोई बातचीत नहीं। हो सकता है गिनती सर्वर पर अटकी हो।",
+    "requestFailed": "रिक्वेस्ट फ़ेल हुई",
+    "allCaughtUp": "सब पढ़ लिया",
+    "stillUnread_one": "{{count}} चैट साफ़ करने के बाद भी {{total}} अनपढ़े दिख रहे हैं।",
+    "stillUnread_other": "{{count}} चैट साफ़ करने के बाद भी {{total}} अनपढ़े दिख रहे हैं।",
+    "stillUnreadNoMatch_one": "{{count}} चैट साफ़ करने के बाद भी {{total}} अनपढ़े दिख रहे हैं। सर्वर गिनती बता रहा है, लेकिन कोई मिलती-जुलती बातचीत नहीं है।",
+    "stillUnreadNoMatch_other": "{{count}} चैट साफ़ करने के बाद भी {{total}} अनपढ़े दिख रहे हैं। सर्वर गिनती बता रहा है, लेकिन कोई मिलती-जुलती बातचीत नहीं है।",
+    "notSignedIn": "चैट में साइन इन नहीं है। चैट फिर से कनेक्ट करें और दोबारा कोशिश करें।",
+    "sessionExpired": "साफ़ करते समय चैट सेशन खत्म हो गया। चैट फिर से कनेक्ट करें और दोबारा कोशिश करें।",
+    "serverRejectedVisible_one": "सर्वर ने सभी {{count}} रिक्वेस्ट अस्वीकार कर दी (दिख रही लिस्ट की IDs)",
+    "serverRejectedVisible_other": "सर्वर ने सभी {{count}} रिक्वेस्ट अस्वीकार कर दीं (दिख रही लिस्ट की IDs)",
+    "serverRejectedServerMap_one": "सर्वर ने सभी {{count}} रिक्वेस्ट अस्वीकार कर दी (सर्वर के अपने अनपढ़े मैप की IDs)",
+    "serverRejectedServerMap_other": "सर्वर ने सभी {{count}} रिक्वेस्ट अस्वीकार कर दीं (सर्वर के अपने अनपढ़े मैप की IDs)",
+    "failed": "सब कुछ पढ़ा हुआ मार्क नहीं हो सका",
+    "marking": "पढ़ा हुआ मार्क हो रहा है…",
+    "button": "सभी को पढ़ा हुआ मार्क करें",
+    "buttonCount": "सभी को पढ़ा हुआ मार्क करें ({{count}})"
+  },
+  "list": {
+    "chooseTarget": "भेजने के लिए कोई चैट चुनें",
+    "loading": "बातचीत लोड हो रही है…",
+    "empty": "अभी कोई बातचीत नहीं। ऊपर Hive यूज़रनेम डालकर नई बातचीत शुरू करें।"
+  },
+  "leave": {
+    "confirmRoom": "यह रूम छोड़ें?",
+    "confirmChannel": "यह चैनल छोड़ें?",
+    "errorRoom": "रूम छोड़ा नहीं जा सका।",
+    "errorChannel": "चैनल छोड़ा नहीं जा सका।",
+    "titleRoom": "रूम छोड़ें",
+    "titleChannel": "चैनल छोड़ें",
+    "button": "छोड़ें"
+  },
+  "thread": {
+    "editError": "मैसेज एडिट नहीं हो सका।",
+    "deleteConfirm": "यह मैसेज डिलीट करें? इसकी जगह “[deleted]” दिखेगा।",
+    "deleteError": "मैसेज डिलीट नहीं हो सका।",
+    "back": "बातचीत पर वापस",
+    "loading": "मैसेज लोड हो रहे हैं…",
+    "empty": "अभी कोई मैसेज नहीं — हाय बोलिए 👋",
+    "editedSuffix": " · एडिट किया गया",
+    "messageActions": "मैसेज के विकल्प",
+    "quote": "कोट करें",
+    "forward": "फ़ॉरवर्ड करें",
+    "typing_one": "{{users}} टाइप कर रहा है…",
+    "typing_other": "{{users}} टाइप कर रहे हैं…",
+    "editing": "मैसेज एडिट हो रहा है",
+    "cancelEdit": "एडिट रद्द करें",
+    "quoting": "@{{user}} को कोट कर रहे हैं",
+    "cancelQuote": "कोट रद्द करें",
+    "removeImage": "इमेज हटाएँ",
+    "placeholder": "मैसेज लिखें…"
+  },
+  "page": {
+    "chooseTarget": "भेजने के लिए कोई चैट चुनें।",
+    "selectConversation": "कोई बातचीत चुनें, या नई शुरू करें।"
+  },
+  "overlay": {
+    "fullscreen": "फ़ुलस्क्रीन",
+    "exitFullscreen": "फ़ुलस्क्रीन से बाहर निकलें",
+    "close": "चैट बंद करें",
+    "sendInChat": "चैट में भेजें"
+  }
+}

@@ -1,5 +1,6 @@
 import * as tus from 'tus-js-client';
 import { toastIn } from './toast';
+import { t } from '../i18n';
 import { EMBED_API_KEY, CHECKER_URL, CHECKER_API_KEY } from './config';
 import { pickEmbedEndpoint } from './embedEndpoints';
 
@@ -42,11 +43,11 @@ export async function publishStreamVod({
 
   if (!EMBED_API_KEY) {
     console.error('[streamVod] No embed API key configured — cannot publish the stream VOD.');
-    toast.error('Stream ended, but the video could not be uploaded (upload key missing).');
+    toast.error(t('misc.streamVod.uploadKeyMissing'));
     return;
   }
 
-  const toastId = toast.loading('Uploading your stream video… 0%');
+  const toastId = toast.loading(t('misc.streamVod.uploading', { pct: 0 }));
 
   try {
     const { base, uploadUrl } = await pickEmbedEndpoint();
@@ -70,7 +71,7 @@ export async function publishStreamVod({
         },
         onProgress: (sent, total) => {
           const pct = total ? Math.round((sent / total) * 100) : 0;
-          toast.loading(`Uploading your stream video… ${pct}%`, { id: toastId });
+          toast.loading(t('misc.streamVod.uploading', { pct }), { id: toastId });
         },
         onError: reject,
         onSuccess: resolve,
@@ -113,13 +114,13 @@ export async function publishStreamVod({
       }).catch((err) => console.warn('[streamVod] thumbnail failed (non-fatal):', err));
     }
 
-    toast.success('Stream video uploaded — it will replace the live stream once encoding finishes.', {
+    toast.success(t('misc.streamVod.uploaded'), {
       id: toastId,
       duration: 8000,
     });
   } catch (err) {
     console.error('[streamVod] upload failed:', err);
-    toast.error('Stream ended, but the video upload failed.', { id: toastId });
+    toast.error(t('misc.streamVod.uploadFailed'), { id: toastId });
   }
 }
 
@@ -134,7 +135,7 @@ export async function publishStreamVod({
  */
 export async function trackServerVodPublish({ statusUrl }) {
   if (!statusUrl) return;
-  const toastId = toast.loading('Saving your stream video…');
+  const toastId = toast.loading(t('misc.streamVod.saving'));
   const started = Date.now();
   const MAX_MS = 20 * 60 * 1000;   // give a long recording time to upload
 
@@ -146,19 +147,19 @@ export async function trackServerVodPublish({ statusUrl }) {
     } catch { /* transient — try again */ }
 
     if (state?.status === 'uploading') {
-      toast.loading(`Uploading your stream video… ${state.progress ?? 0}%`, { id: toastId });
+      toast.loading(t('misc.streamVod.uploading', { pct: state.progress ?? 0 }), { id: toastId });
     } else if (state?.status === 'processing') {
-      toast.loading('Uploaded — the encoder is processing your video…', { id: toastId });
+      toast.loading(t('misc.streamVod.encoding'), { id: toastId });
     } else if (state?.status === 'published') {
-      toast.success('Stream video saved — it will replace the live stream once encoding finishes.', { id: toastId, duration: 8000 });
+      toast.success(t('misc.streamVod.saved'), { id: toastId, duration: 8000 });
       return;
     } else if (state?.status === 'failed') {
-      toast.error(`Stream ended, but the video couldn't be saved: ${state.error || 'upload failed'}.`, { id: toastId });
+      toast.error(t('misc.streamVod.saveFailed', { error: state.error || t('misc.streamVod.uploadFailedShort') }), { id: toastId });
       return;
     }
 
     if (Date.now() - started > MAX_MS) {
-      toast.error('Stream ended — the video is still processing; check your profile shortly.', { id: toastId, duration: 8000 });
+      toast.error(t('misc.streamVod.stillProcessing'), { id: toastId, duration: 8000 });
       return;
     }
     setTimeout(poll, 3000);

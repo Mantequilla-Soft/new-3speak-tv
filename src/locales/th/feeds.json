@@ -1,0 +1,119 @@
+{
+  "loadingMore": "กำลังโหลดเพิ่ม…",
+  "promoted": "โปรโมต",
+  "scrollLeft": "เลื่อนไปทางซ้าย",
+  "scrollRight": "เลื่อนไปทางขวา",
+  "errors": {
+    "fetchVideos": "ดึงวิดีโอไม่สำเร็จ",
+    "loadVideos": "โหลดวิดีโอไม่สำเร็จ",
+    "loadShorts": "โหลด Shorts ไม่สำเร็จ"
+  },
+  "tabs": {
+    "all": "ทั้งหมด",
+    "videos": "วิดีโอ",
+    "shorts": "Shorts",
+    "videosCount": "วิดีโอ ({{count}})",
+    "shortsCount": "Shorts ({{count}})"
+  },
+  "dateFilters": {
+    "all": "ตลอดเวลา",
+    "today": "วันนี้",
+    "week": "สัปดาห์นี้",
+    "month": "เดือนนี้",
+    "justNow": "เมื่อสักครู่"
+  },
+  "live": {
+    "title": "ไลฟ์อยู่ตอนนี้",
+    "badge": "● ไลฟ์"
+  },
+  "newFromFollowing": {
+    "aria": "ใหม่จากครีเอเตอร์ที่คุณติดตาม",
+    "shorts_other": "{{count}} Shorts"
+  },
+  "firstUploads": {
+    "title": "อัปโหลดครั้งแรก"
+  },
+  "newVideos": {
+    "title": "วิดีโอใหม่"
+  },
+  "home": {
+    "sections": {
+      "discover": "สำรวจ",
+      "home": "ฟีดหน้าแรก",
+      "follow": "ฟีดที่ติดตาม",
+      "new": "คอนเทนต์ใหม่",
+      "interests": "ความสนใจ"
+    },
+    "empty": "ยังไม่มีอะไรให้แสดงที่นี่",
+    "viewAll": "ดูทั้งหมด",
+    "dragToReorder": "ลากเพื่อจัดลำดับ",
+    "surfTitle": "Channel Surfing: เลือกหัวข้อแล้วดูเหมือนดูทีวี",
+    "zapping": "กำลังเปลี่ยนช่อง"
+  },
+  "surf": {
+    "pageTitle": "Channel Surfing",
+    "intro": "เลือกช่องแล้วนั่งดูสบายๆ เราจะเรียงวิดีโอที่ดีที่สุดในหัวข้อนั้นให้ต่อกันไปเรื่อยๆ เบื่อแล้ว? กด <b>Zap</b> อยากดูอย่างอื่น? เปลี่ยนช่องได้เลย",
+    "backTo": "กลับไปที่ CH {{number}} {{emoji}} {{title}}",
+    "surprise": "สุ่มให้หน่อย",
+    "yourChannels": "ช่องของคุณ",
+    "nothingOnAir": "ขณะนี้ไม่มีอะไรออกอากาศใน {{channel}}",
+    "tuneFailed": "จูนช่องไม่ได้ ลองอีกครั้งในอีกสักครู่",
+    "remoteAria": "รีโมต Channel Surfing",
+    "openGuide": "เปิดผังรายการ",
+    "ch": "CH {{number}}",
+    "chLabel": "CH",
+    "channelHint": "CH {{number}}: {{title}}",
+    "channelHintKey": "CH {{number}}: {{title}} ({{key}})",
+    "tuningShort": "กำลังจูน",
+    "tuning": "กำลังจูน…",
+    "onAir": "ออกอากาศ",
+    "changeChannel": "เปลี่ยนช่อง",
+    "nextChannel": "ช่องถัดไป",
+    "prevChannel": "ช่องก่อนหน้า",
+    "nextVideo": "วิดีโอถัดไป",
+    "nextVideoKey": "วิดีโอถัดไป (→)",
+    "zap": "Zap",
+    "findingNext": "กำลังหาวิดีโอถัดไป…",
+    "stop": "หยุดเซิร์ฟ",
+    "stopTitle": "หยุดเซิร์ฟ (วิดีโอนี้จะยังเล่นต่อ)",
+    "guide": "ผังรายการ"
+  },
+  "discover": {
+    "searchPlaceholder": "ค้นหาวิดีโอ, Shorts, เสียง, ชุมชน...",
+    "clearSearch": "ล้างการค้นหา",
+    "searchFor": "ค้นหา “{{term}}”",
+    "noResultsFor": "ไม่พบผลลัพธ์สำหรับ “{{term}}”",
+    "types": {
+      "user": "ผู้ใช้",
+      "community": "ชุมชน",
+      "video": "วิดีโอ",
+      "short": "Shorts",
+      "audio": "เสียง",
+      "playlist": "เพลย์ลิสต์"
+    },
+    "suggest": {
+      "tags": "แท็ก",
+      "titles": "ชื่อเรื่อง"
+    },
+    "dates": {
+      "today": "วันนี้",
+      "week": "สัปดาห์นี้",
+      "month": "เดือนนี้",
+      "year": "ปีนี้"
+    },
+    "boostRecent": "เน้นรายการล่าสุด",
+    "filters": "ตัวกรอง",
+    "date": "วันที่",
+    "tag": "แท็ก",
+    "tagPlaceholder": "เช่น crypto, gaming...",
+    "community": "ชุมชน",
+    "communityPlaceholder": "ค้นหาชุมชน...",
+    "clearAllFilters": "ล้างตัวกรองทั้งหมด",
+    "allHidden": "ซ่อนเนื้อหาทุกประเภทอยู่",
+    "reenableFilters": "เปิดตัวกรองทั้งหมดอีกครั้ง",
+    "groupTitle": "{{label}} ({{count}})",
+    "subscribers_other": "สมาชิก {{count}} คน",
+    "authors_other": "ผู้เขียน {{count}} คน",
+    "views_other": "การดู {{views}} ครั้ง"
+  }
+}

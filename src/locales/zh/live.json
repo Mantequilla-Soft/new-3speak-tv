@@ -1,0 +1,96 @@
+{
+  "backToOpenPods": "返回 OpenPods",
+  "modal": {
+    "leaveConfirm": "要离开这个 OpenPod 吗？你随时可以从大厅重新加入。",
+    "yourStreamEnded": "你的直播已结束",
+    "thisStreamEnded": "本场直播已结束",
+    "noLongerLive": "直播已经结束。准备好后随时可以开始新的直播。",
+    "recordingProcessing": "太棒了！你的录像正在处理中，很快会出现在公告帖子上。",
+    "thanksForLive": "太棒了——感谢你的直播！",
+    "backHome": "返回首页",
+    "howWasStream": "这次直播体验如何？",
+    "connecting": "正在连接 OpenPods…",
+    "authenticating": "正在通过 OpenPods 验证…"
+  },
+  "strip": {
+    "liveNow_other": "<n>{{count}}</n> 个 OpenPod 正在直播",
+    "viewAll": "查看全部",
+    "joinAria": "加入 OpenPod：{{title}}"
+  },
+  "announce": {
+    "selectCommunity": "选择社区",
+    "shareToggle": "📣 直播开始时在 Hive 和 3Speak 上分享",
+    "community": "社区",
+    "rewards": "奖励",
+    "rewardDefault": "默认 50/50",
+    "rewardPowerup": "100% Power up",
+    "rewardDecline": "放弃收益",
+    "beneficiaries": "受益人",
+    "beneProHint": "你是 3Speak Pro 用户——无平台费用。如有需要可添加分成。",
+    "beneLockedHint": "给 @threespeakfund 的 10% 已锁定。你可以再添加其他分成。"
+  },
+  "boost": {
+    "label": "助力",
+    "sendTo": "给 @{{user}} 送上助力",
+    "send": "送上助力"
+  },
+  "clip": {
+    "saved": "片段已保存到你的下载文件夹。",
+    "slowDown": "请稍等片刻再剪辑。",
+    "failed": "无法生成片段，请几秒后重试。",
+    "title": "剪辑最后 30 秒",
+    "label": "30 秒",
+    "clipping": "剪辑中…"
+  },
+  "report": {
+    "reasons": {
+      "harassment": "骚扰或仇恨言论",
+      "sexual": "色情或露骨内容",
+      "violence": "暴力或危险行为",
+      "selfharm": "自残",
+      "illegal": "违法内容",
+      "spam": "垃圾信息或诈骗",
+      "other": "其他"
+    },
+    "sent": "谢谢——此直播已举报给我们的团队。",
+    "failed": "举报发送失败，请重试。",
+    "title": "举报此直播",
+    "reporting": "正在举报 <b>@{{host}}</b>。",
+    "intro": "告诉我们哪里有问题——我们的团队会审核每一条举报。",
+    "detailPlaceholder": "补充详细信息（可选）",
+    "sending": "发送中…",
+    "submit": "提交举报"
+  },
+  "signIn": {
+    "waitingWallet": "正在等待你的钱包…"
+  },
+  "publish": {
+    "errors": {
+      "noTitle": "请添加标题",
+      "noAudio": "找不到音频 URL",
+      "failed": "发布失败，请重试。"
+    },
+    "published": "录像已发布到 Hive！",
+    "loginGate": "登录后发布你的录像。",
+    "heading": "发布 OpenPod 录像",
+    "previewLabel": "录像预览",
+    "previewHint": "发布前先听一遍音频。读者在帖子中看到的也是同一个播放器。",
+    "recordingFallback": "OpenPod 录像",
+    "title": "标题",
+    "titlePlaceholder": "给你的录像起个标题",
+    "description": "简介",
+    "optional": "（可选）",
+    "descriptionPlaceholder": "你们聊了什么？添加节目笔记、链接或摘要...",
+    "tags": "标签",
+    "tagsPlaceholder": "用空格分隔的标签",
+    "declinePayout": "放弃收益",
+    "publishing": "发布中…",
+    "submit": "发布录像"
+  },
+  "lobby": {
+    "descriptionPlaceholder": "这次会话是关于什么的？添加节目笔记、链接或摘要…",
+    "enableHosting": "开启主持和发言",
+    "handoverFailed": "无法自动开启主持。OpenPods 会通过 @threespeak 代你发帖——请确认你已授予它 posting 权限，然后重试。",
+    "signInToHost": "使用 Hive 登录以主持或发言"
+  }
+}

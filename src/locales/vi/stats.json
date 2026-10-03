@@ -1,0 +1,116 @@
+{
+  "ranges": {
+    "d7": "7 ngày",
+    "d28": "28 ngày",
+    "d90": "90 ngày",
+    "all": "Tất cả"
+  },
+  "content": {
+    "all": "Tất cả",
+    "videos": "Video",
+    "shorts": "Shorts"
+  },
+  "metrics": {
+    "watchTime": "Thời gian xem",
+    "views": "Lượt xem",
+    "avgPct": "% TB",
+    "votes": "Lượt vote",
+    "comments": "Bình luận",
+    "payout": "Phần thưởng"
+  },
+  "days": {
+    "short": {
+      "sun": "CN",
+      "mon": "T2",
+      "tue": "T3",
+      "wed": "T4",
+      "thu": "T5",
+      "fri": "T6",
+      "sat": "T7"
+    },
+    "initial": {
+      "sun": "CN",
+      "mon": "2",
+      "tue": "3",
+      "wed": "4",
+      "thu": "5",
+      "fri": "6",
+      "sat": "7"
+    }
+  },
+  "sources": {
+    "threespeak": "3Speak",
+    "player": "Trình phát nhúng"
+  },
+  "trend": {
+    "empty": "Chưa có thời gian xem trong khoảng này.",
+    "tip_other": "{{count}} lượt xem · {{date}}"
+  },
+  "noData": "Chưa có dữ liệu.",
+  "demo": {
+    "viewerLocations": "Vị trí người xem",
+    "mapBubble_other": "{{country}} — {{count}} phiên",
+    "empty": "Chưa có dữ liệu người xem trong khoảng này.",
+    "breakdown": "Chi tiết",
+    "map": "Bản đồ",
+    "countries": "Quốc gia",
+    "devices": "Thiết bị",
+    "browsers": "Trình duyệt",
+    "whereTitle": "Nơi họ xem",
+    "whereSub": "3speak so với trình phát nhúng",
+    "newVsReturning": "Mới và quay lại",
+    "new": "Mới",
+    "returning": "Quay lại",
+    "located": "Đã xác định vị trí {{located}} / {{total}} phiên xem."
+  },
+  "when": {
+    "title": "Thời điểm người xem của bạn xem",
+    "sub": "UTC · càng đậm = càng nhiều lượt xem",
+    "cellTitle_other": "{{day}} {{hour}}:00 — {{count}} lượt xem",
+    "hour": "{{hour}} giờ"
+  },
+  "detail": {
+    "summary": "{{votes}} lượt vote · {{comments}} bình luận · ${{payout}}"
+  },
+  "compare": {
+    "notEnough": "Không đủ dữ liệu để so sánh.",
+    "start": "Đầu",
+    "axis": "Tỷ lệ giữ chân trong suốt video",
+    "end": "Cuối",
+    "title": "So sánh video",
+    "pickA": "Chọn một video…",
+    "vs": "và",
+    "pickB": "Chọn video khác…"
+  },
+  "loadError": "Hiện không thể tải số liệu thống kê của bạn.",
+  "emptyRange": "Chưa có dữ liệu xem trong khoảng này — hãy thử “Tất cả”, hoặc chờ mọi người xem video của bạn.",
+  "tiles": {
+    "avgViewDuration": "Thời lượng xem TB",
+    "avgWatched": "Tỷ lệ xem TB",
+    "reactionsPerView": "Phản ứng / lượt xem"
+  },
+  "subtotals": "{{videos}} video · {{votes}} lượt vote · {{comments}} bình luận · ${{payout}} · tốc độ TB {{rate}}×",
+  "sections": {
+    "trend": "Thời gian xem theo thời gian",
+    "best": "Hiệu quả nhất",
+    "audience": "Khán giả của bạn"
+  },
+  "openInNewTab": "Mở video trong tab mới",
+  "footnote": "Số liệu xem lấy từ theo dõi bản xem trước và chỉ bạn mới thấy.",
+  "video": {
+    "noData": "Chưa có dữ liệu",
+    "empty": "Video này chưa có dữ liệu xem.",
+    "uniqueViewers": "Người xem duy nhất",
+    "avgSpeed": "Tốc độ TB",
+    "mostDropOff": "📉 Nhiều người rời đi nhất tại <b>{{time}}</b>",
+    "earlyDrop": "⚡ <b>{{pct}}%</b> rời đi trong 3 giây đầu",
+    "replayed": "🔁 Được xem lại:",
+    "retentionTitle": "Tỷ lệ giữ chân khán giả",
+    "retentionSub": "tỷ lệ người xem vẫn đang xem tại mỗi thời điểm",
+    "pctWatching": "{{pct}}% đang xem",
+    "replayTitle": "Được xem lại nhiều nhất",
+    "replaySub": "các đoạn người xem xem đi xem lại nhiều nhất",
+    "hotSpot": "điểm nóng",
+    "notEnoughReplays": "Chưa đủ lượt xem lại"
+  }
+}

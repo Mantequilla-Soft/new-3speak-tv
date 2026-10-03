@@ -16,14 +16,15 @@ import { KeyTypes } from '@aioha/aioha';
  */
 
 // Canonical categories for the UI filters
+// labelKey is an i18n key: translate at render with t(cat.labelKey).
 export const NOTIF_CATEGORIES = {
-  all: { label: 'All', types: null },
-  replies: { label: 'Replies', types: ['reply', 'reply_comment'] },
-  mentions: { label: 'Mentions', types: ['mention'] },
-  votes: { label: 'Votes', types: ['vote'] },
-  reblogs: { label: 'Reblogs', types: ['reblog'] },
-  follows: { label: 'Follows', types: ['follow'] },
-  transfers: { label: 'Transfers', types: ['transfer'] },
+  all: { labelKey: 'notifications.categories.all', types: null },
+  replies: { labelKey: 'notifications.categories.replies', types: ['reply', 'reply_comment'] },
+  mentions: { labelKey: 'notifications.categories.mentions', types: ['mention'] },
+  votes: { labelKey: 'notifications.categories.votes', types: ['vote'] },
+  reblogs: { labelKey: 'notifications.categories.reblogs', types: ['reblog'] },
+  follows: { labelKey: 'notifications.categories.follows', types: ['follow'] },
+  transfers: { labelKey: 'notifications.categories.transfers', types: ['transfer'] },
 };
 
 const POLL_INTERVAL_MS = 60_000;

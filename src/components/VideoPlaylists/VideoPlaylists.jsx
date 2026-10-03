@@ -2,9 +2,11 @@ import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { MdPlaylistPlay, MdKeyboardArrowDown, MdKeyboardArrowUp } from 'react-icons/md';
 import { useVideoPlaylists } from '../../hooks/useVideoPlaylists';
+import { useTranslation } from 'react-i18next';
 import './VideoPlaylists.scss';
 
 function VideoPlaylists({ author, permlink }) {
+  const { t } = useTranslation();
   const { data: playlists = [], isLoading } = useVideoPlaylists(author, permlink);
   const [expanded, setExpanded] = useState(false);
 
@@ -15,7 +17,7 @@ function VideoPlaylists({ author, permlink }) {
     <div className={`video-playlists${expanded ? ' expanded' : ''}`}>
       <h4 className="playlists-header" onClick={() => setExpanded(prev => !prev)}>
         <span className="playlists-header-left">
-          <MdPlaylistPlay /> Included in {playlists.length} {playlists.length === 1 ? 'playlist' : 'playlists'}
+          <MdPlaylistPlay /> {t('playlists.includedIn', { count: playlists.length })}
         </span>
         <span className="playlists-toggle">
           {expanded ? <MdKeyboardArrowUp size={18} /> : <MdKeyboardArrowDown size={18} />}

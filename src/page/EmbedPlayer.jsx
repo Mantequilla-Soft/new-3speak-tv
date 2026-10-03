@@ -2,6 +2,7 @@ import { useCallback, useEffect, useState } from 'react';
 import { useParams, useSearchParams } from 'react-router-dom';
 import { usePlayer } from '@mantequilla-soft/3speak-player/react';
 import { getPlayerUrl } from '../utils/playerUrl';
+import { useTranslation } from 'react-i18next';
 import './EmbedPlayer.scss';
 
 // Bare, chrome-free 3Speak player used INSIDE the Spotlight /links page (iframed).
@@ -11,6 +12,7 @@ import './EmbedPlayer.scss';
 // NOT autoplay. The page is kept transparent so the parent iframe's own loading
 // spinner (.vid::after) shows through until the poster/first frame paints.
 export default function EmbedPlayer() {
+  const { t } = useTranslation();
   const { author, permlink } = useParams();
   const [sp] = useSearchParams();
   const isShort = sp.get('short') === '1';
@@ -56,7 +58,7 @@ export default function EmbedPlayer() {
     loadVideo(`${a}/${p}`).catch(() => {});
   }, [valid, a, p, player, attached, loadVideo]);
 
-  if (!valid) return <div className="emb-player emb-player--err">Video unavailable</div>;
+  if (!valid) return <div className="emb-player emb-player--err">{t('misc.embedPlayer.unavailable')}</div>;
 
   return (
     <div className={`emb-player${isShort ? ' short' : ''}`}>

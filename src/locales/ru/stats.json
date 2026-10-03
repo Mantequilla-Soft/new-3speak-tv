@@ -1,0 +1,125 @@
+{
+  "ranges": {
+    "d7": "7 дн.",
+    "d28": "28 дн.",
+    "d90": "90 дн.",
+    "all": "Всё"
+  },
+  "content": {
+    "all": "Все",
+    "videos": "Видео",
+    "shorts": "Shorts"
+  },
+  "metrics": {
+    "watchTime": "Время просмотра",
+    "views": "Просмотры",
+    "avgPct": "Средн. %",
+    "votes": "Голоса",
+    "comments": "Комментарии",
+    "payout": "Выплата"
+  },
+  "days": {
+    "short": {
+      "sun": "Вс",
+      "mon": "Пн",
+      "tue": "Вт",
+      "wed": "Ср",
+      "thu": "Чт",
+      "fri": "Пт",
+      "sat": "Сб"
+    },
+    "initial": {
+      "sun": "В",
+      "mon": "П",
+      "tue": "В",
+      "wed": "С",
+      "thu": "Ч",
+      "fri": "П",
+      "sat": "С"
+    }
+  },
+  "sources": {
+    "threespeak": "3Speak",
+    "player": "Встроенный плеер"
+  },
+  "trend": {
+    "empty": "За этот период просмотров пока нет.",
+    "tip_one": "{{count}} просмотр · {{date}}",
+    "tip_few": "{{count}} просмотра · {{date}}",
+    "tip_many": "{{count}} просмотров · {{date}}",
+    "tip_other": "{{count}} просмотра · {{date}}"
+  },
+  "noData": "Данных пока нет.",
+  "demo": {
+    "viewerLocations": "География зрителей",
+    "mapBubble_one": "{{country}} — {{count}} сессия",
+    "mapBubble_few": "{{country}} — {{count}} сессии",
+    "mapBubble_many": "{{country}} — {{count}} сессий",
+    "mapBubble_other": "{{country}} — {{count}} сессии",
+    "empty": "За этот период данных о зрителях пока нет.",
+    "breakdown": "Разбивка",
+    "map": "Карта",
+    "countries": "Страны",
+    "devices": "Устройства",
+    "browsers": "Браузеры",
+    "whereTitle": "Где смотрят",
+    "whereSub": "3speak и встроенный плеер",
+    "newVsReturning": "Новые и вернувшиеся",
+    "new": "Новые",
+    "returning": "Вернувшиеся",
+    "located": "Местоположение определено для {{located}} из {{total}} сессий просмотра."
+  },
+  "when": {
+    "title": "Когда смотрят ваши зрители",
+    "sub": "UTC · темнее = больше просмотров",
+    "cellTitle_one": "{{day}} {{hour}}:00 — {{count}} просмотр",
+    "cellTitle_few": "{{day}} {{hour}}:00 — {{count}} просмотра",
+    "cellTitle_many": "{{day}} {{hour}}:00 — {{count}} просмотров",
+    "cellTitle_other": "{{day}} {{hour}}:00 — {{count}} просмотра",
+    "hour": "{{hour}} ч"
+  },
+  "detail": {
+    "summary": "Голоса: {{votes}} · комментарии: {{comments}} · ${{payout}}"
+  },
+  "compare": {
+    "notEnough": "Недостаточно данных для сравнения.",
+    "start": "Начало",
+    "axis": "Удержание по ходу видео",
+    "end": "Конец",
+    "title": "Сравнить видео",
+    "pickA": "Выберите видео…",
+    "vs": "и",
+    "pickB": "Выберите другое…"
+  },
+  "loadError": "Не удалось загрузить вашу статистику.",
+  "emptyRange": "За этот период данных о просмотрах пока нет — выберите «Всё» или подождите, пока ваши видео посмотрят.",
+  "tiles": {
+    "avgViewDuration": "Средн. длительность просмотра",
+    "avgWatched": "Средн. досмотр",
+    "reactionsPerView": "Реакции / просмотр"
+  },
+  "subtotals": "Видео: {{videos}} · голоса: {{votes}} · комментарии: {{comments}} · ${{payout}} · средн. скорость {{rate}}×",
+  "sections": {
+    "trend": "Время просмотра в динамике",
+    "best": "Самые успешные",
+    "audience": "Ваша аудитория"
+  },
+  "openInNewTab": "Открыть видео в новой вкладке",
+  "footnote": "Статистика просмотров собирается в тестовом режиме и видна только вам.",
+  "video": {
+    "noData": "Данных пока нет",
+    "empty": "Для этого видео данных о просмотрах пока нет.",
+    "uniqueViewers": "Уникальные зрители",
+    "avgSpeed": "Средн. скорость",
+    "mostDropOff": "📉 Больше всего уходят на <b>{{time}}</b>",
+    "earlyDrop": "⚡ <b>{{pct}}%</b> ушли в первые 3 с",
+    "replayed": "🔁 Пересматривали:",
+    "retentionTitle": "Удержание аудитории",
+    "retentionSub": "доля зрителей, которые ещё смотрят в каждый момент",
+    "pctWatching": "смотрят {{pct}}%",
+    "replayTitle": "Чаще всего пересматривают",
+    "replaySub": "фрагменты, которые зрители смотрят и пересматривают чаще всего",
+    "hotSpot": "горячая точка",
+    "notEnoughReplays": "Пока мало повторных просмотров"
+  }
+}

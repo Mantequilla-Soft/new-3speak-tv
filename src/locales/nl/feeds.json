@@ -1,0 +1,123 @@
+{
+  "loadingMore": "Meer laden…",
+  "promoted": "Gepromoot",
+  "scrollLeft": "Naar links scrollen",
+  "scrollRight": "Naar rechts scrollen",
+  "errors": {
+    "fetchVideos": "Fout bij het ophalen van video's",
+    "loadVideos": "Video's laden mislukt",
+    "loadShorts": "Shorts laden mislukt"
+  },
+  "tabs": {
+    "all": "Alles",
+    "videos": "Video's",
+    "shorts": "Shorts",
+    "videosCount": "Video's ({{count}})",
+    "shortsCount": "Shorts ({{count}})"
+  },
+  "dateFilters": {
+    "all": "Altijd",
+    "today": "Vandaag",
+    "week": "Deze week",
+    "month": "Deze maand",
+    "justNow": "Zojuist"
+  },
+  "live": {
+    "title": "Nu live",
+    "badge": "● LIVE"
+  },
+  "newFromFollowing": {
+    "aria": "Nieuw van makers die je volgt",
+    "shorts_one": "{{count}} short",
+    "shorts_other": "{{count}} Shorts"
+  },
+  "firstUploads": {
+    "title": "Eerste uploads"
+  },
+  "newVideos": {
+    "title": "Nieuwe video's"
+  },
+  "home": {
+    "sections": {
+      "discover": "Ontdekken",
+      "home": "Home-feed",
+      "follow": "Volgend-feed",
+      "new": "Nieuwe content",
+      "interests": "Interesses"
+    },
+    "empty": "Hier is nog niets te zien.",
+    "viewAll": "Alles bekijken",
+    "dragToReorder": "Sleep om de volgorde te wijzigen",
+    "surfTitle": "Zappen: kies een onderwerp en kijk zoals naar tv",
+    "zapping": "Zappen"
+  },
+  "surf": {
+    "pageTitle": "Zappen",
+    "intro": "Kies een kanaal en leun achterover. We zetten de beste video's over dat onderwerp achter elkaar. Verveeld? Druk op <b>Zap</b>. Zin in iets anders? Wissel van kanaal.",
+    "backTo": "Terug naar CH {{number}} {{emoji}} {{title}}",
+    "surprise": "Verras me",
+    "yourChannels": "Je kanalen",
+    "nothingOnAir": "Er is nu niets te zien op {{channel}}",
+    "tuneFailed": "Afstemmen mislukt. Probeer het zo opnieuw.",
+    "remoteAria": "Afstandsbediening voor zappen",
+    "openGuide": "Zendergids openen",
+    "ch": "CH {{number}}",
+    "chLabel": "CH",
+    "channelHint": "CH {{number}}: {{title}}",
+    "channelHintKey": "CH {{number}}: {{title}} ({{key}})",
+    "tuningShort": "Afstemmen",
+    "tuning": "Afstemmen…",
+    "onAir": "In de lucht",
+    "changeChannel": "Ander kanaal",
+    "nextChannel": "Volgend kanaal",
+    "prevChannel": "Vorig kanaal",
+    "nextVideo": "Volgende video",
+    "nextVideoKey": "Volgende video (→)",
+    "zap": "Zap",
+    "findingNext": "Volgende zoeken…",
+    "stop": "Stoppen met zappen",
+    "stopTitle": "Stoppen met zappen (deze video blijft spelen)",
+    "guide": "Zendergids"
+  },
+  "discover": {
+    "searchPlaceholder": "Zoek video's, Shorts, audio, community's...",
+    "clearSearch": "Zoekopdracht wissen",
+    "searchFor": "Zoeken naar “{{term}}”",
+    "noResultsFor": "Geen resultaten voor “{{term}}”",
+    "types": {
+      "user": "Gebruikers",
+      "community": "Community's",
+      "video": "Video's",
+      "short": "Shorts",
+      "audio": "Audio",
+      "playlist": "Playlists"
+    },
+    "suggest": {
+      "tags": "Tags",
+      "titles": "Titels"
+    },
+    "dates": {
+      "today": "Vandaag",
+      "week": "Deze week",
+      "month": "Deze maand",
+      "year": "Dit jaar"
+    },
+    "boostRecent": "Recent eerst",
+    "filters": "Filters",
+    "date": "Datum",
+    "tag": "Tag",
+    "tagPlaceholder": "bijv. crypto, gaming...",
+    "community": "Community",
+    "communityPlaceholder": "Community's zoeken...",
+    "clearAllFilters": "Alle filters wissen",
+    "allHidden": "Alle soorten content zijn verborgen.",
+    "reenableFilters": "Alle filters weer inschakelen",
+    "groupTitle": "{{label}} ({{count}})",
+    "subscribers_one": "{{count}} abonnee",
+    "subscribers_other": "{{count}} abonnees",
+    "authors_one": "{{count}} auteur",
+    "authors_other": "{{count}} auteurs",
+    "views_one": "{{views}} weergave",
+    "views_other": "{{views}} weergaven"
+  }
+}

@@ -1,0 +1,113 @@
+{
+  "loading": "Memuat Shorts...",
+  "pleaseTryAgain": "silakan coba lagi",
+  "rotateDevice": "Silakan putar perangkatmu ke mode potret",
+  "pageTitle": {
+    "byAuthor": "3S | Shorts dari @{{author}}",
+    "default": "3S | Shorts"
+  },
+  "stories": {
+    "you": "Kamu"
+  },
+  "errors": {
+    "votingUnavailable": "Vote tidak tersedia untuk postingan ini",
+    "loginToVote": "Masuk untuk vote",
+    "loginToComplete": "Masuk untuk menyelesaikan operasi ini"
+  },
+  "feed": {
+    "ariaLabel": "Feed Shorts",
+    "discover": "Jelajahi",
+    "myInterests": "Minatku",
+    "interestsTitle": "Hanya Shorts yang sesuai minatmu",
+    "pickInterestsFirst": "Pilih beberapa minat dulu",
+    "noInterests": "Kamu belum memilih minat apa pun — pilih di Pengaturan",
+    "interestsExhausted": "Itu semua Shorts untuk minatmu — menampilkan Jelajahi",
+    "noInterestMatches": "Belum ada Shorts yang sesuai minatmu saat ini.",
+    "switchToDiscover": "Beralih ke Jelajahi",
+    "empty": "Tidak ada Shorts yang tersedia",
+    "loadError": "Gagal memuat Shorts: {{error}}"
+  },
+  "glow": {
+    "subtle": "Cahaya ambient: lembut",
+    "vivid": "Cahaya ambient: terang",
+    "off": "Cahaya ambient: nonaktif"
+  },
+  "playbackMode": {
+    "autoReplay": "Ulang Otomatis",
+    "autoSwipe": "Geser Otomatis",
+    "manual": "Manual"
+  },
+  "subtitles": {
+    "off": "Nonaktif"
+  },
+  "chain": {
+    "originalVideo": "Video asli",
+    "snap": "Snap",
+    "openShort": "Buka Shorts",
+    "watch": "Tonton",
+    "openSnap": "Buka snap",
+    "comment": "Komentar",
+    "reaction": "Reaksi",
+    "thisVideo": "Video ini",
+    "remix": "Remix",
+    "show": "tampilkan rantai reaksi"
+  },
+  "caption": {
+    "curatedBy": "Dikurasi oleh Mantequilla",
+    "curated": "Dikurasi",
+    "showOriginal": "Tampilkan asli",
+    "more": "selengkapnya"
+  },
+  "actions": {
+    "remix": "Remix",
+    "promote": "Promosikan"
+  },
+  "share": {
+    "defaultTitle": "3Speak Shorts",
+    "text": "Lihat Shorts dari {{user}} di 3Speak ini!",
+    "shared": "Berhasil dibagikan!",
+    "linkCopied": "Tautan tersalin ke clipboard!",
+    "failed": "Gagal membagikan"
+  },
+  "reshare": {
+    "loginRequired": "Masuk untuk membagikan ulang",
+    "unavailable": "Bagikan ulang tidak tersedia untuk postingan ini",
+    "done": "Berhasil dibagikan ulang!",
+    "failed": "Gagal membagikan ulang"
+  },
+  "remix": {
+    "noUrl": "URL video untuk remix tidak dapat ditemukan",
+    "loadFailed": "Gagal memuat video untuk remix"
+  },
+  "watchLater": {
+    "loginRequired": "Masuk untuk menyimpan Shorts",
+    "cantSave": "Shorts ini tidak dapat disimpan",
+    "removed": "Dihapus dari Tonton Nanti",
+    "saved": "Disimpan ke Tonton Nanti",
+    "failed": "Gagal: {{message}}"
+  },
+  "comments": {
+    "title": "Komentar",
+    "loading": "Memuat komentar...",
+    "closed": "Komentar ditutup",
+    "none": "Belum ada komentar",
+    "postRemoved": "Postingan Hive di balik Shorts ini sudah dihapus, jadi tidak bisa lagi menerima komentar atau vote.",
+    "beFirst": "Jadilah yang pertama berkomentar!",
+    "unavailable": "Komentar tidak tersedia untuk postingan ini",
+    "addPlaceholder": "Tambahkan komentar...",
+    "addPlaceholderBar": "Tambahkan komentar…",
+    "loginPlaceholder": "Masuk untuk berkomentar",
+    "send": "Kirim komentar",
+    "enterComment": "Silakan tulis komentar",
+    "loginToComment": "Silakan masuk untuk berkomentar",
+    "justNow": "Baru saja",
+    "posted": "Komentar berhasil dikirim!",
+    "failed": "Komentar gagal: {{message}}",
+    "translation": "Terjemahan",
+    "translationFailed": "Terjemahan gagal",
+    "reportComment": "Laporkan komentar",
+    "replyPlaceholder": "Tulis balasan...",
+    "viewReplies_other": "Lihat {{count}} balasan",
+    "hideReplies_other": "Sembunyikan {{count}} balasan"
+  }
+}

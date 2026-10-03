@@ -1,0 +1,348 @@
+{
+  "icons": {
+    "link": "Tautan",
+    "globe": "Situs web",
+    "podcast": "Podcast",
+    "email": "Email",
+    "phone": "Telepon",
+    "rss": "RSS",
+    "qrcode": "Kode QR",
+    "shop": "Belanja",
+    "bag": "Toko",
+    "dollar": "Uang",
+    "gift": "Hadiah",
+    "heart": "Dukung",
+    "star": "Bintang",
+    "thumbsup": "Suka",
+    "fire": "Api",
+    "bolt": "Petir",
+    "music": "Musik",
+    "headphones": "Audio",
+    "mic": "Mikrofon",
+    "video": "Video",
+    "film": "Film",
+    "tv": "TV",
+    "play": "Putar",
+    "camera": "Foto",
+    "image": "Gambar",
+    "palette": "Seni",
+    "pen": "Tulis",
+    "book": "Buku",
+    "newspaper": "Berita",
+    "graduation": "Kursus",
+    "code": "Kode",
+    "gamepad": "Gaming",
+    "briefcase": "Kerja",
+    "home": "Rumah",
+    "location": "Lokasi",
+    "map": "Peta",
+    "calendar": "Kalender",
+    "clock": "Jam",
+    "bell": "Peringatan",
+    "tag": "Tag",
+    "download": "Unduh",
+    "file": "File",
+    "users": "Komunitas",
+    "comment": "Komentar",
+    "share": "Bagikan",
+    "coffee": "Kopi",
+    "wallet": "Dompet",
+    "plus": "Lainnya",
+    "check": "Centang"
+  },
+  "fonts": {
+    "system": "Sistem",
+    "rounded": "Bulat",
+    "serif": "Serif",
+    "mono": "Mono",
+    "display": "Display",
+    "condensed": "Rapat",
+    "handwriting": "Tulisan tangan",
+    "grotesk": "Grotesk",
+    "humanist": "Humanis",
+    "geometric": "Geometris",
+    "slab": "Slab",
+    "elegant": "Elegan",
+    "typewriter": "Mesin ketik",
+    "marker": "Spidol",
+    "brush": "Kuas",
+    "palatino": "Palatino",
+    "wide": "Lebar"
+  },
+  "motion": {
+    "none": "Tidak ada",
+    "float": "Melayang",
+    "sway": "Bergoyang",
+    "pulse": "Berdenyut",
+    "wobble": "Bergetar",
+    "bounce": "Memantul",
+    "tilt": "Miring 3D",
+    "spin": "Berputar",
+    "shake": "Berguncang",
+    "breathe": "Bernapas"
+  },
+  "sectionTypes": {
+    "link": "Tautan",
+    "video": "Konten 3Speak",
+    "embed": "Tautan kaya",
+    "image": "Gambar",
+    "header": "Judul / teks"
+  },
+  "blockNames": {
+    "link": "tautan",
+    "header": "judul",
+    "image": "gambar",
+    "video": "video",
+    "embed": "embed"
+  },
+  "blockNamesPlural": {
+    "link": "tautan",
+    "header": "judul",
+    "image": "gambar",
+    "video": "video",
+    "embed": "embed"
+  },
+  "templates": {
+    "minimal": {
+      "name": "Minimal",
+      "niche": "Bersih & sederhana"
+    },
+    "neon": {
+      "name": "Neon Nights",
+      "niche": "Kreator / streamer"
+    },
+    "crypto": {
+      "name": "On-Chain",
+      "niche": "Kripto / Web3"
+    },
+    "gamer": {
+      "name": "Player One",
+      "niche": "Gaming"
+    },
+    "photographer": {
+      "name": "Exposure",
+      "niche": "Fotografi"
+    },
+    "podcaster": {
+      "name": "On Air",
+      "niche": "Podcast"
+    },
+    "fitness": {
+      "name": "Peak Form",
+      "niche": "Kebugaran / pelatih"
+    },
+    "writer": {
+      "name": "Longform",
+      "niche": "Penulis / blogger"
+    },
+    "chef": {
+      "name": "Mise en Place",
+      "niche": "Kuliner / memasak"
+    },
+    "travel": {
+      "name": "Wanderlust",
+      "niche": "Alam / traveling"
+    },
+    "business": {
+      "name": "Boardroom",
+      "niche": "Bisnis / profesional"
+    },
+    "artist": {
+      "name": "Palette",
+      "niche": "Seniman / visual"
+    },
+    "ocean": {
+      "name": "Tidewater",
+      "niche": "Santai / gaya hidup"
+    },
+    "musician": {
+      "name": "Amplified",
+      "niche": "Musik / band"
+    },
+    "developer": {
+      "name": "Terminal",
+      "niche": "Developer / teknologi"
+    },
+    "sports": {
+      "name": "Game Day",
+      "niche": "Olahraga / atlet"
+    }
+  },
+  "errors": {
+    "notLoggedIn": "Belum masuk",
+    "couldNotSaveToHive": "Tidak dapat menyimpan ke Hive"
+  },
+  "arrange": {
+    "title": "Judul",
+    "video": "Video",
+    "latestPosts": "Postingan terbaru",
+    "latestPostsBy": "Postingan terbaru · @{{account}}",
+    "dragToArrange": "Seret untuk mengatur"
+  },
+  "page": {
+    "latestPosts": "Postingan terbaru",
+    "seeNewestPosts": "Lihat postingan terbaru @{{user}} →",
+    "openLink": "Buka tautan",
+    "empty": "@{{user}} belum menambahkan tautan apa pun.",
+    "viewProfile": "Lihat profil 3Speak →",
+    "poweredBy": "Didukung oleh 3Speak"
+  },
+  "editor": {
+    "resetToDefault": "Kembalikan ke default",
+    "motion": "Gerakan",
+    "speed": "Kecepatan {{value}}",
+    "loop": "Ulang",
+    "runSeconds": "Jalan {{value}} dtk",
+    "picker": {
+      "videoLabel": "Pilih dari videoku",
+      "videoLoading": "Memuat videomu…",
+      "videoEmpty": "Tidak ada video 3Speak terbaru.",
+      "shortLabel": "Pilih dari Shorts-ku",
+      "shortLoading": "Memuat Shorts-mu…",
+      "shortEmpty": "Tidak ada Shorts 3Speak terbaru.",
+      "noChannel": "Tidak ada channel terdeteksi (apakah kamu sudah masuk?)",
+      "loadFailed": "Tidak dapat dimuat: {{error}}"
+    },
+    "toasts": {
+      "unfurlFailed": "Pratinjau tautan tidak dapat diambil",
+      "imageUploadFailed": "Gagal mengunggah gambar: {{error}}",
+      "tryAgain": "coba lagi",
+      "styleApplied": "Gaya diterapkan ke semua blok {{type}}",
+      "templateApplied": "“{{name}}” diterapkan — sesuaikan atau Urungkan",
+      "reverted": "Dikembalikan ke desainmu sebelumnya",
+      "saved": "Spotlight disimpan ke profil Hive-mu",
+      "saveFailed": "Tidak dapat menyimpan",
+      "linkCopied": "Tautan tersalin",
+      "uploadFailed": "Gagal mengunggah"
+    },
+    "link": {
+      "labelPlaceholder": "Label (mis. YouTube-ku)",
+      "type": "Jenis tautan",
+      "typeGroup": "Jenis",
+      "website": "Situs web / URL",
+      "email": "Email",
+      "phone": "Telepon",
+      "platformGroup": "Platform",
+      "yourname": "namamu",
+      "platformIconHint": "Ikonnya adalah logo {{platform}} — ganti ke “Situs web / URL” untuk memilih ikon sendiri.",
+      "icon": "Ikon",
+      "iconColor": "Warna ikon",
+      "iconBg": "Latar ikon"
+    },
+    "header": {
+      "text": "Teks",
+      "size": "Ukuran",
+      "large": "Besar",
+      "medium": "Sedang",
+      "small": "Kecil",
+      "align": "Perataan",
+      "left": "Kiri",
+      "center": "Tengah",
+      "right": "Kanan"
+    },
+    "image": {
+      "uploading": "Mengunggah…",
+      "upload": "Unggah gambar",
+      "urlPlaceholder": "…atau URL gambar",
+      "linkPlaceholder": "Tautan saat diklik (opsional)"
+    },
+    "video": {
+      "contentType": "Jenis konten",
+      "video": "Video",
+      "short": "Shorts",
+      "orPaste": "atau tempel tautan",
+      "pastePlaceholder": "Tempel tautan video 3Speak atau author/permlink",
+      "titlePlaceholder": "Judul di atas video (tertaut ke 3Speak)",
+      "hint": "Konten yang dipilih akan disematkan dan diputar di halamanmu."
+    },
+    "embed": {
+      "source": "Sumber",
+      "sourceLink": "Tautan (pratinjau kaya)",
+      "sourceHiveRecent": "Postingan Hive terbaruku",
+      "accountPlaceholder": "Nama pengguna Hive (kosongkan untuk akunmu sendiri)",
+      "showPosts_other": "Tampilkan {{count}} postingan",
+      "perRow": "{{value}} per baris",
+      "hiveRecentHint": "Postingan tingkat atas terbarumu (tanpa reblog atau cross-post). Diperbarui otomatis.",
+      "linkPlaceholder": "Tempel tautan apa saja — postingan Hive, Instagram, X, YouTube, artikel…",
+      "fetching": "Mengambil pratinjau…",
+      "noPreview": "Pratinjau tidak ditemukan — tetap akan tampil sebagai kartu tautan.",
+      "pasteHint": "Tempel tautan dan kami akan mengambil judul, deskripsi & gambarnya."
+    },
+    "style": {
+      "title": "Gaya",
+      "applyAllTitle": "Terapkan gaya ini ke setiap blok {{type}}",
+      "applyAll": "Terapkan ke semua {{types}}",
+      "background": "Latar",
+      "text": "Teks",
+      "backgroundPct": "Latar {{value}}%",
+      "radius": "Radius {{value}}",
+      "fontSizePct": "Ukuran font {{value}}%",
+      "paddingPx": "Padding {{value}}px",
+      "thumbnailPct": "Thumbnail {{value}}%",
+      "border": "Garis tepi",
+      "thicknessPx": "Ketebalan {{value}}px",
+      "opacityPct": "Opasitas {{value}}%",
+      "shadow": "Bayangan",
+      "strengthPct": "Kekuatan {{value}}%",
+      "color": "Warna",
+      "blur": "Blur {{value}}",
+      "spread": "Sebaran {{value}}",
+      "inset": "Inset",
+      "cardDelayMs": "Jeda kartu {{value}}ms"
+    },
+    "tagline": "Tautan & videomu dalam satu halaman",
+    "openPage": "Buka halaman",
+    "templates": {
+      "title": "Template",
+      "hint": "Pilih desain untuk mengisi semuanya — bio-mu tetap disimpan, dan kamu bisa Urungkan.",
+      "undo": "Urungkan template — kembali ke desainku"
+    },
+    "profile": {
+      "title": "Profil",
+      "headlinePlaceholder": "Judul / bio singkat (opsional)",
+      "avatarSizePct": "Ukuran avatar {{value}}%",
+      "avatarShadowPct": "Bayangan avatar {{value}}%",
+      "avatarGlow": "Cahaya avatar",
+      "glowSize": "Ukuran cahaya {{value}}",
+      "channelButtonText": "Teks tombol channel"
+    },
+    "page": {
+      "title": "Gaya halaman",
+      "solid": "Polos",
+      "gradient": "Gradien",
+      "image": "Gambar",
+      "color2": "Warna 2",
+      "angle": "Sudut {{value}}°",
+      "uploadBackground": "Unggah latar",
+      "imageSet": "Gambar diatur ✓",
+      "overlay": "Overlay",
+      "overlay2": "Overlay 2",
+      "none": "Tidak ada",
+      "overlayOpacityPct": "Opasitas overlay {{value}}%",
+      "overlayAngle": "Sudut overlay {{value}}°",
+      "colors": "Warna",
+      "buttonBg": "Latar tombol",
+      "buttonText": "Teks tombol",
+      "buttons": "Tombol",
+      "buttonStyle": "Gaya tombol",
+      "soft": "Lembut",
+      "fill": "Isi",
+      "outline": "Garis luar",
+      "cornerRadius": "Radius sudut {{value}}",
+      "textStyle": "Gaya teks (nama, bio & blok teks)",
+      "font": "Font",
+      "normal": "Normal",
+      "italic": "Miring",
+      "bold": "Tebal",
+      "boldItalic": "Tebal Miring",
+      "strong": "Kuat",
+      "textBorderPx": "Garis tepi teks {{value}}px",
+      "borderColor": "Warna garis tepi"
+    },
+    "addBlock": "Tambah blok",
+    "empty": "Tambahkan tautan, video, atau gambar pertamamu di atas.",
+    "arrangeHint": "Seret <grip></grip> untuk mengatur · jatuhkan blok ke blok lain untuk menyandingkannya · klik blok untuk mengeditnya langsung di sini",
+    "livePreview": "Pratinjau langsung",
+    "previewTitle": "Pratinjau Spotlight"
+  }
+}

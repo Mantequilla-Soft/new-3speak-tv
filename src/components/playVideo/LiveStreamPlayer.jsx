@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
+import { useTranslation } from 'react-i18next';
 import { HangoutsProvider, StandaloneWatch, StreamVideo, StreamViewerCount, ChatPanel, CollabRequest, useStreamLive } from '@snapie/hangouts-react';
 import { defaultEndpoint, findRoomEndpoint } from '../../utils/hangoutsEndpoints';
 import { useStreamSession } from '../../hooks/useStreamSession';
@@ -20,15 +21,15 @@ const LK_URL = import.meta.env.VITE_LIVEKIT_URL || 'wss://livekit.3speak.tv';
  * inside <StandaloneWatch> to read the room's live state.
  */
 function VodProcessingNotice({ expected }) {
+  const { t } = useTranslation();
   const live = useStreamLive();
   if (live || !expected) return null;
   return (
     <div className="live-stream-player__vod">
       <span className="live-stream-player__vod-spinner" aria-hidden="true" />
-      <strong>The recording is processing…</strong>
+      <strong>{t('comments.live.vodProcessing')}</strong>
       <span>
-        This stream has ended. The video will replace it here as soon as the
-        encoder is finished — no need to reload.
+        {t('comments.live.vodProcessingHint')}
       </span>
     </div>
   );
@@ -47,6 +48,7 @@ function VodProcessingNotice({ expected }) {
  * same room and double the viewer count.
  */
 export default function LiveStreamPlayer({ roomName, chatSlot = null, onChatSent = null, vodAssetPending = false, onRoomMeta = null }) {
+  const { t } = useTranslation();
   // Resolve which deployment hosts this room before connecting.
   const [endpoint, setEndpoint] = useState(() => defaultEndpoint());
   useEffect(() => {
@@ -93,20 +95,20 @@ export default function LiveStreamPlayer({ roomName, chatSlot = null, onChatSent
                 server recording that choice. */}
             <VodProcessingNotice expected={!!roomMeta?.willPublishVod || vodAssetPending} />
             <StreamViewerCount render={(c) => (
-              <span className="live-stream-player__viewers">👁 {c} watching</span>
+              <span className="live-stream-player__viewers">{t('comments.live.watching', { count: c })}</span>
             )} />
             <StreamBoostButton variant="overlay" />
             <div className="live-stream-player__collab">
               {needsSignIn
-                ? <StreamSignInButton variant="overlay" label="Sign in to raise your hand" onSignIn={signIn} busy={signingIn} />
+                ? <StreamSignInButton variant="overlay" label={t('comments.live.signInRaiseHand')} onSignIn={signIn} busy={signingIn} />
                 : <CollabRequest canRequest={canInteract} />}
             </div>
             {chatSlot && createPortal(
               <ChatPanel
                 readOnly={!canInteract}
                 readOnlyNotice={needsSignIn
-                  ? <StreamSignInButton label="Sign in to chat" onSignIn={signIn} busy={signingIn} />
-                  : '🔒 Sign in to join the chat.'}
+                  ? <StreamSignInButton label={t('comments.live.signInChat')} onSignIn={signIn} busy={signingIn} />
+                  : t('comments.live.signInJoinChat')}
                 onMessageSent={onChatSent || undefined}
               />,
               chatSlot,

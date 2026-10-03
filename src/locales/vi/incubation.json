@@ -1,0 +1,538 @@
+{
+  "tracks": {
+    "viewer": {
+      "title": "Chủ yếu là người xem",
+      "body": "Tôi ở đây để xem, bình luận và theo dõi các nhà sáng tạo."
+    },
+    "creator": {
+      "title": "Chủ yếu là nhà sáng tạo",
+      "body": "Tôi muốn đăng video, Shorts và xây dựng kênh."
+    },
+    "advertiser": {
+      "title": "Nhà quảng cáo",
+      "body": "Tôi đại diện cho một thương hiệu và muốn tiếp cận người xem 3Speak."
+    }
+  },
+  "tips": {
+    "shortsCamera": {
+      "title": "Shorts là một tab, không phải ứng dụng khác",
+      "body": "Mở Shorts từ thanh trên cùng để xem, hoặc dùng Chia sẻ để đăng. Clip dọc từ điện thoại của bạn dùng được ngay.",
+      "cta": "Mở Shorts"
+    },
+    "searchSlash": {
+      "title": "Nhấn / để tìm kiếm",
+      "body": "Ở bất kỳ đâu trên trang, phím gạch chéo sẽ đưa bạn vào ô tìm kiếm. Nó tìm trong video, nhà sáng tạo và cộng đồng."
+    },
+    "communities": {
+      "title": "Cộng đồng tập hợp mọi người quanh một chủ đề",
+      "body": "Tham gia vài cộng đồng và video của họ sẽ bắt đầu xuất hiện trong bảng tin của bạn. Bạn cũng có thể đăng vào cộng đồng, để đúng người nhìn thấy.",
+      "cta": "Duyệt cộng đồng"
+    },
+    "followFeed": {
+      "title": "Những người bạn theo dõi có bảng tin riêng",
+      "body": "Khi bạn đã theo dõi vài nhà sáng tạo, bảng tin theo dõi chỉ hiển thị video của họ. Đó là cách nhanh nhất để thôi phải lướt qua những thứ bạn không quan tâm.",
+      "cta": "Xem ngay"
+    },
+    "interests": {
+      "title": "Cho chúng tôi biết bạn thích gì",
+      "body": "Chọn vài chủ đề trong Cài đặt và bảng tin chính sẽ ưu tiên chúng ngay lập tức. Cách này hiệu quả hơn mọi lần lướt."
+    },
+    "hideWatched": {
+      "title": "Video đã xem có thể biến mất khỏi bảng tin",
+      "body": "Cài đặt có công tắc \"ẩn video đã xem\", bật theo mặc định, để một video không cứ đeo bám bạn sau khi bạn đã xem."
+    },
+    "timestamps": {
+      "title": "Bình luận vào đúng một khoảnh khắc",
+      "body": "Khi video đang phát, bình luận có thể kèm mốc thời gian bạn đang xem. Người đọc sẽ có liên kết dẫn thẳng đến giây đó."
+    },
+    "badges": {
+      "title": "Huy hiệu được trao, không phải tự nhận",
+      "body": "Mọi người trên Hive được trao huy hiệu cho các sự kiện và cột mốc. Mở một huy hiệu để xem tất cả những ai đang sở hữu nó và họ đăng gì.",
+      "cta": "Xem huy hiệu"
+    },
+    "audio": {
+      "title": "3Speak cũng có âm thanh",
+      "body": "Podcast và nhạc nằm ở mục Âm thanh trên thanh trên cùng, với trình phát riêng. Bạn có thể đăng âm thanh giống như đăng video.",
+      "cta": "Mở Âm thanh"
+    },
+    "backlog": {
+      "title": "Không có gì bạn đăng bây giờ bị lãng phí",
+      "body": "Mọi thứ bạn đăng trong giai đoạn khởi động đều có thể được đăng lại lên Hive dưới tên của chính bạn khi tài khoản của bạn sẵn sàng, và bạn chọn những gì sẽ mang theo."
+    }
+  },
+  "trackChooser": {
+    "saveFailed": "Chưa lưu được. Vui lòng thử lại.",
+    "saving": "Đang lưu..."
+  },
+  "trackQuestion": {
+    "title": "Điều gì đưa bạn đến với 3Speak?",
+    "intro": "Con đường đến tài khoản Hive của bạn phụ thuộc vào điều này: người xem thì xem và tham gia, nhà sáng tạo thì đăng nội dung, còn nhà quảng cáo thì thiết lập thương hiệu."
+  },
+  "tipCard": {
+    "aria": "Mẹo",
+    "dismiss": "Bỏ qua mẹo",
+    "takeALook": "Xem thử"
+  },
+  "progress": {
+    "tasks": {
+      "video": {
+        "label_other": "Tải lên {{count}} video",
+        "hint": "Chia sẻ đôi điều về bạn và kênh của bạn sẽ nói về điều gì.",
+        "why": "Đây là điều đầu tiên đội ngũ xem khi xét duyệt bạn, và là điều đầu tiên khách truy cập thấy khi mở kênh của bạn.",
+        "counts": {
+          "0": "Bất kỳ video nào bạn xuất bản từ studio tải lên.",
+          "1": "Video vẫn thuộc về bạn. Khi được nâng cấp, bạn chọn bài nào trong số này sẽ được xuất bản lên Hive dưới tên của chính bạn."
+        },
+        "cta": "Tải video lên"
+      },
+      "short": {
+        "label_other": "Đăng {{count}} Shorts",
+        "hint": "Tham gia 3Speak Shorts và tải lên vài khoảnh khắc đời thường hoặc những câu chuyện bạn muốn chia sẻ.",
+        "why": "Shorts là cách nhanh nhất để được phát hiện. Chúng phát trong bảng tin gồm những nhà sáng tạo mà mọi người chưa theo dõi, nên một Short có thể vươn xa hơn kênh của chính bạn.",
+        "counts": {
+          "0": "Video dọc được đăng từ trình tải Shorts.",
+          "1": "Về bất kỳ chủ đề nào bạn thích."
+        },
+        "cta": "Đăng Shorts"
+      },
+      "follow": {
+        "label_other": "Theo dõi {{count}} nhà sáng tạo",
+        "hint": "Xây dựng mạng lưới những người cùng chí hướng, hoặc những nhà sáng tạo bạn thấy thú vị.",
+        "why": "Danh sách theo dõi là thứ biến bảng tin chính thành bảng tin của riêng bạn. Nó sẽ đi cùng bạn lên Hive khi bạn được nâng cấp.",
+        "counts": {
+          "0": "Những nhà sáng tạo bạn đang theo dõi.",
+          "1": "Bỏ theo dõi ai đó sẽ làm giảm số đếm, nên mục này ghi nhận những người bạn thực sự theo dõi chứ không phải số lần bạn bấm nút."
+        },
+        "cta": "Tìm nhà sáng tạo"
+      },
+      "comment": {
+        "label_other": "Viết {{count}} bình luận",
+        "why": "Bình luận là cách mọi người tìm thấy bạn trước khi bạn có khán giả. Một phản hồi thật lòng dưới video của người khác sẽ giúp bạn nhiều hơn một video tải lên mà chưa ai xem.",
+        "cta": "Tìm gì đó để phản hồi",
+        "hint_other": "Bình luận được tính khi dài ít nhất {{count}} ký tự. Một suy nghĩ thật sự, không chỉ là “hay quá”.",
+        "counts": {
+          "minChars_other": "Ít nhất {{count}} ký tự bằng lời của chính bạn.",
+          "realThought": "Một suy nghĩ thật sự thay vì chỉ một từ.",
+          "othersPost": "Trên bài đăng của người khác. Phản hồi dưới video của chính bạn, hoặc trả lời bình luận của chính bạn, là nói chuyện với chính mình và không được tính."
+        }
+      },
+      "watch": {
+        "labelHours_other": "Xem {{count}} giờ trên 3Speak",
+        "labelMinutes_other": "Xem {{count}} phút trên 3Speak",
+        "hint": "Bất kỳ video nào. Được tính khi bạn thực sự đang xem.",
+        "why": "Việc xem cho thấy bạn ở đây để tham gia chứ không chỉ để đăng bài. Đây là mục tiêu mà hầu hết mọi người hoàn thành mà không cần cố gắng.",
+        "counts": {
+          "0": "Thời gian trên chính 3Speak. Cùng một video được nhúng trên trang khác thì không được tính.",
+          "1": "Một lần cho mỗi video. Xem lại một video sẽ nâng thời gian tốt nhất của video đó, không bao giờ cộng dồn, và không một video nào có thể tự mình đóng góp toàn bộ.",
+          "2": "Thời gian phát thực tế, nên tua nhanh video không bị phạt và phát chậm cũng không kéo dài thêm thời gian.",
+          "3": "Trên màn hình. Video để phát trong tab chạy nền không được tính.",
+          "4": "Không tính video của chính bạn.",
+          "5": "Không có gì được ghi lại khi bạn xem ở chế độ riêng tư."
+        },
+        "cta": "Xem gì đó"
+      },
+      "time": {
+        "label_other": "Ở đây {{count}} ngày",
+        "hint": "Mục này tự hoàn thành. Bạn không cần làm gì.",
+        "why": "Một tài khoản mới xuất hiện một giờ trước và một tài khoản đã ở đây vài ngày trông giống nhau trên giấy tờ. Số ngày là điều phân biệt chúng, nên ai cũng chờ cùng một khoảng thời gian ngắn.",
+        "counts": {
+          "fullDays_other": "{{count}} ngày tròn kể từ ngày bạn đăng ký.",
+          "forYouWhen": "Với bạn, đó là {{when}}. Các mục tiêu khác đều có thể hoàn thành trước thời điểm đó.",
+          "otherGoals": "Các mục tiêu khác đều có thể hoàn thành trước thời điểm đó.",
+          "keepsCounting": "Thời gian vẫn tiếp tục được tính dù bạn có ở đây hay không, nên bạn không cần làm gì để duy trì."
+        }
+      },
+      "subscription": {
+        "label_other": "Tham gia {{count}} cộng đồng",
+        "hint": "Tìm các cộng đồng về những thứ bạn thích xem hoặc thích làm.",
+        "why": "Cộng đồng tập hợp các video về một chủ đề và những người quan tâm đến nó. Tham gia một cộng đồng sẽ lấp đầy bảng tin của bạn bằng nhiều thứ bạn thích hơn, và với nhà sáng tạo, đó là nơi một kênh mới tìm được những người xem đầu tiên.",
+        "counts": {
+          "0": "Các cộng đồng bạn đang là thành viên.",
+          "1": "Rời khỏi một cộng đồng sẽ làm giảm số đếm."
+        },
+        "cta": "Duyệt cộng đồng"
+      },
+      "profile": {
+        "label_other": "Thiết lập hồ sơ thương hiệu",
+        "hint": "Tên thương hiệu, lĩnh vực hoạt động và logo của bạn.",
+        "why": "Người xem, và đội ngũ xét duyệt bạn, nhìn thấy ai đứng sau quảng cáo trước tiên. Một hồ sơ đầy đủ giúp thương hiệu dễ nhận biết và đáng tin cậy."
+      },
+      "contact": {
+        "label_other": "Thêm thông tin liên hệ kinh doanh",
+        "hint": "Một email, cùng địa chỉ hoặc trang web của bạn.",
+        "why": "Trước khi một quảng cáo chạy, đội ngũ cần một cách thực sự để liên hệ với doanh nghiệp đứng sau. Email và địa chỉ của bạn được giữ riêng tư: chúng không bao giờ được lưu trên blockchain hay hiển thị ở bất kỳ đâu.",
+        "counts": {
+          "0": "Email: bắt buộc.",
+          "1": "Địa chỉ: không bắt buộc.",
+          "2": "Bạn cần có địa chỉ HOẶC trang web trong hồ sơ thương hiệu ở trên, ít nhất một trong hai."
+        }
+      }
+    },
+    "duration": {
+      "s": "{{s}} giây",
+      "hm": "{{h}} giờ {{m}} phút",
+      "h": "{{h}} giờ",
+      "m": "{{m}} phút"
+    },
+    "title": "Con đường đến tài khoản Hive của bạn",
+    "needsTrack": "Danh sách việc cần làm của bạn phụ thuộc vào điều đưa bạn đến với 3Speak.",
+    "choosePath": "Chọn con đường của bạn",
+    "doneCount": "Đã xong {{done}} / {{total}}",
+    "overallAria": "Tiến độ tổng thể",
+    "hideDetails": "Ẩn chi tiết",
+    "showLeft": "Hiện những gì còn lại",
+    "whatCounts": "Điều gì được tính",
+    "reviewDone": "Đã xong tất cả. Đội ngũ sẽ xét duyệt kênh của bạn và nâng cấp cho bạn. Bạn không cần làm gì thêm.",
+    "reviewPending": "Khi bạn đã hoàn thành tất cả những mục này, đội ngũ sẽ xét duyệt kênh của bạn và nâng cấp cho bạn."
+  },
+  "navProgress": {
+    "chooseTitle": "Cho chúng tôi biết điều gì đưa bạn đến với 3Speak để xem con đường đến tài khoản Hive của bạn.",
+    "titleComplete_other": "Đã xong tất cả {{count}} mục tiêu (100%). Đội ngũ sẽ xét duyệt kênh của bạn.",
+    "titleProgress_other": "Đã đi được {{pct}}% đến tài khoản Hive của bạn. Đã hoàn thành {{done}} / {{count}} mục tiêu.",
+    "ariaComplete_other": "Tiến độ của bạn: 100%, đã xong tất cả {{count}} mục tiêu",
+    "ariaProgress_other": "Tiến độ của bạn: {{pct}}%, đã hoàn thành {{done}} / {{count}} mục tiêu",
+    "celebrate": "Đã xong tất cả mục tiêu để có tài khoản Hive."
+  },
+  "welcome": {
+    "what": {
+      "title": "Chào mừng đến với 3Speak",
+      "p1": "3Speak là nền tảng video được xây dựng trên <b>Hive</b>, một blockchain công khai. Video ở đây không thuộc về chúng tôi: chúng thuộc về những người đăng tải, và có thể nhận phần thưởng thật từ những người xem."
+    },
+    "warmup": {
+      "title": "Bạn đang trong giai đoạn khởi động",
+      "p1": "Một tài khoản Hive là thật và vĩnh viễn, và phải có ai đó trả tiền cho nó. Vì vậy thay vì yêu cầu bạn bất cứ điều gì từ đầu, chúng tôi cho bạn một cái tên và một nơi để đăng nội dung ngay lập tức.",
+      "p2": "Mọi thứ bạn tạo trong giai đoạn khởi động đều nằm trên 3Speak. Khi bạn sẵn sàng, đội ngũ sẽ xét duyệt kênh của bạn và cấp cho bạn một tài khoản Hive của riêng bạn, miễn phí. Video, Shorts và danh sách theo dõi của bạn khi đó sẽ được đưa lên blockchain dưới tên của chính bạn, và bạn chọn những gì sẽ mang theo."
+    },
+    "do": {
+      "title": "Những gì bạn có thể làm ngay bây giờ",
+      "upload": "Tải video lên, giống hệt như mọi người khác ở đây.",
+      "shorts": "Đăng Shorts từ điện thoại hoặc máy tính.",
+      "comment": "Bình luận về mọi thứ, kể cả video của những người đã ở trên Hive.",
+      "follow": "Theo dõi nhà sáng tạo và tham gia cộng đồng.",
+      "watch": "Xem. Lịch sử xem và bảng tin là của bạn ngay từ ngày đầu tiên.",
+      "aside": "Một vài thứ phải chờ đến khi bạn có tài khoản: nhận phần thưởng và gửi tip. Những việc đó liên quan đến tiền thật, nên cần một tài khoản thực sự thuộc về bạn."
+    },
+    "path": {
+      "p1": "Hồ sơ của bạn hiển thị một danh sách ngắn những việc cần làm, tùy thuộc vào mục đích bạn đến đây: người xem thì xem và tham gia, nhà sáng tạo thì đăng nội dung, còn nhà quảng cáo thì thiết lập thương hiệu.",
+      "p2": "Đây không phải bài kiểm tra. Đơn giản đó là cách chúng tôi phân biệt một tài khoản thật với một tài khoản trống hoặc có ý đồ xấu. Khi hoàn thành danh sách, đội ngũ sẽ xét duyệt và nâng cấp cho bạn sớm nhất có thể.",
+      "perkEarn": "Bài đăng có thu nhập",
+      "perkKeys": "Khóa chỉ mình bạn nắm giữ",
+      "perkNetwork": "Toàn bộ mạng lưới Hive"
+    },
+    "showList": "Cho tôi xem danh sách",
+    "decideLater": "Quyết định sau"
+  },
+  "profile": {
+    "unlocks": {
+      "earn": {
+        "title": "Bài đăng của bạn bắt đầu có thu nhập.",
+        "body": "Video trên Hive có thể được bất kỳ ai xem thưởng bằng HIVE và HBD, và có thể chạy quảng cáo mà bạn được chia một phần."
+      },
+      "publish": {
+        "title": "Xuất bản mọi thứ bạn đã tạo ở đây.",
+        "body": "Video, Shorts và danh sách theo dõi trên trang này có thể được đăng lên chuỗi dưới tên của chính bạn, và bạn chọn những gì."
+      },
+      "buttons": {
+        "title": "Vote, gửi tip, theo dõi và tạo danh sách phát.",
+        "body": "Tất cả các nút đang bị làm mờ với bạn hôm nay."
+      },
+      "keys": {
+        "title": "Khóa chỉ mình bạn nắm giữ.",
+        "body": "Không ai có thể khóa bạn ra ngoài, và cùng một thông tin đăng nhập dùng được trên mọi ứng dụng Hive, không chỉ 3Speak."
+      },
+      "ecosystem": {
+        "title": "Trở thành một phần của hệ sinh thái Hive toàn cầu.",
+        "body": "3Speak là một ứng dụng trong cả một mạng lưới ứng dụng: blog, cộng đồng, trò chơi, chợ và nhiều hơn nữa, tất cả dùng chung một tài khoản và cùng một danh sách theo dõi."
+      }
+    },
+    "advertiserUnlocks": {
+      "book": {
+        "title": "Đặt quảng cáo trên khắp 3Speak.",
+        "body": "Quảng cáo video, quảng cáo Shorts, banner trình phát, ticker và quảng cáo trước khi tải lên, từ một ngày đến ba tháng."
+      },
+      "pay": {
+        "title": "Thanh toán từ ví của chính bạn.",
+        "body": "Bằng HBD hoặc HIVE, trực tiếp từ tài khoản của bạn. Không cần thẻ, không qua trung gian."
+      },
+      "results": {
+        "title": "Xem kết quả quảng cáo của bạn.",
+        "body": "Lượt phát và lượt nhấp cho mỗi lần đặt, và được hoàn tín dụng vào lần đặt tiếp theo nếu một lần đặt không đạt yêu cầu."
+      },
+      "customers": {
+        "title": "Trò chuyện với khách hàng, nếu bạn muốn.",
+        "body": "Đăng video, trả lời bình luận và theo dõi mọi người dưới tên thương hiệu của bạn."
+      },
+      "keys": {
+        "title": "Khóa chỉ mình bạn nắm giữ.",
+        "body": "Không ai có thể khóa bạn ra ngoài, và cùng một thông tin đăng nhập dùng được trên mọi ứng dụng Hive, không chỉ 3Speak."
+      }
+    },
+    "loadFailed": "Không thể tải hồ sơ này.",
+    "badge": {
+      "onHive": "Trên Hive",
+      "advertiser": "Nhà quảng cáo · đang bắt đầu",
+      "gettingStarted": "Đang bắt đầu"
+    },
+    "stats": {
+      "posts_other": "<b>{{count}}</b>bài đăng",
+      "followers_other": "<b>{{count}}</b>người theo dõi",
+      "following_other": "<b>{{count}}</b>đang theo dõi"
+    },
+    "editProfile": "Chỉnh sửa hồ sơ",
+    "note": {
+      "graduated": "Hiện đã có trên Hive với tên <userLink>@{{user}}</userLink>. Mọi thứ bên dưới được tạo trước thời điểm đó.",
+      "advertiser": "Đây là trang thương hiệu của bạn trên 3Speak. Hoàn thành các bước bên dưới và đội ngũ sẽ xét duyệt thương hiệu của bạn. Sau khi được duyệt, bạn sẽ nhận một tài khoản Hive: đó là tài khoản nhà quảng cáo, dùng để đặt quảng cáo và thanh toán.",
+      "own": "Đây là cách người khác nhìn thấy bạn. Bài đăng của bạn nằm trên 3Speak và chưa có trên blockchain Hive, nên chúng chưa nhận phần thưởng. Điều đó sẽ thay đổi khi bạn có tài khoản sau khi hoàn thành tất cả nhiệm vụ bên dưới.",
+      "visitor": "Người mới, chưa có trên Hive. Các bài đăng này nằm trên 3Speak, nên hiện chưa nhận phần thưởng. Dù vậy, hãy cứ theo dõi và bình luận: sự động viên sớm là điều giúp một người vượt qua những tuần đầu tiên. Khi họ có tài khoản Hive, chúng tôi sẽ báo cho bạn, để bạn có thể theo dõi họ ở đó."
+    },
+    "tabs": {
+      "aria": "Các mục hồ sơ",
+      "goals": "Mục tiêu của bạn",
+      "uploads": "Video tải lên",
+      "comments": "Bình luận",
+      "followers": "Người theo dõi",
+      "following": "Đang theo dõi"
+    },
+    "videosAndShorts": "Video và Shorts",
+    "market": {
+      "audience": "Khán giả đang chờ quảng cáo của bạn",
+      "format": "Chọn định dạng phù hợp với thông điệp của bạn"
+    },
+    "brandVideos": "Video của thương hiệu bạn",
+    "optional": "không bắt buộc",
+    "empty": {
+      "advertiser": "Video ở đây dùng để trò chuyện với khách hàng, nếu bạn muốn. Quảng cáo được đặt riêng trên trang Quảng cáo và không cần video nào.",
+      "own": "Chưa có gì. Lần tải lên đầu tiên sẽ đánh dấu hoàn thành một mục trong danh sách bên cạnh.",
+      "visitor": "Chưa đăng gì."
+    },
+    "videos": "Video",
+    "unlocksTitleAdvertiser": "Tài khoản nhà quảng cáo mang lại cho bạn những gì",
+    "unlocksTitle": "Tài khoản Hive mang lại cho bạn những gì",
+    "fineprint": "Được lưu vào hồ sơ 3Speak của bạn. Nó sẽ được đưa lên Hive cùng mọi thứ khác khi bạn có tài khoản."
+  },
+  "activity": {
+    "empty": {
+      "comments": "Chưa nói gì.",
+      "followers": "Chưa có ai theo dõi họ.",
+      "following": "Họ chưa theo dõi ai."
+    },
+    "loadFailed": "Không thể tải.",
+    "publishedToHive": "đã xuất bản lên Hive",
+    "onHive": "trên Hive"
+  },
+  "bell": {
+    "unreadAria_other": "Thông báo, {{count}} chưa đọc",
+    "empty": "Chưa có gì. Khi ai đó phản hồi hoặc thích video của bạn, thông báo sẽ hiện ở đây.",
+    "replied": "<b>@{{name}}</b> đã phản hồi bài đăng của bạn",
+    "liked": "<b>@{{name}}</b> đã thích bài đăng của bạn"
+  },
+  "rail": {
+    "aria": "Mới trên 3Speak",
+    "title": "Mới bắt đầu",
+    "body": "Người mới, chưa có trên Hive. Các bài đăng này nằm trên 3Speak. Hãy chào đón họ thật nồng nhiệt trước khi họ gia nhập Hive."
+  },
+  "sessionSync": {
+    "signedInAs": "Bạn đang đăng nhập với tư cách @{{name}}",
+    "caughtUp": "Tài khoản Hive của bạn đã sẵn sàng, nên thiết bị này đã được cập nhật theo.",
+    "openFailed": "Không thể mở Butter Auth",
+    "title": "Kết nối lại phiên của bạn",
+    "lede": "Thiết bị này đã mất kết nối với tài khoản của bạn, nên 3Speak không thể tải bài đăng, tiến độ hay thông báo của bạn cho đến khi kết nối lại.",
+    "text": "Không có gì bị mất. Mọi thứ bạn đã tạo đều nằm trên tài khoản của bạn, không phải trong trình duyệt này. Kết nối lại thường chỉ mất một giây và không cần nhập gì.",
+    "opening": "Đang mở…",
+    "reconnect": "Kết nối lại"
+  },
+  "admin": {
+    "title": "Chế độ xem quản trị",
+    "note": "Chỉ quản trị viên 3Speak mới thấy bảng này.",
+    "brandProfile": "Hồ sơ thương hiệu",
+    "public": "công khai",
+    "fields": {
+      "handle": "Tên định danh",
+      "brandName": "Tên thương hiệu",
+      "logo": "Logo",
+      "about": "Giới thiệu",
+      "website": "Trang web",
+      "location": "Vị trí",
+      "interests": "Sở thích",
+      "activity": "Hoạt động",
+      "email": "Email",
+      "address": "Địa chỉ",
+      "contactGoal": "Mục tiêu liên hệ",
+      "firstSaved": "Lưu lần đầu",
+      "lastChanged": "Thay đổi lần cuối",
+      "butrauthUser": "Người dùng ButrAuth"
+    },
+    "activityLine": "{{posts}} bài đăng · {{followers}} người theo dõi · {{following}} đang theo dõi",
+    "notSet": "chưa đặt",
+    "none": "không có",
+    "privateContact": "Liên hệ riêng tư",
+    "privateNote": "chỉ quản trị viên, không bao giờ lên chuỗi",
+    "notGiven": "chưa cung cấp",
+    "met": "Đã đạt",
+    "notMet": "Chưa đạt",
+    "unknown": "không rõ",
+    "noContact": "Chưa lưu thông tin liên hệ kinh doanh nào."
+  },
+  "contact": {
+    "savedComplete": "Đã lưu. Chỉ đội ngũ 3Speak mới thấy được.",
+    "savedIncomplete": "Đã lưu. Thêm địa chỉ của bạn, hoặc trang web trên hồ sơ, để hoàn thành bước này.",
+    "privateNote": "<b>Riêng tư.</b> Email và địa chỉ của bạn không bao giờ được lưu trên blockchain và không bao giờ hiển thị trên hồ sơ hay bất kỳ đâu khác. Chỉ đội ngũ 3Speak thấy chúng, để liên hệ với bạn về quảng cáo.",
+    "email": "Email",
+    "required": "bắt buộc",
+    "emailPlaceholder": "ban@thuonghieucuaban.com",
+    "address": "Địa chỉ",
+    "addressOptional": "không bắt buộc, trừ khi hồ sơ của bạn không có trang web",
+    "ph": {
+      "line1": "Số nhà và tên đường",
+      "line2": "Địa chỉ dòng 2",
+      "postalCode": "Mã bưu chính",
+      "city": "Thành phố",
+      "region": "Tỉnh hoặc khu vực",
+      "country": "Quốc gia"
+    },
+    "addressHint": "Địa chỉ được tính khi đã điền đường, thành phố và quốc gia. Không có địa chỉ? Hãy thêm trang web vào hồ sơ thương hiệu thay thế.",
+    "save": "Lưu thông tin liên hệ"
+  },
+  "brand": {
+    "saved": "Đã lưu hồ sơ thương hiệu",
+    "name": "Tên thương hiệu",
+    "namePlaceholder": "Thương hiệu hoặc công ty của bạn",
+    "about": "Thương hiệu của bạn làm gì",
+    "aboutPlaceholder": "Một hoặc hai câu mà người xem sẽ hiểu.",
+    "logo": "Logo",
+    "uploading": "Đang tải lên…",
+    "replaceLogo": "Thay logo",
+    "uploadLogo": "Tải logo lên",
+    "logoHint": "Hiển thị dạng hình tròn bên cạnh quảng cáo của bạn, nên ảnh vuông là phù hợp nhất.",
+    "website": "Trang web",
+    "websiteOptional": "không bắt buộc nếu bạn cung cấp địa chỉ",
+    "websitePlaceholder": "https://thuonghieucuaban.com",
+    "websiteInvalid": "Dùng địa chỉ đầy đủ bắt đầu bằng https://",
+    "save": "Lưu hồ sơ thương hiệu"
+  },
+  "createAccount": {
+    "started": "Hãy thiết lập tài khoản Hive của bạn",
+    "openFailed": "Không thể mở trang thiết lập tài khoản. Vui lòng thử lại.",
+    "readyAdvertiser": "Tài khoản nhà quảng cáo của bạn đã sẵn sàng",
+    "ready": "Tài khoản Hive của bạn đã sẵn sàng",
+    "approvedAdvertiser": "Đội ngũ đã duyệt thương hiệu của bạn. Hãy tạo tài khoản Hive miễn phí để đặt và thanh toán quảng cáo.",
+    "approved": "Đội ngũ đã duyệt bạn. Hãy tạo tài khoản Hive miễn phí: nó chỉ thuộc về riêng bạn.",
+    "createAdvertiser": "Tạo tài khoản nhà quảng cáo",
+    "create": "Tạo tài khoản Hive của tôi"
+  },
+  "graduatedFollows": {
+    "message": "@{{handle}} hiện đã có tài khoản Hive là @{{hiveUsername}}.",
+    "title": "Một người bạn theo dõi đã được nâng cấp",
+    "followForReal": "Theo dõi chính thức",
+    "gotIt": "Đã hiểu",
+    "nowFollowing": "Đang theo dõi @{{hiveUsername}} trên Hive",
+    "followFailed": "Không thể theo dõi họ"
+  },
+  "backlog": {
+    "title": "Các bài đăng trước đây của bạn vẫn còn ở đây",
+    "lede_other": "Bạn đã tạo <b>{{count}} nội dung</b> trước khi có tài khoản Hive. Chúng chỉ nằm trên 3Speak. Bạn có thể đưa chúng lên Hive với tên <b>@{{user}}</b> bất cứ khi nào bạn muốn.",
+    "text": "Bạn chọn từng thứ sẽ được chuyển sang. Những gì bạn để lại vẫn giữ nguyên trên 3Speak, và bạn có thể quay lại với phần còn lại bất cứ lúc nào.",
+    "later": "Để sau"
+  },
+  "graduation": {
+    "items": {
+      "video_other": "{{count}} video",
+      "short_other": "{{count}} Shorts",
+      "comment_other": "{{count}} bình luận",
+      "follow_other": "{{count}} lượt theo dõi",
+      "like_other": "{{count}} lượt thích",
+      "creator_other": "{{count}} nhà sáng tạo"
+    },
+    "listAnd": "{{rest}} và {{last}}",
+    "listSep": ", ",
+    "viewerDone": {
+      "watched": "đã xem {{time}}",
+      "written": "đã viết {{items}}",
+      "followed": "đã theo dõi {{items}}"
+    },
+    "advertiser": {
+      "lede": "Đội ngũ đã xét duyệt <b>{{name}}</b>. Hãy tạo <b>tài khoản Hive</b> miễn phí: nó sẽ trở thành tài khoản nhà quảng cáo của bạn.",
+      "text": "Với tài khoản này, bạn đặt quảng cáo trên khắp 3Speak, từ quảng cáo video, banner đến ticker, và thanh toán trực tiếp từ ví của nó, bằng HBD hoặc HIVE. Khóa chỉ thuộc về riêng bạn, nên không ai có thể khóa bạn ra ngoài.",
+      "note": "Hồ sơ thương hiệu của bạn sẽ được chuyển theo. Email và địa chỉ kinh doanh của bạn được 3Speak giữ riêng tư và không bao giờ được đưa lên blockchain.",
+      "noteMoving": "<b>{{moving}}</b> của bạn cũng sẽ được chuyển theo, xuất bản dần trong vài ngày."
+    },
+    "viewer": {
+      "title": "Tài khoản riêng của bạn đã sẵn sàng",
+      "ledeDone": "Với tên <b>@{{handle}}</b>, bạn đã {{done}}. Hãy biến điều đó thành một <b>tài khoản Hive</b> thuộc về bạn, miễn phí.",
+      "lede": "Biến <b>@{{handle}}</b> thành một <b>tài khoản Hive</b> thuộc về bạn, miễn phí.",
+      "text": "Với tài khoản này, bạn có thể vote và gửi tip cho video bạn thích, kiếm thu nhập từ bình luận, đăng ký nhận phần thưởng người xem cho những gì bạn xem, và tạo danh sách phát. Cùng một thông tin đăng nhập và cùng danh sách theo dõi dùng được trên mọi ứng dụng Hive, và khóa chỉ thuộc về riêng bạn."
+    },
+    "createMyAccount": "Tạo tài khoản của tôi",
+    "creator": {
+      "title": "Giờ bạn có thể tạo tài khoản của riêng mình",
+      "lede": "Bạn đã đăng bài với tên <b>@{{handle}}</b>. Hãy biến điều đó thành một <b>tài khoản Hive</b> thực sự thuộc về bạn, miễn phí.",
+      "text": "Tài khoản Hive là một khóa chỉ mình bạn nắm giữ. Không ai có thể khóa bạn ra ngoài, bài đăng của bạn bắt đầu có thu nhập, và cùng một thông tin đăng nhập dùng được trên mọi ứng dụng Hive, không chỉ 3Speak."
+    },
+    "note": {
+      "moving": "<b>{{moving}}</b> của bạn sẽ được chuyển theo bạn.",
+      "everything": "Mọi thứ bạn đã tạo ở đây đều được chuyển theo bạn.",
+      "gradual": "Việc xuất bản diễn ra dần dần trong vài ngày, vì một tài khoản hoàn toàn mới chỉ có hạn mức đăng bài nhỏ.",
+      "waiting_other": "{{count}} mục trong số đó chờ bài đăng mà chúng phản hồi được xuất bản trước."
+    },
+    "notYet": "Chưa phải lúc"
+  },
+  "handleTaken": {
+    "openFailed": "Không thể mở trình chọn tên",
+    "title": "Tên @{{handle}} đã có người dùng",
+    "lede": "Ai đó đã đăng ký tên này trên <b>Hive</b>, nên nó không thể trở thành tài khoản của bạn khi bạn sẵn sàng. Chọn tên mới bây giờ chỉ mất một chút thời gian.",
+    "text": "Việc chọn tên ở đây chưa bao giờ giữ chỗ cho tên đó. Hive không có cách nào giữ tên ngoài việc tạo tài khoản, và đó là bước bạn chưa trả phí, cũng chính là lý do để bắt đầu mà không cần tài khoản.",
+    "note": "Không có gì bạn đã tạo bị mất. Video, Shorts, bình luận và danh sách theo dõi vẫn ở cùng bạn và được chuyển sang dưới bất kỳ tên nào bạn chọn.",
+    "pick": "Chọn tên mới"
+  },
+  "backfill": {
+    "rcError": "Chưa đủ resource credits. Chúng sẽ tự hồi lại; hãy thử lại sau ít phút.",
+    "today": "Hôm nay",
+    "yesterday": "Hôm qua",
+    "groups": {
+      "video": "Video",
+      "videoNote": "Mỗi video cách nhau 5 phút — đây là phần chậm.",
+      "short": "Shorts",
+      "comment": "Bình luận",
+      "vote": "Lượt thích",
+      "follow": "Lượt theo dõi",
+      "other": "Mọi thứ khác"
+    },
+    "status": {
+      "done": "Đã xuất bản",
+      "publishing": "Đang xuất bản…",
+      "error": "Thất bại",
+      "idle": "Chỉ trên 3Speak"
+    },
+    "wait": {
+      "ms": "{{m}} phút {{s}} giây",
+      "s": "{{s}} giây"
+    },
+    "noDate": "Không có ngày",
+    "waitToast": "Hive cho phép một bài đăng mỗi 5 phút. Bài tiếp theo sau {{wait}}.",
+    "publishedToast_other": "Đã xuất bản {{count}} mục lên Hive",
+    "loading": "Đang tải bài đăng của bạn…",
+    "emptyTitle": "Không còn gì để xuất bản",
+    "emptyText": "Mọi thứ bạn tạo trước khi có tài khoản Hive đều đã được xuất bản hoặc không thể đăng lại.",
+    "title": "Xuất bản những gì bạn đã tạo trước đây",
+    "intro": "Bạn đã tạo những nội dung này trên 3Speak trước khi có tài khoản Hive, nên chúng chỉ tồn tại ở đây. Hãy chọn những gì bạn muốn có trong hồ sơ công khai với tên <b>@{{user}}</b> và xuất bản. Những gì bạn để lại vẫn giữ nguyên trên 3Speak.",
+    "note": "<b>Việc xuất bản mất một lúc, và điều đó là bình thường.</b> Hive cho phép mỗi tài khoản một bài đăng mỗi 5 phút, và một tài khoản hoàn toàn mới có hạn mức đăng bài nhỏ, hồi lại trong vài ngày. Lượt theo dõi, lượt thích và hồ sơ tốn ít tài nguyên và được xử lý nhanh. Hãy xuất bản từng ít một và quay lại sau.",
+    "groupBy": "Nhóm danh sách theo",
+    "timeline": "Dòng thời gian",
+    "byType": "Theo loại",
+    "rcBlockedIn": "<b>Tài khoản của bạn tạm thời đã hết resource credits.</b> Hive cấp cho mỗi tài khoản một hạn mức nhỏ để đăng bài, và hạn mức này tự hồi lại. Không có gì bị mất: hãy quay lại sau khoảng {{wait}} và tiếp tục từ chỗ bạn đã dừng.",
+    "rcBlockedLater": "<b>Tài khoản của bạn tạm thời đã hết resource credits.</b> Hive cấp cho mỗi tài khoản một hạn mức nhỏ để đăng bài, và hạn mức này tự hồi lại. Không có gì bị mất: hãy quay lại sau một lúc và tiếp tục từ chỗ bạn đã dừng.",
+    "selected": "Đã chọn <b>{{count}}</b>",
+    "rootPostsTime_other": "{{count}} video, nên cần khoảng {{minutes}} phút",
+    "nextVideo": "Video tiếp theo có thể đăng sau {{wait}}. Lượt theo dõi, lượt thích và hồ sơ không bị ảnh hưởng.",
+    "selectAll": "Chọn tất cả",
+    "clear": "Bỏ chọn",
+    "publishSelected": "Xuất bản mục đã chọn",
+    "selectItem": "Chọn {{label}}",
+    "fiveMin": "5 phút",
+    "waitingTitle": "Đang chờ người khác",
+    "waitingText": "Các mục này sẽ tự xuất bản khi bài đăng mà chúng trỏ tới được đăng lên Hive. Trong lúc đó không có gì bị mất.",
+    "waitingFor": "<b>{{label}}</b> — đang chờ {{target}}",
+    "andMore": "và {{count}} mục khác",
+    "excludedTitle": "Không được chuyển sang"
+  }
+}

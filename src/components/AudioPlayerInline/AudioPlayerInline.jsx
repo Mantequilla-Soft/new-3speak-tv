@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
+import { useTranslation } from 'react-i18next';
 import './AudioPlayerInline.scss';
 
 const SPEEDS = [1, 1.5, 2];
@@ -6,11 +7,15 @@ const SPEEDS = [1, 1.5, 2];
 export default function AudioPlayerInline({
   src,
   variant = 'inline',
-  title = 'OpenPod Recording',
-  subtitle = 'Recorded live on 3Speak OpenPods',
+  title: titleProp,
+  subtitle: subtitleProp,
   artworkUrl = '',
   externalUrl = '',
 }) {
+  const { t } = useTranslation();
+  // Same semantics as the old default params: only an undefined prop falls back.
+  const title = titleProp === undefined ? t('audio.inline.defaultTitle') : titleProp;
+  const subtitle = subtitleProp === undefined ? t('audio.inline.defaultSubtitle') : subtitleProp;
   const [audioUrl, setAudioUrl]       = useState(null);
   const [fallbackUrl, setFallbackUrl] = useState(null);
   const [resolvedArtwork, setResolvedArtwork] = useState('');
@@ -113,7 +118,7 @@ export default function AudioPlayerInline({
   const progress = duration > 0 ? (currentTime / duration) * 100 : 0;
   const displayArtwork = artworkUrl || resolvedArtwork;
   const hasMediaHeader = variant === 'preview' || displayArtwork || title || subtitle;
-  const kicker = variant === 'preview' ? 'Audio preview' : 'OpenPod';
+  const kicker = variant === 'preview' ? t('audio.inline.kickerPreview') : t('audio.inline.kickerOpenPod');
 
   if (failed) return null;
 
@@ -158,7 +163,7 @@ export default function AudioPlayerInline({
         className="apin__play"
         onClick={togglePlay}
         disabled={loading || !audioUrl}
-        aria-label={playing ? 'Pause' : 'Play'}
+        aria-label={playing ? t('common.actions.pause') : t('common.actions.play')}
       >
         {loading ? (
           <span className="apin__spinner" />
@@ -196,7 +201,7 @@ export default function AudioPlayerInline({
 
       {externalUrl && (
         <a className="apin__external" href={externalUrl} target="_blank" rel="noopener noreferrer">
-          Open
+          {t('common.actions.open')}
         </a>
       )}
     </div>

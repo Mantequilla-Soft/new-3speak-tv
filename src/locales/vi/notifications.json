@@ -1,0 +1,69 @@
+{
+  "buckets": {
+    "today": "Hôm nay",
+    "yesterday": "Hôm qua",
+    "thisWeek": "Tuần này",
+    "thisMonth": "Tháng này",
+    "older": "Cũ hơn"
+  },
+  "loginRequired": "Vui lòng đăng nhập để xem thông báo của bạn.",
+  "unreadChip_other": "{{count}} mới",
+  "markAllTitle": "Đánh dấu tất cả là đã đọc",
+  "marking": "Đang đánh dấu…",
+  "markAllRead": "Đánh dấu đã đọc hết",
+  "refreshing": "Đang làm mới…",
+  "categories": {
+    "all": "Tất cả",
+    "replies": "Phản hồi",
+    "mentions": "Lượt nhắc",
+    "votes": "Lượt vote",
+    "reblogs": "Reblog",
+    "follows": "Theo dõi",
+    "transfers": "Chuyển tiền"
+  },
+  "unread": "Chưa đọc",
+  "summary": {
+    "title": "Hoạt động",
+    "today": "Hôm nay",
+    "week": "Tuần này",
+    "month": "Tháng này",
+    "emptyToday": "Hôm nay chưa có hoạt động nào.",
+    "emptyWeek": "Tuần này chưa có hoạt động nào.",
+    "stillLoading": "Vẫn đang tải các thông báo cũ hơn…",
+    "emptyMonth": "Tháng này không có hoạt động nào."
+  },
+  "loadError": "Không thể tải thông báo.",
+  "empty": {
+    "all": "Bạn chưa có thông báo nào.",
+    "unread": "Không có thông báo chưa đọc.",
+    "replies": "Chưa có phản hồi nào.",
+    "mentions": "Chưa có lượt nhắc nào.",
+    "votes": "Chưa có lượt vote nào.",
+    "reblogs": "Chưa có reblog nào.",
+    "follows": "Chưa có lượt theo dõi nào.",
+    "transfers": "Chưa có giao dịch chuyển tiền nào."
+  },
+  "threeSpeakVideo": "Video 3Speak",
+  "end": "Bạn đã xem hết.",
+  "cards": {
+    "votes": "Lượt vote",
+    "voters_other": "{{count}} người vote",
+    "replies": "Phản hồi",
+    "newFollowers": "Người theo dõi mới",
+    "mentions": "Lượt nhắc",
+    "reblogs": "Reblog",
+    "transfers": "Chuyển tiền"
+  },
+  "group": {
+    "voteOne": "@{{user}} đã vote bài đăng của bạn",
+    "voteTwo": "@{{user}} và @{{user2}} đã vote bài đăng của bạn",
+    "voteMany_other": "@{{user}} và {{count}} người khác đã vote bài đăng của bạn",
+    "followOne": "@{{user}} đã theo dõi bạn",
+    "followTwo": "@{{user}} và @{{user2}} đã theo dõi bạn",
+    "followMany_other": "@{{user}} và {{count}} người khác đã theo dõi bạn",
+    "generic_other": "{{count}} thông báo {{type}}",
+    "typeCount_other": "{{count}} {{type}}",
+    "collapse": "▾ thu gọn",
+    "expand": "▸ mở rộng"
+  }
+}

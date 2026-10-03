@@ -1,0 +1,282 @@
+{
+  "untitled": "Walang pamagat",
+  "categories": {
+    "podcast": "Podcast",
+    "voice": "Boses",
+    "music": "Musika",
+    "audiobook": "Audiobook",
+    "interview": "Interview"
+  },
+  "inline": {
+    "defaultTitle": "OpenPod Recording",
+    "defaultSubtitle": "Live na na-record sa 3Speak OpenPods",
+    "kickerPreview": "Audio preview",
+    "kickerOpenPod": "OpenPod"
+  },
+  "tile": {
+    "artistAlbum": "Album ng artist",
+    "listenerPlaylist": "Playlist ng listener",
+    "bpm": "{{bpm}} bpm",
+    "queue": "Queue",
+    "playlist": "Playlist",
+    "plays_one": "{{count}} play",
+    "plays_other": "{{count}} plays"
+  },
+  "author": {
+    "followed": "Fina-follow mo na si @{{author}}",
+    "unfollowed": "In-unfollow mo si @{{author}}",
+    "failed": "Pumalya",
+    "tracks_one": "{{count}} track",
+    "tracks_other": "{{count}} tracks"
+  },
+  "player": {
+    "openPost": "Buksan ang audio post",
+    "playlist": "Playlist",
+    "transcript": "Transcript",
+    "volume": "Volume",
+    "queue": "Queue",
+    "closePlayer": "Isara ang player",
+    "curated": "Curated",
+    "noCues": "Walang cues.",
+    "clearQueue": "I-clear ang queue",
+    "clearAll": "I-clear lahat",
+    "queueEmpty": "Walang laman ang queue."
+  },
+  "share": {
+    "failed": "Pumalya",
+    "copyPeakd": "Kopyahin ang PeakD link",
+    "copiedPeakd": "Nakopya ang PeakD link!",
+    "copy3speak": "Kopyahin ang 3Speak link",
+    "copied3speak": "Nakopya ang 3Speak link!",
+    "copyAudioPlayer": "Kopyahin ang link ng audio player",
+    "copiedAudioPlayer": "Nakopya ang link ng audio player!",
+    "searchingHive": "Hinahanap sa Hive…"
+  },
+  "post": {
+    "notFound": "Hindi nahanap ang post",
+    "loadFailed": "Hindi ma-load ang audio post na ito",
+    "loadFailedFull": "Hindi ma-load ang audio post na ito.",
+    "backToAudio": "← Bumalik sa Audio",
+    "untitled": "(walang pamagat)",
+    "addedToQueue": "Naidagdag sa queue",
+    "signInToVote": "Mag-sign in para mag-vote",
+    "voted": "Naka-vote na",
+    "vote": "Vote",
+    "signInToTip": "Mag-sign in para mag-tip",
+    "tip": "Tip",
+    "stillIndexing": "Ini-index pa ang audio ng post na ito — subukan ulit pagkalipas ng ilang minuto."
+  },
+  "page": {
+    "sections": {
+      "popular": "Sikat",
+      "recent": "Mga Bagong Labas",
+      "podcasts": "Mga Podcast",
+      "songs": "Mga Kanta",
+      "audiobooks": "Mga Audiobook",
+      "interviews": "Mga Interview"
+    },
+    "dates": {
+      "today": "Ngayong araw",
+      "thisWeek": "Ngayong linggo",
+      "thisMonth": "Ngayong buwan",
+      "thisYear": "Ngayong taon"
+    },
+    "duration": {
+      "label": "Tagal",
+      "min": "Pinakamaikling tagal",
+      "max": "Pinakamahabang tagal",
+      "seconds": "{{value}}s",
+      "minutes": "{{value}}m",
+      "hours": "{{value}}h"
+    },
+    "all": "Lahat",
+    "musicGenre": "Genre ng musika",
+    "anyGenre": "Kahit anong genre",
+    "tracks_one": "{{count}} track",
+    "tracks_other": "{{count}} tracks",
+    "noTracks": "Walang nahanap na track.",
+    "creators": "Mga Creator",
+    "albumsPlaylists": "Mga Album at Playlist",
+    "noAudioForFilters": "Walang nahanap na audio para sa mga filter na ito."
+  },
+  "upload": {
+    "title": "Mag-upload ng audio",
+    "publishing": "Pine-publish…",
+    "failed": "Pumalya",
+    "unknown": "hindi alam",
+    "unknownError": "hindi kilalang error",
+    "recorded": "Na-record",
+    "uploaded": "Na-upload",
+    "steps": {
+      "source": "Source",
+      "mode": "Mode",
+      "playlist": "Playlist",
+      "post": "Post",
+      "mainpost": "Main post",
+      "tracks": "Mga Track",
+      "review": "Review"
+    },
+    "trackTypes": {
+      "voiceSnap": "Boses / Snap"
+    },
+    "toasts": {
+      "pickImage": "Pumili ng image file",
+      "thumbFailed": "Pumalya ang upload ng thumbnail: {{error}}",
+      "appliedToAll": "Na-apply sa lahat ng track",
+      "micDenied": "Tinanggihan ang access sa mikropono",
+      "signInFirst": "Mag-sign in muna",
+      "enterPlaylistName": "Maglagay ng pangalan ng playlist",
+      "creatingPlaylist": "Ginagawa ang playlist na \"{{name}}\"…",
+      "playlistCreated": "Nagawa ang playlist",
+      "failedWithError": "Pumalya: {{error}}",
+      "authorized": "Na-authorize na si @threespeak — puwede ka nang mag-publish",
+      "authFailed": "Pumalya ang authorization. Subukan ulit.",
+      "couldntPublishMain": "Hindi ma-publish ang main post: {{error}}",
+      "couldntResolveContainer": "Hindi mahanap ang peak.snaps container: {{error}}",
+      "published_one": "Na-publish ang {{count}} track",
+      "published_other": "Na-publish ang {{count}} tracks",
+      "someFailed": "May mga track na pumalya — buksan ang pumalyang track para subukan ulit"
+    },
+    "gate": {
+      "checking": "Tinitingnan…",
+      "allowThreespeak": "Para mag-publish ng audio, payagan si <b>@threespeak</b> na mag-post para sa iyo.",
+      "authorizing": "Ina-authorize…",
+      "authorize": "I-authorize si @threespeak",
+      "notEnoughRc": "Kulang ang <b>Resource Credits</b> ng account mo para mag-publish ng post ngayon.",
+      "whyCantUpload": "Bakit hindi ako makapag-upload?"
+    },
+    "discard": {
+      "title": "Itapon ang upload?",
+      "body_one": "May {{count}} track kang naidagdag. Kapag isinara mo, itatapon ito.",
+      "body_other": "May {{count}} tracks kang naidagdag. Kapag isinara mo, itatapon ang mga ito.",
+      "bodyRecording_one": "May {{count}} track kang naidagdag at may recording na kasalukuyang tumatakbo. Kapag isinara mo, itatapon ang mga ito.",
+      "bodyRecording_other": "May {{count}} tracks kang naidagdag at may recording na kasalukuyang tumatakbo. Kapag isinara mo, itatapon ang mga ito.",
+      "keepEditing": "Ituloy ang pag-edit",
+      "discard": "Itapon"
+    },
+    "source": {
+      "dropHere": "I-drop dito ang mga audio file, o i-click para mag-browse",
+      "formats": "MP3, WAV, OGG, WEBM, M4A, FLAC, AAC — puwede ang marami",
+      "stop": "Itigil",
+      "orRecord": "O mag-record nang live",
+      "recordLimit": "Hanggang {{minutes}} min bawat recording",
+      "record": "Mag-record",
+      "added": "Naidagdag ({{count}})"
+    },
+    "titles": {
+      "help": "Bigyan ng pamagat ang bawat track at pumili ng uri. May genre + BPM fields ang mga music track."
+    },
+    "fields": {
+      "trackTitle": "Pamagat ng track",
+      "genre": "Genre",
+      "bpm": "BPM",
+      "descriptionOptional": "Description (opsyonal)"
+    },
+    "playlist": {
+      "helpRequired": "Kailangan — pumili o gumawa ng playlist. Nasa loob ng playlist ang mga album post para manatiling magkakasama ang mga track nito sa isang 3Speak album. Nakakatulong ito sa exposure at mas kitang puwesto sa audio page.",
+      "helpOptional": "Opsyonal — idagdag lahat ng track sa isang playlist.",
+      "none": "Walang playlist",
+      "noneHint": "Hindi pagsasama-samahin ang mga track",
+      "creatingPending": "ginagawa… (hinihintay ang indexer)",
+      "loading": "Naglo-load ng mga playlist…",
+      "empty": "Wala ka pang playlist.",
+      "items_one": "{{count}} item",
+      "items_other": "{{count}} items",
+      "newPlaylist": "Bagong audio playlist",
+      "namePlaceholder": "Pangalan ng playlist",
+      "public": "Public",
+      "private": "Pribado",
+      "musicStylePlaceholder": "Istilo / genre ng musika (opsyonal, hal. Electronic)",
+      "creditsPlaceholder": "Credits (opsyonal)",
+      "yearPlaceholder": "Taon",
+      "labelPlaceholder": "Label (opsyonal)",
+      "thumbAlt": "Thumbnail ng album",
+      "removeThumb": "Alisin ang thumbnail",
+      "creating": "Ginagawa…",
+      "create": "Gumawa"
+    },
+    "thumb": {
+      "uploading": "Ina-upload…",
+      "addCover": "Magdagdag ng cover image",
+      "hint": "I-click o i-drag & drop — JPG / PNG / WebP",
+      "coverAlt": "cover",
+      "removeCover": "Alisin ang cover"
+    },
+    "mode": {
+      "help_one": "{{count}} track ang naidagdag. Piliin kung paano ito ilalabas.",
+      "help_other": "{{count}} tracks ang naidagdag. Piliin kung paano ilalabas ang mga ito.",
+      "howPublished": "Paano ito ipa-publish?",
+      "snapsTitle": "Snap comments",
+      "snapsDesc": "Bawat audio ay ipo-post bilang reply sa ilalim ng pinakabagong peak.snaps container — lalabas sa Snaps feed (default).",
+      "singleTitle": "Standalone na post",
+      "singleTitleSingleOnly": "Standalone na post (isang file lang)",
+      "singleDesc": "Isang audio sa sarili nitong top-level na Hive post, may pamagat, komunidad, tags at cover.",
+      "albumTitle": "Album post",
+      "albumTitleNeeds2": "Album post (kailangan ng 2+ file)",
+      "albumDesc": "Isang main post (walang audio) na nagsisilbing landing page; bawat track ay ipa-publish bilang comment reply na may sariling cover, description, payout at mga beneficiary.",
+      "howEarn": "Paano kikita ang audio na ito?",
+      "postRewardsTitle": "Post rewards (isang beses)",
+      "postRewardsDesc": "Matatanggap mo ang normal na Hive author payout — isang beses lang ibabayad, ~7 araw pagkatapos mag-publish.",
+      "pplTitle": "Pay-per-listen (panghabambuhay)",
+      "pplDesc": "Mapupunta kay @{{account}} lahat ng rewards ng audio post. Sa halip na isang beses na payout, babayaran ka ng isang 3Speak program sa bawat pakikinig habang buhay ang track."
+    },
+    "reward": {
+      "distribution": "Distribusyon ng rewards",
+      "default": "Default (50% HBD / 50% HP)",
+      "powerup": "Power up 100%",
+      "decline": "Tanggihan ang payout",
+      "beneficiaries": "Mga Beneficiary",
+      "beneficiariesCount": "Mga Beneficiary ({{count}})"
+    },
+    "mainPost": {
+      "helpAlbum": "Detalye para sa main post — ang landing page ng album. Wala itong audio; bawat track ay comment reply na iko-configure mo sa susunod.",
+      "helpSingle": "Detalye para sa standalone na post mo.",
+      "titlePlaceholder": "Pamagat (kailangan)",
+      "selectCommunity": "Pumili ng komunidad",
+      "change": "Palitan",
+      "tagsPlaceholder": "Tags — hiwalay sa space o kuwit (opsyonal)",
+      "whatKind": "Anong uri ng audio ito?"
+    },
+    "tracks": {
+      "helpAlbum": "Bawat track ay ipa-publish bilang comment sa ilalim ng main post. Itakda nang isang beses ang mga shared value at i-apply sa lahat, tapos baguhin bawat track kung kailangan.",
+      "helpSnaps": "Bawat track ay ipa-publish bilang sarili nitong snap. Itakda nang isang beses ang mga shared value at i-apply sa lahat, tapos baguhin bawat track kung kailangan.",
+      "applyToAllHeading": "I-apply sa lahat ng track",
+      "sharedDescription": "Shared na description (opsyonal)",
+      "sharedCover": "Shared na cover image",
+      "applyToAll_one": "I-apply sa {{count}} track",
+      "applyToAll_other": "I-apply sa lahat ng {{count}} tracks",
+      "hide": "Itago"
+    },
+    "review": {
+      "standalone": "Standalone na post",
+      "standaloneIn": "Standalone na post sa {{community}}",
+      "album_one": "Album — 1 main post + {{count}} track comment",
+      "album_other": "Album — 1 main post + {{count}} track comments",
+      "albumIn_one": "Album — 1 main post sa {{community}} + {{count}} track comment",
+      "albumIn_other": "Album — 1 main post sa {{community}} + {{count}} track comments",
+      "snapComments_one": "{{count}} snap comment",
+      "snapComments_other": "{{count}} snap comments",
+      "ready_one": "Handa nang i-publish ang {{count}} track.",
+      "ready_other": "Handa nang i-publish ang {{count}} tracks.",
+      "readyToPlaylist_one": "Handa nang i-publish ang {{count}} track sa playlist na \"{{name}}\".",
+      "readyToPlaylist_other": "Handa nang i-publish ang {{count}} tracks sa playlist na \"{{name}}\".",
+      "publishAs": "I-publish bilang:",
+      "earnings": "Kita:",
+      "earningsPpl": "Pay-per-listen (@{{account}})",
+      "earningsNormal": "Normal na post rewards",
+      "playlist": "Playlist:",
+      "failedCount_one": "{{count}} track ang pumalya.",
+      "failedCount_other": "{{count}} tracks ang pumalya.",
+      "retryAllFailed": "Subukan ulit lahat ng pumalya",
+      "failedDuringUpload": "Pumalya habang ina-upload ang audio file: {{message}}",
+      "failedDuringPost": "Pumalya habang pino-post sa Hive: {{message}}",
+      "failedWithMessage": "Pumalya: {{message}}"
+    },
+    "stage": {
+      "upload": "Ina-upload ang audio file",
+      "post": "Pino-post sa Hive",
+      "uploadingFallback": "Ina-upload",
+      "published": "Na-publish"
+    }
+  }
+}

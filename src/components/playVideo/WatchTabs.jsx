@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import Transcript from './Transcript';
 import { listSubtitleLanguages } from '../../hooks/useSubtitles';
 import './WatchTabs.scss';
@@ -18,6 +19,7 @@ import './WatchTabs.scss';
  * when a video has no subtitles: one thing to show means no tabs to pick from.
  */
 export default function WatchTabs({ reactionPanel, author, permlink, currentTime = 0, onSeek }) {
+  const { t } = useTranslation();
   const [isDesktop, setIsDesktop] = useState(
     () => typeof window !== 'undefined' && window.matchMedia('(min-width: 768px)').matches,
   );
@@ -62,16 +64,16 @@ export default function WatchTabs({ reactionPanel, author, permlink, currentTime
   return (
     <div className="watch-tabs">
       <div className="watch-tabs-bar" role="tablist">
-        {tabs.map((t) => (
+        {tabs.map((tab) => (
           <button
-            key={t}
+            key={tab}
             type="button"
             role="tab"
-            aria-selected={active === t}
-            className={`watch-tab${active === t ? ' active' : ''}`}
-            onClick={() => setActive(t)}
+            aria-selected={active === tab}
+            className={`watch-tab${active === tab ? ' active' : ''}`}
+            onClick={() => setActive(tab)}
           >
-            {t === 'reactions' ? 'Reactions' : 'Transcript'}
+            {tab === 'reactions' ? t('comments.tabs.reactions') : t('comments.tabs.transcript')}
           </button>
         ))}
       </div>

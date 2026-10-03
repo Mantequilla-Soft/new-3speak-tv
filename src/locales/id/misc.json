@@ -1,0 +1,241 @@
+{
+  "leaderboard": {
+    "windows": {
+      "7d": "7 hari",
+      "30d": "30 hari",
+      "365d": "Setahun",
+      "all": "Sepanjang waktu"
+    },
+    "windowsInSentence": {
+      "7d": "7 hari",
+      "30d": "30 hari",
+      "365d": "setahun",
+      "all": "sepanjang waktu"
+    },
+    "metrics": {
+      "video_uploads": "Video",
+      "short_uploads": "Shorts",
+      "video_watch_secs": "Waktu tonton video",
+      "short_watch_secs": "Waktu tonton Shorts",
+      "tags_given": "Tag",
+      "streams": "Siaran",
+      "stream_secs": "Durasi live",
+      "stream_peak_viewers": "Penonton puncak",
+      "stream_viewers": "Penonton bergabung",
+      "boosts_received": "Boost diterima",
+      "boost_amount_received": "Jumlah diterima",
+      "boosts_given": "Boost diberikan",
+      "boost_amount_given": "Jumlah diberikan"
+    },
+    "metricsInSentence": {
+      "video_uploads": "video",
+      "short_uploads": "Shorts",
+      "video_watch_secs": "waktu tonton video",
+      "short_watch_secs": "waktu tonton Shorts",
+      "tags_given": "tag",
+      "streams": "siaran",
+      "stream_secs": "durasi live",
+      "stream_peak_viewers": "penonton puncak",
+      "stream_viewers": "penonton bergabung",
+      "boosts_received": "boost diterima",
+      "boost_amount_received": "jumlah diterima",
+      "boosts_given": "boost diberikan",
+      "boost_amount_given": "jumlah diberikan"
+    },
+    "blurbs": {
+      "video_uploads": "Video diunggah",
+      "short_uploads": "Shorts diunggah",
+      "video_watch_secs": "Detik video mereka ditonton",
+      "short_watch_secs": "Detik Shorts mereka ditonton",
+      "tags_given": "Tag yang diberikan ke video lain",
+      "streams": "Sesi siaran dimulai",
+      "stream_secs": "Total durasi live (hanya siaran yang sudah berakhir)",
+      "stream_peak_viewers": "Penonton bersamaan terbanyak (rekor tertinggi, bukan jumlah)",
+      "stream_viewers": "Kejadian penonton bergabung (volume, bukan jangkauan unik)",
+      "boosts_received": "Boost yang dikirim ke siaran mereka",
+      "boost_amount_received": "Total jumlah boost yang diterima",
+      "boosts_given": "Boost yang mereka kirim ke streamer lain",
+      "boost_amount_given": "Total jumlah boost yang mereka berikan"
+    },
+    "blurbsInSentence": {
+      "video_uploads": "video diunggah",
+      "short_uploads": "Shorts diunggah",
+      "video_watch_secs": "detik video mereka ditonton",
+      "short_watch_secs": "detik Shorts mereka ditonton",
+      "tags_given": "tag yang diberikan ke video lain",
+      "streams": "sesi siaran dimulai",
+      "stream_secs": "total durasi live (hanya siaran yang sudah berakhir)",
+      "stream_peak_viewers": "penonton bersamaan terbanyak (rekor tertinggi, bukan jumlah)",
+      "stream_viewers": "kejadian penonton bergabung (volume, bukan jangkauan unik)",
+      "boosts_received": "boost yang dikirim ke siaran mereka",
+      "boost_amount_received": "total jumlah boost yang diterima",
+      "boosts_given": "boost yang mereka kirim ke streamer lain",
+      "boost_amount_given": "total jumlah boost yang mereka berikan"
+    },
+    "groups": {
+      "video": "Video",
+      "streaming": "Streaming"
+    },
+    "badgeNouns": {
+      "video_uploads": "Video",
+      "short_uploads": "Shorts",
+      "video_watch_secs": "Ditonton",
+      "short_watch_secs": "Shorts Ditonton",
+      "tags_given": "Pemberi Tag"
+    },
+    "badgeLabel": "{{noun}} {{tier}}",
+    "badgeTitleAllTime": "Peringkat #{{rank}} untuk {{what}} sepanjang waktu",
+    "badgeTitleWindow": "Peringkat #{{rank}} untuk {{what}} selama {{window}} terakhir"
+  },
+  "duration": {
+    "hoursMinutes": "{{h}}j {{m}}m",
+    "minutesSeconds": "{{m}}m {{s}}d",
+    "seconds": "{{s}}d",
+    "aMoment": "sebentar",
+    "lessThanMinute": "kurang dari semenit"
+  },
+  "surf": {
+    "community": "Komunitas",
+    "allOf": "Semua {{label}}"
+  },
+  "social": {
+    "signingCancelled": "Penandatanganan dibatalkan",
+    "youtube": {
+      "placeholder": "@handle atau UCxxxxxxxxxxxxxxxxxxxxxx",
+      "help": "Tempel @handle YouTube atau ID channel UC… milikmu. Kami mengubahnya ke ID channel."
+    },
+    "soundcloud": {
+      "placeholder": "profilmu atau https://soundcloud.com/profilmu",
+      "help": "Tempel URL profil SoundCloud-mu atau hanya nama penggunanya. Taruh hash di mana saja di bio profilmu."
+    }
+  },
+  "snaps": {
+    "retrying": "Kontainer Snaps belum ditemukan — mencoba lagi (percobaan {{attempt}})...",
+    "unreachable": "Tidak dapat menjangkau node Hive mana pun untuk menemukan kontainer Snaps. Periksa koneksimu lalu coba lagi.",
+    "unreachableWithError": "Tidak dapat menjangkau node Hive mana pun untuk menemukan kontainer Snaps (error terakhir — {{error}}). Periksa koneksimu lalu coba lagi."
+  },
+  "embed": {
+    "responsive": "Responsif"
+  },
+  "incubation": {
+    "requestFailed": "Permintaan gagal ({{status}})",
+    "contactLoadFailed": "Detail kontakmu tidak dapat dimuat",
+    "contactSaveFailed": "Detail kontakmu tidak dapat disimpan",
+    "onlyButrauthBacklog": "Hanya akun Butter Auth yang bisa punya antrean inkubasi",
+    "publishFailed": "Gagal menerbitkan ({{status}})"
+  },
+  "routeError": {
+    "title": "Halaman ini gagal dimuat",
+    "body": "Sebagian aplikasi gagal diunduh. Biasanya ini berarti versi baru dirilis saat tab ini masih terbuka. Memuat ulang akan mengambil versi tersebut.",
+    "reload": "Muat ulang",
+    "goHome": "Ke beranda"
+  },
+  "seo": {
+    "defaultTitle": "3Speak - Platform Video Terdesentralisasi",
+    "defaultDescription": "3Speak adalah platform berbagi video terdesentralisasi yang dibangun dengan teknologi blockchain. Tonton, unggah, dan bagikan video sambil mendapatkan reward mata uang kripto."
+  },
+  "uploadLinks": {
+    "regularVideo": "Video Biasa",
+    "verticalShort": "Shorts Vertikal",
+    "musicAudio": "Musik / Audio",
+    "groupChat": "Chat Grup",
+    "communitySnap": "Snap Komunitas",
+    "shortsEditor": "Editor Shorts",
+    "goLive": "Siaran Langsung",
+    "streamStudio": "Studio Siaran",
+    "headings": {
+      "upload": "Unggah",
+      "live": "Live",
+      "others": "Lainnya"
+    }
+  },
+  "chat": {
+    "connectFailed": "Tidak dapat terhubung ke chat.",
+    "loginFirst": "Masuk dulu untuk memakai chat.",
+    "roomNameRequired": "Nama ruang wajib diisi."
+  },
+  "hiveAuth": {
+    "waiting": "Menunggu persetujuan di HiveAuth...",
+    "title": "Perlu Persetujuan HiveAuth",
+    "hint": "Silakan cek aplikasi HiveAuth-mu untuk menyetujui transaksi ini"
+  },
+  "hiveApi": {
+    "keychainNotSigned": "Keychain tidak menandatangani transaksi",
+    "loginToCreateCommunity": "Silakan masuk untuk membuat komunitas",
+    "loginFirst": "Silakan masuk dulu",
+    "cancelled": "Operasi dibatalkan"
+  },
+  "openpod": {
+    "announced": "Sesi live diumumkan di Hive!",
+    "announceFailed": "OpenPod sudah dimulai, tetapi pengumuman di Hive tidak dapat diposting."
+  },
+  "appUpdate": {
+    "updating": "Memperbarui ke versi terbaru ({{version}})…",
+    "reloadingForUpload": "Memuat ulang agar unggahanmu berjalan di build terbaru."
+  },
+  "auth": {
+    "switched": "Berhasil beralih ke {{username}}!",
+    "keychainLoginTitle": "Masuk dengan Hive"
+  },
+  "streamVod": {
+    "uploadKeyMissing": "Siaran berakhir, tetapi videonya tidak dapat diunggah (kunci unggah tidak ada).",
+    "uploading": "Mengunggah video siaranmu… {{pct}}%",
+    "uploaded": "Video siaran diunggah — video ini akan menggantikan siaran live setelah encoding selesai.",
+    "uploadFailed": "Siaran berakhir, tetapi unggahan video gagal.",
+    "saving": "Menyimpan video siaranmu…",
+    "encoding": "Terunggah — encoder sedang memproses videomu…",
+    "saved": "Video siaran disimpan — video ini akan menggantikan siaran live setelah encoding selesai.",
+    "saveFailed": "Siaran berakhir, tetapi videonya tidak dapat disimpan: {{error}}.",
+    "uploadFailedShort": "gagal mengunggah",
+    "stillProcessing": "Siaran berakhir — videonya masih diproses; cek profilmu sebentar lagi."
+  },
+  "embedPlayer": {
+    "unavailable": "Video tidak tersedia"
+  },
+  "followFeed": {
+    "title": "Feed Diikuti",
+    "error": "Gagal memuat video"
+  },
+  "groups": {
+    "title": "Grup",
+    "badges": "Lencana",
+    "subtitle": "Komunitas yang bisa kamu ikuti dan lencana yang dimiliki orang-orang, di satu tempat."
+  },
+  "watched": {
+    "removed": "Dihapus dari riwayat tontonan",
+    "removeFailed": "Gagal menghapus dari riwayat tontonan",
+    "title": "Sudah Ditonton",
+    "count_other": "{{count}} ditonton",
+    "trackHistory": "Catat riwayat",
+    "videosTab": "Video ({{count}})",
+    "shortsTab": "Shorts ({{count}})",
+    "loadFailed": "Gagal memuat riwayat tontonan. Silakan coba lagi.",
+    "emptyShorts": "Belum ada Shorts yang ditonton",
+    "emptyVideos": "Belum ada video yang ditonton",
+    "removeTitle": "Hapus dari riwayat tontonan",
+    "watchedAt": "Ditonton {{when}}"
+  },
+  "watchStream": {
+    "saySomething": "Katakan sesuatu…",
+    "waitingWallet": "Menunggu dompetmu…",
+    "signInToChat": "Masuk untuk chat",
+    "sendMessage": "Kirim pesan",
+    "notLive": "Siaran ini sedang tidak live.",
+    "notFound": "Tidak ada siaran live untuk tautan ini.",
+    "browse": "Jelajahi siaran live",
+    "back": "Kembali ke 3Speak",
+    "seoTitle": "{{title}} (LIVE)",
+    "swipeNext": "Geser untuk siaran live berikutnya",
+    "chat": "Chat",
+    "watchingNow": "👁 {{count}} sedang menonton",
+    "signInRaiseHand": "Masuk untuk angkat tangan",
+    "copyLink": "Salin tautan siaran",
+    "notAvailableLive": "Tidak tersedia untuk siaran live",
+    "vote": "Vote",
+    "comment": "Komentar",
+    "liveChat": "Chat live",
+    "signInToJoin": "🔒 Masuk untuk ikut chat.",
+    "moreTag": "Lebih banyak #{{tag}}",
+    "moreVideos": "Video lainnya"
+  }
+}

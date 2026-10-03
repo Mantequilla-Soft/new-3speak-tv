@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation, Trans } from 'react-i18next';
 import { Video, Zap, Radio, Users, MessageCircle, Sparkles, Megaphone, Wallet, Crosshair, BarChart3 } from 'lucide-react';
 import { useAppStore } from '../../lib/store';
 import { isManteAuthLogin } from '../../hive-api/aioha';
@@ -41,27 +42,28 @@ const isForced = () => {
 };
 
 const THINGS_YOU_CAN_DO = [
-  { Icon: Video, title: 'Post videos', text: 'Upload long form video that stays yours, on a chain nobody can quietly delete it from.' },
-  { Icon: Zap, title: 'Film shorts', text: 'Something quick, vertical and easy to share. Great for finding your first viewers.' },
-  { Icon: Radio, title: 'Go live', text: 'Stream to your people, bring guests on stage, and keep the recording afterwards.' },
-  { Icon: Users, title: 'Build a community', text: 'Start a space around what you care about, or join one that is already buzzing.' },
-  { Icon: MessageCircle, title: 'Make real friends', text: 'Comment, chat and collaborate with actual humans who show up for each other.' },
-  { Icon: Sparkles, title: 'Get inspired, get involved', text: 'Discover creators, support the ones you love, and earn while you are at it.' },
+  { Icon: Video, titleKey: 'app.welcome.things.postVideos.title', textKey: 'app.welcome.things.postVideos.text' },
+  { Icon: Zap, titleKey: 'app.welcome.things.filmShorts.title', textKey: 'app.welcome.things.filmShorts.text' },
+  { Icon: Radio, titleKey: 'app.welcome.things.goLive.title', textKey: 'app.welcome.things.goLive.text' },
+  { Icon: Users, titleKey: 'app.welcome.things.buildCommunity.title', textKey: 'app.welcome.things.buildCommunity.text' },
+  { Icon: MessageCircle, titleKey: 'app.welcome.things.makeFriends.title', textKey: 'app.welcome.things.makeFriends.text' },
+  { Icon: Sparkles, titleKey: 'app.welcome.things.getInspired.title', textKey: 'app.welcome.things.getInspired.text' },
 ];
 
 // The same welcome for someone who came to ADVERTISE: what their account is for
 // is booking ads, so that is what it shows them. Talking to customers is in the
 // list, as the optional extra it is for them.
 const THINGS_AN_ADVERTISER_CAN_DO = [
-  { Icon: Megaphone, title: 'Book ads across 3Speak', text: 'Video spots, shorts spots, player banners, tickers and pre-upload spots, from one day to three months.' },
-  { Icon: Wallet, title: 'Pay from your own wallet', text: 'In HBD or HIVE, straight from this account. No card and no middleman.' },
-  { Icon: Crosshair, title: 'Choose where it runs', text: 'Pick the format, the position in the video and how many days it runs.' },
-  { Icon: BarChart3, title: 'See what it delivered', text: 'Plays and clicks for every booking, and credit back if a booking falls short.' },
-  { Icon: MessageCircle, title: 'Talk to your customers', text: 'If you want to: post videos, answer comments and follow people under your brand.' },
-  { Icon: Users, title: 'One account everywhere', text: 'The same brand and login across every Hive app, with a key only you hold.' },
+  { Icon: Megaphone, titleKey: 'app.welcome.advertiserThings.bookAds.title', textKey: 'app.welcome.advertiserThings.bookAds.text' },
+  { Icon: Wallet, titleKey: 'app.welcome.advertiserThings.payFromWallet.title', textKey: 'app.welcome.advertiserThings.payFromWallet.text' },
+  { Icon: Crosshair, titleKey: 'app.welcome.advertiserThings.chooseWhere.title', textKey: 'app.welcome.advertiserThings.chooseWhere.text' },
+  { Icon: BarChart3, titleKey: 'app.welcome.advertiserThings.seeDelivered.title', textKey: 'app.welcome.advertiserThings.seeDelivered.text' },
+  { Icon: MessageCircle, titleKey: 'app.welcome.advertiserThings.talkToCustomers.title', textKey: 'app.welcome.advertiserThings.talkToCustomers.text' },
+  { Icon: Users, titleKey: 'app.welcome.advertiserThings.oneAccount.title', textKey: 'app.welcome.advertiserThings.oneAccount.text' },
 ];
 
 export default function WelcomePrompt() {
+  const { t } = useTranslation();
   const user = useAppStore((s) => s.user);
   const authenticated = useAppStore((s) => s.authenticated);
 
@@ -193,46 +195,43 @@ export default function WelcomePrompt() {
   const submit = async () => {
     // Nothing filled in, so don't spend a transaction on an empty profile.
     if (!hasAnything) { finish(); return; }
-    const ok = await save('Your profile is live. Welcome to 3Speak!');
+    const ok = await save(t('app.welcome.profileLive'));
     if (ok) finish();
   };
 
   // Advertiser: save the brand profile (that is what moves it onto the Hive
   // account), then optionally on to booking. Only when they ask: never a redirect.
   const submitBrand = async ({ thenBook = false } = {}) => {
-    const ok = hasAnything ? await save('Your brand profile is live. Welcome to 3Speak!') : true;
+    const ok = hasAnything ? await save(t('app.welcome.brandProfileLive')) : true;
     if (!ok) return;
     finish();
     if (thenBook) navigate('/advertise');
   };
 
   return createPortal(
-    <div className="welcome-overlay" role="dialog" aria-modal="true" aria-label="Welcome to 3Speak">
+    <div className="welcome-overlay" role="dialog" aria-modal="true" aria-label={t('app.welcome.title')}>
       <div className="welcome-modal">
         {step === 0 ? (
           <>
             <div className="welcome-hero">
               <span className="welcome-wave" aria-hidden="true">👋</span>
-              <h2>{advertiser ? `Welcome to 3Speak${form.name ? `, ${form.name}` : ''}` : 'Welcome to 3Speak'}</h2>
+              <h2>{advertiser && form.name ? t('app.welcome.titleNamed', { name: form.name }) : t('app.welcome.title')}</h2>
               <p className="welcome-hero-sub">
                 {advertiser ? (
-                  <>Your advertiser account <strong>@{user}</strong> is ready. This is the account you book ads with and pay from.</>
+                  <Trans i18nKey="app.welcome.advertiserReady" values={{ user }} components={{ b: <strong /> }} />
                 ) : (
-                  <>
-                    Hey <strong>@{user}</strong>, you made it. 3Speak is built on Hive, so your
-                    account, your audience and your content belong to you.
-                  </>
+                  <Trans i18nKey="app.welcome.heyUser" values={{ user }} components={{ b: <strong /> }} />
                 )}
               </p>
             </div>
 
             <div className="welcome-grid">
-              {(advertiser ? THINGS_AN_ADVERTISER_CAN_DO : THINGS_YOU_CAN_DO).map(({ Icon, title, text }) => (
-                <div className="welcome-card" key={title}>
+              {(advertiser ? THINGS_AN_ADVERTISER_CAN_DO : THINGS_YOU_CAN_DO).map(({ Icon, titleKey, textKey }) => (
+                <div className="welcome-card" key={titleKey}>
                   <span className="welcome-card-icon"><Icon size={18} /></span>
                   <div>
-                    <h4>{title}</h4>
-                    <p>{text}</p>
+                    <h4>{t(titleKey)}</h4>
+                    <p>{t(textKey)}</p>
                   </div>
                 </div>
               ))}
@@ -240,25 +239,25 @@ export default function WelcomePrompt() {
 
             <p className="welcome-note">
               {advertiser
-                ? 'First, a quick look at your brand profile: it is what viewers see next to your ads.'
-                : 'One last thing before you start: let people know who they are watching.'}
+                ? t('app.welcome.noteAdvertiser')
+                : t('app.welcome.note')}
             </p>
 
             <div className="welcome-actions">
-              <button type="button" className="welcome-skip" onClick={finish}>Maybe later</button>
+              <button type="button" className="welcome-skip" onClick={finish}>{t('app.welcome.maybeLater')}</button>
               <button type="button" className="welcome-primary" onClick={() => setStep(1)}>
-                {advertiser ? 'Check my brand profile' : 'Set up my profile'}
+                {advertiser ? t('app.welcome.checkBrandProfile') : t('app.welcome.setUpProfile')}
               </button>
             </div>
           </>
         ) : step === 1 ? (
           <>
             <div className="welcome-head">
-              <h2>{advertiser ? 'Your brand profile' : 'Let people know who you are'}</h2>
+              <h2>{advertiser ? t('app.welcome.brandProfileTitle') : t('app.welcome.profileTitle')}</h2>
               <p>
                 {advertiser
-                  ? 'Carried over from your warm-up. Saving puts it on your Hive account; you can change it any time.'
-                  : 'This is what people see on your profile. You can change it any time.'}
+                  ? t('app.welcome.brandProfileHint')
+                  : t('app.welcome.profileHint')}
               </p>
             </div>
 
@@ -281,19 +280,19 @@ export default function WelcomePrompt() {
               // their feed is not what this account is for.
               <div className="welcome-actions">
                 <button type="button" className="welcome-skip" onClick={finish} disabled={saving}>
-                  Skip for now
+                  {t('app.welcome.skipForNow')}
                 </button>
                 <button type="button" className="welcome-back" onClick={() => submitBrand()} disabled={saving || uploading}>
-                  {saving ? 'Saving…' : 'Save'}
+                  {saving ? t('common.actions.saving') : t('common.actions.save')}
                 </button>
                 <button type="button" className="welcome-primary" onClick={() => submitBrand({ thenBook: true })} disabled={saving || uploading}>
-                  {saving ? 'Saving…' : 'Save and book my first ad'}
+                  {saving ? t('common.actions.saving') : t('app.welcome.saveAndBook')}
                 </button>
               </div>
             ) : (
             <div className="welcome-actions">
               <button type="button" className="welcome-skip" onClick={finish} disabled={saving}>
-                Skip for now
+                {t('app.welcome.skipForNow')}
               </button>
               <button
                 type="button"
@@ -301,7 +300,7 @@ export default function WelcomePrompt() {
                 onClick={() => setStep(2)}
                 disabled={uploading}
               >
-                {uploading ? 'Uploading…' : 'Next'}
+                {uploading ? t('app.welcome.uploading') : t('common.actions.next')}
               </button>
             </div>
             )}
@@ -309,10 +308,9 @@ export default function WelcomePrompt() {
         ) : (
           <>
             <div className="welcome-head">
-              <h2>What are you into?</h2>
+              <h2>{t('app.interests.title')}</h2>
               <p>
-                We use these to pick what shows up on your home page. Choose as many
-                as you like, or none, and change them whenever you want.
+                {t('app.welcome.interestsHint')}
               </p>
             </div>
 
@@ -330,16 +328,15 @@ export default function WelcomePrompt() {
             />
 
             <p className="welcome-fineprint">
-              Saved to your Hive account, so every Hive app shows the same profile
-              and the same interests.
+              {t('app.welcome.interestsFineprint')}
             </p>
 
             <div className="welcome-actions">
               <button type="button" className="welcome-back" onClick={() => setStep(1)} disabled={saving}>
-                Back
+                {t('common.actions.back')}
               </button>
               <button type="button" className="welcome-primary" onClick={submit} disabled={saving || uploading}>
-                {saving ? 'Saving…' : 'Save and start exploring'}
+                {saving ? t('common.actions.saving') : t('app.welcome.saveAndExplore')}
               </button>
             </div>
           </>

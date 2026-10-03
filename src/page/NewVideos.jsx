@@ -12,6 +12,7 @@ import { useWatchHistory } from "../hooks/useWatchHistory";
 import useViewCounts from "../hooks/useViewCounts";
 import PullToRefresh from "../components/PullToRefresh/PullToRefresh";
 import { NewContentIcon } from "../components/FeedIcons";
+import { useTranslation } from "react-i18next";
 
 const LIMIT = 50;
 
@@ -22,6 +23,7 @@ const fetchVideos = async ({ pageParam = 1 }) => {
 };
 
 const NewVideos = () => {
+  const { t } = useTranslation();
   const showNsfw = useAppStore(s => s.showNsfw);
   const queryClient = useQueryClient();
 
@@ -80,7 +82,7 @@ const NewVideos = () => {
     <div className="firstupload-container">
       <div className="feed-page-header">
         <NewContentIcon />
-        <h2>New Videos</h2>
+        <h2>{t('feeds.newVideos.title')}</h2>
       </div>
 
       {isLoading ? (
@@ -89,10 +91,10 @@ const NewVideos = () => {
         <Card3 videos={[...liveStreams, ...videos]} loading={isFetchingNextPage} getContentForVideo={getContentForVideo} isWatched={isWatched} getViewCount={getViewCount} />
       )}
 
-      {isError && <p>Error fetching videos</p>}
+      {isError && <p>{t('feeds.errors.fetchVideos')}</p>}
 
       {isFetchingNextPage && (
-        <p style={{ textAlign: "center" }}>Loading more...</p>
+        <p style={{ textAlign: "center" }}>{t('feeds.loadingMore')}</p>
       )}
     </div>
     </PullToRefresh>

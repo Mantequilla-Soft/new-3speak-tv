@@ -1,0 +1,125 @@
+{
+  "ranges": {
+    "d7": "7 dni",
+    "d28": "28 dni",
+    "d90": "90 dni",
+    "all": "Wszystko"
+  },
+  "content": {
+    "all": "Wszystko",
+    "videos": "Filmy",
+    "shorts": "Shorts"
+  },
+  "metrics": {
+    "watchTime": "Czas oglądania",
+    "views": "Wyświetlenia",
+    "avgPct": "Śr. %",
+    "votes": "Głosy",
+    "comments": "Komentarze",
+    "payout": "Wypłata"
+  },
+  "days": {
+    "short": {
+      "sun": "Nd",
+      "mon": "Pn",
+      "tue": "Wt",
+      "wed": "Śr",
+      "thu": "Cz",
+      "fri": "Pt",
+      "sat": "So"
+    },
+    "initial": {
+      "sun": "N",
+      "mon": "P",
+      "tue": "W",
+      "wed": "Ś",
+      "thu": "C",
+      "fri": "P",
+      "sat": "S"
+    }
+  },
+  "sources": {
+    "threespeak": "3Speak",
+    "player": "Osadzony odtwarzacz"
+  },
+  "trend": {
+    "empty": "Brak czasu oglądania w tym okresie.",
+    "tip_one": "{{count}} wyświetlenie · {{date}}",
+    "tip_few": "{{count}} wyświetlenia · {{date}}",
+    "tip_many": "{{count}} wyświetleń · {{date}}",
+    "tip_other": "{{count}} wyświetlenia · {{date}}"
+  },
+  "noData": "Brak danych.",
+  "demo": {
+    "viewerLocations": "Lokalizacje widzów",
+    "mapBubble_one": "{{country}} — {{count}} sesja",
+    "mapBubble_few": "{{country}} — {{count}} sesje",
+    "mapBubble_many": "{{country}} — {{count}} sesji",
+    "mapBubble_other": "{{country}} — {{count}} sesji",
+    "empty": "Brak danych o widzach w tym okresie.",
+    "breakdown": "Podział",
+    "map": "Mapa",
+    "countries": "Kraje",
+    "devices": "Urządzenia",
+    "browsers": "Przeglądarki",
+    "whereTitle": "Gdzie oglądają",
+    "whereSub": "3speak a osadzony odtwarzacz",
+    "newVsReturning": "Nowi a powracający",
+    "new": "Nowi",
+    "returning": "Powracający",
+    "located": "Zlokalizowano {{located}} z {{total}} sesji oglądania."
+  },
+  "when": {
+    "title": "Kiedy oglądają twoi widzowie",
+    "sub": "UTC · ciemniej = więcej wyświetleń",
+    "cellTitle_one": "{{day}} {{hour}}:00 — {{count}} wyświetlenie",
+    "cellTitle_few": "{{day}} {{hour}}:00 — {{count}} wyświetlenia",
+    "cellTitle_many": "{{day}} {{hour}}:00 — {{count}} wyświetleń",
+    "cellTitle_other": "{{day}} {{hour}}:00 — {{count}} wyświetlenia",
+    "hour": "{{hour}}:00"
+  },
+  "detail": {
+    "summary": "Głosy: {{votes}} · komentarze: {{comments}} · ${{payout}}"
+  },
+  "compare": {
+    "notEnough": "Za mało danych do porównania.",
+    "start": "Początek",
+    "axis": "Utrzymanie widzów w trakcie filmu",
+    "end": "Koniec",
+    "title": "Porównaj filmy",
+    "pickA": "Wybierz film…",
+    "vs": "vs",
+    "pickB": "Wybierz inny…"
+  },
+  "loadError": "Nie udało się teraz wczytać statystyk.",
+  "emptyRange": "Brak danych o oglądaniu w tym okresie — wybierz „Wszystko” albo poczekaj, aż ludzie obejrzą twoje filmy.",
+  "tiles": {
+    "avgViewDuration": "Śr. czas oglądania",
+    "avgWatched": "Śr. obejrzana część",
+    "reactionsPerView": "Reakcje / wyświetlenie"
+  },
+  "subtotals": "Filmy: {{videos}} · głosy: {{votes}} · komentarze: {{comments}} · ${{payout}} · śr. prędkość {{rate}}×",
+  "sections": {
+    "trend": "Czas oglądania w czasie",
+    "best": "Najlepsze wyniki",
+    "audience": "Twoi widzowie"
+  },
+  "openInNewTab": "Otwórz film w nowej karcie",
+  "footnote": "Statystyki oglądania pochodzą z testowego śledzenia i są widoczne tylko dla ciebie.",
+  "video": {
+    "noData": "Brak danych",
+    "empty": "Brak danych o oglądaniu tego filmu.",
+    "uniqueViewers": "Unikalni widzowie",
+    "avgSpeed": "Śr. prędkość",
+    "mostDropOff": "📉 Najwięcej osób odpada w <b>{{time}}</b>",
+    "earlyDrop": "⚡ <b>{{pct}}%</b> wyszło w pierwszych 3 s",
+    "replayed": "🔁 Odtwarzane ponownie:",
+    "retentionTitle": "Utrzymanie widzów",
+    "retentionSub": "odsetek widzów, którzy wciąż oglądają w danym momencie",
+    "pctWatching": "{{pct}}% ogląda",
+    "replayTitle": "Najczęściej odtwarzane ponownie",
+    "replaySub": "fragmenty, które widzowie oglądają i powtarzają najczęściej",
+    "hotSpot": "gorący punkt",
+    "notEnoughReplays": "Za mało ponownych odtworzeń"
+  }
+}

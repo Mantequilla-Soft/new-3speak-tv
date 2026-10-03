@@ -1,4 +1,5 @@
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { MdPlayArrow, MdLibraryMusic } from 'react-icons/md';
 import { useAppStore } from '../../lib/store';
 import PremiumBadge from '../PremiumBadge/PremiumBadge';
@@ -14,19 +15,20 @@ import '../../page/Audio.scss';
  * Title/author click → open the playlist view.
  */
 export default function AudioPlaylistTile({ playlist, kind }) {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const audioPlay = useAppStore((s) => s.audioPlay);
   const audioAddToQueue = useAppStore((s) => s.audioAddToQueue);
   if (!playlist) return null;
 
-  const cover = playlist.thumbnail || playlist.tracks?.find(t => t.thumbnail_url)?.thumbnail_url || fallbackImg;
+  const cover = playlist.thumbnail || playlist.tracks?.find(tr => tr.thumbnail_url)?.thumbnail_url || fallbackImg;
   const tracks = playlist.tracks || [];
   const open = (e) => { e?.stopPropagation(); navigate(`/playlist/${playlist.id}`); };
   const playAlbum = (e) => {
     e.stopPropagation();
     if (tracks.length === 0) return open();
     // Put every track in the queue, then start track 1.
-    tracks.forEach((t) => audioAddToQueue(t));
+    tracks.forEach((tr) => audioAddToQueue(tr));
     audioPlay(tracks[0], tracks);
   };
 
@@ -47,7 +49,7 @@ export default function AudioPlaylistTile({ playlist, kind }) {
         )}
         {kind && (
           <span className={`audio-tile-meta audio-tile-kind audio-tile-kind-${kind}`}>
-            {kind === 'artist' ? 'Artist album' : 'Listener playlist'}
+            {kind === 'artist' ? t('audio.tile.artistAlbum') : t('audio.tile.listenerPlaylist')}
           </span>
         )}
       </div>

@@ -1,0 +1,43 @@
+{
+  "labels": {
+    "tech-science": "প্রযুক্তি ও বিজ্ঞান",
+    "technology": "প্রযুক্তি",
+    "education": "শিক্ষা",
+    "science": "বিজ্ঞান",
+    "programming": "প্রোগ্রামিং",
+    "crypto-finance": "ক্রিপ্টো ও ফাইন্যান্স",
+    "cryptocurrency": "ক্রিপ্টোকারেন্সি",
+    "finance": "ফাইন্যান্স",
+    "business": "ব্যবসা",
+    "entertainment": "বিনোদন",
+    "music": "সংগীত",
+    "gaming": "গেমিং",
+    "film-tv": "সিনেমা ও টিভি",
+    "lifestyle": "লাইফস্টাইল",
+    "vlog": "ভ্লগ",
+    "comedy": "কমেডি",
+    "story-time": "গল্পের সময়",
+    "commercial": "বাণিজ্যিক",
+    "arts-diy": "শিল্প ও DIY",
+    "art": "শিল্প",
+    "diy-crafts": "DIY ও হস্তশিল্প",
+    "photography": "ফটোগ্রাফি",
+    "food-outdoor": "খাবার ও আউটডোর",
+    "nature": "প্রকৃতি",
+    "travel": "ভ্রমণ",
+    "food": "খাবার",
+    "pets": "পোষা প্রাণী",
+    "gardening": "বাগান",
+    "sports-health": "খেলা ও স্বাস্থ্য",
+    "sports": "খেলাধুলা",
+    "health": "স্বাস্থ্য",
+    "fitness": "ফিটনেস",
+    "life-society": "জীবন ও সমাজ",
+    "news": "খবর",
+    "spirituality": "আধ্যাত্মিকতা",
+    "politics": "রাজনীতি"
+  },
+  "display": {
+    "cryptocurrency": "ক্রিপ্টো"
+  }
+}

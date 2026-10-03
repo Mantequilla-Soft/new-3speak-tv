@@ -1,0 +1,205 @@
+{
+  "interests": {
+    "savedToast": "관심사를 Hive 프로필에 저장했어요",
+    "saveFailed": "관심사를 저장하지 못했어요",
+    "title": "관심사",
+    "loading": "불러오는 중…",
+    "hint": "관심 있는 주제를 고르세요. 좋아할 만한 콘텐츠를 더 많이 보여 드리는 데 사용해요.",
+    "loginHint": "관심사를 선택하려면 로그인하세요.",
+    "save": "관심사 저장"
+  },
+  "ads": {
+    "chainNotSaved": "3Speak에는 저장했지만 Hive 계정에는 저장하지 못했어요. Hive에도 저장하려면 다시 시도하세요.",
+    "saveFailed": "설정을 저장하지 못했어요.",
+    "onToast": "내 동영상에 광고가 켜졌어요",
+    "offToast": "내 동영상에 광고가 꺼졌어요",
+    "splitSaved": "수익 분배를 저장했어요",
+    "title": "내 동영상의 광고",
+    "allow": "광고 허용",
+    "allowDesc": "내 동영상 안에서 짧은 스폰서 광고가 재생될 수 있어요. 광고 수익의 일부는 나에게, 일부는 게시한 커뮤니티에 돌아가요. 이 기능을 끄면 내 동영상에는 광고가 전혀 붙지 않으며, 광고주에게 제공하는 인벤토리에서도 제외되어 거부한 광고가 판매되는 일은 없어요.",
+    "allowAria": "내 동영상에 광고 허용",
+    "shareTitle": "커뮤니티와 나누기",
+    "shareDesc": "광고 수익의 {{pool}}%는 나와 게시한 커뮤니티가 나눠 가져요. 그중 커뮤니티 몫을 정하세요. 0으로 두면 {{pool}}% 전부를 내가 받아요.",
+    "youPct": "나 {{pct}}%",
+    "communityPct": "커뮤니티 {{pct}}%",
+    "shareInputLabel": "커뮤니티 몫(%)",
+    "invalidPct": "0에서 {{max}} 사이의 정수를 입력하세요.",
+    "loadingSetting": "현재 설정을 불러오는 중…"
+  },
+  "viewerRewards": {
+    "onToast": "시청자 보상을 켰어요",
+    "offToast": "시청자 보상을 껐고, 시청 데이터를 삭제했어요",
+    "saveFailed": "설정을 저장하지 못했어요.",
+    "title": "보면서 보상 받기",
+    "rowTitle": "시청자 보상",
+    "desc": "시청한 만큼 광고 수익의 일부를 HBD 또는 HIVE로 받으세요. 광고 재생 여부와 관계없이 시청한 동영상에 대해 지급되므로, 광고를 끝까지 보는 것이 아니라 시청 자체에 보상해요. 광고는 3Speak Pro 구독자를 제외한 모든 사람에게 재생돼요. 시청한 동영상 페이지가 이미 보관하는 시청 기록에 더해 각 동영상을 얼마나 시청했는지 기록하며, 이 기능을 끄는 즉시 삭제해요.",
+    "aria": "시청한 만큼 광고 수익의 일부 받기"
+  },
+  "postingAuth": {
+    "updateFailed": "포스팅 권한을 변경하지 못했어요.",
+    "addedToast": "@threespeak를 포스팅 권한에 추가했어요",
+    "removedToast": "@threespeak를 포스팅 권한에서 제거했어요",
+    "notYetAdded": "서명은 완료됐지만 아직 계정에 @threespeak가 표시되지 않아요. 1분 후 설정을 다시 열어 확인하세요.",
+    "stillThere": "서명은 완료됐지만 @threespeak가 아직 계정에 있어요. 1분 후 설정을 다시 열어 확인하세요.",
+    "title": "포스팅 권한",
+    "canPost": "@threespeak가 나 대신 게시할 수 있어요",
+    "cannotPost": "@threespeak가 나 대신 게시할 수 없어요",
+    "checkingStatus": "@threespeak …",
+    "desc": "3Speak가 나 대신 업로드와 예약 게시물을 게시하고, 매번 지갑 확인 없이 일부 설정을 저장할 수 있게 해요. 게시, 투표, 댓글만 할 수 있으며 자금을 옮기거나 키를 바꿀 수는 없어요. 이 권한이 없으면 업로드할 때 다시 추가하라는 요청이 표시돼요. 변경하려면 액티브 키가 필요해요.",
+    "checking": "확인 중…",
+    "removing": "제거 중…",
+    "adding": "추가 중…"
+  },
+  "notifications": {
+    "kinds": {
+      "videos": {
+        "title": "새 동영상",
+        "desc": "팔로우하는 크리에이터가 동영상을 게시할 때."
+      },
+      "shorts": {
+        "title": "새 쇼츠",
+        "desc": "팔로우하는 크리에이터가 쇼츠를 게시할 때."
+      },
+      "audio": {
+        "title": "새 오디오",
+        "desc": "팔로우하는 크리에이터가 트랙이나 에피소드를 업로드할 때."
+      },
+      "replies": {
+        "title": "답글",
+        "desc": "누군가 내 게시물이나 댓글에 답글을 달 때."
+      },
+      "mentions": {
+        "title": "멘션",
+        "desc": "누군가 내 이름을 언급할 때."
+      },
+      "follows": {
+        "title": "새 팔로워",
+        "desc": "누군가 나를 팔로우할 때."
+      },
+      "votes": {
+        "title": "업보트",
+        "desc": "누군가 내 게시물에 업보트할 때. 기본적으로 꺼져 있어요. 인기 게시물이면 알림이 아주 많이 와요."
+      },
+      "reblogs": {
+        "title": "리블로그",
+        "desc": "누군가 내 게시물을 리블로그할 때."
+      }
+    },
+    "groups": {
+      "creators": "팔로우하는 크리에이터",
+      "aboutYou": "나에 관한 알림"
+    },
+    "deviceOffToast": "이 기기에서 더 이상 알림을 받지 않아요",
+    "deviceOnToast": "이 기기에서 알림을 받아요",
+    "changeFailed": "알림 설정을 변경하지 못했어요",
+    "saveFailed": "저장하지 못했어요",
+    "loginHint": "알림 받을 항목을 선택하려면 로그인하세요.",
+    "unsupported": "이 브라우저는 알림을 표시할 수 없어요. iPhone과 iPad에서는 3Speak를 홈 화면에 추가해야만 알림이 작동해요.",
+    "device": "이 기기에서 알림 받기",
+    "deviceBlocked": "브라우저 설정에서 이 사이트의 알림이 차단되어 있어요. 먼저 알림을 허용하세요.",
+    "deviceNoWorker": "이 빌드에서는 사용할 수 없어요.",
+    "deviceDesc": "3Speak가 열려 있지 않아도 알림을 받아요. 이 브라우저에만 적용돼요.",
+    "whatHint": "알림 받을 항목이에요. 알림을 켠 모든 기기에 적용돼요."
+  },
+  "tabs": {
+    "general": "일반",
+    "content": "콘텐츠",
+    "rewards": "광고 및 보상",
+    "about": "정보 / 버전"
+  },
+  "contentTabs": {
+    "feed": "피드",
+    "aria": "콘텐츠 설정"
+  },
+  "butrauthUnlocked": "Butter Auth 잠금 해제됨",
+  "appearance": {
+    "title": "화면",
+    "darkMode": {
+      "title": "다크 모드",
+      "desc": "앱 전체에 어두운 색상 테마를 사용해요."
+    },
+    "largeCards": {
+      "title": "큰 카드",
+      "desc": "홈, 프로필, 재생목록 페이지에 더 큰 동영상 카드를 표시해요. 끄면 더 작고 촘촘한 카드로 보여요."
+    },
+    "previews": {
+      "title": "동영상 미리보기",
+      "desc": "동영상 카드에 마우스를 올리면 음소거된 미리보기를 재생해요(모바일 큰 카드 모드에서는 스크롤할 때 가운데 카드가 자동 재생돼요)."
+    },
+    "simpleFeeds": {
+      "title": "단순 피드",
+      "desc": "추천 알고리즘을 꺼요. 탐색, 관심사, 인기 피드가 순위 대신 단순 최신순 목록으로 바뀌어요."
+    }
+  },
+  "shorts": {
+    "commentBar": {
+      "title": "쇼츠 댓글 입력창",
+      "desc": "쇼츠 아래에 댓글 입력창을 표시해요. 기본적으로 꺼져 있으며, 댓글 버튼으로 언제든지 댓글 창을 열 수 있어요."
+    },
+    "openOnStart": {
+      "title": "시작 시 쇼츠 열기",
+      "desc": "3Speak를 열면 홈 피드 대신 바로 쇼츠로 이동해요."
+    },
+    "inFeeds": {
+      "title": "피드 안의 쇼츠",
+      "desc": "홈 피드의 동영상 사이와 시청 페이지의 추천 목록에 쇼츠 줄을 표시해요. 끄면 동영상만 표시돼요."
+    }
+  },
+  "feed": {
+    "nsfw": {
+      "title": "NSFW 콘텐츠 표시",
+      "desc": "후방주의(NSFW)로 표시된 동영상과 오디오를 표시해요. 기본적으로 꺼져 있어요."
+    },
+    "hideWatched": {
+      "title": "시청한 동영상 숨기기",
+      "desc": "이미 시청한 동영상을 홈, 인기, 추천 피드에서 제외해요."
+    },
+    "hideAi": {
+      "title": "AI 생성 동영상 숨기기",
+      "desc": "AI 생성으로 표시된 동영상과 쇼츠를 모든 피드에서 제외해요. 자동 검사로 표시하기 때문에 일부는 걸러지지 않을 수 있어요."
+    },
+    "privateMode": {
+      "title": "비공개 모드",
+      "desc": "크리에이터 통계에 내 국가가 표시되지 않게 해요. 저희는 누구의 IP 주소도 저장하지 않아요. 재생 버튼을 누르는 순간 국가 코드로 바뀐 뒤 폐기돼요. 이 기능을 켜면 내 조회에 대해서는 국가조차 기록되지 않아요."
+    }
+  },
+  "about": {
+    "title": "정보",
+    "version": "앱 버전",
+    "rpcNode": "Hive RPC 노드",
+    "yourData": "내 데이터",
+    "privacyLink": "3Speak의 데이터 처리 방식"
+  },
+  "dataRequest": {
+    "emailRequired": "답변을 받을 이메일 주소를 입력하세요",
+    "confirmRequired": "삭제할 수 있는 것과 없는 것을 이해했는지 확인해 주세요",
+    "requestFailed": "요청 실패({{status}})",
+    "deletionReceived": "삭제 요청을 접수했어요",
+    "dataReceived": "데이터 요청을 접수했어요",
+    "sendFailed": "요청을 보내지 못했어요",
+    "doneTitle": "요청 접수 완료",
+    "doneBody": "참조 번호는 <b>{{ref}}</b>예요. 늦어도 <b>{{dueBy}}</b>까지 <b>{{contact}}</b>(으)로 답변드릴게요.",
+    "keepRef": "추가 문의가 필요할 수 있으니 참조 번호를 보관하세요.",
+    "signIn": "데이터를 요청하거나 삭제하려면 로그인하세요. 요청은 현재 로그인한 계정에 적용돼요.",
+    "requestFor": "<b>@{{username}}</b>에 대한 요청",
+    "typeAria": "요청 유형",
+    "getData": "내 데이터 받기",
+    "deleteData": "내 계정 데이터 삭제",
+    "ledeDelete": "3Speak가 자체 데이터베이스에 저장한 나에 관한 모든 정보를 삭제해요.",
+    "ledeExport": "3Speak가 자체 데이터베이스에 저장한 나에 관한 모든 정보를 JSON 파일로 보내 드려요.",
+    "covers": "포함 범위:",
+    "cannotTitle": "저희가 할 수 없는 것",
+    "cannotBody": "3Speak는 <b>Hive 블록체인</b> 위에 만들어졌어요. 내 게시물, 댓글, 투표, 리블로그는 내 키로 서명되어 저희가 통제하거나 수정할 수 없는 <b>공개적이고 영구적인 원장</b>에 전송되었어요.",
+    "cannotDelete": "저희는 보관 중인 사본을 삭제하고 3Speak에서 내 콘텐츠를 더 이상 표시하지 않을 수 있어요. 하지만 블록체인에서는 지울 수 없어요. 본인을 포함해 누구도 지울 수 없어요. Hive 노드를 운영하는 사람은 누구나 계속 그 데이터를 갖고 있어요.",
+    "cannotExport": "온체인 데이터는 이미 공개되어 있으며 모든 Hive API를 통해 기계가 읽을 수 있는 형태로 제공돼요. 위치를 안내해 드릴게요. 저희가 보내 드리는 것은 그 외에 저희가 추가로 보관하는 데이터예요.",
+    "emailLabel": "답변 받을 이메일",
+    "emailPlaceholder": "you@example.com",
+    "messageLabel": "추가할 내용이 있나요? (선택)",
+    "messagePlaceholder": "요청에 대한 추가 세부 정보(선택)",
+    "confirmLabel": "Hive 블록체인에 있는 내 콘텐츠는 영구적이며 3Speak나 다른 누구도 삭제할 수 없다는 것을 이해합니다.",
+    "sending": "보내는 중…",
+    "requestDeletion": "삭제 요청",
+    "requestData": "내 데이터 요청",
+    "foot": "한 달 이내에 답변드려요. <mail>privacy@3speak.tv</mail>로 직접 이메일을 보낼 수도 있어요."
+  }
+}

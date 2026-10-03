@@ -1,0 +1,43 @@
+{
+  "labels": {
+    "tech-science": "Tech at Agham",
+    "technology": "Teknolohiya",
+    "education": "Edukasyon",
+    "science": "Agham",
+    "programming": "Programming",
+    "crypto-finance": "Crypto at Pananalapi",
+    "cryptocurrency": "Cryptocurrency",
+    "finance": "Pananalapi",
+    "business": "Negosyo",
+    "entertainment": "Entertainment",
+    "music": "Musika",
+    "gaming": "Gaming",
+    "film-tv": "Pelikula at TV",
+    "lifestyle": "Lifestyle",
+    "vlog": "Vlog",
+    "comedy": "Comedy",
+    "story-time": "Kuwentuhan",
+    "commercial": "Commercial",
+    "arts-diy": "Sining at DIY",
+    "art": "Sining",
+    "diy-crafts": "DIY at Crafts",
+    "photography": "Photography",
+    "food-outdoor": "Pagkain at Outdoors",
+    "nature": "Kalikasan",
+    "travel": "Travel",
+    "food": "Pagkain",
+    "pets": "Alagang Hayop",
+    "gardening": "Paghahalaman",
+    "sports-health": "Sports at Kalusugan",
+    "sports": "Sports",
+    "health": "Kalusugan",
+    "fitness": "Fitness",
+    "life-society": "Buhay at Lipunan",
+    "news": "Balita",
+    "spirituality": "Espiritwalidad",
+    "politics": "Pulitika"
+  },
+  "display": {
+    "cryptocurrency": "crypto"
+  }
+}

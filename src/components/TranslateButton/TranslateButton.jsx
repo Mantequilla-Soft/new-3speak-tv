@@ -1,11 +1,13 @@
 import { useState, useRef, useEffect, useCallback, useMemo } from 'react';
 import { createPortal } from 'react-dom';
+import { useTranslation } from 'react-i18next';
 import { MdTranslate } from 'react-icons/md';
 import { ImSpinner9 } from 'react-icons/im';
 import { SUPPORTED_LANGUAGES, getTargetLanguage, setTargetLanguage } from '../../utils/translate';
 import './TranslateButton.scss';
 
 export default function TranslateButton({ onTranslate, isTranslating, compact }) {
+  const { t } = useTranslation();
   const [open, setOpen] = useState(false);
   const btnRef = useRef(null);
   const menuRef = useRef(null);
@@ -131,7 +133,7 @@ export default function TranslateButton({ onTranslate, isTranslating, compact })
           {isTranslating
             ? <ImSpinner9 size={compact ? 10 : 12} className="spinner" />
             : <MdTranslate size={compact ? 12 : 14} />}
-          {!compact && <span className="comment-btn-label">{isTranslating ? 'Translating...' : 'Translate'}</span>}
+          {!compact && <span className="comment-btn-label">{isTranslating ? t('watch.translate.translating') : t('watch.translate.translate')}</span>}
         </button>
       </div>
       {menu}

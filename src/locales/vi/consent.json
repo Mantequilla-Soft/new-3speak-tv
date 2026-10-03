@@ -1,0 +1,40 @@
+{
+  "ariaLabel": "Cài đặt cookie và bộ nhớ trình duyệt",
+  "title": "Cookie & bộ nhớ trình duyệt",
+  "withAds": {
+    "intro": "3Speak lưu thông tin đăng nhập và các cài đặt bạn chọn trong trình duyệt của bạn. Đó là điều giúp trang web hoạt động, và dữ liệu này chỉ nằm trên thiết bị của bạn. Có hai mục là tùy chọn, và cả hai đều tắt trừ khi bạn bật chúng ở bên dưới.",
+    "advertising": "Một trong số đó là <b>quảng cáo</b>. Khi bật, một công ty quảng cáo bên ngoài sẽ tải mã của riêng họ lên trang và có thể lưu trữ những thứ mà chúng tôi không kiểm soát. Vì vậy đây là một lựa chọn riêng và không bao giờ đi kèm với bất kỳ thứ gì khác."
+  },
+  "noAds": {
+    "intro": "3Speak lưu thông tin đăng nhập và các cài đặt bạn chọn trong trình duyệt của bạn — đó là điều giúp trang web hoạt động. Chúng tôi <b>không dùng cookie theo dõi, không quảng cáo và không dùng công cụ phân tích của bên thứ ba</b>. Điều duy nhất mà việc xem video có thể lưu vào thiết bị của bạn là vị trí bạn đã xem đến — và đó là lựa chọn tùy chọn duy nhất bên dưới.",
+    "optional": "Mục tùy chọn duy nhất: chúng tôi có thể ghi nhớ <b>vị trí bạn đã xem đến trong mỗi video</b> để tiếp tục phát. Dữ liệu này không bao giờ rời khỏi thiết bị của bạn."
+  },
+  "details": {
+    "essentialTitle": "Thiết yếu — luôn bật",
+    "essential": {
+      "login": "Phiên đăng nhập của bạn",
+      "settings": "Các cài đặt bạn đã chọn: giao diện, âm lượng, ngôn ngữ, phụ đề, tùy chọn bảng tin",
+      "uploads": "Tiếp tục một lượt tải lên bị gián đoạn, và bản nháp các bài đăng bạn đang viết",
+      "offline": "Bản thân ứng dụng, để dùng ngoại tuyến sau khi cài đặt",
+      "answer": "Câu trả lời của bạn cho thông báo này"
+    },
+    "optionalTitle": "Tùy chọn — do bạn quyết định",
+    "optional": {
+      "playback": "Vị trí phát của từng video, để bạn có thể xem tiếp từ chỗ đã dừng",
+      "advertising": "Quảng cáo: mã của một công ty quảng cáo bên ngoài, và mọi thứ mà mã đó lưu trên thiết bị của bạn để đếm và giới hạn số quảng cáo bạn thấy"
+    },
+    "noteWithAds": "Để tắt các mục này sẽ ngừng lưu vị trí phát và xóa mọi vị trí đã lưu, đồng thời không có mã quảng cáo nào được tải. Bạn có thể đổi ý bất cứ lúc nào.",
+    "noteNoAds": "Chọn “Chỉ thiết yếu” sẽ ngừng lưu vị trí phát và xóa mọi vị trí đã lưu. Bạn có thể đổi ý bất cứ lúc nào — chọn “Chấp nhận” sẽ bật lại ngay lập tức."
+  },
+  "toggles": {
+    "resumeTitle": "Tiếp tục phát",
+    "resumeDesc": "Ghi nhớ vị trí bạn đã xem đến trong mỗi video. Chỉ lưu trên thiết bị của bạn.",
+    "advertisingTitle": "Quảng cáo",
+    "advertisingDesc": "Cho phép một công ty quảng cáo bên ngoài tải mã của họ và lưu những gì họ cần."
+  },
+  "hideDetails": "Ẩn chi tiết",
+  "whatIsStored": "Chính xác thì những gì được lưu?",
+  "essentialOnly": "Chỉ thiết yếu",
+  "saveChoices": "Lưu lựa chọn",
+  "acceptAll": "Chấp nhận tất cả"
+}
