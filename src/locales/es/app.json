@@ -26,7 +26,6 @@
     "gotIt": "Entendido"
   },
   "routes": {
-    "home": "3S | Gente real - Historias reales",
     "homeFeed": "Feed de inicio",
     "followFeed": "Feed de seguidos",
     "discover": "Descubrir",

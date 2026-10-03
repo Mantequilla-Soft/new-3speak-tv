@@ -26,7 +26,6 @@
     "gotIt": "Got it"
   },
   "routes": {
-    "home": "3S | Real People - Real Stories",
     "homeFeed": "Home Feed",
     "followFeed": "Follow Feed",
     "discover": "Discover",

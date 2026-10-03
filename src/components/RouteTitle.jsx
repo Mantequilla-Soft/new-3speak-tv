@@ -27,7 +27,8 @@ const SELF_TITLED = ['/watch', '/shorts', '/community/:communityName', '/b/:acco
 // recognisable from the mark alone, and putting it first means the platform
 // survives the truncation a narrow tab applies to the end of the string.
 const ROUTES = [
-  { path: '/', end: true, titleKey: 'app.routes.home', full: true },
+  // The 3Speak slogan: a brand line, deliberately NOT translated (same as index.html).
+  { path: '/', end: true, title: () => '3S | Real People - Real Stories', full: true },
   { path: '/home-feed', titleKey: 'app.routes.homeFeed' },
   { path: '/follow-feed', titleKey: 'app.routes.followFeed' },
   { path: '/trend', titleKey: 'common.nav.trending' },

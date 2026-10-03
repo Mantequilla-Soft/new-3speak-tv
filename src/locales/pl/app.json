@@ -26,7 +26,6 @@
     "gotIt": "Rozumiem"
   },
   "routes": {
-    "home": "3S | Prawdziwi ludzie - prawdziwe historie",
     "homeFeed": "Kanał główny",
     "followFeed": "Obserwowani",
     "discover": "Odkrywaj",

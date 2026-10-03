@@ -26,7 +26,6 @@
     "gotIt": "知道了"
   },
   "routes": {
-    "home": "3S | 真实的人，真实的故事",
     "homeFeed": "首页推荐",
     "followFeed": "关注动态",
     "discover": "发现",

@@ -26,7 +26,6 @@
     "gotIt": "Capito"
   },
   "routes": {
-    "home": "3S | Persone vere - Storie vere",
     "homeFeed": "Feed Home",
     "followFeed": "Feed Seguiti",
     "discover": "Scopri",

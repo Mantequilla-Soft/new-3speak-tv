@@ -26,7 +26,6 @@
     "gotIt": "OK"
   },
   "routes": {
-    "home": "3S | Real People - Real Stories",
     "homeFeed": "ホームフィード",
     "followFeed": "フォローフィード",
     "discover": "発見",

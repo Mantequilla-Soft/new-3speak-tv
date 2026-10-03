@@ -26,7 +26,6 @@
     "gotIt": "Anladım"
   },
   "routes": {
-    "home": "3S | Gerçek İnsanlar - Gerçek Hikâyeler",
     "homeFeed": "Ana Akış",
     "followFeed": "Takip Akışı",
     "discover": "Keşfet",

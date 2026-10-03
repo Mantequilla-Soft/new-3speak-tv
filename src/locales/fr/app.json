@@ -26,7 +26,6 @@
     "gotIt": "Compris"
   },
   "routes": {
-    "home": "3S | De vraies personnes, de vraies histoires",
     "homeFeed": "Fil d'accueil",
     "followFeed": "Fil des abonnements",
     "discover": "Découvrir",

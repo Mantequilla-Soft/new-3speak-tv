@@ -26,7 +26,6 @@
     "gotIt": "확인"
   },
   "routes": {
-    "home": "3S | 진짜 사람들 - 진짜 이야기",
     "homeFeed": "홈 피드",
     "followFeed": "팔로우 피드",
     "discover": "탐색",
