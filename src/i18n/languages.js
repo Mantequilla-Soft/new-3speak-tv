@@ -21,6 +21,14 @@ export const LANGUAGES = [
   { code: 'ko', native: '한국어', english: 'Korean' },
   { code: 'ja', native: '日本語', english: 'Japanese' },
   { code: 'zh', native: '中文', english: 'Chinese (Simplified)' },
+  { code: 'hi', native: 'हिन्दी', english: 'Hindi' },
+  { code: 'bn', native: 'বাংলা', english: 'Bengali' },
+  { code: 'vi', native: 'Tiếng Việt', english: 'Vietnamese' },
+  { code: 'fil', native: 'Filipino', english: 'Filipino' },
+  { code: 'th', native: 'ไทย', english: 'Thai' },
+  { code: 'sw', native: 'Kiswahili', english: 'Swahili' },
+  { code: 'uk', native: 'Українська', english: 'Ukrainian' },
+  { code: 'nl', native: 'Nederlands', english: 'Dutch' },
 ];
 
 export const DEFAULT_LANGUAGE = 'en';

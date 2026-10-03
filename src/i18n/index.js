@@ -186,7 +186,8 @@ function readStored() {
 export function detectBrowserLanguage() {
   const prefs = (typeof navigator !== 'undefined' && (navigator.languages || [navigator.language])) || [];
   for (const pref of prefs) {
-    const base = String(pref || '').toLowerCase().split('-')[0];
+    let base = String(pref || '').toLowerCase().split('-')[0];
+    if (base === 'tl') base = 'fil'; // browsers report Filipino as either
     if (LANGUAGE_CODES.includes(base)) return base;
   }
   return DEFAULT_LANGUAGE;
