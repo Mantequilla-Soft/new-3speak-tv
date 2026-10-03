@@ -7,12 +7,6 @@
 // 1.0.0 — that way they see all of these when develop is pushed to production.
 export const CHANGELOG = [
   {
-    version: '1.79.49',
-    date: '2026-10-03',
-    summary:
-      "Speak another language well? Help make 3Speak's translations even better: the link is right under the language picker in Settings.",
-  },
-  {
     version: '1.79.48',
     date: '2026-10-03',
     summary:
