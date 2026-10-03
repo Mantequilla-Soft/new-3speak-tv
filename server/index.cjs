@@ -1645,7 +1645,7 @@ app.post('/api/ads/identity-signature', signChallengeLimiter, async (req, res) =
     // wrong sentence.
     if (!hiveUsername) {
       return res.status(401).json({
-        error: 'We could not confirm your login from here. Open an application with its reference instead.',
+        error: 'Your login has expired. Log out and log in again to see your products.',
       })
     }
     hiveUsername = hiveUsername.toLowerCase()
@@ -1655,7 +1655,7 @@ app.post('/api/ads/identity-signature', signChallengeLimiter, async (req, res) =
     // a reason they can act on.
     if (!(await hasThreespeakPostingGrant(hiveUsername))) {
       return res.status(403).json({
-        error: `Listing your applications from here needs @${HIVE_ACCOUNT} posting authority on your account. You can still look one up with its reference.`,
+        error: `Listing your products from here needs @${HIVE_ACCOUNT} posting authority on your account. Log in with Keychain, HiveAuth, PeakVault or Ledger to list them instead.`,
       })
     }
 
