@@ -19,6 +19,7 @@ import {
 } from '../../utils/postingAuthority';
 import TagsV2Picker from '../tooltip/TagsV2Picker';
 import DataRequestForm from './DataRequestForm';
+import LanguagePicker from '../LanguagePicker/LanguagePicker';
 import './SettingsModal.scss';
 
 // Every toast from this module is headed "Settings"; the message becomes the
@@ -775,6 +776,11 @@ export default function SettingsModal({ isOpen, onClose }) {
           ))}
         </div>
 
+        {tab === 'general' && (
+          <div className="settings-section">
+            <LanguagePicker />
+          </div>
+        )}
         {tab === 'general' && (
           <div className="settings-section">
             <h4 className="settings-section-title">Appearance</h4>

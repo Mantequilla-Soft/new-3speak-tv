@@ -5,6 +5,7 @@ import { useAppStore } from '../../lib/store';
 import { APP_VERSION } from '../../version';
 import { CHANGELOG, changelogSince } from '../../changelog';
 import { markVersionSeen } from '../../utils/appVersion';
+import { formatDaysAgo } from '../../i18n';
 import logo from '../../assets/image/3S_logo.svg';
 import logoDark from '../../assets/image/3S_logodark.png';
 import './ChangelogModal.scss';
@@ -14,21 +15,8 @@ import './ChangelogModal.scss';
 // it only opens for users who upgraded (store.appUpdatedFrom, set by checkAppVersion).
 const DUMMY_MODE = false;
 
-// Short, friendly relative date e.g. "2 weeks ago".
-function timeAgo(dateStr) {
-  const then = new Date(dateStr).getTime();
-  if (isNaN(then)) return '';
-  const days = Math.floor((Date.now() - then) / 86400000);
-  if (days <= 0) return 'today';
-  if (days === 1) return 'yesterday';
-  if (days < 7) return `${days} days ago`;
-  const weeks = Math.floor(days / 7);
-  if (weeks < 5) return weeks === 1 ? '1 week ago' : `${weeks} weeks ago`;
-  const months = Math.floor(days / 30);
-  if (months < 12) return months === 1 ? '1 month ago' : `${months} months ago`;
-  const years = Math.floor(days / 365);
-  return years === 1 ? '1 year ago' : `${years} years ago`;
-}
+// Short, friendly relative date e.g. "2 weeks ago", in the reader's language.
+const timeAgo = formatDaysAgo;
 
 // Routes that must never be interrupted by "what's new". /advertise is a landing
 // page we send people to from outside 3Speak, and a changelog for an app they have

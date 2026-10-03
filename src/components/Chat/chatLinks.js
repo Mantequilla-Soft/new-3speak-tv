@@ -1,5 +1,6 @@
 import { getPostDetails, getAccounts } from '../../hive-api/hiveApi'
 import { HIVE_API_URL } from '../../utils/config'
+import { formatTimeAgo } from '../../i18n'
 
 // Frontends we recognize links for.
 const HIVE_HOSTS = new Set([
@@ -156,12 +157,5 @@ export function formatDuration(sec) {
 
 export function timeAgo(iso) {
   if (!iso) return ''
-  const then = new Date(/[zZ]|[+-]\d\d:?\d\d$/.test(iso) ? iso : iso + 'Z').getTime()
-  const s = Math.max(1, Math.floor((Date.now() - then) / 1000))
-  const units = [['y', 31536000], ['mo', 2592000], ['w', 604800], ['d', 86400], ['h', 3600], ['m', 60]]
-  for (const [label, sec] of units) {
-    const val = Math.floor(s / sec)
-    if (val >= 1) return `${val}${label} ago`
-  }
-  return `${s}s ago`
+  return formatTimeAgo(/[zZ]|[+-]\d\d:?\d\d$/.test(iso) ? iso : iso + 'Z', { style: 'narrow' })
 }

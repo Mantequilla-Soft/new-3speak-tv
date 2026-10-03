@@ -26,6 +26,12 @@ if (import.meta.env.DEV && typeof navigator !== 'undefined' && 'serviceWorker' i
   }
 }
 
+// Interface language: the saved choice, else the browser's, else English. Runs
+// before first render so the app paints in English and swaps the moment the
+// chosen language's strings arrive (see src/i18n).
+import { initLanguage } from './i18n';
+initLanguage();
+
 // Pick the healthy Hive RPC node for this session as early as possible.
 import { ensureHealthyNode } from './utils/hiveNode';
 ensureHealthyNode();
