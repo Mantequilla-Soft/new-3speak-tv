@@ -600,28 +600,6 @@ $mkt-sub: 12px;
     flex-shrink: 0;
   }
 
-  /* The way back into a product you hold a reference for. Quieter than "New", which
-     is the action this page is actually for. */
-  .mkt-codebtn {
-    flex-shrink: 0;
-    padding: 4px 12px;
-    border: 1px solid var(--border-color);
-    border-radius: 8px;
-    background: transparent;
-    color: var(--text-secondary);
-    font: inherit;
-    font-size: $mkt-sub;
-    font-weight: 600;
-    cursor: pointer;
-
-    &:hover { border-color: var(--accent-primary); color: var(--accent-primary); }
-
-    &[aria-expanded='true'] {
-      border-color: var(--accent-primary);
-      color: var(--accent-primary);
-    }
-  }
-
   .mkt-newproduct {
     flex-shrink: 0;
     padding: 4px 12px;
@@ -1347,32 +1325,6 @@ $mkt-sub: 12px;
   .mkt-status-rejected { color: #c0392b; }
 
   /* ── lookup ─────────────────────────────────────────────── */
-  .mkt-lookup {
-    display: flex;
-    gap: 10px;
-    flex-wrap: wrap;
-    /* Hangs off the button that reveals it, so it needs separating from what follows
-       rather than from what came before. */
-    margin: 0 0 14px;
-
-    input {
-      flex: 1 1 140px;
-      min-width: 0;
-      padding: 10px 12px;
-      border: 1px solid var(--input-border);
-      border-radius: 8px;
-      background: var(--input-bg);
-      color: var(--text-primary);
-      font-family: inherit;
-      font-size: $mkt-text;
-
-      &:focus-visible {
-        outline: 2px solid var(--accent-primary);
-        outline-offset: 1px;
-      }
-    }
-  }
-
   .mkt-lookup-result {
     display: flex;
     flex-direction: column;

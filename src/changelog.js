@@ -7,6 +7,13 @@
 // 1.0.0 — that way they see all of these when develop is pushed to production.
 export const CHANGELOG = [
   {
+    version: '1.79.44',
+    date: '2026-10-03',
+    summary:
+      'My products on /advertise now loads right away when you are logged in, without signing anything. '
+      + 'The "Open by code" button is gone, and you no longer need to keep a product code.',
+  },
+  {
     version: '1.79.43',
     date: '2026-10-03',
     summary:
