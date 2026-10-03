@@ -1,0 +1,117 @@
+{
+  "theme": {
+    "switchToLight": "Naar lichte modus",
+    "switchToDark": "Naar donkere modus"
+  },
+  "bottom": {
+    "feeds": "Feeds",
+    "groups": "Groepen",
+    "audio": "Audio",
+    "login": "Inloggen"
+  },
+  "installApp": "App installeren",
+  "iosInstallHint": "Tik op <b>Deel</b> en daarna op <b>Zet op beginscherm</b>",
+  "playlists": {
+    "tooltip": "Playlists die je hebt opgeslagen of gemaakt",
+    "label": "Playlists",
+    "watchLater": "Later bekijken",
+    "watchLaterCount": "Later bekijken ({{n}})",
+    "watchHistory": "Kijkgeschiedenis",
+    "all": "Alle playlists"
+  },
+  "advertise": "Adverteren",
+  "hidePages": "Pagina's verbergen",
+  "showPages": "Pagina's tonen",
+  "tabs": {
+    "overviewTooltip": "Alles wat nieuw is op 3Speak, plus wat jij volgens ons leuk vindt",
+    "overview": "Overzicht",
+    "shortsTooltip": "Korte verticale video's, de een na de ander",
+    "audioTooltip": "Podcasts, muziek en andere audio gepubliceerd op 3Speak",
+    "groupsTooltip": "Community's waar je lid van kunt worden, en badges die mensen krijgen",
+    "rankingsTooltip": "De makers die op dit moment het meest verdienen en bekeken worden"
+  },
+  "aboutLink": "Over 3Speak",
+  "profile": {
+    "accountMenu": "Accountmenu",
+    "myChannelAria": "Mijn kanaal",
+    "vpTooltip": "Voting Power: hoeveel gewicht je volgende vote heeft",
+    "rcTooltip": "Resource Credits: wat je acties op Hive kosten",
+    "myChannel": "Mijn kanaal",
+    "publishBacklog": "Achterstand publiceren",
+    "analytics": "Statistieken",
+    "inviteLinks": "Uitnodigingslinks",
+    "iosInstallToast": "Tik in Safari op de Deel-knop en daarna op \"Zet op beginscherm\"",
+    "changeAccount": "Ander account",
+    "logout": "Uitloggen",
+    "onDiscord": "3Speak op Discord",
+    "onX": "3Speak op X",
+    "onTelegram": "3Speak op Telegram"
+  },
+  "notifications": {
+    "pushOff": "Meldingen uitgeschakeld voor dit apparaat",
+    "pushOn": "Je krijgt een melding als makers die je volgt iets posten",
+    "pushFailed": "Meldingsinstellingen konden niet worden gewijzigd",
+    "ariaUnread": "Meldingen ({{count}} ongelezen)",
+    "pushBlocked": "Meldingen zijn voor deze site geblokkeerd in je browserinstellingen",
+    "pushNoWorker": "Deze build heeft geen service worker, dus meldingen kunnen hier niet worden geregistreerd",
+    "pushStop": "Geen meldingen meer op dit apparaat",
+    "pushStart": "Krijg een melding als makers die je volgt iets posten",
+    "on": "Aan",
+    "notifyMe": "Meld het me",
+    "empty": "Je hebt nog geen meldingen.",
+    "threeSpeakVideo": "3Speak-video",
+    "group": {
+      "voteOne": "@{{a}} heeft op je post gevotet",
+      "voteTwo": "@{{a}} en @{{b}} hebben op je post gevotet",
+      "voteMany_one": "@{{a}} en {{count}} ander hebben op je post gevotet",
+      "voteMany_other": "@{{a}} en {{count}} anderen hebben op je post gevotet",
+      "withValue": "{{label}} (${{value}})",
+      "followOne": "@{{a}} volgt je nu",
+      "followTwo": "@{{a}} en @{{b}} volgen je nu",
+      "followMany_one": "@{{a}} en {{count}} ander volgen je nu",
+      "followMany_other": "@{{a}} en {{count}} anderen volgen je nu",
+      "other": "{{count}} {{type}}-meldingen",
+      "typeCount": "{{count}} × {{type}}",
+      "includesWhale": "Inclusief 🐋 whale-account(s)",
+      "includesOrca": "Inclusief 🐬 orca-account(s)",
+      "andMore": "en nog {{count}}…"
+    }
+  },
+  "search": {
+    "types": {
+      "users": "Gebruikers",
+      "communities": "Community's",
+      "videos": "Video's",
+      "shorts": "Shorts",
+      "audio": "Audio",
+      "playlists": "Playlists"
+    },
+    "dates": {
+      "today": "Vandaag",
+      "thisWeek": "Deze week",
+      "thisMonth": "Deze maand",
+      "thisYear": "Dit jaar"
+    },
+    "contentType": "Soort content",
+    "boostRecent": "Recent eerst",
+    "dateRange": "Periode",
+    "tag": "Tag",
+    "tagPlaceholder": "bijv. crypto, gaming...",
+    "community": "Community",
+    "communityPlaceholder": "Community's zoeken...",
+    "clearFilters": "Alle filters wissen",
+    "allHidden": "Alle soorten content zijn verborgen.",
+    "reenableFilters": "Alle filters weer inschakelen",
+    "noResultsFor": "Geen resultaten voor “{{term}}”",
+    "searchFor": "Zoeken naar “{{term}}”",
+    "authors_one": "{{count}} auteur",
+    "authors_other": "{{count}} auteurs",
+    "subscribers_one": "{{count}} abonnee",
+    "subscribers_other": "{{count}} abonnees",
+    "views_one": "{{formatted}} weergave",
+    "views_other": "{{formatted}} weergaven",
+    "tags": "Tags",
+    "titles": "Titels",
+    "placeholder": "Zoeken..."
+  }
+}

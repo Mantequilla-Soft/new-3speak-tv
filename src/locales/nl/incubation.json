@@ -1,0 +1,569 @@
+{
+  "tracks": {
+    "viewer": {
+      "title": "Vooral kijker",
+      "body": "Ik ben hier om te kijken, te reageren en makers te volgen."
+    },
+    "creator": {
+      "title": "Vooral maker",
+      "body": "Ik wil video's en Shorts publiceren en een kanaal opbouwen."
+    },
+    "advertiser": {
+      "title": "Adverteerder",
+      "body": "Ik vertegenwoordig een merk en wil 3Speak-kijkers bereiken."
+    }
+  },
+  "tips": {
+    "shortsCamera": {
+      "title": "Shorts is een tabblad, geen andere app",
+      "body": "Open Shorts via de bovenste balk om te kijken, of gebruik Delen om er een te plaatsen. Verticale clips van je telefoon werken gewoon zoals ze zijn.",
+      "cta": "Shorts openen"
+    },
+    "searchSlash": {
+      "title": "Druk op / om te zoeken",
+      "body": "Overal op de site spring je met de slash-toets naar het zoekveld. Het zoekt door video's, makers en community's."
+    },
+    "communities": {
+      "title": "Community's brengen mensen samen rond één onderwerp",
+      "body": "Word lid van een paar en hun video's verschijnen in je feeds. Je kunt ook in een community posten, zodat de juiste mensen het zien.",
+      "cta": "Community's bekijken"
+    },
+    "followFeed": {
+      "title": "Wie je volgt heeft een eigen feed",
+      "body": "Zodra je een paar makers volgt, bevat de volgend-feed alleen hun video's. Zo stop je het snelst met langs dingen scrollen die je niet interesseren.",
+      "cta": "Bekijken"
+    },
+    "interests": {
+      "title": "Vertel ons waar je van houdt",
+      "body": "Kies een paar onderwerpen in Instellingen en de home-feeds passen zich meteen aan. Dat werkt beter dan eindeloos scrollen."
+    },
+    "hideWatched": {
+      "title": "Bekeken video's kunnen uit je feeds verdwijnen",
+      "body": "In Instellingen zit een schakelaar \"bekeken verbergen\", standaard aan, zodat dezelfde video je niet blijft achtervolgen nadat je hem hebt gezien."
+    },
+    "timestamps": {
+      "title": "Reageer op een exact moment",
+      "body": "Terwijl een video speelt, kan een reactie het tijdstip meekrijgen waar je was. Lezers krijgen een link die precies naar die seconde gaat."
+    },
+    "badges": {
+      "title": "Badges krijg je, die claim je niet",
+      "body": "Mensen op Hive krijgen badges voor evenementen en mijlpalen. Open er een om te zien wie hem heeft en wat ze publiceren.",
+      "cta": "Badges bekijken"
+    },
+    "audio": {
+      "title": "3Speak heeft ook audio",
+      "body": "Podcasts en muziek staan onder Audio in de bovenste balk, met een eigen speler. Je kunt audio op dezelfde manier publiceren als video.",
+      "cta": "Audio openen"
+    },
+    "backlog": {
+      "title": "Niets wat je nu plaatst is verspild",
+      "body": "Alles wat je tijdens je warming-up publiceert, kan opnieuw op Hive worden gepubliceerd onder je eigen naam zodra je account er is, en jij kiest wat er meegaat."
+    }
+  },
+  "trackChooser": {
+    "saveFailed": "Dat is niet opgeslagen. Probeer het opnieuw.",
+    "saving": "Opslaan..."
+  },
+  "trackQuestion": {
+    "title": "Wat brengt je naar 3Speak?",
+    "intro": "Je weg naar een Hive-account hangt ervan af: kijkers kijken en doen mee, makers publiceren, en adverteerders zetten hun merk neer."
+  },
+  "tipCard": {
+    "aria": "Tip",
+    "dismiss": "Tip sluiten",
+    "takeALook": "Bekijken"
+  },
+  "progress": {
+    "tasks": {
+      "video": {
+        "label_one": "Upload een video",
+        "label_other": "Upload {{count}} video's",
+        "hint": "Deel iets over jezelf en waar je kanaal over gaat.",
+        "why": "Dit is het eerste waar het team naar kijkt als ze je beoordelen, en het eerste wat een bezoeker ziet als die je kanaal opent.",
+        "counts": {
+          "0": "Elke video die je publiceert vanuit de uploadstudio.",
+          "1": "Hij blijft van jou. Als je wordt geüpgraded, kies jij welke van deze posts onder je eigen naam op Hive worden gepubliceerd."
+        },
+        "cta": "Video uploaden"
+      },
+      "short": {
+        "label_one": "Plaats een short",
+        "label_other": "Plaats {{count}} Shorts",
+        "hint": "Doe mee met 3Speak Shorts en upload momenten uit je dagelijks leven of verhalen die je wilt delen.",
+        "why": "Shorts zijn de snelste manier om gevonden te worden. Ze spelen in een feed van makers die mensen nog niet volgen, dus een short reikt verder dan je eigen kanaal.",
+        "counts": {
+          "0": "Verticale video's geplaatst via de Shorts-uploader.",
+          "1": "Over elk onderwerp dat je wilt."
+        },
+        "cta": "Short plaatsen"
+      },
+      "follow": {
+        "label_one": "Volg een maker",
+        "label_other": "Volg {{count}} makers",
+        "hint": "Bouw een netwerk op van gelijkgestemden, of van makers die je spannend vindt.",
+        "why": "Wie je volgt maakt van de home-feed jouw feed. Het gaat met je mee naar Hive als je wordt geüpgraded.",
+        "counts": {
+          "0": "Makers die je op dit moment volgt.",
+          "1": "Als je iemand ontvolgt, gaat de teller weer omlaag, dus dit telt wie je echt volgt en niet hoe vaak je op knoppen hebt gedrukt."
+        },
+        "cta": "Makers zoeken"
+      },
+      "comment": {
+        "label_one": "Schrijf een reactie",
+        "label_other": "Schrijf {{count}} reacties",
+        "why": "Via reacties vinden mensen je voordat je een publiek hebt. Eén echte reactie onder de video van iemand anders doet meer voor je dan een upload die nog niemand heeft gezien.",
+        "cta": "Iets zoeken om op te reageren",
+        "hint_one": "Reacties tellen mee vanaf {{count}} teken. Een echte gedachte, niet alleen “leuk”.",
+        "hint_other": "Reacties tellen mee vanaf {{count}} tekens. Een echte gedachte, niet alleen “leuk”.",
+        "counts": {
+          "minChars_one": "Minstens {{count}} teken in je eigen woorden.",
+          "minChars_other": "Minstens {{count}} tekens in je eigen woorden.",
+          "realThought": "Een echte gedachte in plaats van één woord.",
+          "othersPost": "Op de post van iemand anders. Reacties onder je eigen video's, of op je eigen reacties, zijn een gesprek met jezelf en tellen niet mee."
+        }
+      },
+      "watch": {
+        "labelHours_one": "Kijk een uur op 3Speak",
+        "labelHours_other": "Kijk {{count}} uur op 3Speak",
+        "labelMinutes_one": "Kijk een minuut op 3Speak",
+        "labelMinutes_other": "Kijk {{count}} minuten op 3Speak",
+        "hint": "Alle video's. Telt mee terwijl je echt kijkt.",
+        "why": "Kijken laat zien dat je hier bent om mee te doen en niet alleen om te posten. Het is het doel dat de meeste mensen afronden zonder er moeite voor te doen.",
+        "counts": {
+          "0": "Tijd op 3Speak zelf. Dezelfde video ingesloten op een andere site telt niet mee.",
+          "1": "Eén keer per video. Een video opnieuw bekijken verhoogt de beste tijd ervan, maar telt nooit op, en geen enkele video kan in zijn eentje alles leveren.",
+          "2": "Echte afspeeltijd, dus een video versnellen wordt niet bestraft en vertragen rekt het uur niet op.",
+          "3": "Op het scherm. Een video die in een tabblad op de achtergrond speelt, telt niet mee voor het uur.",
+          "4": "Niet je eigen video's.",
+          "5": "Er wordt niets vastgelegd terwijl je in privémodus kijkt."
+        },
+        "cta": "Iets bekijken"
+      },
+      "time": {
+        "label_one": "Wees hier een dag",
+        "label_other": "Wees hier {{count}} dagen",
+        "hint": "Deze rondt zichzelf af. Je hoeft niets te doen.",
+        "why": "Een account dat een uur geleden verscheen en een account dat er al een paar dagen is, zien er op papier hetzelfde uit. De dagen maken het verschil, dus iedereen wacht even kort.",
+        "counts": {
+          "fullDays_one": "Een volle dag vanaf de dag dat je je registreerde.",
+          "fullDays_other": "{{count}} volle dagen vanaf de dag dat je je registreerde.",
+          "forYouWhen": "Voor jou is dat {{when}}. De andere doelen kun je allemaal eerder afronden.",
+          "otherGoals": "De andere doelen kun je allemaal eerder afronden.",
+          "keepsCounting": "Het blijft doortellen, of je hier nu bent of niet, dus je hoeft niets bij te houden."
+        }
+      },
+      "subscription": {
+        "label_one": "Word lid van een community",
+        "label_other": "Word lid van {{count}} community's",
+        "hint": "Zoek community's over de dingen die je graag kijkt of maakt.",
+        "why": "Community's verzamelen de video's over één onderwerp en de mensen die erom geven. Lid worden vult je feed met meer van wat je leuk vindt, en voor makers is het de plek waar een nieuw kanaal zijn eerste kijkers vindt.",
+        "counts": {
+          "0": "Community's waar je nu lid van bent.",
+          "1": "Als je er een verlaat, gaat de teller weer omlaag."
+        },
+        "cta": "Community's bekijken"
+      },
+      "profile": {
+        "label_one": "Stel je merkprofiel in",
+        "label_other": "Stel je merkprofiel in",
+        "hint": "Je merknaam, wat je doet en je logo.",
+        "why": "Kijkers, en het team dat je beoordeelt, zien vóór al het andere wie er achter een advertentie zit. Een volledig profiel maakt een merk herkenbaar en betrouwbaar."
+      },
+      "contact": {
+        "label_one": "Voeg je zakelijke contactgegevens toe",
+        "label_other": "Voeg je zakelijke contactgegevens toe",
+        "hint": "Een e-mailadres, plus je adres of een website.",
+        "why": "Voordat een advertentie draait, heeft het team een echte manier nodig om het bedrijf erachter te bereiken. Je e-mailadres en adres zijn privé: ze worden nooit op de blockchain opgeslagen of ergens getoond.",
+        "counts": {
+          "0": "E-mail: verplicht.",
+          "1": "Adres: optioneel.",
+          "2": "Je hebt je adres OF een website in je merkprofiel hierboven nodig, minstens een van de twee."
+        }
+      }
+    },
+    "duration": {
+      "s": "{{s}}s",
+      "hm": "{{h}}u {{m}}m",
+      "h": "{{h}}u",
+      "m": "{{m}}m"
+    },
+    "title": "Je weg naar een Hive-account",
+    "needsTrack": "Je takenlijst hangt af van wat je naar 3Speak brengt.",
+    "choosePath": "Kies je weg",
+    "doneCount": "{{done}} van {{total}} klaar",
+    "overallAria": "Totale voortgang",
+    "hideDetails": "Details verbergen",
+    "showLeft": "Toon wat er nog over is",
+    "whatCounts": "Wat telt mee",
+    "reviewDone": "Alles klaar. Het team beoordeelt je kanaal en upgradet je. Je hoeft niets meer te doen.",
+    "reviewPending": "Zodra je dit allemaal hebt afgerond, beoordeelt het team je kanaal en upgradet het je."
+  },
+  "navProgress": {
+    "chooseTitle": "Vertel ons wat je naar 3Speak brengt om je weg naar een Hive-account te zien.",
+    "titleComplete_one": "Het {{count}} doel is klaar (100%). Het team gaat je kanaal beoordelen.",
+    "titleComplete_other": "Alle {{count}} doelen zijn klaar (100%). Het team gaat je kanaal beoordelen.",
+    "titleProgress_one": "{{pct}}% op weg naar je Hive-account. {{done}} van {{count}} doel helemaal klaar.",
+    "titleProgress_other": "{{pct}}% op weg naar je Hive-account. {{done}} van {{count}} doelen helemaal klaar.",
+    "ariaComplete_one": "Je voortgang: 100%, het {{count}} doel is klaar",
+    "ariaComplete_other": "Je voortgang: 100%, alle {{count}} doelen zijn klaar",
+    "ariaProgress_one": "Je voortgang: {{pct}}%, {{done}} van {{count}} doel helemaal klaar",
+    "ariaProgress_other": "Je voortgang: {{pct}}%, {{done}} van {{count}} doelen helemaal klaar",
+    "celebrate": "Alle doelen voor je Hive-account zijn klaar."
+  },
+  "welcome": {
+    "what": {
+      "title": "Welkom bij 3Speak",
+      "p1": "3Speak is een videoplatform gebouwd op <b>Hive</b>, een openbare blockchain. Video's hier zijn niet van ons: ze zijn van de mensen die ze plaatsen, en ze kunnen echte beloningen verdienen van de mensen die ernaar kijken."
+    },
+    "warmup": {
+      "title": "Je zit in je warming-up",
+      "p1": "Een Hive-account is echt en permanent, en iemand moet ervoor betalen. Dus in plaats van vooraf iets van je te vragen, hebben we je meteen een naam en een plek om te publiceren gegeven.",
+      "p2": "Alles wat je tijdens de warming-up maakt, staat op 3Speak. Als je er klaar voor bent, beoordeelt het team je kanaal en krijg je gratis een eigen Hive-account. Je video's, Shorts en wie je volgt gaan dan onder je eigen naam naar de blockchain, en jij kiest wat er meegaat."
+    },
+    "do": {
+      "title": "Wat je nu al kunt doen",
+      "upload": "Video's uploaden, precies zoals iedereen hier.",
+      "shorts": "Shorts plaatsen vanaf je telefoon of computer.",
+      "comment": "Overal op reageren, ook op video's van mensen die al op Hive zitten.",
+      "follow": "Makers volgen en lid worden van community's.",
+      "watch": "Kijken. Je geschiedenis en je feed zijn vanaf dag één van jou.",
+      "aside": "Een paar dingen wachten op je account: beloningen verdienen en fooien geven. Daarmee gaat echt geld om, dus daarvoor is een account nodig dat echt van jou is."
+    },
+    "path": {
+      "p1": "Je profiel toont een korte takenlijst, en die hangt af van waarvoor je hier bent: kijkers kijken en doen mee, makers publiceren, en adverteerders zetten hun merk neer.",
+      "p2": "Het is geen test. Het is gewoon hoe we een echt account kunnen onderscheiden van een leeg of kwaadwillend account. Zodra de lijst klaar is, beoordeelt het team je en upgradet het je zo snel mogelijk.",
+      "perkEarn": "Posts die verdienen",
+      "perkKeys": "Keys die alleen jij hebt",
+      "perkNetwork": "Het hele Hive-netwerk"
+    },
+    "showList": "Toon mijn lijst",
+    "decideLater": "Later beslissen"
+  },
+  "profile": {
+    "unlocks": {
+      "earn": {
+        "title": "Je posts beginnen te verdienen.",
+        "body": "Video's op Hive kunnen door iedereen die ernaar kijkt worden beloond in HIVE en HBD, en ze kunnen advertenties bevatten waarvan jij een deel krijgt."
+      },
+      "publish": {
+        "title": "Publiceer alles wat je hier hebt gemaakt.",
+        "body": "De video's, Shorts en wie je volgt op deze pagina kunnen onder je eigen naam op de chain worden geplaatst, en jij kiest welke."
+      },
+      "buttons": {
+        "title": "Voten, fooien geven, volgen en playlists maken.",
+        "body": "Alle knoppen die vandaag nog grijs zijn voor jou."
+      },
+      "keys": {
+        "title": "Keys die alleen jij hebt.",
+        "body": "Niemand kan je buitensluiten, en dezelfde login werkt in elke Hive-app, niet alleen op 3Speak."
+      },
+      "ecosystem": {
+        "title": "Word deel van het wereldwijde Hive-ecosysteem.",
+        "body": "3Speak is één app in een heel netwerk: blogs, community's, games, marktplaatsen en meer, allemaal met hetzelfde account en dezelfde lijst van wie je volgt."
+      }
+    },
+    "advertiserUnlocks": {
+      "book": {
+        "title": "Boek advertenties op heel 3Speak.",
+        "body": "Videospots, Shorts-spots, spelerbanners, tickers en pre-uploadspots, van één dag tot drie maanden."
+      },
+      "pay": {
+        "title": "Betaal vanuit je eigen wallet.",
+        "body": "In HBD of HIVE, rechtstreeks vanaf je account. Geen kaart en geen tussenpersoon."
+      },
+      "results": {
+        "title": "Zie wat je advertenties opleverden.",
+        "body": "Weergaven en klikken voor elke boeking, en tegoed op je volgende boeking als een boeking tekortschiet."
+      },
+      "customers": {
+        "title": "Praat met je klanten, als je wilt.",
+        "body": "Plaats video's, beantwoord reacties en volg mensen onder de naam van je merk."
+      },
+      "keys": {
+        "title": "Keys die alleen jij hebt.",
+        "body": "Niemand kan je buitensluiten, en dezelfde login werkt in elke Hive-app, niet alleen op 3Speak."
+      }
+    },
+    "loadFailed": "Dit profiel kon niet worden geladen.",
+    "badge": {
+      "onHive": "Op Hive",
+      "advertiser": "Adverteerder · aan de slag",
+      "gettingStarted": "Aan de slag"
+    },
+    "stats": {
+      "posts_one": "<b>{{count}}</b>post",
+      "posts_other": "<b>{{count}}</b>posts",
+      "followers_one": "<b>{{count}}</b>volger",
+      "followers_other": "<b>{{count}}</b>volgers",
+      "following_one": "<b>{{count}}</b>volgend",
+      "following_other": "<b>{{count}}</b>volgend"
+    },
+    "editProfile": "Profiel bewerken",
+    "note": {
+      "graduated": "Nu op Hive als <userLink>@{{user}}</userLink>. Alles hieronder is daarvoor gemaakt.",
+      "advertiser": "Dit is je merkpagina op 3Speak. Rond de stappen hieronder af en het team beoordeelt je merk. Na goedkeuring krijg je een Hive-account: dat is je adverteerdersaccount, waarmee je advertenties boekt en betaalt.",
+      "own": "Zo zien anderen je. Je posts staan op 3Speak en nog niet op de Hive-blockchain, dus ze verdienen geen beloningen. Dat verandert als je je account krijgt nadat je alle taken hieronder hebt afgerond.",
+      "visitor": "Nieuw hier, nog niet op Hive. Deze posts staan op 3Speak, dus ze verdienen voorlopig geen beloningen. Volg en reageer toch: aanmoediging in het begin helpt iemand door de eerste weken heen. Als diegene een Hive-account krijgt, laten we het je weten, zodat je hem of haar daar ook kunt volgen."
+    },
+    "tabs": {
+      "aria": "Profielonderdelen",
+      "goals": "Je doelen",
+      "uploads": "Uploads",
+      "comments": "Reacties",
+      "followers": "Volgers",
+      "following": "Volgend"
+    },
+    "videosAndShorts": "Video's en Shorts",
+    "market": {
+      "audience": "Het publiek dat op je advertentie wacht",
+      "format": "Kies het formaat dat bij je boodschap past"
+    },
+    "brandVideos": "Video's van je merk",
+    "optional": "optioneel",
+    "empty": {
+      "advertiser": "Video's hier zijn om met klanten te praten, als je wilt. Advertenties boek je apart op de pagina Adverteren en daarvoor heb je geen video's nodig.",
+      "own": "Nog niets. Je eerste upload vinkt de lijst hiernaast af.",
+      "visitor": "Nog niets gepubliceerd."
+    },
+    "videos": "Video's",
+    "unlocksTitleAdvertiser": "Wat je adverteerdersaccount je oplevert",
+    "unlocksTitle": "Wat een Hive-account je oplevert",
+    "fineprint": "Opgeslagen in je 3Speak-profiel. Het gaat samen met al het andere naar Hive als je je account krijgt."
+  },
+  "activity": {
+    "empty": {
+      "comments": "Nog niets gezegd.",
+      "followers": "Nog niemand volgt hem of haar.",
+      "following": "Volgt nog niemand."
+    },
+    "loadFailed": "Dat kon niet worden geladen.",
+    "publishedToHive": "gepubliceerd op Hive",
+    "onHive": "op Hive"
+  },
+  "bell": {
+    "unreadAria_one": "Meldingen, {{count}} ongelezen",
+    "unreadAria_other": "Meldingen, {{count}} ongelezen",
+    "empty": "Nog niets. Als iemand op je video's reageert of ze leuk vindt, verschijnt het hier.",
+    "replied": "<b>@{{name}}</b> heeft op je post gereageerd",
+    "liked": "<b>@{{name}}</b> vond je post leuk"
+  },
+  "rail": {
+    "aria": "Nieuw op 3Speak",
+    "title": "Net begonnen",
+    "body": "Nieuw hier, nog niet op Hive. Deze posts staan op 3Speak. Geef ze een warm welkom voordat ze naar Hive gaan."
+  },
+  "sessionSync": {
+    "signedInAs": "Je bent ingelogd als @{{name}}",
+    "caughtUp": "Je Hive-account is klaar, dus dit apparaat is bijgewerkt.",
+    "openFailed": "Butter Auth kon niet worden geopend",
+    "title": "Verbind je sessie opnieuw",
+    "lede": "Dit apparaat heeft de verbinding met je account verloren, dus 3Speak kan je posts, voortgang en meldingen niet laden totdat die terug is.",
+    "text": "Er is niets verloren. Alles wat je hebt gemaakt staat op je account, niet in deze browser. Opnieuw verbinden duurt meestal een seconde en je hoeft niets te typen.",
+    "opening": "Openen…",
+    "reconnect": "Opnieuw verbinden"
+  },
+  "admin": {
+    "title": "Beheerdersweergave",
+    "note": "Alleen 3Speak-beheerders zien dit paneel.",
+    "brandProfile": "Merkprofiel",
+    "public": "openbaar",
+    "fields": {
+      "handle": "Handle",
+      "brandName": "Merknaam",
+      "logo": "Logo",
+      "about": "Over",
+      "website": "Website",
+      "location": "Locatie",
+      "interests": "Interesses",
+      "activity": "Activiteit",
+      "email": "E-mail",
+      "address": "Adres",
+      "contactGoal": "Contactdoel",
+      "firstSaved": "Eerst opgeslagen",
+      "lastChanged": "Laatst gewijzigd",
+      "butrauthUser": "ButrAuth-gebruiker"
+    },
+    "activityLine": "{{posts}} posts · {{followers}} volgers · {{following}} volgend",
+    "notSet": "niet ingesteld",
+    "none": "geen",
+    "privateContact": "Privécontact",
+    "privateNote": "alleen beheerders, nooit op de chain",
+    "notGiven": "niet opgegeven",
+    "met": "Behaald",
+    "notMet": "Nog niet behaald",
+    "unknown": "onbekend",
+    "noContact": "Nog geen zakelijke contactgegevens opgeslagen."
+  },
+  "contact": {
+    "savedComplete": "Opgeslagen. Alleen het 3Speak-team kan het zien.",
+    "savedIncomplete": "Opgeslagen. Voeg je adres toe, of een website op je profiel, om deze stap af te ronden.",
+    "privateNote": "<b>Privé.</b> Je e-mailadres en adres worden nooit op de blockchain opgeslagen en nooit op je profiel of ergens anders getoond. Alleen het 3Speak-team ziet ze, om je te bereiken over je advertenties.",
+    "email": "E-mail",
+    "required": "verplicht",
+    "emailPlaceholder": "jij@jouwmerk.nl",
+    "address": "Adres",
+    "addressOptional": "optioneel, tenzij je profiel geen website heeft",
+    "ph": {
+      "line1": "Straat en huisnummer",
+      "line2": "Adresregel 2",
+      "postalCode": "Postcode",
+      "city": "Plaats",
+      "region": "Provincie of regio",
+      "country": "Land"
+    },
+    "addressHint": "Een adres telt mee zodra straat, plaats en land zijn ingevuld. Geen adres? Voeg dan een website toe aan je merkprofiel.",
+    "save": "Contactgegevens opslaan"
+  },
+  "brand": {
+    "saved": "Merkprofiel opgeslagen",
+    "name": "Merknaam",
+    "namePlaceholder": "Je merk of bedrijf",
+    "about": "Wat je merk doet",
+    "aboutPlaceholder": "Eén of twee zinnen die kijkers begrijpen.",
+    "logo": "Logo",
+    "uploading": "Uploaden…",
+    "replaceLogo": "Logo vervangen",
+    "uploadLogo": "Logo uploaden",
+    "logoHint": "Wordt als cirkel naast je advertenties getoond, dus een vierkante afbeelding werkt het best.",
+    "website": "Website",
+    "websiteOptional": "optioneel als je ons je adres geeft",
+    "websitePlaceholder": "https://jouwmerk.nl",
+    "websiteInvalid": "Gebruik een volledig adres dat begint met https://",
+    "save": "Merkprofiel opslaan"
+  },
+  "createAccount": {
+    "started": "Laten we je Hive-account instellen",
+    "openFailed": "Accountinstelling kon niet worden geopend. Probeer het opnieuw.",
+    "readyAdvertiser": "Je adverteerdersaccount is klaar",
+    "ready": "Je Hive-account is klaar",
+    "approvedAdvertiser": "Het team heeft je merk goedgekeurd. Maak gratis je Hive-account aan om advertenties te boeken en te betalen.",
+    "approved": "Het team heeft je goedgekeurd. Maak gratis je Hive-account aan: het is alleen van jou.",
+    "createAdvertiser": "Mijn adverteerdersaccount aanmaken",
+    "create": "Mijn Hive-account aanmaken"
+  },
+  "graduatedFollows": {
+    "message": "@{{handle}} heeft nu een Hive-account als @{{hiveUsername}}.",
+    "title": "Iemand die je volgt is geüpgraded",
+    "followForReal": "Echt volgen",
+    "gotIt": "Begrepen",
+    "nowFollowing": "Je volgt nu @{{hiveUsername}} op Hive",
+    "followFailed": "Kon diegene niet volgen"
+  },
+  "backlog": {
+    "title": "Je eerdere posts zijn er nog",
+    "lede_one": "Je hebt <b>{{count}} ding</b> gemaakt voordat je een Hive-account had. Het staat alleen op 3Speak. Je kunt het op Hive zetten als <b>@{{user}}</b> wanneer je maar wilt.",
+    "lede_other": "Je hebt <b>{{count}} dingen</b> gemaakt voordat je een Hive-account had. Ze staan alleen op 3Speak. Je kunt ze op Hive zetten als <b>@{{user}}</b> wanneer je maar wilt.",
+    "text": "Jij kiest wat er meegaat, één voor één. Alles wat je laat staan blijft precies zoals het is op 3Speak, en je kunt altijd terugkomen voor de rest.",
+    "later": "Later"
+  },
+  "graduation": {
+    "items": {
+      "video_one": "{{count}} video",
+      "video_other": "{{count}} video's",
+      "short_one": "{{count}} short",
+      "short_other": "{{count}} Shorts",
+      "comment_one": "{{count}} reactie",
+      "comment_other": "{{count}} reacties",
+      "follow_one": "{{count}} gevolgde",
+      "follow_other": "{{count}} gevolgden",
+      "like_one": "{{count}} like",
+      "like_other": "{{count}} likes",
+      "creator_one": "{{count}} maker",
+      "creator_other": "{{count}} makers"
+    },
+    "listAnd": "{{rest}} en {{last}}",
+    "listSep": ", ",
+    "viewerDone": {
+      "watched": "{{time}} gekeken",
+      "written": "{{items}} geschreven",
+      "followed": "{{items}} gevolgd"
+    },
+    "advertiser": {
+      "lede": "Het team heeft <b>{{name}}</b> beoordeeld. Maak gratis je <b>Hive-account</b> aan: dat wordt je adverteerdersaccount.",
+      "text": "Daarmee boek je advertenties op heel 3Speak, van videospots en banners tot tickers, en betaal je ze rechtstreeks vanuit de wallet, in HBD of HIVE. De key is alleen van jou, dus niemand kan je buitensluiten.",
+      "note": "Je merkprofiel gaat met je mee. Je zakelijke e-mailadres en adres blijven privé bij 3Speak en komen nooit op de blockchain.",
+      "noteMoving": "Je <b>{{moving}}</b> gaan ook mee, geleidelijk gepubliceerd over een paar dagen."
+    },
+    "viewer": {
+      "title": "Je eigen account is klaar",
+      "ledeDone": "Als <b>@{{handle}}</b> heb je {{done}}. Maak daar gratis een <b>Hive-account</b> van dat van jou is.",
+      "lede": "Maak van <b>@{{handle}}</b> gratis een <b>Hive-account</b> dat van jou is.",
+      "text": "Daarmee kun je voten op en fooien geven aan de video's die je leuk vindt, verdienen met je reacties, je aanmelden voor kijkbeloningen voor wat je kijkt, en playlists maken. Dezelfde login en dezelfde gevolgde accounts werken in elke Hive-app, en de key is alleen van jou."
+    },
+    "createMyAccount": "Mijn account aanmaken",
+    "creator": {
+      "title": "Je kunt nu je eigen account aanmaken",
+      "lede": "Je hebt gepost als <b>@{{handle}}</b>. Maak daar gratis een echt <b>Hive-account</b> van dat van jou is.",
+      "text": "Een Hive-account is een key die alleen jij hebt. Niemand kan je buitensluiten, je posts beginnen te verdienen, en dezelfde login werkt in elke Hive-app, niet alleen op 3Speak."
+    },
+    "note": {
+      "moving": "Je <b>{{moving}}</b> gaan met je mee.",
+      "everything": "Alles wat je hier hebt gemaakt, gaat met je mee.",
+      "gradual": "Het publiceren gebeurt geleidelijk over een paar dagen, omdat een gloednieuw account begint met een klein posttegoed.",
+      "waiting_one": "Een ervan wacht tot de post waarop het reageert eerst is gepubliceerd.",
+      "waiting_other": "{{count}} ervan wachten tot de posts waarop ze reageren eerst zijn gepubliceerd."
+    },
+    "notYet": "Nog niet"
+  },
+  "handleTaken": {
+    "openFailed": "De naamkiezer kon niet worden geopend",
+    "title": "De naam @{{handle}} is al bezet",
+    "lede": "Iemand heeft hem op <b>Hive</b> geregistreerd, dus hij kan niet je account worden als je er klaar voor bent. Nu een nieuwe kiezen duurt maar even.",
+    "text": "Een naam hier kiezen heeft hem nooit gereserveerd. Hive kan een naam niet vasthouden zonder het account aan te maken, en dat is precies de stap waarvoor je nog niet hebt betaald, wat het hele punt is van beginnen zonder account.",
+    "note": "Niets wat je hebt gemaakt gaat verloren. Je video's, Shorts, reacties en gevolgde accounts blijven bij je en gaan mee onder welke naam je ook kiest.",
+    "pick": "Nieuwe naam kiezen"
+  },
+  "backfill": {
+    "rcError": "Nog niet genoeg Resource Credits. Die vullen zich vanzelf aan; probeer het zo opnieuw.",
+    "today": "Vandaag",
+    "yesterday": "Gisteren",
+    "groups": {
+      "video": "Video's",
+      "videoNote": "Eén per 5 minuten — dit is het langzame deel.",
+      "short": "Shorts",
+      "comment": "Reacties",
+      "vote": "Likes",
+      "follow": "Gevolgd",
+      "other": "Al het andere"
+    },
+    "status": {
+      "done": "Gepubliceerd",
+      "publishing": "Publiceren…",
+      "error": "Mislukt",
+      "idle": "Alleen op 3Speak"
+    },
+    "wait": {
+      "ms": "{{m}}m {{s}}s",
+      "s": "{{s}}s"
+    },
+    "noDate": "Geen datum",
+    "waitToast": "Hive staat één post per 5 minuten toe. De volgende over {{wait}}.",
+    "publishedToast_one": "Gepubliceerd op Hive",
+    "publishedToast_other": "{{count}} items gepubliceerd op Hive",
+    "loading": "Je posts laden…",
+    "emptyTitle": "Niets meer te publiceren",
+    "emptyText": "Alles wat je maakte voordat je een Hive-account had, is gepubliceerd of was niet iets dat opnieuw kan worden gepubliceerd.",
+    "title": "Publiceer wat je eerder hebt gemaakt",
+    "intro": "Je hebt deze op 3Speak gemaakt voordat je een Hive-account had, dus ze bestaan alleen hier. Kies wat je in je openbare geschiedenis als <b>@{{user}}</b> wilt hebben en publiceer het. Alles wat je laat staan blijft precies zoals het is op 3Speak.",
+    "note": "<b>Publiceren duurt even, en dat is normaal.</b> Hive staat per account één post per 5 minuten toe, en een gloednieuw account heeft een klein posttegoed dat zich in een paar dagen aanvult. Volgen, likes en je profiel kosten weinig en gaan snel. Publiceer er een paar tegelijk en kom terug.",
+    "groupBy": "Groepeer de lijst op",
+    "timeline": "Tijdlijn",
+    "byType": "Op soort",
+    "rcBlockedIn": "<b>Je account heeft op dit moment geen Resource Credits meer.</b> Hive geeft elk account een klein tegoed om te posten, en dat vult zich vanzelf aan. Er gaat niets verloren: kom over ongeveer {{wait}} terug en ga verder waar je was gebleven.",
+    "rcBlockedLater": "<b>Je account heeft op dit moment geen Resource Credits meer.</b> Hive geeft elk account een klein tegoed om te posten, en dat vult zich vanzelf aan. Er gaat niets verloren: kom iets later terug en ga verder waar je was gebleven.",
+    "selected": "<b>{{count}}</b> geselecteerd",
+    "rootPostsTime_one": "{{count}} video, dus dit duurt ongeveer {{minutes}} minuten",
+    "rootPostsTime_other": "{{count}} video's, dus dit duurt ongeveer {{minutes}} minuten",
+    "nextVideo": "De volgende video kan over {{wait}} de deur uit. Volgen, likes en profiel worden niet beïnvloed.",
+    "selectAll": "Alles selecteren",
+    "clear": "Wissen",
+    "publishSelected": "Selectie publiceren",
+    "selectItem": "{{label}} selecteren",
+    "fiveMin": "5 min",
+    "waitingTitle": "Wacht op iemand anders",
+    "waitingText": "Deze worden vanzelf gepubliceerd zodra de post waarnaar ze verwijzen op Hive staat. Ondertussen gaat er niets verloren.",
+    "waitingFor": "<b>{{label}}</b> — wacht op {{target}}",
+    "andMore": "en nog {{count}}",
+    "excludedTitle": "Gaat niet mee"
+  }
+}

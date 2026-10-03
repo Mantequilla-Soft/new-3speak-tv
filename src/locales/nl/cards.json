@@ -1,0 +1,46 @@
+{
+  "loading": "Laden...",
+  "error": "Fout: {{error}}",
+  "thumbnailAlt": "thumbnail",
+  "topicTitle": "Onderwerp: {{topic}}",
+  "watchingNow_one": "{{count}} kijkt nu",
+  "watchingNow_other": "{{count}} kijken nu",
+  "badges": {
+    "gatedTitle": "Alleen voor supporters — 3Speak Pro ontgrendelt de volledige video",
+    "pro": "PRO",
+    "new": "NIEUW",
+    "live": "● LIVE",
+    "liveChat": "● LIVECHAT"
+  },
+  "status": {
+    "scheduled": "Ingepland",
+    "mobile": "Mobiel",
+    "mobileTitle": "Geüpload via de mobiele app",
+    "processing": "Verwerken",
+    "processingTitle": "Video wordt verwerkt",
+    "draft": "Concept",
+    "draftTitle": "Concept - nog niet gepubliceerd",
+    "deleted": "Verwijderd",
+    "deletedTitle": "Deze video is verwijderd",
+    "failed": "Mislukt",
+    "failedTitle": "Verwerken van de video is mislukt",
+    "unlisted": "Verborgen",
+    "unlistedTitle": "Verborgen — niet in feeds en zoekresultaten, alleen te bereiken via een directe link"
+  },
+  "playlist": {
+    "loading": "Playlists laden...",
+    "items_one": "{{count}} item",
+    "items_other": "{{count}} items",
+    "openAria": "Playlist {{name}} openen",
+    "tag": "Playlist",
+    "updated": "Bijgewerkt {{when}}"
+  },
+  "watchLater": {
+    "title": "Later bekijken",
+    "subtitle": "Video's om later te bekijken"
+  },
+  "watched": {
+    "title": "Bekeken",
+    "subtitle": "Je kijkgeschiedenis"
+  }
+}

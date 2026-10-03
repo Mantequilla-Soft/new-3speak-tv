@@ -1,0 +1,200 @@
+{
+  "loaders": {
+    "wifi": "Wifi-loader"
+  },
+  "supportBlock": {
+    "banned": {
+      "title": "Je account is geblokkeerd",
+      "body": "Je 3Speak-account is geblokkeerd, dus je kunt niet worden ingelogd. Denk je dat dit een vergissing is? Neem dan contact op met 3Speak-support."
+    },
+    "upload": {
+      "title": "Uploaden is uitgeschakeld voor je account",
+      "body": "Je 3Speak-account mag op dit moment niet uploaden. Denk je dat dit een vergissing is? Neem dan contact op met 3Speak-support."
+    }
+  },
+  "emergency": {
+    "title": "We hebben wat problemen met onze infrastructuur",
+    "body": "Ons team is ermee bezig en werkt er nu aan om 3Speak weer online te krijgen. Kom naar onze Discord om ons te bereiken en live updates te krijgen — bedankt voor je geduld.",
+    "joinDiscord": "Naar onze Discord"
+  },
+  "changelog": {
+    "title": "We hebben een update uitgebracht!",
+    "subtitle": "Dit is er nieuw in v{{version}}",
+    "previousUpdates": "Eerdere updates",
+    "newerUpdates": "Nieuwere updates",
+    "readTheCode": "Bekijk de code",
+    "gotIt": "Begrepen"
+  },
+  "routes": {
+    "homeFeed": "Home-feed",
+    "followFeed": "Volgend-feed",
+    "discover": "Ontdekken",
+    "newVideos": "Nieuwe video's",
+    "firstUploads": "Eerste uploads",
+    "rankings": "Ranglijsten",
+    "groups": "Groepen",
+    "badges": "Badges",
+    "audioBy": "Audio van @{{author}}",
+    "audio": "Audio",
+    "playlist": "Playlist",
+    "watchHistory": "Kijkgeschiedenis — @{{username}}",
+    "postBy": "Post van @{{author}}",
+    "myProfile": "Mijn profiel",
+    "uploadStudio": "Uploadstudio",
+    "drafts": "Concepten",
+    "editVideo": "Video bewerken",
+    "editScheduledPost": "Ingeplande post bewerken",
+    "chat": "Chat",
+    "about": "Over",
+    "login": "Inloggen",
+    "brandFallback": "3Speak - Gedecentraliseerd videoplatform"
+  },
+  "invite": {
+    "title": "<who>@{{referrer}}</who> heeft je uitgenodigd voor 3Speak",
+    "incubatingFastTrack": "Je kunt <b>@{{handle}}</b> nu meteen omzetten in je eigen Hive-account, zonder de warming-up af te ronden.",
+    "incubatingKeepGoing": "Ga verder met je warming-up. <b>@{{referrer}}</b> staat vermeld als degene die je heeft uitgenodigd.",
+    "signUpFastTrack": "Registreer je en krijg meteen je eigen Hive-account: één login voor 3Speak en alle andere Hive-apps, met keys die alleen jij hebt. Het duurt ongeveer een minuut.",
+    "signUpFree": "Registreer je en begin met een gratis profiel op 3Speak. Je uitnodiging is bewaard, dus <b>@{{referrer}}</b> krijgt de credits.",
+    "createHiveAccount": "Mijn Hive-account aanmaken",
+    "createAccount": "Mijn account aanmaken",
+    "lookAround": "Ik wil alleen even rondkijken"
+  },
+  "interests": {
+    "saved": "Interesses opgeslagen — je kunt ze altijd wijzigen in Instellingen",
+    "saveFailed": "Interesses konden niet worden opgeslagen",
+    "title": "Waar hou je van?",
+    "body": "Kies een paar onderwerpen die je leuk vindt en we laten je meer content zien die bij je past. Je kunt ze altijd wijzigen in <b>Instellingen</b>.",
+    "notNow": "Niet nu",
+    "save": "Interesses opslaan"
+  },
+  "emojiGif": {
+    "emoji": "Emoji",
+    "searchEmoji": "Emoji zoeken",
+    "searchGifs": "GIF's zoeken…",
+    "noGifs": "Geen GIF's gevonden.",
+    "poweredBy": "Mogelijk gemaakt door GIPHY"
+  },
+  "welcome": {
+    "things": {
+      "postVideos": {
+        "title": "Video's plaatsen",
+        "text": "Upload lange video's die van jou blijven, op een chain waar niemand ze stilletjes van kan verwijderen."
+      },
+      "filmShorts": {
+        "title": "Shorts filmen",
+        "text": "Iets snels, verticaals en makkelijk te delen. Ideaal om je eerste kijkers te vinden."
+      },
+      "goLive": {
+        "title": "Live gaan",
+        "text": "Stream naar je mensen, haal gasten op het podium en bewaar de opname achteraf."
+      },
+      "buildCommunity": {
+        "title": "Bouw een community",
+        "text": "Begin een plek rond iets waar je om geeft, of word lid van een die al bruist."
+      },
+      "makeFriends": {
+        "title": "Maak echte vrienden",
+        "text": "Reageer, chat en werk samen met echte mensen die er voor elkaar zijn."
+      },
+      "getInspired": {
+        "title": "Laat je inspireren, doe mee",
+        "text": "Ontdek makers, steun degenen van wie je houdt, en verdien er ondertussen aan."
+      }
+    },
+    "advertiserThings": {
+      "bookAds": {
+        "title": "Boek advertenties op heel 3Speak",
+        "text": "Videospots, Shorts-spots, spelerbanners, tickers en pre-uploadspots, van één dag tot drie maanden."
+      },
+      "payFromWallet": {
+        "title": "Betaal vanuit je eigen wallet",
+        "text": "In HBD of HIVE, rechtstreeks vanaf dit account. Geen kaart en geen tussenpersoon."
+      },
+      "chooseWhere": {
+        "title": "Kies waar hij draait",
+        "text": "Kies het formaat, de positie in de video en hoeveel dagen hij draait."
+      },
+      "seeDelivered": {
+        "title": "Zie wat het opleverde",
+        "text": "Weergaven en klikken voor elke boeking, en tegoed terug als een boeking tekortschiet."
+      },
+      "talkToCustomers": {
+        "title": "Praat met je klanten",
+        "text": "Als je wilt: plaats video's, beantwoord reacties en volg mensen onder je merknaam."
+      },
+      "oneAccount": {
+        "title": "Eén account overal",
+        "text": "Hetzelfde merk en dezelfde login in elke Hive-app, met een key die alleen jij hebt."
+      }
+    },
+    "profileLive": "Je profiel staat live. Welkom bij 3Speak!",
+    "brandProfileLive": "Je merkprofiel staat live. Welkom bij 3Speak!",
+    "title": "Welkom bij 3Speak",
+    "titleNamed": "Welkom bij 3Speak, {{name}}",
+    "advertiserReady": "Je adverteerdersaccount <b>@{{user}}</b> is klaar. Met dit account boek je advertenties en betaal je ervoor.",
+    "heyUser": "Hoi <b>@{{user}}</b>, je bent er. 3Speak is gebouwd op Hive, dus je account, je publiek en je content zijn van jou.",
+    "noteAdvertiser": "Eerst even een blik op je merkprofiel: dat zien kijkers naast je advertenties.",
+    "note": "Nog één ding voordat je begint: laat mensen weten naar wie ze kijken.",
+    "maybeLater": "Misschien later",
+    "checkBrandProfile": "Mijn merkprofiel bekijken",
+    "setUpProfile": "Mijn profiel instellen",
+    "brandProfileTitle": "Je merkprofiel",
+    "profileTitle": "Laat mensen weten wie je bent",
+    "brandProfileHint": "Overgenomen uit je warming-up. Bij opslaan komt het op je Hive-account; je kunt het altijd wijzigen.",
+    "profileHint": "Dit zien mensen op je profiel. Je kunt het altijd wijzigen.",
+    "skipForNow": "Nu overslaan",
+    "saveAndBook": "Opslaan en mijn eerste advertentie boeken",
+    "uploading": "Uploaden…",
+    "interestsHint": "Hiermee kiezen we wat er op je startpagina verschijnt. Kies er zoveel als je wilt, of geen, en wijzig ze wanneer je wilt.",
+    "interestsFineprint": "Opgeslagen op je Hive-account, zodat elke Hive-app hetzelfde profiel en dezelfde interesses toont.",
+    "saveAndExplore": "Opslaan en gaan ontdekken"
+  },
+  "profileEdit": {
+    "updated": "Profiel bijgewerkt",
+    "title": "Je profiel bewerken",
+    "subtitle": "Je foto, naam en bio staan op je profiel en naast alles wat je plaatst.",
+    "loading": "Je profiel laden…",
+    "fineprint": "Opgeslagen op je Hive-account, zodat elke Hive-app hetzelfde profiel toont.",
+    "saveChanges": "Wijzigingen opslaan"
+  },
+  "profileFields": {
+    "chooseImage": "Kies een afbeeldingsbestand",
+    "imageTooLarge": "Die afbeelding is groter dan 8 MB, kies een kleinere",
+    "uploadFailed": "Die afbeelding kon niet worden geüpload",
+    "saved": "Profiel opgeslagen",
+    "saveFailed": "Je profiel kon niet worden opgeslagen",
+    "uploadBanner": "Profielbanner uploaden",
+    "changeBanner": "Banner wijzigen",
+    "addBanner": "Banner toevoegen",
+    "bannerHint": "Het mooist op <b>2800 × 684</b> px (of een andere 4:1-afbeelding). Houd het belangrijkste in het midden: de zijkanten vallen weg op smalle schermen en je naam staat linksonder.",
+    "uploadPicture": "Profielfoto uploaden",
+    "pictureLabel": "Profielfoto",
+    "pictureHint": "Een gezicht of logo werkt het best. Vierkant, 400 × 400 px of groter. Maximaal 8 MB.",
+    "displayName": "Weergavenaam",
+    "namePlaceholderUser": "Hoe mogen we je noemen? (@{{username}})",
+    "namePlaceholder": "Hoe mogen we je noemen?",
+    "shortBio": "Korte bio",
+    "bioPlaceholder": "Wat maak je, en wat kunnen mensen van je verwachten?",
+    "location": "Locatie",
+    "optional": "optioneel",
+    "locationPlaceholder": "Waar ter wereld ben je?"
+  },
+  "auth": {
+    "sessionExpired": "Je sessie is verlopen — log opnieuw in",
+    "loggedOut": "Uitgelogd",
+    "loginSuccess": "Inloggen gelukt!",
+    "switchedTo": "Overgeschakeld naar @{{user}}",
+    "butrauthFailed": "Inloggen met Butter Auth mislukt: {{error}}",
+    "signedInAs": "Ingelogd als @{{user}}",
+    "loggedInViaButrauth": "Ingelogd als @{{user}} via Butter Auth",
+    "tokenExpired": "Sessie verlopen",
+    "loginFailed": "Inloggen mislukt: {{error}}",
+    "unknownError": "Onbekende fout",
+    "loginTitle": "Inloggen bij 3Speak"
+  },
+  "update": {
+    "available": "Er is een nieuwe versie ({{version}}) beschikbaar",
+    "description": "Vernieuw om de nieuwste updates te krijgen."
+  },
+  "toastsRegion": "Meldingen"
+}

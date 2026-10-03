@@ -1,0 +1,75 @@
+{
+  "buckets": {
+    "today": "Vandaag",
+    "yesterday": "Gisteren",
+    "thisWeek": "Deze week",
+    "thisMonth": "Deze maand",
+    "older": "Ouder"
+  },
+  "loginRequired": "Log in om je meldingen te bekijken.",
+  "unreadChip_one": "{{count}} nieuw",
+  "unreadChip_other": "{{count}} nieuw",
+  "markAllTitle": "Alles als gelezen markeren",
+  "marking": "Markeren…",
+  "markAllRead": "Alles gelezen",
+  "refreshing": "Vernieuwen…",
+  "categories": {
+    "all": "Alles",
+    "replies": "Reacties",
+    "mentions": "Vermeldingen",
+    "votes": "Votes",
+    "reblogs": "Reblogs",
+    "follows": "Volgers",
+    "transfers": "Overboekingen"
+  },
+  "unread": "Ongelezen",
+  "summary": {
+    "title": "Activiteit",
+    "today": "Vandaag",
+    "week": "Deze week",
+    "month": "Deze maand",
+    "emptyToday": "Vandaag nog geen activiteit.",
+    "emptyWeek": "Deze week nog geen activiteit.",
+    "stillLoading": "Oudere meldingen worden nog geladen…",
+    "emptyMonth": "Deze maand geen activiteit."
+  },
+  "loadError": "Meldingen konden niet worden geladen.",
+  "empty": {
+    "all": "Je hebt nog geen meldingen.",
+    "unread": "Geen ongelezen meldingen.",
+    "replies": "Nog geen reacties.",
+    "mentions": "Nog geen vermeldingen.",
+    "votes": "Nog geen votes.",
+    "reblogs": "Nog geen reblogs.",
+    "follows": "Nog geen nieuwe volgers.",
+    "transfers": "Nog geen overboekingen."
+  },
+  "threeSpeakVideo": "3Speak-video",
+  "end": "Je hebt het einde bereikt.",
+  "cards": {
+    "votes": "Votes",
+    "voters_one": "{{count}} voter",
+    "voters_other": "{{count}} voters",
+    "replies": "Reacties",
+    "newFollowers": "Nieuwe volgers",
+    "mentions": "Vermeldingen",
+    "reblogs": "Reblogs",
+    "transfers": "Overboekingen"
+  },
+  "group": {
+    "voteOne": "@{{user}} heeft op je post gevotet",
+    "voteTwo": "@{{user}} en @{{user2}} hebben op je post gevotet",
+    "voteMany_one": "@{{user}} en {{count}} ander hebben op je post gevotet",
+    "voteMany_other": "@{{user}} en {{count}} anderen hebben op je post gevotet",
+    "followOne": "@{{user}} volgt je nu",
+    "followTwo": "@{{user}} en @{{user2}} volgen je nu",
+    "followMany_one": "@{{user}} en {{count}} ander volgen je nu",
+    "followMany_other": "@{{user}} en {{count}} anderen volgen je nu",
+    "generic_one": "{{count}} {{type}}-melding",
+    "generic_other": "{{count}} {{type}}-meldingen",
+    "typeCount_one": "{{count}} {{type}}",
+    "typeCount_other": "{{count}} × {{type}}",
+    "collapse": "▾ inklappen",
+    "expand": "▸ uitklappen"
+  }
+}

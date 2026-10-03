@@ -1,0 +1,349 @@
+{
+  "icons": {
+    "link": "Link",
+    "globe": "Website",
+    "podcast": "Podcast",
+    "email": "E-mail",
+    "phone": "Telefoon",
+    "rss": "RSS",
+    "qrcode": "QR-code",
+    "shop": "Shop",
+    "bag": "Winkel",
+    "dollar": "Geld",
+    "gift": "Cadeau",
+    "heart": "Steun",
+    "star": "Ster",
+    "thumbsup": "Like",
+    "fire": "Vuur",
+    "bolt": "Bliksem",
+    "music": "Muziek",
+    "headphones": "Audio",
+    "mic": "Microfoon",
+    "video": "Video",
+    "film": "Film",
+    "tv": "Tv",
+    "play": "Afspelen",
+    "camera": "Foto",
+    "image": "Afbeelding",
+    "palette": "Kunst",
+    "pen": "Schrijven",
+    "book": "Boek",
+    "newspaper": "Nieuws",
+    "graduation": "Cursus",
+    "code": "Code",
+    "gamepad": "Gaming",
+    "briefcase": "Werk",
+    "home": "Home",
+    "location": "Locatie",
+    "map": "Kaart",
+    "calendar": "Agenda",
+    "clock": "Klok",
+    "bell": "Meldingen",
+    "tag": "Tag",
+    "download": "Download",
+    "file": "Bestand",
+    "users": "Community",
+    "comment": "Reactie",
+    "share": "Delen",
+    "coffee": "Koffie",
+    "wallet": "Wallet",
+    "plus": "Meer",
+    "check": "Vinkje"
+  },
+  "fonts": {
+    "system": "Systeem",
+    "rounded": "Afgerond",
+    "serif": "Schreef",
+    "mono": "Mono",
+    "display": "Display",
+    "condensed": "Smal",
+    "handwriting": "Handschrift",
+    "grotesk": "Grotesk",
+    "humanist": "Humanistisch",
+    "geometric": "Geometrisch",
+    "slab": "Slab",
+    "elegant": "Elegant",
+    "typewriter": "Typemachine",
+    "marker": "Marker",
+    "brush": "Penseel",
+    "palatino": "Palatino",
+    "wide": "Breed"
+  },
+  "motion": {
+    "none": "Geen",
+    "float": "Zweven",
+    "sway": "Wiegen",
+    "pulse": "Pulseren",
+    "wobble": "Wiebelen",
+    "bounce": "Stuiteren",
+    "tilt": "3D-kantelen",
+    "spin": "Draaien",
+    "shake": "Schudden",
+    "breathe": "Ademen"
+  },
+  "sectionTypes": {
+    "link": "Link",
+    "video": "3Speak-content",
+    "embed": "Rijke link",
+    "image": "Afbeelding",
+    "header": "Titel / tekst"
+  },
+  "blockNames": {
+    "link": "link",
+    "header": "kop",
+    "image": "afbeelding",
+    "video": "video",
+    "embed": "embed"
+  },
+  "blockNamesPlural": {
+    "link": "links",
+    "header": "koppen",
+    "image": "afbeeldingen",
+    "video": "video's",
+    "embed": "embeds"
+  },
+  "templates": {
+    "minimal": {
+      "name": "Minimal",
+      "niche": "Strak & simpel"
+    },
+    "neon": {
+      "name": "Neon Nights",
+      "niche": "Maker / streamer"
+    },
+    "crypto": {
+      "name": "On-Chain",
+      "niche": "Crypto / Web3"
+    },
+    "gamer": {
+      "name": "Player One",
+      "niche": "Gaming"
+    },
+    "photographer": {
+      "name": "Exposure",
+      "niche": "Fotografie"
+    },
+    "podcaster": {
+      "name": "On Air",
+      "niche": "Podcast"
+    },
+    "fitness": {
+      "name": "Peak Form",
+      "niche": "Fitness / coach"
+    },
+    "writer": {
+      "name": "Longform",
+      "niche": "Schrijver / blogger"
+    },
+    "chef": {
+      "name": "Mise en Place",
+      "niche": "Eten / koken"
+    },
+    "travel": {
+      "name": "Wanderlust",
+      "niche": "Natuur / reizen"
+    },
+    "business": {
+      "name": "Boardroom",
+      "niche": "Zakelijk / professioneel"
+    },
+    "artist": {
+      "name": "Palette",
+      "niche": "Kunstenaar / visueel"
+    },
+    "ocean": {
+      "name": "Tidewater",
+      "niche": "Chill / lifestyle"
+    },
+    "musician": {
+      "name": "Amplified",
+      "niche": "Muziek / band"
+    },
+    "developer": {
+      "name": "Terminal",
+      "niche": "Developer / tech"
+    },
+    "sports": {
+      "name": "Game Day",
+      "niche": "Sport / atleet"
+    }
+  },
+  "errors": {
+    "notLoggedIn": "Niet ingelogd",
+    "couldNotSaveToHive": "Opslaan op Hive mislukt"
+  },
+  "arrange": {
+    "title": "Titel",
+    "video": "Video",
+    "latestPosts": "Nieuwste posts",
+    "latestPostsBy": "Nieuwste posts · @{{account}}",
+    "dragToArrange": "Sleep om te ordenen"
+  },
+  "page": {
+    "latestPosts": "Nieuwste posts",
+    "seeNewestPosts": "Bekijk de nieuwste posts van @{{user}} →",
+    "openLink": "Link openen",
+    "empty": "@{{user}} heeft nog geen links toegevoegd.",
+    "viewProfile": "3Speak-profiel bekijken →",
+    "poweredBy": "Mogelijk gemaakt door 3Speak"
+  },
+  "editor": {
+    "resetToDefault": "Standaard herstellen",
+    "motion": "Beweging",
+    "speed": "Snelheid {{value}}",
+    "loop": "Herhalen",
+    "runSeconds": "Duur {{value}}s",
+    "picker": {
+      "videoLabel": "Kies uit mijn video's",
+      "videoLoading": "Je video's laden…",
+      "videoEmpty": "Geen recente 3Speak-video's gevonden.",
+      "shortLabel": "Kies uit mijn Shorts",
+      "shortLoading": "Je Shorts laden…",
+      "shortEmpty": "Geen recente 3Speak-Shorts gevonden.",
+      "noChannel": "Geen kanaal gevonden (ben je ingelogd?)",
+      "loadFailed": "Laden mislukt: {{error}}"
+    },
+    "toasts": {
+      "unfurlFailed": "Linkvoorbeeld kon niet worden opgehaald",
+      "imageUploadFailed": "Afbeelding uploaden mislukt: {{error}}",
+      "tryAgain": "probeer het opnieuw",
+      "styleApplied": "Stijl toegepast op alle {{type}}-blokken",
+      "templateApplied": "“{{name}}” toegepast — pas aan of maak ongedaan",
+      "reverted": "Teruggezet naar je vorige ontwerp",
+      "saved": "Spotlight opgeslagen in je Hive-profiel",
+      "saveFailed": "Opslaan mislukt",
+      "linkCopied": "Link gekopieerd",
+      "uploadFailed": "Uploaden mislukt"
+    },
+    "link": {
+      "labelPlaceholder": "Label (bijv. Mijn YouTube)",
+      "type": "Soort link",
+      "typeGroup": "Soort",
+      "website": "Website / URL",
+      "email": "E-mail",
+      "phone": "Telefoon",
+      "platformGroup": "Platform",
+      "yourname": "jouwnaam",
+      "platformIconHint": "Het icoon is het {{platform}}-logo — kies “Website / URL” om een eigen icoon te kiezen.",
+      "icon": "Icoon",
+      "iconColor": "Icoonkleur",
+      "iconBg": "Icoonachtergrond"
+    },
+    "header": {
+      "text": "Tekst",
+      "size": "Grootte",
+      "large": "Groot",
+      "medium": "Middel",
+      "small": "Klein",
+      "align": "Uitlijning",
+      "left": "Links",
+      "center": "Midden",
+      "right": "Rechts"
+    },
+    "image": {
+      "uploading": "Uploaden…",
+      "upload": "Afbeelding uploaden",
+      "urlPlaceholder": "…of afbeeldings-URL",
+      "linkPlaceholder": "Link bij klikken (optioneel)"
+    },
+    "video": {
+      "contentType": "Soort content",
+      "video": "Video",
+      "short": "Short",
+      "orPaste": "of plak een link",
+      "pastePlaceholder": "Plak een 3Speak-videolink of auteur/permlink",
+      "titlePlaceholder": "Titel boven de video (linkt naar 3Speak)",
+      "hint": "Gekozen content wordt op je pagina ingesloten en afgespeeld."
+    },
+    "embed": {
+      "source": "Bron",
+      "sourceLink": "Een link (rijk voorbeeld)",
+      "sourceHiveRecent": "Mijn nieuwste Hive-posts",
+      "accountPlaceholder": "Hive-gebruikersnaam (leeg laten voor je eigen)",
+      "showPosts_one": "{{count}} post tonen",
+      "showPosts_other": "{{count}} posts tonen",
+      "perRow": "{{value}} per rij",
+      "hiveRecentHint": "Je nieuwste hoofdposts (geen reblogs of crossposts). Wordt automatisch bijgewerkt.",
+      "linkPlaceholder": "Plak een link — Hive-post, Instagram, X, YouTube, artikel…",
+      "fetching": "Voorbeeld ophalen…",
+      "noPreview": "Geen voorbeeld gevonden — het wordt nog steeds als linkkaart getoond.",
+      "pasteHint": "Plak een link en we halen de titel, beschrijving en afbeelding op."
+    },
+    "style": {
+      "title": "Stijl",
+      "applyAllTitle": "Pas deze stijl toe op elk {{type}}-blok",
+      "applyAll": "Toepassen op alle {{types}}",
+      "background": "Achtergrond",
+      "text": "Tekst",
+      "backgroundPct": "Achtergrond {{value}}%",
+      "radius": "Afronding {{value}}",
+      "fontSizePct": "Lettergrootte {{value}}%",
+      "paddingPx": "Opvulling {{value}}px",
+      "thumbnailPct": "Thumbnail {{value}}%",
+      "border": "Rand",
+      "thicknessPx": "Dikte {{value}}px",
+      "opacityPct": "Dekking {{value}}%",
+      "shadow": "Schaduw",
+      "strengthPct": "Sterkte {{value}}%",
+      "color": "Kleur",
+      "blur": "Vervaging {{value}}",
+      "spread": "Spreiding {{value}}",
+      "inset": "Inwendig",
+      "cardDelayMs": "Kaartvertraging {{value}}ms"
+    },
+    "tagline": "Je links & video's op één pagina",
+    "openPage": "Pagina openen",
+    "templates": {
+      "title": "Sjablonen",
+      "hint": "Kies een ontwerp om alles in te vullen — je bio blijft behouden en je kunt het ongedaan maken.",
+      "undo": "Sjabloon ongedaan maken — terug naar mijn ontwerp"
+    },
+    "profile": {
+      "title": "Profiel",
+      "headlinePlaceholder": "Een korte kop / bio (optioneel)",
+      "avatarSizePct": "Avatargrootte {{value}}%",
+      "avatarShadowPct": "Avatarschaduw {{value}}%",
+      "avatarGlow": "Avatargloed",
+      "glowSize": "Gloedgrootte {{value}}",
+      "channelButtonText": "Tekst van kanaalknop"
+    },
+    "page": {
+      "title": "Paginastijl",
+      "solid": "Effen",
+      "gradient": "Verloop",
+      "image": "Afbeelding",
+      "color2": "Kleur 2",
+      "angle": "Hoek {{value}}°",
+      "uploadBackground": "Achtergrond uploaden",
+      "imageSet": "Afbeelding ingesteld ✓",
+      "overlay": "Overlay",
+      "overlay2": "Overlay 2",
+      "none": "Geen",
+      "overlayOpacityPct": "Dekking overlay {{value}}%",
+      "overlayAngle": "Hoek overlay {{value}}°",
+      "colors": "Kleuren",
+      "buttonBg": "Knopachtergrond",
+      "buttonText": "Knoptekst",
+      "buttons": "Knoppen",
+      "buttonStyle": "Knopstijl",
+      "soft": "Zacht",
+      "fill": "Gevuld",
+      "outline": "Omlijnd",
+      "cornerRadius": "Hoekafronding {{value}}",
+      "textStyle": "Tekststijl (naam, bio & tekstblokken)",
+      "font": "Lettertype",
+      "normal": "Normaal",
+      "italic": "Cursief",
+      "bold": "Vet",
+      "boldItalic": "Vet cursief",
+      "strong": "Sterk",
+      "textBorderPx": "Tekstrand {{value}}px",
+      "borderColor": "Randkleur"
+    },
+    "addBlock": "Blok toevoegen",
+    "empty": "Voeg hierboven je eerste link, video of afbeelding toe.",
+    "arrangeHint": "Sleep <grip></grip> om te ordenen · zet een blok op een ander om ze naast elkaar te zetten · klik op een blok om het hier te bewerken",
+    "livePreview": "Live voorbeeld",
+    "previewTitle": "Spotlight-voorbeeld"
+  }
+}

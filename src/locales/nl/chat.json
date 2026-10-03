@@ -1,0 +1,142 @@
+{
+  "button": {
+    "label": "Chat"
+  },
+  "tools": {
+    "emoji": "Emoji",
+    "searchEmoji": "Emoji zoeken",
+    "searchGifs": "GIF's zoeken…",
+    "noGifs": "Geen GIF's gevonden.",
+    "poweredByGiphy": "Mogelijk gemaakt door GIPHY"
+  },
+  "lightbox": {
+    "openInNewTab": "Afbeelding openen in nieuw tabblad"
+  },
+  "linkCard": {
+    "loadingPreview": "Voorbeeld laden…",
+    "community": "Community",
+    "communityWithSubscribers_one": "Community · {{formatted}} abonnee",
+    "communityWithSubscribers_other": "Community · {{formatted}} abonnees",
+    "commentFallback": "(reactie)",
+    "play": "{{title}} afspelen"
+  },
+  "share": {
+    "embedCopied": "Embedcode gekopieerd",
+    "pressToCopy": "Druk op Ctrl/Cmd + C om de geselecteerde code te kopiëren",
+    "embedTitle": "Deze video embedden",
+    "embedHint": "Plak dit in een website of blogpost.",
+    "embedSize": "Embedformaat",
+    "embedCode": "Embedcode",
+    "copyEmbed": "Embedcode kopiëren",
+    "responsiveSub": "Past zich aan de pagina aan waarop hij staat",
+    "fixedSub": "Iframe met vaste grootte",
+    "sendInChat": "Versturen in 3Speak Chat",
+    "sendInChatSub": "Stuur het naar iemand op 3Speak",
+    "embedOnWebsite": "Embedden op een website",
+    "embedOnWebsiteSub": "Kopieer de HTML voor je eigen site of blog",
+    "generalShare": "Delen / link kopiëren",
+    "generalShareSub": "Andere apps, of kopieer de link"
+  },
+  "gate": {
+    "connectTitle": "Verbinden met 3Speak Chat",
+    "connectBody": "Chat werkt met Snapie. Bij het verbinden onderteken je eenmalig een inlog-challenge met je Hive posting key — geen transactie, geen kosten.",
+    "connecting": "Verbinden…",
+    "connectButton": "Chat verbinden",
+    "cannotSign": "Je huidige login kan de chat-challenge niet ondertekenen. Gebruik Keychain, HiveAuth, PeakVault of Ledger.",
+    "needsAccountTitle": "Voor chat heb je een Hive-account nodig",
+    "needsAccountBody": "Berichten worden ondertekend met de keys van je eigen account, dus chat wordt samen met al het andere ontgrendeld zodra je account klaar is. Rond de doelen op je profiel af en het team helpt je verder.",
+    "loginTitle": "Log in om te chatten",
+    "loginBody": "Log in met je Hive-account om berichten te versturen en te ontvangen.",
+    "connectingToChat": "Verbinden met chat…"
+  },
+  "errors": {
+    "notHiveAccount": "@{{user}} is geen Hive-account.",
+    "openConversation": "Dat gesprek kon niet worden geopend.",
+    "verifyAccount": "Dat account kon niet worden geverifieerd.",
+    "createRoom": "De ruimte kon niet worden aangemaakt.",
+    "joinChannel": "Kon niet deelnemen aan dat kanaal."
+  },
+  "newDm": {
+    "placeholder": "Stuur een Hive-gebruiker een bericht…",
+    "start": "Chat starten"
+  },
+  "newRoom": {
+    "toggle": "Nieuwe privéruimte",
+    "namePlaceholder": "Naam van de ruimte…",
+    "removeMember": "@{{user}} verwijderen",
+    "addMore": "Meer toevoegen…",
+    "invitePlaceholder": "Hive-gebruikers uitnodigen (optioneel)…",
+    "create": "Aanmaken"
+  },
+  "channels": {
+    "browse": "Kanalen bekijken",
+    "publicTitle": "Openbare kanalen",
+    "closeBrowser": "Kanaaloverzicht sluiten",
+    "loading": "Kanalen laden…",
+    "empty": "Geen kanalen beschikbaar.",
+    "join": "Deelnemen"
+  },
+  "markRead": {
+    "nothingToClear": "Geen gesprekken om te wissen. De teller zit misschien vast op de server.",
+    "requestFailed": "verzoek mislukt",
+    "allCaughtUp": "Je bent helemaal bij",
+    "stillUnread_one": "Nog steeds {{total}} ongelezen na het wissen van {{count}} chat.",
+    "stillUnread_other": "Nog steeds {{total}} ongelezen na het wissen van {{count}} chats.",
+    "stillUnreadNoMatch_one": "Nog steeds {{total}} ongelezen na het wissen van {{count}} chat. De server meldt een aantal, maar geen bijbehorend gesprek.",
+    "stillUnreadNoMatch_other": "Nog steeds {{total}} ongelezen na het wissen van {{count}} chats. De server meldt een aantal, maar geen bijbehorend gesprek.",
+    "notSignedIn": "Chat is niet ingelogd. Verbind chat opnieuw en probeer het nog eens.",
+    "sessionExpired": "Chatsessie verlopen tijdens het wissen. Verbind chat opnieuw en probeer het nog eens.",
+    "serverRejectedVisible_one": "Server weigerde het {{count}} verzoek (id's uit de zichtbare lijst)",
+    "serverRejectedVisible_other": "Server weigerde alle {{count}} verzoeken (id's uit de zichtbare lijst)",
+    "serverRejectedServerMap_one": "Server weigerde het {{count}} verzoek (id's uit de eigen ongelezen-lijst van de server)",
+    "serverRejectedServerMap_other": "Server weigerde alle {{count}} verzoeken (id's uit de eigen ongelezen-lijst van de server)",
+    "failed": "Niet alles kon als gelezen worden gemarkeerd",
+    "marking": "Als gelezen markeren…",
+    "button": "Alles als gelezen markeren",
+    "buttonCount": "Alles als gelezen markeren ({{count}})"
+  },
+  "list": {
+    "chooseTarget": "Kies een chat om naar te versturen",
+    "loading": "Gesprekken laden…",
+    "empty": "Nog geen gesprekken. Begin er hierboven een door een Hive-gebruikersnaam in te vullen."
+  },
+  "leave": {
+    "confirmRoom": "Deze ruimte verlaten?",
+    "confirmChannel": "Dit kanaal verlaten?",
+    "errorRoom": "Kon de ruimte niet verlaten.",
+    "errorChannel": "Kon het kanaal niet verlaten.",
+    "titleRoom": "Ruimte verlaten",
+    "titleChannel": "Kanaal verlaten",
+    "button": "Verlaten"
+  },
+  "thread": {
+    "editError": "Het bericht kon niet worden bewerkt.",
+    "deleteConfirm": "Dit bericht verwijderen? Het wordt vervangen door “[verwijderd]”.",
+    "deleteError": "Het bericht kon niet worden verwijderd.",
+    "back": "Terug naar gesprekken",
+    "loading": "Berichten laden…",
+    "empty": "Nog geen berichten — zeg hoi 👋",
+    "editedSuffix": " · bewerkt",
+    "messageActions": "Berichtacties",
+    "quote": "Citeren",
+    "forward": "Doorsturen",
+    "typing_one": "{{users}} is aan het typen…",
+    "typing_other": "{{users}} zijn aan het typen…",
+    "editing": "Bericht bewerken",
+    "cancelEdit": "Bewerken annuleren",
+    "quoting": "@{{user}} citeren",
+    "cancelQuote": "Citaat annuleren",
+    "removeImage": "Afbeelding verwijderen",
+    "placeholder": "Typ een bericht…"
+  },
+  "page": {
+    "chooseTarget": "Kies een chat om naar te versturen.",
+    "selectConversation": "Kies een gesprek, of begin een nieuw."
+  },
+  "overlay": {
+    "fullscreen": "Volledig scherm",
+    "exitFullscreen": "Volledig scherm sluiten",
+    "close": "Chat sluiten",
+    "sendInChat": "Versturen in chat"
+  }
+}

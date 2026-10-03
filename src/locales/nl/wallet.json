@@ -1,0 +1,50 @@
+{
+  "tabs": {
+    "overview": "Overzicht",
+    "transactions": "Transacties",
+    "aria": "Wallet-onderdelen"
+  },
+  "errors": {
+    "fetchBalances": "Saldo's ophalen mislukt",
+    "needKeychain": "Je hebt de Keychain-extensie nodig om over te maken"
+  },
+  "header": {
+    "mine": "MIJN wallet",
+    "ofUser": "Wallet van {{user}}"
+  },
+  "assets": "Tegoeden",
+  "transfer": "Overmaken",
+  "transferModal": {
+    "loginRequired": "Log in om over te maken",
+    "insufficient": "Onvoldoende saldo",
+    "invalidUsername": "Ongeldige gebruikersnaam",
+    "success": "Overboeking gelukt!",
+    "failed": "Overboeking mislukt: {{error}}",
+    "title": "{{coin}} overmaken",
+    "amountLabel": "Bedrag ({{coin}})",
+    "balance": "Saldo {{balance}}",
+    "max": "Max",
+    "recipientLabel": "Gebruikersnaam ontvanger",
+    "recipientPlaceholder": "Hive-gebruikersnaam invullen",
+    "memoLabel": "Memo",
+    "memoPlaceholder": "Memo invullen",
+    "confirm": "Overboeking bevestigen"
+  },
+  "history": {
+    "loadFailed": "Transacties laden mislukt",
+    "title": "Transactiegeschiedenis",
+    "cols": {
+      "type": "Type",
+      "amount": "Bedrag",
+      "account": "Account",
+      "date": "Datum",
+      "memo": "Memo"
+    },
+    "types": {
+      "transfer": "Overboeking",
+      "claim": "Beloning claimen",
+      "received": "Ontvangen"
+    },
+    "claimedRewards": "Geclaimde beloningen"
+  }
+}

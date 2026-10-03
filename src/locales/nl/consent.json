@@ -1,0 +1,40 @@
+{
+  "ariaLabel": "Cookie- en opslaginstellingen",
+  "title": "Cookies & browseropslag",
+  "withAds": {
+    "intro": "3Speak bewaart je login en de instellingen die je kiest in je browser. Daardoor werkt de site, en het blijft op je apparaat. Twee dingen zijn optioneel, en allebei staan ze uit tenzij je ze hieronder aanzet.",
+    "advertising": "Een daarvan is <b>advertenties</b>. Als dit aanstaat, laadt een extern advertentiebedrijf zijn eigen code op de pagina en kan het dingen opslaan waar wij geen controle over hebben. Daarom is het een aparte keuze en wordt het nooit met iets anders gecombineerd."
+  },
+  "noAds": {
+    "intro": "3Speak bewaart je login en de instellingen die je kiest in je browser — daardoor werkt de site. We gebruiken <b>geen trackingcookies, geen advertenties en geen analytics van derden</b>. Het enige dat het kijken van een video op je apparaat kan opslaan, is waar je gebleven was — en dat is de enige optionele keuze hieronder.",
+    "optional": "Het enige optionele: we kunnen onthouden <b>waar je in elke video gebleven was</b>, zodat het afspelen daar verdergaat. Dit verlaat je apparaat nooit."
+  },
+  "details": {
+    "essentialTitle": "Essentieel — altijd aan",
+    "essential": {
+      "login": "Je inlogsessie",
+      "settings": "Instellingen die je kiest: thema, volume, taal, ondertitels, feedvoorkeuren",
+      "uploads": "Het hervatten van een onderbroken upload, en concepten van posts die je aan het schrijven bent",
+      "offline": "De app zelf, voor offline gebruik na installatie",
+      "answer": "Je antwoord op deze banner"
+    },
+    "optionalTitle": "Optioneel — jouw keuze",
+    "optional": {
+      "playback": "Afspeelpositie per video, zodat je verder kunt waar je gebleven was",
+      "advertising": "Advertenties: de code van een extern advertentiebedrijf, en alles wat het op je apparaat opslaat om de advertenties die je te zien krijgt te tellen en te beperken"
+    },
+    "noteWithAds": "Als je deze uit laat, worden afspeelposities niet meer opgeslagen en worden al opgeslagen posities verwijderd, en wordt er helemaal geen advertentiecode geladen. Je kunt op elk moment van gedachten veranderen.",
+    "noteNoAds": "Als je “Alleen essentieel” kiest, worden afspeelposities niet meer opgeslagen en worden al opgeslagen posities verwijderd. Je kunt op elk moment van gedachten veranderen — als je “Accepteren” kiest, staat het meteen weer aan."
+  },
+  "toggles": {
+    "resumeTitle": "Afspelen hervatten",
+    "resumeDesc": "Onthoud waar je in elke video gebleven was. Blijft op je apparaat.",
+    "advertisingTitle": "Advertenties",
+    "advertisingDesc": "Laat een extern advertentiebedrijf zijn code laden en opslaan wat het nodig heeft."
+  },
+  "hideDetails": "Details verbergen",
+  "whatIsStored": "Wat wordt er precies opgeslagen?",
+  "essentialOnly": "Alleen essentieel",
+  "saveChoices": "Keuzes opslaan",
+  "acceptAll": "Alles accepteren"
+}

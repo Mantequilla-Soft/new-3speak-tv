@@ -1,0 +1,98 @@
+{
+  "tip": {
+    "successTitle": "Fooi verstuurd!",
+    "successMessage": "Je hebt {{amount}} {{currency}} als fooi verstuurd. Bedankt voor je steun!",
+    "errors": {
+      "allRequired": "Alle velden zijn verplicht",
+      "loginRequired": "Log in om een fooi te sturen",
+      "insufficientBalance": "Onvoldoende saldo",
+      "invalidUsername": "Ongeldige gebruikersnaam",
+      "transferFailed": "Overboeking mislukt: {{message}}"
+    },
+    "heading": "Stuur een fooi naar @{{recipient}}",
+    "amountLabel": "Bedrag: ",
+    "amountPlaceholder": "bijv. 1.000",
+    "currencyLabel": "Valuta:",
+    "availableBalance": "Beschikbaar saldo: {{currency}}",
+    "memoLabel": "Memo (optioneel):",
+    "memoPlaceholder": "bijv. Bedankt voor deze geweldige content!",
+    "send": "Fooi sturen"
+  },
+  "cardMenu": {
+    "loginToPersonalize": "Log in om je feed te personaliseren",
+    "notInterestedToast": "Niet geïnteresseerd — we verbergen deze video",
+    "undo": "Ongedaan maken",
+    "cantHideOwn": "Je kunt je eigen video's niet verbergen",
+    "hidingCreatorToast": "Video's van @{{author}} worden verborgen",
+    "loginForPlaylists": "Log in om video's aan playlists toe te voegen",
+    "loginToTag": "Log in om video's te taggen",
+    "moreOptions": "Meer opties",
+    "addToPlaylist": "Toevoegen aan playlist",
+    "addTag": "Tag toevoegen",
+    "notInterested": "Niet geïnteresseerd",
+    "dontShowCreator": "@{{author}} niet tonen"
+  },
+  "guestList": {
+    "loadFailed": "De huidige gastenlijst kon niet worden geladen",
+    "saved_one": "{{count}} gast kan dit bekijken",
+    "saved_other": "{{count}} gasten kunnen dit bekijken",
+    "cleared": "Gastenlijst gewist",
+    "saveFailed": "De gastenlijst kon niet worden opgeslagen",
+    "invalidAccounts": "Geen geldige Hive-accounts: {{names}}",
+    "title": "🔒 Gastenlijst",
+    "hint": "Deze accounts kunnen kijken zonder 3Speak Pro. Wordt privé bewaard op onze servers en nooit in je post gepubliceerd.",
+    "notRegistered": "Deze video is nog niet klaar met verwerken. Daarna kun je de lijst nog steeds bewerken.",
+    "placeholder": "gebruikersnaam, nog.een.gebruiker",
+    "empty": "Nog niemand. Alleen Pro-abonnees kunnen dit bekijken.",
+    "removeAria": "{{name}} verwijderen"
+  },
+  "voters": {
+    "pinnedTitle_one": "Voters ({{count}})",
+    "pinnedTitle_other": "Voters ({{count}})",
+    "topVoters": "Topvoters",
+    "noVotes": "Nog geen votes"
+  },
+  "payout": {
+    "breakdown": "Uitsplitsing uitbetaling",
+    "estimatedBreakdown": "Geschatte uitsplitsing",
+    "beneficiaries": "Begunstigden",
+    "curators": "Curators (50%)",
+    "author": "Auteur",
+    "total": "Totaal",
+    "totalEstimated": "Totaal (geschat)"
+  },
+  "vote": {
+    "loginRequired": "Log in om dit af te ronden",
+    "fetchPostFailed": "Postgegevens konden niet worden opgehaald",
+    "sameWeight": "Je hebt al met dit gewicht gevotet. Kies een andere waarde.",
+    "failed": "Vote mislukt: {{message}}",
+    "pleaseTryAgain": "probeer het opnieuw",
+    "weight": "Vote-gewicht: {{weight}}%",
+    "success": "Vote gelukt! Waarde: ${{value}}",
+    "successTagged": "Vote gelukt! Getagd als “{{tag}}”. Waarde: ${{value}}",
+    "tagged": "Getagd als “{{tag}}”.",
+    "vote": "Voten",
+    "tagThisVideo": "Tag deze video",
+    "tagOptional": "— optioneel —",
+    "pickTopicFirst": "Kies eerst een onderwerp",
+    "taggedNoDot": "Getagd als “{{tag}}”",
+    "tagFailed": "Taggen mislukt: {{message}}",
+    "taggedAlreadyVoted": "Getagd als “{{tag}}” — je vote van {{weight}}% was al uitgebracht.",
+    "votingClosed": "Voten gesloten — tag deze video",
+    "youTagged": "Je hebt dit getagd als <b>{{tag}}</b>.",
+    "pickTopic": "Kies een onderwerp (telt als een vote van 100%)",
+    "submitTag": "Tag versturen",
+    "tagThisVideoFull": "Tag deze video (telt als een vote van 100%)",
+    "justTag": "Niet voten — alleen taggen"
+  },
+  "tagsPicker": {
+    "autoTagged": "Automatisch getagd: {{tags}}",
+    "searchPlaceholder": "Onderwerpen zoeken…",
+    "searchAria": "Onderwerpen zoeken",
+    "noMatches": "Geen onderwerpen voor “{{query}}”.",
+    "allSelected": "Heel {{category}} is geselecteerd. Voeg alleen losse onderwerpen toe om het smaller te maken:",
+    "orPickTopics": "Of kies losse onderwerpen:",
+    "goodEnough": "Goed genoeg — of maak het specifieker (optioneel):",
+    "moreSpecific": "Specifieker:"
+  }
+}
