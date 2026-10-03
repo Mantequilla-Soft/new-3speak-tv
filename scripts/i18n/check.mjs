@@ -102,10 +102,16 @@ for (const code of folders.filter((c) => c !== 'en').sort()) {
     if (ref !== undefined) {
       // A plural form may legitimately drop {{count}} ("one comment"), so only
       // check the other placeholders there.
+      // A plural form may use any token of ANY English form of that text: Russian
+      // "one" also covers 21, 31…, so it needs {{count}} even where English "one"
+      // reads "Upload a video".
+      const allowed = m
+        ? [...new Set(['zero', 'one', 'two', 'few', 'many', 'other'].flatMap((c) => (`${baseKey(k)}_${c}` in en ? tokens(en[`${baseKey(k)}_${c}`]) : [])))]
+        : tokens(ref);
       const want = tokens(ref).filter((t) => !(m && t === '{{count}}'));
       const have = tokens(v);
       const lost = want.filter((t) => !have.includes(t));
-      const extra = have.filter((t) => !tokens(ref).includes(t));
+      const extra = have.filter((t) => !allowed.includes(t));
       if (lost.length) errors.push(`${code}: ${k} is missing ${lost.join(' ')} (English: "${ref}")`);
       if (extra.length) errors.push(`${code}: ${k} has unknown ${extra.join(' ')} (English: "${ref}")`);
     }

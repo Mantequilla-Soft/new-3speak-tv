@@ -1,0 +1,135 @@
+{
+  "button": {
+    "label": "Sohbet"
+  },
+  "tools": {
+    "emoji": "Emoji",
+    "searchEmoji": "Emoji ara",
+    "searchGifs": "GIF ara…",
+    "noGifs": "GIF bulunamadı.",
+    "poweredByGiphy": "GIPHY desteğiyle"
+  },
+  "lightbox": {
+    "openInNewTab": "Görseli yeni sekmede aç"
+  },
+  "linkCard": {
+    "loadingPreview": "Önizleme yükleniyor…",
+    "community": "Topluluk",
+    "communityWithSubscribers_one": "Topluluk · {{formatted}} abone",
+    "communityWithSubscribers_other": "Topluluk · {{formatted}} abone",
+    "commentFallback": "(yorum)"
+  },
+  "share": {
+    "embedCopied": "Gömme kodu kopyalandı",
+    "pressToCopy": "Seçili kodu kopyalamak için Ctrl/Cmd + C'ye bas",
+    "embedTitle": "Bu videoyu yerleştir",
+    "embedHint": "Bunu herhangi bir web sitesine veya blog yazısına yapıştır.",
+    "embedSize": "Yerleştirme boyutu",
+    "embedCode": "Gömme kodu",
+    "copyEmbed": "Gömme kodunu kopyala",
+    "responsiveSub": "Bulunduğu sayfaya sığacak şekilde ölçeklenir",
+    "fixedSub": "Sabit boyutlu iframe",
+    "sendInChat": "3Speak Sohbet'te gönder",
+    "sendInChatSub": "3Speak'te birine mesajla gönder",
+    "embedOnWebsite": "Web sitesine yerleştir",
+    "embedOnWebsiteSub": "Kendi siten veya blogun için HTML kodunu kopyala",
+    "generalShare": "Paylaş / bağlantıyı kopyala",
+    "generalShareSub": "Diğer uygulamalar ya da bağlantıyı kopyala"
+  },
+  "gate": {
+    "connectTitle": "3Speak Sohbet'e bağlan",
+    "connectBody": "Sohbet Snapie altyapısıyla çalışır. Bağlanmak, Hive posting anahtarınla tek seferlik bir giriş doğrulamasını imzalar; işlem yok, ücret yok.",
+    "connecting": "Bağlanılıyor…",
+    "connectButton": "Sohbete bağlan",
+    "cannotSign": "Mevcut girişin sohbet doğrulamasını imzalayamıyor. Keychain, HiveAuth, PeakVault veya Ledger kullan.",
+    "needsAccountTitle": "Sohbet için Hive hesabı gerekli",
+    "needsAccountBody": "Mesajlar kendi hesap anahtarlarınla imzalanır, bu yüzden sohbet de hesabın hazır olduğunda diğer her şeyle birlikte açılır. Profilindeki hedefleri tamamla, ekip seni oraya ulaştıracak.",
+    "loginTitle": "Sohbeti kullanmak için giriş yap",
+    "loginBody": "Mesaj göndermek ve almak için Hive hesabınla giriş yap.",
+    "connectingToChat": "Sohbete bağlanılıyor…"
+  },
+  "errors": {
+    "notHiveAccount": "@{{user}} bir Hive hesabı değil.",
+    "openConversation": "Bu sohbet açılamadı.",
+    "verifyAccount": "Bu hesap doğrulanamadı.",
+    "createRoom": "Oda oluşturulamadı.",
+    "joinChannel": "Bu kanala katılınamadı."
+  },
+  "newDm": {
+    "placeholder": "Bir Hive kullanıcısına mesaj gönder…",
+    "start": "Sohbet başlat"
+  },
+  "newRoom": {
+    "toggle": "Yeni özel oda",
+    "namePlaceholder": "Oda adı…",
+    "removeMember": "@{{user}} kaldır",
+    "addMore": "Daha fazla ekle…",
+    "invitePlaceholder": "Hive kullanıcılarını davet et (isteğe bağlı)…",
+    "create": "Oluştur"
+  },
+  "channels": {
+    "browse": "Kanallara göz at",
+    "publicTitle": "Herkese açık kanallar",
+    "closeBrowser": "Kanal tarayıcısını kapat",
+    "loading": "Kanallar yükleniyor…",
+    "empty": "Kanal yok.",
+    "join": "Katıl"
+  },
+  "markRead": {
+    "nothingToClear": "Temizlenecek sohbet yok. Sayaç sunucu tarafında takılmış olabilir.",
+    "requestFailed": "istek başarısız",
+    "allCaughtUp": "Hepsini okudun",
+    "stillUnread_one": "{{count}} sohbet temizlendikten sonra hâlâ {{total}} okunmamış görünüyor.",
+    "stillUnread_other": "{{count}} sohbet temizlendikten sonra hâlâ {{total}} okunmamış görünüyor.",
+    "stillUnreadNoMatch_one": "{{count}} sohbet temizlendikten sonra hâlâ {{total}} okunmamış görünüyor. Sunucu bir sayı bildiriyor ama eşleşen sohbet yok.",
+    "stillUnreadNoMatch_other": "{{count}} sohbet temizlendikten sonra hâlâ {{total}} okunmamış görünüyor. Sunucu bir sayı bildiriyor ama eşleşen sohbet yok.",
+    "notSignedIn": "Sohbette oturum açık değil. Sohbete yeniden bağlan ve tekrar dene.",
+    "sessionExpired": "Temizleme sırasında sohbet oturumunun süresi doldu. Sohbete yeniden bağlan ve tekrar dene.",
+    "serverRejectedVisible_one": "Sunucu {{count}} isteğin tümünü reddetti (kimlikler görünen listeden)",
+    "serverRejectedVisible_other": "Sunucu {{count}} isteğin tümünü reddetti (kimlikler görünen listeden)",
+    "serverRejectedServerMap_one": "Sunucu {{count}} isteğin tümünü reddetti (kimlikler sunucunun kendi okunmamış listesinden)",
+    "serverRejectedServerMap_other": "Sunucu {{count}} isteğin tümünü reddetti (kimlikler sunucunun kendi okunmamış listesinden)",
+    "failed": "Hepsi okundu olarak işaretlenemedi",
+    "marking": "Okundu olarak işaretleniyor…",
+    "button": "Tümünü okundu olarak işaretle",
+    "buttonCount": "Tümünü okundu olarak işaretle ({{count}})"
+  },
+  "list": {
+    "chooseTarget": "Gönderilecek sohbeti seç",
+    "loading": "Sohbetler yükleniyor…",
+    "empty": "Henüz sohbet yok. Yukarıya bir Hive kullanıcı adı girerek başlat."
+  },
+  "leave": {
+    "confirmRoom": "Bu odadan ayrılmak istiyor musun?",
+    "confirmChannel": "Bu kanaldan ayrılmak istiyor musun?",
+    "errorRoom": "Odadan ayrılınamadı.",
+    "errorChannel": "Kanaldan ayrılınamadı.",
+    "titleRoom": "Odadan ayrıl",
+    "titleChannel": "Kanaldan ayrıl",
+    "button": "Ayrıl"
+  },
+  "thread": {
+    "editError": "Mesaj düzenlenemedi.",
+    "deleteConfirm": "Bu mesaj silinsin mi? Yerine “[silindi]” yazacak.",
+    "deleteError": "Mesaj silinemedi.",
+    "back": "Sohbetlere dön",
+    "loading": "Mesajlar yükleniyor…",
+    "empty": "Henüz mesaj yok, bir merhaba de 👋",
+    "editedSuffix": " · düzenlendi",
+    "messageActions": "Mesaj işlemleri",
+    "quote": "Alıntıla",
+    "forward": "İlet",
+    "typing_one": "{{users}} yazıyor…",
+    "typing_other": "{{users}} yazıyor…",
+    "editing": "Mesaj düzenleniyor",
+    "cancelEdit": "Düzenlemeyi iptal et",
+    "quoting": "@{{user}} alıntılanıyor",
+    "cancelQuote": "Alıntıyı iptal et",
+    "removeImage": "Görseli kaldır",
+    "placeholder": "Bir mesaj yaz…"
+  },
+  "page": {
+    "chooseTarget": "Gönderilecek sohbeti seç.",
+    "selectConversation": "Bir sohbet seç ya da yeni bir tane başlat."
+  }
+}

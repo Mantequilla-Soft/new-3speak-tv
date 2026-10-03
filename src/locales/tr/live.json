@@ -1,0 +1,97 @@
+{
+  "backToOpenPods": "OpenPods'a dön",
+  "modal": {
+    "leaveConfirm": "Bu OpenPod'dan ayrılmak istiyor musun? Lobiden istediğin zaman yeniden katılabilirsin.",
+    "yourStreamEnded": "Yayının sona erdi",
+    "thisStreamEnded": "Bu yayın sona erdi",
+    "noLongerLive": "Artık canlı değil. Hazır olduğunda yeni bir yayın başlat.",
+    "recordingProcessing": "Harikaydı! Kaydın işleniyor ve kısa süre içinde duyuru gönderisinde görünecek.",
+    "thanksForLive": "Harikaydı, canlı yayın yaptığın için teşekkürler!",
+    "backHome": "Ana sayfaya dön",
+    "howWasStream": "Yayının nasıl geçti?",
+    "connecting": "OpenPods'a bağlanılıyor…",
+    "authenticating": "OpenPods ile kimlik doğrulanıyor…"
+  },
+  "strip": {
+    "liveNow_one": "Şu an <n>{{count}}</n> OpenPod canlı",
+    "liveNow_other": "Şu an <n>{{count}}</n> OpenPod canlı",
+    "viewAll": "Tümünü gör",
+    "joinAria": "OpenPod'a katıl: {{title}}"
+  },
+  "announce": {
+    "selectCommunity": "Topluluk Seç",
+    "shareToggle": "📣 Bu yayını başladığında Hive ve 3Speak'te paylaş",
+    "community": "Topluluk",
+    "rewards": "Ödüller",
+    "rewardDefault": "Varsayılan 50/50",
+    "rewardPowerup": "%100 Power up",
+    "rewardDecline": "Ödemeyi reddet",
+    "beneficiaries": "Lehtarlar",
+    "beneProHint": "3Speak Pro kullanıyorsun, platform ücreti yok. İstersen paylaşım ekleyebilirsin.",
+    "beneLockedHint": "@threespeakfund için %10 sabittir. Daha fazlasını ekleyebilirsin."
+  },
+  "boost": {
+    "label": "Boost",
+    "sendTo": "@{{user}} kullanıcısına boost gönder",
+    "send": "Boost gönder"
+  },
+  "clip": {
+    "saved": "Klip indirilenlere kaydedildi.",
+    "slowDown": "Biraz bekle, sonra yeniden klip al.",
+    "failed": "Klip oluşturulamadı. Birkaç saniye sonra tekrar dene.",
+    "title": "Son 30 saniyeyi klip olarak al",
+    "label": "30 sn",
+    "clipping": "Klip alınıyor…"
+  },
+  "report": {
+    "reasons": {
+      "harassment": "Taciz veya nefret",
+      "sexual": "Cinsel veya müstehcen içerik",
+      "violence": "Şiddet veya tehlikeli davranış",
+      "selfharm": "Kendine zarar verme",
+      "illegal": "Yasa dışı içerik",
+      "spam": "Spam veya dolandırıcılık",
+      "other": "Başka bir şey"
+    },
+    "sent": "Teşekkürler, bu yayın ekibimize bildirildi.",
+    "failed": "Bildirim gönderilemedi. Lütfen tekrar dene.",
+    "title": "Bu yayını bildir",
+    "reporting": "<b>@{{host}}</b> bildiriliyor.",
+    "intro": "Sorunun ne olduğunu anlat; ekibimiz her bildirimi inceler.",
+    "detailPlaceholder": "Ayrıntı ekle (isteğe bağlı)",
+    "sending": "Gönderiliyor…",
+    "submit": "Bildirimi gönder"
+  },
+  "signIn": {
+    "waitingWallet": "Cüzdanın bekleniyor…"
+  },
+  "publish": {
+    "errors": {
+      "noTitle": "Lütfen bir başlık ekle",
+      "noAudio": "Ses URL'si bulunamadı",
+      "failed": "Yayınlanamadı. Lütfen tekrar dene."
+    },
+    "published": "Kayıt Hive'da yayınlandı!",
+    "loginGate": "Kaydını yayınlamak için giriş yap.",
+    "heading": "OpenPod Kaydını Yayınla",
+    "previewLabel": "Kayıt önizlemesi",
+    "previewHint": "Yayınlamadan önce sesi kontrol et. Okuyucuların gönderide göreceği oynatıcının aynısı bu.",
+    "recordingFallback": "OpenPod Kaydı",
+    "title": "Başlık",
+    "titlePlaceholder": "Kaydına bir başlık ver",
+    "description": "Açıklama",
+    "optional": "(isteğe bağlı)",
+    "descriptionPlaceholder": "Neler konuştunuz? Program notları, bağlantılar veya bir özet ekle...",
+    "tags": "Etiketler",
+    "tagsPlaceholder": "Boşlukla ayrılmış etiketler",
+    "declinePayout": "Ödemeyi Reddet",
+    "publishing": "Yayınlanıyor…",
+    "submit": "Kaydı Yayınla"
+  },
+  "lobby": {
+    "descriptionPlaceholder": "Bu oturum ne hakkında? Program notları, bağlantılar veya bir özet ekle…",
+    "enableHosting": "Sunuculuğu ve konuşmayı aç",
+    "handoverFailed": "Sunuculuk otomatik açılamadı. OpenPods senin adına @threespeak üzerinden paylaşım yapar; ona paylaşım (posting) yetkisi verdiğini kontrol et ve tekrar dene.",
+    "signInToHost": "Sunmak veya konuşmak için Hive ile giriş yap"
+  }
+}

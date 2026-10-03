@@ -1,0 +1,98 @@
+{
+  "page": {
+    "fallbackTitle": "Rozet",
+    "kpis": {
+      "recipients": "Alanlar",
+      "recentVideos": "Son videolar",
+      "issued": "Verildi"
+    },
+    "issuedBy": "Veren: <creatorLink>@{{creator}}</creatorLink>",
+    "notFoundTitle": "Rozet bulunamadı",
+    "notFoundBody": "@{{account}} adlı Hive hesabı şu an okunamadı.",
+    "browseAll": "Tüm rozetlere göz at",
+    "tabs": {
+      "videos": "Videolar",
+      "recipients": "Alanlar",
+      "recipientsWithCount": "Alanlar ({{num}})"
+    },
+    "errorVideos": "Videolar alınırken hata oluştu",
+    "noVideosTitle": "Henüz video yok",
+    "noHolders": "Bu rozete henüz kimse sahip değil.",
+    "noHolderVideos": "Bu rozete sahip olanların hiçbiri henüz 3Speak'te video yayınlamadı.",
+    "loadingMore": "Daha fazlası yükleniyor...",
+    "recipientsError": "Rozet sahipleri yüklenemedi",
+    "recipientsLoading": "Rozet sahipleri yükleniyor...",
+    "noRecipientsTitle": "Henüz rozet sahibi yok",
+    "noRecipientsBody": "Bu rozet şimdiye kadar kimseye verilmedi.",
+    "recipientsSummary_one": "{{num}} rozet sahibi",
+    "recipientsSummary_other": "{{num}} rozet sahibi",
+    "recipientsSummaryWithVideos_one": "{{num}} rozet sahibi, {{publishing}} kişi 3Speak'te yayın yapıyor",
+    "recipientsSummaryWithVideos_other": "{{num}} rozet sahibi, {{publishing}} kişi 3Speak'te yayın yapıyor",
+    "recipientVideos_one": "{{num}} video",
+    "recipientVideos_other": "{{num}} video",
+    "recipientNoVideos": "Video yok"
+  },
+  "directory": {
+    "title": "Rozetler",
+    "intro": "Rozetler, etkinlikler, katkılar ve dönüm noktaları için Hive'da <b>başkalarının sana verdiği</b> ödüllerdir. Bir rozete katılamazsın; birinin onu sana vermesi gerekir. Sahiplerinin burada neler yayınladığını görmek için bir rozeti aç.",
+    "searchPlaceholder": "Rozet ara...",
+    "sort": {
+      "recipients": "Sahipler",
+      "created": "Oluşturulma",
+      "name": "Ad"
+    },
+    "createLocked": "Rozet oluşturmak için bir Hive hesabı gerekir. Hesabın hazır olduğunda bu açılır.",
+    "create": "Rozet oluştur",
+    "loadError": "Rozetler şu an yüklenemedi.",
+    "noMatch": "Bu aramayla eşleşen rozet yok.",
+    "held": "Sende var",
+    "recipients_one": "{{num}} rozet sahibi",
+    "recipients_other": "{{num}} rozet sahibi"
+  },
+  "award": {
+    "success": "@{{username}} artık {{title}} rozetine sahip",
+    "failed": "Bu rozet verilemedi",
+    "dialogLabel": "{{username}} kullanıcısına rozet ver",
+    "title": "Rozet ver",
+    "toUser": "alıcı: @{{username}}",
+    "awarding": "Veriliyor…",
+    "held": "Sahip",
+    "award": "Ver",
+    "note": "Rozet onu Hive'da takip eder; rozete sahip olmak bu demektir. Rozetin kendi sayfasından geri alabilirsin."
+  },
+  "hive": {
+    "dragToReorder": "Sıralamak için sürükle",
+    "orderSaved": "Rozet sıralaması Hive profiline kaydedildi",
+    "orderSaveFailed": "Rozet sıralaman kaydedilemedi",
+    "dialogLabel": "@{{username}} kullanıcısının rozetleri",
+    "title": "Rozetler",
+    "arrangeHint": "Rozetlerini görünmesini istediğin sıraya sürükle.",
+    "earnedCount_one": "@{{username}} Hive'da {{count}} rozet kazandı",
+    "earnedCount_other": "@{{username}} Hive'da {{count}} rozet kazandı",
+    "alwaysFirst": "Her zaman ilk gösterilir",
+    "saveOrder": "Sıralamayı kaydet",
+    "arrange": "Düzenle",
+    "arrangeTitle": "Rozetlerinin görüneceği sırayı seç",
+    "showAll_one": "{{count}} rozetin tümünü göster",
+    "showAll_other": "{{count}} rozetin tümünü göster",
+    "awardTitle": "Rozetlerinden birini @{{username}} kullanıcısına ver"
+  },
+  "leaderboardBadges": {
+    "proTitle": "Bu içerik üreticisi 3Speak'i Pro aboneliğiyle destekliyor"
+  },
+  "leaderboard": {
+    "watchNotice": "İzlenme süresi yalnızca {{since}} tarihinden beri takip ediliyor, bu yüzden daha uzun aralıklar da aynı kısa geçmişi gösteriyor.",
+    "unclaimed": "Alınmamış",
+    "noActivity": "Bu aralıkta henüz etkinlik yok",
+    "otherTopics": "Diğer",
+    "title": "Sıralamalar",
+    "subtitle": "{{blurb}}: 3Speak'in en iyi içerik üreticileri.",
+    "subtitleTopic": "{{blurb}}: {{topic}} alanındaki en iyi içerik üreticileri.",
+    "allTopics": "Tüm konular",
+    "finding": "@{{user}} bu tabloda aranıyor…",
+    "notInTop": "@{{user}} bu tablonun ilk {{n}} sırasında değil.",
+    "loading": "Sıralama yükleniyor…",
+    "loadError": "Sıralama yüklenemedi. Birazdan tekrar dene.",
+    "empty": "Bu aralıkta henüz kimsenin {{metric}} değeri yok."
+  }
+}

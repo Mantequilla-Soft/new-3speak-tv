@@ -1,0 +1,242 @@
+{
+  "leaderboard": {
+    "windows": {
+      "7d": "7 gün",
+      "30d": "30 gün",
+      "365d": "Yıl",
+      "all": "Tüm zamanlar"
+    },
+    "windowsInSentence": {
+      "7d": "7 gün",
+      "30d": "30 gün",
+      "365d": "yıl",
+      "all": "tüm zamanlar"
+    },
+    "metrics": {
+      "video_uploads": "Videolar",
+      "short_uploads": "Shorts",
+      "video_watch_secs": "Video izlenme süresi",
+      "short_watch_secs": "Shorts izlenme süresi",
+      "tags_given": "Etiketler",
+      "streams": "Yayınlar",
+      "stream_secs": "Canlı süre",
+      "stream_peak_viewers": "En yüksek izleyici",
+      "stream_viewers": "İzleyici katılımları",
+      "boosts_received": "Alınan boost'lar",
+      "boost_amount_received": "Alınan miktar",
+      "boosts_given": "Verilen boost'lar",
+      "boost_amount_given": "Verilen miktar"
+    },
+    "metricsInSentence": {
+      "video_uploads": "video",
+      "short_uploads": "Shorts",
+      "video_watch_secs": "video izlenme süresi",
+      "short_watch_secs": "Shorts izlenme süresi",
+      "tags_given": "etiket",
+      "streams": "yayın",
+      "stream_secs": "canlı süre",
+      "stream_peak_viewers": "en yüksek izleyici",
+      "stream_viewers": "izleyici katılımı",
+      "boosts_received": "alınan boost",
+      "boost_amount_received": "alınan miktar",
+      "boosts_given": "verilen boost",
+      "boost_amount_given": "verilen miktar"
+    },
+    "blurbs": {
+      "video_uploads": "Yüklenen videolar",
+      "short_uploads": "Yüklenen Shorts",
+      "video_watch_secs": "Videolarının izlendiği saniye",
+      "short_watch_secs": "Shorts videolarının izlendiği saniye",
+      "tags_given": "Diğer videolara verilen etiketler",
+      "streams": "Başlatılan yayın oturumları",
+      "stream_secs": "Toplam canlı süre (yalnızca biten yayınlar)",
+      "stream_peak_viewers": "En yüksek eşzamanlı izleyici (toplam değil, zirve değeri)",
+      "stream_viewers": "İzleyici katılım olayları (hacim, tekil erişim değil)",
+      "boosts_received": "Yayınlarına gönderilen boost'lar",
+      "boost_amount_received": "Alınan boost'ların toplam miktarı",
+      "boosts_given": "Diğer yayıncılara gönderdikleri boost'lar",
+      "boost_amount_given": "Verdikleri boost'ların toplam miktarı"
+    },
+    "blurbsInSentence": {
+      "video_uploads": "yüklenen videolar",
+      "short_uploads": "yüklenen Shorts",
+      "video_watch_secs": "videolarının izlendiği saniye",
+      "short_watch_secs": "Shorts videolarının izlendiği saniye",
+      "tags_given": "diğer videolara verilen etiketler",
+      "streams": "başlatılan yayın oturumları",
+      "stream_secs": "toplam canlı süre (yalnızca biten yayınlar)",
+      "stream_peak_viewers": "en yüksek eşzamanlı izleyici (toplam değil, zirve değeri)",
+      "stream_viewers": "izleyici katılım olayları (hacim, tekil erişim değil)",
+      "boosts_received": "yayınlarına gönderilen boost'lar",
+      "boost_amount_received": "alınan boost'ların toplam miktarı",
+      "boosts_given": "diğer yayıncılara gönderdikleri boost'lar",
+      "boost_amount_given": "verdikleri boost'ların toplam miktarı"
+    },
+    "groups": {
+      "video": "Video",
+      "streaming": "Yayın"
+    },
+    "badgeNouns": {
+      "video_uploads": "Videolar",
+      "short_uploads": "Shorts",
+      "video_watch_secs": "İzlenen",
+      "short_watch_secs": "İzlenen Shorts",
+      "tags_given": "Etiketleyici"
+    },
+    "badgeLabel": "{{tier}} {{noun}}",
+    "badgeTitleAllTime": "Tüm zamanlarda {{what}} sıralamasında #{{rank}}",
+    "badgeTitleWindow": "Son {{window}} içinde {{what}} sıralamasında #{{rank}}"
+  },
+  "duration": {
+    "hoursMinutes": "{{h}}sa {{m}}dk",
+    "minutesSeconds": "{{m}}dk {{s}}sn",
+    "seconds": "{{s}}sn",
+    "aMoment": "bir an",
+    "lessThanMinute": "bir dakikadan az"
+  },
+  "surf": {
+    "community": "Topluluk",
+    "allOf": "{{label}} tümü"
+  },
+  "social": {
+    "signingCancelled": "İmzalama iptal edildi",
+    "youtube": {
+      "placeholder": "@kullaniciadi veya UCxxxxxxxxxxxxxxxxxxxxxx",
+      "help": "YouTube @kullanıcı adını veya UC… kanal kimliğini yapıştır. Biz bunu kanal kimliğine dönüştürürüz."
+    },
+    "soundcloud": {
+      "placeholder": "profilin veya https://soundcloud.com/profilin",
+      "help": "SoundCloud profil URL'ni ya da yalnızca içindeki kullanıcı adını yapıştır. Hash'i profil biyografinde herhangi bir yere koy."
+    }
+  },
+  "snaps": {
+    "retrying": "Snaps kapsayıcısı henüz bulunamadı, yeniden deneniyor ({{attempt}}. deneme)...",
+    "unreachable": "Snaps kapsayıcısını bulmak için hiçbir Hive düğümüne ulaşılamadı. Lütfen bağlantını kontrol et ve tekrar dene.",
+    "unreachableWithError": "Snaps kapsayıcısını bulmak için hiçbir Hive düğümüne ulaşılamadı (son hata: {{error}}). Lütfen bağlantını kontrol et ve tekrar dene."
+  },
+  "embed": {
+    "responsive": "Duyarlı"
+  },
+  "incubation": {
+    "requestFailed": "İstek başarısız ({{status}})",
+    "contactLoadFailed": "İletişim bilgilerin yüklenemedi",
+    "contactSaveFailed": "İletişim bilgilerin kaydedilemedi",
+    "onlyButrauthBacklog": "Yalnızca Butter Auth hesaplarının bekleyen inkübasyon gönderileri olabilir",
+    "publishFailed": "Yayınlama başarısız ({{status}})"
+  },
+  "routeError": {
+    "title": "Bu sayfa yüklenmedi",
+    "body": "Uygulamanın bir kısmı indirilemedi. Bu genellikle bu sekme açıkken yeni bir sürüm yayınlandığı anlamına gelir. Yeniden yüklemek bunu düzeltir.",
+    "reload": "Yeniden yükle",
+    "goHome": "Ana sayfaya git"
+  },
+  "seo": {
+    "defaultTitle": "3Speak - Merkeziyetsiz Video Platformu",
+    "defaultDescription": "3Speak, blokzincir teknolojisi üzerine kurulu merkeziyetsiz bir video paylaşım platformudur. Kripto para ödülleri kazanırken video izle, yükle ve paylaş."
+  },
+  "uploadLinks": {
+    "regularVideo": "Normal Video",
+    "verticalShort": "Dikey Shorts",
+    "musicAudio": "Müzik / Ses",
+    "groupChat": "Grup Sohbeti",
+    "communitySnap": "Topluluk Snap'i",
+    "shortsEditor": "Shorts Düzenleyici",
+    "goLive": "Canlı Yayın",
+    "streamStudio": "Yayın Stüdyosu",
+    "headings": {
+      "upload": "Yükle",
+      "live": "Canlı",
+      "others": "Diğer"
+    }
+  },
+  "chat": {
+    "connectFailed": "Sohbete bağlanılamadı.",
+    "loginFirst": "Sohbeti kullanmak için önce giriş yap.",
+    "roomNameRequired": "Oda adı gerekli."
+  },
+  "hiveAuth": {
+    "waiting": "HiveAuth'ta onay bekleniyor...",
+    "title": "HiveAuth Onayı Gerekli",
+    "hint": "Bu işlemi onaylamak için lütfen HiveAuth uygulamanı kontrol et"
+  },
+  "hiveApi": {
+    "keychainNotSigned": "Keychain işlemi imzalamadı",
+    "loginToCreateCommunity": "Topluluk oluşturmak için giriş yap",
+    "loginFirst": "Lütfen önce giriş yap",
+    "cancelled": "İşlem iptal edildi"
+  },
+  "openpod": {
+    "announced": "Canlı oturum Hive'da duyuruldu!",
+    "announceFailed": "OpenPod başladı ama Hive duyurusu paylaşılamadı."
+  },
+  "appUpdate": {
+    "updating": "En son sürüme ({{version}}) güncelleniyor…",
+    "reloadingForUpload": "Yüklemenin en yeni sürümde çalışması için yeniden yükleniyor."
+  },
+  "auth": {
+    "switched": "{{username}} hesabına geçildi!",
+    "keychainLoginTitle": "Hive ile giriş yap"
+  },
+  "streamVod": {
+    "uploadKeyMissing": "Yayın bitti ama video yüklenemedi (yükleme anahtarı eksik).",
+    "uploading": "Yayın videon yükleniyor… %{{pct}}",
+    "uploaded": "Yayın videosu yüklendi; kodlama bitince canlı yayının yerini alacak.",
+    "uploadFailed": "Yayın bitti ama video yüklenemedi.",
+    "saving": "Yayın videon kaydediliyor…",
+    "encoding": "Yüklendi; kodlayıcı videonu işliyor…",
+    "saved": "Yayın videosu kaydedildi; kodlama bitince canlı yayının yerini alacak.",
+    "saveFailed": "Yayın bitti ama video kaydedilemedi: {{error}}.",
+    "uploadFailedShort": "yükleme başarısız",
+    "stillProcessing": "Yayın bitti; video hâlâ işleniyor, birazdan profilini kontrol et."
+  },
+  "embedPlayer": {
+    "unavailable": "Video kullanılamıyor"
+  },
+  "followFeed": {
+    "title": "Takip Akışı",
+    "error": "Videolar alınırken hata oluştu"
+  },
+  "groups": {
+    "title": "Gruplar",
+    "badges": "Rozetler",
+    "subtitle": "Katılabileceğin topluluklar ve insanların sahip olduğu rozetler, tek bir yerde."
+  },
+  "watched": {
+    "removed": "İzleme geçmişinden kaldırıldı",
+    "removeFailed": "İzleme geçmişinden kaldırılamadı",
+    "title": "İzlenenler",
+    "count_one": "{{count}} izlenen",
+    "count_other": "{{count}} izlenen",
+    "trackHistory": "Geçmişi kaydet",
+    "videosTab": "Videolar ({{count}})",
+    "shortsTab": "Shorts ({{count}})",
+    "loadFailed": "İzleme geçmişi yüklenemedi. Lütfen tekrar dene.",
+    "emptyShorts": "Henüz izlenen Shorts yok",
+    "emptyVideos": "Henüz izlenen video yok",
+    "removeTitle": "İzleme geçmişinden kaldır",
+    "watchedAt": "İzlendi: {{when}}"
+  },
+  "watchStream": {
+    "saySomething": "Bir şey söyle…",
+    "waitingWallet": "Cüzdanın bekleniyor…",
+    "signInToChat": "Sohbet için giriş yap",
+    "sendMessage": "Mesaj gönder",
+    "notLive": "Bu yayın şu an canlı değil.",
+    "notFound": "Bu bağlantı için canlı yayın bulunamadı.",
+    "browse": "Canlı yayınlara göz at",
+    "back": "3Speak'e dön",
+    "seoTitle": "{{title}} (CANLI)",
+    "swipeNext": "Sonraki canlı yayın için kaydır",
+    "chat": "Sohbet",
+    "watchingNow": "👁 Şu an {{count}} kişi izliyor",
+    "signInRaiseHand": "El kaldırmak için giriş yap",
+    "copyLink": "Yayın bağlantısını kopyala",
+    "notAvailableLive": "Canlı yayınlarda kullanılamaz",
+    "vote": "Oy ver",
+    "comment": "Yorum",
+    "liveChat": "Canlı sohbet",
+    "signInToJoin": "🔒 Sohbete katılmak için giriş yap.",
+    "moreTag": "Daha fazla #{{tag}}",
+    "moreVideos": "Daha fazla video"
+  }
+}

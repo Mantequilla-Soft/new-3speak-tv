@@ -19,6 +19,7 @@ const FORBIDDEN_SEGMENTS = new Set(['__proto__', 'prototype', 'constructor'])
 // eslint-disable-next-line no-control-regex
 const CONTROL_CHARS = /[\u0000-\u0009\u000B-\u001F\u007F]/
 const has = (obj, k) => Object.prototype.hasOwnProperty.call(obj, k)
+const PLURAL_FORMS = ['zero', 'one', 'two', 'few', 'many', 'other']
 
 function flatten (obj, prefix = '', out = {}) {
   for (const [k, v] of Object.entries(obj)) {
@@ -94,8 +95,12 @@ function validateEntry (key, value, en, categories) {
     if (!enTags.has(t[2])) return `Tag <${t[2]}> is not in the English text`
   }
 
-  // Same rule as check.mjs. A plural form may drop {{count}} ("one comment").
-  const refTokens = tokens(ref)
+  // Same rule as check.mjs. A plural form may drop {{count}} ("one comment"), and
+  // may use any token from ANY English form of that text: Russian "one" also covers
+  // 21, 31…, so it needs {{count}} even where English "one" reads "Upload a video".
+  const refTokens = m
+    ? [...new Set(PLURAL_FORMS.flatMap((c) => (has(en, `${base}_${c}`) ? tokens(en[`${base}_${c}`]) : [])))]
+    : tokens(ref)
   const want = refTokens.filter((t) => !(m && t === '{{count}}'))
   const haveTokens = tokens(value)
   const lost = want.filter((t) => !haveTokens.includes(t))

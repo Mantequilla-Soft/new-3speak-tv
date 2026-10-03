@@ -1,0 +1,75 @@
+{
+  "buckets": {
+    "today": "Bugün",
+    "yesterday": "Dün",
+    "thisWeek": "Bu Hafta",
+    "thisMonth": "Bu Ay",
+    "older": "Daha Eski"
+  },
+  "loginRequired": "Bildirimlerini görmek için giriş yap.",
+  "unreadChip_one": "{{count}} yeni",
+  "unreadChip_other": "{{count}} yeni",
+  "markAllTitle": "Tümünü okundu olarak işaretle",
+  "marking": "İşaretleniyor…",
+  "markAllRead": "Tümünü okundu yap",
+  "refreshing": "Yenileniyor…",
+  "categories": {
+    "all": "Tümü",
+    "replies": "Yanıtlar",
+    "mentions": "Bahsetmeler",
+    "votes": "Oylar",
+    "reblogs": "Reblog'lar",
+    "follows": "Takipler",
+    "transfers": "Transferler"
+  },
+  "unread": "Okunmamış",
+  "summary": {
+    "title": "Etkinlik",
+    "today": "Bugün",
+    "week": "Bu Hafta",
+    "month": "Bu Ay",
+    "emptyToday": "Bugün henüz etkinlik yok.",
+    "emptyWeek": "Bu hafta henüz etkinlik yok.",
+    "stillLoading": "Eski bildirimler hâlâ yükleniyor…",
+    "emptyMonth": "Bu ay etkinlik yok."
+  },
+  "loadError": "Bildirimler yüklenemedi.",
+  "empty": {
+    "all": "Henüz bildirimin yok.",
+    "unread": "Okunmamış bildirim yok.",
+    "replies": "Henüz yanıt yok.",
+    "mentions": "Henüz bahsetme yok.",
+    "votes": "Henüz oy yok.",
+    "reblogs": "Henüz reblog yok.",
+    "follows": "Henüz takip yok.",
+    "transfers": "Henüz transfer yok."
+  },
+  "threeSpeakVideo": "3Speak videosu",
+  "end": "Sona ulaştın.",
+  "cards": {
+    "votes": "Oylar",
+    "voters_one": "{{count}} oy veren",
+    "voters_other": "{{count}} oy veren",
+    "replies": "Yanıtlar",
+    "newFollowers": "Yeni Takipçiler",
+    "mentions": "Bahsetmeler",
+    "reblogs": "Reblog'lar",
+    "transfers": "Transferler"
+  },
+  "group": {
+    "voteOne": "@{{user}} gönderine oy verdi",
+    "voteTwo": "@{{user}} ve @{{user2}} gönderine oy verdi",
+    "voteMany_one": "@{{user}} ve {{count}} kişi daha gönderine oy verdi",
+    "voteMany_other": "@{{user}} ve {{count}} kişi daha gönderine oy verdi",
+    "followOne": "@{{user}} seni takip etti",
+    "followTwo": "@{{user}} ve @{{user2}} seni takip etti",
+    "followMany_one": "@{{user}} ve {{count}} kişi daha seni takip etti",
+    "followMany_other": "@{{user}} ve {{count}} kişi daha seni takip etti",
+    "generic_one": "{{count}} {{type}} bildirimi",
+    "generic_other": "{{count}} {{type}} bildirimi",
+    "typeCount_one": "{{count}} {{type}}",
+    "typeCount_other": "{{count}} {{type}}",
+    "collapse": "▾ daralt",
+    "expand": "▸ genişlet"
+  }
+}

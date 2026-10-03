@@ -1,0 +1,115 @@
+{
+  "loading": "Shorts yükleniyor...",
+  "pleaseTryAgain": "lütfen tekrar dene",
+  "rotateDevice": "Lütfen cihazını dikey moda çevir",
+  "pageTitle": {
+    "byAuthor": "3S | @{{author}} Shorts videosu",
+    "default": "3S | Shorts"
+  },
+  "stories": {
+    "you": "Sen"
+  },
+  "errors": {
+    "votingUnavailable": "Bu gönderi için oy verme kullanılamıyor",
+    "loginToVote": "Oy vermek için giriş yap",
+    "loginToComplete": "Bu işlemi tamamlamak için giriş yap"
+  },
+  "feed": {
+    "ariaLabel": "Shorts akışı",
+    "discover": "Keşfet",
+    "myInterests": "İlgi alanlarım",
+    "interestsTitle": "Yalnızca ilgi alanlarına uyan Shorts",
+    "pickInterestsFirst": "Önce birkaç ilgi alanı seç",
+    "noInterests": "Henüz hiç ilgi alanı seçmedin; Ayarlar'dan seçebilirsin",
+    "interestsExhausted": "İlgi alanlarına uyan Shorts bu kadar; Keşfet gösteriliyor",
+    "noInterestMatches": "Şu an ilgi alanlarına uyan Shorts yok.",
+    "switchToDiscover": "Keşfet'e geç",
+    "empty": "Shorts yok",
+    "loadError": "Shorts yüklenirken hata: {{error}}"
+  },
+  "glow": {
+    "subtle": "Ortam ışığı: hafif",
+    "vivid": "Ortam ışığı: canlı",
+    "off": "Ortam ışığı: kapalı"
+  },
+  "playbackMode": {
+    "autoReplay": "Otomatik Tekrar",
+    "autoSwipe": "Otomatik Kaydır",
+    "manual": "Manuel"
+  },
+  "subtitles": {
+    "off": "Kapalı"
+  },
+  "chain": {
+    "originalVideo": "Orijinal video",
+    "snap": "Snap",
+    "openShort": "Shorts videosunu aç",
+    "watch": "İzle",
+    "openSnap": "Snap'i aç",
+    "comment": "Yorum",
+    "reaction": "Tepki",
+    "thisVideo": "Bu video",
+    "remix": "Remix",
+    "show": "tepki zincirini göster"
+  },
+  "caption": {
+    "curatedBy": "Mantequilla tarafından seçildi",
+    "curated": "Seçildi",
+    "showOriginal": "Orijinali göster",
+    "more": "daha fazla"
+  },
+  "actions": {
+    "remix": "Remix",
+    "promote": "Öne çıkar"
+  },
+  "share": {
+    "defaultTitle": "3Speak Shorts",
+    "text": "3Speak'te {{user}} tarafından paylaşılan bu Shorts videosuna göz at!",
+    "shared": "Paylaşıldı!",
+    "linkCopied": "Bağlantı panoya kopyalandı!",
+    "failed": "Paylaşılamadı"
+  },
+  "reshare": {
+    "loginRequired": "Yeniden paylaşmak için giriş yap",
+    "unavailable": "Bu gönderi yeniden paylaşılamıyor",
+    "done": "Yeniden paylaşıldı!",
+    "failed": "Yeniden paylaşılamadı"
+  },
+  "remix": {
+    "noUrl": "Remix için video URL'si çözümlenemedi",
+    "loadFailed": "Remix için video yüklenemedi"
+  },
+  "watchLater": {
+    "loginRequired": "Shorts kaydetmek için giriş yap",
+    "cantSave": "Bu Shorts videosu kaydedilemiyor",
+    "removed": "Sonra İzle listesinden kaldırıldı",
+    "saved": "Sonra İzle listesine kaydedildi",
+    "failed": "Başarısız: {{message}}"
+  },
+  "comments": {
+    "title": "Yorumlar",
+    "loading": "Yorumlar yükleniyor...",
+    "closed": "Yorumlar kapalı",
+    "none": "Henüz yorum yok",
+    "postRemoved": "Bu Shorts videosunun arkasındaki Hive gönderisi kaldırıldı, bu yüzden artık yorum veya oy alamaz.",
+    "beFirst": "İlk yorumu sen yap!",
+    "unavailable": "Bu gönderi için yorumlar kullanılamıyor",
+    "addPlaceholder": "Yorum ekle...",
+    "addPlaceholderBar": "Yorum ekle…",
+    "loginPlaceholder": "Yorum yapmak için giriş yap",
+    "send": "Yorumu gönder",
+    "enterComment": "Lütfen bir yorum yaz",
+    "loginToComment": "Yorum yapmak için giriş yap",
+    "justNow": "Az önce",
+    "posted": "Yorum paylaşıldı!",
+    "failed": "Yorum başarısız: {{message}}",
+    "translation": "Çeviri",
+    "translationFailed": "Çeviri başarısız",
+    "reportComment": "Yorumu bildir",
+    "replyPlaceholder": "Bir yanıt yaz...",
+    "viewReplies_one": "{{count}} yanıtı gör",
+    "viewReplies_other": "{{count}} yanıtı gör",
+    "hideReplies_one": "{{count}} yanıtı gizle",
+    "hideReplies_other": "{{count}} yanıtı gizle"
+  }
+}

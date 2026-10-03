@@ -1,0 +1,50 @@
+{
+  "tabs": {
+    "overview": "Genel bakış",
+    "transactions": "İşlemler",
+    "aria": "Cüzdan bölümleri"
+  },
+  "errors": {
+    "fetchBalances": "Bakiyeler alınamadı",
+    "needKeychain": "Transfer yapmak için Keychain eklentisi gerekli"
+  },
+  "header": {
+    "mine": "Cüzdanım",
+    "ofUser": "{{user}} cüzdanı"
+  },
+  "assets": "Varlıklar",
+  "transfer": "Transfer",
+  "transferModal": {
+    "loginRequired": "Transfer için giriş yapmalısın",
+    "insufficient": "Yetersiz bakiye",
+    "invalidUsername": "Geçersiz kullanıcı adı",
+    "success": "Transfer başarılı!",
+    "failed": "Transfer başarısız: {{error}}",
+    "title": "{{coin}} transferi",
+    "amountLabel": "Miktar ({{coin}})",
+    "balance": "Bakiye {{balance}}",
+    "max": "Maks",
+    "recipientLabel": "Alıcı Kullanıcı Adı",
+    "recipientPlaceholder": "Hive kullanıcı adını gir",
+    "memoLabel": "Not",
+    "memoPlaceholder": "Not gir",
+    "confirm": "Transferi Onayla"
+  },
+  "history": {
+    "loadFailed": "İşlemler yüklenemedi",
+    "title": "İşlem Geçmişi",
+    "cols": {
+      "type": "Tür",
+      "amount": "Miktar",
+      "account": "Hesap",
+      "date": "Tarih",
+      "memo": "Not"
+    },
+    "types": {
+      "transfer": "Transfer",
+      "claim": "Ödülü Al",
+      "received": "Alındı"
+    },
+    "claimedRewards": "Alınan Ödüller"
+  }
+}

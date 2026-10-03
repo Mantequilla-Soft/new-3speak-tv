@@ -1,0 +1,569 @@
+{
+  "tracks": {
+    "viewer": {
+      "title": "Çoğunlukla izleyiciyim",
+      "body": "İzlemek, yorum yapmak ve içerik üreticilerini takip etmek için buradayım."
+    },
+    "creator": {
+      "title": "Çoğunlukla içerik üreticisiyim",
+      "body": "Video ve Shorts yayınlamak ve bir kanal kurmak istiyorum."
+    },
+    "advertiser": {
+      "title": "Reklamverenim",
+      "body": "Bir markayı temsil ediyorum ve 3Speak izleyicilerine ulaşmak istiyorum."
+    }
+  },
+  "tips": {
+    "shortsCamera": {
+      "title": "Shorts ayrı bir uygulama değil, bir sekme",
+      "body": "İzlemek için üst çubuktan Shorts'u aç ya da paylaşmak için Paylaş'ı kullan. Telefonundaki dikey klipler olduğu gibi çalışır.",
+      "cta": "Shorts'u aç"
+    },
+    "searchSlash": {
+      "title": "Aramak için / tuşuna bas",
+      "body": "Sitenin her yerinden eğik çizgi tuşu seni arama kutusuna götürür. Videolar, içerik üreticileri ve topluluklar arasında arar."
+    },
+    "communities": {
+      "title": "Topluluklar insanları tek bir konu etrafında toplar",
+      "body": "Birkaçına katıl, videoları akışlarında görünmeye başlasın. Bir topluluğa paylaşım da yapabilirsin, böylece doğru kişiler görür.",
+      "cta": "Topluluklara göz at"
+    },
+    "followFeed": {
+      "title": "Takip ettiklerinin kendi akışı var",
+      "body": "Birkaç içerik üreticisini takip ettiğinde takip akışında yalnızca onların videoları olur. İlgilenmediğin şeyleri kaydırıp geçmeyi bırakmanın en hızlı yolu bu.",
+      "cta": "Göz at"
+    },
+    "interests": {
+      "title": "Nelerden hoşlandığını söyle",
+      "body": "Ayarlar'dan birkaç konu seç, ana akışlar hemen bunlara göre yeniden ağırlıklandırılsın. Ne kadar kaydırırsan kaydır, bu daha iyi çalışır."
+    },
+    "hideWatched": {
+      "title": "İzlenen videolar akışlardan kaybolabilir",
+      "body": "Ayarlar'da varsayılan olarak açık bir \"izlenenleri gizle\" anahtarı var, böylece bir videoyu izledikten sonra aynı video peşini bırakır."
+    },
+    "timestamps": {
+      "title": "Tam bir ana yorum yap",
+      "body": "Bir video oynarken yaptığın yorum, o an bulunduğun zaman damgasını taşıyabilir. Okuyanlar doğrudan o saniyeye giden bir bağlantı alır."
+    },
+    "badges": {
+      "title": "Rozetler alınmaz, verilir",
+      "body": "Hive'daki insanlara etkinlikler ve dönüm noktaları için rozet verilir. Sahip olan herkesi ve ne yayınladıklarını görmek için birini aç.",
+      "cta": "Rozetlere bak"
+    },
+    "audio": {
+      "title": "3Speak'te ses de var",
+      "body": "Podcast'ler ve müzik, kendi oynatıcılarıyla üst çubuktaki Ses bölümünde. Ses de tıpkı video gibi yayınlanabilir.",
+      "cta": "Ses'i aç"
+    },
+    "backlog": {
+      "title": "Şimdi paylaştığın hiçbir şey boşa gitmez",
+      "body": "Isınma aşamasında yayınladığın her şey, hesabın geldiğinde kendi adınla Hive'da yeniden yayınlanabilir ve neyin seninle geleceğini sen seçersin."
+    }
+  },
+  "trackChooser": {
+    "saveFailed": "Kaydedilemedi. Lütfen tekrar dene.",
+    "saving": "Kaydediliyor..."
+  },
+  "trackQuestion": {
+    "title": "Seni 3Speak'e ne getirdi?",
+    "intro": "Hive hesabına giden yolun buna bağlı: izleyiciler izler ve katılır, içerik üreticileri yayınlar, reklamverenler markalarını kurar."
+  },
+  "tipCard": {
+    "aria": "İpucu",
+    "dismiss": "İpucunu kapat",
+    "takeALook": "Göz at"
+  },
+  "progress": {
+    "tasks": {
+      "video": {
+        "label_one": "Bir video yükle",
+        "label_other": "{{count}} video yükle",
+        "hint": "Kendinle ve kanalının ne hakkında olacağıyla ilgili bir şey paylaş.",
+        "why": "Ekibin seni incelerken baktığı ilk şey ve bir ziyaretçinin kanalını açtığında gördüğü ilk şey bu.",
+        "counts": {
+          "0": "Yükleme stüdyosundan yayınladığın herhangi bir video.",
+          "1": "Senin kalır. Yükseltildiğinde bu gönderilerden hangilerinin kendi adınla Hive'da yayınlanacağını sen seçersin."
+        },
+        "cta": "Video yükle"
+      },
+      "short": {
+        "label_one": "Bir Shorts paylaş",
+        "label_other": "{{count}} Shorts paylaş",
+        "hint": "3Speak Shorts'a katıl ve gündelik hayatından anlar ya da paylaşmak istediğin hikâyeler yükle.",
+        "why": "Shorts bulunmanın en hızlı yolu. İnsanların henüz takip etmediği içerik üreticilerinin akışında oynar, böylece bir Shorts kendi kanalının ötesine ulaşır.",
+        "counts": {
+          "0": "Shorts yükleyicisinden paylaşılan dikey videolar.",
+          "1": "İstediğin herhangi bir konuda."
+        },
+        "cta": "Shorts paylaş"
+      },
+      "follow": {
+        "label_one": "Bir içerik üreticisini takip et",
+        "label_other": "{{count}} içerik üreticisini takip et",
+        "hint": "Benzer düşünen insanlardan ya da heyecan verici bulduğun içerik üreticilerinden bir ağ kur.",
+        "why": "Takip listen, ana akışı senin akışına dönüştüren şeydir. Yükseltildiğinde seninle birlikte Hive'a gelir.",
+        "counts": {
+          "0": "Şu an takip ettiğin içerik üreticileri.",
+          "1": "Birini takipten çıkarmak sayıyı yeniden düşürür; yani bu, kaç düğmeye bastığını değil, gerçekte kimi takip ettiğini sayar."
+        },
+        "cta": "İçerik üreticisi bul"
+      },
+      "comment": {
+        "label_one": "Bir yorum yaz",
+        "label_other": "{{count}} yorum yaz",
+        "why": "Henüz bir kitlen yokken insanlar seni yorumlar sayesinde bulur. Başka birinin videosunun altına yazılmış tek bir gerçek yanıt, henüz kimsenin görmediği bir yüklemeden daha çok işine yarar.",
+        "cta": "Yanıt verecek bir şey bul",
+        "hint_one": "Yorumlar en az {{count}} karakter olduğunda sayılır. Sadece “güzel” değil, gerçek bir düşünce.",
+        "hint_other": "Yorumlar en az {{count}} karakter olduğunda sayılır. Sadece “güzel” değil, gerçek bir düşünce.",
+        "counts": {
+          "minChars_one": "Kendi sözlerinden en az {{count}} karakter.",
+          "minChars_other": "Kendi sözlerinden en az {{count}} karakter.",
+          "realThought": "Tek bir kelime değil, gerçek bir düşünce.",
+          "othersPost": "Başka birinin gönderisinde. Kendi videolarının altındaki ya da kendi yorumlarına yazdığın yanıtlar kendinle konuşmaktır ve sayılmaz."
+        }
+      },
+      "watch": {
+        "labelHours_one": "3Speak'te bir saat izle",
+        "labelHours_other": "3Speak'te {{count}} saat izle",
+        "labelMinutes_one": "3Speak'te bir dakika izle",
+        "labelMinutes_other": "3Speak'te {{count}} dakika izle",
+        "hint": "Herhangi bir video. Gerçekten izlediğin süre sayılır.",
+        "why": "İzlemek, yalnızca paylaşım yapmak için değil, katılmak için burada olduğunu gösterir. Çoğu kişinin uğraşmadan tamamladığı hedef bu.",
+        "counts": {
+          "0": "3Speak'in kendisinde geçen süre. Aynı videonun başka bir siteye gömülü hali sayılmaz.",
+          "1": "Video başına bir kez. Bir videoyu tekrar izlemek en iyi süresini artırır ama asla üstüne eklenmez ve tek bir video sürenin tamamını tek başına karşılayamaz.",
+          "2": "Gerçek oynatma süresi; yani videoyu hızlandırmak cezalandırılmaz, yavaşlatmak da saati uzatmaz.",
+          "3": "Ekranda. Arka plandaki bir sekmede oynamaya bırakılan video saate eklenmez.",
+          "4": "Kendi videoların değil.",
+          "5": "Gizli modda izlerken hiçbir şey kaydedilmez."
+        },
+        "cta": "Bir şey izle"
+      },
+      "time": {
+        "label_one": "Bir gün burada ol",
+        "label_other": "{{count}} gün burada ol",
+        "hint": "Bu kendiliğinden tamamlanır. Yapacak bir şey yok.",
+        "why": "Bir saat önce açılmış bir hesapla birkaç gündür burada olan bir hesap kâğıt üzerinde aynı görünür. Onları ayıran günlerdir, bu yüzden herkes aynı kısa süre bekler.",
+        "counts": {
+          "fullDays_one": "Kaydolduğun günden itibaren tam bir gün.",
+          "fullDays_other": "Kaydolduğun günden itibaren tam {{count}} gün.",
+          "forYouWhen": "Senin için bu {{when}}. Diğer hedeflerin hepsi ondan önce tamamlanabilir.",
+          "otherGoals": "Diğer hedeflerin hepsi ondan önce tamamlanabilir.",
+          "keepsCounting": "Burada olsan da olmasan da saymaya devam eder, yani takip etmen gereken bir şey yok."
+        }
+      },
+      "subscription": {
+        "label_one": "Bir topluluğa katıl",
+        "label_other": "{{count}} topluluğa katıl",
+        "hint": "İzlemeyi veya üretmeyi sevdiğin şeylerle ilgili topluluklar bul.",
+        "why": "Topluluklar, tek bir konudaki videoları ve o konuyu önemseyen insanları bir araya getirir. Birine katılmak akışını sevdiğin şeylerle doldurur; içerik üreticileri için de yeni bir kanalın ilk izleyicilerini bulduğu yerdir.",
+        "counts": {
+          "0": "Şu an üyesi olduğun topluluklar.",
+          "1": "Birinden ayrılmak sayıyı yeniden düşürür."
+        },
+        "cta": "Topluluklara göz at"
+      },
+      "profile": {
+        "label_one": "Marka profilini oluştur",
+        "label_other": "Marka profilini oluştur",
+        "hint": "Marka adın, ne yaptığın ve logon.",
+        "why": "İzleyiciler ve seni inceleyen ekip, bir reklamın arkasında kimin olduğunu her şeyden önce görür. Bir markayı tanınır ve güvenilir kılan şey eksiksiz bir profildir."
+      },
+      "contact": {
+        "label_one": "İş iletişim bilgilerini ekle",
+        "label_other": "İş iletişim bilgilerini ekle",
+        "hint": "Bir e-posta, ayrıca adresin veya bir web sitesi.",
+        "why": "Bir reklam yayınlanmadan önce ekibin, arkasındaki işletmeye ulaşmanın gerçek bir yoluna ihtiyacı var. E-postan ve adresin gizlidir: asla blokzincirde saklanmaz veya herhangi bir yerde gösterilmez.",
+        "counts": {
+          "0": "E-posta: zorunlu.",
+          "1": "Adres: isteğe bağlı.",
+          "2": "Adresin VEYA yukarıdaki marka profilinde bir web sitesi gerekli; ikisinden en az biri."
+        }
+      }
+    },
+    "duration": {
+      "s": "{{s}}sn",
+      "hm": "{{h}}sa {{m}}dk",
+      "h": "{{h}}sa",
+      "m": "{{m}}dk"
+    },
+    "title": "Hive hesabına giden yolun",
+    "needsTrack": "Yapılacaklar listen, seni 3Speak'e neyin getirdiğine bağlı.",
+    "choosePath": "Yolunu seç",
+    "doneCount": "{{total}} hedeften {{done}} tanesi tamam",
+    "overallAria": "Genel ilerleme",
+    "hideDetails": "Ayrıntıları gizle",
+    "showLeft": "Kalanları göster",
+    "whatCounts": "Neler sayılır",
+    "reviewDone": "Hepsi tamam. Ekip kanalını inceleyip seni yükseltecek. Yapman gereken başka bir şey yok.",
+    "reviewPending": "Bunların hepsini tamamladığında ekip kanalını inceleyip seni yükseltecek."
+  },
+  "navProgress": {
+    "chooseTitle": "Hive hesabına giden yolunu görmek için seni 3Speak'e neyin getirdiğini söyle.",
+    "titleComplete_one": "{{count}} hedefin tümü tamam (%100). Ekip kanalını inceleyecek.",
+    "titleComplete_other": "{{count}} hedefin tümü tamam (%100). Ekip kanalını inceleyecek.",
+    "titleProgress_one": "Hive hesabına doğru %{{pct}}. {{count}} hedeften {{done}} tanesi tamamen bitti.",
+    "titleProgress_other": "Hive hesabına doğru %{{pct}}. {{count}} hedeften {{done}} tanesi tamamen bitti.",
+    "ariaComplete_one": "İlerlemen: %100, {{count}} hedefin tümü tamam",
+    "ariaComplete_other": "İlerlemen: %100, {{count}} hedefin tümü tamam",
+    "ariaProgress_one": "İlerlemen: %{{pct}}, {{count}} hedeften {{done}} tanesi tamamen bitti",
+    "ariaProgress_other": "İlerlemen: %{{pct}}, {{count}} hedeften {{done}} tanesi tamamen bitti",
+    "celebrate": "Hive hesabına giden tüm hedefler tamam."
+  },
+  "welcome": {
+    "what": {
+      "title": "3Speak'e hoş geldin",
+      "p1": "3Speak, herkese açık bir blokzincir olan <b>Hive</b> üzerine kurulu bir video platformudur. Buradaki videolar bize ait değildir: onları paylaşan kişilere aittir ve izleyenlerden gerçek ödüller kazanabilirler."
+    },
+    "warmup": {
+      "title": "Isınma aşamasındasın",
+      "p1": "Bir Hive hesabı gerçek ve kalıcıdır, ve birinin bunun bedelini ödemesi gerekir. Bu yüzden senden baştan bir şey istemek yerine sana hemen bir ad ve yayın yapabileceğin bir yer verdik.",
+      "p2": "Isınma aşamasında ürettiğin her şey 3Speak'te durur. Hazır olduğunda ekip kanalını inceler ve sana ücretsiz olarak kendi Hive hesabını verir. Videoların, Shorts'ların ve takiplerin daha sonra kendi adınla blokzincire geçer ve neyin seninle geleceğini sen seçersin."
+    },
+    "do": {
+      "title": "Şu an neler yapabilirsin",
+      "upload": "Buradaki herkes gibi video yükle.",
+      "shorts": "Telefonundan ya da bilgisayarından Shorts paylaş.",
+      "comment": "Zaten Hive'da olan kişilerin videoları dahil her şeye yorum yap.",
+      "follow": "İçerik üreticilerini takip et ve topluluklara katıl.",
+      "watch": "İzle. Geçmişin ve akışın ilk günden itibaren senin.",
+      "aside": "Birkaç şey hesabını bekliyor: ödül kazanmak ve bahşiş göndermek. Bunlar gerçek para hareket ettirdiği için gerçekten sana ait bir hesap gerektirir."
+    },
+    "path": {
+      "p1": "Profilinde kısa bir yapılacaklar listesi var ve bu, burada ne için olduğuna bağlı: izleyiciler izler ve katılır, içerik üreticileri yayınlar, reklamverenler markalarını kurar.",
+      "p2": "Bu bir sınav değil. Gerçek bir hesabı boş ya da kötü niyetli bir hesaptan ayırt etmemizin yolu sadece bu. Liste tamamlandığında ekip seni inceler ve en kısa sürede yükseltir.",
+      "perkEarn": "Kazanç getiren gönderiler",
+      "perkKeys": "Yalnızca sende olan anahtarlar",
+      "perkNetwork": "Tüm Hive ağı"
+    },
+    "showList": "Listemi göster",
+    "decideLater": "Sonra karar ver"
+  },
+  "profile": {
+    "unlocks": {
+      "earn": {
+        "title": "Gönderilerin kazanmaya başlar.",
+        "body": "Hive'daki videolar, onları izleyen herkes tarafından HIVE ve HBD ile ödüllendirilebilir ve payını aldığın reklamlar içerebilir."
+      },
+      "publish": {
+        "title": "Burada ürettiğin her şeyi yayınla.",
+        "body": "Bu sayfadaki videolar, Shorts'lar ve takipler kendi adınla zincire gönderilebilir ve hangilerinin gideceğini sen seçersin."
+      },
+      "buttons": {
+        "title": "Oy ver, bahşiş gönder, takip et ve oynatma listeleri oluştur.",
+        "body": "Bugün senin için gri görünen tüm düğmeler."
+      },
+      "keys": {
+        "title": "Yalnızca sende olan anahtarlar.",
+        "body": "Kimse seni dışarıda bırakamaz ve aynı giriş yalnızca 3Speak'te değil, tüm Hive uygulamalarında çalışır."
+      },
+      "ecosystem": {
+        "title": "Küresel Hive ekosisteminin bir parçası ol.",
+        "body": "3Speak koca bir uygulama ağındaki uygulamalardan biridir: bloglar, topluluklar, oyunlar, pazar yerleri ve daha fazlası; hepsi tek hesabı ve aynı takip listesini paylaşır."
+      }
+    },
+    "advertiserUnlocks": {
+      "book": {
+        "title": "3Speak genelinde reklam ver.",
+        "body": "Video spotları, Shorts spotları, oynatıcı bannerları, kayan yazılar ve yükleme öncesi spotlar; bir günden üç aya kadar."
+      },
+      "pay": {
+        "title": "Kendi cüzdanından öde.",
+        "body": "HBD veya HIVE ile, doğrudan hesabından. Kart yok, aracı yok."
+      },
+      "results": {
+        "title": "Reklamlarının ne sağladığını gör.",
+        "body": "Her rezervasyon için oynatma ve tıklama sayıları; bir rezervasyon eksik kalırsa bir sonrakinde kredi iadesi."
+      },
+      "customers": {
+        "title": "İstersen müşterilerinle konuş.",
+        "body": "Markanın adıyla video paylaş, yorumları yanıtla ve insanları takip et."
+      },
+      "keys": {
+        "title": "Yalnızca sende olan anahtarlar.",
+        "body": "Kimse seni dışarıda bırakamaz ve aynı giriş yalnızca 3Speak'te değil, tüm Hive uygulamalarında çalışır."
+      }
+    },
+    "loadFailed": "Bu profil yüklenemedi.",
+    "badge": {
+      "onHive": "Hive'da",
+      "advertiser": "Reklamveren · başlangıç aşamasında",
+      "gettingStarted": "Başlangıç aşamasında"
+    },
+    "stats": {
+      "posts_one": "<b>{{count}}</b>gönderi",
+      "posts_other": "<b>{{count}}</b>gönderi",
+      "followers_one": "<b>{{count}}</b>takipçi",
+      "followers_other": "<b>{{count}}</b>takipçi",
+      "following_one": "<b>{{count}}</b>takip",
+      "following_other": "<b>{{count}}</b>takip"
+    },
+    "editProfile": "Profili düzenle",
+    "note": {
+      "graduated": "Artık Hive'da <userLink>@{{user}}</userLink> olarak. Aşağıdakiler ondan önce üretildi.",
+      "advertiser": "Bu, 3Speak'teki marka sayfan. Aşağıdaki adımları tamamla, ekip markanı incelesin. Onaylandığında bir Hive hesabı alırsın: bu senin reklamveren hesabındır, reklam rezervasyonu yapacağın ve ödeme yapacağın hesap.",
+      "own": "Başkaları seni böyle görüyor. Gönderilerin 3Speak'te duruyor ve henüz Hive blokzincirinde değil, bu yüzden ödül kazanmıyor. Aşağıdaki tüm görevleri tamamlayıp hesabını aldığında bu değişir.",
+      "visitor": "Burada yeni, henüz Hive'da değil. Bu gönderiler 3Speak'te duruyor, bu yüzden şimdilik ödül kazanmıyor. Yine de takip et ve yorum yap: ilk haftaları atlatmayı sağlayan şey erken gelen destektir. Hive hesabını aldığında sana haber vereceğiz, böylece onu orada da takip edebilirsin."
+    },
+    "tabs": {
+      "aria": "Profil bölümleri",
+      "goals": "Hedeflerin",
+      "uploads": "Yüklemeler",
+      "comments": "Yorumlar",
+      "followers": "Takipçiler",
+      "following": "Takip edilenler"
+    },
+    "videosAndShorts": "Videolar ve Shorts",
+    "market": {
+      "audience": "Reklamını bekleyen kitle",
+      "format": "Mesajına uyan formatı seç"
+    },
+    "brandVideos": "Markanın videoları",
+    "optional": "isteğe bağlı",
+    "empty": {
+      "advertiser": "Buradaki videolar, istersen müşterilerinle konuşmak için. Reklamlar ayrı olarak Reklam Ver sayfasından alınır ve video gerektirmez.",
+      "own": "Henüz bir şey yok. İlk yüklemen yandaki listeden bir maddeyi tamamlar.",
+      "visitor": "Henüz yayınlanan bir şey yok."
+    },
+    "videos": "Videolar",
+    "unlocksTitleAdvertiser": "Reklamveren hesabının sana sağladıkları",
+    "unlocksTitle": "Bir Hive hesabının sana sağladıkları",
+    "fineprint": "3Speak profiline kaydedildi. Hesabını aldığında diğer her şeyle birlikte Hive'a geçer."
+  },
+  "activity": {
+    "empty": {
+      "comments": "Henüz bir şey söylenmedi.",
+      "followers": "Henüz kimse takip etmiyor.",
+      "following": "Henüz kimseyi takip etmiyor."
+    },
+    "loadFailed": "Yüklenemedi.",
+    "publishedToHive": "Hive'da yayınlandı",
+    "onHive": "Hive'da"
+  },
+  "bell": {
+    "unreadAria_one": "Bildirimler, {{count}} okunmamış",
+    "unreadAria_other": "Bildirimler, {{count}} okunmamış",
+    "empty": "Henüz bir şey yok. Biri videolarına yanıt verdiğinde ya da onları beğendiğinde burada görünür.",
+    "replied": "<b>@{{name}}</b> gönderine yanıt verdi",
+    "liked": "<b>@{{name}}</b> gönderini beğendi"
+  },
+  "rail": {
+    "aria": "3Speak'te yeni",
+    "title": "Yeni başlayanlar",
+    "body": "Burada yeniler, henüz Hive'da değiller. Bu gönderiler 3Speak'te duruyor. Hive'a katılmadan önce onları sıcak bir şekilde karşıla."
+  },
+  "sessionSync": {
+    "signedInAs": "@{{name}} olarak giriş yaptın",
+    "caughtUp": "Hive hesabın hazır, bu cihaz da onunla eşitlendi.",
+    "openFailed": "Butter Auth açılamadı",
+    "title": "Oturumuna yeniden bağlan",
+    "lede": "Bu cihazın hesabınla bağlantısı koptu, bu yüzden bağlantı geri gelene kadar 3Speak gönderilerini, ilerlemeni veya bildirimlerini yükleyemiyor.",
+    "text": "Hiçbir şey kaybolmadı. Ürettiğin her şey bu tarayıcıda değil, hesabında duruyor. Yeniden bağlanmak genellikle bir saniye sürer ve bir şey yazmana gerek yoktur.",
+    "opening": "Açılıyor…",
+    "reconnect": "Yeniden bağlan"
+  },
+  "admin": {
+    "title": "Yönetici görünümü",
+    "note": "Bu paneli yalnızca 3Speak yöneticileri görür.",
+    "brandProfile": "Marka profili",
+    "public": "herkese açık",
+    "fields": {
+      "handle": "Kullanıcı adı",
+      "brandName": "Marka adı",
+      "logo": "Logo",
+      "about": "Hakkında",
+      "website": "Web sitesi",
+      "location": "Konum",
+      "interests": "İlgi alanları",
+      "activity": "Etkinlik",
+      "email": "E-posta",
+      "address": "Adres",
+      "contactGoal": "İletişim hedefi",
+      "firstSaved": "İlk kayıt",
+      "lastChanged": "Son değişiklik",
+      "butrauthUser": "ButrAuth kullanıcısı"
+    },
+    "activityLine": "{{posts}} gönderi · {{followers}} takipçi · {{following}} takip",
+    "notSet": "ayarlanmadı",
+    "none": "yok",
+    "privateContact": "Gizli iletişim",
+    "privateNote": "yalnızca yöneticiler, asla zincirde değil",
+    "notGiven": "verilmedi",
+    "met": "Karşılandı",
+    "notMet": "Henüz karşılanmadı",
+    "unknown": "bilinmiyor",
+    "noContact": "Henüz kayıtlı iş iletişim bilgisi yok."
+  },
+  "contact": {
+    "savedComplete": "Kaydedildi. Yalnızca 3Speak ekibi görebilir.",
+    "savedIncomplete": "Kaydedildi. Bu adımı tamamlamak için adresini ya da profiline bir web sitesi ekle.",
+    "privateNote": "<b>Gizli.</b> E-postan ve adresin asla blokzincirde saklanmaz, profilinde veya başka bir yerde gösterilmez. Yalnızca 3Speak ekibi, reklamların hakkında sana ulaşmak için görür.",
+    "email": "E-posta",
+    "required": "zorunlu",
+    "emailPlaceholder": "sen@markan.com",
+    "address": "Adres",
+    "addressOptional": "profilinde web sitesi yoksa zorunlu",
+    "ph": {
+      "line1": "Sokak ve numara",
+      "line2": "Adres satırı 2",
+      "postalCode": "Posta kodu",
+      "city": "Şehir",
+      "region": "Eyalet veya bölge",
+      "country": "Ülke"
+    },
+    "addressHint": "Sokak, şehir ve ülke doldurulduğunda adres sayılır. Adresin yok mu? Bunun yerine marka profiline bir web sitesi ekle.",
+    "save": "İletişim bilgilerini kaydet"
+  },
+  "brand": {
+    "saved": "Marka profili kaydedildi",
+    "name": "Marka adı",
+    "namePlaceholder": "Markan veya şirketin",
+    "about": "Markanın ne yaptığı",
+    "aboutPlaceholder": "İzleyicilerin anlayacağı bir iki cümle.",
+    "logo": "Logo",
+    "uploading": "Yükleniyor…",
+    "replaceLogo": "Logoyu değiştir",
+    "uploadLogo": "Logo yükle",
+    "logoHint": "Reklamlarının yanında daire olarak gösterilir, bu yüzden kare bir görsel en iyisidir.",
+    "website": "Web sitesi",
+    "websiteOptional": "adresini verirsen isteğe bağlı",
+    "websitePlaceholder": "https://markan.com",
+    "websiteInvalid": "https:// ile başlayan tam bir adres kullan",
+    "save": "Marka profilini kaydet"
+  },
+  "createAccount": {
+    "started": "Hadi Hive hesabını kuralım",
+    "openFailed": "Hesap kurulumu açılamadı. Lütfen tekrar dene.",
+    "readyAdvertiser": "Reklamveren hesabın hazır",
+    "ready": "Hive hesabın hazır",
+    "approvedAdvertiser": "Ekip markanı onayladı. Reklam vermek ve ödemek için ücretsiz olarak Hive hesabını oluştur.",
+    "approved": "Ekip seni onayladı. Hive hesabını ücretsiz oluştur: yalnızca sana ait.",
+    "createAdvertiser": "Reklamveren hesabımı oluştur",
+    "create": "Hive hesabımı oluştur"
+  },
+  "graduatedFollows": {
+    "message": "@{{handle}} artık @{{hiveUsername}} olarak bir Hive hesabına sahip.",
+    "title": "Takip ettiğin biri yükseltildi",
+    "followForReal": "Gerçekten takip et",
+    "gotIt": "Anladım",
+    "nowFollowing": "Artık Hive'da @{{hiveUsername}} takip ediliyor",
+    "followFailed": "Takip edilemedi"
+  },
+  "backlog": {
+    "title": "Önceki gönderilerin hâlâ burada",
+    "lede_one": "Hive hesabın olmadan önce <b>{{count}} şey</b> ürettin. Bunlar yalnızca 3Speak'te duruyor. İstediğin zaman <b>@{{user}}</b> olarak Hive'a koyabilirsin.",
+    "lede_other": "Hive hesabın olmadan önce <b>{{count}} şey</b> ürettin. Bunlar yalnızca 3Speak'te duruyor. İstediğin zaman <b>@{{user}}</b> olarak Hive'a koyabilirsin.",
+    "text": "Neyin aktarılacağını tek tek sen seçersin. Bıraktığın her şey 3Speak'te olduğu gibi kalır ve geri kalanına istediğin zaman dönebilirsin.",
+    "later": "Sonra"
+  },
+  "graduation": {
+    "items": {
+      "video_one": "{{count}} video",
+      "video_other": "{{count}} video",
+      "short_one": "{{count}} Shorts",
+      "short_other": "{{count}} Shorts",
+      "comment_one": "{{count}} yorum",
+      "comment_other": "{{count}} yorum",
+      "follow_one": "{{count}} takip",
+      "follow_other": "{{count}} takip",
+      "like_one": "{{count}} beğeni",
+      "like_other": "{{count}} beğeni",
+      "creator_one": "{{count}} içerik üreticisi",
+      "creator_other": "{{count}} içerik üreticisi"
+    },
+    "listAnd": "{{rest}} ve {{last}}",
+    "listSep": ", ",
+    "viewerDone": {
+      "watched": "{{time}} izledin",
+      "written": "{{items}} yazdın",
+      "followed": "{{items}} takip ettin"
+    },
+    "advertiser": {
+      "lede": "Ekip <b>{{name}}</b> markasını inceledi. Ücretsiz olarak <b>Hive hesabını</b> oluştur: bu senin reklamveren hesabın olur.",
+      "text": "Bu hesapla video spotlarından bannerlara ve kayan yazılara kadar 3Speak genelinde reklam verir ve ödemeyi doğrudan cüzdanından HBD veya HIVE ile yaparsın. Anahtar yalnızca sende, bu yüzden kimse seni dışarıda bırakamaz.",
+      "note": "Marka profilin seninle birlikte gelir. İş e-postan ve adresin 3Speak'te gizli kalır ve asla blokzincire gitmez.",
+      "noteMoving": "<b>{{moving}}</b> de seninle gelir; birkaç gün içinde kademeli olarak yayınlanır."
+    },
+    "viewer": {
+      "title": "Kendi hesabın hazır",
+      "ledeDone": "<b>@{{handle}}</b> olarak şunları yaptın: {{done}}. Bunu ücretsiz olarak sana ait bir <b>Hive hesabına</b> dönüştür.",
+      "lede": "<b>@{{handle}}</b> adını ücretsiz olarak sana ait bir <b>Hive hesabına</b> dönüştür.",
+      "text": "Bu hesapla beğendiğin videolara oy verebilir ve bahşiş gönderebilir, yorumlarından kazanabilir, izlediklerin için izleyici ödüllerine katılabilir ve oynatma listeleri oluşturabilirsin. Aynı giriş ve aynı takipler tüm Hive uygulamalarında çalışır ve anahtar yalnızca sende."
+    },
+    "createMyAccount": "Hesabımı oluştur",
+    "creator": {
+      "title": "Artık kendi hesabını oluşturabilirsin",
+      "lede": "<b>@{{handle}}</b> olarak paylaşım yapıyordun. Bunu ücretsiz olarak sana ait gerçek bir <b>Hive hesabına</b> dönüştür.",
+      "text": "Hive hesabı, yalnızca sende olan bir anahtardır. Kimse seni dışarıda bırakamaz, gönderilerin kazanmaya başlar ve aynı giriş yalnızca 3Speak'te değil, tüm Hive uygulamalarında çalışır."
+    },
+    "note": {
+      "moving": "<b>{{moving}}</b> seninle birlikte gelir.",
+      "everything": "Burada ürettiğin her şey seninle birlikte gelir.",
+      "gradual": "Yayınlama birkaç gün içinde kademeli olarak yapılır, çünkü yepyeni bir hesap küçük bir paylaşım hakkıyla başlar.",
+      "waiting_one": "Bunlardan biri, yanıt verdiği gönderinin önce yayınlanmasını bekliyor.",
+      "waiting_other": "Bunlardan {{count}} tanesi, yanıt verdikleri gönderilerin önce yayınlanmasını bekliyor."
+    },
+    "notYet": "Henüz değil"
+  },
+  "handleTaken": {
+    "openFailed": "Ad seçici açılamadı",
+    "title": "@{{handle}} adı alınmış",
+    "lede": "Biri bu adı <b>Hive</b>'da kaydettirdi, bu yüzden hazır olduğunda senin hesabın olamaz. Şimdi yeni bir ad seçmek bir dakikanı alır.",
+    "text": "Burada bir ad seçmek onu hiçbir zaman rezerve etmedi. Hive'da bir adı tutmanın hesabı oluşturmaktan başka yolu yok ve bu, henüz ücretini ödemediğin adım; zaten hesapsız başlamanın bütün amacı bu.",
+    "note": "Ürettiğin hiçbir şey kaybolmadı. Videoların, Shorts'ların, yorumların ve takiplerin seninle kalır ve hangi adı seçersen o adla aktarılır.",
+    "pick": "Yeni bir ad seç"
+  },
+  "backfill": {
+    "rcError": "Henüz yeterli resource credits yok. Kendiliğinden dolar; birazdan tekrar dene.",
+    "today": "Bugün",
+    "yesterday": "Dün",
+    "groups": {
+      "video": "Videolar",
+      "videoNote": "Her 5 dakikada bir; yavaş olan kısım bu.",
+      "short": "Shorts",
+      "comment": "Yorumlar",
+      "vote": "Beğeniler",
+      "follow": "Takipler",
+      "other": "Diğer her şey"
+    },
+    "status": {
+      "done": "Yayınlandı",
+      "publishing": "Yayınlanıyor…",
+      "error": "Başarısız",
+      "idle": "Yalnızca 3Speak'te"
+    },
+    "wait": {
+      "ms": "{{m}}dk {{s}}sn",
+      "s": "{{s}}sn"
+    },
+    "noDate": "Tarih yok",
+    "waitToast": "Hive her 5 dakikada bir gönderiye izin verir. Sıradaki {{wait}} sonra.",
+    "publishedToast_one": "Hive'da yayınlandı",
+    "publishedToast_other": "{{count}} öğe Hive'da yayınlandı",
+    "loading": "Gönderilerin yükleniyor…",
+    "emptyTitle": "Yayınlanacak bir şey kalmadı",
+    "emptyText": "Hive hesabın olmadan önce ürettiğin her şey ya yayınlandı ya da yeniden yayınlanabilecek türden değildi.",
+    "title": "Daha önce ürettiklerini yayınla",
+    "intro": "Bunları Hive hesabın olmadan önce 3Speak'te ürettin, bu yüzden yalnızca burada varlar. <b>@{{user}}</b> olarak herkese açık kaydında olmasını istediklerini seç ve yayınla. Bıraktığın her şey 3Speak'te olduğu gibi kalır.",
+    "note": "<b>Yayınlama biraz zaman alır ve bu normal.</b> Hive her hesaba 5 dakikada bir gönderi izni verir ve yepyeni bir hesabın birkaç gün içinde dolan küçük bir paylaşım hakkı vardır. Takipler, beğeniler ve profilin ucuzdur ve hızlıca geçer. Birkaçını yayınla ve sonra geri gel.",
+    "groupBy": "Listeyi grupla",
+    "timeline": "Zaman çizelgesi",
+    "byType": "Türe göre",
+    "rcBlockedIn": "<b>Hesabının resource credits'i şimdilik tükendi.</b> Hive her hesaba paylaşım için küçük bir hak verir ve bu kendiliğinden dolar. Hiçbir şey kaybolmadı: yaklaşık {{wait}} sonra geri gel ve kaldığın yerden devam et.",
+    "rcBlockedLater": "<b>Hesabının resource credits'i şimdilik tükendi.</b> Hive her hesaba paylaşım için küçük bir hak verir ve bu kendiliğinden dolar. Hiçbir şey kaybolmadı: biraz sonra geri gel ve kaldığın yerden devam et.",
+    "selected": "<b>{{count}}</b> seçildi",
+    "rootPostsTime_one": "{{count}} video, bu yüzden yaklaşık {{minutes}} dakika gerekiyor",
+    "rootPostsTime_other": "{{count}} video, bu yüzden yaklaşık {{minutes}} dakika gerekiyor",
+    "nextVideo": "Sıradaki video {{wait}} sonra gönderilebilir. Takipler, beğeniler ve profil etkilenmez.",
+    "selectAll": "Tümünü seç",
+    "clear": "Temizle",
+    "publishSelected": "Seçilenleri yayınla",
+    "selectItem": "{{label}} seç",
+    "fiveMin": "5 dk",
+    "waitingTitle": "Başkasını bekliyor",
+    "waitingText": "Bunlar, işaret ettikleri gönderi Hive'da yayınlandığında kendiliğinden yayınlanır. Bu arada hiçbir şey kaybolmaz.",
+    "waitingFor": "<b>{{label}}</b>: {{target}} bekleniyor",
+    "andMore": "ve {{count}} tane daha",
+    "excludedTitle": "Aktarılmayanlar"
+  }
+}
