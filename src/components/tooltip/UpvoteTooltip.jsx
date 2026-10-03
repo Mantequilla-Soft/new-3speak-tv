@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react';
 import './UpvoteTooltip.scss';
+import { useTranslation } from 'react-i18next';
 import { useAppStore } from '../../lib/store';
 import { IoChevronUpCircleOutline } from 'react-icons/io5';
 import { toastIn } from '../../utils/toast';
@@ -29,6 +30,7 @@ const UpvoteTooltip = ({
   setAccountData,
   setOptimisticVoteCount
 }) => {
+  const { t } = useTranslation();
   const { user, authenticated } = useAppStore();
   const [isLoading, setIsLoading] = useState(false);
   const [isCalculating, setIsCalculating] = useState(false);
@@ -108,7 +110,7 @@ const UpvoteTooltip = ({
 
   const handleVote = async () => {
     if (!authenticated || !isLoggedIn()) {
-      toast.error('Login to complete this operation');
+      toast.error(t('engagement.vote.loginRequired'));
       return;
     }
 
@@ -119,7 +121,7 @@ const UpvoteTooltip = ({
       const data = await getUersContent(author, permlink);
       
       if (!data) {
-        toast.error('Could not fetch post data');
+        toast.error(t('engagement.vote.fetchPostFailed'));
         setIsLoading(false);
         return;
       }
@@ -135,13 +137,13 @@ const UpvoteTooltip = ({
       // picked there's genuinely nothing to change.
       if (existingVote && existingVote.percent === voteWeight) {
         if (!tag) {
-          toast.info('You already voted with this weight. Choose a different value.');
+          toast.info(t('engagement.vote.sameWeight'));
           setIsLoading(false);
           return;
         }
         await tagVideoWithAioha(author, permlink, tag, voteWeight);
         recordViewerTag(user, author, permlink, tag, voteWeight);
-        toast.success(`Tagged “${tag}”.`);
+        toast.success(t('engagement.vote.tagged', { tag }));
         setIsVoted(true);
         setShowTooltip(false);
         return; // finally clears the loading state
@@ -159,12 +161,12 @@ const UpvoteTooltip = ({
         setOptimisticVoteCount((prevCount) => prevCount + 1);
       }
 
-      toast.success(`Vote successful!${tag ? ` Tagged “${tag}”.` : ''} Value: $${voteValue}`);
+      toast.success(tag ? t('engagement.vote.successTagged', { tag, value: voteValue }) : t('engagement.vote.success', { value: voteValue }));
       setIsVoted(true);
       setShowTooltip(false);
     } catch (err) {
       console.error('Vote failed:', err);
-      toast.error('Vote failed: ' + (err.message || 'please try again'));
+      toast.error(t('engagement.vote.failed', { message: err.message || t('engagement.vote.pleaseTryAgain') }));
     } finally {
       setIsLoading(false);
     }
@@ -178,20 +180,20 @@ const UpvoteTooltip = ({
     >
       {showTooltip && (
         <div className="tooltip-box">
-          <p>Vote Weight: {weight}%</p>
+          <p>{t('engagement.vote.weight', { weight })}</p>
 
           {/* Optional: tag the video's topic. Highest combined vote weight wins. */}
           <label className="viewer-tag-select" onClick={(e) => e.stopPropagation()}>
-            <span>Tag this video</span>
+            <span>{t('engagement.vote.tagThisVideo')}</span>
             <select
               value={viewerTag}
               onChange={(e) => setViewerTag(e.target.value)}
               disabled={isLoading}
             >
-              <option value="">— optional —</option>
-              {VIEWER_TAG_OPTIONS.map((t) => (
-                <option key={t.id} value={t.id}>
-                  {t.emoji ? `${t.emoji} ` : ''}{t.label}
+              <option value="">{t('engagement.vote.tagOptional')}</option>
+              {VIEWER_TAG_OPTIONS.map((opt) => (
+                <option key={opt.id} value={opt.id}>
+                  {opt.emoji ? `${opt.emoji} ` : ''}{opt.label}
                 </option>
               ))}
             </select>

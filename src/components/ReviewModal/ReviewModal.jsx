@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { createPortal } from 'react-dom';
+import { useTranslation, Trans } from 'react-i18next';
 import { MdStar, MdStarBorder, MdClose, MdThumbUp, MdThumbDown } from 'react-icons/md';
 import { useLocation } from 'react-router-dom';
 import axios from 'axios';
@@ -15,14 +16,14 @@ const toast = toastIn('Feedback');
 
 // What the feedback is about — optional multi-select tags stored on the review.
 const ASPECTS = [
-  { key: 'upload', label: 'Uploading' },
-  { key: 'playback', label: 'Playback' },
-  { key: 'live', label: 'Live streaming' },
-  { key: 'discovery', label: 'Discovery / feed' },
-  { key: 'design', label: 'Design / UX' },
-  { key: 'performance', label: 'Speed' },
-  { key: 'mobile', label: 'Mobile' },
-  { key: 'other', label: 'Something else' },
+  { key: 'upload', labelKey: 'comments.review.aspects.upload' },
+  { key: 'playback', labelKey: 'comments.review.aspects.playback' },
+  { key: 'live', labelKey: 'comments.review.aspects.live' },
+  { key: 'discovery', labelKey: 'comments.review.aspects.discovery' },
+  { key: 'design', labelKey: 'comments.review.aspects.design' },
+  { key: 'performance', labelKey: 'comments.review.aspects.performance' },
+  { key: 'mobile', labelKey: 'comments.review.aspects.mobile' },
+  { key: 'other', labelKey: 'comments.review.aspects.other' },
 ];
 
 // When the popup is opened for a specific context, pre-select the matching aspect.
@@ -30,13 +31,13 @@ const AREA_ASPECT = { upload: 'upload', stream: 'live', live: 'live' };
 
 // Context-aware heading based on where the popup was opened from.
 const TITLES = {
-  upload: 'How was your upload?',
-  stream: 'How was your livestream?',
-  live: 'How was your livestream?',
-  watch: 'How was watching on 3Speak?',
-  global: "How's your 3Speak experience?",
+  upload: 'comments.review.titles.upload',
+  stream: 'comments.review.titles.stream',
+  live: 'comments.review.titles.stream',
+  watch: 'comments.review.titles.watch',
+  global: 'comments.review.titles.global',
 };
-const STAR_LABELS = ['', 'Poor', 'Fair', 'Good', 'Great', 'Amazing'];
+const STAR_LABELS = ['', 'comments.review.stars.poor', 'comments.review.stars.fair', 'comments.review.stars.good', 'comments.review.stars.great', 'comments.review.stars.amazing'];
 
 /**
  * Reusable feedback/review popup. Hand it { area, username, permlink } and an
@@ -44,6 +45,7 @@ const STAR_LABELS = ['', 'Poor', 'Fair', 'Good', 'Great', 'Amazing'];
  * checker's `reviews` collection. area: 'global' | 'stream' | 'upload' | …
  */
 function ReviewModal({ area = 'global', username = null, permlink = null, onClose }) {
+  const { t } = useTranslation();
   const location = useLocation();
   const [stars, setStars] = useState(0);
   const [hover, setHover] = useState(0);
@@ -60,7 +62,7 @@ function ReviewModal({ area = 'global', username = null, permlink = null, onClos
 
   const submit = async () => {
     if (!stars) {
-      toast.error('Please pick a star rating');
+      toast.error(t('comments.review.errors.pickStars'));
       return;
     }
     setSubmitting(true);
@@ -76,16 +78,16 @@ function ReviewModal({ area = 'global', username = null, permlink = null, onClos
         app_version: APP_VERSION,
         path: location.pathname,
       });
-      toast.success('Thanks for your feedback! 🙏');
+      toast.success(t('comments.review.thanks'));
       onClose?.();
     } catch (e) {
-      toast.error('Could not send your review. Please try again.');
+      toast.error(t('comments.review.errors.sendFailed'));
     } finally {
       setSubmitting(false);
     }
   };
 
-  const title = TITLES[area] || 'Help us make 3Speak better';
+  const title = t(TITLES[area] || 'comments.review.titles.fallback');
   const shown = hover || stars;
 
   return createPortal(
@@ -95,20 +97,20 @@ function ReviewModal({ area = 'global', username = null, permlink = null, onClos
         onClick={(e) => e.stopPropagation()}
         onMouseDown={(e) => e.stopPropagation()}
         role="dialog"
-        aria-label="Send feedback"
+        aria-label={t('comments.review.sendFeedback')}
       >
         <div className="review-header">
           <div className="review-head-text">
             <h3>{title}</h3>
-            <p>Your feedback helps us make 3Speak better.</p>
+            <p>{t('comments.review.subtitle')}</p>
           </div>
-          <button className="review-close" onClick={onClose} aria-label="Close">
+          <button className="review-close" onClick={onClose} aria-label={t('common.actions.close')}>
             <MdClose />
           </button>
         </div>
 
         <div className="review-body">
-          <div className="review-stars" role="radiogroup" aria-label="Star rating">
+          <div className="review-stars" role="radiogroup" aria-label={t('comments.review.starRating')}>
             {[1, 2, 3, 4, 5].map((n) => (
               <button
                 key={n}
@@ -117,18 +119,18 @@ function ReviewModal({ area = 'global', username = null, permlink = null, onClos
                 onMouseEnter={() => setHover(n)}
                 onMouseLeave={() => setHover(0)}
                 onClick={() => setStars(n)}
-                aria-label={`${n} star${n > 1 ? 's' : ''}`}
+                aria-label={t('comments.review.starsAria', { count: n })}
                 aria-pressed={stars === n}
               >
                 {n <= shown ? <MdStar /> : <MdStarBorder />}
               </button>
             ))}
-            <span className="star-label">{STAR_LABELS[shown] || ''}</span>
+            <span className="star-label">{STAR_LABELS[shown] ? t(STAR_LABELS[shown]) : ''}</span>
           </div>
 
           <div className="review-field">
             <label>
-              What&apos;s this about? <span>(optional)</span>
+              <Trans i18nKey="comments.review.aboutLabel" components={{ opt: <span /> }} />
             </label>
             <div className="review-chips">
               {ASPECTS.map((a) => (
@@ -138,7 +140,7 @@ function ReviewModal({ area = 'global', username = null, permlink = null, onClos
                   className={`chip ${aspects.includes(a.key) ? 'on' : ''}`}
                   onClick={() => toggleAspect(a.key)}
                 >
-                  {a.label}
+                  {t(a.labelKey)}
                 </button>
               ))}
             </div>
@@ -146,7 +148,7 @@ function ReviewModal({ area = 'global', username = null, permlink = null, onClos
 
           <div className="review-field">
             <label>
-              Would you recommend 3Speak? <span>(optional)</span>
+              <Trans i18nKey="comments.review.recommendLabel" components={{ opt: <span /> }} />
             </label>
             <div className="review-recommend">
               <button
@@ -154,38 +156,38 @@ function ReviewModal({ area = 'global', username = null, permlink = null, onClos
                 className={`rec ${recommend === true ? 'on yes' : ''}`}
                 onClick={() => setRecommend(recommend === true ? null : true)}
               >
-                <MdThumbUp /> Yes
+                <MdThumbUp /> {t('common.actions.yes')}
               </button>
               <button
                 type="button"
                 className={`rec ${recommend === false ? 'on no' : ''}`}
                 onClick={() => setRecommend(recommend === false ? null : false)}
               >
-                <MdThumbDown /> No
+                <MdThumbDown /> {t('common.actions.no')}
               </button>
             </div>
           </div>
 
           <div className="review-field">
             <label>
-              Tell us more <span>(optional)</span>
+              <Trans i18nKey="comments.review.moreLabel" components={{ opt: <span /> }} />
             </label>
             <textarea
               value={comment}
               onChange={(e) => setComment(e.target.value)}
               maxLength={4000}
               rows={4}
-              placeholder="What did you like? What could be better?"
+              placeholder={t('comments.review.placeholder')}
             />
           </div>
         </div>
 
         <div className="review-actions">
           <button className="review-cancel" onClick={onClose} disabled={submitting}>
-            Not now
+            {t('comments.review.notNow')}
           </button>
           <button className="review-submit" onClick={submit} disabled={submitting || !stars}>
-            {submitting ? 'Sending…' : 'Send feedback'}
+            {submitting ? t('comments.review.sending') : t('comments.review.sendFeedback')}
           </button>
         </div>
       </div>

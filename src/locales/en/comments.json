@@ -1,0 +1,100 @@
+{
+  "review": {
+    "fabAria": "Give feedback",
+    "fab": "Feedback",
+    "aspects": {
+      "upload": "Uploading",
+      "playback": "Playback",
+      "live": "Live streaming",
+      "discovery": "Discovery / feed",
+      "design": "Design / UX",
+      "performance": "Speed",
+      "mobile": "Mobile",
+      "other": "Something else"
+    },
+    "titles": {
+      "upload": "How was your upload?",
+      "stream": "How was your livestream?",
+      "watch": "How was watching on 3Speak?",
+      "global": "How's your 3Speak experience?",
+      "fallback": "Help us make 3Speak better"
+    },
+    "stars": {
+      "poor": "Poor",
+      "fair": "Fair",
+      "good": "Good",
+      "great": "Great",
+      "amazing": "Amazing"
+    },
+    "errors": {
+      "pickStars": "Please pick a star rating",
+      "sendFailed": "Could not send your review. Please try again."
+    },
+    "thanks": "Thanks for your feedback! 🙏",
+    "sendFeedback": "Send feedback",
+    "subtitle": "Your feedback helps us make 3Speak better.",
+    "starRating": "Star rating",
+    "starsAria_one": "{{count}} star",
+    "starsAria_other": "{{count}} stars",
+    "aboutLabel": "What's this about? <opt>(optional)</opt>",
+    "recommendLabel": "Would you recommend 3Speak? <opt>(optional)</opt>",
+    "moreLabel": "Tell us more <opt>(optional)</opt>",
+    "placeholder": "What did you like? What could be better?",
+    "notNow": "Not now",
+    "sending": "Sending…"
+  },
+  "tabs": {
+    "reactions": "Reactions",
+    "transcript": "Transcript"
+  },
+  "live": {
+    "vodProcessing": "The recording is processing…",
+    "vodProcessingHint": "This stream has ended. The video will replace it here as soon as the encoder is finished — no need to reload.",
+    "watching_one": "👁 {{count}} watching",
+    "watching_other": "👁 {{count}} watching",
+    "signInRaiseHand": "Sign in to raise your hand",
+    "signInChat": "Sign in to chat",
+    "signInJoinChat": "🔒 Sign in to join the chat."
+  },
+  "transcript": {
+    "title": "Transcript",
+    "languageAria": "Transcript language",
+    "copyingWithTimes": "Copying with timecodes",
+    "copyingTextOnly": "Copying text only",
+    "timecodes": "Timecodes",
+    "copyWithTimes": "Copy transcript with timecodes",
+    "copyText": "Copy transcript text",
+    "jumpTo": "Jump to {{time}}",
+    "hide": "Hide transcript",
+    "show": "Show transcript",
+    "showWithCount_one": "Show transcript ({{count}} line)",
+    "showWithCount_other": "Show transcript ({{count}} lines)"
+  },
+  "blog": {
+    "noContent": "No content available",
+    "loadError": "Error loading content.",
+    "processError": "Error processing content.",
+    "rendererError": "Error loading renderer."
+  },
+  "section": {
+    "posted": "Comment posted successfully!",
+    "postFailed": "Comment failed, please try again",
+    "editFailed": "Edit failed, please try again",
+    "updated": "Comment updated",
+    "commentTab": "Comment",
+    "reactTab": "React",
+    "at": "at",
+    "atTime": "at {{time}}",
+    "commentPlaceholder": "Write your comment here...",
+    "replyPlaceholder": "Write your reply here...",
+    "commentButton": "Comment",
+    "count_one": "{{count}} Comment",
+    "count_other": "{{count}} Comments",
+    "edited": "(edited)",
+    "saving": "Saving...",
+    "translation": "Translation",
+    "translationFailed": "Translation failed. Is the translation service running?",
+    "reportComment": "Report comment",
+    "openInShorts": "Open in Shorts"
+  }
+}

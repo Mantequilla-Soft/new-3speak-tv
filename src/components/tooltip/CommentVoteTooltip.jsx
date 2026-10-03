@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useRef, useCallback } from 'react';
 import { createPortal } from 'react-dom';
+import { useTranslation, Trans } from 'react-i18next';
 import './UpvoteTooltip.scss';
 import { useAppStore } from '../../lib/store';
 import { X, ChevronUp } from 'lucide-react';
@@ -64,6 +65,7 @@ const CommentVoteTooltip = ({
   // separate values (see utils/voteWeight.js).
   voteKind = 'post',
 }) => {
+  const { t } = useTranslation();
   const { user, authenticated } = useAppStore();
   const [isLoading, setIsLoading] = useState(false);
   const [initializing, setInitializing] = useState(false);
@@ -140,11 +142,11 @@ const CommentVoteTooltip = ({
   // Tag-only submit: broadcast just the custom_json (weight = 100% vote) + mirror.
   const handleTagOnly = async () => {
     if (!authenticated || !isLoggedIn()) {
-      toast.error('Login to complete this operation');
+      toast.error(t('engagement.vote.loginRequired'));
       return;
     }
     if (!viewerTag) {
-      toast.error('Pick a topic first');
+      toast.error(t('engagement.vote.pickTopicFirst'));
       return;
     }
     setIsLoading(true);
@@ -152,14 +154,14 @@ const CommentVoteTooltip = ({
       await tagVideoWithAioha(author, permlink, viewerTag, 10000);
       // Await the mirror so the consensus refresh below reflects this tag.
       await recordViewerTag(user, author, permlink, viewerTag, 10000);
-      toast.success(`Tagged “${getTagLabel(viewerTag)}”`);
+      toast.success(t('engagement.vote.taggedNoDot', { tag: getTagLabel(viewerTag) }));
       // Refresh the watch-page topics row (isNewVote=false → no vote-count change).
       onVoteSuccess?.(author, permlink, false, 10000);
       setShowTooltip(false);
       setActiveTooltipPermlink?.(null);
     } catch (err) {
       console.error('Tag failed:', err);
-      toast.error('Tag failed: ' + (err.message || 'please try again'));
+      toast.error(t('engagement.vote.tagFailed', { message: err.message || t('engagement.vote.pleaseTryAgain') }));
     } finally {
       setIsLoading(false);
     }
@@ -184,13 +186,13 @@ const CommentVoteTooltip = ({
   // Update all DOM elements for a given weight (no React re-render)
   const updateSliderDOM = useCallback((w) => {
     weightRef.current = w;
-    if (labelRef.current) labelRef.current.textContent = `Vote Weight: ${w}%`;
+    if (labelRef.current) labelRef.current.textContent = t('engagement.vote.weight', { weight: w });
     if (fillRef.current) fillRef.current.style.width = `${w}%`;
     if (thumbRef.current) thumbRef.current.style.left = `${w}%`;
     if (valueRef.current && cachedAccountRef.current && cachedDynamicPropsRef.current) {
       valueRef.current.textContent = `$${estimateLocal(cachedAccountRef.current, cachedDynamicPropsRef.current, w)}`;
     }
-  }, []);
+  }, [t]);
 
   // Build the custom div-based slider when popup opens
   useEffect(() => {
@@ -202,7 +204,7 @@ const CommentVoteTooltip = ({
     // comments remember separate values), not a hardcoded 100%.
     const startWeight = getSavedVoteWeight(voteKind);
     weightRef.current = startWeight;
-    if (labelRef.current) labelRef.current.textContent = `Vote Weight: ${startWeight}%`;
+    if (labelRef.current) labelRef.current.textContent = t('engagement.vote.weight', { weight: startWeight });
     // Keep the parent's state in step so the rendered label and the estimate
     // agree with the slider we just built.
     if (startWeight !== parentWeight) setParentWeight(startWeight);
@@ -350,7 +352,7 @@ const CommentVoteTooltip = ({
 
   const handleVote = async () => {
     if (!authenticated || !isLoggedIn()) {
-      toast.error('Login to complete this operation');
+      toast.error(t('engagement.vote.loginRequired'));
       return;
     }
 
@@ -362,7 +364,7 @@ const CommentVoteTooltip = ({
       const data = await getUersContent(author, permlink);
 
       if (!data) {
-        toast.error('Could not fetch post data');
+        toast.error(t('engagement.vote.fetchPostFailed'));
         setIsLoading(false);
         return;
       }
@@ -381,14 +383,14 @@ const CommentVoteTooltip = ({
           await tagVideoWithAioha(author, permlink, tag, voteWeight);
           await recordViewerTag(user, author, permlink, tag, voteWeight);
           saveVoteWeight(voteKind, currentWeight);
-          toast.success(`Tagged “${getTagLabel(tag)}” — your ${currentWeight}% vote was already cast.`);
+          toast.success(t('engagement.vote.taggedAlreadyVoted', { tag: getTagLabel(tag), weight: currentWeight }));
           onVoteSuccess?.(author, permlink, false, voteWeight);
           setShowTooltip(false);
           setActiveTooltipPermlink?.(null);
           setIsLoading(false);
           return;
         }
-        toast.info('You already voted with this weight. Choose a different value.');
+        toast.info(t('engagement.vote.sameWeight'));
         setIsLoading(false);
         return;
       }
@@ -404,7 +406,7 @@ const CommentVoteTooltip = ({
         ? estimateLocal(cachedAccountRef.current, cachedDynamicPropsRef.current, currentWeight)
         : '0.000';
 
-      toast.success(`Vote successful!${tag ? ` Tagged “${getTagLabel(tag)}”.` : ''} Value: $${finalValue}`);
+      toast.success(tag ? t('engagement.vote.successTagged', { tag: getTagLabel(tag), value: finalValue }) : t('engagement.vote.success', { value: finalValue }));
 
       // Sync back to parent + remember this weight for the next vote of this kind.
       setParentWeight(currentWeight);
@@ -427,7 +429,7 @@ const CommentVoteTooltip = ({
       setActiveTooltipPermlink?.(null);
     } catch (err) {
       console.error('Vote failed:', err);
-      toast.error('Vote failed: ' + (err.message || 'please try again'));
+      toast.error(t('engagement.vote.failed', { message: err.message || t('engagement.vote.pleaseTryAgain') }));
     } finally {
       setIsLoading(false);
     }
@@ -492,19 +494,19 @@ const CommentVoteTooltip = ({
             {tagOnlyMode ? (
               // ── Payout window closed: no voting, tag-only (one-shot) ──
               <>
-                <p className="vote-popup-label">Voting closed — tag this video</p>
+                <p className="vote-popup-label">{t('engagement.vote.votingClosed')}</p>
                 {myExistingTag === undefined ? (
                   <div style={{ display: 'flex', justifyContent: 'center' }}>
                     <Orbit size="24" speed="1.5" color="red" />
                   </div>
                 ) : myExistingTag ? (
                   <p className="vote-popup-note">
-                    You tagged this as <b>{getTagLabel(myExistingTag)}</b>.
+                    <Trans i18nKey="engagement.vote.youTagged" values={{ tag: getTagLabel(myExistingTag) }} components={{ b: <b /> }} />
                   </p>
                 ) : (
                   <>
                     <div className="viewer-tag-select" onClick={(e) => e.stopPropagation()}>
-                      <span>Pick a topic (counts as a 100% vote)</span>
+                      <span>{t('engagement.vote.pickTopic')}</span>
                       <TagsV2Picker
                         value={viewerTag}
                         onChange={setViewerTag}
@@ -519,7 +521,7 @@ const CommentVoteTooltip = ({
                       onClick={handleTagOnly}
                       disabled={isLoading || !viewerTag}
                     >
-                      {isLoading ? <TailChase size="18" speed="1.5" color="white" /> : 'Submit tag'}
+                      {isLoading ? <TailChase size="18" speed="1.5" color="white" /> : t('engagement.vote.submitTag')}
                     </button>
                   </>
                 )}
@@ -531,7 +533,7 @@ const CommentVoteTooltip = ({
                     but hidden when "just tag" is on, since there's no vote then. */}
                 <div style={justTag ? { display: 'none' } : undefined}>
                   <p className="vote-popup-label" ref={labelRef}>
-                    Vote Weight: {parentWeight}%
+                    {t('engagement.vote.weight', { weight: parentWeight })}
                   </p>
 
                   {/* Container for custom div-based slider — no <input> at all */}
@@ -550,7 +552,7 @@ const CommentVoteTooltip = ({
                 {enableViewerTag && (
                   <>
                     <div className="viewer-tag-select" onClick={(e) => e.stopPropagation()}>
-                      <span>Tag this video{justTag ? ' (counts as a 100% vote)' : ''}</span>
+                      <span>{justTag ? t('engagement.vote.tagThisVideoFull') : t('engagement.vote.tagThisVideo')}</span>
                       <TagsV2Picker
                         value={viewerTag}
                         onChange={setViewerTag}
@@ -568,7 +570,7 @@ const CommentVoteTooltip = ({
                         onChange={(e) => setJustTag(e.target.checked)}
                         disabled={isLoading}
                       />
-                      <span>Don&rsquo;t vote &mdash; just tag</span>
+                      <span>{t('engagement.vote.justTag')}</span>
                     </label>
                   </>
                 )}
@@ -581,10 +583,10 @@ const CommentVoteTooltip = ({
                   {isLoading ? (
                     <TailChase size="18" speed="1.5" color="white" />
                   ) : justTag ? (
-                    'Submit tag'
+                    t('engagement.vote.submitTag')
                   ) : (
                     <>
-                      <ChevronUp size={20} /> Vote
+                      <ChevronUp size={20} /> {t('engagement.vote.vote')}
                     </>
                   )}
                 </button>

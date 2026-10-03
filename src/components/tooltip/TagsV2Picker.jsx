@@ -1,5 +1,6 @@
 import { useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
+import { useTranslation } from 'react-i18next';
 import {
   TAG_CATEGORIES, getCategoryOf, getTagLabel, getTagEmoji, isCategorySlug,
 } from '../../utils/tagsV2';
@@ -23,6 +24,7 @@ function TagsV2Picker({
   value, onChange, tagPct = {}, disabled = false, suggested = [],
   multi = false, searchable = false,
 }) {
+  const { t } = useTranslation();
   const selectedArr = multi && Array.isArray(value) ? value : [];
   const selectedSet = useMemo(() => new Set(selectedArr), [selectedArr]);
   const isSel = (slug) => (multi ? selectedSet.has(slug) : value === slug);
@@ -32,7 +34,7 @@ function TagsV2Picker({
   // first category that already has a selection so returning users see it.
   const [openCatMulti, setOpenCatMulti] = useState(() => {
     if (!multi) return null;
-    const cat = TAG_CATEGORIES.find((c) => c.topics.some((t) => selectedSet.has(t.slug)));
+    const cat = TAG_CATEGORIES.find((c) => c.topics.some((topic) => selectedSet.has(topic.slug)));
     return cat ? cat.slug : null;
   });
   const activeCategory = multi ? openCatMulti : getCategoryOf(value);
@@ -54,9 +56,9 @@ function TagsV2Picker({
       if (cat.label.toLowerCase().includes(q)) {
         out.push({ slug: cat.slug, label: cat.label, emoji: cat.emoji, isCat: true });
       }
-      for (const t of cat.topics) {
-        if (t.label.toLowerCase().includes(q)) {
-          out.push({ slug: t.slug, label: t.label, emoji: t.emoji, isCat: false });
+      for (const topic of cat.topics) {
+        if (topic.label.toLowerCase().includes(q)) {
+          out.push({ slug: topic.slug, label: topic.label, emoji: topic.emoji, isCat: false });
         }
       }
     }
@@ -93,23 +95,23 @@ function TagsV2Picker({
     else onChange(value === m.slug ? '' : m.slug);
   };
 
-  const catCount = (cat) => cat.topics.reduce((n, t) => n + (selectedSet.has(t.slug) ? 1 : 0), 0);
+  const catCount = (cat) => cat.topics.reduce((n, topic) => n + (selectedSet.has(topic.slug) ? 1 : 0), 0);
 
   const known = suggested.filter(Boolean);
 
-  const renderTopic = (t) => {
-    const pct = tagPct[t.slug];
+  const renderTopic = (topic) => {
+    const pct = tagPct[topic.slug];
     return (
       <button
         type="button"
-        key={t.slug}
-        className={`tagsv2-topic${isSel(t.slug) ? ' selected' : ''}`}
-        onClick={() => pickTopic(t.slug)}
+        key={topic.slug}
+        className={`tagsv2-topic${isSel(topic.slug) ? ' selected' : ''}`}
+        onClick={() => pickTopic(topic.slug)}
         disabled={disabled}
-        aria-pressed={isSel(t.slug)}
+        aria-pressed={isSel(topic.slug)}
       >
-        <span className="tagsv2-emoji">{t.emoji}</span>
-        <span className="tagsv2-label">{t.label}</span>
+        <span className="tagsv2-emoji">{topic.emoji}</span>
+        <span className="tagsv2-label">{topic.label}</span>
         {pct != null && <span className="tagsv2-pct">{pct}%</span>}
       </button>
     );
@@ -119,7 +121,7 @@ function TagsV2Picker({
     <div className="tagsv2-picker" onClick={(e) => e.stopPropagation()}>
       {known.length > 0 && (
         <p className="tagsv2-suggested">
-          Auto-tagged: {known.map((s) => `${getTagEmoji(s)} ${getTagLabel(s)}`).join(', ')}
+          {t('engagement.tagsPicker.autoTagged', { tags: known.map((s) => `${getTagEmoji(s)} ${getTagLabel(s)}`).join(', ') })}
         </p>
       )}
 
@@ -127,17 +129,17 @@ function TagsV2Picker({
         <input
           type="search"
           className="tagsv2-search"
-          placeholder="Search topics…"
+          placeholder={t('engagement.tagsPicker.searchPlaceholder')}
           value={query}
           onChange={(e) => setQuery(e.target.value)}
           disabled={disabled}
-          aria-label="Search topics"
+          aria-label={t('engagement.tagsPicker.searchAria')}
         />
       )}
 
       {q ? (
         matches.length === 0 ? (
-          <p className="tagsv2-hint">No topics match “{query}”.</p>
+          <p className="tagsv2-hint">{t('engagement.tagsPicker.noMatches', { query })}</p>
         ) : (
           <div className="tagsv2-row">
             {matches.map((m) => (
@@ -188,11 +190,11 @@ function TagsV2Picker({
               <p className="tagsv2-hint">
                 {multi
                   ? (isSel(openCategory.slug)
-                      ? `All of ${openCategory.label} is selected. Add individual topics only to go narrower:`
-                      : 'Or pick individual topics:')
+                      ? t('engagement.tagsPicker.allSelected', { category: openCategory.label })
+                      : t('engagement.tagsPicker.orPickTopics'))
                   : isCategorySlug(value)
-                    ? 'Good enough — or get more specific (optional):'
-                    : 'More specific:'}
+                    ? t('engagement.tagsPicker.goodEnough')
+                    : t('engagement.tagsPicker.moreSpecific')}
               </p>
               <div className="tagsv2-row">
                 {openCategory.topics.map(renderTopic)}

@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import Success from './Success';
+import { useTranslation } from 'react-i18next';
 import './TipModal.scss';
 import { fetchBalances, isAccountValid } from '../../hive-api/api';
 import { useAppStore } from '../../lib/store';
@@ -13,6 +14,7 @@ import { transferWithAioha, isLoggedIn } from '../../hive-api/aioha';
 const toast = toastIn('Tip');
 
 const TipModal = ({ recipient, isOpen, onClose, onSendTip }) => {
+    const { t } = useTranslation();
     const { user: activetUser } = useAppStore();
   const [amount, setAmount] = useState("");
   const [currency, setCurrency] = useState("HIVE");
@@ -66,23 +68,23 @@ const TipModal = ({ recipient, isOpen, onClose, onSendTip }) => {
 
   const handleSubmitTransfer = async () => {
     if (!amount || !recipient || !currency) {
-      toast.error("All fields are required");
+      toast.error(t('engagement.tip.errors.allRequired'));
       return;
     }
 
     if (!isLoggedIn()) {
-      toast.error("Please login to send a tip");
+      toast.error(t('engagement.tip.errors.loginRequired'));
       return;
     }
 
     if (parseFloat(amount) > selectedBalance) {
-      toast.error("Insufficient balance");
+      toast.error(t('engagement.tip.errors.insufficientBalance'));
       return;
     }
 
     const valid = await isAccountValid(recipient);
     if (!valid) {
-      toast.error("Invalid username");
+      toast.error(t('engagement.tip.errors.invalidUsername'));
       return;
     }
 
@@ -90,7 +92,7 @@ const TipModal = ({ recipient, isOpen, onClose, onSendTip }) => {
       await transferWithAioha(recipient, parseFloat(amount), currency, memo || '');
       setStep(2);
     } catch (error) {
-      toast.error(`Transfer failed: ${error.message}`);
+      toast.error(t('engagement.tip.errors.transferFailed', { message: error.message }));
       console.error(error);
     }
   };
@@ -103,28 +105,28 @@ const TipModal = ({ recipient, isOpen, onClose, onSendTip }) => {
       
         {step === 1 && <div className="tip-modal-in">
           <div className="header">
-            <h2>Send a Tip to @{recipient}</h2>
+            <h2>{t('engagement.tip.heading', { recipient })}</h2>
           </div>
           
           <div className="form">
             <div className="field">
-              <label>Amount: </label>
+              <label>{t('engagement.tip.amountLabel')}</label>
               <input
                 type="number"
-                placeholder="e.g. 1.000"
+                placeholder={t('engagement.tip.amountPlaceholder')}
                 value={amount}
                 onChange={(e) => setAmount(e.target.value)}
               />
             </div>
 
             <div className="field">
-              <label>Currency:</label>
+              <label>{t('engagement.tip.currencyLabel')}</label>
               <select value={currency} onChange={(e) => setCurrency(e.target.value)}>
                 <option value="HIVE">HIVE</option>
                 <option value="HBD">HBD</option>
               </select>
               <div className='balance-wrap'>
-                <span>Available balance: {currency}</span>
+                <span>{t('engagement.tip.availableBalance', { currency })}</span>
                  {loading ? (<LineSpinner size="10" stroke="3" speed="1" color="red" /> )
                  :
                  <span>{currency === "HIVE" ? <div>{balances.hive}</div>: <div>{balances.hbd}</div>}</span>}</div>
@@ -134,10 +136,10 @@ const TipModal = ({ recipient, isOpen, onClose, onSendTip }) => {
              
 
             <div className="field">
-              <label>Memo (optional):</label>
+              <label>{t('engagement.tip.memoLabel')}</label>
               <input
                 type="text"
-                placeholder="e.g. Thanks for this amazing content!"
+                placeholder={t('engagement.tip.memoPlaceholder')}
                 value={memo}
                 onChange={(e) => setMemo(e.target.value)}
               />
@@ -145,10 +147,10 @@ const TipModal = ({ recipient, isOpen, onClose, onSendTip }) => {
 
             <div className="actions">
               <button className="cancel-btn" onClick={handleClose}>
-                Cancel
+                {t('common.actions.cancel')}
               </button>
               <button className="send-btn" onClick={handleSubmitTransfer}>
-                Send Tip
+                {t('engagement.tip.send')}
               </button>
             </div>
           </div>
