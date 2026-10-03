@@ -1,0 +1,19 @@
+{
+  "placeholder": "अपना कंटेंट यहाँ लिखें...",
+  "uploadFailed": "अपलोड फ़ेल हुआ: {{message}}",
+  "uploadingImage": "इमेज अपलोड हो रही है...",
+  "format": {
+    "underline": "अंडरलाइन",
+    "strike": "स्ट्राइक",
+    "highlight": "हाइलाइट",
+    "bulletList": "बुलेट लिस्ट",
+    "orderedList": "नंबर वाली लिस्ट",
+    "taskList": "टास्क लिस्ट"
+  },
+  "emoji": {
+    "searchPlaceholder": "इमोजी खोजें"
+  },
+  "preview": {
+    "renderError": "कंटेंट दिखाने में त्रुटि"
+  }
+}

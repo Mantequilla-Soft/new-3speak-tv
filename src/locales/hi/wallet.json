@@ -1,0 +1,50 @@
+{
+  "tabs": {
+    "overview": "ओवरव्यू",
+    "transactions": "ट्रांज़ैक्शन",
+    "aria": "वॉलेट सेक्शन"
+  },
+  "errors": {
+    "fetchBalances": "बैलेंस लोड नहीं हो सका",
+    "needKeychain": "ट्रांसफ़र करने के लिए आपको Keychain एक्सटेंशन चाहिए"
+  },
+  "header": {
+    "mine": "मेरा वॉलेट",
+    "ofUser": "{{user}} का वॉलेट"
+  },
+  "assets": "एसेट्स",
+  "transfer": "ट्रांसफ़र",
+  "transferModal": {
+    "loginRequired": "ट्रांसफ़र करने के लिए कृपया लॉग इन करें",
+    "insufficient": "बैलेंस काफ़ी नहीं है",
+    "invalidUsername": "यूज़रनेम गलत है",
+    "success": "ट्रांसफ़र हो गया!",
+    "failed": "ट्रांसफ़र फ़ेल हुआ: {{error}}",
+    "title": "{{coin}} ट्रांसफ़र करें",
+    "amountLabel": "राशि ({{coin}})",
+    "balance": "बैलेंस {{balance}}",
+    "max": "अधिकतम",
+    "recipientLabel": "पाने वाले का यूज़रनेम",
+    "recipientPlaceholder": "Hive यूज़रनेम डालें",
+    "memoLabel": "मेमो",
+    "memoPlaceholder": "मेमो डालें",
+    "confirm": "ट्रांसफ़र की पुष्टि करें"
+  },
+  "history": {
+    "loadFailed": "ट्रांज़ैक्शन लोड नहीं हो सके",
+    "title": "ट्रांज़ैक्शन हिस्ट्री",
+    "cols": {
+      "type": "प्रकार",
+      "amount": "राशि",
+      "account": "अकाउंट",
+      "date": "तारीख",
+      "memo": "मेमो"
+    },
+    "types": {
+      "transfer": "ट्रांसफ़र",
+      "claim": "रिवॉर्ड क्लेम",
+      "received": "मिला"
+    },
+    "claimedRewards": "क्लेम किए गए रिवॉर्ड"
+  }
+}

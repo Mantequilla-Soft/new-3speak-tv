@@ -1,0 +1,115 @@
+{
+  "loading": "शॉर्ट्स लोड हो रहे हैं...",
+  "pleaseTryAgain": "कृपया फिर से कोशिश करें",
+  "rotateDevice": "कृपया अपना डिवाइस पोर्ट्रेट मोड में घुमाएँ",
+  "pageTitle": {
+    "byAuthor": "3S | @{{author}} का शॉर्ट",
+    "default": "3S | शॉर्ट्स"
+  },
+  "stories": {
+    "you": "आप"
+  },
+  "errors": {
+    "votingUnavailable": "इस पोस्ट पर वोटिंग उपलब्ध नहीं है",
+    "loginToVote": "वोट करने के लिए लॉग इन करें",
+    "loginToComplete": "यह काम पूरा करने के लिए लॉग इन करें"
+  },
+  "feed": {
+    "ariaLabel": "शॉर्ट्स फ़ीड",
+    "discover": "डिस्कवर",
+    "myInterests": "मेरी रुचियाँ",
+    "interestsTitle": "सिर्फ़ आपकी रुचियों वाले शॉर्ट्स",
+    "pickInterestsFirst": "पहले कुछ रुचियाँ चुनें",
+    "noInterests": "आपने अभी कोई रुचि नहीं चुनी है — इन्हें सेटिंग्स में चुनें",
+    "interestsExhausted": "आपकी रुचियों के सारे शॉर्ट्स खत्म — डिस्कवर दिखा रहे हैं",
+    "noInterestMatches": "अभी आपकी रुचियों से कोई शॉर्ट मेल नहीं खाता।",
+    "switchToDiscover": "डिस्कवर पर जाएँ",
+    "empty": "कोई शॉर्ट उपलब्ध नहीं",
+    "loadError": "शॉर्ट्स लोड करने में त्रुटि: {{error}}"
+  },
+  "glow": {
+    "subtle": "एम्बिएंट लाइट: हल्की",
+    "vivid": "एम्बिएंट लाइट: तेज़",
+    "off": "एम्बिएंट लाइट: बंद"
+  },
+  "playbackMode": {
+    "autoReplay": "ऑटो-रीप्ले",
+    "autoSwipe": "ऑटो-स्वाइप",
+    "manual": "मैनुअल"
+  },
+  "subtitles": {
+    "off": "बंद"
+  },
+  "chain": {
+    "originalVideo": "मूल वीडियो",
+    "snap": "Snap",
+    "openShort": "शॉर्ट खोलें",
+    "watch": "देखें",
+    "openSnap": "Snap खोलें",
+    "comment": "कमेंट",
+    "reaction": "रिएक्शन",
+    "thisVideo": "यह वीडियो",
+    "remix": "रीमिक्स",
+    "show": "रिएक्शन चेन दिखाएँ"
+  },
+  "caption": {
+    "curatedBy": "Mantequilla द्वारा क्यूरेट किया गया",
+    "curated": "क्यूरेटेड",
+    "showOriginal": "मूल दिखाएँ",
+    "more": "और"
+  },
+  "actions": {
+    "remix": "रीमिक्स",
+    "promote": "प्रमोट करें"
+  },
+  "share": {
+    "defaultTitle": "3Speak शॉर्ट",
+    "text": "3Speak पर {{user}} का यह शॉर्ट देखें!",
+    "shared": "शेयर हो गया!",
+    "linkCopied": "लिंक क्लिपबोर्ड पर कॉपी हो गया!",
+    "failed": "शेयर नहीं हो सका"
+  },
+  "reshare": {
+    "loginRequired": "रीशेयर करने के लिए लॉग इन करें",
+    "unavailable": "इस पोस्ट को रीशेयर नहीं किया जा सकता",
+    "done": "रीशेयर हो गया!",
+    "failed": "रीशेयर नहीं हो सका"
+  },
+  "remix": {
+    "noUrl": "रीमिक्स के लिए वीडियो का URL नहीं मिल सका",
+    "loadFailed": "रीमिक्स के लिए वीडियो लोड नहीं हो सका"
+  },
+  "watchLater": {
+    "loginRequired": "शॉर्ट्स सेव करने के लिए लॉग इन करें",
+    "cantSave": "यह शॉर्ट सेव नहीं किया जा सकता",
+    "removed": "'बाद में देखें' से हटाया गया",
+    "saved": "'बाद में देखें' में सेव हो गया",
+    "failed": "फ़ेल हुआ: {{message}}"
+  },
+  "comments": {
+    "title": "कमेंट",
+    "loading": "कमेंट लोड हो रहे हैं...",
+    "closed": "कमेंट बंद हैं",
+    "none": "अभी कोई कमेंट नहीं",
+    "postRemoved": "इस शॉर्ट के पीछे की Hive पोस्ट हटा दी गई है, इसलिए इस पर अब कमेंट या वोट नहीं हो सकते।",
+    "beFirst": "सबसे पहले कमेंट करें!",
+    "unavailable": "इस पोस्ट पर कमेंट उपलब्ध नहीं हैं",
+    "addPlaceholder": "कमेंट जोड़ें...",
+    "addPlaceholderBar": "कमेंट जोड़ें…",
+    "loginPlaceholder": "कमेंट करने के लिए लॉग इन करें",
+    "send": "कमेंट भेजें",
+    "enterComment": "कृपया कमेंट लिखें",
+    "loginToComment": "कमेंट करने के लिए कृपया लॉग इन करें",
+    "justNow": "अभी-अभी",
+    "posted": "कमेंट पोस्ट हो गया!",
+    "failed": "कमेंट नहीं हो सका: {{message}}",
+    "translation": "अनुवाद",
+    "translationFailed": "अनुवाद नहीं हो सका",
+    "reportComment": "कमेंट रिपोर्ट करें",
+    "replyPlaceholder": "जवाब लिखें...",
+    "viewReplies_one": "{{count}} जवाब देखें",
+    "viewReplies_other": "{{count}} जवाब देखें",
+    "hideReplies_one": "{{count}} जवाब छिपाएँ",
+    "hideReplies_other": "{{count}} जवाब छिपाएँ"
+  }
+}

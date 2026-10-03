@@ -1,0 +1,117 @@
+{
+  "theme": {
+    "switchToLight": "लाइट मोड पर जाएँ",
+    "switchToDark": "डार्क मोड पर जाएँ"
+  },
+  "bottom": {
+    "feeds": "फ़ीड",
+    "groups": "ग्रुप",
+    "audio": "ऑडियो",
+    "login": "लॉग इन"
+  },
+  "installApp": "ऐप इंस्टॉल करें",
+  "iosInstallHint": "<b>शेयर</b> पर टैप करें, फिर <b>होम स्क्रीन पर जोड़ें</b> चुनें",
+  "playlists": {
+    "tooltip": "आपकी सेव की हुई या बनाई गई प्लेलिस्ट",
+    "label": "प्लेलिस्ट",
+    "watchLater": "बाद में देखें",
+    "watchLaterCount": "बाद में देखें ({{n}})",
+    "watchHistory": "वॉच हिस्ट्री",
+    "all": "सभी प्लेलिस्ट"
+  },
+  "advertise": "विज्ञापन दें",
+  "hidePages": "पेज छिपाएँ",
+  "showPages": "पेज दिखाएँ",
+  "tabs": {
+    "overviewTooltip": "3Speak पर सब कुछ नया, साथ में वह जो हमें लगता है आपको पसंद आएगा",
+    "overview": "ओवरव्यू",
+    "shortsTooltip": "छोटे वर्टिकल वीडियो, एक के बाद एक",
+    "audioTooltip": "3Speak पर पब्लिश किए गए पॉडकास्ट, संगीत और दूसरे ऑडियो",
+    "groupsTooltip": "कम्युनिटी जिनसे आप जुड़ सकते हैं, और बैज जो लोगों को दिए जाते हैं",
+    "rankingsTooltip": "वे क्रिएटर्स जो अभी सबसे ज़्यादा कमा रहे हैं और देखे जा रहे हैं"
+  },
+  "aboutLink": "3Speak के बारे में",
+  "profile": {
+    "accountMenu": "अकाउंट मेन्यू",
+    "myChannelAria": "मेरा चैनल",
+    "vpTooltip": "वोटिंग पावर: आपके अगले वोट में कितना वज़न है",
+    "rcTooltip": "Resource Credits: Hive पर आपके कामों की लागत",
+    "myChannel": "मेरा चैनल",
+    "publishBacklog": "बैकलॉग पब्लिश करें",
+    "analytics": "एनालिटिक्स",
+    "inviteLinks": "इनवाइट लिंक",
+    "iosInstallToast": "Safari में शेयर बटन पर टैप करें, फिर \"होम स्क्रीन पर जोड़ें\" चुनें",
+    "changeAccount": "अकाउंट बदलें",
+    "logout": "लॉग आउट",
+    "onDiscord": "Discord पर 3Speak",
+    "onX": "X पर 3Speak",
+    "onTelegram": "Telegram पर 3Speak"
+  },
+  "notifications": {
+    "pushOff": "इस डिवाइस के लिए सूचनाएँ बंद कर दी गईं",
+    "pushOn": "आपके फ़ॉलो किए क्रिएटर्स के पोस्ट करने पर आपको सूचना मिलेगी",
+    "pushFailed": "सूचना सेटिंग्स बदली नहीं जा सकीं",
+    "ariaUnread": "सूचनाएँ ({{count}} अनपढ़ी)",
+    "pushBlocked": "आपके ब्राउज़र की सेटिंग्स में इस साइट के लिए सूचनाएँ ब्लॉक हैं",
+    "pushNoWorker": "इस बिल्ड में service worker नहीं है, इसलिए यहाँ सूचनाएँ रजिस्टर नहीं हो सकतीं",
+    "pushStop": "इस डिवाइस पर सूचनाएँ बंद करें",
+    "pushStart": "आपके फ़ॉलो किए क्रिएटर्स के पोस्ट करने पर सूचना पाएँ",
+    "on": "चालू",
+    "notifyMe": "मुझे सूचना दें",
+    "empty": "आपके पास अभी कोई सूचना नहीं है।",
+    "threeSpeakVideo": "3Speak वीडियो",
+    "group": {
+      "voteOne": "@{{a}} ने आपकी पोस्ट पर वोट किया",
+      "voteTwo": "@{{a}} और @{{b}} ने आपकी पोस्ट पर वोट किया",
+      "voteMany_one": "@{{a}} और {{count}} अन्य ने आपकी पोस्ट पर वोट किया",
+      "voteMany_other": "@{{a}} और {{count}} अन्य ने आपकी पोस्ट पर वोट किया",
+      "withValue": "{{label}} (${{value}})",
+      "followOne": "@{{a}} ने आपको फ़ॉलो किया",
+      "followTwo": "@{{a}} और @{{b}} ने आपको फ़ॉलो किया",
+      "followMany_one": "@{{a}} और {{count}} अन्य ने आपको फ़ॉलो किया",
+      "followMany_other": "@{{a}} और {{count}} अन्य ने आपको फ़ॉलो किया",
+      "other": "{{count}} {{type}} सूचनाएँ",
+      "typeCount": "{{count}} {{type}}",
+      "includesWhale": "इसमें 🐋 whale अकाउंट शामिल हैं",
+      "includesOrca": "इसमें 🐬 orca अकाउंट शामिल हैं",
+      "andMore": "और {{count}} अन्य…"
+    }
+  },
+  "search": {
+    "types": {
+      "users": "यूज़र",
+      "communities": "कम्युनिटी",
+      "videos": "वीडियो",
+      "shorts": "शॉर्ट्स",
+      "audio": "ऑडियो",
+      "playlists": "प्लेलिस्ट"
+    },
+    "dates": {
+      "today": "आज",
+      "thisWeek": "इस हफ़्ते",
+      "thisMonth": "इस महीने",
+      "thisYear": "इस साल"
+    },
+    "contentType": "कंटेंट का प्रकार",
+    "boostRecent": "नए को प्राथमिकता",
+    "dateRange": "तारीख की सीमा",
+    "tag": "टैग",
+    "tagPlaceholder": "जैसे crypto, gaming...",
+    "community": "कम्युनिटी",
+    "communityPlaceholder": "कम्युनिटी खोजें...",
+    "clearFilters": "सभी फ़िल्टर हटाएँ",
+    "allHidden": "सभी तरह का कंटेंट छिपा हुआ है।",
+    "reenableFilters": "सभी फ़िल्टर फिर से चालू करें",
+    "noResultsFor": "“{{term}}” के लिए कोई नतीजा नहीं मिला",
+    "searchFor": "“{{term}}” खोजें",
+    "authors_one": "{{count}} लेखक",
+    "authors_other": "{{count}} लेखक",
+    "subscribers_one": "{{count}} सब्सक्राइबर",
+    "subscribers_other": "{{count}} सब्सक्राइबर",
+    "views_one": "{{formatted}} व्यू",
+    "views_other": "{{formatted}} व्यू",
+    "tags": "टैग",
+    "titles": "टाइटल",
+    "placeholder": "खोजें..."
+  }
+}

@@ -1,0 +1,98 @@
+{
+  "tip": {
+    "successTitle": "टिप भेज दी गई!",
+    "successMessage": "आपने टिप के रूप में {{amount}} {{currency}} भेज दिए हैं। आपके सपोर्ट के लिए धन्यवाद!",
+    "errors": {
+      "allRequired": "सभी फ़ील्ड भरना ज़रूरी है",
+      "loginRequired": "टिप भेजने के लिए कृपया लॉग इन करें",
+      "insufficientBalance": "बैलेंस काफ़ी नहीं है",
+      "invalidUsername": "यूज़रनेम गलत है",
+      "transferFailed": "ट्रांसफ़र फ़ेल हुआ: {{message}}"
+    },
+    "heading": "@{{recipient}} को टिप भेजें",
+    "amountLabel": "राशि: ",
+    "amountPlaceholder": "जैसे 1.000",
+    "currencyLabel": "करेंसी:",
+    "availableBalance": "उपलब्ध बैलेंस: {{currency}}",
+    "memoLabel": "मेमो (वैकल्पिक):",
+    "memoPlaceholder": "जैसे इस शानदार कंटेंट के लिए धन्यवाद!",
+    "send": "टिप भेजें"
+  },
+  "cardMenu": {
+    "loginToPersonalize": "अपनी फ़ीड को पर्सनलाइज़ करने के लिए कृपया लॉग इन करें",
+    "notInterestedToast": "दिलचस्पी नहीं — हम यह वीडियो छिपा देंगे",
+    "undo": "पहले जैसा करें",
+    "cantHideOwn": "आप अपने ही वीडियो नहीं छिपा सकते",
+    "hidingCreatorToast": "@{{author}} के वीडियो छिपाए जा रहे हैं",
+    "loginForPlaylists": "वीडियो को प्लेलिस्ट में जोड़ने के लिए कृपया लॉग इन करें",
+    "loginToTag": "वीडियो टैग करने के लिए कृपया लॉग इन करें",
+    "moreOptions": "और विकल्प",
+    "addToPlaylist": "प्लेलिस्ट में जोड़ें",
+    "addTag": "टैग जोड़ें",
+    "notInterested": "दिलचस्पी नहीं",
+    "dontShowCreator": "@{{author}} को न दिखाएँ"
+  },
+  "guestList": {
+    "loadFailed": "मौजूदा गेस्ट लिस्ट लोड नहीं हो सकी",
+    "saved_one": "{{count}} गेस्ट इसे देख सकता है",
+    "saved_other": "{{count}} गेस्ट इसे देख सकते हैं",
+    "cleared": "गेस्ट लिस्ट खाली कर दी गई",
+    "saveFailed": "गेस्ट लिस्ट सेव नहीं हो सकी",
+    "invalidAccounts": "ये सही Hive अकाउंट नहीं हैं: {{names}}",
+    "title": "🔒 गेस्ट लिस्ट",
+    "hint": "ये अकाउंट 3Speak Pro के बिना देख सकते हैं। यह लिस्ट हमारे सर्वर पर प्राइवेट रहती है, आपकी पोस्ट में कभी पब्लिश नहीं होती।",
+    "notRegistered": "यह वीडियो अभी प्रोसेस हो रहा है। प्रोसेस होने के बाद भी आप लिस्ट एडिट कर सकते हैं।",
+    "placeholder": "username, another.user",
+    "empty": "अभी कोई नहीं। इसे सिर्फ़ Pro सब्सक्राइबर देख सकते हैं।",
+    "removeAria": "{{name}} को हटाएँ"
+  },
+  "voters": {
+    "pinnedTitle_one": "वोटर ({{count}})",
+    "pinnedTitle_other": "वोटर ({{count}})",
+    "topVoters": "टॉप वोटर",
+    "noVotes": "अभी कोई वोट नहीं"
+  },
+  "payout": {
+    "breakdown": "पेआउट का ब्योरा",
+    "estimatedBreakdown": "अनुमानित ब्योरा",
+    "beneficiaries": "बेनिफ़िशियरी",
+    "curators": "क्यूरेटर (50%)",
+    "author": "लेखक",
+    "total": "कुल",
+    "totalEstimated": "कुल (अनुमानित)"
+  },
+  "vote": {
+    "loginRequired": "यह काम पूरा करने के लिए लॉग इन करें",
+    "fetchPostFailed": "पोस्ट का डेटा नहीं मिल सका",
+    "sameWeight": "आप इसी वेट से पहले ही वोट कर चुके हैं। कोई दूसरी वैल्यू चुनें।",
+    "failed": "वोट फ़ेल हुआ: {{message}}",
+    "pleaseTryAgain": "कृपया फिर से कोशिश करें",
+    "weight": "वोट वेट: {{weight}}%",
+    "success": "वोट हो गया! वैल्यू: ${{value}}",
+    "successTagged": "वोट हो गया! “{{tag}}” टैग किया गया। वैल्यू: ${{value}}",
+    "tagged": "“{{tag}}” टैग किया गया।",
+    "vote": "वोट करें",
+    "tagThisVideo": "इस वीडियो को टैग करें",
+    "tagOptional": "— वैकल्पिक —",
+    "pickTopicFirst": "पहले कोई विषय चुनें",
+    "taggedNoDot": "“{{tag}}” टैग किया गया",
+    "tagFailed": "टैग नहीं हो सका: {{message}}",
+    "taggedAlreadyVoted": "“{{tag}}” टैग किया गया — आपका {{weight}}% वोट पहले ही दिया जा चुका था।",
+    "votingClosed": "वोटिंग बंद है — इस वीडियो को टैग करें",
+    "youTagged": "आपने इसे <b>{{tag}}</b> टैग किया है।",
+    "pickTopic": "कोई विषय चुनें (100% वोट गिना जाता है)",
+    "submitTag": "टैग सबमिट करें",
+    "tagThisVideoFull": "इस वीडियो को टैग करें (100% वोट गिना जाता है)",
+    "justTag": "वोट न करें — सिर्फ़ टैग करें"
+  },
+  "tagsPicker": {
+    "autoTagged": "अपने-आप टैग हुआ: {{tags}}",
+    "searchPlaceholder": "विषय खोजें…",
+    "searchAria": "विषय खोजें",
+    "noMatches": "“{{query}}” से कोई विषय मेल नहीं खाता।",
+    "allSelected": "पूरी {{category}} कैटेगरी चुनी गई है। और सटीक होने के लिए ही अलग-अलग विषय जोड़ें:",
+    "orPickTopics": "या अलग-अलग विषय चुनें:",
+    "goodEnough": "इतना काफ़ी है — या और सटीक चुनें (वैकल्पिक):",
+    "moreSpecific": "और सटीक:"
+  }
+}
