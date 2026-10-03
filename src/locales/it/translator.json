@@ -63,5 +63,23 @@
     "added": "{{name}} aggiunta. Inizia a tradurre!",
     "failed": "Impossibile aggiungere la lingua.",
     "invalidCode": "Usa due o tre lettere minuscole, facoltativamente con una regione (pt-BR)."
+  },
+  "proofread": {
+    "checkbox": "Revisionato",
+    "checkboxFor": "Segna {{key}} come revisionato",
+    "checkedBy": "Revisionato da @{{user}}, {{when}}",
+    "notChecked": "Spunta quando hai controllato questa traduzione",
+    "noText": "Niente da revisionare: questo testo non ha ancora una traduzione",
+    "saveFirst": "Salva prima la modifica. Salvando viene segnata come revisionata.",
+    "changed": "modificato dopo la revisione",
+    "changedTitle": "Il testo è cambiato dopo la revisione di @{{user}} ({{when}}). Controllalo di nuovo.",
+    "filter": "Non ancora revisionati",
+    "progress_one": "{{done}} / {{total}} revisionati · {{percent}}",
+    "progress_many": "{{done}} / {{total}} revisionati · {{percent}}",
+    "progress_other": "{{done}} / {{total}} revisionati · {{percent}}",
+    "progressLabel": "Avanzamento revisione",
+    "areaShort": "{{percent}} revisionato",
+    "loadFailed": "Impossibile caricare i segni di revisione. Ricarica la pagina per riprovare.",
+    "saveFailed": "Impossibile salvare i segni di revisione: {{error}}"
   }
 }

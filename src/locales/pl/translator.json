@@ -65,5 +65,24 @@
     "added": "Dodano język {{name}}. Zacznij tłumaczyć!",
     "failed": "Nie udało się dodać języka.",
     "invalidCode": "Użyj dwóch lub trzech małych liter, opcjonalnie z regionem (pt-BR)."
+  },
+  "proofread": {
+    "checkbox": "Sprawdzone",
+    "checkboxFor": "Oznacz {{key}} jako sprawdzone",
+    "checkedBy": "Sprawdzone przez @{{user}}, {{when}}",
+    "notChecked": "Zaznacz, gdy sprawdzisz to tłumaczenie",
+    "noText": "Nie ma czego sprawdzać: ten tekst nie ma jeszcze tłumaczenia",
+    "saveFirst": "Najpierw zapisz zmianę. Zapisanie oznacza ją jako sprawdzoną.",
+    "changed": "zmienione po sprawdzeniu",
+    "changedTitle": "Tekst zmienił się po sprawdzeniu przez @{{user}} ({{when}}). Sprawdź go ponownie.",
+    "filter": "Jeszcze niesprawdzone",
+    "progress_one": "{{done}} / {{total}} sprawdzonych · {{percent}}",
+    "progress_few": "{{done}} / {{total}} sprawdzonych · {{percent}}",
+    "progress_many": "{{done}} / {{total}} sprawdzonych · {{percent}}",
+    "progress_other": "{{done}} / {{total}} sprawdzonych · {{percent}}",
+    "progressLabel": "Postęp korekty",
+    "areaShort": "{{percent}} sprawdzone",
+    "loadFailed": "Nie udało się wczytać oznaczeń korekty. Odśwież stronę, aby spróbować ponownie.",
+    "saveFailed": "Nie udało się zapisać oznaczeń korekty: {{error}}"
   }
 }

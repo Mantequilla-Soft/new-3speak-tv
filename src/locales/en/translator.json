@@ -61,5 +61,22 @@
     "added": "{{name}} added. Start translating!",
     "failed": "Could not add the language.",
     "invalidCode": "Use two or three lowercase letters, optionally with a region (pt-BR)."
+  },
+  "proofread": {
+    "checkbox": "Proofread",
+    "checkboxFor": "Mark {{key}} as proofread",
+    "checkedBy": "Checked by @{{user}}, {{when}}",
+    "notChecked": "Tick once you have checked this translation",
+    "noText": "Nothing to proofread: this string has no translation yet",
+    "saveFirst": "Save your edit first. Saving marks the string as proofread.",
+    "changed": "changed since check",
+    "changedTitle": "The text changed after @{{user}} checked it ({{when}}). Please check it again.",
+    "filter": "Not proofread yet",
+    "progress_one": "{{done}} / {{total}} proofread · {{percent}}",
+    "progress_other": "{{done}} / {{total}} proofread · {{percent}}",
+    "progressLabel": "Proofreading progress",
+    "areaShort": "{{percent}} proofread",
+    "loadFailed": "Could not load the proofread marks. Reload the page to try again.",
+    "saveFailed": "Could not save the proofread marks: {{error}}"
   }
 }

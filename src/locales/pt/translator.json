@@ -63,5 +63,23 @@
     "added": "{{name}} adicionado. Comece a traduzir!",
     "failed": "Não foi possível adicionar o idioma.",
     "invalidCode": "Use duas ou três letras minúsculas, opcionalmente com uma região (pt-BR)."
+  },
+  "proofread": {
+    "checkbox": "Revisado",
+    "checkboxFor": "Marcar {{key}} como revisado",
+    "checkedBy": "Revisado por @{{user}}, {{when}}",
+    "notChecked": "Marque quando tiver revisado esta tradução",
+    "noText": "Nada para revisar: este texto ainda não tem tradução",
+    "saveFirst": "Salve sua edição primeiro. Ao salvar, ela é marcada como revisada.",
+    "changed": "alterado após a revisão",
+    "changedTitle": "O texto mudou depois que @{{user}} revisou ({{when}}). Revise de novo.",
+    "filter": "Ainda não revisados",
+    "progress_one": "{{done}} / {{total}} revisados · {{percent}}",
+    "progress_many": "{{done}} / {{total}} revisados · {{percent}}",
+    "progress_other": "{{done}} / {{total}} revisados · {{percent}}",
+    "progressLabel": "Progresso da revisão",
+    "areaShort": "{{percent}} revisado",
+    "loadFailed": "Não foi possível carregar as marcas de revisão. Recarregue a página para tentar de novo.",
+    "saveFailed": "Não foi possível salvar as marcas de revisão: {{error}}"
   }
 }

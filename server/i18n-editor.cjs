@@ -13,6 +13,15 @@
  *   GET  /api/i18n/source           flat English source the server validates against
  *   PUT  /api/i18n/strings/:lang    { changes: { key: value | null } }   translator
  *   POST /api/i18n/languages        { code, native, english, dir? }       translator
+ *   GET  /api/i18n/proofread/:lang  { marks: { key: { by, at, hash } } }  translator
+ *   PUT  /api/i18n/proofread/:lang  { marks: { key: { checked, hash } } } translator
+ *
+ * Proofreading: most strings were machine-translated, so translators tick each
+ * one they have checked. A mark stores proofHash() of the exact text they saw;
+ * the CLIENT compares it with the text it shows now, so a mark goes stale on its
+ * own when the text changes (a new bundled file, another edit). Saving a string
+ * marks it (a human wrote it); resetting it removes the mark. Marks never go into
+ * the GitHub pull request.
  *
  * Security model (see also the report in the PR):
  *   - Identity is PROVEN only: ButrAuth cookie, SIWH wallet-session cookie, or a
@@ -27,8 +36,9 @@
  *
  * Storage: MongoDB when I18N_MONGODB_URI (or MONGODB_URI) is set AND the
  * `mongodb` driver is installed; otherwise JSON files in I18N_DATA_DIR
- * (default server/data/i18n, gitignored). Both keep the same three record kinds:
- * i18n_strings, i18n_history (append-only), i18n_languages.
+ * (default server/data/i18n, gitignored). Both keep the same record kinds:
+ * i18n_strings, i18n_history (append-only), i18n_languages, i18n_proofread
+ * (files: proofread/<lang>.json, { key: { by, at, hash } }).
  */
 
 const fs = require('fs')
@@ -40,10 +50,15 @@ const cookieParser = require('cookie-parser')
 const rateLimit = require('express-rate-limit')
 const rules = require('./i18n-rules.cjs')
 
-const { LANG_CODE_RE, flatten, pluralCategories, validateBatch, validateLanguageName, PLURAL_SUFFIX } = rules
+const { LANG_CODE_RE, flatten, pluralCategories, validateBatch, validateKey, validateLanguageName, proofHash, PLURAL_SUFFIX } = rules
 
 const HIVE_USER_RE = /^[a-z][a-z0-9.-]{2,15}$/
 const MAX_BATCH = 200
+const MAX_PROOF_BATCH = 500
+const PROOF_HASH_RE = /^[0-9a-f]{16,64}$/
+// Ticking is one write per click (batched ~600ms in the client), so it gets its
+// own, larger budget instead of eating the string-save budget.
+const PROOF_WRITE_LIMIT = 300
 const BODY_LIMIT = '256kb'
 const USER_WRITE_LIMIT = 60
 const USER_WRITE_WINDOW_MS = 10 * 60 * 1000
@@ -112,8 +127,10 @@ function fileStore (dir) {
   const stringsFile = path.join(dir, 'i18n_strings.json')
   const languagesFile = path.join(dir, 'i18n_languages.json')
   const historyFile = path.join(dir, 'i18n_history.jsonl')
+  const proofDir = path.join(dir, 'proofread')
   let strings = []
   let languages = []
+  let proofread = new Map() // lang -> { key: { by, at, hash } }
 
   async function readJson (file, fallback) {
     try { return JSON.parse(await fsp.readFile(file, 'utf8')) } catch (e) {
@@ -132,10 +149,30 @@ function fileStore (dir) {
     kind: `file (${dir})`,
     async init () {
       await fsp.mkdir(dir, { recursive: true, mode: 0o700 })
+      await fsp.mkdir(proofDir, { recursive: true, mode: 0o700 })
       strings = await readJson(stringsFile, [])
       languages = await readJson(languagesFile, [])
+      proofread = new Map()
+      for (const f of await fsp.readdir(proofDir)) {
+        const lang = f.replace(/\.json$/, '')
+        if (f === lang || !LANG_CODE_RE.test(lang)) continue
+        const data = await readJson(path.join(proofDir, f), {})
+        if (data && typeof data === 'object' && !Array.isArray(data)) proofread.set(lang, data)
+      }
     },
-    async loadAll () { return { strings, languages } },
+    async loadAll () {
+      const marks = []
+      for (const [lang, m] of proofread) for (const [key, d] of Object.entries(m)) marks.push({ lang, key, ...d })
+      return { strings, languages, proofread: marks }
+    },
+    async applyProofread (lang, sets, deletes, history) {
+      const next = { ...(proofread.get(lang) || {}) }
+      for (const key of deletes) delete next[key]
+      for (const d of sets) next[d.key] = { by: d.by, at: d.at, hash: d.hash }
+      await writeJson(path.join(proofDir, `${lang}.json`), next)
+      proofread.set(lang, next)
+      if (history.length) await fsp.appendFile(historyFile, history.map((h) => JSON.stringify(h)).join('\n') + '\n', { mode: 0o600 })
+    },
     async applyBatch (lang, sets, deletes, history) {
       const del = new Set(deletes)
       const byKey = new Map(sets.map((d) => [d.key, d]))
@@ -174,18 +211,29 @@ function mongoStore (uri, dbName) {
       col = {
         strings: db.collection('i18n_strings'),
         history: db.collection('i18n_history'),
-        languages: db.collection('i18n_languages')
+        languages: db.collection('i18n_languages'),
+        proofread: db.collection('i18n_proofread')
       }
       await col.strings.createIndex({ lang: 1, key: 1 }, { unique: true })
       await col.languages.createIndex({ code: 1 }, { unique: true })
+      await col.proofread.createIndex({ lang: 1, key: 1 }, { unique: true })
       await col.history.createIndex({ lang: 1, key: 1, at: -1 })
     },
     async loadAll () {
-      const [strings, languages] = await Promise.all([
+      const [strings, languages, proofread] = await Promise.all([
         col.strings.find({}, { projection: { _id: 0 } }).toArray(),
-        col.languages.find({}, { projection: { _id: 0 } }).toArray()
+        col.languages.find({}, { projection: { _id: 0 } }).toArray(),
+        col.proofread.find({}, { projection: { _id: 0 } }).toArray()
       ])
-      return { strings, languages }
+      return { strings, languages, proofread }
+    },
+    async applyProofread (lang, sets, deletes, history) {
+      const ops = [
+        ...deletes.map((key) => ({ deleteOne: { filter: { lang, key } } })),
+        ...sets.map((d) => ({ updateOne: { filter: { lang, key: d.key }, update: { $set: { lang, key: d.key, by: d.by, at: d.at, hash: d.hash } }, upsert: true } }))
+      ]
+      if (ops.length) await col.proofread.bulkWrite(ops, { ordered: true })
+      if (history.length) await col.history.insertMany(history.map((h) => ({ ...h })))
     },
     async applyBatch (lang, sets, deletes, history) {
       const ops = [
@@ -469,9 +517,10 @@ function createI18nRouter ({ resolveUser, allowedOrigins, rootDir = path.join(__
   let ready = false
   let strings = new Map()
   let languages = []
+  let proofread = new Map() // lang -> Map(key -> { by, at, hash })
   const overlayCache = new Map() // lang -> { body, etag }
 
-  function loadSnapshot ({ strings: docs, languages: langs }) {
+  function loadSnapshot ({ strings: docs, languages: langs, proofread: marks }) {
     const next = new Map()
     for (const d of docs) {
       if (!d || typeof d.lang !== 'string' || typeof d.key !== 'string' || typeof d.value !== 'string') continue
@@ -481,6 +530,13 @@ function createI18nRouter ({ resolveUser, allowedOrigins, rootDir = path.join(__
     strings = next
     languages = (langs || []).filter((l) => l && LANG_CODE_RE.test(l.code))
       .map((l) => ({ code: l.code, native: l.native, english: l.english, dir: l.dir === 'rtl' ? 'rtl' : 'ltr', addedBy: l.addedBy, addedAt: l.addedAt }))
+    const nextMarks = new Map()
+    for (const d of marks || []) {
+      if (!d || typeof d.lang !== 'string' || typeof d.key !== 'string' || typeof d.hash !== 'string') continue
+      if (!nextMarks.has(d.lang)) nextMarks.set(d.lang, new Map())
+      nextMarks.get(d.lang).set(d.key, { by: d.by, at: d.at, hash: d.hash })
+    }
+    proofread = nextMarks
     overlayCache.clear()
   }
 
@@ -523,6 +579,18 @@ function createI18nRouter ({ resolveUser, allowedOrigins, rootDir = path.join(__
   const communityCodes = () => new Set(languages.map((l) => l.code))
   const isTargetLanguage = (lang) => lang !== 'en' && (source.bundledLanguages().has(lang) || communityCodes().has(lang))
 
+  // Inside serial(): write marks for one language, then mirror them in memory.
+  async function writeMarks (lang, sets, deletes, history) {
+    if (!sets.length && !deletes.length) return
+    await store.applyProofread(lang, sets, deletes, history)
+    const m = proofread.get(lang) || new Map()
+    for (const k of deletes) m.delete(k)
+    for (const d of sets) m.set(d.key, { by: d.by, at: d.at, hash: d.hash })
+    if (m.size) proofread.set(lang, m)
+    else proofread.delete(lang)
+  }
+  const markOut = (d) => ({ by: d.by, at: d.at instanceof Date ? d.at.toISOString() : d.at, hash: d.hash })
+
   function overlayFor (lang) {
     let hit = overlayCache.get(lang)
     if (!hit) {
@@ -537,19 +605,23 @@ function createI18nRouter ({ resolveUser, allowedOrigins, rootDir = path.join(__
   }
 
   // ---- middleware ----
-  const userHits = new Map() // user -> [timestamps]
-  function userBudget (req, res, next) {
-    const now = Date.now()
-    const list = (userHits.get(req.translator) || []).filter((t) => now - t < USER_WRITE_WINDOW_MS)
-    if (list.length >= USER_WRITE_LIMIT) {
-      res.set('Retry-After', String(Math.ceil((USER_WRITE_WINDOW_MS - (now - list[0])) / 1000)))
-      return res.status(429).json({ error: 'Too many saves, please wait a few minutes' })
+  const makeBudget = (limit) => {
+    const userHits = new Map() // user -> [timestamps]
+    return function userBudget (req, res, next) {
+      const now = Date.now()
+      const list = (userHits.get(req.translator) || []).filter((t) => now - t < USER_WRITE_WINDOW_MS)
+      if (list.length >= limit) {
+        res.set('Retry-After', String(Math.ceil((USER_WRITE_WINDOW_MS - (now - list[0])) / 1000)))
+        return res.status(429).json({ error: 'Too many saves, please wait a few minutes' })
+      }
+      list.push(now)
+      userHits.set(req.translator, list)
+      if (userHits.size > 1000) for (const [u, l] of userHits) if (!l.some((t) => now - t < USER_WRITE_WINDOW_MS)) userHits.delete(u)
+      next()
     }
-    list.push(now)
-    userHits.set(req.translator, list)
-    if (userHits.size > 1000) for (const [u, l] of userHits) if (!l.some((t) => now - t < USER_WRITE_WINDOW_MS)) userHits.delete(u)
-    next()
   }
+  const userBudget = makeBudget(USER_WRITE_LIMIT)
+  const proofBudget = makeBudget(PROOF_WRITE_LIMIT)
 
   // CSRF: the session cookies are the credential, so a write must come from one
   // of our own pages (Origin) and be a JSON request, which a cross-site HTML form
@@ -586,6 +658,7 @@ function createI18nRouter ({ resolveUser, allowedOrigins, rootDir = path.join(__
   }))
   const jsonBody = express.json({ limit: BODY_LIMIT, strict: true })
   const writeChain = [csrfGuard, requireReady, requireTranslator, userBudget, jsonBody]
+  const proofWriteChain = [csrfGuard, requireReady, requireTranslator, proofBudget, jsonBody]
 
   router.get('/me', async (req, res) => {
     res.set('Cache-Control', 'no-store')
@@ -664,7 +737,21 @@ function createI18nRouter ({ resolveUser, allowedOrigins, rootDir = path.join(__
         if (m.size) strings.set(lang, m)
         else strings.delete(lang)
         overlayCache.delete(lang)
-        return { saved: setDocs.length, removed: deletes.length }
+
+        // A human wrote these, so they count as proofread; a reset goes back to
+        // the bundled (machine) text, so its mark goes. The string save above is
+        // the audit record; a failure here must not fail the save.
+        const marks = {}
+        const proofSets = setDocs.map((d) => ({ key: d.key, by, at, hash: proofHash(d.value) }))
+        const had = proofread.get(lang) || new Map()
+        const proofDeletes = deletes.filter((k) => had.has(k))
+        try {
+          await writeMarks(lang, proofSets, proofDeletes, [])
+          for (const d of proofSets) marks[d.key] = markOut(d)
+        } catch (err) {
+          warn(`auto proofread marks failed for lang=${lang}:`, err.message)
+        }
+        return { saved: setDocs.length, removed: deletes.length, marks, unmarked: deletes }
       })
       if (result.errors) {
         log(`rejected save by @${req.translator}: lang=${lang} keys=${keys.length} errors=${Object.keys(result.errors).length}`)
@@ -709,6 +796,85 @@ function createI18nRouter ({ resolveUser, allowedOrigins, rootDir = path.join(__
       if (err.code === 'EXISTS') return res.status(400).json({ errors: { code: 'This language was already added' } })
       warn(`language add failed for @${req.translator}:`, err.message)
       res.status(500).json({ error: 'Could not add the language, please try again' })
+    }
+  })
+
+  // ---- proofreading ----
+  // 'en' is the source, so there is nothing to proofread; unknown codes are 404.
+  function proofLang (req, res) {
+    const { lang } = req.params
+    if (!LANG_CODE_RE.test(lang)) { res.status(400).json({ error: 'Invalid language' }); return null }
+    if (lang === 'en') { res.status(400).json({ error: 'English is the source and is not proofread' }); return null }
+    if (!isTargetLanguage(lang)) { res.status(404).json({ error: 'Unknown language' }); return null }
+    return lang
+  }
+
+  router.get('/proofread/:lang', requireReady, requireTranslator, (req, res) => {
+    res.set('Cache-Control', 'no-store')
+    const lang = proofLang(req, res)
+    if (!lang) return
+    const marks = {}
+    const m = proofread.get(lang)
+    if (m) for (const k of [...m.keys()].sort()) marks[k] = markOut(m.get(k))
+    res.json({ marks })
+  })
+
+  router.put('/proofread/:lang', ...proofWriteChain, async (req, res) => {
+    res.set('Cache-Control', 'no-store')
+    const lang = proofLang(req, res)
+    if (!lang) return
+    const input = req.body && req.body.marks
+    if (!input || typeof input !== 'object' || Array.isArray(input)) return res.status(400).json({ error: 'Expected { marks: { key: { checked, hash } } }' })
+    const keys = Object.keys(input)
+    if (!keys.length) return res.status(400).json({ error: 'No changes' })
+    if (keys.length > MAX_PROOF_BATCH) return res.status(400).json({ error: `At most ${MAX_PROOF_BATCH} marks per request` })
+    const en = source.english()
+    if (!Object.keys(en).length) return res.status(503).json({ error: 'English source unavailable' })
+
+    const categories = pluralCategories(lang)
+    const errors = {}
+    for (const key of keys) {
+      const e = input[key]
+      const keyErr = validateKey(key, en, categories)
+      if (keyErr) errors[key] = keyErr
+      else if (!e || typeof e !== 'object' || Array.isArray(e) || typeof e.checked !== 'boolean') errors[key] = 'Expected { checked: true | false, hash }'
+      else if ((e.checked || e.hash !== undefined) && (typeof e.hash !== 'string' || !PROOF_HASH_RE.test(e.hash))) errors[key] = 'Invalid hash'
+    }
+    if (Object.keys(errors).length) {
+      log(`rejected proofread by @${req.translator}: lang=${lang} keys=${keys.length} errors=${Object.keys(errors).length}`)
+      return res.status(400).json({ errors })
+    }
+
+    try {
+      const result = await serial(async () => {
+        const current = proofread.get(lang) || new Map()
+        const at = new Date()
+        const by = req.translator
+        const sets = []
+        const deletes = []
+        const history = []
+        for (const key of keys) {
+          const { checked, hash } = input[key]
+          const old = current.get(key)
+          if (checked) {
+            if (old && old.hash === hash) continue // already marked for this text
+            sets.push({ key, by, at, hash })
+            history.push({ type: 'proofread', lang, key, old: old ? old.hash : null, new: hash, by, at })
+          } else if (old) {
+            deletes.push(key)
+            history.push({ type: 'proofread', lang, key, old: old.hash, new: null, by, at })
+          }
+        }
+        await writeMarks(lang, sets, deletes, history)
+        const marks = {}
+        for (const key of keys) if (input[key].checked) marks[key] = markOut(proofread.get(lang).get(key))
+        return { marked: sets.length, unmarked: deletes.length, marks }
+      })
+      log(`proofread by @${req.translator}: lang=${lang} marked=${result.marked} unmarked=${result.unmarked}`)
+      res.json({ ok: true, ...result })
+    } catch (err) {
+      warn(`proofread failed for @${req.translator} lang=${lang}:`, err.message)
+      res.status(500).json({ error: 'Could not save, please try again' })
     }
   })
 

@@ -61,5 +61,22 @@
     "added": "{{name}} eklendi. Çeviriye başla!",
     "failed": "Dil eklenemedi.",
     "invalidCode": "İki veya üç küçük harf kullan, istersen bölgeyle birlikte (pt-BR)."
+  },
+  "proofread": {
+    "checkbox": "Kontrol edildi",
+    "checkboxFor": "{{key}} anahtarını kontrol edildi olarak işaretle",
+    "checkedBy": "@{{user}} kontrol etti, {{when}}",
+    "notChecked": "Bu çeviriyi kontrol ettikten sonra işaretle",
+    "noText": "Kontrol edilecek bir şey yok: bu metnin henüz çevirisi yok",
+    "saveFirst": "Önce düzenlemeni kaydet. Kaydetmek onu kontrol edildi olarak işaretler.",
+    "changed": "kontrolden sonra değişti",
+    "changedTitle": "Metin, @{{user}} kontrol ettikten sonra değişti ({{when}}). Lütfen tekrar kontrol et.",
+    "filter": "Henüz kontrol edilmedi",
+    "progress_one": "{{done}} / {{total}} kontrol edildi · {{percent}}",
+    "progress_other": "{{done}} / {{total}} kontrol edildi · {{percent}}",
+    "progressLabel": "Kontrol ilerlemesi",
+    "areaShort": "{{percent}} kontrol edildi",
+    "loadFailed": "Kontrol işaretleri yüklenemedi. Tekrar denemek için sayfayı yenile.",
+    "saveFailed": "Kontrol işaretleri kaydedilemedi: {{error}}"
   }
 }

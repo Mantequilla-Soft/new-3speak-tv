@@ -99,11 +99,42 @@ async function main () {
       assert.ok(R.validateLanguageName(''))
       assert.ok(R.validateLanguageName("it's\\"))
     })
+    check(`${impl}: validateKey`, () => {
+      assert.strictEqual(R.validateKey('watch.title', en, ['one', 'other']), null)
+      assert.strictEqual(R.validateKey('comments.count_few', en, ['one', 'few', 'many', 'other']), null)
+      assert.ok(R.validateKey('comments.count_few', en, ['one', 'other']))
+      assert.ok(R.validateKey('watch.nope', en, ['one', 'other']))
+      assert.ok(R.validateKey('__proto__.x', en, ['one', 'other']))
+    })
     check(`${impl}: lang code regex`, () => {
       for (const c of ['es', 'pt-BR', 'fil']) assert.ok(R.LANG_CODE_RE.test(c), c)
       for (const c of ['EN', 'pt-br', 'e', 'abcd', '../x', 'es_ES']) assert.ok(!R.LANG_CODE_RE.test(c), c)
     })
   }
+
+  // proofHash: both copies agree with each other AND with a reference 64-bit
+  // FNV-1a (BigInt over Buffer's UTF-8), including multi-byte and astral text.
+  const fnvRef = (str) => {
+    let h = 0xcbf29ce484222325n
+    for (const b of Buffer.from(str, 'utf8')) { h ^= BigInt(b); h = (h * 0x100000001b3n) & 0xffffffffffffffffn }
+    return h.toString(16).padStart(16, '0')
+  }
+  const hashInputs = ['', 'a', 'foobar', 'Watch', 'Ver ahora', 'Ünïcödé ß', '日本語のテキスト', '中文', '한국어', 'Русский',
+    '😀🎉 emoji', '👩‍👩‍👧 family', 'line\nbreak', '{{count}} comments', '<termsLink>x</termsLink>', 'x'.repeat(2000), ' trailing ']
+  check('proofHash: known FNV-1a vectors', () => {
+    assert.strictEqual(cjs.proofHash(''), 'cbf29ce484222325')
+    assert.strictEqual(cjs.proofHash('a'), 'af63dc4c8601ec8c')
+    assert.strictEqual(cjs.proofHash('foobar'), '85944171f73967e8')
+  })
+  check('proofHash: cjs === esm === reference, 16 lowercase hex', () => {
+    for (const s of hashInputs) {
+      const h = cjs.proofHash(s)
+      assert.ok(/^[0-9a-f]{16}$/.test(h), s)
+      assert.strictEqual(esm.proofHash(s), h, s)
+      assert.strictEqual(fnvRef(s), h, s)
+    }
+    assert.notStrictEqual(cjs.proofHash('Ver'), cjs.proofHash('Ver '))
+  })
 
   // ---- PR helpers ----
   const { nestLike, addLanguageLine, parseTranslators } = require('./i18n-editor.cjs')
@@ -128,6 +159,7 @@ async function main () {
   })
 
   await routerTests()
+  await proofreadTests(cjs.proofHash)
   await githubTests()
 
   console.log(`\n${failed ? '✗' : '✓'} ${passed} passed, ${failed} failed`)
@@ -254,6 +286,138 @@ async function routerTests () {
     fs.rmSync(dataDir, { recursive: true, force: true })
   }
   for (const [name, ok] of results) check(`router: ${name}`, () => assert.ok(ok))
+}
+
+// ---- Proofreading, on its own router (fresh rate-limit budgets and data dir) ----
+async function proofreadTests (proofHash) {
+  const express = require('express')
+  const dataDir = fs.mkdtempSync(path.join(os.tmpdir(), 'i18n-proof-test-'))
+  process.env.I18N_DATA_DIR = dataDir
+  process.env.TRANSLATORS = 'alice'
+  const ORIGIN = 'https://3speak.tv'
+  const resolveUser = async (req) => req.get('x-test-user') || null
+  const { createI18nRouter } = require('./i18n-editor.cjs')
+  const app = express()
+  app.use('/api/i18n', createI18nRouter({ resolveUser, allowedOrigins: [ORIGIN] }))
+  const server = http.createServer(app)
+  await new Promise((r) => server.listen(0, '127.0.0.1', r))
+  const base = `http://127.0.0.1:${server.address().port}/api/i18n`
+  await new Promise((r) => setTimeout(r, 100))
+  const call = async (method, p, { user, origin = ORIGIN, body, type = 'application/json' } = {}) => {
+    const h = {}
+    if (user) h['x-test-user'] = user
+    if (origin) h.origin = origin
+    if (body !== undefined) h['content-type'] = type
+    const r = await fetch(base + p, { method, headers: h, body: body === undefined ? undefined : JSON.stringify(body) })
+    let data = null
+    try { data = await r.json() } catch { /* empty */ }
+    return { status: r.status, data, headers: r.headers }
+  }
+  const results = []
+  const t = (name, cond) => results.push([name, cond])
+  const H = 'abcdef0123456789'
+  try {
+    const src = (await call('GET', '/source')).data
+    const key = Object.keys(src).find((k) => !/\{\{|</.test(src[k]) && !/_(zero|one|two|few|many|other)$/.test(k))
+    const key2 = Object.keys(src).find((k) => k !== key && !/\{\{|</.test(src[k]) && !/_(zero|one|two|few|many|other)$/.test(k))
+    const pluralBase = Object.keys(src).find((k) => k.endsWith('_other')).replace(/_other$/, '')
+
+    // Auth / CSRF
+    let r = await call('GET', '/proofread/es')
+    t('GET without user → 401', r.status === 401)
+    r = await call('GET', '/proofread/es', { user: 'mallory' })
+    t('GET by non-translator → 403', r.status === 403)
+    r = await call('GET', '/proofread/es', { user: 'alice' })
+    t('GET empty marks, no-store', r.status === 200 && JSON.stringify(r.data) === '{"marks":{}}' && /no-store/.test(r.headers.get('cache-control')))
+    const one = { marks: { [key]: { checked: true, hash: H } } }
+    r = await call('PUT', '/proofread/es', { body: one })
+    t('PUT without user → 401', r.status === 401)
+    r = await call('PUT', '/proofread/es', { user: 'mallory', body: one })
+    t('PUT by non-translator → 403', r.status === 403)
+    r = await call('PUT', '/proofread/es', { user: 'alice', origin: 'https://evil.example', body: one })
+    t('PUT foreign origin → 403', r.status === 403)
+    r = await call('PUT', '/proofread/es', { user: 'alice', origin: null, body: one })
+    t('PUT missing origin → 403', r.status === 403)
+    r = await call('PUT', '/proofread/es', { user: 'alice', type: 'text/plain', body: one })
+    t('PUT text/plain → 415', r.status === 415)
+
+    // Languages
+    r = await call('PUT', '/proofread/en', { user: 'alice', body: one })
+    t('PUT en → 400', r.status === 400)
+    r = await call('GET', '/proofread/en', { user: 'alice' })
+    t('GET en → 400', r.status === 400)
+    r = await call('PUT', '/proofread/xx', { user: 'alice', body: one })
+    t('PUT unknown language → 404', r.status === 404)
+    r = await call('PUT', '/proofread/..%2Fx', { user: 'alice', body: one })
+    t('PUT bad code → 400', r.status === 400)
+
+    // Validation, atomic batch
+    r = await call('PUT', '/proofread/es', { user: 'alice', body: { marks: { [key]: { checked: true, hash: H }, 'watch.nope_nope': { checked: true, hash: H }, [key2]: { checked: true, hash: 'XYZ' } } } })
+    t('bad key + bad hash → 400 per-key, good key not flagged', r.status === 400 && r.data.errors['watch.nope_nope'] && r.data.errors[key2] && !r.data.errors[key])
+    r = await call('GET', '/proofread/es', { user: 'alice' })
+    t('nothing applied after rejected batch', Object.keys(r.data.marks).length === 0)
+    r = await call('PUT', '/proofread/es', { user: 'alice', body: { marks: { [key]: { checked: true, hash: 'abc' } } } })
+    t('short hash → 400', r.status === 400)
+    r = await call('PUT', '/proofread/es', { user: 'alice', body: { marks: { [key]: { checked: 'yes', hash: H } } } })
+    t('non-boolean checked → 400', r.status === 400)
+    r = await call('PUT', '/proofread/es', { user: 'alice', body: { marks: { '__proto__.x': { checked: true, hash: H } } } })
+    t('proto key → 400', r.status === 400)
+    r = await call('PUT', '/proofread/es', { user: 'alice', body: { marks: { [`${pluralBase}_few`]: { checked: true, hash: H } } } })
+    t('plural form the language lacks → 400', r.status === 400)
+    r = await call('PUT', '/proofread/pl', { user: 'alice', body: { marks: { [`${pluralBase}_few`]: { checked: true, hash: H } } } })
+    t('Polish few form accepted', r.status === 200 && r.data.marked === 1)
+    const many = {}
+    for (let i = 0; i < 501; i++) many[`${key}${i}`] = { checked: true, hash: H }
+    r = await call('PUT', '/proofread/es', { user: 'alice', body: { marks: many } })
+    t('501 marks → 400', r.status === 400)
+
+    // Mark, GET, unmark
+    r = await call('PUT', '/proofread/es', { user: 'alice', body: { marks: { [key]: { checked: true, hash: H }, [key2]: { checked: true, hash: H } } } })
+    t('good batch marked', r.status === 200 && r.data.marked === 2 && r.data.marks[key].by === 'alice' && r.data.marks[key].hash === H)
+    r = await call('PUT', '/proofread/es', { user: 'alice', body: { marks: { [key]: { checked: true, hash: H } } } })
+    t('re-tick same hash is a no-op', r.status === 200 && r.data.marked === 0)
+    r = await call('GET', '/proofread/es', { user: 'alice' })
+    t('GET returns marks', r.data.marks[key] && r.data.marks[key].hash === H && r.data.marks[key].by === 'alice' && !Number.isNaN(Date.parse(r.data.marks[key].at)))
+    r = await call('PUT', '/proofread/es', { user: 'alice', body: { marks: { [key2]: { checked: false } } } })
+    t('untick removes', r.status === 200 && r.data.unmarked === 1)
+    r = await call('GET', '/proofread/es', { user: 'alice' })
+    t('GET after untick', r.data.marks[key] && !r.data.marks[key2])
+    t('marks file written per language', fs.existsSync(path.join(dataDir, 'proofread', 'es.json')))
+
+    // Auto-mark on save, removal on reset
+    r = await call('PUT', '/strings/de', { user: 'alice', body: { changes: { [key]: 'Hallo Welt' } } })
+    t('save returns auto-mark', r.status === 200 && r.data.marks[key] && r.data.marks[key].hash === proofHash('Hallo Welt'))
+    r = await call('GET', '/proofread/de', { user: 'alice' })
+    t('auto-mark stored with hash of saved value', r.data.marks[key] && r.data.marks[key].hash === proofHash('Hallo Welt') && r.data.marks[key].by === 'alice')
+    r = await call('PUT', '/strings/de', { user: 'alice', body: { changes: { [key]: null } } })
+    t('reset reports unmarked', r.status === 200 && r.data.unmarked.includes(key))
+    r = await call('GET', '/proofread/de', { user: 'alice' })
+    t('reset removes the mark', !r.data.marks[key])
+
+    // Community language: proofread allowed, auto-mark works
+    r = await call('POST', '/languages', { user: 'alice', body: { code: 'qz', native: 'Qz', english: 'Qz' } })
+    t('community language added', r.status === 201)
+    r = await call('PUT', '/strings/qz', { user: 'alice', body: { changes: { [key]: 'Qz text' } } })
+    t('community save auto-marks', r.status === 200 && r.data.marks[key] && r.data.marks[key].hash === proofHash('Qz text'))
+    r = await call('PUT', '/proofread/qz', { user: 'alice', body: { marks: { [key2]: { checked: true, hash: H } } } })
+    t('community proofread PUT accepted', r.status === 200 && r.data.marked === 1)
+    r = await call('GET', '/proofread/qz', { user: 'alice' })
+    t('community GET has both marks', r.data.marks[key] && r.data.marks[key2])
+
+    // Audit
+    const hist = fs.readFileSync(path.join(dataDir, 'i18n_history.jsonl'), 'utf8').trim().split('\n').map((l) => JSON.parse(l))
+    const proofHist = hist.filter((h) => h.type === 'proofread')
+    t('proofread audit entries (mark/unmark, not auto-marks)', proofHist.length === 5 &&
+      proofHist.some((h) => h.lang === 'es' && h.key === key2 && h.old === H && h.new === null && h.by === 'alice'))
+
+    // Overlay / sync data untouched by marks
+    r = await call('GET', '/overlay/es')
+    t('marks do not leak into the overlay', r.status === 200 && Object.keys(r.data).length === 0)
+  } finally {
+    server.close()
+    fs.rmSync(dataDir, { recursive: true, force: true })
+  }
+  for (const [name, ok] of results) check(`proofread: ${name}`, () => assert.ok(ok))
 }
 
 // ---- GitHub sync against a fake API (global fetch stubbed) -------------------------

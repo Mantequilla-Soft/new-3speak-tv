@@ -63,5 +63,23 @@
     "added": "{{name}} ajouté. À vous de traduire !",
     "failed": "Impossible d'ajouter la langue.",
     "invalidCode": "Utilisez deux ou trois lettres minuscules, éventuellement avec une région (pt-BR)."
+  },
+  "proofread": {
+    "checkbox": "Relu",
+    "checkboxFor": "Marquer {{key}} comme relu",
+    "checkedBy": "Relu par @{{user}}, {{when}}",
+    "notChecked": "Cochez une fois que vous avez vérifié cette traduction",
+    "noText": "Rien à relire : ce texte n’a pas encore de traduction",
+    "saveFirst": "Enregistrez d’abord votre modification. L’enregistrement la marque comme relue.",
+    "changed": "modifié depuis la relecture",
+    "changedTitle": "Le texte a changé après la relecture de @{{user}} ({{when}}). Merci de le relire.",
+    "filter": "Pas encore relus",
+    "progress_one": "{{done}} / {{total}} relus · {{percent}}",
+    "progress_many": "{{done}} / {{total}} relus · {{percent}}",
+    "progress_other": "{{done}} / {{total}} relus · {{percent}}",
+    "progressLabel": "Progression de la relecture",
+    "areaShort": "{{percent}} relu",
+    "loadFailed": "Impossible de charger les marques de relecture. Rechargez la page pour réessayer.",
+    "saveFailed": "Impossible d’enregistrer les marques de relecture : {{error}}"
   }
 }

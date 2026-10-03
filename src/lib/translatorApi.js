@@ -78,8 +78,23 @@ export async function verifyAccount() {
   try { return await establishWalletSession(getOperationUser()); } catch { return false; }
 }
 
-/** PUT { changes } (≤ 200). Resolves { ok, status, data }; data.errors holds per-key messages. */
+/**
+ * PUT { changes } (≤ 200). Resolves { ok, status, data }; data.errors holds per-key
+ * messages, data.marks / data.unmarked the proofread marks the save set or removed.
+ */
 export const saveStrings = (lang, changes) => write('PUT', `/strings/${encodeURIComponent(lang)}`, { changes });
 
 /** POST a community language { code, native, english, dir }. */
 export const addLanguage = (lang) => write('POST', '/languages', lang);
+
+/** GET { marks: { key: { by, at, hash } } } for a language. Resolves { ok, status, data }. */
+export async function fetchProofread(lang) {
+  try {
+    return await request('GET', `/proofread/${encodeURIComponent(lang)}`);
+  } catch {
+    return { ok: false, status: 0, data: {} };
+  }
+}
+
+/** PUT { marks: { key: { checked, hash } } } (≤ 500). data.marks echoes the stored marks. */
+export const saveProofread = (lang, marks) => write('PUT', `/proofread/${encodeURIComponent(lang)}`, { marks });

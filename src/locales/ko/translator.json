@@ -59,5 +59,21 @@
     "added": "{{name}}을(를) 추가했어요. 번역을 시작해 보세요!",
     "failed": "언어를 추가하지 못했어요.",
     "invalidCode": "소문자 2~3자를 사용하고, 필요하면 지역을 붙여 주세요(pt-BR)."
+  },
+  "proofread": {
+    "checkbox": "검수 완료",
+    "checkboxFor": "{{key}}을(를) 검수 완료로 표시",
+    "checkedBy": "@{{user}}님이 검수함, {{when}}",
+    "notChecked": "이 번역을 확인했다면 체크하세요",
+    "noText": "검수할 내용이 없어요: 아직 번역이 없는 문구예요",
+    "saveFirst": "먼저 수정 내용을 저장하세요. 저장하면 검수 완료로 표시돼요.",
+    "changed": "검수 후 변경됨",
+    "changedTitle": "@{{user}}님이 검수한 뒤 문구가 바뀌었어요({{when}}). 다시 확인해 주세요.",
+    "filter": "미검수",
+    "progress_other": "{{done}} / {{total}} 검수 완료 · {{percent}}",
+    "progressLabel": "검수 진행률",
+    "areaShort": "{{percent}} 검수 완료",
+    "loadFailed": "검수 표시를 불러오지 못했어요. 페이지를 새로고침해 다시 시도하세요.",
+    "saveFailed": "검수 표시를 저장하지 못했어요: {{error}}"
   }
 }

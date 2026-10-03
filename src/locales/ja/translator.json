@@ -59,5 +59,21 @@
     "added": "{{name}} を追加しました。翻訳を始めましょう！",
     "failed": "言語を追加できませんでした。",
     "invalidCode": "小文字 2〜3 文字を使ってください。地域を付けることもできます（pt-BR）。"
+  },
+  "proofread": {
+    "checkbox": "校正済み",
+    "checkboxFor": "{{key}} を校正済みにする",
+    "checkedBy": "@{{user}} が確認、{{when}}",
+    "notChecked": "この翻訳を確認したらチェックしてください",
+    "noText": "校正するものはありません：この文言はまだ翻訳されていません",
+    "saveFirst": "先に編集を保存してください。保存すると校正済みになります。",
+    "changed": "確認後に変更あり",
+    "changedTitle": "@{{user}} の確認後にテキストが変更されました（{{when}}）。もう一度確認してください。",
+    "filter": "未校正",
+    "progress_other": "{{done}} / {{total}} 校正済み · {{percent}}",
+    "progressLabel": "校正の進捗",
+    "areaShort": "{{percent}} 校正済み",
+    "loadFailed": "校正マークを読み込めませんでした。ページを再読み込みしてもう一度お試しください。",
+    "saveFailed": "校正マークを保存できませんでした：{{error}}"
   }
 }

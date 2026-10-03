@@ -59,5 +59,21 @@
     "added": "已添加 {{name}}。开始翻译吧！",
     "failed": "无法添加该语言。",
     "invalidCode": "请使用两到三个小写字母，可附加地区（pt-BR）。"
+  },
+  "proofread": {
+    "checkbox": "已校对",
+    "checkboxFor": "将 {{key}} 标记为已校对",
+    "checkedBy": "由 @{{user}} 校对，{{when}}",
+    "notChecked": "检查完这条翻译后请勾选",
+    "noText": "无需校对：这条文本还没有翻译",
+    "saveFirst": "请先保存你的修改。保存后会自动标记为已校对。",
+    "changed": "校对后已更改",
+    "changedTitle": "@{{user}} 校对后文本已更改（{{when}}）。请重新检查。",
+    "filter": "尚未校对",
+    "progress_other": "{{done}} / {{total}} 已校对 · {{percent}}",
+    "progressLabel": "校对进度",
+    "areaShort": "{{percent}} 已校对",
+    "loadFailed": "无法加载校对标记。请刷新页面重试。",
+    "saveFailed": "无法保存校对标记：{{error}}"
   }
 }

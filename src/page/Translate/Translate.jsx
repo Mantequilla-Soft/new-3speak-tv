@@ -11,6 +11,9 @@ import {
   registerCommunityLanguages,
   loadCommunityLanguages,
   getLanguage,
+  formatNumber,
+  formatTimeAgo,
+  LANGUAGES,
 } from '../../i18n';
 import {
   flatten,
@@ -19,8 +22,17 @@ import {
   validateLanguageName,
   LANG_CODE_RE,
   PLURAL_SUFFIX,
+  proofHash,
 } from '../../i18n/rules';
-import { fetchTranslatorStatus, verifyAccount, saveStrings, addLanguage } from '../../lib/translatorApi';
+import {
+  fetchTranslatorStatus,
+  verifyAccount,
+  saveStrings,
+  addLanguage,
+  fetchProofread,
+  saveProofread,
+} from '../../lib/translatorApi';
+import { AREA_INFO } from './areaInfo';
 import { toastIn } from '../../utils/toast';
 import './Translate.scss';
 
@@ -29,6 +41,10 @@ const toast = toastIn('Settings');
 const CONTRIBUTE_URL = 'https://github.com/Mantequilla-Soft/new-3speak-tv/blob/develop/TRANSLATING.md';
 const BATCH = 200;
 const PAGE = 150;
+const PROOF_BATCH = 500;
+const PROOF_DEBOUNCE_MS = 600;
+const has = (obj, k) => Object.prototype.hasOwnProperty.call(obj, k);
+const percent = (done, total) => formatNumber(total ? Math.floor((done / total) * 100) / 100 : 1, { style: 'percent' });
 
 /**
  * /translate: the in-app translation editor, for accounts on the server's
@@ -80,7 +96,7 @@ export default function Translate() {
     );
   }
 
-  return <Editor />;
+  return <Editor me={status.user} />;
 }
 
 // ---- Editor -----------------------------------------------------------------------
@@ -124,7 +140,30 @@ function buildRows(englishFlat, categories) {
   return rows;
 }
 
-function Editor() {
+/**
+ * Proofreading: which rows count as proofread for the shown texts. A row needs
+ * proofreading when it has a text (overlay ?? bundled) and no mark whose hash is
+ * proofHash(that text); a mark with another hash is stale ("changed since check").
+ */
+function proofStatus(rows, hashes, marks) {
+  const ok = new Set();
+  const stale = new Set();
+  const areas = {};
+  let done = 0;
+  let total = 0;
+  for (const r of rows) {
+    const h = hashes[r.key];
+    if (!h) continue; // no text yet: nothing to proofread
+    const a = (areas[r.area] ||= { done: 0, total: 0 });
+    a.total++;
+    total++;
+    const m = marks[r.key];
+    if (m && m.hash === h) { ok.add(r.key); a.done++; done++; } else if (m) stale.add(r.key);
+  }
+  return { ok, stale, areas, done, total, needs: total - done };
+}
+
+function Editor({ me }) {
   const { t } = useTranslation();
   const allLanguages = useSyncExternalStore(subscribeLanguages, getAllLanguages);
   const targets = useMemo(() => allLanguages.filter((l) => l.code !== 'en'), [allLanguages]);
@@ -137,10 +176,13 @@ function Editor() {
     return ui && ui !== 'en' ? ui : (getAllLanguages().find((l) => l.code !== 'en')?.code || '');
   });
   // The loaded language's texts; `loading` is derived, so no setState in effects.
-  const [loaded, setLoaded] = useState({ lang: null, bundled: {}, overlay: {} });
+  // `marks` is null when there is nothing to proofread (English) or loading failed;
+  // `proofAtLoad` says whether the proofread UI shows (sticky for this visit).
+  const [loaded, setLoaded] = useState({ lang: null, bundled: {}, overlay: {}, marks: null, proofAtLoad: false });
   const loading = loaded.lang !== lang;
   const bundled = loaded.bundled;
   const overlay = loaded.overlay;
+  const marks = loaded.marks;
   const setOverlay = (fn) => setLoaded((s) => ({ ...s, overlay: fn(s.overlay) }));
   const [drafts, setDrafts] = useState({}); // key -> string | null (null = reset)
   const [serverErrors, setServerErrors] = useState({});
@@ -148,6 +190,7 @@ function Editor() {
   const [search, setSearch] = useState('');
   const [missingOnly, setMissingOnly] = useState(false);
   const [communityOnly, setCommunityOnly] = useState(false);
+  const [unproofreadOnly, setUnproofreadOnly] = useState(false);
   // "Show more" count, reset whenever the filters change (keyed by them).
   const [paging, setPaging] = useState({ sig: '', n: PAGE });
   const [saving, setSaving] = useState(false);
@@ -159,16 +202,41 @@ function Editor() {
   const categories = useMemo(() => (lang ? pluralCategories(lang) : ['one', 'other']), [lang]);
   const rows = useMemo(() => buildRows(englishFlat, categories), [englishFlat, categories]);
 
-  // Load the target language: bundled text + the live overlay, fresh.
+  // Load the target language: bundled text + the live overlay, fresh, plus the
+  // proofread marks for any non-English language.
   useEffect(() => {
     if (!lang) return undefined;
     let alive = true;
-    Promise.all([loadBundledFlat(lang).catch(() => ({})), fetchOverlay(lang, { fresh: true })])
-      .then(([b, o]) => {
-        if (alive) setLoaded({ lang, bundled: b || {}, overlay: o || {} });
-      });
+    Promise.all([
+      loadBundledFlat(lang).catch(() => ({})),
+      fetchOverlay(lang, { fresh: true }),
+      lang === 'en' ? null : fetchProofread(lang),
+    ]).then(([b, o, p]) => {
+      if (!alive) return;
+      const bundledFlat = b || {};
+      const overlayFlat = o || {};
+      let marksFlat = null;
+      if (p && p.ok && p.data?.marks && typeof p.data.marks === 'object') marksFlat = p.data.marks;
+      else if (p) toast.error(t('translator.proofread.loadFailed'));
+      // Bundled languages were machine-translated, so they always get the
+      // proofread UI. A community language only once it holds text nobody has
+      // checked (new English strings machine-translated into it); one written
+      // entirely in the editor is all auto-marked and keeps the UI hidden.
+      const isBundled = LANGUAGES.some((l) => l.code === lang && l.code !== 'en');
+      let proofAtLoad = false;
+      if (marksFlat) {
+        if (isBundled) proofAtLoad = true;
+        else {
+          for (const r of rows) {
+            const v = overlayFlat[r.key] ?? bundledFlat[r.key] ?? '';
+            if (v && marksFlat[r.key]?.hash !== proofHash(v)) { proofAtLoad = true; break; }
+          }
+        }
+      }
+      setLoaded({ lang, bundled: bundledFlat, overlay: overlayFlat, marks: marksFlat, proofAtLoad });
+    });
     return () => { alive = false; };
-  }, [lang]);
+  }, [lang, rows, t]);
 
   const valueOf = useCallback((key) => {
     if (Object.prototype.hasOwnProperty.call(drafts, key)) {
@@ -225,19 +293,35 @@ function Editor() {
     return out;
   }, [rows, overlay, bundled]);
 
+  // Fingerprints of the texts shown now (overlay ?? bundled), for proofreading.
+  const marksLoaded = !!marks;
+  const hashes = useMemo(() => {
+    const out = {};
+    if (!marksLoaded) return out;
+    for (const r of rows) {
+      const v = overlay[r.key] ?? bundled[r.key] ?? '';
+      if (v) out[r.key] = proofHash(v);
+    }
+    return out;
+  }, [rows, overlay, bundled, marksLoaded]);
+  const proof = useMemo(() => (marks ? proofStatus(rows, hashes, marks) : null), [rows, hashes, marks]);
+  const showProof = !!proof && lang !== 'en' && !loading && (loaded.proofAtLoad || proof.needs > 0);
+  const filterUnproofread = showProof && unproofreadOnly;
+
   const q = search.trim().toLowerCase();
   const visible = useMemo(() => rows.filter((r) => {
     if (!q && r.area !== area) return false;
     if (missingOnly && (overlay[r.key] || bundled[r.key])) return false;
     if (communityOnly && !Object.prototype.hasOwnProperty.call(overlay, r.key)) return false;
+    if (filterUnproofread && (!hashes[r.key] || proof.ok.has(r.key))) return false;
     if (q) {
       const hay = `${r.key}\n${r.english}\n${overlay[r.key] ?? bundled[r.key] ?? ''}\n${drafts[r.key] ?? ''}`.toLowerCase();
       if (!hay.includes(q)) return false;
     }
     return true;
-  }), [rows, area, q, missingOnly, communityOnly, overlay, bundled, drafts]);
+  }), [rows, area, q, missingOnly, communityOnly, filterUnproofread, hashes, proof, overlay, bundled, drafts]);
 
-  const pageSig = JSON.stringify([area, q, missingOnly, communityOnly, lang]);
+  const pageSig = JSON.stringify([area, q, missingOnly, communityOnly, filterUnproofread, lang]);
   const limit = paging.sig === pageSig ? paging.n : PAGE;
   const showMore = () => setPaging({ sig: pageSig, n: limit + PAGE });
 
@@ -258,9 +342,87 @@ function Editor() {
 
   const confirmDiscard = () => !dirtyKeys.length || window.confirm(t('translator.unsavedConfirm'));
 
+  // ---- proofread ticks: optimistic, batched, reverted on failure ----
+  const setMarks = useCallback((forLang, fn) => setLoaded((s) => (
+    s.lang === forLang && s.marks ? { ...s, marks: fn(s.marks) } : s
+  )), []);
+  // { lang, marks: { key: { checked, hash } }, prev: { key: mark | null } }
+  const pendingProof = useRef(null);
+  const proofTimer = useRef(null);
+
+  const flushProof = useCallback(async () => {
+    clearTimeout(proofTimer.current);
+    proofTimer.current = null;
+    const p = pendingProof.current;
+    pendingProof.current = null;
+    if (!p) return;
+    const keys = Object.keys(p.marks);
+    for (let i = 0; i < keys.length; i += PROOF_BATCH) {
+      const chunk = keys.slice(i, i + PROOF_BATCH);
+      let r;
+      try {
+        r = await saveProofread(p.lang, Object.fromEntries(chunk.map((k) => [k, p.marks[k]])));
+      } catch (e) {
+        r = { ok: false, status: 0, data: { error: e?.message || '' } };
+      }
+      if (r.ok) {
+        const server = r.data?.marks || {};
+        setMarks(p.lang, (m) => {
+          const next = { ...m };
+          for (const k of chunk) if (p.marks[k].checked && server[k]) next[k] = server[k];
+          return next;
+        });
+        continue;
+      }
+      // Put back what the server had, except rows ticked again meanwhile.
+      const failed = keys.slice(i);
+      const newer = pendingProof.current?.lang === p.lang ? pendingProof.current.marks : {};
+      setMarks(p.lang, (m) => {
+        const next = { ...m };
+        for (const k of failed) {
+          if (has(newer, k)) continue;
+          if (p.prev[k]) next[k] = p.prev[k];
+          else delete next[k];
+        }
+        return next;
+      });
+      if (r.status === 401) toast.error(t('translator.notSignedIn'));
+      else if (r.status === 403) toast.error(t('translator.forbidden'));
+      else if (r.status === 429) toast.error(t('translator.rateLimited'));
+      else {
+        const why = r.data?.error || (r.data?.errors ? Object.values(r.data.errors)[0] : '') || r.status;
+        toast.error(t('translator.proofread.saveFailed', { error: why }));
+      }
+      return;
+    }
+  }, [setMarks, t]);
+
+  // Leaving the page sends what is still waiting.
+  useEffect(() => () => { flushProof(); }, [flushProof]);
+
+  const toggleProof = (key, checked) => {
+    const hash = hashes[key];
+    if (!hash || !marks) return;
+    if (pendingProof.current && pendingProof.current.lang !== lang) flushProof();
+    const p = (pendingProof.current ||= { lang, marks: {}, prev: {} });
+    if (!has(p.prev, key)) p.prev[key] = marks[key] || null;
+    p.marks[key] = checked ? { checked: true, hash } : { checked: false };
+    setMarks(lang, (m) => {
+      const next = { ...m };
+      if (checked) next[key] = { by: me || '', at: new Date().toISOString(), hash };
+      else delete next[key];
+      return next;
+    });
+    clearTimeout(proofTimer.current);
+    proofTimer.current = setTimeout(flushProof, PROOF_DEBOUNCE_MS);
+  };
+
+  const proofTitle = (m) => t('translator.proofread.checkedBy', { user: m.by, when: formatTimeAgo(m.at) });
+
   const changeLanguage = (code) => {
     if (code === '__add') { setShowAdd(true); return; }
     if (code === lang || !confirmDiscard()) return;
+    flushProof();
     setDrafts({});
     setServerErrors({});
     setLang(code);
@@ -272,6 +434,8 @@ function Editor() {
     setSaving(true);
     let savedCount = 0;
     const savedChanges = {};
+    const savedMarks = {};
+    const unmarked = [];
     try {
       for (let i = 0; i < dirtyKeys.length; i += BATCH) {
         const chunk = dirtyKeys.slice(i, i + BATCH);
@@ -288,6 +452,9 @@ function Editor() {
           break;
         }
         Object.assign(savedChanges, changes);
+        // The server marks saved strings proofread and unmarks reset ones.
+        if (r.data?.marks && typeof r.data.marks === 'object') Object.assign(savedMarks, r.data.marks);
+        if (Array.isArray(r.data?.unmarked)) unmarked.push(...r.data.unmarked);
         savedCount += chunk.length;
       }
     } catch (e) {
@@ -310,6 +477,14 @@ function Editor() {
       for (const k of Object.keys(savedChanges)) delete next[k];
       return next;
     });
+    if (Object.keys(savedMarks).length || unmarked.length) {
+      setMarks(lang, (m) => {
+        const next = { ...m };
+        for (const k of unmarked) delete next[k];
+        Object.assign(next, savedMarks);
+        return next;
+      });
+    }
     applyLiveChanges(lang, savedChanges, bundled);
     if (savedCount === dirtyKeys.length) toast.success(t('translator.saved', { count: savedCount }));
   };
@@ -338,23 +513,65 @@ function Editor() {
         </div>
       </header>
 
+      {showProof && (
+        <div className="translate-proof-progress">
+          <span>
+            {t('translator.proofread.progress', {
+              count: proof.total,
+              done: formatNumber(proof.done),
+              total: formatNumber(proof.total),
+              percent: percent(proof.done, proof.total),
+            })}
+          </span>
+          <span
+            className="translate-proof-bar"
+            role="progressbar"
+            aria-label={t('translator.proofread.progressLabel')}
+            aria-valuemin={0}
+            aria-valuemax={proof.total}
+            aria-valuenow={proof.done}
+          >
+            <span style={{ width: `${proof.total ? (proof.done / proof.total) * 100 : 100}%` }} />
+          </span>
+        </div>
+      )}
+
       <div className="translate-layout">
         <nav className="translate-areas" aria-label={t('translator.areas')}>
           <select className="translate-areas-select" value={area} onChange={(e) => setArea(e.target.value)} aria-label={t('translator.areas')}>
-            {areas.map((a) => (
-              <option key={a} value={a}>{a} ({progress[a]?.done || 0}/{progress[a]?.total || 0})</option>
-            ))}
+            {areas.map((a) => {
+              const pa = showProof ? (proof.areas[a] || { done: 0, total: 0 }) : null;
+              return (
+                <option key={a} value={a} title={AREA_INFO[a] || undefined}>
+                  {a} ({progress[a]?.done || 0}/{progress[a]?.total || 0}
+                  {pa ? ` · ${t('translator.proofread.areaShort', { percent: percent(pa.done, pa.total) })}` : ''})
+                </option>
+              );
+            })}
           </select>
           <ul className="translate-areas-list">
             {areas.map((a) => {
               const p = progress[a] || { done: 0, total: 0 };
               const pct = p.total ? Math.round((p.done / p.total) * 100) : 100;
+              const pa = showProof ? (proof.areas[a] || { done: 0, total: 0 }) : null;
+              const proofLabel = pa ? t('translator.proofread.areaShort', { percent: percent(pa.done, pa.total) }) : '';
               return (
                 <li key={a}>
-                  <button type="button" className={a === area && !q ? 'is-active' : ''} onClick={() => setArea(a)}>
+                  <button type="button" className={a === area && !q ? 'is-active' : ''} onClick={() => setArea(a)} title={AREA_INFO[a] || undefined}>
                     <span className="translate-area-name">{a}</span>
                     <span className="translate-area-pct">{pct}%</span>
                     <span className="translate-area-bar"><span style={{ width: `${pct}%` }} /></span>
+                    {pa && (
+                      <>
+                        <span className="translate-area-bar is-proof" aria-hidden="true">
+                          <span style={{ width: `${pa.total ? (pa.done / pa.total) * 100 : 100}%` }} />
+                        </span>
+                        <span className="translate-area-pct is-proof" title={proofLabel}>
+                          <span aria-hidden="true">✓ </span>{percent(pa.done, pa.total)}
+                          <span className="translate-sr-only"> {proofLabel}</span>
+                        </span>
+                      </>
+                    )}
                   </button>
                 </li>
               );
@@ -380,7 +597,20 @@ function Editor() {
               <input type="checkbox" checked={communityOnly} onChange={(e) => setCommunityOnly(e.target.checked)} />
               {t('translator.communityOnly')}
             </label>
+            {showProof && (
+              <label className="translate-check">
+                <input type="checkbox" checked={unproofreadOnly} onChange={(e) => setUnproofreadOnly(e.target.checked)} />
+                {t('translator.proofread.filter')}
+              </label>
+            )}
           </div>
+
+          {!q && area && (
+            <div className="translate-area-head">
+              <h2>{area}</h2>
+              {AREA_INFO[area] && <p className="translate-area-info" lang="en" dir="ltr">{AREA_INFO[area]}</p>}
+            </div>
+          )}
 
           {loading ? (
             <p className="translate-muted">{t('translator.loading')}</p>
@@ -397,6 +627,14 @@ function Editor() {
                   const isDirty = dirtySet.has(r.key);
                   const edited = Object.prototype.hasOwnProperty.call(overlay, r.key);
                   const err = errors[r.key];
+                  const mark = showProof ? marks[r.key] : null;
+                  const proofed = showProof && proof.ok.has(r.key);
+                  const stale = showProof && proof.stale.has(r.key);
+                  const hasText = !!hashes[r.key];
+                  let proofHint = t('translator.proofread.notChecked');
+                  if (!hasText) proofHint = t('translator.proofread.noText');
+                  else if (isDirty) proofHint = t('translator.proofread.saveFirst');
+                  else if (proofed) proofHint = proofTitle(mark);
                   return (
                     <div key={r.key} role="listitem" className={`translate-row${isDirty ? ' is-dirty' : ''}${err ? ' has-error' : ''}`}>
                       <div className="translate-key">
@@ -417,6 +655,26 @@ function Editor() {
                         {err && <p className="translate-error" role="alert">{err}</p>}
                         {pendingReset && <p className="translate-muted small">{t('translator.pendingReset')}</p>}
                         <div className="translate-row-actions">
+                          {showProof && (
+                            <label className={`translate-proof${proofed ? ' is-checked' : ''}`} title={proofHint}>
+                              <input
+                                type="checkbox"
+                                checked={proofed}
+                                disabled={!hasText || isDirty}
+                                aria-label={t('translator.proofread.checkboxFor', { key: r.key })}
+                                onChange={(e) => toggleProof(r.key, e.target.checked)}
+                              />
+                              <span aria-hidden="true">{t('translator.proofread.checkbox')}</span>
+                            </label>
+                          )}
+                          {stale && (
+                            <span
+                              className="translate-tag is-stale"
+                              title={t('translator.proofread.changedTitle', { user: mark.by, when: formatTimeAgo(mark.at) })}
+                            >
+                              {t('translator.proofread.changed')}
+                            </span>
+                          )}
                           {isDirty && (
                             <button type="button" className="translate-btn small" onClick={() => discard(r.key)}>{t('translator.undo')}</button>
                           )}

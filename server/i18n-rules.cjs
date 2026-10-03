@@ -58,21 +58,32 @@ function isValidKeyShape (key) {
 }
 
 /**
- * Check one translated string. `en` is the FLAT English source, `categories` the
- * plural categories of the target language. Returns an error message, or null.
+ * Is `key` a row of the target language? Strict shape, and either an English key
+ * or a plural form of one that the language uses. Returns an error message, or null.
  */
-function validateEntry (key, value, en, categories) {
+function validateKey (key, en, categories) {
   if (!isValidKeyShape(key)) return 'Invalid key'
   const m = key.match(PLURAL_SUFFIX)
-  const base = baseKey(key)
   if (m) {
-    if (!has(en, `${base}_other`)) return 'Not a plural form English uses for this text'
+    if (!has(en, `${baseKey(key)}_other`)) return 'Not a plural form English uses for this text'
     if (!categories.includes(m[1]) && m[1] !== 'zero') {
       return `'${m[1]}' is not a plural form in this language (use: ${categories.join(', ')})`
     }
   } else if (!has(en, key)) {
     return 'This key does not exist in English'
   }
+  return null
+}
+
+/**
+ * Check one translated string. `en` is the FLAT English source, `categories` the
+ * plural categories of the target language. Returns an error message, or null.
+ */
+function validateEntry (key, value, en, categories) {
+  const keyErr = validateKey(key, en, categories)
+  if (keyErr) return keyErr
+  const m = key.match(PLURAL_SUFFIX)
+  const base = baseKey(key)
 
   if (typeof value !== 'string') return 'Must be text'
   if (!value.trim()) return 'Empty; reset the row instead to fall back to English'
@@ -134,6 +145,36 @@ function validateBatch (changes, en, categories, existing = {}) {
   return { errors, sets, deletes }
 }
 
+/**
+ * Fingerprint of a string for proofread marks: 64-bit FNV-1a over the UTF-8 bytes,
+ * as 16 hex characters. A mark stores the fingerprint of the exact text the
+ * translator saw; when the text changes, the fingerprints differ and the mark is
+ * stale. Not a security hash (it only has to notice edits), but synchronous and
+ * identical in the browser and on the server, which sha256 cannot be.
+ * The 64-bit multiply by the FNV prime (2^40 + 0x1b3) is done on two 32-bit halves.
+ */
+function proofHash (value) {
+  let hi = 0xcbf29ce4
+  let lo = 0x84222325
+  const byte = (b) => {
+    lo = (lo ^ b) >>> 0
+    const low = lo * 0x1b3
+    const carry = Math.floor(low / 0x100000000)
+    hi = (hi * 0x1b3 + carry + ((lo << 8) >>> 0)) >>> 0
+    lo = low >>> 0
+  }
+  for (const ch of String(value)) {
+    const c = ch.codePointAt(0)
+    if (c < 0x80) byte(c)
+    else if (c < 0x800) { byte(0xc0 | (c >> 6)); byte(0x80 | (c & 63)) } else if (c < 0x10000) {
+      byte(0xe0 | (c >> 12)); byte(0x80 | ((c >> 6) & 63)); byte(0x80 | (c & 63))
+    } else {
+      byte(0xf0 | (c >> 18)); byte(0x80 | ((c >> 12) & 63)); byte(0x80 | ((c >> 6) & 63)); byte(0x80 | (c & 63))
+    }
+  }
+  return hi.toString(16).padStart(8, '0') + lo.toString(16).padStart(8, '0')
+}
+
 /** Plain-text language name: 1-40 chars, no markup or quotes-breaking characters. */
 function validateLanguageName (s) {
   if (typeof s !== 'string') return 'Must be text'
@@ -155,7 +196,9 @@ module.exports = {
   baseKey,
   pluralCategories,
   isValidKeyShape,
+  validateKey,
   validateEntry,
   validateBatch,
-  validateLanguageName
+  validateLanguageName,
+  proofHash
 }

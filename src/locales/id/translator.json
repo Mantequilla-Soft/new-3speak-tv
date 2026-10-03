@@ -59,5 +59,21 @@
     "added": "{{name}} ditambahkan. Mulai menerjemahkan!",
     "failed": "Bahasa tidak dapat ditambahkan.",
     "invalidCode": "Gunakan dua atau tiga huruf kecil, opsional dengan wilayah (pt-BR)."
+  },
+  "proofread": {
+    "checkbox": "Sudah dicek",
+    "checkboxFor": "Tandai {{key}} sudah dicek",
+    "checkedBy": "Dicek oleh @{{user}}, {{when}}",
+    "notChecked": "Centang setelah kamu memeriksa terjemahan ini",
+    "noText": "Tidak ada yang perlu dicek: teks ini belum punya terjemahan",
+    "saveFirst": "Simpan dulu perubahanmu. Menyimpan akan menandainya sudah dicek.",
+    "changed": "berubah sejak dicek",
+    "changedTitle": "Teks berubah setelah dicek oleh @{{user}} ({{when}}). Silakan cek lagi.",
+    "filter": "Belum dicek",
+    "progress_other": "{{done}} / {{total}} sudah dicek · {{percent}}",
+    "progressLabel": "Progres pengecekan",
+    "areaShort": "{{percent}} sudah dicek",
+    "loadFailed": "Tanda pengecekan tidak bisa dimuat. Muat ulang halaman untuk mencoba lagi.",
+    "saveFailed": "Tanda pengecekan tidak bisa disimpan: {{error}}"
   }
 }

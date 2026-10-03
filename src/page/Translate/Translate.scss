@@ -387,3 +387,109 @@
   justify-content: flex-end;
   gap: 8px;
 }
+
+// ---- Proofreading ----
+// The app has no shared "success" token; green, readable on light and dark.
+.translate-page { --translate-proof: #2e9d5b; }
+
+.translate-sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+.translate-proof-progress {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px 12px;
+  margin-bottom: 16px;
+  font-size: 14px;
+  color: var(--text-secondary);
+
+  > span:first-child { font-variant-numeric: tabular-nums; }
+}
+
+.translate-proof-bar {
+  flex: 1 1 200px;
+  height: 6px;
+  border-radius: 3px;
+  background: var(--border-color);
+  overflow: hidden;
+
+  span { display: block; height: 100%; background: var(--translate-proof); }
+}
+
+.translate-area-bar.is-proof span { background: var(--translate-proof); }
+.translate-area-pct.is-proof { grid-column: 2; grid-row: 3; }
+.translate-area-bar.is-proof { grid-column: 1; grid-row: 3; align-self: center; }
+
+.translate-area-head {
+  margin: 0 0 10px;
+
+  h2 {
+    margin: 0;
+    font-size: 16px;
+    font-weight: 700;
+  }
+}
+
+.translate-area-info {
+  margin: 2px 0 0;
+  font-size: 13px;
+  line-height: 1.45;
+  color: var(--text-secondary);
+  overflow-wrap: anywhere;
+}
+
+.translate-row-actions {
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+// The checkbox row is a full tap target (36px tall, 44px on touch screens).
+.translate-proof {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 36px;
+  margin-inline-end: auto;
+  padding: 0 10px 0 6px;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  font-size: 13px;
+  color: var(--text-secondary);
+  cursor: pointer;
+  user-select: none;
+
+  input {
+    width: 18px;
+    height: 18px;
+    margin: 0;
+    accent-color: var(--translate-proof);
+    cursor: inherit;
+  }
+
+  &.is-checked {
+    border-color: var(--translate-proof);
+    color: var(--text-primary);
+  }
+
+  &:has(input:disabled) { opacity: 0.55; cursor: default; }
+  &:has(input:focus-visible) { outline: 2px solid var(--accent-primary); outline-offset: 1px; }
+
+  @media (pointer: coarse) {
+    min-height: 44px;
+    padding: 0 12px 0 10px;
+
+    input { width: 22px; height: 22px; }
+  }
+}
+
+.translate-tag.is-stale {
+  border-color: #f0a020;
+  color: #c27c00;
+}

@@ -61,5 +61,22 @@
     "added": "{{name}} hinzugefügt. Leg los mit dem Übersetzen!",
     "failed": "Die Sprache konnte nicht hinzugefügt werden.",
     "invalidCode": "Verwende zwei oder drei Kleinbuchstaben, optional mit Region (pt-BR)."
+  },
+  "proofread": {
+    "checkbox": "Korrekturgelesen",
+    "checkboxFor": "{{key}} als korrekturgelesen markieren",
+    "checkedBy": "Geprüft von @{{user}}, {{when}}",
+    "notChecked": "Abhaken, sobald du diese Übersetzung geprüft hast",
+    "noText": "Nichts zu prüfen: Dieser Text hat noch keine Übersetzung",
+    "saveFirst": "Speichere zuerst deine Änderung. Beim Speichern wird sie als geprüft markiert.",
+    "changed": "seit der Prüfung geändert",
+    "changedTitle": "Der Text wurde geändert, nachdem @{{user}} ihn geprüft hat ({{when}}). Bitte prüfe ihn erneut.",
+    "filter": "Noch nicht geprüft",
+    "progress_one": "{{done}} / {{total}} geprüft · {{percent}}",
+    "progress_other": "{{done}} / {{total}} geprüft · {{percent}}",
+    "progressLabel": "Fortschritt beim Korrekturlesen",
+    "areaShort": "{{percent}} geprüft",
+    "loadFailed": "Die Prüfmarkierungen konnten nicht geladen werden. Lade die Seite neu, um es erneut zu versuchen.",
+    "saveFailed": "Die Prüfmarkierungen konnten nicht gespeichert werden: {{error}}"
   }
 }
