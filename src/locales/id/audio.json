@@ -1,0 +1,267 @@
+{
+  "untitled": "Tanpa judul",
+  "categories": {
+    "podcast": "Podcast",
+    "voice": "Suara",
+    "music": "Musik",
+    "audiobook": "Buku audio",
+    "interview": "Wawancara"
+  },
+  "inline": {
+    "defaultTitle": "Rekaman OpenPod",
+    "defaultSubtitle": "Direkam live di 3Speak OpenPods",
+    "kickerPreview": "Pratinjau audio",
+    "kickerOpenPod": "OpenPod"
+  },
+  "tile": {
+    "artistAlbum": "Album artis",
+    "listenerPlaylist": "Playlist pendengar",
+    "bpm": "{{bpm}} bpm",
+    "queue": "Antrean",
+    "playlist": "Playlist",
+    "plays_other": "{{count}} kali diputar"
+  },
+  "author": {
+    "followed": "Mengikuti @{{author}}",
+    "unfollowed": "Berhenti mengikuti @{{author}}",
+    "failed": "Gagal",
+    "tracks_other": "{{count}} lagu"
+  },
+  "player": {
+    "openPost": "Buka postingan audio",
+    "playlist": "Playlist",
+    "transcript": "Transkrip",
+    "volume": "Volume",
+    "queue": "Antrean",
+    "closePlayer": "Tutup pemutar",
+    "curated": "Dikurasi",
+    "noCues": "Tidak ada cue.",
+    "clearQueue": "Kosongkan antrean",
+    "clearAll": "Hapus semua",
+    "queueEmpty": "Antrean kosong."
+  },
+  "share": {
+    "failed": "Gagal",
+    "copyPeakd": "Salin tautan PeakD",
+    "copiedPeakd": "Tautan PeakD tersalin!",
+    "copy3speak": "Salin tautan 3Speak",
+    "copied3speak": "Tautan 3Speak tersalin!",
+    "copyAudioPlayer": "Salin tautan pemutar audio",
+    "copiedAudioPlayer": "Tautan pemutar audio tersalin!",
+    "searchingHive": "Mencari di Hive…"
+  },
+  "post": {
+    "notFound": "Postingan tidak ditemukan",
+    "loadFailed": "Postingan audio ini tidak dapat dimuat",
+    "loadFailedFull": "Postingan audio ini tidak dapat dimuat.",
+    "backToAudio": "← Kembali ke Audio",
+    "untitled": "(tanpa judul)",
+    "addedToQueue": "Ditambahkan ke antrean",
+    "signInToVote": "Masuk untuk vote",
+    "voted": "Sudah vote",
+    "vote": "Vote",
+    "signInToTip": "Masuk untuk memberi tip",
+    "tip": "Tip",
+    "stillIndexing": "Audio untuk postingan ini masih diindeks — coba lagi dalam beberapa menit."
+  },
+  "page": {
+    "sections": {
+      "popular": "Populer",
+      "recent": "Rilisan Baru",
+      "podcasts": "Podcast",
+      "songs": "Lagu",
+      "audiobooks": "Buku Audio",
+      "interviews": "Wawancara"
+    },
+    "dates": {
+      "today": "Hari ini",
+      "thisWeek": "Minggu ini",
+      "thisMonth": "Bulan ini",
+      "thisYear": "Tahun ini"
+    },
+    "duration": {
+      "label": "Durasi",
+      "min": "Durasi minimum",
+      "max": "Durasi maksimum",
+      "seconds": "{{value}}d",
+      "minutes": "{{value}}m",
+      "hours": "{{value}}j"
+    },
+    "all": "Semua",
+    "musicGenre": "Genre musik",
+    "anyGenre": "Semua genre",
+    "tracks_other": "{{count}} lagu",
+    "noTracks": "Tidak ada lagu yang ditemukan.",
+    "creators": "Kreator",
+    "albumsPlaylists": "Album & Playlist",
+    "noAudioForFilters": "Tidak ada audio untuk filter ini."
+  },
+  "upload": {
+    "title": "Unggah audio",
+    "publishing": "Menerbitkan…",
+    "failed": "Gagal",
+    "unknown": "tidak diketahui",
+    "unknownError": "kesalahan tidak diketahui",
+    "recorded": "Direkam",
+    "uploaded": "Diunggah",
+    "steps": {
+      "source": "Sumber",
+      "mode": "Mode",
+      "playlist": "Playlist",
+      "post": "Postingan",
+      "mainpost": "Postingan utama",
+      "tracks": "Lagu",
+      "review": "Tinjau"
+    },
+    "trackTypes": {
+      "voiceSnap": "Suara / Snap"
+    },
+    "toasts": {
+      "pickImage": "Pilih file gambar",
+      "thumbFailed": "Gagal mengunggah thumbnail: {{error}}",
+      "appliedToAll": "Diterapkan ke semua lagu",
+      "micDenied": "Akses mikrofon ditolak",
+      "signInFirst": "Masuk dulu",
+      "enterPlaylistName": "Masukkan nama playlist",
+      "creatingPlaylist": "Membuat playlist \"{{name}}\"…",
+      "playlistCreated": "Playlist dibuat",
+      "failedWithError": "Gagal: {{error}}",
+      "authorized": "@threespeak sudah diberi izin — sekarang kamu bisa menerbitkan",
+      "authFailed": "Otorisasi gagal. Silakan coba lagi.",
+      "couldntPublishMain": "Postingan utama tidak dapat diterbitkan: {{error}}",
+      "couldntResolveContainer": "Kontainer peak.snaps tidak dapat ditemukan: {{error}}",
+      "published_other": "{{count}} lagu diterbitkan",
+      "someFailed": "Beberapa lagu gagal — buka lagu yang gagal untuk mencoba lagi"
+    },
+    "gate": {
+      "checking": "Memeriksa…",
+      "allowThreespeak": "Untuk menerbitkan audio, izinkan <b>@threespeak</b> memposting atas namamu.",
+      "authorizing": "Memberi izin…",
+      "authorize": "Beri izin @threespeak",
+      "notEnoughRc": "Akunmu saat ini tidak punya cukup <b>Resource Credits</b> untuk menerbitkan postingan.",
+      "whyCantUpload": "Kenapa aku tidak bisa mengunggah?"
+    },
+    "discard": {
+      "title": "Buang unggahan?",
+      "body_other": "Kamu sudah menambahkan {{count}} lagu. Menutup akan membuang semuanya.",
+      "bodyRecording_other": "Kamu sudah menambahkan {{count}} lagu dan ada rekaman yang sedang berjalan. Menutup akan membuang semuanya.",
+      "keepEditing": "Lanjut mengedit",
+      "discard": "Buang"
+    },
+    "source": {
+      "dropHere": "Lepaskan file audio di sini, atau klik untuk memilih",
+      "formats": "MP3, WAV, OGG, WEBM, M4A, FLAC, AAC — boleh lebih dari satu",
+      "stop": "Berhenti",
+      "orRecord": "Atau rekam langsung",
+      "recordLimit": "Maksimal {{minutes}} menit per rekaman",
+      "record": "Rekam",
+      "added": "Ditambahkan ({{count}})"
+    },
+    "titles": {
+      "help": "Beri judul setiap lagu dan pilih jenisnya. Lagu musik mendapat kolom genre + BPM."
+    },
+    "fields": {
+      "trackTitle": "Judul lagu",
+      "genre": "Genre",
+      "bpm": "BPM",
+      "descriptionOptional": "Deskripsi (opsional)"
+    },
+    "playlist": {
+      "helpRequired": "Wajib — pilih atau buat playlist. Postingan album berada di dalam playlist agar lagu-lagunya tetap terkelompok dalam album 3Speak. Ini membantu eksposur dan penempatan yang lebih menonjol di halaman audio.",
+      "helpOptional": "Opsional — tambahkan semua lagu ke playlist.",
+      "none": "Tanpa playlist",
+      "noneHint": "Lagu tidak akan dikelompokkan",
+      "creatingPending": "membuat… (menunggu indexer)",
+      "loading": "Memuat playlist…",
+      "empty": "Kamu belum punya playlist.",
+      "items_other": "{{count}} item",
+      "newPlaylist": "Playlist audio baru",
+      "namePlaceholder": "Nama playlist",
+      "public": "Publik",
+      "private": "Privat",
+      "musicStylePlaceholder": "Gaya / genre musik (opsional, mis. Electronic)",
+      "creditsPlaceholder": "Kredit (opsional)",
+      "yearPlaceholder": "Tahun",
+      "labelPlaceholder": "Label (opsional)",
+      "thumbAlt": "Thumbnail album",
+      "removeThumb": "Hapus thumbnail",
+      "creating": "Membuat…",
+      "create": "Buat"
+    },
+    "thumb": {
+      "uploading": "Mengunggah…",
+      "addCover": "Tambah gambar sampul",
+      "hint": "Klik atau seret & lepas — JPG / PNG / WebP",
+      "coverAlt": "sampul",
+      "removeCover": "Hapus sampul"
+    },
+    "mode": {
+      "help_other": "{{count}} lagu ditambahkan. Pilih cara menerbitkannya.",
+      "howPublished": "Bagaimana ini akan diterbitkan?",
+      "snapsTitle": "Komentar snap",
+      "snapsDesc": "Setiap audio diposting sebagai balasan di bawah kontainer peak.snaps terbaru — tampil di feed Snaps (default).",
+      "singleTitle": "Postingan mandiri",
+      "singleTitleSingleOnly": "Postingan mandiri (hanya satu file)",
+      "singleDesc": "Satu audio dalam postingan Hive tingkat atas tersendiri, dengan judul, komunitas, tag & sampul.",
+      "albumTitle": "Postingan album",
+      "albumTitleNeeds2": "Postingan album (butuh 2+ file)",
+      "albumDesc": "Satu postingan utama (tanpa audio) sebagai halaman pembuka; setiap lagu diterbitkan sebagai balasan komentar dengan sampul, deskripsi, payout & penerima manfaatnya sendiri.",
+      "howEarn": "Bagaimana audio ini menghasilkan?",
+      "postRewardsTitle": "Reward postingan (sekali)",
+      "postRewardsDesc": "Kamu menerima payout penulis Hive yang biasa — dibayar sekali, ~7 hari setelah diterbitkan.",
+      "pplTitle": "Bayar per dengar (seumur hidup)",
+      "pplDesc": "Semua reward postingan audio masuk ke @{{account}}. Alih-alih satu kali payout, program 3Speak membayarmu per dengar selama lagu itu ada."
+    },
+    "reward": {
+      "distribution": "Distribusi reward",
+      "default": "Default (50% HBD / 50% HP)",
+      "powerup": "Power up 100%",
+      "decline": "Tolak payout",
+      "beneficiaries": "Penerima manfaat",
+      "beneficiariesCount": "Penerima manfaat ({{count}})"
+    },
+    "mainPost": {
+      "helpAlbum": "Detail untuk postingan utama — halaman pembuka album. Postingan ini tidak membawa audio; setiap lagu adalah balasan komentar yang kamu atur berikutnya.",
+      "helpSingle": "Detail untuk postingan mandirimu.",
+      "titlePlaceholder": "Judul (wajib)",
+      "selectCommunity": "Pilih komunitas",
+      "change": "Ganti",
+      "tagsPlaceholder": "Tag — dipisahkan spasi atau koma (opsional)",
+      "whatKind": "Ini audio jenis apa?"
+    },
+    "tracks": {
+      "helpAlbum": "Setiap lagu diterbitkan sebagai komentar di bawah postingan utama. Atur nilai bersama sekali dan terapkan ke semua, lalu ubah per lagu.",
+      "helpSnaps": "Setiap lagu diterbitkan sebagai snap tersendiri. Atur nilai bersama sekali dan terapkan ke semua, lalu ubah per lagu.",
+      "applyToAllHeading": "Terapkan ke semua lagu",
+      "sharedDescription": "Deskripsi bersama (opsional)",
+      "sharedCover": "Gambar sampul bersama",
+      "applyToAll_other": "Terapkan ke semua {{count}} lagu",
+      "hide": "Sembunyikan"
+    },
+    "review": {
+      "standalone": "Postingan mandiri",
+      "standaloneIn": "Postingan mandiri di {{community}}",
+      "album_other": "Album — 1 postingan utama + {{count}} komentar lagu",
+      "albumIn_other": "Album — 1 postingan utama di {{community}} + {{count}} komentar lagu",
+      "snapComments_other": "{{count}} komentar snap",
+      "ready_other": "Siap menerbitkan {{count}} lagu.",
+      "readyToPlaylist_other": "Siap menerbitkan {{count}} lagu ke playlist \"{{name}}\".",
+      "publishAs": "Terbitkan sebagai:",
+      "earnings": "Penghasilan:",
+      "earningsPpl": "Bayar per dengar (@{{account}})",
+      "earningsNormal": "Reward postingan biasa",
+      "playlist": "Playlist:",
+      "failedCount_other": "{{count}} lagu gagal.",
+      "retryAllFailed": "Coba lagi semua yang gagal",
+      "failedDuringUpload": "Gagal saat mengunggah file audio: {{message}}",
+      "failedDuringPost": "Gagal saat memposting ke Hive: {{message}}",
+      "failedWithMessage": "Gagal: {{message}}"
+    },
+    "stage": {
+      "upload": "Mengunggah file audio",
+      "post": "Memposting ke Hive",
+      "uploadingFallback": "Mengunggah",
+      "published": "Diterbitkan"
+    }
+  }
+}

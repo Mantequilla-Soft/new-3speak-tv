@@ -1,0 +1,205 @@
+{
+  "interests": {
+    "savedToast": "Minat disimpan ke profil Hive-mu",
+    "saveFailed": "Minat tidak dapat disimpan",
+    "title": "Minat",
+    "loading": "memuat…",
+    "hint": "Pilih topik yang kamu pedulikan — kami akan memakainya untuk menampilkan lebih banyak konten yang kamu suka.",
+    "loginHint": "Masuk untuk memilih minatmu.",
+    "save": "Simpan minat"
+  },
+  "ads": {
+    "chainNotSaved": "Tersimpan di 3Speak, tetapi belum di akun Hive-mu. Coba lagi untuk menyimpannya di sana juga.",
+    "saveFailed": "Pengaturan tidak dapat disimpan.",
+    "onToast": "Iklan diaktifkan untuk videomu",
+    "offToast": "Iklan dinonaktifkan untuk videomu",
+    "splitSaved": "Pembagian pendapatan disimpan",
+    "title": "Iklan di videomu",
+    "allow": "Izinkan iklan",
+    "allowDesc": "Slot sponsor singkat bisa diputar di dalam videomu. Kamu mendapat bagian dari pendapatannya, begitu juga komunitas tempat kamu memposting. Jika ini dinonaktifkan, videomu tidak membawa iklan sama sekali — videomu juga dikeluarkan dari yang kami tawarkan ke pengiklan, sehingga tidak ada yang dijual dari hal yang sudah kamu tolak.",
+    "allowAria": "Izinkan iklan di videomu",
+    "shareTitle": "Berbagi dengan komunitas",
+    "shareDesc": "{{pool}}% dari pendapatan iklan dibagi antara kamu dan komunitas tempat kamu memposting. Pilih berapa bagian untuk komunitas — biarkan nol dan kamu mendapat seluruh {{pool}}%.",
+    "youPct": "Kamu {{pct}}%",
+    "communityPct": "Komunitas {{pct}}%",
+    "shareInputLabel": "Bagian komunitas, persen",
+    "invalidPct": "Masukkan bilangan bulat antara 0 dan {{max}}.",
+    "loadingSetting": "Memuat pengaturanmu saat ini…"
+  },
+  "viewerRewards": {
+    "onToast": "Reward penonton aktif",
+    "offToast": "Reward penonton nonaktif, dan data tontonanmu sudah dihapus",
+    "saveFailed": "Pengaturan itu tidak dapat disimpan.",
+    "title": "Dapatkan penghasilan sambil menonton",
+    "rowTitle": "Reward penonton",
+    "desc": "Dapatkan bagian dari pendapatan iklan atas apa yang kamu tonton, dibayar dalam HBD atau HIVE. Kamu dibayar berdasarkan video yang ditonton, baik ada iklan yang diputar maupun tidak, jadi yang dihargai adalah menonton, bukan menunggu iklan selesai. Iklan sendiri diputar untuk semua orang kecuali pelanggan 3Speak Pro. Kami mencatat seberapa banyak bagian setiap video yang kamu tonton, di samping riwayat tontonan yang sudah disimpan halaman Sudah Ditonton, dan menghapusnya begitu kamu menonaktifkan fitur ini.",
+    "aria": "Dapatkan bagian dari pendapatan iklan atas apa yang kamu tonton"
+  },
+  "postingAuth": {
+    "updateFailed": "Otoritas posting-mu tidak dapat diperbarui.",
+    "addedToast": "@threespeak ditambahkan ke otoritas posting-mu",
+    "removedToast": "@threespeak dihapus dari otoritas posting-mu",
+    "notYetAdded": "Sudah ditandatangani, tetapi @threespeak belum muncul di akunmu. Buka lagi pengaturan dalam semenit untuk mengecek ulang.",
+    "stillThere": "Sudah ditandatangani, tetapi @threespeak masih ada di akunmu. Buka lagi pengaturan dalam semenit untuk mengecek ulang.",
+    "title": "Otoritas posting",
+    "canPost": "@threespeak bisa memposting untukmu",
+    "cannotPost": "@threespeak tidak bisa memposting untukmu",
+    "checkingStatus": "@threespeak …",
+    "desc": "Memungkinkan 3Speak menerbitkan unggahan dan postingan terjadwalmu atas namamu, serta menyimpan beberapa pengaturan tanpa permintaan dompet setiap kali. Otoritas ini hanya bisa memposting, vote, dan berkomentar; tidak pernah bisa memindahkan dana atau mengubah key-mu. Tanpanya, setiap unggahan akan memintamu menambahkannya lagi. Mengubah ini membutuhkan active key-mu.",
+    "checking": "Memeriksa…",
+    "removing": "Menghapus…",
+    "adding": "Menambahkan…"
+  },
+  "notifications": {
+    "kinds": {
+      "videos": {
+        "title": "Video baru",
+        "desc": "Saat kreator yang kamu ikuti menerbitkan video."
+      },
+      "shorts": {
+        "title": "Shorts baru",
+        "desc": "Saat kreator yang kamu ikuti memposting Shorts."
+      },
+      "audio": {
+        "title": "Audio baru",
+        "desc": "Saat kreator yang kamu ikuti mengunggah lagu atau episode."
+      },
+      "replies": {
+        "title": "Balasan",
+        "desc": "Saat seseorang membalas postingan atau komentarmu."
+      },
+      "mentions": {
+        "title": "Sebutan",
+        "desc": "Saat seseorang menyebut namamu."
+      },
+      "follows": {
+        "title": "Pengikut baru",
+        "desc": "Saat seseorang mengikutimu."
+      },
+      "votes": {
+        "title": "Upvote",
+        "desc": "Saat seseorang memberi upvote pada postinganmu. Nonaktif secara default — postingan populer bisa memicu notifikasi bertubi-tubi."
+      },
+      "reblogs": {
+        "title": "Reblog",
+        "desc": "Saat seseorang me-reblog postinganmu."
+      }
+    },
+    "groups": {
+      "creators": "Dari kreator yang kamu ikuti",
+      "aboutYou": "Tentang kamu"
+    },
+    "deviceOffToast": "Perangkat ini tidak akan diberi notifikasi lagi",
+    "deviceOnToast": "Perangkat ini akan diberi notifikasi",
+    "changeFailed": "Notifikasi tidak dapat diubah",
+    "saveFailed": "Tidak dapat menyimpan itu",
+    "loginHint": "Masuk untuk memilih notifikasi yang kamu terima.",
+    "unsupported": "Browser ini tidak bisa menampilkan notifikasi. Di iPhone dan iPad, notifikasi hanya berfungsi setelah 3Speak ditambahkan ke Layar Utama.",
+    "device": "Beri notifikasi ke perangkat ini",
+    "deviceBlocked": "Diblokir di pengaturan browser untuk situs ini — izinkan notifikasi di sana dulu.",
+    "deviceNoWorker": "Tidak tersedia di build ini.",
+    "deviceDesc": "Dapatkan notifikasi bahkan saat 3Speak tidak dibuka. Hanya berlaku untuk browser ini.",
+    "whatHint": "Hal-hal yang ingin kamu dapatkan notifikasinya. Berlaku untuk setiap perangkat yang sudah kamu aktifkan."
+  },
+  "tabs": {
+    "general": "Umum",
+    "content": "Konten",
+    "rewards": "Iklan & reward",
+    "about": "Tentang / Versi"
+  },
+  "contentTabs": {
+    "feed": "Feed",
+    "aria": "Pengaturan konten"
+  },
+  "butrauthUnlocked": "Butter Auth terbuka",
+  "appearance": {
+    "title": "Tampilan",
+    "darkMode": {
+      "title": "Mode gelap",
+      "desc": "Gunakan tema warna gelap di seluruh aplikasi."
+    },
+    "largeCards": {
+      "title": "Kartu besar",
+      "desc": "Tampilkan kartu video yang lebih besar di halaman beranda, profil, dan playlist. Nonaktifkan untuk kartu yang lebih kecil dan ringkas."
+    },
+    "previews": {
+      "title": "Pratinjau video",
+      "desc": "Putar pratinjau tanpa suara saat kamu mengarahkan kursor ke kartu video (dan, di seluler dalam mode besar, kartu di tengah diputar otomatis saat kamu menggulir)."
+    },
+    "simpleFeeds": {
+      "title": "Feed sederhana",
+      "desc": "Matikan algoritma rekomendasi — Jelajahi, Minat, dan Trending menjadi daftar biasa dari yang terbaru, bukan berdasarkan peringkat."
+    }
+  },
+  "shorts": {
+    "commentBar": {
+      "title": "Bilah komentar di Shorts",
+      "desc": "Tampilkan kolom komentar di bawah Shorts. Nonaktif secara default — kamu selalu bisa membuka panel komentar dengan tombol komentar."
+    },
+    "openOnStart": {
+      "title": "Buka Shorts saat mulai",
+      "desc": "Langsung ke Shorts saat kamu membuka 3Speak, bukan ke feed beranda."
+    },
+    "inFeeds": {
+      "title": "Shorts di dalam feed",
+      "desc": "Tampilkan baris Shorts di antara video di feed beranda dan rekomendasi di halaman tonton. Nonaktifkan agar daftar itu hanya berisi video."
+    }
+  },
+  "feed": {
+    "nsfw": {
+      "title": "Tampilkan konten NSFW",
+      "desc": "Tampilkan video dan audio yang ditandai tidak aman untuk ditonton di tempat umum (NSFW). Nonaktif secara default."
+    },
+    "hideWatched": {
+      "title": "Sembunyikan video yang sudah ditonton",
+      "desc": "Jangan tampilkan video yang sudah kamu tonton di feed beranda, trending, dan rekomendasi."
+    },
+    "hideAi": {
+      "title": "Sembunyikan video buatan AI",
+      "desc": "Jangan tampilkan video dan Shorts yang ditandai buatan AI, di semua feed. Tanda ini berasal dari pemeriksaan otomatis, jadi beberapa mungkin lolos."
+    },
+    "privateMode": {
+      "title": "Mode privat",
+      "desc": "Jangan sertakan negaramu dalam statistik kreator. Kami tidak pernah menyimpan alamat IP-mu — untuk siapa pun. Alamat itu diubah menjadi kode negara begitu kamu menekan putar, lalu dibuang. Jika ini aktif, bahkan negaramu pun tidak dicatat untuk tayanganmu."
+    }
+  },
+  "about": {
+    "title": "Tentang",
+    "version": "Versi aplikasi",
+    "rpcNode": "Node RPC Hive",
+    "yourData": "Datamu",
+    "privacyLink": "Cara 3Speak menangani datamu"
+  },
+  "dataRequest": {
+    "emailRequired": "Masukkan alamat email agar kami bisa membalas",
+    "confirmRequired": "Harap konfirmasi bahwa kamu memahami apa yang bisa dan tidak bisa dihapus",
+    "requestFailed": "Permintaan gagal ({{status}})",
+    "deletionReceived": "Permintaan penghapusan diterima",
+    "dataReceived": "Permintaan data diterima",
+    "sendFailed": "Permintaanmu tidak dapat dikirim",
+    "doneTitle": "Permintaan diterima",
+    "doneBody": "Nomor referensimu adalah <b>{{ref}}</b>. Kami akan membalas ke <b>{{contact}}</b> paling lambat <b>{{dueBy}}</b>.",
+    "keepRef": "Simpan nomor referensi ini jika kamu perlu menindaklanjuti.",
+    "signIn": "Silakan masuk untuk meminta atau menghapus datamu — permintaan berlaku untuk akun yang sedang kamu gunakan.",
+    "requestFor": "Permintaan untuk <b>@{{username}}</b>",
+    "typeAria": "Jenis permintaan",
+    "getData": "Dapatkan dataku",
+    "deleteData": "Hapus data akunku",
+    "ledeDelete": "Kami akan menghapus semua yang disimpan 3Speak tentang dirimu di database kami sendiri.",
+    "ledeExport": "Kami akan mengirimkan semua yang disimpan 3Speak tentang dirimu di database kami sendiri, dalam bentuk file JSON.",
+    "covers": "Ini mencakup:",
+    "cannotTitle": "Yang tidak bisa kami lakukan",
+    "cannotBody": "3Speak dibangun di atas <b>blockchain Hive</b>. Postingan, komentar, vote, dan reshare-mu ditandatangani dengan key-mu sendiri dan di-broadcast ke <b>buku besar publik yang permanen</b> yang tidak kami kendalikan dan tidak bisa kami ubah.",
+    "cannotDelete": "Kami bisa menghapus salinan kami dan berhenti menampilkan kontenmu di 3Speak. Kami tidak bisa menghapusnya dari blockchain — tidak ada yang bisa, termasuk kamu. Siapa pun yang menjalankan node Hive akan tetap memilikinya.",
+    "cannotExport": "Data on-chain milikmu sudah publik dan dapat dibaca mesin lewat API Hive mana pun — kami akan menunjukkannya kepadamu. Yang kami kirimkan adalah data yang kami simpan di luar itu.",
+    "emailLabel": "Email untuk balasan",
+    "emailPlaceholder": "kamu@contoh.com",
+    "messageLabel": "Ada yang ingin ditambahkan? (opsional)",
+    "messagePlaceholder": "Detail opsional tentang permintaanmu",
+    "confirmLabel": "Aku memahami bahwa kontenku di blockchain Hive bersifat permanen dan tidak dapat dihapus oleh 3Speak maupun siapa pun.",
+    "sending": "Mengirim…",
+    "requestDeletion": "Minta penghapusan",
+    "requestData": "Minta dataku",
+    "foot": "Kami membalas dalam waktu satu bulan. Kamu juga bisa langsung mengirim email ke <mail>privacy@3speak.tv</mail>."
+  }
+}

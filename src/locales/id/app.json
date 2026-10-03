@@ -1,0 +1,201 @@
+{
+  "loaders": {
+    "wifi": "Loader Wifi"
+  },
+  "supportBlock": {
+    "banned": {
+      "title": "Akunmu diblokir",
+      "body": "Akun 3Speak-mu sudah diblokir, jadi kamu tidak bisa masuk. Jika menurutmu ini kesalahan, silakan hubungi dukungan 3Speak."
+    },
+    "upload": {
+      "title": "Unggahan dinonaktifkan untuk akunmu",
+      "body": "Akun 3Speak-mu saat ini tidak diizinkan mengunggah. Jika menurutmu ini kesalahan, silakan hubungi dukungan 3Speak."
+    }
+  },
+  "emergency": {
+    "title": "Kami sedang mengalami masalah infrastruktur",
+    "body": "Tim kami sedang menanganinya dan berusaha memulihkan 3Speak sekarang juga. Gabung ke Discord kami untuk menghubungi kami dan mendapat kabar terbaru — terima kasih atas kesabaranmu.",
+    "joinDiscord": "Gabung ke Discord kami"
+  },
+  "changelog": {
+    "title": "Ada pembaruan baru!",
+    "subtitle": "Ini yang baru di v{{version}}",
+    "previousUpdates": "Pembaruan sebelumnya",
+    "newerUpdates": "Pembaruan lebih baru",
+    "readTheCode": "Baca kodenya",
+    "gotIt": "Mengerti"
+  },
+  "routes": {
+    "home": "3S | Orang Nyata - Cerita Nyata",
+    "homeFeed": "Feed Beranda",
+    "followFeed": "Feed Diikuti",
+    "discover": "Jelajahi",
+    "newVideos": "Video Baru",
+    "firstUploads": "Unggahan Pertama",
+    "rankings": "Peringkat",
+    "groups": "Grup",
+    "badges": "Lencana",
+    "audioBy": "Audio dari @{{author}}",
+    "audio": "Audio",
+    "playlist": "Playlist",
+    "watchHistory": "Riwayat tontonan — @{{username}}",
+    "postBy": "Postingan dari @{{author}}",
+    "myProfile": "Profilku",
+    "uploadStudio": "Studio Unggah",
+    "drafts": "Draf",
+    "editVideo": "Edit Video",
+    "editScheduledPost": "Edit Postingan Terjadwal",
+    "chat": "Chat",
+    "about": "Tentang",
+    "login": "Masuk",
+    "brandFallback": "3Speak - Platform Video Terdesentralisasi"
+  },
+  "invite": {
+    "title": "<who>@{{referrer}}</who> mengundangmu ke 3Speak",
+    "incubatingFastTrack": "Kamu bisa menjadikan <b>@{{handle}}</b> akun Hive milikmu sendiri sekarang juga, tanpa menyelesaikan masa pemanasan.",
+    "incubatingKeepGoing": "Lanjutkan masa pemanasanmu. <b>@{{referrer}}</b> tercatat sebagai orang yang mengundangmu.",
+    "signUpFastTrack": "Daftar dan langsung dapatkan akun Hive milikmu sendiri: satu login untuk 3Speak dan semua aplikasi Hive lainnya, dengan key yang hanya kamu pegang. Hanya butuh sekitar satu menit.",
+    "signUpFree": "Daftar dan mulai dengan profil gratis di 3Speak. Undanganmu tersimpan, jadi <b>@{{referrer}}</b> tetap mendapat kreditnya.",
+    "createHiveAccount": "Buat akun Hive-ku",
+    "createAccount": "Buat akunku",
+    "lookAround": "Aku cuma mau lihat-lihat"
+  },
+  "interests": {
+    "saved": "Minat disimpan — ubah kapan saja di Pengaturan",
+    "saveFailed": "Minat tidak dapat disimpan",
+    "title": "Kamu suka apa?",
+    "body": "Pilih beberapa topik yang kamu suka dan kami akan menampilkan lebih banyak konten yang sesuai. Kamu bisa mengubahnya kapan saja di <b>Pengaturan</b>.",
+    "notNow": "Nanti saja",
+    "save": "Simpan minat"
+  },
+  "emojiGif": {
+    "emoji": "Emoji",
+    "searchEmoji": "Cari emoji",
+    "searchGifs": "Cari GIF…",
+    "noGifs": "GIF tidak ditemukan.",
+    "poweredBy": "Didukung oleh GIPHY"
+  },
+  "welcome": {
+    "things": {
+      "postVideos": {
+        "title": "Posting video",
+        "text": "Unggah video panjang yang tetap milikmu, di chain yang tidak bisa dihapus diam-diam oleh siapa pun."
+      },
+      "filmShorts": {
+        "title": "Rekam Shorts",
+        "text": "Sesuatu yang cepat, vertikal, dan mudah dibagikan. Cocok untuk mendapatkan penonton pertamamu."
+      },
+      "goLive": {
+        "title": "Siaran langsung",
+        "text": "Siarkan ke orang-orangmu, ajak tamu ke panggung, dan simpan rekamannya setelahnya."
+      },
+      "buildCommunity": {
+        "title": "Bangun komunitas",
+        "text": "Buat ruang seputar hal yang kamu pedulikan, atau gabung ke komunitas yang sudah ramai."
+      },
+      "makeFriends": {
+        "title": "Dapatkan teman sungguhan",
+        "text": "Berkomentar, chat, dan berkolaborasi dengan manusia sungguhan yang saling mendukung."
+      },
+      "getInspired": {
+        "title": "Dapatkan inspirasi, ikut terlibat",
+        "text": "Temukan kreator, dukung yang kamu sukai, dan dapatkan penghasilan sambil melakukannya."
+      }
+    },
+    "advertiserThings": {
+      "bookAds": {
+        "title": "Pesan iklan di seluruh 3Speak",
+        "text": "Slot video, slot Shorts, banner pemutar, ticker, dan slot sebelum unggah, dari satu hari hingga tiga bulan."
+      },
+      "payFromWallet": {
+        "title": "Bayar dari dompetmu sendiri",
+        "text": "Dalam HBD atau HIVE, langsung dari akun ini. Tanpa kartu dan tanpa perantara."
+      },
+      "chooseWhere": {
+        "title": "Pilih tempat tayangnya",
+        "text": "Pilih format, posisi di dalam video, dan berapa hari iklan tayang."
+      },
+      "seeDelivered": {
+        "title": "Lihat hasilnya",
+        "text": "Jumlah putar dan klik untuk setiap pemesanan, dan kredit dikembalikan jika pemesanan tidak mencapai target."
+      },
+      "talkToCustomers": {
+        "title": "Bicara dengan pelangganmu",
+        "text": "Jika mau: posting video, balas komentar, dan ikuti orang atas nama brand-mu."
+      },
+      "oneAccount": {
+        "title": "Satu akun di mana saja",
+        "text": "Brand dan login yang sama di semua aplikasi Hive, dengan key yang hanya kamu pegang."
+      }
+    },
+    "profileLive": "Profilmu sudah aktif. Selamat datang di 3Speak!",
+    "brandProfileLive": "Profil brand-mu sudah aktif. Selamat datang di 3Speak!",
+    "title": "Selamat datang di 3Speak",
+    "titleNamed": "Selamat datang di 3Speak, {{name}}",
+    "advertiserReady": "Akun pengiklanmu <b>@{{user}}</b> sudah siap. Ini akun yang kamu pakai untuk memesan dan membayar iklan.",
+    "heyUser": "Hai <b>@{{user}}</b>, kamu berhasil. 3Speak dibangun di atas Hive, jadi akun, penonton, dan kontenmu adalah milikmu.",
+    "noteAdvertiser": "Pertama, lihat sekilas profil brand-mu: itulah yang dilihat penonton di samping iklanmu.",
+    "note": "Satu hal terakhir sebelum mulai: beri tahu orang siapa yang mereka tonton.",
+    "maybeLater": "Mungkin nanti",
+    "checkBrandProfile": "Cek profil brand-ku",
+    "setUpProfile": "Atur profilku",
+    "brandProfileTitle": "Profil brand-mu",
+    "profileTitle": "Beri tahu orang siapa kamu",
+    "brandProfileHint": "Dibawa dari masa pemanasanmu. Menyimpan akan menaruhnya di akun Hive-mu; kamu bisa mengubahnya kapan saja.",
+    "profileHint": "Inilah yang dilihat orang di profilmu. Kamu bisa mengubahnya kapan saja.",
+    "skipForNow": "Lewati dulu",
+    "saveAndBook": "Simpan dan pesan iklan pertamaku",
+    "uploading": "Mengunggah…",
+    "interestsHint": "Kami memakai ini untuk memilih apa yang muncul di berandamu. Pilih sebanyak yang kamu mau, atau tidak sama sekali, dan ubah kapan pun kamu mau.",
+    "interestsFineprint": "Disimpan ke akun Hive-mu, jadi semua aplikasi Hive menampilkan profil dan minat yang sama.",
+    "saveAndExplore": "Simpan dan mulai menjelajah"
+  },
+  "profileEdit": {
+    "updated": "Profil diperbarui",
+    "title": "Edit profilmu",
+    "subtitle": "Foto, nama, dan bio-mu tampil di profilmu dan di samping semua yang kamu posting.",
+    "loading": "Memuat profilmu…",
+    "fineprint": "Disimpan ke akun Hive-mu, jadi semua aplikasi Hive menampilkan profil yang sama.",
+    "saveChanges": "Simpan perubahan"
+  },
+  "profileFields": {
+    "chooseImage": "Silakan pilih file gambar",
+    "imageTooLarge": "Gambar itu lebih dari 8MB, silakan pilih yang lebih kecil",
+    "uploadFailed": "Gambar itu tidak dapat diunggah",
+    "saved": "Profil disimpan",
+    "saveFailed": "Profilmu tidak dapat disimpan",
+    "uploadBanner": "Unggah banner profil",
+    "changeBanner": "Ganti banner",
+    "addBanner": "Tambah banner",
+    "bannerHint": "Paling bagus di <b>2800 × 684</b> px (atau gambar 4:1 apa pun). Taruh bagian penting di tengah: sisi-sisinya terpotong di layar sempit dan namamu ada di kiri bawah.",
+    "uploadPicture": "Unggah foto profil",
+    "pictureLabel": "Foto profil",
+    "pictureHint": "Wajah atau logo paling cocok. Persegi, 400 × 400 px atau lebih besar. Maksimal 8MB.",
+    "displayName": "Nama tampilan",
+    "namePlaceholderUser": "Kami panggil kamu apa? (@{{username}})",
+    "namePlaceholder": "Kami panggil kamu apa?",
+    "shortBio": "Bio singkat",
+    "bioPlaceholder": "Kamu membuat apa, dan apa yang bisa diharapkan orang darimu?",
+    "location": "Lokasi",
+    "optional": "opsional",
+    "locationPlaceholder": "Kamu ada di mana?"
+  },
+  "auth": {
+    "sessionExpired": "Sesimu berakhir — silakan masuk lagi",
+    "loggedOut": "Berhasil keluar",
+    "loginSuccess": "Berhasil masuk!",
+    "switchedTo": "Beralih ke @{{user}}",
+    "butrauthFailed": "Login Butter Auth gagal: {{error}}",
+    "signedInAs": "Masuk sebagai @{{user}}",
+    "loggedInViaButrauth": "Masuk sebagai @{{user}} lewat Butter Auth",
+    "tokenExpired": "Sesi berakhir",
+    "loginFailed": "Login gagal: {{error}}",
+    "unknownError": "Kesalahan tidak diketahui",
+    "loginTitle": "Masuk ke 3Speak"
+  },
+  "update": {
+    "available": "Versi baru ({{version}}) sudah tersedia",
+    "description": "Muat ulang untuk mendapatkan pembaruan terbaru."
+  },
+  "toastsRegion": "Notifikasi"
+}

@@ -1,0 +1,129 @@
+{
+  "button": {
+    "label": "Chat"
+  },
+  "tools": {
+    "emoji": "Emoji",
+    "searchEmoji": "Cari emoji",
+    "searchGifs": "Cari GIF…",
+    "noGifs": "GIF tidak ditemukan.",
+    "poweredByGiphy": "Didukung oleh GIPHY"
+  },
+  "lightbox": {
+    "openInNewTab": "Buka gambar di tab baru"
+  },
+  "linkCard": {
+    "loadingPreview": "Memuat pratinjau…",
+    "community": "Komunitas",
+    "communityWithSubscribers_other": "Komunitas · {{formatted}} anggota",
+    "commentFallback": "(komentar)"
+  },
+  "share": {
+    "embedCopied": "Kode embed tersalin",
+    "pressToCopy": "Tekan Ctrl/Cmd + C untuk menyalin kode yang dipilih",
+    "embedTitle": "Sematkan video ini",
+    "embedHint": "Tempel ini di situs web atau postingan blog mana pun.",
+    "embedSize": "Ukuran embed",
+    "embedCode": "Kode embed",
+    "copyEmbed": "Salin kode embed",
+    "responsiveSub": "Menyesuaikan ukuran halaman tempatnya berada",
+    "fixedSub": "Iframe berukuran tetap",
+    "sendInChat": "Kirim di 3Speak Chat",
+    "sendInChatSub": "Kirim sebagai pesan ke seseorang di 3Speak",
+    "embedOnWebsite": "Sematkan di situs web",
+    "embedOnWebsiteSub": "Salin HTML untuk situs atau blogmu sendiri",
+    "generalShare": "Bagikan / salin tautan",
+    "generalShareSub": "Aplikasi lain, atau salin tautannya"
+  },
+  "gate": {
+    "connectTitle": "Hubungkan ke 3Speak Chat",
+    "connectBody": "Chat didukung oleh Snapie. Menghubungkan berarti menandatangani tantangan login satu kali dengan posting key Hive-mu — bukan transaksi, tanpa biaya.",
+    "connecting": "Menghubungkan…",
+    "connectButton": "Hubungkan chat",
+    "cannotSign": "Login-mu saat ini tidak bisa menandatangani tantangan chat. Gunakan Keychain, HiveAuth, PeakVault, atau Ledger.",
+    "needsAccountTitle": "Chat butuh akun Hive",
+    "needsAccountBody": "Pesan ditandatangani dengan key akunmu sendiri, jadi chat terbuka bersama fitur lainnya begitu akunmu siap. Selesaikan target di profilmu dan tim akan membantumu sampai ke sana.",
+    "loginTitle": "Masuk untuk memakai chat",
+    "loginBody": "Masuk dengan akun Hive-mu untuk mengirim dan menerima pesan.",
+    "connectingToChat": "Menghubungkan ke chat…"
+  },
+  "errors": {
+    "notHiveAccount": "@{{user}} bukan akun Hive.",
+    "openConversation": "Percakapan itu tidak dapat dibuka.",
+    "verifyAccount": "Akun itu tidak dapat diverifikasi.",
+    "createRoom": "Ruang tidak dapat dibuat.",
+    "joinChannel": "Tidak dapat bergabung ke channel itu."
+  },
+  "newDm": {
+    "placeholder": "Kirim pesan ke pengguna Hive…",
+    "start": "Mulai chat"
+  },
+  "newRoom": {
+    "toggle": "Ruang privat baru",
+    "namePlaceholder": "Nama ruang…",
+    "removeMember": "Hapus @{{user}}",
+    "addMore": "Tambah lagi…",
+    "invitePlaceholder": "Undang pengguna Hive (opsional)…",
+    "create": "Buat"
+  },
+  "channels": {
+    "browse": "Jelajahi channel",
+    "publicTitle": "Channel publik",
+    "closeBrowser": "Tutup penjelajah channel",
+    "loading": "Memuat channel…",
+    "empty": "Tidak ada channel yang tersedia.",
+    "join": "Gabung"
+  },
+  "markRead": {
+    "nothingToClear": "Tidak ada percakapan untuk dibersihkan. Jumlahnya mungkin tersangkut di server.",
+    "requestFailed": "permintaan gagal",
+    "allCaughtUp": "Semua sudah dibaca",
+    "stillUnread_other": "Masih menampilkan {{total}} belum dibaca setelah membersihkan {{count}} chat.",
+    "stillUnreadNoMatch_other": "Masih menampilkan {{total}} belum dibaca setelah membersihkan {{count}} chat. Server melaporkan jumlah, tetapi tidak ada percakapan yang cocok.",
+    "notSignedIn": "Chat belum masuk. Hubungkan ulang chat lalu coba lagi.",
+    "sessionExpired": "Sesi chat berakhir saat membersihkan. Hubungkan ulang chat lalu coba lagi.",
+    "serverRejectedVisible_other": "Server menolak semua {{count}} permintaan (ID dari daftar yang terlihat)",
+    "serverRejectedServerMap_other": "Server menolak semua {{count}} permintaan (ID dari peta belum-dibaca milik server sendiri)",
+    "failed": "Tidak dapat menandai semua sebagai dibaca",
+    "marking": "Menandai sebagai dibaca…",
+    "button": "Tandai semua sudah dibaca",
+    "buttonCount": "Tandai semua sudah dibaca ({{count}})"
+  },
+  "list": {
+    "chooseTarget": "Pilih chat tujuan",
+    "loading": "Memuat percakapan…",
+    "empty": "Belum ada percakapan. Mulai satu di atas dengan memasukkan nama pengguna Hive."
+  },
+  "leave": {
+    "confirmRoom": "Keluar dari ruang ini?",
+    "confirmChannel": "Keluar dari channel ini?",
+    "errorRoom": "Tidak dapat keluar dari ruang.",
+    "errorChannel": "Tidak dapat keluar dari channel.",
+    "titleRoom": "Keluar dari ruang",
+    "titleChannel": "Keluar dari channel",
+    "button": "Keluar"
+  },
+  "thread": {
+    "editError": "Pesan tidak dapat diedit.",
+    "deleteConfirm": "Hapus pesan ini? Pesan akan diganti dengan “[dihapus]”.",
+    "deleteError": "Pesan tidak dapat dihapus.",
+    "back": "Kembali ke percakapan",
+    "loading": "Memuat pesan…",
+    "empty": "Belum ada pesan — sapa dulu 👋",
+    "editedSuffix": " · diedit",
+    "messageActions": "Aksi pesan",
+    "quote": "Kutip",
+    "forward": "Teruskan",
+    "typing_other": "{{users}} sedang mengetik…",
+    "editing": "Mengedit pesan",
+    "cancelEdit": "Batalkan edit",
+    "quoting": "Mengutip @{{user}}",
+    "cancelQuote": "Batalkan kutipan",
+    "removeImage": "Hapus gambar",
+    "placeholder": "Ketik pesan…"
+  },
+  "page": {
+    "chooseTarget": "Pilih chat tujuan.",
+    "selectConversation": "Pilih percakapan, atau mulai yang baru."
+  }
+}

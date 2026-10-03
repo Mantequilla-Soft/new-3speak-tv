@@ -1,0 +1,96 @@
+{
+  "tip": {
+    "successTitle": "Tip Berhasil Dikirim!",
+    "successMessage": "Kamu berhasil mengirim {{amount}} {{currency}} sebagai tip. Terima kasih atas dukunganmu!",
+    "errors": {
+      "allRequired": "Semua kolom wajib diisi",
+      "loginRequired": "Silakan masuk untuk mengirim tip",
+      "insufficientBalance": "Saldo tidak cukup",
+      "invalidUsername": "Nama pengguna tidak valid",
+      "transferFailed": "Transfer gagal: {{message}}"
+    },
+    "heading": "Kirim Tip ke @{{recipient}}",
+    "amountLabel": "Jumlah: ",
+    "amountPlaceholder": "mis. 1.000",
+    "currencyLabel": "Mata uang:",
+    "availableBalance": "Saldo tersedia: {{currency}}",
+    "memoLabel": "Memo (opsional):",
+    "memoPlaceholder": "mis. Makasih untuk konten kerennya!",
+    "send": "Kirim Tip"
+  },
+  "cardMenu": {
+    "loginToPersonalize": "Silakan masuk untuk menyesuaikan feed-mu",
+    "notInterestedToast": "Tidak tertarik — kami akan menyembunyikan video ini",
+    "undo": "Urungkan",
+    "cantHideOwn": "Kamu tidak bisa menyembunyikan videomu sendiri",
+    "hidingCreatorToast": "Menyembunyikan video dari @{{author}}",
+    "loginForPlaylists": "Silakan masuk untuk menambahkan video ke playlist",
+    "loginToTag": "Silakan masuk untuk memberi tag pada video",
+    "moreOptions": "Opsi lainnya",
+    "addToPlaylist": "Tambahkan ke playlist",
+    "addTag": "Tambah tag",
+    "notInterested": "Tidak tertarik",
+    "dontShowCreator": "Jangan tampilkan @{{author}}"
+  },
+  "guestList": {
+    "loadFailed": "Daftar tamu saat ini tidak dapat dimuat",
+    "saved_other": "{{count}} tamu bisa menonton ini",
+    "cleared": "Daftar tamu dikosongkan",
+    "saveFailed": "Daftar tamu tidak dapat disimpan",
+    "invalidAccounts": "Bukan akun Hive yang valid: {{names}}",
+    "title": "🔒 Daftar tamu",
+    "hint": "Akun-akun ini bisa menonton tanpa 3Speak Pro. Disimpan secara privat di server kami, tidak pernah diterbitkan di postinganmu.",
+    "notRegistered": "Video ini belum selesai diproses. Kamu tetap bisa mengedit daftarnya setelah selesai.",
+    "placeholder": "username, user.lain",
+    "empty": "Belum ada siapa pun. Hanya pelanggan Pro yang bisa menonton ini.",
+    "removeAria": "Hapus {{name}}"
+  },
+  "voters": {
+    "pinnedTitle_other": "Pemberi vote ({{count}})",
+    "topVoters": "Pemberi Vote Teratas",
+    "noVotes": "Belum ada vote"
+  },
+  "payout": {
+    "breakdown": "Rincian Payout",
+    "estimatedBreakdown": "Perkiraan Rincian",
+    "beneficiaries": "Penerima manfaat",
+    "curators": "Kurator (50%)",
+    "author": "Penulis",
+    "total": "Total",
+    "totalEstimated": "Total (perk.)"
+  },
+  "vote": {
+    "loginRequired": "Masuk untuk menyelesaikan operasi ini",
+    "fetchPostFailed": "Data postingan tidak dapat dimuat",
+    "sameWeight": "Kamu sudah vote dengan bobot ini. Pilih nilai lain.",
+    "failed": "Vote gagal: {{message}}",
+    "pleaseTryAgain": "silakan coba lagi",
+    "weight": "Bobot Vote: {{weight}}%",
+    "success": "Vote berhasil! Nilai: ${{value}}",
+    "successTagged": "Vote berhasil! Diberi tag “{{tag}}”. Nilai: ${{value}}",
+    "tagged": "Diberi tag “{{tag}}”.",
+    "vote": "Vote",
+    "tagThisVideo": "Beri tag video ini",
+    "tagOptional": "— opsional —",
+    "pickTopicFirst": "Pilih topik dulu",
+    "taggedNoDot": "Diberi tag “{{tag}}”",
+    "tagFailed": "Tag gagal: {{message}}",
+    "taggedAlreadyVoted": "Diberi tag “{{tag}}” — vote {{weight}}%-mu sudah diberikan.",
+    "votingClosed": "Voting ditutup — beri tag video ini",
+    "youTagged": "Kamu memberi tag <b>{{tag}}</b> pada video ini.",
+    "pickTopic": "Pilih topik (dihitung sebagai vote 100%)",
+    "submitTag": "Kirim tag",
+    "tagThisVideoFull": "Beri tag video ini (dihitung sebagai vote 100%)",
+    "justTag": "Jangan vote — beri tag saja"
+  },
+  "tagsPicker": {
+    "autoTagged": "Tag otomatis: {{tags}}",
+    "searchPlaceholder": "Cari topik…",
+    "searchAria": "Cari topik",
+    "noMatches": "Tidak ada topik yang cocok dengan “{{query}}”.",
+    "allSelected": "Semua {{category}} sudah dipilih. Tambahkan topik satuan hanya jika ingin lebih spesifik:",
+    "orPickTopics": "Atau pilih topik satuan:",
+    "goodEnough": "Sudah cukup — atau buat lebih spesifik (opsional):",
+    "moreSpecific": "Lebih spesifik:"
+  }
+}

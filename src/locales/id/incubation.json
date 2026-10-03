@@ -1,0 +1,538 @@
+{
+  "tracks": {
+    "viewer": {
+      "title": "Kebanyakan penonton",
+      "body": "Aku di sini untuk menonton, berkomentar, dan mengikuti kreator."
+    },
+    "creator": {
+      "title": "Kebanyakan kreator",
+      "body": "Aku ingin menerbitkan video dan Shorts serta membangun channel."
+    },
+    "advertiser": {
+      "title": "Pengiklan",
+      "body": "Aku mewakili sebuah brand dan ingin menjangkau penonton 3Speak."
+    }
+  },
+  "tips": {
+    "shortsCamera": {
+      "title": "Shorts adalah tab, bukan aplikasi lain",
+      "body": "Buka Shorts dari bilah atas untuk menonton, atau gunakan Bagikan untuk memposting. Klip vertikal dari ponselmu bisa langsung dipakai.",
+      "cta": "Buka Shorts"
+    },
+    "searchSlash": {
+      "title": "Tekan / untuk mencari",
+      "body": "Dari mana saja di situs ini, tombol garis miring langsung membawamu ke kotak pencarian. Pencarian mencakup video, kreator, dan komunitas."
+    },
+    "communities": {
+      "title": "Komunitas mengumpulkan orang di sekitar satu topik",
+      "body": "Gabung ke beberapa komunitas dan video mereka mulai muncul di feed-mu. Kamu juga bisa memposting ke komunitas, agar orang yang tepat melihatnya.",
+      "cta": "Jelajahi komunitas"
+    },
+    "followFeed": {
+      "title": "Yang kamu ikuti punya feed sendiri",
+      "body": "Setelah kamu mengikuti beberapa kreator, feed diikuti hanya berisi video mereka. Ini cara tercepat untuk berhenti menggulir hal-hal yang tidak kamu pedulikan.",
+      "cta": "Lihat"
+    },
+    "interests": {
+      "title": "Beri tahu kami apa yang kamu suka",
+      "body": "Pilih beberapa topik di Pengaturan dan feed beranda langsung menyesuaikan bobotnya. Ini lebih efektif daripada menggulir sebanyak apa pun."
+    },
+    "hideWatched": {
+      "title": "Video yang sudah ditonton bisa hilang dari feed",
+      "body": "Pengaturan punya tombol \"sembunyikan yang sudah ditonton\", aktif secara default, jadi video yang sama berhenti mengikutimu setelah kamu menontonnya."
+    },
+    "timestamps": {
+      "title": "Berkomentar di momen yang tepat",
+      "body": "Saat video diputar, komentar bisa membawa penanda waktu posisimu. Pembaca mendapat tautan langsung ke detik itu."
+    },
+    "badges": {
+      "title": "Lencana diberikan, bukan diklaim",
+      "body": "Orang-orang di Hive dianugerahi lencana untuk acara dan pencapaian. Buka salah satunya untuk melihat semua pemegangnya dan apa yang mereka terbitkan.",
+      "cta": "Lihat lencana"
+    },
+    "audio": {
+      "title": "3Speak juga menyediakan audio",
+      "body": "Podcast dan musik ada di Audio di bilah atas, dengan pemutarnya sendiri. Kamu bisa menerbitkan audio dengan cara yang sama seperti video.",
+      "cta": "Buka Audio"
+    },
+    "backlog": {
+      "title": "Tidak ada yang kamu posting sekarang yang sia-sia",
+      "body": "Semua yang kamu terbitkan selama masa pemanasan bisa diterbitkan ulang ke Hive atas namamu sendiri begitu akunmu tersedia, dan kamu yang memilih apa saja yang dibawa."
+    }
+  },
+  "trackChooser": {
+    "saveFailed": "Belum tersimpan. Silakan coba lagi.",
+    "saving": "Menyimpan..."
+  },
+  "trackQuestion": {
+    "title": "Apa yang membawamu ke 3Speak?",
+    "intro": "Jalanmu menuju akun Hive bergantung pada ini: penonton menonton dan ikut berinteraksi, kreator menerbitkan, dan pengiklan menyiapkan brand mereka."
+  },
+  "tipCard": {
+    "aria": "Tip",
+    "dismiss": "Tutup tip",
+    "takeALook": "Lihat"
+  },
+  "progress": {
+    "tasks": {
+      "video": {
+        "label_other": "Unggah {{count}} video",
+        "hint": "Bagikan sesuatu tentang dirimu dan akan seperti apa channel-mu.",
+        "why": "Inilah hal pertama yang dilihat tim saat meninjaumu, dan hal pertama yang dilihat pengunjung saat membuka channel-mu.",
+        "counts": {
+          "0": "Video apa pun yang kamu terbitkan dari studio unggah.",
+          "1": "Video itu tetap milikmu. Saat akunmu ditingkatkan, kamu memilih postingan mana yang diterbitkan ke Hive atas namamu sendiri."
+        },
+        "cta": "Unggah video"
+      },
+      "short": {
+        "label_other": "Posting {{count}} Shorts",
+        "hint": "Ikut meramaikan 3Speak Shorts dan unggah momen-momen keseharianmu atau cerita yang ingin kamu bagikan.",
+        "why": "Shorts adalah cara tercepat untuk ditemukan. Shorts diputar di feed berisi kreator yang belum diikuti orang, jadi Shorts menjangkau lebih jauh dari channel-mu sendiri.",
+        "counts": {
+          "0": "Video vertikal yang diposting dari pengunggah Shorts.",
+          "1": "Tentang topik apa pun yang kamu suka."
+        },
+        "cta": "Posting Shorts"
+      },
+      "follow": {
+        "label_other": "Ikuti {{count}} kreator",
+        "hint": "Bangun jaringan dengan orang-orang yang sepemikiran, atau kreator yang menurutmu seru.",
+        "why": "Daftar yang kamu ikuti mengubah feed beranda menjadi feed-mu sendiri. Daftar ini ikut pindah ke Hive saat akunmu ditingkatkan.",
+        "counts": {
+          "0": "Kreator yang kamu ikuti saat ini.",
+          "1": "Berhenti mengikuti seseorang akan mengurangi jumlahnya lagi, jadi ini mencatat siapa yang benar-benar kamu ikuti, bukan berapa kali kamu menekan tombol."
+        },
+        "cta": "Temukan kreator"
+      },
+      "comment": {
+        "label_other": "Tulis {{count}} komentar",
+        "why": "Komentar adalah cara orang menemukanmu sebelum kamu punya penonton. Satu balasan tulus di video orang lain lebih bermanfaat bagimu daripada unggahan yang belum dilihat siapa pun.",
+        "cta": "Cari sesuatu untuk dibalas",
+        "hint_other": "Komentar dihitung jika panjangnya minimal {{count}} karakter. Pemikiran sungguhan, bukan sekadar “bagus”.",
+        "counts": {
+          "minChars_other": "Minimal {{count}} karakter dengan kata-katamu sendiri.",
+          "realThought": "Pemikiran sungguhan, bukan satu kata.",
+          "othersPost": "Di postingan orang lain. Balasan di videomu sendiri, atau ke komentarmu sendiri, adalah percakapan dengan dirimu sendiri dan tidak dihitung."
+        }
+      },
+      "watch": {
+        "labelHours_other": "Tonton {{count}} jam di 3Speak",
+        "labelMinutes_other": "Tonton {{count}} menit di 3Speak",
+        "hint": "Video apa saja. Dihitung saat kamu benar-benar menonton.",
+        "why": "Menonton menunjukkan bahwa kamu di sini untuk ikut serta, bukan hanya untuk memposting. Ini target yang paling banyak diselesaikan orang tanpa berusaha.",
+        "counts": {
+          "0": "Waktu di 3Speak sendiri. Video yang sama yang disematkan di situs lain tidak dihitung.",
+          "1": "Sekali per video. Menonton ulang menaikkan waktu terbaiknya, tidak pernah menambahkannya, dan tidak ada satu video pun yang bisa memenuhi semuanya sendirian.",
+          "2": "Waktu putar sebenarnya, jadi mempercepat video tidak dihukum dan memperlambatnya tidak memperpanjang jam.",
+          "3": "Di layar. Video yang dibiarkan diputar di tab latar belakang tidak menambah jam.",
+          "4": "Bukan videomu sendiri.",
+          "5": "Tidak ada yang dicatat saat kamu menonton dalam mode privat."
+        },
+        "cta": "Tonton sesuatu"
+      },
+      "time": {
+        "label_other": "Berada di sini selama {{count}} hari",
+        "hint": "Yang ini selesai dengan sendirinya. Tidak ada yang perlu dilakukan.",
+        "why": "Akun yang muncul sejam lalu dan akun yang sudah ada di sini beberapa hari terlihat sama di atas kertas. Hari-hari itulah yang membedakannya, jadi semua orang menunggu waktu singkat yang sama.",
+        "counts": {
+          "fullDays_other": "{{count}} hari penuh sejak hari kamu mendaftar.",
+          "forYouWhen": "Untukmu, itu {{when}}. Target lainnya bisa diselesaikan semua sebelum itu.",
+          "otherGoals": "Target lainnya bisa diselesaikan semua sebelum itu.",
+          "keepsCounting": "Hitungannya terus berjalan baik kamu di sini maupun tidak, jadi tidak ada yang perlu dikejar."
+        }
+      },
+      "subscription": {
+        "label_other": "Gabung ke {{count}} komunitas",
+        "hint": "Temukan komunitas tentang hal yang suka kamu tonton atau buat.",
+        "why": "Komunitas mengumpulkan video tentang satu topik dan orang-orang yang peduli padanya. Bergabung ke salah satunya mengisi feed-mu dengan lebih banyak hal yang kamu suka, dan bagi kreator, di sanalah channel baru menemukan penonton pertamanya.",
+        "counts": {
+          "0": "Komunitas tempat kamu menjadi anggota saat ini.",
+          "1": "Keluar dari komunitas akan mengurangi jumlahnya lagi."
+        },
+        "cta": "Jelajahi komunitas"
+      },
+      "profile": {
+        "label_other": "Atur profil brand-mu",
+        "hint": "Nama brand, apa yang kamu lakukan, dan logomu.",
+        "why": "Penonton, dan tim yang meninjaumu, melihat siapa di balik sebuah iklan sebelum hal lainnya. Profil yang lengkap membuat brand mudah dikenali dan dipercaya."
+      },
+      "contact": {
+        "label_other": "Tambahkan kontak bisnismu",
+        "hint": "Email, ditambah alamat atau situs web.",
+        "why": "Sebelum iklan tayang, tim butuh cara nyata untuk menghubungi bisnis di baliknya. Email dan alamatmu bersifat privat: tidak pernah disimpan di blockchain atau ditampilkan di mana pun.",
+        "counts": {
+          "0": "Email: wajib.",
+          "1": "Alamat: opsional.",
+          "2": "Kamu butuh alamat ATAU situs web di profil brand-mu di atas, minimal salah satunya."
+        }
+      }
+    },
+    "duration": {
+      "s": "{{s}}d",
+      "hm": "{{h}}j {{m}}m",
+      "h": "{{h}}j",
+      "m": "{{m}}m"
+    },
+    "title": "Jalanmu menuju akun Hive",
+    "needsTrack": "Daftar hal yang perlu kamu lakukan bergantung pada apa yang membawamu ke 3Speak.",
+    "choosePath": "Pilih jalanmu",
+    "doneCount": "{{done}} dari {{total}} selesai",
+    "overallAria": "Progres keseluruhan",
+    "hideDetails": "Sembunyikan detail",
+    "showLeft": "Tampilkan yang tersisa",
+    "whatCounts": "Yang dihitung",
+    "reviewDone": "Semua selesai. Tim akan meninjau channel-mu dan meningkatkan akunmu. Tidak ada lagi yang perlu kamu lakukan.",
+    "reviewPending": "Setelah kamu menyelesaikan semua ini, tim akan meninjau channel-mu dan meningkatkan akunmu."
+  },
+  "navProgress": {
+    "chooseTitle": "Beri tahu kami apa yang membawamu ke 3Speak untuk melihat jalanmu menuju akun Hive.",
+    "titleComplete_other": "Semua {{count}} target selesai (100%). Tim akan meninjau channel-mu.",
+    "titleProgress_other": "{{pct}}% menuju akun Hive-mu. {{done}} dari {{count}} target sudah selesai sepenuhnya.",
+    "ariaComplete_other": "Progresmu: 100%, semua {{count}} target selesai",
+    "ariaProgress_other": "Progresmu: {{pct}}%, {{done}} dari {{count}} target sudah selesai sepenuhnya",
+    "celebrate": "Semua target menuju akun Hive-mu sudah selesai."
+  },
+  "welcome": {
+    "what": {
+      "title": "Selamat datang di 3Speak",
+      "p1": "3Speak adalah platform video yang dibangun di atas <b>Hive</b>, sebuah blockchain publik. Video di sini bukan milik kami: video adalah milik orang yang mempostingnya, dan bisa menghasilkan reward nyata dari orang yang menontonnya."
+    },
+    "warmup": {
+      "title": "Kamu sedang dalam masa pemanasan",
+      "p1": "Akun Hive itu nyata dan permanen, dan seseorang harus membayarnya. Jadi, alih-alih meminta apa pun di awal, kami langsung memberimu nama dan tempat untuk menerbitkan.",
+      "p2": "Semua yang kamu buat selama masa pemanasan ada di 3Speak. Saat kamu siap, tim meninjau channel-mu dan memberimu akun Hive milikmu sendiri, gratis. Video, Shorts, dan daftar yang kamu ikuti lalu pindah ke blockchain atas namamu sendiri, dan kamu yang memilih apa saja yang dibawa."
+    },
+    "do": {
+      "title": "Yang bisa kamu lakukan sekarang",
+      "upload": "Unggah video, persis seperti orang lain di sini.",
+      "shorts": "Posting Shorts dari ponsel atau desktop-mu.",
+      "comment": "Berkomentar di mana saja, termasuk di video orang yang sudah ada di Hive.",
+      "follow": "Ikuti kreator dan gabung ke komunitas.",
+      "watch": "Menonton. Riwayat dan feed-mu adalah milikmu sejak hari pertama.",
+      "aside": "Beberapa hal menunggu akunmu: mendapatkan reward dan memberi tip. Hal-hal itu melibatkan uang sungguhan, jadi butuh akun yang benar-benar milikmu."
+    },
+    "path": {
+      "p1": "Profilmu menampilkan daftar singkat hal yang perlu dilakukan, dan isinya bergantung pada tujuanmu di sini: penonton menonton dan ikut berinteraksi, kreator menerbitkan, dan pengiklan menyiapkan brand mereka.",
+      "p2": "Ini bukan ujian. Ini hanya cara kami membedakan akun sungguhan dari akun kosong atau berniat jahat. Setelah daftarnya selesai, tim meninjaumu dan meningkatkan akunmu secepat mungkin.",
+      "perkEarn": "Postingan yang menghasilkan",
+      "perkKeys": "Key yang hanya kamu pegang",
+      "perkNetwork": "Seluruh jaringan Hive"
+    },
+    "showList": "Tunjukkan daftarku",
+    "decideLater": "Putuskan nanti"
+  },
+  "profile": {
+    "unlocks": {
+      "earn": {
+        "title": "Postinganmu mulai menghasilkan.",
+        "body": "Video di Hive bisa diberi reward dalam HIVE dan HBD oleh siapa pun yang menontonnya, dan bisa membawa iklan yang hasilnya ikut kamu terima."
+      },
+      "publish": {
+        "title": "Terbitkan semua yang kamu buat di sini.",
+        "body": "Video, Shorts, dan daftar yang kamu ikuti di halaman ini bisa diposting ke chain atas namamu sendiri, dan kamu yang memilih mana saja."
+      },
+      "buttons": {
+        "title": "Vote, beri tip, ikuti, dan buat playlist.",
+        "body": "Semua tombol yang hari ini masih berwarna abu-abu untukmu."
+      },
+      "keys": {
+        "title": "Key yang hanya kamu pegang.",
+        "body": "Tidak ada yang bisa mengunci aksesmu, dan login yang sama berfungsi di semua aplikasi Hive, bukan hanya 3Speak."
+      },
+      "ecosystem": {
+        "title": "Jadilah bagian dari ekosistem Hive global.",
+        "body": "3Speak adalah satu aplikasi di antara seluruh jaringan aplikasi: blog, komunitas, game, marketplace, dan lainnya, semuanya memakai satu akun dan daftar ikuti yang sama."
+      }
+    },
+    "advertiserUnlocks": {
+      "book": {
+        "title": "Pesan iklan di seluruh 3Speak.",
+        "body": "Slot video, slot Shorts, banner pemutar, ticker, dan slot sebelum unggah, dari satu hari hingga tiga bulan."
+      },
+      "pay": {
+        "title": "Bayar dari dompetmu sendiri.",
+        "body": "Dalam HBD atau HIVE, langsung dari akunmu. Tanpa kartu dan tanpa perantara."
+      },
+      "results": {
+        "title": "Lihat hasil iklanmu.",
+        "body": "Jumlah putar dan klik untuk setiap pemesanan, dan kredit dikembalikan di pemesanan berikutnya jika pemesanan tidak mencapai target."
+      },
+      "customers": {
+        "title": "Bicara dengan pelangganmu, jika mau.",
+        "body": "Posting video, balas komentar, dan ikuti orang atas nama brand-mu."
+      },
+      "keys": {
+        "title": "Key yang hanya kamu pegang.",
+        "body": "Tidak ada yang bisa mengunci aksesmu, dan login yang sama berfungsi di semua aplikasi Hive, bukan hanya 3Speak."
+      }
+    },
+    "loadFailed": "Profil ini tidak dapat dimuat.",
+    "badge": {
+      "onHive": "Di Hive",
+      "advertiser": "Pengiklan · baru memulai",
+      "gettingStarted": "Baru memulai"
+    },
+    "stats": {
+      "posts_other": "<b>{{count}}</b>postingan",
+      "followers_other": "<b>{{count}}</b>pengikut",
+      "following_other": "<b>{{count}}</b>mengikuti"
+    },
+    "editProfile": "Edit profil",
+    "note": {
+      "graduated": "Sekarang ada di Hive sebagai <userLink>@{{user}}</userLink>. Semua di bawah ini dibuat sebelum itu.",
+      "advertiser": "Ini halaman brand-mu di 3Speak. Selesaikan langkah-langkah di bawah dan tim akan meninjau brand-mu. Setelah disetujui, kamu mendapat akun Hive: itulah akun pengiklanmu, yang kamu pakai untuk memesan dan membayar iklan.",
+      "own": "Beginilah orang lain melihatmu. Postinganmu ada di 3Speak dan belum ada di blockchain Hive, jadi belum menghasilkan reward. Itu berubah saat kamu mendapat akunmu setelah menyelesaikan semua tugas di bawah.",
+      "visitor": "Baru di sini, belum ada di Hive. Postingan ini ada di 3Speak, jadi untuk sementara tidak menghasilkan reward. Tetap ikuti dan beri komentar: dukungan di awal-lah yang membuat seseorang bertahan di minggu-minggu pertamanya. Saat mereka mendapat akun Hive, kami akan memberitahumu, agar kamu bisa mengikuti mereka di sana juga."
+    },
+    "tabs": {
+      "aria": "Bagian profil",
+      "goals": "Targetmu",
+      "uploads": "Unggahan",
+      "comments": "Komentar",
+      "followers": "Pengikut",
+      "following": "Mengikuti"
+    },
+    "videosAndShorts": "Video dan Shorts",
+    "market": {
+      "audience": "Penonton yang menunggu iklanmu",
+      "format": "Pilih format yang cocok dengan pesanmu"
+    },
+    "brandVideos": "Video brand-mu",
+    "optional": "opsional",
+    "empty": {
+      "advertiser": "Video di sini untuk berbicara dengan pelanggan, jika kamu mau. Iklan dipesan terpisah di halaman Pasang Iklan dan tidak membutuhkan video apa pun.",
+      "own": "Belum ada apa-apa. Unggahan pertamamu akan mencentang daftar di sebelah ini.",
+      "visitor": "Belum ada yang diterbitkan."
+    },
+    "videos": "Video",
+    "unlocksTitleAdvertiser": "Yang kamu dapatkan dari akun pengiklan",
+    "unlocksTitle": "Yang kamu dapatkan dari akun Hive",
+    "fineprint": "Disimpan ke profil 3Speak-mu. Akan pindah ke Hive bersama semuanya saat kamu mendapat akunmu."
+  },
+  "activity": {
+    "empty": {
+      "comments": "Belum ada yang dikatakan.",
+      "followers": "Belum ada yang mengikuti mereka.",
+      "following": "Mereka belum mengikuti siapa pun."
+    },
+    "loadFailed": "Tidak dapat memuat itu.",
+    "publishedToHive": "diterbitkan ke Hive",
+    "onHive": "di Hive"
+  },
+  "bell": {
+    "unreadAria_other": "Notifikasi, {{count}} belum dibaca",
+    "empty": "Belum ada apa-apa. Saat seseorang membalas atau menyukai videomu, notifikasinya muncul di sini.",
+    "replied": "<b>@{{name}}</b> membalas postinganmu",
+    "liked": "<b>@{{name}}</b> menyukai postinganmu"
+  },
+  "rail": {
+    "aria": "Baru di 3Speak",
+    "title": "Baru memulai",
+    "body": "Baru di sini, belum ada di Hive. Postingan ini ada di 3Speak. Sambut mereka dengan hangat sebelum mereka bergabung ke Hive."
+  },
+  "sessionSync": {
+    "signedInAs": "Kamu masuk sebagai @{{name}}",
+    "caughtUp": "Akun Hive-mu sudah siap, jadi perangkat ini sudah menyesuaikan dengannya.",
+    "openFailed": "Butter Auth tidak dapat dibuka",
+    "title": "Hubungkan ulang sesimu",
+    "lede": "Perangkat ini kehilangan koneksi ke akunmu, jadi 3Speak tidak bisa memuat postingan, progres, atau notifikasimu sampai terhubung kembali.",
+    "text": "Tidak ada yang hilang. Semua yang kamu buat tersimpan di akunmu, bukan di browser ini. Menghubungkan ulang biasanya hanya butuh sedetik dan tanpa mengetik.",
+    "opening": "Membuka…",
+    "reconnect": "Hubungkan ulang"
+  },
+  "admin": {
+    "title": "Tampilan admin",
+    "note": "Hanya admin 3Speak yang melihat panel ini.",
+    "brandProfile": "Profil brand",
+    "public": "publik",
+    "fields": {
+      "handle": "Handle",
+      "brandName": "Nama brand",
+      "logo": "Logo",
+      "about": "Tentang",
+      "website": "Situs web",
+      "location": "Lokasi",
+      "interests": "Minat",
+      "activity": "Aktivitas",
+      "email": "Email",
+      "address": "Alamat",
+      "contactGoal": "Target kontak",
+      "firstSaved": "Pertama disimpan",
+      "lastChanged": "Terakhir diubah",
+      "butrauthUser": "Pengguna ButrAuth"
+    },
+    "activityLine": "{{posts}} postingan · {{followers}} pengikut · {{following}} mengikuti",
+    "notSet": "belum diatur",
+    "none": "tidak ada",
+    "privateContact": "Kontak privat",
+    "privateNote": "hanya admin, tidak pernah di chain",
+    "notGiven": "tidak diberikan",
+    "met": "Terpenuhi",
+    "notMet": "Belum terpenuhi",
+    "unknown": "tidak diketahui",
+    "noContact": "Belum ada kontak bisnis yang disimpan."
+  },
+  "contact": {
+    "savedComplete": "Tersimpan. Hanya tim 3Speak yang bisa melihatnya.",
+    "savedIncomplete": "Tersimpan. Tambahkan alamatmu, atau situs web di profilmu, untuk menyelesaikan langkah ini.",
+    "privateNote": "<b>Privat.</b> Email dan alamatmu tidak pernah disimpan di blockchain dan tidak pernah ditampilkan di profilmu atau di mana pun. Hanya tim 3Speak yang melihatnya, untuk menghubungimu soal iklanmu.",
+    "email": "Email",
+    "required": "wajib",
+    "emailPlaceholder": "kamu@brandmu.com",
+    "address": "Alamat",
+    "addressOptional": "opsional, kecuali profilmu tidak punya situs web",
+    "ph": {
+      "line1": "Jalan dan nomor",
+      "line2": "Alamat baris 2",
+      "postalCode": "Kode pos",
+      "city": "Kota",
+      "region": "Provinsi atau wilayah",
+      "country": "Negara"
+    },
+    "addressHint": "Alamat dihitung jika jalan, kota, dan negara sudah diisi. Tidak punya alamat? Tambahkan situs web ke profil brand-mu sebagai gantinya.",
+    "save": "Simpan detail kontak"
+  },
+  "brand": {
+    "saved": "Profil brand disimpan",
+    "name": "Nama brand",
+    "namePlaceholder": "Brand atau perusahaanmu",
+    "about": "Apa yang dilakukan brand-mu",
+    "aboutPlaceholder": "Satu atau dua kalimat yang mudah dipahami penonton.",
+    "logo": "Logo",
+    "uploading": "Mengunggah…",
+    "replaceLogo": "Ganti logo",
+    "uploadLogo": "Unggah logo",
+    "logoHint": "Ditampilkan sebagai lingkaran di samping iklanmu, jadi gambar persegi paling cocok.",
+    "website": "Situs web",
+    "websiteOptional": "opsional jika kamu memberikan alamatmu",
+    "websitePlaceholder": "https://brandmu.com",
+    "websiteInvalid": "Gunakan alamat lengkap yang diawali https://",
+    "save": "Simpan profil brand"
+  },
+  "createAccount": {
+    "started": "Ayo siapkan akun Hive-mu",
+    "openFailed": "Pengaturan akun tidak dapat dibuka. Silakan coba lagi.",
+    "readyAdvertiser": "Akun pengiklanmu sudah siap",
+    "ready": "Akun Hive-mu sudah siap",
+    "approvedAdvertiser": "Tim sudah menyetujui brand-mu. Buat akun Hive-mu, gratis, untuk memesan dan membayar iklan.",
+    "approved": "Tim sudah menyetujuimu. Buat akun Hive-mu, gratis: akun itu hanya milikmu.",
+    "createAdvertiser": "Buat akun pengiklanku",
+    "create": "Buat akun Hive-ku"
+  },
+  "graduatedFollows": {
+    "message": "@{{handle}} sekarang punya akun Hive sebagai @{{hiveUsername}}.",
+    "title": "Seseorang yang kamu ikuti sudah ditingkatkan",
+    "followForReal": "Ikuti sungguhan",
+    "gotIt": "Mengerti",
+    "nowFollowing": "Sekarang mengikuti @{{hiveUsername}} di Hive",
+    "followFailed": "Tidak dapat mengikuti mereka"
+  },
+  "backlog": {
+    "title": "Postingan lamamu masih ada di sini",
+    "lede_other": "Kamu membuat <b>{{count}} hal</b> sebelum punya akun Hive. Semuanya hanya ada di 3Speak. Kamu bisa menaruhnya di Hive sebagai <b>@{{user}}</b> kapan saja.",
+    "text": "Kamu memilih apa yang dipindahkan, satu per satu. Apa pun yang kamu tinggalkan tetap ada di 3Speak persis seperti adanya, dan kamu bisa kembali untuk sisanya kapan saja.",
+    "later": "Nanti"
+  },
+  "graduation": {
+    "items": {
+      "video_other": "{{count}} video",
+      "short_other": "{{count}} Shorts",
+      "comment_other": "{{count}} komentar",
+      "follow_other": "{{count}} akun yang diikuti",
+      "like_other": "{{count}} like",
+      "creator_other": "{{count}} kreator"
+    },
+    "listAnd": "{{rest}} dan {{last}}",
+    "listSep": ", ",
+    "viewerDone": {
+      "watched": "menonton {{time}}",
+      "written": "menulis {{items}}",
+      "followed": "mengikuti {{items}}"
+    },
+    "advertiser": {
+      "lede": "Tim sudah meninjau <b>{{name}}</b>. Buat <b>akun Hive</b>-mu, gratis: akun itu menjadi akun pengiklanmu.",
+      "text": "Dengan akun itu, kamu memesan iklan di seluruh 3Speak, dari slot video dan banner hingga ticker, dan membayarnya langsung dari dompetnya, dalam HBD atau HIVE. Key-nya hanya milikmu, jadi tidak ada yang bisa mengunci aksesmu.",
+      "note": "Profil brand-mu ikut pindah bersamamu. Email dan alamat bisnismu tetap privat di 3Speak dan tidak pernah masuk ke blockchain.",
+      "noteMoving": "<b>{{moving}}</b>-mu juga ikut pindah, diterbitkan bertahap selama beberapa hari."
+    },
+    "viewer": {
+      "title": "Akunmu sendiri sudah siap",
+      "ledeDone": "Sebagai <b>@{{handle}}</b> kamu sudah {{done}}. Ubah itu menjadi <b>akun Hive</b> milikmu sendiri, gratis.",
+      "lede": "Ubah <b>@{{handle}}</b> menjadi <b>akun Hive</b> milikmu sendiri, gratis.",
+      "text": "Dengan akun itu, kamu bisa vote dan memberi tip pada video yang kamu suka, mendapat penghasilan dari komentarmu, ikut reward penonton atas apa yang kamu tonton, dan membuat playlist. Login yang sama dan daftar ikuti yang sama berfungsi di semua aplikasi Hive, dan key-nya hanya milikmu."
+    },
+    "createMyAccount": "Buat akunku",
+    "creator": {
+      "title": "Kamu bisa membuat akunmu sendiri sekarang",
+      "lede": "Kamu sudah memposting sebagai <b>@{{handle}}</b>. Ubah itu menjadi <b>akun Hive</b> sungguhan milikmu sendiri, gratis.",
+      "text": "Akun Hive adalah key yang hanya kamu pegang. Tidak ada yang bisa mengunci aksesmu, postinganmu mulai menghasilkan, dan login yang sama berfungsi di semua aplikasi Hive, bukan hanya 3Speak."
+    },
+    "note": {
+      "moving": "<b>{{moving}}</b>-mu ikut pindah bersamamu.",
+      "everything": "Semua yang kamu buat di sini ikut pindah bersamamu.",
+      "gradual": "Penerbitan berlangsung bertahap selama beberapa hari, karena akun yang benar-benar baru dimulai dengan jatah posting yang kecil.",
+      "waiting_other": "{{count}} di antaranya menunggu postingan yang mereka balas diterbitkan lebih dulu."
+    },
+    "notYet": "Belum sekarang"
+  },
+  "handleTaken": {
+    "openFailed": "Pemilih nama tidak dapat dibuka",
+    "title": "Nama @{{handle}} sudah dipakai",
+    "lede": "Seseorang sudah mendaftarkannya di <b>Hive</b>, jadi nama itu tidak bisa menjadi akunmu saat kamu siap. Memilih nama baru sekarang hanya butuh sebentar.",
+    "text": "Memilih nama di sini tidak pernah memesannya. Hive tidak punya cara untuk menahan nama selain membuat akunnya, dan itulah langkah yang belum kamu bayar, yang memang menjadi inti dari memulai tanpa akun.",
+    "note": "Tidak ada yang kamu buat yang hilang. Video, Shorts, komentar, dan daftar ikutimu tetap bersamamu dan ikut pindah dengan nama apa pun yang kamu pilih.",
+    "pick": "Pilih nama baru"
+  },
+  "backfill": {
+    "rcError": "Resource credits belum cukup. Akan terisi ulang sendiri; coba lagi sebentar lagi.",
+    "today": "Hari ini",
+    "yesterday": "Kemarin",
+    "groups": {
+      "video": "Video",
+      "videoNote": "Satu setiap 5 menit — inilah bagian yang lambat.",
+      "short": "Shorts",
+      "comment": "Komentar",
+      "vote": "Suka",
+      "follow": "Ikuti",
+      "other": "Lainnya"
+    },
+    "status": {
+      "done": "Diterbitkan",
+      "publishing": "Menerbitkan…",
+      "error": "Gagal",
+      "idle": "Hanya di 3Speak"
+    },
+    "wait": {
+      "ms": "{{m}}m {{s}}d",
+      "s": "{{s}}d"
+    },
+    "noDate": "Tanpa tanggal",
+    "waitToast": "Hive mengizinkan satu postingan setiap 5 menit. Berikutnya dalam {{wait}}.",
+    "publishedToast_other": "{{count}} item diterbitkan ke Hive",
+    "loading": "Memuat postinganmu…",
+    "emptyTitle": "Tidak ada lagi yang perlu diterbitkan",
+    "emptyText": "Semua yang kamu buat sebelum punya akun Hive sudah diterbitkan atau memang tidak bisa diterbitkan ulang.",
+    "title": "Terbitkan yang kamu buat sebelumnya",
+    "intro": "Kamu membuat ini di 3Speak sebelum punya akun Hive, jadi semuanya hanya ada di sini. Pilih apa yang ingin kamu tampilkan di catatan publikmu sebagai <b>@{{user}}</b> lalu terbitkan. Apa pun yang kamu tinggalkan tetap ada di 3Speak persis seperti adanya.",
+    "note": "<b>Penerbitan butuh waktu, dan itu normal.</b> Hive mengizinkan satu postingan setiap 5 menit per akun, dan akun yang benar-benar baru punya jatah posting kecil yang terisi ulang selama beberapa hari. Ikuti, suka, dan profilmu murah dan cepat diproses. Terbitkan sedikit demi sedikit lalu kembali lagi.",
+    "groupBy": "Kelompokkan daftar berdasarkan",
+    "timeline": "Linimasa",
+    "byType": "Berdasarkan jenis",
+    "rcBlockedIn": "<b>Akunmu sedang kehabisan resource credits.</b> Hive memberi setiap akun jatah kecil untuk memposting, dan jatah itu terisi ulang sendiri. Tidak ada yang hilang: kembali sekitar {{wait}} lagi dan lanjutkan dari posisi terakhirmu.",
+    "rcBlockedLater": "<b>Akunmu sedang kehabisan resource credits.</b> Hive memberi setiap akun jatah kecil untuk memposting, dan jatah itu terisi ulang sendiri. Tidak ada yang hilang: kembali sebentar lagi dan lanjutkan dari posisi terakhirmu.",
+    "selected": "<b>{{count}}</b> dipilih",
+    "rootPostsTime_other": "{{count}} video, jadi butuh sekitar {{minutes}} menit",
+    "nextVideo": "Video berikutnya bisa dikirim dalam {{wait}}. Ikuti, suka, dan profil tidak terpengaruh.",
+    "selectAll": "Pilih semua",
+    "clear": "Hapus pilihan",
+    "publishSelected": "Terbitkan yang dipilih",
+    "selectItem": "Pilih {{label}}",
+    "fiveMin": "5 mnt",
+    "waitingTitle": "Menunggu yang lain",
+    "waitingText": "Ini akan terbit sendiri begitu postingan yang dirujuknya naik ke Hive. Tidak ada yang hilang sementara itu.",
+    "waitingFor": "<b>{{label}}</b> — menunggu {{target}}",
+    "andMore": "dan {{count}} lainnya",
+    "excludedTitle": "Tidak ikut dipindahkan"
+  }
+}

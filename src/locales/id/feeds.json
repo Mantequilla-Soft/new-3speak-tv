@@ -1,0 +1,119 @@
+{
+  "loadingMore": "Memuat lagi…",
+  "promoted": "Dipromosikan",
+  "scrollLeft": "Gulir ke kiri",
+  "scrollRight": "Gulir ke kanan",
+  "errors": {
+    "fetchVideos": "Gagal memuat video",
+    "loadVideos": "Gagal memuat video",
+    "loadShorts": "Gagal memuat Shorts"
+  },
+  "tabs": {
+    "all": "Semua",
+    "videos": "Video",
+    "shorts": "Shorts",
+    "videosCount": "Video ({{count}})",
+    "shortsCount": "Shorts ({{count}})"
+  },
+  "dateFilters": {
+    "all": "Sepanjang Waktu",
+    "today": "Hari Ini",
+    "week": "Minggu Ini",
+    "month": "Bulan Ini",
+    "justNow": "Baru saja"
+  },
+  "live": {
+    "title": "Sedang live",
+    "badge": "● LIVE"
+  },
+  "newFromFollowing": {
+    "aria": "Baru dari kreator yang kamu ikuti",
+    "shorts_other": "{{count}} Shorts"
+  },
+  "firstUploads": {
+    "title": "Unggahan Pertama"
+  },
+  "newVideos": {
+    "title": "Video Baru"
+  },
+  "home": {
+    "sections": {
+      "discover": "Jelajahi",
+      "home": "Feed Beranda",
+      "follow": "Feed Diikuti",
+      "new": "Konten Baru",
+      "interests": "Minat"
+    },
+    "empty": "Belum ada yang bisa ditampilkan di sini.",
+    "viewAll": "Lihat semua",
+    "dragToReorder": "Seret untuk mengatur urutan",
+    "surfTitle": "Channel Surfing: pilih topik dan tonton seperti TV",
+    "zapping": "Zapping"
+  },
+  "surf": {
+    "pageTitle": "Channel Surfing",
+    "intro": "Pilih channel dan bersantailah. Kami menyusun video terbaik tentang topik itu satu per satu. Bosan? Tekan <b>Zap</b>. Ingin yang lain? Ganti channel.",
+    "backTo": "Kembali ke CH {{number}} {{emoji}} {{title}}",
+    "surprise": "Kejutkan aku",
+    "yourChannels": "Channel-mu",
+    "nothingOnAir": "Tidak ada yang tayang di {{channel}} saat ini",
+    "tuneFailed": "Tidak dapat menyetel channel. Coba lagi sebentar lagi.",
+    "remoteAria": "Remote Channel Surfing",
+    "openGuide": "Buka panduan channel",
+    "ch": "CH {{number}}",
+    "chLabel": "CH",
+    "channelHint": "CH {{number}}: {{title}}",
+    "channelHintKey": "CH {{number}}: {{title}} ({{key}})",
+    "tuningShort": "Menyetel",
+    "tuning": "Menyetel…",
+    "onAir": "Tayang",
+    "changeChannel": "Ganti channel",
+    "nextChannel": "Channel berikutnya",
+    "prevChannel": "Channel sebelumnya",
+    "nextVideo": "Video berikutnya",
+    "nextVideoKey": "Video berikutnya (→)",
+    "zap": "Zap",
+    "findingNext": "Mencari yang berikutnya…",
+    "stop": "Berhenti surfing",
+    "stopTitle": "Berhenti surfing (video ini tetap diputar)",
+    "guide": "Panduan channel"
+  },
+  "discover": {
+    "searchPlaceholder": "Cari video, Shorts, audio, komunitas...",
+    "clearSearch": "Hapus pencarian",
+    "searchFor": "Cari “{{term}}”",
+    "noResultsFor": "Tidak ada hasil untuk “{{term}}”",
+    "types": {
+      "user": "Pengguna",
+      "community": "Komunitas",
+      "video": "Video",
+      "short": "Shorts",
+      "audio": "Audio",
+      "playlist": "Playlist"
+    },
+    "suggest": {
+      "tags": "Tag",
+      "titles": "Judul"
+    },
+    "dates": {
+      "today": "Hari ini",
+      "week": "Minggu ini",
+      "month": "Bulan ini",
+      "year": "Tahun ini"
+    },
+    "boostRecent": "Utamakan terbaru",
+    "filters": "Filter",
+    "date": "Tanggal",
+    "tag": "Tag",
+    "tagPlaceholder": "mis. crypto, gaming...",
+    "community": "Komunitas",
+    "communityPlaceholder": "Cari komunitas...",
+    "clearAllFilters": "Hapus semua filter",
+    "allHidden": "Semua jenis konten disembunyikan.",
+    "reenableFilters": "Aktifkan lagi semua filter",
+    "groupTitle": "{{label}} ({{count}})",
+    "subscribers_other": "{{count}} anggota",
+    "authors_other": "{{count}} penulis",
+    "views_other": "{{views}} tayangan"
+  }
+}

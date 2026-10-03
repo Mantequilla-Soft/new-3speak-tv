@@ -1,0 +1,101 @@
+{
+  "controls": {
+    "rewind10": "Mundur 10 dtk",
+    "forward10": "Maju 10 dtk",
+    "reactToMoment": "Beri reaksi pada momen ini",
+    "mute": "Bisukan",
+    "unmute": "Bunyikan",
+    "playerSize": "Ukuran pemutar: {{size}}",
+    "sizeStandard": "Standar",
+    "pip": "Picture-in-Picture",
+    "autoplayOn": "Putar otomatis: aktif",
+    "autoplayOff": "Putar otomatis: nonaktif",
+    "ambientSubtle": "Cahaya ambient: lembut",
+    "ambientVivid": "Cahaya ambient: terang",
+    "ambientOff": "Cahaya ambient: nonaktif",
+    "playbackSpeed": "Kecepatan putar",
+    "speedNormal": "Normal",
+    "quality": "Kualitas",
+    "qualityAuto": "Otomatis",
+    "fullscreen": "Layar penuh",
+    "exitFullscreen": "Keluar dari Layar Penuh",
+    "markerReplies_other": "({{count}} balasan)"
+  },
+  "subtitles": {
+    "title": "Subtitle",
+    "off": "Nonaktif",
+    "font": "Font",
+    "size": "Ukuran",
+    "textColor": "Warna Teks",
+    "textBorder": "Garis Tepi Teks",
+    "borderColor": "Warna Garis Tepi",
+    "background": "Latar",
+    "none": "Tidak ada",
+    "fonts": {
+      "sansSerif": "Sans-serif",
+      "serif": "Serif",
+      "monospace": "Monospace"
+    }
+  },
+  "mini": {
+    "untitled": "Video"
+  },
+  "playlist": {
+    "previous": "Video sebelumnya",
+    "next": "Video berikutnya",
+    "close": "Tutup playlist"
+  },
+  "overlay": {
+    "replay": "Putar ulang"
+  },
+  "reactions": {
+    "translation": "Terjemahan",
+    "translationFailed": "Terjemahan gagal",
+    "videoReaction": "Reaksi Video",
+    "comment": "Komentar",
+    "previous": "Sebelumnya",
+    "next": "Berikutnya",
+    "hide": "Sembunyikan reaksi",
+    "hideShort": "Sembunyikan",
+    "loadingReplies": "Memuat balasan...",
+    "sizeTitle": "Ukuran: {{size}}",
+    "sizes": {
+      "small": "K",
+      "medium": "S",
+      "standard": "Std",
+      "big": "Besar",
+      "cinema": "Bioskop"
+    },
+    "sizeNames": {
+      "small": "Kecil",
+      "medium": "Sedang",
+      "standard": "Standar",
+      "big": "Besar",
+      "cinema": "Bioskop"
+    }
+  },
+  "reactionUpload": {
+    "authorized": "@threespeak sudah diberi izin — sekarang kamu bisa memposting reaksimu",
+    "authFailed": "Otorisasi gagal. Silakan coba lagi.",
+    "webcamDenied": "Webcam tidak dapat diakses",
+    "shortTooLong": "Shorts maksimal {{max}}. Hapus centang \"Tampilkan di 3Speak Shorts\" atau gunakan video yang lebih pendek.",
+    "uploadingVideo": "Mengunggah video...",
+    "noEmbedUrl": "Unggahan berhasil, tetapi tidak ada URL embed yang dikembalikan",
+    "publishingComment": "Menerbitkan komentar...",
+    "posted": "Reaksi video terkirim!",
+    "postFailed": "Gagal memposting komentar",
+    "uploadFailed": "Gagal mengunggah",
+    "uploadVideo": "Unggah Video",
+    "recordVideo": "Rekam Video",
+    "startRecording": "Mulai Merekam",
+    "stopRecording": "Berhenti Merekam",
+    "recordedVideo": "Video rekaman",
+    "descriptionPlaceholder": "Tambahkan deskripsi untuk reaksi videomu...",
+    "showInShorts": "Tampilkan di 3Speak Shorts",
+    "authNote": "Izinkan <b>@threespeak</b> memposting reaksimu atas namamu.",
+    "authorizing": "Memberi izin…",
+    "authorize": "Beri izin @threespeak",
+    "uploading": "Mengunggah...",
+    "postReaction": "Posting Reaksi"
+  }
+}

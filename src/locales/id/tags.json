@@ -1,0 +1,43 @@
+{
+  "labels": {
+    "tech-science": "Teknologi & Sains",
+    "technology": "Teknologi",
+    "education": "Pendidikan",
+    "science": "Sains",
+    "programming": "Pemrograman",
+    "crypto-finance": "Kripto & Keuangan",
+    "cryptocurrency": "Mata Uang Kripto",
+    "finance": "Keuangan",
+    "business": "Bisnis",
+    "entertainment": "Hiburan",
+    "music": "Musik",
+    "gaming": "Gaming",
+    "film-tv": "Film & TV",
+    "lifestyle": "Gaya Hidup",
+    "vlog": "Vlog",
+    "comedy": "Komedi",
+    "story-time": "Cerita",
+    "commercial": "Komersial",
+    "arts-diy": "Seni & DIY",
+    "art": "Seni",
+    "diy-crafts": "DIY & Kerajinan",
+    "photography": "Fotografi",
+    "food-outdoor": "Kuliner & Alam Bebas",
+    "nature": "Alam",
+    "travel": "Traveling",
+    "food": "Kuliner",
+    "pets": "Hewan Peliharaan",
+    "gardening": "Berkebun",
+    "sports-health": "Olahraga & Kesehatan",
+    "sports": "Olahraga",
+    "health": "Kesehatan",
+    "fitness": "Kebugaran",
+    "life-society": "Kehidupan & Masyarakat",
+    "news": "Berita",
+    "spirituality": "Spiritualitas",
+    "politics": "Politik"
+  },
+  "display": {
+    "cryptocurrency": "kripto"
+  }
+}
