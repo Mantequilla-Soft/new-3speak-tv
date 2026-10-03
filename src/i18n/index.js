@@ -148,10 +148,16 @@ export const getEnglishResources = () => bundle(english);
 const loadedLanguages = new Set();
 async function loadLanguage(code) {
   if (code === DEFAULT_LANGUAGE || loadedLanguages.has(code)) return;
-  const [files, overlay] = await Promise.all([loadBundled(code), fetchOverlay(code)]);
+  // The editor overlay never blocks a language: it is fetched alongside and laid on
+  // top when it arrives (react re-renders on 'added', see init). Only a language
+  // with no bundled files at all (community-only) waits for it, since the overlay
+  // IS that language.
+  const overlay = fetchOverlay(code);
+  const files = await loadBundled(code);
   i18n.addResourceBundle(code, 'translation', files, true, true);
-  applyOverlay(code, overlay);
   loadedLanguages.add(code);
+  if (Object.keys(files).length) overlay.then((o) => applyOverlay(code, o));
+  else applyOverlay(code, await overlay);
 }
 
 /**
@@ -217,7 +223,8 @@ i18n.use(initReactI18next).init({
   // A missing key in a half-finished translation falls back to English, never to
   // an empty string.
   returnEmptyString: false,
-  react: { useSuspense: false },
+  // 'added': strings that arrive later (the editor overlay) re-render what is on screen.
+  react: { useSuspense: false, bindI18nStore: 'added' },
 });
 
 i18n.on('languageChanged', applyDocumentLanguage);
@@ -239,14 +246,17 @@ export async function setLanguage(code, { remember = true } = {}) {
   }
 }
 
-/** Start in the stored or browser language. English renders until it has loaded. */
+/**
+ * Start in the stored or browser language. Resolves once that language is ready
+ * (immediately for English); main.jsx holds the first render on it, capped, so a
+ * non-English visitor never sees an English first frame.
+ */
 export function initLanguage() {
   const code = initialLanguage();
   applyDocumentLanguage(DEFAULT_LANGUAGE);
   loadCommunityLanguages();
-  if (code !== DEFAULT_LANGUAGE) {
-    setLanguage(code, { remember: false }).catch(() => { /* stay in English */ });
-  }
+  if (code === DEFAULT_LANGUAGE) return Promise.resolve();
+  return setLanguage(code, { remember: false }).catch(() => { /* stay in English */ });
 }
 
 export const getLanguage = () => i18n.resolvedLanguage || i18n.language || DEFAULT_LANGUAGE;

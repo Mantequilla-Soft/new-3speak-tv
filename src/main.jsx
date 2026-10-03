@@ -26,11 +26,10 @@ if (import.meta.env.DEV && typeof navigator !== 'undefined' && 'serviceWorker' i
   }
 }
 
-// Interface language: the saved choice, else the browser's, else English. Runs
-// before first render so the app paints in English and swaps the moment the
-// chosen language's strings arrive (see src/i18n).
+// Interface language: the saved choice, else the browser's, else English. Starts
+// loading here; boot() below waits for it (capped), see src/i18n.
 import { initLanguage } from './i18n';
-initLanguage();
+const languageReady = initLanguage();
 
 // Pick the healthy Hive RPC node for this session as early as possible.
 import { ensureHealthyNode } from './utils/hiveNode';
@@ -131,4 +130,8 @@ const boot = () => createRoot(document.getElementById('root')).render(
 // resolved value at USE time and `ensurePlayerUrl()` is idempotent + cached, so the
 // watch page can await it where it actually matters.
 ensurePlayerUrl();
-boot();
+// Hold the first render until the visitor's language has loaded, so a non-English
+// visitor never sees an English first frame. English resolves at once. Capped: a
+// slow or failed language download renders in English and swaps when it lands,
+// never a blank page.
+Promise.race([languageReady, new Promise((r) => setTimeout(r, 1500))]).finally(boot);
