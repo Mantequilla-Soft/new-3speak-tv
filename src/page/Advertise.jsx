@@ -1619,7 +1619,12 @@ function TickerPanel({ reference, account, productName, format = null, onCreativ
   const needs = tickerMinSeconds(message, spec);
   const tooSlowToRead = needs > maxSeconds;
   const linkOk = /^https:\/\/[^\s/]+\.[^\s]+/i.test(link.trim());
-  const canSave = length > 0 && length <= maxChars && !tooSlowToRead && linkOk && !busy;
+  // What is in the form is already saved as-is. The form is NOT cleared after a save
+  // (an empty form right after pressing Save read as "it lost my ticker"), so this is
+  // what tells the advertiser it went through; any edit makes it savable again.
+  const alreadySaved = saved.some((c) => c.message === message.trim()
+    && c.clickUrl === link.trim() && (c.tickerStyle || 'crawl') === tickerStyle);
+  const canSave = length > 0 && length <= maxChars && !tooSlowToRead && linkOk && !busy && !alreadySaved;
 
   async function onSave() {
     if (!canSave) return;
@@ -1627,7 +1632,6 @@ function TickerPanel({ reference, account, productName, format = null, onCreativ
     try {
       await saveTickerCreative({ reference, message: message.trim(), clickUrl: link.trim(), style: tickerStyle });
       toast.success('Ticker saved. We will review it before it runs');
-      setMessage('');
       refresh();
     } catch (err) {
       setError(err.message || 'Could not save the ticker');
@@ -1700,7 +1704,7 @@ function TickerPanel({ reference, account, productName, format = null, onCreativ
 
       <div className="mkt-upload-row">
         <button type="button" className="mkt-outline" disabled={!canSave} onClick={onSave}>
-          {busy ? 'Saving…' : 'Save ticker'}
+          {busy ? 'Saving…' : (alreadySaved ? 'Saved' : 'Save ticker')}
         </button>
       </div>
       {error ? <p className="mkt-upload-error">{error}</p> : null}
