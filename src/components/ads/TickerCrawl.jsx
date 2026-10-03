@@ -19,9 +19,10 @@ import './TickerCrawl.scss';
  * is cut with an ellipsis instead.
  *
  * Two styles. 'crawl' crosses once. 'hold' eases in from the right, spends the middle
- * 60% of the time readable, then slides out to the left. A line that FITS the bar
+ * 60% of the time readable, then eases out to the left. A line that FITS the bar
  * stops centred; a longer one (a long message on a phone) comes to rest with its start
- * just inside the left edge and pans slowly until its end is in view. So it is
+ * just inside the left edge, pans slowly until its end is in view and rests there a
+ * moment before leaving (timings in TickerCrawl.scss). So it is
  * measured here, and re-measured when the strip changes size. Same booked seconds
  * either way.
  *

@@ -94,10 +94,13 @@
   to { transform: translateX(-100%); }
 }
 
-/* 'hold': eases in from the right edge, readable for the middle 60% (still when it fits,
-   a slow pan when it does not), out past the left edge. Positions are measured in px
-   by the component. The entry eases out, so it arrives quickly and settles; the rest is
-   linear, so the pan reads at an even pace. */
+/* 'hold', in four parts of the booked time:
+     0-20%   eases in from the right edge (fast, then settles),
+     20-70%  a slow even pan from its start to its end (no movement when it fits,
+             because start and end are then the same centred spot),
+     70-80%  rests with its end in view,
+     80-100% eases out past the left edge (gathers speed as it goes).
+   Positions are measured in px by the component. */
 .ticker-track.is-hold {
   padding-left: 0;
   animation-name: ticker-hold;
@@ -106,7 +109,8 @@
 @keyframes ticker-hold {
   0% { transform: translateX(var(--ticker-from)); animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1); }
   20% { transform: translateX(var(--ticker-start)); animation-timing-function: linear; }
-  80% { transform: translateX(var(--ticker-end)); animation-timing-function: linear; }
+  70% { transform: translateX(var(--ticker-end)); animation-timing-function: linear; }
+  80% { transform: translateX(var(--ticker-end)); animation-timing-function: cubic-bezier(0.64, 0, 0.78, 0); }
   100% { transform: translateX(var(--ticker-to)); }
 }
 
