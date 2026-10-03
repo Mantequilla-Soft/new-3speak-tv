@@ -2,36 +2,44 @@
 // serve the pre-aggregated `leaderboard` collection (one row per window+user,
 // carrying all five metrics).
 import { CHECKER_URL } from '../utils/config';
+import { t, formatNumber } from '../i18n';
+
+// labelKey / blurbKey are i18n keys: translate at render (t(m.labelKey)).
 
 export const WINDOWS = [
-  { id: '7d', label: '7 days' },
-  { id: '30d', label: '30 days' },
-  { id: '365d', label: 'Year' },
-  { id: 'all', label: 'All time' },
+  { id: '7d', labelKey: 'misc.leaderboard.windows.7d' },
+  { id: '30d', labelKey: 'misc.leaderboard.windows.30d' },
+  { id: '365d', labelKey: 'misc.leaderboard.windows.365d' },
+  { id: 'all', labelKey: 'misc.leaderboard.windows.all' },
 ];
 
 // `watch` metrics are only tracked from the checker's WATCH_TRACKED_SINCE date;
 // the board response flags that per metric via partial_watch_data.
 export const METRICS = [
-  { id: 'video_uploads', label: 'Videos', unit: 'count', group: 'Video', blurb: 'Videos uploaded' },
-  { id: 'short_uploads', label: 'Shorts', unit: 'count', group: 'Video', blurb: 'Shorts uploaded' },
-  { id: 'video_watch_secs', label: 'Video watch time', unit: 'duration', group: 'Video', blurb: 'Seconds their videos were watched' },
-  { id: 'short_watch_secs', label: 'Shorts watch time', unit: 'duration', group: 'Video', blurb: 'Seconds their shorts were watched' },
-  { id: 'tags_given', label: 'Tags', unit: 'count', group: 'Video', blurb: 'Tags given to other videos' },
+  { id: 'video_uploads', labelKey: 'misc.leaderboard.metrics.video_uploads', unit: 'count', group: 'Video', blurbKey: 'misc.leaderboard.blurbs.video_uploads' },
+  { id: 'short_uploads', labelKey: 'misc.leaderboard.metrics.short_uploads', unit: 'count', group: 'Video', blurbKey: 'misc.leaderboard.blurbs.short_uploads' },
+  { id: 'video_watch_secs', labelKey: 'misc.leaderboard.metrics.video_watch_secs', unit: 'duration', group: 'Video', blurbKey: 'misc.leaderboard.blurbs.video_watch_secs' },
+  { id: 'short_watch_secs', labelKey: 'misc.leaderboard.metrics.short_watch_secs', unit: 'duration', group: 'Video', blurbKey: 'misc.leaderboard.blurbs.short_watch_secs' },
+  { id: 'tags_given', labelKey: 'misc.leaderboard.metrics.tags_given', unit: 'count', group: 'Video', blurbKey: 'misc.leaderboard.blurbs.tags_given' },
   // Livestream + boosts. Populated once the stream service calls the checker's
   // /stream-stats/* endpoints; until then these boards read empty (all zeros).
-  { id: 'streams', label: 'Streams', unit: 'count', group: 'Streaming', blurb: 'Stream sessions started' },
-  { id: 'stream_secs', label: 'Time live', unit: 'duration', group: 'Streaming', blurb: 'Total time live (ended streams only)' },
-  { id: 'stream_peak_viewers', label: 'Peak viewers', unit: 'count', group: 'Streaming', blurb: 'Best concurrent viewers (a high-water mark, not a sum)' },
-  { id: 'stream_viewers', label: 'Viewer joins', unit: 'count', group: 'Streaming', blurb: 'Viewer-join events (volume, not unique reach)' },
-  { id: 'boosts_received', label: 'Boosts received', unit: 'count', group: 'Streaming', blurb: 'Boosts sent to their streams' },
-  { id: 'boost_amount_received', label: 'Amount received', unit: 'amount', group: 'Streaming', blurb: 'Summed amount of boosts received' },
-  { id: 'boosts_given', label: 'Boosts given', unit: 'count', group: 'Streaming', blurb: 'Boosts they sent to other streamers' },
-  { id: 'boost_amount_given', label: 'Amount given', unit: 'amount', group: 'Streaming', blurb: 'Summed amount of boosts they gave' },
+  { id: 'streams', labelKey: 'misc.leaderboard.metrics.streams', unit: 'count', group: 'Streaming', blurbKey: 'misc.leaderboard.blurbs.streams' },
+  { id: 'stream_secs', labelKey: 'misc.leaderboard.metrics.stream_secs', unit: 'duration', group: 'Streaming', blurbKey: 'misc.leaderboard.blurbs.stream_secs' },
+  { id: 'stream_peak_viewers', labelKey: 'misc.leaderboard.metrics.stream_peak_viewers', unit: 'count', group: 'Streaming', blurbKey: 'misc.leaderboard.blurbs.stream_peak_viewers' },
+  { id: 'stream_viewers', labelKey: 'misc.leaderboard.metrics.stream_viewers', unit: 'count', group: 'Streaming', blurbKey: 'misc.leaderboard.blurbs.stream_viewers' },
+  { id: 'boosts_received', labelKey: 'misc.leaderboard.metrics.boosts_received', unit: 'count', group: 'Streaming', blurbKey: 'misc.leaderboard.blurbs.boosts_received' },
+  { id: 'boost_amount_received', labelKey: 'misc.leaderboard.metrics.boost_amount_received', unit: 'amount', group: 'Streaming', blurbKey: 'misc.leaderboard.blurbs.boost_amount_received' },
+  { id: 'boosts_given', labelKey: 'misc.leaderboard.metrics.boosts_given', unit: 'count', group: 'Streaming', blurbKey: 'misc.leaderboard.blurbs.boosts_given' },
+  { id: 'boost_amount_given', labelKey: 'misc.leaderboard.metrics.boost_amount_given', unit: 'amount', group: 'Streaming', blurbKey: 'misc.leaderboard.blurbs.boost_amount_given' },
 ];
 
 // Metric groups, in tab order. Drives the grouped metric selector on the board.
 export const METRIC_GROUPS = ['Video', 'Streaming'];
+// Group ids above are compared against METRICS[].group; display via these keys.
+export const METRIC_GROUP_LABEL_KEYS = {
+  Video: 'misc.leaderboard.groups.video',
+  Streaming: 'misc.leaderboard.groups.streaming',
+};
 
 // The metric tabs are the SAME list whether or not a topic is selected — the
 // labels must never change under the user. The four content metrics exist on
@@ -101,12 +109,13 @@ export function fetchLeaderboardBadges(username) {
 // Only overrides — anything not listed falls back to the metric's own label in
 // METRICS above. These five are shortened because the board label is too long
 // for a header chip ("Video watch time" → "Watched").
+// Values are i18n keys.
 const BADGE_NOUNS = {
-  video_uploads: 'Videos',
-  short_uploads: 'Shorts',
-  video_watch_secs: 'Watched',
-  short_watch_secs: 'Shorts Watched',
-  tags_given: 'Tagger',
+  video_uploads: 'misc.leaderboard.badgeNouns.video_uploads',
+  short_uploads: 'misc.leaderboard.badgeNouns.short_uploads',
+  video_watch_secs: 'misc.leaderboard.badgeNouns.video_watch_secs',
+  short_watch_secs: 'misc.leaderboard.badgeNouns.short_watch_secs',
+  tags_given: 'misc.leaderboard.badgeNouns.tags_given',
 };
 
 // "Top 100" is too easy to earn to be worth a badge (a few uploads gets you
@@ -135,13 +144,18 @@ export function badgeLabel(badge) {
   // Fall back to the metric's board label, NOT the raw id — a metric added to
   // the checker without a noun here used to render as "#1 stream_peak_viewers".
   const metric = METRICS.find((m) => m.id === badge.metric);
-  return `${badge.tier_label} ${BADGE_NOUNS[badge.metric] || metric?.label || badge.metric}`;
+  const noun = BADGE_NOUNS[badge.metric] ? t(BADGE_NOUNS[badge.metric]) : metric ? t(metric.labelKey) : badge.metric;
+  return t('misc.leaderboard.badgeLabel', { tier: badge.tier_label, noun });
 }
 
 export function badgeTitle(badge) {
   const w = WINDOWS.find((x) => x.id === badge.window);
-  const scope = badge.window === 'all' ? 'all time' : `the last ${w ? w.label.toLowerCase() : badge.window}`;
-  return `Ranked #${badge.rank} for ${metricById(badge.metric).blurb.toLowerCase()} over ${scope}`;
+  // The *InSentence keys are the mid-sentence forms (lower case in English, but a
+  // translator decides: German keeps nouns capitalised). Never lowercase in code.
+  const what = t(`misc.leaderboard.blurbsInSentence.${metricById(badge.metric).id}`);
+  if (badge.window === 'all') return t('misc.leaderboard.badgeTitleAllTime', { rank: badge.rank, what });
+  const windowLabel = w ? t(`misc.leaderboard.windowsInSentence.${w.id}`) : badge.window;
+  return t('misc.leaderboard.badgeTitleWindow', { rank: badge.rank, what, window: windowLabel });
 }
 
 // Strongest first, capped — a profile shows a highlight reel, not a résumé.
@@ -158,12 +172,12 @@ export function formatDuration(secs) {
   const h = Math.floor(s / 3600);
   const m = Math.floor((s % 3600) / 60);
   const sec = s % 60;
-  if (h > 0) return `${h}h ${m}m`;
-  if (m > 0) return `${m}m ${sec}s`;
-  return `${sec}s`;
+  if (h > 0) return t('misc.duration.hoursMinutes', { h, m });
+  if (m > 0) return t('misc.duration.minutesSeconds', { m, s: sec });
+  return t('misc.duration.seconds', { s: sec });
 }
 
 export function formatMetric(value, unit) {
   if (unit === 'duration') return formatDuration(value);
-  return Number(value || 0).toLocaleString();
+  return formatNumber(value);
 }

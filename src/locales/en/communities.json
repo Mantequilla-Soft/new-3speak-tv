@@ -3,8 +3,8 @@
     "sortBy": "Sort by",
     "ascending": "Sort ascending",
     "descending": "Sort descending",
-    "highestFirst": "Highest {{label}} first",
-    "lowestFirst": "Lowest {{label}} first"
+    "highestFirst": "{{label}}: highest first",
+    "lowestFirst": "{{label}}: lowest first"
   },
   "tags": {
     "loginToUpload": "Login to upload video"

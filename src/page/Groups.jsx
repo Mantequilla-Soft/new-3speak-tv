@@ -1,6 +1,7 @@
 import { Suspense, lazy } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
+import { useTranslation } from 'react-i18next';
 import './Groups.scss';
 
 const CommunitiesRender = lazy(() => import('../components/Communities/CommunitiesRender'));
@@ -14,14 +15,15 @@ const BadgesRender = lazy(() => import('../components/Badges/BadgesRender'));
 // Collectives will join these once they exist. Not listed until then: a tab
 // that only announces itself is a dead end for anyone who clicks it.
 const TABS = [
-  { id: 'communities', label: 'Communities' },
-  { id: 'badges', label: 'Badges' },
+  { id: 'communities', labelKey: 'common.nav.communities' },
+  { id: 'badges', labelKey: 'misc.groups.badges' },
 ];
 
 export default function Groups() {
+  const { t } = useTranslation();
   const [params, setParams] = useSearchParams();
   const requested = params.get('tab');
-  const tab = TABS.some((t) => t.id === requested) ? requested : 'communities';
+  const tab = TABS.some((item) => item.id === requested) ? requested : 'communities';
 
   // In the URL rather than in state, so a tab can be linked to and so the old
   // /communities and /badges addresses can land on the right one.
@@ -36,25 +38,25 @@ export default function Groups() {
   return (
     <div className="groups-page">
       <Helmet>
-        <title>{`3S | Groups`}</title>
+        <title>{`3S | ${t('misc.groups.title')}`}</title>
       </Helmet>
 
       <header className="groups-head">
-        <h1>Groups</h1>
-        <p>The communities you can join and the badges people hold, in one place.</p>
+        <h1>{t('misc.groups.title')}</h1>
+        <p>{t('misc.groups.subtitle')}</p>
       </header>
 
-      <div className="groups-tabs" role="tablist" aria-label="Groups">
-        {TABS.map((t) => (
+      <div className="groups-tabs" role="tablist" aria-label={t('misc.groups.title')}>
+        {TABS.map((item) => (
           <button
-            key={t.id}
+            key={item.id}
             type="button"
             role="tab"
-            aria-selected={tab === t.id}
-            className={`groups-tab${tab === t.id ? ' is-active' : ''}`}
-            onClick={() => select(t.id)}
+            aria-selected={tab === item.id}
+            className={`groups-tab${tab === item.id ? ' is-active' : ''}`}
+            onClick={() => select(item.id)}
           >
-            {t.label}
+            {t(item.labelKey)}
           </button>
         ))}
       </div>

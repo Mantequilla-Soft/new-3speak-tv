@@ -6,7 +6,7 @@ import { LANGUAGES, LANGUAGE_CODES, DEFAULT_LANGUAGE, getLanguageInfo } from './
  * Interface translations.
  *
  * Strings live in src/locales/<lang>/<area>.json. Each file becomes one top-level
- * key, so `src/locales/en/watch.json` → `t('watch.someKey')`. Splitting by area
+ * key, so `src/locales/en/watch.json` → `t('watch.<key>')`. Splitting by area
  * keeps every file small enough to review in a pull request, which is how people
  * contribute translations (TRANSLATING.md).
  *

@@ -1,3 +1,5 @@
+import { getLanguage } from '../i18n';
+
 const API_URL_FROM_WEST = import.meta.env.VITE_API_URL_FROM_WEST;
 const VIDEO_CDN_DOMAIN = import.meta.env.VITE_APP_VIDEO_CDN_DOMAIN;
 const UPLOAD_TOKEN = import.meta.env.VITE_UPLOAD_TOKEN;
@@ -64,10 +66,11 @@ const FIRST_UPLOADS_URL = `${CHECKER_URL}/feeds/firstUploads`;
 const SHORTS_MAX_DURATION_SEC = parseInt(import.meta.env.VITE_SHORTS_MAX_DURATION_SEC, 10) || 120;
 
 /** "2 minutes" / "90 seconds" — for hint + error copy. */
+// Localised via Intl unit formatting (current interface language).
 const shortsMaxDurationLabel = () => (
   SHORTS_MAX_DURATION_SEC % 60 === 0
-    ? `${SHORTS_MAX_DURATION_SEC / 60} minute${SHORTS_MAX_DURATION_SEC === 60 ? '' : 's'}`
-    : `${SHORTS_MAX_DURATION_SEC} seconds`
+    ? new Intl.NumberFormat(getLanguage(), { style: 'unit', unit: 'minute', unitDisplay: 'long' }).format(SHORTS_MAX_DURATION_SEC / 60)
+    : new Intl.NumberFormat(getLanguage(), { style: 'unit', unit: 'second', unitDisplay: 'long' }).format(SHORTS_MAX_DURATION_SEC)
 );
 
 const SHORTS_STORIES_URL = `${CHECKER_URL}/shorts/stories`;

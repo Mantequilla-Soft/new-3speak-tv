@@ -34,14 +34,6 @@ const toast = toastIn('Playlist');
 
 dayjs.extend(relativeTime);
 
-// utils/dateFilters labels are English; translated here by key at render.
-const DATE_FILTER_KEYS = {
-  all: 'playlists.view.dateFilters.all',
-  today: 'playlists.view.dateFilters.today',
-  week: 'playlists.view.dateFilters.week',
-  month: 'playlists.view.dateFilters.month',
-};
-
 /**
  * Fetch video data from Hive for a list of playlist items
  */
@@ -590,7 +582,7 @@ function PlaylistView() {
               className={`date-filter-btn ${dateFilter === f.key ? 'active' : ''}`}
               onClick={() => setDateFilter(f.key)}
             >
-              {f.labelKey ? t(f.labelKey) : DATE_FILTER_KEYS[f.key] ? t(DATE_FILTER_KEYS[f.key]) : f.label}
+              {t(f.labelKey)}
             </button>
           ))}
         </div>

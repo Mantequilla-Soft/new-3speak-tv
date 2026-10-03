@@ -1,6 +1,7 @@
 import { getAccounts } from '../hive-api/hiveApi';
 import { broadcastWithAioha, KeyTypes } from '../hive-api/aioha';
 import { getTagLabel as getTagLabelV2, isKnownTag as isKnownTagV2 } from './tagsV2';
+import { t as translate } from '../i18n';
 
 // The selectable interest taxonomy — mirrors the tags the transcription/subtitles
 // pipeline assigns to videos (the distinct set in the checker's `subtitles-tags`
@@ -32,13 +33,14 @@ const INTEREST_ID_SET = new Set(INTEREST_IDS);
 
 // Short display names for raw tag ids (e.g. the watch-page topic row shows the
 // bare tag, not the INTERESTS label). Keeps display in sync with the labels.
-const TAG_DISPLAY = { cryptocurrency: 'crypto' };
+// Values are i18n keys (translated at call time).
+const TAG_DISPLAY = { cryptocurrency: 'tags.display.cryptocurrency' };
 export const displayTag = (id) => {
   const t = String(id || '').toLowerCase();
   // v1 display names first (curated), then the v2 taxonomy so its slugs render
   // as proper labels ("food-outdoor" → "Food & Outdoors", "story-time" → "Story
   // Time") instead of leaking raw slugs into the UI, then the raw value.
-  if (TAG_DISPLAY[t]) return TAG_DISPLAY[t];
+  if (TAG_DISPLAY[t]) return translate(TAG_DISPLAY[t]);
   if (isKnownTagV2(t)) return getTagLabelV2(t);
   return t;
 };

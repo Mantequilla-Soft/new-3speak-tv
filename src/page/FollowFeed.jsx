@@ -13,6 +13,7 @@ import useViewCounts from "../hooks/useViewCounts";
 import { useAppStore } from "../lib/store";
 import PullToRefresh from "../components/PullToRefresh/PullToRefresh";
 import { TrendingIcon } from "../components/FeedIcons";
+import { useTranslation } from "react-i18next";
 
 const LIMIT = 50;
 
@@ -25,6 +26,7 @@ const fetchVideos = async ({ pageParam = 1 }, username) => {
 };
 
 const FollowFeed = () => {
+  const { t } = useTranslation();
   const { user, showNsfw, hideWatched } = useAppStore();
   const incubationHandle = useAppStore((s) => s.incubationHandle);
   // Whose follows this feed is of. A handle is not a Hive account, but the
@@ -83,7 +85,7 @@ const FollowFeed = () => {
     <div className="firstupload-container">
       <div className="feed-page-header">
         <TrendingIcon />
-        <h2>Follow Feed</h2>
+        <h2>{t('misc.followFeed.title')}</h2>
       </div>
 
       {isLoading ? (
@@ -92,10 +94,10 @@ const FollowFeed = () => {
         <Card3 videos={[...liveStreams, ...videos]} loading={isFetchingNextPage} getContentForVideo={getContentForVideo} isWatched={isWatched} getViewCount={getViewCount} />
       )}
 
-      {isError && <p>Error fetching videos</p>}
+      {isError && <p>{t('misc.followFeed.error')}</p>}
 
       {isFetchingNextPage && (
-        <p style={{ textAlign: "center" }}>Loading more...</p>
+        <p style={{ textAlign: "center" }}>{t('feeds.loadingMore')}</p>
       )}
     </div>
     </PullToRefresh>

@@ -5,8 +5,10 @@
 import React, { useState, useRef } from 'react';
 import './HiveImageUploader.scss';
 import { uploadThumbnail } from '../utils/uploadThumbnail';
+import { useTranslation } from 'react-i18next';
 
 const HiveImageUploader = () => {
+  const { t } = useTranslation();
   const [selectedImage, setSelectedImage] = useState(null);
   const [preview, setPreview] = useState(null);
   const [uploading, setUploading] = useState(false);
@@ -20,11 +22,11 @@ const HiveImageUploader = () => {
     if (!file) return;
 
     if (!file.type.startsWith('image/')) {
-      setError('Please select a valid image file');
+      setError(t('posts.imageUploader.invalidFile'));
       return;
     }
     if (file.size > 10 * 1024 * 1024) {
-      setError('Image size must be less than 10MB');
+      setError(t('posts.imageUploader.tooLarge'));
       return;
     }
 
@@ -40,7 +42,7 @@ const HiveImageUploader = () => {
   // Upload via the @threespeak-backed image pipeline
   const handleUpload = async () => {
     if (!selectedImage) {
-      setError('Please select an image first');
+      setError(t('posts.imageUploader.selectFirst'));
       return;
     }
 
@@ -52,7 +54,7 @@ const HiveImageUploader = () => {
       setUploadedUrl(url);
       setError('');
     } catch (err) {
-      setError(err?.message || 'Upload failed');
+      setError(err?.message || t('posts.imageUploader.uploadFailed'));
     } finally {
       setUploading(false);
     }
@@ -60,7 +62,7 @@ const HiveImageUploader = () => {
 
   const copyToClipboard = () => {
     navigator.clipboard.writeText(uploadedUrl);
-    alert('URL copied to clipboard!');
+    alert(t('posts.imageUploader.urlCopied'));
   };
 
   const handleReset = () => {
@@ -74,7 +76,7 @@ const HiveImageUploader = () => {
   return (
     <div className="hive-image-uploader">
       <div className="uploader-container">
-        <h2>Hive Image Uploader</h2>
+        <h2>{t('posts.imageUploader.title')}</h2>
 
         {/* File Upload Section */}
         <div className="upload-section">
@@ -83,14 +85,14 @@ const HiveImageUploader = () => {
             onClick={() => fileInputRef.current?.click()}
           >
             {preview ? (
-              <img src={preview} alt="Preview" className="preview-image" />
+              <img src={preview} alt={t('posts.imageUploader.previewAlt')} className="preview-image" />
             ) : (
               <div className="drop-zone-content">
                 <svg className="upload-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
                 </svg>
-                <p>Click to select an image</p>
-                <span>PNG, JPG, GIF up to 10MB</span>
+                <p>{t('posts.imageUploader.clickToSelect')}</p>
+                <span>{t('posts.imageUploader.formats')}</span>
               </div>
             )}
           </div>
@@ -130,16 +132,16 @@ const HiveImageUploader = () => {
             {uploading ? (
               <>
                 <span className="spinner"></span>
-                Uploading...
+                {t('posts.imageUploader.uploading')}
               </>
             ) : (
-              'Upload Image'
+              t('posts.imageUploader.upload')
             )}
           </button>
 
           {selectedImage && (
             <button className="btn btn-secondary" onClick={handleReset}>
-              Reset
+              {t('common.actions.reset')}
             </button>
           )}
         </div>
@@ -148,7 +150,7 @@ const HiveImageUploader = () => {
         {uploadedUrl && (
           <div className="success-section">
             <div className="success-message">
-              <span>✅</span> Image uploaded successfully!
+              <span>✅</span> {t('posts.imageUploader.success')}
             </div>
             <div className="url-display">
               <input
@@ -158,11 +160,11 @@ const HiveImageUploader = () => {
                 className="url-input"
               />
               <button className="btn btn-copy" onClick={copyToClipboard}>
-                Copy
+                {t('common.actions.copy')}
               </button>
             </div>
             <div className="uploaded-preview">
-              <img src={uploadedUrl} alt="Uploaded" />
+              <img src={uploadedUrl} alt={t('posts.imageUploader.uploadedAlt')} />
             </div>
           </div>
         )}

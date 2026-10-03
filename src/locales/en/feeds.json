@@ -19,7 +19,8 @@
     "all": "All Time",
     "today": "Today",
     "week": "This Week",
-    "month": "This Month"
+    "month": "This Month",
+    "justNow": "Just now"
   },
   "live": {
     "title": "Live now",

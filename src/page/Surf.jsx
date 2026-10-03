@@ -5,7 +5,7 @@ import { useAppStore } from '../lib/store';
 import { TAG_CATEGORIES } from '../utils/tagsV2';
 import { toastIn } from '../utils/toast';
 import {
-  CHANNELS, getChannel, channelNumber, channelTitle, findNextOnChannel, loadLastChannel, surfUrl,
+  CHANNELS, getChannel, channelLabel, channelNumber, channelTitle, findNextOnChannel, loadLastChannel, surfUrl,
 } from '../utils/surf';
 import { useTranslation, Trans } from 'react-i18next';
 import './Surf.scss';
@@ -36,7 +36,7 @@ function Surf() {
     try {
       const video = await findNextOnChannel(slug);
       if (!video) {
-        toast(t('feeds.surf.nothingOnAir', { channel: getChannel(slug)?.label || slug }));
+        toast(t('feeds.surf.nothingOnAir', { channel: channelLabel(getChannel(slug)) || slug }));
         return;
       }
       navigate(surfUrl(video, slug));
@@ -106,7 +106,7 @@ function Surf() {
 
       {TAG_CATEGORIES.map((cat) => (
         <section className="surf-section" key={cat.slug}>
-          <h2><span aria-hidden="true">{cat.emoji}</span> {cat.label}</h2>
+          <h2><span aria-hidden="true">{cat.emoji}</span> {t(cat.labelKey)}</h2>
           <div className="surf-grid">
             {[cat.slug, ...cat.topics.map((topic) => topic.slug)].map((slug) => tile(getChannel(slug)))}
           </div>

@@ -102,7 +102,7 @@ export default function ShareChooserModal({ open, url, title, embed, onClose, on
                   aria-pressed={size === s.id}
                   onClick={() => setSize(s.id)}
                 >
-                  {s.label}
+                  {s.labelKey ? t(s.labelKey) : s.label}
                 </button>
               ))}
             </div>

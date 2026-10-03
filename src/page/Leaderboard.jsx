@@ -9,6 +9,7 @@ import {
   WINDOWS,
   METRICS,
   METRIC_GROUPS,
+  METRIC_GROUP_LABEL_KEYS,
   DEFAULT_WINDOW,
   DEFAULT_METRIC,
   metricSupportsTopics,
@@ -62,7 +63,7 @@ function Podium({ entries, metric, focusUser }) {
           <span className="lb-podium-avatar-empty" />
           <span className="lb-podium-user">{t('badges.leaderboard.unclaimed')}</span>
           <span className="lb-podium-value">—</span>
-          <span className="lb-podium-metric">{metric.label}</span>
+          <span className="lb-podium-metric">{t(metric.labelKey)}</span>
         </div>
       ) : (
         <Link
@@ -75,7 +76,7 @@ function Podium({ entries, metric, focusUser }) {
           <HiveAvatar username={e.user} size="medium" className="lb-podium-avatar" badgeSize={14} />
           <span className="lb-podium-user">@{e.user}</span>
           <span className="lb-podium-value">{formatMetric(e[metric.id], metric.unit)}</span>
-          <span className="lb-podium-metric">{metric.label}</span>
+          <span className="lb-podium-metric">{t(metric.labelKey)}</span>
         </Link>
       )))}
     </div>
@@ -119,7 +120,7 @@ function MyStanding({ user, window, metric }) {
       <span className="lb-me-user">@{user}</span>
       <span className="lb-me-value">
         {formatMetric(value, metric.unit)}
-        <small>{metric.label}</small>
+        <small>{t(metric.labelKey)}</small>
       </span>
       {!rank && <span className="lb-me-empty">{t('badges.leaderboard.noActivity')}</span>}
     </div>
@@ -170,10 +171,10 @@ function Leaderboard() {
   const groups = useMemo(() => {
     const gs = TAG_CATEGORIES.map((c) => ({
       slug: c.slug,
-      label: c.label,
+      label: t(c.labelKey),
       emoji: c.emoji,
       self: topicSet.has(c.slug),
-      topics: c.topics.filter((tp) => topicSet.has(tp.slug)),
+      topics: c.topics.filter((tp) => topicSet.has(tp.slug)).map((tp) => ({ ...tp, label: t(tp.labelKey) })),
     })).filter((g) => g.self || g.topics.length > 0);
 
     const known = new Set(TAG_CATEGORIES.flatMap((c) => [c.slug, ...c.topics.map((tp) => tp.slug)]));
@@ -270,8 +271,8 @@ function Leaderboard() {
           <h1>{t('badges.leaderboard.title')}</h1>
           <p>
             {activeTopic
-              ? t('badges.leaderboard.subtitleTopic', { blurb: metric.blurb, topic: activeTopic })
-              : t('badges.leaderboard.subtitle', { blurb: metric.blurb })}
+              ? t('badges.leaderboard.subtitleTopic', { blurb: t(metric.blurbKey), topic: activeTopic })
+              : t('badges.leaderboard.subtitle', { blurb: t(metric.blurbKey) })}
           </p>
         </div>
       </header>
@@ -281,7 +282,7 @@ function Leaderboard() {
       <div className="lb-tabs lb-metrics">
         {METRIC_GROUPS.map((g) => (
           <div className="lb-metric-group" key={g}>
-            <span className="lb-metric-group-label">{g}</span>
+            <span className="lb-metric-group-label">{t(METRIC_GROUP_LABEL_KEYS[g])}</span>
             {METRICS.filter((m) => m.group === g).map((m) => (
               <button
                 key={m.id}
@@ -289,7 +290,7 @@ function Leaderboard() {
                 className={`lb-tab${metricId === m.id ? ' active' : ''}`}
                 onClick={() => setMetricId(m.id)}
               >
-                {m.label}
+                {t(m.labelKey)}
               </button>
             ))}
           </div>
@@ -304,7 +305,7 @@ function Leaderboard() {
             className={`lb-tab${window === w.id ? ' active' : ''}`}
             onClick={() => setWindow(w.id)}
           >
-            {w.label}
+            {t(w.labelKey)}
           </button>
         ))}
       </div>
@@ -377,7 +378,7 @@ function Leaderboard() {
       {isError && <div className="lb-state error">{t('badges.leaderboard.loadError')}</div>}
 
       {!isLoading && !isError && entries.length === 0 && (
-        <div className="lb-state">{t('badges.leaderboard.empty', { metric: metric.label.toLowerCase() })}</div>
+        <div className="lb-state">{t('badges.leaderboard.empty', { metric: t(`misc.leaderboard.metricsInSentence.${metric.id}`) })}</div>
       )}
 
       {!isLoading && !isError && entries.length > 0 && (

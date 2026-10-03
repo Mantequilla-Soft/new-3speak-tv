@@ -32,8 +32,8 @@ export default function GroupSort({ options, field, direction, onFieldChange, on
         // looking at now: an arrow on its own reads as either.
         aria-label={direction === 'desc' ? t('communities.sort.ascending') : t('communities.sort.descending')}
         title={direction === 'desc'
-          ? t('communities.sort.highestFirst', { label: current.label.toLowerCase() })
-          : t('communities.sort.lowestFirst', { label: current.label.toLowerCase() })}
+          ? t('communities.sort.highestFirst', { label: current.label })
+          : t('communities.sort.lowestFirst', { label: current.label })}
       >
         {direction === 'desc' ? <MdArrowDownward size={16} /> : <MdArrowUpward size={16} />}
       </button>

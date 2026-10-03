@@ -12,6 +12,7 @@ import { useWatchHistory } from "../hooks/useWatchHistory";
 import useViewCounts from "../hooks/useViewCounts";
 import PullToRefresh from "../components/PullToRefresh/PullToRefresh";
 import { TrendingIcon } from "../components/FeedIcons";
+import { useTranslation } from "react-i18next";
 
 const LIMIT = 50;
 
@@ -22,6 +23,7 @@ const fetchVideos = async ({ pageParam = 1 }) => {
 };
 
 const Trend = () => {
+  const { t } = useTranslation();
   const showNsfw = useAppStore(s => s.showNsfw);
   const hideWatched = useAppStore(s => s.hideWatched);
   const user = useAppStore(s => s.user);
@@ -81,7 +83,7 @@ const Trend = () => {
     <div className="firstupload-container">
       <div className="feed-page-header">
         <TrendingIcon />
-        <h2>Trending</h2>
+        <h2>{t('common.nav.trending')}</h2>
       </div>
 
       {isLoading ? (
@@ -90,10 +92,10 @@ const Trend = () => {
         <Card3 videos={videos} loading={isFetchingNextPage} getContentForVideo={getContentForVideo} isWatched={isWatched} getViewCount={getViewCount} />
       )}
 
-      {isError && <p>Error fetching videos</p>}
+      {isError && <p>{t('misc.followFeed.error')}</p>}
 
       {isFetchingNextPage && (
-        <p style={{ textAlign: "center" }}>Loading more...</p>
+        <p style={{ textAlign: "center" }}>{t('feeds.loadingMore')}</p>
       )}
     </div>
     </PullToRefresh>

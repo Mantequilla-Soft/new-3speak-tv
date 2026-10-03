@@ -15,6 +15,8 @@ import PromoteModal from '../components/Promote/PromoteModal';
 import { Rocket } from 'lucide-react';
 import { getPostBodyRenderer } from '../lib/hiveRenderer';
 import { setChannelTrailer, fetchChannelTrailer, trailerMatches } from '../utils/channelTrailer';
+import { useTranslation } from 'react-i18next';
+import { t as tNow } from '../i18n';
 
 // Every toast from this module is headed "Video"; the message becomes the
 // line under it. See utils/toast.js.
@@ -23,6 +25,7 @@ const toast = toastIn('Video');
 const client = getHiveClient();
 
 const EditVideo = () => {
+  const { t } = useTranslation();
   const location = useLocation();
   const {user} = useAppStore()
   const navigate = useNavigate();
@@ -88,7 +91,7 @@ const EditVideo = () => {
       initialNsfwRef.current = nsfw;
       setPromotedUntil(video.promotedUntil || null);
     } else {
-      toast.error('Video not found');
+      toast.error(tNow('posts.edit.notFound'));
     }
   }, [id, navigate, video]);
 
@@ -149,7 +152,7 @@ const handleSubmit = async (e) => {
   e.preventDefault();
 
   if (!isLoggedIn()) {
-    toast.error("Please login to update the video");
+    toast.error(t('posts.edit.loginRequired'));
     return;
   }
 
@@ -192,7 +195,7 @@ const handleSubmit = async (e) => {
 
   try {
     await broadcastWithAioha([commentOp], KeyTypes.Posting);
-    toast.success("Post successfully updated on Hive!");
+    toast.success(t('posts.edit.updated'));
 
     // Push the new thumbnail straight to the checker's MongoDB (Pancreas
     // API) so it reflects immediately instead of waiting for the
@@ -207,7 +210,7 @@ const handleSubmit = async (e) => {
         );
       } catch (thumbErr) {
         console.warn('Thumbnail Mongo update failed (will reconcile on sync):', thumbErr?.message);
-        toast.info('Thumbnail saved on Hive — it may take a moment to refresh.');
+        toast.info(t('posts.edit.thumbnailSaved'));
       }
     }
 
@@ -235,10 +238,10 @@ const handleSubmit = async (e) => {
           { headers: { Authorization: `Bearer ${CHECKER_API_KEY}` } },
         );
         initialListedRef.current = listed;
-        toast.success(listed ? 'Video re-listed — it will show in feeds again.' : 'Video unlisted — hidden from feeds & search.');
+        toast.success(listed ? t('posts.edit.relisted') : t('posts.edit.unlisted'));
       } catch (listErr) {
         console.warn('Listing update failed:', listErr?.message);
-        toast.error('Could not update the listing — please try again.');
+        toast.error(t('posts.edit.listingFailed'));
       }
     }
 
@@ -250,17 +253,17 @@ const handleSubmit = async (e) => {
         await setChannelTrailer(user, isTrailer ? permlink : null, { author: user });
         initialTrailerRef.current = isTrailer;
         toast.success(isTrailer
-          ? 'Set as your channel trailer.'
-          : 'Removed as your channel trailer.');
+          ? t('posts.edit.trailerSet')
+          : t('posts.edit.trailerRemoved'));
       } catch (trailerErr) {
         console.warn('Channel trailer update failed:', trailerErr?.message);
-        toast.error('Could not update your channel trailer.');
+        toast.error(t('posts.edit.trailerFailed'));
       }
     }
 
     navigate("/draft");
   } catch (error) {
-    toast.error(`Failed to update post: ${error.message}`);
+    toast.error(t('posts.edit.updateFailed', { error: error.message }));
     console.error("Update error:", error);
   }
 };
@@ -271,7 +274,7 @@ const handleSubmit = async (e) => {
     return (
       <div className="page-loading">
         <div className="spinner"></div>
-        <p>Loading video details...</p>
+        <p>{t('posts.edit.loading')}</p>
       </div>
     );
   }
@@ -281,7 +284,7 @@ const handleSubmit = async (e) => {
       <div className="header">
         <h1>
           <Edit className="edit-icon" />
-          Edit Video
+          {t('posts.edit.title')}
         </h1>
       </div>
 
@@ -289,19 +292,19 @@ const handleSubmit = async (e) => {
         <div className="form-container">
           <form className="edit-form" onSubmit={handleSubmit}>
             <div className="form-group">
-              <label htmlFor="title">Title</label>
+              <label htmlFor="title">{t('posts.edit.titleLabel')}</label>
               <input 
                 id="title"
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
-                placeholder="Video title"
+                placeholder={t('posts.edit.titlePlaceholder')}
                 className="form-input"
                 required
               />
             </div>
             
             <div className="form-group">
-              <label htmlFor="description">Description</label>
+              <label htmlFor="description">{t('posts.edit.descriptionLabel')}</label>
               {/* <textarea 
                 id="description"
                 value={description}
@@ -310,16 +313,16 @@ const handleSubmit = async (e) => {
                 className="form-textarea"
                 rows={8}
               /> */}
-              <MarkdownComposer value={description} onChange={setDescription} placeholder="Write your video description here... Supports markdown formatting!" show={true} />
+              <MarkdownComposer value={description} onChange={setDescription} placeholder={t('posts.edit.descriptionPlaceholder')} show={true} />
             </div>
             
             <div className="form-group tap-sp">
-              <label htmlFor="tags">Tags (comma separated)</label>
+              <label htmlFor="tags">{t('posts.edit.tagsLabel')}</label>
               <input
                 id="tags"
                 value={tags}
                 onChange={(e) => setTags(e.target.value)}
-                placeholder="tag1,tag2,tag3"
+                placeholder={t('posts.edit.tagsPlaceholder')}
                 className="form-input"
               />
             </div>
@@ -334,11 +337,11 @@ const handleSubmit = async (e) => {
               >
                 <span className="listing-switch__track"><span className="listing-switch__thumb" /></span>
                 <span className="listing-switch__label">
-                  <strong>{listed ? 'Listed' : 'Unlisted'}</strong>
+                  <strong>{listed ? t('posts.edit.listed') : t('posts.edit.unlistedLabel')}</strong>
                   <small>
                     {listed
-                      ? 'Shown in feeds, search and on your profile.'
-                      : 'Hidden from feeds & search — still plays by direct link and stays on your profile (badged).'}
+                      ? t('posts.edit.listedHint')
+                      : t('posts.edit.unlistedHint')}
                   </small>
                 </span>
               </button>
@@ -354,11 +357,11 @@ const handleSubmit = async (e) => {
               >
                 <span className="listing-switch__track"><span className="listing-switch__thumb" /></span>
                 <span className="listing-switch__label">
-                  <strong>Allow Remix/Clip</strong>
+                  <strong>{t('posts.edit.allowRemix')}</strong>
                   <small>
                     {reusable
-                      ? 'Others can create remixes/clips from this video; you are credited as original author.'
-                      : 'Others cannot remix or clip this video.'}
+                      ? t('posts.edit.remixOnHint')
+                      : t('posts.edit.remixOffHint')}
                   </small>
                 </span>
               </button>
@@ -374,11 +377,11 @@ const handleSubmit = async (e) => {
               >
                 <span className="listing-switch__track"><span className="listing-switch__thumb" /></span>
                 <span className="listing-switch__label">
-                  <strong>{isNsfw ? 'Adult / NSFW' : 'Not adult'}</strong>
+                  <strong>{isNsfw ? t('posts.edit.nsfw') : t('posts.edit.notNsfw')}</strong>
                   <small>
                     {isNsfw
-                      ? 'Marked adult — hidden from feeds & search unless the viewer enabled NSFW, and tagged nsfw on Hive.'
-                      : 'Normal content, shown to everyone.'}
+                      ? t('posts.edit.nsfwHint')
+                      : t('posts.edit.notNsfwHint')}
                   </small>
                 </span>
               </button>
@@ -396,11 +399,11 @@ const handleSubmit = async (e) => {
                 >
                   <span className="listing-switch__track"><span className="listing-switch__thumb" /></span>
                   <span className="listing-switch__label">
-                    <strong>Channel trailer</strong>
+                    <strong>{t('posts.edit.trailer')}</strong>
                     <small>
                       {isTrailer
-                        ? 'Autoplays at the top of your profile\u2019s Overview tab, replacing any trailer you set before.'
-                        : 'Make this the video that autoplays at the top of your profile\u2019s Overview tab.'}
+                        ? t('posts.edit.trailerOnHint')
+                        : t('posts.edit.trailerOffHint')}
                     </small>
                   </span>
                 </button>
@@ -413,7 +416,7 @@ const handleSubmit = async (e) => {
                 className="btn btn--primary"
               >
                 <Save />
-                Update Video
+                {t('posts.edit.submit')}
               </button>
               <button
                 type="button"
@@ -421,17 +424,17 @@ const handleSubmit = async (e) => {
                 onClick={() => setPromoteOpen(true)}
               >
                 <Rocket size={18} />
-                {promotedUntil && new Date(promotedUntil).getTime() > Date.now() ? 'Promoted' : 'Promote'}
+                {promotedUntil && new Date(promotedUntil).getTime() > Date.now() ? t('posts.edit.promoted') : t('posts.edit.promote')}
               </button>
             </div>
           </form>
         </div>
 
         <div className="preview">
-          <h2>Preview</h2>
+          <h2>{t('posts.edit.preview')}</h2>
           <div className="video-preview">
             <div className="thumbnail">
-              <img src={thumbnailUrl} alt="thumbnail" />
+              <img src={thumbnailUrl} alt={t('posts.edit.thumbnailAlt')} />
             </div>
             <div className="content-pre">
               <h3 className="title">{title}</h3>

@@ -53,17 +53,19 @@ function TagsV2Picker({
       // Categories are searchable in BOTH modes now. They used to be hidden from
       // multi-select results, which made a whole area findable by browsing but not
       // by typing its name — the one way most people look for it.
-      if (cat.label.toLowerCase().includes(q)) {
-        out.push({ slug: cat.slug, label: cat.label, emoji: cat.emoji, isCat: true });
+      const catLabel = t(cat.labelKey);
+      if (catLabel.toLowerCase().includes(q)) {
+        out.push({ slug: cat.slug, label: catLabel, emoji: cat.emoji, isCat: true });
       }
       for (const topic of cat.topics) {
-        if (topic.label.toLowerCase().includes(q)) {
-          out.push({ slug: topic.slug, label: topic.label, emoji: topic.emoji, isCat: false });
+        const topicLabel = t(topic.labelKey);
+        if (topicLabel.toLowerCase().includes(q)) {
+          out.push({ slug: topic.slug, label: topicLabel, emoji: topic.emoji, isCat: false });
         }
       }
     }
     return out;
-  }, [q, multi]);
+  }, [q, multi, t]);
 
   const toggleMulti = (slug) => {
     onChange(selectedSet.has(slug) ? selectedArr.filter((s) => s !== slug) : [...selectedArr, slug]);
@@ -111,7 +113,7 @@ function TagsV2Picker({
         aria-pressed={isSel(topic.slug)}
       >
         <span className="tagsv2-emoji">{topic.emoji}</span>
-        <span className="tagsv2-label">{topic.label}</span>
+        <span className="tagsv2-label">{t(topic.labelKey)}</span>
         {pct != null && <span className="tagsv2-pct">{pct}%</span>}
       </button>
     );
@@ -177,7 +179,7 @@ function TagsV2Picker({
                   aria-pressed={isSel(cat.slug)}
                 >
                   <span className="tagsv2-emoji">{cat.emoji}</span>
-                  <span className="tagsv2-label">{cat.label}</span>
+                  <span className="tagsv2-label">{t(cat.labelKey)}</span>
                   {cnt > 0 && <span className="tagsv2-count">{cnt}</span>}
                   {pct != null && <span className="tagsv2-pct">{pct}%</span>}
                 </button>
@@ -190,7 +192,7 @@ function TagsV2Picker({
               <p className="tagsv2-hint">
                 {multi
                   ? (isSel(openCategory.slug)
-                      ? t('engagement.tagsPicker.allSelected', { category: openCategory.label })
+                      ? t('engagement.tagsPicker.allSelected', { category: t(openCategory.labelKey) })
                       : t('engagement.tagsPicker.orPickTopics'))
                   : isCategorySlug(value)
                     ? t('engagement.tagsPicker.goodEnough')

@@ -1,4 +1,5 @@
 import { toastIn } from './toast';
+import { t } from '../i18n';
 import { APP_VERSION } from "../version";
 import { APP_VERSION_STORAGE_KEY } from "./appVersion";
 
@@ -96,8 +97,8 @@ export async function reloadForUpdate() {
 export async function reloadIfStale() {
   const newer = await fetchNewerVersion();
   if (!newer) return false;
-  toast(`Updating to the latest version (${newer})…`, {
-    description: "Reloading so your upload runs on the newest build.",
+  toast(t('misc.appUpdate.updating', { version: newer }), {
+    description: t('misc.appUpdate.reloadingForUpload'),
   });
   await reloadForUpdate();
   return true;

@@ -1,5 +1,6 @@
 import { Component } from "react";
 import { reloadForUpdate } from "../utils/checkLatestVersion";
+import { t } from "../i18n";
 
 /* There was no error boundary anywhere above <Routes>, so anything a route threw
  * while rendering unmounted the whole tree and left the page background behind
@@ -54,10 +55,9 @@ export default class RouteErrorBoundary extends Component {
           color: "var(--text-primary, #e8e8e8)",
         }}
       >
-        <h2 style={{ margin: 0, fontSize: 20, fontWeight: 600 }}>This page didn't load</h2>
+        <h2 style={{ margin: 0, fontSize: 20, fontWeight: 600 }}>{t('misc.routeError.title')}</h2>
         <p style={{ margin: 0, maxWidth: 420, fontSize: 14, lineHeight: 1.5, opacity: 0.75 }}>
-          Part of the app failed to download. That usually means a new version was
-          released while this tab was open. Reloading picks it up.
+          {t('misc.routeError.body')}
         </p>
         <div style={{ display: "flex", gap: 10, flexWrap: "wrap", justifyContent: "center" }}>
           <button
@@ -73,7 +73,7 @@ export default class RouteErrorBoundary extends Component {
               cursor: "pointer",
             }}
           >
-            Reload
+            {t('misc.routeError.reload')}
           </button>
           <button
             onClick={() => { window.location.href = "/"; }}
@@ -87,7 +87,7 @@ export default class RouteErrorBoundary extends Component {
               cursor: "pointer",
             }}
           >
-            Go home
+            {t('misc.routeError.goHome')}
           </button>
         </div>
       </div>

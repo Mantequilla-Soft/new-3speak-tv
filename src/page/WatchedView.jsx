@@ -16,6 +16,7 @@ import { fixVideoThumbnail, fallbackImg } from '../utils/fixThumbnails';
 import { getSinceTimestamp, formatRelativeDate } from '../utils/dateFilters';
 import { findShortByEmbedUrl } from '../hive-api/hiveApi';
 import { FeedToolbar, Pagination } from '../components/FeedToolbar/FeedToolbar';
+import { useTranslation } from 'react-i18next';
 import './WatchedView.scss';
 
 // Every toast from this module is headed "Video"; the message becomes the
@@ -95,6 +96,7 @@ const LIMIT = 20;
 
 
 function WatchedView() {
+  const { t } = useTranslation();
   const { username } = useParams();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
@@ -162,11 +164,11 @@ function WatchedView() {
     if (success) {
       setDeletedKeys(prev => new Set(prev).add(`${author}/${permlink}`));
       queryClient.invalidateQueries({ queryKey: ['watchedVideosCount'] });
-      toast.success('Removed from watch history');
+      toast.success(t('misc.watched.removed'));
     } else {
-      toast.error('Failed to remove from watch history');
+      toast.error(t('misc.watched.removeFailed'));
     }
-  }, [username, queryClient]);
+  }, [username, queryClient, t]);
 
   return (
     <div className="watched-view-container">
@@ -177,13 +179,13 @@ function WatchedView() {
             <MdHistory className="watched-icon" />
           </div>
           <div className="watched-details">
-            <h1>Watched</h1>
+            <h1>{t('misc.watched.title')}</h1>
             <div className="watched-meta">
               <Link to={`/p/${username}`} className="owner">
                 @{username}
               </Link>
               <span className="separator">-</span>
-              <span>{videosCount + shortsCount} watched</span>
+              <span>{t('misc.watched.count', { count: videosCount + shortsCount })}</span>
             </div>
           </div>
         </div>
@@ -196,11 +198,11 @@ function WatchedView() {
                 checked={watchHistoryEnabled}
                 onChange={(e) => setWatchHistoryEnabled(e.target.checked)}
               />
-              <span>Track history</span>
+              <span>{t('misc.watched.trackHistory')}</span>
             </label>
           )}
           <button type="button" className="back-btn" onClick={() => navigate(-1)}>
-            <IoArrowBack /> Back
+            <IoArrowBack /> {t('common.actions.back')}
           </button>
         </div>
       </div>
@@ -212,8 +214,8 @@ function WatchedView() {
         dateFilter={dateFilter}
         onDateFilterChange={handleDateFilterChange}
         tabs={[
-          { key: 'videos', label: `Videos (${videosCount})` },
-          { key: 'shorts', label: `Shorts (${shortsCount})` },
+          { key: 'videos', label: t('misc.watched.videosTab', { count: videosCount }) },
+          { key: 'shorts', label: t('misc.watched.shortsTab', { count: shortsCount }) },
         ]}
         page={currentPage}
         totalPages={totalPages}
@@ -226,12 +228,12 @@ function WatchedView() {
           <div className="loading-more"><BarLoader /></div>
         ) : isError ? (
           <div className="empty-wrap">
-            <span>Failed to load watch history. Please try again.</span>
+            <span>{t('misc.watched.loadFailed')}</span>
           </div>
         ) : filtered.length === 0 ? (
           <div className="empty-wrap">
             <img src={icon} alt="" />
-            <span>No watched {activeTab === 'shorts' ? 'shorts' : 'videos'} yet</span>
+            <span>{activeTab === 'shorts' ? t('misc.watched.emptyShorts') : t('misc.watched.emptyVideos')}</span>
           </div>
         ) : activeTab === 'shorts' ? (
           <div className="watched-shorts-grid">
@@ -261,7 +263,7 @@ function WatchedView() {
                       type="button"
                       className="delete-btn"
                       onClick={(e) => handleDelete(e, video.author, video.permlink)}
-                      title="Remove from watch history"
+                      title={t('misc.watched.removeTitle')}
                     >
                       <MdDelete />
                     </button>
@@ -270,7 +272,7 @@ function WatchedView() {
                 <div className="video-meta">
                   <h3>{video.title}</h3>
                   <p className="video-author">@{video.author}</p>
-                  <p className="watched-date">Watched {formatRelativeDate(video.watched_at)}</p>
+                  <p className="watched-date">{t('misc.watched.watchedAt', { when: formatRelativeDate(video.watched_at) })}</p>
                 </div>
               </Link>
             ))}

@@ -9,15 +9,6 @@ const DEFAULT_TABS = [
   { key: 'shorts', labelKey: 'feeds.tabs.shorts' },
 ];
 
-// DATE_FILTERS (utils/dateFilters) carries English labels; translate by key here
-// and fall back to its label for any key not listed.
-const DATE_FILTER_KEYS = {
-  all: 'feeds.dateFilters.all',
-  today: 'feeds.dateFilters.today',
-  week: 'feeds.dateFilters.week',
-  month: 'feeds.dateFilters.month',
-};
-
 export function Pagination({ page, totalPages, onPageChange }) {
   if (totalPages <= 1) return null;
 
@@ -90,7 +81,7 @@ export function FeedToolbar({ activeTab, onTabChange, dateFilter, onDateFilterCh
               className={`date-filter-btn ${dateFilter === f.key ? 'active' : ''}`}
               onClick={() => onDateFilterChange(f.key)}
             >
-              {f.labelKey ? t(f.labelKey) : DATE_FILTER_KEYS[f.key] ? t(DATE_FILTER_KEYS[f.key]) : f.label}
+              {t(f.labelKey)}
             </button>
           ))}
         </div>

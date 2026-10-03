@@ -271,12 +271,12 @@ export default function AddSocialLink_modal({ isOpen, onClose, hiveUsername, onC
                   type="text"
                   value={platformUsername}
                   onChange={(e) => setPlatformUsername(e.target.value)}
-                  placeholder={PLATFORMS[selectedPlatform]?.inputPlaceholder}
+                  placeholder={PLATFORMS[selectedPlatform]?.inputPlaceholderKey && t(PLATFORMS[selectedPlatform].inputPlaceholderKey)}
                   autoFocus
                 />
-                {PLATFORMS[selectedPlatform]?.inputHelp && (
+                {PLATFORMS[selectedPlatform]?.inputHelpKey && (
                   <small className="social-link-input-help">
-                    {PLATFORMS[selectedPlatform].inputHelp}
+                    {t(PLATFORMS[selectedPlatform].inputHelpKey)}
                   </small>
                 )}
               </li>

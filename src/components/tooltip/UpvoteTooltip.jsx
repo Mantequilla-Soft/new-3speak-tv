@@ -193,7 +193,7 @@ const UpvoteTooltip = ({
               <option value="">{t('engagement.vote.tagOptional')}</option>
               {VIEWER_TAG_OPTIONS.map((opt) => (
                 <option key={opt.id} value={opt.id}>
-                  {opt.emoji ? `${opt.emoji} ` : ''}{opt.label}
+                  {opt.emoji ? `${opt.emoji} ` : ''}{t(opt.labelKey)}
                 </option>
               ))}
             </select>

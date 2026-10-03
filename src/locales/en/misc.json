@@ -1,0 +1,242 @@
+{
+  "leaderboard": {
+    "windows": {
+      "7d": "7 days",
+      "30d": "30 days",
+      "365d": "Year",
+      "all": "All time"
+    },
+    "windowsInSentence": {
+      "7d": "7 days",
+      "30d": "30 days",
+      "365d": "year",
+      "all": "all time"
+    },
+    "metrics": {
+      "video_uploads": "Videos",
+      "short_uploads": "Shorts",
+      "video_watch_secs": "Video watch time",
+      "short_watch_secs": "Shorts watch time",
+      "tags_given": "Tags",
+      "streams": "Streams",
+      "stream_secs": "Time live",
+      "stream_peak_viewers": "Peak viewers",
+      "stream_viewers": "Viewer joins",
+      "boosts_received": "Boosts received",
+      "boost_amount_received": "Amount received",
+      "boosts_given": "Boosts given",
+      "boost_amount_given": "Amount given"
+    },
+    "metricsInSentence": {
+      "video_uploads": "videos",
+      "short_uploads": "shorts",
+      "video_watch_secs": "video watch time",
+      "short_watch_secs": "shorts watch time",
+      "tags_given": "tags",
+      "streams": "streams",
+      "stream_secs": "time live",
+      "stream_peak_viewers": "peak viewers",
+      "stream_viewers": "viewer joins",
+      "boosts_received": "boosts received",
+      "boost_amount_received": "amount received",
+      "boosts_given": "boosts given",
+      "boost_amount_given": "amount given"
+    },
+    "blurbs": {
+      "video_uploads": "Videos uploaded",
+      "short_uploads": "Shorts uploaded",
+      "video_watch_secs": "Seconds their videos were watched",
+      "short_watch_secs": "Seconds their shorts were watched",
+      "tags_given": "Tags given to other videos",
+      "streams": "Stream sessions started",
+      "stream_secs": "Total time live (ended streams only)",
+      "stream_peak_viewers": "Best concurrent viewers (a high-water mark, not a sum)",
+      "stream_viewers": "Viewer-join events (volume, not unique reach)",
+      "boosts_received": "Boosts sent to their streams",
+      "boost_amount_received": "Summed amount of boosts received",
+      "boosts_given": "Boosts they sent to other streamers",
+      "boost_amount_given": "Summed amount of boosts they gave"
+    },
+    "blurbsInSentence": {
+      "video_uploads": "videos uploaded",
+      "short_uploads": "shorts uploaded",
+      "video_watch_secs": "seconds their videos were watched",
+      "short_watch_secs": "seconds their shorts were watched",
+      "tags_given": "tags given to other videos",
+      "streams": "stream sessions started",
+      "stream_secs": "total time live (ended streams only)",
+      "stream_peak_viewers": "best concurrent viewers (a high-water mark, not a sum)",
+      "stream_viewers": "viewer-join events (volume, not unique reach)",
+      "boosts_received": "boosts sent to their streams",
+      "boost_amount_received": "summed amount of boosts received",
+      "boosts_given": "boosts they sent to other streamers",
+      "boost_amount_given": "summed amount of boosts they gave"
+    },
+    "groups": {
+      "video": "Video",
+      "streaming": "Streaming"
+    },
+    "badgeNouns": {
+      "video_uploads": "Videos",
+      "short_uploads": "Shorts",
+      "video_watch_secs": "Watched",
+      "short_watch_secs": "Shorts Watched",
+      "tags_given": "Tagger"
+    },
+    "badgeLabel": "{{tier}} {{noun}}",
+    "badgeTitleAllTime": "Ranked #{{rank}} for {{what}} over all time",
+    "badgeTitleWindow": "Ranked #{{rank}} for {{what}} over the last {{window}}"
+  },
+  "duration": {
+    "hoursMinutes": "{{h}}h {{m}}m",
+    "minutesSeconds": "{{m}}m {{s}}s",
+    "seconds": "{{s}}s",
+    "aMoment": "a moment",
+    "lessThanMinute": "less than a minute"
+  },
+  "surf": {
+    "community": "Community",
+    "allOf": "All of {{label}}"
+  },
+  "social": {
+    "signingCancelled": "Signing was cancelled",
+    "youtube": {
+      "placeholder": "@handle or UCxxxxxxxxxxxxxxxxxxxxxx",
+      "help": "Paste your YouTube @handle or your UC… channel ID. We canonicalize to the channel ID."
+    },
+    "soundcloud": {
+      "placeholder": "your-profile or https://soundcloud.com/your-profile",
+      "help": "Paste your SoundCloud profile URL or just the username from it. Put the hash anywhere in your profile bio."
+    }
+  },
+  "snaps": {
+    "retrying": "Snaps container not found yet — retrying (attempt {{attempt}})...",
+    "unreachable": "Could not reach any Hive node to find the snaps container. Please check your connection and try again.",
+    "unreachableWithError": "Could not reach any Hive node to find the snaps container (last error — {{error}}). Please check your connection and try again."
+  },
+  "embed": {
+    "responsive": "Responsive"
+  },
+  "incubation": {
+    "requestFailed": "Request failed ({{status}})",
+    "contactLoadFailed": "Could not load your contact details",
+    "contactSaveFailed": "Could not save your contact details",
+    "onlyButrauthBacklog": "Only a Butter Auth account can have an incubation backlog",
+    "publishFailed": "Publish failed ({{status}})"
+  },
+  "routeError": {
+    "title": "This page didn't load",
+    "body": "Part of the app failed to download. That usually means a new version was released while this tab was open. Reloading picks it up.",
+    "reload": "Reload",
+    "goHome": "Go home"
+  },
+  "seo": {
+    "defaultTitle": "3Speak - Decentralized Video Platform",
+    "defaultDescription": "3Speak is a decentralized video sharing platform built on blockchain technology. Watch, upload, and share videos while earning cryptocurrency rewards."
+  },
+  "uploadLinks": {
+    "regularVideo": "Regular Video",
+    "verticalShort": "Vertical Short",
+    "musicAudio": "Music / Audio",
+    "groupChat": "Group Chat",
+    "communitySnap": "Community Snap",
+    "shortsEditor": "Shorts Editor",
+    "goLive": "Go Live",
+    "streamStudio": "Stream Studio",
+    "headings": {
+      "upload": "Upload",
+      "live": "Live",
+      "others": "Others"
+    }
+  },
+  "chat": {
+    "connectFailed": "Could not connect to chat.",
+    "loginFirst": "Log in first to use chat.",
+    "roomNameRequired": "A room name is required."
+  },
+  "hiveAuth": {
+    "waiting": "Waiting for approval on HiveAuth...",
+    "title": "HiveAuth Approval Required",
+    "hint": "Please check your HiveAuth app to approve this transaction"
+  },
+  "hiveApi": {
+    "keychainNotSigned": "Keychain did not sign the transaction",
+    "loginToCreateCommunity": "Please login to create a community",
+    "loginFirst": "Please login first",
+    "cancelled": "Operation cancelled"
+  },
+  "openpod": {
+    "announced": "Live session announced on Hive!",
+    "announceFailed": "OpenPod started, but the Hive announcement could not be posted."
+  },
+  "appUpdate": {
+    "updating": "Updating to the latest version ({{version}})…",
+    "reloadingForUpload": "Reloading so your upload runs on the newest build."
+  },
+  "auth": {
+    "switched": "Switched to {{username}} successfully!",
+    "keychainLoginTitle": "Login using Hive"
+  },
+  "streamVod": {
+    "uploadKeyMissing": "Stream ended, but the video could not be uploaded (upload key missing).",
+    "uploading": "Uploading your stream video… {{pct}}%",
+    "uploaded": "Stream video uploaded — it will replace the live stream once encoding finishes.",
+    "uploadFailed": "Stream ended, but the video upload failed.",
+    "saving": "Saving your stream video…",
+    "encoding": "Uploaded — the encoder is processing your video…",
+    "saved": "Stream video saved — it will replace the live stream once encoding finishes.",
+    "saveFailed": "Stream ended, but the video couldn't be saved: {{error}}.",
+    "uploadFailedShort": "upload failed",
+    "stillProcessing": "Stream ended — the video is still processing; check your profile shortly."
+  },
+  "embedPlayer": {
+    "unavailable": "Video unavailable"
+  },
+  "followFeed": {
+    "title": "Follow Feed",
+    "error": "Error fetching videos"
+  },
+  "groups": {
+    "title": "Groups",
+    "badges": "Badges",
+    "subtitle": "The communities you can join and the badges people hold, in one place."
+  },
+  "watched": {
+    "removed": "Removed from watch history",
+    "removeFailed": "Failed to remove from watch history",
+    "title": "Watched",
+    "count_one": "{{count}} watched",
+    "count_other": "{{count}} watched",
+    "trackHistory": "Track history",
+    "videosTab": "Videos ({{count}})",
+    "shortsTab": "Shorts ({{count}})",
+    "loadFailed": "Failed to load watch history. Please try again.",
+    "emptyShorts": "No watched shorts yet",
+    "emptyVideos": "No watched videos yet",
+    "removeTitle": "Remove from watch history",
+    "watchedAt": "Watched {{when}}"
+  },
+  "watchStream": {
+    "saySomething": "Say something…",
+    "waitingWallet": "Waiting for your wallet…",
+    "signInToChat": "Sign in to chat",
+    "sendMessage": "Send message",
+    "notLive": "This stream isn’t live right now.",
+    "notFound": "No live stream found for this link.",
+    "browse": "Browse live streams",
+    "back": "Back to 3Speak",
+    "seoTitle": "{{title}} (LIVE)",
+    "swipeNext": "Swipe for the next live stream",
+    "chat": "Chat",
+    "watchingNow": "👁 {{count}} watching now",
+    "signInRaiseHand": "Sign in to raise your hand",
+    "copyLink": "Copy the stream link",
+    "notAvailableLive": "Not available for live streams",
+    "vote": "Vote",
+    "comment": "Comment",
+    "liveChat": "Live chat",
+    "signInToJoin": "🔒 Sign in to join the chat.",
+    "moreTag": "More #{{tag}}",
+    "moreVideos": "More videos"
+  }
+}

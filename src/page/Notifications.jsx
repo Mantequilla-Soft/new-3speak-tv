@@ -350,7 +350,7 @@ function Notifications() {
             className={`notifications-filter-btn${filter === key ? ' active' : ''}`}
             onClick={() => setFilter(key)}
           >
-            {t(`notifications.categories.${key}`, { defaultValue: cat.label })}
+            {t(cat.labelKey)}
           </button>
         ))}
         <button
@@ -442,7 +442,7 @@ function Notifications() {
             ? t('notifications.empty.all')
             : filter === 'unread'
               ? t('notifications.empty.unread')
-              : t(`notifications.empty.${filter}`, { defaultValue: `No ${NOTIF_CATEGORIES[filter]?.label?.toLowerCase() || filter} yet.` })}
+              : t(`notifications.empty.${filter}`)}
         </div>
       )}
 

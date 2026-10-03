@@ -1,8 +1,11 @@
+import { t, formatTimeAgo, formatDate } from '../i18n';
+
+// labelKey is an i18n key: translate at render with t(f.labelKey).
 export const DATE_FILTERS = [
-  { key: 'all', label: 'All Time' },
-  { key: 'today', label: 'Today' },
-  { key: 'week', label: 'This Week' },
-  { key: 'month', label: 'This Month' },
+  { key: 'all', labelKey: 'feeds.dateFilters.all' },
+  { key: 'today', labelKey: 'feeds.dateFilters.today' },
+  { key: 'week', labelKey: 'feeds.dateFilters.week' },
+  { key: 'month', labelKey: 'feeds.dateFilters.month' },
 ];
 
 export function getSinceTimestamp(filterKey) {
@@ -31,12 +34,10 @@ export function formatRelativeDate(timestamp) {
   const now = new Date();
   const diffMs = now - date;
   const diffMin = Math.floor(diffMs / 60000);
-  const diffHr = Math.floor(diffMs / 3600000);
   const diffDays = Math.floor(diffMs / 86400000);
 
-  if (diffMin < 1) return 'Just now';
-  if (diffMin < 60) return `${diffMin}m ago`;
-  if (diffHr < 24) return `${diffHr}h ago`;
-  if (diffDays < 7) return `${diffDays}d ago`;
-  return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+  if (diffMin < 1) return t('feeds.dateFilters.justNow');
+  // "3m ago" / "3h ago" / "3d ago" in the current language.
+  if (diffDays < 7) return formatTimeAgo(date, { style: 'narrow' });
+  return formatDate(date, { month: 'short', day: 'numeric' });
 }
