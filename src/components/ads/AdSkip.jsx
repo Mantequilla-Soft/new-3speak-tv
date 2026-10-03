@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types';
 import { MdSkipNext } from 'react-icons/md';
+import { useTranslation, Trans } from 'react-i18next';
 import './AdSkip.scss';
 
 /**
@@ -21,12 +22,13 @@ import './AdSkip.scss';
  * left, so the two never collide.
  */
 export default function AdSkip({ secondsUntil, onSkip }) {
+  const { t } = useTranslation();
   const ready = secondsUntil == null && typeof onSkip === 'function';
 
   if (!ready) {
     return (
       <div className="ad-skip ad-skip-waiting" role="status" aria-live="off">
-        Skip in <strong>{Math.max(1, Math.ceil(secondsUntil ?? 0))}</strong>
+        <Trans i18nKey="ads.skip.skipIn" values={{ seconds: Math.max(1, Math.ceil(secondsUntil ?? 0)) }} components={{ b: <strong /> }} />
       </div>
     );
   }
@@ -37,7 +39,7 @@ export default function AdSkip({ secondsUntil, onSkip }) {
       className="ad-skip ad-skip-ready"
       onClick={(e) => { e.preventDefault(); e.stopPropagation(); onSkip(); }}
     >
-      Skip ad
+      {t('ads.skip.skipAd')}
       <MdSkipNext aria-hidden="true" />
     </button>
   );

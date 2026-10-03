@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types';
 import { MdOpenInNew } from 'react-icons/md';
+import { useTranslation, Trans } from 'react-i18next';
 import './AdOverlay.scss';
 
 /**
@@ -25,6 +26,7 @@ import './AdOverlay.scss';
  * measurable, which is the first thing an advertiser asks about.
  */
 export default function AdOverlay({ account, brand, previewOnly = false, resumeIn = null }) {
+  const { t } = useTranslation();
   const productName = brand?.productName || null;
   const slogan = brand?.slogan || null;
   const logoUrl = brand?.logoUrl || null;
@@ -35,7 +37,9 @@ export default function AdOverlay({ account, brand, previewOnly = false, resumeI
   const inner = (
     <>
       <span className="brandmark-from">
-        Advertisement{account ? <> from <strong>@{account}</strong></> : null}
+        {account
+          ? <Trans i18nKey="ads.overlay.advertisementFrom" values={{ account }} components={{ b: <strong /> }} />
+          : t('ads.overlay.advertisement')}
       </span>
 
       {(productName || slogan || logoUrl) && (
@@ -57,8 +61,8 @@ export default function AdOverlay({ account, brand, previewOnly = false, resumeI
       {resumeIn != null && (
         <span className="brandmark-resume">
           {resumeIn > 0
-            ? <>Video continues in <strong>{resumeIn}s</strong></>
-            : 'Video continues in a moment'}
+            ? <Trans i18nKey="ads.overlay.continuesIn" values={{ seconds: resumeIn }} components={{ b: <strong /> }} />
+            : t('ads.overlay.continuesMoment')}
         </span>
       )}
     </>
@@ -76,7 +80,9 @@ export default function AdOverlay({ account, brand, previewOnly = false, resumeI
       rel="noopener noreferrer"
       // Named for what happens, not what it is: a viewer should know they are about
       // to leave for an advertiser's site and that the video stays put.
-      aria-label={`Open ${productName || 'the advertiser'}'s website in a new tab`}
+      aria-label={productName
+        ? t('ads.overlay.openSite', { name: productName })
+        : t('ads.overlay.openAdvertiserSite')}
     >
       {inner}
       {/* Says the overlay is openable. Only drawn when there is somewhere to go, so

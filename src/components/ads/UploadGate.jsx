@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import Hls from 'hls.js';
+import { useTranslation } from 'react-i18next';
 import './UploadGate.scss';
 
 /**
@@ -24,6 +25,7 @@ import './UploadGate.scss';
  * hatch is the failure path above, not a button.
  */
 export default function UploadGate({ ad, onWatched }) {
+  const { t } = useTranslation();
   const videoRef = useRef(null);
   const hlsRef = useRef(null);
   const [left, setLeft] = useState(Math.ceil(Number(ad?.durationSeconds) || 0));
@@ -139,13 +141,13 @@ export default function UploadGate({ ad, onWatched }) {
   // consume the advertiser's seconds.
   useEffect(() => {
     if (!playing || failed) return undefined;
-    const t = setInterval(() => setLeft((n) => (n > 0 ? n - 1 : 0)), 1000);
-    return () => clearInterval(t);
+    const timer = setInterval(() => setLeft((n) => (n > 0 ? n - 1 : 0)), 1000);
+    return () => clearInterval(timer);
   }, [playing, failed]);
 
   const brand = ad?.brand;
   return (
-    <div className="upload-gate" role="dialog" aria-modal="true" aria-label="Sponsor message">
+    <div className="upload-gate" role="dialog" aria-modal="true" aria-label={t('ads.gate.ariaLabel')}>
       <div className="upload-gate-inner">
         <video
           ref={videoRef}
@@ -157,17 +159,17 @@ export default function UploadGate({ ad, onWatched }) {
           onError={() => { setFailed(true); finish(false); }}
         />
         <div className="upload-gate-bar">
-          <span className="upload-gate-label">{ad?.label || 'Sponsored'}</span>
+          <span className="upload-gate-label">{ad?.label || t('ads.gate.sponsored')}</span>
           {brand?.productName && (
             brand.clickUrl
               ? <a className="upload-gate-brand" href={brand.clickUrl} target="_blank" rel="noopener noreferrer sponsored">{brand.productName}</a>
               : <span className="upload-gate-brand">{brand.productName}</span>
           )}
           <span className="upload-gate-count">
-            {playing ? `${left}s` : 'loading…'}
+            {playing ? `${left}s` : t('ads.gate.loading')}
           </span>
         </div>
-        <p className="upload-gate-note">Watch this to unlock Post Video.</p>
+        <p className="upload-gate-note">{t('ads.gate.note')}</p>
       </div>
     </div>
   );

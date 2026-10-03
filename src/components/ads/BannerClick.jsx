@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import { MdOpenInNew, MdClose } from 'react-icons/md';
+import { useTranslation } from 'react-i18next';
 import './BannerClick.scss';
 
 /**
@@ -28,6 +29,7 @@ import './BannerClick.scss';
 export default function BannerClick({
   videoRef, placement, visible, clickUrl, advertiser, onDismiss, overlay,
 }) {
+  const { t } = useTranslation();
   const [rect, setRect] = useState(null);
   /* The creative's real shape, once it is known.
    *
@@ -179,7 +181,7 @@ export default function BannerClick({
         )}
         {/* The disclosure travels with the ad. Burned banners carry it in their own
             pixels; a drawn one has to say it here. */}
-        <span className="watch-banner-label">{creative.label || 'Ad'}</span>
+        <span className="watch-banner-label">{creative.label || t('ads.overlay.adTag')}</span>
       </div>
     ) : null}
     {onDismiss ? (
@@ -197,8 +199,8 @@ export default function BannerClick({
       <button
         type="button"
         className="watch-banner-close"
-        aria-label="Close this ad"
-        title="Close this ad"
+        aria-label={t('ads.overlay.closeAd')}
+        title={t('ads.overlay.closeAd')}
         style={{
           left: `${rect.left + rect.width - 26}px`,
           top: `${Math.max(0, rect.top - 26)}px`,
@@ -216,7 +218,9 @@ export default function BannerClick({
       rel="noopener noreferrer"
       // Named for what happens. The banner is already labelled "Ad" in the picture,
       // so this does not have to disclose — it has to say where the tap goes.
-      aria-label={`Open ${advertiser || 'the advertiser'}'s website in a new tab`}
+      aria-label={advertiser
+        ? t('ads.overlay.openSite', { name: advertiser })
+        : t('ads.overlay.openAdvertiserSite')}
       style={{
         left: `${rect.left}px`,
         top: `${rect.top}px`,
