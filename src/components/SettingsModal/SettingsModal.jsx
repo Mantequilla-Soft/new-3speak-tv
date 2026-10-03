@@ -772,7 +772,7 @@ export default function SettingsModal({ isOpen, onClose }) {
 
         {tab === 'general' && (
           <div className="settings-section">
-            <LanguagePicker />
+            <LanguagePicker onNavigate={onClose} />
           </div>
         )}
         {tab === 'general' && (

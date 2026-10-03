@@ -1,6 +1,7 @@
 import i18n from 'i18next';
 import { initReactI18next } from 'react-i18next';
-import { LANGUAGES, LANGUAGE_CODES, DEFAULT_LANGUAGE, getLanguageInfo } from './languages';
+import { LANGUAGES, LANGUAGE_CODES, DEFAULT_LANGUAGE } from './languages';
+import { flatten, LANG_CODE_RE } from './rules';
 
 /**
  * Interface translations.
@@ -13,6 +14,15 @@ import { LANGUAGES, LANGUAGE_CODES, DEFAULT_LANGUAGE, getLanguageInfo } from './
  * English is bundled into the app because it is the fallback for every missing
  * key. Every other language is a lazy chunk, loaded once when it is first chosen,
  * so a visitor only ever downloads the language they read.
+ *
+ * On top of the bundled files sits the COMMUNITY OVERLAY: strings translators
+ * saved in the in-app editor (/translate, server/i18n-editor.cjs). It is fetched
+ * from /api/i18n/overlay/<lang> when a language loads and wins over the bundled
+ * text, so a fix is live for everyone right away and reaches the files later
+ * through a pull request. The overlay is optional: with the API down the app
+ * simply shows the bundled text. Languages added in the editor ("community
+ * languages") have no bundled files at all, only overlay, with English for the
+ * rest; they come from /api/i18n/languages and join the picker when they arrive.
  *
  * In React use the hook:      const { t } = useTranslation();
  * Outside React (utils, toasts, stores) import `t` from here. It reads the CURRENT
@@ -33,12 +43,139 @@ function bundle(modules) {
   return out;
 }
 
-async function loadLanguage(code) {
-  if (code === DEFAULT_LANGUAGE || i18n.hasResourceBundle(code, 'translation')) return;
+// ---- Community overlay + community languages ------------------------------------
+
+const API = import.meta.env.VITE_THREESPEAK_API || '/api';
+const OVERLAY_KEY_RE = /^[\w-]+(\.[\w-]+)+$/;
+
+async function fetchJson(url, { timeoutMs = 4000, ...init } = {}) {
+  const ctrl = typeof AbortController !== 'undefined' ? new AbortController() : null;
+  const timer = ctrl ? setTimeout(() => ctrl.abort(), timeoutMs) : null;
+  try {
+    const res = await fetch(url, { ...init, signal: ctrl?.signal });
+    if (!res.ok) return null;
+    return await res.json();
+  } catch {
+    return null; // the site must work with the API down
+  } finally {
+    if (timer) clearTimeout(timer);
+  }
+}
+
+/** Saved community strings for a language, flat ({ "watch.title": "…" }), or null. */
+export async function fetchOverlay(code, { fresh = false } = {}) {
+  if (code === DEFAULT_LANGUAGE || !LANG_CODE_RE.test(code)) return null;
+  // Short timeout: switching language waits for this, and it is only an extra.
+  const data = await fetchJson(`${API}/i18n/overlay/${encodeURIComponent(code)}`, { timeoutMs: 2500, ...(fresh ? { cache: 'no-store' } : {}) });
+  return data && typeof data === 'object' && !Array.isArray(data) ? data : null;
+}
+
+/** Lay flat overlay strings over whatever the language already has. */
+export function applyOverlay(code, flat) {
+  if (!flat || code === DEFAULT_LANGUAGE) return;
+  const clean = {};
+  for (const [k, v] of Object.entries(flat)) {
+    if (typeof v === 'string' && v && OVERLAY_KEY_RE.test(k)) clean[k] = v;
+  }
+  if (Object.keys(clean).length) i18n.addResources(code, 'translation', clean);
+}
+
+let community = [];
+let allLanguages = LANGUAGES;
+const languageListeners = new Set();
+
+/** Bundled + community languages. Stable reference until the list changes. */
+export const getAllLanguages = () => allLanguages;
+export const subscribeLanguages = (fn) => {
+  languageListeners.add(fn);
+  return () => languageListeners.delete(fn);
+};
+export const findLanguage = (code) => allLanguages.find((l) => l.code === code);
+const isKnownLanguage = (code) => allLanguages.some((l) => l.code === code);
+
+// i18next drops languages missing from supportedLngs, so a community language
+// has to be added there before it can be switched to.
+function allowLanguage(code) {
+  const lists = new Set([i18n.options?.supportedLngs, i18n.services?.languageUtils?.supportedLngs]);
+  for (const list of lists) if (Array.isArray(list) && !list.includes(code)) list.push(code);
+}
+
+export function registerCommunityLanguages(list) {
+  if (!Array.isArray(list)) return;
+  const known = new Set(allLanguages.map((l) => l.code));
+  const added = [];
+  for (const l of list) {
+    if (!l || typeof l.code !== 'string' || !LANG_CODE_RE.test(l.code) || known.has(l.code)) continue;
+    known.add(l.code);
+    added.push({
+      code: l.code,
+      native: String(l.native || l.code).slice(0, 40),
+      english: String(l.english || l.code).slice(0, 40),
+      ...(l.dir === 'rtl' ? { dir: 'rtl' } : {}),
+      community: true,
+    });
+    allowLanguage(l.code);
+  }
+  if (!added.length) return;
+  community = [...community, ...added];
+  allLanguages = [...LANGUAGES, ...community];
+  languageListeners.forEach((fn) => fn());
+}
+
+let communityPromise = null;
+/** Fetch community-added languages once per page load. Never rejects. */
+export function loadCommunityLanguages() {
+  communityPromise ||= fetchJson(`${API}/i18n/languages`).then(registerCommunityLanguages);
+  return communityPromise;
+}
+
+async function loadBundled(code) {
   const prefix = `../locales/${code}/`;
   const entries = Object.entries(others).filter(([p]) => p.startsWith(prefix));
   const loaded = await Promise.all(entries.map(async ([p, load]) => [p, await load()]));
-  i18n.addResourceBundle(code, 'translation', bundle(Object.fromEntries(loaded)), true, true);
+  return bundle(Object.fromEntries(loaded));
+}
+
+/** The bundled text of a language, flat, WITHOUT the overlay (for the editor). */
+export async function loadBundledFlat(code) {
+  if (code === DEFAULT_LANGUAGE) return flatten(bundle(english));
+  return flatten(await loadBundled(code));
+}
+
+/** English, nested by area, exactly as bundled (for the editor). */
+export const getEnglishResources = () => bundle(english);
+
+const loadedLanguages = new Set();
+async function loadLanguage(code) {
+  if (code === DEFAULT_LANGUAGE || loadedLanguages.has(code)) return;
+  const [files, overlay] = await Promise.all([loadBundled(code), fetchOverlay(code)]);
+  i18n.addResourceBundle(code, 'translation', files, true, true);
+  applyOverlay(code, overlay);
+  loadedLanguages.add(code);
+}
+
+/**
+ * Apply saved editor changes in this tab right away: a string sets the text, null
+ * drops the override and puts the bundled text back (or English, if none).
+ */
+export function applyLiveChanges(code, changes, bundledFlat = {}) {
+  if (code === DEFAULT_LANGUAGE) return;
+  const sets = {};
+  const data = i18n.store?.data?.[code]?.translation;
+  for (const [key, value] of Object.entries(changes)) {
+    if (!OVERLAY_KEY_RE.test(key)) continue;
+    if (typeof value === 'string') sets[key] = value;
+    else if (typeof bundledFlat[key] === 'string') sets[key] = bundledFlat[key];
+    else if (data) {
+      const parts = key.split('.');
+      let node = data;
+      for (const p of parts.slice(0, -1)) node = node && Object.prototype.hasOwnProperty.call(node, p) ? node[p] : null;
+      if (node && typeof node === 'object') delete node[parts[parts.length - 1]];
+    }
+  }
+  if (Object.keys(sets).length) i18n.addResources(code, 'translation', sets);
+  // react-i18next re-renders on languageChanged, not on added resources.
+  if (i18n.language === code) i18n.changeLanguage(code);
 }
 
 function readStored() {
@@ -57,14 +194,16 @@ export function detectBrowserLanguage() {
 
 function initialLanguage() {
   const stored = readStored();
-  if (stored && LANGUAGE_CODES.includes(stored)) return stored;
+  // A community language is only known once /api/i18n/languages answers, so a
+  // well-formed stored code is kept and resolved in setLanguage.
+  if (stored && (LANGUAGE_CODES.includes(stored) || LANG_CODE_RE.test(stored))) return stored;
   return detectBrowserLanguage();
 }
 
 function applyDocumentLanguage(code) {
   if (typeof document === 'undefined') return;
   document.documentElement.lang = code;
-  document.documentElement.dir = getLanguageInfo(code)?.dir || 'ltr';
+  document.documentElement.dir = findLanguage(code)?.dir || 'ltr';
 }
 
 i18n.use(initReactI18next).init({
@@ -88,7 +227,10 @@ i18n.on('languageChanged', applyDocumentLanguage);
  * did not pick.
  */
 export async function setLanguage(code, { remember = true } = {}) {
-  if (!LANGUAGE_CODES.includes(code)) code = DEFAULT_LANGUAGE;
+  if (!isKnownLanguage(code) && typeof code === 'string' && LANG_CODE_RE.test(code)) {
+    await loadCommunityLanguages();
+  }
+  if (!isKnownLanguage(code)) code = DEFAULT_LANGUAGE;
   await loadLanguage(code);
   await i18n.changeLanguage(code);
   if (remember) {
@@ -100,6 +242,7 @@ export async function setLanguage(code, { remember = true } = {}) {
 export function initLanguage() {
   const code = initialLanguage();
   applyDocumentLanguage(DEFAULT_LANGUAGE);
+  loadCommunityLanguages();
   if (code !== DEFAULT_LANGUAGE) {
     setLanguage(code, { remember: false }).catch(() => { /* stay in English */ });
   }

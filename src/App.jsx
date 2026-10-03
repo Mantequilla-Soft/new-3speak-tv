@@ -119,6 +119,7 @@ const Wallet = lazyRoute(() => import("./page/Wallet"), "./page/Wallet");
 const Watch = lazyRoute(() => import("./page/Watch"), "./page/Watch");
 const WatchStream = lazyRoute(() => import("./page/WatchStream"), "./page/WatchStream");
 const WatchedView = lazyRoute(() => import("./page/WatchedView"), "./page/WatchedView");
+const Translate = lazyRoute(() => import("./page/Translate/Translate"), "./page/Translate/Translate");
 
 function OpenPodModalMounter() {
   const { activeRoom, closeRoom, sessionToken, hangoutsUser } = useHangout();
@@ -710,6 +711,8 @@ function App() {
               <Route path="/badge/:account" element={<BadgePage />} />
               <Route path="/t/:tag" element={<TagFeed />} />
               <Route path="/leaderboard" element={<Leaderboard />} />
+              {/* In-app translation editor; translators only (server-checked). */}
+              <Route path="/translate" element={<Translate />} />
               <Route path="/surf" element={<Surf />} />
               <Route path="/advertise" element={<Advertise openLoginModal={openLoginModal} />} />
               {/* Invite links (Butter Auth referral fast-track): the landing page a
