@@ -20,18 +20,20 @@ import { getHiveClient } from '../../utils/hiveNode';
 import '../legacy-studio/StudioPage.scss';
 import SettingInfo, { SettingSheet } from './SettingInfo';
 import './EmbedDetails.scss';
+import { useTranslation, Trans } from 'react-i18next';
 
 // Every toast from this module is headed "Upload"; the message becomes the
 // line under it. See utils/toast.js.
 const toast = toastIn('Upload');
 
 const REWARD_LABELS = {
-  default: 'Default 50% 50%',
-  powerup: 'Power up 100%',
-  decline: 'Decline payout',
+  default: 'upload.details.rewards.default',
+  powerup: 'upload.details.rewards.powerup',
+  decline: 'upload.details.rewards.decline',
 };
 
 function EmbedDetails() {
+  const { t } = useTranslation();
   // Someone with no Hive account yet. Their upload is stored off-chain, so
   // every Hive payout concept below is inapplicable rather than merely unset.
   const incubationHandle = useAppStore((s) => s.incubationHandle);
@@ -118,15 +120,15 @@ function EmbedDetails() {
       } catch (err) {
         // A node hiccup must not silently drop the names: say so and add nothing.
         console.error('[allowlist] account lookup failed:', err?.message || err);
-        toast.error('Could not verify those accounts right now. Try again in a moment.');
+        toast.error(t('upload.details.guests.verifyFailed'));
         setAllowlistChecking(false);
         return;
       }
       setAllowlistChecking(false);
     }
 
-    if (malformed.length) toast.error(`Not valid Hive names: ${malformed.join(', ')}`);
-    if (missing.length) toast.error(`No such Hive account: ${missing.join(', ')}`);
+    if (malformed.length) toast.error(t('upload.details.guests.invalidNames', { names: malformed.join(', ') }));
+    if (missing.length) toast.error(t('upload.details.guests.missingAccounts', { names: missing.join(', ') }));
 
     if (existing.length) {
       setGatedAllowlist([...new Set([...gatedAllowlist, ...existing])]);
@@ -150,7 +152,7 @@ function EmbedDetails() {
         // Only fire a toast if one isn't already showing (3-second throttle)
         if (!descLimitToastRef.current) {
           descLimitToastRef.current = toast.error(
-            'Maximum 240 characters reached for short descriptions.',
+            t('upload.details.shortDescLimit'),
             { duration: 3000 }
           );
           setTimeout(() => { descLimitToastRef.current = null; }, 3000);
@@ -203,17 +205,17 @@ function EmbedDetails() {
 
   const process = () => {
     if (!fromStories && !title?.trim()) {
-      toast.error("Title is required");
+      toast.error(t("upload.details.errors.titleRequired"));
       return;
     }
 
     if (!description?.trim()) {
-      toast.error("Description is required");
+      toast.error(t("upload.details.errors.descriptionRequired"));
       return;
     }
 
     if (!fromStories && (!tagsPreview || tagsPreview.length === 0)) {
-      toast.error("Please add at least one tag");
+      toast.error(t("upload.details.errors.tagRequired"));
       return;
     }
 
@@ -231,7 +233,7 @@ function EmbedDetails() {
     : (community?.name || 'hive-181335');
   const autoTags = fromStories ? ['hive-181335'] : [communityTag];
   const maxUserTags = Math.max(0, 10 - autoTags.length);
-  const allTags = [...autoTags, ...tagsPreview.filter((t) => !autoTags.includes(t))];
+  const allTags = [...autoTags, ...tagsPreview.filter((tag) => !autoTags.includes(tag))];
 
   const handleTagChange = (e) => {
     const value = e.target.value.toLowerCase();
@@ -241,10 +243,10 @@ function EmbedDetails() {
       .split(/\s+/)
       .filter(Boolean);
 
-    const uniqueTags = [...new Set(tags)].filter((t) => !autoTags.includes(t));
+    const uniqueTags = [...new Set(tags)].filter((tag) => !autoTags.includes(tag));
 
     if (uniqueTags.length > maxUserTags) {
-      toast.error(`You can add up to ${maxUserTags} tags — the community tag is added automatically.`);
+      toast.error(t('upload.details.errors.tooManyTags', { max: maxUserTags }));
       return;
     }
 
@@ -256,7 +258,7 @@ function EmbedDetails() {
     <>
       <div className="studio-main-container embed-details-page">
         <div className="studio-page-header">
-          <h1>{fromStories ? "Share a Short" : "Share a Video"}</h1>
+          <h1>{fromStories ? t("upload.page.shareShort") : t("upload.page.shareVideo")}</h1>
         </div>
         <StepProgress step={step} />
         <EmbedUploadProgressBar />
@@ -266,17 +268,17 @@ function EmbedDetails() {
             <div className="video-items">
               {!fromStories && (
                 <div className="input-group">
-                  <label htmlFor="">Title</label>
+                  <label htmlFor="">{t("upload.details.title")}</label>
                   <input type="text" value={title} onChange={(e) => setTitle(e.target.value)} />
                 </div>
               )}
               <div className="input-group">
-                <label htmlFor="">Description</label>
+                <label htmlFor="">{t("upload.details.description")}</label>
                 <div className={`wrap-dec${fromStories ? ' wrap-dec--short' : ''}`}>
                   <MarkdownComposer
                     value={description}
                     onChange={handleDescriptionChange}
-                    placeholder={fromStories ? "Describe your short..." : "Write your video description here... Supports markdown formatting!"}
+                    placeholder={fromStories ? t("upload.details.descriptionPlaceholderShort") : t("upload.details.descriptionPlaceholder")}
                   />
                 </div>
                 {fromStories && (
@@ -296,18 +298,18 @@ function EmbedDetails() {
 
               <div className="input-group">
                 <label htmlFor="">
-                  Tag
+                  {t("upload.details.tag")}
                   <span
                     className="tag-count"
                     style={{ marginLeft: 8, color: allTags.length >= 10 ? '#e0a852' : 'var(--text-muted, #888)' }}
                   >
-                    {allTags.length}/10 tags{!fromStories ? ' · at least 1 required' : ''}
+                    {!fromStories ? t('upload.details.tagCountRequired', { n: allTags.length }) : t('upload.details.tagCount', { n: allTags.length })}
                   </span>
                 </label>
                 <input type="text" value={tagsInputValue} onChange={handleTagChange} />
 
                 <div className="wrap">
-                  <span>Separate multiple tags with </span> <span>Space</span>
+                  <Trans i18nKey="upload.details.tagsSeparator" components={{ text: <span />, space: <span /> }} />
                 </div>
                 {/* The community (and 'short' for shorts) is added automatically —
                     shown here as a pinned tag and counted toward the 10-tag limit. */}
@@ -317,7 +319,7 @@ function EmbedDetails() {
                       className={`item${index < autoTags.length ? ' item--auto' : ''}`}
                       key={index}
                       style={index < autoTags.length ? { opacity: 0.75, fontStyle: 'italic' } : undefined}
-                      title={index < autoTags.length ? 'Added automatically' : undefined}
+                      title={index < autoTags.length ? t('upload.details.addedAutomatically') : undefined}
                     >
                       {item}
                     </span>
@@ -334,35 +336,35 @@ function EmbedDetails() {
                 {!fromStories && (
                   <div className="beneficiary-wrap community-tile is-clickable" onClick={openCommunityModal}>
                     <div className="wrap">
-                      <span>Community<SettingInfo title="Community">Which Hive community this video is posted to. It becomes the post&apos;s category, so community feeds and moderation follow it.</SettingInfo></span>
-                      <span>Where this video is posted.</span>
+                      <span>{t('upload.details.community.label')}<SettingInfo title={t('upload.details.community.label')}>{t('upload.details.community.info')}</SettingInfo></span>
+                      <span>{t('upload.details.community.hint')}</span>
                     </div>
                     <div className="tile-value community-value">
-                      {community ? <span>{community === "hive-181335" ? <div className="wrap"><img src={`https://images.hive.blog/u/hive-181335/avatar/small`} alt="" /><span></span>Threespeak</div> : <div className="wrap"><img src={`https://images.hive.blog/u/${community.name}/avatar/small`} alt="" /><span></span>{community.title}</div>}</span> : <span> Select Community </span>}
+                      {community ? <span>{community === "hive-181335" ? <div className="wrap"><img src={`https://images.hive.blog/u/hive-181335/avatar/small`} alt="" /><span></span>Threespeak</div> : <div className="wrap"><img src={`https://images.hive.blog/u/${community.name}/avatar/small`} alt="" /><span></span>{community.title}</div>}</span> : <span> {t('upload.details.community.select')} </span>}
                       <IoIosArrowDropdownCircle size={16} />
                     </div>
                   </div>
                 )}
                 <div className="beneficiary-wrap is-clickable" onClick={() => setRewardsOpen(true)}>
                   <div className="wrap">
-                    <span>Rewards<SettingInfo title="Rewards">Optional &quot;Hive Reward Pool&quot; distribution method. Choose the default 50/50 split, power up 100% of the payout, or decline rewards entirely.</SettingInfo></span>
-                      <span>How rewards are paid out.</span>
+                    <span>{t('upload.details.rewards.label')}<SettingInfo title={t('upload.details.rewards.label')}>{t('upload.details.rewards.info')}</SettingInfo></span>
+                      <span>{t('upload.details.rewards.hint')}</span>
                   </div>
-                  <div className="tile-value">{REWARD_LABELS[rewardChoice] || REWARD_LABELS.default}</div>
+                  <div className="tile-value">{t(REWARD_LABELS[rewardChoice] || REWARD_LABELS.default)}</div>
                 </div>
                 <div className="beneficiary-wrap is-clickable" onClick={toggleBeneficiaryModal}>
                   <div className="wrap">
-                    <span>Beneficiaries<SettingInfo title="Beneficiaries">Other accounts that should get a percentage of this post's rewards. Useful for co-creators, editors, or the original author of a clip.</SettingInfo></span>
-                      <span>Share rewards with others.</span>
+                    <span>{t('upload.details.beneficiaries.label')}<SettingInfo title={t('upload.details.beneficiaries.label')}>{t('upload.details.beneficiaries.info')}</SettingInfo></span>
+                      <span>{t('upload.details.beneficiaries.hint')}</span>
                   </div>
                   <div className="tile-value">{list.length > 0
-                    ? `${list.length} account${list.length === 1 ? '' : 's'}`
-                    : 'None'}</div>
+                    ? t('upload.details.beneficiaries.accounts', { count: list.length })
+                    : t('upload.details.beneficiaries.none')}</div>
                 </div>
                 <div className="beneficiary-wrap" onClick={() => setIsRemix(!isRemix)}>
                   <div className="wrap">
-                    <span>Allow Remix/Clip<SettingInfo title="Allow Remix/Clip">Allow others to create remixes and clips from this video. You will be credited as original author and receive a minimum of 5% in beneficiaries.</SettingInfo></span>
-                      <span>Let others remix this.</span>
+                    <span>{t('upload.details.remix.label')}<SettingInfo title={t('upload.details.remix.label')}>{t('upload.details.remix.info')}</SettingInfo></span>
+                      <span>{t('upload.details.remix.hint')}</span>
                   </div>
                   <label className={`toggle-switch${isRemix ? ' disabled' : ''}`}>
                     <input
@@ -376,8 +378,8 @@ function EmbedDetails() {
                 </div>
                 <div className="beneficiary-wrap" onClick={() => setIsNsfw(!isNsfw)}>
                   <div className="wrap">
-                    <span>Mark as NSFW<SettingInfo title="Mark as NSFW">Flags this video as adult content. It will be hidden from feeds and search for viewers who have not enabled NSFW, and tagged <code>nsfw</code> across Hive.</SettingInfo></span>
-                      <span>Adult content.</span>
+                    <span>{t('upload.details.nsfw.label')}<SettingInfo title={t('upload.details.nsfw.label')}><Trans i18nKey="upload.details.nsfw.info" components={{ code: <code /> }} /></SettingInfo></span>
+                      <span>{t('upload.details.nsfw.hint')}</span>
                   </div>
                   <label className="toggle-switch" onClick={(e) => e.stopPropagation()}>
                     <input
@@ -399,17 +401,12 @@ function EmbedDetails() {
                 {!fromStories && isPro && isTestUser(user) && (
                   <div className="beneficiary-wrap" onClick={() => setGated(!gated)}>
                     <div className="wrap">
-                      <span>Supporters only<SettingInfo title="Supporters only">
-                          Encrypts this video so only 3Speak Pro subscribers can play it.
-                          A <strong>10 second unencrypted preview</strong> is published alongside
-                          it, so the post still shows a trailer everywhere on Hive.
-                          {' '}Your title, description and tags are ordinary Hive post content and
-                          are <strong>not encrypted</strong> — only the video is.
-                          {' '}<strong>This cannot be changed after upload.</strong>
+                      <span>{t('upload.details.gated.label')}<SettingInfo title={t('upload.details.gated.label')}>
+                          <Trans i18nKey="upload.details.gated.info" components={{ b: <strong /> }} />
                         </SettingInfo></span>
                       <span>{gated && gatedAllowlist.length
-                        ? `Pro subscribers + ${gatedAllowlist.length} guest${gatedAllowlist.length === 1 ? '' : 's'}.`
-                        : 'Pro subscribers only.'}</span>
+                        ? t('upload.details.gated.withGuests', { count: gatedAllowlist.length })
+                        : t('upload.details.gated.hint')}</span>
                     </div>
                     <label className="toggle-switch" onClick={(e) => e.stopPropagation()}>
                       <input
@@ -429,7 +426,7 @@ function EmbedDetails() {
                         className="schedule-tile__change"
                         onClick={(e) => { e.stopPropagation(); setGuestsOpen(true); }}
                       >
-                        Guest list
+                        {t('upload.details.guests.title')}
                       </button>
                     )}
                   </div>
@@ -438,8 +435,8 @@ function EmbedDetails() {
                 {!fromStories && (
                   <div className="beneficiary-wrap" onClick={() => setIsChannelTrailer(!isChannelTrailer)}>
                     <div className="wrap">
-                      <span>Channel trailer<SettingInfo title="Channel trailer">Plays automatically at the top of your profile&apos;s <strong>Overview</strong> tab, replacing any trailer you set before.</SettingInfo></span>
-                      <span>Autoplays on your profile.</span>
+                      <span>{t('upload.details.trailer.label')}<SettingInfo title={t('upload.details.trailer.label')}><Trans i18nKey="upload.details.trailer.info" components={{ b: <strong /> }} /></SettingInfo></span>
+                      <span>{t('upload.details.trailer.hint')}</span>
                     </div>
                     <label className="toggle-switch" onClick={(e) => e.stopPropagation()}>
                       <input
@@ -459,10 +456,10 @@ function EmbedDetails() {
                 {!fromStories && (
                   <div className="beneficiary-wrap schedule-tile" onClick={() => { const next = !isScheduled; setIsScheduled(next); if (next) { if (!scheduleDateTime) { const { minFormatted, minDate } = getMinMaxDates(); setScheduleDateTime(minFormatted || minDate?.toISOString().slice(0, 16)); } setScheduleDraft(scheduleDateTime || ''); setScheduleOpen(true); } }}>
                     <div className="wrap">
-                      <span>Schedule this post<SettingInfo title="Schedule this post">Queues the post and publishes it automatically at the time you choose, at least 15 minutes from now and up to 90 days out. It is broadcast by @threespeak on your behalf, so you will be asked to authorize that once.</SettingInfo></span>
+                      <span>{t('upload.details.schedule.label')}<SettingInfo title={t('upload.details.schedule.label')}>{t('upload.details.schedule.info')}</SettingInfo></span>
                       <span>{isScheduled && scheduleDateTime
                         ? new Date(scheduleDateTime).toLocaleString(undefined, { dateStyle: 'medium', timeStyle: 'short' })
-                        : 'Publish immediately.'}</span>
+                        : t('upload.details.schedule.immediately')}</span>
                     </div>
                     <label className="toggle-switch" onClick={(e) => e.stopPropagation()}>
                       <input
@@ -487,7 +484,7 @@ function EmbedDetails() {
                     </label>
                     {isScheduled && (
                       <button type="button" className="schedule-tile__change" onClick={(e) => { e.stopPropagation(); setScheduleDraft(scheduleDateTime || ''); setScheduleOpen(true); }}>
-                        Change time
+                        {t('upload.details.schedule.changeTime')}
                       </button>
                     )}
                   </div>
@@ -495,12 +492,12 @@ function EmbedDetails() {
               </div>
               )}
 
-              <SettingSheet title="Rewards" open={rewardsOpen} onClose={() => setRewardsOpen(false)}>
+              <SettingSheet title={t('upload.details.rewards.label')} open={rewardsOpen} onClose={() => setRewardsOpen(false)}>
                 <div className="option-sheet">
                   {[
-                    { value: 'default', label: 'Default 50% 50%', hint: 'Half HBD, half Hive Power.' },
-                    { value: 'powerup', label: 'Power up 100%', hint: 'All rewards as Hive Power.' },
-                    { value: 'decline', label: 'Decline payout', hint: 'Take no rewards for this post.' },
+                    { value: 'default', label: t('upload.details.rewards.default'), hint: t('upload.details.rewards.defaultHint') },
+                    { value: 'powerup', label: t('upload.details.rewards.powerup'), hint: t('upload.details.rewards.powerupHint') },
+                    { value: 'decline', label: t('upload.details.rewards.decline'), hint: t('upload.details.rewards.declineHint') },
                   ].map((opt) => (
                     <button
                       type="button"
@@ -515,22 +512,20 @@ function EmbedDetails() {
                 </div>
               </SettingSheet>
 
-              <SettingSheet title="Guest list" open={guestsOpen} onClose={() => setGuestsOpen(false)}>
+              <SettingSheet title={t('upload.details.guests.title')} open={guestsOpen} onClose={() => setGuestsOpen(false)}>
                 <p className="schedule-sheet__note" style={{ marginTop: 0 }}>
-                  These Hive accounts can watch without 3Speak Pro. The list is kept private on
-                  our servers and is never published to your post, so nobody can see who you
-                  shared it with.
+                  {t('upload.details.guests.note')}
                 </p>
                 <div className="gated-guests__editor">
                   <div className="gated-guests__input-row">
                     <input
                       type="text"
                       value={allowlistDraft}
-                      placeholder="username, another.user"
+                      placeholder={t('upload.details.guests.placeholder')}
                       onChange={(e) => setAllowlistDraft(e.target.value)}
                       onKeyDown={(e) => { if (e.key === 'Enter') { e.preventDefault(); addAllowlistNames(); } }}
                     />
-                    <button type="button" onClick={addAllowlistNames} disabled={allowlistChecking}>{allowlistChecking ? 'Checking…' : 'Add'}</button>
+                    <button type="button" onClick={addAllowlistNames} disabled={allowlistChecking}>{allowlistChecking ? t('upload.details.guests.checking') : t('common.actions.add')}</button>
                   </div>
                   {gatedAllowlist.length > 0 && (
                     <div className="gated-guests__chips">
@@ -539,7 +534,7 @@ function EmbedDetails() {
                           @{name}
                           <button
                             type="button"
-                            aria-label={`Remove ${name}`}
+                            aria-label={t('upload.details.guests.remove', { name })}
                             onClick={() => setGatedAllowlist(gatedAllowlist.filter((n) => n !== name))}
                           >×</button>
                         </span>
@@ -549,7 +544,7 @@ function EmbedDetails() {
                 </div>
               </SettingSheet>
 
-              <SettingSheet title="Schedule this post" open={scheduleOpen} onClose={() => setScheduleOpen(false)}>
+              <SettingSheet title={t('upload.details.schedule.label')} open={scheduleOpen} onClose={() => setScheduleOpen(false)}>
                 {(() => {
                   const { minFormatted, maxFormatted } = getMinMaxDates();
                   return (
@@ -563,8 +558,7 @@ function EmbedDetails() {
                         onChange={(e) => setScheduleDraft(e.target.value)}
                       />
                       <p className="schedule-sheet__note">
-                        At least 15 minutes from now, up to 90 days. Posted automatically by
-                        @threespeak on your behalf — you will be asked to authorize this once.
+                        {t('upload.details.schedule.note')}
                       </p>
                       <div className="sheet-actions">
                         <button
@@ -573,7 +567,7 @@ function EmbedDetails() {
                           disabled={!scheduleDraft}
                           onClick={() => { setScheduleDateTime(scheduleDraft); setScheduleOpen(false); }}
                         >
-                          OK
+                          {t('common.actions.ok')}
                         </button>
                       </div>
                     </>
@@ -587,7 +581,7 @@ function EmbedDetails() {
                     process();
                   }}
                 >
-                  Proceed
+                  {t('upload.details.proceed')}
                 </button>
               </div>
 

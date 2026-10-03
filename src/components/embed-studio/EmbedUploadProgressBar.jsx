@@ -4,6 +4,7 @@ import 'ldrs/react/Ring2.css';
 import { useEmbedUpload } from '../../context/EmbedUploadContext';
 import { APP_VERSION } from '../../version';
 import './EmbedUploadProgressBar.scss';
+import { useTranslation } from 'react-i18next';
 
 // Compact elapsed time: 45s, 4m12s, 1h05m. Short enough to sit on the fault line
 // without wrapping on a phone.
@@ -38,6 +39,7 @@ function fmtBytes(n) {
  * and for prefilled flows (nothing to upload).
  */
 export default function EmbedUploadProgressBar() {
+  const { t } = useTranslation();
   const {
     videoUploadStatus, uploadProgress, uploading, prefilled, selectedEndpoint,
     statusText, uploadDetail, cancelEarlyUpload,
@@ -84,10 +86,10 @@ export default function EmbedUploadProgressBar() {
 
   const label =
     videoUploadStatus === 'done'
-      ? 'Video uploaded — finish your details to publish.'
+      ? t('upload.progress.uploadedFinishDetails')
       : videoUploadStatus === 'error'
-        ? (statusText || 'Background upload didn’t finish — it will retry when you publish.')
-        : `Uploading your video… ${pct}%`;
+        ? (statusText || t('upload.progress.backgroundFailed'))
+        : t('upload.progress.uploadingPct', { pct });
 
   // Show just the hostname of the chosen upload server.
   const endpointHost = selectedEndpoint
@@ -99,21 +101,21 @@ export default function EmbedUploadProgressBar() {
   // it is on, and whether bytes are actually moving, so a stall is legible.
   const d = uploadDetail || {};
   const bits = [];
-  if (d.method) bits.push(d.method === 'reliable' ? 'Reliable upload' : 'Resumable upload');
+  if (d.method) bits.push(d.method === 'reliable' ? t('upload.progress.methodReliable') : t('upload.progress.methodResumable'));
   if (d.phase) bits.push(d.phase);
-  if (d.attempts > 1 && d.attempt) bits.push(`attempt ${d.attempt}/${d.attempts}`);
+  if (d.attempts > 1 && d.attempt) bits.push(t('upload.progress.attempt', { attempt: d.attempt, attempts: d.attempts }));
   if (Number.isFinite(d.sent) && Number.isFinite(d.total) && d.total > 0) {
     // "sent" is bytes pushed into the socket; "confirmed" is what the server
     // acknowledged. A proxy that swallows uploads makes those two diverge, so
     // show both whenever they disagree.
     bits.push(
       Number.isFinite(d.acked) && d.acked !== d.sent
-        ? `${fmtBytes(d.sent)} sent · ${fmtBytes(d.acked)} confirmed of ${fmtBytes(d.total)}`
-        : `${fmtBytes(d.sent)} of ${fmtBytes(d.total)}`,
+        ? t('upload.progress.sentConfirmedOf', { sent: fmtBytes(d.sent), acked: fmtBytes(d.acked), total: fmtBytes(d.total) })
+        : t('upload.progress.sentOf', { sent: fmtBytes(d.sent), total: fmtBytes(d.total) }),
     );
   }
   if (Number.isFinite(d.chunksTotal) && d.chunksTotal > 0) {
-    bits.push(`chunk ${d.chunksDone ?? 0}/${d.chunksTotal}`);
+    bits.push(t('upload.progress.chunk', { done: d.chunksDone ?? 0, total: d.chunksTotal }));
   }
   const detailLine = bits.join(' · ');
 
@@ -177,7 +179,7 @@ export default function EmbedUploadProgressBar() {
             className="embed-upload-progress-cancel"
             onClick={cancelEarlyUpload}
           >
-            Cancel upload
+            {t('upload.progress.cancelUpload')}
           </button>
         )}
       </div>
@@ -198,10 +200,10 @@ export default function EmbedUploadProgressBar() {
         <span className="embed-upload-progress-detail">{faultLine}</span>
       )}
       {showWaiting && (
-        <span className="embed-upload-progress-waiting">Waiting on: {d.waitingOn}</span>
+        <span className="embed-upload-progress-waiting">{t('upload.progress.waitingOn', { what: d.waitingOn })}</span>
       )}
       {endpointHost && (
-        <span className="embed-upload-progress-endpoint">Upload server: {endpointHost}</span>
+        <span className="embed-upload-progress-endpoint">{t('upload.progress.uploadServer', { host: endpointHost })}</span>
       )}
     </div>
   );

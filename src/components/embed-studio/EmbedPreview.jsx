@@ -16,8 +16,10 @@ import { Rocket, Star } from "lucide-react";
 import { useReviewModal } from "../../lib/reviewStore";
 import UploadGate from "../ads/UploadGate";
 import { fetchUploadGateAd, confirmUploadGatePost, gateSessionId } from "../../lib/uploadGate";
+import { useTranslation, Trans } from "react-i18next";
 
 function EmbedPreview() {
+  const { t } = useTranslation();
   const {
     step,
     title,
@@ -129,13 +131,13 @@ function EmbedPreview() {
     : { name: community.name, title: community.title || community.name };
 
   const payoutLabel = declineRewards
-    ? "Declined (rewards burned)"
+    ? t("upload.review.payoutDeclined")
     : rewardPowerup
-      ? "100% Hive Power"
-      : "50% HBD / 50% HP";
+      ? t("upload.review.payoutPowerup")
+      : t("upload.review.payoutDefault");
 
   const isRemix = !!(originalAuthor && originalPermlink);
-  const remixLabel = isRemix ? "On (this is a remix)" : reusable ? "Allowed" : "Not allowed";
+  const remixLabel = isRemix ? t("upload.review.remixOn") : reusable ? t("upload.review.remixAllowed") : t("upload.review.remixNotAllowed");
 
   // The body the viewer will actually read = description (+ remix credit). The
   // published body also prepends the embed URL and appends a "Watch on 3Speak"
@@ -215,7 +217,7 @@ function EmbedPreview() {
       {!uploading && !completed && (
         <div className="studio-main-container">
           <div className="studio-page-header">
-            <h1>{fromStories ? "Share a Short" : "Share a Video"}</h1>
+            <h1>{fromStories ? t("upload.page.shareShort") : t("upload.page.shareVideo")}</h1>
           </div>
 
           <StepProgress step={step} />
@@ -245,11 +247,11 @@ function EmbedPreview() {
 
               {/* Everything that isn't the post body, shown below it. */}
               <div className="ep-settings">
-                <div className="ep-settings__head">Publish settings</div>
+                <div className="ep-settings__head">{t("upload.review.publishSettings")}</div>
 
                 <div className="ep-setting">
                   <span className="ep-setting__icon"><Users size={18} /></span>
-                  <span className="ep-setting__label">Community</span>
+                  <span className="ep-setting__label">{t("upload.details.community.label")}</span>
                   <span className="ep-setting__value ep-setting__value--community">
                     <img src={`https://images.hive.blog/u/${communityDisplay.name}/avatar/small`} alt="" />
                     {communityDisplay.title}
@@ -258,16 +260,16 @@ function EmbedPreview() {
 
                 <div className="ep-setting">
                   <span className="ep-setting__icon"><Coins size={18} /></span>
-                  <span className="ep-setting__label">Payout</span>
+                  <span className="ep-setting__label">{t("upload.review.payout")}</span>
                   <span className="ep-setting__value">{payoutLabel}</span>
                 </div>
 
                 <div className="ep-setting ep-setting--top">
                   <span className="ep-setting__icon"><Gift size={18} /></span>
-                  <span className="ep-setting__label">Beneficiaries</span>
+                  <span className="ep-setting__label">{t("upload.details.beneficiaries.label")}</span>
                   <span className="ep-setting__value">
                     {userBeneficiaries.length === 0 ? (
-                      <span className="ep-muted">None</span>
+                      <span className="ep-muted">{t("upload.details.beneficiaries.none")}</span>
                     ) : (
                       <span className="ep-benes">
                         {userBeneficiaries.map((b, i) => (
@@ -280,7 +282,7 @@ function EmbedPreview() {
 
                 <div className="ep-setting ep-setting--top">
                   <span className="ep-setting__icon"><Tag size={18} /></span>
-                  <span className="ep-setting__label">Tags</span>
+                  <span className="ep-setting__label">{t("upload.review.tags")}</span>
                   <span className="ep-setting__value">
                     {tagsPreview && tagsPreview.length > 0 ? (
                       <span className="ep-tags">
@@ -288,21 +290,21 @@ function EmbedPreview() {
                           <span className="ep-tag" key={index}>{tag}</span>
                         ))}
                       </span>
-                    ) : <span className="ep-muted">None</span>}
+                    ) : <span className="ep-muted">{t("upload.details.beneficiaries.none")}</span>}
                   </span>
                 </div>
 
                 <div className="ep-setting">
                   <span className="ep-setting__icon"><Repeat2 size={18} /></span>
-                  <span className="ep-setting__label">Remix / clip</span>
+                  <span className="ep-setting__label">{t("upload.review.remix")}</span>
                   <span className="ep-setting__value">{remixLabel}</span>
                 </div>
 
                 <div className="ep-setting">
                   <span className="ep-setting__icon"><ShieldAlert size={18} /></span>
-                  <span className="ep-setting__label">Adult / NSFW</span>
+                  <span className="ep-setting__label">{t("upload.review.nsfw")}</span>
                   <span className="ep-setting__value">
-                    {isNsfw ? <span className="ep-nsfw-on">Yes</span> : <span className="ep-muted">No</span>}
+                    {isNsfw ? <span className="ep-nsfw-on">{t("common.actions.yes")}</span> : <span className="ep-muted">{t("common.actions.no")}</span>}
                   </span>
                 </div>
               </div>
@@ -313,7 +315,7 @@ function EmbedPreview() {
                   className="ep-btn ep-btn--secondary"
                   onClick={() => navigate('/embed-studio/details')}
                 >
-                  Edit Post
+                  {t("upload.review.editPost")}
                 </button>
                 {/* Two steps, shown as two buttons, so what is being asked for is never
                     in doubt: watch the spot, then publish. The publish button stays
@@ -325,7 +327,7 @@ function EmbedPreview() {
                     className="ep-btn ep-btn--primary"
                     onClick={startGateAd}
                   >
-                    Watch ad to publish
+                    {t("upload.review.watchAdToPublish")}
                   </button>
                 )}
                 <button
@@ -333,9 +335,9 @@ function EmbedPreview() {
                   className="ep-btn ep-btn--primary"
                   onClick={handlePostVideo}
                   disabled={!gateSatisfied}
-                  title={gateSatisfied ? undefined : 'Watch the sponsor message first'}
+                  title={gateSatisfied ? undefined : t('upload.review.watchSponsorFirst')}
                 >
-                  {fromStories ? 'Post Short' : 'Post Video'}
+                  {fromStories ? t('upload.review.postShort') : t('upload.review.postVideo')}
                 </button>
               </div>
             </div>
@@ -352,9 +354,9 @@ function EmbedPreview() {
             </div>
 
             <h2 className="upload-title">
-              {fromStories ? 'Publishing Short' : 'Publishing Video'}
+              {fromStories ? t('upload.publishing.titleShort') : t('upload.publishing.titleVideo')}
             </h2>
-            <p className="upload-subtitle">Please wait while we process your content...</p>
+            <p className="upload-subtitle">{t("upload.publishing.subtitle")}</p>
 
             <div className="progress-section">
               <div className="progress-bar-container">
@@ -366,24 +368,26 @@ function EmbedPreview() {
                 </div>
               </div>
               <div className="progress-header">
-                <span className="progress-label">{statusText || 'Starting...'}</span>
+                <span className="progress-label">{statusText || t('upload.publishing.starting')}</span>
                 <span className="progress-percentage">{uploadProgress}%</span>
               </div>
             </div>
 
             <div className="caution-wrap">
-              Please stay on this page until publishing is finished.
+              {t("upload.publishing.stayOnPage")}
             </div>
 
             <div className="activity-log">
               <div className="activity-log-header">
                 <div className="wrapin">
                   <FileText size={18} />
-                  <span>Activity Log</span>
+                  <span>{t("upload.publishing.activityLog")}</span>
                 </div>
                 <div className="discord">
-                  For Support reach out to us on{" "}
-                  <a href="https://discord.com/invite/NSFS2VGj83" target="_blank" rel="noopener noreferrer" className="discord-link">Discord</a>
+                  <Trans
+                    i18nKey="upload.publishing.support"
+                    components={{ discordLink: <a href="https://discord.com/invite/NSFS2VGj83" target="_blank" rel="noopener noreferrer" className="discord-link" /> }}
+                  />
                 </div>
               </div>
               <div className="activity-log-content">
@@ -410,22 +414,19 @@ function EmbedPreview() {
             <div className="success-icon">
               <CheckCircle size={34} strokeWidth={2} />
             </div>
-            <h3>Upload Finished!</h3>
+            <h3>{t("upload.done.title")}</h3>
             <p>
               {fromStories
-                ? 'Your short has been published on 3Speak. It will take around 5 minutes to show up on your profile.'
+                ? t('upload.done.shortPublished')
                 : (
-                  <>
-                    Your video has been published!<br />
-                    It&apos;s now encoding in the background, which can take a few minutes.
-                  </>
+                  <Trans i18nKey="upload.done.videoPublished" components={{ br: <br /> }} />
                 )}
             </p>
 
             <div className="success-actions">
               {!fromStories && publishedPermlink && (
                 <button className="promote-success-btn" onClick={() => setPromoteOpen(true)}>
-                  <Rocket size={18} /> Promote this video
+                  <Rocket size={18} /> {t("upload.done.promote")}
                 </button>
               )}
               <button
@@ -439,7 +440,7 @@ function EmbedPreview() {
                 onClick={() => navigate("/profile")}
                 className="profile-btn"
               >
-                Go To My Profile →
+                {t("upload.done.goToProfile")}
               </button>
             </div>
 
@@ -447,7 +448,7 @@ function EmbedPreview() {
               className="review-success-btn"
               onClick={() => openReview({ area: 'upload', username: user || null, permlink: publishedPermlink || null })}
             >
-              <Star size={18} /> How was your upload</button>
+              <Star size={18} /> {t("upload.done.feedback")}</button>
           </div>
         </div>
       )}
