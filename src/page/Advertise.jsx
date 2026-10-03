@@ -24,7 +24,6 @@ import {
   readWizard,
   clearWizard,
   discardProduct,
-  identityIsSilent,
   uploadCreative,
   uploadImageAsset,
   uploadLogo,
@@ -2052,35 +2051,29 @@ export default function Advertise({ openLoginModal }) {
   /**
    * This account's applications.
    *
-   * Two ways in. The cached path replays references we have already proved ownership
-   * of: a reference IS the credential the rest of this page uses, so once one is on
-   * the device it costs nothing and asks for no signature. The signed path goes to
-   * the checker with proof and returns the lot, which is what a new browser needs.
+   * The whole list, from the checker, vouched for by our backend's view of the login
+   * session, so it loads on arrival for every login type with no prompt. Only when
+   * that fails (no session it can verify) does it fall back to the references this
+   * device already holds, which are proof on their own: a reference IS the credential
+   * the rest of this page uses. `forceSigned` is the "Show my products" button, the
+   * one path allowed to ask a wallet for a signature.
    *
    * On react-query rather than a fetch-on-mount effect, like the inventory and rate
    * card above it, so the account key handles invalidation on a login change for us.
    */
-  // Read once per account rather than on every render — localStorage in a render
-  // body would make the query's `enabled` flip about as React re-renders.
-  // eslint-disable-next-line react-hooks/exhaustive-deps -- refsVersion IS the signal
-  const hasCachedRefs = useMemo(() => rememberedReferences(user).length > 0, [user, refsVersion]);
-
   const listMine = useCallback(async () => {
-    const cached = rememberedReferences(user);
-    if (cached.length && !forceSigned) {
+    try {
+      return await fetchMyApplications(user, { prompt: forceSigned });
+    } catch (err) {
+      const cached = forceSigned ? [] : rememberedReferences(user);
+      if (!cached.length) throw err;
       const rows = await Promise.all(cached.map((ref) => fetchApplication(ref)
         .then((r) => ({ ...r, reference: ref }))
         .catch(() => null)));   // a stale reference is not an error worth showing
       return rows.filter(Boolean);
     }
-    return fetchMyApplications(user);
   }, [user, forceSigned]);
 
-  // Runs on arrival when it can do so silently: cached references always, and the
-  // signed route for logins the server can verify on its own (Butter Auth,
-  // HiveSigner). A wallet login would mean a signing popup the moment the page
-  // loads, which is not something to spring on someone who came to read it, so
-  // `forceSigned` waits for them to press the button.
   const {
     data: mine,
     isFetching: mineBusy,
@@ -2089,7 +2082,7 @@ export default function Advertise({ openLoginModal }) {
   } = useQuery({
     queryKey: ['advertise-mine', user, forceSigned, refsVersion],
     queryFn: listMine,
-    enabled: !!user && (forceSigned || hasCachedRefs || identityIsSilent()),
+    enabled: !!user,
     staleTime: 60 * 1000,
     retry: false,
   });

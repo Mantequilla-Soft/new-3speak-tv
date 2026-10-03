@@ -1627,14 +1627,18 @@ app.post('/api/ads/viewer-signature', signChallengeLimiter, async (req, res) => 
 // accepts the public app key plus a CLAIMED username, which is fine for a broadcast
 // the user is watching happen and useless as proof here — it would let anyone read
 // anyone's application by typing a name. Only a real server-side session counts:
-// a Butter Auth cookie, or a HiveSigner token we verify with HiveSigner itself.
-// Wallet logins (Keychain, HiveAuth, PeakVault, Ledger) hold a key in the browser
-// and sign this message client-side instead, so they lose nothing by being refused.
+// a Butter Auth cookie, a wallet-login session (proved with the posting key at
+// login), or a HiveSigner token we verify with HiveSigner itself.
+//
+// It signs a VOUCH ('mine-vouch'), not the user's own 'mine' message: "we verified a
+// session for @x". The checker accepts that from @threespeak's own key without a
+// posting grant, because it only lists what @x already owns. So every login type sees
+// its products on arrival with no wallet prompt. (Owner's call, 2026-10-03.)
 app.post('/api/ads/identity-signature', signChallengeLimiter, async (req, res) => {
   try {
     if (!POSTING_WIF) return res.status(500).json({ error: 'Server is not configured' })
 
-    let hiveUsername = await resolveButrUser(req, res)
+    let hiveUsername = await resolveVerifiedHiveUser(req, res)
     if (!hiveUsername) {
       const authHeader = req.headers.authorization || ''
       const bearer = authHeader.startsWith('Bearer ') ? authHeader.slice(7).trim() : ''
@@ -1650,21 +1654,12 @@ app.post('/api/ads/identity-signature', signChallengeLimiter, async (req, res) =
     }
     hiveUsername = hiveUsername.toLowerCase()
 
-    // We sign as @threespeak, so the grant has to actually exist — otherwise the
-    // checker rejects the signature and the user sees a cryptic failure instead of
-    // a reason they can act on.
-    if (!(await hasThreespeakPostingGrant(hiveUsername))) {
-      return res.status(403).json({
-        error: `Listing your products from here needs @${HIVE_ACCOUNT} posting authority on your account. Log in with Keychain, HiveAuth, PeakVault or Ledger to list them instead.`,
-      })
-    }
-
     const timestamp = Date.now()
-    // Keep in lockstep with mineMessage() in 3speakchecks/routes/advertise.js.
-    const message = ['3speak-ads', 'mine', hiveUsername, String(timestamp)].join('|')
+    // Keep in lockstep with mineVouchMessage() in 3speakchecks/routes/advertise.js.
+    const message = ['3speak-ads', 'mine-vouch', hiveUsername, String(timestamp)].join('|')
     const signature = PrivateKey.fromString(POSTING_WIF).sign(cryptoUtils.sha256(Buffer.from(message, 'utf8'))).toString()
 
-    return res.json({ success: true, signature, timestamp, username: hiveUsername })
+    return res.json({ success: true, signature, timestamp, username: hiveUsername, vouched: true })
   } catch (err) {
     console.error('Ads identity signature error:', err.message)
     res.status(500).json({ error: 'Signing failed' })

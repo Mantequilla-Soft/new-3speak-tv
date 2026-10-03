@@ -478,11 +478,12 @@ export function forgetReferences(account) {
 const mineMessage = (account, timestamp) => ['3speak-ads', 'mine', account, String(timestamp)].join('|');
 
 /**
- * Ask our own backend to prove who is logged in.
+ * Ask our own backend to vouch for who is logged in.
  *
- * Only reachable for sessions the server can actually verify — a Butter Auth cookie
- * or a HiveSigner token. Wallet logins never come through here; they sign locally,
- * which is the path below.
+ * Works for every session the server can verify: a Butter Auth cookie, a HiveSigner
+ * token, or the wallet-login session a Keychain/HiveAuth/PeakVault/Ledger login sets
+ * up when it logs in. The answer is a 'mine-vouch' signature the checker accepts
+ * without a posting grant (`vouched: true`).
  */
 async function identityViaThreespeak(account) {
   const headers = { 'Content-Type': 'application/json' };
@@ -507,49 +508,64 @@ async function identityViaThreespeak(account) {
   if (account && data.username && data.username !== String(account).toLowerCase()) {
     throw new Error('Your session is for a different account. Log out and back in.');
   }
-  return { signature: data.signature, timestamp: data.timestamp, account: data.username };
+  return {
+    signature: data.signature,
+    timestamp: data.timestamp,
+    account: data.username,
+    vouched: data.vouched === true,
+  };
 }
 
 /**
  * Every application belonging to the logged-in account.
  *
- * Costs one signature: a wallet prompt for Keychain/HiveAuth/PeakVault/Ledger, and
- * nothing at all for Butter Auth and HiveSigner, whose sessions the server can
- * verify on its own. The references it returns are cached, so this runs once per
- * browser rather than once per visit.
+ * Silent first: our backend vouches for the session (see identityViaThreespeak), so
+ * nobody is asked for anything on arrival. Only a wallet login with no session yet
+ * (cookies cleared, or it predates sessions) needs a signature, and only with
+ * `prompt` (the user pressed "Show my products"): it sets up the 30-day login
+ * session, which also serves comments and votes, and asks again. Signing the
+ * 'mine' message by hand is the last resort, if that session cannot be made.
  */
-export async function fetchMyApplications(account) {
+export async function fetchMyApplications(account, { prompt = false } = {}) {
   const name = String(account || '').toLowerCase();
   if (!name) return [];
 
-  let signature;
-  let timestamp;
-  if (canSignLocally()) {
-    timestamp = Date.now();
-    const res = await signMessageWithAioha(
-      mineMessage(name, timestamp),
-      KeyTypes.Posting,
-      'Show your advertising applications',
-    );
-    if (!res?.success || !res.result) throw new Error('Signature was rejected.');
-    signature = res.result;
-  } else {
-    ({ signature, timestamp } = await identityViaThreespeak(name));
+  let proof;
+  try {
+    proof = await identityViaThreespeak(name);
+  } catch (err) {
+    if (!canSignLocally()) throw err;
+    if (!prompt) throw new Error('Confirm your login once to list your products.', { cause: err });
+    if (await establishWalletSession(name).catch(() => false)) {
+      proof = await identityViaThreespeak(name).catch(() => null);
+    }
+    if (!proof) {
+      const timestamp = Date.now();
+      const res = await signMessageWithAioha(
+        mineMessage(name, timestamp),
+        KeyTypes.Posting,
+        'Show your advertising applications',
+      );
+      if (!res?.success || !res.result) throw new Error('Signature was rejected.', { cause: err });
+      proof = { signature: res.result, timestamp, vouched: false };
+    }
   }
 
   const body = await readJson(await fetch(`${BASE}/mine`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ account: name, signature, timestamp }),
+    body: JSON.stringify({
+      account: name,
+      signature: proof.signature,
+      timestamp: proof.timestamp,
+      vouched: proof.vouched === true,
+    }),
   }));
 
   const applications = body.applications || [];
   applications.forEach((a) => rememberReference(name, a.reference));
   return applications;
 }
-
-/** True when this login can prove itself with no wallet prompt at all. */
-export const identityIsSilent = () => !canSignLocally();
 
 /** Abandon an enrollment and delete what it created. Pending products only. */
 export async function discardProduct(reference) {
