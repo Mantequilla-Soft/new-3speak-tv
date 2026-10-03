@@ -1,0 +1,81 @@
+{
+  "buckets": {
+    "today": "Hoje",
+    "yesterday": "Ontem",
+    "thisWeek": "Esta semana",
+    "thisMonth": "Este mês",
+    "older": "Mais antigas"
+  },
+  "loginRequired": "Entre na sua conta para ver suas notificações.",
+  "unreadChip_one": "{{count}} nova",
+  "unreadChip_many": "{{count}} novas",
+  "unreadChip_other": "{{count}} novas",
+  "markAllTitle": "Marcar todas como lidas",
+  "marking": "Marcando…",
+  "markAllRead": "Marcar todas como lidas",
+  "refreshing": "Atualizando…",
+  "categories": {
+    "all": "Todas",
+    "replies": "Respostas",
+    "mentions": "Menções",
+    "votes": "Votos",
+    "reblogs": "Reblogs",
+    "follows": "Seguidores",
+    "transfers": "Transferências"
+  },
+  "unread": "Não lidas",
+  "summary": {
+    "title": "Atividade",
+    "today": "Hoje",
+    "week": "Esta semana",
+    "month": "Este mês",
+    "emptyToday": "Nenhuma atividade hoje ainda.",
+    "emptyWeek": "Nenhuma atividade esta semana ainda.",
+    "stillLoading": "Ainda carregando notificações antigas…",
+    "emptyMonth": "Nenhuma atividade este mês."
+  },
+  "loadError": "Não foi possível carregar as notificações.",
+  "empty": {
+    "all": "Você ainda não tem notificações.",
+    "unread": "Nenhuma notificação não lida.",
+    "replies": "Nenhuma resposta ainda.",
+    "mentions": "Nenhuma menção ainda.",
+    "votes": "Nenhum voto ainda.",
+    "reblogs": "Nenhum reblog ainda.",
+    "follows": "Nenhum novo seguidor ainda.",
+    "transfers": "Nenhuma transferência ainda."
+  },
+  "threeSpeakVideo": "Vídeo do 3Speak",
+  "end": "Você chegou ao fim.",
+  "cards": {
+    "votes": "Votos",
+    "voters_one": "{{count}} votante",
+    "voters_many": "{{count}} votantes",
+    "voters_other": "{{count}} votantes",
+    "replies": "Respostas",
+    "newFollowers": "Novos seguidores",
+    "mentions": "Menções",
+    "reblogs": "Reblogs",
+    "transfers": "Transferências"
+  },
+  "group": {
+    "voteOne": "@{{user}} votou no seu post",
+    "voteTwo": "@{{user}} e @{{user2}} votaram no seu post",
+    "voteMany_one": "@{{user}} e mais {{count}} pessoa votaram no seu post",
+    "voteMany_many": "@{{user}} e mais {{count}} pessoas votaram no seu post",
+    "voteMany_other": "@{{user}} e mais {{count}} pessoas votaram no seu post",
+    "followOne": "@{{user}} começou a seguir você",
+    "followTwo": "@{{user}} e @{{user2}} começaram a seguir você",
+    "followMany_one": "@{{user}} e mais {{count}} pessoa começaram a seguir você",
+    "followMany_many": "@{{user}} e mais {{count}} pessoas começaram a seguir você",
+    "followMany_other": "@{{user}} e mais {{count}} pessoas começaram a seguir você",
+    "generic_one": "{{count}} notificação de {{type}}",
+    "generic_many": "{{count}} notificações de {{type}}",
+    "generic_other": "{{count}} notificações de {{type}}",
+    "typeCount_one": "{{count}} {{type}}",
+    "typeCount_many": "{{count}} {{type}}",
+    "typeCount_other": "{{count}} {{type}}",
+    "collapse": "▾ recolher",
+    "expand": "▸ expandir"
+  }
+}

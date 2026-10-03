@@ -1,0 +1,103 @@
+{
+  "controls": {
+    "rewind10": "Voltar 10s",
+    "forward10": "Avançar 10s",
+    "reactToMoment": "Reagir a este momento",
+    "mute": "Silenciar",
+    "unmute": "Ativar som",
+    "playerSize": "Tamanho do player: {{size}}",
+    "sizeStandard": "Padrão",
+    "pip": "Picture-in-Picture",
+    "autoplayOn": "Reprodução automática: ativada",
+    "autoplayOff": "Reprodução automática: desativada",
+    "ambientSubtle": "Luz ambiente: suave",
+    "ambientVivid": "Luz ambiente: intensa",
+    "ambientOff": "Luz ambiente: desativada",
+    "playbackSpeed": "Velocidade",
+    "speedNormal": "Normal",
+    "quality": "Qualidade",
+    "qualityAuto": "Automática",
+    "fullscreen": "Tela cheia",
+    "exitFullscreen": "Sair da tela cheia",
+    "markerReplies_one": "({{count}} resposta)",
+    "markerReplies_many": "({{count}} respostas)",
+    "markerReplies_other": "({{count}} respostas)"
+  },
+  "subtitles": {
+    "title": "Legendas",
+    "off": "Desativadas",
+    "font": "Fonte",
+    "size": "Tamanho",
+    "textColor": "Cor do texto",
+    "textBorder": "Contorno do texto",
+    "borderColor": "Cor do contorno",
+    "background": "Fundo",
+    "none": "Nenhum",
+    "fonts": {
+      "sansSerif": "Sem serifa",
+      "serif": "Serifada",
+      "monospace": "Monoespaçada"
+    }
+  },
+  "mini": {
+    "untitled": "Vídeo"
+  },
+  "playlist": {
+    "previous": "Vídeo anterior",
+    "next": "Próximo vídeo",
+    "close": "Fechar playlist"
+  },
+  "overlay": {
+    "replay": "Assistir de novo"
+  },
+  "reactions": {
+    "translation": "Tradução",
+    "translationFailed": "Falha na tradução",
+    "videoReaction": "Reação em vídeo",
+    "comment": "Comentário",
+    "previous": "Anterior",
+    "next": "Próxima",
+    "hide": "Ocultar reações",
+    "hideShort": "Ocultar",
+    "loadingReplies": "Carregando respostas...",
+    "sizeTitle": "Tamanho: {{size}}",
+    "sizes": {
+      "small": "P",
+      "medium": "M",
+      "standard": "Pad",
+      "big": "G",
+      "cinema": "Cin"
+    },
+    "sizeNames": {
+      "small": "Pequeno",
+      "medium": "Médio",
+      "standard": "Padrão",
+      "big": "Grande",
+      "cinema": "Cinema"
+    }
+  },
+  "reactionUpload": {
+    "authorized": "@threespeak autorizado — agora você pode publicar sua reação",
+    "authFailed": "Falha na autorização. Tente de novo.",
+    "webcamDenied": "Não foi possível acessar a webcam",
+    "shortTooLong": "Shorts devem ter no máximo {{max}}. Desmarque \"Mostrar nos Shorts do 3Speak\" ou use um vídeo mais curto.",
+    "uploadingVideo": "Enviando vídeo...",
+    "noEmbedUrl": "O envio deu certo, mas nenhuma URL de incorporação foi retornada",
+    "publishingComment": "Publicando comentário...",
+    "posted": "Reação em vídeo publicada!",
+    "postFailed": "Não foi possível publicar o comentário",
+    "uploadFailed": "Falha no envio",
+    "uploadVideo": "Enviar vídeo",
+    "recordVideo": "Gravar vídeo",
+    "startRecording": "Começar gravação",
+    "stopRecording": "Parar gravação",
+    "recordedVideo": "Vídeo gravado",
+    "descriptionPlaceholder": "Adicione uma descrição à sua reação em vídeo...",
+    "showInShorts": "Mostrar nos Shorts do 3Speak",
+    "authNote": "Permita que <b>@threespeak</b> publique sua reação em seu nome.",
+    "authorizing": "Autorizando…",
+    "authorize": "Autorizar @threespeak",
+    "uploading": "Enviando...",
+    "postReaction": "Publicar reação"
+  }
+}

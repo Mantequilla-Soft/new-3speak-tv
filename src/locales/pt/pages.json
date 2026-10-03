@@ -1,0 +1,139 @@
+{
+  "about": {
+    "quotes": {
+      "q1": "Se a liberdade significa alguma coisa, é o direito de dizer às pessoas o que elas não querem ouvir.",
+      "q2": "Discordo do que você diz, mas defenderei até a morte o seu direito de dizê-lo.",
+      "q3": "O direito à liberdade de expressão e a expectativa irreal de nunca se ofender não podem coexistir.",
+      "q4": "Em nenhum momento a liberdade de expressão é mais preciosa do que quando um homem acerta o próprio dedo com um martelo.",
+      "q5": "Liberdade de expressão significa liberdade para quem você despreza e liberdade para expressar as opiniões mais desprezíveis.",
+      "q6": "A liberdade de expressão ignorante muitas vezes se volta contra quem fala. Esse é um dos vários motivos pelos quais ela deve ter rédea solta em vez de ser reprimida.",
+      "q7": "A liberdade de expressão inclui a liberdade de ofender as pessoas.",
+      "q8": "Há uma linha tênue entre liberdade de expressão e discurso de ódio. A liberdade de expressão incentiva o debate, enquanto o discurso de ódio incita a violência.",
+      "q9": "Liberdade de expressão significa que você não deve fazer nada contra as pessoas por causa das opiniões que têm, das opiniões que expressam ou das palavras que falam ou escrevem."
+    },
+    "faq": {
+      "what": {
+        "question": "O que é o 3Speak?",
+        "answer": "O 3Speak é um lugar onde os criadores de conteúdo são donos diretos dos seus ativos e das suas comunidades. Com a tecnologia blockchain, a propriedade desses ativos e comunidades pertence ao criador e ao usuário, não ao 3Speak. Por isso, eles podem ser levados para outros apps que usam blockchain. Isso significa que, se não servirmos a comunidade e os criadores da melhor forma possível, eles podem pegar os ativos que geraram e ir para outro app. O resultado é que o 3Speak é resistente à censura, não pode tirar seus ativos nem apagar suas comunidades."
+      },
+      "upvote": {
+        "question": "Por que o 3Speak não vota em mim?",
+        "answer": "O 3Speak vota a seu próprio critério e não segue nenhum critério específico. A melhor forma de chamar nossa atenção é enviar conteúdo de alta qualidade e trazer público e comunidades para o 3Speak."
+      },
+      "missing": {
+        "question": "Por que alguns dos meus vídeos não aparecem no feed de novos?",
+        "answer": "Você pode enviar quantos vídeos quiser! Isso significa que às vezes um único usuário poderia encher os feeds só com o próprio conteúdo. Para evitar isso, limitamos quantos vídeos de um mesmo criador podem aparecer a cada carregamento."
+      },
+      "creator": {
+        "question": "Como me torno um criador de conteúdo?",
+        "answer": "O jeito mais rápido de ter uma conta da Hive é clicar no botão \"Criar conta\" no painel de navegação e seguir as instruções (não perca suas chaves!). Depois, entre com sua conta da Hive e clique em \"estúdio do criador\" / enviar. Pronto, está tudo configurado!"
+      },
+      "rewards": {
+        "question": "Como ganho recompensas por comentar?",
+        "answer": "Para ganhar recompensas, você precisa de uma conta na blockchain Hive. Você pode conseguir uma de graça na Hive (https://signup.hive.io), comprar um guia de usuário da Hive ou pedir para outro usuário da Hive criar uma para você. Com a conta em mãos, entre com o Hivesigner e informe sua chave ACTIVE no primeiro login. Aí você pode publicar comentários que podem render recompensas em criptomoeda."
+      }
+    },
+    "hero": {
+      "tagline1": "PROTEJA SEU CONTEÚDO",
+      "tagline2": "TOKENIZE SUA COMUNIDADE",
+      "cta": "Junte-se à revolução",
+      "description": "O 3Speak é construído na blockchain Hive, garantindo descentralização real, resistência à censura e propriedade da comunidade."
+    },
+    "how": {
+      "title": "Como o 3Speak funciona",
+      "subtitle": "Tenha a propriedade real do seu conteúdo com a tecnologia blockchain",
+      "create": {
+        "title": "Crie conteúdo",
+        "text": "Envie seus vídeos e crie conteúdo que realmente pertence a você na blockchain."
+      },
+      "earn": {
+        "title": "Ganhe recompensas",
+        "text": "Seja recompensado em tokens da Hive e receba doações no nosso token próprio, o Speak."
+      },
+      "community": {
+        "title": "Construa uma comunidade",
+        "text": "Crie seus próprios tokens, marketplaces e economias para apoiar suas comunidades."
+      }
+    },
+    "features": {
+      "title": "Recursos",
+      "rewards": {
+        "title": "RECOMPENSAS",
+        "text": "Ao usar a plataforma, os usuários são recompensados em tokens da Hive e podem receber doações no nosso token próprio, o Speak. Quanto mais desses tokens você tiver, mais privilégios terá no ecossistema."
+      },
+      "p2p": {
+        "title": "P2P",
+        "text": "A tecnologia blockchain usada pelo site garante que os criadores de conteúdo tenham conexões P2P reais com seu público, sem intermediários."
+      },
+      "tokenisation": {
+        "title": "TOKENIZAÇÃO",
+        "text": "Os criadores de conteúdo também podem criar com facilidade seus próprios tokens, marketplaces, recompensas por stake e economias para apoiar suas comunidades."
+      },
+      "freeSpeech": {
+        "title": "LIBERDADE DE EXPRESSÃO",
+        "text": "Nossa política é que a possibilidade de ofender é a base da liberdade de expressão, e a liberdade de expressão, por sua vez, protege as sociedades de cair no caos e na guerra civil."
+      },
+      "journalism": {
+        "title": "JORNALISMO CIDADÃO",
+        "text": "Incentivamos jornalistas cidadãos a se juntarem a nós e publicarem o tipo de conteúdo que costuma ser ignorado. Acreditamos que os jornalistas cidadãos são o futuro."
+      }
+    },
+    "hive": {
+      "title": "Movido pela blockchain Hive",
+      "decentralized": {
+        "title": "Descentralizado",
+        "text": "Nenhum ponto único de falha ou de controle"
+      },
+      "fast": {
+        "title": "Rápido e grátis",
+        "text": "Zero taxa de transação e blocos de 3 segundos"
+      },
+      "community": {
+        "title": "Da comunidade",
+        "text": "Governado pelos participantes, não por corporações"
+      },
+      "description": "O 3Speak é construído na blockchain Hive, garantindo descentralização real, resistência à censura e propriedade da comunidade. O ecossistema da Hive fornece a infraestrutura de recompensas, governança e propriedade de ativos que torna o 3Speak revolucionário."
+    },
+    "guidelines": {
+      "title": "Nossas diretrizes",
+      "subtitle": "Acreditamos que a liberdade de expressão é absoluta, com políticas claras e justas",
+      "support": {
+        "title": "O que apoiamos",
+        "religion": "Criticar religiões, crenças, grupos e pessoas",
+        "politics": "Política alternativa e discussões sobre teorias da conspiração",
+        "governments": "Criticar governos e líderes mundiais",
+        "pseudonyms": "Usar pseudônimos para ter privacidade",
+        "jokes": "Piadas ofensivas (quando claramente identificadas como tal)"
+      },
+      "restrict": {
+        "title": "O que restringimos",
+        "violence": "Pedir ou incitar violência",
+        "gore": "Mostrar violência gráfica excessiva ou conteúdo pornográfico",
+        "slander": "Calúnia e conteúdo difamatório",
+        "illegal": "Atividades ou conteúdo ilegais"
+      }
+    },
+    "faqSection": {
+      "title": "Perguntas frequentes",
+      "subtitle": "Tudo o que você precisa saber sobre o 3Speak"
+    },
+    "quotesTitle": "Vozes da liberdade",
+    "cta": {
+      "title": "Pronto para ser dono do seu conteúdo?",
+      "subtitle": "Junte-se a milhares de criadores que já assumiram o controle dos seus ativos digitais."
+    },
+    "connect": "Conecte-se ao 3Speak",
+    "logoAlt": "Logo do 3Speak"
+  },
+  "legal": {
+    "pageTitle": "Como o 3Speak trata seus dados · 3Speak",
+    "englishOnly": "Esta página só está disponível em inglês. A versão em inglês é a que vale.",
+    "back": "← Voltar ao 3Speak"
+  },
+  "notFound": {
+    "imageAlt": "404",
+    "title": "DESCULPE! PÁGINA NÃO ENCONTRADA",
+    "message": "Infelizmente, a página que você procura não está disponível.",
+    "goHome": "IR PARA O INÍCIO"
+  }
+}

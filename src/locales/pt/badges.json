@@ -1,0 +1,104 @@
+{
+  "page": {
+    "fallbackTitle": "Selo",
+    "kpis": {
+      "recipients": "Premiados",
+      "recentVideos": "Vídeos recentes",
+      "issued": "Emitido"
+    },
+    "issuedBy": "Emitido por <creatorLink>@{{creator}}</creatorLink>",
+    "notFoundTitle": "Selo não encontrado",
+    "notFoundBody": "Não foi possível ler nenhuma conta da Hive chamada @{{account}} agora.",
+    "browseAll": "Ver todos os selos",
+    "tabs": {
+      "videos": "Vídeos",
+      "recipients": "Premiados",
+      "recipientsWithCount": "Premiados ({{num}})"
+    },
+    "errorVideos": "Erro ao carregar os vídeos",
+    "noVideosTitle": "Nenhum vídeo ainda",
+    "noHolders": "Ninguém tem este selo ainda.",
+    "noHolderVideos": "Ninguém com este selo publicou um vídeo no 3Speak ainda.",
+    "loadingMore": "Carregando mais...",
+    "recipientsError": "Não foi possível carregar os premiados",
+    "recipientsLoading": "Carregando premiados...",
+    "noRecipientsTitle": "Nenhum premiado ainda",
+    "noRecipientsBody": "Ninguém recebeu este selo até agora.",
+    "recipientsSummary_one": "{{num}} premiado",
+    "recipientsSummary_many": "{{num}} premiados",
+    "recipientsSummary_other": "{{num}} premiados",
+    "recipientsSummaryWithVideos_one": "{{num}} premiado, {{publishing}} publicando no 3Speak",
+    "recipientsSummaryWithVideos_many": "{{num}} premiados, {{publishing}} publicando no 3Speak",
+    "recipientsSummaryWithVideos_other": "{{num}} premiados, {{publishing}} publicando no 3Speak",
+    "recipientVideos_one": "{{num}} vídeo",
+    "recipientVideos_many": "{{num}} vídeos",
+    "recipientVideos_other": "{{num}} vídeos",
+    "recipientNoVideos": "Nenhum vídeo"
+  },
+  "directory": {
+    "title": "Selos",
+    "intro": "Selos são prêmios <b>dados a você por outras pessoas</b> na Hive, por eventos, contribuições e conquistas. Não dá para entrar em um: alguém precisa conceder. Abra um selo para ver o que os premiados publicam aqui.",
+    "searchPlaceholder": "Pesquisar selos...",
+    "sort": {
+      "recipients": "Premiados",
+      "created": "Criação",
+      "name": "Nome"
+    },
+    "createLocked": "Criar um selo exige uma conta da Hive. Isso será liberado quando a sua estiver pronta.",
+    "create": "Criar selo",
+    "loadError": "Não foi possível carregar os selos agora.",
+    "noMatch": "Nenhum selo corresponde a essa pesquisa.",
+    "held": "Seu",
+    "recipients_one": "{{num}} premiado",
+    "recipients_many": "{{num}} premiados",
+    "recipients_other": "{{num}} premiados"
+  },
+  "award": {
+    "success": "@{{username}} agora tem o selo {{title}}",
+    "failed": "Não foi possível conceder esse selo",
+    "dialogLabel": "Conceder um selo a {{username}}",
+    "title": "Conceder um selo",
+    "toUser": "para @{{username}}",
+    "awarding": "Concedendo…",
+    "held": "Já tem",
+    "award": "Conceder",
+    "note": "O selo passa a seguir a pessoa na Hive, e é isso que significa ter o selo. Você pode retirá-lo na própria página do selo."
+  },
+  "hive": {
+    "dragToReorder": "Arraste para reordenar",
+    "orderSaved": "Ordem dos selos salva no seu perfil da Hive",
+    "orderSaveFailed": "Não foi possível salvar a ordem dos selos",
+    "dialogLabel": "Selos de @{{username}}",
+    "title": "Selos",
+    "arrangeHint": "Arraste seus selos para a ordem em que quer exibi-los.",
+    "earnedCount_one": "{{count}} selo conquistado por @{{username}} na Hive",
+    "earnedCount_many": "{{count}} selos conquistados por @{{username}} na Hive",
+    "earnedCount_other": "{{count}} selos conquistados por @{{username}} na Hive",
+    "alwaysFirst": "Sempre exibido primeiro",
+    "saveOrder": "Salvar ordem",
+    "arrange": "Organizar",
+    "arrangeTitle": "Escolha a ordem em que seus selos aparecem",
+    "showAll_one": "Mostrar o {{count}} selo",
+    "showAll_many": "Mostrar todos os {{count}} selos",
+    "showAll_other": "Mostrar todos os {{count}} selos",
+    "awardTitle": "Conceder um dos seus selos a @{{username}}"
+  },
+  "leaderboardBadges": {
+    "proTitle": "Este criador apoia o 3Speak com uma assinatura Pro"
+  },
+  "leaderboard": {
+    "watchNotice": "O tempo assistido só é registrado desde {{since}}, então períodos maiores ainda mostram o mesmo histórico curto.",
+    "unclaimed": "Não resgatado",
+    "noActivity": "Nenhuma atividade neste período ainda",
+    "otherTopics": "Outros",
+    "title": "Rankings",
+    "subtitle": "{{blurb}} — os principais criadores do 3Speak.",
+    "subtitleTopic": "{{blurb}} — os principais criadores em {{topic}}.",
+    "allTopics": "Todos os temas",
+    "finding": "Procurando @{{user}} neste ranking…",
+    "notInTop": "@{{user}} não está no top {{n}} deste ranking.",
+    "loading": "Carregando ranking…",
+    "loadError": "Não foi possível carregar o ranking. Tente de novo daqui a pouco.",
+    "empty": "Ninguém tem {{metric}} neste período ainda."
+  }
+}

@@ -1,0 +1,122 @@
+{
+  "ranges": {
+    "d7": "7d",
+    "d28": "28d",
+    "d90": "90d",
+    "all": "Tudo"
+  },
+  "content": {
+    "all": "Tudo",
+    "videos": "Vídeos",
+    "shorts": "Shorts"
+  },
+  "metrics": {
+    "watchTime": "Tempo assistido",
+    "views": "Visualizações",
+    "avgPct": "% média",
+    "votes": "Votos",
+    "comments": "Comentários",
+    "payout": "Pagamento"
+  },
+  "days": {
+    "short": {
+      "sun": "Dom",
+      "mon": "Seg",
+      "tue": "Ter",
+      "wed": "Qua",
+      "thu": "Qui",
+      "fri": "Sex",
+      "sat": "Sáb"
+    },
+    "initial": {
+      "sun": "D",
+      "mon": "S",
+      "tue": "T",
+      "wed": "Q",
+      "thu": "Q",
+      "fri": "S",
+      "sat": "S"
+    }
+  },
+  "sources": {
+    "threespeak": "3Speak",
+    "player": "Player incorporado"
+  },
+  "trend": {
+    "empty": "Nenhum tempo assistido neste período ainda.",
+    "tip_one": "{{count}} visualização · {{date}}",
+    "tip_many": "{{count}} visualizações · {{date}}",
+    "tip_other": "{{count}} visualizações · {{date}}"
+  },
+  "noData": "Nenhum dado ainda.",
+  "demo": {
+    "viewerLocations": "Localização dos espectadores",
+    "mapBubble_one": "{{country}} — {{count}} sessão",
+    "mapBubble_many": "{{country}} — {{count}} sessões",
+    "mapBubble_other": "{{country}} — {{count}} sessões",
+    "empty": "Nenhum dado de espectadores neste período ainda.",
+    "breakdown": "Detalhamento",
+    "map": "Mapa",
+    "countries": "Países",
+    "devices": "Dispositivos",
+    "browsers": "Navegadores",
+    "whereTitle": "Onde assistem",
+    "whereSub": "3speak vs. player incorporado",
+    "newVsReturning": "Novos vs. recorrentes",
+    "new": "Novos",
+    "returning": "Recorrentes",
+    "located": "{{located}} de {{total}} sessões com localização."
+  },
+  "when": {
+    "title": "Quando seus espectadores assistem",
+    "sub": "UTC · mais escuro = mais visualizações",
+    "cellTitle_one": "{{day}} {{hour}}:00 — {{count}} visualização",
+    "cellTitle_many": "{{day}} {{hour}}:00 — {{count}} visualizações",
+    "cellTitle_other": "{{day}} {{hour}}:00 — {{count}} visualizações",
+    "hour": "{{hour}}h"
+  },
+  "detail": {
+    "summary": "{{votes}} votos · {{comments}} comentários · ${{payout}}"
+  },
+  "compare": {
+    "notEnough": "Não há dados suficientes para comparar.",
+    "start": "Início",
+    "axis": "Retenção ao longo do vídeo",
+    "end": "Fim",
+    "title": "Comparar vídeos",
+    "pickA": "Escolha um vídeo…",
+    "vs": "vs.",
+    "pickB": "Escolha outro…"
+  },
+  "loadError": "Não foi possível carregar suas estatísticas agora.",
+  "emptyRange": "Nenhum dado de visualização neste período ainda — tente “Tudo” ou espere as pessoas assistirem aos seus vídeos.",
+  "tiles": {
+    "avgViewDuration": "Duração média",
+    "avgWatched": "Média assistida",
+    "reactionsPerView": "Reações / visualização"
+  },
+  "subtotals": "{{videos}} vídeos · {{votes}} votos · {{comments}} comentários · ${{payout}} · velocidade média {{rate}}×",
+  "sections": {
+    "trend": "Tempo assistido ao longo do tempo",
+    "best": "Melhor desempenho",
+    "audience": "Seu público"
+  },
+  "openInNewTab": "Abrir o vídeo em nova aba",
+  "footnote": "As estatísticas vêm do rastreamento de prévia e só você pode vê-las.",
+  "video": {
+    "noData": "Nenhum dado ainda",
+    "empty": "Nenhum dado de visualização para este vídeo ainda.",
+    "uniqueViewers": "Espectadores únicos",
+    "avgSpeed": "Velocidade média",
+    "mostDropOff": "📉 A maioria sai em <b>{{time}}</b>",
+    "earlyDrop": "⚡ <b>{{pct}}%</b> saíram nos primeiros 3s",
+    "replayed": "🔁 Reassistido:",
+    "retentionTitle": "Retenção do público",
+    "retentionSub": "parcela dos espectadores ainda assistindo em cada momento",
+    "pctWatching": "{{pct}}% assistindo",
+    "replayTitle": "Mais reassistidos",
+    "replaySub": "trechos que os espectadores mais assistem e reassistem",
+    "hotSpot": "ponto quente",
+    "notEnoughReplays": "Ainda não há repetições suficientes"
+  }
+}
