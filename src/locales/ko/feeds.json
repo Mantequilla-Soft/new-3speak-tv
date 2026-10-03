@@ -1,0 +1,119 @@
+{
+  "loadingMore": "더 불러오는 중…",
+  "promoted": "프로모션",
+  "scrollLeft": "왼쪽으로 스크롤",
+  "scrollRight": "오른쪽으로 스크롤",
+  "errors": {
+    "fetchVideos": "동영상을 불러오는 중 오류가 발생했어요",
+    "loadVideos": "동영상을 불러오지 못했어요",
+    "loadShorts": "쇼츠를 불러오지 못했어요"
+  },
+  "tabs": {
+    "all": "전체",
+    "videos": "동영상",
+    "shorts": "쇼츠",
+    "videosCount": "동영상({{count}})",
+    "shortsCount": "쇼츠({{count}})"
+  },
+  "dateFilters": {
+    "all": "전체 기간",
+    "today": "오늘",
+    "week": "이번 주",
+    "month": "이번 달",
+    "justNow": "방금 전"
+  },
+  "live": {
+    "title": "지금 라이브",
+    "badge": "● LIVE"
+  },
+  "newFromFollowing": {
+    "aria": "팔로우하는 크리에이터의 새 콘텐츠",
+    "shorts_other": "쇼츠 {{count}}개"
+  },
+  "firstUploads": {
+    "title": "첫 업로드"
+  },
+  "newVideos": {
+    "title": "새 동영상"
+  },
+  "home": {
+    "sections": {
+      "discover": "탐색",
+      "home": "홈 피드",
+      "follow": "팔로우 피드",
+      "new": "새 콘텐츠",
+      "interests": "관심사"
+    },
+    "empty": "아직 표시할 내용이 없어요.",
+    "viewAll": "모두 보기",
+    "dragToReorder": "드래그해서 순서 변경",
+    "surfTitle": "채널 서핑: 주제를 고르고 TV처럼 시청하세요",
+    "zapping": "재핑"
+  },
+  "surf": {
+    "pageTitle": "채널 서핑",
+    "intro": "채널을 고르고 편하게 즐기세요. 해당 주제의 인기 동영상을 차례로 틀어 드려요. 지루하다면 <b>재핑</b>을 누르세요. 다른 걸 보고 싶다면 채널을 바꾸세요.",
+    "backTo": "CH {{number}} {{emoji}} {{title}}(으)로 돌아가기",
+    "surprise": "아무거나 틀어줘",
+    "yourChannels": "내 채널",
+    "nothingOnAir": "지금 {{channel}}에서 방송 중인 콘텐츠가 없어요",
+    "tuneFailed": "채널을 맞추지 못했어요. 잠시 후 다시 시도해 주세요.",
+    "remoteAria": "채널 서핑 리모컨",
+    "openGuide": "채널 가이드 열기",
+    "ch": "CH {{number}}",
+    "chLabel": "CH",
+    "channelHint": "CH {{number}}: {{title}}",
+    "channelHintKey": "CH {{number}}: {{title}} ({{key}})",
+    "tuningShort": "튜닝",
+    "tuning": "튜닝 중…",
+    "onAir": "방송 중",
+    "changeChannel": "채널 변경",
+    "nextChannel": "다음 채널",
+    "prevChannel": "이전 채널",
+    "nextVideo": "다음 동영상",
+    "nextVideoKey": "다음 동영상(→)",
+    "zap": "재핑",
+    "findingNext": "다음 동영상 찾는 중…",
+    "stop": "서핑 중지",
+    "stopTitle": "서핑 중지(현재 동영상은 계속 재생)",
+    "guide": "채널 가이드"
+  },
+  "discover": {
+    "searchPlaceholder": "동영상, 쇼츠, 오디오, 커뮤니티 검색...",
+    "clearSearch": "검색어 지우기",
+    "searchFor": "“{{term}}” 검색",
+    "noResultsFor": "“{{term}}”에 대한 검색 결과가 없어요",
+    "types": {
+      "user": "사용자",
+      "community": "커뮤니티",
+      "video": "동영상",
+      "short": "쇼츠",
+      "audio": "오디오",
+      "playlist": "재생목록"
+    },
+    "suggest": {
+      "tags": "태그",
+      "titles": "제목"
+    },
+    "dates": {
+      "today": "오늘",
+      "week": "이번 주",
+      "month": "이번 달",
+      "year": "올해"
+    },
+    "boostRecent": "최신 우선",
+    "filters": "필터",
+    "date": "날짜",
+    "tag": "태그",
+    "tagPlaceholder": "예: crypto, gaming...",
+    "community": "커뮤니티",
+    "communityPlaceholder": "커뮤니티 검색...",
+    "clearAllFilters": "모든 필터 지우기",
+    "allHidden": "모든 콘텐츠 유형이 숨겨져 있어요.",
+    "reenableFilters": "모든 필터 다시 켜기",
+    "groupTitle": "{{label}}({{count}})",
+    "subscribers_other": "구독자 {{count}}명",
+    "authors_other": "작성자 {{count}}명",
+    "views_other": "조회수 {{views}}회"
+  }
+}

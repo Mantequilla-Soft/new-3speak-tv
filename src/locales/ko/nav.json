@@ -1,0 +1,112 @@
+{
+  "theme": {
+    "switchToLight": "라이트 모드로 전환",
+    "switchToDark": "다크 모드로 전환"
+  },
+  "bottom": {
+    "feeds": "피드",
+    "groups": "그룹",
+    "audio": "오디오",
+    "login": "로그인"
+  },
+  "installApp": "앱 설치",
+  "iosInstallHint": "<b>공유</b>를 누른 다음 <b>홈 화면에 추가</b>를 누르세요",
+  "playlists": {
+    "tooltip": "저장했거나 만든 재생목록",
+    "label": "재생목록",
+    "watchLater": "나중에 볼 동영상",
+    "watchLaterCount": "나중에 볼 동영상({{n}})",
+    "watchHistory": "시청 기록",
+    "all": "모든 재생목록"
+  },
+  "advertise": "광고하기",
+  "hidePages": "페이지 숨기기",
+  "showPages": "페이지 표시",
+  "tabs": {
+    "overviewTooltip": "3Speak의 모든 새 콘텐츠와 좋아할 만한 추천 콘텐츠",
+    "overview": "개요",
+    "shortsTooltip": "연속으로 이어지는 짧은 세로 동영상",
+    "audioTooltip": "3Speak에 게시된 팟캐스트, 음악 및 기타 오디오",
+    "groupsTooltip": "가입할 수 있는 커뮤니티와 수여받는 배지",
+    "rankingsTooltip": "지금 가장 많이 벌고 가장 많이 시청되는 크리에이터"
+  },
+  "aboutLink": "3Speak 소개",
+  "profile": {
+    "accountMenu": "계정 메뉴",
+    "myChannelAria": "내 채널",
+    "vpTooltip": "보팅 파워: 다음 투표가 가지는 영향력",
+    "rcTooltip": "리소스 크레딧: Hive에서 하는 활동의 비용",
+    "myChannel": "내 채널",
+    "publishBacklog": "미게시 동영상 게시",
+    "analytics": "분석",
+    "inviteLinks": "초대 링크",
+    "iosInstallToast": "Safari에서 공유 버튼을 누른 다음 \"홈 화면에 추가\"를 누르세요",
+    "changeAccount": "계정 전환",
+    "logout": "로그아웃",
+    "onDiscord": "Discord의 3Speak",
+    "onX": "X의 3Speak",
+    "onTelegram": "Telegram의 3Speak"
+  },
+  "notifications": {
+    "pushOff": "이 기기의 알림을 껐어요",
+    "pushOn": "팔로우하는 크리에이터가 게시하면 알려드릴게요",
+    "pushFailed": "알림 설정을 변경하지 못했어요",
+    "ariaUnread": "알림(읽지 않음 {{count}}개)",
+    "pushBlocked": "브라우저 설정에서 이 사이트의 알림이 차단되어 있어요",
+    "pushNoWorker": "이 빌드에는 서비스 워커가 없어서 여기서 알림을 등록할 수 없어요",
+    "pushStop": "이 기기에서 알림 받지 않기",
+    "pushStart": "팔로우하는 크리에이터가 게시하면 알림 받기",
+    "on": "켜짐",
+    "notifyMe": "알림 받기",
+    "empty": "아직 알림이 없어요.",
+    "threeSpeakVideo": "3Speak 동영상",
+    "group": {
+      "voteOne": "@{{a}}님이 내 게시물에 투표했어요",
+      "voteTwo": "@{{a}}님과 @{{b}}님이 내 게시물에 투표했어요",
+      "voteMany_other": "@{{a}}님 외 {{count}}명이 내 게시물에 투표했어요",
+      "withValue": "{{label}}(${{value}})",
+      "followOne": "@{{a}}님이 나를 팔로우했어요",
+      "followTwo": "@{{a}}님과 @{{b}}님이 나를 팔로우했어요",
+      "followMany_other": "@{{a}}님 외 {{count}}명이 나를 팔로우했어요",
+      "other": "{{type}} 알림 {{count}}개",
+      "typeCount": "{{type}} {{count}}개",
+      "includesWhale": "🐋 고래 계정 포함",
+      "includesOrca": "🐬 범고래 계정 포함",
+      "andMore": "외 {{count}}개…"
+    }
+  },
+  "search": {
+    "types": {
+      "users": "사용자",
+      "communities": "커뮤니티",
+      "videos": "동영상",
+      "shorts": "쇼츠",
+      "audio": "오디오",
+      "playlists": "재생목록"
+    },
+    "dates": {
+      "today": "오늘",
+      "thisWeek": "이번 주",
+      "thisMonth": "이번 달",
+      "thisYear": "올해"
+    },
+    "contentType": "콘텐츠 유형",
+    "boostRecent": "최신 우선",
+    "dateRange": "기간",
+    "tag": "태그",
+    "tagPlaceholder": "예: crypto, gaming...",
+    "community": "커뮤니티",
+    "communityPlaceholder": "커뮤니티 검색...",
+    "clearFilters": "모든 필터 지우기",
+    "allHidden": "모든 콘텐츠 유형이 숨겨져 있어요.",
+    "reenableFilters": "모든 필터 다시 켜기",
+    "noResultsFor": "“{{term}}”에 대한 검색 결과가 없어요",
+    "searchFor": "“{{term}}” 검색",
+    "authors_other": "작성자 {{count}}명",
+    "subscribers_other": "구독자 {{count}}명",
+    "views_other": "조회수 {{formatted}}회",
+    "tags": "태그",
+    "titles": "제목",
+    "placeholder": "검색..."
+  }
+}

@@ -1,0 +1,96 @@
+{
+  "tip": {
+    "successTitle": "팁을 보냈어요!",
+    "successMessage": "{{amount}} {{currency}}를 팁으로 보냈어요. 후원해 주셔서 감사합니다!",
+    "errors": {
+      "allRequired": "모든 항목을 입력해 주세요",
+      "loginRequired": "팁을 보내려면 로그인해 주세요",
+      "insufficientBalance": "잔액이 부족해요",
+      "invalidUsername": "잘못된 사용자 이름이에요",
+      "transferFailed": "송금 실패: {{message}}"
+    },
+    "heading": "@{{recipient}}님에게 팁 보내기",
+    "amountLabel": "금액: ",
+    "amountPlaceholder": "예: 1.000",
+    "currencyLabel": "통화:",
+    "availableBalance": "사용 가능 잔액: {{currency}}",
+    "memoLabel": "메모(선택):",
+    "memoPlaceholder": "예: 멋진 콘텐츠 감사해요!",
+    "send": "팁 보내기"
+  },
+  "cardMenu": {
+    "loginToPersonalize": "피드를 맞춤 설정하려면 로그인해 주세요",
+    "notInterestedToast": "관심 없음 — 이 동영상을 숨길게요",
+    "undo": "실행 취소",
+    "cantHideOwn": "내 동영상은 숨길 수 없어요",
+    "hidingCreatorToast": "@{{author}}님의 동영상을 숨기는 중",
+    "loginForPlaylists": "재생목록에 동영상을 추가하려면 로그인해 주세요",
+    "loginToTag": "동영상에 태그를 달려면 로그인해 주세요",
+    "moreOptions": "옵션 더보기",
+    "addToPlaylist": "재생목록에 추가",
+    "addTag": "태그 추가",
+    "notInterested": "관심 없음",
+    "dontShowCreator": "@{{author}}님 표시 안 함"
+  },
+  "guestList": {
+    "loadFailed": "현재 게스트 목록을 불러오지 못했어요",
+    "saved_other": "게스트 {{count}}명이 시청할 수 있어요",
+    "cleared": "게스트 목록을 비웠어요",
+    "saveFailed": "게스트 목록을 저장하지 못했어요",
+    "invalidAccounts": "유효하지 않은 Hive 계정: {{names}}",
+    "title": "🔒 게스트 목록",
+    "hint": "이 계정들은 3Speak Pro 없이 시청할 수 있어요. 저희 서버에 비공개로 보관되며, 게시물에는 절대 공개되지 않아요.",
+    "notRegistered": "이 동영상은 아직 처리가 끝나지 않았어요. 처리가 끝나면 목록을 수정할 수 있어요.",
+    "placeholder": "username, another.user",
+    "empty": "아직 아무도 없어요. Pro 구독자만 시청할 수 있어요.",
+    "removeAria": "{{name}} 제거"
+  },
+  "voters": {
+    "pinnedTitle_other": "투표자({{count}})",
+    "topVoters": "상위 투표자",
+    "noVotes": "아직 투표가 없어요"
+  },
+  "payout": {
+    "breakdown": "보상 내역",
+    "estimatedBreakdown": "예상 보상 내역",
+    "beneficiaries": "수혜자",
+    "curators": "큐레이터(50%)",
+    "author": "작성자",
+    "total": "합계",
+    "totalEstimated": "합계(예상)"
+  },
+  "vote": {
+    "loginRequired": "이 작업을 완료하려면 로그인하세요",
+    "fetchPostFailed": "게시물 데이터를 불러오지 못했어요",
+    "sameWeight": "이미 이 비율로 투표했어요. 다른 값을 선택하세요.",
+    "failed": "투표 실패: {{message}}",
+    "pleaseTryAgain": "다시 시도해 주세요",
+    "weight": "투표 비율: {{weight}}%",
+    "success": "투표 완료! 가치: ${{value}}",
+    "successTagged": "투표 완료! “{{tag}}” 태그 추가. 가치: ${{value}}",
+    "tagged": "“{{tag}}” 태그를 달았어요.",
+    "vote": "투표",
+    "tagThisVideo": "이 동영상에 태그 달기",
+    "tagOptional": "— 선택 사항 —",
+    "pickTopicFirst": "먼저 주제를 선택하세요",
+    "taggedNoDot": "“{{tag}}” 태그 추가됨",
+    "tagFailed": "태그 실패: {{message}}",
+    "taggedAlreadyVoted": "“{{tag}}” 태그 추가됨 — {{weight}}% 투표는 이미 완료되었어요.",
+    "votingClosed": "투표 마감 — 이 동영상에 태그 달기",
+    "youTagged": "이 동영상에 <b>{{tag}}</b> 태그를 달았어요.",
+    "pickTopic": "주제 선택(100% 투표로 계산돼요)",
+    "submitTag": "태그 제출",
+    "tagThisVideoFull": "이 동영상에 태그 달기(100% 투표로 계산돼요)",
+    "justTag": "투표 없이 태그만 달기"
+  },
+  "tagsPicker": {
+    "autoTagged": "자동 태그: {{tags}}",
+    "searchPlaceholder": "주제 검색…",
+    "searchAria": "주제 검색",
+    "noMatches": "“{{query}}”와 일치하는 주제가 없어요.",
+    "allSelected": "{{category}} 전체가 선택되었어요. 범위를 좁히려면 개별 주제만 추가하세요:",
+    "orPickTopics": "또는 개별 주제 선택:",
+    "goodEnough": "이대로도 좋아요. 더 구체적으로 고를 수도 있어요(선택):",
+    "moreSpecific": "더 구체적으로:"
+  }
+}

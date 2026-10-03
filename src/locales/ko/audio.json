@@ -1,0 +1,267 @@
+{
+  "untitled": "제목 없음",
+  "categories": {
+    "podcast": "팟캐스트",
+    "voice": "음성",
+    "music": "음악",
+    "audiobook": "오디오북",
+    "interview": "인터뷰"
+  },
+  "inline": {
+    "defaultTitle": "OpenPod 녹화본",
+    "defaultSubtitle": "3Speak OpenPods에서 라이브로 녹음됨",
+    "kickerPreview": "오디오 미리보기",
+    "kickerOpenPod": "OpenPod"
+  },
+  "tile": {
+    "artistAlbum": "아티스트 앨범",
+    "listenerPlaylist": "청취자 재생목록",
+    "bpm": "{{bpm}} bpm",
+    "queue": "대기열",
+    "playlist": "재생목록",
+    "plays_other": "재생 {{count}}회"
+  },
+  "author": {
+    "followed": "@{{author}}님을 팔로우했어요",
+    "unfollowed": "@{{author}}님을 언팔로우했어요",
+    "failed": "실패",
+    "tracks_other": "트랙 {{count}}개"
+  },
+  "player": {
+    "openPost": "오디오 게시물 열기",
+    "playlist": "재생목록",
+    "transcript": "스크립트",
+    "volume": "볼륨",
+    "queue": "대기열",
+    "closePlayer": "플레이어 닫기",
+    "curated": "큐레이션",
+    "noCues": "큐가 없어요.",
+    "clearQueue": "대기열 비우기",
+    "clearAll": "모두 지우기",
+    "queueEmpty": "대기열이 비어 있어요."
+  },
+  "share": {
+    "failed": "실패",
+    "copyPeakd": "PeakD 링크 복사",
+    "copiedPeakd": "PeakD 링크를 복사했어요!",
+    "copy3speak": "3Speak 링크 복사",
+    "copied3speak": "3Speak 링크를 복사했어요!",
+    "copyAudioPlayer": "오디오 플레이어 링크 복사",
+    "copiedAudioPlayer": "오디오 플레이어 링크를 복사했어요!",
+    "searchingHive": "Hive 검색 중…"
+  },
+  "post": {
+    "notFound": "게시물을 찾을 수 없어요",
+    "loadFailed": "이 오디오 게시물을 불러오지 못했어요",
+    "loadFailedFull": "이 오디오 게시물을 불러오지 못했어요.",
+    "backToAudio": "← 오디오로 돌아가기",
+    "untitled": "(제목 없음)",
+    "addedToQueue": "대기열에 추가했어요",
+    "signInToVote": "투표하려면 로그인하세요",
+    "voted": "투표함",
+    "vote": "투표",
+    "signInToTip": "팁을 보내려면 로그인하세요",
+    "tip": "팁",
+    "stillIndexing": "이 게시물의 오디오를 아직 인덱싱하는 중이에요. 몇 분 후 다시 시도하세요."
+  },
+  "page": {
+    "sections": {
+      "popular": "인기",
+      "recent": "최신 발매",
+      "podcasts": "팟캐스트",
+      "songs": "노래",
+      "audiobooks": "오디오북",
+      "interviews": "인터뷰"
+    },
+    "dates": {
+      "today": "오늘",
+      "thisWeek": "이번 주",
+      "thisMonth": "이번 달",
+      "thisYear": "올해"
+    },
+    "duration": {
+      "label": "길이",
+      "min": "최소 길이",
+      "max": "최대 길이",
+      "seconds": "{{value}}초",
+      "minutes": "{{value}}분",
+      "hours": "{{value}}시간"
+    },
+    "all": "전체",
+    "musicGenre": "음악 장르",
+    "anyGenre": "모든 장르",
+    "tracks_other": "트랙 {{count}}개",
+    "noTracks": "트랙을 찾을 수 없어요.",
+    "creators": "크리에이터",
+    "albumsPlaylists": "앨범 및 재생목록",
+    "noAudioForFilters": "이 필터에 해당하는 오디오가 없어요."
+  },
+  "upload": {
+    "title": "오디오 업로드",
+    "publishing": "게시 중…",
+    "failed": "실패",
+    "unknown": "알 수 없음",
+    "unknownError": "알 수 없는 오류",
+    "recorded": "녹음됨",
+    "uploaded": "업로드됨",
+    "steps": {
+      "source": "소스",
+      "mode": "방식",
+      "playlist": "재생목록",
+      "post": "게시물",
+      "mainpost": "메인 게시물",
+      "tracks": "트랙",
+      "review": "검토"
+    },
+    "trackTypes": {
+      "voiceSnap": "음성 / Snap"
+    },
+    "toasts": {
+      "pickImage": "이미지 파일을 선택하세요",
+      "thumbFailed": "썸네일 업로드 실패: {{error}}",
+      "appliedToAll": "모든 트랙에 적용했어요",
+      "micDenied": "마이크 접근이 거부되었어요",
+      "signInFirst": "먼저 로그인하세요",
+      "enterPlaylistName": "재생목록 이름을 입력하세요",
+      "creatingPlaylist": "재생목록 \"{{name}}\" 만드는 중…",
+      "playlistCreated": "재생목록을 만들었어요",
+      "failedWithError": "실패: {{error}}",
+      "authorized": "@threespeak 권한 부여 완료 — 이제 게시할 수 있어요",
+      "authFailed": "권한 부여에 실패했어요. 다시 시도해 주세요.",
+      "couldntPublishMain": "메인 게시물을 게시하지 못했어요: {{error}}",
+      "couldntResolveContainer": "peak.snaps 컨테이너를 확인하지 못했어요: {{error}}",
+      "published_other": "트랙 {{count}}개를 게시했어요",
+      "someFailed": "일부 트랙이 실패했어요. 실패한 트랙을 열어 다시 시도하세요"
+    },
+    "gate": {
+      "checking": "확인 중…",
+      "allowThreespeak": "오디오를 게시하려면 <b>@threespeak</b>이 나 대신 게시하도록 허용하세요.",
+      "authorizing": "권한 부여 중…",
+      "authorize": "@threespeak 권한 부여",
+      "notEnoughRc": "지금은 계정에 게시물을 게시할 <b>리소스 크레딧</b>이 부족해요.",
+      "whyCantUpload": "왜 업로드할 수 없나요?"
+    },
+    "discard": {
+      "title": "업로드를 취소할까요?",
+      "body_other": "추가한 트랙이 {{count}}개 있어요. 닫으면 모두 삭제돼요.",
+      "bodyRecording_other": "추가한 트랙 {{count}}개와 진행 중인 녹음이 있어요. 닫으면 모두 삭제돼요.",
+      "keepEditing": "계속 편집",
+      "discard": "삭제"
+    },
+    "source": {
+      "dropHere": "오디오 파일을 여기에 놓거나 클릭해서 찾아보세요",
+      "formats": "MP3, WAV, OGG, WEBM, M4A, FLAC, AAC — 여러 개 가능",
+      "stop": "중지",
+      "orRecord": "또는 라이브로 녹음",
+      "recordLimit": "녹음당 최대 {{minutes}}분",
+      "record": "녹음",
+      "added": "추가됨({{count}})"
+    },
+    "titles": {
+      "help": "각 트랙에 제목을 붙이고 유형을 고르세요. 음악 트랙에는 장르와 BPM 항목이 추가돼요."
+    },
+    "fields": {
+      "trackTitle": "트랙 제목",
+      "genre": "장르",
+      "bpm": "BPM",
+      "descriptionOptional": "설명(선택)"
+    },
+    "playlist": {
+      "helpRequired": "필수 — 재생목록을 선택하거나 만드세요. 앨범 게시물은 재생목록 안에 있어서 트랙들이 3Speak 앨범으로 묶여요. 노출이 늘고 오디오 페이지에서 더 눈에 띄게 배치돼요.",
+      "helpOptional": "선택 — 모든 트랙을 재생목록에 추가해요.",
+      "none": "재생목록 없음",
+      "noneHint": "트랙이 묶이지 않아요",
+      "creatingPending": "만드는 중… (인덱서 대기 중)",
+      "loading": "재생목록 불러오는 중…",
+      "empty": "아직 재생목록이 없어요.",
+      "items_other": "{{count}}개 항목",
+      "newPlaylist": "새 오디오 재생목록",
+      "namePlaceholder": "재생목록 이름",
+      "public": "공개",
+      "private": "비공개",
+      "musicStylePlaceholder": "음악 스타일 / 장르(선택, 예: 일렉트로닉)",
+      "creditsPlaceholder": "크레딧(선택)",
+      "yearPlaceholder": "연도",
+      "labelPlaceholder": "레이블(선택)",
+      "thumbAlt": "앨범 썸네일",
+      "removeThumb": "썸네일 제거",
+      "creating": "만드는 중…",
+      "create": "만들기"
+    },
+    "thumb": {
+      "uploading": "업로드 중…",
+      "addCover": "커버 이미지 추가",
+      "hint": "클릭하거나 드래그 앤 드롭 — JPG / PNG / WebP",
+      "coverAlt": "커버",
+      "removeCover": "커버 제거"
+    },
+    "mode": {
+      "help_other": "트랙 {{count}}개를 추가했어요. 게시 방식을 선택하세요.",
+      "howPublished": "어떻게 게시할까요?",
+      "snapsTitle": "Snap 댓글",
+      "snapsDesc": "각 오디오가 최신 peak.snaps 컨테이너 아래에 답글로 게시돼요. Snaps 피드에 표시돼요(기본값).",
+      "singleTitle": "단독 게시물",
+      "singleTitleSingleOnly": "단독 게시물(파일 1개만)",
+      "singleDesc": "오디오 하나를 제목, 커뮤니티, 태그, 커버가 있는 독립된 Hive 게시물로 게시해요.",
+      "albumTitle": "앨범 게시물",
+      "albumTitleNeeds2": "앨범 게시물(파일 2개 이상 필요)",
+      "albumDesc": "메인 게시물(오디오 없음)이 랜딩 페이지 역할을 하고, 각 트랙은 자체 커버, 설명, 보상, 수혜자를 가진 댓글 답글로 게시돼요.",
+      "howEarn": "이 오디오로 어떻게 수익을 받을까요?",
+      "postRewardsTitle": "게시물 보상(1회)",
+      "postRewardsDesc": "일반적인 Hive 작성자 보상을 받아요. 게시 후 약 7일 뒤에 한 번 지급돼요.",
+      "pplTitle": "청취당 지급(평생)",
+      "pplDesc": "오디오 게시물의 모든 보상은 @{{account}}에게 가요. 한 번 지급받는 대신, 3Speak 프로그램이 트랙이 존재하는 동안 청취할 때마다 보상을 지급해요."
+    },
+    "reward": {
+      "distribution": "보상 분배",
+      "default": "기본(50% HBD / 50% HP)",
+      "powerup": "100% 파워업",
+      "decline": "보상 거절",
+      "beneficiaries": "수혜자",
+      "beneficiariesCount": "수혜자({{count}})"
+    },
+    "mainPost": {
+      "helpAlbum": "메인 게시물(앨범 랜딩 페이지)의 세부 정보예요. 오디오는 없으며, 각 트랙은 다음 단계에서 설정하는 댓글 답글이에요.",
+      "helpSingle": "단독 게시물의 세부 정보예요.",
+      "titlePlaceholder": "제목(필수)",
+      "selectCommunity": "커뮤니티 선택",
+      "change": "변경",
+      "tagsPlaceholder": "태그 — 공백 또는 쉼표로 구분(선택)",
+      "whatKind": "어떤 종류의 오디오인가요?"
+    },
+    "tracks": {
+      "helpAlbum": "각 트랙은 메인 게시물 아래 댓글로 게시돼요. 공통 값을 한 번 설정해 모두에 적용한 다음, 트랙별로 바꿀 수 있어요.",
+      "helpSnaps": "각 트랙은 개별 Snap으로 게시돼요. 공통 값을 한 번 설정해 모두에 적용한 다음, 트랙별로 바꿀 수 있어요.",
+      "applyToAllHeading": "모든 트랙에 적용",
+      "sharedDescription": "공통 설명(선택)",
+      "sharedCover": "공통 커버 이미지",
+      "applyToAll_other": "트랙 {{count}}개 모두에 적용",
+      "hide": "숨기기"
+    },
+    "review": {
+      "standalone": "단독 게시물",
+      "standaloneIn": "{{community}}의 단독 게시물",
+      "album_other": "앨범 — 메인 게시물 1개 + 트랙 댓글 {{count}}개",
+      "albumIn_other": "앨범 — {{community}}의 메인 게시물 1개 + 트랙 댓글 {{count}}개",
+      "snapComments_other": "Snap 댓글 {{count}}개",
+      "ready_other": "트랙 {{count}}개를 게시할 준비가 되었어요.",
+      "readyToPlaylist_other": "트랙 {{count}}개를 재생목록 \"{{name}}\"에 게시할 준비가 되었어요.",
+      "publishAs": "게시 방식:",
+      "earnings": "수익:",
+      "earningsPpl": "청취당 지급(@{{account}})",
+      "earningsNormal": "일반 게시물 보상",
+      "playlist": "재생목록:",
+      "failedCount_other": "트랙 {{count}}개가 실패했어요.",
+      "retryAllFailed": "실패한 항목 모두 재시도",
+      "failedDuringUpload": "오디오 파일 업로드 중 실패: {{message}}",
+      "failedDuringPost": "Hive에 게시 중 실패: {{message}}",
+      "failedWithMessage": "실패: {{message}}"
+    },
+    "stage": {
+      "upload": "오디오 파일 업로드 중",
+      "post": "Hive에 게시 중",
+      "uploadingFallback": "업로드 중",
+      "published": "게시됨"
+    }
+  }
+}
