@@ -1,0 +1,50 @@
+{
+  "tabs": {
+    "overview": "Resumen",
+    "transactions": "Transacciones",
+    "aria": "Secciones de la billetera"
+  },
+  "errors": {
+    "fetchBalances": "No se pudieron cargar los saldos",
+    "needKeychain": "Necesitas la extensión Keychain para hacer transferencias"
+  },
+  "header": {
+    "mine": "MI billetera",
+    "ofUser": "Billetera de {{user}}"
+  },
+  "assets": "Activos",
+  "transfer": "Transferir",
+  "transferModal": {
+    "loginRequired": "Inicia sesión para transferir",
+    "insufficient": "Saldo insuficiente",
+    "invalidUsername": "Nombre de usuario no válido",
+    "success": "¡Transferencia realizada!",
+    "failed": "Falló la transferencia: {{error}}",
+    "title": "Transferir {{coin}}",
+    "amountLabel": "Monto ({{coin}})",
+    "balance": "Saldo {{balance}}",
+    "max": "Máx.",
+    "recipientLabel": "Usuario destinatario",
+    "recipientPlaceholder": "Ingresa el usuario de Hive",
+    "memoLabel": "Memo",
+    "memoPlaceholder": "Escribe un memo",
+    "confirm": "Confirmar transferencia"
+  },
+  "history": {
+    "loadFailed": "No se pudieron cargar las transacciones",
+    "title": "Historial de transacciones",
+    "cols": {
+      "type": "Tipo",
+      "amount": "Monto",
+      "account": "Cuenta",
+      "date": "Fecha",
+      "memo": "Memo"
+    },
+    "types": {
+      "transfer": "Transferencia",
+      "claim": "Reclamar recompensa",
+      "received": "Recibido"
+    },
+    "claimedRewards": "Recompensas reclamadas"
+  }
+}

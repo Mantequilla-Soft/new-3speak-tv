@@ -1,0 +1,104 @@
+{
+  "page": {
+    "fallbackTitle": "Insignia",
+    "kpis": {
+      "recipients": "Receptores",
+      "recentVideos": "Videos recientes",
+      "issued": "Emitida"
+    },
+    "issuedBy": "Emitida por <creatorLink>@{{creator}}</creatorLink>",
+    "notFoundTitle": "Insignia no encontrada",
+    "notFoundBody": "No se pudo leer ninguna cuenta de Hive llamada @{{account}} en este momento.",
+    "browseAll": "Ver todas las insignias",
+    "tabs": {
+      "videos": "Videos",
+      "recipients": "Receptores",
+      "recipientsWithCount": "Receptores ({{num}})"
+    },
+    "errorVideos": "Error al cargar los videos",
+    "noVideosTitle": "Aún no hay videos",
+    "noHolders": "Nadie tiene esta insignia todavía.",
+    "noHolderVideos": "Nadie con esta insignia ha publicado un video en 3Speak todavía.",
+    "loadingMore": "Cargando más...",
+    "recipientsError": "No se pudieron cargar los receptores",
+    "recipientsLoading": "Cargando receptores...",
+    "noRecipientsTitle": "Aún no hay receptores",
+    "noRecipientsBody": "Nadie ha recibido esta insignia hasta ahora.",
+    "recipientsSummary_one": "{{num}} receptor",
+    "recipientsSummary_many": "{{num}} receptores",
+    "recipientsSummary_other": "{{num}} receptores",
+    "recipientsSummaryWithVideos_one": "{{num}} receptor, {{publishing}} publicando en 3Speak",
+    "recipientsSummaryWithVideos_many": "{{num}} receptores, {{publishing}} publicando en 3Speak",
+    "recipientsSummaryWithVideos_other": "{{num}} receptores, {{publishing}} publicando en 3Speak",
+    "recipientVideos_one": "{{num}} video",
+    "recipientVideos_many": "{{num}} videos",
+    "recipientVideos_other": "{{num}} videos",
+    "recipientNoVideos": "Sin videos"
+  },
+  "directory": {
+    "title": "Insignias",
+    "intro": "Las insignias son reconocimientos <b>que otros te otorgan</b> en Hive por eventos, aportes y logros. No puedes unirte a una: alguien te la otorga. Abre una insignia para ver lo que publican aquí quienes la tienen.",
+    "searchPlaceholder": "Buscar insignias...",
+    "sort": {
+      "recipients": "Receptores",
+      "created": "Creación",
+      "name": "Nombre"
+    },
+    "createLocked": "Para crear una insignia necesitas una cuenta de Hive. Se desbloquea cuando la tuya esté lista.",
+    "create": "Crear insignia",
+    "loadError": "No se pudieron cargar las insignias en este momento.",
+    "noMatch": "Ninguna insignia coincide con esa búsqueda.",
+    "held": "La tienes",
+    "recipients_one": "{{num}} receptor",
+    "recipients_many": "{{num}} receptores",
+    "recipients_other": "{{num}} receptores"
+  },
+  "award": {
+    "success": "@{{username}} ahora tiene {{title}}",
+    "failed": "No se pudo otorgar esa insignia",
+    "dialogLabel": "Otorgar una insignia a {{username}}",
+    "title": "Otorgar una insignia",
+    "toUser": "a @{{username}}",
+    "awarding": "Otorgando…",
+    "held": "La tiene",
+    "award": "Otorgar",
+    "note": "La insignia sigue a la persona en Hive; eso es lo que significa tenerla. Puedes retirarla desde la página de la insignia."
+  },
+  "hive": {
+    "dragToReorder": "Arrastra para reordenar",
+    "orderSaved": "Orden de insignias guardado en tu perfil de Hive",
+    "orderSaveFailed": "No se pudo guardar el orden de tus insignias",
+    "dialogLabel": "Insignias de @{{username}}",
+    "title": "Insignias",
+    "arrangeHint": "Arrastra tus insignias al orden en que quieres mostrarlas.",
+    "earnedCount_one": "{{count}} insignia obtenida por @{{username}} en Hive",
+    "earnedCount_many": "{{count}} insignias obtenidas por @{{username}} en Hive",
+    "earnedCount_other": "{{count}} insignias obtenidas por @{{username}} en Hive",
+    "alwaysFirst": "Siempre se muestra primero",
+    "saveOrder": "Guardar orden",
+    "arrange": "Ordenar",
+    "arrangeTitle": "Elige el orden en que aparecen tus insignias",
+    "showAll_one": "Mostrar {{count}} insignia",
+    "showAll_many": "Mostrar las {{count}} insignias",
+    "showAll_other": "Mostrar las {{count}} insignias",
+    "awardTitle": "Otorga una de tus insignias a @{{username}}"
+  },
+  "leaderboardBadges": {
+    "proTitle": "Este creador apoya a 3Speak con una suscripción Pro"
+  },
+  "leaderboard": {
+    "watchNotice": "El tiempo de visualización solo se registra desde {{since}}, así que los periodos más largos todavía muestran el mismo historial corto.",
+    "unclaimed": "Sin reclamar",
+    "noActivity": "Aún no hay actividad en este periodo",
+    "otherTopics": "Otros",
+    "title": "Rankings",
+    "subtitle": "{{blurb}}: los mejores creadores de 3Speak.",
+    "subtitleTopic": "{{blurb}}: los mejores creadores en {{topic}}.",
+    "allTopics": "Todos los temas",
+    "finding": "Buscando a @{{user}} en este ranking…",
+    "notInTop": "@{{user}} no está en el top {{n}} de este ranking.",
+    "loading": "Cargando ranking…",
+    "loadError": "No se pudo cargar el ranking. Inténtalo de nuevo en un rato.",
+    "empty": "Nadie tiene {{metric}} en este periodo todavía."
+  }
+}

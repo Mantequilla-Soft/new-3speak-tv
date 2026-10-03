@@ -1,0 +1,127 @@
+{
+  "loadingMore": "Cargando más…",
+  "promoted": "Promocionado",
+  "scrollLeft": "Desplazar a la izquierda",
+  "scrollRight": "Desplazar a la derecha",
+  "errors": {
+    "fetchVideos": "Error al cargar los videos",
+    "loadVideos": "No se pudieron cargar los videos",
+    "loadShorts": "No se pudieron cargar los Shorts"
+  },
+  "tabs": {
+    "all": "Todo",
+    "videos": "Videos",
+    "shorts": "Shorts",
+    "videosCount": "Videos ({{count}})",
+    "shortsCount": "Shorts ({{count}})"
+  },
+  "dateFilters": {
+    "all": "Todo el tiempo",
+    "today": "Hoy",
+    "week": "Esta semana",
+    "month": "Este mes",
+    "justNow": "Justo ahora"
+  },
+  "live": {
+    "title": "En vivo ahora",
+    "badge": "● EN VIVO"
+  },
+  "newFromFollowing": {
+    "aria": "Lo nuevo de creadores que sigues",
+    "shorts_one": "{{count}} short",
+    "shorts_many": "{{count}} shorts",
+    "shorts_other": "{{count}} shorts"
+  },
+  "firstUploads": {
+    "title": "Primeras subidas"
+  },
+  "newVideos": {
+    "title": "Videos nuevos"
+  },
+  "home": {
+    "sections": {
+      "discover": "Descubrir",
+      "home": "Feed de inicio",
+      "follow": "Feed de seguidos",
+      "new": "Contenido nuevo",
+      "interests": "Intereses"
+    },
+    "empty": "Aún no hay nada que mostrar aquí.",
+    "viewAll": "Ver todo",
+    "dragToReorder": "Arrastra para reordenar",
+    "surfTitle": "Zapping: elige un tema y míralo como si fuera TV",
+    "zapping": "Zapping"
+  },
+  "surf": {
+    "pageTitle": "Zapping",
+    "intro": "Elige un canal y relájate. Ponemos los mejores videos de ese tema uno tras otro. ¿Te aburriste? Dale a <b>Zap</b>. ¿Quieres otra cosa? Cambia de canal.",
+    "backTo": "Volver a CH {{number}} {{emoji}} {{title}}",
+    "surprise": "Sorpréndeme",
+    "yourChannels": "Tus canales",
+    "nothingOnAir": "No hay nada al aire en {{channel}} ahora mismo",
+    "tuneFailed": "No se pudo sintonizar. Inténtalo de nuevo en un momento.",
+    "remoteAria": "Control remoto de Zapping",
+    "openGuide": "Abrir la guía de canales",
+    "ch": "CH {{number}}",
+    "chLabel": "CH",
+    "channelHint": "CH {{number}}: {{title}}",
+    "channelHintKey": "CH {{number}}: {{title}} ({{key}})",
+    "tuningShort": "Sintonizando",
+    "tuning": "Sintonizando…",
+    "onAir": "Al aire",
+    "changeChannel": "Cambiar de canal",
+    "nextChannel": "Canal siguiente",
+    "prevChannel": "Canal anterior",
+    "nextVideo": "Siguiente video",
+    "nextVideoKey": "Siguiente video (→)",
+    "zap": "Zap",
+    "findingNext": "Buscando el siguiente…",
+    "stop": "Dejar de hacer zapping",
+    "stopTitle": "Dejar de hacer zapping (este video sigue reproduciéndose)",
+    "guide": "Guía de canales"
+  },
+  "discover": {
+    "searchPlaceholder": "Busca videos, Shorts, audio, comunidades...",
+    "clearSearch": "Borrar búsqueda",
+    "searchFor": "Buscar “{{term}}”",
+    "noResultsFor": "No hay resultados para “{{term}}”",
+    "types": {
+      "user": "Usuarios",
+      "community": "Comunidades",
+      "video": "Videos",
+      "short": "Shorts",
+      "audio": "Audio",
+      "playlist": "Playlists"
+    },
+    "suggest": {
+      "tags": "Etiquetas",
+      "titles": "Títulos"
+    },
+    "dates": {
+      "today": "Hoy",
+      "week": "Esta semana",
+      "month": "Este mes",
+      "year": "Este año"
+    },
+    "boostRecent": "Priorizar recientes",
+    "filters": "Filtros",
+    "date": "Fecha",
+    "tag": "Etiqueta",
+    "tagPlaceholder": "p. ej. crypto, gaming...",
+    "community": "Comunidad",
+    "communityPlaceholder": "Buscar comunidades...",
+    "clearAllFilters": "Borrar todos los filtros",
+    "allHidden": "Todos los tipos de contenido están ocultos.",
+    "reenableFilters": "Volver a activar todos los filtros",
+    "groupTitle": "{{label}} ({{count}})",
+    "subscribers_one": "{{count}} suscriptor",
+    "subscribers_many": "{{count}} suscriptores",
+    "subscribers_other": "{{count}} suscriptores",
+    "authors_one": "{{count}} autor",
+    "authors_many": "{{count}} autores",
+    "authors_other": "{{count}} autores",
+    "views_one": "{{views}} vista",
+    "views_many": "{{views}} vistas",
+    "views_other": "{{views}} vistas"
+  }
+}
