@@ -98,5 +98,9 @@
     "authorize": "@threespeak autorisieren",
     "uploading": "Wird hochgeladen...",
     "postReaction": "Reaktion posten"
+  },
+  "inline": {
+    "cantPlay": "Dieses Video kann hier nicht abgespielt werden.",
+    "openOnSite": "Auf 3Speak öffnen"
   }
 }

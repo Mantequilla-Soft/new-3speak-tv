@@ -16,9 +16,10 @@
     "loadingPreview": "Cargando vista previa…",
     "community": "Comunidad",
     "communityWithSubscribers_one": "Comunidad · {{formatted}} suscriptor",
-    "communityWithSubscribers_many": "Comunidad · {{formatted}} suscriptores",
     "communityWithSubscribers_other": "Comunidad · {{formatted}} suscriptores",
-    "commentFallback": "(comentario)"
+    "commentFallback": "(comentario)",
+    "play": "Reproducir {{title}}",
+    "communityWithSubscribers_many": "Comunidad · {{formatted}} suscriptores"
   },
   "share": {
     "embedCopied": "Código de inserción copiado",
@@ -81,23 +82,23 @@
     "requestFailed": "falló la solicitud",
     "allCaughtUp": "Todo al día",
     "stillUnread_one": "Aún se muestran {{total}} sin leer después de limpiar {{count}} chat.",
-    "stillUnread_many": "Aún se muestran {{total}} sin leer después de limpiar {{count}} chats.",
     "stillUnread_other": "Aún se muestran {{total}} sin leer después de limpiar {{count}} chats.",
     "stillUnreadNoMatch_one": "Aún se muestran {{total}} sin leer después de limpiar {{count}} chat. El servidor reporta un contador pero ninguna conversación que coincida.",
-    "stillUnreadNoMatch_many": "Aún se muestran {{total}} sin leer después de limpiar {{count}} chats. El servidor reporta un contador pero ninguna conversación que coincida.",
     "stillUnreadNoMatch_other": "Aún se muestran {{total}} sin leer después de limpiar {{count}} chats. El servidor reporta un contador pero ninguna conversación que coincida.",
     "notSignedIn": "El chat no tiene sesión iniciada. Vuelve a conectar el chat e inténtalo de nuevo.",
     "sessionExpired": "La sesión del chat expiró mientras se limpiaba. Vuelve a conectar el chat e inténtalo de nuevo.",
     "serverRejectedVisible_one": "El servidor rechazó {{count}} solicitud (ids de la lista visible)",
-    "serverRejectedVisible_many": "El servidor rechazó las {{count}} solicitudes (ids de la lista visible)",
     "serverRejectedVisible_other": "El servidor rechazó las {{count}} solicitudes (ids de la lista visible)",
     "serverRejectedServerMap_one": "El servidor rechazó {{count}} solicitud (ids del propio mapa de no leídos del servidor)",
-    "serverRejectedServerMap_many": "El servidor rechazó las {{count}} solicitudes (ids del propio mapa de no leídos del servidor)",
     "serverRejectedServerMap_other": "El servidor rechazó las {{count}} solicitudes (ids del propio mapa de no leídos del servidor)",
     "failed": "No se pudo marcar todo como leído",
     "marking": "Marcando como leído…",
     "button": "Marcar todo como leído",
-    "buttonCount": "Marcar todo como leído ({{count}})"
+    "buttonCount": "Marcar todo como leído ({{count}})",
+    "stillUnread_many": "Aún se muestran {{total}} sin leer después de limpiar {{count}} chats.",
+    "stillUnreadNoMatch_many": "Aún se muestran {{total}} sin leer después de limpiar {{count}} chats. El servidor reporta un contador pero ninguna conversación que coincida.",
+    "serverRejectedVisible_many": "El servidor rechazó las {{count}} solicitudes (ids de la lista visible)",
+    "serverRejectedServerMap_many": "El servidor rechazó las {{count}} solicitudes (ids del propio mapa de no leídos del servidor)"
   },
   "list": {
     "chooseTarget": "Elige un chat al que enviarlo",
@@ -125,17 +126,23 @@
     "quote": "Citar",
     "forward": "Reenviar",
     "typing_one": "{{users}} está escribiendo…",
-    "typing_many": "{{users}} están escribiendo…",
     "typing_other": "{{users}} están escribiendo…",
     "editing": "Editando mensaje",
     "cancelEdit": "Cancelar edición",
     "quoting": "Citando a @{{user}}",
     "cancelQuote": "Cancelar cita",
     "removeImage": "Quitar imagen",
-    "placeholder": "Escribe un mensaje…"
+    "placeholder": "Escribe un mensaje…",
+    "typing_many": "{{users}} están escribiendo…"
   },
   "page": {
     "chooseTarget": "Elige un chat al que enviarlo.",
     "selectConversation": "Selecciona una conversación o inicia una nueva."
+  },
+  "overlay": {
+    "fullscreen": "Pantalla completa",
+    "exitFullscreen": "Salir de pantalla completa",
+    "close": "Cerrar chat",
+    "sendInChat": "Enviar en el chat"
   }
 }

@@ -16,7 +16,8 @@
     "loadingPreview": "正在加载预览…",
     "community": "社区",
     "communityWithSubscribers_other": "社区 · {{formatted}} 位订阅者",
-    "commentFallback": "（评论）"
+    "commentFallback": "（评论）",
+    "play": "播放 {{title}}"
   },
   "share": {
     "embedCopied": "嵌入代码已复制",
@@ -125,5 +126,11 @@
   "page": {
     "chooseTarget": "选择要发送到的聊天。",
     "selectConversation": "选择一个会话，或开始新的会话。"
+  },
+  "overlay": {
+    "fullscreen": "全屏",
+    "exitFullscreen": "退出全屏",
+    "close": "关闭聊天",
+    "sendInChat": "在聊天中发送"
   }
 }

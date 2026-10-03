@@ -20,8 +20,8 @@
     "fullscreen": "Plein écran",
     "exitFullscreen": "Quitter le plein écran",
     "markerReplies_one": "({{count}} réponse)",
-    "markerReplies_many": "({{count}} réponses)",
-    "markerReplies_other": "({{count}} réponses)"
+    "markerReplies_other": "({{count}} réponses)",
+    "markerReplies_many": "({{count}} réponses)"
   },
   "subtitles": {
     "title": "Sous-titres",
@@ -99,5 +99,9 @@
     "authorize": "Autoriser @threespeak",
     "uploading": "Mise en ligne...",
     "postReaction": "Publier la réaction"
+  },
+  "inline": {
+    "cantPlay": "Cette vidéo ne peut pas être lue ici.",
+    "openOnSite": "Ouvrir sur 3Speak"
   }
 }

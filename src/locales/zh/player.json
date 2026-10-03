@@ -97,5 +97,9 @@
     "authorize": "授权 @threespeak",
     "uploading": "上传中...",
     "postReaction": "发布回应"
+  },
+  "inline": {
+    "cantPlay": "此视频无法在这里播放。",
+    "openOnSite": "在 3Speak 打开"
   }
 }

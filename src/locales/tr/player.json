@@ -98,5 +98,9 @@
     "authorize": "@threespeak'i yetkilendir",
     "uploading": "Yükleniyor...",
     "postReaction": "Tepkiyi Paylaş"
+  },
+  "inline": {
+    "cantPlay": "Bu video burada oynatılamıyor.",
+    "openOnSite": "3Speak'te aç"
   }
 }

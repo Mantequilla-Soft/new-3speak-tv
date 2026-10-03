@@ -17,7 +17,8 @@
     "community": "Topluluk",
     "communityWithSubscribers_one": "Topluluk · {{formatted}} abone",
     "communityWithSubscribers_other": "Topluluk · {{formatted}} abone",
-    "commentFallback": "(yorum)"
+    "commentFallback": "(yorum)",
+    "play": "{{title}} oynat"
   },
   "share": {
     "embedCopied": "Gömme kodu kopyalandı",
@@ -131,5 +132,11 @@
   "page": {
     "chooseTarget": "Gönderilecek sohbeti seç.",
     "selectConversation": "Bir sohbet seç ya da yeni bir tane başlat."
+  },
+  "overlay": {
+    "fullscreen": "Tam ekran",
+    "exitFullscreen": "Tam ekrandan çık",
+    "close": "Sohbeti kapat",
+    "sendInChat": "Sohbette gönder"
   }
 }

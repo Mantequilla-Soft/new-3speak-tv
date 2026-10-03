@@ -20,8 +20,8 @@
     "fullscreen": "Tela cheia",
     "exitFullscreen": "Sair da tela cheia",
     "markerReplies_one": "({{count}} resposta)",
-    "markerReplies_many": "({{count}} respostas)",
-    "markerReplies_other": "({{count}} respostas)"
+    "markerReplies_other": "({{count}} respostas)",
+    "markerReplies_many": "({{count}} respostas)"
   },
   "subtitles": {
     "title": "Legendas",
@@ -99,5 +99,9 @@
     "authorize": "Autorizar @threespeak",
     "uploading": "Enviando...",
     "postReaction": "Publicar reação"
+  },
+  "inline": {
+    "cantPlay": "Este vídeo não pode ser reproduzido aqui.",
+    "openOnSite": "Abrir no 3Speak"
   }
 }

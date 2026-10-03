@@ -558,7 +558,7 @@
       line-height: 1;
     }
   }
-  > .nav-right button:not(.notif-bell-btn) {
+  > .nav-right button:not(.notif-bell-btn):not(.chat-nav-btn) {
     padding: 7px 25px;
     border-radius: 5px;
     font-weight: 500;

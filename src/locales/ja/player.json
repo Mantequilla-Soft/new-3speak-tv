@@ -97,5 +97,9 @@
     "authorize": "@threespeak を承認",
     "uploading": "アップロード中...",
     "postReaction": "リアクションを投稿"
+  },
+  "inline": {
+    "cantPlay": "この動画はここでは再生できません。",
+    "openOnSite": "3Speakで開く"
   }
 }

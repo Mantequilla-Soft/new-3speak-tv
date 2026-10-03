@@ -16,10 +16,11 @@
     "loadingPreview": "Загрузка превью…",
     "community": "Сообщество",
     "communityWithSubscribers_one": "Сообщество · {{formatted}} подписчик",
-    "communityWithSubscribers_few": "Сообщество · {{formatted}} подписчика",
-    "communityWithSubscribers_many": "Сообщество · {{formatted}} подписчиков",
     "communityWithSubscribers_other": "Сообщество · {{formatted}} подписчика",
-    "commentFallback": "(комментарий)"
+    "commentFallback": "(комментарий)",
+    "play": "Воспроизвести {{title}}",
+    "communityWithSubscribers_few": "Сообщество · {{formatted}} подписчика",
+    "communityWithSubscribers_many": "Сообщество · {{formatted}} подписчиков"
   },
   "share": {
     "embedCopied": "Код для встраивания скопирован",
@@ -82,27 +83,27 @@
     "requestFailed": "запрос не удался",
     "allCaughtUp": "Всё прочитано",
     "stillUnread_one": "После очистки {{count}} чата всё ещё показано непрочитанных: {{total}}.",
-    "stillUnread_few": "После очистки {{count}} чатов всё ещё показано непрочитанных: {{total}}.",
-    "stillUnread_many": "После очистки {{count}} чатов всё ещё показано непрочитанных: {{total}}.",
     "stillUnread_other": "После очистки {{count}} чата всё ещё показано непрочитанных: {{total}}.",
     "stillUnreadNoMatch_one": "После очистки {{count}} чата всё ещё показано непрочитанных: {{total}}. Сервер сообщает счётчик, но соответствующего разговора нет.",
-    "stillUnreadNoMatch_few": "После очистки {{count}} чатов всё ещё показано непрочитанных: {{total}}. Сервер сообщает счётчик, но соответствующего разговора нет.",
-    "stillUnreadNoMatch_many": "После очистки {{count}} чатов всё ещё показано непрочитанных: {{total}}. Сервер сообщает счётчик, но соответствующего разговора нет.",
     "stillUnreadNoMatch_other": "После очистки {{count}} чата всё ещё показано непрочитанных: {{total}}. Сервер сообщает счётчик, но соответствующего разговора нет.",
     "notSignedIn": "Вход в чат не выполнен. Переподключите чат и попробуйте снова.",
     "sessionExpired": "Сессия чата истекла во время очистки. Переподключите чат и попробуйте снова.",
     "serverRejectedVisible_one": "Сервер отклонил {{count}} запрос (ID из видимого списка)",
-    "serverRejectedVisible_few": "Сервер отклонил все {{count}} запроса (ID из видимого списка)",
-    "serverRejectedVisible_many": "Сервер отклонил все {{count}} запросов (ID из видимого списка)",
     "serverRejectedVisible_other": "Сервер отклонил все {{count}} запроса (ID из видимого списка)",
     "serverRejectedServerMap_one": "Сервер отклонил {{count}} запрос (ID из собственного списка непрочитанных сервера)",
-    "serverRejectedServerMap_few": "Сервер отклонил все {{count}} запроса (ID из собственного списка непрочитанных сервера)",
-    "serverRejectedServerMap_many": "Сервер отклонил все {{count}} запросов (ID из собственного списка непрочитанных сервера)",
     "serverRejectedServerMap_other": "Сервер отклонил все {{count}} запроса (ID из собственного списка непрочитанных сервера)",
     "failed": "Не удалось отметить всё как прочитанное",
     "marking": "Отмечаем как прочитанное…",
     "button": "Отметить все как прочитанные",
-    "buttonCount": "Отметить все как прочитанные ({{count}})"
+    "buttonCount": "Отметить все как прочитанные ({{count}})",
+    "stillUnread_few": "После очистки {{count}} чатов всё ещё показано непрочитанных: {{total}}.",
+    "stillUnread_many": "После очистки {{count}} чатов всё ещё показано непрочитанных: {{total}}.",
+    "stillUnreadNoMatch_few": "После очистки {{count}} чатов всё ещё показано непрочитанных: {{total}}. Сервер сообщает счётчик, но соответствующего разговора нет.",
+    "stillUnreadNoMatch_many": "После очистки {{count}} чатов всё ещё показано непрочитанных: {{total}}. Сервер сообщает счётчик, но соответствующего разговора нет.",
+    "serverRejectedVisible_few": "Сервер отклонил все {{count}} запроса (ID из видимого списка)",
+    "serverRejectedVisible_many": "Сервер отклонил все {{count}} запросов (ID из видимого списка)",
+    "serverRejectedServerMap_few": "Сервер отклонил все {{count}} запроса (ID из собственного списка непрочитанных сервера)",
+    "serverRejectedServerMap_many": "Сервер отклонил все {{count}} запросов (ID из собственного списка непрочитанных сервера)"
   },
   "list": {
     "chooseTarget": "Выберите чат для отправки",
@@ -130,18 +131,24 @@
     "quote": "Цитировать",
     "forward": "Переслать",
     "typing_one": "{{users}} печатает…",
-    "typing_few": "{{users}} печатают…",
-    "typing_many": "{{users}} печатают…",
     "typing_other": "{{users}} печатают…",
     "editing": "Редактирование сообщения",
     "cancelEdit": "Отменить редактирование",
     "quoting": "Цитата @{{user}}",
     "cancelQuote": "Отменить цитату",
     "removeImage": "Убрать изображение",
-    "placeholder": "Напишите сообщение…"
+    "placeholder": "Напишите сообщение…",
+    "typing_few": "{{users}} печатают…",
+    "typing_many": "{{users}} печатают…"
   },
   "page": {
     "chooseTarget": "Выберите чат для отправки.",
     "selectConversation": "Выберите разговор или начните новый."
+  },
+  "overlay": {
+    "fullscreen": "Полноэкранный режим",
+    "exitFullscreen": "Выйти из полноэкранного режима",
+    "close": "Закрыть чат",
+    "sendInChat": "Отправить в чат"
   }
 }

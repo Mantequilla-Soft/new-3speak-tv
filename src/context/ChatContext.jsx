@@ -44,6 +44,12 @@ export function ChatProvider({ children }) {
   // clears it via setShareDraft(null).
   const [shareDraft, setShareDraft] = useState(null)
 
+  // Desktop/tablet overlay panel (phones use the /chat page instead, see
+  // useOpenChat). `pendingDm` is a DM to open once the client is ready, for
+  // entry points like the profile "Message" button that fire before connect.
+  const [overlayOpen, setOverlayOpen] = useState(false)
+  const [pendingDm, setPendingDm] = useState(null)
+
   // Username we've already auto-attempted, so the silent background connect
   // fires once per login (not on every render).
   const autoTriedRef = useRef(null)
@@ -78,6 +84,8 @@ export function ChatProvider({ children }) {
       setReady(false)
       setError(null)
       setActiveConversation(null)
+      setOverlayOpen(false)
+      setPendingDm(null)
       autoTriedRef.current = null
       return
     }
@@ -218,6 +226,20 @@ export function ChatProvider({ children }) {
     [leaveGroup, leaveChannel]
   )
 
+  const openOverlay = useCallback(({ dm } = {}) => {
+    if (dm) setPendingDm(String(dm).trim().replace(/^@/, '').toLowerCase())
+    setOverlayOpen(true)
+  }, [])
+  const closeOverlay = useCallback(() => setOverlayOpen(false), [])
+
+  // Open a queued DM as soon as the client can.
+  useEffect(() => {
+    if (!ready || !pendingDm) return
+    const handle = pendingDm
+    setPendingDm(null)
+    openDmWith(handle).catch(() => {})
+  }, [ready, pendingDm, openDmWith])
+
   const value = useMemo(
     () => ({
       client,
@@ -237,8 +259,14 @@ export function ChatProvider({ children }) {
       leaveConversation,
       shareDraft,
       setShareDraft,
+      overlayOpen,
+      openOverlay,
+      closeOverlay,
     }),
     [
+      overlayOpen,
+      openOverlay,
+      closeOverlay,
       client,
       ready,
       connecting,

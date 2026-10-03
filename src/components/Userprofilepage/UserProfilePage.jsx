@@ -6,6 +6,7 @@ import { getFollowers, getRelationshipBetweenAccounts, isAccountValid } from '..
 import { isCreatorHidden as isModeratedCreatorHidden } from '../../utils/hiddenCreators';
 import { followWithAioha, isLoggedIn } from '../../hive-api/aioha';
 import { useLocation, useNavigate, useParams, useSearchParams } from 'react-router-dom';
+import { useOpenChat } from '../../hooks/useOpenChat';
 import "./UserProfilePage.scss"
 import BarLoader from '../Loader/BarLoader';
 import { Quantum } from 'ldrs/react'
@@ -59,6 +60,7 @@ function UserProfilePage() {
     const { user } = useParams();
     const [searchParams] = useSearchParams();
     const navigate = useNavigate()
+    const openChat = useOpenChat()
     const location = useLocation();
     const queryClient = useReactQueryClient();
     const { user: authenticatedUser, authenticated } = useAppStore();
@@ -563,7 +565,7 @@ const {
               title={t('profile.page.messageTitle', { user })}
               onClick={() => {
                 if (!authenticated) { toast.error(t('profile.page.messageLogin')); return; }
-                navigate(`/chat?dm=${encodeURIComponent(user)}`);
+                openChat({ dm: user });
               }}
             >
               <MdChatBubbleOutline /> {t('profile.page.message')}

@@ -16,10 +16,11 @@
     "loadingPreview": "Wczytywanie podglądu…",
     "community": "Społeczność",
     "communityWithSubscribers_one": "Społeczność · {{formatted}} subskrybent",
-    "communityWithSubscribers_few": "Społeczność · {{formatted}} subskrybentów",
-    "communityWithSubscribers_many": "Społeczność · {{formatted}} subskrybentów",
     "communityWithSubscribers_other": "Społeczność · {{formatted}} subskrybenta",
-    "commentFallback": "(komentarz)"
+    "commentFallback": "(komentarz)",
+    "play": "Odtwórz {{title}}",
+    "communityWithSubscribers_few": "Społeczność · {{formatted}} subskrybentów",
+    "communityWithSubscribers_many": "Społeczność · {{formatted}} subskrybentów"
   },
   "share": {
     "embedCopied": "Skopiowano kod osadzenia",
@@ -82,27 +83,27 @@
     "requestFailed": "żądanie nie powiodło się",
     "allCaughtUp": "Wszystko przeczytane",
     "stillUnread_one": "Nadal {{total}} nieprzeczytanych po wyczyszczeniu {{count}} czatu.",
-    "stillUnread_few": "Nadal {{total}} nieprzeczytanych po wyczyszczeniu {{count}} czatów.",
-    "stillUnread_many": "Nadal {{total}} nieprzeczytanych po wyczyszczeniu {{count}} czatów.",
     "stillUnread_other": "Nadal {{total}} nieprzeczytanych po wyczyszczeniu {{count}} czatu.",
     "stillUnreadNoMatch_one": "Nadal {{total}} nieprzeczytanych po wyczyszczeniu {{count}} czatu. Serwer zgłasza licznik, ale żadnej pasującej rozmowy.",
-    "stillUnreadNoMatch_few": "Nadal {{total}} nieprzeczytanych po wyczyszczeniu {{count}} czatów. Serwer zgłasza licznik, ale żadnej pasującej rozmowy.",
-    "stillUnreadNoMatch_many": "Nadal {{total}} nieprzeczytanych po wyczyszczeniu {{count}} czatów. Serwer zgłasza licznik, ale żadnej pasującej rozmowy.",
     "stillUnreadNoMatch_other": "Nadal {{total}} nieprzeczytanych po wyczyszczeniu {{count}} czatu. Serwer zgłasza licznik, ale żadnej pasującej rozmowy.",
     "notSignedIn": "Czat nie jest zalogowany. Połącz czat ponownie i spróbuj jeszcze raz.",
     "sessionExpired": "Sesja czatu wygasła podczas czyszczenia. Połącz czat ponownie i spróbuj jeszcze raz.",
     "serverRejectedVisible_one": "Serwer odrzucił {{count}} żądanie (ID z widocznej listy)",
-    "serverRejectedVisible_few": "Serwer odrzucił wszystkie {{count}} żądania (ID z widocznej listy)",
-    "serverRejectedVisible_many": "Serwer odrzucił wszystkie {{count}} żądań (ID z widocznej listy)",
     "serverRejectedVisible_other": "Serwer odrzucił wszystkie {{count}} żądania (ID z widocznej listy)",
     "serverRejectedServerMap_one": "Serwer odrzucił {{count}} żądanie (ID z serwerowej mapy nieprzeczytanych)",
-    "serverRejectedServerMap_few": "Serwer odrzucił wszystkie {{count}} żądania (ID z serwerowej mapy nieprzeczytanych)",
-    "serverRejectedServerMap_many": "Serwer odrzucił wszystkie {{count}} żądań (ID z serwerowej mapy nieprzeczytanych)",
     "serverRejectedServerMap_other": "Serwer odrzucił wszystkie {{count}} żądania (ID z serwerowej mapy nieprzeczytanych)",
     "failed": "Nie udało się oznaczyć wszystkiego jako przeczytane",
     "marking": "Oznaczanie jako przeczytane…",
     "button": "Oznacz wszystko jako przeczytane",
-    "buttonCount": "Oznacz wszystko jako przeczytane ({{count}})"
+    "buttonCount": "Oznacz wszystko jako przeczytane ({{count}})",
+    "stillUnread_few": "Nadal {{total}} nieprzeczytanych po wyczyszczeniu {{count}} czatów.",
+    "stillUnread_many": "Nadal {{total}} nieprzeczytanych po wyczyszczeniu {{count}} czatów.",
+    "stillUnreadNoMatch_few": "Nadal {{total}} nieprzeczytanych po wyczyszczeniu {{count}} czatów. Serwer zgłasza licznik, ale żadnej pasującej rozmowy.",
+    "stillUnreadNoMatch_many": "Nadal {{total}} nieprzeczytanych po wyczyszczeniu {{count}} czatów. Serwer zgłasza licznik, ale żadnej pasującej rozmowy.",
+    "serverRejectedVisible_few": "Serwer odrzucił wszystkie {{count}} żądania (ID z widocznej listy)",
+    "serverRejectedVisible_many": "Serwer odrzucił wszystkie {{count}} żądań (ID z widocznej listy)",
+    "serverRejectedServerMap_few": "Serwer odrzucił wszystkie {{count}} żądania (ID z serwerowej mapy nieprzeczytanych)",
+    "serverRejectedServerMap_many": "Serwer odrzucił wszystkie {{count}} żądań (ID z serwerowej mapy nieprzeczytanych)"
   },
   "list": {
     "chooseTarget": "Wybierz czat, do którego chcesz wysłać",
@@ -130,18 +131,24 @@
     "quote": "Cytuj",
     "forward": "Przekaż dalej",
     "typing_one": "{{users}} pisze…",
-    "typing_few": "{{users}} piszą…",
-    "typing_many": "{{users}} piszą…",
     "typing_other": "{{users}} piszą…",
     "editing": "Edytowanie wiadomości",
     "cancelEdit": "Anuluj edycję",
     "quoting": "Cytujesz @{{user}}",
     "cancelQuote": "Anuluj cytat",
     "removeImage": "Usuń obraz",
-    "placeholder": "Napisz wiadomość…"
+    "placeholder": "Napisz wiadomość…",
+    "typing_few": "{{users}} piszą…",
+    "typing_many": "{{users}} piszą…"
   },
   "page": {
     "chooseTarget": "Wybierz czat, do którego chcesz wysłać.",
     "selectConversation": "Wybierz rozmowę albo rozpocznij nową."
+  },
+  "overlay": {
+    "fullscreen": "Pełny ekran",
+    "exitFullscreen": "Zamknij pełny ekran",
+    "close": "Zamknij czat",
+    "sendInChat": "Wyślij na czacie"
   }
 }

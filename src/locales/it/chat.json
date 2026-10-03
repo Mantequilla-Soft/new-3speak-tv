@@ -16,9 +16,10 @@
     "loadingPreview": "Caricamento anteprima…",
     "community": "Community",
     "communityWithSubscribers_one": "Community · {{formatted}} iscritto",
-    "communityWithSubscribers_many": "Community · {{formatted}} iscritti",
     "communityWithSubscribers_other": "Community · {{formatted}} iscritti",
-    "commentFallback": "(commento)"
+    "commentFallback": "(commento)",
+    "play": "Riproduci {{title}}",
+    "communityWithSubscribers_many": "Community · {{formatted}} iscritti"
   },
   "share": {
     "embedCopied": "Codice di incorporamento copiato",
@@ -81,23 +82,23 @@
     "requestFailed": "richiesta non riuscita",
     "allCaughtUp": "Sei in pari",
     "stillUnread_one": "Ancora {{total}} non letti dopo aver segnato {{count}} chat.",
-    "stillUnread_many": "Ancora {{total}} non letti dopo aver segnato {{count}} chat.",
     "stillUnread_other": "Ancora {{total}} non letti dopo aver segnato {{count}} chat.",
     "stillUnreadNoMatch_one": "Ancora {{total}} non letti dopo aver segnato {{count}} chat. Il server riporta un conteggio ma nessuna conversazione corrispondente.",
-    "stillUnreadNoMatch_many": "Ancora {{total}} non letti dopo aver segnato {{count}} chat. Il server riporta un conteggio ma nessuna conversazione corrispondente.",
     "stillUnreadNoMatch_other": "Ancora {{total}} non letti dopo aver segnato {{count}} chat. Il server riporta un conteggio ma nessuna conversazione corrispondente.",
     "notSignedIn": "Non sei collegato alla chat. Ricollega la chat e riprova.",
     "sessionExpired": "La sessione della chat è scaduta durante l'operazione. Ricollega la chat e riprova.",
     "serverRejectedVisible_one": "Il server ha rifiutato {{count}} richiesta (ID dall'elenco visibile)",
-    "serverRejectedVisible_many": "Il server ha rifiutato tutte le {{count}} richieste (ID dall'elenco visibile)",
     "serverRejectedVisible_other": "Il server ha rifiutato tutte le {{count}} richieste (ID dall'elenco visibile)",
     "serverRejectedServerMap_one": "Il server ha rifiutato {{count}} richiesta (ID dalla mappa dei non letti del server)",
-    "serverRejectedServerMap_many": "Il server ha rifiutato tutte le {{count}} richieste (ID dalla mappa dei non letti del server)",
     "serverRejectedServerMap_other": "Il server ha rifiutato tutte le {{count}} richieste (ID dalla mappa dei non letti del server)",
     "failed": "Impossibile segnare tutto come letto",
     "marking": "Segno come letti…",
     "button": "Segna tutto come letto",
-    "buttonCount": "Segna tutto come letto ({{count}})"
+    "buttonCount": "Segna tutto come letto ({{count}})",
+    "stillUnread_many": "Ancora {{total}} non letti dopo aver segnato {{count}} chat.",
+    "stillUnreadNoMatch_many": "Ancora {{total}} non letti dopo aver segnato {{count}} chat. Il server riporta un conteggio ma nessuna conversazione corrispondente.",
+    "serverRejectedVisible_many": "Il server ha rifiutato tutte le {{count}} richieste (ID dall'elenco visibile)",
+    "serverRejectedServerMap_many": "Il server ha rifiutato tutte le {{count}} richieste (ID dalla mappa dei non letti del server)"
   },
   "list": {
     "chooseTarget": "Scegli una chat a cui inviare",
@@ -125,17 +126,23 @@
     "quote": "Cita",
     "forward": "Inoltra",
     "typing_one": "{{users}} sta scrivendo…",
-    "typing_many": "{{users}} stanno scrivendo…",
     "typing_other": "{{users}} stanno scrivendo…",
     "editing": "Modifica del messaggio",
     "cancelEdit": "Annulla modifica",
     "quoting": "Citazione di @{{user}}",
     "cancelQuote": "Annulla citazione",
     "removeImage": "Rimuovi immagine",
-    "placeholder": "Scrivi un messaggio…"
+    "placeholder": "Scrivi un messaggio…",
+    "typing_many": "{{users}} stanno scrivendo…"
   },
   "page": {
     "chooseTarget": "Scegli una chat a cui inviare.",
     "selectConversation": "Seleziona una conversazione o iniziane una nuova."
+  },
+  "overlay": {
+    "fullscreen": "Schermo intero",
+    "exitFullscreen": "Esci da schermo intero",
+    "close": "Chiudi chat",
+    "sendInChat": "Invia in chat"
   }
 }

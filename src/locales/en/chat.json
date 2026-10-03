@@ -17,7 +17,8 @@
     "community": "Community",
     "communityWithSubscribers_one": "Community · {{formatted}} subscriber",
     "communityWithSubscribers_other": "Community · {{formatted}} subscribers",
-    "commentFallback": "(comment)"
+    "commentFallback": "(comment)",
+    "play": "Play {{title}}"
   },
   "share": {
     "embedCopied": "Embed code copied",
@@ -131,5 +132,11 @@
   "page": {
     "chooseTarget": "Choose a chat to send to.",
     "selectConversation": "Select a conversation, or start a new one."
+  },
+  "overlay": {
+    "fullscreen": "Fullscreen",
+    "exitFullscreen": "Exit fullscreen",
+    "close": "Close chat",
+    "sendInChat": "Send in chat"
   }
 }

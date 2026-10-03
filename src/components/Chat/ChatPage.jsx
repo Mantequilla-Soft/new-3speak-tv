@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect, useMemo } from 'react'
-import { ArrowLeft, Send, MessageCirclePlus, Loader2, MoreHorizontal, X, Users, Hash, LogOut } from 'lucide-react'
+import { ArrowLeft, Send, MessageCirclePlus, Loader2, MoreHorizontal, X, Users, Hash, LogOut, Maximize2, Minimize2 } from 'lucide-react'
 import {
   useConversations,
   useChatMessages,
@@ -590,8 +590,11 @@ function ConversationList() {
         <div className="chat-share-banner">{t('chat.list.chooseTarget')}</div>
       )}
       <NewDmForm />
-      <NewRoomForm />
-      <BrowseChannels />
+      {/* Side by side while collapsed; an opened form drops below, full width. */}
+      <div className="chat-list-actions">
+        <NewRoomForm />
+        <BrowseChannels />
+      </div>
       {hasUnread && (
         <button
           type="button"
@@ -690,7 +693,7 @@ function LeaveButton({ conv }) {
   )
 }
 
-function Thread({ conv }) {
+function Thread({ conv, headerActions = null }) {
   const { t } = useTranslation()
   const me = useAppStore((s) => s.user)
   const { backToList, shareDraft, setShareDraft } = useChat()
@@ -712,7 +715,16 @@ function Thread({ conv }) {
   }, [conv?._id, messages.length, markRead])
   // Draft is seeded from (and saved to) a per-conversation store, so switching
   // chats shows that chat's own unsent text and restores it on return.
-  const [draft, setDraft] = useState(() => draftStore.get(conv._id) || '')
+  // A queued share/forward is folded in HERE, at mount, not in an effect: an
+  // effect that prepends runs twice under StrictMode (dev, i.e. preview) and
+  // put the shared link in the composer twice. An initializer is pure, so a
+  // second call gives the same result.
+  const [draft, setDraft] = useState(() => {
+    const cur = draftStore.get(conv._id) || ''
+    const next = shareDraft ? (cur ? `${shareDraft}\n${cur}` : shareDraft) : cur
+    if (next) draftStore.set(conv._id, next)
+    return next
+  })
   const [menuFor, setMenuFor] = useState(null)
   const [menuDir, setMenuDir] = useState('up')
   const [quoteTarget, setQuoteTarget] = useState(null)
@@ -749,13 +761,10 @@ function Thread({ conv }) {
     })
   }
 
-  // When this conversation opens with queued text (Share link / Forward),
-  // prefill the composer with it once, then clear the queued draft.
+  // The queued share/forward text is already in the draft (see useState above);
+  // clearing it is idempotent, so this is safe to run twice.
   useEffect(() => {
-    if (shareDraft) {
-      updateDraft((cur) => (cur ? `${shareDraft}\n${cur}` : shareDraft))
-      setShareDraft(null)
-    }
+    if (shareDraft) setShareDraft(null)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [conv._id])
 
@@ -876,6 +885,7 @@ function Thread({ conv }) {
         <img className="chat-thread-avatar" src={avatar(isDm ? title : conv.owner || 'spknetwork')} alt="" />
         <span className="chat-thread-title">{isDm ? `@${title}` : `# ${title}`}</span>
         {!isDm && <LeaveButton conv={conv} />}
+        {headerActions}
       </header>
 
       <div className="chat-messages" ref={scrollRef}>
@@ -1040,11 +1050,141 @@ function Thread({ conv }) {
   )
 }
 
-export default function ChatPage() {
+// Fullscreen toggle + close for the overlay. Sits in the thread header when a
+// chat is open in the small panel, so it spends no extra row on its own chrome.
+function OverlayActions({ expanded, onToggleExpand }) {
   const { t } = useTranslation()
-  const { ready, connecting, activeConversation, openDmWith, shareDraft } = useChat()
+  const { closeOverlay } = useChat()
+  return (
+    <div className="chat-overlay-actions">
+      <button
+        type="button"
+        className="chat-icon-btn"
+        onClick={onToggleExpand}
+        aria-label={expanded ? t('chat.overlay.exitFullscreen') : t('chat.overlay.fullscreen')}
+        title={expanded ? t('chat.overlay.exitFullscreen') : t('chat.overlay.fullscreen')}
+      >
+        {expanded ? <Minimize2 size={16} /> : <Maximize2 size={16} />}
+      </button>
+      <button
+        type="button"
+        className="chat-icon-btn"
+        onClick={closeOverlay}
+        aria-label={t('chat.overlay.close')}
+        title={t('chat.overlay.close')}
+      >
+        <X size={18} />
+      </button>
+    </div>
+  )
+}
+
+function Gate({ title, children }) {
+  return (
+    <div className="chat-gate">
+      <div className="chat-gate-icon">
+        <MessageCirclePlus size={44} />
+      </div>
+      <h3>{title}</h3>
+      {children}
+    </div>
+  )
+}
+
+// Everything chat shows, page or overlay. `overlay` = the floating panel: one
+// pane at a time (list, or the open thread with its back button), which is
+// what the page already does on phones. `expanded` = that panel fullscreen,
+// back to the page's side-by-side list + thread.
+export function ChatPanel({ overlay = false, expanded = false, onToggleExpand }) {
+  const { t } = useTranslation()
+  const { ready, connecting, activeConversation, shareDraft } = useChat()
   const authenticated = useAppStore((s) => s.authenticated)
   const incubationHandle = useAppStore((s) => s.incubationHandle)
+  const single = overlay && !expanded
+  const actions = overlay ? <OverlayActions expanded={expanded} onToggleExpand={onToggleExpand} /> : null
+
+  const shell = (body, { showHead = true, className = '' } = {}) => (
+    <div className={`chat-page${overlay ? ' chat-page--overlay' : ''}${single ? ' chat-page--single' : ''}${className}`}>
+      {overlay && showHead && (
+        <header className="chat-overlay-head">
+          <span className="chat-overlay-title">{shareDraft ? t('chat.overlay.sendInChat') : t('chat.button.label')}</span>
+          {actions}
+        </header>
+      )}
+      {body}
+    </div>
+  )
+
+  // Checked before the logged-out gate, because a warm-up user IS logged in and
+  // would otherwise fall through to the chat client and fail on a signing step
+  // they can never satisfy. The entry points are hidden for them; this is what a
+  // typed URL or an old link lands on.
+  if (incubationHandle) {
+    return shell(
+      <Gate title={t('chat.gate.needsAccountTitle')}>
+        <p>
+          {t('chat.gate.needsAccountBody')}
+        </p>
+      </Gate>
+    )
+  }
+
+  if (!authenticated) {
+    return shell(
+      <Gate title={t('chat.gate.loginTitle')}>
+        <p>{t('chat.gate.loginBody')}</p>
+      </Gate>
+    )
+  }
+
+  if (!ready) {
+    // While the silent background connect runs, show a spinner rather than the
+    // gate — the gate only appears if auto-connect couldn't establish a session.
+    return shell(
+      connecting ? (
+        <div className="chat-gate">
+          <Loader2 size={40} className="chat-spin" />
+          <p>{t('chat.gate.connectingToChat')}</p>
+        </div>
+      ) : (
+        <ConnectGate />
+      )
+    )
+  }
+
+  if (single) {
+    return activeConversation
+      ? shell(
+          <Thread key={activeConversation._id} conv={activeConversation} headerActions={actions} />,
+          { showHead: false }
+        )
+      : shell(<ConversationList />)
+  }
+
+  // `has-active` drives the mobile single-pane swap (list vs thread).
+  const panes = (
+    <>
+      <div className="chat-page-sidebar">
+        <ConversationList />
+      </div>
+      <div className="chat-page-main">
+        {activeConversation ? (
+          <Thread key={activeConversation._id} conv={activeConversation} />
+        ) : (
+          <div className="chat-empty chat-page-placeholder">
+            {shareDraft ? t('chat.page.chooseTarget') : t('chat.page.selectConversation')}
+          </div>
+        )}
+      </div>
+    </>
+  )
+  const paneClass = ` two-pane${activeConversation ? ' has-active' : ''}`
+  if (overlay) return shell(<div className="chat-page-panes">{panes}</div>, { className: paneClass })
+  return <div className={`chat-page${paneClass}`}>{panes}</div>
+}
+
+export default function ChatPage() {
+  const { ready, openDmWith } = useChat()
   const [searchParams, setSearchParams] = useSearchParams()
 
   // Deep link: /chat?dm=<username> (e.g. the "Write message" profile button)
@@ -1058,72 +1198,5 @@ export default function ChatPage() {
     setSearchParams(next, { replace: true })
   }, [ready, searchParams, openDmWith, setSearchParams])
 
-  // Checked before the logged-out gate, because a warm-up user IS logged in and
-  // would otherwise fall through to the chat client and fail on a signing step
-  // they can never satisfy. The entry points are hidden for them; this is what a
-  // typed URL or an old link lands on.
-  if (incubationHandle) {
-    return (
-      <div className="chat-page">
-        <div className="chat-gate">
-          <div className="chat-gate-icon">
-            <MessageCirclePlus size={44} />
-          </div>
-          <h3>{t('chat.gate.needsAccountTitle')}</h3>
-          <p>
-            {t('chat.gate.needsAccountBody')}
-          </p>
-        </div>
-      </div>
-    )
-  }
-
-  if (!authenticated) {
-    return (
-      <div className="chat-page">
-        <div className="chat-gate">
-          <div className="chat-gate-icon">
-            <MessageCirclePlus size={44} />
-          </div>
-          <h3>{t('chat.gate.loginTitle')}</h3>
-          <p>{t('chat.gate.loginBody')}</p>
-        </div>
-      </div>
-    )
-  }
-
-  if (!ready) {
-    // While the silent background connect runs, show a spinner rather than the
-    // gate — the gate only appears if auto-connect couldn't establish a session.
-    return (
-      <div className="chat-page">
-        {connecting ? (
-          <div className="chat-gate">
-            <Loader2 size={40} className="chat-spin" />
-            <p>{t('chat.gate.connectingToChat')}</p>
-          </div>
-        ) : (
-          <ConnectGate />
-        )}
-      </div>
-    )
-  }
-
-  // `has-active` drives the mobile single-pane swap (list vs thread).
-  return (
-    <div className={`chat-page two-pane${activeConversation ? ' has-active' : ''}`}>
-      <div className="chat-page-sidebar">
-        <ConversationList />
-      </div>
-      <div className="chat-page-main">
-        {activeConversation ? (
-          <Thread key={activeConversation._id} conv={activeConversation} />
-        ) : (
-          <div className="chat-empty chat-page-placeholder">
-            {shareDraft ? t('chat.page.chooseTarget') : t('chat.page.selectConversation')}
-          </div>
-        )}
-      </div>
-    </div>
-  )
+  return <ChatPanel />
 }

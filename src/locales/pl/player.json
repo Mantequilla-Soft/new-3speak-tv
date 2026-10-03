@@ -20,9 +20,9 @@
     "fullscreen": "Pełny ekran",
     "exitFullscreen": "Zamknij pełny ekran",
     "markerReplies_one": "({{count}} odpowiedź)",
+    "markerReplies_other": "({{count}} odpowiedzi)",
     "markerReplies_few": "({{count}} odpowiedzi)",
-    "markerReplies_many": "({{count}} odpowiedzi)",
-    "markerReplies_other": "({{count}} odpowiedzi)"
+    "markerReplies_many": "({{count}} odpowiedzi)"
   },
   "subtitles": {
     "title": "Napisy",
@@ -100,5 +100,9 @@
     "authorize": "Autoryzuj @threespeak",
     "uploading": "Przesyłanie...",
     "postReaction": "Opublikuj reakcję"
+  },
+  "inline": {
+    "cantPlay": "Tego filmu nie można tu odtworzyć.",
+    "openOnSite": "Otwórz w 3Speak"
   }
 }

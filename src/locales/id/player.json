@@ -97,5 +97,9 @@
     "authorize": "Beri izin @threespeak",
     "uploading": "Mengunggah...",
     "postReaction": "Posting Reaksi"
+  },
+  "inline": {
+    "cantPlay": "Video ini tidak bisa diputar di sini.",
+    "openOnSite": "Buka di 3Speak"
   }
 }

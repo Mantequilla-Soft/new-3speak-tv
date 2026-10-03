@@ -16,7 +16,8 @@
     "loadingPreview": "Memuat pratinjau…",
     "community": "Komunitas",
     "communityWithSubscribers_other": "Komunitas · {{formatted}} anggota",
-    "commentFallback": "(komentar)"
+    "commentFallback": "(komentar)",
+    "play": "Putar {{title}}"
   },
   "share": {
     "embedCopied": "Kode embed tersalin",
@@ -125,5 +126,11 @@
   "page": {
     "chooseTarget": "Pilih chat tujuan.",
     "selectConversation": "Pilih percakapan, atau mulai yang baru."
+  },
+  "overlay": {
+    "fullscreen": "Layar penuh",
+    "exitFullscreen": "Keluar dari layar penuh",
+    "close": "Tutup chat",
+    "sendInChat": "Kirim di chat"
   }
 }

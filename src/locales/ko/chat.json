@@ -16,7 +16,8 @@
     "loadingPreview": "미리보기 불러오는 중…",
     "community": "커뮤니티",
     "communityWithSubscribers_other": "커뮤니티 · 구독자 {{formatted}}명",
-    "commentFallback": "(댓글)"
+    "commentFallback": "(댓글)",
+    "play": "{{title}} 재생"
   },
   "share": {
     "embedCopied": "임베드 코드를 복사했어요",
@@ -125,5 +126,11 @@
   "page": {
     "chooseTarget": "보낼 채팅을 선택하세요.",
     "selectConversation": "대화를 선택하거나 새 대화를 시작하세요."
+  },
+  "overlay": {
+    "fullscreen": "전체 화면",
+    "exitFullscreen": "전체 화면 종료",
+    "close": "채팅 닫기",
+    "sendInChat": "채팅으로 보내기"
   }
 }

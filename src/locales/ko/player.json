@@ -97,5 +97,9 @@
     "authorize": "@threespeak 권한 부여",
     "uploading": "업로드 중...",
     "postReaction": "리액션 게시"
+  },
+  "inline": {
+    "cantPlay": "이 동영상은 여기서 재생할 수 없어요.",
+    "openOnSite": "3Speak에서 열기"
   }
 }

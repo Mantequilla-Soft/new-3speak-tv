@@ -16,9 +16,10 @@
     "loadingPreview": "Chargement de l'aperçu…",
     "community": "Communauté",
     "communityWithSubscribers_one": "Communauté · {{formatted}} membre",
-    "communityWithSubscribers_many": "Communauté · {{formatted}} membres",
     "communityWithSubscribers_other": "Communauté · {{formatted}} membres",
-    "commentFallback": "(commentaire)"
+    "commentFallback": "(commentaire)",
+    "play": "Lire {{title}}",
+    "communityWithSubscribers_many": "Communauté · {{formatted}} membres"
   },
   "share": {
     "embedCopied": "Code d'intégration copié",
@@ -81,23 +82,23 @@
     "requestFailed": "échec de la requête",
     "allCaughtUp": "Vous êtes à jour",
     "stillUnread_one": "Encore {{total}} non lus après avoir effacé {{count}} chat.",
-    "stillUnread_many": "Encore {{total}} non lus après avoir effacé {{count}} chats.",
     "stillUnread_other": "Encore {{total}} non lus après avoir effacé {{count}} chats.",
     "stillUnreadNoMatch_one": "Encore {{total}} non lus après avoir effacé {{count}} chat. Le serveur indique un compteur mais aucune conversation correspondante.",
-    "stillUnreadNoMatch_many": "Encore {{total}} non lus après avoir effacé {{count}} chats. Le serveur indique un compteur mais aucune conversation correspondante.",
     "stillUnreadNoMatch_other": "Encore {{total}} non lus après avoir effacé {{count}} chats. Le serveur indique un compteur mais aucune conversation correspondante.",
     "notSignedIn": "Le chat n'est pas connecté. Reconnectez le chat et réessayez.",
     "sessionExpired": "La session de chat a expiré pendant l'effacement. Reconnectez le chat et réessayez.",
     "serverRejectedVisible_one": "Le serveur a rejeté la requête ({{count}}) (identifiants de la liste visible)",
-    "serverRejectedVisible_many": "Le serveur a rejeté les {{count}} requêtes (identifiants de la liste visible)",
     "serverRejectedVisible_other": "Le serveur a rejeté les {{count}} requêtes (identifiants de la liste visible)",
     "serverRejectedServerMap_one": "Le serveur a rejeté la requête ({{count}}) (identifiants de sa propre liste de non-lus)",
-    "serverRejectedServerMap_many": "Le serveur a rejeté les {{count}} requêtes (identifiants de sa propre liste de non-lus)",
     "serverRejectedServerMap_other": "Le serveur a rejeté les {{count}} requêtes (identifiants de sa propre liste de non-lus)",
     "failed": "Impossible de tout marquer comme lu",
     "marking": "Marquage comme lu…",
     "button": "Tout marquer comme lu",
-    "buttonCount": "Tout marquer comme lu ({{count}})"
+    "buttonCount": "Tout marquer comme lu ({{count}})",
+    "stillUnread_many": "Encore {{total}} non lus après avoir effacé {{count}} chats.",
+    "stillUnreadNoMatch_many": "Encore {{total}} non lus après avoir effacé {{count}} chats. Le serveur indique un compteur mais aucune conversation correspondante.",
+    "serverRejectedVisible_many": "Le serveur a rejeté les {{count}} requêtes (identifiants de la liste visible)",
+    "serverRejectedServerMap_many": "Le serveur a rejeté les {{count}} requêtes (identifiants de sa propre liste de non-lus)"
   },
   "list": {
     "chooseTarget": "Choisissez un chat de destination",
@@ -125,17 +126,23 @@
     "quote": "Citer",
     "forward": "Transférer",
     "typing_one": "{{users}} est en train d'écrire…",
-    "typing_many": "{{users}} sont en train d'écrire…",
     "typing_other": "{{users}} sont en train d'écrire…",
     "editing": "Modification du message",
     "cancelEdit": "Annuler la modification",
     "quoting": "Citation de @{{user}}",
     "cancelQuote": "Annuler la citation",
     "removeImage": "Retirer l'image",
-    "placeholder": "Écrivez un message…"
+    "placeholder": "Écrivez un message…",
+    "typing_many": "{{users}} sont en train d'écrire…"
   },
   "page": {
     "chooseTarget": "Choisissez un chat de destination.",
     "selectConversation": "Sélectionnez une conversation, ou lancez-en une nouvelle."
+  },
+  "overlay": {
+    "fullscreen": "Plein écran",
+    "exitFullscreen": "Quitter le plein écran",
+    "close": "Fermer le chat",
+    "sendInChat": "Envoyer dans le chat"
   }
 }

@@ -20,9 +20,9 @@
     "fullscreen": "Во весь экран",
     "exitFullscreen": "Выйти из полноэкранного режима",
     "markerReplies_one": "({{count}} ответ)",
+    "markerReplies_other": "({{count}} ответа)",
     "markerReplies_few": "({{count}} ответа)",
-    "markerReplies_many": "({{count}} ответов)",
-    "markerReplies_other": "({{count}} ответа)"
+    "markerReplies_many": "({{count}} ответов)"
   },
   "subtitles": {
     "title": "Субтитры",
@@ -100,5 +100,9 @@
     "authorize": "Авторизовать @threespeak",
     "uploading": "Загрузка...",
     "postReaction": "Опубликовать реакцию"
+  },
+  "inline": {
+    "cantPlay": "Это видео нельзя воспроизвести здесь.",
+    "openOnSite": "Открыть в 3Speak"
   }
 }

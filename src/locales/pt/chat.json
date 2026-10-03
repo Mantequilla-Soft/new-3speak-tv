@@ -16,9 +16,10 @@
     "loadingPreview": "Carregando prévia…",
     "community": "Comunidade",
     "communityWithSubscribers_one": "Comunidade · {{formatted}} inscrito",
-    "communityWithSubscribers_many": "Comunidade · {{formatted}} inscritos",
     "communityWithSubscribers_other": "Comunidade · {{formatted}} inscritos",
-    "commentFallback": "(comentário)"
+    "commentFallback": "(comentário)",
+    "play": "Reproduzir {{title}}",
+    "communityWithSubscribers_many": "Comunidade · {{formatted}} inscritos"
   },
   "share": {
     "embedCopied": "Código de incorporação copiado",
@@ -81,23 +82,23 @@
     "requestFailed": "a solicitação falhou",
     "allCaughtUp": "Tudo em dia",
     "stillUnread_one": "Ainda há {{total}} não lidas depois de limpar {{count}} chat.",
-    "stillUnread_many": "Ainda há {{total}} não lidas depois de limpar {{count}} chats.",
     "stillUnread_other": "Ainda há {{total}} não lidas depois de limpar {{count}} chats.",
     "stillUnreadNoMatch_one": "Ainda há {{total}} não lidas depois de limpar {{count}} chat. O servidor informa uma contagem, mas nenhuma conversa correspondente.",
-    "stillUnreadNoMatch_many": "Ainda há {{total}} não lidas depois de limpar {{count}} chats. O servidor informa uma contagem, mas nenhuma conversa correspondente.",
     "stillUnreadNoMatch_other": "Ainda há {{total}} não lidas depois de limpar {{count}} chats. O servidor informa uma contagem, mas nenhuma conversa correspondente.",
     "notSignedIn": "Você não está conectado ao chat. Reconecte o chat e tente de novo.",
     "sessionExpired": "A sessão do chat expirou durante a limpeza. Reconecte o chat e tente de novo.",
     "serverRejectedVisible_one": "O servidor rejeitou a {{count}} solicitação (ids da lista visível)",
-    "serverRejectedVisible_many": "O servidor rejeitou todas as {{count}} solicitações (ids da lista visível)",
     "serverRejectedVisible_other": "O servidor rejeitou todas as {{count}} solicitações (ids da lista visível)",
     "serverRejectedServerMap_one": "O servidor rejeitou a {{count}} solicitação (ids do mapa de não lidas do próprio servidor)",
-    "serverRejectedServerMap_many": "O servidor rejeitou todas as {{count}} solicitações (ids do mapa de não lidas do próprio servidor)",
     "serverRejectedServerMap_other": "O servidor rejeitou todas as {{count}} solicitações (ids do mapa de não lidas do próprio servidor)",
     "failed": "Não foi possível marcar tudo como lido",
     "marking": "Marcando como lido…",
     "button": "Marcar tudo como lido",
-    "buttonCount": "Marcar tudo como lido ({{count}})"
+    "buttonCount": "Marcar tudo como lido ({{count}})",
+    "stillUnread_many": "Ainda há {{total}} não lidas depois de limpar {{count}} chats.",
+    "stillUnreadNoMatch_many": "Ainda há {{total}} não lidas depois de limpar {{count}} chats. O servidor informa uma contagem, mas nenhuma conversa correspondente.",
+    "serverRejectedVisible_many": "O servidor rejeitou todas as {{count}} solicitações (ids da lista visível)",
+    "serverRejectedServerMap_many": "O servidor rejeitou todas as {{count}} solicitações (ids do mapa de não lidas do próprio servidor)"
   },
   "list": {
     "chooseTarget": "Escolha um chat para enviar",
@@ -125,17 +126,23 @@
     "quote": "Citar",
     "forward": "Encaminhar",
     "typing_one": "{{users}} está digitando…",
-    "typing_many": "{{users}} estão digitando…",
     "typing_other": "{{users}} estão digitando…",
     "editing": "Editando mensagem",
     "cancelEdit": "Cancelar edição",
     "quoting": "Citando @{{user}}",
     "cancelQuote": "Cancelar citação",
     "removeImage": "Remover imagem",
-    "placeholder": "Digite uma mensagem…"
+    "placeholder": "Digite uma mensagem…",
+    "typing_many": "{{users}} estão digitando…"
   },
   "page": {
     "chooseTarget": "Escolha um chat para enviar.",
     "selectConversation": "Selecione uma conversa ou comece uma nova."
+  },
+  "overlay": {
+    "fullscreen": "Tela cheia",
+    "exitFullscreen": "Sair da tela cheia",
+    "close": "Fechar chat",
+    "sendInChat": "Enviar no chat"
   }
 }

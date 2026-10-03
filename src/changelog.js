@@ -19,6 +19,19 @@ export const CHANGELOG = [
       '3Speak now speaks your language! Choose from 13 languages in Settings → General.',
   },
   {
+    version: '1.79.47',
+    date: '2026-10-03',
+    summary:
+      'Videos shared in chat now play right in the conversation, and sharing into chat no longer adds the link twice.',
+  },
+  {
+    version: '1.79.46',
+    date: '2026-10-03',
+    summary:
+      'Chat now opens as a floating panel on tablet and desktop, so you can keep watching while you message, '
+      + 'and the expand button makes it bigger. Phones still get the full chat page.',
+  },
+  {
     version: '1.79.45',
     date: '2026-10-03',
     summary:

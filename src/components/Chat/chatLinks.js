@@ -103,6 +103,10 @@ async function fetchPost(author, permlink) {
     thumbnail: jm?.image?.[0] || null,
     duration: typeof video?.duration === 'number' ? video.duration : null,
     isVideo: !!video || String(jm?.app || '').includes('3speak'),
+    // Can it play inline in chat? Not a supporters-only post (the gate needs the
+    // watch page) and not a live stream (no VOD to play yet).
+    playable: (!!video || String(jm?.app || '').includes('3speak'))
+      && jm?.gated !== true && !jm?.video?.live && !jm?.live,
   }
 }
 
