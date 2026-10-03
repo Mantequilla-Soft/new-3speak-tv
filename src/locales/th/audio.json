@@ -1,0 +1,267 @@
+{
+  "untitled": "ไม่มีชื่อ",
+  "categories": {
+    "podcast": "พอดแคสต์",
+    "voice": "เสียงพูด",
+    "music": "เพลง",
+    "audiobook": "หนังสือเสียง",
+    "interview": "สัมภาษณ์"
+  },
+  "inline": {
+    "defaultTitle": "การบันทึก OpenPod",
+    "defaultSubtitle": "บันทึกสดบน 3Speak OpenPods",
+    "kickerPreview": "ตัวอย่างเสียง",
+    "kickerOpenPod": "OpenPod"
+  },
+  "tile": {
+    "artistAlbum": "อัลบั้มศิลปิน",
+    "listenerPlaylist": "เพลย์ลิสต์ผู้ฟัง",
+    "bpm": "{{bpm}} bpm",
+    "queue": "คิว",
+    "playlist": "เพลย์ลิสต์",
+    "plays_other": "เล่น {{count}} ครั้ง"
+  },
+  "author": {
+    "followed": "ติดตาม @{{author}} แล้ว",
+    "unfollowed": "เลิกติดตาม @{{author}} แล้ว",
+    "failed": "ไม่สำเร็จ",
+    "tracks_other": "{{count}} แทร็ก"
+  },
+  "player": {
+    "openPost": "เปิดโพสต์เสียง",
+    "playlist": "เพลย์ลิสต์",
+    "transcript": "ข้อความถอดเสียง",
+    "volume": "ระดับเสียง",
+    "queue": "คิว",
+    "closePlayer": "ปิดเครื่องเล่น",
+    "curated": "คัดสรรแล้ว",
+    "noCues": "ไม่มีคิวข้อความ",
+    "clearQueue": "ล้างคิว",
+    "clearAll": "ล้างทั้งหมด",
+    "queueEmpty": "คิวว่างเปล่า"
+  },
+  "share": {
+    "failed": "ไม่สำเร็จ",
+    "copyPeakd": "คัดลอกลิงก์ PeakD",
+    "copiedPeakd": "คัดลอกลิงก์ PeakD แล้ว!",
+    "copy3speak": "คัดลอกลิงก์ 3Speak",
+    "copied3speak": "คัดลอกลิงก์ 3Speak แล้ว!",
+    "copyAudioPlayer": "คัดลอกลิงก์เครื่องเล่นเสียง",
+    "copiedAudioPlayer": "คัดลอกลิงก์เครื่องเล่นเสียงแล้ว!",
+    "searchingHive": "กำลังค้นหาใน Hive…"
+  },
+  "post": {
+    "notFound": "ไม่พบโพสต์",
+    "loadFailed": "โหลดโพสต์เสียงนี้ไม่ได้",
+    "loadFailedFull": "โหลดโพสต์เสียงนี้ไม่ได้",
+    "backToAudio": "← กลับไปที่เสียง",
+    "untitled": "(ไม่มีชื่อ)",
+    "addedToQueue": "เพิ่มลงในคิวแล้ว",
+    "signInToVote": "เข้าสู่ระบบเพื่อโหวต",
+    "voted": "โหวตแล้ว",
+    "vote": "โหวต",
+    "signInToTip": "เข้าสู่ระบบเพื่อส่งทิป",
+    "tip": "ทิป",
+    "stillIndexing": "เสียงของโพสต์นี้ยังอยู่ระหว่างการจัดทำดัชนี — ลองอีกครั้งในอีกไม่กี่นาที"
+  },
+  "page": {
+    "sections": {
+      "popular": "ยอดนิยม",
+      "recent": "มาใหม่",
+      "podcasts": "พอดแคสต์",
+      "songs": "เพลง",
+      "audiobooks": "หนังสือเสียง",
+      "interviews": "สัมภาษณ์"
+    },
+    "dates": {
+      "today": "วันนี้",
+      "thisWeek": "สัปดาห์นี้",
+      "thisMonth": "เดือนนี้",
+      "thisYear": "ปีนี้"
+    },
+    "duration": {
+      "label": "ความยาว",
+      "min": "ความยาวขั้นต่ำ",
+      "max": "ความยาวสูงสุด",
+      "seconds": "{{value}} วิ",
+      "minutes": "{{value}} นาที",
+      "hours": "{{value}} ชม."
+    },
+    "all": "ทั้งหมด",
+    "musicGenre": "แนวเพลง",
+    "anyGenre": "ทุกแนว",
+    "tracks_other": "{{count}} แทร็ก",
+    "noTracks": "ไม่พบแทร็ก",
+    "creators": "ครีเอเตอร์",
+    "albumsPlaylists": "อัลบั้มและเพลย์ลิสต์",
+    "noAudioForFilters": "ไม่พบเสียงตามตัวกรองเหล่านี้"
+  },
+  "upload": {
+    "title": "อัปโหลดเสียง",
+    "publishing": "กำลังเผยแพร่…",
+    "failed": "ไม่สำเร็จ",
+    "unknown": "ไม่ทราบ",
+    "unknownError": "ข้อผิดพลาดที่ไม่ทราบสาเหตุ",
+    "recorded": "บันทึกเสียง",
+    "uploaded": "อัปโหลด",
+    "steps": {
+      "source": "แหล่งที่มา",
+      "mode": "โหมด",
+      "playlist": "เพลย์ลิสต์",
+      "post": "โพสต์",
+      "mainpost": "โพสต์หลัก",
+      "tracks": "แทร็ก",
+      "review": "ตรวจสอบ"
+    },
+    "trackTypes": {
+      "voiceSnap": "เสียงพูด / Snap"
+    },
+    "toasts": {
+      "pickImage": "เลือกไฟล์รูปภาพ",
+      "thumbFailed": "อัปโหลดภาพขนาดย่อไม่สำเร็จ: {{error}}",
+      "appliedToAll": "ใช้กับทุกแทร็กแล้ว",
+      "micDenied": "ถูกปฏิเสธการเข้าถึงไมโครโฟน",
+      "signInFirst": "เข้าสู่ระบบก่อน",
+      "enterPlaylistName": "กรอกชื่อเพลย์ลิสต์",
+      "creatingPlaylist": "กำลังสร้างเพลย์ลิสต์ \"{{name}}\"…",
+      "playlistCreated": "สร้างเพลย์ลิสต์แล้ว",
+      "failedWithError": "ไม่สำเร็จ: {{error}}",
+      "authorized": "อนุญาต @threespeak แล้ว — ตอนนี้คุณเผยแพร่ได้แล้ว",
+      "authFailed": "การอนุญาตไม่สำเร็จ โปรดลองอีกครั้ง",
+      "couldntPublishMain": "เผยแพร่โพสต์หลักไม่ได้: {{error}}",
+      "couldntResolveContainer": "หาคอนเทนเนอร์ peak.snaps ไม่ได้: {{error}}",
+      "published_other": "เผยแพร่ {{count}} แทร็กแล้ว",
+      "someFailed": "บางแทร็กไม่สำเร็จ — เปิดแทร็กที่ไม่สำเร็จเพื่อลองใหม่"
+    },
+    "gate": {
+      "checking": "กำลังตรวจสอบ…",
+      "allowThreespeak": "หากต้องการเผยแพร่เสียง ให้อนุญาต <b>@threespeak</b> โพสต์แทนคุณ",
+      "authorizing": "กำลังอนุญาต…",
+      "authorize": "อนุญาต @threespeak",
+      "notEnoughRc": "ขณะนี้บัญชีของคุณมี <b>Resource Credits</b> ไม่พอสำหรับเผยแพร่โพสต์",
+      "whyCantUpload": "ทำไมฉันอัปโหลดไม่ได้?"
+    },
+    "discard": {
+      "title": "ละทิ้งการอัปโหลด?",
+      "body_other": "คุณเพิ่มไว้ {{count}} แทร็ก การปิดจะละทิ้งแทร็กเหล่านั้น",
+      "bodyRecording_other": "คุณเพิ่มไว้ {{count}} แทร็กและกำลังบันทึกเสียงอยู่ การปิดจะละทิ้งทั้งหมด",
+      "keepEditing": "แก้ไขต่อ",
+      "discard": "ละทิ้ง"
+    },
+    "source": {
+      "dropHere": "วางไฟล์เสียงที่นี่ หรือคลิกเพื่อเลือกไฟล์",
+      "formats": "MP3, WAV, OGG, WEBM, M4A, FLAC, AAC — เลือกได้หลายไฟล์",
+      "stop": "หยุด",
+      "orRecord": "หรือบันทึกสด",
+      "recordLimit": "สูงสุด {{minutes}} นาทีต่อการบันทึก",
+      "record": "บันทึก",
+      "added": "เพิ่มแล้ว ({{count}})"
+    },
+    "titles": {
+      "help": "ตั้งชื่อแต่ละแทร็กและเลือกประเภท แทร็กเพลงจะมีช่องแนวเพลงและ BPM"
+    },
+    "fields": {
+      "trackTitle": "ชื่อแทร็ก",
+      "genre": "แนวเพลง",
+      "bpm": "BPM",
+      "descriptionOptional": "คำอธิบาย (ไม่บังคับ)"
+    },
+    "playlist": {
+      "helpRequired": "จำเป็น — เลือกหรือสร้างเพลย์ลิสต์ โพสต์อัลบั้มอยู่ภายในเพลย์ลิสต์ เพื่อให้แทร็กรวมกลุ่มอยู่ในอัลบั้ม 3Speak ช่วยเพิ่มการมองเห็นและตำแหน่งที่เด่นขึ้นในหน้าเสียง",
+      "helpOptional": "ไม่บังคับ — เพิ่มแทร็กทั้งหมดลงในเพลย์ลิสต์",
+      "none": "ไม่มีเพลย์ลิสต์",
+      "noneHint": "แทร็กจะไม่ถูกจัดกลุ่ม",
+      "creatingPending": "กำลังสร้าง… (รอตัวจัดทำดัชนี)",
+      "loading": "กำลังโหลดเพลย์ลิสต์…",
+      "empty": "คุณยังไม่มีเพลย์ลิสต์",
+      "items_other": "{{count}} รายการ",
+      "newPlaylist": "เพลย์ลิสต์เสียงใหม่",
+      "namePlaceholder": "ชื่อเพลย์ลิสต์",
+      "public": "สาธารณะ",
+      "private": "ส่วนตัว",
+      "musicStylePlaceholder": "สไตล์ / แนวเพลง (ไม่บังคับ เช่น Electronic)",
+      "creditsPlaceholder": "เครดิต (ไม่บังคับ)",
+      "yearPlaceholder": "ปี",
+      "labelPlaceholder": "ค่ายเพลง (ไม่บังคับ)",
+      "thumbAlt": "ภาพขนาดย่ออัลบั้ม",
+      "removeThumb": "นำภาพขนาดย่อออก",
+      "creating": "กำลังสร้าง…",
+      "create": "สร้าง"
+    },
+    "thumb": {
+      "uploading": "กำลังอัปโหลด…",
+      "addCover": "เพิ่มภาพปก",
+      "hint": "คลิกหรือลากแล้ววาง — JPG / PNG / WebP",
+      "coverAlt": "ปก",
+      "removeCover": "นำภาพปกออก"
+    },
+    "mode": {
+      "help_other": "เพิ่มแล้ว {{count}} แทร็ก เลือกวิธีเผยแพร่",
+      "howPublished": "ต้องการเผยแพร่แบบไหน?",
+      "snapsTitle": "ความคิดเห็นแบบ Snap",
+      "snapsDesc": "เสียงแต่ละรายการจะโพสต์เป็นการตอบกลับใต้คอนเทนเนอร์ peak.snaps ล่าสุด — แสดงในฟีด Snaps (ค่าเริ่มต้น)",
+      "singleTitle": "โพสต์เดี่ยว",
+      "singleTitleSingleOnly": "โพสต์เดี่ยว (ไฟล์เดียวเท่านั้น)",
+      "singleDesc": "เสียงหนึ่งรายการในโพสต์ Hive หลักของตัวเอง พร้อมชื่อเรื่อง ชุมชน แท็ก และภาพปก",
+      "albumTitle": "โพสต์อัลบั้ม",
+      "albumTitleNeeds2": "โพสต์อัลบั้ม (ต้องมี 2 ไฟล์ขึ้นไป)",
+      "albumDesc": "โพสต์หลักหนึ่งโพสต์ (ไม่มีเสียง) ทำหน้าที่เป็นหน้าแรกของอัลบั้ม ทุกแทร็กจะเผยแพร่เป็นความคิดเห็นตอบกลับ พร้อมภาพปก คำอธิบาย การรับรางวัล และผู้รับผลประโยชน์ของตัวเอง",
+      "howEarn": "ต้องการให้เสียงนี้สร้างรายได้แบบไหน?",
+      "postRewardsTitle": "รางวัลโพสต์ (ครั้งเดียว)",
+      "postRewardsDesc": "คุณได้รับรางวัลผู้เขียนตามปกติของ Hive — จ่ายครั้งเดียว ประมาณ 7 วันหลังเผยแพร่",
+      "pplTitle": "จ่ายตามการฟัง (ตลอดอายุ)",
+      "pplDesc": "รางวัลทั้งหมดของโพสต์เสียงจะไปที่ @{{account}} แทนการจ่ายครั้งเดียว โปรแกรมของ 3Speak จะจ่ายให้คุณตามจำนวนการฟังตลอดอายุของแทร็ก"
+    },
+    "reward": {
+      "distribution": "การแบ่งรางวัล",
+      "default": "ค่าเริ่มต้น (50% HBD / 50% HP)",
+      "powerup": "Power up 100%",
+      "decline": "ปฏิเสธการรับรางวัล",
+      "beneficiaries": "ผู้รับผลประโยชน์",
+      "beneficiariesCount": "ผู้รับผลประโยชน์ ({{count}})"
+    },
+    "mainPost": {
+      "helpAlbum": "รายละเอียดของโพสต์หลัก — หน้าแรกของอัลบั้ม ไม่มีเสียงในโพสต์นี้ แต่ละแทร็กเป็นความคิดเห็นตอบกลับที่คุณตั้งค่าในขั้นถัดไป",
+      "helpSingle": "รายละเอียดของโพสต์เดี่ยวของคุณ",
+      "titlePlaceholder": "ชื่อเรื่อง (จำเป็น)",
+      "selectCommunity": "เลือกชุมชน",
+      "change": "เปลี่ยน",
+      "tagsPlaceholder": "แท็ก — คั่นด้วยเว้นวรรคหรือจุลภาค (ไม่บังคับ)",
+      "whatKind": "เสียงนี้เป็นประเภทใด?"
+    },
+    "tracks": {
+      "helpAlbum": "แต่ละแทร็กจะเผยแพร่เป็นความคิดเห็นใต้โพสต์หลัก ตั้งค่าที่ใช้ร่วมกันครั้งเดียวแล้วใช้กับทุกแทร็ก จากนั้นปรับแยกแต่ละแทร็กได้",
+      "helpSnaps": "แต่ละแทร็กจะเผยแพร่เป็น Snap ของตัวเอง ตั้งค่าที่ใช้ร่วมกันครั้งเดียวแล้วใช้กับทุกแทร็ก จากนั้นปรับแยกแต่ละแทร็กได้",
+      "applyToAllHeading": "ใช้กับทุกแทร็ก",
+      "sharedDescription": "คำอธิบายที่ใช้ร่วมกัน (ไม่บังคับ)",
+      "sharedCover": "ภาพปกที่ใช้ร่วมกัน",
+      "applyToAll_other": "ใช้กับทั้ง {{count}} แทร็ก",
+      "hide": "ซ่อน"
+    },
+    "review": {
+      "standalone": "โพสต์เดี่ยว",
+      "standaloneIn": "โพสต์เดี่ยวใน {{community}}",
+      "album_other": "อัลบั้ม — โพสต์หลัก 1 โพสต์ + ความคิดเห็นแทร็ก {{count}} รายการ",
+      "albumIn_other": "อัลบั้ม — โพสต์หลัก 1 โพสต์ใน {{community}} + ความคิดเห็นแทร็ก {{count}} รายการ",
+      "snapComments_other": "ความคิดเห็นแบบ Snap {{count}} รายการ",
+      "ready_other": "พร้อมเผยแพร่ {{count}} แทร็ก",
+      "readyToPlaylist_other": "พร้อมเผยแพร่ {{count}} แทร็กไปยังเพลย์ลิสต์ \"{{name}}\"",
+      "publishAs": "เผยแพร่เป็น:",
+      "earnings": "รายได้:",
+      "earningsPpl": "จ่ายตามการฟัง (@{{account}})",
+      "earningsNormal": "รางวัลโพสต์ตามปกติ",
+      "playlist": "เพลย์ลิสต์:",
+      "failedCount_other": "ไม่สำเร็จ {{count}} แทร็ก",
+      "retryAllFailed": "ลองใหม่ทั้งหมดที่ไม่สำเร็จ",
+      "failedDuringUpload": "ล้มเหลวระหว่างอัปโหลดไฟล์เสียง: {{message}}",
+      "failedDuringPost": "ล้มเหลวระหว่างโพสต์ไปยัง Hive: {{message}}",
+      "failedWithMessage": "ไม่สำเร็จ: {{message}}"
+    },
+    "stage": {
+      "upload": "กำลังอัปโหลดไฟล์เสียง",
+      "post": "กำลังโพสต์ไปยัง Hive",
+      "uploadingFallback": "กำลังอัปโหลด",
+      "published": "เผยแพร่แล้ว"
+    }
+  }
+}

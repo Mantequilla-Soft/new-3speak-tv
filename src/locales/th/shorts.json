@@ -1,0 +1,113 @@
+{
+  "loading": "กำลังโหลด Shorts...",
+  "pleaseTryAgain": "โปรดลองอีกครั้ง",
+  "rotateDevice": "โปรดหมุนอุปกรณ์เป็นแนวตั้ง",
+  "pageTitle": {
+    "byAuthor": "3S | Shorts โดย @{{author}}",
+    "default": "3S | Shorts"
+  },
+  "stories": {
+    "you": "คุณ"
+  },
+  "errors": {
+    "votingUnavailable": "โพสต์นี้โหวตไม่ได้",
+    "loginToVote": "เข้าสู่ระบบเพื่อโหวต",
+    "loginToComplete": "เข้าสู่ระบบเพื่อดำเนินการนี้"
+  },
+  "feed": {
+    "ariaLabel": "ฟีด Shorts",
+    "discover": "สำรวจ",
+    "myInterests": "ความสนใจของฉัน",
+    "interestsTitle": "เฉพาะ Shorts ที่ตรงกับความสนใจของคุณ",
+    "pickInterestsFirst": "เลือกความสนใจก่อน",
+    "noInterests": "คุณยังไม่ได้เลือกความสนใจ — เลือกได้ในการตั้งค่า",
+    "interestsExhausted": "Shorts ตามความสนใจของคุณหมดแล้ว — กำลังแสดงสำรวจ",
+    "noInterestMatches": "ขณะนี้ไม่มี Shorts ที่ตรงกับความสนใจของคุณ",
+    "switchToDiscover": "เปลี่ยนไปที่สำรวจ",
+    "empty": "ไม่มี Shorts",
+    "loadError": "โหลด Shorts ไม่สำเร็จ: {{error}}"
+  },
+  "glow": {
+    "subtle": "แสงรอบข้าง: อ่อน",
+    "vivid": "แสงรอบข้าง: สดใส",
+    "off": "แสงรอบข้าง: ปิด"
+  },
+  "playbackMode": {
+    "autoReplay": "เล่นซ้ำอัตโนมัติ",
+    "autoSwipe": "ปัดอัตโนมัติ",
+    "manual": "ด้วยตนเอง"
+  },
+  "subtitles": {
+    "off": "ปิด"
+  },
+  "chain": {
+    "originalVideo": "วิดีโอต้นฉบับ",
+    "snap": "Snap",
+    "openShort": "เปิด Shorts",
+    "watch": "ดู",
+    "openSnap": "เปิด Snap",
+    "comment": "ความคิดเห็น",
+    "reaction": "รีแอ็กชัน",
+    "thisVideo": "วิดีโอนี้",
+    "remix": "รีมิกซ์",
+    "show": "แสดงลำดับรีแอ็กชัน"
+  },
+  "caption": {
+    "curatedBy": "คัดสรรโดย Mantequilla",
+    "curated": "คัดสรรแล้ว",
+    "showOriginal": "แสดงต้นฉบับ",
+    "more": "เพิ่มเติม"
+  },
+  "actions": {
+    "remix": "รีมิกซ์",
+    "promote": "โปรโมต"
+  },
+  "share": {
+    "defaultTitle": "3Speak Shorts",
+    "text": "ดู Shorts นี้โดย {{user}} บน 3Speak!",
+    "shared": "แชร์สำเร็จ!",
+    "linkCopied": "คัดลอกลิงก์ไปยังคลิปบอร์ดแล้ว!",
+    "failed": "แชร์ไม่สำเร็จ"
+  },
+  "reshare": {
+    "loginRequired": "เข้าสู่ระบบเพื่อแชร์ต่อ",
+    "unavailable": "โพสต์นี้แชร์ต่อไม่ได้",
+    "done": "แชร์ต่อแล้ว!",
+    "failed": "แชร์ต่อไม่สำเร็จ"
+  },
+  "remix": {
+    "noUrl": "หา URL วิดีโอสำหรับรีมิกซ์ไม่ได้",
+    "loadFailed": "โหลดวิดีโอสำหรับรีมิกซ์ไม่สำเร็จ"
+  },
+  "watchLater": {
+    "loginRequired": "เข้าสู่ระบบเพื่อบันทึก Shorts",
+    "cantSave": "บันทึก Shorts นี้ไม่ได้",
+    "removed": "นำออกจากดูภายหลังแล้ว",
+    "saved": "บันทึกลงในดูภายหลังแล้ว",
+    "failed": "ไม่สำเร็จ: {{message}}"
+  },
+  "comments": {
+    "title": "ความคิดเห็น",
+    "loading": "กำลังโหลดความคิดเห็น...",
+    "closed": "ปิดการแสดงความคิดเห็นแล้ว",
+    "none": "ยังไม่มีความคิดเห็น",
+    "postRemoved": "โพสต์ Hive ของ Shorts นี้ถูกนำออกแล้ว จึงไม่สามารถรับความคิดเห็นหรือโหวตได้อีก",
+    "beFirst": "เป็นคนแรกที่แสดงความคิดเห็น!",
+    "unavailable": "โพสต์นี้แสดงความคิดเห็นไม่ได้",
+    "addPlaceholder": "เพิ่มความคิดเห็น...",
+    "addPlaceholderBar": "เพิ่มความคิดเห็น…",
+    "loginPlaceholder": "เข้าสู่ระบบเพื่อแสดงความคิดเห็น",
+    "send": "ส่งความคิดเห็น",
+    "enterComment": "โปรดพิมพ์ความคิดเห็น",
+    "loginToComment": "โปรดเข้าสู่ระบบเพื่อแสดงความคิดเห็น",
+    "justNow": "เมื่อสักครู่",
+    "posted": "โพสต์ความคิดเห็นแล้ว!",
+    "failed": "แสดงความคิดเห็นไม่สำเร็จ: {{message}}",
+    "translation": "คำแปล",
+    "translationFailed": "แปลไม่สำเร็จ",
+    "reportComment": "รายงานความคิดเห็น",
+    "replyPlaceholder": "เขียนการตอบกลับ...",
+    "viewReplies_other": "ดูการตอบกลับ {{count}} รายการ",
+    "hideReplies_other": "ซ่อนการตอบกลับ {{count}} รายการ"
+  }
+}

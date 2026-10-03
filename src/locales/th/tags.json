@@ -1,0 +1,43 @@
+{
+  "labels": {
+    "tech-science": "เทคโนโลยีและวิทยาศาสตร์",
+    "technology": "เทคโนโลยี",
+    "education": "การศึกษา",
+    "science": "วิทยาศาสตร์",
+    "programming": "การเขียนโปรแกรม",
+    "crypto-finance": "คริปโตและการเงิน",
+    "cryptocurrency": "คริปโทเคอร์เรนซี",
+    "finance": "การเงิน",
+    "business": "ธุรกิจ",
+    "entertainment": "บันเทิง",
+    "music": "เพลง",
+    "gaming": "เกม",
+    "film-tv": "ภาพยนตร์และทีวี",
+    "lifestyle": "ไลฟ์สไตล์",
+    "vlog": "วล็อก",
+    "comedy": "ตลก",
+    "story-time": "เล่าเรื่อง",
+    "commercial": "โฆษณา",
+    "arts-diy": "ศิลปะและ DIY",
+    "art": "ศิลปะ",
+    "diy-crafts": "DIY และงานฝีมือ",
+    "photography": "การถ่ายภาพ",
+    "food-outdoor": "อาหารและกิจกรรมกลางแจ้ง",
+    "nature": "ธรรมชาติ",
+    "travel": "ท่องเที่ยว",
+    "food": "อาหาร",
+    "pets": "สัตว์เลี้ยง",
+    "gardening": "ทำสวน",
+    "sports-health": "กีฬาและสุขภาพ",
+    "sports": "กีฬา",
+    "health": "สุขภาพ",
+    "fitness": "ฟิตเนส",
+    "life-society": "ชีวิตและสังคม",
+    "news": "ข่าว",
+    "spirituality": "จิตวิญญาณ",
+    "politics": "การเมือง"
+  },
+  "display": {
+    "cryptocurrency": "คริปโต"
+  }
+}

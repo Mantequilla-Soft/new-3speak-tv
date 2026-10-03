@@ -1,0 +1,19 @@
+{
+  "placeholder": "เขียนเนื้อหาของคุณที่นี่...",
+  "uploadFailed": "อัปโหลดไม่สำเร็จ: {{message}}",
+  "uploadingImage": "กำลังอัปโหลดรูปภาพ...",
+  "format": {
+    "underline": "ขีดเส้นใต้",
+    "strike": "ขีดฆ่า",
+    "highlight": "ไฮไลต์",
+    "bulletList": "รายการสัญลักษณ์",
+    "orderedList": "รายการลำดับเลข",
+    "taskList": "รายการงาน"
+  },
+  "emoji": {
+    "searchPlaceholder": "ค้นหาอีโมจิ"
+  },
+  "preview": {
+    "renderError": "แสดงเนื้อหาไม่สำเร็จ"
+  }
+}

@@ -1,0 +1,96 @@
+{
+  "tip": {
+    "successTitle": "ส่งทิปสำเร็จ!",
+    "successMessage": "คุณส่งทิป {{amount}} {{currency}} สำเร็จแล้ว ขอบคุณสำหรับการสนับสนุน!",
+    "errors": {
+      "allRequired": "ต้องกรอกทุกช่อง",
+      "loginRequired": "โปรดเข้าสู่ระบบเพื่อส่งทิป",
+      "insufficientBalance": "ยอดคงเหลือไม่พอ",
+      "invalidUsername": "ชื่อผู้ใช้ไม่ถูกต้อง",
+      "transferFailed": "โอนไม่สำเร็จ: {{message}}"
+    },
+    "heading": "ส่งทิปให้ @{{recipient}}",
+    "amountLabel": "จำนวน: ",
+    "amountPlaceholder": "เช่น 1.000",
+    "currencyLabel": "สกุลเงิน:",
+    "availableBalance": "ยอดคงเหลือที่ใช้ได้: {{currency}}",
+    "memoLabel": "บันทึกช่วยจำ (ไม่บังคับ):",
+    "memoPlaceholder": "เช่น ขอบคุณสำหรับคอนเทนต์ดีๆ!",
+    "send": "ส่งทิป"
+  },
+  "cardMenu": {
+    "loginToPersonalize": "โปรดเข้าสู่ระบบเพื่อปรับแต่งฟีดของคุณ",
+    "notInterestedToast": "ไม่สนใจ — เราจะซ่อนวิดีโอนี้",
+    "undo": "เลิกทำ",
+    "cantHideOwn": "คุณซ่อนวิดีโอของตัวเองไม่ได้",
+    "hidingCreatorToast": "กำลังซ่อนวิดีโอจาก @{{author}}",
+    "loginForPlaylists": "โปรดเข้าสู่ระบบเพื่อเพิ่มวิดีโอลงในเพลย์ลิสต์",
+    "loginToTag": "โปรดเข้าสู่ระบบเพื่อติดแท็กวิดีโอ",
+    "moreOptions": "ตัวเลือกเพิ่มเติม",
+    "addToPlaylist": "เพิ่มลงในเพลย์ลิสต์",
+    "addTag": "เพิ่มแท็ก",
+    "notInterested": "ไม่สนใจ",
+    "dontShowCreator": "ไม่ต้องแสดง @{{author}}"
+  },
+  "guestList": {
+    "loadFailed": "โหลดรายชื่อแขกปัจจุบันไม่ได้",
+    "saved_other": "แขก {{count}} คนดูวิดีโอนี้ได้",
+    "cleared": "ล้างรายชื่อแขกแล้ว",
+    "saveFailed": "บันทึกรายชื่อแขกไม่ได้",
+    "invalidAccounts": "ไม่ใช่บัญชี Hive ที่ถูกต้อง: {{names}}",
+    "title": "🔒 รายชื่อแขก",
+    "hint": "บัญชีเหล่านี้ดูได้โดยไม่ต้องมี 3Speak Pro เก็บเป็นความลับบนเซิร์ฟเวอร์ของเรา และไม่ถูกเผยแพร่ในโพสต์ของคุณ",
+    "notRegistered": "วิดีโอนี้ยังประมวลผลไม่เสร็จ คุณจะแก้ไขรายชื่อได้เมื่อประมวลผลเสร็จแล้ว",
+    "placeholder": "username, another.user",
+    "empty": "ยังไม่มีใคร เฉพาะสมาชิก Pro เท่านั้นที่ดูได้",
+    "removeAria": "นำ {{name}} ออก"
+  },
+  "voters": {
+    "pinnedTitle_other": "ผู้โหวต ({{count}})",
+    "topVoters": "ผู้โหวตสูงสุด",
+    "noVotes": "ยังไม่มีโหวต"
+  },
+  "payout": {
+    "breakdown": "รายละเอียดการจ่ายรางวัล",
+    "estimatedBreakdown": "รายละเอียดโดยประมาณ",
+    "beneficiaries": "ผู้รับผลประโยชน์",
+    "curators": "ผู้คัดสรร (50%)",
+    "author": "ผู้เขียน",
+    "total": "รวม",
+    "totalEstimated": "รวม (ประมาณ)"
+  },
+  "vote": {
+    "loginRequired": "เข้าสู่ระบบเพื่อดำเนินการนี้",
+    "fetchPostFailed": "ดึงข้อมูลโพสต์ไม่ได้",
+    "sameWeight": "คุณโหวตด้วยน้ำหนักนี้ไปแล้ว เลือกค่าอื่น",
+    "failed": "โหวตไม่สำเร็จ: {{message}}",
+    "pleaseTryAgain": "โปรดลองอีกครั้ง",
+    "weight": "น้ำหนักโหวต: {{weight}}%",
+    "success": "โหวตสำเร็จ! มูลค่า: ${{value}}",
+    "successTagged": "โหวตสำเร็จ! ติดแท็ก “{{tag}}” แล้ว มูลค่า: ${{value}}",
+    "tagged": "ติดแท็ก “{{tag}}” แล้ว",
+    "vote": "โหวต",
+    "tagThisVideo": "ติดแท็กวิดีโอนี้",
+    "tagOptional": "— ไม่บังคับ —",
+    "pickTopicFirst": "เลือกหัวข้อก่อน",
+    "taggedNoDot": "ติดแท็ก “{{tag}}” แล้ว",
+    "tagFailed": "ติดแท็กไม่สำเร็จ: {{message}}",
+    "taggedAlreadyVoted": "ติดแท็ก “{{tag}}” แล้ว — คุณโหวต {{weight}}% ไปก่อนหน้านี้แล้ว",
+    "votingClosed": "ปิดโหวตแล้ว — ติดแท็กวิดีโอนี้",
+    "youTagged": "คุณติดแท็กนี้เป็น <b>{{tag}}</b>",
+    "pickTopic": "เลือกหัวข้อ (นับเป็นโหวต 100%)",
+    "submitTag": "ส่งแท็ก",
+    "tagThisVideoFull": "ติดแท็กวิดีโอนี้ (นับเป็นโหวต 100%)",
+    "justTag": "ไม่โหวต — ติดแท็กอย่างเดียว"
+  },
+  "tagsPicker": {
+    "autoTagged": "ติดแท็กอัตโนมัติ: {{tags}}",
+    "searchPlaceholder": "ค้นหาหัวข้อ…",
+    "searchAria": "ค้นหาหัวข้อ",
+    "noMatches": "ไม่มีหัวข้อที่ตรงกับ “{{query}}”",
+    "allSelected": "เลือก {{category}} ทั้งหมดแล้ว เพิ่มหัวข้อย่อยเฉพาะเมื่อต้องการเจาะจงมากขึ้น:",
+    "orPickTopics": "หรือเลือกหัวข้อทีละรายการ:",
+    "goodEnough": "เท่านี้ก็พอ — หรือเจาะจงมากขึ้น (ไม่บังคับ):",
+    "moreSpecific": "เจาะจงมากขึ้น:"
+  }
+}

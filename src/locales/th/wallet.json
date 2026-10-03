@@ -1,0 +1,50 @@
+{
+  "tabs": {
+    "overview": "ภาพรวม",
+    "transactions": "ธุรกรรม",
+    "aria": "ส่วนของกระเป๋าเงิน"
+  },
+  "errors": {
+    "fetchBalances": "ดึงยอดคงเหลือไม่สำเร็จ",
+    "needKeychain": "ต้องใช้ส่วนขยาย Keychain เพื่อโอน"
+  },
+  "header": {
+    "mine": "กระเป๋าเงินของฉัน",
+    "ofUser": "กระเป๋าเงินของ {{user}}"
+  },
+  "assets": "สินทรัพย์",
+  "transfer": "โอน",
+  "transferModal": {
+    "loginRequired": "โปรดเข้าสู่ระบบเพื่อโอน",
+    "insufficient": "ยอดคงเหลือไม่พอ",
+    "invalidUsername": "ชื่อผู้ใช้ไม่ถูกต้อง",
+    "success": "โอนสำเร็จ!",
+    "failed": "โอนไม่สำเร็จ: {{error}}",
+    "title": "โอน {{coin}}",
+    "amountLabel": "จำนวน ({{coin}})",
+    "balance": "ยอดคงเหลือ {{balance}}",
+    "max": "สูงสุด",
+    "recipientLabel": "ชื่อผู้ใช้ผู้รับ",
+    "recipientPlaceholder": "กรอกชื่อผู้ใช้ Hive",
+    "memoLabel": "บันทึกช่วยจำ",
+    "memoPlaceholder": "กรอกบันทึกช่วยจำ",
+    "confirm": "ยืนยันการโอน"
+  },
+  "history": {
+    "loadFailed": "โหลดธุรกรรมไม่สำเร็จ",
+    "title": "ประวัติธุรกรรม",
+    "cols": {
+      "type": "ประเภท",
+      "amount": "จำนวน",
+      "account": "บัญชี",
+      "date": "วันที่",
+      "memo": "บันทึกช่วยจำ"
+    },
+    "types": {
+      "transfer": "โอน",
+      "claim": "รับรางวัล",
+      "received": "ได้รับ"
+    },
+    "claimedRewards": "รางวัลที่รับแล้ว"
+  }
+}
