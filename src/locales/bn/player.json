@@ -1,0 +1,106 @@
+{
+  "controls": {
+    "rewind10": "10 সেকেন্ড পেছনে",
+    "forward10": "10 সেকেন্ড সামনে",
+    "reactToMoment": "এই মুহূর্তে রিঅ্যাক্ট করুন",
+    "mute": "মিউট",
+    "unmute": "আনমিউট",
+    "playerSize": "প্লেয়ারের সাইজ: {{size}}",
+    "sizeStandard": "স্ট্যান্ডার্ড",
+    "pip": "পিকচার-ইন-পিকচার",
+    "autoplayOn": "অটোপ্লে: চালু",
+    "autoplayOff": "অটোপ্লে: বন্ধ",
+    "ambientSubtle": "অ্যাম্বিয়েন্ট লাইট: হালকা",
+    "ambientVivid": "অ্যাম্বিয়েন্ট লাইট: উজ্জ্বল",
+    "ambientOff": "অ্যাম্বিয়েন্ট লাইট: বন্ধ",
+    "playbackSpeed": "প্লেব্যাকের গতি",
+    "speedNormal": "স্বাভাবিক",
+    "quality": "কোয়ালিটি",
+    "qualityAuto": "অটো",
+    "fullscreen": "ফুলস্ক্রিন",
+    "exitFullscreen": "ফুলস্ক্রিন থেকে বের হন",
+    "markerReplies_one": "({{count}}টি রিপ্লাই)",
+    "markerReplies_other": "({{count}}টি রিপ্লাই)"
+  },
+  "subtitles": {
+    "title": "সাবটাইটেল",
+    "off": "বন্ধ",
+    "font": "ফন্ট",
+    "size": "সাইজ",
+    "textColor": "লেখার রং",
+    "textBorder": "লেখার বর্ডার",
+    "borderColor": "বর্ডারের রং",
+    "background": "ব্যাকগ্রাউন্ড",
+    "none": "কিছু না",
+    "fonts": {
+      "sansSerif": "Sans-serif",
+      "serif": "Serif",
+      "monospace": "Monospace"
+    }
+  },
+  "mini": {
+    "untitled": "ভিডিও"
+  },
+  "playlist": {
+    "previous": "আগের ভিডিও",
+    "next": "পরের ভিডিও",
+    "close": "প্লেলিস্ট বন্ধ করুন"
+  },
+  "overlay": {
+    "replay": "আবার চালান"
+  },
+  "reactions": {
+    "translation": "অনুবাদ",
+    "translationFailed": "অনুবাদ ব্যর্থ হয়েছে",
+    "videoReaction": "ভিডিও রিঅ্যাকশন",
+    "comment": "কমেন্ট",
+    "previous": "আগের",
+    "next": "পরের",
+    "hide": "রিঅ্যাকশন লুকান",
+    "hideShort": "লুকান",
+    "loadingReplies": "রিপ্লাই লোড হচ্ছে...",
+    "sizeTitle": "সাইজ: {{size}}",
+    "sizes": {
+      "small": "S",
+      "medium": "M",
+      "standard": "Std",
+      "big": "বড়",
+      "cinema": "সিনে"
+    },
+    "sizeNames": {
+      "small": "ছোট",
+      "medium": "মাঝারি",
+      "standard": "স্ট্যান্ডার্ড",
+      "big": "বড়",
+      "cinema": "সিনেমা"
+    }
+  },
+  "reactionUpload": {
+    "authorized": "@threespeak অনুমোদিত — এখন আপনি আপনার রিঅ্যাকশন পোস্ট করতে পারবেন",
+    "authFailed": "অনুমোদন ব্যর্থ হয়েছে। আবার চেষ্টা করুন।",
+    "webcamDenied": "ওয়েবক্যাম চালু করা যায়নি",
+    "shortTooLong": "শর্টস {{max}} বা তার কম হতে হবে। \"3Speak শর্টস-এ দেখান\" থেকে টিক তুলে দিন অথবা ছোট ভিডিও ব্যবহার করুন।",
+    "uploadingVideo": "ভিডিও আপলোড হচ্ছে...",
+    "noEmbedUrl": "আপলোড সফল হয়েছে কিন্তু কোনো এমবেড URL পাওয়া যায়নি",
+    "publishingComment": "কমেন্ট প্রকাশ হচ্ছে...",
+    "posted": "ভিডিও রিঅ্যাকশন পোস্ট হয়েছে!",
+    "postFailed": "কমেন্ট পোস্ট করা যায়নি",
+    "uploadFailed": "আপলোড ব্যর্থ হয়েছে",
+    "uploadVideo": "ভিডিও আপলোড করুন",
+    "recordVideo": "ভিডিও রেকর্ড করুন",
+    "startRecording": "রেকর্ডিং শুরু করুন",
+    "stopRecording": "রেকর্ডিং থামান",
+    "recordedVideo": "রেকর্ড করা ভিডিও",
+    "descriptionPlaceholder": "আপনার ভিডিও রিঅ্যাকশনের একটি বিবরণ যোগ করুন...",
+    "showInShorts": "3Speak শর্টস-এ দেখান",
+    "authNote": "<b>@threespeak</b>-কে আপনার হয়ে রিঅ্যাকশন পোস্ট করার অনুমতি দিন।",
+    "authorizing": "অনুমোদন হচ্ছে…",
+    "authorize": "@threespeak অনুমোদন করুন",
+    "uploading": "আপলোড হচ্ছে...",
+    "postReaction": "রিঅ্যাকশন পোস্ট করুন"
+  },
+  "inline": {
+    "cantPlay": "এই ভিডিওটি এখানে চালানো যাচ্ছে না।",
+    "openOnSite": "3Speak-এ খুলুন"
+  }
+}

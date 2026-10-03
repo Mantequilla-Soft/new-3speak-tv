@@ -1,0 +1,75 @@
+{
+  "buckets": {
+    "today": "আজ",
+    "yesterday": "গতকাল",
+    "thisWeek": "এই সপ্তাহ",
+    "thisMonth": "এই মাস",
+    "older": "পুরোনো"
+  },
+  "loginRequired": "আপনার নোটিফিকেশন দেখতে লগ ইন করুন।",
+  "unreadChip_one": "{{count}}টি নতুন",
+  "unreadChip_other": "{{count}}টি নতুন",
+  "markAllTitle": "সব পড়া হয়েছে হিসেবে চিহ্নিত করুন",
+  "marking": "চিহ্নিত হচ্ছে…",
+  "markAllRead": "সব পড়া হয়েছে",
+  "refreshing": "রিফ্রেশ হচ্ছে…",
+  "categories": {
+    "all": "সব",
+    "replies": "রিপ্লাই",
+    "mentions": "মেনশন",
+    "votes": "ভোট",
+    "reblogs": "রিব্লগ",
+    "follows": "ফলো",
+    "transfers": "ট্রান্সফার"
+  },
+  "unread": "অপঠিত",
+  "summary": {
+    "title": "অ্যাক্টিভিটি",
+    "today": "আজ",
+    "week": "এই সপ্তাহ",
+    "month": "এই মাস",
+    "emptyToday": "আজ এখনো কোনো অ্যাক্টিভিটি নেই।",
+    "emptyWeek": "এই সপ্তাহে এখনো কোনো অ্যাক্টিভিটি নেই।",
+    "stillLoading": "পুরোনো নোটিফিকেশন এখনো লোড হচ্ছে…",
+    "emptyMonth": "এই মাসে কোনো অ্যাক্টিভিটি নেই।"
+  },
+  "loadError": "নোটিফিকেশন লোড করা যায়নি।",
+  "empty": {
+    "all": "আপনার এখনো কোনো নোটিফিকেশন নেই।",
+    "unread": "কোনো অপঠিত নোটিফিকেশন নেই।",
+    "replies": "এখনো কোনো রিপ্লাই নেই।",
+    "mentions": "এখনো কোনো মেনশন নেই।",
+    "votes": "এখনো কোনো ভোট নেই।",
+    "reblogs": "এখনো কোনো রিব্লগ নেই।",
+    "follows": "এখনো কেউ ফলো করেননি।",
+    "transfers": "এখনো কোনো ট্রান্সফার নেই।"
+  },
+  "threeSpeakVideo": "3Speak ভিডিও",
+  "end": "আপনি শেষ পর্যন্ত পৌঁছে গেছেন।",
+  "cards": {
+    "votes": "ভোট",
+    "voters_one": "{{count}} জন ভোটার",
+    "voters_other": "{{count}} জন ভোটার",
+    "replies": "রিপ্লাই",
+    "newFollowers": "নতুন ফলোয়ার",
+    "mentions": "মেনশন",
+    "reblogs": "রিব্লগ",
+    "transfers": "ট্রান্সফার"
+  },
+  "group": {
+    "voteOne": "@{{user}} আপনার পোস্টে ভোট দিয়েছেন",
+    "voteTwo": "@{{user}} ও @{{user2}} আপনার পোস্টে ভোট দিয়েছেন",
+    "voteMany_one": "@{{user}} ও আরও {{count}} জন আপনার পোস্টে ভোট দিয়েছেন",
+    "voteMany_other": "@{{user}} ও আরও {{count}} জন আপনার পোস্টে ভোট দিয়েছেন",
+    "followOne": "@{{user}} আপনাকে ফলো করেছেন",
+    "followTwo": "@{{user}} ও @{{user2}} আপনাকে ফলো করেছেন",
+    "followMany_one": "@{{user}} ও আরও {{count}} জন আপনাকে ফলো করেছেন",
+    "followMany_other": "@{{user}} ও আরও {{count}} জন আপনাকে ফলো করেছেন",
+    "generic_one": "{{count}}টি {{type}} নোটিফিকেশন",
+    "generic_other": "{{count}}টি {{type}} নোটিফিকেশন",
+    "typeCount_one": "{{count}}টি {{type}}",
+    "typeCount_other": "{{count}}টি {{type}}",
+    "collapse": "▾ ছোট করুন",
+    "expand": "▸ বড় করুন"
+  }
+}

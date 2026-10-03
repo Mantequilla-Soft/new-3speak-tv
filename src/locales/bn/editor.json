@@ -1,0 +1,19 @@
+{
+  "placeholder": "এখানে আপনার লেখা লিখুন...",
+  "uploadFailed": "আপলোড ব্যর্থ: {{message}}",
+  "uploadingImage": "ছবি আপলোড হচ্ছে...",
+  "format": {
+    "underline": "আন্ডারলাইন",
+    "strike": "স্ট্রাইক",
+    "highlight": "হাইলাইট",
+    "bulletList": "বুলেট তালিকা",
+    "orderedList": "ক্রমিক তালিকা",
+    "taskList": "কাজের তালিকা"
+  },
+  "emoji": {
+    "searchPlaceholder": "ইমোজি খুঁজুন"
+  },
+  "preview": {
+    "renderError": "কনটেন্ট দেখাতে সমস্যা হয়েছে"
+  }
+}

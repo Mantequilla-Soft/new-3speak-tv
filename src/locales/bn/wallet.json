@@ -1,0 +1,50 @@
+{
+  "tabs": {
+    "overview": "সারসংক্ষেপ",
+    "transactions": "লেনদেন",
+    "aria": "ওয়ালেটের অংশ"
+  },
+  "errors": {
+    "fetchBalances": "ব্যালেন্স আনা যায়নি",
+    "needKeychain": "ট্রান্সফার করতে Keychain এক্সটেনশন লাগবে"
+  },
+  "header": {
+    "mine": "আমার ওয়ালেট",
+    "ofUser": "{{user}}-এর ওয়ালেট"
+  },
+  "assets": "সম্পদ",
+  "transfer": "ট্রান্সফার",
+  "transferModal": {
+    "loginRequired": "ট্রান্সফার করতে লগ ইন করুন",
+    "insufficient": "পর্যাপ্ত ব্যালেন্স নেই",
+    "invalidUsername": "ইউজারনেম সঠিক নয়",
+    "success": "ট্রান্সফার সফল হয়েছে!",
+    "failed": "ট্রান্সফার ব্যর্থ: {{error}}",
+    "title": "{{coin}} ট্রান্সফার",
+    "amountLabel": "পরিমাণ ({{coin}})",
+    "balance": "ব্যালেন্স {{balance}}",
+    "max": "সর্বোচ্চ",
+    "recipientLabel": "প্রাপকের ইউজারনেম",
+    "recipientPlaceholder": "Hive ইউজারনেম লিখুন",
+    "memoLabel": "মেমো",
+    "memoPlaceholder": "মেমো লিখুন",
+    "confirm": "ট্রান্সফার নিশ্চিত করুন"
+  },
+  "history": {
+    "loadFailed": "লেনদেন লোড করা যায়নি",
+    "title": "লেনদেনের ইতিহাস",
+    "cols": {
+      "type": "ধরন",
+      "amount": "পরিমাণ",
+      "account": "অ্যাকাউন্ট",
+      "date": "তারিখ",
+      "memo": "মেমো"
+    },
+    "types": {
+      "transfer": "ট্রান্সফার",
+      "claim": "রিওয়ার্ড ক্লেইম",
+      "received": "প্রাপ্ত"
+    },
+    "claimedRewards": "ক্লেইম করা রিওয়ার্ড"
+  }
+}

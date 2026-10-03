@@ -1,0 +1,98 @@
+{
+  "page": {
+    "fallbackTitle": "ব্যাজ",
+    "kpis": {
+      "recipients": "প্রাপক",
+      "recentVideos": "সাম্প্রতিক ভিডিও",
+      "issued": "প্রদান করা হয়েছে"
+    },
+    "issuedBy": "প্রদান করেছেন <creatorLink>@{{creator}}</creatorLink>",
+    "notFoundTitle": "ব্যাজ পাওয়া যায়নি",
+    "notFoundBody": "এই মুহূর্তে @{{account}} নামের কোনো Hive অ্যাকাউন্ট পড়া যায়নি।",
+    "browseAll": "সব ব্যাজ দেখুন",
+    "tabs": {
+      "videos": "ভিডিও",
+      "recipients": "প্রাপক",
+      "recipientsWithCount": "প্রাপক ({{num}})"
+    },
+    "errorVideos": "ভিডিও আনতে সমস্যা হয়েছে",
+    "noVideosTitle": "এখনো কোনো ভিডিও নেই",
+    "noHolders": "এখনো কারো কাছে এই ব্যাজ নেই।",
+    "noHolderVideos": "এই ব্যাজধারীদের কেউ এখনো 3Speak-এ ভিডিও প্রকাশ করেননি।",
+    "loadingMore": "আরও লোড হচ্ছে...",
+    "recipientsError": "প্রাপকদের লোড করা যায়নি",
+    "recipientsLoading": "প্রাপকদের লোড করা হচ্ছে...",
+    "noRecipientsTitle": "এখনো কোনো প্রাপক নেই",
+    "noRecipientsBody": "এখন পর্যন্ত কাউকে এই ব্যাজ দেওয়া হয়নি।",
+    "recipientsSummary_one": "{{num}} জন প্রাপক",
+    "recipientsSummary_other": "{{num}} জন প্রাপক",
+    "recipientsSummaryWithVideos_one": "{{num}} জন প্রাপক, {{publishing}} জন 3Speak-এ প্রকাশ করছেন",
+    "recipientsSummaryWithVideos_other": "{{num}} জন প্রাপক, {{publishing}} জন 3Speak-এ প্রকাশ করছেন",
+    "recipientVideos_one": "{{num}}টি ভিডিও",
+    "recipientVideos_other": "{{num}}টি ভিডিও",
+    "recipientNoVideos": "কোনো ভিডিও নেই"
+  },
+  "directory": {
+    "title": "ব্যাজ",
+    "intro": "ব্যাজ হলো Hive-এ <b>অন্যদের দেওয়া পুরস্কার</b>, ইভেন্ট, অবদান ও মাইলফলকের জন্য। আপনি নিজে এতে যোগ দিতে পারবেন না: কেউ একজন এটি দেয়। একটি ব্যাজ খুলে দেখুন এর প্রাপকরা এখানে কী প্রকাশ করছেন।",
+    "searchPlaceholder": "ব্যাজ খুঁজুন...",
+    "sort": {
+      "recipients": "প্রাপক",
+      "created": "তৈরির তারিখ",
+      "name": "নাম"
+    },
+    "createLocked": "ব্যাজ তৈরি করতে একটি Hive অ্যাকাউন্ট লাগে। আপনার অ্যাকাউন্ট প্রস্তুত হলে এটি চালু হবে।",
+    "create": "ব্যাজ তৈরি করুন",
+    "loadError": "এই মুহূর্তে ব্যাজ লোড করা যায়নি।",
+    "noMatch": "এই সার্চের সাথে কোনো ব্যাজ মেলে না।",
+    "held": "আপনার আছে",
+    "recipients_one": "{{num}} জন প্রাপক",
+    "recipients_other": "{{num}} জন প্রাপক"
+  },
+  "award": {
+    "success": "@{{username}} এখন {{title}} পেয়েছেন",
+    "failed": "ব্যাজটি দেওয়া যায়নি",
+    "dialogLabel": "{{username}}-কে একটি ব্যাজ দিন",
+    "title": "একটি ব্যাজ দিন",
+    "toUser": "@{{username}}-কে",
+    "awarding": "দেওয়া হচ্ছে…",
+    "held": "আছে",
+    "award": "দিন",
+    "note": "ব্যাজটি Hive-এ তাদের ফলো করে, আর ব্যাজ থাকা মানে এটাই। আপনি ব্যাজের নিজস্ব পেজ থেকে এটি ফিরিয়ে নিতে পারবেন।"
+  },
+  "hive": {
+    "dragToReorder": "ক্রম বদলাতে টেনে আনুন",
+    "orderSaved": "ব্যাজের ক্রম আপনার Hive প্রোফাইলে সেভ হয়েছে",
+    "orderSaveFailed": "আপনার ব্যাজের ক্রম সেভ করা যায়নি",
+    "dialogLabel": "@{{username}}-এর ব্যাজ",
+    "title": "ব্যাজ",
+    "arrangeHint": "যে ক্রমে দেখাতে চান, ব্যাজগুলো টেনে সেভাবে সাজান।",
+    "earnedCount_one": "Hive-এ @{{username}}-এর অর্জিত {{count}}টি ব্যাজ",
+    "earnedCount_other": "Hive-এ @{{username}}-এর অর্জিত {{count}}টি ব্যাজ",
+    "alwaysFirst": "সবসময় প্রথমে দেখানো হয়",
+    "saveOrder": "ক্রম সেভ করুন",
+    "arrange": "সাজান",
+    "arrangeTitle": "আপনার ব্যাজগুলো কোন ক্রমে দেখাবে তা বেছে নিন",
+    "showAll_one": "সব {{count}}টি ব্যাজ দেখান",
+    "showAll_other": "সব {{count}}টি ব্যাজ দেখান",
+    "awardTitle": "@{{username}}-কে আপনার একটি ব্যাজ দিন"
+  },
+  "leaderboardBadges": {
+    "proTitle": "এই ক্রিয়েটর Pro সাবস্ক্রিপশন দিয়ে 3Speak-কে সমর্থন করেন"
+  },
+  "leaderboard": {
+    "watchNotice": "দেখার সময় শুধু {{since}} থেকে ট্র্যাক করা হচ্ছে, তাই লম্বা সময়সীমাতেও একই ছোট ইতিহাস দেখা যায়।",
+    "unclaimed": "ক্লেইম করা হয়নি",
+    "noActivity": "এই সময়সীমায় এখনো কোনো অ্যাক্টিভিটি নেই",
+    "otherTopics": "অন্যান্য",
+    "title": "র‍্যাঙ্কিং",
+    "subtitle": "{{blurb}} — 3Speak-এর শীর্ষ ক্রিয়েটর।",
+    "subtitleTopic": "{{blurb}} — {{topic}}-এর শীর্ষ ক্রিয়েটর।",
+    "allTopics": "সব বিষয়",
+    "finding": "এই বোর্ডে @{{user}}-কে খোঁজা হচ্ছে…",
+    "notInTop": "@{{user}} এই বোর্ডের শীর্ষ {{n}}-এ নেই।",
+    "loading": "লিডারবোর্ড লোড হচ্ছে…",
+    "loadError": "লিডারবোর্ড লোড করা যায়নি। একটু পরে আবার চেষ্টা করুন।",
+    "empty": "এই সময়সীমায় এখনো কারো কোনো {{metric}} নেই।"
+  }
+}

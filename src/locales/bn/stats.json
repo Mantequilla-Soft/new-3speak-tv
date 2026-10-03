@@ -1,0 +1,119 @@
+{
+  "ranges": {
+    "d7": "7 দিন",
+    "d28": "28 দিন",
+    "d90": "90 দিন",
+    "all": "সব"
+  },
+  "content": {
+    "all": "সব",
+    "videos": "ভিডিও",
+    "shorts": "শর্টস"
+  },
+  "metrics": {
+    "watchTime": "দেখার সময়",
+    "views": "ভিউ",
+    "avgPct": "গড় %",
+    "votes": "ভোট",
+    "comments": "কমেন্ট",
+    "payout": "পেআউট"
+  },
+  "days": {
+    "short": {
+      "sun": "রবি",
+      "mon": "সোম",
+      "tue": "মঙ্গল",
+      "wed": "বুধ",
+      "thu": "বৃহঃ",
+      "fri": "শুক্র",
+      "sat": "শনি"
+    },
+    "initial": {
+      "sun": "র",
+      "mon": "সো",
+      "tue": "ম",
+      "wed": "বু",
+      "thu": "বৃ",
+      "fri": "শু",
+      "sat": "শ"
+    }
+  },
+  "sources": {
+    "threespeak": "3Speak",
+    "player": "এমবেড প্লেয়ার"
+  },
+  "trend": {
+    "empty": "এই সময়সীমায় এখনো দেখার সময় নেই।",
+    "tip_one": "{{count}} ভিউ · {{date}}",
+    "tip_other": "{{count}} ভিউ · {{date}}"
+  },
+  "noData": "এখনো কোনো ডেটা নেই।",
+  "demo": {
+    "viewerLocations": "দর্শকদের অবস্থান",
+    "mapBubble_one": "{{country}} — {{count}}টি সেশন",
+    "mapBubble_other": "{{country}} — {{count}}টি সেশন",
+    "empty": "এই সময়সীমায় এখনো দর্শকদের কোনো ডেটা নেই।",
+    "breakdown": "বিভাজন",
+    "map": "ম্যাপ",
+    "countries": "দেশ",
+    "devices": "ডিভাইস",
+    "browsers": "ব্রাউজার",
+    "whereTitle": "তারা কোথায় দেখেন",
+    "whereSub": "3speak বনাম এমবেড প্লেয়ার",
+    "newVsReturning": "নতুন বনাম ফিরে আসা",
+    "new": "নতুন",
+    "returning": "ফিরে আসা",
+    "located": "{{total}}টি দেখার সেশনের মধ্যে {{located}}টির অবস্থান জানা গেছে।"
+  },
+  "when": {
+    "title": "আপনার দর্শকরা কখন দেখেন",
+    "sub": "UTC · গাঢ় রং = বেশি ভিউ",
+    "cellTitle_one": "{{day}} {{hour}}:00 — {{count}} ভিউ",
+    "cellTitle_other": "{{day}} {{hour}}:00 — {{count}} ভিউ",
+    "hour": "{{hour}}টা"
+  },
+  "detail": {
+    "summary": "{{votes}}টি ভোট · {{comments}}টি কমেন্ট · ${{payout}}"
+  },
+  "compare": {
+    "notEnough": "তুলনা করার মতো যথেষ্ট ডেটা নেই।",
+    "start": "শুরু",
+    "axis": "পুরো ভিডিওজুড়ে ধরে রাখা",
+    "end": "শেষ",
+    "title": "ভিডিও তুলনা করুন",
+    "pickA": "একটি ভিডিও বেছে নিন…",
+    "vs": "বনাম",
+    "pickB": "আরেকটি বেছে নিন…"
+  },
+  "loadError": "এই মুহূর্তে আপনার পরিসংখ্যান লোড করা যায়নি।",
+  "emptyRange": "এই সময়সীমায় এখনো দেখার ডেটা নেই — “সব” চেষ্টা করুন, অথবা মানুষ আপনার ভিডিও দেখা পর্যন্ত অপেক্ষা করুন।",
+  "tiles": {
+    "avgViewDuration": "গড় দেখার সময়কাল",
+    "avgWatched": "গড়ে দেখা হয়েছে",
+    "reactionsPerView": "প্রতিক্রিয়া / ভিউ"
+  },
+  "subtotals": "{{videos}}টি ভিডিও · {{votes}}টি ভোট · {{comments}}টি কমেন্ট · ${{payout}} · গড় গতি {{rate}}×",
+  "sections": {
+    "trend": "সময়ের সাথে দেখার সময়",
+    "best": "সেরা পারফরম্যান্স",
+    "audience": "আপনার দর্শক"
+  },
+  "openInNewTab": "ভিডিওটি নতুন ট্যাবে খুলুন",
+  "footnote": "দেখার পরিসংখ্যান প্রিভিউ ট্র্যাকিং থেকে নেওয়া এবং শুধু আপনিই দেখতে পান।",
+  "video": {
+    "noData": "এখনো কোনো ডেটা নেই",
+    "empty": "এই ভিডিওর এখনো কোনো দেখার ডেটা নেই।",
+    "uniqueViewers": "অনন্য দর্শক",
+    "avgSpeed": "গড় গতি",
+    "mostDropOff": "📉 সবচেয়ে বেশি দর্শক চলে যান <b>{{time}}</b>-এ",
+    "earlyDrop": "⚡ প্রথম 3 সেকেন্ডে <b>{{pct}}%</b> চলে গেছেন",
+    "replayed": "🔁 আবার দেখা:",
+    "retentionTitle": "দর্শক ধরে রাখা",
+    "retentionSub": "প্রতিটি মুহূর্তে কত শতাংশ দর্শক এখনো দেখছেন",
+    "pctWatching": "{{pct}}% দেখছেন",
+    "replayTitle": "সবচেয়ে বেশি আবার দেখা",
+    "replaySub": "যে অংশগুলো দর্শকরা সবচেয়ে বেশি দেখেন ও আবার দেখেন",
+    "hotSpot": "হট স্পট",
+    "notEnoughReplays": "এখনো যথেষ্ট রিপ্লে নেই"
+  }
+}
