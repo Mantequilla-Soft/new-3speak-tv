@@ -44,7 +44,8 @@ const PAGE = 150;
 const PROOF_BATCH = 500;
 const PROOF_DEBOUNCE_MS = 600;
 const has = (obj, k) => Object.prototype.hasOwnProperty.call(obj, k);
-const percent = (done, total) => formatNumber(total ? Math.floor((done / total) * 100) / 100 : 1, { style: 'percent' });
+// Floored to 0.1%: whole percent hid single ticks in big areas (1 of 200 = 0.5%).
+const percent = (done, total) => formatNumber(total ? Math.floor((done / total) * 1000) / 1000 : 1, { style: 'percent', maximumFractionDigits: 1 });
 
 /**
  * /translate: the in-app translation editor, for accounts on the server's
@@ -417,7 +418,25 @@ function Editor({ me }) {
     proofTimer.current = setTimeout(flushProof, PROOF_DEBOUNCE_MS);
   };
 
-  const proofTitle = (m) => t('translator.proofread.checkedBy', { user: m.by, when: formatTimeAgo(m.at) });
+  // Tab walks the column you are in: from a translation field to the next field,
+  // from a proofread checkbox to the next checkbox (Shift+Tab goes back). Past the
+  // first/last one the browser's normal tab order takes over again.
+  const onRowsKeyDown = (e) => {
+    if (e.key !== 'Tab' || e.altKey || e.ctrlKey || e.metaKey) return;
+    const el = e.target;
+    let selector = null;
+    if (el.matches('textarea.translate-input')) selector = 'textarea.translate-input';
+    else if (el.matches('.translate-proof input[type="checkbox"]')) selector = '.translate-proof input[type="checkbox"]:not(:disabled)';
+    if (!selector) return;
+    const list = [...e.currentTarget.querySelectorAll(selector)];
+    const next = list[list.indexOf(el) + (e.shiftKey ? -1 : 1)];
+    if (!next) return;
+    e.preventDefault();
+    next.focus();
+    next.scrollIntoView({ block: 'nearest' });
+  };
+
+  const proofTitle = (m) =>t('translator.proofread.checkedBy', { user: m.by, when: formatTimeAgo(m.at) });
 
   const changeLanguage = (code) => {
     if (code === '__add') { setShowAdd(true); return; }
@@ -567,7 +586,7 @@ function Editor({ me }) {
                           <span style={{ width: `${pa.total ? (pa.done / pa.total) * 100 : 100}%` }} />
                         </span>
                         <span className="translate-area-pct is-proof" title={proofLabel}>
-                          <span aria-hidden="true">✓ </span>{percent(pa.done, pa.total)}
+                          <span aria-hidden="true">✓ </span>{formatNumber(pa.done)}/{formatNumber(pa.total)}
                           <span className="translate-sr-only"> {proofLabel}</span>
                         </span>
                       </>
@@ -616,11 +635,12 @@ function Editor({ me }) {
             <p className="translate-muted">{t('translator.loading')}</p>
           ) : (
             <>
-              <div className="translate-rows" role="list">
+              <div className={`translate-rows${showProof ? ' has-proof' : ''}`} role="list" onKeyDown={onRowsKeyDown}>
                 <div className="translate-row translate-row-head" aria-hidden="true">
                   <span>{t('translator.columns.key')}</span>
                   <span>{t('translator.columns.english')}</span>
                   <span>{t('translator.columns.translation')}</span>
+                  {showProof && <span>{t('translator.proofread.checkbox')}</span>}
                 </div>
                 {shown.map((r) => {
                   const pendingReset = drafts[r.key] === null;
@@ -655,26 +675,6 @@ function Editor({ me }) {
                         {err && <p className="translate-error" role="alert">{err}</p>}
                         {pendingReset && <p className="translate-muted small">{t('translator.pendingReset')}</p>}
                         <div className="translate-row-actions">
-                          {showProof && (
-                            <label className={`translate-proof${proofed ? ' is-checked' : ''}`} title={proofHint}>
-                              <input
-                                type="checkbox"
-                                checked={proofed}
-                                disabled={!hasText || isDirty}
-                                aria-label={t('translator.proofread.checkboxFor', { key: r.key })}
-                                onChange={(e) => toggleProof(r.key, e.target.checked)}
-                              />
-                              <span aria-hidden="true">{t('translator.proofread.checkbox')}</span>
-                            </label>
-                          )}
-                          {stale && (
-                            <span
-                              className="translate-tag is-stale"
-                              title={t('translator.proofread.changedTitle', { user: mark.by, when: formatTimeAgo(mark.at) })}
-                            >
-                              {t('translator.proofread.changed')}
-                            </span>
-                          )}
                           {isDirty && (
                             <button type="button" className="translate-btn small" onClick={() => discard(r.key)}>{t('translator.undo')}</button>
                           )}
@@ -685,6 +685,28 @@ function Editor({ me }) {
                           )}
                         </div>
                       </div>
+                      {showProof && (
+                        <div className="translate-proof-cell">
+                          <label className={`translate-proof${proofed ? ' is-checked' : ''}`} title={proofHint}>
+                            <input
+                              type="checkbox"
+                              checked={proofed}
+                              disabled={!hasText || isDirty}
+                              aria-label={t('translator.proofread.checkboxFor', { key: r.key })}
+                              onChange={(e) => toggleProof(r.key, e.target.checked)}
+                            />
+                            <span aria-hidden="true">{t('translator.proofread.checkbox')}</span>
+                          </label>
+                          {stale && (
+                            <span
+                              className="translate-tag is-stale"
+                              title={t('translator.proofread.changedTitle', { user: mark.by, when: formatTimeAgo(mark.at) })}
+                            >
+                              {t('translator.proofread.changed')}
+                            </span>
+                          )}
+                        </div>
+                      )}
                     </div>
                   );
                 })}

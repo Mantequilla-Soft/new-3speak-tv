@@ -2,7 +2,9 @@
 
 // In-app translation editor (/translate).
 .translate-page {
-  max-width: 1280px;
+  // Full width on desktop: four columns (key, English, translation, proofread)
+  // need the room, and translators work here for long stretches.
+  max-width: none;
   margin: 0 auto;
   padding: 20px 16px 24px;
   color: var(--text-primary);
@@ -492,4 +494,20 @@
 .translate-tag.is-stale {
   border-color: #f0a020;
   color: #c27c00;
+}
+
+// Proofread checkbox as its own column, in the same row as the text.
+.translate-rows.has-proof .translate-row {
+  grid-template-columns: minmax(140px, 0.7fr) minmax(0, 1.2fr) minmax(0, 1.6fr) auto;
+
+  @media (max-width: 767px) { grid-template-columns: minmax(0, 1fr); }
+}
+
+.translate-proof-cell {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 6px;
+
+  .translate-proof { margin-inline-end: 0; }
 }
