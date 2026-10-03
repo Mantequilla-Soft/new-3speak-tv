@@ -96,7 +96,8 @@
 
 /* 'hold', in four parts of the booked time:
      0-20%   eases in from the right edge: fast, slowing to the pan's speed (to rest when it fits; curve set by the component),
-     20-70%  a slow even pan from its start to its end (no movement when it fits,
+     20-70%  a slow pan from its start to its end: takes over at the entry's speed and
+             glides to a stop as the end comes into view (no movement when it fits,
              because start and end are then the same centred spot),
      70-80%  rests with its end in view,
      80-100% eases out past the left edge (gathers speed as it goes).
@@ -112,7 +113,7 @@
   // No timing function here: the entry takes the ELEMENT's (see .is-hold), because a
   // var() inside a keyframe's timing function is not resolved and falls back to ease.
   0% { transform: translateX(var(--ticker-from)); }
-  20% { transform: translateX(var(--ticker-start)); animation-timing-function: linear; }
+  20% { transform: translateX(var(--ticker-start)); animation-timing-function: cubic-bezier(0.3, 0.3, 0.6, 1); }
   70% { transform: translateX(var(--ticker-end)); animation-timing-function: linear; }
   80% { transform: translateX(var(--ticker-end)); animation-timing-function: cubic-bezier(0.64, 0, 0.78, 0); }
   100% { transform: translateX(var(--ticker-to)); }

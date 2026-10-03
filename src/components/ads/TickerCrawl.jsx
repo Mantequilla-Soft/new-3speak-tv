@@ -54,7 +54,9 @@ function holdVars(w, c) {
  * the pan instead of stopping and then lurching off again. A line that fits has no pan
  * (pan = 0) and eases all the way to rest.
  *
- * In the entry's own 0..1 terms the pan's speed is (pan / 50%) / (entry / 20%), the
+ * The pan's curve (TickerCrawl.scss, 20%) STARTS at its average speed (slope 1) and
+ * glides to a stop, so the speed to hand over at is that average.
+ * In the entry's own 0..1 terms it is (pan / 50%) / (entry / 20%), the
  * slope the curve must end on; a cubic-bezier ends on the slope (1 - y2) / (1 - x2).
  * Capped at 1 (linear): a pan faster than the entry would need the entry to SPEED UP. */
 function holdEntryEase(entry, pan) {
