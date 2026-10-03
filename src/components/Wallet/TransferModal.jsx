@@ -4,12 +4,14 @@ import {useAppStore } from "../../lib/store"
 import {isAccountValid} from "../../hive-api/api"
 import { transferWithAioha, isLoggedIn } from "../../hive-api/aioha"
 import { toastIn } from '../../utils/toast';
+import { useTranslation } from 'react-i18next';
 
 // Every toast from this module is headed "Wallet"; the message becomes the
 // line under it. See utils/toast.js.
 const toast = toastIn('Wallet');
 
 function TransferModal({showModal, selectedCoin, balances, fetchBalances}) {
+    const { t } = useTranslation();
     const { user } = useAppStore();
     const [amount, setAmount] = useState('');
     const [recipient, setRecipient] = useState('');
@@ -22,12 +24,12 @@ function TransferModal({showModal, selectedCoin, balances, fetchBalances}) {
         if (!amount || !recipient || !selectedCoin || !coinType) return;
 
         if (!isLoggedIn()) {
-            toast.error("Please login to transfer");
+            toast.error(t('wallet.transferModal.loginRequired'));
             return;
         }
 
         if (parseFloat(amount) > balance) {
-            setBalErr("Insufficient balance");
+            setBalErr(t('wallet.transferModal.insufficient'));
             return;
         } else {
             setBalErr("");
@@ -36,7 +38,7 @@ function TransferModal({showModal, selectedCoin, balances, fetchBalances}) {
         const valid = await isAccountValid(recipient);
         console.log(valid);
         if (!valid) {
-            setError("Invalid username");
+            setError(t('wallet.transferModal.invalidUsername'));
             return;
         } else {
             setError("");
@@ -44,11 +46,11 @@ function TransferModal({showModal, selectedCoin, balances, fetchBalances}) {
 
         try {
             await transferWithAioha(recipient, parseFloat(amount), coinType, memo || '');
-            toast.success('Transfer successful!');
+            toast.success(t('wallet.transferModal.success'));
             showModal(false);
         } catch (error) {
             console.error('Transfer failed:', error);
-            toast.error(`Transfer failed: ${error.message}`);
+            toast.error(t('wallet.transferModal.failed', { error: error.message }));
         }
     };
 
@@ -67,9 +69,9 @@ function TransferModal({showModal, selectedCoin, balances, fetchBalances}) {
   return (
     <div className="transfer-modal">
             <div className="modal-content-tran">
-              <h3>Transfer {selectedCoin.name}</h3>
+              <h3>{t('wallet.transferModal.title', { coin: selectedCoin.name })}</h3>
               <div className="input-group">
-                <label>Amount ({selectedCoin.name})</label> <span className='error'>{balErr}</span>
+                <label>{t('wallet.transferModal.amountLabel', { coin: selectedCoin.name })}</label> <span className='error'>{balErr}</span>
                 <input
                   type="number"
                   value={amount}
@@ -78,27 +80,27 @@ function TransferModal({showModal, selectedCoin, balances, fetchBalances}) {
                   step="0.001"
                 />
                 <div className="wrap">
-                    <span>Balance {balance}</span>
-                    <span onClick={()=> setAmount(balance)}>Max</span>
+                    <span>{t('wallet.transferModal.balance', { balance })}</span>
+                    <span onClick={()=> setAmount(balance)}>{t('wallet.transferModal.max')}</span>
                 </div>
               </div>
               <div className="input-group">
-                <label>Recipient Username</label>
+                <label>{t('wallet.transferModal.recipientLabel')}</label>
                 <input
                   type="text"
                   value={recipient}
                   onChange={(e) => setRecipient(e.target.value)}
-                  placeholder="Enter Hive username"
+                  placeholder={t('wallet.transferModal.recipientPlaceholder')}
                 />
                 <span className='error'>{error}</span>
               </div>
               <div className="input-group">
-                <label>Memo</label>
+                <label>{t('wallet.transferModal.memoLabel')}</label>
                 <input
                   type="text"
                   value={memo}
                   onChange={(e) => setMemo(e.target.value)}
-                  placeholder="Enter Memo"
+                  placeholder={t('wallet.transferModal.memoPlaceholder')}
                 />
               </div>
               <div className="button-group">
@@ -106,13 +108,13 @@ function TransferModal({showModal, selectedCoin, balances, fetchBalances}) {
                   className="cancel-btn"
                   onClick={() => showModal(false)}
                 >
-                  Cancel
+                  {t('common.actions.cancel')}
                 </button>
                 <button
                   className="confirm-btn"
                   onClick={()=>handleSubmitTransfer(selectedCoin.name)}
                 >
-                  Confirm Transfer
+                  {t('wallet.transferModal.confirm')}
                 </button>
               </div>
             </div>

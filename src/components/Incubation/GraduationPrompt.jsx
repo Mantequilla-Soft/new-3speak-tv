@@ -9,6 +9,7 @@ import {
   fetchIncubationProgress, fetchMyIncubationProfile,
 } from '../../lib/incubation';
 import { openButrauthPopup } from '../../utils/butrauthPopup';
+import { useTranslation, Trans } from 'react-i18next';
 // Reuses the ads prompt's dialog styles rather than duplicating them. That file
 // is the app's one modal-dialog shape, and a second copy would drift from it.
 import '../AdsPrompt/AdsPrompt.scss';
@@ -30,23 +31,28 @@ const toast = toastIn('Your account');
 // offers it again.
 let dismissedThisVisit = false;
 
-/** "1 video", "2 shorts" — and nothing at all for a zero. */
-const count = (n, one, many = `${one}s`) => (n > 0 ? `${n} ${n === 1 ? one : many}` : null);
+/** "1 video", "2 shorts" — and nothing at all for a zero. `kind` picks the
+ *  plural key incubation.graduation.items.<kind>. */
+const count = (n, kind, t) => (n > 0 ? t(`incubation.graduation.items.${kind}`, { count: n }) : null);
 
 /** Seconds as "3h 10m" or "25m". */
-function watched(seconds) {
+function watched(seconds, t) {
   const m = Math.floor((Number(seconds) || 0) / 60);
   if (m < 1) return null;
   const h = Math.floor(m / 60);
-  return h ? `${h}h${m % 60 ? ` ${m % 60}m` : ''}` : `${m}m`;
+  if (!h) return t('incubation.progress.duration.m', { m });
+  return m % 60 ? t('incubation.progress.duration.hm', { h, m: m % 60 }) : t('incubation.progress.duration.h', { h });
 }
 
 /** "a, b and c", skipping the empties. */
-function sentenceList(parts) {
+function sentenceList(parts, t) {
   const kept = parts.filter(Boolean);
   if (kept.length === 0) return '';
   if (kept.length === 1) return kept[0];
-  return `${kept.slice(0, -1).join(', ')} and ${kept[kept.length - 1]}`;
+  return t('incubation.graduation.listAnd', {
+    rest: kept.slice(0, -1).join(t('incubation.graduation.listSep')),
+    last: kept[kept.length - 1],
+  });
 }
 
 /**
@@ -66,6 +72,7 @@ function sentenceList(parts) {
  * the point, and nothing is lost by forgetting it.
  */
 export default function GraduationPrompt() {
+  const { t } = useTranslation();
   const incubationHandle = useAppStore((s) => s.incubationHandle);
   const authenticated = useAppStore((s) => s.authenticated);
 
@@ -133,10 +140,10 @@ export default function GraduationPrompt() {
     // the user to a dead page on the wrong origin.
     try {
       await openButrauthPopup({ graduate: true });
-      toast.success('Let’s set up your Hive account');
+      toast.success(t('incubation.createAccount.started'));
     } catch (err) {
       console.error('Graduation start error:', err);
-      toast.error('Could not open account setup. Please try again.');
+      toast.error(t('incubation.createAccount.openFailed'));
     }
   }
 
@@ -151,12 +158,12 @@ export default function GraduationPrompt() {
   // is the worst place in the app to be wrong about it.
   const content = plan?.content || {};
   const moving = sentenceList([
-    count(content.videos, 'video'),
-    count(content.shorts, 'short'),
-    count(content.comments, 'comment'),
-    count(plan?.follow?.pending, 'follow'),
-    count(plan?.vote?.pending, 'like'),
-  ]);
+    count(content.videos, 'video', t),
+    count(content.shorts, 'short', t),
+    count(content.comments, 'comment', t),
+    count(plan?.follow?.pending, 'follow', t),
+    count(plan?.vote?.pending, 'like', t),
+  ], t);
   // Replies and likes aimed at another incubating user's post, which cannot go
   // up until that post does. Everything aimed at real Hive content goes across.
   const waiting = (plan?.waiting?.comment || 0) + (plan?.waiting?.vote || 0);
@@ -166,26 +173,26 @@ export default function GraduationPrompt() {
    * start earning") answered neither. What happens next is identical for all three;
    * only how it is said changes. Unknown or no track reads as the creator copy. */
   const track = progress?.track || null;
-  const have = (type) => progress?.tasks?.find((t) => t.type === type)?.have;
+  const have = (type) => progress?.tasks?.find((task) => task.type === type)?.have;
   const viewerDone = sentenceList([
-    watched(have('watch')) ? `watched ${watched(have('watch'))}` : null,
-    count(have('comment'), 'comment') ? `written ${count(have('comment'), 'comment')}` : null,
-    count(have('follow'), 'creator') ? `followed ${count(have('follow'), 'creator')}` : null,
-  ]);
+    watched(have('watch'), t) ? t('incubation.graduation.viewerDone.watched', { time: watched(have('watch'), t) }) : null,
+    count(have('comment'), 'comment', t) ? t('incubation.graduation.viewerDone.written', { items: count(have('comment'), 'comment', t) }) : null,
+    count(have('follow'), 'creator', t) ? t('incubation.graduation.viewerDone.followed', { items: count(have('follow'), 'creator', t) }) : null,
+  ], t);
   const copy = track === 'advertiser' ? {
-    title: 'Your advertiser account is ready',
-    lede: <>The team has reviewed <strong>{brandName || `@${incubationHandle}`}</strong>. Create your <strong>Hive account</strong>, for free: it becomes your advertiser account.</>,
-    text: 'With it you book ads across 3Speak, from video spots and banners to tickers, and pay for them straight from its wallet, in HBD or HIVE. The key is yours alone, so nobody can lock you out.',
-    note: <>Your brand profile comes across with you. Your business email and address stay private with 3Speak and never go on the blockchain.{moving ? <>{' '}Your <strong>{moving}</strong> come across too, published gradually over a few days.</> : null}</>,
-    cta: 'Create my advertiser account',
+    title: t('incubation.createAccount.readyAdvertiser'),
+    lede: <Trans i18nKey="incubation.graduation.advertiser.lede" values={{ name: brandName || `@${incubationHandle}` }} components={{ b: <strong /> }} />,
+    text: t('incubation.graduation.advertiser.text'),
+    note: <>{t('incubation.graduation.advertiser.note')}{moving ? <>{' '}<Trans i18nKey="incubation.graduation.advertiser.noteMoving" values={{ moving }} components={{ b: <strong /> }} /></> : null}</>,
+    cta: t('incubation.createAccount.createAdvertiser'),
   } : track === 'viewer' ? {
-    title: 'Your own account is ready',
+    title: t('incubation.graduation.viewer.title'),
     lede: viewerDone
-      ? <>As <strong>@{incubationHandle}</strong> you have {viewerDone}. Turn that into a <strong>Hive account</strong> that belongs to you, for free.</>
-      : <>Turn <strong>@{incubationHandle}</strong> into a <strong>Hive account</strong> that belongs to you, for free.</>,
-    text: 'With it you can vote on and tip the videos you like, earn from your comments, opt in to viewer rewards for what you watch, and build playlists. The same login and the same follows work across every Hive app, and the key is yours alone.',
+      ? <Trans i18nKey="incubation.graduation.viewer.ledeDone" values={{ handle: incubationHandle, done: viewerDone }} components={{ b: <strong /> }} />
+      : <Trans i18nKey="incubation.graduation.viewer.lede" values={{ handle: incubationHandle }} components={{ b: <strong /> }} />,
+    text: t('incubation.graduation.viewer.text'),
     note: null,
-    cta: 'Create my account',
+    cta: t('incubation.graduation.createMyAccount'),
   } : null;
 
   return (
@@ -200,21 +207,18 @@ export default function GraduationPrompt() {
           <MdRocketLaunch className="ads-prompt-head-icon" aria-hidden="true" />
           <div>
             <h3 className="ads-prompt-title" id="graduation-title">
-              {copy ? copy.title : 'You can create your own account now'}
+              {copy ? copy.title : t('incubation.graduation.creator.title')}
             </h3>
             <p className="ads-prompt-lede">
               {copy ? copy.lede : (
-                <>
-                  You have been posting as <strong>@{incubationHandle}</strong>. Turn that into a
-                  real <strong>Hive account</strong> that belongs to you, for free.
-                </>
+                <Trans i18nKey="incubation.graduation.creator.lede" values={{ handle: incubationHandle }} components={{ b: <strong /> }} />
               )}
             </p>
           </div>
         </header>
 
         <p className="ads-prompt-text">
-          {copy ? copy.text : 'A Hive account is a key only you hold. Nobody can lock you out of it, your posts start earning, and the same login works across every Hive app, not just 3Speak.'}
+          {copy ? copy.text : t('incubation.graduation.creator.text')}
         </p>
 
         {/* Said up front rather than discovered afterwards. Publishing the back
@@ -226,21 +230,19 @@ export default function GraduationPrompt() {
         ) : (
         <p className="ads-prompt-note">
           {moving
-            ? <>Your <strong>{moving}</strong> come across with you.</>
-            : <>Everything you have made here comes across with you.</>}
-          {' '}Publishing happens gradually over a few days, because a brand new account
-          starts with a small posting allowance.
-          {waiting === 1 && <>{' '}One of them waits for the post it answers to be published first.</>}
-          {waiting > 1 && <>{' '}{waiting} of them wait for the posts they answer to be published first.</>}
+            ? <Trans i18nKey="incubation.graduation.note.moving" values={{ moving }} components={{ b: <strong /> }} />
+            : t('incubation.graduation.note.everything')}
+          {' '}{t('incubation.graduation.note.gradual')}
+          {waiting > 0 && <>{' '}{t('incubation.graduation.note.waiting', { count: waiting })}</>}
         </p>
         )}
 
         <div className="ads-prompt-actions">
           <button type="button" className="ads-prompt-ghost" onClick={() => close(true)}>
-            Not yet
+            {t('incubation.graduation.notYet')}
           </button>
           <button type="button" className="ads-prompt-primary" onClick={goCreate}>
-            {copy ? copy.cta : 'Create my account'}
+            {copy ? copy.cta : t('incubation.graduation.createMyAccount')}
           </button>
         </div>
       </div>

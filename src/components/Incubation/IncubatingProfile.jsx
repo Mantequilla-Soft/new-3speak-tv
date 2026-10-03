@@ -21,27 +21,29 @@ import {
   fetchMyIncubationProfile, saveIncubationProfile, followIncubationUser,
   fetchIncubationProgress, onIncubationProgress,
 } from '../../lib/incubation';
+import { useTranslation, Trans } from 'react-i18next';
 import './IncubatingProfile.scss';
 
 // The unlock tiles, as data: the icon belongs beside its own heading, and the
 // list was long enough that repeating the markup five times hid the copy.
+// Text is i18n keys, translated at render.
 const UNLOCKS = [
-  { Icon: FaCoins, title: 'Your posts start earning.', body: 'Videos on Hive can be rewarded in HIVE and HBD by anyone who watches them, and they can carry ads you take a share of.' },
-  { Icon: FaCloudUploadAlt, title: 'Publish everything you made here.', body: 'The videos, shorts and follows on this page can be posted to the chain under your own name, and you choose which.' },
-  { Icon: FaThumbsUp, title: 'Vote, tip, follow and build playlists.', body: 'All the buttons that are greyed out for you today.' },
-  { Icon: FaKey, title: 'Keys only you hold.', body: 'Nobody can lock you out, and the same login works across every Hive app, not just 3Speak.' },
-  { Icon: FaGlobeAmericas, title: 'Be part of the global Hive ecosystem.', body: '3Speak is one app on a whole network of them: blogs, communities, games, marketplaces and more, all sharing the one account and the same following list.' },
+  { Icon: FaCoins, titleKey: 'incubation.profile.unlocks.earn.title', bodyKey: 'incubation.profile.unlocks.earn.body' },
+  { Icon: FaCloudUploadAlt, titleKey: 'incubation.profile.unlocks.publish.title', bodyKey: 'incubation.profile.unlocks.publish.body' },
+  { Icon: FaThumbsUp, titleKey: 'incubation.profile.unlocks.buttons.title', bodyKey: 'incubation.profile.unlocks.buttons.body' },
+  { Icon: FaKey, titleKey: 'incubation.profile.unlocks.keys.title', bodyKey: 'incubation.profile.unlocks.keys.body' },
+  { Icon: FaGlobeAmericas, titleKey: 'incubation.profile.unlocks.ecosystem.title', bodyKey: 'incubation.profile.unlocks.ecosystem.body' },
 ];
 
 // The same tiles for an ADVERTISER. They are not here to earn from posts: the Hive
 // account is the account they book and pay for ads with. Talking to customers is
 // in the list, but as the optional extra it is for them.
 const ADVERTISER_UNLOCKS = [
-  { Icon: FaBullhorn, title: 'Book ads across 3Speak.', body: 'Video spots, shorts spots, player banners, tickers and pre-upload spots, from one day to three months.' },
-  { Icon: FaWallet, title: 'Pay from your own wallet.', body: 'In HBD or HIVE, straight from your account. No card and no middleman.' },
-  { Icon: FaChartLine, title: 'See what your ads delivered.', body: 'Plays and clicks for every booking, and credit back on your next one if a booking falls short.' },
-  { Icon: FaComments, title: 'Talk to your customers, if you want to.', body: 'Post videos, answer comments and follow people under your brand\u2019s name.' },
-  { Icon: FaKey, title: 'Keys only you hold.', body: 'Nobody can lock you out, and the same login works across every Hive app, not just 3Speak.' },
+  { Icon: FaBullhorn, titleKey: 'incubation.profile.advertiserUnlocks.book.title', bodyKey: 'incubation.profile.advertiserUnlocks.book.body' },
+  { Icon: FaWallet, titleKey: 'incubation.profile.advertiserUnlocks.pay.title', bodyKey: 'incubation.profile.advertiserUnlocks.pay.body' },
+  { Icon: FaChartLine, titleKey: 'incubation.profile.advertiserUnlocks.results.title', bodyKey: 'incubation.profile.advertiserUnlocks.results.body' },
+  { Icon: FaComments, titleKey: 'incubation.profile.advertiserUnlocks.customers.title', bodyKey: 'incubation.profile.advertiserUnlocks.customers.body' },
+  { Icon: FaKey, titleKey: 'incubation.profile.advertiserUnlocks.keys.title', bodyKey: 'incubation.profile.advertiserUnlocks.keys.body' },
 ];
 
 /**
@@ -73,6 +75,7 @@ function useIsNarrow() {
  * they get a sidebar nobody else sees.
  */
 export default function IncubatingProfile({ handle, own = false }) {
+  const { t } = useTranslation();
   const [profile, setProfile] = useState(null);
   const [posts, setPosts] = useState([]);
   const [editing, setEditing] = useState(false);
@@ -144,9 +147,9 @@ export default function IncubatingProfile({ handle, own = false }) {
         interestsRef.current = p.interests || [];
         setPosts(list.items || []);
       })
-      .catch(() => { if (alive) setError('Could not load this profile.'); });
+      .catch(() => { if (alive) setError(t('incubation.profile.loadFailed')); });
     return () => { alive = false; };
-  }, [handle]);
+  }, [handle, t]);
 
   // Stable identities: ProfileEditModal reloads whenever `loadProfile` changes,
   // so a new function every render would refetch in a loop.
@@ -198,7 +201,7 @@ export default function IncubatingProfile({ handle, own = false }) {
   const shortCards = useMemo(() => cards.filter((c) => c._short), [cards]);
 
   if (error) return <p className="inc-profile-error">{error}</p>;
-  if (!profile) return <p className="desc" style={{ padding: 32 }}>Loading…</p>;
+  if (!profile) return <p className="desc" style={{ padding: 32 }}>{t('common.status.loading')}</p>;
 
   const p = profile.profile || {};
   const graduated = profile.status === 'graduated' && profile.hiveUsername;
@@ -224,20 +227,20 @@ export default function IncubatingProfile({ handle, own = false }) {
               {p.name && <span>@{handle}</span>}
               <span className="inc-badge">
                 <MdVerified size={13} aria-hidden="true" />
-                {graduated ? 'On Hive' : (advertiser ? 'Advertiser \u00b7 getting started' : 'Getting started')}
+                {graduated ? t('incubation.profile.badge.onHive') : (advertiser ? t('incubation.profile.badge.advertiser') : t('incubation.profile.badge.gettingStarted'))}
               </span>
             </p>
             {p.about && <p className="inc-hero-about">{p.about}</p>}
             {profile.interests?.length > 0 && (
               <ul className="inc-chips">
-                {profile.interests.map((t) => <li key={t}>{t}</li>)}
+                {profile.interests.map((tag) => <li key={tag}>{tag}</li>)}
               </ul>
             )}
           </div>
           <div className="inc-hero-stats">
-            <span><strong>{profile.counts?.posts ?? 0}</strong>posts</span>
-            <span><strong>{profile.counts?.followers ?? 0}</strong>followers</span>
-            <span><strong>{profile.counts?.following ?? 0}</strong>following</span>
+            <span><Trans i18nKey="incubation.profile.stats.posts" count={profile.counts?.posts ?? 0} components={{ b: <strong /> }} /></span>
+            <span><Trans i18nKey="incubation.profile.stats.followers" count={profile.counts?.followers ?? 0} components={{ b: <strong /> }} /></span>
+            <span><Trans i18nKey="incubation.profile.stats.following" count={profile.counts?.following ?? 0} components={{ b: <strong /> }} /></span>
           </div>
           {!own && !graduated && (
             // Someone can finally follow back. Until now this was impossible:
@@ -269,13 +272,13 @@ export default function IncubatingProfile({ handle, own = false }) {
               }}
             >
               {following ? <FaUserCheck size={13} aria-hidden="true" /> : <FaUserPlus size={13} aria-hidden="true" />}
-              {following ? 'Following' : 'Follow'}
+              {following ? t('common.actions.following') : t('common.actions.follow')}
             </button>
           )}
           {own && (
             <button type="button" className="inc-edit-btn" onClick={() => setEditing(true)}>
               <MdEdit size={15} aria-hidden="true" />
-              Edit profile
+              {t('incubation.profile.editProfile')}
             </button>
           )}
         </div>
@@ -283,13 +286,13 @@ export default function IncubatingProfile({ handle, own = false }) {
 
       <p className="inc-note">
         {graduated ? (
-          <>Now on Hive as <Link to={`/p/${profile.hiveUsername}`}>@{profile.hiveUsername}</Link>. Anything below was made before that.</>
+          <Trans i18nKey="incubation.profile.note.graduated" values={{ user: profile.hiveUsername }} components={{ userLink: <Link to={`/p/${profile.hiveUsername}`} /> }} />
         ) : advertiser ? (
-          <>This is your brand page on 3Speak. Finish the steps below and the team reviews your brand. Once approved you get a Hive account: that is your advertiser account, the one you book ads with and pay from.</>
+          <>{t('incubation.profile.note.advertiser')}</>
         ) : own ? (
-          <>This is how others see you. Your posts live on 3Speak and are not on the Hive blockchain yet, so they do not earn rewards. That changes when you get your account after completing all the tasks below.</>
+          <>{t('incubation.profile.note.own')}</>
         ) : (
-          <>New here, not on Hive yet. These posts live on 3Speak, so they earn no rewards for now. Follow and comment anyway: early encouragement is what carries someone through their first weeks. When they get their Hive account we will tell you, so you can follow them there too.</>
+          <>{t('incubation.profile.note.visitor')}</>
         )}
       </p>
 
@@ -301,7 +304,7 @@ export default function IncubatingProfile({ handle, own = false }) {
         // Only rendered when there IS a second panel to switch to. Below the
         // split the goals sit above the feed, so reaching your own videos meant
         // scrolling past the whole checklist every time.
-        <div className="inc-tabs" role="tablist" aria-label="Profile sections">
+        <div className="inc-tabs" role="tablist" aria-label={t('incubation.profile.tabs.aria')}>
           <button
             type="button"
             role="tab"
@@ -309,7 +312,7 @@ export default function IncubatingProfile({ handle, own = false }) {
             className={mobileTab === 'progress' ? 'is-active' : ''}
             onClick={() => setMobileTab('progress')}
           >
-            Your goals
+            {t('incubation.profile.tabs.goals')}
           </button>
           <button
             type="button"
@@ -318,7 +321,7 @@ export default function IncubatingProfile({ handle, own = false }) {
             className={mobileTab === 'posts' ? 'is-active' : ''}
             onClick={() => setMobileTab('posts')}
           >
-            Videos and Shorts
+            {t('incubation.profile.videosAndShorts')}
           </button>
         </div>
       )}
@@ -327,15 +330,15 @@ export default function IncubatingProfile({ handle, own = false }) {
         // Same control as the owner's mobile switcher above -- one tab strip on
         // this page, not two that look alike. The two can never both render:
         // showSidebar requires `own` and this requires `!own`.
-        <div className="inc-tabs inc-tabs--visitor" role="tablist" aria-label="Profile sections">
+        <div className="inc-tabs inc-tabs--visitor" role="tablist" aria-label={t('incubation.profile.tabs.aria')}>
           {[
             // 'Uploads', not the 'Videos and Shorts' the owner's strip uses:
             // four labels share this row at phone width, and the grid heading
             // directly below already names the two things in it.
-            ['posts', 'Uploads', profile?.counts?.posts],
-            ['comments', 'Comments', commentCount],
-            ['followers', 'Followers', profile?.counts?.followers],
-            ['following', 'Following', profile?.counts?.following],
+            ['posts', t('incubation.profile.tabs.uploads'), profile?.counts?.posts],
+            ['comments', t('incubation.profile.tabs.comments'), commentCount],
+            ['followers', t('incubation.profile.tabs.followers'), profile?.counts?.followers],
+            ['following', t('incubation.profile.tabs.following'), profile?.counts?.following],
           ].map(([id, label, count]) => (
             <button
               key={id}
@@ -380,7 +383,7 @@ export default function IncubatingProfile({ handle, own = false }) {
           {advertiser && <IncubationProgressPanel />}
           {advertiser && (
             <section className="inc-panel inc-market">
-              <h2><FaUsers size={14} aria-hidden="true" /> The audience waiting for your ad</h2>
+              <h2><FaUsers size={14} aria-hidden="true" /> {t('incubation.profile.market.audience')}</h2>
               <div className="mkt-page mkt-embed">
                 <InventoryPanel data={market.inventory} isLoading={market.loading} error={market.error} />
               </div>
@@ -388,7 +391,7 @@ export default function IncubatingProfile({ handle, own = false }) {
           )}
           {advertiser && market.pricing?.formats?.length > 0 && (
             <section className="inc-panel inc-market">
-              <h2><FaLayerGroup size={14} aria-hidden="true" /> Pick the format that fits your message</h2>
+              <h2><FaLayerGroup size={14} aria-hidden="true" /> {t('incubation.profile.market.format')}</h2>
               <div className="mkt-page mkt-embed">
                 <RateCard pricing={market.pricing} />
               </div>
@@ -402,18 +405,18 @@ export default function IncubatingProfile({ handle, own = false }) {
             <IncubatingActivity
               handle={handle}
               tab={visitorTab}
-              onCount={(t, n) => { if (t === 'comments') setCommentCount(n); }}
+              onCount={(tab, n) => { if (tab === 'comments') setCommentCount(n); }}
             />
           ) : (
           <>
           {advertiser && (
-            <h2 className="inc-subhead"><FaFilm size={15} aria-hidden="true" /> Your brand&apos;s videos <span className="inc-subhead-note">optional</span></h2>
+            <h2 className="inc-subhead"><FaFilm size={15} aria-hidden="true" /> {t('incubation.profile.brandVideos')} <span className="inc-subhead-note">{t('incubation.profile.optional')}</span></h2>
           )}
           {nothingYet && (
             <p className="desc">
               {advertiser
-                ? 'Videos here are for talking to customers, if you want to. Ads are booked separately on the Advertise page and do not need any.'
-                : own ? 'Nothing yet. Your first upload ticks off the list beside this.' : 'Nothing published yet.'}
+                ? t('incubation.profile.empty.advertiser')
+                : own ? t('incubation.profile.empty.own') : t('incubation.profile.empty.visitor')}
             </p>
           )}
 
@@ -429,13 +432,13 @@ export default function IncubatingProfile({ handle, own = false }) {
             <>
               {videoCards.length > 0 && (
                 <>
-                  <h2 className="inc-subhead"><FaFilm size={15} aria-hidden="true" /> Videos</h2>
+                  <h2 className="inc-subhead"><FaFilm size={15} aria-hidden="true" /> {t('incubation.profile.videos')}</h2>
                   <Card3 videos={videoCards} />
                 </>
               )}
               {shortCards.length > 0 && (
                 <>
-                  <h2 className="inc-subhead">Shorts</h2>
+                  <h2 className="inc-subhead">{t('common.nav.shorts')}</h2>
                   <Card3 videos={shortCards} shortsGrid />
                 </>
               )}
@@ -444,7 +447,7 @@ export default function IncubatingProfile({ handle, own = false }) {
             <>
               {/* Names the two things in the feed, since they share one grid
                   rather than sitting under separate headings. */}
-              {!advertiser && <h2 className="inc-subhead"><FaFilm size={15} aria-hidden="true" /> Videos and Shorts</h2>}
+              {!advertiser && <h2 className="inc-subhead"><FaFilm size={15} aria-hidden="true" /> {t('incubation.profile.videosAndShorts')}</h2>}
               <Card3 videos={cards} />
             </>
           ))}
@@ -460,12 +463,12 @@ export default function IncubatingProfile({ handle, own = false }) {
           {showSidebar && <TrackQuestion />}
           {showSidebar && (
             <section className="inc-panel inc-unlocks">
-              <h2><FaUnlockAlt size={14} aria-hidden="true" /> {advertiser ? 'What your advertiser account gets you' : 'What a Hive account gets you'}</h2>
+              <h2><FaUnlockAlt size={14} aria-hidden="true" /> {advertiser ? t('incubation.profile.unlocksTitleAdvertiser') : t('incubation.profile.unlocksTitle')}</h2>
               <ul>
-                {unlocks.map(({ Icon, title, body }) => (
-                  <li key={title}>
-                    <strong><Icon size={13} aria-hidden="true" />{title}</strong>
-                    {body}
+                {unlocks.map(({ Icon, titleKey, bodyKey }) => (
+                  <li key={titleKey}>
+                    <strong><Icon size={13} aria-hidden="true" />{t(titleKey)}</strong>
+                    {t(bodyKey)}
                   </li>
                 ))}
               </ul>
@@ -482,7 +485,7 @@ export default function IncubatingProfile({ handle, own = false }) {
           loadProfile={loadOwnProfile}
           onSave={saveOwnProfile}
           onSaved={onProfileSaved}
-          fineprint="Saved to your 3Speak profile. It goes to Hive with everything else when you get your account."
+          fineprint={t('incubation.profile.fineprint')}
         />
       )}
     </div>

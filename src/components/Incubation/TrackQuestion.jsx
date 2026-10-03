@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { FaRocket } from 'react-icons/fa';
 import { fetchIncubationProgress, onIncubationProgress } from '../../lib/incubation';
 import TrackChooser from './TrackChooser';
+import { useTranslation } from 'react-i18next';
 
 /**
  * "What brings you to 3Speak?" on the profile, for someone who has not picked
@@ -14,6 +15,7 @@ import TrackChooser from './TrackChooser';
 export const TRACK_QUESTION_ID = 'inc-track-question';
 
 export default function TrackQuestion() {
+  const { t } = useTranslation();
   const [needsTrack, setNeedsTrack] = useState(false);
 
   useEffect(() => {
@@ -30,10 +32,9 @@ export default function TrackQuestion() {
 
   return (
     <section className="inc-panel inc-track-question" id={TRACK_QUESTION_ID}>
-      <h2><FaRocket size={14} aria-hidden="true" /> What brings you to 3Speak?</h2>
+      <h2><FaRocket size={14} aria-hidden="true" /> {t('incubation.trackQuestion.title')}</h2>
       <p className="inc-track-intro">
-        Your path to a Hive account depends on it: viewers watch and join in,
-        creators publish, and advertisers set up their brand.
+        {t('incubation.trackQuestion.intro')}
       </p>
       <TrackChooser />
     </section>

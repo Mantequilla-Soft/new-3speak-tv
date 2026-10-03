@@ -3,6 +3,7 @@ import { toastIn } from '../../utils/toast';
 import { useAppStore } from '../../lib/store';
 import { fetchGraduatedFollows, ackGraduatedFollow } from '../../lib/incubation';
 import { followWithAioha } from '../../hive-api/aioha';
+import { useTranslation } from 'react-i18next';
 
 const toast = toastIn('Follows');
 
@@ -19,6 +20,7 @@ const toast = toastIn('Follows');
  * slot the welcome and graduation prompts share.
  */
 export default function GraduatedFollowsPrompt() {
+  const { t } = useTranslation();
   const authenticated = useAppStore((s) => s.authenticated);
   const user = useAppStore((s) => s.user);
   const incubationHandle = useAppStore((s) => s.incubationHandle);
@@ -34,21 +36,21 @@ export default function GraduatedFollowsPrompt() {
       .then(({ items }) => {
         if (!alive || !items?.length) return;
         for (const it of items) {
-          toast(`@${it.handle} now has a Hive account as @${it.hiveUsername}.`, {
-            title: 'Someone you follow got upgraded',
+          toast(t('incubation.graduatedFollows.message', { handle: it.handle, hiveUsername: it.hiveUsername }), {
+            title: t('incubation.graduatedFollows.title'),
             duration: 15000,
             action: {
               // Only a Hive user can sign a real follow. An incubating follower
               // gets the news and the name; their own follow moves on chain when
               // they graduate and replay it.
-              label: user ? 'Follow for real' : 'Got it',
+              label: user ? t('incubation.graduatedFollows.followForReal') : t('incubation.graduatedFollows.gotIt'),
               onClick: async () => {
                 try {
                   if (user) await followWithAioha(it.hiveUsername, true);
                   await ackGraduatedFollow(it.handle);
-                  if (user) toast.success(`Now following @${it.hiveUsername} on Hive`);
+                  if (user) toast.success(t('incubation.graduatedFollows.nowFollowing', { hiveUsername: it.hiveUsername }));
                 } catch (err) {
-                  toast.error(err?.message || 'Could not follow them');
+                  toast.error(err?.message || t('incubation.graduatedFollows.followFailed'));
                 }
               },
             },
@@ -60,7 +62,7 @@ export default function GraduatedFollowsPrompt() {
       })
       .catch(() => { /* nothing to say if we cannot ask */ });
     return () => { alive = false; };
-  }, [authenticated, user, incubationHandle]);
+  }, [authenticated, user, incubationHandle, t]);
 
   return null;
 }

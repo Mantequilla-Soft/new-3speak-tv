@@ -4,6 +4,8 @@ import "./TrxHistory.scss";
 import { Client } from "@hiveio/dhive";
 import Skeleton from "./Skeleton";
 import { HIVE_API_NODES } from "../../utils/config";
+import { useTranslation } from "react-i18next";
+import { formatDate } from "../../i18n";
 
 const client = getHiveClient();
 
@@ -83,6 +85,7 @@ async function fetchAllTransactions(username) {
 }
 
 function TrxHistory({ user }) {
+  const { t } = useTranslation();
   const [isLoading, setIsLoading] = useState(true);
   const [transactions, setTransactions] = useState([]);
   const [error, setError] = useState(null);
@@ -96,7 +99,7 @@ function TrxHistory({ user }) {
           setTransactions(txns);
         }
       } catch (err) {
-        setError("Failed to load transactions");
+        setError(t('wallet.history.loadFailed'));
         console.error(err);
       } finally {
         setIsLoading(false);
@@ -104,11 +107,11 @@ function TrxHistory({ user }) {
     };
 
     loadTransactions();
-  }, [user]);
+  }, [user, t]);
 
   return (
     <div className="transaction-history">
-      <h2>Transaction History</h2>
+      <h2>{t('wallet.history.title')}</h2>
       <div className="history-table">
         {isLoading ? (
           <Skeleton />
@@ -118,11 +121,11 @@ function TrxHistory({ user }) {
           <table>
             <thead>
               <tr>
-                <th>Type</th>
-                <th>Amount</th>
-                <th>Account</th>
-                <th>Date</th>
-                <th>Memo</th>
+                <th>{t('wallet.history.cols.type')}</th>
+                <th>{t('wallet.history.cols.amount')}</th>
+                <th>{t('wallet.history.cols.account')}</th>
+                <th>{t('wallet.history.cols.date')}</th>
+                <th>{t('wallet.history.cols.memo')}</th>
               </tr>
             </thead>
             <tbody>
@@ -142,10 +145,10 @@ function TrxHistory({ user }) {
                         ></i>
                       </span>
                       {transaction.type === "send"
-                        ? "Transfer"
+                        ? t('wallet.history.types.transfer')
                         : transaction.type === "claim"
-                        ? "Claim Reward"
-                        : "Received"}
+                        ? t('wallet.history.types.claim')
+                        : t('wallet.history.types.received')}
                     </div>
                   </td>
                   <td>
@@ -170,15 +173,15 @@ function TrxHistory({ user }) {
                     </span>
                   </td>
                   <td>
-                    {new Intl.DateTimeFormat("en-US", {
+                    {formatDate(transaction.date, {
                       month: "short",
                       day: "numeric",
                       hour: "2-digit",
                       minute: "2-digit",
-                    }).format(transaction.date)}
+                    })}
                   </td>
                   <td>
-                    <span className="memo">{transaction.memo || "-"}</span>
+                    <span className="memo">{(transaction.type === "claim" ? t('wallet.history.claimedRewards') : transaction.memo) || "-"}</span>
                   </td>
                 </tr>
               ))}

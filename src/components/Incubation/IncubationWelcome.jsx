@@ -9,6 +9,7 @@ import { MdClose } from 'react-icons/md';
 import { useAppStore } from '../../lib/store';
 import { usePromptsActive, setPromptActive } from '../../utils/welcomeGate';
 import TrackChooser from './TrackChooser';
+import { useTranslation, Trans } from 'react-i18next';
 import './IncubationWelcome.scss';
 
 // Shown once per handle, per browser. Not a server flag: it is a greeting, and
@@ -37,17 +38,18 @@ const markSeen = (handle) => {
 // The word "incubation" is ours, not theirs. Nobody signing up for a video site
 // thinks of themselves as being incubated, so the copy says "warm-up" and talks
 // about what actually happens instead.
+//
+// Text is i18n keys: `titleKey` is translated at render, and `body` is a
+// function of `t` so nothing is translated at import time.
 const STEPS = [
   {
     key: 'what',
     Icon: FaCubes,
-    title: 'Welcome to 3Speak',
-    body: (
+    titleKey: 'incubation.welcome.what.title',
+    body: () => (
       <>
         <p>
-          3Speak is a video platform built on <strong>Hive</strong>, a public blockchain.
-          Videos here are not owned by us: they belong to the people who post them, and
-          they can earn real rewards from the people who watch them.
+          <Trans i18nKey="incubation.welcome.what.p1" components={{ b: <strong /> }} />
         </p>
       </>
     ),
@@ -55,19 +57,14 @@ const STEPS = [
   {
     key: 'warmup',
     Icon: FaSeedling,
-    title: 'You are in your warm-up',
-    body: (
+    titleKey: 'incubation.welcome.warmup.title',
+    body: (t) => (
       <>
         <p>
-          A Hive account is real and permanent, and someone has to pay for it. So instead
-          of asking you for anything up front, we gave you a name and a place to publish
-          straight away.
+          {t('incubation.welcome.warmup.p1')}
         </p>
         <p>
-          Everything you make during the warm-up lives on 3Speak. When you are ready, the
-          team reviews your channel and gives you a Hive account of your own, free. Your
-          videos, shorts and follows then go to the blockchain under your own name, and
-          you choose what comes with you.
+          {t('incubation.welcome.warmup.p2')}
         </p>
       </>
     ),
@@ -75,19 +72,18 @@ const STEPS = [
   {
     key: 'do',
     Icon: FaBolt,
-    title: 'What you can do right now',
-    body: (
+    titleKey: 'incubation.welcome.do.title',
+    body: (t) => (
       <>
         <ul className="incw-list">
-          <li><FaVideo aria-hidden="true" /> <span>Upload videos, exactly as anyone else here does.</span></li>
-          <li><FaMobileAlt aria-hidden="true" /> <span>Post shorts from your phone or your desktop.</span></li>
-          <li><FaComments aria-hidden="true" /> <span>Comment on anything, including videos by people already on Hive.</span></li>
-          <li><FaUserPlus aria-hidden="true" /> <span>Follow creators and join communities.</span></li>
-          <li><FaClock aria-hidden="true" /> <span>Watch. Your history and your feed are yours from day one.</span></li>
+          <li><FaVideo aria-hidden="true" /> <span>{t('incubation.welcome.do.upload')}</span></li>
+          <li><FaMobileAlt aria-hidden="true" /> <span>{t('incubation.welcome.do.shorts')}</span></li>
+          <li><FaComments aria-hidden="true" /> <span>{t('incubation.welcome.do.comment')}</span></li>
+          <li><FaUserPlus aria-hidden="true" /> <span>{t('incubation.welcome.do.follow')}</span></li>
+          <li><FaClock aria-hidden="true" /> <span>{t('incubation.welcome.do.watch')}</span></li>
         </ul>
         <p className="incw-aside">
-          A few things wait for your account: earning rewards and tipping. Those move
-          real money, so they need an account that really is yours.
+          {t('incubation.welcome.do.aside')}
         </p>
       </>
     ),
@@ -97,23 +93,19 @@ const STEPS = [
     // needs state; see `current.key === 'path'` in the component.
     key: 'path',
     Icon: FaRocket,
-    title: 'What brings you to 3Speak?',
-    body: (
+    titleKey: 'incubation.trackQuestion.title',
+    body: (t) => (
       <>
         <p>
-          Your profile shows a short list of things to do, and it depends on what you
-          are here for: viewers watch and join in, creators publish, and advertisers
-          set up their brand.
+          {t('incubation.welcome.path.p1')}
         </p>
         <p>
-          It is not a test. It is simply how we can tell a real account from an empty
-          or malicious one. Once the list is done the team reviews you and upgrades
-          you as soon as possible.
+          {t('incubation.welcome.path.p2')}
         </p>
         <div className="incw-perks">
-          <span><FaCoins aria-hidden="true" /> Posts that earn</span>
-          <span><FaKey aria-hidden="true" /> Keys only you hold</span>
-          <span><FaGlobeAmericas aria-hidden="true" /> The whole Hive network</span>
+          <span><FaCoins aria-hidden="true" /> {t('incubation.welcome.path.perkEarn')}</span>
+          <span><FaKey aria-hidden="true" /> {t('incubation.welcome.path.perkKeys')}</span>
+          <span><FaGlobeAmericas aria-hidden="true" /> {t('incubation.welcome.path.perkNetwork')}</span>
         </div>
       </>
     ),
@@ -128,6 +120,7 @@ const STEPS = [
  * nobody asked them for a wallet, and what the list on their profile is for.
  */
 export default function IncubationWelcome() {
+  const { t } = useTranslation();
   const incubationHandle = useAppStore((s) => s.incubationHandle);
   const authenticated = useAppStore((s) => s.authenticated);
   const promptsActive = usePromptsActive('incubation-welcome');
@@ -143,11 +136,11 @@ export default function IncubationWelcome() {
     if (seen().includes(incubationHandle)) return undefined;
 
     // A beat after landing, so it does not race the page it is explaining.
-    const t = setTimeout(() => {
+    const timer = setTimeout(() => {
       setPromptActive('incubation-welcome', true);
       setOpen(true);
     }, 900);
-    return () => clearTimeout(t);
+    return () => clearTimeout(timer);
   }, [authenticated, incubationHandle, promptsActive]);
 
   const close = () => {
@@ -164,20 +157,20 @@ export default function IncubationWelcome() {
 
   return createPortal(
     <div className="incw-overlay" onClick={close}>
-      <div className="incw" onClick={(e) => e.stopPropagation()} role="dialog" aria-modal="true" aria-label="Welcome to 3Speak">
-        <button type="button" className="incw-close" onClick={close} aria-label="Close">
+      <div className="incw" onClick={(e) => e.stopPropagation()} role="dialog" aria-modal="true" aria-label={t('incubation.welcome.what.title')}>
+        <button type="button" className="incw-close" onClick={close} aria-label={t('common.actions.close')}>
           <MdClose size={18} />
         </button>
 
         <div className="incw-body">
           <h2>
             <span className="incw-head-icon"><Icon size={16} aria-hidden="true" /></span>
-            {current.title}
+            {t(current.titleKey)}
           </h2>
-          {current.body}
+          {current.body(t)}
           {current.key === 'path' && (
             <>
-              <h3 className="incw-choose">Choose your path</h3>
+              <h3 className="incw-choose">{t('incubation.progress.choosePath')}</h3>
               <TrackChooser current={chosen} onChosen={setChosen} />
             </>
           )}
@@ -194,16 +187,16 @@ export default function IncubationWelcome() {
           <div className="incw-actions">
             {step > 0 && (
               <button type="button" className="incw-secondary" onClick={() => setStep((n) => n - 1)}>
-                Back
+                {t('common.actions.back')}
               </button>
             )}
             {last ? (
               <Link to="/profile" className="incw-primary" onClick={close}>
-                {chosen ? 'Show me my list' : 'Decide later'}
+                {chosen ? t('incubation.welcome.showList') : t('incubation.welcome.decideLater')}
               </Link>
             ) : (
               <button type="button" className="incw-primary" onClick={() => setStep((n) => n + 1)}>
-                Next
+                {t('common.actions.next')}
               </button>
             )}
           </div>

@@ -5,6 +5,7 @@ import { AiohaModal, useAioha } from "@aioha/react-ui";
 import { Providers, KeyTypes } from "@aioha/aioha";
 import { IoPower } from "react-icons/io5";
 import { createPortal } from "react-dom";
+import { useTranslation, Trans } from "react-i18next";
 import { ENABLE_METAMASK_SNAP, ENABLE_BUTRAUTH } from "../../utils/config";
 import { useAppStore } from "../../lib/store";
 import "./LoginModal.scss";
@@ -13,6 +14,7 @@ import "./LoginModal.scss";
  * Custom login modal wrapper that adds Butter Auth + MetaMask Snap login options to AiohaModal
  */
 function LoginModal({ displayed, onLogin, onClose, loginTitle, loginOptions, intent }) {
+  const { t } = useTranslation();
   const [topContainer, setTopContainer] = useState(null);
   // 'choose' = sign-up / log-in chooser screen; 'providers' = wallet/provider list.
   const [step, setStep] = useState('choose');
@@ -91,7 +93,7 @@ function LoginModal({ displayed, onLogin, onClose, loginTitle, loginOptions, int
       const modal = document.querySelector('#aioha-modal');
       if (!modal) return;
       const originalText = 'Scan the QR code using a HiveAuth-compatible mobile app.';
-      const newText = 'Scan the QR code using a hiveauth compatible mobile app. If you have the app on this phone then just tap the qr code.';
+      const newText = t('auth.loginModal.hiveAuthQrHint');
       modal.querySelectorAll('p').forEach((p) => {
         if (p.textContent.trim() === originalText) {
           p.textContent = newText;
@@ -141,7 +143,7 @@ function LoginModal({ displayed, onLogin, onClose, loginTitle, loginOptions, int
         e.preventDefault();
         e.stopPropagation();
         // Prompt for username then trigger MetaMask Snap login
-        const username = prompt('Enter your Hive username:');
+        const username = prompt(t('auth.loginModal.enterUsername'));
         if (!username) return;
         try {
           // MetaMask Snap must login with Active key — contract calls require
@@ -153,10 +155,10 @@ function LoginModal({ displayed, onLogin, onClose, loginTitle, loginOptions, int
           if (result.success) {
             onLogin?.(result);
           } else {
-            alert(result.error || 'MetaMask Snap login failed');
+            alert(result.error || t('auth.loginModal.metamaskFailed'));
           }
         } catch (err) {
-          alert(err.message || 'MetaMask Snap login failed');
+          alert(err.message || t('auth.loginModal.metamaskFailed'));
         }
       });
       li.appendChild(a);
@@ -225,7 +227,7 @@ function LoginModal({ displayed, onLogin, onClose, loginTitle, loginOptions, int
       timeouts.forEach(clearTimeout);
       observer.disconnect();
     };
-  }, [displayed, step]);
+  }, [displayed, step, t]);
 
   // Offer Butter Auth on the provider list only when there is NO active wallet
   // session — i.e. logged out, or a Butter Auth session (aioha.isLoggedIn() is
@@ -246,28 +248,30 @@ function LoginModal({ displayed, onLogin, onClose, loginTitle, loginOptions, int
           <div className="login-chooser" onMouseDown={(e) => e.stopPropagation()}>
             {isManteAuth ? (
               <>
-                <h3 className="login-chooser-title">You're signed in</h3>
+                <h3 className="login-chooser-title">{t('auth.loginModal.signedInTitle')}</h3>
                 <p className="login-chooser-sub">
-                  Signed in{user ? <> as <strong>@{user}</strong></> : ''} via Butter Auth.
+                  {user
+                    ? <Trans i18nKey="auth.loginModal.signedInAs" values={{ user }} components={{ b: <strong /> }} />
+                    : t('auth.loginModal.signedIn')}
                 </p>
                 <button className="login-chooser-login" onClick={() => setStep('providers')}>
-                  <span style={{ display: 'block' }}>Change account</span>
+                  <span style={{ display: 'block' }}>{t('auth.loginModal.changeAccount')}</span>
                   <span style={{ display: 'block', fontWeight: 400, fontSize: '12.5px', opacity: 0.7, marginTop: '2px' }}>
-                    {ENABLE_BUTRAUTH ? 'Log in with Butter Auth or any Hive wallet' : 'Log in with any Hive wallet'}
+                    {ENABLE_BUTRAUTH ? t('auth.loginModal.loginWithButrauthOrWallet') : t('auth.loginModal.loginWithWallet')}
                   </span>
                 </button>
                 <button className="login-chooser-login" onClick={handleLogout}>
-                  <IoPower style={{ marginRight: 8, verticalAlign: 'middle' }} /> Log out
+                  <IoPower style={{ marginRight: 8, verticalAlign: 'middle' }} /> {t('common.actions.logout')}
                 </button>
-                <button className="login-chooser-cancel" onClick={onClose}>Cancel</button>
+                <button className="login-chooser-cancel" onClick={onClose}>{t('common.actions.cancel')}</button>
               </>
             ) : (
               <>
-                <h3 className="login-chooser-title">Welcome to 3Speak</h3>
+                <h3 className="login-chooser-title">{t('auth.loginModal.welcomeTitle')}</h3>
                 <p className="login-chooser-sub">
                   {ENABLE_BUTRAUTH
-                    ? 'Create a new account, or log in if you already have one.'
-                    : 'Log in to your account.'}
+                    ? t('auth.loginModal.welcomeSubSignup')
+                    : t('auth.loginModal.welcomeSubLogin')}
                 </p>
 
                 {/* Hidden when Butter Auth says no account can be created from
@@ -278,26 +282,26 @@ function LoginModal({ displayed, onLogin, onClose, loginTitle, loginOptions, int
                 {ENABLE_BUTRAUTH && signupPossible.possible && (
                   <button className="login-chooser-signup" onClick={() => startButrauthFlow(true)}>
                     <span className="butrauth-text">
-                      <span className="butrauth-title">Sign up</span>
-                      <span className="butrauth-subtitle">New here? Use Google, email &amp; more</span>
+                      <span className="butrauth-title">{t('common.actions.signUp')}</span>
+                      <span className="butrauth-subtitle">{t('auth.loginModal.signupSubtitle')}</span>
                     </span>
                   </button>
                 )}
                 {ENABLE_BUTRAUTH && !signupPossible.possible && (
                   <p className="login-chooser-sub" style={{ marginTop: 0 }}>
                     {signupPossible.reason === 'datacenter_ip'
-                      ? 'New accounts can\u2019t be created over a VPN or proxy. Turn it off and reload, or log in below if you already have an account.'
-                      : 'New accounts aren\u2019t available on this network right now. You can still log in below.'}
+                      ? t('auth.loginModal.signupBlockedVpn')
+                      : t('auth.loginModal.signupBlockedNetwork')}
                   </p>
                 )}
 
                 <button className="login-chooser-login" onClick={() => setStep('providers')}>
-                  <span style={{ display: 'block' }}>Log in</span>
+                  <span style={{ display: 'block' }}>{t('common.actions.login')}</span>
                   <span style={{ display: 'block', fontWeight: 400, fontSize: '12.5px', opacity: 0.7, marginTop: '2px' }}>
-                    {ENABLE_BUTRAUTH ? 'Log in with Butter Auth or any Hive wallet' : 'Log in with any Hive wallet'}
+                    {ENABLE_BUTRAUTH ? t('auth.loginModal.loginWithButrauthOrWallet') : t('auth.loginModal.loginWithWallet')}
                   </span>
                 </button>
-                <button className="login-chooser-cancel" onClick={onClose}>Cancel</button>
+                <button className="login-chooser-cancel" onClick={onClose}>{t('common.actions.cancel')}</button>
               </>
             )}
           </div>
@@ -308,18 +312,17 @@ function LoginModal({ displayed, onLogin, onClose, loginTitle, loginOptions, int
       {displayed && step === 'signup' && (
         <div className="login-chooser-overlay" onMouseDown={onClose}>
           <div className="login-chooser" onMouseDown={(e) => e.stopPropagation()}>
-            <h3 className="login-chooser-title">Opening sign up…</h3>
+            <h3 className="login-chooser-title">{t('auth.loginModal.openingSignup')}</h3>
             <p className="login-chooser-sub">
-              Continue in the secure Butter Auth window. If it didn't open, allow
-              pop-ups and try again.
+              {t('auth.loginModal.openingSignupHint')}
             </p>
             <button className="login-chooser-login" onClick={() => startButrauthFlow(true)}>
-              <span style={{ display: 'block' }}>Reopen sign up</span>
+              <span style={{ display: 'block' }}>{t('auth.loginModal.reopenSignup')}</span>
             </button>
             <button className="login-chooser-login" onClick={() => setStep('providers')}>
-              <span style={{ display: 'block' }}>Log in instead</span>
+              <span style={{ display: 'block' }}>{t('auth.loginModal.loginInstead')}</span>
             </button>
-            <button className="login-chooser-cancel" onClick={onClose}>Cancel</button>
+            <button className="login-chooser-cancel" onClick={onClose}>{t('common.actions.cancel')}</button>
           </div>
         </div>
       )}
@@ -340,8 +343,8 @@ function LoginModal({ displayed, onLogin, onClose, loginTitle, loginOptions, int
           >
             <img src="/butrauth-logo.png" alt="" width={32} height={32} />
             <span className="butrauth-text">
-              <span className="butrauth-title">Butter Auth <span className="recommended-suffix">(Recommended)</span></span>
-              <span className="butrauth-subtitle">Sign in with Google, email &amp; more</span>
+              <span className="butrauth-title">Butter Auth <span className="recommended-suffix">{t('auth.loginModal.recommended')}</span></span>
+              <span className="butrauth-subtitle">{t('auth.loginModal.butrauthSubtitle')}</span>
             </span>
           </button>
           )}
