@@ -1,0 +1,96 @@
+{
+  "review": {
+    "fabAria": "Gửi góp ý",
+    "fab": "Góp ý",
+    "aspects": {
+      "upload": "Tải lên",
+      "playback": "Phát video",
+      "live": "Phát trực tiếp",
+      "discovery": "Khám phá / bảng tin",
+      "design": "Thiết kế / UX",
+      "performance": "Tốc độ",
+      "mobile": "Di động",
+      "other": "Khác"
+    },
+    "titles": {
+      "upload": "Lượt tải lên của bạn thế nào?",
+      "stream": "Buổi phát trực tiếp của bạn thế nào?",
+      "watch": "Bạn thấy xem video trên 3Speak thế nào?",
+      "global": "Trải nghiệm 3Speak của bạn thế nào?",
+      "fallback": "Giúp chúng tôi làm 3Speak tốt hơn"
+    },
+    "stars": {
+      "poor": "Tệ",
+      "fair": "Tạm được",
+      "good": "Tốt",
+      "great": "Rất tốt",
+      "amazing": "Tuyệt vời"
+    },
+    "errors": {
+      "pickStars": "Vui lòng chọn số sao",
+      "sendFailed": "Không thể gửi đánh giá của bạn. Vui lòng thử lại."
+    },
+    "thanks": "Cảm ơn góp ý của bạn! 🙏",
+    "sendFeedback": "Gửi góp ý",
+    "subtitle": "Góp ý của bạn giúp chúng tôi làm 3Speak tốt hơn.",
+    "starRating": "Đánh giá sao",
+    "starsAria_other": "{{count}} sao",
+    "aboutLabel": "Góp ý về điều gì? <opt>(không bắt buộc)</opt>",
+    "recommendLabel": "Bạn có giới thiệu 3Speak cho người khác không? <opt>(không bắt buộc)</opt>",
+    "moreLabel": "Kể thêm cho chúng tôi <opt>(không bắt buộc)</opt>",
+    "placeholder": "Bạn thích điều gì? Điều gì có thể tốt hơn?",
+    "notNow": "Để sau",
+    "sending": "Đang gửi…"
+  },
+  "tabs": {
+    "reactions": "Phản ứng",
+    "transcript": "Bản ghi lời"
+  },
+  "live": {
+    "vodProcessing": "Bản ghi đang được xử lý…",
+    "vodProcessingHint": "Buổi phát trực tiếp này đã kết thúc. Video sẽ thay thế tại đây ngay khi bộ mã hóa xử lý xong — không cần tải lại trang.",
+    "watching_other": "👁 {{count}} người đang xem",
+    "signInRaiseHand": "Đăng nhập để giơ tay",
+    "signInChat": "Đăng nhập để chat",
+    "signInJoinChat": "🔒 Đăng nhập để tham gia chat."
+  },
+  "transcript": {
+    "title": "Bản ghi lời",
+    "languageAria": "Ngôn ngữ bản ghi lời",
+    "copyingWithTimes": "Sao chép kèm mốc thời gian",
+    "copyingTextOnly": "Chỉ sao chép văn bản",
+    "timecodes": "Mốc thời gian",
+    "copyWithTimes": "Sao chép bản ghi lời kèm mốc thời gian",
+    "copyText": "Sao chép văn bản bản ghi lời",
+    "jumpTo": "Chuyển đến {{time}}",
+    "hide": "Ẩn bản ghi lời",
+    "show": "Hiện bản ghi lời",
+    "showWithCount_other": "Hiện bản ghi lời ({{count}} dòng)"
+  },
+  "blog": {
+    "noContent": "Không có nội dung",
+    "loadError": "Lỗi khi tải nội dung.",
+    "processError": "Lỗi khi xử lý nội dung.",
+    "rendererError": "Lỗi khi tải trình hiển thị."
+  },
+  "section": {
+    "posted": "Đã đăng bình luận!",
+    "postFailed": "Bình luận thất bại, vui lòng thử lại",
+    "editFailed": "Chỉnh sửa thất bại, vui lòng thử lại",
+    "updated": "Đã cập nhật bình luận",
+    "commentTab": "Bình luận",
+    "reactTab": "Phản ứng",
+    "at": "lúc",
+    "atTime": "lúc {{time}}",
+    "commentPlaceholder": "Viết bình luận của bạn tại đây...",
+    "replyPlaceholder": "Viết phản hồi của bạn tại đây...",
+    "commentButton": "Bình luận",
+    "count_other": "{{count}} bình luận",
+    "edited": "(đã chỉnh sửa)",
+    "saving": "Đang lưu...",
+    "translation": "Bản dịch",
+    "translationFailed": "Dịch thất bại. Dịch vụ dịch có đang chạy không?",
+    "reportComment": "Báo cáo bình luận",
+    "openInShorts": "Mở trong Shorts"
+  }
+}

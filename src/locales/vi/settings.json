@@ -1,0 +1,205 @@
+{
+  "interests": {
+    "savedToast": "Đã lưu sở thích vào hồ sơ Hive của bạn",
+    "saveFailed": "Không thể lưu sở thích",
+    "title": "Sở thích",
+    "loading": "đang tải…",
+    "hint": "Chọn các chủ đề bạn quan tâm — chúng tôi sẽ dùng chúng để cho bạn xem nhiều nội dung bạn thích hơn.",
+    "loginHint": "Đăng nhập để chọn sở thích của bạn.",
+    "save": "Lưu sở thích"
+  },
+  "ads": {
+    "chainNotSaved": "Đã lưu trên 3Speak, nhưng chưa lưu trên tài khoản Hive của bạn. Hãy thử lại để lưu cả ở đó.",
+    "saveFailed": "Không thể lưu cài đặt.",
+    "onToast": "Đã bật quảng cáo cho video của bạn",
+    "offToast": "Đã tắt quảng cáo cho video của bạn",
+    "splitSaved": "Đã lưu tỷ lệ chia doanh thu",
+    "title": "Quảng cáo trên video của bạn",
+    "allow": "Cho phép quảng cáo",
+    "allowDesc": "Một đoạn tài trợ ngắn có thể phát trong video của bạn. Bạn nhận một phần doanh thu từ đó, và cộng đồng nơi bạn đăng video cũng vậy. Nếu tắt mục này, video của bạn sẽ hoàn toàn không có quảng cáo — chúng cũng bị loại khỏi những gì chúng tôi chào bán cho nhà quảng cáo, nên không có gì bạn đã từ chối được bán đi.",
+    "allowAria": "Cho phép quảng cáo trên video của bạn",
+    "shareTitle": "Chia sẻ với cộng đồng",
+    "shareDesc": "{{pool}}% doanh thu từ một quảng cáo được chia giữa bạn và cộng đồng nơi bạn đăng video. Chọn phần cộng đồng nhận được bao nhiêu — để ở 0 thì bạn giữ toàn bộ {{pool}}%.",
+    "youPct": "Bạn {{pct}}%",
+    "communityPct": "Cộng đồng {{pct}}%",
+    "shareInputLabel": "Phần của cộng đồng, phần trăm",
+    "invalidPct": "Nhập một số nguyên từ 0 đến {{max}}.",
+    "loadingSetting": "Đang tải cài đặt hiện tại của bạn…"
+  },
+  "viewerRewards": {
+    "onToast": "Đã bật phần thưởng người xem",
+    "offToast": "Đã tắt phần thưởng người xem, và dữ liệu xem của bạn đã bị xóa",
+    "saveFailed": "Không thể lưu cài đặt đó.",
+    "title": "Kiếm tiền khi xem",
+    "rowTitle": "Phần thưởng người xem",
+    "desc": "Nhận một phần doanh thu quảng cáo cho những gì bạn xem, được trả bằng HBD hoặc HIVE. Bạn được trả theo video đã xem, dù có quảng cáo phát hay không, nên phần thưởng dành cho việc xem chứ không phải việc ngồi xem hết quảng cáo. Bản thân quảng cáo phát cho tất cả mọi người, trừ người đăng ký 3Speak Pro. Chúng tôi ghi lại bạn đã xem bao nhiêu phần của mỗi video, ngoài lịch sử xem mà trang Đã xem vốn đã lưu, và xóa dữ liệu đó ngay khi bạn tắt mục này.",
+    "aria": "Nhận một phần doanh thu quảng cáo cho những gì bạn xem"
+  },
+  "postingAuth": {
+    "updateFailed": "Không thể cập nhật quyền posting của bạn.",
+    "addedToast": "Đã thêm @threespeak vào quyền posting của bạn",
+    "removedToast": "Đã gỡ @threespeak khỏi quyền posting của bạn",
+    "notYetAdded": "Đã ký, nhưng @threespeak chưa xuất hiện trên tài khoản của bạn. Hãy mở lại cài đặt sau một phút để kiểm tra lại.",
+    "stillThere": "Đã ký, nhưng @threespeak vẫn còn trên tài khoản của bạn. Hãy mở lại cài đặt sau một phút để kiểm tra lại.",
+    "title": "Quyền posting",
+    "canPost": "@threespeak có thể đăng bài thay bạn",
+    "cannotPost": "@threespeak không thể đăng bài thay bạn",
+    "checkingStatus": "@threespeak …",
+    "desc": "Cho phép 3Speak xuất bản video tải lên và bài đăng đã lên lịch thay bạn, và lưu một số cài đặt mà không cần ví hỏi mỗi lần. Quyền này chỉ cho phép đăng bài, vote và bình luận; không bao giờ có thể chuyển tiền hay đổi khóa của bạn. Nếu không có quyền này, mỗi lần tải lên sẽ yêu cầu bạn thêm lại. Việc thay đổi mục này cần active key của bạn.",
+    "checking": "Đang kiểm tra…",
+    "removing": "Đang gỡ…",
+    "adding": "Đang thêm…"
+  },
+  "notifications": {
+    "kinds": {
+      "videos": {
+        "title": "Video mới",
+        "desc": "Khi nhà sáng tạo bạn theo dõi đăng video."
+      },
+      "shorts": {
+        "title": "Shorts mới",
+        "desc": "Khi nhà sáng tạo bạn theo dõi đăng Shorts."
+      },
+      "audio": {
+        "title": "Âm thanh mới",
+        "desc": "Khi nhà sáng tạo bạn theo dõi tải lên một bản nhạc hoặc tập podcast."
+      },
+      "replies": {
+        "title": "Phản hồi",
+        "desc": "Khi ai đó phản hồi bài đăng hoặc bình luận của bạn."
+      },
+      "mentions": {
+        "title": "Lượt nhắc",
+        "desc": "Khi ai đó nhắc đến tên bạn."
+      },
+      "follows": {
+        "title": "Người theo dõi mới",
+        "desc": "Khi ai đó theo dõi bạn."
+      },
+      "votes": {
+        "title": "Upvote",
+        "desc": "Khi ai đó upvote bài đăng của bạn. Tắt theo mặc định — một bài đăng nổi tiếng sẽ khiến máy rung liên tục."
+      },
+      "reblogs": {
+        "title": "Reblog",
+        "desc": "Khi ai đó reblog bài đăng của bạn."
+      }
+    },
+    "groups": {
+      "creators": "Từ nhà sáng tạo bạn theo dõi",
+      "aboutYou": "Về bạn"
+    },
+    "deviceOffToast": "Thiết bị này sẽ không nhận thông báo nữa",
+    "deviceOnToast": "Thiết bị này sẽ nhận thông báo",
+    "changeFailed": "Không thể thay đổi thông báo",
+    "saveFailed": "Không thể lưu",
+    "loginHint": "Đăng nhập để chọn những gì bạn muốn được thông báo.",
+    "unsupported": "Trình duyệt này không thể hiển thị thông báo. Trên iPhone và iPad, thông báo chỉ hoạt động sau khi 3Speak được thêm vào Màn hình chính.",
+    "device": "Thông báo trên thiết bị này",
+    "deviceBlocked": "Đã bị chặn trong cài đặt trình duyệt cho trang này — hãy cho phép thông báo ở đó trước.",
+    "deviceNoWorker": "Không khả dụng trên bản dựng này.",
+    "deviceDesc": "Nhận thông báo ngay cả khi 3Speak không mở. Chỉ áp dụng cho trình duyệt này.",
+    "whatHint": "Những gì bạn muốn được thông báo. Áp dụng cho mọi thiết bị bạn đã bật."
+  },
+  "tabs": {
+    "general": "Chung",
+    "content": "Nội dung",
+    "rewards": "Quảng cáo & phần thưởng",
+    "about": "Giới thiệu / Phiên bản"
+  },
+  "contentTabs": {
+    "feed": "Bảng tin",
+    "aria": "Cài đặt nội dung"
+  },
+  "butrauthUnlocked": "Đã mở khóa Butter Auth",
+  "appearance": {
+    "title": "Giao diện",
+    "darkMode": {
+      "title": "Chế độ tối",
+      "desc": "Dùng giao diện màu tối trên toàn ứng dụng."
+    },
+    "largeCards": {
+      "title": "Thẻ lớn",
+      "desc": "Hiển thị thẻ video lớn hơn trên trang chủ, hồ sơ và danh sách phát. Tắt để dùng thẻ nhỏ gọn hơn."
+    },
+    "previews": {
+      "title": "Xem trước video",
+      "desc": "Phát bản xem trước tắt tiếng khi bạn di chuột qua thẻ video (và trên di động ở chế độ thẻ lớn, thẻ ở giữa sẽ tự phát khi bạn cuộn)."
+    },
+    "simpleFeeds": {
+      "title": "Bảng tin đơn giản",
+      "desc": "Tắt thuật toán đề xuất — Khám phá, Sở thích và Thịnh hành trở thành danh sách mới nhất trước thay vì được xếp hạng."
+    }
+  },
+  "shorts": {
+    "commentBar": {
+      "title": "Thanh bình luận trên Shorts",
+      "desc": "Hiển thị ô nhập bình luận bên dưới Shorts. Tắt theo mặc định — bạn luôn có thể mở bảng bình luận bằng nút bình luận."
+    },
+    "openOnStart": {
+      "title": "Mở Shorts khi khởi động",
+      "desc": "Vào thẳng Shorts khi bạn mở 3Speak, thay vì bảng tin chính."
+    },
+    "inFeeds": {
+      "title": "Shorts trong bảng tin",
+      "desc": "Hiển thị các hàng Shorts giữa các video trong bảng tin chính và phần đề xuất trên trang xem. Tắt để các danh sách đó chỉ có video."
+    }
+  },
+  "feed": {
+    "nsfw": {
+      "title": "Hiển thị nội dung NSFW",
+      "desc": "Hiển thị video và âm thanh được đánh dấu là không phù hợp nơi công sở. Tắt theo mặc định."
+    },
+    "hideWatched": {
+      "title": "Ẩn video đã xem",
+      "desc": "Loại bỏ các video bạn đã xem khỏi bảng tin chính, thịnh hành và đề xuất."
+    },
+    "hideAi": {
+      "title": "Ẩn video do AI tạo",
+      "desc": "Loại bỏ video và Shorts được đánh dấu do AI tạo khỏi mọi bảng tin. Nhãn này đến từ một bước kiểm tra tự động, nên có thể có một số video lọt qua."
+    },
+    "privateMode": {
+      "title": "Chế độ riêng tư",
+      "desc": "Không đưa quốc gia của bạn vào số liệu thống kê của nhà sáng tạo. Chúng tôi không bao giờ lưu địa chỉ IP của bạn — của bất kỳ ai. Địa chỉ IP được chuyển thành mã quốc gia ngay khi bạn nhấn phát rồi bị loại bỏ. Khi bật mục này, ngay cả quốc gia đó cũng không được ghi lại cho lượt xem của bạn."
+    }
+  },
+  "about": {
+    "title": "Giới thiệu",
+    "version": "Phiên bản ứng dụng",
+    "rpcNode": "Node RPC Hive",
+    "yourData": "Dữ liệu của bạn",
+    "privacyLink": "Cách 3Speak xử lý dữ liệu của bạn"
+  },
+  "dataRequest": {
+    "emailRequired": "Nhập địa chỉ email để chúng tôi có thể phản hồi",
+    "confirmRequired": "Vui lòng xác nhận bạn hiểu những gì có thể và không thể xóa",
+    "requestFailed": "Yêu cầu thất bại ({{status}})",
+    "deletionReceived": "Đã nhận yêu cầu xóa",
+    "dataReceived": "Đã nhận yêu cầu dữ liệu",
+    "sendFailed": "Không thể gửi yêu cầu của bạn",
+    "doneTitle": "Đã nhận yêu cầu",
+    "doneBody": "Mã tham chiếu của bạn là <b>{{ref}}</b>. Chúng tôi sẽ phản hồi tới <b>{{contact}}</b> chậm nhất vào <b>{{dueBy}}</b>.",
+    "keepRef": "Hãy giữ mã tham chiếu phòng khi bạn cần liên hệ tiếp.",
+    "signIn": "Vui lòng đăng nhập để yêu cầu hoặc xóa dữ liệu của bạn — yêu cầu sẽ áp dụng cho tài khoản bạn đang đăng nhập.",
+    "requestFor": "Yêu cầu cho <b>@{{username}}</b>",
+    "typeAria": "Loại yêu cầu",
+    "getData": "Lấy dữ liệu của tôi",
+    "deleteData": "Xóa dữ liệu tài khoản của tôi",
+    "ledeDelete": "Chúng tôi sẽ xóa mọi thứ 3Speak lưu trữ về bạn trong cơ sở dữ liệu của chính chúng tôi.",
+    "ledeExport": "Chúng tôi sẽ gửi cho bạn mọi thứ 3Speak lưu trữ về bạn trong cơ sở dữ liệu của chính chúng tôi, dưới dạng tệp JSON.",
+    "covers": "Bao gồm:",
+    "cannotTitle": "Những gì chúng tôi không thể làm",
+    "cannotBody": "3Speak được xây dựng trên <b>blockchain Hive</b>. Bài đăng, bình luận, lượt vote và lượt chia sẻ lại của bạn đã được ký bằng khóa của chính bạn và phát lên một <b>sổ cái công khai, vĩnh viễn</b> mà chúng tôi không kiểm soát và không thể chỉnh sửa.",
+    "cannotDelete": "Chúng tôi có thể xóa các bản sao của mình và ngừng hiển thị nội dung của bạn trên 3Speak. Chúng tôi không thể xóa nội dung đó khỏi blockchain — không ai có thể, kể cả bạn. Bất kỳ ai vận hành một node Hive vẫn sẽ có nó.",
+    "cannotExport": "Dữ liệu trên chuỗi của bạn vốn đã công khai và máy có thể đọc được qua bất kỳ API Hive nào — chúng tôi sẽ chỉ cho bạn nơi lấy. Những gì chúng tôi gửi bạn là dữ liệu chúng tôi lưu giữ thêm ngoài phần đó.",
+    "emailLabel": "Email để phản hồi",
+    "emailPlaceholder": "ban@example.com",
+    "messageLabel": "Bạn muốn bổ sung gì không? (không bắt buộc)",
+    "messagePlaceholder": "Chi tiết bổ sung về yêu cầu của bạn (không bắt buộc)",
+    "confirmLabel": "Tôi hiểu rằng nội dung của tôi trên blockchain Hive là vĩnh viễn và không thể bị xóa bởi 3Speak hay bất kỳ ai khác.",
+    "sending": "Đang gửi…",
+    "requestDeletion": "Yêu cầu xóa",
+    "requestData": "Yêu cầu dữ liệu của tôi",
+    "foot": "Chúng tôi phản hồi trong vòng một tháng. Bạn cũng có thể gửi email trực tiếp tới <mail>privacy@3speak.tv</mail>."
+  }
+}

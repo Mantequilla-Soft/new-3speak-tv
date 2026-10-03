@@ -1,0 +1,112 @@
+{
+  "theme": {
+    "switchToLight": "Chuyển sang chế độ sáng",
+    "switchToDark": "Chuyển sang chế độ tối"
+  },
+  "bottom": {
+    "feeds": "Bảng tin",
+    "groups": "Nhóm",
+    "audio": "Âm thanh",
+    "login": "Đăng nhập"
+  },
+  "installApp": "Cài ứng dụng",
+  "iosInstallHint": "Chạm <b>Chia sẻ</b> rồi chọn <b>Thêm vào MH chính</b>",
+  "playlists": {
+    "tooltip": "Danh sách phát bạn đã lưu hoặc tạo",
+    "label": "Danh sách phát",
+    "watchLater": "Xem sau",
+    "watchLaterCount": "Xem sau ({{n}})",
+    "watchHistory": "Lịch sử xem",
+    "all": "Tất cả danh sách phát"
+  },
+  "advertise": "Quảng cáo",
+  "hidePages": "Ẩn trang",
+  "showPages": "Hiện trang",
+  "tabs": {
+    "overviewTooltip": "Mọi thứ mới trên 3Speak, cùng những gì chúng tôi nghĩ bạn sẽ thích",
+    "overview": "Tổng quan",
+    "shortsTooltip": "Video dọc ngắn, xem liên tục",
+    "audioTooltip": "Podcast, nhạc và các nội dung âm thanh khác được đăng trên 3Speak",
+    "groupsTooltip": "Các cộng đồng bạn có thể tham gia, và huy hiệu mọi người được trao",
+    "rankingsTooltip": "Các nhà sáng tạo đang kiếm được nhiều nhất và được xem nhiều nhất hiện nay"
+  },
+  "aboutLink": "Giới thiệu về 3Speak",
+  "profile": {
+    "accountMenu": "Menu tài khoản",
+    "myChannelAria": "Kênh của tôi",
+    "vpTooltip": "Voting Power: mức ảnh hưởng của lượt vote tiếp theo của bạn",
+    "rcTooltip": "Resource Credits: chi phí cho các thao tác của bạn trên Hive",
+    "myChannel": "Kênh của tôi",
+    "publishBacklog": "Xuất bản video tồn đọng",
+    "analytics": "Phân tích",
+    "inviteLinks": "Đường liên kết mời",
+    "iosInstallToast": "Chạm nút Chia sẻ trong Safari, rồi chọn \"Thêm vào MH chính\"",
+    "changeAccount": "Đổi tài khoản",
+    "logout": "Đăng xuất",
+    "onDiscord": "3Speak trên Discord",
+    "onX": "3Speak trên X",
+    "onTelegram": "3Speak trên Telegram"
+  },
+  "notifications": {
+    "pushOff": "Đã tắt thông báo trên thiết bị này",
+    "pushOn": "Bạn sẽ được thông báo khi nhà sáng tạo bạn theo dõi đăng bài",
+    "pushFailed": "Không thể thay đổi cài đặt thông báo",
+    "ariaUnread": "Thông báo ({{count}} chưa đọc)",
+    "pushBlocked": "Thông báo cho trang này đã bị chặn trong cài đặt trình duyệt của bạn",
+    "pushNoWorker": "Bản dựng này không có service worker, nên không thể đăng ký thông báo tại đây",
+    "pushStop": "Ngừng thông báo trên thiết bị này",
+    "pushStart": "Nhận thông báo khi nhà sáng tạo bạn theo dõi đăng bài",
+    "on": "Bật",
+    "notifyMe": "Thông báo cho tôi",
+    "empty": "Bạn chưa có thông báo nào.",
+    "threeSpeakVideo": "Video 3Speak",
+    "group": {
+      "voteOne": "@{{a}} đã vote bài đăng của bạn",
+      "voteTwo": "@{{a}} và @{{b}} đã vote bài đăng của bạn",
+      "voteMany_other": "@{{a}} và {{count}} người khác đã vote bài đăng của bạn",
+      "withValue": "{{label}} (${{value}})",
+      "followOne": "@{{a}} đã theo dõi bạn",
+      "followTwo": "@{{a}} và @{{b}} đã theo dõi bạn",
+      "followMany_other": "@{{a}} và {{count}} người khác đã theo dõi bạn",
+      "other": "{{count}} thông báo {{type}}",
+      "typeCount": "{{count}} {{type}}",
+      "includesWhale": "Bao gồm tài khoản 🐋 cá voi",
+      "includesOrca": "Bao gồm tài khoản 🐬 cá hổ kình",
+      "andMore": "và {{count}} người khác…"
+    }
+  },
+  "search": {
+    "types": {
+      "users": "Người dùng",
+      "communities": "Cộng đồng",
+      "videos": "Video",
+      "shorts": "Shorts",
+      "audio": "Âm thanh",
+      "playlists": "Danh sách phát"
+    },
+    "dates": {
+      "today": "Hôm nay",
+      "thisWeek": "Tuần này",
+      "thisMonth": "Tháng này",
+      "thisYear": "Năm nay"
+    },
+    "contentType": "Loại nội dung",
+    "boostRecent": "Ưu tiên nội dung mới",
+    "dateRange": "Khoảng thời gian",
+    "tag": "Thẻ",
+    "tagPlaceholder": "ví dụ crypto, gaming...",
+    "community": "Cộng đồng",
+    "communityPlaceholder": "Tìm cộng đồng...",
+    "clearFilters": "Xóa tất cả bộ lọc",
+    "allHidden": "Tất cả loại nội dung đang bị ẩn.",
+    "reenableFilters": "Bật lại tất cả bộ lọc",
+    "noResultsFor": "Không tìm thấy kết quả cho “{{term}}”",
+    "searchFor": "Tìm “{{term}}”",
+    "authors_other": "{{count}} tác giả",
+    "subscribers_other": "{{count}} người đăng ký",
+    "views_other": "{{formatted}} lượt xem",
+    "tags": "Thẻ",
+    "titles": "Tiêu đề",
+    "placeholder": "Tìm kiếm..."
+  }
+}

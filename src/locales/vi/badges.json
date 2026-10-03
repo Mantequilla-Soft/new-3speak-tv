@@ -1,0 +1,92 @@
+{
+  "page": {
+    "fallbackTitle": "Huy hiệu",
+    "kpis": {
+      "recipients": "Người nhận",
+      "recentVideos": "Video gần đây",
+      "issued": "Ngày cấp"
+    },
+    "issuedBy": "Được cấp bởi <creatorLink>@{{creator}}</creatorLink>",
+    "notFoundTitle": "Không tìm thấy huy hiệu",
+    "notFoundBody": "Hiện không thể đọc tài khoản Hive nào tên @{{account}}.",
+    "browseAll": "Xem tất cả huy hiệu",
+    "tabs": {
+      "videos": "Video",
+      "recipients": "Người nhận",
+      "recipientsWithCount": "Người nhận ({{num}})"
+    },
+    "errorVideos": "Lỗi khi tải video",
+    "noVideosTitle": "Chưa có video nào",
+    "noHolders": "Chưa có ai sở hữu huy hiệu này.",
+    "noHolderVideos": "Chưa có ai sở hữu huy hiệu này đăng video trên 3Speak.",
+    "loadingMore": "Đang tải thêm...",
+    "recipientsError": "Không thể tải danh sách người nhận",
+    "recipientsLoading": "Đang tải danh sách người nhận...",
+    "noRecipientsTitle": "Chưa có người nhận",
+    "noRecipientsBody": "Cho đến nay chưa có ai được trao huy hiệu này.",
+    "recipientsSummary_other": "{{num}} người nhận",
+    "recipientsSummaryWithVideos_other": "{{num}} người nhận, {{publishing}} người đăng video trên 3Speak",
+    "recipientVideos_other": "{{num}} video",
+    "recipientNoVideos": "Không có video"
+  },
+  "directory": {
+    "title": "Huy hiệu",
+    "intro": "Huy hiệu là phần thưởng <b>do người khác trao cho bạn</b> trên Hive, cho sự kiện, đóng góp và cột mốc. Bạn không thể tự tham gia: phải có người trao cho bạn. Mở một huy hiệu để xem những người nhận đăng gì tại đây.",
+    "searchPlaceholder": "Tìm huy hiệu...",
+    "sort": {
+      "recipients": "Người nhận",
+      "created": "Ngày tạo",
+      "name": "Tên"
+    },
+    "createLocked": "Cần có tài khoản Hive để tạo huy hiệu. Tính năng này sẽ mở khi tài khoản của bạn sẵn sàng.",
+    "create": "Tạo huy hiệu",
+    "loadError": "Hiện không thể tải huy hiệu.",
+    "noMatch": "Không có huy hiệu nào khớp với tìm kiếm đó.",
+    "held": "Đã có",
+    "recipients_other": "{{num}} người nhận"
+  },
+  "award": {
+    "success": "@{{username}} hiện đã sở hữu {{title}}",
+    "failed": "Không thể trao huy hiệu đó",
+    "dialogLabel": "Trao huy hiệu cho {{username}}",
+    "title": "Trao huy hiệu",
+    "toUser": "cho @{{username}}",
+    "awarding": "Đang trao…",
+    "held": "Đã có",
+    "award": "Trao",
+    "note": "Huy hiệu sẽ theo dõi họ trên Hive, đó chính là ý nghĩa của việc sở hữu huy hiệu. Bạn có thể thu hồi từ trang của huy hiệu đó."
+  },
+  "hive": {
+    "dragToReorder": "Kéo để sắp xếp lại",
+    "orderSaved": "Đã lưu thứ tự huy hiệu vào hồ sơ Hive của bạn",
+    "orderSaveFailed": "Không thể lưu thứ tự huy hiệu của bạn",
+    "dialogLabel": "Huy hiệu của @{{username}}",
+    "title": "Huy hiệu",
+    "arrangeHint": "Kéo các huy hiệu theo thứ tự bạn muốn hiển thị.",
+    "earnedCount_other": "@{{username}} đã nhận {{count}} huy hiệu trên Hive",
+    "alwaysFirst": "Luôn hiển thị đầu tiên",
+    "saveOrder": "Lưu thứ tự",
+    "arrange": "Sắp xếp",
+    "arrangeTitle": "Chọn thứ tự hiển thị huy hiệu của bạn",
+    "showAll_other": "Hiện tất cả {{count}} huy hiệu",
+    "awardTitle": "Trao một huy hiệu của bạn cho @{{username}}"
+  },
+  "leaderboardBadges": {
+    "proTitle": "Nhà sáng tạo này ủng hộ 3Speak bằng gói Pro"
+  },
+  "leaderboard": {
+    "watchNotice": "Thời gian xem chỉ được ghi nhận từ {{since}}, nên các khoảng thời gian dài hơn vẫn hiển thị cùng một lịch sử ngắn.",
+    "unclaimed": "Chưa nhận",
+    "noActivity": "Chưa có hoạt động trong khoảng thời gian này",
+    "otherTopics": "Khác",
+    "title": "Bảng xếp hạng",
+    "subtitle": "{{blurb}} — các nhà sáng tạo hàng đầu trên 3Speak.",
+    "subtitleTopic": "{{blurb}} — các nhà sáng tạo hàng đầu về {{topic}}.",
+    "allTopics": "Tất cả chủ đề",
+    "finding": "Đang tìm @{{user}} trên bảng này…",
+    "notInTop": "@{{user}} không nằm trong top {{n}} của bảng này.",
+    "loading": "Đang tải bảng xếp hạng…",
+    "loadError": "Không thể tải bảng xếp hạng. Hãy thử lại sau ít phút.",
+    "empty": "Chưa ai có {{metric}} trong khoảng thời gian này."
+  }
+}

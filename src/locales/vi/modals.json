@@ -1,0 +1,172 @@
+{
+  "addTag": {
+    "loginRequired": "Đăng nhập để gắn thẻ video này",
+    "pickTopic": "Hãy chọn một chủ đề trước",
+    "tagged": "Đã gắn thẻ “{{label}}”",
+    "failed": "Gắn thẻ thất bại: {{error}}",
+    "pleaseTryAgain": "vui lòng thử lại",
+    "title": "Gắn thẻ video này",
+    "question": "Video này nói về điều gì?",
+    "existing": "Bạn đã gắn thẻ video này là <b>{{label}}</b> — chọn thẻ khác sẽ thay thế thẻ cũ.",
+    "submit": "Gửi thẻ"
+  },
+  "addAccount": {
+    "usernameRequired": "Cần có tên người dùng để tiếp tục.",
+    "hiveAuthExpired": "Yêu cầu xác thực HiveAuth đã hết hạn",
+    "loginSuccess": "Đăng nhập thành công!",
+    "loginFailed": "Đăng nhập thất bại: {{error}}",
+    "logoAlt": "Logo 3Speak",
+    "title": "Đăng nhập bằng tên người dùng",
+    "usernamePlaceholder": "Tên người dùng"
+  },
+  "socialLink": {
+    "hashCopied": "Đã sao chép mã hash",
+    "copyFailed": "Không thể sao chép vào bộ nhớ tạm",
+    "enterHandle": "Nhập tên hoặc ID của bạn trên nền tảng",
+    "verified": "Đã xác minh và liên kết tài khoản",
+    "errors": {
+      "hashNotFound": "Chưa tìm thấy mã hash trên hồ sơ. Hãy đảm bảo thay đổi đã được lưu ở chế độ công khai, rồi thử lại.",
+      "alreadyLinked": "Kênh này đã được một người dùng Hive khác (@{{user}}) xác minh.",
+      "tooMany": "Bạn đã đạt số lượng tài khoản liên kết tối đa.",
+      "notFound": "Kênh đó không tồn tại trên nền tảng.",
+      "badSignature": "Không thể xác minh chữ ký. Hãy đảm bảo bạn đã đăng nhập bằng posting key.",
+      "rateLimited": "Quá nhiều yêu cầu. Vui lòng chờ một phút rồi thử lại.",
+      "lookupFailed": "Tra cứu nền tảng thất bại. Hãy thử lại sau giây lát.",
+      "verifyFailed": "Xác minh thất bại",
+      "stillPresent": "Mã hash vẫn còn trên hồ sơ của bạn — hãy gỡ nó trước.",
+      "unlinkFailed": "Hủy liên kết thất bại",
+      "noSuchLink": "Không có liên kết nào như vậy để gỡ."
+    },
+    "confirmUnlink": "Gỡ liên kết {{platform}} của bạn? Hãy đảm bảo mã hash xác minh không còn trên hồ sơ công khai của bạn, nếu không việc hủy liên kết sẽ bị từ chối.",
+    "removed": "Đã gỡ liên kết",
+    "title": "Hồ sơ bên ngoài đã liên kết",
+    "intro": "Chứng minh bạn sở hữu một kênh YouTube (hoặc kênh khác) bằng cách dán mã hash 3Speak riêng của bạn vào phần mô tả hồ sơ công khai, rồi xác minh tại đây.",
+    "openProfile": "Mở hồ sơ",
+    "removeLink": "Gỡ liên kết",
+    "empty": "Chưa liên kết hồ sơ bên ngoài nào.",
+    "addPlatform": "Thêm nền tảng mới",
+    "flowTitle": "Liên kết kênh {{platform}} của bạn",
+    "step1": "Sao chép mã hash xác minh riêng của bạn:",
+    "step2": "<strong>Dán nó vào phần mô tả hồ sơ {{platform}} công khai của bạn</strong> (ở đâu cũng được — giới thiệu / tiểu sử / mô tả đều ổn). Lưu thay đổi.",
+    "step3": "Nhập định danh {{platform}} của bạn:",
+    "verifying": "Đang xác minh…",
+    "verify": "Xác minh"
+  },
+  "auth": {
+    "title": "Cấp quyền cho 3Speak!",
+    "text": "Để tải video lên 3Speak, chúng tôi cần quyền posting của bạn. Quyền này cho phép chúng tôi xuất bản video bạn đã tải lên Hive. Bạn chỉ cần cấp quyền posting cho chúng tôi một lần.",
+    "authorize": "Cấp quyền"
+  },
+  "beneficiary": {
+    "errors": {
+      "emptyUsername": "Tên người dùng không được để trống.",
+      "sameUser": "Không thể đặt chính bạn làm người thụ hưởng",
+      "greaterThanZero": "Tỷ lệ phần thưởng phải lớn hơn 0.",
+      "exceedsRemaining": "Tỷ lệ phần thưởng vượt quá phần còn lại là {{percent}}%.",
+      "validNumber": "Nhập một số hợp lệ",
+      "validPercent": "Nhập tỷ lệ phần thưởng hợp lệ.",
+      "duplicate": "Tài khoản này đã có trong danh sách.",
+      "invalidAccount": "Tên người dùng hoặc ID cộng đồng không hợp lệ.",
+      "cannotIncrease": "Không thể tăng vượt quá {{percent}}% còn lại",
+      "pendingRow": "@{{account}} chưa được thêm — nhấn + để thêm, hoặc xóa trường này.",
+      "atLeastOne": "Tỷ lệ phần thưởng phải ít nhất 1%"
+    },
+    "title": "Người thụ hưởng",
+    "intro": "Thêm người dùng mà bạn muốn tự động nhận một phần phần thưởng của bài đăng này.",
+    "minPercent": "% (tối thiểu {{percent}}%)",
+    "usernamePlaceholder": "Nhập tên người dùng",
+    "minimumReward": "Phần thưởng tối thiểu là <strong>1%</strong>",
+    "checking": "Đang kiểm tra <strong>@{{account}}</strong> trên Hive…",
+    "notExisting": "⚠️ <strong>@{{account}}</strong> không phải là tài khoản Hive tồn tại.",
+    "notAdded": "⚠️ <strong>@{{account}}</strong> chưa được thêm — nhấn <strong>+</strong> để thêm, hoặc xóa trường này.",
+    "infrastructure": "10% === Hạ tầng",
+    "videoEncoding": "Mã hóa video === 1%",
+    "defaults": "Người thụ hưởng mặc định ({{count}})"
+  },
+  "qr": {
+    "scan": "Quét mã QR này bằng Hive Keychain:",
+    "click": "Nhấn vào mã QR để mở trong ứng dụng Keychain"
+  },
+  "editVideoHint": {
+    "title": "Chỉnh sửa bất kỳ video nào của bạn",
+    "text": "Mở một video của chính bạn và tìm <strong>nút bút</strong> trong thanh thao tác bên dưới trình phát. Nhấn vào đó để đổi tiêu đề, mô tả, hình thu nhỏ, thẻ và nhiều hơn nữa.",
+    "penTitle": "Chỉnh sửa thông tin video",
+    "tip": "Mẹo",
+    "caption": "Đây chính là nút bút bạn đang tìm",
+    "gotIt": "Đã hiểu"
+  },
+  "verifyAuth": {
+    "title": "Đang xác minh quyền",
+    "text": "Vui lòng chờ trong lúc chúng tôi xác minh quyền đã được cấp..."
+  },
+  "editor": {
+    "confirmLeave": "Trình chỉnh sửa vẫn đang mở. Rời trang này sẽ đóng trình chỉnh sửa và các thay đổi chưa lưu sẽ bị mất.\n\nOK = Đóng trình chỉnh sửa & rời đi\nHủy = Ở lại trang này",
+    "confirmClose": "Bạn có chắc muốn đóng trình chỉnh sửa? Các thay đổi chưa lưu sẽ bị mất.",
+    "iframeTitle": "Trình chỉnh sửa video 3Speak",
+    "finding": "Đang tìm trình chỉnh sửa khả dụng...",
+    "loading": "Đang tải trình chỉnh sửa...",
+    "unavailable": "Hiện không có máy chủ chỉnh sửa nào khả dụng. Vui lòng thử lại sau.",
+    "sending": "Đang gửi đến dịch vụ kết xuất...",
+    "rendering": "Đang kết xuất... {{percent}}%",
+    "complete": "Kết xuất hoàn tất!",
+    "useVideo": "Dùng video",
+    "preparing": "Đang chuẩn bị video để tải lên...",
+    "renderUnavailable": "Dịch vụ kết xuất chưa khả dụng. Dữ liệu dòng thời gian đã được ghi vào console.",
+    "backToEditor": "Quay lại trình chỉnh sửa",
+    "postError": "Không thể chuẩn bị video để tải lên. Vui lòng thử tải xuống thay thế."
+  },
+  "profile": {
+    "mustLogin": "Bạn cần đăng nhập trước",
+    "followed": "Đã theo dõi",
+    "unfollowed": "Đã bỏ theo dõi",
+    "followFailed": "Theo dõi thất bại: {{error}}",
+    "unfollowFailed": "Bỏ theo dõi thất bại: {{error}}",
+    "avatarAlt": "Hồ sơ",
+    "posts": "Bài đăng",
+    "followers": "Người theo dõi",
+    "joined": "Tham gia {{date}}",
+    "about": "Giới thiệu",
+    "noBio": "Chưa có tiểu sử"
+  },
+  "report": {
+    "reasons": {
+      "spamMisleading": "Spam hoặc gây hiểu lầm",
+      "harassment": "Quấy rối hoặc bắt nạt",
+      "hateSpeech": "Ngôn từ gây thù ghét",
+      "violence": "Nội dung bạo lực hoặc phản cảm",
+      "sexual": "Nội dung tình dục",
+      "copyright": "Vi phạm bản quyền",
+      "scam": "Lừa đảo hoặc gian lận",
+      "other": "Khác",
+      "spam": "Spam",
+      "impersonation": "Mạo danh",
+      "spamAccount": "Tài khoản spam"
+    },
+    "selectReasonError": "Vui lòng chọn lý do",
+    "loginRequired": "Bạn cần đăng nhập để báo cáo",
+    "submitted": "Đã gửi báo cáo. Cảm ơn bạn.",
+    "failed": "Gửi báo cáo thất bại",
+    "titles": {
+      "user": "Báo cáo người dùng",
+      "comment": "Báo cáo bình luận",
+      "short": "Báo cáo Short",
+      "post": "Báo cáo bài đăng",
+      "video": "Báo cáo video"
+    },
+    "reason": "Lý do",
+    "selectReason": "Chọn lý do...",
+    "details": "Chi tiết bổ sung (không bắt buộc)",
+    "detailsPlaceholder": "Cung cấp thêm ngữ cảnh...",
+    "submitting": "Đang gửi...",
+    "submit": "Gửi báo cáo"
+  },
+  "upload": {
+    "missingInfo": "Thiếu thông tin video hoặc hình thu nhỏ.",
+    "updateFailed": "Cập nhật thông tin video thất bại. Vui lòng thử lại.",
+    "title": "Tải lên video và hình thu nhỏ",
+    "selectVideo": "Chọn video",
+    "thumbnail": "Hình thu nhỏ",
+    "clickThumbnail": "Nhấn để tải hình thu nhỏ lên",
+    "updateInfo": "Cập nhật thông tin video"
+  }
+}

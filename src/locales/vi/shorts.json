@@ -1,0 +1,113 @@
+{
+  "loading": "Đang tải Shorts...",
+  "pleaseTryAgain": "vui lòng thử lại",
+  "rotateDevice": "Vui lòng xoay thiết bị sang chế độ dọc",
+  "pageTitle": {
+    "byAuthor": "3S | Short của @{{author}}",
+    "default": "3S | Shorts"
+  },
+  "stories": {
+    "you": "Bạn"
+  },
+  "errors": {
+    "votingUnavailable": "Không thể vote cho bài đăng này",
+    "loginToVote": "Đăng nhập để vote",
+    "loginToComplete": "Đăng nhập để hoàn tất thao tác này"
+  },
+  "feed": {
+    "ariaLabel": "Bảng tin Shorts",
+    "discover": "Khám phá",
+    "myInterests": "Sở thích của tôi",
+    "interestsTitle": "Chỉ các Shorts phù hợp với sở thích của bạn",
+    "pickInterestsFirst": "Hãy chọn một vài sở thích trước",
+    "noInterests": "Bạn chưa chọn sở thích nào — hãy chọn trong Cài đặt",
+    "interestsExhausted": "Đã hết Shorts theo sở thích của bạn — đang hiển thị Khám phá",
+    "noInterestMatches": "Hiện chưa có Shorts nào phù hợp với sở thích của bạn.",
+    "switchToDiscover": "Chuyển sang Khám phá",
+    "empty": "Không có Shorts nào",
+    "loadError": "Lỗi khi tải Shorts: {{error}}"
+  },
+  "glow": {
+    "subtle": "Ánh sáng nền: nhẹ",
+    "vivid": "Ánh sáng nền: rực rỡ",
+    "off": "Ánh sáng nền: tắt"
+  },
+  "playbackMode": {
+    "autoReplay": "Tự phát lại",
+    "autoSwipe": "Tự vuốt",
+    "manual": "Thủ công"
+  },
+  "subtitles": {
+    "off": "Tắt"
+  },
+  "chain": {
+    "originalVideo": "Video gốc",
+    "snap": "Snap",
+    "openShort": "Mở Short",
+    "watch": "Xem",
+    "openSnap": "Mở snap",
+    "comment": "Bình luận",
+    "reaction": "Phản ứng",
+    "thisVideo": "Video này",
+    "remix": "Remix",
+    "show": "hiện chuỗi phản ứng"
+  },
+  "caption": {
+    "curatedBy": "Được tuyển chọn bởi Mantequilla",
+    "curated": "Tuyển chọn",
+    "showOriginal": "Hiện bản gốc",
+    "more": "thêm"
+  },
+  "actions": {
+    "remix": "Remix",
+    "promote": "Quảng bá"
+  },
+  "share": {
+    "defaultTitle": "Short trên 3Speak",
+    "text": "Xem Short này của {{user}} trên 3Speak nhé!",
+    "shared": "Đã chia sẻ!",
+    "linkCopied": "Đã sao chép đường liên kết vào bộ nhớ tạm!",
+    "failed": "Chia sẻ thất bại"
+  },
+  "reshare": {
+    "loginRequired": "Đăng nhập để chia sẻ lại",
+    "unavailable": "Không thể chia sẻ lại bài đăng này",
+    "done": "Đã chia sẻ lại!",
+    "failed": "Chia sẻ lại thất bại"
+  },
+  "remix": {
+    "noUrl": "Không thể xác định URL video để remix",
+    "loadFailed": "Không tải được video để remix"
+  },
+  "watchLater": {
+    "loginRequired": "Đăng nhập để lưu Shorts",
+    "cantSave": "Không thể lưu Short này",
+    "removed": "Đã xóa khỏi Xem sau",
+    "saved": "Đã lưu vào Xem sau",
+    "failed": "Thất bại: {{message}}"
+  },
+  "comments": {
+    "title": "Bình luận",
+    "loading": "Đang tải bình luận...",
+    "closed": "Bình luận đã bị đóng",
+    "none": "Chưa có bình luận nào",
+    "postRemoved": "Bài đăng Hive của Short này đã bị gỡ, nên không thể nhận thêm bình luận hay vote.",
+    "beFirst": "Hãy là người đầu tiên bình luận!",
+    "unavailable": "Không thể bình luận bài đăng này",
+    "addPlaceholder": "Thêm bình luận...",
+    "addPlaceholderBar": "Thêm bình luận…",
+    "loginPlaceholder": "Đăng nhập để bình luận",
+    "send": "Gửi bình luận",
+    "enterComment": "Vui lòng nhập bình luận",
+    "loginToComment": "Vui lòng đăng nhập để bình luận",
+    "justNow": "Vừa xong",
+    "posted": "Đã đăng bình luận!",
+    "failed": "Bình luận thất bại: {{message}}",
+    "translation": "Bản dịch",
+    "translationFailed": "Dịch thất bại",
+    "reportComment": "Báo cáo bình luận",
+    "replyPlaceholder": "Viết phản hồi...",
+    "viewReplies_other": "Xem {{count}} phản hồi",
+    "hideReplies_other": "Ẩn {{count}} phản hồi"
+  }
+}
