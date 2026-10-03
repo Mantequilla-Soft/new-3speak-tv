@@ -1,0 +1,50 @@
+{
+  "loading": "Wczytywanie...",
+  "error": "Błąd: {{error}}",
+  "thumbnailAlt": "miniatura",
+  "topicTitle": "Temat: {{topic}}",
+  "watchingNow_one": "{{count}} osoba ogląda teraz",
+  "watchingNow_few": "{{count}} osoby oglądają teraz",
+  "watchingNow_many": "{{count}} osób ogląda teraz",
+  "watchingNow_other": "{{count}} osoby ogląda teraz",
+  "badges": {
+    "gatedTitle": "Tylko dla wspierających — 3Speak Pro odblokowuje cały film",
+    "pro": "PRO",
+    "new": "NOWE",
+    "live": "● NA ŻYWO",
+    "liveChat": "● CZAT NA ŻYWO"
+  },
+  "status": {
+    "scheduled": "Zaplanowany",
+    "mobile": "Mobilny",
+    "mobileTitle": "Przesłano z aplikacji mobilnej",
+    "processing": "Przetwarzanie",
+    "processingTitle": "Film jest przetwarzany",
+    "draft": "Szkic",
+    "draftTitle": "Szkic - jeszcze nieopublikowany",
+    "deleted": "Usunięty",
+    "deletedTitle": "Ten film został usunięty",
+    "failed": "Błąd",
+    "failedTitle": "Przetwarzanie filmu nie powiodło się",
+    "unlisted": "Niepubliczny",
+    "unlistedTitle": "Niepubliczny — ukryty w kanałach i wyszukiwaniu, dostępny tylko przez bezpośredni link"
+  },
+  "playlist": {
+    "loading": "Wczytywanie playlist...",
+    "items_one": "{{count}} element",
+    "items_few": "{{count}} elementy",
+    "items_many": "{{count}} elementów",
+    "items_other": "{{count}} elementu",
+    "openAria": "Otwórz playlistę {{name}}",
+    "tag": "Playlista",
+    "updated": "Zaktualizowano {{when}}"
+  },
+  "watchLater": {
+    "title": "Do obejrzenia",
+    "subtitle": "Filmy do obejrzenia później"
+  },
+  "watched": {
+    "title": "Obejrzane",
+    "subtitle": "Twoja historia oglądania"
+  }
+}

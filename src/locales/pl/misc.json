@@ -1,0 +1,244 @@
+{
+  "leaderboard": {
+    "windows": {
+      "7d": "7 dni",
+      "30d": "30 dni",
+      "365d": "Rok",
+      "all": "Cały czas"
+    },
+    "windowsInSentence": {
+      "7d": "7 dni",
+      "30d": "30 dni",
+      "365d": "rok",
+      "all": "cały czas"
+    },
+    "metrics": {
+      "video_uploads": "Filmy",
+      "short_uploads": "Shorts",
+      "video_watch_secs": "Czas oglądania filmów",
+      "short_watch_secs": "Czas oglądania Shorts",
+      "tags_given": "Tagi",
+      "streams": "Transmisje",
+      "stream_secs": "Czas na żywo",
+      "stream_peak_viewers": "Szczyt widzów",
+      "stream_viewers": "Dołączenia widzów",
+      "boosts_received": "Otrzymane boosty",
+      "boost_amount_received": "Otrzymana kwota",
+      "boosts_given": "Wysłane boosty",
+      "boost_amount_given": "Wysłana kwota"
+    },
+    "metricsInSentence": {
+      "video_uploads": "filmów",
+      "short_uploads": "Shorts",
+      "video_watch_secs": "czasu oglądania filmów",
+      "short_watch_secs": "czasu oglądania Shorts",
+      "tags_given": "tagów",
+      "streams": "transmisji",
+      "stream_secs": "czasu na żywo",
+      "stream_peak_viewers": "szczytu widzów",
+      "stream_viewers": "dołączeń widzów",
+      "boosts_received": "otrzymanych boostów",
+      "boost_amount_received": "otrzymanej kwoty",
+      "boosts_given": "wysłanych boostów",
+      "boost_amount_given": "wysłanej kwoty"
+    },
+    "blurbs": {
+      "video_uploads": "Przesłane filmy",
+      "short_uploads": "Przesłane Shorts",
+      "video_watch_secs": "Sekundy oglądania ich filmów",
+      "short_watch_secs": "Sekundy oglądania ich Shorts",
+      "tags_given": "Tagi nadane innym filmom",
+      "streams": "Rozpoczęte transmisje",
+      "stream_secs": "Łączny czas na żywo (tylko zakończone transmisje)",
+      "stream_peak_viewers": "Najwięcej widzów jednocześnie (rekord, nie suma)",
+      "stream_viewers": "Dołączenia widzów (liczba zdarzeń, nie unikalny zasięg)",
+      "boosts_received": "Boosty wysłane na ich transmisje",
+      "boost_amount_received": "Łączna kwota otrzymanych boostów",
+      "boosts_given": "Boosty wysłane innym streamerom",
+      "boost_amount_given": "Łączna kwota wysłanych boostów"
+    },
+    "blurbsInSentence": {
+      "video_uploads": "przesłane filmy",
+      "short_uploads": "przesłane Shorts",
+      "video_watch_secs": "sekundy oglądania ich filmów",
+      "short_watch_secs": "sekundy oglądania ich Shorts",
+      "tags_given": "tagi nadane innym filmom",
+      "streams": "rozpoczęte transmisje",
+      "stream_secs": "łączny czas na żywo (tylko zakończone transmisje)",
+      "stream_peak_viewers": "najwięcej widzów jednocześnie (rekord, nie suma)",
+      "stream_viewers": "dołączenia widzów (liczba zdarzeń, nie unikalny zasięg)",
+      "boosts_received": "boosty wysłane na ich transmisje",
+      "boost_amount_received": "łączna kwota otrzymanych boostów",
+      "boosts_given": "boosty wysłane innym streamerom",
+      "boost_amount_given": "łączna kwota wysłanych boostów"
+    },
+    "groups": {
+      "video": "Wideo",
+      "streaming": "Transmisje"
+    },
+    "badgeNouns": {
+      "video_uploads": "Filmy",
+      "short_uploads": "Shorts",
+      "video_watch_secs": "Oglądalność",
+      "short_watch_secs": "Oglądalność Shorts",
+      "tags_given": "Tagujący"
+    },
+    "badgeLabel": "{{tier}} {{noun}}",
+    "badgeTitleAllTime": "Miejsce #{{rank}} pod względem {{what}} (cały czas)",
+    "badgeTitleWindow": "Miejsce #{{rank}} pod względem {{what}} (okres: {{window}})"
+  },
+  "duration": {
+    "hoursMinutes": "{{h}} godz. {{m}} min",
+    "minutesSeconds": "{{m}} min {{s}} s",
+    "seconds": "{{s}} s",
+    "aMoment": "chwilę",
+    "lessThanMinute": "mniej niż minutę"
+  },
+  "surf": {
+    "community": "Społeczność",
+    "allOf": "Całość: {{label}}"
+  },
+  "social": {
+    "signingCancelled": "Podpisywanie anulowane",
+    "youtube": {
+      "placeholder": "@nazwa lub UCxxxxxxxxxxxxxxxxxxxxxx",
+      "help": "Wklej swoją @nazwę YouTube lub ID kanału UC…. Zamieniamy je na ID kanału."
+    },
+    "soundcloud": {
+      "placeholder": "twoj-profil lub https://soundcloud.com/twoj-profil",
+      "help": "Wklej adres URL profilu SoundCloud lub samą nazwę użytkownika z niego. Umieść hash w dowolnym miejscu opisu profilu."
+    }
+  },
+  "snaps": {
+    "retrying": "Nie znaleziono jeszcze kontenera Snaps — ponawianie (próba {{attempt}})...",
+    "unreachable": "Nie udało się połączyć z żadnym węzłem Hive, aby znaleźć kontener Snaps. Sprawdź połączenie i spróbuj ponownie.",
+    "unreachableWithError": "Nie udało się połączyć z żadnym węzłem Hive, aby znaleźć kontener Snaps (ostatni błąd — {{error}}). Sprawdź połączenie i spróbuj ponownie."
+  },
+  "embed": {
+    "responsive": "Responsywny"
+  },
+  "incubation": {
+    "requestFailed": "Żądanie nie powiodło się ({{status}})",
+    "contactLoadFailed": "Nie udało się wczytać twoich danych kontaktowych",
+    "contactSaveFailed": "Nie udało się zapisać twoich danych kontaktowych",
+    "onlyButrauthBacklog": "Zaległe posty z inkubacji może mieć tylko konto Butter Auth",
+    "publishFailed": "Publikacja nie powiodła się ({{status}})"
+  },
+  "routeError": {
+    "title": "Ta strona się nie wczytała",
+    "body": "Nie udało się pobrać części aplikacji. Zwykle oznacza to, że podczas gdy ta karta była otwarta, wydano nową wersję. Odświeżenie ją wczyta.",
+    "reload": "Odśwież",
+    "goHome": "Strona główna"
+  },
+  "seo": {
+    "defaultTitle": "3Speak - zdecentralizowana platforma wideo",
+    "defaultDescription": "3Speak to zdecentralizowana platforma do udostępniania filmów oparta na technologii blockchain. Oglądaj, przesyłaj i udostępniaj filmy, zarabiając nagrody w kryptowalucie."
+  },
+  "uploadLinks": {
+    "regularVideo": "Zwykły film",
+    "verticalShort": "Pionowy short",
+    "musicAudio": "Muzyka / audio",
+    "groupChat": "Czat grupowy",
+    "communitySnap": "Snap w społeczności",
+    "shortsEditor": "Edytor Shorts",
+    "goLive": "Nadawaj na żywo",
+    "streamStudio": "Studio transmisji",
+    "headings": {
+      "upload": "Prześlij",
+      "live": "Na żywo",
+      "others": "Inne"
+    }
+  },
+  "chat": {
+    "connectFailed": "Nie udało się połączyć z czatem.",
+    "loginFirst": "Najpierw się zaloguj, aby korzystać z czatu.",
+    "roomNameRequired": "Nazwa pokoju jest wymagana."
+  },
+  "hiveAuth": {
+    "waiting": "Czekam na zatwierdzenie w HiveAuth...",
+    "title": "Wymagane zatwierdzenie w HiveAuth",
+    "hint": "Sprawdź aplikację HiveAuth, aby zatwierdzić tę transakcję"
+  },
+  "hiveApi": {
+    "keychainNotSigned": "Keychain nie podpisał transakcji",
+    "loginToCreateCommunity": "Zaloguj się, aby utworzyć społeczność",
+    "loginFirst": "Najpierw się zaloguj",
+    "cancelled": "Operacja anulowana"
+  },
+  "openpod": {
+    "announced": "Sesja na żywo ogłoszona na Hive!",
+    "announceFailed": "OpenPod wystartował, ale nie udało się opublikować ogłoszenia na Hive."
+  },
+  "appUpdate": {
+    "updating": "Aktualizacja do najnowszej wersji ({{version}})…",
+    "reloadingForUpload": "Odświeżamy, aby twoje przesyłanie działało na najnowszej wersji."
+  },
+  "auth": {
+    "switched": "Przełączono na {{username}}!",
+    "keychainLoginTitle": "Zaloguj się przez Hive"
+  },
+  "streamVod": {
+    "uploadKeyMissing": "Transmisja zakończona, ale nie udało się przesłać filmu (brak klucza przesyłania).",
+    "uploading": "Przesyłanie filmu z transmisji… {{pct}}%",
+    "uploaded": "Film z transmisji przesłany — zastąpi transmisję na żywo po zakończeniu kodowania.",
+    "uploadFailed": "Transmisja zakończona, ale przesyłanie filmu nie powiodło się.",
+    "saving": "Zapisywanie filmu z transmisji…",
+    "encoding": "Przesłano — enkoder przetwarza twój film…",
+    "saved": "Film z transmisji zapisany — zastąpi transmisję na żywo po zakończeniu kodowania.",
+    "saveFailed": "Transmisja zakończona, ale nie udało się zapisać filmu: {{error}}.",
+    "uploadFailedShort": "przesyłanie nie powiodło się",
+    "stillProcessing": "Transmisja zakończona — film jest jeszcze przetwarzany; zajrzyj wkrótce na swój profil."
+  },
+  "embedPlayer": {
+    "unavailable": "Film niedostępny"
+  },
+  "followFeed": {
+    "title": "Obserwowani",
+    "error": "Błąd pobierania filmów"
+  },
+  "groups": {
+    "title": "Grupy",
+    "badges": "Odznaki",
+    "subtitle": "Społeczności, do których możesz dołączyć, i odznaki, które mają ludzie, w jednym miejscu."
+  },
+  "watched": {
+    "removed": "Usunięto z historii oglądania",
+    "removeFailed": "Nie udało się usunąć z historii oglądania",
+    "title": "Obejrzane",
+    "count_one": "{{count}} obejrzany",
+    "count_few": "{{count}} obejrzane",
+    "count_many": "{{count}} obejrzanych",
+    "count_other": "{{count}} obejrzanego",
+    "trackHistory": "Zapisuj historię",
+    "videosTab": "Filmy ({{count}})",
+    "shortsTab": "Shorts ({{count}})",
+    "loadFailed": "Nie udało się wczytać historii oglądania. Spróbuj ponownie.",
+    "emptyShorts": "Brak obejrzanych Shorts",
+    "emptyVideos": "Brak obejrzanych filmów",
+    "removeTitle": "Usuń z historii oglądania",
+    "watchedAt": "Obejrzano {{when}}"
+  },
+  "watchStream": {
+    "saySomething": "Napisz coś…",
+    "waitingWallet": "Czekam na portfel…",
+    "signInToChat": "Zaloguj się, aby czatować",
+    "sendMessage": "Wyślij wiadomość",
+    "notLive": "Ta transmisja nie jest teraz na żywo.",
+    "notFound": "Nie znaleziono transmisji na żywo dla tego linku.",
+    "browse": "Przeglądaj transmisje na żywo",
+    "back": "Wróć do 3Speak",
+    "seoTitle": "{{title}} (NA ŻYWO)",
+    "swipeNext": "Przesuń, aby zobaczyć następną transmisję",
+    "chat": "Czat",
+    "watchingNow": "👁 Ogląda teraz: {{count}}",
+    "signInRaiseHand": "Zaloguj się, aby podnieść rękę",
+    "copyLink": "Kopiuj link do transmisji",
+    "notAvailableLive": "Niedostępne dla transmisji na żywo",
+    "vote": "Zagłosuj",
+    "comment": "Komentarz",
+    "liveChat": "Czat na żywo",
+    "signInToJoin": "🔒 Zaloguj się, aby dołączyć do czatu.",
+    "moreTag": "Więcej #{{tag}}",
+    "moreVideos": "Więcej filmów"
+  }
+}

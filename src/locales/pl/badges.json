@@ -1,0 +1,110 @@
+{
+  "page": {
+    "fallbackTitle": "Odznaka",
+    "kpis": {
+      "recipients": "Odbiorcy",
+      "recentVideos": "Najnowsze filmy",
+      "issued": "Przyznano"
+    },
+    "issuedBy": "Przyznaje <creatorLink>@{{creator}}</creatorLink>",
+    "notFoundTitle": "Nie znaleziono odznaki",
+    "notFoundBody": "Nie udało się teraz odczytać konta Hive o nazwie @{{account}}.",
+    "browseAll": "Przeglądaj wszystkie odznaki",
+    "tabs": {
+      "videos": "Filmy",
+      "recipients": "Odbiorcy",
+      "recipientsWithCount": "Odbiorcy ({{num}})"
+    },
+    "errorVideos": "Błąd pobierania filmów",
+    "noVideosTitle": "Brak filmów",
+    "noHolders": "Nikt jeszcze nie ma tej odznaki.",
+    "noHolderVideos": "Nikt z posiadaczy tej odznaki nie opublikował jeszcze filmu na 3Speak.",
+    "loadingMore": "Wczytywanie kolejnych...",
+    "recipientsError": "Nie udało się wczytać odbiorców",
+    "recipientsLoading": "Wczytywanie odbiorców...",
+    "noRecipientsTitle": "Brak odbiorców",
+    "noRecipientsBody": "Nikt jeszcze nie otrzymał tej odznaki.",
+    "recipientsSummary_one": "{{num}} odbiorca",
+    "recipientsSummary_few": "{{num}} odbiorcy",
+    "recipientsSummary_many": "{{num}} odbiorców",
+    "recipientsSummary_other": "{{num}} odbiorcy",
+    "recipientsSummaryWithVideos_one": "{{num}} odbiorca, {{publishing}} publikuje na 3Speak",
+    "recipientsSummaryWithVideos_few": "{{num}} odbiorcy, {{publishing}} publikuje na 3Speak",
+    "recipientsSummaryWithVideos_many": "{{num}} odbiorców, {{publishing}} publikuje na 3Speak",
+    "recipientsSummaryWithVideos_other": "{{num}} odbiorcy, {{publishing}} publikuje na 3Speak",
+    "recipientVideos_one": "{{num}} film",
+    "recipientVideos_few": "{{num}} filmy",
+    "recipientVideos_many": "{{num}} filmów",
+    "recipientVideos_other": "{{num}} filmu",
+    "recipientNoVideos": "Brak filmów"
+  },
+  "directory": {
+    "title": "Odznaki",
+    "intro": "Odznaki to wyróżnienia <b>przyznawane ci przez innych</b> na Hive za wydarzenia, wkład i osiągnięcia. Nie możesz do nich dołączyć: ktoś musi ci je przyznać. Otwórz odznakę, aby zobaczyć, co publikują tu jej odbiorcy.",
+    "searchPlaceholder": "Szukaj odznak...",
+    "sort": {
+      "recipients": "Odbiorcy",
+      "created": "Utworzono",
+      "name": "Nazwa"
+    },
+    "createLocked": "Utworzenie odznaki wymaga konta Hive. Odblokuje się, gdy twoje będzie gotowe.",
+    "create": "Utwórz odznakę",
+    "loadError": "Nie udało się teraz wczytać odznak.",
+    "noMatch": "Żadna odznaka nie pasuje do wyszukiwania.",
+    "held": "Posiadana",
+    "recipients_one": "{{num}} odbiorca",
+    "recipients_few": "{{num}} odbiorcy",
+    "recipients_many": "{{num}} odbiorców",
+    "recipients_other": "{{num}} odbiorcy"
+  },
+  "award": {
+    "success": "@{{username}} ma teraz odznakę {{title}}",
+    "failed": "Nie udało się przyznać tej odznaki",
+    "dialogLabel": "Przyznaj odznakę użytkownikowi {{username}}",
+    "title": "Przyznaj odznakę",
+    "toUser": "dla @{{username}}",
+    "awarding": "Przyznawanie…",
+    "held": "Posiadana",
+    "award": "Przyznaj",
+    "note": "Odznaka zaczyna obserwować tę osobę na Hive — to właśnie oznacza jej posiadanie. Możesz ją odebrać na stronie odznaki."
+  },
+  "hive": {
+    "dragToReorder": "Przeciągnij, aby zmienić kolejność",
+    "orderSaved": "Kolejność odznak zapisana w twoim profilu Hive",
+    "orderSaveFailed": "Nie udało się zapisać kolejności odznak",
+    "dialogLabel": "Odznaki użytkownika @{{username}}",
+    "title": "Odznaki",
+    "arrangeHint": "Przeciągnij odznaki w kolejności, w jakiej mają być wyświetlane.",
+    "earnedCount_one": "{{count}} odznaka zdobyta przez @{{username}} na Hive",
+    "earnedCount_few": "{{count}} odznaki zdobyte przez @{{username}} na Hive",
+    "earnedCount_many": "{{count}} odznak zdobytych przez @{{username}} na Hive",
+    "earnedCount_other": "{{count}} odznaki zdobytej przez @{{username}} na Hive",
+    "alwaysFirst": "Zawsze wyświetlana jako pierwsza",
+    "saveOrder": "Zapisz kolejność",
+    "arrange": "Uporządkuj",
+    "arrangeTitle": "Wybierz kolejność wyświetlania odznak",
+    "showAll_one": "Pokaż {{count}} odznakę",
+    "showAll_few": "Pokaż wszystkie {{count}} odznaki",
+    "showAll_many": "Pokaż wszystkie {{count}} odznak",
+    "showAll_other": "Pokaż wszystkie {{count}} odznaki",
+    "awardTitle": "Przyznaj jedną ze swoich odznak użytkownikowi @{{username}}"
+  },
+  "leaderboardBadges": {
+    "proTitle": "Ten twórca wspiera 3Speak subskrypcją Pro"
+  },
+  "leaderboard": {
+    "watchNotice": "Czas oglądania jest mierzony dopiero od {{since}}, więc dłuższe okresy nadal pokazują tę samą krótką historię.",
+    "unclaimed": "Nieodebrane",
+    "noActivity": "Brak aktywności w tym okresie",
+    "otherTopics": "Inne",
+    "title": "Rankingi",
+    "subtitle": "{{blurb}} — najlepsi twórcy na 3Speak.",
+    "subtitleTopic": "{{blurb}} — najlepsi twórcy w kategorii {{topic}}.",
+    "allTopics": "Wszystkie tematy",
+    "finding": "Szukam @{{user}} w tym rankingu…",
+    "notInTop": "@{{user}} nie jest w pierwszej {{n}} tego rankingu.",
+    "loading": "Wczytywanie rankingu…",
+    "loadError": "Nie udało się wczytać rankingu. Spróbuj za chwilę.",
+    "empty": "Nikt nie ma jeszcze {{metric}} w tym okresie."
+  }
+}

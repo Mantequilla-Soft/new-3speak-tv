@@ -1,0 +1,245 @@
+{
+  "aiBadge": {
+    "title": "Wykryto jako wygenerowane przez AI",
+    "label": "AI"
+  },
+  "translate": {
+    "titleButton": "Przetłumacz tytuł",
+    "original": "Oryginał",
+    "translate": "Przetłumacz",
+    "translating": "Tłumaczenie..."
+  },
+  "summary": {
+    "title": "Podsumowanie",
+    "close": "Zamknij podsumowanie",
+    "showingOriginal": "Wyświetlany jest oryginał",
+    "translatedTo": "Przetłumaczono na: {{language}}",
+    "showLanguage": "Pokaż: {{language}}",
+    "showOriginal": "Pokaż oryginał",
+    "buttonTitle": "Podsumowanie AI tego filmu"
+  },
+  "errors": {
+    "notAvailable": "Ten film jest niedostępny.",
+    "goHome": "Strona główna",
+    "scheduledNotFound": "Nie znaleziono zaplanowanego posta — mógł już zostać opublikowany lub anulowany.",
+    "network": "Błąd sieci. Sprawdź połączenie.",
+    "notFound": "Nie znaleziono filmu lub nie udało się go wczytać.",
+    "backToProfile": "Wróć do profilu"
+  },
+  "gated": {
+    "title": "Tylko dla wspierających",
+    "checkFailed": "Nie udało się teraz potwierdzić twojej subskrypcji. Spróbuj za chwilę.",
+    "preview": "Oglądasz darmowy podgląd. 3Speak Pro odblokowuje cały film.",
+    "subscribersOnly": "Ten film jest dostępny dla subskrybentów 3Speak Pro.",
+    "cta": "Kup 3Speak Pro"
+  },
+  "reactions": {
+    "show": "Pokaż reakcje",
+    "add": "Dodaj reakcję"
+  },
+  "liveChat": "Czat na żywo",
+  "moreVideos": "Więcej filmów",
+  "vote": {
+    "saveFailed": "Nie udało się zapisać głosu"
+  },
+  "locked": {
+    "noAccount": "Odblokuje się po utworzeniu konta Hive",
+    "offChainPost": "Jeszcze niedostępne: tego posta nie ma na Hive"
+  },
+  "interests": {
+    "loginRequired": "Zaloguj się, aby zapisywać zainteresowania",
+    "added": "Dodano „{{tag}}” do twoich zainteresowań",
+    "saveFailed": "Nie udało się zapisać zainteresowań"
+  },
+  "watchLater": {
+    "removed": "Usunięto z listy Do obejrzenia",
+    "removeFailed": "Nie udało się usunąć: {{error}}",
+    "removeTitle": "Usuń z listy Do obejrzenia"
+  },
+  "reshare": {
+    "loginRequired": "Zaloguj się, aby udostępnić dalej",
+    "success": "Udostępniono dalej!",
+    "failed": "Nie udało się udostępnić dalej",
+    "reshared": "Udostępniono",
+    "reshare": "Udostępnij dalej",
+    "reshareWithCount": "Udostępnij dalej ({{count}})"
+  },
+  "clip": {
+    "noVideoUrlRemix": "Nie udało się ustalić adresu URL filmu do remiksu",
+    "noVideoUrl": "Nie udało się ustalić adresu URL filmu",
+    "startHint": "Przewiń do początku klipu, a potem kliknij „Ustaw początek”",
+    "endHint": "Teraz przewiń do końca klipu i kliknij „Ustaw koniec”",
+    "endBeforeStart": "Koniec musi być po początku",
+    "trimmed": "Klip przycięty do 1 minuty — przytniemy klip na końcu osi czasu.",
+    "set": "Klip ustawiony: {{start}} – {{end}}. Teraz kliknij „Utwórz klip”",
+    "loginRequired": "Zaloguj się, aby tworzyć klipy",
+    "cancel": "Anuluj klip",
+    "clipVideo": "Utwórz klip z filmu",
+    "label": "Klip z filmu",
+    "clip": "Klip",
+    "seekToStart": "Przewiń do początku",
+    "setStart": "Ustaw początek",
+    "setEnd": "Ustaw koniec",
+    "createClip": "Utwórz klip",
+    "barStart": "Przewiń do początku klipu",
+    "barEnd": "Początek: {{start}} — teraz przewiń do końca",
+    "barDone": "Klip: {{start}} – {{end}}"
+  },
+  "share": {
+    "defaultTitle": "Film 3Speak",
+    "linkCopied": "Skopiowano link do schowka!",
+    "failed": "Nie udało się udostępnić"
+  },
+  "follow": {
+    "loginRequired": "Zaloguj się, aby obserwować użytkowników",
+    "followed": "Obserwujesz @{{user}}",
+    "failed": "Nie udało się zaobserwować: {{error}}"
+  },
+  "ad": {
+    "countdown": "Reklama za {{seconds}}"
+  },
+  "media": {
+    "unavailableTitle": "Ten film nie jest już dostępny",
+    "unavailableBody": "Nie udało się znaleźć w sieci plików tego starszego filmu. Post nadal istnieje w blockchainie, ale filmu nie da się już odtworzyć.",
+    "blockedTitle": "Nie udało się teraz wczytać filmu",
+    "blockedBody": "Jeden z naszych serwerów wideo nie odpowiedział. Z samym filmem wszystko w porządku, więc spróbuj ponownie."
+  },
+  "tipNudge": {
+    "text": "Podobało ci się?<hide> Wyślij <b>@{{author}}</b> napiwek!</hide>",
+    "dismiss": "Zamknij"
+  },
+  "community": {
+    "members_one": "{{count}} członek",
+    "members_few": "{{count}} członków",
+    "members_many": "{{count}} członków",
+    "members_other": "{{count}} członka"
+  },
+  "tags": {
+    "curated": "Wybrane"
+  },
+  "topics": {
+    "taggedBy": "„{{label}}” · otagowało: {{count}}",
+    "viewers_one": "„{{label}}” · {{count}} widz",
+    "viewers_few": "„{{label}}” · {{count}} widzów",
+    "viewers_many": "„{{label}}” · {{count}} widzów",
+    "viewers_other": "„{{label}}” · {{count}} widza",
+    "autoNoVotes": "Otagowano automatycznie — brak głosów widzów",
+    "noVotes": "Brak głosów widzów",
+    "inInterests": "✓ W twoich zainteresowaniach",
+    "addToInterests": "+ Dodaj do moich zainteresowań",
+    "openTagFeed": "Otwórz kanał tagu"
+  },
+  "scheduled": {
+    "notice": "Zaplanowano na <b>{{date}}</b> — jeszcze nieopublikowane.",
+    "futureDate": "przyszłą datę",
+    "edit": "Edytuj, zmień termin lub anuluj",
+    "editTitle": "Edytuj zaplanowany post (szczegóły, datę lub anuluj)"
+  },
+  "actions": {
+    "voteOffChain": "Zagłosuj na ten film. Głos jest zapisywany na 3Speak i nie daje nagród.",
+    "signInToVote": "Zaloguj się, aby zagłosować",
+    "tagVideo": "Otaguj ten film",
+    "voteVideo": "Zagłosuj na ten film",
+    "tag": "Taguj",
+    "vote": "Zagłosuj",
+    "analyticsTitle": "Statystyki filmu",
+    "analytics": "Statystyki",
+    "videoStats": "Statystyki filmu",
+    "promoteTitle": "Promuj ten film",
+    "promote": "Promuj",
+    "editTitle": "Edytuj szczegóły filmu",
+    "reportTitle": "Zgłoś film",
+    "addToPlaylist": "Dodaj do playlisty",
+    "playlist": "Playlista",
+    "tipTitle": "Daj napiwek twórcy",
+    "tip": "Napiwek",
+    "details": "Szczegóły",
+    "toggleDetails": "Pokaż/ukryj szczegóły",
+    "followCreator": "Obserwuj twórcę",
+    "closeMenu": "Zamknij menu",
+    "openActions": "Otwórz akcje"
+  },
+  "description": {
+    "hide": "Ukryj opis",
+    "show": "Pokaż opis"
+  },
+  "edit": {
+    "title": "Edytuj film",
+    "loading": "Wczytywanie obecnego posta…",
+    "videoFile": "Plik wideo",
+    "replaceVideo": "Zastąp film",
+    "replaceHint": "Podmienia plik wideo w tym poście. Wszystko inne zostaje bez zmian: post zachowuje polubienia, wypłatę, komentarze, datę przesłania i miejsce na twoim profilu. Nie ruszaj tego, aby zachować obecny film.",
+    "uploadingTo": "Przesyłanie do <b>{{host}}</b>… {{pct}}%",
+    "choosingServer": "Wybieranie serwera przesyłania…",
+    "uploadedTo": "Przesłano do <b>{{host}}</b>. Naciśnij Zapisz, aby go podmienić.",
+    "uploaded": "Przesłano. Naciśnij Zapisz, aby go podmienić.",
+    "cancelUpload": "Anuluj przesyłanie",
+    "keepCurrent": "Zachowaj obecny film",
+    "encodeHint": "Po zapisaniu kodowanie potrwa jeszcze kilka minut, a do tego czasu odtwarzany będzie stary film. Miniatura się nie zmienia, więc zaktualizuj ją powyżej, jeśli już nie pasuje.",
+    "thumbnail": "Miniatura",
+    "thumbPreviewAlt": "Podgląd miniatury",
+    "uploadImage": "Prześlij obraz",
+    "uploading": "Przesyłanie…",
+    "thumbHint": "Prześlij obraz lub wklej bezpośredni URL. Nie zmieniaj, aby zachować obecną miniaturę.",
+    "titleLabel": "Tytuł",
+    "titleMin": "min. {{min}}",
+    "tags": "Tagi",
+    "tagsPlaceholder": "oddzielone spacjami",
+    "autoTag": "Dodany automatycznie — nie można go usunąć",
+    "tagCount_one": "{{count}}/{{max}} tag",
+    "tagCount_few": "{{count}}/{{max}} tagi",
+    "tagCount_many": "{{count}}/{{max}} tagów",
+    "tagCount_other": "{{count}}/{{max}} tagu",
+    "tagCountRequired_one": "{{count}}/{{max}} tag · wymagany co najmniej 1",
+    "tagCountRequired_few": "{{count}}/{{max}} tagi · wymagany co najmniej 1",
+    "tagCountRequired_many": "{{count}}/{{max}} tagów · wymagany co najmniej 1",
+    "tagCountRequired_other": "{{count}}/{{max}} tagu · wymagany co najmniej 1",
+    "description": "Opis",
+    "descriptionPlaceholder": "Opowiedz widzom o swoim filmie…",
+    "markdownHint": "Obsługuje markdown.",
+    "listed": "Publiczny",
+    "unlistedLabel": "Niepubliczny",
+    "listedHint": "Widoczny w kanałach, wyszukiwaniu i na twoim profilu.",
+    "unlistedHint": "Ukryty w kanałach i wyszukiwaniu — nadal odtwarza się przez bezpośredni link i zostaje na twoim profilu (z oznaczeniem).",
+    "allowRemix": "Zezwól na remiks/klip",
+    "remixOn": "Inni mogą tworzyć remiksy/klipy; jako autor oryginału widniejesz ty.",
+    "remixOff": "Inni nie mogą remiksować ani wycinać klipów z tego filmu.",
+    "trailer": "Zwiastun kanału",
+    "trailerOn": "Odtwarza się automatycznie na górze zakładki Przegląd na twoim profilu, zastępując poprzedni zwiastun.",
+    "trailerOff": "Ustaw ten film jako automatycznie odtwarzany na górze zakładki Przegląd na twoim profilu.",
+    "nsfw": "Dla dorosłych / NSFW",
+    "notNsfw": "Nie dla dorosłych",
+    "nsfwHint": "Ukryty w kanałach i wyszukiwaniu, chyba że widz włączył NSFW; otagowany jako nsfw na Hive.",
+    "notNsfwHint": "Zwykła treść, widoczna dla wszystkich.",
+    "promoted": "Promowany",
+    "promote": "Promuj film",
+    "saveChanges": "Zapisz zmiany",
+    "noChanges": "Brak zmian do zapisania.",
+    "thumbUploaded": "Miniatura przesłana.",
+    "videoUploaded": "Nowy film przesłany. Zapisz, aby zastosować go w tym poście.",
+    "relisted": "Film znów jest publiczny.",
+    "unlisted": "Film jest niepubliczny.",
+    "trailerSet": "Ustawiono jako zwiastun kanału.",
+    "trailerRemoved": "Usunięto jako zwiastun kanału.",
+    "updatedEncoding": "Film zaktualizowany! Nowy plik potrzebuje chwili na zakończenie kodowania.",
+    "updated": "Film zaktualizowany!",
+    "errors": {
+      "notFound": "Nie udało się znaleźć tego posta na Hive.",
+      "loadFailed": "Nie udało się wczytać posta z Hive. Spróbuj ponownie.",
+      "notImage": "Wybierz plik obrazu.",
+      "imageTooLarge": "Obraz jest za duży (maks. 10 MB).",
+      "thumbUploadFailed": "Przesyłanie miniatury nie powiodło się.",
+      "notVideo": "Wybierz plik wideo.",
+      "videoTooLarge": "Film jest za duży (maks. 5 GB).",
+      "noVideoEntry": "Ten post nie ma wpisu wideo do zastąpienia — jego metadane go nie wskazują.",
+      "notInLibrary": "Filmu z tego posta nie ma już w bibliotece, więc nie można zastąpić jego pliku.",
+      "notOwner": "Możesz zastępować plik tylko we własnym filmie.",
+      "videoUploadFailed": "Przesyłanie filmu nie powiodło się.",
+      "noEmbedEntry": "Ten post nie ma wpisu osadzonego wideo do zastąpienia — jego metadane go nie wskazują.",
+      "broadcastFailed": "Wysłanie transakcji nie powiodło się",
+      "listingFailed": "Nie udało się zmienić widoczności.",
+      "trailerFailed": "Nie udało się zaktualizować zwiastuna kanału.",
+      "saveFailed": "Nie udało się zapisać zmian."
+    }
+  }
+}

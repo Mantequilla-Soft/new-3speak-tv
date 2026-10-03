@@ -1,0 +1,139 @@
+{
+  "about": {
+    "quotes": {
+      "q1": "Jeśli wolność w ogóle coś znaczy, to prawo do mówienia ludziom tego, czego nie chcą słyszeć.",
+      "q2": "Nie zgadzam się z tym, co mówisz, ale do śmierci będę bronić twojego prawa, by to mówić.",
+      "q3": "Prawo do wolności słowa i nierealne oczekiwanie, że nikt nigdy nas nie urazi, nie mogą współistnieć.",
+      "q4": "Wolność słowa nigdy nie jest cenniejsza niż wtedy, gdy ktoś uderzy się młotkiem w kciuk.",
+      "q5": "Wolność słowa oznacza wolność dla tych, którymi gardzisz, i wolność wyrażania najbardziej odrażających poglądów.",
+      "q6": "Ignorancka wolność słowa często działa na niekorzyść mówiącego. To jeden z kilku powodów, dla których trzeba dać jej swobodę, zamiast ją tłumić.",
+      "q7": "Wolność słowa obejmuje wolność obrażania ludzi.",
+      "q8": "Granica między wolnością słowa a mową nienawiści jest cienka. Wolność słowa zachęca do debaty, mowa nienawiści podżega do przemocy.",
+      "q9": "Wolność słowa oznacza, że nie wolno nic robić ludziom ani za poglądy, które mają, ani za poglądy, które wyrażają, ani za słowa, które mówią lub piszą."
+    },
+    "faq": {
+      "what": {
+        "question": "Czym jest 3Speak?",
+        "answer": "3Speak to miejsce, w którym twórcy treści bezpośrednio posiadają swoje zasoby w serwisie i swoje społeczności. Dzięki technologii blockchain własność tych zasobów i społeczności należy do twórcy i użytkownika, a nie do 3Speak. Można je więc przenieść do innych aplikacji korzystających z technologii blockchain. Oznacza to, że jeśli nie będziemy służyć społeczności i twórcom najlepiej, jak to możliwe, mogą oni zabrać wytworzone przez siebie zasoby i przenieść się do innej aplikacji. W efekcie 3Speak jest odporny na cenzurę, nie może odebrać ci twoich zasobów ani usunąć twoich społeczności."
+      },
+      "upvote": {
+        "question": "Dlaczego 3Speak nie daje mi upvote'ów?",
+        "answer": "3Speak głosuje według własnego uznania i nie kieruje się żadnymi konkretnymi kryteriami. Najlepszym sposobem, by zwrócić naszą uwagę, jest przesyłanie wysokiej jakości treści i przyciąganie widzów oraz społeczności do 3speak."
+      },
+      "missing": {
+        "question": "Dlaczego niektórych moich filmów brakuje w kanale nowości?",
+        "answer": "Pozwalamy przesyłać tyle filmów, ile chcesz! Oznacza to, że czasem jeden użytkownik mógłby zapełnić kanały wyłącznie swoimi treściami. Aby temu zapobiec, ograniczamy liczbę filmów jednego twórcy wyświetlanych przy jednym wczytaniu."
+      },
+      "creator": {
+        "question": "Jak zostać twórcą treści?",
+        "answer": "Najszybszy sposób na zdobycie konta Hive to naciśnięcie przycisku „Zarejestruj się” w panelu nawigacji i postępowanie zgodnie z instrukcjami (nie zgub swoich kluczy!). Następnie zaloguj się kontem Hive i kliknij „studio twórcy” / przesyłanie. Wszystko gotowe, możesz zaczynać!"
+      },
+      "rewards": {
+        "question": "Jak zarabiać nagrody za komentowanie?",
+        "answer": "Aby zarabiać nagrody, potrzebujesz konta w blockchainie Hive. Możesz je dostać za darmo od Hive (https://signup.hive.io), kupić przewodnik użytkownika Hive albo poprosić innego użytkownika Hive, by ci je założył. Gdy masz już konto, zaloguj się przez Hivesigner i przy pierwszym logowaniu podaj swój klucz ACTIVE. Potem możesz publikować komentarze, które mogą przynosić nagrody w kryptowalucie."
+      }
+    },
+    "hero": {
+      "tagline1": "CHROŃ SWOJE TREŚCI",
+      "tagline2": "TOKENIZUJ SWOJĄ SPOŁECZNOŚĆ",
+      "cta": "Dołącz do rewolucji",
+      "description": "3Speak działa na blockchainie Hive, co zapewnia prawdziwą decentralizację, odporność na cenzurę i własność społeczności."
+    },
+    "how": {
+      "title": "Jak działa 3Speak",
+      "subtitle": "Poczuj, co znaczy prawdziwa własność treści dzięki technologii blockchain",
+      "create": {
+        "title": "Twórz treści",
+        "text": "Przesyłaj filmy i twórz treści, które naprawdę należą do ciebie w blockchainie."
+      },
+      "earn": {
+        "title": "Zdobywaj nagrody",
+        "text": "Otrzymuj nagrody w tokenach Hive i darowizny w naszym własnym tokenie Speak."
+      },
+      "community": {
+        "title": "Buduj społeczność",
+        "text": "Twórz własne tokeny, rynki i ekonomie, które wspierają twoje społeczności."
+      }
+    },
+    "features": {
+      "title": "Funkcje",
+      "rewards": {
+        "title": "NAGRODY",
+        "text": "Korzystając z platformy, użytkownicy otrzymują nagrody w tokenach Hive i mogą dostawać darowizny w naszym własnym tokenie Speak. Im więcej tych tokenów masz, tym więcej przywilejów w ekosystemie."
+      },
+      "p2p": {
+        "title": "P2P",
+        "text": "Technologia blockchain, z której korzysta serwis, zapewnia twórcom prawdziwe połączenia P2P z ich odbiorcami, bez żadnych pośredników."
+      },
+      "tokenisation": {
+        "title": "TOKENIZACJA",
+        "text": "Twórcy mogą też łatwo tworzyć własne tokeny, rynki, nagrody oparte na stakingu i ekonomie, które wspierają ich społeczności."
+      },
+      "freeSpeech": {
+        "title": "WOLNOŚĆ SŁOWA",
+        "text": "Naszą zasadą jest, że możliwość urażenia kogoś to fundament wolności słowa, a wolność słowa z kolei chroni społeczeństwa przed pogrążeniem się w chaosie i wojnie domowej."
+      },
+      "journalism": {
+        "title": "DZIENNIKARSTWO OBYWATELSKIE",
+        "text": "Zachęcamy dziennikarzy obywatelskich, by do nas dołączyli i publikowali treści, które często są pomijane. Wierzymy, że dziennikarze obywatelscy to przyszłość."
+      }
+    },
+    "hive": {
+      "title": "Napędzane przez blockchain Hive",
+      "decentralized": {
+        "title": "Zdecentralizowany",
+        "text": "Brak pojedynczego punktu awarii lub kontroli"
+      },
+      "fast": {
+        "title": "Szybki i darmowy",
+        "text": "Zero opłat za transakcje i bloki co 3 sekundy"
+      },
+      "community": {
+        "title": "Własność społeczności",
+        "text": "Zarządzany przez posiadaczy udziałów, nie korporacje"
+      },
+      "description": "3Speak działa na blockchainie Hive, co zapewnia prawdziwą decentralizację, odporność na cenzurę i własność społeczności. Ekosystem Hive dostarcza infrastrukturę dla nagród, zarządzania i własności zasobów, która czyni 3Speak rewolucyjnym."
+    },
+    "guidelines": {
+      "title": "Nasze zasady",
+      "subtitle": "Wierzymy, że wolność słowa jest absolutna, przy jasnych i uczciwych zasadach",
+      "support": {
+        "title": "Co wspieramy",
+        "religion": "Krytykowanie religii, przekonań, grup i ludzi",
+        "politics": "Alternatywną politykę i dyskusje o teoriach spiskowych",
+        "governments": "Krytykowanie rządów i światowych przywódców",
+        "pseudonyms": "Używanie pseudonimów dla prywatności",
+        "jokes": "Obraźliwe żarty (gdy są wyraźnie oznaczone jako żarty)"
+      },
+      "restrict": {
+        "title": "Co ograniczamy",
+        "violence": "Nawoływanie lub podżeganie do przemocy",
+        "gore": "Pokazywanie nadmiernie drastycznych lub pornograficznych treści",
+        "slander": "Pomówienia i treści zniesławiające",
+        "illegal": "Nielegalne działania lub treści"
+      }
+    },
+    "faqSection": {
+      "title": "Najczęściej zadawane pytania",
+      "subtitle": "Wszystko, co musisz wiedzieć o 3Speak"
+    },
+    "quotesTitle": "Głosy wolności",
+    "cta": {
+      "title": "Chcesz naprawdę posiadać swoje treści?",
+      "subtitle": "Dołącz do tysięcy twórców, którzy już przejęli kontrolę nad swoimi cyfrowymi zasobami."
+    },
+    "connect": "Bądź w kontakcie z 3Speak",
+    "logoAlt": "Logo 3Speak"
+  },
+  "legal": {
+    "pageTitle": "Jak 3Speak przetwarza twoje dane · 3Speak",
+    "englishOnly": "Ta strona jest dostępna tylko po angielsku. Wiążąca jest wersja angielska.",
+    "back": "← Wróć do 3Speak"
+  },
+  "notFound": {
+    "imageAlt": "404",
+    "title": "PRZEPRASZAMY! NIE ZNALEZIONO STRONY",
+    "message": "Niestety strona, której szukasz, nie jest dostępna.",
+    "goHome": "PRZEJDŹ NA STRONĘ GŁÓWNĄ"
+  }
+}
