@@ -1,0 +1,81 @@
+{
+  "buckets": {
+    "today": "Oggi",
+    "yesterday": "Ieri",
+    "thisWeek": "Questa settimana",
+    "thisMonth": "Questo mese",
+    "older": "Meno recenti"
+  },
+  "loginRequired": "Accedi per vedere le tue notifiche.",
+  "unreadChip_one": "{{count}} nuova",
+  "unreadChip_many": "{{count}} nuove",
+  "unreadChip_other": "{{count}} nuove",
+  "markAllTitle": "Segna tutte come lette",
+  "marking": "Aggiornamento…",
+  "markAllRead": "Segna tutte come lette",
+  "refreshing": "Aggiornamento…",
+  "categories": {
+    "all": "Tutte",
+    "replies": "Risposte",
+    "mentions": "Menzioni",
+    "votes": "Voti",
+    "reblogs": "Reblog",
+    "follows": "Follow",
+    "transfers": "Trasferimenti"
+  },
+  "unread": "Non lette",
+  "summary": {
+    "title": "Attività",
+    "today": "Oggi",
+    "week": "Questa settimana",
+    "month": "Questo mese",
+    "emptyToday": "Ancora nessuna attività oggi.",
+    "emptyWeek": "Ancora nessuna attività questa settimana.",
+    "stillLoading": "Caricamento delle notifiche meno recenti…",
+    "emptyMonth": "Nessuna attività questo mese."
+  },
+  "loadError": "Impossibile caricare le notifiche.",
+  "empty": {
+    "all": "Non hai ancora notifiche.",
+    "unread": "Nessuna notifica non letta.",
+    "replies": "Ancora nessuna risposta.",
+    "mentions": "Ancora nessuna menzione.",
+    "votes": "Ancora nessun voto.",
+    "reblogs": "Ancora nessun reblog.",
+    "follows": "Ancora nessun follow.",
+    "transfers": "Ancora nessun trasferimento."
+  },
+  "threeSpeakVideo": "Video 3Speak",
+  "end": "Sei arrivato alla fine.",
+  "cards": {
+    "votes": "Voti",
+    "voters_one": "{{count}} votante",
+    "voters_many": "{{count}} votanti",
+    "voters_other": "{{count}} votanti",
+    "replies": "Risposte",
+    "newFollowers": "Nuovi follower",
+    "mentions": "Menzioni",
+    "reblogs": "Reblog",
+    "transfers": "Trasferimenti"
+  },
+  "group": {
+    "voteOne": "@{{user}} ha votato il tuo post",
+    "voteTwo": "@{{user}} e @{{user2}} hanno votato il tuo post",
+    "voteMany_one": "@{{user}} e {{count}} altro utente hanno votato il tuo post",
+    "voteMany_many": "@{{user}} e altri {{count}} utenti hanno votato il tuo post",
+    "voteMany_other": "@{{user}} e altri {{count}} utenti hanno votato il tuo post",
+    "followOne": "@{{user}} ha iniziato a seguirti",
+    "followTwo": "@{{user}} e @{{user2}} hanno iniziato a seguirti",
+    "followMany_one": "@{{user}} e {{count}} altro utente hanno iniziato a seguirti",
+    "followMany_many": "@{{user}} e altri {{count}} utenti hanno iniziato a seguirti",
+    "followMany_other": "@{{user}} e altri {{count}} utenti hanno iniziato a seguirti",
+    "generic_one": "{{count}} notifica: {{type}}",
+    "generic_many": "{{count}} notifiche: {{type}}",
+    "generic_other": "{{count}} notifiche: {{type}}",
+    "typeCount_one": "{{count}} {{type}}",
+    "typeCount_many": "{{count}} {{type}}",
+    "typeCount_other": "{{count}} {{type}}",
+    "collapse": "▾ comprimi",
+    "expand": "▸ espandi"
+  }
+}

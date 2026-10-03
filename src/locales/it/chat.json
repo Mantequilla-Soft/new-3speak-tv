@@ -1,0 +1,141 @@
+{
+  "button": {
+    "label": "Chat"
+  },
+  "tools": {
+    "emoji": "Emoji",
+    "searchEmoji": "Cerca emoji",
+    "searchGifs": "Cerca GIF…",
+    "noGifs": "Nessuna GIF trovata.",
+    "poweredByGiphy": "Powered by GIPHY"
+  },
+  "lightbox": {
+    "openInNewTab": "Apri l'immagine in una nuova scheda"
+  },
+  "linkCard": {
+    "loadingPreview": "Caricamento anteprima…",
+    "community": "Community",
+    "communityWithSubscribers_one": "Community · {{formatted}} iscritto",
+    "communityWithSubscribers_many": "Community · {{formatted}} iscritti",
+    "communityWithSubscribers_other": "Community · {{formatted}} iscritti",
+    "commentFallback": "(commento)"
+  },
+  "share": {
+    "embedCopied": "Codice di incorporamento copiato",
+    "pressToCopy": "Premi Ctrl/Cmd + C per copiare il codice selezionato",
+    "embedTitle": "Incorpora questo video",
+    "embedHint": "Incollalo in qualsiasi sito web o articolo di blog.",
+    "embedSize": "Dimensione",
+    "embedCode": "Codice di incorporamento",
+    "copyEmbed": "Copia codice",
+    "responsiveSub": "Si adatta alla pagina in cui si trova",
+    "fixedSub": "Iframe a dimensione fissa",
+    "sendInChat": "Invia nella chat di 3Speak",
+    "sendInChatSub": "Invialo a qualcuno su 3Speak",
+    "embedOnWebsite": "Incorpora in un sito web",
+    "embedOnWebsiteSub": "Copia l'HTML per il tuo sito o blog",
+    "generalShare": "Condividi / copia link",
+    "generalShareSub": "Altre app, o copia il link"
+  },
+  "gate": {
+    "connectTitle": "Collegati alla chat di 3Speak",
+    "connectBody": "La chat è basata su Snapie. Per collegarti firmi una sfida di accesso una tantum con la tua chiave posting Hive — nessuna transazione, nessun costo.",
+    "connecting": "Connessione…",
+    "connectButton": "Collega la chat",
+    "cannotSign": "Il tuo metodo di accesso attuale non può firmare la sfida della chat. Usa Keychain, HiveAuth, PeakVault o Ledger.",
+    "needsAccountTitle": "La chat richiede un account Hive",
+    "needsAccountBody": "I messaggi sono firmati con le chiavi del tuo account, quindi la chat si sblocca insieme a tutto il resto quando il tuo account è pronto. Completa gli obiettivi sul tuo profilo e il team ti porterà fin lì.",
+    "loginTitle": "Accedi per usare la chat",
+    "loginBody": "Accedi con il tuo account Hive per inviare e ricevere messaggi.",
+    "connectingToChat": "Connessione alla chat…"
+  },
+  "errors": {
+    "notHiveAccount": "@{{user}} non è un account Hive.",
+    "openConversation": "Impossibile aprire quella conversazione.",
+    "verifyAccount": "Impossibile verificare quell'account.",
+    "createRoom": "Impossibile creare la stanza.",
+    "joinChannel": "Impossibile entrare in quel canale."
+  },
+  "newDm": {
+    "placeholder": "Scrivi a un utente Hive…",
+    "start": "Avvia chat"
+  },
+  "newRoom": {
+    "toggle": "Nuova stanza privata",
+    "namePlaceholder": "Nome della stanza…",
+    "removeMember": "Rimuovi @{{user}}",
+    "addMore": "Aggiungi altri…",
+    "invitePlaceholder": "Invita utenti Hive (facoltativo)…",
+    "create": "Crea"
+  },
+  "channels": {
+    "browse": "Sfoglia i canali",
+    "publicTitle": "Canali pubblici",
+    "closeBrowser": "Chiudi l'elenco dei canali",
+    "loading": "Caricamento canali…",
+    "empty": "Nessun canale disponibile.",
+    "join": "Entra"
+  },
+  "markRead": {
+    "nothingToClear": "Nessuna conversazione da segnare. Il contatore potrebbe essere bloccato lato server.",
+    "requestFailed": "richiesta non riuscita",
+    "allCaughtUp": "Sei in pari",
+    "stillUnread_one": "Ancora {{total}} non letti dopo aver segnato {{count}} chat.",
+    "stillUnread_many": "Ancora {{total}} non letti dopo aver segnato {{count}} chat.",
+    "stillUnread_other": "Ancora {{total}} non letti dopo aver segnato {{count}} chat.",
+    "stillUnreadNoMatch_one": "Ancora {{total}} non letti dopo aver segnato {{count}} chat. Il server riporta un conteggio ma nessuna conversazione corrispondente.",
+    "stillUnreadNoMatch_many": "Ancora {{total}} non letti dopo aver segnato {{count}} chat. Il server riporta un conteggio ma nessuna conversazione corrispondente.",
+    "stillUnreadNoMatch_other": "Ancora {{total}} non letti dopo aver segnato {{count}} chat. Il server riporta un conteggio ma nessuna conversazione corrispondente.",
+    "notSignedIn": "Non sei collegato alla chat. Ricollega la chat e riprova.",
+    "sessionExpired": "La sessione della chat è scaduta durante l'operazione. Ricollega la chat e riprova.",
+    "serverRejectedVisible_one": "Il server ha rifiutato {{count}} richiesta (ID dall'elenco visibile)",
+    "serverRejectedVisible_many": "Il server ha rifiutato tutte le {{count}} richieste (ID dall'elenco visibile)",
+    "serverRejectedVisible_other": "Il server ha rifiutato tutte le {{count}} richieste (ID dall'elenco visibile)",
+    "serverRejectedServerMap_one": "Il server ha rifiutato {{count}} richiesta (ID dalla mappa dei non letti del server)",
+    "serverRejectedServerMap_many": "Il server ha rifiutato tutte le {{count}} richieste (ID dalla mappa dei non letti del server)",
+    "serverRejectedServerMap_other": "Il server ha rifiutato tutte le {{count}} richieste (ID dalla mappa dei non letti del server)",
+    "failed": "Impossibile segnare tutto come letto",
+    "marking": "Segno come letti…",
+    "button": "Segna tutto come letto",
+    "buttonCount": "Segna tutto come letto ({{count}})"
+  },
+  "list": {
+    "chooseTarget": "Scegli una chat a cui inviare",
+    "loading": "Caricamento conversazioni…",
+    "empty": "Ancora nessuna conversazione. Iniziane una qui sopra inserendo un nome utente Hive."
+  },
+  "leave": {
+    "confirmRoom": "Vuoi lasciare questa stanza?",
+    "confirmChannel": "Vuoi lasciare questo canale?",
+    "errorRoom": "Impossibile lasciare la stanza.",
+    "errorChannel": "Impossibile lasciare il canale.",
+    "titleRoom": "Lascia la stanza",
+    "titleChannel": "Lascia il canale",
+    "button": "Lascia"
+  },
+  "thread": {
+    "editError": "Impossibile modificare il messaggio.",
+    "deleteConfirm": "Eliminare questo messaggio? Verrà sostituito con “[eliminato]”.",
+    "deleteError": "Impossibile eliminare il messaggio.",
+    "back": "Torna alle conversazioni",
+    "loading": "Caricamento messaggi…",
+    "empty": "Ancora nessun messaggio — saluta 👋",
+    "editedSuffix": " · modificato",
+    "messageActions": "Azioni sul messaggio",
+    "quote": "Cita",
+    "forward": "Inoltra",
+    "typing_one": "{{users}} sta scrivendo…",
+    "typing_many": "{{users}} stanno scrivendo…",
+    "typing_other": "{{users}} stanno scrivendo…",
+    "editing": "Modifica del messaggio",
+    "cancelEdit": "Annulla modifica",
+    "quoting": "Citazione di @{{user}}",
+    "cancelQuote": "Annulla citazione",
+    "removeImage": "Rimuovi immagine",
+    "placeholder": "Scrivi un messaggio…"
+  },
+  "page": {
+    "chooseTarget": "Scegli una chat a cui inviare.",
+    "selectConversation": "Seleziona una conversazione o iniziane una nuova."
+  }
+}

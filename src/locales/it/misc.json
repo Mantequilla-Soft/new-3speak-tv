@@ -1,0 +1,243 @@
+{
+  "leaderboard": {
+    "windows": {
+      "7d": "7 giorni",
+      "30d": "30 giorni",
+      "365d": "Anno",
+      "all": "Sempre"
+    },
+    "windowsInSentence": {
+      "7d": "7 giorni",
+      "30d": "30 giorni",
+      "365d": "anno",
+      "all": "di sempre"
+    },
+    "metrics": {
+      "video_uploads": "Video",
+      "short_uploads": "Shorts",
+      "video_watch_secs": "Tempo di visione video",
+      "short_watch_secs": "Tempo di visione Shorts",
+      "tags_given": "Tag",
+      "streams": "Dirette",
+      "stream_secs": "Tempo in diretta",
+      "stream_peak_viewers": "Picco di spettatori",
+      "stream_viewers": "Ingressi degli spettatori",
+      "boosts_received": "Boost ricevuti",
+      "boost_amount_received": "Importo ricevuto",
+      "boosts_given": "Boost inviati",
+      "boost_amount_given": "Importo inviato"
+    },
+    "metricsInSentence": {
+      "video_uploads": "video",
+      "short_uploads": "Shorts",
+      "video_watch_secs": "tempo di visione video",
+      "short_watch_secs": "tempo di visione Shorts",
+      "tags_given": "tag",
+      "streams": "dirette",
+      "stream_secs": "tempo in diretta",
+      "stream_peak_viewers": "picco di spettatori",
+      "stream_viewers": "ingressi degli spettatori",
+      "boosts_received": "boost ricevuti",
+      "boost_amount_received": "importo ricevuto",
+      "boosts_given": "boost inviati",
+      "boost_amount_given": "importo inviato"
+    },
+    "blurbs": {
+      "video_uploads": "Video caricati",
+      "short_uploads": "Shorts caricati",
+      "video_watch_secs": "Secondi di visione dei loro video",
+      "short_watch_secs": "Secondi di visione dei loro Shorts",
+      "tags_given": "Tag assegnati ad altri video",
+      "streams": "Sessioni di diretta avviate",
+      "stream_secs": "Tempo totale in diretta (solo dirette concluse)",
+      "stream_peak_viewers": "Massimo di spettatori simultanei (un picco, non una somma)",
+      "stream_viewers": "Ingressi degli spettatori (volume, non portata unica)",
+      "boosts_received": "Boost inviati alle loro dirette",
+      "boost_amount_received": "Importo totale dei boost ricevuti",
+      "boosts_given": "Boost inviati ad altri streamer",
+      "boost_amount_given": "Importo totale dei boost inviati"
+    },
+    "blurbsInSentence": {
+      "video_uploads": "video caricati",
+      "short_uploads": "Shorts caricati",
+      "video_watch_secs": "secondi di visione dei loro video",
+      "short_watch_secs": "secondi di visione dei loro Shorts",
+      "tags_given": "tag assegnati ad altri video",
+      "streams": "sessioni di diretta avviate",
+      "stream_secs": "tempo totale in diretta (solo dirette concluse)",
+      "stream_peak_viewers": "massimo di spettatori simultanei (un picco, non una somma)",
+      "stream_viewers": "ingressi degli spettatori (volume, non portata unica)",
+      "boosts_received": "boost inviati alle loro dirette",
+      "boost_amount_received": "importo totale dei boost ricevuti",
+      "boosts_given": "boost inviati ad altri streamer",
+      "boost_amount_given": "importo totale dei boost inviati"
+    },
+    "groups": {
+      "video": "Video",
+      "streaming": "Streaming"
+    },
+    "badgeNouns": {
+      "video_uploads": "Video",
+      "short_uploads": "Shorts",
+      "video_watch_secs": "Visti",
+      "short_watch_secs": "Shorts visti",
+      "tags_given": "Tagger"
+    },
+    "badgeLabel": "{{tier}} {{noun}}",
+    "badgeTitleAllTime": "#{{rank}} in classifica per {{what}} di sempre",
+    "badgeTitleWindow": "#{{rank}} in classifica per {{what}} negli ultimi {{window}}"
+  },
+  "duration": {
+    "hoursMinutes": "{{h}} h {{m}} min",
+    "minutesSeconds": "{{m}} min {{s}} s",
+    "seconds": "{{s}} s",
+    "aMoment": "un momento",
+    "lessThanMinute": "meno di un minuto"
+  },
+  "surf": {
+    "community": "Community",
+    "allOf": "Tutto {{label}}"
+  },
+  "social": {
+    "signingCancelled": "Firma annullata",
+    "youtube": {
+      "placeholder": "@handle o UCxxxxxxxxxxxxxxxxxxxxxx",
+      "help": "Incolla il tuo @handle di YouTube o l'ID del canale UC…. Lo convertiamo nell'ID del canale."
+    },
+    "soundcloud": {
+      "placeholder": "tuo-profilo o https://soundcloud.com/tuo-profilo",
+      "help": "Incolla l'URL del tuo profilo SoundCloud o solo il nome utente. Inserisci l'hash in qualsiasi punto della bio del profilo."
+    }
+  },
+  "snaps": {
+    "retrying": "Contenitore degli Snaps non ancora trovato — nuovo tentativo ({{attempt}})...",
+    "unreachable": "Impossibile raggiungere un nodo Hive per trovare il contenitore degli Snaps. Controlla la connessione e riprova.",
+    "unreachableWithError": "Impossibile raggiungere un nodo Hive per trovare il contenitore degli Snaps (ultimo errore — {{error}}). Controlla la connessione e riprova."
+  },
+  "embed": {
+    "responsive": "Responsive"
+  },
+  "incubation": {
+    "requestFailed": "Richiesta non riuscita ({{status}})",
+    "contactLoadFailed": "Impossibile caricare i tuoi dati di contatto",
+    "contactSaveFailed": "Impossibile salvare i tuoi dati di contatto",
+    "onlyButrauthBacklog": "Solo un account Butter Auth può avere arretrati di incubazione",
+    "publishFailed": "Pubblicazione non riuscita ({{status}})"
+  },
+  "routeError": {
+    "title": "Questa pagina non si è caricata",
+    "body": "Una parte dell'app non è stata scaricata. Di solito significa che è uscita una nuova versione mentre questa scheda era aperta. Ricaricando la ottieni.",
+    "reload": "Ricarica",
+    "goHome": "Vai alla Home"
+  },
+  "seo": {
+    "defaultTitle": "3Speak - Piattaforma video decentralizzata",
+    "defaultDescription": "3Speak è una piattaforma decentralizzata di condivisione video basata sulla tecnologia blockchain. Guarda, carica e condividi video guadagnando ricompense in criptovaluta."
+  },
+  "uploadLinks": {
+    "regularVideo": "Video normale",
+    "verticalShort": "Short verticale",
+    "musicAudio": "Musica / Audio",
+    "groupChat": "Chat di gruppo",
+    "communitySnap": "Snap della community",
+    "shortsEditor": "Editor Shorts",
+    "goLive": "Vai in diretta",
+    "streamStudio": "Studio diretta",
+    "headings": {
+      "upload": "Carica",
+      "live": "Live",
+      "others": "Altro"
+    }
+  },
+  "chat": {
+    "connectFailed": "Impossibile connettersi alla chat.",
+    "loginFirst": "Accedi per usare la chat.",
+    "roomNameRequired": "Serve un nome per la stanza."
+  },
+  "hiveAuth": {
+    "waiting": "In attesa di approvazione su HiveAuth...",
+    "title": "Approvazione HiveAuth richiesta",
+    "hint": "Controlla l'app HiveAuth per approvare questa transazione"
+  },
+  "hiveApi": {
+    "keychainNotSigned": "Keychain non ha firmato la transazione",
+    "loginToCreateCommunity": "Accedi per creare una community",
+    "loginFirst": "Prima accedi",
+    "cancelled": "Operazione annullata"
+  },
+  "openpod": {
+    "announced": "Sessione live annunciata su Hive!",
+    "announceFailed": "OpenPod avviato, ma non è stato possibile pubblicare l'annuncio su Hive."
+  },
+  "appUpdate": {
+    "updating": "Aggiornamento all'ultima versione ({{version}})…",
+    "reloadingForUpload": "Ricarichiamo la pagina così il tuo caricamento usa la build più recente."
+  },
+  "auth": {
+    "switched": "Sei passato a {{username}}!",
+    "keychainLoginTitle": "Accedi con Hive"
+  },
+  "streamVod": {
+    "uploadKeyMissing": "Diretta terminata, ma non è stato possibile caricare il video (manca la chiave di caricamento).",
+    "uploading": "Caricamento del video della diretta… {{pct}}%",
+    "uploaded": "Video della diretta caricato — sostituirà la diretta al termine della codifica.",
+    "uploadFailed": "Diretta terminata, ma il caricamento del video non è riuscito.",
+    "saving": "Salvataggio del video della diretta…",
+    "encoding": "Caricato — l'encoder sta elaborando il tuo video…",
+    "saved": "Video della diretta salvato — sostituirà la diretta al termine della codifica.",
+    "saveFailed": "Diretta terminata, ma non è stato possibile salvare il video: {{error}}.",
+    "uploadFailedShort": "caricamento non riuscito",
+    "stillProcessing": "Diretta terminata — il video è ancora in elaborazione; controlla il tuo profilo tra poco."
+  },
+  "embedPlayer": {
+    "unavailable": "Video non disponibile"
+  },
+  "followFeed": {
+    "title": "Feed Seguiti",
+    "error": "Errore nel recupero dei video"
+  },
+  "groups": {
+    "title": "Gruppi",
+    "badges": "Badge",
+    "subtitle": "Le community a cui puoi unirti e i badge che le persone possiedono, in un unico posto."
+  },
+  "watched": {
+    "removed": "Rimosso dalla cronologia",
+    "removeFailed": "Impossibile rimuovere dalla cronologia",
+    "title": "Guardati",
+    "count_one": "{{count}} guardato",
+    "count_many": "{{count}} guardati",
+    "count_other": "{{count}} guardati",
+    "trackHistory": "Registra cronologia",
+    "videosTab": "Video ({{count}})",
+    "shortsTab": "Shorts ({{count}})",
+    "loadFailed": "Impossibile caricare la cronologia. Riprova.",
+    "emptyShorts": "Ancora nessuno Short guardato",
+    "emptyVideos": "Ancora nessun video guardato",
+    "removeTitle": "Rimuovi dalla cronologia",
+    "watchedAt": "Guardato {{when}}"
+  },
+  "watchStream": {
+    "saySomething": "Scrivi qualcosa…",
+    "waitingWallet": "In attesa del tuo wallet…",
+    "signInToChat": "Accedi per chattare",
+    "sendMessage": "Invia messaggio",
+    "notLive": "Questa diretta non è attiva in questo momento.",
+    "notFound": "Nessuna diretta trovata per questo link.",
+    "browse": "Sfoglia le dirette",
+    "back": "Torna a 3Speak",
+    "seoTitle": "{{title}} (LIVE)",
+    "swipeNext": "Scorri per la prossima diretta",
+    "chat": "Chat",
+    "watchingNow": "👁 {{count}} spettatori ora",
+    "signInRaiseHand": "Accedi per alzare la mano",
+    "copyLink": "Copia il link della diretta",
+    "notAvailableLive": "Non disponibile per le dirette",
+    "vote": "Vota",
+    "comment": "Commenta",
+    "liveChat": "Chat live",
+    "signInToJoin": "🔒 Accedi per partecipare alla chat.",
+    "moreTag": "Altro su #{{tag}}",
+    "moreVideos": "Altri video"
+  }
+}

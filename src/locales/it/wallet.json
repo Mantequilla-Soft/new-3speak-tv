@@ -1,0 +1,50 @@
+{
+  "tabs": {
+    "overview": "Panoramica",
+    "transactions": "Transazioni",
+    "aria": "Sezioni del wallet"
+  },
+  "errors": {
+    "fetchBalances": "Impossibile recuperare i saldi",
+    "needKeychain": "Per effettuare il trasferimento ti serve l'estensione Keychain"
+  },
+  "header": {
+    "mine": "IL MIO Wallet",
+    "ofUser": "Wallet di {{user}}"
+  },
+  "assets": "Asset",
+  "transfer": "Trasferisci",
+  "transferModal": {
+    "loginRequired": "Accedi per effettuare il trasferimento",
+    "insufficient": "Saldo insufficiente",
+    "invalidUsername": "Nome utente non valido",
+    "success": "Trasferimento riuscito!",
+    "failed": "Trasferimento non riuscito: {{error}}",
+    "title": "Trasferisci {{coin}}",
+    "amountLabel": "Importo ({{coin}})",
+    "balance": "Saldo {{balance}}",
+    "max": "Max",
+    "recipientLabel": "Nome utente del destinatario",
+    "recipientPlaceholder": "Inserisci il nome utente Hive",
+    "memoLabel": "Memo",
+    "memoPlaceholder": "Inserisci il memo",
+    "confirm": "Conferma trasferimento"
+  },
+  "history": {
+    "loadFailed": "Impossibile caricare le transazioni",
+    "title": "Cronologia transazioni",
+    "cols": {
+      "type": "Tipo",
+      "amount": "Importo",
+      "account": "Account",
+      "date": "Data",
+      "memo": "Memo"
+    },
+    "types": {
+      "transfer": "Trasferimento",
+      "claim": "Riscatto ricompensa",
+      "received": "Ricevuto"
+    },
+    "claimedRewards": "Ricompense riscattate"
+  }
+}

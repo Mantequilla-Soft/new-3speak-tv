@@ -1,0 +1,104 @@
+{
+  "page": {
+    "fallbackTitle": "Badge",
+    "kpis": {
+      "recipients": "Destinatari",
+      "recentVideos": "Video recenti",
+      "issued": "Emesso"
+    },
+    "issuedBy": "Emesso da <creatorLink>@{{creator}}</creatorLink>",
+    "notFoundTitle": "Badge non trovato",
+    "notFoundBody": "Al momento non è possibile leggere nessun account Hive chiamato @{{account}}.",
+    "browseAll": "Sfoglia tutti i badge",
+    "tabs": {
+      "videos": "Video",
+      "recipients": "Destinatari",
+      "recipientsWithCount": "Destinatari ({{num}})"
+    },
+    "errorVideos": "Errore nel recupero dei video",
+    "noVideosTitle": "Ancora nessun video",
+    "noHolders": "Nessuno possiede ancora questo badge.",
+    "noHolderVideos": "Nessuno dei possessori di questo badge ha ancora pubblicato un video su 3Speak.",
+    "loadingMore": "Caricamento di altri contenuti...",
+    "recipientsError": "Impossibile caricare i destinatari",
+    "recipientsLoading": "Caricamento destinatari...",
+    "noRecipientsTitle": "Ancora nessun destinatario",
+    "noRecipientsBody": "Finora nessuno ha ricevuto questo badge.",
+    "recipientsSummary_one": "{{num}} destinatario",
+    "recipientsSummary_many": "{{num}} destinatari",
+    "recipientsSummary_other": "{{num}} destinatari",
+    "recipientsSummaryWithVideos_one": "{{num}} destinatario, {{publishing}} pubblicano su 3Speak",
+    "recipientsSummaryWithVideos_many": "{{num}} destinatari, {{publishing}} pubblicano su 3Speak",
+    "recipientsSummaryWithVideos_other": "{{num}} destinatari, {{publishing}} pubblicano su 3Speak",
+    "recipientVideos_one": "{{num}} video",
+    "recipientVideos_many": "{{num}} video",
+    "recipientVideos_other": "{{num}} video",
+    "recipientNoVideos": "Nessun video"
+  },
+  "directory": {
+    "title": "Badge",
+    "intro": "I badge sono riconoscimenti <b>assegnati da altri</b> su Hive, per eventi, contributi e traguardi. Non puoi unirti a un badge: è qualcuno a conferirtelo. Apri un badge per guardare cosa pubblicano qui i suoi destinatari.",
+    "searchPlaceholder": "Cerca badge...",
+    "sort": {
+      "recipients": "Destinatari",
+      "created": "Data di creazione",
+      "name": "Nome"
+    },
+    "createLocked": "Per creare un badge serve un account Hive. Questa funzione si sblocca quando il tuo sarà pronto.",
+    "create": "Crea badge",
+    "loadError": "Impossibile caricare i badge in questo momento.",
+    "noMatch": "Nessun badge corrisponde alla ricerca.",
+    "held": "Posseduto",
+    "recipients_one": "{{num}} destinatario",
+    "recipients_many": "{{num}} destinatari",
+    "recipients_other": "{{num}} destinatari"
+  },
+  "award": {
+    "success": "@{{username}} ora possiede {{title}}",
+    "failed": "Impossibile assegnare quel badge",
+    "dialogLabel": "Assegna un badge a {{username}}",
+    "title": "Assegna un badge",
+    "toUser": "a @{{username}}",
+    "awarding": "Assegnazione…",
+    "held": "Posseduto",
+    "award": "Assegna",
+    "note": "Il badge segue l'utente su Hive, ed è questo che significa possederlo. Puoi revocarlo dalla pagina del badge."
+  },
+  "hive": {
+    "dragToReorder": "Trascina per riordinare",
+    "orderSaved": "Ordine dei badge salvato nel tuo profilo Hive",
+    "orderSaveFailed": "Impossibile salvare l'ordine dei badge",
+    "dialogLabel": "Badge posseduti da @{{username}}",
+    "title": "Badge",
+    "arrangeHint": "Trascina i tuoi badge nell'ordine in cui vuoi mostrarli.",
+    "earnedCount_one": "{{count}} badge ottenuto da @{{username}} su Hive",
+    "earnedCount_many": "{{count}} badge ottenuti da @{{username}} su Hive",
+    "earnedCount_other": "{{count}} badge ottenuti da @{{username}} su Hive",
+    "alwaysFirst": "Mostrato sempre per primo",
+    "saveOrder": "Salva ordine",
+    "arrange": "Riordina",
+    "arrangeTitle": "Scegli l'ordine in cui compaiono i tuoi badge",
+    "showAll_one": "Mostra {{count}} badge",
+    "showAll_many": "Mostra tutti i {{count}} badge",
+    "showAll_other": "Mostra tutti i {{count}} badge",
+    "awardTitle": "Assegna uno dei tuoi badge a @{{username}}"
+  },
+  "leaderboardBadges": {
+    "proTitle": "Questo creator sostiene 3Speak con un abbonamento Pro"
+  },
+  "leaderboard": {
+    "watchNotice": "Il tempo di visione viene registrato solo dal {{since}}, quindi i periodi più lunghi mostrano ancora la stessa breve cronologia.",
+    "unclaimed": "Non rivendicato",
+    "noActivity": "Ancora nessuna attività in questo periodo",
+    "otherTopics": "Altro",
+    "title": "Classifiche",
+    "subtitle": "{{blurb}} — i migliori creator su 3Speak.",
+    "subtitleTopic": "{{blurb}} — i migliori creator in {{topic}}.",
+    "allTopics": "Tutti gli argomenti",
+    "finding": "Ricerca di @{{user}} in questa classifica…",
+    "notInTop": "@{{user}} non è tra i primi {{n}} di questa classifica.",
+    "loading": "Caricamento classifica…",
+    "loadError": "Impossibile caricare la classifica. Riprova tra poco.",
+    "empty": "Ancora nessuno ha {{metric}} in questo periodo."
+  }
+}

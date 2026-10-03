@@ -1,0 +1,40 @@
+{
+  "ariaLabel": "Impostazioni di cookie e archiviazione",
+  "title": "Cookie e archiviazione del browser",
+  "withAds": {
+    "intro": "3Speak conserva nel tuo browser il tuo accesso e le impostazioni che scegli. È ciò che fa funzionare il sito, e resta sul tuo dispositivo. Due cose sono facoltative, ed entrambe sono disattivate a meno che tu non le attivi qui sotto.",
+    "advertising": "Una di queste è la <b>pubblicità</b>. Quando è attiva, un'azienda pubblicitaria esterna carica il proprio codice sulla pagina e può memorizzare dati che non controlliamo. Per questo è una scelta separata e non è mai abbinata ad altro."
+  },
+  "noAds": {
+    "intro": "3Speak conserva nel tuo browser il tuo accesso e le impostazioni che scegli — è ciò che fa funzionare il sito. Non usiamo <b>cookie di tracciamento, pubblicità né strumenti di analisi di terze parti</b>. L'unica cosa che guardare un video può salvare sul tuo dispositivo è il punto in cui ti sei fermato — ed è l'unica scelta facoltativa qui sotto.",
+    "optional": "L'unica cosa facoltativa: possiamo ricordare <b>il punto in cui ti sei fermato in ogni video</b>, così la riproduzione riprende da lì. Questa informazione non lascia mai il tuo dispositivo."
+  },
+  "details": {
+    "essentialTitle": "Essenziali — sempre attivi",
+    "essential": {
+      "login": "La tua sessione di accesso",
+      "settings": "Le impostazioni che scegli: tema, volume, lingua, sottotitoli, preferenze del feed",
+      "uploads": "La ripresa di un caricamento interrotto e le bozze dei post che stai scrivendo",
+      "offline": "L'app stessa, per l'uso offline dopo l'installazione",
+      "answer": "La tua risposta a questo banner"
+    },
+    "optionalTitle": "Facoltativi — a tua scelta",
+    "optional": {
+      "playback": "La posizione di riproduzione di ogni video, così puoi riprendere da dove ti eri fermato",
+      "advertising": "Pubblicità: il codice di un'azienda pubblicitaria esterna e tutto ciò che memorizza sul tuo dispositivo per contare e limitare gli annunci che ti vengono mostrati"
+    },
+    "noteWithAds": "Se li lasci disattivati, le posizioni di riproduzione non vengono salvate, quelle già memorizzate vengono eliminate e nessun codice pubblicitario viene caricato. Puoi cambiare idea in qualsiasi momento.",
+    "noteNoAds": "Scegliendo “Solo essenziali” le posizioni di riproduzione non vengono più salvate e quelle già memorizzate vengono eliminate. Puoi cambiare idea in qualsiasi momento — scegliendo “Accetta” la funzione si riattiva subito."
+  },
+  "toggles": {
+    "resumeTitle": "Riprendi la riproduzione",
+    "resumeDesc": "Ricorda il punto in cui ti sei fermato in ogni video. Resta sul tuo dispositivo.",
+    "advertisingTitle": "Pubblicità",
+    "advertisingDesc": "Consenti a un'azienda pubblicitaria esterna di caricare il proprio codice e memorizzare ciò che le serve."
+  },
+  "hideDetails": "Nascondi dettagli",
+  "whatIsStored": "Cosa viene memorizzato esattamente?",
+  "essentialOnly": "Solo essenziali",
+  "saveChoices": "Salva le scelte",
+  "acceptAll": "Accetta tutto"
+}
