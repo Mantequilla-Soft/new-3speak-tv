@@ -1,0 +1,538 @@
+{
+  "tracks": {
+    "viewer": {
+      "title": "主要是观众",
+      "body": "我来这里是为了观看、评论和关注创作者。"
+    },
+    "creator": {
+      "title": "主要是创作者",
+      "body": "我想发布视频和短视频，打造自己的频道。"
+    },
+    "advertiser": {
+      "title": "广告主",
+      "body": "我代表一个品牌，想触达 3Speak 的观众。"
+    }
+  },
+  "tips": {
+    "shortsCamera": {
+      "title": "短视频是一个标签页，不是另一个应用",
+      "body": "从顶部栏打开短视频即可观看，或者用分享来发布一个。手机拍的竖屏视频可以直接用。",
+      "cta": "打开短视频"
+    },
+    "searchSlash": {
+      "title": "按 / 搜索",
+      "body": "在网站任何位置，按斜杠键都能跳到搜索框。它会搜索视频、创作者和社区。"
+    },
+    "communities": {
+      "title": "社区把关注同一主题的人聚在一起",
+      "body": "加入几个社区，它们的视频就会开始出现在你的信息流中。你也可以把内容发布到社区里，让对的人看到。",
+      "cta": "浏览社区"
+    },
+    "followFeed": {
+      "title": "你的关注有专属的信息流",
+      "body": "关注几位创作者后，关注动态里就只有他们的视频。这是不再刷到不感兴趣内容的最快方式。",
+      "cta": "去看看"
+    },
+    "interests": {
+      "title": "告诉我们你喜欢什么",
+      "body": "在设置中选几个话题，首页信息流会立即向它们倾斜。这比刷多久都管用。"
+    },
+    "hideWatched": {
+      "title": "看过的视频可以从信息流中消失",
+      "body": "设置里有一个“隐藏已看过的视频”开关，默认开启，这样同一个视频在你看过之后就不会一直出现。"
+    },
+    "timestamps": {
+      "title": "评论某个具体时刻",
+      "body": "视频播放时，评论可以带上你当时所在的时间点。读者会得到一个直接跳到那一秒的链接。"
+    },
+    "badges": {
+      "title": "徽章是颁发的，不是认领的",
+      "body": "Hive 上的人会因为活动和里程碑获得徽章。打开一枚徽章，就能看到所有拥有它的人以及他们发布的内容。",
+      "cta": "看看徽章"
+    },
+    "audio": {
+      "title": "3Speak 也有音频",
+      "body": "播客和音乐在顶部栏的“音频”中，有专属的播放器。你可以像发布视频一样发布音频。",
+      "cta": "打开音频"
+    },
+    "backlog": {
+      "title": "你现在发布的一切都不会白费",
+      "body": "你在预热期间发布的所有内容，都可以在你的账号到来后以你自己的名义重新发布到 Hive，而且由你选择带走哪些。"
+    }
+  },
+  "trackChooser": {
+    "saveFailed": "保存失败，请重试。",
+    "saving": "保存中..."
+  },
+  "trackQuestion": {
+    "title": "是什么让你来到 3Speak？",
+    "intro": "你获得 Hive 账号的路径取决于此：观众观看并参与，创作者发布内容，广告主设置自己的品牌。"
+  },
+  "tipCard": {
+    "aria": "提示",
+    "dismiss": "关闭提示",
+    "takeALook": "去看看"
+  },
+  "progress": {
+    "tasks": {
+      "video": {
+        "label_other": "上传 {{count}} 个视频",
+        "hint": "分享一些关于你自己以及你的频道将要做什么的内容。",
+        "why": "这是团队审核你时首先看的东西，也是访客打开你的频道时首先看到的东西。",
+        "counts": {
+          "0": "你从上传工作室发布的任何视频。",
+          "1": "它始终属于你。升级后，你可以选择哪些帖子以你自己的名义发布到 Hive。"
+        },
+        "cta": "上传视频"
+      },
+      "short": {
+        "label_other": "发布 {{count}} 个短视频",
+        "hint": "参与 3Speak 短视频，上传一些你日常生活的片段，或者你想分享的故事。",
+        "why": "短视频是被发现最快的方式。它们会出现在一个由大家尚未关注的创作者组成的信息流中，所以短视频能触达你自己频道以外的人。",
+        "counts": {
+          "0": "通过短视频上传器发布的竖屏视频。",
+          "1": "任何你喜欢的主题都可以。"
+        },
+        "cta": "发布短视频"
+      },
+      "follow": {
+        "label_other": "关注 {{count}} 位创作者",
+        "hint": "建立一个由志同道合的人或你觉得很精彩的创作者组成的关系网。",
+        "why": "你的关注列表会把首页信息流变成你自己的信息流。升级后它会跟着你一起转移到 Hive。",
+        "counts": {
+          "0": "你当前关注的创作者。",
+          "1": "取消关注会让计数再次减少，所以这里统计的是你真正关注的人，而不是你按了多少次按钮。"
+        },
+        "cta": "寻找创作者"
+      },
+      "comment": {
+        "label_other": "写 {{count}} 条评论",
+        "why": "在你还没有观众之前，评论是别人发现你的方式。在别人的视频下认真回复一条，比一个还没人看过的上传更有用。",
+        "cta": "找点内容来回复",
+        "hint_other": "评论至少 {{count}} 个字符才会被计入。要写真实的想法，而不只是“不错”。",
+        "counts": {
+          "minChars_other": "至少 {{count}} 个字符，用你自己的话来写。",
+          "realThought": "真实的想法，而不是一个词。",
+          "othersPost": "发在别人的帖子下。在你自己的视频下或对你自己的评论的回复，相当于自言自语，不计入。"
+        }
+      },
+      "watch": {
+        "labelHours_other": "在 3Speak 上观看 {{count}} 小时",
+        "labelMinutes_other": "在 3Speak 上观看 {{count}} 分钟",
+        "hint": "任何视频都可以。只在你真正观看时计时。",
+        "why": "观看说明你是来参与的，而不只是来发帖的。这是大多数人不经意间就能完成的目标。",
+        "counts": {
+          "0": "只计算在 3Speak 本站的时间。嵌入在其他网站上的同一个视频不计入。",
+          "1": "每个视频只计一次。重看一个视频只会刷新它的最佳时长，不会累加，而且单个视频无法单独提供全部时长。",
+          "2": "按实际播放时间计算，所以加速播放不会吃亏，减速播放也不会拉长时长。",
+          "3": "必须显示在屏幕上。在后台标签页播放的视频不计入时长。",
+          "4": "不包括你自己的视频。",
+          "5": "在隐私模式下观看时不会记录任何内容。"
+        },
+        "cta": "去看点什么"
+      },
+      "time": {
+        "label_other": "在这里待满 {{count}} 天",
+        "hint": "这一项会自动完成，不需要做任何事。",
+        "why": "一个一小时前才出现的账号和一个已经存在几天的账号，在纸面上看起来没什么区别。天数才能把它们区分开，所以每个人都要等同样短的一段时间。",
+        "counts": {
+          "fullDays_other": "从你注册那天起满 {{count}} 天。",
+          "forYouWhen": "对你来说是 {{when}}。其他目标都可以在那之前完成。",
+          "otherGoals": "其他目标都可以在那之前完成。",
+          "keepsCounting": "无论你在不在，它都会持续计时，所以不需要做任何事来维持。"
+        }
+      },
+      "subscription": {
+        "label_other": "加入 {{count}} 个社区",
+        "hint": "寻找与你喜欢观看或创作的内容相关的社区。",
+        "why": "社区把同一主题的视频和关心这个主题的人聚在一起。加入社区会让你的信息流里有更多你喜欢的内容；对创作者来说，这是新频道找到第一批观众的地方。",
+        "counts": {
+          "0": "你当前所在的社区。",
+          "1": "退出社区会让计数再次减少。"
+        },
+        "cta": "浏览社区"
+      },
+      "profile": {
+        "label_other": "设置你的品牌主页",
+        "hint": "你的品牌名称、业务介绍和 Logo。",
+        "why": "观众以及审核你的团队，首先会看到广告背后是谁。完整的主页能让品牌更容易被认出、更值得信任。"
+      },
+      "contact": {
+        "label_other": "添加你的商务联系方式",
+        "hint": "一个邮箱，加上你的地址或网站。",
+        "why": "在广告投放之前，团队需要一种真实的方式联系广告背后的企业。你的邮箱和地址是私密的：它们绝不会存储在区块链上，也不会在任何地方显示。",
+        "counts": {
+          "0": "邮箱：必填。",
+          "1": "地址：可选。",
+          "2": "你需要提供地址，或者在上方品牌主页中填写网站，两者至少其一。"
+        }
+      }
+    },
+    "duration": {
+      "s": "{{s}} 秒",
+      "hm": "{{h}} 小时 {{m}} 分",
+      "h": "{{h}} 小时",
+      "m": "{{m}} 分钟"
+    },
+    "title": "你获得 Hive 账号的路径",
+    "needsTrack": "你的待办清单取决于你来 3Speak 的目的。",
+    "choosePath": "选择你的路径",
+    "doneCount": "已完成 {{done}} / {{total}}",
+    "overallAria": "总体进度",
+    "hideDetails": "隐藏详情",
+    "showLeft": "显示剩余项目",
+    "whatCounts": "计入规则",
+    "reviewDone": "全部完成。团队会审核你的频道并为你升级。你不需要再做任何事了。",
+    "reviewPending": "完成以上所有项目后，团队会审核你的频道并为你升级。"
+  },
+  "navProgress": {
+    "chooseTitle": "告诉我们你来 3Speak 的目的，查看你获得 Hive 账号的路径。",
+    "titleComplete_other": "全部 {{count}} 个目标已完成（100%）。团队会审核你的频道。",
+    "titleProgress_other": "距离获得 Hive 账号已完成 {{pct}}%。{{count}} 个目标中已全部完成 {{done}} 个。",
+    "ariaComplete_other": "你的进度：100%，全部 {{count}} 个目标已完成",
+    "ariaProgress_other": "你的进度：{{pct}}%，{{count}} 个目标中已全部完成 {{done}} 个",
+    "celebrate": "获得 Hive 账号的所有目标都已完成。"
+  },
+  "welcome": {
+    "what": {
+      "title": "欢迎来到 3Speak",
+      "p1": "3Speak 是一个构建在公共区块链 <b>Hive</b> 上的视频平台。这里的视频不归我们所有：它们属于发布它们的人，并且可以从观看它们的人那里获得真实的奖励。"
+    },
+    "warmup": {
+      "title": "你正处于预热阶段",
+      "p1": "Hive 账号是真实且永久的，总得有人为它付费。所以我们没有一开始就向你索要任何东西，而是直接给了你一个名字和一个发布内容的地方。",
+      "p2": "你在预热期间创作的一切都保存在 3Speak 上。当你准备好后，团队会审核你的频道，并免费为你提供一个属于你自己的 Hive 账号。届时，你的视频、短视频和关注会以你自己的名义上链，并由你选择带走哪些。"
+    },
+    "do": {
+      "title": "你现在就能做的事",
+      "upload": "上传视频，和这里的其他人完全一样。",
+      "shorts": "用手机或电脑发布短视频。",
+      "comment": "评论任何内容，包括已经在 Hive 上的人的视频。",
+      "follow": "关注创作者，加入社区。",
+      "watch": "观看。你的观看记录和信息流从第一天起就属于你。",
+      "aside": "有几件事要等你有了账号才能做：赚取奖励和打赏。这些涉及真实的钱，所以需要一个真正属于你的账号。"
+    },
+    "path": {
+      "p1": "你的主页上会显示一份简短的待办清单，内容取决于你来这里的目的：观众观看并参与，创作者发布内容，广告主设置自己的品牌。",
+      "p2": "这不是考试。这只是我们区分真实账号与空壳或恶意账号的方式。清单完成后，团队会尽快审核并为你升级。",
+      "perkEarn": "能赚取收益的帖子",
+      "perkKeys": "只有你掌握的密钥",
+      "perkNetwork": "整个 Hive 网络"
+    },
+    "showList": "查看我的清单",
+    "decideLater": "以后再决定"
+  },
+  "profile": {
+    "unlocks": {
+      "earn": {
+        "title": "你的帖子开始赚取收益。",
+        "body": "Hive 上的视频可以获得任何观众给予的 HIVE 和 HBD 奖励，还可以投放广告，你能从中分成。"
+      },
+      "publish": {
+        "title": "发布你在这里创作的一切。",
+        "body": "此页面上的视频、短视频和关注都可以以你自己的名义上链，由你选择发布哪些。"
+      },
+      "buttons": {
+        "title": "点赞、打赏、关注和创建播放列表。",
+        "body": "所有你今天还是灰色不可用的按钮。"
+      },
+      "keys": {
+        "title": "只有你掌握的密钥。",
+        "body": "没有人能把你锁在外面，而且同一个登录可以用于所有 Hive 应用，不只是 3Speak。"
+      },
+      "ecosystem": {
+        "title": "成为全球 Hive 生态的一员。",
+        "body": "3Speak 只是整个应用网络中的一个：博客、社区、游戏、市场等等，全都共享同一个账号和同一份关注列表。"
+      }
+    },
+    "advertiserUnlocks": {
+      "book": {
+        "title": "在 3Speak 全站投放广告。",
+        "body": "视频广告位、短视频广告位、播放器横幅、滚动字幕和上传前广告位，投放时长从一天到三个月。"
+      },
+      "pay": {
+        "title": "用你自己的钱包付款。",
+        "body": "使用 HBD 或 HIVE，直接从你的账号支付。无需银行卡，没有中间商。"
+      },
+      "results": {
+        "title": "查看广告的投放效果。",
+        "body": "每笔预订的播放和点击数据，如果某笔预订未达标，会在你下次预订时返还额度。"
+      },
+      "customers": {
+        "title": "与你的客户交流，如果你愿意的话。",
+        "body": "以你品牌的名义发布视频、回复评论、关注他人。"
+      },
+      "keys": {
+        "title": "只有你掌握的密钥。",
+        "body": "没有人能把你锁在外面，而且同一个登录可以用于所有 Hive 应用，不只是 3Speak。"
+      }
+    },
+    "loadFailed": "无法加载此主页。",
+    "badge": {
+      "onHive": "已在 Hive",
+      "advertiser": "广告主 · 起步中",
+      "gettingStarted": "起步中"
+    },
+    "stats": {
+      "posts_other": "<b>{{count}}</b>帖子",
+      "followers_other": "<b>{{count}}</b>粉丝",
+      "following_other": "<b>{{count}}</b>关注"
+    },
+    "editProfile": "编辑主页",
+    "note": {
+      "graduated": "现已以 <userLink>@{{user}}</userLink> 的身份加入 Hive。以下内容均为此前创作。",
+      "advertiser": "这是你在 3Speak 上的品牌页面。完成下面的步骤后，团队会审核你的品牌。审核通过后你会获得一个 Hive 账号：这就是你的广告主账号，你将用它预订广告并付款。",
+      "own": "这是别人看到的你。你的帖子保存在 3Speak 上，还没有上 Hive 区块链，所以不会获得奖励。完成下面的所有任务并获得账号后，这一点就会改变。",
+      "visitor": "新来的，还没有上 Hive。这些帖子保存在 3Speak 上，所以暂时不会获得奖励。不过还是去关注和评论吧：早期的鼓励正是帮助一个人度过最初几周的动力。等他们获得 Hive 账号后我们会通知你，这样你也可以在那里关注他们。"
+    },
+    "tabs": {
+      "aria": "主页分区",
+      "goals": "你的目标",
+      "uploads": "上传",
+      "comments": "评论",
+      "followers": "粉丝",
+      "following": "关注"
+    },
+    "videosAndShorts": "视频和短视频",
+    "market": {
+      "audience": "等待你广告的观众",
+      "format": "选择适合你信息的广告形式"
+    },
+    "brandVideos": "你品牌的视频",
+    "optional": "可选",
+    "empty": {
+      "advertiser": "这里的视频用于和客户交流，如果你愿意的话。广告在“投放广告”页面单独预订，不需要任何视频。",
+      "own": "还什么都没有。你的第一次上传就能勾掉旁边清单中的一项。",
+      "visitor": "还没有发布任何内容。"
+    },
+    "videos": "视频",
+    "unlocksTitleAdvertiser": "广告主账号能为你带来什么",
+    "unlocksTitle": "Hive 账号能为你带来什么",
+    "fineprint": "保存到你的 3Speak 主页。获得账号后，它会和其他所有内容一起转移到 Hive。"
+  },
+  "activity": {
+    "empty": {
+      "comments": "还没有发言。",
+      "followers": "还没有人关注。",
+      "following": "还没有关注任何人。"
+    },
+    "loadFailed": "无法加载。",
+    "publishedToHive": "已发布到 Hive",
+    "onHive": "在 Hive 上"
+  },
+  "bell": {
+    "unreadAria_other": "通知，{{count}} 条未读",
+    "empty": "还什么都没有。有人回复或喜欢你的视频时，会显示在这里。",
+    "replied": "<b>@{{name}}</b> 回复了你的帖子",
+    "liked": "<b>@{{name}}</b> 喜欢了你的帖子"
+  },
+  "rail": {
+    "aria": "3Speak 新人",
+    "title": "刚刚起步",
+    "body": "新来的，还没有上 Hive。这些帖子保存在 3Speak 上。在他们加入 Hive 之前，热情地欢迎他们吧。"
+  },
+  "sessionSync": {
+    "signedInAs": "你已以 @{{name}} 的身份登录",
+    "caughtUp": "你的 Hive 账号已准备就绪，此设备已完成同步。",
+    "openFailed": "无法打开 Butter Auth",
+    "title": "重新连接你的会话",
+    "lede": "此设备与你账号的连接已断开，因此在恢复连接前，3Speak 无法加载你的帖子、进度或通知。",
+    "text": "没有丢失任何东西。你创作的一切都保存在你的账号上，而不是这个浏览器里。重新连接通常只需一秒，也不需要输入任何内容。",
+    "opening": "正在打开…",
+    "reconnect": "重新连接"
+  },
+  "admin": {
+    "title": "管理员视图",
+    "note": "只有 3Speak 管理员能看到此面板。",
+    "brandProfile": "品牌主页",
+    "public": "公开",
+    "fields": {
+      "handle": "用户名",
+      "brandName": "品牌名称",
+      "logo": "Logo",
+      "about": "简介",
+      "website": "网站",
+      "location": "所在地",
+      "interests": "兴趣",
+      "activity": "活动",
+      "email": "邮箱",
+      "address": "地址",
+      "contactGoal": "联系方式目标",
+      "firstSaved": "首次保存",
+      "lastChanged": "最后修改",
+      "butrauthUser": "ButrAuth 用户"
+    },
+    "activityLine": "{{posts}} 条帖子 · {{followers}} 位粉丝 · {{following}} 个关注",
+    "notSet": "未设置",
+    "none": "无",
+    "privateContact": "私密联系方式",
+    "privateNote": "仅管理员可见，绝不上链",
+    "notGiven": "未提供",
+    "met": "已达成",
+    "notMet": "尚未达成",
+    "unknown": "未知",
+    "noContact": "尚未保存商务联系方式。"
+  },
+  "contact": {
+    "savedComplete": "已保存。只有 3Speak 团队能看到。",
+    "savedIncomplete": "已保存。添加你的地址，或在主页中填写网站，即可完成此步骤。",
+    "privateNote": "<b>私密。</b>你的邮箱和地址绝不会存储在区块链上，也不会显示在你的主页或任何其他地方。只有 3Speak 团队能看到，用于就你的广告与你联系。",
+    "email": "邮箱",
+    "required": "必填",
+    "emailPlaceholder": "you@yourbrand.com",
+    "address": "地址",
+    "addressOptional": "可选，除非你的主页没有填写网站",
+    "ph": {
+      "line1": "街道和门牌号",
+      "line2": "地址第 2 行",
+      "postalCode": "邮政编码",
+      "city": "城市",
+      "region": "省/州或地区",
+      "country": "国家/地区"
+    },
+    "addressHint": "填写街道、城市和国家/地区后，地址才算有效。没有地址？可以改为在品牌主页中添加网站。",
+    "save": "保存联系方式"
+  },
+  "brand": {
+    "saved": "品牌主页已保存",
+    "name": "品牌名称",
+    "namePlaceholder": "你的品牌或公司",
+    "about": "你的品牌是做什么的",
+    "aboutPlaceholder": "一两句观众能看懂的话。",
+    "logo": "Logo",
+    "uploading": "上传中…",
+    "replaceLogo": "更换 Logo",
+    "uploadLogo": "上传 Logo",
+    "logoHint": "会以圆形显示在你的广告旁边，所以正方形图片效果最好。",
+    "website": "网站",
+    "websiteOptional": "如果你提供了地址，则为可选",
+    "websitePlaceholder": "https://yourbrand.com",
+    "websiteInvalid": "请使用以 https:// 开头的完整地址",
+    "save": "保存品牌主页"
+  },
+  "createAccount": {
+    "started": "我们来设置你的 Hive 账号吧",
+    "openFailed": "无法打开账号设置，请重试。",
+    "readyAdvertiser": "你的广告主账号已准备就绪",
+    "ready": "你的 Hive 账号已准备就绪",
+    "approvedAdvertiser": "团队已批准你的品牌。免费创建你的 Hive 账号，即可预订广告并付款。",
+    "approved": "团队已批准你。免费创建你的 Hive 账号：它只属于你一个人。",
+    "createAdvertiser": "创建我的广告主账号",
+    "create": "创建我的 Hive 账号"
+  },
+  "graduatedFollows": {
+    "message": "@{{handle}} 现在有了 Hive 账号：@{{hiveUsername}}。",
+    "title": "你关注的人升级了",
+    "followForReal": "正式关注",
+    "gotIt": "知道了",
+    "nowFollowing": "已在 Hive 上关注 @{{hiveUsername}}",
+    "followFailed": "无法关注对方"
+  },
+  "backlog": {
+    "title": "你之前的帖子都还在",
+    "lede_other": "在拥有 Hive 账号之前，你创作了 <b>{{count}} 项内容</b>。它们只保存在 3Speak 上。你随时可以以 <b>@{{user}}</b> 的身份把它们发布到 Hive。",
+    "text": "你可以逐一选择要转移的内容。没选的内容会原样保留在 3Speak 上，你随时可以回来处理剩下的。",
+    "later": "以后再说"
+  },
+  "graduation": {
+    "items": {
+      "video_other": "{{count}} 个视频",
+      "short_other": "{{count}} 个短视频",
+      "comment_other": "{{count}} 条评论",
+      "follow_other": "{{count}} 个关注",
+      "like_other": "{{count}} 个赞",
+      "creator_other": "{{count}} 位创作者"
+    },
+    "listAnd": "{{rest}}和{{last}}",
+    "listSep": "、",
+    "viewerDone": {
+      "watched": "观看了 {{time}}",
+      "written": "写了 {{items}}",
+      "followed": "关注了 {{items}}"
+    },
+    "advertiser": {
+      "lede": "团队已审核 <b>{{name}}</b>。免费创建你的 <b>Hive 账号</b>：它将成为你的广告主账号。",
+      "text": "有了它，你可以在 3Speak 全站预订广告，从视频广告位、横幅到滚动字幕，并直接用它的钱包以 HBD 或 HIVE 付款。密钥只属于你一个人，所以没有人能把你锁在外面。",
+      "note": "你的品牌主页会随你一起转移。你的商务邮箱和地址会在 3Speak 私密保存，绝不会上链。",
+      "noteMoving": "你的 <b>{{moving}}</b> 也会一起转移，并在几天内逐步发布。"
+    },
+    "viewer": {
+      "title": "你自己的账号已准备就绪",
+      "ledeDone": "作为 <b>@{{handle}}</b>，你已经{{done}}。把它免费变成一个属于你的 <b>Hive 账号</b>吧。",
+      "lede": "把 <b>@{{handle}}</b> 免费变成一个属于你的 <b>Hive 账号</b>。",
+      "text": "有了它，你可以给喜欢的视频点赞和打赏，通过评论赚取收益，选择加入观众奖励以根据观看获得报酬，还能创建播放列表。同一个登录和同一份关注可以用于所有 Hive 应用，而且密钥只属于你一个人。"
+    },
+    "createMyAccount": "创建我的账号",
+    "creator": {
+      "title": "你现在可以创建自己的账号了",
+      "lede": "你一直以 <b>@{{handle}}</b> 的身份发布内容。把它免费变成一个真正属于你的 <b>Hive 账号</b>吧。",
+      "text": "Hive 账号是一把只有你掌握的密钥。没有人能把你锁在外面，你的帖子开始赚取收益，而且同一个登录可以用于所有 Hive 应用，不只是 3Speak。"
+    },
+    "note": {
+      "moving": "你的 <b>{{moving}}</b> 会随你一起转移。",
+      "everything": "你在这里创作的一切都会随你一起转移。",
+      "gradual": "发布会在几天内逐步进行，因为全新的账号一开始的发帖额度很小。",
+      "waiting_other": "其中 {{count}} 项需要等它们所回复的帖子先发布。"
+    },
+    "notYet": "暂时不"
+  },
+  "handleTaken": {
+    "openFailed": "无法打开名称选择器",
+    "title": "名称 @{{handle}} 已被占用",
+    "lede": "有人已在 <b>Hive</b> 上注册了它，所以当你准备好时它无法成为你的账号。现在选一个新名字只需片刻。",
+    "text": "在这里选择名称从来不会为你保留它。Hive 除了创建账号之外没有任何办法保留名称，而创建账号正是你还没有付费的那一步——这也正是先不创建账号就开始的意义所在。",
+    "note": "你创作的一切都不会丢失。你的视频、短视频、评论和关注都会保留，并以你选择的任何名字转移过去。",
+    "pick": "选择新名称"
+  },
+  "backfill": {
+    "rcError": "资源积分还不够。它会自动恢复；请稍后再试。",
+    "today": "今天",
+    "yesterday": "昨天",
+    "groups": {
+      "video": "视频",
+      "videoNote": "每 5 分钟一个——这是比较慢的部分。",
+      "short": "短视频",
+      "comment": "评论",
+      "vote": "赞",
+      "follow": "关注",
+      "other": "其他所有内容"
+    },
+    "status": {
+      "done": "已发布",
+      "publishing": "发布中…",
+      "error": "失败",
+      "idle": "仅在 3Speak"
+    },
+    "wait": {
+      "ms": "{{m}} 分 {{s}} 秒",
+      "s": "{{s}} 秒"
+    },
+    "noDate": "无日期",
+    "waitToast": "Hive 每 5 分钟只允许发一条帖子。下一条还需 {{wait}}。",
+    "publishedToast_other": "已将 {{count}} 项内容发布到 Hive",
+    "loading": "正在加载你的帖子…",
+    "emptyTitle": "没有需要发布的内容了",
+    "emptyText": "你在拥有 Hive 账号之前创作的所有内容，要么已经发布，要么是无法重新发布的内容。",
+    "title": "发布你之前创作的内容",
+    "intro": "这些是你在拥有 Hive 账号之前在 3Speak 上创作的，所以它们只存在于这里。选择你希望以 <b>@{{user}}</b> 身份公开记录的内容并发布。没选的内容会原样保留在 3Speak 上。",
+    "note": "<b>发布需要一段时间，这很正常。</b>Hive 规定每个账号每 5 分钟只能发一条帖子，而全新账号的发帖额度很小，需要几天时间恢复。关注、点赞和个人资料消耗很少，会很快完成。每次发布几条，然后再回来。",
+    "groupBy": "列表分组方式",
+    "timeline": "时间线",
+    "byType": "按类型",
+    "rcBlockedIn": "<b>你的账号暂时用完了资源积分。</b>Hive 给每个账号一小笔发帖额度，它会自动恢复。没有丢失任何东西：大约 {{wait}} 后再回来，从上次停下的地方继续。",
+    "rcBlockedLater": "<b>你的账号暂时用完了资源积分。</b>Hive 给每个账号一小笔发帖额度，它会自动恢复。没有丢失任何东西：稍后再回来，从上次停下的地方继续。",
+    "selected": "已选择 <b>{{count}}</b> 项",
+    "rootPostsTime_other": "{{count}} 个视频，大约需要 {{minutes}} 分钟",
+    "nextVideo": "下一个视频可在 {{wait}} 后发布。关注、点赞和个人资料不受影响。",
+    "selectAll": "全选",
+    "clear": "清除",
+    "publishSelected": "发布所选内容",
+    "selectItem": "选择 {{label}}",
+    "fiveMin": "5 分钟",
+    "waitingTitle": "正在等待其他内容",
+    "waitingText": "一旦它们所指向的帖子在 Hive 上发布，这些内容就会自动发布。在此期间不会丢失任何东西。",
+    "waitingFor": "<b>{{label}}</b> — 正在等待 {{target}}",
+    "andMore": "还有 {{count}} 项",
+    "excludedTitle": "不会转移的内容"
+  }
+}

@@ -1,0 +1,113 @@
+{
+  "loading": "正在加载短视频...",
+  "pleaseTryAgain": "请重试",
+  "rotateDevice": "请将设备旋转为竖屏",
+  "pageTitle": {
+    "byAuthor": "3S | @{{author}} 的短视频",
+    "default": "3S | 短视频"
+  },
+  "stories": {
+    "you": "你"
+  },
+  "errors": {
+    "votingUnavailable": "此帖子暂不支持点赞",
+    "loginToVote": "登录后点赞",
+    "loginToComplete": "登录后才能完成此操作"
+  },
+  "feed": {
+    "ariaLabel": "短视频信息流",
+    "discover": "发现",
+    "myInterests": "我的兴趣",
+    "interestsTitle": "只看符合你兴趣的短视频",
+    "pickInterestsFirst": "请先选择一些兴趣",
+    "noInterests": "你还没有选择任何兴趣——去设置里选择吧",
+    "interestsExhausted": "符合你兴趣的短视频已经看完了——正在显示发现",
+    "noInterestMatches": "目前没有符合你兴趣的短视频。",
+    "switchToDiscover": "切换到发现",
+    "empty": "暂无短视频",
+    "loadError": "短视频加载出错：{{error}}"
+  },
+  "glow": {
+    "subtle": "氛围光：柔和",
+    "vivid": "氛围光：鲜艳",
+    "off": "氛围光：关"
+  },
+  "playbackMode": {
+    "autoReplay": "自动重播",
+    "autoSwipe": "自动下滑",
+    "manual": "手动"
+  },
+  "subtitles": {
+    "off": "关"
+  },
+  "chain": {
+    "originalVideo": "原视频",
+    "snap": "Snap",
+    "openShort": "打开短视频",
+    "watch": "观看",
+    "openSnap": "打开 Snap",
+    "comment": "评论",
+    "reaction": "回应",
+    "thisVideo": "当前视频",
+    "remix": "二创",
+    "show": "显示回应链"
+  },
+  "caption": {
+    "curatedBy": "由 Mantequilla 精选",
+    "curated": "精选",
+    "showOriginal": "显示原文",
+    "more": "更多"
+  },
+  "actions": {
+    "remix": "二创",
+    "promote": "推广"
+  },
+  "share": {
+    "defaultTitle": "3Speak 短视频",
+    "text": "来 3Speak 看看 {{user}} 的这个短视频！",
+    "shared": "分享成功！",
+    "linkCopied": "链接已复制到剪贴板！",
+    "failed": "分享失败"
+  },
+  "reshare": {
+    "loginRequired": "登录后转发",
+    "unavailable": "此帖子暂不支持转发",
+    "done": "已转发！",
+    "failed": "转发失败"
+  },
+  "remix": {
+    "noUrl": "无法获取用于二创的视频 URL",
+    "loadFailed": "无法加载用于二创的视频"
+  },
+  "watchLater": {
+    "loginRequired": "登录后收藏短视频",
+    "cantSave": "这个短视频无法收藏",
+    "removed": "已从稍后观看中移除",
+    "saved": "已保存到稍后观看",
+    "failed": "失败：{{message}}"
+  },
+  "comments": {
+    "title": "评论",
+    "loading": "正在加载评论...",
+    "closed": "评论已关闭",
+    "none": "还没有评论",
+    "postRemoved": "这个短视频对应的 Hive 帖子已被删除，因此无法再评论或点赞。",
+    "beFirst": "来抢沙发吧！",
+    "unavailable": "此帖子暂不支持评论",
+    "addPlaceholder": "发条评论...",
+    "addPlaceholderBar": "发条评论…",
+    "loginPlaceholder": "登录后评论",
+    "send": "发送评论",
+    "enterComment": "请输入评论",
+    "loginToComment": "请登录后再评论",
+    "justNow": "刚刚",
+    "posted": "评论发布成功！",
+    "failed": "评论失败：{{message}}",
+    "translation": "翻译",
+    "translationFailed": "翻译失败",
+    "reportComment": "举报评论",
+    "replyPlaceholder": "写下回复...",
+    "viewReplies_other": "查看 {{count}} 条回复",
+    "hideReplies_other": "隐藏 {{count}} 条回复"
+  }
+}

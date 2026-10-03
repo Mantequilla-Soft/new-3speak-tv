@@ -1,0 +1,69 @@
+{
+  "buckets": {
+    "today": "今天",
+    "yesterday": "昨天",
+    "thisWeek": "本周",
+    "thisMonth": "本月",
+    "older": "更早"
+  },
+  "loginRequired": "请登录后查看通知。",
+  "unreadChip_other": "{{count}} 条新通知",
+  "markAllTitle": "全部标为已读",
+  "marking": "标记中…",
+  "markAllRead": "全部已读",
+  "refreshing": "刷新中…",
+  "categories": {
+    "all": "全部",
+    "replies": "回复",
+    "mentions": "提及",
+    "votes": "点赞",
+    "reblogs": "转发",
+    "follows": "关注",
+    "transfers": "转账"
+  },
+  "unread": "未读",
+  "summary": {
+    "title": "动态",
+    "today": "今天",
+    "week": "本周",
+    "month": "本月",
+    "emptyToday": "今天还没有动态。",
+    "emptyWeek": "本周还没有动态。",
+    "stillLoading": "正在加载更早的通知…",
+    "emptyMonth": "本月没有动态。"
+  },
+  "loadError": "无法加载通知。",
+  "empty": {
+    "all": "你还没有任何通知。",
+    "unread": "没有未读通知。",
+    "replies": "还没有回复。",
+    "mentions": "还没有提及。",
+    "votes": "还没有点赞。",
+    "reblogs": "还没有转发。",
+    "follows": "还没有关注。",
+    "transfers": "还没有转账。"
+  },
+  "threeSpeakVideo": "3Speak 视频",
+  "end": "已经到底了。",
+  "cards": {
+    "votes": "点赞",
+    "voters_other": "{{count}} 人点赞",
+    "replies": "回复",
+    "newFollowers": "新粉丝",
+    "mentions": "提及",
+    "reblogs": "转发",
+    "transfers": "转账"
+  },
+  "group": {
+    "voteOne": "@{{user}} 给你的帖子点了赞",
+    "voteTwo": "@{{user}} 和 @{{user2}} 给你的帖子点了赞",
+    "voteMany_other": "@{{user}} 等 {{count}} 人给你的帖子点了赞",
+    "followOne": "@{{user}} 关注了你",
+    "followTwo": "@{{user}} 和 @{{user2}} 关注了你",
+    "followMany_other": "@{{user}} 等 {{count}} 人关注了你",
+    "generic_other": "{{count}} 条{{type}}通知",
+    "typeCount_other": "{{count}} 条{{type}}",
+    "collapse": "▾ 收起",
+    "expand": "▸ 展开"
+  }
+}

@@ -1,0 +1,348 @@
+{
+  "icons": {
+    "link": "链接",
+    "globe": "网站",
+    "podcast": "播客",
+    "email": "邮箱",
+    "phone": "电话",
+    "rss": "RSS",
+    "qrcode": "二维码",
+    "shop": "商店",
+    "bag": "店铺",
+    "dollar": "钱",
+    "gift": "礼物",
+    "heart": "支持",
+    "star": "星标",
+    "thumbsup": "赞",
+    "fire": "火",
+    "bolt": "闪电",
+    "music": "音乐",
+    "headphones": "音频",
+    "mic": "麦克风",
+    "video": "视频",
+    "film": "电影",
+    "tv": "电视",
+    "play": "播放",
+    "camera": "照片",
+    "image": "图片",
+    "palette": "艺术",
+    "pen": "写作",
+    "book": "书",
+    "newspaper": "新闻",
+    "graduation": "课程",
+    "code": "代码",
+    "gamepad": "游戏",
+    "briefcase": "工作",
+    "home": "首页",
+    "location": "位置",
+    "map": "地图",
+    "calendar": "日历",
+    "clock": "时钟",
+    "bell": "提醒",
+    "tag": "标签",
+    "download": "下载",
+    "file": "文件",
+    "users": "社区",
+    "comment": "评论",
+    "share": "分享",
+    "coffee": "咖啡",
+    "wallet": "钱包",
+    "plus": "更多",
+    "check": "勾选"
+  },
+  "fonts": {
+    "system": "系统",
+    "rounded": "圆体",
+    "serif": "衬线",
+    "mono": "等宽",
+    "display": "展示",
+    "condensed": "窄体",
+    "handwriting": "手写",
+    "grotesk": "怪诞体",
+    "humanist": "人文主义",
+    "geometric": "几何",
+    "slab": "粗衬线",
+    "elegant": "优雅",
+    "typewriter": "打字机",
+    "marker": "马克笔",
+    "brush": "毛笔",
+    "palatino": "Palatino",
+    "wide": "宽体"
+  },
+  "motion": {
+    "none": "无",
+    "float": "漂浮",
+    "sway": "摇摆",
+    "pulse": "脉动",
+    "wobble": "晃动",
+    "bounce": "弹跳",
+    "tilt": "3D 倾斜",
+    "spin": "旋转",
+    "shake": "抖动",
+    "breathe": "呼吸"
+  },
+  "sectionTypes": {
+    "link": "链接",
+    "video": "3Speak 内容",
+    "embed": "富链接",
+    "image": "图片",
+    "header": "标题 / 文字"
+  },
+  "blockNames": {
+    "link": "链接",
+    "header": "标题",
+    "image": "图片",
+    "video": "视频",
+    "embed": "嵌入"
+  },
+  "blockNamesPlural": {
+    "link": "链接",
+    "header": "标题",
+    "image": "图片",
+    "video": "视频",
+    "embed": "嵌入"
+  },
+  "templates": {
+    "minimal": {
+      "name": "极简",
+      "niche": "干净简洁"
+    },
+    "neon": {
+      "name": "霓虹之夜",
+      "niche": "创作者 / 主播"
+    },
+    "crypto": {
+      "name": "链上",
+      "niche": "加密 / Web3"
+    },
+    "gamer": {
+      "name": "玩家一号",
+      "niche": "游戏"
+    },
+    "photographer": {
+      "name": "曝光",
+      "niche": "摄影"
+    },
+    "podcaster": {
+      "name": "播出中",
+      "niche": "播客"
+    },
+    "fitness": {
+      "name": "巅峰状态",
+      "niche": "健身 / 教练"
+    },
+    "writer": {
+      "name": "长文",
+      "niche": "作家 / 博主"
+    },
+    "chef": {
+      "name": "备料就绪",
+      "niche": "美食 / 烹饪"
+    },
+    "travel": {
+      "name": "漫游",
+      "niche": "自然 / 旅行"
+    },
+    "business": {
+      "name": "会议室",
+      "niche": "商务 / 专业"
+    },
+    "artist": {
+      "name": "调色板",
+      "niche": "艺术家 / 视觉"
+    },
+    "ocean": {
+      "name": "潮汐",
+      "niche": "休闲 / 生活方式"
+    },
+    "musician": {
+      "name": "放大音量",
+      "niche": "音乐 / 乐队"
+    },
+    "developer": {
+      "name": "终端",
+      "niche": "开发者 / 科技"
+    },
+    "sports": {
+      "name": "比赛日",
+      "niche": "体育 / 运动员"
+    }
+  },
+  "errors": {
+    "notLoggedIn": "未登录",
+    "couldNotSaveToHive": "无法保存到 Hive"
+  },
+  "arrange": {
+    "title": "标题",
+    "video": "视频",
+    "latestPosts": "最新帖子",
+    "latestPostsBy": "最新帖子 · @{{account}}",
+    "dragToArrange": "拖动以排列"
+  },
+  "page": {
+    "latestPosts": "最新帖子",
+    "seeNewestPosts": "查看 @{{user}} 的最新帖子 →",
+    "openLink": "打开链接",
+    "empty": "@{{user}} 还没有添加任何链接。",
+    "viewProfile": "查看 3Speak 主页 →",
+    "poweredBy": "由 3Speak 提供支持"
+  },
+  "editor": {
+    "resetToDefault": "恢复默认",
+    "motion": "动效",
+    "speed": "速度 {{value}}",
+    "loop": "循环",
+    "runSeconds": "运行 {{value}} 秒",
+    "picker": {
+      "videoLabel": "从我的视频中选择",
+      "videoLoading": "正在加载你的视频…",
+      "videoEmpty": "没有找到最近的 3Speak 视频。",
+      "shortLabel": "从我的短视频中选择",
+      "shortLoading": "正在加载你的短视频…",
+      "shortEmpty": "没有找到最近的 3Speak 短视频。",
+      "noChannel": "未检测到频道（你登录了吗？）",
+      "loadFailed": "无法加载：{{error}}"
+    },
+    "toasts": {
+      "unfurlFailed": "无法获取链接预览",
+      "imageUploadFailed": "图片上传失败：{{error}}",
+      "tryAgain": "请重试",
+      "styleApplied": "样式已应用到所有{{type}}块",
+      "templateApplied": "已应用“{{name}}”——可以微调或撤销",
+      "reverted": "已恢复为你之前的设计",
+      "saved": "Spotlight 已保存到你的 Hive 资料",
+      "saveFailed": "无法保存",
+      "linkCopied": "链接已复制",
+      "uploadFailed": "上传失败"
+    },
+    "link": {
+      "labelPlaceholder": "标签（例如：我的 YouTube）",
+      "type": "链接类型",
+      "typeGroup": "类型",
+      "website": "网站 / URL",
+      "email": "邮箱",
+      "phone": "电话",
+      "platformGroup": "平台",
+      "yourname": "yourname",
+      "platformIconHint": "图标为 {{platform}} 的 Logo——切换到“网站 / URL”即可选择自定义图标。",
+      "icon": "图标",
+      "iconColor": "图标颜色",
+      "iconBg": "图标背景"
+    },
+    "header": {
+      "text": "文字",
+      "size": "大小",
+      "large": "大",
+      "medium": "中",
+      "small": "小",
+      "align": "对齐",
+      "left": "左",
+      "center": "居中",
+      "right": "右"
+    },
+    "image": {
+      "uploading": "上传中…",
+      "upload": "上传图片",
+      "urlPlaceholder": "…或图片 URL",
+      "linkPlaceholder": "点击后跳转的链接（可选）"
+    },
+    "video": {
+      "contentType": "内容类型",
+      "video": "视频",
+      "short": "短视频",
+      "orPaste": "或粘贴链接",
+      "pastePlaceholder": "粘贴 3Speak 视频链接或 author/permlink",
+      "titlePlaceholder": "显示在视频上方的标题（链接到 3Speak）",
+      "hint": "所选内容会嵌入你的页面并在页面中播放。"
+    },
+    "embed": {
+      "source": "来源",
+      "sourceLink": "链接（富预览）",
+      "sourceHiveRecent": "我最新的 Hive 帖子",
+      "accountPlaceholder": "Hive 用户名（留空则为你自己）",
+      "showPosts_other": "显示 {{count}} 条帖子",
+      "perRow": "每行 {{value}} 个",
+      "hiveRecentHint": "你最近的顶层帖子（不含转发或交叉发布）。自动更新。",
+      "linkPlaceholder": "粘贴任意链接——Hive 帖子、Instagram、X、YouTube、文章…",
+      "fetching": "正在获取预览…",
+      "noPreview": "没有找到预览——仍会以链接卡片的形式显示。",
+      "pasteHint": "粘贴链接，我们会自动获取它的标题、描述和图片。"
+    },
+    "style": {
+      "title": "样式",
+      "applyAllTitle": "将此样式应用到每个{{type}}块",
+      "applyAll": "应用到所有{{types}}",
+      "background": "背景",
+      "text": "文字",
+      "backgroundPct": "背景 {{value}}%",
+      "radius": "圆角 {{value}}",
+      "fontSizePct": "字号 {{value}}%",
+      "paddingPx": "内边距 {{value}}px",
+      "thumbnailPct": "缩略图 {{value}}%",
+      "border": "边框",
+      "thicknessPx": "粗细 {{value}}px",
+      "opacityPct": "不透明度 {{value}}%",
+      "shadow": "阴影",
+      "strengthPct": "强度 {{value}}%",
+      "color": "颜色",
+      "blur": "模糊 {{value}}",
+      "spread": "扩散 {{value}}",
+      "inset": "内阴影",
+      "cardDelayMs": "卡片延迟 {{value}}ms"
+    },
+    "tagline": "你的链接和视频，尽在一页",
+    "openPage": "打开页面",
+    "templates": {
+      "title": "模板",
+      "hint": "选择一个设计来填充所有内容——你的简介会保留，并且可以撤销。",
+      "undo": "撤销模板——恢复我的设计"
+    },
+    "profile": {
+      "title": "个人资料",
+      "headlinePlaceholder": "简短的标语 / 简介（可选）",
+      "avatarSizePct": "头像大小 {{value}}%",
+      "avatarShadowPct": "头像阴影 {{value}}%",
+      "avatarGlow": "头像光晕",
+      "glowSize": "光晕大小 {{value}}",
+      "channelButtonText": "频道按钮文字"
+    },
+    "page": {
+      "title": "页面样式",
+      "solid": "纯色",
+      "gradient": "渐变",
+      "image": "图片",
+      "color2": "颜色 2",
+      "angle": "角度 {{value}}°",
+      "uploadBackground": "上传背景",
+      "imageSet": "已设置图片 ✓",
+      "overlay": "叠加层",
+      "overlay2": "叠加层 2",
+      "none": "无",
+      "overlayOpacityPct": "叠加层不透明度 {{value}}%",
+      "overlayAngle": "叠加层角度 {{value}}°",
+      "colors": "颜色",
+      "buttonBg": "按钮背景",
+      "buttonText": "按钮文字",
+      "buttons": "按钮",
+      "buttonStyle": "按钮样式",
+      "soft": "柔和",
+      "fill": "填充",
+      "outline": "描边",
+      "cornerRadius": "圆角 {{value}}",
+      "textStyle": "文字样式（名字、简介和文字块）",
+      "font": "字体",
+      "normal": "常规",
+      "italic": "斜体",
+      "bold": "粗体",
+      "boldItalic": "粗斜体",
+      "strong": "加粗",
+      "textBorderPx": "文字描边 {{value}}px",
+      "borderColor": "描边颜色"
+    },
+    "addBlock": "添加区块",
+    "empty": "在上方添加你的第一个链接、视频或图片。",
+    "arrangeHint": "拖动 <grip></grip> 进行排列 · 把一个区块拖到另一个上面可以并排放置 · 点击区块可直接在此编辑",
+    "livePreview": "实时预览",
+    "previewTitle": "Spotlight 预览"
+  }
+}

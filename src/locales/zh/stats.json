@@ -1,0 +1,116 @@
+{
+  "ranges": {
+    "d7": "7 天",
+    "d28": "28 天",
+    "d90": "90 天",
+    "all": "全部"
+  },
+  "content": {
+    "all": "全部",
+    "videos": "视频",
+    "shorts": "短视频"
+  },
+  "metrics": {
+    "watchTime": "观看时长",
+    "views": "观看次数",
+    "avgPct": "平均 %",
+    "votes": "点赞",
+    "comments": "评论",
+    "payout": "收益"
+  },
+  "days": {
+    "short": {
+      "sun": "周日",
+      "mon": "周一",
+      "tue": "周二",
+      "wed": "周三",
+      "thu": "周四",
+      "fri": "周五",
+      "sat": "周六"
+    },
+    "initial": {
+      "sun": "日",
+      "mon": "一",
+      "tue": "二",
+      "wed": "三",
+      "thu": "四",
+      "fri": "五",
+      "sat": "六"
+    }
+  },
+  "sources": {
+    "threespeak": "3Speak",
+    "player": "嵌入播放器"
+  },
+  "trend": {
+    "empty": "该时间段内还没有观看时长。",
+    "tip_other": "{{count}} 次观看 · {{date}}"
+  },
+  "noData": "暂无数据。",
+  "demo": {
+    "viewerLocations": "观众地区",
+    "mapBubble_other": "{{country}} — {{count}} 次观看会话",
+    "empty": "该时间段内还没有观众数据。",
+    "breakdown": "明细",
+    "map": "地图",
+    "countries": "国家/地区",
+    "devices": "设备",
+    "browsers": "浏览器",
+    "whereTitle": "观看渠道",
+    "whereSub": "3speak 与嵌入播放器",
+    "newVsReturning": "新观众与回访观众",
+    "new": "新观众",
+    "returning": "回访观众",
+    "located": "{{total}} 次观看会话中已定位 {{located}} 次。"
+  },
+  "when": {
+    "title": "你的观众什么时候观看",
+    "sub": "UTC · 颜色越深 = 观看越多",
+    "cellTitle_other": "{{day}} {{hour}}:00 — {{count}} 次观看",
+    "hour": "{{hour}} 时"
+  },
+  "detail": {
+    "summary": "{{votes}} 个赞 · {{comments}} 条评论 · ${{payout}}"
+  },
+  "compare": {
+    "notEnough": "数据不足，无法比较。",
+    "start": "开头",
+    "axis": "整个视频的观众留存",
+    "end": "结尾",
+    "title": "比较视频",
+    "pickA": "选择一个视频…",
+    "vs": "对比",
+    "pickB": "选择另一个…"
+  },
+  "loadError": "暂时无法加载你的数据。",
+  "emptyRange": "该时间段内还没有观看数据——试试“全部”，或者等观众来看你的视频。",
+  "tiles": {
+    "avgViewDuration": "平均观看时长",
+    "avgWatched": "平均观看比例",
+    "reactionsPerView": "回应 / 观看"
+  },
+  "subtotals": "{{videos}} 个视频 · {{votes}} 个赞 · {{comments}} 条评论 · ${{payout}} · 平均倍速 {{rate}}×",
+  "sections": {
+    "trend": "观看时长趋势",
+    "best": "表现最佳",
+    "audience": "你的观众"
+  },
+  "openInNewTab": "在新标签页中打开视频",
+  "footnote": "观看数据来自预览版统计，仅你自己可见。",
+  "video": {
+    "noData": "暂无数据",
+    "empty": "这个视频还没有观看数据。",
+    "uniqueViewers": "独立观众",
+    "avgSpeed": "平均倍速",
+    "mostDropOff": "📉 最多人在 <b>{{time}}</b> 离开",
+    "earlyDrop": "⚡ <b>{{pct}}%</b> 的人在前 3 秒离开",
+    "replayed": "🔁 重播：",
+    "retentionTitle": "观众留存",
+    "retentionSub": "每个时刻仍在观看的观众比例",
+    "pctWatching": "{{pct}}% 在看",
+    "replayTitle": "重播最多",
+    "replaySub": "观众观看和反复观看最多的片段",
+    "hotSpot": "热点",
+    "notEnoughReplays": "重播数据还不够"
+  }
+}

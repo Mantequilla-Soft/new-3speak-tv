@@ -1,0 +1,92 @@
+{
+  "page": {
+    "fallbackTitle": "徽章",
+    "kpis": {
+      "recipients": "获得者",
+      "recentVideos": "近期视频",
+      "issued": "颁发时间"
+    },
+    "issuedBy": "由 <creatorLink>@{{creator}}</creatorLink> 颁发",
+    "notFoundTitle": "找不到徽章",
+    "notFoundBody": "暂时无法读取名为 @{{account}} 的 Hive 账号。",
+    "browseAll": "浏览所有徽章",
+    "tabs": {
+      "videos": "视频",
+      "recipients": "获得者",
+      "recipientsWithCount": "获得者（{{num}}）"
+    },
+    "errorVideos": "获取视频出错",
+    "noVideosTitle": "还没有视频",
+    "noHolders": "还没有人拥有这枚徽章。",
+    "noHolderVideos": "拥有这枚徽章的人还没有在 3Speak 发布过视频。",
+    "loadingMore": "正在加载更多...",
+    "recipientsError": "无法加载获得者",
+    "recipientsLoading": "正在加载获得者...",
+    "noRecipientsTitle": "还没有获得者",
+    "noRecipientsBody": "目前还没有人获得这枚徽章。",
+    "recipientsSummary_other": "{{num}} 位获得者",
+    "recipientsSummaryWithVideos_other": "{{num}} 位获得者，其中 {{publishing}} 位在 3Speak 发布视频",
+    "recipientVideos_other": "{{num}} 个视频",
+    "recipientNoVideos": "没有视频"
+  },
+  "directory": {
+    "title": "徽章",
+    "intro": "徽章是 Hive 上<b>由他人颁发给你</b>的奖励，用于表彰活动、贡献和里程碑。你无法主动加入：只能由别人颁发。打开一枚徽章，就能在这里观看其获得者发布的内容。",
+    "searchPlaceholder": "搜索徽章...",
+    "sort": {
+      "recipients": "获得者",
+      "created": "创建时间",
+      "name": "名称"
+    },
+    "createLocked": "创建徽章需要 Hive 账号。你的账号准备好后即可解锁。",
+    "create": "创建徽章",
+    "loadError": "暂时无法加载徽章。",
+    "noMatch": "没有符合搜索的徽章。",
+    "held": "已拥有",
+    "recipients_other": "{{num}} 位获得者"
+  },
+  "award": {
+    "success": "@{{username}} 已获得 {{title}}",
+    "failed": "无法颁发该徽章",
+    "dialogLabel": "向 {{username}} 颁发徽章",
+    "title": "颁发徽章",
+    "toUser": "给 @{{username}}",
+    "awarding": "颁发中…",
+    "held": "已拥有",
+    "award": "颁发",
+    "note": "徽章会在 Hive 上关注对方，这就是“拥有徽章”的含义。你可以在徽章自己的页面上收回它。"
+  },
+  "hive": {
+    "dragToReorder": "拖动以调整顺序",
+    "orderSaved": "徽章顺序已保存到你的 Hive 资料",
+    "orderSaveFailed": "无法保存徽章顺序",
+    "dialogLabel": "@{{username}} 拥有的徽章",
+    "title": "徽章",
+    "arrangeHint": "拖动徽章，按你想要的顺序排列。",
+    "earnedCount_other": "@{{username}} 在 Hive 上获得了 {{count}} 枚徽章",
+    "alwaysFirst": "始终显示在最前",
+    "saveOrder": "保存顺序",
+    "arrange": "排列",
+    "arrangeTitle": "选择徽章的显示顺序",
+    "showAll_other": "显示全部 {{count}} 枚徽章",
+    "awardTitle": "把你的一枚徽章颁发给 @{{username}}"
+  },
+  "leaderboardBadges": {
+    "proTitle": "该创作者订阅了 Pro，支持 3Speak"
+  },
+  "leaderboard": {
+    "watchNotice": "观看时长自 {{since}} 起才开始统计，所以更长的时间范围显示的仍是同样较短的历史。",
+    "unclaimed": "未认领",
+    "noActivity": "该时间段内还没有活动",
+    "otherTopics": "其他",
+    "title": "排行榜",
+    "subtitle": "{{blurb}} — 3Speak 上的头部创作者。",
+    "subtitleTopic": "{{blurb}} — {{topic}} 领域的头部创作者。",
+    "allTopics": "全部话题",
+    "finding": "正在榜单中查找 @{{user}}…",
+    "notInTop": "@{{user}} 不在本榜单前 {{n}} 名中。",
+    "loading": "正在加载排行榜…",
+    "loadError": "排行榜加载失败，请稍后再试。",
+    "empty": "该时间段内还没有人有{{metric}}。"
+  }
+}

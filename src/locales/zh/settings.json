@@ -1,0 +1,205 @@
+{
+  "interests": {
+    "savedToast": "兴趣已保存到你的 Hive 资料",
+    "saveFailed": "无法保存兴趣",
+    "title": "兴趣",
+    "loading": "加载中…",
+    "hint": "选择你关心的话题——我们会据此为你推荐更多喜欢的内容。",
+    "loginHint": "登录后选择你的兴趣。",
+    "save": "保存兴趣"
+  },
+  "ads": {
+    "chainNotSaved": "已保存在 3Speak，但未保存到你的 Hive 账号。请重试，以便也保存到那里。",
+    "saveFailed": "无法保存该设置。",
+    "onToast": "你的视频已开启广告",
+    "offToast": "你的视频已关闭广告",
+    "splitSaved": "收入分成已保存",
+    "title": "你视频中的广告",
+    "allow": "允许广告",
+    "allowDesc": "你的视频中可能会播放一段简短的赞助广告。你会获得其收入的一部分，你发布内容所在的社区也会获得一部分。关闭后，你的视频将完全不含广告——它们也会从我们提供给广告主的资源中移除，因此不会出售任何你已选择退出的内容。",
+    "allowAria": "允许在你的视频中投放广告",
+    "shareTitle": "与社区分享",
+    "shareDesc": "广告收入的 {{pool}}% 由你和你发布内容所在的社区分配。选择社区能分到多少——保持为零，你就保留全部 {{pool}}%。",
+    "youPct": "你 {{pct}}%",
+    "communityPct": "社区 {{pct}}%",
+    "shareInputLabel": "社区分成百分比",
+    "invalidPct": "请输入 0 到 {{max}} 之间的整数。",
+    "loadingSetting": "正在加载你当前的设置…"
+  },
+  "viewerRewards": {
+    "onToast": "观众奖励已开启",
+    "offToast": "观众奖励已关闭，你的观看数据已被删除",
+    "saveFailed": "无法保存该设置。",
+    "title": "边看边赚",
+    "rowTitle": "观众奖励",
+    "desc": "根据你的观看获得一部分广告收入，以 HBD 或 HIVE 支付。你按观看的视频获得报酬，无论是否播放了广告，所以奖励的是观看本身，而不是忍受广告。除 3Speak Pro 订阅者外，所有人都会看到广告。除了“已观看”页面已保存的观看记录外，我们还会记录你观看每个视频的进度，并在你关闭此功能的那一刻将其删除。",
+    "aria": "根据你的观看获得一部分广告收入"
+  },
+  "postingAuth": {
+    "updateFailed": "无法更新你的 posting 权限。",
+    "addedToast": "已将 @threespeak 添加到你的 posting 权限",
+    "removedToast": "已将 @threespeak 从你的 posting 权限中移除",
+    "notYetAdded": "已签名，但 @threespeak 还没有出现在你的账号上。请一分钟后重新打开设置再检查。",
+    "stillThere": "已签名，但 @threespeak 仍在你的账号上。请一分钟后重新打开设置再检查。",
+    "title": "Posting 权限",
+    "canPost": "@threespeak 可以代你发帖",
+    "cannotPost": "@threespeak 无法代你发帖",
+    "checkingStatus": "@threespeak …",
+    "desc": "允许 3Speak 代你发布上传内容和定时帖子，并在保存某些设置时无需每次都弹出钱包确认。它只能发帖、点赞和评论；永远不能转移资金或更改你的密钥。没有它的话，上传时会要求你重新添加。更改此项需要你的 active 密钥。",
+    "checking": "检查中…",
+    "removing": "移除中…",
+    "adding": "添加中…"
+  },
+  "notifications": {
+    "kinds": {
+      "videos": {
+        "title": "新视频",
+        "desc": "你关注的创作者发布视频时。"
+      },
+      "shorts": {
+        "title": "新短视频",
+        "desc": "你关注的创作者发布短视频时。"
+      },
+      "audio": {
+        "title": "新音频",
+        "desc": "你关注的创作者上传曲目或节目时。"
+      },
+      "replies": {
+        "title": "回复",
+        "desc": "有人回复你的帖子或评论时。"
+      },
+      "mentions": {
+        "title": "提及",
+        "desc": "有人提到你的名字时。"
+      },
+      "follows": {
+        "title": "新粉丝",
+        "desc": "有人关注你时。"
+      },
+      "votes": {
+        "title": "点赞",
+        "desc": "有人给你的帖子点赞时。默认关闭——热门帖子会带来大量提醒。"
+      },
+      "reblogs": {
+        "title": "转发",
+        "desc": "有人转发你的帖子时。"
+      }
+    },
+    "groups": {
+      "creators": "来自你关注的创作者",
+      "aboutYou": "与你相关"
+    },
+    "deviceOffToast": "此设备将不再收到通知",
+    "deviceOnToast": "此设备将会收到通知",
+    "changeFailed": "无法更改通知设置",
+    "saveFailed": "无法保存",
+    "loginHint": "登录后选择你想接收哪些通知。",
+    "unsupported": "此浏览器无法显示通知。在 iPhone 和 iPad 上，需要先把 3Speak 添加到主屏幕才能使用通知。",
+    "device": "通知此设备",
+    "deviceBlocked": "你的浏览器设置已屏蔽此网站的通知——请先在那里允许通知。",
+    "deviceNoWorker": "此版本不可用。",
+    "deviceDesc": "即使没有打开 3Speak 也能收到通知。仅适用于此浏览器。",
+    "whatHint": "选择接收哪些通知。这些设置适用于你开启了通知的所有设备。"
+  },
+  "tabs": {
+    "general": "通用",
+    "content": "内容",
+    "rewards": "广告与奖励",
+    "about": "关于 / 版本"
+  },
+  "contentTabs": {
+    "feed": "信息流",
+    "aria": "内容设置"
+  },
+  "butrauthUnlocked": "Butter Auth 已解锁",
+  "appearance": {
+    "title": "外观",
+    "darkMode": {
+      "title": "深色模式",
+      "desc": "在整个应用中使用深色主题。"
+    },
+    "largeCards": {
+      "title": "大卡片",
+      "desc": "在首页、个人主页和播放列表页面显示更大的视频卡片。关闭后显示更小、更紧凑的卡片。"
+    },
+    "previews": {
+      "title": "视频预览",
+      "desc": "鼠标悬停在视频卡片上时播放静音预览（在手机上的大卡片模式下，滚动时居中的卡片会自动播放）。"
+    },
+    "simpleFeeds": {
+      "title": "简洁信息流",
+      "desc": "关闭推荐算法——发现、兴趣和热门将变成按时间从新到旧排列的普通列表，而不是排序后的推荐。"
+    }
+  },
+  "shorts": {
+    "commentBar": {
+      "title": "短视频评论栏",
+      "desc": "在短视频下方显示评论输入框。默认关闭——你随时可以通过评论按钮打开评论面板。"
+    },
+    "openOnStart": {
+      "title": "启动时打开短视频",
+      "desc": "打开 3Speak 时直接进入短视频，而不是首页信息流。"
+    },
+    "inFeeds": {
+      "title": "在信息流中显示短视频",
+      "desc": "在首页信息流的视频之间以及观看页的推荐中显示短视频行。关闭后这些列表只显示视频。"
+    }
+  },
+  "feed": {
+    "nsfw": {
+      "title": "显示 NSFW 内容",
+      "desc": "显示标记为不适合工作场合（NSFW）的视频和音频。默认关闭。"
+    },
+    "hideWatched": {
+      "title": "隐藏已看过的视频",
+      "desc": "在首页、热门和推荐信息流中不显示你已经看过的视频。"
+    },
+    "hideAi": {
+      "title": "隐藏 AI 生成的视频",
+      "desc": "在所有信息流中不显示标记为 AI 生成的视频和短视频。该标记来自自动检测，因此可能会有漏网之鱼。"
+    },
+    "privateMode": {
+      "title": "隐私模式",
+      "desc": "不让你的国家/地区出现在创作者的统计数据中。我们从不存储任何人的 IP 地址——你按下播放的那一刻，它就会被转换成国家/地区代码，然后丢弃。开启此项后，你的观看连国家/地区都不会被记录。"
+    }
+  },
+  "about": {
+    "title": "关于",
+    "version": "应用版本",
+    "rpcNode": "Hive RPC 节点",
+    "yourData": "你的数据",
+    "privacyLink": "3Speak 如何处理你的数据"
+  },
+  "dataRequest": {
+    "emailRequired": "请输入邮箱地址，以便我们回复你",
+    "confirmRequired": "请确认你了解哪些内容可以删除、哪些不能删除",
+    "requestFailed": "请求失败（{{status}}）",
+    "deletionReceived": "已收到删除请求",
+    "dataReceived": "已收到数据请求",
+    "sendFailed": "无法发送你的请求",
+    "doneTitle": "已收到请求",
+    "doneBody": "你的参考编号是 <b>{{ref}}</b>。我们最迟会在 <b>{{dueBy}}</b> 之前回复到 <b>{{contact}}</b>。",
+    "keepRef": "请保留此参考编号，以便后续跟进。",
+    "signIn": "请登录后再申请获取或删除你的数据——请求仅适用于你当前登录的账号。",
+    "requestFor": "为 <b>@{{username}}</b> 提交请求",
+    "typeAria": "请求类型",
+    "getData": "获取我的数据",
+    "deleteData": "删除我的账号数据",
+    "ledeDelete": "我们将删除 3Speak 在自有数据库中存储的所有关于你的数据。",
+    "ledeExport": "我们将以 JSON 文件的形式，把 3Speak 在自有数据库中存储的所有关于你的数据发送给你。",
+    "covers": "范围包括：",
+    "cannotTitle": "我们无法做到的",
+    "cannotBody": "3Speak 构建在 <b>Hive 区块链</b>之上。你的帖子、评论、点赞和转发都是用你自己的密钥签名，并广播到一个我们无法控制、也无法编辑的<b>公开、永久的账本</b>上。",
+    "cannotDelete": "我们可以删除我们保存的副本，并停止在 3Speak 上显示你的内容。但我们无法将其从区块链上抹除——任何人都做不到，包括你自己。任何运行 Hive 节点的人仍然会保有这些数据。",
+    "cannotExport": "你的链上数据本来就是公开的，可通过任意 Hive API 以机器可读的方式获取——我们会告诉你在哪里获取。我们发送给你的是在此之外我们额外持有的数据。",
+    "emailLabel": "用于回复的邮箱",
+    "emailPlaceholder": "you@example.com",
+    "messageLabel": "还有什么要补充的吗？（可选）",
+    "messagePlaceholder": "关于你请求的补充说明（可选）",
+    "confirmLabel": "我了解我在 Hive 区块链上的内容是永久的，无法被 3Speak 或任何其他人删除。",
+    "sending": "发送中…",
+    "requestDeletion": "申请删除",
+    "requestData": "申请获取我的数据",
+    "foot": "我们会在一个月内回复。你也可以直接发邮件至 <mail>privacy@3speak.tv</mail>。"
+  }
+}
