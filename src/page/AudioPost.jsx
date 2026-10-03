@@ -42,7 +42,7 @@ function audioCover(item) {
   if (!item) return fallbackImg;
   const fixed = fixVideoThumbnail({ thumbnail_url: item.thumbnail_url, thumbnail: item.thumbnail_url });
   if (!fixed || fixed === fallbackImg || fixed === '/images/speak.jpg') {
-    return `https://images.hive.blog/u/${item.owner}/avatar/small`;
+    return `/img/u/${item.owner}/avatar/small`;
   }
   return fixed;
 }
@@ -177,7 +177,7 @@ function AudioPost() {
       body: post.body,
       author: {
         id: post.author, username: post.author,
-        profile: { name: post.author, images: { avatar: `https://images.hive.blog/u/${post.author}/avatar/small` } },
+        profile: { name: post.author, images: { avatar: `/img/u/${post.author}/avatar/small` } },
       },
       stats: {
         num_comments: post.children || 0,
@@ -208,7 +208,7 @@ function AudioPost() {
   }
 
   const tags = videoDetails?.tags?.slice(0, 7) || [];
-  const cover = audioDoc ? audioCover(audioDoc) : `https://images.hive.blog/u/${author}/avatar/small`;
+  const cover = audioDoc ? audioCover(audioDoc) : `/img/u/${author}/avatar/small`;
   const pct = total > 0 ? (elapsed / total) * 100 : 0;
 
   return (

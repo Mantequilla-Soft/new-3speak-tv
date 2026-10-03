@@ -93,7 +93,7 @@ export default function AwardBadgeModal({ username, badges, onClose, onAwarded }
                   onClick={() => award(badge)}
                 >
                   <img
-                    src={badge.image || `https://images.hive.blog/u/${badge.account}/avatar`}
+                    src={badge.image || `/img/u/${badge.account}/avatar`}
                     alt=""
                   />
                   <span className="award-item-text">

@@ -253,7 +253,7 @@ function EmbedPreview() {
                   <span className="ep-setting__icon"><Users size={18} /></span>
                   <span className="ep-setting__label">{t("upload.details.community.label")}</span>
                   <span className="ep-setting__value ep-setting__value--community">
-                    <img src={`https://images.hive.blog/u/${communityDisplay.name}/avatar/small`} alt="" />
+                    <img src={`/img/u/${communityDisplay.name}/avatar/small`} alt="" />
                     {communityDisplay.title}
                   </span>
                 </div>

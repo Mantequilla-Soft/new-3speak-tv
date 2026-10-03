@@ -4,7 +4,7 @@ import { Play } from 'lucide-react'
 import { fetchLinkMeta, formatDuration, timeAgo } from './chatLinks'
 import { useTranslation } from 'react-i18next'
 
-const avatarSmall = (name) => `https://images.hive.blog/u/${name}/avatar/small`
+const avatarSmall = (name) => `/img/u/${name}/avatar/small`
 
 /** Rich preview card for a 3Speak/Hive link (post, comment, profile, community). */
 export default function ChatLinkCard({ link }) {

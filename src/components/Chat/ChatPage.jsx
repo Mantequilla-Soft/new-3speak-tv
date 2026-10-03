@@ -27,7 +27,7 @@ import { useTranslation } from 'react-i18next'
 // line under it. See utils/toast.js.
 const toast = toastIn('Chat');
 
-const avatar = (name) => `https://images.hive.blog/u/${name}/avatar/small`
+const avatar = (name) => `/img/u/${name}/avatar/small`
 
 function convTitle(conv) {
   if (!conv) return ''

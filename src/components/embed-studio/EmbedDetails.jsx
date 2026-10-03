@@ -340,7 +340,7 @@ function EmbedDetails() {
                       <span>{t('upload.details.community.hint')}</span>
                     </div>
                     <div className="tile-value community-value">
-                      {community ? <span>{community === "hive-181335" ? <div className="wrap"><img src={`https://images.hive.blog/u/hive-181335/avatar/small`} alt="" /><span></span>Threespeak</div> : <div className="wrap"><img src={`https://images.hive.blog/u/${community.name}/avatar/small`} alt="" /><span></span>{community.title}</div>}</span> : <span> {t('upload.details.community.select')} </span>}
+                      {community ? <span>{community === "hive-181335" ? <div className="wrap"><img src={`/img/u/hive-181335/avatar/small`} alt="" /><span></span>Threespeak</div> : <div className="wrap"><img src={`/img/u/${community.name}/avatar/small`} alt="" /><span></span>{community.title}</div>}</span> : <span> {t('upload.details.community.select')} </span>}
                       <IoIosArrowDropdownCircle size={16} />
                     </div>
                   </div>

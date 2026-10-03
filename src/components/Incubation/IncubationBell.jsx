@@ -103,7 +103,7 @@ export default function IncubationBell() {
                   >
                     <img
                       src={n.actor.onChain
-                        ? `https://images.hive.blog/u/${n.actor.name}/avatar/small`
+                        ? `/img/u/${n.actor.name}/avatar/small`
                         : handleAvatar(n.actor.name)}
                       alt=""
                       onError={(e) => { e.target.src = handleAvatar(n.actor.name); }}

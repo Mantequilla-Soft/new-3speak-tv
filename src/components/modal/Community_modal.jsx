@@ -92,7 +92,7 @@ function CommunityCard({ community, onSelect }) {
       <div className="community-card-main" onClick={() => onSelect(community)}>
         <img
           className="community-card-avatar"
-          src={`https://images.hive.blog/u/${community.name}/avatar/small`}
+          src={`/img/u/${community.name}/avatar/small`}
           alt=""
           loading="lazy"
           onError={(e) => { e.currentTarget.style.visibility = "hidden"; }}

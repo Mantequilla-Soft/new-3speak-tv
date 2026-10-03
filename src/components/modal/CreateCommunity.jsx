@@ -482,7 +482,7 @@ const CreateCommunity = ({ isOpen, close, kind = 'community'}) => {
                   <div className="cc-meta-item">
                     <span className="cc-label">{t('communities.create.creator')}</span>
                     <span className="cc-meta-value">
-                      <img src={`https://images.hive.blog/u/${user}/avatar/small`} alt="" />
+                      <img src={`/img/u/${user}/avatar/small`} alt="" />
                       @{user}
                     </span>
                   </div>

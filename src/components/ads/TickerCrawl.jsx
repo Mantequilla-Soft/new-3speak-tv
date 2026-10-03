@@ -119,7 +119,7 @@ export default function TickerCrawl({
         {account ? (
           <img
             className="ticker-avatar"
-            src={`https://images.hive.blog/u/${account}/avatar/small`}
+            src={`/img/u/${account}/avatar/small`}
             alt=""
             loading="lazy"
           />

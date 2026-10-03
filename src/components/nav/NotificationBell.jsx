@@ -327,7 +327,7 @@ function NotifAvatar({ actor, className = 'notif-avatar', style }) {
     <img
       className={className}
       style={style}
-      src={`https://images.hive.blog/u/${actor}/avatar/small`}
+      src={`/img/u/${actor}/avatar/small`}
       alt={actor}
       onError={() => setFailed(true)}
     />

@@ -307,7 +307,7 @@ function CommentSection({ videoDetails, author, permlink, currentTime, duration,
             username: comment.author,
             profile: {
               images: {
-                avatar: `https://images.hive.blog/u/${comment.author}/avatar/small`,
+                avatar: `/img/u/${comment.author}/avatar/small`,
               },
             },
           },
@@ -436,7 +436,7 @@ function CommentSection({ videoDetails, author, permlink, currentTime, duration,
                 // it renders broken.
                 avatar: incubationHandle
                   ? handleAvatar(incubationHandle)
-                  : `https://images.hive.blog/u/${user}/avatar/small`,
+                  : `/img/u/${user}/avatar/small`,
               },
             },
           },

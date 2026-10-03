@@ -127,7 +127,7 @@ function Follower({ count = {}, username }) {
 
   const users = lists[activeTab];
   const total = activeTab === 'followers' ? count.follower_count : count.following_count;
-  const avatar = (u) => `https://images.hive.blog/u/${u}/avatar/small`;
+  const avatar = (u) => `/img/u/${u}/avatar/small`;
   const compact = (n) => formatNumber(n, { compact: true, maximumFractionDigits: n >= 10000 ? 0 : 1 });
 
   const TABS = [

@@ -6,7 +6,7 @@ import { CHECKER_URL } from '../../utils/config';
 import { useTranslation } from 'react-i18next';
 import './SubscriberTicker.scss';
 
-const avatar = (u) => `https://images.hive.blog/u/${u}/avatar/small`;
+const avatar = (u) => `/img/u/${u}/avatar/small`;
 
 /**
  * Horizontal news-ticker of active 3Speak Pro subscribers. Click → popup

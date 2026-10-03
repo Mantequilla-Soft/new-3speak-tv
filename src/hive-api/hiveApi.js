@@ -212,7 +212,7 @@ export function parseEmbedUrl(embedUrl) {
 
 export function parseUserAvatar(account) {
   if (!account) {
-    return "https://images.hive.blog/u/null/avatar/small";
+    return "/img/u/null/avatar/small";
   }
 
   try {
@@ -235,7 +235,7 @@ export function parseUserAvatar(account) {
     }
   } catch (_) { }
 
-  return `https://images.hive.blog/u/${account.name}/avatar/small`;
+  return `/img/u/${account.name}/avatar/small`;
 }
 
 export function formatNumber(num) {
@@ -283,7 +283,7 @@ export async function fetchCompleteShortData(shortItem, loggedInUser = null) {
     caption: embed_title || "",
     user: {
       username: `@${author}`,
-      avatar: `https://images.hive.blog/u/${author}/avatar/small`,
+      avatar: `/img/u/${author}/avatar/small`,
       isSubscribed: false
     },
     stats: {
@@ -632,7 +632,7 @@ async function loadNestedComments(comments, loggedInUser = null) {
         },
         user: {
           username: `@${comment.author}`,
-          avatar: `https://images.hive.blog/u/${comment.author}/avatar/small`
+          avatar: `/img/u/${comment.author}/avatar/small`
         }
       };
     })
@@ -748,7 +748,7 @@ export async function fetchShortsWithDetails(page = 1, limit = 10, loggedInUser 
       sound: s.hive_sound || null,
       user: {
         username: `@${finalAuthor}`,
-        avatar: `https://images.hive.blog/u/${finalAuthor}/avatar/small`,
+        avatar: `/img/u/${finalAuthor}/avatar/small`,
         isSubscribed: false,
         followersCount: s.hive_followers ?? null,
         reputation: s.hive_author_reputation ?? null,
@@ -827,7 +827,7 @@ export async function fetchUserShortsWithDetails(username, page = 1, limit = 20,
       sound: s.hive_sound || null,
       user: {
         username: `@${finalAuthor}`,
-        avatar: `https://images.hive.blog/u/${finalAuthor}/avatar/small`,
+        avatar: `/img/u/${finalAuthor}/avatar/small`,
         isSubscribed: false,
         followersCount: s.hive_followers ?? null,
         reputation: s.hive_author_reputation ?? null,

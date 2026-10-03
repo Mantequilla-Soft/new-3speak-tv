@@ -138,8 +138,13 @@ const fetchFeedShorts = async (mode, sectionKey, page = 1) => {
   return shorts;
 };
 
+// Promoted leads every feed, so the checker drops dismissed and (with the
+// preference on) already-watched promos up front. Filtering only client-side
+// flashed a watched promo for a split second until watch history loaded.
 const fetchPromoted = async () => {
-  const res = await axios.get(appendNsfw(`${CHECKER_URL}/feeds/promoted?limit=20`, useAppStore.getState().showNsfw));
+  const st = useAppStore.getState();
+  const viewer = st.user ? `&currentuser=${encodeURIComponent(st.user)}&hidewatched=${st.hideWatched ? '1' : '0'}` : '';
+  const res = await axios.get(appendNsfw(`${CHECKER_URL}/feeds/promoted?limit=20${viewer}`, st.showNsfw));
   return res.data?.videos || [];
 };
 
@@ -348,7 +353,7 @@ const HomeGrouped = () => {
 
   // Promoted videos — prefixed onto EVERY feed below (no dedicated tab any more).
   const { data: promotedData } = useQuery({
-    queryKey: ["promoted-grouped", showNsfw],
+    queryKey: ["promoted-grouped", showNsfw, user, hideWatched],
     queryFn: fetchPromoted,
     staleTime: 5 * 60 * 1000,
     gcTime: 10 * 60 * 1000,

@@ -50,7 +50,7 @@ function PlaylistFeedCard({ playlist }) {
     retry: 1,
   });
 
-  const cover = thumbnail || resolvedThumb || (owner ? `https://images.hive.blog/u/${owner}/avatar` : fallback);
+  const cover = thumbnail || resolvedThumb || (owner ? `/img/u/${owner}/avatar` : fallback);
   const changed = updatedAt ? dayjs(updatedAt).fromNow() : null;
 
   return (

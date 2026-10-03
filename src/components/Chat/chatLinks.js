@@ -116,7 +116,7 @@ async function fetchProfile(author) {
     author: acc.name,
     displayName: profile.name || acc.name,
     about: profile.about || '',
-    avatar: `https://images.hive.blog/u/${acc.name}/avatar/small`,
+    avatar: `/img/u/${acc.name}/avatar/small`,
   }
 }
 
@@ -129,7 +129,7 @@ async function fetchCommunity(name) {
     title: c.title || name,
     about: c.about || '',
     subscribers: c.subscribers || 0,
-    avatar: `https://images.hive.blog/u/${name}/avatar/small`,
+    avatar: `/img/u/${name}/avatar/small`,
   }
 }
 

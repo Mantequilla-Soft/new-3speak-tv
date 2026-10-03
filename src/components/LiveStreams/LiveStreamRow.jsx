@@ -68,7 +68,7 @@ export default function LiveStreamRow({ title, following = false }) {
               <span className="live-card-badge">{t('feeds.live.badge')}</span>
             </div>
             <div className="live-card-info">
-              <img className="live-card-avatar" src={`https://images.hive.blog/u/${s.host}/avatar/small`} alt={s.host} loading="lazy" />
+              <img className="live-card-avatar" src={`/img/u/${s.host}/avatar/small`} alt={s.host} loading="lazy" />
               <div className="live-card-text">
                 <span className="live-card-name">{s.title}</span>
                 <span className="live-card-host">@{s.host}</span>

@@ -1177,7 +1177,7 @@ const PlayVideo = ({ videoDetails, author, permlink, mediaUnavailable = false, m
                 />
                 {community_id && (
                   <div className="community-title-wrap" onClick={() => handleCommunityNavigate(community_id)}>
-                    <img src={`https://images.hive.blog/u/${community_id}/avatar/small`} alt="" />
+                    <img src={`/img/u/${community_id}/avatar/small`} alt="" />
                     <div className="community-text">
                       <span className="community-name">{comunity_name}</span>
                     </div>
@@ -1213,7 +1213,7 @@ const PlayVideo = ({ videoDetails, author, permlink, mediaUnavailable = false, m
               onFollow={(_, willFollow) => setIsFollowingCreator(willFollow)}
             />
             {community_id && (<div className="community-title-wrap" onClick={() => handleCommunityNavigate(community_id)}>
-              <img src={`https://images.hive.blog/u/${community_id}/avatar/small`} alt="" />
+              <img src={`/img/u/${community_id}/avatar/small`} alt="" />
               <div className="community-text">
                 <span className="community-name">{comunity_name}</span>
                 {communityData?.subscribers != null && (

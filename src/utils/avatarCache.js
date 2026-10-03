@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { hiveProxy } from './fixThumbnails';
+import { hiveProxy, viaImageCache } from './fixThumbnails';
 
 // images.hive.blog/u/<name>/avatar resolves profile_image server-side, but it
 // answers with `cache-control: public, max-age=86400`. So a browser that ever
@@ -58,8 +58,8 @@ function persist() {
 export function hiveAvatarUrl(username, size = 'small') {
   const u = encodeURIComponent(clean(username));
   return size
-    ? `https://images.hive.blog/u/${u}/avatar/${size}`
-    : `https://images.hive.blog/u/${u}/avatar`;
+    ? `/img/u/${u}/avatar/${size}`
+    : `/img/u/${u}/avatar`;
 }
 
 // A resolved profile_image is a URL on SOMEONE ELSE's host, and loading it
@@ -72,8 +72,16 @@ export function hiveAvatarUrl(username, size = 'small') {
 // the proxy cannot fetch it and it is already our CDN.
 const PROXY_PX = { small: 64, medium: 128, large: 512 };
 function viaHiveProxy(url, size) {
-  if (!/^https?:\/\//i.test(url) || /^https?:\/\/images\.hive\.blog\//i.test(url)) return url;
+  if (!/^https?:\/\//i.test(url)) return url;
   const px = PROXY_PX[size] || 256;
+  // Already a resized Hive URL (/p/..., /WxH/..., /u/.../avatar): just cache it. A raw
+  // upload ON Hive's image host (images.hive.blog/DQm...) is the original file, up to
+  // several MB for a 64 px circle, so it is resized like any other picture.
+  if (/^https?:\/\/images\.hive\.blog\/(p\/|\d+x\d+\/|u\/)/i.test(url)) return viaImageCache(url);
+  // Our own host: Hive's proxy cannot fetch it, so it would load at full size.
+  // /img/a/ (nginx) square-crops it once and keeps it.
+  const own = url.match(/^https?:\/\/images\.3speak\.tv\/(.+)$/i);
+  if (own) return `/img/a/${own[1].split('?')[0]}?px=${px === 256 ? 128 : px}`;
   return hiveProxy(url, { w: px, h: px });
 }
 

@@ -186,7 +186,7 @@ function SearchList_Sm({searchTerm, setSearchTerm, handleNav, setIsDropdownOpens
                     <div className='wrap'
                       onClick={()=>{handleNavigate(username); handleNav()}}
                     >
-                       <img src={`https://images.hive.blog/u/${username}/avatar/small`} alt="" /><span>{username}</span>
+                       <img src={`/img/u/${username}/avatar/small`} alt="" /><span>{username}</span>
                     </div>
                   </li>
                 ))}
@@ -225,7 +225,7 @@ function SearchList_Sm({searchTerm, setSearchTerm, handleNav, setIsDropdownOpens
 
                     onClick={()=>{handleNavigateCommunity(community.name)}}
                     >
-                        <img src={`https://images.hive.blog/u/${community.name}/avatar/small`} alt="" /><span>{community.title}</span>
+                        <img src={`/img/u/${community.name}/avatar/small`} alt="" /><span>{community.title}</span>
                       {/* {community.title} (hive-{community.name}) */}
                     </div>
                   </li>
