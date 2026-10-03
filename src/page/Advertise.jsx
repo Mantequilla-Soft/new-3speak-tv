@@ -1403,6 +1403,25 @@ const CREATIVE_STATUS = {
   rejected: 'Not accepted',
 };
 
+/* A creative still waiting on something (our review, or its encode) changes on the
+ * server's schedule, not the page's. These lists were read once on mount, so "Waiting
+ * for review" stayed on screen after we had approved it until somebody reloaded.
+ *
+ * Re-reads while anything is unsettled and stops once nothing is, so a settled list
+ * makes no requests. Not while the tab is hidden; it catches up the moment it is back. */
+const CREATIVE_POLL_MS = 20000;
+const isUnsettled = (c) => c.status === 'pending' || c.status === 'review';
+function usePollWhileUnsettled(list, refresh) {
+  const waiting = list.some(isUnsettled);
+  useEffect(() => {
+    if (!waiting) return undefined;
+    const tick = () => { if (document.visibilityState === 'visible') refresh(); };
+    const t = setInterval(tick, CREATIVE_POLL_MS);
+    document.addEventListener('visibilitychange', tick);
+    return () => { clearInterval(t); document.removeEventListener('visibilitychange', tick); };
+  }, [waiting, refresh]);
+}
+
 /**
  * Upload the spot.
  *
@@ -1611,6 +1630,7 @@ function TickerPanel({ reference, account, productName, format = null, onCreativ
       .catch(() => { /* an unreadable list is not worth an error banner */ });
   }, [reference, onCreatives]);
   useEffect(() => { refresh(); }, [refresh]);
+  usePollWhileUnsettled(saved, refresh);
 
   const length = [...message.trim()].length;
   const words = message.trim() ? message.trim().split(/\s+/).length : 0;
@@ -1760,6 +1780,7 @@ function CreativePanel({ reference, account, maxSeconds, bannerSpec, onCreatives
   }, [reference, onCreatives]);
 
   useEffect(() => { refresh(); }, [refresh]);
+  usePollWhileUnsettled(creatives, refresh);
 
   async function onFile(e) {
     const file = e.target.files && e.target.files[0];
