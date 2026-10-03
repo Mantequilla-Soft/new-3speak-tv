@@ -94,22 +94,26 @@
   to { transform: translateX(-100%); }
 }
 
-/* 'hold': in from the right edge, centred for the middle 60%, out past the left edge.
-   Positions are measured in px by the component (it only uses this when the line fits). */
+/* 'hold': eases in from the right edge, readable for the middle 60% (still when it fits,
+   a slow pan when it does not), out past the left edge. Positions are measured in px
+   by the component. The entry eases out, so it arrives quickly and settles; the rest is
+   linear, so the pan reads at an even pace. */
 .ticker-track.is-hold {
   padding-left: 0;
   animation-name: ticker-hold;
 }
 
 @keyframes ticker-hold {
-  0% { transform: translateX(var(--ticker-from)); }
-  20% { transform: translateX(var(--ticker-center)); }
-  80% { transform: translateX(var(--ticker-center)); }
+  0% { transform: translateX(var(--ticker-from)); animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1); }
+  20% { transform: translateX(var(--ticker-start)); animation-timing-function: linear; }
+  80% { transform: translateX(var(--ticker-end)); animation-timing-function: linear; }
   100% { transform: translateX(var(--ticker-to)); }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .ticker-track {
+  // .is-hold named too: its own rule is more specific and would keep it moving.
+  .ticker-track,
+  .ticker-track.is-hold {
     animation: none;
     padding-left: 0;
     max-width: 100%;

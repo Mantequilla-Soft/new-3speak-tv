@@ -1575,7 +1575,7 @@ function BrandPanel({ reference, account, productName, initialLogoUrl, initialSl
  */
 const TICKER_STYLES = [
   { id: 'crawl', title: 'Crawl across', blurb: 'Enters on the right and leaves on the left in one smooth pass.' },
-  { id: 'hold', title: 'Slide in, pause, slide out', blurb: 'Stops in the middle so it can be read standing still. Only when the line fits the bar; a longer one crawls.' },
+  { id: 'hold', title: 'Slide in, pause, slide out', blurb: 'Glides in and stops in the middle so it can be read standing still. A line longer than the screen pans slowly from its start to its end instead.' },
 ];
 
 /* The ticker as a viewer will get it: the same TickerCrawl the watch page draws, at the

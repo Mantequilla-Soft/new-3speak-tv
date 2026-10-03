@@ -18,15 +18,36 @@ import './TickerCrawl.scss';
  * that they will never read. With reduced motion it does not move at all and the line
  * is cut with an ellipsis instead.
  *
- * Two styles. 'crawl' crosses once. 'hold' slides in from the right, stops centred for
- * the middle 60% of the time, then slides out to the left: easier to read, and only
- * possible when the line FITS the bar, so it is measured here and falls back to the
- * crawl when it does not (a long message on a phone). Same booked seconds either way.
+ * Two styles. 'crawl' crosses once. 'hold' eases in from the right, spends the middle
+ * 60% of the time readable, then slides out to the left. A line that FITS the bar
+ * stops centred; a longer one (a long message on a phone) comes to rest with its start
+ * just inside the left edge and pans slowly until its end is in view. So it is
+ * measured here, and re-measured when the strip changes size. Same booked seconds
+ * either way.
  *
  * With a click URL the whole strip is a link to OUR origin, which counts the click and
  * redirects to the link a reviewer approved with the message. New tab, so the viewer
  * keeps their video.
  */
+// Breathing room at either edge when a long line pans, so its first and last letters
+// are not cut by the edge of the strip.
+const HOLD_EDGE = 12;
+
+/* Where the 'hold' line rests, as CSS variables: it comes in from the right edge,
+ * is readable from --ticker-start to --ticker-end (the same spot when it fits, centred;
+ * a slow pan from its start to its end when it does not), then leaves past the left. */
+function holdVars(w, c) {
+  const fits = c <= w - 2 * HOLD_EDGE;
+  const start = fits ? Math.round((w - c) / 2) : HOLD_EDGE;
+  const end = fits ? start : Math.round(w - c - HOLD_EDGE);
+  return {
+    '--ticker-from': `${w}px`,
+    '--ticker-start': `${start}px`,
+    '--ticker-end': `${end}px`,
+    '--ticker-to': `${-c}px`,
+  };
+}
+
 export default function TickerCrawl({
   account = null,
   productName = null,
@@ -46,7 +67,7 @@ export default function TickerCrawl({
 }) {
   const windowRef = useRef(null);
   const contentRef = useRef(null);
-  // Measured sizes for 'hold'; null until measured, and whenever the line does not fit.
+  // Measured sizes for 'hold'; null until measured.
   const [measured, setMeasured] = useState(null);
   // Only meaningful in 'hold' mode; a crawl ignores whatever was last measured.
   const hold = tickerStyle === 'hold' ? measured : null;
@@ -56,7 +77,7 @@ export default function TickerCrawl({
     const measure = () => {
       const w = windowRef.current?.clientWidth || 0;
       const c = contentRef.current?.scrollWidth || 0;
-      setMeasured(w > 0 && c > 0 && c <= w - 8 ? { w, c } : null);
+      setMeasured(w > 0 && c > 0 ? { w, c } : null);
     };
     measure();
     const ro = typeof ResizeObserver !== 'undefined' ? new ResizeObserver(measure) : null;
@@ -68,11 +89,7 @@ export default function TickerCrawl({
     '--ticker-duration': `${Math.max(3, Number(durationSeconds) || 15)}s`,
     '--ticker-iterations': loop ? 'infinite' : '1',
     '--ticker-state': paused ? 'paused' : 'running',
-    ...(hold ? {
-      '--ticker-from': `${hold.w}px`,
-      '--ticker-center': `${Math.round((hold.w - hold.c) / 2)}px`,
-      '--ticker-to': `${-hold.c}px`,
-    } : {}),
+    ...(hold ? holdVars(hold.w, hold.c) : {}),
   };
 
   const line = (
