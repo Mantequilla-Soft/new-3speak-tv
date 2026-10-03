@@ -14,6 +14,7 @@ import { useAppStore } from '../../lib/store';
 import useGiphySearch, { normalizeGifUrl } from '../../hooks/useGiphySearch';
 import { gifMarkdown } from '../../utils/composerInsert';
 import { getHiveRenderer, getPostBodyRenderer } from '../../lib/hiveRenderer';
+import { useTranslation } from 'react-i18next';
 
 // Every toast from this module is headed "Post"; the message becomes the
 // line under it. See utils/toast.js.
@@ -29,7 +30,8 @@ const PREVIEW_RENDERERS = {
   snap: getHiveRenderer,
 };
 
-const MarkdownComposer = ({ value, onChange, placeholder = "Write your description here...", show, previewContext = 'post-body' }) => {
+const MarkdownComposer = ({ value, onChange, placeholder, show, previewContext = 'post-body' }) => {
+  const { t } = useTranslation();
   const { theme } = useAppStore()
   const textareaRef = useRef(null);
   const [viewMode, setViewMode] = useState('editor'); // 'editor' | 'preview' | 'split'
@@ -75,10 +77,10 @@ const MarkdownComposer = ({ value, onChange, placeholder = "Write your descripti
         setRenderedContent(render(value));
       } catch (error) {
         console.error("Error rendering content:", error);
-        setRenderedContent("<p>Error rendering content</p>");
+        setRenderedContent(`<p>${t('studio.composer.renderError')}</p>`);
       }
     });
-  }, [value, viewMode, previewContext]);
+  }, [value, viewMode, previewContext, t]);
 
   // Helper to wrap selected text or insert at cursor
   const wrapText = useCallback((before, after = before) => {
@@ -139,7 +141,7 @@ const MarkdownComposer = ({ value, onChange, placeholder = "Write your descripti
   const handleSpoiler = () => wrapText('\n<details>\n<summary>Click to reveal</summary>\n\n', '\n\n</details>\n');
   
   const handleLink = () => {
-    const url = prompt('Enter URL:');
+    const url = prompt(t('studio.composer.enterUrl'));
     if (url) {
       const textarea = textareaRef.current;
       const start = textarea.selectionStart;
@@ -208,7 +210,7 @@ const MarkdownComposer = ({ value, onChange, placeholder = "Write your descripti
   // Image upload
   const handleImageUpload = async (file) => {
     if (!file || !file.type.startsWith('image/')) {
-      toast.error('Please select an image file');
+      toast.error(t('studio.composer.selectImage'));
       return;
     }
 
@@ -216,10 +218,10 @@ const MarkdownComposer = ({ value, onChange, placeholder = "Write your descripti
     try {
       const url = await uploadImageToHive(file);
       insertText(`\n![${file.name}](${url})\n`);
-      toast.success('Image uploaded successfully!');
+      toast.success(t('studio.composer.imageUploaded'));
     } catch (error) {
       console.error('Image upload failed:', error);
-      toast.error('Failed to upload image. Please try again.');
+      toast.error(t('studio.composer.imageUploadFailed'));
     } finally {
       setIsUploading(false);
     }
@@ -279,16 +281,16 @@ const MarkdownComposer = ({ value, onChange, placeholder = "Write your descripti
       {/* Toolbar */}
       <div className="composer-toolbar">
         <div className="toolbar-group">
-          <button type="button" onClick={handleBold} title="Bold (Ctrl+B)">
+          <button type="button" onClick={handleBold} title={t('studio.composer.bold')}>
             <FaBold />
           </button>
-          <button type="button" onClick={handleItalic} title="Italic (Ctrl+I)">
+          <button type="button" onClick={handleItalic} title={t('studio.composer.italic')}>
             <FaItalic />
           </button>
-          <button type="button" onClick={handleUnderline} title="Underline">
+          <button type="button" onClick={handleUnderline} title={t('studio.composer.underline')}>
             <FaUnderline />
           </button>
-          <button type="button" onClick={handleStrikethrough} title="Strikethrough">
+          <button type="button" onClick={handleStrikethrough} title={t('studio.composer.strikethrough')}>
             <FaStrikethrough />
           </button>
         </div>
@@ -300,7 +302,7 @@ const MarkdownComposer = ({ value, onChange, placeholder = "Write your descripti
             <button 
               type="button" 
               onClick={() => setShowHeaderMenu(!showHeaderMenu)} 
-              title="Headers"
+              title={t('studio.composer.headers')}
               className={showHeaderMenu ? 'active' : ''}
             >
               <FaHeading />
@@ -319,13 +321,13 @@ const MarkdownComposer = ({ value, onChange, placeholder = "Write your descripti
               </div>
             )}
           </div>
-          <button type="button" onClick={handleBulletList} title="Bullet List">
+          <button type="button" onClick={handleBulletList} title={t('studio.composer.bulletList')}>
             <FaListUl />
           </button>
-          <button type="button" onClick={handleNumberedList} title="Numbered List">
+          <button type="button" onClick={handleNumberedList} title={t('studio.composer.numberedList')}>
             <FaListOl />
           </button>
-          <button type="button" onClick={handleQuote} title="Quote">
+          <button type="button" onClick={handleQuote} title={t('studio.composer.quote')}>
             <FaQuoteLeft />
           </button>
         </div>
@@ -333,24 +335,24 @@ const MarkdownComposer = ({ value, onChange, placeholder = "Write your descripti
         <div className="toolbar-divider" />
 
         <div className="toolbar-group">
-          <button type="button" onClick={handleCodeBlock} title="Code Block">
+          <button type="button" onClick={handleCodeBlock} title={t('studio.composer.codeBlock')}>
             <FaCode />
           </button>
-          <button type="button" onClick={handleLink} title="Insert Link">
+          <button type="button" onClick={handleLink} title={t('studio.composer.insertLink')}>
             <FaLink />
           </button>
           <button 
             type="button" 
             onClick={handleImageClick} 
-            title="Upload Image"
+            title={t('studio.composer.uploadImage')}
             disabled={isUploading}
           >
             <FaImage />
           </button>
-          <button type="button" onClick={handleTable} title="Insert Table">
+          <button type="button" onClick={handleTable} title={t('studio.composer.insertTable')}>
             <FaTable />
           </button>
-          <button type="button" onClick={handleSpoiler} title="Spoiler/Hidden Text">
+          <button type="button" onClick={handleSpoiler} title={t('studio.composer.spoiler')}>
             <FaEyeSlash />
           </button>
         </div>
@@ -362,7 +364,7 @@ const MarkdownComposer = ({ value, onChange, placeholder = "Write your descripti
             <button
               type="button"
               onClick={toggleEmojiPicker}
-              title="Emoji"
+              title={t('studio.composer.emoji')}
               className={showEmojiPicker ? 'active' : ''}
             >
               <FaSmile />
@@ -376,7 +378,7 @@ const MarkdownComposer = ({ value, onChange, placeholder = "Write your descripti
                   width={340}
                   height={380}
                   previewConfig={{ showPreview: false }}
-                  searchPlaceholder="Search emoji"
+                  searchPlaceholder={t('studio.composer.searchEmoji')}
                 />
               </div>
             )}
@@ -395,21 +397,21 @@ const MarkdownComposer = ({ value, onChange, placeholder = "Write your descripti
                 <input
                   className="gif-picker-search"
                   type="text"
-                  placeholder="Search GIFs…"
+                  placeholder={t('studio.composer.searchGifs')}
                   value={gifQuery}
                   onChange={(e) => setGifQuery(e.target.value)}
                   autoFocus
                 />
                 <div className="gif-picker-grid">
-                  {gifLoading && <div className="gif-picker-status">Loading…</div>}
-                  {!gifLoading && gifs.length === 0 && <div className="gif-picker-status">No GIFs found.</div>}
+                  {gifLoading && <div className="gif-picker-status">{t('common.status.loading')}</div>}
+                  {!gifLoading && gifs.length === 0 && <div className="gif-picker-status">{t('studio.composer.noGifs')}</div>}
                   {!gifLoading && gifs.map((g) => (
                     <button key={g.id} type="button" className="gif-picker-item" onClick={() => handleGifSelect(g)}>
                       <img src={g.images?.fixed_height?.url || g.images?.fixed_height_small?.url} alt={g.title || 'gif'} loading="lazy" />
                     </button>
                   ))}
                 </div>
-                <div className="gif-picker-attribution">Powered by GIPHY</div>
+                <div className="gif-picker-attribution">{t('studio.composer.poweredByGiphy')}</div>
               </div>
             )}
           </div>
@@ -421,7 +423,7 @@ const MarkdownComposer = ({ value, onChange, placeholder = "Write your descripti
           <button 
             type="button" 
             onClick={() => setViewMode('editor')} 
-            title="Editor Only"
+            title={t('studio.composer.editorOnly')}
             className={viewMode === 'editor' ? 'active' : ''}
           >
             <FaEdit />
@@ -429,7 +431,7 @@ const MarkdownComposer = ({ value, onChange, placeholder = "Write your descripti
           <button 
             type="button" 
             onClick={() => setViewMode('split')} 
-            title="Split View"
+            title={t('studio.composer.splitView')}
             className={`show ${viewMode === 'split' ? 'active' : ''}`}
           >
             <FaColumns />
@@ -437,7 +439,7 @@ const MarkdownComposer = ({ value, onChange, placeholder = "Write your descripti
           <button 
             type="button" 
             onClick={() => setViewMode('preview')} 
-            title="Preview Only"
+            title={t('studio.composer.previewOnly')}
             className={viewMode === 'preview' ? 'active' : ''}
           >
             <FaEye />
@@ -460,18 +462,18 @@ const MarkdownComposer = ({ value, onChange, placeholder = "Write your descripti
               value={value}
               onChange={(e) => onChange(e.target.value)}
               onPaste={handlePaste}
-              placeholder={placeholder}
+              placeholder={placeholder ?? t('studio.composer.placeholder')}
               spellCheck={false}
             />
             {isDragOver && (
               <div className="drag-overlay">
                 <FaImage size={48} />
-                <span>Drop image here</span>
+                <span>{t('studio.composer.dropImage')}</span>
               </div>
             )}
             {isUploading && (
               <div className="upload-overlay">
-                <span>Uploading image...</span>
+                <span>{t('studio.composer.uploadingImage')}</span>
               </div>
             )}
           </div>
@@ -487,7 +489,7 @@ const MarkdownComposer = ({ value, onChange, placeholder = "Write your descripti
               />
             ) : (
               <div className="preview-placeholder">
-                Preview will appear here...
+                {t('studio.composer.previewPlaceholder')}
               </div>
             )}
           </div>

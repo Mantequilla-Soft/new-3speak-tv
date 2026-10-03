@@ -21,6 +21,7 @@ import { useAppStore } from '../../lib/store'
 import { EMBED_API_KEY } from '../../utils/config'
 import { getAccounts } from '../../hive-api/hiveApi'
 import './chat.scss'
+import { useTranslation } from 'react-i18next'
 
 // Every toast from this module is headed "Chat"; the message becomes the
 // line under it. See utils/toast.js.
@@ -122,16 +123,16 @@ function renderMessageText(text) {
 
 /** Shown when the client isn't authenticated to the Snapie chat backend yet. */
 function ConnectGate() {
+  const { t } = useTranslation()
   const { connect, connecting, error, canConnect } = useChat()
   return (
     <div className="chat-gate">
       <div className="chat-gate-icon">
         <MessageCirclePlus size={44} />
       </div>
-      <h3>Connect to 3Speak Chat</h3>
+      <h3>{t('chat.gate.connectTitle')}</h3>
       <p>
-        Chat is powered by Snapie. Connecting signs a one-time login challenge
-        with your Hive posting key — no transaction, no cost.
+        {t('chat.gate.connectBody')}
       </p>
       {error && <p className="chat-gate-error">{error}</p>}
       <button
@@ -142,16 +143,15 @@ function ConnectGate() {
       >
         {connecting ? (
           <>
-            <Loader2 size={16} className="chat-spin" /> Connecting…
+            <Loader2 size={16} className="chat-spin" /> {t('chat.gate.connecting')}
           </>
         ) : (
-          'Connect chat'
+          t('chat.gate.connectButton')
         )}
       </button>
       {!canConnect && (
         <p className="chat-gate-hint">
-          Your current login can’t sign the chat challenge. Use Keychain,
-          HiveAuth, PeakVault or Ledger.
+          {t('chat.gate.cannotSign')}
         </p>
       )}
     </div>
@@ -159,6 +159,7 @@ function ConnectGate() {
 }
 
 function NewDmForm() {
+  const { t } = useTranslation()
   const { openDmWith } = useChat()
   const [value, setValue] = useState('')
   const [busy, setBusy] = useState(false)
@@ -172,13 +173,13 @@ function NewDmForm() {
       // Only let users start a DM with a real Hive account.
       const accounts = await getAccounts([handle])
       if (!accounts || accounts.length === 0) {
-        toast.error(`@${handle} is not a Hive account.`)
+        toast.error(t('chat.errors.notHiveAccount', { user: handle }))
         return
       }
       await openDmWith(handle)
       setValue('')
     } catch (err) {
-      toast.error(err?.message || 'Could not open that conversation.')
+      toast.error(err?.message || t('chat.errors.openConversation'))
     } finally {
       setBusy(false)
     }
@@ -189,13 +190,13 @@ function NewDmForm() {
       <span className="chat-newdm-at">@</span>
       <input
         type="text"
-        placeholder="Message a Hive user…"
+        placeholder={t('chat.newDm.placeholder')}
         value={value}
         onChange={(e) => setValue(e.target.value)}
         spellCheck={false}
         autoCapitalize="none"
       />
-      <button type="submit" disabled={!value.trim() || busy} aria-label="Start chat">
+      <button type="submit" disabled={!value.trim() || busy} aria-label={t('chat.newDm.start')}>
         {busy ? <Loader2 size={16} className="chat-spin" /> : <Send size={16} />}
       </button>
     </form>
@@ -213,6 +214,7 @@ async function hiveAccountExists(handle) {
 // Members are entered as chips: type a handle, press space/enter/comma to
 // verify it against Hive and add it; the × removes it.
 function NewRoomForm() {
+  const { t } = useTranslation()
   const { createPrivateRoom } = useChat()
   const [open, setOpen] = useState(false)
   const [name, setName] = useState('')
@@ -236,13 +238,13 @@ function NewRoomForm() {
     setChecking(true)
     try {
       if (!(await hiveAccountExists(handle))) {
-        toast.error(`@${handle} is not a Hive account.`)
+        toast.error(t('chat.errors.notHiveAccount', { user: handle }))
         return
       }
       setMembers((prev) => (prev.includes(handle) ? prev : [...prev, handle]))
       setMemberInput('')
     } catch (err) {
-      toast.error(err?.message || 'Could not verify that account.')
+      toast.error(err?.message || t('chat.errors.verifyAccount'))
     } finally {
       setChecking(false)
     }
@@ -285,7 +287,7 @@ function NewRoomForm() {
       const tail = memberInput.trim().replace(/^@/, '').toLowerCase()
       if (tail && !finalMembers.includes(tail)) {
         if (!(await hiveAccountExists(tail))) {
-          toast.error(`@${tail} is not a Hive account.`)
+          toast.error(t('chat.errors.notHiveAccount', { user: tail }))
           return
         }
         finalMembers.push(tail)
@@ -293,7 +295,7 @@ function NewRoomForm() {
       await createPrivateRoom({ name: roomName, members: finalMembers })
       close()
     } catch (err) {
-      toast.error(err?.message || 'Could not create the room.')
+      toast.error(err?.message || t('chat.errors.createRoom'))
     } finally {
       setBusy(false)
     }
@@ -302,7 +304,7 @@ function NewRoomForm() {
   if (!open) {
     return (
       <button type="button" className="chat-newroom-toggle" onClick={() => setOpen(true)}>
-        <Users size={16} /> New private room
+        <Users size={16} /> {t('chat.newRoom.toggle')}
       </button>
     )
   }
@@ -311,7 +313,7 @@ function NewRoomForm() {
     <form className="chat-newroom" onSubmit={submit}>
       <input
         type="text"
-        placeholder="Room name…"
+        placeholder={t('chat.newRoom.namePlaceholder')}
         value={name}
         onChange={(e) => setName(e.target.value)}
         autoFocus
@@ -320,14 +322,14 @@ function NewRoomForm() {
         {members.map((m) => (
           <span key={m} className="chat-member-chip">
             @{m}
-            <button type="button" onClick={() => removeMember(m)} aria-label={`Remove @${m}`}>
+            <button type="button" onClick={() => removeMember(m)} aria-label={t('chat.newRoom.removeMember', { user: m })}>
               <X size={12} />
             </button>
           </span>
         ))}
         <input
           type="text"
-          placeholder={members.length ? 'Add more…' : 'Invite Hive users (optional)…'}
+          placeholder={members.length ? t('chat.newRoom.addMore') : t('chat.newRoom.invitePlaceholder')}
           value={memberInput}
           onChange={onMemberChange}
           onKeyDown={onMemberKeyDown}
@@ -338,10 +340,10 @@ function NewRoomForm() {
       </div>
       <div className="chat-newroom-actions">
         <button type="button" className="chat-newroom-cancel" onClick={close} disabled={busy}>
-          Cancel
+          {t('common.actions.cancel')}
         </button>
         <button type="submit" disabled={!name.trim() || busy}>
-          {busy ? <Loader2 size={16} className="chat-spin" /> : 'Create'}
+          {busy ? <Loader2 size={16} className="chat-spin" /> : t('chat.newRoom.create')}
         </button>
       </div>
     </form>
@@ -380,6 +382,7 @@ function useGroups() {
 
 // Browse & join public channels. Collapsed to a button until opened.
 function BrowseChannels() {
+  const { t } = useTranslation()
   const { client, joinChannel } = useChat()
   const [open, setOpen] = useState(false)
   const [channels, setChannels] = useState([])
@@ -403,7 +406,7 @@ function BrowseChannels() {
     try {
       await joinChannel(ch) // joins, then opens the channel thread
     } catch (err) {
-      toast.error(err?.message || 'Could not join that channel.')
+      toast.error(err?.message || t('chat.errors.joinChannel'))
     } finally {
       setJoining(null)
     }
@@ -412,7 +415,7 @@ function BrowseChannels() {
   if (!open) {
     return (
       <button type="button" className="chat-newroom-toggle" onClick={() => setOpen(true)}>
-        <Hash size={16} /> Browse channels
+        <Hash size={16} /> {t('chat.channels.browse')}
       </button>
     )
   }
@@ -420,21 +423,21 @@ function BrowseChannels() {
   return (
     <div className="chat-browse">
       <div className="chat-browse-head">
-        <span>Public channels</span>
-        <button type="button" onClick={() => setOpen(false)} aria-label="Close channel browser">
+        <span>{t('chat.channels.publicTitle')}</span>
+        <button type="button" onClick={() => setOpen(false)} aria-label={t('chat.channels.closeBrowser')}>
           <X size={14} />
         </button>
       </div>
-      {loading && <div className="chat-empty">Loading channels…</div>}
+      {loading && <div className="chat-empty">{t('chat.channels.loading')}</div>}
       {!loading && channels.length === 0 && (
-        <div className="chat-empty">No channels available.</div>
+        <div className="chat-empty">{t('chat.channels.empty')}</div>
       )}
       <ul className="chat-browse-ul">
         {channels.map((ch) => (
           <li key={ch._id} className="chat-browse-row">
             <span className="chat-browse-name"># {ch.name}</span>
             <button type="button" onClick={() => join(ch)} disabled={joining === ch._id}>
-              {joining === ch._id ? <Loader2 size={14} className="chat-spin" /> : 'Join'}
+              {joining === ch._id ? <Loader2 size={14} className="chat-spin" /> : t('chat.channels.join')}
             </button>
           </li>
         ))}
@@ -444,6 +447,7 @@ function BrowseChannels() {
 }
 
 function ConversationList() {
+  const { t } = useTranslation()
   const { conversations, loading } = useConversations()
   const { openConversation, activeConversation, shareDraft } = useChat()
   // Per-conversation unread from the same snapshot that drives the nav badge.
@@ -508,7 +512,7 @@ function ConversationList() {
       if (usedFallback) ids = merged.map((c) => c._id).filter(Boolean)
 
       if (!ids.length) {
-        toast.error('No conversations to clear. The count may be stuck server-side.')
+        toast.error(t('chat.markRead.nothingToClear'))
         return
       }
 
@@ -546,32 +550,34 @@ function ConversationList() {
           const body = await r.text()
           serverError = ` (HTTP ${r.status}: ${body.slice(0, 120)})`
         } catch (e) {
-          serverError = ` (${e?.message || 'request failed'})`
+          serverError = ` (${e?.message || t('chat.markRead.requestFailed')})`
         }
       }
 
       if (last && (last.total || 0) === 0) {
-        toast.success('All caught up')
+        toast.success(t('chat.markRead.allCaughtUp'))
       } else if (last) {
         toast.error(
-          `Still showing ${last.total} unread after clearing ${ids.length} chat${ids.length === 1 ? '' : 's'}.` +
-          (usedFallback ? ' The server reports a count but no matching conversation.' : '')
+          usedFallback
+            ? t('chat.markRead.stillUnreadNoMatch', { count: ids.length, total: last.total })
+            : t('chat.markRead.stillUnread', { count: ids.length, total: last.total })
         )
       } else if (!authedBefore) {
-        toast.error('Chat is not signed in. Reconnect chat and try again.')
+        toast.error(t('chat.markRead.notSignedIn'))
       } else if (!authedAfter) {
         // request() nulls the token on any 401 and rethrows, so one rejected
         // call silently disarms every call after it.
-        toast.error('Chat session expired while clearing. Reconnect chat and try again.')
+        toast.error(t('chat.markRead.sessionExpired'))
       } else {
         toast.error(
-          `Server rejected all ${ids.length} request${ids.length === 1 ? '' : 's'}` +
-          `${usedFallback ? ' (ids from the visible list)' : ' (ids from the server\'s own unread map)'}` +
+          (usedFallback
+            ? t('chat.markRead.serverRejectedVisible', { count: ids.length })
+            : t('chat.markRead.serverRejectedServerMap', { count: ids.length })) +
           `${serverError}`
         )
       }
     } catch {
-      toast.error('Could not mark everything as read')
+      toast.error(t('chat.markRead.failed'))
     } finally {
       setClearing(false)
       refreshUnread()
@@ -581,7 +587,7 @@ function ConversationList() {
   return (
     <div className="chat-list">
       {shareDraft && (
-        <div className="chat-share-banner">Choose a chat to send to</div>
+        <div className="chat-share-banner">{t('chat.list.chooseTarget')}</div>
       )}
       <NewDmForm />
       <NewRoomForm />
@@ -594,16 +600,16 @@ function ConversationList() {
           disabled={clearing}
         >
           {clearing
-            ? 'Marking as read…'
-            : `Mark all as read${unreadCount > 0 ? ` (${unreadCount})` : ''}`}
+            ? t('chat.markRead.marking')
+            : (unreadCount > 0 ? t('chat.markRead.buttonCount', { count: unreadCount }) : t('chat.markRead.button'))}
         </button>
       )}
       {loading && merged.length === 0 && (
-        <div className="chat-empty">Loading conversations…</div>
+        <div className="chat-empty">{t('chat.list.loading')}</div>
       )}
       {!loading && merged.length === 0 && (
         <div className="chat-empty">
-          No conversations yet. Start one above by entering a Hive username.
+          {t('chat.list.empty')}
         </div>
       )}
       <ul className="chat-conv-ul">
@@ -654,17 +660,18 @@ function ConversationList() {
 
 // Leave the current room/channel from the thread header (DMs can't be left).
 function LeaveButton({ conv }) {
+  const { t } = useTranslation()
   const { leaveConversation, backToList } = useChat()
   const [busy, setBusy] = useState(false)
   const kind = conv.type === 'group' ? 'room' : 'channel'
   const leave = async () => {
-    if (!window.confirm(`Leave this ${kind}?`)) return
+    if (!window.confirm(kind === 'room' ? t('chat.leave.confirmRoom') : t('chat.leave.confirmChannel'))) return
     setBusy(true)
     try {
       await leaveConversation(conv)
       backToList()
     } catch (err) {
-      toast.error(err?.message || `Could not leave the ${kind}.`)
+      toast.error(err?.message || (kind === 'room' ? t('chat.leave.errorRoom') : t('chat.leave.errorChannel')))
     } finally {
       setBusy(false)
     }
@@ -675,15 +682,16 @@ function LeaveButton({ conv }) {
       className="chat-thread-leave"
       onClick={leave}
       disabled={busy}
-      title={`Leave ${kind}`}
+      title={kind === 'room' ? t('chat.leave.titleRoom') : t('chat.leave.titleChannel')}
     >
       {busy ? <Loader2 size={15} className="chat-spin" /> : <LogOut size={16} />}
-      <span>Leave</span>
+      <span>{t('chat.leave.button')}</span>
     </button>
   )
 }
 
 function Thread({ conv }) {
+  const { t } = useTranslation()
   const me = useAppStore((s) => s.user)
   const { backToList, shareDraft, setShareDraft } = useChat()
   const { messages, loading, error, sendMessage, editMessage } = useChatMessages(
@@ -770,7 +778,7 @@ function Thread({ conv }) {
       try {
         await editMessage(target._id, body)
       } catch (err) {
-        toast.error(err?.message || 'Could not edit the message.')
+        toast.error(err?.message || t('chat.thread.editError'))
       }
       return
     }
@@ -811,12 +819,12 @@ function Thread({ conv }) {
 
   // Soft delete — the SDK has no real delete, so replace the body with a marker.
   const deleteMessage = async (m) => {
-    if (!window.confirm('Delete this message? It will be replaced with “[deleted]”.')) return
+    if (!window.confirm(t('chat.thread.deleteConfirm'))) return
     if (editTarget?._id === m._id) { setEditTarget(null); updateDraft('') }
     try {
       await editMessage(m._id, '[deleted]')
     } catch (err) {
-      toast.error(err?.message || 'Could not delete the message.')
+      toast.error(err?.message || t('chat.thread.deleteError'))
     }
   }
 
@@ -861,7 +869,7 @@ function Thread({ conv }) {
           type="button"
           className="chat-icon-btn chat-thread-back"
           onClick={backToList}
-          aria-label="Back to conversations"
+          aria-label={t('chat.thread.back')}
         >
           <ArrowLeft size={20} />
         </button>
@@ -871,10 +879,10 @@ function Thread({ conv }) {
       </header>
 
       <div className="chat-messages" ref={scrollRef}>
-        {loading && <div className="chat-empty">Loading messages…</div>}
+        {loading && <div className="chat-empty">{t('chat.thread.loading')}</div>}
         {error && <div className="chat-gate-error">{error}</div>}
         {!loading && messages.length === 0 && (
-          <div className="chat-empty">No messages yet — say hi 👋</div>
+          <div className="chat-empty">{t('chat.thread.empty')}</div>
         )}
         {messages.map((m) => {
           const mine = m.sender === me
@@ -916,7 +924,7 @@ function Thread({ conv }) {
                   {postLink && <ChatLinkCard link={postLink} />}
                   {m.createdAt && (
                     <span className="chat-msg-time" title={new Date(m.createdAt).toLocaleString()}>
-                      {timeAgo(m.createdAt)}{m.editedAt ? ' · edited' : ''}
+                      {timeAgo(m.createdAt)}{m.editedAt ? t('chat.thread.editedSuffix') : ''}
                     </span>
                   )}
                 </div>
@@ -924,7 +932,7 @@ function Thread({ conv }) {
                   <button
                     type="button"
                     className="chat-msg-menu-btn"
-                    aria-label="Message actions"
+                    aria-label={t('chat.thread.messageActions')}
                     onClick={(e) => { e.stopPropagation(); toggleMenu(e, m._id) }}
                   >
                     <MoreHorizontal size={15} />
@@ -932,18 +940,18 @@ function Thread({ conv }) {
                   {menuFor === m._id && (
                     <div className={`chat-msg-menu chat-msg-menu--${menuDir}`}>
                       <button type="button" onClick={(e) => { e.stopPropagation(); startQuote(m); setMenuFor(null) }}>
-                        Quote
+                        {t('chat.thread.quote')}
                       </button>
                       <button type="button" onClick={(e) => { e.stopPropagation(); forwardMessage(m); setMenuFor(null) }}>
-                        Forward
+                        {t('chat.thread.forward')}
                       </button>
                       {mine && (
                         <>
                           <button type="button" onClick={(e) => { e.stopPropagation(); startEdit(m); setMenuFor(null) }}>
-                            Edit
+                            {t('common.actions.edit')}
                           </button>
                           <button type="button" className="chat-msg-menu-danger" onClick={(e) => { e.stopPropagation(); setMenuFor(null); deleteMessage(m) }}>
-                            Delete
+                            {t('common.actions.delete')}
                           </button>
                         </>
                       )}
@@ -956,7 +964,7 @@ function Thread({ conv }) {
         })}
         {others.length > 0 && (
           <div className="chat-typing">
-            {others.join(', ')} {others.length === 1 ? 'is' : 'are'} typing…
+            {t('chat.thread.typing', { count: others.length, users: others.join(', ') })}
           </div>
         )}
       </div>
@@ -965,10 +973,10 @@ function Thread({ conv }) {
         {editTarget && (
           <div className="chat-quote-preview chat-edit-preview">
             <div className="chat-quote-preview-main">
-              <span className="chat-quote-preview-label">Editing message</span>
+              <span className="chat-quote-preview-label">{t('chat.thread.editing')}</span>
               <blockquote className="chat-quote chat-quote-preview-text">{quoteSnippet(editTarget.content)}</blockquote>
             </div>
-            <button type="button" className="chat-quote-preview-close" aria-label="Cancel edit" onClick={() => { setEditTarget(null); updateDraft('') }}>
+            <button type="button" className="chat-quote-preview-close" aria-label={t('chat.thread.cancelEdit')} onClick={() => { setEditTarget(null); updateDraft('') }}>
               <X size={16} />
             </button>
           </div>
@@ -976,10 +984,10 @@ function Thread({ conv }) {
         {quoteTarget && (
           <div className="chat-quote-preview">
             <div className="chat-quote-preview-main">
-              <span className="chat-quote-preview-label">Quoting @{quoteTarget.sender}</span>
+              <span className="chat-quote-preview-label">{t('chat.thread.quoting', { user: quoteTarget.sender })}</span>
               <blockquote className="chat-quote chat-quote-preview-text">{quoteSnippet(quoteTarget.content)}</blockquote>
             </div>
-            <button type="button" className="chat-quote-preview-close" aria-label="Cancel quote" onClick={() => setQuoteTarget(null)}>
+            <button type="button" className="chat-quote-preview-close" aria-label={t('chat.thread.cancelQuote')} onClick={() => setQuoteTarget(null)}>
               <X size={16} />
             </button>
           </div>
@@ -993,7 +1001,7 @@ function Thread({ conv }) {
                   <span className="chat-attachment-overlay"><Loader2 size={18} className="chat-spin" /></span>
                 )}
                 {a.status === 'error' && <span className="chat-attachment-overlay chat-attachment-err">!</span>}
-                <button type="button" className="chat-attachment-x" aria-label="Remove image" onClick={() => removeAttachment(a.id)}>
+                <button type="button" className="chat-attachment-x" aria-label={t('chat.thread.removeImage')} onClick={() => removeAttachment(a.id)}>
                   <X size={12} />
                 </button>
               </div>
@@ -1007,7 +1015,7 @@ function Thread({ conv }) {
           />
           <EmojiTextInput
             className="chat-msg-input"
-            placeholder="Type a message…"
+            placeholder={t('chat.thread.placeholder')}
             value={draft}
             onChange={(v) => { updateDraft(v); setTyping(v.length > 0) }}
             onSubmit={send}
@@ -1020,7 +1028,7 @@ function Thread({ conv }) {
               attachments.some((a) => a.status === 'uploading') ||
               (!draft.trim() && !quoteTarget && !attachments.some((a) => a.status === 'done'))
             }
-            aria-label="Send"
+            aria-label={t('common.actions.send')}
           >
             <Send size={18} />
           </button>
@@ -1033,6 +1041,7 @@ function Thread({ conv }) {
 }
 
 export default function ChatPage() {
+  const { t } = useTranslation()
   const { ready, connecting, activeConversation, openDmWith, shareDraft } = useChat()
   const authenticated = useAppStore((s) => s.authenticated)
   const incubationHandle = useAppStore((s) => s.incubationHandle)
@@ -1060,11 +1069,9 @@ export default function ChatPage() {
           <div className="chat-gate-icon">
             <MessageCirclePlus size={44} />
           </div>
-          <h3>Chat needs a Hive account</h3>
+          <h3>{t('chat.gate.needsAccountTitle')}</h3>
           <p>
-            Messages are signed with your own account keys, so chat unlocks along
-            with everything else once your account is ready. Finish the goals on
-            your profile and the team will get you there.
+            {t('chat.gate.needsAccountBody')}
           </p>
         </div>
       </div>
@@ -1078,8 +1085,8 @@ export default function ChatPage() {
           <div className="chat-gate-icon">
             <MessageCirclePlus size={44} />
           </div>
-          <h3>Log in to use chat</h3>
-          <p>Sign in with your Hive account to send and receive messages.</p>
+          <h3>{t('chat.gate.loginTitle')}</h3>
+          <p>{t('chat.gate.loginBody')}</p>
         </div>
       </div>
     )
@@ -1093,7 +1100,7 @@ export default function ChatPage() {
         {connecting ? (
           <div className="chat-gate">
             <Loader2 size={40} className="chat-spin" />
-            <p>Connecting to chat…</p>
+            <p>{t('chat.gate.connectingToChat')}</p>
           </div>
         ) : (
           <ConnectGate />
@@ -1113,7 +1120,7 @@ export default function ChatPage() {
           <Thread key={activeConversation._id} conv={activeConversation} />
         ) : (
           <div className="chat-empty chat-page-placeholder">
-            {shareDraft ? 'Choose a chat to send to.' : 'Select a conversation, or start a new one.'}
+            {shareDraft ? t('chat.page.chooseTarget') : t('chat.page.selectConversation')}
           </div>
         )}
       </div>

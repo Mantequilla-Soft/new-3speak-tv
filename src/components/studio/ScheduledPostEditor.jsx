@@ -8,6 +8,7 @@ import { getMinMaxDates, formatDateTimeLocal } from '../../utils/schedulingHelpe
 import { uploadThumbnail } from '../../utils/uploadThumbnail';
 import MarkdownComposer from './MarkdownComposer';
 import Beneficiary_modal from '../modal/Beneficiary_modal';
+import { useTranslation } from 'react-i18next';
 // Form look is inherited from the legacy studio's stylesheet (.studio-main-container,
 // .input-group, .preview-tags, .advance-option, .bene-btn-wrap, .submit-btn-wrap, …)
 // plus EditScheduledPost.scss for the thumbnail row + the secondary buttons.
@@ -89,6 +90,7 @@ function listToBenes(list) {
  *   showHeader   bool (default true)        — render the title/permlink header
  */
 export default function ScheduledPostEditor({ permlink, onClose, onSaved, onCancelled, showHeader = true }) {
+  const { t } = useTranslation();
   const { user } = useAppStore();
 
   const [loading, setLoading] = useState(true);
@@ -124,15 +126,15 @@ export default function ScheduledPostEditor({ permlink, onClose, onSaved, onCanc
       .then((res) => {
         const found = (res.data?.scheduled_posts || []).find((p) => p.permlink === permlink);
         if (!found) {
-          setError('Scheduled post not found (it may have already been published or cancelled).');
+          setError(t('studio.scheduled.notFound'));
           return;
         }
         setPost(found);
         setTitle(found.title || '');
         setDescription(found.description || '');
-        const t = Array.isArray(found.tags) ? found.tags : [];
-        setTagsPreview(t);
-        setTagsInputValue(tagsToText(t));
+        const tags = Array.isArray(found.tags) ? found.tags : [];
+        setTagsPreview(tags);
+        setTagsInputValue(tagsToText(tags));
         setThumbnail(found.thumbnail || null);
         setPayoutOptions(found.payoutOptions || 'default');
         setScheduleDateTime(
@@ -143,9 +145,9 @@ export default function ScheduledPostEditor({ permlink, onClose, onSaved, onCanc
         const used = benList.reduce((s, b) => s + (b.percent || 0), 0);
         setRemaingPercent(Math.max(0, 100 - used));
       })
-      .catch((err) => setError(err?.message || 'Failed to load scheduled post'))
+      .catch((err) => setError(err?.message || t('studio.scheduled.loadFailed')))
       .finally(() => setLoading(false));
-  }, [user, permlink]);
+  }, [user, permlink, t]);
 
   function handleTagChange(e) {
     const value = e.target.value;
@@ -161,10 +163,10 @@ export default function ScheduledPostEditor({ permlink, onClose, onSaved, onCanc
     try {
       const url = await uploadThumbnail(file, user);
       setThumbnail(url);
-      toast.success('Thumbnail uploaded');
+      toast.success(t('studio.scheduled.thumbnailUploaded'));
     } catch (err) {
       console.error('thumbnail upload:', err);
-      toast.error(err?.message || 'Thumbnail upload failed');
+      toast.error(err?.message || t('studio.scheduled.thumbnailFailed'));
     } finally {
       setThumbnailUploading(false);
     }
@@ -181,7 +183,7 @@ export default function ScheduledPostEditor({ permlink, onClose, onSaved, onCanc
       const cleanedBenes = listToBenes(list);
       const totalWeight = cleanedBenes.reduce((s, b) => s + b.weight, 0);
       if (totalWeight > 10000) {
-        throw new Error(`Beneficiaries total ${totalWeight / 100}% exceeds 100%`);
+        throw new Error(t('studio.scheduled.beneficiariesExceed', { total: totalWeight / 100 }));
       }
       const scheduledOnIso = new Date(scheduleDateTime).toISOString();
       const url = `${CHECKER_BASE.replace(/\/$/, '')}/scheduled-posts/update`;
@@ -200,12 +202,12 @@ export default function ScheduledPostEditor({ permlink, onClose, onSaved, onCanc
       }, {
         headers: CHECKER_API_KEY ? { Authorization: `Bearer ${CHECKER_API_KEY}` } : {},
       });
-      if (!resp.data?.success) throw new Error(resp.data?.error || 'Update failed');
-      toast.success('Scheduled post updated');
+      if (!resp.data?.success) throw new Error(resp.data?.error || t('studio.scheduled.updateFailed'));
+      toast.success(t('studio.scheduled.updated'));
       onSaved?.({ title, description, thumbnail, scheduledOn: scheduledOnIso });
     } catch (err) {
       console.error('update scheduled post:', err);
-      toast.error(err?.response?.data?.error || err?.message || 'Update failed');
+      toast.error(err?.response?.data?.error || err?.message || t('studio.scheduled.updateFailed'));
     } finally {
       setSaving(false);
     }
@@ -213,30 +215,30 @@ export default function ScheduledPostEditor({ permlink, onClose, onSaved, onCanc
 
   async function handleCancel() {
     if (!post) return;
-    if (!window.confirm('Cancel this scheduled post? It will not be broadcast.')) return;
+    if (!window.confirm(t('studio.scheduled.cancelConfirm'))) return;
     setSaving(true);
     try {
       const url = `${CHECKER_BASE.replace(/\/$/, '')}/scheduled-posts/cancel`;
       await axios.post(url, { owner: user, permlink }, {
         headers: CHECKER_API_KEY ? { Authorization: `Bearer ${CHECKER_API_KEY}` } : {},
       });
-      toast.success('Scheduled post cancelled');
+      toast.success(t('studio.scheduled.cancelled'));
       onCancelled?.();
     } catch (err) {
       console.error('cancel scheduled post:', err);
-      toast.error(err?.response?.data?.error || err?.message || 'Cancel failed');
+      toast.error(err?.response?.data?.error || err?.message || t('studio.scheduled.cancelFailed'));
     } finally {
       setSaving(false);
     }
   }
 
   if (loading) {
-    return <div className="studio-main-container edit-scheduled-page"><p style={{ padding: 20 }}>Loading…</p></div>;
+    return <div className="studio-main-container edit-scheduled-page"><p style={{ padding: 20 }}>{t('common.status.loading')}</p></div>;
   }
   if (error) {
     return (
       <div className="studio-main-container edit-scheduled-page">
-        {showHeader && <div className="studio-page-header"><h1>Edit scheduled post</h1></div>}
+        {showHeader && <div className="studio-page-header"><h1>{t('studio.scheduled.title')}</h1></div>}
         <div className="studio-page-content"><p style={{ padding: '0 20px' }}>{error}</p></div>
       </div>
     );
@@ -250,9 +252,9 @@ export default function ScheduledPostEditor({ permlink, onClose, onSaved, onCanc
       <div className="studio-main-container edit-scheduled-page">
         {showHeader && (
           <div className="studio-page-header">
-            <h1>Edit scheduled post</h1>
+            <h1>{t('studio.scheduled.title')}</h1>
             <p className="permlink-line">
-              Permlink: <code>{permlink}</code>
+              {t('studio.scheduled.permlink')} <code>{permlink}</code>
             </p>
           </div>
         )}
@@ -262,34 +264,34 @@ export default function ScheduledPostEditor({ permlink, onClose, onSaved, onCanc
             <div className="video-items">
 
               <div className="input-group">
-                <label>Title</label>
+                <label>{t('studio.scheduled.fields.title')}</label>
                 <input type="text" value={title} onChange={(e) => setTitle(e.target.value)} />
               </div>
 
               <div className="input-group">
-                <label>Description</label>
+                <label>{t('studio.scheduled.fields.description')}</label>
                 <div className="wrap-dec">
                   <MarkdownComposer
                     value={description}
                     onChange={setDescription}
-                    placeholder="Write your video description here... Supports markdown formatting!"
+                    placeholder={t('studio.scheduled.descriptionPlaceholder')}
                   />
                 </div>
               </div>
 
               <div className="input-group">
-                <label>Thumbnail</label>
+                <label>{t('studio.scheduled.fields.thumbnail')}</label>
                 <div className="thumbnail-edit-row">
                   {thumbnail ? (
-                    <img className="thumbnail-edit-preview" src={thumbnail} alt="thumbnail" />
+                    <img className="thumbnail-edit-preview" src={thumbnail} alt={t('studio.scheduled.thumbnailAlt')} />
                   ) : (
                     <div className="thumbnail-edit-preview thumbnail-edit-preview--placeholder">
-                      No thumbnail
+                      {t('studio.scheduled.noThumbnail')}
                     </div>
                   )}
                   <div className="thumbnail-edit-controls">
                     <label className="thumbnail-edit-btn">
-                      {thumbnailUploading ? 'Uploading…' : (thumbnail ? 'Replace' : 'Upload')}
+                      {thumbnailUploading ? t('studio.scheduled.uploading') : (thumbnail ? t('studio.scheduled.replace') : t('common.actions.upload'))}
                       <input
                         type="file"
                         accept="image/*"
@@ -304,7 +306,7 @@ export default function ScheduledPostEditor({ permlink, onClose, onSaved, onCanc
                         onClick={() => setThumbnail(null)}
                         disabled={thumbnailUploading}
                       >
-                        Remove
+                        {t('common.actions.remove')}
                       </button>
                     )}
                   </div>
@@ -312,10 +314,10 @@ export default function ScheduledPostEditor({ permlink, onClose, onSaved, onCanc
               </div>
 
               <div className="input-group">
-                <label>Tag</label>
+                <label>{t('studio.scheduled.fields.tag')}</label>
                 <input type="text" value={tagsInputValue} onChange={handleTagChange} />
                 <div className="wrap">
-                  <span>Separate multiple tags with </span> <span>Space</span>
+                  <span>{t('studio.scheduled.tagsHint')} </span> <span>{t('studio.scheduled.tagsHintKey')}</span>
                 </div>
                 <div className="preview-tags">
                   <span>
@@ -329,25 +331,25 @@ export default function ScheduledPostEditor({ permlink, onClose, onSaved, onCanc
               <div className="advance-option">
                 <div className="beneficiary-wrap mb">
                   <div className="wrap">
-                    <span>Rewards Distribution</span>
-                    <span>Optional "Hive Reward Pool" distribution method.</span>
+                    <span>{t('studio.scheduled.rewards')}</span>
+                    <span>{t('studio.scheduled.rewardsDesc')}</span>
                   </div>
                   <div className="select-wrap">
                     <select value={payoutOptions} onChange={(e) => setPayoutOptions(e.target.value)}>
-                      <option value="default"> Default 50% 50% </option>
-                      <option value="powerup">Power up 100%</option>
-                      <option value="decline">Decline Payout</option>
+                      <option value="default"> {t('studio.scheduled.payoutDefault')} </option>
+                      <option value="powerup">{t('studio.scheduled.payoutPowerup')}</option>
+                      <option value="decline">{t('studio.scheduled.payoutDecline')}</option>
                     </select>
                   </div>
                 </div>
                 <div className="beneficiary-wrap">
                   <div className="wrap">
-                    <span>Beneficiaries</span>
-                    <span>Other accounts that should get a % of the post rewards.</span>
+                    <span>{t('studio.scheduled.beneficiaries')}</span>
+                    <span>{t('studio.scheduled.beneficiariesDesc')}</span>
                   </div>
                   <div className="bene-btn-wrap" onClick={toggleBeneficiaryModal}>
                     {list.length > 0 && <span>{list.length}</span>}
-                    <span> BENEFICIARIES</span>
+                    <span> {t('studio.scheduled.beneficiariesButton')}</span>
                     <MdPeopleAlt />
                   </div>
                 </div>
@@ -355,7 +357,7 @@ export default function ScheduledPostEditor({ permlink, onClose, onSaved, onCanc
 
               <div className="schedule-box-wrap" style={{ marginTop: '12px' }}>
                 <div className="input-group">
-                  <label>Scheduled for</label>
+                  <label>{t('studio.scheduled.fields.scheduledFor')}</label>
                   <input
                     type="datetime-local"
                     value={scheduleDateTime}
@@ -364,7 +366,7 @@ export default function ScheduledPostEditor({ permlink, onClose, onSaved, onCanc
                     onChange={(e) => setScheduleDateTime(e.target.value)}
                   />
                   <div className="wrap">
-                    <span>Range: at least 15 minutes from now, up to 90 days.</span>
+                    <span>{t('studio.scheduled.range')}</span>
                   </div>
                 </div>
               </div>
@@ -376,7 +378,7 @@ export default function ScheduledPostEditor({ permlink, onClose, onSaved, onCanc
                   onClick={() => onClose?.()}
                   disabled={saving}
                 >
-                  Back
+                  {t('common.actions.back')}
                 </button>
                 <button
                   type="button"
@@ -384,14 +386,14 @@ export default function ScheduledPostEditor({ permlink, onClose, onSaved, onCanc
                   onClick={handleCancel}
                   disabled={saving}
                 >
-                  Cancel scheduled post
+                  {t('studio.scheduled.cancelPost')}
                 </button>
                 <button
                   className="es-btn-save"
                   onClick={handleSave}
                   disabled={saving || thumbnailUploading}
                 >
-                  {saving ? 'Saving…' : 'Save changes'}
+                  {saving ? t('common.actions.saving') : t('studio.scheduled.saveChanges')}
                 </button>
               </div>
 

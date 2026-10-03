@@ -1,9 +1,11 @@
 import { useEffect } from 'react'
 import { createPortal } from 'react-dom'
 import { X, ExternalLink } from 'lucide-react'
+import { useTranslation } from 'react-i18next'
 
 /** Full-screen viewer for a chat image, with close + open-in-new-tab buttons. */
 export default function ChatImageLightbox({ url, onClose }) {
+  const { t } = useTranslation()
   useEffect(() => {
     if (!url) return
     const onKey = (e) => { if (e.key === 'Escape') onClose() }
@@ -21,12 +23,12 @@ export default function ChatImageLightbox({ url, onClose }) {
           href={url}
           target="_blank"
           rel="noopener noreferrer"
-          title="Open image in new tab"
-          aria-label="Open image in new tab"
+          title={t('chat.lightbox.openInNewTab')}
+          aria-label={t('chat.lightbox.openInNewTab')}
         >
           <ExternalLink size={20} />
         </a>
-        <button className="chat-lightbox-btn" onClick={onClose} title="Close" aria-label="Close">
+        <button className="chat-lightbox-btn" onClick={onClose} title={t('common.actions.close')} aria-label={t('common.actions.close')}>
           <X size={22} />
         </button>
       </div>

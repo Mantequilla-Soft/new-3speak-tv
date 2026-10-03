@@ -4,6 +4,7 @@ import { useServerUnread } from '../../hooks/useServerUnread'
 import { useChat } from '../../context/ChatContext'
 import { useAppStore } from '../../lib/store'
 import './ChatButton.scss'
+import { useTranslation } from 'react-i18next'
 
 // Split out so the unread subscription only mounts once chat is connected —
 // the SDK hook keys its subscription on the client, not on auth state, so we
@@ -20,6 +21,7 @@ function UnreadDot() {
 }
 
 export default function ChatButton() {
+  const { t } = useTranslation()
   const { ready } = useChat()
   const incubationHandle = useAppStore((s) => s.incubationHandle)
 
@@ -33,8 +35,8 @@ export default function ChatButton() {
     <NavLink
       to="/chat"
       className={({ isActive }) => `chat-nav-btn${isActive ? ' open' : ''}`}
-      aria-label="Chat"
-      title="Chat"
+      aria-label={t('chat.button.label')}
+      title={t('chat.button.label')}
     >
       <MessageCircle size={21} />
       {ready && <UnreadDot />}

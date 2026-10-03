@@ -1,0 +1,135 @@
+{
+  "button": {
+    "label": "Chat"
+  },
+  "tools": {
+    "emoji": "Emoji",
+    "searchEmoji": "Search emoji",
+    "searchGifs": "Search GIFs…",
+    "noGifs": "No GIFs found.",
+    "poweredByGiphy": "Powered by GIPHY"
+  },
+  "lightbox": {
+    "openInNewTab": "Open image in new tab"
+  },
+  "linkCard": {
+    "loadingPreview": "Loading preview…",
+    "community": "Community",
+    "communityWithSubscribers_one": "Community · {{formatted}} subscriber",
+    "communityWithSubscribers_other": "Community · {{formatted}} subscribers",
+    "commentFallback": "(comment)"
+  },
+  "share": {
+    "embedCopied": "Embed code copied",
+    "pressToCopy": "Press Ctrl/Cmd + C to copy the selected code",
+    "embedTitle": "Embed this video",
+    "embedHint": "Paste this into any website or blog post.",
+    "embedSize": "Embed size",
+    "embedCode": "Embed code",
+    "copyEmbed": "Copy embed code",
+    "responsiveSub": "Scales to fit the page it sits on",
+    "fixedSub": "Fixed size iframe",
+    "sendInChat": "Send in 3Speak Chat",
+    "sendInChatSub": "Message it to someone on 3Speak",
+    "embedOnWebsite": "Embed on a website",
+    "embedOnWebsiteSub": "Copy the HTML for your own site or blog",
+    "generalShare": "Share / copy link",
+    "generalShareSub": "Other apps, or copy the link"
+  },
+  "gate": {
+    "connectTitle": "Connect to 3Speak Chat",
+    "connectBody": "Chat is powered by Snapie. Connecting signs a one-time login challenge with your Hive posting key — no transaction, no cost.",
+    "connecting": "Connecting…",
+    "connectButton": "Connect chat",
+    "cannotSign": "Your current login can’t sign the chat challenge. Use Keychain, HiveAuth, PeakVault or Ledger.",
+    "needsAccountTitle": "Chat needs a Hive account",
+    "needsAccountBody": "Messages are signed with your own account keys, so chat unlocks along with everything else once your account is ready. Finish the goals on your profile and the team will get you there.",
+    "loginTitle": "Log in to use chat",
+    "loginBody": "Sign in with your Hive account to send and receive messages.",
+    "connectingToChat": "Connecting to chat…"
+  },
+  "errors": {
+    "notHiveAccount": "@{{user}} is not a Hive account.",
+    "openConversation": "Could not open that conversation.",
+    "verifyAccount": "Could not verify that account.",
+    "createRoom": "Could not create the room.",
+    "joinChannel": "Could not join that channel."
+  },
+  "newDm": {
+    "placeholder": "Message a Hive user…",
+    "start": "Start chat"
+  },
+  "newRoom": {
+    "toggle": "New private room",
+    "namePlaceholder": "Room name…",
+    "removeMember": "Remove @{{user}}",
+    "addMore": "Add more…",
+    "invitePlaceholder": "Invite Hive users (optional)…",
+    "create": "Create"
+  },
+  "channels": {
+    "browse": "Browse channels",
+    "publicTitle": "Public channels",
+    "closeBrowser": "Close channel browser",
+    "loading": "Loading channels…",
+    "empty": "No channels available.",
+    "join": "Join"
+  },
+  "markRead": {
+    "nothingToClear": "No conversations to clear. The count may be stuck server-side.",
+    "requestFailed": "request failed",
+    "allCaughtUp": "All caught up",
+    "stillUnread_one": "Still showing {{total}} unread after clearing {{count}} chat.",
+    "stillUnread_other": "Still showing {{total}} unread after clearing {{count}} chats.",
+    "stillUnreadNoMatch_one": "Still showing {{total}} unread after clearing {{count}} chat. The server reports a count but no matching conversation.",
+    "stillUnreadNoMatch_other": "Still showing {{total}} unread after clearing {{count}} chats. The server reports a count but no matching conversation.",
+    "notSignedIn": "Chat is not signed in. Reconnect chat and try again.",
+    "sessionExpired": "Chat session expired while clearing. Reconnect chat and try again.",
+    "serverRejectedVisible_one": "Server rejected all {{count}} request (ids from the visible list)",
+    "serverRejectedVisible_other": "Server rejected all {{count}} requests (ids from the visible list)",
+    "serverRejectedServerMap_one": "Server rejected all {{count}} request (ids from the server's own unread map)",
+    "serverRejectedServerMap_other": "Server rejected all {{count}} requests (ids from the server's own unread map)",
+    "failed": "Could not mark everything as read",
+    "marking": "Marking as read…",
+    "button": "Mark all as read",
+    "buttonCount": "Mark all as read ({{count}})"
+  },
+  "list": {
+    "chooseTarget": "Choose a chat to send to",
+    "loading": "Loading conversations…",
+    "empty": "No conversations yet. Start one above by entering a Hive username."
+  },
+  "leave": {
+    "confirmRoom": "Leave this room?",
+    "confirmChannel": "Leave this channel?",
+    "errorRoom": "Could not leave the room.",
+    "errorChannel": "Could not leave the channel.",
+    "titleRoom": "Leave room",
+    "titleChannel": "Leave channel",
+    "button": "Leave"
+  },
+  "thread": {
+    "editError": "Could not edit the message.",
+    "deleteConfirm": "Delete this message? It will be replaced with “[deleted]”.",
+    "deleteError": "Could not delete the message.",
+    "back": "Back to conversations",
+    "loading": "Loading messages…",
+    "empty": "No messages yet — say hi 👋",
+    "editedSuffix": " · edited",
+    "messageActions": "Message actions",
+    "quote": "Quote",
+    "forward": "Forward",
+    "typing_one": "{{users}} is typing…",
+    "typing_other": "{{users}} are typing…",
+    "editing": "Editing message",
+    "cancelEdit": "Cancel edit",
+    "quoting": "Quoting @{{user}}",
+    "cancelQuote": "Cancel quote",
+    "removeImage": "Remove image",
+    "placeholder": "Type a message…"
+  },
+  "page": {
+    "chooseTarget": "Choose a chat to send to.",
+    "selectConversation": "Select a conversation, or start a new one."
+  }
+}

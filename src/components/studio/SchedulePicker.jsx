@@ -1,11 +1,14 @@
 import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { IoChevronBack, IoChevronForward, IoGlobeOutline } from 'react-icons/io5';
 import './SchedulePicker.scss';
+import { useTranslation } from 'react-i18next';
+import { formatDate } from '../../i18n';
 
-const MONTH_NAMES = ['January','February','March','April','May','June','July','August','September','October','November','December'];
-const DAY_NAMES = ['Mo','Tu','We','Th','Fr','Sa','Su'];
+// Translation-key suffixes for the weekday header (studio.schedule.days.*), Monday first.
+const DAY_NAMES = ['mo','tu','we','th','fr','sa','su'];
 
 function SchedulePicker({ value, onChange, minDate, maxDate, onValidChange }) {
+  const { t, i18n } = useTranslation();
   // Parse existing value into date and time parts
   const [dateStr, timeStr] = useMemo(() => {
     if (!value) return ['', ''];
@@ -105,8 +108,8 @@ function SchedulePicker({ value, onChange, minDate, maxDate, onValidChange }) {
   }, [minParsed, maxParsed]);
 
   const isToday = (year, month, day) => {
-    const t = new Date();
-    return t.getFullYear() === year && t.getMonth() === month && t.getDate() === day;
+    const now = new Date();
+    return now.getFullYear() === year && now.getMonth() === month && now.getDate() === day;
   };
 
   const isSelected = (year, month, day) => {
@@ -285,16 +288,15 @@ function SchedulePicker({ value, onChange, minDate, maxDate, onValidChange }) {
     if (!dateStr || !timeStr) return null;
     const local = new Date(`${dateStr}T${timeStr}`);
     if (isNaN(local.getTime())) return null;
-    return local.toLocaleString('en-US', {
+    return formatDate(local, {
       timeZone: 'UTC',
       month: 'short',
       day: 'numeric',
       year: 'numeric',
       hour: 'numeric',
       minute: '2-digit',
-      hour12: true,
     }) + ' UTC';
-  }, [dateStr, timeStr]);
+  }, [dateStr, timeStr, i18n.language]);
 
   return (
     <div className="schedule-picker">
@@ -306,8 +308,8 @@ function SchedulePicker({ value, onChange, minDate, maxDate, onValidChange }) {
               <button type="button" className="nav-btn" onClick={prevMonth} disabled={!canGoPrev}>
                 <IoChevronBack size={16} />
               </button>
-              <span className="month-year">{MONTH_NAMES[viewMonth]} {viewYear}</span>
-              <span className="month-year second-month-label">{MONTH_NAMES[nextMonthIdx]} {nextMonthYear}</span>
+              <span className="month-year">{formatDate(new Date(viewYear, viewMonth, 1), { month: 'long', year: 'numeric' })}</span>
+              <span className="month-year second-month-label">{formatDate(new Date(nextMonthYear, nextMonthIdx, 1), { month: 'long', year: 'numeric' })}</span>
               <button type="button" className="nav-btn" onClick={nextMonth} disabled={!canGoNext}>
                 <IoChevronForward size={16} />
               </button>
@@ -316,7 +318,7 @@ function SchedulePicker({ value, onChange, minDate, maxDate, onValidChange }) {
               <table className="calendar-grid">
                 <thead>
                   <tr>
-                    {DAY_NAMES.map(d => <th key={d}>{d}</th>)}
+                    {DAY_NAMES.map(d => <th key={d}>{t(`studio.schedule.days.${d}`)}</th>)}
                   </tr>
                 </thead>
                 <tbody>{calendarDays}</tbody>
@@ -324,7 +326,7 @@ function SchedulePicker({ value, onChange, minDate, maxDate, onValidChange }) {
               <table className="calendar-grid second-month">
                 <thead>
                   <tr>
-                    {DAY_NAMES.map(d => <th key={d}>{d}</th>)}
+                    {DAY_NAMES.map(d => <th key={d}>{t(`studio.schedule.days.${d}`)}</th>)}
                   </tr>
                 </thead>
                 <tbody>{calendarDays2}</tbody>
@@ -333,12 +335,12 @@ function SchedulePicker({ value, onChange, minDate, maxDate, onValidChange }) {
           </div>
 
           <div className="schedule-picker__manual-date">
-            <label>Or enter date manually</label>
+            <label>{t('studio.schedule.manualDate')}</label>
             <div className="manual-date-inputs">
               <input
                 type="text"
                 inputMode="numeric"
-                placeholder="DD"
+                placeholder={t('studio.schedule.dd')}
                 maxLength={2}
                 value={manualDay}
                 onChange={(e) => setManualDay(e.target.value.replace(/\D/g, ''))}
@@ -349,7 +351,7 @@ function SchedulePicker({ value, onChange, minDate, maxDate, onValidChange }) {
               <input
                 type="text"
                 inputMode="numeric"
-                placeholder="MM"
+                placeholder={t('studio.schedule.mm')}
                 maxLength={2}
                 value={manualMonth}
                 onChange={(e) => setManualMonth(e.target.value.replace(/\D/g, ''))}
@@ -360,7 +362,7 @@ function SchedulePicker({ value, onChange, minDate, maxDate, onValidChange }) {
               <input
                 type="text"
                 inputMode="numeric"
-                placeholder="YYYY"
+                placeholder={t('studio.schedule.yyyy')}
                 maxLength={4}
                 value={manualYear}
                 onChange={(e) => setManualYear(e.target.value.replace(/\D/g, ''))}
@@ -424,7 +426,7 @@ function SchedulePicker({ value, onChange, minDate, maxDate, onValidChange }) {
               </div>
               <div className="time-col ampm-col">
                 <button type="button" className="ampm-btn" onClick={toggleAmPm}>
-                  {ampm}
+                  {ampm === 'AM' ? t('studio.schedule.am') : t('studio.schedule.pm')}
                 </button>
               </div>
             </div>
@@ -435,7 +437,7 @@ function SchedulePicker({ value, onChange, minDate, maxDate, onValidChange }) {
       {/* Past warning */}
       {isPast && (
         <div className="schedule-picker__past-warning">
-          This date and time is in the past. Please select a future date and time.
+          {t('studio.schedule.pastWarning')}
         </div>
       )}
 
@@ -443,7 +445,7 @@ function SchedulePicker({ value, onChange, minDate, maxDate, onValidChange }) {
       {utcDisplay && !isPast && (
         <div className="schedule-picker__utc-info">
           <IoGlobeOutline size={14} />
-          <span>Your video will be published automatically at {utcDisplay}</span>
+          <span>{t('studio.schedule.publishAt', { when: utcDisplay })}</span>
         </div>
       )}
     </div>

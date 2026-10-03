@@ -2,11 +2,13 @@ import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Play } from 'lucide-react'
 import { fetchLinkMeta, formatDuration, timeAgo } from './chatLinks'
+import { useTranslation } from 'react-i18next'
 
 const avatarSmall = (name) => `https://images.hive.blog/u/${name}/avatar/small`
 
 /** Rich preview card for a 3Speak/Hive link (post, comment, profile, community). */
 export default function ChatLinkCard({ link }) {
+  const { t } = useTranslation()
   const [meta, setMeta] = useState(null)
   const [failed, setFailed] = useState(false)
   const navigate = useNavigate()
@@ -24,7 +26,7 @@ export default function ChatLinkCard({ link }) {
   }, [link.kind, link.author, link.permlink, link.community])
 
   if (failed) return null
-  if (!meta) return <div className="chat-linkcard chat-linkcard-loading">Loading preview…</div>
+  if (!meta) return <div className="chat-linkcard chat-linkcard-loading">{t('chat.linkCard.loadingPreview')}</div>
 
   const open = () => {
     if (meta.kind === 'profile') navigate(`/p/${meta.author}`)
@@ -40,7 +42,9 @@ export default function ChatLinkCard({ link }) {
     const title = meta.kind === 'profile' ? meta.displayName : meta.title
     const sub = meta.kind === 'profile'
       ? `@${meta.author}`
-      : `Community${meta.subscribers ? ` · ${meta.subscribers.toLocaleString()} subscribers` : ''}`
+      : (meta.subscribers
+        ? t('chat.linkCard.communityWithSubscribers', { count: meta.subscribers, formatted: meta.subscribers.toLocaleString() })
+        : t('chat.linkCard.community'))
     return (
       <div className="chat-linkcard chat-linkcard-account" {...cardProps}>
         <img className="chat-linkcard-account-avatar" src={meta.avatar} alt=""
@@ -63,7 +67,7 @@ export default function ChatLinkCard({ link }) {
             <span className="chat-linkcard-author">@{meta.author}</span>
             {meta.created && <><span className="chat-linkcard-dot">·</span><span>{timeAgo(meta.created)}</span></>}
           </div>
-          <div className="chat-linkcard-excerpt">{meta.excerpt || '(comment)'}</div>
+          <div className="chat-linkcard-excerpt">{meta.excerpt || t('chat.linkCard.commentFallback')}</div>
         </div>
       </div>
     )

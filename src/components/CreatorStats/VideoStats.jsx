@@ -3,6 +3,7 @@ import { fetchVideoAnalytics, fmtDuration, fmtCount } from '../../lib/creatorSta
 import BarLoader from '../Loader/BarLoader';
 import useSeekPreview from '../../hooks/useSeekPreview';
 import './VideoStats.scss';
+import { useTranslation, Trans } from 'react-i18next';
 
 function mmss(sec) {
   const s = Math.max(0, Math.round(sec || 0));
@@ -15,6 +16,7 @@ function mmss(sec) {
 // see useSeekPreview) plus the value + timestamp — falls back to a plain
 // tooltip when no videoId is available.
 export function PositionChart({ values, maxValue, color, duration, formatValue, emptyLabel, videoId }) {
+  const { t } = useTranslation();
   const [hover, setHover] = useState(null);
   const wrapRef = useRef(null);
   const n = values?.length || 0;
@@ -45,7 +47,7 @@ export function PositionChart({ values, maxValue, color, duration, formatValue, 
 
   const onLeave = useCallback(() => { setHover(null); hide(); }, [hide]);
 
-  if (!has) return <div className="vs-chart-empty">{emptyLabel || 'No data yet'}</div>;
+  if (!has) return <div className="vs-chart-empty">{emptyLabel || t('stats.video.noData')}</div>;
 
   return (
     <div
@@ -132,6 +134,7 @@ function deriveInsights(data) {
  * @param {function} onSeek  optional — makes replay timestamps clickable (seek the player)
  */
 export default function VideoStats({ username, permlink, compact = false, onSeek = null }) {
+  const { t } = useTranslation();
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [err, setErr] = useState(false);
@@ -154,17 +157,17 @@ export default function VideoStats({ username, permlink, compact = false, onSeek
 
   if (loading) return <div className={`video-stats${compact ? ' compact' : ''}`}><BarLoader /></div>;
   if (err || !data || data.sessions === 0) {
-    return <div className={`video-stats${compact ? ' compact' : ''}`}><div className="vs-chart-empty">No watch data for this video yet.</div></div>;
+    return <div className={`video-stats${compact ? ' compact' : ''}`}><div className="vs-chart-empty">{t('stats.video.empty')}</div></div>;
   }
 
   return (
     <div className={`video-stats${compact ? ' compact' : ''}`}>
       <div className="vs-stats">
-        <div><span>{fmtDuration(data.watchSeconds)}</span><label>Watch time</label></div>
-        <div><span>{fmtCount(data.sessions)}</span><label>Views</label></div>
-        <div><span>{fmtCount(data.viewers)}</span><label>Unique viewers</label></div>
-        <div><span>{data.avgPct}%</span><label>Avg watched</label></div>
-        <div><span>{data.avgRate}×</span><label>Avg speed</label></div>
+        <div><span>{fmtDuration(data.watchSeconds)}</span><label>{t('stats.metrics.watchTime')}</label></div>
+        <div><span>{fmtCount(data.sessions)}</span><label>{t('stats.metrics.views')}</label></div>
+        <div><span>{fmtCount(data.viewers)}</span><label>{t('stats.video.uniqueViewers')}</label></div>
+        <div><span>{data.avgPct}%</span><label>{t('stats.tiles.avgWatched')}</label></div>
+        <div><span>{data.avgRate}×</span><label>{t('stats.video.avgSpeed')}</label></div>
       </div>
 
       {(() => {
@@ -172,10 +175,10 @@ export default function VideoStats({ username, permlink, compact = false, onSeek
         if (!ins.biggestDrop && !ins.topMoments.length && !(data.duration <= 90 && ins.earlyDrop)) return null;
         return (
           <div className="vs-insights">
-            {ins.biggestDrop && <span className="vs-insight">📉 Most drop off at <b>{mmss(ins.biggestDrop.t)}</b></span>}
-            {data.duration <= 90 && ins.earlyDrop != null && <span className="vs-insight">⚡ <b>{ins.earlyDrop}%</b> left in the first 3s</span>}
+            {ins.biggestDrop && <span className="vs-insight"><Trans i18nKey="stats.video.mostDropOff" values={{ time: mmss(ins.biggestDrop.t) }} components={{ b: <b /> }} /></span>}
+            {data.duration <= 90 && ins.earlyDrop != null && <span className="vs-insight"><Trans i18nKey="stats.video.earlyDrop" values={{ pct: ins.earlyDrop }} components={{ b: <b /> }} /></span>}
             {ins.topMoments.length > 0 && (
-              <span className="vs-insight">🔁 Replayed:
+              <span className="vs-insight">{t('stats.video.replayed')}
                 {ins.topMoments.map((m, i) => (
                   onSeek
                     ? <button key={i} type="button" className="vs-ts" onClick={() => onSeek(m.t)}>{mmss(m.t)}</button>
@@ -189,22 +192,22 @@ export default function VideoStats({ username, permlink, compact = false, onSeek
 
       <div className="vs-charts">
         <div className="vs-chart-block">
-          <h5>Audience retention<em>share of viewers still watching at each moment</em></h5>
+          <h5>{t('stats.video.retentionTitle')}<em>{t('stats.video.retentionSub')}</em></h5>
           <PositionChart
             values={data.retention} maxValue={100} duration={data.duration}
             color="var(--accent-primary, #e53935)"
-            formatValue={(v) => `${Math.round(v)}% watching`}
+            formatValue={(v) => t('stats.video.pctWatching', { pct: Math.round(v) })}
             videoId={previewId}
           />
         </div>
 
         <div className="vs-chart-block">
-          <h5>Most replayed<em>sections viewers watch and rewatch most</em></h5>
+          <h5>{t('stats.video.replayTitle')}<em>{t('stats.video.replaySub')}</em></h5>
           <PositionChart
             values={data.replay?.normalized || []} maxValue={1} duration={data.duration}
             color="rgba(120,170,255,0.85)"
-            formatValue={() => 'hot spot'}
-            emptyLabel="Not enough replays yet"
+            formatValue={() => t('stats.video.hotSpot')}
+            emptyLabel={t('stats.video.notEnoughReplays')}
             videoId={previewId}
           />
         </div>

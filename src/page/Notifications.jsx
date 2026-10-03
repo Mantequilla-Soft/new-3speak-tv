@@ -26,6 +26,7 @@ import { useWhaleDetection } from '../utils/whaleDetection';
 import threeSpeakLogo from '../assets/image/3S_mark.svg';
 import HiveAvatar from '../components/HiveAvatar/HiveAvatar';
 import './Notifications.scss';
+import { useTranslation } from 'react-i18next';
 
 const MAX_STACKED_AVATARS = 5;
 
@@ -51,12 +52,13 @@ function getTimeBucket(dateStr) {
   return 'older';
 }
 
+// Translation keys for the time-bucket headings.
 const BUCKET_LABELS = {
-  today: 'Today',
-  yesterday: 'Yesterday',
-  this_week: 'This Week',
-  this_month: 'This Month',
-  older: 'Older',
+  today: 'notifications.buckets.today',
+  yesterday: 'notifications.buckets.yesterday',
+  this_week: 'notifications.buckets.thisWeek',
+  this_month: 'notifications.buckets.thisMonth',
+  older: 'notifications.buckets.older',
 };
 const BUCKET_ORDER = ['today', 'yesterday', 'this_week', 'this_month', 'older'];
 
@@ -72,6 +74,7 @@ function bucketize(groups) {
 
 // ──────────────────────────────────────────────────
 function Notifications() {
+  const { t } = useTranslation();
   const { user, authenticated } = useAppStore();
   const navigate = useNavigate();
   const [filter, setFilter] = useState('all');
@@ -299,7 +302,7 @@ function Notifications() {
   if (!authenticated || !user) {
     return (
       <div className="notifications-page">
-        <div className="notifications-empty">Please log in to view your notifications.</div>
+        <div className="notifications-empty">{t('notifications.loginRequired')}</div>
       </div>
     );
   }
@@ -308,8 +311,8 @@ function Notifications() {
     <div className="notifications-page">
       <header className="notifications-header">
         <h1 className="notifications-title">
-          Notifications
-          {unreadCount > 0 && <span className="notifications-unread-chip">{unreadCount} new</span>}
+          {t('common.nav.notifications')}
+          {unreadCount > 0 && <span className="notifications-unread-chip">{t('notifications.unreadChip', { count: unreadCount })}</span>}
         </h1>
         <div className="notifications-header-actions">
           {unreadCount > 0 && (
@@ -318,11 +321,11 @@ function Notifications() {
               className="notifications-mark-all"
               onClick={markAllAsRead}
               disabled={markingAsRead}
-              title="Mark all as read"
+              title={t('notifications.markAllTitle')}
             >
               {markingAsRead
-                ? <><i className="fa-solid fa-spinner fa-spin" /> Marking…</>
-                : <><i className="fa-solid fa-check-double" /> Mark all read</>
+                ? <><i className="fa-solid fa-spinner fa-spin" /> {t('notifications.marking')}</>
+                : <><i className="fa-solid fa-check-double" /> {t('notifications.markAllRead')}</>
               }
             </button>
           )}
@@ -332,7 +335,7 @@ function Notifications() {
             onClick={() => refetch()}
             disabled={loading}
           >
-            {loading ? 'Refreshing…' : 'Refresh'}
+            {loading ? t('notifications.refreshing') : t('common.actions.refresh')}
           </button>
         </div>
       </header>
@@ -347,7 +350,7 @@ function Notifications() {
             className={`notifications-filter-btn${filter === key ? ' active' : ''}`}
             onClick={() => setFilter(key)}
           >
-            {cat.label}
+            {t(`notifications.categories.${key}`, { defaultValue: cat.label })}
           </button>
         ))}
         <button
@@ -357,7 +360,7 @@ function Notifications() {
           className={`notifications-filter-btn notifications-filter-unread${filter === 'unread' ? ' active' : ''}`}
           onClick={() => setFilter('unread')}
         >
-          <i className="fa-solid fa-circle" /> Unread
+          <i className="fa-solid fa-circle" /> {t('notifications.unread')}
           {unreadCount > 0 && <span className="notifications-filter-count">{unreadCount}</span>}
         </button>
       </div>
@@ -366,28 +369,28 @@ function Notifications() {
       {authenticated && user && (
         <div className="notif-summary-section">
           <div className="notif-summary-header">
-            <h2 className="notif-summary-title"><i className="fa-solid fa-chart-simple" /> Activity</h2>
+            <h2 className="notif-summary-title"><i className="fa-solid fa-chart-simple" /> {t('notifications.summary.title')}</h2>
             <div className="notif-summary-tabs">
               <button
                 type="button"
                 className={`notif-summary-tab${summaryTab === 'today' ? ' active' : ''}`}
                 onClick={() => setSummaryTab('today')}
               >
-                Today
+                {t('notifications.summary.today')}
               </button>
               <button
                 type="button"
                 className={`notif-summary-tab${summaryTab === 'week' ? ' active' : ''}`}
                 onClick={() => setSummaryTab('week')}
               >
-                This Week
+                {t('notifications.summary.week')}
               </button>
               <button
                 type="button"
                 className={`notif-summary-tab${summaryTab === 'month' ? ' active' : ''}`}
                 onClick={() => setSummaryTab('month')}
               >
-                This Month {monthLoading && <i className="fa-solid fa-spinner fa-spin notif-summary-tab-spin" />}
+                {t('notifications.summary.month')} {monthLoading && <i className="fa-solid fa-spinner fa-spin notif-summary-tab-spin" />}
               </button>
             </div>
           </div>
@@ -395,13 +398,13 @@ function Notifications() {
           {summaryTab === 'today' && (
             todaySummary.total > 0
               ? <SummaryCards summary={todaySummary} onFilter={setFilter} />
-              : <div className="notif-summary-empty">No activity today yet.</div>
+              : <div className="notif-summary-empty">{t('notifications.summary.emptyToday')}</div>
           )}
 
           {summaryTab === 'week' && (
             weeklySummary.total > 0
               ? <SummaryCards summary={weeklySummary} onFilter={setFilter} />
-              : <div className="notif-summary-empty">No activity this week yet.</div>
+              : <div className="notif-summary-empty">{t('notifications.summary.emptyWeek')}</div>
           )}
 
           {summaryTab === 'month' && (
@@ -414,10 +417,10 @@ function Notifications() {
             ) : monthlySummary.total > 0 ? (
               <>
                 <SummaryCards summary={monthlySummary} onFilter={setFilter} />
-                {monthLoading && <div className="notif-summary-loading-hint">Still loading older notifications…</div>}
+                {monthLoading && <div className="notif-summary-loading-hint">{t('notifications.summary.stillLoading')}</div>}
               </>
             ) : (
-              <div className="notif-summary-empty">No activity this month.</div>
+              <div className="notif-summary-empty">{t('notifications.summary.emptyMonth')}</div>
             )
           )}
         </div>
@@ -425,21 +428,21 @@ function Notifications() {
 
       {error && (
         <div className="notifications-error">
-          Could not load notifications. <button onClick={() => refetch()}>Retry</button>
+          {t('notifications.loadError')} <button onClick={() => refetch()}>{t('common.actions.retry')}</button>
         </div>
       )}
 
       {!error && loading && filtered.length === 0 && (
-        <div className="notifications-empty">Loading…</div>
+        <div className="notifications-empty">{t('common.status.loading')}</div>
       )}
 
       {!error && !loading && filtered.length === 0 && (
         <div className="notifications-empty">
           {filter === 'all'
-            ? 'You have no notifications yet.'
+            ? t('notifications.empty.all')
             : filter === 'unread'
-              ? 'No unread notifications.'
-              : `No ${NOTIF_CATEGORIES[filter]?.label?.toLowerCase() || filter} yet.`}
+              ? t('notifications.empty.unread')
+              : t(`notifications.empty.${filter}`, { defaultValue: `No ${NOTIF_CATEGORIES[filter]?.label?.toLowerCase() || filter} yet.` })}
         </div>
       )}
 
@@ -450,7 +453,7 @@ function Notifications() {
             if (!items || items.length === 0) return null;
             return (
               <section key={bucket} className="notifications-section">
-                <h2 className="notifications-section-title">{BUCKET_LABELS[bucket]}</h2>
+                <h2 className="notifications-section-title">{t(BUCKET_LABELS[bucket])}</h2>
                 <ul className="notifications-list">
                   {items.map((group) => {
                     if (group.type === 'group') {
@@ -501,7 +504,7 @@ function Notifications() {
                           </div>
                         </div>
                         {is3Speak && (
-                          <img className="notifications-3speak-icon" src={threeSpeakLogo} alt="3Speak" title="3Speak video" />
+                          <img className="notifications-3speak-icon" src={threeSpeakLogo} alt="3Speak" title={t('notifications.threeSpeakVideo')} />
                         )}
                         {unread && <span className="notifications-unread-dot" aria-hidden="true" />}
                       </li>
@@ -523,12 +526,12 @@ function Notifications() {
                 }}
                 disabled={loadingMore}
               >
-                {loadingMore ? 'Loading…' : 'Load more'}
+                {loadingMore ? t('common.status.loading') : t('common.actions.loadMore')}
               </button>
             </div>
           )}
           {!hasMore && mergedNotifications.length > 0 && (
-            <div className="notifications-end">You've reached the end.</div>
+            <div className="notifications-end">{t('notifications.end')}</div>
           )}
         </>
       )}
@@ -543,14 +546,15 @@ function Notifications() {
 // Summary cards (reused for week + month)
 // ──────────────────────────────────────────────────
 function SummaryCards({ summary, onFilter }) {
+  const { t } = useTranslation();
   const cards = [
     summary.votes > 0 && {
       key: 'votes',
       icon: 'fa-solid fa-thumbs-up',
       value: summary.votes,
-      label: 'Votes',
+      label: t('notifications.cards.votes'),
       sub: summary.totalEarnings > 0 ? `$${summary.totalEarnings.toFixed(2)}` : null,
-      detail: `${summary.uniqueVoters} voter${summary.uniqueVoters !== 1 ? 's' : ''}`,
+      detail: t('notifications.cards.voters', { count: summary.uniqueVoters }),
       filter: 'votes',
       color: 'votes',
     },
@@ -558,7 +562,7 @@ function SummaryCards({ summary, onFilter }) {
       key: 'replies',
       icon: 'fa-solid fa-comment-dots',
       value: summary.replies,
-      label: 'Replies',
+      label: t('notifications.cards.replies'),
       filter: 'replies',
       color: 'replies',
     },
@@ -566,7 +570,7 @@ function SummaryCards({ summary, onFilter }) {
       key: 'follows',
       icon: 'fa-solid fa-user-plus',
       value: summary.follows,
-      label: 'New Followers',
+      label: t('notifications.cards.newFollowers'),
       filter: 'follows',
       color: 'follows',
     },
@@ -574,7 +578,7 @@ function SummaryCards({ summary, onFilter }) {
       key: 'mentions',
       icon: 'fa-solid fa-at',
       value: summary.mentions,
-      label: 'Mentions',
+      label: t('notifications.cards.mentions'),
       filter: 'mentions',
       color: 'mentions',
     },
@@ -582,7 +586,7 @@ function SummaryCards({ summary, onFilter }) {
       key: 'reblogs',
       icon: 'fa-solid fa-retweet',
       value: summary.reblogs,
-      label: 'Reblogs',
+      label: t('notifications.cards.reblogs'),
       filter: 'reblogs',
       color: 'reblogs',
     },
@@ -590,7 +594,7 @@ function SummaryCards({ summary, onFilter }) {
       key: 'transfers',
       icon: 'fa-solid fa-arrow-right-arrow-left',
       value: summary.transfers,
-      label: 'Transfers',
+      label: t('notifications.cards.transfers'),
       filter: 'transfers',
       color: 'transfers',
     },
@@ -621,6 +625,7 @@ function SummaryCards({ summary, onFilter }) {
 // Group row component (votes / follows)
 // ──────────────────────────────────────────────────
 function GroupRow({ group, isUnread, is3Speak, getWhaleTier, onClick }) {
+  const { t } = useTranslation();
   const { actors = [], items, notifType, date } = group;
   const hasUnread = items.some((n) => isUnread(n));
   const topActors = actors.slice(0, MAX_STACKED_AVATARS);
@@ -628,22 +633,26 @@ function GroupRow({ group, isUnread, is3Speak, getWhaleTier, onClick }) {
   const [expanded, setExpanded] = useState(false);
 
   const topTier = actors.reduce((best, a) => {
-    const t = getWhaleTier(a);
-    if (t === 'whale') return 'whale';
-    if (t === 'orca' && best !== 'whale') return 'orca';
+    const tier = getWhaleTier(a);
+    if (tier === 'whale') return 'whale';
+    if (tier === 'orca' && best !== 'whale') return 'orca';
     return best;
   }, null);
 
+  // Whole sentences per actor count: one actor, two actors, or "X and N others".
+  const actorSentence = (prefix) => {
+    if (actors.length <= 1) return t(`notifications.group.${prefix}One`, { user: actors[0] || '' });
+    if (actors.length === 2) return t(`notifications.group.${prefix}Two`, { user: actors[0], user2: actors[1] });
+    return t(`notifications.group.${prefix}Many`, { user: actors[0], count: actors.length - 1 });
+  };
   let label;
   if (notifType === 'vote') {
-    const names = actors.length <= 2 ? actors.map((a) => `@${a}`).join(' and ') : `@${actors[0]} and ${actors.length - 1} others`;
-    label = `${names} voted on your post`;
+    label = actorSentence('vote');
     if (group.totalValue > 0) label += ` ($${group.totalValue.toFixed(2)})`;
   } else if (notifType === 'follow') {
-    const names = actors.length <= 2 ? actors.map((a) => `@${a}`).join(' and ') : `@${actors[0]} and ${actors.length - 1} others`;
-    label = `${names} followed you`;
+    label = actorSentence('follow');
   } else {
-    label = `${items.length} ${notifType} notifications`;
+    label = t('notifications.group.generic', { count: items.length, type: notifType });
   }
 
   return (
@@ -677,17 +686,17 @@ function GroupRow({ group, isUnread, is3Speak, getWhaleTier, onClick }) {
         <div className="notifications-body">
           <div className="notifications-msg">{label}</div>
           <div className="notifications-meta">
-            <span className="notifications-type">{items.length} {notifType}{items.length > 1 ? 's' : ''}</span>
+            <span className="notifications-type">{t('notifications.group.typeCount', { count: items.length, type: notifType })}</span>
             <span className="notifications-dot">·</span>
             <span className="notifications-time">{formatNotifTime(date)}</span>
             {topTier && <span className="notifications-meta-tier">{topTier === 'whale' ? '🐋' : '🐬'}</span>}
             {items.length > 1 && (
-              <span className="notifications-expand-hint">{expanded ? '▾ collapse' : '▸ expand'}</span>
+              <span className="notifications-expand-hint">{expanded ? t('notifications.group.collapse') : t('notifications.group.expand')}</span>
             )}
           </div>
         </div>
         {is3Speak && (
-          <img className="notifications-3speak-icon" src={threeSpeakLogo} alt="3Speak" title="3Speak video" />
+          <img className="notifications-3speak-icon" src={threeSpeakLogo} alt="3Speak" title={t('notifications.threeSpeakVideo')} />
         )}
         {hasUnread && <span className="notifications-unread-dot" aria-hidden="true" />}
       </li>

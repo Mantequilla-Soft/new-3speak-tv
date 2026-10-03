@@ -1,7 +1,9 @@
 import { useEffect, useState } from "react";
 import { FileVideo } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
  const VideoPreview = ({ file }) => {
+  const { t } = useTranslation();
   const [objectUrl, setObjectUrl] = useState(null);
   const [previewError, setPreviewError] = useState(false);
 
@@ -23,9 +25,7 @@ import { FileVideo } from "lucide-react";
       <div className="video-preview-fallback" style={{ marginTop: "1rem" }}>
         <FileVideo className="video-preview-fallback-icon" />
         <p>
-          Your browser can't preview this video — this is common for HEVC/H.265
-          clips (e.g. iPhone “High Efficiency” recordings). That's fine: it will
-          still upload and be converted so it plays for everyone.
+          {t('studio.preview.cannotPreview')}
         </p>
       </div>
     );
