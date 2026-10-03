@@ -120,6 +120,29 @@ export async function fetchCreatorAdPrefs(account) {
   return readJson(await fetch(`${BASE}/creator/prefs/${encodeURIComponent(account)}`));
 }
 
+/**
+ * Mirror one post's per-video ad choice into the checker.
+ *
+ * Carries no signature and needs none: the checker reads the post off the chain
+ * and copies the `3speak.ads` flag its author signed into it. A fresh broadcast is
+ * not readable for a block or two, so a 404 is retried rather than reported.
+ */
+const VIDEO_ADS_SYNC_DELAYS_MS = [2000, 4000, 8000];
+export async function syncVideoAdOptOut(author, permlink) {
+  for (let attempt = 0; ; attempt += 1) {
+    try {
+      return await readJson(await fetch(`${BASE}/creator/video-ads/sync`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ author, permlink }),
+      }));
+    } catch (err) {
+      if (err?.status !== 404 || attempt >= VIDEO_ADS_SYNC_DELAYS_MS.length) throw err;
+      await new Promise((r) => setTimeout(r, VIDEO_ADS_SYNC_DELAYS_MS[attempt]));
+    }
+  }
+}
+
 /* ─── turning ads off ─────────────────────────────────────────────────── */
 
 // Wallets that can sign an arbitrary message in the browser. HiveSigner cannot

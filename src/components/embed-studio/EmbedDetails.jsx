@@ -14,6 +14,7 @@ import EmbedUploadProgressBar from './EmbedUploadProgressBar';
 import { usePremiumStatus } from '../../hooks/usePremiumStatus';
 import { isTestUser } from '../../utils/config';
 import { getHiveClient } from '../../utils/hiveNode';
+import { fetchCreatorAdPrefs } from '../../lib/advertiseData';
 // This route renders on its own, so it imports the studio stylesheet rather
 // than relying on EmbedStudioPage having mounted first and pulled it in.
 // ScheduledPostEditor already does the same for the same reason; Vite dedupes.
@@ -59,6 +60,7 @@ function EmbedDetails() {
     fromStories,
     reusable, setReusable,
     isNsfw, setIsNsfw,
+    videoAdsEnabled, setVideoAdsEnabled,
     gated, setGated,
     gatedAllowlist, setGatedAllowlist,
     user,
@@ -84,6 +86,25 @@ function EmbedDetails() {
   useEffect(() => {
     if (!gated && gatedAllowlist.length) setGatedAllowlist([]);
   }, [gated, gatedAllowlist, setGatedAllowlist]);
+
+  // Per-video ad opt-out is only offered to a creator whose account carries ads.
+  // Read from the checker, the same row the ad server decides on. Hidden until a
+  // definite yes: a failed read (or ads switched off platform-wide, which 404s)
+  // must not offer a switch that would do nothing.
+  const [accountAdsOn, setAccountAdsOn] = useState(false);
+  useEffect(() => {
+    if (!user || incubationHandle) { setAccountAdsOn(false); return undefined; }
+    let alive = true;
+    fetchCreatorAdPrefs(user)
+      .then((p) => { if (alive) setAccountAdsOn(p?.adsEnabled === true); })
+      .catch(() => { if (alive) setAccountAdsOn(false); });
+    return () => { alive = false; };
+  }, [user, incubationHandle]);
+
+  // Never carry a stale "no ads" into the post if the switch is not on screen.
+  useEffect(() => {
+    if (!accountAdsOn && !videoAdsEnabled) setVideoAdsEnabled(true);
+  }, [accountAdsOn, videoAdsEnabled, setVideoAdsEnabled]);
 
   const [scheduleOpen, setScheduleOpen] = useState(false);
   // The sheet edits a draft; only OK writes it back, so closing or pressing
@@ -390,6 +411,22 @@ function EmbedDetails() {
                     <span className="toggle-track"><span className="toggle-thumb" /></span>
                   </label>
                 </div>
+                {accountAdsOn && (
+                  <div className="beneficiary-wrap" onClick={() => setVideoAdsEnabled(!videoAdsEnabled)}>
+                    <div className="wrap">
+                      <span>{t('upload.details.ads.label')}<SettingInfo title={t('upload.details.ads.label')}>{t('upload.details.ads.info')}</SettingInfo></span>
+                      <span>{videoAdsEnabled ? t('upload.details.ads.hintOn') : t('upload.details.ads.hintOff')}</span>
+                    </div>
+                    <label className="toggle-switch" onClick={(e) => e.stopPropagation()}>
+                      <input
+                        type="checkbox"
+                        checked={!!videoAdsEnabled}
+                        onChange={(e) => setVideoAdsEnabled(e.target.checked)}
+                      />
+                      <span className="toggle-track"><span className="toggle-thumb" /></span>
+                    </label>
+                  </div>
+                )}
                 {/* 🔐 Supporters-only. Pro-gated in the UI, but the backend
                     re-checks Pro status when it mints the upload token, so
                     hiding this control is presentation, not enforcement. Not

@@ -193,6 +193,12 @@
       "info": "Kennzeichnet dieses Video als Inhalt ab 18. Es wird für Zuschauer, die NSFW nicht aktiviert haben, in Feeds und Suche ausgeblendet und auf ganz Hive mit <code>nsfw</code> getaggt.",
       "hint": "Inhalt ab 18."
     },
+    "ads": {
+      "label": "Werbung in diesem Video",
+      "info": "Dein Konto zeigt Werbung, also auch dieses Video, außer du schaltest sie hier aus. Das betrifft nur dieses eine Video; deine anderen Videos und deine Kontoeinstellung bleiben unverändert.",
+      "hintOn": "In diesem Video kann Werbung laufen.",
+      "hintOff": "Keine Werbung in diesem Video."
+    },
     "gated": {
       "label": "Nur für Unterstützer",
       "info": "Verschlüsselt dieses Video, sodass nur 3Speak-Pro-Abonnenten es abspielen können. Zusätzlich wird eine <b>unverschlüsselte Vorschau von 10 Sekunden</b> veröffentlicht, damit der Post überall auf Hive trotzdem einen Trailer zeigt. Titel, Beschreibung und Tags sind normale Hive-Post-Inhalte und <b>nicht verschlüsselt</b> – nur das Video ist es. <b>Das kann nach dem Upload nicht mehr geändert werden.</b>",
@@ -254,6 +260,7 @@
     "scheduledFor": "Geplant für {{when}}",
     "scheduled": "Post geplant!",
     "linkingEmbed": "Embed-Video wird verknüpft...",
+    "adsOffFailedToast": "Veröffentlicht, aber die Werbung für dieses Video konnte noch nicht ausgeschaltet werden.",
     "trailerFailedToast": "Veröffentlicht, aber konnte nicht als dein Kanaltrailer festgelegt werden.",
     "completed": "Abgeschlossen",
     "publishedToast": "Video erfolgreich veröffentlicht!",
@@ -279,6 +286,8 @@
       "embedLinkFailed": "Warnung: Embed-Video konnte nicht verknüpft werden (nicht kritisch)",
       "thumbnailLinked": "Thumbnail mit Embed-Video verknüpft",
       "thumbnailLinkFailed": "Warnung: Embed-Thumbnail konnte nicht gesetzt werden (nicht kritisch)",
+      "adsOffSaved": "Werbung für dieses Video ausgeschaltet",
+      "adsOffFailed": "Die Einstellung ohne Werbung für dieses Video konnte nicht gespeichert werden",
       "trailerSet": "Als Kanaltrailer festgelegt",
       "trailerFailed": "Veröffentlicht, aber konnte nicht als dein Kanaltrailer festgelegt werden",
       "published": "Video erfolgreich veröffentlicht!"

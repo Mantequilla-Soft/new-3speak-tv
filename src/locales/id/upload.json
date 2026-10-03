@@ -192,6 +192,12 @@
       "info": "Menandai video ini sebagai konten dewasa. Video akan disembunyikan dari feed dan pencarian bagi penonton yang belum mengaktifkan NSFW, dan diberi tag <code>nsfw</code> di seluruh Hive.",
       "hint": "Konten dewasa."
     },
+    "ads": {
+      "label": "Iklan di video ini",
+      "info": "Akunmu menayangkan iklan, jadi video ini juga, kecuali kamu mematikannya di sini. Ini hanya berlaku untuk video ini; video lain dan pengaturan akunmu tetap sama.",
+      "hintOn": "Iklan dapat diputar di video ini.",
+      "hintOff": "Tidak ada iklan di video ini."
+    },
     "gated": {
       "label": "Khusus pendukung",
       "info": "Mengenkripsi video ini agar hanya pelanggan 3Speak Pro yang bisa memutarnya. <b>Pratinjau 10 detik tanpa enkripsi</b> diterbitkan bersamanya, jadi postingan tetap menampilkan cuplikan di mana pun di Hive. Judul, deskripsi, dan tag-mu adalah konten postingan Hive biasa dan <b>tidak dienkripsi</b> — hanya videonya. <b>Ini tidak bisa diubah setelah diunggah.</b>",
@@ -252,6 +258,7 @@
     "scheduledFor": "Dijadwalkan untuk {{when}}",
     "scheduled": "Postingan dijadwalkan!",
     "linkingEmbed": "Menautkan video embed...",
+    "adsOffFailedToast": "Sudah dipublikasikan, tetapi iklan untuk video ini belum bisa dimatikan.",
     "trailerFailedToast": "Sudah diterbitkan, tetapi tidak dapat dijadikan trailer channel-mu.",
     "completed": "Selesai",
     "publishedToast": "Video berhasil diterbitkan!",
@@ -277,6 +284,8 @@
       "embedLinkFailed": "Peringatan: Video embed tidak dapat ditautkan (tidak kritis)",
       "thumbnailLinked": "Thumbnail ditautkan ke video embed",
       "thumbnailLinkFailed": "Peringatan: Thumbnail embed tidak dapat diatur (tidak kritis)",
+      "adsOffSaved": "Iklan dimatikan untuk video ini",
+      "adsOffFailed": "Tidak dapat menyimpan pengaturan tanpa iklan untuk video ini",
       "trailerSet": "Dijadikan trailer channel-mu",
       "trailerFailed": "Sudah diterbitkan, tetapi tidak dapat dijadikan trailer channel-mu",
       "published": "Video berhasil diterbitkan!"

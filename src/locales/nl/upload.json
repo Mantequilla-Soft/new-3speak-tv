@@ -193,6 +193,12 @@
       "info": "Markeert deze video als inhoud voor volwassenen. Hij wordt verborgen in feeds en zoekresultaten voor kijkers die NSFW niet hebben ingeschakeld, en op heel Hive getagd als <code>nsfw</code>.",
       "hint": "Inhoud voor volwassenen."
     },
+    "ads": {
+      "label": "Advertenties in deze video",
+      "info": "Je account toont advertenties, dus deze video ook, tenzij je ze hier uitzet. Dit geldt alleen voor deze ene video; je andere video's en je accountinstelling blijven ongewijzigd.",
+      "hintOn": "Er kunnen advertenties in deze video worden getoond.",
+      "hintOff": "Geen advertenties in deze video."
+    },
     "gated": {
       "label": "Alleen voor supporters",
       "info": "Versleutelt deze video zodat alleen 3Speak Pro-abonnees hem kunnen afspelen. Er wordt een <b>onversleuteld voorproefje van 10 seconden</b> naast gepubliceerd, zodat de post overal op Hive nog een trailer toont. Je titel, beschrijving en tags zijn gewone inhoud van een Hive-post en worden <b>niet versleuteld</b> — alleen de video. <b>Dit kan na het uploaden niet meer worden gewijzigd.</b>",
@@ -254,6 +260,7 @@
     "scheduledFor": "Ingepland voor {{when}}",
     "scheduled": "Post ingepland!",
     "linkingEmbed": "Embedvideo koppelen...",
+    "adsOffFailedToast": "Gepubliceerd, maar de advertenties voor deze video konden nog niet worden uitgezet.",
     "trailerFailedToast": "Gepubliceerd, maar kon niet worden ingesteld als je kanaaltrailer.",
     "completed": "Voltooid",
     "publishedToast": "Video gepubliceerd!",
@@ -279,6 +286,8 @@
       "embedLinkFailed": "Waarschuwing: embedvideo kon niet worden gekoppeld (niet kritiek)",
       "thumbnailLinked": "Thumbnail gekoppeld aan embedvideo",
       "thumbnailLinkFailed": "Waarschuwing: embedthumbnail kon niet worden ingesteld (niet kritiek)",
+      "adsOffSaved": "Advertenties uitgezet voor deze video",
+      "adsOffFailed": "Kon de instelling zonder advertenties voor deze video niet opslaan",
       "trailerSet": "Ingesteld als je kanaaltrailer",
       "trailerFailed": "Gepubliceerd, maar kon niet worden ingesteld als je kanaaltrailer",
       "published": "Video gepubliceerd!"

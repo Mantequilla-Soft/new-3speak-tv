@@ -192,6 +192,12 @@
       "info": "Đánh dấu video này là nội dung người lớn. Video sẽ bị ẩn khỏi bảng tin và tìm kiếm đối với người xem chưa bật NSFW, và được gắn thẻ <code>nsfw</code> trên toàn Hive.",
       "hint": "Nội dung người lớn."
     },
+    "ads": {
+      "label": "Quảng cáo trên video này",
+      "info": "Tài khoản của bạn đang bật quảng cáo, nên video này cũng có quảng cáo trừ khi bạn tắt tại đây. Cài đặt này chỉ áp dụng cho video này; các video khác và cài đặt tài khoản của bạn vẫn giữ nguyên.",
+      "hintOn": "Video này có thể phát quảng cáo.",
+      "hintOff": "Không có quảng cáo trên video này."
+    },
     "gated": {
       "label": "Chỉ dành cho người ủng hộ",
       "info": "Mã hóa video này để chỉ người đăng ký 3Speak Pro mới phát được. Một <b>bản xem trước 10 giây không mã hóa</b> được xuất bản kèm theo, nên bài đăng vẫn hiển thị đoạn giới thiệu ở mọi nơi trên Hive. Tiêu đề, mô tả và thẻ của bạn là nội dung bài đăng Hive thông thường và <b>không được mã hóa</b> — chỉ có video được mã hóa. <b>Không thể thay đổi sau khi tải lên.</b>",
@@ -252,6 +258,7 @@
     "scheduledFor": "Đã lên lịch vào {{when}}",
     "scheduled": "Đã lên lịch bài đăng!",
     "linkingEmbed": "Đang liên kết video nhúng...",
+    "adsOffFailedToast": "Đã đăng, nhưng chưa thể tắt quảng cáo cho video này.",
     "trailerFailedToast": "Đã xuất bản, nhưng không thể đặt làm video giới thiệu kênh của bạn.",
     "completed": "Hoàn tất",
     "publishedToast": "Đã xuất bản video thành công!",
@@ -277,6 +284,8 @@
       "embedLinkFailed": "Cảnh báo: Không thể liên kết video nhúng (không nghiêm trọng)",
       "thumbnailLinked": "Đã liên kết hình thu nhỏ với video nhúng",
       "thumbnailLinkFailed": "Cảnh báo: Không thể đặt hình thu nhỏ cho video nhúng (không nghiêm trọng)",
+      "adsOffSaved": "Đã tắt quảng cáo cho video này",
+      "adsOffFailed": "Không thể lưu cài đặt không quảng cáo cho video này",
       "trailerSet": "Đã đặt làm video giới thiệu kênh của bạn",
       "trailerFailed": "Đã xuất bản, nhưng không thể đặt làm video giới thiệu kênh của bạn",
       "published": "Đã xuất bản video thành công!"

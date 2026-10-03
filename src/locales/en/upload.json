@@ -193,6 +193,12 @@
       "info": "Flags this video as adult content. It will be hidden from feeds and search for viewers who have not enabled NSFW, and tagged <code>nsfw</code> across Hive.",
       "hint": "Adult content."
     },
+    "ads": {
+      "label": "Ads on this video",
+      "info": "Your account carries ads, so this video does too unless you turn it off here. This only affects this one video; your other videos and your account setting stay as they are.",
+      "hintOn": "Ads may play on this video.",
+      "hintOff": "No ads on this video."
+    },
     "gated": {
       "label": "Supporters only",
       "info": "Encrypts this video so only 3Speak Pro subscribers can play it. A <b>10 second unencrypted preview</b> is published alongside it, so the post still shows a trailer everywhere on Hive. Your title, description and tags are ordinary Hive post content and are <b>not encrypted</b> — only the video is. <b>This cannot be changed after upload.</b>",
@@ -254,6 +260,7 @@
     "scheduledFor": "Scheduled for {{when}}",
     "scheduled": "Post scheduled!",
     "linkingEmbed": "Linking embed video...",
+    "adsOffFailedToast": "Published, but ads could not be turned off for this video yet.",
     "trailerFailedToast": "Published, but could not set it as your channel trailer.",
     "completed": "Completed",
     "publishedToast": "Video published successfully!",
@@ -279,6 +286,8 @@
       "embedLinkFailed": "Warning: Could not link embed video (non-critical)",
       "thumbnailLinked": "Thumbnail linked to embed video",
       "thumbnailLinkFailed": "Warning: Could not set embed thumbnail (non-critical)",
+      "adsOffSaved": "Ads turned off for this video",
+      "adsOffFailed": "Could not save the no-ads setting for this video",
       "trailerSet": "Set as your channel trailer",
       "trailerFailed": "Published, but could not set it as your channel trailer",
       "published": "Video successfully published!"
