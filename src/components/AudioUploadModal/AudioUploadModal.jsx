@@ -5,6 +5,7 @@ import {
   MdPublic, MdLock, MdCheck, MdAdd,
 } from 'react-icons/md';
 import axios from 'axios';
+import { useTranslation, Trans } from 'react-i18next';
 import { toastIn } from '../../utils/toast';
 import { useQueryClient } from '@tanstack/react-query';
 import { KeyTypes } from '@aioha/aioha';
@@ -51,14 +52,15 @@ function generatePermlink(title) {
 // The wizard's step sequence depends on the publish mode. `step` is an
 // index into the active flow (not a fixed number) so the same Back/Next
 // machinery works for every mode.
-const STEP_LABELS = {
-  source: 'Source',
-  mode: 'Mode',
-  playlist: 'Playlist',
-  post: 'Post',
-  mainpost: 'Main post',
-  tracks: 'Tracks',
-  review: 'Review',
+// i18n keys, translated at render.
+const STEP_LABEL_KEYS = {
+  source: 'audio.upload.steps.source',
+  mode: 'audio.upload.steps.mode',
+  playlist: 'audio.upload.steps.playlist',
+  post: 'audio.upload.steps.post',
+  mainpost: 'audio.upload.steps.mainpost',
+  tracks: 'audio.upload.steps.tracks',
+  review: 'audio.upload.steps.review',
 };
 const FLOWS = {
   // each audio → a reply under the latest peak.snaps container
@@ -92,11 +94,11 @@ function broadcastAudioOps(ops) {
 
 // Content type per track (matches the existing 3speak audio categories)
 const TRACK_TYPES = [
-  { value: 'voice_message', label: 'Voice / Snap' },
-  { value: 'song',          label: 'Music' },
-  { value: 'podcast',       label: 'Podcast' },
-  { value: 'audiobook',     label: 'Audiobook' },
-  { value: 'interview',     label: 'Interview' },
+  { value: 'voice_message', labelKey: 'audio.upload.trackTypes.voiceSnap' },
+  { value: 'song',          labelKey: 'audio.categories.music' },
+  { value: 'podcast',       labelKey: 'audio.categories.podcast' },
+  { value: 'audiobook',     labelKey: 'audio.categories.audiobook' },
+  { value: 'interview',     labelKey: 'audio.categories.interview' },
 ];
 
 // Hardcoded suggestions; users can still type any genre into the field.
@@ -177,6 +179,7 @@ function probeDuration(blob) {
 }
 
 function AudioUploadModal({ isOpen, onClose, initialTrack }) {
+  const { t } = useTranslation();
   const [step, setStep] = useState(0); // index into the active flow
   const [tracks, setTracks] = useState([]);
   const [playlistChoice, setPlaylistChoice] = useState(null);
@@ -244,44 +247,44 @@ function AudioUploadModal({ isOpen, onClose, initialTrack }) {
   const isPremium = !!usePremiumStatus(user)?.premium;
 
   const patchTrack = useCallback((id, patch) => {
-    setTracks(prev => prev.map(t => (t.id === id ? { ...t, ...patch } : t)));
+    setTracks(prev => prev.map(tr => (tr.id === id ? { ...tr, ...patch } : tr)));
   }, []);
 
   // Upload a cover for a target ('main' or a track id) and store the URL.
   const uploadCoverFor = useCallback(async (target, file) => {
     if (!file) return;
-    if (!file.type.startsWith('image/')) { toast.error('Pick an image file'); return; }
+    if (!file.type.startsWith('image/')) { toast.error(t('audio.upload.toasts.pickImage')); return; }
     setThumbUploadingId(target);
     try {
       const url = await uploadThumbnail(file);
       if (target === 'main') setPostThumb(url);
-      else setTracks(prev => prev.map(t => (t.id === target ? { ...t, thumb: url } : t)));
+      else setTracks(prev => prev.map(tr => (tr.id === target ? { ...tr, thumb: url } : tr)));
     } catch (err) {
-      toast.error(`Thumbnail upload failed: ${err?.message || 'unknown'}`);
+      toast.error(t('audio.upload.toasts.thumbFailed', { error: err?.message || t('audio.upload.unknown') }));
     } finally {
       setThumbUploadingId(null);
       if (thumbInputRef.current) thumbInputRef.current.value = '';
     }
-  }, []);
+  }, [t]);
 
   // Apply the main composer's desc/payout/beneficiaries to every track.
   const applyToAllTracks = useCallback(() => {
-    setTracks(prev => prev.map(t => ({
-      ...t,
+    setTracks(prev => prev.map(tr => ({
+      ...tr,
       desc: postDescription,
-      thumb: postThumb || t.thumb,
+      thumb: postThumb || tr.thumb,
       payout: postPayout,
       beneStr: postBeneStr,
     })));
-    toast.success('Applied to all tracks');
-  }, [postDescription, postThumb, postPayout, postBeneStr]);
+    toast.success(t('audio.upload.toasts.appliedToAll'));
+  }, [postDescription, postThumb, postPayout, postBeneStr, t]);
 
   // Open the beneficiary modal for a target; seed its list from that
   // target's stored JSON.
   const openBeneFor = useCallback((target) => {
     const json = target === 'main'
       ? postBeneStr
-      : (tracks.find(t => t.id === target)?.beneStr || '[]');
+      : (tracks.find(tr => tr.id === target)?.beneStr || '[]');
     let list = [];
     try { list = (JSON.parse(json || '[]') || []).map(b => ({ account: b.account, percent: (b.weight || 0) / 100 })); } catch { list = []; }
     const used = list.reduce((s, b) => s + (b.percent || 0), 0);
@@ -295,7 +298,7 @@ function AudioUploadModal({ isOpen, onClose, initialTrack }) {
   // Write the modal's beneficiary JSON back to its target.
   const writeBeneToTarget = useCallback((json) => {
     if (beneTarget === 'main') setPostBeneStr(json);
-    else setTracks(prev => prev.map(t => (t.id === beneTarget ? { ...t, beneStr: json } : t)));
+    else setTracks(prev => prev.map(tr => (tr.id === beneTarget ? { ...tr, beneStr: json } : tr)));
   }, [beneTarget]);
 
   const fileInputRef = useRef(null);
@@ -377,17 +380,17 @@ function AudioUploadModal({ isOpen, onClose, initialTrack }) {
 
   const removeTrack = (id) => {
     setTracks(prev => {
-      const t = prev.find(x => x.id === id);
-      if (t?.objectUrl) {
-        URL.revokeObjectURL(t.objectUrl);
-        objectUrlsRef.current.delete(t.objectUrl);
+      const tr = prev.find(x => x.id === id);
+      if (tr?.objectUrl) {
+        URL.revokeObjectURL(tr.objectUrl);
+        objectUrlsRef.current.delete(tr.objectUrl);
       }
       return prev.filter(x => x.id !== id);
     });
   };
 
   const setTitle = (id, title) => {
-    setTracks(prev => prev.map(t => t.id === id ? { ...t, title } : t));
+    setTracks(prev => prev.map(tr => tr.id === id ? { ...tr, title } : tr));
   };
 
   const stopRecordTimer = () => {
@@ -406,7 +409,7 @@ function AudioUploadModal({ isOpen, onClose, initialTrack }) {
       mr.ondataavailable = (e) => { if (e.data?.size > 0) recordChunksRef.current.push(e.data); };
       mr.onstop = async () => {
         const blob = new Blob(recordChunksRef.current, { type: 'audio/webm' });
-        recordStreamRef.current?.getTracks().forEach(t => t.stop());
+        recordStreamRef.current?.getTracks().forEach(tr => tr.stop());
         recordStreamRef.current = null;
         const idx = newId().slice(0, 4);
         await addBlobAsTrack(blob, `recording-${idx}.webm`, 'record');
@@ -428,7 +431,7 @@ function AudioUploadModal({ isOpen, onClose, initialTrack }) {
         });
       }, 1000);
     } catch {
-      toast.error('Microphone access denied');
+      toast.error(t('audio.upload.toasts.micDenied'));
     }
   };
 
@@ -447,7 +450,7 @@ function AudioUploadModal({ isOpen, onClose, initialTrack }) {
       if (mr && mr.state === 'recording') {
         try { mr.stop(); } catch {}
       }
-      recordStreamRef.current?.getTracks().forEach(t => t.stop());
+      recordStreamRef.current?.getTracks().forEach(tr => tr.stop());
       objectUrlsRef.current.forEach(u => URL.revokeObjectURL(u));
       objectUrlsRef.current.clear();
     };
@@ -461,14 +464,14 @@ function AudioUploadModal({ isOpen, onClose, initialTrack }) {
   }, [pendingPlaylist, playlists]);
 
   const handleCreatePlaylist = useCallback(async ({ name, access, credits, musicStyle, year, label, description, thumbnail }) => {
-    if (!user) { toast.error('Sign in first'); return; }
+    if (!user) { toast.error(t('audio.upload.toasts.signInFirst')); return; }
     const trimmed = name.trim();
-    if (!trimmed) { toast.error('Enter a playlist name'); return; }
+    if (!trimmed) { toast.error(t('audio.upload.toasts.enterPlaylistName')); return; }
     const playlistId = (typeof crypto !== 'undefined' && crypto.randomUUID)
       ? crypto.randomUUID()
       : `${Date.now()}-${Math.random().toString(36).slice(2, 9)}`;
     try {
-      toast.info(`Creating playlist "${trimmed}"…`);
+      toast.info(t('audio.upload.toasts.creatingPlaylist', { name: trimmed }));
       // Build the album payload — only include fields with values.
       const album = {};
       if (credits && credits.trim()) album.credits = credits.trim();
@@ -517,7 +520,7 @@ function AudioUploadModal({ isOpen, onClose, initialTrack }) {
       }
 
       await broadcastAudioOps(ops);
-      toast.success('Playlist created');
+      toast.success(t('audio.upload.toasts.playlistCreated'));
       setPlaylistChoice(playlistId);
       setPendingPlaylist({ id: playlistId, name: trimmed, access });
       setTimeout(() => {
@@ -526,10 +529,10 @@ function AudioUploadModal({ isOpen, onClose, initialTrack }) {
       }, 3000);
       return true;
     } catch (err) {
-      toast.error(`Failed: ${err?.message || 'unknown error'}`);
+      toast.error(t('audio.upload.toasts.failedWithError', { error: err?.message || t('audio.upload.unknownError') }));
       return false;
     }
-  }, [user, queryClient, refetchPlaylists]);
+  }, [user, queryClient, refetchPlaylists, t]);
 
   const hasUnsavedWork = tracks.length > 0 || isRecording;
 
@@ -584,14 +587,14 @@ function AudioUploadModal({ isOpen, onClose, initialTrack }) {
     try {
       await addThreespeakToPostingAuth(user, { signWindow });
       setNeedsAuth(false);
-      toast.success('@threespeak authorized — you can now publish');
+      toast.success(t('audio.upload.toasts.authorized'));
     } catch (e) {
       try { signWindow?.close(); } catch { /* ignore */ }
-      toast.error(e?.message || 'Authorization failed. Please try again.');
+      toast.error(e?.message || t('audio.upload.toasts.authFailed'));
     } finally {
       setAuthorizing(false);
     }
-  }, [user]);
+  }, [user, t]);
 
   // Check the user's Resource Credits when the modal opens. Runs for every login
   // (including ButrAuth — they're the post author too). Fails OPEN: if RC can't
@@ -687,13 +690,13 @@ function AudioUploadModal({ isOpen, onClose, initialTrack }) {
 
   // ── single (standalone post, audio embedded — uses the main composer) ──
   const publishSinglePost = useCallback(async (track) => {
-    setTrackStatus(track.id, { state: 'uploading', stage: 'Uploading audio file', message: undefined });
+    setTrackStatus(track.id, { state: 'uploading', stage: 'upload', message: undefined });
     const { permlink: audioPermlink, playUrl } = await uploadAudioTo3Speak({
       blob: track.blob, durationSec: track.durationSec, username: user, title: track.title,
     });
-    setTrackStatus(track.id, { state: 'posting', stage: 'Posting to Hive', playUrl });
+    setTrackStatus(track.id, { state: 'posting', stage: 'post', playUrl });
     const hivePermlink = generatePermlink(mainTitle || track.title) || audioPermlink;
-    const userTags = postTagsInput.split(/[\s,]+/).map(t => t.trim().toLowerCase()).filter(Boolean);
+    const userTags = postTagsInput.split(/[\s,]+/).map(tr => tr.trim().toLowerCase()).filter(Boolean);
     const tags = userTags.length ? Array.from(new Set(userTags)) : Array.from(new Set(HIVE_DEFAULT_TAGS));
     const desc = (postDescription || '').trim() || (track.title || '').trim();
     const cover = postThumb ? `![${(track.title || 'cover').replace(/[[\]]/g, '')}](${postThumb})\n\n` : '';
@@ -740,7 +743,7 @@ function AudioUploadModal({ isOpen, onClose, initialTrack }) {
   const albumMainRef = useRef(null);
   const ensureAlbumMain = useCallback(async () => {
     if (albumMainRef.current) return albumMainRef.current;
-    const userTags = postTagsInput.split(/[\s,]+/).map(t => t.trim().toLowerCase()).filter(Boolean);
+    const userTags = postTagsInput.split(/[\s,]+/).map(tr => tr.trim().toLowerCase()).filter(Boolean);
     const tags = userTags.length ? Array.from(new Set(userTags)) : Array.from(new Set(HIVE_DEFAULT_TAGS));
     const hivePermlink = generatePermlink(mainTitle) || `audio-album-${Date.now().toString(36)}`;
     const cover = postThumb ? `![cover](${postThumb})\n\n` : '';
@@ -774,11 +777,11 @@ function AudioUploadModal({ isOpen, onClose, initialTrack }) {
   // ── one audio as a comment under `parent` (snaps container OR album main) ──
   // Uses the track's own desc/thumb/payout/beneficiaries.
   const publishTrackComment = useCallback(async (track, parent) => {
-    setTrackStatus(track.id, { state: 'uploading', stage: 'Uploading audio file', message: undefined });
+    setTrackStatus(track.id, { state: 'uploading', stage: 'upload', message: undefined });
     const { permlink: audioPermlink, playUrl } = await uploadAudioTo3Speak({
       blob: track.blob, durationSec: track.durationSec, username: user, title: track.title,
     });
-    setTrackStatus(track.id, { state: 'posting', stage: 'Posting to Hive', playUrl });
+    setTrackStatus(track.id, { state: 'posting', stage: 'post', playUrl });
     const hivePermlink = generatePermlink(track.title) || audioPermlink;
     const tags = Array.from(new Set(HIVE_DEFAULT_TAGS));
     const desc = (track.desc || '').trim() || (track.title || '').trim();
@@ -839,7 +842,7 @@ function AudioUploadModal({ isOpen, onClose, initialTrack }) {
   }, [mode, publishSinglePost, publishTrackComment]);
 
   const retryTrack = useCallback(async (trackId) => {
-    const track = tracks.find((t) => t.id === trackId);
+    const track = tracks.find((tr) => tr.id === trackId);
     if (!track) return;
     setIsPublishing(true);
     try {
@@ -847,15 +850,15 @@ function AudioUploadModal({ isOpen, onClose, initialTrack }) {
       await publishOneTrack(track, parent);
       if (playlistChoice) queryClient.invalidateQueries({ queryKey: ['myPlaylists', user] });
     } catch (err) {
-      const message = err?.message || (typeof err === 'string' ? err : 'Failed');
+      const message = err?.message || (typeof err === 'string' ? err : t('audio.upload.failed'));
       setTrackStatus(trackId, { state: 'error', stage: undefined, message });
     } finally {
       setIsPublishing(false);
     }
-  }, [tracks, mode, resolveParent, publishOneTrack, playlistChoice, queryClient, user]);
+  }, [tracks, mode, resolveParent, publishOneTrack, playlistChoice, queryClient, user, t]);
 
   const retryAllFailed = useCallback(async () => {
-    const failed = tracks.filter((t) => publishStatus[t.id]?.state === 'error');
+    const failed = tracks.filter((tr) => publishStatus[tr.id]?.state === 'error');
     if (failed.length === 0) return;
     for (let i = 0; i < failed.length; i++) {
       if (i > 0) await sleep(PUBLISH_DELAY_MS); // throttle between tracks
@@ -866,7 +869,7 @@ function AudioUploadModal({ isOpen, onClose, initialTrack }) {
 
   if (!isOpen) return null;
 
-  const allPublished = tracks.length > 0 && tracks.every(t => publishStatus[t.id]?.state === 'success');
+  const allPublished = tracks.length > 0 && tracks.every(tr => publishStatus[tr.id]?.state === 'success');
 
   const flow = FLOWS[mode] || FLOWS.snaps;
   const stepKey = flow[Math.min(step, flow.length - 1)];
@@ -885,12 +888,12 @@ function AudioUploadModal({ isOpen, onClose, initialTrack }) {
   const goBack = () => setStep(s => Math.max(s - 1, 0));
 
   const onPublish = async () => {
-    if (!user) { toast.error('Sign in first'); return; }
+    if (!user) { toast.error(t('audio.upload.toasts.signInFirst')); return; }
     if (tracks.length === 0) return;
     setIsPublishing(true);
 
     const initial = {};
-    for (const t of tracks) initial[t.id] = { state: 'pending' };
+    for (const tr of tracks) initial[tr.id] = { state: 'pending' };
     setPublishStatus(initial);
 
     // Resolve the shared parent up front (snap container, or broadcast the
@@ -901,8 +904,10 @@ function AudioUploadModal({ isOpen, onClose, initialTrack }) {
         parent = await resolveParent();
       } catch (err) {
         setIsPublishing(false);
-        const what = mode === 'album' ? 'publish the main post' : 'resolve peak.snaps container';
-        toast.error(`Couldn't ${what}: ${err?.message || 'unknown'}`);
+        const errorText = err?.message || t('audio.upload.unknown');
+        toast.error(mode === 'album'
+          ? t('audio.upload.toasts.couldntPublishMain', { error: errorText })
+          : t('audio.upload.toasts.couldntResolveContainer', { error: errorText }));
         return;
       }
     }
@@ -915,7 +920,7 @@ function AudioUploadModal({ isOpen, onClose, initialTrack }) {
         await publishOneTrack(track, parent);
       } catch (err) {
         allOk = false;
-        const message = err?.message || (typeof err === 'string' ? err : 'Failed');
+        const message = err?.message || (typeof err === 'string' ? err : t('audio.upload.failed'));
         setTrackStatus(track.id, { state: 'error', stage: undefined, message });
       }
     }
@@ -923,11 +928,11 @@ function AudioUploadModal({ isOpen, onClose, initialTrack }) {
     setIsPublishing(false);
 
     if (allOk) {
-      toast.success(`Published ${tracks.length} track${tracks.length !== 1 ? 's' : ''}`);
+      toast.success(t('audio.upload.toasts.published', { count: tracks.length }));
       queryClient.invalidateQueries({ queryKey: ['myPlaylists', user] });
       setTimeout(() => onClose(), 1200);
     } else {
-      toast.error('Some tracks failed — open the failed track to retry');
+      toast.error(t('audio.upload.toasts.someFailed'));
     }
   };
 
@@ -939,27 +944,27 @@ function AudioUploadModal({ isOpen, onClose, initialTrack }) {
       </datalist>
       <div className="audio-upload-modal audio-upload-modal-wizard" onClick={e => e.stopPropagation()}>
         <div className="audio-upload-header">
-          <h3><MdCloudUpload /> Upload audio</h3>
-          <button className="audio-upload-close" onClick={attemptClose} aria-label="Close"><MdClose size={20} /></button>
+          <h3><MdCloudUpload /> {t('audio.upload.title')}</h3>
+          <button className="audio-upload-close" onClick={attemptClose} aria-label={t('common.actions.close')}><MdClose size={20} /></button>
         </div>
 
         {(authChecking || rcChecking || needsAuth || rcInsufficient) ? (
           <div className="audio-upload-body">
             <div className="audio-upload-auth-gate">
               {(authChecking || rcChecking) ? (
-                <p>Checking…</p>
+                <p>{t('audio.upload.gate.checking')}</p>
               ) : needsAuth ? (
                 <>
-                  <p>To publish audio, allow <strong>@threespeak</strong> to post on your behalf.</p>
+                  <p><Trans i18nKey="audio.upload.gate.allowThreespeak" components={{ b: <strong /> }} /></p>
                   <button className="audio-upload-btn-primary" onClick={handleAuthorize} disabled={authorizing}>
-                    {authorizing ? 'Authorizing…' : 'Authorize @threespeak'}
+                    {authorizing ? t('audio.upload.gate.authorizing') : t('audio.upload.gate.authorize')}
                   </button>
                 </>
               ) : (
                 <>
-                  <p>Your account doesn&apos;t have enough <strong>Resource Credits</strong> to publish a post right now.</p>
+                  <p><Trans i18nKey="audio.upload.gate.notEnoughRc" components={{ b: <strong /> }} /></p>
                   <button className="audio-upload-btn-primary" onClick={() => setRcModalOpen(true)}>
-                    Why can&apos;t I upload?
+                    {t('audio.upload.gate.whyCantUpload')}
                   </button>
                 </>
               )}
@@ -973,7 +978,7 @@ function AudioUploadModal({ isOpen, onClose, initialTrack }) {
               className={`audio-upload-step${step === i ? ' active' : ''}${step > i ? ' done' : ''}`}
             >
               <span className="audio-upload-step-num">{step > i ? <MdCheck size={14} /> : i + 1}</span>
-              <span className="audio-upload-step-label">{STEP_LABELS[key]}</span>
+              <span className="audio-upload-step-label">{t(STEP_LABEL_KEYS[key])}</span>
             </li>
           ))}
         </ol>
@@ -1102,19 +1107,19 @@ function AudioUploadModal({ isOpen, onClose, initialTrack }) {
         <div className="audio-upload-footer">
           {step > 0 ? (
             <button className="audio-upload-btn-secondary" onClick={goBack} disabled={isPublishing}>
-              <MdArrowBack size={16} /> Back
+              <MdArrowBack size={16} /> {t('common.actions.back')}
             </button>
           ) : <span />}
           {!isLastStep ? (
             <button className="audio-upload-btn-primary" onClick={goNext} disabled={!canNext}>
-              Next <MdArrowForward size={16} />
+              {t('common.actions.next')} <MdArrowForward size={16} />
             </button>
           ) : allPublished ? (
             <button
               className="audio-upload-btn-primary"
               onClick={onClose}
             >
-              <MdCheck size={16} /> Close
+              <MdCheck size={16} /> {t('common.actions.close')}
             </button>
           ) : (
             <button
@@ -1122,7 +1127,7 @@ function AudioUploadModal({ isOpen, onClose, initialTrack }) {
               onClick={onPublish}
               disabled={isPublishing}
             >
-              {isPublishing ? 'Publishing…' : 'Publish'}
+              {isPublishing ? t('audio.upload.publishing') : t('common.actions.publish')}
             </button>
           )}
         </div>
@@ -1131,10 +1136,11 @@ function AudioUploadModal({ isOpen, onClose, initialTrack }) {
         {showCloseConfirm && (
           <div className="audio-upload-confirm" onClick={(e) => e.stopPropagation()}>
             <div className="audio-upload-confirm-card">
-              <h4>Discard upload?</h4>
+              <h4>{t('audio.upload.discard.title')}</h4>
               <p>
-                You have {tracks.length} track{tracks.length !== 1 ? 's' : ''} added
-                {isRecording ? ' and a recording in progress' : ''}. Closing will discard them.
+                {isRecording
+                  ? t('audio.upload.discard.bodyRecording', { count: tracks.length })
+                  : t('audio.upload.discard.body', { count: tracks.length })}
               </p>
               <div className="audio-upload-confirm-actions">
                 <button
@@ -1142,13 +1148,13 @@ function AudioUploadModal({ isOpen, onClose, initialTrack }) {
                   onClick={() => setShowCloseConfirm(false)}
                   autoFocus
                 >
-                  Keep editing
+                  {t('audio.upload.discard.keepEditing')}
                 </button>
                 <button
                   className="audio-upload-btn-primary audio-upload-btn-danger"
                   onClick={() => { setShowCloseConfirm(false); onClose(); }}
                 >
-                  Discard
+                  {t('audio.upload.discard.discard')}
                 </button>
               </div>
             </div>
@@ -1172,6 +1178,7 @@ function SourceStep({
   onDrop, onDragOver, onDragLeave, onPickFiles, onFilesSelected,
   onStart, onStop, onRemove,
 }) {
+  const { t } = useTranslation();
   return (
     <>
       <div className="audio-upload-source-row">
@@ -1185,8 +1192,8 @@ function SourceStep({
           tabIndex={0}
         >
           <MdCloudUpload size={32} />
-          <p>Drop audio files here, or click to browse</p>
-          <small>MP3, WAV, OGG, WEBM, M4A, FLAC, AAC — multiple allowed</small>
+          <p>{t('audio.upload.source.dropHere')}</p>
+          <small>{t('audio.upload.source.formats')}</small>
           <input
             ref={fileInputRef}
             type="file"
@@ -1203,16 +1210,16 @@ function SourceStep({
               <div className="audio-upload-rec-dot" />
               <div className="audio-upload-rec-time">{fmtTime(recordSec)}</div>
               <button className="audio-upload-btn-secondary" onClick={onStop}>
-                <MdStop size={16} /> Stop
+                <MdStop size={16} /> {t('audio.upload.source.stop')}
               </button>
             </>
           ) : (
             <>
               <MdMic size={32} />
-              <p>Or record live</p>
-              <small>Up to {Math.round(MAX_RECORD_SEC / 60)} min per recording</small>
+              <p>{t('audio.upload.source.orRecord')}</p>
+              <small>{t('audio.upload.source.recordLimit', { minutes: Math.round(MAX_RECORD_SEC / 60) })}</small>
               <button className="audio-upload-btn-primary" onClick={onStart}>
-                <MdMic size={16} /> Record
+                <MdMic size={16} /> {t('audio.upload.source.record')}
               </button>
             </>
           )}
@@ -1220,15 +1227,15 @@ function SourceStep({
       </div>
       {tracks.length > 0 && (
         <div className="audio-upload-track-list">
-          <h4>Added ({tracks.length})</h4>
-          {tracks.map(t => (
-            <div key={t.id} className="audio-upload-track-row">
-              <span className="audio-upload-track-source" title={t.source === 'record' ? 'Recorded' : 'Uploaded'}>
-                {t.source === 'record' ? <MdMic size={14} /> : <MdCloudUpload size={14} />}
+          <h4>{t('audio.upload.source.added', { count: tracks.length })}</h4>
+          {tracks.map(tr => (
+            <div key={tr.id} className="audio-upload-track-row">
+              <span className="audio-upload-track-source" title={tr.source === 'record' ? t('audio.upload.recorded') : t('audio.upload.uploaded')}>
+                {tr.source === 'record' ? <MdMic size={14} /> : <MdCloudUpload size={14} />}
               </span>
-              <span className="audio-upload-track-name">{t.filename}</span>
-              <span className="audio-upload-track-meta">{fmtTime(t.durationSec)}</span>
-              <button className="audio-upload-track-remove" onClick={() => onRemove(t.id)} aria-label="Remove">
+              <span className="audio-upload-track-name">{tr.filename}</span>
+              <span className="audio-upload-track-meta">{fmtTime(tr.durationSec)}</span>
+              <button className="audio-upload-track-remove" onClick={() => onRemove(tr.id)} aria-label={t('common.actions.remove')}>
                 <MdDelete size={14} />
               </button>
             </div>
@@ -1240,58 +1247,59 @@ function SourceStep({
 }
 
 function TitlesStep({ tracks, setTitle, patchTrack, onRemove }) {
+  const { t } = useTranslation();
   return (
     <div className="audio-upload-titles">
-      <p className="audio-upload-step-help">Title each track and pick a type. Music tracks get genre + BPM fields.</p>
-      {tracks.map((t, i) => (
-        <div key={t.id} className="audio-upload-title-card">
+      <p className="audio-upload-step-help">{t('audio.upload.titles.help')}</p>
+      {tracks.map((tr, i) => (
+        <div key={tr.id} className="audio-upload-title-card">
           <div className="audio-upload-title-row">
             <span className="audio-upload-title-num">{i + 1}.</span>
             <input
               type="text"
               className="audio-upload-title-input"
-              value={t.title}
-              onChange={(e) => setTitle(t.id, e.target.value)}
-              placeholder="Track title"
+              value={tr.title}
+              onChange={(e) => setTitle(tr.id, e.target.value)}
+              placeholder={t('audio.upload.fields.trackTitle')}
               maxLength={120}
             />
             <select
               className="audio-upload-type-select"
-              value={t.type || 'voice_message'}
-              onChange={(e) => patchTrack(t.id, { type: e.target.value })}
+              value={tr.type || 'voice_message'}
+              onChange={(e) => patchTrack(tr.id, { type: e.target.value })}
             >
               {TRACK_TYPES.map((opt) => (
-                <option key={opt.value} value={opt.value}>{opt.label}</option>
+                <option key={opt.value} value={opt.value}>{t(opt.labelKey)}</option>
               ))}
             </select>
-            <button className="audio-upload-track-remove" onClick={() => onRemove(t.id)} aria-label="Remove">
+            <button className="audio-upload-track-remove" onClick={() => onRemove(tr.id)} aria-label={t('common.actions.remove')}>
               <MdDelete size={14} />
             </button>
           </div>
-          {t.type === 'song' && (
+          {tr.type === 'song' && (
             <div className="audio-upload-music-row">
               <input
                 type="text"
                 className="audio-upload-genre-input"
-                value={t.genre || ''}
-                onChange={(e) => patchTrack(t.id, { genre: e.target.value })}
-                placeholder="Genre"
+                value={tr.genre || ''}
+                onChange={(e) => patchTrack(tr.id, { genre: e.target.value })}
+                placeholder={t('audio.upload.fields.genre')}
                 list="audio-upload-genre-options"
                 maxLength={60}
               />
               <input
                 type="number"
                 className="audio-upload-bpm-input"
-                value={t.bpm || ''}
-                onChange={(e) => patchTrack(t.id, { bpm: e.target.value })}
-                placeholder="BPM"
+                value={tr.bpm || ''}
+                onChange={(e) => patchTrack(tr.id, { bpm: e.target.value })}
+                placeholder={t('audio.upload.fields.bpm')}
                 min="20"
                 max="400"
               />
             </div>
           )}
           <div className="audio-upload-title-meta-line">
-            <span>{fmtTime(t.durationSec)} · {t.source === 'record' ? 'Recorded' : t.filename}</span>
+            <span>{fmtTime(tr.durationSec)} · {tr.source === 'record' ? t('audio.upload.recorded') : tr.filename}</span>
           </div>
         </div>
       ))}
@@ -1300,6 +1308,7 @@ function TitlesStep({ tracks, setTitle, patchTrack, onRemove }) {
 }
 
 function PlaylistStep({ playlists, loading, choice, onChoose, pendingPlaylist, onCreate, required = false }) {
+  const { t } = useTranslation();
   const [showCreateForm, setShowCreateForm] = useState(false);
   const [newName, setNewName] = useState('');
   const [newAccess, setNewAccess] = useState('public');
@@ -1331,7 +1340,7 @@ function PlaylistStep({ playlists, loading, choice, onChoose, pendingPlaylist, o
   const processThumbnailFile = async (file) => {
     if (!file) return;
     if (!file.type.startsWith('image/')) {
-      toast.error('Pick an image file');
+      toast.error(t('audio.upload.toasts.pickImage'));
       return;
     }
     setThumbnailUploading(true);
@@ -1339,7 +1348,7 @@ function PlaylistStep({ playlists, loading, choice, onChoose, pendingPlaylist, o
       const url = await uploadThumbnail(file);
       setThumbnailUrl(url);
     } catch (err) {
-      toast.error(`Thumbnail upload failed: ${err?.message || 'unknown'}`);
+      toast.error(t('audio.upload.toasts.thumbFailed', { error: err?.message || t('audio.upload.unknown') }));
     } finally {
       setThumbnailUploading(false);
       if (thumbInputRef.current) thumbInputRef.current.value = '';
@@ -1374,8 +1383,8 @@ function PlaylistStep({ playlists, loading, choice, onChoose, pendingPlaylist, o
     <div className="audio-upload-playlist-step">
       <p className="audio-upload-step-help">
         {required
-          ? 'Required — pick or create a playlist. Album posts live inside a playlist so its tracks stay grouped inside of a 3Speak album. This helps exposure and more prominent placement on the audio page.'
-          : 'Optional — add all tracks to a playlist.'}
+          ? t('audio.upload.playlist.helpRequired')
+          : t('audio.upload.playlist.helpOptional')}
       </p>
 
       {!required && (
@@ -1385,8 +1394,8 @@ function PlaylistStep({ playlists, loading, choice, onChoose, pendingPlaylist, o
         >
           <span className="audio-upload-playlist-icon"><MdPlaylistAdd size={18} /></span>
           <span className="audio-upload-playlist-name">
-            <span>No playlist</span>
-            <small>Tracks won't be grouped</small>
+            <span>{t('audio.upload.playlist.none')}</span>
+            <small>{t('audio.upload.playlist.noneHint')}</small>
           </span>
           {choice === null && <MdCheck size={16} />}
         </button>
@@ -1402,7 +1411,7 @@ function PlaylistStep({ playlists, loading, choice, onChoose, pendingPlaylist, o
             <span>{pendingPlaylist.name}</span>
             <small>
               {pendingPlaylist.access === 'private' ? <MdLock size={11} /> : <MdPublic size={11} />}{' '}
-              creating… (waiting for indexer)
+              {t('audio.upload.playlist.creatingPending')}
             </small>
           </span>
           {choice === pendingPlaylist.id && <MdCheck size={16} />}
@@ -1410,9 +1419,9 @@ function PlaylistStep({ playlists, loading, choice, onChoose, pendingPlaylist, o
       )}
 
       {loading ? (
-        <div className="audio-upload-playlist-loading">Loading playlists…</div>
+        <div className="audio-upload-playlist-loading">{t('audio.upload.playlist.loading')}</div>
       ) : playlists.length === 0 && !showPending ? (
-        <div className="audio-upload-playlist-empty">You don't have any playlists yet.</div>
+        <div className="audio-upload-playlist-empty">{t('audio.upload.playlist.empty')}</div>
       ) : (
         playlists.map(p => (
           <button
@@ -1427,7 +1436,7 @@ function PlaylistStep({ playlists, loading, choice, onChoose, pendingPlaylist, o
               <span>{p.name}</span>
               <small>
                 {p.access === 'private' ? <MdLock size={11} /> : <MdPublic size={11} />}{' '}
-                {p.items?.length || 0} items
+                {t('audio.upload.playlist.items', { count: p.items?.length || 0 })}
               </small>
             </span>
             {choice === p.id && <MdCheck size={16} />}
@@ -1441,7 +1450,7 @@ function PlaylistStep({ playlists, loading, choice, onChoose, pendingPlaylist, o
           className="audio-upload-playlist-create-btn"
           onClick={() => setShowCreateForm(true)}
         >
-          <MdAdd size={16} /> New audio playlist
+          <MdAdd size={16} /> {t('audio.upload.playlist.newPlaylist')}
         </button>
       ) : (
         <div className="audio-upload-playlist-form">
@@ -1450,7 +1459,7 @@ function PlaylistStep({ playlists, loading, choice, onChoose, pendingPlaylist, o
             className="audio-upload-title-input"
             value={newName}
             onChange={(e) => setNewName(e.target.value)}
-            placeholder="Playlist name"
+            placeholder={t('audio.upload.playlist.namePlaceholder')}
             maxLength={80}
             autoFocus
           />
@@ -1460,14 +1469,14 @@ function PlaylistStep({ playlists, loading, choice, onChoose, pendingPlaylist, o
               className={`audio-upload-playlist-privacy-btn${newAccess === 'public' ? ' active' : ''}`}
               onClick={() => setNewAccess('public')}
             >
-              <MdPublic size={14} /> Public
+              <MdPublic size={14} /> {t('audio.upload.playlist.public')}
             </button>
             <button
               type="button"
               className={`audio-upload-playlist-privacy-btn${newAccess === 'private' ? ' active' : ''}`}
               onClick={() => setNewAccess('private')}
             >
-              <MdLock size={14} /> Private
+              <MdLock size={14} /> {t('audio.upload.playlist.private')}
             </button>
           </div>
           <input
@@ -1475,7 +1484,7 @@ function PlaylistStep({ playlists, loading, choice, onChoose, pendingPlaylist, o
             className="audio-upload-title-input"
             value={newMusicStyle}
             onChange={(e) => setNewMusicStyle(e.target.value)}
-            placeholder="Music style / genre (optional, e.g. Electronic)"
+            placeholder={t('audio.upload.playlist.musicStylePlaceholder')}
             list="audio-upload-genre-options"
             maxLength={60}
           />
@@ -1486,7 +1495,7 @@ function PlaylistStep({ playlists, loading, choice, onChoose, pendingPlaylist, o
               className="audio-upload-title-input"
               value={newCredits}
               onChange={(e) => setNewCredits(e.target.value)}
-              placeholder="Credits (optional)"
+              placeholder={t('audio.upload.playlist.creditsPlaceholder')}
               maxLength={200}
             />
             <input
@@ -1494,7 +1503,7 @@ function PlaylistStep({ playlists, loading, choice, onChoose, pendingPlaylist, o
               className="audio-upload-title-input"
               value={newYear}
               onChange={(e) => setNewYear(e.target.value)}
-              placeholder="Year"
+              placeholder={t('audio.upload.playlist.yearPlaceholder')}
               min="1900"
               max="2100"
             />
@@ -1503,7 +1512,7 @@ function PlaylistStep({ playlists, loading, choice, onChoose, pendingPlaylist, o
               className="audio-upload-title-input"
               value={newLabel}
               onChange={(e) => setNewLabel(e.target.value)}
-              placeholder="Label (optional)"
+              placeholder={t('audio.upload.playlist.labelPlaceholder')}
               maxLength={120}
             />
           </div>
@@ -1512,7 +1521,7 @@ function PlaylistStep({ playlists, loading, choice, onChoose, pendingPlaylist, o
             className="audio-upload-title-input audio-upload-credits-input"
             value={newDescription}
             onChange={(e) => setNewDescription(e.target.value)}
-            placeholder="Description (optional)"
+            placeholder={t('audio.upload.fields.descriptionOptional')}
             rows={3}
             maxLength={1000}
           />
@@ -1526,19 +1535,19 @@ function PlaylistStep({ playlists, loading, choice, onChoose, pendingPlaylist, o
           >
             {thumbnailUrl ? (
               <>
-                <img src={thumbnailUrl} alt="Album thumbnail" />
+                <img src={thumbnailUrl} alt={t('audio.upload.playlist.thumbAlt')} />
                 <button
                   type="button"
                   className="audio-upload-album-thumb-remove"
                   onClick={(e) => { e.stopPropagation(); setThumbnailUrl(''); }}
-                  aria-label="Remove thumbnail"
+                  aria-label={t('audio.upload.playlist.removeThumb')}
                 ><MdClose size={14} /></button>
               </>
             ) : (
               <>
                 <MdCloudUpload size={28} />
-                <span>{thumbnailUploading ? 'Uploading…' : 'Add cover image'}</span>
-                <small>Click or drag &amp; drop — JPG / PNG / WebP</small>
+                <span>{thumbnailUploading ? t('audio.upload.thumb.uploading') : t('audio.upload.thumb.addCover')}</span>
+                <small>{t('audio.upload.thumb.hint')}</small>
               </>
             )}
             <input
@@ -1558,7 +1567,7 @@ function PlaylistStep({ playlists, loading, choice, onChoose, pendingPlaylist, o
               onClick={resetForm}
               disabled={submitting}
             >
-              Cancel
+              {t('common.actions.cancel')}
             </button>
             <button
               type="button"
@@ -1566,7 +1575,7 @@ function PlaylistStep({ playlists, loading, choice, onChoose, pendingPlaylist, o
               onClick={submit}
               disabled={submitting || !newName.trim()}
             >
-              {submitting ? 'Creating…' : 'Create'}
+              {submitting ? t('audio.upload.playlist.creating') : t('audio.upload.playlist.create')}
             </button>
           </div>
         </div>
@@ -1576,7 +1585,8 @@ function PlaylistStep({ playlists, loading, choice, onChoose, pendingPlaylist, o
 }
 
 // Reusable cover picker — owns its own file input so many can coexist.
-function ThumbPicker({ value, uploading, onPick, onClear, label = 'Add cover image' }) {
+function ThumbPicker({ value, uploading, onPick, onClear, label }) {
+  const { t } = useTranslation();
   const ref = useRef(null);
   const [dragging, setDragging] = useState(false);
   const handleDrop = (e) => {
@@ -1596,19 +1606,19 @@ function ThumbPicker({ value, uploading, onPick, onClear, label = 'Add cover ima
     >
       {value ? (
         <>
-          <img src={value} alt="cover" />
+          <img src={value} alt={t('audio.upload.thumb.coverAlt')} />
           <button
             type="button"
             className="audio-upload-album-thumb-remove"
             onClick={(e) => { e.stopPropagation(); onClear(); }}
-            aria-label="Remove cover"
+            aria-label={t('audio.upload.thumb.removeCover')}
           ><MdClose size={14} /></button>
         </>
       ) : (
         <>
           <MdCloudUpload size={26} />
-          <span>{uploading ? 'Uploading…' : label}</span>
-          <small>Click or drag &amp; drop — JPG / PNG / WebP</small>
+          <span>{uploading ? t('audio.upload.thumb.uploading') : (label === undefined ? t('audio.upload.thumb.addCover') : label)}</span>
+          <small>{t('audio.upload.thumb.hint')}</small>
         </>
       )}
       <input
@@ -1625,6 +1635,7 @@ function ThumbPicker({ value, uploading, onPick, onClear, label = 'Add cover ima
 
 // Per-track content-type + music fields (shared by Mode/MainPost/Tracks).
 function TrackTypeFields({ track, patchTrack, disabled }) {
+  const { t } = useTranslation();
   return (
     <>
       <div className="audio-upload-title-row">
@@ -1635,7 +1646,7 @@ function TrackTypeFields({ track, patchTrack, disabled }) {
           disabled={disabled}
         >
           {TRACK_TYPES.map((opt) => (
-            <option key={opt.value} value={opt.value}>{opt.label}</option>
+            <option key={opt.value} value={opt.value}>{t(opt.labelKey)}</option>
           ))}
         </select>
       </div>
@@ -1646,7 +1657,7 @@ function TrackTypeFields({ track, patchTrack, disabled }) {
             className="audio-upload-genre-input"
             value={track.genre || ''}
             onChange={(e) => patchTrack(track.id, { genre: e.target.value })}
-            placeholder="Genre"
+            placeholder={t('audio.upload.fields.genre')}
             list="audio-upload-genre-options"
             maxLength={60}
             disabled={disabled}
@@ -1656,7 +1667,7 @@ function TrackTypeFields({ track, patchTrack, disabled }) {
             className="audio-upload-bpm-input"
             value={track.bpm || ''}
             onChange={(e) => patchTrack(track.id, { bpm: e.target.value })}
-            placeholder="BPM"
+            placeholder={t('audio.upload.fields.bpm')}
             min="20"
             max="400"
             disabled={disabled}
@@ -1669,7 +1680,8 @@ function TrackTypeFields({ track, patchTrack, disabled }) {
 
 // ─── Step: Mode (how the audio is published + how it earns) ───
 function ModeStep({ tracks, mode, setMode, rewardMode, setRewardMode, isPublishing, publishStatus = {} }) {
-  const locked = isPublishing || tracks.some(t => publishStatus[t.id]?.state);
+  const { t } = useTranslation();
+  const locked = isPublishing || tracks.some(tr => publishStatus[tr.id]?.state);
   const count = tracks.length;
   const opt = (id, enabled, title, desc) => (
     <button
@@ -1685,30 +1697,30 @@ function ModeStep({ tracks, mode, setMode, rewardMode, setRewardMode, isPublishi
   return (
     <div className="audio-upload-review">
       <p className="audio-upload-step-help">
-        {count} track{count !== 1 ? 's' : ''} added. Choose how they go out.
+        {t('audio.upload.mode.help', { count })}
       </p>
 
       <div className="audio-upload-reward">
-        <span className="audio-upload-reward-label">How should this be published?</span>
-        {opt('snaps', true, 'Snap comments',
-          'Each audio posts as a reply under the latest peak.snaps container — shows in the Snaps feed (default).')}
-        {opt('single', count === 1, `Standalone post${count !== 1 ? ' (single file only)' : ''}`,
-          'One audio in its own top-level Hive post, with a title, community, tags & cover.')}
-        {opt('album', count >= 2, `Album post${count < 2 ? ' (needs 2+ files)' : ''}`,
-          'One main post (no audio) acting as a landing page; every track is published as a comment reply with its own cover, description, payout & beneficiaries.')}
+        <span className="audio-upload-reward-label">{t('audio.upload.mode.howPublished')}</span>
+        {opt('snaps', true, t('audio.upload.mode.snapsTitle'),
+          t('audio.upload.mode.snapsDesc'))}
+        {opt('single', count === 1, count !== 1 ? t('audio.upload.mode.singleTitleSingleOnly') : t('audio.upload.mode.singleTitle'),
+          t('audio.upload.mode.singleDesc'))}
+        {opt('album', count >= 2, count < 2 ? t('audio.upload.mode.albumTitleNeeds2') : t('audio.upload.mode.albumTitle'),
+          t('audio.upload.mode.albumDesc'))}
       </div>
 
       {ENABLE_PPL && (
         <div className="audio-upload-reward">
-          <span className="audio-upload-reward-label">How should this audio earn?</span>
+          <span className="audio-upload-reward-label">{t('audio.upload.mode.howEarn')}</span>
           <button
             type="button"
             className={`audio-upload-reward-opt${rewardMode === 'post' ? ' is-active' : ''}`}
             onClick={() => setRewardMode('post')}
             disabled={locked}
           >
-            <strong>Post rewards (one-time)</strong>
-            <small>You receive the normal Hive author payout — paid out once, ~7 days after publishing.</small>
+            <strong>{t('audio.upload.mode.postRewardsTitle')}</strong>
+            <small>{t('audio.upload.mode.postRewardsDesc')}</small>
           </button>
           <button
             type="button"
@@ -1716,10 +1728,9 @@ function ModeStep({ tracks, mode, setMode, rewardMode, setRewardMode, isPublishi
             onClick={() => setRewardMode('ppl')}
             disabled={locked}
           >
-            <strong>Pay-per-listen (lifetime)</strong>
+            <strong>{t('audio.upload.mode.pplTitle')}</strong>
             <small>
-              All audio-post rewards go to @{PPL_BENEFICIARY}. Instead of a single payout,
-              a 3Speak program pays you per listen for the lifetime of the track.
+              {t('audio.upload.mode.pplDesc', { account: PPL_BENEFICIARY })}
             </small>
           </button>
         </div>
@@ -1730,19 +1741,20 @@ function ModeStep({ tracks, mode, setMode, rewardMode, setRewardMode, isPublishi
 
 // Shared payout + beneficiaries control row.
 function RewardRow({ payout, setPayout, beneCount, onOpenBene }) {
+  const { t } = useTranslation();
   return (
     <div className="audio-upload-post-reward-row">
       <label>
-        <span>Rewards distribution</span>
+        <span>{t('audio.upload.reward.distribution')}</span>
         <select value={payout} onChange={(e) => setPayout(e.target.value)}>
-          <option value="default">Default (50% HBD / 50% HP)</option>
-          <option value="powerup">Power up 100%</option>
-          <option value="decline">Decline payout</option>
+          <option value="default">{t('audio.upload.reward.default')}</option>
+          <option value="powerup">{t('audio.upload.reward.powerup')}</option>
+          <option value="decline">{t('audio.upload.reward.decline')}</option>
         </select>
       </label>
       <button type="button" className="audio-upload-community-btn" onClick={onOpenBene}>
-        {beneCount > 0 ? `Beneficiaries (${beneCount})` : 'Beneficiaries'}
-        <span className="audio-upload-community-change">Edit</span>
+        {beneCount > 0 ? t('audio.upload.reward.beneficiariesCount', { count: beneCount }) : t('audio.upload.reward.beneficiaries')}
+        <span className="audio-upload-community-change">{t('common.actions.edit')}</span>
       </button>
     </div>
   );
@@ -1756,19 +1768,20 @@ function MainPostStep({
   thumb, setThumb, thumbUploading, onPickThumb,
   payout, setPayout, beneCount, onOpenBene,
 }) {
+  const { t } = useTranslation();
   const isAlbum = variant === 'album';
   return (
     <div className="audio-upload-review audio-upload-post-form">
       <p className="audio-upload-step-help">
         {isAlbum
-          ? 'Details for the main post — the album landing page. It carries no audio; each track is a comment reply you configure next.'
-          : 'Details for your standalone post.'}
+          ? t('audio.upload.mainPost.helpAlbum')
+          : t('audio.upload.mainPost.helpSingle')}
       </p>
 
       <input
         type="text"
         className="audio-upload-post-tags"
-        placeholder="Title (required)"
+        placeholder={t('audio.upload.mainPost.titlePlaceholder')}
         value={title}
         onChange={(e) => setTitle(e.target.value)}
       />
@@ -1780,21 +1793,21 @@ function MainPostStep({
       >
         {community
           ? <><img src={`https://images.hive.blog/u/${community.name}/avatar/small`} alt="" />{community.title || community.name}</>
-          : <>Select community</>}
-        <span className="audio-upload-community-change">Change</span>
+          : <>{t('audio.upload.mainPost.selectCommunity')}</>}
+        <span className="audio-upload-community-change">{t('audio.upload.mainPost.change')}</span>
       </button>
 
       <input
         type="text"
         className="audio-upload-post-tags"
-        placeholder="Tags — space or comma separated (optional)"
+        placeholder={t('audio.upload.mainPost.tagsPlaceholder')}
         value={tagsInput}
         onChange={(e) => setTagsInput(e.target.value)}
       />
 
       <textarea
         className="audio-upload-post-desc"
-        placeholder="Description (optional)"
+        placeholder={t('audio.upload.fields.descriptionOptional')}
         rows={4}
         maxLength={5000}
         value={description}
@@ -1810,7 +1823,7 @@ function MainPostStep({
 
       {!isAlbum && singleTrack && (
         <div className="audio-upload-title-card">
-          <span className="audio-upload-reward-label">What kind of audio is this?</span>
+          <span className="audio-upload-reward-label">{t('audio.upload.mainPost.whatKind')}</span>
           <TrackTypeFields track={singleTrack} patchTrack={patchTrack} />
         </div>
       )}
@@ -1827,20 +1840,21 @@ function TracksStep({
   postPayout, setPostPayout, postBeneCount,
   applyToAllTracks, onOpenBene, uploadCoverFor, thumbUploadingId,
 }) {
+  const { t } = useTranslation();
   const [openId, setOpenId] = useState(null);
   return (
     <div className="audio-upload-review audio-upload-post-form">
       <p className="audio-upload-step-help">
         {mode === 'album'
-          ? 'Each track is published as a comment under the main post. Set shared values once and apply them to all, then override per track.'
-          : 'Each track is published as its own snap. Set shared values once and apply them to all, then override per track.'}
+          ? t('audio.upload.tracks.helpAlbum')
+          : t('audio.upload.tracks.helpSnaps')}
       </p>
 
       <div className="audio-upload-title-card">
-        <span className="audio-upload-reward-label">Apply to all tracks</span>
+        <span className="audio-upload-reward-label">{t('audio.upload.tracks.applyToAllHeading')}</span>
         <textarea
           className="audio-upload-post-desc"
-          placeholder="Shared description (optional)"
+          placeholder={t('audio.upload.tracks.sharedDescription')}
           rows={3}
           maxLength={5000}
           value={postDescription}
@@ -1851,7 +1865,7 @@ function TracksStep({
           uploading={thumbUploadingId === 'main'}
           onPick={(f) => uploadCoverFor('main', f)}
           onClear={() => setPostThumb('')}
-          label="Shared cover image"
+          label={t('audio.upload.tracks.sharedCover')}
         />
         <RewardRow
           payout={postPayout}
@@ -1865,21 +1879,21 @@ function TracksStep({
           onClick={applyToAllTracks}
           style={{ marginTop: 8 }}
         >
-          Apply to all {tracks.length} tracks
+          {t('audio.upload.tracks.applyToAll', { count: tracks.length })}
         </button>
       </div>
 
-      {tracks.map((t, i) => {
-        const expanded = openId === t.id;
+      {tracks.map((tr, i) => {
+        const expanded = openId === tr.id;
         let beneCount = 0;
-        try { beneCount = (JSON.parse(t.beneStr || '[]') || []).length; } catch { beneCount = 0; }
+        try { beneCount = (JSON.parse(tr.beneStr || '[]') || []).length; } catch { beneCount = 0; }
         return (
-          <div key={t.id} className="audio-upload-title-card">
+          <div key={tr.id} className="audio-upload-title-card">
             <div
               className="audio-upload-title-row"
               role="button"
               tabIndex={0}
-              onClick={() => setOpenId(expanded ? null : t.id)}
+              onClick={() => setOpenId(expanded ? null : tr.id)}
               style={{ cursor: 'pointer' }}
             >
               <span className="audio-upload-title-num">{i + 1}.</span>
@@ -1887,9 +1901,9 @@ function TracksStep({
                 className="audio-upload-title-input"
                 style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}
               >
-                {t.title || t.filename}
+                {tr.title || tr.filename}
               </span>
-              <span className="audio-upload-community-change">{expanded ? 'Hide' : 'Edit'}</span>
+              <span className="audio-upload-community-change">{expanded ? t('audio.upload.tracks.hide') : t('common.actions.edit')}</span>
             </div>
 
             {expanded && (
@@ -1897,37 +1911,37 @@ function TracksStep({
                 <input
                   type="text"
                   className="audio-upload-post-tags"
-                  placeholder="Track title"
-                  value={t.title}
-                  onChange={(e) => patchTrack(t.id, { title: e.target.value })}
+                  placeholder={t('audio.upload.fields.trackTitle')}
+                  value={tr.title}
+                  onChange={(e) => patchTrack(tr.id, { title: e.target.value })}
                   maxLength={120}
                 />
-                <TrackTypeFields track={t} patchTrack={patchTrack} />
+                <TrackTypeFields track={tr} patchTrack={patchTrack} />
                 <textarea
                   className="audio-upload-post-desc"
-                  placeholder="Description (optional)"
+                  placeholder={t('audio.upload.fields.descriptionOptional')}
                   rows={3}
                   maxLength={5000}
-                  value={t.desc || ''}
-                  onChange={(e) => patchTrack(t.id, { desc: e.target.value })}
+                  value={tr.desc || ''}
+                  onChange={(e) => patchTrack(tr.id, { desc: e.target.value })}
                 />
                 <ThumbPicker
-                  value={t.thumb || ''}
-                  uploading={thumbUploadingId === t.id}
-                  onPick={(f) => uploadCoverFor(t.id, f)}
-                  onClear={() => patchTrack(t.id, { thumb: '' })}
+                  value={tr.thumb || ''}
+                  uploading={thumbUploadingId === tr.id}
+                  onPick={(f) => uploadCoverFor(tr.id, f)}
+                  onClear={() => patchTrack(tr.id, { thumb: '' })}
                 />
                 <RewardRow
-                  payout={t.payout || 'default'}
-                  setPayout={(v) => patchTrack(t.id, { payout: v })}
+                  payout={tr.payout || 'default'}
+                  setPayout={(v) => patchTrack(tr.id, { payout: v })}
                   beneCount={beneCount}
-                  onOpenBene={() => onOpenBene(t.id)}
+                  onOpenBene={() => onOpenBene(tr.id)}
                 />
               </>
             )}
 
             <div className="audio-upload-title-meta-line">
-              <span>{fmtTime(t.durationSec)} · {t.source === 'record' ? 'Recorded' : t.filename}</span>
+              <span>{fmtTime(tr.durationSec)} · {tr.source === 'record' ? t('audio.upload.recorded') : tr.filename}</span>
             </div>
           </div>
         );
@@ -1940,49 +1954,53 @@ function TracksStep({
 function ReviewStep({ tracks, playlists, playlistChoice, pendingPlaylist, publishStatus = {}, onRetry, onRetryAll, isPublishing, mode, rewardMode, community }) {
   const chosen = playlists.find(p => p.id === playlistChoice)
     || (pendingPlaylist && pendingPlaylist.id === playlistChoice ? pendingPlaylist : null);
-  const failedCount = tracks.filter((t) => publishStatus[t.id]?.state === 'error').length;
-  const inCommunity = community ? ` in ${community.title || community.name}` : '';
+  const failedCount = tracks.filter((tr) => publishStatus[tr.id]?.state === 'error').length;
+  const { t } = useTranslation();
+  const communityName = community ? (community.title || community.name) : '';
   const publishAsLabel = mode === 'single'
-    ? `Standalone post${inCommunity}`
+    ? (community ? t('audio.upload.review.standaloneIn', { community: communityName }) : t('audio.upload.review.standalone'))
     : mode === 'album'
-      ? `Album — 1 main post${inCommunity} + ${tracks.length} track comments`
-      : `${tracks.length} snap comment${tracks.length !== 1 ? 's' : ''}`;
+      ? (community
+        ? t('audio.upload.review.albumIn', { community: communityName, count: tracks.length })
+        : t('audio.upload.review.album', { count: tracks.length }))
+      : t('audio.upload.review.snapComments', { count: tracks.length });
   return (
     <div className="audio-upload-review">
       <p className="audio-upload-step-help">
-        Ready to publish {tracks.length} track{tracks.length !== 1 ? 's' : ''}
-        {chosen ? ` to playlist "${chosen.name}"` : ''}.
+        {chosen
+          ? t('audio.upload.review.readyToPlaylist', { count: tracks.length, name: chosen.name })
+          : t('audio.upload.review.ready', { count: tracks.length })}
       </p>
 
       <div className="audio-upload-review-summary">
-        <div><strong>Publish as:</strong> {publishAsLabel}</div>
-        <div><strong>Earnings:</strong> {rewardMode === 'ppl' ? `Pay-per-listen (@${PPL_BENEFICIARY})` : 'Normal post rewards'}</div>
-        {chosen && <div><strong>Playlist:</strong> {chosen.name}</div>}
+        <div><strong>{t('audio.upload.review.publishAs')}</strong> {publishAsLabel}</div>
+        <div><strong>{t('audio.upload.review.earnings')}</strong> {rewardMode === 'ppl' ? t('audio.upload.review.earningsPpl', { account: PPL_BENEFICIARY }) : t('audio.upload.review.earningsNormal')}</div>
+        {chosen && <div><strong>{t('audio.upload.review.playlist')}</strong> {chosen.name}</div>}
       </div>
 
       {failedCount > 0 && (
         <div className="audio-upload-review-failed-banner">
-          <span>{failedCount} track{failedCount !== 1 ? 's' : ''} failed.</span>
+          <span>{t('audio.upload.review.failedCount', { count: failedCount })}</span>
           <button
             type="button"
             className="audio-upload-btn-secondary"
             onClick={onRetryAll}
             disabled={isPublishing}
           >
-            Retry all failed
+            {t('audio.upload.review.retryAllFailed')}
           </button>
         </div>
       )}
 
-      {tracks.map((t, i) => {
-        const status = publishStatus[t.id];
+      {tracks.map((tr, i) => {
+        const status = publishStatus[tr.id];
         return (
-          <div key={t.id} className={`audio-upload-review-row${status?.state ? ` is-${status.state}` : ''}`}>
+          <div key={tr.id} className={`audio-upload-review-row${status?.state ? ` is-${status.state}` : ''}`}>
             <div className="audio-upload-review-info">
               <span className="audio-upload-review-num">{i + 1}.</span>
-              <strong className="audio-upload-review-title">{t.title}</strong>
+              <strong className="audio-upload-review-title">{tr.title}</strong>
               <small className="audio-upload-review-meta">
-                {fmtTime(t.durationSec)} · {t.source === 'record' ? 'Recorded' : t.filename}
+                {fmtTime(tr.durationSec)} · {tr.source === 'record' ? t('audio.upload.recorded') : tr.filename}
               </small>
               {status && <PublishBadge status={status} />}
             </div>
@@ -1990,21 +2008,25 @@ function ReviewStep({ tracks, playlists, playlistChoice, pendingPlaylist, publis
             {status?.state === 'error' && (
               <div className="audio-upload-review-error">
                 <p className="audio-upload-review-error-msg">
-                  {status.stage ? `Failed during ${status.stage.toLowerCase()}: ` : 'Failed: '}
-                  {status.message || 'unknown error'}
+                  {t(status.stage === 'upload'
+                    ? 'audio.upload.review.failedDuringUpload'
+                    : status.stage === 'post'
+                      ? 'audio.upload.review.failedDuringPost'
+                      : 'audio.upload.review.failedWithMessage',
+                  { message: status.message || t('audio.upload.unknownError') })}
                 </p>
                 <button
                   type="button"
                   className="audio-upload-btn-primary"
-                  onClick={() => onRetry?.(t.id)}
+                  onClick={() => onRetry?.(tr.id)}
                   disabled={isPublishing}
                 >
-                  Retry
+                  {t('common.actions.retry')}
                 </button>
               </div>
             )}
 
-            <audio controls preload="metadata" src={t.objectUrl} className="audio-upload-review-player" />
+            <audio controls preload="metadata" src={tr.objectUrl} className="audio-upload-review-player" />
           </div>
         );
       })}
@@ -2012,12 +2034,20 @@ function ReviewStep({ tracks, playlists, playlistChoice, pendingPlaylist, publis
   );
 }
 
+// `status.stage` is a code ('upload' | 'post'), translated here.
+const STAGE_LABEL_KEYS = {
+  upload: 'audio.upload.stage.upload',
+  post: 'audio.upload.stage.post',
+};
+
 function PublishBadge({ status }) {
+  const { t } = useTranslation();
   if (!status?.state || status.state === 'pending') return null;
-  if (status.state === 'uploading') return <span className="audio-upload-review-badge uploading">{status.stage || 'Uploading'}…</span>;
-  if (status.state === 'posting') return <span className="audio-upload-review-badge posting">{status.stage || 'Posting to Hive'}…</span>;
-  if (status.state === 'success') return <span className="audio-upload-review-badge success"><MdCheck size={12} /> Published</span>;
-  if (status.state === 'error') return <span className="audio-upload-review-badge error">Failed</span>;
+  const stageLabel = STAGE_LABEL_KEYS[status.stage] ? t(STAGE_LABEL_KEYS[status.stage]) : '';
+  if (status.state === 'uploading') return <span className="audio-upload-review-badge uploading">{stageLabel || t('audio.upload.stage.uploadingFallback')}…</span>;
+  if (status.state === 'posting') return <span className="audio-upload-review-badge posting">{stageLabel || t('audio.upload.stage.post')}…</span>;
+  if (status.state === 'success') return <span className="audio-upload-review-badge success"><MdCheck size={12} /> {t('audio.upload.stage.published')}</span>;
+  if (status.state === 'error') return <span className="audio-upload-review-badge error">{t('audio.upload.failed')}</span>;
   return null;
 }
 
