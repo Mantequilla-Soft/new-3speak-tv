@@ -80,6 +80,7 @@ const EmbedPlayer = lazyRoute(() => import("./page/EmbedPlayer"), "./page/EmbedP
 const EmbedPreview = lazyRoute(() => import("./components/embed-studio/EmbedPreview"), "./components/embed-studio/EmbedPreview");
 const EmbedStudioPage = lazyRoute(() => import("./components/embed-studio/EmbedStudioPage"), "./components/embed-studio/EmbedStudioPage");
 const EmbedThumbnail = lazyRoute(() => import("./components/embed-studio/EmbedThumbnail"), "./components/embed-studio/EmbedThumbnail");
+const YoutubeImportPage = lazyRoute(() => import("./page/YoutubeImportPage"), "./page/YoutubeImportPage");
 const Feed = lazyRoute(() => import("./components/Feed/Feed"), "./components/Feed/Feed");
 const FirstUploads = lazyRoute(() => import("./page/FirstUploads"), "./page/FirstUploads");
 const FollowFeed = lazyRoute(() => import("./page/FollowFeed"), "./page/FollowFeed");
@@ -663,6 +664,7 @@ function App() {
               {/* Publish the backlog someone made before they had a Hive account. */}
               <Route path="/publish-backlog" element={<PublishBacklog />} />
               <Route path="/firstupload" element={<FirstUploads />} />
+              <Route path="/youtube-import" element={<YoutubeImportPage />} />
               <Route path="/trend" element={<Trend />} />
               <Route path="/discover" element={<Discover />} />
               <Route path="/audio" element={<Audio />} />

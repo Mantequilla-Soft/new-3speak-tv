@@ -19,7 +19,7 @@ import { useWatchHistory } from "../hooks/useWatchHistory";
 import useViewCounts from "../hooks/useViewCounts";
 import { fetchUserShortsWithDetails } from "../hive-api/hiveApi";
 
-import { FaVideo, FaPlus } from "react-icons/fa";
+import { FaVideo, FaPlus, FaYoutube } from "react-icons/fa";
 import { IoMdShare, IoMdAdd } from "react-icons/io";
 import { MdLock, MdPublic, MdClose } from "react-icons/md";
 import SocialLinks from "../components/Userprofilepage/SocialLinks";
@@ -536,6 +536,14 @@ function ProfilePage() {
                 title={t('profile.page.linkExternalTitle')}
               >
                 <FaPlus /> {t('profile.page.addProfile')}
+              </button>
+              <button
+                type="button"
+                className="add-social-link-btn"
+                onClick={() => navigate('/youtube-import')}
+                title={t('ytimport.subtitle')}
+              >
+                <FaYoutube /> {t('ytimport.entry')}
               </button>
             </div>
           </>

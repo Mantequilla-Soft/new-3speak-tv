@@ -1,0 +1,67 @@
+{
+  "title": "导入你的视频",
+  "subtitle": "把你在 YouTube 或 TikTok 上的视频带到 3Speak。标题、描述、标签和缩略图会自动为你填好。",
+  "noChannel": "你还没有关联 YouTube 频道。请先在个人资料中关联并验证，然后再回到这里。",
+  "linkChannel": "前往我的个人资料",
+  "channel": "频道",
+  "noVideos": "在此频道中未找到公开视频。",
+  "loadMore": "加载更多",
+  "openOnYoutube": "在 YouTube 上打开",
+  "import": "导入此视频",
+  "useOwnFile": "我已有文件",
+  "cancel": "取消",
+  "retry": "重试",
+  "progress": {
+    "starting": "正在开始导入...",
+    "server": "正在获取视频：{{pct}}%",
+    "transfer": "正在将视频载入上传器：{{pct}}%",
+    "handoff": "正在打开上传器..."
+  },
+  "fallback": {
+    "intro": "你仍然可以导入：自己下载视频，然后在这里选择文件。其他内容都会保持已填写状态。",
+    "step1": "请用以下工具打开此视频：",
+    "step2": "点击三点菜单，然后选择下载。",
+    "step3": "在下方选择已下载的文件。",
+    "pickFile": "选择已下载的文件"
+  },
+  "errors": {
+    "signIn": "请登录以导入你的视频。",
+    "generic": "导入失败。",
+    "blocked": "YouTube 目前不允许我们的服务器下载此视频。",
+    "notVideo": "该文件不是视频。",
+    "tooLongForShort": "此视频时长超过 {{minutes}} 分钟，对 Short 来说太长了。请将其作为普通视频导入。"
+  },
+  "entry": "导入视频",
+  "types": {
+    "videos": "视频",
+    "shorts": "Shorts",
+    "live": "直播"
+  },
+  "empty": {
+    "videos": "此频道没有公开视频。",
+    "shorts": "此频道没有公开的 Shorts。",
+    "live": "此频道没有过往直播。"
+  },
+  "limits": "导入仅限时长不超过 {{minutes}} 分钟、分辨率不超过 {{height}}p 的视频。",
+  "tooLong": "超过 {{minutes}} 分钟",
+  "onSite": "已在 3Speak 上",
+  "viewPost": "查看帖子",
+  "premiumHint": "使用 3Speak Premium，你可以导入最高 {{height}}p 的视频。",
+  "platforms": {
+    "youtube": "YouTube",
+    "tiktok": "TikTok"
+  },
+  "tiktok": {
+    "noLink": "你还没有关联 TikTok 账号。请先在个人资料中关联并验证，然后再回到这里。",
+    "pasteLabel": "粘贴你的某个 TikTok 视频的链接",
+    "placeholder": "https://www.tiktok.com/@you/video/…",
+    "find": "查找视频",
+    "finding": "正在查找…",
+    "openOn": "在 TikTok 上打开",
+    "fallbackStep1": "在 TikTok 应用中打开该视频。",
+    "fallbackStep2": "点按“分享”，然后点按“保存视频”。",
+    "latest": "你最新的 10 个 TikTok 视频",
+    "empty": "在你的账号中没有找到公开的 TikTok 视频。",
+    "tabLink": "通过链接导入"
+  }
+}

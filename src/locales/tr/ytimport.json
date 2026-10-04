@@ -1,0 +1,67 @@
+{
+  "title": "Videolarınızı içe aktarın",
+  "subtitle": "Videolarınızı YouTube veya TikTok'tan 3Speak'e taşıyın. Başlık, açıklama, etiketler ve küçük resim sizin için doldurulur.",
+  "noChannel": "Henüz bir YouTube kanalı bağlamadınız. Önce profilinizde bağlayıp doğrulayın, sonra buraya dönün.",
+  "linkChannel": "Profilime git",
+  "channel": "Kanal",
+  "noVideos": "Bu kanalda herkese açık video bulunamadı.",
+  "loadMore": "Daha fazla yükle",
+  "openOnYoutube": "YouTube'da aç",
+  "import": "Bu videoyu içe aktar",
+  "useOwnFile": "Dosya zaten bende",
+  "cancel": "İptal",
+  "retry": "Tekrar dene",
+  "progress": {
+    "starting": "İçe aktarma başlatılıyor...",
+    "server": "Video alınıyor: %{{pct}}",
+    "transfer": "Video yükleyiciye aktarılıyor: %{{pct}}",
+    "handoff": "Yükleyici açılıyor..."
+  },
+  "fallback": {
+    "intro": "Yine de içe aktarabilirsiniz: videoyu kendiniz indirin ve dosyayı buradan seçin. Geri kalan her şey dolu kalır.",
+    "step1": "Bu videoyu şurada açın:",
+    "step2": "Üç nokta menüsüne tıklayın ve İndir'i seçin.",
+    "step3": "İndirdiğiniz dosyayı aşağıdan seçin.",
+    "pickFile": "İndirilen dosyayı seç"
+  },
+  "errors": {
+    "signIn": "Videolarınızı içe aktarmak için giriş yapın.",
+    "generic": "İçe aktarma başarısız oldu.",
+    "blocked": "YouTube şu anda sunucumuzun bu videoyu indirmesine izin vermedi.",
+    "notVideo": "Bu dosya bir video değil.",
+    "tooLongForShort": "Bu video {{minutes}} dakikadan uzun, bir Short için çok uzun. Bunun yerine normal video olarak içe aktarın."
+  },
+  "entry": "Videoları içe aktar",
+  "types": {
+    "videos": "Videolar",
+    "shorts": "Shorts",
+    "live": "Canlı yayınlar"
+  },
+  "empty": {
+    "videos": "Bu kanalda herkese açık video yok.",
+    "shorts": "Bu kanalda herkese açık Shorts yok.",
+    "live": "Bu kanalda geçmiş canlı yayın yok."
+  },
+  "limits": "İçe aktarma, en fazla {{minutes}} dakikalık ve en fazla {{height}}p çözünürlüğündeki videolarla sınırlıdır.",
+  "tooLong": "{{minutes}} dk üzeri",
+  "onSite": "Zaten 3Speak'te",
+  "viewPost": "Gönderiyi gör",
+  "premiumHint": "3Speak Premium ile en fazla {{height}}p çözünürlüğe kadar içe aktarabilirsiniz.",
+  "platforms": {
+    "youtube": "YouTube",
+    "tiktok": "TikTok"
+  },
+  "tiktok": {
+    "noLink": "Henüz bir TikTok hesabı bağlamadınız. Önce profilinizde bağlayıp doğrulayın, sonra buraya dönün.",
+    "pasteLabel": "TikTok videolarınızdan birinin bağlantısını yapıştırın",
+    "placeholder": "https://www.tiktok.com/@siz/video/…",
+    "find": "Videoyu bul",
+    "finding": "Aranıyor…",
+    "openOn": "TikTok'ta aç",
+    "fallbackStep1": "Videoyu TikTok uygulamasında açın.",
+    "fallbackStep2": "Paylaş'a, ardından Videoyu kaydet'e dokunun.",
+    "latest": "En son 10 TikTok videonuz",
+    "empty": "Hesabınızda herkese açık TikTok videosu bulunamadı.",
+    "tabLink": "Bağlantıdan içe aktar"
+  }
+}

@@ -15,6 +15,7 @@ import { useAppStore } from '../lib/store';
 import { usePremiumStatus } from '../hooks/usePremiumStatus';
 import { setChannelTrailer } from '../utils/channelTrailer';
 import { syncVideoAdOptOut } from '../lib/advertiseData';
+import { markImportPublished } from '../lib/youtubeImport';
 import { sanitizeMusicCredits, soundAuthorsOf, soundCreditsMarkdown, primarySoundMetadata } from '../utils/soundCredits';
 import { enforceLockedBeneficiaries, getLockedBeneficiaries, chargesEncoder, LOCKED_FUND_ACCOUNT, LOCKED_ENCODER_ACCOUNT } from '../utils/beneficiaries';
 import { oaEnvelope, threespeakVideo, probeVideoOrientation, OA_ARTICLE, OA_MICROPOST, OA_COMMENT } from '../utils/openAttribute';
@@ -249,6 +250,11 @@ export function EmbedUploadProvider({ children }) {
   // Hive permlink of the just-published post — used by the success screen to
   // offer promotion of the new video.
   const [publishedPermlink, setPublishedPermlink] = useState('');
+  // ▶️ Set when the video came from the importer (/youtube-import):
+  // { id: "<youtube id>" | "tiktok:<id>", platform, url }. On publish it goes into
+  // the post's json_metadata (imported_from) and is reported to our API, so the
+  // import grid can mark it as already on 3Speak.
+  const [importSource, setImportSource] = useState(null);
 
   // Prefilled state — set when arriving from an external upload (e.g. Hangouts
   // server-side recording) that already pushed a video to the embed service.
@@ -384,6 +390,7 @@ export function EmbedUploadProvider({ children }) {
     setStatusMessages([]);
     setEmbedUrl('');
     setPublishedPermlink('');
+    setImportSource(null);
     setBeneficiaryList([]);
     // Re-seed the LOCKED rows instead of emptying the list. Emptying left a
     // non-Pro user looking like they had no splits at all after their first
@@ -1754,6 +1761,16 @@ export function EmbedUploadProvider({ children }) {
         // signed record, and the checker mirrors it from the chain (routes/
         // advertise.js, /creator/video-ads/sync), so no separate signature is asked.
         ...(videoAdsEnabled ? {} : { '3speak': { ads: false } }),
+        // ▶️ Where an imported video came from (/youtube-import): provenance on the
+        // creator's own signed record, for later features (dedupe, re-sync,
+        // "originally on …") without depending on our server's bookkeeping.
+        ...(importSource ? {
+          imported_from: {
+            platform: importSource.platform,
+            id: String(importSource.id).replace(/^tiktok:/, ''),
+            url: importSource.url,
+          },
+        } : {}),
       };
 
       // Build comment_options. When the author is declining payout, skip
@@ -2093,6 +2110,12 @@ export function EmbedUploadProvider({ children }) {
         }
       }
 
+      // ─── Imported video: remember it is on 3Speak now ───
+      // Non-fatal and silent: it only feeds the ✓ on the import page.
+      if (importSource && !result.incubation) {
+        markImportPublished(importSource.id, hivePermlink).catch((e) => console.warn('Could not record the import:', e.message));
+      }
+
       // ─── Done ───
       setStatusText(t('upload.publishing.completed'));
       setPublishedPermlink(hivePermlink);
@@ -2157,6 +2180,7 @@ export function EmbedUploadProvider({ children }) {
     statusMessages, setStatusMessages,
     embedUrl, setEmbedUrl,
     publishedPermlink,
+    importSource, setImportSource,
     // Background ('early') video upload that starts on the details step
     videoUploadStatus,
     selectedEndpoint,

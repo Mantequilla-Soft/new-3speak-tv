@@ -1,0 +1,67 @@
+{
+  "title": "Nhập video của bạn",
+  "subtitle": "Đưa video của bạn từ YouTube hoặc TikTok sang 3Speak. Tiêu đề, mô tả, thẻ và ảnh thu nhỏ sẽ được điền sẵn cho bạn.",
+  "noChannel": "Bạn chưa liên kết kênh YouTube. Hãy liên kết và xác minh trong hồ sơ của bạn trước, rồi quay lại đây.",
+  "linkChannel": "Đến hồ sơ của tôi",
+  "channel": "Kênh",
+  "noVideos": "Không tìm thấy video công khai nào trên kênh này.",
+  "loadMore": "Tải thêm",
+  "openOnYoutube": "Mở trên YouTube",
+  "import": "Nhập video này",
+  "useOwnFile": "Tôi đã có tệp",
+  "cancel": "Hủy",
+  "retry": "Thử lại",
+  "progress": {
+    "starting": "Đang bắt đầu nhập...",
+    "server": "Đang lấy video: {{pct}}%",
+    "transfer": "Đang tải video vào trình tải lên: {{pct}}%",
+    "handoff": "Đang mở trình tải lên..."
+  },
+  "fallback": {
+    "intro": "Bạn vẫn có thể nhập video: hãy tự tải video về và chọn tệp tại đây. Mọi thứ khác vẫn được giữ nguyên.",
+    "step1": "Mở video này trong",
+    "step2": "Nhấp vào menu ba chấm và chọn Tải xuống.",
+    "step3": "Chọn tệp đã tải xuống bên dưới.",
+    "pickFile": "Chọn tệp đã tải xuống"
+  },
+  "errors": {
+    "signIn": "Đăng nhập để nhập video của bạn.",
+    "generic": "Nhập thất bại.",
+    "blocked": "YouTube hiện không cho máy chủ của chúng tôi tải video này.",
+    "notVideo": "Tệp đó không phải là video.",
+    "tooLongForShort": "Video này dài hơn {{minutes}} phút, quá dài cho một Short. Hãy nhập nó dưới dạng video thường."
+  },
+  "entry": "Nhập video",
+  "types": {
+    "videos": "Video",
+    "shorts": "Shorts",
+    "live": "Phát trực tiếp"
+  },
+  "empty": {
+    "videos": "Kênh này không có video công khai.",
+    "shorts": "Kênh này không có Shorts công khai.",
+    "live": "Kênh này không có buổi phát trực tiếp nào đã kết thúc."
+  },
+  "limits": "Chỉ có thể nhập video dài tối đa {{minutes}} phút, với độ phân giải tối đa {{height}}p.",
+  "tooLong": "Quá {{minutes}} phút",
+  "onSite": "Đã có trên 3Speak",
+  "viewPost": "Xem bài đăng",
+  "premiumHint": "Với 3Speak Premium, bạn có thể nhập video lên đến {{height}}p.",
+  "platforms": {
+    "youtube": "YouTube",
+    "tiktok": "TikTok"
+  },
+  "tiktok": {
+    "noLink": "Bạn chưa liên kết tài khoản TikTok. Hãy liên kết và xác minh trong hồ sơ của bạn trước, rồi quay lại đây.",
+    "pasteLabel": "Dán liên kết đến một trong các video TikTok của bạn",
+    "placeholder": "https://www.tiktok.com/@you/video/…",
+    "find": "Tìm video",
+    "finding": "Đang tìm…",
+    "openOn": "Mở trên TikTok",
+    "fallbackStep1": "Mở video trong ứng dụng TikTok.",
+    "fallbackStep2": "Nhấn Chia sẻ, rồi nhấn Lưu video.",
+    "latest": "10 video TikTok mới nhất của bạn",
+    "empty": "Không tìm thấy video TikTok công khai nào trên tài khoản của bạn.",
+    "tabLink": "Nhập từ liên kết"
+  }
+}

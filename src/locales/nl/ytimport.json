@@ -1,0 +1,67 @@
+{
+  "title": "Je video's importeren",
+  "subtitle": "Haal je video's van YouTube of TikTok naar 3Speak. Titel, beschrijving, tags en thumbnail worden voor je ingevuld.",
+  "noChannel": "Je hebt nog geen YouTube-kanaal gekoppeld. Koppel en verifieer het eerst in je profiel en kom daarna hier terug.",
+  "linkChannel": "Naar mijn profiel",
+  "channel": "Kanaal",
+  "noVideos": "Geen openbare video's gevonden op dit kanaal.",
+  "loadMore": "Meer laden",
+  "openOnYoutube": "Openen op YouTube",
+  "import": "Deze video importeren",
+  "useOwnFile": "Ik heb het bestand al",
+  "cancel": "Annuleren",
+  "retry": "Opnieuw proberen",
+  "progress": {
+    "starting": "Import starten...",
+    "server": "Video ophalen: {{pct}}%",
+    "transfer": "Video laden in de uploader: {{pct}}%",
+    "handoff": "Uploader openen..."
+  },
+  "fallback": {
+    "intro": "Je kunt hem nog steeds importeren: download de video zelf en kies hier het bestand. Al het andere blijft ingevuld.",
+    "step1": "Open deze video in",
+    "step2": "Klik op het menu met drie puntjes en kies Downloaden.",
+    "step3": "Kies hieronder het gedownloade bestand.",
+    "pickFile": "Kies het gedownloade bestand"
+  },
+  "errors": {
+    "signIn": "Log in om je video's te importeren.",
+    "generic": "De import is mislukt.",
+    "blocked": "YouTube liet onze server deze video nu niet downloaden.",
+    "notVideo": "Dat bestand is geen video.",
+    "tooLongForShort": "Deze video is langer dan {{minutes}} minuten, te lang voor een Short. Importeer hem in plaats daarvan als gewone video."
+  },
+  "entry": "Video's importeren",
+  "types": {
+    "videos": "Video's",
+    "shorts": "Shorts",
+    "live": "Livestreams"
+  },
+  "empty": {
+    "videos": "Geen openbare video's op dit kanaal.",
+    "shorts": "Geen openbare Shorts op dit kanaal.",
+    "live": "Geen eerdere livestreams op dit kanaal."
+  },
+  "limits": "Imports zijn beperkt tot video's van maximaal {{minutes}} minuten, in maximaal {{height}}p.",
+  "tooLong": "Meer dan {{minutes}} min",
+  "onSite": "Al op 3Speak",
+  "viewPost": "Bekijk bericht",
+  "premiumHint": "Met 3Speak Premium kun je tot {{height}}p importeren.",
+  "platforms": {
+    "youtube": "YouTube",
+    "tiktok": "TikTok"
+  },
+  "tiktok": {
+    "noLink": "Je hebt nog geen TikTok-account gekoppeld. Koppel en verifieer het eerst in je profiel en kom daarna hier terug.",
+    "pasteLabel": "Plak de link naar een van je TikTok-video's",
+    "placeholder": "https://www.tiktok.com/@jij/video/…",
+    "find": "Video zoeken",
+    "finding": "Zoeken…",
+    "openOn": "Openen op TikTok",
+    "fallbackStep1": "Open de video in de TikTok-app.",
+    "fallbackStep2": "Tik op Delen en daarna op Video opslaan.",
+    "latest": "Je 10 nieuwste TikTok's",
+    "empty": "Geen openbare TikTok's gevonden op je account.",
+    "tabLink": "Importeren via link"
+  }
+}

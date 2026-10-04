@@ -1,0 +1,67 @@
+{
+  "title": "I-import ang iyong mga video",
+  "subtitle": "Dalhin sa 3Speak ang iyong mga video mula sa YouTube o TikTok. Awtomatikong pupunan ang pamagat, paglalarawan, mga tag, at thumbnail.",
+  "noChannel": "Wala ka pang naka-link na YouTube channel. I-link at i-verify muna ito sa iyong profile, pagkatapos ay bumalik dito.",
+  "linkChannel": "Pumunta sa aking profile",
+  "channel": "Channel",
+  "noVideos": "Walang nakitang pampublikong video sa channel na ito.",
+  "loadMore": "Mag-load pa",
+  "openOnYoutube": "Buksan sa YouTube",
+  "import": "I-import ang video na ito",
+  "useOwnFile": "Mayroon na akong file",
+  "cancel": "Kanselahin",
+  "retry": "Subukan muli",
+  "progress": {
+    "starting": "Sinisimulan ang pag-import...",
+    "server": "Kinukuha ang video: {{pct}}%",
+    "transfer": "Nilo-load ang video sa uploader: {{pct}}%",
+    "handoff": "Binubuksan ang uploader..."
+  },
+  "fallback": {
+    "intro": "Maaari mo pa ring i-import ito: i-download mo mismo ang video at piliin ang file dito. Mananatiling napunan ang lahat ng iba pa.",
+    "step1": "Buksan ang video na ito sa",
+    "step2": "I-click ang menu na may tatlong tuldok at piliin ang Download.",
+    "step3": "Piliin sa ibaba ang na-download na file.",
+    "pickFile": "Piliin ang na-download na file"
+  },
+  "errors": {
+    "signIn": "Mag-sign in para i-import ang iyong mga video.",
+    "generic": "Nabigo ang pag-import.",
+    "blocked": "Hindi pinayagan ng YouTube ang aming server na i-download ang video na ito ngayon.",
+    "notVideo": "Hindi video ang file na iyon.",
+    "tooLongForShort": "Mas mahaba sa {{minutes}} minuto ang video na ito, masyadong mahaba para sa isang Short. I-import na lang ito bilang regular na video."
+  },
+  "entry": "I-import ang mga video",
+  "types": {
+    "videos": "Mga Video",
+    "shorts": "Shorts",
+    "live": "Mga Livestream"
+  },
+  "empty": {
+    "videos": "Walang pampublikong video sa channel na ito.",
+    "shorts": "Walang pampublikong Shorts sa channel na ito.",
+    "live": "Walang nakaraang livestream sa channel na ito."
+  },
+  "limits": "Limitado ang mga import sa mga video na hanggang {{minutes}} minuto ang haba at hanggang {{height}}p.",
+  "tooLong": "Lampas {{minutes}} min",
+  "onSite": "Nasa 3Speak na",
+  "viewPost": "Tingnan ang post",
+  "premiumHint": "Sa 3Speak Premium, maaari kang mag-import hanggang {{height}}p.",
+  "platforms": {
+    "youtube": "YouTube",
+    "tiktok": "TikTok"
+  },
+  "tiktok": {
+    "noLink": "Wala ka pang naka-link na TikTok account. I-link at i-verify muna ito sa iyong profile, pagkatapos ay bumalik dito.",
+    "pasteLabel": "I-paste ang link ng isa sa iyong mga TikTok video",
+    "placeholder": "https://www.tiktok.com/@you/video/…",
+    "find": "Hanapin ang video",
+    "finding": "Hinahanap…",
+    "openOn": "Buksan sa TikTok",
+    "fallbackStep1": "Buksan ang video sa TikTok app.",
+    "fallbackStep2": "I-tap ang Ibahagi, pagkatapos ay I-save ang video.",
+    "latest": "Ang iyong 10 pinakabagong TikTok",
+    "empty": "Walang nakitang pampublikong TikTok sa iyong account.",
+    "tabLink": "I-import mula sa link"
+  }
+}

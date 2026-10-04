@@ -1,0 +1,67 @@
+{
+  "title": "Leta video zako",
+  "subtitle": "Leta video zako kutoka YouTube au TikTok hadi 3Speak. Kichwa, maelezo, lebo na picha ndogo hujazwa kwa ajili yako.",
+  "noChannel": "Bado hujaunganisha kituo cha YouTube. Kiunganishe na ukithibitishe kwenye wasifu wako kwanza, kisha urudi hapa.",
+  "linkChannel": "Nenda kwenye wasifu wangu",
+  "channel": "Kituo",
+  "noVideos": "Hakuna video za umma zilizopatikana kwenye kituo hiki.",
+  "loadMore": "Pakia zaidi",
+  "openOnYoutube": "Fungua kwenye YouTube",
+  "import": "Leta video hii",
+  "useOwnFile": "Tayari nina faili",
+  "cancel": "Ghairi",
+  "retry": "Jaribu tena",
+  "progress": {
+    "starting": "Inaanza kuleta...",
+    "server": "Inapakua video: {{pct}}%",
+    "transfer": "Inapakia video kwenye kipakiaji: {{pct}}%",
+    "handoff": "Inafungua kipakiaji..."
+  },
+  "fallback": {
+    "intro": "Bado unaweza kuileta: pakua video mwenyewe kisha uchague faili hapa. Kila kitu kingine kinabaki kimejazwa.",
+    "step1": "Fungua video hii katika",
+    "step2": "Bofya menyu ya nukta tatu kisha uchague Pakua.",
+    "step3": "Chagua faili uliyopakua hapa chini.",
+    "pickFile": "Chagua faili iliyopakuliwa"
+  },
+  "errors": {
+    "signIn": "Ingia ili uleta video zako.",
+    "generic": "Kuleta kumeshindwa.",
+    "blocked": "YouTube haikuruhusu seva yetu kupakua video hii kwa sasa.",
+    "notVideo": "Faili hiyo si video.",
+    "tooLongForShort": "Video hii ni ndefu kuliko dakika {{minutes}}, ni ndefu mno kwa Short. Iulete kama video ya kawaida badala yake."
+  },
+  "entry": "Leta video",
+  "types": {
+    "videos": "Video",
+    "shorts": "Shorts",
+    "live": "Matangazo ya moja kwa moja"
+  },
+  "empty": {
+    "videos": "Hakuna video za umma kwenye kituo hiki.",
+    "shorts": "Hakuna Shorts za umma kwenye kituo hiki.",
+    "live": "Hakuna matangazo ya moja kwa moja yaliyopita kwenye kituo hiki."
+  },
+  "limits": "Uletaji unaruhusiwa kwa video zisizozidi dakika {{minutes}}, kwa ubora usiozidi {{height}}p.",
+  "tooLong": "Zaidi ya dak {{minutes}}",
+  "onSite": "Tayari iko kwenye 3Speak",
+  "viewPost": "Tazama chapisho",
+  "premiumHint": "Ukiwa na 3Speak Premium, unaweza kuleta video hadi {{height}}p.",
+  "platforms": {
+    "youtube": "YouTube",
+    "tiktok": "TikTok"
+  },
+  "tiktok": {
+    "noLink": "Bado hujaunganisha akaunti ya TikTok. Iunganishe na uithibitishe kwenye wasifu wako kwanza, kisha urudi hapa.",
+    "pasteLabel": "Bandika kiungo cha mojawapo ya video zako za TikTok",
+    "placeholder": "https://www.tiktok.com/@wewe/video/…",
+    "find": "Tafuta video",
+    "finding": "Inatafuta…",
+    "openOn": "Fungua kwenye TikTok",
+    "fallbackStep1": "Fungua video kwenye programu ya TikTok.",
+    "fallbackStep2": "Gusa Shiriki, kisha Hifadhi video.",
+    "latest": "Video zako 10 za hivi karibuni za TikTok",
+    "empty": "Hakuna video za umma za TikTok zilizopatikana kwenye akaunti yako.",
+    "tabLink": "Leta kupitia kiungo"
+  }
+}

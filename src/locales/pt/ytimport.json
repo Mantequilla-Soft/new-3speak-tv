@@ -1,0 +1,67 @@
+{
+  "title": "Importe seus vídeos",
+  "subtitle": "Traga seus vídeos do YouTube ou do TikTok para o 3Speak. Título, descrição, tags e miniatura são preenchidos para você.",
+  "noChannel": "Você ainda não vinculou um canal do YouTube. Vincule e verifique primeiro no seu perfil e depois volte aqui.",
+  "linkChannel": "Ir para o meu perfil",
+  "channel": "Canal",
+  "noVideos": "Nenhum vídeo público encontrado neste canal.",
+  "loadMore": "Carregar mais",
+  "openOnYoutube": "Abrir no YouTube",
+  "import": "Importar este vídeo",
+  "useOwnFile": "Já tenho o arquivo",
+  "cancel": "Cancelar",
+  "retry": "Tentar novamente",
+  "progress": {
+    "starting": "Iniciando a importação...",
+    "server": "Buscando o vídeo: {{pct}}%",
+    "transfer": "Carregando o vídeo no uploader: {{pct}}%",
+    "handoff": "Abrindo o uploader..."
+  },
+  "fallback": {
+    "intro": "Você ainda pode importá-lo: baixe o vídeo você mesmo e escolha o arquivo aqui. Todo o resto continua preenchido.",
+    "step1": "Abra este vídeo no",
+    "step2": "Clique no menu de três pontos e escolha Baixar.",
+    "step3": "Escolha abaixo o arquivo baixado.",
+    "pickFile": "Escolher o arquivo baixado"
+  },
+  "errors": {
+    "signIn": "Entre para importar seus vídeos.",
+    "generic": "A importação falhou.",
+    "blocked": "O YouTube não permitiu que nosso servidor baixasse este vídeo agora.",
+    "notVideo": "Esse arquivo não é um vídeo.",
+    "tooLongForShort": "Este vídeo tem mais de {{minutes}} minutos, longo demais para um Short. Importe-o como um vídeo normal."
+  },
+  "entry": "Importar vídeos",
+  "types": {
+    "videos": "Vídeos",
+    "shorts": "Shorts",
+    "live": "Transmissões ao vivo"
+  },
+  "empty": {
+    "videos": "Nenhum vídeo público neste canal.",
+    "shorts": "Nenhum Shorts público neste canal.",
+    "live": "Nenhuma transmissão ao vivo anterior neste canal."
+  },
+  "limits": "As importações são limitadas a vídeos de até {{minutes}} minutos, em até {{height}}p.",
+  "tooLong": "Mais de {{minutes}} min",
+  "onSite": "Já está no 3Speak",
+  "viewPost": "Ver publicação",
+  "premiumHint": "Com o 3Speak Premium, você pode importar em até {{height}}p.",
+  "platforms": {
+    "youtube": "YouTube",
+    "tiktok": "TikTok"
+  },
+  "tiktok": {
+    "noLink": "Você ainda não vinculou uma conta do TikTok. Vincule e verifique primeiro no seu perfil e depois volte aqui.",
+    "pasteLabel": "Cole o link de um dos seus vídeos do TikTok",
+    "placeholder": "https://www.tiktok.com/@voce/video/…",
+    "find": "Encontrar vídeo",
+    "finding": "Procurando…",
+    "openOn": "Abrir no TikTok",
+    "fallbackStep1": "Abra o vídeo no app do TikTok.",
+    "fallbackStep2": "Toque em Compartilhar e depois em Salvar vídeo.",
+    "latest": "Seus 10 TikToks mais recentes",
+    "empty": "Nenhum TikTok público encontrado na sua conta.",
+    "tabLink": "Importar por link"
+  }
+}

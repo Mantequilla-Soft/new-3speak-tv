@@ -1,0 +1,67 @@
+{
+  "title": "Impor video Anda",
+  "subtitle": "Bawa video Anda dari YouTube atau TikTok ke 3Speak. Judul, deskripsi, tag, dan thumbnail diisi otomatis untuk Anda.",
+  "noChannel": "Anda belum menautkan kanal YouTube. Tautkan dan verifikasi dulu di profil Anda, lalu kembali ke sini.",
+  "linkChannel": "Buka profil saya",
+  "channel": "Kanal",
+  "noVideos": "Tidak ada video publik yang ditemukan di kanal ini.",
+  "loadMore": "Muat lebih banyak",
+  "openOnYoutube": "Buka di YouTube",
+  "import": "Impor video ini",
+  "useOwnFile": "Saya sudah punya filenya",
+  "cancel": "Batal",
+  "retry": "Coba lagi",
+  "progress": {
+    "starting": "Memulai impor...",
+    "server": "Mengambil video: {{pct}}%",
+    "transfer": "Memuat video ke pengunggah: {{pct}}%",
+    "handoff": "Membuka pengunggah..."
+  },
+  "fallback": {
+    "intro": "Anda masih bisa mengimpornya: unduh videonya sendiri dan pilih file di sini. Semua yang lain tetap terisi.",
+    "step1": "Buka video ini di",
+    "step2": "Klik menu tiga titik dan pilih Unduh.",
+    "step3": "Pilih file yang sudah diunduh di bawah.",
+    "pickFile": "Pilih file yang diunduh"
+  },
+  "errors": {
+    "signIn": "Masuk untuk mengimpor video Anda.",
+    "generic": "Impor gagal.",
+    "blocked": "YouTube tidak mengizinkan server kami mengunduh video ini saat ini.",
+    "notVideo": "File itu bukan video.",
+    "tooLongForShort": "Video ini berdurasi lebih dari {{minutes}} menit, terlalu panjang untuk sebuah Short. Impor sebagai video biasa saja."
+  },
+  "entry": "Impor video",
+  "types": {
+    "videos": "Video",
+    "shorts": "Shorts",
+    "live": "Siaran langsung"
+  },
+  "empty": {
+    "videos": "Tidak ada video publik di channel ini.",
+    "shorts": "Tidak ada Shorts publik di channel ini.",
+    "live": "Tidak ada siaran langsung sebelumnya di channel ini."
+  },
+  "limits": "Impor dibatasi untuk video hingga {{minutes}} menit, dengan resolusi hingga {{height}}p.",
+  "tooLong": "Lebih dari {{minutes}} mnt",
+  "onSite": "Sudah ada di 3Speak",
+  "viewPost": "Lihat postingan",
+  "premiumHint": "Dengan 3Speak Premium, Anda dapat mengimpor hingga {{height}}p.",
+  "platforms": {
+    "youtube": "YouTube",
+    "tiktok": "TikTok"
+  },
+  "tiktok": {
+    "noLink": "Anda belum menautkan akun TikTok. Tautkan dan verifikasi dulu di profil Anda, lalu kembali ke sini.",
+    "pasteLabel": "Tempel tautan ke salah satu video TikTok Anda",
+    "placeholder": "https://www.tiktok.com/@anda/video/…",
+    "find": "Cari video",
+    "finding": "Mencari…",
+    "openOn": "Buka di TikTok",
+    "fallbackStep1": "Buka video di aplikasi TikTok.",
+    "fallbackStep2": "Ketuk Bagikan, lalu Simpan video.",
+    "latest": "10 TikTok terbaru Anda",
+    "empty": "Tidak ada TikTok publik yang ditemukan di akun Anda.",
+    "tabLink": "Impor dari tautan"
+  }
+}

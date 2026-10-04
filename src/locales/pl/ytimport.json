@@ -1,0 +1,67 @@
+{
+  "title": "Importuj swoje filmy",
+  "subtitle": "Przenieś swoje filmy z YouTube lub TikTok do 3Speak. Tytuł, opis, tagi i miniatura zostaną uzupełnione za Ciebie.",
+  "noChannel": "Nie połączono jeszcze kanału YouTube. Najpierw połącz go i zweryfikuj w swoim profilu, a potem wróć tutaj.",
+  "linkChannel": "Przejdź do mojego profilu",
+  "channel": "Kanał",
+  "noVideos": "Nie znaleziono publicznych filmów na tym kanale.",
+  "loadMore": "Wczytaj więcej",
+  "openOnYoutube": "Otwórz w YouTube",
+  "import": "Importuj ten film",
+  "useOwnFile": "Mam już plik",
+  "cancel": "Anuluj",
+  "retry": "Spróbuj ponownie",
+  "progress": {
+    "starting": "Rozpoczynanie importu...",
+    "server": "Pobieranie filmu: {{pct}}%",
+    "transfer": "Wczytywanie filmu do uploadera: {{pct}}%",
+    "handoff": "Otwieranie uploadera..."
+  },
+  "fallback": {
+    "intro": "Nadal możesz go zaimportować: pobierz film samodzielnie i wybierz plik tutaj. Cała reszta pozostaje uzupełniona.",
+    "step1": "Otwórz ten film w",
+    "step2": "Kliknij menu z trzema kropkami i wybierz Pobierz.",
+    "step3": "Wybierz poniżej pobrany plik.",
+    "pickFile": "Wybierz pobrany plik"
+  },
+  "errors": {
+    "signIn": "Zaloguj się, aby importować swoje filmy.",
+    "generic": "Import się nie powiódł.",
+    "blocked": "YouTube nie pozwolił naszemu serwerowi pobrać tego filmu w tej chwili.",
+    "notVideo": "Ten plik nie jest filmem.",
+    "tooLongForShort": "Ten film jest dłuższy niż {{minutes}} minut, za długi na format Shorts. Zaimportuj go zamiast tego jako zwykły film."
+  },
+  "entry": "Importuj filmy",
+  "types": {
+    "videos": "Filmy",
+    "shorts": "Shorts",
+    "live": "Transmisje na żywo"
+  },
+  "empty": {
+    "videos": "Brak publicznych filmów na tym kanale.",
+    "shorts": "Brak publicznych Shorts na tym kanale.",
+    "live": "Brak zakończonych transmisji na żywo na tym kanale."
+  },
+  "limits": "Import jest ograniczony do filmów o długości do {{minutes}} minut, w rozdzielczości do {{height}}p.",
+  "tooLong": "Ponad {{minutes}} min",
+  "onSite": "Już na 3Speak",
+  "viewPost": "Zobacz wpis",
+  "premiumHint": "Dzięki 3Speak Premium zaimportujesz filmy w rozdzielczości do {{height}}p.",
+  "platforms": {
+    "youtube": "YouTube",
+    "tiktok": "TikTok"
+  },
+  "tiktok": {
+    "noLink": "Nie połączono jeszcze konta TikTok. Najpierw połącz je i zweryfikuj w swoim profilu, a potem wróć tutaj.",
+    "pasteLabel": "Wklej link do jednego ze swoich filmów TikTok",
+    "placeholder": "https://www.tiktok.com/@ty/video/…",
+    "find": "Znajdź film",
+    "finding": "Wyszukiwanie…",
+    "openOn": "Otwórz w TikTok",
+    "fallbackStep1": "Otwórz film w aplikacji TikTok.",
+    "fallbackStep2": "Stuknij Udostępnij, a następnie Zapisz film.",
+    "latest": "Twoje 10 najnowszych filmów TikTok",
+    "empty": "Nie znaleziono publicznych filmów TikTok na Twoim koncie.",
+    "tabLink": "Importuj z linku"
+  }
+}

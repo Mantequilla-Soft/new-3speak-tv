@@ -1861,6 +1861,9 @@ app.post('/api/upload-image', imageUploadLimiter, express.raw({ type: () => true
 
 app.get('/api/health', (req, res) => res.json({ ok: true }))
 
+// ▶️ YouTube import (verified channel owners only). See youtube-import.cjs.
+require('./youtube-import.cjs').mountYoutubeImport(app, { resolveUser: resolveProvenViewer, limiter: baseLimiter })
+
 // === Teleprompter STT token minting ===
 // Hands the browser a short-lived SIGNED token for the self-hosted STT WebSocket,
 // so the browser never holds STT_SIGNING_SECRET. Token = "<exp>.<hexHMAC(exp)>";

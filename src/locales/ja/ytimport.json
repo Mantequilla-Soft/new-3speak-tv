@@ -1,0 +1,67 @@
+{
+  "title": "動画をインポート",
+  "subtitle": "YouTubeやTikTokの動画を3Speakに取り込みます。タイトル、説明、タグ、サムネイルは自動で入力されます。",
+  "noChannel": "YouTubeチャンネルがまだリンクされていません。まずプロフィールでリンクして認証してから、ここに戻ってください。",
+  "linkChannel": "プロフィールへ移動",
+  "channel": "チャンネル",
+  "noVideos": "このチャンネルに公開動画が見つかりませんでした。",
+  "loadMore": "さらに読み込む",
+  "openOnYoutube": "YouTubeで開く",
+  "import": "この動画をインポート",
+  "useOwnFile": "ファイルはすでにあります",
+  "cancel": "キャンセル",
+  "retry": "もう一度試す",
+  "progress": {
+    "starting": "インポートを開始しています...",
+    "server": "動画を取得中: {{pct}}%",
+    "transfer": "アップローダーに動画を読み込み中: {{pct}}%",
+    "handoff": "アップローダーを開いています..."
+  },
+  "fallback": {
+    "intro": "それでもインポートできます。動画を自分でダウンロードして、ここでファイルを選んでください。それ以外はそのまま入力済みです。",
+    "step1": "この動画を次で開く:",
+    "step2": "3点メニューをクリックして、ダウンロードを選択します。",
+    "step3": "ダウンロードしたファイルを下から選びます。",
+    "pickFile": "ダウンロードしたファイルを選ぶ"
+  },
+  "errors": {
+    "signIn": "動画をインポートするにはログインしてください。",
+    "generic": "インポートに失敗しました。",
+    "blocked": "現在、YouTubeが当サーバーによるこの動画のダウンロードを許可しませんでした。",
+    "notVideo": "そのファイルは動画ではありません。",
+    "tooLongForShort": "この動画は{{minutes}}分より長いため、ショートには長すぎます。代わりに通常の動画としてインポートしてください。"
+  },
+  "entry": "動画をインポート",
+  "types": {
+    "videos": "動画",
+    "shorts": "ショート",
+    "live": "ライブ配信"
+  },
+  "empty": {
+    "videos": "このチャンネルに公開動画はありません。",
+    "shorts": "このチャンネルに公開ショートはありません。",
+    "live": "このチャンネルに過去のライブ配信はありません。"
+  },
+  "limits": "インポートできるのは、長さ{{minutes}}分まで、解像度{{height}}pまでの動画です。",
+  "tooLong": "{{minutes}}分超",
+  "onSite": "3Speakに投稿済み",
+  "viewPost": "投稿を見る",
+  "premiumHint": "3Speak Premiumなら、{{height}}pまでインポートできます。",
+  "platforms": {
+    "youtube": "YouTube",
+    "tiktok": "TikTok"
+  },
+  "tiktok": {
+    "noLink": "TikTokアカウントがまだリンクされていません。まずプロフィールでリンクして認証してから、ここに戻ってください。",
+    "pasteLabel": "ご自身のTikTok動画のリンクを貼り付けてください",
+    "placeholder": "https://www.tiktok.com/@you/video/…",
+    "find": "動画を探す",
+    "finding": "検索中…",
+    "openOn": "TikTokで開く",
+    "fallbackStep1": "TikTokアプリで動画を開きます。",
+    "fallbackStep2": "「シェア」をタップし、「動画を保存」を選択します。",
+    "latest": "最新のTikTok動画10件",
+    "empty": "アカウントに公開されているTikTok動画が見つかりませんでした。",
+    "tabLink": "リンクからインポート"
+  }
+}
