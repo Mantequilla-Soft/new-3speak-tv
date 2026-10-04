@@ -54,6 +54,7 @@ import { HiveAuthProvider } from "./context/HiveAuthContext";
 import { HangoutContextProvider, useHangout } from "./context/HangoutContext";
 import { ChatProvider } from "./context/ChatContext";
 import ChatOverlay from "./components/Chat/ChatOverlay";
+import ChatAutoOpen from "./components/Chat/ChatAutoOpen";
 const OpenPodModal = lazyRoute(() => import("./components/OpenPod/OpenPodModal"), "./components/OpenPod/OpenPodModal");
 const ObsOverlay = lazyRoute(() => import("./page/ObsOverlay"), "./page/ObsOverlay");
 
@@ -800,6 +801,7 @@ function App() {
         {/* Chat as a floating panel on tablet/desktop; renders nothing until
             the nav chat button opens it (phones go to /chat instead). */}
         <ChatOverlay />
+        <ChatAutoOpen />
         {FEATURE_EDITOR && (
           <EditorModal
             isOpen={editorModalOpen}

@@ -7,6 +7,13 @@
 // 1.0.0 — that way they see all of these when develop is pushed to production.
 export const CHANGELOG = [
   {
+    version: '1.79.52',
+    date: '2026-10-04',
+    summary:
+      'Chat now opens by itself when you arrive with a new message, straight into that conversation. '
+      + 'Close it and it stays closed until the next new message; on phones this only happens on the home page.',
+  },
+  {
     version: '1.79.51',
     date: '2026-10-04',
     summary:
