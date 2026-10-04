@@ -107,6 +107,10 @@
     "soundcloud": {
       "placeholder": "your-profile или https://soundcloud.com/your-profile",
       "help": "Вставьте URL своего профиля SoundCloud или просто имя пользователя из него. Разместите хеш в любом месте описания профиля."
+    },
+    "tiktok": {
+      "placeholder": "@handle или https://www.tiktok.com/@handle",
+      "help": "Вставьте свой @handle в TikTok или ссылку на профиль. Разместите хеш в любом месте описания профиля."
     }
   },
   "snaps": {

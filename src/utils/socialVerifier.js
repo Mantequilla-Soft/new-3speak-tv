@@ -1,5 +1,7 @@
 import axios from 'axios';
-import aioha, { KeyTypes } from '../hive-api/aioha';
+import aioha, { KeyTypes, Providers, getCurrentProvider, isManteAuthLogin } from '../hive-api/aioha';
+
+const THREESPEAK_API = import.meta.env.VITE_THREESPEAK_API || '/api';
 import { SOCIAL_VERIFIER_URL } from './config';
 import { t } from '../i18n';
 
@@ -16,7 +18,30 @@ function buildMessage({ action, hive_username, platform, platform_username, time
   ].join('|');
 }
 
+// HiveSigner and Butter Auth logins have no key in the browser to sign with, so
+// our API signs as @threespeak under the posting authority the user granted
+// (server/index.cjs /api/verify/sign); the checker accepts that delegate.
+function needsServerSignature() {
+  return getCurrentProvider() === Providers.HiveSigner || isManteAuthLogin();
+}
+
+async function serverSignedParams({ action, platform, platform_username }) {
+  const headers = { 'Content-Type': 'application/json' };
+  if (getCurrentProvider() === Providers.HiveSigner) {
+    const tok = localStorage.getItem('hivesignerToken');
+    if (tok) headers.Authorization = `Bearer ${tok}`;
+  }
+  const res = await fetch(`${THREESPEAK_API}/verify/sign`, {
+    method: 'POST', headers, credentials: 'include',
+    body: JSON.stringify({ action, platform, platform_username }),
+  });
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok || !data.signature) throw new Error(data.error || t('misc.social.signingCancelled'));
+  return { signature: data.signature, timestamp: data.timestamp };
+}
+
 async function signedParams({ action, hive_username, platform, platform_username }) {
+  if (needsServerSignature()) return serverSignedParams({ action, platform, platform_username });
   const timestamp = Date.now();
   const message = buildMessage({ action, hive_username, platform, platform_username, timestamp });
   const result = await aioha.signMessage(message, KeyTypes.Posting);
@@ -78,6 +103,13 @@ export const PLATFORMS = {
     profileUrl: (canonical) => `https://soundcloud.com/${canonical}`,
     inputPlaceholderKey: 'misc.social.soundcloud.placeholder',
     inputHelpKey: 'misc.social.soundcloud.help',
+  },
+  tiktok: {
+    label: 'TikTok',
+    // The checker stores the lower-cased @handle (see 3speakchecks platforms/tiktok.js).
+    profileUrl: (canonical) => `https://www.tiktok.com/@${canonical}`,
+    inputPlaceholderKey: 'misc.social.tiktok.placeholder',
+    inputHelpKey: 'misc.social.tiktok.help',
   },
 };
 

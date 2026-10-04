@@ -107,6 +107,10 @@
     "soundcloud": {
       "placeholder": "your-profile or https://soundcloud.com/your-profile",
       "help": "Paste your SoundCloud profile URL or just the username from it. Put the hash anywhere in your profile bio."
+    },
+    "tiktok": {
+      "placeholder": "@handle or https://www.tiktok.com/@handle",
+      "help": "Paste your TikTok @handle or profile link. Put the hash anywhere in your profile bio."
     }
   },
   "snaps": {

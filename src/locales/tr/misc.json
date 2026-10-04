@@ -107,6 +107,10 @@
     "soundcloud": {
       "placeholder": "profilin veya https://soundcloud.com/profilin",
       "help": "SoundCloud profil URL'ni ya da yalnızca içindeki kullanıcı adını yapıştır. Hash'i profil biyografinde herhangi bir yere koy."
+    },
+    "tiktok": {
+      "placeholder": "@handle veya https://www.tiktok.com/@handle",
+      "help": "TikTok @handle'ını veya profil bağlantını yapıştır. Hash'i profil biyografinde herhangi bir yere koy."
     }
   },
   "snaps": {

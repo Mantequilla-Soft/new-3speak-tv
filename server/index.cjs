@@ -1593,6 +1593,49 @@ app.post('/api/ads/opt-out-signature', signChallengeLimiter, async (req, res) =>
 // logged-in identity this server already established: the body carries a boolean
 // and nothing else, so this endpoint cannot be steered into signing a claim about
 // somebody else.
+// POST /api/verify/sign — sign a social-link check/unlink for the checker's /verify.
+//
+// HiveSigner and Butter Auth sessions hold no key in the browser, so they could
+// never link a YouTube channel ("message signing is unsupported in HiveSigner").
+// Same delegated shape as the ads signatures: we sign as @threespeak under the
+// posting authority the user granted, and the checker accepts @threespeak as a
+// delegate in requireHiveSignature.
+//
+// 🚨 Identity comes ONLY from a credential we can prove (resolveProvenViewer), never
+// the app-key-plus-claimed-name path: that path would let anyone link a channel to
+// anyone. The message is built here, in lockstep with buildMessage() in
+// 3speakchecks/utils/hiveAuth.js, from that proven name.
+app.post('/api/verify/sign', signChallengeLimiter, async (req, res) => {
+  try {
+    if (!POSTING_WIF) return res.status(500).json({ error: 'Server is not configured' })
+    const hiveUsername = await resolveProvenViewer(req, res)
+    if (!hiveUsername) return res.status(401).json({ error: 'Unauthorized' })
+
+    const action = String(req.body?.action || '')
+    const platform = String(req.body?.platform || '')
+    const platformUsername = String(req.body?.platform_username || '').trim()
+    if (!['check', 'unlink'].includes(action)) return res.status(400).json({ error: 'invalid action' })
+    if (!/^[a-z0-9_-]{1,32}$/.test(platform)) return res.status(400).json({ error: 'invalid platform' })
+    if (!platformUsername || platformUsername.length > 200 || platformUsername.includes('|')) {
+      return res.status(400).json({ error: 'invalid platform_username' })
+    }
+
+    if (!(await hasThreespeakPostingGrant(hiveUsername))) {
+      return res.status(403).json({
+        error: `Linking an account from here needs @${HIVE_ACCOUNT} posting authority on your account. Log in with Keychain, HiveAuth, PeakVault or Ledger to sign it directly instead.`,
+      })
+    }
+
+    const timestamp = Date.now()
+    const message = ['3speak-social-verifier', action, hiveUsername.toLowerCase(), platform, platformUsername, String(timestamp)].join('|')
+    const signature = PrivateKey.fromString(POSTING_WIF).sign(cryptoUtils.sha256(Buffer.from(message, 'utf8'))).toString()
+    return res.json({ signature, timestamp, hive_username: hiveUsername.toLowerCase() })
+  } catch (err) {
+    console.error('Verify sign error:', err.message)
+    res.status(500).json({ error: 'Signing failed' })
+  }
+})
+
 app.post('/api/ads/viewer-signature', signChallengeLimiter, async (req, res) => {
   try {
     if (!POSTING_WIF) return res.status(500).json({ error: 'Server is not configured' })

@@ -107,6 +107,10 @@
     "soundcloud": {
       "placeholder": "wasifu-wako au https://soundcloud.com/wasifu-wako",
       "help": "Bandika URL ya wasifu wako wa SoundCloud au jina la mtumiaji kutoka humo tu. Weka hash popote kwenye bio ya wasifu wako."
+    },
+    "tiktok": {
+      "placeholder": "@handle au https://www.tiktok.com/@handle",
+      "help": "Bandika @handle yako ya TikTok au kiungo cha wasifu wako. Weka hash popote kwenye bio ya wasifu wako."
     }
   },
   "snaps": {

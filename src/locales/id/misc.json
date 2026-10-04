@@ -107,6 +107,10 @@
     "soundcloud": {
       "placeholder": "profilmu atau https://soundcloud.com/profilmu",
       "help": "Tempel URL profil SoundCloud-mu atau hanya nama penggunanya. Taruh hash di mana saja di bio profilmu."
+    },
+    "tiktok": {
+      "placeholder": "@handle atau https://www.tiktok.com/@handle",
+      "help": "Tempel @handle TikTok atau tautan profilmu. Taruh hash di mana saja di bio profilmu."
     }
   },
   "snaps": {

@@ -107,6 +107,10 @@
     "soundcloud": {
       "placeholder": "your-profile または https://soundcloud.com/your-profile",
       "help": "SoundCloud のプロフィール URL、またはその中のユーザー名だけを貼り付けてください。ハッシュはプロフィールの自己紹介のどこかに入れてください。"
+    },
+    "tiktok": {
+      "placeholder": "@handle または https://www.tiktok.com/@handle",
+      "help": "TikTok の @handle またはプロフィールのリンクを貼り付けてください。ハッシュはプロフィールの自己紹介のどこかに入れてください。"
     }
   },
   "snaps": {

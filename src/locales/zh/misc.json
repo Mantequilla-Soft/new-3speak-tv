@@ -107,6 +107,10 @@
     "soundcloud": {
       "placeholder": "your-profile 或 https://soundcloud.com/your-profile",
       "help": "粘贴你的 SoundCloud 主页 URL，或只填其中的用户名。把哈希放在你主页简介的任意位置。"
+    },
+    "tiktok": {
+      "placeholder": "@handle 或 https://www.tiktok.com/@handle",
+      "help": "粘贴你的 TikTok @handle 或主页链接。把哈希放在你主页简介的任意位置。"
     }
   },
   "snaps": {

@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { FaYoutube, FaSoundcloud } from 'react-icons/fa';
+import { FaYoutube, FaSoundcloud, FaTiktok } from 'react-icons/fa';
 import { IoClose } from 'react-icons/io5';
 import { toastIn } from '../../utils/toast';
 import {
@@ -17,6 +17,7 @@ const toast = toastIn('Profile');
 
 const PLATFORM_ICONS = {
   youtube: FaYoutube,
+  tiktok: FaTiktok,
   soundcloud: FaSoundcloud,
 };
 

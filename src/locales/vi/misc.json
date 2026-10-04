@@ -107,6 +107,10 @@
     "soundcloud": {
       "placeholder": "your-profile hoặc https://soundcloud.com/your-profile",
       "help": "Dán URL hồ sơ SoundCloud của bạn hoặc chỉ tên người dùng trong đó. Đặt mã hash ở bất kỳ đâu trong phần giới thiệu hồ sơ."
+    },
+    "tiktok": {
+      "placeholder": "@handle hoặc https://www.tiktok.com/@handle",
+      "help": "Dán @handle TikTok hoặc liên kết hồ sơ của bạn. Đặt mã hash ở bất kỳ đâu trong phần giới thiệu hồ sơ."
     }
   },
   "snaps": {

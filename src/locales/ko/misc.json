@@ -107,6 +107,10 @@
     "soundcloud": {
       "placeholder": "your-profile 또는 https://soundcloud.com/your-profile",
       "help": "SoundCloud 프로필 URL이나 사용자 이름만 붙여넣으세요. 해시는 프로필 소개 어디에든 넣으면 돼요."
+    },
+    "tiktok": {
+      "placeholder": "@handle 또는 https://www.tiktok.com/@handle",
+      "help": "TikTok @handle 또는 프로필 링크를 붙여넣으세요. 해시는 프로필 소개 어디에든 넣으면 돼요."
     }
   },
   "snaps": {

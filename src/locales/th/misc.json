@@ -107,6 +107,10 @@
     "soundcloud": {
       "placeholder": "your-profile หรือ https://soundcloud.com/your-profile",
       "help": "วาง URL โปรไฟล์ SoundCloud หรือเฉพาะชื่อผู้ใช้จาก URL นั้น ใส่แฮชไว้ตรงไหนก็ได้ในไบโอโปรไฟล์"
+    },
+    "tiktok": {
+      "placeholder": "@handle หรือ https://www.tiktok.com/@handle",
+      "help": "วาง @handle ของ TikTok หรือลิงก์โปรไฟล์ของคุณ ใส่แฮชไว้ตรงไหนก็ได้ในไบโอโปรไฟล์"
     }
   },
   "snaps": {

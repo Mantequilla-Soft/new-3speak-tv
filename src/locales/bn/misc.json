@@ -107,6 +107,10 @@
     "soundcloud": {
       "placeholder": "your-profile বা https://soundcloud.com/your-profile",
       "help": "আপনার SoundCloud প্রোফাইল URL বা তার ইউজারনেম অংশটুকু পেস্ট করুন। হ্যাশটি আপনার প্রোফাইল বায়োর যেকোনো জায়গায় রাখুন।"
+    },
+    "tiktok": {
+      "placeholder": "@handle বা https://www.tiktok.com/@handle",
+      "help": "আপনার TikTok @handle বা প্রোফাইল লিংক পেস্ট করুন। হ্যাশটি আপনার প্রোফাইল বায়োর যেকোনো জায়গায় রাখুন।"
     }
   },
   "snaps": {

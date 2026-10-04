@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { IoClose } from 'react-icons/io5';
-import { FaYoutube, FaSoundcloud, FaCopy, FaCheck, FaTrash, FaExternalLinkAlt } from 'react-icons/fa';
+import { FaYoutube, FaSoundcloud, FaTiktok, FaCopy, FaCheck, FaTrash, FaExternalLinkAlt } from 'react-icons/fa';
 import { toastIn } from '../../utils/toast';
 import {
   getHash,
@@ -21,6 +21,7 @@ const toast = toastIn('Profile');
 
 const PLATFORM_ICONS = {
   youtube: FaYoutube,
+  tiktok: FaTiktok,
   soundcloud: FaSoundcloud,
 };
 
