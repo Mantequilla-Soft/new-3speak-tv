@@ -1522,6 +1522,52 @@ app.post('/api/snapie-chat/sign-challenge', signChallengeLimiter, async (req, re
   }
 })
 
+// POST /api/snapie-chat/butrauth-session — chat sign-in for ButrAuth logins.
+//
+// Warm-up users have no Hive account, so there is nothing to sign a chat
+// challenge with, and the route above cannot serve them. Snapie instead accepts
+// the user's ButrAuth access token (POST /api/chat/auth/butrauth) and answers
+// with a chat session: `~<butrauth userId>` for a warm-up user, their Hive name
+// otherwise. The token sits in an httpOnly cookie, so the server forwards it;
+// the browser only ever receives the chat session.
+//
+// Hive-account ButrAuth users go through here first too: their first sign-in
+// under the new Hive name is what moves their warm-up conversations onto it.
+//
+// 404 `not_enabled` while Snapie has not switched ButrAuth sign-in on.
+const SNAPIE_CHAT_URL = (process.env.SNAPIE_CHAT_URL || 'https://snapie.io').replace(/\/+$/, '')
+app.post('/api/snapie-chat/butrauth-session', signChallengeLimiter, async (req, res) => {
+  try {
+    const session = await resolveButrSession(req, res)
+    if (!session) return res.status(401).json({ error: 'Unauthorized' })
+
+    const r = await fetch(`${SNAPIE_CHAT_URL}/api/chat/auth/butrauth`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ accessToken: session.token }),
+      signal: AbortSignal.timeout(10000),
+    })
+    // A Snapie without the route answers its HTML page with a 200, not a 404.
+    const isJson = (r.headers.get('content-type') || '').includes('application/json')
+    if (r.status === 404 || !isJson) return res.status(404).json({ error: 'not_enabled' })
+    const data = await r.json().catch(() => ({}))
+    if (!r.ok || typeof data.token !== 'string' || typeof data.username !== 'string') {
+      // 409 = a warm-up token that outlived its graduation; the next refresh
+      // carries the Hive name. Everything else is Snapie refusing or failing.
+      return res.status(r.status === 409 ? 409 : 502).json({ error: data.error || 'Chat sign-in failed' })
+    }
+    return res.json({
+      token: data.token,
+      username: data.username,
+      displayName: data.displayName || null,
+      warmup: !!data.warmup,
+    })
+  } catch (err) {
+    console.error('Snapie-chat butrauth-session error:', err.message)
+    res.status(502).json({ error: 'Chat sign-in failed' })
+  }
+})
+
 // POST /api/ads/opt-out-signature — sign a creator's ad preference on their behalf.
 //
 // HiveSigner and Butter Auth sessions hold no signing key in the browser, so those

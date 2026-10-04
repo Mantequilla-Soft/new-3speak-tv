@@ -13,10 +13,16 @@ import { t } from '../i18n'
 import {
   getChatClient,
   authenticateChat,
+  authenticateWarmupChat,
   canSignChatChallenge,
+  isWarmupChatId,
 } from '../lib/snapieChat'
 
 const ChatUIContext = createContext(null)
+
+// Stand-in "username" for the auth flow while a warm-up user signs in: their
+// chat id (`~<id>`) is only known once Snapie answers.
+const WARMUP = '~warmup'
 
 export function useChat() {
   const ctx = useContext(ChatUIContext)
@@ -28,11 +34,19 @@ export function ChatProvider({ children }) {
   const client = useMemo(() => getChatClient(), [])
   const user = useAppStore((s) => s.user)
   const authenticated = useAppStore((s) => s.authenticated)
+  const incubationHandle = useAppStore((s) => s.incubationHandle)
+  // A warm-up user (ButrAuth, no Hive account) chats as `~<id>`, signed in
+  // through their ButrAuth session rather than a Hive signature.
+  const warmup = !!authenticated && !user && !!incubationHandle
 
-  // `ready` = the SDK client holds a valid token for the current Hive user.
-  const [ready, setReady] = useState(
-    () => client.isAuthenticated() && client.getUsername() === user
-  )
+  // Does the client's token belong to whoever is logged in now?
+  const tokenIsMine = useCallback(() => {
+    if (!client.isAuthenticated()) return false
+    return warmup ? isWarmupChatId(client.getUsername()) : client.getUsername() === user
+  }, [client, user, warmup])
+
+  // `ready` = the SDK client holds a valid token for the current user.
+  const [ready, setReady] = useState(() => tokenIsMine())
   const [connecting, setConnecting] = useState(false)
   const [error, setError] = useState(null)
 
@@ -61,7 +75,8 @@ export function ChatProvider({ children }) {
     setConnecting(true)
     if (allowClientFallback) setError(null)
     try {
-      await authenticateChat(uname, { allowClientFallback })
+      if (uname === WARMUP) await authenticateWarmupChat()
+      else await authenticateChat(uname, { allowClientFallback })
       setReady(true)
       return true
     } catch (e) {
@@ -78,7 +93,7 @@ export function ChatProvider({ children }) {
   // Keep chat auth in sync with login state, and auto-connect silently (no
   // wallet popup) the first time we see a logged-in user without a token.
   useEffect(() => {
-    const loggedInAs = authenticated ? user : null
+    const loggedInAs = authenticated ? (user || (warmup ? WARMUP : null)) : null
     if (!loggedInAs) {
       if (client.isAuthenticated()) client.logout()
       setReady(false)
@@ -89,7 +104,7 @@ export function ChatProvider({ children }) {
       autoTriedRef.current = null
       return
     }
-    if (client.isAuthenticated() && client.getUsername() === loggedInAs) {
+    if (tokenIsMine()) {
       setReady(true)
       return
     }
@@ -102,16 +117,17 @@ export function ChatProvider({ children }) {
       autoTriedRef.current = loggedInAs
       runAuthenticate(loggedInAs, { allowClientFallback: false })
     }
-  }, [client, user, authenticated, runAuthenticate])
+  }, [client, user, authenticated, warmup, tokenIsMine, runAuthenticate])
 
   // Manual connect (from the fallback gate): may use a wallet signature.
   const connect = useCallback(async () => {
+    if (warmup) return runAuthenticate(WARMUP, { allowClientFallback: false })
     if (!authenticated || !user) {
       setError(t('misc.chat.loginFirst'))
       return false
     }
     return runAuthenticate(user, { allowClientFallback: true })
-  }, [authenticated, user, runAuthenticate])
+  }, [authenticated, user, warmup, runAuthenticate])
 
   const openConversation = useCallback((conv) => {
     setActiveConversation(conv)
@@ -246,7 +262,10 @@ export function ChatProvider({ children }) {
       ready,
       connecting,
       error,
-      canConnect: canSignChatChallenge(),
+      warmup,
+      // Who "me" is in chat: the Hive name, or `~<id>` for a warm-up user.
+      chatUser: ready ? client.getUsername() : null,
+      canConnect: warmup || canSignChatChallenge(),
       connect,
       activeConversation,
       openConversation,
@@ -264,6 +283,7 @@ export function ChatProvider({ children }) {
       closeOverlay,
     }),
     [
+      warmup,
       overlayOpen,
       openOverlay,
       closeOverlay,

@@ -2,7 +2,6 @@ import { useLocation } from 'react-router-dom'
 import { MessageCircle } from 'lucide-react'
 import { useServerUnread } from '../../hooks/useServerUnread'
 import { useChat } from '../../context/ChatContext'
-import { useAppStore } from '../../lib/store'
 import { useOpenChat } from '../../hooks/useOpenChat'
 import './ChatButton.scss'
 import { useTranslation } from 'react-i18next'
@@ -23,18 +22,16 @@ function UnreadDot() {
 
 export default function ChatButton() {
   const { t } = useTranslation()
-  const { ready, overlayOpen, closeOverlay } = useChat()
-  const incubationHandle = useAppStore((s) => s.incubationHandle)
+  const { ready, warmup, overlayOpen, closeOverlay } = useChat()
   const openChat = useOpenChat()
   const { pathname } = useLocation()
   const onChatPage = pathname === '/chat'
   const isOpen = onChatPage || overlayOpen
 
-  // Chat is a Hive-account feature end to end: Snapie authenticates it with a
-  // posting-key signMessage challenge, so there is nothing to sign for someone
-  // who has no account yet and no off-chain equivalent to divert to. Offering
-  // the button anyway just walks them into a signing error.
-  if (incubationHandle) return null
+  // Warm-up users (no Hive account) sign in to chat through their ButrAuth
+  // session. Until that has worked, e.g. while the chat server has not switched
+  // it on, the button would only lead to a dead end, so it stays hidden.
+  if (warmup && !ready) return null
 
   return (
     // A toggle for the overlay on wider screens, a link to /chat on phones
