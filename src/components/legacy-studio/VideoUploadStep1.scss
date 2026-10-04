@@ -35,9 +35,9 @@
     button {
       padding: 0.5rem 1rem; 
       border-radius: 0.5rem;
-      background-color: var(--accent-primary); 
-      color: #fff; 
-      border: none;
+      background-color: transparent; 
+      color: var(--accent-primary, #e53935); 
+      border: 1px solid var(--accent-primary, #e53935);
       cursor: pointer;
       transition: background-color 0.3s ease;
       &:disabled {
@@ -161,17 +161,19 @@
     }
 
     .button {
-      background-color: var(--accent-primary, #e53935);
-      color: #fff;
+      background-color: transparent;
+      color: var(--accent-primary, #e53935);
       padding: 0.5rem 1rem;
-      border: none;
+      border: 1px solid var(--accent-primary, #e53935);
       border-radius: 0.375rem;
       cursor: pointer;
       transition: all 0.3s ease;
       font-size: 14px;
 
       &:hover {
-        background-color: var(--accent-primary, #e53935);
+        background-color: color-mix(in srgb, var(--accent-primary, #e53935) 10%, transparent);
+        border-color: var(--accent-primary, #e53935);
+        color: var(--accent-primary, #e53935);
         filter: brightness(0.9);
       }
 

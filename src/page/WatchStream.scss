@@ -214,9 +214,9 @@
 .ws-error-btn {
   padding: 0.6rem 1.2rem;
   border-radius: 999px;
-  border: none;
-  background: var(--primary-color, #e31337);
-  color: #fff;
+  border: 1px solid var(--accent-primary, #e53935);
+  background: transparent;
+  color: var(--accent-primary, #e53935);
   font-weight: 600;
   cursor: pointer;
 }

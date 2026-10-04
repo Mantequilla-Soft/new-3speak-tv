@@ -37,14 +37,15 @@
   gap: 6px;
   padding: 8px 14px;
   border-radius: 8px;
-  background: var(--accent-primary, #e53935);
-  color: #fff;
+  background: transparent;
+  border: 1px solid var(--accent-primary, #e53935);
+  color: var(--accent-primary, #e53935);
   font-size: 13px;
   font-weight: 500;
   text-decoration: none;
   transition: opacity 0.15s ease;
 
-  &:hover { opacity: 0.9; color: #fff; }
+  &:hover { background: color-mix(in srgb, var(--accent-primary, #e53935) 10%, transparent); }
 
   &.post-view-nav-btn-secondary {
     background: var(--bg-secondary);
@@ -122,8 +123,9 @@
   text-decoration: none;
 
   &:hover {
-    background: var(--accent-primary);
-    color: #fff;
+    background: color-mix(in srgb, var(--accent-primary, #e53935) 10%, transparent);
+    box-shadow: inset 0 0 0 1px var(--accent-primary, #e53935);
+    color: var(--accent-primary, #e53935);
   }
 }
 

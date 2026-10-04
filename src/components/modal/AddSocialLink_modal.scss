@@ -287,9 +287,9 @@
 }
 
 .social-link-btn-primary {
-  border: none;
-  background: var(--accent-color, #e31337);
-  color: #fff;
+  border: 1px solid var(--accent-primary, #e53935);
+  background: transparent;
+  color: var(--accent-primary, #e53935);
 
   &:hover:not(:disabled) { opacity: 0.9; }
 }

@@ -140,14 +140,14 @@
     gap: 0.5rem;
     margin-top: 0.2rem;
     padding: 0.7rem 1.6rem;
-    border: none;
+    border: 1px solid var(--accent-primary, #e53935);
     border-radius: 999px;
-    background: var(--accent-primary, #e53935);
-    color: #fff;
+    background: transparent;
+    color: var(--accent-primary, #e53935);
     font-size: 1rem;
     font-weight: 700;
     cursor: pointer;
-    box-shadow: 0 4px 12px rgba(229, 57, 53, 0.3);
+    box-shadow: none;
     transition: transform 0.15s ease, box-shadow 0.15s ease;
 
     &:hover { transform: translateY(-2px); box-shadow: 0 6px 16px rgba(229, 57, 53, 0.4); }

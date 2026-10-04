@@ -312,9 +312,9 @@
   gap: 6px;
   padding: 10px 16px;
   border-radius: 8px;
-  border: none;
-  background: var(--accent-primary, #e53935);
-  color: #fff;
+  border: 1px solid var(--accent-primary, #e53935);
+  background: transparent;
+  color: var(--accent-primary, #e53935);
   font-size: 13px;
   font-weight: 600;
   cursor: pointer;

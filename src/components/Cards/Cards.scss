@@ -140,7 +140,9 @@ html[data-card-size="large"] { --card-min-w: 420px; }
         z-index: 3;
 
         &:hover {
-          background: var(--accent-primary, #e53935);
+          background: rgba(0, 0, 0, 0.6);
+          border: 1px solid var(--accent-primary, #e53935);
+          color: var(--accent-primary, #e53935);
           transform: translateY(0);
         }
       }

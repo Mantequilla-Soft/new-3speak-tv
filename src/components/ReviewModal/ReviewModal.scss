@@ -241,9 +241,10 @@
     }
 
     .review-submit {
-      background: var(--accent-primary, #e53935);
-      color: #fff;
-      &:hover:not(:disabled) { background: #c62828; }
+      background: transparent;
+      border: 1px solid var(--accent-primary, #e53935);
+      color: var(--accent-primary, #e53935);
+      &:hover:not(:disabled) { background: color-mix(in srgb, var(--accent-primary, #e53935) 10%, transparent); border-color: var(--accent-primary, #e53935); color: var(--accent-primary, #e53935); }
     }
   }
 }

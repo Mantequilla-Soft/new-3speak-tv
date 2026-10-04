@@ -85,7 +85,9 @@
     transition: all 0.2s ease;
 
     &--start {
-      background: var(--accent-primary, #e53935);
+      background: transparent;
+      border: 1px solid var(--accent-primary, #e53935);
+      color: var(--accent-primary, #e53935);
       &:hover { opacity: 0.9; }
     }
 
@@ -172,13 +174,13 @@
   .rvt-submit {
     width: 100%;
     padding: 8px;
-    border: none;
+    border: 1px solid var(--accent-primary, #e53935);
     border-radius: 8px;
     font-size: 13px;
     font-weight: 700;
     font-family: inherit;
-    color: #fff;
-    background: var(--accent-primary, #e53935);
+    color: var(--accent-primary, #e53935);
+    background: transparent;
     cursor: pointer;
     transition: all 0.2s ease;
 

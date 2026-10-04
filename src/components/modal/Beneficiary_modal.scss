@@ -88,9 +88,9 @@
       button {
         padding: 10px 20px;
         border-radius: 6px;
-        border: none;
-        background-color: var(--accent-primary, #e53935);
-        color: #fff;
+        border: 1px solid var(--accent-primary, #e53935);
+        background-color: transparent;
+        color: var(--accent-primary, #e53935);
         height: 100%;
         text-align: center;
         display: flex;
@@ -147,9 +147,9 @@
     button {
       padding: 8px 20px;
       border-radius: 6px;
-      border: none;
-      color: #fff;
-      background-color: var(--accent-primary, #e53935);
+      border: 1px solid var(--accent-primary, #e53935);
+      color: var(--accent-primary, #e53935);
+      background-color: transparent;
       cursor: pointer;
 
       &:hover {

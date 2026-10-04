@@ -67,8 +67,9 @@
       &:hover { background: var(--bg-hover); }
 
       &.active {
-        background: var(--accent-primary);
-        color: #fff;
+        background: color-mix(in srgb, var(--accent-primary, #e53935) 10%, transparent);
+        box-shadow: inset 0 0 0 1px var(--accent-primary, #e53935);
+        color: var(--accent-primary, #e53935);
       }
     }
   }

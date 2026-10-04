@@ -191,7 +191,7 @@
       border-radius: 50%;
       transition: transform 0.12s ease, background 0.12s ease;
     }
-    .sp-video-poster:hover .sp-video-play { transform: scale(1.08); background: var(--accent-primary, #e53935); }
+    .sp-video-poster:hover .sp-video-play { transform: scale(1.08); background: rgba(0, 0, 0, 0.6); border: 1px solid var(--accent-primary, #e53935); color: var(--accent-primary, #e53935); }
     .sp-video-title {
       position: absolute;
       left: 0; right: 0; bottom: 0;

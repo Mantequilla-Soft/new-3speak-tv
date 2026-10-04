@@ -496,14 +496,15 @@
         }
 
         .btn-follow {
-          background: linear-gradient(135deg, var(--accent-primary, #e53935), #c62828);
-          border-color: transparent;
-          color: #fff;
+          background: transparent;
+          border-color: var(--accent-primary, #e53935);
+          color: var(--accent-primary, #e53935);
           font-weight: 600;
 
           &:hover {
-            background: linear-gradient(135deg, #c62828, #b71c1c);
-            border-color: transparent;
+            background: color-mix(in srgb, var(--accent-primary, #e53935) 10%, transparent);
+            color: var(--accent-primary, #e53935);
+            border-color: var(--accent-primary, #e53935);
           }
 
           &:disabled {

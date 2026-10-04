@@ -340,8 +340,9 @@
 // style used in the OpenPods create-room dialog: these two prompts appear back to
 // back and a different primary in each would read as a different app.
 .ads-prompt-primary {
-  background: var(--accent-primary, #e0594b);
-  color: #fff;
+  background: transparent;
+  border: 1px solid var(--accent-primary, #e53935);
+  color: var(--accent-primary, #e53935);
   // Link and button share the class, and only the link needs centring.
   display: inline-flex;
   align-items: center;
