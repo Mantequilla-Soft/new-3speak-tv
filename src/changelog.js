@@ -10,8 +10,9 @@ export const CHANGELOG = [
     version: '1.79.52',
     date: '2026-10-04',
     summary:
-      'Chat now opens by itself when you arrive with a new message, straight into that conversation. '
-      + 'Close it and it stays closed until the next new message; on phones this only happens on the home page.',
+      'On desktop, chat now opens by itself when a new message is waiting or comes in, straight into that '
+      + 'conversation, without interrupting: it waits while you type or watch fullscreen. '
+      + 'On phones, the chat icon shows your new messages.',
   },
   {
     version: '1.79.51',
