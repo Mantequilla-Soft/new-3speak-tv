@@ -2,6 +2,7 @@ import i18n from 'i18next';
 import { initReactI18next } from 'react-i18next';
 import { LANGUAGES, LANGUAGE_CODES, DEFAULT_LANGUAGE } from './languages';
 import { flatten, LANG_CODE_RE } from './rules';
+import { reloadOnceForChunk } from '../utils/staleChunk';
 
 /**
  * Interface translations.
@@ -129,11 +130,27 @@ export function loadCommunityLanguages() {
   return communityPromise;
 }
 
+// Each area file loads on its own: one that fails costs only that area (English
+// shows there), never the whole language. They fail almost only when a deploy
+// replaced the files while this tab, or its service worker, still runs the old
+// build, so the first failure reloads onto the current build. Never rejects.
 async function loadBundled(code) {
   const prefix = `../locales/${code}/`;
   const entries = Object.entries(others).filter(([p]) => p.startsWith(prefix));
-  const loaded = await Promise.all(entries.map(async ([p, load]) => [p, await load()]));
-  return bundle(Object.fromEntries(loaded));
+  const failed = [];
+  const loaded = await Promise.all(entries.map(async ([p, load]) => {
+    try {
+      return [p, await load()];
+    } catch {
+      failed.push(fileArea(p));
+      return null;
+    }
+  }));
+  if (failed.length) {
+    console.warn(`[i18n] ${code}: ${failed.length} file(s) failed to load: ${failed.join(', ')}`);
+    if (await reloadOnceForChunk(`locale:${code}`)) await new Promise(() => {}); // navigating away
+  }
+  return bundle(Object.fromEntries(loaded.filter(Boolean)));
 }
 
 /** The bundled text of a language, flat, WITHOUT the overlay (for the editor). */
@@ -151,7 +168,8 @@ async function loadLanguage(code) {
   // The editor overlay never blocks a language: it is fetched alongside and laid on
   // top when it arrives (react re-renders on 'added', see init). Only a language
   // with no bundled files at all (community-only) waits for it, since the overlay
-  // IS that language.
+  // IS that language. loadBundled never rejects, so the overlay is laid on top even
+  // when some bundled files are missing.
   const overlay = fetchOverlay(code);
   const files = await loadBundled(code);
   i18n.addResourceBundle(code, 'translation', files, true, true);
