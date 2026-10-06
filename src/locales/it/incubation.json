@@ -66,7 +66,8 @@
   },
   "trackQuestion": {
     "title": "Cosa ti porta su 3Speak?",
-    "intro": "Il tuo percorso verso un account Hive dipende da questo: gli spettatori guardano e partecipano, i creator pubblicano e gli inserzionisti configurano il proprio brand."
+    "intro": "Il tuo percorso verso un account Hive dipende da questo: gli spettatori guardano e partecipano, i creator pubblicano e gli inserzionisti configurano il proprio brand.",
+    "introNoAdvertisers": "Il tuo percorso verso un account Hive dipende da questo: gli spettatori guardano e partecipano, mentre i creator pubblicano."
   },
   "tipCard": {
     "aria": "Suggerimento",
@@ -248,6 +249,7 @@
     },
     "path": {
       "p1": "Il tuo profilo mostra un breve elenco di cose da fare, che dipende dal motivo per cui sei qui: gli spettatori guardano e partecipano, i creator pubblicano e gli inserzionisti configurano il proprio brand.",
+      "p1NoAdvertisers": "Il tuo profilo mostra un breve elenco di cose da fare, che dipende dal motivo per cui sei qui: gli spettatori guardano e partecipano, mentre i creator pubblicano.",
       "p2": "Non è un esame. È semplicemente il modo in cui distinguiamo un account reale da uno vuoto o malevolo. Quando l'elenco è completo, il team ti valuta e ti promuove il prima possibile.",
       "perkEarn": "Post che guadagnano",
       "perkKeys": "Chiavi che possiedi solo tu",

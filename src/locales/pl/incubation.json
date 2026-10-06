@@ -66,7 +66,8 @@
   },
   "trackQuestion": {
     "title": "Co sprowadza cię do 3Speak?",
-    "intro": "Od tego zależy twoja droga do konta Hive: widzowie oglądają i się angażują, twórcy publikują, a reklamodawcy konfigurują swoją markę."
+    "intro": "Od tego zależy twoja droga do konta Hive: widzowie oglądają i się angażują, twórcy publikują, a reklamodawcy konfigurują swoją markę.",
+    "introNoAdvertisers": "Od tego zależy twoja droga do konta Hive: widzowie oglądają i się angażują, a twórcy publikują."
   },
   "tipCard": {
     "aria": "Wskazówka",
@@ -265,6 +266,7 @@
     },
     "path": {
       "p1": "Na twoim profilu jest krótka lista zadań, zależna od tego, po co tu jesteś: widzowie oglądają i się angażują, twórcy publikują, a reklamodawcy konfigurują swoją markę.",
+      "p1NoAdvertisers": "Na twoim profilu jest krótka lista zadań, zależna od tego, po co tu jesteś: widzowie oglądają i się angażują, a twórcy publikują.",
       "p2": "To nie jest test. To po prostu sposób, by odróżnić prawdziwe konto od pustego lub złośliwego. Gdy lista będzie wykonana, zespół jak najszybciej cię oceni i przeniesie na Hive.",
       "perkEarn": "Posty, które zarabiają",
       "perkKeys": "Klucze, które masz tylko ty",

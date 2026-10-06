@@ -7,7 +7,7 @@ import { MdSettings, MdTrendingUp, MdCampaign, MdCloudUpload, MdPersonAdd } from
 import { ImPower } from "react-icons/im";
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { FaDiscord, FaLanguage } from 'react-icons/fa';
+import { FaDiscord, FaLanguage, FaFileImport } from 'react-icons/fa';
 import { IoPower } from 'react-icons/io5';
 import { FaCheckToSlot, FaJxl, FaSquareXTwitter } from 'react-icons/fa6';
 import { TiThList } from "react-icons/ti";
@@ -17,7 +17,7 @@ import { RiWallet3Fill } from 'react-icons/ri';
 import { SiTelegram } from "react-icons/si";
 import { getVotePower } from '../../utils/hiveUtils';
 import { getHiveUrl, ensureHealthyNode } from '../../utils/hiveNode';
-import { adsEnabledFor } from '../../utils/config';
+import { adsEnabledFor, VIDEO_IMPORT_ENABLED } from '../../utils/config';
 import LabeledToggle from '../LabeledToggle/LabeledToggle';
 import SettingsModal from '../SettingsModal/SettingsModal';
 import { useAvatarUrl } from '../../utils/avatarCache';
@@ -213,6 +213,13 @@ function ProfileNav({ isVisible, onclose, toggleAddAccount, openLoginModal }) {
           {!isIncubating && (
             <Link to="/profile?tab=stats" className="pn-item" role="menuitem" onClick={onclose}>
               <MdTrendingUp className="pn-icon" /> <span>{t('nav.profile.analytics')}</span>
+            </Link>
+          )}
+          {/* ▶️ Import your own videos from YouTube & co. (moved here from the profile
+              header). Needs a Hive account to publish, so not for incubating users. */}
+          {VIDEO_IMPORT_ENABLED && !isIncubating && (
+            <Link to="/youtube-import" className="pn-item" role="menuitem" onClick={onclose}>
+              <FaFileImport className="pn-icon" /> <span>{t('ytimport.entry')}</span>
             </Link>
           )}
           {/* Closed testing. Same gate as the /advertise page itself, so the menu can

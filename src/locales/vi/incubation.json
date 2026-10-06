@@ -66,7 +66,8 @@
   },
   "trackQuestion": {
     "title": "Điều gì đưa bạn đến với 3Speak?",
-    "intro": "Con đường đến tài khoản Hive của bạn phụ thuộc vào điều này: người xem thì xem và tham gia, nhà sáng tạo thì đăng nội dung, còn nhà quảng cáo thì thiết lập thương hiệu."
+    "intro": "Con đường đến tài khoản Hive của bạn phụ thuộc vào điều này: người xem thì xem và tham gia, nhà sáng tạo thì đăng nội dung, còn nhà quảng cáo thì thiết lập thương hiệu.",
+    "introNoAdvertisers": "Con đường đến tài khoản Hive của bạn phụ thuộc vào điều này: người xem thì xem và tham gia, còn nhà sáng tạo thì đăng nội dung."
   },
   "tipCard": {
     "aria": "Mẹo",
@@ -214,6 +215,7 @@
     },
     "path": {
       "p1": "Hồ sơ của bạn hiển thị một danh sách ngắn những việc cần làm, tùy thuộc vào mục đích bạn đến đây: người xem thì xem và tham gia, nhà sáng tạo thì đăng nội dung, còn nhà quảng cáo thì thiết lập thương hiệu.",
+      "p1NoAdvertisers": "Hồ sơ của bạn hiển thị một danh sách ngắn những việc cần làm, tùy thuộc vào mục đích bạn đến đây: người xem thì xem và tham gia, còn nhà sáng tạo thì đăng nội dung.",
       "p2": "Đây không phải bài kiểm tra. Đơn giản đó là cách chúng tôi phân biệt một tài khoản thật với một tài khoản trống hoặc có ý đồ xấu. Khi hoàn thành danh sách, đội ngũ sẽ xét duyệt và nâng cấp cho bạn sớm nhất có thể.",
       "perkEarn": "Bài đăng có thu nhập",
       "perkKeys": "Khóa chỉ mình bạn nắm giữ",

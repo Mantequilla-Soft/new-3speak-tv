@@ -582,10 +582,10 @@ const {
             <HiveBadges username={user} canArrange={isOwnProfile} />
             <div className="own-badges">
               <LeaderboardBadges username={user} />
-              <SocialLinks hiveUsername={user} />
             </div>
           </>
         }
+        aside={<SocialLinks hiveUsername={user} column />}
         actions={
           <>
             {/* The follower pill is gone — the count lives in the stat line

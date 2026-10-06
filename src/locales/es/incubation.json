@@ -66,7 +66,8 @@
   },
   "trackQuestion": {
     "title": "¿Qué te trae a 3Speak?",
-    "intro": "Tu camino hacia una cuenta de Hive depende de eso: los espectadores ven y participan, los creadores publican y los anunciantes configuran su marca."
+    "intro": "Tu camino hacia una cuenta de Hive depende de eso: los espectadores ven y participan, los creadores publican y los anunciantes configuran su marca.",
+    "introNoAdvertisers": "Tu camino hacia una cuenta de Hive depende de eso: los espectadores ven y participan, y los creadores publican."
   },
   "tipCard": {
     "aria": "Consejo",
@@ -248,6 +249,7 @@
     },
     "path": {
       "p1": "Tu perfil muestra una lista corta de tareas, y depende de para qué estás aquí: los espectadores ven y participan, los creadores publican y los anunciantes configuran su marca.",
+      "p1NoAdvertisers": "Tu perfil muestra una lista corta de tareas, y depende de para qué estás aquí: los espectadores ven y participan, y los creadores publican.",
       "p2": "No es un examen. Es simplemente la forma en que distinguimos una cuenta real de una vacía o maliciosa. Cuando completes la lista, el equipo te revisa y actualiza tu cuenta lo antes posible.",
       "perkEarn": "Publicaciones que generan ganancias",
       "perkKeys": "Claves que solo tú tienes",

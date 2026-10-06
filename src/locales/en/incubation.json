@@ -66,7 +66,8 @@
   },
   "trackQuestion": {
     "title": "What brings you to 3Speak?",
-    "intro": "Your path to a Hive account depends on it: viewers watch and join in, creators publish, and advertisers set up their brand."
+    "intro": "Your path to a Hive account depends on it: viewers watch and join in, creators publish, and advertisers set up their brand.",
+    "introNoAdvertisers": "Your path to a Hive account depends on it: viewers watch and join in, and creators publish."
   },
   "tipCard": {
     "aria": "Tip",
@@ -231,6 +232,7 @@
     },
     "path": {
       "p1": "Your profile shows a short list of things to do, and it depends on what you are here for: viewers watch and join in, creators publish, and advertisers set up their brand.",
+      "p1NoAdvertisers": "Your profile shows a short list of things to do, and it depends on what you are here for: viewers watch and join in, and creators publish.",
       "p2": "It is not a test. It is simply how we can tell a real account from an empty or malicious one. Once the list is done the team reviews you and upgrades you as soon as possible.",
       "perkEarn": "Posts that earn",
       "perkKeys": "Keys only you hold",

@@ -57,6 +57,16 @@ const TRACKS = {
     { type: 'time', from: 'days', need: 1 }
   ]
 }
+// Which tracks a NEW pick may choose. The advertiser track is closed at the public
+// signup launch (owner 2026-10-06: viewers and creators only for now). People
+// already on it keep their goals, because TRACKS above still has them.
+// WARMUP_ADVERTISER_SIGNUP=true reopens it (and VITE_ENABLE_ADVERTISER_SIGNUP in
+// the frontend shows the option again).
+function trackOpen(track) {
+  if (track === 'viewer' || track === 'creator') return true
+  return track === 'advertiser' && process.env.WARMUP_ADVERTISER_SIGNUP === 'true'
+}
+
 // A length floor for a reply to count, not a quality judgement.
 const MIN_COMMENT_CHARS = 20
 
@@ -140,4 +150,4 @@ function createWarmupBackend(sdk, { inc, butr, getSession, getHiveUser }) {
   })
 }
 
-module.exports = { createWarmupBackend, TRACKS, MIN_COMMENT_CHARS, readContact, readContactByHandle, saveContact }
+module.exports = { createWarmupBackend, TRACKS, trackOpen, MIN_COMMENT_CHARS, readContact, readContactByHandle, saveContact }

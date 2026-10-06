@@ -66,7 +66,8 @@
   },
   "trackQuestion": {
     "title": "Seni 3Speak'e ne getirdi?",
-    "intro": "Hive hesabına giden yolun buna bağlı: izleyiciler izler ve katılır, içerik üreticileri yayınlar, reklamverenler markalarını kurar."
+    "intro": "Hive hesabına giden yolun buna bağlı: izleyiciler izler ve katılır, içerik üreticileri yayınlar, reklamverenler markalarını kurar.",
+    "introNoAdvertisers": "Hive hesabına giden yolun buna bağlı: izleyiciler izler ve katılır, içerik üreticileri ise yayınlar."
   },
   "tipCard": {
     "aria": "İpucu",
@@ -231,6 +232,7 @@
     },
     "path": {
       "p1": "Profilinde kısa bir yapılacaklar listesi var ve bu, burada ne için olduğuna bağlı: izleyiciler izler ve katılır, içerik üreticileri yayınlar, reklamverenler markalarını kurar.",
+      "p1NoAdvertisers": "Profilinde kısa bir yapılacaklar listesi var ve bu, burada ne için olduğuna bağlı: izleyiciler izler ve katılır, içerik üreticileri ise yayınlar.",
       "p2": "Bu bir sınav değil. Gerçek bir hesabı boş ya da kötü niyetli bir hesaptan ayırt etmemizin yolu sadece bu. Liste tamamlandığında ekip seni inceler ve en kısa sürede yükseltir.",
       "perkEarn": "Kazanç getiren gönderiler",
       "perkKeys": "Yalnızca sende olan anahtarlar",

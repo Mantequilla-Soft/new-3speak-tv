@@ -5,7 +5,7 @@ import axios from "axios";
 import { toastIn } from '../utils/toast';
 import { useAppStore } from "../lib/store";
 import { getFollowers } from "../hive-api/api";
-import { MY_VIDEOS_URL, CHECKER_URL, VIDEO_IMPORT_ENABLED } from "../utils/config";
+import { MY_VIDEOS_URL, CHECKER_URL } from "../utils/config";
 
 import Card3 from "../components/Cards/Card3";
 import Follower from "../components/Userprofilepage/Follower";
@@ -19,7 +19,7 @@ import { useWatchHistory } from "../hooks/useWatchHistory";
 import useViewCounts from "../hooks/useViewCounts";
 import { fetchUserShortsWithDetails } from "../hive-api/hiveApi";
 
-import { FaVideo, FaPlus, FaYoutube } from "react-icons/fa";
+import { FaVideo, FaPlus } from "react-icons/fa";
 import { IoMdShare, IoMdAdd } from "react-icons/io";
 import { MdLock, MdPublic, MdClose } from "react-icons/md";
 import SocialLinks from "../components/Userprofilepage/SocialLinks";
@@ -523,12 +523,6 @@ function ProfilePage() {
             <HiveBadges username={user} canArrange />
             <div className="own-badges">
               <LeaderboardBadges username={user} />
-              <SocialLinks
-                hiveUsername={user}
-                refreshKey={socialLinksRefreshKey}
-                canDelete
-                onChange={() => setSocialLinksRefreshKey((k) => k + 1)}
-              />
               <button
                 type="button"
                 className="add-social-link-btn"
@@ -537,18 +531,17 @@ function ProfilePage() {
               >
                 <FaPlus /> {t('profile.page.addProfile')}
               </button>
-              {VIDEO_IMPORT_ENABLED && (
-                <button
-                  type="button"
-                  className="add-social-link-btn"
-                  onClick={() => navigate('/youtube-import')}
-                  title={t('ytimport.subtitle')}
-                >
-                  <FaYoutube /> {t('ytimport.entry')}
-                </button>
-              )}
             </div>
           </>
+        }
+        aside={
+          <SocialLinks
+            hiveUsername={user}
+            refreshKey={socialLinksRefreshKey}
+            canDelete
+            column
+            onChange={() => setSocialLinksRefreshKey((k) => k + 1)}
+          />
         }
         actions={
           <>
