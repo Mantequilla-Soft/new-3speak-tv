@@ -269,13 +269,19 @@ async function resolveButrUser(req, res) {
     return null
   }
   try {
-    const { ok, data } = await butrTokenRequest({ grant_type: 'refresh_token', refresh_token: refreshToken })
+    // Through refreshOnce (below), never a direct refresh: a page fires several
+    // requests at once, and two of them spending the same rotated token makes
+    // ButrAuth revoke the whole session family.
+    const { ok, status, data } = await refreshOnce(refreshToken)
     if (!ok || !data.access_token) {
       console.warn('[incubation] refresh refused:', data?.error || 'no access_token in response')
       // Refused (expired, revoked, or a detected replay) — drop both cookies so
       // the user is cleanly logged out instead of retrying a dead token forever.
-      clearRefreshCookie(res)
-      clearSessionCookie(res)
+      // Only on an actual refusal: a 5xx or timeout says nothing about the token.
+      if (status === 400 || status === 401) {
+        clearRefreshCookie(res)
+        clearSessionCookie(res)
+      }
       return null
     }
     setSessionCookie(res, data.access_token, data.username)
