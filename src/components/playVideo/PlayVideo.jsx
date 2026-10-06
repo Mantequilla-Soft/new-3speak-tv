@@ -73,6 +73,7 @@ import { MdFlag, MdEdit, MdAutoAwesome } from 'react-icons/md';
 import useTitleMeta from '../../hooks/useTitleMeta';
 import TitleTranslate from '../TitleTranslate/TitleTranslate';
 import SummaryModal from '../SummaryModal/SummaryModal';
+import AccountImg from '../HiveAvatar/AccountImg';
 
 // Every toast from this module is headed "Video"; the message becomes the
 // line under it. See utils/toast.js.
@@ -1177,7 +1178,7 @@ const PlayVideo = ({ videoDetails, author, permlink, mediaUnavailable = false, m
                 />
                 {community_id && (
                   <div className="community-title-wrap" onClick={() => handleCommunityNavigate(community_id)}>
-                    <img src={`/img/u/${community_id}/avatar/small`} alt="" />
+                    <AccountImg account={community_id} alt="" />
                     <div className="community-text">
                       <span className="community-name">{comunity_name}</span>
                     </div>
@@ -1213,7 +1214,7 @@ const PlayVideo = ({ videoDetails, author, permlink, mediaUnavailable = false, m
               onFollow={(_, willFollow) => setIsFollowingCreator(willFollow)}
             />
             {community_id && (<div className="community-title-wrap" onClick={() => handleCommunityNavigate(community_id)}>
-              <img src={`/img/u/${community_id}/avatar/small`} alt="" />
+              <AccountImg account={community_id} alt="" />
               <div className="community-text">
                 <span className="community-name">{comunity_name}</span>
                 {communityData?.subscribers != null && (

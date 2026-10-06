@@ -107,6 +107,22 @@
     "soundcloud": {
       "placeholder": "your-profile বা https://soundcloud.com/your-profile",
       "help": "আপনার SoundCloud প্রোফাইল URL বা তার ইউজারনেম অংশটুকু পেস্ট করুন। হ্যাশটি আপনার প্রোফাইল বায়োর যেকোনো জায়গায় রাখুন।"
+    },
+    "tiktok": {
+      "placeholder": "@handle বা https://www.tiktok.com/@handle",
+      "help": "আপনার TikTok @handle বা প্রোফাইল লিংক পেস্ট করুন। হ্যাশটি আপনার প্রোফাইল বায়োর যেকোনো জায়গায় রাখুন।"
+    },
+    "instagram": {
+      "placeholder": "@handle বা https://www.instagram.com/handle",
+      "help": "আপনার Instagram @handle বা প্রোফাইল লিংক পেস্ট করুন। হ্যাশটি আপনার প্রোফাইল বায়োর যেকোনো জায়গায় রাখুন।"
+    },
+    "bitchute": {
+      "placeholder": "https://www.bitchute.com/channel/…",
+      "help": "আপনার BitChute চ্যানেলের নাম বা লিংক পেস্ট করুন। হ্যাশটি চ্যানেলের বিবরণের যেকোনো জায়গায় রাখুন।"
+    },
+    "rumble": {
+      "placeholder": "https://rumble.com/c/…",
+      "help": "আপনার Rumble চ্যানেলের নাম বা লিংক পেস্ট করুন। হ্যাশটি চ্যানেলের বিবরণের যেকোনো জায়গায় রাখুন।"
     }
   },
   "snaps": {

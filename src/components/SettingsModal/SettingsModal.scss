@@ -253,10 +253,10 @@
 
 .settings-interests-save {
   padding: 8px 18px;
-  border: none;
+  border: 1px solid var(--accent-primary, #e53935);
   border-radius: 8px;
-  background: var(--accent-primary, #e0594b);
-  color: #fff;
+  background: transparent;
+  color: var(--accent-primary, #e53935);
   font-size: 13.5px;
   font-weight: 600;
   cursor: pointer;
@@ -430,10 +430,10 @@
 
 .settings-ads-save {
   padding: 6px 14px;
-  border: none;
+  border: 1px solid var(--accent-primary, #e53935);
   border-radius: 8px;
-  background: var(--accent-primary);
-  color: var(--text-inverse);
+  background: transparent;
+  color: var(--accent-primary, #e53935);
   font-family: inherit;
   font-size: 13px;
   font-weight: 600;

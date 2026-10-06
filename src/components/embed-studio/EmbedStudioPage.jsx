@@ -9,7 +9,7 @@ import axios from "axios";
 import { has3SpeakPostAuth } from "../../utils/hiveUtils";
 import 'ldrs/react/LineSpinner.css'
 import { useEmbedUpload } from "../../context/EmbedUploadContext";
-import { HIVE_API_URL } from "../../utils/config";
+import { HIVE_API_URL, SHORTS_MAX_DURATION_SEC } from "../../utils/config";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useState } from "react";
 import { generateVideoThumbnails } from "../../utils/videoThumbnails";
@@ -39,6 +39,10 @@ function EmbedStudioPage() {
     videoMode, setVideoMode,
     clearVideoSelection,
     setCommunity,
+    setTitle,
+    setDescription,
+    setTagsPreview,
+    setImportSource,
   } = useEmbedUpload();
 
   // `?trailer=1` — arrived from the "Upload a channel trailer" button on an own
@@ -146,11 +150,33 @@ function EmbedStudioPage() {
       });
 
       const thumbs = await generateVideoThumbnails(file, 2, 'url');
-      setGeneratedThumbnail(thumbs);
+
+      // ▶️ YouTube import (/youtube-import): carry over title, description, tags
+      // and the original thumbnail, which goes first so it is preselected.
+      const ytMeta = window.__ytImportMeta;
+      delete window.__ytImportMeta;
+      if (ytMeta) {
+        setImportSource(ytMeta.videoId ? { id: ytMeta.videoId, platform: ytMeta.platform, url: ytMeta.sourceUrl } : null);
+        if (ytMeta.title) setTitle(ytMeta.title);
+        if (ytMeta.description) setDescription(ytMeta.description);
+        if (ytMeta.tags?.length) setTagsPreview(ytMeta.tags);
+        setGeneratedThumbnail(ytMeta.thumbnail ? [ytMeta.thumbnail, ...thumbs] : thumbs);
+      } else {
+        setGeneratedThumbnail(thumbs);
+      }
       setVideoFile(file);
       setPrevVideoFile(file);
       setVideoDuration(duration);
-      setVideoMode(fromStories ? 'shorts' : 'longform');
+      // `fromStories` here is the value from the first render, before the ?from=
+      // effect ran, so an import says which mode it wants explicitly. An imported
+      // TikTok is sent as a Short before anyone measured it; if the file is longer
+      // than a Short may be, it goes in as a normal video instead.
+      let mode = ytMeta?.mode || (fromStories ? 'shorts' : 'longform');
+      if (ytMeta?.mode === 'shorts' && duration > SHORTS_MAX_DURATION_SEC) {
+        mode = 'longform';
+        setFromStories(false);
+      }
+      setVideoMode(mode);
     };
 
     // Check for file passed from StudioPage redirect (vertical short)

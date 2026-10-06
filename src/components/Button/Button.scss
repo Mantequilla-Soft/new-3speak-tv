@@ -26,15 +26,15 @@
   }
 
   &.prominent {
-    background: var(--accent-primary, #e53935);
+    background: transparent;
     border-color: var(--accent-primary, #e53935);
-    color: #fff;
+    color: var(--accent-primary, #e53935);
     font-weight: 500;
 
     &:hover:not(:disabled) {
       opacity: 0.85;
-      background: var(--accent-primary, #e53935);
-      color: #fff;
+      background: color-mix(in srgb, var(--accent-primary, #e53935) 10%, transparent);
+      color: var(--accent-primary, #e53935);
     }
   }
 }

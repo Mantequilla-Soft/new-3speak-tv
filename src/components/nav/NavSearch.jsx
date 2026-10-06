@@ -11,6 +11,7 @@ import { useAppStore } from "../../lib/store";
 import { fixVideoThumbnail, fallbackImg } from "../../utils/fixThumbnails";
 import TimeAgo from "../TimeAgo/TimeAgo";
 import "./NavSearch.scss";
+import AccountImg from "../HiveAvatar/AccountImg";
 
 const LIMIT = 50;
 
@@ -353,7 +354,7 @@ function NavSearch() {
                   {groupedSuggestions.community.map((s, i) => (
                     <button key={i} className="discover-suggest-badge" onMouseDown={(e) => { e.stopPropagation(); selectSuggestion(s); }}>
                       <div className="discover-suggest-badge-avatar">
-                        <img src={`/img/u/${s.name}/avatar/small`} alt="" onError={(e) => { e.target.style.display = 'none'; }} />
+                        <AccountImg account={s.name} alt="" onError={(e) => { e.target.style.display = 'none'; }} />
                       </div>
                       <span>{s.title || s.name}</span>
                     </button>
@@ -479,7 +480,7 @@ function NavSearch() {
                     {communityFilter ? (
                       <div className="discover-community-selected">
                         <div className="discover-community-selected-avatar">
-                          <img src={`/img/u/${communityFilter}/avatar/small`} alt="" onError={(e) => { e.target.style.display = 'none'; }} />
+                          <AccountImg account={communityFilter} alt="" onError={(e) => { e.target.style.display = 'none'; }} />
                         </div>
                         <span>{communityLabel || communityFilter}</span>
                         <button type="button" className="discover-advanced-clear" onClick={() => { setCommunityFilter(''); setCommunityLabel(''); setCommunitySearch(''); }}>
@@ -512,7 +513,7 @@ function NavSearch() {
                                 }}
                               >
                                 <div className="discover-suggest-avatar">
-                                  <img src={`/img/u/${c.name}/avatar/small`} alt="" onError={(e) => { e.target.style.display = 'none'; }} />
+                                  <AccountImg account={c.name} alt="" onError={(e) => { e.target.style.display = 'none'; }} />
                                 </div>
                                 <div className="discover-suggest-text">
                                   <span className="discover-suggest-primary">{c.title || c.name}</span>
@@ -579,7 +580,7 @@ function NavSearch() {
                           {items.map(c => (
                             <Link to={`/community/${c.name}`} key={c.name} className="discover-community-card" onClick={closePanel}>
                               <div className="discover-community-avatar">
-                                <img src={`/img/u/${c.name}/avatar/small`} alt="" loading="lazy" onError={(e) => { e.target.style.display = 'none'; }} />
+                                <AccountImg account={c.name} alt="" loading="lazy" onError={(e) => { e.target.style.display = 'none'; }} />
                               </div>
                               <div className="discover-community-info">
                                 <span className="discover-community-name">{c.title || c.name}</span>

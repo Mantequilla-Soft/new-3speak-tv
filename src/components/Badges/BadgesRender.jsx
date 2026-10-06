@@ -6,6 +6,7 @@ import { BADGES_URL } from '../../utils/config';
 import GroupSort, { sortBy } from '../Groups/GroupSort';
 import { useAppStore } from '../../lib/store';
 import fetchHiveBadges from '../../utils/hiveBadges';
+import { cachedProfileImage } from '../../utils/avatarCache';
 import CreateCommunity from '../modal/CreateCommunity';
 import SkeletonLoader from '../Communities/SkeletonLoader';
 import { useTranslation, Trans } from 'react-i18next';
@@ -130,13 +131,12 @@ function BadgesRender() {
             <Link className="badge-card" to={`/b/${badge.account}`} key={badge.account}>
               <div className="badge-card-img">
                 {/* The badge's OWN picture, which the directory already
-                    carries. This was hardcoded to images.hive.blog, and that
-                    proxy cannot read images.3speak.tv -- it answers with its own
-                    grey placeholder (200, so nothing looks broken), which is why
-                    a badge created here had a blank face in this grid while its
-                    art was sitting in the index the whole time. */}
+                    carries, served from our /img/ cache: art hosted on
+                    images.3speak.tv goes through /img/a/ (Hive's proxy answers
+                    it with a grey placeholder), everything else through
+                    /img/u/, resized, instead of the raw original. */}
                 <img
-                  src={badge.image || `/img/u/${badge.account}/avatar`}
+                  src={cachedProfileImage(badge.account, badge.image, 'medium')}
                   alt={badge.title}
                   loading="lazy"
                 />

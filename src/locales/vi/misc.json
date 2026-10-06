@@ -107,6 +107,22 @@
     "soundcloud": {
       "placeholder": "your-profile hoặc https://soundcloud.com/your-profile",
       "help": "Dán URL hồ sơ SoundCloud của bạn hoặc chỉ tên người dùng trong đó. Đặt mã hash ở bất kỳ đâu trong phần giới thiệu hồ sơ."
+    },
+    "tiktok": {
+      "placeholder": "@handle hoặc https://www.tiktok.com/@handle",
+      "help": "Dán @handle TikTok hoặc liên kết hồ sơ của bạn. Đặt mã hash ở bất kỳ đâu trong phần giới thiệu hồ sơ."
+    },
+    "instagram": {
+      "placeholder": "@handle hoặc https://www.instagram.com/handle",
+      "help": "Dán @handle Instagram hoặc liên kết hồ sơ của bạn. Đặt mã hash ở bất kỳ đâu trong phần giới thiệu hồ sơ."
+    },
+    "bitchute": {
+      "placeholder": "https://www.bitchute.com/channel/…",
+      "help": "Dán tên hoặc liên kết kênh BitChute của bạn. Đặt mã hash ở bất kỳ đâu trong phần mô tả kênh."
+    },
+    "rumble": {
+      "placeholder": "https://rumble.com/c/…",
+      "help": "Dán tên hoặc liên kết kênh Rumble của bạn. Đặt mã hash ở bất kỳ đâu trong phần mô tả kênh."
     }
   },
   "snaps": {

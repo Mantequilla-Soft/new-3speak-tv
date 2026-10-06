@@ -1,0 +1,13 @@
+{
+  "ariaLabel": "3Speak'ten duyuru",
+  "personalLabel": "Ekipten yalnızca size özel bir mesaj",
+  "linkFallback": "Daha fazla bilgi",
+  "replyLabel": "Yanıtınız",
+  "replyPlaceholder": "Yanıtınızı yazın…",
+  "replyAs": "@{{user}} olarak gönderilir",
+  "replyNoName": "Hesap adı olmadan gönderilir",
+  "sending": "Gönderiliyor…",
+  "replySent": "Teşekkürler! Yanıtınız gönderildi.",
+  "replyFailed": "Yanıtınız gönderilemedi. Lütfen tekrar deneyin.",
+  "replyTooMany": "Az önce birkaç yanıt gönderdiniz. Lütfen birkaç dakika sonra tekrar deneyin."
+}

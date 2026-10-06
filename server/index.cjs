@@ -269,13 +269,19 @@ async function resolveButrUser(req, res) {
     return null
   }
   try {
-    const { ok, data } = await butrTokenRequest({ grant_type: 'refresh_token', refresh_token: refreshToken })
+    // Through refreshOnce (below), never a direct refresh: a page fires several
+    // requests at once, and two of them spending the same rotated token makes
+    // ButrAuth revoke the whole session family.
+    const { ok, status, data } = await refreshOnce(refreshToken)
     if (!ok || !data.access_token) {
       console.warn('[incubation] refresh refused:', data?.error || 'no access_token in response')
       // Refused (expired, revoked, or a detected replay) — drop both cookies so
       // the user is cleanly logged out instead of retrying a dead token forever.
-      clearRefreshCookie(res)
-      clearSessionCookie(res)
+      // Only on an actual refusal: a 5xx or timeout says nothing about the token.
+      if (status === 400 || status === 401) {
+        clearRefreshCookie(res)
+        clearSessionCookie(res)
+      }
       return null
     }
     setSessionCookie(res, data.access_token, data.username)
@@ -1522,6 +1528,52 @@ app.post('/api/snapie-chat/sign-challenge', signChallengeLimiter, async (req, re
   }
 })
 
+// POST /api/snapie-chat/butrauth-session — chat sign-in for ButrAuth logins.
+//
+// Warm-up users have no Hive account, so there is nothing to sign a chat
+// challenge with, and the route above cannot serve them. Snapie instead accepts
+// the user's ButrAuth access token (POST /api/chat/auth/butrauth) and answers
+// with a chat session: `~<butrauth userId>` for a warm-up user, their Hive name
+// otherwise. The token sits in an httpOnly cookie, so the server forwards it;
+// the browser only ever receives the chat session.
+//
+// Hive-account ButrAuth users go through here first too: their first sign-in
+// under the new Hive name is what moves their warm-up conversations onto it.
+//
+// 404 `not_enabled` while Snapie has not switched ButrAuth sign-in on.
+const SNAPIE_CHAT_URL = (process.env.SNAPIE_CHAT_URL || 'https://snapie.io').replace(/\/+$/, '')
+app.post('/api/snapie-chat/butrauth-session', signChallengeLimiter, async (req, res) => {
+  try {
+    const session = await resolveButrSession(req, res)
+    if (!session) return res.status(401).json({ error: 'Unauthorized' })
+
+    const r = await fetch(`${SNAPIE_CHAT_URL}/api/chat/auth/butrauth`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ accessToken: session.token }),
+      signal: AbortSignal.timeout(10000),
+    })
+    // A Snapie without the route answers its HTML page with a 200, not a 404.
+    const isJson = (r.headers.get('content-type') || '').includes('application/json')
+    if (r.status === 404 || !isJson) return res.status(404).json({ error: 'not_enabled' })
+    const data = await r.json().catch(() => ({}))
+    if (!r.ok || typeof data.token !== 'string' || typeof data.username !== 'string') {
+      // 409 = a warm-up token that outlived its graduation; the next refresh
+      // carries the Hive name. Everything else is Snapie refusing or failing.
+      return res.status(r.status === 409 ? 409 : 502).json({ error: data.error || 'Chat sign-in failed' })
+    }
+    return res.json({
+      token: data.token,
+      username: data.username,
+      displayName: data.displayName || null,
+      warmup: !!data.warmup,
+    })
+  } catch (err) {
+    console.error('Snapie-chat butrauth-session error:', err.message)
+    res.status(502).json({ error: 'Chat sign-in failed' })
+  }
+})
+
 // POST /api/ads/opt-out-signature — sign a creator's ad preference on their behalf.
 //
 // HiveSigner and Butter Auth sessions hold no signing key in the browser, so those
@@ -1593,6 +1645,49 @@ app.post('/api/ads/opt-out-signature', signChallengeLimiter, async (req, res) =>
 // logged-in identity this server already established: the body carries a boolean
 // and nothing else, so this endpoint cannot be steered into signing a claim about
 // somebody else.
+// POST /api/verify/sign — sign a social-link check/unlink for the checker's /verify.
+//
+// HiveSigner and Butter Auth sessions hold no key in the browser, so they could
+// never link a YouTube channel ("message signing is unsupported in HiveSigner").
+// Same delegated shape as the ads signatures: we sign as @threespeak under the
+// posting authority the user granted, and the checker accepts @threespeak as a
+// delegate in requireHiveSignature.
+//
+// 🚨 Identity comes ONLY from a credential we can prove (resolveProvenViewer), never
+// the app-key-plus-claimed-name path: that path would let anyone link a channel to
+// anyone. The message is built here, in lockstep with buildMessage() in
+// 3speakchecks/utils/hiveAuth.js, from that proven name.
+app.post('/api/verify/sign', signChallengeLimiter, async (req, res) => {
+  try {
+    if (!POSTING_WIF) return res.status(500).json({ error: 'Server is not configured' })
+    const hiveUsername = await resolveProvenViewer(req, res)
+    if (!hiveUsername) return res.status(401).json({ error: 'Unauthorized' })
+
+    const action = String(req.body?.action || '')
+    const platform = String(req.body?.platform || '')
+    const platformUsername = String(req.body?.platform_username || '').trim()
+    if (!['check', 'unlink'].includes(action)) return res.status(400).json({ error: 'invalid action' })
+    if (!/^[a-z0-9_-]{1,32}$/.test(platform)) return res.status(400).json({ error: 'invalid platform' })
+    if (!platformUsername || platformUsername.length > 200 || platformUsername.includes('|')) {
+      return res.status(400).json({ error: 'invalid platform_username' })
+    }
+
+    if (!(await hasThreespeakPostingGrant(hiveUsername))) {
+      return res.status(403).json({
+        error: `Linking an account from here needs @${HIVE_ACCOUNT} posting authority on your account. Log in with Keychain, HiveAuth, PeakVault or Ledger to sign it directly instead.`,
+      })
+    }
+
+    const timestamp = Date.now()
+    const message = ['3speak-social-verifier', action, hiveUsername.toLowerCase(), platform, platformUsername, String(timestamp)].join('|')
+    const signature = PrivateKey.fromString(POSTING_WIF).sign(cryptoUtils.sha256(Buffer.from(message, 'utf8'))).toString()
+    return res.json({ signature, timestamp, hive_username: hiveUsername.toLowerCase() })
+  } catch (err) {
+    console.error('Verify sign error:', err.message)
+    res.status(500).json({ error: 'Signing failed' })
+  }
+})
+
 app.post('/api/ads/viewer-signature', signChallengeLimiter, async (req, res) => {
   try {
     if (!POSTING_WIF) return res.status(500).json({ error: 'Server is not configured' })
@@ -1672,6 +1767,62 @@ app.post('/api/ads/identity-signature', signChallengeLimiter, async (req, res) =
     return res.json({ success: true, signature, timestamp, username: hiveUsername, vouched: true })
   } catch (err) {
     console.error('Ads identity signature error:', err.message)
+    res.status(500).json({ error: 'Signing failed' })
+  }
+})
+
+// Announcement vouches: "we verified a session for @x", signed by @threespeak's own
+// posting key, so the checker can (a) hand @x the announcements addressed to them and
+// (b) file @x's replies under a PROVEN name. See 3speakchecks/routes/announcements.js.
+//
+// Same evidence rules as /api/ads/identity-signature above: a Butter Auth cookie, a
+// wallet-login session or a HiveSigner token, never the app key plus a claimed name.
+// Each vouch has its own action word, and the reply one is bound to the announcement
+// number, so neither is any use for anything else. Keep both messages in lockstep
+// with readVouchMessage() / replyVouchMessage() in the checker.
+async function resolveAnnouncementUser(req, res) {
+  let hiveUsername = await resolveVerifiedHiveUser(req, res)
+  if (!hiveUsername) {
+    const authHeader = req.headers.authorization || ''
+    const bearer = authHeader.startsWith('Bearer ') ? authHeader.slice(7).trim() : ''
+    if (bearer) hiveUsername = await verifyHiveSignerToken(bearer)
+  }
+  return hiveUsername ? hiveUsername.toLowerCase() : null
+}
+
+function signVouch(parts) {
+  const timestamp = Date.now()
+  const message = [...parts, String(timestamp)].join('|')
+  const signature = PrivateKey.fromString(POSTING_WIF).sign(cryptoUtils.sha256(Buffer.from(message, 'utf8'))).toString()
+  return { signature, timestamp }
+}
+
+// POST /api/announcements/read-signature: lets the popup ask for the announcements
+// addressed to this account. Called once per app load by logged-in users.
+app.post('/api/announcements/read-signature', signChallengeLimiter, async (req, res) => {
+  try {
+    if (!POSTING_WIF) return res.status(500).json({ error: 'Server is not configured' })
+    const hiveUsername = await resolveAnnouncementUser(req, res)
+    if (!hiveUsername) return res.status(401).json({ error: 'Not signed in' })
+    return res.json({ success: true, username: hiveUsername, ...signVouch(['3speak-announce', 'read-vouch', hiveUsername]) })
+  } catch (err) {
+    console.error('Announcement read signature error:', err.message)
+    res.status(500).json({ error: 'Signing failed' })
+  }
+})
+
+// POST /api/announcements/reply-signature: proves who wrote a reply. Without it the
+// checker still takes the reply, it just stores the name as a claim.
+app.post('/api/announcements/reply-signature', signChallengeLimiter, async (req, res) => {
+  try {
+    if (!POSTING_WIF) return res.status(500).json({ error: 'Server is not configured' })
+    const number = Number(req.body?.number)
+    if (!Number.isInteger(number) || number < 1) return res.status(400).json({ error: 'Invalid announcement' })
+    const hiveUsername = await resolveAnnouncementUser(req, res)
+    if (!hiveUsername) return res.status(401).json({ error: 'Not signed in' })
+    return res.json({ success: true, username: hiveUsername, ...signVouch(['3speak-announce', 'reply-vouch', hiveUsername, String(number)]) })
+  } catch (err) {
+    console.error('Announcement reply signature error:', err.message)
     res.status(500).json({ error: 'Signing failed' })
   }
 })
@@ -1768,55 +1919,74 @@ app.post('/api/watch/token', watchTokenLimiter, async (req, res) => {
   }
 })
 
+// Upload an image to images.hive.blog as @threespeak. Returns the URL; throws
+// { status, message, upstreamStatus } on failure. Shared by /api/upload-image and
+// the batch importer (server-built posts need their thumbnail hosted too).
+async function uploadImageAsThreespeak(img, contentType = 'image/png') {
+  if (!POSTING_WIF) throw Object.assign(new Error('Server is not configured'), { status: 500 })
+  if (!Buffer.isBuffer(img) || img.length === 0) throw Object.assign(new Error('No image data'), { status: 400 })
+
+  // Standard hive.blog image auth: sign sha256("ImageSigningChallenge" + bytes).
+  const hash = cryptoUtils.sha256(Buffer.concat([Buffer.from('ImageSigningChallenge'), img]))
+  const signature = PrivateKey.fromString(POSTING_WIF).sign(hash).toString()
+
+  const form = new FormData()
+  form.append('file', new Blob([img], { type: contentType }), 'image')
+
+  const ctrl = new AbortController()
+  const t = setTimeout(() => ctrl.abort(), 20000)
+  let hostResp
+  try {
+    hostResp = await fetch(`https://images.hive.blog/${HIVE_ACCOUNT}/${signature}`, {
+      method: 'POST', body: form, signal: ctrl.signal,
+    })
+  } finally { clearTimeout(t) }
+
+  const data = await hostResp.json().catch(() => ({}))
+  if (!hostResp.ok || !data.url) {
+    console.error('Image host rejected:', hostResp.status, JSON.stringify(data).slice(0, 200))
+    // Tell the caller WHICH failure this is. A 429 from images.hive.blog is the
+    // shared @threespeak upload quota running out — it is not the user's file, not
+    // retryable in the next second, and not something a generic "upload failed"
+    // helps anyone diagnose. It has bitten thumbnails too.
+    const quota = hostResp.status === 429 || /qouta|quota/i.test(JSON.stringify(data))
+    throw Object.assign(new Error(quota
+      ? "3Speak's image upload quota is exhausted for now — this is on our side, not your file. Try again later."
+      : 'Image host rejected the upload'), { status: quota ? 503 : 502, upstreamStatus: hostResp.status })
+  }
+  return data.url
+}
+
 const imageUploadLimiter = rateLimit({ windowMs: 60 * 1000, max: 40, standardHeaders: true, legacyHeaders: false })
 app.post('/api/upload-image', imageUploadLimiter, express.raw({ type: () => true, limit: '15mb' }), async (req, res) => {
   try {
     const apiKey = req.headers['x-api-key'] || ''
     if (!EMBED_API_KEY || apiKey !== EMBED_API_KEY) return res.status(401).json({ error: 'Unauthorized' })
-    if (!POSTING_WIF) return res.status(500).json({ error: 'Server is not configured' })
-    const img = req.body
-    if (!Buffer.isBuffer(img) || img.length === 0) return res.status(400).json({ error: 'No image data' })
-
-    // Standard hive.blog image auth: sign sha256("ImageSigningChallenge" + bytes).
-    const hash = cryptoUtils.sha256(Buffer.concat([Buffer.from('ImageSigningChallenge'), img]))
-    const signature = PrivateKey.fromString(POSTING_WIF).sign(hash).toString()
-
-    const contentType = req.headers['content-type'] || 'image/png'
-    const form = new FormData()
-    form.append('file', new Blob([img], { type: contentType }), 'image')
-
-    const ctrl = new AbortController()
-    const t = setTimeout(() => ctrl.abort(), 20000)
-    let hostResp
-    try {
-      hostResp = await fetch(`https://images.hive.blog/${HIVE_ACCOUNT}/${signature}`, {
-        method: 'POST', body: form, signal: ctrl.signal,
-      })
-    } finally { clearTimeout(t) }
-
-    const data = await hostResp.json().catch(() => ({}))
-    if (!hostResp.ok || !data.url) {
-      console.error('Image host rejected:', hostResp.status, JSON.stringify(data).slice(0, 200))
-      // Tell the caller WHICH failure this is. A 429 from images.hive.blog is the
-      // shared @threespeak upload quota running out — it is not the user's file, not
-      // retryable in the next second, and not something a generic "upload failed"
-      // helps anyone diagnose. It has bitten thumbnails too.
-      const quota = hostResp.status === 429 || /qouta|quota/i.test(JSON.stringify(data))
-      return res.status(quota ? 503 : 502).json({
-        error: quota
-          ? "3Speak's image upload quota is exhausted for now — this is on our side, not your file. Try again later."
-          : 'Image host rejected the upload',
-        upstreamStatus: hostResp.status,
-      })
-    }
-    return res.json({ success: true, url: data.url })
+    const url = await uploadImageAsThreespeak(req.body, req.headers['content-type'] || 'image/png')
+    return res.json({ success: true, url })
   } catch (e) {
+    if (e.status && e.status !== 500) return res.status(e.status).json({ error: e.message, ...(e.upstreamStatus ? { upstreamStatus: e.upstreamStatus } : {}) })
     console.error('Image upload error:', e.message)
-    return res.status(500).json({ error: 'Image upload failed' })
+    return res.status(500).json({ error: e.status === 500 ? e.message : 'Image upload failed' })
   }
 })
 
 app.get('/api/health', (req, res) => res.json({ ok: true }))
+
+// ▶️ YouTube import (verified channel owners only). See youtube-import.cjs.
+// The whole importer is OFF unless VIDEO_IMPORT_ENABLED=true (owner's call
+// 2026-10-06); each source has its own IMPORT_SOURCE_<NAME> switch inside.
+if (process.env.VIDEO_IMPORT_ENABLED === 'true') {
+  require('./youtube-import.cjs').mountYoutubeImport(app, {
+    resolveUser: resolveProvenViewer,
+    limiter: baseLimiter,
+    // For the batch importer, which builds and schedules the posts itself.
+    uploadImage: uploadImageAsThreespeak,
+    hasPostingGrant: hasThreespeakPostingGrant,
+  })
+} else {
+  console.log('[yt-import] video import is OFF (VIDEO_IMPORT_ENABLED is not true)')
+}
 
 // === Teleprompter STT token minting ===
 // Hands the browser a short-lived SIGNED token for the self-hosted STT WebSocket,

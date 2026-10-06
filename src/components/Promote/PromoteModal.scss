@@ -112,10 +112,10 @@
 .promote-cta {
   width: 100%;
   padding: 12px 0;
-  border: none;
+  border: 1px solid var(--accent-primary, #e53935);
   border-radius: 12px;
-  background: var(--accent-primary, #e53935);
-  color: #fff;
+  background: transparent;
+  color: var(--accent-primary, #e53935);
   font-size: 15px;
   font-weight: 700;
   cursor: pointer;

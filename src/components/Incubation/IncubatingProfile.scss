@@ -178,9 +178,9 @@
   flex-shrink: 0;
   padding: 8px 16px;
   border-radius: 999px;
-  border: 1px solid var(--accent-primary);
-  background: var(--accent-primary);
-  color: #fff;
+  border: 1px solid var(--accent-primary, #e53935);
+  background: transparent;
+  color: var(--accent-primary, #e53935);
   font: inherit;
   font-size: 13px;
   font-weight: 700;

@@ -1,0 +1,482 @@
+@use "../mixins.scss" as mix;
+
+.yt-import {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 24px 16px 48px;
+  color: var(--text-primary, #000);
+
+  &__header {
+    margin-bottom: 20px;
+    h1 {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 24px;
+      margin: 0 0 4px;
+    }
+  }
+  &__logo { color: #ff0000; }
+
+  &__muted {
+    font-size: 13px;
+    color: var(--text-secondary, #666);
+    a { color: inherit; text-decoration: underline; }
+  }
+  &__note { color: var(--text-secondary, #666); }
+  &__limits {
+    font-size: 13px;
+    color: var(--text-secondary, #666);
+    margin: -8px 0 16px;
+  }
+  &__error { color: #e53935; font-size: 14px; }
+  &__center { display: flex; justify-content: center; padding: 20px 0; }
+
+  &__empty {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  &__channel {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    margin-bottom: 16px;
+    select { padding: 6px 8px; border-radius: 6px; }
+  }
+
+  // Primary = red OUTLINE (red text + border), never a solid red fill.
+  &__btn {
+    display: inline-block;
+    background: transparent;
+    color: #e53935;
+    border: 1px solid #e53935;
+    border-radius: 8px;
+    padding: 9px 16px;
+    font-weight: 600;
+    cursor: pointer;
+    text-decoration: none;
+    &:hover:not(:disabled) { background: rgba(229, 57, 53, 0.08); }
+    &--outline {
+      background: transparent;
+      color: var(--text-primary, #000);
+      border-color: var(--border-color, #ccc);
+      &:hover:not(:disabled) { background: rgba(127, 127, 127, 0.08); }
+    }
+    &:disabled { opacity: 0.5; cursor: default; }
+  }
+
+  &__actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 12px; }
+
+  &__progress { margin-top: 12px; display: flex; flex-direction: column; gap: 8px; align-items: flex-start; }
+  &__bar {
+    width: 100%;
+    height: 8px;
+    border-radius: 4px;
+    background: var(--border-color, #e0e0e0);
+    overflow: hidden;
+    span { display: block; height: 100%; background: #e53935; transition: width 0.4s ease; }
+  }
+
+  &__fallback {
+    margin-top: 12px;
+    ol { padding-left: 20px; margin: 8px 0; li { margin: 4px 0; } }
+    a { color: #e53935; text-decoration: underline; }
+  }
+
+  // Platform switch (YouTube / TikTok): pills, the active one red OUTLINE.
+  &__platforms {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 16px;
+    flex-wrap: wrap;
+  }
+  &__platform {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 7px 14px;
+    border-radius: 999px;
+    border: 1px solid var(--border-color, #ccc);
+    background: transparent;
+    color: var(--text-primary, #000);
+    font-weight: 600;
+    cursor: pointer;
+    &--active {
+      color: #e53935;
+      border-color: #e53935;
+      background: rgba(229, 57, 53, 0.08);
+    }
+  }
+
+  &__section {
+    font-size: 16px;
+    margin: 0 0 12px;
+  }
+
+  &__paste {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-bottom: 20px;
+    label { font-weight: 600; }
+    .yt-import__note { margin: 0; font-size: 14px; }
+    &--card {
+      padding: 14px 16px;
+      border: 1px solid var(--border-color, #ccc);
+      border-radius: 12px;
+      background: var(--bg-secondary, rgba(0, 0, 0, 0.03));
+    }
+  }
+  &__more-hint { margin-top: 16px; text-align: center; }
+  &__linkbtn {
+    background: none;
+    border: 0;
+    padding: 0;
+    color: inherit;
+    font: inherit;
+    font-weight: 600;
+    text-decoration: underline;
+    cursor: pointer;
+  }
+  &__paste-row {
+    display: flex;
+    gap: 8px;
+    input {
+      flex: 1;
+      min-width: 0;
+      padding: 9px 12px;
+      border-radius: 8px;
+      border: 1px solid var(--border-color, #ccc);
+      background: var(--bg-primary, #fff);
+      color: var(--text-primary, #000);
+      font-size: 15px;
+    }
+    @include mix.respond(phone) { flex-direction: column; }
+  }
+
+  &__tabs {
+    display: flex;
+    gap: 4px;
+    border-bottom: 1px solid var(--border-color, #e0e0e0);
+    margin-bottom: 16px;
+    overflow-x: auto;
+  }
+  &__tab {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: none;
+    border: none;
+    border-bottom: 2px solid transparent;
+    padding: 10px 14px;
+    font-weight: 600;
+    color: var(--text-secondary, #666);
+    cursor: pointer;
+    white-space: nowrap;
+    &--active { color: var(--text-primary, #000); border-bottom-color: #e53935; }
+  }
+  &__count {
+    font-size: 12px;
+    font-weight: 500;
+    padding: 1px 7px;
+    border-radius: 10px;
+    background: var(--border-color, #e0e0e0);
+    color: var(--text-primary, #000);
+  }
+
+  &__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 16px;
+    @include mix.respond(phone) { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 10px; }
+  }
+
+  // Shorts are portrait: narrower cards with a 9:16 frame.
+  &__grid--shorts {
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    .yt-import__thumb img { aspect-ratio: 9 / 16; }
+    @include mix.respond(phone) { grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)); }
+  }
+
+  // A tile: the pick button (cover, title, date); the picked one opens across
+  // its whole row with the import controls next to the cover.
+  &__card {
+    position: relative;
+    min-width: 0;
+    border: 2px solid transparent;
+    border-radius: 10px;
+    &--picked:not(.yt-import__card--selected) { border-color: rgba(229, 57, 53, 0.55); }
+    &--selected {
+      grid-column: 1 / -1;
+      display: flex;
+      gap: 16px;
+      align-items: flex-start;
+      border-color: #e53935;
+      background: var(--card-bg, transparent);
+      padding: 8px;
+      .yt-import__pick { flex: 0 0 260px; padding: 0; cursor: default; }
+      @include mix.respond(phone) {
+        gap: 10px;
+        .yt-import__pick { flex-basis: 40%; }
+      }
+    }
+  }
+  &__grid--shorts .yt-import__card--selected .yt-import__pick { flex-basis: 170px; }
+  &__pick {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    width: 100%;
+    text-align: left;
+    background: none;
+    border: 0;
+    padding: 4px;
+    cursor: pointer;
+    color: inherit;
+    min-width: 0;
+    // Over the length limit: visible so the creator knows why, but not pickable.
+    .yt-import__card--too-long &:disabled { opacity: 0.45; cursor: not-allowed; }
+    &:disabled { opacity: 0.4; cursor: default; }
+  }
+  &__card-panel {
+    flex: 1;
+    min-width: 0;
+    padding-top: 2px;
+    .yt-import__muted { margin: 0; }
+    .yt-import__actions { margin-top: 10px; }
+  }
+  &__thumb {
+    position: relative;
+    img { width: 100%; aspect-ratio: 16 / 9; object-fit: cover; border-radius: 8px; display: block; }
+  }
+  // Already published on 3Speak from an import.
+  &__done {
+    position: absolute;
+    right: 6px;
+    top: 6px;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #2e7d32;
+    color: #fff;
+    font-size: 12px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+  }
+  &__on-site {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    color: #43a047;
+    font-size: 14px;
+    font-weight: 600;
+    margin: 4px 0 0;
+    a { color: inherit; text-decoration: underline; }
+  }
+
+  &__too-long {
+    position: absolute;
+    left: 6px;
+    top: 6px;
+    background: rgba(0, 0, 0, 0.8);
+    color: #fff;
+    font-size: 11px;
+    font-weight: 600;
+    padding: 2px 6px;
+    border-radius: 4px;
+  }
+  &__dur {
+    position: absolute;
+    right: 6px;
+    bottom: 6px;
+    background: rgba(0, 0, 0, 0.8);
+    color: #fff;
+    font-size: 12px;
+    padding: 1px 5px;
+    border-radius: 4px;
+  }
+  &__title {
+    font-size: 14px;
+    font-weight: 600;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  // Batch pick box, top left of a tile (the duration / ✓ badges sit on the right).
+  &__tick {
+    position: absolute;
+    left: 10px;
+    top: 10px;
+    z-index: 2;
+    width: 24px;
+    height: 24px;
+    border-radius: 6px;
+    border: 2px solid #fff;
+    background: rgba(0, 0, 0, 0.45);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    padding: 0;
+    cursor: pointer;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+    // Red is an outline in 3Speak, never a filled button.
+    &.is-on { background: #fff; border-color: #e53935; color: #e53935; }
+    &:disabled { opacity: 0.35; cursor: not-allowed; }
+  }
+}
+
+// Selection bar for the batch import, pinned to the bottom of the screen.
+.yt-batch-bar {
+  position: sticky;
+  bottom: 12px;
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-top: 20px;
+  padding: 12px 16px;
+  border-radius: 12px;
+  background: var(--card-bg, #fff);
+  border: 1px solid var(--border-color, #e0e0e0);
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.18);
+  font-weight: 600;
+  &__actions { display: flex; gap: 8px; flex-wrap: wrap; }
+}
+
+// One-time form: centred dialog, a bottom sheet on phones. Below the shared
+// modals (1000) so the community picker opens on top of it.
+.yt-batch-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 900;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  &__overlay { position: absolute; inset: 0; background: rgba(0, 0, 0, 0.55); }
+  &__sheet {
+    position: relative;
+    width: min(560px, calc(100vw - 32px));
+    max-height: calc(100vh - 48px);
+    overflow-y: auto;
+    padding: 20px;
+    border-radius: 14px;
+    background: var(--card-bg, #fff);
+    color: var(--text-primary, #000);
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.35);
+  }
+  @include mix.respond(phone) {
+    align-items: flex-end;
+    .yt-batch-modal__sheet {
+      width: 100%;
+      max-height: 88vh;
+      border-radius: 16px 16px 0 0;
+      padding: 16px 16px 24px;
+    }
+  }
+  &__head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    h2 { font-size: 20px; margin: 0; }
+  }
+  &__close {
+    background: none;
+    border: 0;
+    color: inherit;
+    font-size: 18px;
+    cursor: pointer;
+    padding: 4px;
+    &:disabled { opacity: 0.4; }
+  }
+  &__picked {
+    list-style: none;
+    padding: 0;
+    margin: 12px 0;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    li { display: flex; align-items: center; gap: 10px; font-size: 14px; min-width: 0; }
+    img { width: 56px; height: 32px; object-fit: cover; border-radius: 4px; flex-shrink: 0; }
+    span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  }
+  &__field { margin: 14px 0; display: flex; flex-direction: column; gap: 8px; align-items: flex-start; }
+  &__label { font-weight: 600; }
+  &__avatar { width: 20px; height: 20px; border-radius: 50%; vertical-align: middle; margin-right: 4px; }
+  &__choices { display: flex; flex-wrap: wrap; gap: 8px; }
+  &__choice {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 12px;
+    border-radius: 18px;
+    border: 1px solid var(--border-color, #ccc);
+    cursor: pointer;
+    font-size: 14px;
+    input { margin: 0; }
+    &.is-on { border-color: #e53935; color: #e53935; }
+  }
+  &__bene {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    input {
+      padding: 6px 8px;
+      border-radius: 6px;
+      border: 1px solid var(--border-color, #ccc);
+      background: var(--bg-primary, #fff);
+      color: var(--text-primary, #000);
+      font-size: 14px;
+      &[type='text'] { width: 160px; }
+      &[type='number'] { width: 64px; }
+    }
+  }
+  &__check { display: flex; align-items: center; gap: 8px; margin: 8px 0; cursor: pointer; }
+  &__small { font-size: 13px; margin: 6px 0 0; }
+  &__grant {
+    margin: 14px 0;
+    padding: 12px;
+    border-radius: 10px;
+    border: 1px solid rgba(229, 57, 53, 0.4);
+    p { margin: 0 0 10px; }
+  }
+}
+
+// The creator's newest batch.
+.yt-batch-status {
+  margin: 0 0 20px;
+  padding: 14px 16px;
+  border-radius: 12px;
+  border: 1px solid var(--border-color, #e0e0e0);
+  &__head { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+  ul { list-style: none; padding: 0; margin: 8px 0 0; display: flex; flex-direction: column; gap: 10px; }
+  &__item {
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    img, .yt-batch-status__noimg { width: 96px; aspect-ratio: 16 / 9; object-fit: cover; border-radius: 6px; flex-shrink: 0; background: rgba(127, 127, 127, 0.2); }
+    &.is-failed, &.is-publish_failed { .yt-import__muted { color: #e53935; } }
+    &.is-posted .yt-import__muted { color: #43a047; }
+    &.is-cancelled { opacity: 0.55; }
+  }
+  &__body {
+    min-width: 0;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    .yt-import__muted { display: inline-flex; align-items: center; gap: 4px; flex-wrap: wrap; font-size: 13px; }
+    .yt-import__bar { max-width: 320px; }
+  }
+}

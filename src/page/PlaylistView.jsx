@@ -871,7 +871,7 @@ function PlaylistView() {
               <button type="button" className="btn-cancel" onClick={() => setShowEditModal(false)} disabled={isUpdating}>
                 {t('common.actions.cancel')}
               </button>
-              <button type="button" className="btn-confirm-delete" style={{ background: 'var(--accent-primary, #e53935)', color: '#fff' }} onClick={handleSaveEdit} disabled={isUpdating || !editName.trim()}>
+              <button type="button" className="btn-confirm-delete" style={{ background: 'transparent', color: 'var(--accent-primary, #e53935)', border: '1px solid var(--accent-primary, #e53935)' }} onClick={handleSaveEdit} disabled={isUpdating || !editName.trim()}>
                 {isUpdating ? t('playlists.view.saving') : t('playlists.view.saveChanges')}
               </button>
             </div>

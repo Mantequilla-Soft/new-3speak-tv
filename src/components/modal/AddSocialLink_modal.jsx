@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { IoClose } from 'react-icons/io5';
-import { FaYoutube, FaSoundcloud, FaCopy, FaCheck, FaTrash, FaExternalLinkAlt } from 'react-icons/fa';
+import { FaYoutube, FaSoundcloud, FaTiktok, FaInstagram, FaPlayCircle, FaCopy, FaCheck, FaTrash, FaExternalLinkAlt } from 'react-icons/fa';
+import { SiRumble } from 'react-icons/si';
 import { toastIn } from '../../utils/toast';
 import {
   getHash,
@@ -13,6 +14,7 @@ import {
   platformLabel,
 } from '../../utils/socialVerifier';
 import { useTranslation, Trans } from 'react-i18next';
+import { SOCIAL_LINK_ENABLED } from '../../utils/config';
 import './AddSocialLink_modal.scss';
 
 // Every toast from this module is headed "Profile"; the message becomes the
@@ -21,6 +23,10 @@ const toast = toastIn('Profile');
 
 const PLATFORM_ICONS = {
   youtube: FaYoutube,
+  tiktok: FaTiktok,
+  instagram: FaInstagram,
+  bitchute: FaPlayCircle,
+  rumble: SiRumble,
   soundcloud: FaSoundcloud,
 };
 
@@ -224,7 +230,7 @@ export default function AddSocialLink_modal({ isOpen, onClose, hiveUsername, onC
 
             <h4 className="social-link-section-title">{t('modals.socialLink.addPlatform')}</h4>
             <div className="social-link-platform-grid">
-              {Object.entries(PLATFORMS).map(([key, info]) => {
+              {Object.entries(PLATFORMS).filter(([key]) => SOCIAL_LINK_ENABLED[key]).map(([key, info]) => {
                 const Icon = PLATFORM_ICONS[key];
                 return (
                   <button

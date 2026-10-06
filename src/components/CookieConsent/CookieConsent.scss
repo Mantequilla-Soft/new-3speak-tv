@@ -142,8 +142,9 @@
 
   /* Accept — accent fill. */
   &.primary {
-    background: var(--accent-primary, #e23a3a);
-    color: #fff;
+    background: transparent;
+    border: 1px solid var(--accent-primary, #e53935);
+    color: var(--accent-primary, #e53935);
   }
 
   /* Decline the optional category — a solid neutral fill of equal prominence, NOT a

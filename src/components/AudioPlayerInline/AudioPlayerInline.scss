@@ -101,10 +101,10 @@
     width: 38px;
     height: 38px;
     border-radius: 50%;
-    border: none;
+    border: 1px solid var(--accent-primary, #e53935);
     background:
-      linear-gradient(145deg, var(--accent-primary), var(--accent-hover, #c62828));
-    color: #fff;
+      transparent;
+    color: var(--accent-primary, #e53935);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -196,9 +196,9 @@
     font-family: inherit;
 
     &:hover {
-      background: var(--accent-primary);
-      color: #fff;
-      border-color: transparent;
+      background: color-mix(in srgb, var(--accent-primary, #e53935) 10%, transparent);
+      color: var(--accent-primary, #e53935);
+      border-color: var(--accent-primary, #e53935);
     }
   }
 

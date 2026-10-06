@@ -115,8 +115,9 @@
       color: var(--text-primary);
 
       &:hover {
-        background: var(--accent-primary);
-        color: white;
+        background: color-mix(in srgb, var(--accent-primary, #e53935) 10%, transparent);
+        border-color: var(--accent-primary, #e53935);
+        color: var(--accent-primary, #e53935);
         transform: translateY(-60%) scale(1.1);
       }
 

@@ -516,7 +516,7 @@ const {
           <p style={{ fontSize: '1.2rem', color: 'var(--text-secondary)', marginBottom: '1rem' }}>
             <Trans i18nKey="profile.page.userNotFound" values={{ user }} components={{ b: <strong /> }} />
           </p>
-          <button onClick={() => navigate('/')} style={{ padding: '10px 24px', borderRadius: '8px', background: 'var(--accent-primary, #e53935)', color: '#fff', border: 'none', cursor: 'pointer', fontSize: '14px' }}>
+          <button onClick={() => navigate('/')} style={{ padding: '10px 24px', borderRadius: '8px', background: 'transparent', color: 'var(--accent-primary, #e53935)', border: '1px solid var(--accent-primary, #e53935)', cursor: 'pointer', fontSize: '14px' }}>
             {t('profile.page.goHome')}
           </button>
         </div>
@@ -532,7 +532,7 @@ const {
           <p style={{ fontSize: '1.2rem', color: 'var(--text-secondary)', marginBottom: '1rem' }}>
             {t('profile.page.notAvailable')}
           </p>
-          <button onClick={() => navigate('/')} style={{ padding: '10px 24px', borderRadius: '8px', background: 'var(--accent-primary, #e53935)', color: '#fff', border: 'none', cursor: 'pointer', fontSize: '14px' }}>
+          <button onClick={() => navigate('/')} style={{ padding: '10px 24px', borderRadius: '8px', background: 'transparent', color: 'var(--accent-primary, #e53935)', border: '1px solid var(--accent-primary, #e53935)', cursor: 'pointer', fontSize: '14px' }}>
             {t('profile.page.goHome')}
           </button>
         </div>

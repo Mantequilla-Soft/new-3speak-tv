@@ -40,9 +40,9 @@ $bg: #ffffff;
   gap: 8px;
   padding: 10px 20px;
   margin-bottom: 16px;
-  background: linear-gradient(135deg, var(--accent-primary, #e53935), #c62828);
-  color: #fff;
-  border: none;
+  background: transparent;
+  color: var(--accent-primary, #e53935);
+  border: 1px solid var(--accent-primary, #e53935);
   border-radius: 8px;
   font-size: 14px;
   font-weight: 600;
@@ -65,9 +65,9 @@ $bg: #ffffff;
   gap: 8px;
   padding: 12px 24px;
   margin-top: 16px;
-  background: linear-gradient(135deg, var(--accent-primary, #e53935), #c62828);
-  color: #fff;
-  border: none;
+  background: transparent;
+  color: var(--accent-primary, #e53935);
+  border: 1px solid var(--accent-primary, #e53935);
   border-radius: 8px;
   font-size: 14px;
   font-weight: 600;
@@ -294,9 +294,9 @@ $bg: #ffffff;
     }
 
     .btn-create {
-      background: linear-gradient(135deg, var(--accent-primary, #e53935), #c62828);
-      border: none;
-      color: #fff;
+      background: transparent;
+      border: 1px solid var(--accent-primary, #e53935);
+      color: var(--accent-primary, #e53935);
 
       &:hover:not(:disabled) {
         transform: translateY(-2px);

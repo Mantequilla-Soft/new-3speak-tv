@@ -7,6 +7,33 @@
 // 1.0.0 — that way they see all of these when develop is pushed to production.
 export const CHANGELOG = [
   {
+    version: '1.79.55',
+    date: '2026-10-06',
+    summary:
+      'The 3Speak team can now message you in the app, and you can reply.',
+  },
+  {
+    version: '1.79.54',
+    date: '2026-10-06',
+    summary:
+      'Badge and community pictures now load faster and more reliably, served from 3Speak\'s own image cache.',
+  },
+  {
+    version: '1.79.52',
+    date: '2026-10-04',
+    summary:
+      'On desktop, chat now opens by itself when a new message is waiting or comes in, straight into that '
+      + 'conversation, without interrupting: it waits while you type or watch fullscreen. '
+      + 'On phones, the chat icon shows your new messages.',
+  },
+  {
+    version: '1.79.51',
+    date: '2026-10-04',
+    summary:
+      'Languages load more reliably: if your browser holds an older copy of 3Speak, it now updates itself '
+      + 'so your language shows in full, and wording improved by the community always comes through.',
+  },
+  {
     version: '1.79.50',
     date: '2026-10-03',
     summary:

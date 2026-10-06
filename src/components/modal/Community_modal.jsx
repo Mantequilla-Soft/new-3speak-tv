@@ -9,6 +9,7 @@ import { getHiveUrl } from "../../utils/hiveNode";
 import { useAppStore } from "../../lib/store";
 import { useTranslation } from "react-i18next";
 import { getHiveRenderer } from '../../lib/hiveRenderer';
+import AccountImg from '../HiveAvatar/AccountImg';
 
 // Debounce hook
 const useDebounce = (value, delay = 300) => {
@@ -90,9 +91,9 @@ function CommunityCard({ community, onSelect }) {
   return (
     <div ref={cardRef} className={`community-card${expanded ? " expanded" : ""}`}>
       <div className="community-card-main" onClick={() => onSelect(community)}>
-        <img
+        <AccountImg
           className="community-card-avatar"
-          src={`/img/u/${community.name}/avatar/small`}
+          account={community.name}
           alt=""
           loading="lazy"
           onError={(e) => { e.currentTarget.style.visibility = "hidden"; }}

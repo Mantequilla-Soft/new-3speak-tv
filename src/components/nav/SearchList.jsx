@@ -8,6 +8,7 @@ import { TailChase } from 'ldrs/react'
 import 'ldrs/react/TailChase.css'
 import { HIVE_API_NODES } from '../../utils/config';
 import HiveAvatar from '../HiveAvatar/HiveAvatar';
+import AccountImg from '../HiveAvatar/AccountImg';
 
 const client = getHiveClient();
 
@@ -229,7 +230,7 @@ function SearchList({searchTerm, setSearchTerm, setIsDropdownOpen, isDropdownOpe
 
                     onClick={()=>{handleNavigateCommunity(community.name)}}
                     >
-                        <img src={`/img/u/${community.name}/avatar/small`} alt="" /><span>{community.title}</span>
+                        <AccountImg account={community.name} alt="" /><span>{community.title}</span>
                       {/* {community.title} (hive-{community.name}) */}
                     </div>
                   </li>

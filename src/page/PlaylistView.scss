@@ -207,9 +207,9 @@
         }
 
         &.active {
-          background: var(--accent-primary, #667eea);
-          border-color: var(--accent-primary, #667eea);
-          color: #fff;
+          background: color-mix(in srgb, var(--accent-primary, #e53935) 10%, transparent);
+          border-color: var(--accent-primary, #e53935);
+          color: var(--accent-primary, #e53935);
         }
 
         &:disabled {
@@ -233,8 +233,9 @@
         transition: all 0.2s ease;
 
         &:hover:not(:disabled) {
-          background: #ef4444;
-          color: #fff;
+          background: color-mix(in srgb, var(--accent-primary, #e53935) 10%, transparent);
+          border-color: var(--accent-primary, #e53935);
+          color: var(--accent-primary, #e53935);
         }
 
         &:disabled {
@@ -295,9 +296,9 @@
         align-items: center;
         gap: 6px;
         padding: 8px 20px;
-        background: var(--accent-primary, #e53935);
-        border: none;
-        color: #fff;
+        background: transparent;
+        border: 1px solid var(--accent-primary, #e53935);
+        color: var(--accent-primary, #e53935);
         border-radius: 6px;
         font-size: 14px;
         font-weight: 600;
@@ -360,9 +361,9 @@
       }
 
       &.active {
-        background: var(--accent-primary, #667eea);
-        border-color: var(--accent-primary, #667eea);
-        color: #fff;
+        background: color-mix(in srgb, var(--accent-primary, #e53935) 10%, transparent);
+        border-color: var(--accent-primary, #e53935);
+        color: var(--accent-primary, #e53935);
       }
     }
   }
@@ -505,9 +506,9 @@
         flex-shrink: 0;
 
         &:hover {
-          background: #ef4444;
-          border-color: #ef4444;
-          color: #fff;
+          background: color-mix(in srgb, var(--accent-primary, #e53935) 10%, transparent);
+          border-color: var(--accent-primary, #e53935);
+          color: var(--accent-primary, #e53935);
         }
 
         svg {
@@ -592,7 +593,9 @@
           font-size: 16px;
 
           &:hover {
-            background: rgba(229, 57, 53, 0.85);
+            background: rgba(0, 0, 0, 0.6);
+            border: 1px solid var(--accent-primary, #e53935);
+            color: var(--accent-primary, #e53935);
           }
         }
       }
@@ -763,12 +766,14 @@
     }
 
     .btn-confirm-delete {
-      background: #ef4444;
-      border: none;
-      color: #fff;
+      background: transparent;
+      border: 1px solid var(--accent-primary, #e53935);
+      color: var(--accent-primary, #e53935);
 
       &:hover:not(:disabled) {
-        background: #dc2626;
+        background: color-mix(in srgb, var(--accent-primary, #e53935) 10%, transparent);
+        border-color: var(--accent-primary, #e53935);
+        color: var(--accent-primary, #e53935);
       }
     }
   }

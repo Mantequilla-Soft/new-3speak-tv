@@ -111,8 +111,9 @@
     .view-toggle {
       button {
         &.active {
-          background-color: var(--accent-primary);
-          color: var(--text-inverse);
+          background-color: color-mix(in srgb, var(--accent-primary, #e53935) 10%, transparent);
+          box-shadow: inset 0 0 0 1px var(--accent-primary, #e53935);
+          color: var(--accent-primary, #e53935);
         }
         &.show{
           

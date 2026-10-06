@@ -1,0 +1,13 @@
+{
+  "ariaLabel": "Announcement from 3Speak",
+  "personalLabel": "A message just for you by the team",
+  "linkFallback": "Learn more",
+  "replyLabel": "Your reply",
+  "replyPlaceholder": "Write your reply…",
+  "replyAs": "Sent as @{{user}}",
+  "replyNoName": "Sent without an account name",
+  "sending": "Sending…",
+  "replySent": "Thanks! Your reply was sent.",
+  "replyFailed": "Your reply could not be sent. Please try again.",
+  "replyTooMany": "You sent a few replies just now. Please try again in a few minutes."
+}

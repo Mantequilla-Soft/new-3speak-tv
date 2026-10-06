@@ -29,9 +29,10 @@ const toast = toastIn('Chat');
 
 const avatar = (name) => `/img/u/${name}/avatar/small`
 
+// A warm-up peer is `~<id>` to the chat server; peerDisplayName is their handle.
 function convTitle(conv) {
   if (!conv) return ''
-  if (conv.type === 'dm') return conv.peer || conv.name
+  if (conv.type === 'dm') return conv.peerDisplayName || conv.peer || conv.name
   return conv.name
 }
 
@@ -695,8 +696,11 @@ function LeaveButton({ conv }) {
 
 function Thread({ conv, headerActions = null }) {
   const { t } = useTranslation()
-  const me = useAppStore((s) => s.user)
-  const { backToList, shareDraft, setShareDraft } = useChat()
+  const storeUser = useAppStore((s) => s.user)
+  const { backToList, shareDraft, setShareDraft, chatUser } = useChat()
+  // The chat id, not the store's Hive name: a warm-up user has none and
+  // chats as `~<id>`, so their own messages would otherwise look like a peer's.
+  const me = chatUser || storeUser
   const { messages, loading, error, sendMessage, editMessage } = useChatMessages(
     conv._id,
     conv.type
@@ -1097,9 +1101,8 @@ function Gate({ title, children }) {
 // back to the page's side-by-side list + thread.
 export function ChatPanel({ overlay = false, expanded = false, onToggleExpand }) {
   const { t } = useTranslation()
-  const { ready, connecting, activeConversation, shareDraft } = useChat()
+  const { ready, connecting, activeConversation, shareDraft, warmup } = useChat()
   const authenticated = useAppStore((s) => s.authenticated)
-  const incubationHandle = useAppStore((s) => s.incubationHandle)
   const single = overlay && !expanded
   const actions = overlay ? <OverlayActions expanded={expanded} onToggleExpand={onToggleExpand} /> : null
 
@@ -1115,11 +1118,10 @@ export function ChatPanel({ overlay = false, expanded = false, onToggleExpand })
     </div>
   )
 
-  // Checked before the logged-out gate, because a warm-up user IS logged in and
-  // would otherwise fall through to the chat client and fail on a signing step
-  // they can never satisfy. The entry points are hidden for them; this is what a
-  // typed URL or an old link lands on.
-  if (incubationHandle) {
+  // Warm-up users sign in through their ButrAuth session. Only when that is not
+  // available (the chat server has not switched it on) do they land here, from
+  // a typed URL or an old link: the entry points are hidden for them then.
+  if (warmup && !ready && !connecting) {
     return shell(
       <Gate title={t('chat.gate.needsAccountTitle')}>
         <p>

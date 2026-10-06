@@ -107,6 +107,22 @@
     "soundcloud": {
       "placeholder": "profilin veya https://soundcloud.com/profilin",
       "help": "SoundCloud profil URL'ni ya da yalnızca içindeki kullanıcı adını yapıştır. Hash'i profil biyografinde herhangi bir yere koy."
+    },
+    "tiktok": {
+      "placeholder": "@handle veya https://www.tiktok.com/@handle",
+      "help": "TikTok @handle'ını veya profil bağlantını yapıştır. Hash'i profil biyografinde herhangi bir yere koy."
+    },
+    "instagram": {
+      "placeholder": "@handle veya https://www.instagram.com/handle",
+      "help": "Instagram @handle'ını veya profil bağlantını yapıştır. Hash'i profil biyografinde herhangi bir yere koy."
+    },
+    "bitchute": {
+      "placeholder": "https://www.bitchute.com/channel/…",
+      "help": "BitChute kanalının adını veya bağlantısını yapıştır. Hash'i kanal açıklamasında herhangi bir yere koy."
+    },
+    "rumble": {
+      "placeholder": "https://rumble.com/c/…",
+      "help": "Rumble kanalının adını veya bağlantısını yapıştır. Hash'i kanal açıklamasında herhangi bir yere koy."
     }
   },
   "snaps": {

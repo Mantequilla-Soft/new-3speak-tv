@@ -30,6 +30,22 @@ const CHECKER_URL = import.meta.env.VITE_CHECKER_URL || 'https://checker.3speak.
 // ad manifest and taking it back is a change to the playback state machine that
 // cannot be verified on this box — it has no H.264 decoder in any browser.
 const SHORTS_ADS_ENABLED = String(import.meta.env.VITE_SHORTS_ADS || '').toLowerCase() === 'true';
+
+// ▶️ Video import (/youtube-import and its entry buttons): OFF unless
+// VITE_VIDEO_IMPORT=true (owner's call 2026-10-06; on for develop/preview).
+const VIDEO_IMPORT_ENABLED = import.meta.env.VITE_VIDEO_IMPORT === 'true';
+// Which platforms can be LINKED on a profile: one switch each,
+// VITE_SOCIAL_LINK_<NAME>=true|false. Default: YouTube + SoundCloud only. Existing
+// links of a switched-off platform still show (and can be removed).
+const flag = (v, dflt) => (v === 'true' ? true : v === 'false' ? false : dflt);
+const SOCIAL_LINK_ENABLED = {
+  youtube: flag(import.meta.env.VITE_SOCIAL_LINK_YOUTUBE, true),
+  soundcloud: flag(import.meta.env.VITE_SOCIAL_LINK_SOUNDCLOUD, true),
+  tiktok: flag(import.meta.env.VITE_SOCIAL_LINK_TIKTOK, false),
+  instagram: flag(import.meta.env.VITE_SOCIAL_LINK_INSTAGRAM, false),
+  rumble: flag(import.meta.env.VITE_SOCIAL_LINK_RUMBLE, false),
+  bitchute: flag(import.meta.env.VITE_SOCIAL_LINK_BITCHUTE, false),
+};
 const TAG_FEED_URL = CHECKER_URL;
 const PLAYLISTS_API_URL = import.meta.env.VITE_PLAYLISTS_API_URL || 'https://3speak-playlists.okinoko.io/api';
 // Playlist READS go through the 3speak server proxy (/api/pl/*), which holds the
@@ -420,4 +436,6 @@ export {
   THREESPEAK_AUDIO_API_URL,
   THREESPEAK_API_KEY,
   SOCIAL_VERIFIER_URL,
+  VIDEO_IMPORT_ENABLED,
+  SOCIAL_LINK_ENABLED,
 };

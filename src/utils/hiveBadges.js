@@ -15,8 +15,7 @@
 
 import axios from 'axios';
 import { getHiveUrl } from './hiveNode';
-import { hiveAvatarUrl } from './avatarCache';
-import { hiveProxyRefuses } from './fixThumbnails';
+import { cachedProfileImage } from './avatarCache';
 import { getAccounts } from '../hive-api/hiveApi';
 import { broadcastWithAioha, KeyTypes } from '../hive-api/aioha';
 
@@ -191,11 +190,9 @@ export async function fetchHiveBadges(username) {
       // not parse. But it cannot fetch images.3speak.tv, and for those it
       // answers with its own grey placeholder rather than an error — so a badge
       // whose art was uploaded here appeared blank next to badges that worked.
-      // We already have the metadata, so use the real URL when the proxy would
-      // refuse it.
-      image: hiveProxyRefuses(profile.profile_image)
-        ? profile.profile_image
-        : hiveAvatarUrl(account.name, 'small'),
+      // We already have the metadata, so art the proxy would refuse goes
+      // through our own /img/a/ resizer instead (see cachedProfileImage).
+      image: cachedProfileImage(account.name, profile.profile_image, 'small'),
       // In-app, not peakd.com: a badge chip used to send the reader off the
       // site to read what is on our own /b/ page.
       url: `/b/${account.name}`,

@@ -17,6 +17,7 @@ import { useReviewModal } from "../../lib/reviewStore";
 import UploadGate from "../ads/UploadGate";
 import { fetchUploadGateAd, confirmUploadGatePost, gateSessionId } from "../../lib/uploadGate";
 import { useTranslation, Trans } from "react-i18next";
+import AccountImg from "../HiveAvatar/AccountImg";
 
 function EmbedPreview() {
   const { t } = useTranslation();
@@ -253,7 +254,7 @@ function EmbedPreview() {
                   <span className="ep-setting__icon"><Users size={18} /></span>
                   <span className="ep-setting__label">{t("upload.details.community.label")}</span>
                   <span className="ep-setting__value ep-setting__value--community">
-                    <img src={`/img/u/${communityDisplay.name}/avatar/small`} alt="" />
+                    <AccountImg account={communityDisplay.name} alt="" />
                     {communityDisplay.title}
                   </span>
                 </div>

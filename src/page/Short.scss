@@ -1704,9 +1704,9 @@
 
     button {
       padding: 0.5rem 1rem;
-      background-color: var(--accent-primary);
-      color: white;
-      border: none;
+      background-color: transparent;
+      color: var(--accent-primary, #e53935);
+      border: 1px solid var(--accent-primary, #e53935);
       border-radius: 0.5rem;
       cursor: pointer;
       font-size: 0.875rem;

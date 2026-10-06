@@ -34,8 +34,10 @@
  *     scripts/i18n/check.mjs plus markup checks; a batch is all-or-nothing.
  *   - Per-user write budget, IP budget, body/batch caps, append-only audit log.
  *
- * Storage: MongoDB when I18N_MONGODB_URI (or MONGODB_URI) is set AND the
- * `mongodb` driver is installed; otherwise JSON files in I18N_DATA_DIR
+ * Storage: MongoDB only when I18N_STORE=mongo AND I18N_MONGODB_URI (or
+ * MONGODB_URI) is set AND the `mongodb` driver is installed; otherwise JSON
+ * files in I18N_DATA_DIR. (Opt-in since 2026-10-05: the driver was installed for
+ * the batch importer, and switching silently would hide every saved edit.)
  * (default server/data/i18n, gitignored). Both keep the same record kinds:
  * i18n_strings, i18n_history (append-only), i18n_languages, i18n_proofread
  * (files: proofread/<lang>.json, { key: { by, at, hash } }).
@@ -257,7 +259,7 @@ function mongoStore (uri, dbName) {
 
 function createStore () {
   const uri = process.env.I18N_MONGODB_URI || process.env.MONGODB_URI
-  if (uri) {
+  if (uri && process.env.I18N_STORE === 'mongo') {
     try {
       require.resolve('mongodb')
       return mongoStore(uri, process.env.I18N_DATABASE_NAME || process.env.DATABASE_NAME || '')

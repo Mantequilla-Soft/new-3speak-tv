@@ -1,5 +1,6 @@
 import React, { useRef, useState, useEffect, useMemo } from 'react'
 import { Upload, FileVideo, Video } from "lucide-react";
+import { FaFileImport } from "react-icons/fa";
 import "../legacy-studio/VideoUploadStep1.scss"
 import { generateVideoThumbnails } from "../../utils/videoThumbnails";
 import { toastIn } from '../../utils/toast';
@@ -14,7 +15,7 @@ import { useAppStore } from '../../lib/store';
 import { canUseUploadFaults, getUploadFaults, setUploadFaults, initUploadFaults } from '../../utils/uploadFaults';
 import { checkPostingRc } from '../../utils/rcCheck';
 import RcInsufficientModal from './RcInsufficientModal';
-import { SHORTS_MAX_DURATION_SEC, shortsMaxDurationLabel, cameraRecordEnabledFor } from '../../utils/config';
+import { SHORTS_MAX_DURATION_SEC, shortsMaxDurationLabel, cameraRecordEnabledFor, VIDEO_IMPORT_ENABLED } from '../../utils/config';
 import { isChromium } from '../../utils/browser';
 import { useTranslation, Trans } from 'react-i18next';
 
@@ -474,6 +475,21 @@ function EmbedVideoUploadStep1() {
                     {t("upload.select.replace")}
                   </label>
                 </div>
+              )}
+
+              {/* ▶️ Import from the creator's own verified YouTube / TikTok. The mode
+                  makes the import page offer only what fits this uploader:
+                  Shorts → YouTube Shorts + TikTok, videos → YouTube videos + streams. */}
+              {VIDEO_IMPORT_ENABLED && !videoFile && !needsAuth && !rcInsufficient && !authChecking && !rcChecking && (
+                <button
+                  type="button"
+                  className="button button--outline yt-import-entry"
+                  style={{ marginTop: 12 }}
+                  onClick={() => navigate(`/youtube-import?mode=${fromStories ? 'shorts' : 'videos'}`)}
+                >
+                  <FaFileImport style={{ display: 'inline', verticalAlign: 'middle', marginRight: 6 }} />
+                  {t('ytimport.entry')}
+                </button>
               )}
             </div>
           </div>

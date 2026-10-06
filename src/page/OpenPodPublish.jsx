@@ -16,6 +16,7 @@ import AudioPlayerInline from '../components/AudioPlayerInline/AudioPlayerInline
 import { usePremiumStatus } from '../hooks/usePremiumStatus';
 import { enforceLockedBeneficiaries } from '../utils/beneficiaries';
 import './OpenPodPublish.scss';
+import AccountImg from '../components/HiveAvatar/AccountImg';
 
 // Every toast from this module is headed "Live"; the message becomes the
 // line under it. See utils/toast.js.
@@ -290,8 +291,8 @@ export default function OpenPodPublish() {
               onClick={() => setCommunityModalOpen(true)}
             >
               {typeof community !== 'string' && community?.name && (
-                <img
-                  src={`/img/u/${community.name}/avatar/small`}
+                <AccountImg
+                  account={community.name}
                   alt=""
                   className="community-avatar"
                 />

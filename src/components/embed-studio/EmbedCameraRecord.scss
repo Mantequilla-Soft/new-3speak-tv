@@ -227,7 +227,7 @@
       font-size: 0.8rem;
       font-weight: 600;
       cursor: pointer;
-      &.is-on { background: var(--accent-primary, #e53935); color: #fff; }
+      &.is-on { background: rgba(0, 0, 0, 0.6); border: 1px solid var(--accent-primary, #e53935); color: var(--accent-primary, #e53935); }
     }
   }
 
@@ -407,7 +407,7 @@
           font-weight: 600;
           line-height: 1.15;
           cursor: pointer;
-          &:active { background: var(--accent-primary, #e53935); border-color: transparent; }
+          &:active { background: rgba(0, 0, 0, 0.6); color: var(--accent-primary, #e53935); border-color: var(--accent-primary, #e53935); }
         }
       }
 
@@ -498,7 +498,7 @@
     cursor: pointer;
     transition: filter 0.2s ease, opacity 0.2s ease;
     &:disabled { opacity: 0.5; cursor: not-allowed; }
-    &--record { background: var(--accent-primary, #e53935); color: #fff; &:not(:disabled):hover { filter: brightness(0.92); } }
+    &--record { background: rgba(0, 0, 0, 0.6); border: 1px solid var(--accent-primary, #e53935); color: var(--accent-primary, #e53935); &:not(:disabled):hover { filter: brightness(0.92); } }
     &--outline { background: transparent; color: #fff; border: 1px solid rgba(255, 255, 255, 0.35); }
     &--ghost { background: rgba(255, 255, 255, 0.08); color: #fff; }
   }

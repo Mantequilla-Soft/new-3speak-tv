@@ -417,13 +417,14 @@
 }
 
 .welcome-primary {
-  background: var(--accent-primary, #ff5252);
-  color: #fff;
-  border: 1px solid var(--accent-primary, #ff5252);
+  background: transparent;
+  color: var(--accent-primary, #e53935);
+  border: 1px solid var(--accent-primary, #e53935);
 
   &:hover:not(:disabled) {
-    background: var(--accent-hover, #ff1744);
-    border-color: var(--accent-hover, #ff1744);
+    background: color-mix(in srgb, var(--accent-primary, #e53935) 10%, transparent);
+    color: var(--accent-primary, #e53935);
+    border-color: var(--accent-primary, #e53935);
   }
 }
 
