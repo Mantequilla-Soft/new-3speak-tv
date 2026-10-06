@@ -201,7 +201,17 @@
     },
     "goalDone": "Erledigt",
     "reviewDone": "Alles erledigt. Das Team prüft deinen Kanal und stuft dich hoch. Du musst nichts mehr tun.",
-    "reviewPending": "Sobald du all das erledigt hast, prüft das Team deinen Kanal und stuft dich hoch."
+    "reviewPending": "Sobald du all das erledigt hast, prüft das Team deinen Kanal und stuft dich hoch.",
+    "optional": {
+      "title": "Optional",
+      "social": {
+        "label": "Verknüpfe dein YouTube, TikTok oder Instagram",
+        "hint": "Für die Prüfung nicht nötig, aber so sehen andere, wo sie dich noch finden.",
+        "linked": "Verknüpft: {{platforms}}",
+        "why": "Du setzt einen kurzen Code in die Bio deines Kanals, wir prüfen ihn, und der Kanal erscheint in deinem Profil. Wenn dein Warm-up endet, wandert die Verknüpfung zu deinem Hive-Konto.",
+        "cta": "Kanal verknüpfen"
+      }
+    }
   },
   "navProgress": {
     "chooseTitle": "Sag uns, was dich zu 3Speak führt, um deinen Weg zu einem Hive-Konto zu sehen.",

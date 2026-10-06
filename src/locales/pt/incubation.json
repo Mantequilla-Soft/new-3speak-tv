@@ -214,7 +214,17 @@
     },
     "goalDone": "Concluído",
     "reviewDone": "Tudo pronto. A equipe vai analisar seu canal e liberar sua conta. Você não precisa fazer mais nada.",
-    "reviewPending": "Quando você concluir tudo isso, a equipe vai analisar seu canal e liberar sua conta."
+    "reviewPending": "Quando você concluir tudo isso, a equipe vai analisar seu canal e liberar sua conta.",
+    "optional": {
+      "title": "Opcional",
+      "social": {
+        "label": "Vincule seu YouTube, TikTok ou Instagram",
+        "hint": "Não é necessário para a revisão, mas mostra onde mais as pessoas podem te encontrar.",
+        "linked": "Vinculado: {{platforms}}",
+        "why": "Você coloca um código curto na bio do seu canal, nós verificamos e o canal aparece no seu perfil. Quando seu aquecimento terminar, o vínculo passa para sua conta Hive.",
+        "cta": "Vincular um canal"
+      }
+    }
   },
   "navProgress": {
     "chooseTitle": "Conte o que traz você ao 3Speak para ver seu caminho até uma conta da Hive.",

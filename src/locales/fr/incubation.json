@@ -214,7 +214,17 @@
     },
     "goalDone": "Terminé",
     "reviewDone": "Tout est fait. L'équipe va examiner votre chaîne et vous faire passer sur Hive. Vous n'avez plus rien à faire.",
-    "reviewPending": "Une fois tout cela terminé, l'équipe examinera votre chaîne et vous fera passer sur Hive."
+    "reviewPending": "Une fois tout cela terminé, l'équipe examinera votre chaîne et vous fera passer sur Hive.",
+    "optional": {
+      "title": "Facultatif",
+      "social": {
+        "label": "Lie ton YouTube, TikTok ou Instagram",
+        "hint": "Pas nécessaire pour la vérification, mais cela montre où on peut aussi te trouver.",
+        "linked": "Lié : {{platforms}}",
+        "why": "Tu ajoutes un court code dans la bio de ta chaîne, nous le vérifions et la chaîne apparaît sur ton profil. À la fin de ton échauffement, le lien passe sur ton compte Hive.",
+        "cta": "Lier une chaîne"
+      }
+    }
   },
   "navProgress": {
     "chooseTitle": "Dites-nous ce qui vous amène sur 3Speak pour voir votre parcours vers un compte Hive.",

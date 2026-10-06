@@ -35,7 +35,8 @@
       "verifyFailed": "Falló la verificación",
       "stillPresent": "El hash sigue en tu perfil; quítalo primero.",
       "unlinkFailed": "No se pudo desvincular",
-      "noSuchLink": "No existe ese vínculo para quitar."
+      "noSuchLink": "No existe ese vínculo para quitar.",
+      "alreadyLinkedOther": "Este canal ya está vinculado a otra cuenta."
     },
     "confirmUnlink": "¿Quitar tu vínculo de {{platform}}? Asegúrate de que el hash de verificación ya no esté en tu perfil público; si no, se rechazará la desvinculación.",
     "removed": "Vínculo quitado",

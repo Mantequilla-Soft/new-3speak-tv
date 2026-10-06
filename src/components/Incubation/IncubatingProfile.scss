@@ -831,6 +831,16 @@
   }
 }
 
+// The optional goals under the list (they never hold up a review).
+.inc-optional-title {
+  margin: 18px 0 8px;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+}
+
 .inc-review {
   margin: 16px 0 0;
   padding: 12px 14px;

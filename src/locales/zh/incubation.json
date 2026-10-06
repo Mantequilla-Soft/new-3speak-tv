@@ -188,7 +188,17 @@
     },
     "goalDone": "已完成",
     "reviewDone": "全部完成。团队会审核你的频道并为你升级。你不需要再做任何事了。",
-    "reviewPending": "完成以上所有项目后，团队会审核你的频道并为你升级。"
+    "reviewPending": "完成以上所有项目后，团队会审核你的频道并为你升级。",
+    "optional": {
+      "title": "可选",
+      "social": {
+        "label": "关联你的 YouTube、TikTok 或 Instagram",
+        "hint": "审核不需要这一步，但能让大家知道还能在哪里找到你。",
+        "linked": "已关联：{{platforms}}",
+        "why": "在频道简介里放入一段简短代码，我们核对后，频道就会显示在你的个人资料上。热身期结束后，关联会转到你的 Hive 账号。",
+        "cta": "关联频道"
+      }
+    }
   },
   "navProgress": {
     "chooseTitle": "告诉我们你来 3Speak 的目的，查看你获得 Hive 账号的路径。",

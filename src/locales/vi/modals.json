@@ -35,7 +35,8 @@
       "verifyFailed": "Xác minh thất bại",
       "stillPresent": "Mã hash vẫn còn trên hồ sơ của bạn — hãy gỡ nó trước.",
       "unlinkFailed": "Hủy liên kết thất bại",
-      "noSuchLink": "Không có liên kết nào như vậy để gỡ."
+      "noSuchLink": "Không có liên kết nào như vậy để gỡ.",
+      "alreadyLinkedOther": "Kênh này đã được liên kết với một tài khoản khác."
     },
     "confirmUnlink": "Gỡ liên kết {{platform}} của bạn? Hãy đảm bảo mã hash xác minh không còn trên hồ sơ công khai của bạn, nếu không việc hủy liên kết sẽ bị từ chối.",
     "removed": "Đã gỡ liên kết",

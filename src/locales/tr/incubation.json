@@ -201,7 +201,17 @@
     },
     "goalDone": "Tamam",
     "reviewDone": "Hepsi tamam. Ekip kanalını inceleyip seni yükseltecek. Yapman gereken başka bir şey yok.",
-    "reviewPending": "Bunların hepsini tamamladığında ekip kanalını inceleyip seni yükseltecek."
+    "reviewPending": "Bunların hepsini tamamladığında ekip kanalını inceleyip seni yükseltecek.",
+    "optional": {
+      "title": "İsteğe bağlı",
+      "social": {
+        "label": "YouTube, TikTok veya Instagram hesabını bağla",
+        "hint": "İnceleme için gerekmez ama insanlara seni başka nerede bulabileceklerini gösterir.",
+        "linked": "Bağlandı: {{platforms}}",
+        "why": "Kanalının biyografisine kısa bir kod koyarsın, biz kontrol ederiz ve kanal profilinde görünür. Isınma dönemin bittiğinde bağlantı Hive hesabına taşınır.",
+        "cta": "Kanal bağla"
+      }
+    }
   },
   "navProgress": {
     "chooseTitle": "Hive hesabına giden yolunu görmek için seni 3Speak'e neyin getirdiğini söyle.",

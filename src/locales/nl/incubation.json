@@ -201,7 +201,17 @@
     },
     "goalDone": "Klaar",
     "reviewDone": "Alles klaar. Het team beoordeelt je kanaal en upgradet je. Je hoeft niets meer te doen.",
-    "reviewPending": "Zodra je dit allemaal hebt afgerond, beoordeelt het team je kanaal en upgradet het je."
+    "reviewPending": "Zodra je dit allemaal hebt afgerond, beoordeelt het team je kanaal en upgradet het je.",
+    "optional": {
+      "title": "Optioneel",
+      "social": {
+        "label": "Koppel je YouTube, TikTok of Instagram",
+        "hint": "Niet nodig voor de beoordeling, maar zo zien mensen waar ze je nog meer vinden.",
+        "linked": "Gekoppeld: {{platforms}}",
+        "why": "Je zet een korte code in de bio van je kanaal, wij controleren die en het kanaal verschijnt op je profiel. Als je warm-up afloopt, gaat de koppeling mee naar je Hive-account.",
+        "cta": "Kanaal koppelen"
+      }
+    }
   },
   "navProgress": {
     "chooseTitle": "Vertel ons wat je naar 3Speak brengt om je weg naar een Hive-account te zien.",

@@ -35,7 +35,8 @@
       "verifyFailed": "Verification failed",
       "stillPresent": "Hash is still on your profile — remove it first.",
       "unlinkFailed": "Unlink failed",
-      "noSuchLink": "No such link to remove."
+      "noSuchLink": "No such link to remove.",
+      "alreadyLinkedOther": "This channel is already linked to another account."
     },
     "confirmUnlink": "Remove your {{platform}} link? Make sure the verification hash is no longer on your public profile, otherwise the unlink will be rejected.",
     "removed": "Link removed",

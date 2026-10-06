@@ -35,7 +35,8 @@
       "verifyFailed": "Weryfikacja nie powiodła się",
       "stillPresent": "Hash nadal jest na twoim profilu — najpierw go usuń.",
       "unlinkFailed": "Odłączanie nie powiodło się",
-      "noSuchLink": "Nie ma takiego połączenia do usunięcia."
+      "noSuchLink": "Nie ma takiego połączenia do usunięcia.",
+      "alreadyLinkedOther": "Ten kanał jest już połączony z innym kontem."
     },
     "confirmUnlink": "Usunąć połączenie z {{platform}}? Upewnij się, że hasha weryfikacyjnego nie ma już na twoim publicznym profilu, inaczej odłączenie zostanie odrzucone.",
     "removed": "Połączenie usunięte",

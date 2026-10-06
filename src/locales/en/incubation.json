@@ -201,7 +201,17 @@
     },
     "goalDone": "Done",
     "reviewDone": "All done. The team will review your channel and upgrade you. Nothing more for you to do.",
-    "reviewPending": "Once you have completed all of these, the team will review your channel and upgrade you."
+    "reviewPending": "Once you have completed all of these, the team will review your channel and upgrade you.",
+    "optional": {
+      "title": "Optional",
+      "social": {
+        "label": "Link your YouTube, TikTok or Instagram",
+        "hint": "Not needed for the review, but it shows people where else to find you.",
+        "linked": "Linked: {{platforms}}",
+        "why": "You put a short code in your channel's bio, we check it, and the channel appears on your profile. When your warm-up ends, the link moves to your Hive account.",
+        "cta": "Link a channel"
+      }
+    }
   },
   "navProgress": {
     "chooseTitle": "Tell us what brings you to 3Speak to see your path to a Hive account.",

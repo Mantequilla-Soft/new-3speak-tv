@@ -214,7 +214,17 @@
     },
     "goalDone": "Fatto",
     "reviewDone": "Tutto fatto. Il team valuterà il tuo canale e ti promuoverà. Non devi fare altro.",
-    "reviewPending": "Quando avrai completato tutto, il team valuterà il tuo canale e ti promuoverà."
+    "reviewPending": "Quando avrai completato tutto, il team valuterà il tuo canale e ti promuoverà.",
+    "optional": {
+      "title": "Facoltativo",
+      "social": {
+        "label": "Collega il tuo YouTube, TikTok o Instagram",
+        "hint": "Non serve per la revisione, ma mostra dove altro trovarti.",
+        "linked": "Collegato: {{platforms}}",
+        "why": "Inserisci un breve codice nella bio del tuo canale, lo verifichiamo e il canale compare nel tuo profilo. Quando finisce il tuo riscaldamento, il collegamento passa al tuo account Hive.",
+        "cta": "Collega un canale"
+      }
+    }
   },
   "navProgress": {
     "chooseTitle": "Dicci cosa ti porta su 3Speak per vedere il tuo percorso verso un account Hive.",

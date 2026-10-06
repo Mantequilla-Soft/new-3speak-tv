@@ -188,7 +188,17 @@
     },
     "goalDone": "Đã xong",
     "reviewDone": "Đã xong tất cả. Đội ngũ sẽ xét duyệt kênh của bạn và nâng cấp cho bạn. Bạn không cần làm gì thêm.",
-    "reviewPending": "Khi bạn đã hoàn thành tất cả những mục này, đội ngũ sẽ xét duyệt kênh của bạn và nâng cấp cho bạn."
+    "reviewPending": "Khi bạn đã hoàn thành tất cả những mục này, đội ngũ sẽ xét duyệt kênh của bạn và nâng cấp cho bạn.",
+    "optional": {
+      "title": "Tùy chọn",
+      "social": {
+        "label": "Liên kết YouTube, TikTok hoặc Instagram của bạn",
+        "hint": "Không cần cho việc xét duyệt, nhưng cho mọi người biết còn có thể tìm thấy bạn ở đâu.",
+        "linked": "Đã liên kết: {{platforms}}",
+        "why": "Bạn đặt một mã ngắn vào phần giới thiệu của kênh, chúng tôi kiểm tra và kênh sẽ hiện trên hồ sơ của bạn. Khi giai đoạn khởi động kết thúc, liên kết sẽ chuyển sang tài khoản Hive của bạn.",
+        "cta": "Liên kết kênh"
+      }
+    }
   },
   "navProgress": {
     "chooseTitle": "Cho chúng tôi biết điều gì đưa bạn đến với 3Speak để xem con đường đến tài khoản Hive của bạn.",

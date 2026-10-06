@@ -6,6 +6,8 @@ import {
   FaUsers, FaIdCard, FaEnvelope,
 } from 'react-icons/fa';
 import AdvertiserContactForm from './AdvertiserContactForm';
+import AddSocialLink_modal from '../modal/AddSocialLink_modal';
+import { warmupSocial, platformLabel } from '../../utils/socialVerifier';
 import BrandProfileForm from './BrandProfileForm';
 import { TRACK_QUESTION_ID } from './TrackQuestion';
 import { trackTitleKey } from './tracks';
@@ -499,6 +501,7 @@ export default function IncubationProgressPanel() {
             );
           })}
           </div>
+          <WarmupSocialTask />
           {/* Said plainly, because "finish the list" without saying what
               happens next reads as a slot machine rather than a process. */}
           {!approved && (
@@ -511,5 +514,64 @@ export default function IncubationProgressPanel() {
         </div>
       )}
     </section>
+  );
+}
+
+/**
+ * Optional warm-up task: link your YouTube, TikTok or Instagram (owner 2026-10-06).
+ * Not part of the ladder (the SDK has no optional goals, and it must never hold up
+ * a review), so it sits under the list with its own state. Works with video import
+ * and the profile link switches off: the API route and the checker carry their own
+ * platform list. Linked channels move to the Hive account at graduation.
+ */
+function WarmupSocialTask() {
+  const { t } = useTranslation();
+  const [links, setLinks] = useState(null);
+  const [open, setOpen] = useState(false);
+  const [dialog, setDialog] = useState(false);
+  const load = useCallback(() => {
+    warmupSocial.load().then((d) => setLinks(d?.links || [])).catch(() => setLinks([]));
+  }, []);
+  useEffect(() => { load(); }, [load]);
+  if (links === null) return null;
+  const verified = links.filter((l) => l.verified);
+  const done = verified.length > 0;
+  return (
+    <>
+      <h5 className="inc-optional-title">{t('incubation.progress.optional.title')}</h5>
+      <ul className="inc-tasks inc-tasks--optional">
+        <li className={`${done ? 'is-done' : ''}${open ? ' is-open' : ''}`.trim()} style={{ '--task-fill': done ? '100%' : '0%' }}>
+          <button
+            type="button"
+            className="inc-task-head"
+            onClick={() => setOpen((o) => !o)}
+            aria-expanded={open}
+            aria-controls="inc-task-social"
+          >
+            {done ? <MdCheckCircle size={20} className="inc-task-icon done" />
+              : <MdRadioButtonUnchecked size={20} className="inc-task-icon" />}
+            <span className="inc-task-text">
+              <strong>{t('incubation.progress.optional.social.label')}</strong>
+              <span>
+                {done
+                  ? t('incubation.progress.optional.social.linked', { platforms: [...new Set(verified.map((l) => platformLabel(l.platform)))].join(', ') })
+                  : t('incubation.progress.optional.social.hint')}
+              </span>
+            </span>
+            <span className="inc-task-count">{done ? verified.length : 0}/1</span>
+            <MdExpandMore size={18} className="inc-task-chevron" aria-hidden="true" />
+          </button>
+          {open && (
+            <div className="inc-task-detail" id="inc-task-social">
+              <p className="inc-task-why">{t('incubation.progress.optional.social.why')}</p>
+              <button type="button" className="inc-task-cta" onClick={() => setDialog(true)}>
+                {t('incubation.progress.optional.social.cta')}
+              </button>
+            </div>
+          )}
+        </li>
+      </ul>
+      <AddSocialLink_modal isOpen={dialog} onClose={() => setDialog(false)} onChange={load} warmup />
+    </>
   );
 }

@@ -227,7 +227,17 @@
     },
     "goalDone": "Gotowe",
     "reviewDone": "Wszystko gotowe. Zespół oceni twój kanał i przeniesie cię na Hive. Nie musisz już nic robić.",
-    "reviewPending": "Gdy wykonasz wszystkie te zadania, zespół oceni twój kanał i przeniesie cię na Hive."
+    "reviewPending": "Gdy wykonasz wszystkie te zadania, zespół oceni twój kanał i przeniesie cię na Hive.",
+    "optional": {
+      "title": "Opcjonalne",
+      "social": {
+        "label": "Połącz swój YouTube, TikTok lub Instagram",
+        "hint": "Niepotrzebne do weryfikacji, ale pokazuje, gdzie jeszcze można cię znaleźć.",
+        "linked": "Połączono: {{platforms}}",
+        "why": "Wstawiasz krótki kod w opisie kanału, my go sprawdzamy, a kanał pojawia się w twoim profilu. Gdy rozgrzewka się skończy, połączenie przejdzie na twoje konto Hive.",
+        "cta": "Połącz kanał"
+      }
+    }
   },
   "navProgress": {
     "chooseTitle": "Powiedz nam, co sprowadza cię do 3Speak, aby zobaczyć swoją drogę do konta Hive.",

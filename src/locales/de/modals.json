@@ -35,7 +35,8 @@
       "verifyFailed": "Verifizierung fehlgeschlagen",
       "stillPresent": "Der Hash ist noch in deinem Profil – entferne ihn zuerst.",
       "unlinkFailed": "Trennen fehlgeschlagen",
-      "noSuchLink": "Diese Verknüpfung gibt es nicht."
+      "noSuchLink": "Diese Verknüpfung gibt es nicht.",
+      "alreadyLinkedOther": "Dieser Kanal ist bereits mit einem anderen Konto verknüpft."
     },
     "confirmUnlink": "Deine {{platform}}-Verknüpfung entfernen? Stell sicher, dass der Verifizierungs-Hash nicht mehr in deinem öffentlichen Profil steht, sonst wird das Trennen abgelehnt.",
     "removed": "Verknüpfung entfernt",

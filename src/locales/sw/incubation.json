@@ -201,7 +201,17 @@
     },
     "goalDone": "Imekamilika",
     "reviewDone": "Yote yamekamilika. Timu itakagua chaneli yako na kukupandisha daraja. Hakuna zaidi cha kufanya.",
-    "reviewPending": "Ukishakamilisha yote haya, timu itakagua chaneli yako na kukupandisha daraja."
+    "reviewPending": "Ukishakamilisha yote haya, timu itakagua chaneli yako na kukupandisha daraja.",
+    "optional": {
+      "title": "Si lazima",
+      "social": {
+        "label": "Unganisha YouTube, TikTok au Instagram yako",
+        "hint": "Haihitajiki kwa ukaguzi, lakini inaonyesha watu wanaweza kukupata wapi kwingine.",
+        "linked": "Imeunganishwa: {{platforms}}",
+        "why": "Unaweka msimbo mfupi kwenye maelezo ya chaneli yako, tunaukagua, na chaneli inaonekana kwenye wasifu wako. Kipindi chako cha maandalizi kikiisha, kiungo kinahamia akaunti yako ya Hive.",
+        "cta": "Unganisha chaneli"
+      }
+    }
   },
   "navProgress": {
     "chooseTitle": "Tuambie nini kimekuleta 3Speak ili uone njia yako ya kupata akaunti ya Hive.",

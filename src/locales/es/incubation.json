@@ -214,7 +214,17 @@
     },
     "goalDone": "Hecho",
     "reviewDone": "Todo listo. El equipo revisará tu canal y actualizará tu cuenta. No tienes que hacer nada más.",
-    "reviewPending": "Cuando completes todo esto, el equipo revisará tu canal y actualizará tu cuenta."
+    "reviewPending": "Cuando completes todo esto, el equipo revisará tu canal y actualizará tu cuenta.",
+    "optional": {
+      "title": "Opcional",
+      "social": {
+        "label": "Vincula tu YouTube, TikTok o Instagram",
+        "hint": "No es necesario para la revisión, pero muestra dónde más te pueden encontrar.",
+        "linked": "Vinculado: {{platforms}}",
+        "why": "Pones un código corto en la biografía de tu canal, lo comprobamos y el canal aparece en tu perfil. Cuando termine tu calentamiento, el vínculo pasa a tu cuenta de Hive.",
+        "cta": "Vincular un canal"
+      }
+    }
   },
   "navProgress": {
     "chooseTitle": "Cuéntanos qué te trae a 3Speak para ver tu camino hacia una cuenta de Hive.",

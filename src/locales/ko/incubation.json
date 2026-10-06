@@ -188,7 +188,17 @@
     },
     "goalDone": "완료",
     "reviewDone": "모두 완료했어요. 팀이 채널을 검토하고 업그레이드해 드릴 거예요. 더 할 일은 없어요.",
-    "reviewPending": "이 항목을 모두 완료하면 팀이 채널을 검토하고 업그레이드해 드려요."
+    "reviewPending": "이 항목을 모두 완료하면 팀이 채널을 검토하고 업그레이드해 드려요.",
+    "optional": {
+      "title": "선택",
+      "social": {
+        "label": "YouTube, TikTok 또는 Instagram 연결하기",
+        "hint": "심사에는 필요 없지만, 다른 곳에서도 나를 찾을 수 있다는 걸 보여줘요.",
+        "linked": "연결됨: {{platforms}}",
+        "why": "채널 소개에 짧은 코드를 넣으면 확인 후 채널이 내 프로필에 표시돼요. 워밍업이 끝나면 연결은 내 Hive 계정으로 옮겨져요.",
+        "cta": "채널 연결"
+      }
+    }
   },
   "navProgress": {
     "chooseTitle": "3Speak에 온 목적을 알려주시면 Hive 계정까지의 과정을 보여 드려요.",

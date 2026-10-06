@@ -201,7 +201,17 @@
     },
     "goalDone": "Tapos na",
     "reviewDone": "Tapos na lahat. Ire-review ng team ang channel mo at ia-upgrade ka. Wala ka nang kailangang gawin.",
-    "reviewPending": "Kapag natapos mo na lahat ng ito, ire-review ng team ang channel mo at ia-upgrade ka."
+    "reviewPending": "Kapag natapos mo na lahat ng ito, ire-review ng team ang channel mo at ia-upgrade ka.",
+    "optional": {
+      "title": "Opsyonal",
+      "social": {
+        "label": "I-link ang iyong YouTube, TikTok o Instagram",
+        "hint": "Hindi kailangan para sa review, pero ipinapakita nito kung saan ka pa mahahanap.",
+        "linked": "Naka-link: {{platforms}}",
+        "why": "Maglalagay ka ng maikling code sa bio ng channel mo, susuriin namin, at lalabas ang channel sa profile mo. Kapag natapos ang warm-up mo, lilipat ang link sa iyong Hive account.",
+        "cta": "Mag-link ng channel"
+      }
+    }
   },
   "navProgress": {
     "chooseTitle": "Sabihin sa amin kung ano ang nagdala sa iyo sa 3Speak para makita ang daan mo papunta sa Hive account.",

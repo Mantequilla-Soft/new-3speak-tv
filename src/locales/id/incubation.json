@@ -188,7 +188,17 @@
     },
     "goalDone": "Selesai",
     "reviewDone": "Semua selesai. Tim akan meninjau channel-mu dan meningkatkan akunmu. Tidak ada lagi yang perlu kamu lakukan.",
-    "reviewPending": "Setelah kamu menyelesaikan semua ini, tim akan meninjau channel-mu dan meningkatkan akunmu."
+    "reviewPending": "Setelah kamu menyelesaikan semua ini, tim akan meninjau channel-mu dan meningkatkan akunmu.",
+    "optional": {
+      "title": "Opsional",
+      "social": {
+        "label": "Tautkan YouTube, TikTok, atau Instagram-mu",
+        "hint": "Tidak wajib untuk peninjauan, tapi menunjukkan di mana lagi orang bisa menemukanmu.",
+        "linked": "Tertaut: {{platforms}}",
+        "why": "Kamu menaruh kode pendek di bio kanalmu, kami memeriksanya, lalu kanal itu muncul di profilmu. Saat masa pemanasanmu selesai, tautan pindah ke akun Hive-mu.",
+        "cta": "Tautkan kanal"
+      }
+    }
   },
   "navProgress": {
     "chooseTitle": "Beri tahu kami apa yang membawamu ke 3Speak untuk melihat jalanmu menuju akun Hive.",
