@@ -4,6 +4,18 @@
   gap: 0.4rem;
   margin-left: 0.5rem;
 
+  // Stacked at the right edge of the profile header (ProfileHeader `aside`);
+  // back to a row on phones, where the header is centred.
+  &--column {
+    flex-direction: column;
+    margin-left: 0;
+    gap: 0.55rem;
+
+    @media screen and (max-width: 767px) {
+      flex-direction: row;
+    }
+  }
+
   &__chip {
     position: relative;
     display: inline-flex;
