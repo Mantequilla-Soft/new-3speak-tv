@@ -957,6 +957,13 @@ app.put('/api/warmup/contact', incubationLimiter, async (req, res) => {
   }
 })
 
+// Picking a warm-up track that is not open for signup (warmup.cjs trackOpen).
+// Ahead of the SDK handler, which would accept any track it has goals for.
+app.put('/api/incubation/social/track', (req, res, next) => {
+  if (require('./warmup.cjs').trackOpen(req.body?.track)) return next()
+  res.status(403).json({ error: 'track_closed' })
+})
+
 // /api/incubation/* -- the warm-up backend. The SDK's createWarmupHandler:
 // an allowlist of routes, each forwarded to one SDK call with the user's own
 // token (or, for a wallet login, vouched for with 3Speak's client credentials),

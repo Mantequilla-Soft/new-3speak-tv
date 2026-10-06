@@ -1,4 +1,23 @@
+import i18n from 'i18next';
 import { withReferrer, getStoredInvite } from './referral';
+
+/**
+ * Tell Butter Auth which language the visitor reads 3Speak in, so its login and
+ * signup screens open in the same one (`ui_locales`, the OAuth/OIDC parameter).
+ * Butter Auth falls back to the browser's language for anything it lacks.
+ * Used by both popup paths, like withReferrer.
+ */
+export function withLocale(url) {
+  const lang = i18n.resolvedLanguage || i18n.language;
+  if (!lang || typeof url !== 'string') return url;
+  try {
+    const u = new URL(url);
+    if (!u.searchParams.get('ui_locales')) u.searchParams.set('ui_locales', lang);
+    return u.toString();
+  } catch {
+    return url;
+  }
+}
 
 /**
  * Open a Butter Auth flow in a popup.
@@ -42,7 +61,7 @@ export async function openButrauthPopup({ signup = false, graduate = false, chan
 
   // Carry a `?ref=` the visitor arrived with, so the person who sent them here
   // is credited at the moment they name themselves on Butter Auth.
-  const url = withReferrer(data.url);
+  const url = withLocale(withReferrer(data.url));
 
   // Sized to the screen rather than fixed: these flows are tall (explainer,
   // provider buttons, captcha, key backup) and scrolled inside a small popup.

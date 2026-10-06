@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { FaRocket } from 'react-icons/fa';
 import { fetchIncubationProgress, onIncubationProgress } from '../../lib/incubation';
 import TrackChooser from './TrackChooser';
+import { withTracksKey } from './tracks';
 import { useTranslation } from 'react-i18next';
 
 /**
@@ -34,7 +35,7 @@ export default function TrackQuestion() {
     <section className="inc-panel inc-track-question" id={TRACK_QUESTION_ID}>
       <h2><FaRocket size={14} aria-hidden="true" /> {t('incubation.trackQuestion.title')}</h2>
       <p className="inc-track-intro">
-        {t('incubation.trackQuestion.intro')}
+        {t(withTracksKey('incubation.trackQuestion.intro'))}
       </p>
       <TrackChooser />
     </section>

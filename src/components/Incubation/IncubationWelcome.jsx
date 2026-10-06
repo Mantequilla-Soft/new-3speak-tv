@@ -9,6 +9,7 @@ import { MdClose } from 'react-icons/md';
 import { useAppStore } from '../../lib/store';
 import { usePromptsActive, setPromptActive } from '../../utils/welcomeGate';
 import TrackChooser from './TrackChooser';
+import { withTracksKey } from './tracks';
 import { useTranslation, Trans } from 'react-i18next';
 import './IncubationWelcome.scss';
 
@@ -97,7 +98,7 @@ const STEPS = [
     body: (t) => (
       <>
         <p>
-          {t('incubation.welcome.path.p1')}
+          {t(withTracksKey('incubation.welcome.path.p1'))}
         </p>
         <p>
           {t('incubation.welcome.path.p2')}

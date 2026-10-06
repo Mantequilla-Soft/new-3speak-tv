@@ -66,7 +66,8 @@
   },
   "trackQuestion": {
     "title": "Nini kimekuleta 3Speak?",
-    "intro": "Njia yako ya kupata akaunti ya Hive inategemea hilo: watazamaji hutazama na kushiriki, watayarishaji huchapisha, na watangazaji huandaa chapa yao."
+    "intro": "Njia yako ya kupata akaunti ya Hive inategemea hilo: watazamaji hutazama na kushiriki, watayarishaji huchapisha, na watangazaji huandaa chapa yao.",
+    "introNoAdvertisers": "Njia yako ya kupata akaunti ya Hive inategemea hilo: watazamaji hutazama na kushiriki, na watayarishaji huchapisha."
   },
   "tipCard": {
     "aria": "Dokezo",
@@ -231,6 +232,7 @@
     },
     "path": {
       "p1": "Wasifu wako unaonyesha orodha fupi ya mambo ya kufanya, na inategemea uko hapa kwa ajili ya nini: watazamaji hutazama na kushiriki, watayarishaji huchapisha, na watangazaji huandaa chapa yao.",
+      "p1NoAdvertisers": "Wasifu wako unaonyesha orodha fupi ya mambo ya kufanya, na inategemea uko hapa kwa ajili ya nini: watazamaji hutazama na kushiriki, na watayarishaji huchapisha.",
       "p2": "Si mtihani. Ni njia tu ya sisi kutofautisha akaunti halisi na akaunti tupu au yenye nia mbaya. Orodha ikikamilika timu inakukagua na kukupandisha daraja haraka iwezekanavyo.",
       "perkEarn": "Machapisho yanayopata mapato",
       "perkKeys": "Funguo ambazo wewe pekee unazo",

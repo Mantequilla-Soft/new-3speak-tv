@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useSignupPossible } from '../../utils/signupPossible';
 import { withReferrer, getStoredInvite } from '../../utils/referral';
+import { withLocale } from '../../utils/butrauthPopup';
 import { AiohaModal, useAioha } from "@aioha/react-ui";
 import { Providers, KeyTypes } from "@aioha/aioha";
 import { IoPower } from "react-icons/io5";
@@ -63,7 +64,7 @@ function LoginModal({ displayed, onLogin, onClose, loginTitle, loginOptions, int
       if (!res.ok || !data.url) throw new Error(data.error || 'Failed to start Butter Auth login');
       // Same referral hand-off as openButrauthPopup. Both paths, or attribution
       // works only for whichever button the user happened to press.
-      const url = withReferrer(data.url);
+      const url = withLocale(withReferrer(data.url));
       // Sized to the screen (capped) rather than a fixed 480x720: the signup
       // flow is tall — explainer, provider buttons, captcha — and was scrolling
       // inside a small popup.

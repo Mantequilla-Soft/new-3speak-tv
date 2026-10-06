@@ -66,7 +66,8 @@
   },
   "trackQuestion": {
     "title": "Apa yang membawamu ke 3Speak?",
-    "intro": "Jalanmu menuju akun Hive bergantung pada ini: penonton menonton dan ikut berinteraksi, kreator menerbitkan, dan pengiklan menyiapkan brand mereka."
+    "intro": "Jalanmu menuju akun Hive bergantung pada ini: penonton menonton dan ikut berinteraksi, kreator menerbitkan, dan pengiklan menyiapkan brand mereka.",
+    "introNoAdvertisers": "Jalanmu menuju akun Hive bergantung pada ini: penonton menonton dan ikut berinteraksi, dan kreator menerbitkan."
   },
   "tipCard": {
     "aria": "Tip",
@@ -214,6 +215,7 @@
     },
     "path": {
       "p1": "Profilmu menampilkan daftar singkat hal yang perlu dilakukan, dan isinya bergantung pada tujuanmu di sini: penonton menonton dan ikut berinteraksi, kreator menerbitkan, dan pengiklan menyiapkan brand mereka.",
+      "p1NoAdvertisers": "Profilmu menampilkan daftar singkat hal yang perlu dilakukan, dan isinya bergantung pada tujuanmu di sini: penonton menonton dan ikut berinteraksi, dan kreator menerbitkan.",
       "p2": "Ini bukan ujian. Ini hanya cara kami membedakan akun sungguhan dari akun kosong atau berniat jahat. Setelah daftarnya selesai, tim meninjaumu dan meningkatkan akunmu secepat mungkin.",
       "perkEarn": "Postingan yang menghasilkan",
       "perkKeys": "Key yang hanya kamu pegang",

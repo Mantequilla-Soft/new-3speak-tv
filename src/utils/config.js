@@ -232,6 +232,11 @@ const ENABLE_BUTRAUTH = import.meta.env.VITE_ENABLE_BUTRAUTH !== 'false'
 // proxying it through our server would ask about the server's address instead
 // of the user's, and always get "yes".
 const BUTRAUTH_URL = (import.meta.env.VITE_BUTRAUTH_URL || 'https://butrauth.com').replace(/\/+$/, '');
+// Whether a NEW warm-up may pick the advertiser track. Closed at the public signup
+// launch (owner 2026-10-06: viewers and creators only for now); people already on
+// the advertiser track keep it. The server enforces the same rule
+// (server/warmup.cjs, WARMUP_ADVERTISER_SIGNUP), this only hides the option.
+const ADVERTISER_SIGNUP = import.meta.env.VITE_ENABLE_ADVERTISER_SIGNUP === 'true';
 const ENABLE_SUBS = import.meta.env.VITE_ENABLE_SUBS === 'true';
 // Pay-per-listen reward controls in the audio uploader. Enabled by
 // default; set VITE_ENABLE_PPL=false to hide the earn-mode chooser and
@@ -417,6 +422,7 @@ export {
   ENABLE_METAMASK_SNAP,
   ENABLE_BUTRAUTH,
   BUTRAUTH_URL,
+  ADVERTISER_SIGNUP,
   ENABLE_SUBS,
   OPENPODS_STANDALONE,
   ENABLE_OPENPODS,

@@ -66,7 +66,8 @@
   },
   "trackQuestion": {
     "title": "Wat brengt je naar 3Speak?",
-    "intro": "Je weg naar een Hive-account hangt ervan af: kijkers kijken en doen mee, makers publiceren, en adverteerders zetten hun merk neer."
+    "intro": "Je weg naar een Hive-account hangt ervan af: kijkers kijken en doen mee, makers publiceren, en adverteerders zetten hun merk neer.",
+    "introNoAdvertisers": "Je weg naar een Hive-account hangt ervan af: kijkers kijken en doen mee, en makers publiceren."
   },
   "tipCard": {
     "aria": "Tip",
@@ -231,6 +232,7 @@
     },
     "path": {
       "p1": "Je profiel toont een korte takenlijst, en die hangt af van waarvoor je hier bent: kijkers kijken en doen mee, makers publiceren, en adverteerders zetten hun merk neer.",
+      "p1NoAdvertisers": "Je profiel toont een korte takenlijst, en die hangt af van waarvoor je hier bent: kijkers kijken en doen mee, en makers publiceren.",
       "p2": "Het is geen test. Het is gewoon hoe we een echt account kunnen onderscheiden van een leeg of kwaadwillend account. Zodra de lijst klaar is, beoordeelt het team je en upgradet het je zo snel mogelijk.",
       "perkEarn": "Posts die verdienen",
       "perkKeys": "Keys die alleen jij hebt",

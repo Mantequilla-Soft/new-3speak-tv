@@ -66,7 +66,8 @@
   },
   "trackQuestion": {
     "title": "Ano ang nagdala sa iyo sa 3Speak?",
-    "intro": "Nakadepende rito ang daan mo papunta sa Hive account: nanonood at nakikisali ang mga viewer, nagpa-publish ang mga creator, at sine-set up ng mga advertiser ang kanilang brand."
+    "intro": "Nakadepende rito ang daan mo papunta sa Hive account: nanonood at nakikisali ang mga viewer, nagpa-publish ang mga creator, at sine-set up ng mga advertiser ang kanilang brand.",
+    "introNoAdvertisers": "Nakadepende rito ang daan mo papunta sa Hive account: nanonood at nakikisali ang mga viewer, at nagpa-publish ang mga creator."
   },
   "tipCard": {
     "aria": "Tip",
@@ -231,6 +232,7 @@
     },
     "path": {
       "p1": "Nagpapakita ang profile mo ng maikling listahan ng mga gagawin, at nakadepende ito sa kung para saan ka nandito: nanonood at nakikisali ang mga viewer, nagpa-publish ang mga creator, at sine-set up ng mga advertiser ang kanilang brand.",
+      "p1NoAdvertisers": "Nagpapakita ang profile mo ng maikling listahan ng mga gagawin, at nakadepende ito sa kung para saan ka nandito: nanonood at nakikisali ang mga viewer, at nagpa-publish ang mga creator.",
       "p2": "Hindi ito test. Ito lang ang paraan namin para makilala ang totoong account mula sa walang laman o mapanirang account. Kapag tapos na ang listahan, ire-review ka ng team at ia-upgrade ka sa lalong madaling panahon.",
       "perkEarn": "Mga post na kumikita",
       "perkKeys": "Keys na ikaw lang ang may hawak",
