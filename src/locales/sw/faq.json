@@ -1,0 +1,125 @@
+{
+  "title": "Maswali yanayoulizwa mara kwa mara",
+  "subtitle": "Wewe ni mgeni kwenye 3Speak? Haya ndiyo majibu ya maswali tunayoulizwa zaidi.",
+  "groups": {
+    "start": "Kuanza",
+    "earning": "Kupata mapato",
+    "uploading": "Kupakia",
+    "community": "Jumuiya na usalama",
+    "more": "Matangazo na mengineyo"
+  },
+  "items": {
+    "what": {
+      "q": "3Speak ni nini?",
+      "a": "3Speak ni jukwaa la video ambapo chaneli yako ni mali yako. Video, maoni na wafuasi wako huhifadhiwa kwenye akaunti yako mwenyewe ya Hive, si kwenye seva ya 3Speak, kwa hivyo hakuna anayeweza kukunyang'anya. Watayarishi na watazamaji wote wanaweza kupata zawadi wanapoitumia."
+    },
+    "watchFree": {
+      "q": "Je, ninahitaji akaunti ili kutazama?",
+      "a": "Hapana. Kutazama ni bure na hakuhitaji akaunti. Unahitaji akaunti tu ili kupakia, kutoa maoni, kupiga kura, kufuata chaneli na kupata zawadi."
+    },
+    "signup": {
+      "q": "Ninafunguaje akaunti?",
+      "a": "Gusa <b>Jisajili</b> juu na uendelee kwa Google, barua pepe au chaguo lingine kutoka Butter Auth, huduma ya kuingia ambayo 3Speak inatumia. Ni bure na huchukua takriban dakika moja. Akaunti mpya huanza na kipindi kifupi cha maandalizi: unaweza kutazama, kupakia na kutoa maoni mara moja, na kupiga kura, kutoa bakshishi na kupata mapato hufunguka ukishakimaliza na kupata akaunti yako mwenyewe ya Hive."
+    },
+    "hive": {
+      "q": "Hive ni nini, na je, ninahitaji kuielewa?",
+      "a": "Hive ni mtandao huria unaohifadhi akaunti, machapisho, kura na zawadi. Umekuwa ukifanya kazi tangu 2016, na mwaka 2020 jamii yake iliufanya kuwa huru kutoka kwa kampuni yoyote. 3Speak ni mojawapo ya programu nyingi zilizojengwa juu yake, kwa hivyo akaunti hiyo hiyo inafanya kazi pia kwenye programu nyingine za Hive. Huhitaji kuelewa chochote kati ya hayo ili kutumia 3Speak: ingia tu, tazama, chapisha na utoe maoni."
+    },
+    "loginTypes": {
+      "q": "Butter Auth, Keychain, HiveSigner: tofauti ni ipi?",
+      "a": "Ni njia tofauti za kuingia kwenye aina moja ya akaunti. <b>Butter Auth</b> (Google, barua pepe na zaidi) ndiyo rahisi zaidi: inairuhusu 3Speak kuchapisha kwa niaba yako, na unaidhinisha vitendo vya pochi kama uhamisho kando. <b>Hive Keychain</b>, <b>HiveSigner</b>, <b>HiveAuth</b>, <b>PeakVault</b> na <b>Ledger</b> ni pochi za Hive: funguo zako zinabaki kwako na unaidhinisha kila kitendo wewe mwenyewe. Chagua unayopenda."
+    },
+    "lostKeys": {
+      "q": "Nimepoteza funguo au nenosiri langu. Nifanye nini sasa?",
+      "a": "Funguo zilizopotea haziwezi kurejeshwa na mtu yeyote, hata 3Speak, kwa hivyo hifadhi nakala ya funguo zako mahali salama. Ikiwa bado una nenosiri kuu (master password) au ufunguo wa mmiliki (owner key), unaweza kuiongeza tena akaunti yako kwenye pochi kwa kuutumia. Ikiwa funguo zako zimepotea kabisa, tutumie ujumbe kwenye <discord>Discord</discord> na tutakufungulia usajili ili uweze kufungua akaunti mpya. Ikiwa mtu mwingine ameichukua akaunti yako, urejeshaji wa akaunti wa Hive unaweza kusaidia ndani ya siku 30: tuulize kwenye <discord>Discord</discord> na tutakuongoza hatua kwa hatua."
+    },
+    "creatorsEarn": {
+      "q": "Watayarishi hupataje mapato?",
+      "a": "Kwa njia mbili. Watu wanapoipigia video yako kura, hukusanya zawadi zinazolipwa mara moja, takriban siku 7 baada ya kuichapisha, kwa HBD na Hive Power. Na matangazo yanapocheza kwenye video zako, unapata sehemu ya mapato yake, ambayo unaweza kugawana na jumuiya uliyochapisha ndani yake ukipenda."
+    },
+    "viewersEarn": {
+      "q": "Je, watazamaji wanaweza kupata mapato pia?",
+      "a": "Ndiyo. Washa <b>Zawadi za watazamaji</b> kwenye Mipangilio (ikoni ya gia) chini ya <b>Matangazo na zawadi</b>, na utapata sehemu ya mapato ya matangazo kwa video unazotazama. Maoni yako yanaweza kupata zawadi watu wanapoyapigia kura, na kupigia kura video nzuri mapema pia hukupa sehemu ya zawadi zake. Yote haya yanahitaji akaunti yako mwenyewe ya Hive."
+    },
+    "tokens": {
+      "q": "HIVE, HBD na Hive Power ni nini?",
+      "a": "<b>HIVE</b> ni sarafu kuu ya Hive na inaweza kuuzwa na kununuliwa kwenye masoko ya kubadilishana. <b>HBD</b> (Hive Backed Dollars) imeundwa kubaki karibu na dola 1 ya Marekani na hupata riba unapoihamishia kwenye akiba. <b>Hive Power</b> ni HIVE uliyoifunga (stake): inaongeza thamani ya kura zako na kukupa Resource Credits zaidi, na kuirudisha kuwa HIVE huchukua wiki 13. Utapata zote tatu kwenye <b>Pochi</b> yako."
+    },
+    "vpRc": {
+      "q": "Nguvu ya kura na Resource Credits ni nini?",
+      "a": "Unaziona zote mbili kama vipimo kwenye menyu ya wasifu wako. <b>Nguvu ya kura</b> hupungua kidogo kwa kila kura unayopiga na hujijaza yenyewe ndani ya takriban siku 5: kadiri ilivyojaa zaidi, ndivyo kura yako inayofuata inavyokuwa na thamani zaidi. <b>Resource Credits</b> hulipia vitendo kama kuchapisha, kutoa maoni na kupiga kura, kwa hivyo hulipi ada kamwe. Nazo pia hujijaza zenyewe, na Hive Power zaidi hukupa nyingi zaidi. Kitendo kikishindwa kwa sababu Resource Credits zako zimeisha, subiri kidogo tu kisha ujaribu tena."
+    },
+    "formats": {
+      "q": "Ninaweza kupakia nini, na faili zinaweza kuwa kubwa kiasi gani?",
+      "a": "Video za MP4, MOV, AVI au WMV, hadi GB 5 kila moja. Video za wima za hadi dakika {{shortMinutes}} zinaweza kuchapishwa kama <b>Shorts</b>, zinazoonekana kwenye mlisho wa kutelezesha. Unaweza pia kuchapisha muziki, sauti na podikasti. Kila kitu huanzia kwenye kitufe cha <b>Pakia</b> juu."
+    },
+    "import": {
+      "q": "Je, ninaweza kuleta video zangu za YouTube au TikTok?",
+      "a": "Ndiyo. Fungua <importLink>Leta video</importLink> kwenye menyu ya wasifu na uhamishe video zako kutoka YouTube, TikTok na majukwaa mengine. Kichwa, maelezo, lebo na picha ndogo hujazwa kwa ajili yako, na unaweza kuleta video nyingi kwa wakati mmoja. Kwanza unaunganisha na kuthibitisha chaneli yako, ili tujue ni yako. Kuleta video kunahitaji akaunti yako mwenyewe ya Hive.",
+      "aSoon": "Kuleta video moja kwa moja kutoka YouTube na TikTok kunakuja hivi karibuni. Hadi wakati huo, pakua video yako kwenye kifaa chako na uipakie kwa kitufe cha <b>Pakia</b> juu."
+    },
+    "edit": {
+      "q": "Je, ninaweza kuhariri video baada ya kuichapisha?",
+      "a": "Ndiyo. Fungua video na uchague <b>Hariri</b>: unaweza kubadilisha kichwa, maelezo, lebo, picha ndogo na alama ya NSFW wakati wowote. Kwa video nyingi unaweza hata kuweka faili mpya kwa <b>Badilisha video</b>, na video inabaki na mara zake za kutazamwa na maoni yake."
+    },
+    "processing": {
+      "q": "Kwa nini video yangu bado inachakatwa?",
+      "a": "Baada ya kupakia, kila video hubadilishwa kuwa ubora kadhaa ili icheze vizuri kwenye muunganisho wowote. Kwa kawaida hii huchukua dakika chache, na zaidi kwa video ndefu au kubwa sana. Unaweza kufunga ukurasa wakati huo: video itaonekana kwenye chaneli yako mara itakapokuwa tayari."
+    },
+    "live": {
+      "q": "Je, ninaweza kutiririsha moja kwa moja?",
+      "a": "Ndiyo. Fungua <b>Studio ya utiririshaji</b> kutoka kwenye menyu ya kupakia juu. Unaweza kuwaleta wageni jukwaani, kutiririsha kutoka OBS ukipenda, na rekodi inabaki kwenye chaneli yako baadaye.",
+      "aSoon": "Utiririshaji wa moja kwa moja unajaribiwa sasa na kikundi kidogo cha watayarishi. Tutatangaza mara utakapofunguliwa kwa kila mtu."
+    },
+    "communities": {
+      "q": "Jumuiya ni nini?",
+      "a": "Jumuiya ni vikundi vinavyozunguka jambo moja linalopendwa, kama michezo ya video, muziki au usafiri. Jiunge na unazozipenda kwenye ukurasa wa <b>Vikundi</b> na video zao zitaonekana kwenye milisho yako. Unapopakia, unaweza kuchapisha ndani ya jumuiya ili watu sahihi waipate video yako. Ukiwa na akaunti ya Hive unaweza pia kuanzisha yako mwenyewe."
+    },
+    "report": {
+      "q": "Ninaripotije video au mtumiaji?",
+      "a": "Tumia <b>Ripoti</b> kwenye video, short, maoni au chaneli unayotaka kuripoti. Unahitaji kuwa umeingia, na timu yetu hukagua kila ripoti."
+    },
+    "nsfw": {
+      "q": "Je, maudhui ya NSFW yanaruhusiwa?",
+      "a": "Maudhui ya watu wazima yanaruhusiwa mradi yamewekwa alama ya <b>NSFW</b>, iwe unapopakia au baadaye kwa kuhariri video. Video zenye alama hufichwa kwenye milisho na utafutaji kwa kila mtu ambaye hajawasha <b>Onyesha maudhui ya NSFW</b> kwenye Mipangilio chini ya <b>Maudhui</b>. Maudhui haramu hayaruhusiwi kamwe."
+    },
+    "ai": {
+      "q": "Je, maudhui yaliyotengenezwa na AI yanaruhusiwa?",
+      "a": "Video na shorts zilizotengenezwa na AI zinaruhusiwa mradi uziwekee alama kwa uaminifu, kwa mfano kwenye lebo au maelezo. Zinapata lebo ya <b>AI</b> na hufichwa kwenye milisho na utafutaji kwa kila mtu ambaye hajazima <b>Ficha video zilizotengenezwa na AI</b> kwenye Mipangilio chini ya <b>Maudhui</b>."
+    },
+    "deleteVideos": {
+      "q": "Je, ninaweza kufuta video zangu?",
+      "a": "Si kabisa: video zako ni machapisho kwenye Hive, ambayo huhifadhi kila chapisho milele. Lakini unaweza kuficha video. Fungua video, chagua <b>Hariri</b> na uibadilishe kuwa <b>Haijaorodheshwa</b>: inatoweka kwenye mipasho na utafutaji na inawekwa alama kuwa haijaorodheshwa kwenye wasifu wako, huku mtu yeyote mwenye kiungo cha moja kwa moja bado anaweza kuitazama. Unaweza pia kuhariri kichwa na maelezo yake wakati wowote."
+    },
+    "myData": {
+      "q": "Je, ninaweza kupata nakala ya data yangu?",
+      "a": "Ndiyo. Kwenye Mipangilio (aikoni ya gia), fungua <b>Kuhusu / Toleo</b>, nenda kwenye <b>Data yako</b> na uchague <b>Pata data yangu</b>. Tunakutumia kama faili kila kitu ambacho 3Speak inahifadhi kukuhusu kwenye hifadhidata yetu wenyewe, ndani ya mwezi mmoja hivi karibuni zaidi. Machapisho, maoni na kura zako kwenye Hive ni za umma hata hivyo na zinaweza kusomwa kwenye programu yoyote ya Hive."
+    },
+    "deleteData": {
+      "q": "Je, ninaweza kuiomba 3Speak ifute data yangu?",
+      "a": "Ndiyo. Kwenye Mipangilio (aikoni ya gia), fungua <b>Kuhusu / Toleo</b>, nenda kwenye <b>Data yako</b> na uchague <b>Futa data ya akaunti yangu</b>. Tunafuta kila kitu ambacho 3Speak inahifadhi kukuhusu kwenye hifadhidata yetu wenyewe na tunaacha kuonyesha maudhui yako kwenye 3Speak, ndani ya mwezi mmoja hivi karibuni zaidi. Machapisho yako kwenye Hive yenyewe hatuwezi kuyafuta. Unaweza kuondoa chapisho mwenyewe tu wakati halina majibu wala kura za kuunga mkono, na hata hapo linabaki kwenye historia ya Hive."
+    },
+    "advertise": {
+      "q": "Ninatangazaje kwenye 3Speak?",
+      "a": "Fungua <advertiseLink>Tangaza</advertiseLink> ili kuweka matangazo ya bidhaa au huduma yako, au kutangaza video na chaneli yako mwenyewe. Unachagua tangazo lako litaonekana wapi na mara ngapi, unalipa kutoka kwenye pochi yako ya Hive, na unafuatilia matokeo kwenye takwimu za kampeni yako. Kuweka tangazo kunahitaji akaunti ya Hive."
+    },
+    "install": {
+      "q": "Je, ninaweza kusakinisha 3Speak kama programu?",
+      "a": "Ndiyo, bila duka la programu. Kwenye Android, gusa <b>Sakinisha programu</b> kwenye menyu au ukubali ombi la kusakinisha la kivinjari chako. Kwenye iPhone, fungua 3speak.tv kwenye Safari, gusa Shiriki kisha <b>Ongeza kwenye Skrini ya Nyumbani</b>. Kwenye kompyuta, tumia ikoni ya kusakinisha kwenye upau wa anwani wa kivinjari chako."
+    },
+    "languages": {
+      "q": "Je, ninaweza kutumia 3Speak kwa lugha yangu?",
+      "a": "Ndiyo. 3Speak inapatikana kwa lugha 21: chagua yako kwenye Mipangilio chini ya <b>Jumla</b>. Watu kutoka jumuiya hukagua na kuboresha tafsiri, kwa hivyo ukiona kosa au ukitaka kusaidia, tuambie kwenye <discord>Discord</discord>."
+    },
+    "help": {
+      "q": "Ninaweza kupata msaada wapi?",
+      "a": "Jiunge nasi kwenye <discord>Discord</discord> au <telegram>Telegram</telegram>: timu na jumuiya hujibu maswali huko. Kwa habari, fuata 3Speak kwenye <x>X</x>."
+    }
+  },
+  "linkCopied": "Kiungo cha swali hili kimenakiliwa",
+  "copyLink": "Nakili kiungo cha swali hili",
+  "more": {
+    "title": "Bado una swali?",
+    "text": "Tuulize kwenye <discord>Discord</discord> au <telegram>Telegram</telegram>, au soma zaidi <aboutLink>kuhusu 3Speak</aboutLink>."
+  }
+}

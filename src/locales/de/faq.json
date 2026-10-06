@@ -1,0 +1,125 @@
+{
+  "title": "Häufige Fragen",
+  "subtitle": "Neu bei 3Speak? Hier findest du die Antworten auf die Fragen, die wir am häufigsten bekommen.",
+  "groups": {
+    "start": "Erste Schritte",
+    "earning": "Verdienen",
+    "uploading": "Hochladen",
+    "community": "Community und Sicherheit",
+    "more": "Werbung und mehr"
+  },
+  "items": {
+    "what": {
+      "q": "Was ist 3Speak?",
+      "a": "3Speak ist eine Videoplattform, auf der dein Kanal dir gehört. Deine Videos, Kommentare und Follower liegen auf deinem eigenen Hive-Konto, nicht auf einem Server von 3Speak, deshalb kann sie dir niemand wegnehmen. Creator und Zuschauer können beim Nutzen beide Belohnungen verdienen."
+    },
+    "watchFree": {
+      "q": "Brauche ich ein Konto zum Anschauen?",
+      "a": "Nein. Anschauen ist kostenlos und braucht kein Konto. Du brauchst nur eins, um hochzuladen, zu kommentieren, abzustimmen, Kanälen zu folgen und Belohnungen zu verdienen."
+    },
+    "signup": {
+      "q": "Wie erstelle ich ein Konto?",
+      "a": "Tippe oben auf <b>Registrieren</b> und mach mit Google, E-Mail oder einer anderen Option von Butter Auth weiter, dem Anmeldedienst, den 3Speak nutzt. Es ist kostenlos und dauert etwa eine Minute. Neue Konten starten mit einer kurzen Aufwärmphase: Du kannst sofort schauen, hochladen und kommentieren, und Voten, Trinkgeld geben und Verdienen werden freigeschaltet, sobald du sie abgeschlossen und dein eigenes Hive-Konto bekommen hast."
+    },
+    "hive": {
+      "q": "Was ist Hive, und muss ich das verstehen?",
+      "a": "Hive ist ein offenes Netzwerk, das Konten, Posts, Votes und Belohnungen speichert. Es läuft seit 2016, und 2020 hat die Community es von jedem Unternehmen unabhängig gemacht. 3Speak ist eine von vielen Apps, die darauf aufbauen, deshalb funktioniert dasselbe Konto auch in anderen Hive-Apps. Du musst nichts davon verstehen, um 3Speak zu nutzen: Melde dich einfach an, schau, poste und kommentiere."
+    },
+    "loginTypes": {
+      "q": "Butter Auth, Keychain, HiveSigner: Was ist der Unterschied?",
+      "a": "Das sind verschiedene Wege, dich bei derselben Art von Konto anzumelden. <b>Butter Auth</b> (Google, E-Mail und mehr) ist am einfachsten: 3Speak darf damit für dich posten, und Wallet-Aktionen wie Überweisungen bestätigst du separat. <b>Hive Keychain</b>, <b>HiveSigner</b>, <b>HiveAuth</b>, <b>PeakVault</b> und <b>Ledger</b> sind Hive-Wallets: Deine Schlüssel bleiben bei dir, und du bestätigst jede Aktion selbst. Nimm einfach, was dir lieber ist."
+    },
+    "lostKeys": {
+      "q": "Ich habe meine Schlüssel oder mein Passwort verloren. Was jetzt?",
+      "a": "Verlorene Schlüssel kann niemand wiederherstellen, auch 3Speak nicht. Bewahre deshalb eine Kopie deiner Schlüssel an einem sicheren Ort auf. Wenn du dein Master-Passwort oder deinen Owner-Schlüssel noch hast, kannst du dein Konto damit wieder zu einer Wallet hinzufügen. Wenn deine Schlüssel endgültig weg sind, schreib uns auf <discord>Discord</discord>: Wir schalten dich frei, damit du ein neues Konto erstellen kannst. Wenn jemand anderes dein Konto übernommen hat, kann die Kontowiederherstellung von Hive innerhalb von 30 Tagen helfen: Frag uns auf <discord>Discord</discord>, und wir führen dich Schritt für Schritt durch."
+    },
+    "creatorsEarn": {
+      "q": "Wie verdienen Creator?",
+      "a": "Auf zwei Wegen. Wenn Leute dein Video upvoten, sammelt es Belohnungen, die einmal ausgezahlt werden, etwa 7 Tage nach der Veröffentlichung, in HBD und Hive Power. Und wenn auf deinen Videos Werbung läuft, bekommst du einen Anteil an den Einnahmen, den du auf Wunsch mit der Community teilen kannst, in der du gepostet hast."
+    },
+    "viewersEarn": {
+      "q": "Können auch Zuschauer verdienen?",
+      "a": "Ja. Schalte <b>Zuschauer-Belohnungen</b> in den Einstellungen (das Zahnrad-Symbol) unter <b>Werbung & Belohnungen</b> ein, dann verdienst du einen Anteil an den Werbeeinnahmen der Videos, die du schaust. Deine Kommentare können Belohnungen verdienen, wenn Leute sie upvoten, und wer gute Videos früh upvotet, bekommt auch einen Teil ihrer Belohnungen. Für all das brauchst du dein eigenes Hive-Konto."
+    },
+    "tokens": {
+      "q": "Was sind HIVE, HBD und Hive Power?",
+      "a": "<b>HIVE</b> ist die Hauptwährung von Hive und kann an Börsen gehandelt werden. <b>HBD</b> (Hive Backed Dollars) soll nah bei 1 US-Dollar bleiben und bringt Zinsen, wenn du es ins Sparkonto verschiebst. <b>Hive Power</b> ist gestaktes HIVE: Es macht deine Votes wertvoller und gibt dir mehr Resource Credits, und die Rückumwandlung in HIVE dauert 13 Wochen. Alle drei findest du in deiner <b>Wallet</b>."
+    },
+    "vpRc": {
+      "q": "Was sind Voting Power und Resource Credits?",
+      "a": "Du siehst beide als Anzeigen in deinem Profilmenü. <b>Voting Power</b> sinkt bei jedem Upvote ein wenig und füllt sich in etwa 5 Tagen von selbst wieder auf: Je voller sie ist, desto mehr ist dein nächster Vote wert. <b>Resource Credits</b> bezahlen Aktionen wie Posten, Kommentieren und Voten, deshalb zahlst du nie Gebühren. Auch sie füllen sich von selbst wieder auf, und mehr Hive Power gibt dir mehr davon. Wenn eine Aktion fehlschlägt, weil deine Resource Credits aufgebraucht sind, warte einfach eine Weile und versuch es nochmal."
+    },
+    "formats": {
+      "q": "Was kann ich hochladen, und wie groß dürfen Dateien sein?",
+      "a": "Videos als MP4, MOV, AVI oder WMV, jeweils bis zu 5 GB. Hochkant-Videos bis {{shortMinutes}} Minuten können als <b>Shorts</b> erscheinen, die im Wisch-Feed auftauchen. Du kannst auch Musik, Audio und Podcasts veröffentlichen. Alles startet über den Button <b>Hochladen</b> oben."
+    },
+    "import": {
+      "q": "Kann ich meine YouTube- oder TikTok-Videos importieren?",
+      "a": "Ja. Öffne <importLink>Videos importieren</importLink> im Profilmenü und hol deine Videos von YouTube, TikTok und anderen Plattformen rüber. Titel, Beschreibung, Tags und Thumbnail werden für dich ausgefüllt, und du kannst viele Videos auf einmal importieren. Zuerst verknüpfst und bestätigst du deinen Kanal, damit wir wissen, dass er dir gehört. Für den Import brauchst du dein eigenes Hive-Konto.",
+      "aSoon": "Der direkte Import von YouTube und TikTok kommt bald. Bis dahin lade dein Video herunter und lade es über den Button <b>Hochladen</b> oben hoch."
+    },
+    "edit": {
+      "q": "Kann ich ein Video nach dem Veröffentlichen bearbeiten?",
+      "a": "Ja. Öffne das Video und wähle <b>Bearbeiten</b>: Du kannst Titel, Beschreibung, Tags, Thumbnail und die NSFW-Markierung jederzeit ändern. Bei den meisten Videos kannst du mit <b>Video ersetzen</b> sogar eine neue Datei einsetzen, und das Video behält seine Aufrufe und Kommentare."
+    },
+    "processing": {
+      "q": "Warum wird mein Video noch verarbeitet?",
+      "a": "Nach dem Hochladen wird jedes Video in mehrere Qualitätsstufen umgewandelt, damit es bei jeder Verbindung flüssig läuft. Das dauert meist ein paar Minuten, bei langen oder sehr großen Videos länger. Du kannst die Seite in der Zwischenzeit schließen: Das Video erscheint auf deinem Kanal, sobald es fertig ist."
+    },
+    "live": {
+      "q": "Kann ich livestreamen?",
+      "a": "Ja. Öffne das <b>Stream-Studio</b> über das Hochladen-Menü oben. Du kannst Gäste auf die Bühne holen, auf Wunsch aus OBS streamen, und die Aufnahme bleibt danach auf deinem Kanal.",
+      "aSoon": "Livestreaming wird gerade mit einer kleinen Gruppe von Creatorn getestet. Wir sagen Bescheid, sobald es für alle freigegeben ist."
+    },
+    "communities": {
+      "q": "Was sind Communities?",
+      "a": "Communities sind Gruppen rund um ein gemeinsames Interesse, zum Beispiel Gaming, Musik oder Reisen. Tritt auf der Seite <b>Gruppen</b> denen bei, die dir gefallen, dann erscheinen ihre Videos in deinen Feeds. Beim Hochladen kannst du in eine Community posten, damit die richtigen Leute dein Video finden. Mit einem Hive-Konto kannst du auch deine eigene gründen."
+    },
+    "report": {
+      "q": "Wie melde ich ein Video oder einen Nutzer?",
+      "a": "Nutze <b>Melden</b> beim Video, Short, Kommentar oder Kanal, den du melden willst. Dafür musst du angemeldet sein, und unser Team prüft jede Meldung."
+    },
+    "nsfw": {
+      "q": "Sind NSFW-Inhalte erlaubt?",
+      "a": "Inhalte für Erwachsene sind erlaubt, solange sie als <b>NSFW</b> markiert sind, entweder beim Hochladen oder später durch Bearbeiten des Videos. Markierte Videos sind in Feeds und Suche für alle ausgeblendet, die <b>NSFW-Inhalte anzeigen</b> nicht in den Einstellungen unter <b>Inhalte</b> eingeschaltet haben. Illegale Inhalte sind nie erlaubt."
+    },
+    "ai": {
+      "q": "Sind KI-generierte Inhalte erlaubt?",
+      "a": "KI-generierte Videos und Shorts sind erlaubt, solange du sie ehrlich kennzeichnest, zum Beispiel in den Tags oder der Beschreibung. Sie bekommen ein <b>KI</b>-Label und sind in Feeds und Suche für alle ausgeblendet, die <b>KI-generierte Videos ausblenden</b> nicht in den Einstellungen unter <b>Inhalte</b> ausgeschaltet haben."
+    },
+    "deleteVideos": {
+      "q": "Kann ich meine Videos löschen?",
+      "a": "Nicht ganz: Deine Videos sind Beiträge auf Hive, und Hive behält jeden Beitrag für immer. Du kannst ein Video aber verstecken. Öffne das Video, wähle <b>Bearbeiten</b> und stelle es auf <b>Nicht gelistet</b>: Es verschwindet aus Feeds und Suche und ist auf deinem Profil als nicht gelistet markiert, aber wer den direkten Link hat, kann es weiter ansehen. Titel und Beschreibung kannst du außerdem jederzeit ändern."
+    },
+    "myData": {
+      "q": "Kann ich eine Kopie meiner Daten bekommen?",
+      "a": "Ja. Öffne in den Einstellungen (das Zahnrad-Symbol) <b>Info / Version</b>, gehe zu <b>Deine Daten</b> und wähle <b>Meine Daten anfordern</b>. Wir schicken dir alles, was 3Speak in unserer eigenen Datenbank über dich speichert, als Datei, spätestens innerhalb eines Monats. Deine Beiträge, Kommentare und Votes auf Hive sind sowieso öffentlich und in jeder Hive-App lesbar."
+    },
+    "deleteData": {
+      "q": "Kann ich 3Speak meine Daten löschen lassen?",
+      "a": "Ja. Öffne in den Einstellungen (das Zahnrad-Symbol) <b>Info / Version</b>, gehe zu <b>Deine Daten</b> und wähle <b>Meine Kontodaten löschen</b>. Wir löschen alles, was 3Speak in unserer eigenen Datenbank über dich speichert, und zeigen deine Inhalte auf 3Speak nicht mehr an, spätestens innerhalb eines Monats. Deine Beiträge auf Hive selbst können wir nicht löschen. Du kannst einen Beitrag nur selbst entfernen, solange er keine Antworten und keine Upvotes hat, und auch dann bleibt er in der Hive-Historie erhalten."
+    },
+    "advertise": {
+      "q": "Wie werbe ich auf 3Speak?",
+      "a": "Öffne <advertiseLink>Werben</advertiseLink>, um Werbung für dein Produkt oder deine Dienstleistung zu buchen oder deine eigenen Videos und deinen Kanal zu bewerben. Du wählst, wo und wie oft deine Anzeige läuft, bezahlst aus deiner Hive-Wallet und verfolgst die Ergebnisse in deinen Kampagnenstatistiken. Zum Buchen brauchst du ein Hive-Konto."
+    },
+    "install": {
+      "q": "Kann ich 3Speak als App installieren?",
+      "a": "Ja, ganz ohne App Store. Tippe unter Android im Menü auf <b>App installieren</b> oder bestätige die Installationsanfrage deines Browsers. Öffne auf dem iPhone 3speak.tv in Safari, tippe auf Teilen und dann auf <b>Zum Home-Bildschirm</b>. Nutze am Computer das Installations-Symbol in der Adressleiste deines Browsers."
+    },
+    "languages": {
+      "q": "Kann ich 3Speak in meiner Sprache nutzen?",
+      "a": "Ja. 3Speak gibt es in 21 Sprachen: Wähle deine in den Einstellungen unter <b>Allgemein</b>. Leute aus der Community prüfen und verbessern die Übersetzungen, also sag uns auf <discord>Discord</discord> Bescheid, wenn dir ein Fehler auffällt oder du helfen möchtest."
+    },
+    "help": {
+      "q": "Wo bekomme ich Hilfe?",
+      "a": "Komm zu uns auf <discord>Discord</discord> oder <telegram>Telegram</telegram>: Dort beantworten das Team und die Community Fragen. Für Neuigkeiten folge 3Speak auf <x>X</x>."
+    }
+  },
+  "linkCopied": "Link zu dieser Frage kopiert",
+  "copyLink": "Link zu dieser Frage kopieren",
+  "more": {
+    "title": "Noch eine Frage?",
+    "text": "Frag uns auf <discord>Discord</discord> oder <telegram>Telegram</telegram>, oder lies mehr <aboutLink>über 3Speak</aboutLink>."
+  }
+}

@@ -11,28 +11,6 @@
       "q8": "Há uma linha tênue entre liberdade de expressão e discurso de ódio. A liberdade de expressão incentiva o debate, enquanto o discurso de ódio incita a violência.",
       "q9": "Liberdade de expressão significa que você não deve fazer nada contra as pessoas por causa das opiniões que têm, das opiniões que expressam ou das palavras que falam ou escrevem."
     },
-    "faq": {
-      "what": {
-        "question": "O que é o 3Speak?",
-        "answer": "O 3Speak é um lugar onde os criadores de conteúdo são donos diretos dos seus ativos e das suas comunidades. Com a tecnologia blockchain, a propriedade desses ativos e comunidades pertence ao criador e ao usuário, não ao 3Speak. Por isso, eles podem ser levados para outros apps que usam blockchain. Isso significa que, se não servirmos a comunidade e os criadores da melhor forma possível, eles podem pegar os ativos que geraram e ir para outro app. O resultado é que o 3Speak é resistente à censura, não pode tirar seus ativos nem apagar suas comunidades."
-      },
-      "upvote": {
-        "question": "Por que o 3Speak não vota em mim?",
-        "answer": "O 3Speak vota a seu próprio critério e não segue nenhum critério específico. A melhor forma de chamar nossa atenção é enviar conteúdo de alta qualidade e trazer público e comunidades para o 3Speak."
-      },
-      "missing": {
-        "question": "Por que alguns dos meus vídeos não aparecem no feed de novos?",
-        "answer": "Você pode enviar quantos vídeos quiser! Isso significa que às vezes um único usuário poderia encher os feeds só com o próprio conteúdo. Para evitar isso, limitamos quantos vídeos de um mesmo criador podem aparecer a cada carregamento."
-      },
-      "creator": {
-        "question": "Como me torno um criador de conteúdo?",
-        "answer": "O jeito mais rápido de ter uma conta da Hive é clicar no botão \"Criar conta\" no painel de navegação e seguir as instruções (não perca suas chaves!). Depois, entre com sua conta da Hive e clique em \"estúdio do criador\" / enviar. Pronto, está tudo configurado!"
-      },
-      "rewards": {
-        "question": "Como ganho recompensas por comentar?",
-        "answer": "Para ganhar recompensas, você precisa de uma conta na blockchain Hive. Você pode conseguir uma de graça na Hive (https://signup.hive.io), comprar um guia de usuário da Hive ou pedir para outro usuário da Hive criar uma para você. Com a conta em mãos, entre com o Hivesigner e informe sua chave ACTIVE no primeiro login. Aí você pode publicar comentários que podem render recompensas em criptomoeda."
-      }
-    },
     "hero": {
       "tagline1": "PROTEJA SEU CONTEÚDO",
       "tagline2": "TOKENIZE SUA COMUNIDADE",
@@ -115,7 +93,8 @@
     },
     "faqSection": {
       "title": "Perguntas frequentes",
-      "subtitle": "Tudo o que você precisa saber sobre o 3Speak"
+      "subtitle": "Tudo o que você precisa saber sobre o 3Speak",
+      "cta": "Ver as perguntas frequentes"
     },
     "quotesTitle": "Vozes da liberdade",
     "cta": {

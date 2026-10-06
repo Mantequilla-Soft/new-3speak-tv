@@ -61,8 +61,8 @@
     "success": "Geteilt!",
     "failed": "Erneutes Teilen fehlgeschlagen",
     "reshared": "Geteilt",
-    "reshare": "Erneut teilen",
-    "reshareWithCount": "Erneut teilen ({{count}})"
+    "reshare": "Reshare",
+    "reshareWithCount": "Reshare ({{count}})"
   },
   "clip": {
     "noVideoUrlRemix": "Video-URL für den Remix konnte nicht ermittelt werden",
@@ -75,7 +75,7 @@
     "loginRequired": "Melde dich an, um zu clippen",
     "cancel": "Clip abbrechen",
     "clipVideo": "Video clippen",
-    "label": "Video clippen",
+    "label": "clippen",
     "clip": "Clip",
     "seekToStart": "Zum Anfang spulen",
     "setStart": "Start setzen",

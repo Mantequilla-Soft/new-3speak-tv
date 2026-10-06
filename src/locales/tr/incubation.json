@@ -131,12 +131,8 @@
         "hint": "Herhangi bir video. Gerçekten izlediğin süre sayılır.",
         "why": "İzlemek, yalnızca paylaşım yapmak için değil, katılmak için burada olduğunu gösterir. Çoğu kişinin uğraşmadan tamamladığı hedef bu.",
         "counts": {
-          "0": "3Speak'in kendisinde geçen süre. Aynı videonun başka bir siteye gömülü hali sayılmaz.",
           "1": "Video başına bir kez. Bir videoyu tekrar izlemek en iyi süresini artırır ama asla üstüne eklenmez ve tek bir video sürenin tamamını tek başına karşılayamaz.",
-          "2": "Gerçek oynatma süresi; yani videoyu hızlandırmak cezalandırılmaz, yavaşlatmak da saati uzatmaz.",
-          "3": "Ekranda. Arka plandaki bir sekmede oynamaya bırakılan video saate eklenmez.",
-          "4": "Kendi videoların değil.",
-          "5": "Gizli modda izlerken hiçbir şey kaydedilmez."
+          "4": "Kendi videoların değil."
         },
         "cta": "Bir şey izle"
       },
@@ -196,8 +192,26 @@
     "hideDetails": "Ayrıntıları gizle",
     "showLeft": "Kalanları göster",
     "whatCounts": "Neler sayılır",
+    "groups": {
+      "create": "Üret",
+      "watch": "İzle ve katıl",
+      "connect": "İnsanlarını bul",
+      "brand": "Markan",
+      "time": "Birkaç gün ver"
+    },
+    "goalDone": "Tamam",
     "reviewDone": "Hepsi tamam. Ekip kanalını inceleyip seni yükseltecek. Yapman gereken başka bir şey yok.",
-    "reviewPending": "Bunların hepsini tamamladığında ekip kanalını inceleyip seni yükseltecek."
+    "reviewPending": "Bunların hepsini tamamladığında ekip kanalını inceleyip seni yükseltecek.",
+    "optional": {
+      "title": "İsteğe bağlı",
+      "social": {
+        "label": "YouTube, TikTok veya Instagram hesabını bağla",
+        "hint": "İnceleme için gerekmez ama insanlara seni başka nerede bulabileceklerini gösterir.",
+        "linked": "Bağlandı: {{platforms}}",
+        "why": "Kanalının biyografisine kısa bir kod koyarsın, biz kontrol ederiz ve kanal profilinde görünür. Isınma dönemin bittiğinde bağlantı Hive hesabına taşınır.",
+        "cta": "Kanal bağla"
+      }
+    }
   },
   "navProgress": {
     "chooseTitle": "Hive hesabına giden yolunu görmek için seni 3Speak'e neyin getirdiğini söyle.",
@@ -305,6 +319,8 @@
       "graduated": "Artık Hive'da <userLink>@{{user}}</userLink> olarak. Aşağıdakiler ondan önce üretildi.",
       "advertiser": "Bu, 3Speak'teki marka sayfan. Aşağıdaki adımları tamamla, ekip markanı incelesin. Onaylandığında bir Hive hesabı alırsın: bu senin reklamveren hesabındır, reklam rezervasyonu yapacağın ve ödeme yapacağın hesap.",
       "own": "Başkaları seni böyle görüyor. Gönderilerin 3Speak'te duruyor ve henüz Hive blokzincirinde değil, bu yüzden ödül kazanmıyor. Aşağıdaki tüm görevleri tamamlayıp hesabını aldığında bu değişir.",
+      "ownCreator": "Gönderilerin bir ısınma alanında tutuluyor, ama ana platformda görünür ve öne çıkarılmış durumda. Orada kaldıkları sürece henüz ödül kazanmazlar. Aşağıdaki tüm görevleri tamamlayıp videolarını birkaç basit adımda aktardıktan sonra hesabını aldığında bu değişir.",
+      "ownViewer": "Isınma dönemindesin. Yorumların ve takiplerin şimdilik bir ısınma alanında tutuluyor ve henüz ödül kazanmıyor. Aşağıdaki tüm görevleri tamamladığında Hive hesabını alırsın ve o andan itibaren her şey doğrudan ana platforma gider.",
       "visitor": "Burada yeni, henüz Hive'da değil. Bu gönderiler 3Speak'te duruyor, bu yüzden şimdilik ödül kazanmıyor. Yine de takip et ve yorum yap: ilk haftaları atlatmayı sağlayan şey erken gelen destektir. Hive hesabını aldığında sana haber vereceğiz, böylece onu orada da takip edebilirsin."
     },
     "tabs": {

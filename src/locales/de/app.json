@@ -26,8 +26,8 @@
     "gotIt": "Verstanden"
   },
   "routes": {
-    "homeFeed": "Startseiten-Feed",
-    "followFeed": "Folge-ich-Feed",
+    "homeFeed": "Startseite",
+    "followFeed": "Deine Follows",
     "discover": "Entdecken",
     "newVideos": "Neue Videos",
     "firstUploads": "Erste Uploads",
@@ -46,6 +46,7 @@
     "editScheduledPost": "Geplanten Post bearbeiten",
     "chat": "Chat",
     "about": "Über uns",
+    "faq": "FAQ",
     "login": "Anmelden",
     "brandFallback": "3Speak – Dezentrale Videoplattform"
   },

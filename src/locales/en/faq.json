@@ -1,0 +1,125 @@
+{
+  "title": "Frequently asked questions",
+  "subtitle": "New to 3Speak? Here are the answers to the questions people ask us most.",
+  "groups": {
+    "start": "Getting started",
+    "earning": "Earning",
+    "uploading": "Uploading",
+    "community": "Community and safety",
+    "more": "Advertising and more"
+  },
+  "items": {
+    "what": {
+      "q": "What is 3Speak?",
+      "a": "3Speak is a video platform where your channel belongs to you. Your videos, comments and followers live on your own Hive account, not on a 3Speak server, so nobody can take them away from you. Creators and viewers can both earn rewards while they use it."
+    },
+    "watchFree": {
+      "q": "Do I need an account to watch?",
+      "a": "No. Watching is free and needs no account. You only need one to upload, comment, vote, follow channels and earn rewards."
+    },
+    "signup": {
+      "q": "How do I create an account?",
+      "a": "Tap <b>Sign up</b> at the top and continue with Google, email or another option offered by Butter Auth, the login service 3Speak uses. It is free and takes about a minute. New accounts start with a short warm-up: you can watch, upload and comment right away, and voting, tipping and earning unlock once you finish it and get your own Hive account."
+    },
+    "hive": {
+      "q": "What is Hive, and do I need to understand it?",
+      "a": "Hive is an open network that stores accounts, posts, votes and rewards. It has been running since 2016, and in 2020 its community made it independent of any company. 3Speak is one of many apps built on it, so the same account also works in other Hive apps. You do not need to understand any of it to use 3Speak: just log in, watch, post and comment."
+    },
+    "loginTypes": {
+      "q": "Butter Auth, Keychain, HiveSigner: what is the difference?",
+      "a": "They are different ways to log in to the same kind of account. <b>Butter Auth</b> (Google, email and more) is the easiest: it lets 3Speak post for you, and you approve wallet actions like transfers separately. <b>Hive Keychain</b>, <b>HiveSigner</b>, <b>HiveAuth</b>, <b>PeakVault</b> and <b>Ledger</b> are Hive wallets: your keys stay with you and you approve every action yourself. Pick whichever you prefer."
+    },
+    "lostKeys": {
+      "q": "I lost my keys or password. What now?",
+      "a": "Lost keys cannot be restored by anyone, not even by 3Speak, so keep a copy of your keys somewhere safe. If you still have your master password or owner key, you can add your account to a wallet again with it. If your keys are gone for good, message us on <discord>Discord</discord> and we will unlock signing up again, so you can create a new account. If someone else took over your account, Hive's account recovery can help within 30 days: ask us on <discord>Discord</discord> and we will walk you through it."
+    },
+    "creatorsEarn": {
+      "q": "How do creators earn?",
+      "a": "In two ways. When people upvote your video, it collects rewards that are paid out once, about 7 days after you publish, in HBD and Hive Power. And when ads run on your videos, you get a share of what they make, which you can split with the community you posted in if you like."
+    },
+    "viewersEarn": {
+      "q": "Can viewers earn too?",
+      "a": "Yes. Turn on <b>Viewer rewards</b> in Settings (the gear icon) under <b>Ads & rewards</b>, and you earn a share of ad revenue for the videos you watch. Your comments can earn rewards when people upvote them, and upvoting good videos early earns you a part of their rewards too. All of this needs your own Hive account."
+    },
+    "tokens": {
+      "q": "What are HIVE, HBD and Hive Power?",
+      "a": "<b>HIVE</b> is the main currency of Hive and can be traded on exchanges. <b>HBD</b> (Hive Backed Dollars) is designed to stay close to 1 US dollar and earns interest when you move it into savings. <b>Hive Power</b> is HIVE you have staked: it makes your votes worth more and gives you more Resource Credits, and turning it back into HIVE takes 13 weeks. You find all three in your <b>Wallet</b>."
+    },
+    "vpRc": {
+      "q": "What are Voting Power and Resource Credits?",
+      "a": "You see both as meters in your profile menu. <b>Voting Power</b> goes down a little with every upvote and refills by itself over about 5 days: the fuller it is, the more your next vote is worth. <b>Resource Credits</b> pay for actions like posting, commenting and voting, so you never pay fees. They refill by themselves too, and more Hive Power gives you more of them. If an action fails because you are out of Resource Credits, just wait a while and try again."
+    },
+    "formats": {
+      "q": "What can I upload, and how big can files be?",
+      "a": "Videos in MP4, MOV, AVI or WMV, up to 5 GB each. Upright videos up to {{shortMinutes}} minutes can go out as <b>Shorts</b>, which show up in the swipe feed. You can also publish music, audio and podcasts. Everything starts from the <b>Upload</b> button at the top."
+    },
+    "import": {
+      "q": "Can I import my YouTube or TikTok videos?",
+      "a": "Yes. Open <importLink>Import videos</importLink> in the profile menu and bring your videos over from YouTube, TikTok and other platforms. Title, description, tags and thumbnail are filled in for you, and you can import many videos at once. You link and verify your channel first, so we know it is yours. Importing needs your own Hive account.",
+      "aSoon": "Importing straight from YouTube and TikTok is coming soon. Until then, download your video and upload it with the <b>Upload</b> button at the top."
+    },
+    "edit": {
+      "q": "Can I edit a video after publishing?",
+      "a": "Yes. Open the video and choose <b>Edit</b>: you can change the title, description, tags, thumbnail and NSFW mark at any time. For most videos you can even swap in a new file with <b>Replace video</b>, and the video keeps its views and comments."
+    },
+    "processing": {
+      "q": "Why is my video still processing?",
+      "a": "After an upload, every video is converted into several qualities so it plays smoothly on any connection. That usually takes a few minutes, and longer for long or very large videos. You can close the page in the meantime: the video appears on your channel as soon as it is ready."
+    },
+    "live": {
+      "q": "Can I livestream?",
+      "a": "Yes. Open <b>Stream Studio</b> from the Upload menu at the top. You can bring guests on stage, stream from OBS if you like, and the recording stays on your channel afterwards.",
+      "aSoon": "Livestreaming is being tested with a small group of creators right now. We will announce it as soon as it opens to everyone."
+    },
+    "communities": {
+      "q": "What are communities?",
+      "a": "Communities are groups around a shared interest, like gaming, music or travel. Join the ones you like on the <b>Groups</b> page and their videos show up in your feeds. When you upload, you can post into a community so the right people find your video. With a Hive account you can also start your own."
+    },
+    "report": {
+      "q": "How do I report a video or user?",
+      "a": "Use <b>Report</b> on the video, short, comment or channel you want to report. You need to be logged in, and our team reviews every report."
+    },
+    "nsfw": {
+      "q": "Is NSFW content allowed?",
+      "a": "Adult content is allowed as long as it is marked <b>NSFW</b>, either when you upload or later by editing the video. Marked videos are hidden from feeds and search for everyone who has not turned on <b>Show NSFW content</b> in Settings under <b>Content</b>. Illegal content is never allowed."
+    },
+    "ai": {
+      "q": "Is AI-generated content allowed?",
+      "a": "AI-generated videos and shorts are allowed as long as you mark them honestly, for example in the tags or the description. They get an <b>AI</b> label and are hidden from feeds and search for everyone who has not turned off <b>Hide AI-generated videos</b> in Settings under <b>Content</b>."
+    },
+    "deleteVideos": {
+      "q": "Can I delete my videos?",
+      "a": "Not completely: your videos are posts on Hive, which keeps every post for good. But you can hide one. Open the video, choose <b>Edit</b> and switch it to <b>Unlisted</b>: it disappears from feeds and search and is marked as unlisted on your profile, while anyone with the direct link can still watch it. You can also edit its title and description at any time."
+    },
+    "myData": {
+      "q": "Can I get a copy of my data?",
+      "a": "Yes. In Settings (the gear icon), open <b>About / Version</b>, go to <b>Your data</b> and choose <b>Get my data</b>. We send you everything 3Speak stores about you in our own database as a file, within one month at the latest. Your posts, comments and votes on Hive are public anyway and can be read in any Hive app."
+    },
+    "deleteData": {
+      "q": "Can I have 3Speak delete my data?",
+      "a": "Yes. In Settings (the gear icon), open <b>About / Version</b>, go to <b>Your data</b> and choose <b>Delete my account data</b>. We delete everything 3Speak stores about you in our own database and stop showing your content on 3Speak, within one month at the latest. Your posts on Hive itself cannot be erased by us. You can remove a post yourself only while it has no replies and no upvotes, and even then it stays in Hive's history."
+    },
+    "advertise": {
+      "q": "How do I advertise on 3Speak?",
+      "a": "Open <advertiseLink>Advertise</advertiseLink> to book ads for your product or service, or to promote your own videos and channel. You choose where and how often your ad runs, pay from your Hive wallet, and follow the results in your campaign stats. Booking needs a Hive account."
+    },
+    "install": {
+      "q": "Can I install 3Speak as an app?",
+      "a": "Yes, without an app store. On Android, tap <b>Install App</b> in the menu or accept your browser's install prompt. On iPhone, open 3speak.tv in Safari, tap Share and then <b>Add to Home Screen</b>. On a computer, use the install icon in your browser's address bar."
+    },
+    "languages": {
+      "q": "Can I use 3Speak in my language?",
+      "a": "Yes. 3Speak is available in 21 languages: pick yours in Settings under <b>General</b>. People from the community check and improve the translations, so if you spot a mistake or want to help, tell us on <discord>Discord</discord>."
+    },
+    "help": {
+      "q": "Where can I get help?",
+      "a": "Join us on <discord>Discord</discord> or <telegram>Telegram</telegram>: the team and the community answer questions there. For news, follow 3Speak on <x>X</x>."
+    }
+  },
+  "linkCopied": "Link to this question copied",
+  "copyLink": "Copy link to this question",
+  "more": {
+    "title": "Still have a question?",
+    "text": "Ask us on <discord>Discord</discord> or <telegram>Telegram</telegram>, or read more <aboutLink>about 3Speak</aboutLink>."
+  }
+}

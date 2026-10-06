@@ -123,7 +123,7 @@
       "desc": "Größere Videokarten auf Startseite, Profil- und Playlist-Seiten anzeigen. Ausschalten für kleinere, kompaktere Karten."
     },
     "previews": {
-      "title": "Videovorschauen",
+      "title": "Videovorschau",
       "desc": "Eine stumme Vorschau abspielen, wenn du über eine Videokarte fährst (und auf dem Handy im großen Modus startet die mittlere Karte beim Scrollen automatisch)."
     },
     "simpleFeeds": {

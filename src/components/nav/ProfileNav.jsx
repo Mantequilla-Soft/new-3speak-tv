@@ -3,7 +3,7 @@ import "./ProfileNav.scss"
 import '../../page/Login/KeyChainLogin.scss';
 import { useAppStore } from '../../lib/store';
 import { useGetMyQuery } from '../../hooks/getUserDetails';
-import { MdSettings, MdTrendingUp, MdCampaign, MdCloudUpload, MdPersonAdd } from "react-icons/md";
+import { MdSettings, MdTrendingUp, MdCampaign, MdCloudUpload, MdPersonAdd, MdHelpOutline } from "react-icons/md";
 import { ImPower } from "react-icons/im";
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
@@ -245,6 +245,9 @@ function ProfileNav({ isVisible, onclose, toggleAddAccount, openLoginModal }) {
           </Link>
           <Link to="/about" className="pn-item" role="menuitem" onClick={onclose}>
             <HiInformationCircle className="pn-icon" /> <span>{t('nav.aboutLink')}</span>
+          </Link>
+          <Link to="/faq" className="pn-item" role="menuitem" onClick={onclose}>
+            <MdHelpOutline className="pn-icon" /> <span>{t('nav.faqLink')}</span>
           </Link>
           {/* Phone only, and only where the app can actually be installed. iOS
               has no install prompt, so it gets the Share-sheet instructions. */}

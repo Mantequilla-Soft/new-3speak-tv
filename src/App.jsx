@@ -64,6 +64,7 @@ const ObsOverlay = lazyRoute(() => import("./page/ObsOverlay"), "./page/ObsOverl
 // the studio, wallet, editor and every other page down before rendering anything.
 // The index route (HomeGrouped) stays eager - lazying it would only add a waterfall.
 const AboutPage = lazyRoute(() => import("./components/LandingPage/AboutPage"), "./components/LandingPage/AboutPage");
+const FaqPage = lazyRoute(() => import("./page/Faq"), "./page/Faq");
 const Audio = lazyRoute(() => import("./page/Audio"), "./page/Audio");
 const AudioPost = lazyRoute(() => import("./page/AudioPost"), "./page/AudioPost");
 const AuthCallback = lazyRoute(() => import("./page/Login/AuthCallback"), "./page/Login/AuthCallback");
@@ -701,6 +702,7 @@ function App() {
                   from search results and from our own changelog. */}
               <Route path="/communities" element={<Navigate to="/groups" replace />} />
               <Route path="/about" element={<AboutPage />} />
+              <Route path="/faq" element={<FaqPage />} />
               <Route path="/privacy" element={<Legal />} />
               <Route path="/imprint" element={<Legal />} />
               <Route path="/shorts/stories" element={<ShortsStoryFeed />} />

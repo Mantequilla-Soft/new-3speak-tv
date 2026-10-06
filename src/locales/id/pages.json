@@ -11,28 +11,6 @@
       "q8": "Ada garis tipis antara kebebasan berbicara dan ujaran kebencian. Kebebasan berbicara mendorong perdebatan, sedangkan ujaran kebencian menghasut kekerasan.",
       "q9": "Kebebasan berbicara berarti kamu tidak boleh melakukan sesuatu terhadap orang karena pandangan yang mereka miliki, pandangan yang mereka ungkapkan, atau kata-kata yang mereka ucapkan atau tulis."
     },
-    "faq": {
-      "what": {
-        "question": "Apa itu 3Speak?",
-        "answer": "3Speak adalah tempat di mana kreator konten secara langsung memiliki aset dan komunitas mereka di situs ini. Dengan teknologi blockchain, kepemilikan aset dan komunitas ini melekat pada kreator dan pengguna, bukan pada 3Speak. Karena itu, aset dan komunitas tersebut dapat dipindahkan ke aplikasi lain yang menggunakan teknologi blockchain. Artinya, jika kami tidak melayani komunitas dan kreator dengan sebaik-baiknya, mereka dapat membawa aset yang telah mereka hasilkan dan pindah ke aplikasi lain. Hasilnya, 3Speak tahan sensor, tidak dapat mengambil asetmu, atau menghapus komunitasmu."
-      },
-      "upvote": {
-        "question": "Mengapa aku tidak di-upvote oleh 3Speak?",
-        "answer": "3Speak memberi vote atas kebijakan kami sendiri dan tidak mengikuti kriteria tertentu. Cara terbaik untuk menarik perhatian kami adalah mengunggah konten berkualitas tinggi dan membawa penonton serta komunitas ke 3Speak."
-      },
-      "missing": {
-        "question": "Mengapa beberapa videoku tidak muncul di feed terbaru?",
-        "answer": "Kamu boleh mengunggah video sebanyak yang kamu mau! Artinya, kadang satu pengguna bisa memenuhi feed hanya dengan kontennya sendiri. Untuk mengatasinya, kami membatasi jumlah video dari satu kreator yang dapat ditampilkan per muatan."
-      },
-      "creator": {
-        "question": "Bagaimana cara menjadi kreator konten?",
-        "answer": "Cara tercepat mendapatkan akun Hive adalah menekan tombol \"Daftar\" di panel navigasi dan mengikuti petunjuknya. (jangan sampai kehilangan key-mu!). Selanjutnya, masuk dengan akun Hive-mu dan klik \"creator studio\" / unggah. Kamu sudah siap!"
-      },
-      "rewards": {
-        "question": "Bagaimana cara mendapatkan reward dari berkomentar?",
-        "answer": "Untuk mendapatkan reward, kamu butuh akun blockchain Hive. Kamu bisa mendapatkannya gratis dari Hive (https://signup.hive.io), membeli panduan pengguna Hive, atau meminta pengguna Hive lain membuatkannya untukmu. Setelah punya akun, masuk dengan Hivesigner dan berikan key ACTIVE-mu saat login pertama. Setelah itu kamu bisa memposting komentar yang dapat menghasilkan reward mata uang kripto."
-      }
-    },
     "hero": {
       "tagline1": "LINDUNGI KONTENMU",
       "tagline2": "TOKENISASI KOMUNITASMU",
@@ -115,7 +93,8 @@
     },
     "faqSection": {
       "title": "Pertanyaan yang Sering Diajukan",
-      "subtitle": "Semua yang perlu kamu ketahui tentang 3Speak"
+      "subtitle": "Semua yang perlu kamu ketahui tentang 3Speak",
+      "cta": "Baca FAQ"
     },
     "quotesTitle": "Suara Kebebasan",
     "cta": {

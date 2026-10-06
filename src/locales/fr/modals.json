@@ -35,7 +35,8 @@
       "verifyFailed": "Échec de la vérification",
       "stillPresent": "Le hash est toujours sur votre profil — retirez-le d'abord.",
       "unlinkFailed": "Échec de la dissociation",
-      "noSuchLink": "Aucune association de ce type à retirer."
+      "noSuchLink": "Aucune association de ce type à retirer.",
+      "alreadyLinkedOther": "Cette chaîne est déjà liée à un autre compte."
     },
     "confirmUnlink": "Retirer votre lien {{platform}} ? Assurez-vous que le hash de vérification n'est plus sur votre profil public, sinon la dissociation sera refusée.",
     "removed": "Lien retiré",

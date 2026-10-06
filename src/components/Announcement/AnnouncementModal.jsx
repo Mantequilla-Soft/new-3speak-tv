@@ -37,7 +37,12 @@ export default function AnnouncementModal() {
   const silenced = isSilentRoute(pathname);
   const authenticated = useAppStore((s) => s.authenticated);
   const authChecked = useAppStore((s) => s.authChecked);
-  const user = useAppStore((s) => s.user);
+  const hiveUser = useAppStore((s) => s.user);
+  const incubationHandle = useAppStore((s) => s.incubationHandle);
+  // Who the popup asks for personal messages as. A warm-up user has no Hive name
+  // yet, so they are addressed as `~handle`: Hive names cannot contain `~`, so a
+  // handle can never read a message meant for a Hive account of the same name.
+  const user = hiveUser || (incubationHandle ? `~${String(incubationHandle).toLowerCase()}` : null);
   // The "what's new" popup goes first; this one waits until that is closed.
   const changelogPending = useAppStore((s) => !!s.appUpdatedFrom);
   const [queue, setQueue] = useState([]);
@@ -149,7 +154,7 @@ function AnnouncementCard({ announcement, user, onClose }) {
               />
               <div className="announcement-reply-row">
                 <span className="announcement-reply-as">
-                  {user ? t('announcement.replyAs', { user }) : t('announcement.replyNoName')}
+                  {user ? t('announcement.replyAs', { user: user.replace(/^~/, '') }) : t('announcement.replyNoName')}
                 </span>
                 <button type="submit" className="announcement-send" disabled={!reply.trim() || sendState === 'sending'}>
                   {sendState === 'sending' ? t('announcement.sending') : t('common.actions.send')}

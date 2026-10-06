@@ -12,6 +12,7 @@ import {
   PLATFORMS,
   platformProfileUrl,
   platformLabel,
+  warmupSocial,
 } from '../../utils/socialVerifier';
 import { useTranslation, Trans } from 'react-i18next';
 import { SOCIAL_LINK_ENABLED } from '../../utils/config';
@@ -30,8 +31,13 @@ const PLATFORM_ICONS = {
   soundcloud: FaSoundcloud,
 };
 
-export default function AddSocialLink_modal({ isOpen, onClose, hiveUsername, onChange }) {
+// `warmup`: a warm-up user (no Hive account) doing the optional "link your
+// channel" task. Everything goes through warmupSocial (3Speak's API, keyed by the
+// session) and the platform list comes from the server, NOT the profile link
+// switches (SOCIAL_LINK_ENABLED), so it works on prod while those are off.
+export default function AddSocialLink_modal({ isOpen, onClose, hiveUsername, onChange, warmup = false }) {
   const { t } = useTranslation();
+  const [warmupPlatforms, setWarmupPlatforms] = useState([]);
   const [step, setStep] = useState('list'); // 'list' | 'flow'
   const [hashInfo, setHashInfo] = useState(null);
   const [links, setLinks] = useState([]);
@@ -44,7 +50,8 @@ export default function AddSocialLink_modal({ isOpen, onClose, hiveUsername, onC
   const [hashCopied, setHashCopied] = useState(false);
 
   useEffect(() => {
-    if (!isOpen || !hiveUsername) return;
+    if (!isOpen || warmup) return;
+    if (!hiveUsername) return;
     setLoadingLinks(true);
     Promise.all([
       getHash(hiveUsername).catch(() => null),
@@ -53,7 +60,19 @@ export default function AddSocialLink_modal({ isOpen, onClose, hiveUsername, onC
       setHashInfo(h);
       setLinks(l);
     }).finally(() => setLoadingLinks(false));
-  }, [isOpen, hiveUsername]);
+  }, [isOpen, hiveUsername, warmup]);
+  useEffect(() => {
+    if (!isOpen || !warmup) return;
+    setLoadingLinks(true);
+    warmupSocial.load()
+      .then((d) => {
+        setHashInfo(d?.code ? { hash: d.code } : null);
+        setLinks(d?.links || []);
+        setWarmupPlatforms(d?.platforms || []);
+      })
+      .catch(() => setLinks([]))
+      .finally(() => setLoadingLinks(false));
+  }, [isOpen, warmup]);
 
   if (!isOpen) return null;
 
@@ -70,7 +89,9 @@ export default function AddSocialLink_modal({ isOpen, onClose, hiveUsername, onC
   };
 
   const refreshLinks = async () => {
-    const fresh = await getLinks(hiveUsername).catch(() => []);
+    const fresh = warmup
+      ? await warmupSocial.load().then((d) => d?.links || []).catch(() => [])
+      : await getLinks(hiveUsername).catch(() => []);
     setLinks(fresh);
     onChange?.();
   };
@@ -101,7 +122,7 @@ export default function AddSocialLink_modal({ isOpen, onClose, hiveUsername, onC
     setSubmitting(true);
     setError('');
     try {
-      const record = await checkLink({
+      const record = await (warmup ? warmupSocial.check : checkLink)({
         hive_username: hiveUsername,
         platform: selectedPlatform,
         platform_username: platformUsername.trim(),
@@ -119,7 +140,9 @@ export default function AddSocialLink_modal({ isOpen, onClose, hiveUsername, onC
       const data = err?.response?.data;
       const code = data?.code;
       if (code === 'CHANNEL_ALREADY_LINKED') {
-        setError(t('modals.socialLink.errors.alreadyLinked', { user: data?.claimed_by }));
+        setError(data?.claimed_by
+          ? t('modals.socialLink.errors.alreadyLinked', { user: data.claimed_by })
+          : t('modals.socialLink.errors.alreadyLinkedOther'));
       } else if (code === 'TOO_MANY_LINKS') {
         setError(t('modals.socialLink.errors.tooMany'));
       } else if (err?.response?.status === 404) {
@@ -144,7 +167,7 @@ export default function AddSocialLink_modal({ isOpen, onClose, hiveUsername, onC
     const key = `${link.platform}:${link.platform_username}`;
     setUnlinkingKey(key);
     try {
-      const result = await unlinkLink({
+      const result = await (warmup ? warmupSocial.unlink : unlinkLink)({
         hive_username: hiveUsername,
         platform: link.platform,
         platform_username: link.platform_username,
@@ -230,7 +253,7 @@ export default function AddSocialLink_modal({ isOpen, onClose, hiveUsername, onC
 
             <h4 className="social-link-section-title">{t('modals.socialLink.addPlatform')}</h4>
             <div className="social-link-platform-grid">
-              {Object.entries(PLATFORMS).filter(([key]) => SOCIAL_LINK_ENABLED[key]).map(([key, info]) => {
+              {Object.entries(PLATFORMS).filter(([key]) => (warmup ? warmupPlatforms.includes(key) : SOCIAL_LINK_ENABLED[key])).map(([key, info]) => {
                 const Icon = PLATFORM_ICONS[key];
                 return (
                   <button

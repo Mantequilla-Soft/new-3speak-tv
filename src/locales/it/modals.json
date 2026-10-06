@@ -35,7 +35,8 @@
       "verifyFailed": "Verifica non riuscita",
       "stillPresent": "L'hash è ancora sul tuo profilo — prima rimuovilo.",
       "unlinkFailed": "Scollegamento non riuscito",
-      "noSuchLink": "Nessun collegamento di questo tipo da rimuovere."
+      "noSuchLink": "Nessun collegamento di questo tipo da rimuovere.",
+      "alreadyLinkedOther": "Questo canale è già collegato a un altro account."
     },
     "confirmUnlink": "Rimuovere il collegamento a {{platform}}? Assicurati che l'hash di verifica non sia più sul tuo profilo pubblico, altrimenti lo scollegamento verrà rifiutato.",
     "removed": "Collegamento rimosso",

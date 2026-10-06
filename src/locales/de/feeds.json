@@ -40,9 +40,9 @@
   "home": {
     "sections": {
       "discover": "Entdecken",
-      "home": "Startseiten-Feed",
-      "follow": "Folge-ich-Feed",
-      "new": "Neue Inhalte",
+      "home": "Startseite",
+      "follow": "Deine Follows",
+      "new": "Neue Videos",
       "interests": "Interessen"
     },
     "empty": "Hier gibt es noch nichts zu sehen.",

@@ -147,12 +147,8 @@
         "hint": "Dowolne filmy. Liczy się czas, gdy naprawdę oglądasz.",
         "why": "Oglądanie pokazuje, że jesteś tu, by uczestniczyć, a nie tylko publikować. Większość osób kończy ten cel bez wysiłku.",
         "counts": {
-          "0": "Czas na samym 3Speak. Ten sam film osadzony na innej stronie się nie liczy.",
           "1": "Raz na film. Ponowne obejrzenie podnosi jego najlepszy czas, ale nigdy go nie sumuje, i żaden pojedynczy film nie może sam wypełnić całości.",
-          "2": "Rzeczywisty czas odtwarzania, więc przyspieszanie filmu nie jest karane, a zwalnianie nie wydłuża godziny.",
-          "3": "Na ekranie. Film odtwarzany w karcie w tle nie nabija godziny.",
-          "4": "Nie twoje własne filmy.",
-          "5": "W trybie prywatnym nic nie jest zapisywane."
+          "4": "Nie twoje własne filmy."
         },
         "cta": "Obejrzyj coś"
       },
@@ -222,8 +218,26 @@
     "hideDetails": "Ukryj szczegóły",
     "showLeft": "Pokaż, co zostało",
     "whatCounts": "Co się liczy",
+    "groups": {
+      "create": "Twórz",
+      "watch": "Oglądaj i dołącz",
+      "connect": "Znajdź swoich ludzi",
+      "brand": "Twoja marka",
+      "time": "Daj temu kilka dni"
+    },
+    "goalDone": "Gotowe",
     "reviewDone": "Wszystko gotowe. Zespół oceni twój kanał i przeniesie cię na Hive. Nie musisz już nic robić.",
-    "reviewPending": "Gdy wykonasz wszystkie te zadania, zespół oceni twój kanał i przeniesie cię na Hive."
+    "reviewPending": "Gdy wykonasz wszystkie te zadania, zespół oceni twój kanał i przeniesie cię na Hive.",
+    "optional": {
+      "title": "Opcjonalne",
+      "social": {
+        "label": "Połącz swój YouTube, TikTok lub Instagram",
+        "hint": "Niepotrzebne do weryfikacji, ale pokazuje, gdzie jeszcze można cię znaleźć.",
+        "linked": "Połączono: {{platforms}}",
+        "why": "Wstawiasz krótki kod w opisie kanału, my go sprawdzamy, a kanał pojawia się w twoim profilu. Gdy rozgrzewka się skończy, połączenie przejdzie na twoje konto Hive.",
+        "cta": "Połącz kanał"
+      }
+    }
   },
   "navProgress": {
     "chooseTitle": "Powiedz nam, co sprowadza cię do 3Speak, aby zobaczyć swoją drogę do konta Hive.",
@@ -345,6 +359,8 @@
       "graduated": "Teraz na Hive jako <userLink>@{{user}}</userLink>. Wszystko poniżej powstało wcześniej.",
       "advertiser": "To strona twojej marki na 3Speak. Wykonaj poniższe kroki, a zespół oceni twoją markę. Po zatwierdzeniu dostaniesz konto Hive: to twoje konto reklamodawcy, którym rezerwujesz reklamy i za nie płacisz.",
       "own": "Tak widzą cię inni. Twoje posty są na 3Speak i nie ma ich jeszcze w blockchainie Hive, więc nie zarabiają nagród. Zmieni się to, gdy dostaniesz konto po wykonaniu wszystkich zadań poniżej.",
+      "ownCreator": "Twoje posty są przechowywane w przestrzeni rozgrzewki, ale są widoczne i wyróżnione na głównej platformie. Dopóki tam są, nie przynoszą jeszcze nagród. To się zmieni, gdy dostaniesz konto, po wykonaniu wszystkich zadań poniżej i przeniesieniu swoich filmów w kilku prostych krokach.",
+      "ownViewer": "Jesteś na rozgrzewce. Twoje komentarze i obserwacje są na razie przechowywane w przestrzeni rozgrzewki i nie przynoszą jeszcze nagród. Gdy wykonasz wszystkie zadania poniżej, dostaniesz konto Hive i od tej pory wszystko trafia prosto na główną platformę.",
       "visitor": "Nowa osoba, jeszcze nie na Hive. Te posty są na 3Speak, więc na razie nie zarabiają nagród. Mimo to obserwuj i komentuj: wczesne wsparcie pomaga przetrwać pierwsze tygodnie. Gdy ta osoba dostanie konto Hive, damy ci znać, aby można było obserwować ją także tam."
     },
     "tabs": {

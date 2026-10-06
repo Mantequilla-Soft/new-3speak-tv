@@ -35,7 +35,8 @@
       "verifyFailed": "Verificatie mislukt",
       "stillPresent": "De hash staat nog op je profiel — verwijder hem eerst.",
       "unlinkFailed": "Ontkoppelen mislukt",
-      "noSuchLink": "Deze koppeling bestaat niet."
+      "noSuchLink": "Deze koppeling bestaat niet.",
+      "alreadyLinkedOther": "Dit kanaal is al aan een ander account gekoppeld."
     },
     "confirmUnlink": "Je {{platform}}-koppeling verwijderen? Zorg dat de verificatiehash niet meer op je openbare profiel staat, anders wordt het ontkoppelen geweigerd.",
     "removed": "Koppeling verwijderd",

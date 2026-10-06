@@ -523,25 +523,29 @@ function ProfilePage() {
             <HiveBadges username={user} canArrange />
             <div className="own-badges">
               <LeaderboardBadges username={user} />
-              <button
-                type="button"
-                className="add-social-link-btn"
-                onClick={() => setShowSocialLinkModal(true)}
-                title={t('profile.page.linkExternalTitle')}
-              >
-                <FaPlus /> {t('profile.page.addProfile')}
-              </button>
             </div>
           </>
         }
         aside={
-          <SocialLinks
-            hiveUsername={user}
-            refreshKey={socialLinksRefreshKey}
-            canDelete
-            column
-            onChange={() => setSocialLinksRefreshKey((k) => k + 1)}
-          />
+          // Linked channels, with "link a profile" as a round + at the end.
+          <div className="social-links-aside">
+            <SocialLinks
+              hiveUsername={user}
+              refreshKey={socialLinksRefreshKey}
+              canDelete
+              column
+              onChange={() => setSocialLinksRefreshKey((k) => k + 1)}
+            />
+            <button
+              type="button"
+              className="social-links__add"
+              onClick={() => setShowSocialLinkModal(true)}
+              title={`${t('profile.page.addProfile')}: ${t('profile.page.linkExternalTitle')}`}
+              aria-label={t('profile.page.addProfile')}
+            >
+              <FaPlus />
+            </button>
+          </div>
         }
         actions={
           <>

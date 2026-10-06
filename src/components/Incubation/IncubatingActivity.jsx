@@ -2,11 +2,12 @@ import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import {
   fetchIncubationUserComments, fetchIncubationFollowers, fetchIncubationFollowing,
-  fetchIncubationUserContent,
+  fetchIncubationUserContent, handleAvatar,
 } from '../../lib/incubation';
 import { batchGetContent } from '../../utils/hiveUtils';
 import { useTranslation } from 'react-i18next';
 import './IncubatingActivity.scss';
+import '../Userprofilepage/Follower.scss';
 
 const LOADERS = {
   comments: fetchIncubationUserComments,
@@ -192,20 +193,40 @@ export default function IncubatingActivity({ handle, tab, onCount }) {
     );
   }
 
-  // Followers and following are the same row: a name that links to a profile.
+  // Followers and following: the same account badges the regular profile's
+  // Follower tab uses (owner 2026-10-06), so a warm-up page does not look like
+  // a second-class copy of one. Same classes, same stylesheet.
   return (
-    <ul className="inc-activity inc-activity--people">
-      {items.map((f) => (
-        <li key={`${f.name}-${f.since}`} className="inc-activity-row">
-          <Link to={`/@${f.name}`} className="inc-activity-name">@{f.name}</Link>
-          {/* Only on followers, and only for the ones who are already on Hive:
-              it is the interesting half of the answer. Somebody incubating
-              being followed by real accounts says something a raw count does
-              not. */}
-          {f.kind === 'hive' && <span className="inc-activity-tag">{t('incubation.activity.onHive')}</span>}
-          <span className="inc-activity-meta">{when(f.since)}</span>
-        </li>
-      ))}
-    </ul>
+    <div className="followers-page inc-people">
+      <div className="users-grid">
+        {items.map((f) => (
+          <Link key={`${f.name}-${f.since}`} to={`/@${f.name}`} className="user-card">
+            <img
+              className="user-avatar"
+              // A known warm-up handle has no Hive avatar. Following rows carry no
+              // `kind` (the target may be either), so those try Hive first and
+              // fall back below when the image cache has nobody by that name.
+              src={f.kind === 'incubating' ? handleAvatar(f.name) : `/img/u/${f.name}/avatar/small`}
+              alt=""
+              loading="lazy"
+              onError={(e) => {
+                if (e.currentTarget.dataset.fallback) return;
+                e.currentTarget.dataset.fallback = '1';
+                e.currentTarget.src = handleAvatar(f.name);
+              }}
+            />
+            <span className="user-text">
+              <span className="user-name">@{f.name}</span>
+              <span className="user-stats">
+                {/* Only for the ones already on Hive: somebody incubating being
+                    followed by real accounts says something a raw count does not. */}
+                {f.kind === 'hive' && <span>{t('incubation.activity.onHive')}</span>}
+                {f.since && <span>{when(f.since)}</span>}
+              </span>
+            </span>
+          </Link>
+        ))}
+      </div>
+    </div>
   );
 }

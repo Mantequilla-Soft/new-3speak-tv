@@ -11,28 +11,6 @@
       "q8": "C'è un confine sottile tra libertà di parola e incitamento all'odio. La libertà di parola incoraggia il dibattito, mentre l'incitamento all'odio istiga alla violenza.",
       "q9": "Libertà di parola significa che non devi fare nulla alle persone per le opinioni che hanno, per quelle che esprimono o per le parole che dicono o scrivono."
     },
-    "faq": {
-      "what": {
-        "question": "Cos'è 3Speak?",
-        "answer": "3Speak è un luogo in cui i creator possiedono direttamente i propri asset sulla piattaforma e le proprie community. Grazie alla tecnologia blockchain, la proprietà di questi asset e di queste community appartiene al creator e all'utente, non a 3Speak. Sono quindi trasferibili ad altre app che usano la tecnologia blockchain. Ciò significa che, se non serviamo la community e i creator nel miglior modo possibile, questi possono prendere gli asset che hanno generato e spostarli su un'altra app. Il risultato è che 3Speak è resistente alla censura e non può toglierti i tuoi asset né eliminare le tue community."
-      },
-      "upvote": {
-        "question": "Perché 3Speak non mi vota?",
-        "answer": "3Speak vota a propria discrezione e non segue criteri specifici. Il modo migliore per attirare la nostra attenzione è caricare contenuti di alta qualità e portare pubblico e community su 3speak."
-      },
-      "missing": {
-        "question": "Perché alcuni dei miei video non compaiono nel feed dei nuovi?",
-        "answer": "Ti permettiamo di caricare tutti i video che vuoi! Questo significa che a volte un singolo utente potrebbe riempire i feed solo con i propri contenuti; per evitarlo, limitiamo il numero di video di uno stesso creator che possono essere mostrati per ogni caricamento."
-      },
-      "creator": {
-        "question": "Come divento un creator?",
-        "answer": "Il modo più rapido per ottenere un account Hive è premere il pulsante \"Registrati\" nel pannello di navigazione e seguire le istruzioni (non perdere le tue chiavi!). Poi dovrai accedere con il tuo account Hive e fare clic su \"creator studio\" / carica. Ecco fatto, sei pronto per iniziare!"
-      },
-      "rewards": {
-        "question": "Come guadagno ricompense commentando?",
-        "answer": "Per guadagnare ricompense ti serve un account sulla blockchain Hive. Puoi ottenerne uno gratis da Hive (https://signup.hive.io), acquistare una guida utente di Hive o farti dare un account da un altro utente Hive. Una volta che hai un account, accedi con Hivesigner e fornisci la tua chiave ACTIVE al primo accesso. Poi potrai pubblicare commenti che possono farti guadagnare ricompense in criptovaluta."
-      }
-    },
     "hero": {
       "tagline1": "PROTEGGI I TUOI CONTENUTI",
       "tagline2": "TOKENIZZA LA TUA COMMUNITY",
@@ -115,7 +93,8 @@
     },
     "faqSection": {
       "title": "Domande frequenti",
-      "subtitle": "Tutto quello che c'è da sapere su 3Speak"
+      "subtitle": "Tutto quello che c'è da sapere su 3Speak",
+      "cta": "Leggi le FAQ"
     },
     "quotesTitle": "Voci di libertà",
     "cta": {

@@ -35,7 +35,8 @@
       "verifyFailed": "Verifikasi gagal",
       "stillPresent": "Hash masih ada di profilmu — hapus dulu.",
       "unlinkFailed": "Gagal melepas tautan",
-      "noSuchLink": "Tautan itu tidak ada untuk dihapus."
+      "noSuchLink": "Tautan itu tidak ada untuk dihapus.",
+      "alreadyLinkedOther": "Kanal ini sudah ditautkan ke akun lain."
     },
     "confirmUnlink": "Hapus tautan {{platform}}-mu? Pastikan hash verifikasi sudah tidak ada di profil publikmu, jika tidak, pelepasan tautan akan ditolak.",
     "removed": "Tautan dihapus",

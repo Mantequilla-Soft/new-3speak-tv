@@ -11,28 +11,6 @@
       "q8": "Granica między wolnością słowa a mową nienawiści jest cienka. Wolność słowa zachęca do debaty, mowa nienawiści podżega do przemocy.",
       "q9": "Wolność słowa oznacza, że nie wolno nic robić ludziom ani za poglądy, które mają, ani za poglądy, które wyrażają, ani za słowa, które mówią lub piszą."
     },
-    "faq": {
-      "what": {
-        "question": "Czym jest 3Speak?",
-        "answer": "3Speak to miejsce, w którym twórcy treści bezpośrednio posiadają swoje zasoby w serwisie i swoje społeczności. Dzięki technologii blockchain własność tych zasobów i społeczności należy do twórcy i użytkownika, a nie do 3Speak. Można je więc przenieść do innych aplikacji korzystających z technologii blockchain. Oznacza to, że jeśli nie będziemy służyć społeczności i twórcom najlepiej, jak to możliwe, mogą oni zabrać wytworzone przez siebie zasoby i przenieść się do innej aplikacji. W efekcie 3Speak jest odporny na cenzurę, nie może odebrać ci twoich zasobów ani usunąć twoich społeczności."
-      },
-      "upvote": {
-        "question": "Dlaczego 3Speak nie daje mi upvote'ów?",
-        "answer": "3Speak głosuje według własnego uznania i nie kieruje się żadnymi konkretnymi kryteriami. Najlepszym sposobem, by zwrócić naszą uwagę, jest przesyłanie wysokiej jakości treści i przyciąganie widzów oraz społeczności do 3speak."
-      },
-      "missing": {
-        "question": "Dlaczego niektórych moich filmów brakuje w kanale nowości?",
-        "answer": "Pozwalamy przesyłać tyle filmów, ile chcesz! Oznacza to, że czasem jeden użytkownik mógłby zapełnić kanały wyłącznie swoimi treściami. Aby temu zapobiec, ograniczamy liczbę filmów jednego twórcy wyświetlanych przy jednym wczytaniu."
-      },
-      "creator": {
-        "question": "Jak zostać twórcą treści?",
-        "answer": "Najszybszy sposób na zdobycie konta Hive to naciśnięcie przycisku „Zarejestruj się” w panelu nawigacji i postępowanie zgodnie z instrukcjami (nie zgub swoich kluczy!). Następnie zaloguj się kontem Hive i kliknij „studio twórcy” / przesyłanie. Wszystko gotowe, możesz zaczynać!"
-      },
-      "rewards": {
-        "question": "Jak zarabiać nagrody za komentowanie?",
-        "answer": "Aby zarabiać nagrody, potrzebujesz konta w blockchainie Hive. Możesz je dostać za darmo od Hive (https://signup.hive.io), kupić przewodnik użytkownika Hive albo poprosić innego użytkownika Hive, by ci je założył. Gdy masz już konto, zaloguj się przez Hivesigner i przy pierwszym logowaniu podaj swój klucz ACTIVE. Potem możesz publikować komentarze, które mogą przynosić nagrody w kryptowalucie."
-      }
-    },
     "hero": {
       "tagline1": "CHROŃ SWOJE TREŚCI",
       "tagline2": "TOKENIZUJ SWOJĄ SPOŁECZNOŚĆ",
@@ -115,7 +93,8 @@
     },
     "faqSection": {
       "title": "Najczęściej zadawane pytania",
-      "subtitle": "Wszystko, co musisz wiedzieć o 3Speak"
+      "subtitle": "Wszystko, co musisz wiedzieć o 3Speak",
+      "cta": "Przejdź do FAQ"
     },
     "quotesTitle": "Głosy wolności",
     "cta": {
