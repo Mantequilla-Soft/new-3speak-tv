@@ -111,6 +111,18 @@
     "tiktok": {
       "placeholder": "@handle ou https://www.tiktok.com/@handle",
       "help": "Collez votre @handle TikTok ou le lien de votre profil. Placez le hash n'importe où dans la bio de votre profil."
+    },
+    "instagram": {
+      "placeholder": "@handle ou https://www.instagram.com/handle",
+      "help": "Collez votre @handle Instagram ou le lien de votre profil. Placez le hash n'importe où dans la bio de votre profil."
+    },
+    "bitchute": {
+      "placeholder": "https://www.bitchute.com/channel/…",
+      "help": "Colle le nom ou le lien de ta chaîne BitChute. Place le hash n'importe où dans la description de la chaîne."
+    },
+    "rumble": {
+      "placeholder": "https://rumble.com/c/…",
+      "help": "Colle le nom ou le lien de ta chaîne Rumble. Place le hash n'importe où dans la description de la chaîne."
     }
   },
   "snaps": {

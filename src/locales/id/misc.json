@@ -111,6 +111,18 @@
     "tiktok": {
       "placeholder": "@handle atau https://www.tiktok.com/@handle",
       "help": "Tempel @handle TikTok atau tautan profilmu. Taruh hash di mana saja di bio profilmu."
+    },
+    "instagram": {
+      "placeholder": "@handle atau https://www.instagram.com/handle",
+      "help": "Tempel @handle Instagram atau tautan profilmu. Taruh hash di mana saja di bio profilmu."
+    },
+    "bitchute": {
+      "placeholder": "https://www.bitchute.com/channel/…",
+      "help": "Tempel nama atau tautan kanal BitChute-mu. Taruh hash di mana saja di deskripsi kanal."
+    },
+    "rumble": {
+      "placeholder": "https://rumble.com/c/…",
+      "help": "Tempel nama atau tautan kanal Rumble-mu. Taruh hash di mana saja di deskripsi kanal."
     }
   },
   "snaps": {

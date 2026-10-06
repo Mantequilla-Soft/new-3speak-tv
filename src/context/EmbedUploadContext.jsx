@@ -251,7 +251,7 @@ export function EmbedUploadProvider({ children }) {
   // offer promotion of the new video.
   const [publishedPermlink, setPublishedPermlink] = useState('');
   // ▶️ Set when the video came from the importer (/youtube-import):
-  // { id: "<youtube id>" | "tiktok:<id>", platform, url }. On publish it goes into
+  // { id: "<youtube id>" | "tiktok:<id>" | "instagram:<shortcode>", platform, url }. On publish it goes into
   // the post's json_metadata (imported_from) and is reported to our API, so the
   // import grid can mark it as already on 3Speak.
   const [importSource, setImportSource] = useState(null);
@@ -1767,7 +1767,7 @@ export function EmbedUploadProvider({ children }) {
         ...(importSource ? {
           imported_from: {
             platform: importSource.platform,
-            id: String(importSource.id).replace(/^tiktok:/, ''),
+            id: String(importSource.id).replace(/^[a-z]+:/, ''),
             url: importSource.url,
           },
         } : {}),

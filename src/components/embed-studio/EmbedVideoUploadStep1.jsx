@@ -15,7 +15,7 @@ import { useAppStore } from '../../lib/store';
 import { canUseUploadFaults, getUploadFaults, setUploadFaults, initUploadFaults } from '../../utils/uploadFaults';
 import { checkPostingRc } from '../../utils/rcCheck';
 import RcInsufficientModal from './RcInsufficientModal';
-import { SHORTS_MAX_DURATION_SEC, shortsMaxDurationLabel, cameraRecordEnabledFor } from '../../utils/config';
+import { SHORTS_MAX_DURATION_SEC, shortsMaxDurationLabel, cameraRecordEnabledFor, VIDEO_IMPORT_ENABLED } from '../../utils/config';
 import { isChromium } from '../../utils/browser';
 import { useTranslation, Trans } from 'react-i18next';
 
@@ -480,7 +480,7 @@ function EmbedVideoUploadStep1() {
               {/* ▶️ Import from the creator's own verified YouTube / TikTok. The mode
                   makes the import page offer only what fits this uploader:
                   Shorts → YouTube Shorts + TikTok, videos → YouTube videos + streams. */}
-              {!videoFile && !needsAuth && !rcInsufficient && !authChecking && !rcChecking && (
+              {VIDEO_IMPORT_ENABLED && !videoFile && !needsAuth && !rcInsufficient && !authChecking && !rcChecking && (
                 <button
                   type="button"
                   className="button button--outline yt-import-entry"

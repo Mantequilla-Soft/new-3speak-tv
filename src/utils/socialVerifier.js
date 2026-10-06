@@ -111,6 +111,28 @@ export const PLATFORMS = {
     inputPlaceholderKey: 'misc.social.tiktok.placeholder',
     inputHelpKey: 'misc.social.tiktok.help',
   },
+  instagram: {
+    label: 'Instagram',
+    // The checker stores the lower-cased username (see 3speakchecks platforms/instagram.js).
+    profileUrl: (canonical) => `https://www.instagram.com/${canonical}/`,
+    inputPlaceholderKey: 'misc.social.instagram.placeholder',
+    inputHelpKey: 'misc.social.instagram.help',
+  },
+  bitchute: {
+    label: 'BitChute',
+    // The checker stores the channel_id (see 3speakchecks platforms/bitchute.js);
+    // BitChute's channel URLs accept it in place of the slug.
+    profileUrl: (canonical) => `https://www.bitchute.com/channel/${canonical}/`,
+    inputPlaceholderKey: 'misc.social.bitchute.placeholder',
+    inputHelpKey: 'misc.social.bitchute.help',
+  },
+  rumble: {
+    label: 'Rumble',
+    // The checker stores "c/<name>" or "user/<name>" (see 3speakchecks platforms/rumble.js).
+    profileUrl: (canonical) => `https://rumble.com/${canonical}`,
+    inputPlaceholderKey: 'misc.social.rumble.placeholder',
+    inputHelpKey: 'misc.social.rumble.help',
+  },
 };
 
 export function platformProfileUrl(platform, canonical) {

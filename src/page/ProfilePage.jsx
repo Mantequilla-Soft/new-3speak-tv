@@ -5,7 +5,7 @@ import axios from "axios";
 import { toastIn } from '../utils/toast';
 import { useAppStore } from "../lib/store";
 import { getFollowers } from "../hive-api/api";
-import { MY_VIDEOS_URL, CHECKER_URL } from "../utils/config";
+import { MY_VIDEOS_URL, CHECKER_URL, VIDEO_IMPORT_ENABLED } from "../utils/config";
 
 import Card3 from "../components/Cards/Card3";
 import Follower from "../components/Userprofilepage/Follower";
@@ -537,14 +537,16 @@ function ProfilePage() {
               >
                 <FaPlus /> {t('profile.page.addProfile')}
               </button>
-              <button
-                type="button"
-                className="add-social-link-btn"
-                onClick={() => navigate('/youtube-import')}
-                title={t('ytimport.subtitle')}
-              >
-                <FaYoutube /> {t('ytimport.entry')}
-              </button>
+              {VIDEO_IMPORT_ENABLED && (
+                <button
+                  type="button"
+                  className="add-social-link-btn"
+                  onClick={() => navigate('/youtube-import')}
+                  title={t('ytimport.subtitle')}
+                >
+                  <FaYoutube /> {t('ytimport.entry')}
+                </button>
+              )}
             </div>
           </>
         }

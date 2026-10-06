@@ -111,6 +111,18 @@
     "tiktok": {
       "placeholder": "@handle หรือ https://www.tiktok.com/@handle",
       "help": "วาง @handle ของ TikTok หรือลิงก์โปรไฟล์ของคุณ ใส่แฮชไว้ตรงไหนก็ได้ในไบโอโปรไฟล์"
+    },
+    "instagram": {
+      "placeholder": "@handle หรือ https://www.instagram.com/handle",
+      "help": "วาง @handle ของ Instagram หรือลิงก์โปรไฟล์ของคุณ ใส่แฮชไว้ตรงไหนก็ได้ในไบโอโปรไฟล์"
+    },
+    "bitchute": {
+      "placeholder": "https://www.bitchute.com/channel/…",
+      "help": "วางชื่อหรือลิงก์ช่อง BitChute ของคุณ ใส่แฮชไว้ตรงไหนก็ได้ในคำอธิบายช่อง"
+    },
+    "rumble": {
+      "placeholder": "https://rumble.com/c/…",
+      "help": "วางชื่อหรือลิงก์ช่อง Rumble ของคุณ ใส่แฮชไว้ตรงไหนก็ได้ในคำอธิบายช่อง"
     }
   },
   "snaps": {

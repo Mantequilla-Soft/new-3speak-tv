@@ -111,6 +111,18 @@
     "tiktok": {
       "placeholder": "@handle au https://www.tiktok.com/@handle",
       "help": "Bandika @handle yako ya TikTok au kiungo cha wasifu wako. Weka hash popote kwenye bio ya wasifu wako."
+    },
+    "instagram": {
+      "placeholder": "@handle au https://www.instagram.com/handle",
+      "help": "Bandika @handle yako ya Instagram au kiungo cha wasifu wako. Weka hash popote kwenye bio ya wasifu wako."
+    },
+    "bitchute": {
+      "placeholder": "https://www.bitchute.com/channel/…",
+      "help": "Bandika jina au kiungo cha chaneli yako ya BitChute. Weka hash popote kwenye maelezo ya chaneli."
+    },
+    "rumble": {
+      "placeholder": "https://rumble.com/c/…",
+      "help": "Bandika jina au kiungo cha chaneli yako ya Rumble. Weka hash popote kwenye maelezo ya chaneli."
     }
   },
   "snaps": {

@@ -165,7 +165,7 @@ import HandleTakenPrompt from "./components/Incubation/HandleTakenPrompt";
 import IncubationSessionSync from "./components/Incubation/IncubationSessionSync";
 import AvatarSync from "./components/HiveAvatar/AvatarSync";
 import EditorModal from "./components/modal/EditorModal";
-import { FEATURE_EDITOR } from "./utils/config";
+import { FEATURE_EDITOR, VIDEO_IMPORT_ENABLED } from "./utils/config";
 import BottomNav from "./components/BottomNav/BottomNav";
 import MiniPlayer from "./components/MiniPlayer/MiniPlayer";
 import GlobalAudioPlayer from "./components/GlobalAudioPlayer/GlobalAudioPlayer";
@@ -665,7 +665,7 @@ function App() {
               {/* Publish the backlog someone made before they had a Hive account. */}
               <Route path="/publish-backlog" element={<PublishBacklog />} />
               <Route path="/firstupload" element={<FirstUploads />} />
-              <Route path="/youtube-import" element={<YoutubeImportPage />} />
+              {VIDEO_IMPORT_ENABLED && <Route path="/youtube-import" element={<YoutubeImportPage />} />}
               <Route path="/trend" element={<Trend />} />
               <Route path="/discover" element={<Discover />} />
               <Route path="/audio" element={<Audio />} />

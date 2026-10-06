@@ -1857,58 +1857,74 @@ app.post('/api/watch/token', watchTokenLimiter, async (req, res) => {
   }
 })
 
+// Upload an image to images.hive.blog as @threespeak. Returns the URL; throws
+// { status, message, upstreamStatus } on failure. Shared by /api/upload-image and
+// the batch importer (server-built posts need their thumbnail hosted too).
+async function uploadImageAsThreespeak(img, contentType = 'image/png') {
+  if (!POSTING_WIF) throw Object.assign(new Error('Server is not configured'), { status: 500 })
+  if (!Buffer.isBuffer(img) || img.length === 0) throw Object.assign(new Error('No image data'), { status: 400 })
+
+  // Standard hive.blog image auth: sign sha256("ImageSigningChallenge" + bytes).
+  const hash = cryptoUtils.sha256(Buffer.concat([Buffer.from('ImageSigningChallenge'), img]))
+  const signature = PrivateKey.fromString(POSTING_WIF).sign(hash).toString()
+
+  const form = new FormData()
+  form.append('file', new Blob([img], { type: contentType }), 'image')
+
+  const ctrl = new AbortController()
+  const t = setTimeout(() => ctrl.abort(), 20000)
+  let hostResp
+  try {
+    hostResp = await fetch(`https://images.hive.blog/${HIVE_ACCOUNT}/${signature}`, {
+      method: 'POST', body: form, signal: ctrl.signal,
+    })
+  } finally { clearTimeout(t) }
+
+  const data = await hostResp.json().catch(() => ({}))
+  if (!hostResp.ok || !data.url) {
+    console.error('Image host rejected:', hostResp.status, JSON.stringify(data).slice(0, 200))
+    // Tell the caller WHICH failure this is. A 429 from images.hive.blog is the
+    // shared @threespeak upload quota running out — it is not the user's file, not
+    // retryable in the next second, and not something a generic "upload failed"
+    // helps anyone diagnose. It has bitten thumbnails too.
+    const quota = hostResp.status === 429 || /qouta|quota/i.test(JSON.stringify(data))
+    throw Object.assign(new Error(quota
+      ? "3Speak's image upload quota is exhausted for now — this is on our side, not your file. Try again later."
+      : 'Image host rejected the upload'), { status: quota ? 503 : 502, upstreamStatus: hostResp.status })
+  }
+  return data.url
+}
+
 const imageUploadLimiter = rateLimit({ windowMs: 60 * 1000, max: 40, standardHeaders: true, legacyHeaders: false })
 app.post('/api/upload-image', imageUploadLimiter, express.raw({ type: () => true, limit: '15mb' }), async (req, res) => {
   try {
     const apiKey = req.headers['x-api-key'] || ''
     if (!EMBED_API_KEY || apiKey !== EMBED_API_KEY) return res.status(401).json({ error: 'Unauthorized' })
-    if (!POSTING_WIF) return res.status(500).json({ error: 'Server is not configured' })
-    const img = req.body
-    if (!Buffer.isBuffer(img) || img.length === 0) return res.status(400).json({ error: 'No image data' })
-
-    // Standard hive.blog image auth: sign sha256("ImageSigningChallenge" + bytes).
-    const hash = cryptoUtils.sha256(Buffer.concat([Buffer.from('ImageSigningChallenge'), img]))
-    const signature = PrivateKey.fromString(POSTING_WIF).sign(hash).toString()
-
-    const contentType = req.headers['content-type'] || 'image/png'
-    const form = new FormData()
-    form.append('file', new Blob([img], { type: contentType }), 'image')
-
-    const ctrl = new AbortController()
-    const t = setTimeout(() => ctrl.abort(), 20000)
-    let hostResp
-    try {
-      hostResp = await fetch(`https://images.hive.blog/${HIVE_ACCOUNT}/${signature}`, {
-        method: 'POST', body: form, signal: ctrl.signal,
-      })
-    } finally { clearTimeout(t) }
-
-    const data = await hostResp.json().catch(() => ({}))
-    if (!hostResp.ok || !data.url) {
-      console.error('Image host rejected:', hostResp.status, JSON.stringify(data).slice(0, 200))
-      // Tell the caller WHICH failure this is. A 429 from images.hive.blog is the
-      // shared @threespeak upload quota running out — it is not the user's file, not
-      // retryable in the next second, and not something a generic "upload failed"
-      // helps anyone diagnose. It has bitten thumbnails too.
-      const quota = hostResp.status === 429 || /qouta|quota/i.test(JSON.stringify(data))
-      return res.status(quota ? 503 : 502).json({
-        error: quota
-          ? "3Speak's image upload quota is exhausted for now — this is on our side, not your file. Try again later."
-          : 'Image host rejected the upload',
-        upstreamStatus: hostResp.status,
-      })
-    }
-    return res.json({ success: true, url: data.url })
+    const url = await uploadImageAsThreespeak(req.body, req.headers['content-type'] || 'image/png')
+    return res.json({ success: true, url })
   } catch (e) {
+    if (e.status && e.status !== 500) return res.status(e.status).json({ error: e.message, ...(e.upstreamStatus ? { upstreamStatus: e.upstreamStatus } : {}) })
     console.error('Image upload error:', e.message)
-    return res.status(500).json({ error: 'Image upload failed' })
+    return res.status(500).json({ error: e.status === 500 ? e.message : 'Image upload failed' })
   }
 })
 
 app.get('/api/health', (req, res) => res.json({ ok: true }))
 
 // ▶️ YouTube import (verified channel owners only). See youtube-import.cjs.
-require('./youtube-import.cjs').mountYoutubeImport(app, { resolveUser: resolveProvenViewer, limiter: baseLimiter })
+// The whole importer is OFF unless VIDEO_IMPORT_ENABLED=true (owner's call
+// 2026-10-06); each source has its own IMPORT_SOURCE_<NAME> switch inside.
+if (process.env.VIDEO_IMPORT_ENABLED === 'true') {
+  require('./youtube-import.cjs').mountYoutubeImport(app, {
+    resolveUser: resolveProvenViewer,
+    limiter: baseLimiter,
+    // For the batch importer, which builds and schedules the posts itself.
+    uploadImage: uploadImageAsThreespeak,
+    hasPostingGrant: hasThreespeakPostingGrant,
+  })
+} else {
+  console.log('[yt-import] video import is OFF (VIDEO_IMPORT_ENABLED is not true)')
+}
 
 // === Teleprompter STT token minting ===
 // Hands the browser a short-lived SIGNED token for the self-hosted STT WebSocket,

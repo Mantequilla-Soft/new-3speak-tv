@@ -111,6 +111,18 @@
     "tiktok": {
       "placeholder": "@handle または https://www.tiktok.com/@handle",
       "help": "TikTok の @handle またはプロフィールのリンクを貼り付けてください。ハッシュはプロフィールの自己紹介のどこかに入れてください。"
+    },
+    "instagram": {
+      "placeholder": "@handle または https://www.instagram.com/handle",
+      "help": "Instagram の @handle またはプロフィールのリンクを貼り付けてください。ハッシュはプロフィールの自己紹介のどこかに入れてください。"
+    },
+    "bitchute": {
+      "placeholder": "https://www.bitchute.com/channel/…",
+      "help": "BitChute チャンネルの名前またはリンクを貼り付けてください。ハッシュはチャンネル説明のどこかに入れてください。"
+    },
+    "rumble": {
+      "placeholder": "https://rumble.com/c/…",
+      "help": "Rumble チャンネルの名前またはリンクを貼り付けてください。ハッシュはチャンネル説明のどこかに入れてください。"
     }
   },
   "snaps": {

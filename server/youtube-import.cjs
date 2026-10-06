@@ -82,8 +82,27 @@ function proxyForAttempt() {
     .replace(/\{session\}/g, session)
     .replace(/\{port:(\d+)-(\d+)\}/g, (_, a, b) => String(Number(a) + crypto.randomInt(Number(b) - Number(a) + 1)))
 }
+// Which sources can be imported from: one switch each, IMPORT_SOURCE_<NAME>=
+// true|false. Default: YouTube only (owner's call 2026-10-06). The older
+// INSTAGRAM_IMPORT_ENABLED=true still counts for Instagram.
+const IMPORT_SOURCES = ['youtube', 'tiktok', 'instagram', 'rumble', 'bitchute']
+function sourceEnabled(name) {
+  const v = process.env[`IMPORT_SOURCE_${String(name).toUpperCase()}`]
+  if (v === 'true') return true
+  if (v === 'false') return false
+  if (name === 'instagram' && process.env.INSTAGRAM_IMPORT_ENABLED === 'true') return true
+  return name === 'youtube'
+}
+const enabledSources = () => IMPORT_SOURCES.filter(sourceEnabled)
+const sourceOff = (res, name) => res.status(403).json({ error: `Importing from ${name} is not available`, errorCode: 'source_disabled' })
+
 // Proxy URLs carry credentials; never let one reach a log line or a client.
 const scrubSecrets = (text) => String(text || '').replace(/\/\/[^\s/@]+@/g, '//***@')
+
+// BitChute + Rumble readers (import-platforms.cjs). Rumble pages need the
+// residential proxy (Cloudflare); its files and everything BitChute go direct.
+const platforms = require('./import-platforms.cjs')
+const rumble = platforms.createRumble({ proxyForAttempt, scrub: scrubSecrets })
 
 // ── Discord alerts ───────────────────────────────────────────────────────────
 // Failed imports and blocked users go to a Discord webhook as an embed, so a
@@ -129,11 +148,11 @@ function alertDiscord({ title, color, user, platform, videoId, url, code, messag
     .catch((e) => console.warn(`[yt-import] Discord alert failed: ${e.message}`))
 }
 // ── What has already been published from an import ──────────────────────────
-// user → { "<youtube id>" | "tiktok:<id>": { permlink, at } }, written by the
+// user → { "<youtube id>" | "tiktok:<id>" | "instagram:<shortcode>": { permlink, at } }, written by the
 // uploader after a successful publish, read by the grid for its ✓ mark. A small
 // JSON file is plenty at POC scale; written via temp file + rename.
 const IMPORTS_FILE = process.env.YT_IMPORT_STORE || path.join(__dirname, 'data', 'yt-imports.json')
-const SOURCE_RE = /^(?:[A-Za-z0-9_-]{11}|tiktok:\d{8,25})$/
+const SOURCE_RE = /^(?:[A-Za-z0-9_-]{11}|tiktok:\d{8,25}|instagram:[A-Za-z0-9_-]{5,40}|bitchute:[A-Za-z0-9_-]{6,20}|rumble:v[a-z0-9]{3,15})$/
 let importsStore = null
 function loadImports() {
   if (importsStore) return importsStore
@@ -162,6 +181,9 @@ function videoUrlOf(job) {
 
 function alertJobFailed(job, code, message) {
   const viaSession = job.platform === 'tiktok' && !!tiktokSession()
+  const route = job.platform === 'instagram' ? 'Instagram browser service + CDN'
+    : job.platform === 'bitchute' || job.platform === 'rumble' ? `${job.platform} CDN (direct)`
+    : viaSession ? 'TikTok session (yt-dlp)' : (YTDLP_PROXY ? 'yt-dlp via proxy' : 'yt-dlp direct')
   alertDiscord({
     title: viaSession ? 'TikTok import failed (the TikTok session may have expired)' : `Import failed (${job.platform || 'youtube'})`,
     color: ALERT_RED,
@@ -173,7 +195,7 @@ function alertJobFailed(job, code, message) {
     message,
     fields: [
       { name: 'Attempts', value: String(job.attempt || 0) },
-      { name: 'Route', value: viaSession ? 'TikTok session (yt-dlp)' : (YTDLP_PROXY ? 'yt-dlp via proxy' : 'yt-dlp direct') },
+      { name: 'Route', value: route },
       { name: 'Max quality', value: `${job.maxHeight}p` },
       { name: 'Job', value: job.id, inline: false },
     ],
@@ -226,17 +248,20 @@ async function isPremium(user) {
 const maxHeightFor = async (user) => ((await isPremium(user)) ? MAX_HEIGHT_PREMIUM : MAX_HEIGHT)
 
 // Verified links of a Hive user per platform, from the checker's public read:
-// YouTube UC… channel ids, TikTok lower-cased @handles.
+// YouTube UC… channel ids, TikTok and Instagram lower-cased usernames.
 async function verifiedLinks(user) {
   const r = await fetch(`${VERIFIER_URL}/verify/links/${encodeURIComponent(user)}`, { signal: AbortSignal.timeout(8000) })
   if (!r.ok) throw Object.assign(new Error('Could not load your linked accounts'), { status: 502 })
   const data = await r.json()
-  const out = { youtube: [], tiktok: [] }
+  const out = { youtube: [], tiktok: [], instagram: [], bitchute: [], rumble: [] }
   for (const l of data?.links || []) {
     if (l.verified === false) continue
     const id = String(l.platform_username || '')
     if (l.platform === 'youtube' && CHANNEL_ID_RE.test(id)) out.youtube.push(id)
     if (l.platform === 'tiktok' && TIKTOK_HANDLE_RE.test(id)) out.tiktok.push(id.toLowerCase())
+    if (l.platform === 'instagram' && IG_HANDLE_RE.test(id)) out.instagram.push(id.toLowerCase())
+    if (l.platform === 'bitchute' && platforms.BITCHUTE_CHANNEL_RE.test(id)) out.bitchute.push(id)
+    if (l.platform === 'rumble' && platforms.RUMBLE_CHANNEL_RE.test(id.toLowerCase())) out.rumble.push(id.toLowerCase())
   }
   return out
 }
@@ -357,6 +382,179 @@ function tiktokEntry(user, ev) {
   return video
 }
 
+// ── Instagram ────────────────────────────────────────────────────────────────
+// Instagram refuses scripted requests even with a valid logged-in session (it
+// checks the TLS / HTTP2 fingerprint against the claimed browser: 429 from every
+// IP tried, 2026-10-04). So every Instagram read goes through the local
+// instagram-browser service (127.0.0.1:4031, services/instagram-browser), which
+// opens the same pages a person would in a real headless Firefox with a dedicated
+// throwaway account's session, through one German home IP, one page at a time.
+// The checker's profile verification uses the same service. Owner's call
+// 2026-10-04, POC; the proper route is Meta's "Instagram API with Instagram Login".
+// Off unless INSTAGRAM_IMPORT_ENABLED=true.
+const IG_BROWSER_URL = (process.env.INSTAGRAM_BROWSER_URL || 'http://127.0.0.1:4031').replace(/\/+$/, '')
+const INSTAGRAM_ENABLED = sourceEnabled('instagram')
+const IG_HANDLE_RE = /^[a-z0-9_.]{1,30}$/i
+const IG_SHORTCODE_RE = /^[A-Za-z0-9_-]{5,40}$/
+
+// Whether the service is up and has a session (cached 30s, for /status).
+let igHealth = { at: 0, ok: false }
+async function instagramReady() {
+  if (!INSTAGRAM_ENABLED) return false
+  if (Date.now() - igHealth.at < 30 * 1000) return igHealth.ok
+  let ok = false
+  try {
+    const r = await fetch(`${IG_BROWSER_URL}/health`, { signal: AbortSignal.timeout(3000) })
+    ok = r.ok && !!(await r.json())?.session
+  } catch { /* service down */ }
+  igHealth = { at: Date.now(), ok }
+  return ok
+}
+
+// One read from the service. null = not found. The service queues page loads,
+// so this can take a while when several people use it at once.
+async function igBrowser(pathname) {
+  let r
+  let body = null
+  try {
+    r = await fetch(`${IG_BROWSER_URL}${pathname}`, { signal: AbortSignal.timeout(150 * 1000) })
+    body = await r.json().catch(() => null)
+  } catch (e) {
+    console.warn(`[yt-import] instagram-browser unreachable: ${e.message}`)
+    throw Object.assign(new Error('Instagram is not answering right now, try again later'), { status: 502, code: 'unreachable' })
+  }
+  if (r.status === 404) return null
+  if (r.ok) return body
+  const code = body?.code || `http_${r.status}`
+  console.warn(`[yt-import] instagram-browser ${pathname.split('/')[1]} → HTTP ${r.status} ${code}`)
+  if (code === 'session') {
+    alertDiscord({
+      title: 'Instagram session may have expired', color: ALERT_RED, platform: 'instagram', code,
+      message: `${body?.error || ''}. Log the throwaway account in again and replace cookies.txt.`,
+    })
+  } else if (code === 'rate_limited') {
+    alertDiscord({ title: 'Instagram is rate-limiting the import account', color: ALERT_ORANGE, platform: 'instagram', code, message: body?.error })
+  }
+  if (r.status === 503 && code === 'busy') {
+    throw Object.assign(new Error('The importer is busy, try again in a few minutes'), { status: 503, code })
+  }
+  throw Object.assign(new Error('Instagram is not answering right now, try again later'), { status: 502, code })
+}
+
+// Pasted link → shortcode. /p/, /reel/, /reels/, /tv/, with or without a
+// /<username>/ in front; /share/… links redirect to one of those (3 hops max).
+const IG_POST_RE = /^\/(?:[A-Za-z0-9_.]+\/)?(?:p|reels?|tv)\/([A-Za-z0-9_-]{5,40})\/?$/
+async function canonicalInstagramUrl(raw) {
+  let url = String(raw || '').trim()
+  if (!url) return null
+  if (!/^https?:\/\//i.test(url)) url = `https://${url}`
+  for (let hop = 0; hop < 4; hop++) {
+    let u
+    try { u = new URL(url) } catch { return null }
+    if (!/(^|\.)instagram\.com$/i.test(u.hostname)) return null
+    const m = IG_POST_RE.exec(u.pathname)
+    if (m) return { shortcode: m[1] }
+    if (hop === 3 || !/^\/share\//.test(u.pathname)) return null
+    const r = await fetch(`https://www.instagram.com${u.pathname}`, { redirect: 'manual', headers: { 'User-Agent': BROWSER_UA }, signal: AbortSignal.timeout(8000) })
+    const loc = r.headers.get('location')
+    if (!loc) return null
+    url = new URL(loc, u).href
+  }
+  return null
+}
+
+function igTitle(caption) {
+  const plain = String(caption || '').replace(/#[\p{L}\p{N}_]+/gu, '').replace(/\s+/g, ' ').trim()
+  if (!plain) return 'Instagram video'
+  return plain.length <= 100 ? plain : `${plain.slice(0, 97).replace(/\s+\S*$/, '')}…`
+}
+
+// The service's post → what the importer works with.
+function shapeIg(m) {
+  return {
+    shortcode: m.code,
+    isVideo: m.mediaType === 2,
+    author: String(m.username || '').toLowerCase(),
+    authorName: m.fullName || '',
+    caption: String(m.caption || ''),
+    createTime: Number(m.takenAt) || 0,
+    cover: m.cover || '',
+    width: Number(m.width) || 0,
+    height: Number(m.height) || 0,
+    duration: Math.round(Number(m.duration) || 0),
+    videoVersions: Array.isArray(m.videoVersions) ? m.videoVersions : [],
+  }
+}
+
+// One post, as its own page loads it. The author comes from Instagram's data,
+// never from the pasted URL. The service keeps every answer; a download asks for
+// one at most 12h old because the signed video links in it expire.
+async function instagramMedia(shortcode, { forDownload = false } = {}) {
+  const m = await igBrowser(`/media/${encodeURIComponent(shortcode)}${forDownload ? '?maxAge=43200' : ''}`)
+  return m && m.code === shortcode ? shapeIg(m) : null
+}
+
+// The newest videos of a profile, from its reels tab.
+async function instagramLatest(handle) {
+  const d = await igBrowser(`/reels/${encodeURIComponent(handle)}`)
+  return (d?.videos || []).map(shapeIg)
+}
+
+function instagramEntry(user, ev) {
+  const token = crypto.randomBytes(12).toString('hex')
+  const sourceUrl = `https://www.instagram.com/reel/${ev.shortcode}/`
+  const video = {
+    id: `instagram:${ev.shortcode}`,
+    platform: 'instagram',
+    token,
+    sourceUrl,
+    channelTitle: ev.authorName || ev.author,
+    title: igTitle(ev.caption),
+    description: ev.caption,
+    tags: [],
+    publishedAt: ev.createTime ? new Date(ev.createTime * 1000).toISOString() : null,
+    thumbnail: ev.cover ? `/api/yt-import/thumb-token/${token}` : '',
+    duration: ev.duration,
+    tooLong: ev.duration > MAX_DURATION_S,
+    privacy: 'public',
+    type: ev.height > ev.width ? 'shorts' : 'videos',
+  }
+  resolved.set(token, { user, platform: 'instagram', igShortcode: ev.shortcode, videoKey: `ig-${ev.shortcode}`, sourceUrl, thumbUrl: ev.cover, video, createdAt: Date.now() })
+  return video
+}
+
+// A BitChute / Rumble video becomes a token the job route accepts. `direct` says
+// how the job gets the file without yt-dlp (BitChute: its media API; Rumble: the
+// CDN links from the channel listing).
+const PLATFORM_LABEL = { bitchute: 'BitChute', rumble: 'Rumble' }
+function platformEntry(user, platform, ev) {
+  const token = crypto.randomBytes(12).toString('hex')
+  const description = ev.description || ''
+  const title = ev.title || `${PLATFORM_LABEL[platform]} video`
+  const video = {
+    id: `${platform}:${ev.id}`,
+    platform,
+    token,
+    sourceUrl: ev.url,
+    channelTitle: ev.channelName || ev.channelId,
+    title,
+    description,
+    tags: ev.tags || [],
+    publishedAt: ev.createTime ? new Date(ev.createTime).toISOString() : null,
+    thumbnail: ev.cover ? `/api/yt-import/thumb-token/${token}` : '',
+    duration: Math.round(ev.duration || 0),
+    tooLong: ev.duration > MAX_DURATION_S,
+    privacy: 'public',
+    type: ev.isShort || ev.height > ev.width ? 'shorts' : 'videos',
+  }
+  const direct = platform === 'bitchute' ? { platform, id: ev.id } : { platform, id: ev.id, versions: ev.versions || [] }
+  resolved.set(token, {
+    user, platform, videoKey: `${platform === 'bitchute' ? 'bc' : 'rb'}-${ev.id}`, sourceUrl: ev.url, thumbUrl: ev.cover,
+    video, direct, createdAt: Date.now(),
+  })
+  return video
+}
+
 // Small concurrency pool for the per-video embed lookups.
 async function mapLimit(items, limit, fn) {
   const out = new Array(items.length)
@@ -410,7 +608,10 @@ async function videoDetails(ids) {
 
 function errorCodeFromLog(log) {
   if (/Sign in to confirm you.re not a bot|LOGIN_REQUIRED/i.test(log)) return 'bot_check'
-  if (/Video unavailable|Private video|members-only|This live event/i.test(log)) return 'unavailable'
+  if (/Private video|members-only|This live event/i.test(log)) return 'unavailable'
+  // The Data API already confirmed the video exists before the job started, so a bare
+  // "Video unavailable" here usually means YouTube is hiding it from this exit IP.
+  if (/video (is )?unavailable/i.test(log)) return 'unavailable_here'
   if (/HTTP Error 429|Too Many Requests/i.test(log)) return 'rate_limited'
   if (/HTTP Error 403|Forbidden/i.test(log)) return 'forbidden'
   if (/Unable to connect to proxy|ProxyError|Tunnel connection failed|407 Proxy/i.test(log)) return 'proxy_failed'
@@ -433,9 +634,9 @@ function publicJob(j) {
   }
 }
 
-// Failures worth another attempt from a fresh exit IP. A private/removed video or an
-// over-size file fails the same way from anywhere, so those stop right away.
-const RETRYABLE = new Set(['bot_check', 'rate_limited', 'forbidden', 'proxy_failed', 'download_failed'])
+// Failures worth another attempt from a fresh exit IP. A private/members-only video or
+// an over-size file fails the same way from anywhere, so those stop right away.
+const RETRYABLE = new Set(['bot_check', 'unavailable_here', 'rate_limited', 'forbidden', 'proxy_failed', 'download_failed'])
 
 function startDownload(job) {
   job.status = 'downloading'
@@ -450,23 +651,38 @@ function startDownload(job) {
     })
     return
   }
+  // BitChute / Rumble: direct MP4 from their CDNs (no proxy, no yt-dlp).
+  if ((job.platform === 'bitchute' || job.platform === 'rumble') && job.direct) {
+    directPlatformDownload(job).catch((e) => {
+      if (job.status === 'cancelled') return
+      job.status = 'failed'
+      job.errorCode = e.code || 'download_failed'
+      job.error = scrubSecrets(e.message).slice(0, 400)
+      console.warn(`[yt-import] @${job.user} ${job.videoId} ${job.platform} download failed (${job.errorCode}): ${job.error}`)
+      alertJobFailed(job, job.errorCode, job.error)
+    })
+    return
+  }
+  // Instagram: the post's own MP4 link, read by the browser service. yt-dlp is no
+  // option here (it calls Instagram's API from this server, which gets 429).
+  if (job.platform === 'instagram') {
+    directInstagramDownload(job).catch((e) => {
+      if (job.status === 'cancelled') return
+      job.status = 'failed'
+      job.errorCode = e.code || 'download_failed'
+      job.error = scrubSecrets(e.message).slice(0, 400)
+      console.warn(`[yt-import] @${job.user} ${job.videoId} Instagram download failed (${job.errorCode}): ${job.error}`)
+      alertJobFailed(job, job.errorCode, job.error)
+    })
+    return
+  }
   runAttempt(job)
 }
 
-async function directTikTokDownload(job) {
-  const dir = path.join(WORK_DIR, job.id)
-  fs.rmSync(dir, { recursive: true, force: true })
-  fs.mkdirSync(dir, { recursive: true })
-  job.progress = 0
-  // Fetched fresh: the MP4 links are signed and expire.
-  const ev = await tiktokEmbedVideo(job.tiktokId)
-  if (!ev?.videoUrl) throw new Error('no video link in the embed')
-  if (ev.duration > MAX_DURATION_S) {
-    job.status = 'failed'; job.errorCode = 'too_long'; job.error = LIMIT_MESSAGE
-    return
-  }
+// Streams a direct MP4 link into the job dir with progress, then measures it.
+async function streamToJob(job, dir, url, headers, via) {
   job.abort = new AbortController()
-  const r = await fetch(ev.videoUrl, { headers: { ...EMBED_HEADERS, Referer: 'https://www.tiktok.com/' }, signal: job.abort.signal })
+  const r = await fetch(url, { headers, signal: job.abort.signal })
   if (!r.ok || !r.body) throw new Error(`HTTP ${r.status}`)
   const total = Number(r.headers.get('content-length')) || 0
   if (total > 6 * 1024 ** 3) throw new Error('file too large')
@@ -488,7 +704,79 @@ async function directTikTokDownload(job) {
   job.status = 'done'
   job.progress = 100
   const m = job.media
-  console.log(`[yt-import] @${job.user} ${job.videoId} done via embed (${(job.size / 1e6).toFixed(1)} MB${m ? `, ${m.width}x${m.height}, ${Math.round(m.duration)}s` : ''})`)
+  console.log(`[yt-import] @${job.user} ${job.videoId} done via ${via} (${(job.size / 1e6).toFixed(1)} MB${m ? `, ${m.width}x${m.height}, ${Math.round(m.duration)}s` : ''})`)
+}
+
+// Instagram serves each video in a few progressive MP4 sizes (with sound). Take
+// the biggest whose short side fits the job's cap, else the smallest there is.
+function pickIgVersion(versions, maxShortSide) {
+  const short = (v) => Math.min(v.width || 0, v.height || 0) || Math.max(v.width || 0, v.height || 0)
+  const sorted = [...versions].filter((v) => /^https:\/\//.test(v.url || '')).sort((a, b) => short(b) - short(a))
+  return sorted.find((v) => short(v) <= maxShortSide) || sorted[sorted.length - 1] || null
+}
+
+async function directInstagramDownload(job) {
+  const dir = path.join(WORK_DIR, job.id)
+  fs.rmSync(dir, { recursive: true, force: true })
+  fs.mkdirSync(dir, { recursive: true })
+  job.progress = 0
+  // Live video links: the service re-reads the post when its copy is over 12h old.
+  const ev = await instagramMedia(job.igShortcode, { forDownload: true })
+  if (!ev) throw Object.assign(new Error('The post is gone or no longer public'), { code: 'not_found' })
+  if (ev.duration > MAX_DURATION_S) {
+    job.status = 'failed'; job.errorCode = 'too_long'; job.error = LIMIT_MESSAGE
+    return
+  }
+  const version = pickIgVersion(ev.videoVersions, job.maxHeight)
+  if (!version) throw Object.assign(new Error('Instagram gave no video file for this post'), { code: 'no_video' })
+  if (!/^https:\/\/[^/]*(cdninstagram\.com|fbcdn\.net)\//i.test(version.url)) {
+    throw Object.assign(new Error('Unexpected video host'), { code: 'download_failed' })
+  }
+  // The CDN does not need the session; a plain browser-like GET from here.
+  await streamToJob(job, dir, version.url, { 'User-Agent': BROWSER_UA, Referer: 'https://www.instagram.com/' }, `Instagram ${version.width}x${version.height}`)
+}
+
+async function directPlatformDownload(job) {
+  const dir = path.join(WORK_DIR, job.id)
+  fs.rmSync(dir, { recursive: true, force: true })
+  fs.mkdirSync(dir, { recursive: true })
+  job.progress = 0
+  let url = ''
+  let via = ''
+  if (job.platform === 'bitchute') {
+    // Fetched now: BitChute hands out the file link per request.
+    url = await platforms.bitchuteMediaUrl(job.direct.id)
+    if (!url) throw Object.assign(new Error('BitChute gave no file for this video'), { code: 'no_video' })
+    if (/\.m3u8(\?|$)/i.test(url)) throw Object.assign(new Error('This BitChute video is a live stream, which cannot be imported'), { code: 'live' })
+    via = 'BitChute'
+  } else {
+    const v = platforms.pickRumbleVersion(job.direct.versions || [], job.maxHeight)
+    if (!v) throw Object.assign(new Error('Rumble gave no file for this video'), { code: 'no_video' })
+    url = v.url
+    via = `Rumble ${v.res}p`
+  }
+  if (!/^https:\/\/[^/]*(bitchute\.com|rumble\.cloud|rmbl\.ws|rumble\.com)\//i.test(url)) {
+    throw Object.assign(new Error('Unexpected video host'), { code: 'download_failed' })
+  }
+  await streamToJob(job, dir, url, { 'User-Agent': BROWSER_UA }, via)
+  if (job.media?.duration > MAX_DURATION_S) {
+    job.status = 'failed'; job.errorCode = 'too_long'; job.error = LIMIT_MESSAGE
+  }
+}
+
+async function directTikTokDownload(job) {
+  const dir = path.join(WORK_DIR, job.id)
+  fs.rmSync(dir, { recursive: true, force: true })
+  fs.mkdirSync(dir, { recursive: true })
+  job.progress = 0
+  // Fetched fresh: the MP4 links are signed and expire.
+  const ev = await tiktokEmbedVideo(job.tiktokId)
+  if (!ev?.videoUrl) throw new Error('no video link in the embed')
+  if (ev.duration > MAX_DURATION_S) {
+    job.status = 'failed'; job.errorCode = 'too_long'; job.error = LIMIT_MESSAGE
+    return
+  }
+  await streamToJob(job, dir, ev.videoUrl, { ...EMBED_HEADERS, Referer: 'https://www.tiktok.com/' }, 'embed')
 }
 
 function runAttempt(job) {
@@ -667,7 +955,11 @@ function sweep() {
  * Mount the routes. `resolveUser(req, res)` must return a PROVEN Hive username
  * (butrauth session, wallet session cookie, or HiveSigner bearer) or null.
  */
-function mountYoutubeImport(app, { resolveUser, limiter }) {
+function mountYoutubeImport(app, { resolveUser, limiter, uploadImage, hasPostingGrant }) {
+  const library = require('./import-library.cjs').createLibrary({
+    uri: process.env.IMPORT_LIBRARY_MONGODB_URI || process.env.MONGODB_URI || '',
+    dbName: process.env.IMPORT_LIBRARY_DATABASE_NAME || process.env.DATABASE_NAME || '',
+  })
   // Leftovers from a previous process are unreachable (jobs live in memory).
   try {
     fs.mkdirSync(WORK_DIR, { recursive: true })
@@ -691,12 +983,15 @@ function mountYoutubeImport(app, { resolveUser, limiter }) {
   app.get('/api/yt-import/status', ...mw, async (req, res) => {
     const user = await auth(req, res); if (!user) return
     try {
-      const [links, premium] = await Promise.all([verifiedLinks(user), isPremium(user)])
+      const [links, premium, igReady] = await Promise.all([verifiedLinks(user), isPremium(user), instagramReady()])
       res.json({
         user, channels: links.youtube, links, premium,
         apiConfigured: !!YT_API_KEY,
         downloader: fs.existsSync(YTDLP_BIN),
         proxyConfigured: !!YTDLP_PROXY || !!YTDLP_COOKIES,
+        instagramReady: igReady,
+        // The sources this server imports from (IMPORT_SOURCE_<NAME>).
+        sources: enabledSources(),
         limits: {
           maxHeight: premium ? MAX_HEIGHT_PREMIUM : MAX_HEIGHT,
           maxDurationS: MAX_DURATION_S,
@@ -725,36 +1020,61 @@ function mountYoutubeImport(app, { resolveUser, limiter }) {
     }
   })
 
+  // ── Lists come from the import library (import-library.cjs) ────────────────
+  // The first visit reads the channel once (first page now, the rest in the
+  // background); every later visit reads only the library. Without Mongo the
+  // lists are read live, page by page, as before.
+  const PAGE = 25
+  const byDateDesc = (a, b) => String(b.publishedAt || '').localeCompare(String(a.publishedAt || ''))
+  const pagedReply = async (platform, channels, type, page) => {
+    const { evs, total } = await library.listVideos(platform, channels, type, page, PAGE)
+    const loading = channels.some((c) => library.isLoading(platform, c, type))
+    return { evs, total, hasMore: (page + 1) * PAGE < total || loading, loading }
+  }
+
+  // One page of a YouTube upload playlist (50 ids → details); cursor = pageToken.
+  async function ytPage(channelId, type, cursor, max = 50) {
+    const playlistId = TYPE_PLAYLIST_PREFIX[type] + channelId.slice(2)
+    let list
+    try {
+      list = await ytApi('playlistItems', {
+        part: 'contentDetails', playlistId, maxResults: String(max), ...(cursor ? { pageToken: cursor } : {}),
+      }, { quiet404: type !== 'all' })
+    } catch (e) {
+      // A channel with no Shorts (or no livestreams) has no such playlist at all.
+      if (e.upstreamStatus === 404 && type !== 'all') return { evs: [], next: null, total: 0 }
+      throw e
+    }
+    const ids = (list.items || []).map((i) => i.contentDetails?.videoId).filter((id) => VIDEO_ID_RE.test(id || ''))
+    const evs = (await videoDetails(ids)).filter((v) => v.privacy === 'public' && v.live !== 'live' && v.live !== 'upcoming')
+    return { evs, next: list.nextPageToken || null, total: list.pageInfo?.totalResults ?? null }
+  }
+
   // Public uploads of the user's verified channel(s), newest first, 25 per page.
+  // pageToken = page number (it was YouTube's own token before the library).
   app.get('/api/yt-import/videos', ...mw, async (req, res) => {
     const user = await auth(req, res); if (!user) return
+    if (!sourceEnabled('youtube')) return sourceOff(res, 'youtube')
     if (!YT_API_KEY) return res.status(503).json({ error: 'YouTube API key is not configured on this server' })
     try {
       const channels = await verifiedChannels(user)
       const channelId = String(req.query.channel || channels[0] || '')
       if (!channels.includes(channelId)) return res.status(403).json({ error: 'Link and verify your YouTube channel on your profile first' })
-      const pageToken = typeof req.query.pageToken === 'string' ? req.query.pageToken.slice(0, 200) : ''
       const type = Object.hasOwn(TYPE_PLAYLIST_PREFIX, req.query.type) ? req.query.type : 'all'
-      const playlistId = TYPE_PLAYLIST_PREFIX[type] + channelId.slice(2)
-      let list
-      try {
-        list = await ytApi('playlistItems', {
-          part: 'contentDetails', playlistId, maxResults: '25', ...(pageToken ? { pageToken } : {}),
-        }, { quiet404: type !== 'all' })
-      } catch (e) {
-        // A channel with no Shorts (or no livestreams) has no such playlist at all.
-        if (e.upstreamStatus === 404 && type !== 'all') {
-          return res.json({ channelId, channels, type, videos: [], nextPageToken: null, total: 0 })
-        }
-        throw e
+      const page = Math.max(0, Math.min(1000, Number(req.query.pageToken) || 0))
+      const { kept } = await library.ensureChannel('youtube', channelId, type, {
+        fetchPage: (cursor) => ytPage(channelId, type, cursor),
+        gapMs: 300,
+        store: (evs) => library.putVideos('youtube', channelId, type === 'all' ? null : type, evs, { dateOf: (v) => v.publishedAt }),
+      })
+      if (!kept) {
+        const live = await ytPage(channelId, type, typeof req.query.pageToken === 'string' && !/^\d+$/.test(req.query.pageToken) ? req.query.pageToken : null, PAGE)
+        const videos = live.evs.map((v) => ({ ...v, type: type === 'all' ? null : type })).sort(byDateDesc)
+        return res.json({ channelId, channels, type, videos, nextPageToken: live.next, total: live.total })
       }
-      const ids = (list.items || []).map((i) => i.contentDetails?.videoId).filter((id) => VIDEO_ID_RE.test(id || ''))
-      const videos = (await videoDetails(ids))
-        .filter((v) => v.privacy === 'public' && v.live !== 'live' && v.live !== 'upcoming')
-        .map((v) => ({ ...v, type: type === 'all' ? null : type }))
-      // videos.list does not keep the playlist order
-      videos.sort((a, b) => String(b.publishedAt).localeCompare(String(a.publishedAt)))
-      res.json({ channelId, channels, type, videos, nextPageToken: list.nextPageToken || null, total: list.pageInfo?.totalResults ?? null })
+      const r = await pagedReply('youtube', [channelId], type, page)
+      const videos = r.evs.map((v) => ({ ...v, type: type === 'all' ? null : type }))
+      res.json({ channelId, channels, type, videos, nextPageToken: r.hasMore ? String(page + 1) : null, total: r.loading ? null : r.total })
     } catch (e) { fail(res, e) }
   })
 
@@ -775,12 +1095,17 @@ function mountYoutubeImport(app, { resolveUser, limiter }) {
     res.status(404).end()
   })
 
-  // A pasted TikTok link → the video, if it belongs to one of the user's verified
-  // handles. Returns a token the job route accepts instead of a YouTube id.
+  // A pasted TikTok or Instagram link → the video, if it belongs to one of the
+  // user's verified accounts. Returns a token the job route accepts instead of a YouTube id.
   app.post('/api/yt-import/resolve', ...mw, async (req, res) => {
     const user = await auth(req, res); if (!user) return
     const raw = String(req.body?.url || '').slice(0, 500)
-    if (/instagram\.com/i.test(raw)) return res.status(400).json({ error: 'Instagram is not supported yet', errorCode: 'unsupported' })
+    const host = /instagram\.com/i.test(raw) ? 'instagram' : /bitchute\.com/i.test(raw) ? 'bitchute'
+      : /rumble\.com/i.test(raw) ? 'rumble' : 'tiktok'
+    if (!sourceEnabled(host)) return sourceOff(res, host)
+    if (host === 'instagram') return resolveInstagram(req, res, user, raw)
+    if (host === 'bitchute') return resolveBitchute(req, res, user, raw)
+    if (host === 'rumble') return resolveRumble(req, res, user, raw)
     try {
       const links = await verifiedLinks(user)
       if (!links.tiktok.length) return res.status(403).json({ error: 'Link and verify your TikTok account on your profile first', errorCode: 'no_link' })
@@ -809,31 +1134,198 @@ function mountYoutubeImport(app, { resolveUser, limiter }) {
         })
         return res.status(403).json({ error: 'You can only import videos from your own verified TikTok account', errorCode: 'not_owner' })
       }
+      tiktokStore(ev.author)([ev]).catch(() => {})
       res.json({ video: tiktokEntry(user, ev) })
     } catch (e) { fail(res, e) }
   })
 
-  // The newest TikToks of the user's verified handle(s), from the official creator
-  // embed (TikTok serves 10 per creator, no paging); older ones go through /resolve.
+  // The TikToks of the user's verified handle(s): TikTok's creator embed shows the
+  // newest 10 (no paging), read once and kept; older ones go through /resolve,
+  // which adds them to the library too.
+  const tiktokStore = (handle) => (evs) => library.putVideos('tiktok', handle, 'all', evs, { dateOf: (ev) => (ev.createTime ? new Date(ev.createTime * 1000).toISOString() : null) })
   app.get('/api/yt-import/tiktok/videos', ...mw, async (req, res) => {
     const user = await auth(req, res); if (!user) return
+    if (!sourceEnabled('tiktok')) return sourceOff(res, 'tiktok')
     try {
       const links = await verifiedLinks(user)
       if (!links.tiktok.length) return res.status(403).json({ error: 'Link and verify your TikTok account on your profile first', errorCode: 'no_link' })
-      const ids = (await Promise.all(links.tiktok.map((h) => tiktokCreatorVideoIds(h).catch(() => [])))).flat()
-      const evs = await mapLimit(ids, 5, (id) => tiktokEmbedVideo(id))
+      const readLatest = async (h) => {
+        const ids = await tiktokCreatorVideoIds(h).catch(() => [])
+        return (await mapLimit(ids, 5, (id) => tiktokEmbedVideo(id))).filter((ev) => ev && ev.author === h)
+      }
+      let evs = []
+      const kept = await Promise.all(links.tiktok.map((h) => library.ensureChannel('tiktok', h, 'all', {
+        fetchPage: async () => ({ evs: await readLatest(h), next: null }),
+        store: tiktokStore(h),
+      })))
+      if (kept.every((k) => k.kept)) evs = (await library.listVideos('tiktok', links.tiktok, 'all', 0, 500)).evs
+      else for (const h of links.tiktok) evs.push(...await readLatest(h))
       const videos = evs
         .filter((ev) => ev && links.tiktok.includes(ev.author))
         .map((ev) => tiktokEntry(user, ev))
-        .sort((a, b) => String(b.publishedAt || '').localeCompare(String(a.publishedAt || '')))
+        .sort(byDateDesc)
       res.json({ handles: links.tiktok, videos })
     } catch (e) { fail(res, e) }
   })
 
-  // Thumbnail of a looked-up TikTok (signed CDN URL kept server side).
+  const igOff = (res) => res.status(503).json({ error: 'Instagram import is not available yet', errorCode: 'unavailable' })
+
+  // ── BitChute + Rumble ──────────────────────────────────────────────────────
+  const blockedOther = (user, platform, id, url, author, mine) => {
+    console.warn(`[yt-import] @${user} tried to import ${platform} ${id} by ${author}`)
+    alertDiscord({
+      title: `Blocked: import of someone else's ${PLATFORM_LABEL[platform]} video`, color: ALERT_ORANGE, user, platform,
+      videoId: id, url, code: 'not_owner',
+      fields: [{ name: 'Video by', value: author || 'unknown' }, { name: `Verified ${PLATFORM_LABEL[platform]}`, value: mine.join(', ') }],
+    })
+  }
+  const noLink = (res, platform) => res.status(403).json({ error: `Link and verify your ${PLATFORM_LABEL[platform]} channel on your profile first`, errorCode: 'no_link' })
+  const sendError = (res, e) => res.status(e.status || 500).json({ error: e.status ? e.message : 'Something went wrong', errorCode: e.code || undefined })
+
+  async function resolveBitchute(req, res, user, raw) {
+    try {
+      const links = await verifiedLinks(user)
+      if (!links.bitchute.length) return noLink(res, 'bitchute')
+      const m = platforms.BITCHUTE_VIDEO_RE.exec(raw)
+      if (!m) return res.status(400).json({ error: 'That is not a BitChute video link', errorCode: 'bad_url' })
+      const ev = await platforms.bitchuteVideo(m[1])
+      if (!ev) return res.status(404).json({ error: 'Video not found or not public', errorCode: 'not_found' })
+      if (!links.bitchute.includes(ev.channelId)) {
+        blockedOther(user, 'bitchute', ev.id, ev.url, ev.channelName || ev.channelId, links.bitchute)
+        return res.status(403).json({ error: 'You can only import videos from your own verified BitChute channel', errorCode: 'not_owner' })
+      }
+      channelStore('bitchute', ev.channelId)([ev]).catch(() => {})
+      res.json({ video: platformEntry(user, 'bitchute', ev) })
+    } catch (e) { sendError(res, e) }
+  }
+
+  // The owner comes from Rumble's video page; the file links from that owner's
+  // channel listing (so only a verified channel's listing is ever walked).
+  async function resolveRumble(req, res, user, raw) {
+    try {
+      const links = await verifiedLinks(user)
+      if (!links.rumble.length) return noLink(res, 'rumble')
+      let url = String(raw).trim()
+      if (!/^https?:\/\//i.test(url)) url = `https://${url}`
+      const m = platforms.RUMBLE_VIDEO_RE.exec(url)
+      if (!m) return res.status(400).json({ error: 'That is not a Rumble video link', errorCode: 'bad_url' })
+      const page = await rumble.videoPage(url)
+      if (!page) return res.status(404).json({ error: 'Video not found or not public', errorCode: 'not_found' })
+      if (!links.rumble.includes(page.channelId)) {
+        blockedOther(user, 'rumble', m[1], url, page.channelId, links.rumble)
+        return res.status(403).json({ error: 'You can only import videos from your own verified Rumble channel', errorCode: 'not_owner' })
+      }
+      const ev = await rumble.findInChannel(page.channelId, m[1].toLowerCase())
+      if (!ev) return res.status(404).json({ error: 'This video is not listed on your channel (private, unlisted or still processing)', errorCode: 'not_found' })
+      const full = { ...ev, title: page.title || ev.title, description: page.description }
+      channelStore('rumble', page.channelId)([full]).catch(() => {})
+      res.json({ video: platformEntry(user, 'rumble', full) })
+    } catch (e) { sendError(res, e) }
+  }
+
+  // A page of a verified channel's videos, 25 per page, newest first.
+  // Whole channel read once into the library (BitChute 1 s, Rumble 3 s between
+  // pages); pages are then served from the library, 25 at a time.
+  const channelStore = (platform, c) => (evs) => library.putVideos(platform, c, null, evs, {
+    dateOf: (ev) => (ev.createTime ? new Date(ev.createTime).toISOString() : null),
+    typeOf: (ev) => (ev.isShort || ev.height > ev.width ? 'shorts' : 'videos'),
+  })
+  const readChannelPage = (platform, c, page) => (platform === 'bitchute'
+    ? platforms.bitchuteChannelVideos(c, page) : rumble.readChannelVideos(c, page))
+  const listChannelPage = (platform) => async (req, res) => {
+    const user = await auth(req, res); if (!user) return
+    if (!sourceEnabled(platform)) return sourceOff(res, platform)
+    try {
+      const links = await verifiedLinks(user)
+      const channels = links[platform]
+      if (!channels.length) return noLink(res, platform)
+      const page = Math.max(0, Math.min(1000, Number(req.query.page) || 0))
+      const kept = await Promise.all(channels.map((c) => library.ensureChannel(platform, c, 'all', {
+        fetchPage: async (cursor) => {
+          const n = cursor || 0
+          const got = await readChannelPage(platform, c, n)
+          return { evs: got.videos.filter((ev) => ev.channelId === c), next: got.hasMore ? n + 1 : null }
+        },
+        gapMs: platform === 'rumble' ? 3000 : 1000,
+        store: channelStore(platform, c),
+      }).catch(() => ({ kept: false }))))
+      let evs
+      let hasMore
+      if (kept.every((k) => k.kept)) {
+        const r = await pagedReply(platform, channels, null, page)
+        evs = r.evs
+        hasMore = r.hasMore
+      } else {
+        const got = await Promise.all(channels.map((c) => readChannelPage(platform, c, page).catch(() => ({ videos: [], hasMore: false }))))
+        evs = got.flatMap((g) => g.videos).filter((ev) => channels.includes(ev.channelId))
+        hasMore = got.some((g) => g.hasMore)
+      }
+      if (platform === 'rumble') {
+        // Descriptions live on video pages: read the missing ones in the background
+        // and keep them in the library.
+        rumble.warmDescriptions(evs.filter((ev) => !ev.description), (id, pageInfo) => library.patchVideo('rumble', id, { description: pageInfo.description }))
+      }
+      const videos = evs.map((ev) => platformEntry(user, platform, ev)).sort(byDateDesc)
+      res.json({ channels, videos, page, hasMore })
+    } catch (e) { sendError(res, e) }
+  }
+  app.get('/api/yt-import/bitchute/videos', ...mw, listChannelPage('bitchute'))
+  app.get('/api/yt-import/rumble/videos', ...mw, listChannelPage('rumble'))
+
+  async function resolveInstagram(req, res, user, raw) {
+    if (!INSTAGRAM_ENABLED) return igOff(res)
+    try {
+      const links = await verifiedLinks(user)
+      if (!links.instagram.length) return res.status(403).json({ error: 'Link and verify your Instagram account on your profile first', errorCode: 'no_link' })
+      const canon = await canonicalInstagramUrl(raw).catch(() => null)
+      if (!canon) return res.status(400).json({ error: 'That is not an Instagram post or reel link', errorCode: 'bad_url' })
+      const ev = await instagramMedia(canon.shortcode)
+      if (!ev) return res.status(404).json({ error: 'Video not found or not public', errorCode: 'not_found' })
+      if (!links.instagram.includes(ev.author)) {
+        console.warn(`[yt-import] @${user} tried to import Instagram ${canon.shortcode} by @${ev.author}`)
+        alertDiscord({
+          title: 'Blocked: import of someone else\'s Instagram', color: ALERT_ORANGE, user, platform: 'instagram',
+          videoId: canon.shortcode, url: `https://www.instagram.com/p/${canon.shortcode}/`, code: 'not_owner',
+          fields: [{ name: 'Posted by', value: `@${ev.author}` }, { name: 'Verified Instagram', value: links.instagram.map((h) => `@${h}`).join(', ') }],
+        })
+        return res.status(403).json({ error: 'You can only import videos from your own verified Instagram account', errorCode: 'not_owner' })
+      }
+      if (!ev.isVideo) return res.status(400).json({ error: 'That post is not a single video', errorCode: 'not_video' })
+      igStore(ev.author)([ev]).catch(() => {})
+      res.json({ video: instagramEntry(user, ev) })
+    } catch (e) { res.status(e.status || 500).json({ error: e.status ? e.message : 'Something went wrong', errorCode: e.code || undefined }) }
+  }
+
+  // The video posts of the user's verified Instagram account(s): the reels tab +
+  // profile feed, read once and kept; older ones via /resolve, also kept.
+  const igStore = (handle) => (evs) => library.putVideos('instagram', handle, 'all', evs, {
+    idOf: (ev) => ev.shortcode, dateOf: (ev) => (ev.createTime ? new Date(ev.createTime * 1000).toISOString() : null),
+  })
+  app.get('/api/yt-import/instagram/videos', ...mw, async (req, res) => {
+    const user = await auth(req, res); if (!user) return
+    if (!INSTAGRAM_ENABLED) return igOff(res)
+    try {
+      const links = await verifiedLinks(user)
+      if (!links.instagram.length) return res.status(403).json({ error: 'Link and verify your Instagram account on your profile first', errorCode: 'no_link' })
+      const kept = await Promise.all(links.instagram.map((h) => library.ensureChannel('instagram', h, 'all', {
+        fetchPage: async () => ({ evs: await instagramLatest(h), next: null }),
+        store: igStore(h),
+      })))
+      let evs = []
+      if (kept.every((k) => k.kept)) evs = (await library.listVideos('instagram', links.instagram, 'all', 0, 500)).evs
+      else for (const h of links.instagram) evs.push(...await instagramLatest(h))
+      const videos = evs
+        .filter((ev) => links.instagram.includes(ev.author))
+        .map((ev) => instagramEntry(user, ev))
+        .sort(byDateDesc)
+      res.json({ handles: links.instagram, videos })
+    } catch (e) { res.status(e.status || 500).json({ error: e.status ? e.message : 'Something went wrong', errorCode: e.code || undefined }) }
+  })
+
+  // Thumbnail of a looked-up TikTok / Instagram video (signed CDN URL kept server side).
   app.get('/api/yt-import/thumb-token/:token', ...mw, async (req, res) => {
     const entry = resolved.get(String(req.params.token || ''))
-    if (!entry?.thumbUrl || !/^https:\/\/[^/]*(tiktokcdn|tiktokcdn-eu|tiktokcdn-us|ibyteimg|byteimg)\.com\//i.test(entry.thumbUrl)) return res.status(404).end()
+    if (!entry?.thumbUrl || !/^https:\/\/[^/]*(tiktokcdn|tiktokcdn-eu|tiktokcdn-us|ibyteimg|byteimg|cdninstagram|fbcdn|bitchute|rumble|rmbl)\.(com|net|cloud|ws)\//i.test(entry.thumbUrl)) return res.status(404).end()
     try {
       const r = await fetch(entry.thumbUrl, { signal: AbortSignal.timeout(8000) })
       if (!r.ok) return res.status(404).end()
@@ -849,6 +1341,7 @@ function mountYoutubeImport(app, { resolveUser, limiter }) {
     const token = String(req.body?.token || '')
     const entry = token ? resolved.get(token) : null
     if (token && (!entry || entry.user !== user)) return res.status(404).json({ error: 'Look the video up again', errorCode: 'expired' })
+    if (!sourceEnabled(entry ? entry.platform : 'youtube')) return sourceOff(res, entry ? entry.platform : 'youtube')
     const videoId = entry ? entry.videoKey : String(req.body?.videoId || '')
     if (!entry && !VIDEO_ID_RE.test(videoId)) return res.status(400).json({ error: 'invalid video id' })
     if (!fs.existsSync(YTDLP_BIN)) return res.status(503).json({ error: 'Downloader is not installed on this server', errorCode: 'no_downloader' })
@@ -856,7 +1349,7 @@ function mountYoutubeImport(app, { resolveUser, limiter }) {
     try {
       let video
       if (entry) {
-        // Ownership was checked when the link was looked up (oEmbed author).
+        // Ownership was checked when the link was looked up (oEmbed / media info author).
         video = entry.video
       } else {
         const [channels, [ytVideo]] = await Promise.all([verifiedChannels(user), videoDetails([videoId])])
@@ -902,6 +1395,8 @@ function mountYoutubeImport(app, { resolveUser, limiter }) {
         id: crypto.randomBytes(12).toString('hex'), user, videoId, maxHeight,
         platform: entry ? entry.platform : 'youtube', sourceUrl: entry ? entry.sourceUrl : null,
         tiktokId: entry?.tiktokId || null,
+        igShortcode: entry?.igShortcode || null,
+        direct: entry?.direct || null,
         status: 'queued', progress: 0, createdAt: now, log: '',
       }
       jobs.set(job.id, job)
@@ -936,6 +1431,86 @@ function mountYoutubeImport(app, { resolveUser, limiter }) {
     removeJob(job)
     res.json({ ok: true })
   })
+
+  // ── Batch import (import-batch.cjs) ────────────────────────────────────────
+  // A batch item names a video the same way the single import does (a YouTube id,
+  // or the token of a looked-up TikTok / Instagram post); ownership is checked
+  // here exactly like POST /jobs does.
+  async function resolveSource(user, item) {
+    const bad = (status, message, code) => Object.assign(new Error(message), { status, code })
+    const platform = item?.token ? resolved.get(String(item.token))?.platform : 'youtube'
+    if (platform && !sourceEnabled(platform)) throw bad(403, `Importing from ${platform} is not available`, 'source_disabled')
+    if (item?.token) {
+      const entry = resolved.get(String(item.token))
+      if (!entry || entry.user !== user) throw bad(404, 'Look the video up again', 'expired')
+      const v = entry.video
+      if (v.tooLong) throw bad(400, LIMIT_MESSAGE, 'too_long')
+      let { title, description } = v
+      // An Instagram reel picked before its details arrived: read them now.
+      if (entry.platform === 'instagram' && !description && entry.igShortcode) {
+        const ev = await instagramMedia(entry.igShortcode).catch(() => null)
+        if (ev?.caption) { description = ev.caption; title = igTitle(ev.caption) }
+      }
+      return {
+        sourceId: v.id, platform: entry.platform, title, description, tags: v.tags || [],
+        thumbnail: v.thumbnail, thumbUrl: entry.thumbUrl, sourceUrl: entry.sourceUrl, duration: v.duration || 0,
+        videoKey: entry.videoKey, tiktokId: entry.tiktokId || null, igShortcode: entry.igShortcode || null,
+        direct: entry.direct || null,
+      }
+    }
+    const videoId = String(item?.videoId || '')
+    if (!VIDEO_ID_RE.test(videoId)) throw bad(400, 'invalid video id')
+    if (!YT_API_KEY) throw bad(503, 'YouTube API key is not configured on this server')
+    const [channels, [v]] = await Promise.all([verifiedChannels(user), videoDetails([videoId])])
+    if (!v) throw bad(404, 'Video not found')
+    if (!channels.includes(v.channelId)) throw bad(403, 'You can only import videos from your own verified channel', 'not_owner')
+    if (v.privacy !== 'public') throw bad(400, 'Only public videos can be imported')
+    if (v.duration > MAX_DURATION_S) throw bad(400, LIMIT_MESSAGE, 'too_long')
+    return {
+      sourceId: v.id, platform: 'youtube', title: v.title, description: v.description, tags: v.tags || [],
+      thumbnail: v.thumbnail, thumbUrl: null, sourceUrl: `https://www.youtube.com/watch?v=${v.id}`, duration: v.duration,
+      videoKey: v.id, tiktokId: null, igShortcode: null,
+    }
+  }
+
+  async function startBatchDownload(user, src) {
+    const now = Date.now()
+    const starts = (userStarts.get(user) || []).filter((t) => now - t < 24 * 3600 * 1000)
+    starts.push(now); userStarts.set(user, starts)
+    const job = {
+      id: crypto.randomBytes(12).toString('hex'), user, videoId: src.videoKey, maxHeight: await maxHeightFor(user),
+      platform: src.platform, sourceUrl: src.platform === 'youtube' ? null : src.sourceUrl,
+      tiktokId: src.tiktokId, igShortcode: src.igShortcode, direct: src.direct || null,
+      status: 'queued', progress: 0, createdAt: now, log: '', batch: true,
+    }
+    jobs.set(job.id, job)
+    console.log(`[yt-import] @${user} started ${job.videoId} for a batch (up to ${job.maxHeight}p)`)
+    startDownload(job)
+    return job
+  }
+
+  if (uploadImage && hasPostingGrant) {
+    require('./import-batch.cjs').mountImportBatch(app, {
+      auth, mw, resolveSource,
+      // Just before a post is built: a Rumble video's description (from its page).
+      enrichSource: async (src) => {
+        if (src.platform !== 'rumble' || src.description) return src
+        const page = await rumble.videoPage(src.sourceUrl).catch(() => null)
+        return page?.description ? { ...src, description: page.description } : src
+      },
+      startDownload: startBatchDownload,
+      getJob: (id) => jobs.get(id),
+      removeJob,
+      canStartDownload: () => !ytdlpUpdating && runningCount() < MAX_CONCURRENT,
+      startsToday: (user) => (userStarts.get(user) || []).filter((t) => Date.now() - t < 24 * 3600 * 1000).length,
+      maxPerDay: MAX_JOBS_PER_DAY,
+      isPremium,
+      recordImport,
+      uploadImage,
+      hasPostingGrant,
+      alert: alertDiscord,
+    })
+  }
 }
 
 module.exports = { mountYoutubeImport }

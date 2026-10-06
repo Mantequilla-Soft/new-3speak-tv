@@ -111,6 +111,18 @@
     "tiktok": {
       "placeholder": "@handle или https://www.tiktok.com/@handle",
       "help": "Вставьте свой @handle в TikTok или ссылку на профиль. Разместите хеш в любом месте описания профиля."
+    },
+    "instagram": {
+      "placeholder": "@handle или https://www.instagram.com/handle",
+      "help": "Вставьте свой @handle в Instagram или ссылку на профиль. Разместите хеш в любом месте описания профиля."
+    },
+    "bitchute": {
+      "placeholder": "https://www.bitchute.com/channel/…",
+      "help": "Вставьте название или ссылку на свой канал BitChute. Разместите хеш в любом месте описания канала."
+    },
+    "rumble": {
+      "placeholder": "https://rumble.com/c/…",
+      "help": "Вставьте название или ссылку на свой канал Rumble. Разместите хеш в любом месте описания канала."
     }
   },
   "snaps": {

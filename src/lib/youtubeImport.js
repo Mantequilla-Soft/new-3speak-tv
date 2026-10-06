@@ -54,14 +54,20 @@ export const listChannelVideos = ({ channel, type, pageToken } = {}) => {
   return call(`/videos${q ? `?${q}` : ''}`);
 };
 
-// A pasted TikTok link → { video } if it belongs to one of the user's verified handles.
+// A pasted TikTok / Instagram link → { video } if it belongs to one of the user's verified accounts.
 export const resolveImportUrl = (url) => call('/resolve', { method: 'POST', body: { url } });
 
 // The newest TikToks (TikTok's creator embed serves 10) of the user's verified handle(s).
 export const listTikTokVideos = () => call('/tiktok/videos');
 
-// YouTube videos go by id; looked-up TikToks by the token the lookup returned.
-// After publishing an imported video: source ("<youtube id>" / "tiktok:<id>") is
+// The newest Instagram video posts (from the profile's 12 newest posts) of the user's verified account(s).
+export const listInstagramVideos = () => call('/instagram/videos');
+
+// BitChute / Rumble: a page (25, newest first) of the user's verified channel(s). { videos, hasMore }
+export const listPlatformVideos = (platform, page = 0) => call(`/${platform}/videos?page=${page}`);
+
+// YouTube videos go by id; looked-up TikToks / Instagram posts by the token the lookup returned.
+// After publishing an imported video: source ("<youtube id>" / "tiktok:<id>" / "instagram:<shortcode>") is
 // now this 3Speak post. Feeds the ✓ "On 3Speak" mark in the import grid.
 export const markImportPublished = (source, permlink) => call('/published', { method: 'POST', body: { source, permlink } });
 
@@ -70,6 +76,13 @@ export const startImportJob = (video) => call('/jobs', {
   body: video.token ? { token: video.token } : { videoId: video.id },
 });
 export const getImportJob = (id) => call(`/jobs/${encodeURIComponent(id)}`);
+
+// ▶️ Batch import: up to 5 videos imported and published server side, the posts
+// going out one by one through the checker's scheduled posts (as @threespeak).
+// items: [{ videoId }] for YouTube, [{ token }] for looked-up TikTok / Instagram.
+export const getImportBatches = () => call('/batch');
+export const createImportBatch = (items, options) => call('/batch', { method: 'POST', body: { items, options } });
+export const cancelImportBatch = (id) => call(`/batch/${encodeURIComponent(id)}/cancel`, { method: 'POST' });
 export const cancelImportJob = (id) => call(`/jobs/${encodeURIComponent(id)}`, { method: 'DELETE' }).catch(() => null);
 
 /** Pull the finished download into the browser as a File, reporting 0..1 progress. */
@@ -98,7 +111,7 @@ export async function downloadImportFile(id, videoId, onProgress) {
 /** The video's thumbnail as a data URL (proxied by our API, so no CORS trouble). null on failure. */
 export async function fetchThumbnailDataUrl(video) {
   try {
-    const src = video.platform === 'tiktok' ? video.thumbnail : `${API}/yt-import/thumb/${encodeURIComponent(video.id)}`;
+    const src = video.platform !== 'youtube' ? video.thumbnail : `${API}/yt-import/thumb/${encodeURIComponent(video.id)}`;
     if (!src) return null;
     const res = await fetch(src, { credentials: 'include' });
     if (!res.ok) return null;
