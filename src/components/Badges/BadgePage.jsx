@@ -9,6 +9,7 @@ import { feedParams } from "../../utils/feedParams";
 import { useAppStore } from "../../lib/store";
 import ProfileHeader from "../ProfileHeader/ProfileHeader";
 import HiveAvatar from "../HiveAvatar/HiveAvatar";
+import { cachedProfileImage } from "../../utils/avatarCache";
 import Card3 from "../Cards/Card3";
 import CardSkeleton from "../Cards/CardSkeleton";
 import { useContentBatch } from "../../hooks/useContentBatch";
@@ -211,9 +212,9 @@ function BadgeView({ account }) {
         username={account}
         name={badge?.title || account}
         bio={badge?.description}
-        // Straight from the index. A badge's art is usually uploaded here, and
-        // images.hive.blog cannot serve it back to us.
-        avatarUrl={badge?.image}
+        // From the index, but through our /img/ cache rather than the raw
+        // original on someone else's host (see cachedProfileImage).
+        avatarUrl={cachedProfileImage(account, badge?.image, 'large')}
         coverUrl={badge?.cover}
         // No subscribe here. Subscribing to a badge is a plain Hive follow of
         // the badge account, which does nothing: a badge is not a feed you join,

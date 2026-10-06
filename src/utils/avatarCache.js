@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { hiveProxy, viaImageCache } from './fixThumbnails';
+import { hiveProxy, hiveProxyRefuses, viaImageCache } from './fixThumbnails';
 
 // images.hive.blog/u/<name>/avatar resolves profile_image server-side, but it
 // answers with `cache-control: public, max-age=86400`. So a browser that ever
@@ -83,6 +83,24 @@ function viaHiveProxy(url, size) {
   const own = url.match(/^https?:\/\/images\.3speak\.tv\/(.+)$/i);
   if (own) return `/img/a/${own[1].split('?')[0]}?px=${px === 256 ? 128 : px}`;
   return hiveProxy(url, { w: px, h: px });
+}
+
+/**
+ * A badge's or community's picture, served from OUR /img/ cache, for callers that
+ * already hold the account's profile_image (the badge directory, a community list).
+ *
+ * The raw profile_image is NOT loaded as-is: those are full-size originals on
+ * whatever host the art was uploaded to (files.peakd.com, imgur, an expired
+ * Discord link, the long-dead files.steempeak.com), fetched from the viewer's
+ * browser at up to hundreds of KB for a 64 px circle. /img/u/<account>/avatar
+ * asks Hive's proxy for the same picture, which also still holds copies of art
+ * whose host has gone, and nginx keeps the resized result. Only art on our own
+ * host takes the other road: Hive's proxy cannot fetch images.3speak.tv and
+ * answers with its grey default face, so that goes through /img/a/ instead.
+ */
+export function cachedProfileImage(account, url, size = 'small') {
+  if (hiveProxyRefuses(url)) return viaHiveProxy(String(url).trim(), size);
+  return hiveAvatarUrl(account, size);
 }
 
 /** Remember the image we just uploaded for this account. */

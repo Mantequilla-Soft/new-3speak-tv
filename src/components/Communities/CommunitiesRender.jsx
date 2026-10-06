@@ -13,6 +13,7 @@ import CreateCommunity from '../modal/CreateCommunity';
 import { HIVE_API_NODES, FEED_URL, CHECKER_URL } from '../../utils/config';
 import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
+import AccountImg from '../HiveAvatar/AccountImg';
 import { useTranslation, Trans } from 'react-i18next';
 import { formatNumber } from '../../i18n';
 import { fixVideoThumbnail, fallbackImg } from '../../utils/fixThumbnails';
@@ -296,17 +297,15 @@ function CommunitiesRender() {
             <div key={community.name || index} className="blog-card" onClick={() => handleCardClick(community.name)}>
               <div className="blog-card-main">
               <div className="img-wrap">
-                {/* The community's own picture when the index has it. The
-                    hardcoded proxy below is the fallback: it cannot read
-                    images.3speak.tv and answers with a grey placeholder at 200,
-                    so a community created here looked faceless in this grid. */}
-                <img
-                  src={
-                    community.image
-                    || '/img/u/' + community.name + '/avatar/small?size=icon'
-                  }
+                {/* bridge.list_communities carries no picture, so this
+                    resolves the account's real one and serves it through our
+                    /img/ cache (see AccountImg): the plain /img/u/ proxy cannot
+                    read images.3speak.tv and answers with a grey placeholder. */}
+                <AccountImg
+                  account={community.name}
                   alt={community.title}
                   className="blog-image"
+                  loading="lazy"
                 />
               </div>
               {/* The three lines are wrapped so they stay a block beside the

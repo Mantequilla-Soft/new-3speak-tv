@@ -7,6 +7,12 @@
 // 1.0.0 — that way they see all of these when develop is pushed to production.
 export const CHANGELOG = [
   {
+    version: '1.79.54',
+    date: '2026-10-06',
+    summary:
+      'Badge and community pictures now load from 3Speak\'s own image cache, resized to the size they are shown at. Badge art hosted on other sites loads reliably, and communities created on 3Speak always show their own picture.',
+  },
+  {
     version: '1.79.52',
     date: '2026-10-04',
     summary:
