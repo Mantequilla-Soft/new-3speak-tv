@@ -9,6 +9,7 @@ import { MdClose } from 'react-icons/md';
 import { useAppStore } from '../../lib/store';
 import { usePromptsActive, setPromptActive } from '../../utils/welcomeGate';
 import TrackChooser from './TrackChooser';
+import { fetchIncubationProgress } from '../../lib/incubation';
 import { withTracksKey } from './tracks';
 import { useTranslation, Trans } from 'react-i18next';
 import './IncubationWelcome.scss';
@@ -136,12 +137,26 @@ export default function IncubationWelcome() {
     if (promptsActive) return undefined;
     if (seen().includes(incubationHandle)) return undefined;
 
+    // "Seen" lives in this browser only, so a second device would greet them
+    // again. The server knows whether they already picked a path: if they did,
+    // they have been through this, so remember that here and stay closed
+    // (owner 2026-10-06). If the question fails, show it as before.
+    let alive = true;
     // A beat after landing, so it does not race the page it is explaining.
-    const timer = setTimeout(() => {
+    const timer = setTimeout(async () => {
+      try {
+        const progress = await fetchIncubationProgress();
+        if (!alive) return;
+        if (progress && progress.track && !progress.needsTrack) {
+          markSeen(incubationHandle);
+          return;
+        }
+      } catch { /* unknown: show it */ }
+      if (!alive) return;
       setPromptActive('incubation-welcome', true);
       setOpen(true);
     }, 900);
-    return () => clearTimeout(timer);
+    return () => { alive = false; clearTimeout(timer); };
   }, [authenticated, incubationHandle, promptsActive]);
 
   const close = () => {

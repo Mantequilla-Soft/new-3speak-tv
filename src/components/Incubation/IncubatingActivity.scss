@@ -145,3 +145,10 @@
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
+
+// The people tabs reuse the regular profile's account badges (Follower.scss).
+// Those are <button>s there and links here, so take the link look off.
+.inc-people .user-card {
+  color: inherit;
+  text-decoration: none;
+}
