@@ -1,0 +1,125 @@
+{
+  "title": "Mga madalas itanong",
+  "subtitle": "Bago ka ba sa 3Speak? Narito ang mga sagot sa mga tanong na pinakamadalas itanong sa amin.",
+  "groups": {
+    "start": "Pagsisimula",
+    "earning": "Pagkita",
+    "uploading": "Pag-upload",
+    "community": "Community at kaligtasan",
+    "more": "Advertising at iba pa"
+  },
+  "items": {
+    "what": {
+      "q": "Ano ang 3Speak?",
+      "a": "Ang 3Speak ay isang video platform kung saan sa iyo talaga ang channel mo. Ang mga video, comment at follower mo ay nasa sarili mong Hive account, hindi sa server ng 3Speak, kaya walang makakakuha ng mga ito sa iyo. Parehong puwedeng kumita ng rewards ang mga creator at viewer habang ginagamit ito."
+    },
+    "watchFree": {
+      "q": "Kailangan ko ba ng account para manood?",
+      "a": "Hindi. Libre ang panonood at walang kailangang account. Kailangan mo lang ng account para mag-upload, mag-comment, mag-vote, mag-follow ng mga channel at kumita ng rewards."
+    },
+    "signup": {
+      "q": "Paano ako gagawa ng account?",
+      "a": "I-tap ang <b>Mag-sign up</b> sa itaas at magpatuloy gamit ang Google, email o ibang option mula sa Butter Auth, ang login service na ginagamit ng 3Speak. Libre ito at mga isang minuto lang. May maikling warm-up ang mga bagong account: puwede ka nang manood, mag-upload at mag-comment agad, at mabubuksan ang pag-vote, pag-tip at pagkita kapag natapos mo ito at nagkaroon ka na ng sarili mong Hive account."
+    },
+    "hive": {
+      "q": "Ano ang Hive, at kailangan ko ba itong maintindihan?",
+      "a": "Ang Hive ay isang bukas na network na nag-iimbak ng mga account, post, vote at rewards. Isa ang Tumatakbo na ito mula pa noong 2016, at noong 2020 ginawa itong malaya ng komunidad nito mula sa anumang kumpanya. 3Speak sa maraming app na nakatayo rito, kaya gumagana rin ang parehong account sa ibang Hive app. Hindi mo kailangang maintindihan ang alinman dito para gamitin ang 3Speak: mag-log in ka lang, manood, mag-post at mag-comment."
+    },
+    "loginTypes": {
+      "q": "Butter Auth, Keychain, HiveSigner: ano ang pagkakaiba?",
+      "a": "Iba't ibang paraan ang mga ito para mag-log in sa parehong uri ng account. Ang <b>Butter Auth</b> (Google, email at iba pa) ang pinakamadali: hinahayaan nitong mag-post ang 3Speak para sa iyo, at hiwalay mong ina-approve ang mga wallet action tulad ng transfer. Ang <b>Hive Keychain</b>, <b>HiveSigner</b>, <b>HiveAuth</b>, <b>PeakVault</b> at <b>Ledger</b> ay mga Hive wallet: nasa iyo ang mga key mo at ikaw mismo ang nag-a-approve ng bawat aksyon. Piliin kung alin ang gusto mo."
+    },
+    "lostKeys": {
+      "q": "Nawala ko ang mga key o password ko. Ano na ngayon?",
+      "a": "Walang makakapagbalik ng nawalang key, kahit ang 3Speak, kaya magtabi ng kopya ng mga key mo sa ligtas na lugar. Kung nasa iyo pa ang master password o owner key mo, puwede mong idagdag ulit ang account mo sa isang wallet gamit iyon. Kung tuluyan nang nawala ang mga key mo, mag-message sa amin sa <discord>Discord</discord> at bubuksan namin ulit ang sign up para makagawa ka ng bagong account. Kung may ibang nakakuha ng account mo, makakatulong ang account recovery ng Hive sa loob ng 30 araw: magtanong sa amin sa <discord>Discord</discord> at gagabayan ka namin."
+    },
+    "creatorsEarn": {
+      "q": "Paano kumikita ang mga creator?",
+      "a": "Sa dalawang paraan. Kapag ina-upvote ng mga tao ang video mo, nag-iipon ito ng rewards na binabayaran nang isang beses, mga 7 araw pagkatapos mong i-publish, sa HBD at Hive Power. At kapag may ads sa mga video mo, makakakuha ka ng bahagi ng kinita nila, na puwede mong hatiin sa community kung saan mo ito pinost kung gusto mo."
+    },
+    "viewersEarn": {
+      "q": "Puwede rin bang kumita ang mga viewer?",
+      "a": "Oo. I-on ang <b>Viewer rewards</b> sa Settings (ang icon na gear) sa ilalim ng <b>Ads at rewards</b>, at kikita ka ng bahagi ng ad revenue para sa mga video na pinapanood mo. Puwede ring kumita ng rewards ang mga comment mo kapag ina-upvote ng mga tao, at ang maagang pag-upvote sa magagandang video ay nagbibigay rin sa iyo ng bahagi ng rewards nila. Kailangan ng sarili mong Hive account para sa lahat ng ito."
+    },
+    "tokens": {
+      "q": "Ano ang HIVE, HBD at Hive Power?",
+      "a": "Ang <b>HIVE</b> ang pangunahing currency ng Hive at puwedeng i-trade sa mga exchange. Ang <b>HBD</b> (Hive Backed Dollars) ay ginawa para manatiling malapit sa 1 US dollar at kumikita ng interest kapag inilipat mo ito sa savings. Ang <b>Hive Power</b> ay HIVE na na-stake mo: pinapalakas nito ang halaga ng mga vote mo at binibigyan ka ng mas maraming Resource Credits, at 13 linggo ang kailangan para gawin itong HIVE ulit. Makikita mo ang tatlong ito sa <b>Wallet</b> mo."
+    },
+    "vpRc": {
+      "q": "Ano ang Voting Power at Resource Credits?",
+      "a": "Makikita mo ang dalawa bilang mga meter sa profile menu mo. Bumababa nang kaunti ang <b>Voting Power</b> sa bawat upvote at kusa itong napupuno ulit sa loob ng mga 5 araw: habang mas puno ito, mas malaki ang halaga ng susunod mong vote. Ang <b>Resource Credits</b> ang pambayad sa mga aksyon tulad ng pag-post, pag-comment at pag-vote, kaya hindi ka kailanman nagbabayad ng fees. Kusa rin silang napupuno ulit, at mas maraming Hive Power, mas marami rin sila. Kung pumalya ang isang aksyon dahil ubos na ang Resource Credits mo, maghintay ka lang nang kaunti at subukan ulit."
+    },
+    "formats": {
+      "q": "Ano ang puwede kong i-upload, at gaano kalaki ang mga file?",
+      "a": "Mga video na MP4, MOV, AVI o WMV, hanggang 5 GB bawat isa. Ang mga patayong video na hanggang {{shortMinutes}} minuto ay puwedeng i-publish bilang <b>Shorts</b>, na lumalabas sa swipe feed. Puwede ka ring mag-publish ng music, audio at podcast. Nagsisimula ang lahat sa button na <b>Mag-upload</b> sa itaas."
+    },
+    "import": {
+      "q": "Puwede ko bang i-import ang mga YouTube o TikTok video ko?",
+      "a": "Oo. Buksan ang <importLink>I-import ang mga video</importLink> sa profile menu at ilipat ang mga video mo mula sa YouTube, TikTok at iba pang platform. Kusang napupunan ang title, description, tags at thumbnail, at puwede kang mag-import ng maraming video nang sabay-sabay. I-link at i-verify mo muna ang channel mo, para malaman naming sa iyo ito. Kailangan ng sarili mong Hive account para mag-import.",
+      "aSoon": "Malapit na ang direktang pag-import mula sa YouTube at TikTok. Habang hinihintay, i-download ang video mo at i-upload ito gamit ang button na <b>Mag-upload</b> sa itaas."
+    },
+    "edit": {
+      "q": "Puwede ko bang i-edit ang video pagkatapos i-publish?",
+      "a": "Oo. Buksan ang video at piliin ang <b>I-edit</b>: puwede mong palitan ang title, description, tags, thumbnail at NSFW mark anumang oras. Sa karamihan ng video, puwede ka pang magpalit ng bagong file gamit ang <b>Palitan ang video</b>, at mananatili ang views at comments ng video."
+    },
+    "processing": {
+      "q": "Bakit nagpo-process pa rin ang video ko?",
+      "a": "Pagkatapos mag-upload, kino-convert ang bawat video sa iba't ibang quality para maayos itong mag-play sa kahit anong connection. Karaniwang ilang minuto lang ito, at mas matagal para sa mahahaba o napakalalaking video. Puwede mong isara ang page habang naghihintay: lalabas ang video sa channel mo kapag handa na ito."
+    },
+    "live": {
+      "q": "Puwede ba akong mag-livestream?",
+      "a": "Oo. Buksan ang <b>Stream Studio</b> mula sa Upload menu sa itaas. Puwede kang magdala ng mga guest sa stage, mag-stream mula sa OBS kung gusto mo, at mananatili ang recording sa channel mo pagkatapos.",
+      "aSoon": "Sinusubukan pa ngayon ang livestreaming kasama ang maliit na grupo ng mga creator. Ia-announce namin ito kapag bukas na para sa lahat."
+    },
+    "communities": {
+      "q": "Ano ang mga community?",
+      "a": "Ang mga community ay mga grupo tungkol sa iisang interes, tulad ng gaming, music o travel. Sumali sa mga gusto mo sa page na <b>Groups</b> at lalabas ang mga video nila sa mga feed mo. Kapag nag-upload ka, puwede mo itong i-post sa isang community para mahanap ng tamang mga tao ang video mo. Kapag may Hive account ka, puwede ka ring gumawa ng sarili mo."
+    },
+    "report": {
+      "q": "Paano ako magre-report ng video o user?",
+      "a": "Gamitin ang <b>I-report</b> sa video, short, comment o channel na gusto mong i-report. Kailangan mong naka-log in, at sinusuri ng team namin ang bawat report."
+    },
+    "nsfw": {
+      "q": "Pinapayagan ba ang NSFW content?",
+      "a": "Pinapayagan ang adult content basta naka-mark ito bilang <b>NSFW</b>, kapag nag-upload ka o mamaya sa pag-edit ng video. Nakatago ang mga naka-mark na video sa mga feed at search para sa lahat ng hindi nag-on ng <b>Ipakita ang NSFW content</b> sa Settings sa ilalim ng <b>Content</b>. Hindi kailanman pinapayagan ang ilegal na content."
+    },
+    "ai": {
+      "q": "Pinapayagan ba ang AI-generated na content?",
+      "a": "Pinapayagan ang mga AI-generated na video at short basta tapat mo itong mina-mark, halimbawa sa tags o sa description. May label silang <b>AI</b> at nakatago sila sa mga feed at search para sa lahat ng hindi nag-off ng <b>Itago ang mga AI-generated na video</b> sa Settings sa ilalim ng <b>Content</b>."
+    },
+    "deleteVideos": {
+      "q": "Puwede ko bang i-delete ang mga video ko?",
+      "a": "Hindi nang buo: ang mga video mo ay mga post sa Hive, na nag-iingat ng bawat post magpakailanman. Pero puwede mong itago ang isang video. Buksan ang video, piliin ang <b>I-edit</b> at gawin itong <b>Unlisted</b>: mawawala ito sa mga feed at sa search at mamarkahan itong unlisted sa profile mo, pero mapapanood pa rin ito ng sinumang may direktang link. Puwede mo ring i-edit ang title at description nito anumang oras."
+    },
+    "myData": {
+      "q": "Puwede ba akong makakuha ng kopya ng data ko?",
+      "a": "Oo. Sa Settings (ang gear icon), buksan ang <b>Tungkol / Bersyon</b>, pumunta sa <b>Ang data mo</b> at piliin ang <b>Kunin ang data ko</b>. Ipapadala namin sa iyo bilang file ang lahat ng iniimbak ng 3Speak tungkol sa iyo sa sarili naming database, sa loob ng isang buwan sa pinakamatagal. Ang mga post, comment at vote mo sa Hive ay pampubliko na at mababasa sa kahit anong Hive app."
+    },
+    "deleteData": {
+      "q": "Puwede ko bang ipabura sa 3Speak ang data ko?",
+      "a": "Oo. Sa Settings (ang gear icon), buksan ang <b>Tungkol / Bersyon</b>, pumunta sa <b>Ang data mo</b> at piliin ang <b>Burahin ang data ng account ko</b>. Buburahin namin ang lahat ng iniimbak ng 3Speak tungkol sa iyo sa sarili naming database at hihinto kaming ipakita ang content mo sa 3Speak, sa loob ng isang buwan sa pinakamatagal. Hindi namin mabubura ang mga post mo sa Hive mismo. Maaalis mo lang ang isang post nang ikaw mismo habang wala pa itong reply at upvote, at kahit noon ay nananatili pa rin ito sa history ng Hive."
+    },
+    "advertise": {
+      "q": "Paano ako mag-a-advertise sa 3Speak?",
+      "a": "Buksan ang <advertiseLink>Mag-advertise</advertiseLink> para mag-book ng ads para sa produkto o serbisyo mo, o para i-promote ang sarili mong mga video at channel. Ikaw ang pipili kung saan at gaano kadalas lalabas ang ad mo, magbabayad ka mula sa Hive wallet mo, at susundan mo ang resulta sa campaign stats mo. Kailangan ng Hive account para mag-book."
+    },
+    "install": {
+      "q": "Puwede ko bang i-install ang 3Speak bilang app?",
+      "a": "Oo, kahit walang app store. Sa Android, i-tap ang <b>I-install ang App</b> sa menu o tanggapin ang install prompt ng browser mo. Sa iPhone, buksan ang 3speak.tv sa Safari, i-tap ang Share at pagkatapos ang <b>Add to Home Screen</b>. Sa computer, gamitin ang install icon sa address bar ng browser mo."
+    },
+    "languages": {
+      "q": "Puwede ko bang gamitin ang 3Speak sa sarili kong wika?",
+      "a": "Oo. Available ang 3Speak sa 21 wika: piliin ang sa iyo sa Settings sa ilalim ng <b>General</b>. Mga tao mula sa community ang nagche-check at nagpapaganda ng mga translation, kaya kung may makita kang mali o gusto mong tumulong, sabihin sa amin sa <discord>Discord</discord>."
+    },
+    "help": {
+      "q": "Saan ako puwedeng humingi ng tulong?",
+      "a": "Sumali sa amin sa <discord>Discord</discord> o <telegram>Telegram</telegram>: doon sumasagot ng mga tanong ang team at ang community. Para sa balita, i-follow ang 3Speak sa <x>X</x>."
+    }
+  },
+  "linkCopied": "Nakopya ang link sa tanong na ito",
+  "copyLink": "Kopyahin ang link sa tanong na ito",
+  "more": {
+    "title": "May tanong ka pa ba?",
+    "text": "Magtanong sa amin sa <discord>Discord</discord> o <telegram>Telegram</telegram>, o magbasa pa <aboutLink>tungkol sa 3Speak</aboutLink>."
+  }
+}

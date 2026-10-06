@@ -1,0 +1,125 @@
+{
+  "title": "Najczęściej zadawane pytania",
+  "subtitle": "Dopiero zaczynasz z 3Speak? Oto odpowiedzi na pytania, które słyszymy najczęściej.",
+  "groups": {
+    "start": "Pierwsze kroki",
+    "earning": "Zarabianie",
+    "uploading": "Przesyłanie",
+    "community": "Społeczność i bezpieczeństwo",
+    "more": "Reklama i nie tylko"
+  },
+  "items": {
+    "what": {
+      "q": "Czym jest 3Speak?",
+      "a": "3Speak to platforma wideo, na której twój kanał należy do ciebie. Twoje filmy, komentarze i obserwujący są zapisani na twoim własnym koncie Hive, a nie na serwerze 3Speak, więc nikt nie może ci ich odebrać. Zarówno twórcy, jak i widzowie mogą zdobywać nagrody, korzystając z serwisu."
+    },
+    "watchFree": {
+      "q": "Czy potrzebuję konta, żeby oglądać?",
+      "a": "Nie. Oglądanie jest darmowe i nie wymaga konta. Konto jest potrzebne tylko do przesyłania, komentowania, głosowania, obserwowania kanałów i zdobywania nagród."
+    },
+    "signup": {
+      "q": "Jak założyć konto?",
+      "a": "Dotknij <b>Zarejestruj się</b> u góry i kontynuuj przez Google, e-mail lub inną opcję oferowaną przez Butter Auth, usługę logowania, z której korzysta 3Speak. To nic nie kosztuje i zajmuje około minuty. Nowe konta zaczynają od krótkiej rozgrzewki: od razu możesz oglądać, przesyłać i komentować, a głosowanie, napiwki i zarabianie odblokują się, gdy ją ukończysz i dostaniesz własne konto Hive."
+    },
+    "hive": {
+      "q": "Czym jest Hive i czy muszę to rozumieć?",
+      "a": "Hive to otwarta sieć, która przechowuje konta, posty, głosy i nagrody. Działa od 2016 roku, a w 2020 roku jej społeczność uniezależniła ją od jakiejkolwiek firmy. 3Speak to jedna z wielu aplikacji na niej zbudowanych, więc to samo konto działa też w innych aplikacjach Hive. Nie musisz nic z tego rozumieć, żeby korzystać z 3Speak: po prostu zaloguj się, oglądaj, publikuj i komentuj."
+    },
+    "loginTypes": {
+      "q": "Butter Auth, Keychain, HiveSigner: czym się różnią?",
+      "a": "To różne sposoby logowania do tego samego rodzaju konta. <b>Butter Auth</b> (Google, e-mail i inne) jest najprostszy: pozwala 3Speak publikować w twoim imieniu, a działania w portfelu, takie jak przelewy, zatwierdzasz osobno. <b>Hive Keychain</b>, <b>HiveSigner</b>, <b>HiveAuth</b>, <b>PeakVault</b> i <b>Ledger</b> to portfele Hive: twoje klucze zostają u ciebie i każde działanie zatwierdzasz samodzielnie. Wybierz to, co ci najbardziej odpowiada."
+    },
+    "lostKeys": {
+      "q": "Zgubione klucze lub hasło. Co teraz?",
+      "a": "Zgubionych kluczy nikt nie odtworzy, nawet 3Speak, więc trzymaj ich kopię w bezpiecznym miejscu. Jeśli nadal masz hasło główne (master password) lub klucz właściciela (owner key), możesz za jego pomocą ponownie dodać konto do portfela. Jeśli klucze przepadły na dobre, napisz do nas na <discord>Discordzie</discord>, a odblokujemy ci rejestrację, żeby można było założyć nowe konto. Jeśli ktoś inny przejął twoje konto, odzyskiwanie konta Hive może pomóc w ciągu 30 dni: napisz do nas na <discord>Discordzie</discord>, a przeprowadzimy cię przez cały proces."
+    },
+    "creatorsEarn": {
+      "q": "Jak zarabiają twórcy?",
+      "a": "Na dwa sposoby. Gdy ludzie głosują na twój film, zbiera on nagrody, które są wypłacane jednorazowo, około 7 dni po publikacji, w HBD i Hive Power. A gdy w twoich filmach wyświetlają się reklamy, dostajesz część ich przychodu, którą możesz, jeśli chcesz, podzielić ze społecznością, w której opublikowano film."
+    },
+    "viewersEarn": {
+      "q": "Czy widzowie też mogą zarabiać?",
+      "a": "Tak. Włącz <b>Nagrody dla widzów</b> w Ustawieniach (ikona koła zębatego) w sekcji <b>Reklamy i nagrody</b>, a dostaniesz część przychodu z reklam za filmy, które oglądasz. Twoje komentarze mogą zdobywać nagrody, gdy ludzie na nie głosują, a wczesne głosowanie na dobre filmy też daje ci część ich nagród. Do tego wszystkiego potrzebujesz własnego konta Hive."
+    },
+    "tokens": {
+      "q": "Czym są HIVE, HBD i Hive Power?",
+      "a": "<b>HIVE</b> to główna waluta Hive, którą można wymieniać na giełdach. <b>HBD</b> (Hive Backed Dollars) ma utrzymywać wartość bliską 1 dolara amerykańskiego i przynosi odsetki, gdy przeniesiesz je do oszczędności. <b>Hive Power</b> to zablokowane (zestakowane) HIVE: zwiększa wartość twoich głosów i daje ci więcej Resource Credits, a zamiana z powrotem na HIVE trwa 13 tygodni. Wszystkie trzy znajdziesz w swoim <b>Portfelu</b>."
+    },
+    "vpRc": {
+      "q": "Czym są Voting Power i Resource Credits?",
+      "a": "Oba widzisz jako wskaźniki w menu profilu. <b>Voting Power</b> spada trochę przy każdym głosie i sam się uzupełnia w ciągu około 5 dni: im jest pełniejszy, tym więcej wart jest twój następny głos. <b>Resource Credits</b> opłacają działania takie jak publikowanie, komentowanie i głosowanie, więc nigdy nie płacisz opłat. One też same się uzupełniają, a więcej Hive Power daje ci ich więcej. Jeśli jakieś działanie się nie uda, bo skończyły ci się Resource Credits, po prostu odczekaj chwilę i spróbuj ponownie."
+    },
+    "formats": {
+      "q": "Co mogę przesłać i jak duże mogą być pliki?",
+      "a": "Filmy w formacie MP4, MOV, AVI lub WMV, do 5 GB każdy. Pionowe filmy do {{shortMinutes}} minut mogą trafić do <b>Shorts</b>, które pojawiają się w kanale do przewijania. Możesz też publikować muzykę, audio i podcasty. Wszystko zaczyna się od przycisku <b>Prześlij</b> u góry."
+    },
+    "import": {
+      "q": "Czy mogę zaimportować swoje filmy z YouTube lub TikToka?",
+      "a": "Tak. Otwórz <importLink>Importuj filmy</importLink> w menu profilu i przenieś swoje filmy z YouTube, TikToka i innych platform. Tytuł, opis, tagi i miniatura zostaną uzupełnione za ciebie, a wiele filmów możesz zaimportować naraz. Najpierw łączysz i weryfikujesz swój kanał, żebyśmy wiedzieli, że jest twój. Import wymaga własnego konta Hive.",
+      "aSoon": "Import bezpośrednio z YouTube i TikToka pojawi się wkrótce. Do tego czasu pobierz swój film i prześlij go przyciskiem <b>Prześlij</b> u góry."
+    },
+    "edit": {
+      "q": "Czy mogę edytować film po publikacji?",
+      "a": "Tak. Otwórz film i wybierz <b>Edytuj</b>: w każdej chwili możesz zmienić tytuł, opis, tagi, miniaturę i oznaczenie NSFW. W przypadku większości filmów możesz nawet podmienić plik przyciskiem <b>Zastąp film</b>, a film zachowa swoje wyświetlenia i komentarze."
+    },
+    "processing": {
+      "q": "Dlaczego mój film wciąż się przetwarza?",
+      "a": "Po przesłaniu każdy film jest konwertowany do kilku jakości, żeby płynnie odtwarzał się przy każdym połączeniu. Zwykle trwa to kilka minut, a przy długich lub bardzo dużych filmach dłużej. W międzyczasie możesz zamknąć stronę: film pojawi się na twoim kanale, gdy tylko będzie gotowy."
+    },
+    "live": {
+      "q": "Czy mogę prowadzić transmisje na żywo?",
+      "a": "Tak. Otwórz <b>Studio transmisji</b> z menu przesyłania u góry. Możesz zapraszać gości na scenę, nadawać z OBS, jeśli chcesz, a nagranie zostaje potem na twoim kanale.",
+      "aSoon": "Transmisje na żywo są teraz testowane z małą grupą twórców. Ogłosimy to, gdy tylko zostaną otwarte dla wszystkich."
+    },
+    "communities": {
+      "q": "Czym są społeczności?",
+      "a": "Społeczności to grupy skupione wokół wspólnych zainteresowań, takich jak gry, muzyka czy podróże. Dołącz do tych, które lubisz, na stronie <b>Grupy</b>, a ich filmy pojawią się w twoich kanałach. Podczas przesyłania możesz opublikować film w społeczności, żeby trafił do właściwych osób. Z kontem Hive możesz też założyć własną."
+    },
+    "report": {
+      "q": "Jak zgłosić film lub użytkownika?",
+      "a": "Użyj opcji <b>Zgłoś</b> przy filmie, Shorts, komentarzu lub kanale, który chcesz zgłosić. Trzeba być zalogowanym, a nasz zespół sprawdza każde zgłoszenie."
+    },
+    "nsfw": {
+      "q": "Czy treści NSFW są dozwolone?",
+      "a": "Treści dla dorosłych są dozwolone, o ile są oznaczone jako <b>NSFW</b>, podczas przesyłania albo później przez edycję filmu. Oznaczone filmy są ukryte w kanałach i wyszukiwaniu dla wszystkich, którzy nie włączyli opcji <b>Pokazuj treści NSFW</b> w Ustawieniach w sekcji <b>Treści</b>. Nielegalne treści nigdy nie są dozwolone."
+    },
+    "ai": {
+      "q": "Czy treści wygenerowane przez AI są dozwolone?",
+      "a": "Filmy i Shorts wygenerowane przez AI są dozwolone, o ile uczciwie je oznaczysz, na przykład w tagach lub opisie. Dostają etykietę <b>AI</b> i są ukryte w kanałach i wyszukiwaniu dla wszystkich, którzy nie wyłączyli opcji <b>Ukryj filmy wygenerowane przez AI</b> w Ustawieniach w sekcji <b>Treści</b>."
+    },
+    "deleteVideos": {
+      "q": "Czy mogę usunąć swoje filmy?",
+      "a": "Nie całkiem: twoje filmy to posty na Hive, który przechowuje każdy post na zawsze. Możesz jednak film ukryć. Otwórz film, wybierz <b>Edytuj</b> i ustaw go jako <b>Niepubliczny</b>: znika z feedów i wyszukiwania, a na twoim profilu jest oznaczony jako niepubliczny, ale każdy z bezpośrednim linkiem nadal może go obejrzeć. Tytuł i opis możesz też zmienić w każdej chwili."
+    },
+    "myData": {
+      "q": "Czy mogę dostać kopię swoich danych?",
+      "a": "Tak. W Ustawieniach (ikona koła zębatego) otwórz <b>Informacje / wersja</b>, przejdź do <b>Twoje dane</b> i wybierz <b>Pobierz moje dane</b>. Wyślemy ci w pliku wszystko, co 3Speak przechowuje o tobie w naszej własnej bazie danych, najpóźniej w ciągu miesiąca. Twoje posty, komentarze i głosy na Hive i tak są publiczne i można je przeczytać w każdej aplikacji Hive."
+    },
+    "deleteData": {
+      "q": "Czy mogę poprosić 3Speak o usunięcie moich danych?",
+      "a": "Tak. W Ustawieniach (ikona koła zębatego) otwórz <b>Informacje / wersja</b>, przejdź do <b>Twoje dane</b> i wybierz <b>Usuń dane mojego konta</b>. Usuniemy wszystko, co 3Speak przechowuje o tobie w naszej własnej bazie danych, i przestaniemy pokazywać twoje treści na 3Speak, najpóźniej w ciągu miesiąca. Twoich postów na samym Hive nie możemy usunąć. Post możesz usunąć samodzielnie tylko wtedy, gdy nie ma odpowiedzi ani głosów za, a nawet wtedy pozostaje on w historii Hive."
+    },
+    "advertise": {
+      "q": "Jak reklamować się w 3Speak?",
+      "a": "Otwórz <advertiseLink>Reklamuj się</advertiseLink>, aby zarezerwować reklamy swojego produktu lub usługi albo promować własne filmy i kanał. To ty wybierasz, gdzie i jak często wyświetla się twoja reklama, płacisz ze swojego portfela Hive i śledzisz wyniki w statystykach kampanii. Rezerwacja wymaga konta Hive."
+    },
+    "install": {
+      "q": "Czy mogę zainstalować 3Speak jako aplikację?",
+      "a": "Tak, bez sklepu z aplikacjami. Na Androidzie dotknij <b>Zainstaluj aplikację</b> w menu lub zaakceptuj prośbę o instalację w przeglądarce. Na iPhonie otwórz 3speak.tv w Safari, dotknij Udostępnij, a potem <b>Do ekranu początkowego</b>. Na komputerze użyj ikony instalacji na pasku adresu przeglądarki."
+    },
+    "languages": {
+      "q": "Czy mogę używać 3Speak w moim języku?",
+      "a": "Tak. 3Speak jest dostępny w 21 językach: wybierz swój w Ustawieniach w sekcji <b>Ogólne</b>. Osoby ze społeczności sprawdzają i poprawiają tłumaczenia, więc jeśli zauważysz błąd lub chcesz pomóc, daj nam znać na <discord>Discordzie</discord>."
+    },
+    "help": {
+      "q": "Gdzie mogę uzyskać pomoc?",
+      "a": "Dołącz do nas na <discord>Discordzie</discord> lub <telegram>Telegramie</telegram>: zespół i społeczność odpowiadają tam na pytania. Aby być na bieżąco, obserwuj 3Speak na <x>X</x>."
+    }
+  },
+  "linkCopied": "Skopiowano link do tego pytania",
+  "copyLink": "Kopiuj link do tego pytania",
+  "more": {
+    "title": "Masz jeszcze pytanie?",
+    "text": "Zapytaj nas na <discord>Discordzie</discord> lub <telegram>Telegramie</telegram> albo przeczytaj więcej <aboutLink>o 3Speak</aboutLink>."
+  }
+}

@@ -7,6 +7,12 @@
 // 1.0.0 — that way they see all of these when develop is pushed to production.
 export const CHANGELOG = [
   {
+    version: '1.79.56',
+    date: '2026-10-06',
+    summary:
+      "New FAQ page (/faq) with answers to the questions new users ask most: accounts, earning, uploading, AI and NSFW content, and more. Find it in the profile menu, or in the top bar when you're not logged in.",
+  },
+  {
     version: '1.79.55',
     date: '2026-10-06',
     summary:

@@ -57,6 +57,7 @@ const ROUTES = [
   { path: '/chat', titleKey: 'app.routes.chat' },
   { path: '/openpods', title: () => 'OpenPods' },
   { path: '/about', titleKey: 'app.routes.about' },
+  { path: '/faq', titleKey: 'app.routes.faq' },
   { path: '/login', titleKey: 'app.routes.login' },
   { path: '/newlogin', titleKey: 'app.routes.login' },
   { path: '/auth/login', titleKey: 'app.routes.login' },

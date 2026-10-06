@@ -1,0 +1,125 @@
+{
+  "title": "Veelgestelde vragen",
+  "subtitle": "Nieuw op 3Speak? Hier vind je de antwoorden op de vragen die we het vaakst krijgen.",
+  "groups": {
+    "start": "Aan de slag",
+    "earning": "Verdienen",
+    "uploading": "Uploaden",
+    "community": "Community en veiligheid",
+    "more": "Adverteren en meer"
+  },
+  "items": {
+    "what": {
+      "q": "Wat is 3Speak?",
+      "a": "3Speak is een videoplatform waar je kanaal echt van jou is. Je video's, reacties en volgers staan op je eigen Hive-account, niet op een server van 3Speak, dus niemand kan ze van je afpakken. Zowel makers als kijkers kunnen beloningen verdienen terwijl ze het gebruiken."
+    },
+    "watchFree": {
+      "q": "Heb ik een account nodig om te kijken?",
+      "a": "Nee. Kijken is gratis en kan zonder account. Je hebt er alleen een nodig om te uploaden, te reageren, te stemmen, kanalen te volgen en beloningen te verdienen."
+    },
+    "signup": {
+      "q": "Hoe maak ik een account aan?",
+      "a": "Tik bovenaan op <b>Registreren</b> en ga verder met Google, e-mail of een andere optie van Butter Auth, de inlogdienst die 3Speak gebruikt. Het is gratis en duurt ongeveer een minuut. Nieuwe accounts beginnen met een korte opwarmfase: je kunt meteen kijken, uploaden en reageren, en stemmen, fooien geven en verdienen worden vrijgegeven zodra je die afrondt en je eigen Hive-account krijgt."
+    },
+    "hive": {
+      "q": "Wat is Hive, en moet ik dat begrijpen?",
+      "a": "Hive is een open netwerk dat accounts, posts, stemmen en beloningen opslaat. Het draait sinds 2016, en in 2020 heeft de community het onafhankelijk gemaakt van elk bedrijf. 3Speak is een van de vele apps die erop gebouwd zijn, dus hetzelfde account werkt ook in andere Hive-apps. Je hoeft er niets van te begrijpen om 3Speak te gebruiken: log gewoon in, kijk, post en reageer."
+    },
+    "loginTypes": {
+      "q": "Butter Auth, Keychain, HiveSigner: wat is het verschil?",
+      "a": "Het zijn verschillende manieren om in te loggen op hetzelfde soort account. <b>Butter Auth</b> (Google, e-mail en meer) is het makkelijkst: 3Speak kan dan voor je posten, en walletacties zoals overboekingen keur je apart goed. <b>Hive Keychain</b>, <b>HiveSigner</b>, <b>HiveAuth</b>, <b>PeakVault</b> en <b>Ledger</b> zijn Hive-wallets: je sleutels blijven bij jou en je keurt elke actie zelf goed. Kies wat jij het fijnst vindt."
+    },
+    "lostKeys": {
+      "q": "Ik ben mijn sleutels of wachtwoord kwijt. Wat nu?",
+      "a": "Verloren sleutels kan niemand herstellen, ook 3Speak niet, dus bewaar een kopie van je sleutels op een veilige plek. Heb je je masterwachtwoord of owner key nog, dan kun je je account daarmee opnieuw aan een wallet toevoegen. Ben je je sleutels voorgoed kwijt, stuur ons dan een bericht op <discord>Discord</discord> en we geven je weer toegang tot aanmelden, zodat je een nieuw account kunt maken. Heeft iemand anders je account overgenomen, dan kan de accountherstelfunctie van Hive binnen 30 dagen helpen: vraag het ons op <discord>Discord</discord> en we helpen je stap voor stap."
+    },
+    "creatorsEarn": {
+      "q": "Hoe verdienen makers?",
+      "a": "Op twee manieren. Als mensen je video upvoten, verzamelt hij beloningen die één keer worden uitbetaald, ongeveer 7 dagen na publicatie, in HBD en Hive Power. En als er advertenties op je video's draaien, krijg je een deel van wat ze opbrengen, dat je als je wilt kunt delen met de community waarin je postte."
+    },
+    "viewersEarn": {
+      "q": "Kunnen kijkers ook verdienen?",
+      "a": "Ja. Zet <b>Kijkbeloningen</b> aan in Instellingen (het tandwielicoon) onder <b>Advertenties & beloningen</b>, en je verdient een deel van de advertentie-inkomsten voor de video's die je kijkt. Je reacties kunnen beloningen verdienen als mensen ze upvoten, en als je goede video's vroeg upvote, krijg je ook een deel van hun beloningen. Voor dit alles heb je je eigen Hive-account nodig."
+    },
+    "tokens": {
+      "q": "Wat zijn HIVE, HBD en Hive Power?",
+      "a": "<b>HIVE</b> is de hoofdmunt van Hive en kan op exchanges worden verhandeld. <b>HBD</b> (Hive Backed Dollars) is bedoeld om dicht bij 1 Amerikaanse dollar te blijven en levert rente op als je het naar je spaarrekening zet. <b>Hive Power</b> is HIVE die je hebt gestaked: je stemmen worden er meer waard door en je krijgt meer Resource Credits, en het terugzetten naar HIVE duurt 13 weken. Je vindt ze alle drie in je <b>Wallet</b>."
+    },
+    "vpRc": {
+      "q": "Wat zijn Voting Power en Resource Credits?",
+      "a": "Je ziet ze allebei als meters in je profielmenu. <b>Voting Power</b> daalt een beetje bij elke upvote en vult zichzelf weer aan in ongeveer 5 dagen: hoe voller, hoe meer je volgende stem waard is. <b>Resource Credits</b> betalen voor acties zoals posten, reageren en stemmen, zodat je nooit kosten betaalt. Ook die vullen zichzelf weer aan, en met meer Hive Power krijg je er meer van. Mislukt een actie omdat je Resource Credits op zijn, wacht dan even en probeer het opnieuw."
+    },
+    "formats": {
+      "q": "Wat kan ik uploaden, en hoe groot mogen bestanden zijn?",
+      "a": "Video's in MP4, MOV, AVI of WMV, tot 5 GB per stuk. Staande video's tot {{shortMinutes}} minuten kunnen als <b>Shorts</b> verschijnen, in de swipe-feed. Je kunt ook muziek, audio en podcasts publiceren. Alles begint bij de knop <b>Uploaden</b> bovenaan."
+    },
+    "import": {
+      "q": "Kan ik mijn YouTube- of TikTok-video's importeren?",
+      "a": "Ja. Open <importLink>Video's importeren</importLink> in het profielmenu en haal je video's over van YouTube, TikTok en andere platforms. Titel, beschrijving, tags en thumbnail worden voor je ingevuld, en je kunt veel video's tegelijk importeren. Je koppelt en verifieert eerst je kanaal, zodat we weten dat het van jou is. Voor importeren heb je je eigen Hive-account nodig.",
+      "aSoon": "Direct importeren vanaf YouTube en TikTok komt binnenkort. Download tot die tijd je video en upload hem met de knop <b>Uploaden</b> bovenaan."
+    },
+    "edit": {
+      "q": "Kan ik een video bewerken na het publiceren?",
+      "a": "Ja. Open de video en kies <b>Bewerken</b>: je kunt titel, beschrijving, tags, thumbnail en NSFW-markering altijd aanpassen. Bij de meeste video's kun je zelfs een nieuw bestand plaatsen met <b>Video vervangen</b>, en de video houdt zijn weergaven en reacties."
+    },
+    "processing": {
+      "q": "Waarom wordt mijn video nog verwerkt?",
+      "a": "Na het uploaden wordt elke video omgezet in meerdere kwaliteiten, zodat hij soepel afspeelt op elke verbinding. Dat duurt meestal een paar minuten, en langer bij lange of heel grote video's. Je kunt de pagina intussen sluiten: de video verschijnt op je kanaal zodra hij klaar is."
+    },
+    "live": {
+      "q": "Kan ik livestreamen?",
+      "a": "Ja. Open <b>Streamstudio</b> via het uploadmenu bovenaan. Je kunt gasten op het podium halen, desgewenst streamen vanuit OBS, en de opname blijft daarna op je kanaal staan.",
+      "aSoon": "Livestreamen wordt nu getest met een kleine groep makers. We laten het weten zodra het voor iedereen opengaat."
+    },
+    "communities": {
+      "q": "Wat zijn communities?",
+      "a": "Communities zijn groepen rond een gedeelde interesse, zoals gaming, muziek of reizen. Word lid van de groepen die je leuk vindt op de pagina <b>Groepen</b>, en hun video's verschijnen in je feeds. Als je uploadt, kun je in een community posten zodat de juiste mensen je video vinden. Met een Hive-account kun je ook je eigen community starten."
+    },
+    "report": {
+      "q": "Hoe meld ik een video of gebruiker?",
+      "a": "Gebruik <b>Melden</b> bij de video, short, reactie of het kanaal dat je wilt melden. Je moet ingelogd zijn, en ons team bekijkt elke melding."
+    },
+    "nsfw": {
+      "q": "Is NSFW-content toegestaan?",
+      "a": "Content voor volwassenen is toegestaan, zolang hij als <b>NSFW</b> is gemarkeerd, bij het uploaden of later door de video te bewerken. Gemarkeerde video's zijn verborgen in feeds en zoekresultaten voor iedereen die <b>NSFW-content tonen</b> niet heeft aangezet in Instellingen onder <b>Content</b>. Illegale content is nooit toegestaan."
+    },
+    "ai": {
+      "q": "Is AI-gegenereerde content toegestaan?",
+      "a": "Met AI gegenereerde video's en shorts zijn toegestaan, zolang je ze eerlijk markeert, bijvoorbeeld in de tags of de beschrijving. Ze krijgen een <b>AI</b>-label en zijn verborgen in feeds en zoekresultaten voor iedereen die <b>AI-gegenereerde video's verbergen</b> niet heeft uitgezet in Instellingen onder <b>Content</b>."
+    },
+    "deleteVideos": {
+      "q": "Kan ik mijn video's verwijderen?",
+      "a": "Niet helemaal: je video's zijn berichten op Hive, dat elk bericht voorgoed bewaart. Maar je kunt een video wel verbergen. Open de video, kies <b>Bewerken</b> en zet hem op <b>Verborgen</b>: hij verdwijnt uit feeds en zoekresultaten en wordt op je profiel als verborgen gemarkeerd, terwijl iedereen met de directe link hem nog steeds kan bekijken. Je kunt ook de titel en beschrijving altijd aanpassen."
+    },
+    "myData": {
+      "q": "Kan ik een kopie van mijn gegevens krijgen?",
+      "a": "Ja. Open in Instellingen (het tandwielpictogram) <b>Over / versie</b>, ga naar <b>Je gegevens</b> en kies <b>Mijn gegevens opvragen</b>. We sturen je alles wat 3Speak in onze eigen database over je opslaat als bestand, uiterlijk binnen een maand. Je berichten, reacties en stemmen op Hive zijn sowieso openbaar en kunnen in elke Hive-app worden gelezen."
+    },
+    "deleteData": {
+      "q": "Kan ik 3Speak mijn gegevens laten verwijderen?",
+      "a": "Ja. Open in Instellingen (het tandwielpictogram) <b>Over / versie</b>, ga naar <b>Je gegevens</b> en kies <b>Mijn accountgegevens verwijderen</b>. We verwijderen alles wat 3Speak in onze eigen database over je opslaat en tonen je content niet meer op 3Speak, uiterlijk binnen een maand. Je berichten op Hive zelf kunnen wij niet wissen. Je kunt een bericht alleen zelf verwijderen zolang het geen reacties en geen upvotes heeft, en zelfs dan blijft het in de geschiedenis van Hive staan."
+    },
+    "advertise": {
+      "q": "Hoe adverteer ik op 3Speak?",
+      "a": "Open <advertiseLink>Adverteren</advertiseLink> om advertenties te boeken voor je product of dienst, of om je eigen video's en kanaal te promoten. Je kiest waar en hoe vaak je advertentie draait, betaalt vanuit je Hive-wallet en volgt de resultaten in je campagnestatistieken. Voor boeken heb je een Hive-account nodig."
+    },
+    "install": {
+      "q": "Kan ik 3Speak als app installeren?",
+      "a": "Ja, zonder app store. Tik op Android op <b>App installeren</b> in het menu of accepteer de installatievraag van je browser. Open op een iPhone 3speak.tv in Safari, tik op Deel en dan op <b>Zet op beginscherm</b>. Gebruik op een computer het installatie-icoon in de adresbalk van je browser."
+    },
+    "languages": {
+      "q": "Kan ik 3Speak in mijn eigen taal gebruiken?",
+      "a": "Ja. 3Speak is beschikbaar in 21 talen: kies de jouwe in Instellingen onder <b>Algemeen</b>. Mensen uit de community controleren en verbeteren de vertalingen, dus zie je een fout of wil je helpen, laat het ons weten op <discord>Discord</discord>."
+    },
+    "help": {
+      "q": "Waar kan ik hulp krijgen?",
+      "a": "Kom naar <discord>Discord</discord> of <telegram>Telegram</telegram>: daar beantwoorden het team en de community vragen. Volg 3Speak op <x>X</x> voor nieuws."
+    }
+  },
+  "linkCopied": "Link naar deze vraag gekopieerd",
+  "copyLink": "Link naar deze vraag kopiëren",
+  "more": {
+    "title": "Nog een vraag?",
+    "text": "Vraag het ons op <discord>Discord</discord> of <telegram>Telegram</telegram>, of lees meer <aboutLink>over 3Speak</aboutLink>."
+  }
+}
