@@ -1,4 +1,5 @@
 import { FaEye, FaVideo, FaBullhorn } from 'react-icons/fa';
+import { ADVERTISER_SIGNUP } from '../../utils/config';
 
 // The kinds of warm-up user. The ids must match the tracks in
 // server/warmup.cjs, which decide each one's goals.
@@ -25,3 +26,11 @@ export const TRACKS = [
 
 // Returns the i18n KEY of the track's title (translate it at render with t()).
 export const trackTitleKey = (id) => TRACKS.find((tr) => tr.id === id)?.titleKey || null;
+
+// The tracks a person may still pick. The advertiser track stays visible to
+// someone already on it, so their own choice never disappears from the chooser.
+export const openTracks = (current = null) =>
+  TRACKS.filter((tr) => tr.id !== 'advertiser' || ADVERTISER_SIGNUP || current === 'advertiser');
+
+// The "viewers ..., creators ..." sentence names advertisers only while they can sign up.
+export const withTracksKey = (key) => (ADVERTISER_SIGNUP ? key : `${key}NoAdvertisers`);

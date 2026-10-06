@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { setIncubationTrack } from '../../lib/incubation';
-import { TRACKS } from './tracks';
+import { openTracks } from './tracks';
 import { useTranslation } from 'react-i18next';
 import './TrackChooser.scss';
 
@@ -36,7 +36,7 @@ export default function TrackChooser({ current = null, onChosen }) {
   return (
     <div className="track-chooser">
       <div className="track-chooser-options" role="radiogroup" aria-label={t('incubation.trackQuestion.title')}>
-        {TRACKS.map(({ id, Icon, titleKey, bodyKey }) => (
+        {openTracks(current).map(({ id, Icon, titleKey, bodyKey }) => (
           <button
             key={id}
             type="button"

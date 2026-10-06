@@ -66,7 +66,8 @@
   },
   "trackQuestion": {
     "title": "Was führt dich zu 3Speak?",
-    "intro": "Davon hängt dein Weg zu einem Hive-Konto ab: Zuschauer schauen zu und machen mit, Creator veröffentlichen, und Werbekunden richten ihre Marke ein."
+    "intro": "Davon hängt dein Weg zu einem Hive-Konto ab: Zuschauer schauen zu und machen mit, Creator veröffentlichen, und Werbekunden richten ihre Marke ein.",
+    "introNoAdvertisers": "Davon hängt dein Weg zu einem Hive-Konto ab: Zuschauer schauen zu und machen mit, und Creator veröffentlichen."
   },
   "tipCard": {
     "aria": "Tipp",
@@ -231,6 +232,7 @@
     },
     "path": {
       "p1": "Dein Profil zeigt eine kurze Liste mit Aufgaben, und die hängt davon ab, wofür du hier bist: Zuschauer schauen zu und machen mit, Creator veröffentlichen, und Werbekunden richten ihre Marke ein.",
+      "p1NoAdvertisers": "Dein Profil zeigt eine kurze Liste mit Aufgaben, und die hängt davon ab, wofür du hier bist: Zuschauer schauen zu und machen mit, und Creator veröffentlichen.",
       "p2": "Das ist kein Test. So können wir einfach ein echtes Konto von einem leeren oder böswilligen unterscheiden. Sobald die Liste erledigt ist, prüft dich das Team und stuft dich so schnell wie möglich hoch.",
       "perkEarn": "Posts, die verdienen",
       "perkKeys": "Schlüssel, die nur du hast",

@@ -25,7 +25,7 @@ const PLATFORM_ICONS = {
   soundcloud: FaSoundcloud,
 };
 
-export default function SocialLinks({ hiveUsername, refreshKey = 0, canDelete = false, onChange }) {
+export default function SocialLinks({ hiveUsername, refreshKey = 0, canDelete = false, onChange, column = false }) {
   const { t } = useTranslation();
   const [links, setLinks] = useState([]);
   const [removingKey, setRemovingKey] = useState(null);
@@ -82,7 +82,7 @@ export default function SocialLinks({ hiveUsername, refreshKey = 0, canDelete = 
   if (!links.length) return null;
 
   return (
-    <span className="social-links">
+    <span className={`social-links${column ? ' social-links--column' : ''}`}>
       {links.map((link) => {
         const Icon = PLATFORM_ICONS[link.platform];
         const url = platformProfileUrl(link.platform, link.platform_username);

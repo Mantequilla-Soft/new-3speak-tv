@@ -41,6 +41,9 @@ export default function ProfileHeader({
   // Slot between the bio/location and the badge row — user profiles put their
   // stat line here (see ProfileStats); community pages pass nothing.
   meta,
+  // Right edge of the card, under the action buttons, stacked in a column on
+  // desktop (a centred row on phones): the linked channels (SocialLinks).
+  aside,
   avatarBadgeSize = 16,
   refreshKey = 0,
   showHandle = false,
@@ -229,6 +232,7 @@ export default function ProfileHeader({
           </div>
           {actions ? <div className="button-group">{actions}</div> : null}
         </div>
+        {aside ? <div className="header-aside">{aside}</div> : null}
       </div>
     </div>
   );
