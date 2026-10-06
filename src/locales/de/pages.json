@@ -11,28 +11,6 @@
       "q8": "Zwischen freier Rede und Hassrede verläuft ein schmaler Grat. Freie Rede fördert die Debatte, Hassrede dagegen stachelt zu Gewalt an.",
       "q9": "Redefreiheit bedeutet, dass man Menschen nichts antun darf – weder für die Ansichten, die sie haben, noch für die Ansichten, die sie äußern, noch für die Worte, die sie sprechen oder schreiben."
     },
-    "faq": {
-      "what": {
-        "question": "Was ist 3Speak?",
-        "answer": "3Speak ist ein Ort, an dem Content Creator ihre Assets auf der Plattform und ihre Communitys direkt besitzen. Dank Blockchain-Technologie gehören diese Assets und Communitys dem Creator und dem Nutzer, nicht 3Speak. Deshalb lassen sie sich auf andere Apps übertragen, die Blockchain-Technologie nutzen. Wenn wir der Community und den Creatorn also nicht bestmöglich dienen, können sie die Assets, die sie erzeugt haben, mitnehmen und in eine andere App umziehen. Das Ergebnis: 3Speak ist zensurresistent und kann dir weder deine Assets wegnehmen noch deine Communitys löschen."
-      },
-      "upvote": {
-        "question": "Warum bekomme ich keine Upvotes von 3Speak?",
-        "answer": "3Speak votet nach eigenem Ermessen und folgt dabei keinen bestimmten Kriterien. Am besten machst du auf dich aufmerksam, indem du hochwertige Inhalte hochlädst und Publikum und Communitys zu 3Speak bringst."
-      },
-      "missing": {
-        "question": "Warum fehlen einige meiner Videos im Neu-Feed?",
-        "answer": "Du kannst so viele Videos hochladen, wie du willst! Das bedeutet aber, dass ein einzelner Nutzer manchmal die Feeds mit seinen Inhalten füllen könnte. Um das zu verhindern, begrenzen wir die Anzahl der Videos eines Creators, die pro Ladevorgang angezeigt werden."
-      },
-      "creator": {
-        "question": "Wie werde ich Content Creator?",
-        "answer": "Am schnellsten bekommst du ein Hive-Konto, indem du in der Navigation auf \"Registrieren\" klickst und den Anweisungen folgst (verlier deine Schlüssel nicht!). Danach meldest du dich mit deinem Hive-Konto an und klickst auf \"Creator Studio\" / Hochladen. Schon kann es losgehen!"
-      },
-      "rewards": {
-        "question": "Wie verdiene ich Belohnungen fürs Kommentieren?",
-        "answer": "Um Belohnungen zu verdienen, brauchst du ein Konto auf der Hive-Blockchain. Du kannst dir kostenlos eins bei Hive holen (https://signup.hive.io), einen Hive-Nutzerguide kaufen oder dir von einem anderen Hive-Nutzer eins geben lassen. Sobald du ein Konto hast, melde dich mit HiveSigner an und gib bei der ersten Anmeldung deinen ACTIVE Key an. Dann kannst du Kommentare posten, die Kryptowährungs-Belohnungen einbringen können."
-      }
-    },
     "hero": {
       "tagline1": "SCHÜTZE DEINE INHALTE",
       "tagline2": "TOKENISIERE DEINE COMMUNITY",
@@ -115,7 +93,8 @@
     },
     "faqSection": {
       "title": "Häufige Fragen",
-      "subtitle": "Alles, was du über 3Speak wissen musst"
+      "subtitle": "Alles, was du über 3Speak wissen musst",
+      "cta": "Zu den FAQ"
     },
     "quotesTitle": "Stimmen der Freiheit",
     "cta": {

@@ -11,28 +11,6 @@
       "q8": "Có một ranh giới mong manh giữa tự do ngôn luận và ngôn từ thù ghét. Tự do ngôn luận khuyến khích tranh luận, còn ngôn từ thù ghét kích động bạo lực.",
       "q9": "Tự do ngôn luận nghĩa là bạn không được làm gì người khác vì quan điểm họ có, quan điểm họ bày tỏ, hay những lời họ nói hoặc viết."
     },
-    "faq": {
-      "what": {
-        "question": "3Speak là gì?",
-        "answer": "3Speak là nơi các nhà sáng tạo nội dung trực tiếp sở hữu tài sản trên nền tảng và cộng đồng của họ. Nhờ công nghệ blockchain, quyền sở hữu các tài sản và cộng đồng này thuộc về nhà sáng tạo và người dùng, không phải 3Speak. Vì vậy chúng có thể được chuyển sang các ứng dụng khác dùng công nghệ blockchain. Điều này có nghĩa là nếu chúng tôi không phục vụ cộng đồng và nhà sáng tạo theo cách tốt nhất có thể, họ có thể mang tài sản mình tạo ra sang một ứng dụng khác. Kết quả là 3Speak chống kiểm duyệt, không thể lấy đi tài sản của bạn hay xóa cộng đồng của bạn."
-      },
-      "upvote": {
-        "question": "Tại sao tôi không được 3Speak upvote?",
-        "answer": "3Speak vote theo quyết định riêng của chúng tôi và không theo tiêu chí cụ thể nào. Cách tốt nhất để thu hút sự chú ý của chúng tôi là tải lên nội dung chất lượng cao và thu hút khán giả cùng cộng đồng đến với 3Speak."
-      },
-      "missing": {
-        "question": "Tại sao một số video của tôi không có trong bảng tin mới?",
-        "answer": "Chúng tôi cho phép bạn tải lên bao nhiêu video tùy thích! Điều này có nghĩa là đôi khi một người dùng có thể lấp đầy bảng tin chỉ bằng nội dung của họ. Để tránh điều này, chúng tôi giới hạn số video của mỗi nhà sáng tạo được hiển thị trong mỗi lần tải."
-      },
-      "creator": {
-        "question": "Làm thế nào để trở thành nhà sáng tạo nội dung?",
-        "answer": "Cách nhanh nhất để có tài khoản Hive là nhấn nút \"Đăng ký\" trên thanh điều hướng và làm theo hướng dẫn (đừng làm mất khóa của bạn!). Tiếp theo, bạn cần đăng nhập bằng tài khoản Hive và nhấn vào \"creator studio\" / tải lên. Vậy là bạn đã sẵn sàng!"
-      },
-      "rewards": {
-        "question": "Làm thế nào để nhận phần thưởng khi bình luận?",
-        "answer": "Để nhận phần thưởng, bạn cần một tài khoản trên blockchain Hive. Bạn có thể nhận miễn phí từ Hive (https://signup.hive.io), mua một hướng dẫn sử dụng Hive, hoặc nhờ một người dùng Hive khác tạo cho bạn. Khi đã có tài khoản, hãy đăng nhập bằng Hivesigner và cung cấp ACTIVE key của bạn trong lần đăng nhập đầu tiên. Sau đó bạn có thể đăng bình luận và nhận phần thưởng tiền mã hóa."
-      }
-    },
     "hero": {
       "tagline1": "BẢO VỆ NỘI DUNG CỦA BẠN",
       "tagline2": "TOKEN HÓA CỘNG ĐỒNG CỦA BẠN",
@@ -115,7 +93,8 @@
     },
     "faqSection": {
       "title": "Câu hỏi thường gặp",
-      "subtitle": "Mọi điều bạn cần biết về 3Speak"
+      "subtitle": "Mọi điều bạn cần biết về 3Speak",
+      "cta": "Xem câu hỏi thường gặp"
     },
     "quotesTitle": "Tiếng nói của tự do",
     "cta": {

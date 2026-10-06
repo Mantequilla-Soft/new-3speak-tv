@@ -27,7 +27,7 @@ export const AREA_INFO = {
   modals: 'Assorted popups: report a video, add a tag, QR code, add a social link, beneficiaries, verify account, edit-video hints, and the profile popup.',
   nav: 'The top bar and menus: search, the notification bell, the profile menu (top right), the sidebar, and the bottom bar on phones.',
   notifications: 'The Notifications page (/notifications): every notification line ("@x upvoted your video"), the categories and the filters.',
-  pages: 'Static pages: About (/about, including its short FAQ), the 404 "page not found" screen, and the frame around the legal pages (the legal text itself stays English).',
+  pages: 'Static pages: About (/about, with a button to the FAQ), the 404 "page not found" screen, and the frame around the legal pages (the legal text itself stays English).',
   player: 'The video player itself: play, pause, volume, speed, subtitles, fullscreen, the mini player, the playlist bar, and reaction videos.',
   playlists: 'Playlists: "Add to playlist", the playlist page, Watch Later, and Watched.',
   posts: 'Text posts and editing: the post page, editing a video\'s post, and the image uploader.',

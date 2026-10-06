@@ -10,7 +10,7 @@ export const CHANGELOG = [
     version: '1.79.56',
     date: '2026-10-06',
     summary:
-      "New FAQ page (/faq) with answers to the questions new users ask most: accounts, earning, uploading, AI and NSFW content, and more. Find it in the profile menu, or in the top bar when you're not logged in.",
+      'New FAQ page (/faq) answers the questions new users ask most. Find it in the profile menu, on the About page, or in the top bar when logged out.',
   },
   {
     version: '1.79.55',
