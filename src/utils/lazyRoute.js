@@ -1,5 +1,5 @@
 import { lazy } from "react";
-import { reloadForUpdate } from "./checkLatestVersion";
+import { reloadOnceForChunk } from "./staleChunk";
 
 /* Drop-in replacement for React.lazy() for route components.
  *
@@ -32,53 +32,13 @@ import { reloadForUpdate } from "./checkLatestVersion";
  * error boundary say something the user can act on.
  */
 
-// One reload attempt per chunk per tab. Session-scoped, because a chunk that is
-// genuinely missing (rather than briefly unreachable) would otherwise put the tab
-// into an endless reload cycle — the second failure has to fall through instead.
-const RELOADED_KEY = "3speak_chunk_reloaded";
-
-function readReloaded() {
-  try {
-    const raw = sessionStorage.getItem(RELOADED_KEY);
-    const list = raw ? JSON.parse(raw) : [];
-    return Array.isArray(list) ? list : [];
-  } catch {
-    // Private mode / storage disabled. We lose the loop guard, so return null and
-    // never reload at all — an error message is recoverable, a reload loop is not.
-    return null;
-  }
-}
-
-function markReloaded(name) {
-  try {
-    const list = readReloaded() || [];
-    if (!list.includes(name)) list.push(name);
-    sessionStorage.setItem(RELOADED_KEY, JSON.stringify(list));
-  } catch {
-    /* ignore — see readReloaded */
-  }
-}
-
 export default function lazyRoute(factory, name) {
   return lazy(() =>
     factory().catch(async (err) => {
-      const reloaded = readReloaded();
-      const canReload =
-        reloaded &&
-        !reloaded.includes(name) &&
-        // Reloading while offline just trades this screen for the browser's own
-        // error page, and burns the one retry we get. Better to show the boundary,
-        // which has a Reload button for when the connection is back.
-        navigator.onLine !== false;
-
-      if (canReload) {
-        markReloaded(name);
-        // Clears caches + service workers first, so the reload actually fetches the
-        // new index.html rather than the cached one that names dead chunks.
-        await reloadForUpdate();
-        // reloadForUpdate() navigates away; nothing after this runs. Hand back a
-        // promise that never settles so React holds the fallback during teardown
-        // instead of flashing an error on the way out.
+      if (await reloadOnceForChunk(name)) {
+        // The reload navigates away; nothing after this runs. Hand back a promise
+        // that never settles so React holds the fallback during teardown instead
+        // of flashing an error on the way out.
         return await new Promise(() => {});
       }
 

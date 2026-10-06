@@ -20,6 +20,7 @@ import { fixVideoThumbnail, fallbackImg } from "../utils/fixThumbnails";
 import TimeAgo from "../components/TimeAgo/TimeAgo";
 import { useTranslation } from "react-i18next";
 import { formatNumber } from "../i18n";
+import AccountImg from "../components/HiveAvatar/AccountImg";
 
 const LIMIT = 50;
 
@@ -434,7 +435,7 @@ const Discover = () => {
                     {groupedSuggestions.community.map((s, i) => (
                       <button key={i} className="discover-suggest-badge" onMouseDown={() => selectSuggestion(s)}>
                         <div className="discover-suggest-badge-avatar">
-                          <img src={`/img/u/${s.name}/avatar/small`} alt="" onError={(e) => { e.target.style.display = 'none'; }} />
+                          <AccountImg account={s.name} alt="" onError={(e) => { e.target.style.display = 'none'; }} />
                         </div>
                         <span>{s.title || s.name}</span>
                       </button>
@@ -555,7 +556,7 @@ const Discover = () => {
                 {communityFilter ? (
                   <div className="discover-community-selected">
                     <div className="discover-community-selected-avatar">
-                      <img src={`/img/u/${communityFilter}/avatar/small`} alt="" onError={(e) => { e.target.style.display = 'none'; }} />
+                      <AccountImg account={communityFilter} alt="" onError={(e) => { e.target.style.display = 'none'; }} />
                     </div>
                     <span>{communityLabel || communityFilter}</span>
                     <button type="button" className="discover-advanced-clear" onClick={() => { setCommunityFilter(''); setCommunityLabel(''); setCommunitySearch(''); }}>
@@ -587,7 +588,7 @@ const Discover = () => {
                             }}
                           >
                             <div className="discover-suggest-avatar">
-                              <img src={`/img/u/${c.name}/avatar/small`} alt="" onError={(e) => { e.target.style.display = 'none'; }} />
+                              <AccountImg account={c.name} alt="" onError={(e) => { e.target.style.display = 'none'; }} />
                             </div>
                             <div className="discover-suggest-text">
                               <span className="discover-suggest-primary">{c.title || c.name}</span>
@@ -657,7 +658,7 @@ const Discover = () => {
                       {items.map(c => (
                         <Link to={`/community/${c.name}`} key={c.name} className="discover-community-card">
                           <div className="discover-community-avatar">
-                            <img src={`/img/u/${c.name}/avatar/small`} alt="" loading="lazy" onError={(e) => { e.target.style.display = 'none'; }} />
+                            <AccountImg account={c.name} alt="" loading="lazy" onError={(e) => { e.target.style.display = 'none'; }} />
                           </div>
                           <div className="discover-community-info">
                             <span className="discover-community-name">{c.title || c.name}</span>

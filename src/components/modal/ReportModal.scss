@@ -111,10 +111,10 @@
 
 .report-submit-btn {
   padding: 10px 20px;
-  border: none;
+  border: 1px solid var(--accent-primary, #e53935);
   border-radius: 8px;
-  background: var(--accent-color, #e31337);
-  color: #fff;
+  background: transparent;
+  color: var(--accent-primary, #e53935);
   font-size: 14px;
   font-weight: 500;
   cursor: pointer;

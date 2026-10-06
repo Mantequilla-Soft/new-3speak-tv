@@ -24,7 +24,9 @@
 
   &:hover,
   &:focus-visible {
-    background: var(--accent-primary, #e53935);
+    background: color-mix(in srgb, var(--accent-primary, #e53935) 10%, transparent);
+    box-shadow: inset 0 0 0 1px var(--accent-primary, #e53935);
+    color: var(--accent-primary, #e53935);
     transform: translateY(0);
   }
 
@@ -32,7 +34,9 @@
   &.open {
     opacity: 1;
     transform: translateY(0);
-    background: var(--accent-primary, #e53935);
+    background: color-mix(in srgb, var(--accent-primary, #e53935) 10%, transparent);
+    box-shadow: inset 0 0 0 1px var(--accent-primary, #e53935);
+    color: var(--accent-primary, #e53935);
   }
 
   &.compact {

@@ -94,6 +94,55 @@ async function signChatChallengeClientSide(challenge) {
   return res.result
 }
 
+// Chat ids Snapie gives ButrAuth warm-up users: `~<butrauth userId>`. `~` is
+// never part of a Hive name, so this tells the two kinds of identity apart.
+export const isWarmupChatId = (id) => typeof id === 'string' && id.startsWith('~')
+
+// Hand the SDK a session the 3Speak server obtained for us. chat-client 0.4.0
+// has useSession for exactly this; 0.3.0 only reads its token from storage at
+// construction, so there the live fields are set as well.
+function adoptChatSession(c, token, username) {
+  if (typeof c.useSession === 'function') { c.useSession(token, username); return }
+  try {
+    localStorage.setItem('snapie-chat-token', token)
+    localStorage.setItem('snapie-chat-token-user', username)
+  } catch { /* private mode: the session still works until reload */ }
+  if (c.service) {
+    c.service.token = token
+    c.service.tokenUsername = username
+  }
+}
+
+// Sign in with the ButrAuth session (httpOnly cookie) through the 3Speak server,
+// which hands Snapie the access token. The only way in for warm-up users, who
+// have no Hive account to sign with. Throws with `status` set (404 = Snapie has
+// not switched ButrAuth sign-in on yet).
+async function authenticateViaButrAuth(c) {
+  const res = await fetch(`${THREESPEAK_API}/snapie-chat/butrauth-session`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    credentials: 'include',
+    body: '{}',
+  })
+  const data = await res.json().catch(() => ({}))
+  if (!res.ok || !data.token || !data.username) {
+    throw Object.assign(new Error(data.error || 'Chat sign-in failed'), { status: res.status })
+  }
+  adoptChatSession(c, data.token, data.username)
+  return data
+}
+
+/**
+ * Sign a warm-up user (ButrAuth, no Hive account) in to chat. Reuses a stored
+ * warm-up session when there is one.
+ */
+export async function authenticateWarmupChat() {
+  const c = getChatClient()
+  if (c.isAuthenticated() && isWarmupChatId(c.getUsername())) return c
+  await authenticateViaButrAuth(c)
+  return c
+}
+
 /**
  * Authenticate the shared client for `username` against the Snapie chat API.
  * Reuses an existing valid token when one is already stored for this user.
@@ -107,6 +156,19 @@ async function signChatChallengeClientSide(challenge) {
 export async function authenticateChat(username, { allowClientFallback = true } = {}) {
   const c = getChatClient()
   if (c.isAuthenticated() && c.getUsername() === username) return c
+
+  // ButrAuth logins try their own session first: it needs no @threespeak
+  // posting grant, and the first sign-in under a freshly graduated Hive name is
+  // what carries the warm-up conversations over to it. Any failure (Snapie not
+  // set up for it yet, a session for some other name) falls through to the
+  // signed challenge below.
+  if (isManteAuthLogin()) {
+    try {
+      const s = await authenticateViaButrAuth(c)
+      if (s.username === username) return c
+      c.logout()
+    } catch { /* fall through */ }
+  }
 
   try {
     await c.authenticate(username, (challenge) =>

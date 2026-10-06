@@ -22,6 +22,7 @@ import '../legacy-studio/StudioPage.scss';
 import SettingInfo, { SettingSheet } from './SettingInfo';
 import './EmbedDetails.scss';
 import { useTranslation, Trans } from 'react-i18next';
+import AccountImg from '../HiveAvatar/AccountImg';
 
 // Every toast from this module is headed "Upload"; the message becomes the
 // line under it. See utils/toast.js.
@@ -361,7 +362,7 @@ function EmbedDetails() {
                       <span>{t('upload.details.community.hint')}</span>
                     </div>
                     <div className="tile-value community-value">
-                      {community ? <span>{community === "hive-181335" ? <div className="wrap"><img src={`/img/u/hive-181335/avatar/small`} alt="" /><span></span>Threespeak</div> : <div className="wrap"><img src={`/img/u/${community.name}/avatar/small`} alt="" /><span></span>{community.title}</div>}</span> : <span> {t('upload.details.community.select')} </span>}
+                      {community ? <span>{community === "hive-181335" ? <div className="wrap"><AccountImg account="hive-181335" alt="" /><span></span>Threespeak</div> : <div className="wrap"><AccountImg account={community.name} alt="" /><span></span>{community.title}</div>}</span> : <span> {t('upload.details.community.select')} </span>}
                       <IoIosArrowDropdownCircle size={16} />
                     </div>
                   </div>

@@ -1,0 +1,13 @@
+{
+  "ariaLabel": "Ogłoszenie od 3Speak",
+  "personalLabel": "Wiadomość tylko dla Ciebie od zespołu",
+  "linkFallback": "Dowiedz się więcej",
+  "replyLabel": "Twoja odpowiedź",
+  "replyPlaceholder": "Napisz swoją odpowiedź…",
+  "replyAs": "Wysyłane jako @{{user}}",
+  "replyNoName": "Wysyłane bez nazwy konta",
+  "sending": "Wysyłanie…",
+  "replySent": "Dziękujemy! Twoja odpowiedź została wysłana.",
+  "replyFailed": "Nie udało się wysłać odpowiedzi. Spróbuj ponownie.",
+  "replyTooMany": "Właśnie wysłałeś kilka odpowiedzi. Spróbuj ponownie za kilka minut."
+}

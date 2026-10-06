@@ -18,6 +18,7 @@ import { useEffect } from "react";
 import { readAppVersion } from "./utils/appVersion";
 import { captureReferralFromUrl } from "./utils/referral";
 import ChangelogModal from "./components/Changelog/ChangelogModal";
+import AnnouncementModal from "./components/Announcement/AnnouncementModal";
 import ProfileNav from "./components/nav/ProfileNav";
 // Legacy studio is retired: /studio routes now redirect to /embed-studio
 // (the embed-studio uploader in non-short mode is the only video upload flow).
@@ -54,6 +55,7 @@ import { HiveAuthProvider } from "./context/HiveAuthContext";
 import { HangoutContextProvider, useHangout } from "./context/HangoutContext";
 import { ChatProvider } from "./context/ChatContext";
 import ChatOverlay from "./components/Chat/ChatOverlay";
+import ChatAutoOpen from "./components/Chat/ChatAutoOpen";
 const OpenPodModal = lazyRoute(() => import("./components/OpenPod/OpenPodModal"), "./components/OpenPod/OpenPodModal");
 const ObsOverlay = lazyRoute(() => import("./page/ObsOverlay"), "./page/ObsOverlay");
 
@@ -80,6 +82,7 @@ const EmbedPlayer = lazyRoute(() => import("./page/EmbedPlayer"), "./page/EmbedP
 const EmbedPreview = lazyRoute(() => import("./components/embed-studio/EmbedPreview"), "./components/embed-studio/EmbedPreview");
 const EmbedStudioPage = lazyRoute(() => import("./components/embed-studio/EmbedStudioPage"), "./components/embed-studio/EmbedStudioPage");
 const EmbedThumbnail = lazyRoute(() => import("./components/embed-studio/EmbedThumbnail"), "./components/embed-studio/EmbedThumbnail");
+const YoutubeImportPage = lazyRoute(() => import("./page/YoutubeImportPage"), "./page/YoutubeImportPage");
 const Feed = lazyRoute(() => import("./components/Feed/Feed"), "./components/Feed/Feed");
 const FirstUploads = lazyRoute(() => import("./page/FirstUploads"), "./page/FirstUploads");
 const FollowFeed = lazyRoute(() => import("./page/FollowFeed"), "./page/FollowFeed");
@@ -163,7 +166,7 @@ import HandleTakenPrompt from "./components/Incubation/HandleTakenPrompt";
 import IncubationSessionSync from "./components/Incubation/IncubationSessionSync";
 import AvatarSync from "./components/HiveAvatar/AvatarSync";
 import EditorModal from "./components/modal/EditorModal";
-import { FEATURE_EDITOR } from "./utils/config";
+import { FEATURE_EDITOR, VIDEO_IMPORT_ENABLED } from "./utils/config";
 import BottomNav from "./components/BottomNav/BottomNav";
 import MiniPlayer from "./components/MiniPlayer/MiniPlayer";
 import GlobalAudioPlayer from "./components/GlobalAudioPlayer/GlobalAudioPlayer";
@@ -615,6 +618,7 @@ function App() {
         }}
       />
       <ChangelogModal />
+      <AnnouncementModal />
       <SupportModal />
       <CookieConsent />
       <GlobalReviewModal />
@@ -663,6 +667,7 @@ function App() {
               {/* Publish the backlog someone made before they had a Hive account. */}
               <Route path="/publish-backlog" element={<PublishBacklog />} />
               <Route path="/firstupload" element={<FirstUploads />} />
+              {VIDEO_IMPORT_ENABLED && <Route path="/youtube-import" element={<YoutubeImportPage />} />}
               <Route path="/trend" element={<Trend />} />
               <Route path="/discover" element={<Discover />} />
               <Route path="/audio" element={<Audio />} />
@@ -798,6 +803,7 @@ function App() {
         {/* Chat as a floating panel on tablet/desktop; renders nothing until
             the nav chat button opens it (phones go to /chat instead). */}
         <ChatOverlay />
+        <ChatAutoOpen />
         {FEATURE_EDITOR && (
           <EditorModal
             isOpen={editorModalOpen}

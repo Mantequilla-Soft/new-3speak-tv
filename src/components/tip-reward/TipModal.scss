@@ -135,9 +135,9 @@
     }
 
     .send-btn {
-      background-color: var(--accent-primary, #e53935);
-      color: #fff;
-      border: none;
+      background-color: transparent;
+      color: var(--accent-primary, #e53935);
+      border: 1px solid var(--accent-primary, #e53935);
     }
   }
 }

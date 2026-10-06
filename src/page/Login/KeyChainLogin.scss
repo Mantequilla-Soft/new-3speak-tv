@@ -1,10 +1,10 @@
 .login-btn-primary {
     width: 100%;
-    color: #fff;
-    background-color: #ff0000;
+    color: var(--accent-primary, #e53935);
+    background-color: transparent;
     padding: 12px 20px;
     border-radius: 15px;
-    border: none;
+    border: 1px solid var(--accent-primary, #e53935);
     font-size: 16px;
     font-weight: 600;
     cursor: pointer;
@@ -12,7 +12,9 @@
     margin-top: 10px;
 
     &:hover {
-        background-color: #cc0000;
+        background-color: color-mix(in srgb, var(--accent-primary, #e53935) 10%, transparent);
+        border-color: var(--accent-primary, #e53935);
+        color: var(--accent-primary, #e53935);
     }
 }
 

@@ -24,6 +24,7 @@ import { usePremiumStatus } from '../../hooks/usePremiumStatus';
 import { enforceLockedBeneficiaries } from '../../utils/beneficiaries';
 import { PPL_BENEFICIARY, ENABLE_PPL, CHECKER_URL, CHECKER_API_KEY } from '../../utils/config';
 import './AudioUploadModal.scss';
+import AccountImg from '../HiveAvatar/AccountImg';
 
 // Every toast from this module is headed "Upload"; the message becomes the
 // line under it. See utils/toast.js.
@@ -1792,7 +1793,7 @@ function MainPostStep({
         onClick={() => setCommunityOpen(true)}
       >
         {community
-          ? <><img src={`/img/u/${community.name}/avatar/small`} alt="" />{community.title || community.name}</>
+          ? <><AccountImg account={community.name} alt="" />{community.title || community.name}</>
           : <>{t('audio.upload.mainPost.selectCommunity')}</>}
         <span className="audio-upload-community-change">{t('audio.upload.mainPost.change')}</span>
       </button>

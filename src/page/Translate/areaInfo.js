@@ -6,6 +6,7 @@
 // A new area file needs a line here too (the editor shows nothing for a missing one).
 export const AREA_INFO = {
   ads: 'Advertising: the /advertise page (booking ads, prices, payments, campaign stats), ad overlays and skip buttons on videos, the ticker banner, and the "Promote" wizard.',
+  announcement: 'The announcement popup some visitors see when they open 3Speak: the link button, the reply box and its messages. The announcement text itself is written by the 3Speak team and is not translated here.',
   app: 'App-wide bits: page titles in the browser tab, the "What\'s new" update popup, loading and error screens, welcome and interest prompts, the support popup, and app-level toasts.',
   audio: 'Audio and podcasts: the audio upload window, the audio page and audio posts, the mini audio player at the bottom, and audio tiles in feeds.',
   auth: 'Signing in: the login window, wallet approval popups (Keychain, HiveAuth, ...), the login return pages, and invite links.',

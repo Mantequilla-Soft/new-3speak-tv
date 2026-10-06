@@ -1,0 +1,13 @@
+{
+  "ariaLabel": "Tangazo kutoka 3Speak",
+  "personalLabel": "Ujumbe kwa ajili yako tu kutoka kwa timu",
+  "linkFallback": "Jifunze zaidi",
+  "replyLabel": "Jibu lako",
+  "replyPlaceholder": "Andika jibu lako…",
+  "replyAs": "Litatumwa kama @{{user}}",
+  "replyNoName": "Litatumwa bila jina la akaunti",
+  "sending": "Inatuma…",
+  "replySent": "Asante! Jibu lako limetumwa.",
+  "replyFailed": "Jibu lako halikuweza kutumwa. Tafadhali jaribu tena.",
+  "replyTooMany": "Umetuma majibu kadhaa sasa hivi. Tafadhali jaribu tena baada ya dakika chache."
+}

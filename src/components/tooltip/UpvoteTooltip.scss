@@ -317,17 +317,17 @@
     gap: 6px;
     width: 100%;
     padding: 12px 0;
-    border: none;
+    border: 1px solid var(--accent-primary, #e53935);
     border-radius: 10px;
-    background: var(--accent-primary, #e53935);
-    color: #fff;
+    background: transparent;
+    color: var(--accent-primary, #e53935);
     font-size: 16px;
     font-weight: 600;
     cursor: pointer;
     transition: background 0.15s, transform 0.1s;
     min-height: 48px;
 
-    &:hover { background: var(--accent-hover, #c62828); }
+    &:hover { background: color-mix(in srgb, var(--accent-primary, #e53935) 10%, transparent); border-color: var(--accent-primary, #e53935); color: var(--accent-primary, #e53935); }
     &:active { transform: scale(0.98); }
     &:disabled { opacity: 0.6; cursor: not-allowed; }
   }

@@ -45,8 +45,9 @@
   &:hover { background: var(--card-bg, rgba(255, 255, 255, 0.5)); }
 
   &.active {
-    background: var(--accent-primary, #e23a3a);
-    color: #fff;
+    background: color-mix(in srgb, var(--accent-primary, #e53935) 10%, transparent);
+    box-shadow: inset 0 0 0 1px var(--accent-primary, #e53935);
+    color: var(--accent-primary, #e53935);
   }
 }
 
@@ -150,10 +151,10 @@
 .drf-submit {
   margin-top: 4px;
   padding: 10px 14px;
-  border: none;
+  border: 1px solid var(--accent-primary, #e53935);
   border-radius: 8px;
-  background: var(--accent-primary, #e23a3a);
-  color: #fff;
+  background: transparent;
+  color: var(--accent-primary, #e53935);
   font-size: 0.85rem;
   font-weight: 600;
   cursor: pointer;

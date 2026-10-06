@@ -101,7 +101,9 @@
   transition: background 0.15s ease, transform 0.15s ease;
 }
 .ep-player__poster:hover .ep-player__play {
-  background: var(--accent-primary, #e53935);
+  background: rgba(0, 0, 0, 0.6);
+  border: 1px solid var(--accent-primary, #e53935);
+  color: var(--accent-primary, #e53935);
   transform: scale(1.05);
 }
 
@@ -256,8 +258,9 @@
   }
 
   &--primary {
-    background: var(--accent-primary, #e53935);
-    color: #fff;
+    background: transparent;
+    border: 1px solid var(--accent-primary, #e53935);
+    color: var(--accent-primary, #e53935);
     &:hover { opacity: 0.92; }
   }
 
@@ -331,14 +334,14 @@
   gap: 8px;
   margin-top: 24px;
   padding: 13px 26px;
-  border: none;
+  border: 1px solid var(--accent-primary, #e53935);
   border-radius: 12px;
-  background: var(--accent-primary, #e53935);
-  color: #fff;
+  background: transparent;
+  color: var(--accent-primary, #e53935);
   font-weight: 700;
   font-size: 15px;
   cursor: pointer;
-  box-shadow: 0 4px 12px rgba(229, 57, 53, 0.3);
+  box-shadow: none;
   transition: transform 0.15s ease, box-shadow 0.15s ease;
   &:hover { transform: translateY(-2px); box-shadow: 0 6px 16px rgba(229, 57, 53, 0.4); }
 }

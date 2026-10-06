@@ -1,0 +1,13 @@
+{
+  "ariaLabel": "来自 3Speak 的公告",
+  "personalLabel": "团队专门发给你的消息",
+  "linkFallback": "了解更多",
+  "replyLabel": "你的回复",
+  "replyPlaceholder": "写下你的回复…",
+  "replyAs": "将以 @{{user}} 的身份发送",
+  "replyNoName": "将不附带账户名发送",
+  "sending": "正在发送…",
+  "replySent": "谢谢！你的回复已发送。",
+  "replyFailed": "回复发送失败，请重试。",
+  "replyTooMany": "你刚刚发送了多条回复，请几分钟后再试。"
+}

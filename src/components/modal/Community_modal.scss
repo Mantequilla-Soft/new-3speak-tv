@@ -258,11 +258,11 @@
   align-self: flex-start;
   margin-top: 0;
   padding: 7px 16px;
-  border: none;
+  border: 1px solid var(--accent-primary, #e53935);
   border-radius: 8px;
-  background: var(--accent-primary, #e53935);
+  background: transparent;
   background-image: none;
-  color: #fff;
+  color: var(--accent-primary, #e53935);
   font-size: 13px;
   font-weight: 600;
   cursor: pointer;

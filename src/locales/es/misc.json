@@ -107,6 +107,22 @@
     "soundcloud": {
       "placeholder": "tu-perfil o https://soundcloud.com/tu-perfil",
       "help": "Pega la URL de tu perfil de SoundCloud o solo el nombre de usuario. Pon el hash en cualquier parte de la biografía de tu perfil."
+    },
+    "tiktok": {
+      "placeholder": "@handle o https://www.tiktok.com/@handle",
+      "help": "Pega tu @handle de TikTok o el enlace de tu perfil. Pon el hash en cualquier parte de la biografía de tu perfil."
+    },
+    "instagram": {
+      "placeholder": "@handle o https://www.instagram.com/handle",
+      "help": "Pega tu @handle de Instagram o el enlace de tu perfil. Pon el hash en cualquier parte de la biografía de tu perfil."
+    },
+    "bitchute": {
+      "placeholder": "https://www.bitchute.com/channel/…",
+      "help": "Pega el nombre o enlace de tu canal de BitChute. Pon el hash en cualquier parte de la descripción del canal."
+    },
+    "rumble": {
+      "placeholder": "https://rumble.com/c/…",
+      "help": "Pega el nombre o enlace de tu canal de Rumble. Pon el hash en cualquier parte de la descripción del canal."
     }
   },
   "snaps": {

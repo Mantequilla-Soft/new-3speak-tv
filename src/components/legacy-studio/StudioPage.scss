@@ -607,9 +607,9 @@
       button {
         padding: 10px 20px;
         border-radius: 5px;
-        border: none;
-        background-color: var(--accent-primary, #e53935);
-        color: #fff;
+        border: 1px solid var(--accent-primary, #e53935);
+        background-color: transparent;
+        color: var(--accent-primary, #e53935);
         cursor: pointer;
         transition: background-color 0.2s ease, opacity 0.2s ease;
 

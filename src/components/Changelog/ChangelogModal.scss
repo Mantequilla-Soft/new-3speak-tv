@@ -248,13 +248,13 @@
   align-items: center;
   gap: 7px;
   padding: 12px 20px;
-  border: none;
+  border: 1px solid var(--accent-primary, #e53935);
   border-radius: 12px;
   font-size: 15px;
   font-weight: 600;
-  color: #fff;
+  color: var(--accent-primary, #e53935);
   cursor: pointer;
-  background: linear-gradient(135deg, var(--accent-primary, #e53935), var(--accent-hover, #ff1744));
+  background: transparent;
   transition: filter 0.15s ease, transform 0.05s ease;
 
   svg { font-size: 18px; }

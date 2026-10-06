@@ -8,6 +8,7 @@ import { getAnnounceConfig, setAnnounceConfig } from '../../utils/openpodAnnounc
 import Community_modal from '../modal/Community_modal';
 import Beneficiary_modal from '../modal/Beneficiary_modal';
 import './AnnounceOptions.scss';
+import AccountImg from '../HiveAvatar/AccountImg';
 
 /**
  * Integrator-owned announcement controls (community / payout / beneficiaries),
@@ -144,8 +145,8 @@ export default function AnnounceOptions({ announceType, isPremium = false, onCha
               onClick={() => setCommunityModalOpen(true)}
             >
               {typeof community !== 'string' && community?.name && (
-                <img
-                  src={`/img/u/${community.name}/avatar/small`}
+                <AccountImg
+                  account={community.name}
                   alt=""
                   className="hh-announce-opts__avatar"
                 />

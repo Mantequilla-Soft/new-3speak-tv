@@ -67,8 +67,9 @@
 }
 
 .interests-prompt-save {
-  background: var(--accent-primary, #e0594b);
-  color: #fff;
+  background: transparent;
+  border: 1px solid var(--accent-primary, #e53935);
+  color: var(--accent-primary, #e53935);
 }
 
 // Mobile: bottom sheet instead of a centred popup (convention: all popups are

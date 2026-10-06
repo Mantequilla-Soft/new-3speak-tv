@@ -5,6 +5,7 @@ import { FaCheck } from 'react-icons/fa';
 import { toastIn } from '../../utils/toast';
 import { awardBadgeWithAioha } from '../../hive-api/aioha';
 import { badgeHolders } from '../../utils/badgeAwards';
+import { cachedProfileImage } from '../../utils/avatarCache';
 import { useTranslation, Trans } from 'react-i18next';
 import './AwardBadgeModal.scss';
 
@@ -93,7 +94,7 @@ export default function AwardBadgeModal({ username, badges, onClose, onAwarded }
                   onClick={() => award(badge)}
                 >
                   <img
-                    src={badge.image || `/img/u/${badge.account}/avatar`}
+                    src={cachedProfileImage(badge.account, badge.image, 'small')}
                     alt=""
                   />
                   <span className="award-item-text">

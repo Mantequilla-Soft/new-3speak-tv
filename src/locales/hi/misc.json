@@ -107,6 +107,22 @@
     "soundcloud": {
       "placeholder": "your-profile या https://soundcloud.com/your-profile",
       "help": "अपना SoundCloud प्रोफ़ाइल URL या उसमें से सिर्फ़ यूज़रनेम पेस्ट करें। हैश को अपनी प्रोफ़ाइल बायो में कहीं भी डालें।"
+    },
+    "tiktok": {
+      "placeholder": "@handle या https://www.tiktok.com/@handle",
+      "help": "अपना TikTok @handle या प्रोफ़ाइल लिंक पेस्ट करें। हैश को अपनी प्रोफ़ाइल बायो में कहीं भी डालें।"
+    },
+    "instagram": {
+      "placeholder": "@handle या https://www.instagram.com/handle",
+      "help": "अपना Instagram @handle या प्रोफ़ाइल लिंक पेस्ट करें। हैश को अपनी प्रोफ़ाइल बायो में कहीं भी डालें।"
+    },
+    "bitchute": {
+      "placeholder": "https://www.bitchute.com/channel/…",
+      "help": "अपने BitChute चैनल का नाम या लिंक पेस्ट करें। हैश को अपने चैनल विवरण में कहीं भी डालें।"
+    },
+    "rumble": {
+      "placeholder": "https://rumble.com/c/…",
+      "help": "अपने Rumble चैनल का नाम या लिंक पेस्ट करें। हैश को अपने चैनल विवरण में कहीं भी डालें।"
     }
   },
   "snaps": {
