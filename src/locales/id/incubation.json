@@ -123,12 +123,8 @@
         "hint": "Video apa saja. Dihitung saat kamu benar-benar menonton.",
         "why": "Menonton menunjukkan bahwa kamu di sini untuk ikut serta, bukan hanya untuk memposting. Ini target yang paling banyak diselesaikan orang tanpa berusaha.",
         "counts": {
-          "0": "Waktu di 3Speak sendiri. Video yang sama yang disematkan di situs lain tidak dihitung.",
           "1": "Sekali per video. Menonton ulang menaikkan waktu terbaiknya, tidak pernah menambahkannya, dan tidak ada satu video pun yang bisa memenuhi semuanya sendirian.",
-          "2": "Waktu putar sebenarnya, jadi mempercepat video tidak dihukum dan memperlambatnya tidak memperpanjang jam.",
-          "3": "Di layar. Video yang dibiarkan diputar di tab latar belakang tidak menambah jam.",
-          "4": "Bukan videomu sendiri.",
-          "5": "Tidak ada yang dicatat saat kamu menonton dalam mode privat."
+          "4": "Bukan videomu sendiri."
         },
         "cta": "Tonton sesuatu"
       },
@@ -183,6 +179,14 @@
     "hideDetails": "Sembunyikan detail",
     "showLeft": "Tampilkan yang tersisa",
     "whatCounts": "Yang dihitung",
+    "groups": {
+      "create": "Berkarya",
+      "watch": "Tonton dan ikut berinteraksi",
+      "connect": "Temukan komunitasmu",
+      "brand": "Brand-mu",
+      "time": "Beri waktu beberapa hari"
+    },
+    "goalDone": "Selesai",
     "reviewDone": "Semua selesai. Tim akan meninjau channel-mu dan meningkatkan akunmu. Tidak ada lagi yang perlu kamu lakukan.",
     "reviewPending": "Setelah kamu menyelesaikan semua ini, tim akan meninjau channel-mu dan meningkatkan akunmu."
   },
@@ -285,6 +289,8 @@
       "graduated": "Sekarang ada di Hive sebagai <userLink>@{{user}}</userLink>. Semua di bawah ini dibuat sebelum itu.",
       "advertiser": "Ini halaman brand-mu di 3Speak. Selesaikan langkah-langkah di bawah dan tim akan meninjau brand-mu. Setelah disetujui, kamu mendapat akun Hive: itulah akun pengiklanmu, yang kamu pakai untuk memesan dan membayar iklan.",
       "own": "Beginilah orang lain melihatmu. Postinganmu ada di 3Speak dan belum ada di blockchain Hive, jadi belum menghasilkan reward. Itu berubah saat kamu mendapat akunmu setelah menyelesaikan semua tugas di bawah.",
+      "ownCreator": "Postinganmu disimpan di ruang masa pemanasan, tetapi tetap terlihat dan ditonjolkan di platform utama. Selama masih di sana, postinganmu belum menghasilkan reward. Itu berubah saat kamu mendapatkan akunmu, setelah menyelesaikan semua tugas di bawah dan memindahkan videomu dalam beberapa langkah mudah.",
+      "ownViewer": "Kamu sedang dalam masa pemanasan. Komentar dan follow-mu untuk sementara disimpan di ruang masa pemanasan dan belum menghasilkan reward. Setelah kamu menyelesaikan semua tugas di bawah, kamu mendapatkan akun Hive, dan sejak itu semuanya langsung masuk ke platform utama.",
       "visitor": "Baru di sini, belum ada di Hive. Postingan ini ada di 3Speak, jadi untuk sementara tidak menghasilkan reward. Tetap ikuti dan beri komentar: dukungan di awal-lah yang membuat seseorang bertahan di minggu-minggu pertamanya. Saat mereka mendapat akun Hive, kami akan memberitahumu, agar kamu bisa mengikuti mereka di sana juga."
     },
     "tabs": {

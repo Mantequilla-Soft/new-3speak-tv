@@ -335,33 +335,10 @@
   align-items: start;
 }
 
-// Content leads, progress sits alongside it. The panels stay FIRST in the DOM
-// and are placed into the second column, so the single-column fallback below
-// puts the owner's next step above their back catalogue without needing a
-// second copy of the markup.
-.inc-cols--split {
-  grid-template-columns: minmax(0, 1fr) 340px;
-
-  .inc-main { grid-column: 1; grid-row: 1; }
-  .inc-side { grid-column: 2; grid-row: 1; }
-}
-
-// minmax(0, 1fr) above rather than 1fr: a grid track is auto-sized to its
-// content by default, and the card grid inside would push the column wider than
-// the page instead of wrapping.
+// min-width 0: a grid item is auto-sized to its content by default, and the
+// card grid inside would push the column wider than the page instead of wrapping.
 .inc-main {
   min-width: 0;
-}
-
-.inc-side {
-  display: flex;
-  flex-direction: column;
-  gap: 18px;
-  // Deliberately NOT sticky. Both panels together are about a screenful, so
-  // pinning them meant either clipping the bottom of the unlocks list or
-  // nesting a second scrollbar inside the page. It scrolls with the content,
-  // and the part that matters is at the top of it anyway.
-  .inc-panel { margin-bottom: 0; }
 }
 
 /* ------------------------------------------------------ tasks disclosure --- */
@@ -605,6 +582,171 @@
   white-space: nowrap;
 }
 
+/* ---------------------------------------------------- goals as tiles --- */
+
+// The goals in groups (IncubationProgressPanel GOAL_GROUPS). On a wide screen
+// the groups are columns side by side, each stacking its own tiles, so four
+// groups of two fill the row instead of leaving most of it empty. Narrower,
+// auto-fit wraps them, and on a phone they stack with their tiles two across.
+// The checklist's wrapper in the main column (IncubatingProfile): clear air
+// between the uploads above it and the goals (owner 2026-10-06).
+.inc-goals {
+  margin-top: 32px;
+}
+
+.inc-goal-groups {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+  gap: 16px 14px;
+  align-items: start;
+  margin-top: 4px;
+}
+
+.inc-goal-group {
+  min-width: 0;
+
+  h3 {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+    margin: 0 0 8px;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--text-secondary);
+  }
+}
+
+.inc-goal-group-count {
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0;
+  color: var(--text-muted);
+}
+
+.inc-goal-tiles {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  // One tile per row inside a group column; a phone puts two side by side (below).
+  grid-template-columns: minmax(0, 1fr);
+  gap: 10px;
+
+  @media (max-width: 600px) {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.inc-goal-tile {
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  background: var(--bg-secondary);
+  overflow: hidden;
+  min-width: 0;
+  // A column, so the header fills a closed tile (tiles in a row stay even) and an
+  // open tile's details get their own space below it. `height: 100%` on the
+  // header did that wrong: it took the open tile's whole height and pushed the
+  // details out of view.
+  display: flex;
+  flex-direction: column;
+
+  // An open tile grows taller in place, inside its own column, so nothing else
+  // on the page moves (owner 2026-10-06: spanning the row looked weird). Only on
+  // a phone, where tiles sit two across and are too narrow, does it take the row.
+  @media (max-width: 600px) {
+    &.is-open { grid-column: 1 / -1; }
+  }
+}
+
+.inc-goal-head {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 6px;
+  flex: 1 0 auto;
+  width: 100%;
+  padding: 12px 14px;
+  border: 0;
+  background: none;
+  font: inherit;
+  color: inherit;
+  text-align: left;
+  cursor: pointer;
+
+  &:hover { background: var(--bg-tertiary); }
+  &:focus-visible { outline: 2px solid var(--text-secondary); outline-offset: -2px; }
+}
+
+.inc-goal-top {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.inc-goal-type {
+  color: var(--text-secondary);
+  flex-shrink: 0;
+}
+
+.inc-goal-count {
+  flex: 1;
+  font-variant-numeric: tabular-nums;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  white-space: nowrap;
+}
+
+.inc-goal-label {
+  font-size: 14px;
+  line-height: 1.3;
+  color: var(--text-primary);
+}
+
+.inc-goal-hint {
+  font-size: 12.5px;
+  line-height: 1.4;
+  color: var(--text-muted);
+  // Kept to three lines so the tiles in a row stay even; the full text is one
+  // tap away in the open tile.
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.inc-goal-tile.is-open .inc-goal-hint {
+  -webkit-line-clamp: unset;
+}
+
+.inc-goal-bar {
+  margin-top: auto;
+  height: 4px;
+  border-radius: 999px;
+  background: var(--bg-tertiary);
+  overflow: hidden;
+
+  span {
+    display: block;
+    height: 100%;
+    border-radius: inherit;
+    background: var(--text-muted);
+    transition: width 0.45s ease;
+  }
+}
+
+.inc-goal-tile.is-done .inc-goal-bar span {
+  background: #2e9c4a;
+}
+
+// The detail inside a tile starts at the tile's edge; the row layout indented
+// it under a label that sat beside a status icon. Both classes, so this wins
+// over .inc-task-detail, which comes later in the file.
+.inc-task-detail.inc-goal-detail {
+  padding-left: 14px;
+}
+
 /* ------------------------------------------- expanded goal detail --- */
 
 .inc-task-detail {
@@ -764,26 +906,11 @@
     display: flex;
   }
 
-  .inc-cols--split {
-    grid-template-columns: minmax(0, 1fr);
-
-    // Back to source order, which is why the panels are written first.
-    .inc-main,
-    .inc-side {
-      grid-column: 1;
-      grid-row: auto;
-    }
-  }
-
   // One at a time, chosen by the tabs above. Both stay mounted, so switching
   // back does not refetch the feed or lose the collapsed/expanded state.
-  //
-  // The goals tab hides the FEED, not the whole main column: "What a Hive
-  // account gets you" lives at the bottom of that column, and hiding .inc-main
-  // took it away from the one tab where it argues for the work being shown.
-  // It stays on both tabs now, under whichever one is open.
-  .inc-cols--split.inc-show-progress .inc-feed { display: none; }
-  .inc-cols--split.inc-show-posts .inc-side { display: none; }
+  // "What a Hive account gets you" stays on both tabs, under whichever is open.
+  .inc-cols--goals.inc-show-progress .inc-feed { display: none; }
+  .inc-cols--goals.inc-show-posts .inc-goals { display: none; }
 }
 
 @include mix.respond(phone) {

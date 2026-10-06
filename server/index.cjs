@@ -1794,7 +1794,13 @@ async function resolveAnnouncementUser(req, res) {
     const bearer = authHeader.startsWith('Bearer ') ? authHeader.slice(7).trim() : ''
     if (bearer) hiveUsername = await verifyHiveSignerToken(bearer)
   }
-  return hiveUsername ? hiveUsername.toLowerCase() : null
+  if (hiveUsername) return hiveUsername.toLowerCase()
+  // A warm-up user has no Hive name yet: vouch for their handle as `~handle`.
+  // Hive names cannot contain `~`, so this can never prove a Hive account, and a
+  // message addressed to one is never readable by a handle of the same spelling.
+  const session = await resolveButrSession(req, res)
+  const handle = session?.claims?.incubation && session.claims.handle
+  return handle ? `~${String(handle).toLowerCase()}` : null
 }
 
 function signVouch(parts) {

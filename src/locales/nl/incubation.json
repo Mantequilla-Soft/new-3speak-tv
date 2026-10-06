@@ -131,12 +131,8 @@
         "hint": "Alle video's. Telt mee terwijl je echt kijkt.",
         "why": "Kijken laat zien dat je hier bent om mee te doen en niet alleen om te posten. Het is het doel dat de meeste mensen afronden zonder er moeite voor te doen.",
         "counts": {
-          "0": "Tijd op 3Speak zelf. Dezelfde video ingesloten op een andere site telt niet mee.",
           "1": "Eén keer per video. Een video opnieuw bekijken verhoogt de beste tijd ervan, maar telt nooit op, en geen enkele video kan in zijn eentje alles leveren.",
-          "2": "Echte afspeeltijd, dus een video versnellen wordt niet bestraft en vertragen rekt het uur niet op.",
-          "3": "Op het scherm. Een video die in een tabblad op de achtergrond speelt, telt niet mee voor het uur.",
-          "4": "Niet je eigen video's.",
-          "5": "Er wordt niets vastgelegd terwijl je in privémodus kijkt."
+          "4": "Niet je eigen video's."
         },
         "cta": "Iets bekijken"
       },
@@ -196,6 +192,14 @@
     "hideDetails": "Details verbergen",
     "showLeft": "Toon wat er nog over is",
     "whatCounts": "Wat telt mee",
+    "groups": {
+      "create": "Maken",
+      "watch": "Kijken en meedoen",
+      "connect": "Vind je mensen",
+      "brand": "Je merk",
+      "time": "Geef het een paar dagen"
+    },
+    "goalDone": "Klaar",
     "reviewDone": "Alles klaar. Het team beoordeelt je kanaal en upgradet je. Je hoeft niets meer te doen.",
     "reviewPending": "Zodra je dit allemaal hebt afgerond, beoordeelt het team je kanaal en upgradet het je."
   },
@@ -305,6 +309,8 @@
       "graduated": "Nu op Hive als <userLink>@{{user}}</userLink>. Alles hieronder is daarvoor gemaakt.",
       "advertiser": "Dit is je merkpagina op 3Speak. Rond de stappen hieronder af en het team beoordeelt je merk. Na goedkeuring krijg je een Hive-account: dat is je adverteerdersaccount, waarmee je advertenties boekt en betaalt.",
       "own": "Zo zien anderen je. Je posts staan op 3Speak en nog niet op de Hive-blockchain, dus ze verdienen geen beloningen. Dat verandert als je je account krijgt nadat je alle taken hieronder hebt afgerond.",
+      "ownCreator": "Je posts staan in een warm-upruimte, maar zijn zichtbaar en uitgelicht op het hoofdplatform. Zolang ze daar staan, leveren ze nog geen beloningen op. Dat verandert wanneer je je account krijgt, nadat je alle taken hieronder hebt afgerond en je video's in een paar eenvoudige stappen hebt overgezet.",
+      "ownViewer": "Je zit in de warm-up. Je reacties en volgacties staan voorlopig in een warm-upruimte en leveren nog geen beloningen op. Zodra je alle taken hieronder hebt afgerond, krijg je je Hive-account, en vanaf dan gaat alles direct naar het hoofdplatform.",
       "visitor": "Nieuw hier, nog niet op Hive. Deze posts staan op 3Speak, dus ze verdienen voorlopig geen beloningen. Volg en reageer toch: aanmoediging in het begin helpt iemand door de eerste weken heen. Als diegene een Hive-account krijgt, laten we het je weten, zodat je hem of haar daar ook kunt volgen."
     },
     "tabs": {

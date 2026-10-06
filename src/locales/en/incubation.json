@@ -131,12 +131,8 @@
         "hint": "Any videos. Counted while you are really watching.",
         "why": "Watching says you are here to take part and not only to post. It is the goal most people finish without trying.",
         "counts": {
-          "0": "Time on 3Speak itself. The same video embedded on another site cannot count.",
           "1": "Once per video. Rewatching one raises its best time, it never adds to it, and no single video can supply all of it on its own.",
-          "2": "Real playing time, so speeding a video up is not punished and slowing it down does not stretch the hour.",
-          "3": "On screen. A video left playing in a background tab does not build the hour.",
-          "4": "Not your own videos.",
-          "5": "Nothing is recorded while you watch in private mode."
+          "4": "Not your own videos."
         },
         "cta": "Watch something"
       },
@@ -196,6 +192,14 @@
     "hideDetails": "Hide the details",
     "showLeft": "Show what is left",
     "whatCounts": "What counts",
+    "groups": {
+      "create": "Create",
+      "watch": "Watch and join in",
+      "connect": "Find your people",
+      "brand": "Your brand",
+      "time": "Give it a few days"
+    },
+    "goalDone": "Done",
     "reviewDone": "All done. The team will review your channel and upgrade you. Nothing more for you to do.",
     "reviewPending": "Once you have completed all of these, the team will review your channel and upgrade you."
   },
@@ -305,6 +309,8 @@
       "graduated": "Now on Hive as <userLink>@{{user}}</userLink>. Anything below was made before that.",
       "advertiser": "This is your brand page on 3Speak. Finish the steps below and the team reviews your brand. Once approved you get a Hive account: that is your advertiser account, the one you book ads with and pay from.",
       "own": "This is how others see you. Your posts live on 3Speak and are not on the Hive blockchain yet, so they do not earn rewards. That changes when you get your account after completing all the tasks below.",
+      "ownCreator": "Your posts are kept in a warm-up space, but they are visible and highlighted on the main platform. While they are in the warm-up space, they do not earn rewards yet. That changes when you get your account, after you have completed all the tasks below and moved your videos over in a few simple steps.",
+      "ownViewer": "You are in the warm-up. Your comments and follows are kept in a warm-up space for now and do not earn rewards yet. Once you have completed all the tasks below, you get your Hive account, and from then on everything goes straight to the main platform.",
       "visitor": "New here, not on Hive yet. These posts live on 3Speak, so they earn no rewards for now. Follow and comment anyway: early encouragement is what carries someone through their first weeks. When they get their Hive account we will tell you, so you can follow them there too."
     },
     "tabs": {

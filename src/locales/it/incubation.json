@@ -139,12 +139,8 @@
         "hint": "Qualsiasi video. Conta solo quando stai guardando davvero.",
         "why": "Guardare dimostra che sei qui per partecipare e non solo per pubblicare. È l'obiettivo che la maggior parte delle persone completa senza nemmeno provarci.",
         "counts": {
-          "0": "Il tempo su 3Speak stesso. Lo stesso video incorporato in un altro sito non conta.",
           "1": "Una volta per video. Riguardare un video ne migliora il tempo massimo, non lo somma mai, e nessun singolo video può coprire tutto da solo.",
-          "2": "Tempo di riproduzione reale, quindi accelerare un video non viene penalizzato e rallentarlo non allunga l'ora.",
-          "3": "Sullo schermo. Un video lasciato in riproduzione in una scheda in background non conta.",
-          "4": "Non i tuoi video.",
-          "5": "Non viene registrato nulla mentre guardi in modalità privata."
+          "4": "Non i tuoi video."
         },
         "cta": "Guarda qualcosa"
       },
@@ -209,6 +205,14 @@
     "hideDetails": "Nascondi i dettagli",
     "showLeft": "Mostra cosa manca",
     "whatCounts": "Cosa conta",
+    "groups": {
+      "create": "Crea",
+      "watch": "Guarda e partecipa",
+      "connect": "Trova la tua gente",
+      "brand": "Il tuo brand",
+      "time": "Lascia passare qualche giorno"
+    },
+    "goalDone": "Fatto",
     "reviewDone": "Tutto fatto. Il team valuterà il tuo canale e ti promuoverà. Non devi fare altro.",
     "reviewPending": "Quando avrai completato tutto, il team valuterà il tuo canale e ti promuoverà."
   },
@@ -325,6 +329,8 @@
       "graduated": "Ora su Hive come <userLink>@{{user}}</userLink>. Tutto ciò che segue è stato creato prima.",
       "advertiser": "Questa è la pagina del tuo brand su 3Speak. Completa i passaggi qui sotto e il team valuterà il tuo brand. Una volta approvato ricevi un account Hive: è il tuo account inserzionista, quello con cui prenoti gli annunci e da cui paghi.",
       "own": "Ecco come ti vedono gli altri. I tuoi post vivono su 3Speak e non sono ancora sulla blockchain Hive, quindi non guadagnano ricompense. Le cose cambieranno quando riceverai il tuo account dopo aver completato tutte le attività qui sotto.",
+      "ownCreator": "I tuoi post sono conservati in uno spazio di riscaldamento, ma sono visibili e messi in evidenza sulla piattaforma principale. Finché restano lì, non generano ancora ricompense. Questo cambia quando ricevi il tuo account, dopo aver completato tutte le attività qui sotto e trasferito i tuoi video in pochi semplici passaggi.",
+      "ownViewer": "Sei nel riscaldamento. I tuoi commenti e follow sono conservati per ora in uno spazio di riscaldamento e non generano ancora ricompense. Quando avrai completato tutte le attività qui sotto, ricevi il tuo account Hive e da quel momento tutto va direttamente sulla piattaforma principale.",
       "visitor": "Nuovo qui, non ancora su Hive. Questi post vivono su 3Speak, quindi per ora non guadagnano ricompense. Segui e commenta comunque: l'incoraggiamento iniziale è ciò che aiuta qualcuno a superare le prime settimane. Quando riceverà il suo account Hive te lo diremo, così potrai seguirlo anche lì."
     },
     "tabs": {

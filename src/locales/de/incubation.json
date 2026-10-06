@@ -131,12 +131,8 @@
         "hint": "Beliebige Videos. Gezählt wird, solange du wirklich zuschaust.",
         "why": "Zuschauen zeigt, dass du hier bist, um mitzumachen, und nicht nur, um zu posten. Dieses Ziel erreichen die meisten, ohne es zu versuchen.",
         "counts": {
-          "0": "Zeit auf 3Speak selbst. Dasselbe Video, auf einer anderen Seite eingebettet, zählt nicht.",
           "1": "Einmal pro Video. Erneutes Ansehen erhöht seine Bestzeit, addiert aber nie etwas dazu, und kein einzelnes Video kann alles allein liefern.",
-          "2": "Echte Wiedergabezeit, daher wird schnelleres Abspielen nicht bestraft, und langsameres Abspielen streckt die Stunde nicht.",
-          "3": "Auf dem Bildschirm. Ein Video, das in einem Hintergrund-Tab läuft, zählt nicht zur Stunde.",
-          "4": "Nicht deine eigenen Videos.",
-          "5": "Im privaten Modus wird beim Zuschauen nichts erfasst."
+          "4": "Nicht deine eigenen Videos."
         },
         "cta": "Etwas ansehen"
       },
@@ -196,6 +192,14 @@
     "hideDetails": "Details ausblenden",
     "showLeft": "Zeigen, was noch fehlt",
     "whatCounts": "Was zählt",
+    "groups": {
+      "create": "Erstellen",
+      "watch": "Schauen und mitmachen",
+      "connect": "Finde deine Leute",
+      "brand": "Deine Marke",
+      "time": "Ein paar Tage Zeit"
+    },
+    "goalDone": "Erledigt",
     "reviewDone": "Alles erledigt. Das Team prüft deinen Kanal und stuft dich hoch. Du musst nichts mehr tun.",
     "reviewPending": "Sobald du all das erledigt hast, prüft das Team deinen Kanal und stuft dich hoch."
   },
@@ -305,6 +309,8 @@
       "graduated": "Jetzt auf Hive als <userLink>@{{user}}</userLink>. Alles unten wurde davor erstellt.",
       "advertiser": "Das ist die Seite deiner Marke auf 3Speak. Erledige die Schritte unten, dann prüft das Team deine Marke. Nach der Freigabe bekommst du ein Hive-Konto: Das ist dein Werbekonto, mit dem du Werbung buchst und bezahlst.",
       "own": "So sehen dich andere. Deine Posts liegen auf 3Speak und noch nicht auf der Hive-Blockchain, daher verdienen sie keine Belohnungen. Das ändert sich, wenn du dein Konto bekommst, nachdem du alle Aufgaben unten erledigt hast.",
+      "ownCreator": "Deine Posts liegen in einem Warm-up-Speicher, sind aber auf der Hauptplattform sichtbar und hervorgehoben. Solange sie im Warm-up-Speicher liegen, verdienen sie noch keine Rewards. Das ändert sich, wenn du dein Konto bekommst, nachdem du alle Aufgaben unten erledigt und deine Videos in wenigen einfachen Schritten übertragen hast.",
+      "ownViewer": "Du bist im Warm-up. Deine Kommentare und Follows liegen vorerst in einem Warm-up-Speicher und verdienen noch keine Rewards. Sobald du alle Aufgaben unten erledigt hast, bekommst du dein Hive-Konto, und ab dann landet alles direkt auf der Hauptplattform.",
       "visitor": "Neu hier, noch nicht auf Hive. Diese Posts liegen auf 3Speak und verdienen deshalb vorerst keine Belohnungen. Folge und kommentiere trotzdem: Frühe Ermutigung trägt jemanden durch die ersten Wochen. Wenn die Person ihr Hive-Konto bekommt, sagen wir dir Bescheid, damit du ihr auch dort folgen kannst."
     },
     "tabs": {

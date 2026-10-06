@@ -123,12 +123,8 @@
         "hint": "Bất kỳ video nào. Được tính khi bạn thực sự đang xem.",
         "why": "Việc xem cho thấy bạn ở đây để tham gia chứ không chỉ để đăng bài. Đây là mục tiêu mà hầu hết mọi người hoàn thành mà không cần cố gắng.",
         "counts": {
-          "0": "Thời gian trên chính 3Speak. Cùng một video được nhúng trên trang khác thì không được tính.",
           "1": "Một lần cho mỗi video. Xem lại một video sẽ nâng thời gian tốt nhất của video đó, không bao giờ cộng dồn, và không một video nào có thể tự mình đóng góp toàn bộ.",
-          "2": "Thời gian phát thực tế, nên tua nhanh video không bị phạt và phát chậm cũng không kéo dài thêm thời gian.",
-          "3": "Trên màn hình. Video để phát trong tab chạy nền không được tính.",
-          "4": "Không tính video của chính bạn.",
-          "5": "Không có gì được ghi lại khi bạn xem ở chế độ riêng tư."
+          "4": "Không tính video của chính bạn."
         },
         "cta": "Xem gì đó"
       },
@@ -183,6 +179,14 @@
     "hideDetails": "Ẩn chi tiết",
     "showLeft": "Hiện những gì còn lại",
     "whatCounts": "Điều gì được tính",
+    "groups": {
+      "create": "Sáng tạo",
+      "watch": "Xem và tham gia",
+      "connect": "Tìm người cùng sở thích",
+      "brand": "Thương hiệu của bạn",
+      "time": "Chờ thêm vài ngày"
+    },
+    "goalDone": "Đã xong",
     "reviewDone": "Đã xong tất cả. Đội ngũ sẽ xét duyệt kênh của bạn và nâng cấp cho bạn. Bạn không cần làm gì thêm.",
     "reviewPending": "Khi bạn đã hoàn thành tất cả những mục này, đội ngũ sẽ xét duyệt kênh của bạn và nâng cấp cho bạn."
   },
@@ -285,6 +289,8 @@
       "graduated": "Hiện đã có trên Hive với tên <userLink>@{{user}}</userLink>. Mọi thứ bên dưới được tạo trước thời điểm đó.",
       "advertiser": "Đây là trang thương hiệu của bạn trên 3Speak. Hoàn thành các bước bên dưới và đội ngũ sẽ xét duyệt thương hiệu của bạn. Sau khi được duyệt, bạn sẽ nhận một tài khoản Hive: đó là tài khoản nhà quảng cáo, dùng để đặt quảng cáo và thanh toán.",
       "own": "Đây là cách người khác nhìn thấy bạn. Bài đăng của bạn nằm trên 3Speak và chưa có trên blockchain Hive, nên chúng chưa nhận phần thưởng. Điều đó sẽ thay đổi khi bạn có tài khoản sau khi hoàn thành tất cả nhiệm vụ bên dưới.",
+      "ownCreator": "Bài đăng của bạn được lưu trong khu vực khởi động, nhưng vẫn hiển thị và được làm nổi bật trên nền tảng chính. Khi còn ở đó, chúng chưa tạo ra phần thưởng. Điều này sẽ thay đổi khi bạn nhận được tài khoản, sau khi hoàn thành mọi nhiệm vụ bên dưới và chuyển video của bạn qua vài bước đơn giản.",
+      "ownViewer": "Bạn đang trong giai đoạn khởi động. Bình luận và lượt theo dõi của bạn tạm thời được lưu trong khu vực khởi động và chưa tạo ra phần thưởng. Khi hoàn thành mọi nhiệm vụ bên dưới, bạn sẽ nhận được tài khoản Hive, và từ đó mọi thứ sẽ đi thẳng lên nền tảng chính.",
       "visitor": "Người mới, chưa có trên Hive. Các bài đăng này nằm trên 3Speak, nên hiện chưa nhận phần thưởng. Dù vậy, hãy cứ theo dõi và bình luận: sự động viên sớm là điều giúp một người vượt qua những tuần đầu tiên. Khi họ có tài khoản Hive, chúng tôi sẽ báo cho bạn, để bạn có thể theo dõi họ ở đó."
     },
     "tabs": {
