@@ -10,7 +10,7 @@ export const CHANGELOG = [
     version: '1.79.54',
     date: '2026-10-06',
     summary:
-      'Badge and community pictures now load from 3Speak\'s own image cache, resized to the size they are shown at. Badge art hosted on other sites loads reliably, and communities created on 3Speak always show their own picture.',
+      'Badge and community pictures now load faster and more reliably, served from 3Speak\'s own image cache.',
   },
   {
     version: '1.79.52',
