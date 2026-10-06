@@ -1,0 +1,13 @@
+{
+  "ariaLabel": "3Speakからのお知らせ",
+  "personalLabel": "チームからあなただけへのメッセージ",
+  "linkFallback": "詳しく見る",
+  "replyLabel": "あなたの返信",
+  "replyPlaceholder": "返信を入力…",
+  "replyAs": "@{{user}} として送信されます",
+  "replyNoName": "アカウント名なしで送信されます",
+  "sending": "送信中…",
+  "replySent": "ありがとうございます！返信を送信しました。",
+  "replyFailed": "返信を送信できませんでした。もう一度お試しください。",
+  "replyTooMany": "短時間に複数の返信が送信されました。数分後にもう一度お試しください。"
+}

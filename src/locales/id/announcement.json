@@ -1,0 +1,13 @@
+{
+  "ariaLabel": "Pengumuman dari 3Speak",
+  "personalLabel": "Pesan khusus untuk Anda dari tim",
+  "linkFallback": "Pelajari lebih lanjut",
+  "replyLabel": "Balasan Anda",
+  "replyPlaceholder": "Tulis balasan Anda…",
+  "replyAs": "Dikirim sebagai @{{user}}",
+  "replyNoName": "Dikirim tanpa nama akun",
+  "sending": "Mengirim…",
+  "replySent": "Terima kasih! Balasan Anda telah terkirim.",
+  "replyFailed": "Balasan Anda tidak dapat dikirim. Silakan coba lagi.",
+  "replyTooMany": "Anda baru saja mengirim beberapa balasan. Silakan coba lagi dalam beberapa menit."
+}

@@ -1,0 +1,13 @@
+{
+  "ariaLabel": "Mededeling van 3Speak",
+  "personalLabel": "Een bericht speciaal voor jou van het team",
+  "linkFallback": "Meer informatie",
+  "replyLabel": "Jouw antwoord",
+  "replyPlaceholder": "Schrijf je antwoord…",
+  "replyAs": "Wordt verstuurd als @{{user}}",
+  "replyNoName": "Wordt verstuurd zonder accountnaam",
+  "sending": "Versturen…",
+  "replySent": "Bedankt! Je antwoord is verstuurd.",
+  "replyFailed": "Je antwoord kon niet worden verstuurd. Probeer het opnieuw.",
+  "replyTooMany": "Je hebt net een paar antwoorden verstuurd. Probeer het over een paar minuten opnieuw."
+}

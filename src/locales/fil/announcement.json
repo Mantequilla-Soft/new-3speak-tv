@@ -1,0 +1,13 @@
+{
+  "ariaLabel": "Anunsyo mula sa 3Speak",
+  "personalLabel": "Isang mensahe para sa iyo lang mula sa team",
+  "linkFallback": "Alamin pa",
+  "replyLabel": "Ang iyong sagot",
+  "replyPlaceholder": "Isulat ang iyong sagot…",
+  "replyAs": "Ipapadala bilang @{{user}}",
+  "replyNoName": "Ipapadala nang walang pangalan ng account",
+  "sending": "Ipinapadala…",
+  "replySent": "Salamat! Naipadala na ang iyong sagot.",
+  "replyFailed": "Hindi maipadala ang iyong sagot. Pakisubukang muli.",
+  "replyTooMany": "Nagpadala ka ng ilang sagot ngayon lang. Pakisubukang muli pagkalipas ng ilang minuto."
+}

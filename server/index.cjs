@@ -1771,6 +1771,62 @@ app.post('/api/ads/identity-signature', signChallengeLimiter, async (req, res) =
   }
 })
 
+// Announcement vouches: "we verified a session for @x", signed by @threespeak's own
+// posting key, so the checker can (a) hand @x the announcements addressed to them and
+// (b) file @x's replies under a PROVEN name. See 3speakchecks/routes/announcements.js.
+//
+// Same evidence rules as /api/ads/identity-signature above: a Butter Auth cookie, a
+// wallet-login session or a HiveSigner token, never the app key plus a claimed name.
+// Each vouch has its own action word, and the reply one is bound to the announcement
+// number, so neither is any use for anything else. Keep both messages in lockstep
+// with readVouchMessage() / replyVouchMessage() in the checker.
+async function resolveAnnouncementUser(req, res) {
+  let hiveUsername = await resolveVerifiedHiveUser(req, res)
+  if (!hiveUsername) {
+    const authHeader = req.headers.authorization || ''
+    const bearer = authHeader.startsWith('Bearer ') ? authHeader.slice(7).trim() : ''
+    if (bearer) hiveUsername = await verifyHiveSignerToken(bearer)
+  }
+  return hiveUsername ? hiveUsername.toLowerCase() : null
+}
+
+function signVouch(parts) {
+  const timestamp = Date.now()
+  const message = [...parts, String(timestamp)].join('|')
+  const signature = PrivateKey.fromString(POSTING_WIF).sign(cryptoUtils.sha256(Buffer.from(message, 'utf8'))).toString()
+  return { signature, timestamp }
+}
+
+// POST /api/announcements/read-signature: lets the popup ask for the announcements
+// addressed to this account. Called once per app load by logged-in users.
+app.post('/api/announcements/read-signature', signChallengeLimiter, async (req, res) => {
+  try {
+    if (!POSTING_WIF) return res.status(500).json({ error: 'Server is not configured' })
+    const hiveUsername = await resolveAnnouncementUser(req, res)
+    if (!hiveUsername) return res.status(401).json({ error: 'Not signed in' })
+    return res.json({ success: true, username: hiveUsername, ...signVouch(['3speak-announce', 'read-vouch', hiveUsername]) })
+  } catch (err) {
+    console.error('Announcement read signature error:', err.message)
+    res.status(500).json({ error: 'Signing failed' })
+  }
+})
+
+// POST /api/announcements/reply-signature: proves who wrote a reply. Without it the
+// checker still takes the reply, it just stores the name as a claim.
+app.post('/api/announcements/reply-signature', signChallengeLimiter, async (req, res) => {
+  try {
+    if (!POSTING_WIF) return res.status(500).json({ error: 'Server is not configured' })
+    const number = Number(req.body?.number)
+    if (!Number.isInteger(number) || number < 1) return res.status(400).json({ error: 'Invalid announcement' })
+    const hiveUsername = await resolveAnnouncementUser(req, res)
+    if (!hiveUsername) return res.status(401).json({ error: 'Not signed in' })
+    return res.json({ success: true, username: hiveUsername, ...signVouch(['3speak-announce', 'reply-vouch', hiveUsername, String(number)]) })
+  } catch (err) {
+    console.error('Announcement reply signature error:', err.message)
+    res.status(500).json({ error: 'Signing failed' })
+  }
+})
+
 // Image upload — sign the standard images.hive.blog "ImageSigningChallenge" with
 // @threespeak's posting key and upload on the user's behalf. Lets every login
 // (incl. HiveSigner, which can't sign client-side) attach covers/thumbnails with

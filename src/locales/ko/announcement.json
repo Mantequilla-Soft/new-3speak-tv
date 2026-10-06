@@ -1,0 +1,13 @@
+{
+  "ariaLabel": "3Speak 공지",
+  "personalLabel": "팀이 회원님께만 보내는 메시지",
+  "linkFallback": "자세히 알아보기",
+  "replyLabel": "답장",
+  "replyPlaceholder": "답장을 입력하세요…",
+  "replyAs": "@{{user}}(으)로 전송됩니다",
+  "replyNoName": "계정 이름 없이 전송됩니다",
+  "sending": "전송 중…",
+  "replySent": "감사합니다! 답장이 전송되었습니다.",
+  "replyFailed": "답장을 보내지 못했습니다. 다시 시도해 주세요.",
+  "replyTooMany": "방금 여러 개의 답장을 보냈습니다. 몇 분 후에 다시 시도해 주세요."
+}

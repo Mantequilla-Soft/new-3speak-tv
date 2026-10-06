@@ -1,0 +1,13 @@
+{
+  "ariaLabel": "Thông báo từ 3Speak",
+  "personalLabel": "Tin nhắn dành riêng cho bạn từ đội ngũ",
+  "linkFallback": "Tìm hiểu thêm",
+  "replyLabel": "Phản hồi của bạn",
+  "replyPlaceholder": "Viết phản hồi của bạn…",
+  "replyAs": "Gửi với tên @{{user}}",
+  "replyNoName": "Gửi mà không kèm tên tài khoản",
+  "sending": "Đang gửi…",
+  "replySent": "Cảm ơn! Phản hồi của bạn đã được gửi.",
+  "replyFailed": "Không thể gửi phản hồi của bạn. Vui lòng thử lại.",
+  "replyTooMany": "Bạn vừa gửi vài phản hồi. Vui lòng thử lại sau vài phút."
+}

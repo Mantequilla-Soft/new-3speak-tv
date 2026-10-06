@@ -18,6 +18,7 @@ import { useEffect } from "react";
 import { readAppVersion } from "./utils/appVersion";
 import { captureReferralFromUrl } from "./utils/referral";
 import ChangelogModal from "./components/Changelog/ChangelogModal";
+import AnnouncementModal from "./components/Announcement/AnnouncementModal";
 import ProfileNav from "./components/nav/ProfileNav";
 // Legacy studio is retired: /studio routes now redirect to /embed-studio
 // (the embed-studio uploader in non-short mode is the only video upload flow).
@@ -617,6 +618,7 @@ function App() {
         }}
       />
       <ChangelogModal />
+      <AnnouncementModal />
       <SupportModal />
       <CookieConsent />
       <GlobalReviewModal />
