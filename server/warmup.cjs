@@ -120,6 +120,30 @@ async function saveContact(userId, body) {
   return { status: r.status, data }
 }
 
+// The optional "link your channel" task: links kept by the checker under the
+// warm-up user's own id (routes/incubation.js, /internal/social/*). The checker
+// decides which platforms (WARMUP_LINK_PLATFORMS), independent of the profile
+// link switches and of video import.
+async function readSocial(userId) {
+  const r = await fetch(`${CHECKER_INTERNAL_URL}/incubation/internal/social/${encodeURIComponent(userId)}`, {
+    signal: AbortSignal.timeout(5000)
+  })
+  if (!r.ok) throw new Error(`checker social returned ${r.status}`)
+  return r.json()
+}
+
+// Verifying reads the platform (Rumble/Instagram can take a while), so a long timeout.
+async function socialAction(action, userId, body) {
+  const r = await fetch(`${CHECKER_INTERNAL_URL}/incubation/internal/social/${action}`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ userId, platform: body.platform, platform_username: body.platform_username }),
+    signal: AbortSignal.timeout(150000)
+  })
+  const data = await r.json().catch(() => ({}))
+  return { status: r.status, data }
+}
+
 async function claimAssets({ userId, handle, hiveUsername }) {
   const r = await fetch(`${CHECKER_INTERNAL_URL}/incubation/internal/claim-assets`, {
     method: 'POST',
@@ -150,4 +174,4 @@ function createWarmupBackend(sdk, { inc, butr, getSession, getHiveUser }) {
   })
 }
 
-module.exports = { createWarmupBackend, TRACKS, trackOpen, MIN_COMMENT_CHARS, readContact, readContactByHandle, saveContact }
+module.exports = { createWarmupBackend, TRACKS, trackOpen, MIN_COMMENT_CHARS, readContact, readContactByHandle, saveContact, readSocial, socialAction }

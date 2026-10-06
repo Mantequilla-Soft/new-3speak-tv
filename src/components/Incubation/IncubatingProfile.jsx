@@ -290,7 +290,9 @@ export default function IncubatingProfile({ handle, own = false }) {
         ) : advertiser ? (
           <>{t('incubation.profile.note.advertiser')}</>
         ) : own ? (
-          <>{t('incubation.profile.note.own')}</>
+          // Per track: a viewer has no videos to move over, so their note talks
+          // about comments and follows instead (owner 2026-10-06).
+          <>{t(progress?.track === 'viewer' ? 'incubation.profile.note.ownViewer' : 'incubation.profile.note.ownCreator')}</>
         ) : (
           <>{t('incubation.profile.note.visitor')}</>
         )}
@@ -359,14 +361,11 @@ export default function IncubatingProfile({ handle, own = false }) {
 
       {/* An advertiser's page is ONE column: their checklist leads it (below), and
           nothing sits beside it. */}
-      <div className={`inc-cols${showSidebar && !advertiser ? ` inc-cols--split inc-show-${mobileTab}` : ''}`}>
-        {showSidebar && !advertiser && (
-          <aside className="inc-side">
-            <IncubationProgressPanel />
-
-          </aside>
-        )}
-
+      {/* One column for everyone. The owner's checklist sits in it, between their
+          uploads and "What a Hive account gets you" (owner 2026-10-06: the list
+          belongs in the middle, not in a sidebar). On a phone the tabs above
+          show the goals or the uploads, see .inc-cols--goals. */}
+      <div className={`inc-cols${showSidebar && !advertiser ? ` inc-cols--goals inc-show-${mobileTab}` : ''}`}>
         <main className="inc-main">
           {/* Wrapped so the mobile tabs can hide the FEED without hiding the
               whole column. "What a Hive account gets you" sits below it, in
@@ -461,6 +460,11 @@ export default function IncubatingProfile({ handle, own = false }) {
           {/* Above the unlocks: until a path is picked there is no list to work
               through, so the question comes first. */}
           {showSidebar && <TrackQuestion />}
+          {showSidebar && !advertiser && (
+            <div className="inc-goals">
+              <IncubationProgressPanel />
+            </div>
+          )}
           {showSidebar && (
             <section className="inc-panel inc-unlocks">
               <h2><FaUnlockAlt size={14} aria-hidden="true" /> {advertiser ? t('incubation.profile.unlocksTitleAdvertiser') : t('incubation.profile.unlocksTitle')}</h2>

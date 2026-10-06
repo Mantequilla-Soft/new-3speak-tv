@@ -1,0 +1,125 @@
+{
+  "title": "Pertanyaan yang sering diajukan",
+  "subtitle": "Baru di 3Speak? Ini jawaban untuk pertanyaan yang paling sering ditanyakan kepada kami.",
+  "groups": {
+    "start": "Memulai",
+    "earning": "Penghasilan",
+    "uploading": "Mengunggah",
+    "community": "Komunitas dan keamanan",
+    "more": "Iklan dan lainnya"
+  },
+  "items": {
+    "what": {
+      "q": "Apa itu 3Speak?",
+      "a": "3Speak adalah platform video di mana channel-mu benar-benar milikmu. Video, komentar, dan pengikutmu tersimpan di akun Hive-mu sendiri, bukan di server 3Speak, jadi tidak ada yang bisa mengambilnya darimu. Kreator dan penonton sama-sama bisa mendapatkan reward saat menggunakannya."
+    },
+    "watchFree": {
+      "q": "Apakah aku perlu akun untuk menonton?",
+      "a": "Tidak. Menonton gratis dan tidak perlu akun. Kamu hanya perlu akun untuk mengunggah, berkomentar, vote, mengikuti channel, dan mendapatkan reward."
+    },
+    "signup": {
+      "q": "Bagaimana cara membuat akun?",
+      "a": "Ketuk <b>Daftar</b> di bagian atas lalu lanjutkan dengan Google, email, atau opsi lain yang ditawarkan Butter Auth, layanan login yang digunakan 3Speak. Gratis dan hanya butuh sekitar satu menit. Akun baru dimulai dengan masa pemanasan singkat: kamu bisa langsung menonton, mengunggah, dan berkomentar, sementara vote, tip, dan penghasilan terbuka setelah kamu menyelesaikannya dan mendapatkan akun Hive-mu sendiri."
+    },
+    "hive": {
+      "q": "Apa itu Hive, dan apakah aku perlu memahaminya?",
+      "a": "Hive adalah jaringan terbuka yang menyimpan akun, postingan, vote, dan reward. Jaringan ini sudah berjalan sejak 2016, dan pada 2020 komunitasnya membuatnya lepas dari perusahaan mana pun. 3Speak adalah salah satu dari banyak aplikasi yang dibangun di atasnya, jadi akun yang sama juga bisa dipakai di aplikasi Hive lainnya. Kamu tidak perlu memahami semua itu untuk memakai 3Speak: cukup masuk, tonton, posting, dan berkomentar."
+    },
+    "loginTypes": {
+      "q": "Butter Auth, Keychain, HiveSigner: apa bedanya?",
+      "a": "Semuanya adalah cara berbeda untuk masuk ke jenis akun yang sama. <b>Butter Auth</b> (Google, email, dan lainnya) adalah yang paling mudah: 3Speak bisa memposting untukmu, dan kamu menyetujui aksi dompet seperti transfer secara terpisah. <b>Hive Keychain</b>, <b>HiveSigner</b>, <b>HiveAuth</b>, <b>PeakVault</b>, dan <b>Ledger</b> adalah dompet Hive: kunci tetap ada padamu dan kamu menyetujui setiap aksi sendiri. Pilih yang paling kamu suka."
+    },
+    "lostKeys": {
+      "q": "Aku kehilangan kunci atau kata sandi. Lalu bagaimana?",
+      "a": "Kunci yang hilang tidak bisa dipulihkan oleh siapa pun, bahkan oleh 3Speak, jadi simpan salinan kuncimu di tempat yang aman. Kalau kamu masih punya master password atau owner key, kamu bisa menambahkan akunmu lagi ke dompet dengan itu. Kalau kuncimu benar-benar hilang, kirim pesan kepada kami di <discord>Discord</discord> dan kami akan membuka pendaftaran untukmu agar kamu bisa membuat akun baru. Kalau akunmu diambil alih orang lain, pemulihan akun Hive bisa membantu dalam 30 hari: tanyakan kepada kami di <discord>Discord</discord> dan kami akan memandumu langkah demi langkah."
+    },
+    "creatorsEarn": {
+      "q": "Bagaimana kreator mendapatkan penghasilan?",
+      "a": "Dengan dua cara. Saat orang memberi upvote pada videomu, video itu mengumpulkan reward yang dibayarkan sekali, sekitar 7 hari setelah kamu menerbitkannya, dalam HBD dan Hive Power. Dan saat iklan tayang di videomu, kamu mendapat bagian dari pendapatannya, yang bisa kamu bagi dengan komunitas tempat kamu memposting jika kamu mau."
+    },
+    "viewersEarn": {
+      "q": "Apakah penonton juga bisa mendapatkan penghasilan?",
+      "a": "Ya. Aktifkan <b>Reward penonton</b> di Pengaturan (ikon roda gigi) di bagian <b>Iklan & reward</b>, dan kamu mendapat bagian dari pendapatan iklan untuk video yang kamu tonton. Komentarmu bisa mendapatkan reward saat orang memberinya upvote, dan memberi upvote lebih awal pada video bagus juga memberimu sebagian dari reward-nya. Semua ini membutuhkan akun Hive-mu sendiri."
+    },
+    "tokens": {
+      "q": "Apa itu HIVE, HBD, dan Hive Power?",
+      "a": "<b>HIVE</b> adalah mata uang utama Hive dan bisa diperdagangkan di exchange. <b>HBD</b> (Hive Backed Dollars) dirancang agar nilainya tetap dekat dengan 1 dolar AS dan memberi bunga saat kamu memindahkannya ke tabungan. <b>Hive Power</b> adalah HIVE yang kamu stake: membuat vote-mu lebih bernilai dan memberimu lebih banyak Resource Credits, dan mengubahnya kembali menjadi HIVE butuh 13 minggu. Ketiganya ada di <b>Dompet</b>-mu."
+    },
+    "vpRc": {
+      "q": "Apa itu Voting Power dan Resource Credits?",
+      "a": "Kamu bisa melihat keduanya sebagai meteran di menu profilmu. <b>Voting Power</b> berkurang sedikit setiap kali kamu upvote dan terisi kembali dengan sendirinya dalam sekitar 5 hari: semakin penuh, semakin bernilai vote-mu berikutnya. <b>Resource Credits</b> membayar aksi seperti memposting, berkomentar, dan vote, jadi kamu tidak pernah membayar biaya. Ini juga terisi kembali dengan sendirinya, dan semakin banyak Hive Power, semakin banyak pula Resource Credits-mu. Kalau sebuah aksi gagal karena Resource Credits-mu habis, tunggu sebentar lalu coba lagi."
+    },
+    "formats": {
+      "q": "Apa yang bisa aku unggah, dan seberapa besar file-nya?",
+      "a": "Video dalam format MP4, MOV, AVI, atau WMV, maksimal 5 GB per video. Video vertikal hingga {{shortMinutes}} menit bisa diterbitkan sebagai <b>Shorts</b>, yang muncul di feed geser. Kamu juga bisa menerbitkan musik, audio, dan podcast. Semuanya dimulai dari tombol <b>Unggah</b> di bagian atas."
+    },
+    "import": {
+      "q": "Bisakah aku mengimpor video YouTube atau TikTok-ku?",
+      "a": "Bisa. Buka <importLink>Impor video</importLink> di menu profil dan pindahkan videomu dari YouTube, TikTok, dan platform lainnya. Judul, deskripsi, tag, dan thumbnail diisi otomatis untukmu, dan kamu bisa mengimpor banyak video sekaligus. Kamu menautkan dan memverifikasi channel-mu terlebih dahulu, supaya kami tahu itu milikmu. Impor membutuhkan akun Hive-mu sendiri.",
+      "aSoon": "Impor langsung dari YouTube dan TikTok akan segera hadir. Sampai saat itu, unduh videomu lalu unggah dengan tombol <b>Unggah</b> di bagian atas."
+    },
+    "edit": {
+      "q": "Bisakah aku mengedit video setelah diterbitkan?",
+      "a": "Bisa. Buka videonya dan pilih <b>Edit</b>: kamu bisa mengubah judul, deskripsi, tag, thumbnail, dan tanda NSFW kapan saja. Untuk sebagian besar video, kamu bahkan bisa memasang file baru dengan <b>Ganti video</b>, dan video tetap mempertahankan jumlah tayangan dan komentarnya."
+    },
+    "processing": {
+      "q": "Kenapa videoku masih diproses?",
+      "a": "Setelah diunggah, setiap video dikonversi ke beberapa kualitas agar bisa diputar dengan lancar di koneksi apa pun. Biasanya ini butuh beberapa menit, dan lebih lama untuk video yang panjang atau sangat besar. Sementara itu kamu boleh menutup halaman: video akan muncul di channel-mu begitu siap."
+    },
+    "live": {
+      "q": "Bisakah aku melakukan siaran langsung?",
+      "a": "Bisa. Buka <b>Studio Siaran</b> dari menu unggah di bagian atas. Kamu bisa mengajak tamu ke panggung, siaran dari OBS kalau mau, dan rekamannya tetap ada di channel-mu setelahnya.",
+      "aSoon": "Siaran langsung sedang diuji bersama sekelompok kecil kreator. Kami akan mengumumkannya begitu dibuka untuk semua orang."
+    },
+    "communities": {
+      "q": "Apa itu komunitas?",
+      "a": "Komunitas adalah grup yang berkumpul karena minat yang sama, seperti game, musik, atau traveling. Bergabunglah dengan yang kamu suka di halaman <b>Grup</b> dan video mereka akan muncul di feed-mu. Saat mengunggah, kamu bisa memposting ke sebuah komunitas agar videomu ditemukan orang yang tepat. Dengan akun Hive, kamu juga bisa membuat komunitasmu sendiri."
+    },
+    "report": {
+      "q": "Bagaimana cara melaporkan video atau pengguna?",
+      "a": "Gunakan <b>Laporkan</b> pada video, Shorts, komentar, atau channel yang ingin kamu laporkan. Kamu harus masuk terlebih dahulu, dan tim kami meninjau setiap laporan."
+    },
+    "nsfw": {
+      "q": "Apakah konten NSFW diperbolehkan?",
+      "a": "Konten dewasa diperbolehkan selama ditandai <b>NSFW</b>, baik saat mengunggah maupun nanti dengan mengedit videonya. Video yang ditandai disembunyikan dari feed dan pencarian bagi semua orang yang belum mengaktifkan <b>Tampilkan konten NSFW</b> di Pengaturan di bagian <b>Konten</b>. Konten ilegal tidak pernah diperbolehkan."
+    },
+    "ai": {
+      "q": "Apakah konten buatan AI diperbolehkan?",
+      "a": "Video dan Shorts buatan AI diperbolehkan selama kamu menandainya dengan jujur, misalnya di tag atau deskripsi. Konten ini mendapat label <b>AI</b> dan disembunyikan dari feed dan pencarian bagi semua orang yang belum menonaktifkan <b>Sembunyikan video buatan AI</b> di Pengaturan di bagian <b>Konten</b>."
+    },
+    "deleteVideos": {
+      "q": "Bisakah saya menghapus video saya?",
+      "a": "Tidak sepenuhnya: videomu adalah postingan di Hive, dan Hive menyimpan setiap postingan selamanya. Tapi kamu bisa menyembunyikannya. Buka videonya, pilih <b>Edit</b> lalu ubah ke <b>Tidak publik</b>: video hilang dari feed dan pencarian dan ditandai sebagai tidak publik di profilmu, tapi siapa pun yang punya tautan langsungnya tetap bisa menontonnya. Kamu juga bisa mengubah judul dan deskripsinya kapan saja."
+    },
+    "myData": {
+      "q": "Bisakah saya mendapatkan salinan data saya?",
+      "a": "Bisa. Di Pengaturan (ikon roda gigi), buka <b>Tentang / Versi</b>, masuk ke <b>Datamu</b> lalu pilih <b>Dapatkan dataku</b>. Kami mengirimkan semua yang disimpan 3Speak tentang kamu di database kami sendiri dalam bentuk file, paling lambat dalam satu bulan. Postingan, komentar, dan vote kamu di Hive memang sudah publik dan bisa dibaca di aplikasi Hive mana pun."
+    },
+    "deleteData": {
+      "q": "Bisakah saya meminta 3Speak menghapus data saya?",
+      "a": "Bisa. Di Pengaturan (ikon roda gigi), buka <b>Tentang / Versi</b>, masuk ke <b>Datamu</b> lalu pilih <b>Hapus data akunku</b>. Kami menghapus semua yang disimpan 3Speak tentang kamu di database kami sendiri dan berhenti menampilkan kontenmu di 3Speak, paling lambat dalam satu bulan. Postinganmu di Hive sendiri tidak bisa kami hapus. Kamu hanya bisa menghapus postingan sendiri selama postingan itu belum punya balasan dan upvote, dan meski begitu postingan itu tetap tersimpan di riwayat Hive."
+    },
+    "advertise": {
+      "q": "Bagaimana cara beriklan di 3Speak?",
+      "a": "Buka <advertiseLink>Pasang Iklan</advertiseLink> untuk memesan iklan produk atau layananmu, atau untuk mempromosikan video dan channel-mu sendiri. Kamu memilih di mana dan seberapa sering iklanmu tayang, membayar dari dompet Hive-mu, dan memantau hasilnya di statistik kampanye. Pemesanan membutuhkan akun Hive."
+    },
+    "install": {
+      "q": "Bisakah aku menginstal 3Speak sebagai aplikasi?",
+      "a": "Bisa, tanpa app store. Di Android, ketuk <b>Instal Aplikasi</b> di menu atau terima tawaran instal dari browser-mu. Di iPhone, buka 3speak.tv di Safari, ketuk Bagikan lalu <b>Tambahkan ke Layar Utama</b>. Di komputer, gunakan ikon instal di bilah alamat browser-mu."
+    },
+    "languages": {
+      "q": "Bisakah aku memakai 3Speak dalam bahasaku?",
+      "a": "Bisa. 3Speak tersedia dalam 21 bahasa: pilih bahasamu di Pengaturan di bagian <b>Umum</b>. Orang-orang dari komunitas memeriksa dan memperbaiki terjemahannya, jadi kalau kamu menemukan kesalahan atau ingin membantu, beri tahu kami di <discord>Discord</discord>."
+    },
+    "help": {
+      "q": "Di mana aku bisa mendapatkan bantuan?",
+      "a": "Bergabunglah dengan kami di <discord>Discord</discord> atau <telegram>Telegram</telegram>: tim dan komunitas menjawab pertanyaan di sana. Untuk berita terbaru, ikuti 3Speak di <x>X</x>."
+    }
+  },
+  "linkCopied": "Link ke pertanyaan ini disalin",
+  "copyLink": "Salin link ke pertanyaan ini",
+  "more": {
+    "title": "Masih punya pertanyaan?",
+    "text": "Tanyakan kepada kami di <discord>Discord</discord> atau <telegram>Telegram</telegram>, atau baca lebih lanjut <aboutLink>tentang 3Speak</aboutLink>."
+  }
+}

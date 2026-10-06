@@ -11,28 +11,6 @@
       "q8": "Kuna mstari mwembamba kati ya uhuru wa kujieleza na matamshi ya chuki. Uhuru wa kujieleza huhimiza mjadala, ilhali matamshi ya chuki huchochea vurugu.",
       "q9": "Uhuru wa kujieleza unamaanisha kwamba hutawafanyia watu jambo kwa sababu ya maoni waliyonayo, maoni wanayoyatoa, au maneno wanayosema au kuandika."
     },
-    "faq": {
-      "what": {
-        "question": "3Speak ni nini?",
-        "answer": "3Speak ni mahali ambapo watayarishaji wa maudhui wanamiliki moja kwa moja mali zao kwenye tovuti na jumuiya zao. Kwa kutumia teknolojia ya blockchain, umiliki wa mali na jumuiya hizi ni wa mtayarishaji na mtumiaji, si wa 3Speak. Kwa hivyo zinaweza kuhamishiwa kwenye programu nyingine zinazotumia teknolojia ya blockchain. Hii inamaanisha kwamba tusipohudumia jumuiya na watayarishaji kwa njia bora zaidi, wanaweza kuchukua mali walizozalisha na kuzihamishia kwenye programu nyingine. Matokeo yake ni kwamba 3Speak inastahimili udhibiti, haiwezi kukunyang'anya mali zako wala kufuta jumuiya zako."
-      },
-      "upvote": {
-        "question": "Kwa nini sipigiwi kura na 3Speak?",
-        "answer": "3Speak hupiga kura kwa hiari yetu wenyewe na hatufuati vigezo maalum. Njia bora ya kuvutia umakini wetu ni kupakia maudhui ya ubora wa juu na kuleta hadhira na jumuiya kwenye 3Speak."
-      },
-      "missing": {
-        "question": "Kwa nini baadhi ya video zangu hazionekani kwenye mlisho wa mpya?",
-        "answer": "Tunakuruhusu kupakia video nyingi kadiri unavyotaka! Hii inamaanisha kwamba wakati mwingine mtumiaji mmoja angeweza kujaza milisho kwa maudhui yake tu. Ili kuzuia hili, tunapunguza idadi ya video za mtayarishaji mmoja zinazoweza kuonyeshwa kwa kila upakiaji."
-      },
-      "creator": {
-        "question": "Ninawezaje kuwa mtayarishaji wa maudhui?",
-        "answer": "Njia ya haraka zaidi ya kupata akaunti ya Hive ni kubonyeza kitufe cha \"Jisajili\" kwenye paneli ya urambazaji na kufuata maelekezo. (usipoteze funguo zako!). Kisha utahitaji kuingia kwa akaunti yako ya Hive na kubofya \"studio ya mtayarishaji\" / pakia. Uko tayari kuanza!"
-      },
-      "rewards": {
-        "question": "Ninawezaje kupata zawadi kwa kutoa maoni?",
-        "answer": "Ili kupata zawadi, unahitaji akaunti ya blockchain ya Hive. Unaweza kupata moja bure kutoka Hive (https://signup.hive.io), kununua mwongozo wa mtumiaji wa Hive, au kumwomba mtumiaji mwingine wa Hive akupe moja. Ukishapata akaunti, ingia kwa HiveSigner na utoe ufunguo wako wa ACTIVE unapoingia mara ya kwanza. Kisha unaweza kuchapisha maoni yanayoweza kupata zawadi za sarafu za kidijitali."
-      }
-    },
     "hero": {
       "tagline1": "LINDA MAUDHUI YAKO",
       "tagline2": "WEKA JUMUIYA YAKO KWENYE TOKENI",
@@ -115,7 +93,8 @@
     },
     "faqSection": {
       "title": "Maswali yanayoulizwa mara kwa mara",
-      "subtitle": "Kila kitu unachohitaji kujua kuhusu 3Speak"
+      "subtitle": "Kila kitu unachohitaji kujua kuhusu 3Speak",
+      "cta": "Soma maswali yanayoulizwa mara kwa mara"
     },
     "quotesTitle": "Sauti za uhuru",
     "cta": {

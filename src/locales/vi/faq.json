@@ -1,0 +1,125 @@
+{
+  "title": "Câu hỏi thường gặp",
+  "subtitle": "Bạn mới đến với 3Speak? Đây là câu trả lời cho những câu hỏi mọi người hỏi chúng tôi nhiều nhất.",
+  "groups": {
+    "start": "Bắt đầu",
+    "earning": "Kiếm thưởng",
+    "uploading": "Tải lên",
+    "community": "Cộng đồng và an toàn",
+    "more": "Quảng cáo và hơn thế nữa"
+  },
+  "items": {
+    "what": {
+      "q": "3Speak là gì?",
+      "a": "3Speak là một nền tảng video nơi kênh của bạn thuộc về chính bạn. Video, bình luận và người theo dõi của bạn nằm trên tài khoản Hive của riêng bạn, không phải trên máy chủ của 3Speak, nên không ai có thể lấy chúng đi. Cả nhà sáng tạo lẫn người xem đều có thể kiếm phần thưởng khi sử dụng."
+    },
+    "watchFree": {
+      "q": "Tôi có cần tài khoản để xem không?",
+      "a": "Không. Xem video là miễn phí và không cần tài khoản. Bạn chỉ cần tài khoản để tải lên, bình luận, vote, theo dõi kênh và kiếm phần thưởng."
+    },
+    "signup": {
+      "q": "Làm sao để tạo tài khoản?",
+      "a": "Nhấn <b>Đăng ký</b> ở phía trên và tiếp tục bằng Google, email hoặc một cách khác mà Butter Auth (dịch vụ đăng nhập 3Speak sử dụng) cung cấp. Hoàn toàn miễn phí và chỉ mất khoảng một phút. Tài khoản mới bắt đầu bằng một giai đoạn làm quen ngắn: bạn có thể xem, tải lên và bình luận ngay, còn vote, gửi tip và kiếm thưởng sẽ mở khi bạn hoàn thành giai đoạn này và có tài khoản Hive của riêng mình."
+    },
+    "hive": {
+      "q": "Hive là gì, và tôi có cần hiểu về nó không?",
+      "a": "Hive là một mạng lưới mở lưu trữ tài khoản, bài đăng, lượt vote và phần thưởng. Mạng này đã hoạt động từ năm 2016, và vào năm 2020 cộng đồng đã giúp nó độc lập khỏi mọi công ty. 3Speak là một trong nhiều ứng dụng xây dựng trên đó, nên cùng một tài khoản cũng dùng được trong các ứng dụng Hive khác. Bạn không cần hiểu những điều này để dùng 3Speak: chỉ cần đăng nhập, xem, đăng bài và bình luận."
+    },
+    "loginTypes": {
+      "q": "Butter Auth, Keychain, HiveSigner: khác nhau thế nào?",
+      "a": "Đây là những cách khác nhau để đăng nhập vào cùng một loại tài khoản. <b>Butter Auth</b> (Google, email và nhiều cách khác) là dễ nhất: nó cho phép 3Speak đăng bài thay bạn, còn các thao tác ví như chuyển tiền thì bạn xác nhận riêng. <b>Hive Keychain</b>, <b>HiveSigner</b>, <b>HiveAuth</b>, <b>PeakVault</b> và <b>Ledger</b> là các ví Hive: khóa của bạn luôn ở bên bạn và bạn tự xác nhận mọi thao tác. Hãy chọn cách bạn thích."
+    },
+    "lostKeys": {
+      "q": "Tôi bị mất khóa hoặc mật khẩu. Giờ phải làm sao?",
+      "a": "Không ai có thể khôi phục khóa đã mất, kể cả 3Speak, vì vậy hãy lưu một bản sao khóa của bạn ở nơi an toàn. Nếu bạn vẫn còn mật khẩu chính (master password) hoặc khóa owner, bạn có thể dùng nó để thêm lại tài khoản vào ví. Nếu khóa của bạn đã mất hẳn, hãy nhắn cho chúng tôi trên <discord>Discord</discord>, chúng tôi sẽ mở khóa đăng ký để bạn tạo tài khoản mới. Nếu ai đó đã chiếm tài khoản của bạn, tính năng khôi phục tài khoản của Hive có thể giúp trong vòng 30 ngày: hãy hỏi chúng tôi trên <discord>Discord</discord> và chúng tôi sẽ hướng dẫn bạn từng bước."
+    },
+    "creatorsEarn": {
+      "q": "Nhà sáng tạo kiếm tiền như thế nào?",
+      "a": "Có hai cách. Khi mọi người upvote video của bạn, video sẽ tích lũy phần thưởng và được trả một lần, khoảng 7 ngày sau khi bạn đăng, bằng HBD và Hive Power. Và khi quảng cáo chạy trên video của bạn, bạn nhận được một phần doanh thu từ đó, và nếu muốn, bạn có thể chia sẻ với cộng đồng mà bạn đã đăng vào."
+    },
+    "viewersEarn": {
+      "q": "Người xem cũng kiếm được thưởng chứ?",
+      "a": "Có. Hãy bật <b>Phần thưởng người xem</b> trong Cài đặt (biểu tượng bánh răng) ở mục <b>Quảng cáo & phần thưởng</b>, và bạn sẽ nhận một phần doanh thu quảng cáo từ các video bạn xem. Bình luận của bạn cũng có thể nhận thưởng khi mọi người upvote, và upvote sớm những video hay cũng giúp bạn nhận một phần phần thưởng của chúng. Tất cả những điều này đều cần tài khoản Hive của riêng bạn."
+    },
+    "tokens": {
+      "q": "HIVE, HBD và Hive Power là gì?",
+      "a": "<b>HIVE</b> là đồng tiền chính của Hive và có thể giao dịch trên các sàn. <b>HBD</b> (Hive Backed Dollars) được thiết kế để giữ giá gần 1 đô la Mỹ và sinh lãi khi bạn chuyển vào tiết kiệm. <b>Hive Power</b> là HIVE bạn đã stake: nó làm lượt vote của bạn có giá trị hơn và cho bạn nhiều Resource Credits hơn, và đổi lại thành HIVE mất 13 tuần. Bạn có thể thấy cả ba trong <b>Ví</b> của mình."
+    },
+    "vpRc": {
+      "q": "Voting Power và Resource Credits là gì?",
+      "a": "Bạn thấy cả hai dưới dạng thanh đo trong menu hồ sơ. <b>Voting Power</b> giảm một chút sau mỗi lần upvote và tự hồi lại trong khoảng 5 ngày: càng đầy thì lượt vote tiếp theo của bạn càng có giá trị. <b>Resource Credits</b> chi trả cho các thao tác như đăng bài, bình luận và vote, nên bạn không bao giờ phải trả phí. Chúng cũng tự hồi lại, và càng nhiều Hive Power thì bạn càng có nhiều. Nếu một thao tác thất bại vì bạn hết Resource Credits, hãy đợi một lúc rồi thử lại."
+    },
+    "formats": {
+      "q": "Tôi có thể tải lên những gì, và tệp lớn tối đa bao nhiêu?",
+      "a": "Video định dạng MP4, MOV, AVI hoặc WMV, mỗi video tối đa 5 GB. Video dọc dài tối đa {{shortMinutes}} phút có thể đăng dưới dạng <b>Shorts</b>, xuất hiện trong bảng tin vuốt. Bạn cũng có thể đăng nhạc, âm thanh và podcast. Mọi thứ đều bắt đầu từ nút <b>Tải lên</b> ở phía trên."
+    },
+    "import": {
+      "q": "Tôi có thể nhập video YouTube hoặc TikTok của mình không?",
+      "a": "Có. Mở <importLink>Nhập video</importLink> trong menu hồ sơ và mang video của bạn sang từ YouTube, TikTok và các nền tảng khác. Tiêu đề, mô tả, thẻ và ảnh thu nhỏ được điền sẵn cho bạn, và bạn có thể nhập nhiều video cùng lúc. Trước tiên bạn liên kết và xác minh kênh của mình để chúng tôi biết đó là kênh của bạn. Nhập video cần tài khoản Hive của riêng bạn.",
+      "aSoon": "Tính năng nhập trực tiếp từ YouTube và TikTok sắp ra mắt. Trong lúc chờ, hãy tải video của bạn về máy rồi tải lên bằng nút <b>Tải lên</b> ở phía trên."
+    },
+    "edit": {
+      "q": "Tôi có thể chỉnh sửa video sau khi đăng không?",
+      "a": "Có. Mở video và chọn <b>Chỉnh sửa</b>: bạn có thể đổi tiêu đề, mô tả, thẻ, ảnh thu nhỏ và nhãn NSFW bất cứ lúc nào. Với hầu hết video, bạn còn có thể thay bằng tệp mới qua <b>Thay video</b>, và video vẫn giữ nguyên lượt xem và bình luận."
+    },
+    "processing": {
+      "q": "Tại sao video của tôi vẫn đang xử lý?",
+      "a": "Sau khi tải lên, mỗi video được chuyển đổi sang nhiều chất lượng khác nhau để phát mượt trên mọi kết nối. Việc này thường mất vài phút, và lâu hơn với video dài hoặc rất lớn. Trong lúc đó bạn có thể đóng trang: video sẽ xuất hiện trên kênh của bạn ngay khi sẵn sàng."
+    },
+    "live": {
+      "q": "Tôi có thể phát trực tiếp không?",
+      "a": "Có. Mở <b>Studio phát trực tiếp</b> từ menu Tải lên ở phía trên. Bạn có thể mời khách lên sân khấu, phát từ OBS nếu muốn, và bản ghi sẽ được giữ lại trên kênh của bạn sau đó.",
+      "aSoon": "Phát trực tiếp hiện đang được thử nghiệm với một nhóm nhỏ nhà sáng tạo. Chúng tôi sẽ thông báo ngay khi tính năng mở cho mọi người."
+    },
+    "communities": {
+      "q": "Cộng đồng là gì?",
+      "a": "Cộng đồng là các nhóm xoay quanh một sở thích chung, như chơi game, âm nhạc hay du lịch. Tham gia những cộng đồng bạn thích trên trang <b>Nhóm</b> và video của họ sẽ xuất hiện trong bảng tin của bạn. Khi tải lên, bạn có thể đăng vào một cộng đồng để đúng người tìm thấy video của bạn. Với tài khoản Hive, bạn cũng có thể tạo cộng đồng của riêng mình."
+    },
+    "report": {
+      "q": "Làm sao để báo cáo một video hoặc người dùng?",
+      "a": "Dùng <b>Báo cáo</b> trên video, Shorts, bình luận hoặc kênh mà bạn muốn báo cáo. Bạn cần đăng nhập, và đội ngũ của chúng tôi xem xét mọi báo cáo."
+    },
+    "nsfw": {
+      "q": "Nội dung NSFW có được phép không?",
+      "a": "Nội dung người lớn được phép, miễn là được đánh dấu <b>NSFW</b>, khi tải lên hoặc sau đó bằng cách chỉnh sửa video. Video đã đánh dấu sẽ bị ẩn khỏi bảng tin và tìm kiếm với tất cả những ai chưa bật <b>Hiển thị nội dung NSFW</b> trong Cài đặt ở mục <b>Nội dung</b>. Nội dung vi phạm pháp luật không bao giờ được phép."
+    },
+    "ai": {
+      "q": "Nội dung do AI tạo có được phép không?",
+      "a": "Video và Shorts do AI tạo được phép, miễn là bạn đánh dấu trung thực, ví dụ trong thẻ hoặc mô tả. Chúng có nhãn <b>AI</b> và bị ẩn khỏi bảng tin và tìm kiếm với tất cả những ai chưa tắt <b>Ẩn video do AI tạo</b> trong Cài đặt ở mục <b>Nội dung</b>."
+    },
+    "deleteVideos": {
+      "q": "Tôi có thể xóa video của mình không?",
+      "a": "Không hoàn toàn: video của bạn là bài đăng trên Hive, nơi lưu mọi bài đăng vĩnh viễn. Nhưng bạn có thể ẩn video. Mở video, chọn <b>Chỉnh sửa</b> và chuyển sang <b>Không công khai</b>: video sẽ biến mất khỏi bảng tin và kết quả tìm kiếm, được đánh dấu là không công khai trên trang cá nhân của bạn, còn ai có đường link trực tiếp vẫn xem được. Bạn cũng có thể chỉnh sửa tiêu đề và mô tả bất cứ lúc nào."
+    },
+    "myData": {
+      "q": "Tôi có thể nhận bản sao dữ liệu của mình không?",
+      "a": "Có. Trong Cài đặt (biểu tượng bánh răng), mở <b>Giới thiệu / Phiên bản</b>, vào <b>Dữ liệu của bạn</b> và chọn <b>Lấy dữ liệu của tôi</b>. Chúng tôi sẽ gửi cho bạn một tệp chứa mọi thứ 3Speak lưu về bạn trong cơ sở dữ liệu của chính mình, chậm nhất trong vòng một tháng. Bài đăng, bình luận và lượt bình chọn của bạn trên Hive vốn đã công khai và có thể đọc trong bất kỳ ứng dụng Hive nào."
+    },
+    "deleteData": {
+      "q": "Tôi có thể yêu cầu 3Speak xóa dữ liệu của mình không?",
+      "a": "Có. Trong Cài đặt (biểu tượng bánh răng), mở <b>Giới thiệu / Phiên bản</b>, vào <b>Dữ liệu của bạn</b> và chọn <b>Xóa dữ liệu tài khoản của tôi</b>. Chúng tôi sẽ xóa mọi thứ 3Speak lưu về bạn trong cơ sở dữ liệu của chính mình và ngừng hiển thị nội dung của bạn trên 3Speak, chậm nhất trong vòng một tháng. Chúng tôi không thể xóa các bài đăng của bạn trên chính Hive. Bạn chỉ có thể tự gỡ một bài đăng khi nó chưa có phản hồi và lượt upvote nào, và ngay cả khi đó nó vẫn còn trong lịch sử của Hive."
+    },
+    "advertise": {
+      "q": "Làm sao để quảng cáo trên 3Speak?",
+      "a": "Mở <advertiseLink>Quảng cáo</advertiseLink> để đặt quảng cáo cho sản phẩm hoặc dịch vụ của bạn, hoặc để quảng bá video và kênh của chính bạn. Bạn chọn quảng cáo chạy ở đâu và bao lâu một lần, thanh toán từ ví Hive của bạn và theo dõi kết quả trong thống kê chiến dịch. Đặt quảng cáo cần tài khoản Hive."
+    },
+    "install": {
+      "q": "Tôi có thể cài 3Speak như một ứng dụng không?",
+      "a": "Có, không cần cửa hàng ứng dụng. Trên Android, nhấn <b>Cài ứng dụng</b> trong menu hoặc chấp nhận lời nhắc cài đặt của trình duyệt. Trên iPhone, mở 3speak.tv trong Safari, nhấn Chia sẻ rồi chọn <b>Thêm vào MH chính</b>. Trên máy tính, dùng biểu tượng cài đặt trong thanh địa chỉ của trình duyệt."
+    },
+    "languages": {
+      "q": "Tôi có thể dùng 3Speak bằng ngôn ngữ của mình không?",
+      "a": "Có. 3Speak có sẵn 21 ngôn ngữ: hãy chọn ngôn ngữ của bạn trong Cài đặt ở mục <b>Chung</b>. Các thành viên cộng đồng kiểm tra và cải thiện bản dịch, nên nếu bạn thấy lỗi hoặc muốn giúp, hãy cho chúng tôi biết trên <discord>Discord</discord>."
+    },
+    "help": {
+      "q": "Tôi có thể nhận trợ giúp ở đâu?",
+      "a": "Tham gia cùng chúng tôi trên <discord>Discord</discord> hoặc <telegram>Telegram</telegram>: đội ngũ và cộng đồng sẽ trả lời câu hỏi ở đó. Để cập nhật tin tức, hãy theo dõi 3Speak trên <x>X</x>."
+    }
+  },
+  "linkCopied": "Đã sao chép liên kết đến câu hỏi này",
+  "copyLink": "Sao chép liên kết đến câu hỏi này",
+  "more": {
+    "title": "Vẫn còn thắc mắc?",
+    "text": "Hãy hỏi chúng tôi trên <discord>Discord</discord> hoặc <telegram>Telegram</telegram>, hoặc đọc thêm <aboutLink>về 3Speak</aboutLink>."
+  }
+}

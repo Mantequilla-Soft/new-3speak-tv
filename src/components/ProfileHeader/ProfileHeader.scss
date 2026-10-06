@@ -61,22 +61,6 @@
     position: relative;
     z-index: 2;
 
-    // The `aside` slot (linked channels): a column on the card's right edge,
-    // level with the bottom of the identity panel, below the action buttons.
-    // Phones keep the centred layout, so there it is a centred row underneath.
-    .header-aside {
-      position: absolute;
-      right: 1rem;
-      bottom: 1.6rem;
-      z-index: 3;
-
-      @include mix.respond(phone) {
-        position: static;
-        display: flex;
-        justify-content: center;
-        margin-top: 0.75rem;
-      }
-    }
     // Top padding is the visible band of cover image above the panel (the image
     // itself now spans the whole card, see .profile-header). On a phone top and
     // bottom match so the panel sits centred in the card.
@@ -109,6 +93,32 @@
         align-self: flex-start;
         border-radius: 14px;
         padding: 0.75rem 1rem;
+
+        // The `aside` slot (linked channels) lives INSIDE this panel: a column
+        // on its right edge, with room reserved so it never sits on the text.
+        // Phones: a centred row at the bottom of the panel instead.
+        &.left-info--has-aside {
+          position: relative;
+          padding-right: 3.6rem;
+
+          @include mix.respond(phone) {
+            padding-right: 1rem;
+          }
+        }
+        .header-aside {
+          position: absolute;
+          top: 50%;
+          right: 0.9rem;
+          transform: translateY(-50%);
+
+          @include mix.respond(phone) {
+            position: static;
+            transform: none;
+            display: flex;
+            justify-content: center;
+            margin-top: 0.75rem;
+          }
+        }
 
         // Phone: the panel is the whole screen's worth of width anyway, so it
         // centres — avatar above the text, every row centred under it.

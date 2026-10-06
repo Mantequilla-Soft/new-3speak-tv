@@ -11,28 +11,6 @@
       "q8": "İfade özgürlüğü ile nefret söylemi arasında ince bir çizgi vardır. İfade özgürlüğü tartışmayı teşvik eder, nefret söylemi ise şiddete kışkırtır.",
       "q9": "İfade özgürlüğü, insanlara sahip oldukları ya da dile getirdikleri görüşler veya söyledikleri ya da yazdıkları sözler nedeniyle bir şey yapılmaması demektir."
     },
-    "faq": {
-      "what": {
-        "question": "3Speak nedir?",
-        "answer": "3Speak, içerik üreticilerinin sitedeki varlıklarına ve topluluklarına doğrudan sahip olduğu bir yerdir. Blokzincir teknolojisi sayesinde bu varlıkların ve toplulukların sahipliği 3Speak'e değil, içerik üreticisine ve kullanıcıya aittir. Bu yüzden blokzincir teknolojisi kullanan başka uygulamalara taşınabilirler. Yani topluluğa ve içerik üreticilerine en iyi şekilde hizmet etmezsek, ürettikleri varlıkları alıp başka bir uygulamaya geçebilirler. Sonuç olarak 3Speak sansüre dirençlidir, varlıklarını elinden alamaz ve topluluklarını silemez."
-      },
-      "upvote": {
-        "question": "3Speak neden bana upvote vermiyor?",
-        "answer": "3Speak kendi takdirine göre oy verir ve belirli bir kritere bağlı değildir. Dikkatimizi çekmenin en iyi yolu yüksek kaliteli içerik yüklemek ve 3Speak'e izleyici ve topluluk çekmektir."
-      },
-      "missing": {
-        "question": "Bazı videolarım neden yeni akışında görünmüyor?",
-        "answer": "İstediğin kadar video yüklemene izin veriyoruz! Bu da bazen tek bir kullanıcının akışları yalnızca kendi içeriğiyle doldurabileceği anlamına gelir. Bunu önlemek için her yüklemede tek bir içerik üreticisinden gösterilebilecek video sayısını sınırlıyoruz."
-      },
-      "creator": {
-        "question": "Nasıl içerik üreticisi olurum?",
-        "answer": "Hive hesabı edinmenin en hızlı yolu, gezinme panelindeki \"Kaydol\" düğmesine basıp talimatları izlemektir (anahtarlarını kaybetme!). Ardından Hive hesabınla giriş yapıp \"içerik stüdyosu\" / yükle'ye tıklaman gerekir. Her şey hazır, başlayabilirsin!"
-      },
-      "rewards": {
-        "question": "Yorum yaparak nasıl ödül kazanırım?",
-        "answer": "Ödül kazanmak için bir Hive blokzincir hesabına ihtiyacın var. Hive'dan (https://signup.hive.io) ücretsiz alabilir, bir Hive kullanıcı rehberi satın alabilir ya da başka bir Hive kullanıcısından sana hesap açmasını isteyebilirsin. Hesabın olduktan sonra Hivesigner ile giriş yap ve ilk girişte ACTIVE anahtarını gir. Ardından kripto para ödülü kazanabilecek yorumlar paylaşabilirsin."
-      }
-    },
     "hero": {
       "tagline1": "İÇERİĞİNİ KORU",
       "tagline2": "TOPLULUĞUNU TOKENLAŞTIR",
@@ -115,7 +93,8 @@
     },
     "faqSection": {
       "title": "Sıkça Sorulan Sorular",
-      "subtitle": "3Speak hakkında bilmen gereken her şey"
+      "subtitle": "3Speak hakkında bilmen gereken her şey",
+      "cta": "SSS'yi oku"
     },
     "quotesTitle": "Özgürlüğün Sesleri",
     "cta": {

@@ -35,7 +35,8 @@
       "verifyFailed": "Doğrulama başarısız",
       "stillPresent": "Hash hâlâ profilinde, önce onu kaldır.",
       "unlinkFailed": "Bağlantı kaldırılamadı",
-      "noSuchLink": "Kaldırılacak böyle bir bağlantı yok."
+      "noSuchLink": "Kaldırılacak böyle bir bağlantı yok.",
+      "alreadyLinkedOther": "Bu kanal zaten başka bir hesaba bağlı."
     },
     "confirmUnlink": "{{platform}} bağlantın kaldırılsın mı? Doğrulama hash'inin artık herkese açık profilinde olmadığından emin ol, yoksa bağlantı kaldırma reddedilir.",
     "removed": "Bağlantı kaldırıldı",

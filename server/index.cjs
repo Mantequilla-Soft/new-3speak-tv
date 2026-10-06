@@ -957,6 +957,52 @@ app.put('/api/warmup/contact', incubationLimiter, async (req, res) => {
   }
 })
 
+/* /api/warmup/social -- the optional warm-up task "link your YouTube, TikTok or
+ * Instagram". A warm-up user has no Hive account, so the checker keeps these links
+ * under their ButrAuth user id (warmup.cjs → checker /incubation/internal/social)
+ * and moves them to the Hive account at graduation. Independent of video import
+ * and of the profile link switches (VITE_SOCIAL_LINK_*): works on prod too.
+ * Identity ONLY from the proven session, never from the request. */
+async function warmupSocialUser(req, res) {
+  const session = await resolveButrSession(req, res)
+  const claims = session?.claims
+  if (!claims?.userId) { res.status(401).json({ error: 'Not signed in' }); return null }
+  if (!claims.incubation) {
+    res.status(409).json({ error: 'Your account is on Hive: link channels from your profile', reason: 'has_hive_account' })
+    return null
+  }
+  return claims.userId
+}
+app.get('/api/warmup/social', incubationLimiter, async (req, res) => {
+  try {
+    const userId = await warmupSocialUser(req, res); if (!userId) return
+    res.set('Cache-Control', 'no-store')
+    res.json(await require('./warmup.cjs').readSocial(userId))
+  } catch (err) {
+    console.error('[warmup-social] read failed:', err.message)
+    res.status(502).json({ error: 'Could not load your linked channels' })
+  }
+})
+for (const action of ['verify', 'unlink']) {
+  app.post(`/api/warmup/social/${action}`, incubationLimiter, async (req, res) => {
+    try {
+      const userId = await warmupSocialUser(req, res); if (!userId) return
+      const b = req.body || {}
+      if (typeof b.platform !== 'string' || typeof b.platform_username !== 'string' || !b.platform_username.trim()) {
+        return res.status(400).json({ error: 'platform and platform_username are required' })
+      }
+      const { status, data } = await require('./warmup.cjs').socialAction(action, userId, {
+        platform: b.platform.slice(0, 20), platform_username: b.platform_username.trim().slice(0, 200)
+      })
+      res.set('Cache-Control', 'no-store')
+      res.status([200, 400, 404, 409].includes(status) ? status : 502).json(data)
+    } catch (err) {
+      console.error(`[warmup-social] ${action} failed:`, err.message)
+      res.status(502).json({ error: 'Platform lookup failed.' })
+    }
+  })
+}
+
 // Picking a warm-up track that is not open for signup (warmup.cjs trackOpen).
 // Ahead of the SDK handler, which would accept any track it has goals for.
 app.put('/api/incubation/social/track', (req, res, next) => {
@@ -1794,7 +1840,13 @@ async function resolveAnnouncementUser(req, res) {
     const bearer = authHeader.startsWith('Bearer ') ? authHeader.slice(7).trim() : ''
     if (bearer) hiveUsername = await verifyHiveSignerToken(bearer)
   }
-  return hiveUsername ? hiveUsername.toLowerCase() : null
+  if (hiveUsername) return hiveUsername.toLowerCase()
+  // A warm-up user has no Hive name yet: vouch for their handle as `~handle`.
+  // Hive names cannot contain `~`, so this can never prove a Hive account, and a
+  // message addressed to one is never readable by a handle of the same spelling.
+  const session = await resolveButrSession(req, res)
+  const handle = session?.claims?.incubation && session.claims.handle
+  return handle ? `~${String(handle).toLowerCase()}` : null
 }
 
 function signVouch(parts) {

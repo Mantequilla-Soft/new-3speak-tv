@@ -7,6 +7,31 @@ import { t } from '../i18n';
 
 const client = axios.create({ baseURL: SOCIAL_VERIFIER_URL });
 
+// Warm-up users (no Hive account): the same three things through 3Speak's own
+// API (/api/warmup/social), which proves the session and keys the links by the
+// ButrAuth user id. Shapes match the Hive-user calls so the dialog can use either.
+const warmupApi = axios.create({ baseURL: THREESPEAK_API, withCredentials: true });
+export const warmupSocial = {
+  // → { code, platforms, links }
+  async load() {
+    const { data } = await warmupApi.get('/warmup/social');
+    return data;
+  },
+  async check({ platform, platform_username }) {
+    const { data } = await warmupApi.post('/warmup/social/verify', { platform, platform_username });
+    return data;
+  },
+  async unlink({ platform, platform_username }) {
+    try {
+      await warmupApi.post('/warmup/social/unlink', { platform, platform_username });
+      return { deleted: true };
+    } catch (err) {
+      if (err?.response?.status === 409 && err.response.data?.status === 'still_present') return { still_present: true };
+      throw err;
+    }
+  },
+};
+
 function buildMessage({ action, hive_username, platform, platform_username, timestamp }) {
   return [
     '3speak-social-verifier',

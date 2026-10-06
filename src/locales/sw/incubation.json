@@ -131,12 +131,8 @@
         "hint": "Video zozote. Inahesabiwa unapotazama kweli.",
         "why": "Kutazama kunaonyesha uko hapa kushiriki na si kuchapisha tu. Ni lengo ambalo watu wengi hulimaliza bila kujaribu.",
         "counts": {
-          "0": "Muda kwenye 3Speak yenyewe. Video ile ile iliyopachikwa kwenye tovuti nyingine haiwezi kuhesabiwa.",
           "1": "Mara moja kwa kila video. Kuitazama tena kunapandisha muda wake bora, hakuuongezi kamwe, na hakuna video moja inayoweza kutoa muda wote peke yake.",
-          "2": "Muda halisi wa kucheza, kwa hivyo kuongeza kasi ya video hakuadhibiwi na kuipunguza kasi hakurefushi saa.",
-          "3": "Kwenye skrini. Video iliyoachwa ikicheza kwenye kichupo cha nyuma haijengi saa.",
-          "4": "Si video zako mwenyewe.",
-          "5": "Hakuna kinachorekodiwa unapotazama katika hali ya faragha."
+          "4": "Si video zako mwenyewe."
         },
         "cta": "Tazama kitu"
       },
@@ -196,8 +192,26 @@
     "hideDetails": "Ficha maelezo",
     "showLeft": "Onyesha kilichobaki",
     "whatCounts": "Kinachohesabiwa",
+    "groups": {
+      "create": "Unda",
+      "watch": "Tazama na ushiriki",
+      "connect": "Pata watu wako",
+      "brand": "Chapa yako",
+      "time": "Ipe siku chache"
+    },
+    "goalDone": "Imekamilika",
     "reviewDone": "Yote yamekamilika. Timu itakagua chaneli yako na kukupandisha daraja. Hakuna zaidi cha kufanya.",
-    "reviewPending": "Ukishakamilisha yote haya, timu itakagua chaneli yako na kukupandisha daraja."
+    "reviewPending": "Ukishakamilisha yote haya, timu itakagua chaneli yako na kukupandisha daraja.",
+    "optional": {
+      "title": "Si lazima",
+      "social": {
+        "label": "Unganisha YouTube, TikTok au Instagram yako",
+        "hint": "Haihitajiki kwa ukaguzi, lakini inaonyesha watu wanaweza kukupata wapi kwingine.",
+        "linked": "Imeunganishwa: {{platforms}}",
+        "why": "Unaweka msimbo mfupi kwenye maelezo ya chaneli yako, tunaukagua, na chaneli inaonekana kwenye wasifu wako. Kipindi chako cha maandalizi kikiisha, kiungo kinahamia akaunti yako ya Hive.",
+        "cta": "Unganisha chaneli"
+      }
+    }
   },
   "navProgress": {
     "chooseTitle": "Tuambie nini kimekuleta 3Speak ili uone njia yako ya kupata akaunti ya Hive.",
@@ -305,6 +319,8 @@
       "graduated": "Sasa yuko kwenye Hive kama <userLink>@{{user}}</userLink>. Chochote kilicho hapa chini kilitengenezwa kabla ya hapo.",
       "advertiser": "Huu ni ukurasa wa chapa yako kwenye 3Speak. Kamilisha hatua zilizo hapa chini na timu itakagua chapa yako. Ikishaidhinishwa unapata akaunti ya Hive: hiyo ndiyo akaunti yako ya mtangazaji, unayotumia kuweka matangazo na kulipia.",
       "own": "Hivi ndivyo wengine wanavyokuona. Machapisho yako yanaishi kwenye 3Speak na bado hayako kwenye blockchain ya Hive, kwa hivyo hayapati zawadi. Hilo linabadilika utakapopata akaunti yako baada ya kukamilisha kazi zote zilizo hapa chini.",
+      "ownCreator": "Machapisho yako yanahifadhiwa katika hifadhi ya kipindi cha maandalizi, lakini yanaonekana na kuangaziwa kwenye jukwaa kuu. Yakiwa bado huko, hayapati zawadi bado. Hilo hubadilika unapopata akaunti yako, baada ya kukamilisha kazi zote hapa chini na kuhamisha video zako kwa hatua chache rahisi.",
+      "ownViewer": "Uko katika kipindi cha maandalizi. Maoni yako na unaowafuata vinahifadhiwa kwa sasa katika hifadhi ya kipindi cha maandalizi na havipati zawadi bado. Ukikamilisha kazi zote hapa chini, utapata akaunti yako ya Hive, na tangu hapo kila kitu kitaenda moja kwa moja kwenye jukwaa kuu.",
       "visitor": "Mgeni hapa, bado hayuko kwenye Hive. Machapisho haya yanaishi kwenye 3Speak, kwa hivyo kwa sasa hayapati zawadi. Mfuate na utoe maoni hata hivyo: kutiwa moyo mapema ndiko kunakomvusha mtu katika wiki zake za kwanza. Akipata akaunti yake ya Hive tutakujulisha, ili uweze kumfuata huko pia."
     },
     "tabs": {

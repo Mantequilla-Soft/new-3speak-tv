@@ -35,7 +35,8 @@
       "verifyFailed": "Uthibitishaji umeshindwa",
       "stillPresent": "Hash bado iko kwenye wasifu wako — iondoe kwanza.",
       "unlinkFailed": "Kutenganisha kumeshindwa",
-      "noSuchLink": "Hakuna kiungo kama hicho cha kuondoa."
+      "noSuchLink": "Hakuna kiungo kama hicho cha kuondoa.",
+      "alreadyLinkedOther": "Chaneli hii tayari imeunganishwa na akaunti nyingine."
     },
     "confirmUnlink": "Ondoa kiungo chako cha {{platform}}? Hakikisha hash ya uthibitishaji haipo tena kwenye wasifu wako wa umma, vinginevyo kutenganisha kutakataliwa.",
     "removed": "Kiungo kimeondolewa",

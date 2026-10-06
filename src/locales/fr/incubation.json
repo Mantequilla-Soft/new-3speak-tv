@@ -139,12 +139,8 @@
         "hint": "N'importe quelles vidéos. Compté pendant que vous regardez vraiment.",
         "why": "Regarder montre que vous êtes là pour participer, pas seulement pour publier. C'est l'objectif que la plupart des gens atteignent sans effort.",
         "counts": {
-          "0": "Le temps passé sur 3Speak même. La même vidéo intégrée sur un autre site ne compte pas.",
           "1": "Une fois par vidéo. Revoir une vidéo augmente son meilleur temps sans jamais s'y ajouter, et aucune vidéo ne peut à elle seule fournir la totalité.",
-          "2": "Temps de lecture réel : accélérer une vidéo n'est pas pénalisé et la ralentir n'allonge pas l'heure.",
-          "3": "À l'écran. Une vidéo laissée en lecture dans un onglet en arrière-plan ne compte pas.",
-          "4": "Pas vos propres vidéos.",
-          "5": "Rien n'est enregistré lorsque vous regardez en mode privé."
+          "4": "Pas vos propres vidéos."
         },
         "cta": "Regarder quelque chose"
       },
@@ -209,8 +205,26 @@
     "hideDetails": "Masquer les détails",
     "showLeft": "Voir ce qu'il reste",
     "whatCounts": "Ce qui compte",
+    "groups": {
+      "create": "Créer",
+      "watch": "Regarder et participer",
+      "connect": "Trouvez votre communauté",
+      "brand": "Votre marque",
+      "time": "Laissez passer quelques jours"
+    },
+    "goalDone": "Terminé",
     "reviewDone": "Tout est fait. L'équipe va examiner votre chaîne et vous faire passer sur Hive. Vous n'avez plus rien à faire.",
-    "reviewPending": "Une fois tout cela terminé, l'équipe examinera votre chaîne et vous fera passer sur Hive."
+    "reviewPending": "Une fois tout cela terminé, l'équipe examinera votre chaîne et vous fera passer sur Hive.",
+    "optional": {
+      "title": "Facultatif",
+      "social": {
+        "label": "Lie ton YouTube, TikTok ou Instagram",
+        "hint": "Pas nécessaire pour la vérification, mais cela montre où on peut aussi te trouver.",
+        "linked": "Lié : {{platforms}}",
+        "why": "Tu ajoutes un court code dans la bio de ta chaîne, nous le vérifions et la chaîne apparaît sur ton profil. À la fin de ton échauffement, le lien passe sur ton compte Hive.",
+        "cta": "Lier une chaîne"
+      }
+    }
   },
   "navProgress": {
     "chooseTitle": "Dites-nous ce qui vous amène sur 3Speak pour voir votre parcours vers un compte Hive.",
@@ -325,6 +339,8 @@
       "graduated": "Désormais sur Hive en tant que <userLink>@{{user}}</userLink>. Tout ce qui suit a été créé avant.",
       "advertiser": "Voici la page de votre marque sur 3Speak. Terminez les étapes ci-dessous et l'équipe examinera votre marque. Une fois approuvée, vous obtenez un compte Hive : c'est votre compte annonceur, celui avec lequel vous réservez et payez vos pubs.",
       "own": "Voici comment les autres vous voient. Vos publications vivent sur 3Speak et ne sont pas encore sur la blockchain Hive : elles ne rapportent donc pas de récompenses. Cela changera quand vous obtiendrez votre compte après avoir terminé toutes les tâches ci-dessous.",
+      "ownCreator": "Vos publications sont conservées dans un espace d'échauffement, mais elles sont visibles et mises en avant sur la plateforme principale. Tant qu'elles s'y trouvent, elles ne rapportent pas encore de récompenses. Cela change quand vous obtenez votre compte, après avoir terminé toutes les tâches ci-dessous et transféré vos vidéos en quelques étapes simples.",
+      "ownViewer": "Vous êtes en phase d'échauffement. Vos commentaires et abonnements sont conservés pour l'instant dans un espace d'échauffement et ne rapportent pas encore de récompenses. Une fois toutes les tâches ci-dessous terminées, vous obtenez votre compte Hive, et dès lors tout arrive directement sur la plateforme principale.",
       "visitor": "Nouveau ici, pas encore sur Hive. Ces publications vivent sur 3Speak et ne rapportent donc pas de récompenses pour l'instant. Suivez et commentez quand même : les encouragements du début aident à passer les premières semaines. Quand cette personne obtiendra son compte Hive, nous vous préviendrons pour que vous puissiez la suivre là-bas aussi."
     },
     "tabs": {

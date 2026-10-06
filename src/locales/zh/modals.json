@@ -35,7 +35,8 @@
       "verifyFailed": "验证失败",
       "stillPresent": "哈希仍在你的主页上——请先把它删除。",
       "unlinkFailed": "取消关联失败",
-      "noSuchLink": "没有可移除的关联。"
+      "noSuchLink": "没有可移除的关联。",
+      "alreadyLinkedOther": "这个频道已经关联到另一个账号。"
     },
     "confirmUnlink": "要移除你的 {{platform}} 关联吗？请确认验证哈希已不在你的公开主页上，否则取消关联会被拒绝。",
     "removed": "关联已移除",

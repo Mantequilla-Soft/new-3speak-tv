@@ -13,11 +13,11 @@
   "iosInstallHint": "Tippe auf <b>Teilen</b> und dann auf <b>Zum Home-Bildschirm</b>",
   "playlists": {
     "tooltip": "Playlists, die du gespeichert oder erstellt hast",
-    "label": "Playlists",
+    "label": "Playlisten",
     "watchLater": "Später ansehen",
     "watchLaterCount": "Später ansehen ({{n}})",
-    "watchHistory": "Wiedergabeverlauf",
-    "all": "Alle Playlists"
+    "watchHistory": "Verlauf",
+    "all": "Alle Playlisten"
   },
   "advertise": "Werben",
   "hidePages": "Seiten ausblenden",
@@ -31,6 +31,8 @@
     "rankingsTooltip": "Die Creator, die gerade am meisten verdienen und angesehen werden"
   },
   "aboutLink": "Über 3Speak",
+  "faqLink": "FAQ",
+  "faqAria": "Häufige Fragen",
   "profile": {
     "accountMenu": "Kontomenü",
     "myChannelAria": "Mein Kanal",

@@ -11,28 +11,6 @@
       "q8": "Manipis ang pagitan ng malayang pananalita at hate speech. Hinihikayat ng malayang pananalita ang debate, samantalang nag-uudyok ng karahasan ang hate speech.",
       "q9": "Ang kalayaan sa pananalita ay nangangahulugang hindi ka gagawa ng anuman laban sa mga tao dahil sa pananaw nila, sa pananaw na ipinapahayag nila, o sa mga salitang sinasabi o isinusulat nila."
     },
-    "faq": {
-      "what": {
-        "question": "Ano ang 3Speak?",
-        "answer": "Ang 3Speak ay lugar kung saan direktang pagmamay-ari ng mga content creator ang kanilang onsite assets at mga komunidad. Gamit ang blockchain technology, likas na pag-aari ng creator at ng user ang mga asset at komunidad na ito, hindi ng 3Speak. Kaya puwede itong ilipat sa ibang app na gumagamit ng blockchain technology. Ibig sabihin, kung hindi namin mapaglingkuran nang pinakamahusay ang komunidad at mga creator, puwede nilang dalhin ang mga asset na nabuo nila sa ibang app. Ang resulta: hindi kayang i-censor ang 3Speak, hindi nito makukuha ang mga asset mo, at hindi nito mabubura ang mga komunidad mo."
-      },
-      "upvote": {
-        "question": "Bakit hindi ako ina-upvote ng 3Speak?",
-        "answer": "Nagvo-vote ang 3Speak ayon sa sarili naming pasya at hindi sumusunod sa anumang tiyak na pamantayan. Ang pinakamagandang paraan para makuha ang atensyon namin ay mag-upload ng de-kalidad na content at magdala ng audience at mga komunidad sa 3Speak."
-      },
-      "missing": {
-        "question": "Bakit nawawala sa new feed ang ilan sa mga video ko?",
-        "answer": "Puwede kang mag-upload ng kahit ilang video! Kaya minsan, puwedeng mapuno ng isang user ang feeds ng sarili niyang content lang. Para maiwasan ito, nililimitahan namin ang bilang ng video ng iisang creator na puwedeng lumabas sa bawat load."
-      },
-      "creator": {
-        "question": "Paano ako magiging content creator?",
-        "answer": "Ang pinakamabilis na paraan para magkaroon ng Hive account ay pindutin ang \"Sign up\" button sa navigation panel at sundin ang mga instruction. (huwag mawala ang keys mo!). Pagkatapos, mag-log in gamit ang Hive account mo at i-click ang \"creator studio\" / upload. Handa ka na!"
-      },
-      "rewards": {
-        "question": "Paano ako kikita ng rewards sa pag-comment?",
-        "answer": "Para kumita ng rewards, kailangan mo ng Hive blockchain account. Puwede kang kumuha nang libre mula sa Hive (https://signup.hive.io), bumili ng Hive user guide, o magpabigay sa ibang Hive user. Kapag may account ka na, mag-login gamit ang Hivesigner at ibigay ang ACTIVE key mo sa unang login. Pagkatapos, puwede ka nang mag-post ng mga comment na puwedeng kumita ng cryptocurrency rewards."
-      }
-    },
     "hero": {
       "tagline1": "PROTEKTAHAN ANG CONTENT MO",
       "tagline2": "I-TOKENIZE ANG KOMUNIDAD MO",
@@ -115,7 +93,8 @@
     },
     "faqSection": {
       "title": "Mga Madalas Itanong",
-      "subtitle": "Lahat ng kailangan mong malaman tungkol sa 3Speak"
+      "subtitle": "Lahat ng kailangan mong malaman tungkol sa 3Speak",
+      "cta": "Basahin ang FAQ"
     },
     "quotesTitle": "Mga Tinig ng Kalayaan",
     "cta": {

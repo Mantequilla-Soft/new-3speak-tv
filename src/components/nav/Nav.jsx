@@ -8,7 +8,7 @@ import { IoCloudUploadSharp } from "react-icons/io5";
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import NavSearch from "./NavSearch";
-import { MdOutlineSearch, MdGraphicEq, MdPlaylistPlay, MdWatchLater, MdHistory, MdKeyboardArrowDown, MdAdd, MdHomeFilled, MdChevronRight, MdGroups, MdCampaign } from "react-icons/md";
+import { MdOutlineSearch, MdGraphicEq, MdPlaylistPlay, MdWatchLater, MdHistory, MdKeyboardArrowDown, MdAdd, MdHomeFilled, MdChevronRight, MdGroups, MdCampaign, MdHelpOutline } from "react-icons/md";
 import { FaMedal } from "react-icons/fa6";
 import { useMyPlaylists } from "../../hooks/useMyPlaylists";
 import ShortsIcon from "../icons/ShortsIcon";
@@ -470,7 +470,13 @@ function Nav({ toggleProfileNav, openLoginModal }) {
           <Link to="/discover" className="nav-mobile-discover" title={t('app.routes.discover')}>
             <MdOutlineSearch size={19} />
           </Link>
+          {/* Help for first-time visitors: a pill on desktop, a bare ? icon
+              on phones and tablets, where the About pill is hidden. */}
+          <Link to="/faq" className="nav-mobile-discover nav-guest-faq-icon" title={t('nav.faqAria')} aria-label={t('nav.faqAria')}>
+            <MdHelpOutline size={19} />
+          </Link>
           <Link to="/about" className="nav-guest-about">{t('nav.aboutLink')}</Link>
+          <Link to="/faq" className="nav-guest-about" aria-label={t('nav.faqAria')}>{t('nav.faqLink')}</Link>
           {/* No guest buttons until the stored session has been read: a logged-in
               refresh otherwise flashes Log in before the avatar replaces it. */}
           {authChecked && (<>

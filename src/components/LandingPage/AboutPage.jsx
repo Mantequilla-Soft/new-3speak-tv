@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Shield, Users, Zap, HelpCircle, ChevronDown, Video, MessageCircle } from 'lucide-react';
+import { Shield, Users, Zap, HelpCircle, Video, MessageCircle } from 'lucide-react';
 import './AboutPage.scss';
 import speak from "../../assets/image/3speak.png"
 // lucide-react v1 dropped brand icons; the X mark comes from react-icons, like
@@ -14,17 +14,12 @@ import hive from "../../assets/image/hive-1.jpeg"
 const AboutPage = () => {
   const { t } = useTranslation();
   const [isVisible, setIsVisible] = useState(false);
-  const [openFaq, setOpenFaq] = useState(null);
   const {   user,  } = useAppStore();
   const navigate = useNavigate()
 
   useEffect(() => {
     setIsVisible(true);
   }, []);
-
-  const toggleFaq = (index) => {
-    setOpenFaq(openFaq === index ? null : index);
-  };
 
   const iflogin = ()=>{
     
@@ -71,29 +66,6 @@ const AboutPage = () => {
     {
       text: t('pages.about.quotes.q9'),
       author: "Hugo L. Black"
-    }
-  ];
-
-  const faqs = [
-    {
-      question: t('pages.about.faq.what.question'),
-      answer: t('pages.about.faq.what.answer')
-    },
-    {
-      question: t('pages.about.faq.upvote.question'),
-      answer: t('pages.about.faq.upvote.answer')
-    },
-    {
-      question: t('pages.about.faq.missing.question'),
-      answer: t('pages.about.faq.missing.answer')
-    },
-    {
-      question: t('pages.about.faq.creator.question'),
-      answer: t('pages.about.faq.creator.answer')
-    },
-    {
-      question: t('pages.about.faq.rewards.question'),
-      answer: t('pages.about.faq.rewards.answer')
     }
   ];
 
@@ -320,26 +292,10 @@ const AboutPage = () => {
               {t('pages.about.faqSection.subtitle')}
             </p>
           </div>
-          <div>
-            {faqs.map((faq, index) => (
-              <div key={index} className="faq-item">
-                <button
-                  onClick={() => toggleFaq(index)}
-                  className="faq-button"
-                >
-                  <h3 className="faq-question">{faq.question}</h3>
-                  <ChevronDown 
-                    size={24} 
-                    className={`faq-icon ${openFaq === index ? 'rotated' : ''}`}
-                  />
-                </button>
-                {openFaq === index && (
-                  <div className="faq-answer">
-                    <p>{faq.answer}</p>
-                  </div>
-                )}
-              </div>
-            ))}
+          {/* The full FAQ lives on its own page (/faq), so it can grow and be
+              linked to question by question. */}
+          <div className="faq-cta-wrap">
+            <Link to="/faq" className="faq-cta">{t('pages.about.faqSection.cta')}</Link>
           </div>
         </div>
       </section>

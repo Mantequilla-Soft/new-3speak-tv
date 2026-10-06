@@ -9,7 +9,7 @@
     "needKeychain": "Für Überweisungen brauchst du die Keychain-Erweiterung"
   },
   "header": {
-    "mine": "MEINE Wallet",
+    "mine": "MEIN Wallet",
     "ofUser": "Wallet von {{user}}"
   },
   "assets": "Assets",

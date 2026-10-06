@@ -139,12 +139,8 @@
         "hint": "Quaisquer vídeos. Conta enquanto você está realmente assistindo.",
         "why": "Assistir mostra que você está aqui para participar, e não só para publicar. É a meta que a maioria das pessoas cumpre sem nem tentar.",
         "counts": {
-          "0": "Tempo no próprio 3Speak. O mesmo vídeo incorporado em outro site não conta.",
           "1": "Uma vez por vídeo. Assistir de novo aumenta o melhor tempo dele, nunca soma, e nenhum vídeo sozinho pode completar tudo.",
-          "2": "Tempo real de reprodução, então acelerar um vídeo não é punido e desacelerar não estica a hora.",
-          "3": "Na tela. Um vídeo tocando em uma aba em segundo plano não conta para a hora.",
-          "4": "Não vale com seus próprios vídeos.",
-          "5": "Nada é registrado enquanto você assiste no modo privado."
+          "4": "Não vale com seus próprios vídeos."
         },
         "cta": "Assistir a algo"
       },
@@ -209,8 +205,26 @@
     "hideDetails": "Ocultar os detalhes",
     "showLeft": "Mostrar o que falta",
     "whatCounts": "O que conta",
+    "groups": {
+      "create": "Crie",
+      "watch": "Assista e participe",
+      "connect": "Encontre sua turma",
+      "brand": "Sua marca",
+      "time": "Dê alguns dias"
+    },
+    "goalDone": "Concluído",
     "reviewDone": "Tudo pronto. A equipe vai analisar seu canal e liberar sua conta. Você não precisa fazer mais nada.",
-    "reviewPending": "Quando você concluir tudo isso, a equipe vai analisar seu canal e liberar sua conta."
+    "reviewPending": "Quando você concluir tudo isso, a equipe vai analisar seu canal e liberar sua conta.",
+    "optional": {
+      "title": "Opcional",
+      "social": {
+        "label": "Vincule seu YouTube, TikTok ou Instagram",
+        "hint": "Não é necessário para a revisão, mas mostra onde mais as pessoas podem te encontrar.",
+        "linked": "Vinculado: {{platforms}}",
+        "why": "Você coloca um código curto na bio do seu canal, nós verificamos e o canal aparece no seu perfil. Quando seu aquecimento terminar, o vínculo passa para sua conta Hive.",
+        "cta": "Vincular um canal"
+      }
+    }
   },
   "navProgress": {
     "chooseTitle": "Conte o que traz você ao 3Speak para ver seu caminho até uma conta da Hive.",
@@ -325,6 +339,8 @@
       "graduated": "Agora na Hive como <userLink>@{{user}}</userLink>. O que está abaixo foi feito antes disso.",
       "advertiser": "Esta é a página da sua marca no 3Speak. Conclua as etapas abaixo e a equipe analisa sua marca. Depois de aprovada, você recebe uma conta da Hive: essa é sua conta de anunciante, com a qual você reserva e paga os anúncios.",
       "own": "É assim que os outros veem você. Seus posts ficam no 3Speak e ainda não estão na blockchain Hive, então não rendem recompensas. Isso muda quando você receber sua conta, depois de concluir todas as tarefas abaixo.",
+      "ownCreator": "Suas publicações ficam em um espaço de aquecimento, mas são visíveis e destacadas na plataforma principal. Enquanto estiverem nesse espaço, ainda não geram recompensas. Isso muda quando você recebe sua conta, depois de concluir todas as tarefas abaixo e transferir seus vídeos em poucos passos simples.",
+      "ownViewer": "Você está no aquecimento. Seus comentários e follows ficam por enquanto em um espaço de aquecimento e ainda não geram recompensas. Quando você concluir todas as tarefas abaixo, recebe sua conta da Hive e, a partir daí, tudo vai direto para a plataforma principal.",
       "visitor": "Novo por aqui, ainda não está na Hive. Estes posts ficam no 3Speak, então por enquanto não rendem recompensas. Siga e comente mesmo assim: o incentivo no começo é o que ajuda alguém a passar pelas primeiras semanas. Quando a pessoa receber a conta da Hive, avisaremos você, para que possa segui-la lá também."
     },
     "tabs": {

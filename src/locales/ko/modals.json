@@ -35,7 +35,8 @@
       "verifyFailed": "인증 실패",
       "stillPresent": "해시가 아직 프로필에 있어요. 먼저 삭제하세요.",
       "unlinkFailed": "연결 해제 실패",
-      "noSuchLink": "삭제할 연결이 없어요."
+      "noSuchLink": "삭제할 연결이 없어요.",
+      "alreadyLinkedOther": "이 채널은 이미 다른 계정에 연결되어 있어요."
     },
     "confirmUnlink": "{{platform}} 연결을 삭제할까요? 인증 해시가 공개 프로필에 더 이상 없는지 확인하세요. 그렇지 않으면 연결 해제가 거부돼요.",
     "removed": "연결을 삭제했어요",

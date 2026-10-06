@@ -11,28 +11,6 @@
       "q8": "There is a fine line between free speech and hate speech. Free speech encourages debate whereas hate speech incites violence.",
       "q9": "Freedom of speech means that you shall not do something to people either for the views they have, or the views they express, or the words they speak or write."
     },
-    "faq": {
-      "what": {
-        "question": "What is 3Speak?",
-        "answer": "3Speak is a place where content creators directly own their onsite assets and their communities. Using blockchain technology, the ownership of these assets and communities are intrinsic to the creator and the user, not 3 Speak. They are therefore transferable to other apps that use blockchain technology. This means that if we do not serve the community and creators in the best possible way, they can take the assets they have generated and move them to another app. The result is that 3Speak is censorship resistant, cannot take your assets away or delete your communities."
-      },
-      "upvote": {
-        "question": "Why am I not upvoted by 3Speak?",
-        "answer": "3Speak will vote at our own discretion and do not follow any specific criteria. The best way to attract our attention is to upload high-quality content and draw audiences and communities to 3speak."
-      },
-      "missing": {
-        "question": "Why are some of my videos missing from the new feed?",
-        "answer": "We allow you to upload as many videos as you want! This means that sometimes one user could fill up feeds with just their content, to combat this, we limit the videos by any one creator that can be displayed per load."
-      },
-      "creator": {
-        "question": "How do I become a content creator?",
-        "answer": "The quickest way to get a hive account is to press the \"Sign up\" button in the navigation panel and follow the instructions. (don't lose your keys!). Next you will need to log in with your hive account and click on the \"creator studio\" / upload. You're all set up and ready to go!"
-      },
-      "rewards": {
-        "question": "How do I earn rewards for commenting?",
-        "answer": "In order to earn rewards, you need a Hive blockchain account. You can get one for free from Hive (https://signup.hive.io), purchase a Hive user guide, or get another Hive user to give you one. Once you have an account, login with Hivesigner and provide your ACTIVE key on first login. Then you can post comments which can earn cryptocurrency rewards."
-      }
-    },
     "hero": {
       "tagline1": "PROTECT YOUR CONTENT",
       "tagline2": "TOKENISE YOUR COMMUNITY",
@@ -115,7 +93,8 @@
     },
     "faqSection": {
       "title": "Frequently Asked Questions",
-      "subtitle": "Everything you need to know about 3Speak"
+      "subtitle": "Everything you need to know about 3Speak",
+      "cta": "Read the FAQ"
     },
     "quotesTitle": "Voices of Freedom",
     "cta": {

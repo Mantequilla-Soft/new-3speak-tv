@@ -35,7 +35,8 @@
       "verifyFailed": "Pumalya ang verification",
       "stillPresent": "Nasa profile mo pa ang hash — alisin muna ito.",
       "unlinkFailed": "Pumalya ang pag-unlink",
-      "noSuchLink": "Walang ganoong link na aalisin."
+      "noSuchLink": "Walang ganoong link na aalisin.",
+      "alreadyLinkedOther": "Naka-link na ang channel na ito sa ibang account."
     },
     "confirmUnlink": "Alisin ang {{platform}} link mo? Siguraduhing wala na ang verification hash sa public profile mo, kung hindi ay tatanggihan ang pag-unlink.",
     "removed": "Inalis ang link",

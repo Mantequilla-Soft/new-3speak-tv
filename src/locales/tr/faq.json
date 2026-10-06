@@ -1,0 +1,125 @@
+{
+  "title": "Sıkça sorulan sorular",
+  "subtitle": "3Speak'te yeni misin? İşte bize en çok sorulan soruların cevapları.",
+  "groups": {
+    "start": "Başlarken",
+    "earning": "Kazanç",
+    "uploading": "Yükleme",
+    "community": "Topluluk ve güvenlik",
+    "more": "Reklam ve daha fazlası"
+  },
+  "items": {
+    "what": {
+      "q": "3Speak nedir?",
+      "a": "3Speak, kanalının sana ait olduğu bir video platformudur. Videoların, yorumların ve takipçilerin bir 3Speak sunucusunda değil, kendi Hive hesabında durur, bu yüzden kimse onları senden alamaz. Hem içerik üreticileri hem de izleyiciler platformu kullanırken ödül kazanabilir."
+    },
+    "watchFree": {
+      "q": "İzlemek için hesap gerekiyor mu?",
+      "a": "Hayır. İzlemek ücretsizdir ve hesap gerektirmez. Hesaba yalnızca video yüklemek, yorum yapmak, oy vermek, kanalları takip etmek ve ödül kazanmak için ihtiyacın var."
+    },
+    "signup": {
+      "q": "Nasıl hesap oluştururum?",
+      "a": "Üstteki <b>Kaydol</b>'a dokun ve Google, e-posta ya da 3Speak'in kullandığı giriş hizmeti Butter Auth'un sunduğu başka bir seçenekle devam et. Ücretsizdir ve yaklaşık bir dakika sürer. Yeni hesaplar kısa bir ısınma süreciyle başlar: hemen izleyebilir, video yükleyebilir ve yorum yapabilirsin; oy verme, bahşiş ve kazanç ise bu süreci tamamlayıp kendi Hive hesabını aldığında açılır."
+    },
+    "hive": {
+      "q": "Hive nedir, bunu anlamam gerekiyor mu?",
+      "a": "Hive; hesapları, gönderileri, oyları ve ödülleri saklayan açık bir ağdır. 2016'dan beri çalışıyor ve 2020'de topluluğu onu herhangi bir şirketten bağımsız hale getirdi. 3Speak bunun üzerine kurulmuş birçok uygulamadan biridir, bu yüzden aynı hesap diğer Hive uygulamalarında da çalışır. 3Speak'i kullanmak için bunların hiçbirini anlaman gerekmez: giriş yap, izle, paylaş ve yorum yap, o kadar."
+    },
+    "loginTypes": {
+      "q": "Butter Auth, Keychain, HiveSigner: farkları ne?",
+      "a": "Bunlar aynı tür hesaba giriş yapmanın farklı yollarıdır. <b>Butter Auth</b> (Google, e-posta ve diğerleri) en kolayıdır: 3Speak'in senin yerine paylaşım yapmasına izin verir, transfer gibi cüzdan işlemlerini ise ayrıca onaylarsın. <b>Hive Keychain</b>, <b>HiveSigner</b>, <b>HiveAuth</b>, <b>PeakVault</b> ve <b>Ledger</b> birer Hive cüzdanıdır: anahtarların sende kalır ve her işlemi kendin onaylarsın. Hangisini istersen onu seç."
+    },
+    "lostKeys": {
+      "q": "Anahtarlarımı veya şifremi kaybettim. Şimdi ne yapmalıyım?",
+      "a": "Kaybolan anahtarları hiç kimse, 3Speak bile geri getiremez; bu yüzden anahtarlarının bir kopyasını güvenli bir yerde sakla. Ana şifren (master password) veya sahip anahtarın (owner key) hâlâ duruyorsa, onunla hesabını bir cüzdana yeniden ekleyebilirsin. Anahtarların tamamen kaybolduysa <discord>Discord</discord>'da bize yaz; yeni bir hesap oluşturabilmen için kaydını açalım. Hesabını başka biri ele geçirdiyse, Hive'ın hesap kurtarma özelliği 30 gün içinde yardımcı olabilir: <discord>Discord</discord>'da bize yaz, sana adım adım yol gösterelim."
+    },
+    "creatorsEarn": {
+      "q": "İçerik üreticileri nasıl kazanır?",
+      "a": "İki şekilde. İnsanlar videona oy verdiğinde video ödül toplar ve bu ödüller, yayınladıktan yaklaşık 7 gün sonra tek seferde HBD ve Hive Power olarak ödenir. Videolarında reklam gösterildiğinde de reklam gelirinden pay alırsın; istersen bu payı videoyu paylaştığın toplulukla bölüşebilirsin."
+    },
+    "viewersEarn": {
+      "q": "İzleyiciler de kazanabilir mi?",
+      "a": "Evet. Ayarlar'da (dişli simgesi) <b>Reklamlar ve ödüller</b> altında <b>İzleyici ödülleri</b>'ni aç; izlediğin videolar için reklam gelirinden pay kazanırsın. Yorumların, insanlar onlara oy verdiğinde ödül kazanabilir; iyi videolara erken oy vermek de sana onların ödüllerinden bir pay kazandırır. Bunların hepsi için kendi Hive hesabın gerekir."
+    },
+    "tokens": {
+      "q": "HIVE, HBD ve Hive Power nedir?",
+      "a": "<b>HIVE</b>, Hive'ın ana para birimidir ve borsalarda alınıp satılabilir. <b>HBD</b> (Hive Backed Dollars) 1 ABD dolarına yakın kalacak şekilde tasarlanmıştır ve birikime aktardığında faiz kazandırır. <b>Hive Power</b>, stake ettiğin HIVE'dır: oylarının değerini artırır, sana daha fazla Resource Credits verir ve tekrar HIVE'a çevrilmesi 13 hafta sürer. Üçünü de <b>Cüzdan</b>'ında bulabilirsin."
+    },
+    "vpRc": {
+      "q": "Oy Gücü ve Resource Credits nedir?",
+      "a": "İkisini de profil menündeki göstergelerde görürsün. <b>Oy Gücü</b> her oyda biraz azalır ve yaklaşık 5 gün içinde kendiliğinden dolar: ne kadar doluysa bir sonraki oyun o kadar değerli olur. <b>Resource Credits</b>, paylaşım, yorum ve oy verme gibi işlemlerin bedelini karşılar, bu yüzden hiç ücret ödemezsin. Onlar da kendiliğinden dolar ve daha fazla Hive Power sana daha fazlasını verir. Bir işlem Resource Credits bittiği için başarısız olursa biraz bekle ve tekrar dene."
+    },
+    "formats": {
+      "q": "Neler yükleyebilirim, dosyalar ne kadar büyük olabilir?",
+      "a": "MP4, MOV, AVI veya WMV biçiminde, her biri en fazla 5 GB olan videolar. {{shortMinutes}} dakikaya kadar olan dikey videolar, kaydırmalı akışta görünen <b>Shorts</b> olarak yayınlanabilir. Müzik, ses ve podcast de yayınlayabilirsin. Her şey üstteki <b>Yükle</b> düğmesinden başlar."
+    },
+    "import": {
+      "q": "YouTube veya TikTok videolarımı içe aktarabilir miyim?",
+      "a": "Evet. Profil menüsünden <importLink>Videoları içe aktar</importLink>'ı aç ve videolarını YouTube, TikTok ve diğer platformlardan taşı. Başlık, açıklama, etiketler ve küçük resim senin için doldurulur ve aynı anda birçok video içe aktarabilirsin. Önce kanalını bağlayıp doğrularsın, böylece kanalın sana ait olduğunu biliriz. İçe aktarmak için kendi Hive hesabın gerekir.",
+      "aSoon": "Doğrudan YouTube ve TikTok'tan içe aktarma yakında geliyor. O zamana kadar videonu indir ve üstteki <b>Yükle</b> düğmesiyle yükle."
+    },
+    "edit": {
+      "q": "Yayınladıktan sonra videoyu düzenleyebilir miyim?",
+      "a": "Evet. Videoyu aç ve <b>Düzenle</b>'yi seç: başlığı, açıklamayı, etiketleri, küçük resmi ve NSFW işaretini istediğin zaman değiştirebilirsin. Çoğu videoda <b>Videoyu değiştir</b> ile yeni bir dosya bile koyabilirsin; video izlenmelerini ve yorumlarını korur."
+    },
+    "processing": {
+      "q": "Videom neden hâlâ işleniyor?",
+      "a": "Yüklemeden sonra her video, her bağlantıda akıcı oynaması için birkaç farklı kaliteye dönüştürülür. Bu genellikle birkaç dakika sürer, uzun veya çok büyük videolarda daha uzun sürer. Bu arada sayfayı kapatabilirsin: video hazır olur olmaz kanalında görünür."
+    },
+    "live": {
+      "q": "Canlı yayın yapabilir miyim?",
+      "a": "Evet. Üstteki yükleme menüsünden <b>Yayın Stüdyosu</b>'nu aç. Konukları sahneye alabilir, istersen OBS ile yayın yapabilirsin; kayıt da sonrasında kanalında kalır.",
+      "aSoon": "Canlı yayın şu anda küçük bir içerik üreticisi grubuyla test ediliyor. Herkese açıldığı anda duyuracağız."
+    },
+    "communities": {
+      "q": "Topluluklar nedir?",
+      "a": "Topluluklar oyun, müzik veya seyahat gibi ortak bir ilgi alanı etrafındaki gruplardır. <b>Gruplar</b> sayfasında sevdiklerine katıl, videoları akışlarında görünsün. Yükleme yaparken videonu bir toplulukta paylaşabilirsin, böylece doğru kişiler onu bulur. Bir Hive hesabınla kendi topluluğunu da kurabilirsin."
+    },
+    "report": {
+      "q": "Bir videoyu veya kullanıcıyı nasıl bildiririm?",
+      "a": "Bildirmek istediğin videoda, Shorts'ta, yorumda veya kanalda <b>Bildir</b>'i kullan. Giriş yapmış olman gerekir ve ekibimiz her bildirimi inceler."
+    },
+    "nsfw": {
+      "q": "NSFW içeriğe izin veriliyor mu?",
+      "a": "Yetişkin içeriğine, yüklerken ya da sonradan videoyu düzenleyerek <b>NSFW</b> olarak işaretlendiği sürece izin verilir. İşaretli videolar, Ayarlar'da <b>İçerik</b> altında <b>NSFW içeriği göster</b>'i açmamış herkes için akışlarda ve aramada gizlenir. Yasa dışı içeriğe asla izin verilmez."
+    },
+    "ai": {
+      "q": "Yapay zekâ ile üretilmiş içeriğe izin veriliyor mu?",
+      "a": "Yapay zekâ ile üretilmiş videolara ve Shorts'a, örneğin etiketlerde ya da açıklamada dürüstçe işaretlediğin sürece izin verilir. Bir <b>YZ</b> etiketi alırlar ve Ayarlar'da <b>İçerik</b> altında <b>Yapay zekâ ile üretilmiş videoları gizle</b>'yi kapatmamış herkes için akışlarda ve aramada gizlenirler."
+    },
+    "deleteVideos": {
+      "q": "Videolarımı silebilir miyim?",
+      "a": "Tamamen değil: videoların Hive üzerindeki gönderilerdir ve Hive her gönderiyi kalıcı olarak saklar. Ama bir videoyu gizleyebilirsin. Videoyu aç, <b>Düzenle</b>'yi seç ve <b>Liste dışı</b> olarak ayarla: video akışlardan ve aramadan kaybolur, profilinde liste dışı olarak işaretlenir, ama doğrudan bağlantıya sahip olan herkes onu izlemeye devam edebilir. Başlığını ve açıklamasını da istediğin zaman düzenleyebilirsin."
+    },
+    "myData": {
+      "q": "Verilerimin bir kopyasını alabilir miyim?",
+      "a": "Evet. Ayarlar'da (dişli simgesi) <b>Hakkında / Sürüm</b>'ü aç, <b>Verilerin</b> bölümüne git ve <b>Verilerimi al</b>'ı seç. 3Speak'in kendi veritabanımızda senin hakkında sakladığı her şeyi en geç bir ay içinde sana bir dosya olarak göndeririz. Hive'daki gönderilerin, yorumların ve oyların zaten herkese açıktır ve herhangi bir Hive uygulamasında okunabilir."
+    },
+    "deleteData": {
+      "q": "3Speak'ten verilerimi silmesini isteyebilir miyim?",
+      "a": "Evet. Ayarlar'da (dişli simgesi) <b>Hakkında / Sürüm</b>'ü aç, <b>Verilerin</b> bölümüne git ve <b>Hesap verilerimi sil</b>'i seç. 3Speak'in kendi veritabanımızda senin hakkında sakladığı her şeyi siler ve içeriğini 3Speak'te göstermeyi bırakırız, en geç bir ay içinde. Hive'ın kendisindeki gönderilerini biz silemeyiz. Bir gönderiyi ancak hiç yanıtı ve olumlu oyu yokken kendin kaldırabilirsin, o zaman bile gönderi Hive'ın geçmişinde kalır."
+    },
+    "advertise": {
+      "q": "3Speak'te nasıl reklam veririm?",
+      "a": "Ürünün veya hizmetin için reklam rezervasyonu yapmak ya da kendi videolarını ve kanalını tanıtmak için <advertiseLink>Reklam ver</advertiseLink>'i aç. Reklamının nerede ve ne sıklıkta gösterileceğini sen seçer, Hive cüzdanından ödersin ve sonuçları kampanya istatistiklerinde takip edersin. Rezervasyon için bir Hive hesabı gerekir."
+    },
+    "install": {
+      "q": "3Speak'i uygulama olarak yükleyebilir miyim?",
+      "a": "Evet, uygulama mağazası olmadan. Android'de menüdeki <b>Uygulamayı Yükle</b>'ye dokun veya tarayıcının yükleme önerisini kabul et. iPhone'da 3speak.tv'yi Safari'de aç, Paylaş'a ve ardından <b>Ana Ekrana Ekle</b>'ye dokun. Bilgisayarda tarayıcının adres çubuğundaki yükleme simgesini kullan."
+    },
+    "languages": {
+      "q": "3Speak'i kendi dilimde kullanabilir miyim?",
+      "a": "Evet. 3Speak 21 dilde kullanılabilir: dilini Ayarlar'da <b>Genel</b> altından seç. Çevirileri topluluktan kişiler kontrol edip iyileştiriyor; bir hata görürsen veya yardım etmek istersen <discord>Discord</discord>'da bize söyle."
+    },
+    "help": {
+      "q": "Nereden yardım alabilirim?",
+      "a": "<discord>Discord</discord> veya <telegram>Telegram</telegram>'da bize katıl: ekip ve topluluk orada soruları yanıtlıyor. Haberler için 3Speak'i <x>X</x>'te takip et."
+    }
+  },
+  "linkCopied": "Bu sorunun bağlantısı kopyalandı",
+  "copyLink": "Bu sorunun bağlantısını kopyala",
+  "more": {
+    "title": "Aklında hâlâ bir soru mu var?",
+    "text": "<discord>Discord</discord> veya <telegram>Telegram</telegram>'da bize sor ya da <aboutLink>3Speak hakkında</aboutLink> daha fazlasını oku."
+  }
+}
