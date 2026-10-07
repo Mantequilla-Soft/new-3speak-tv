@@ -57,12 +57,18 @@
   "transcript": {
     "title": "ข้อความถอดเสียง",
     "languageAria": "ภาษาของข้อความถอดเสียง",
+    "languageLoadFailed": "ไม่สามารถโหลดภาษานี้ได้",
     "copyingWithTimes": "คัดลอกพร้อมไทม์โค้ด",
     "copyingTextOnly": "คัดลอกเฉพาะข้อความ",
     "timecodes": "ไทม์โค้ด",
     "copyWithTimes": "คัดลอกข้อความถอดเสียงพร้อมไทม์โค้ด",
     "copyText": "คัดลอกข้อความถอดเสียง",
     "jumpTo": "ข้ามไปที่ {{time}}",
+    "search": "ค้นหาในบทถอดความ",
+    "searchPlaceholder": "ค้นหาในบทถอดความ…",
+    "closeSearch": "ปิดการค้นหา",
+    "searchResults_other": "{{count}} รายการ",
+    "searchNoResults": "ไม่พบบรรทัดที่ตรงกัน",
     "hide": "ซ่อนข้อความถอดเสียง",
     "show": "แสดงข้อความถอดเสียง",
     "showWithCount_other": "แสดงข้อความถอดเสียง ({{count}} บรรทัด)"

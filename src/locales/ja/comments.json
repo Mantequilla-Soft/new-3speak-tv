@@ -57,12 +57,18 @@
   "transcript": {
     "title": "文字起こし",
     "languageAria": "文字起こしの言語",
+    "languageLoadFailed": "この言語を読み込めませんでした。",
     "copyingWithTimes": "タイムコード付きでコピー",
     "copyingTextOnly": "テキストのみコピー",
     "timecodes": "タイムコード",
     "copyWithTimes": "文字起こしをタイムコード付きでコピー",
     "copyText": "文字起こしのテキストをコピー",
     "jumpTo": "{{time}} に移動",
+    "search": "文字起こしを検索",
+    "searchPlaceholder": "文字起こしを検索…",
+    "closeSearch": "検索を閉じる",
+    "searchResults_other": "{{count}} 件",
+    "searchNoResults": "一致する行はありません",
     "hide": "文字起こしを非表示",
     "show": "文字起こしを表示",
     "showWithCount_other": "文字起こしを表示（{{count}} 行）"

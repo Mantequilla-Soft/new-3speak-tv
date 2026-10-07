@@ -57,12 +57,18 @@
   "transcript": {
     "title": "文字稿",
     "languageAria": "文字稿语言",
+    "languageLoadFailed": "无法加载此语言。",
     "copyingWithTimes": "复制时包含时间码",
     "copyingTextOnly": "仅复制文字",
     "timecodes": "时间码",
     "copyWithTimes": "复制带时间码的文字稿",
     "copyText": "复制文字稿",
     "jumpTo": "跳转到 {{time}}",
+    "search": "搜索文字稿",
+    "searchPlaceholder": "在文字稿中搜索…",
+    "closeSearch": "关闭搜索",
+    "searchResults_other": "{{count}} 个结果",
+    "searchNoResults": "没有匹配的内容",
     "hide": "隐藏文字稿",
     "show": "显示文字稿",
     "showWithCount_other": "显示文字稿（{{count}} 行）"

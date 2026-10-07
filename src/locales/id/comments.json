@@ -57,12 +57,18 @@
   "transcript": {
     "title": "Transkrip",
     "languageAria": "Bahasa transkrip",
+    "languageLoadFailed": "Bahasa ini tidak dapat dimuat.",
     "copyingWithTimes": "Menyalin dengan kode waktu",
     "copyingTextOnly": "Menyalin teks saja",
     "timecodes": "Kode waktu",
     "copyWithTimes": "Salin transkrip dengan kode waktu",
     "copyText": "Salin teks transkrip",
     "jumpTo": "Lompat ke {{time}}",
+    "search": "Cari di transkrip",
+    "searchPlaceholder": "Cari di transkrip…",
+    "closeSearch": "Tutup pencarian",
+    "searchResults_other": "{{count}} hasil",
+    "searchNoResults": "Tidak ada baris yang cocok",
     "hide": "Sembunyikan transkrip",
     "show": "Tampilkan transkrip",
     "showWithCount_other": "Tampilkan transkrip ({{count}} baris)"

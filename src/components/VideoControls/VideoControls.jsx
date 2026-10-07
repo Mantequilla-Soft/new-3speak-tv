@@ -1,5 +1,6 @@
 import { useState, useCallback, useRef, useEffect, useMemo } from 'react';
 import useSeekPreview from '../../hooks/useSeekPreview';
+import { chapterAt } from '../../utils/timestamps';
 import { createPortal } from 'react-dom';
 import { useTranslation } from 'react-i18next';
 import { FaPlay, FaPause, FaExpand, FaCompress, FaVolumeUp, FaVolumeMute, FaVideo, FaCog } from 'react-icons/fa';
@@ -76,6 +77,10 @@ function VideoControls({
   onSeek,
   isVisible,
   markers,
+  // [{ start, end, title }] in content seconds, from a timestamp list in the
+  // description. Drawn as gaps in the track; the title shows on hover and next
+  // to the clock.
+  chapters,
   replayHeatmap,
   previewVideoId,
   getPlaybackHeight,
@@ -101,14 +106,20 @@ function VideoControls({
   onPlaybackRateChange,
   onHoldControls,
   onReleaseControls,
+  // Bumped by a long press on the video: open the speed menu, centred on the
+  // video rather than under its button (which on a phone is tucked in the gear).
+  speedMenuRequest = 0,
 }) {
   const { t } = useTranslation();
   const resolvedMarkers = markers || [];
+  const chapterList = duration > 0 && chapters?.length > 1 ? chapters : null;
 
   const [hovering, setHovering] = useState(false);
   const [qualityMenuOpen, setQualityMenuOpen] = useState(false);
   const qualityMenuRef = useRef(null);
   const [speedMenuOpen, setSpeedMenuOpen] = useState(false);
+  const [speedMenuCentered, setSpeedMenuCentered] = useState(false);
+  const rootRef = useRef(null);
   const speedMenuRef = useRef(null);
   const speedPortalRef = useRef(null);
   const [subtitleMenuOpen, setSubtitleMenuOpen] = useState(false);
@@ -263,6 +274,17 @@ function VideoControls({
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, [qualityMenuOpen]);
 
+  useEffect(() => {
+    if (!speedMenuRequest || !onPlaybackRateChange) return;
+    setQualityMenuOpen(false);
+    setSubtitleMenuOpen(false);
+    setMobileSettingsOpen(false);
+    setSpeedMenuCentered(true);
+    setSpeedMenuOpen(true);
+  }, [speedMenuRequest]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  useEffect(() => { if (!speedMenuOpen) setSpeedMenuCentered(false); }, [speedMenuOpen]);
+
   // Close speed menu when clicking outside
   useEffect(() => {
     if (!speedMenuOpen) return;
@@ -274,7 +296,13 @@ function VideoControls({
       }
     };
     document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
+    // The video surface swallows touchstart (preventDefault), so on a phone a tap
+    // there never becomes a mousedown; listen for the touch itself as well.
+    document.addEventListener('touchstart', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener('touchstart', handleClickOutside);
+    };
   }, [speedMenuOpen]);
 
   // Close subtitle menu when clicking outside
@@ -355,7 +383,25 @@ function VideoControls({
 
   const subtitlePortalStyle = subtitleMenuOpen ? getPortalStyle(subtitleMenuRef) : null;
   const qualityPortalStyle = qualityMenuOpen ? getPortalStyle(qualityMenuRef) : null;
-  const speedPortalStyle = speedMenuOpen ? getPortalStyle(speedMenuRef) : null;
+  const speedPortalStyle = !speedMenuOpen ? null : (() => {
+    if (!speedMenuCentered || isFullscreen) return getPortalStyle(speedMenuRef);
+    // Centred over the video, so it shows wherever the hold happened and even
+    // while the bar (and the button it normally hangs from) is hidden.
+    const box = rootRef.current?.parentElement?.getBoundingClientRect();
+    if (!box) return getPortalStyle(speedMenuRef);
+    return {
+      position: 'fixed',
+      top: box.top + box.height / 2,
+      left: box.left + box.width / 2,
+      right: 'auto',
+      bottom: 'auto',
+      transform: 'translate(-50%, -50%)',
+      margin: 0,
+      maxHeight: Math.max(120, box.height - 16),
+      overflowY: 'auto',
+      zIndex: 10000,
+    };
+  })();
 
   const handleMarkerClick = useCallback((e, time, index) => {
     e.stopPropagation();
@@ -373,6 +419,7 @@ function VideoControls({
 
   return (
     <div
+      ref={rootRef}
       className={`video-controls${show ? ' visible' : ''}`}
       onMouseEnter={() => { if (!isTouchDevice) setHovering(true); }}
       onMouseLeave={() => { if (!isTouchDevice) setHovering(false); }}
@@ -394,6 +441,9 @@ function VideoControls({
               style={{ left: `${preview.leftPx}px`, width: `${previewWidth}px` }}
             >
               <video ref={previewVideoRef} className="vc-seek-preview-video" muted playsInline disablePictureInPicture />
+              {chapterList && chapterAt(chapterList, preview.time)?.title && (
+                <div className="vc-seek-preview-chapter">{chapterAt(chapterList, preview.time).title}</div>
+              )}
               <div className="vc-seek-preview-time">{fmtPreviewTime(preview.time)}</div>
             </div>
           )}
@@ -410,6 +460,16 @@ function VideoControls({
           {heatmapStyle && <div className="vc-heatmap" style={heatmapStyle} />}
           <div className="vc-buffered-fill" style={{ width: `${bufferedPercent}%` }} />
           <div className="vc-progress-fill" style={{ width: `${progress}%` }} />
+
+          {/* Chapter boundaries: a gap in the bar at each chapter start, as on YouTube. */}
+          {chapterList && chapterList.slice(1).map((c) => (
+            <div
+              key={`ch-${c.start}`}
+              className="vc-chapter-gap"
+              style={{ left: `${(c.start / duration) * 100}%` }}
+              aria-hidden="true"
+            />
+          ))}
 
           {/* Timeline markers */}
           {duration > 0 && resolvedMarkers.map((marker, i) => {
@@ -462,6 +522,11 @@ function VideoControls({
           <div className="vc-time">
             {formatTime(currentTime)} / {formatTime(duration)}
           </div>
+          {chapterList && chapterAt(chapterList, currentTime)?.title && (
+            <div className="vc-chapter-title" title={chapterAt(chapterList, currentTime).title}>
+              {chapterAt(chapterList, currentTime).title}
+            </div>
+          )}
         </div>
         <div className="vc-controls-right">
           {onReactToMoment && (
