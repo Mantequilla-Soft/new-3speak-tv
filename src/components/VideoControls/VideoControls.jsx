@@ -113,6 +113,8 @@ function VideoControls({
   const { t } = useTranslation();
   const resolvedMarkers = markers || [];
   const chapterList = duration > 0 && chapters?.length > 1 ? chapters : null;
+  // Track width in px, so a chapter too narrow for a readable name gets none.
+  const [trackW, setTrackW] = useState(0);
 
   const [hovering, setHovering] = useState(false);
   const [qualityMenuOpen, setQualityMenuOpen] = useState(false);
@@ -201,6 +203,14 @@ function VideoControls({
     hide: hideSeekPreview,
     fmtTime: fmtPreviewTime,
   } = useSeekPreview({ videoId: previewVideoId, trackRef, duration, getPlaybackHeight });
+
+  useEffect(() => {
+    const el = trackRef.current;
+    if (!el || !chapterList || typeof ResizeObserver === 'undefined') return undefined;
+    const ro = new ResizeObserver(([entry]) => setTrackW(entry.contentRect.width));
+    ro.observe(el);
+    return () => ro.disconnect();
+  }, [!!chapterList]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // Drag/scrub support — visual progress updates instantly, seeks throttled to ~150ms
   const isDraggingRef = useRef(false);
@@ -505,6 +515,35 @@ function VideoControls({
             );
           })}
         </div>
+
+        {/* Chapter names under the bar, each under its own stretch of it. The
+            chapter being played is lit; while scrubbing or hovering the bar, the
+            one under the pointer is. A click jumps to the chapter's start. */}
+        {chapterList && (
+          <div className="vc-chapter-labels">
+            {(() => {
+              const lit = chapterAt(chapterList, preview.visible || dragProgress !== null
+                ? (dragProgress !== null ? (dragProgress / 100) * duration : preview.time)
+                : currentTime);
+              return chapterList.map((c) => {
+                const w = (c.end - c.start) / duration;
+                if (!c.title || w * trackW < 44) return null;
+                return (
+                  <button
+                    key={`chl-${c.start}`}
+                    type="button"
+                    className={`vc-chapter-label${lit === c ? ' active' : ''}`}
+                    style={{ left: `${(c.start / duration) * 100}%`, width: `${w * 100}%` }}
+                    onClick={(e) => { e.stopPropagation(); onSeek?.(c.start); }}
+                    title={`${formatTime(c.start)} ${c.title}`}
+                  >
+                    {c.title}
+                  </button>
+                );
+              });
+            })()}
+          </div>
+        )}
       </div>
 
       {/* Controls row */}

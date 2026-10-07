@@ -7,6 +7,18 @@
 // 1.0.0 — that way they see all of these when develop is pushed to production.
 export const CHANGELOG = [
   {
+    version: '1.79.63',
+    date: '2026-10-07',
+    summary:
+      'Chapter names on the timeline: Chapter names now show right under the video\'s progress bar. Click one to jump to that chapter.',
+  },
+  {
+    version: '1.79.62',
+    date: '2026-10-07',
+    summary:
+      'Timestamps work everywhere: Times like 4:12 in your comments now also link to that moment when people read them on other Hive apps.',
+  },
+  {
     version: '1.79.61',
     date: '2026-10-07',
     summary:
