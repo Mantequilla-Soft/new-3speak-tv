@@ -79,7 +79,20 @@
     "show": "Afficher la transcription",
     "showWithCount_one": "Afficher la transcription ({{count}} ligne)",
     "showWithCount_many": "Afficher la transcription ({{count}} lignes)",
-    "showWithCount_other": "Afficher la transcription ({{count}} lignes)"
+    "showWithCount_other": "Afficher la transcription ({{count}} lignes)",
+    "edit": {
+      "button": "Modifier les sous-titres",
+      "hint": "Modification des sous-titres en {{language}}. Chaque ligne garde son minutage ; videz une ligne pour la supprimer.",
+      "saving": "Enregistrement…",
+      "saved": "Sous-titres enregistrés",
+      "saveFailed": "Impossible d'enregistrer les sous-titres",
+      "discardConfirm": "Abandonner vos modifications des sous-titres ?",
+      "lineAria": "Sous-titre à {{time}}",
+      "signedInAsOther": "Connecté en tant que @{{signedFor}}, mais cette vidéo appartient à @{{want}}. Reconnectez-vous et réessayez.",
+      "signatureRejected": "La signature a été refusée",
+      "walletPrompt": "Enregistrer les sous-titres",
+      "empty": "Les sous-titres ne peuvent pas être vides"
+    }
   },
   "blog": {
     "noContent": "Aucun contenu disponible",

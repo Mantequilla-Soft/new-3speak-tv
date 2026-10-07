@@ -75,7 +75,20 @@
     "hide": "Ficha nakala",
     "show": "Onyesha nakala",
     "showWithCount_one": "Onyesha nakala (mstari {{count}})",
-    "showWithCount_other": "Onyesha nakala (mistari {{count}})"
+    "showWithCount_other": "Onyesha nakala (mistari {{count}})",
+    "edit": {
+      "button": "Hariri manukuu",
+      "hint": "Unahariri manukuu ya {{language}}. Kila mstari unabaki na muda wake; futa maandishi ya mstari ili kuuondoa.",
+      "saving": "Inahifadhi…",
+      "saved": "Manukuu yamehifadhiwa",
+      "saveFailed": "Imeshindwa kuhifadhi manukuu",
+      "discardConfirm": "Ungependa kutupa mabadiliko yako kwenye manukuu?",
+      "lineAria": "Manukuu saa {{time}}",
+      "signedInAsOther": "Umeingia kama @{{signedFor}}, lakini video hii ni ya @{{want}}. Ingia tena kisha ujaribu upya.",
+      "signatureRejected": "Sahihi imekataliwa",
+      "walletPrompt": "Hifadhi manukuu",
+      "empty": "Manukuu hayawezi kuwa tupu"
+    }
   },
   "blog": {
     "noContent": "Hakuna maudhui",

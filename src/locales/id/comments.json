@@ -71,7 +71,20 @@
     "searchNoResults": "Tidak ada baris yang cocok",
     "hide": "Sembunyikan transkrip",
     "show": "Tampilkan transkrip",
-    "showWithCount_other": "Tampilkan transkrip ({{count}} baris)"
+    "showWithCount_other": "Tampilkan transkrip ({{count}} baris)",
+    "edit": {
+      "button": "Edit teks",
+      "hint": "Mengedit teks {{language}}. Setiap baris mempertahankan waktunya; kosongkan baris untuk menghapusnya.",
+      "saving": "Menyimpan…",
+      "saved": "Teks disimpan",
+      "saveFailed": "Teks tidak dapat disimpan",
+      "discardConfirm": "Buang perubahan pada teks?",
+      "lineAria": "Teks pada {{time}}",
+      "signedInAsOther": "Masuk sebagai @{{signedFor}}, tetapi video ini milik @{{want}}. Masuk lagi lalu coba ulang.",
+      "signatureRejected": "Tanda tangan ditolak",
+      "walletPrompt": "Simpan teks",
+      "empty": "Teks tidak boleh kosong"
+    }
   },
   "blog": {
     "noContent": "Tidak ada konten",

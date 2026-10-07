@@ -79,7 +79,20 @@
     "show": "Mostra trascrizione",
     "showWithCount_one": "Mostra trascrizione ({{count}} riga)",
     "showWithCount_many": "Mostra trascrizione ({{count}} righe)",
-    "showWithCount_other": "Mostra trascrizione ({{count}} righe)"
+    "showWithCount_other": "Mostra trascrizione ({{count}} righe)",
+    "edit": {
+      "button": "Modifica sottotitoli",
+      "hint": "Stai modificando i sottotitoli in {{language}}. Ogni riga mantiene i suoi tempi; svuota una riga per rimuoverla.",
+      "saving": "Salvataggio…",
+      "saved": "Sottotitoli salvati",
+      "saveFailed": "Impossibile salvare i sottotitoli",
+      "discardConfirm": "Annullare le modifiche ai sottotitoli?",
+      "lineAria": "Sottotitolo a {{time}}",
+      "signedInAsOther": "Accesso come @{{signedFor}}, ma questo video appartiene a @{{want}}. Accedi di nuovo e riprova.",
+      "signatureRejected": "La firma è stata rifiutata",
+      "walletPrompt": "Salva sottotitoli",
+      "empty": "I sottotitoli non possono essere vuoti"
+    }
   },
   "blog": {
     "noContent": "Nessun contenuto disponibile",

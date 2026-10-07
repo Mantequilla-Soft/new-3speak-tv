@@ -79,7 +79,20 @@
     "show": "Mostrar transcripción",
     "showWithCount_one": "Mostrar transcripción ({{count}} línea)",
     "showWithCount_many": "Mostrar transcripción ({{count}} líneas)",
-    "showWithCount_other": "Mostrar transcripción ({{count}} líneas)"
+    "showWithCount_other": "Mostrar transcripción ({{count}} líneas)",
+    "edit": {
+      "button": "Editar subtítulos",
+      "hint": "Editando los subtítulos en {{language}}. Cada línea conserva su tiempo; vacía una línea para eliminarla.",
+      "saving": "Guardando…",
+      "saved": "Subtítulos guardados",
+      "saveFailed": "No se pudieron guardar los subtítulos",
+      "discardConfirm": "¿Descartar tus cambios en los subtítulos?",
+      "lineAria": "Subtítulo en {{time}}",
+      "signedInAsOther": "Has iniciado sesión como @{{signedFor}}, pero este video es de @{{want}}. Inicia sesión de nuevo y vuelve a intentarlo.",
+      "signatureRejected": "La firma fue rechazada",
+      "walletPrompt": "Guardar subtítulos",
+      "empty": "Los subtítulos no pueden estar vacíos"
+    }
   },
   "blog": {
     "noContent": "No hay contenido disponible",

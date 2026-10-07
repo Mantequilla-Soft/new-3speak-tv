@@ -71,7 +71,20 @@
     "searchNoResults": "没有匹配的内容",
     "hide": "隐藏文字稿",
     "show": "显示文字稿",
-    "showWithCount_other": "显示文字稿（{{count}} 行）"
+    "showWithCount_other": "显示文字稿（{{count}} 行）",
+    "edit": {
+      "button": "编辑字幕",
+      "hint": "正在编辑{{language}}字幕。每行保留原有时间；清空某行即可删除。",
+      "saving": "正在保存…",
+      "saved": "字幕已保存",
+      "saveFailed": "无法保存字幕",
+      "discardConfirm": "放弃对字幕的修改？",
+      "lineAria": "{{time}} 的字幕",
+      "signedInAsOther": "你以 @{{signedFor}} 身份登录，但此视频属于 @{{want}}。请重新登录后再试。",
+      "signatureRejected": "签名被拒绝",
+      "walletPrompt": "保存字幕",
+      "empty": "字幕不能为空"
+    }
   },
   "blog": {
     "noContent": "暂无内容",

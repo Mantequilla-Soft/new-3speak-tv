@@ -83,7 +83,20 @@
     "showWithCount_one": "Pokaż transkrypcję ({{count}} wiersz)",
     "showWithCount_few": "Pokaż transkrypcję ({{count}} wiersze)",
     "showWithCount_many": "Pokaż transkrypcję ({{count}} wierszy)",
-    "showWithCount_other": "Pokaż transkrypcję ({{count}} wiersza)"
+    "showWithCount_other": "Pokaż transkrypcję ({{count}} wiersza)",
+    "edit": {
+      "button": "Edytuj napisy",
+      "hint": "Edytujesz napisy w języku: {{language}}. Każda linia zachowuje swój czas; wyczyść linię, aby ją usunąć.",
+      "saving": "Zapisywanie…",
+      "saved": "Napisy zapisane",
+      "saveFailed": "Nie udało się zapisać napisów",
+      "discardConfirm": "Odrzucić zmiany w napisach?",
+      "lineAria": "Napis w {{time}}",
+      "signedInAsOther": "Zalogowano jako @{{signedFor}}, ale ten film należy do @{{want}}. Zaloguj się ponownie i spróbuj jeszcze raz.",
+      "signatureRejected": "Podpis został odrzucony",
+      "walletPrompt": "Zapisz napisy",
+      "empty": "Napisy nie mogą być puste"
+    }
   },
   "blog": {
     "noContent": "Brak treści",

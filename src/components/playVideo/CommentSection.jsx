@@ -34,7 +34,9 @@ import { Link } from 'react-router-dom';
 import EmojiGifPicker from '../common/EmojiGifPicker/EmojiGifPicker';
 import { insertAtCursor, gifMarkdown } from '../../utils/composerInsert';
 import { getHiveRenderer } from '../../lib/hiveRenderer';
-import { linkifyTimestamps, handleTimestampClick } from '../../utils/timestamps';
+import {
+  linkifyTimestamps, handleTimestampClick, linkTimestampsInMarkdown, unlinkTimestampsInMarkdown,
+} from '../../utils/timestamps';
 
 // Every toast from this module is headed "Comment"; the message becomes the
 // line under it. See utils/toast.js.
@@ -386,8 +388,12 @@ function CommentSection({ videoDetails, author, permlink, currentTime, duration,
         }
       }
 
+      // Timestamps in the text become real 3speak.tv links to that moment, so
+      // they work on every Hive frontend. Rendered here, they turn back into the
+      // in-page seek link (stripTimestampEmbeds + linkifyTimestamps).
+      let body = linkTimestampsInMarkdown(textToPost, { author, permlink, duration });
+
       // Append "replied to" timestamp reference if we have a timestamp
-      let body = textToPost;
       if (metadata.parentTimestamp > 0) {
         const ts = metadata.parentTimestamp;
         const tsLabel = formatTimeInput(ts);
@@ -519,12 +525,16 @@ function CommentSection({ videoDetails, author, permlink, currentTime, duration,
    * only be set once per comment and would fail the whole transaction.
    * Resolves true when the edit landed, so the editor knows to close.
    */
+  // What the edit box starts with: the author's words, with the 3speak links we
+  // made of their timestamps turned back into plain "4:12" (re-linked on save).
+  const editableText = (body) => unlinkTimestampsInMarkdown(splitRepliedTo(body).text, { author, permlink });
+
   const handleEditComment = async (comment, newText) => {
     const text = (newText || '').trim();
     if (!text) return false;
     if (!editableBy || comment?.author?.username !== editableBy) return false;
     const { suffix } = splitRepliedTo(comment.body);
-    const body = text + suffix;
+    const body = linkTimestampsInMarkdown(text, { author, permlink, duration }) + suffix;
     try {
       const result = await commentWithAioha(
         comment.parentAuthor,
@@ -735,6 +745,7 @@ function CommentSection({ videoDetails, author, permlink, currentTime, duration,
       translating={translating}
       editableBy={editableBy}
       onEditComment={handleEditComment}
+      editableText={editableText}
         />
       )) )}
     </div>
@@ -779,6 +790,7 @@ function Comment({
       translating,
       editableBy,
       onEditComment,
+      editableText,
 }) {
   const { t } = useI18n();
   const isReplying = activeReply === comment.permlink;
@@ -793,7 +805,7 @@ function Comment({
     && comment?.author?.username === editableBy && !!comment.parentPermlink;
 
   const startEdit = () => {
-    setEditText(splitRepliedTo(comment.body).text.trim());
+    setEditText((editableText ? editableText(comment.body) : splitRepliedTo(comment.body).text).trim());
     setEditing(true);
   };
 
@@ -1095,6 +1107,7 @@ function Comment({
       translating={translating}
       editableBy={editableBy}
       onEditComment={onEditComment}
+      editableText={editableText}
             />
           ))}
         </div>

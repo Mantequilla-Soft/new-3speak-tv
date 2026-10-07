@@ -88,6 +88,26 @@ export function loadSubtitleCues(author, permlink, langEntry) {
   return subtitleCache[cacheKey];
 }
 
+export const SUBTITLES_UPDATED_EVENT = '3speak:subtitles-updated';
+
+/**
+ * An author just saved corrected captions (lib/captionEdit.js). Put the new file
+ * and its lines in both caches, so the transcript and the on-video captions show
+ * the corrected text at once instead of the version cached before the edit, and
+ * tell any mounted caption overlay to pick it up.
+ */
+export function publishSubtitleEdit(author, permlink, lang, cid, cues) {
+  const key = `${author}/${permlink}`;
+  const list = languageListCache[key];
+  if (list) {
+    languageListCache[key] = list.then((entries) => entries.map((e) => (e.lang === lang ? { ...e, cid } : e)));
+  }
+  subtitleCache[`${key}/${lang}`] = Promise.resolve(cues);
+  try {
+    window.dispatchEvent(new CustomEvent(SUBTITLES_UPDATED_EVENT, { detail: { author, permlink, lang, cues } }));
+  } catch { /* no window (SSR) */ }
+}
+
 // The viewer's languages from the browser, which follows the device language on
 // phones and usually on desktop too. "de-AT" also offers "de", since subtitle
 // entries use bare codes.
@@ -216,6 +236,17 @@ export default function useSubtitles(author, permlink, { autoSelect = false } = 
 
     return () => { cancelled = true; };
   }, [selectedLang, availableLanguages, author, permlink]);
+
+  // The author corrected the captions of this video: show the new lines now.
+  useEffect(() => {
+    const onEdit = (e) => {
+      const d = e.detail || {};
+      if (d.author !== author || d.permlink !== permlink || d.lang !== selectedLang) return;
+      setCues(d.cues || []);
+    };
+    window.addEventListener(SUBTITLES_UPDATED_EVENT, onEdit);
+    return () => window.removeEventListener(SUBTITLES_UPDATED_EVENT, onEdit);
+  }, [author, permlink, selectedLang]);
 
   // Language selection handler (persists to localStorage)
   const selectLanguage = useCallback((lang) => {
