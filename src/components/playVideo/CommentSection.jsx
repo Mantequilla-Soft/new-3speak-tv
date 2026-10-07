@@ -34,6 +34,7 @@ import { Link } from 'react-router-dom';
 import EmojiGifPicker from '../common/EmojiGifPicker/EmojiGifPicker';
 import { insertAtCursor, gifMarkdown } from '../../utils/composerInsert';
 import { getHiveRenderer } from '../../lib/hiveRenderer';
+import { linkifyTimestamps, handleTimestampClick } from '../../utils/timestamps';
 
 // Every toast from this module is headed "Comment"; the message becomes the
 // line under it. See utils/toast.js.
@@ -354,7 +355,8 @@ function CommentSection({ videoDetails, author, permlink, currentTime, duration,
       .replace(/<sup>\s*replied to\s*<a[^>]*>.*?<\/a>\s*<\/sup>/gi, '')
       .replace(/\n?<sup>replied to \[.*?\]\([^)]*\)<\/sup>/g, '');
 
-    return html;
+    // "4:12" in a comment seeks there, if the video is that long.
+    return onSeek ? linkifyTimestamps(html, duration) : html;
   };
 
   const handlePostComment = async (replyTimestamp) => {
@@ -896,7 +898,10 @@ function Comment({
               </div>
             </div>
           ) : (
-            <MarkdownView html={processedBody(comment?.body || '', comment?.permlink)} />
+            <MarkdownView
+              html={processedBody(comment?.body || '', comment?.permlink)}
+              onClick={(e) => handleTimestampClick(e, onSeek)}
+            />
           )}
           {translatedText && (
             <div className="comment-translation">

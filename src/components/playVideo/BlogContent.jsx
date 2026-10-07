@@ -1,5 +1,5 @@
 import MarkdownView from '../common/MarkdownView';
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useMemo, useState, useRef } from "react";
 import { createRoot } from "react-dom/client";
 import { useTranslation } from "react-i18next";
 import { getUersContent } from "../../utils/hiveUtils";
@@ -8,10 +8,14 @@ import { FaChevronDown, FaChevronUp } from "react-icons/fa";
 import { TailChase } from 'ldrs/react';
 import AudioPlayerInline from "../AudioPlayerInline/AudioPlayerInline";
 import { getPostBodyRenderer } from "../../lib/hiveRenderer";
+import { linkifyTimestamps, handleTimestampClick } from "../../utils/timestamps";
 
 const THRESHOLD_HEIGHT = 100;
 
-const BlogContent = ({ author, permlink, description, alwaysExpanded = false }) => {
+// `duration` + `onSeek` (content seconds) turn timestamps in the text into links
+// that seek the player. Without them, or before the duration is known, the text
+// stays as written.
+const BlogContent = ({ author, permlink, description, alwaysExpanded = false, duration = 0, onSeek = null }) => {
   const { t } = useTranslation();
   const [content, setContent] = useState("");
   const [renderedContent, setRenderedContent] = useState("");
@@ -182,6 +186,14 @@ const BlogContent = ({ author, permlink, description, alwaysExpanded = false }) 
 
   const toggleExpand = () => setIsExpanded(!isExpanded);
 
+  // Floored so the HTML only changes when a whole second is added to the video,
+  // which is never during ordinary playback.
+  const durationSec = onSeek ? Math.floor(duration || 0) : 0;
+  const linkedContent = useMemo(
+    () => linkifyTimestamps(renderedContent, durationSec),
+    [renderedContent, durationSec],
+  );
+
   return (
     <div className="blog-content-container">
       <div
@@ -195,7 +207,10 @@ const BlogContent = ({ author, permlink, description, alwaysExpanded = false }) 
             </div>
           </div>
         ) : (
-          <MarkdownView html={renderedContent} />
+          <MarkdownView
+            html={linkedContent}
+            onClick={(e) => handleTimestampClick(e, onSeek)}
+          />
         )}
         {needsExpansion && !isExpanded && <div className="fade-overlay" />}
       </div>

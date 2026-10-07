@@ -5,22 +5,20 @@ import { parseSrt } from '../utils/srtParser';
 const SUBTITLE_LANG_KEY = '3speak-subtitle-lang';
 const SUBTITLE_STYLE_KEY = '3speak-subtitle-style';
 
-// The CDN is fronted by a specific hot-pinning node — content not yet
-// propagated to IT 500s ("block was not found locally") even though
-// ipfs.3speak.tv already serves it fine. Try the CDN first (fast, direct);
-// on failure go through OUR OWN backend rather than fetching ipfs.3speak.tv
-// straight from the browser — that gateway sends `access-control-allow-origin`
-// TWICE on every response, which every real browser rejects outright
-// ("Failed to fetch", confirmed live) even though the value itself is fine.
-// The proxy fetches server-to-server (no CORS involved) and re-serves it
-// with a single, correct header via our own cors() middleware.
-async function fetchSrtWithFallback(cid) {
-  try {
-    const res = await fetch(`https://hotipfs-3speak-1.b-cdn.net/ipfs/${cid}`);
-    if (res.ok) return await res.text();
-  } catch { /* fall through to the proxy */ }
+// Straight to OUR proxy (checker /subtitle-proxy). It asks the IPFS node that
+// wrote the subtitle files first and only then the gateways, server-to-server.
+// The browser used to try hotipfs-3speak-1.b-cdn.net itself first, but that
+// node 500s for every subtitle file it hasn't pinned (all of them, as of
+// 2026-10-07) and the proxy tries it anyway, so the direct attempt only added
+// seconds to every language switch. (Going to ipfs.3speak.tv directly is no
+// option either: it sends `access-control-allow-origin` twice, which browsers
+// reject.) A file the proxy can't find anywhere 502s after ~8s, and the
+// transcript then says so instead of waiting on.
+const PROXY_TIMEOUT_MS = 20000;
+const timeoutSignal = (ms) => (typeof AbortSignal !== 'undefined' && AbortSignal.timeout ? AbortSignal.timeout(ms) : undefined);
 
-  const res = await fetch(`${CHECKER_URL}/subtitle-proxy/${cid}`);
+async function fetchSrtWithFallback(cid) {
+  const res = await fetch(`${CHECKER_URL}/subtitle-proxy/${cid}`, { signal: timeoutSignal(PROXY_TIMEOUT_MS) });
   if (!res.ok) throw new Error(`subtitle-proxy responded ${res.status}`);
   return await res.text();
 }

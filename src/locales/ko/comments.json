@@ -57,12 +57,18 @@
   "transcript": {
     "title": "스크립트",
     "languageAria": "스크립트 언어",
+    "languageLoadFailed": "이 언어를 불러오지 못했습니다.",
     "copyingWithTimes": "타임코드 포함 복사",
     "copyingTextOnly": "텍스트만 복사",
     "timecodes": "타임코드",
     "copyWithTimes": "타임코드 포함 스크립트 복사",
     "copyText": "스크립트 텍스트 복사",
     "jumpTo": "{{time}}(으)로 이동",
+    "search": "스크립트 검색",
+    "searchPlaceholder": "스크립트에서 검색…",
+    "closeSearch": "검색 닫기",
+    "searchResults_other": "{{count}}개 일치",
+    "searchNoResults": "일치하는 줄이 없습니다",
     "hide": "스크립트 숨기기",
     "show": "스크립트 표시",
     "showWithCount_other": "스크립트 표시({{count}}줄)"

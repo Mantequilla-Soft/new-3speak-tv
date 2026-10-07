@@ -127,6 +127,11 @@
 
       .vc-seek-preview-video { display: none; }
 
+      .vc-seek-preview-chapter {
+        position: static;
+        margin-bottom: 4px;
+      }
+
       .vc-seek-preview-time {
         position: static;
         display: inline-block;
@@ -368,6 +373,55 @@
     margin-left: 8px;
     white-space: nowrap;
     user-select: none;
+  }
+
+  // Current chapter, next to the clock. Long titles are cut, the full one is in
+  // the tooltip.
+  .vc-chapter-title {
+    font-size: 12px;
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.9);
+    margin-left: 6px;
+    max-width: 220px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    user-select: none;
+
+    &::before {
+      content: '\2022';
+      margin-right: 6px;
+      opacity: 0.7;
+    }
+  }
+
+  // A chapter boundary: a short break in the bar, over the fill and the buffer,
+  // under the comment markers.
+  .vc-chapter-gap {
+    position: absolute;
+    top: 0;
+    width: 2px;
+    height: 100%;
+    margin-left: -1px;
+    background: rgba(0, 0, 0, 0.75);
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  .vc-seek-preview-chapter {
+    position: absolute;
+    top: 4px;
+    left: 4px;
+    right: 4px;
+    text-align: center;
+    font-size: 11px;
+    font-weight: 600;
+    color: #fff;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.95);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    pointer-events: none;
   }
 
   // Volume group — icon + slider on hover (desktop only)
@@ -740,6 +794,8 @@
 
 // Mobile controls layout
 @media (max-width: 767px) {
+  .video-controls .vc-chapter-title { display: none; }
+
   // Container always visible (for progress bar) but non-interactive
   .video-controls,
   .video-controls.visible {
@@ -955,6 +1011,8 @@
 
 // Phone landscape — same mobile controls layout (settings gear instead of individual buttons)
 @media screen and (orientation: landscape) and (max-height: 500px) {
+  .video-controls .vc-chapter-title { display: none; }
+
   .video-controls,
   .video-controls.visible {
     top: 0;

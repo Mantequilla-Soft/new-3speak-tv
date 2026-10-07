@@ -52,7 +52,8 @@ const SHOW_TOPIC_TAGS =
 import { fixVideoThumbnail, fallbackImg } from '../../utils/fixThumbnails';
 import { isLoggedIn, followWithAioha } from "../../hive-api/aioha";
 import { MdPlaylistAdd, MdWatchLater, MdKeyboardArrowDown, MdKeyboardArrowUp, MdAdd, MdClose, MdShare, MdAttachMoney, MdPersonAdd, MdInfo, MdBarChart } from "react-icons/md";
-import { FaHeart } from "react-icons/fa";
+import { FaHeart, FaPlay, FaPause } from "react-icons/fa";
+import { TbRewindBackward10, TbRewindForward10 } from "react-icons/tb";
 import { IoPricetagOutline } from "react-icons/io5";
 import AddToPlaylistModal from "../AddToPlaylistModal/AddToPlaylistModal";
 import VideoPlaylists from "../VideoPlaylists/VideoPlaylists";
@@ -197,6 +198,23 @@ const PlayVideo = ({ videoDetails, author, permlink, mediaUnavailable = false, m
   const queryClient = useQueryClient();
 
   const lastTouchRef = useRef(0); // prevent touch+mouse double-fire
+  // Press-and-hold on the video opens the speed menu. The tap action (play/pause,
+  // or show the controls on a phone) therefore runs on RELEASE, and only when the
+  // hold didn't fire: otherwise holding to change speed would also pause.
+  const LONG_PRESS_MS = 500;
+  const pressTimerRef = useRef(null);
+  const pressFiredRef = useRef(false);
+  const [speedMenuRequest, setSpeedMenuRequest] = useState(0);
+  // A one-second icon in the middle of the video confirming what a key, click or
+  // tap on the video just did. `n` restarts the animation on a repeat press.
+  const [actionFlash, setActionFlash] = useState(null);
+  const flashTimerRef = useRef(null);
+  const flashAction = (kind) => {
+    clearTimeout(flashTimerRef.current);
+    setActionFlash((f) => ({ kind, n: (f?.n || 0) + 1 }));
+    flashTimerRef.current = setTimeout(() => setActionFlash(null), 1000);
+  };
+  useEffect(() => () => clearTimeout(flashTimerRef.current), []);
 
   // Mobile collapsible details
   const [mobileDetailsExpanded, setMobileDetailsExpanded] = useState(false);
@@ -211,6 +229,132 @@ const PlayVideo = ({ videoDetails, author, permlink, mediaUnavailable = false, m
     (user?.toLowerCase() === author?.toLowerCase() || STATS_ADMINS.includes(user?.toLowerCase()));
   // ...but only once we've confirmed the video actually has watch records.
   const canSeeVideoStats = isStatsViewer && videoHasStats;
+
+  // Long press on the video. No speed menu while an ad plays: the controls are
+  // down for the spot, and a hold then is just a slow tap.
+  const startPress = () => {
+    pressFiredRef.current = false;
+    clearTimeout(pressTimerRef.current);
+    if (adPlaying || !videoControls?.onPlaybackRateChange) return;
+    pressTimerRef.current = setTimeout(() => {
+      pressTimerRef.current = null;
+      pressFiredRef.current = true;
+      try { navigator.vibrate?.(15); } catch { /* not supported */ }
+      setSpeedMenuRequest((n) => n + 1);
+    }, LONG_PRESS_MS);
+  };
+  // True when the press was a plain tap, so the caller runs the tap action.
+  const endPress = () => {
+    clearTimeout(pressTimerRef.current);
+    pressTimerRef.current = null;
+    return !pressFiredRef.current;
+  };
+  const cancelPress = () => {
+    clearTimeout(pressTimerRef.current);
+    pressTimerRef.current = null;
+  };
+  useEffect(() => () => clearTimeout(pressTimerRef.current), []);
+
+  // Keyboard, YouTube style: ← / → skip (the same 10s and the same ad lock as the
+  // on-screen buttons), space plays/pauses, "," / "." step one frame back /
+  // forward (pausing first, as stepping only makes sense on a still frame).
+  // Never while typing, and never with a modifier held, so browser and OS
+  // shortcuts keep working.
+  const controlsRef = useRef(videoControls);
+  controlsRef.current = videoControls;
+  const flashActionRef = useRef(flashAction);
+  flashActionRef.current = flashAction;
+  const adLockedRef = useRef(adLocked);
+  adLockedRef.current = adLocked || adPlaying;
+  // Frame length, measured from the decoder while the video plays (the smallest
+  // gap between two presented frames: a dropped frame only makes a gap larger).
+  const frameSecRef = useRef(1 / 30);
+  // Where the last frame step went. Steps arrive faster than the player reports
+  // the new time, so the next one starts from here rather than from a stale clock.
+  const stepRef = useRef({ to: 0, at: 0 });
+  useEffect(() => {
+    const el = videoRef && typeof videoRef === 'object' ? videoRef.current : null;
+    if (!el || typeof el.requestVideoFrameCallback !== 'function') return undefined;
+    let last = null; let id = 0; let best = Infinity;
+    const onFrame = (_now, meta) => {
+      if (last != null && !el.paused && el.playbackRate === 1) {
+        const d = meta.mediaTime - last;
+        if (d > 1 / 121 && d < 1 / 9 && d < best) { best = d; frameSecRef.current = d; }
+      }
+      last = meta.mediaTime;
+      id = el.requestVideoFrameCallback(onFrame);
+    };
+    id = el.requestVideoFrameCallback(onFrame);
+    return () => el.cancelVideoFrameCallback?.(id);
+  }, [videoRef, permlink]);
+
+  useEffect(() => {
+    if (isLive) return undefined;
+    const onKey = (e) => {
+      const vc = controlsRef.current;
+      if (!vc || e.defaultPrevented || e.ctrlKey || e.metaKey || e.altKey) return;
+      const tgt = e.target;
+      const tag = tgt?.tagName;
+      if (tgt?.isContentEditable || tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT') return;
+      // A dialog the key was pressed in, or a modal that's open, owns the
+      // keyboard. Not any [role=dialog] on the page: the cookie banner is one,
+      // and it would switch the shortcuts off for every new visitor.
+      if (tgt?.closest?.('[role="dialog"], [aria-modal="true"]')) return;
+      const modal = document.querySelector('[aria-modal="true"]');
+      if (modal && modal.getClientRects().length) return;
+      switch (e.key) {
+        case 'ArrowLeft':
+          e.preventDefault();
+          flashActionRef.current('back');
+          vc.onSeekBackward?.();
+          break;
+        case 'ArrowRight':
+          e.preventDefault();
+          // Refused while an ad break holds the playhead; don't claim a skip.
+          if (!adLockedRef.current) flashActionRef.current('forward');
+          vc.onSeekForward?.();
+          break;
+        case ' ':
+        case 'Spacebar': {
+          // A focused button or link already acts on space; don't toggle twice.
+          if (tag === 'BUTTON' || tag === 'A' || tgt?.getAttribute?.('role') === 'button') return;
+          e.preventDefault(); // and don't scroll the page
+          flashActionRef.current(vc.isPlaying ? 'pause' : 'play');
+          vc.onTogglePlay?.();
+          break;
+        }
+        case ',':
+        case '.': {
+          e.preventDefault();
+          if (vc.isPlaying) vc.onTogglePlay?.();
+          const now = Date.now();
+          const from = now - stepRef.current.at < 1000 ? stepRef.current.to : (vc.currentTime || 0);
+          const end = vc.duration || Infinity;
+          const to = Math.min(end, Math.max(0, from + (e.key === '.' ? 1 : -1) * frameSecRef.current));
+          stepRef.current = { to, at: now };
+          vc.onSeek?.(to);
+          break;
+        }
+        default:
+      }
+    };
+    document.addEventListener('keydown', onKey);
+    return () => document.removeEventListener('keydown', onKey);
+  }, [isLive]);
+
+  // A timestamp clicked in the description or a comment. The reader is usually
+  // scrolled down past the player by then, so bring it back into view, and
+  // start it if it was paused: clicking "4:12" means "show me 4:12".
+  const seekFromText = (tSec) => {
+    if (!videoControls?.onSeek) return;
+    videoControls.onSeek(tSec);
+    const el = wrapperRef && typeof wrapperRef === 'object' ? wrapperRef.current : null;
+    if (el) {
+      const r = el.getBoundingClientRect();
+      if (r.top < 0 || r.bottom > window.innerHeight) el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+    if (videoControls.isPlaying === false) videoControls.onTogglePlay?.();
+  };
 
   useEffect(() => {
     setVideoHasStats(false);
@@ -1082,22 +1226,49 @@ const PlayVideo = ({ videoDetails, author, permlink, mediaUnavailable = false, m
                     onMouseMove={() => {
                       if (window.innerWidth > 767) videoControls.onMouseMove();
                     }}
-                    onMouseDown={() => {
-                      if (Date.now() - lastTouchRef.current < 500) return;
+                    onMouseDown={(e) => {
+                      if (e.button !== 0 || Date.now() - lastTouchRef.current < 500) return;
+                      startPress();
+                    }}
+                    onMouseUp={(e) => {
+                      if (e.button !== 0 || Date.now() - lastTouchRef.current < 500) return;
+                      if (!endPress()) return;
                       // While a spot is on screen the controls are hidden, so the
                       // small-screen gesture that normally reveals them has nothing
                       // to reveal. Pause instead — a tap has to do SOMETHING, and
                       // pausing is what tapping a playing ad should do anyway.
                       if (window.innerWidth <= 767 && !adPlaying) videoControls.onToggleControls();
-                      else videoControls.onTogglePlay();
+                      else {
+                        flashAction(videoControls.isPlaying ? 'pause' : 'play');
+                        videoControls.onTogglePlay();
+                      }
                     }}
+                    onMouseLeave={cancelPress}
                     onTouchStart={(e) => {
                       lastTouchRef.current = Date.now();
                       e.preventDefault();
-                      if (adPlaying) videoControls.onTogglePlay();
-                      else videoControls.onToggleControls();
+                      startPress();
                     }}
+                    onTouchEnd={(e) => {
+                      lastTouchRef.current = Date.now();
+                      e.preventDefault();
+                      if (!endPress()) return;
+                      if (adPlaying) {
+                        flashAction(videoControls.isPlaying ? 'pause' : 'play');
+                        videoControls.onTogglePlay();
+                      } else videoControls.onToggleControls();
+                    }}
+                    onTouchCancel={cancelPress}
+                    onContextMenu={(e) => { if (pressFiredRef.current) e.preventDefault(); }}
                   />
+                  {actionFlash && (
+                    <div key={actionFlash.n} className="video-action-flash" aria-hidden="true">
+                      {actionFlash.kind === 'play' && <FaPlay className="video-action-flash__icon video-action-flash__icon--play" />}
+                      {actionFlash.kind === 'pause' && <FaPause className="video-action-flash__icon" />}
+                      {actionFlash.kind === 'back' && <TbRewindBackward10 className="video-action-flash__icon" />}
+                      {actionFlash.kind === 'forward' && <TbRewindForward10 className="video-action-flash__icon" />}
+                    </div>
+                  )}
                   <VideoControls
                     adPlaying={adPlaying}
                     adLocked={adLocked}
@@ -1117,6 +1288,7 @@ const PlayVideo = ({ videoDetails, author, permlink, mediaUnavailable = false, m
                     onSeek={videoControls.onSeek}
                     onToggleFullscreen={videoControls.onToggleFullscreen}
                     markers={videoControls.markers}
+                    chapters={videoControls.chapters}
                     replayHeatmap={videoControls.replayHeatmap}
                     previewVideoId={videoControls.previewVideoId}
                     getPlaybackHeight={videoControls.getPlaybackHeight}
@@ -1140,6 +1312,7 @@ const PlayVideo = ({ videoDetails, author, permlink, mediaUnavailable = false, m
                     onSubtitleStyleChange={videoControls.onSubtitleStyleChange}
                     playbackRate={videoControls.playbackRate}
                     onPlaybackRateChange={videoControls.onPlaybackRateChange}
+                    speedMenuRequest={speedMenuRequest}
                     onHoldControls={videoControls.onHoldControls}
                     onReleaseControls={videoControls.onReleaseControls}
                   />
@@ -1622,6 +1795,8 @@ const PlayVideo = ({ videoDetails, author, permlink, mediaUnavailable = false, m
                 author={author}
                 permlink={permlink}
                 description={overrideBody ?? (postIsOffChain ? videoDetails?.body : undefined)}
+                duration={videoControls?.duration}
+                onSeek={isLive ? null : seekFromText}
               />
             </div>
           </div>
@@ -1669,7 +1844,7 @@ const PlayVideo = ({ videoDetails, author, permlink, mediaUnavailable = false, m
           setIsVoted={setIsVoted}
           currentTime={videoControls?.currentTime}
           duration={videoControls?.duration}
-          onSeek={videoControls?.onSeek}
+          onSeek={isLive ? videoControls?.onSeek : seekFromText}
           onRefreshReactions={videoControls?.onRefreshReactions}
           onPause={videoControls?.onPause}
         />

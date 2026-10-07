@@ -41,7 +41,8 @@
 
   .transcript-lang,
   .transcript-copy,
-  .transcript-times {
+  .transcript-times,
+  .transcript-search-btn {
     display: inline-flex;
     align-items: center;
     gap: 5px;
@@ -64,6 +65,9 @@
 
   // Lit when the copy will carry timecodes, so the format is visible before
   // the paste rather than after it.
+  .transcript-search-btn { padding: 0.28rem 0.45rem; }
+
+  .transcript-search-btn.active,
   .transcript-times.active {
     color: var(--accent-primary);
     border-color: var(--accent-primary);
@@ -84,6 +88,32 @@
     &::-webkit-scrollbar-thumb {
       background: var(--border-color);
       border-radius: 999px;
+    }
+  }
+
+  // A language switch in flight: the old lines stay, faded, until the new ones land.
+  .transcript-body.loading { opacity: 0.45; transition: opacity 0.15s ease; }
+
+  .transcript-load-failed {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.6rem;
+    padding: 0.5rem 0.9rem;
+    border-bottom: 1px solid var(--border-color);
+    font-size: 0.82rem;
+    color: var(--text-secondary);
+
+    button {
+      flex: 0 0 auto;
+      padding: 0.2rem 0.7rem;
+      border: 1px solid var(--accent-primary);
+      border-radius: 999px;
+      background: transparent;
+      color: var(--accent-primary);
+      font-size: 0.78rem;
+      font-weight: 600;
+      cursor: pointer;
     }
   }
 
@@ -125,7 +155,66 @@
     color: var(--text-muted);
   }
 
-  .transcript-text { flex: 1 1 auto; }
+  .transcript-text {
+    flex: 1 1 auto;
+
+    mark {
+      background: var(--accent-light);
+      color: var(--accent-primary);
+      font-weight: 700;
+      border-radius: 3px;
+      padding: 0 1px;
+    }
+  }
+
+  .transcript-search {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.45rem 0.9rem;
+    border-bottom: 1px solid var(--border-color);
+
+    input {
+      flex: 1 1 auto;
+      min-width: 0;
+      border: 0;
+      outline: none;
+      background: transparent;
+      color: var(--text-primary);
+      font-size: 0.86rem;
+
+      &::-webkit-search-cancel-button { display: none; }
+    }
+  }
+
+  .transcript-search-icon { flex: 0 0 auto; color: var(--text-muted); }
+
+  .transcript-search-count {
+    flex: 0 0 auto;
+    font-size: 0.76rem;
+    font-weight: 600;
+    color: var(--text-muted);
+    white-space: nowrap;
+  }
+
+  .transcript-search-close {
+    display: inline-flex;
+    flex: 0 0 auto;
+    padding: 2px;
+    border: 0;
+    border-radius: 999px;
+    background: transparent;
+    color: var(--text-secondary);
+    cursor: pointer;
+
+    &:hover { color: var(--text-primary); background: var(--bg-hover); }
+  }
+
+  .transcript-search-empty {
+    padding: 0.8rem 0.55rem;
+    font-size: 0.84rem;
+    color: var(--text-muted);
+  }
 
   .transcript-toggle {
     display: flex;
@@ -149,11 +238,12 @@
     .transcript-line { font-size: 0.82rem; }
     .transcript-time { min-width: 2.8rem; }
 
-    // Three controls on a narrow head: the toggle keeps its icon, drops its word.
+    // Four controls on a narrow head: the toggle keeps its icon, drops its word.
     .transcript-actions { gap: 0.35rem; }
     .transcript-lang,
     .transcript-copy,
     .transcript-times { padding: 0.28rem 0.55rem; font-size: 0.74rem; }
+    .transcript-search-btn { padding: 0.28rem 0.4rem; }
     .transcript-times-label { display: none; }
   }
 }

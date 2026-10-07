@@ -25,6 +25,7 @@ import { useStreamChatMirror } from '../hooks/useStreamChatMirror';
 import { getFeedSeed } from '../utils/feedSeed';
 import ReactionPlayer from '../components/ReactionPlayer/ReactionPlayer';
 import WatchTabs from '../components/playVideo/WatchTabs';
+import { parseChapters } from '../utils/timestamps';
 import { MdVideocam, MdChatBubble } from 'react-icons/md';
 import { batchGetReputations, LOW_REP_THRESHOLD } from '../utils/reputation';
 import { batchCheckHidden, isCreatorHidden } from '../utils/hiddenCreators';
@@ -1266,6 +1267,15 @@ function Watch({ v2 = false }) {
   // what mounts the live player, the chat column and the hangouts sign-in.
   const livePending = !!videoDetails?.live && !liveVodReady;
   const isLive = livePending && liveChecked;
+
+  // Chapters from a timestamp list in the description, YouTube style. Content
+  // seconds, like the rest of the timeline; nothing until the duration is known,
+  // because a chapter past the end of the video must not be drawn.
+  const chapterDurationSec = Math.floor(adBreakRef.current.contentDuration(playerState.duration) || 0);
+  const chapters = useMemo(
+    () => (isLive ? [] : parseChapters(videoDetails?.body, chapterDurationSec)),
+    [videoDetails?.body, chapterDurationSec, isLive],
+  );
   const liveUnknown = livePending && !liveChecked;
   useEffect(() => { isLiveRef.current = livePending; }, [livePending]);
 
@@ -1831,6 +1841,7 @@ function Watch({ v2 = false }) {
           onPause: pause,
           onReactToMoment: handleReactToMoment,
           markers: resolvedMarkers,
+          chapters,
           replayHeatmap,
           previewVideoId: playerLoadId,
           getPlaybackHeight,
