@@ -75,7 +75,20 @@
     "hide": "Dökümü gizle",
     "show": "Dökümü göster",
     "showWithCount_one": "Dökümü göster ({{count}} satır)",
-    "showWithCount_other": "Dökümü göster ({{count}} satır)"
+    "showWithCount_other": "Dökümü göster ({{count}} satır)",
+    "edit": {
+      "button": "Altyazıları düzenle",
+      "hint": "{{language}} altyazıları düzenleniyor. Her satır zamanlamasını korur; bir satırı silmek için içini boşalt.",
+      "saving": "Kaydediliyor…",
+      "saved": "Altyazılar kaydedildi",
+      "saveFailed": "Altyazılar kaydedilemedi",
+      "discardConfirm": "Altyazılardaki değişiklikler silinsin mi?",
+      "lineAria": "{{time}} anındaki altyazı",
+      "signedInAsOther": "@{{signedFor}} olarak giriş yaptın ama bu video @{{want}} hesabına ait. Tekrar giriş yapıp yeniden dene.",
+      "signatureRejected": "İmza reddedildi",
+      "walletPrompt": "Altyazıları kaydet",
+      "empty": "Altyazılar boş olamaz"
+    }
   },
   "blog": {
     "noContent": "İçerik yok",

@@ -1686,6 +1686,53 @@ app.post('/api/ads/opt-out-signature', signChallengeLimiter, async (req, res) =>
   }
 })
 
+// POST /api/captions/edit-signature — sign a caption edit for the video's author.
+//
+// The checker (routes/subtitleEdit.js) only stores corrected captions with a
+// signature from the author's posting authority. HiveSigner and Butter Auth
+// sessions hold no key in the browser, so this signs as @threespeak under the
+// grant the author gave it — the same delegated shape as the ad preferences.
+//
+// The author in the message is the SESSION user, never a value from the body, so
+// this can only ever sign "I am editing captions on my own video". The client
+// supplies the permlink, the language and the SHA-256 of the SRT; all three are
+// shape-checked, so the signed bytes are always the fixed caption-edit message.
+//
+// 🔒 Stricter than the other signers: the legacy public-app-key path (claimed
+// username) is NOT accepted here. It would let anyone holding the public key
+// rewrite the captions of every account that granted @threespeak. Wallet logins
+// get a SIWH session cookie instead (or sign in their wallet).
+app.post('/api/captions/edit-signature', signChallengeLimiter, async (req, res) => {
+  try {
+    if (!POSTING_WIF) return res.status(500).json({ error: 'Server is not configured' })
+    delete req.headers['x-api-key'] // see 🔒 above
+    const hiveUsername = await resolveDelegatedSignUser(req, res)
+    if (!hiveUsername) return res.status(401).json({ error: 'Unauthorized' })
+
+    const permlink = typeof req.body?.permlink === 'string' ? req.body.permlink : ''
+    const lang = typeof req.body?.lang === 'string' ? req.body.lang.toLowerCase() : ''
+    const srtSha256 = typeof req.body?.srtSha256 === 'string' ? req.body.srtSha256.toLowerCase() : ''
+    if (!/^[a-z0-9-]{1,255}$/.test(permlink) || !/^[a-z]{2,3}(?:-[a-z0-9]{2,8})?$/.test(lang) || !/^[0-9a-f]{64}$/.test(srtSha256)) {
+      return res.status(400).json({ error: 'Invalid request' })
+    }
+
+    if (!(await hasThreespeakPostingGrant(hiveUsername))) {
+      return res.status(403).json({
+        error: `Saving captions from here needs @${HIVE_ACCOUNT} posting authority on your account. Log in with Keychain, HiveAuth, PeakVault or Ledger to sign it directly instead.`,
+      })
+    }
+
+    const timestamp = Date.now()
+    // Keep in lockstep with editMessage() in 3speakchecks/routes/subtitleEdit.js.
+    const message = ['3speak-captions', 'edit', hiveUsername, permlink, lang, srtSha256, String(timestamp)].join('|')
+    const signature = PrivateKey.fromString(POSTING_WIF).sign(cryptoUtils.sha256(Buffer.from(message, 'utf8'))).toString()
+    return res.json({ success: true, signature, timestamp, username: hiveUsername })
+  } catch (err) {
+    console.error('Caption edit signature error:', err.message)
+    res.status(500).json({ error: 'Signing failed' })
+  }
+})
+
 // POST /api/ads/viewer-signature — sign a VIEWER's reward opt-in on their behalf.
 //
 // Same delegated-signing shape as the creator preference above, and needed for the

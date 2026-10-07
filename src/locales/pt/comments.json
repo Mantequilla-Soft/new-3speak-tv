@@ -79,7 +79,20 @@
     "show": "Mostrar transcrição",
     "showWithCount_one": "Mostrar transcrição ({{count}} linha)",
     "showWithCount_many": "Mostrar transcrição ({{count}} linhas)",
-    "showWithCount_other": "Mostrar transcrição ({{count}} linhas)"
+    "showWithCount_other": "Mostrar transcrição ({{count}} linhas)",
+    "edit": {
+      "button": "Editar legendas",
+      "hint": "Editando as legendas em {{language}}. Cada linha mantém seu tempo; esvazie uma linha para removê-la.",
+      "saving": "Salvando…",
+      "saved": "Legendas salvas",
+      "saveFailed": "Não foi possível salvar as legendas",
+      "discardConfirm": "Descartar suas alterações nas legendas?",
+      "lineAria": "Legenda em {{time}}",
+      "signedInAsOther": "Conectado como @{{signedFor}}, mas este vídeo é de @{{want}}. Entre novamente e tente de novo.",
+      "signatureRejected": "A assinatura foi recusada",
+      "walletPrompt": "Salvar legendas",
+      "empty": "As legendas não podem ficar vazias"
+    }
   },
   "blog": {
     "noContent": "Nenhum conteúdo disponível",

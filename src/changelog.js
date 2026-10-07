@@ -7,6 +7,12 @@
 // 1.0.0 — that way they see all of these when develop is pushed to production.
 export const CHANGELOG = [
   {
+    version: '1.79.64',
+    date: '2026-10-07',
+    summary:
+      'Edit your captions: Fix the automatic captions of your own videos. Open the Transcript tab under your video, click the pencil, correct the lines and save.',
+  },
+  {
     version: '1.79.63',
     date: '2026-10-07',
     summary:

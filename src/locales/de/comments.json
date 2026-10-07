@@ -75,7 +75,20 @@
     "hide": "Transkript ausblenden",
     "show": "Transkript anzeigen",
     "showWithCount_one": "Transkript anzeigen ({{count}} Zeile)",
-    "showWithCount_other": "Transkript anzeigen ({{count}} Zeilen)"
+    "showWithCount_other": "Transkript anzeigen ({{count}} Zeilen)",
+    "edit": {
+      "button": "Untertitel bearbeiten",
+      "hint": "Du bearbeitest die Untertitel auf {{language}}. Jede Zeile behält ihr Timing; leere eine Zeile, um sie zu entfernen.",
+      "saving": "Wird gespeichert…",
+      "saved": "Untertitel gespeichert",
+      "saveFailed": "Die Untertitel konnten nicht gespeichert werden",
+      "discardConfirm": "Deine Änderungen an den Untertiteln verwerfen?",
+      "lineAria": "Untertitel bei {{time}}",
+      "signedInAsOther": "Angemeldet als @{{signedFor}}, aber dieses Video gehört @{{want}}. Melde dich erneut an und versuche es nochmal.",
+      "signatureRejected": "Die Signatur wurde abgelehnt",
+      "walletPrompt": "Untertitel speichern",
+      "empty": "Untertitel dürfen nicht leer sein"
+    }
   },
   "blog": {
     "noContent": "Kein Inhalt verfügbar",

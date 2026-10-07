@@ -75,7 +75,20 @@
     "hide": "Hide transcript",
     "show": "Show transcript",
     "showWithCount_one": "Show transcript ({{count}} line)",
-    "showWithCount_other": "Show transcript ({{count}} lines)"
+    "showWithCount_other": "Show transcript ({{count}} lines)",
+    "edit": {
+      "button": "Edit captions",
+      "hint": "Editing the {{language}} captions. Each line keeps its timing; empty a line to remove it.",
+      "saving": "Saving…",
+      "saved": "Captions saved",
+      "saveFailed": "Could not save the captions",
+      "discardConfirm": "Discard your changes to the captions?",
+      "lineAria": "Caption at {{time}}",
+      "signedInAsOther": "Signed in as @{{signedFor}}, but this video belongs to @{{want}}. Log in again and retry.",
+      "signatureRejected": "The signature was declined",
+      "walletPrompt": "Save captions",
+      "empty": "Captions can't be empty"
+    }
   },
   "blog": {
     "noContent": "No content available",
