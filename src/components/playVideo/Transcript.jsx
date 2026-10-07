@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import {
-  MdContentCopy, MdKeyboardArrowDown, MdKeyboardArrowUp, MdSchedule,
+  MdClose, MdContentCopy, MdKeyboardArrowDown, MdKeyboardArrowUp, MdSchedule, MdSearch,
 } from 'react-icons/md';
 import {
   listSubtitleLanguages,
@@ -44,11 +44,52 @@ const stamp = (seconds) => {
   return h > 0 ? `${h}:${pad(m)}:${pad(sec)}` : `${m}:${pad(sec)}`;
 };
 
+// Case- and accent-insensitive: "cafe" finds "Café". Folding a character can
+// change its length (NFD splits "é" in two), so each folded character remembers
+// where it came from in the original, for the highlight.
+const fold = (text) => {
+  let out = '';
+  const map = [];
+  const src = String(text);
+  for (let i = 0; i < src.length; i += 1) {
+    const f = src[i].normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
+    for (let k = 0; k < f.length; k += 1) { out += f[k]; map.push(i); }
+  }
+  return { out, map };
+};
+
+function highlight(text, needle) {
+  if (!needle) return text;
+  const { out, map } = fold(text);
+  const parts = [];
+  let from = 0;
+  let last = 0;
+  for (;;) {
+    const at = out.indexOf(needle, from);
+    if (at < 0) break;
+    const start = map[at];
+    const end = (map[at + needle.length - 1] ?? start) + 1;
+    if (start > last) parts.push(text.slice(last, start));
+    parts.push(<mark key={start}>{text.slice(start, end)}</mark>);
+    last = end;
+    from = at + needle.length;
+  }
+  if (last < text.length) parts.push(text.slice(last));
+  return parts;
+}
+
 export default function Transcript({ author, permlink, currentTime = 0, onSeek, embedded = false }) {
   const { t } = useTranslation();
   const [languages, setLanguages] = useState([]);
   const [lang, setLang] = useState(null);
   const [cues, setCues] = useState([]);
+  const [loadingLang, setLoadingLang] = useState(false);
+  const [loadFailed, setLoadFailed] = useState(false);
+  const [retryKey, setRetryKey] = useState(0);
+  // Set once the reader picks a language themselves. From then on that choice
+  // is final: it loads, or they are told it didn't. Only the automatic first
+  // pick may quietly fall through to another language.
+  const userPickedRef = useRef(false);
   const [expanded, setExpanded] = useState(embedded);
   const [copied, setCopied] = useState(false);
   // Copying is done for two different reasons and they want different text:
@@ -59,13 +100,21 @@ export default function Transcript({ author, permlink, currentTime = 0, onSeek, 
     try { return localStorage.getItem(COPY_TIMES_KEY) !== '0'; } catch { return true; }
   });
 
+  const [searchOpen, setSearchOpen] = useState(false);
+  const [query, setQuery] = useState('');
+  const searchRef = useRef(null);
+
   const listRef = useRef(null);
   const lastUserScrollRef = useRef(0);
+  // A line clicked in the search results, to scroll to once the full list is back.
+  const revealRef = useRef(-1);
 
   // Which languages exist for this video.
   useEffect(() => {
     let alive = true;
     setLanguages([]); setLang(null); setCues([]);
+    setLoadFailed(false);
+    userPickedRef.current = false;
     listSubtitleLanguages(author, permlink).then((list) => {
       if (!alive || !list.length) return;
       setLanguages(list);
@@ -81,28 +130,42 @@ export default function Transcript({ author, permlink, currentTime = 0, onSeek, 
   // yet, and the fallback gateway is not always healthy either). A video with
   // eight translations shouldn't show no transcript because the preferred one
   // is the unlucky file, so the rest are tried in turn.
+  //
+  // 🚨 But NOT after the reader picked a language from the menu. Falling through
+  // then swapped their choice for English and set the menu back, which reads as
+  // "the language menu does nothing". A picked language loads, or the panel
+  // says it couldn't (keeping the lines it had) and offers a retry.
   useEffect(() => {
     if (!lang || !languages.length) return undefined;
     let alive = true;
+    const picked = userPickedRef.current;
+    setLoadingLang(true);
+    setLoadFailed(false);
     (async () => {
       const preferred = languages.find((l) => l.lang === lang);
-      const ordered = [preferred, ...languages.filter((l) => l.lang !== lang)].filter(Boolean);
+      const ordered = picked
+        ? [preferred].filter(Boolean)
+        : [preferred, ...languages.filter((l) => l.lang !== lang)].filter(Boolean);
       for (const entry of ordered) {
         try {
           const parsed = await loadSubtitleCues(author, permlink, entry);
           if (!alive) return;
           if (parsed.length) {
             setCues(parsed);
+            setLoadingLang(false);
             // Say which language is actually on screen.
             if (entry.lang !== lang) setLang(entry.lang);
             return;
           }
         } catch { /* unfetchable right now — try the next language */ }
       }
-      if (alive) setCues([]);
+      if (!alive) return;
+      setLoadingLang(false);
+      if (picked) setLoadFailed(true);
+      else setCues([]);
     })();
     return () => { alive = false; };
-  }, [lang, languages, author, permlink]);
+  }, [lang, languages, author, permlink, retryKey]);
 
   const activeIndex = useMemo(() => {
     if (!cues.length) return -1;
@@ -116,13 +179,49 @@ export default function Transcript({ author, permlink, currentTime = 0, onSeek, 
     return currentTime <= cues[found].end + 0.5 ? found : -1;
   }, [cues, currentTime]);
 
-  // Follow along, unless the reader is scrolling the panel themselves.
+  const needle = useMemo(() => fold(query.trim()).out, [query]);
+  // Cue indexes that match, in order. Indexes, not cues, so a result keeps the
+  // position it has in the full transcript.
+  const matches = useMemo(() => {
+    if (!needle) return null;
+    const hits = [];
+    cues.forEach((c, i) => { if (fold(c.text).out.includes(needle)) hits.push(i); });
+    return hits;
+  }, [cues, needle]);
+
+  // Follow along, unless the reader is scrolling the panel themselves or
+  // looking at search results.
   useEffect(() => {
-    if (!expanded || activeIndex < 0) return;
+    if (!expanded || activeIndex < 0 || matches) return;
     if (Date.now() - lastUserScrollRef.current < AUTOSCROLL_PAUSE_MS) return;
     const el = listRef.current?.querySelector(`[data-cue="${activeIndex}"]`);
     el?.scrollIntoView({ block: 'nearest' });
-  }, [activeIndex, expanded]);
+  }, [activeIndex, expanded, matches]);
+
+  // After jumping from a search result, show that line in the full transcript.
+  useEffect(() => {
+    if (matches || revealRef.current < 0) return;
+    const el = listRef.current?.querySelector(`[data-cue="${revealRef.current}"]`);
+    revealRef.current = -1;
+    el?.scrollIntoView({ block: 'center' });
+  }, [matches]);
+
+  useEffect(() => { if (searchOpen) searchRef.current?.focus(); }, [searchOpen]);
+  // A new video starts with no search.
+  useEffect(() => { setSearchOpen(false); setQuery(''); }, [author, permlink]);
+
+  const closeSearch = useCallback(() => { setSearchOpen(false); setQuery(''); }, []);
+
+  const pick = useCallback((i) => {
+    onSeek?.(cues[i].start);
+    if (matches) {
+      // Hand the reader back the whole transcript, at the line they picked, so
+      // they can read on from there.
+      revealRef.current = i;
+      lastUserScrollRef.current = Date.now();
+      closeSearch();
+    }
+  }, [cues, matches, onSeek, closeSearch]);
 
   const toggleTimes = useCallback(() => {
     setWithTimes((v) => {
@@ -155,11 +254,21 @@ export default function Transcript({ author, permlink, currentTime = 0, onSeek, 
       <div className="transcript-head">
         {embedded ? null : <h3>{t('comments.transcript.title')}</h3>}
         <div className="transcript-actions">
+          <button
+            type="button"
+            className={`transcript-search-btn${searchOpen ? ' active' : ''}`}
+            onClick={() => (searchOpen ? closeSearch() : (setSearchOpen(true), setExpanded(true)))}
+            aria-pressed={searchOpen}
+            aria-label={t('comments.transcript.search')}
+            title={t('comments.transcript.search')}
+          >
+            <MdSearch size={16} />
+          </button>
           {languages.length > 1 && (
             <select
               className="transcript-lang"
               value={lang || ''}
-              onChange={(e) => setLang(e.target.value)}
+              onChange={(e) => { userPickedRef.current = true; setLang(e.target.value); }}
               aria-label={t('comments.transcript.languageAria')}
             >
               {languages.map((l) => <option key={l.lang} value={l.lang}>{l.label || l.lang}</option>)}
@@ -185,24 +294,71 @@ export default function Transcript({ author, permlink, currentTime = 0, onSeek, 
         </div>
       </div>
 
+      {searchOpen && (
+        <div className="transcript-search">
+          <MdSearch size={16} className="transcript-search-icon" aria-hidden="true" />
+          <input
+            ref={searchRef}
+            type="search"
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === 'Escape') closeSearch();
+              if (e.key === 'Enter' && matches?.length) pick(matches[0]);
+            }}
+            placeholder={t('comments.transcript.searchPlaceholder')}
+            aria-label={t('comments.transcript.search')}
+          />
+          {matches && (
+            <span className="transcript-search-count" aria-live="polite">
+              {t('comments.transcript.searchResults', { count: matches.length })}
+            </span>
+          )}
+          <button
+            type="button"
+            className="transcript-search-close"
+            onClick={closeSearch}
+            aria-label={t('comments.transcript.closeSearch')}
+            title={t('comments.transcript.closeSearch')}
+          >
+            <MdClose size={16} />
+          </button>
+        </div>
+      )}
+
+      {loadFailed && (
+        <div className="transcript-load-failed" role="status">
+          <span>{t('comments.transcript.languageLoadFailed')}</span>
+          <button type="button" onClick={() => setRetryKey((k) => k + 1)}>
+            {t('common.actions.retry')}
+          </button>
+        </div>
+      )}
+
       <div
-        className="transcript-body"
+        className={`transcript-body${loadingLang ? ' loading' : ''}`}
         ref={listRef}
         onScroll={() => { lastUserScrollRef.current = Date.now(); }}
       >
-        {cues.map((cue, i) => (
-          <button
-            key={`${cue.start}-${i}`}
-            type="button"
-            data-cue={i}
-            className={`transcript-line${i === activeIndex ? ' active' : ''}`}
-            onClick={() => onSeek?.(cue.start)}
-            title={t('comments.transcript.jumpTo', { time: stamp(cue.start) })}
-          >
-            <span className="transcript-time">{stamp(cue.start)}</span>
-            <span className="transcript-text">{cue.text}</span>
-          </button>
-        ))}
+        {(matches || cues.map((_, i) => i)).map((i) => {
+          const cue = cues[i];
+          return (
+            <button
+              key={`${cue.start}-${i}`}
+              type="button"
+              data-cue={i}
+              className={`transcript-line${i === activeIndex ? ' active' : ''}`}
+              onClick={() => pick(i)}
+              title={t('comments.transcript.jumpTo', { time: stamp(cue.start) })}
+            >
+              <span className="transcript-time">{stamp(cue.start)}</span>
+              <span className="transcript-text">{matches ? highlight(cue.text, needle) : cue.text}</span>
+            </button>
+          );
+        })}
+        {matches && !matches.length && (
+          <div className="transcript-search-empty">{t('comments.transcript.searchNoResults')}</div>
+        )}
       </div>
 
       {embedded ? null : (

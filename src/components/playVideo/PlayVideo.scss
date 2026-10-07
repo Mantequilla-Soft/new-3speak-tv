@@ -876,6 +876,41 @@
   }
 }
 
+// One-second confirmation of a key / click / tap on the video: play, pause,
+// skip. Centred, 20% of the player's height, never in the way of a click.
+.video-action-flash {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  height: 20%;
+  aspect-ratio: 1 / 1;
+  transform: translate(-50%, -50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.5);
+  color: #fff;
+  z-index: 6;
+  pointer-events: none;
+  animation: video-action-flash 1s ease-out forwards;
+
+  .video-action-flash__icon {
+    width: 45%;
+    height: 45%;
+  }
+
+  // The triangle's visual centre sits left of its box.
+  .video-action-flash__icon--play { margin-left: 8%; }
+}
+
+@keyframes video-action-flash {
+  0% { opacity: 0; transform: translate(-50%, -50%) scale(0.85); }
+  12% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+  70% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+  100% { opacity: 0; transform: translate(-50%, -50%) scale(1.08); }
+}
+
 .video-interact-overlay {
   position: absolute;
   top: 40px;
@@ -884,6 +919,10 @@
   height: calc(100% - 40px);
   z-index: 5;
   cursor: pointer;
+  // A long press opens the speed menu; keep iOS from popping its own
+  // callout / text selection over it.
+  -webkit-touch-callout: none;
+  user-select: none;
 }
 
 

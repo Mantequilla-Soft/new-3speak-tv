@@ -57,12 +57,18 @@
   "transcript": {
     "title": "Bản ghi lời",
     "languageAria": "Ngôn ngữ bản ghi lời",
+    "languageLoadFailed": "Không thể tải ngôn ngữ này.",
     "copyingWithTimes": "Sao chép kèm mốc thời gian",
     "copyingTextOnly": "Chỉ sao chép văn bản",
     "timecodes": "Mốc thời gian",
     "copyWithTimes": "Sao chép bản ghi lời kèm mốc thời gian",
     "copyText": "Sao chép văn bản bản ghi lời",
     "jumpTo": "Chuyển đến {{time}}",
+    "search": "Tìm trong bản ghi",
+    "searchPlaceholder": "Tìm trong bản ghi…",
+    "closeSearch": "Đóng tìm kiếm",
+    "searchResults_other": "{{count}} kết quả",
+    "searchNoResults": "Không có dòng nào khớp",
     "hide": "Ẩn bản ghi lời",
     "show": "Hiện bản ghi lời",
     "showWithCount_other": "Hiện bản ghi lời ({{count}} dòng)"
