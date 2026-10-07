@@ -1,12 +1,16 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import {
-  MdClose, MdContentCopy, MdKeyboardArrowDown, MdKeyboardArrowUp, MdSchedule, MdSearch,
+  MdClose, MdContentCopy, MdEdit, MdKeyboardArrowDown, MdKeyboardArrowUp, MdSchedule, MdSearch,
 } from 'react-icons/md';
 import {
   listSubtitleLanguages,
   loadSubtitleCues,
   pickSubtitleLang,
+  publishSubtitleEdit,
 } from '../../hooks/useSubtitles';
+import { useAppStore } from '../../lib/store';
+import { saveCaptionEdit } from '../../lib/captionEdit';
+import { toastIn } from '../../utils/toast';
 import { useTranslation } from 'react-i18next';
 import './Transcript.scss';
 
@@ -31,6 +35,8 @@ import './Transcript.scss';
  * language here is chosen independently: reading along is not the same choice
  * as turning captions on, and neither should switch the other.
  */
+
+const toast = toastIn('Captions');
 
 const AUTOSCROLL_PAUSE_MS = 6000;
 const COPY_TIMES_KEY = '3speak-transcript-copy-times';
@@ -78,8 +84,15 @@ function highlight(text, needle) {
   return parts;
 }
 
+// "de" → "German" (in the reader's own language), falling back to the code.
+function languageName(code, uiLang) {
+  try {
+    return new Intl.DisplayNames([uiLang || 'en'], { type: 'language' }).of(code) || code;
+  } catch { return code; }
+}
+
 export default function Transcript({ author, permlink, currentTime = 0, onSeek, embedded = false }) {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const [languages, setLanguages] = useState([]);
   const [lang, setLang] = useState(null);
   const [cues, setCues] = useState([]);
@@ -99,6 +112,15 @@ export default function Transcript({ author, permlink, currentTime = 0, onSeek, 
   const [withTimes, setWithTimes] = useState(() => {
     try { return localStorage.getItem(COPY_TIMES_KEY) !== '0'; } catch { return true; }
   });
+
+  // The video's author can correct the automatic captions, one language at a
+  // time. `draft` holds the edited text per line while editing, else null.
+  const { user, incubationHandle } = useAppStore();
+  const canEdit = !!user && !incubationHandle && !!author && user.toLowerCase() === String(author).toLowerCase();
+  const [draft, setDraft] = useState(null);
+  const [savingEdit, setSavingEdit] = useState(false);
+  const editing = draft !== null;
+  const dirty = editing && draft.some((txt, i) => txt !== cues[i]?.text);
 
   const [searchOpen, setSearchOpen] = useState(false);
   const [query, setQuery] = useState('');
@@ -192,11 +214,11 @@ export default function Transcript({ author, permlink, currentTime = 0, onSeek, 
   // Follow along, unless the reader is scrolling the panel themselves or
   // looking at search results.
   useEffect(() => {
-    if (!expanded || activeIndex < 0 || matches) return;
+    if (!expanded || activeIndex < 0 || matches || editing) return;
     if (Date.now() - lastUserScrollRef.current < AUTOSCROLL_PAUSE_MS) return;
     const el = listRef.current?.querySelector(`[data-cue="${activeIndex}"]`);
     el?.scrollIntoView({ block: 'nearest' });
-  }, [activeIndex, expanded, matches]);
+  }, [activeIndex, expanded, matches, editing]);
 
   // After jumping from a search result, show that line in the full transcript.
   useEffect(() => {
@@ -208,9 +230,40 @@ export default function Transcript({ author, permlink, currentTime = 0, onSeek, 
 
   useEffect(() => { if (searchOpen) searchRef.current?.focus(); }, [searchOpen]);
   // A new video starts with no search.
-  useEffect(() => { setSearchOpen(false); setQuery(''); }, [author, permlink]);
+  useEffect(() => { setSearchOpen(false); setQuery(''); setDraft(null); }, [author, permlink]);
 
   const closeSearch = useCallback(() => { setSearchOpen(false); setQuery(''); }, []);
+
+  const startEdit = () => {
+    setSearchOpen(false); setQuery('');
+    setExpanded(true);
+    setDraft(cues.map((c) => c.text));
+  };
+  const cancelEdit = () => {
+    if (dirty && !window.confirm(t('comments.transcript.edit.discardConfirm'))) return;
+    setDraft(null);
+  };
+  const saveEdit = async () => {
+    if (!dirty || savingEdit) return;
+    setSavingEdit(true);
+    try {
+      const { cid, cues: stored } = await saveCaptionEdit({
+        author,
+        permlink,
+        lang,
+        cues: cues.map((c, i) => ({ start: c.start, end: c.end, text: draft[i] })),
+      });
+      publishSubtitleEdit(author, permlink, lang, cid, stored);
+      setLanguages((list) => list.map((l) => (l.lang === lang ? { ...l, cid } : l)));
+      setCues(stored);
+      setDraft(null);
+      toast.success(t('comments.transcript.edit.saved'));
+    } catch (err) {
+      toast.error(err?.message || t('comments.transcript.edit.saveFailed'));
+    } finally {
+      setSavingEdit(false);
+    }
+  };
 
   const pick = useCallback((i) => {
     onSeek?.(cues[i].start);
@@ -254,8 +307,20 @@ export default function Transcript({ author, permlink, currentTime = 0, onSeek, 
       <div className="transcript-head">
         {embedded ? null : <h3>{t('comments.transcript.title')}</h3>}
         <div className="transcript-actions">
+          {canEdit && !editing && (
+            <button
+              type="button"
+              className="transcript-search-btn"
+              onClick={startEdit}
+              aria-label={t('comments.transcript.edit.button')}
+              title={t('comments.transcript.edit.button')}
+            >
+              <MdEdit size={16} />
+            </button>
+          )}
           <button
             type="button"
+            disabled={editing}
             className={`transcript-search-btn${searchOpen ? ' active' : ''}`}
             onClick={() => (searchOpen ? closeSearch() : (setSearchOpen(true), setExpanded(true)))}
             aria-pressed={searchOpen}
@@ -268,6 +333,7 @@ export default function Transcript({ author, permlink, currentTime = 0, onSeek, 
             <select
               className="transcript-lang"
               value={lang || ''}
+              disabled={editing}
               onChange={(e) => { userPickedRef.current = true; setLang(e.target.value); }}
               aria-label={t('comments.transcript.languageAria')}
             >
@@ -326,6 +392,22 @@ export default function Transcript({ author, permlink, currentTime = 0, onSeek, 
         </div>
       )}
 
+      {editing && (
+        <div className="transcript-edit-bar">
+          <span className="transcript-edit-hint">
+            {t('comments.transcript.edit.hint', { language: languageName(lang, i18n.language) })}
+          </span>
+          <div className="transcript-edit-actions">
+            <button type="button" className="transcript-edit-cancel" onClick={cancelEdit} disabled={savingEdit}>
+              {t('common.actions.cancel')}
+            </button>
+            <button type="button" className="transcript-edit-save" onClick={saveEdit} disabled={!dirty || savingEdit}>
+              {savingEdit ? t('comments.transcript.edit.saving') : t('common.actions.save')}
+            </button>
+          </div>
+        </div>
+      )}
+
       {loadFailed && (
         <div className="transcript-load-failed" role="status">
           <span>{t('comments.transcript.languageLoadFailed')}</span>
@@ -340,7 +422,30 @@ export default function Transcript({ author, permlink, currentTime = 0, onSeek, 
         ref={listRef}
         onScroll={() => { lastUserScrollRef.current = Date.now(); }}
       >
-        {(matches || cues.map((_, i) => i)).map((i) => {
+        {editing && cues.map((cue, i) => (
+          <div key={`e-${cue.start}-${i}`} data-cue={i} className={`transcript-line transcript-line--edit${i === activeIndex ? ' active' : ''}`}>
+            <button
+              type="button"
+              className="transcript-time"
+              onClick={() => onSeek?.(cue.start)}
+              title={t('comments.transcript.jumpTo', { time: stamp(cue.start) })}
+            >
+              {stamp(cue.start)}
+            </button>
+            <textarea
+              className={`transcript-edit-input${draft[i] !== cue.text ? ' changed' : ''}`}
+              value={draft[i]}
+              rows={Math.min(2, String(draft[i]).split('\n').length)}
+              maxLength={500}
+              onChange={(e) => {
+                const v = e.target.value;
+                setDraft((d) => d.map((x, k) => (k === i ? v : x)));
+              }}
+              aria-label={t('comments.transcript.edit.lineAria', { time: stamp(cue.start) })}
+            />
+          </div>
+        ))}
+        {!editing && (matches || cues.map((_, i) => i)).map((i) => {
           const cue = cues[i];
           return (
             <button

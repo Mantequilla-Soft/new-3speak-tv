@@ -75,7 +75,20 @@
     "hide": "Transcript verbergen",
     "show": "Transcript tonen",
     "showWithCount_one": "Transcript tonen ({{count}} regel)",
-    "showWithCount_other": "Transcript tonen ({{count}} regels)"
+    "showWithCount_other": "Transcript tonen ({{count}} regels)",
+    "edit": {
+      "button": "Ondertitels bewerken",
+      "hint": "Je bewerkt de {{language}} ondertitels. Elke regel behoudt zijn timing; maak een regel leeg om hem te verwijderen.",
+      "saving": "Opslaan…",
+      "saved": "Ondertitels opgeslagen",
+      "saveFailed": "De ondertitels konden niet worden opgeslagen",
+      "discardConfirm": "Je wijzigingen aan de ondertitels weggooien?",
+      "lineAria": "Ondertitel op {{time}}",
+      "signedInAsOther": "Ingelogd als @{{signedFor}}, maar deze video is van @{{want}}. Log opnieuw in en probeer het nog eens.",
+      "signatureRejected": "De handtekening is geweigerd",
+      "walletPrompt": "Ondertitels opslaan",
+      "empty": "Ondertitels mogen niet leeg zijn"
+    }
   },
   "blog": {
     "noContent": "Geen inhoud beschikbaar",

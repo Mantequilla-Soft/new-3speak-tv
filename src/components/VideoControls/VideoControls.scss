@@ -395,6 +395,44 @@
     }
   }
 
+  // Chapter names under the bar. Above the track's invisible 12px hit area,
+  // which would otherwise swallow clicks on them.
+  .vc-chapter-labels {
+    position: relative;
+    z-index: 2;
+    height: 16px;
+    margin-top: 5px;
+  }
+
+  .vc-chapter-label {
+    position: absolute;
+    top: 0;
+    box-sizing: border-box;
+    padding: 0 4px;
+    border: 0;
+    border-left: 1px solid rgba(255, 255, 255, 0.25);
+    background: none;
+    color: rgba(255, 255, 255, 0.65);
+    font-size: 11px;
+    font-weight: 500;
+    line-height: 16px;
+    text-align: left;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    cursor: pointer;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8);
+    transition: color 0.15s ease;
+
+    &:first-child { border-left: 0; }
+    &:hover { color: #fff; }
+
+    &.active {
+      color: #fff;
+      font-weight: 600;
+    }
+  }
+
   // A chapter boundary: a short break in the bar, over the fill and the buffer,
   // under the comment markers.
   .vc-chapter-gap {
@@ -794,7 +832,8 @@
 
 // Mobile controls layout
 @media (max-width: 767px) {
-  .video-controls .vc-chapter-title { display: none; }
+  .video-controls .vc-chapter-title,
+  .video-controls .vc-chapter-labels { display: none; }
 
   // Container always visible (for progress bar) but non-interactive
   .video-controls,
@@ -1011,7 +1050,8 @@
 
 // Phone landscape — same mobile controls layout (settings gear instead of individual buttons)
 @media screen and (orientation: landscape) and (max-height: 500px) {
-  .video-controls .vc-chapter-title { display: none; }
+  .video-controls .vc-chapter-title,
+  .video-controls .vc-chapter-labels { display: none; }
 
   .video-controls,
   .video-controls.visible {

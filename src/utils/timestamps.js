@@ -210,3 +210,55 @@ export function chapterAt(chapters, time) {
   }
   return chapters[0];
 }
+
+// ── Timestamps in the comments people write ──────────────────────────────
+//
+// A comment is a Hive post, read by every Hive frontend, and on PeakD or Ecency
+// a bare "4:12" is just text. So when a comment is posted, each timestamp that
+// falls inside the video is stored as a real link to that moment on 3Speak:
+// [4:12](https://3speak.tv/watch?v=author/permlink&t=252). On 3Speak itself
+// the comment renderer turns such links back into the in-page seek link, so it
+// looks and behaves exactly like a typed timestamp.
+
+const SITE = 'https://3speak.tv';
+
+export function watchTimeUrl(author, permlink, seconds) {
+  return `${SITE}/watch?v=${author}/${permlink}&t=${Math.floor(seconds)}`;
+}
+
+const escapeRe = (s) => String(s).replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+
+// Stretches of markdown a timestamp must not be linked inside: fenced and inline
+// code, existing links and images (label AND target), raw HTML tags and bare URLs.
+const PROTECTED_RE = /```[\s\S]*?```|`[^`\n]*`|!?\[[^\]]*\]\([^)]*\)|<[^>\n]+>|https?:\/\/\S+/g;
+
+/** Turn the timestamps in a comment's markdown into 3Speak links to that moment. */
+export function linkTimestampsInMarkdown(text, { author, permlink, duration }) {
+  const limit = Math.floor(Number(duration) || 0);
+  if (!text || !author || !permlink || limit <= 0 || !STAMP_TEST.test(text)) return text || '';
+  const linkPlain = (chunk) => chunk.replace(new RegExp(STAMP_SRC, 'gi'), (m, h, mm, ss) => {
+    const sec = toSeconds(h, mm, ss);
+    return sec == null || sec > limit ? m : `[${m}](${watchTimeUrl(author, permlink, sec)})`;
+  });
+  let out = '';
+  let last = 0;
+  for (const m of text.matchAll(PROTECTED_RE)) {
+    out += linkPlain(text.slice(last, m.index)) + m[0];
+    last = m.index + m[0].length;
+  }
+  return out + linkPlain(text.slice(last));
+}
+
+/**
+ * The reverse, for the edit box: [4:12](3speak link to THIS video) back to a
+ * plain 4:12, so the author edits their words and not link syntax. A link to a
+ * moment in another video is left as it is.
+ */
+export function unlinkTimestampsInMarkdown(text, { author, permlink }) {
+  if (!text || !author || !permlink) return text || '';
+  const re = new RegExp(
+    String.raw`\[((?:\d{1,2}:)?\d{1,2}:[0-5]\d)\]\(https?:\/\/(?:[\w-]+\.)?3speak\.tv\/watch\?v=${escapeRe(author)}\/${escapeRe(permlink)}(?:&[^)\s]*)?\)`,
+    'g',
+  );
+  return text.replace(re, '$1');
+}

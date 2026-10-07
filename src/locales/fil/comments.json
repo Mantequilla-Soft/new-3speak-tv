@@ -75,7 +75,20 @@
     "hide": "Itago ang transcript",
     "show": "Ipakita ang transcript",
     "showWithCount_one": "Ipakita ang transcript ({{count}} linya)",
-    "showWithCount_other": "Ipakita ang transcript ({{count}} linya)"
+    "showWithCount_other": "Ipakita ang transcript ({{count}} linya)",
+    "edit": {
+      "button": "I-edit ang captions",
+      "hint": "Ine-edit ang {{language}} na captions. Nananatili ang timing ng bawat linya; tanggalin ang laman ng linya para alisin ito.",
+      "saving": "Sine-save…",
+      "saved": "Na-save ang captions",
+      "saveFailed": "Hindi ma-save ang captions",
+      "discardConfirm": "Itapon ang mga pagbabago mo sa captions?",
+      "lineAria": "Caption sa {{time}}",
+      "signedInAsOther": "Naka-sign in ka bilang @{{signedFor}}, pero kay @{{want}} ang video na ito. Mag-log in ulit at subukang muli.",
+      "signatureRejected": "Tinanggihan ang signature",
+      "walletPrompt": "I-save ang captions",
+      "empty": "Hindi puwedeng walang laman ang captions"
+    }
   },
   "blog": {
     "noContent": "Walang available na content",

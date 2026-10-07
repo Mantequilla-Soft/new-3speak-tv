@@ -167,6 +167,83 @@
     }
   }
 
+  // ── Author editing the captions ──
+  .transcript-edit-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    padding: 0.5rem 0.9rem;
+    border-bottom: 1px solid var(--border-color);
+    background: var(--accent-light);
+  }
+
+  .transcript-edit-hint {
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+  }
+
+  .transcript-edit-actions { display: flex; gap: 0.4rem; }
+
+  .transcript-edit-cancel,
+  .transcript-edit-save {
+    padding: 0.28rem 0.8rem;
+    border-radius: 999px;
+    font-size: 0.78rem;
+    font-weight: 600;
+    cursor: pointer;
+
+    &:disabled { opacity: 0.5; cursor: default; }
+  }
+
+  .transcript-edit-cancel {
+    border: 1px solid var(--border-color);
+    background: transparent;
+    color: var(--text-secondary);
+  }
+
+  // Outline, never a red fill (3Speak rule: red buttons are text + border).
+  .transcript-edit-save {
+    border: 1px solid var(--accent-primary);
+    background: transparent;
+    color: var(--accent-primary);
+  }
+
+  .transcript-line--edit {
+    cursor: default;
+    align-items: flex-start;
+
+    &:hover { background: transparent; }
+
+    .transcript-time {
+      border: 0;
+      background: none;
+      padding: 0.3rem 0 0;
+      text-align: left;
+      cursor: pointer;
+
+      &:hover { color: var(--accent-primary); }
+    }
+  }
+
+  .transcript-edit-input {
+    flex: 1 1 auto;
+    min-width: 0;
+    padding: 0.25rem 0.45rem;
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    font: inherit;
+    font-size: 0.86rem;
+    line-height: 1.45;
+    resize: vertical;
+
+    &:focus { outline: none; border-color: var(--accent-primary); }
+    &.changed { border-color: var(--accent-primary); background: var(--accent-light); }
+  }
+
   .transcript-search {
     display: flex;
     align-items: center;

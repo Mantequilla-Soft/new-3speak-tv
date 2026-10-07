@@ -71,7 +71,20 @@
     "searchNoResults": "一致する行はありません",
     "hide": "文字起こしを非表示",
     "show": "文字起こしを表示",
-    "showWithCount_other": "文字起こしを表示（{{count}} 行）"
+    "showWithCount_other": "文字起こしを表示（{{count}} 行）",
+    "edit": {
+      "button": "字幕を編集",
+      "hint": "{{language}}の字幕を編集しています。各行のタイミングはそのままです。行を空にすると削除されます。",
+      "saving": "保存中…",
+      "saved": "字幕を保存しました",
+      "saveFailed": "字幕を保存できませんでした",
+      "discardConfirm": "字幕の変更を破棄しますか？",
+      "lineAria": "{{time}} の字幕",
+      "signedInAsOther": "@{{signedFor}} としてログインしていますが、この動画は @{{want}} のものです。ログインし直してから再度お試しください。",
+      "signatureRejected": "署名が拒否されました",
+      "walletPrompt": "字幕を保存",
+      "empty": "字幕を空にすることはできません"
+    }
   },
   "blog": {
     "noContent": "コンテンツがありません",
