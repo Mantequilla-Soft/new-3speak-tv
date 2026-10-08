@@ -15,14 +15,14 @@
       "tagline1": "BESCHERM JE CONTENT",
       "tagline2": "TOKENISEER JE COMMUNITY",
       "cta": "Doe mee met de revolutie",
-      "description": "3Speak is gebouwd op de Hive-blockchain, wat zorgt voor echte decentralisatie, censuurbestendigheid en eigendom bij de community."
+      "description": "3Speak is gebouwd op Hive, wat zorgt voor echte decentralisatie, censuurbestendigheid en eigendom bij de community. Het wordt onderhouden en gedraaid door de community, voor de community."
     },
     "how": {
       "title": "Zo werkt 3Speak",
-      "subtitle": "Ervaar echt eigendom van je content dankzij blockchaintechnologie",
+      "subtitle": "Ervaar echt eigendom van je content, gebouwd op Hive",
       "create": {
         "title": "Maak content",
-        "text": "Upload je video's en maak content die echt van jou is op de blockchain."
+        "text": "Upload je video's en maak content die echt van jou is, opgeslagen op Hive."
       },
       "earn": {
         "title": "Verdien beloningen",
@@ -41,7 +41,7 @@
       },
       "p2p": {
         "title": "P2P",
-        "text": "De blockchaintechnologie die de site gebruikt, zorgt ervoor dat contentmakers echte P2P-verbindingen hebben met hun publiek, zonder tussenpartijen."
+        "text": "Omdat 3Speak op Hive draait, hebben contentmakers echte P2P-verbindingen met hun publiek, zonder tussenpartijen."
       },
       "tokenisation": {
         "title": "TOKENISATIE",
@@ -57,7 +57,7 @@
       }
     },
     "hive": {
-      "title": "Aangedreven door de Hive-blockchain",
+      "title": "Aangedreven door Hive",
       "decentralized": {
         "title": "Gedecentraliseerd",
         "text": "Geen enkel centraal punt van falen of controle"
@@ -70,7 +70,7 @@
         "title": "Van de community",
         "text": "Bestuurd door stakeholders, niet door bedrijven"
       },
-      "description": "3Speak is gebouwd op de Hive-blockchain, wat zorgt voor echte decentralisatie, censuurbestendigheid en eigendom bij de community. Het Hive-ecosysteem levert de infrastructuur voor beloningen, bestuur en eigendom van bezittingen die 3Speak revolutionair maakt."
+      "description": "3Speak is gebouwd op Hive, wat zorgt voor echte decentralisatie, censuurbestendigheid en eigendom bij de community. Het Hive-ecosysteem levert de infrastructuur voor beloningen, bestuur en eigendom van bezittingen die 3Speak revolutionair maakt."
     },
     "guidelines": {
       "title": "Onze richtlijnen",

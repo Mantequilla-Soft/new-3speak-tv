@@ -227,14 +227,15 @@
     .feature-title {
       font-size: 1.5rem;
       font-weight: 700;
+      // Tile headings in the normal text colour: red on every tile was too much.
       margin-bottom: 1rem;
 
       &.red-text {
-        color: var(--accent-primary);
+        color: var(--text-primary);
       }
 
       &.blue-text {
-        color: var(--accent-primary);
+        color: var(--text-primary);
       }
     }
 
@@ -267,11 +268,11 @@
         margin-bottom: 1rem;
 
         &.red-text {
-          color: var(--accent-primary);
+          color: var(--text-primary);
         }
 
         &.blue-text {
-          color: var(--accent-primary);
+          color: var(--text-primary);
         }
       }
 

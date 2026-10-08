@@ -15,14 +15,14 @@
       "tagline1": "LINDUNGI KONTENMU",
       "tagline2": "TOKENISASI KOMUNITASMU",
       "cta": "Ikut Revolusinya",
-      "description": "3Speak dibangun di atas blockchain Hive, yang menjamin desentralisasi sejati, ketahanan terhadap sensor, dan kepemilikan oleh komunitas."
+      "description": "3Speak dibangun di atas Hive, yang menjamin desentralisasi sejati, ketahanan terhadap sensor, dan kepemilikan oleh komunitas. 3Speak dikelola dan dijalankan oleh komunitas, untuk komunitas."
     },
     "how": {
       "title": "Cara Kerja 3Speak",
-      "subtitle": "Rasakan kepemilikan konten yang sesungguhnya lewat teknologi blockchain",
+      "subtitle": "Rasakan kepemilikan konten yang sesungguhnya, dibangun di atas Hive",
       "create": {
         "title": "Buat Konten",
-        "text": "Unggah videomu dan buat konten yang benar-benar milikmu di blockchain."
+        "text": "Unggah videomu dan buat konten yang benar-benar milikmu, tersimpan di Hive."
       },
       "earn": {
         "title": "Dapatkan Reward",
@@ -41,7 +41,7 @@
       },
       "p2p": {
         "title": "P2P",
-        "text": "Teknologi blockchain yang digunakan situs ini memastikan kreator konten memiliki koneksi P2P sejati dengan basis penggunanya, tanpa pihak perantara."
+        "text": "Karena 3Speak berjalan di Hive, kreator konten memiliki koneksi P2P sejati dengan basis penggunanya, tanpa pihak perantara."
       },
       "tokenisation": {
         "title": "TOKENISASI",
@@ -57,7 +57,7 @@
       }
     },
     "hive": {
-      "title": "Didukung oleh Blockchain Hive",
+      "title": "Didukung oleh Hive",
       "decentralized": {
         "title": "Terdesentralisasi",
         "text": "Tidak ada satu titik kegagalan atau kendali"
@@ -70,7 +70,7 @@
         "title": "Milik Komunitas",
         "text": "Diatur oleh pemangku kepentingan, bukan korporasi"
       },
-      "description": "3Speak dibangun di atas blockchain Hive, yang menjamin desentralisasi sejati, ketahanan terhadap sensor, dan kepemilikan oleh komunitas. Ekosistem Hive menyediakan infrastruktur untuk reward, tata kelola, dan kepemilikan aset yang membuat 3Speak revolusioner."
+      "description": "3Speak dibangun di atas Hive, yang menjamin desentralisasi sejati, ketahanan terhadap sensor, dan kepemilikan oleh komunitas. Ekosistem Hive menyediakan infrastruktur untuk reward, tata kelola, dan kepemilikan aset yang membuat 3Speak revolusioner."
     },
     "guidelines": {
       "title": "Pedoman Kami",

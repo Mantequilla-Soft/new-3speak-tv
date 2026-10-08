@@ -15,14 +15,14 @@
       "tagline1": "PROTEGGI I TUOI CONTENUTI",
       "tagline2": "TOKENIZZA LA TUA COMMUNITY",
       "cta": "Unisciti alla rivoluzione",
-      "description": "3Speak è costruito sulla blockchain Hive, che garantisce vera decentralizzazione, resistenza alla censura e proprietà della community."
+      "description": "3Speak è costruito su Hive, che garantisce vera decentralizzazione, resistenza alla censura e proprietà della community. È gestito e servito dalla community, per la community."
     },
     "how": {
       "title": "Come funziona 3Speak",
-      "subtitle": "Scopri la vera proprietà dei contenuti grazie alla tecnologia blockchain",
+      "subtitle": "Scopri la vera proprietà dei contenuti, costruita su Hive",
       "create": {
         "title": "Crea contenuti",
-        "text": "Carica i tuoi video e crea contenuti che ti appartengono davvero, sulla blockchain."
+        "text": "Carica i tuoi video e crea contenuti che ti appartengono davvero, archiviati su Hive."
       },
       "earn": {
         "title": "Guadagna ricompense",
@@ -41,7 +41,7 @@
       },
       "p2p": {
         "title": "P2P",
-        "text": "La tecnologia blockchain usata dal sito garantisce ai creator vere connessioni P2P con il proprio pubblico, senza intermediari."
+        "text": "Poiché 3Speak funziona su Hive, i creator hanno vere connessioni P2P con il proprio pubblico, senza intermediari."
       },
       "tokenisation": {
         "title": "TOKENIZZAZIONE",
@@ -57,7 +57,7 @@
       }
     },
     "hive": {
-      "title": "Basato sulla blockchain Hive",
+      "title": "Basato su Hive",
       "decentralized": {
         "title": "Decentralizzato",
         "text": "Nessun singolo punto di guasto o di controllo"
@@ -70,7 +70,7 @@
         "title": "Di proprietà della community",
         "text": "Governato da chi ne detiene le quote, non dalle aziende"
       },
-      "description": "3Speak è costruito sulla blockchain Hive, che garantisce vera decentralizzazione, resistenza alla censura e proprietà della community. L'ecosistema Hive fornisce l'infrastruttura per ricompense, governance e proprietà degli asset che rende 3Speak rivoluzionario."
+      "description": "3Speak è costruito su Hive, che garantisce vera decentralizzazione, resistenza alla censura e proprietà della community. L'ecosistema Hive fornisce l'infrastruttura per ricompense, governance e proprietà degli asset che rende 3Speak rivoluzionario."
     },
     "guidelines": {
       "title": "Le nostre linee guida",

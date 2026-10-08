@@ -15,14 +15,14 @@
       "tagline1": "SCHÜTZE DEINE INHALTE",
       "tagline2": "TOKENISIERE DEINE COMMUNITY",
       "cta": "Sei Teil der Revolution",
-      "description": "3Speak basiert auf der Hive-Blockchain und sorgt so für echte Dezentralisierung, Zensurresistenz und Community-Eigentum."
+      "description": "3Speak basiert auf Hive und sorgt so für echte Dezentralisierung, Zensurresistenz und Community-Eigentum. Es wird von der Community für die Community betrieben und gepflegt."
     },
     "how": {
       "title": "So funktioniert 3Speak",
-      "subtitle": "Erlebe echtes Eigentum an deinen Inhalten dank Blockchain-Technologie",
+      "subtitle": "Erlebe echtes Eigentum an deinen Inhalten, aufgebaut auf Hive",
       "create": {
         "title": "Inhalte erstellen",
-        "text": "Lade deine Videos hoch und erstelle Inhalte, die auf der Blockchain wirklich dir gehören."
+        "text": "Lade deine Videos hoch und erstelle Inhalte, die wirklich dir gehören, gespeichert auf Hive."
       },
       "earn": {
         "title": "Belohnungen verdienen",
@@ -41,7 +41,7 @@
       },
       "p2p": {
         "title": "P2P",
-        "text": "Die Blockchain-Technologie der Seite sorgt dafür, dass Content Creator echte P2P-Verbindungen zu ihrem Publikum haben – ohne Mittelsmänner."
+        "text": "Weil 3Speak auf Hive läuft, haben Content Creator echte P2P-Verbindungen zu ihrem Publikum, ganz ohne Mittelsmänner."
       },
       "tokenisation": {
         "title": "TOKENISIERUNG",
@@ -57,7 +57,7 @@
       }
     },
     "hive": {
-      "title": "Angetrieben von der Hive-Blockchain",
+      "title": "Angetrieben von Hive",
       "decentralized": {
         "title": "Dezentral",
         "text": "Kein Single Point of Failure, keine zentrale Kontrolle"
@@ -70,7 +70,7 @@
         "title": "Im Besitz der Community",
         "text": "Gesteuert von Stakeholdern, nicht von Konzernen"
       },
-      "description": "3Speak basiert auf der Hive-Blockchain und sorgt so für echte Dezentralisierung, Zensurresistenz und Community-Eigentum. Das Hive-Ökosystem liefert die Infrastruktur für Belohnungen, Governance und Eigentum an Assets, die 3Speak revolutionär macht."
+      "description": "3Speak basiert auf Hive und sorgt so für echte Dezentralisierung, Zensurresistenz und Community-Eigentum. Das Hive-Ökosystem liefert die Infrastruktur für Belohnungen, Governance und Eigentum an Assets, die 3Speak revolutionär macht."
     },
     "guidelines": {
       "title": "Unsere Richtlinien",

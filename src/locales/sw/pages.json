@@ -15,14 +15,14 @@
       "tagline1": "LINDA MAUDHUI YAKO",
       "tagline2": "WEKA JUMUIYA YAKO KWENYE TOKENI",
       "cta": "Jiunge na Mapinduzi",
-      "description": "3Speak imejengwa juu ya blockchain ya Hive, ikihakikisha ugatuzi wa kweli, ustahimilivu dhidi ya udhibiti, na umiliki wa jumuiya."
+      "description": "3Speak imejengwa juu ya Hive, ikihakikisha ugatuzi wa kweli, ustahimilivu dhidi ya udhibiti, na umiliki wa jumuiya. Linatunzwa na kuendeshwa na jamii, kwa ajili ya jamii."
     },
     "how": {
       "title": "Jinsi 3Speak inavyofanya kazi",
-      "subtitle": "Furahia umiliki wa kweli wa maudhui kupitia teknolojia ya blockchain",
+      "subtitle": "Furahia umiliki wa kweli wa maudhui, uliojengwa juu ya Hive",
       "create": {
         "title": "Tayarisha maudhui",
-        "text": "Pakia video zako na utayarishe maudhui ambayo ni yako kweli kwenye blockchain."
+        "text": "Pakia video zako na utayarishe maudhui ambayo ni yako kweli, yaliyohifadhiwa kwenye Hive."
       },
       "earn": {
         "title": "Pata zawadi",
@@ -41,7 +41,7 @@
       },
       "p2p": {
         "title": "P2P",
-        "text": "Teknolojia ya blockchain inayotumiwa na tovuti inahakikisha kwamba watayarishaji wa maudhui wana muunganisho wa kweli wa P2P na watumiaji wao, bila watu wa kati."
+        "text": "Kwa kuwa 3Speak inaendeshwa kwenye Hive, watayarishaji wa maudhui wana muunganisho wa kweli wa P2P na watumiaji wao, bila watu wa kati."
       },
       "tokenisation": {
         "title": "TOKENI",
@@ -57,7 +57,7 @@
       }
     },
     "hive": {
-      "title": "Inaendeshwa na blockchain ya Hive",
+      "title": "Inaendeshwa na Hive",
       "decentralized": {
         "title": "Iliyogatuliwa",
         "text": "Hakuna sehemu moja ya kushindwa wala udhibiti"
@@ -70,7 +70,7 @@
         "title": "Inamilikiwa na jumuiya",
         "text": "Inaongozwa na wadau, si mashirika"
       },
-      "description": "3Speak imejengwa juu ya blockchain ya Hive, ikihakikisha ugatuzi wa kweli, ustahimilivu dhidi ya udhibiti, na umiliki wa jumuiya. Mfumo ikolojia wa Hive unatoa miundombinu ya zawadi, utawala, na umiliki wa mali inayoifanya 3Speak kuwa ya kimapinduzi."
+      "description": "3Speak imejengwa juu ya Hive, ikihakikisha ugatuzi wa kweli, ustahimilivu dhidi ya udhibiti, na umiliki wa jumuiya. Mfumo ikolojia wa Hive unatoa miundombinu ya zawadi, utawala, na umiliki wa mali inayoifanya 3Speak kuwa ya kimapinduzi."
     },
     "guidelines": {
       "title": "Miongozo yetu",
