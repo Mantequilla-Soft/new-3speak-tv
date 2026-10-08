@@ -121,6 +121,8 @@
   color: var(--text-secondary);
 }
 
+.wt-text b { color: var(--text-primary); }
+
 .wt-dots {
   display: flex;
   gap: 5px;

@@ -34,6 +34,24 @@
           "hive": "Écosystème Hive"
         }
       },
+      "earnCreators": {
+        "title": "Les créateurs gagnent dès le premier jour",
+        "text": "Chaque vote positif sur votre vidéo augmente ses récompenses d'auteur, versées 7 jours après la publication. En plus, 50 % des revenus publicitaires générés par vos vidéos vous reviennent (vous pouvez en partager une partie avec la communauté où vous avez publié), versés à quelques jours d'intervalle. Contrairement à la plupart des réseaux sociaux, il n'y a ni durée de visionnage minimale ni nombre d'abonnés minimal à atteindre au préalable.",
+        "chips": {
+          "authorRewards": "Récompenses d'auteur",
+          "adShare": "50 % des revenus publicitaires",
+          "noMinimum": "Aucun visionnage minimum"
+        }
+      },
+      "earnViewers": {
+        "title": "Les spectateurs gagnent aussi",
+        "text": "Rien qu'en regardant des vidéos, vous pouvez gagner grâce au programme de récompenses 3Speak : 10 % de tous les revenus publicitaires reviennent aux spectateurs, répartis selon ce que chacun regarde. Activez <b>Récompenses spectateur</b> dans les Paramètres pour y participer. Vos commentaires et vos votes positifs peuvent aussi vous rapporter des récompenses.",
+        "chips": {
+          "watch": "Gagnez en regardant",
+          "adShare": "10 % des revenus publicitaires",
+          "program": "Programme de récompenses 3Speak"
+        }
+      },
       "pagesBar": {
         "text": "Shorts, Groupes, Audio, le classement et plus encore, ici dans la barre du haut."
       },

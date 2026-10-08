@@ -34,6 +34,24 @@
           "hive": "Hệ sinh thái Hive"
         }
       },
+      "earnCreators": {
+        "title": "Nhà sáng tạo kiếm tiền ngay từ ngày đầu",
+        "text": "Mỗi lượt upvote cho video của bạn đều được cộng vào phần thưởng tác giả của video đó, được trả 7 ngày sau khi bạn đăng. Ngoài ra, 50% doanh thu quảng cáo mà video của bạn mang lại thuộc về bạn (bạn có thể chia một phần cho cộng đồng nơi bạn đã đăng), được trả vài ngày một lần. Khác với phần lớn các nền tảng mạng xã hội, ở đây không có thời gian xem tối thiểu hay số người theo dõi tối thiểu nào phải đạt trước.",
+        "chips": {
+          "authorRewards": "Phần thưởng tác giả",
+          "adShare": "50% doanh thu quảng cáo",
+          "noMinimum": "Không cần giờ xem tối thiểu"
+        }
+      },
+      "earnViewers": {
+        "title": "Người xem cũng kiếm được tiền",
+        "text": "Chỉ cần xem video, bạn có thể kiếm tiền từ chương trình phần thưởng 3Speak: 10% toàn bộ doanh thu quảng cáo được dành cho người xem, chia theo những gì mỗi người đã xem. Bật <b>Phần thưởng người xem</b> trong Cài đặt để tham gia. Bình luận và upvote của bạn cũng có thể nhận được phần thưởng.",
+        "chips": {
+          "watch": "Kiếm tiền khi xem",
+          "adShare": "10% doanh thu quảng cáo",
+          "program": "Chương trình thưởng 3Speak"
+        }
+      },
       "pagesBar": {
         "text": "Shorts, Nhóm, Âm thanh, bảng xếp hạng và nhiều hơn nữa, ngay trên thanh trên cùng."
       },

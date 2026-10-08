@@ -34,6 +34,24 @@
           "hive": "Hive ecosystem"
         }
       },
+      "earnCreators": {
+        "title": "Kumikita ang creators mula sa unang araw",
+        "text": "Bawat upvote sa video mo ay nadadagdag sa author rewards nito, na ibinabayad 7 araw pagkatapos mong mag-publish. Bukod diyan, 50% ng ad revenue na dala ng mga video mo ay napupunta sa iyo (puwede mong ibahagi ang bahagi nito sa komunidad kung saan ka nag-post), bayad kada ilang araw. Hindi tulad ng karamihan ng social media platform, walang minimum na watch time o bilang ng followers na kailangan mo munang maabot.",
+        "chips": {
+          "authorRewards": "Author rewards",
+          "adShare": "50% ng ad revenue",
+          "noMinimum": "Walang minimum na watch time"
+        }
+      },
+      "earnViewers": {
+        "title": "Kumikita rin ang viewers",
+        "text": "Sa panonood lang ng mga video, puwede kang kumita mula sa 3Speak reward program: 10% ng lahat ng ad revenue ay napupunta sa viewers, hinahati batay sa pinapanood ng bawat isa. I-on ang <b>Viewer rewards</b> sa Settings para sumali. Puwede ring kumita ng rewards ang mga comment at upvote mo.",
+        "chips": {
+          "watch": "Kumita habang nanonood",
+          "adShare": "10% ng ad revenue",
+          "program": "3Speak reward program"
+        }
+      },
       "pagesBar": {
         "text": "Shorts, Groups, Audio, leaderboard at iba pa, nandito mismo sa itaas na bar."
       },

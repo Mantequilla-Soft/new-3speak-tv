@@ -34,6 +34,24 @@
           "hive": "Hive ekosistemi"
         }
       },
+      "earnCreators": {
+        "title": "İçerik üreticileri ilk günden kazanır",
+        "text": "Videona gelen her upvote, yayınladıktan 7 gün sonra ödenen yazar ödüllerine eklenir. Bunun üstüne, videolarının getirdiği reklam gelirinin %50'si sana gider (bir kısmını videoyu yayınladığın toplulukla paylaşabilirsin) ve birkaç günde bir ödenir. Çoğu sosyal medya platformunun aksine, önce ulaşman gereken bir minimum izlenme süresi veya takipçi sayısı yoktur.",
+        "chips": {
+          "authorRewards": "Yazar ödülleri",
+          "adShare": "Reklam gelirinin %50'si",
+          "noMinimum": "Minimum izlenme süresi yok"
+        }
+      },
+      "earnViewers": {
+        "title": "İzleyiciler de kazanır",
+        "text": "Sadece video izleyerek 3Speak ödül programından kazanabilirsin: tüm reklam gelirinin %10'u izleyicilere gider ve her birinin ne izlediğine göre paylaştırılır. Katılmak için Ayarlar'da <b>İzleyici ödülleri</b> seçeneğini aç. Yorumların ve upvote'ların da sana ödül kazandırabilir.",
+        "chips": {
+          "watch": "İzlerken kazan",
+          "adShare": "Reklam gelirinin %10'u",
+          "program": "3Speak ödül programı"
+        }
+      },
       "pagesBar": {
         "text": "Shorts, Gruplar, Ses, sıralama ve daha fazlası, hemen burada üst çubukta."
       },

@@ -34,6 +34,24 @@
           "hive": "Hive-ecosysteem"
         }
       },
+      "earnCreators": {
+        "title": "Makers verdienen vanaf dag één",
+        "text": "Elke upvote op je video telt mee voor de auteursbeloning, die 7 dagen na publicatie wordt uitbetaald. Daarbovenop gaat 50% van de advertentie-inkomsten die je video's opleveren naar jou (je kunt een deel ervan delen met de community waarin je hebt gepost), elke paar dagen uitbetaald. Anders dan bij de meeste sociale media hoef je niet eerst een minimale kijktijd of een minimum aantal volgers te halen.",
+        "chips": {
+          "authorRewards": "Auteursbeloningen",
+          "adShare": "50% van de advertentie-inkomsten",
+          "noMinimum": "Geen minimale kijktijd"
+        }
+      },
+      "earnViewers": {
+        "title": "Kijkers verdienen ook",
+        "text": "Alleen al door video's te kijken kun je verdienen via het 3Speak-beloningsprogramma: 10% van alle advertentie-inkomsten gaat naar kijkers, verdeeld naar wat ieder van hen kijkt. Zet <b>Kijkbeloningen</b> aan in Instellingen om mee te doen. Ook je reacties en upvotes kunnen beloningen opleveren.",
+        "chips": {
+          "watch": "Verdien terwijl je kijkt",
+          "adShare": "10% van de advertentie-inkomsten",
+          "program": "3Speak-beloningsprogramma"
+        }
+      },
       "pagesBar": {
         "text": "Shorts, Groepen, Audio, het klassement en meer, hier in de bovenste balk."
       },

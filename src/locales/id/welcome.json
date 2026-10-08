@@ -34,6 +34,24 @@
           "hive": "Ekosistem Hive"
         }
       },
+      "earnCreators": {
+        "title": "Kreator dapat penghasilan sejak hari pertama",
+        "text": "Setiap upvote di videomu menambah reward penulisnya, yang dibayarkan 7 hari setelah kamu memublikasikannya. Selain itu, 50% pendapatan iklan yang dihasilkan videomu menjadi milikmu (kamu bisa membagi sebagiannya dengan komunitas tempat kamu memposting), dibayarkan setiap beberapa hari. Tidak seperti kebanyakan media sosial, tidak ada minimal waktu tonton atau jumlah pengikut yang harus dicapai terlebih dahulu.",
+        "chips": {
+          "authorRewards": "Reward penulis",
+          "adShare": "50% pendapatan iklan",
+          "noMinimum": "Tanpa minimal waktu tonton"
+        }
+      },
+      "earnViewers": {
+        "title": "Penonton juga dapat penghasilan",
+        "text": "Cukup dengan menonton video, kamu bisa mendapat penghasilan dari program reward 3Speak: 10% dari seluruh pendapatan iklan diberikan kepada penonton, dibagi berdasarkan apa yang ditonton masing-masing. Aktifkan <b>Reward penonton</b> di Pengaturan untuk bergabung. Komentar dan upvote-mu juga bisa menghasilkan reward.",
+        "chips": {
+          "watch": "Dapat penghasilan sambil menonton",
+          "adShare": "10% pendapatan iklan",
+          "program": "Program reward 3Speak"
+        }
+      },
       "pagesBar": {
         "text": "Shorts, Grup, Audio, peringkat, dan lainnya, ada di bilah atas ini."
       },

@@ -34,6 +34,24 @@
           "hive": "Ekosystem Hive"
         }
       },
+      "earnCreators": {
+        "title": "Twórcy zarabiają od pierwszego dnia",
+        "text": "Każdy upvote pod twoim filmem zwiększa jego nagrody autorskie, wypłacane 7 dni po publikacji. Do tego 50% przychodów z reklam, które przynoszą twoje filmy, trafia do ciebie (częścią możesz podzielić się ze społecznością, w której opublikowano film), z wypłatą co kilka dni. W przeciwieństwie do większości mediów społecznościowych nie musisz najpierw osiągnąć minimalnego czasu oglądania ani liczby obserwujących.",
+        "chips": {
+          "authorRewards": "Nagrody autorskie",
+          "adShare": "50% przychodów z reklam",
+          "noMinimum": "Bez minimalnego czasu oglądania"
+        }
+      },
+      "earnViewers": {
+        "title": "Widzowie też zarabiają",
+        "text": "Już samo oglądanie filmów pozwala zarabiać w programie nagród 3Speak: 10% wszystkich przychodów z reklam trafia do widzów i jest dzielone według tego, co ogląda każdy z nich. Włącz <b>Nagrody dla widzów</b> w sekcji Ustawienia, aby dołączyć. Twoje komentarze i upvote'y też mogą przynosić nagrody.",
+        "chips": {
+          "watch": "Zarabiaj, oglądając",
+          "adShare": "10% przychodów z reklam",
+          "program": "Program nagród 3Speak"
+        }
+      },
       "pagesBar": {
         "text": "Shorts, Grupy, Audio, ranking i więcej, tutaj na górnym pasku."
       },

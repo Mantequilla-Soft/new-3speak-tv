@@ -34,6 +34,24 @@
           "hive": "Mfumo wa Hive"
         }
       },
+      "earnCreators": {
+        "title": "Watayarishi hupata mapato tangu siku ya kwanza",
+        "text": "Kila upvote kwenye video yako huongeza zawadi zake za mwandishi, zinazolipwa siku 7 baada ya kuchapisha. Zaidi ya hayo, 50% ya mapato ya matangazo yanayoletwa na video zako ni yako (unaweza kugawana sehemu yake na jamii uliyochapisha ndani yake), yakilipwa kila baada ya siku chache. Tofauti na mitandao mingi ya kijamii, hakuna muda wa chini wa kutazamwa wala idadi ya wafuasi unayopaswa kufikia kwanza.",
+        "chips": {
+          "authorRewards": "Zawadi za mwandishi",
+          "adShare": "50% ya mapato ya matangazo",
+          "noMinimum": "Hakuna muda wa chini"
+        }
+      },
+      "earnViewers": {
+        "title": "Watazamaji pia hupata mapato",
+        "text": "Kwa kutazama video tu, unaweza kupata mapato kutoka kwa mpango wa zawadi wa 3Speak: 10% ya mapato yote ya matangazo huenda kwa watazamaji, yakigawanywa kulingana na kile ambacho kila mmoja anatazama. Washa <b>Zawadi za watazamaji</b> kwenye Mipangilio ili ujiunge. Maoni yako na upvote zako pia zinaweza kukuletea zawadi.",
+        "chips": {
+          "watch": "Pata mapato unapotazama",
+          "adShare": "10% ya mapato ya matangazo",
+          "program": "Mpango wa zawadi wa 3Speak"
+        }
+      },
       "pagesBar": {
         "text": "Shorts, Vikundi, Sauti, orodha ya viongozi na zaidi, hapa hapa kwenye upau wa juu."
       },

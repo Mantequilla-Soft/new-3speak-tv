@@ -34,6 +34,24 @@
           "hive": "Hive ecosystem"
         }
       },
+      "earnCreators": {
+        "title": "Creators earn from day one",
+        "text": "Every upvote on your video adds to its author rewards, paid out 7 days after you publish. On top of that, 50% of the ad revenue your videos bring in goes to you (you can share part of it with the community you posted in), paid every few days. Unlike most social media platforms, there is no minimum watch time or follower count to reach first.",
+        "chips": {
+          "authorRewards": "Author rewards",
+          "adShare": "50% of ad revenue",
+          "noMinimum": "No minimum watch time"
+        }
+      },
+      "earnViewers": {
+        "title": "Viewers earn too",
+        "text": "Just by watching videos, you can earn from the 3Speak reward program: 10% of all ad revenue goes to viewers, shared by what each of them watches. Turn on <b>Viewer rewards</b> in Settings to join. Your comments and upvotes can earn rewards as well.",
+        "chips": {
+          "watch": "Earn while you watch",
+          "adShare": "10% of ad revenue",
+          "program": "3Speak reward program"
+        }
+      },
       "pagesBar": {
         "text": "Shorts, Groups, Audio, the leaderboard and more, right here in the top bar."
       },

@@ -34,6 +34,24 @@
           "hive": "Ecosistema Hive"
         }
       },
+      "earnCreators": {
+        "title": "I creator guadagnano dal primo giorno",
+        "text": "Ogni voto positivo al tuo video aumenta le sue ricompense d'autore, pagate 7 giorni dopo la pubblicazione. In più, il 50% dei ricavi pubblicitari generati dai tuoi video va a te (puoi condividerne una parte con la community in cui hai pubblicato), pagato ogni pochi giorni. A differenza della maggior parte dei social, non c'è un tempo di visione minimo né un numero minimo di follower da raggiungere prima.",
+        "chips": {
+          "authorRewards": "Ricompense d'autore",
+          "adShare": "50% dei ricavi pubblicitari",
+          "noMinimum": "Nessuna visione minima"
+        }
+      },
+      "earnViewers": {
+        "title": "Anche gli spettatori guadagnano",
+        "text": "Solo guardando video puoi guadagnare con il programma di ricompense di 3Speak: il 10% di tutti i ricavi pubblicitari va agli spettatori, diviso in base a ciò che guarda ciascuno. Attiva <b>Ricompense per gli spettatori</b> in Impostazioni per partecipare. Anche i tuoi commenti e voti positivi possono farti guadagnare ricompense.",
+        "chips": {
+          "watch": "Guadagna mentre guardi",
+          "adShare": "10% dei ricavi pubblicitari",
+          "program": "Programma ricompense 3Speak"
+        }
+      },
       "pagesBar": {
         "text": "Shorts, Gruppi, Audio, la classifica e altro, proprio qui nella barra in alto."
       },

@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { useTranslation } from 'react-i18next';
+import { Trans, useTranslation } from 'react-i18next';
 import { START_TOUR_EVENT } from './welcomeState';
 import './WelcomeTour.scss';
 
@@ -14,6 +14,9 @@ const STEPS = [
   { id: 'intro' },
   // What 3Speak is, as keyword chips plus one short paragraph.
   { id: 'about', chips: ['community', 'free', 'international', 'communities', 'decentralized', 'openSource', 'hive'] },
+  // How creators and viewers earn (author rewards, the 50% / 10% ad split).
+  { id: 'earnCreators', chips: ['authorRewards', 'adShare', 'noMinimum'] },
+  { id: 'earnViewers', chips: ['watch', 'adShare', 'program'] },
   // Wide screens show the page links in the top bar; narrower ones hide them
   // behind the logo. Only one of these two survives (see visibleSteps).
   { id: 'pagesBar', titleKey: 'pagesDesktop', targets: ['#nav-tabs'], desktopOnly: true },
@@ -211,7 +214,9 @@ export default function WelcomeTour() {
             {step.chips.map((c) => <li key={c}>{t(`welcome.tour.steps.${step.id}.chips.${c}`)}</li>)}
           </ul>
         )}
-        <p className="wt-text" id="wt-text">{t(`welcome.tour.steps.${step.id}.text`)}</p>
+        <p className="wt-text" id="wt-text">
+          <Trans i18nKey={`welcome.tour.steps.${step.id}.text`} components={{ b: <b /> }} />
+        </p>
         <div className="wt-dots" aria-hidden="true">
           {steps.map((s, i) => <span key={s.id} className={i === index ? 'on' : ''} />)}
         </div>
