@@ -2,7 +2,7 @@ import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import utc from 'dayjs/plugin/utc';
 import { useTranslation } from 'react-i18next';
-import { formatTimeAgo } from '../../i18n';
+import { formatTimeAgo, formatTimeAgoCompact } from '../../i18n';
 import './TimeAgo.scss';
 
 dayjs.extend(relativeTime);
@@ -23,16 +23,18 @@ function toUtc(date) {
 // normalised to UTC first, then handed to Intl via formatTimeAgo.
 const shortTime = (d) => formatTimeAgo(d.toDate(), { style: 'narrow' });
 const longTime = (d) => formatTimeAgo(d.toDate());
+// Phones always get the numbers-only form ("vor 2 Tagen", "vor 1 Wo.", never
+// "vorgestern" or "letzte Woche"): the worded forms are too long for a card row there.
+const phoneTime = (d) => formatTimeAgoCompact(d.toDate());
 
 function TimeAgo({ date, unix, short }) {
   // Subscribes to language changes so the label re-renders in the new language.
   useTranslation();
   const d = unix ? dayjs.unix(date).utc() : toUtc(date);
-  if (short) return <span>{shortTime(d)}</span>;
   return (
     <span className="time-ago-wrap">
-      <span className="time-long">{longTime(d)}</span>
-      <span className="time-short">{shortTime(d)}</span>
+      <span className="time-long">{short ? shortTime(d) : longTime(d)}</span>
+      <span className="time-short">{phoneTime(d)}</span>
     </span>
   );
 }

@@ -844,3 +844,23 @@ html[data-card-size="large"] { --card-min-w: 420px; }
     font-weight: 400;
   }
 }
+
+// Warm-up user (on 3Speak, not on Hive yet): a small leaf right after the author
+// name. The group keeps the two together, since `.profile-view-wrap` spreads its
+// children with space-between. The leaf carries the hint (title attribute).
+.card .card-author-group {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  min-width: 0;
+}
+
+.card .card-incubation-leaf {
+  display: inline-flex;
+  align-items: center;
+  flex-shrink: 0;
+  color: #3a9d5d;
+  cursor: help;
+
+  [data-theme="dark"] & { color: #5cc47f; }
+}

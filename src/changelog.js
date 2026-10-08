@@ -7,6 +7,12 @@
 // 1.0.0 — that way they see all of these when develop is pushed to production.
 export const CHANGELOG = [
   {
+    version: '1.79.67',
+    date: '2026-10-08',
+    summary:
+      'Tidier cards on phones: shorter upload times and rounded vote counts (like 1k), so everything fits on one line. And with Hide AI-generated on, Shorts rows now fill up with other shorts instead of leaving gaps.',
+  },
+  {
     version: '1.79.66',
     date: '2026-10-08',
     summary:

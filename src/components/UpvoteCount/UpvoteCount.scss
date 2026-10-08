@@ -1,3 +1,5 @@
+@use "../../mixins.scss" as *;
+
 .upvote-count-badge {
   display: flex;
   align-items: center;
@@ -22,4 +24,11 @@
       color: var(--accent-primary, #e53935);
     }
   }
+}
+
+// Full count on desktop, whole thousands on a phone (see UpvoteCount.jsx).
+.upvote-count-compact { display: none; }
+@include respond(phone) {
+  .upvote-count-full { display: none; }
+  .upvote-count-compact { display: inline; }
 }
