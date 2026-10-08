@@ -613,7 +613,8 @@
     @include mix.respond(tab)   { display: none; }
   }
 
-  // "About 3Speak" pill for logged-out users — sits left of the login button.
+  // "FAQ" pill for logged-out users (class name kept from the old About pill),
+  // left of the login button.
   // Neutral (secondary) styling so the red login pill stays the primary action.
   > .nav-right a.nav-guest-about {
     display: inline-flex;

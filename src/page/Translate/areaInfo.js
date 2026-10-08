@@ -20,6 +20,7 @@ export const AREA_INFO = {
   editor: 'The rich-text editor used when writing a post or description (toolbar, image upload, preview).',
   engagement: 'Votes, tips and payouts: the upvote slider and tooltips, who voted, payout details, beneficiaries, tipping, the "..." menu on cards, and tag picking.',
   faq: 'The FAQ page (/faq): questions new visitors ask, with their answers. Linked from the profile menu and, for logged-out visitors, the top bar. Keep the names of buttons and settings the same as in the rest of the app.',
+  welcome: 'First visit: the welcome box at the top of the home page for logged-out visitors, and the guided tour it starts (the card that points at parts of the page, step by step).',
   feeds: 'The home page and feeds: Home, New, Trending, Discover, tag pages, the feed filter bar, "New from people you follow", live-stream rows, and Channel Surfing (/surf).',
   incubation: 'New accounts that are not on Hive yet ("warm-up"): the progress panel, tasks to unlock things, tips, the graduation popup, and the advertiser warm-up pages.',
   live: 'Livestreaming (OpenPods): the live strip, going live, boosting a stream, clipping, reporting, and publishing a recording.',

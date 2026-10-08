@@ -71,6 +71,14 @@
       "a": "Sim. Abra o <b>Estúdio de transmissão</b> pelo menu Enviar no topo. Você pode trazer convidados para o palco, transmitir pelo OBS se quiser, e a gravação continua no seu canal depois.",
       "aSoon": "As transmissões ao vivo estão sendo testadas agora com um pequeno grupo de criadores. Vamos avisar assim que forem liberadas para todos."
     },
+    "talk": {
+      "q": "Sobre o que posso falar no 3Speak?",
+      "a": "O 3Speak é uma plataforma que celebra as diferenças, o respeito e a tolerância. O 3Speak acredita na liberdade de expressão, com regras claras e justas. Você é livre para criticar religiões, crenças, grupos e pessoas, discutir política alternativa e teorias da conspiração, criticar governos e líderes mundiais, usar um pseudônimo para proteger sua privacidade e postar piadas ofensivas, desde que estejam claramente marcadas como piadas. Criticar ideias é bem-vindo, mas discurso de ódio não: atacar pessoas pelo que elas são, como origem, religião, gênero, sexualidade ou deficiência, não tem espaço aqui."
+    },
+    "notAllowed": {
+      "q": "O que não é permitido?",
+      "a": "Convocar ou incitar à violência, discurso de ódio, gore, conteúdo pornográfico, calúnia e difamação, e qualquer coisa ilegal."
+    },
     "communities": {
       "q": "O que são comunidades?",
       "a": "Comunidades são grupos em torno de um interesse em comum, como games, música ou viagens. Entre nas que você gosta na página <b>Grupos</b> e os vídeos delas aparecem nos seus feeds. Ao enviar um vídeo, você pode postá-lo em uma comunidade para que as pessoas certas o encontrem. Com uma conta Hive você também pode criar a sua."
@@ -81,7 +89,7 @@
     },
     "nsfw": {
       "q": "Conteúdo NSFW é permitido?",
-      "a": "Conteúdo adulto é permitido desde que esteja marcado como <b>NSFW</b>, no envio ou depois, editando o vídeo. Vídeos marcados ficam ocultos nos feeds e na busca para quem não ativou <b>Mostrar conteúdo NSFW</b> em Configurações, em <b>Conteúdo</b>. Conteúdo ilegal nunca é permitido."
+      "a": "Conteúdo adulto é permitido desde que esteja marcado como <b>NSFW</b>, no envio ou depois, editando o vídeo. Vídeos marcados ficam ocultos nos feeds e na busca para quem não ativou <b>Mostrar conteúdo NSFW</b> em Configurações, em <b>Conteúdo</b>. Conteúdo pornográfico não é permitido, mesmo quando marcado, e conteúdo ilegal nunca é."
     },
     "ai": {
       "q": "Conteúdo gerado por IA é permitido?",

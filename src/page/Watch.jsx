@@ -20,6 +20,7 @@ import { Client } from '@hiveio/dhive';
 import { HIVE_API_NODES, SHORTS_API_URL, appendNsfw } from '../utils/config';
 import { getPlayerUrl } from '../utils/playerUrl';
 import ShortsRow from '../components/ShortsRow/ShortsRow';
+import { useAiFilteredShorts } from '../hooks/useAiFilteredShorts';
 import { useGridColumns, useShortsPerRow } from '../hooks/useGridMetrics';
 import { useStreamChatMirror } from '../hooks/useStreamChatMirror';
 import { getFeedSeed } from '../utils/feedSeed';
@@ -1406,7 +1407,7 @@ function Watch({ v2 = false }) {
   //
   // Gated on the related query so we ask ONCE, with the topic already known,
   // rather than firing a topic-less request and refetching a moment later.
-  const { data: relatedShorts = EMPTY_LIST } = useQuery({
+  const { data: rawRelatedShorts = EMPTY_LIST } = useQuery({
     queryKey: ['watch-related-shorts', currentTopic, showNsfw],
     queryFn: async () => {
       const topicParam = currentTopic ? `&topic=${encodeURIComponent(currentTopic)}` : '';
@@ -1423,6 +1424,9 @@ function Watch({ v2 = false }) {
     staleTime: 5 * 60 * 1000,
     retry: 1,
   });
+  // Filter "Hide AI-generated" on the pool, before the rails slice it, so a flagged
+  // short is replaced by the next one instead of leaving a hole in the row.
+  const relatedShorts = useAiFilteredShorts(rawRelatedShorts);
 
   // The desktop sidebar list and the mobile list are BOTH mounted (CSS picks one),
   // so each needs its own measurement — a hidden container measures 0 and simply

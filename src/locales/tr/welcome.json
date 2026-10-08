@@ -1,0 +1,95 @@
+{
+  "banner": {
+    "title": "3Speak'e hoş geldin!",
+    "text": "Videolar, onları yapan insanlara aittir. Burada yeni misin? Kısa bir tura katıl ya da sık sorulan soruların cevaplarını oku.",
+    "textShort": "Burada yeni misin? Kısa bir tura katıl ya da SSS'yi oku.",
+    "tour": "Tura başla",
+    "tourShort": "Tur",
+    "faq": "SSS",
+    "close": "Karşılama mesajını kapat"
+  },
+  "tour": {
+    "aria": "3Speak turu",
+    "next": "İleri",
+    "back": "Geri",
+    "skip": "Turu atla",
+    "done": "Hadi başlayalım",
+    "progress": "{{current}} / {{total}}",
+    "steps": {
+      "intro": {
+        "title": "Hızlı bir bakış",
+        "text": "Bu kısa tur sana her şeyin nerede olduğunu gösterir. Yaklaşık bir dakika sürer ve istediğin zaman çıkabilirsin."
+      },
+      "about": {
+        "title": "3Speak nedir?",
+        "text": "Her ilgi alanına uygun toplulukları olan ücretsiz, uluslararası bir video platformu. Bir şirkete değil, topluluğuna aittir ve bir CEO'su yoktur. Açık kaynaklıdır ve Hive ekosisteminin bir parçasıdır: hesabın, videoların ve takipçilerin senindir ve diğer Hive uygulamalarında da çalışır.",
+        "chips": {
+          "community": "Topluluğa ait",
+          "free": "Ücretsiz",
+          "international": "Uluslararası",
+          "communities": "Birçok topluluk",
+          "decentralized": "Merkeziyetsiz",
+          "openSource": "Açık kaynak",
+          "hive": "Hive ekosistemi"
+        }
+      },
+      "earnCreators": {
+        "title": "İçerik üreticileri ilk günden kazanır",
+        "text": "Videona gelen her upvote, yayınladıktan 7 gün sonra ödenen yazar ödüllerine eklenir. Bunun üstüne, videolarının getirdiği reklam gelirinin %50'si sana gider (bir kısmını videoyu yayınladığın toplulukla paylaşabilirsin) ve birkaç günde bir ödenir. Çoğu sosyal medya platformunun aksine, önce ulaşman gereken bir minimum izlenme süresi veya takipçi sayısı yoktur.",
+        "chips": {
+          "authorRewards": "Yazar ödülleri",
+          "adShare": "Reklam gelirinin %50'si",
+          "noMinimum": "Minimum izlenme süresi yok"
+        }
+      },
+      "earnViewers": {
+        "title": "İzleyiciler de kazanır",
+        "text": "Sadece video izleyerek 3Speak ödül programından kazanabilirsin: tüm reklam gelirinin %10'u izleyicilere gider ve her birinin ne izlediğine göre paylaştırılır. Katılmak için Ayarlar'da <b>İzleyici ödülleri</b> seçeneğini aç. Yorumların ve upvote'ların da sana ödül kazandırabilir.",
+        "chips": {
+          "watch": "İzlerken kazan",
+          "adShare": "Reklam gelirinin %10'u",
+          "program": "3Speak ödül programı"
+        }
+      },
+      "pagesBar": {
+        "text": "Shorts, Gruplar, Ses, sıralama ve daha fazlası, hemen burada üst çubukta."
+      },
+      "pagesDesktop": {
+        "title": "Tüm sayfalar tek yerde",
+        "text": "Tüm sayfaları açmak için 3Speak logosuna tıkla: Shorts, Gruplar, Ses, Sıralamalar ve daha fazlası."
+      },
+      "pagesPhone": {
+        "title": "Kolayca gezin",
+        "text": "Alttaki çubuk seni akışlara, Shorts'a, Gruplar'a ve Ses'e götürür."
+      },
+      "search": {
+        "title": "Her şeyi bul",
+        "text": "Video, kanal ve konu ara."
+      },
+      "stories": {
+        "title": "Shorts",
+        "text": "Kısa dikey videolar. Birine dokun ve diğerlerine kaydır."
+      },
+      "feeds": {
+        "title": "Akışını seç",
+        "text": "Keşfet, Ana Akış, en yeni videolar ve daha fazlası arasında geçiş yap."
+      },
+      "settings": {
+        "title": "Kendine göre ayarla",
+        "text": "Dişli simgesi Ayarlar'ı açar: dilin, açık veya koyu mod ve hangi videoları görmek istediğin."
+      },
+      "faq": {
+        "title": "Soruların mı var?",
+        "text": "SSS, yeni gelenlerin en çok sorduklarını cevaplar: hesap açmaktan ödül kazanmaya kadar."
+      },
+      "account": {
+        "title": "Aramıza katıl",
+        "text": "Bir hesapla video yükleyebilir, yorum yapabilir, oy verebilir, kanalları takip edebilir ve ödül kazanabilirsin. Ücretsizdir."
+      },
+      "done": {
+        "title": "Her şey hazır!",
+        "text": "İyi seyirler. Bu turu SSS sayfasından istediğin zaman yeniden başlatabilirsin."
+      }
+    }
+  }
+}

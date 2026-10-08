@@ -15,14 +15,14 @@
       "tagline1": "PROTEKTAHAN ANG CONTENT MO",
       "tagline2": "I-TOKENIZE ANG KOMUNIDAD MO",
       "cta": "Sumali sa Rebolusyon",
-      "description": "Nakatayo ang 3Speak sa Hive blockchain, kaya tunay itong decentralized, hindi kayang i-censor, at pag-aari ng komunidad."
+      "description": "Nakatayo ang 3Speak sa Hive, kaya tunay itong decentralized, hindi kayang i-censor, at pag-aari ng komunidad. Pinapanatili at pinapatakbo ito ng komunidad, para sa komunidad."
     },
     "how": {
       "title": "Paano Gumagana ang 3Speak",
-      "subtitle": "Maranasan ang tunay na pagmamay-ari ng content sa pamamagitan ng blockchain technology",
+      "subtitle": "Maranasan ang tunay na pagmamay-ari ng content, nakatayo sa Hive",
       "create": {
         "title": "Gumawa ng Content",
-        "text": "I-upload ang mga video mo at gumawa ng content na tunay na sa iyo sa blockchain."
+        "text": "I-upload ang mga video mo at gumawa ng content na tunay na sa iyo, naka-store sa Hive."
       },
       "earn": {
         "title": "Kumita ng Rewards",
@@ -41,7 +41,7 @@
       },
       "p2p": {
         "title": "P2P",
-        "text": "Tinitiyak ng blockchain technology na ginagamit ng site na may tunay na P2P na koneksyon ang mga content creator sa kanilang audience, nang walang middleman."
+        "text": "Dahil tumatakbo ang 3Speak sa Hive, may tunay na P2P na koneksyon ang mga content creator sa kanilang audience, nang walang middleman."
       },
       "tokenisation": {
         "title": "TOKENIZATION",
@@ -57,7 +57,7 @@
       }
     },
     "hive": {
-      "title": "Pinapagana ng Hive Blockchain",
+      "title": "Pinapagana ng Hive",
       "decentralized": {
         "title": "Decentralized",
         "text": "Walang iisang punto ng pagbagsak o kontrol"
@@ -70,26 +70,12 @@
         "title": "Pag-aari ng Komunidad",
         "text": "Pinamamahalaan ng mga stakeholder, hindi ng mga korporasyon"
       },
-      "description": "Nakatayo ang 3Speak sa Hive blockchain, kaya tunay itong decentralized, hindi kayang i-censor, at pag-aari ng komunidad. Ang Hive ecosystem ang nagbibigay ng imprastraktura para sa rewards, pamamahala, at pagmamay-ari ng asset na nagpapa-rebolusyonaryo sa 3Speak."
+      "description": "Nakatayo ang 3Speak sa Hive, kaya tunay itong decentralized, hindi kayang i-censor, at pag-aari ng komunidad. Ang Hive ecosystem ang nagbibigay ng imprastraktura para sa rewards, pamamahala, at pagmamay-ari ng asset na nagpapa-rebolusyonaryo sa 3Speak."
     },
     "guidelines": {
       "title": "Ang Aming Guidelines",
       "subtitle": "Naniniwala kami na absolute ang Kalayaan sa Pananalita, na may malinaw at patas na mga patakaran",
-      "support": {
-        "title": "Ang Sinusuportahan Namin",
-        "religion": "Pagpuna sa relihiyon, paniniwala, grupo, at tao",
-        "politics": "Alternatibong pulitika at mga talakayan tungkol sa conspiracy",
-        "governments": "Pagpuna sa mga gobyerno at lider ng mundo",
-        "pseudonyms": "Paggamit ng pseudonym para sa privacy",
-        "jokes": "Mga nakakasakit na biro (kapag malinaw na naka-mark bilang biro)"
-      },
-      "restrict": {
-        "title": "Ang Nililimitahan Namin",
-        "violence": "Panawagan o pag-uudyok sa karahasan",
-        "gore": "Pagpapakita ng sobrang gore o pornographic na content",
-        "slander": "Paninirang-puri at mapanirang content",
-        "illegal": "Ilegal na gawain o content"
-      }
+      "cta": "Basahin ang aming mga patakaran"
     },
     "faqSection": {
       "title": "Mga Madalas Itanong",

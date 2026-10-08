@@ -1,0 +1,95 @@
+{
+  "banner": {
+    "title": "Karibu 3Speak!",
+    "text": "Video ambazo ni mali ya watu wanaozitengeneza. Wewe ni mgeni hapa? Pitia ziara fupi au soma majibu ya maswali ya kawaida.",
+    "textShort": "Wewe ni mgeni hapa? Pitia ziara fupi au soma Maswali.",
+    "tour": "Anza ziara",
+    "tourShort": "Ziara",
+    "faq": "Maswali",
+    "close": "Funga ujumbe wa makaribisho"
+  },
+  "tour": {
+    "aria": "Ziara ya 3Speak",
+    "next": "Endelea",
+    "back": "Rudi",
+    "skip": "Ruka ziara",
+    "done": "Twende",
+    "progress": "{{current}} kati ya {{total}}",
+    "steps": {
+      "intro": {
+        "title": "Tazama haraka",
+        "text": "Ziara hii fupi inakuonyesha kila kitu kilipo. Inachukua takriban dakika moja, na unaweza kuiacha wakati wowote."
+      },
+      "about": {
+        "title": "3Speak ni nini?",
+        "text": "Jukwaa la video la bure na la kimataifa, lenye jamii kwa kila hamu. Ni mali ya jamii yake, si ya kampuni, na hakuna Mkurugenzi Mtendaji. Ni la chanzo huria na ni sehemu ya mfumo wa Hive: akaunti yako, video zako na wafuasi wako ni vyako na vinafanya kazi pia kwenye programu nyingine za Hive.",
+        "chips": {
+          "community": "Mali ya jamii",
+          "free": "Bure",
+          "international": "Kimataifa",
+          "communities": "Jamii nyingi",
+          "decentralized": "Bila udhibiti wa kati",
+          "openSource": "Chanzo huria",
+          "hive": "Mfumo wa Hive"
+        }
+      },
+      "earnCreators": {
+        "title": "Watayarishi hupata mapato tangu siku ya kwanza",
+        "text": "Kila upvote kwenye video yako huongeza zawadi zake za mwandishi, zinazolipwa siku 7 baada ya kuchapisha. Zaidi ya hayo, 50% ya mapato ya matangazo yanayoletwa na video zako ni yako (unaweza kugawana sehemu yake na jamii uliyochapisha ndani yake), yakilipwa kila baada ya siku chache. Tofauti na mitandao mingi ya kijamii, hakuna muda wa chini wa kutazamwa wala idadi ya wafuasi unayopaswa kufikia kwanza.",
+        "chips": {
+          "authorRewards": "Zawadi za mwandishi",
+          "adShare": "50% ya mapato ya matangazo",
+          "noMinimum": "Hakuna muda wa chini"
+        }
+      },
+      "earnViewers": {
+        "title": "Watazamaji pia hupata mapato",
+        "text": "Kwa kutazama video tu, unaweza kupata mapato kutoka kwa mpango wa zawadi wa 3Speak: 10% ya mapato yote ya matangazo huenda kwa watazamaji, yakigawanywa kulingana na kile ambacho kila mmoja anatazama. Washa <b>Zawadi za watazamaji</b> kwenye Mipangilio ili ujiunge. Maoni yako na upvote zako pia zinaweza kukuletea zawadi.",
+        "chips": {
+          "watch": "Pata mapato unapotazama",
+          "adShare": "10% ya mapato ya matangazo",
+          "program": "Mpango wa zawadi wa 3Speak"
+        }
+      },
+      "pagesBar": {
+        "text": "Shorts, Vikundi, Sauti, orodha ya viongozi na zaidi, hapa hapa kwenye upau wa juu."
+      },
+      "pagesDesktop": {
+        "title": "Kurasa zote mahali pamoja",
+        "text": "Bofya nembo ya 3Speak ili kufungua kila ukurasa: Shorts, Vikundi, Sauti, Viwango na zaidi."
+      },
+      "pagesPhone": {
+        "title": "Zunguka",
+        "text": "Upau wa chini unakupeleka kwenye milisho, Shorts, Vikundi na Sauti."
+      },
+      "search": {
+        "title": "Tafuta chochote",
+        "text": "Tafuta video, chaneli na mada."
+      },
+      "stories": {
+        "title": "Shorts",
+        "text": "Video fupi wima. Gusa moja kisha telezesha kuona zingine."
+      },
+      "feeds": {
+        "title": "Chagua mlisho wako",
+        "text": "Badilisha kati ya Gundua, Mlisho wa nyumbani, video mpya zaidi na mengineyo."
+      },
+      "settings": {
+        "title": "Ifanye iwe yako",
+        "text": "Gia inafungua Mipangilio: lugha yako, hali ya mwanga au giza, na video unazotaka kuona."
+      },
+      "faq": {
+        "title": "Una maswali?",
+        "text": "Ukurasa wa Maswali unajibu yale ambayo watu wapya huuliza zaidi, kuanzia kufungua akaunti hadi kupata zawadi."
+      },
+      "account": {
+        "title": "Jiunge",
+        "text": "Ukiwa na akaunti unaweza kupakia, kutoa maoni, kupiga kura, kufuata chaneli na kupata zawadi. Ni bure."
+      },
+      "done": {
+        "title": "Uko tayari!",
+        "text": "Furahia kutazama. Unaweza kuanza ziara hii tena wakati wowote kutoka kwenye ukurasa wa Maswali."
+      }
+    }
+  }
+}

@@ -1,0 +1,95 @@
+{
+  "banner": {
+    "title": "Selamat datang di 3Speak!",
+    "text": "Video yang menjadi milik para pembuatnya. Baru di sini? Ikuti tur singkat atau baca jawaban atas pertanyaan umum.",
+    "textShort": "Baru di sini? Ikuti tur singkat atau baca FAQ.",
+    "tour": "Ikuti tur",
+    "tourShort": "Tur",
+    "faq": "FAQ",
+    "close": "Tutup pesan sambutan"
+  },
+  "tour": {
+    "aria": "Tur 3Speak",
+    "next": "Berikutnya",
+    "back": "Kembali",
+    "skip": "Lewati tur",
+    "done": "Ayo mulai",
+    "progress": "{{current}} dari {{total}}",
+    "steps": {
+      "intro": {
+        "title": "Lihat-lihat sebentar",
+        "text": "Tur singkat ini menunjukkan letak semuanya. Hanya sekitar satu menit, dan kamu bisa keluar kapan saja."
+      },
+      "about": {
+        "title": "Apa itu 3Speak?",
+        "text": "Platform video gratis dan internasional dengan komunitas untuk setiap minat. 3Speak dimiliki komunitasnya, bukan perusahaan, dan tidak ada CEO. 3Speak open source dan bagian dari ekosistem Hive: akun, video, dan pengikutmu adalah milikmu dan bisa dipakai juga di aplikasi Hive lain.",
+        "chips": {
+          "community": "Milik komunitas",
+          "free": "Gratis",
+          "international": "Internasional",
+          "communities": "Banyak komunitas",
+          "decentralized": "Terdesentralisasi",
+          "openSource": "Open source",
+          "hive": "Ekosistem Hive"
+        }
+      },
+      "earnCreators": {
+        "title": "Kreator dapat penghasilan sejak hari pertama",
+        "text": "Setiap upvote di videomu menambah reward penulisnya, yang dibayarkan 7 hari setelah kamu memublikasikannya. Selain itu, 50% pendapatan iklan yang dihasilkan videomu menjadi milikmu (kamu bisa membagi sebagiannya dengan komunitas tempat kamu memposting), dibayarkan setiap beberapa hari. Tidak seperti kebanyakan media sosial, tidak ada minimal waktu tonton atau jumlah pengikut yang harus dicapai terlebih dahulu.",
+        "chips": {
+          "authorRewards": "Reward penulis",
+          "adShare": "50% pendapatan iklan",
+          "noMinimum": "Tanpa minimal waktu tonton"
+        }
+      },
+      "earnViewers": {
+        "title": "Penonton juga dapat penghasilan",
+        "text": "Cukup dengan menonton video, kamu bisa mendapat penghasilan dari program reward 3Speak: 10% dari seluruh pendapatan iklan diberikan kepada penonton, dibagi berdasarkan apa yang ditonton masing-masing. Aktifkan <b>Reward penonton</b> di Pengaturan untuk bergabung. Komentar dan upvote-mu juga bisa menghasilkan reward.",
+        "chips": {
+          "watch": "Dapat penghasilan sambil menonton",
+          "adShare": "10% pendapatan iklan",
+          "program": "Program reward 3Speak"
+        }
+      },
+      "pagesBar": {
+        "text": "Shorts, Grup, Audio, peringkat, dan lainnya, ada di bilah atas ini."
+      },
+      "pagesDesktop": {
+        "title": "Semua halaman di satu tempat",
+        "text": "Klik logo 3Speak untuk membuka semua halaman: Shorts, Grup, Audio, Peringkat, dan lainnya."
+      },
+      "pagesPhone": {
+        "title": "Berpindah halaman",
+        "text": "Bilah di bawah membawamu ke feed, Shorts, Grup, dan Audio."
+      },
+      "search": {
+        "title": "Temukan apa saja",
+        "text": "Cari video, channel, dan topik."
+      },
+      "stories": {
+        "title": "Shorts",
+        "text": "Video vertikal pendek. Ketuk salah satunya dan geser untuk melihat yang lain."
+      },
+      "feeds": {
+        "title": "Pilih feed-mu",
+        "text": "Beralih antara Jelajahi, Feed Beranda, video terbaru, dan lainnya."
+      },
+      "settings": {
+        "title": "Sesuaikan sesukamu",
+        "text": "Ikon roda gigi membuka Pengaturan: bahasamu, mode terang atau gelap, dan video apa yang ingin kamu lihat."
+      },
+      "faq": {
+        "title": "Ada pertanyaan?",
+        "text": "FAQ menjawab hal yang paling sering ditanyakan pengguna baru, dari membuat akun hingga mendapatkan reward."
+      },
+      "account": {
+        "title": "Ayo bergabung",
+        "text": "Dengan akun, kamu bisa mengunggah, berkomentar, vote, mengikuti channel, dan mendapatkan reward. Gratis."
+      },
+      "done": {
+        "title": "Semua siap!",
+        "text": "Selamat menonton. Kamu bisa mengulang tur ini kapan saja dari FAQ."
+      }
+    }
+  }
+}

@@ -15,14 +15,14 @@
       "tagline1": "PROTÉGEZ VOTRE CONTENU",
       "tagline2": "TOKENISEZ VOTRE COMMUNAUTÉ",
       "cta": "Rejoignez la révolution",
-      "description": "3Speak repose sur la blockchain Hive, garantissant une vraie décentralisation, la résistance à la censure et la propriété communautaire."
+      "description": "3Speak repose sur Hive, garantissant une vraie décentralisation, la résistance à la censure et la propriété communautaire. Il est maintenu et servi par la communauté, pour la communauté."
     },
     "how": {
       "title": "Comment fonctionne 3Speak",
-      "subtitle": "Possédez vraiment votre contenu grâce à la blockchain",
+      "subtitle": "Possédez vraiment votre contenu, grâce à Hive",
       "create": {
         "title": "Créez du contenu",
-        "text": "Mettez en ligne vos vidéos et créez du contenu qui vous appartient vraiment, sur la blockchain."
+        "text": "Mettez en ligne vos vidéos et créez du contenu qui vous appartient vraiment, stocké sur Hive."
       },
       "earn": {
         "title": "Gagnez des récompenses",
@@ -41,7 +41,7 @@
       },
       "p2p": {
         "title": "P2P",
-        "text": "La technologie blockchain utilisée par le site garantit aux créateurs de contenu de véritables connexions P2P avec leur public, sans aucun intermédiaire."
+        "text": "Comme 3Speak fonctionne sur Hive, les créateurs de contenu ont de véritables connexions P2P avec leur public, sans aucun intermédiaire."
       },
       "tokenisation": {
         "title": "TOKENISATION",
@@ -57,7 +57,7 @@
       }
     },
     "hive": {
-      "title": "Propulsé par la blockchain Hive",
+      "title": "Propulsé par Hive",
       "decentralized": {
         "title": "Décentralisé",
         "text": "Aucun point unique de défaillance ou de contrôle"
@@ -70,26 +70,12 @@
         "title": "Propriété de la communauté",
         "text": "Gouverné par ses parties prenantes, pas par des entreprises"
       },
-      "description": "3Speak repose sur la blockchain Hive, garantissant une vraie décentralisation, la résistance à la censure et la propriété communautaire. L'écosystème Hive fournit l'infrastructure de récompenses, de gouvernance et de propriété des actifs qui rend 3Speak révolutionnaire."
+      "description": "3Speak repose sur Hive, garantissant une vraie décentralisation, la résistance à la censure et la propriété communautaire. L'écosystème Hive fournit l'infrastructure de récompenses, de gouvernance et de propriété des actifs qui rend 3Speak révolutionnaire."
     },
     "guidelines": {
       "title": "Nos règles",
       "subtitle": "Pour nous, la liberté d'expression est absolue, avec des règles claires et justes",
-      "support": {
-        "title": "Ce que nous acceptons",
-        "religion": "Critiquer les religions, croyances, groupes et personnes",
-        "politics": "Les opinions politiques alternatives et les discussions sur les théories du complot",
-        "governments": "Critiquer les gouvernements et les dirigeants du monde",
-        "pseudonyms": "Utiliser un pseudonyme pour protéger sa vie privée",
-        "jokes": "Les blagues offensantes (clairement signalées comme telles)"
-      },
-      "restrict": {
-        "title": "Ce que nous restreignons",
-        "violence": "Appeler ou inciter à la violence",
-        "gore": "Montrer du contenu excessivement gore ou pornographique",
-        "slander": "La calomnie et les contenus diffamatoires",
-        "illegal": "Les activités ou contenus illégaux"
-      }
+      "cta": "Lire nos règles"
     },
     "faqSection": {
       "title": "Questions fréquentes",

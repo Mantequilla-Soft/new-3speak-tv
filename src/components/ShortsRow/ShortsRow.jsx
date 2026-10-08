@@ -5,8 +5,8 @@ import CardThumbnail from '../Cards/CardThumbnail';
 import { fixVideoThumbnail, fallbackImg } from '../../utils/fixThumbnails';
 import { parseEmbedUrl, bodyToPlaintext } from '../../hive-api/hiveApi';
 import { AiPill } from '../AiBadge/AiBadge';
-import { aiKey, isAiFlagged, useAiFlags } from '../../utils/aiFlags';
-import { useAppStore } from '../../lib/store';
+import { aiKey, useAiFlags } from '../../utils/aiFlags';
+import { hiveAuthorOf, isAiShort } from '../../hooks/useAiFilteredShorts';
 import './ShortsRow.scss';
 
 /**
@@ -44,28 +44,17 @@ function shortTitle(s) {
   return '';
 }
 
-// The feed keys a short by owner + ASSET permlink, which is how the AI flag is
-// stored, so that pair is a direct hit; the hive author is asked too in case the
-// two accounts differ.
-const hiveAuthorOf = (s) => parseEmbedUrl(s.embed_url).author || s.owner;
-const isAiShort = (s) => isAiFlagged(s.owner, s.permlink) || isAiFlagged(hiveAuthorOf(s), s.permlink);
-
 function ShortsRow({ shorts, columns }) {
-  const hideAi = useAppStore((st) => st.hideAi);
+  // "Hide AI-generated" is applied by the CALLER to the whole pool before slicing
+  // (useAiFilteredShorts), so the row refills instead of leaving an empty slot.
+  // Here we only subscribe so the AI pill appears once the flags land.
   const aiKeys = useMemo(
     () => (shorts || []).flatMap((s) => [aiKey(s.owner, s.permlink), aiKey(hiveAuthorOf(s), s.permlink)]),
     [shorts]
   );
-  const aiVersion = useAiFlags(aiKeys);
-  // With "Hide AI-generated" on the row loses a card rather than refilling: the
-  // caller sized it to the width, so a flagged short leaves one empty slot.
-  const visible = useMemo(
-    () => (hideAi ? (shorts || []).filter((s) => !isAiShort(s)) : shorts),
-    // eslint-disable-next-line react-hooks/exhaustive-deps -- aiVersion: isAiShort reads a module cache
-    [shorts, hideAi, aiVersion]
-  );
+  useAiFlags(aiKeys);
 
-  if (!visible?.length) return null;
+  if (!shorts?.length) return null;
 
   return (
     <div
@@ -75,7 +64,7 @@ function ShortsRow({ shorts, columns }) {
       // to the track instead of overflowing on a long title.
       style={{ gridTemplateColumns: `repeat(${columns || shorts.length}, minmax(0, 1fr))` }}
     >
-      {visible.map((s) => {
+      {shorts.map((s) => {
         // The feed keys a short by its ASSET permlink, but the shorts viewer is
         // addressed by the HIVE author from embed_url ("@author/permlink").
         const { author } = parseEmbedUrl(s.embed_url);

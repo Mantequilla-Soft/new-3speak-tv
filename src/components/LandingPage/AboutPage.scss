@@ -227,20 +227,45 @@
     .feature-title {
       font-size: 1.5rem;
       font-weight: 700;
+      // Tile headings in the normal text colour: red on every tile was too much.
       margin-bottom: 1rem;
 
       &.red-text {
-        color: var(--accent-primary);
+        color: var(--text-primary);
       }
 
       &.blue-text {
-        color: var(--accent-primary);
+        color: var(--text-primary);
       }
     }
 
     .feature-description {
       color: var(--text-secondary);
       line-height: 1.6;
+    }
+  }
+
+  // Link buttons (FAQ, guidelines): red outline, used by more than one section.
+  .faq-cta-wrap {
+    display: flex;
+    justify-content: center;
+  }
+
+  // Red outline, never a red fill (3Speak convention).
+  .faq-cta {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.8rem 2.2rem;
+    border-radius: 9999px;
+    border: 1px solid var(--accent-primary, #e53935);
+    background: transparent;
+    color: var(--accent-primary, #e53935);
+    font-weight: 600;
+    text-decoration: none;
+    transition: background-color 0.2s ease;
+
+    &:hover {
+      background: color-mix(in srgb, var(--accent-primary, #e53935) 10%, transparent);
     }
   }
 
@@ -267,11 +292,11 @@
         margin-bottom: 1rem;
 
         &.red-text {
-          color: var(--accent-primary);
+          color: var(--text-primary);
         }
 
         &.blue-text {
-          color: var(--accent-primary);
+          color: var(--text-primary);
         }
       }
 
@@ -305,28 +330,6 @@
     margin: 0 auto;
     padding: 0 2rem;
 
-    .faq-cta-wrap {
-      display: flex;
-      justify-content: center;
-    }
-
-    // Red outline, never a red fill (3Speak convention).
-    .faq-cta {
-      display: inline-flex;
-      align-items: center;
-      padding: 0.8rem 2.2rem;
-      border-radius: 9999px;
-      border: 1px solid var(--accent-primary, #e53935);
-      background: transparent;
-      color: var(--accent-primary, #e53935);
-      font-weight: 600;
-      text-decoration: none;
-      transition: background-color 0.2s ease;
-
-      &:hover {
-        background: color-mix(in srgb, var(--accent-primary, #e53935) 10%, transparent);
-      }
-    }
   }
 
   // Quotes section

@@ -71,6 +71,14 @@
       "a": "Oui. Ouvrez le <b>Studio live</b> depuis le menu Mettre en ligne en haut. Vous pouvez inviter des personnes sur scène, diffuser depuis OBS si vous le souhaitez, et l'enregistrement reste ensuite sur votre chaîne.",
       "aSoon": "Les lives sont en test en ce moment avec un petit groupe de créateurs. Nous l'annoncerons dès qu'ils seront ouverts à tous."
     },
+    "talk": {
+      "q": "De quoi puis-je parler sur 3Speak ?",
+      "a": "3Speak est une plateforme qui célèbre les différences, le respect et la tolérance. 3Speak croit en la liberté d'expression, avec des règles claires et équitables. Vous êtes libre de critiquer les religions, les croyances, les groupes et les personnes, de débattre de politique alternative et de théories du complot, de critiquer les gouvernements et les dirigeants du monde, d'utiliser un pseudonyme pour protéger votre vie privée et de publier des blagues offensantes, à condition qu'elles soient clairement signalées comme des blagues. La critique des idées est la bienvenue, mais pas les discours de haine : attaquer des personnes pour ce qu'elles sont, par exemple leur origine, leur religion, leur genre, leur sexualité ou leur handicap, n'a pas sa place ici."
+    },
+    "notAllowed": {
+      "q": "Qu'est-ce qui n'est pas autorisé ?",
+      "a": "Les appels ou l'incitation à la violence, les discours de haine, le gore, le contenu pornographique, la calomnie et la diffamation, et tout ce qui est illégal."
+    },
     "communities": {
       "q": "Que sont les communautés ?",
       "a": "Les communautés sont des groupes autour d'un intérêt commun, comme le jeu vidéo, la musique ou le voyage. Rejoignez celles qui vous plaisent sur la page <b>Groupes</b> et leurs vidéos apparaissent dans vos fils. Quand vous mettez une vidéo en ligne, vous pouvez la publier dans une communauté pour que les bonnes personnes la trouvent. Avec un compte Hive, vous pouvez aussi créer la vôtre."
@@ -81,7 +89,7 @@
     },
     "nsfw": {
       "q": "Le contenu NSFW est-il autorisé ?",
-      "a": "Le contenu pour adultes est autorisé à condition d'être marqué <b>NSFW</b>, lors de la mise en ligne ou plus tard en modifiant la vidéo. Les vidéos marquées sont masquées des fils et de la recherche pour toutes les personnes qui n'ont pas activé <b>Afficher le contenu NSFW</b> dans les Paramètres, sous <b>Contenu</b>. Le contenu illégal n'est jamais autorisé."
+      "a": "Le contenu pour adultes est autorisé à condition d'être marqué <b>NSFW</b>, lors de la mise en ligne ou plus tard en modifiant la vidéo. Les vidéos marquées sont masquées des fils et de la recherche pour toutes les personnes qui n'ont pas activé <b>Afficher le contenu NSFW</b> dans les Paramètres, sous <b>Contenu</b>. Le contenu pornographique n'est pas autorisé, même marqué, et le contenu illégal ne l'est jamais."
     },
     "ai": {
       "q": "Le contenu généré par IA est-il autorisé ?",

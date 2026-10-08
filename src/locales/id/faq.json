@@ -71,6 +71,14 @@
       "a": "Bisa. Buka <b>Studio Siaran</b> dari menu unggah di bagian atas. Kamu bisa mengajak tamu ke panggung, siaran dari OBS kalau mau, dan rekamannya tetap ada di channel-mu setelahnya.",
       "aSoon": "Siaran langsung sedang diuji bersama sekelompok kecil kreator. Kami akan mengumumkannya begitu dibuka untuk semua orang."
     },
+    "talk": {
+      "q": "Apa yang bisa aku bicarakan di 3Speak?",
+      "a": "3Speak adalah platform yang merayakan perbedaan, rasa hormat, dan toleransi. 3Speak percaya pada kebebasan berbicara, dengan aturan yang jelas dan adil. Kamu bebas mengkritik agama, keyakinan, kelompok, dan orang, membahas politik alternatif dan teori konspirasi, mengkritik pemerintah dan para pemimpin dunia, memakai nama samaran demi privasi, serta memposting lelucon yang menyinggung selama ditandai dengan jelas sebagai lelucon. Kritik terhadap gagasan dipersilakan, tetapi ujaran kebencian tidak: menyerang orang karena siapa diri mereka, seperti asal-usul, agama, gender, seksualitas, atau disabilitas mereka, tidak punya tempat di sini."
+    },
+    "notAllowed": {
+      "q": "Apa yang tidak diperbolehkan?",
+      "a": "Menyerukan atau menghasut kekerasan, ujaran kebencian, konten sadis (gore), konten pornografi, fitnah dan pencemaran nama baik, serta apa pun yang ilegal."
+    },
     "communities": {
       "q": "Apa itu komunitas?",
       "a": "Komunitas adalah grup yang berkumpul karena minat yang sama, seperti game, musik, atau traveling. Bergabunglah dengan yang kamu suka di halaman <b>Grup</b> dan video mereka akan muncul di feed-mu. Saat mengunggah, kamu bisa memposting ke sebuah komunitas agar videomu ditemukan orang yang tepat. Dengan akun Hive, kamu juga bisa membuat komunitasmu sendiri."
@@ -81,7 +89,7 @@
     },
     "nsfw": {
       "q": "Apakah konten NSFW diperbolehkan?",
-      "a": "Konten dewasa diperbolehkan selama ditandai <b>NSFW</b>, baik saat mengunggah maupun nanti dengan mengedit videonya. Video yang ditandai disembunyikan dari feed dan pencarian bagi semua orang yang belum mengaktifkan <b>Tampilkan konten NSFW</b> di Pengaturan di bagian <b>Konten</b>. Konten ilegal tidak pernah diperbolehkan."
+      "a": "Konten dewasa diperbolehkan selama ditandai <b>NSFW</b>, baik saat mengunggah maupun nanti dengan mengedit videonya. Video yang ditandai disembunyikan dari feed dan pencarian bagi semua orang yang belum mengaktifkan <b>Tampilkan konten NSFW</b> di Pengaturan di bagian <b>Konten</b>. Konten pornografi tidak diperbolehkan, meskipun sudah ditandai, dan konten ilegal tidak pernah diperbolehkan."
     },
     "ai": {
       "q": "Apakah konten buatan AI diperbolehkan?",

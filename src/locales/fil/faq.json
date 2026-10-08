@@ -71,6 +71,14 @@
       "a": "Oo. Buksan ang <b>Stream Studio</b> mula sa Upload menu sa itaas. Puwede kang magdala ng mga guest sa stage, mag-stream mula sa OBS kung gusto mo, at mananatili ang recording sa channel mo pagkatapos.",
       "aSoon": "Sinusubukan pa ngayon ang livestreaming kasama ang maliit na grupo ng mga creator. Ia-announce namin ito kapag bukas na para sa lahat."
     },
+    "talk": {
+      "q": "Ano ang puwede kong pag-usapan sa 3Speak?",
+      "a": "Ang 3Speak ay isang platform na nagdiriwang ng pagkakaiba-iba, paggalang at pagpaparaya. Naniniwala ang 3Speak sa malayang pananalita, na may malinaw at patas na mga patakaran. Malaya kang punahin ang mga relihiyon, paniniwala, grupo at tao, pag-usapan ang alternatibong pulitika at mga conspiracy theory, punahin ang mga gobyerno at mga lider ng mundo, gumamit ng pseudonym para sa privacy, at mag-post ng mga nakaka-offend na biro basta malinaw na naka-mark ang mga ito bilang biro. Welcome ang pagpuna sa mga ideya, pero hindi ang hate speech: walang lugar dito ang pag-atake sa mga tao dahil sa kung sino sila, gaya ng kanilang pinagmulan, relihiyon, kasarian, sekswalidad o kapansanan."
+    },
+    "notAllowed": {
+      "q": "Ano ang hindi pinapayagan?",
+      "a": "Pananawagan o pag-uudyok ng karahasan, hate speech, gore, pornographic content, slander at defamation, at anumang ilegal."
+    },
     "communities": {
       "q": "Ano ang mga community?",
       "a": "Ang mga community ay mga grupo tungkol sa iisang interes, tulad ng gaming, music o travel. Sumali sa mga gusto mo sa page na <b>Groups</b> at lalabas ang mga video nila sa mga feed mo. Kapag nag-upload ka, puwede mo itong i-post sa isang community para mahanap ng tamang mga tao ang video mo. Kapag may Hive account ka, puwede ka ring gumawa ng sarili mo."
@@ -81,7 +89,7 @@
     },
     "nsfw": {
       "q": "Pinapayagan ba ang NSFW content?",
-      "a": "Pinapayagan ang adult content basta naka-mark ito bilang <b>NSFW</b>, kapag nag-upload ka o mamaya sa pag-edit ng video. Nakatago ang mga naka-mark na video sa mga feed at search para sa lahat ng hindi nag-on ng <b>Ipakita ang NSFW content</b> sa Settings sa ilalim ng <b>Content</b>. Hindi kailanman pinapayagan ang ilegal na content."
+      "a": "Pinapayagan ang adult content basta naka-mark ito bilang <b>NSFW</b>, kapag nag-upload ka o mamaya sa pag-edit ng video. Nakatago ang mga naka-mark na video sa mga feed at search para sa lahat ng hindi nag-on ng <b>Ipakita ang NSFW content</b> sa Settings sa ilalim ng <b>Content</b>. Hindi pinapayagan ang pornographic content, kahit naka-mark pa ito, at hindi kailanman pinapayagan ang ilegal na content."
     },
     "ai": {
       "q": "Pinapayagan ba ang AI-generated na content?",

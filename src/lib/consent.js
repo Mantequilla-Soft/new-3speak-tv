@@ -24,6 +24,8 @@
  *       worker: workbox precache + share-target-cache) — first-party, strictly
  *       necessary; stores 3Speak's own files, never third-party content
  *     • App-version marker (3speak_app_version) for the "what's new" changelog
+ *     • "Welcome box closed" (3speak_welcome_closed): set when you close the welcome
+ *       box with its X, so it does not come back
  *     • This consent choice itself — we cannot remember "no" without storing "no"
  *
  *   FUNCTIONAL (optional — this is what the banner is actually for):

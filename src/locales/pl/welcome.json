@@ -1,0 +1,95 @@
+{
+  "banner": {
+    "title": "Witaj w 3Speak!",
+    "text": "Filmy, które należą do ich twórców. Dopiero zaczynasz? Przejdź krótki przewodnik albo przeczytaj odpowiedzi na częste pytania.",
+    "textShort": "Dopiero zaczynasz? Przejdź krótki przewodnik albo przeczytaj FAQ.",
+    "tour": "Rozpocznij przewodnik",
+    "tourShort": "Przewodnik",
+    "faq": "FAQ",
+    "close": "Zamknij wiadomość powitalną"
+  },
+  "tour": {
+    "aria": "Przewodnik po 3Speak",
+    "next": "Dalej",
+    "back": "Wstecz",
+    "skip": "Pomiń przewodnik",
+    "done": "Zaczynamy",
+    "progress": "{{current}} z {{total}}",
+    "steps": {
+      "intro": {
+        "title": "Szybki rzut oka",
+        "text": "Ten krótki przewodnik pokaże ci, gdzie co jest. Zajmie około minuty i możesz go przerwać w każdej chwili."
+      },
+      "about": {
+        "title": "Czym jest 3Speak?",
+        "text": "Darmowa, międzynarodowa platforma wideo ze społecznościami dla każdych zainteresowań. Należy do swojej społeczności, a nie do firmy, i nie ma tu żadnego prezesa. Jest open source i jest częścią ekosystemu Hive: twoje konto, filmy i obserwujący należą do ciebie i działają też w innych aplikacjach Hive.",
+        "chips": {
+          "community": "Własność społeczności",
+          "free": "Za darmo",
+          "international": "Międzynarodowa",
+          "communities": "Wiele społeczności",
+          "decentralized": "Zdecentralizowana",
+          "openSource": "Open source",
+          "hive": "Ekosystem Hive"
+        }
+      },
+      "earnCreators": {
+        "title": "Twórcy zarabiają od pierwszego dnia",
+        "text": "Każdy upvote pod twoim filmem zwiększa jego nagrody autorskie, wypłacane 7 dni po publikacji. Do tego 50% przychodów z reklam, które przynoszą twoje filmy, trafia do ciebie (częścią możesz podzielić się ze społecznością, w której opublikowano film), z wypłatą co kilka dni. W przeciwieństwie do większości mediów społecznościowych nie musisz najpierw osiągnąć minimalnego czasu oglądania ani liczby obserwujących.",
+        "chips": {
+          "authorRewards": "Nagrody autorskie",
+          "adShare": "50% przychodów z reklam",
+          "noMinimum": "Bez minimalnego czasu oglądania"
+        }
+      },
+      "earnViewers": {
+        "title": "Widzowie też zarabiają",
+        "text": "Już samo oglądanie filmów pozwala zarabiać w programie nagród 3Speak: 10% wszystkich przychodów z reklam trafia do widzów i jest dzielone według tego, co ogląda każdy z nich. Włącz <b>Nagrody dla widzów</b> w sekcji Ustawienia, aby dołączyć. Twoje komentarze i upvote'y też mogą przynosić nagrody.",
+        "chips": {
+          "watch": "Zarabiaj, oglądając",
+          "adShare": "10% przychodów z reklam",
+          "program": "Program nagród 3Speak"
+        }
+      },
+      "pagesBar": {
+        "text": "Shorts, Grupy, Audio, ranking i więcej, tutaj na górnym pasku."
+      },
+      "pagesDesktop": {
+        "title": "Wszystkie strony w jednym miejscu",
+        "text": "Kliknij logo 3Speak, aby otworzyć wszystkie strony: Shorts, Grupy, Audio, Rankingi i inne."
+      },
+      "pagesPhone": {
+        "title": "Poruszanie się",
+        "text": "Pasek na dole prowadzi do kanałów, Shorts, Grup i Audio."
+      },
+      "search": {
+        "title": "Znajdź wszystko",
+        "text": "Szukaj filmów, kanałów i tematów."
+      },
+      "stories": {
+        "title": "Shorts",
+        "text": "Krótkie pionowe filmy. Stuknij jeden i przesuwaj, aby oglądać kolejne."
+      },
+      "feeds": {
+        "title": "Wybierz swój kanał",
+        "text": "Przełączaj się między Odkrywaj, Kanałem głównym, najnowszymi filmami i nie tylko."
+      },
+      "settings": {
+        "title": "Dopasuj do siebie",
+        "text": "Zębatka otwiera Ustawienia: język, tryb jasny lub ciemny i to, jakie filmy chcesz oglądać."
+      },
+      "faq": {
+        "title": "Pytania?",
+        "text": "FAQ odpowiada na pytania, które nowi użytkownicy zadają najczęściej, od zakładania konta po zdobywanie nagród."
+      },
+      "account": {
+        "title": "Dołącz",
+        "text": "Z kontem możesz przesyłać filmy, komentować, głosować, obserwować kanały i zdobywać nagrody. To nic nie kosztuje."
+      },
+      "done": {
+        "title": "Wszystko gotowe!",
+        "text": "Miłego oglądania. Ten przewodnik możesz w każdej chwili uruchomić ponownie z FAQ."
+      }
+    }
+  }
+}

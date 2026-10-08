@@ -1,0 +1,150 @@
+@use "../../mixins.scss" as mix;
+
+// One slim row on desktop: mark · text · buttons · close. Below 1100px the
+// buttons drop under the text, so nothing gets squeezed.
+.welcome-banner {
+  position: relative;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  grid-template-areas: "mark body actions";
+  align-items: center;
+  column-gap: 14px;
+  row-gap: 10px;
+  margin: 2px 24px 10px;
+  padding: 12px 48px 12px 16px;
+  border-radius: 14px;
+  border: 1px solid var(--border-color);
+  background:
+    linear-gradient(110deg, color-mix(in srgb, var(--accent-primary, #e53935) 9%, transparent), transparent 45%),
+    var(--bg-secondary);
+
+  @media (max-width: 1100px) {
+    grid-template-columns: auto minmax(0, 1fr);
+    grid-template-areas:
+      "mark body"
+      "mark actions";
+    align-items: start;
+  }
+
+  @include mix.respond(phone) {
+    grid-template-areas:
+      "mark body"
+      "actions actions";
+    margin: 2px 10px 8px;
+    padding: 12px 40px 12px 12px;
+    column-gap: 10px;
+  }
+
+  .welcome-banner-mark {
+    grid-area: mark;
+    width: 32px;
+    height: 32px;
+
+    @include mix.respond(phone) { width: 28px; height: 28px; }
+  }
+
+  .welcome-banner-body {
+    grid-area: body;
+    min-width: 0;
+
+    h2 {
+      margin: 0 0 2px;
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+
+    p {
+      margin: 0;
+      font-size: 13.5px;
+      line-height: 1.45;
+      color: var(--text-secondary);
+    }
+  }
+
+  .welcome-banner-actions {
+    grid-area: actions;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .welcome-banner-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 5px 14px;
+    border-radius: 20px;
+    border: 1px solid var(--border-color);
+    background: transparent;
+    color: var(--text-secondary);
+    font-size: 13.5px;
+    font-weight: 600;
+    white-space: nowrap;
+    text-decoration: none;
+    cursor: pointer;
+    transition: background-color 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+
+    &:hover {
+      background: var(--bg-hover);
+      color: var(--text-primary);
+      border-color: var(--text-secondary);
+    }
+
+    // Red outline, never a red fill (3Speak convention).
+    &--primary {
+      border-color: var(--accent-primary, #e53935);
+      color: var(--accent-primary, #e53935);
+
+      &:hover {
+        border-color: var(--accent-primary, #e53935);
+        color: var(--accent-primary, #e53935);
+        background: color-mix(in srgb, var(--accent-primary, #e53935) 10%, transparent);
+      }
+    }
+
+    svg { font-size: 16px; }
+
+    // Keeps all three on one row on a phone.
+    @include mix.respond(phone) {
+      padding: 5px 11px;
+      font-size: 13px;
+    }
+  }
+
+  // Phones get the short text and the one-word button label.
+  .welcome-banner-text--short,
+  .welcome-banner-label--short { display: none; }
+
+  @include mix.respond(phone) {
+    .welcome-banner-text--long,
+    .welcome-banner-label--long { display: none; }
+    .welcome-banner-text--short { display: block; }
+    .welcome-banner-label--short { display: inline; }
+  }
+
+  .welcome-banner-close {
+    position: absolute;
+    top: 50%;
+    right: 10px;
+    transform: translateY(-50%);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    border: none;
+    border-radius: 50%;
+    background: transparent;
+    color: var(--text-muted);
+    font-size: 19px;
+    cursor: pointer;
+
+    &:hover { background: var(--bg-hover); color: var(--text-primary); }
+
+    @media (max-width: 1100px) {
+      top: 8px;
+      transform: none;
+    }
+  }
+}

@@ -71,6 +71,14 @@
       "a": "Evet. Üstteki yükleme menüsünden <b>Yayın Stüdyosu</b>'nu aç. Konukları sahneye alabilir, istersen OBS ile yayın yapabilirsin; kayıt da sonrasında kanalında kalır.",
       "aSoon": "Canlı yayın şu anda küçük bir içerik üreticisi grubuyla test ediliyor. Herkese açıldığı anda duyuracağız."
     },
+    "talk": {
+      "q": "3Speak'te neler hakkında konuşabilirim?",
+      "a": "3Speak farklılıkları, saygıyı ve hoşgörüyü kutlayan bir platformdur. 3Speak, açık ve adil kurallarla ifade özgürlüğüne inanır. Dinleri, inançları, grupları ve kişileri eleştirmekte, alternatif siyaseti ve komplo teorilerini tartışmakta, hükümetleri ve dünya liderlerini eleştirmekte, gizliliğin için takma ad kullanmakta ve açıkça şaka olarak belirtildiği sürece rahatsız edici şakalar paylaşmakta özgürsün. Fikirleri eleştirmek hoş karşılanır, nefret söylemi ise karşılanmaz: insanlara kim oldukları için, örneğin kökenleri, dinleri, cinsiyetleri, cinsellikleri veya engellilikleri nedeniyle saldırmanın burada yeri yoktur."
+    },
+    "notAllowed": {
+      "q": "Neye izin verilmez?",
+      "a": "Şiddete çağrı yapmak veya şiddeti kışkırtmak, nefret söylemi, kan ve vahşet içeren içerikler (gore), pornografik içerik, iftira ve karalama ile yasa dışı her şey."
+    },
     "communities": {
       "q": "Topluluklar nedir?",
       "a": "Topluluklar oyun, müzik veya seyahat gibi ortak bir ilgi alanı etrafındaki gruplardır. <b>Gruplar</b> sayfasında sevdiklerine katıl, videoları akışlarında görünsün. Yükleme yaparken videonu bir toplulukta paylaşabilirsin, böylece doğru kişiler onu bulur. Bir Hive hesabınla kendi topluluğunu da kurabilirsin."
@@ -81,7 +89,7 @@
     },
     "nsfw": {
       "q": "NSFW içeriğe izin veriliyor mu?",
-      "a": "Yetişkin içeriğine, yüklerken ya da sonradan videoyu düzenleyerek <b>NSFW</b> olarak işaretlendiği sürece izin verilir. İşaretli videolar, Ayarlar'da <b>İçerik</b> altında <b>NSFW içeriği göster</b>'i açmamış herkes için akışlarda ve aramada gizlenir. Yasa dışı içeriğe asla izin verilmez."
+      "a": "Yetişkin içeriğine, yüklerken ya da sonradan videoyu düzenleyerek <b>NSFW</b> olarak işaretlendiği sürece izin verilir. İşaretli videolar, Ayarlar'da <b>İçerik</b> altında <b>NSFW içeriği göster</b>'i açmamış herkes için akışlarda ve aramada gizlenir. Pornografik içeriğe işaretlenmiş olsa bile izin verilmez, yasa dışı içeriğe ise asla izin verilmez."
     },
     "ai": {
       "q": "Yapay zekâ ile üretilmiş içeriğe izin veriliyor mu?",

@@ -1,0 +1,95 @@
+{
+  "banner": {
+    "title": "Bienvenue sur 3Speak !",
+    "text": "Des vidéos qui appartiennent à celles et ceux qui les créent. Vous débutez ? Faites une visite rapide ou lisez les réponses aux questions fréquentes.",
+    "textShort": "Vous débutez ? Faites une visite rapide ou lisez la FAQ.",
+    "tour": "Faire la visite",
+    "tourShort": "Visite",
+    "faq": "FAQ",
+    "close": "Fermer le message de bienvenue"
+  },
+  "tour": {
+    "aria": "Visite de 3Speak",
+    "next": "Suivant",
+    "back": "Retour",
+    "skip": "Passer la visite",
+    "done": "C'est parti",
+    "progress": "{{current}} sur {{total}}",
+    "steps": {
+      "intro": {
+        "title": "Petit tour d'horizon",
+        "text": "Cette courte visite vous montre où se trouve chaque chose. Elle dure environ une minute, et vous pouvez la quitter à tout moment."
+      },
+      "about": {
+        "title": "Qu'est-ce que 3Speak ?",
+        "text": "Une plateforme vidéo gratuite et internationale, avec des communautés pour tous les centres d'intérêt. Elle appartient à sa communauté, pas à une entreprise, et il n'y a pas de PDG. Elle est open source et fait partie de l'écosystème Hive : votre compte, vos vidéos et vos abonnés sont à vous et fonctionnent aussi dans les autres applis Hive.",
+        "chips": {
+          "community": "Détenue par la communauté",
+          "free": "Gratuite",
+          "international": "Internationale",
+          "communities": "De nombreuses communautés",
+          "decentralized": "Décentralisée",
+          "openSource": "Open source",
+          "hive": "Écosystème Hive"
+        }
+      },
+      "earnCreators": {
+        "title": "Les créateurs gagnent dès le premier jour",
+        "text": "Chaque vote positif sur votre vidéo augmente ses récompenses d'auteur, versées 7 jours après la publication. En plus, 50 % des revenus publicitaires générés par vos vidéos vous reviennent (vous pouvez en partager une partie avec la communauté où vous avez publié), versés à quelques jours d'intervalle. Contrairement à la plupart des réseaux sociaux, il n'y a ni durée de visionnage minimale ni nombre d'abonnés minimal à atteindre au préalable.",
+        "chips": {
+          "authorRewards": "Récompenses d'auteur",
+          "adShare": "50 % des revenus publicitaires",
+          "noMinimum": "Aucun visionnage minimum"
+        }
+      },
+      "earnViewers": {
+        "title": "Les spectateurs gagnent aussi",
+        "text": "Rien qu'en regardant des vidéos, vous pouvez gagner grâce au programme de récompenses 3Speak : 10 % de tous les revenus publicitaires reviennent aux spectateurs, répartis selon ce que chacun regarde. Activez <b>Récompenses spectateur</b> dans les Paramètres pour y participer. Vos commentaires et vos votes positifs peuvent aussi vous rapporter des récompenses.",
+        "chips": {
+          "watch": "Gagnez en regardant",
+          "adShare": "10 % des revenus publicitaires",
+          "program": "Programme de récompenses 3Speak"
+        }
+      },
+      "pagesBar": {
+        "text": "Shorts, Groupes, Audio, le classement et plus encore, ici dans la barre du haut."
+      },
+      "pagesDesktop": {
+        "title": "Toutes les pages au même endroit",
+        "text": "Cliquez sur le logo 3Speak pour ouvrir toutes les pages : Shorts, Groupes, Audio, les Classements et plus encore."
+      },
+      "pagesPhone": {
+        "title": "Se déplacer",
+        "text": "La barre en bas vous mène aux fils, aux Shorts, aux Groupes et à Audio."
+      },
+      "search": {
+        "title": "Tout trouver",
+        "text": "Recherchez des vidéos, des chaînes et des sujets."
+      },
+      "stories": {
+        "title": "Shorts",
+        "text": "De courtes vidéos verticales. Touchez-en une et faites défiler les autres."
+      },
+      "feeds": {
+        "title": "Choisissez votre fil",
+        "text": "Passez de Découvrir au Fil d'accueil, aux vidéos les plus récentes et plus encore."
+      },
+      "settings": {
+        "title": "À votre goût",
+        "text": "La roue dentée ouvre les Paramètres : votre langue, le mode clair ou sombre et les vidéos que vous voulez voir."
+      },
+      "faq": {
+        "title": "Des questions ?",
+        "text": "La FAQ répond aux questions que les nouveaux venus posent le plus, de la création d'un compte aux récompenses."
+      },
+      "account": {
+        "title": "Rejoignez-nous",
+        "text": "Avec un compte, vous pouvez mettre en ligne, commenter, voter, suivre des chaînes et gagner des récompenses. C'est gratuit."
+      },
+      "done": {
+        "title": "Tout est prêt !",
+        "text": "Bon visionnage. Vous pouvez relancer cette visite à tout moment depuis la FAQ."
+      }
+    }
+  }
+}

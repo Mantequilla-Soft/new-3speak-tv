@@ -1,0 +1,95 @@
+{
+  "banner": {
+    "title": "Ti diamo il benvenuto su 3Speak!",
+    "text": "Video che appartengono a chi li crea. Sei nuovo qui? Fai un breve tour o leggi le risposte alle domande più comuni.",
+    "textShort": "Sei nuovo? Fai un breve tour o leggi le FAQ.",
+    "tour": "Fai il tour",
+    "tourShort": "Tour",
+    "faq": "FAQ",
+    "close": "Chiudi il messaggio di benvenuto"
+  },
+  "tour": {
+    "aria": "Tour di 3Speak",
+    "next": "Avanti",
+    "back": "Indietro",
+    "skip": "Salta il tour",
+    "done": "Iniziamo",
+    "progress": "{{current}} di {{total}}",
+    "steps": {
+      "intro": {
+        "title": "Un rapido giro",
+        "text": "Questo breve tour ti mostra dove si trova tutto. Dura circa un minuto e puoi uscire quando vuoi."
+      },
+      "about": {
+        "title": "Che cos'è 3Speak?",
+        "text": "Una piattaforma video gratuita e internazionale, con community per ogni interesse. Appartiene alla sua community, non a un'azienda, e non c'è nessun CEO. È open source e fa parte dell'ecosistema Hive: il tuo account, i tuoi video e i tuoi follower sono tuoi e funzionano anche in altre app Hive.",
+        "chips": {
+          "community": "Della community",
+          "free": "Gratis",
+          "international": "Internazionale",
+          "communities": "Tante community",
+          "decentralized": "Decentralizzata",
+          "openSource": "Open source",
+          "hive": "Ecosistema Hive"
+        }
+      },
+      "earnCreators": {
+        "title": "I creator guadagnano dal primo giorno",
+        "text": "Ogni voto positivo al tuo video aumenta le sue ricompense d'autore, pagate 7 giorni dopo la pubblicazione. In più, il 50% dei ricavi pubblicitari generati dai tuoi video va a te (puoi condividerne una parte con la community in cui hai pubblicato), pagato ogni pochi giorni. A differenza della maggior parte dei social, non c'è un tempo di visione minimo né un numero minimo di follower da raggiungere prima.",
+        "chips": {
+          "authorRewards": "Ricompense d'autore",
+          "adShare": "50% dei ricavi pubblicitari",
+          "noMinimum": "Nessuna visione minima"
+        }
+      },
+      "earnViewers": {
+        "title": "Anche gli spettatori guadagnano",
+        "text": "Solo guardando video puoi guadagnare con il programma di ricompense di 3Speak: il 10% di tutti i ricavi pubblicitari va agli spettatori, diviso in base a ciò che guarda ciascuno. Attiva <b>Ricompense per gli spettatori</b> in Impostazioni per partecipare. Anche i tuoi commenti e voti positivi possono farti guadagnare ricompense.",
+        "chips": {
+          "watch": "Guadagna mentre guardi",
+          "adShare": "10% dei ricavi pubblicitari",
+          "program": "Programma ricompense 3Speak"
+        }
+      },
+      "pagesBar": {
+        "text": "Shorts, Gruppi, Audio, la classifica e altro, proprio qui nella barra in alto."
+      },
+      "pagesDesktop": {
+        "title": "Tutte le pagine in un posto",
+        "text": "Clicca sul logo di 3Speak per aprire tutte le pagine: Shorts, Gruppi, Audio, le Classifiche e altro."
+      },
+      "pagesPhone": {
+        "title": "Come muoverti",
+        "text": "La barra in basso ti porta ai feed, a Shorts, Gruppi e Audio."
+      },
+      "search": {
+        "title": "Trova di tutto",
+        "text": "Cerca video, canali e argomenti."
+      },
+      "stories": {
+        "title": "Shorts",
+        "text": "Brevi video verticali. Toccane uno e scorri tra gli altri."
+      },
+      "feeds": {
+        "title": "Scegli il tuo feed",
+        "text": "Passa da Scopri al Feed Home, ai video più recenti e altro ancora."
+      },
+      "settings": {
+        "title": "A modo tuo",
+        "text": "L'ingranaggio apre le Impostazioni: la tua lingua, la modalità chiara o scura e quali video vuoi vedere."
+      },
+      "faq": {
+        "title": "Domande?",
+        "text": "Le FAQ rispondono a ciò che i nuovi arrivati chiedono più spesso, dalla creazione di un account alle ricompense."
+      },
+      "account": {
+        "title": "Unisciti a noi",
+        "text": "Con un account puoi caricare video, commentare, votare, seguire canali e guadagnare ricompense. È gratis."
+      },
+      "done": {
+        "title": "Tutto pronto!",
+        "text": "Buona visione. Puoi rifare questo tour quando vuoi dalle FAQ."
+      }
+    }
+  }
+}

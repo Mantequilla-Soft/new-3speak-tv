@@ -15,14 +15,14 @@
       "tagline1": "CHROŃ SWOJE TREŚCI",
       "tagline2": "TOKENIZUJ SWOJĄ SPOŁECZNOŚĆ",
       "cta": "Dołącz do rewolucji",
-      "description": "3Speak działa na blockchainie Hive, co zapewnia prawdziwą decentralizację, odporność na cenzurę i własność społeczności."
+      "description": "3Speak działa na Hive, co zapewnia prawdziwą decentralizację, odporność na cenzurę i własność społeczności. Utrzymuje go i obsługuje społeczność, dla społeczności."
     },
     "how": {
       "title": "Jak działa 3Speak",
-      "subtitle": "Poczuj, co znaczy prawdziwa własność treści dzięki technologii blockchain",
+      "subtitle": "Poczuj prawdziwą własność swoich treści, zbudowaną na Hive",
       "create": {
         "title": "Twórz treści",
-        "text": "Przesyłaj filmy i twórz treści, które naprawdę należą do ciebie w blockchainie."
+        "text": "Przesyłaj filmy i twórz treści, które naprawdę należą do ciebie, przechowywane na Hive."
       },
       "earn": {
         "title": "Zdobywaj nagrody",
@@ -41,7 +41,7 @@
       },
       "p2p": {
         "title": "P2P",
-        "text": "Technologia blockchain, z której korzysta serwis, zapewnia twórcom prawdziwe połączenia P2P z ich odbiorcami, bez żadnych pośredników."
+        "text": "Ponieważ 3Speak działa na Hive, twórcy mają prawdziwe połączenia P2P ze swoimi odbiorcami, bez żadnych pośredników."
       },
       "tokenisation": {
         "title": "TOKENIZACJA",
@@ -57,7 +57,7 @@
       }
     },
     "hive": {
-      "title": "Napędzane przez blockchain Hive",
+      "title": "Napędzane przez Hive",
       "decentralized": {
         "title": "Zdecentralizowany",
         "text": "Brak pojedynczego punktu awarii lub kontroli"
@@ -70,26 +70,12 @@
         "title": "Własność społeczności",
         "text": "Zarządzany przez posiadaczy udziałów, nie korporacje"
       },
-      "description": "3Speak działa na blockchainie Hive, co zapewnia prawdziwą decentralizację, odporność na cenzurę i własność społeczności. Ekosystem Hive dostarcza infrastrukturę dla nagród, zarządzania i własności zasobów, która czyni 3Speak rewolucyjnym."
+      "description": "3Speak działa na Hive, co zapewnia prawdziwą decentralizację, odporność na cenzurę i własność społeczności. Ekosystem Hive dostarcza infrastrukturę dla nagród, zarządzania i własności zasobów, która czyni 3Speak rewolucyjnym."
     },
     "guidelines": {
       "title": "Nasze zasady",
       "subtitle": "Wierzymy, że wolność słowa jest absolutna, przy jasnych i uczciwych zasadach",
-      "support": {
-        "title": "Co wspieramy",
-        "religion": "Krytykowanie religii, przekonań, grup i ludzi",
-        "politics": "Alternatywną politykę i dyskusje o teoriach spiskowych",
-        "governments": "Krytykowanie rządów i światowych przywódców",
-        "pseudonyms": "Używanie pseudonimów dla prywatności",
-        "jokes": "Obraźliwe żarty (gdy są wyraźnie oznaczone jako żarty)"
-      },
-      "restrict": {
-        "title": "Co ograniczamy",
-        "violence": "Nawoływanie lub podżeganie do przemocy",
-        "gore": "Pokazywanie nadmiernie drastycznych lub pornograficznych treści",
-        "slander": "Pomówienia i treści zniesławiające",
-        "illegal": "Nielegalne działania lub treści"
-      }
+      "cta": "Przeczytaj nasze zasady"
     },
     "faqSection": {
       "title": "Najczęściej zadawane pytania",

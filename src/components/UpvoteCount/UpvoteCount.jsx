@@ -1,4 +1,5 @@
 import { FaHeart } from 'react-icons/fa';
+import { formatCountCompact } from '../../i18n';
 import './UpvoteCount.scss';
 
 function UpvoteCount({ count, voted, onClick, loading, onCountEnter, onCountLeave, onCountClick, size, children }) {
@@ -21,7 +22,13 @@ function UpvoteCount({ count, voted, onClick, loading, onCountEnter, onCountLeav
         onClick={onCountClick}
         style={onCountClick ? { cursor: 'pointer' } : undefined}
       >
-        {count ?? '…'}
+        {count == null ? '…' : (
+          // Full number on desktop; whole thousands on a phone ("1250" → "1k").
+          <>
+            <span className="upvote-count-full">{count}</span>
+            <span className="upvote-count-compact">{formatCountCompact(count)}</span>
+          </>
+        )}
       </span>
     </div>
   );
