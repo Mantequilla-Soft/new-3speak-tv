@@ -15,6 +15,32 @@
     gap: 14px;
     margin-bottom: 22px;
 
+    .faq-tour-btn {
+      margin-left: auto;
+      flex-shrink: 0;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 16px;
+      border-radius: 20px;
+      // Red outline, never a red fill (3Speak convention).
+      border: 1px solid var(--accent-primary, #e53935);
+      background: transparent;
+      color: var(--accent-primary, #e53935);
+      font-size: 14px;
+      font-weight: 600;
+      white-space: nowrap;
+      cursor: pointer;
+
+      &:hover { background: color-mix(in srgb, var(--accent-primary, #e53935) 10%, transparent); }
+      svg { font-size: 17px; }
+    }
+
+    @include mix.respond(phone) {
+      flex-wrap: wrap;
+      .faq-tour-btn { margin-left: 52px; }
+    }
+
     .faq-header-icon {
       flex-shrink: 0;
       font-size: 38px;
@@ -110,6 +136,17 @@
     }
 
     b { color: var(--text-primary); }
+
+    .faq-inline-link {
+      padding: 0;
+      border: none;
+      background: none;
+      font: inherit;
+      color: var(--accent-primary);
+      text-decoration: underline;
+      text-underline-offset: 2px;
+      cursor: pointer;
+    }
 
     a {
       color: var(--accent-primary);

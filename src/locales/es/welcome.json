@@ -1,0 +1,78 @@
+{
+  "banner": {
+    "title": "¡Te damos la bienvenida a 3Speak!",
+    "text": "Videos que pertenecen a quienes los crean. ¿Eres nuevo aquí? Haz un recorrido rápido o lee las respuestas a las preguntas frecuentes.",
+    "textShort": "¿Eres nuevo? Haz un recorrido rápido o lee las preguntas frecuentes.",
+    "tour": "Hacer el recorrido",
+    "tourShort": "Recorrido",
+    "faq": "Preguntas frecuentes",
+    "about": "Acerca de 3Speak",
+    "close": "Cerrar el mensaje de bienvenida"
+  },
+  "tour": {
+    "aria": "Recorrido por 3Speak",
+    "next": "Siguiente",
+    "back": "Atrás",
+    "skip": "Omitir recorrido",
+    "done": "¡Vamos!",
+    "progress": "{{current}} de {{total}}",
+    "steps": {
+      "intro": {
+        "title": "Un vistazo rápido",
+        "text": "Este breve recorrido te muestra dónde está todo. Dura alrededor de un minuto y puedes salir cuando quieras."
+      },
+      "about": {
+        "title": "¿Qué es 3Speak?",
+        "text": "Una plataforma de video gratuita e internacional, con comunidades para todos los intereses. Pertenece a su comunidad, no a una empresa, y no hay ningún CEO. Es de código abierto y parte del ecosistema Hive: tu cuenta, tus videos y tus seguidores son tuyos y también funcionan en otras apps de Hive.",
+        "chips": {
+          "community": "De la comunidad",
+          "free": "Gratis",
+          "international": "Internacional",
+          "communities": "Muchas comunidades",
+          "decentralized": "Descentralizada",
+          "openSource": "Código abierto",
+          "hive": "Ecosistema Hive"
+        }
+      },
+      "pagesBar": {
+        "text": "Shorts, Grupos, Audio, la clasificación y más, aquí mismo en la barra superior."
+      },
+      "pagesDesktop": {
+        "title": "Todas las páginas en un lugar",
+        "text": "Haz clic en el logo de 3Speak para abrir todas las páginas: Shorts, Grupos, Audio, los Rankings y más."
+      },
+      "pagesPhone": {
+        "title": "Muévete por 3Speak",
+        "text": "La barra de abajo te lleva a los feeds, Shorts, Grupos y Audio."
+      },
+      "search": {
+        "title": "Encuentra lo que quieras",
+        "text": "Busca videos, canales y temas."
+      },
+      "stories": {
+        "title": "Shorts",
+        "text": "Videos verticales cortos. Toca uno y desliza para ver el resto."
+      },
+      "feeds": {
+        "title": "Elige tu feed",
+        "text": "Cambia entre Descubrir, el Feed de inicio, los videos más nuevos y más."
+      },
+      "settings": {
+        "title": "A tu manera",
+        "text": "El engranaje abre Ajustes: tu idioma, el modo claro u oscuro y qué videos quieres ver."
+      },
+      "faq": {
+        "title": "¿Preguntas?",
+        "text": "Las Preguntas frecuentes responden lo que más preguntan los recién llegados, desde crear una cuenta hasta ganar recompensas."
+      },
+      "account": {
+        "title": "Únete",
+        "text": "Con una cuenta puedes subir videos, comentar, votar, seguir canales y ganar recompensas. Es gratis."
+      },
+      "done": {
+        "title": "¡Todo listo!",
+        "text": "Disfruta viendo. Siempre encontrarás las Preguntas frecuentes y la página Acerca de 3Speak en el menú."
+      }
+    }
+  }
+}

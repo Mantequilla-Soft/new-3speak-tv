@@ -1,0 +1,78 @@
+{
+  "banner": {
+    "title": "Maligayang pagdating sa 3Speak!",
+    "text": "Mga video na pag-aari ng mga gumawa nito. Bago ka rito? Mag-tour nang mabilis o basahin ang mga sagot sa mga karaniwang tanong.",
+    "textShort": "Bago ka rito? Mag-tour nang mabilis o basahin ang FAQ.",
+    "tour": "Mag-tour",
+    "tourShort": "Tour",
+    "faq": "FAQ",
+    "about": "Tungkol sa 3Speak",
+    "close": "Isara ang welcome message"
+  },
+  "tour": {
+    "aria": "Tour ng 3Speak",
+    "next": "Susunod",
+    "back": "Bumalik",
+    "skip": "Laktawan ang tour",
+    "done": "Tara na",
+    "progress": "{{current}} sa {{total}}",
+    "steps": {
+      "intro": {
+        "title": "Mabilis na silip",
+        "text": "Ipapakita ng maikling tour na ito kung nasaan ang lahat. Mga isang minuto lang ito, at puwede kang umalis anumang oras."
+      },
+      "about": {
+        "title": "Ano ang 3Speak?",
+        "text": "Isang libre at internasyonal na video platform na may mga komunidad para sa bawat hilig. Pag-aari ito ng komunidad nito, hindi ng isang kumpanya, at walang CEO. Open source ito at bahagi ng Hive ecosystem: sa iyo ang account, mga video at followers mo, at gumagana rin ang mga ito sa ibang Hive app.",
+        "chips": {
+          "community": "Pag-aari ng komunidad",
+          "free": "Libre",
+          "international": "Internasyonal",
+          "communities": "Maraming komunidad",
+          "decentralized": "Decentralized",
+          "openSource": "Open source",
+          "hive": "Hive ecosystem"
+        }
+      },
+      "pagesBar": {
+        "text": "Shorts, Groups, Audio, leaderboard at iba pa, nandito mismo sa itaas na bar."
+      },
+      "pagesDesktop": {
+        "title": "Lahat ng page sa iisang lugar",
+        "text": "I-click ang logo ng 3Speak para buksan ang bawat page: Shorts, Groups, Audio, ang Rankings at marami pa."
+      },
+      "pagesPhone": {
+        "title": "Mag-ikot",
+        "text": "Dadalhin ka ng bar sa ibaba sa mga feed, Shorts, Groups at Audio."
+      },
+      "search": {
+        "title": "Hanapin ang kahit ano",
+        "text": "Maghanap ng mga video, channel at paksa."
+      },
+      "stories": {
+        "title": "Shorts",
+        "text": "Maiikling vertical na video. I-tap ang isa at mag-swipe para sa iba pa."
+      },
+      "feeds": {
+        "title": "Piliin ang feed mo",
+        "text": "Lumipat sa pagitan ng Discover, Home Feed, mga pinakabagong video at marami pa."
+      },
+      "settings": {
+        "title": "Gawin itong iyo",
+        "text": "Binubuksan ng gear ang Settings: ang wika mo, light o dark mode, at kung anong mga video ang gusto mong makita."
+      },
+      "faq": {
+        "title": "May tanong?",
+        "text": "Sinasagot ng FAQ ang pinakamadalas itanong ng mga bago, mula sa paggawa ng account hanggang sa pagkita ng rewards."
+      },
+      "account": {
+        "title": "Sumali ka",
+        "text": "Kapag may account ka, puwede kang mag-upload, mag-comment, mag-vote, mag-follow ng mga channel at kumita ng rewards. Libre ito."
+      },
+      "done": {
+        "title": "Handa ka na!",
+        "text": "Mag-enjoy sa panonood. Makikita mo palagi ang FAQ at ang Tungkol sa 3Speak sa menu."
+      }
+    }
+  }
+}

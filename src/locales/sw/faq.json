@@ -13,6 +13,10 @@
       "q": "3Speak ni nini?",
       "a": "3Speak ni jukwaa la video ambapo chaneli yako ni mali yako. Video, maoni na wafuasi wako huhifadhiwa kwenye akaunti yako mwenyewe ya Hive, si kwenye seva ya 3Speak, kwa hivyo hakuna anayeweza kukunyang'anya. Watayarishi na watazamaji wote wanaweza kupata zawadi wanapoitumia."
     },
+    "tour": {
+      "q": "Je, kuna ziara ya 3Speak?",
+      "a": "Ndiyo. <tourLink>Anza ziara</tourLink> wakati wowote. Kwa takriban dakika moja inakuonyesha kila kitu: menyu, utafutaji, Shorts, mipasho na Mipangilio."
+    },
     "watchFree": {
       "q": "Je, ninahitaji akaunti ili kutazama?",
       "a": "Hapana. Kutazama ni bure na hakuhitaji akaunti. Unahitaji akaunti tu ili kupakia, kutoa maoni, kupiga kura, kufuata chaneli na kupata zawadi."

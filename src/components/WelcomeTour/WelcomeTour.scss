@@ -1,0 +1,184 @@
+@use "../../mixins.scss" as mix;
+
+// Above every modal (they top out around 100050) and the cookie banner.
+.wt-root {
+  position: fixed;
+  inset: 0;
+  z-index: 100100;
+}
+
+.wt-blocker {
+  position: fixed;
+  inset: 0;
+}
+
+.wt-dim {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+}
+
+// The cut-out: a transparent box whose enormous shadow darkens everything else.
+.wt-spot {
+  position: fixed;
+  border-radius: 12px;
+  box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.6);
+  outline: 2px solid var(--accent-primary, #e53935);
+  outline-offset: 2px;
+  pointer-events: none;
+  transition: top 0.3s ease, left 0.3s ease, width 0.3s ease, height 0.3s ease;
+
+  @media (prefers-reduced-motion: reduce) { transition: none; }
+}
+
+.wt-card {
+  position: fixed;
+  width: 340px;
+  max-width: calc(100vw - 32px);
+  padding: 18px 18px 14px;
+  border-radius: 16px;
+  background: var(--bg-elevated, var(--card-bg, #1f1f1f));
+  border: 1px solid var(--border-color);
+  box-shadow: 0 18px 50px rgba(0, 0, 0, 0.35);
+  color: var(--text-primary);
+
+  &--center {
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+
+  // Phones: a sheet across the full width, at the bottom, or at the top when
+  // the spotlight sits in the lower half (the bottom bar).
+  &--sheet {
+    left: 0;
+    right: 0;
+    width: auto;
+    max-width: none;
+    padding: 18px 16px calc(14px + env(safe-area-inset-bottom));
+    border-radius: 18px 18px 0 0;
+  }
+  &--bottom { bottom: 0; }
+  &--top {
+    top: 0;
+    border-radius: 0 0 18px 18px;
+    padding-top: calc(18px + env(safe-area-inset-top));
+    padding-bottom: 14px;
+  }
+
+  @include mix.respond(phone) {
+    &--center {
+      top: auto;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      width: auto;
+      max-width: none;
+      transform: none;
+      border-radius: 18px 18px 0 0;
+      padding-bottom: calc(14px + env(safe-area-inset-bottom));
+    }
+  }
+}
+
+.wt-progress {
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  color: var(--text-muted);
+  margin-bottom: 6px;
+}
+
+.wt-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 4px 0 10px;
+  padding: 0;
+  list-style: none;
+
+  li {
+    padding: 3px 10px;
+    border-radius: 999px;
+    border: 1px solid var(--border-color);
+    color: var(--text-primary);
+    font-size: 12px;
+    font-weight: 600;
+    white-space: nowrap;
+  }
+}
+
+.wt-title {
+  margin: 0 0 6px;
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.wt-text {
+  margin: 0;
+  font-size: 14.5px;
+  line-height: 1.55;
+  color: var(--text-secondary);
+}
+
+.wt-dots {
+  display: flex;
+  gap: 5px;
+  margin: 14px 0 12px;
+
+  span {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--border-color);
+    transition: width 0.2s ease, background-color 0.2s ease;
+
+    &.on {
+      width: 16px;
+      border-radius: 3px;
+      background: var(--accent-primary, #e53935);
+    }
+  }
+}
+
+.wt-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  .wt-spacer { flex: 1; }
+}
+
+.wt-skip {
+  border: none;
+  background: none;
+  padding: 6px 2px;
+  font-size: 13px;
+  color: var(--text-muted);
+  cursor: pointer;
+
+  &:hover { color: var(--text-primary); }
+}
+
+.wt-btn {
+  padding: 7px 16px;
+  border-radius: 20px;
+  border: 1px solid var(--border-color);
+  background: transparent;
+  color: var(--text-primary);
+  font-weight: 600;
+  font-size: 14px;
+  cursor: pointer;
+
+  &:hover { background: var(--bg-hover); }
+
+  // Red outline, never a red fill (3Speak convention).
+  &--primary {
+    border-color: var(--accent-primary, #e53935);
+    color: var(--accent-primary, #e53935);
+
+    &:hover { background: color-mix(in srgb, var(--accent-primary, #e53935) 10%, transparent); }
+  }
+
+  &:focus-visible { outline: 2px solid var(--accent-primary, #e53935); outline-offset: 2px; }
+}

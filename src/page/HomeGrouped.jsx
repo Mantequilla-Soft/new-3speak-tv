@@ -12,6 +12,7 @@ import useViewCounts from "../hooks/useViewCounts";
 import { useAppStore } from "../lib/store";
 import { getFeedSeed, refreshHomeFeeds } from "../utils/feedSeed";
 import ShortsStories from "../components/ShortsStories/ShortsStories";
+import WelcomeBanner from "../components/WelcomeTour/WelcomeBanner";
 import NewFromFollowing from "../components/NewFromFollowing/NewFromFollowing";
 import SuggestedCreators from "../components/SuggestedCreators/SuggestedCreators";
 import NewOn3SpeakRail from "../components/Incubation/NewOn3SpeakRail";
@@ -814,6 +815,8 @@ const HomeGrouped = () => {
   return (
     <PullToRefresh onRefresh={handleRefresh}>
     <div className="home-grouped-container home-tabbed" data-card-size={homeCardSize || 'small'}>
+      {/* Logged-out first visits only. */}
+      <WelcomeBanner />
       <ShortsStories />
       {/* Logged-in only, and renders nothing when there's nothing unwatched. */}
       <NewFromFollowing />

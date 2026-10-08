@@ -13,6 +13,10 @@
       "q": "3Speak nedir?",
       "a": "3Speak, kanalının sana ait olduğu bir video platformudur. Videoların, yorumların ve takipçilerin bir 3Speak sunucusunda değil, kendi Hive hesabında durur, bu yüzden kimse onları senden alamaz. Hem içerik üreticileri hem de izleyiciler platformu kullanırken ödül kazanabilir."
     },
+    "tour": {
+      "q": "3Speak'te bir tur var mı?",
+      "a": "Evet. <tourLink>Turu başlat</tourLink>, istediğin zaman. Yaklaşık bir dakikada sana her şeyi gösterir: menüler, arama, Shorts, akışlar ve Ayarlar."
+    },
     "watchFree": {
       "q": "İzlemek için hesap gerekiyor mu?",
       "a": "Hayır. İzlemek ücretsizdir ve hesap gerektirmez. Hesaba yalnızca video yüklemek, yorum yapmak, oy vermek, kanalları takip etmek ve ödül kazanmak için ihtiyacın var."

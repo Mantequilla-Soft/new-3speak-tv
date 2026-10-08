@@ -1,0 +1,78 @@
+{
+  "banner": {
+    "title": "Welkom bij 3Speak!",
+    "text": "Video's die van hun makers zijn. Nieuw hier? Volg een korte rondleiding of lees de antwoorden op veelgestelde vragen.",
+    "textShort": "Nieuw hier? Volg een korte rondleiding of lees de FAQ.",
+    "tour": "Rondleiding starten",
+    "tourShort": "Rondleiding",
+    "faq": "FAQ",
+    "about": "Over 3Speak",
+    "close": "Welkomstbericht sluiten"
+  },
+  "tour": {
+    "aria": "Rondleiding door 3Speak",
+    "next": "Volgende",
+    "back": "Terug",
+    "skip": "Rondleiding overslaan",
+    "done": "Aan de slag",
+    "progress": "{{current}} van {{total}}",
+    "steps": {
+      "intro": {
+        "title": "Even rondkijken",
+        "text": "Deze korte rondleiding laat je zien waar alles staat. Het duurt ongeveer een minuut en je kunt op elk moment stoppen."
+      },
+      "about": {
+        "title": "Wat is 3Speak?",
+        "text": "Een gratis, internationaal videoplatform met community's voor elke interesse. Het is van zijn community, niet van een bedrijf, en er is geen CEO. Het is open source en onderdeel van het Hive-ecosysteem: je account, video's en volgers zijn van jou en werken ook in andere Hive-apps.",
+        "chips": {
+          "community": "Van de community",
+          "free": "Gratis",
+          "international": "Internationaal",
+          "communities": "Veel community's",
+          "decentralized": "Gedecentraliseerd",
+          "openSource": "Open source",
+          "hive": "Hive-ecosysteem"
+        }
+      },
+      "pagesBar": {
+        "text": "Shorts, Groepen, Audio, het klassement en meer, hier in de bovenste balk."
+      },
+      "pagesDesktop": {
+        "title": "Alle pagina's op één plek",
+        "text": "Klik op het 3Speak-logo om elke pagina te openen: Shorts, Groepen, Audio, de ranglijsten en meer."
+      },
+      "pagesPhone": {
+        "title": "Je weg vinden",
+        "text": "Met de balk onderaan ga je naar de feeds, Shorts, Groepen en Audio."
+      },
+      "search": {
+        "title": "Vind alles",
+        "text": "Zoek naar video's, kanalen en onderwerpen."
+      },
+      "stories": {
+        "title": "Shorts",
+        "text": "Korte verticale video's. Tik er een aan en swipe door de rest."
+      },
+      "feeds": {
+        "title": "Kies je feed",
+        "text": "Wissel tussen Ontdekken, de Home-feed, de nieuwste video's en meer."
+      },
+      "settings": {
+        "title": "Maak het je eigen",
+        "text": "Het tandwiel opent Instellingen: je taal, lichte of donkere modus en welke video's je wilt zien."
+      },
+      "faq": {
+        "title": "Vragen?",
+        "text": "De FAQ beantwoordt wat nieuwe mensen het vaakst vragen, van een account aanmaken tot beloningen verdienen."
+      },
+      "account": {
+        "title": "Doe mee",
+        "text": "Met een account kun je uploaden, reageren, stemmen, kanalen volgen en beloningen verdienen. Het is gratis."
+      },
+      "done": {
+        "title": "Je bent er klaar voor!",
+        "text": "Veel kijkplezier. De FAQ en de pagina Over 3Speak vind je altijd in het menu."
+      }
+    }
+  }
+}

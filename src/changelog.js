@@ -7,6 +7,12 @@
 // 1.0.0 — that way they see all of these when develop is pushed to production.
 export const CHANGELOG = [
   {
+    version: '1.79.66',
+    date: '2026-10-08',
+    summary:
+      'New here? The home page now welcomes first-time visitors with links to the FAQ and About page, plus a short guided tour that shows where everything is: menus, search, Shorts, feeds and Settings.',
+  },
+  {
     version: '1.79.65',
     date: '2026-10-08',
     summary:

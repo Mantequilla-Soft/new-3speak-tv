@@ -13,6 +13,10 @@
       "q": "Wat is 3Speak?",
       "a": "3Speak is een videoplatform waar je kanaal echt van jou is. Je video's, reacties en volgers staan op je eigen Hive-account, niet op een server van 3Speak, dus niemand kan ze van je afpakken. Zowel makers als kijkers kunnen beloningen verdienen terwijl ze het gebruiken."
     },
+    "tour": {
+      "q": "Is er een rondleiding door 3Speak?",
+      "a": "Ja. <tourLink>Start de rondleiding</tourLink> wanneer je wilt. In ongeveer een minuut laat ze alles zien: menu's, zoeken, Shorts, feeds en Instellingen."
+    },
     "watchFree": {
       "q": "Heb ik een account nodig om te kijken?",
       "a": "Nee. Kijken is gratis en kan zonder account. Je hebt er alleen een nodig om te uploaden, te reageren, te stemmen, kanalen te volgen en beloningen te verdienen."

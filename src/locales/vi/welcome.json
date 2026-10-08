@@ -1,0 +1,78 @@
+{
+  "banner": {
+    "title": "Chào mừng bạn đến với 3Speak!",
+    "text": "Video thuộc về chính những người làm ra chúng. Bạn mới đến? Hãy xem nhanh một vòng hoặc đọc câu trả lời cho các câu hỏi thường gặp.",
+    "textShort": "Bạn mới đến? Hãy xem nhanh một vòng hoặc đọc câu hỏi thường gặp.",
+    "tour": "Xem hướng dẫn",
+    "tourShort": "Tham quan",
+    "faq": "FAQ",
+    "about": "Giới thiệu về 3Speak",
+    "close": "Đóng lời chào"
+  },
+  "tour": {
+    "aria": "Hướng dẫn về 3Speak",
+    "next": "Tiếp",
+    "back": "Quay lại",
+    "skip": "Bỏ qua",
+    "done": "Bắt đầu thôi",
+    "progress": "{{current}} / {{total}}",
+    "steps": {
+      "intro": {
+        "title": "Xem nhanh một vòng",
+        "text": "Hướng dẫn ngắn này cho bạn biết mọi thứ nằm ở đâu. Chỉ mất khoảng một phút, và bạn có thể thoát ra bất cứ lúc nào."
+      },
+      "about": {
+        "title": "3Speak là gì?",
+        "text": "Một nền tảng video quốc tế miễn phí, với cộng đồng cho mọi sở thích. Nó thuộc về cộng đồng, không thuộc về công ty nào, và không có CEO. Nó là mã nguồn mở và là một phần của hệ sinh thái Hive: tài khoản, video và người theo dõi là của bạn và dùng được cả trong các ứng dụng Hive khác.",
+        "chips": {
+          "community": "Cộng đồng sở hữu",
+          "free": "Miễn phí",
+          "international": "Quốc tế",
+          "communities": "Nhiều cộng đồng",
+          "decentralized": "Phi tập trung",
+          "openSource": "Mã nguồn mở",
+          "hive": "Hệ sinh thái Hive"
+        }
+      },
+      "pagesBar": {
+        "text": "Shorts, Nhóm, Âm thanh, bảng xếp hạng và nhiều hơn nữa, ngay trên thanh trên cùng."
+      },
+      "pagesDesktop": {
+        "title": "Mọi trang ở một nơi",
+        "text": "Nhấp vào logo 3Speak để mở mọi trang: Shorts, Nhóm, Âm thanh, bảng xếp hạng và nhiều hơn nữa."
+      },
+      "pagesPhone": {
+        "title": "Di chuyển dễ dàng",
+        "text": "Thanh ở dưới cùng đưa bạn đến các bảng tin, Shorts, Nhóm và Âm thanh."
+      },
+      "search": {
+        "title": "Tìm mọi thứ",
+        "text": "Tìm video, kênh và chủ đề."
+      },
+      "stories": {
+        "title": "Shorts",
+        "text": "Video dọc ngắn. Nhấn vào một video rồi vuốt để xem tiếp."
+      },
+      "feeds": {
+        "title": "Chọn bảng tin",
+        "text": "Chuyển giữa Khám phá, Bảng tin chính, video mới nhất và nhiều hơn nữa."
+      },
+      "settings": {
+        "title": "Theo cách của bạn",
+        "text": "Biểu tượng bánh răng mở Cài đặt: ngôn ngữ, chế độ sáng hoặc tối, và những video bạn muốn xem."
+      },
+      "faq": {
+        "title": "Có câu hỏi?",
+        "text": "FAQ trả lời những điều người mới hay hỏi nhất, từ tạo tài khoản đến kiếm phần thưởng."
+      },
+      "account": {
+        "title": "Tham gia nào",
+        "text": "Có tài khoản, bạn có thể tải lên, bình luận, vote, theo dõi kênh và kiếm phần thưởng. Hoàn toàn miễn phí."
+      },
+      "done": {
+        "title": "Bạn đã sẵn sàng!",
+        "text": "Chúc bạn xem vui. Bạn luôn có thể tìm FAQ và trang Giới thiệu về 3Speak trong menu."
+      }
+    }
+  }
+}

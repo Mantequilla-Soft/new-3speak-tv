@@ -1,0 +1,78 @@
+{
+  "banner": {
+    "title": "Welcome to 3Speak!",
+    "text": "Videos that belong to the people who make them. New here? Take a quick tour or read the answers to common questions.",
+    "textShort": "New here? Take a quick tour or read the FAQ.",
+    "tour": "Take the tour",
+    "tourShort": "Tour",
+    "faq": "FAQ",
+    "about": "About 3Speak",
+    "close": "Close the welcome message"
+  },
+  "tour": {
+    "aria": "Tour of 3Speak",
+    "next": "Next",
+    "back": "Back",
+    "skip": "Skip tour",
+    "done": "Let's go",
+    "progress": "{{current}} of {{total}}",
+    "steps": {
+      "intro": {
+        "title": "A quick look around",
+        "text": "This short tour shows you where everything is. It takes about a minute, and you can leave it any time."
+      },
+      "about": {
+        "title": "What is 3Speak?",
+        "text": "A free, international video platform with communities for every interest. It belongs to its community, not to a company, and there is no CEO. It is open source and part of the Hive ecosystem, so your account, videos and followers are yours and work in other Hive apps too.",
+        "chips": {
+          "community": "Community owned",
+          "free": "Free",
+          "international": "International",
+          "communities": "Many communities",
+          "decentralized": "Decentralized",
+          "openSource": "Open source",
+          "hive": "Hive ecosystem"
+        }
+      },
+      "pagesBar": {
+        "text": "Shorts, Groups, Audio, the leaderboard and more, right here in the top bar."
+      },
+      "pagesDesktop": {
+        "title": "All pages in one place",
+        "text": "Click the 3Speak logo to open every page: Shorts, Groups, Audio, the leaderboard and more."
+      },
+      "pagesPhone": {
+        "title": "Get around",
+        "text": "The bar at the bottom takes you to the feeds, Shorts, Groups and Audio."
+      },
+      "search": {
+        "title": "Find anything",
+        "text": "Search for videos, channels and topics."
+      },
+      "stories": {
+        "title": "Shorts",
+        "text": "Short vertical videos. Tap one and swipe through the rest."
+      },
+      "feeds": {
+        "title": "Choose your feed",
+        "text": "Switch between Discover, the Home Feed, the newest videos and more."
+      },
+      "settings": {
+        "title": "Make it yours",
+        "text": "The gear opens Settings: your language, light or dark mode, and which videos you want to see."
+      },
+      "faq": {
+        "title": "Questions?",
+        "text": "The FAQ answers what new people ask most, from creating an account to earning rewards."
+      },
+      "account": {
+        "title": "Join in",
+        "text": "With an account you can upload, comment, vote, follow channels and earn rewards. It is free."
+      },
+      "done": {
+        "title": "You're all set!",
+        "text": "Enjoy watching. You can always find the FAQ and the About page in the menu."
+      }
+    }
+  }
+}

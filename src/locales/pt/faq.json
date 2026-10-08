@@ -13,6 +13,10 @@
       "q": "O que é o 3Speak?",
       "a": "O 3Speak é uma plataforma de vídeo em que o seu canal pertence a você. Seus vídeos, comentários e seguidores ficam na sua própria conta Hive, não em um servidor do 3Speak, então ninguém pode tirá-los de você. Criadores e espectadores podem ganhar recompensas enquanto usam a plataforma."
     },
+    "tour": {
+      "q": "Existe um tour pelo 3Speak?",
+      "a": "Sim. <tourLink>Comece o tour</tourLink> quando quiser. Em cerca de um minuto ele mostra tudo: menus, busca, Shorts, feeds e Configurações."
+    },
     "watchFree": {
       "q": "Preciso de uma conta para assistir?",
       "a": "Não. Assistir é grátis e não precisa de conta. Você só precisa de uma para enviar vídeos, comentar, votar, seguir canais e ganhar recompensas."

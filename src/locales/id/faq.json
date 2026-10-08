@@ -13,6 +13,10 @@
       "q": "Apa itu 3Speak?",
       "a": "3Speak adalah platform video di mana channel-mu benar-benar milikmu. Video, komentar, dan pengikutmu tersimpan di akun Hive-mu sendiri, bukan di server 3Speak, jadi tidak ada yang bisa mengambilnya darimu. Kreator dan penonton sama-sama bisa mendapatkan reward saat menggunakannya."
     },
+    "tour": {
+      "q": "Apakah ada tur 3Speak?",
+      "a": "Ada. <tourLink>Mulai tur</tourLink> kapan saja. Dalam sekitar satu menit, tur ini menunjukkan semuanya: menu, pencarian, Shorts, feed, dan Pengaturan."
+    },
     "watchFree": {
       "q": "Apakah aku perlu akun untuk menonton?",
       "a": "Tidak. Menonton gratis dan tidak perlu akun. Kamu hanya perlu akun untuk mengunggah, berkomentar, vote, mengikuti channel, dan mendapatkan reward."

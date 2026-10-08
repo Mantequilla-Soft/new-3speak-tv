@@ -1,10 +1,11 @@
 import { useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Trans, useTranslation } from 'react-i18next';
-import { MdHelpOutline, MdLink } from 'react-icons/md';
+import { MdExplore, MdHelpOutline, MdLink } from 'react-icons/md';
 import { useAppStore } from '../lib/store';
 import { openpodsEnabledFor, VIDEO_IMPORT_ENABLED, SHORTS_MAX_DURATION_SEC } from '../utils/config';
 import { toastIn } from '../utils/toast';
+import { startWelcomeTour } from '../components/WelcomeTour/welcomeState';
 import './Faq.scss';
 
 const toast = toastIn('3Speak');
@@ -12,7 +13,7 @@ const toast = toastIn('3Speak');
 // Order on the page. Each id is also the item's key in locales/<lang>/faq.json
 // and its #anchor, so a question can be linked to directly (/faq#ai).
 const GROUPS = [
-  { id: 'start', items: ['what', 'watchFree', 'signup', 'hive', 'loginTypes', 'lostKeys'] },
+  { id: 'start', items: ['what', 'tour', 'watchFree', 'signup', 'hive', 'loginTypes', 'lostKeys'] },
   { id: 'earning', items: ['creatorsEarn', 'viewersEarn', 'tokens', 'vpRc'] },
   // 'import' (YouTube/TikTok) and 'live' are hidden for now; their strings stay in faq.json.
   { id: 'uploading', items: ['formats', 'edit', 'processing'] },
@@ -32,6 +33,8 @@ const TAGS = {
   importLink: <Link to="/youtube-import" />,
   advertiseLink: <Link to="/advertise" />,
   aboutLink: <Link to="/about" />,
+  // Starts the guided tour (it moves to the home page first).
+  tourLink: <button type="button" className="faq-inline-link" onClick={startWelcomeTour} />,
 };
 
 export default function Faq() {
@@ -72,6 +75,9 @@ export default function Faq() {
           <h1>{t('faq.title')}</h1>
           <p>{t('faq.subtitle')}</p>
         </div>
+        <button type="button" className="faq-tour-btn" onClick={startWelcomeTour}>
+          <MdExplore aria-hidden="true" /> {t('welcome.banner.tour')}
+        </button>
       </header>
 
       {GROUPS.map((group) => (

@@ -13,6 +13,10 @@
       "q": "Ano ang 3Speak?",
       "a": "Ang 3Speak ay isang video platform kung saan sa iyo talaga ang channel mo. Ang mga video, comment at follower mo ay nasa sarili mong Hive account, hindi sa server ng 3Speak, kaya walang makakakuha ng mga ito sa iyo. Parehong puwedeng kumita ng rewards ang mga creator at viewer habang ginagamit ito."
     },
+    "tour": {
+      "q": "May tour ba ng 3Speak?",
+      "a": "Oo. <tourLink>Simulan ang tour</tourLink> kahit kailan. Sa loob ng mga isang minuto, ipapakita nito ang lahat: menu, search, Shorts, feeds at Settings."
+    },
     "watchFree": {
       "q": "Kailangan ko ba ng account para manood?",
       "a": "Hindi. Libre ang panonood at walang kailangang account. Kailangan mo lang ng account para mag-upload, mag-comment, mag-vote, mag-follow ng mga channel at kumita ng rewards."

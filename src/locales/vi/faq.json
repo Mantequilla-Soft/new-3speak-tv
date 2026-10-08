@@ -13,6 +13,10 @@
       "q": "3Speak là gì?",
       "a": "3Speak là một nền tảng video nơi kênh của bạn thuộc về chính bạn. Video, bình luận và người theo dõi của bạn nằm trên tài khoản Hive của riêng bạn, không phải trên máy chủ của 3Speak, nên không ai có thể lấy chúng đi. Cả nhà sáng tạo lẫn người xem đều có thể kiếm phần thưởng khi sử dụng."
     },
+    "tour": {
+      "q": "3Speak có chuyến tham quan không?",
+      "a": "Có. Hãy <tourLink>bắt đầu tham quan</tourLink> bất cứ lúc nào. Chỉ khoảng một phút, nó giới thiệu mọi thứ: menu, tìm kiếm, Shorts, bảng tin và Cài đặt."
+    },
     "watchFree": {
       "q": "Tôi có cần tài khoản để xem không?",
       "a": "Không. Xem video là miễn phí và không cần tài khoản. Bạn chỉ cần tài khoản để tải lên, bình luận, vote, theo dõi kênh và kiếm phần thưởng."
