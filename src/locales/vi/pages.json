@@ -15,14 +15,14 @@
       "tagline1": "BẢO VỆ NỘI DUNG CỦA BẠN",
       "tagline2": "TOKEN HÓA CỘNG ĐỒNG CỦA BẠN",
       "cta": "Tham gia cuộc cách mạng",
-      "description": "3Speak được xây dựng trên blockchain Hive, đảm bảo tính phi tập trung thực sự, khả năng chống kiểm duyệt và quyền sở hữu của cộng đồng."
+      "description": "3Speak được xây dựng trên Hive, đảm bảo tính phi tập trung thực sự, khả năng chống kiểm duyệt và quyền sở hữu của cộng đồng. Nền tảng được cộng đồng duy trì và vận hành, vì cộng đồng."
     },
     "how": {
       "title": "3Speak hoạt động như thế nào",
-      "subtitle": "Trải nghiệm quyền sở hữu nội dung thực sự nhờ công nghệ blockchain",
+      "subtitle": "Trải nghiệm quyền sở hữu nội dung thực sự, xây dựng trên Hive",
       "create": {
         "title": "Tạo nội dung",
-        "text": "Tải video lên và tạo nội dung thực sự thuộc về bạn trên blockchain."
+        "text": "Tải video lên và tạo nội dung thực sự thuộc về bạn, được lưu trữ trên Hive."
       },
       "earn": {
         "title": "Nhận phần thưởng",
@@ -41,7 +41,7 @@
       },
       "p2p": {
         "title": "P2P",
-        "text": "Công nghệ blockchain mà trang web sử dụng đảm bảo các nhà sáng tạo nội dung có kết nối P2P thực sự với người dùng của họ, không qua bất kỳ bên trung gian nào."
+        "text": "Vì 3Speak chạy trên Hive, các nhà sáng tạo nội dung có kết nối P2P thực sự với người dùng của họ, không qua bất kỳ bên trung gian nào."
       },
       "tokenisation": {
         "title": "TOKEN HÓA",
@@ -57,7 +57,7 @@
       }
     },
     "hive": {
-      "title": "Vận hành trên blockchain Hive",
+      "title": "Vận hành trên Hive",
       "decentralized": {
         "title": "Phi tập trung",
         "text": "Không có điểm lỗi hay điểm kiểm soát duy nhất"
@@ -70,26 +70,12 @@
         "title": "Thuộc sở hữu cộng đồng",
         "text": "Được quản trị bởi những người nắm giữ, không phải các tập đoàn"
       },
-      "description": "3Speak được xây dựng trên blockchain Hive, đảm bảo tính phi tập trung thực sự, khả năng chống kiểm duyệt và quyền sở hữu của cộng đồng. Hệ sinh thái Hive cung cấp hạ tầng cho phần thưởng, quản trị và quyền sở hữu tài sản, điều làm nên tính cách mạng của 3Speak."
+      "description": "3Speak được xây dựng trên Hive, đảm bảo tính phi tập trung thực sự, khả năng chống kiểm duyệt và quyền sở hữu của cộng đồng. Hệ sinh thái Hive cung cấp hạ tầng cho phần thưởng, quản trị và quyền sở hữu tài sản, điều làm nên tính cách mạng của 3Speak."
     },
     "guidelines": {
       "title": "Nguyên tắc của chúng tôi",
       "subtitle": "Chúng tôi tin Tự do ngôn luận là tuyệt đối, với các chính sách rõ ràng và công bằng",
-      "support": {
-        "title": "Những gì chúng tôi ủng hộ",
-        "religion": "Phê bình tôn giáo, niềm tin, nhóm người và cá nhân",
-        "politics": "Chính trị thay thế và thảo luận về thuyết âm mưu",
-        "governments": "Phê bình chính phủ và các nhà lãnh đạo thế giới",
-        "pseudonyms": "Dùng bút danh để bảo vệ quyền riêng tư",
-        "jokes": "Đùa cợt gây phản cảm (khi được ghi rõ là đùa)"
-      },
-      "restrict": {
-        "title": "Những gì chúng tôi hạn chế",
-        "violence": "Kêu gọi hoặc kích động bạo lực",
-        "gore": "Hiển thị nội dung máu me quá mức hoặc khiêu dâm",
-        "slander": "Vu khống và nội dung bôi nhọ",
-        "illegal": "Hoạt động hoặc nội dung bất hợp pháp"
-      }
+      "cta": "Đọc nguyên tắc của chúng tôi"
     },
     "faqSection": {
       "title": "Câu hỏi thường gặp",

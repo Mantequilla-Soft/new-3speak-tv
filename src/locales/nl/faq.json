@@ -71,6 +71,14 @@
       "a": "Ja. Open <b>Streamstudio</b> via het uploadmenu bovenaan. Je kunt gasten op het podium halen, desgewenst streamen vanuit OBS, en de opname blijft daarna op je kanaal staan.",
       "aSoon": "Livestreamen wordt nu getest met een kleine groep makers. We laten het weten zodra het voor iedereen opengaat."
     },
+    "talk": {
+      "q": "Waar kan ik over praten op 3Speak?",
+      "a": "3Speak is een platform dat verschillen, respect en tolerantie viert. 3Speak gelooft in vrijheid van meningsuiting, met duidelijke en eerlijke regels. Je bent vrij om religies, overtuigingen, groepen en mensen te bekritiseren, alternatieve politiek en complottheorieën te bespreken, regeringen en wereldleiders te bekritiseren, een pseudoniem te gebruiken voor je privacy, en aanstootgevende grappen te posten, zolang ze duidelijk als grap zijn gemarkeerd. Kritiek op ideeën is welkom, maar haatspraak niet: mensen aanvallen om wie ze zijn, zoals hun afkomst, religie, gender, seksualiteit of handicap, hoort hier niet thuis."
+    },
+    "notAllowed": {
+      "q": "Wat is niet toegestaan?",
+      "a": "Oproepen of aanzetten tot geweld, haatspraak, gore, pornografische content, laster en smaad, en alles wat illegaal is."
+    },
     "communities": {
       "q": "Wat zijn communities?",
       "a": "Communities zijn groepen rond een gedeelde interesse, zoals gaming, muziek of reizen. Word lid van de groepen die je leuk vindt op de pagina <b>Groepen</b>, en hun video's verschijnen in je feeds. Als je uploadt, kun je in een community posten zodat de juiste mensen je video vinden. Met een Hive-account kun je ook je eigen community starten."
@@ -81,7 +89,7 @@
     },
     "nsfw": {
       "q": "Is NSFW-content toegestaan?",
-      "a": "Content voor volwassenen is toegestaan, zolang hij als <b>NSFW</b> is gemarkeerd, bij het uploaden of later door de video te bewerken. Gemarkeerde video's zijn verborgen in feeds en zoekresultaten voor iedereen die <b>NSFW-content tonen</b> niet heeft aangezet in Instellingen onder <b>Content</b>. Illegale content is nooit toegestaan."
+      "a": "Content voor volwassenen is toegestaan, zolang hij als <b>NSFW</b> is gemarkeerd, bij het uploaden of later door de video te bewerken. Gemarkeerde video's zijn verborgen in feeds en zoekresultaten voor iedereen die <b>NSFW-content tonen</b> niet heeft aangezet in Instellingen onder <b>Content</b>. Pornografische content is niet toegestaan, ook niet als hij gemarkeerd is, en illegale content nooit."
     },
     "ai": {
       "q": "Is AI-gegenereerde content toegestaan?",

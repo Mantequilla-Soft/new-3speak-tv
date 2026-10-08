@@ -11,6 +11,7 @@ import { IoCalendarOutline } from "react-icons/io5";
 dayjs.extend(utc);
 import { MdDelete, MdError, MdPhoneIphone, MdVisibilityOff } from "react-icons/md";
 import { FaCog, FaFileAlt } from "react-icons/fa";
+import { Leaf } from "lucide-react";
 import CardOptionsMenu from "../CardOptionsMenu/CardOptionsMenu";
 import TimeAgo from "../TimeAgo/TimeAgo";
 import { Link, useNavigate } from "react-router-dom";
@@ -342,11 +343,30 @@ function Card3({ videos = [], loading = false, error = null, interleaveEvery = 0
 
             {/* Author */}
             <div className="profile-view-wrap">
-              <AuthorBadge
-                author={video.author?.username || video.author || video.owner}
-                noLink
-                compact
-              />
+              {video._incubation ? (
+                /* A warm-up user (on 3Speak, not on Hive yet): a leaf next to the
+                   name, its hint the same title + line the old "new on 3Speak"
+                   section used as its heading. Next to the author, not on the
+                   thumbnail, because the hover preview covers the thumbnail and
+                   would hide the hint. */
+                <span className="card-author-group">
+                  <AuthorBadge author={cardAuthor} noLink compact />
+                  <span
+                    className="card-incubation-leaf"
+                    role="img"
+                    aria-label={t('incubation.rail.aria')}
+                    title={`${t('incubation.rail.title')}\n${t('incubation.rail.body')}`}
+                  >
+                    <Leaf size={14} aria-hidden="true" />
+                  </span>
+                </span>
+              ) : (
+                <AuthorBadge
+                  author={video.author?.username || video.author || video.owner}
+                  noLink
+                  compact
+                />
+              )}
               {/* 1st-level v2 tag (the category the auto-tag rolls up to), left of
                   the view count. Visibility is CSS-driven (see .card-topic-chip):
                   shown on desktop whatever the layout, and on large cards

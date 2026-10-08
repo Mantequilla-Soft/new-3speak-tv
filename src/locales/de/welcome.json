@@ -1,0 +1,95 @@
+{
+  "banner": {
+    "title": "Willkommen bei 3Speak!",
+    "text": "Videos, die den Menschen gehören, die sie machen. Neu hier? Mach eine kurze Tour oder lies die Antworten auf häufige Fragen.",
+    "textShort": "Neu hier? Mach eine kurze Tour oder lies die FAQ.",
+    "tour": "Tour starten",
+    "tourShort": "Tour",
+    "faq": "FAQ",
+    "close": "Willkommensnachricht schließen"
+  },
+  "tour": {
+    "aria": "Tour durch 3Speak",
+    "next": "Weiter",
+    "back": "Zurück",
+    "skip": "Tour überspringen",
+    "done": "Los geht's",
+    "progress": "{{current}} von {{total}}",
+    "steps": {
+      "intro": {
+        "title": "Ein kurzer Rundgang",
+        "text": "Diese kurze Tour zeigt dir, wo alles ist. Sie dauert etwa eine Minute, und du kannst sie jederzeit beenden."
+      },
+      "about": {
+        "title": "Was ist 3Speak?",
+        "text": "Eine kostenlose, internationale Videoplattform mit Communitys für jedes Interesse. Sie gehört ihrer Community und keinem Unternehmen, und es gibt keinen CEO. Sie ist Open Source und Teil des Hive-Ökosystems: Dein Konto, deine Videos und deine Follower gehören dir und funktionieren auch in anderen Hive-Apps.",
+        "chips": {
+          "community": "Gehört der Community",
+          "free": "Kostenlos",
+          "international": "International",
+          "communities": "Viele Communitys",
+          "decentralized": "Dezentral",
+          "openSource": "Open Source",
+          "hive": "Hive-Ökosystem"
+        }
+      },
+      "earnCreators": {
+        "title": "Creator verdienen ab dem ersten Tag",
+        "text": "Jeder Upvote auf dein Video erhöht seine Autor-Belohnungen, die 7 Tage nach der Veröffentlichung ausgezahlt werden. Dazu gehen 50 % der Werbeeinnahmen, die deine Videos einbringen, an dich (einen Teil davon kannst du mit der Community teilen, in der du gepostet hast), ausgezahlt alle paar Tage. Anders als bei den meisten sozialen Netzwerken musst du vorher keine Mindest-Wiedergabezeit und keine Mindestzahl an Followern erreichen.",
+        "chips": {
+          "authorRewards": "Autor-Belohnungen",
+          "adShare": "50 % der Werbeeinnahmen",
+          "noMinimum": "Keine Mindest-Wiedergabezeit"
+        }
+      },
+      "earnViewers": {
+        "title": "Auch Zuschauer verdienen",
+        "text": "Schon durch das Ansehen von Videos kannst du am 3Speak-Belohnungsprogramm verdienen: 10 % aller Werbeeinnahmen gehen an die Zuschauer, aufgeteilt danach, was jeder von ihnen ansieht. Aktiviere <b>Zuschauer-Belohnungen</b> in den Einstellungen, um mitzumachen. Auch deine Kommentare und Upvotes können Belohnungen einbringen.",
+        "chips": {
+          "watch": "Verdienen beim Zuschauen",
+          "adShare": "10 % der Werbeeinnahmen",
+          "program": "3Speak-Belohnungsprogramm"
+        }
+      },
+      "pagesBar": {
+        "text": "Shorts, Gruppen, Audio, die Rangliste und mehr, direkt hier in der oberen Leiste."
+      },
+      "pagesDesktop": {
+        "title": "Alle Seiten an einem Ort",
+        "text": "Klick auf das 3Speak-Logo, um alle Seiten zu öffnen: Shorts, Gruppen, Audio, die Rankings und mehr."
+      },
+      "pagesPhone": {
+        "title": "Navigation",
+        "text": "Die Leiste unten bringt dich zu den Feeds, Shorts, Gruppen und Audio."
+      },
+      "search": {
+        "title": "Alles finden",
+        "text": "Suche nach Videos, Kanälen und Themen."
+      },
+      "stories": {
+        "title": "Shorts",
+        "text": "Kurze Hochkant-Videos. Tippe eins an und wische durch die anderen."
+      },
+      "feeds": {
+        "title": "Wähle deinen Feed",
+        "text": "Wechsle zwischen Entdecken, der Startseite, den neuesten Videos und mehr."
+      },
+      "settings": {
+        "title": "Ganz nach deinem Geschmack",
+        "text": "Das Zahnrad öffnet die Einstellungen: deine Sprache, heller oder dunkler Modus und welche Videos du sehen willst."
+      },
+      "faq": {
+        "title": "Fragen?",
+        "text": "Die FAQ beantworten, was Neue am häufigsten fragen, vom Erstellen eines Kontos bis zum Verdienen von Belohnungen."
+      },
+      "account": {
+        "title": "Mach mit",
+        "text": "Mit einem Konto kannst du hochladen, kommentieren, voten, Kanälen folgen und Belohnungen verdienen. Es ist kostenlos."
+      },
+      "done": {
+        "title": "Alles bereit!",
+        "text": "Viel Spaß beim Schauen. Du kannst diese Tour jederzeit über die FAQ neu starten."
+      }
+    }
+  }
+}

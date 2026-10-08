@@ -471,11 +471,10 @@ function Nav({ toggleProfileNav, openLoginModal }) {
             <MdOutlineSearch size={19} />
           </Link>
           {/* Help for first-time visitors: a pill on desktop, a bare ? icon
-              on phones and tablets, where the About pill is hidden. */}
+              on phones and tablets, where the pill is hidden. */}
           <Link to="/faq" className="nav-mobile-discover nav-guest-faq-icon" title={t('nav.faqAria')} aria-label={t('nav.faqAria')}>
             <MdHelpOutline size={19} />
           </Link>
-          <Link to="/about" className="nav-guest-about">{t('nav.aboutLink')}</Link>
           <Link to="/faq" className="nav-guest-about" aria-label={t('nav.faqAria')}>{t('nav.faqLink')}</Link>
           {/* No guest buttons until the stored session has been read: a logged-in
               refresh otherwise flashes Log in before the avatar replaces it. */}

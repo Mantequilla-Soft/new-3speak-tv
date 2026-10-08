@@ -71,6 +71,14 @@
       "a": "Yes. Open <b>Stream Studio</b> from the Upload menu at the top. You can bring guests on stage, stream from OBS if you like, and the recording stays on your channel afterwards.",
       "aSoon": "Livestreaming is being tested with a small group of creators right now. We will announce it as soon as it opens to everyone."
     },
+    "talk": {
+      "q": "What can I talk about on 3Speak?",
+      "a": "3Speak is a platform that celebrates differences, respect and tolerance. It believes in free speech, with clear and fair rules. You are free to criticise religions, beliefs, groups and people, to discuss alternative politics and conspiracy theories, to criticise governments and world leaders, to use a pseudonym for privacy, and to post offensive jokes as long as they are clearly marked as jokes. Criticising ideas is welcome, but hate speech is not: attacking people for who they are, such as their origin, religion, gender, sexuality or disability, has no place here."
+    },
+    "notAllowed": {
+      "q": "What is not allowed?",
+      "a": "Calling for or inciting violence, hate speech, gore, pornographic content, slander and defamation, and anything illegal."
+    },
     "communities": {
       "q": "What are communities?",
       "a": "Communities are groups around a shared interest, like gaming, music or travel. Join the ones you like on the <b>Groups</b> page and their videos show up in your feeds. When you upload, you can post into a community so the right people find your video. With a Hive account you can also start your own."
@@ -81,7 +89,7 @@
     },
     "nsfw": {
       "q": "Is NSFW content allowed?",
-      "a": "Adult content is allowed as long as it is marked <b>NSFW</b>, either when you upload or later by editing the video. Marked videos are hidden from feeds and search for everyone who has not turned on <b>Show NSFW content</b> in Settings under <b>Content</b>. Illegal content is never allowed."
+      "a": "Adult content is allowed as long as it is marked <b>NSFW</b>, either when you upload or later by editing the video. Marked videos are hidden from feeds and search for everyone who has not turned on <b>Show NSFW content</b> in Settings under <b>Content</b>. Pornographic content is not allowed, even when marked, and illegal content never is."
     },
     "ai": {
       "q": "Is AI-generated content allowed?",

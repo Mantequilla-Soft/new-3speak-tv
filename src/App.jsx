@@ -12,6 +12,7 @@ import { useSupportBlock } from "./lib/supportBlockStore";
 import { getCreatorSettings, isBanned } from "./utils/creatorSettings";
 import SupportModal from "./components/SupportModal/SupportModal";
 import CookieConsent from "./components/CookieConsent/CookieConsent";
+import WelcomeTour from "./components/WelcomeTour/WelcomeTour";
 import { GlobalReviewModal } from "./components/ReviewModal/ReviewModal";
 import ReviewFab from "./components/ReviewModal/ReviewFab";
 import { useEffect } from "react";
@@ -622,6 +623,7 @@ function App() {
       <AnnouncementModal />
       <SupportModal />
       <CookieConsent />
+      <WelcomeTour />
       <GlobalReviewModal />
       <ReviewFab />
       <ShortsPreloader />

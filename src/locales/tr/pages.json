@@ -15,14 +15,14 @@
       "tagline1": "İÇERİĞİNİ KORU",
       "tagline2": "TOPLULUĞUNU TOKENLAŞTIR",
       "cta": "Devrime Katıl",
-      "description": "3Speak, Hive blokzinciri üzerine kuruludur; gerçek merkeziyetsizlik, sansüre direnç ve topluluk sahipliği sağlar."
+      "description": "3Speak, Hive üzerine kuruludur; gerçek merkeziyetsizlik, sansüre direnç ve topluluk sahipliği sağlar. Topluluk tarafından, topluluk için sürdürülür ve sunulur."
     },
     "how": {
       "title": "3Speak Nasıl Çalışır",
-      "subtitle": "Blokzincir teknolojisiyle gerçek içerik sahipliğini deneyimle",
+      "subtitle": "Hive üzerine kurulu gerçek içerik sahipliğini deneyimle",
       "create": {
         "title": "İçerik Oluştur",
-        "text": "Videolarını yükle ve blokzincirde gerçekten sana ait içerikler oluştur."
+        "text": "Videolarını yükle ve Hive'da saklanan, gerçekten sana ait içerikler oluştur."
       },
       "earn": {
         "title": "Ödül Kazan",
@@ -41,7 +41,7 @@
       },
       "p2p": {
         "title": "P2P",
-        "text": "Sitenin kullandığı blokzincir teknolojisi, içerik üreticilerinin kitleleriyle hiçbir aracı olmadan gerçek P2P bağlantı kurmasını sağlar."
+        "text": "3Speak Hive üzerinde çalıştığı için içerik üreticileri, kitleleriyle hiçbir aracı olmadan gerçek P2P bağlantı kurar."
       },
       "tokenisation": {
         "title": "TOKENLAŞTIRMA",
@@ -57,7 +57,7 @@
       }
     },
     "hive": {
-      "title": "Hive Blokzinciri ile Güçlendirildi",
+      "title": "Hive ile Güçlendirildi",
       "decentralized": {
         "title": "Merkeziyetsiz",
         "text": "Tek bir arıza ya da kontrol noktası yok"
@@ -70,26 +70,12 @@
         "title": "Topluluğa Ait",
         "text": "Şirketler tarafından değil, paydaşlar tarafından yönetilir"
       },
-      "description": "3Speak, Hive blokzinciri üzerine kuruludur; gerçek merkeziyetsizlik, sansüre direnç ve topluluk sahipliği sağlar. Hive ekosistemi, 3Speak'i devrim niteliğinde kılan ödüller, yönetişim ve varlık sahipliği altyapısını sunar."
+      "description": "3Speak, Hive üzerine kuruludur; gerçek merkeziyetsizlik, sansüre direnç ve topluluk sahipliği sağlar. Hive ekosistemi, 3Speak'i devrim niteliğinde kılan ödüller, yönetişim ve varlık sahipliği altyapısını sunar."
     },
     "guidelines": {
       "title": "Kurallarımız",
       "subtitle": "İfade Özgürlüğünün mutlak olduğuna inanıyoruz; açık ve adil politikalarla",
-      "support": {
-        "title": "Desteklediklerimiz",
-        "religion": "Dinleri, inançları, grupları ve kişileri eleştirmek",
-        "politics": "Alternatif siyaset ve komplo tartışmaları",
-        "governments": "Hükümetleri ve dünya liderlerini eleştirmek",
-        "pseudonyms": "Gizlilik için takma ad kullanmak",
-        "jokes": "Gücendirici şakalar (açıkça öyle belirtildiğinde)"
-      },
-      "restrict": {
-        "title": "Kısıtladıklarımız",
-        "violence": "Şiddete çağrı veya kışkırtma",
-        "gore": "Aşırı kan ve vahşet ya da pornografik içerik göstermek",
-        "slander": "İftira ve karalayıcı içerik",
-        "illegal": "Yasa dışı faaliyetler veya içerik"
-      }
+      "cta": "Kurallarımızı oku"
     },
     "faqSection": {
       "title": "Sıkça Sorulan Sorular",

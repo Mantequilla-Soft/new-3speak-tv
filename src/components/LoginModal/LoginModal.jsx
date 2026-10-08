@@ -10,6 +10,7 @@ import { useTranslation, Trans } from "react-i18next";
 import { ENABLE_METAMASK_SNAP, ENABLE_BUTRAUTH } from "../../utils/config";
 import { useAppStore } from "../../lib/store";
 import "./LoginModal.scss";
+import mark from "../../assets/image/3S_mark.svg";
 
 /**
  * Custom login modal wrapper that adds Butter Auth + MetaMask Snap login options to AiohaModal
@@ -247,6 +248,7 @@ function LoginModal({ displayed, onLogin, onClose, loginTitle, loginOptions, int
       {displayed && step === 'choose' && (
         <div className="login-chooser-overlay" onMouseDown={onClose}>
           <div className="login-chooser" onMouseDown={(e) => e.stopPropagation()}>
+            <img className="login-chooser-mark" src={mark} alt="3Speak" />
             {isManteAuth ? (
               <>
                 <h3 className="login-chooser-title">{t('auth.loginModal.signedInTitle')}</h3>
@@ -313,6 +315,7 @@ function LoginModal({ displayed, onLogin, onClose, loginTitle, loginOptions, int
       {displayed && step === 'signup' && (
         <div className="login-chooser-overlay" onMouseDown={onClose}>
           <div className="login-chooser" onMouseDown={(e) => e.stopPropagation()}>
+            <img className="login-chooser-mark" src={mark} alt="3Speak" />
             <h3 className="login-chooser-title">{t('auth.loginModal.openingSignup')}</h3>
             <p className="login-chooser-sub">
               {t('auth.loginModal.openingSignupHint')}

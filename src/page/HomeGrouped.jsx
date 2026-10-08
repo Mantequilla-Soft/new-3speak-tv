@@ -12,12 +12,14 @@ import useViewCounts from "../hooks/useViewCounts";
 import { useAppStore } from "../lib/store";
 import { getFeedSeed, refreshHomeFeeds } from "../utils/feedSeed";
 import ShortsStories from "../components/ShortsStories/ShortsStories";
+import WelcomeBanner from "../components/WelcomeTour/WelcomeBanner";
 import NewFromFollowing from "../components/NewFromFollowing/NewFromFollowing";
 import SuggestedCreators from "../components/SuggestedCreators/SuggestedCreators";
-import NewOn3SpeakRail from "../components/Incubation/NewOn3SpeakRail";
+import { useWarmupVideos } from "../hooks/useWarmupVideos";
 import { useLiveStreams } from "../hooks/useLiveStreams";
 import PullToRefresh from "../components/PullToRefresh/PullToRefresh";
 import ShortsRow from "../components/ShortsRow/ShortsRow";
+import { useAiFilteredShorts } from "../hooks/useAiFilteredShorts";
 import { useGridColumns, useShortsPerRow, useTilesPerRow } from "../hooks/useGridMetrics";
 import { fetchCommunityFeed } from "../lib/snaps";
 import { SnapCard } from "../components/Userprofilepage/CommunitySnaps";
@@ -261,7 +263,7 @@ const HomeGrouped = () => {
   // Who is looking, for feature gates that are keyed on a name. A warm-up user
   // has a handle and no Hive username, so `user` alone is null for them.
   const incubationHandle = useAppStore((st) => st.incubationHandle);
-  const railViewer = user || incubationHandle;
+  const gateViewer = user || incubationHandle;
   const queryClient = useQueryClient();
   const hasInterests = Array.isArray(interests) && interests.length > 0;
   const interestsKey = hasInterests ? interests.join(',') : '';
@@ -359,14 +361,34 @@ const HomeGrouped = () => {
     gcTime: 10 * 60 * 1000,
   });
 
+  // Recent videos from warm-up users (on 3Speak, not on Hive yet). They go in as
+  // ordinary cards right AFTER the promoted ones, in a fixed slot: they have no
+  // votes or views to rank on, and Card3 marks them with a leaf so they read as
+  // new people rather than as something the ranking picked.
+  //
+  // Gated to the warm-up testers while the feature is still being worked on:
+  // everything else here has been through ranking and moderation, so giving
+  // unvetted content a slot next to it is a call to make deliberately rather than
+  // to inherit. Flip VITE_ENABLE_WARMUP_RAIL when it should be everyone's.
+  //
+  // A warm-up user is identified by their HANDLE, not a Hive username, which is
+  // why the gate uses gateViewer: `user` alone would hide these from exactly the
+  // people they are about.
+  const warmupVideos = useWarmupVideos({
+    enabled: warmupRailEnabledFor(gateViewer),
+    ownHandle: incubationHandle,
+  });
+
   // Promoted videos LEAD EVERY FEED — they no longer get a tab of their own. Each
-  // section is prefixed with them and deduped, so a promoted video that also shows
-  // up organically further down that feed isn't rendered twice.
+  // section is prefixed with them (then the warm-up videos) and deduped, so a
+  // promoted video that also shows up organically further down that feed isn't
+  // rendered twice.
   const leadWithPromoted = useCallback(
-    (videos) => (promotedData?.length
-      ? deduplicateVideos([...promotedData, ...(videos || [])])
-      : (videos || [])),
-    [promotedData],
+    (videos) => {
+      const lead = [...(promotedData || []), ...warmupVideos];
+      return lead.length ? deduplicateVideos([...lead, ...(videos || [])]) : (videos || []);
+    },
+    [promotedData, warmupVideos],
   );
 
   // Live OpenPods streams, prepended into the grids as regular cards. "all"
@@ -447,7 +469,11 @@ const HomeGrouped = () => {
     staleTime: 5 * 60 * 1000,
     gcTime: 10 * 60 * 1000,
   });
-  const feedShorts = useMemo(() => (shortsQ.data?.pages || []).flat(), [shortsQ.data]);
+  const rawFeedShorts = useMemo(() => (shortsQ.data?.pages || []).flat(), [shortsQ.data]);
+  // "Hide AI-generated" drops flagged shorts from the POOL, before the rails slice
+  // it, so each rail still fills its row. The supply check below then counts only
+  // the shorts that will actually show and pages in more to replace them.
+  const feedShorts = useAiFilteredShorts(rawFeedShorts);
 
   // Live column count of the card grid — drives "a shorts rail every 2 rows".
   const gridCols = useGridColumns(panelRef, `${activeSection?.key}:${activeVideos.length}`);
@@ -609,24 +635,9 @@ const HomeGrouped = () => {
     return (
       <>
         <SuggestedCreators variant={activeSection?.key} perRow={creatorsPerRow} />
-        {/* People with no Hive account yet, in their own labelled rail rather
-            than mixed into the ranked feed — they have no votes or views to
-            rank on, and this content has not been through the same gates. It
-            renders nothing when there is nothing to show.
-
-            Gated to the warm-up testers while the feature is still being
-            worked on: everything else on this page has been through ranking
-            and moderation, so giving unvetted content a labelled slot next to
-            it is a call to make deliberately rather than to inherit. Flip
-            VITE_ENABLE_WARMUP_RAIL when it should be everyone's.
-
-            A warm-up user is identified by their HANDLE, not a Hive username,
-            which is why both are offered here: gating on `user` alone would
-            hide the rail from exactly the people it is about. */}
-        {warmupRailEnabledFor(railViewer) && <NewOn3SpeakRail />}
       </>
     );
-  }, [activeSection?.key, creatorsPerRow, railViewer]);
+  }, [activeSection?.key, creatorsPerRow]);
 
   const { getContentForVideo } = useContentBatch(visibleVideos);
   const { isWatched, version: watchedVersion } = useWatchHistory(visibleVideos);
@@ -814,6 +825,8 @@ const HomeGrouped = () => {
   return (
     <PullToRefresh onRefresh={handleRefresh}>
     <div className="home-grouped-container home-tabbed" data-card-size={homeCardSize || 'small'}>
+      {/* Logged-out first visits only. */}
+      <WelcomeBanner />
       <ShortsStories />
       {/* Logged-in only, and renders nothing when there's nothing unwatched. */}
       <NewFromFollowing />

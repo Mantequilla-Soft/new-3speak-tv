@@ -308,6 +308,77 @@ export function formatTimeAgo(date, { style = 'long' } = {}) {
   return i18n.t('common.time.justNow');
 }
 
+/**
+ * The PHONE form of formatTimeAgo: always a number, never a word. `numeric: 'auto'`
+ * turns small values into words, and in several languages those are the longest
+ * labels of all ("vorgestern", "letzte Woche"), which do not fit a card's bottom
+ * row on a phone.
+ *
+ * Most languages use Intl's narrow form with `numeric: 'always'` ("2d ago",
+ * "hace 2 d", "2 gg fa"). COMPACT_STYLE covers the ones where that is still long
+ * or reads oddly, researched per language (2026-10-08) against CLDR's short and
+ * narrow unit abbreviations and the compact locales of the Flutter `timeago` and
+ * `javascript-time-ago` libraries:
+ *   - rtf:     Intl's relative form in that style ("il y a 5 j", not narrow "-5 j").
+ *   - units:   CLDR unit abbreviations in the language's own "ago" pattern.
+ *   - unit:    the bare CLDR unit form, no "ago" word, the way compact feed
+ *              timestamps read in that language ("5 วัน", "5 ngày", "siku 5").
+ *              Plural-correct ("mwezi 1", "miezi 5"), since Intl formats it.
+ */
+const COMPACT_STYLE = {
+  fr: { rtf: 'short' },  // narrow is "-5 j"
+  ru: { rtf: 'short' },  // narrow is "-5 дн."
+  de: { pattern: 'vor {n} {u}', units: { minute: 'Min.', hour: 'Std.', day: 'Tg.', week: 'Wo.', month: 'Mon.', year: 'J.' } },
+  // No "geleden": after an abbreviation it reads odd, so just "5 d", like the unit languages below.
+  nl: { pattern: '{n} {u}', units: { minute: 'min', hour: 'u', day: 'd', week: 'w', month: 'mnd', year: 'jr' } },
+  hi: { pattern: '{n} {u} पहले', units: { minute: 'मि', hour: 'घं', day: 'दि', week: 'सप्ताह', month: 'माह', year: 'वर्ष' } },
+  bn: { pattern: '{n} {u} আগে', units: { minute: 'মিঃ', hour: 'ঘঃ', day: 'দিন', week: 'সপ্তাহ', month: 'মাস', year: 'বছর' } },
+  fil: { unit: 'short' }, // "5 araw ang nakalipas" → "5 araw"
+  sw: { unit: 'narrow' }, // "siku 5 zilizopita" → "siku 5"
+  th: { unit: 'short' },  // "5 วันที่แล้ว" → "5 วัน"
+  vi: { unit: 'short' },  // "5 ngày trước" → "5 ngày"
+};
+const compactCache = {};
+const compactFormatter = (lang) => {
+  if (compactCache[lang]) return compactCache[lang];
+  const style = COMPACT_STYLE[lang.split('-')[0]] || {};
+  let fmt;
+  if (style.units) {
+    const num = new Intl.NumberFormat(lang);
+    fmt = (n, unit) => style.pattern.replace('{n}', num.format(n)).replace('{u}', style.units[unit]);
+  } else if (style.unit) {
+    const nf = {};
+    fmt = (n, unit) => (nf[unit] ||= new Intl.NumberFormat(lang, { style: 'unit', unit, unitDisplay: style.unit })).format(n);
+  } else {
+    const rtfc = new Intl.RelativeTimeFormat(lang, { numeric: 'always', style: style.rtf || 'narrow' });
+    fmt = (n, unit) => rtfc.format(-n, unit);
+  }
+  return (compactCache[lang] = fmt);
+};
+export function formatTimeAgoCompact(date) {
+  const ms = date instanceof Date ? date.getTime() : new Date(date).getTime();
+  if (Number.isNaN(ms)) return '';
+  // Elapsed time, positive. A date in the future (clock skew) reads as "now".
+  const seconds = Math.round((Date.now() - ms) / 1000);
+  for (const [unit, size] of UNITS) {
+    if (seconds >= size) return compactFormatter(getLanguage())(Math.trunc(seconds / size), unit);
+  }
+  return i18n.t('common.time.justNow');
+}
+
+/**
+ * Vote counts on a phone: whole thousands, rounded DOWN ("1250" → "1k",
+ * "15300" → "15k"), millions as "M". Below 1000 the number as is.
+ */
+export function formatCountCompact(n) {
+  const num = Number(n);
+  if (!Number.isFinite(num)) return n;
+  const abs = Math.abs(num);
+  if (abs >= 1e6) return `${Math.trunc(num / 1e6)}M`;
+  if (abs >= 1000) return `${Math.trunc(num / 1000)}k`;
+  return num;
+}
+
 /** Calendar days only: "today", "yesterday", "2 weeks ago". */
 export function formatDaysAgo(date) {
   const ms = new Date(date).getTime();
