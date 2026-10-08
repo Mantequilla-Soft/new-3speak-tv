@@ -75,21 +75,7 @@
     "guidelines": {
       "title": "Le nostre linee guida",
       "subtitle": "Crediamo che la libertà di parola sia assoluta, con regole chiare ed eque",
-      "support": {
-        "title": "Cosa sosteniamo",
-        "religion": "Criticare religioni, credenze, gruppi e persone",
-        "politics": "Politica alternativa e discussioni sulle teorie del complotto",
-        "governments": "Criticare governi e leader mondiali",
-        "pseudonyms": "Usare pseudonimi per tutelare la privacy",
-        "jokes": "Battute offensive (se chiaramente indicate come tali)"
-      },
-      "restrict": {
-        "title": "Cosa limitiamo",
-        "violence": "Appelli o incitamento alla violenza",
-        "gore": "Mostrare contenuti eccessivamente cruenti o pornografici",
-        "slander": "Calunnie e contenuti diffamatori",
-        "illegal": "Attività o contenuti illegali"
-      }
+      "cta": "Leggi le nostre linee guida"
     },
     "faqSection": {
       "title": "Domande frequenti",

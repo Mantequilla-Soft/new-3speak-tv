@@ -75,21 +75,7 @@
     "guidelines": {
       "title": "Nguyên tắc của chúng tôi",
       "subtitle": "Chúng tôi tin Tự do ngôn luận là tuyệt đối, với các chính sách rõ ràng và công bằng",
-      "support": {
-        "title": "Những gì chúng tôi ủng hộ",
-        "religion": "Phê bình tôn giáo, niềm tin, nhóm người và cá nhân",
-        "politics": "Chính trị thay thế và thảo luận về thuyết âm mưu",
-        "governments": "Phê bình chính phủ và các nhà lãnh đạo thế giới",
-        "pseudonyms": "Dùng bút danh để bảo vệ quyền riêng tư",
-        "jokes": "Đùa cợt gây phản cảm (khi được ghi rõ là đùa)"
-      },
-      "restrict": {
-        "title": "Những gì chúng tôi hạn chế",
-        "violence": "Kêu gọi hoặc kích động bạo lực",
-        "gore": "Hiển thị nội dung máu me quá mức hoặc khiêu dâm",
-        "slander": "Vu khống và nội dung bôi nhọ",
-        "illegal": "Hoạt động hoặc nội dung bất hợp pháp"
-      }
+      "cta": "Đọc nguyên tắc của chúng tôi"
     },
     "faqSection": {
       "title": "Câu hỏi thường gặp",

@@ -75,21 +75,7 @@
     "guidelines": {
       "title": "Kurallarımız",
       "subtitle": "İfade Özgürlüğünün mutlak olduğuna inanıyoruz; açık ve adil politikalarla",
-      "support": {
-        "title": "Desteklediklerimiz",
-        "religion": "Dinleri, inançları, grupları ve kişileri eleştirmek",
-        "politics": "Alternatif siyaset ve komplo tartışmaları",
-        "governments": "Hükümetleri ve dünya liderlerini eleştirmek",
-        "pseudonyms": "Gizlilik için takma ad kullanmak",
-        "jokes": "Gücendirici şakalar (açıkça öyle belirtildiğinde)"
-      },
-      "restrict": {
-        "title": "Kısıtladıklarımız",
-        "violence": "Şiddete çağrı veya kışkırtma",
-        "gore": "Aşırı kan ve vahşet ya da pornografik içerik göstermek",
-        "slander": "İftira ve karalayıcı içerik",
-        "illegal": "Yasa dışı faaliyetler veya içerik"
-      }
+      "cta": "Kurallarımızı oku"
     },
     "faqSection": {
       "title": "Sıkça Sorulan Sorular",

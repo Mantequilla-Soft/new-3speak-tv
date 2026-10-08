@@ -75,21 +75,7 @@
     "guidelines": {
       "title": "Onze richtlijnen",
       "subtitle": "Wij geloven dat vrijheid van meningsuiting absoluut is, met duidelijk en eerlijk beleid",
-      "support": {
-        "title": "Wat we toestaan",
-        "religion": "Kritiek op religie, overtuigingen, groepen en mensen",
-        "politics": "Alternatieve politiek en discussies over complottheorieën",
-        "governments": "Kritiek op overheden en wereldleiders",
-        "pseudonyms": "Pseudoniemen gebruiken voor privacy",
-        "jokes": "Aanstootgevende grappen (mits duidelijk als zodanig aangegeven)"
-      },
-      "restrict": {
-        "title": "Wat we beperken",
-        "violence": "Oproepen of aanzetten tot geweld",
-        "gore": "Overmatig bloederige of pornografische inhoud tonen",
-        "slander": "Laster en smadelijke inhoud",
-        "illegal": "Illegale activiteiten of inhoud"
-      }
+      "cta": "Lees onze richtlijnen"
     },
     "faqSection": {
       "title": "Veelgestelde vragen",

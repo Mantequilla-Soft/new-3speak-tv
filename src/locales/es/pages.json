@@ -75,21 +75,7 @@
     "guidelines": {
       "title": "Nuestras normas",
       "subtitle": "Creemos que la libertad de expresión es absoluta, con políticas claras y justas",
-      "support": {
-        "title": "Lo que apoyamos",
-        "religion": "Criticar religiones, creencias, grupos y personas",
-        "politics": "Política alternativa y debates sobre conspiraciones",
-        "governments": "Criticar gobiernos y líderes mundiales",
-        "pseudonyms": "Usar seudónimos por privacidad",
-        "jokes": "Chistes ofensivos (cuando estén claramente marcados como tales)"
-      },
-      "restrict": {
-        "title": "Lo que restringimos",
-        "violence": "Llamar o incitar a la violencia",
-        "gore": "Mostrar contenido gore excesivo o pornográfico",
-        "slander": "Calumnias y contenido difamatorio",
-        "illegal": "Actividades o contenido ilegales"
-      }
+      "cta": "Lee nuestras normas"
     },
     "faqSection": {
       "title": "Preguntas frecuentes",

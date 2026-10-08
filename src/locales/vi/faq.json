@@ -13,10 +13,6 @@
       "q": "3Speak là gì?",
       "a": "3Speak là một nền tảng video nơi kênh của bạn thuộc về chính bạn. Video, bình luận và người theo dõi của bạn nằm trên tài khoản Hive của riêng bạn, không phải trên máy chủ của 3Speak, nên không ai có thể lấy chúng đi. Cả nhà sáng tạo lẫn người xem đều có thể kiếm phần thưởng khi sử dụng."
     },
-    "tour": {
-      "q": "3Speak có chuyến tham quan không?",
-      "a": "Có. Hãy <tourLink>bắt đầu tham quan</tourLink> bất cứ lúc nào. Chỉ khoảng một phút, nó giới thiệu mọi thứ: menu, tìm kiếm, Shorts, bảng tin và Cài đặt."
-    },
     "watchFree": {
       "q": "Tôi có cần tài khoản để xem không?",
       "a": "Không. Xem video là miễn phí và không cần tài khoản. Bạn chỉ cần tài khoản để tải lên, bình luận, vote, theo dõi kênh và kiếm phần thưởng."
@@ -75,6 +71,14 @@
       "a": "Có. Mở <b>Studio phát trực tiếp</b> từ menu Tải lên ở phía trên. Bạn có thể mời khách lên sân khấu, phát từ OBS nếu muốn, và bản ghi sẽ được giữ lại trên kênh của bạn sau đó.",
       "aSoon": "Phát trực tiếp hiện đang được thử nghiệm với một nhóm nhỏ nhà sáng tạo. Chúng tôi sẽ thông báo ngay khi tính năng mở cho mọi người."
     },
+    "talk": {
+      "q": "Tôi có thể nói về những gì trên 3Speak?",
+      "a": "3Speak là nền tảng tôn vinh sự khác biệt, sự tôn trọng và lòng khoan dung. 3Speak tin vào tự do ngôn luận, với các quy tắc rõ ràng và công bằng. Bạn được tự do phê phán các tôn giáo, niềm tin, nhóm người và cá nhân, thảo luận về chính trị phi chính thống và thuyết âm mưu, phê phán các chính phủ và nhà lãnh đạo thế giới, dùng bút danh để bảo vệ quyền riêng tư, và đăng những câu đùa mang tính xúc phạm, miễn là chúng được ghi rõ là câu đùa. Phê phán ý tưởng luôn được hoan nghênh, nhưng ngôn từ thù ghét thì không: tấn công người khác vì con người của họ, chẳng hạn như nguồn gốc, tôn giáo, giới tính, xu hướng tính dục hay khuyết tật, không có chỗ đứng ở đây."
+    },
+    "notAllowed": {
+      "q": "Những gì không được phép?",
+      "a": "Kêu gọi hoặc kích động bạo lực, ngôn từ thù ghét, nội dung máu me ghê rợn, nội dung khiêu dâm, vu khống và phỉ báng, và bất cứ điều gì vi phạm pháp luật."
+    },
     "communities": {
       "q": "Cộng đồng là gì?",
       "a": "Cộng đồng là các nhóm xoay quanh một sở thích chung, như chơi game, âm nhạc hay du lịch. Tham gia những cộng đồng bạn thích trên trang <b>Nhóm</b> và video của họ sẽ xuất hiện trong bảng tin của bạn. Khi tải lên, bạn có thể đăng vào một cộng đồng để đúng người tìm thấy video của bạn. Với tài khoản Hive, bạn cũng có thể tạo cộng đồng của riêng mình."
@@ -85,7 +89,7 @@
     },
     "nsfw": {
       "q": "Nội dung NSFW có được phép không?",
-      "a": "Nội dung người lớn được phép, miễn là được đánh dấu <b>NSFW</b>, khi tải lên hoặc sau đó bằng cách chỉnh sửa video. Video đã đánh dấu sẽ bị ẩn khỏi bảng tin và tìm kiếm với tất cả những ai chưa bật <b>Hiển thị nội dung NSFW</b> trong Cài đặt ở mục <b>Nội dung</b>. Nội dung vi phạm pháp luật không bao giờ được phép."
+      "a": "Nội dung người lớn được phép, miễn là được đánh dấu <b>NSFW</b>, khi tải lên hoặc sau đó bằng cách chỉnh sửa video. Video đã đánh dấu sẽ bị ẩn khỏi bảng tin và tìm kiếm với tất cả những ai chưa bật <b>Hiển thị nội dung NSFW</b> trong Cài đặt ở mục <b>Nội dung</b>. Nội dung khiêu dâm không được phép, kể cả khi đã đánh dấu, và nội dung vi phạm pháp luật thì không bao giờ được phép."
     },
     "ai": {
       "q": "Nội dung do AI tạo có được phép không?",

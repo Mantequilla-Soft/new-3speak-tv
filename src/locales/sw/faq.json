@@ -13,10 +13,6 @@
       "q": "3Speak ni nini?",
       "a": "3Speak ni jukwaa la video ambapo chaneli yako ni mali yako. Video, maoni na wafuasi wako huhifadhiwa kwenye akaunti yako mwenyewe ya Hive, si kwenye seva ya 3Speak, kwa hivyo hakuna anayeweza kukunyang'anya. Watayarishi na watazamaji wote wanaweza kupata zawadi wanapoitumia."
     },
-    "tour": {
-      "q": "Je, kuna ziara ya 3Speak?",
-      "a": "Ndiyo. <tourLink>Anza ziara</tourLink> wakati wowote. Kwa takriban dakika moja inakuonyesha kila kitu: menyu, utafutaji, Shorts, mipasho na Mipangilio."
-    },
     "watchFree": {
       "q": "Je, ninahitaji akaunti ili kutazama?",
       "a": "Hapana. Kutazama ni bure na hakuhitaji akaunti. Unahitaji akaunti tu ili kupakia, kutoa maoni, kupiga kura, kufuata chaneli na kupata zawadi."
@@ -75,6 +71,14 @@
       "a": "Ndiyo. Fungua <b>Studio ya utiririshaji</b> kutoka kwenye menyu ya kupakia juu. Unaweza kuwaleta wageni jukwaani, kutiririsha kutoka OBS ukipenda, na rekodi inabaki kwenye chaneli yako baadaye.",
       "aSoon": "Utiririshaji wa moja kwa moja unajaribiwa sasa na kikundi kidogo cha watayarishi. Tutatangaza mara utakapofunguliwa kwa kila mtu."
     },
+    "talk": {
+      "q": "Ninaweza kuzungumzia nini kwenye 3Speak?",
+      "a": "3Speak ni jukwaa linalosherehekea tofauti, heshima na uvumilivu. 3Speak inaamini katika uhuru wa kujieleza, pamoja na sheria zilizo wazi na za haki. Uko huru kukosoa dini, imani, makundi na watu, kujadili siasa mbadala na nadharia za njama, kukosoa serikali na viongozi wa dunia, kutumia jina bandia kwa ajili ya faragha, na kuchapisha vichekesho vinavyoudhi mradi vimewekwa alama wazi kuwa ni vichekesho. Kukosoa mawazo kunakaribishwa, lakini matamshi ya chuki hayakaribishwi: kuwashambulia watu kwa sababu ya utambulisho wao, kama asili yao, dini, jinsia, mwelekeo wa kingono au ulemavu, hakuna nafasi hapa."
+    },
+    "notAllowed": {
+      "q": "Nini hakiruhusiwi?",
+      "a": "Kutoa wito wa vurugu au kuchochea vurugu, matamshi ya chuki, maudhui ya kutisha ya umwagaji damu, maudhui ya ponografia, kashfa na kuchafua jina la mtu, na chochote kilicho haramu."
+    },
     "communities": {
       "q": "Jumuiya ni nini?",
       "a": "Jumuiya ni vikundi vinavyozunguka jambo moja linalopendwa, kama michezo ya video, muziki au usafiri. Jiunge na unazozipenda kwenye ukurasa wa <b>Vikundi</b> na video zao zitaonekana kwenye milisho yako. Unapopakia, unaweza kuchapisha ndani ya jumuiya ili watu sahihi waipate video yako. Ukiwa na akaunti ya Hive unaweza pia kuanzisha yako mwenyewe."
@@ -85,7 +89,7 @@
     },
     "nsfw": {
       "q": "Je, maudhui ya NSFW yanaruhusiwa?",
-      "a": "Maudhui ya watu wazima yanaruhusiwa mradi yamewekwa alama ya <b>NSFW</b>, iwe unapopakia au baadaye kwa kuhariri video. Video zenye alama hufichwa kwenye milisho na utafutaji kwa kila mtu ambaye hajawasha <b>Onyesha maudhui ya NSFW</b> kwenye Mipangilio chini ya <b>Maudhui</b>. Maudhui haramu hayaruhusiwi kamwe."
+      "a": "Maudhui ya watu wazima yanaruhusiwa mradi yamewekwa alama ya <b>NSFW</b>, iwe unapopakia au baadaye kwa kuhariri video. Video zenye alama hufichwa kwenye milisho na utafutaji kwa kila mtu ambaye hajawasha <b>Onyesha maudhui ya NSFW</b> kwenye Mipangilio chini ya <b>Maudhui</b>. Maudhui ya ponografia hayaruhusiwi, hata yakiwa yamewekwa alama, na maudhui haramu hayaruhusiwi kamwe."
     },
     "ai": {
       "q": "Je, maudhui yaliyotengenezwa na AI yanaruhusiwa?",

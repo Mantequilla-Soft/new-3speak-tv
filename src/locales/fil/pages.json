@@ -75,21 +75,7 @@
     "guidelines": {
       "title": "Ang Aming Guidelines",
       "subtitle": "Naniniwala kami na absolute ang Kalayaan sa Pananalita, na may malinaw at patas na mga patakaran",
-      "support": {
-        "title": "Ang Sinusuportahan Namin",
-        "religion": "Pagpuna sa relihiyon, paniniwala, grupo, at tao",
-        "politics": "Alternatibong pulitika at mga talakayan tungkol sa conspiracy",
-        "governments": "Pagpuna sa mga gobyerno at lider ng mundo",
-        "pseudonyms": "Paggamit ng pseudonym para sa privacy",
-        "jokes": "Mga nakakasakit na biro (kapag malinaw na naka-mark bilang biro)"
-      },
-      "restrict": {
-        "title": "Ang Nililimitahan Namin",
-        "violence": "Panawagan o pag-uudyok sa karahasan",
-        "gore": "Pagpapakita ng sobrang gore o pornographic na content",
-        "slander": "Paninirang-puri at mapanirang content",
-        "illegal": "Ilegal na gawain o content"
-      }
+      "cta": "Basahin ang aming mga patakaran"
     },
     "faqSection": {
       "title": "Mga Madalas Itanong",

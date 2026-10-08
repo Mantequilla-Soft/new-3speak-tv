@@ -75,21 +75,7 @@
     "guidelines": {
       "title": "Unsere Richtlinien",
       "subtitle": "Für uns ist Redefreiheit absolut – mit klaren und fairen Regeln",
-      "support": {
-        "title": "Was wir unterstützen",
-        "religion": "Kritik an Religion, Überzeugungen, Gruppen und Personen",
-        "politics": "Alternative Politik und Diskussionen über Verschwörungstheorien",
-        "governments": "Kritik an Regierungen und Staatsoberhäuptern",
-        "pseudonyms": "Pseudonyme zum Schutz der Privatsphäre",
-        "jokes": "Anstößige Witze (wenn sie klar als solche gekennzeichnet sind)"
-      },
-      "restrict": {
-        "title": "Was wir einschränken",
-        "violence": "Aufrufe oder Anstiftung zu Gewalt",
-        "gore": "Übermäßig blutige oder pornografische Inhalte",
-        "slander": "Verleumdung und diffamierende Inhalte",
-        "illegal": "Illegale Aktivitäten oder Inhalte"
-      }
+      "cta": "Zu unseren Richtlinien"
     },
     "faqSection": {
       "title": "Häufige Fragen",

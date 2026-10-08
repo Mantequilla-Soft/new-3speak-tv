@@ -6,7 +6,6 @@
     "tour": "Mag-tour",
     "tourShort": "Tour",
     "faq": "FAQ",
-    "about": "Tungkol sa 3Speak",
     "close": "Isara ang welcome message"
   },
   "tour": {
@@ -89,7 +88,7 @@
       },
       "done": {
         "title": "Handa ka na!",
-        "text": "Mag-enjoy sa panonood. Makikita mo palagi ang FAQ at ang Tungkol sa 3Speak sa menu."
+        "text": "Mag-enjoy sa panonood. Puwede mong ulitin ang tour na ito kahit kailan mula sa FAQ."
       }
     }
   }

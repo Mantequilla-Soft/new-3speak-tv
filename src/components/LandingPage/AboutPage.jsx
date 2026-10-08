@@ -259,26 +259,10 @@ const AboutPage = () => {
               {t('pages.about.guidelines.subtitle')}
             </p>
           </div>
-          <div className="guidelines-grid">
-            <div className="guideline-card">
-              <h3 className="guideline-title red-text">{t('pages.about.guidelines.support.title')}</h3>
-              <ul className="guideline-list">
-                <li>{t('pages.about.guidelines.support.religion')}</li>
-                <li>{t('pages.about.guidelines.support.politics')}</li>
-                <li>{t('pages.about.guidelines.support.governments')}</li>
-                <li>{t('pages.about.guidelines.support.pseudonyms')}</li>
-                <li>{t('pages.about.guidelines.support.jokes')}</li>
-              </ul>
-            </div>
-            <div className="guideline-card blue-border">
-              <h3 className="guideline-title blue-text">{t('pages.about.guidelines.restrict.title')}</h3>
-              <ul className="guideline-list">
-                <li className="blue-bullet">{t('pages.about.guidelines.restrict.violence')}</li>
-                <li className="blue-bullet">{t('pages.about.guidelines.restrict.gore')}</li>
-                <li className="blue-bullet">{t('pages.about.guidelines.restrict.slander')}</li>
-                <li className="blue-bullet">{t('pages.about.guidelines.restrict.illegal')}</li>
-              </ul>
-            </div>
+          {/* The guidelines themselves live in the FAQ, so there is one version
+              to keep current. This opens that exact question. */}
+          <div className="faq-cta-wrap">
+            <Link to="/faq#talk" className="faq-cta">{t('pages.about.guidelines.cta')}</Link>
           </div>
         </div>
       </section>

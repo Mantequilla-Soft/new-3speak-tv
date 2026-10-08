@@ -6,7 +6,6 @@
     "tour": "Rozpocznij przewodnik",
     "tourShort": "Przewodnik",
     "faq": "FAQ",
-    "about": "O 3Speak",
     "close": "Zamknij wiadomość powitalną"
   },
   "tour": {
@@ -89,7 +88,7 @@
       },
       "done": {
         "title": "Wszystko gotowe!",
-        "text": "Miłego oglądania. FAQ i stronę O 3Speak zawsze znajdziesz w menu."
+        "text": "Miłego oglądania. Ten przewodnik możesz w każdej chwili uruchomić ponownie z FAQ."
       }
     }
   }

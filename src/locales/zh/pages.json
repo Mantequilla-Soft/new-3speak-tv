@@ -75,21 +75,7 @@
     "guidelines": {
       "title": "我们的准则",
       "subtitle": "我们相信言论自由是绝对的，并配以清晰、公平的规则",
-      "support": {
-        "title": "我们支持的",
-        "religion": "批评宗教、信仰、团体和个人",
-        "politics": "另类政治观点和阴谋论讨论",
-        "governments": "批评政府和世界领导人",
-        "pseudonyms": "为保护隐私使用化名",
-        "jokes": "冒犯性笑话（需明确标注）"
-      },
-      "restrict": {
-        "title": "我们限制的",
-        "violence": "呼吁或煽动暴力",
-        "gore": "展示过度血腥或色情内容",
-        "slander": "诽谤和中伤性内容",
-        "illegal": "违法活动或内容"
-      }
+      "cta": "阅读我们的准则"
     },
     "faqSection": {
       "title": "常见问题",

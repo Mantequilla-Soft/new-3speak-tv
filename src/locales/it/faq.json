@@ -13,10 +13,6 @@
       "q": "Che cos'è 3Speak?",
       "a": "3Speak è una piattaforma video in cui il tuo canale appartiene a te. I tuoi video, commenti e follower stanno sul tuo account Hive, non su un server di 3Speak, quindi nessuno può portarteli via. Sia i creator sia gli spettatori possono guadagnare ricompense mentre la usano."
     },
-    "tour": {
-      "q": "C'è un tour di 3Speak?",
-      "a": "Sì. <tourLink>Avvia il tour</tourLink> quando vuoi. In circa un minuto ti mostra tutto: menu, ricerca, Shorts, feed e Impostazioni."
-    },
     "watchFree": {
       "q": "Serve un account per guardare?",
       "a": "No. Guardare è gratis e non serve un account. Ti serve solo per caricare, commentare, votare, seguire canali e guadagnare ricompense."
@@ -75,6 +71,14 @@
       "a": "Sì. Apri lo <b>Studio diretta</b> dal menu Carica in alto. Puoi portare ospiti sul palco, trasmettere da OBS se vuoi, e la registrazione resta poi sul tuo canale.",
       "aSoon": "Le dirette sono in prova in questo momento con un piccolo gruppo di creator. Lo annunceremo appena saranno aperte a tutti."
     },
+    "talk": {
+      "q": "Di cosa posso parlare su 3Speak?",
+      "a": "3Speak è una piattaforma che celebra le differenze, il rispetto e la tolleranza. 3Speak crede nella libertà di parola, con regole chiare ed eque. Puoi criticare liberamente religioni, credenze, gruppi e persone, discutere di politica alternativa e teorie del complotto, criticare governi e leader mondiali, usare uno pseudonimo per la tua privacy e pubblicare battute offensive, purché siano chiaramente indicate come battute. La critica alle idee è benvenuta, ma i discorsi d'odio no: attaccare le persone per ciò che sono, ad esempio per la loro origine, religione, genere, sessualità o disabilità, qui non ha spazio."
+    },
+    "notAllowed": {
+      "q": "Cosa non è consentito?",
+      "a": "Invocare o incitare alla violenza, discorsi d'odio, contenuti gore, contenuti pornografici, calunnia e diffamazione, e qualsiasi cosa illegale."
+    },
     "communities": {
       "q": "Cosa sono le community?",
       "a": "Le community sono gruppi intorno a un interesse comune, come videogiochi, musica o viaggi. Unisciti a quelle che ti piacciono nella pagina <b>Gruppi</b> e i loro video compariranno nei tuoi feed. Quando carichi, puoi pubblicare in una community così le persone giuste trovano il tuo video. Con un account Hive puoi anche crearne una tua."
@@ -85,7 +89,7 @@
     },
     "nsfw": {
       "q": "I contenuti NSFW sono consentiti?",
-      "a": "I contenuti per adulti sono consentiti purché siano contrassegnati come <b>NSFW</b>, al caricamento o in seguito modificando il video. I video contrassegnati sono nascosti da feed e ricerca per chi non ha attivato <b>Mostra contenuti NSFW</b> nelle Impostazioni, in <b>Contenuti</b>. I contenuti illegali non sono mai consentiti."
+      "a": "I contenuti per adulti sono consentiti purché siano contrassegnati come <b>NSFW</b>, al caricamento o in seguito modificando il video. I video contrassegnati sono nascosti da feed e ricerca per chi non ha attivato <b>Mostra contenuti NSFW</b> nelle Impostazioni, in <b>Contenuti</b>. I contenuti pornografici non sono consentiti, nemmeno se contrassegnati, e i contenuti illegali non lo sono mai."
     },
     "ai": {
       "q": "I contenuti generati dall'IA sono consentiti?",

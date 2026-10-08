@@ -42,7 +42,6 @@ export default function WelcomeBanner() {
           <span className="welcome-banner-label--short">{t('welcome.banner.tourShort')}</span>
         </button>
         <Link to="/faq" className="welcome-banner-btn">{t('welcome.banner.faq')}</Link>
-        <Link to="/about" className="welcome-banner-btn">{t('welcome.banner.about')}</Link>
       </div>
       <button
         type="button"

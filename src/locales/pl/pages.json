@@ -75,21 +75,7 @@
     "guidelines": {
       "title": "Nasze zasady",
       "subtitle": "Wierzymy, że wolność słowa jest absolutna, przy jasnych i uczciwych zasadach",
-      "support": {
-        "title": "Co wspieramy",
-        "religion": "Krytykowanie religii, przekonań, grup i ludzi",
-        "politics": "Alternatywną politykę i dyskusje o teoriach spiskowych",
-        "governments": "Krytykowanie rządów i światowych przywódców",
-        "pseudonyms": "Używanie pseudonimów dla prywatności",
-        "jokes": "Obraźliwe żarty (gdy są wyraźnie oznaczone jako żarty)"
-      },
-      "restrict": {
-        "title": "Co ograniczamy",
-        "violence": "Nawoływanie lub podżeganie do przemocy",
-        "gore": "Pokazywanie nadmiernie drastycznych lub pornograficznych treści",
-        "slander": "Pomówienia i treści zniesławiające",
-        "illegal": "Nielegalne działania lub treści"
-      }
+      "cta": "Przeczytaj nasze zasady"
     },
     "faqSection": {
       "title": "Najczęściej zadawane pytania",

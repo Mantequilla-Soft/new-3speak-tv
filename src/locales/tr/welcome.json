@@ -6,7 +6,6 @@
     "tour": "Tura başla",
     "tourShort": "Tur",
     "faq": "SSS",
-    "about": "3Speak Hakkında",
     "close": "Karşılama mesajını kapat"
   },
   "tour": {
@@ -89,7 +88,7 @@
       },
       "done": {
         "title": "Her şey hazır!",
-        "text": "İyi seyirler. SSS'yi ve 3Speak Hakkında sayfasını her zaman menüde bulabilirsin."
+        "text": "İyi seyirler. Bu turu SSS sayfasından istediğin zaman yeniden başlatabilirsin."
       }
     }
   }

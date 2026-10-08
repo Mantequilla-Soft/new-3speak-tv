@@ -75,21 +75,7 @@
     "guidelines": {
       "title": "Pedoman Kami",
       "subtitle": "Kami percaya Kebebasan Berbicara itu mutlak, dengan kebijakan yang jelas dan adil",
-      "support": {
-        "title": "Yang Kami Dukung",
-        "religion": "Mengkritik agama, keyakinan, kelompok, dan orang",
-        "politics": "Politik alternatif dan diskusi teori konspirasi",
-        "governments": "Mengkritik pemerintah dan pemimpin dunia",
-        "pseudonyms": "Menggunakan nama samaran demi privasi",
-        "jokes": "Lelucon yang menyinggung (jika ditandai dengan jelas)"
-      },
-      "restrict": {
-        "title": "Yang Kami Batasi",
-        "violence": "Menyerukan atau menghasut kekerasan",
-        "gore": "Menampilkan konten sadis berlebihan atau pornografi",
-        "slander": "Fitnah dan konten yang mencemarkan nama baik",
-        "illegal": "Aktivitas atau konten ilegal"
-      }
+      "cta": "Baca pedoman kami"
     },
     "faqSection": {
       "title": "Pertanyaan yang Sering Diajukan",

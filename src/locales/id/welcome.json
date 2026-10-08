@@ -6,7 +6,6 @@
     "tour": "Ikuti tur",
     "tourShort": "Tur",
     "faq": "FAQ",
-    "about": "Tentang 3Speak",
     "close": "Tutup pesan sambutan"
   },
   "tour": {
@@ -89,7 +88,7 @@
       },
       "done": {
         "title": "Semua siap!",
-        "text": "Selamat menonton. FAQ dan halaman Tentang 3Speak selalu ada di menu."
+        "text": "Selamat menonton. Kamu bisa mengulang tur ini kapan saja dari FAQ."
       }
     }
   }

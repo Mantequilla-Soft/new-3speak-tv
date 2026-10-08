@@ -6,7 +6,6 @@
     "tour": "Take the tour",
     "tourShort": "Tour",
     "faq": "FAQ",
-    "about": "About 3Speak",
     "close": "Close the welcome message"
   },
   "tour": {
@@ -89,7 +88,7 @@
       },
       "done": {
         "title": "You're all set!",
-        "text": "Enjoy watching. You can always find the FAQ and the About page in the menu."
+        "text": "Enjoy watching. You can restart this tour any time from the FAQ."
       }
     }
   }

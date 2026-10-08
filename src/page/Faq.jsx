@@ -13,11 +13,11 @@ const toast = toastIn('3Speak');
 // Order on the page. Each id is also the item's key in locales/<lang>/faq.json
 // and its #anchor, so a question can be linked to directly (/faq#ai).
 const GROUPS = [
-  { id: 'start', items: ['what', 'tour', 'watchFree', 'signup', 'hive', 'loginTypes', 'lostKeys'] },
+  { id: 'start', items: ['what', 'watchFree', 'signup', 'hive', 'loginTypes', 'lostKeys'] },
   { id: 'earning', items: ['creatorsEarn', 'viewersEarn', 'tokens', 'vpRc'] },
   // 'import' (YouTube/TikTok) and 'live' are hidden for now; their strings stay in faq.json.
   { id: 'uploading', items: ['formats', 'edit', 'processing'] },
-  { id: 'community', items: ['communities', 'report', 'nsfw', 'ai', 'deleteVideos', 'myData', 'deleteData'] },
+  { id: 'community', items: ['talk', 'notAllowed', 'communities', 'report', 'nsfw', 'ai', 'deleteVideos', 'myData', 'deleteData'] },
   { id: 'more', items: ['advertise', 'install', 'languages', 'help'] },
 ];
 
@@ -33,8 +33,6 @@ const TAGS = {
   importLink: <Link to="/youtube-import" />,
   advertiseLink: <Link to="/advertise" />,
   aboutLink: <Link to="/about" />,
-  // Starts the guided tour (it moves to the home page first).
-  tourLink: <button type="button" className="faq-inline-link" onClick={startWelcomeTour} />,
 };
 
 export default function Faq() {

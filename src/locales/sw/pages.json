@@ -75,21 +75,7 @@
     "guidelines": {
       "title": "Miongozo yetu",
       "subtitle": "Tunaamini Uhuru wa Kujieleza ni kamili, pamoja na sera zilizo wazi na za haki",
-      "support": {
-        "title": "Tunachokiunga mkono",
-        "religion": "Kukosoa dini, imani, vikundi, na watu",
-        "politics": "Siasa mbadala na mijadala ya nadharia za njama",
-        "governments": "Kukosoa serikali na viongozi wa dunia",
-        "pseudonyms": "Kutumia majina bandia kwa ajili ya faragha",
-        "jokes": "Utani wa kuchukiza (ukiwekwa alama wazi hivyo)"
-      },
-      "restrict": {
-        "title": "Tunachokizuia",
-        "violence": "Kutoa wito au kuchochea vurugu",
-        "gore": "Kuonyesha umwagaji damu uliopita kiasi au maudhui ya ngono",
-        "slander": "Kashfa na maudhui ya kuchafua jina",
-        "illegal": "Shughuli au maudhui haramu"
-      }
+      "cta": "Soma miongozo yetu"
     },
     "faqSection": {
       "title": "Maswali yanayoulizwa mara kwa mara",

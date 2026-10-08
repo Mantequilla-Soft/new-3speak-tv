@@ -6,7 +6,6 @@
     "tour": "Anza ziara",
     "tourShort": "Ziara",
     "faq": "Maswali",
-    "about": "Kuhusu 3Speak",
     "close": "Funga ujumbe wa makaribisho"
   },
   "tour": {
@@ -89,7 +88,7 @@
       },
       "done": {
         "title": "Uko tayari!",
-        "text": "Furahia kutazama. Unaweza kupata Maswali na ukurasa wa Kuhusu 3Speak kwenye menyu wakati wowote."
+        "text": "Furahia kutazama. Unaweza kuanza ziara hii tena wakati wowote kutoka kwenye ukurasa wa Maswali."
       }
     }
   }

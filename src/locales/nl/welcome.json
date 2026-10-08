@@ -6,7 +6,6 @@
     "tour": "Rondleiding starten",
     "tourShort": "Rondleiding",
     "faq": "FAQ",
-    "about": "Over 3Speak",
     "close": "Welkomstbericht sluiten"
   },
   "tour": {
@@ -89,7 +88,7 @@
       },
       "done": {
         "title": "Je bent er klaar voor!",
-        "text": "Veel kijkplezier. De FAQ en de pagina Over 3Speak vind je altijd in het menu."
+        "text": "Veel kijkplezier. Je kunt deze rondleiding altijd opnieuw starten vanuit de FAQ."
       }
     }
   }

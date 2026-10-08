@@ -6,7 +6,6 @@
     "tour": "Xem hướng dẫn",
     "tourShort": "Tham quan",
     "faq": "FAQ",
-    "about": "Giới thiệu về 3Speak",
     "close": "Đóng lời chào"
   },
   "tour": {
@@ -89,7 +88,7 @@
       },
       "done": {
         "title": "Bạn đã sẵn sàng!",
-        "text": "Chúc bạn xem vui. Bạn luôn có thể tìm FAQ và trang Giới thiệu về 3Speak trong menu."
+        "text": "Chúc bạn xem vui. Bạn có thể bắt đầu lại chuyến tham quan này bất cứ lúc nào từ trang câu hỏi thường gặp."
       }
     }
   }

@@ -13,10 +13,6 @@
       "q": "Was ist 3Speak?",
       "a": "3Speak ist eine Videoplattform, auf der dein Kanal dir gehört. Deine Videos, Kommentare und Follower liegen auf deinem eigenen Hive-Konto, nicht auf einem Server von 3Speak, deshalb kann sie dir niemand wegnehmen. Creator und Zuschauer können beim Nutzen beide Belohnungen verdienen."
     },
-    "tour": {
-      "q": "Gibt es eine Tour durch 3Speak?",
-      "a": "Ja. <tourLink>Starte die Tour</tourLink> jederzeit. In etwa einer Minute zeigt sie dir alles: Menüs, Suche, Shorts, Feeds und Einstellungen."
-    },
     "watchFree": {
       "q": "Brauche ich ein Konto zum Anschauen?",
       "a": "Nein. Anschauen ist kostenlos und braucht kein Konto. Du brauchst nur eins, um hochzuladen, zu kommentieren, abzustimmen, Kanälen zu folgen und Belohnungen zu verdienen."
@@ -75,6 +71,14 @@
       "a": "Ja. Öffne das <b>Stream-Studio</b> über das Hochladen-Menü oben. Du kannst Gäste auf die Bühne holen, auf Wunsch aus OBS streamen, und die Aufnahme bleibt danach auf deinem Kanal.",
       "aSoon": "Livestreaming wird gerade mit einer kleinen Gruppe von Creatorn getestet. Wir sagen Bescheid, sobald es für alle freigegeben ist."
     },
+    "talk": {
+      "q": "Worüber kann ich auf 3Speak sprechen?",
+      "a": "3Speak ist eine Plattform, die Vielfalt, Respekt und Toleranz feiert. 3Speak steht für freie Meinungsäußerung, mit klaren und fairen Regeln. Du darfst Religionen, Überzeugungen, Gruppen und Personen kritisieren, über alternative Politik und Verschwörungstheorien diskutieren, Regierungen sowie Staats- und Regierungschefs kritisieren, zum Schutz deiner Privatsphäre ein Pseudonym verwenden und anstößige Witze posten, solange sie klar als Witze gekennzeichnet sind. Kritik an Ideen ist willkommen, Hassrede nicht: Menschen dafür anzugreifen, wer sie sind, etwa wegen ihrer Herkunft, ihrer Religion, ihres Geschlechts, ihrer Sexualität oder einer Behinderung, hat hier keinen Platz."
+    },
+    "notAllowed": {
+      "q": "Was ist nicht erlaubt?",
+      "a": "Aufrufe oder Anstiftung zu Gewalt, Hassrede, drastische Gewaltdarstellungen (Gore), pornografische Inhalte, üble Nachrede und Verleumdung sowie alles Illegale."
+    },
     "communities": {
       "q": "Was sind Communities?",
       "a": "Communities sind Gruppen rund um ein gemeinsames Interesse, zum Beispiel Gaming, Musik oder Reisen. Tritt auf der Seite <b>Gruppen</b> denen bei, die dir gefallen, dann erscheinen ihre Videos in deinen Feeds. Beim Hochladen kannst du in eine Community posten, damit die richtigen Leute dein Video finden. Mit einem Hive-Konto kannst du auch deine eigene gründen."
@@ -85,7 +89,7 @@
     },
     "nsfw": {
       "q": "Sind NSFW-Inhalte erlaubt?",
-      "a": "Inhalte für Erwachsene sind erlaubt, solange sie als <b>NSFW</b> markiert sind, entweder beim Hochladen oder später durch Bearbeiten des Videos. Markierte Videos sind in Feeds und Suche für alle ausgeblendet, die <b>NSFW-Inhalte anzeigen</b> nicht in den Einstellungen unter <b>Inhalte</b> eingeschaltet haben. Illegale Inhalte sind nie erlaubt."
+      "a": "Inhalte für Erwachsene sind erlaubt, solange sie als <b>NSFW</b> markiert sind, entweder beim Hochladen oder später durch Bearbeiten des Videos. Markierte Videos sind in Feeds und Suche für alle ausgeblendet, die <b>NSFW-Inhalte anzeigen</b> nicht in den Einstellungen unter <b>Inhalte</b> eingeschaltet haben. Pornografische Inhalte sind auch mit Markierung nicht erlaubt, und illegale Inhalte sind es nie."
     },
     "ai": {
       "q": "Sind KI-generierte Inhalte erlaubt?",

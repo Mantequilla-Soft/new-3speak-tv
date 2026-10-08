@@ -16,7 +16,7 @@ export const CHANGELOG = [
     version: '1.79.66',
     date: '2026-10-08',
     summary:
-      'New here? The home page now welcomes first-time visitors with links to the FAQ and About page, plus a short guided tour: what 3Speak is, how creators and viewers earn, and where everything is.',
+      'New here? The home page now welcomes first-time visitors with a link to the FAQ, plus a short guided tour: what 3Speak is, how creators and viewers earn, and where everything is.',
   },
   {
     version: '1.79.65',

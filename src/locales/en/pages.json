@@ -75,21 +75,7 @@
     "guidelines": {
       "title": "Our Guidelines",
       "subtitle": "We believe Freedom of Speech is absolute, with clear and fair policies",
-      "support": {
-        "title": "What We Support",
-        "religion": "Criticising religion, beliefs, groups, and people",
-        "politics": "Alternative politics and conspiracy discussions",
-        "governments": "Criticizing governments and world leaders",
-        "pseudonyms": "Using pseudonyms for privacy",
-        "jokes": "Offensive jokes (when clearly marked as such)"
-      },
-      "restrict": {
-        "title": "What We Restrict",
-        "violence": "Calling for or incitement to violence",
-        "gore": "Showing excessive gore or pornographic content",
-        "slander": "Slander and defamatory content",
-        "illegal": "Illegal activities or content"
-      }
+      "cta": "Read our guidelines"
     },
     "faqSection": {
       "title": "Frequently Asked Questions",

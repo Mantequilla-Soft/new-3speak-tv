@@ -6,7 +6,6 @@
     "tour": "Faire la visite",
     "tourShort": "Visite",
     "faq": "FAQ",
-    "about": "À propos de 3Speak",
     "close": "Fermer le message de bienvenue"
   },
   "tour": {
@@ -89,7 +88,7 @@
       },
       "done": {
         "title": "Tout est prêt !",
-        "text": "Bon visionnage. Vous retrouverez toujours la FAQ et la page À propos de 3Speak dans le menu."
+        "text": "Bon visionnage. Vous pouvez relancer cette visite à tout moment depuis la FAQ."
       }
     }
   }

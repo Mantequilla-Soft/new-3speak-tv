@@ -6,7 +6,6 @@
     "tour": "Hacer el recorrido",
     "tourShort": "Recorrido",
     "faq": "Preguntas frecuentes",
-    "about": "Acerca de 3Speak",
     "close": "Cerrar el mensaje de bienvenida"
   },
   "tour": {
@@ -89,7 +88,7 @@
       },
       "done": {
         "title": "¡Todo listo!",
-        "text": "Disfruta viendo. Siempre encontrarás las Preguntas frecuentes y la página Acerca de 3Speak en el menú."
+        "text": "Disfruta viendo videos. Puedes repetir este recorrido cuando quieras desde las preguntas frecuentes."
       }
     }
   }

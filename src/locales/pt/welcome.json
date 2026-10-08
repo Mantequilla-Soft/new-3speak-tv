@@ -6,7 +6,6 @@
     "tour": "Fazer o tour",
     "tourShort": "Tour",
     "faq": "Perguntas frequentes",
-    "about": "Sobre o 3Speak",
     "close": "Fechar a mensagem de boas-vindas"
   },
   "tour": {
@@ -89,7 +88,7 @@
       },
       "done": {
         "title": "Tudo pronto!",
-        "text": "Bom proveito. Você sempre encontra as Perguntas frequentes e a página Sobre o 3Speak no menu."
+        "text": "Bom proveito. Você pode refazer este tour quando quiser pelas perguntas frequentes."
       }
     }
   }

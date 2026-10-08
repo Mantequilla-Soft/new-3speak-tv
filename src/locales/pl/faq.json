@@ -13,10 +13,6 @@
       "q": "Czym jest 3Speak?",
       "a": "3Speak to platforma wideo, na której twój kanał należy do ciebie. Twoje filmy, komentarze i obserwujący są zapisani na twoim własnym koncie Hive, a nie na serwerze 3Speak, więc nikt nie może ci ich odebrać. Zarówno twórcy, jak i widzowie mogą zdobywać nagrody, korzystając z serwisu."
     },
-    "tour": {
-      "q": "Czy jest przewodnik po 3Speak?",
-      "a": "Tak. <tourLink>Uruchom przewodnik</tourLink> w dowolnej chwili. W około minutę pokaże wszystko: menu, wyszukiwanie, Shorts, feedy i Ustawienia."
-    },
     "watchFree": {
       "q": "Czy potrzebuję konta, żeby oglądać?",
       "a": "Nie. Oglądanie jest darmowe i nie wymaga konta. Konto jest potrzebne tylko do przesyłania, komentowania, głosowania, obserwowania kanałów i zdobywania nagród."
@@ -75,6 +71,14 @@
       "a": "Tak. Otwórz <b>Studio transmisji</b> z menu przesyłania u góry. Możesz zapraszać gości na scenę, nadawać z OBS, jeśli chcesz, a nagranie zostaje potem na twoim kanale.",
       "aSoon": "Transmisje na żywo są teraz testowane z małą grupą twórców. Ogłosimy to, gdy tylko zostaną otwarte dla wszystkich."
     },
+    "talk": {
+      "q": "O czym mogę mówić na 3Speak?",
+      "a": "3Speak to platforma, która docenia różnorodność, szacunek i tolerancję. 3Speak wierzy w wolność słowa, z jasnymi i uczciwymi zasadami. Możesz swobodnie krytykować religie, przekonania, grupy i ludzi, dyskutować o alternatywnej polityce i teoriach spiskowych, krytykować rządy i światowych przywódców, używać pseudonimu dla ochrony prywatności i publikować obraźliwe żarty, o ile są wyraźnie oznaczone jako żarty. Krytyka idei jest mile widziana, ale mowa nienawiści nie: atakowanie ludzi za to, kim są, na przykład za ich pochodzenie, religię, płeć, seksualność czy niepełnosprawność, nie ma tu miejsca."
+    },
+    "notAllowed": {
+      "q": "Co jest niedozwolone?",
+      "a": "Wzywanie lub podżeganie do przemocy, mowa nienawiści, drastyczne treści (gore), treści pornograficzne, oszczerstwa i zniesławienie oraz wszystko, co nielegalne."
+    },
     "communities": {
       "q": "Czym są społeczności?",
       "a": "Społeczności to grupy skupione wokół wspólnych zainteresowań, takich jak gry, muzyka czy podróże. Dołącz do tych, które lubisz, na stronie <b>Grupy</b>, a ich filmy pojawią się w twoich kanałach. Podczas przesyłania możesz opublikować film w społeczności, żeby trafił do właściwych osób. Z kontem Hive możesz też założyć własną."
@@ -85,7 +89,7 @@
     },
     "nsfw": {
       "q": "Czy treści NSFW są dozwolone?",
-      "a": "Treści dla dorosłych są dozwolone, o ile są oznaczone jako <b>NSFW</b>, podczas przesyłania albo później przez edycję filmu. Oznaczone filmy są ukryte w kanałach i wyszukiwaniu dla wszystkich, którzy nie włączyli opcji <b>Pokazuj treści NSFW</b> w Ustawieniach w sekcji <b>Treści</b>. Nielegalne treści nigdy nie są dozwolone."
+      "a": "Treści dla dorosłych są dozwolone, o ile są oznaczone jako <b>NSFW</b>, podczas przesyłania albo później przez edycję filmu. Oznaczone filmy są ukryte w kanałach i wyszukiwaniu dla wszystkich, którzy nie włączyli opcji <b>Pokazuj treści NSFW</b> w Ustawieniach w sekcji <b>Treści</b>. Treści pornograficzne są niedozwolone, nawet jeśli są oznaczone, a nielegalne treści nigdy nie są dozwolone."
     },
     "ai": {
       "q": "Czy treści wygenerowane przez AI są dozwolone?",
