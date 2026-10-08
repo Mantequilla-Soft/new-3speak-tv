@@ -53,7 +53,7 @@ import { fixVideoThumbnail, fallbackImg } from '../../utils/fixThumbnails';
 import { isLoggedIn, followWithAioha } from "../../hive-api/aioha";
 import { MdPlaylistAdd, MdWatchLater, MdKeyboardArrowDown, MdKeyboardArrowUp, MdAdd, MdClose, MdShare, MdAttachMoney, MdPersonAdd, MdInfo, MdBarChart } from "react-icons/md";
 import { FaHeart, FaPlay, FaPause } from "react-icons/fa";
-import { TbRewindBackward10, TbRewindForward10 } from "react-icons/tb";
+import { TbRewindBackward10, TbRewindForward10, TbPlayerTrackNextFilled } from "react-icons/tb";
 import { IoPricetagOutline } from "react-icons/io5";
 import AddToPlaylistModal from "../AddToPlaylistModal/AddToPlaylistModal";
 import VideoPlaylists from "../VideoPlaylists/VideoPlaylists";
@@ -198,13 +198,41 @@ const PlayVideo = ({ videoDetails, author, permlink, mediaUnavailable = false, m
   const queryClient = useQueryClient();
 
   const lastTouchRef = useRef(0); // prevent touch+mouse double-fire
-  // Press-and-hold on the video opens the speed menu. The tap action (play/pause,
-  // or show the controls on a phone) therefore runs on RELEASE, and only when the
-  // hold didn't fire: otherwise holding to change speed would also pause.
+  // Our own handle on the <video>. Watch passes `videoRef` as a CALLBACK ref (the
+  // player attaches through it), so there is no `.current` to read; this ref
+  // forwards the element to that callback and keeps it for the hold-to-speed-up
+  // and frame-rate code here. Stable, so the player is never re-attached.
+  const [videoNode, setVideoNode] = useState(null);
+  const attachVideo = useCallback((el) => {
+    setVideoNode(el);
+    if (typeof videoRef === 'function') videoRef(el);
+    else if (videoRef) videoRef.current = el;
+  }, [videoRef]);
+  // Press-and-hold on the video plays it fast (2x) for as long as it is held, the
+  // way YouTube does; sliding left / right while holding picks another temporary
+  // speed, and letting go puts the viewer's own speed back. The tap action
+  // (play/pause, or show the controls on a phone) therefore runs on RELEASE, and
+  // only when the hold didn't fire.
   const LONG_PRESS_MS = 500;
+  // From one frame a second up to 10x. Browsers play that fast, but most go silent
+  // somewhere above 4x and the stream has to arrive that much faster too, so the
+  // top end is for skimming. The bottom end, FRAME_STEP, is below what any browser
+  // will set as a playback rate (~0.06x), so it is done by hand: paused, one frame
+  // forward every second.
+  const FRAME_STEP = 'frame';
+  const HOLD_SPEEDS = [FRAME_STEP, 0.1, 0.25, 0.5, 0.75, 1, 1.25, 1.5, 1.75, 2, 2.5, 3, 4, 5, 6, 8, 10];
+  const HOLD_START_INDEX = HOLD_SPEEDS.indexOf(2);
+  const HOLD_STEP_PX = 32;   // slide this far for the next speed
+  const PRESS_SLOP_PX = 12;  // moving more than this before the hold fires = not a hold
   const pressTimerRef = useRef(null);
   const pressFiredRef = useRef(false);
-  const [speedMenuRequest, setSpeedMenuRequest] = useState(0);
+  const pressStartXRef = useRef(0);
+  // The running hold: { base, wasPaused, startX, index, end } or null.
+  const holdRef = useRef(null);
+  // The speed badge on the video: { rate, holding } while held, then briefly the
+  // restored speed as it fades out.
+  const [speedBadge, setSpeedBadge] = useState(null);
+  const speedBadgeTimerRef = useRef(null);
   // A one-second icon in the middle of the video confirming what a key, click or
   // tap on the video just did. `n` restarts the animation on a repeat press.
   const [actionFlash, setActionFlash] = useState(null);
@@ -230,18 +258,113 @@ const PlayVideo = ({ videoDetails, author, permlink, mediaUnavailable = false, m
   // ...but only once we've confirmed the video actually has watch records.
   const canSeeVideoStats = isStatsViewer && videoHasStats;
 
-  // Long press on the video. No speed menu while an ad plays: the controls are
-  // down for the spot, and a hold then is just a slow tap.
-  const startPress = () => {
+  // Long press on the video. Not while an ad plays: the controls are down for the
+  // spot, the advertiser's seconds are not ours to fast-forward, and a hold then
+  // is just a slow tap.
+  const videoEl = () => videoNode;
+
+  const endHold = () => {
+    const h = holdRef.current;
+    if (!h) return;
+    holdRef.current = null;
+    h.end();
+    h.stopFrames();
+    const vc = controlsRef.current;
+    vc?.onPlaybackRateChange?.(h.base);
+    // It was paused before the hold played it: pause it again.
+    if (h.wasPaused && videoEl() && !videoEl().paused) vc?.onTogglePlay?.();
+    clearTimeout(speedBadgeTimerRef.current);
+    setSpeedBadge({ rate: h.base, holding: false });
+    speedBadgeTimerRef.current = setTimeout(() => setSpeedBadge(null), 700);
+  };
+
+  const beginHold = () => {
+    const vc = controlsRef.current;
+    if (!vc?.onPlaybackRateChange) return;
+    const el = videoEl();
+    const base = el?.playbackRate || vc.playbackRate || 1;
+    const wasPaused = el ? el.paused : !vc.isPlaying;
+    if (wasPaused) vc.onTogglePlay?.();
+    let frameTimer = null;
+    const stopFrames = () => {
+      if (!frameTimer) return;
+      clearInterval(frameTimer);
+      frameTimer = null;
+      videoEl()?.play?.()?.catch?.(() => {});
+    };
+    const setRate = (index) => {
+      const rate = HOLD_SPEEDS[index];
+      const v = videoEl();
+      if (rate === FRAME_STEP) {
+        if (!frameTimer && v) {
+          v.pause();
+          frameTimer = setInterval(() => {
+            const el = videoEl();
+            if (el && Number.isFinite(el.duration)) el.currentTime = Math.min(el.duration, el.currentTime + frameSecRef.current);
+          }, 1000);
+        }
+      } else {
+        stopFrames();
+        // A browser that will not play this fast (or slow) throws; stay at the last speed.
+        try { controlsRef.current?.onPlaybackRateChange?.(rate); } catch { /* unsupported rate */ }
+      }
+      clearTimeout(speedBadgeTimerRef.current);
+      setSpeedBadge({ rate, holding: true });
+    };
+    // Tracked on the window, not the video: the pointer may slide off the frame,
+    // and letting go anywhere must still end the hold.
+    const onMove = (e) => {
+      const h = holdRef.current;
+      if (!h) return;
+      const x = e.touches ? e.touches[0]?.clientX : e.clientX;
+      if (x == null) return;
+      const index = Math.max(0, Math.min(HOLD_SPEEDS.length - 1,
+        HOLD_START_INDEX + Math.round((x - h.startX) / HOLD_STEP_PX)));
+      if (index !== h.index) { h.index = index; setRate(index); }
+    };
+    const onEnd = () => endHold();
+    const onHidden = () => { if (document.hidden) endHold(); };
+    window.addEventListener('mousemove', onMove);
+    window.addEventListener('touchmove', onMove, { passive: true });
+    window.addEventListener('mouseup', onEnd);
+    window.addEventListener('touchend', onEnd);
+    window.addEventListener('touchcancel', onEnd);
+    window.addEventListener('blur', onEnd);
+    document.addEventListener('visibilitychange', onHidden);
+    holdRef.current = {
+      base,
+      wasPaused,
+      startX: pressStartXRef.current,
+      index: HOLD_START_INDEX,
+      stopFrames,
+      end: () => {
+        window.removeEventListener('mousemove', onMove);
+        window.removeEventListener('touchmove', onMove);
+        window.removeEventListener('mouseup', onEnd);
+        window.removeEventListener('touchend', onEnd);
+        window.removeEventListener('touchcancel', onEnd);
+        window.removeEventListener('blur', onEnd);
+        document.removeEventListener('visibilitychange', onHidden);
+      },
+    };
+    setRate(HOLD_START_INDEX);
+  };
+
+  const startPress = (clientX) => {
     pressFiredRef.current = false;
+    pressStartXRef.current = clientX;
     clearTimeout(pressTimerRef.current);
     if (adPlaying || !videoControls?.onPlaybackRateChange) return;
     pressTimerRef.current = setTimeout(() => {
       pressTimerRef.current = null;
       pressFiredRef.current = true;
       try { navigator.vibrate?.(15); } catch { /* not supported */ }
-      setSpeedMenuRequest((n) => n + 1);
+      beginHold();
     }, LONG_PRESS_MS);
+  };
+  // Moving before the hold fires means a swipe or a drag, not a hold.
+  const pressMoved = (clientX) => {
+    if (pressTimerRef.current && Math.abs(clientX - pressStartXRef.current) > PRESS_SLOP_PX) cancelPress();
   };
   // True when the press was a plain tap, so the caller runs the tap action.
   const endPress = () => {
@@ -253,7 +376,12 @@ const PlayVideo = ({ videoDetails, author, permlink, mediaUnavailable = false, m
     clearTimeout(pressTimerRef.current);
     pressTimerRef.current = null;
   };
-  useEffect(() => () => clearTimeout(pressTimerRef.current), []);
+  // Leaving the page mid-hold must not leave the video stuck fast.
+  useEffect(() => () => {
+    clearTimeout(pressTimerRef.current);
+    clearTimeout(speedBadgeTimerRef.current);
+    if (holdRef.current) { holdRef.current.end(); holdRef.current.stopFrames(); holdRef.current = null; }
+  }, []);
 
   // Keyboard, YouTube style: ← / → skip (the same 10s and the same ad lock as the
   // on-screen buttons), space plays/pauses, "," / "." step one frame back /
@@ -273,7 +401,7 @@ const PlayVideo = ({ videoDetails, author, permlink, mediaUnavailable = false, m
   // the new time, so the next one starts from here rather than from a stale clock.
   const stepRef = useRef({ to: 0, at: 0 });
   useEffect(() => {
-    const el = videoRef && typeof videoRef === 'object' ? videoRef.current : null;
+    const el = videoNode;
     if (!el || typeof el.requestVideoFrameCallback !== 'function') return undefined;
     let last = null; let id = 0; let best = Infinity;
     const onFrame = (_now, meta) => {
@@ -286,7 +414,7 @@ const PlayVideo = ({ videoDetails, author, permlink, mediaUnavailable = false, m
     };
     id = el.requestVideoFrameCallback(onFrame);
     return () => el.cancelVideoFrameCallback?.(id);
-  }, [videoRef, permlink]);
+  }, [videoNode, permlink]);
 
   useEffect(() => {
     if (isLive) return undefined;
@@ -1071,7 +1199,7 @@ const PlayVideo = ({ videoDetails, author, permlink, mediaUnavailable = false, m
               {/* The ticker crawl, drawn above the controls bar. */}
               {tickerSlot}
               <video
-                ref={videoRef}
+                ref={attachVideo}
                 style={{
                   position: "absolute",
                   top: 0,
@@ -1223,12 +1351,13 @@ const PlayVideo = ({ videoDetails, author, permlink, mediaUnavailable = false, m
                   <div
                     className="video-interact-overlay"
                     style={showTooltip ? { pointerEvents: 'none' } : undefined}
-                    onMouseMove={() => {
+                    onMouseMove={(e) => {
                       if (window.innerWidth > 767) videoControls.onMouseMove();
+                      pressMoved(e.clientX);
                     }}
                     onMouseDown={(e) => {
                       if (e.button !== 0 || Date.now() - lastTouchRef.current < 500) return;
-                      startPress();
+                      startPress(e.clientX);
                     }}
                     onMouseUp={(e) => {
                       if (e.button !== 0 || Date.now() - lastTouchRef.current < 500) return;
@@ -1247,8 +1376,9 @@ const PlayVideo = ({ videoDetails, author, permlink, mediaUnavailable = false, m
                     onTouchStart={(e) => {
                       lastTouchRef.current = Date.now();
                       e.preventDefault();
-                      startPress();
+                      startPress(e.touches[0]?.clientX ?? 0);
                     }}
+                    onTouchMove={(e) => pressMoved(e.touches[0]?.clientX ?? 0)}
                     onTouchEnd={(e) => {
                       lastTouchRef.current = Date.now();
                       e.preventDefault();
@@ -1261,6 +1391,12 @@ const PlayVideo = ({ videoDetails, author, permlink, mediaUnavailable = false, m
                     onTouchCancel={cancelPress}
                     onContextMenu={(e) => { if (pressFiredRef.current) e.preventDefault(); }}
                   />
+                  {speedBadge && (
+                    <div className={`video-speed-badge${speedBadge.holding ? '' : ' video-speed-badge--leaving'}`} aria-live="polite">
+                      <span className="video-speed-badge__rate">{speedBadge.rate === FRAME_STEP ? '1 fps' : `${speedBadge.rate}x`}</span>
+                      {speedBadge.holding && <TbPlayerTrackNextFilled className="video-speed-badge__icon" aria-hidden="true" />}
+                    </div>
+                  )}
                   {actionFlash && (
                     <div key={actionFlash.n} className="video-action-flash" aria-hidden="true">
                       {actionFlash.kind === 'play' && <FaPlay className="video-action-flash__icon video-action-flash__icon--play" />}
@@ -1312,7 +1448,6 @@ const PlayVideo = ({ videoDetails, author, permlink, mediaUnavailable = false, m
                     onSubtitleStyleChange={videoControls.onSubtitleStyleChange}
                     playbackRate={videoControls.playbackRate}
                     onPlaybackRateChange={videoControls.onPlaybackRateChange}
-                    speedMenuRequest={speedMenuRequest}
                     onHoldControls={videoControls.onHoldControls}
                     onReleaseControls={videoControls.onReleaseControls}
                   />

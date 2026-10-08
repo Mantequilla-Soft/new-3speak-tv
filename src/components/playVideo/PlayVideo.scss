@@ -876,6 +876,43 @@
   }
 }
 
+// The temporary speed while the video is held down ("2x ⏭"), top-centre like
+// YouTube's, so it never covers the middle of the picture. It shows the restored
+// speed for a moment on release, fading out.
+.video-speed-badge {
+  position: absolute;
+  top: 12px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.55);
+  color: #fff;
+  font-size: 15px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  z-index: 6;
+  pointer-events: none;
+  animation: video-speed-badge-in 0.12s ease-out;
+
+  &--leaving { animation: video-speed-badge-out 0.7s ease-in forwards; }
+
+  .video-speed-badge__icon { width: 16px; height: 16px; }
+}
+
+@keyframes video-speed-badge-in {
+  from { opacity: 0; transform: translateX(-50%) scale(0.9); }
+  to { opacity: 1; transform: translateX(-50%) scale(1); }
+}
+
+@keyframes video-speed-badge-out {
+  0%, 40% { opacity: 1; }
+  100% { opacity: 0; }
+}
+
 // One-second confirmation of a key / click / tap on the video: play, pause,
 // skip. Centred, 20% of the player's height, never in the way of a click.
 .video-action-flash {
