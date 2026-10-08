@@ -37,12 +37,6 @@ export const CHANGELOG = [
       'Keyboard shortcuts: Space plays or pauses, the arrow keys skip 10 seconds, and comma and period step one frame. A short icon confirms each action.',
   },
   {
-    version: '1.79.60',
-    date: '2026-10-07',
-    summary:
-      'Hold to change speed: Press and hold on a video to open the playback speed menu, on your phone or with the mouse.',
-  },
-  {
     version: '1.79.59',
     date: '2026-10-07',
     summary:
