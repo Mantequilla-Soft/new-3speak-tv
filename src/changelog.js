@@ -7,6 +7,12 @@
 // 1.0.0 — that way they see all of these when develop is pushed to production.
 export const CHANGELOG = [
   {
+    version: '1.79.65',
+    date: '2026-10-08',
+    summary:
+      'Hold to speed up: Press and hold on a video to play it at 2x until you let go. Slide right for up to 10x, or left to slow down to one frame per second.',
+  },
+  {
     version: '1.79.64',
     date: '2026-10-07',
     summary:
@@ -29,12 +35,6 @@ export const CHANGELOG = [
     date: '2026-10-07',
     summary:
       'Keyboard shortcuts: Space plays or pauses, the arrow keys skip 10 seconds, and comma and period step one frame. A short icon confirms each action.',
-  },
-  {
-    version: '1.79.60',
-    date: '2026-10-07',
-    summary:
-      'Hold to change speed: Press and hold on a video to open the playback speed menu, on your phone or with the mouse.',
   },
   {
     version: '1.79.59',
