@@ -170,7 +170,7 @@
         "label_one": "Ongeza mawasiliano ya biashara yako",
         "label_other": "Ongeza mawasiliano ya biashara yako",
         "hint": "Barua pepe, pamoja na anwani yako au tovuti.",
-        "why": "Kabla tangazo halijaonyeshwa, timu inahitaji njia halisi ya kuifikia biashara iliyo nyuma yake. Barua pepe na anwani yako ni za siri: hazihifadhiwi kamwe kwenye blockchain wala kuonyeshwa popote.",
+        "why": "Kabla tangazo halijaonyeshwa, timu inahitaji njia halisi ya kuifikia biashara iliyo nyuma yake. Barua pepe na anwani yako ni za siri: hazichapishwi kamwe kwenye Hive wala kuonyeshwa popote.",
         "counts": {
           "0": "Barua pepe: inahitajika.",
           "1": "Anwani: si lazima.",
@@ -228,12 +228,12 @@
   "welcome": {
     "what": {
       "title": "Karibu 3Speak",
-      "p1": "3Speak ni jukwaa la video lililojengwa juu ya <b>Hive</b>, blockchain ya umma. Video hapa hazimilikiwi na sisi: ni mali ya watu wanaozichapisha, na zinaweza kupata zawadi halisi kutoka kwa watu wanaozitazama."
+      "p1": "3Speak ni jukwaa la video lililojengwa juu ya <b>Hive</b>, mtandao huru unaomilikiwa na jamii yake. Video hapa hazimilikiwi na sisi: ni mali ya watu wanaozichapisha, na zinaweza kupata zawadi halisi kutoka kwa watu wanaozitazama."
     },
     "warmup": {
       "title": "Uko kwenye kipindi chako cha maandalizi",
-      "p1": "Akaunti ya Hive ni halisi na ya kudumu, na mtu lazima aigharamie. Kwa hivyo badala ya kukuomba chochote mapema, tulikupa jina na mahali pa kuchapisha papo hapo.",
-      "p2": "Kila kitu unachotengeneza wakati wa kipindi cha maandalizi kinaishi kwenye 3Speak. Ukiwa tayari, timu inakagua chaneli yako na kukupa akaunti yako mwenyewe ya Hive, bure. Video, Shorts na unaowafuata kisha huenda kwenye blockchain kwa jina lako mwenyewe, na wewe unachagua kipi kiende nawe."
+      "p1": "Akaunti ya Hive ni halisi na ya kudumu, na mtu lazima aigharamie, <b>lakini si wewe!</b> Kwa hivyo badala ya kukuomba chochote mapema, tulikupa jina na mahali pa kuchapisha papo hapo.",
+      "p2": "Kila kitu unachotengeneza wakati wa kipindi cha maandalizi kinaishi kwenye 3Speak. Ukiwa tayari, timu inakagua chaneli yako na kukupa akaunti yako mwenyewe ya Hive, bure. Video, Shorts na unaowafuata kisha huhamia Hive kwa jina lako mwenyewe, na wewe unachagua kipi kiende nawe."
     },
     "do": {
       "title": "Unachoweza kufanya sasa hivi",
@@ -263,7 +263,7 @@
       },
       "publish": {
         "title": "Chapisha kila kitu ulichotengeneza hapa.",
-        "body": "Video, Shorts na unaowafuata kwenye ukurasa huu vinaweza kuchapishwa kwenye mnyororo kwa jina lako mwenyewe, na wewe unachagua vipi."
+        "body": "Video, Shorts na unaowafuata kwenye ukurasa huu vinaweza kuchapishwa kwenye Hive kwa jina lako mwenyewe, na wewe unachagua vipi."
       },
       "buttons": {
         "title": "Piga kura, toa bakshishi, fuata na tengeneza orodha za kucheza.",
@@ -318,7 +318,7 @@
     "note": {
       "graduated": "Sasa yuko kwenye Hive kama <userLink>@{{user}}</userLink>. Chochote kilicho hapa chini kilitengenezwa kabla ya hapo.",
       "advertiser": "Huu ni ukurasa wa chapa yako kwenye 3Speak. Kamilisha hatua zilizo hapa chini na timu itakagua chapa yako. Ikishaidhinishwa unapata akaunti ya Hive: hiyo ndiyo akaunti yako ya mtangazaji, unayotumia kuweka matangazo na kulipia.",
-      "own": "Hivi ndivyo wengine wanavyokuona. Machapisho yako yanaishi kwenye 3Speak na bado hayako kwenye blockchain ya Hive, kwa hivyo hayapati zawadi. Hilo linabadilika utakapopata akaunti yako baada ya kukamilisha kazi zote zilizo hapa chini.",
+      "own": "Hivi ndivyo wengine wanavyokuona. Machapisho yako yanaishi kwenye 3Speak na bado hayako kwenye Hive, kwa hivyo hayapati zawadi. Hilo linabadilika utakapopata akaunti yako baada ya kukamilisha kazi zote zilizo hapa chini.",
       "ownCreator": "Machapisho yako yanahifadhiwa katika hifadhi ya kipindi cha maandalizi, lakini yanaonekana na kuangaziwa kwenye jukwaa kuu. Yakiwa bado huko, hayapati zawadi bado. Hilo hubadilika unapopata akaunti yako, baada ya kukamilisha kazi zote hapa chini na kuhamisha video zako kwa hatua chache rahisi.",
       "ownViewer": "Uko katika kipindi cha maandalizi. Maoni yako na unaowafuata vinahifadhiwa kwa sasa katika hifadhi ya kipindi cha maandalizi na havipati zawadi bado. Ukikamilisha kazi zote hapa chini, utapata akaunti yako ya Hive, na tangu hapo kila kitu kitaenda moja kwa moja kwenye jukwaa kuu.",
       "visitor": "Mgeni hapa, bado hayuko kwenye Hive. Machapisho haya yanaishi kwenye 3Speak, kwa hivyo kwa sasa hayapati zawadi. Mfuate na utoe maoni hata hivyo: kutiwa moyo mapema ndiko kunakomvusha mtu katika wiki zake za kwanza. Akipata akaunti yake ya Hive tutakujulisha, ili uweze kumfuata huko pia."
@@ -405,7 +405,7 @@
     "notSet": "haijawekwa",
     "none": "hakuna",
     "privateContact": "Mawasiliano ya siri",
-    "privateNote": "wasimamizi tu, kamwe si kwenye mnyororo",
+    "privateNote": "wasimamizi tu, kamwe si kwenye Hive",
     "notGiven": "haijatolewa",
     "met": "Limefikiwa",
     "notMet": "Bado halijafikiwa",
@@ -415,7 +415,7 @@
   "contact": {
     "savedComplete": "Imehifadhiwa. Ni timu ya 3Speak pekee inayoweza kuyaona.",
     "savedIncomplete": "Imehifadhiwa. Ongeza anwani yako, au tovuti kwenye wasifu wako, ili kukamilisha hatua hii.",
-    "privateNote": "<b>Siri.</b> Barua pepe na anwani yako hazihifadhiwi kamwe kwenye blockchain na hazionyeshwi kamwe kwenye wasifu wako wala popote pengine. Ni timu ya 3Speak pekee inayoziona, ili kukufikia kuhusu matangazo yako.",
+    "privateNote": "<b>Siri.</b> Barua pepe na anwani yako hazichapishwi kamwe kwenye Hive na hazionyeshwi kamwe kwenye wasifu wako wala popote pengine. Ni timu ya 3Speak pekee inayoziona, ili kukufikia kuhusu matangazo yako.",
     "email": "Barua pepe",
     "required": "inahitajika",
     "emailPlaceholder": "wewe@chapayako.com",
@@ -499,7 +499,7 @@
     "advertiser": {
       "lede": "Timu imekagua <b>{{name}}</b>. Fungua <b>akaunti yako ya Hive</b>, bure: inakuwa akaunti yako ya mtangazaji.",
       "text": "Kwayo unaweka matangazo kote 3Speak, kuanzia nafasi za video na mabango hadi tika, na unayalipia moja kwa moja kutoka kwenye pochi yake, kwa HBD au HIVE. Ufunguo ni wako peke yako, kwa hivyo hakuna anayeweza kukufungia nje.",
-      "note": "Wasifu wa chapa yako unahamia pamoja nawe. Barua pepe na anwani ya biashara yako zinabaki siri kwa 3Speak na haziendi kamwe kwenye blockchain.",
+      "note": "Wasifu wa chapa yako unahamia pamoja nawe. Barua pepe na anwani ya biashara yako zinabaki siri kwa 3Speak na hazichapishwi kamwe kwenye Hive.",
       "noteMoving": "<b>{{moving}}</b> zako zinahamia pia, zikichapishwa taratibu kwa siku chache."
     },
     "viewer": {

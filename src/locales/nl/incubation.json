@@ -170,7 +170,7 @@
         "label_one": "Voeg je zakelijke contactgegevens toe",
         "label_other": "Voeg je zakelijke contactgegevens toe",
         "hint": "Een e-mailadres, plus je adres of een website.",
-        "why": "Voordat een advertentie draait, heeft het team een echte manier nodig om het bedrijf erachter te bereiken. Je e-mailadres en adres zijn privé: ze worden nooit op de blockchain opgeslagen of ergens getoond.",
+        "why": "Voordat een advertentie draait, heeft het team een echte manier nodig om het bedrijf erachter te bereiken. Je e-mailadres en adres zijn privé: ze worden nooit op Hive gepubliceerd of ergens getoond.",
         "counts": {
           "0": "E-mail: verplicht.",
           "1": "Adres: optioneel.",
@@ -228,12 +228,12 @@
   "welcome": {
     "what": {
       "title": "Welkom bij 3Speak",
-      "p1": "3Speak is een videoplatform gebouwd op <b>Hive</b>, een openbare blockchain. Video's hier zijn niet van ons: ze zijn van de mensen die ze plaatsen, en ze kunnen echte beloningen verdienen van de mensen die ernaar kijken."
+      "p1": "3Speak is een videoplatform gebouwd op <b>Hive</b>, een open netwerk dat van zijn community is. Video's hier zijn niet van ons: ze zijn van de mensen die ze plaatsen, en ze kunnen echte beloningen verdienen van de mensen die ernaar kijken."
     },
     "warmup": {
       "title": "Je zit in je warming-up",
-      "p1": "Een Hive-account is echt en permanent, en iemand moet ervoor betalen. Dus in plaats van vooraf iets van je te vragen, hebben we je meteen een naam en een plek om te publiceren gegeven.",
-      "p2": "Alles wat je tijdens de warming-up maakt, staat op 3Speak. Als je er klaar voor bent, beoordeelt het team je kanaal en krijg je gratis een eigen Hive-account. Je video's, Shorts en wie je volgt gaan dan onder je eigen naam naar de blockchain, en jij kiest wat er meegaat."
+      "p1": "Een Hive-account is echt en permanent, en iemand moet ervoor betalen, <b>maar niet jij!</b> Dus in plaats van vooraf iets van je te vragen, hebben we je meteen een naam en een plek om te publiceren gegeven.",
+      "p2": "Alles wat je tijdens de warming-up maakt, staat op 3Speak. Als je er klaar voor bent, beoordeelt het team je kanaal en krijg je gratis een eigen Hive-account. Je video's, Shorts en wie je volgt gaan dan onder je eigen naam naar Hive, en jij kiest wat er meegaat."
     },
     "do": {
       "title": "Wat je nu al kunt doen",
@@ -263,7 +263,7 @@
       },
       "publish": {
         "title": "Publiceer alles wat je hier hebt gemaakt.",
-        "body": "De video's, Shorts en wie je volgt op deze pagina kunnen onder je eigen naam op de chain worden geplaatst, en jij kiest welke."
+        "body": "De video's, Shorts en wie je volgt op deze pagina kunnen onder je eigen naam op Hive worden geplaatst, en jij kiest welke."
       },
       "buttons": {
         "title": "Voten, fooien geven, volgen en playlists maken.",
@@ -318,7 +318,7 @@
     "note": {
       "graduated": "Nu op Hive als <userLink>@{{user}}</userLink>. Alles hieronder is daarvoor gemaakt.",
       "advertiser": "Dit is je merkpagina op 3Speak. Rond de stappen hieronder af en het team beoordeelt je merk. Na goedkeuring krijg je een Hive-account: dat is je adverteerdersaccount, waarmee je advertenties boekt en betaalt.",
-      "own": "Zo zien anderen je. Je posts staan op 3Speak en nog niet op de Hive-blockchain, dus ze verdienen geen beloningen. Dat verandert als je je account krijgt nadat je alle taken hieronder hebt afgerond.",
+      "own": "Zo zien anderen je. Je posts staan op 3Speak en nog niet op Hive, dus ze verdienen geen beloningen. Dat verandert als je je account krijgt nadat je alle taken hieronder hebt afgerond.",
       "ownCreator": "Je posts staan in een warm-upruimte, maar zijn zichtbaar en uitgelicht op het hoofdplatform. Zolang ze daar staan, leveren ze nog geen beloningen op. Dat verandert wanneer je je account krijgt, nadat je alle taken hieronder hebt afgerond en je video's in een paar eenvoudige stappen hebt overgezet.",
       "ownViewer": "Je zit in de warm-up. Je reacties en volgacties staan voorlopig in een warm-upruimte en leveren nog geen beloningen op. Zodra je alle taken hieronder hebt afgerond, krijg je je Hive-account, en vanaf dan gaat alles direct naar het hoofdplatform.",
       "visitor": "Nieuw hier, nog niet op Hive. Deze posts staan op 3Speak, dus ze verdienen voorlopig geen beloningen. Volg en reageer toch: aanmoediging in het begin helpt iemand door de eerste weken heen. Als diegene een Hive-account krijgt, laten we het je weten, zodat je hem of haar daar ook kunt volgen."
@@ -405,7 +405,7 @@
     "notSet": "niet ingesteld",
     "none": "geen",
     "privateContact": "Privécontact",
-    "privateNote": "alleen beheerders, nooit op de chain",
+    "privateNote": "alleen beheerders, nooit op Hive",
     "notGiven": "niet opgegeven",
     "met": "Behaald",
     "notMet": "Nog niet behaald",
@@ -415,7 +415,7 @@
   "contact": {
     "savedComplete": "Opgeslagen. Alleen het 3Speak-team kan het zien.",
     "savedIncomplete": "Opgeslagen. Voeg je adres toe, of een website op je profiel, om deze stap af te ronden.",
-    "privateNote": "<b>Privé.</b> Je e-mailadres en adres worden nooit op de blockchain opgeslagen en nooit op je profiel of ergens anders getoond. Alleen het 3Speak-team ziet ze, om je te bereiken over je advertenties.",
+    "privateNote": "<b>Privé.</b> Je e-mailadres en adres worden nooit op Hive gepubliceerd en nooit op je profiel of ergens anders getoond. Alleen het 3Speak-team ziet ze, om je te bereiken over je advertenties.",
     "email": "E-mail",
     "required": "verplicht",
     "emailPlaceholder": "jij@jouwmerk.nl",
@@ -499,7 +499,7 @@
     "advertiser": {
       "lede": "Het team heeft <b>{{name}}</b> beoordeeld. Maak gratis je <b>Hive-account</b> aan: dat wordt je adverteerdersaccount.",
       "text": "Daarmee boek je advertenties op heel 3Speak, van videospots en banners tot tickers, en betaal je ze rechtstreeks vanuit de wallet, in HBD of HIVE. De key is alleen van jou, dus niemand kan je buitensluiten.",
-      "note": "Je merkprofiel gaat met je mee. Je zakelijke e-mailadres en adres blijven privé bij 3Speak en komen nooit op de blockchain.",
+      "note": "Je merkprofiel gaat met je mee. Je zakelijke e-mailadres en adres blijven privé bij 3Speak en worden nooit op Hive gepubliceerd.",
       "noteMoving": "Je <b>{{moving}}</b> gaan ook mee, geleidelijk gepubliceerd over een paar dagen."
     },
     "viewer": {

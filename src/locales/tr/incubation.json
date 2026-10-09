@@ -170,7 +170,7 @@
         "label_one": "İş iletişim bilgilerini ekle",
         "label_other": "İş iletişim bilgilerini ekle",
         "hint": "Bir e-posta, ayrıca adresin veya bir web sitesi.",
-        "why": "Bir reklam yayınlanmadan önce ekibin, arkasındaki işletmeye ulaşmanın gerçek bir yoluna ihtiyacı var. E-postan ve adresin gizlidir: asla blokzincirde saklanmaz veya herhangi bir yerde gösterilmez.",
+        "why": "Bir reklam yayınlanmadan önce ekibin, arkasındaki işletmeye ulaşmanın gerçek bir yoluna ihtiyacı var. E-postan ve adresin gizlidir: asla Hive'da yayınlanmaz veya herhangi bir yerde gösterilmez.",
         "counts": {
           "0": "E-posta: zorunlu.",
           "1": "Adres: isteğe bağlı.",
@@ -228,12 +228,12 @@
   "welcome": {
     "what": {
       "title": "3Speak'e hoş geldin",
-      "p1": "3Speak, herkese açık bir blokzincir olan <b>Hive</b> üzerine kurulu bir video platformudur. Buradaki videolar bize ait değildir: onları paylaşan kişilere aittir ve izleyenlerden gerçek ödüller kazanabilirler."
+      "p1": "3Speak, topluluğuna ait açık bir ağ olan <b>Hive</b> üzerine kurulu bir video platformudur. Buradaki videolar bize ait değildir: onları paylaşan kişilere aittir ve izleyenlerden gerçek ödüller kazanabilirler."
     },
     "warmup": {
       "title": "Isınma aşamasındasın",
-      "p1": "Bir Hive hesabı gerçek ve kalıcıdır, ve birinin bunun bedelini ödemesi gerekir. Bu yüzden senden baştan bir şey istemek yerine sana hemen bir ad ve yayın yapabileceğin bir yer verdik.",
-      "p2": "Isınma aşamasında ürettiğin her şey 3Speak'te durur. Hazır olduğunda ekip kanalını inceler ve sana ücretsiz olarak kendi Hive hesabını verir. Videoların, Shorts'ların ve takiplerin daha sonra kendi adınla blokzincire geçer ve neyin seninle geleceğini sen seçersin."
+      "p1": "Bir Hive hesabı gerçek ve kalıcıdır, ve birinin bunun bedelini ödemesi gerekir, <b>ama o kişi sen değilsin!</b> Bu yüzden senden baştan bir şey istemek yerine sana hemen bir ad ve yayın yapabileceğin bir yer verdik.",
+      "p2": "Isınma aşamasında ürettiğin her şey 3Speak'te durur. Hazır olduğunda ekip kanalını inceler ve sana ücretsiz olarak kendi Hive hesabını verir. Videoların, Shorts'ların ve takiplerin daha sonra kendi adınla Hive'a geçer ve neyin seninle geleceğini sen seçersin."
     },
     "do": {
       "title": "Şu an neler yapabilirsin",
@@ -263,7 +263,7 @@
       },
       "publish": {
         "title": "Burada ürettiğin her şeyi yayınla.",
-        "body": "Bu sayfadaki videolar, Shorts'lar ve takipler kendi adınla zincire gönderilebilir ve hangilerinin gideceğini sen seçersin."
+        "body": "Bu sayfadaki videolar, Shorts'lar ve takipler kendi adınla Hive'a gönderilebilir ve hangilerinin gideceğini sen seçersin."
       },
       "buttons": {
         "title": "Oy ver, bahşiş gönder, takip et ve oynatma listeleri oluştur.",
@@ -318,7 +318,7 @@
     "note": {
       "graduated": "Artık Hive'da <userLink>@{{user}}</userLink> olarak. Aşağıdakiler ondan önce üretildi.",
       "advertiser": "Bu, 3Speak'teki marka sayfan. Aşağıdaki adımları tamamla, ekip markanı incelesin. Onaylandığında bir Hive hesabı alırsın: bu senin reklamveren hesabındır, reklam rezervasyonu yapacağın ve ödeme yapacağın hesap.",
-      "own": "Başkaları seni böyle görüyor. Gönderilerin 3Speak'te duruyor ve henüz Hive blokzincirinde değil, bu yüzden ödül kazanmıyor. Aşağıdaki tüm görevleri tamamlayıp hesabını aldığında bu değişir.",
+      "own": "Başkaları seni böyle görüyor. Gönderilerin 3Speak'te duruyor ve henüz Hive'da değil, bu yüzden ödül kazanmıyor. Aşağıdaki tüm görevleri tamamlayıp hesabını aldığında bu değişir.",
       "ownCreator": "Gönderilerin bir ısınma alanında tutuluyor, ama ana platformda görünür ve öne çıkarılmış durumda. Orada kaldıkları sürece henüz ödül kazanmazlar. Aşağıdaki tüm görevleri tamamlayıp videolarını birkaç basit adımda aktardıktan sonra hesabını aldığında bu değişir.",
       "ownViewer": "Isınma dönemindesin. Yorumların ve takiplerin şimdilik bir ısınma alanında tutuluyor ve henüz ödül kazanmıyor. Aşağıdaki tüm görevleri tamamladığında Hive hesabını alırsın ve o andan itibaren her şey doğrudan ana platforma gider.",
       "visitor": "Burada yeni, henüz Hive'da değil. Bu gönderiler 3Speak'te duruyor, bu yüzden şimdilik ödül kazanmıyor. Yine de takip et ve yorum yap: ilk haftaları atlatmayı sağlayan şey erken gelen destektir. Hive hesabını aldığında sana haber vereceğiz, böylece onu orada da takip edebilirsin."
@@ -405,7 +405,7 @@
     "notSet": "ayarlanmadı",
     "none": "yok",
     "privateContact": "Gizli iletişim",
-    "privateNote": "yalnızca yöneticiler, asla zincirde değil",
+    "privateNote": "yalnızca yöneticiler, asla Hive'da değil",
     "notGiven": "verilmedi",
     "met": "Karşılandı",
     "notMet": "Henüz karşılanmadı",
@@ -415,7 +415,7 @@
   "contact": {
     "savedComplete": "Kaydedildi. Yalnızca 3Speak ekibi görebilir.",
     "savedIncomplete": "Kaydedildi. Bu adımı tamamlamak için adresini ya da profiline bir web sitesi ekle.",
-    "privateNote": "<b>Gizli.</b> E-postan ve adresin asla blokzincirde saklanmaz, profilinde veya başka bir yerde gösterilmez. Yalnızca 3Speak ekibi, reklamların hakkında sana ulaşmak için görür.",
+    "privateNote": "<b>Gizli.</b> E-postan ve adresin asla Hive'da yayınlanmaz, profilinde veya başka bir yerde gösterilmez. Yalnızca 3Speak ekibi, reklamların hakkında sana ulaşmak için görür.",
     "email": "E-posta",
     "required": "zorunlu",
     "emailPlaceholder": "sen@markan.com",
@@ -499,7 +499,7 @@
     "advertiser": {
       "lede": "Ekip <b>{{name}}</b> markasını inceledi. Ücretsiz olarak <b>Hive hesabını</b> oluştur: bu senin reklamveren hesabın olur.",
       "text": "Bu hesapla video spotlarından bannerlara ve kayan yazılara kadar 3Speak genelinde reklam verir ve ödemeyi doğrudan cüzdanından HBD veya HIVE ile yaparsın. Anahtar yalnızca sende, bu yüzden kimse seni dışarıda bırakamaz.",
-      "note": "Marka profilin seninle birlikte gelir. İş e-postan ve adresin 3Speak'te gizli kalır ve asla blokzincire gitmez.",
+      "note": "Marka profilin seninle birlikte gelir. İş e-postan ve adresin 3Speak'te gizli kalır ve asla Hive'da yayınlanmaz.",
       "noteMoving": "<b>{{moving}}</b> de seninle gelir; birkaç gün içinde kademeli olarak yayınlanır."
     },
     "viewer": {
