@@ -170,7 +170,7 @@
         "label_one": "Idagdag ang business contact mo",
         "label_other": "Idagdag ang business contact mo",
         "hint": "Isang email, kasama ang address mo o isang website.",
-        "why": "Bago tumakbo ang isang ad, kailangan ng team ng totoong paraan para makontak ang negosyong nasa likod nito. Pribado ang email at address mo: hindi kailanman ise-save ang mga ito sa blockchain o ipapakita kahit saan.",
+        "why": "Bago tumakbo ang isang ad, kailangan ng team ng totoong paraan para makontak ang negosyong nasa likod nito. Pribado ang email at address mo: hindi kailanman ipa-publish ang mga ito sa Hive o ipapakita kahit saan.",
         "counts": {
           "0": "Email: kailangan.",
           "1": "Address: opsyonal.",
@@ -228,12 +228,12 @@
   "welcome": {
     "what": {
       "title": "Welcome sa 3Speak",
-      "p1": "Ang 3Speak ay video platform na nakatayo sa <b>Hive</b>, isang public blockchain. Hindi kami ang may-ari ng mga video dito: pag-aari ito ng mga taong nagpo-post ng mga ito, at puwede itong kumita ng totoong rewards mula sa mga nanonood."
+      "p1": "Ang 3Speak ay video platform na nakatayo sa <b>Hive</b>, isang bukas na network na pag-aari ng komunidad nito. Hindi kami ang may-ari ng mga video dito: pag-aari ito ng mga taong nagpo-post ng mga ito, at puwede itong kumita ng totoong rewards mula sa mga nanonood."
     },
     "warmup": {
       "title": "Nasa warm-up ka",
-      "p1": "Totoo at permanente ang isang Hive account, at may kailangang magbayad para rito. Kaya sa halip na humingi sa iyo ng kahit ano sa simula, binigyan ka namin agad ng pangalan at lugar kung saan ka makakapag-publish.",
-      "p2": "Lahat ng gagawin mo habang nasa warm-up ay nasa 3Speak. Kapag handa ka na, ire-review ng team ang channel mo at bibigyan ka ng sarili mong Hive account, nang libre. Mapupunta sa blockchain ang mga video, Shorts at follows mo sa sarili mong pangalan, at ikaw ang pipili kung ano ang isasama."
+      "p1": "Totoo at permanente ang isang Hive account, at may kailangang magbayad para rito, <b>pero hindi ikaw!</b> Kaya sa halip na humingi sa iyo ng kahit ano sa simula, binigyan ka namin agad ng pangalan at lugar kung saan ka makakapag-publish.",
+      "p2": "Lahat ng gagawin mo habang nasa warm-up ay nasa 3Speak. Kapag handa ka na, ire-review ng team ang channel mo at bibigyan ka ng sarili mong Hive account, nang libre. Lilipat sa Hive ang mga video, Shorts at follows mo sa sarili mong pangalan, at ikaw ang pipili kung ano ang isasama."
     },
     "do": {
       "title": "Ang puwede mong gawin ngayon",
@@ -263,7 +263,7 @@
       },
       "publish": {
         "title": "I-publish lahat ng ginawa mo rito.",
-        "body": "Ang mga video, Shorts at follows sa page na ito ay puwedeng i-post sa chain sa sarili mong pangalan, at ikaw ang pipili kung alin."
+        "body": "Ang mga video, Shorts at follows sa page na ito ay puwedeng i-post sa Hive sa sarili mong pangalan, at ikaw ang pipili kung alin."
       },
       "buttons": {
         "title": "Mag-vote, mag-tip, mag-follow at gumawa ng playlist.",
@@ -318,7 +318,7 @@
     "note": {
       "graduated": "Nasa Hive na bilang <userLink>@{{user}}</userLink>. Ginawa bago iyon ang lahat ng nasa ibaba.",
       "advertiser": "Ito ang brand page mo sa 3Speak. Tapusin ang mga hakbang sa ibaba at ire-review ng team ang brand mo. Kapag naaprubahan, makakakuha ka ng Hive account: iyon ang advertiser account mo, ang gagamitin mo sa pag-book at pagbayad ng ads.",
-      "own": "Ganito ka nakikita ng iba. Nasa 3Speak ang mga post mo at wala pa sa Hive blockchain, kaya hindi pa sila kumikita ng rewards. Magbabago iyan kapag nakuha mo na ang account mo matapos makumpleto lahat ng task sa ibaba.",
+      "own": "Ganito ka nakikita ng iba. Nasa 3Speak ang mga post mo at wala pa sa Hive, kaya hindi pa sila kumikita ng rewards. Magbabago iyan kapag nakuha mo na ang account mo matapos makumpleto lahat ng task sa ibaba.",
       "ownCreator": "Nakatabi ang mga post mo sa isang warm-up na imbakan, pero nakikita at itinatampok ang mga ito sa pangunahing platform. Habang nandoon pa sila, wala pa silang kinikitang reward. Magbabago iyon kapag nakuha mo na ang account mo, pagkatapos mong tapusin ang lahat ng gawain sa ibaba at mailipat ang mga video mo sa ilang madaling hakbang.",
       "ownViewer": "Nasa warm-up ka. Nakatabi muna sa isang warm-up na imbakan ang mga komento at follow mo at wala pa silang kinikitang reward. Kapag natapos mo na ang lahat ng gawain sa ibaba, makukuha mo ang Hive account mo, at mula noon diretso na ang lahat sa pangunahing platform.",
       "visitor": "Bago rito, wala pa sa Hive. Nasa 3Speak ang mga post na ito, kaya wala pa silang kinikitang rewards sa ngayon. Mag-follow at mag-comment pa rin: ang maagang suporta ang nagdadala sa isang tao sa mga una niyang linggo. Kapag nakuha na nila ang Hive account nila, sasabihan ka namin, para ma-follow mo rin sila roon."
@@ -405,7 +405,7 @@
     "notSet": "hindi naka-set",
     "none": "wala",
     "privateContact": "Pribadong contact",
-    "privateNote": "mga admin lang, hindi kailanman sa chain",
+    "privateNote": "mga admin lang, hindi kailanman sa Hive",
     "notGiven": "hindi ibinigay",
     "met": "Natupad",
     "notMet": "Hindi pa natutupad",
@@ -415,7 +415,7 @@
   "contact": {
     "savedComplete": "Na-save. Ang 3Speak team lang ang makakakita nito.",
     "savedIncomplete": "Na-save. Idagdag ang address mo, o isang website sa profile mo, para matapos ang hakbang na ito.",
-    "privateNote": "<b>Pribado.</b> Hindi kailanman ise-save sa blockchain ang email at address mo at hindi kailanman ipapakita sa profile mo o kahit saan. Ang 3Speak team lang ang makakakita ng mga ito, para makontak ka tungkol sa ads mo.",
+    "privateNote": "<b>Pribado.</b> Hindi kailanman ipa-publish sa Hive ang email at address mo at hindi kailanman ipapakita sa profile mo o kahit saan. Ang 3Speak team lang ang makakakita ng mga ito, para makontak ka tungkol sa ads mo.",
     "email": "Email",
     "required": "kailangan",
     "emailPlaceholder": "you@yourbrand.com",
@@ -499,7 +499,7 @@
     "advertiser": {
       "lede": "Na-review na ng team ang <b>{{name}}</b>. Gawin ang <b>Hive account</b> mo, nang libre: ito ang magiging advertiser account mo.",
       "text": "Gamit ito, makakapag-book ka ng ads sa buong 3Speak, mula video spots at banners hanggang tickers, at mababayaran mo ang mga ito diretso mula sa wallet nito, sa HBD o HIVE. Sa iyo lang ang key, kaya walang makaka-lock out sa iyo.",
-      "note": "Sasama sa iyo ang brand profile mo. Mananatiling pribado sa 3Speak ang business email at address mo at hindi kailanman mapupunta sa blockchain.",
+      "note": "Sasama sa iyo ang brand profile mo. Mananatiling pribado sa 3Speak ang business email at address mo at hindi kailanman ipa-publish sa Hive.",
       "noteMoving": "Sasama rin ang <b>{{moving}}</b> mo, unti-unting ipa-publish sa loob ng ilang araw."
     },
     "viewer": {

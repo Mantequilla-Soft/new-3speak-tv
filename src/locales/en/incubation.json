@@ -170,7 +170,7 @@
         "label_one": "Add your business contact",
         "label_other": "Add your business contact",
         "hint": "An email, plus your address or a website.",
-        "why": "Before an ad runs, the team needs a real way to reach the business behind it. Your email and address are private: they are never stored on the blockchain or shown anywhere.",
+        "why": "Before an ad runs, the team needs a real way to reach the business behind it. Your email and address are private: they are never published on Hive or shown anywhere.",
         "counts": {
           "0": "Email: required.",
           "1": "Address: optional.",
@@ -228,12 +228,12 @@
   "welcome": {
     "what": {
       "title": "Welcome to 3Speak",
-      "p1": "3Speak is a video platform built on <b>Hive</b>, a public blockchain. Videos here are not owned by us: they belong to the people who post them, and they can earn real rewards from the people who watch them."
+      "p1": "3Speak is a video platform built on <b>Hive</b>, an open network that belongs to its community. Videos here are not owned by us: they belong to the people who post them, and they can earn real rewards from the people who watch them."
     },
     "warmup": {
       "title": "You are in your warm-up",
-      "p1": "A Hive account is real and permanent, and someone has to pay for it. So instead of asking you for anything up front, we gave you a name and a place to publish straight away.",
-      "p2": "Everything you make during the warm-up lives on 3Speak. When you are ready, the team reviews your channel and gives you a Hive account of your own, free. Your videos, shorts and follows then go to the blockchain under your own name, and you choose what comes with you."
+      "p1": "A Hive account is real and permanent, and someone has to pay for it, <b>but not you!</b> So instead of asking you for anything up front, we gave you a name and a place to publish straight away.",
+      "p2": "Everything you make during the warm-up lives on 3Speak. When you are ready, the team reviews your channel and gives you a Hive account of your own, free. Your videos, shorts and follows then move to Hive under your own name, and you choose what comes with you."
     },
     "do": {
       "title": "What you can do right now",
@@ -263,7 +263,7 @@
       },
       "publish": {
         "title": "Publish everything you made here.",
-        "body": "The videos, shorts and follows on this page can be posted to the chain under your own name, and you choose which."
+        "body": "The videos, shorts and follows on this page can be posted to Hive under your own name, and you choose which."
       },
       "buttons": {
         "title": "Vote, tip, follow and build playlists.",
@@ -318,7 +318,7 @@
     "note": {
       "graduated": "Now on Hive as <userLink>@{{user}}</userLink>. Anything below was made before that.",
       "advertiser": "This is your brand page on 3Speak. Finish the steps below and the team reviews your brand. Once approved you get a Hive account: that is your advertiser account, the one you book ads with and pay from.",
-      "own": "This is how others see you. Your posts live on 3Speak and are not on the Hive blockchain yet, so they do not earn rewards. That changes when you get your account after completing all the tasks below.",
+      "own": "This is how others see you. Your posts live on 3Speak and are not on Hive yet, so they do not earn rewards. That changes when you get your account after completing all the tasks below.",
       "ownCreator": "Your posts are kept in a warm-up space, but they are visible and highlighted on the main platform. While they are in the warm-up space, they do not earn rewards yet. That changes when you get your account, after you have completed all the tasks below and moved your videos over in a few simple steps.",
       "ownViewer": "You are in the warm-up. Your comments and follows are kept in a warm-up space for now and do not earn rewards yet. Once you have completed all the tasks below, you get your Hive account, and from then on everything goes straight to the main platform.",
       "visitor": "New here, not on Hive yet. These posts live on 3Speak, so they earn no rewards for now. Follow and comment anyway: early encouragement is what carries someone through their first weeks. When they get their Hive account we will tell you, so you can follow them there too."
@@ -405,7 +405,7 @@
     "notSet": "not set",
     "none": "none",
     "privateContact": "Private contact",
-    "privateNote": "admins only, never on chain",
+    "privateNote": "admins only, never on Hive",
     "notGiven": "not given",
     "met": "Met",
     "notMet": "Not met yet",
@@ -415,7 +415,7 @@
   "contact": {
     "savedComplete": "Saved. Only the 3Speak team can see it.",
     "savedIncomplete": "Saved. Add your address, or a website on your profile, to finish this step.",
-    "privateNote": "<b>Private.</b> Your email and address are never stored on the blockchain and never shown on your profile or anywhere else. Only the 3Speak team sees them, to reach you about your ads.",
+    "privateNote": "<b>Private.</b> Your email and address are never published on Hive and never shown on your profile or anywhere else. Only the 3Speak team sees them, to reach you about your ads.",
     "email": "Email",
     "required": "required",
     "emailPlaceholder": "you@yourbrand.com",
@@ -499,7 +499,7 @@
     "advertiser": {
       "lede": "The team has reviewed <b>{{name}}</b>. Create your <b>Hive account</b>, for free: it becomes your advertiser account.",
       "text": "With it you book ads across 3Speak, from video spots and banners to tickers, and pay for them straight from its wallet, in HBD or HIVE. The key is yours alone, so nobody can lock you out.",
-      "note": "Your brand profile comes across with you. Your business email and address stay private with 3Speak and never go on the blockchain.",
+      "note": "Your brand profile comes across with you. Your business email and address stay private with 3Speak and are never published on Hive.",
       "noteMoving": "Your <b>{{moving}}</b> come across too, published gradually over a few days."
     },
     "viewer": {

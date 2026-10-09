@@ -63,7 +63,7 @@ const STEPS = [
     body: (t) => (
       <>
         <p>
-          {t('incubation.welcome.warmup.p1')}
+          <Trans i18nKey="incubation.welcome.warmup.p1" components={{ b: <strong /> }} />
         </p>
         <p>
           {t('incubation.welcome.warmup.p2')}
