@@ -157,7 +157,7 @@
       "contact": {
         "label_other": "Thêm thông tin liên hệ kinh doanh",
         "hint": "Một email, cùng địa chỉ hoặc trang web của bạn.",
-        "why": "Trước khi một quảng cáo chạy, đội ngũ cần một cách thực sự để liên hệ với doanh nghiệp đứng sau. Email và địa chỉ của bạn được giữ riêng tư: chúng không bao giờ được lưu trên blockchain hay hiển thị ở bất kỳ đâu.",
+        "why": "Trước khi một quảng cáo chạy, đội ngũ cần một cách thực sự để liên hệ với doanh nghiệp đứng sau. Email và địa chỉ của bạn được giữ riêng tư: chúng không bao giờ được đăng lên Hive hay hiển thị ở bất kỳ đâu.",
         "counts": {
           "0": "Email: bắt buộc.",
           "1": "Địa chỉ: không bắt buộc.",
@@ -211,12 +211,12 @@
   "welcome": {
     "what": {
       "title": "Chào mừng đến với 3Speak",
-      "p1": "3Speak là nền tảng video được xây dựng trên <b>Hive</b>, một blockchain công khai. Video ở đây không thuộc về chúng tôi: chúng thuộc về những người đăng tải, và có thể nhận phần thưởng thật từ những người xem."
+      "p1": "3Speak là nền tảng video được xây dựng trên <b>Hive</b>, một mạng lưới mở thuộc về cộng đồng của nó. Video ở đây không thuộc về chúng tôi: chúng thuộc về những người đăng tải, và có thể nhận phần thưởng thật từ những người xem."
     },
     "warmup": {
       "title": "Bạn đang trong giai đoạn khởi động",
-      "p1": "Một tài khoản Hive là thật và vĩnh viễn, và phải có ai đó trả tiền cho nó. Vì vậy thay vì yêu cầu bạn bất cứ điều gì từ đầu, chúng tôi cho bạn một cái tên và một nơi để đăng nội dung ngay lập tức.",
-      "p2": "Mọi thứ bạn tạo trong giai đoạn khởi động đều nằm trên 3Speak. Khi bạn sẵn sàng, đội ngũ sẽ xét duyệt kênh của bạn và cấp cho bạn một tài khoản Hive của riêng bạn, miễn phí. Video, Shorts và danh sách theo dõi của bạn khi đó sẽ được đưa lên blockchain dưới tên của chính bạn, và bạn chọn những gì sẽ mang theo."
+      "p1": "Một tài khoản Hive là thật và vĩnh viễn, và phải có ai đó trả tiền cho nó, <b>nhưng không phải bạn!</b> Vì vậy thay vì yêu cầu bạn bất cứ điều gì từ đầu, chúng tôi cho bạn một cái tên và một nơi để đăng nội dung ngay lập tức.",
+      "p2": "Mọi thứ bạn tạo trong giai đoạn khởi động đều nằm trên 3Speak. Khi bạn sẵn sàng, đội ngũ sẽ xét duyệt kênh của bạn và cấp cho bạn một tài khoản Hive của riêng bạn, miễn phí. Video, Shorts và danh sách theo dõi của bạn khi đó sẽ được chuyển sang Hive dưới tên của chính bạn, và bạn chọn những gì sẽ mang theo."
     },
     "do": {
       "title": "Những gì bạn có thể làm ngay bây giờ",
@@ -246,7 +246,7 @@
       },
       "publish": {
         "title": "Xuất bản mọi thứ bạn đã tạo ở đây.",
-        "body": "Video, Shorts và danh sách theo dõi trên trang này có thể được đăng lên chuỗi dưới tên của chính bạn, và bạn chọn những gì."
+        "body": "Video, Shorts và danh sách theo dõi trên trang này có thể được đăng lên Hive dưới tên của chính bạn, và bạn chọn những gì."
       },
       "buttons": {
         "title": "Vote, gửi tip, theo dõi và tạo danh sách phát.",
@@ -298,7 +298,7 @@
     "note": {
       "graduated": "Hiện đã có trên Hive với tên <userLink>@{{user}}</userLink>. Mọi thứ bên dưới được tạo trước thời điểm đó.",
       "advertiser": "Đây là trang thương hiệu của bạn trên 3Speak. Hoàn thành các bước bên dưới và đội ngũ sẽ xét duyệt thương hiệu của bạn. Sau khi được duyệt, bạn sẽ nhận một tài khoản Hive: đó là tài khoản nhà quảng cáo, dùng để đặt quảng cáo và thanh toán.",
-      "own": "Đây là cách người khác nhìn thấy bạn. Bài đăng của bạn nằm trên 3Speak và chưa có trên blockchain Hive, nên chúng chưa nhận phần thưởng. Điều đó sẽ thay đổi khi bạn có tài khoản sau khi hoàn thành tất cả nhiệm vụ bên dưới.",
+      "own": "Đây là cách người khác nhìn thấy bạn. Bài đăng của bạn nằm trên 3Speak và chưa có trên Hive, nên chúng chưa nhận phần thưởng. Điều đó sẽ thay đổi khi bạn có tài khoản sau khi hoàn thành tất cả nhiệm vụ bên dưới.",
       "ownCreator": "Bài đăng của bạn được lưu trong khu vực khởi động, nhưng vẫn hiển thị và được làm nổi bật trên nền tảng chính. Khi còn ở đó, chúng chưa tạo ra phần thưởng. Điều này sẽ thay đổi khi bạn nhận được tài khoản, sau khi hoàn thành mọi nhiệm vụ bên dưới và chuyển video của bạn qua vài bước đơn giản.",
       "ownViewer": "Bạn đang trong giai đoạn khởi động. Bình luận và lượt theo dõi của bạn tạm thời được lưu trong khu vực khởi động và chưa tạo ra phần thưởng. Khi hoàn thành mọi nhiệm vụ bên dưới, bạn sẽ nhận được tài khoản Hive, và từ đó mọi thứ sẽ đi thẳng lên nền tảng chính.",
       "visitor": "Người mới, chưa có trên Hive. Các bài đăng này nằm trên 3Speak, nên hiện chưa nhận phần thưởng. Dù vậy, hãy cứ theo dõi và bình luận: sự động viên sớm là điều giúp một người vượt qua những tuần đầu tiên. Khi họ có tài khoản Hive, chúng tôi sẽ báo cho bạn, để bạn có thể theo dõi họ ở đó."
@@ -384,7 +384,7 @@
     "notSet": "chưa đặt",
     "none": "không có",
     "privateContact": "Liên hệ riêng tư",
-    "privateNote": "chỉ quản trị viên, không bao giờ lên chuỗi",
+    "privateNote": "chỉ quản trị viên, không bao giờ lên Hive",
     "notGiven": "chưa cung cấp",
     "met": "Đã đạt",
     "notMet": "Chưa đạt",
@@ -394,7 +394,7 @@
   "contact": {
     "savedComplete": "Đã lưu. Chỉ đội ngũ 3Speak mới thấy được.",
     "savedIncomplete": "Đã lưu. Thêm địa chỉ của bạn, hoặc trang web trên hồ sơ, để hoàn thành bước này.",
-    "privateNote": "<b>Riêng tư.</b> Email và địa chỉ của bạn không bao giờ được lưu trên blockchain và không bao giờ hiển thị trên hồ sơ hay bất kỳ đâu khác. Chỉ đội ngũ 3Speak thấy chúng, để liên hệ với bạn về quảng cáo.",
+    "privateNote": "<b>Riêng tư.</b> Email và địa chỉ của bạn không bao giờ được đăng lên Hive và không bao giờ hiển thị trên hồ sơ hay bất kỳ đâu khác. Chỉ đội ngũ 3Speak thấy chúng, để liên hệ với bạn về quảng cáo.",
     "email": "Email",
     "required": "bắt buộc",
     "emailPlaceholder": "ban@thuonghieucuaban.com",
@@ -471,7 +471,7 @@
     "advertiser": {
       "lede": "Đội ngũ đã xét duyệt <b>{{name}}</b>. Hãy tạo <b>tài khoản Hive</b> miễn phí: nó sẽ trở thành tài khoản nhà quảng cáo của bạn.",
       "text": "Với tài khoản này, bạn đặt quảng cáo trên khắp 3Speak, từ quảng cáo video, banner đến ticker, và thanh toán trực tiếp từ ví của nó, bằng HBD hoặc HIVE. Khóa chỉ thuộc về riêng bạn, nên không ai có thể khóa bạn ra ngoài.",
-      "note": "Hồ sơ thương hiệu của bạn sẽ được chuyển theo. Email và địa chỉ kinh doanh của bạn được 3Speak giữ riêng tư và không bao giờ được đưa lên blockchain.",
+      "note": "Hồ sơ thương hiệu của bạn sẽ được chuyển theo. Email và địa chỉ kinh doanh của bạn được 3Speak giữ riêng tư và không bao giờ được đăng lên Hive.",
       "noteMoving": "<b>{{moving}}</b> của bạn cũng sẽ được chuyển theo, xuất bản dần trong vài ngày."
     },
     "viewer": {

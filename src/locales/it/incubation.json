@@ -183,7 +183,7 @@
         "label_many": "Aggiungi il tuo contatto aziendale",
         "label_other": "Aggiungi il tuo contatto aziendale",
         "hint": "Un'email, più il tuo indirizzo o un sito web.",
-        "why": "Prima che un annuncio vada in onda, il team ha bisogno di un modo reale per contattare l'azienda che c'è dietro. La tua email e il tuo indirizzo sono privati: non vengono mai memorizzati sulla blockchain né mostrati da nessuna parte.",
+        "why": "Prima che un annuncio vada in onda, il team ha bisogno di un modo reale per contattare l'azienda che c'è dietro. La tua email e il tuo indirizzo sono privati: non vengono mai pubblicati su Hive né mostrati da nessuna parte.",
         "counts": {
           "0": "Email: obbligatoria.",
           "1": "Indirizzo: facoltativo.",
@@ -245,12 +245,12 @@
   "welcome": {
     "what": {
       "title": "Benvenuto su 3Speak",
-      "p1": "3Speak è una piattaforma video costruita su <b>Hive</b>, una blockchain pubblica. I video qui non sono nostri: appartengono a chi li pubblica, e possono guadagnare ricompense reali da chi li guarda."
+      "p1": "3Speak è una piattaforma video costruita su <b>Hive</b>, una rete aperta che appartiene alla sua community. I video qui non sono nostri: appartengono a chi li pubblica, e possono guadagnare ricompense reali da chi li guarda."
     },
     "warmup": {
       "title": "Sei nel tuo warm-up",
-      "p1": "Un account Hive è reale e permanente, e qualcuno deve pagarlo. Quindi, invece di chiederti qualcosa in anticipo, ti abbiamo dato subito un nome e un posto dove pubblicare.",
-      "p2": "Tutto ciò che crei durante il warm-up vive su 3Speak. Quando sei pronto, il team valuta il tuo canale e ti dà un account Hive tutto tuo, gratis. I tuoi video, Shorts e follow passano poi sulla blockchain a tuo nome, e scegli tu cosa portare con te."
+      "p1": "Un account Hive è reale e permanente, e qualcuno deve pagarlo, <b>ma non tu!</b> Quindi, invece di chiederti qualcosa in anticipo, ti abbiamo dato subito un nome e un posto dove pubblicare.",
+      "p2": "Tutto ciò che crei durante il warm-up vive su 3Speak. Quando sei pronto, il team valuta il tuo canale e ti dà un account Hive tutto tuo, gratis. I tuoi video, Shorts e follow passano poi su Hive a tuo nome, e scegli tu cosa portare con te."
     },
     "do": {
       "title": "Cosa puoi fare subito",
@@ -280,7 +280,7 @@
       },
       "publish": {
         "title": "Pubblica tutto ciò che hai creato qui.",
-        "body": "I video, gli Shorts e i follow di questa pagina possono essere pubblicati sulla chain a tuo nome, e scegli tu quali."
+        "body": "I video, gli Shorts e i follow di questa pagina possono essere pubblicati su Hive a tuo nome, e scegli tu quali."
       },
       "buttons": {
         "title": "Vota, manda mance, segui e crea playlist.",
@@ -338,7 +338,7 @@
     "note": {
       "graduated": "Ora su Hive come <userLink>@{{user}}</userLink>. Tutto ciò che segue è stato creato prima.",
       "advertiser": "Questa è la pagina del tuo brand su 3Speak. Completa i passaggi qui sotto e il team valuterà il tuo brand. Una volta approvato ricevi un account Hive: è il tuo account inserzionista, quello con cui prenoti gli annunci e da cui paghi.",
-      "own": "Ecco come ti vedono gli altri. I tuoi post vivono su 3Speak e non sono ancora sulla blockchain Hive, quindi non guadagnano ricompense. Le cose cambieranno quando riceverai il tuo account dopo aver completato tutte le attività qui sotto.",
+      "own": "Ecco come ti vedono gli altri. I tuoi post vivono su 3Speak e non sono ancora su Hive, quindi non guadagnano ricompense. Le cose cambieranno quando riceverai il tuo account dopo aver completato tutte le attività qui sotto.",
       "ownCreator": "I tuoi post sono conservati in uno spazio di riscaldamento, ma sono visibili e messi in evidenza sulla piattaforma principale. Finché restano lì, non generano ancora ricompense. Questo cambia quando ricevi il tuo account, dopo aver completato tutte le attività qui sotto e trasferito i tuoi video in pochi semplici passaggi.",
       "ownViewer": "Sei nel riscaldamento. I tuoi commenti e follow sono conservati per ora in uno spazio di riscaldamento e non generano ancora ricompense. Quando avrai completato tutte le attività qui sotto, ricevi il tuo account Hive e da quel momento tutto va direttamente sulla piattaforma principale.",
       "visitor": "Nuovo qui, non ancora su Hive. Questi post vivono su 3Speak, quindi per ora non guadagnano ricompense. Segui e commenta comunque: l'incoraggiamento iniziale è ciò che aiuta qualcuno a superare le prime settimane. Quando riceverà il suo account Hive te lo diremo, così potrai seguirlo anche lì."
@@ -426,7 +426,7 @@
     "notSet": "non impostato",
     "none": "nessuno",
     "privateContact": "Contatto privato",
-    "privateNote": "solo admin, mai sulla chain",
+    "privateNote": "solo admin, mai su Hive",
     "notGiven": "non fornito",
     "met": "Raggiunto",
     "notMet": "Non ancora raggiunto",
@@ -436,7 +436,7 @@
   "contact": {
     "savedComplete": "Salvato. Solo il team di 3Speak può vederlo.",
     "savedIncomplete": "Salvato. Aggiungi il tuo indirizzo, o un sito web nel profilo, per completare questo passaggio.",
-    "privateNote": "<b>Privato.</b> La tua email e il tuo indirizzo non vengono mai memorizzati sulla blockchain né mostrati sul tuo profilo o altrove. Solo il team di 3Speak li vede, per contattarti riguardo ai tuoi annunci.",
+    "privateNote": "<b>Privato.</b> La tua email e il tuo indirizzo non vengono mai pubblicati su Hive né mostrati sul tuo profilo o altrove. Solo il team di 3Speak li vede, per contattarti riguardo ai tuoi annunci.",
     "email": "Email",
     "required": "obbligatoria",
     "emailPlaceholder": "tu@iltuobrand.com",
@@ -527,7 +527,7 @@
     "advertiser": {
       "lede": "Il team ha valutato <b>{{name}}</b>. Crea il tuo <b>account Hive</b>, gratis: diventerà il tuo account inserzionista.",
       "text": "Con questo account prenoti annunci su tutto 3Speak, dagli spot nei video ai banner fino ai ticker, e li paghi direttamente dal suo wallet, in HBD o HIVE. La chiave è solo tua, quindi nessuno può bloccarti fuori.",
-      "note": "Il profilo del tuo brand viene con te. La tua email aziendale e il tuo indirizzo restano privati presso 3Speak e non finiscono mai sulla blockchain.",
+      "note": "Il profilo del tuo brand viene con te. La tua email aziendale e il tuo indirizzo restano privati presso 3Speak e non vengono mai pubblicati su Hive.",
       "noteMoving": "Anche i tuoi <b>{{moving}}</b> vengono con te, pubblicati gradualmente nell'arco di qualche giorno."
     },
     "viewer": {

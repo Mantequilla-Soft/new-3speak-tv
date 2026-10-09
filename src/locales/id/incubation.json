@@ -157,7 +157,7 @@
       "contact": {
         "label_other": "Tambahkan kontak bisnismu",
         "hint": "Email, ditambah alamat atau situs web.",
-        "why": "Sebelum iklan tayang, tim butuh cara nyata untuk menghubungi bisnis di baliknya. Email dan alamatmu bersifat privat: tidak pernah disimpan di blockchain atau ditampilkan di mana pun.",
+        "why": "Sebelum iklan tayang, tim butuh cara nyata untuk menghubungi bisnis di baliknya. Email dan alamatmu bersifat privat: tidak pernah dipublikasikan di Hive atau ditampilkan di mana pun.",
         "counts": {
           "0": "Email: wajib.",
           "1": "Alamat: opsional.",
@@ -211,12 +211,12 @@
   "welcome": {
     "what": {
       "title": "Selamat datang di 3Speak",
-      "p1": "3Speak adalah platform video yang dibangun di atas <b>Hive</b>, sebuah blockchain publik. Video di sini bukan milik kami: video adalah milik orang yang mempostingnya, dan bisa menghasilkan reward nyata dari orang yang menontonnya."
+      "p1": "3Speak adalah platform video yang dibangun di atas <b>Hive</b>, sebuah jaringan terbuka milik komunitasnya. Video di sini bukan milik kami: video adalah milik orang yang mempostingnya, dan bisa menghasilkan reward nyata dari orang yang menontonnya."
     },
     "warmup": {
       "title": "Kamu sedang dalam masa pemanasan",
-      "p1": "Akun Hive itu nyata dan permanen, dan seseorang harus membayarnya. Jadi, alih-alih meminta apa pun di awal, kami langsung memberimu nama dan tempat untuk menerbitkan.",
-      "p2": "Semua yang kamu buat selama masa pemanasan ada di 3Speak. Saat kamu siap, tim meninjau channel-mu dan memberimu akun Hive milikmu sendiri, gratis. Video, Shorts, dan daftar yang kamu ikuti lalu pindah ke blockchain atas namamu sendiri, dan kamu yang memilih apa saja yang dibawa."
+      "p1": "Akun Hive itu nyata dan permanen, dan seseorang harus membayarnya, <b>tapi bukan kamu!</b> Jadi, alih-alih meminta apa pun di awal, kami langsung memberimu nama dan tempat untuk menerbitkan.",
+      "p2": "Semua yang kamu buat selama masa pemanasan ada di 3Speak. Saat kamu siap, tim meninjau channel-mu dan memberimu akun Hive milikmu sendiri, gratis. Video, Shorts, dan daftar yang kamu ikuti lalu pindah ke Hive atas namamu sendiri, dan kamu yang memilih apa saja yang dibawa."
     },
     "do": {
       "title": "Yang bisa kamu lakukan sekarang",
@@ -246,7 +246,7 @@
       },
       "publish": {
         "title": "Terbitkan semua yang kamu buat di sini.",
-        "body": "Video, Shorts, dan daftar yang kamu ikuti di halaman ini bisa diposting ke chain atas namamu sendiri, dan kamu yang memilih mana saja."
+        "body": "Video, Shorts, dan daftar yang kamu ikuti di halaman ini bisa diposting ke Hive atas namamu sendiri, dan kamu yang memilih mana saja."
       },
       "buttons": {
         "title": "Vote, beri tip, ikuti, dan buat playlist.",
@@ -298,7 +298,7 @@
     "note": {
       "graduated": "Sekarang ada di Hive sebagai <userLink>@{{user}}</userLink>. Semua di bawah ini dibuat sebelum itu.",
       "advertiser": "Ini halaman brand-mu di 3Speak. Selesaikan langkah-langkah di bawah dan tim akan meninjau brand-mu. Setelah disetujui, kamu mendapat akun Hive: itulah akun pengiklanmu, yang kamu pakai untuk memesan dan membayar iklan.",
-      "own": "Beginilah orang lain melihatmu. Postinganmu ada di 3Speak dan belum ada di blockchain Hive, jadi belum menghasilkan reward. Itu berubah saat kamu mendapat akunmu setelah menyelesaikan semua tugas di bawah.",
+      "own": "Beginilah orang lain melihatmu. Postinganmu ada di 3Speak dan belum ada di Hive, jadi belum menghasilkan reward. Itu berubah saat kamu mendapat akunmu setelah menyelesaikan semua tugas di bawah.",
       "ownCreator": "Postinganmu disimpan di ruang masa pemanasan, tetapi tetap terlihat dan ditonjolkan di platform utama. Selama masih di sana, postinganmu belum menghasilkan reward. Itu berubah saat kamu mendapatkan akunmu, setelah menyelesaikan semua tugas di bawah dan memindahkan videomu dalam beberapa langkah mudah.",
       "ownViewer": "Kamu sedang dalam masa pemanasan. Komentar dan follow-mu untuk sementara disimpan di ruang masa pemanasan dan belum menghasilkan reward. Setelah kamu menyelesaikan semua tugas di bawah, kamu mendapatkan akun Hive, dan sejak itu semuanya langsung masuk ke platform utama.",
       "visitor": "Baru di sini, belum ada di Hive. Postingan ini ada di 3Speak, jadi untuk sementara tidak menghasilkan reward. Tetap ikuti dan beri komentar: dukungan di awal-lah yang membuat seseorang bertahan di minggu-minggu pertamanya. Saat mereka mendapat akun Hive, kami akan memberitahumu, agar kamu bisa mengikuti mereka di sana juga."
@@ -384,7 +384,7 @@
     "notSet": "belum diatur",
     "none": "tidak ada",
     "privateContact": "Kontak privat",
-    "privateNote": "hanya admin, tidak pernah di chain",
+    "privateNote": "hanya admin, tidak pernah di Hive",
     "notGiven": "tidak diberikan",
     "met": "Terpenuhi",
     "notMet": "Belum terpenuhi",
@@ -394,7 +394,7 @@
   "contact": {
     "savedComplete": "Tersimpan. Hanya tim 3Speak yang bisa melihatnya.",
     "savedIncomplete": "Tersimpan. Tambahkan alamatmu, atau situs web di profilmu, untuk menyelesaikan langkah ini.",
-    "privateNote": "<b>Privat.</b> Email dan alamatmu tidak pernah disimpan di blockchain dan tidak pernah ditampilkan di profilmu atau di mana pun. Hanya tim 3Speak yang melihatnya, untuk menghubungimu soal iklanmu.",
+    "privateNote": "<b>Privat.</b> Email dan alamatmu tidak pernah dipublikasikan di Hive dan tidak pernah ditampilkan di profilmu atau di mana pun. Hanya tim 3Speak yang melihatnya, untuk menghubungimu soal iklanmu.",
     "email": "Email",
     "required": "wajib",
     "emailPlaceholder": "kamu@brandmu.com",
@@ -471,7 +471,7 @@
     "advertiser": {
       "lede": "Tim sudah meninjau <b>{{name}}</b>. Buat <b>akun Hive</b>-mu, gratis: akun itu menjadi akun pengiklanmu.",
       "text": "Dengan akun itu, kamu memesan iklan di seluruh 3Speak, dari slot video dan banner hingga ticker, dan membayarnya langsung dari dompetnya, dalam HBD atau HIVE. Key-nya hanya milikmu, jadi tidak ada yang bisa mengunci aksesmu.",
-      "note": "Profil brand-mu ikut pindah bersamamu. Email dan alamat bisnismu tetap privat di 3Speak dan tidak pernah masuk ke blockchain.",
+      "note": "Profil brand-mu ikut pindah bersamamu. Email dan alamat bisnismu tetap privat di 3Speak dan tidak pernah dipublikasikan di Hive.",
       "noteMoving": "<b>{{moving}}</b>-mu juga ikut pindah, diterbitkan bertahap selama beberapa hari."
     },
     "viewer": {
