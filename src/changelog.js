@@ -7,6 +7,30 @@
 // 1.0.0 — that way they see all of these when develop is pushed to production.
 export const CHANGELOG = [
   {
+    version: '1.79.71',
+    date: '2026-10-12',
+    summary:
+      'Shorts from the editor can now be up to 2 minutes long, and so can clips you send to it from a video.',
+  },
+  {
+    version: '1.79.70',
+    date: '2026-10-12',
+    summary:
+      'Green screen in the Shorts editor: remove a green, blue or plain still background from recordings and clips.',
+  },
+  {
+    version: '1.79.69',
+    date: '2026-10-12',
+    summary:
+      'Shorts editor: a teleprompter for camera recordings. It follows your voice in Chrome and Edge, or scrolls at your speed.',
+  },
+  {
+    version: '1.79.68',
+    date: '2026-10-12',
+    summary:
+      'Your watch history (/watched) loads faster, opens on Today and uses the home feed cards. "This week" now means the past 7 days.',
+  },
+  {
     version: '1.79.67',
     date: '2026-10-08',
     summary:

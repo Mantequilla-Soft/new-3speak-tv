@@ -70,7 +70,7 @@
     "startHint": "Przewiń do początku klipu, a potem kliknij „Ustaw początek”",
     "endHint": "Teraz przewiń do końca klipu i kliknij „Ustaw koniec”",
     "endBeforeStart": "Koniec musi być po początku",
-    "trimmed": "Klip przycięty do 1 minuty — przytniemy klip na końcu osi czasu.",
+    "trimmedTwoMinutes": "Klip przycięto do 2 minut, tyle maksymalnie mieści oś czasu edytora.",
     "set": "Klip ustawiony: {{start}} – {{end}}. Teraz kliknij „Utwórz klip”",
     "loginRequired": "Zaloguj się, aby tworzyć klipy",
     "cancel": "Anuluj klip",

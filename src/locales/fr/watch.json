@@ -70,7 +70,7 @@
     "startHint": "Placez-vous au début de votre clip, puis cliquez sur « Définir le début »",
     "endHint": "Placez-vous maintenant à la fin de votre clip et cliquez sur « Définir la fin »",
     "endBeforeStart": "La fin doit être après le début",
-    "trimmed": "Clip réduit à 1 minute — nous couperons le clip à la fin de la timeline.",
+    "trimmedTwoMinutes": "Clip réduit à 2 minutes, le maximum que la timeline de l'éditeur peut contenir.",
     "set": "Clip défini : {{start}} – {{end}}. Cliquez maintenant sur « Créer le clip »",
     "loginRequired": "Connectez-vous pour créer un clip",
     "cancel": "Annuler le clip",

@@ -94,7 +94,7 @@ const aiKeysFor = (v) => (v._liveStream ? [] : [
 const isAiCard = (v) => !v._liveStream
   && (isAiFlagged(cardAuthorOf(v), v.permlink) || (!!v.owner && isAiFlagged(v.owner, v.permlink)));
 
-function Card3({ videos = [], loading = false, error = null, interleaveEvery = 0, renderInterleave = null, communityEvery = 0, renderCommunity = null, creatorsEvery = 0, renderCreators = null, getContentForVideo = null, isWatched = null, getViewCount = null, isNew = null, linkPrefix = '/watch', linkQuery = '', shortTimeAgo = true, shortsGrid = false, priority = false, hideWatched = false, watchedVersion = 0 }) {
+function Card3({ videos = [], loading = false, error = null, interleaveEvery = 0, renderInterleave = null, communityEvery = 0, renderCommunity = null, creatorsEvery = 0, renderCreators = null, getContentForVideo = null, isWatched = null, getViewCount = null, isNew = null, linkPrefix = '/watch', linkQuery = '', shortTimeAgo = true, shortsGrid = false, priority = false, hideWatched = false, watchedVersion = 0, renderFooter = null }) {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const [modalUser, setModalUser] = useState(null);
@@ -438,6 +438,11 @@ function Card3({ videos = [], loading = false, error = null, interleaveEvery = 0
               </div>
               <p><TimeAgo date={video.created_at || video.created} short={shortTimeAgo} /></p>
             </div>
+
+            {/* Caller-specific line under the card (watch history: when it was
+                watched, and its remove button). Anything clickable in it must
+                stop the event, or the click also follows the card's link. */}
+            {renderFooter?.(video)}
           </Link>
         );
       }), [
@@ -468,6 +473,7 @@ Card3.propTypes = {
   watchedVersion: PropTypes.number,  // bump from useWatchHistory so the filter reacts to new data
   getViewCount: PropTypes.func,
   linkPrefix: PropTypes.string,
+  renderFooter: PropTypes.func,      // (video) => node drawn under the card's bottom row
 };
 
 export default memo(Card3);

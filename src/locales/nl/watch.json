@@ -70,7 +70,7 @@
     "startHint": "Spoel naar het begin van je clip en klik dan op \"Begin instellen\"",
     "endHint": "Spoel nu naar het einde van je clip en klik op \"Einde instellen\"",
     "endBeforeStart": "Het einde moet na het begin liggen",
-    "trimmed": "Clip ingekort tot 1 minuut — we korten de clip in aan het einde van de tijdlijn.",
+    "trimmedTwoMinutes": "Clip ingekort tot 2 minuten, meer past er niet op de tijdlijn van de editor.",
     "set": "Clip ingesteld: {{start}} – {{end}}. Klik nu op \"Clip maken\"",
     "loginRequired": "Log in om te clippen",
     "cancel": "Clip annuleren",

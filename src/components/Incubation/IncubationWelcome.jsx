@@ -5,7 +5,6 @@ import {
   FaVideo, FaMobileAlt, FaComments, FaUserPlus, FaClock, FaKey, FaCoins, FaGlobeAmericas,
   FaCubes, FaSeedling, FaBolt, FaRocket,
 } from 'react-icons/fa';
-import { MdClose } from 'react-icons/md';
 import { useAppStore } from '../../lib/store';
 import { usePromptsActive, setPromptActive } from '../../utils/welcomeGate';
 import TrackChooser from './TrackChooser';
@@ -128,31 +127,41 @@ export default function IncubationWelcome() {
   const promptsActive = usePromptsActive('incubation-welcome');
   const [open, setOpen] = useState(false);
   const [step, setStep] = useState(0);
-  // Their answer on the last step. Optional here: until they pick, the nav pill
-  // says "Choose your path" and their profile asks again.
+  // Their answer on the last step. Required: nothing they do counts towards
+  // their list until they pick, so the popup cannot be closed without it
+  // (owner 2026-10-12, after someone clicked it away and uploaded a video
+  // that sat uncounted). Whatever they did before picking still counts after.
   const [chosen, setChosen] = useState(null);
 
   useEffect(() => {
     if (!authenticated || !incubationHandle) return undefined;
     if (promptsActive) return undefined;
-    if (seen().includes(incubationHandle)) return undefined;
+    const greeted = seen().includes(incubationHandle);
 
     // "Seen" lives in this browser only, so a second device would greet them
     // again. The server knows whether they already picked a path: if they did,
     // they have been through this, so remember that here and stay closed
-    // (owner 2026-10-06). If the question fails, show it as before.
+    // (owner 2026-10-06).
+    //
+    // It opens only on a confirmed needsTrack. It cannot be closed without a
+    // path, so if the service is unreachable (which would also fail the save)
+    // it waits for a later visit instead of locking them out of the site.
+    // Greeted but still no path (they got past it before it was required):
+    // ask again on every visit, straight at the question.
     let alive = true;
     // A beat after landing, so it does not race the page it is explaining.
     const timer = setTimeout(async () => {
+      let progress = null;
       try {
-        const progress = await fetchIncubationProgress();
-        if (!alive) return;
-        if (progress && progress.track && !progress.needsTrack) {
-          markSeen(incubationHandle);
-          return;
-        }
-      } catch { /* unknown: show it */ }
+        progress = await fetchIncubationProgress();
+      } catch { /* unknown: try again next visit */ }
       if (!alive) return;
+      if (progress && progress.track && !progress.needsTrack) {
+        markSeen(incubationHandle);
+        return;
+      }
+      if (!progress?.needsTrack) return;
+      if (greeted) setStep(STEPS.length - 1);
       setPromptActive('incubation-welcome', true);
       setOpen(true);
     }, 900);
@@ -172,12 +181,9 @@ export default function IncubationWelcome() {
   const last = step === STEPS.length - 1;
 
   return createPortal(
-    <div className="incw-overlay" onClick={close}>
-      <div className="incw" onClick={(e) => e.stopPropagation()} role="dialog" aria-modal="true" aria-label={t('incubation.welcome.what.title')}>
-        <button type="button" className="incw-close" onClick={close} aria-label={t('common.actions.close')}>
-          <MdClose size={18} />
-        </button>
-
+    // No close button and no click-outside: the only way out is picking a path.
+    <div className="incw-overlay">
+      <div className="incw" role="dialog" aria-modal="true" aria-label={t('incubation.welcome.what.title')}>
         <div className="incw-body">
           <h2>
             <span className="incw-head-icon"><Icon size={16} aria-hidden="true" /></span>
@@ -206,10 +212,14 @@ export default function IncubationWelcome() {
                 {t('common.actions.back')}
               </button>
             )}
-            {last ? (
+            {last && chosen ? (
               <Link to="/profile" className="incw-primary" onClick={close}>
-                {chosen ? t('incubation.welcome.showList') : t('incubation.welcome.decideLater')}
+                {t('incubation.welcome.showList')}
               </Link>
+            ) : last ? (
+              <button type="button" className="incw-primary" disabled>
+                {t('incubation.welcome.showList')}
+              </button>
             ) : (
               <button type="button" className="incw-primary" onClick={() => setStep((n) => n + 1)}>
                 {t('common.actions.next')}

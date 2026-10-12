@@ -70,7 +70,7 @@
     "startHint": "Ve al inicio de tu clip y haz clic en \"Marcar inicio\"",
     "endHint": "Ahora ve al final de tu clip y haz clic en \"Marcar final\"",
     "endBeforeStart": "El final debe estar después del inicio",
-    "trimmed": "Clip recortado a 1 minuto: recortaremos el clip al final de la línea de tiempo.",
+    "trimmedTwoMinutes": "Clip recortado a 2 minutos, lo máximo que cabe en la línea de tiempo del editor.",
     "set": "Clip listo: {{start}} – {{end}}. Ahora haz clic en \"Crear clip\"",
     "loginRequired": "Inicia sesión para hacer clips",
     "cancel": "Cancelar clip",

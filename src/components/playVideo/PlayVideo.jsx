@@ -1004,9 +1004,10 @@ const PlayVideo = ({ videoDetails, author, permlink, mediaUnavailable = false, m
       toast.error(t('watch.clip.endBeforeStart'));
       return;
     }
-    if (clipStart !== null && time - clipStart > 60) {
-      time = clipStart + 60;
-      toast.info(t('watch.clip.trimmed'));
+    // The Shorts editor's timeline holds 2 minutes (MAX_TIMELINE_SECONDS there).
+    if (clipStart !== null && time - clipStart > 120) {
+      time = clipStart + 120;
+      toast.info(t('watch.clip.trimmedTwoMinutes'));
     }
     setClipEnd(time);
     setClipMode('done');

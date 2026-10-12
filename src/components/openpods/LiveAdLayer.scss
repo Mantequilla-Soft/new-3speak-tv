@@ -1,0 +1,27 @@
+/* Ads over a live stream (LiveAdLayer.jsx). The layer covers the player box and
+   lets every touch through except on the ad pieces themselves, which set their
+   own pointer-events. */
+.live-ads {
+  position: absolute;
+  inset: 0;
+  z-index: 30;
+  pointer-events: none;
+
+  .watch-banner-hit,
+  .watch-banner-close,
+  .watch-ticker {
+    pointer-events: auto;
+  }
+}
+
+/* The ticker runs along the top like on the watch page, pushed down by
+   --live-ads-ticker-top where the page has its own controls up there. */
+.live-ads__ticker {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: var(--live-ads-ticker-top, 0px);
+  height: 34px;
+
+  .watch-ticker { top: 0; }
+}

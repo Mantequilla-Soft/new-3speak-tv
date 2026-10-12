@@ -252,8 +252,7 @@
       "perkKeys": "Keys only you hold",
       "perkNetwork": "The whole Hive network"
     },
-    "showList": "Show me my list",
-    "decideLater": "Decide later"
+    "showList": "Show me my list"
   },
   "profile": {
     "unlocks": {
