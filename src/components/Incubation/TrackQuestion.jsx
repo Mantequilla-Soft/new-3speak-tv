@@ -7,7 +7,7 @@ import { useTranslation } from 'react-i18next';
 
 /**
  * "What brings you to 3Speak?" on the profile, for someone who has not picked
- * a path yet (they chose "Decide later" on the welcome screen).
+ * a path yet (from before the welcome screen required one).
  *
  * In the main column rather than the sidebar: three tiles do not fit there.
  * Once they pick, the progress announcement makes this disappear and the goal

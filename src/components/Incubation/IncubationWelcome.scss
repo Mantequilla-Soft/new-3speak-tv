@@ -33,24 +33,6 @@
   }
 }
 
-.incw-close {
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 30px;
-  height: 30px;
-  border: 0;
-  border-radius: 50%;
-  background: none;
-  color: var(--text-muted);
-  cursor: pointer;
-
-  &:hover { color: var(--text-primary); background: var(--bg-tertiary); }
-}
-
 .incw-body {
   padding: 26px 24px 8px;
   overflow-y: auto;
@@ -202,6 +184,13 @@
   color: var(--accent-primary);
 
   &:hover { background: color-mix(in srgb, var(--accent-primary) 10%, transparent); }
+
+  // The last step until a path is picked.
+  &:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+    &:hover { background: transparent; }
+  }
 }
 
 // The headline over the three path tiles on the last step.
