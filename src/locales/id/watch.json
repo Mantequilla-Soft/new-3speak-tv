@@ -70,7 +70,7 @@
     "startHint": "Geser ke awal klipmu, lalu klik \"Atur Awal\"",
     "endHint": "Sekarang geser ke akhir klipmu dan klik \"Atur Akhir\"",
     "endBeforeStart": "Waktu akhir harus setelah waktu awal",
-    "trimmed": "Klip dipangkas jadi 1 menit — kami akan memangkas klip di akhir timeline.",
+    "trimmedTwoMinutes": "Klip dipotong menjadi 2 menit, batas maksimal timeline editor.",
     "set": "Klip diatur: {{start}} – {{end}}. Sekarang klik \"Buat Klip\"",
     "loginRequired": "Masuk untuk membuat klip",
     "cancel": "Batalkan klip",

@@ -70,7 +70,7 @@
     "startHint": "Seek to the start of your clip, then click \"Set Start\"",
     "endHint": "Now seek to the end of your clip and click \"Set End\"",
     "endBeforeStart": "End time must be after start time",
-    "trimmed": "Clip trimmed to 1 minute — we will trim the clip at the end of the timeline.",
+    "trimmedTwoMinutes": "Clip trimmed to 2 minutes, the most the editor's timeline holds.",
     "set": "Clip set: {{start}} – {{end}}. Now click on \"Create Clip\"",
     "loginRequired": "Log in to clip",
     "cancel": "Cancel clip",

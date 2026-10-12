@@ -70,7 +70,7 @@
     "startHint": "Nenda kwenye mwanzo wa klipu yako, kisha bofya \"Weka mwanzo\"",
     "endHint": "Sasa nenda kwenye mwisho wa klipu yako na ubofye \"Weka mwisho\"",
     "endBeforeStart": "Muda wa mwisho lazima uwe baada ya muda wa mwanzo",
-    "trimmed": "Klipu imepunguzwa hadi dakika 1 — tutakata klipu mwishoni mwa ratiba.",
+    "trimmedTwoMinutes": "Klipu imekatwa hadi dakika 2, kiwango cha juu ambacho ratiba ya kihariri inabeba.",
     "set": "Klipu imewekwa: {{start}} – {{end}}. Sasa bofya \"Tengeneza klipu\"",
     "loginRequired": "Ingia ili kukata klipu",
     "cancel": "Ghairi klipu",

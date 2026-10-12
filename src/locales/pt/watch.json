@@ -70,7 +70,7 @@
     "startHint": "Vá até o início do seu clipe e clique em \"Definir início\"",
     "endHint": "Agora vá até o fim do seu clipe e clique em \"Definir fim\"",
     "endBeforeStart": "O fim precisa ser depois do início",
-    "trimmed": "Clipe cortado para 1 minuto — vamos cortar o clipe no fim da linha do tempo.",
+    "trimmedTwoMinutes": "Clipe cortado para 2 minutos, o máximo que a linha do tempo do editor comporta.",
     "set": "Clipe definido: {{start}} – {{end}}. Agora clique em \"Criar clipe\"",
     "loginRequired": "Entre para criar clipes",
     "cancel": "Cancelar clipe",

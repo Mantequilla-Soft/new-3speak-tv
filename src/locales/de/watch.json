@@ -70,7 +70,7 @@
     "startHint": "Spul zum Anfang deines Clips und klicke dann auf \"Start setzen\"",
     "endHint": "Spul jetzt zum Ende deines Clips und klicke auf \"Ende setzen\"",
     "endBeforeStart": "Das Ende muss nach dem Start liegen",
-    "trimmed": "Clip auf 1 Minute gekürzt – wir kürzen den Clip am Ende der Timeline.",
+    "trimmedTwoMinutes": "Clip auf 2 Minuten gekürzt, mehr passt nicht in die Zeitleiste des Editors.",
     "set": "Clip festgelegt: {{start}} – {{end}}. Klicke jetzt auf \"Clip erstellen\"",
     "loginRequired": "Melde dich an, um zu clippen",
     "cancel": "Clip abbrechen",

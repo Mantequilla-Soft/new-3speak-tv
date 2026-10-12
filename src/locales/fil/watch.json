@@ -70,7 +70,7 @@
     "startHint": "Pumunta sa simula ng clip mo, tapos i-click ang \"Itakda ang Simula\"",
     "endHint": "Ngayon, pumunta sa dulo ng clip mo at i-click ang \"Itakda ang Dulo\"",
     "endBeforeStart": "Dapat nasa pagkatapos ng simula ang dulo",
-    "trimmed": "Ginawang 1 minuto ang clip — tatabasin namin ang clip sa dulo ng timeline.",
+    "trimmedTwoMinutes": "Pinaikli ang clip sa 2 minuto, ang pinakamahabang kasya sa timeline ng editor.",
     "set": "Naitakda ang clip: {{start}} – {{end}}. I-click na ang \"Gumawa ng Clip\"",
     "loginRequired": "Mag-log in para mag-clip",
     "cancel": "Kanselahin ang clip",

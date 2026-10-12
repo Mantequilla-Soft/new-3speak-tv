@@ -70,7 +70,7 @@
     "startHint": "Klibinin başlangıcına git, sonra \"Başlangıcı Ayarla\"ya tıkla",
     "endHint": "Şimdi klibinin sonuna git ve \"Sonu Ayarla\"ya tıkla",
     "endBeforeStart": "Bitiş zamanı başlangıç zamanından sonra olmalı",
-    "trimmed": "Klip 1 dakikaya kısaltıldı; klibi zaman çizelgesinin sonunda kırpacağız.",
+    "trimmedTwoMinutes": "Klip 2 dakikaya kısaltıldı, düzenleyicinin zaman çizelgesi en fazla bunu alır.",
     "set": "Klip ayarlandı: {{start}} – {{end}}. Şimdi \"Klip Oluştur\"a tıkla",
     "loginRequired": "Klip almak için giriş yap",
     "cancel": "Klibi iptal et",
