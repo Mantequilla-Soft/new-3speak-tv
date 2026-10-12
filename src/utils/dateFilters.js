@@ -16,10 +16,9 @@ export function getSinceTimestamp(filterKey) {
     return Math.floor(start.getTime() / 1000);
   }
   if (filterKey === 'week') {
-    const day = now.getDay();
-    const diff = day === 0 ? 6 : day - 1; // Monday as start of week
-    const start = new Date(now.getFullYear(), now.getMonth(), now.getDate() - diff);
-    return Math.floor(start.getTime() / 1000);
+    // The past 7 days, not the calendar week: from Monday, "this week" on a
+    // Monday morning showed almost nothing.
+    return Math.floor(now.getTime() / 1000) - 7 * 24 * 60 * 60;
   }
   if (filterKey === 'month') {
     const start = new Date(now.getFullYear(), now.getMonth(), 1);

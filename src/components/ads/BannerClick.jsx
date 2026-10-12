@@ -27,7 +27,7 @@ import './BannerClick.scss';
  * intrinsic size and the target is placed inside THAT.
  */
 export default function BannerClick({
-  videoRef, placement, visible, clickUrl, advertiser, onDismiss, overlay,
+  videoRef, placement, visible, clickUrl, advertiser, onDismiss, overlay, fit = 'contain',
 }) {
   const { t } = useTranslation();
   const [rect, setRect] = useState(null);
@@ -50,9 +50,11 @@ export default function BannerClick({
 
       // `contain`: the frame is scaled to fit, so one axis fills the box and the
       // other is centred with a bar either side of it.
+      // `cover` (the vertical crop of a live stream): the frame overflows the box and
+      // only the box is visible, so the box itself is the frame the banner sits in.
       const scale = Math.min(box.width / vw, box.height / vh);
-      const fw = vw * scale;
-      const fh = vh * scale;
+      const fw = fit === 'cover' ? box.width : vw * scale;
+      const fh = fit === 'cover' ? box.height : vh * scale;
       const offsetX = (box.width - fw) / 2;
       const offsetY = (box.height - fh) / 2;
 
@@ -94,7 +96,7 @@ export default function BannerClick({
       el.removeEventListener('loadedmetadata', measure);
       window.removeEventListener('orientationchange', measure);
     };
-  }, [videoRef, placement, visible, mediaAspect]);
+  }, [videoRef, placement, visible, mediaAspect, fit]);
 
   const creative = overlay && (overlay.imageUrl || overlay.videoUrl) ? overlay : null;
   const drawing = !!(visible && rect && creative);
@@ -253,6 +255,8 @@ BannerClick.propTypes = {
   /** Called when the viewer closes the ad. Absent means no close button. */
   onDismiss: PropTypes.func,
   advertiser: PropTypes.string,
+  /** How the video fills its box: 'contain' (default) or 'cover' (cropped live stream). */
+  fit: PropTypes.oneOf(['contain', 'cover']),
   /** The creative to draw, when the server handed it over instead of burning it. */
   overlay: PropTypes.shape({
     imageUrl: PropTypes.string,

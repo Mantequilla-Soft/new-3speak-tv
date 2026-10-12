@@ -156,6 +156,11 @@ const CAP_ID = (() => {
   }
 })();
 
+/** The per-page-load frequency-cap id, for the live stream ad layer (LiveAdLayer). */
+export function adCapId() {
+  return CAP_ID;
+}
+
 export function createAdBreak() {
   let session = null;
   let window_ = null;

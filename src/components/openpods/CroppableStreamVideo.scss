@@ -1,0 +1,68 @@
+/* Viewer-side vertical crop of a landscape stream (CroppableStreamVideo.jsx).
+   The wrapper takes the place <StreamVideo> had: it fills its positioned parent,
+   and the SDK's .hh-stream-video inside it is absolute/inset:0 as before. */
+.ws-crop {
+  position: absolute;
+  inset: 0;
+}
+
+.ws-crop--active {
+  /* Horizontal drags are ours; vertical swipes still reach the stream pager. */
+  touch-action: pan-y;
+  cursor: grab;
+  user-select: none;
+  -webkit-user-select: none;
+
+  .hh-stream-video__el {
+    object-fit: cover;
+    object-position: var(--ws-crop-x, 50%) 50%;
+  }
+
+  &:active { cursor: grabbing; }
+}
+
+/* Hint + position bar, top centre (the bottom belongs to the author block and
+   the chat composer). Fades in while dragging and when the crop switches on. */
+.ws-crop__guide {
+  position: absolute;
+  /* Below the back button row and a live ticker (LiveAdLayer), if one is running. */
+  top: calc(96px + env(safe-area-inset-top, 0px));
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 40;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.25s ease;
+
+  &.is-visible { opacity: 1; }
+}
+
+.ws-crop__hint {
+  padding: 3px 10px;
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.7);
+  color: #fff;
+  font-size: 12px;
+  white-space: nowrap;
+}
+
+.ws-crop__track {
+  position: relative;
+  width: 96px;
+  height: 6px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.3);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+}
+
+.ws-crop__thumb {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  border-radius: 999px;
+  background: #fff;
+}

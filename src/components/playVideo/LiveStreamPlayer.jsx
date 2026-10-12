@@ -6,6 +6,7 @@ import { defaultEndpoint, findRoomEndpoint } from '../../utils/hangoutsEndpoints
 import { useStreamSession } from '../../hooks/useStreamSession';
 import StreamBoostButton from '../openpods/StreamBoostButton';
 import StreamSignInButton from '../openpods/StreamSignInButton';
+import LiveAdLayer from '../openpods/LiveAdLayer';
 import '@snapie/hangouts-react/src/styles/hangouts.css';
 import './LiveStreamPlayer.scss';
 
@@ -90,6 +91,8 @@ export default function LiveStreamPlayer({ roomName, chatSlot = null, onChatSent
         {connectReady && (
           <StandaloneWatch key={joinKey} roomName={roomName}>
             <StreamVideo showLiveBadge />
+            {/* Ticker + drawn banner; the host comes from the room lookup above. */}
+            {roomMeta?.host && <LiveAdLayer host={roomMeta.host} room={roomName} />}
             {/* The host's own choice is the reliable signal; an encoder row
                 that exists but isn't published covers rooms that pre-date the
                 server recording that choice. */}

@@ -70,7 +70,7 @@
     "startHint": "Tua đến điểm bắt đầu clip, rồi nhấn \"Đặt điểm đầu\"",
     "endHint": "Giờ hãy tua đến điểm kết thúc clip và nhấn \"Đặt điểm cuối\"",
     "endBeforeStart": "Thời điểm kết thúc phải sau thời điểm bắt đầu",
-    "trimmed": "Clip đã được cắt còn 1 phút — chúng tôi sẽ cắt clip ở cuối dòng thời gian.",
+    "trimmedTwoMinutes": "Đã cắt clip còn 2 phút, mức tối đa mà dòng thời gian của trình chỉnh sửa chứa được.",
     "set": "Đã đặt clip: {{start}} – {{end}}. Giờ hãy nhấn \"Tạo clip\"",
     "loginRequired": "Đăng nhập để cắt clip",
     "cancel": "Hủy clip",

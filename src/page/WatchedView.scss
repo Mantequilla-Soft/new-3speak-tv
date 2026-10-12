@@ -145,120 +145,44 @@
     margin-top: 20px;
   }
 
-  // Videos grid
+  // Videos grid - wraps Card3, which lays out its own grid
   .watched-videos-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-    gap: 16px;
+    position: relative;
+  }
 
-    @include respond(phone) {
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 10px;
+  // Under each card: when it was watched, and (own history) its remove button.
+  .watched-card-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    padding: 4px 0 0;
+
+    .watched-date {
+      font-size: 11px;
+      color: var(--text-secondary);
+      opacity: 0.8;
     }
 
-    .watched-video-card {
-      text-decoration: none;
-      border-radius: 10px;
-      overflow: hidden;
-      transition: transform 0.2s ease;
+    // 🚨 Red is outline only in 3Speak (text + border), never a red fill.
+    .watched-remove-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 28px;
+      height: 28px;
+      flex-shrink: 0;
+      background: transparent;
+      border: 1px solid transparent;
+      border-radius: 6px;
+      color: var(--text-secondary);
+      cursor: pointer;
+      font-size: 16px;
 
-      &:hover {
-        transform: translateY(-2px);
-
-        .video-thumbnail img {
-          transform: scale(1.03);
-        }
-      }
-
-      .video-thumbnail {
-        position: relative;
-        aspect-ratio: 16 / 9;
-        overflow: hidden;
-        border-radius: 10px;
-
-        img {
-          width: 100%;
-          height: 100%;
-          object-fit: cover;
-          transition: transform 0.2s ease;
-        }
-
-        .duration {
-          position: absolute;
-          bottom: 6px;
-          right: 6px;
-          padding: 2px 6px;
-          background: rgba(0, 0, 0, 0.75);
-          color: #fff;
-          font-size: 11px;
-          border-radius: 4px;
-          font-weight: 500;
-        }
-
-        .delete-btn {
-          position: absolute;
-          top: 6px;
-          right: 6px;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          width: 30px;
-          height: 30px;
-          background: rgba(0, 0, 0, 0.6);
-          border: none;
-          color: #fff;
-          border-radius: 6px;
-          cursor: pointer;
-          opacity: 0;
-          transition: opacity 0.2s ease;
-          font-size: 16px;
-
-          &:hover {
-            background: rgba(0, 0, 0, 0.6);
-            border: 1px solid var(--accent-primary, #e53935);
-            color: var(--accent-primary, #e53935);
-          }
-        }
-      }
-
-      &:hover .delete-btn,
-      &:focus-within .delete-btn {
-        opacity: 1;
-      }
-
-      @media (pointer: coarse) {
-        .delete-btn {
-          opacity: 0.8;
-        }
-      }
-
-      .video-meta {
-        padding: 8px 2px;
-
-        h3 {
-          font-size: 13px;
-          font-weight: 500;
-          color: var(--text-primary);
-          margin: 0 0 4px;
-          display: -webkit-box;
-          -webkit-line-clamp: 2;
-          -webkit-box-orient: vertical;
-          overflow: hidden;
-          line-height: 1.3;
-        }
-
-        .video-author {
-          font-size: 12px;
-          color: var(--text-secondary);
-          margin: 0 0 2px;
-        }
-
-        .watched-date {
-          font-size: 11px;
-          color: var(--text-secondary);
-          margin: 0;
-          opacity: 0.7;
-        }
+      &:hover,
+      &:focus-visible {
+        border-color: var(--accent-primary, #e53935);
+        color: var(--accent-primary, #e53935);
       }
     }
   }

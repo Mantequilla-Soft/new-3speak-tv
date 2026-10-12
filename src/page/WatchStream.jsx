@@ -8,6 +8,8 @@ import '@snapie/hangouts-react/src/styles/hangouts.css';
 import StreamBoostButton from '../components/openpods/StreamBoostButton';
 import StreamReportButton from '../components/openpods/StreamReportButton';
 import StreamClipButton from '../components/openpods/StreamClipButton';
+import CroppableStreamVideo from '../components/openpods/CroppableStreamVideo';
+import LiveAdLayer from '../components/openpods/LiveAdLayer';
 import StreamSignInButton from '../components/openpods/StreamSignInButton';
 import { useStreamSession } from '../hooks/useStreamSession';
 import { useLiveStreamPager } from '../hooks/useLiveStreamPager';
@@ -19,7 +21,7 @@ import SEOHead from '../components/SEOHead';
 import BarLoader from '../components/Loader/BarLoader';
 import Card3 from '../components/Cards/Card3';
 import AuthorBadge from '../components/AuthorBadge/AuthorBadge';
-import { ArrowLeft, MessageSquare, Send, Share2 } from 'lucide-react';
+import { ArrowLeft, MessageSquare, RectangleHorizontal, RectangleVertical, Send, Share2 } from 'lucide-react';
 
 import { TAG_FEED_URL } from '../utils/config';
 import { FaThumbsUp, FaRegCommentAlt, FaBookmark } from 'react-icons/fa';
@@ -33,6 +35,12 @@ import './WatchStream.scss';
 const API_URL = (import.meta.env.VITE_HANGOUTS_API_URL || '').replace(/\/$/, '');
 const LK_URL = import.meta.env.VITE_LIVEKIT_URL || 'wss://livekit.3speak.tv';
 const IMAGE_KEY = import.meta.env.VITE_IMAGE_SERVER_API_KEY;
+// The viewer's last vertical/full choice on phones. A per-device convenience,
+// so plain localStorage; vertical is the default when nothing is stored.
+const VERTICAL_PREF_KEY = 'ws-vertical-view';
+function readVerticalPref() {
+  try { return localStorage.getItem(VERTICAL_PREF_KEY) !== '0'; } catch { return true; }
+}
 
 /**
  * The chat composer, docked to the bottom of the screen like the shorts
@@ -122,6 +130,22 @@ export default function WatchStream() {
   }, [revealInfo]);
 
   const [chatOverlayOn, setChatOverlayOn] = useState(true);
+
+  // Dual format: a landscape stream on a phone held upright plays as a vertical,
+  // draggable crop by default. The switch only appears when the stream really is
+  // landscape (CroppableStreamVideo reads the decoded frame size), and a phone
+  // turned sideways always gets the full frame.
+  const [streamLandscape, setStreamLandscape] = useState(null);
+  const [verticalPref, setVerticalPref] = useState(readVerticalPref);
+  const toggleVertical = () => {
+    setVerticalPref((v) => {
+      const next = !v;
+      try { localStorage.setItem(VERTICAL_PREF_KEY, next ? '1' : '0'); } catch { /* private mode */ }
+      return next;
+    });
+  };
+  const canCrop = !isLandscape && streamLandscape === true;
+  const verticalOn = !isLandscape && verticalPref;
   // Swipe/scroll to the next live stream, shorts-style. No-op when nothing else
   // is live.
   const { containerRef: pagerRef, hasNext: hasNextLive } = useLiveStreamPager({
@@ -252,7 +276,14 @@ export default function WatchStream() {
               <main className={`short-main no-bottom-bar ws-shorts${isLandscape ? ' ws-shorts--landscape' : ''}${!infoVisible ? ' ws-info-hidden' : ''}`}>
                 <div className="videoWrapper">
                   <div className="videoContainer" ref={pagerRef} onClick={revealInfo}>
-                    <StreamVideo showLiveBadge={false} />
+                    <CroppableStreamVideo vertical={verticalOn} onOrientation={setStreamLandscape} />
+                    {/* Ticker + drawn banner. Below the back button / quality row. */}
+                    <LiveAdLayer
+                      host={host}
+                      room={streamId}
+                      fit={verticalOn && streamLandscape ? 'cover' : 'contain'}
+                      tickerTop="calc(52px + env(safe-area-inset-top, 0px))"
+                    />
 
                     {/* Same back affordance as the shorts feed. */}
                     <button
@@ -297,6 +328,14 @@ export default function WatchStream() {
                       </div>
                       <CollabRequest variant="rail" canRequest={canInteract} />
                       <StreamBoostButton variant="rail" />
+                      {canCrop && (
+                        <div className="actionItem" onClick={toggleVertical}>
+                          <div className="actionButton">
+                            {verticalPref ? <RectangleHorizontal size={24} /> : <RectangleVertical size={24} />}
+                          </div>
+                          <span className="actionLabel">{verticalPref ? t('misc.watchStream.fullView') : t('misc.watchStream.verticalView')}</span>
+                        </div>
+                      )}
                       <div className="actionItem" onClick={copyLink}>
                         <div className="actionButton"><Share2 size={24} /></div>
                         <span className="actionLabel">{copied ? t('common.actions.copied') : t('common.actions.share')}</span>
@@ -341,6 +380,7 @@ export default function WatchStream() {
             <div className="ws-col-main">
               <div className="ws-player">
                 <StreamVideo showLiveBadge={false} />
+                <LiveAdLayer host={host} room={streamId} />
               </div>
 
               {/* Info area — reuses the watch page (PlayVideo) classes so it

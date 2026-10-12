@@ -1,20 +1,17 @@
 import { useState, useCallback, useMemo } from 'react';
-import { getHiveUrl } from '../utils/hiveNode';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
-import axios from 'axios';
 import { MdHistory, MdDelete } from 'react-icons/md';
 import { IoArrowBack } from 'react-icons/io5';
 import BarLoader from '../components/Loader/BarLoader';
 import Card3 from '../components/Cards/Card3';
 import icon from '../../public/images/stack.png';
 import { useAppStore } from '../lib/store';
-import { getWatchHistory, getWatchHistoryCount, deleteWatchHistoryEntry } from '../utils/watchHistory';
-import { HIVE_API_URL, SHORTS_MAX_DURATION_SEC } from '../utils/config';
+import { deleteWatchHistoryEntry } from '../utils/watchHistory';
+import { CHECKER_URL } from '../utils/config';
+import { fetchIncubationPost } from '../lib/incubation';
 import { toastIn } from '../utils/toast';
-import { fixVideoThumbnail, fallbackImg } from '../utils/fixThumbnails';
 import { getSinceTimestamp, formatRelativeDate } from '../utils/dateFilters';
-import { findShortByEmbedUrl } from '../hive-api/hiveApi';
 import { FeedToolbar, Pagination } from '../components/FeedToolbar/FeedToolbar';
 import { useTranslation } from 'react-i18next';
 import './WatchedView.scss';
@@ -23,77 +20,42 @@ import './WatchedView.scss';
 // line under it. See utils/toast.js.
 const toast = toastIn('Video');
 
-async function fetchVideosFromHistory(items) {
-  if (!items?.length) return [];
-
-  const videoPromises = items.map(async (item) => {
-    try {
-      const response = await axios.post(getHiveUrl(), {
-        jsonrpc: '2.0',
-        method: 'condenser_api.get_content',
-        params: [item.author, item.permlink],
-        id: 1,
-      });
-
-      const post = response.data?.result;
-      if (!post || !post.author) return null;
-
-      let metadata = {};
-      try {
-        metadata = typeof post.json_metadata === 'string'
-          ? JSON.parse(post.json_metadata)
-          : post.json_metadata || {};
-      } catch (e) {
-        console.error('Error parsing metadata:', e);
-      }
-
-      let thumbnail = null;
-      if (metadata.image?.[0]) {
-        thumbnail = metadata.image[0];
-      }
-
-      const duration = metadata.video?.info?.duration || 0;
-
-      const isShort = item.short === true
-        || (metadata.tags || []).includes('shorts')
-        || (!!metadata.video?.platform && duration > 0 && duration <= SHORTS_MAX_DURATION_SEC);
-
-      let embedPermlink = null;
-      if (isShort) {
-        try {
-          const shortEntry = await findShortByEmbedUrl(post.author, post.permlink);
-          if (shortEntry) {
-            embedPermlink = shortEntry.permlink;
-          }
-        } catch (e) {
-          console.error('Failed to look up short embed permlink:', e);
-        }
-      }
-
-      return {
-        author: post.author,
-        permlink: embedPermlink || post.permlink,
-        title: post.title,
-        created_at: post.created,
-        images: { thumbnail },
-        duration,
-        isShort,
-        watched_at: item.last_watched_at || item.watched_at,
-        watch_count: item.watch_count || 1,
-      };
-    } catch (error) {
-      console.error(`Error fetching video ${item.author}/${item.permlink}:`, error);
-      return null;
-    }
-  });
-
-  const videos = await Promise.all(videoPromises);
-  return videos.filter(Boolean);
-}
-
 const LIMIT = 20;
 
-
+/**
+ * One page of the history as main-feed cards, with both tab counts.
+ *
+ * The checker resolves the whole page against our own video collections in one
+ * request. This page used to resolve each entry against Hive itself (one
+ * get_content per card, plus a lookup per short), which is why it took so long,
+ * and the history API it read ignored the date and type filters.
+ *
+ * A regular video with no Hive post comes back `_unlinked` and without a title:
+ * those are warm-up users' videos, whose post lives off-chain. Looked up here and
+ * badged like they are on the main feed; one that is not found there either is
+ * dropped, as such entries always were.
+ */
+async function fetchWatchedPage(username, type, since, page) {
+  const params = new URLSearchParams({ type, page: String(page), limit: String(LIMIT) });
+  if (since) params.set('since', String(since));
+  const res = await fetch(`${CHECKER_URL}/feeds/watched/${encodeURIComponent(username)}?${params}`);
+  if (!res.ok) throw new Error(`watched feed ${res.status}`);
+  const data = await res.json();
+  const videos = await Promise.all((data.videos || []).map(async (v) => {
+    if (!v._unlinked) return v;
+    try {
+      const post = (await fetchIncubationPost(v.author, v.permlink))?.post;
+      return post?.title ? { ...v, title: post.title, _incubation: true } : null;
+    } catch {
+      return null;
+    }
+  }));
+  return {
+    videos: videos.filter(Boolean),
+    counts: data.counts || { videos: 0, shorts: 0 },
+    totalPages: data.totalPages || 1,
+  };
+}
 
 function WatchedView() {
   const { t } = useTranslation();
@@ -109,7 +71,9 @@ function WatchedView() {
   const [activeTab, setActiveTab] = useState('videos');
   const [videosPage, setVideosPage] = useState(1);
   const [shortsPage, setShortsPage] = useState(1);
-  const [dateFilter, setDateFilter] = useState('all');
+  // Today first: a long history is slow to page through, and what someone
+  // usually wants back is something they watched today.
+  const [dateFilter, setDateFilter] = useState('today');
 
   const me = authenticatedUser || incubationHandle;
   const isOwner = me && username?.toLowerCase() === me.toLowerCase();
@@ -126,49 +90,54 @@ function WatchedView() {
     setShortsPage(1);
   }, []);
 
-  const { data: videosCount = 0 } = useQuery({
-    queryKey: ['watchedVideosCount', username, 'videos', since],
-    queryFn: () => getWatchHistoryCount(username, 'videos', since),
+  const { data, isLoading, isError } = useQuery({
+    queryKey: ['watchedFeed', username, apiType, currentPage, since],
+    queryFn: () => fetchWatchedPage(username, apiType, since, currentPage),
     enabled: !!username,
     staleTime: 60 * 1000,
   });
+  const videosCount = data?.counts.videos ?? 0;
+  const shortsCount = data?.counts.shorts ?? 0;
+  const totalPages = data?.totalPages ?? 1;
 
-  const { data: shortsCount = 0 } = useQuery({
-    queryKey: ['watchedVideosCount', username, 'shorts', since],
-    queryFn: () => getWatchHistoryCount(username, 'shorts', since),
-    enabled: !!username,
-    staleTime: 60 * 1000,
-  });
+  const filtered = useMemo(
+    () => (data?.videos || []).filter((v) => !deletedKeys.has(v._historyKey)),
+    [data, deletedKeys],
+  );
 
-  const currentCount = activeTab === 'shorts' ? shortsCount : videosCount;
-  const totalPages = Math.max(1, Math.ceil(currentCount / LIMIT));
-  const offset = (currentPage - 1) * LIMIT;
-
-  const { data: items = [], isLoading, isFetching, isError } = useQuery({
-    queryKey: ['watchedVideos', username, apiType, currentPage, since],
-    queryFn: async () => {
-      const historyItems = await getWatchHistory(username, LIMIT, offset, apiType, since);
-      return fetchVideosFromHistory(historyItems);
-    },
-    enabled: !!username,
-    staleTime: 60 * 1000,
-  });
-
-  const filtered = items.filter(v => !deletedKeys.has(`${v.author}/${v.permlink}`));
-
-  const handleDelete = useCallback(async (e, author, permlink) => {
+  // History rows are keyed by what the player recorded, which is not always the
+  // card's own author/permlink (Hive permlink vs asset id), so delete by that key.
+  const handleDelete = useCallback(async (e, historyKey) => {
     e.preventDefault();
     e.stopPropagation();
 
+    const [author, permlink] = historyKey.split('/');
     const success = await deleteWatchHistoryEntry(username, author, permlink);
     if (success) {
-      setDeletedKeys(prev => new Set(prev).add(`${author}/${permlink}`));
-      queryClient.invalidateQueries({ queryKey: ['watchedVideosCount'] });
+      setDeletedKeys(prev => new Set(prev).add(historyKey));
+      queryClient.invalidateQueries({ queryKey: ['watchedFeed', username] });
       toast.success(t('misc.watched.removed'));
     } else {
       toast.error(t('misc.watched.removeFailed'));
     }
   }, [username, queryClient, t]);
+
+  const renderFooter = useCallback((video) => (
+    <div className="watched-card-footer">
+      <span className="watched-date">{t('misc.watched.watchedAt', { when: formatRelativeDate(video.watched_at) })}</span>
+      {isOwner && (
+        <button
+          type="button"
+          className="watched-remove-btn"
+          onClick={(e) => handleDelete(e, video._historyKey)}
+          title={t('misc.watched.removeTitle')}
+          aria-label={t('misc.watched.removeTitle')}
+        >
+          <MdDelete />
+        </button>
+      )}
+    </div>
+  ), [isOwner, handleDelete, t]);
 
   return (
     <div className="watched-view-container">
@@ -224,7 +193,7 @@ function WatchedView() {
 
       {/* Content */}
       <div className="watched-content">
-        {(isLoading || isFetching) ? (
+        {isLoading ? (
           <div className="loading-more"><BarLoader /></div>
         ) : isError ? (
           <div className="empty-wrap">
@@ -241,41 +210,13 @@ function WatchedView() {
               videos={filtered}
               linkPrefix="/shorts"
               shortsGrid
+              renderFooter={renderFooter}
             />
           </div>
         ) : (
           <div className="watched-videos-grid">
-            {filtered.map((video) => (
-              <Link
-                key={`${video.author}-${video.permlink}`}
-                to={`/watch?v=${video.author}/${video.permlink}`}
-                className="watched-video-card"
-              >
-                <div className="video-thumbnail">
-                  <img src={fixVideoThumbnail(video)} alt={video.title} onError={(e) => (e.currentTarget.src = fallbackImg)} />
-                  {video.duration > 0 && (
-                    <span className="duration">
-                      {Math.floor(video.duration / 60)}:{String(Math.floor(video.duration % 60)).padStart(2, '0')}
-                    </span>
-                  )}
-                  {isOwner && (
-                    <button
-                      type="button"
-                      className="delete-btn"
-                      onClick={(e) => handleDelete(e, video.author, video.permlink)}
-                      title={t('misc.watched.removeTitle')}
-                    >
-                      <MdDelete />
-                    </button>
-                  )}
-                </div>
-                <div className="video-meta">
-                  <h3>{video.title}</h3>
-                  <p className="video-author">@{video.author}</p>
-                  <p className="watched-date">{t('misc.watched.watchedAt', { when: formatRelativeDate(video.watched_at) })}</p>
-                </div>
-              </Link>
-            ))}
+            {/* The main feed's card, so history looks and behaves like every feed. */}
+            <Card3 videos={filtered} renderFooter={renderFooter} />
           </div>
         )}
       </div>

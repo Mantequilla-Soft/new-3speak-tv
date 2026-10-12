@@ -3,7 +3,7 @@ import { createPortal } from 'react-dom';
 import { useNavigate } from 'react-router-dom';
 import { X, Loader2 } from 'lucide-react';
 import { generateVideoThumbnails } from '../../utils/videoThumbnails';
-import { getEditorUrl } from '../../utils/config';
+import { getEditorUrl, STT_WS_URL, EMBED_API_KEY, cameraRecordEnabledFor } from '../../utils/config';
 import { useAppStore } from '../../lib/store';
 import { useEmbedUpload } from '../../context/EmbedUploadContext';
 import { usePremiumStatus } from '../../hooks/usePremiumStatus';
@@ -21,6 +21,8 @@ function EditorModal({ isOpen, onClose, videoUrl, videoName, videoType, clipStar
   const [editorReady, setEditorReady] = useState(false);
   const { theme, getEffectiveTheme, user } = useAppStore();
   const premiumStatus = usePremiumStatus(user);
+  const userRef = useRef(user);
+  useEffect(() => { userRef.current = user; }, [user]);
   const isPremium = !!premiumStatus?.premium;
   const [renderStatus, setRenderStatus] = useState(null); // null | 'sending' | 'rendering' | 'complete' | 'error' | 'preparing'
   const [renderProgress, setRenderProgress] = useState(0);
@@ -135,7 +137,38 @@ function EditorModal({ isOpen, onClose, videoUrl, videoName, videoType, clipStar
           // The editor already asked "are you sure" inside the iframe
           handleClose({ confirmed: true });
           break;
+
+        case 'stt-config-request':
+          replySttConfig(data.requestId);
+          break;
       }
+    };
+
+    // The editor's teleprompter asks for the STT server + a short-lived token.
+    // It runs on another origin, so it can't call /api/stt-token itself; we mint
+    // the token here and send it to the editor's origin only. Same audience as
+    // our own camera teleprompter (cameraRecordEnabledFor); everyone else gets an
+    // empty url, and the editor falls back to browser speech or timed scroll.
+    const replySttConfig = async (requestId) => {
+      if (typeof requestId !== 'string') return;
+      let url = '';
+      let token = '';
+      let models = [];
+      if (STT_WS_URL && cameraRecordEnabledFor(userRef.current)) {
+        const [tok, langs] = await Promise.all([
+          fetch('/api/stt-token', {
+            credentials: 'include',
+            headers: EMBED_API_KEY ? { 'X-API-Key': EMBED_API_KEY } : {},
+          }).then((r) => (r.ok ? r.json() : null)).catch(() => null),
+          fetch('/api/stt-langs').then((r) => (r.ok ? r.json() : null)).catch(() => null),
+        ]);
+        if (tok?.token) {
+          url = STT_WS_URL;
+          token = tok.token;
+          models = Array.isArray(langs?.models) ? langs.models : [];
+        }
+      }
+      sendToEditor({ type: 'stt-config', requestId, url, token, models });
     };
 
     window.addEventListener('message', handleMessage);
