@@ -13,9 +13,12 @@
   user-select: none;
   -webkit-user-select: none;
 
+  /* !important on purpose: the phone layout reuses the shorts page, whose
+     `.videoContainer video { object-fit: contain }` (Short.scss) is more specific
+     and silently kept the stream letterboxed while the crop looked "on". */
   .hh-stream-video__el {
-    object-fit: cover;
-    object-position: var(--ws-crop-x, 50%) 50%;
+    object-fit: cover !important;
+    object-position: var(--ws-crop-x, 50%) 50% !important;
   }
 
   &:active { cursor: grabbing; }
