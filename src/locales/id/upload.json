@@ -25,7 +25,8 @@
     "selectVideo": "Pilih Video",
     "chooseThumbnail": "Pilih Thumbnail",
     "addDetails": "Tambah Detail",
-    "previewUpload": "Pratinjau & Unggah"
+    "previewUpload": "Pratinjau & Unggah",
+    "timeline": "Linimasa"
   },
   "preview": {
     "playVideo": "Putar video",
@@ -239,7 +240,8 @@
     "watchAdToPublish": "Tonton iklan untuk menerbitkan",
     "watchSponsorFirst": "Tonton pesan sponsor dulu",
     "postShort": "Posting Shorts",
-    "postVideo": "Posting Video"
+    "postVideo": "Posting Video",
+    "backToTimeline": "Kembali ke linimasa"
   },
   "publishing": {
     "titleShort": "Menerbitkan Shorts",
@@ -403,5 +405,60 @@
     "hivePostFailed": "Gagal memposting ke Hive",
     "uploadFailedWith": "Gagal mengunggah: {{msg}}",
     "addToBlogFailed": "Sudah diterbitkan, tetapi gagal ditambahkan ke blog Anda: {{error}}"
+  },
+  "timeline": {
+    "title": "Bab dan tautan",
+    "intro": "Bagi videomu menjadi bab dan tambahkan tautan yang muncul di kanan atas video saat diputar: video 3Speak lain, profil Hive, atau situs web apa pun. Keduanya opsional.",
+    "previewUnavailable": "Video ini tidak bisa diputar di sini, tetapi kamu tetap bisa mengetik waktunya secara manual.",
+    "noPreview": "Tidak ada pratinjau untuk video ini di sini. Kamu tetap bisa mengetik waktunya secara manual.",
+    "setNow": "Atur ke waktu saat ini",
+    "trackLabel": "Linimasa: ketuk untuk melompat, seret penanda untuk memindahkannya",
+    "moveChapter": "Pindahkan awal {{title}}",
+    "moveLink": "Pindahkan tautan ini",
+    "fixChapters": "Perbaiki dulu bab-babnya, atau hapus.",
+    "chapters": {
+      "heading": "Bab",
+      "add": "Tambah di {{time}}",
+      "hint": "Bab tampil di bilah progres. Jika ada 3 atau lebih, bab juga ditulis ke deskripsimu agar aplikasi Hive lain ikut menampilkannya.",
+      "empty": "Belum ada bab. Putar videonya dan tambahkan bab di tempat bagian baru dimulai.",
+      "start": "Waktu mulai",
+      "titlePlaceholder": "Judul bab",
+      "errFirst": "Bab pertama harus dimulai di 0:00.",
+      "errGap": "Jarak antarbab minimal 5 detik.",
+      "errTitle": "Setiap bab perlu judul.",
+      "errEnd": "Ada bab yang dimulai setelah video berakhir.",
+      "errTooFew": "Tambahkan setidaknya satu bab lagi. Satu bab saja tidak ditampilkan.",
+      "max": "Kamu bisa menambahkan hingga {{max}} bab."
+    },
+    "links": {
+      "heading": "Tautan",
+      "count": "{{n}} dari {{max}}",
+      "add": "Tambah tautan",
+      "hint": "Setiap tautan muncul beberapa detik sebagai kotak kecil di kanan atas video. Penonton bisa mengekliknya atau menutupnya.",
+      "empty": "Belum ada tautan. Tambahkan video 3Speak, profil Hive, atau situs web apa pun.",
+      "max": "Kamu bisa menambahkan hingga {{max}} tautan.",
+      "showsAt": "Muncul di",
+      "onScreen": "Tampil selama",
+      "secondsUnit": "detik",
+      "forSeconds": "selama {{seconds}} dtk",
+      "afterEnd": "Tautan ini dimulai setelah video berakhir."
+    },
+    "form": {
+      "addTitle": "Tambah tautan",
+      "editTitle": "Edit tautan",
+      "tabLink": "Tempel tautan",
+      "tabVideo": "Video 3Speak",
+      "tabProfile": "Profil",
+      "urlPlaceholder": "https://… atau @namapengguna",
+      "urlHint": "Video 3Speak, profil Hive, atau situs web apa pun.",
+      "searchVideo": "Cari video 3Speak",
+      "searchProfile": "Cari orang",
+      "searching": "Mencari…",
+      "noResults": "Tidak ada yang ditemukan.",
+      "checking": "Memeriksa tautan…",
+      "badUrl": "Itu tidak terlihat seperti alamat web. Harus diawali http:// atau https://.",
+      "noAccount": "Tidak ada akun dengan nama itu.",
+      "addButton": "Tambah tautan"
+    }
   }
 }

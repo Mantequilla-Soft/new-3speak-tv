@@ -25,7 +25,8 @@
     "selectVideo": "Video auswählen",
     "chooseThumbnail": "Thumbnail wählen",
     "addDetails": "Details hinzufügen",
-    "previewUpload": "Vorschau & Upload"
+    "previewUpload": "Vorschau & Upload",
+    "timeline": "Zeitleiste"
   },
   "preview": {
     "playVideo": "Video abspielen",
@@ -241,7 +242,8 @@
     "watchAdToPublish": "Werbung ansehen zum Veröffentlichen",
     "watchSponsorFirst": "Sieh dir zuerst die Sponsor-Botschaft an",
     "postShort": "Short posten",
-    "postVideo": "Video posten"
+    "postVideo": "Video posten",
+    "backToTimeline": "Zurück zur Zeitleiste"
   },
   "publishing": {
     "titleShort": "Short wird veröffentlicht",
@@ -405,5 +407,60 @@
     "hivePostFailed": "Posten auf Hive fehlgeschlagen",
     "uploadFailedWith": "Upload fehlgeschlagen: {{msg}}",
     "addToBlogFailed": "Veröffentlicht, aber das Hinzufügen zu deinem Blog ist fehlgeschlagen: {{error}}"
+  },
+  "timeline": {
+    "title": "Kapitel und Links",
+    "intro": "Teile dein Video in Kapitel und füge Links hinzu, die beim Abspielen oben rechts im Video erscheinen: andere 3Speak-Videos, Hive-Profile oder beliebige Websites. Beides ist optional.",
+    "previewUnavailable": "Dieses Video kann hier nicht abgespielt werden, aber du kannst die Zeiten trotzdem von Hand eingeben.",
+    "noPreview": "Für dieses Video gibt es hier keine Vorschau. Du kannst die Zeiten trotzdem von Hand eingeben.",
+    "setNow": "Auf die aktuelle Zeit setzen",
+    "trackLabel": "Zeitleiste: tippen zum Springen, Markierung ziehen zum Verschieben",
+    "moveChapter": "Beginn von {{title}} verschieben",
+    "moveLink": "Diesen Link verschieben",
+    "fixChapters": "Bitte korrigiere zuerst die Kapitel oder entferne sie.",
+    "chapters": {
+      "heading": "Kapitel",
+      "add": "Bei {{time}} hinzufügen",
+      "hint": "Kapitel erscheinen in der Fortschrittsleiste. Ab 3 Kapiteln werden sie auch in deine Beschreibung geschrieben, damit andere Hive-Apps sie ebenfalls zeigen.",
+      "empty": "Noch keine Kapitel. Spiel das Video ab und füge eines dort hinzu, wo ein neuer Teil beginnt.",
+      "start": "Startzeit",
+      "titlePlaceholder": "Kapiteltitel",
+      "errFirst": "Das erste Kapitel muss bei 0:00 beginnen.",
+      "errGap": "Kapitel müssen mindestens 5 Sekunden auseinanderliegen.",
+      "errTitle": "Jedes Kapitel braucht einen Titel.",
+      "errEnd": "Ein Kapitel beginnt nach dem Ende des Videos.",
+      "errTooFew": "Füge mindestens ein weiteres Kapitel hinzu. Ein einzelnes Kapitel wird nicht angezeigt.",
+      "max": "Du kannst bis zu {{max}} Kapitel hinzufügen."
+    },
+    "links": {
+      "heading": "Links",
+      "count": "{{n}} von {{max}}",
+      "add": "Link hinzufügen",
+      "hint": "Jeder Link erscheint für ein paar Sekunden als kleines Feld oben rechts im Video. Zuschauer können ihn anklicken oder schließen.",
+      "empty": "Noch keine Links. Füge ein 3Speak-Video, ein Hive-Profil oder eine beliebige Website hinzu.",
+      "max": "Du kannst bis zu {{max}} Links hinzufügen.",
+      "showsAt": "Erscheint bei",
+      "onScreen": "Sichtbar für",
+      "secondsUnit": "Sekunden",
+      "forSeconds": "für {{seconds}} s",
+      "afterEnd": "Dieser Link beginnt nach dem Ende des Videos."
+    },
+    "form": {
+      "addTitle": "Link hinzufügen",
+      "editTitle": "Link bearbeiten",
+      "tabLink": "Link einfügen",
+      "tabVideo": "3Speak-Video",
+      "tabProfile": "Profil",
+      "urlPlaceholder": "https://… oder @nutzername",
+      "urlHint": "Ein 3Speak-Video, ein Hive-Profil oder eine beliebige Website.",
+      "searchVideo": "3Speak-Videos durchsuchen",
+      "searchProfile": "Nach Personen suchen",
+      "searching": "Suche läuft…",
+      "noResults": "Nichts gefunden.",
+      "checking": "Link wird geprüft…",
+      "badUrl": "Das sieht nicht nach einer Webadresse aus. Sie muss mit http:// oder https:// beginnen.",
+      "noAccount": "Es gibt kein Konto mit diesem Namen.",
+      "addButton": "Link hinzufügen"
+    }
   }
 }

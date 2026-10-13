@@ -232,6 +232,33 @@
       "listingFailed": "Could not update the listing.",
       "trailerFailed": "Could not update your channel trailer.",
       "saveFailed": "Failed to save changes."
-    }
+    },
+    "timeline": "Chapters and links",
+    "timelineHint": "Chapters show on the progress bar, links pop up at the top right of the video. The preview plays the published video.",
+    "timelineLoadingVideo": "Loading the video…",
+    "tabs": {
+      "label": "Edit sections",
+      "details": "Details",
+      "media": "Media",
+      "settings": "Settings",
+      "unsaved": "Unsaved changes",
+      "hasErrors": "Needs attention"
+    },
+    "sections": {
+      "visibility": "Visibility",
+      "content": "Content",
+      "promotion": "Promotion"
+    },
+    "chaptersNote": "With 3 or more chapters, the chapter list is written into the description when you save.",
+    "editChapters": "Edit chapters",
+    "fixErrors": "Please fix the marked tab first."
+  },
+  "timeline": {
+    "video": "Video",
+    "profile": "Profile",
+    "link": "Link",
+    "region": "Links from the creator",
+    "dismiss": "Close",
+    "opensNewTab": "Opens in a new tab"
   }
 }

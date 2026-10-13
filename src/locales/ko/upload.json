@@ -25,7 +25,8 @@
     "selectVideo": "동영상 선택",
     "chooseThumbnail": "썸네일 선택",
     "addDetails": "세부 정보 입력",
-    "previewUpload": "미리보기 및 업로드"
+    "previewUpload": "미리보기 및 업로드",
+    "timeline": "타임라인"
   },
   "preview": {
     "playVideo": "동영상 재생",
@@ -239,7 +240,8 @@
     "watchAdToPublish": "광고 보고 게시하기",
     "watchSponsorFirst": "먼저 스폰서 메시지를 시청하세요",
     "postShort": "쇼츠 게시",
-    "postVideo": "동영상 게시"
+    "postVideo": "동영상 게시",
+    "backToTimeline": "타임라인으로 돌아가기"
   },
   "publishing": {
     "titleShort": "쇼츠 게시 중",
@@ -403,5 +405,60 @@
     "hivePostFailed": "Hive에 게시하지 못했어요",
     "uploadFailedWith": "업로드 실패: {{msg}}",
     "addToBlogFailed": "게시됐지만 내 블로그에 추가하지 못했어요: {{error}}"
+  },
+  "timeline": {
+    "title": "챕터와 링크",
+    "intro": "영상을 챕터로 나누고, 재생 중 영상 오른쪽 위에 나타나는 링크를 추가하세요. 다른 3Speak 영상, Hive 프로필 또는 어떤 웹사이트든 가능합니다. 둘 다 선택 사항입니다.",
+    "previewUnavailable": "이 영상은 여기서 재생할 수 없지만, 시간은 직접 입력할 수 있습니다.",
+    "noPreview": "이 영상은 여기서 미리 볼 수 없습니다. 시간은 직접 입력할 수 있습니다.",
+    "setNow": "현재 시간으로 설정",
+    "trackLabel": "타임라인: 탭하면 이동, 마커를 끌면 위치 변경",
+    "moveChapter": "{{title}} 시작 위치 옮기기",
+    "moveLink": "이 링크 옮기기",
+    "fixChapters": "먼저 챕터를 고치거나 삭제해 주세요.",
+    "chapters": {
+      "heading": "챕터",
+      "add": "{{time}}에 추가",
+      "hint": "챕터는 진행 표시줄에 나타납니다. 3개 이상이면 설명에도 기록되어 다른 Hive 앱에서도 표시됩니다.",
+      "empty": "아직 챕터가 없습니다. 영상을 재생하고 새 부분이 시작되는 곳에 추가하세요.",
+      "start": "시작 시간",
+      "titlePlaceholder": "챕터 제목",
+      "errFirst": "첫 번째 챕터는 0:00에 시작해야 합니다.",
+      "errGap": "챕터 사이는 최소 5초 이상 떨어져 있어야 합니다.",
+      "errTitle": "모든 챕터에 제목이 필요합니다.",
+      "errEnd": "영상이 끝난 뒤에 시작하는 챕터가 있습니다.",
+      "errTooFew": "챕터를 하나 이상 더 추가하세요. 챕터가 하나뿐이면 표시되지 않습니다.",
+      "max": "챕터는 최대 {{max}}개까지 추가할 수 있습니다."
+    },
+    "links": {
+      "heading": "링크",
+      "count": "{{n}} / {{max}}",
+      "add": "링크 추가",
+      "hint": "각 링크는 몇 초 동안 영상 오른쪽 위에 작은 상자로 나타납니다. 시청자는 클릭하거나 닫을 수 있습니다.",
+      "empty": "아직 링크가 없습니다. 3Speak 영상, Hive 프로필 또는 웹사이트를 추가하세요.",
+      "max": "링크는 최대 {{max}}개까지 추가할 수 있습니다.",
+      "showsAt": "표시 시점",
+      "onScreen": "표시 시간",
+      "secondsUnit": "초",
+      "forSeconds": "{{seconds}}초 동안",
+      "afterEnd": "이 링크는 영상이 끝난 뒤에 시작합니다."
+    },
+    "form": {
+      "addTitle": "링크 추가",
+      "editTitle": "링크 편집",
+      "tabLink": "링크 붙여넣기",
+      "tabVideo": "3Speak 영상",
+      "tabProfile": "프로필",
+      "urlPlaceholder": "https://… 또는 @사용자이름",
+      "urlHint": "3Speak 영상, Hive 프로필 또는 어떤 웹사이트든 가능합니다.",
+      "searchVideo": "3Speak 영상 검색",
+      "searchProfile": "사람 검색",
+      "searching": "검색 중…",
+      "noResults": "찾은 결과가 없습니다.",
+      "checking": "링크 확인 중…",
+      "badUrl": "웹 주소가 아닌 것 같습니다. http:// 또는 https://로 시작해야 합니다.",
+      "noAccount": "그 이름의 계정이 없습니다.",
+      "addButton": "링크 추가"
+    }
   }
 }

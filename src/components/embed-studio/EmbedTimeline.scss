@@ -1,0 +1,21 @@
+@use "../../mixins.scss" as mix;
+
+.embed-timeline-page .studio-page-content {
+  display: block;
+}
+
+.embed-timeline {
+  width: 100%;
+  max-width: 1100px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  min-width: 0;
+}
+
+.embed-timeline__intro {
+  h2 { margin: 0 0 4px; font-size: 20px; font-weight: 700; }
+  p { margin: 0; font-size: 14px; line-height: 1.5; color: var(--text-secondary); }
+}
+

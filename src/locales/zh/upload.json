@@ -25,7 +25,8 @@
     "selectVideo": "选择视频",
     "chooseThumbnail": "选择缩略图",
     "addDetails": "添加详情",
-    "previewUpload": "预览并上传"
+    "previewUpload": "预览并上传",
+    "timeline": "时间线"
   },
   "preview": {
     "playVideo": "播放视频",
@@ -239,7 +240,8 @@
     "watchAdToPublish": "看完广告即可发布",
     "watchSponsorFirst": "请先观看赞助商信息",
     "postShort": "发布短视频",
-    "postVideo": "发布视频"
+    "postVideo": "发布视频",
+    "backToTimeline": "返回时间线"
   },
   "publishing": {
     "titleShort": "正在发布短视频",
@@ -403,5 +405,60 @@
     "hivePostFailed": "发布到 Hive 失败",
     "uploadFailedWith": "上传失败：{{msg}}",
     "addToBlogFailed": "已发布，但添加到你的博客失败：{{error}}"
+  },
+  "timeline": {
+    "title": "章节和链接",
+    "intro": "把视频分成章节，并添加在播放时出现在视频右上角的链接：其他 3Speak 视频、Hive 个人主页或任何网站。两者都是可选的。",
+    "previewUnavailable": "这个视频无法在这里播放，但你仍然可以手动输入时间。",
+    "noPreview": "这里没有该视频的预览。你仍然可以手动输入时间。",
+    "setNow": "设为当前时间",
+    "trackLabel": "时间线：点按跳转，拖动标记来移动",
+    "moveChapter": "移动“{{title}}”的开始位置",
+    "moveLink": "移动此链接",
+    "fixChapters": "请先修正章节，或将其删除。",
+    "chapters": {
+      "heading": "章节",
+      "add": "在 {{time}} 添加",
+      "hint": "章节会显示在进度条上。达到 3 个或以上时，也会写入你的描述，让其他 Hive 应用也能显示。",
+      "empty": "还没有章节。播放视频，在新部分开始的地方添加一个。",
+      "start": "开始时间",
+      "titlePlaceholder": "章节标题",
+      "errFirst": "第一个章节必须从 0:00 开始。",
+      "errGap": "章节之间至少需要间隔 5 秒。",
+      "errTitle": "每个章节都需要标题。",
+      "errEnd": "有章节在视频结束后才开始。",
+      "errTooFew": "请至少再添加一个章节。只有一个章节时不会显示。",
+      "max": "最多可以添加 {{max}} 个章节。"
+    },
+    "links": {
+      "heading": "链接",
+      "count": "{{n}} / {{max}}",
+      "add": "添加链接",
+      "hint": "每个链接会以小框的形式在视频右上角显示几秒钟。观众可以点击或关闭它。",
+      "empty": "还没有链接。添加一个 3Speak 视频、Hive 个人主页或任何网站。",
+      "max": "最多可以添加 {{max}} 个链接。",
+      "showsAt": "出现时间",
+      "onScreen": "显示时长",
+      "secondsUnit": "秒",
+      "forSeconds": "持续 {{seconds}} 秒",
+      "afterEnd": "此链接在视频结束后才开始。"
+    },
+    "form": {
+      "addTitle": "添加链接",
+      "editTitle": "编辑链接",
+      "tabLink": "粘贴链接",
+      "tabVideo": "3Speak 视频",
+      "tabProfile": "个人主页",
+      "urlPlaceholder": "https://… 或 @用户名",
+      "urlHint": "3Speak 视频、Hive 个人主页或任何网站。",
+      "searchVideo": "搜索 3Speak 视频",
+      "searchProfile": "搜索用户",
+      "searching": "正在搜索…",
+      "noResults": "未找到结果。",
+      "checking": "正在检查链接…",
+      "badUrl": "这看起来不像网址。网址必须以 http:// 或 https:// 开头。",
+      "noAccount": "没有这个名字的账号。",
+      "addButton": "添加链接"
+    }
   }
 }

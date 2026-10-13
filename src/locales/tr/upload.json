@@ -25,7 +25,8 @@
     "selectVideo": "Video Seç",
     "chooseThumbnail": "Küçük Resim Seç",
     "addDetails": "Ayrıntıları Ekle",
-    "previewUpload": "Önizle ve Yükle"
+    "previewUpload": "Önizle ve Yükle",
+    "timeline": "Zaman çizelgesi"
   },
   "preview": {
     "playVideo": "Videoyu oynat",
@@ -241,7 +242,8 @@
     "watchAdToPublish": "Yayınlamak için reklamı izle",
     "watchSponsorFirst": "Önce sponsor mesajını izle",
     "postShort": "Shorts Paylaş",
-    "postVideo": "Video Paylaş"
+    "postVideo": "Video Paylaş",
+    "backToTimeline": "Zaman çizelgesine dön"
   },
   "publishing": {
     "titleShort": "Shorts Yayınlanıyor",
@@ -405,5 +407,60 @@
     "hivePostFailed": "Hive'a gönderilemedi",
     "uploadFailedWith": "Yükleme başarısız: {{msg}}",
     "addToBlogFailed": "Yayınlandı ama bloguna eklenemedi: {{error}}"
+  },
+  "timeline": {
+    "title": "Bölümler ve bağlantılar",
+    "intro": "Videonu bölümlere ayır ve video oynarken sağ üst köşede beliren bağlantılar ekle: diğer 3Speak videoları, Hive profilleri veya herhangi bir web sitesi. İkisi de isteğe bağlı.",
+    "previewUnavailable": "Bu video burada oynatılamıyor ama zamanları yine de elle yazabilirsin.",
+    "noPreview": "Bu video için burada önizleme yok. Zamanları yine de elle yazabilirsin.",
+    "setNow": "Şu anki zamana ayarla",
+    "trackLabel": "Zaman çizelgesi: atlamak için dokun, taşımak için bir işareti sürükle",
+    "moveChapter": "{{title}} başlangıcını taşı",
+    "moveLink": "Bu bağlantıyı taşı",
+    "fixChapters": "Lütfen önce bölümleri düzelt veya kaldır.",
+    "chapters": {
+      "heading": "Bölümler",
+      "add": "{{time}} konumuna ekle",
+      "hint": "Bölümler ilerleme çubuğunda görünür. 3 veya daha fazlası olduğunda açıklamana da yazılır, böylece diğer Hive uygulamaları da gösterir.",
+      "empty": "Henüz bölüm yok. Videoyu oynat ve yeni bir kısmın başladığı yere bir bölüm ekle.",
+      "start": "Başlangıç zamanı",
+      "titlePlaceholder": "Bölüm başlığı",
+      "errFirst": "İlk bölüm 0:00 noktasında başlamalı.",
+      "errGap": "Bölümler arasında en az 5 saniye olmalı.",
+      "errTitle": "Her bölümün bir başlığı olmalı.",
+      "errEnd": "Bir bölüm videonun bitişinden sonra başlıyor.",
+      "errTooFew": "En az bir bölüm daha ekle. Tek bir bölüm gösterilmez.",
+      "max": "En fazla {{max}} bölüm ekleyebilirsin."
+    },
+    "links": {
+      "heading": "Bağlantılar",
+      "count": "{{n}} / {{max}}",
+      "add": "Bağlantı ekle",
+      "hint": "Her bağlantı birkaç saniyeliğine videonun sağ üst köşesinde küçük bir kutu olarak görünür. İzleyiciler tıklayabilir veya kapatabilir.",
+      "empty": "Henüz bağlantı yok. Bir 3Speak videosu, bir Hive profili veya herhangi bir web sitesi ekle.",
+      "max": "En fazla {{max}} bağlantı ekleyebilirsin.",
+      "showsAt": "Göründüğü an",
+      "onScreen": "Ekranda kalma süresi",
+      "secondsUnit": "saniye",
+      "forSeconds": "{{seconds}} sn boyunca",
+      "afterEnd": "Bu bağlantı videonun bitişinden sonra başlıyor."
+    },
+    "form": {
+      "addTitle": "Bağlantı ekle",
+      "editTitle": "Bağlantıyı düzenle",
+      "tabLink": "Bağlantı yapıştır",
+      "tabVideo": "3Speak videosu",
+      "tabProfile": "Profil",
+      "urlPlaceholder": "https://… veya @kullaniciadi",
+      "urlHint": "Bir 3Speak videosu, bir Hive profili veya herhangi bir web sitesi.",
+      "searchVideo": "3Speak videolarında ara",
+      "searchProfile": "Kişi ara",
+      "searching": "Aranıyor…",
+      "noResults": "Hiçbir şey bulunamadı.",
+      "checking": "Bağlantı kontrol ediliyor…",
+      "badUrl": "Bu bir web adresine benzemiyor. http:// veya https:// ile başlamalı.",
+      "noAccount": "Bu isimde bir hesap yok.",
+      "addButton": "Bağlantı ekle"
+    }
   }
 }

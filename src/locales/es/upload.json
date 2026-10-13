@@ -25,7 +25,8 @@
     "selectVideo": "Elegir video",
     "chooseThumbnail": "Elegir miniatura",
     "addDetails": "Agregar detalles",
-    "previewUpload": "Revisar y subir"
+    "previewUpload": "Revisar y subir",
+    "timeline": "Línea de tiempo"
   },
   "preview": {
     "playVideo": "Reproducir video",
@@ -243,7 +244,8 @@
     "watchAdToPublish": "Mira el anuncio para publicar",
     "watchSponsorFirst": "Primero mira el mensaje del patrocinador",
     "postShort": "Publicar short",
-    "postVideo": "Publicar video"
+    "postVideo": "Publicar video",
+    "backToTimeline": "Volver a la línea de tiempo"
   },
   "publishing": {
     "titleShort": "Publicando short",
@@ -407,5 +409,60 @@
     "hivePostFailed": "No se pudo publicar en Hive",
     "uploadFailedWith": "Falló la subida: {{msg}}",
     "addToBlogFailed": "Publicado, pero no se pudo agregar a tu blog: {{error}}"
+  },
+  "timeline": {
+    "title": "Capítulos y enlaces",
+    "intro": "Divide tu video en capítulos y añade enlaces que aparecen arriba a la derecha del video mientras se reproduce: otros videos de 3Speak, perfiles de Hive o cualquier sitio web. Ambos son opcionales.",
+    "previewUnavailable": "Este video no se puede reproducir aquí, pero aun así puedes escribir los tiempos a mano.",
+    "noPreview": "No hay vista previa de este video aquí. Aun así puedes escribir los tiempos a mano.",
+    "setNow": "Usar el tiempo actual",
+    "trackLabel": "Línea de tiempo: toca para saltar, arrastra un marcador para moverlo",
+    "moveChapter": "Mover el inicio de {{title}}",
+    "moveLink": "Mover este enlace",
+    "fixChapters": "Primero corrige los capítulos o elimínalos.",
+    "chapters": {
+      "heading": "Capítulos",
+      "add": "Añadir en {{time}}",
+      "hint": "Los capítulos se muestran en la barra de progreso. Con 3 o más, también se escriben en tu descripción para que otras apps de Hive los muestren.",
+      "empty": "Aún no hay capítulos. Reproduce el video y añade uno donde empiece una nueva parte.",
+      "start": "Hora de inicio",
+      "titlePlaceholder": "Título del capítulo",
+      "errFirst": "El primer capítulo debe empezar en 0:00.",
+      "errGap": "Los capítulos deben estar separados al menos 5 segundos.",
+      "errTitle": "Cada capítulo necesita un título.",
+      "errEnd": "Un capítulo empieza después del final del video.",
+      "errTooFew": "Añade al menos un capítulo más. Un solo capítulo no se muestra.",
+      "max": "Puedes añadir hasta {{max}} capítulos."
+    },
+    "links": {
+      "heading": "Enlaces",
+      "count": "{{n}} de {{max}}",
+      "add": "Añadir enlace",
+      "hint": "Cada enlace aparece unos segundos como un pequeño recuadro arriba a la derecha del video. Los espectadores pueden hacer clic o cerrarlo.",
+      "empty": "Aún no hay enlaces. Añade un video de 3Speak, un perfil de Hive o cualquier sitio web.",
+      "max": "Puedes añadir hasta {{max}} enlaces.",
+      "showsAt": "Aparece en",
+      "onScreen": "En pantalla durante",
+      "secondsUnit": "segundos",
+      "forSeconds": "durante {{seconds}} s",
+      "afterEnd": "Este enlace empieza después del final del video."
+    },
+    "form": {
+      "addTitle": "Añadir un enlace",
+      "editTitle": "Editar enlace",
+      "tabLink": "Pegar un enlace",
+      "tabVideo": "Video de 3Speak",
+      "tabProfile": "Perfil",
+      "urlPlaceholder": "https://… o @usuario",
+      "urlHint": "Un video de 3Speak, un perfil de Hive o cualquier sitio web.",
+      "searchVideo": "Buscar videos de 3Speak",
+      "searchProfile": "Buscar personas",
+      "searching": "Buscando…",
+      "noResults": "No se encontró nada.",
+      "checking": "Comprobando el enlace…",
+      "badUrl": "Eso no parece una dirección web. Debe empezar con http:// o https://.",
+      "noAccount": "No existe ninguna cuenta con ese nombre.",
+      "addButton": "Añadir enlace"
+    }
   }
 }

@@ -25,7 +25,8 @@
     "selectVideo": "Wybierz film",
     "chooseThumbnail": "Wybierz miniaturę",
     "addDetails": "Dodaj szczegóły",
-    "previewUpload": "Podgląd i przesłanie"
+    "previewUpload": "Podgląd i przesłanie",
+    "timeline": "Oś czasu"
   },
   "preview": {
     "playVideo": "Odtwórz film",
@@ -245,7 +246,8 @@
     "watchAdToPublish": "Obejrzyj reklamę, aby opublikować",
     "watchSponsorFirst": "Najpierw obejrzyj wiadomość sponsora",
     "postShort": "Opublikuj shorta",
-    "postVideo": "Opublikuj film"
+    "postVideo": "Opublikuj film",
+    "backToTimeline": "Wróć do osi czasu"
   },
   "publishing": {
     "titleShort": "Publikowanie shorta",
@@ -409,5 +411,60 @@
     "hivePostFailed": "Nie udało się opublikować na Hive",
     "uploadFailedWith": "Przesyłanie nie powiodło się: {{msg}}",
     "addToBlogFailed": "Opublikowano, ale nie udało się dodać do Twojego bloga: {{error}}"
+  },
+  "timeline": {
+    "title": "Rozdziały i linki",
+    "intro": "Podziel film na rozdziały i dodaj linki, które pojawiają się w prawym górnym rogu filmu podczas odtwarzania: inne filmy z 3Speak, profile Hive lub dowolne strony. Jedno i drugie jest opcjonalne.",
+    "previewUnavailable": "Tego filmu nie da się tu odtworzyć, ale nadal możesz wpisać czasy ręcznie.",
+    "noPreview": "Brak podglądu tego filmu. Nadal możesz wpisać czasy ręcznie.",
+    "setNow": "Ustaw na bieżący czas",
+    "trackLabel": "Oś czasu: dotknij, aby przeskoczyć, przeciągnij znacznik, aby go przesunąć",
+    "moveChapter": "Przesuń początek: {{title}}",
+    "moveLink": "Przesuń ten link",
+    "fixChapters": "Najpierw popraw rozdziały albo je usuń.",
+    "chapters": {
+      "heading": "Rozdziały",
+      "add": "Dodaj w {{time}}",
+      "hint": "Rozdziały są widoczne na pasku postępu. Gdy są co najmniej 3, trafiają też do opisu, aby inne aplikacje Hive też je pokazywały.",
+      "empty": "Nie ma jeszcze rozdziałów. Odtwórz film i dodaj rozdział tam, gdzie zaczyna się nowa część.",
+      "start": "Czas rozpoczęcia",
+      "titlePlaceholder": "Tytuł rozdziału",
+      "errFirst": "Pierwszy rozdział musi zaczynać się od 0:00.",
+      "errGap": "Rozdziały muszą być od siebie oddalone o co najmniej 5 sekund.",
+      "errTitle": "Każdy rozdział potrzebuje tytułu.",
+      "errEnd": "Jeden z rozdziałów zaczyna się po końcu filmu.",
+      "errTooFew": "Dodaj co najmniej jeszcze jeden rozdział. Pojedynczy rozdział nie jest wyświetlany.",
+      "max": "Możesz dodać maksymalnie {{max}} rozdziałów."
+    },
+    "links": {
+      "heading": "Linki",
+      "count": "{{n}} z {{max}}",
+      "add": "Dodaj link",
+      "hint": "Każdy link pojawia się na kilka sekund jako małe okienko w prawym górnym rogu filmu. Widzowie mogą go kliknąć lub zamknąć.",
+      "empty": "Nie ma jeszcze linków. Dodaj film z 3Speak, profil Hive lub dowolną stronę.",
+      "max": "Możesz dodać maksymalnie {{max}} linków.",
+      "showsAt": "Pojawia się w",
+      "onScreen": "Widoczny przez",
+      "secondsUnit": "sekund",
+      "forSeconds": "przez {{seconds}} s",
+      "afterEnd": "Ten link zaczyna się po końcu filmu."
+    },
+    "form": {
+      "addTitle": "Dodaj link",
+      "editTitle": "Edytuj link",
+      "tabLink": "Wklej link",
+      "tabVideo": "Film z 3Speak",
+      "tabProfile": "Profil",
+      "urlPlaceholder": "https://… lub @nazwa",
+      "urlHint": "Film z 3Speak, profil Hive lub dowolna strona.",
+      "searchVideo": "Szukaj filmów na 3Speak",
+      "searchProfile": "Szukaj osób",
+      "searching": "Szukanie…",
+      "noResults": "Nic nie znaleziono.",
+      "checking": "Sprawdzanie linku…",
+      "badUrl": "To nie wygląda na adres strony. Musi zaczynać się od http:// lub https://.",
+      "noAccount": "Nie ma konta o tej nazwie.",
+      "addButton": "Dodaj link"
+    }
   }
 }

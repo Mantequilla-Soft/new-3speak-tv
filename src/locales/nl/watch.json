@@ -232,6 +232,33 @@
       "listingFailed": "Zichtbaarheid kon niet worden bijgewerkt.",
       "trailerFailed": "Je kanaaltrailer kon niet worden bijgewerkt.",
       "saveFailed": "Wijzigingen opslaan mislukt."
-    }
+    },
+    "timeline": "Hoofdstukken en links",
+    "timelineHint": "Hoofdstukken staan op de voortgangsbalk, links verschijnen rechtsboven in de video. Het voorbeeld speelt de gepubliceerde video af.",
+    "timelineLoadingVideo": "Video laden…",
+    "tabs": {
+      "label": "Bewerkonderdelen",
+      "details": "Details",
+      "media": "Media",
+      "settings": "Instellingen",
+      "unsaved": "Niet-opgeslagen wijzigingen",
+      "hasErrors": "Vraagt aandacht"
+    },
+    "sections": {
+      "visibility": "Zichtbaarheid",
+      "content": "Inhoud",
+      "promotion": "Promotie"
+    },
+    "chaptersNote": "Vanaf 3 hoofdstukken wordt de hoofdstukkenlijst bij het opslaan in de beschrijving gezet.",
+    "editChapters": "Hoofdstukken bewerken",
+    "fixErrors": "Verbeter eerst het gemarkeerde tabblad."
+  },
+  "timeline": {
+    "video": "Video",
+    "profile": "Profiel",
+    "link": "Link",
+    "region": "Links van de maker",
+    "dismiss": "Sluiten",
+    "opensNewTab": "Opent in een nieuw tabblad"
   }
 }

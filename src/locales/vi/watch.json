@@ -228,6 +228,33 @@
       "listingFailed": "Không thể cập nhật chế độ hiển thị.",
       "trailerFailed": "Không thể cập nhật video giới thiệu kênh của bạn.",
       "saveFailed": "Lưu thay đổi thất bại."
-    }
+    },
+    "timeline": "Chương và liên kết",
+    "timelineHint": "Các chương hiện trên thanh tiến trình, liên kết hiện ở góc trên bên phải video. Bản xem trước phát video đã đăng.",
+    "timelineLoadingVideo": "Đang tải video…",
+    "tabs": {
+      "label": "Các phần chỉnh sửa",
+      "details": "Chi tiết",
+      "media": "Phương tiện",
+      "settings": "Cài đặt",
+      "unsaved": "Có thay đổi chưa lưu",
+      "hasErrors": "Cần xem lại"
+    },
+    "sections": {
+      "visibility": "Hiển thị",
+      "content": "Nội dung",
+      "promotion": "Quảng bá"
+    },
+    "chaptersNote": "Khi có từ 3 chương trở lên, danh sách chương sẽ được ghi vào phần mô tả khi lưu.",
+    "editChapters": "Sửa chương",
+    "fixErrors": "Hãy sửa thẻ được đánh dấu trước."
+  },
+  "timeline": {
+    "video": "Video",
+    "profile": "Hồ sơ",
+    "link": "Liên kết",
+    "region": "Liên kết từ nhà sáng tạo",
+    "dismiss": "Đóng",
+    "opensNewTab": "Mở trong tab mới"
   }
 }

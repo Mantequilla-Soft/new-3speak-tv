@@ -23,6 +23,7 @@ import axios from 'axios';
 import { isWeakLinkForced } from '../utils/uploadFaults';
 import { useTranslation } from 'react-i18next';
 import { readAddToBlog, writeAddToBlog, reblogOp } from '../utils/addToBlog';
+import { timelineMeta, applyChaptersToDescription } from '../utils/videoTimeline';
 
 // Every toast from this module is headed "Upload"; the message becomes the
 // line under it. See utils/toast.js.
@@ -124,7 +125,7 @@ export function EmbedUploadProvider({ children }) {
   const [step, setStep] = useState(() => {
     if (typeof window === 'undefined') return 1;
     const forced = parseInt(new URLSearchParams(window.location.search).get('devstep') || '', 10);
-    if (Number.isInteger(forced) && forced >= 1 && forced <= 4) {
+    if (Number.isInteger(forced) && forced >= 1 && forced <= 5) {
       console.warn(`[dev] jumping to wizard step ${forced} via ?devstep — remove this hack before release`);
       return forced;
     }
@@ -228,6 +229,14 @@ export function EmbedUploadProvider({ children }) {
 
   // Reusable flag (allow others to remix/clip this video)
   const [reusable, setReusable] = useState(true);
+
+  // ⏱️ Timeline step (long-form only): chapters + link toasters. Editing arrays,
+  // items carry an `_k` key; utils/videoTimeline normalises them on publish.
+  // `timelineSeeded` = the chapters were already prefilled from the description
+  // once, so clearing them in the editor is not undone by the next visit.
+  const [chapters, setChapters] = useState([]);
+  const [timelineLinks, setTimelineLinks] = useState([]);
+  const [timelineSeeded, setTimelineSeeded] = useState(false);
 
   // Publish state
   const [uploading, setUploading] = useState(false);
@@ -344,6 +353,10 @@ export function EmbedUploadProvider({ children }) {
     setThumbnailFile(null);
     setSelectedIndex(null);
     setVideoMode(null);
+    // Times belong to the video they were set against.
+    setChapters([]);
+    setTimelineLinks([]);
+    setTimelineSeeded(false);
     resetEarlyUpload();
   };
 
@@ -388,6 +401,9 @@ export function EmbedUploadProvider({ children }) {
     setOriginalShortPermlink(null);
     setMusicCreditsRaw([]);
     setReusable(true);
+    setChapters([]);
+    setTimelineLinks([]);
+    setTimelineSeeded(false);
     setUploading(false);
     setCompleted(false);
     setUploadProgress(0);
@@ -1650,8 +1666,17 @@ export function EmbedUploadProvider({ children }) {
       }
       const communityTag = typeof community === 'string' ? community : community?.name || 'hive-181335';
 
+      // ⏱️ Timeline (long-form only). Chapters go into the metadata AND, when there
+      // are enough for every Hive frontend to accept them (3+ from 0:00), into the
+      // description as plain "0:00 Title" lines, so PeakD/Ecency show them too.
+      const timelineDuration = Number(videoDuration) || 0;
+      const timeline = fromStories ? {} : timelineMeta(chapters, timelineLinks, { duration: timelineDuration });
+      const publishDescription = fromStories || !timeline.chapters
+        ? description
+        : applyChaptersToDescription(description, timeline.chapters);
+
       // Build body: embed URL (video first) + description + credit to original author
-      let postBody = `${capturedEmbedUrl}\n\n${description}`;
+      let postBody = `${capturedEmbedUrl}\n\n${publishDescription}`;
       if (originalAuthor && originalPermlink) {
         // Use shorts link format when remix comes from a short
         const shortPl = originalShortPermlink || originalPermlink;
@@ -1727,6 +1752,9 @@ export function EmbedUploadProvider({ children }) {
           ...(thumbnailUrl ? { thumbnail: thumbnailUrl } : {}),
           ...(originalAuthor ? { originalAuthor, originalPermlink } : {}),
           ...(musicCredits.length ? { sound: primarySoundMetadata(musicCredits) } : {}),
+          // Chapters + link toasters (utils/videoTimeline.js). Read by the watch
+          // page and the embed player; nothing when the creator added none.
+          ...timeline,
           // Legacy 3Speak `info` block. Other Hive frontends (peakd, ecency, …)
           // render the player by reading video.info.author + video.info.permlink
           // to build the embed — WITHOUT it they request an EMPTY owner/permlink
@@ -1908,7 +1936,7 @@ export function EmbedUploadProvider({ children }) {
             permlink: hivePermlink,
             scheduledOn: scheduledOnIso,
             title,
-            description,
+            description: publishDescription,
             body: postBody,
             tags: jsonMetadata.tags,
             jsonMetadata,
@@ -2225,6 +2253,10 @@ export function EmbedUploadProvider({ children }) {
     musicCredits, setMusicCredits,
     // Reusable flag
     reusable, setReusable,
+    // Timeline step
+    chapters, setChapters,
+    timelineLinks, setTimelineLinks,
+    timelineSeeded, setTimelineSeeded,
     // User
     user,
     navigate,
