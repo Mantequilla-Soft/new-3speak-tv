@@ -7,7 +7,7 @@ import { LuTimer } from "react-icons/lu";
 import { MdReplay, MdPlayArrow } from "react-icons/md";
 import UpvoteCount from "../UpvoteCount/UpvoteCount";
 import PayoutAmount from "../PayoutAmount/PayoutAmount";
-import { useEffect, useState, useCallback, useMemo, useRef } from "react";
+import { useEffect, useLayoutEffect, useState, useCallback, useMemo, useRef } from "react";
 import { fetchHiveProfile, fetchPlaySource } from "../../lib/videoData";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
@@ -68,6 +68,7 @@ import PromoteModal from '../Promote/PromoteModal';
 import { recordReshare, getResharesForVideo } from '../../utils/reshares';
 import EditorModal from '../modal/EditorModal';
 import SubtitleOverlay from '../SubtitleOverlay/SubtitleOverlay';
+import TimelineToasters from './TimelineToasters';
 import ReportModal, { isReported } from '../modal/ReportModal';
 import EditVideoModal from './EditVideoModal';
 import { MdFlag, MdEdit, MdAutoAwesome } from 'react-icons/md';
@@ -75,6 +76,7 @@ import useTitleMeta from '../../hooks/useTitleMeta';
 import TitleTranslate from '../TitleTranslate/TitleTranslate';
 import SummaryModal from '../SummaryModal/SummaryModal';
 import AccountImg from '../HiveAvatar/AccountImg';
+import useUnstickPlayerWhileTyping from '../../hooks/useUnstickPlayerWhileTyping';
 
 // Every toast from this module is headed "Video"; the message becomes the
 // line under it. See utils/toast.js.
@@ -82,7 +84,7 @@ const toast = toastIn('Video');
 
 dayjs.extend(relativeTime);
 
-const PlayVideo = ({ videoDetails, author, permlink, mediaUnavailable = false, mediaBlocked = false, onRetryPlayback = null, mediaLoading = false, playlistData, onClosePlaylist, videoControls, mobileReactionPanel, cinemaReactionPanel, videoRef, wrapperRef, onVideoEdited, overrideBody, scheduled = false, scheduledOn = null, onEditScheduled, v2 = false, isLive = false, streamRoom = null, liveChatSlot = null, onLiveChatSent = null, vodAssetPending = false, onStreamRoomMeta = null, belowPlayerSlot = null, sponsorLabel = null, adCountdown = null, bannerHit = null, tickerSlot = null, adSkip = null, adPlaying = false, adLocked = false }) => {
+const PlayVideo = ({ videoDetails, author, permlink, mediaUnavailable = false, mediaBlocked = false, onRetryPlayback = null, mediaLoading = false, playlistData, onClosePlaylist, videoControls, mobileReactionPanel, cinemaReactionPanel, videoRef, wrapperRef, onVideoEdited, overrideBody, scheduled = false, scheduledOn = null, onEditScheduled, v2 = false, isLive = false, streamRoom = null, liveChatSlot = null, onLiveChatSent = null, vodAssetPending = false, onStreamRoomMeta = null, belowPlayerSlot = null, sponsorLabel = null, adCountdown = null, bannerHit = null, tickerSlot = null, adSkip = null, adPlaying = false, adLocked = false, timelineLinks = null, timelineResetKey = null, tickerShown = false, surfActive = false }) => {
   const { t } = useTranslation();
   const { user, authenticated } = useAppStore();
   const incubationHandle = useAppStore((s) => s.incubationHandle);
@@ -525,6 +527,22 @@ const PlayVideo = ({ videoDetails, author, permlink, mediaUnavailable = false, m
   const [communityData, setCommunityData] = useState(null);
   const [authorReputation, setAuthorReputation] = useState(null);
   const [fabOpen, setFabOpen] = useState(false);
+  // Phones: the sticky player gives way while a comment is being typed.
+  useUnstickPlayerWhileTyping();
+  // The speed dial can hold more actions (up to 11 for the owner) than a short
+  // phone screen fits in one column. Measured before the first paint: if the
+  // column would reach above the top bar, it opens as the compact wrapped grid
+  // (the landscape layout) instead. No scroll area on purpose: it clipped the
+  // Remix dropdown and fought the actions' slide-in animation.
+  const fabActionsRef = useRef(null);
+  const [fabCompact, setFabCompact] = useState(false);
+  useLayoutEffect(() => {
+    if (!fabOpen) { setFabCompact(false); return; }
+    const el = fabActionsRef.current;
+    if (!el) return;
+    const navTop = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--nav-top-offset')) || 56;
+    if (el.getBoundingClientRect().top < navTop + 8) setFabCompact(true);
+  }, [fabOpen]);
   const [shareChooserOpen, setShareChooserOpen] = useState(false);
   const [isFollowingCreator, setIsFollowingCreator] = useState(null);
   const [followLoading, setFollowLoading] = useState(false);
@@ -1287,6 +1305,27 @@ const PlayVideo = ({ videoDetails, author, permlink, mediaUnavailable = false, m
                   style={videoControls.subtitleStyle}
                 />
               )}
+              {/* ⏱️ The creator's link toasters, top-right. Content seconds, like the
+                  subtitles; never over a sponsor spot. Pushed down under the ticker
+                  band, the tip nudge and the fullscreen surf remote rather than
+                  covering them (z map in TimelineToasters.scss). */}
+              {timelineLinks?.length > 0 && (() => {
+                const tipShown = tipNudgeVisible && !isTipModalOpen && authenticated && isLoggedIn() && user !== author;
+                const top = 10
+                  + (tickerShown ? 34 : 0)
+                  + (tipShown ? 58 : 0)
+                  + (surfActive && videoControls?.isFullscreen ? 50 : 0);
+                return (
+                  <TimelineToasters
+                    links={timelineLinks}
+                    currentTime={videoControls?.currentTime}
+                    hidden={adPlaying || adCountdown != null || mediaUnavailable || mediaBlocked || isLive}
+                    top={top}
+                    resetKey={timelineResetKey}
+                    onBeforeNavigate={() => videoControls?.onPause?.()}
+                  />
+                );
+              })()}
               {tipNudgeVisible && !isTipModalOpen && authenticated && isLoggedIn() && user !== author && (
                 <div className="tip-nudge">
                   <FaHeart className="tip-nudge-emoji hide-mobile" style={{ color: '#e53935' }} />
@@ -2050,7 +2089,7 @@ const PlayVideo = ({ videoDetails, author, permlink, mediaUnavailable = false, m
       {!videoControls?.isFullscreen && (
         <div className={`fab-speed-dial${fabOpen ? ' open' : ''}`}>
           {fabOpen && (
-            <div className="fab-actions">
+            <div className={`fab-actions${fabCompact ? ' fab-actions--compact' : ''}`} ref={fabActionsRef}>
               {canSeeVideoStats && (
                 <div className="fab-action">
                   <span className="fab-action-label">{t('watch.actions.analytics')}</span>
