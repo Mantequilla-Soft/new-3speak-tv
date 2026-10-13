@@ -7,6 +7,30 @@
 // 1.0.0 — that way they see all of these when develop is pushed to production.
 export const CHANGELOG = [
   {
+    version: '1.79.83',
+    date: '2026-10-13',
+    summary:
+      'Smoother on phones: the video makes room while you write a comment, and menus and buttons fit small screens.',
+  },
+  {
+    version: '1.79.82',
+    date: '2026-10-13',
+    summary:
+      'A cleaner upload flow: a new step bar, Back buttons, and the Next buttons at the top and at the bottom of every step.',
+  },
+  {
+    version: '1.79.81',
+    date: '2026-10-13',
+    summary:
+      'Editing a video is tidier, with tabs for Details, Media, Chapters and links, and Settings. Add chapters and links to videos you already posted.',
+  },
+  {
+    version: '1.79.80',
+    date: '2026-10-13',
+    summary:
+      'New Timeline step when uploading: add chapters and links that pop up at the top right of your video at the moment you choose.',
+  },
+  {
     version: '1.79.79',
     date: '2026-10-13',
     summary:
