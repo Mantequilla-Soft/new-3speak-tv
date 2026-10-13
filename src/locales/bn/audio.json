@@ -254,7 +254,8 @@
       "applyToAll_other": "সব {{count}}টি ট্র্যাকে প্রয়োগ করুন",
       "hide": "লুকান",
       "commentText": "এই ট্র্যাকের কমেন্টের লেখা (ঐচ্ছিক)",
-      "snapText": "এই Snap-এর লেখা (ঐচ্ছিক)"
+      "snapText": "এই Snap-এর লেখা (ঐচ্ছিক)",
+      "trackCover": "এই ট্র্যাকের কভার (ঐচ্ছিক)"
     },
     "review": {
       "standalone": "আলাদা পোস্ট",

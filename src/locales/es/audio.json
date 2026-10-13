@@ -263,7 +263,8 @@
       "applyToAll_other": "Aplicar a las {{count}} pistas",
       "hide": "Ocultar",
       "commentText": "Texto del comentario para esta pista (opcional)",
-      "snapText": "Texto para este snap (opcional)"
+      "snapText": "Texto para este snap (opcional)",
+      "trackCover": "Portada para esta pista (opcional)"
     },
     "review": {
       "standalone": "Publicación independiente",

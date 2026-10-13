@@ -254,7 +254,8 @@
       "applyToAll_other": "Tumia kwa nyimbo zote {{count}}",
       "hide": "Ficha",
       "commentText": "Maandishi ya maoni kwa wimbo huu (si lazima)",
-      "snapText": "Maandishi ya snap hii (si lazima)"
+      "snapText": "Maandishi ya snap hii (si lazima)",
+      "trackCover": "Jalada la wimbo huu (si lazima)"
     },
     "review": {
       "standalone": "Chapisho la kujitegemea",

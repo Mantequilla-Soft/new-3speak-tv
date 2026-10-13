@@ -272,7 +272,8 @@
       "applyToAll_other": "Zastosuj do wszystkich {{count}} utworu",
       "hide": "Ukryj",
       "commentText": "Tekst komentarza do tego utworu (opcjonalnie)",
-      "snapText": "Tekst tego snapa (opcjonalnie)"
+      "snapText": "Tekst tego snapa (opcjonalnie)",
+      "trackCover": "Okładka tego utworu (opcjonalnie)"
     },
     "review": {
       "standalone": "Osobny post",

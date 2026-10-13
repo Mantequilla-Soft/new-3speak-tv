@@ -263,7 +263,8 @@
       "applyToAll_other": "Appliquer aux {{count}} titres",
       "hide": "Masquer",
       "commentText": "Texte du commentaire pour cette piste (facultatif)",
-      "snapText": "Texte de ce snap (facultatif)"
+      "snapText": "Texte de ce snap (facultatif)",
+      "trackCover": "Couverture de cette piste (facultatif)"
     },
     "review": {
       "standalone": "Publication autonome",

@@ -263,7 +263,8 @@
       "applyToAll_other": "Applica a tutte le {{count}} tracce",
       "hide": "Nascondi",
       "commentText": "Testo del commento per questa traccia (facoltativo)",
-      "snapText": "Testo per questo snap (facoltativo)"
+      "snapText": "Testo per questo snap (facoltativo)",
+      "trackCover": "Copertina per questa traccia (facoltativo)"
     },
     "review": {
       "standalone": "Post singolo",

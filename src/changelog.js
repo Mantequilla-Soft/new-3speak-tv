@@ -7,6 +7,12 @@
 // 1.0.0 — that way they see all of these when develop is pushed to production.
 export const CHANGELOG = [
   {
+    version: '1.79.78',
+    date: '2026-10-13',
+    summary:
+      'Album uploads: each track can now get its own cover, and shared track settings only apply when you tap Apply to all tracks.',
+  },
+  {
     version: '1.79.77',
     date: '2026-10-13',
     summary:

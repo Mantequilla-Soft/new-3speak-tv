@@ -245,7 +245,8 @@
       "applyToAll_other": "Terapkan ke semua {{count}} lagu",
       "hide": "Sembunyikan",
       "commentText": "Teks komentar untuk lagu ini (opsional)",
-      "snapText": "Teks untuk snap ini (opsional)"
+      "snapText": "Teks untuk snap ini (opsional)",
+      "trackCover": "Sampul untuk lagu ini (opsional)"
     },
     "review": {
       "standalone": "Postingan mandiri",

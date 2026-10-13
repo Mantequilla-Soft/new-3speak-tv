@@ -254,7 +254,8 @@
       "applyToAll_other": "Toepassen op alle {{count}} tracks",
       "hide": "Verbergen",
       "commentText": "Reactietekst voor deze track (optioneel)",
-      "snapText": "Tekst voor deze snap (optioneel)"
+      "snapText": "Tekst voor deze snap (optioneel)",
+      "trackCover": "Cover voor deze track (optioneel)"
     },
     "review": {
       "standalone": "Losse post",

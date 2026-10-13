@@ -245,7 +245,8 @@
       "applyToAll_other": "Áp dụng cho tất cả {{count}} bản nhạc",
       "hide": "Ẩn",
       "commentText": "Nội dung bình luận cho bản nhạc này (không bắt buộc)",
-      "snapText": "Nội dung cho snap này (không bắt buộc)"
+      "snapText": "Nội dung cho snap này (không bắt buộc)",
+      "trackCover": "Ảnh bìa cho bản nhạc này (không bắt buộc)"
     },
     "review": {
       "standalone": "Bài đăng độc lập",

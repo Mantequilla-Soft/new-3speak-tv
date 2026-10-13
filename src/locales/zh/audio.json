@@ -245,7 +245,8 @@
       "applyToAll_other": "应用到全部 {{count}} 首曲目",
       "hide": "隐藏",
       "commentText": "此曲目的评论内容（可选）",
-      "snapText": "此 Snap 的内容（可选）"
+      "snapText": "此 Snap 的内容（可选）",
+      "trackCover": "此曲目的封面（可选）"
     },
     "review": {
       "standalone": "独立帖子",

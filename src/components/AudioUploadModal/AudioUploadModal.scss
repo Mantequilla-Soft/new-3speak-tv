@@ -868,9 +868,13 @@
   &:hover:not(:disabled) { filter: brightness(1.1); }
 }
 
+// Red as an outline only (no red-background buttons anywhere in 3Speak)
 .audio-upload-btn-danger {
-  background: #c73a3a;
-  border-color: #c73a3a;
+  background: transparent;
+  border-color: #e5484d;
+  color: #e5484d;
+
+  &:hover:not(:disabled) { background: rgba(229, 72, 77, 0.1); filter: none; }
 }
 
 // ─── Close-confirm overlay ──────────

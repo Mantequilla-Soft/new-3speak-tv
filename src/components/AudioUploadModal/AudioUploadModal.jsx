@@ -259,6 +259,13 @@ function AudioUploadModal({ isOpen, onClose, initialTrack }) {
   const [postThumb, setPostThumb] = useState('');
   const [postPayout, setPostPayout] = useState('default');
   const [postBeneStr, setPostBeneStr] = useState('[]');
+  // The tracks step's "Apply to all tracks" panel. Its own values, starting
+  // empty: they are NOT the main post's, and reach the tracks only when the
+  // user clicks Apply to all.
+  const [sharedDesc, setSharedDesc] = useState('');
+  const [sharedThumb, setSharedThumb] = useState('');
+  const [sharedPayout, setSharedPayout] = useState('default');
+  const [sharedBeneStr, setSharedBeneStr] = useState('[]');
   // "Add to my blog" (utils/addToBlog.js): reblog the standalone/album post so
   // it reaches the creator's blog and followers' feeds. Snaps have no post.
   const [addToBlog, setAddToBlogState] = useState(readAddToBlog);
@@ -267,13 +274,13 @@ function AudioUploadModal({ isOpen, onClose, initialTrack }) {
   const [published, setPublished] = useState(null);
   // Album post failed to publish: shown in the review step with its own retry.
   const [mainError, setMainError] = useState(null);
-  // Shared Beneficiary_modal — `beneTarget` is 'main' or a track id.
+  // Shared Beneficiary_modal — `beneTarget` is 'main', 'shared' or a track id.
   const [beneList, setBeneList] = useState([]);
   const [beneListCount, setBeneListCount] = useState(0);
   const [beneRemaining, setBeneRemaining] = useState(100);
   const [beneOpen, setBeneOpen] = useState(false);
   const [beneTarget, setBeneTarget] = useState('main');
-  // 'main' | track id currently uploading a thumbnail, else null.
+  // 'main' | 'shared' | track id currently uploading a thumbnail, else null.
   const [thumbUploadingId, setThumbUploadingId] = useState(null);
   const thumbInputRef = useRef(null);
 
@@ -286,7 +293,7 @@ function AudioUploadModal({ isOpen, onClose, initialTrack }) {
     setTracks(prev => prev.map(tr => (tr.id === id ? { ...tr, ...patch } : tr)));
   }, []);
 
-  // Upload a cover for a target ('main' or a track id) and store the URL.
+  // Upload a cover for a target ('main', 'shared' or a track id) and store the URL.
   const uploadCoverFor = useCallback(async (target, file) => {
     if (!file) return;
     if (!file.type.startsWith('image/')) { toast.error(t('audio.upload.toasts.pickImage')); return; }
@@ -294,6 +301,7 @@ function AudioUploadModal({ isOpen, onClose, initialTrack }) {
     try {
       const url = await uploadThumbnail(file);
       if (target === 'main') setPostThumb(url);
+      else if (target === 'shared') setSharedThumb(url);
       else setTracks(prev => prev.map(tr => (tr.id === target ? { ...tr, thumb: url } : tr)));
     } catch (err) {
       toast.error(t('audio.upload.toasts.thumbFailed', { error: err?.message || t('audio.upload.unknown') }));
@@ -303,24 +311,27 @@ function AudioUploadModal({ isOpen, onClose, initialTrack }) {
     }
   }, [t]);
 
-  // Apply the main composer's desc/payout/beneficiaries to every track.
+  // Copy the "Apply to all tracks" panel onto every track. Only on click: an
+  // empty shared cover keeps each track's own.
   const applyToAllTracks = useCallback(() => {
     setTracks(prev => prev.map(tr => ({
       ...tr,
-      desc: postDescription,
-      thumb: postThumb || tr.thumb,
-      payout: postPayout,
-      beneStr: postBeneStr,
+      desc: sharedDesc,
+      thumb: sharedThumb || tr.thumb,
+      payout: sharedPayout,
+      beneStr: sharedBeneStr,
     })));
     toast.success(t('audio.upload.toasts.appliedToAll'));
-  }, [postDescription, postThumb, postPayout, postBeneStr, t]);
+  }, [sharedDesc, sharedThumb, sharedPayout, sharedBeneStr, t]);
 
   // Open the beneficiary modal for a target; seed its list from that
   // target's stored JSON.
   const openBeneFor = useCallback((target) => {
     const json = target === 'main'
       ? postBeneStr
-      : (tracks.find(tr => tr.id === target)?.beneStr || '[]');
+      : target === 'shared'
+        ? sharedBeneStr
+        : (tracks.find(tr => tr.id === target)?.beneStr || '[]');
     let list = [];
     try { list = (JSON.parse(json || '[]') || []).map(b => ({ account: b.account, percent: (b.weight || 0) / 100 })); } catch { list = []; }
     const used = list.reduce((s, b) => s + (b.percent || 0), 0);
@@ -329,11 +340,12 @@ function AudioUploadModal({ isOpen, onClose, initialTrack }) {
     setBeneRemaining(Math.max(0, (isPremium ? 100 : 90) - used));
     setBeneTarget(target);
     setBeneOpen(true);
-  }, [postBeneStr, tracks, isPremium]);
+  }, [postBeneStr, sharedBeneStr, tracks, isPremium]);
 
   // Write the modal's beneficiary JSON back to its target.
   const writeBeneToTarget = useCallback((json) => {
     if (beneTarget === 'main') setPostBeneStr(json);
+    else if (beneTarget === 'shared') setSharedBeneStr(json);
     else setTracks(prev => prev.map(tr => (tr.id === beneTarget ? { ...tr, beneStr: json } : tr)));
   }, [beneTarget]);
 
@@ -865,9 +877,10 @@ function AudioUploadModal({ isOpen, onClose, initialTrack }) {
     const hivePermlink = generatePermlink(track.title) || audioPermlink;
     const tags = Array.from(new Set(HIVE_DEFAULT_TAGS));
     const desc = (track.desc || '').trim() || (track.title || '').trim();
-    // Fall back to the main composer cover so a thumbnail set in the main step
-    // also lands on snap/voice track comments (json_metadata.image + body + Mongo).
-    const tThumb = track.thumb || postThumb || '';
+    // Only the track's own cover. The album/post cover is not copied onto the
+    // tracks unless the user applies it to all; tiles fall back to the album
+    // art by themselves (checker playlist_thumbnail).
+    const tThumb = track.thumb || '';
     const cover = tThumb ? `![${(track.title || 'cover').replace(/[[\]]/g, '')}](${tThumb})\n\n` : '';
     const body = `${cover}${playUrl}\n\n${desc}`.trim();
     // Both modes post the track as a reply, but to different parents, and the
@@ -909,7 +922,7 @@ function AudioUploadModal({ isOpen, onClose, initialTrack }) {
     await pushAudioThumb(audioPermlink, tThumb);
     trackPostsRef.current[track.id] = { author: user, permlink: hivePermlink, title: track.title };
     setTrackStatus(track.id, { state: 'success', stage: undefined });
-  }, [user, mode, isPremium, rewardMode, playlistChoice, postThumb, pushAudioThumb]);
+  }, [user, mode, isPremium, rewardMode, playlistChoice, pushAudioThumb]);
 
   // Resolve the parent a track comment hangs off, per mode.
   const resolveParent = useCallback(async () => {
@@ -960,6 +973,10 @@ function AudioUploadModal({ isOpen, onClose, initialTrack }) {
     setPostThumb('');
     setPostPayout('default');
     setPostBeneStr('[]');
+    setSharedDesc('');
+    setSharedThumb('');
+    setSharedPayout('default');
+    setSharedBeneStr('[]');
     setBeneList([]);
     setPublished(null);
     setMainError(null);
@@ -1237,13 +1254,13 @@ function AudioUploadModal({ isOpen, onClose, initialTrack }) {
               tracks={tracks}
               mode={mode}
               patchTrack={patchTrack}
-              postDescription={postDescription}
-              setPostDescription={setPostDescription}
-              postThumb={postThumb}
-              setPostThumb={setPostThumb}
-              postPayout={postPayout}
-              setPostPayout={setPostPayout}
-              postBeneCount={beneList.length}
+              sharedDesc={sharedDesc}
+              setSharedDesc={setSharedDesc}
+              sharedThumb={sharedThumb}
+              setSharedThumb={setSharedThumb}
+              sharedPayout={sharedPayout}
+              setSharedPayout={setSharedPayout}
+              sharedBeneCount={(() => { try { return (JSON.parse(sharedBeneStr || '[]') || []).length; } catch { return 0; } })()}
               applyToAllTracks={applyToAllTracks}
               onOpenBene={openBeneFor}
               uploadCoverFor={uploadCoverFor}
@@ -2061,7 +2078,7 @@ function TagChipsInput({ value, onChange, placeholder }) {
     <div className="audio-upload-tag-chips">
       {tags.map((tag) => (
         <span key={tag} className="audio-upload-tag-chip">
-          #{tag}
+          {tag}
           <button type="button" onClick={() => removeTag(tag)} aria-label={t('audio.upload.mainPost.removeTag', { tag })}>
             <MdClose size={12} />
           </button>
@@ -2102,8 +2119,8 @@ function TagChipsInput({ value, onChange, placeholder }) {
 // ─── Step: Tracks (snaps / album) — apply-to-all panel + per-track accordion ───
 function TracksStep({
   tracks, mode, patchTrack,
-  postDescription, setPostDescription, postThumb, setPostThumb,
-  postPayout, setPostPayout, postBeneCount,
+  sharedDesc, setSharedDesc, sharedThumb, setSharedThumb,
+  sharedPayout, setSharedPayout, sharedBeneCount,
   applyToAllTracks, onOpenBene, uploadCoverFor, thumbUploadingId,
 }) {
   const { t } = useTranslation();
@@ -2123,21 +2140,21 @@ function TracksStep({
           placeholder={t('audio.upload.tracks.sharedDescription')}
           rows={3}
           maxLength={5000}
-          value={postDescription}
-          onChange={(e) => setPostDescription(e.target.value)}
+          value={sharedDesc}
+          onChange={(e) => setSharedDesc(e.target.value)}
         />
         <ThumbPicker
-          value={postThumb}
-          uploading={thumbUploadingId === 'main'}
-          onPick={(f) => uploadCoverFor('main', f)}
-          onClear={() => setPostThumb('')}
+          value={sharedThumb}
+          uploading={thumbUploadingId === 'shared'}
+          onPick={(f) => uploadCoverFor('shared', f)}
+          onClear={() => setSharedThumb('')}
           label={t('audio.upload.tracks.sharedCover')}
         />
         <RewardRow
-          payout={postPayout}
-          setPayout={setPostPayout}
-          beneCount={postBeneCount}
-          onOpenBene={() => onOpenBene('main')}
+          payout={sharedPayout}
+          setPayout={setSharedPayout}
+          beneCount={sharedBeneCount}
+          onOpenBene={() => onOpenBene('shared')}
         />
         <button
           type="button"
@@ -2183,12 +2200,6 @@ function TracksStep({
                   maxLength={120}
                 />
                 <TrackTypeFields track={tr} patchTrack={patchTrack} />
-                <ThumbPicker
-                  value={tr.thumb || ''}
-                  uploading={thumbUploadingId === tr.id}
-                  onPick={(f) => uploadCoverFor(tr.id, f)}
-                  onClear={() => patchTrack(tr.id, { thumb: '' })}
-                />
                 <RewardRow
                   payout={tr.payout || 'default'}
                   setPayout={(v) => patchTrack(tr.id, { payout: v })}
@@ -2207,6 +2218,14 @@ function TracksStep({
               maxLength={5000}
               value={tr.desc || ''}
               onChange={(e) => patchTrack(tr.id, { desc: e.target.value })}
+            />
+            {/* Its own cover, also always in view (it was behind Edit). */}
+            <ThumbPicker
+              value={tr.thumb || ''}
+              uploading={thumbUploadingId === tr.id}
+              onPick={(f) => uploadCoverFor(tr.id, f)}
+              onClear={() => patchTrack(tr.id, { thumb: '' })}
+              label={t('audio.upload.tracks.trackCover')}
             />
 
             <div className="audio-upload-title-meta-line">

@@ -245,7 +245,8 @@
       "applyToAll_other": "트랙 {{count}}개 모두에 적용",
       "hide": "숨기기",
       "commentText": "이 트랙의 댓글 내용(선택)",
-      "snapText": "이 Snap의 내용(선택)"
+      "snapText": "이 Snap의 내용(선택)",
+      "trackCover": "이 트랙의 커버(선택)"
     },
     "review": {
       "standalone": "단독 게시물",

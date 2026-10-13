@@ -254,7 +254,8 @@
       "applyToAll_other": "I-apply sa lahat ng {{count}} tracks",
       "hide": "Itago",
       "commentText": "Text ng comment para sa track na ito (opsyonal)",
-      "snapText": "Text para sa snap na ito (opsyonal)"
+      "snapText": "Text para sa snap na ito (opsyonal)",
+      "trackCover": "Cover para sa track na ito (opsyonal)"
     },
     "review": {
       "standalone": "Standalone na post",

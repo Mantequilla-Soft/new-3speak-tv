@@ -254,7 +254,8 @@
       "applyToAll_other": "Apply to all {{count}} tracks",
       "hide": "Hide",
       "commentText": "Comment text for this track (optional)",
-      "snapText": "Text for this snap (optional)"
+      "snapText": "Text for this snap (optional)",
+      "trackCover": "Cover for this track (optional)"
     },
     "review": {
       "standalone": "Standalone post",

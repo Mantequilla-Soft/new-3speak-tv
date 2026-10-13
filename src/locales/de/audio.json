@@ -254,7 +254,8 @@
       "applyToAll_other": "Auf alle {{count}} Tracks anwenden",
       "hide": "Ausblenden",
       "commentText": "Kommentartext für diesen Track (optional)",
-      "snapText": "Text für diesen Snap (optional)"
+      "snapText": "Text für diesen Snap (optional)",
+      "trackCover": "Cover für diesen Track (optional)"
     },
     "review": {
       "standalone": "Eigenständiger Post",

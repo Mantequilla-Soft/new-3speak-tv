@@ -254,7 +254,8 @@
       "applyToAll_other": "{{count}} parçanın tümüne uygula",
       "hide": "Gizle",
       "commentText": "Bu parçanın yorum metni (isteğe bağlı)",
-      "snapText": "Bu snap için metin (isteğe bağlı)"
+      "snapText": "Bu snap için metin (isteğe bağlı)",
+      "trackCover": "Bu parçanın kapağı (isteğe bağlı)"
     },
     "review": {
       "standalone": "Bağımsız gönderi",

@@ -245,7 +245,8 @@
       "applyToAll_other": "{{count}} トラックすべてに適用",
       "hide": "隠す",
       "commentText": "このトラックのコメント本文（任意）",
-      "snapText": "この Snap の本文（任意）"
+      "snapText": "この Snap の本文（任意）",
+      "trackCover": "このトラックのカバー（任意）"
     },
     "review": {
       "standalone": "単独の投稿",

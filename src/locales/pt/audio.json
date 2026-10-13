@@ -263,7 +263,8 @@
       "applyToAll_other": "Aplicar a todas as {{count}} faixas",
       "hide": "Ocultar",
       "commentText": "Texto do comentário desta faixa (opcional)",
-      "snapText": "Texto deste snap (opcional)"
+      "snapText": "Texto deste snap (opcional)",
+      "trackCover": "Capa desta faixa (opcional)"
     },
     "review": {
       "standalone": "Post individual",
