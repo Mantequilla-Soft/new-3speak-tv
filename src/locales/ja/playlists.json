@@ -51,6 +51,8 @@
     "private": "この再生リストは非公開です",
     "items_other": "{{count}} 件",
     "created": "{{when}} に作成",
+    "podcastFeed": "ポッドキャストフィード",
+    "podcastFeedTitle": "お好きなポッドキャストアプリで{{name}}をフォロー（RSSフィード）",
     "album": {
       "genre": "<strong>ジャンル:</strong> {{value}}",
       "year": "<strong>年:</strong> {{value}}",

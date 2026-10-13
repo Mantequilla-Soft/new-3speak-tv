@@ -54,6 +54,8 @@
     "items_one": "{{count}} Eintrag",
     "items_other": "{{count}} Einträge",
     "created": "Erstellt {{when}}",
+    "podcastFeed": "Podcast-Feed",
+    "podcastFeedTitle": "{{name}} in jeder Podcast-App abonnieren (RSS-Feed)",
     "album": {
       "genre": "<strong>Genre:</strong> {{value}}",
       "year": "<strong>Jahr:</strong> {{value}}",

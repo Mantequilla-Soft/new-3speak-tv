@@ -60,6 +60,8 @@
     "items_many": "{{count}} elementów",
     "items_other": "{{count}} elementu",
     "created": "Utworzono {{when}}",
+    "podcastFeed": "Kanał podcastu",
+    "podcastFeedTitle": "Obserwuj {{name}} w dowolnej aplikacji do podcastów (kanał RSS)",
     "album": {
       "genre": "<strong>Gatunek:</strong> {{value}}",
       "year": "<strong>Rok:</strong> {{value}}",

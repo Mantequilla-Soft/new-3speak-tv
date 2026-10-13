@@ -54,6 +54,8 @@
     "items_one": "kipengee {{count}}",
     "items_other": "vipengee {{count}}",
     "created": "Iliundwa {{when}}",
+    "podcastFeed": "Mlisho wa podikasti",
+    "podcastFeedTitle": "Fuatilia {{name}} kwenye programu yoyote ya podikasti (mlisho wa RSS)",
     "album": {
       "genre": "<strong>Aina:</strong> {{value}}",
       "year": "<strong>Mwaka:</strong> {{value}}",

@@ -51,6 +51,8 @@
     "private": "此播放列表为私密",
     "items_other": "{{count}} 项",
     "created": "创建于 {{when}}",
+    "podcastFeed": "播客订阅源",
+    "podcastFeedTitle": "在任意播客应用中关注 {{name}}（RSS 订阅源）",
     "album": {
       "genre": "<strong>流派：</strong>{{value}}",
       "year": "<strong>年份：</strong>{{value}}",

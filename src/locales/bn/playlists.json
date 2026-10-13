@@ -54,6 +54,8 @@
     "items_one": "{{count}}টি আইটেম",
     "items_other": "{{count}}টি আইটেম",
     "created": "তৈরি {{when}}",
+    "podcastFeed": "পডকাস্ট ফিড",
+    "podcastFeedTitle": "যেকোনো পডকাস্ট অ্যাপে {{name}} ফলো করুন (RSS ফিড)",
     "album": {
       "genre": "<strong>ধরন:</strong> {{value}}",
       "year": "<strong>বছর:</strong> {{value}}",

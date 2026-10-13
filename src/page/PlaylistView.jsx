@@ -3,7 +3,7 @@ import { getHiveUrl } from '../utils/hiveNode';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import axios from 'axios';
 import { useState, useMemo, useRef } from 'react';
-import { MdPlaylistPlay, MdClose, MdDragIndicator, MdEdit, MdLock, MdPublic, MdCloudUpload } from 'react-icons/md';
+import { MdPlaylistPlay, MdClose, MdDragIndicator, MdEdit, MdLock, MdPublic, MdCloudUpload, MdRssFeed } from 'react-icons/md';
 import { IoArrowBack, IoTrash, IoSave, IoReorderThree } from 'react-icons/io5';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
@@ -502,6 +502,29 @@ function PlaylistView() {
               <span>{t('playlists.view.items', { count: allVideos.length })}</span>
               <span className="separator">•</span>
               <span>{t('playlists.view.created', { when: dayjs.unix(playlist.created_at).fromNow() })}</span>
+              {/* Podcast / RSS feed for this playlist (checker routes/rss.js), so
+                  people can follow one series in a podcast app. The <link> is
+                  hoisted into <head> for feed readers, as on profiles. */}
+              {!isPrivate && (
+                <>
+                  <span className="separator">•</span>
+                  <link
+                    rel="alternate"
+                    type="application/rss+xml"
+                    title={playlist.name}
+                    href={`${window.location.origin}/rss/playlist/${encodeURIComponent(playlistId)}.xml`}
+                  />
+                  <a
+                    className="playlist-feed-link"
+                    href={`/rss/playlist/${encodeURIComponent(playlistId)}.xml`}
+                    target="_blank"
+                    rel="noreferrer"
+                    title={t('playlists.view.podcastFeedTitle', { name: playlist.name })}
+                  >
+                    <MdRssFeed /> {t('playlists.view.podcastFeed')}
+                  </a>
+                </>
+              )}
             </div>
             {playlist.metadata?.album && (
               <div className="playlist-album-meta">

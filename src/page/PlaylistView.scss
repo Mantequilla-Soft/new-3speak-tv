@@ -137,6 +137,23 @@
             }
           }
 
+          .playlist-feed-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            color: var(--text-secondary);
+            text-decoration: none;
+
+            svg {
+              color: #f26522; // the RSS orange, so the icon reads as a feed at a glance
+            }
+
+            &:hover {
+              color: var(--accent-primary);
+              text-decoration: underline;
+            }
+          }
+
           .separator {
             opacity: 0.5;
           }
