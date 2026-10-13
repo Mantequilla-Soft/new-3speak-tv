@@ -1,96 +1,138 @@
 @use "../../mixins.scss" as mix;
+
+// Upload wizard stepper (StepProgress.jsx). Spans the same width as the step
+// pages' content (the Timeline step is 1100 px wide), so the row lines up with
+// what is below it. A page can narrow it with --step-progress-max.
 .step-progress {
   width: 100%;
-  margin-bottom: 1rem;
+  max-width: var(--step-progress-max, 1100px);
+  margin: 0 auto 1.25rem;
+  padding: 0 4px;
+  box-sizing: border-box;
+}
 
-  .step-progress__container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 90px;
-    @include mix.respond(phone) {
-      gap: 20px;
-    }
+.step-progress__container {
+  display: flex;
+  align-items: center;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  min-width: 0;
+}
 
-    .step-progress__step {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      position: relative;
+// A step plus the line after it. The last item has no line and does not grow,
+// so the last step ends exactly on the right edge.
+.step-progress__item {
+  display: flex;
+  align-items: center;
+  flex: 1 1 0;
+  min-width: 0;
 
-      .step-progress__circle {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        width: 2.5rem;
-        height: 2.5rem;
-        border-radius: 50%;
-        font-size: 0.875rem;
-        font-weight: 500;
-        transition: all 0.3s ease;
-        @include mix.respond(phone) {
-          width: 2rem;
-          height: 2rem;
-        }
+  &:last-child { flex: 0 0 auto; }
+}
 
-        &.step-progress__circle--completed {
-          background-color: var(--accent-primary, #e53935);
-          color: #ffffff;
-          box-shadow: 0 0 10px rgba(229, 57, 53, 0.5);
-        }
+.step-progress__step {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex: 0 0 auto;
+  min-width: 0;
+}
 
-        &.step-progress__circle--active {
-          background-color: var(--accent-primary, #e53935);
-          color: #ffffff;
-          box-shadow: 0 0 10px rgba(229, 57, 53, 0.5);
-          opacity: 0.85;
-        }
+.step-progress__circle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 2px solid var(--border-color, #3a3a3a);
+  background: transparent;
+  color: var(--text-muted, #8a8a8a);
+  font-size: 0.85rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  box-sizing: border-box;
+  flex-shrink: 0;
+  transition: border-color 0.25s ease, color 0.25s ease, box-shadow 0.25s ease, background-color 0.25s ease;
+}
 
-        &.step-progress__circle--inactive {
-          background-color: var(--bg-tertiary, #e5e7eb);
-          color: var(--text-muted, #9ca3af);
-        }
-      }
+.step-progress__label {
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--text-muted, #8a8a8a);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  transition: color 0.25s ease;
+}
 
-      .step-progress__label {
-        margin-top: 0.5rem;
-        font-size: 0.75rem;
-        font-weight: 500;
-        transition: color 0.3s ease;
+// Done: outlined in the accent with a tick, label in normal text colour.
+.step-progress__step.is-done {
+  .step-progress__circle {
+    border-color: var(--accent-primary, #e0594b);
+    color: var(--accent-primary, #e0594b);
+  }
+  .step-progress__label { color: var(--text-secondary, #b5b5b5); }
+}
 
-        @include mix.respond(phone) {
-          text-align: center;
-        }
+// Current: accent outline, a faint accent wash inside and a soft halo.
+.step-progress__step.is-active {
+  .step-progress__circle {
+    border-color: var(--accent-primary, #e0594b);
+    color: var(--accent-primary, #e0594b);
+    background: color-mix(in srgb, var(--accent-primary, #e0594b) 12%, transparent);
+    box-shadow: 0 0 0 4px color-mix(in srgb, var(--accent-primary, #e0594b) 16%, transparent);
+  }
+  .step-progress__label {
+    color: var(--text-primary, #f2f2f2);
+    font-weight: 700;
+  }
+}
 
-        &.step-progress__label--active {
-          color: var(--text-primary, #111827);
-        }
+// The line between two steps fills the remaining space; accent once passed.
+.step-progress__line {
+  flex: 1 1 auto;
+  min-width: 16px;
+  height: 2px;
+  margin: 0 14px;
+  border-radius: 2px;
+  background: var(--border-color, #3a3a3a);
+  transition: background-color 0.25s ease;
 
-        &.step-progress__label--inactive {
-          color: var(--text-muted, #9ca3af);
-        }
-      }
+  &.is-done { background: var(--accent-primary, #e0594b); }
+}
 
-      .step-progress__connector {
-        width: 6rem;
-        height: 2px;
-        margin: 0 1rem;
-        position: absolute;
-        top: 1.25rem;
-        left: 100%;
-        transition: background-color 0.3s ease;
-        @include mix.respond(phone) {
-          width: 2rem;
-        }
+// Phones only: a single line under the row with the current step's name.
+.step-progress__caption {
+  display: none;
+}
 
-        &.step-progress__connector--completed {
-          background-color: var(--accent-primary, #e53935);
-        }
+// Tablets: keep the row, show only the current step's label so five German
+// labels never squeeze the lines to nothing.
+@media screen and (min-width: 768px) and (max-width: 1024px) {
+  .step-progress__step:not(.is-active) .step-progress__label { display: none; }
+  .step-progress__line { margin: 0 10px; }
+}
 
-        &.step-progress__connector--inactive {
-          background-color: var(--bg-tertiary, #e5e7eb);
-        }
-      }
-    }
+@include mix.respond(phone) {
+  .step-progress {
+    margin-bottom: 1rem;
+    padding: 0 8px;
+  }
+  .step-progress__circle {
+    width: 28px;
+    height: 28px;
+    font-size: 0.78rem;
+  }
+  .step-progress__label { display: none; }
+  .step-progress__line { margin: 0 6px; min-width: 8px; }
+  .step-progress__caption {
+    display: block;
+    margin-top: 10px;
+    text-align: center;
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--text-primary, #f2f2f2);
   }
 }

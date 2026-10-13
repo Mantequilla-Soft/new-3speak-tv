@@ -3,6 +3,7 @@ import { getHiveUrl } from '../../utils/hiveNode';
 import "../legacy-studio/StudioPage.scss";
 import { StepProgress } from "../legacy-studio/StepProgress";
 import EmbedVideoUploadStep1 from "./EmbedVideoUploadStep1";
+import EmbedUploadProgressBar from "./EmbedUploadProgressBar";
 import Auth_modal from "../modal/Auth_modal";
 import VerifyAuthModal from "../modal/VerifyAuthModal";
 import axios from "axios";
@@ -259,11 +260,14 @@ function EmbedStudioPage() {
 
   return (
     <>
-      <div className="studio-main-container">
+      <div className="studio-main-container embed-wizard">
         <div className="studio-page-header">
           <h1>{fromStories ? t("upload.page.shareShort") : t("upload.page.shareVideo")}</h1>
         </div>
-        <StepProgress step={step} />
+        <StepProgress step={step} short={fromStories} />
+        {/* Hidden until the background upload runs (it starts on Details), so it
+            only shows after coming Back here, where it keeps going. */}
+        <EmbedUploadProgressBar />
         <div className="studio-page-content">
           <EmbedVideoUploadStep1 />
         </div>

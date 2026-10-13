@@ -2,9 +2,9 @@ import React, { useEffect, useRef, useState } from "react";
 import { Upload, Check } from "lucide-react";
 import "../legacy-studio/VideoUploadStep2.scss";
 import { toastIn } from '../../utils/toast';
-import { TailChase } from "ldrs/react";
-import "ldrs/react/TailChase.css";
 import { StepProgress } from "../legacy-studio/StepProgress";
+import EmbedUploadProgressBar from "./EmbedUploadProgressBar";
+import StepActions from "./StepActions";
 import { Navigate, useNavigate } from "react-router-dom";
 import { useEmbedUpload } from "../../context/EmbedUploadContext";
 import { useTranslation } from "react-i18next";
@@ -30,9 +30,13 @@ function EmbedThumbnail() {
     prefilled,
   } = useEmbedUpload();
 
-  const [customfile, setCustomFile] = useState([]);
-  const [customFiles, setCustomFiles] = useState([]);
-  const [loading, setLoading] = useState(false);
+  // Custom uploads live only on this page, so coming back here (Back from
+  // Details) would drop a chosen custom thumbnail from the grid while it stays
+  // selected in the upload state. Put it back as the custom card it was; the
+  // "newest custom" effect below then re-selects it at its new index.
+  const keptCustom = !!(selectedThumbnail && thumbnailFile && !generatedThumbnail.includes(selectedThumbnail));
+  const [customfile, setCustomFile] = useState(() => (keptCustom ? [selectedThumbnail] : []));
+  const [customFiles, setCustomFiles] = useState(() => (keptCustom ? [thumbnailFile] : []));
   const [thumbDragging, setThumbDragging] = useState(false);
 
   const thumbnailInputRef = useRef(null);
@@ -121,16 +125,33 @@ function EmbedThumbnail() {
     setStep(3);
   };
 
+  // Rendered above and below the grid from this one object. Back keeps the
+  // picked video (EmbedStudioPage only resets after a COMPLETED upload); the
+  // mode goes along in the URL, because arriving there without `?from=stories`
+  // reads as "long-form" and would drop a Short's selection. A prefilled upload
+  // (Hangouts recording) never had a select step, so it gets no Back.
+  const actions = {
+    back: prefilled ? null : {
+      label: t("common.actions.back"),
+      onClick: () => navigate(fromStories ? "/embed-studio?from=stories" : "/embed-studio"),
+    },
+    primary: [{ key: "proceed", label: t("upload.thumbnail.proceed"), onClick: uploadThumbnail }],
+  };
+
   return (
     <>
-      <div className="studio-main-container">
+      <div className="studio-main-container embed-wizard">
         <div className="studio-page-header">
           <h1>{fromStories ? t("upload.page.shareShort") : t("upload.page.shareVideo")}</h1>
         </div>
 
-        <StepProgress step={step} />
+        <StepProgress step={step} short={fromStories} />
+        {/* Shows only once the background upload runs (it starts on Details),
+            i.e. after coming back here: it keeps going, and this says so. */}
+        <EmbedUploadProgressBar />
 
         <div className="studio-page-content">
+          <StepActions placement="top" {...actions} />
           <div className="upload-step">
             <div className="upload-step__header">
               <h2 className="upload-step__title">{t("upload.thumbnail.title")}</h2>
@@ -140,18 +161,6 @@ function EmbedThumbnail() {
             </div>
 
             <div className="upload-step__content">
-              <div className="upload-step__actions">
-                <button
-                  onClick={uploadThumbnail}
-                  className="button button-primary"
-                >
-                  {loading ? (
-                    <TailChase size="20" speed="1.75" color="white" />
-                  ) : (
-                    t("upload.thumbnail.proceed")
-                  )}
-                </button>
-              </div>
               <div className={`thumbnail-grid${fromStories ? ' thumbnail-grid--portrait' : ''}`}>
                 {allThumbnails.map((thumbnail, index) => (
                   <div
@@ -232,6 +241,7 @@ function EmbedThumbnail() {
               </div>
             </div>
           </div>
+          <StepActions placement="bottom" {...actions} />
         </div>
       </div>
     </>

@@ -1,12 +1,24 @@
 @use "../../mixins.scss" as mix;
 
-/* Redesigned embed-studio review/preview step — single column, rendered to look
-   like the final post (player → title → description), with publish settings
-   shown below the post body. */
+/* Redesigned embed-studio review/preview step, rendered to look like the final
+   post (player → title → description). It takes the wizard's full content width
+   (EmbedWizard.scss, the stepper's 1100px): on wide screens the post keeps a
+   readable column (about the old 760px) and the publish settings sit beside it;
+   below that they stack, settings under the post. */
 .ep-review {
-  max-width: 760px;
-  margin: 0 auto;
   width: 100%;
+  min-width: 0;
+
+  @media (min-width: 1025px) {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 340px;
+    gap: 24px;
+    align-items: start;
+
+    .ep-settings { margin-top: 0; }
+    /* Narrower label column in the side panel so values keep room. */
+    .ep-setting { grid-template-columns: 22px 100px 1fr; }
+  }
 }
 
 /* ---- The post preview itself ---- */
@@ -223,66 +235,6 @@
 .ep-nsfw-on {
   color: var(--accent-primary, #e53935);
   font-weight: 700;
-}
-
-/* ---- Actions row (below the grid) ---- */
-.ep-actions {
-  display: flex;
-  justify-content: flex-end;
-  gap: 12px;
-  margin-top: 22px;
-  flex-wrap: wrap;
-
-  @include mix.respond(phone) {
-    .ep-btn { flex: 1; }
-  }
-}
-
-.ep-btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  padding: 12px 26px;
-  border-radius: 12px;
-  font-size: 15px;
-  font-weight: 700;
-  cursor: pointer;
-  border: 1px solid transparent;
-  transition: opacity 0.15s ease, background 0.15s ease, color 0.15s ease;
-
-  &--secondary {
-    background: transparent;
-    border-color: var(--border-color, rgba(0, 0, 0, 0.2));
-    color: var(--text-primary, #111);
-    &:hover { background: var(--bg-secondary, #f1f1f3); }
-  }
-
-  &--primary {
-    background: transparent;
-    border: 1px solid var(--accent-primary, #e53935);
-    color: var(--accent-primary, #e53935);
-    &:hover { opacity: 0.92; }
-  }
-
-  /* Inert, and it has to LOOK inert.
-   *
-   * The pre-upload gate leaves Post Video on screen but disabled until the sponsor
-   * spot has run, so the destination stays obvious. There was no disabled rule at all,
-   * so it kept the full accent fill, the pointer cursor AND the hover lift — it read
-   * as a live button that simply ignored the click.
-   *
-   * ⚠️ Declared after the variants on purpose. `.ep-btn--primary:hover` and
-   * `.ep-btn:disabled` carry the same specificity (0,2,0), so source order is what
-   * settles it; and `:hover` still matches a disabled button in every browser, hence
-   * the explicit `:disabled:hover`. */
-  &:disabled,
-  &:disabled:hover {
-    background: var(--bg-secondary, #f1f1f3);
-    color: var(--text-secondary, #6b7280);
-    border-color: var(--border-light, #d1d5db);
-    opacity: 0.6;
-    cursor: not-allowed;
-  }
 }
 
 /* Promote button on the upload success screen */
