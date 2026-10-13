@@ -1,11 +1,13 @@
-import { Suspense, lazy } from 'react';
+import { Suspense } from 'react';
+import lazyRoute from '../utils/lazyRoute';
 import { useSearchParams } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import { useTranslation } from 'react-i18next';
 import './Groups.scss';
 
-const CommunitiesRender = lazy(() => import('../components/Communities/CommunitiesRender'));
-const BadgesRender = lazy(() => import('../components/Badges/BadgesRender'));
+// lazyRoute, not lazy: reloads once onto a new build after a deploy (see lazyRoute.js).
+const CommunitiesRender = lazyRoute(() => import('../components/Communities/CommunitiesRender'), '../components/Communities/CommunitiesRender');
+const BadgesRender = lazyRoute(() => import('../components/Badges/BadgesRender'), '../components/Badges/BadgesRender');
 
 // Communities and badges are the same idea wearing different clothes: a marker
 // that gathers people. A community is a group you join; a badge is one you are

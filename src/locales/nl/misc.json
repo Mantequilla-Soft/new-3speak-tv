@@ -143,8 +143,11 @@
   "routeError": {
     "title": "Deze pagina is niet geladen",
     "body": "Een deel van de app kon niet worden gedownload. Dat betekent meestal dat er een nieuwe versie is uitgebracht terwijl dit tabblad openstond. Herladen lost het op.",
+    "brokenTitle": "Er ging iets mis op deze pagina",
+    "brokenBody": "Een deel van deze pagina liep tegen een fout aan. Opnieuw laden lost het meestal op, en de details hieronder helpen ons de oorzaak te vinden.",
     "reload": "Herladen",
-    "goHome": "Naar home"
+    "goHome": "Naar home",
+    "details": "Details"
   },
   "seo": {
     "defaultTitle": "3Speak - Gedecentraliseerd videoplatform",
