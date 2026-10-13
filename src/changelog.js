@@ -7,6 +7,24 @@
 // 1.0.0 — that way they see all of these when develop is pushed to production.
 export const CHANGELOG = [
   {
+    version: '1.79.75',
+    date: '2026-10-13',
+    summary:
+      'After publishing audio you get buttons to open your post or playlist, and audio tiles now show their album and track number.',
+  },
+  {
+    version: '1.79.74',
+    date: '2026-10-13',
+    summary:
+      'Easier album uploads: tags turn into pills, each track has its own text, and the album post lists links to all its tracks.',
+  },
+  {
+    version: '1.79.73',
+    date: '2026-10-13',
+    summary:
+      "Uploads get an Add to my blog option (on by default), so your videos and audio posts also reach your blog and your followers' feeds.",
+  },
+  {
     version: '1.79.72',
     date: '2026-10-13',
     summary:

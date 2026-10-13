@@ -103,6 +103,8 @@ async function fetchVideosForPlaylist(items) {
         duration,
         position: item.position,
         added_at: item.added_at,
+        parentAuthor: post.parent_author || '',
+        parentPermlink: post.parent_permlink || '',
         isAudio: !!audioDoc,
         audioPermlink,
         audioDoc,
@@ -193,9 +195,21 @@ function PlaylistView() {
 
   const since = useMemo(() => getSinceTimestamp(dateFilter), [dateFilter]);
 
+  // Album uploads used to add the album's own post to the playlist as well.
+  // It carries no audio (its tracks are replies to it), so it showed up as an
+  // empty video card. Hide any item whose replies are tracks in this playlist.
+  // It stays in the reorder list, where the owner can still remove it.
+  const listedVideos = useMemo(() => {
+    const albumPosts = new Set(
+      allVideos.filter(v => v.isAudio && v.parentAuthor).map(v => `${v.parentAuthor}/${v.parentPermlink}`)
+    );
+    if (albumPosts.size === 0) return allVideos;
+    return allVideos.filter(v => v.isAudio || !albumPosts.has(`${v.author}/${v.permlink}`));
+  }, [allVideos]);
+
   const displayVideos = useMemo(() => {
-    if (!since) return allVideos;
-    return allVideos.filter(v => {
+    if (!since) return listedVideos;
+    return listedVideos.filter(v => {
       const addedAt = v.added_at;
       if (!addedAt) return true;
       let ts;
@@ -207,7 +221,10 @@ function PlaylistView() {
       }
       return ts == null || ts >= since;
     });
-  }, [allVideos, since]);
+  }, [listedVideos, since]);
+
+  // Track numbers on audio tiles count the tracks only, in playlist order.
+  const audioTracks = useMemo(() => displayVideos.filter(v => v.isAudio && v.audioDoc), [displayVideos]);
 
   // Check if there are unsaved changes
   const hasChanges = pendingChanges.length > 0;
@@ -499,7 +516,7 @@ function PlaylistView() {
                 @{playlist.owner}
               </Link>
               <span className="separator">•</span>
-              <span>{t('playlists.view.items', { count: allVideos.length })}</span>
+              <span>{t('playlists.view.items', { count: listedVideos.length })}</span>
               <span className="separator">•</span>
               <span>{t('playlists.view.created', { when: dayjs.unix(playlist.created_at).fromNow() })}</span>
               {/* Podcast / RSS feed for this playlist (checker routes/rss.js), so
@@ -610,7 +627,7 @@ function PlaylistView() {
           ))}
         </div>
         {dateFilter !== 'all' && (
-          <span className="filter-count">{t('playlists.view.filterCount', { shown: displayVideos.length, count: allVideos.length })}</span>
+          <span className="filter-count">{t('playlists.view.filterCount', { shown: displayVideos.length, count: listedVideos.length })}</span>
         )}
       </div>
 
@@ -698,6 +715,8 @@ function PlaylistView() {
                     : v.audioDoc
                 ))}
                 loggedIn={!!authenticatedUser}
+                trackNumber={audioTracks.indexOf(video) + 1}
+                hideAlbum
                 onAddToPlaylist={() => setPlaylistTarget({
                   author: video.audioDoc.owner,
                   permlink: video.audioDoc.post_permlink || video.audioDoc.permlink,

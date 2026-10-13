@@ -193,6 +193,11 @@
       "info": "Inaweka alama kuwa video hii ni maudhui ya watu wazima. Itafichwa kwenye milisho na utafutaji kwa watazamaji ambao hawajawasha NSFW, na itawekwa lebo <code>nsfw</code> kote Hive.",
       "hint": "Maudhui ya watu wazima."
     },
+    "addToBlog": {
+      "label": "Ongeza kwenye blogu yangu",
+      "hint": "Ionyeshe kwenye blogu yako na kwenye mlisho wa wafuasi wako.",
+      "info": "3Speak huchapisha kila video kwenye jumuiya, na Hive haionyeshi machapisho ya jumuiya kwenye blogu yako wala kwenye mlisho wa wafuasi wako usipoyashiriki. Ukiwasha hili, 3Speak hushiriki (hu-reblog) video kwenye blogu yako mara tu baada ya kuchapisha."
+    },
     "ads": {
       "label": "Matangazo kwenye video hii",
       "info": "Akaunti yako inaonyesha matangazo, kwa hivyo video hii pia, isipokuwa ukiyazima hapa. Hii inahusu video hii moja tu; video zako nyingine na mpangilio wa akaunti yako vinabaki vilevile.",
@@ -398,6 +403,7 @@
     "couldNotSchedule": "Imeshindwa kuratibu chapisho",
     "scheduleFailed": "Kuratibu kumeshindwa: {{msg}}",
     "hivePostFailed": "Imeshindwa kuchapisha kwenye Hive",
-    "uploadFailedWith": "Upakiaji umeshindwa: {{msg}}"
+    "uploadFailedWith": "Upakiaji umeshindwa: {{msg}}",
+    "addToBlogFailed": "Imechapishwa, lakini kuiongeza kwenye blogu yako kumeshindikana: {{error}}"
   }
 }

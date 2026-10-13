@@ -192,6 +192,11 @@
       "info": "Đánh dấu video này là nội dung người lớn. Video sẽ bị ẩn khỏi bảng tin và tìm kiếm đối với người xem chưa bật NSFW, và được gắn thẻ <code>nsfw</code> trên toàn Hive.",
       "hint": "Nội dung người lớn."
     },
+    "addToBlog": {
+      "label": "Thêm vào blog của tôi",
+      "hint": "Hiển thị trên blog của bạn và trong bảng tin của người theo dõi.",
+      "info": "3Speak đăng mọi video vào một cộng đồng, và Hive không hiển thị bài đăng cộng đồng trên blog của bạn hay trong bảng tin của người theo dõi trừ khi bạn chia sẻ chúng. Khi bật tùy chọn này, 3Speak sẽ chia sẻ (reblog) video lên blog của bạn ngay sau khi xuất bản."
+    },
     "ads": {
       "label": "Quảng cáo trên video này",
       "info": "Tài khoản của bạn đang bật quảng cáo, nên video này cũng có quảng cáo trừ khi bạn tắt tại đây. Cài đặt này chỉ áp dụng cho video này; các video khác và cài đặt tài khoản của bạn vẫn giữ nguyên.",
@@ -396,6 +401,7 @@
     "couldNotSchedule": "Không thể lên lịch bài đăng",
     "scheduleFailed": "Lên lịch thất bại: {{msg}}",
     "hivePostFailed": "Không thể đăng lên Hive",
-    "uploadFailedWith": "Tải lên thất bại: {{msg}}"
+    "uploadFailedWith": "Tải lên thất bại: {{msg}}",
+    "addToBlogFailed": "Đã xuất bản, nhưng không thêm được vào blog của bạn: {{error}}"
   }
 }

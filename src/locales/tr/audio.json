@@ -20,7 +20,8 @@
     "queue": "Sıraya ekle",
     "playlist": "Oynatma listesi",
     "plays_one": "{{count}} dinlenme",
-    "plays_other": "{{count}} dinlenme"
+    "plays_other": "{{count}} dinlenme",
+    "fromAlbum": "{{album}} albümünden"
   },
   "author": {
     "followed": "@{{author}} takip edildi",
@@ -135,7 +136,9 @@
       "couldntResolveContainer": "peak.snaps kapsayıcısı çözümlenemedi: {{error}}",
       "published_one": "{{count}} parça yayınlandı",
       "published_other": "{{count}} parça yayınlandı",
-      "someFailed": "Bazı parçalar başarısız oldu; yeniden denemek için başarısız parçayı aç"
+      "someFailed": "Bazı parçalar başarısız oldu; yeniden denemek için başarısız parçayı aç",
+      "trackLinksFailed": "Parçaların yayınlandı ama bağlantıları albüm gönderisine eklenemedi: {{error}}",
+      "addToBlogFailed": "Yayınlandı ama bloguna eklenemedi: {{error}}"
     },
     "gate": {
       "checking": "Kontrol ediliyor…",
@@ -175,6 +178,7 @@
     "playlist": {
       "helpRequired": "Zorunlu: bir oynatma listesi seç veya oluştur. Albüm gönderileri bir oynatma listesinin içinde durur, böylece parçaları bir 3Speak albümünde gruplanmış kalır. Bu, daha fazla görünürlük ve ses sayfasında daha öne çıkan bir yer sağlar.",
       "helpOptional": "İsteğe bağlı: tüm parçaları bir oynatma listesine ekle.",
+      "onlyOn3Speak": "Oynatma listeleri yalnızca 3Speak'te bulunur. Parçalarını burada gruplar ve gönderilerini asla değiştirmez.",
       "none": "Oynatma listesi yok",
       "noneHint": "Parçalar gruplanmaz",
       "creatingPending": "oluşturuluyor… (dizinleyici bekleniyor)",
@@ -235,7 +239,10 @@
       "selectCommunity": "Topluluk seç",
       "change": "Değiştir",
       "tagsPlaceholder": "Etiketler: boşluk veya virgülle ayrılmış (isteğe bağlı)",
-      "whatKind": "Bu ne tür bir ses?"
+      "removeTag": "{{tag}} etiketini kaldır",
+      "whatKind": "Bu ne tür bir ses?",
+      "addToBlog": "Bloguma ekle",
+      "addToBlogHint": "Gönderiyi blogunda ve takipçilerinin akışında da gösterir. Bir topluluktaki gönderiler oraya kendiliğinden düşmez."
     },
     "tracks": {
       "helpAlbum": "Her parça ana gönderinin altında bir yorum olarak yayınlanır. Ortak değerleri bir kez ayarlayıp hepsine uygula, sonra parça bazında değiştir.",
@@ -245,7 +252,9 @@
       "sharedCover": "Ortak kapak görseli",
       "applyToAll_one": "{{count}} parçanın tümüne uygula",
       "applyToAll_other": "{{count}} parçanın tümüne uygula",
-      "hide": "Gizle"
+      "hide": "Gizle",
+      "commentText": "Bu parçanın yorum metni (isteğe bağlı)",
+      "snapText": "Bu snap için metin (isteğe bağlı)"
     },
     "review": {
       "standalone": "Bağımsız gönderi",
@@ -270,7 +279,15 @@
       "retryAllFailed": "Başarısızların hepsini yeniden dene",
       "failedDuringUpload": "Ses dosyası yüklenirken başarısız oldu: {{message}}",
       "failedDuringPost": "Hive'a gönderilirken başarısız oldu: {{message}}",
-      "failedWithMessage": "Başarısız: {{message}}"
+      "failedWithMessage": "Başarısız: {{message}}",
+      "mainFailed": "Albüm gönderisi yayınlanamadı: {{message}}",
+      "containerFailed": "Gönderilecek snap dizisine ulaşılamadı: {{message}}"
+    },
+    "done": {
+      "title": "Tamamdır! Sesin yayınlandı.",
+      "openPost": "Gönderiyi aç",
+      "openPlaylist": "Oynatma listesini aç",
+      "openMyAudio": "Seslerimi aç"
     },
     "stage": {
       "upload": "Ses dosyası yükleniyor",

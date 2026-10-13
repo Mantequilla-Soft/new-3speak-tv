@@ -193,6 +193,11 @@
       "info": "Markeert deze video als inhoud voor volwassenen. Hij wordt verborgen in feeds en zoekresultaten voor kijkers die NSFW niet hebben ingeschakeld, en op heel Hive getagd als <code>nsfw</code>.",
       "hint": "Inhoud voor volwassenen."
     },
+    "addToBlog": {
+      "label": "Toevoegen aan mijn blog",
+      "hint": "Toon hem op je blog en in de feed van je volgers.",
+      "info": "3Speak plaatst elke video in een community, en Hive houdt communityposts buiten je blog en de feed van je volgers, tenzij je ze deelt. Met deze optie aan deelt (reblogt) 3Speak de video op je blog direct na het publiceren."
+    },
     "ads": {
       "label": "Advertenties in deze video",
       "info": "Je account toont advertenties, dus deze video ook, tenzij je ze hier uitzet. Dit geldt alleen voor deze ene video; je andere video's en je accountinstelling blijven ongewijzigd.",
@@ -398,6 +403,7 @@
     "couldNotSchedule": "Post kon niet worden ingepland",
     "scheduleFailed": "Inplannen mislukt: {{msg}}",
     "hivePostFailed": "Posten op Hive mislukt",
-    "uploadFailedWith": "Uploaden mislukt: {{msg}}"
+    "uploadFailedWith": "Uploaden mislukt: {{msg}}",
+    "addToBlogFailed": "Gepubliceerd, maar toevoegen aan je blog is mislukt: {{error}}"
   }
 }

@@ -192,6 +192,11 @@
       "info": "Menandai video ini sebagai konten dewasa. Video akan disembunyikan dari feed dan pencarian bagi penonton yang belum mengaktifkan NSFW, dan diberi tag <code>nsfw</code> di seluruh Hive.",
       "hint": "Konten dewasa."
     },
+    "addToBlog": {
+      "label": "Tambahkan ke blog saya",
+      "hint": "Tampilkan di blog Anda dan di feed pengikut Anda.",
+      "info": "3Speak memposting setiap video ke sebuah komunitas, dan Hive tidak menampilkan postingan komunitas di blog Anda maupun di feed pengikut Anda kecuali Anda membagikannya. Jika ini aktif, 3Speak membagikan (me-reblog) video ke blog Anda tepat setelah diterbitkan."
+    },
     "ads": {
       "label": "Iklan di video ini",
       "info": "Akunmu menayangkan iklan, jadi video ini juga, kecuali kamu mematikannya di sini. Ini hanya berlaku untuk video ini; video lain dan pengaturan akunmu tetap sama.",
@@ -396,6 +401,7 @@
     "couldNotSchedule": "Postingan tidak dapat dijadwalkan",
     "scheduleFailed": "Penjadwalan gagal: {{msg}}",
     "hivePostFailed": "Gagal memposting ke Hive",
-    "uploadFailedWith": "Gagal mengunggah: {{msg}}"
+    "uploadFailedWith": "Gagal mengunggah: {{msg}}",
+    "addToBlogFailed": "Sudah diterbitkan, tetapi gagal ditambahkan ke blog Anda: {{error}}"
   }
 }

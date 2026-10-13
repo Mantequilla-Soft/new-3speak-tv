@@ -21,7 +21,8 @@
     "playlist": "Playlist",
     "plays_one": "{{count}} reprodução",
     "plays_many": "{{count}} reproduções",
-    "plays_other": "{{count}} reproduções"
+    "plays_other": "{{count}} reproduções",
+    "fromAlbum": "de {{album}}"
   },
   "author": {
     "followed": "Seguindo @{{author}}",
@@ -139,7 +140,9 @@
       "published_one": "{{count}} faixa publicada",
       "published_many": "{{count}} faixas publicadas",
       "published_other": "{{count}} faixas publicadas",
-      "someFailed": "Algumas faixas falharam — abra a faixa com falha para tentar de novo"
+      "someFailed": "Algumas faixas falharam — abra a faixa com falha para tentar de novo",
+      "trackLinksFailed": "Suas faixas foram publicadas, mas não foi possível adicionar os links delas ao post do álbum: {{error}}",
+      "addToBlogFailed": "Publicado, mas não foi possível adicionar ao seu blog: {{error}}"
     },
     "gate": {
       "checking": "Verificando…",
@@ -181,6 +184,7 @@
     "playlist": {
       "helpRequired": "Obrigatório — escolha ou crie uma playlist. Posts de álbum ficam dentro de uma playlist para que as faixas continuem agrupadas em um álbum do 3Speak. Isso ajuda na visibilidade e dá mais destaque na página de áudio.",
       "helpOptional": "Opcional — adicione todas as faixas a uma playlist.",
+      "onlyOn3Speak": "Playlists existem só no 3Speak. Elas agrupam suas faixas aqui e nunca alteram seus posts.",
       "none": "Sem playlist",
       "noneHint": "As faixas não serão agrupadas",
       "creatingPending": "criando… (aguardando o indexador)",
@@ -243,7 +247,10 @@
       "selectCommunity": "Selecionar comunidade",
       "change": "Trocar",
       "tagsPlaceholder": "Tags — separadas por espaço ou vírgula (opcional)",
-      "whatKind": "Que tipo de áudio é este?"
+      "removeTag": "Remover tag {{tag}}",
+      "whatKind": "Que tipo de áudio é este?",
+      "addToBlog": "Adicionar ao meu blog",
+      "addToBlogHint": "Mostra o post também no seu blog e no feed dos seus seguidores. Posts em uma comunidade não aparecem lá sozinhos."
     },
     "tracks": {
       "helpAlbum": "Cada faixa é publicada como comentário no post principal. Defina os valores comuns uma vez, aplique a todas e depois ajuste faixa por faixa.",
@@ -254,7 +261,9 @@
       "applyToAll_one": "Aplicar à {{count}} faixa",
       "applyToAll_many": "Aplicar a todas as {{count}} faixas",
       "applyToAll_other": "Aplicar a todas as {{count}} faixas",
-      "hide": "Ocultar"
+      "hide": "Ocultar",
+      "commentText": "Texto do comentário desta faixa (opcional)",
+      "snapText": "Texto deste snap (opcional)"
     },
     "review": {
       "standalone": "Post individual",
@@ -285,7 +294,15 @@
       "retryAllFailed": "Tentar de novo todas as que falharam",
       "failedDuringUpload": "Falha ao enviar o arquivo de áudio: {{message}}",
       "failedDuringPost": "Falha ao publicar na Hive: {{message}}",
-      "failedWithMessage": "Falhou: {{message}}"
+      "failedWithMessage": "Falhou: {{message}}",
+      "mainFailed": "Não foi possível publicar o post do álbum: {{message}}",
+      "containerFailed": "Não foi possível acessar o tópico de snaps para publicar: {{message}}"
+    },
+    "done": {
+      "title": "Pronto! Seu áudio foi publicado.",
+      "openPost": "Abrir post",
+      "openPlaylist": "Abrir playlist",
+      "openMyAudio": "Abrir meus áudios"
     },
     "stage": {
       "upload": "Enviando arquivo de áudio",

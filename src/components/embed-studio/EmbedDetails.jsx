@@ -61,6 +61,7 @@ function EmbedDetails() {
     fromStories,
     reusable, setReusable,
     isNsfw, setIsNsfw,
+    addToBlog, setAddToBlog,
     videoAdsEnabled, setVideoAdsEnabled,
     gated, setGated,
     gatedAllowlist, setGatedAllowlist,
@@ -412,6 +413,24 @@ function EmbedDetails() {
                     <span className="toggle-track"><span className="toggle-thumb" /></span>
                   </label>
                 </div>
+                {/* Regular videos only: a short is a reply, not a post, so there
+                    is nothing to put on a blog. */}
+                {!fromStories && (
+                  <div className="beneficiary-wrap" onClick={() => setAddToBlog(!addToBlog)}>
+                    <div className="wrap">
+                      <span>{t('upload.details.addToBlog.label')}<SettingInfo title={t('upload.details.addToBlog.label')}>{t('upload.details.addToBlog.info')}</SettingInfo></span>
+                      <span>{t('upload.details.addToBlog.hint')}</span>
+                    </div>
+                    <label className="toggle-switch" onClick={(e) => e.stopPropagation()}>
+                      <input
+                        type="checkbox"
+                        checked={!!addToBlog}
+                        onChange={(e) => setAddToBlog(e.target.checked)}
+                      />
+                      <span className="toggle-track"><span className="toggle-thumb" /></span>
+                    </label>
+                  </div>
+                )}
                 {accountAdsOn && (
                   <div className="beneficiary-wrap" onClick={() => setVideoAdsEnabled(!videoAdsEnabled)}>
                     <div className="wrap">

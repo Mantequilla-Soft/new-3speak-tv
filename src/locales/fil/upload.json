@@ -193,6 +193,11 @@
       "info": "Mamarkahan ang video na ito bilang adult content. Itatago ito sa feeds at search para sa mga viewer na hindi nag-enable ng NSFW, at ita-tag na <code>nsfw</code> sa buong Hive.",
       "hint": "Adult content."
     },
+    "addToBlog": {
+      "label": "Idagdag sa blog ko",
+      "hint": "Ipakita ito sa blog mo at sa feed ng mga follower mo.",
+      "info": "Pino-post ng 3Speak ang bawat video sa isang community, at hindi ipinapakita ng Hive ang mga community post sa blog mo o sa feed ng mga follower mo maliban kung i-share mo ang mga ito. Kapag naka-on ito, ishe-share (ire-reblog) ng 3Speak ang video sa blog mo pagkatapos itong ma-publish."
+    },
     "ads": {
       "label": "Mga ad sa video na ito",
       "info": "May mga ad ang account mo, kaya pati ang video na ito, maliban kung i-off mo ito rito. Sa video na ito lang ito may epekto; hindi magbabago ang iba mong video at ang setting ng account mo.",
@@ -398,6 +403,7 @@
     "couldNotSchedule": "Hindi ma-schedule ang post",
     "scheduleFailed": "Pumalya ang pag-schedule: {{msg}}",
     "hivePostFailed": "Hindi ma-post sa Hive",
-    "uploadFailedWith": "Pumalya ang upload: {{msg}}"
+    "uploadFailedWith": "Pumalya ang upload: {{msg}}",
+    "addToBlogFailed": "Na-publish na, pero hindi ito naidagdag sa blog mo: {{error}}"
   }
 }

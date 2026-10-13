@@ -22,6 +22,7 @@ import { oaEnvelope, threespeakVideo, probeVideoOrientation, OA_ARTICLE, OA_MICR
 import axios from 'axios';
 import { isWeakLinkForced } from '../utils/uploadFaults';
 import { useTranslation } from 'react-i18next';
+import { readAddToBlog, writeAddToBlog, reblogOp } from '../utils/addToBlog';
 
 // Every toast from this module is headed "Upload"; the message becomes the
 // line under it. See utils/toast.js.
@@ -154,6 +155,11 @@ export function EmbedUploadProvider({ children }) {
   const [declineRewards, SetDeclineRewards] = useState(false);
   const [rewardPowerup, setRewardPowerup] = useState(false);
   const [isNsfw, setIsNsfw] = useState(false);
+  // "Add to my blog" (utils/addToBlog.js): reblog a regular video right after
+  // publishing so it reaches the creator's blog and followers' feeds. Never
+  // for shorts, which are replies, not posts. On by default, remembered.
+  const [addToBlog, setAddToBlogState] = useState(readAddToBlog);
+  const setAddToBlog = useCallback((on) => { setAddToBlogState(on); writeAddToBlog(on); }, []);
   // Per-video ad opt-out. Only offered to creators whose account-level setting
   // carries ads; written into the post itself, see the publish path below.
   const [videoAdsEnabled, setVideoAdsEnabled] = useState(true);
@@ -2024,6 +2030,19 @@ export function EmbedUploadProvider({ children }) {
         throw new Error(t('upload.errors.hivePostFailed'));
       }
 
+      // "Add to my blog": reblog the video right after it is out, as its own
+      // broadcast (the way Ecency does it). Regular videos only. Never fails
+      // the upload: the video is published either way.
+      if (addToBlog && !fromStories && !incubationHandle) {
+        try {
+          const reblog = [reblogOp(user, user, hivePermlink)];
+          if (useThreespeakProxy) await broadcastViaThreespeak(reblog);
+          else await broadcastWithAioha(reblog, KeyTypes.Posting);
+        } catch (reblogErr) {
+          toast.error(t('upload.errors.addToBlogFailed', { error: reblogErr?.message || '' }));
+        }
+      }
+
       addMessage(t('upload.publishing.log.postedToHive'));
       setStatusText(t('upload.publishing.linkingEmbed'));
 
@@ -2155,6 +2174,7 @@ export function EmbedUploadProvider({ children }) {
     tagsInputValue, setTagsInputValue,
     tagsPreview, setTagsPreview,
     community, setCommunity,
+    addToBlog, setAddToBlog,
     beneficiaries, setBeneficiaries,
     declineRewards, SetDeclineRewards,
     rewardPowerup, setRewardPowerup,

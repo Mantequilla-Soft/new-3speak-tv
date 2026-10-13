@@ -19,7 +19,8 @@
     "bpm": "{{bpm}} bpm",
     "queue": "キュー",
     "playlist": "再生リスト",
-    "plays_other": "{{count}} 回再生"
+    "plays_other": "{{count}} 回再生",
+    "fromAlbum": "{{album}} より"
   },
   "author": {
     "followed": "@{{author}} さんをフォローしました",
@@ -131,7 +132,9 @@
       "couldntPublishMain": "メイン投稿を公開できませんでした: {{error}}",
       "couldntResolveContainer": "peak.snaps のコンテナを取得できませんでした: {{error}}",
       "published_other": "{{count}} トラックを公開しました",
-      "someFailed": "一部のトラックが失敗しました。失敗したトラックを開いて再試行してください"
+      "someFailed": "一部のトラックが失敗しました。失敗したトラックを開いて再試行してください",
+      "trackLinksFailed": "トラックは公開されましたが、アルバム投稿へのリンク追加に失敗しました: {{error}}",
+      "addToBlogFailed": "公開されましたが、自分のブログへの追加に失敗しました: {{error}}"
     },
     "gate": {
       "checking": "確認中…",
@@ -169,6 +172,7 @@
     "playlist": {
       "helpRequired": "必須 — 再生リストを選ぶか作成してください。アルバム投稿は再生リストの中に置かれ、トラックが 3Speak のアルバムとしてまとまります。露出が増え、音声ページで目立つ位置に表示されやすくなります。",
       "helpOptional": "任意 — すべてのトラックを再生リストに追加します。",
+      "onlyOn3Speak": "再生リストは 3Speak の中だけのものです。ここでトラックをまとめるだけで、投稿を変更することはありません。",
       "none": "再生リストなし",
       "noneHint": "トラックはまとめられません",
       "creatingPending": "作成中…（インデクサーを待っています）",
@@ -227,7 +231,10 @@
       "selectCommunity": "コミュニティを選択",
       "change": "変更",
       "tagsPlaceholder": "タグ — スペースまたはカンマ区切り（任意）",
-      "whatKind": "どんな種類の音声ですか？"
+      "removeTag": "タグ {{tag}} を削除",
+      "whatKind": "どんな種類の音声ですか？",
+      "addToBlog": "自分のブログに追加",
+      "addToBlogHint": "投稿を自分のブログとフォロワーのフィードにも表示します。コミュニティの投稿は自動ではそこに表示されません。"
     },
     "tracks": {
       "helpAlbum": "各トラックはメイン投稿へのコメントとして公開されます。共通の値を一度設定してすべてに適用し、トラックごとに上書きできます。",
@@ -236,7 +243,9 @@
       "sharedDescription": "共通の説明（任意）",
       "sharedCover": "共通のカバー画像",
       "applyToAll_other": "{{count}} トラックすべてに適用",
-      "hide": "隠す"
+      "hide": "隠す",
+      "commentText": "このトラックのコメント本文（任意）",
+      "snapText": "この Snap の本文（任意）"
     },
     "review": {
       "standalone": "単独の投稿",
@@ -255,7 +264,15 @@
       "retryAllFailed": "失敗したものをすべて再試行",
       "failedDuringUpload": "音声ファイルのアップロード中に失敗しました: {{message}}",
       "failedDuringPost": "Hive への投稿中に失敗しました: {{message}}",
-      "failedWithMessage": "失敗しました: {{message}}"
+      "failedWithMessage": "失敗しました: {{message}}",
+      "mainFailed": "アルバム投稿を公開できませんでした: {{message}}",
+      "containerFailed": "投稿先の Snap スレッドに接続できませんでした: {{message}}"
+    },
+    "done": {
+      "title": "完了！オーディオが公開されました。",
+      "openPost": "投稿を開く",
+      "openPlaylist": "再生リストを開く",
+      "openMyAudio": "自分のオーディオを開く"
     },
     "stage": {
       "upload": "音声ファイルをアップロード中",

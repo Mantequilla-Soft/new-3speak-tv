@@ -19,7 +19,8 @@
     "bpm": "{{bpm}} bpm",
     "queue": "Antrean",
     "playlist": "Playlist",
-    "plays_other": "{{count}} kali diputar"
+    "plays_other": "{{count}} kali diputar",
+    "fromAlbum": "dari {{album}}"
   },
   "author": {
     "followed": "Mengikuti @{{author}}",
@@ -131,7 +132,9 @@
       "couldntPublishMain": "Postingan utama tidak dapat diterbitkan: {{error}}",
       "couldntResolveContainer": "Kontainer peak.snaps tidak dapat ditemukan: {{error}}",
       "published_other": "{{count}} lagu diterbitkan",
-      "someFailed": "Beberapa lagu gagal — buka lagu yang gagal untuk mencoba lagi"
+      "someFailed": "Beberapa lagu gagal — buka lagu yang gagal untuk mencoba lagi",
+      "trackLinksFailed": "Lagu Anda sudah diterbitkan, tetapi tautannya gagal ditambahkan ke postingan album: {{error}}",
+      "addToBlogFailed": "Sudah diterbitkan, tetapi gagal ditambahkan ke blog Anda: {{error}}"
     },
     "gate": {
       "checking": "Memeriksa…",
@@ -169,6 +172,7 @@
     "playlist": {
       "helpRequired": "Wajib — pilih atau buat playlist. Postingan album berada di dalam playlist agar lagu-lagunya tetap terkelompok dalam album 3Speak. Ini membantu eksposur dan penempatan yang lebih menonjol di halaman audio.",
       "helpOptional": "Opsional — tambahkan semua lagu ke playlist.",
+      "onlyOn3Speak": "Playlist hanya ada di 3Speak. Playlist mengelompokkan lagu Anda di sini dan tidak pernah mengubah postingan Anda.",
       "none": "Tanpa playlist",
       "noneHint": "Lagu tidak akan dikelompokkan",
       "creatingPending": "membuat… (menunggu indexer)",
@@ -227,7 +231,10 @@
       "selectCommunity": "Pilih komunitas",
       "change": "Ganti",
       "tagsPlaceholder": "Tag — dipisahkan spasi atau koma (opsional)",
-      "whatKind": "Ini audio jenis apa?"
+      "removeTag": "Hapus tag {{tag}}",
+      "whatKind": "Ini audio jenis apa?",
+      "addToBlog": "Tambahkan ke blog saya",
+      "addToBlogHint": "Juga menampilkan postingan di blog Anda dan di feed pengikut Anda. Postingan di komunitas tidak muncul di sana dengan sendirinya."
     },
     "tracks": {
       "helpAlbum": "Setiap lagu diterbitkan sebagai komentar di bawah postingan utama. Atur nilai bersama sekali dan terapkan ke semua, lalu ubah per lagu.",
@@ -236,7 +243,9 @@
       "sharedDescription": "Deskripsi bersama (opsional)",
       "sharedCover": "Gambar sampul bersama",
       "applyToAll_other": "Terapkan ke semua {{count}} lagu",
-      "hide": "Sembunyikan"
+      "hide": "Sembunyikan",
+      "commentText": "Teks komentar untuk lagu ini (opsional)",
+      "snapText": "Teks untuk snap ini (opsional)"
     },
     "review": {
       "standalone": "Postingan mandiri",
@@ -255,7 +264,15 @@
       "retryAllFailed": "Coba lagi semua yang gagal",
       "failedDuringUpload": "Gagal saat mengunggah file audio: {{message}}",
       "failedDuringPost": "Gagal saat memposting ke Hive: {{message}}",
-      "failedWithMessage": "Gagal: {{message}}"
+      "failedWithMessage": "Gagal: {{message}}",
+      "mainFailed": "Postingan album tidak dapat diterbitkan: {{message}}",
+      "containerFailed": "Utas snap untuk memposting tidak dapat dijangkau: {{message}}"
+    },
+    "done": {
+      "title": "Selesai! Audio Anda sudah diterbitkan.",
+      "openPost": "Buka postingan",
+      "openPlaylist": "Buka playlist",
+      "openMyAudio": "Buka audio saya"
     },
     "stage": {
       "upload": "Mengunggah file audio",

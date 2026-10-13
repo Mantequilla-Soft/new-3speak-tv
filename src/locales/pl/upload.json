@@ -195,6 +195,11 @@
       "info": "Oznacza ten film jako treść dla dorosłych. Będzie ukryty w kanałach i wyszukiwaniu dla widzów, którzy nie włączyli NSFW, i otagowany jako <code>nsfw</code> w całym Hive.",
       "hint": "Treść dla dorosłych."
     },
+    "addToBlog": {
+      "label": "Dodaj do mojego bloga",
+      "hint": "Pokaż go na swoim blogu i w kanale swoich obserwujących.",
+      "info": "3Speak publikuje każdy film w społeczności, a Hive nie pokazuje postów ze społeczności na Twoim blogu ani w kanale Twoich obserwujących, dopóki ich nie udostępnisz. Gdy ta opcja jest włączona, 3Speak udostępnia (rebloguje) film na Twoim blogu zaraz po publikacji."
+    },
     "ads": {
       "label": "Reklamy w tym filmie",
       "info": "Twoje konto wyświetla reklamy, więc ten film też, chyba że wyłączysz je tutaj. Dotyczy to tylko tego jednego filmu; pozostałe filmy i ustawienie konta się nie zmieniają.",
@@ -402,6 +407,7 @@
     "couldNotSchedule": "Nie udało się zaplanować posta",
     "scheduleFailed": "Planowanie nie powiodło się: {{msg}}",
     "hivePostFailed": "Nie udało się opublikować na Hive",
-    "uploadFailedWith": "Przesyłanie nie powiodło się: {{msg}}"
+    "uploadFailedWith": "Przesyłanie nie powiodło się: {{msg}}",
+    "addToBlogFailed": "Opublikowano, ale nie udało się dodać do Twojego bloga: {{error}}"
   }
 }

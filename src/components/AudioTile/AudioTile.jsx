@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { formatTimeAgo } from '../../i18n';
 import { MdPlayArrow, MdPlaylistPlay, MdShare, MdAdd } from 'react-icons/md';
@@ -73,6 +73,8 @@ function getMetaLine(item, t) {
  *   onAddToPlaylist, onShare, onVote — optional; the corresponding action button
  *                  is only rendered when its callback is provided
  *   loggedIn      — gate playlist button rendering (defaults to false)
+ *   trackNumber   — optional; shown before the title (e.g. inside a playlist)
+ *   hideAlbum     — hide the "from <album>" line (the playlist page itself)
  */
 function AudioTile({
   item,
@@ -84,6 +86,8 @@ function AudioTile({
   onShare,
   onVote, // eslint-disable-line no-unused-vars
   loggedIn = false,
+  trackNumber,
+  hideAlbum = false,
 }) {
   const { t } = useTranslation();
   const audioCurrent = useAppStore((s) => s.audioCurrent);
@@ -215,15 +219,33 @@ function AudioTile({
 
   const body = (
     <div className="audio-tile-body">
-      <span className="audio-tile-title" onClick={handlePlay}>{item.title || t('audio.untitled')}</span>
+      <span className="audio-tile-title" onClick={handlePlay}>
+        {trackNumber != null && <span className="audio-tile-track-num">{trackNumber}.</span>}
+        {item.title || t('audio.untitled')}
+      </span>
       <AuthorBadge author={item.owner} showFollow={inView} compact tabHint="audio" onClick={onAuthorClick} />
       {metaLine && <span className="audio-tile-meta"><i className={`audio-tile-meta-icon ${audioCategoryIcon(item.category)}`} /> {metaLine}</span>}
+      {/* The album (public playlist) the track belongs to, from the checker. */}
+      {!hideAlbum && item.playlist_id && item.playlist_name && (
+        <Link
+          className="audio-tile-album"
+          to={`/playlist/${item.playlist_id}`}
+          onClick={(e) => e.stopPropagation()}
+        >
+          {t('audio.tile.fromAlbum', { album: item.playlist_name })}
+        </Link>
+      )}
       <div className="audio-tile-footer">
         <div className="audio-tile-footer-left">
           {item.stats?.total_hive_reward > 0 && <PayoutAmount amount={item.stats.total_hive_reward} size={10} />}
           {item.plays > 0 && <span>{t('audio.tile.plays', { count: item.plays })}</span>}
         </div>
-        <span className="audio-tile-time">{fmtAgo(item.createdAt)}</span>
+        <span
+          className="audio-tile-time"
+          title={item.createdAt ? new Date(item.createdAt).toLocaleString() : undefined}
+        >
+          {fmtAgo(item.createdAt)}
+        </span>
       </div>
     </div>
   );

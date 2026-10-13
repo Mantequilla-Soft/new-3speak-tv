@@ -19,7 +19,8 @@
     "bpm": "{{bpm}} bpm",
     "queue": "队列",
     "playlist": "播放列表",
-    "plays_other": "{{count}} 次播放"
+    "plays_other": "{{count}} 次播放",
+    "fromAlbum": "来自 {{album}}"
   },
   "author": {
     "followed": "已关注 @{{author}}",
@@ -131,7 +132,9 @@
       "couldntPublishMain": "无法发布主帖：{{error}}",
       "couldntResolveContainer": "无法解析 peak.snaps 容器：{{error}}",
       "published_other": "已发布 {{count}} 首曲目",
-      "someFailed": "部分曲目发布失败——打开失败的曲目重试"
+      "someFailed": "部分曲目发布失败——打开失败的曲目重试",
+      "trackLinksFailed": "曲目已发布，但未能把它们的链接添加到专辑帖子：{{error}}",
+      "addToBlogFailed": "已发布，但添加到你的博客失败：{{error}}"
     },
     "gate": {
       "checking": "检查中…",
@@ -169,6 +172,7 @@
     "playlist": {
       "helpRequired": "必填——选择或创建一个播放列表。专辑帖子位于播放列表中，这样它的曲目会集中在一张 3Speak 专辑里。这有助于提高曝光，并在音频页面获得更显眼的位置。",
       "helpOptional": "可选——把所有曲目添加到一个播放列表。",
+      "onlyOn3Speak": "播放列表只存在于 3Speak。它只在这里归类你的曲目，绝不会修改你的帖子。",
       "none": "不加入播放列表",
       "noneHint": "曲目不会被归组",
       "creatingPending": "创建中…（等待索引器）",
@@ -227,7 +231,10 @@
       "selectCommunity": "选择社区",
       "change": "更改",
       "tagsPlaceholder": "标签——用空格或逗号分隔（可选）",
-      "whatKind": "这是什么类型的音频？"
+      "removeTag": "移除标签 {{tag}}",
+      "whatKind": "这是什么类型的音频？",
+      "addToBlog": "添加到我的博客",
+      "addToBlogHint": "帖子也会显示在你的博客和关注者的动态中。社区里的帖子不会自动出现在那里。"
     },
     "tracks": {
       "helpAlbum": "每首曲目都会作为主帖下的评论发布。共享的设置只需填写一次并应用到全部，然后再按曲目单独修改。",
@@ -236,7 +243,9 @@
       "sharedDescription": "共享简介（可选）",
       "sharedCover": "共享封面图片",
       "applyToAll_other": "应用到全部 {{count}} 首曲目",
-      "hide": "隐藏"
+      "hide": "隐藏",
+      "commentText": "此曲目的评论内容（可选）",
+      "snapText": "此 Snap 的内容（可选）"
     },
     "review": {
       "standalone": "独立帖子",
@@ -255,7 +264,15 @@
       "retryAllFailed": "重试所有失败项",
       "failedDuringUpload": "上传音频文件时失败：{{message}}",
       "failedDuringPost": "发布到 Hive 时失败：{{message}}",
-      "failedWithMessage": "失败：{{message}}"
+      "failedWithMessage": "失败：{{message}}",
+      "mainFailed": "专辑帖子发布失败：{{message}}",
+      "containerFailed": "无法连接到要发布的 Snap 帖子串：{{message}}"
+    },
+    "done": {
+      "title": "完成！你的音频已发布。",
+      "openPost": "打开帖子",
+      "openPlaylist": "打开播放列表",
+      "openMyAudio": "打开我的音频"
     },
     "stage": {
       "upload": "正在上传音频文件",

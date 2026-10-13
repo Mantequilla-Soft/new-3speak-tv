@@ -1454,9 +1454,19 @@ app.post('/api/broadcast', broadcastLimiter, async (req, res) => {
     return await broadcastAsThreespeak(hiveUsername, req.body.operations, res)
   } catch (err) {
     console.error('Broadcast error:', err.message)
-    res.status(500).json({ error: 'Broadcast failed' })
+    res.status(500).json({ error: hiveRejection(err) || 'Broadcast failed' })
   }
 })
+
+// Hive's own rejection of a transaction (RC too low, parent post not found,
+// duplicate permlink, ...) is the one error a user can act on, so it goes back
+// to the client as the node wrote it, trimmed. Anything else (our config, the
+// network) stays the generic message: it describes our server, not their post.
+function hiveRejection(err) {
+  if (!err || err.name !== 'RPCError') return null
+  const msg = String(err.message || '').replace(/\s+/g, ' ').trim()
+  return msg ? msg.slice(0, 300) : null
+}
 
 // ---------------------------------------------------------------------------
 // Delegated challenge signing for OpenPods (Hangouts) and Snapie chat.

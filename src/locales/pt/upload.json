@@ -194,6 +194,11 @@
       "info": "Marca este vídeo como conteúdo adulto. Ele ficará oculto dos feeds e da busca para quem não ativou NSFW e será marcado com <code>nsfw</code> em toda a Hive.",
       "hint": "Conteúdo adulto."
     },
+    "addToBlog": {
+      "label": "Adicionar ao meu blog",
+      "hint": "Mostre no seu blog e no feed dos seus seguidores.",
+      "info": "O 3Speak publica cada vídeo em uma comunidade, e o Hive deixa posts de comunidades fora do seu blog e do feed dos seus seguidores, a menos que você os compartilhe. Com esta opção ativada, o 3Speak compartilha (dá reblog) o vídeo no seu blog logo após a publicação."
+    },
     "ads": {
       "label": "Anúncios neste vídeo",
       "info": "Sua conta exibe anúncios, então este vídeo também, a menos que você os desative aqui. Isso afeta apenas este vídeo; seus outros vídeos e a configuração da sua conta continuam iguais.",
@@ -400,6 +405,7 @@
     "couldNotSchedule": "Não foi possível agendar o post",
     "scheduleFailed": "Falha no agendamento: {{msg}}",
     "hivePostFailed": "Não foi possível publicar na Hive",
-    "uploadFailedWith": "Falha no envio: {{msg}}"
+    "uploadFailedWith": "Falha no envio: {{msg}}",
+    "addToBlogFailed": "Publicado, mas não foi possível adicionar ao seu blog: {{error}}"
   }
 }

@@ -21,7 +21,8 @@
     "playlist": "Playlist",
     "plays_one": "{{count}} écoute",
     "plays_many": "{{count}} écoutes",
-    "plays_other": "{{count}} écoutes"
+    "plays_other": "{{count}} écoutes",
+    "fromAlbum": "de {{album}}"
   },
   "author": {
     "followed": "Vous suivez @{{author}}",
@@ -139,7 +140,9 @@
       "published_one": "{{count}} titre publié",
       "published_many": "{{count}} titres publiés",
       "published_other": "{{count}} titres publiés",
-      "someFailed": "Certains titres ont échoué — ouvrez le titre concerné pour réessayer"
+      "someFailed": "Certains titres ont échoué — ouvrez le titre concerné pour réessayer",
+      "trackLinksFailed": "Vos pistes sont publiées, mais l'ajout de leurs liens à la publication de l'album a échoué : {{error}}",
+      "addToBlogFailed": "Publié, mais l'ajout à votre blog a échoué : {{error}}"
     },
     "gate": {
       "checking": "Vérification…",
@@ -181,6 +184,7 @@
     "playlist": {
       "helpRequired": "Obligatoire — choisissez ou créez une playlist. Les publications d'album vivent dans une playlist pour que leurs titres restent regroupés dans un album 3Speak. Cela améliore la visibilité et la mise en avant sur la page audio.",
       "helpOptional": "Facultatif — ajoutez tous les titres à une playlist.",
+      "onlyOn3Speak": "Les playlists n'existent que sur 3Speak. Elles regroupent vos pistes ici et ne modifient jamais vos publications.",
       "none": "Aucune playlist",
       "noneHint": "Les titres ne seront pas regroupés",
       "creatingPending": "création… (en attente de l'indexeur)",
@@ -243,7 +247,10 @@
       "selectCommunity": "Choisir une communauté",
       "change": "Changer",
       "tagsPlaceholder": "Tags — séparés par des espaces ou des virgules (facultatif)",
-      "whatKind": "De quel type d'audio s'agit-il ?"
+      "removeTag": "Retirer le tag {{tag}}",
+      "whatKind": "De quel type d'audio s'agit-il ?",
+      "addToBlog": "Ajouter à mon blog",
+      "addToBlogHint": "Affiche aussi la publication sur votre blog et dans le fil de vos abonnés. Les publications d'une communauté n'y apparaissent pas d'elles-mêmes."
     },
     "tracks": {
       "helpAlbum": "Chaque titre est publié en commentaire sous la publication principale. Définissez les valeurs communes une fois, appliquez-les à tous, puis ajustez titre par titre.",
@@ -254,7 +261,9 @@
       "applyToAll_one": "Appliquer au titre ({{count}})",
       "applyToAll_many": "Appliquer aux {{count}} titres",
       "applyToAll_other": "Appliquer aux {{count}} titres",
-      "hide": "Masquer"
+      "hide": "Masquer",
+      "commentText": "Texte du commentaire pour cette piste (facultatif)",
+      "snapText": "Texte de ce snap (facultatif)"
     },
     "review": {
       "standalone": "Publication autonome",
@@ -285,7 +294,15 @@
       "retryAllFailed": "Réessayer tous les échecs",
       "failedDuringUpload": "Échec lors de la mise en ligne du fichier audio : {{message}}",
       "failedDuringPost": "Échec lors de la publication sur Hive : {{message}}",
-      "failedWithMessage": "Échec : {{message}}"
+      "failedWithMessage": "Échec : {{message}}",
+      "mainFailed": "La publication de l'album n'a pas pu être publiée : {{message}}",
+      "containerFailed": "Impossible d'accéder au fil de snaps pour publier : {{message}}"
+    },
+    "done": {
+      "title": "C'est fait ! Votre audio est publié.",
+      "openPost": "Ouvrir la publication",
+      "openPlaylist": "Ouvrir la playlist",
+      "openMyAudio": "Ouvrir mes audios"
     },
     "stage": {
       "upload": "Mise en ligne du fichier audio",

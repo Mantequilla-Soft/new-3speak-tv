@@ -193,6 +193,11 @@
       "info": "Kennzeichnet dieses Video als Inhalt ab 18. Es wird für Zuschauer, die NSFW nicht aktiviert haben, in Feeds und Suche ausgeblendet und auf ganz Hive mit <code>nsfw</code> getaggt.",
       "hint": "Inhalt ab 18."
     },
+    "addToBlog": {
+      "label": "Zu meinem Blog hinzufügen",
+      "hint": "Zeig es in deinem Blog und im Feed deiner Follower.",
+      "info": "3Speak veröffentlicht jedes Video in einer Community, und Hive zeigt Community-Beiträge weder in deinem Blog noch im Feed deiner Follower, solange du sie nicht teilst. Ist das an, teilt (rebloggt) 3Speak das Video direkt nach dem Veröffentlichen in deinem Blog."
+    },
     "ads": {
       "label": "Werbung in diesem Video",
       "info": "Dein Konto zeigt Werbung, also auch dieses Video, außer du schaltest sie hier aus. Das betrifft nur dieses eine Video; deine anderen Videos und deine Kontoeinstellung bleiben unverändert.",
@@ -398,6 +403,7 @@
     "couldNotSchedule": "Post konnte nicht geplant werden",
     "scheduleFailed": "Planen fehlgeschlagen: {{msg}}",
     "hivePostFailed": "Posten auf Hive fehlgeschlagen",
-    "uploadFailedWith": "Upload fehlgeschlagen: {{msg}}"
+    "uploadFailedWith": "Upload fehlgeschlagen: {{msg}}",
+    "addToBlogFailed": "Veröffentlicht, aber das Hinzufügen zu deinem Blog ist fehlgeschlagen: {{error}}"
   }
 }
