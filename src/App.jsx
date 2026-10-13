@@ -743,6 +743,9 @@ function App() {
               <Route path="/image" element={<HiveImageUploader />} />
               <Route path="/openpods" element={<OpenPods />} />
               <Route path="/openpods/publish" element={<OpenPodPublish />} />
+              {/* Old address of the OBS templates, now the Stream Studio's
+                  Templates tab. A static segment, so it wins over /openpods/:roomName. */}
+              <Route path="/openpods/templates" element={<Navigate to="/openpods?tab=templates" replace />} />
               <Route path="/openpods/:roomName" element={<OpenPods />} />
               <Route path="/chat" element={<ChatPage />} />
               <Route path="*" element={<HiveLinkRedirect />} />

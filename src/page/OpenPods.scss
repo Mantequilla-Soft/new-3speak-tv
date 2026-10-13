@@ -86,3 +86,46 @@
   text-align: center;
   color: var(--text-secondary, rgba(255, 255, 255, 0.65));
 }
+
+/* Stream Studio tabs ("New stream" / "Templates") on top of the create form,
+   at the SDK lobby's width so they read as part of the same card. */
+.openpods-studio-tabs {
+  display: flex;
+  gap: 4px;
+  max-width: 640px;
+  margin: 0 auto 4px;
+  padding: 0 1.5rem;
+  border-bottom: 1px solid var(--border-color);
+
+  button {
+    padding: 10px 14px;
+    border: none;
+    border-bottom: 2px solid transparent;
+    margin-bottom: -1px;
+    background: transparent;
+    color: var(--text-secondary);
+    font-size: 0.95rem;
+    font-weight: 600;
+    cursor: pointer;
+
+    &:hover { color: var(--text-primary); }
+
+    &.is-active {
+      color: var(--accent-primary, #e53935);
+      border-bottom-color: var(--accent-primary, #e53935);
+    }
+  }
+}
+
+.openpods-studio-panel {
+  max-width: 640px;
+  margin: 0 auto;
+  padding: 1.25rem 1.5rem 1.5rem;
+}
+
+@media (max-width: 767px) {
+  .openpods-studio-tabs { padding: 0 0.25rem; }
+  .openpods-studio-panel {
+    padding: 1rem 0.25rem calc(88px + env(safe-area-inset-bottom, 0px));
+  }
+}

@@ -1566,6 +1566,118 @@ app.post('/api/openpods/sign-challenge', signChallengeLimiter, async (req, res) 
   }
 })
 
+// ---------------------------------------------------------------------------
+// POST /api/openpods/announce — server-to-server, called by the hangouts server
+// when a stream started from OBS (a stream template) goes live. Nobody is in a
+// browser to announce it, so this posts the SAME Hive announcement the browser's
+// postFullPost would have (see server/openpodPost.cjs, kept in sync with
+// src/utils/openpodAnnounce.js), signed by @threespeak under the host's posting
+// grant. Permlink = room name, author = host.
+//
+// Auth: `X-Announce-Secret` must equal OPENPODS_ANNOUNCE_SECRET (shared with the
+// hangouts server); with the variable unset everything is refused. On top of
+// that, only direct loopback callers are accepted: the TCP peer must be local AND
+// the request must carry no proxy headers, because nginx's /api location also
+// reaches us from 127.0.0.1 but always adds X-Forwarded-For / X-Real-IP. Set
+// OPENPODS_ANNOUNCE_ALLOW_REMOTE=1 if the hangouts server ever moves off this box.
+//
+// Body: { host, room, title, description, thumbnail, tags, language, community,
+//         communityTitle, declineRewards, rewardPowerup, beneficiaries, portrait,
+//         orientation?, premium, dryRun? }
+// `premium:false` locks @threespeakfund 10% in, server-side, whatever was sent.
+// Replies { ok: true, permlink } | { ok: true, dryRun: true, permlink, operations }
+//       | { ok: false, reason: 'invalid'|'no_posting_authority'|'broadcast_failed'|… }
+//
+// The browser flow does nothing else after announcing: the checker
+// `PUT /video/openpod` stamp belongs to the VOD publish (utils/streamVod.js),
+// which the hangouts server already performs itself.
+// ---------------------------------------------------------------------------
+const { normaliseAnnounceInput, buildStreamAnnounceOps } = require('./openpodPost.cjs')
+const OPENPODS_ANNOUNCE_SECRET = process.env.OPENPODS_ANNOUNCE_SECRET || ''
+const OPENPODS_ANNOUNCE_ALLOW_REMOTE = process.env.OPENPODS_ANNOUNCE_ALLOW_REMOTE === '1'
+const announceLimiter = rateLimit({ windowMs: 60 * 1000, max: 30, standardHeaders: true, legacyHeaders: false })
+
+function isDirectLoopbackCall(req) {
+  const peer = String(req.socket?.remoteAddress || '')
+  const loopback = peer === '127.0.0.1' || peer === '::1' || peer === '::ffff:127.0.0.1'
+  return loopback && !req.headers['x-forwarded-for'] && !req.headers['x-real-ip']
+}
+
+function announceSecretMatches(given) {
+  if (!OPENPODS_ANNOUNCE_SECRET || typeof given !== 'string' || !given) return false
+  // Hash both sides so the compare is constant-time regardless of length.
+  const a = crypto.createHash('sha256').update(given).digest()
+  const b = crypto.createHash('sha256').update(OPENPODS_ANNOUNCE_SECRET).digest()
+  return crypto.timingSafeEqual(a, b)
+}
+
+// A post at author/permlink already exists? (a retried announce must not edit
+// the post or re-send comment_options, which Hive refuses once voted on).
+async function hivePostExists(author, permlink) {
+  // database_api (not condenser get_content, which hivemind answers with an
+  // error for a post that does not exist).
+  const r = await client.call('database_api', 'find_comments', { comments: [[author, permlink]] })
+  return Array.isArray(r?.comments) && r.comments.length > 0
+}
+
+app.post('/api/openpods/announce', announceLimiter, async (req, res) => {
+  if (!OPENPODS_ANNOUNCE_SECRET) return res.status(503).json({ ok: false, reason: 'not_configured' })
+  if (!OPENPODS_ANNOUNCE_ALLOW_REMOTE && !isDirectLoopbackCall(req)) {
+    return res.status(403).json({ ok: false, reason: 'forbidden' })
+  }
+  if (!announceSecretMatches(req.headers['x-announce-secret'])) {
+    return res.status(401).json({ ok: false, reason: 'unauthorized' })
+  }
+
+  const parsed = normaliseAnnounceInput(req.body)
+  if (!parsed.ok) return res.status(400).json({ ok: false, reason: 'invalid', field: parsed.error })
+  const built = buildStreamAnnounceOps(parsed.input)
+  if (!built.ok) return res.status(400).json({ ok: false, reason: 'invalid', field: built.error })
+  const { host } = parsed.input
+  const dryRun = req.body?.dryRun === true
+
+  try {
+    if (!(await hasThreespeakPostingGrant(host))) {
+      return res.json({ ok: false, reason: 'no_posting_authority' })
+    }
+    if (await hivePostExists(host, built.permlink)) {
+      return res.json({ ok: true, permlink: built.permlink, alreadyPosted: true, ...(dryRun ? { dryRun: true } : {}) })
+    }
+  } catch (err) {
+    console.error('[openpods/announce] chain lookup failed:', err.message)
+    return res.json({ ok: false, reason: 'chain_unavailable' })
+  }
+
+  if (dryRun) {
+    return res.json({ ok: true, dryRun: true, permlink: built.permlink, operations: built.operations })
+  }
+  if (!POSTING_WIF) return res.status(500).json({ ok: false, reason: 'not_configured' })
+
+  // broadcastAsThreespeak writes an HTTP response; capture it instead so the
+  // caller gets this endpoint's { ok, reason } shape. It re-checks the grant and
+  // validates every op (author must be the host).
+  const out = { code: 200, body: null }
+  const shim = {
+    status(c) { out.code = c; return shim },
+    json(b) { out.body = b; return shim },
+  }
+  try {
+    await broadcastAsThreespeak(host, built.operations, shim)
+  } catch (err) {
+    console.error(`[openpods/announce] broadcast for @${host}/${built.permlink} failed:`, err.message)
+    return res.json({ ok: false, reason: 'broadcast_failed' })
+  }
+  if (out.code === 200 && out.body?.success) {
+    console.log(`[openpods/announce] announced @${host}/${built.permlink}`)
+    return res.json({ ok: true, permlink: built.permlink })
+  }
+  if (out.code === 403 && out.body?.error === 'Authorization required') {
+    return res.json({ ok: false, reason: 'no_posting_authority' })
+  }
+  console.error(`[openpods/announce] broadcast for @${host}/${built.permlink} refused:`, out.code, out.body?.error)
+  return res.json({ ok: false, reason: 'broadcast_failed' })
+})
+
 // POST /api/snapie-chat/sign-challenge — Snapie chat challenges are bare UUIDv4s.
 // Validating the UUID shape keeps this from signing arbitrary bytes (no tx replay).
 const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i

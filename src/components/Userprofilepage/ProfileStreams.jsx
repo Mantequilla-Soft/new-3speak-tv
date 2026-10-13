@@ -3,18 +3,16 @@ import axios from 'axios';
 import { Link } from 'react-router-dom';
 import Card3 from '../Cards/Card3';
 import { MY_VIDEOS_URL } from '../../utils/config';
+import { fetchAllEndpoints } from '../../utils/hangoutsEndpoints';
 import { useTranslation } from 'react-i18next';
 import './ProfileStreams.scss';
 
-const HANGOUTS_API = (import.meta.env.VITE_HANGOUTS_API_URL || '').replace(/\/$/, '');
-
-/** Live/standby OpenPods rooms hosted by this user. */
+/** Live/standby OpenPods rooms hosted by this user, on every configured
+ *  hangouts deployment (a stream from OBS lives on the one with templates). */
 async function fetchHostStreams(username) {
-  if (!HANGOUTS_API || !username) return [];
+  if (!username) return [];
   try {
-    const res = await fetch(`${HANGOUTS_API}/streams`);
-    if (!res.ok) return [];
-    const rooms = await res.json();
+    const rooms = await fetchAllEndpoints('/streams');
     return (Array.isArray(rooms) ? rooms : []).filter(
       (r) => String(r.host || '').toLowerCase() === String(username).toLowerCase(),
     );

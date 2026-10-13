@@ -10,11 +10,13 @@ import StreamReportButton from '../components/openpods/StreamReportButton';
 import StreamClipButton from '../components/openpods/StreamClipButton';
 import CroppableStreamVideo from '../components/openpods/CroppableStreamVideo';
 import LiveAdLayer from '../components/openpods/LiveAdLayer';
+import StreamWatermark from '../components/openpods/StreamWatermark';
 import StreamSignInButton from '../components/openpods/StreamSignInButton';
 import { useStreamSession } from '../hooks/useStreamSession';
 import { useLiveStreamPager } from '../hooks/useLiveStreamPager';
 import { useStreamChatMirror } from '../hooks/useStreamChatMirror';
 import { fetchVideoDetails } from '../lib/videoData';
+import { defaultEndpoint, findRoomEndpoint } from '../utils/hangoutsEndpoints';
 // The mobile layout reuses the shorts page's classes — load its styles too.
 import './Short.scss';
 import SEOHead from '../components/SEOHead';
@@ -32,8 +34,10 @@ import '../components/playVideo/PlayVideo.scss';
 import { useTranslation } from 'react-i18next';
 import './WatchStream.scss';
 
-const API_URL = (import.meta.env.VITE_HANGOUTS_API_URL || '').replace(/\/$/, '');
-const LK_URL = import.meta.env.VITE_LIVEKIT_URL || 'wss://livekit.3speak.tv';
+// A room lives on exactly ONE hangouts deployment (VITE_HANGOUTS_API_URLS), e.g.
+// a stream started from OBS is created on the server that has the templates.
+// So the page looks the room up across all of them, like LiveStreamPlayer, and
+// connects to that server's API + LiveKit pair.
 const IMAGE_KEY = import.meta.env.VITE_IMAGE_SERVER_API_KEY;
 // The viewer's last vertical/full choice on phones. A per-device convenience,
 // so plain localStorage; vertical is the default when nothing is stored.
@@ -90,6 +94,7 @@ export default function WatchStream() {
   const { aioha, sessionToken, hangoutsUser, connectReady, joinKey, needsSignIn, canInteract, signIn, signingIn } = useStreamSession();
 
   const [state, setState] = useState({ status: 'loading', room: null, hivePost: null });
+  const [endpoint, setEndpoint] = useState(() => defaultEndpoint());
   const [copied, setCopied] = useState(false);
   const [recommended, setRecommended] = useState({ loading: false, videos: [] });
   // Phones get a shorts-style full-bleed player rather than the desktop grid.
@@ -166,8 +171,12 @@ export default function WatchStream() {
   useEffect(() => {
     let alive = true;
     setState({ status: 'loading', room: null, hivePost: null });
-    if (!streamId || !API_URL) { setState({ status: 'notfound', room: null, hivePost: null }); return undefined; }
-    fetch(`${API_URL}/rooms/${encodeURIComponent(streamId)}`)
+    if (!streamId || !defaultEndpoint().api) { setState({ status: 'notfound', room: null, hivePost: null }); return undefined; }
+    findRoomEndpoint(streamId)
+      .then((ep) => {
+        if (alive) setEndpoint(ep);
+        return fetch(`${ep.api}/rooms/${encodeURIComponent(streamId)}`);
+      })
       .then((res) => (res.ok ? res.json() : null))
       .then(async (room) => {
         if (!alive) return;
@@ -252,6 +261,8 @@ export default function WatchStream() {
     return <Navigate to={`/watch?v=${room.host}/${streamId}`} replace />;
   }
   const host = room.host;
+  // Set by the hangouts server on a stream started from OBS by a non-Pro host.
+  const showWatermark = !!(room.headless && room.watermark);
   const title = post.title || room.title;
   const description = post.description || room.description || '';
 
@@ -264,8 +275,8 @@ export default function WatchStream() {
       <>
         <SEOHead title={t('misc.watchStream.seoTitle', { title })} author={host} url={window.location.href} />
         <HangoutsProvider
-          apiBaseUrl={API_URL}
-          livekitServerUrl={LK_URL}
+          apiBaseUrl={endpoint.api}
+          livekitServerUrl={endpoint.lk}
           imageServerApiKey={IMAGE_KEY || undefined}
           sessionToken={sessionToken || undefined}
           username={hangoutsUser || undefined}
@@ -277,6 +288,9 @@ export default function WatchStream() {
                 <div className="videoWrapper">
                   <div className="videoContainer" ref={pagerRef} onClick={revealInfo}>
                     <CroppableStreamVideo vertical={verticalOn} onOrientation={setStreamLandscape} />
+                    {/* Free host streaming from OBS: draw the 3Speak mark the
+                        browser studio would have burned in. Follows the crop. */}
+                    <StreamWatermark show={showWatermark} />
                     {/* Ticker + drawn banner. Below the back button / quality row. */}
                     <LiveAdLayer
                       host={host}
@@ -365,8 +379,8 @@ export default function WatchStream() {
     <div className="play-container watch-v2 ws-page">
       <SEOHead title={t('misc.watchStream.seoTitle', { title })} author={host} url={window.location.href} />
       <HangoutsProvider
-        apiBaseUrl={API_URL}
-        livekitServerUrl={LK_URL}
+        apiBaseUrl={endpoint.api}
+        livekitServerUrl={endpoint.lk}
         imageServerApiKey={IMAGE_KEY || undefined}
         sessionToken={sessionToken || undefined}
         username={hangoutsUser || undefined}
@@ -380,6 +394,7 @@ export default function WatchStream() {
             <div className="ws-col-main">
               <div className="ws-player">
                 <StreamVideo showLiveBadge={false} />
+                <StreamWatermark show={showWatermark} />
                 <LiveAdLayer host={host} room={streamId} />
               </div>
 
