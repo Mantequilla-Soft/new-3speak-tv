@@ -64,3 +64,34 @@ export async function uploadAudioTo3Speak({ blob, durationSec, username, title }
     apiUrl,
   };
 }
+
+/**
+ * Tell the audio service which Hive post an upload became, right after the
+ * post is broadcast. Without it the link waits for the checker's sync job
+ * (every 30 min), and until then the track has no upvotes/payout on its tile
+ * and is missing from the RSS feeds. Best effort: the sync job still catches
+ * anything this misses.
+ *   PATCH {THREESPEAK_AUDIO_API_URL}/api/audio/:permlink/post-permlink
+ *   Headers: X-API-Key, X-User (must be the upload's owner)
+ */
+export async function linkAudioToPost({ audioPermlink, postPermlink, username }) {
+  if (!THREESPEAK_API_KEY || !audioPermlink || !postPermlink || !username) return false;
+  try {
+    const resp = await fetch(
+      `${THREESPEAK_AUDIO_API_URL}/api/audio/${encodeURIComponent(audioPermlink)}/post-permlink`,
+      {
+        method: 'PATCH',
+        headers: {
+          'X-API-Key': THREESPEAK_API_KEY,
+          'X-User': username,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ post_permlink: postPermlink }),
+      },
+    );
+    return resp.ok;
+  } catch (err) {
+    console.warn('Linking audio to its post failed (the sync job will catch it):', err?.message);
+    return false;
+  }
+}

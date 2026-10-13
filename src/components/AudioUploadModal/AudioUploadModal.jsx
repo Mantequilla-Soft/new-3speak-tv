@@ -11,7 +11,7 @@ import { toastIn } from '../../utils/toast';
 import { useQueryClient } from '@tanstack/react-query';
 import { KeyTypes } from '@aioha/aioha';
 import { useMyPlaylists } from '../../hooks/useMyPlaylists';
-import { uploadAudioTo3Speak, getSnapsContainer } from '../../utils/audioUpload';
+import { uploadAudioTo3Speak, getSnapsContainer, linkAudioToPost } from '../../utils/audioUpload';
 import { uploadThumbnail } from '../../utils/uploadThumbnail';
 import { broadcastWithAioha, broadcastViaThreespeak, getCurrentProvider, Providers } from '../../hive-api/aioha';
 import { hasThreespeakPostingAuth, addThreespeakToPostingAuth } from '../../utils/postingAuthority';
@@ -770,6 +770,7 @@ function AudioUploadModal({ isOpen, onClose, initialTrack }) {
     if (playlistChoice) ops.push(playlistAddOp(hivePermlink));
 
     await broadcastAudioOps(ops);
+    await linkAudioToPost({ audioPermlink, postPermlink: hivePermlink, username: user });
     await shareToBlog(hivePermlink);
     await pushAudioThumb(audioPermlink, postThumb);
     trackPostsRef.current[track.id] = { author: user, permlink: hivePermlink, title: track.title };
@@ -904,6 +905,7 @@ function AudioUploadModal({ isOpen, onClose, initialTrack }) {
     if (playlistChoice) ops.push(playlistAddOp(hivePermlink));
 
     await broadcastAudioOps(ops);
+    await linkAudioToPost({ audioPermlink, postPermlink: hivePermlink, username: user });
     await pushAudioThumb(audioPermlink, tThumb);
     trackPostsRef.current[track.id] = { author: user, permlink: hivePermlink, title: track.title };
     setTrackStatus(track.id, { state: 'success', stage: undefined });

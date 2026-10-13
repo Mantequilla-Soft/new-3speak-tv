@@ -1918,6 +1918,8 @@ export function EmbedUploadProvider({ children }) {
             parentAuthor,
             parentPermlink,
             embedPermlink,
+            // "Add to my blog": the checker reblogs it once the cron publishes it.
+            reblog: !!addToBlog && !fromStories,
           }, {
             headers: CHECKER_API_KEY ? { Authorization: `Bearer ${CHECKER_API_KEY}` } : {},
           });

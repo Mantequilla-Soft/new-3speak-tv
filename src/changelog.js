@@ -7,6 +7,12 @@
 // 1.0.0 — that way they see all of these when develop is pushed to production.
 export const CHANGELOG = [
   {
+    version: '1.79.76',
+    date: '2026-10-13',
+    summary:
+      'New audio now shows up in podcast feeds and with its votes right away, and scheduled videos also go to your blog when Add to my blog is on.',
+  },
+  {
     version: '1.79.75',
     date: '2026-10-13',
     summary:
