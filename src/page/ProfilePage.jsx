@@ -21,7 +21,7 @@ import { fetchUserShortsWithDetails } from "../hive-api/hiveApi";
 
 import { FaVideo, FaPlus } from "react-icons/fa";
 import { IoMdShare, IoMdAdd } from "react-icons/io";
-import { MdLock, MdPublic, MdClose } from "react-icons/md";
+import { MdLock, MdPublic, MdClose, MdRssFeed } from "react-icons/md";
 import SocialLinks from "../components/Userprofilepage/SocialLinks";
 import LeaderboardBadges from "../components/LeaderboardBadges/LeaderboardBadges";
 import HiveBadges from "../components/HiveBadges/HiveBadges";
@@ -559,6 +559,28 @@ function ProfilePage() {
 
             {/* Follower pill removed — the count in the stat line under the bio
                 opens this list instead. */}
+            {/* Podcast / RSS feed for the channel, the same button public profiles
+                (UserProfilePage) have. Hive accounts only: an off-chain account
+                has no feed. */}
+            {user && (
+              <>
+                <link
+                  rel="alternate"
+                  type="application/rss+xml"
+                  title={t('profile.page.onThreeSpeak', { user })}
+                  href={`${window.location.origin}/rss/${user}.xml`}
+                />
+                <a
+                  className="btn btn-secondary"
+                  href={`/rss/${user}.xml`}
+                  target="_blank"
+                  rel="noreferrer"
+                  title={t('profile.page.podcastFeedTitle', { user })}
+                >
+                  <MdRssFeed />
+                </a>
+              </>
+            )}
             <button
               className="btn btn-secondary"
               onClick={async () => {

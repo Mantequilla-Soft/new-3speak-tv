@@ -7,6 +7,12 @@
 // 1.0.0 — that way they see all of these when develop is pushed to production.
 export const CHANGELOG = [
   {
+    version: '1.79.79',
+    date: '2026-10-13',
+    summary:
+      'Podcast feed buttons on profiles and playlists now always open the feed itself, ready to copy into a podcast app.',
+  },
+  {
     version: '1.79.78',
     date: '2026-10-13',
     summary:
