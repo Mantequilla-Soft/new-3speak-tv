@@ -213,6 +213,13 @@
       "savedIntro": "\"{{name}}\" sudah siap. Di OBS, pakai URL server ini dan kunci rahasia siaranmu, lalu klik \"Start Streaming\" untuk live dengan template ini. Kamu tetap bisa memulai siaran dari browser seperti biasa.",
       "serverUrl": "URL server",
       "manage": "Kelola di Template"
+    },
+    "steps": {
+      "basics": "Dasar",
+      "details": "Detail",
+      "sharing": "Boost & berbagi",
+      "goLive": "Siaran langsung",
+      "titleRequired": "Tambahkan judul untuk melanjutkan."
     }
   }
 }

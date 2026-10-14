@@ -83,6 +83,29 @@ export default function AnnounceOptions({ announceType, isPremium = false, onCha
     }).then(res => setCommunitiesData(res.data.result || [])).catch(() => {});
   }, []);
 
+  // A community known only by its id (the default, a setup saved before titles
+  // were stored, a template) is shown by its real name: look the title up once.
+  // Writing it back as an object also stores the title for next time.
+  const communityName = typeof community === 'string' ? community : community?.name;
+  const communityHasTitle = typeof community === 'object' && !!community?.title;
+  useEffect(() => {
+    if (!communityName || communityHasTitle) return undefined;
+    let alive = true;
+    axios.post(getHiveUrl(), {
+      jsonrpc: '2.0',
+      method: 'bridge.get_community',
+      params: { name: communityName, observer: '' },
+      id: 1,
+    }).then((res) => {
+      const title = res.data?.result?.title;
+      if (!alive || !title) return;
+      setCommunity((cur) => ((typeof cur === 'string' ? cur : cur?.name) === communityName
+        ? { name: communityName, title }
+        : cur));
+    }).catch(() => { /* the id stays as the label */ });
+    return () => { alive = false; };
+  }, [communityName, communityHasTitle]);
+
   // Persist every choice to the shared store (single source of truth read at
   // post time) and notify any parent that passed onChange.
   const onChangeRef = useRef(onChange);

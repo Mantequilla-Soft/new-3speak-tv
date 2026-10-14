@@ -214,6 +214,13 @@
       "savedIntro": "\"{{name}}\" kiko tayari. Kwenye OBS, tumia URL hii ya seva na siri ya mtiririko wako, kisha bofya \"Start Streaming\" ili uende mubashara nacho. Bado unaweza kuanzisha mtiririko kwenye kivinjari kama kawaida.",
       "serverUrl": "URL ya seva",
       "manage": "Dhibiti kwenye Violezo"
+    },
+    "steps": {
+      "basics": "Msingi",
+      "details": "Maelezo",
+      "sharing": "Boost na kushiriki",
+      "goLive": "Anza mubashara",
+      "titleRequired": "Ongeza kichwa ili kuendelea."
     }
   }
 }

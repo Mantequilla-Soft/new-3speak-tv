@@ -213,6 +213,13 @@
       "savedIntro": "\"{{name}}\" 已就绪。在 OBS 中使用此服务器 URL 和你的直播密钥，然后点击 \"Start Streaming\"，即可用它开播。你仍然可以像往常一样在浏览器中开始直播。",
       "serverUrl": "服务器 URL",
       "manage": "在模板中管理"
+    },
+    "steps": {
+      "basics": "基本信息",
+      "details": "详情",
+      "sharing": "打赏与分享",
+      "goLive": "开始直播",
+      "titleRequired": "请先添加标题再继续。"
     }
   }
 }

@@ -213,6 +213,13 @@
       "savedIntro": "\"{{name}}\" の準備ができました。OBS でこのサーバー URL と配信シークレットを使い、\"Start Streaming\" をクリックするとこのテンプレートで配信が始まります。これまでどおりブラウザから配信を始めることもできます。",
       "serverUrl": "サーバー URL",
       "manage": "テンプレートで管理"
+    },
+    "steps": {
+      "basics": "基本",
+      "details": "詳細",
+      "sharing": "ブーストと共有",
+      "goLive": "配信開始",
+      "titleRequired": "続けるにはタイトルを入力してください。"
     }
   }
 }

@@ -215,6 +215,13 @@
       "savedIntro": "\"{{name}}\" está lista. En OBS, usa esta URL del servidor y tu clave secreta de transmisión, y luego haz clic en \"Start Streaming\" para salir en vivo con ella. También puedes iniciar una transmisión desde el navegador como siempre.",
       "serverUrl": "URL del servidor",
       "manage": "Gestionar en Plantillas"
+    },
+    "steps": {
+      "basics": "Básico",
+      "details": "Detalles",
+      "sharing": "Boosts y difusión",
+      "goLive": "Transmitir",
+      "titleRequired": "Añade un título para continuar."
     }
   }
 }

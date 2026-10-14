@@ -215,6 +215,13 @@
       "savedIntro": "\"{{name}}\" è pronto. In OBS usa questo URL del server e il tuo segreto di diretta, poi clicca \"Start Streaming\" per andare in diretta con questo modello. Puoi comunque avviare una diretta dal browser come al solito.",
       "serverUrl": "URL del server",
       "manage": "Gestisci in Modelli"
+    },
+    "steps": {
+      "basics": "Base",
+      "details": "Dettagli",
+      "sharing": "Boost e condivisione",
+      "goLive": "Vai in diretta",
+      "titleRequired": "Aggiungi un titolo per continuare."
     }
   }
 }

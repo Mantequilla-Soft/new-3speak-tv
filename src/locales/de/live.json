@@ -214,6 +214,13 @@
       "savedIntro": "\"{{name}}\" ist bereit. Nutze in OBS diese Server-URL und dein Stream-Secret und klick dann auf \"Start Streaming\", um damit live zu gehen. Einen Browser-Stream kannst du weiterhin wie gewohnt starten.",
       "serverUrl": "Server-URL",
       "manage": "In Vorlagen verwalten"
+    },
+    "steps": {
+      "basics": "Grundlagen",
+      "details": "Details",
+      "sharing": "Boosts & Teilen",
+      "goLive": "Live gehen",
+      "titleRequired": "Gib einen Titel ein, um weiterzumachen."
     }
   }
 }

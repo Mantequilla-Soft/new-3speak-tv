@@ -214,6 +214,13 @@
       "savedIntro": "\"{{name}}\" hazır. OBS'te bu sunucu URL'sini ve yayın anahtarını kullan, ardından bu şablonla canlı yayına geçmek için \"Start Streaming\"e tıkla. Tarayıcıdan yayını yine her zamanki gibi başlatabilirsin.",
       "serverUrl": "Sunucu URL'si",
       "manage": "Şablonlar'da yönet"
+    },
+    "steps": {
+      "basics": "Temel bilgiler",
+      "details": "Ayrıntılar",
+      "sharing": "Boost ve paylaşım",
+      "goLive": "Yayına geç",
+      "titleRequired": "Devam etmek için bir başlık ekle."
     }
   }
 }

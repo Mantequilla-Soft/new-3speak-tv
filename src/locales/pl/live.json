@@ -216,6 +216,13 @@
       "savedIntro": "\"{{name}}\" jest gotowy. W OBS użyj tego URL serwera i swojego sekretu transmisji, a potem kliknij \"Start Streaming\", aby nadawać na żywo z tym szablonem. Nadal możesz jak zwykle rozpocząć transmisję w przeglądarce.",
       "serverUrl": "URL serwera",
       "manage": "Zarządzaj w Szablonach"
+    },
+    "steps": {
+      "basics": "Podstawy",
+      "details": "Szczegóły",
+      "sharing": "Boosty i udostępnianie",
+      "goLive": "Na żywo",
+      "titleRequired": "Dodaj tytuł, aby kontynuować."
     }
   }
 }

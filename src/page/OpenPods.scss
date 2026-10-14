@@ -129,3 +129,10 @@
     padding: 1rem 0.25rem calc(88px + env(safe-area-inset-bottom, 0px));
   }
 }
+
+/* The stepped stream form opens straight on its stepper: the SDK's "Stream
+   Studio" heading and explainer above it are dropped here (the tab row already
+   says where you are). Group chats keep theirs. */
+.openpods-page .hh-cd--stepped .hh-cd__intro {
+  display: none;
+}

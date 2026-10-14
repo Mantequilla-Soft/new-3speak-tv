@@ -82,7 +82,12 @@ export default function OpenPods() {
   // falls back to a client-side signature. Gating on a signable provider (as
   // this used to) meant mobile users, who have no Keychain extension, never got
   // a handover at all and were told to sign in again.
-  const handoverUser = aiohaUser || user;
+  // The 3Speak account first: it is who the viewer IS logged in as, for every
+  // login type. Aioha can still hold a wallet user from an EARLIER login (a
+  // ButrAuth session has no aioha user of its own), and naming that stale
+  // account in the challenge made the @threespeak signer refuse it (400), so
+  // a logged-in viewer was treated as a guest.
+  const handoverUser = user || aiohaUser;
   const canHandover = !!authenticated && !!handoverUser;
 
   // If they're genuinely signed in on 3Speak, hand that session over in the
@@ -318,6 +323,19 @@ export default function OpenPods() {
               onManage={() => setTab('templates')}
             />
           ) : undefined}
+          /* Streams go through the form step by step (Basics, Details,
+             Boosts & sharing, Go live); group chats keep the single page. */
+          stepped={createReq.mode !== 'conference'}
+          stepLabels={{
+            basics: t('live.obs.steps.basics'),
+            details: t('live.obs.steps.details'),
+            sharing: t('live.obs.steps.sharing'),
+            goLive: t('live.obs.steps.goLive'),
+            back: t('common.actions.back'),
+            next: t('common.actions.next'),
+            cancel: t('common.actions.cancel'),
+            titleRequired: t('live.obs.steps.titleRequired'),
+          }}
           renderDescriptionEditor={(value, onChange) => (
             <MarkdownComposer
               value={value}

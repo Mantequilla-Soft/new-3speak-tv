@@ -215,6 +215,13 @@
       "savedIntro": "\"{{name}}\" está pronto. No OBS, use esta URL do servidor e seu segredo de transmissão e clique em \"Start Streaming\" para entrar ao vivo com ele. Você ainda pode iniciar uma transmissão pelo navegador como de costume.",
       "serverUrl": "URL do servidor",
       "manage": "Gerenciar em Modelos"
+    },
+    "steps": {
+      "basics": "Básico",
+      "details": "Detalhes",
+      "sharing": "Boosts e partilha",
+      "goLive": "Entrar ao vivo",
+      "titleRequired": "Adiciona um título para continuar."
     }
   }
 }

@@ -213,6 +213,13 @@
       "savedIntro": "\"{{name}}\" đã sẵn sàng. Trong OBS, hãy dùng URL máy chủ này và mã bí mật phát trực tiếp của bạn, rồi nhấn \"Start Streaming\" để phát trực tiếp với mẫu này. Bạn vẫn có thể bắt đầu phát từ trình duyệt như thường lệ.",
       "serverUrl": "URL máy chủ",
       "manage": "Quản lý trong Mẫu"
+    },
+    "steps": {
+      "basics": "Cơ bản",
+      "details": "Chi tiết",
+      "sharing": "Boost & chia sẻ",
+      "goLive": "Phát trực tiếp",
+      "titleRequired": "Thêm tiêu đề để tiếp tục."
     }
   }
 }

@@ -214,6 +214,13 @@
       "savedIntro": "\"{{name}}\" staat klaar. Gebruik in OBS deze server-URL en je stream-geheim en klik dan op \"Start Streaming\" om ermee live te gaan. Je kunt nog steeds gewoon een stream in de browser starten.",
       "serverUrl": "Server-URL",
       "manage": "Beheren in Sjablonen"
+    },
+    "steps": {
+      "basics": "Basis",
+      "details": "Details",
+      "sharing": "Boosts & delen",
+      "goLive": "Live gaan",
+      "titleRequired": "Voeg een titel toe om verder te gaan."
     }
   }
 }
