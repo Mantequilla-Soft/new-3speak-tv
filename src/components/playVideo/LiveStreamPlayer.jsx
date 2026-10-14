@@ -7,6 +7,7 @@ import { useStreamSession } from '../../hooks/useStreamSession';
 import StreamBoostButton from '../openpods/StreamBoostButton';
 import StreamSignInButton from '../openpods/StreamSignInButton';
 import LiveAdLayer from '../openpods/LiveAdLayer';
+import StreamFullscreenButton from '../openpods/StreamFullscreenButton';
 import StreamWatermark from '../openpods/StreamWatermark';
 import '@snapie/hangouts-react/src/styles/hangouts.css';
 import './LiveStreamPlayer.scss';
@@ -86,6 +87,8 @@ export default function LiveStreamPlayer({ roomName, chatSlot = null, onChatSent
   }, [roomName, endpoint?.api]);
 
   const { aioha, sessionToken, hangoutsUser, connectReady, joinKey, needsSignIn, canInteract, signIn, signingIn } = useStreamSession();
+  // The stream's sound stays off while LiveAdLayer plays a pre-roll over it.
+  const [prerollHold, setPrerollHold] = useState(false);
 
   if (!roomName) return null;
   return (
@@ -98,13 +101,13 @@ export default function LiveStreamPlayer({ roomName, chatSlot = null, onChatSent
         aioha={aioha}
       >
         {connectReady && endpointReady && (
-          <StandaloneWatch key={`${joinKey}:${endpoint.api}`} roomName={roomName}>
+          <StandaloneWatch key={`${joinKey}:${endpoint.api}`} roomName={roomName} audioMuted={prerollHold}>
             <StreamVideo showLiveBadge />
             {/* A free host's stream from OBS: the page draws the 3Speak mark
                 the browser studio would have burned into the picture. */}
             <StreamWatermark show={!!(roomMeta?.headless && roomMeta?.watermark)} />
             {/* Ticker + drawn banner; the host comes from the room lookup above. */}
-            {roomMeta?.host && <LiveAdLayer host={roomMeta.host} room={roomName} />}
+            {roomMeta?.host && <LiveAdLayer host={roomMeta.host} room={roomName} onPreroll={setPrerollHold} />}
             {/* The host's own choice is the reliable signal; an encoder row
                 that exists but isn't published covers rooms that pre-date the
                 server recording that choice. */}
@@ -113,6 +116,7 @@ export default function LiveStreamPlayer({ roomName, chatSlot = null, onChatSent
               <span className="live-stream-player__viewers">{t('comments.live.watching', { count: c })}</span>
             )} />
             <StreamBoostButton variant="overlay" />
+            <StreamFullscreenButton />
             <div className="live-stream-player__collab">
               {needsSignIn
                 ? <StreamSignInButton variant="overlay" label={t('comments.live.signInRaiseHand')} onSignIn={signIn} busy={signingIn} />

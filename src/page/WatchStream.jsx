@@ -10,6 +10,7 @@ import StreamReportButton from '../components/openpods/StreamReportButton';
 import StreamClipButton from '../components/openpods/StreamClipButton';
 import CroppableStreamVideo from '../components/openpods/CroppableStreamVideo';
 import LiveAdLayer from '../components/openpods/LiveAdLayer';
+import StreamFullscreenButton from '../components/openpods/StreamFullscreenButton';
 import StreamWatermark from '../components/openpods/StreamWatermark';
 import StreamSignInButton from '../components/openpods/StreamSignInButton';
 import { useStreamSession } from '../hooks/useStreamSession';
@@ -23,7 +24,7 @@ import SEOHead from '../components/SEOHead';
 import BarLoader from '../components/Loader/BarLoader';
 import Card3 from '../components/Cards/Card3';
 import AuthorBadge from '../components/AuthorBadge/AuthorBadge';
-import { ArrowLeft, MessageSquare, RectangleHorizontal, RectangleVertical, Send, Share2 } from 'lucide-react';
+import { ArrowLeft, Eye, EyeOff, MessageSquare, RectangleHorizontal, RectangleVertical, Send, Share2 } from 'lucide-react';
 
 import { TAG_FEED_URL } from '../utils/config';
 import { FaThumbsUp, FaRegCommentAlt, FaBookmark } from 'react-icons/fa';
@@ -135,6 +136,10 @@ export default function WatchStream() {
   }, [revealInfo]);
 
   const [chatOverlayOn, setChatOverlayOn] = useState(true);
+  // Phones: the viewer's "clean view". Everything over the picture goes (rail,
+  // caption, chat, composer, quality, back); one small button in the top-right
+  // corner brings it all back.
+  const [controlsHidden, setControlsHidden] = useState(false);
 
   // Dual format: a landscape stream on a phone held upright plays as a vertical,
   // draggable crop by default. The switch only appears when the stream really is
@@ -151,6 +156,9 @@ export default function WatchStream() {
   };
   const canCrop = !isLandscape && streamLandscape === true;
   const verticalOn = !isLandscape && verticalPref;
+  // While LiveAdLayer holds the stream for a pre-roll: the stream's sound is off
+  // and, on phones, its chrome (chat, rail, caption) steps out of the ad's way.
+  const [prerollHold, setPrerollHold] = useState(false);
   // Swipe/scroll to the next live stream, shorts-style. No-op when nothing else
   // is live.
   const { containerRef: pagerRef, hasNext: hasNextLive } = useLiveStreamPager({
@@ -283,8 +291,8 @@ export default function WatchStream() {
           aioha={aioha}
         >
           {!connectReady ? <BarLoader /> : (
-            <StandaloneWatch key={joinKey} roomName={streamId} connecting={<BarLoader />}>
-              <main className={`short-main no-bottom-bar ws-shorts${isLandscape ? ' ws-shorts--landscape' : ''}${!infoVisible ? ' ws-info-hidden' : ''}`}>
+            <StandaloneWatch key={joinKey} roomName={streamId} connecting={<BarLoader />} audioMuted={prerollHold}>
+              <main className={`short-main no-bottom-bar ws-shorts${isLandscape ? ' ws-shorts--landscape' : ''}${!infoVisible ? ' ws-info-hidden' : ''}${prerollHold ? ' ws-preroll-on' : ''}${chatOverlayOn ? '' : ' ws-chat-off'}${controlsHidden ? ' ws-controls-hidden' : ''}`}>
                 <div className="videoWrapper">
                   <div className="videoContainer" ref={pagerRef} onClick={revealInfo}>
                     <CroppableStreamVideo vertical={verticalOn} onOrientation={setStreamLandscape} />
@@ -297,12 +305,16 @@ export default function WatchStream() {
                       room={streamId}
                       fit={verticalOn && streamLandscape ? 'cover' : 'contain'}
                       tickerTop="calc(52px + env(safe-area-inset-top, 0px))"
+                      onPreroll={setPrerollHold}
                     />
 
                     {/* Same back affordance as the shorts feed. */}
                     <button
                       className="shortBackBtn"
-                      onClick={(e) => { e.stopPropagation(); navigate('/'); }}
+                      // Back to where the viewer came from (a profile, a feed), like
+                      // the shorts feed; home only when the stream was opened
+                      // straight from a link and there is nothing in the app to go back to.
+                      onClick={(e) => { e.stopPropagation(); if (window.history.state?.idx > 0) navigate(-1); else navigate('/'); }}
                       title={t('misc.watchStream.back')}
                     >
                       <ArrowLeft size={18} />
@@ -356,7 +368,23 @@ export default function WatchStream() {
                       </div>
                       <StreamClipButton roomName={streamId} variant="sidebar" />
                       <StreamReportButton roomName={streamId} host={host} variant="sidebar" />
+                      <div className="actionItem" onClick={() => setControlsHidden(true)}>
+                        <div className="actionButton"><EyeOff size={24} /></div>
+                        <span className="actionLabel">{t('misc.watchStream.hideControls')}</span>
+                      </div>
                     </div>
+
+                    {controlsHidden && (
+                      <button
+                        type="button"
+                        className="ws-shorts__show-controls"
+                        onClick={(e) => { e.stopPropagation(); setControlsHidden(false); }}
+                        aria-label={t('misc.watchStream.showControls')}
+                        title={t('misc.watchStream.showControls')}
+                      >
+                        <Eye size={20} />
+                      </button>
+                    )}
 
                     {chatOverlayOn && (
                       <div className="ws-shorts__chat">
@@ -366,7 +394,11 @@ export default function WatchStream() {
                     )}
                   </div>
                 </div>
-                <StreamChatBar canChat={canInteract} needsSignIn={needsSignIn} onSignIn={signIn} signingIn={signingIn} onSent={mirrorChatToHive} />
+                {/* Chat switched off on the rail: the composer (and its "sign in to
+                    chat" prompt) goes with the messages. */}
+                {chatOverlayOn && !controlsHidden && (
+                  <StreamChatBar canChat={canInteract} needsSignIn={needsSignIn} onSignIn={signIn} signingIn={signingIn} onSent={mirrorChatToHive} />
+                )}
               </main>
             </StandaloneWatch>
           )}
@@ -388,14 +420,15 @@ export default function WatchStream() {
       >
         {!connectReady ? <BarLoader /> : (
 
-        <StandaloneWatch key={joinKey} roomName={streamId} connecting={<BarLoader />}>
+        <StandaloneWatch key={joinKey} roomName={streamId} connecting={<BarLoader />} audioMuted={prerollHold}>
           <div className="ws-grid">
             {/* Main column */}
             <div className="ws-col-main">
               <div className="ws-player">
                 <StreamVideo showLiveBadge={false} />
                 <StreamWatermark show={showWatermark} />
-                <LiveAdLayer host={host} room={streamId} />
+                <LiveAdLayer host={host} room={streamId} onPreroll={setPrerollHold} />
+                <StreamFullscreenButton />
               </div>
 
               {/* Info area — reuses the watch page (PlayVideo) classes so it

@@ -258,6 +258,8 @@
     "liveChat": "直播聊天",
     "signInToJoin": "🔒 登录后加入聊天。",
     "moreTag": "更多 #{{tag}}",
-    "moreVideos": "更多视频"
+    "moreVideos": "更多视频",
+    "hideControls": "隐藏控件",
+    "showControls": "显示控件"
   }
 }

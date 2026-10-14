@@ -160,7 +160,10 @@
     "openSite": "Buka situs web {{name}} di tab baru",
     "openAdvertiserSite": "Buka situs web pengiklan di tab baru",
     "adTag": "Iklan",
-    "closeAd": "Tutup iklan ini"
+    "closeAd": "Tutup iklan ini",
+    "streamStartsIn": "Siaran dimulai dalam <b>{{seconds}} dtk</b>",
+    "streamStartsMoment": "Siaran segera dimulai",
+    "tapForSound": "Ketuk untuk suara"
   },
   "skip": {
     "skipIn": "Lewati dalam <b>{{seconds}}</b>",

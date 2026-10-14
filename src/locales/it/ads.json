@@ -164,7 +164,10 @@
     "openSite": "Apri il sito web di {{name}} in una nuova scheda",
     "openAdvertiserSite": "Apri il sito web dell'inserzionista in una nuova scheda",
     "adTag": "Annuncio",
-    "closeAd": "Chiudi questo annuncio"
+    "closeAd": "Chiudi questo annuncio",
+    "streamStartsIn": "La diretta inizia tra <b>{{seconds}}s</b>",
+    "streamStartsMoment": "La diretta inizia tra un attimo",
+    "tapForSound": "Tocca per l'audio"
   },
   "skip": {
     "skipIn": "Salta tra <b>{{seconds}}</b>",

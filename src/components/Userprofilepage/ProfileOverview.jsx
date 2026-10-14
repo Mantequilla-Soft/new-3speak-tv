@@ -6,6 +6,7 @@ import ChannelTrailer from './ChannelTrailer';
 import CommunitySnaps from './CommunitySnaps';
 import ProfileLinksPanel from './ProfileLinksPanel';
 import ProfilePlaylistRails from './ProfilePlaylistRails';
+import { ProfileLiveNow } from './ProfileStreams';
 import { useTranslation } from 'react-i18next';
 import './ProfileOverview.scss';
 
@@ -101,6 +102,9 @@ export default function ProfileOverview({
     <div className="profile-overview">
       <div className="pov-main">
         <ChannelTrailer username={username} isOwnProfile={isOwnProfile} onOpenCommunityTab={openCommunityTab} />
+
+        {/* Streaming right now: the stream leads the videos. Nothing when not live. */}
+        <ProfileLiveNow user={username} />
 
         <Section title={t('profile.overview.videos')} count={videoSlice.length} onViewMore={() => onOpenTab('video')}>
           <Card3

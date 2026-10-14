@@ -258,6 +258,8 @@
     "liveChat": "ライブチャット",
     "signInToJoin": "🔒 チャットに参加するにはログインしてください。",
     "moreTag": "#{{tag}} をもっと見る",
-    "moreVideos": "ほかの動画"
+    "moreVideos": "ほかの動画",
+    "hideControls": "操作を隠す",
+    "showControls": "操作を表示"
   }
 }

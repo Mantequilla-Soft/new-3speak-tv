@@ -166,7 +166,10 @@
     "openSite": "Otwórz stronę {{name}} w nowej karcie",
     "openAdvertiserSite": "Otwórz stronę reklamodawcy w nowej karcie",
     "adTag": "Reklama",
-    "closeAd": "Zamknij tę reklamę"
+    "closeAd": "Zamknij tę reklamę",
+    "streamStartsIn": "Transmisja zacznie się za <b>{{seconds}} s</b>",
+    "streamStartsMoment": "Transmisja zaraz się zacznie",
+    "tapForSound": "Dotknij, aby włączyć dźwięk"
   },
   "skip": {
     "skipIn": "Pomiń za <b>{{seconds}}</b>",

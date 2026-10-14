@@ -162,7 +162,10 @@
     "openSite": "{{name}} की वेबसाइट नए टैब में खोलें",
     "openAdvertiserSite": "विज्ञापनदाता की वेबसाइट नए टैब में खोलें",
     "adTag": "विज्ञापन",
-    "closeAd": "यह विज्ञापन बंद करें"
+    "closeAd": "यह विज्ञापन बंद करें",
+    "streamStartsIn": "स्ट्रीम <b>{{seconds}} सेकंड</b> में शुरू होगी",
+    "streamStartsMoment": "स्ट्रीम कुछ ही पल में शुरू होगी",
+    "tapForSound": "आवाज़ के लिए टैप करें"
   },
   "skip": {
     "skipIn": "<b>{{seconds}}</b> में स्किप करें",

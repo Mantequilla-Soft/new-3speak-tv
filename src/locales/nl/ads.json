@@ -162,7 +162,10 @@
     "openSite": "Website van {{name}} openen in een nieuw tabblad",
     "openAdvertiserSite": "Website van de adverteerder openen in een nieuw tabblad",
     "adTag": "Advertentie",
-    "closeAd": "Deze advertentie sluiten"
+    "closeAd": "Deze advertentie sluiten",
+    "streamStartsIn": "De stream begint over <b>{{seconds}}s</b>",
+    "streamStartsMoment": "De stream begint zo",
+    "tapForSound": "Tik voor geluid"
   },
   "skip": {
     "skipIn": "Overslaan over <b>{{seconds}}</b>",

@@ -261,6 +261,8 @@
     "liveChat": "Czat na żywo",
     "signInToJoin": "🔒 Zaloguj się, aby dołączyć do czatu.",
     "moreTag": "Więcej #{{tag}}",
-    "moreVideos": "Więcej filmów"
+    "moreVideos": "Więcej filmów",
+    "hideControls": "Ukryj sterowanie",
+    "showControls": "Pokaż sterowanie"
   }
 }

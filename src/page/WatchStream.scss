@@ -543,3 +543,76 @@
     pointer-events: none;
   }
 }
+
+/* Phones, while a pre-roll holds the stream (LiveAdLayer `onPreroll`): the
+   stream's chrome steps out of the ad's way. The back button stays. */
+.ws-shorts.ws-preroll-on {
+  .bottomOverlay,
+  .actionSidebar,
+  .ws-shorts__chat,
+  .ws-shorts__next-hint,
+  .ws-shorts__quality,
+  .ws-shorts__bar {
+    visibility: hidden;
+  }
+}
+
+/* Sideways drags anywhere over the picture pan the vertical crop
+   (CroppableStreamVideo listens on the whole box): the browser keeps only
+   vertical panning here, the stream pager's swipe and the chat's scroll. The
+   chat list is its own scroll container, so it needs the rule itself. */
+.ws-shorts .videoContainer,
+.ws-shorts__chat .hh-chat__messages,
+.ws-shorts__chat .hh-chat__messages * {
+  touch-action: pan-y;
+}
+
+/* Chat switched off (rail button): no docked composer, so what was lifted
+   above it drops back down to the bottom edge. */
+.ws-shorts.ws-chat-off {
+  .bottomOverlay { padding-bottom: calc(1rem + env(safe-area-inset-bottom, 0px)); }
+  .actionSidebar { bottom: calc(1.25rem + env(safe-area-inset-bottom, 0px)); }
+}
+@media (orientation: landscape) and (max-height: 500px) {
+  .ws-shorts.ws-shorts--landscape.ws-chat-off {
+    .bottomOverlay { bottom: 0.5rem; }
+    .actionSidebar { bottom: 0.75rem; }
+  }
+}
+
+/* Clean view (rail "Hide controls"): nothing over the picture but the stream
+   itself, its ads and the one button that brings the controls back. */
+.ws-shorts.ws-controls-hidden {
+  .bottomOverlay,
+  .actionSidebar,
+  .ws-shorts__chat,
+  .ws-shorts__next-hint,
+  .ws-shorts__quality,
+  .shortBackBtn {
+    display: none;
+  }
+}
+
+.ws-shorts__show-controls {
+  position: absolute;
+  top: calc(12px + env(safe-area-inset-top, 0px));
+  right: 12px;
+  z-index: 55;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.55);
+  color: #fff;
+  cursor: pointer;
+  /* Visible but quiet: it sits on the picture the viewer wanted clean. */
+  opacity: 0.7;
+  transition: opacity 0.2s ease;
+
+  &:hover,
+  &:focus-visible { opacity: 1; }
+}

@@ -160,7 +160,10 @@
     "openSite": "在新标签页中打开 {{name}} 的网站",
     "openAdvertiserSite": "在新标签页中打开广告主的网站",
     "adTag": "广告",
-    "closeAd": "关闭此广告"
+    "closeAd": "关闭此广告",
+    "streamStartsIn": "直播将在 <b>{{seconds}} 秒</b>后开始",
+    "streamStartsMoment": "直播马上开始",
+    "tapForSound": "点按开启声音"
   },
   "skip": {
     "skipIn": "<b>{{seconds}}</b> 秒后可跳过",

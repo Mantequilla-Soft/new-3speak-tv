@@ -261,6 +261,8 @@
     "liveChat": "Чат наживо",
     "signInToJoin": "🔒 Увійдіть, щоб приєднатися до чату.",
     "moreTag": "Більше #{{tag}}",
-    "moreVideos": "Більше відео"
+    "moreVideos": "Більше відео",
+    "hideControls": "Сховати елементи",
+    "showControls": "Показати елементи"
   }
 }

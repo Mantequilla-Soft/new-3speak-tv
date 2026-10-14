@@ -258,6 +258,8 @@
     "liveChat": "Chat live",
     "signInToJoin": "🔒 Masuk untuk ikut chat.",
     "moreTag": "Lebih banyak #{{tag}}",
-    "moreVideos": "Video lainnya"
+    "moreVideos": "Video lainnya",
+    "hideControls": "Sembunyikan kontrol",
+    "showControls": "Tampilkan kontrol"
   }
 }

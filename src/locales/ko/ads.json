@@ -160,7 +160,10 @@
     "openSite": "새 탭에서 {{name}} 웹사이트 열기",
     "openAdvertiserSite": "새 탭에서 광고주 웹사이트 열기",
     "adTag": "광고",
-    "closeAd": "이 광고 닫기"
+    "closeAd": "이 광고 닫기",
+    "streamStartsIn": "<b>{{seconds}}초</b> 후 방송이 시작됩니다",
+    "streamStartsMoment": "곧 방송이 시작됩니다",
+    "tapForSound": "탭하여 소리 켜기"
   },
   "skip": {
     "skipIn": "<b>{{seconds}}</b>초 후 건너뛰기",

@@ -162,7 +162,10 @@
     "openSite": "Buksan ang website ng {{name}} sa bagong tab",
     "openAdvertiserSite": "Buksan ang website ng advertiser sa bagong tab",
     "adTag": "Ad",
-    "closeAd": "Isara ang ad na ito"
+    "closeAd": "Isara ang ad na ito",
+    "streamStartsIn": "Magsisimula ang stream sa <b>{{seconds}}s</b>",
+    "streamStartsMoment": "Magsisimula na ang stream",
+    "tapForSound": "I-tap para sa tunog"
   },
   "skip": {
     "skipIn": "Laktawan sa loob ng <b>{{seconds}}</b>",
