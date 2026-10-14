@@ -377,7 +377,8 @@
       "contactGoal": "連絡先の目標",
       "firstSaved": "初回保存",
       "lastChanged": "最終変更",
-      "butrauthUser": "ButrAuth ユーザー"
+      "butrauthUser": "ButrAuth ユーザー",
+      "socials": "SNS プロフィール"
     },
     "activityLine": "投稿 {{posts}} · フォロワー {{followers}} · フォロー中 {{following}}",
     "notSet": "未設定",
@@ -388,7 +389,8 @@
     "met": "達成",
     "notMet": "未達成",
     "unknown": "不明",
-    "noContact": "ビジネス連絡先はまだ保存されていません。"
+    "noContact": "ビジネス連絡先はまだ保存されていません。",
+    "notVerified": "未確認"
   },
   "contact": {
     "savedComplete": "保存しました。3Speak チームだけが見られます。",

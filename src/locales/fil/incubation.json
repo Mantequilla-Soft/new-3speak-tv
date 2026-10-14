@@ -398,7 +398,8 @@
       "contactGoal": "Contact goal",
       "firstSaved": "Unang na-save",
       "lastChanged": "Huling binago",
-      "butrauthUser": "ButrAuth user"
+      "butrauthUser": "ButrAuth user",
+      "socials": "Mga social profile"
     },
     "activityLine": "{{posts}} posts · {{followers}} followers · {{following}} fina-follow",
     "notSet": "hindi naka-set",
@@ -409,7 +410,8 @@
     "met": "Natupad",
     "notMet": "Hindi pa natutupad",
     "unknown": "hindi alam",
-    "noContact": "Wala pang naka-save na business contact."
+    "noContact": "Wala pang naka-save na business contact.",
+    "notVerified": "hindi pa beripikado"
   },
   "contact": {
     "savedComplete": "Na-save. Ang 3Speak team lang ang makakakita nito.",

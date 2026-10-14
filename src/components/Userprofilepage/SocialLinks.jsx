@@ -16,7 +16,8 @@ import './SocialLinks.scss';
 // line under it. See utils/toast.js.
 const toast = toastIn('Profile');
 
-const PLATFORM_ICONS = {
+// Shared with the admin view on warm-up profiles (AdvertiserAdminPanel).
+export const PLATFORM_ICONS = {
   youtube: FaYoutube,
   tiktok: FaTiktok,
   instagram: FaInstagram,

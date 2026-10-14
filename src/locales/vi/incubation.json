@@ -377,7 +377,8 @@
       "contactGoal": "Mục tiêu liên hệ",
       "firstSaved": "Lưu lần đầu",
       "lastChanged": "Thay đổi lần cuối",
-      "butrauthUser": "Người dùng ButrAuth"
+      "butrauthUser": "Người dùng ButrAuth",
+      "socials": "Hồ sơ mạng xã hội"
     },
     "activityLine": "{{posts}} bài đăng · {{followers}} người theo dõi · {{following}} đang theo dõi",
     "notSet": "chưa đặt",
@@ -388,7 +389,8 @@
     "met": "Đã đạt",
     "notMet": "Chưa đạt",
     "unknown": "không rõ",
-    "noContact": "Chưa lưu thông tin liên hệ kinh doanh nào."
+    "noContact": "Chưa lưu thông tin liên hệ kinh doanh nào.",
+    "notVerified": "chưa xác minh"
   },
   "contact": {
     "savedComplete": "Đã lưu. Chỉ đội ngũ 3Speak mới thấy được.",

@@ -1001,6 +1001,21 @@
 }
 
 .inc-admin-about { white-space: pre-wrap; }
+/* Linked social profiles: one per line, icon in front. */
+.inc-admin-socials {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.inc-admin-social {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+  overflow-wrap: anywhere;
+
+  svg { flex-shrink: 0; opacity: 0.8; }
+}
 
 /* Admin view: public profile and private contact side by side. Labels are narrower
    than in a single column so each half keeps room for its values. */

@@ -377,7 +377,8 @@
       "contactGoal": "联系方式目标",
       "firstSaved": "首次保存",
       "lastChanged": "最后修改",
-      "butrauthUser": "ButrAuth 用户"
+      "butrauthUser": "ButrAuth 用户",
+      "socials": "社交资料"
     },
     "activityLine": "{{posts}} 条帖子 · {{followers}} 位粉丝 · {{following}} 个关注",
     "notSet": "未设置",
@@ -388,7 +389,8 @@
     "met": "已达成",
     "notMet": "尚未达成",
     "unknown": "未知",
-    "noContact": "尚未保存商务联系方式。"
+    "noContact": "尚未保存商务联系方式。",
+    "notVerified": "未验证"
   },
   "contact": {
     "savedComplete": "已保存。只有 3Speak 团队能看到。",

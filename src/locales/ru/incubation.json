@@ -440,7 +440,8 @@
       "contactGoal": "Цель «Контакты»",
       "firstSaved": "Впервые сохранено",
       "lastChanged": "Последнее изменение",
-      "butrauthUser": "Пользователь ButrAuth"
+      "butrauthUser": "Пользователь ButrAuth",
+      "socials": "Профили в соцсетях"
     },
     "activityLine": "Посты: {{posts}} · подписчики: {{followers}} · подписки: {{following}}",
     "notSet": "не задано",
@@ -451,7 +452,8 @@
     "met": "Выполнено",
     "notMet": "Пока не выполнено",
     "unknown": "неизвестно",
-    "noContact": "Деловые контакты пока не сохранены."
+    "noContact": "Деловые контакты пока не сохранены.",
+    "notVerified": "не подтверждён"
   },
   "contact": {
     "savedComplete": "Сохранено. Это видит только команда 3Speak.",
