@@ -162,7 +162,10 @@
     "openSite": "Fungua tovuti ya {{name}} kwenye kichupo kipya",
     "openAdvertiserSite": "Fungua tovuti ya mtangazaji kwenye kichupo kipya",
     "adTag": "Tangazo",
-    "closeAd": "Funga tangazo hili"
+    "closeAd": "Funga tangazo hili",
+    "streamStartsIn": "Mubashara utaanza baada ya <b>sekunde {{seconds}}</b>",
+    "streamStartsMoment": "Mubashara utaanza muda si mrefu",
+    "tapForSound": "Gusa kwa sauti"
   },
   "skip": {
     "skipIn": "Ruka baada ya <b>{{seconds}}</b>",

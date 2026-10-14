@@ -259,6 +259,8 @@
     "liveChat": "Live chat",
     "signInToJoin": "🔒 Mag-sign in para sumali sa chat.",
     "moreTag": "Iba pang #{{tag}}",
-    "moreVideos": "Iba pang video"
+    "moreVideos": "Iba pang video",
+    "hideControls": "Itago ang controls",
+    "showControls": "Ipakita ang controls"
   }
 }

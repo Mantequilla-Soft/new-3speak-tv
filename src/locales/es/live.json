@@ -136,7 +136,8 @@
       "neverLive": "Aún sin usar",
       "watch": "Ver la transmisión",
       "notAnnounced": "Esta transmisión no se anunció en Hive.",
-      "notAnnouncedAuth": "No se anunció en Hive: 3Speak aún no puede publicar por ti. Edita la plantilla para permitirlo."
+      "notAnnouncedAuth": "No se anunció en Hive: 3Speak aún no puede publicar por ti. Edita la plantilla para permitirlo.",
+      "useInStudio": "Usar en Stream Studio"
     },
     "guide": {
       "title": "Cómo configurar OBS",
@@ -215,6 +216,16 @@
       "savedIntro": "\"{{name}}\" está lista. En OBS, usa esta URL del servidor y tu clave secreta de transmisión, y luego haz clic en \"Start Streaming\" para salir en vivo con ella. También puedes iniciar una transmisión desde el navegador como siempre.",
       "serverUrl": "URL del servidor",
       "manage": "Gestionar en Plantillas"
-    }
+    },
+    "steps": {
+      "basics": "Básico",
+      "details": "Detalles",
+      "sharing": "Boosts y difusión",
+      "goLive": "Transmitir",
+      "titleRequired": "Añade un título para continuar."
+    },
+    "pickTemplate": "Empezar desde una plantilla",
+    "pickTemplatePlaceholder": "Elige una plantilla…",
+    "templateLoaded": "“{{name}}” cargada en Nueva transmisión"
   }
 }

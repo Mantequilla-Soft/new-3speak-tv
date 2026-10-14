@@ -419,7 +419,8 @@
       "contactGoal": "Meta de contato",
       "firstSaved": "Salvo pela primeira vez",
       "lastChanged": "Última alteração",
-      "butrauthUser": "Usuário ButrAuth"
+      "butrauthUser": "Usuário ButrAuth",
+      "socials": "Perfis sociais"
     },
     "activityLine": "{{posts}} posts · {{followers}} seguidores · {{following}} seguindo",
     "notSet": "não definido",
@@ -430,7 +431,8 @@
     "met": "Cumprida",
     "notMet": "Ainda não cumprida",
     "unknown": "desconhecido",
-    "noContact": "Nenhum contato comercial salvo ainda."
+    "noContact": "Nenhum contato comercial salvo ainda.",
+    "notVerified": "não verificado"
   },
   "contact": {
     "savedComplete": "Salvo. Só a equipe do 3Speak pode ver.",

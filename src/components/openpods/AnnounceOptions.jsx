@@ -5,6 +5,7 @@ import { MdPeopleAlt } from 'react-icons/md';
 import { IoIosArrowDropdownCircle } from 'react-icons/io';
 import { getHiveUrl } from '../../utils/hiveNode';
 import { getAnnounceConfig, setAnnounceConfig } from '../../utils/openpodAnnounce';
+import { readAddToBlog, writeAddToBlog } from '../../utils/addToBlog';
 import Community_modal from '../modal/Community_modal';
 import Beneficiary_modal from '../modal/Beneficiary_modal';
 import './AnnounceOptions.scss';
@@ -43,6 +44,12 @@ export default function AnnounceOptions({ announceType, isPremium = false, onCha
   const [communitiesData, setCommunitiesData] = useState([]);
   const [communityModalOpen, setCommunityModalOpen] = useState(false);
   const [declineRewards, setDeclineRewards] = useState(!!init.declineRewards);
+  // "Add to my blog" (utils/addToBlog): the SAME remembered choice as video and
+  // audio uploads, so one decision covers everything this creator posts. Only
+  // for a full post (a snap is a comment); not offered on stream templates,
+  // whose OBS announcement is posted by the server, which does not reblog yet.
+  const [addToBlog, setAddToBlogState] = useState(readAddToBlog);
+  const setAddToBlog = (on) => { setAddToBlogState(on); writeAddToBlog(on); };
   const [rewardPowerup, setRewardPowerup] = useState(!!init.rewardPowerup);
   const [beneModalOpen, setBeneModalOpen] = useState(false);
   // Beneficiary_modal works in PERCENT ({account, percent}); the Hive publish
@@ -83,6 +90,29 @@ export default function AnnounceOptions({ announceType, isPremium = false, onCha
     }).then(res => setCommunitiesData(res.data.result || [])).catch(() => {});
   }, []);
 
+  // A community known only by its id (the default, a setup saved before titles
+  // were stored, a template) is shown by its real name: look the title up once.
+  // Writing it back as an object also stores the title for next time.
+  const communityName = typeof community === 'string' ? community : community?.name;
+  const communityHasTitle = typeof community === 'object' && !!community?.title;
+  useEffect(() => {
+    if (!communityName || communityHasTitle) return undefined;
+    let alive = true;
+    axios.post(getHiveUrl(), {
+      jsonrpc: '2.0',
+      method: 'bridge.get_community',
+      params: { name: communityName, observer: '' },
+      id: 1,
+    }).then((res) => {
+      const title = res.data?.result?.title;
+      if (!alive || !title) return;
+      setCommunity((cur) => ((typeof cur === 'string' ? cur : cur?.name) === communityName
+        ? { name: communityName, title }
+        : cur));
+    }).catch(() => { /* the id stays as the label */ });
+    return () => { alive = false; };
+  }, [communityName, communityHasTitle]);
+
   // Persist every choice to the shared store (single source of truth read at
   // post time) and notify any parent that passed onChange.
   const onChangeRef = useRef(onChange);
@@ -95,6 +125,7 @@ export default function AnnounceOptions({ announceType, isPremium = false, onCha
       communityTitle: typeof community === 'object' ? (community?.title || '') : '',
       declineRewards,
       rewardPowerup,
+      addToBlog,
       // …and back out to WEIGHT here, so the publish path (and the persisted
       // config) always sees the canonical {account, weight} Hive shape.
       beneList: (beneList || [])
@@ -108,7 +139,7 @@ export default function AnnounceOptions({ announceType, isPremium = false, onCha
     };
     if (!detached) setAnnounceConfig(cfg);
     onChangeRef.current?.({ announceType, ...cfg });
-  }, [announceType, community, declineRewards, rewardPowerup, beneList, announceEnabled, showAnnounceToggle, detached]);
+  }, [announceType, community, declineRewards, rewardPowerup, addToBlog, beneList, announceEnabled, showAnnounceToggle, detached]);
 
   const handleReward = (e) => {
     const v = e.target.value;
@@ -193,6 +224,16 @@ export default function AnnounceOptions({ announceType, isPremium = false, onCha
           <span>{t('live.announce.beneficiaries')}</span>
         </button>
       </div>
+
+      {announceType === 'post' && !detached && (
+        <label className="hh-announce-opts__toggle hh-announce-opts__blog">
+          <input type="checkbox" checked={addToBlog} onChange={(e) => setAddToBlog(e.target.checked)} />
+          <span>
+            {t('upload.details.addToBlog.label')}
+            <small>{t('upload.details.addToBlog.hint')}</small>
+          </span>
+        </label>
+      )}
       </>
       )}
 

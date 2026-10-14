@@ -14,7 +14,9 @@ import { defaultEndpoint, pickLeastLoadedEndpoint, fetchAllEndpoints } from '../
 import { postOpenPodAnnouncement, setPendingAnnouncement, setAnnounceConfig, getAnnounceConfig } from '../utils/openpodAnnounce';
 import AnnounceOptions from '../components/openpods/AnnounceOptions';
 import MarkdownComposer from '../components/studio/MarkdownComposer';
-import { StreamTemplatesPanel, SaveAsTemplate } from '../components/openpods/StreamTemplates';
+import { StreamTemplatesPanel, SaveAsTemplate, TemplatePicker } from '../components/openpods/StreamTemplates';
+import { applyTemplateToSetup } from '../utils/streamTemplates';
+import { toastIn } from '../utils/toast';
 import './OpenPods.scss';
 
 // Strip any trailing slash — useHangoutsRoom builds `${apiBaseUrl}/rooms` with a
@@ -82,7 +84,12 @@ export default function OpenPods() {
   // falls back to a client-side signature. Gating on a signable provider (as
   // this used to) meant mobile users, who have no Keychain extension, never got
   // a handover at all and were told to sign in again.
-  const handoverUser = aiohaUser || user;
+  // The 3Speak account first: it is who the viewer IS logged in as, for every
+  // login type. Aioha can still hold a wallet user from an EARLIER login (a
+  // ButrAuth session has no aioha user of its own), and naming that stale
+  // account in the challenge made the @threespeak signer refuse it (400), so
+  // a logged-in viewer was treated as a guest.
+  const handoverUser = user || aiohaUser;
   const canHandover = !!authenticated && !!handoverUser;
 
   // If they're genuinely signed in on 3Speak, hand that session over in the
@@ -220,6 +227,17 @@ export default function OpenPods() {
   const studioTabs = OPENPODS_STANDALONE && authenticated && !!user && openpodsEnabledFor(user)
     && createReq.mode !== 'conference';
   const tab = studioTabs && new URLSearchParams(location.search).get('tab') === 'templates' ? 'templates' : 'new';
+  // A stream template in the BROWSER studio (no OBS): load it into the New
+  // stream form and remount the form (the `seq` in RoomLobby's key) so it reads
+  // the template's values; the stepped form starts again at its first step.
+  const loadTemplate = (tpl) => {
+    if (!tpl) return;
+    applyTemplateToSetup(tpl);
+    setCreateReq((r) => ({ ...r, mode: 'standalone', seq: r.seq + 1 }));
+    toastIn('Live').success(t('live.obs.templateLoaded', { name: tpl.name }));
+    if (tab !== 'new') setTab('new');
+  };
+
   const setTab = (next) => {
     const params = new URLSearchParams(location.search);
     if (next === 'templates') params.set('tab', 'templates'); else params.delete('tab');
@@ -254,9 +272,15 @@ export default function OpenPods() {
 
       {tab === 'templates' ? (
         <div className="openpods-studio-panel">
-          <StreamTemplatesPanel token={sessionToken} user={user} isPremium={isPremium} />
+          <StreamTemplatesPanel token={sessionToken} user={user} isPremium={isPremium} onUse={loadTemplate} />
         </div>
       ) : (
+      <>
+      {studioTabs && (
+        <div className="openpods-template-pick">
+          <TemplatePicker token={sessionToken} onPick={loadTemplate} />
+        </div>
+      )}
       <HangoutsProvider
         apiBaseUrl={endpoint.api}
         livekitServerUrl={endpoint.lk}
@@ -318,6 +342,19 @@ export default function OpenPods() {
               onManage={() => setTab('templates')}
             />
           ) : undefined}
+          /* Streams go through the form step by step (Basics, Details,
+             Boosts & sharing, Go live); group chats keep the single page. */
+          stepped={createReq.mode !== 'conference'}
+          stepLabels={{
+            basics: t('live.obs.steps.basics'),
+            details: t('live.obs.steps.details'),
+            sharing: t('live.obs.steps.sharing'),
+            goLive: t('live.obs.steps.goLive'),
+            back: t('common.actions.back'),
+            next: t('common.actions.next'),
+            cancel: t('common.actions.cancel'),
+            titleRequired: t('live.obs.steps.titleRequired'),
+          }}
           renderDescriptionEditor={(value, onChange) => (
             <MarkdownComposer
               value={value}
@@ -327,6 +364,7 @@ export default function OpenPods() {
           )}
         />
       </HangoutsProvider>
+      </>
       )}
 
       {/* No session yet → show the right call-to-action without blocking the

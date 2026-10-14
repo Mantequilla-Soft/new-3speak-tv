@@ -259,6 +259,8 @@
     "liveChat": "লাইভ চ্যাট",
     "signInToJoin": "🔒 চ্যাটে যোগ দিতে সাইন ইন করুন।",
     "moreTag": "আরও #{{tag}}",
-    "moreVideos": "আরও ভিডিও"
+    "moreVideos": "আরও ভিডিও",
+    "hideControls": "নিয়ন্ত্রণ লুকান",
+    "showControls": "নিয়ন্ত্রণ দেখান"
   }
 }

@@ -135,7 +135,8 @@
       "neverLive": "Hindi pa nagagamit",
       "watch": "Panoorin ang stream",
       "notAnnounced": "Hindi in-announce sa Hive ang stream na ito.",
-      "notAnnouncedAuth": "Hindi in-announce sa Hive: hindi pa puwedeng mag-post ang 3Speak para sa iyo. I-edit ang template para payagan ito."
+      "notAnnouncedAuth": "Hindi in-announce sa Hive: hindi pa puwedeng mag-post ang 3Speak para sa iyo. I-edit ang template para payagan ito.",
+      "useInStudio": "Gamitin sa Stream Studio"
     },
     "guide": {
       "title": "Paano i-set up ang OBS",
@@ -214,6 +215,16 @@
       "savedIntro": "Handa na ang \"{{name}}\". Sa OBS, gamitin ang server URL na ito at ang stream secret mo, tapos i-click ang \"Start Streaming\" para mag-live gamit ito. Puwede ka pa ring magsimula ng browser stream gaya ng dati.",
       "serverUrl": "Server URL",
       "manage": "I-manage sa Mga template"
-    }
+    },
+    "steps": {
+      "basics": "Mga pangunahin",
+      "details": "Mga detalye",
+      "sharing": "Boosts at pagbabahagi",
+      "goLive": "Mag-live",
+      "titleRequired": "Magdagdag ng pamagat para magpatuloy."
+    },
+    "pickTemplate": "Magsimula sa isang template",
+    "pickTemplatePlaceholder": "Pumili ng template…",
+    "templateLoaded": "Na-load ang “{{name}}” sa Bagong stream"
   }
 }

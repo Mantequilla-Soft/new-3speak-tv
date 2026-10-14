@@ -259,6 +259,8 @@
     "liveChat": "Gumzo mubashara",
     "signInToJoin": "🔒 Ingia ili ujiunge na gumzo.",
     "moreTag": "Zaidi #{{tag}}",
-    "moreVideos": "Video zaidi"
+    "moreVideos": "Video zaidi",
+    "hideControls": "Ficha vidhibiti",
+    "showControls": "Onyesha vidhibiti"
   }
 }

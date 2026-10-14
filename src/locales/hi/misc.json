@@ -259,6 +259,8 @@
     "liveChat": "लाइव चैट",
     "signInToJoin": "🔒 चैट में शामिल होने के लिए साइन इन करें।",
     "moreTag": "और #{{tag}}",
-    "moreVideos": "और वीडियो"
+    "moreVideos": "और वीडियो",
+    "hideControls": "कंट्रोल छिपाएँ",
+    "showControls": "कंट्रोल दिखाएँ"
   }
 }

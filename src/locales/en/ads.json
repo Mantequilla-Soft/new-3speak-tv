@@ -162,7 +162,10 @@
     "openSite": "Open {{name}}'s website in a new tab",
     "openAdvertiserSite": "Open the advertiser's website in a new tab",
     "adTag": "Ad",
-    "closeAd": "Close this ad"
+    "closeAd": "Close this ad",
+    "streamStartsIn": "The stream starts in <b>{{seconds}}s</b>",
+    "streamStartsMoment": "The stream starts in a moment",
+    "tapForSound": "Tap for sound"
   },
   "skip": {
     "skipIn": "Skip in <b>{{seconds}}</b>",

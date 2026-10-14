@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react';
 import { FaUserShield } from 'react-icons/fa';
 import { fetchAdvertiserAdminView } from '../../lib/incubation';
+import { getLinks, platformProfileUrl, platformLabel } from '../../utils/socialVerifier';
+import { PLATFORM_ICONS } from '../Userprofilepage/SocialLinks';
 import { useTranslation } from 'react-i18next';
 
 const when = (d) => (d ? new Date(d).toLocaleString() : null);
@@ -8,7 +10,9 @@ const when = (d) => (d ? new Date(d).toLocaleString() : null);
 /**
  * "Admin view" on an advertiser's warm-up page: everything about them in one place.
  * Their public brand profile (name, logo, bio, website, location, interests, counts)
- * from the page, and the private business contact nobody else can see (email,
+ * from the page, the social profiles they linked through the checker's verifier
+ * (verified ones as links, unverified ones marked, since an admin wants to see
+ * those too), and the private business contact nobody else can see (email,
  * address) from the admin-only route.
  *
  * Rendered for every visitor, shown to almost none: the server asks ButrAuth whether
@@ -21,11 +25,24 @@ export default function AdvertiserAdminPanel({ handle, profile = {}, interests =
   const website = profile.website || null;
   const [data, setData] = useState(null);
 
+  const [socials, setSocials] = useState([]);
+
   useEffect(() => {
     let alive = true;
     fetchAdvertiserAdminView(handle).then((d) => { if (alive) setData(d); });
     return () => { alive = false; };
   }, [handle]);
+
+  // Public data, but only fetched once the admin route has answered: nobody
+  // else renders this panel, so nobody else should pay for the request.
+  useEffect(() => {
+    if (!data || !handle) return undefined;
+    let alive = true;
+    getLinks(handle, { includePending: true })
+      .then((links) => { if (alive) setSocials(Array.isArray(links) ? links : []); })
+      .catch(() => { if (alive) setSocials([]); });
+    return () => { alive = false; };
+  }, [data, handle]);
 
   if (!data) return null;
   const c = data.contact;
@@ -55,6 +72,25 @@ export default function AdvertiserAdminPanel({ handle, profile = {}, interests =
         </div>
         <div><dt>{t('incubation.admin.fields.about')}</dt><dd className="inc-admin-about">{profile.about || <em>{t('incubation.admin.notSet')}</em>}</dd></div>
         <div><dt>{t('incubation.admin.fields.website')}</dt><dd>{website ? <a href={website} target="_blank" rel="noopener noreferrer">{website}</a> : <em>{t('incubation.admin.none')}</em>}</dd></div>
+        {socials.length > 0 ? (
+          <div>
+            <dt>{t('incubation.admin.fields.socials')}</dt>
+            <dd className="inc-admin-socials">
+              {socials.map((link) => {
+                const Icon = PLATFORM_ICONS[link.platform];
+                const url = platformProfileUrl(link.platform, link.platform_username);
+                const label = `${platformLabel(link.platform)}: ${link.platform_username}`;
+                return (
+                  <span key={`${link.platform}:${link.platform_username}`} className="inc-admin-social">
+                    {Icon ? <Icon size={13} aria-hidden="true" /> : null}
+                    {url ? <a href={url} target="_blank" rel="noopener noreferrer">{label}</a> : label}
+                    {!link.verified ? <em> ({t('incubation.admin.notVerified')})</em> : null}
+                  </span>
+                );
+              })}
+            </dd>
+          </div>
+        ) : null}
         {profile.location ? <div><dt>{t('incubation.admin.fields.location')}</dt><dd>{profile.location}</dd></div> : null}
         {interests.length > 0 ? <div><dt>{t('incubation.admin.fields.interests')}</dt><dd>{interests.join(', ')}</dd></div> : null}
         <div><dt>{t('incubation.admin.fields.activity')}</dt><dd>{t('incubation.admin.activityLine', { posts: counts.posts ?? 0, followers: counts.followers ?? 0, following: counts.following ?? 0 })}</dd></div>

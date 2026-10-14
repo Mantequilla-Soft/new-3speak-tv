@@ -25,7 +25,7 @@ import { MdLock, MdPublic, MdClose, MdRssFeed } from "react-icons/md";
 import SocialLinks from "../components/Userprofilepage/SocialLinks";
 import LeaderboardBadges from "../components/LeaderboardBadges/LeaderboardBadges";
 import HiveBadges from "../components/HiveBadges/HiveBadges";
-import ProfileStreams from "../components/Userprofilepage/ProfileStreams";
+import ProfileStreams, { ProfileLiveNow } from "../components/Userprofilepage/ProfileStreams";
 import AddSocialLink_modal from "../components/modal/AddSocialLink_modal";
 import EditVideoHintModal from "../components/modal/EditVideoHintModal";
 import { fetchScheduledPosts, normalizeScheduledForCard } from "../utils/scheduledPosts";
@@ -704,13 +704,17 @@ function ProfilePage() {
             getViewCount={getViewCount}
           />
         ) : show === "video" ? (
-          isLoading ? (
-            <BarLoader />
-          ) : videoListItems.length === 0 ? (
-            <ProfileEmptyState kind="video" isOwnProfile username={user} />
-          ) : (
-            <Card3 videos={videoListItems} loading={isFetchingNextPage} getContentForVideo={getContentForVideo} isWatched={isWatched} getViewCount={getViewCount} />
-          )
+          <>
+            {/* A live stream comes first, ahead of the videos. */}
+            <ProfileLiveNow user={user} />
+            {isLoading ? (
+              <BarLoader />
+            ) : videoListItems.length === 0 ? (
+              <ProfileEmptyState kind="video" isOwnProfile username={user} />
+            ) : (
+              <Card3 videos={videoListItems} loading={isFetchingNextPage} getContentForVideo={getContentForVideo} isWatched={isWatched} getViewCount={getViewCount} />
+            )}
+          </>
         ) : show === "shorts" ? (
           isShortsLoading ? (
             <BarLoader />

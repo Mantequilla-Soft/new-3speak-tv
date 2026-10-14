@@ -134,7 +134,8 @@
       "neverLive": "Belum pernah dipakai",
       "watch": "Tonton siaran",
       "notAnnounced": "Siaran ini tidak diumumkan di Hive.",
-      "notAnnouncedAuth": "Tidak diumumkan di Hive: 3Speak belum boleh memposting untukmu. Edit template untuk mengizinkannya."
+      "notAnnouncedAuth": "Tidak diumumkan di Hive: 3Speak belum boleh memposting untukmu. Edit template untuk mengizinkannya.",
+      "useInStudio": "Gunakan di Stream Studio"
     },
     "guide": {
       "title": "Cara menyiapkan OBS",
@@ -213,6 +214,16 @@
       "savedIntro": "\"{{name}}\" sudah siap. Di OBS, pakai URL server ini dan kunci rahasia siaranmu, lalu klik \"Start Streaming\" untuk live dengan template ini. Kamu tetap bisa memulai siaran dari browser seperti biasa.",
       "serverUrl": "URL server",
       "manage": "Kelola di Template"
-    }
+    },
+    "steps": {
+      "basics": "Dasar",
+      "details": "Detail",
+      "sharing": "Boost & berbagi",
+      "goLive": "Siaran langsung",
+      "titleRequired": "Tambahkan judul untuk melanjutkan."
+    },
+    "pickTemplate": "Mulai dari template",
+    "pickTemplatePlaceholder": "Pilih template…",
+    "templateLoaded": "“{{name}}” dimuat ke Siaran baru"
   }
 }

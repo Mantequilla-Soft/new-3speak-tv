@@ -259,6 +259,8 @@
     "liveChat": "Livechat",
     "signInToJoin": "🔒 Log in om mee te chatten.",
     "moreTag": "Meer #{{tag}}",
-    "moreVideos": "Meer video's"
+    "moreVideos": "Meer video's",
+    "hideControls": "Bediening verbergen",
+    "showControls": "Bediening tonen"
   }
 }

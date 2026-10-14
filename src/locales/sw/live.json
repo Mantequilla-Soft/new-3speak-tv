@@ -135,7 +135,8 @@
       "neverLive": "Bado haijatumika",
       "watch": "Tazama mtiririko",
       "notAnnounced": "Mtiririko huu haukutangazwa kwenye Hive.",
-      "notAnnouncedAuth": "Haukutangazwa kwenye Hive: 3Speak bado haiwezi kuchapisha kwa niaba yako. Hariri kiolezo ili kuruhusu."
+      "notAnnouncedAuth": "Haukutangazwa kwenye Hive: 3Speak bado haiwezi kuchapisha kwa niaba yako. Hariri kiolezo ili kuruhusu.",
+      "useInStudio": "Tumia kwenye Stream Studio"
     },
     "guide": {
       "title": "Jinsi ya kuweka OBS",
@@ -214,6 +215,16 @@
       "savedIntro": "\"{{name}}\" kiko tayari. Kwenye OBS, tumia URL hii ya seva na siri ya mtiririko wako, kisha bofya \"Start Streaming\" ili uende mubashara nacho. Bado unaweza kuanzisha mtiririko kwenye kivinjari kama kawaida.",
       "serverUrl": "URL ya seva",
       "manage": "Dhibiti kwenye Violezo"
-    }
+    },
+    "steps": {
+      "basics": "Msingi",
+      "details": "Maelezo",
+      "sharing": "Boost na kushiriki",
+      "goLive": "Anza mubashara",
+      "titleRequired": "Ongeza kichwa ili kuendelea."
+    },
+    "pickTemplate": "Anza kwa kiolezo",
+    "pickTemplatePlaceholder": "Chagua kiolezo…",
+    "templateLoaded": "“{{name}}” imepakiwa kwenye Mubashara mpya"
   }
 }

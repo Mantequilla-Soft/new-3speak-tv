@@ -419,7 +419,8 @@
       "contactGoal": "Objectif contact",
       "firstSaved": "Premier enregistrement",
       "lastChanged": "Dernière modification",
-      "butrauthUser": "Utilisateur ButrAuth"
+      "butrauthUser": "Utilisateur ButrAuth",
+      "socials": "Profils sociaux"
     },
     "activityLine": "{{posts}} publications · {{followers}} abonnés · {{following}} abonnements",
     "notSet": "non défini",
@@ -430,7 +431,8 @@
     "met": "Atteint",
     "notMet": "Pas encore atteint",
     "unknown": "inconnu",
-    "noContact": "Aucun contact professionnel enregistré pour l'instant."
+    "noContact": "Aucun contact professionnel enregistré pour l'instant.",
+    "notVerified": "non vérifié"
   },
   "contact": {
     "savedComplete": "Enregistré. Seule l'équipe 3Speak peut le voir.",

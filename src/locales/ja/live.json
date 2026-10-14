@@ -134,7 +134,8 @@
       "neverLive": "未使用",
       "watch": "配信を見る",
       "notAnnounced": "この配信は Hive で告知されませんでした。",
-      "notAnnouncedAuth": "Hive で告知されていません: 3Speak はまだあなたの代わりに投稿できません。テンプレートを編集して許可してください。"
+      "notAnnouncedAuth": "Hive で告知されていません: 3Speak はまだあなたの代わりに投稿できません。テンプレートを編集して許可してください。",
+      "useInStudio": "Stream Studio で使う"
     },
     "guide": {
       "title": "OBS の設定方法",
@@ -213,6 +214,16 @@
       "savedIntro": "\"{{name}}\" の準備ができました。OBS でこのサーバー URL と配信シークレットを使い、\"Start Streaming\" をクリックするとこのテンプレートで配信が始まります。これまでどおりブラウザから配信を始めることもできます。",
       "serverUrl": "サーバー URL",
       "manage": "テンプレートで管理"
-    }
+    },
+    "steps": {
+      "basics": "基本",
+      "details": "詳細",
+      "sharing": "ブーストと共有",
+      "goLive": "配信開始",
+      "titleRequired": "続けるにはタイトルを入力してください。"
+    },
+    "pickTemplate": "テンプレートから始める",
+    "pickTemplatePlaceholder": "テンプレートを選択…",
+    "templateLoaded": "「{{name}}」を新しい配信に読み込みました"
   }
 }

@@ -377,7 +377,8 @@
       "contactGoal": "Target kontak",
       "firstSaved": "Pertama disimpan",
       "lastChanged": "Terakhir diubah",
-      "butrauthUser": "Pengguna ButrAuth"
+      "butrauthUser": "Pengguna ButrAuth",
+      "socials": "Profil media sosial"
     },
     "activityLine": "{{posts}} postingan · {{followers}} pengikut · {{following}} mengikuti",
     "notSet": "belum diatur",
@@ -388,7 +389,8 @@
     "met": "Terpenuhi",
     "notMet": "Belum terpenuhi",
     "unknown": "tidak diketahui",
-    "noContact": "Belum ada kontak bisnis yang disimpan."
+    "noContact": "Belum ada kontak bisnis yang disimpan.",
+    "notVerified": "belum diverifikasi"
   },
   "contact": {
     "savedComplete": "Tersimpan. Hanya tim 3Speak yang bisa melihatnya.",

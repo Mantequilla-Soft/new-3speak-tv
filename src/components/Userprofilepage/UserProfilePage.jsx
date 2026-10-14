@@ -39,7 +39,7 @@ import TipModal from '../tip-reward/TipModal';
 import UserAudioList from './UserAudioList';
 import CommunitySnaps from './CommunitySnaps';
 import SpotlightEditor from '../Spotlight/SpotlightEditor';
-import ProfileStreams from './ProfileStreams';
+import ProfileStreams, { ProfileLiveNow } from './ProfileStreams';
 import { fetchSnaps } from '../../lib/snaps';
 import SocialLinks from './SocialLinks';
 import LeaderboardBadges from '../LeaderboardBadges/LeaderboardBadges';
@@ -712,13 +712,17 @@ const {
       getViewCount={getViewCount}
     />
   ) : show === "video" ? (
-    isLoading ? (
-      <BarLoader />
-    ) : videos?.length === 0 ? (
-      <ProfileEmptyState kind="video" isOwnProfile={isOwnProfile} username={user} />
-    ) : (
-      <Card3 videos={videos} loading={isFetchingNextPage} getContentForVideo={getContentForVideo} isWatched={isWatched} getViewCount={getViewCount} />
-    )
+    <>
+      {/* A live stream comes first, ahead of the videos. */}
+      <ProfileLiveNow user={user} />
+      {isLoading ? (
+        <BarLoader />
+      ) : videos?.length === 0 ? (
+        <ProfileEmptyState kind="video" isOwnProfile={isOwnProfile} username={user} />
+      ) : (
+        <Card3 videos={videos} loading={isFetchingNextPage} getContentForVideo={getContentForVideo} isWatched={isWatched} getViewCount={getViewCount} />
+      )}
+    </>
   ) : show === "shorts" ? (
     isShortsLoading ? (
       <BarLoader />

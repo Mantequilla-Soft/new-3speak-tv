@@ -25,7 +25,12 @@ import './AdOverlay.scss';
  * then redirects — the advertiser's real address is never in the page, and a click is
  * measurable, which is the first thing an advertiser asks about.
  */
-export default function AdOverlay({ account, brand, previewOnly = false, resumeIn = null }) {
+// `resumeKey` / `resumeMomentKey`: the countdown's wording, for a spot in front of
+// something other than a video (a live stream's pre-roll says the stream starts).
+export default function AdOverlay({
+  account, brand, previewOnly = false, resumeIn = null,
+  resumeKey = 'ads.overlay.continuesIn', resumeMomentKey = 'ads.overlay.continuesMoment',
+}) {
   const { t } = useTranslation();
   const productName = brand?.productName || null;
   const slogan = brand?.slogan || null;
@@ -61,8 +66,8 @@ export default function AdOverlay({ account, brand, previewOnly = false, resumeI
       {resumeIn != null && (
         <span className="brandmark-resume">
           {resumeIn > 0
-            ? <Trans i18nKey="ads.overlay.continuesIn" values={{ seconds: resumeIn }} components={{ b: <strong /> }} />
-            : t('ads.overlay.continuesMoment')}
+            ? <Trans i18nKey={resumeKey} values={{ seconds: resumeIn }} components={{ b: <strong /> }} />
+            : t(resumeMomentKey)}
         </span>
       )}
     </>
@@ -104,4 +109,6 @@ AdOverlay.propTypes = {
   }),
   previewOnly: PropTypes.bool,
   resumeIn: PropTypes.number,
+  resumeKey: PropTypes.string,
+  resumeMomentKey: PropTypes.string,
 };

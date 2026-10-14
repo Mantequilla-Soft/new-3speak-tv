@@ -162,7 +162,10 @@
     "openSite": "Website von {{name}} in neuem Tab öffnen",
     "openAdvertiserSite": "Website des Werbekunden in neuem Tab öffnen",
     "adTag": "Anzeige",
-    "closeAd": "Diese Werbung schließen"
+    "closeAd": "Diese Werbung schließen",
+    "streamStartsIn": "Der Stream startet in <b>{{seconds}}s</b>",
+    "streamStartsMoment": "Der Stream startet gleich",
+    "tapForSound": "Für Ton tippen"
   },
   "skip": {
     "skipIn": "Überspringen in <b>{{seconds}}</b>",

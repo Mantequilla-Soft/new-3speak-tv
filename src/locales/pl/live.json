@@ -137,7 +137,8 @@
       "neverLive": "Jeszcze nieużywany",
       "watch": "Oglądaj transmisję",
       "notAnnounced": "Ta transmisja nie została ogłoszona na Hive.",
-      "notAnnouncedAuth": "Nie ogłoszono na Hive: 3Speak nie może jeszcze publikować w twoim imieniu. Edytuj szablon, aby na to zezwolić."
+      "notAnnouncedAuth": "Nie ogłoszono na Hive: 3Speak nie może jeszcze publikować w twoim imieniu. Edytuj szablon, aby na to zezwolić.",
+      "useInStudio": "Użyj w Stream Studio"
     },
     "guide": {
       "title": "Jak skonfigurować OBS",
@@ -216,6 +217,16 @@
       "savedIntro": "\"{{name}}\" jest gotowy. W OBS użyj tego URL serwera i swojego sekretu transmisji, a potem kliknij \"Start Streaming\", aby nadawać na żywo z tym szablonem. Nadal możesz jak zwykle rozpocząć transmisję w przeglądarce.",
       "serverUrl": "URL serwera",
       "manage": "Zarządzaj w Szablonach"
-    }
+    },
+    "steps": {
+      "basics": "Podstawy",
+      "details": "Szczegóły",
+      "sharing": "Boosty i udostępnianie",
+      "goLive": "Na żywo",
+      "titleRequired": "Dodaj tytuł, aby kontynuować."
+    },
+    "pickTemplate": "Zacznij od szablonu",
+    "pickTemplatePlaceholder": "Wybierz szablon…",
+    "templateLoaded": "Wczytano „{{name}}” do Nowej transmisji"
   }
 }

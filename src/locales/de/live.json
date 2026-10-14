@@ -135,7 +135,8 @@
       "neverLive": "Noch nicht genutzt",
       "watch": "Stream ansehen",
       "notAnnounced": "Dieser Stream wurde nicht auf Hive angekündigt.",
-      "notAnnouncedAuth": "Nicht auf Hive angekündigt: 3Speak darf noch nicht für dich posten. Bearbeite die Vorlage, um es zu erlauben."
+      "notAnnouncedAuth": "Nicht auf Hive angekündigt: 3Speak darf noch nicht für dich posten. Bearbeite die Vorlage, um es zu erlauben.",
+      "useInStudio": "Im Stream Studio verwenden"
     },
     "guide": {
       "title": "So richtest du OBS ein",
@@ -214,6 +215,16 @@
       "savedIntro": "\"{{name}}\" ist bereit. Nutze in OBS diese Server-URL und dein Stream-Secret und klick dann auf \"Start Streaming\", um damit live zu gehen. Einen Browser-Stream kannst du weiterhin wie gewohnt starten.",
       "serverUrl": "Server-URL",
       "manage": "In Vorlagen verwalten"
-    }
+    },
+    "steps": {
+      "basics": "Grundlagen",
+      "details": "Details",
+      "sharing": "Boosts & Teilen",
+      "goLive": "Live gehen",
+      "titleRequired": "Gib einen Titel ein, um weiterzumachen."
+    },
+    "pickTemplate": "Mit einer Vorlage beginnen",
+    "pickTemplatePlaceholder": "Vorlage wählen…",
+    "templateLoaded": "„{{name}}“ in Neuer Stream geladen"
   }
 }

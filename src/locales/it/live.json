@@ -136,7 +136,8 @@
       "neverLive": "Non ancora usato",
       "watch": "Guarda la diretta",
       "notAnnounced": "Questa diretta non è stata annunciata su Hive.",
-      "notAnnouncedAuth": "Non annunciata su Hive: 3Speak non può ancora pubblicare per te. Modifica il modello per consentirlo."
+      "notAnnouncedAuth": "Non annunciata su Hive: 3Speak non può ancora pubblicare per te. Modifica il modello per consentirlo.",
+      "useInStudio": "Usa in Stream Studio"
     },
     "guide": {
       "title": "Come configurare OBS",
@@ -215,6 +216,16 @@
       "savedIntro": "\"{{name}}\" è pronto. In OBS usa questo URL del server e il tuo segreto di diretta, poi clicca \"Start Streaming\" per andare in diretta con questo modello. Puoi comunque avviare una diretta dal browser come al solito.",
       "serverUrl": "URL del server",
       "manage": "Gestisci in Modelli"
-    }
+    },
+    "steps": {
+      "basics": "Base",
+      "details": "Dettagli",
+      "sharing": "Boost e condivisione",
+      "goLive": "Vai in diretta",
+      "titleRequired": "Aggiungi un titolo per continuare."
+    },
+    "pickTemplate": "Parti da un modello",
+    "pickTemplatePlaceholder": "Scegli un modello…",
+    "templateLoaded": "“{{name}}” caricato in Nuova diretta"
   }
 }
