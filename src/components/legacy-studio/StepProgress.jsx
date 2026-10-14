@@ -2,62 +2,54 @@ import { Check } from "lucide-react";
 import "./StepProgress.scss";
 import { useTranslation } from "react-i18next";
 
-
-export const StepProgress = ({ step }) => {
-  // Default values if none are provided
+// The upload wizard's stepper.
+//
+// One row that spans the page's content width: each step is a small numbered
+// ring with its label beside it, joined by lines that fill the space between,
+// so the first step sits on the content's left edge and the last on its right
+// edge whatever the page width. Rings are OUTLINED in the accent colour (3Speak
+// uses red as outline, never as a fill), the current one with a soft halo.
+// Phones keep the rings and lines and show only the current step's name below.
+//
+// `short`: shorts have no Timeline step (chapters and link toasters are for
+// long-form videos), so they keep the original four.
+//
+// EmbedUploadProgressBar measures `.step-progress__container` /
+// `.step-progress__step` to match its width to the row; keep those classes.
+export const StepProgress = ({ step, short = false }) => {
   const { t } = useTranslation();
-  const defaultSteps = [t("upload.steps.selectVideo"), t("upload.steps.chooseThumbnail"), t("upload.steps.addDetails"), t("upload.steps.previewUpload")];
-  const safeSteps =  defaultSteps;
-  const safeTotalSteps = safeSteps.length;
-  const safeCurrentStep = step;
+  const steps = short
+    ? [t("upload.steps.selectVideo"), t("upload.steps.chooseThumbnail"), t("upload.steps.addDetails"), t("upload.steps.previewUpload")]
+    : [t("upload.steps.selectVideo"), t("upload.steps.chooseThumbnail"), t("upload.steps.addDetails"), t("upload.steps.timeline"), t("upload.steps.previewUpload")];
+  const current = step;
+  const stateOf = (n) => (n < current ? "done" : n === current ? "active" : "todo");
 
   return (
-    <div className="step-progress">
-      <div className="step-progress__container">
-        {safeSteps.map((step, index) => {
-          const stepNumber = index + 1;
-          const isCompleted = stepNumber < safeCurrentStep;
-          const isActive = stepNumber === safeCurrentStep;
-
+    <nav className="step-progress" aria-label={steps[current - 1] || undefined}>
+      <ol className="step-progress__container">
+        {steps.map((label, index) => {
+          const n = index + 1;
+          const state = stateOf(n);
           return (
-            <div key={stepNumber} className="step-progress__step">
+            <li key={n} className="step-progress__item">
               <div
-                className={`step-progress__circle ${
-                  isCompleted
-                    ? "step-progress__circle--completed"
-                    : isActive
-                    ? "step-progress__circle--active"
-                    : "step-progress__circle--inactive"
-                }`}
+                className={`step-progress__step is-${state}`}
+                aria-current={state === "active" ? "step" : undefined}
               >
-                {isCompleted ? (
-                  <Check className="w-5 h-5" />
-                ) : (
-                  stepNumber
-                )}
+                <span className="step-progress__circle">
+                  {state === "done" ? <Check size={16} strokeWidth={3} aria-hidden="true" /> : n}
+                </span>
+                <span className="step-progress__label">{label}</span>
               </div>
-              <span
-                className={`step-progress__label ${
-                  isCompleted || isActive
-                    ? "step-progress__label--active"
-                    : "step-progress__label--inactive"
-                }`}
-              >
-                {step}
-              </span>
-              {stepNumber < safeTotalSteps && (
-                <div
-                  className={`step-progress__connector ${
-                    isCompleted
-                      ? "step-progress__connector--completed"
-                      : "step-progress__connector--inactive"
-                  }`}
-                />
+              {n < steps.length && (
+                <span className={`step-progress__line${n < current ? " is-done" : ""}`} aria-hidden="true" />
               )}
-            </div>
+            </li>
           );
         })}
-      </div>
-    </div>
+      </ol>
+      {/* Phones: the row has no room for labels, so the current one sits below. */}
+      <div className="step-progress__caption">{steps[current - 1]}</div>
+    </nav>
   );
 };

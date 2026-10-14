@@ -136,8 +136,14 @@
     font-size: 12px;
   }
 
+  // Wraps instead of overflowing: on a phone (and deeper in a reply thread) the
+  // vote/reply/translate/report row did not fit, widened the whole page past the
+  // screen and made the browser zoom out, which pushed the fixed buttons
+  // (floating action button) half off-screen.
   .comment-action {
     display: flex;
+    flex-wrap: wrap;
+    min-width: 0;
     align-items: center;
     gap: 12px;
     margin: 8px 0;
@@ -157,6 +163,9 @@
 
   .comment-action-right {
     display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    min-width: 0;
     align-items: center;
     gap: 8px;
     margin-left: auto;

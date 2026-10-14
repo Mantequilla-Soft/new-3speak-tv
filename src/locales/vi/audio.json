@@ -19,7 +19,8 @@
     "bpm": "{{bpm}} bpm",
     "queue": "Hàng đợi",
     "playlist": "Danh sách phát",
-    "plays_other": "{{count}} lượt nghe"
+    "plays_other": "{{count}} lượt nghe",
+    "fromAlbum": "từ {{album}}"
   },
   "author": {
     "followed": "Đã theo dõi @{{author}}",
@@ -131,7 +132,9 @@
       "couldntPublishMain": "Không thể xuất bản bài chính: {{error}}",
       "couldntResolveContainer": "Không thể xác định bài chứa peak.snaps: {{error}}",
       "published_other": "Đã xuất bản {{count}} bản nhạc",
-      "someFailed": "Một số bản nhạc thất bại — mở bản nhạc lỗi để thử lại"
+      "someFailed": "Một số bản nhạc thất bại — mở bản nhạc lỗi để thử lại",
+      "trackLinksFailed": "Các bản nhạc đã được xuất bản, nhưng không thêm được liên kết của chúng vào bài đăng album: {{error}}",
+      "addToBlogFailed": "Đã xuất bản, nhưng không thêm được vào blog của bạn: {{error}}"
     },
     "gate": {
       "checking": "Đang kiểm tra…",
@@ -169,6 +172,7 @@
     "playlist": {
       "helpRequired": "Bắt buộc — chọn hoặc tạo một danh sách phát. Bài đăng album nằm trong một danh sách phát để các bản nhạc được nhóm lại trong một album 3Speak. Điều này giúp tăng khả năng tiếp cận và vị trí nổi bật hơn trên trang âm thanh.",
       "helpOptional": "Không bắt buộc — thêm tất cả bản nhạc vào một danh sách phát.",
+      "onlyOn3Speak": "Danh sách phát chỉ có trên 3Speak. Chúng nhóm các bản nhạc của bạn ở đây và không bao giờ thay đổi bài đăng của bạn.",
       "none": "Không có danh sách phát",
       "noneHint": "Các bản nhạc sẽ không được nhóm lại",
       "creatingPending": "đang tạo… (chờ bộ lập chỉ mục)",
@@ -227,7 +231,10 @@
       "selectCommunity": "Chọn cộng đồng",
       "change": "Thay đổi",
       "tagsPlaceholder": "Thẻ — phân cách bằng dấu cách hoặc dấu phẩy (không bắt buộc)",
-      "whatKind": "Đây là loại âm thanh nào?"
+      "removeTag": "Xóa thẻ {{tag}}",
+      "whatKind": "Đây là loại âm thanh nào?",
+      "addToBlog": "Thêm vào blog của tôi",
+      "addToBlogHint": "Bài đăng cũng hiển thị trên blog của bạn và trong bảng tin của người theo dõi. Bài đăng trong cộng đồng không tự xuất hiện ở đó."
     },
     "tracks": {
       "helpAlbum": "Mỗi bản nhạc được xuất bản dưới dạng bình luận trong bài chính. Đặt giá trị chung một lần và áp dụng cho tất cả, rồi chỉnh riêng cho từng bản nhạc.",
@@ -236,7 +243,10 @@
       "sharedDescription": "Mô tả chung (không bắt buộc)",
       "sharedCover": "Ảnh bìa chung",
       "applyToAll_other": "Áp dụng cho tất cả {{count}} bản nhạc",
-      "hide": "Ẩn"
+      "hide": "Ẩn",
+      "commentText": "Nội dung bình luận cho bản nhạc này (không bắt buộc)",
+      "snapText": "Nội dung cho snap này (không bắt buộc)",
+      "trackCover": "Ảnh bìa cho bản nhạc này (không bắt buộc)"
     },
     "review": {
       "standalone": "Bài đăng độc lập",
@@ -255,7 +265,15 @@
       "retryAllFailed": "Thử lại tất cả bản lỗi",
       "failedDuringUpload": "Thất bại khi tải tệp âm thanh lên: {{message}}",
       "failedDuringPost": "Thất bại khi đăng lên Hive: {{message}}",
-      "failedWithMessage": "Thất bại: {{message}}"
+      "failedWithMessage": "Thất bại: {{message}}",
+      "mainFailed": "Không thể xuất bản bài đăng album: {{message}}",
+      "containerFailed": "Không thể kết nối tới chuỗi snap để đăng: {{message}}"
+    },
+    "done": {
+      "title": "Xong! Âm thanh của bạn đã được xuất bản.",
+      "openPost": "Mở bài đăng",
+      "openPlaylist": "Mở danh sách phát",
+      "openMyAudio": "Mở âm thanh của tôi"
     },
     "stage": {
       "upload": "Đang tải tệp âm thanh lên",

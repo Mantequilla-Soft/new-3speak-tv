@@ -685,6 +685,27 @@
 }
 
 // One-line metadata summary shown beneath the username (e.g. "reggae · 103 bpm").
+// "from <album>": the public playlist the track belongs to (AudioTile)
+.audio-tile-album {
+  display: block;
+  font-size: 11px;
+  color: var(--text-muted);
+  margin-top: 1px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-decoration: none;
+
+  &:hover { color: var(--accent-primary); text-decoration: underline; }
+}
+
+// Track number before the title inside a playlist
+.audio-tile-track-num {
+  margin-right: 4px;
+  color: var(--text-muted);
+  font-variant-numeric: tabular-nums;
+}
+
 .audio-tile-meta {
   display: block;
   font-size: 11px;

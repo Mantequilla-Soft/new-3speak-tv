@@ -143,8 +143,11 @@
   "routeError": {
     "title": "Trang này không tải được",
     "body": "Một phần của ứng dụng không tải xuống được. Điều này thường do có phiên bản mới được phát hành trong lúc tab này đang mở. Tải lại trang sẽ cập nhật phiên bản mới.",
+    "brokenTitle": "Đã xảy ra sự cố trên trang này",
+    "brokenBody": "Một phần của trang này gặp lỗi. Tải lại thường sẽ khắc phục được, và thông tin chi tiết bên dưới giúp chúng tôi tìm ra nguyên nhân.",
     "reload": "Tải lại",
-    "goHome": "Về trang chủ"
+    "goHome": "Về trang chủ",
+    "details": "Chi tiết"
   },
   "seo": {
     "defaultTitle": "3Speak - Nền tảng video phi tập trung",

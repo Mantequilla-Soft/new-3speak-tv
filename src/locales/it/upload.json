@@ -25,7 +25,8 @@
     "selectVideo": "Seleziona video",
     "chooseThumbnail": "Scegli miniatura",
     "addDetails": "Aggiungi dettagli",
-    "previewUpload": "Anteprima e caricamento"
+    "previewUpload": "Anteprima e caricamento",
+    "timeline": "Timeline"
   },
   "preview": {
     "playVideo": "Riproduci video",
@@ -194,6 +195,11 @@
       "info": "Contrassegna questo video come contenuto per adulti. Verrà nascosto da feed e ricerca per gli spettatori che non hanno abilitato i contenuti NSFW, e taggato <code>nsfw</code> su tutto Hive.",
       "hint": "Contenuto per adulti."
     },
+    "addToBlog": {
+      "label": "Aggiungi al mio blog",
+      "hint": "Mostralo sul tuo blog e nel feed dei tuoi follower.",
+      "info": "3Speak pubblica ogni video in una community, e Hive esclude i post delle community dal tuo blog e dal feed dei tuoi follower, a meno che tu non li condivida. Con questa opzione attiva, 3Speak condivide (reblogga) il video sul tuo blog subito dopo la pubblicazione."
+    },
     "ads": {
       "label": "Pubblicità su questo video",
       "info": "Il tuo account mostra pubblicità, quindi anche questo video, a meno che tu non la disattivi qui. Vale solo per questo video; gli altri tuoi video e l'impostazione del tuo account restano invariati.",
@@ -238,7 +244,8 @@
     "watchAdToPublish": "Guarda l'annuncio per pubblicare",
     "watchSponsorFirst": "Prima guarda il messaggio dello sponsor",
     "postShort": "Pubblica short",
-    "postVideo": "Pubblica video"
+    "postVideo": "Pubblica video",
+    "backToTimeline": "Torna alla timeline"
   },
   "publishing": {
     "titleShort": "Pubblicazione dello short",
@@ -400,6 +407,62 @@
     "couldNotSchedule": "Impossibile programmare il post",
     "scheduleFailed": "Programmazione non riuscita: {{msg}}",
     "hivePostFailed": "Impossibile pubblicare su Hive",
-    "uploadFailedWith": "Caricamento non riuscito: {{msg}}"
+    "uploadFailedWith": "Caricamento non riuscito: {{msg}}",
+    "addToBlogFailed": "Pubblicato, ma l'aggiunta al tuo blog non è riuscita: {{error}}"
+  },
+  "timeline": {
+    "title": "Capitoli e link",
+    "intro": "Dividi il tuo video in capitoli e aggiungi link che compaiono in alto a destra del video durante la riproduzione: altri video di 3Speak, profili Hive o qualsiasi sito web. Entrambi sono facoltativi.",
+    "previewUnavailable": "Questo video non può essere riprodotto qui, ma puoi comunque inserire i tempi a mano.",
+    "noPreview": "Nessuna anteprima per questo video qui. Puoi comunque inserire i tempi a mano.",
+    "setNow": "Usa il tempo attuale",
+    "trackLabel": "Timeline: tocca per saltare, trascina un segnaposto per spostarlo",
+    "moveChapter": "Sposta l'inizio di {{title}}",
+    "moveLink": "Sposta questo link",
+    "fixChapters": "Correggi prima i capitoli, oppure rimuovili.",
+    "chapters": {
+      "heading": "Capitoli",
+      "add": "Aggiungi a {{time}}",
+      "hint": "I capitoli compaiono sulla barra di avanzamento. Con 3 o più vengono scritti anche nella descrizione, così le altre app Hive li mostrano.",
+      "empty": "Ancora nessun capitolo. Avvia il video e aggiungine uno dove inizia una nuova parte.",
+      "start": "Inizio",
+      "titlePlaceholder": "Titolo del capitolo",
+      "errFirst": "Il primo capitolo deve iniziare a 0:00.",
+      "errGap": "I capitoli devono essere distanti almeno 5 secondi.",
+      "errTitle": "Ogni capitolo ha bisogno di un titolo.",
+      "errEnd": "Un capitolo inizia dopo la fine del video.",
+      "errTooFew": "Aggiungi almeno un altro capitolo. Un solo capitolo non viene mostrato.",
+      "max": "Puoi aggiungere fino a {{max}} capitoli."
+    },
+    "links": {
+      "heading": "Link",
+      "count": "{{n}} di {{max}}",
+      "add": "Aggiungi link",
+      "hint": "Ogni link compare per qualche secondo in un piccolo riquadro in alto a destra del video. Chi guarda può cliccarlo o chiuderlo.",
+      "empty": "Ancora nessun link. Aggiungi un video di 3Speak, un profilo Hive o qualsiasi sito web.",
+      "max": "Puoi aggiungere fino a {{max}} link.",
+      "showsAt": "Appare a",
+      "onScreen": "Sullo schermo per",
+      "secondsUnit": "secondi",
+      "forSeconds": "per {{seconds}} s",
+      "afterEnd": "Questo link inizia dopo la fine del video."
+    },
+    "form": {
+      "addTitle": "Aggiungi un link",
+      "editTitle": "Modifica link",
+      "tabLink": "Incolla un link",
+      "tabVideo": "Video 3Speak",
+      "tabProfile": "Profilo",
+      "urlPlaceholder": "https://… o @utente",
+      "urlHint": "Un video di 3Speak, un profilo Hive o qualsiasi sito web.",
+      "searchVideo": "Cerca video di 3Speak",
+      "searchProfile": "Cerca persone",
+      "searching": "Ricerca in corso…",
+      "noResults": "Nessun risultato.",
+      "checking": "Controllo del link…",
+      "badUrl": "Non sembra un indirizzo web. Deve iniziare con http:// o https://.",
+      "noAccount": "Non esiste un account con questo nome.",
+      "addButton": "Aggiungi link"
+    }
   }
 }

@@ -143,8 +143,11 @@
   "routeError": {
     "title": "Bu sayfa yüklenmedi",
     "body": "Uygulamanın bir kısmı indirilemedi. Bu genellikle bu sekme açıkken yeni bir sürüm yayınlandığı anlamına gelir. Yeniden yüklemek bunu düzeltir.",
+    "brokenTitle": "Bu sayfada bir şeyler ters gitti",
+    "brokenBody": "Bu sayfanın bir bölümünde hata oluştu. Yeniden yüklemek genelde düzeltir, aşağıdaki ayrıntılar da sebebi bulmamıza yardımcı olur.",
     "reload": "Yeniden yükle",
-    "goHome": "Ana sayfaya git"
+    "goHome": "Ana sayfaya git",
+    "details": "Ayrıntılar"
   },
   "seo": {
     "defaultTitle": "3Speak - Merkeziyetsiz Video Platformu",

@@ -51,6 +51,8 @@
     "private": "Danh sách phát này ở chế độ riêng tư",
     "items_other": "{{count}} mục",
     "created": "Đã tạo {{when}}",
+    "podcastFeed": "Nguồn podcast",
+    "podcastFeedTitle": "Theo dõi {{name}} trên mọi ứng dụng podcast (nguồn RSS)",
     "album": {
       "genre": "<strong>Thể loại:</strong> {{value}}",
       "year": "<strong>Năm:</strong> {{value}}",

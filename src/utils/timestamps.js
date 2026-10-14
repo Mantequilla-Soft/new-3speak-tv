@@ -134,7 +134,7 @@ const BULLET_RE = /^(?:[-*+•▶►▸→]\s*|\d{1,3}[.)]\s+)?/;
 // Separator between the time and the title, either side: "0:00 - Intro", "Intro | 0:00".
 const SEP_RE = /^[\s\-–—:|·.)\]]+|[\s\-–—:|·.([]+$/g;
 
-function chapterFromLine(raw) {
+export function chapterFromLine(raw) {
   const line = plainLine(raw).replace(BULLET_RE, '');
   if (!line) return null;
   // Time first ("0:00 Intro"), or time last ("Intro 0:00", "Intro (0:00)").
@@ -151,8 +151,8 @@ function chapterFromLine(raw) {
   return null;
 }
 
-const MIN_CHAPTERS = 3;
-const MIN_CHAPTER_SECONDS = 5;
+export const MIN_CHAPTERS = 3;
+export const MIN_CHAPTER_SECONDS = 5;
 
 /**
  * Chapters from a description, YouTube style: a run of at least three

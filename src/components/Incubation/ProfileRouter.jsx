@@ -1,10 +1,13 @@
-import { lazy, Suspense, useEffect, useState } from 'react';
+import { Suspense, useEffect, useState } from 'react';
+import lazyRoute from '../../utils/lazyRoute';
 import { Navigate, useParams } from 'react-router-dom';
 import { fetchIncubationProfile } from '../../lib/incubation';
 import { useAppStore } from '../../lib/store';
 import IncubatingProfile from './IncubatingProfile';
 
-const UserProfilePage = lazy(() => import('../Userprofilepage/UserProfilePage'));
+// lazyRoute, not lazy: a tab left open across a deploy reloads once onto the
+// new build instead of showing the route error panel.
+const UserProfilePage = lazyRoute(() => import('../Userprofilepage/UserProfilePage'), '../Userprofilepage/UserProfilePage');
 
 // A name is EITHER a Hive account or an incubating handle, never both: the
 // handle claim refuses any name that already exists on chain, so there is no

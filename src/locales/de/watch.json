@@ -232,6 +232,33 @@
       "listingFailed": "Die Sichtbarkeit konnte nicht geändert werden.",
       "trailerFailed": "Dein Kanaltrailer konnte nicht aktualisiert werden.",
       "saveFailed": "Änderungen konnten nicht gespeichert werden."
-    }
+    },
+    "timeline": "Kapitel und Links",
+    "timelineHint": "Kapitel erscheinen in der Fortschrittsleiste, Links oben rechts im Video. Die Vorschau spielt das veröffentlichte Video.",
+    "timelineLoadingVideo": "Video wird geladen…",
+    "tabs": {
+      "label": "Bereiche bearbeiten",
+      "details": "Details",
+      "media": "Medien",
+      "settings": "Einstellungen",
+      "unsaved": "Ungespeicherte Änderungen",
+      "hasErrors": "Bitte prüfen"
+    },
+    "sections": {
+      "visibility": "Sichtbarkeit",
+      "content": "Inhalt",
+      "promotion": "Werbung"
+    },
+    "chaptersNote": "Ab 3 Kapiteln wird die Kapitelliste beim Speichern in die Beschreibung geschrieben.",
+    "editChapters": "Kapitel bearbeiten",
+    "fixErrors": "Bitte korrigiere zuerst den markierten Tab."
+  },
+  "timeline": {
+    "video": "Video",
+    "profile": "Profil",
+    "link": "Link",
+    "region": "Links vom Creator",
+    "dismiss": "Schließen",
+    "opensNewTab": "Öffnet sich in einem neuen Tab"
   }
 }

@@ -20,7 +20,8 @@
     "queue": "Queue",
     "playlist": "Playlist",
     "plays_one": "{{count}} play",
-    "plays_other": "{{count}} plays"
+    "plays_other": "{{count}} plays",
+    "fromAlbum": "from {{album}}"
   },
   "author": {
     "followed": "Followed @{{author}}",
@@ -135,7 +136,9 @@
       "couldntResolveContainer": "Couldn't resolve peak.snaps container: {{error}}",
       "published_one": "Published {{count}} track",
       "published_other": "Published {{count}} tracks",
-      "someFailed": "Some tracks failed — open the failed track to retry"
+      "someFailed": "Some tracks failed — open the failed track to retry",
+      "trackLinksFailed": "Your tracks are published, but adding their links to the album post failed: {{error}}",
+      "addToBlogFailed": "Published, but adding it to your blog failed: {{error}}"
     },
     "gate": {
       "checking": "Checking…",
@@ -175,6 +178,7 @@
     "playlist": {
       "helpRequired": "Required — pick or create a playlist. Album posts live inside a playlist so its tracks stay grouped inside of a 3Speak album. This helps exposure and more prominent placement on the audio page.",
       "helpOptional": "Optional — add all tracks to a playlist.",
+      "onlyOn3Speak": "Playlists only live on 3Speak. They group your tracks here and never change your posts.",
       "none": "No playlist",
       "noneHint": "Tracks won't be grouped",
       "creatingPending": "creating… (waiting for indexer)",
@@ -235,7 +239,10 @@
       "selectCommunity": "Select community",
       "change": "Change",
       "tagsPlaceholder": "Tags — space or comma separated (optional)",
-      "whatKind": "What kind of audio is this?"
+      "removeTag": "Remove tag {{tag}}",
+      "whatKind": "What kind of audio is this?",
+      "addToBlog": "Add to my blog",
+      "addToBlogHint": "Also shows the post on your blog and in your followers' feeds. Posts in a community don't appear there on their own."
     },
     "tracks": {
       "helpAlbum": "Each track is published as a comment under the main post. Set shared values once and apply them to all, then override per track.",
@@ -245,7 +252,10 @@
       "sharedCover": "Shared cover image",
       "applyToAll_one": "Apply to all {{count}} track",
       "applyToAll_other": "Apply to all {{count}} tracks",
-      "hide": "Hide"
+      "hide": "Hide",
+      "commentText": "Comment text for this track (optional)",
+      "snapText": "Text for this snap (optional)",
+      "trackCover": "Cover for this track (optional)"
     },
     "review": {
       "standalone": "Standalone post",
@@ -270,7 +280,15 @@
       "retryAllFailed": "Retry all failed",
       "failedDuringUpload": "Failed during uploading audio file: {{message}}",
       "failedDuringPost": "Failed during posting to Hive: {{message}}",
-      "failedWithMessage": "Failed: {{message}}"
+      "failedWithMessage": "Failed: {{message}}",
+      "mainFailed": "The album post couldn't be published: {{message}}",
+      "containerFailed": "Couldn't reach the snaps thread to post into: {{message}}"
+    },
+    "done": {
+      "title": "All done! Your audio is published.",
+      "openPost": "Open post",
+      "openPlaylist": "Open playlist",
+      "openMyAudio": "Open my audio"
     },
     "stage": {
       "upload": "Uploading audio file",

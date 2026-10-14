@@ -143,8 +143,11 @@
   "routeError": {
     "title": "Halaman ini gagal dimuat",
     "body": "Sebagian aplikasi gagal diunduh. Biasanya ini berarti versi baru dirilis saat tab ini masih terbuka. Memuat ulang akan mengambil versi tersebut.",
+    "brokenTitle": "Terjadi masalah di halaman ini",
+    "brokenBody": "Sebagian halaman ini mengalami galat. Memuat ulang biasanya memperbaikinya, dan detail di bawah membantu kami menemukan penyebabnya.",
     "reload": "Muat ulang",
-    "goHome": "Ke beranda"
+    "goHome": "Ke beranda",
+    "details": "Detail"
   },
   "seo": {
     "defaultTitle": "3Speak - Platform Video Terdesentralisasi",

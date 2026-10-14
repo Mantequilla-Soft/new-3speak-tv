@@ -20,7 +20,8 @@
     "queue": "Wachtrij",
     "playlist": "Playlist",
     "plays_one": "{{count}} keer afgespeeld",
-    "plays_other": "{{count}} keer afgespeeld"
+    "plays_other": "{{count}} keer afgespeeld",
+    "fromAlbum": "uit {{album}}"
   },
   "author": {
     "followed": "Je volgt @{{author}}",
@@ -135,7 +136,9 @@
       "couldntResolveContainer": "peak.snaps-container kon niet worden gevonden: {{error}}",
       "published_one": "{{count}} track gepubliceerd",
       "published_other": "{{count}} tracks gepubliceerd",
-      "someFailed": "Sommige tracks zijn mislukt — open de mislukte track om het opnieuw te proberen"
+      "someFailed": "Sommige tracks zijn mislukt — open de mislukte track om het opnieuw te proberen",
+      "trackLinksFailed": "Je tracks zijn gepubliceerd, maar het toevoegen van hun links aan de albumpost is mislukt: {{error}}",
+      "addToBlogFailed": "Gepubliceerd, maar toevoegen aan je blog is mislukt: {{error}}"
     },
     "gate": {
       "checking": "Controleren…",
@@ -175,6 +178,7 @@
     "playlist": {
       "helpRequired": "Verplicht — kies of maak een playlist. Albumposts staan in een playlist, zodat de tracks gegroepeerd blijven in een 3Speak-album. Dat zorgt voor meer zichtbaarheid en een prominentere plek op de audiopagina.",
       "helpOptional": "Optioneel — voeg alle tracks toe aan een playlist.",
+      "onlyOn3Speak": "Playlists bestaan alleen op 3Speak. Ze groeperen je tracks hier en veranderen nooit je posts.",
       "none": "Geen playlist",
       "noneHint": "Tracks worden niet gegroepeerd",
       "creatingPending": "aanmaken… (wachten op indexer)",
@@ -235,7 +239,10 @@
       "selectCommunity": "Kies een community",
       "change": "Wijzigen",
       "tagsPlaceholder": "Tags — gescheiden door spatie of komma (optioneel)",
-      "whatKind": "Wat voor audio is dit?"
+      "removeTag": "Tag {{tag}} verwijderen",
+      "whatKind": "Wat voor audio is dit?",
+      "addToBlog": "Toevoegen aan mijn blog",
+      "addToBlogHint": "Toont de post ook op je blog en in de feed van je volgers. Posts in een community verschijnen daar niet vanzelf."
     },
     "tracks": {
       "helpAlbum": "Elke track wordt gepubliceerd als reactie onder de hoofdpost. Stel gedeelde waarden één keer in en pas ze op alles toe, en pas ze daarna per track aan.",
@@ -245,7 +252,10 @@
       "sharedCover": "Gedeelde coverafbeelding",
       "applyToAll_one": "Toepassen op {{count}} track",
       "applyToAll_other": "Toepassen op alle {{count}} tracks",
-      "hide": "Verbergen"
+      "hide": "Verbergen",
+      "commentText": "Reactietekst voor deze track (optioneel)",
+      "snapText": "Tekst voor deze snap (optioneel)",
+      "trackCover": "Cover voor deze track (optioneel)"
     },
     "review": {
       "standalone": "Losse post",
@@ -270,7 +280,15 @@
       "retryAllFailed": "Alle mislukte opnieuw proberen",
       "failedDuringUpload": "Mislukt tijdens het uploaden van het audiobestand: {{message}}",
       "failedDuringPost": "Mislukt tijdens het posten op Hive: {{message}}",
-      "failedWithMessage": "Mislukt: {{message}}"
+      "failedWithMessage": "Mislukt: {{message}}",
+      "mainFailed": "De albumpost kon niet worden gepubliceerd: {{message}}",
+      "containerFailed": "De snaps-thread om in te posten was niet bereikbaar: {{message}}"
+    },
+    "done": {
+      "title": "Klaar! Je audio is gepubliceerd.",
+      "openPost": "Post openen",
+      "openPlaylist": "Playlist openen",
+      "openMyAudio": "Mijn audio openen"
     },
     "stage": {
       "upload": "Audiobestand uploaden",

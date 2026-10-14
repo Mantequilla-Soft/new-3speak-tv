@@ -27,6 +27,7 @@ import { getFeedSeed } from '../utils/feedSeed';
 import ReactionPlayer from '../components/ReactionPlayer/ReactionPlayer';
 import WatchTabs from '../components/playVideo/WatchTabs';
 import { parseChapters } from '../utils/timestamps';
+import { readTimeline, chaptersWithEnds } from '../utils/videoTimeline';
 import { MdVideocam, MdChatBubble } from 'react-icons/md';
 import { batchGetReputations, LOW_REP_THRESHOLD } from '../utils/reputation';
 import { batchCheckHidden, isCreatorHidden } from '../utils/hiddenCreators';
@@ -82,6 +83,9 @@ function buildScheduledVideoDetails(doc) {
     tags: Array.isArray(doc.tags) ? doc.tags : (doc.jsonMetadata?.tags || []),
     parent_permlink: doc.parentPermlink,
     spkvideo: { play_url: null, thumbnail_url: doc.thumbnail || null, duration: 0 },
+    // The post's metadata as it will be broadcast: the timeline (chapters, link
+    // toasters) previews from it like on a published video.
+    json_metadata: doc.jsonMetadata || null,
     _scheduled: true,
     scheduledOn: doc.scheduledOn,
   };
@@ -486,7 +490,7 @@ function Watch({ v2 = false }) {
   // Server-side ads: spot, disclosure, Skip, seek lock, banner, ticker. Shared with
   // the inline chat player; see hooks/useAdPlayback.jsx.
   const {
-    adBreakRef, chrome: adChrome, beginVideo, loadWithSpot,
+    adBreakRef, chrome: adChrome, beginVideo, loadWithSpot, tickerVisible, tickerHeld,
   } = useAdPlayback({ player, playerState, videoElRef, videoAttached });
 
 
@@ -1273,10 +1277,41 @@ function Watch({ v2 = false }) {
   // seconds, like the rest of the timeline; nothing until the duration is known,
   // because a chapter past the end of the video must not be drawn.
   const chapterDurationSec = Math.floor(adBreakRef.current.contentDuration(playerState.duration) || 0);
-  const chapters = useMemo(
-    () => (isLive ? [] : parseChapters(videoDetails?.body, chapterDurationSec)),
-    [videoDetails?.body, chapterDurationSec, isLive],
-  );
+  // ⏱️ The creator's timeline (Timeline step / Edit dialog): chapters and link
+  // toasters in json_metadata. Its chapters win over a list in the description;
+  // a post without them falls back to the description, as before.
+  const timelineRaw = videoDetails?.json_metadata ?? videoDetails?.jsonMetadata;
+  const postTimeline = useMemo(() => readTimeline(timelineRaw), [timelineRaw]);
+  // Right after posting, the player plays the encoder's "still processing" card
+  // (a placeholder clip), not the creator's video: its chapters and link toasters
+  // would sit on the wrong clip. So while the real video isn't published yet they
+  // stay off, re-checked every 20 s until it is. Fails OPEN: if the check can't
+  // answer, the timeline shows as usual. Scheduled previews are not encodes.
+  const hasTimeline = postTimeline.links.length > 0 || postTimeline.chapters.length > 0;
+  const [timelineReady, setTimelineReady] = useState(true);
+  useEffect(() => {
+    setTimelineReady(true);
+    if (!hasTimeline || isLive || scheduled || !author || !permlink) return undefined;
+    let alive = true;
+    let timer = null;
+    const check = () => {
+      fetchPlaySource(author, permlink)
+        .then((src) => {
+          if (!alive) return;
+          const ready = !src || src.published;
+          setTimelineReady(ready);
+          if (!ready) timer = setTimeout(check, 20000);
+        })
+        .catch(() => { if (alive) setTimelineReady(true); });
+    };
+    check();
+    return () => { alive = false; if (timer) clearTimeout(timer); };
+  }, [hasTimeline, isLive, scheduled, author, permlink]);
+  const chapters = useMemo(() => {
+    if (isLive || !timelineReady) return [];
+    const fromMeta = chaptersWithEnds(postTimeline.chapters, chapterDurationSec);
+    return fromMeta.length ? fromMeta : parseChapters(videoDetails?.body, chapterDurationSec);
+  }, [postTimeline, videoDetails?.body, chapterDurationSec, isLive, timelineReady]);
   const liveUnknown = livePending && !liveChecked;
   useEffect(() => { isLiveRef.current = livePending; }, [livePending]);
 
@@ -1320,6 +1355,9 @@ function Watch({ v2 = false }) {
       body: changes.body,
       tags: changes.tags,
       thumbnail_url: changes.thumbnail || undefined,
+      // The saved metadata, so an edited timeline (chapters, link toasters)
+      // shows at once instead of after the indexer catches up.
+      ...(changes.json_metadata ? { json_metadata: changes.json_metadata } : {}),
     });
     // Re-fetch from Hive a few times — the edit may take a moment to propagate
     // across nodes.
@@ -1764,6 +1802,10 @@ function Watch({ v2 = false }) {
         onClosePlaylist={() => setShowPlaylist(false)}
         onVideoEdited={handleVideoEdited}
         overrideBody={editOverride?.body}
+        timelineLinks={isLive || !timelineReady ? null : postTimeline.links}
+        timelineResetKey={`${author}/${permlink}`}
+        tickerShown={!!tickerVisible && !tickerHeld}
+        surfActive={!!surfChannel}
         scheduled={scheduled}
         scheduledOn={scheduledDoc?.scheduledOn}
         onEditScheduled={() => { pause(); setScheduledEditOpen(true); }}

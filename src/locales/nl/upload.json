@@ -25,7 +25,8 @@
     "selectVideo": "Video kiezen",
     "chooseThumbnail": "Thumbnail kiezen",
     "addDetails": "Details toevoegen",
-    "previewUpload": "Voorbeeld & uploaden"
+    "previewUpload": "Voorbeeld & uploaden",
+    "timeline": "Tijdlijn"
   },
   "preview": {
     "playVideo": "Video afspelen",
@@ -193,6 +194,11 @@
       "info": "Markeert deze video als inhoud voor volwassenen. Hij wordt verborgen in feeds en zoekresultaten voor kijkers die NSFW niet hebben ingeschakeld, en op heel Hive getagd als <code>nsfw</code>.",
       "hint": "Inhoud voor volwassenen."
     },
+    "addToBlog": {
+      "label": "Toevoegen aan mijn blog",
+      "hint": "Toon hem op je blog en in de feed van je volgers.",
+      "info": "3Speak plaatst elke video in een community, en Hive houdt communityposts buiten je blog en de feed van je volgers, tenzij je ze deelt. Met deze optie aan deelt (reblogt) 3Speak de video op je blog direct na het publiceren."
+    },
     "ads": {
       "label": "Advertenties in deze video",
       "info": "Je account toont advertenties, dus deze video ook, tenzij je ze hier uitzet. Dit geldt alleen voor deze ene video; je andere video's en je accountinstelling blijven ongewijzigd.",
@@ -236,7 +242,8 @@
     "watchAdToPublish": "Bekijk advertentie om te publiceren",
     "watchSponsorFirst": "Bekijk eerst de sponsorboodschap",
     "postShort": "Short plaatsen",
-    "postVideo": "Video plaatsen"
+    "postVideo": "Video plaatsen",
+    "backToTimeline": "Terug naar tijdlijn"
   },
   "publishing": {
     "titleShort": "Short publiceren",
@@ -398,6 +405,62 @@
     "couldNotSchedule": "Post kon niet worden ingepland",
     "scheduleFailed": "Inplannen mislukt: {{msg}}",
     "hivePostFailed": "Posten op Hive mislukt",
-    "uploadFailedWith": "Uploaden mislukt: {{msg}}"
+    "uploadFailedWith": "Uploaden mislukt: {{msg}}",
+    "addToBlogFailed": "Gepubliceerd, maar toevoegen aan je blog is mislukt: {{error}}"
+  },
+  "timeline": {
+    "title": "Hoofdstukken en links",
+    "intro": "Verdeel je video in hoofdstukken en voeg links toe die tijdens het afspelen rechtsboven in de video verschijnen: andere 3Speak-video's, Hive-profielen of elke website. Beide zijn optioneel.",
+    "previewUnavailable": "Deze video kan hier niet worden afgespeeld, maar je kunt de tijden nog steeds met de hand invullen.",
+    "noPreview": "Geen voorbeeld van deze video hier. Je kunt de tijden nog steeds met de hand invullen.",
+    "setNow": "Op de huidige tijd zetten",
+    "trackLabel": "Tijdlijn: tik om te springen, sleep een markering om die te verplaatsen",
+    "moveChapter": "Begin van {{title}} verplaatsen",
+    "moveLink": "Deze link verplaatsen",
+    "fixChapters": "Verbeter eerst de hoofdstukken, of verwijder ze.",
+    "chapters": {
+      "heading": "Hoofdstukken",
+      "add": "Toevoegen op {{time}}",
+      "hint": "Hoofdstukken staan op de voortgangsbalk. Vanaf 3 worden ze ook in je beschrijving gezet, zodat andere Hive-apps ze ook tonen.",
+      "empty": "Nog geen hoofdstukken. Speel de video af en voeg er een toe waar een nieuw deel begint.",
+      "start": "Begintijd",
+      "titlePlaceholder": "Titel van het hoofdstuk",
+      "errFirst": "Het eerste hoofdstuk moet op 0:00 beginnen.",
+      "errGap": "Hoofdstukken moeten minstens 5 seconden uit elkaar liggen.",
+      "errTitle": "Elk hoofdstuk heeft een titel nodig.",
+      "errEnd": "Een hoofdstuk begint na het einde van de video.",
+      "errTooFew": "Voeg minstens nog één hoofdstuk toe. Eén los hoofdstuk wordt niet getoond.",
+      "max": "Je kunt tot {{max}} hoofdstukken toevoegen."
+    },
+    "links": {
+      "heading": "Links",
+      "count": "{{n}} van {{max}}",
+      "add": "Link toevoegen",
+      "hint": "Elke link verschijnt een paar seconden als klein vak rechtsboven in de video. Kijkers kunnen erop klikken of hem sluiten.",
+      "empty": "Nog geen links. Voeg een 3Speak-video, een Hive-profiel of een website toe.",
+      "max": "Je kunt tot {{max}} links toevoegen.",
+      "showsAt": "Verschijnt op",
+      "onScreen": "In beeld gedurende",
+      "secondsUnit": "seconden",
+      "forSeconds": "{{seconds}} s lang",
+      "afterEnd": "Deze link begint na het einde van de video."
+    },
+    "form": {
+      "addTitle": "Een link toevoegen",
+      "editTitle": "Link bewerken",
+      "tabLink": "Link plakken",
+      "tabVideo": "3Speak-video",
+      "tabProfile": "Profiel",
+      "urlPlaceholder": "https://… of @gebruikersnaam",
+      "urlHint": "Een 3Speak-video, een Hive-profiel of een website.",
+      "searchVideo": "3Speak-video's zoeken",
+      "searchProfile": "Mensen zoeken",
+      "searching": "Zoeken…",
+      "noResults": "Niets gevonden.",
+      "checking": "Link controleren…",
+      "badUrl": "Dat lijkt geen webadres. Het moet beginnen met http:// of https://.",
+      "noAccount": "Er is geen account met die naam.",
+      "addButton": "Link toevoegen"
+    }
   }
 }

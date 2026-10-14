@@ -25,7 +25,8 @@
     "selectVideo": "Pumili ng Video",
     "chooseThumbnail": "Pumili ng Thumbnail",
     "addDetails": "Magdagdag ng Detalye",
-    "previewUpload": "Preview at Upload"
+    "previewUpload": "Preview at Upload",
+    "timeline": "Timeline"
   },
   "preview": {
     "playVideo": "I-play ang video",
@@ -193,6 +194,11 @@
       "info": "Mamarkahan ang video na ito bilang adult content. Itatago ito sa feeds at search para sa mga viewer na hindi nag-enable ng NSFW, at ita-tag na <code>nsfw</code> sa buong Hive.",
       "hint": "Adult content."
     },
+    "addToBlog": {
+      "label": "Idagdag sa blog ko",
+      "hint": "Ipakita ito sa blog mo at sa feed ng mga follower mo.",
+      "info": "Pino-post ng 3Speak ang bawat video sa isang community, at hindi ipinapakita ng Hive ang mga community post sa blog mo o sa feed ng mga follower mo maliban kung i-share mo ang mga ito. Kapag naka-on ito, ishe-share (ire-reblog) ng 3Speak ang video sa blog mo pagkatapos itong ma-publish."
+    },
     "ads": {
       "label": "Mga ad sa video na ito",
       "info": "May mga ad ang account mo, kaya pati ang video na ito, maliban kung i-off mo ito rito. Sa video na ito lang ito may epekto; hindi magbabago ang iba mong video at ang setting ng account mo.",
@@ -236,7 +242,8 @@
     "watchAdToPublish": "Manood ng ad para mag-publish",
     "watchSponsorFirst": "Panoorin muna ang sponsor message",
     "postShort": "I-post ang Short",
-    "postVideo": "I-post ang Video"
+    "postVideo": "I-post ang Video",
+    "backToTimeline": "Bumalik sa timeline"
   },
   "publishing": {
     "titleShort": "Pine-publish ang Short",
@@ -398,6 +405,62 @@
     "couldNotSchedule": "Hindi ma-schedule ang post",
     "scheduleFailed": "Pumalya ang pag-schedule: {{msg}}",
     "hivePostFailed": "Hindi ma-post sa Hive",
-    "uploadFailedWith": "Pumalya ang upload: {{msg}}"
+    "uploadFailedWith": "Pumalya ang upload: {{msg}}",
+    "addToBlogFailed": "Na-publish na, pero hindi ito naidagdag sa blog mo: {{error}}"
+  },
+  "timeline": {
+    "title": "Mga kabanata at link",
+    "intro": "Hatiin ang video mo sa mga kabanata at magdagdag ng mga link na lumalabas sa kanang itaas ng video habang nagpe-play: ibang 3Speak video, mga Hive profile o kahit anong website. Opsyonal ang dalawa.",
+    "previewUnavailable": "Hindi mape-play dito ang video na ito, pero puwede mo pa ring i-type nang mano-mano ang mga oras.",
+    "noPreview": "Walang preview ng video na ito dito. Puwede mo pa ring i-type nang mano-mano ang mga oras.",
+    "setNow": "Itakda sa kasalukuyang oras",
+    "trackLabel": "Timeline: i-tap para lumipat, i-drag ang marker para ilipat ito",
+    "moveChapter": "Ilipat ang simula ng {{title}}",
+    "moveLink": "Ilipat ang link na ito",
+    "fixChapters": "Ayusin muna ang mga kabanata, o alisin ang mga ito.",
+    "chapters": {
+      "heading": "Mga kabanata",
+      "add": "Idagdag sa {{time}}",
+      "hint": "Lumalabas ang mga kabanata sa progress bar. Kapag 3 o higit pa, isinusulat din ang mga ito sa description mo para maipakita rin ng ibang Hive app.",
+      "empty": "Wala pang kabanata. I-play ang video at magdagdag kung saan nagsisimula ang bagong bahagi.",
+      "start": "Oras ng simula",
+      "titlePlaceholder": "Pamagat ng kabanata",
+      "errFirst": "Dapat magsimula sa 0:00 ang unang kabanata.",
+      "errGap": "Dapat may pagitan na hindi bababa sa 5 segundo ang mga kabanata.",
+      "errTitle": "Kailangan ng pamagat ang bawat kabanata.",
+      "errEnd": "May kabanatang nagsisimula pagkatapos ng dulo ng video.",
+      "errTooFew": "Magdagdag ng kahit isa pang kabanata. Hindi ipinapakita ang iisang kabanata.",
+      "max": "Puwede kang magdagdag ng hanggang {{max}} kabanata."
+    },
+    "links": {
+      "heading": "Mga link",
+      "count": "{{n}} sa {{max}}",
+      "add": "Magdagdag ng link",
+      "hint": "Lumalabas ang bawat link nang ilang segundo bilang maliit na kahon sa kanang itaas ng video. Puwede itong i-click o isara ng mga nanonood.",
+      "empty": "Wala pang link. Magdagdag ng 3Speak video, Hive profile o kahit anong website.",
+      "max": "Puwede kang magdagdag ng hanggang {{max}} link.",
+      "showsAt": "Lalabas sa",
+      "onScreen": "Nasa screen nang",
+      "secondsUnit": "segundo",
+      "forSeconds": "nang {{seconds}} s",
+      "afterEnd": "Nagsisimula ang link na ito pagkatapos ng dulo ng video."
+    },
+    "form": {
+      "addTitle": "Magdagdag ng link",
+      "editTitle": "I-edit ang link",
+      "tabLink": "I-paste ang link",
+      "tabVideo": "3Speak video",
+      "tabProfile": "Profile",
+      "urlPlaceholder": "https://… o @username",
+      "urlHint": "Isang 3Speak video, Hive profile o kahit anong website.",
+      "searchVideo": "Maghanap ng 3Speak video",
+      "searchProfile": "Maghanap ng tao",
+      "searching": "Naghahanap…",
+      "noResults": "Walang nakita.",
+      "checking": "Sinusuri ang link…",
+      "badUrl": "Mukhang hindi iyan web address. Dapat itong magsimula sa http:// o https://.",
+      "noAccount": "Walang account na may ganyang pangalan.",
+      "addButton": "Idagdag ang link"
+    }
   }
 }

@@ -232,6 +232,33 @@
       "listingFailed": "Hindi ma-update ang listing.",
       "trailerFailed": "Hindi ma-update ang channel trailer mo.",
       "saveFailed": "Hindi ma-save ang mga pagbabago."
-    }
+    },
+    "timeline": "Mga kabanata at link",
+    "timelineHint": "Lumalabas ang mga kabanata sa progress bar at ang mga link sa kanang itaas ng video. Ang preview ay nagpe-play ng na-publish na video.",
+    "timelineLoadingVideo": "Nilo-load ang video…",
+    "tabs": {
+      "label": "Mga bahagi ng pag-edit",
+      "details": "Detalye",
+      "media": "Media",
+      "settings": "Mga setting",
+      "unsaved": "May hindi pa nase-save",
+      "hasErrors": "Kailangang ayusin"
+    },
+    "sections": {
+      "visibility": "Visibility",
+      "content": "Nilalaman",
+      "promotion": "Promosyon"
+    },
+    "chaptersNote": "Kapag 3 o higit pa ang kabanata, isinusulat ang listahan sa description pag nag-save ka.",
+    "editChapters": "I-edit ang mga kabanata",
+    "fixErrors": "Ayusin muna ang naka-markang tab."
+  },
+  "timeline": {
+    "video": "Video",
+    "profile": "Profile",
+    "link": "Link",
+    "region": "Mga link mula sa creator",
+    "dismiss": "Isara",
+    "opensNewTab": "Bubukas sa bagong tab"
   }
 }

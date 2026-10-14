@@ -232,6 +232,33 @@
       "listingFailed": "Imeshindwa kusasisha uorodheshaji.",
       "trailerFailed": "Imeshindwa kusasisha trela ya chaneli yako.",
       "saveFailed": "Imeshindwa kuhifadhi mabadiliko."
-    }
+    },
+    "timeline": "Sura na viungo",
+    "timelineHint": "Sura huonekana kwenye upau wa maendeleo, viungo hutokea juu kulia kwenye video. Onyesho la awali linacheza video iliyochapishwa.",
+    "timelineLoadingVideo": "Inapakia video…",
+    "tabs": {
+      "label": "Sehemu za kuhariri",
+      "details": "Maelezo",
+      "media": "Midia",
+      "settings": "Mipangilio",
+      "unsaved": "Mabadiliko hayajahifadhiwa",
+      "hasErrors": "Inahitaji kuangaliwa"
+    },
+    "sections": {
+      "visibility": "Mwonekano",
+      "content": "Maudhui",
+      "promotion": "Utangazaji"
+    },
+    "chaptersNote": "Sura zikiwa 3 au zaidi, orodha ya sura huandikwa kwenye maelezo unapohifadhi.",
+    "editChapters": "Hariri sura",
+    "fixErrors": "Tafadhali rekebisha kichupo kilichowekwa alama kwanza."
+  },
+  "timeline": {
+    "video": "Video",
+    "profile": "Wasifu",
+    "link": "Kiungo",
+    "region": "Viungo kutoka kwa mtayarishaji",
+    "dismiss": "Funga",
+    "opensNewTab": "Hufunguka kwenye kichupo kipya"
   }
 }

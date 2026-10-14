@@ -228,6 +228,33 @@
       "listingFailed": "Status publikasi tidak dapat diperbarui.",
       "trailerFailed": "Trailer channel-mu tidak dapat diperbarui.",
       "saveFailed": "Gagal menyimpan perubahan."
-    }
+    },
+    "timeline": "Bab dan tautan",
+    "timelineHint": "Bab tampil di bilah progres, tautan muncul di kanan atas video. Pratinjau memutar video yang sudah diterbitkan.",
+    "timelineLoadingVideo": "Memuat video…",
+    "tabs": {
+      "label": "Bagian edit",
+      "details": "Detail",
+      "media": "Media",
+      "settings": "Pengaturan",
+      "unsaved": "Perubahan belum disimpan",
+      "hasErrors": "Perlu diperiksa"
+    },
+    "sections": {
+      "visibility": "Visibilitas",
+      "content": "Konten",
+      "promotion": "Promosi"
+    },
+    "chaptersNote": "Jika ada 3 bab atau lebih, daftar bab ditulis ke deskripsi saat kamu menyimpan.",
+    "editChapters": "Edit bab",
+    "fixErrors": "Perbaiki dulu tab yang ditandai."
+  },
+  "timeline": {
+    "video": "Video",
+    "profile": "Profil",
+    "link": "Tautan",
+    "region": "Tautan dari kreator",
+    "dismiss": "Tutup",
+    "opensNewTab": "Terbuka di tab baru"
   }
 }

@@ -17,9 +17,14 @@ import AccountImg from '../HiveAvatar/AccountImg';
  * instance initializes from the store and writes back on every change, so a
  * value set in the create dialog is still there in the studio, and vice versa.
  */
-export default function AnnounceOptions({ announceType, isPremium = false, onChange, showAnnounceToggle = false, announceEnabled: announceEnabledProp, onAnnounceEnabledChange }) {
+export default function AnnounceOptions({ announceType, isPremium = false, onChange, showAnnounceToggle = false, announceEnabled: announceEnabledProp, onAnnounceEnabledChange, initialConfig = null }) {
   const { t } = useTranslation();
-  const init = getAnnounceConfig();
+  // `initialConfig` DETACHES this instance from the shared store: it starts from
+  // the given values and reports changes only through onChange. The stream
+  // templates page uses it, since each template keeps its own announcement
+  // settings and editing one must not rewrite the browser studio's defaults.
+  const detached = !!initialConfig;
+  const init = detached ? initialConfig : getAnnounceConfig();
   const [announceEnabledLocal, setAnnounceEnabledLocal] = useState(init.announceEnabled !== false);
   // Controlled when the parent supplies a value (OpenPodModal needs to know,
   // so it can hide the studio's "replace the stream with a video" option).
@@ -101,9 +106,9 @@ export default function AnnounceOptions({ announceType, isPremium = false, onCha
       // Only the studio instance owns this switch; the dialog leaves it alone.
       ...(showAnnounceToggle ? { announceEnabled } : {}),
     };
-    setAnnounceConfig(cfg);
+    if (!detached) setAnnounceConfig(cfg);
     onChangeRef.current?.({ announceType, ...cfg });
-  }, [announceType, community, declineRewards, rewardPowerup, beneList, announceEnabled, showAnnounceToggle]);
+  }, [announceType, community, declineRewards, rewardPowerup, beneList, announceEnabled, showAnnounceToggle, detached]);
 
   const handleReward = (e) => {
     const v = e.target.value;

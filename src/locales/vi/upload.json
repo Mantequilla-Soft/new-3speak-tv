@@ -25,7 +25,8 @@
     "selectVideo": "Chọn video",
     "chooseThumbnail": "Chọn hình thu nhỏ",
     "addDetails": "Thêm thông tin",
-    "previewUpload": "Xem trước & tải lên"
+    "previewUpload": "Xem trước & tải lên",
+    "timeline": "Dòng thời gian"
   },
   "preview": {
     "playVideo": "Phát video",
@@ -192,6 +193,11 @@
       "info": "Đánh dấu video này là nội dung người lớn. Video sẽ bị ẩn khỏi bảng tin và tìm kiếm đối với người xem chưa bật NSFW, và được gắn thẻ <code>nsfw</code> trên toàn Hive.",
       "hint": "Nội dung người lớn."
     },
+    "addToBlog": {
+      "label": "Thêm vào blog của tôi",
+      "hint": "Hiển thị trên blog của bạn và trong bảng tin của người theo dõi.",
+      "info": "3Speak đăng mọi video vào một cộng đồng, và Hive không hiển thị bài đăng cộng đồng trên blog của bạn hay trong bảng tin của người theo dõi trừ khi bạn chia sẻ chúng. Khi bật tùy chọn này, 3Speak sẽ chia sẻ (reblog) video lên blog của bạn ngay sau khi xuất bản."
+    },
     "ads": {
       "label": "Quảng cáo trên video này",
       "info": "Tài khoản của bạn đang bật quảng cáo, nên video này cũng có quảng cáo trừ khi bạn tắt tại đây. Cài đặt này chỉ áp dụng cho video này; các video khác và cài đặt tài khoản của bạn vẫn giữ nguyên.",
@@ -234,7 +240,8 @@
     "watchAdToPublish": "Xem quảng cáo để xuất bản",
     "watchSponsorFirst": "Hãy xem thông điệp của nhà tài trợ trước",
     "postShort": "Đăng Shorts",
-    "postVideo": "Đăng video"
+    "postVideo": "Đăng video",
+    "backToTimeline": "Quay lại dòng thời gian"
   },
   "publishing": {
     "titleShort": "Đang xuất bản Shorts",
@@ -396,6 +403,62 @@
     "couldNotSchedule": "Không thể lên lịch bài đăng",
     "scheduleFailed": "Lên lịch thất bại: {{msg}}",
     "hivePostFailed": "Không thể đăng lên Hive",
-    "uploadFailedWith": "Tải lên thất bại: {{msg}}"
+    "uploadFailedWith": "Tải lên thất bại: {{msg}}",
+    "addToBlogFailed": "Đã xuất bản, nhưng không thêm được vào blog của bạn: {{error}}"
+  },
+  "timeline": {
+    "title": "Chương và liên kết",
+    "intro": "Chia video thành các chương và thêm liên kết hiện ở góc trên bên phải video khi đang phát: video 3Speak khác, hồ sơ Hive hoặc bất kỳ trang web nào. Cả hai đều không bắt buộc.",
+    "previewUnavailable": "Không thể phát video này ở đây, nhưng bạn vẫn có thể nhập thời gian bằng tay.",
+    "noPreview": "Không có bản xem trước cho video này ở đây. Bạn vẫn có thể nhập thời gian bằng tay.",
+    "setNow": "Đặt theo thời điểm hiện tại",
+    "trackLabel": "Dòng thời gian: chạm để nhảy tới, kéo một điểm đánh dấu để di chuyển",
+    "moveChapter": "Di chuyển điểm bắt đầu của {{title}}",
+    "moveLink": "Di chuyển liên kết này",
+    "fixChapters": "Hãy sửa các chương trước, hoặc xoá chúng.",
+    "chapters": {
+      "heading": "Chương",
+      "add": "Thêm tại {{time}}",
+      "hint": "Các chương hiện trên thanh tiến trình. Khi có từ 3 chương trở lên, chúng cũng được ghi vào phần mô tả để các ứng dụng Hive khác cũng hiển thị.",
+      "empty": "Chưa có chương nào. Hãy phát video và thêm một chương ở chỗ phần mới bắt đầu.",
+      "start": "Thời điểm bắt đầu",
+      "titlePlaceholder": "Tên chương",
+      "errFirst": "Chương đầu tiên phải bắt đầu ở 0:00.",
+      "errGap": "Các chương phải cách nhau ít nhất 5 giây.",
+      "errTitle": "Mỗi chương cần có tên.",
+      "errEnd": "Có chương bắt đầu sau khi video đã kết thúc.",
+      "errTooFew": "Hãy thêm ít nhất một chương nữa. Một chương duy nhất sẽ không được hiển thị.",
+      "max": "Bạn có thể thêm tối đa {{max}} chương."
+    },
+    "links": {
+      "heading": "Liên kết",
+      "count": "{{n}} / {{max}}",
+      "add": "Thêm liên kết",
+      "hint": "Mỗi liên kết hiện trong vài giây dưới dạng một ô nhỏ ở góc trên bên phải video. Người xem có thể bấm vào hoặc đóng lại.",
+      "empty": "Chưa có liên kết nào. Thêm một video 3Speak, một hồ sơ Hive hoặc bất kỳ trang web nào.",
+      "max": "Bạn có thể thêm tối đa {{max}} liên kết.",
+      "showsAt": "Hiện lúc",
+      "onScreen": "Hiện trong",
+      "secondsUnit": "giây",
+      "forSeconds": "trong {{seconds}} giây",
+      "afterEnd": "Liên kết này bắt đầu sau khi video đã kết thúc."
+    },
+    "form": {
+      "addTitle": "Thêm liên kết",
+      "editTitle": "Sửa liên kết",
+      "tabLink": "Dán liên kết",
+      "tabVideo": "Video 3Speak",
+      "tabProfile": "Hồ sơ",
+      "urlPlaceholder": "https://… hoặc @tênngườidùng",
+      "urlHint": "Một video 3Speak, một hồ sơ Hive hoặc bất kỳ trang web nào.",
+      "searchVideo": "Tìm video 3Speak",
+      "searchProfile": "Tìm người",
+      "searching": "Đang tìm…",
+      "noResults": "Không tìm thấy gì.",
+      "checking": "Đang kiểm tra liên kết…",
+      "badUrl": "Đó không giống một địa chỉ web. Địa chỉ phải bắt đầu bằng http:// hoặc https://.",
+      "noAccount": "Không có tài khoản nào với tên đó.",
+      "addButton": "Thêm liên kết"
+    }
   }
 }

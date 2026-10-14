@@ -228,6 +228,33 @@
       "listingFailed": "공개 상태를 변경하지 못했어요.",
       "trailerFailed": "채널 트레일러를 변경하지 못했어요.",
       "saveFailed": "변경 사항을 저장하지 못했어요."
-    }
+    },
+    "timeline": "챕터와 링크",
+    "timelineHint": "챕터는 진행 표시줄에, 링크는 영상 오른쪽 위에 나타납니다. 미리보기에서는 게시된 영상이 재생됩니다.",
+    "timelineLoadingVideo": "영상을 불러오는 중…",
+    "tabs": {
+      "label": "편집 섹션",
+      "details": "세부 정보",
+      "media": "미디어",
+      "settings": "설정",
+      "unsaved": "저장하지 않은 변경 사항",
+      "hasErrors": "확인 필요"
+    },
+    "sections": {
+      "visibility": "공개 범위",
+      "content": "콘텐츠",
+      "promotion": "홍보"
+    },
+    "chaptersNote": "챕터가 3개 이상이면 저장할 때 챕터 목록이 설명에 기록됩니다.",
+    "editChapters": "챕터 편집",
+    "fixErrors": "먼저 표시된 탭을 수정해 주세요."
+  },
+  "timeline": {
+    "video": "영상",
+    "profile": "프로필",
+    "link": "링크",
+    "region": "크리에이터의 링크",
+    "dismiss": "닫기",
+    "opensNewTab": "새 탭에서 열립니다"
   }
 }

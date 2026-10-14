@@ -232,6 +232,33 @@
       "listingFailed": "Listeleme güncellenemedi.",
       "trailerFailed": "Kanal fragmanın güncellenemedi.",
       "saveFailed": "Değişiklikler kaydedilemedi."
-    }
+    },
+    "timeline": "Bölümler ve bağlantılar",
+    "timelineHint": "Bölümler ilerleme çubuğunda görünür, bağlantılar videonun sağ üst köşesinde belirir. Önizleme yayınlanmış videoyu oynatır.",
+    "timelineLoadingVideo": "Video yükleniyor…",
+    "tabs": {
+      "label": "Düzenleme bölümleri",
+      "details": "Ayrıntılar",
+      "media": "Medya",
+      "settings": "Ayarlar",
+      "unsaved": "Kaydedilmemiş değişiklikler",
+      "hasErrors": "Dikkat gerekiyor"
+    },
+    "sections": {
+      "visibility": "Görünürlük",
+      "content": "İçerik",
+      "promotion": "Tanıtım"
+    },
+    "chaptersNote": "3 veya daha fazla bölüm olduğunda, bölüm listesi kaydederken açıklamaya yazılır.",
+    "editChapters": "Bölümleri düzenle",
+    "fixErrors": "Lütfen önce işaretli sekmeyi düzelt."
+  },
+  "timeline": {
+    "video": "Video",
+    "profile": "Profil",
+    "link": "Bağlantı",
+    "region": "İçerik üreticisinin bağlantıları",
+    "dismiss": "Kapat",
+    "opensNewTab": "Yeni sekmede açılır"
   }
 }

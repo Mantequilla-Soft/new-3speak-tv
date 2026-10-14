@@ -143,8 +143,11 @@
   "routeError": {
     "title": "Ta strona się nie wczytała",
     "body": "Nie udało się pobrać części aplikacji. Zwykle oznacza to, że podczas gdy ta karta była otwarta, wydano nową wersję. Odświeżenie ją wczyta.",
+    "brokenTitle": "Coś poszło nie tak na tej stronie",
+    "brokenBody": "Część tej strony napotkała błąd. Odświeżenie zwykle pomaga, a szczegóły poniżej pomagają nam znaleźć przyczynę.",
     "reload": "Odśwież",
-    "goHome": "Strona główna"
+    "goHome": "Strona główna",
+    "details": "Szczegóły"
   },
   "seo": {
     "defaultTitle": "3Speak - zdecentralizowana platforma wideo",

@@ -51,6 +51,8 @@
     "private": "비공개 재생목록이에요",
     "items_other": "{{count}}개 항목",
     "created": "{{when}} 생성",
+    "podcastFeed": "팟캐스트 피드",
+    "podcastFeedTitle": "어떤 팟캐스트 앱에서든 {{name}} 구독하기 (RSS 피드)",
     "album": {
       "genre": "<strong>장르:</strong> {{value}}",
       "year": "<strong>연도:</strong> {{value}}",

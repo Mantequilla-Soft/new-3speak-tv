@@ -22,7 +22,8 @@
     "plays_one": "{{count}} odtworzenie",
     "plays_few": "{{count}} odtworzenia",
     "plays_many": "{{count}} odtworzeń",
-    "plays_other": "{{count}} odtworzenia"
+    "plays_other": "{{count}} odtworzenia",
+    "fromAlbum": "z {{album}}"
   },
   "author": {
     "followed": "Obserwujesz @{{author}}",
@@ -143,7 +144,9 @@
       "published_few": "Opublikowano {{count}} utwory",
       "published_many": "Opublikowano {{count}} utworów",
       "published_other": "Opublikowano {{count}} utworu",
-      "someFailed": "Niektóre utwory się nie udały — otwórz utwór z błędem, aby ponowić"
+      "someFailed": "Niektóre utwory się nie udały — otwórz utwór z błędem, aby ponowić",
+      "trackLinksFailed": "Twoje utwory są opublikowane, ale nie udało się dodać ich linków do posta albumu: {{error}}",
+      "addToBlogFailed": "Opublikowano, ale nie udało się dodać do Twojego bloga: {{error}}"
     },
     "gate": {
       "checking": "Sprawdzanie…",
@@ -187,6 +190,7 @@
     "playlist": {
       "helpRequired": "Wymagane — wybierz lub utwórz playlistę. Posty albumowe znajdują się w playliście, aby ich utwory były zgrupowane w albumie 3Speak. To zwiększa zasięg i daje lepsze miejsce na stronie audio.",
       "helpOptional": "Opcjonalnie — dodaj wszystkie utwory do playlisty.",
+      "onlyOn3Speak": "Playlisty istnieją tylko w 3Speak. Grupują tu Twoje utwory i nigdy nie zmieniają Twoich postów.",
       "none": "Bez playlisty",
       "noneHint": "Utwory nie będą zgrupowane",
       "creatingPending": "tworzenie… (czekam na indekser)",
@@ -251,7 +255,10 @@
       "selectCommunity": "Wybierz społeczność",
       "change": "Zmień",
       "tagsPlaceholder": "Tagi — oddzielone spacją lub przecinkiem (opcjonalnie)",
-      "whatKind": "Jaki to rodzaj audio?"
+      "removeTag": "Usuń tag {{tag}}",
+      "whatKind": "Jaki to rodzaj audio?",
+      "addToBlog": "Dodaj do mojego bloga",
+      "addToBlogHint": "Pokazuje post także na Twoim blogu i w kanale Twoich obserwujących. Posty w społeczności nie pojawiają się tam same."
     },
     "tracks": {
       "helpAlbum": "Każdy utwór jest publikowany jako komentarz pod postem głównym. Ustaw wspólne wartości raz i zastosuj je do wszystkich, a potem zmień dla poszczególnych utworów.",
@@ -263,7 +270,10 @@
       "applyToAll_few": "Zastosuj do wszystkich {{count}} utworów",
       "applyToAll_many": "Zastosuj do wszystkich {{count}} utworów",
       "applyToAll_other": "Zastosuj do wszystkich {{count}} utworu",
-      "hide": "Ukryj"
+      "hide": "Ukryj",
+      "commentText": "Tekst komentarza do tego utworu (opcjonalnie)",
+      "snapText": "Tekst tego snapa (opcjonalnie)",
+      "trackCover": "Okładka tego utworu (opcjonalnie)"
     },
     "review": {
       "standalone": "Osobny post",
@@ -300,7 +310,15 @@
       "retryAllFailed": "Ponów wszystkie nieudane",
       "failedDuringUpload": "Błąd podczas przesyłania pliku audio: {{message}}",
       "failedDuringPost": "Błąd podczas publikowania na Hive: {{message}}",
-      "failedWithMessage": "Błąd: {{message}}"
+      "failedWithMessage": "Błąd: {{message}}",
+      "mainFailed": "Nie udało się opublikować posta albumu: {{message}}",
+      "containerFailed": "Nie udało się połączyć z wątkiem snapów do publikacji: {{message}}"
+    },
+    "done": {
+      "title": "Gotowe! Twoje audio jest opublikowane.",
+      "openPost": "Otwórz post",
+      "openPlaylist": "Otwórz playlistę",
+      "openMyAudio": "Otwórz moje audio"
     },
     "stage": {
       "upload": "Przesyłanie pliku audio",

@@ -143,8 +143,11 @@
   "routeError": {
     "title": "Ukurasa huu haukupakia",
     "body": "Sehemu ya programu imeshindwa kupakuliwa. Kwa kawaida hii inamaanisha toleo jipya lilitolewa wakati kichupo hiki kilikuwa wazi. Kupakia upya kutalileta.",
+    "brokenTitle": "Kuna hitilafu kwenye ukurasa huu",
+    "brokenBody": "Sehemu ya ukurasa huu ilipata hitilafu. Kupakia upya kwa kawaida hurekebisha, na maelezo hapa chini yanatusaidia kupata chanzo.",
     "reload": "Pakia upya",
-    "goHome": "Nenda nyumbani"
+    "goHome": "Nenda nyumbani",
+    "details": "Maelezo"
   },
   "seo": {
     "defaultTitle": "3Speak - Jukwaa la video lililogatuliwa",

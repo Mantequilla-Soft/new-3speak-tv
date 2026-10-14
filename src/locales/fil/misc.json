@@ -143,8 +143,11 @@
   "routeError": {
     "title": "Hindi nag-load ang page na ito",
     "body": "Hindi na-download ang isang bahagi ng app. Kadalasan, ibig sabihin nito ay may bagong bersyon na lumabas habang bukas ang tab na ito. Kapag nag-reload ka, makukuha mo ito.",
+    "brokenTitle": "May nangyaring mali sa page na ito",
+    "brokenBody": "Nagkaroon ng error ang isang bahagi ng page na ito. Kadalasang naaayos ito sa pag-reload, at nakakatulong sa amin ang mga detalye sa ibaba para mahanap ang sanhi.",
     "reload": "I-reload",
-    "goHome": "Pumunta sa Home"
+    "goHome": "Pumunta sa Home",
+    "details": "Mga detalye"
   },
   "seo": {
     "defaultTitle": "3Speak - Decentralized na Video Platform",

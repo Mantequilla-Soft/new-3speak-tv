@@ -60,6 +60,8 @@
     "items_many": "{{count}} элементов",
     "items_other": "{{count}} элемента",
     "created": "Создан {{when}}",
+    "podcastFeed": "Лента подкаста",
+    "podcastFeedTitle": "Следите за «{{name}}» в любом приложении для подкастов (RSS-лента)",
     "album": {
       "genre": "<strong>Жанр:</strong> {{value}}",
       "year": "<strong>Год:</strong> {{value}}",

@@ -1835,3 +1835,42 @@
     filter: none;
   }
 }
+
+// Phones: while a comment (or any text field below the player) is being typed,
+// the sticky player lets go so the field and the keyboard get the screen
+// (hooks/useUnstickPlayerWhileTyping.js toggles the body class).
+@include mix.respond(phone) {
+  body.watch-composing .video-iframe-wrapper {
+    position: relative !important;
+    top: auto !important;
+  }
+}
+
+// Phones, portrait: when the opened speed dial would not fit between the top
+// bar and its button (PlayVideo measures it), it wraps into the compact grid the
+// landscape layout uses: icons with small labels underneath, several per row.
+@include mix.respond(phone) {
+  .fab-actions.fab-actions--compact {
+    flex-direction: row-reverse;
+    flex-wrap: wrap-reverse;
+    justify-content: flex-start;
+    gap: 10px;
+    max-width: calc(100vw - 80px);
+    padding-right: 0;
+
+    .fab-action { flex-direction: column; gap: 4px; }
+    .fab-action-label { font-size: 11px; padding: 2px 6px; order: 1; }
+    .fab-action-btn { order: 0; }
+  }
+}
+
+// Phones: nothing on the watch page may make the page wider than the screen.
+// When something did (a comment's action row), the browser zoomed out and every
+// fixed element (floating action button, bottom bar) slid partly off-screen.
+// `clip`, not `hidden`: hidden would make this a scroll container and break the
+// sticky player.
+@include mix.respond(phone) {
+  .play-container.watch-v2 {
+    overflow-x: clip;
+  }
+}

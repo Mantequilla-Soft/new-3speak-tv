@@ -1,8 +1,10 @@
-import { lazy, Suspense } from 'react';
+import { Suspense } from 'react';
+import lazyRoute from '../../utils/lazyRoute';
 import { useAppStore } from '../../lib/store';
 import IncubatingProfile from './IncubatingProfile';
 
-const ProfilePage = lazy(() => import('../../page/ProfilePage'));
+// lazyRoute, not lazy: reloads once onto a new build after a deploy (see lazyRoute.js).
+const ProfilePage = lazyRoute(() => import('../../page/ProfilePage'), '../../page/ProfilePage');
 
 /**
  * "My profile" for whoever is signed in.

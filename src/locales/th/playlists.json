@@ -51,6 +51,8 @@
     "private": "เพลย์ลิสต์นี้เป็นแบบส่วนตัว",
     "items_other": "{{count}} รายการ",
     "created": "สร้างเมื่อ {{when}}",
+    "podcastFeed": "ฟีดพอดแคสต์",
+    "podcastFeedTitle": "ติดตาม {{name}} ในแอปพอดแคสต์ใดก็ได้ (ฟีด RSS)",
     "album": {
       "genre": "<strong>แนวเพลง:</strong> {{value}}",
       "year": "<strong>ปี:</strong> {{value}}",
