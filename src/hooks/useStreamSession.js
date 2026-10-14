@@ -35,7 +35,12 @@ export function useStreamSession() {
   // server-side by @threespeak's delegated posting authority, which covers
   // HiveSigner and ManteAuth too. Gating on a signable provider meant mobile
   // viewers — who have no Keychain extension — silently joined as guests.
-  const handoverUser = aiohaUser || user;
+  // The 3Speak account first: it is who the viewer IS logged in as, for every
+  // login type. Aioha can still hold a wallet user from an EARLIER login (a
+  // ButrAuth session has no aioha user of its own), and naming that stale
+  // account in the challenge made the @threespeak signer refuse it (400), so
+  // a logged-in viewer was treated as a guest.
+  const handoverUser = user || aiohaUser;
   const canHandover = !!authenticated && !!handoverUser;
   // Two attempts, not one. The handover involves a server-side signature and
   // can lose a race on a cold load; giving up after a single failure left a
