@@ -72,6 +72,14 @@
     cursor: pointer;
   }
 
+  // "Add to my blog": the toggle row with its hint underneath.
+  &__blog {
+    align-items: flex-start;
+
+    span { display: flex; flex-direction: column; gap: 0.1rem; }
+    small { font-size: 0.68rem; font-weight: 400; color: var(--hh-text-muted, #999); }
+  }
+
   &__bene {
     display: flex;
     align-items: center;

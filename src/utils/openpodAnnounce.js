@@ -1,6 +1,7 @@
 import { toastIn } from './toast';
 import { t } from '../i18n';
-import { commentWithAioha } from '../hive-api/aioha';
+import { commentWithAioha, broadcastWithAioha, KeyTypes } from '../hive-api/aioha';
+import { readAddToBlog, reblogOp } from './addToBlog';
 import { enforceLockedBeneficiaries } from './beneficiaries';
 import {
   fetchLatestSnapsPost,
@@ -219,6 +220,17 @@ async function postFullPost({ room, user, isPremium, orientation }) {
 
   const result = await commentWithAioha('', communityTag, permlink, room.title, body, jsonMetadata, commentOptions);
   if (result && result.success === false) throw new Error('Post rejected');
+
+  // "Add to my blog": a community post stays off the host's blog and out of
+  // their followers' feeds unless reblogged. Its own broadcast right after the
+  // post (as audio uploads do), and never a reason to fail the announcement.
+  if (cfg.addToBlog ?? readAddToBlog()) {
+    try {
+      await broadcastWithAioha([reblogOp(user, user, permlink)], KeyTypes.Posting);
+    } catch (err) {
+      console.warn('[openpod] add to blog failed:', err?.message || err);
+    }
+  }
 }
 
 /**
