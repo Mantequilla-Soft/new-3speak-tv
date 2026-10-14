@@ -135,7 +135,8 @@
       "neverLive": "Not used yet",
       "watch": "Watch the stream",
       "notAnnounced": "This stream was not announced on Hive.",
-      "notAnnouncedAuth": "Not announced on Hive: 3Speak may not post for you yet. Edit the template to allow it."
+      "notAnnouncedAuth": "Not announced on Hive: 3Speak may not post for you yet. Edit the template to allow it.",
+      "useInStudio": "Use in Stream Studio"
     },
     "guide": {
       "title": "How to set up OBS",
@@ -221,6 +222,9 @@
       "sharing": "Boosts & sharing",
       "goLive": "Go live",
       "titleRequired": "Add a title to continue."
-    }
+    },
+    "pickTemplate": "Start from a template",
+    "pickTemplatePlaceholder": "Choose a template…",
+    "templateLoaded": "Loaded “{{name}}” into New stream"
   }
 }

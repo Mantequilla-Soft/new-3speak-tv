@@ -136,7 +136,8 @@
       "neverLive": "Ainda não usado",
       "watch": "Assistir à transmissão",
       "notAnnounced": "Esta transmissão não foi anunciada na Hive.",
-      "notAnnouncedAuth": "Não anunciada na Hive: o 3Speak ainda não pode publicar por você. Edite o modelo para permitir."
+      "notAnnouncedAuth": "Não anunciada na Hive: o 3Speak ainda não pode publicar por você. Edite o modelo para permitir.",
+      "useInStudio": "Usar no Stream Studio"
     },
     "guide": {
       "title": "Como configurar o OBS",
@@ -222,6 +223,9 @@
       "sharing": "Boosts e partilha",
       "goLive": "Entrar ao vivo",
       "titleRequired": "Adiciona um título para continuar."
-    }
+    },
+    "pickTemplate": "Começar a partir de um modelo",
+    "pickTemplatePlaceholder": "Escolhe um modelo…",
+    "templateLoaded": "“{{name}}” carregado em Nova transmissão"
   }
 }

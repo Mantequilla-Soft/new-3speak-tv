@@ -134,7 +134,8 @@
       "neverLive": "尚未使用",
       "watch": "观看直播",
       "notAnnounced": "这场直播没有在 Hive 上发布公告。",
-      "notAnnouncedAuth": "未在 Hive 上发布公告：3Speak 还不能代你发帖。编辑模板即可授权。"
+      "notAnnouncedAuth": "未在 Hive 上发布公告：3Speak 还不能代你发帖。编辑模板即可授权。",
+      "useInStudio": "在 Stream Studio 中使用"
     },
     "guide": {
       "title": "如何设置 OBS",
@@ -220,6 +221,9 @@
       "sharing": "打赏与分享",
       "goLive": "开始直播",
       "titleRequired": "请先添加标题再继续。"
-    }
+    },
+    "pickTemplate": "从模板开始",
+    "pickTemplatePlaceholder": "选择模板…",
+    "templateLoaded": "已将“{{name}}”载入新直播"
   }
 }

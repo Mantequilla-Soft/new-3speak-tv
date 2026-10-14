@@ -137,7 +137,8 @@
       "neverLive": "Jeszcze nieużywany",
       "watch": "Oglądaj transmisję",
       "notAnnounced": "Ta transmisja nie została ogłoszona na Hive.",
-      "notAnnouncedAuth": "Nie ogłoszono na Hive: 3Speak nie może jeszcze publikować w twoim imieniu. Edytuj szablon, aby na to zezwolić."
+      "notAnnouncedAuth": "Nie ogłoszono na Hive: 3Speak nie może jeszcze publikować w twoim imieniu. Edytuj szablon, aby na to zezwolić.",
+      "useInStudio": "Użyj w Stream Studio"
     },
     "guide": {
       "title": "Jak skonfigurować OBS",
@@ -223,6 +224,9 @@
       "sharing": "Boosty i udostępnianie",
       "goLive": "Na żywo",
       "titleRequired": "Dodaj tytuł, aby kontynuować."
-    }
+    },
+    "pickTemplate": "Zacznij od szablonu",
+    "pickTemplatePlaceholder": "Wybierz szablon…",
+    "templateLoaded": "Wczytano „{{name}}” do Nowej transmisji"
   }
 }

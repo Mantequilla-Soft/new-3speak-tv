@@ -14,7 +14,9 @@ import { defaultEndpoint, pickLeastLoadedEndpoint, fetchAllEndpoints } from '../
 import { postOpenPodAnnouncement, setPendingAnnouncement, setAnnounceConfig, getAnnounceConfig } from '../utils/openpodAnnounce';
 import AnnounceOptions from '../components/openpods/AnnounceOptions';
 import MarkdownComposer from '../components/studio/MarkdownComposer';
-import { StreamTemplatesPanel, SaveAsTemplate } from '../components/openpods/StreamTemplates';
+import { StreamTemplatesPanel, SaveAsTemplate, TemplatePicker } from '../components/openpods/StreamTemplates';
+import { applyTemplateToSetup } from '../utils/streamTemplates';
+import { toastIn } from '../utils/toast';
 import './OpenPods.scss';
 
 // Strip any trailing slash — useHangoutsRoom builds `${apiBaseUrl}/rooms` with a
@@ -225,6 +227,17 @@ export default function OpenPods() {
   const studioTabs = OPENPODS_STANDALONE && authenticated && !!user && openpodsEnabledFor(user)
     && createReq.mode !== 'conference';
   const tab = studioTabs && new URLSearchParams(location.search).get('tab') === 'templates' ? 'templates' : 'new';
+  // A stream template in the BROWSER studio (no OBS): load it into the New
+  // stream form and remount the form (the `seq` in RoomLobby's key) so it reads
+  // the template's values; the stepped form starts again at its first step.
+  const loadTemplate = (tpl) => {
+    if (!tpl) return;
+    applyTemplateToSetup(tpl);
+    setCreateReq((r) => ({ ...r, mode: 'standalone', seq: r.seq + 1 }));
+    toastIn('Live').success(t('live.obs.templateLoaded', { name: tpl.name }));
+    if (tab !== 'new') setTab('new');
+  };
+
   const setTab = (next) => {
     const params = new URLSearchParams(location.search);
     if (next === 'templates') params.set('tab', 'templates'); else params.delete('tab');
@@ -259,9 +272,15 @@ export default function OpenPods() {
 
       {tab === 'templates' ? (
         <div className="openpods-studio-panel">
-          <StreamTemplatesPanel token={sessionToken} user={user} isPremium={isPremium} />
+          <StreamTemplatesPanel token={sessionToken} user={user} isPremium={isPremium} onUse={loadTemplate} />
         </div>
       ) : (
+      <>
+      {studioTabs && (
+        <div className="openpods-template-pick">
+          <TemplatePicker token={sessionToken} onPick={loadTemplate} />
+        </div>
+      )}
       <HangoutsProvider
         apiBaseUrl={endpoint.api}
         livekitServerUrl={endpoint.lk}
@@ -345,6 +364,7 @@ export default function OpenPods() {
           )}
         />
       </HangoutsProvider>
+      </>
       )}
 
       {/* No session yet → show the right call-to-action without blocking the

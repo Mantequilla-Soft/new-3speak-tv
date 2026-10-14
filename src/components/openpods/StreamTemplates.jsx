@@ -2,7 +2,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { Copy, Eye, EyeOff, Pencil, Plus, RefreshCw, Trash2, X, ImagePlus, Radio, ChevronDown } from 'lucide-react';
+import { Copy, Eye, EyeOff, Pencil, Plus, RefreshCw, Trash2, X, ImagePlus, Radio, ChevronDown, Clapperboard } from 'lucide-react';
 import { toastIn } from '../../utils/toast';
 import { getLanguage } from '../../i18n';
 import { getCurrentProvider, Providers } from '../../hive-api/aioha';
@@ -240,7 +240,7 @@ function useVisible(ref) {
   return visible;
 }
 
-function TemplateCard({ tpl, token, onEdit, onDelete }) {
+function TemplateCard({ tpl, token, onEdit, onDelete, onUse }) {
   const { t } = useTranslation();
   const ref = useRef(null);
   const visible = useVisible(ref);
@@ -302,6 +302,12 @@ function TemplateCard({ tpl, token, onEdit, onDelete }) {
             : t('live.obs.card.neverLive')}
         </div>
         <div className="st-card__actions">
+          {/* The browser studio, no OBS: fills "New stream" from this template. */}
+          {onUse && (
+            <button type="button" className="st-btn st-btn--ghost" onClick={() => onUse(tpl)}>
+              <Clapperboard size={15} /><span>{t('live.obs.card.useInStudio')}</span>
+            </button>
+          )}
           <button type="button" className="st-btn st-btn--ghost" onClick={copyUrl}>
             <Copy size={15} /><span>{t('live.obs.card.copyUrl')}</span>
           </button>
@@ -721,7 +727,7 @@ function TemplateEditor({ token, user, whipBase, existing, isPremium, onSaved, o
  * and the library (status, copy address, edit, delete). Needs a hangouts
  * session token; the studio page shows its own sign-in call to action without one.
  */
-export function StreamTemplatesPanel({ token, user, isPremium }) {
+export function StreamTemplatesPanel({ token, user, isPremium, onUse }) {
   const { t } = useTranslation();
   const [data, setData] = useState({ status: 'idle', templates: [], whipBase: '' });
   const [editing, setEditing] = useState(null);   // null | 'new' | template
@@ -815,7 +821,7 @@ export function StreamTemplatesPanel({ token, user, isPremium }) {
       {data.status === 'ready' && data.templates.length > 0 && (
         <div className="st-grid">
           {data.templates.map((tpl) => (
-            <TemplateCard key={tpl.id} tpl={tpl} token={token} onEdit={setEditing} onDelete={setDeleting} />
+            <TemplateCard key={tpl.id} tpl={tpl} token={token} onEdit={setEditing} onDelete={setDeleting} onUse={onUse} />
           ))}
         </div>
       )}
@@ -843,6 +849,41 @@ export function StreamTemplatesPanel({ token, user, isPremium }) {
         />
       )}
     </div>
+  );
+}
+
+// ─── "Start from a template" on the New stream form ────────────────────────
+/**
+ * A template picker above the browser create form, so a saved setup can be
+ * streamed from the browser studio as well as from OBS. Renders nothing for a
+ * host without templates (or while they load). `onPick(template)` loads it.
+ */
+export function TemplatePicker({ token, onPick }) {
+  const { t } = useTranslation();
+  const [templates, setTemplates] = useState([]);
+  useEffect(() => {
+    if (!token) return undefined;
+    let alive = true;
+    listTemplates(token)
+      .then((res) => { if (alive) setTemplates(Array.isArray(res.templates) ? res.templates : []); })
+      .catch(() => { /* no picker; the form works as before */ });
+    return () => { alive = false; };
+  }, [token]);
+  if (!templates.length) return null;
+  return (
+    <label className="st-picker">
+      <span>{t('live.obs.pickTemplate')}</span>
+      <select
+        value=""
+        onChange={(e) => {
+          const tpl = templates.find((x) => x.id === e.target.value);
+          if (tpl) onPick(tpl);
+        }}
+      >
+        <option value="">{t('live.obs.pickTemplatePlaceholder')}</option>
+        {templates.map((tpl) => <option key={tpl.id} value={tpl.id}>{tpl.name}</option>)}
+      </select>
+    </label>
   );
 }
 

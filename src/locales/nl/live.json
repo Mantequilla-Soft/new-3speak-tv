@@ -135,7 +135,8 @@
       "neverLive": "Nog niet gebruikt",
       "watch": "Bekijk de stream",
       "notAnnounced": "Deze stream is niet aangekondigd op Hive.",
-      "notAnnouncedAuth": "Niet aangekondigd op Hive: 3Speak mag nog niet voor je posten. Bewerk het sjabloon om dit toe te staan."
+      "notAnnouncedAuth": "Niet aangekondigd op Hive: 3Speak mag nog niet voor je posten. Bewerk het sjabloon om dit toe te staan.",
+      "useInStudio": "Gebruiken in Stream Studio"
     },
     "guide": {
       "title": "Zo stel je OBS in",
@@ -221,6 +222,9 @@
       "sharing": "Boosts & delen",
       "goLive": "Live gaan",
       "titleRequired": "Voeg een titel toe om verder te gaan."
-    }
+    },
+    "pickTemplate": "Begin met een sjabloon",
+    "pickTemplatePlaceholder": "Kies een sjabloon…",
+    "templateLoaded": "“{{name}}” geladen in Nieuwe stream"
   }
 }

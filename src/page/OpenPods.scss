@@ -136,3 +136,16 @@
 .openpods-page .hh-cd--stepped .hh-cd__intro {
   display: none;
 }
+
+/* "Start from a template" above the New stream form: the same column as the
+   tabs and the form. Empty (no templates) it takes no room. */
+.openpods-template-pick {
+  max-width: 640px;
+  margin: 0 auto;
+  padding: 1rem 1.5rem 0;
+
+  &:empty { display: none; }
+}
+@media (max-width: 767px) {
+  .openpods-template-pick { padding: 0.75rem 0.25rem 0; }
+}

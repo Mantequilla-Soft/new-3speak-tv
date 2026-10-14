@@ -135,7 +135,8 @@
       "neverLive": "Noch nicht genutzt",
       "watch": "Stream ansehen",
       "notAnnounced": "Dieser Stream wurde nicht auf Hive angekündigt.",
-      "notAnnouncedAuth": "Nicht auf Hive angekündigt: 3Speak darf noch nicht für dich posten. Bearbeite die Vorlage, um es zu erlauben."
+      "notAnnouncedAuth": "Nicht auf Hive angekündigt: 3Speak darf noch nicht für dich posten. Bearbeite die Vorlage, um es zu erlauben.",
+      "useInStudio": "Im Stream Studio verwenden"
     },
     "guide": {
       "title": "So richtest du OBS ein",
@@ -221,6 +222,9 @@
       "sharing": "Boosts & Teilen",
       "goLive": "Live gehen",
       "titleRequired": "Gib einen Titel ein, um weiterzumachen."
-    }
+    },
+    "pickTemplate": "Mit einer Vorlage beginnen",
+    "pickTemplatePlaceholder": "Vorlage wählen…",
+    "templateLoaded": "„{{name}}“ in Neuer Stream geladen"
   }
 }

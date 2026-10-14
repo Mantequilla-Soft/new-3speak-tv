@@ -135,7 +135,8 @@
       "neverLive": "Hindi pa nagagamit",
       "watch": "Panoorin ang stream",
       "notAnnounced": "Hindi in-announce sa Hive ang stream na ito.",
-      "notAnnouncedAuth": "Hindi in-announce sa Hive: hindi pa puwedeng mag-post ang 3Speak para sa iyo. I-edit ang template para payagan ito."
+      "notAnnouncedAuth": "Hindi in-announce sa Hive: hindi pa puwedeng mag-post ang 3Speak para sa iyo. I-edit ang template para payagan ito.",
+      "useInStudio": "Gamitin sa Stream Studio"
     },
     "guide": {
       "title": "Paano i-set up ang OBS",
@@ -221,6 +222,9 @@
       "sharing": "Boosts at pagbabahagi",
       "goLive": "Mag-live",
       "titleRequired": "Magdagdag ng pamagat para magpatuloy."
-    }
+    },
+    "pickTemplate": "Magsimula sa isang template",
+    "pickTemplatePlaceholder": "Pumili ng template…",
+    "templateLoaded": "Na-load ang “{{name}}” sa Bagong stream"
   }
 }

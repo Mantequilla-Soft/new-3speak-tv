@@ -134,7 +134,8 @@
       "neverLive": "아직 사용 안 함",
       "watch": "방송 보기",
       "notAnnounced": "이 방송은 Hive에 알리지 않았어요.",
-      "notAnnouncedAuth": "Hive에 알리지 않음: 아직 3Speak가 나 대신 게시할 수 없어요. 템플릿을 편집해서 허용하세요."
+      "notAnnouncedAuth": "Hive에 알리지 않음: 아직 3Speak가 나 대신 게시할 수 없어요. 템플릿을 편집해서 허용하세요.",
+      "useInStudio": "Stream Studio에서 사용"
     },
     "guide": {
       "title": "OBS 설정 방법",
@@ -220,6 +221,9 @@
       "sharing": "부스트 및 공유",
       "goLive": "라이브 시작",
       "titleRequired": "계속하려면 제목을 입력하세요."
-    }
+    },
+    "pickTemplate": "템플릿으로 시작",
+    "pickTemplatePlaceholder": "템플릿 선택…",
+    "templateLoaded": "“{{name}}”을(를) 새 스트림에 불러왔습니다"
   }
 }

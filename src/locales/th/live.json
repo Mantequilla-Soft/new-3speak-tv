@@ -134,7 +134,8 @@
       "neverLive": "ยังไม่เคยใช้",
       "watch": "ดูไลฟ์",
       "notAnnounced": "ไลฟ์นี้ไม่ได้ประกาศบน Hive",
-      "notAnnouncedAuth": "ไม่ได้ประกาศบน Hive: 3Speak ยังโพสต์แทนคุณไม่ได้ แก้ไขเทมเพลตเพื่ออนุญาต"
+      "notAnnouncedAuth": "ไม่ได้ประกาศบน Hive: 3Speak ยังโพสต์แทนคุณไม่ได้ แก้ไขเทมเพลตเพื่ออนุญาต",
+      "useInStudio": "ใช้ใน Stream Studio"
     },
     "guide": {
       "title": "วิธีตั้งค่า OBS",
@@ -220,6 +221,9 @@
       "sharing": "บูสต์และการแชร์",
       "goLive": "เริ่มไลฟ์",
       "titleRequired": "เพิ่มชื่อเพื่อดำเนินการต่อ"
-    }
+    },
+    "pickTemplate": "เริ่มจากเทมเพลต",
+    "pickTemplatePlaceholder": "เลือกเทมเพลต…",
+    "templateLoaded": "โหลด “{{name}}” ไปที่สตรีมใหม่แล้ว"
   }
 }
