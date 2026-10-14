@@ -658,3 +658,27 @@
   flex-direction: column;
   gap: 14px;
 }
+
+/* "Start from a template" above the New stream form (TemplatePicker). */
+.st-picker {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px 12px;
+  margin: 0 0 1rem;
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: var(--text-secondary, #b5b5b5);
+
+  select {
+    flex: 1 1 220px;
+    max-width: 360px;
+    padding: 8px 10px;
+    border-radius: 10px;
+    border: 1px solid var(--border-color, #3a3a3a);
+    background: var(--background-secondary, #1a1a1a);
+    color: var(--text-primary, #f2f2f2);
+    font: inherit;
+    font-weight: 500;
+  }
+}

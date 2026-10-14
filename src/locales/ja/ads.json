@@ -160,7 +160,10 @@
     "openSite": "{{name}} のウェブサイトを新しいタブで開く",
     "openAdvertiserSite": "広告主のウェブサイトを新しいタブで開く",
     "adTag": "広告",
-    "closeAd": "この広告を閉じる"
+    "closeAd": "この広告を閉じる",
+    "streamStartsIn": "配信はあと<b>{{seconds}}秒</b>で始まります",
+    "streamStartsMoment": "配信はまもなく始まります",
+    "tapForSound": "タップして音声をオン"
   },
   "skip": {
     "skipIn": "<b>{{seconds}}</b> 秒後にスキップ",

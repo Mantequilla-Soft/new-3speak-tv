@@ -259,6 +259,8 @@
     "liveChat": "Live-Chat",
     "signInToJoin": "🔒 Melde dich an, um am Chat teilzunehmen.",
     "moreTag": "Mehr #{{tag}}",
-    "moreVideos": "Mehr Videos"
+    "moreVideos": "Mehr Videos",
+    "hideControls": "Steuerung ausblenden",
+    "showControls": "Steuerung einblenden"
   }
 }

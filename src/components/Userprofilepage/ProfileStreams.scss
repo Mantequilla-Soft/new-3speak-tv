@@ -66,3 +66,10 @@
     gap: 16px;
   }
 }
+
+/* The live block on top of the Videos tab / overview (ProfileLiveNow). */
+.profile-streams--now {
+  margin-bottom: 18px;
+
+  .profile-streams__heading { margin-top: 4px; }
+}

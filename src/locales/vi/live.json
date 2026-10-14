@@ -134,7 +134,8 @@
       "neverLive": "Chưa dùng lần nào",
       "watch": "Xem buổi phát",
       "notAnnounced": "Buổi phát này không được thông báo trên Hive.",
-      "notAnnouncedAuth": "Chưa thông báo trên Hive: 3Speak chưa được phép đăng bài thay bạn. Hãy sửa mẫu để cho phép."
+      "notAnnouncedAuth": "Chưa thông báo trên Hive: 3Speak chưa được phép đăng bài thay bạn. Hãy sửa mẫu để cho phép.",
+      "useInStudio": "Dùng trong Stream Studio"
     },
     "guide": {
       "title": "Cách thiết lập OBS",
@@ -213,6 +214,16 @@
       "savedIntro": "\"{{name}}\" đã sẵn sàng. Trong OBS, hãy dùng URL máy chủ này và mã bí mật phát trực tiếp của bạn, rồi nhấn \"Start Streaming\" để phát trực tiếp với mẫu này. Bạn vẫn có thể bắt đầu phát từ trình duyệt như thường lệ.",
       "serverUrl": "URL máy chủ",
       "manage": "Quản lý trong Mẫu"
-    }
+    },
+    "steps": {
+      "basics": "Cơ bản",
+      "details": "Chi tiết",
+      "sharing": "Boost & chia sẻ",
+      "goLive": "Phát trực tiếp",
+      "titleRequired": "Thêm tiêu đề để tiếp tục."
+    },
+    "pickTemplate": "Bắt đầu từ mẫu",
+    "pickTemplatePlaceholder": "Chọn mẫu…",
+    "templateLoaded": "Đã tải “{{name}}” vào Buổi phát mới"
   }
 }

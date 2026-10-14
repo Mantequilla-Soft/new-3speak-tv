@@ -259,6 +259,8 @@
     "liveChat": "Live chat",
     "signInToJoin": "🔒 Sign in to join the chat.",
     "moreTag": "More #{{tag}}",
-    "moreVideos": "More videos"
+    "moreVideos": "More videos",
+    "hideControls": "Hide controls",
+    "showControls": "Show controls"
   }
 }

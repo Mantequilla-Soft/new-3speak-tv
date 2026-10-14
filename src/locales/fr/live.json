@@ -136,7 +136,8 @@
       "neverLive": "Pas encore utilisé",
       "watch": "Regarder le live",
       "notAnnounced": "Ce live n'a pas été annoncé sur Hive.",
-      "notAnnouncedAuth": "Non annoncé sur Hive : 3Speak n'a pas encore le droit de publier pour vous. Modifiez le modèle pour l'autoriser."
+      "notAnnouncedAuth": "Non annoncé sur Hive : 3Speak n'a pas encore le droit de publier pour vous. Modifiez le modèle pour l'autoriser.",
+      "useInStudio": "Utiliser dans Stream Studio"
     },
     "guide": {
       "title": "Configurer OBS",
@@ -215,6 +216,16 @@
       "savedIntro": "\"{{name}}\" est prêt. Dans OBS, utilisez cette URL du serveur et votre clé secrète de live, puis cliquez sur \"Start Streaming\" pour passer en direct avec ce modèle. Vous pouvez toujours lancer un live depuis le navigateur comme d'habitude.",
       "serverUrl": "URL du serveur",
       "manage": "Gérer dans Modèles"
-    }
+    },
+    "steps": {
+      "basics": "Essentiel",
+      "details": "Détails",
+      "sharing": "Boosts et partage",
+      "goLive": "Passer en direct",
+      "titleRequired": "Ajoute un titre pour continuer."
+    },
+    "pickTemplate": "Partir d’un modèle",
+    "pickTemplatePlaceholder": "Choisis un modèle…",
+    "templateLoaded": "« {{name}} » chargé dans Nouveau direct"
   }
 }

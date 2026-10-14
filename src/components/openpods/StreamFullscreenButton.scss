@@ -1,0 +1,45 @@
+/* Fullscreen toggle on a desktop stream player (StreamFullscreenButton.jsx).
+   Bottom-right, where every player keeps it. Above the ad layer (30) so a
+   ticker never covers it, under a pre-roll (45), which owns the whole box. */
+.stream-fs-btn {
+  position: absolute;
+  right: 10px;
+  bottom: 10px;
+  z-index: 40;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  border-radius: 8px;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(6px);
+  color: #fff;
+  cursor: pointer;
+  opacity: 0.85;
+  transition: opacity 0.2s ease, background-color 0.2s ease;
+
+  &:hover,
+  &:focus-visible {
+    opacity: 1;
+    background: rgba(0, 0, 0, 0.8);
+  }
+}
+
+/* The player box in fullscreen: the browser sizes it to the screen; drop the
+   rounded corners and the fixed 16:9 so a vertical stream sits centred on black. */
+.ws-player:fullscreen,
+.live-stream-player:fullscreen {
+  border-radius: 0;
+  aspect-ratio: auto;
+  background: #000;
+}
+
+/* The watch page's live player also has the boost chip and "Ask to join" in
+   that corner (when they show): they move left of the fullscreen button. */
+.live-stream-player:has(.stream-fs-btn) {
+  .stream-boost-btn--overlay { right: calc(0.6rem + 44px); }
+  .live-stream-player__collab { right: calc(6.2rem + 44px); }
+}

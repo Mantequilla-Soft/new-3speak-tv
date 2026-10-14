@@ -98,42 +98,68 @@ export default function CroppableStreamVideo({ vertical = false, onOrientation, 
   // How many CSS pixels of the covered frame hang outside the box sideways.
   const overflowPx = aspect && box.h ? Math.max(0, box.h * aspect - box.w) : 0;
 
-  const onPointerDown = (e) => {
-    if (!active || (e.pointerType === 'mouse' && e.button !== 0)) return;
-    dragRef.current = { id: e.pointerId, x: e.clientX, y: e.clientY, start: cropX, overflow: overflowPx, dragging: false };
-    draggedRef.current = false;
-  };
-  const onPointerMove = (e) => {
-    const d = dragRef.current;
-    if (!d || d.id !== e.pointerId) return;
-    const dx = e.clientX - d.x;
-    const dy = e.clientY - d.y;
-    if (!d.dragging) {
-      // Mostly vertical = the swipe-to-next-stream gesture, not ours.
-      if (Math.abs(dx) < DRAG_SLOP_PX || Math.abs(dx) < Math.abs(dy)) return;
-      d.dragging = true;
-      draggedRef.current = true;
-      try { e.currentTarget.setPointerCapture(e.pointerId); } catch { /* old browsers */ }
-    }
-    if (d.overflow <= 0) return;
-    // The picture follows the finger: dragging right reveals the LEFT side.
-    const next = Math.min(1, Math.max(0, d.start - dx / d.overflow));
-    setCropX(next);
-    flashGuide();
-  };
-  const endDrag = (e) => {
-    const d = dragRef.current;
-    if (!d || d.id !== e.pointerId) return;
-    dragRef.current = null;
-  };
-  // A drag must not also count as the page's tap (which toggles the info block).
-  const onClickCapture = (e) => {
-    if (draggedRef.current) {
+  /* The drag listens on the whole player box (this component's positioned
+   * parent), not only on the video. On phones the chat overlay is a transparent
+   * band over the middle of the picture whose message list takes touches, so a
+   * listener on the video alone only ever saw drags above and below that band.
+   * Real controls keep their touches: buttons, links, form fields, the rail and
+   * the chat composer never start a pan. Vertical moves are left alone either way
+   * (the stream pager's swipe, the chat's own scrolling). */
+  const latestRef = useRef(null);
+  latestRef.current = { active, cropX, overflowPx };
+  useEffect(() => {
+    const box = wrapRef.current?.parentElement;
+    if (!box) return undefined;
+    const KEEP = 'button, a, input, textarea, select, label, [role="button"], .actionSidebar, .hh-chat__input-row, .hh-chat__guest-prompt';
+    const down = (e) => {
+      const { active: on, cropX: x, overflowPx: overflow } = latestRef.current;
+      if (!on || (e.pointerType === 'mouse' && e.button !== 0)) return;
+      if (e.target instanceof Element && e.target.closest(KEEP)) return;
+      dragRef.current = { id: e.pointerId, x: e.clientX, y: e.clientY, start: x, overflow, dragging: false };
+      draggedRef.current = false;
+    };
+    const move = (e) => {
+      const d = dragRef.current;
+      if (!d || d.id !== e.pointerId) return;
+      const dx = e.clientX - d.x;
+      const dy = e.clientY - d.y;
+      if (!d.dragging) {
+        // Mostly vertical = the swipe-to-next-stream gesture, not ours.
+        if (Math.abs(dx) < DRAG_SLOP_PX || Math.abs(dx) < Math.abs(dy)) return;
+        d.dragging = true;
+        draggedRef.current = true;
+        try { box.setPointerCapture(e.pointerId); } catch { /* old browsers */ }
+      }
+      if (d.overflow <= 0) return;
+      // The picture follows the finger: dragging right reveals the LEFT side.
+      setCropX(Math.min(1, Math.max(0, d.start - dx / d.overflow)));
+      flashGuide();
+    };
+    const end = (e) => {
+      const d = dragRef.current;
+      if (!d || d.id !== e.pointerId) return;
+      dragRef.current = null;
+    };
+    // A drag must not also count as the page's tap (which toggles the info block).
+    const click = (e) => {
+      if (!draggedRef.current) return;
       e.stopPropagation();
       e.preventDefault();
       draggedRef.current = false;
-    }
-  };
+    };
+    box.addEventListener('pointerdown', down);
+    box.addEventListener('pointermove', move);
+    box.addEventListener('pointerup', end);
+    box.addEventListener('pointercancel', end);
+    box.addEventListener('click', click, true);
+    return () => {
+      box.removeEventListener('pointerdown', down);
+      box.removeEventListener('pointermove', move);
+      box.removeEventListener('pointerup', end);
+      box.removeEventListener('pointercancel', end);
+      box.removeEventListener('click', click, true);
+    };
+  }, [flashGuide]);
 
   // Position bar: the full frame as a track, the visible slice as the thumb.
   const visibleFrac = active && aspect && box.h ? Math.min(1, box.w / (box.h * aspect)) : 1;
@@ -144,11 +170,6 @@ export default function CroppableStreamVideo({ vertical = false, onOrientation, 
       ref={wrapRef}
       className={`ws-crop${active ? ' ws-crop--active' : ''}`}
       style={{ '--ws-crop-x': `${(cropX * 100).toFixed(2)}%` }}
-      onPointerDown={onPointerDown}
-      onPointerMove={onPointerMove}
-      onPointerUp={endDrag}
-      onPointerCancel={endDrag}
-      onClickCapture={onClickCapture}
     >
       <StreamVideo showLiveBadge={showLiveBadge} />
       {active && (

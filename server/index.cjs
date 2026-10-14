@@ -1532,6 +1532,26 @@ async function resolveDelegatedSignUser(req, res) {
   return null
 }
 
+// Every account this request is VERIFIABLY signed in as, in the same order and
+// under the same rules as resolveDelegatedSignUser. A browser can hold more than
+// one login at once (a ButrAuth cookie next to an older wallet session or a
+// HiveSigner token), so "the first one found" is not always the account the
+// page is acting for. The OpenPods signer names its account in the challenge,
+// and checks it against all of these instead.
+async function resolveDelegatedSignUsers(req, res) {
+  const out = []
+  const add = (u) => { const v = String(u || '').toLowerCase(); if (v && !out.includes(v)) out.push(v) }
+  add(await resolveButrUser(req, res))
+  const ws = req.cookies?.[WSESSION_COOKIE_NAME]
+  const wu = ws && verifyWalletSession(ws)
+  if (wu) add(wu)
+  const authHeader = req.headers.authorization || ''
+  const bearer = authHeader.startsWith('Bearer ') ? authHeader.slice(7).trim() : ''
+  if (bearer) add(await verifyHiveSignerToken(bearer))
+  if (!out.length) add(await resolveDelegatedSignUser(req, res))   // the gated legacy app-key path
+  return out
+}
+
 // True when `hiveUsername` granted @threespeak posting authority at/above threshold.
 async function hasThreespeakPostingGrant(hiveUsername) {
   const [account] = await client.database.getAccounts([hiveUsername])
@@ -1546,13 +1566,18 @@ const signChallengeLimiter = rateLimit({ windowMs: 60 * 1000, max: 60, standardH
 app.post('/api/openpods/sign-challenge', signChallengeLimiter, async (req, res) => {
   try {
     if (!POSTING_WIF) return res.status(500).json({ error: 'Server is not configured' })
-    const hiveUsername = await resolveDelegatedSignUser(req, res)
-    if (!hiveUsername) return res.status(401).json({ error: 'Unauthorized' })
+    const signedInAs = await resolveDelegatedSignUsers(req, res)
+    if (!signedInAs.length) return res.status(401).json({ error: 'Unauthorized' })
 
+    // The challenge names the account it is for; that account has to be one this
+    // request is signed in as (see resolveDelegatedSignUsers).
     const challenge = typeof req.body?.challenge === 'string' ? req.body.challenge : ''
-    const escapedUser = hiveUsername.replace(/[.\-]/g, '\\$&')
-    if (!new RegExp(`^hivehangouts:${escapedUser}:\\d+:[0-9a-f]+$`).test(challenge)) {
-      return res.status(400).json({ error: 'Invalid challenge' })
+    const m = /^hivehangouts:([a-z0-9.-]{3,16}):\d+:[0-9a-f]+$/.exec(challenge)
+    if (!m) return res.status(400).json({ error: 'Invalid challenge' })
+    const hiveUsername = m[1]
+    if (!signedInAs.includes(hiveUsername)) {
+      console.warn(`[openpods sign] challenge for @${hiveUsername}, request signed in as ${signedInAs.map((u) => '@' + u).join(', ')}`)
+      return res.status(403).json({ error: 'Signed in as a different account' })
     }
     if (!(await hasThreespeakPostingGrant(hiveUsername))) {
       return res.status(403).json({ error: 'Authorization required' })

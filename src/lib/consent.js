@@ -20,6 +20,9 @@
  *       weight, OpenPod announce config, shorts mute/mode  (`user-store` + friends)
  *     • Resuming an interrupted upload (tus::*, chunked::*) AND post-composer drafts
  *       (hh-studio-post-draft) — so you don't lose work you explicitly started
+ *     • Your stream studio setup (hh-studio-setup:<user>: scene, mixer, layout) and
+ *       the media/sound files YOU added to it (IndexedDB `hh-studio`), so the
+ *       studio opens the way you left it; removing a file there deletes it
  *     • The installed PWA's own asset cache + OS "share into 3Speak" (service
  *       worker: workbox precache + share-target-cache) — first-party, strictly
  *       necessary; stores 3Speak's own files, never third-party content

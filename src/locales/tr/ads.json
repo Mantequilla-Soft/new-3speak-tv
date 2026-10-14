@@ -162,7 +162,10 @@
     "openSite": "{{name}} web sitesini yeni sekmede aç",
     "openAdvertiserSite": "Reklamverenin web sitesini yeni sekmede aç",
     "adTag": "Reklam",
-    "closeAd": "Bu reklamı kapat"
+    "closeAd": "Bu reklamı kapat",
+    "streamStartsIn": "Yayın <b>{{seconds}} sn</b> içinde başlıyor",
+    "streamStartsMoment": "Yayın birazdan başlıyor",
+    "tapForSound": "Ses için dokun"
   },
   "skip": {
     "skipIn": "<b>{{seconds}}</b> içinde geç",

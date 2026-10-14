@@ -398,7 +398,8 @@
       "contactGoal": "যোগাযোগের লক্ষ্য",
       "firstSaved": "প্রথম সেভ",
       "lastChanged": "শেষ পরিবর্তন",
-      "butrauthUser": "ButrAuth ইউজার"
+      "butrauthUser": "ButrAuth ইউজার",
+      "socials": "সোশ্যাল প্রোফাইল"
     },
     "activityLine": "{{posts}}টি পোস্ট · {{followers}} জন ফলোয়ার · {{following}} জনকে ফলো করছেন",
     "notSet": "সেট করা নেই",
@@ -409,7 +410,8 @@
     "met": "পূরণ হয়েছে",
     "notMet": "এখনো পূরণ হয়নি",
     "unknown": "অজানা",
-    "noContact": "এখনো কোনো ব্যবসায়িক যোগাযোগ সেভ করা হয়নি।"
+    "noContact": "এখনো কোনো ব্যবসায়িক যোগাযোগ সেভ করা হয়নি।",
+    "notVerified": "যাচাই হয়নি"
   },
   "contact": {
     "savedComplete": "সেভ হয়েছে। শুধু 3Speak টিম এটি দেখতে পারে।",

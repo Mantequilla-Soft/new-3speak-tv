@@ -135,7 +135,8 @@
       "neverLive": "Henüz kullanılmadı",
       "watch": "Yayını izle",
       "notAnnounced": "Bu yayın Hive'da duyurulmadı.",
-      "notAnnouncedAuth": "Hive'da duyurulmadı: 3Speak henüz senin adına paylaşım yapamıyor. İzin vermek için şablonu düzenle."
+      "notAnnouncedAuth": "Hive'da duyurulmadı: 3Speak henüz senin adına paylaşım yapamıyor. İzin vermek için şablonu düzenle.",
+      "useInStudio": "Stream Studio'da kullan"
     },
     "guide": {
       "title": "OBS nasıl ayarlanır",
@@ -214,6 +215,16 @@
       "savedIntro": "\"{{name}}\" hazır. OBS'te bu sunucu URL'sini ve yayın anahtarını kullan, ardından bu şablonla canlı yayına geçmek için \"Start Streaming\"e tıkla. Tarayıcıdan yayını yine her zamanki gibi başlatabilirsin.",
       "serverUrl": "Sunucu URL'si",
       "manage": "Şablonlar'da yönet"
-    }
+    },
+    "steps": {
+      "basics": "Temel bilgiler",
+      "details": "Ayrıntılar",
+      "sharing": "Boost ve paylaşım",
+      "goLive": "Yayına geç",
+      "titleRequired": "Devam etmek için bir başlık ekle."
+    },
+    "pickTemplate": "Bir şablonla başla",
+    "pickTemplatePlaceholder": "Şablon seç…",
+    "templateLoaded": "“{{name}}” Yeni yayın'a yüklendi"
   }
 }

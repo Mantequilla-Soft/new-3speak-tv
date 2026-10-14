@@ -260,6 +260,8 @@
     "liveChat": "Chat live",
     "signInToJoin": "🔒 Accedi per partecipare alla chat.",
     "moreTag": "Altro su #{{tag}}",
-    "moreVideos": "Altri video"
+    "moreVideos": "Altri video",
+    "hideControls": "Nascondi controlli",
+    "showControls": "Mostra controlli"
   }
 }

@@ -259,6 +259,8 @@
     "liveChat": "Canlı sohbet",
     "signInToJoin": "🔒 Sohbete katılmak için giriş yap.",
     "moreTag": "Daha fazla #{{tag}}",
-    "moreVideos": "Daha fazla video"
+    "moreVideos": "Daha fazla video",
+    "hideControls": "Kontrolleri gizle",
+    "showControls": "Kontrolleri göster"
   }
 }

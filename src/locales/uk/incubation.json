@@ -440,7 +440,8 @@
       "contactGoal": "Ціль «контакт»",
       "firstSaved": "Уперше збережено",
       "lastChanged": "Востаннє змінено",
-      "butrauthUser": "Користувач ButrAuth"
+      "butrauthUser": "Користувач ButrAuth",
+      "socials": "Профілі в соцмережах"
     },
     "activityLine": "Дописи: {{posts}} · підписники: {{followers}} · підписки: {{following}}",
     "notSet": "не задано",
@@ -451,7 +452,8 @@
     "met": "Виконано",
     "notMet": "Ще не виконано",
     "unknown": "невідомо",
-    "noContact": "Діловий контакт ще не збережено."
+    "noContact": "Діловий контакт ще не збережено.",
+    "notVerified": "не підтверджено"
   },
   "contact": {
     "savedComplete": "Збережено. Це бачить лише команда 3Speak.",

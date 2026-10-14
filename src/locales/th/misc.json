@@ -258,6 +258,8 @@
     "liveChat": "แชตสด",
     "signInToJoin": "🔒 เข้าสู่ระบบเพื่อร่วมแชต",
     "moreTag": "#{{tag}} เพิ่มเติม",
-    "moreVideos": "วิดีโอเพิ่มเติม"
+    "moreVideos": "วิดีโอเพิ่มเติม",
+    "hideControls": "ซ่อนปุ่มควบคุม",
+    "showControls": "แสดงปุ่มควบคุม"
   }
 }

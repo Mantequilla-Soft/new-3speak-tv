@@ -14,6 +14,16 @@
   }
 }
 
+/* Holding the stream: waiting for the checker, or playing the pre-roll. Above
+   every overlay the stream draws in the box (watermark, crop guide), and the
+   pre-roll takes touches (skip, sound, the advertiser link). */
+.live-ads--hold,
+.live-ads--preroll {
+  z-index: 45;
+}
+.live-ads--hold { background: #000; }
+.live-ads--preroll { pointer-events: auto; }
+
 /* The ticker runs along the top like on the watch page, pushed down by
    --live-ads-ticker-top where the page has its own controls up there. */
 .live-ads__ticker {

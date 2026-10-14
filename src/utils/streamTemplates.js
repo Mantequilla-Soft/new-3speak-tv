@@ -19,6 +19,9 @@
 // is allowed for a rollout where only one deployment has the templates routes
 // yet (session tokens are accepted by every deployment that shares the
 // SESSION_SECRET, as the premium API already relies on).
+import { writePostDraft, writePref, AUTO_VOD_KEY, ALLOW_CLIPS_KEY } from '@snapie/hangouts-react';
+import { setAnnounceConfig } from './openpodAnnounce';
+
 const API_URL = (import.meta.env.VITE_HANGOUTS_TEMPLATES_API_URL || import.meta.env.VITE_HANGOUTS_API_URL || '')
   .replace(/\/$/, '');
 
@@ -158,4 +161,41 @@ export function formToInput(form, { isPremium }) {
         .slice(0, TEMPLATE_LIMITS.beneficiaries),
     },
   };
+}
+
+/**
+ * Load a template into the browser Stream Studio's setup ("New stream"), so a
+ * template works without OBS too: the create form and the studio's post tab
+ * read the SDK's remembered draft and recording prefs, the announcement block
+ * reads the shared announce store. Written in the formats those readers use;
+ * the caller remounts the form so it picks them up.
+ */
+export function applyTemplateToSetup(tpl) {
+  const f = templateToForm(tpl);
+  writePostDraft({
+    title: f.title,
+    description: f.description,
+    thumbnail: f.thumbnail,
+    tags: f.tags,
+    language: f.language,
+    mode: 'standalone',
+    visibility: f.visibility,
+    boostEnabled: !!f.boost.enabled,
+    minBoostUsd: String(f.boost.minBoostUsd ?? '0.1'),
+    creatorPayoutAccount: f.boost.creatorPayoutAccount || '',
+    notifyOnHive: !!f.announce.enabled,
+    announceType: 'post',
+  }, 'standalone');
+  setAnnounceConfig({
+    announceEnabled: !!f.announce.enabled,
+    community: f.announce.community || 'hive-181335',
+    communityTitle: f.announce.communityTitle || '',
+    declineRewards: !!f.announce.declineRewards,
+    rewardPowerup: !!f.announce.rewardPowerup,
+    beneList: (f.announce.beneficiaries || [])
+      .filter((b) => b && b.account && b.weight > 0)
+      .map((b) => ({ account: b.account, weight: b.weight })),
+  });
+  writePref(AUTO_VOD_KEY, !!f.recording.publishVod);
+  writePref(ALLOW_CLIPS_KEY, f.recording.allowClips !== false);
 }

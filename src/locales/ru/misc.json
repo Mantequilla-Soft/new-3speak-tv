@@ -261,6 +261,8 @@
     "liveChat": "Чат эфира",
     "signInToJoin": "🔒 Войдите, чтобы присоединиться к чату.",
     "moreTag": "Ещё #{{tag}}",
-    "moreVideos": "Ещё видео"
+    "moreVideos": "Ещё видео",
+    "hideControls": "Скрыть элементы",
+    "showControls": "Показать элементы"
   }
 }

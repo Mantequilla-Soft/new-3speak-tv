@@ -164,7 +164,10 @@
     "openSite": "Ouvrir le site de {{name}} dans un nouvel onglet",
     "openAdvertiserSite": "Ouvrir le site de l'annonceur dans un nouvel onglet",
     "adTag": "Pub",
-    "closeAd": "Fermer cette pub"
+    "closeAd": "Fermer cette pub",
+    "streamStartsIn": "Le direct commence dans <b>{{seconds}}s</b>",
+    "streamStartsMoment": "Le direct commence dans un instant",
+    "tapForSound": "Touche pour activer le son"
   },
   "skip": {
     "skipIn": "Passer dans <b>{{seconds}}</b>",

@@ -258,6 +258,8 @@
     "liveChat": "Chat trực tiếp",
     "signInToJoin": "🔒 Đăng nhập để tham gia chat.",
     "moreTag": "Thêm #{{tag}}",
-    "moreVideos": "Thêm video"
+    "moreVideos": "Thêm video",
+    "hideControls": "Ẩn điều khiển",
+    "showControls": "Hiện điều khiển"
   }
 }

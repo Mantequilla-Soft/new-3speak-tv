@@ -398,7 +398,8 @@
       "contactGoal": "Lengo la mawasiliano",
       "firstSaved": "Ilihifadhiwa kwanza",
       "lastChanged": "Ilibadilishwa mwisho",
-      "butrauthUser": "Mtumiaji wa ButrAuth"
+      "butrauthUser": "Mtumiaji wa ButrAuth",
+      "socials": "Wasifu wa mitandao ya kijamii"
     },
     "activityLine": "machapisho {{posts}} · wafuasi {{followers}} · anawafuata {{following}}",
     "notSet": "haijawekwa",
@@ -409,7 +410,8 @@
     "met": "Limefikiwa",
     "notMet": "Bado halijafikiwa",
     "unknown": "haijulikani",
-    "noContact": "Bado hakuna mawasiliano ya biashara yaliyohifadhiwa."
+    "noContact": "Bado hakuna mawasiliano ya biashara yaliyohifadhiwa.",
+    "notVerified": "haijathibitishwa"
   },
   "contact": {
     "savedComplete": "Imehifadhiwa. Ni timu ya 3Speak pekee inayoweza kuyaona.",

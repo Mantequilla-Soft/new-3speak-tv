@@ -398,7 +398,8 @@
       "contactGoal": "İletişim hedefi",
       "firstSaved": "İlk kayıt",
       "lastChanged": "Son değişiklik",
-      "butrauthUser": "ButrAuth kullanıcısı"
+      "butrauthUser": "ButrAuth kullanıcısı",
+      "socials": "Sosyal profiller"
     },
     "activityLine": "{{posts}} gönderi · {{followers}} takipçi · {{following}} takip",
     "notSet": "ayarlanmadı",
@@ -409,7 +410,8 @@
     "met": "Karşılandı",
     "notMet": "Henüz karşılanmadı",
     "unknown": "bilinmiyor",
-    "noContact": "Henüz kayıtlı iş iletişim bilgisi yok."
+    "noContact": "Henüz kayıtlı iş iletişim bilgisi yok.",
+    "notVerified": "doğrulanmadı"
   },
   "contact": {
     "savedComplete": "Kaydedildi. Yalnızca 3Speak ekibi görebilir.",

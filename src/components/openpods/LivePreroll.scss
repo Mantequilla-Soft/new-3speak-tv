@@ -1,0 +1,80 @@
+/* A live stream's pre-roll (LivePreroll.jsx): covers the player box the stream
+   fills, above the stream's own overlays (the crop guide is 40), until the spot
+   ends. The page's own chrome outside the box is untouched. */
+.live-preroll {
+  position: absolute;
+  inset: 0;
+  z-index: 45;
+  background: #000;
+  overflow: hidden;
+}
+
+.live-preroll__video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  background: #000;
+}
+
+/* The disclosure, top-left, below a phone's back button row. */
+.live-preroll__brand {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  max-width: calc(100% - 24px);
+}
+
+/* "Tap for sound" when the browser only allowed a muted start. Bottom-left,
+   opposite the skip button. */
+.live-preroll__sound {
+  position: absolute;
+  left: 12px;
+  bottom: 56px;
+  z-index: 7;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.66);
+  backdrop-filter: blur(6px);
+  color: #fff;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+
+  svg { width: 16px; height: 16px; }
+}
+
+/* While the spot's first segment loads. */
+.live-preroll__loading {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  i {
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    border: 3px solid rgba(255, 255, 255, 0.25);
+    border-top-color: #fff;
+    animation: live-preroll-spin 0.9s linear infinite;
+  }
+}
+
+@keyframes live-preroll-spin { to { transform: rotate(360deg); } }
+
+/* Phones: the shorts-style stream page has its back button row at the top. */
+@media (max-width: 767px) {
+  .live-preroll__brand { top: calc(56px + env(safe-area-inset-top, 0px)); }
+  .live-preroll__sound { bottom: calc(96px + env(safe-area-inset-bottom, 0px)); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .live-preroll__loading i { animation-duration: 2.4s; }
+}

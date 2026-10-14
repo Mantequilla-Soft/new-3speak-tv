@@ -28,6 +28,58 @@ async function fetchStreamVods(username) {
   return res.data?.data?.videos || [];
 }
 
+/** This host's open rooms, shared (one query key) by the Streams tab and the
+ *  live block on top of the Videos tab. */
+function useHostRooms(user) {
+  return useQuery({
+    queryKey: ['profile-streams-live', user],
+    queryFn: () => fetchHostStreams(user),
+    enabled: !!user,
+    refetchInterval: 30000, // live status changes minute to minute
+    staleTime: 15000,
+  });
+}
+
+/** The room cards, live or on standby. */
+function RoomCards({ rooms }) {
+  const { t } = useTranslation();
+  return (
+    <div className="profile-streams__live">
+      {rooms.map((room) => (
+        <Link key={room.name} to={`/watch/${room.name}`} className="profile-streams__room">
+          <div
+            className="profile-streams__room-thumb"
+            style={room.thumbnail ? { backgroundImage: `url(${room.thumbnail})` } : undefined}
+          >
+            <span className={`profile-streams__badge${room.live ? '' : ' profile-streams__badge--off'}`}>
+              {room.live ? `● ${t('profile.streams.live')}` : `○ ${t('profile.streams.standby')}`}
+            </span>
+          </div>
+          <span className="profile-streams__room-title">{room.title || room.name}</span>
+        </Link>
+      ))}
+    </div>
+  );
+}
+
+/**
+ * Top of the Videos tab: the stream this user is broadcasting right now, ahead
+ * of their videos. Only rooms that are actually live (not standby); renders
+ * nothing otherwise, so the tab looks exactly as before when nobody streams.
+ */
+export function ProfileLiveNow({ user }) {
+  const { t } = useTranslation();
+  const { data: rooms = [] } = useHostRooms(user);
+  const live = rooms.filter((r) => r.live);
+  if (!live.length) return null;
+  return (
+    <div className="profile-streams profile-streams--now">
+      <h3 className="profile-streams__heading">{t('profile.streams.liveNow')}</h3>
+      <RoomCards rooms={live} />
+    </div>
+  );
+}
+
 /**
  * "Streams" profile tab: currently-running OpenPods sessions plus the VODs of
  * finished ones. The VODs deliberately ALSO stay in the Videos tab — this is a
@@ -35,13 +87,7 @@ async function fetchStreamVods(username) {
  */
 export default function ProfileStreams({ user, getViewCount }) {
   const { t } = useTranslation();
-  const { data: liveRooms = [] } = useQuery({
-    queryKey: ['profile-streams-live', user],
-    queryFn: () => fetchHostStreams(user),
-    enabled: !!user,
-    refetchInterval: 30000, // live status changes minute to minute
-    staleTime: 15000,
-  });
+  const { data: liveRooms = [] } = useHostRooms(user);
 
   const { data: vods = [], isLoading } = useQuery({
     queryKey: ['profile-streams-vods', user],
@@ -65,21 +111,7 @@ export default function ProfileStreams({ user, getViewCount }) {
           <h3 className="profile-streams__heading">
             {liveRooms.some((r) => r.live) ? t('profile.streams.liveNow') : t('profile.streams.upcoming')}
           </h3>
-          <div className="profile-streams__live">
-            {liveRooms.map((room) => (
-              <Link key={room.name} to={`/watch/${room.name}`} className="profile-streams__room">
-                <div
-                  className="profile-streams__room-thumb"
-                  style={room.thumbnail ? { backgroundImage: `url(${room.thumbnail})` } : undefined}
-                >
-                  <span className={`profile-streams__badge${room.live ? '' : ' profile-streams__badge--off'}`}>
-                    {room.live ? `● ${t('profile.streams.live')}` : `○ ${t('profile.streams.standby')}`}
-                  </span>
-                </div>
-                <span className="profile-streams__room-title">{room.title || room.name}</span>
-              </Link>
-            ))}
-          </div>
+          <RoomCards rooms={liveRooms} />
         </>
       )}
 

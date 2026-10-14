@@ -398,7 +398,8 @@
       "contactGoal": "Contactdoel",
       "firstSaved": "Eerst opgeslagen",
       "lastChanged": "Laatst gewijzigd",
-      "butrauthUser": "ButrAuth-gebruiker"
+      "butrauthUser": "ButrAuth-gebruiker",
+      "socials": "Sociale profielen"
     },
     "activityLine": "{{posts}} posts · {{followers}} volgers · {{following}} volgend",
     "notSet": "niet ingesteld",
@@ -409,7 +410,8 @@
     "met": "Behaald",
     "notMet": "Nog niet behaald",
     "unknown": "onbekend",
-    "noContact": "Nog geen zakelijke contactgegevens opgeslagen."
+    "noContact": "Nog geen zakelijke contactgegevens opgeslagen.",
+    "notVerified": "niet geverifieerd"
   },
   "contact": {
     "savedComplete": "Opgeslagen. Alleen het 3Speak-team kan het zien.",

@@ -258,6 +258,8 @@
     "liveChat": "라이브 채팅",
     "signInToJoin": "🔒 채팅에 참여하려면 로그인하세요.",
     "moreTag": "#{{tag}} 더보기",
-    "moreVideos": "동영상 더보기"
+    "moreVideos": "동영상 더보기",
+    "hideControls": "컨트롤 숨기기",
+    "showControls": "컨트롤 표시"
   }
 }

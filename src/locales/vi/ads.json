@@ -160,7 +160,10 @@
     "openSite": "Mở trang web của {{name}} trong tab mới",
     "openAdvertiserSite": "Mở trang web của nhà quảng cáo trong tab mới",
     "adTag": "QC",
-    "closeAd": "Đóng quảng cáo này"
+    "closeAd": "Đóng quảng cáo này",
+    "streamStartsIn": "Buổi phát bắt đầu sau <b>{{seconds}} giây</b>",
+    "streamStartsMoment": "Buổi phát sắp bắt đầu",
+    "tapForSound": "Chạm để bật âm thanh"
   },
   "skip": {
     "skipIn": "Bỏ qua sau <b>{{seconds}}</b>",
