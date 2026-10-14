@@ -21,7 +21,8 @@
     "playlist": "Playlist",
     "plays_one": "{{count}} ascolto",
     "plays_many": "{{count}} ascolti",
-    "plays_other": "{{count}} ascolti"
+    "plays_other": "{{count}} ascolti",
+    "fromAlbum": "da {{album}}"
   },
   "author": {
     "followed": "Ora segui @{{author}}",
@@ -139,7 +140,9 @@
       "published_one": "{{count}} traccia pubblicata",
       "published_many": "{{count}} tracce pubblicate",
       "published_other": "{{count}} tracce pubblicate",
-      "someFailed": "Alcune tracce non sono riuscite — apri la traccia non riuscita per riprovare"
+      "someFailed": "Alcune tracce non sono riuscite — apri la traccia non riuscita per riprovare",
+      "trackLinksFailed": "Le tue tracce sono pubblicate, ma non è stato possibile aggiungere i loro link al post dell'album: {{error}}",
+      "addToBlogFailed": "Pubblicato, ma l'aggiunta al tuo blog non è riuscita: {{error}}"
     },
     "gate": {
       "checking": "Verifica…",
@@ -181,6 +184,7 @@
     "playlist": {
       "helpRequired": "Obbligatorio — scegli o crea una playlist. I post album vivono dentro una playlist, così le tracce restano raggruppate in un album 3Speak. Questo aiuta la visibilità e dà una posizione più in evidenza nella pagina Audio.",
       "helpOptional": "Facoltativo — aggiungi tutte le tracce a una playlist.",
+      "onlyOn3Speak": "Le playlist esistono solo su 3Speak. Raggruppano qui le tue tracce e non modificano mai i tuoi post.",
       "none": "Nessuna playlist",
       "noneHint": "Le tracce non verranno raggruppate",
       "creatingPending": "creazione… (in attesa dell'indicizzatore)",
@@ -243,7 +247,10 @@
       "selectCommunity": "Seleziona community",
       "change": "Cambia",
       "tagsPlaceholder": "Tag — separati da spazi o virgole (facoltativo)",
-      "whatKind": "Che tipo di audio è?"
+      "removeTag": "Rimuovi tag {{tag}}",
+      "whatKind": "Che tipo di audio è?",
+      "addToBlog": "Aggiungi al mio blog",
+      "addToBlogHint": "Mostra il post anche sul tuo blog e nel feed dei tuoi follower. I post in una community non vi compaiono da soli."
     },
     "tracks": {
       "helpAlbum": "Ogni traccia viene pubblicata come commento sotto il post principale. Imposta i valori comuni una volta, applicali a tutte e poi personalizzali per singola traccia.",
@@ -254,7 +261,10 @@
       "applyToAll_one": "Applica a {{count}} traccia",
       "applyToAll_many": "Applica a tutte le {{count}} tracce",
       "applyToAll_other": "Applica a tutte le {{count}} tracce",
-      "hide": "Nascondi"
+      "hide": "Nascondi",
+      "commentText": "Testo del commento per questa traccia (facoltativo)",
+      "snapText": "Testo per questo snap (facoltativo)",
+      "trackCover": "Copertina per questa traccia (facoltativo)"
     },
     "review": {
       "standalone": "Post singolo",
@@ -285,7 +295,15 @@
       "retryAllFailed": "Riprova tutte quelle non riuscite",
       "failedDuringUpload": "Errore durante il caricamento del file audio: {{message}}",
       "failedDuringPost": "Errore durante la pubblicazione su Hive: {{message}}",
-      "failedWithMessage": "Non riuscito: {{message}}"
+      "failedWithMessage": "Non riuscito: {{message}}",
+      "mainFailed": "Non è stato possibile pubblicare il post dell'album: {{message}}",
+      "containerFailed": "Impossibile raggiungere il thread degli snap in cui pubblicare: {{message}}"
+    },
+    "done": {
+      "title": "Fatto! Il tuo audio è pubblicato.",
+      "openPost": "Apri post",
+      "openPlaylist": "Apri playlist",
+      "openMyAudio": "Apri i miei audio"
     },
     "stage": {
       "upload": "Caricamento del file audio",

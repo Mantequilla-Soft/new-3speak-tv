@@ -1,0 +1,84 @@
+@use "../../mixins.scss" as mix;
+
+// ── One width for the whole upload wizard ────────────────────────────────────
+// Every embed-studio step (Select, Thumbnail, Details, Timeline, Preview) puts
+// `embed-wizard` on its `.studio-main-container`. Its content then takes the
+// stepper's box exactly: the same max width (the stepper's own
+// --step-progress-max, 1100px by default), centred, with the same side padding
+// (4px, 8px on phones; StepProgress.scss). Stepper, both action rows and the
+// content therefore share one left and one right edge.
+//
+// Scoped to `.embed-wizard` so the other pages built on `.studio-main-container`
+// (legacy studio, scheduled-post editor, EditScheduledModal) are untouched.
+.studio-main-container.embed-wizard > .studio-page-content {
+  width: 100%;
+  max-width: var(--step-progress-max, 1100px);
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 4px;
+  padding-right: 4px;
+  box-sizing: border-box;
+  min-width: 0;
+
+  @include mix.respond(phone) {
+    padding-left: 8px;
+    padding-right: 8px;
+  }
+}
+
+// Inner layouts fill that box instead of keeping their old fixed widths. The
+// legacy stylesheets these override are shared with the old studio, hence the
+// overrides live here, scoped, rather than in those files.
+.embed-wizard {
+  // Select: drop zone and file preview were a fixed 700px (90% on phones).
+  .file-upload,
+  .video-preview-container {
+    width: 100%;
+    box-sizing: border-box;
+  }
+  // The file preview now sits in a wide box; a letterboxed black band across
+  // the whole row reads as a broken player, so the bars go.
+  .video-preview-container .video-preview { background: transparent; }
+
+  // Thumbnail: the frames fill the row (three across for the usual two
+  // generated frames + the upload card), wrapping as custom ones are added.
+  .upload-step { width: 100%; }
+  .upload-step__content {
+    width: 100%;
+    box-sizing: border-box;
+  }
+  .thumbnail-grid:not(.thumbnail-grid--portrait) {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    width: 100%;
+
+    .thumbnail-card,
+    .thumbnail-upload {
+      width: auto;
+      min-width: 0;
+    }
+    .thumbnail-card .content .image {
+      height: auto;
+      aspect-ratio: 16 / 9;
+    }
+    // The upload card stretches to the frames' height; keep its prompt centred.
+    .thumbnail-upload {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    @include mix.respond(phone) {
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    }
+  }
+
+  // Details: the form card was 80% of a full-width wrapper with 16px around it.
+  .video-detail-wrap {
+    padding: 0;
+    .video-items {
+      width: 100%;
+      box-sizing: border-box;
+    }
+  }
+}

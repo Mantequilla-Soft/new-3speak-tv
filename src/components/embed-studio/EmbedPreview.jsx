@@ -5,6 +5,7 @@ import { Navigate, useNavigate } from "react-router-dom";
 import { CheckCircle, Upload, FileText, Info, Users, Coins, Gift, Repeat2, Tag, ShieldAlert } from "lucide-react";
 import { StepProgress } from "../legacy-studio/StepProgress";
 import EmbedUploadProgressBar from "./EmbedUploadProgressBar";
+import StepActions from "./StepActions";
 import { useEmbedUpload } from "../../context/EmbedUploadContext";
 import { enforceLockedBeneficiaries } from "../../utils/beneficiaries";
 import { soundCreditsMarkdown, soundAuthorsOf } from '../../utils/soundCredits';
@@ -18,6 +19,7 @@ import UploadGate from "../ads/UploadGate";
 import { fetchUploadGateAd, confirmUploadGatePost, gateSessionId } from "../../lib/uploadGate";
 import { useTranslation, Trans } from "react-i18next";
 import AccountImg from "../HiveAvatar/AccountImg";
+import { normalizeChapters, applyChaptersToDescription } from "../../utils/videoTimeline";
 
 function EmbedPreview() {
   const { t } = useTranslation();
@@ -48,10 +50,20 @@ function EmbedPreview() {
     isNsfw,
     publishedPermlink,
     isPremium,
+    setStep,
+    chapters,
+    videoDuration,
   } = useEmbedUpload();
+
+  // Last step: 5 for a long-form video (after Timeline), 4 for a short.
+  React.useEffect(() => {
+    if (!completed && !uploading) setStep(fromStories ? 4 : 5);
+  }, [fromStories]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const navigate = useNavigate();
   const [promoteOpen, setPromoteOpen] = React.useState(false);
+  const [publishing, setPublishing] = React.useState(false);
+  const publishingRef = React.useRef(false);
 
   /* The pre-upload spot, if this account is being shown one.
    *
@@ -145,13 +157,18 @@ function EmbedPreview() {
   // footer, but BlogContent strips both on render — so rendering this through the
   // same BlogContent the watch page uses gives a faithful preview. The player is
   // shown separately above, standing in for that leading embed URL.
+  // The chapter block the Timeline step writes into the description on publish
+  // (same call as publishToEmbed), so what is shown here is what gets posted.
+  const shownDescription = fromStories
+    ? description
+    : applyChaptersToDescription(description, normalizeChapters(chapters, { duration: Number(videoDuration) || 0 }));
   const previewBody = isRemix
-    ? `${description}\n\n---\n*Based on a video by [@${originalAuthor}](${
+    ? `${shownDescription}\n\n---\n*Based on a video by [@${originalAuthor}](${
         fromStories
           ? `${window.location.origin}/shorts?v=${originalAuthor}/${originalPermlink}`
           : `${window.location.origin}/@${originalAuthor}/${originalPermlink}`
       })*${soundCreditsMarkdown(musicCredits)}`
-    : `${description}${soundCreditsMarkdown(musicCredits)}`;
+    : `${shownDescription}${soundCreditsMarkdown(musicCredits)}`;
 
   // `beneficiaries` is an array initially but the beneficiary modal stores it as
   // a JSON string — normalise both shapes before rendering.
@@ -203,11 +220,46 @@ function EmbedPreview() {
     setGateAd(pendingAd);
   };
 
-  const handlePostVideo = () => {
+  const handlePostVideo = async () => {
     // Belt and braces: the button is disabled while a spot is outstanding, but a
     // disabled button is a presentation detail and this is the publish path.
     if (!gateSatisfied) return;
-    publishToEmbed();
+    // There are two Post buttons (above and below the preview), and publish
+    // awaits a creator-settings read before it flips `uploading`; a second
+    // press in that window would start a second publish. One at a time.
+    if (publishingRef.current) return;
+    publishingRef.current = true;
+    setPublishing(true);
+    try {
+      await publishToEmbed();
+    } finally {
+      publishingRef.current = false;
+      setPublishing(false);
+    }
+  };
+
+  // Rendered above and below the preview from this one object. Long-form: Back
+  // is the Timeline step and "Edit post" jumps to Details; a short has no
+  // Timeline, so "Edit post" is its Back.
+  const editPost = { key: "edit", label: t("upload.review.editPost"), onClick: () => navigate('/embed-studio/details') };
+  const actions = {
+    back: fromStories
+      ? editPost
+      : { label: t("upload.review.backToTimeline"), onClick: () => navigate('/embed-studio/timeline') },
+    secondary: fromStories ? [] : [editPost],
+    // Two steps, shown as two buttons, so what is being asked for is never in
+    // doubt: watch the spot, then publish. The publish button stays visible and
+    // disabled rather than hidden, so the destination is obvious from the start.
+    primary: [
+      !gateSatisfied && { key: "watch", label: t("upload.review.watchAdToPublish"), onClick: startGateAd },
+      {
+        key: "post",
+        label: fromStories ? t('upload.review.postShort') : t('upload.review.postVideo'),
+        onClick: handlePostVideo,
+        disabled: !gateSatisfied || publishing,
+        title: gateSatisfied ? undefined : t('upload.review.watchSponsorFirst'),
+      },
+    ],
   };
 
 
@@ -216,15 +268,16 @@ function EmbedPreview() {
       {gateAd && <UploadGate ad={gateAd} onWatched={onGateWatched} />}
       {/* PREVIEW & PUBLISH BUTTON */}
       {!uploading && !completed && (
-        <div className="studio-main-container">
+        <div className="studio-main-container embed-wizard">
           <div className="studio-page-header">
             <h1>{fromStories ? t("upload.page.shareShort") : t("upload.page.shareVideo")}</h1>
           </div>
 
-          <StepProgress step={step} />
+          <StepProgress step={step} short={fromStories} />
           <EmbedUploadProgressBar />
 
           <div className="studio-page-content">
+            <StepActions placement="top" {...actions} />
             <div className="ep-review">
               {/* POST PREVIEW — rendered like the final post: player (standing in
                   for the leading embed URL) → title → description body. */}
@@ -309,39 +362,8 @@ function EmbedPreview() {
                   </span>
                 </div>
               </div>
-
-              <div className="ep-actions">
-                <button
-                  type="button"
-                  className="ep-btn ep-btn--secondary"
-                  onClick={() => navigate('/embed-studio/details')}
-                >
-                  {t("upload.review.editPost")}
-                </button>
-                {/* Two steps, shown as two buttons, so what is being asked for is never
-                    in doubt: watch the spot, then publish. The publish button stays
-                    visible and disabled rather than hidden, so the destination is
-                    obvious from the start. */}
-                {!gateSatisfied && (
-                  <button
-                    type="button"
-                    className="ep-btn ep-btn--primary"
-                    onClick={startGateAd}
-                  >
-                    {t("upload.review.watchAdToPublish")}
-                  </button>
-                )}
-                <button
-                  type="button"
-                  className="ep-btn ep-btn--primary"
-                  onClick={handlePostVideo}
-                  disabled={!gateSatisfied}
-                  title={gateSatisfied ? undefined : t('upload.review.watchSponsorFirst')}
-                >
-                  {fromStories ? t('upload.review.postShort') : t('upload.review.postVideo')}
-                </button>
-              </div>
             </div>
+            <StepActions placement="bottom" {...actions} />
           </div>
         </div>
       )}

@@ -25,7 +25,8 @@
     "selectVideo": "Chagua video",
     "chooseThumbnail": "Chagua picha ndogo",
     "addDetails": "Ongeza maelezo",
-    "previewUpload": "Onyesho na upakiaji"
+    "previewUpload": "Onyesho na upakiaji",
+    "timeline": "Ratiba ya muda"
   },
   "preview": {
     "playVideo": "Cheza video",
@@ -193,6 +194,11 @@
       "info": "Inaweka alama kuwa video hii ni maudhui ya watu wazima. Itafichwa kwenye milisho na utafutaji kwa watazamaji ambao hawajawasha NSFW, na itawekwa lebo <code>nsfw</code> kote Hive.",
       "hint": "Maudhui ya watu wazima."
     },
+    "addToBlog": {
+      "label": "Ongeza kwenye blogu yangu",
+      "hint": "Ionyeshe kwenye blogu yako na kwenye mlisho wa wafuasi wako.",
+      "info": "3Speak huchapisha kila video kwenye jumuiya, na Hive haionyeshi machapisho ya jumuiya kwenye blogu yako wala kwenye mlisho wa wafuasi wako usipoyashiriki. Ukiwasha hili, 3Speak hushiriki (hu-reblog) video kwenye blogu yako mara tu baada ya kuchapisha."
+    },
     "ads": {
       "label": "Matangazo kwenye video hii",
       "info": "Akaunti yako inaonyesha matangazo, kwa hivyo video hii pia, isipokuwa ukiyazima hapa. Hii inahusu video hii moja tu; video zako nyingine na mpangilio wa akaunti yako vinabaki vilevile.",
@@ -236,7 +242,8 @@
     "watchAdToPublish": "Tazama tangazo ili kuchapisha",
     "watchSponsorFirst": "Tazama ujumbe wa mfadhili kwanza",
     "postShort": "Chapisha short",
-    "postVideo": "Chapisha video"
+    "postVideo": "Chapisha video",
+    "backToTimeline": "Rudi kwenye ratiba ya muda"
   },
   "publishing": {
     "titleShort": "Inachapisha short",
@@ -398,6 +405,62 @@
     "couldNotSchedule": "Imeshindwa kuratibu chapisho",
     "scheduleFailed": "Kuratibu kumeshindwa: {{msg}}",
     "hivePostFailed": "Imeshindwa kuchapisha kwenye Hive",
-    "uploadFailedWith": "Upakiaji umeshindwa: {{msg}}"
+    "uploadFailedWith": "Upakiaji umeshindwa: {{msg}}",
+    "addToBlogFailed": "Imechapishwa, lakini kuiongeza kwenye blogu yako kumeshindikana: {{error}}"
+  },
+  "timeline": {
+    "title": "Sura na viungo",
+    "intro": "Gawanya video yako kwa sura na uongeze viungo vinavyotokea juu kulia kwenye video inapocheza: video nyingine za 3Speak, wasifu wa Hive au tovuti yoyote. Vyote viwili ni hiari.",
+    "previewUnavailable": "Video hii haiwezi kuchezwa hapa, lakini bado unaweza kuandika nyakati kwa mkono.",
+    "noPreview": "Hakuna onyesho la awali la video hii hapa. Bado unaweza kuandika nyakati kwa mkono.",
+    "setNow": "Weka muda wa sasa",
+    "trackLabel": "Ratiba ya muda: gusa kuruka, buruta alama kuisogeza",
+    "moveChapter": "Sogeza mwanzo wa {{title}}",
+    "moveLink": "Sogeza kiungo hiki",
+    "fixChapters": "Tafadhali rekebisha sura kwanza, au uziondoe.",
+    "chapters": {
+      "heading": "Sura",
+      "add": "Ongeza kwenye {{time}}",
+      "hint": "Sura huonekana kwenye upau wa maendeleo. Zikiwa 3 au zaidi, huandikwa pia kwenye maelezo yako ili programu nyingine za Hive nazo zizionyeshe.",
+      "empty": "Bado hakuna sura. Cheza video na uongeze sura pale sehemu mpya inapoanza.",
+      "start": "Muda wa kuanza",
+      "titlePlaceholder": "Kichwa cha sura",
+      "errFirst": "Sura ya kwanza lazima ianze 0:00.",
+      "errGap": "Sura lazima zitengane kwa angalau sekunde 5.",
+      "errTitle": "Kila sura inahitaji kichwa.",
+      "errEnd": "Kuna sura inayoanza baada ya video kuisha.",
+      "errTooFew": "Ongeza angalau sura moja zaidi. Sura moja peke yake haionyeshwi.",
+      "max": "Unaweza kuongeza hadi sura {{max}}."
+    },
+    "links": {
+      "heading": "Viungo",
+      "count": "{{n}} kati ya {{max}}",
+      "add": "Ongeza kiungo",
+      "hint": "Kila kiungo huonekana kwa sekunde chache kama kisanduku kidogo juu kulia kwenye video. Watazamaji wanaweza kukibofya au kukifunga.",
+      "empty": "Bado hakuna viungo. Ongeza video ya 3Speak, wasifu wa Hive au tovuti yoyote.",
+      "max": "Unaweza kuongeza hadi viungo {{max}}.",
+      "showsAt": "Kinaonekana saa",
+      "onScreen": "Kwenye skrini kwa",
+      "secondsUnit": "sekunde",
+      "forSeconds": "kwa sek {{seconds}}",
+      "afterEnd": "Kiungo hiki kinaanza baada ya video kuisha."
+    },
+    "form": {
+      "addTitle": "Ongeza kiungo",
+      "editTitle": "Hariri kiungo",
+      "tabLink": "Bandika kiungo",
+      "tabVideo": "Video ya 3Speak",
+      "tabProfile": "Wasifu",
+      "urlPlaceholder": "https://… au @jina",
+      "urlHint": "Video ya 3Speak, wasifu wa Hive au tovuti yoyote.",
+      "searchVideo": "Tafuta video za 3Speak",
+      "searchProfile": "Tafuta watu",
+      "searching": "Inatafuta…",
+      "noResults": "Hakuna kilichopatikana.",
+      "checking": "Inakagua kiungo…",
+      "badUrl": "Hiyo haionekani kama anwani ya wavuti. Lazima ianze na http:// au https://.",
+      "noAccount": "Hakuna akaunti yenye jina hilo.",
+      "addButton": "Ongeza kiungo"
+    }
   }
 }

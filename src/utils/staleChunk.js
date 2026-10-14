@@ -54,3 +54,13 @@ export async function reloadOnceForChunk(name) {
   await reloadForUpdate();
   return true;
 }
+
+/**
+ * Did this error come from a code-split file that failed to download (rather
+ * than from a page that broke while rendering)? Each browser words it
+ * differently; Vite adds its own for CSS preloads.
+ */
+export function isChunkLoadError(err) {
+  const text = `${err?.name || ''} ${err?.message || err || ''}`;
+  return /Failed to fetch dynamically imported module|error loading dynamically imported module|Importing a module script failed|ChunkLoadError|Loading (CSS )?chunk \S+ failed|Unable to preload CSS|is not a valid JavaScript MIME type/i.test(text);
+}

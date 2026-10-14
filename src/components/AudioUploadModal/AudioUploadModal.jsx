@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect, useCallback } from 'react';
+import { Link } from 'react-router-dom';
 import {
   MdClose, MdCloudUpload, MdMic, MdStop, MdDelete,
   MdArrowBack, MdArrowForward, MdPlaylistAdd, MdPlaylistAddCheck,
@@ -10,7 +11,7 @@ import { toastIn } from '../../utils/toast';
 import { useQueryClient } from '@tanstack/react-query';
 import { KeyTypes } from '@aioha/aioha';
 import { useMyPlaylists } from '../../hooks/useMyPlaylists';
-import { uploadAudioTo3Speak, getSnapsContainer } from '../../utils/audioUpload';
+import { uploadAudioTo3Speak, getSnapsContainer, linkAudioToPost } from '../../utils/audioUpload';
 import { uploadThumbnail } from '../../utils/uploadThumbnail';
 import { broadcastWithAioha, broadcastViaThreespeak, getCurrentProvider, Providers } from '../../hive-api/aioha';
 import { hasThreespeakPostingAuth, addThreespeakToPostingAuth } from '../../utils/postingAuthority';
@@ -25,6 +26,8 @@ import { enforceLockedBeneficiaries } from '../../utils/beneficiaries';
 import { PPL_BENEFICIARY, ENABLE_PPL, CHECKER_URL, CHECKER_API_KEY } from '../../utils/config';
 import './AudioUploadModal.scss';
 import AccountImg from '../HiveAvatar/AccountImg';
+import { getHiveUrl } from '../../utils/hiveNode';
+import { readAddToBlog, writeAddToBlog, reblogOp } from '../../utils/addToBlog';
 
 // Every toast from this module is headed "Upload"; the message becomes the
 // line under it. See utils/toast.js.
@@ -79,6 +82,30 @@ const AUDIO_EXT_RE = /\.(mp3|wav|ogg|webm|m4a|flac|aac)$/i;
 // don't see a burst from a single user (avoids rate-limit / dupe-window issues).
 const PUBLISH_DELAY_MS = 3500;
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+
+// Wait until a freshly broadcast post is readable from a Hive node. A reply
+// sent before the node knows its parent fails with a missing-parent error,
+// which is what made the first track of an album fail now and then. Gives up
+// after `timeoutMs` and lets the caller carry on (a track that still fails can
+// be retried).
+async function waitForPost(author, permlink, { timeoutMs = 30000, everyMs = 2000 } = {}) {
+  const until = Date.now() + timeoutMs;
+  while (Date.now() < until) {
+    try {
+      const { data } = await axios.post(getHiveUrl(), {
+        jsonrpc: '2.0', method: 'condenser_api.get_content', params: [author, permlink], id: 1,
+      }, { timeout: 8000 });
+      if (data?.result?.author) return true;
+    } catch {
+      // node hiccup: keep polling
+    }
+    await sleep(everyMs);
+  }
+  return false;
+}
+
+// Square brackets would break the markdown link text in the album's track list.
+const mdLinkText = (s) => String(s || '').replace(/[[\]]/g, '').trim();
 
 // All audio broadcasts (playlist create/update, posts, comments) go out as
 // @threespeak for every aioha login — the user granted @threespeak posting
@@ -232,13 +259,28 @@ function AudioUploadModal({ isOpen, onClose, initialTrack }) {
   const [postThumb, setPostThumb] = useState('');
   const [postPayout, setPostPayout] = useState('default');
   const [postBeneStr, setPostBeneStr] = useState('[]');
-  // Shared Beneficiary_modal — `beneTarget` is 'main' or a track id.
+  // The tracks step's "Apply to all tracks" panel. Its own values, starting
+  // empty: they are NOT the main post's, and reach the tracks only when the
+  // user clicks Apply to all.
+  const [sharedDesc, setSharedDesc] = useState('');
+  const [sharedThumb, setSharedThumb] = useState('');
+  const [sharedPayout, setSharedPayout] = useState('default');
+  const [sharedBeneStr, setSharedBeneStr] = useState('[]');
+  // "Add to my blog" (utils/addToBlog.js): reblog the standalone/album post so
+  // it reaches the creator's blog and followers' feeds. Snaps have no post.
+  const [addToBlog, setAddToBlogState] = useState(readAddToBlog);
+  const setAddToBlog = useCallback((on) => { setAddToBlogState(on); writeAddToBlog(on); }, []);
+  // Where the success screen links to once everything is published.
+  const [published, setPublished] = useState(null);
+  // Album post failed to publish: shown in the review step with its own retry.
+  const [mainError, setMainError] = useState(null);
+  // Shared Beneficiary_modal — `beneTarget` is 'main', 'shared' or a track id.
   const [beneList, setBeneList] = useState([]);
   const [beneListCount, setBeneListCount] = useState(0);
   const [beneRemaining, setBeneRemaining] = useState(100);
   const [beneOpen, setBeneOpen] = useState(false);
   const [beneTarget, setBeneTarget] = useState('main');
-  // 'main' | track id currently uploading a thumbnail, else null.
+  // 'main' | 'shared' | track id currently uploading a thumbnail, else null.
   const [thumbUploadingId, setThumbUploadingId] = useState(null);
   const thumbInputRef = useRef(null);
 
@@ -251,7 +293,7 @@ function AudioUploadModal({ isOpen, onClose, initialTrack }) {
     setTracks(prev => prev.map(tr => (tr.id === id ? { ...tr, ...patch } : tr)));
   }, []);
 
-  // Upload a cover for a target ('main' or a track id) and store the URL.
+  // Upload a cover for a target ('main', 'shared' or a track id) and store the URL.
   const uploadCoverFor = useCallback(async (target, file) => {
     if (!file) return;
     if (!file.type.startsWith('image/')) { toast.error(t('audio.upload.toasts.pickImage')); return; }
@@ -259,6 +301,7 @@ function AudioUploadModal({ isOpen, onClose, initialTrack }) {
     try {
       const url = await uploadThumbnail(file);
       if (target === 'main') setPostThumb(url);
+      else if (target === 'shared') setSharedThumb(url);
       else setTracks(prev => prev.map(tr => (tr.id === target ? { ...tr, thumb: url } : tr)));
     } catch (err) {
       toast.error(t('audio.upload.toasts.thumbFailed', { error: err?.message || t('audio.upload.unknown') }));
@@ -268,24 +311,27 @@ function AudioUploadModal({ isOpen, onClose, initialTrack }) {
     }
   }, [t]);
 
-  // Apply the main composer's desc/payout/beneficiaries to every track.
+  // Copy the "Apply to all tracks" panel onto every track. Only on click: an
+  // empty shared cover keeps each track's own.
   const applyToAllTracks = useCallback(() => {
     setTracks(prev => prev.map(tr => ({
       ...tr,
-      desc: postDescription,
-      thumb: postThumb || tr.thumb,
-      payout: postPayout,
-      beneStr: postBeneStr,
+      desc: sharedDesc,
+      thumb: sharedThumb || tr.thumb,
+      payout: sharedPayout,
+      beneStr: sharedBeneStr,
     })));
     toast.success(t('audio.upload.toasts.appliedToAll'));
-  }, [postDescription, postThumb, postPayout, postBeneStr, t]);
+  }, [sharedDesc, sharedThumb, sharedPayout, sharedBeneStr, t]);
 
   // Open the beneficiary modal for a target; seed its list from that
   // target's stored JSON.
   const openBeneFor = useCallback((target) => {
     const json = target === 'main'
       ? postBeneStr
-      : (tracks.find(tr => tr.id === target)?.beneStr || '[]');
+      : target === 'shared'
+        ? sharedBeneStr
+        : (tracks.find(tr => tr.id === target)?.beneStr || '[]');
     let list = [];
     try { list = (JSON.parse(json || '[]') || []).map(b => ({ account: b.account, percent: (b.weight || 0) / 100 })); } catch { list = []; }
     const used = list.reduce((s, b) => s + (b.percent || 0), 0);
@@ -294,11 +340,12 @@ function AudioUploadModal({ isOpen, onClose, initialTrack }) {
     setBeneRemaining(Math.max(0, (isPremium ? 100 : 90) - used));
     setBeneTarget(target);
     setBeneOpen(true);
-  }, [postBeneStr, tracks, isPremium]);
+  }, [postBeneStr, sharedBeneStr, tracks, isPremium]);
 
   // Write the modal's beneficiary JSON back to its target.
   const writeBeneToTarget = useCallback((json) => {
     if (beneTarget === 'main') setPostBeneStr(json);
+    else if (beneTarget === 'shared') setSharedBeneStr(json);
     else setTracks(prev => prev.map(tr => (tr.id === beneTarget ? { ...tr, beneStr: json } : tr)));
   }, [beneTarget]);
 
@@ -535,28 +582,6 @@ function AudioUploadModal({ isOpen, onClose, initialTrack }) {
     }
   }, [user, queryClient, refetchPlaylists, t]);
 
-  const hasUnsavedWork = tracks.length > 0 || isRecording;
-
-  const attemptClose = useCallback(() => {
-    if (hasUnsavedWork) {
-      setShowCloseConfirm(true);
-    } else {
-      onClose();
-    }
-  }, [hasUnsavedWork, onClose]);
-
-  // Esc to close (with confirm guard)
-  useEffect(() => {
-    if (!isOpen) return undefined;
-    const onKey = (e) => {
-      if (e.key !== 'Escape') return;
-      if (showCloseConfirm) setShowCloseConfirm(false);
-      else attemptClose();
-    };
-    window.addEventListener('keydown', onKey);
-    return () => window.removeEventListener('keydown', onKey);
-  }, [isOpen, attemptClose, showCloseConfirm]);
-
   // Check the @threespeak posting-auth grant when the modal opens (aioha logins
   // only; ButrAuth → getCurrentProvider() null → keeps its own cookie path).
   useEffect(() => {
@@ -642,8 +667,19 @@ function AudioUploadModal({ isOpen, onClose, initialTrack }) {
   // setTrackStatus is referentially stable via setState; we keep it as a plain
   // function (no hook) since it's only used inside other callbacks below.
   const setTrackStatus = (trackId, patch) => {
+    statusRef.current = { ...statusRef.current, [trackId]: { ...(statusRef.current[trackId] || {}), ...patch } };
     setPublishStatus(prev => ({ ...prev, [trackId]: { ...(prev[trackId] || {}), ...patch } }));
   };
+
+  // trackId → the Hive post each published track became (album track list,
+  // success screen).
+  const trackPostsRef = useRef({});
+  // Mirror of publishStatus that is current inside async loops (retries).
+  const statusRef = useRef({});
+  const replaceStatuses = useCallback((next) => {
+    statusRef.current = next;
+    setPublishStatus(next);
+  }, []);
 
   // Cached snap container for the whole modal session — re-used on retry.
   const containerRef = useRef(null);
@@ -688,6 +724,17 @@ function AudioUploadModal({ isOpen, onClose, initialTrack }) {
       json: JSON.stringify({ playlist_id: playlistChoice, author: user, permlink, position: 0 }),
     },
   ]);
+
+  // "Add to my blog": reblog the post right after it is out, as its own
+  // broadcast (the way Ecency does it). Never fails the publish.
+  const shareToBlog = useCallback(async (permlink) => {
+    if (!addToBlog) return;
+    try {
+      await broadcastAudioOps([reblogOp(user, user, permlink)]);
+    } catch (err) {
+      toast.error(t('audio.upload.toasts.addToBlogFailed', { error: err?.message || t('audio.upload.unknown') }));
+    }
+  }, [addToBlog, user, t]);
 
   // ── single (standalone post, audio embedded — uses the main composer) ──
   const publishSinglePost = useCallback(async (track) => {
@@ -735,9 +782,12 @@ function AudioUploadModal({ isOpen, onClose, initialTrack }) {
     if (playlistChoice) ops.push(playlistAddOp(hivePermlink));
 
     await broadcastAudioOps(ops);
+    await linkAudioToPost({ audioPermlink, postPermlink: hivePermlink, username: user });
+    await shareToBlog(hivePermlink);
     await pushAudioThumb(audioPermlink, postThumb);
+    trackPostsRef.current[track.id] = { author: user, permlink: hivePermlink, title: track.title };
     setTrackStatus(track.id, { state: 'success', stage: undefined });
-  }, [user, mainTitle, community, postDescription, postTagsInput, postThumb, postPayout, postBeneStr, isPremium, rewardMode, playlistChoice, pushAudioThumb]);
+  }, [user, mainTitle, community, postDescription, postTagsInput, postThumb, postPayout, postBeneStr, isPremium, rewardMode, playlistChoice, pushAudioThumb, shareToBlog]);
 
   // ── album main post (no audio — pure composer landing page) ──
   // Cached so a per-track retry doesn't re-broadcast the parent.
@@ -769,11 +819,52 @@ function AudioUploadModal({ isOpen, onClose, initialTrack }) {
       payout: postPayout, beneStr: postBeneStr, isPremium, ppl: false,
     });
     if (co) ops.push(co);
-    if (playlistChoice) ops.push(playlistAddOp(hivePermlink));
+    // The album post itself is NOT added to the playlist: only the tracks are.
+    // It carries no audio, so in the playlist it showed up as an empty video.
     await broadcastAudioOps(ops);
-    albumMainRef.current = { author: user, permlink: hivePermlink };
+    // Kept so the post can be edited later with links to its tracks.
+    albumMainRef.current = {
+      author: user,
+      permlink: hivePermlink,
+      parentPermlink: ops[0][1].parent_permlink,
+      title: ops[0][1].title,
+      body,
+      jsonMetadata: ops[0][1].json_metadata,
+      linkedBody: null,
+    };
+    // Replies need their parent to exist on the node first.
+    await waitForPost(user, hivePermlink);
+    await shareToBlog(hivePermlink);
     return albumMainRef.current;
-  }, [user, mainTitle, community, postDescription, postTagsInput, postThumb, postPayout, postBeneStr, isPremium, playlistChoice]);
+  }, [user, mainTitle, community, postDescription, postTagsInput, postThumb, postPayout, postBeneStr, isPremium, shareToBlog]);
+
+  // After the tracks: edit the album post to list them with links, so they
+  // stay easy to find once a long discussion pushes the replies down. Post
+  // bodies go to Hive, so the heading stays English like the rest of the post.
+  const linkAlbumTracks = useCallback(async () => {
+    const main = albumMainRef.current;
+    if (!main) return;
+    const done = tracks.map((tr) => trackPostsRef.current[tr.id]).filter(Boolean);
+    if (done.length === 0) return;
+    const list = done
+      .map((p, i) => `${i + 1}. [${mdLinkText(p.title) || 'Track'}](/@${p.author}/${p.permlink})`)
+      .join('\n');
+    const body = `${main.body}\n\n---\n\n**Tracks**\n\n${list}`;
+    if (body === main.linkedBody) return;
+    await broadcastAudioOps([[
+      'comment',
+      {
+        parent_author: '',
+        parent_permlink: main.parentPermlink,
+        author: main.author,
+        permlink: main.permlink,
+        title: main.title,
+        body,
+        json_metadata: main.jsonMetadata,
+      },
+    ]]);
+    main.linkedBody = body;
+  }, [tracks]);
 
   // ── one audio as a comment under `parent` (snaps container OR album main) ──
   // Uses the track's own desc/thumb/payout/beneficiaries.
@@ -786,9 +877,10 @@ function AudioUploadModal({ isOpen, onClose, initialTrack }) {
     const hivePermlink = generatePermlink(track.title) || audioPermlink;
     const tags = Array.from(new Set(HIVE_DEFAULT_TAGS));
     const desc = (track.desc || '').trim() || (track.title || '').trim();
-    // Fall back to the main composer cover so a thumbnail set in the main step
-    // also lands on snap/voice track comments (json_metadata.image + body + Mongo).
-    const tThumb = track.thumb || postThumb || '';
+    // Only the track's own cover. The album/post cover is not copied onto the
+    // tracks unless the user applies it to all; tiles fall back to the album
+    // art by themselves (checker playlist_thumbnail).
+    const tThumb = track.thumb || '';
     const cover = tThumb ? `![${(track.title || 'cover').replace(/[[\]]/g, '')}](${tThumb})\n\n` : '';
     const body = `${cover}${playUrl}\n\n${desc}`.trim();
     // Both modes post the track as a reply, but to different parents, and the
@@ -826,9 +918,11 @@ function AudioUploadModal({ isOpen, onClose, initialTrack }) {
     if (playlistChoice) ops.push(playlistAddOp(hivePermlink));
 
     await broadcastAudioOps(ops);
+    await linkAudioToPost({ audioPermlink, postPermlink: hivePermlink, username: user });
     await pushAudioThumb(audioPermlink, tThumb);
+    trackPostsRef.current[track.id] = { author: user, permlink: hivePermlink, title: track.title };
     setTrackStatus(track.id, { state: 'success', stage: undefined });
-  }, [user, mode, isPremium, rewardMode, playlistChoice, postThumb, pushAudioThumb]);
+  }, [user, mode, isPremium, rewardMode, playlistChoice, pushAudioThumb]);
 
   // Resolve the parent a track comment hangs off, per mode.
   const resolveParent = useCallback(async () => {
@@ -842,6 +936,101 @@ function AudioUploadModal({ isOpen, onClose, initialTrack }) {
     return publishTrackComment(track, parent);
   }, [mode, publishSinglePost, publishTrackComment]);
 
+  // Where "Open post" / "Open playlist" go once every track is published.
+  const publishedLinks = useCallback(() => {
+    let post = null;
+    if (mode === 'album' && albumMainRef.current) {
+      post = `/post/${albumMainRef.current.author}/${albumMainRef.current.permlink}`;
+    } else if (mode === 'single') {
+      const p = trackPostsRef.current[tracks[0]?.id];
+      if (p) post = `/audio/${p.author}/${p.permlink}`;
+    }
+    return {
+      post,
+      playlist: playlistChoice ? `/playlist/${playlistChoice}` : null,
+      profileAudio: mode === 'snaps' && user ? `/p/${user}?tab=audio` : null,
+    };
+  }, [mode, tracks, playlistChoice, user]);
+
+  // The modal stays mounted (App.jsx), so a closed session would otherwise
+  // reopen with the last upload still in it. Every close starts fresh.
+  const resetSession = useCallback(() => {
+    setStep(0);
+    setTracks((prev) => {
+      prev.forEach((tr) => {
+        if (tr.objectUrl) {
+          URL.revokeObjectURL(tr.objectUrl);
+          objectUrlsRef.current.delete(tr.objectUrl);
+        }
+      });
+      return [];
+    });
+    setPlaylistChoice(null);
+    replaceStatuses({});
+    setMainTitle('');
+    setPostDescription('');
+    setPostTagsInput('');
+    setPostThumb('');
+    setPostPayout('default');
+    setPostBeneStr('[]');
+    setSharedDesc('');
+    setSharedThumb('');
+    setSharedPayout('default');
+    setSharedBeneStr('[]');
+    setBeneList([]);
+    setPublished(null);
+    setMainError(null);
+    albumMainRef.current = null;
+    containerRef.current = null;
+    trackPostsRef.current = {};
+  }, [replaceStatuses]);
+
+  const closeModal = useCallback(() => {
+    resetSession();
+    onClose();
+  }, [resetSession, onClose]);
+
+  // Once everything is published there is nothing left to lose.
+  const hasUnsavedWork = (tracks.length > 0 || isRecording) && !published;
+
+  const attemptClose = useCallback(() => {
+    if (hasUnsavedWork) {
+      setShowCloseConfirm(true);
+    } else {
+      closeModal();
+    }
+  }, [hasUnsavedWork, closeModal]);
+
+  // Esc to close (with confirm guard)
+  useEffect(() => {
+    if (!isOpen) return undefined;
+    const onKey = (e) => {
+      if (e.key !== 'Escape') return;
+      if (showCloseConfirm) setShowCloseConfirm(false);
+      else attemptClose();
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [isOpen, attemptClose, showCloseConfirm]);
+
+  // Once every track is out (by the first run or by retries), show where
+  // everything landed. statusRef has the latest states even inside a retry loop.
+  const markDoneIfComplete = useCallback(() => {
+    const done = tracks.length > 0 && tracks.every((tr) => statusRef.current[tr.id]?.state === 'success');
+    if (done) setPublished(publishedLinks());
+  }, [tracks, publishedLinks]);
+
+  // Album only: refresh the track list on the album post. Never fails the
+  // publish; the tracks are out either way.
+  const finishAlbum = useCallback(async () => {
+    if (mode !== 'album') return;
+    try {
+      await linkAlbumTracks();
+    } catch (err) {
+      toast.error(t('audio.upload.toasts.trackLinksFailed', { error: err?.message || t('audio.upload.unknown') }));
+    }
+  }, [mode, linkAlbumTracks, t]);
+
   const retryTrack = useCallback(async (trackId) => {
     const track = tracks.find((tr) => tr.id === trackId);
     if (!track) return;
@@ -849,6 +1038,8 @@ function AudioUploadModal({ isOpen, onClose, initialTrack }) {
     try {
       const parent = mode === 'single' ? null : await resolveParent();
       await publishOneTrack(track, parent);
+      await finishAlbum();
+      markDoneIfComplete();
       if (playlistChoice) queryClient.invalidateQueries({ queryKey: ['myPlaylists', user] });
     } catch (err) {
       const message = err?.message || (typeof err === 'string' ? err : t('audio.upload.failed'));
@@ -856,7 +1047,7 @@ function AudioUploadModal({ isOpen, onClose, initialTrack }) {
     } finally {
       setIsPublishing(false);
     }
-  }, [tracks, mode, resolveParent, publishOneTrack, playlistChoice, queryClient, user, t]);
+  }, [tracks, mode, resolveParent, publishOneTrack, finishAlbum, markDoneIfComplete, playlistChoice, queryClient, user, t]);
 
   const retryAllFailed = useCallback(async () => {
     const failed = tracks.filter((tr) => publishStatus[tr.id]?.state === 'error');
@@ -868,9 +1059,9 @@ function AudioUploadModal({ isOpen, onClose, initialTrack }) {
     }
   }, [tracks, publishStatus, retryTrack]);
 
-  if (!isOpen) return null;
-
   const allPublished = tracks.length > 0 && tracks.every(tr => publishStatus[tr.id]?.state === 'success');
+
+  if (!isOpen) return null;
 
   const flow = FLOWS[mode] || FLOWS.snaps;
   const stepKey = flow[Math.min(step, flow.length - 1)];
@@ -892,10 +1083,12 @@ function AudioUploadModal({ isOpen, onClose, initialTrack }) {
     if (!user) { toast.error(t('audio.upload.toasts.signInFirst')); return; }
     if (tracks.length === 0) return;
     setIsPublishing(true);
+    setMainError(null);
+    setPublished(null);
 
     const initial = {};
     for (const tr of tracks) initial[tr.id] = { state: 'pending' };
-    setPublishStatus(initial);
+    replaceStatuses(initial);
 
     // Resolve the shared parent up front (snap container, or broadcast the
     // album's main post first). Single posts are top-level — no parent.
@@ -906,6 +1099,10 @@ function AudioUploadModal({ isOpen, onClose, initialTrack }) {
       } catch (err) {
         setIsPublishing(false);
         const errorText = err?.message || t('audio.upload.unknown');
+        // Shown in the review step too, with its own retry: nothing went out,
+        // so publishing again starts cleanly.
+        setMainError(errorText);
+        replaceStatuses({});
         toast.error(mode === 'album'
           ? t('audio.upload.toasts.couldntPublishMain', { error: errorText })
           : t('audio.upload.toasts.couldntResolveContainer', { error: errorText }));
@@ -926,12 +1123,14 @@ function AudioUploadModal({ isOpen, onClose, initialTrack }) {
       }
     }
 
+    await finishAlbum();
     setIsPublishing(false);
 
     if (allOk) {
       toast.success(t('audio.upload.toasts.published', { count: tracks.length }));
       queryClient.invalidateQueries({ queryKey: ['myPlaylists', user] });
-      setTimeout(() => onClose(), 1200);
+      // No auto-close: the review step now shows where everything landed.
+      markDoneIfComplete();
     } else {
       toast.error(t('audio.upload.toasts.someFailed'));
     }
@@ -1046,6 +1245,8 @@ function AudioUploadModal({ isOpen, onClose, initialTrack }) {
               setPayout={setPostPayout}
               beneCount={beneList.length}
               onOpenBene={() => openBeneFor('main')}
+              addToBlog={addToBlog}
+              setAddToBlog={setAddToBlog}
             />
           )}
           {stepKey === 'tracks' && (
@@ -1053,13 +1254,13 @@ function AudioUploadModal({ isOpen, onClose, initialTrack }) {
               tracks={tracks}
               mode={mode}
               patchTrack={patchTrack}
-              postDescription={postDescription}
-              setPostDescription={setPostDescription}
-              postThumb={postThumb}
-              setPostThumb={setPostThumb}
-              postPayout={postPayout}
-              setPostPayout={setPostPayout}
-              postBeneCount={beneList.length}
+              sharedDesc={sharedDesc}
+              setSharedDesc={setSharedDesc}
+              sharedThumb={sharedThumb}
+              setSharedThumb={setSharedThumb}
+              sharedPayout={sharedPayout}
+              setSharedPayout={setSharedPayout}
+              sharedBeneCount={(() => { try { return (JSON.parse(sharedBeneStr || '[]') || []).length; } catch { return 0; } })()}
               applyToAllTracks={applyToAllTracks}
               onOpenBene={openBeneFor}
               uploadCoverFor={uploadCoverFor}
@@ -1080,6 +1281,10 @@ function AudioUploadModal({ isOpen, onClose, initialTrack }) {
               mode={mode}
               rewardMode={rewardMode}
               community={community}
+              mainError={mainError}
+              onRetryMain={onPublish}
+              published={published}
+              onNavigate={closeModal}
             />
           )}
           {communityOpen && (
@@ -1118,7 +1323,7 @@ function AudioUploadModal({ isOpen, onClose, initialTrack }) {
           ) : allPublished ? (
             <button
               className="audio-upload-btn-primary"
-              onClick={onClose}
+              onClick={closeModal}
             >
               <MdCheck size={16} /> {t('common.actions.close')}
             </button>
@@ -1153,7 +1358,7 @@ function AudioUploadModal({ isOpen, onClose, initialTrack }) {
                 </button>
                 <button
                   className="audio-upload-btn-primary audio-upload-btn-danger"
-                  onClick={() => { setShowCloseConfirm(false); onClose(); }}
+                  onClick={() => { setShowCloseConfirm(false); closeModal(); }}
                 >
                   {t('audio.upload.discard.discard')}
                 </button>
@@ -1387,6 +1592,7 @@ function PlaylistStep({ playlists, loading, choice, onChoose, pendingPlaylist, o
           ? t('audio.upload.playlist.helpRequired')
           : t('audio.upload.playlist.helpOptional')}
       </p>
+      <p className="audio-upload-step-note">{t('audio.upload.playlist.onlyOn3Speak')}</p>
 
       {!required && (
         <button
@@ -1768,6 +1974,7 @@ function MainPostStep({
   community, setCommunityOpen, tagsInput, setTagsInput,
   thumb, setThumb, thumbUploading, onPickThumb,
   payout, setPayout, beneCount, onOpenBene,
+  addToBlog, setAddToBlog,
 }) {
   const { t } = useTranslation();
   const isAlbum = variant === 'album';
@@ -1798,12 +2005,10 @@ function MainPostStep({
         <span className="audio-upload-community-change">{t('audio.upload.mainPost.change')}</span>
       </button>
 
-      <input
-        type="text"
-        className="audio-upload-post-tags"
-        placeholder={t('audio.upload.mainPost.tagsPlaceholder')}
+      <TagChipsInput
         value={tagsInput}
-        onChange={(e) => setTagsInput(e.target.value)}
+        onChange={setTagsInput}
+        placeholder={t('audio.upload.mainPost.tagsPlaceholder')}
       />
 
       <textarea
@@ -1830,6 +2035,83 @@ function MainPostStep({
       )}
 
       <RewardRow payout={payout} setPayout={setPayout} beneCount={beneCount} onOpenBene={onOpenBene} />
+
+      <label className="audio-upload-blog-toggle">
+        <input
+          type="checkbox"
+          checked={!!addToBlog}
+          onChange={(e) => setAddToBlog(e.target.checked)}
+        />
+        <span>
+          <strong>{t('audio.upload.mainPost.addToBlog')}</strong>
+          <small>{t('audio.upload.mainPost.addToBlogHint')}</small>
+        </span>
+      </label>
+    </div>
+  );
+}
+
+// Tags as pills, like the video upload shows them: space, comma or Enter turns
+// the typed word into a pill, Backspace on an empty field takes the last one
+// back. `value` stays the space-separated string the publish code reads.
+// Android keyboards often send no key events for space, so the onChange path
+// splits too.
+const MAX_TAGS = 10;
+const cleanTag = (raw) => String(raw || '').trim().toLowerCase().replace(/^#/, '').replace(/[^a-z0-9-]/g, '').slice(0, 24);
+
+function TagChipsInput({ value, onChange, placeholder }) {
+  const { t } = useTranslation();
+  const [draft, setDraft] = useState('');
+  const tags = String(value || '').split(/[\s,]+/).filter(Boolean);
+
+  const addTags = (words) => {
+    const next = [...tags];
+    for (const w of words) {
+      const tag = cleanTag(w);
+      if (tag && !next.includes(tag) && next.length < MAX_TAGS) next.push(tag);
+    }
+    if (next.length !== tags.length) onChange(next.join(' '));
+  };
+  const removeTag = (tag) => onChange(tags.filter((x) => x !== tag).join(' '));
+
+  return (
+    <div className="audio-upload-tag-chips">
+      {tags.map((tag) => (
+        <span key={tag} className="audio-upload-tag-chip">
+          {tag}
+          <button type="button" onClick={() => removeTag(tag)} aria-label={t('audio.upload.mainPost.removeTag', { tag })}>
+            <MdClose size={12} />
+          </button>
+        </span>
+      ))}
+      {tags.length < MAX_TAGS && (
+        <input
+          type="text"
+          value={draft}
+          placeholder={tags.length ? '' : placeholder}
+          onChange={(e) => {
+            const parts = e.target.value.split(/[\s,]+/);
+            if (parts.length > 1) {
+              addTags(parts.slice(0, -1));
+              setDraft(parts[parts.length - 1]);
+            } else {
+              setDraft(e.target.value);
+            }
+          }}
+          onKeyDown={(e) => {
+            if ((e.key === 'Enter' || e.key === ',' || e.key === ' ') && draft.trim()) {
+              e.preventDefault();
+              addTags([draft]);
+              setDraft('');
+            } else if (e.key === 'Backspace' && !draft && tags.length) {
+              onChange(tags.slice(0, -1).join(' '));
+            }
+          }}
+          onBlur={() => {
+            if (draft.trim()) { addTags([draft]); setDraft(''); }
+          }}
+        />
+      )}
     </div>
   );
 }
@@ -1837,8 +2119,8 @@ function MainPostStep({
 // ─── Step: Tracks (snaps / album) — apply-to-all panel + per-track accordion ───
 function TracksStep({
   tracks, mode, patchTrack,
-  postDescription, setPostDescription, postThumb, setPostThumb,
-  postPayout, setPostPayout, postBeneCount,
+  sharedDesc, setSharedDesc, sharedThumb, setSharedThumb,
+  sharedPayout, setSharedPayout, sharedBeneCount,
   applyToAllTracks, onOpenBene, uploadCoverFor, thumbUploadingId,
 }) {
   const { t } = useTranslation();
@@ -1858,21 +2140,21 @@ function TracksStep({
           placeholder={t('audio.upload.tracks.sharedDescription')}
           rows={3}
           maxLength={5000}
-          value={postDescription}
-          onChange={(e) => setPostDescription(e.target.value)}
+          value={sharedDesc}
+          onChange={(e) => setSharedDesc(e.target.value)}
         />
         <ThumbPicker
-          value={postThumb}
-          uploading={thumbUploadingId === 'main'}
-          onPick={(f) => uploadCoverFor('main', f)}
-          onClear={() => setPostThumb('')}
+          value={sharedThumb}
+          uploading={thumbUploadingId === 'shared'}
+          onPick={(f) => uploadCoverFor('shared', f)}
+          onClear={() => setSharedThumb('')}
           label={t('audio.upload.tracks.sharedCover')}
         />
         <RewardRow
-          payout={postPayout}
-          setPayout={setPostPayout}
-          beneCount={postBeneCount}
-          onOpenBene={() => onOpenBene('main')}
+          payout={sharedPayout}
+          setPayout={setSharedPayout}
+          beneCount={sharedBeneCount}
+          onOpenBene={() => onOpenBene('shared')}
         />
         <button
           type="button"
@@ -1918,20 +2200,6 @@ function TracksStep({
                   maxLength={120}
                 />
                 <TrackTypeFields track={tr} patchTrack={patchTrack} />
-                <textarea
-                  className="audio-upload-post-desc"
-                  placeholder={t('audio.upload.fields.descriptionOptional')}
-                  rows={3}
-                  maxLength={5000}
-                  value={tr.desc || ''}
-                  onChange={(e) => patchTrack(tr.id, { desc: e.target.value })}
-                />
-                <ThumbPicker
-                  value={tr.thumb || ''}
-                  uploading={thumbUploadingId === tr.id}
-                  onPick={(f) => uploadCoverFor(tr.id, f)}
-                  onClear={() => patchTrack(tr.id, { thumb: '' })}
-                />
                 <RewardRow
                   payout={tr.payout || 'default'}
                   setPayout={(v) => patchTrack(tr.id, { payout: v })}
@@ -1940,6 +2208,25 @@ function TracksStep({
                 />
               </>
             )}
+
+            {/* The text this track's comment (or snap) carries. Always in view:
+                hidden behind Edit, people only ever found the shared field. */}
+            <textarea
+              className="audio-upload-post-desc audio-upload-track-text"
+              placeholder={mode === 'album' ? t('audio.upload.tracks.commentText') : t('audio.upload.tracks.snapText')}
+              rows={2}
+              maxLength={5000}
+              value={tr.desc || ''}
+              onChange={(e) => patchTrack(tr.id, { desc: e.target.value })}
+            />
+            {/* Its own cover, also always in view (it was behind Edit). */}
+            <ThumbPicker
+              value={tr.thumb || ''}
+              uploading={thumbUploadingId === tr.id}
+              onPick={(f) => uploadCoverFor(tr.id, f)}
+              onClear={() => patchTrack(tr.id, { thumb: '' })}
+              label={t('audio.upload.tracks.trackCover')}
+            />
 
             <div className="audio-upload-title-meta-line">
               <span>{fmtTime(tr.durationSec)} · {tr.source === 'record' ? t('audio.upload.recorded') : tr.filename}</span>
@@ -1952,7 +2239,10 @@ function TracksStep({
 }
 
 // ─── Step 5: Review (summary + publish) ───
-function ReviewStep({ tracks, playlists, playlistChoice, pendingPlaylist, publishStatus = {}, onRetry, onRetryAll, isPublishing, mode, rewardMode, community }) {
+function ReviewStep({
+  tracks, playlists, playlistChoice, pendingPlaylist, publishStatus = {}, onRetry, onRetryAll, isPublishing,
+  mode, rewardMode, community, mainError, onRetryMain, published, onNavigate,
+}) {
   const chosen = playlists.find(p => p.id === playlistChoice)
     || (pendingPlaylist && pendingPlaylist.id === playlistChoice ? pendingPlaylist : null);
   const failedCount = tracks.filter((tr) => publishStatus[tr.id]?.state === 'error').length;
@@ -1978,6 +2268,45 @@ function ReviewStep({ tracks, playlists, playlistChoice, pendingPlaylist, publis
         <div><strong>{t('audio.upload.review.earnings')}</strong> {rewardMode === 'ppl' ? t('audio.upload.review.earningsPpl', { account: PPL_BENEFICIARY }) : t('audio.upload.review.earningsNormal')}</div>
         {chosen && <div><strong>{t('audio.upload.review.playlist')}</strong> {chosen.name}</div>}
       </div>
+
+      {published && (
+        <div className="audio-upload-done">
+          <strong><MdCheck size={18} /> {t('audio.upload.done.title')}</strong>
+          <div className="audio-upload-done-links">
+            {published.post && (
+              <Link className="audio-upload-btn-primary" to={published.post} onClick={onNavigate}>
+                {t('audio.upload.done.openPost')}
+              </Link>
+            )}
+            {published.playlist && (
+              <Link className="audio-upload-btn-secondary" to={published.playlist} onClick={onNavigate}>
+                {t('audio.upload.done.openPlaylist')}
+              </Link>
+            )}
+            {published.profileAudio && (
+              <Link className="audio-upload-btn-primary" to={published.profileAudio} onClick={onNavigate}>
+                {t('audio.upload.done.openMyAudio')}
+              </Link>
+            )}
+          </div>
+        </div>
+      )}
+
+      {mainError && (
+        <div className="audio-upload-review-error">
+          <p className="audio-upload-review-error-msg">
+            {t(mode === 'album' ? 'audio.upload.review.mainFailed' : 'audio.upload.review.containerFailed', { message: mainError })}
+          </p>
+          <button
+            type="button"
+            className="audio-upload-btn-primary"
+            onClick={onRetryMain}
+            disabled={isPublishing}
+          >
+            {t('common.actions.retry')}
+          </button>
+        </div>
+      )}
 
       {failedCount > 0 && (
         <div className="audio-upload-review-failed-banner">

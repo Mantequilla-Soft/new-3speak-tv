@@ -10,7 +10,7 @@ function isSupportedHost(host) {
   return HIVE_HOSTS.has(host) || host.endsWith('.okinoko.io') || host.endsWith('.3speak.tv')
 }
 
-function parseOne(raw) {
+export function parseOne(raw) {
   let u
   try { u = new URL(raw) } catch { return null }
   const host = u.hostname.replace(/^www\./, '')

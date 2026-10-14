@@ -4,7 +4,6 @@ import { FaFileImport } from "react-icons/fa";
 import "../legacy-studio/VideoUploadStep1.scss"
 import { generateVideoThumbnails } from "../../utils/videoThumbnails";
 import { toastIn } from '../../utils/toast';
-import Arrow from "./../../../public/images/arrow.png"
 import { useEmbedUpload } from '../../context/EmbedUploadContext';
 import { useNavigate } from 'react-router-dom';
 import { TailChase } from 'ldrs/react'
@@ -15,6 +14,7 @@ import { useAppStore } from '../../lib/store';
 import { canUseUploadFaults, getUploadFaults, setUploadFaults, initUploadFaults } from '../../utils/uploadFaults';
 import { checkPostingRc } from '../../utils/rcCheck';
 import RcInsufficientModal from './RcInsufficientModal';
+import StepActions from './StepActions';
 import { SHORTS_MAX_DURATION_SEC, shortsMaxDurationLabel, cameraRecordEnabledFor, VIDEO_IMPORT_ENABLED } from '../../utils/config';
 import { isChromium } from '../../utils/browser';
 import { useTranslation, Trans } from 'react-i18next';
@@ -32,6 +32,7 @@ function EmbedVideoUploadStep1() {
     setPrevVideoFile,
     setGeneratedThumbnail,
     setVideoMode,
+    clearVideoSelection,
     fromStories,
     user,
   } = useEmbedUpload()
@@ -240,6 +241,12 @@ function EmbedVideoUploadStep1() {
         console.warn("Thumbnail generation failed; continuing without a preview", thumbErr);
         toast(t("upload.select.thumbnailGenFailed"));
       }
+      // A different file replacing one picked earlier (now also reachable with
+      // Back from the later steps): drop what belonged to the old one, i.e. the
+      // chosen thumbnail (it would stay selected over the new frames), the
+      // timeline times and any background upload of the old bytes. Only here,
+      // once the new file passed every check, so a rejected pick keeps the old one.
+      if (videoFile && videoFile !== file) clearVideoSelection();
       setGeneratedThumbnail(thumbs);
 
       // Store video for next step
@@ -265,6 +272,18 @@ function EmbedVideoUploadStep1() {
     navigate("/embed-studio/thumbnail");
   };
 
+  // Rendered above and below the picker from this one object. No Back: this is
+  // the first step. Proceed waits for a processed file.
+  const actions = {
+    primary: [{
+      key: 'proceed',
+      label: t("upload.select.proceed"),
+      onClick: uploadVideo,
+      disabled: !videoFile || loading,
+      title: !videoFile ? t("upload.select.selectFirst") : undefined,
+    }],
+  };
+
   // Drag & drop onto the upload box (gated behind the same @threespeak auth check)
   const handleDragOver = (e) => {
     if (needsAuth || rcInsufficient || loading) return;
@@ -285,6 +304,7 @@ function EmbedVideoUploadStep1() {
 
   return (
     <div>
+      <StepActions placement="top" {...actions} />
       <div className="upload-step">
 
         <div className="content">
@@ -407,7 +427,9 @@ function EmbedVideoUploadStep1() {
                     </div>
                   )}
 
-                  <img className="arrow-in" src={Arrow} alt="" />
+                  {/* The down-arrow that pointed at the in-box Proceed button is
+                      gone with that button: Proceed now lives in the step's
+                      action rows, and the arrow would point at Replace instead. */}
                 </div>
               )}
 
@@ -468,9 +490,6 @@ function EmbedVideoUploadStep1() {
                 )
               ) : (
                 <div className="button-group">
-                  <label onClick={uploadVideo} className="button">
-                    {t("upload.select.proceed")}
-                  </label>
                   <label htmlFor="embed-video-upload" className="button button--outline">
                     {t("upload.select.replace")}
                   </label>
@@ -519,6 +538,7 @@ function EmbedVideoUploadStep1() {
         )}
 
       </div>
+      <StepActions placement="bottom" {...actions} />
 
       <RcInsufficientModal
         isOpen={rcModalOpen}

@@ -143,8 +143,11 @@
   "routeError": {
     "title": "Esta página no cargó",
     "body": "No se pudo descargar una parte de la app. Normalmente significa que se lanzó una nueva versión mientras esta pestaña estaba abierta. Al recargar se obtiene.",
+    "brokenTitle": "Algo salió mal en esta página",
+    "brokenBody": "Una parte de esta página tuvo un error. Recargar suele solucionarlo, y los detalles de abajo nos ayudan a encontrar la causa.",
     "reload": "Recargar",
-    "goHome": "Ir al inicio"
+    "goHome": "Ir al inicio",
+    "details": "Detalles"
   },
   "seo": {
     "defaultTitle": "3Speak - Plataforma de video descentralizada",

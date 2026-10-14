@@ -66,9 +66,12 @@ precacheAndRoute(self.__WB_MANIFEST);
 cleanupOutdatedCaches();
 
 // SPA navigation fallback. Denylist = routes that must hit the network instead of
-// the cached SPA shell: the hivesigner callback, and the server-rendered Spotlight
+// the cached SPA shell: the hivesigner callback, the server-rendered Spotlight
 // link pages (/links/<user> and legacy /@<user>/links) which are standalone HTML
-// from the API, NOT part of the React app.
+// from the API, NOT part of the React app, and the files nginx serves from other
+// services: podcast feeds (/rss/<user>.xml, /rss/playlist/<id>.xml, served by the
+// checker) and cached images (/img/...). Without those two, opening a feed in a
+// browser that had visited 3Speak showed the app instead of the feed.
 // createHandlerBoundToURL THROWS when its URL isn't in the precache manifest,
 // and in dev that manifest is empty (`precacheAndRoute([])`) — which killed the
 // whole worker at evaluation time, so nothing registered and push had no
@@ -78,7 +81,7 @@ try {
   const navHandler = createHandlerBoundToURL('/index.html');
   registerRoute(
     new NavigationRoute(navHandler, {
-      denylist: [/^\/hivesigner\.html/, /^\/links\//, /^\/@[^/]+\/links\/?$/],
+      denylist: [/^\/hivesigner\.html/, /^\/links\//, /^\/@[^/]+\/links\/?$/, /^\/rss\//, /^\/img\//],
     })
   );
 } catch {

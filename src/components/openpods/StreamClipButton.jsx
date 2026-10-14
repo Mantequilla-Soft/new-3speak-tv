@@ -11,18 +11,25 @@ const toast = toastIn('Live');
 // Pro host has DVR running, so the button appears only while /dvr/status reports
 // recording=true (which also hides it for non-Pro hosts). Both endpoints are
 // public; /clip is rate-limited server-side.
-const HANGOUTS_API_URL = (import.meta.env.VITE_HANGOUTS_API_URL || '').replace(/\/$/, '');
+// The room's own hangouts deployment (VITE_apiUrlS): DVR runs there.
+import { findRoomEndpoint } from '../../utils/hangoutsEndpoints';
 
 export default function StreamClipButton({ roomName, variant = 'inline' }) {
   const { t } = useTranslation();
   const [available, setAvailable] = useState(false);
   const [busy, setBusy] = useState(false);
+  const [apiUrl, setApiUrl] = useState('');
+  useEffect(() => {
+    let alive = true;
+    if (roomName) findRoomEndpoint(roomName).then((ep) => { if (alive) setApiUrl((ep?.api || '').replace(/\/$/, '')); });
+    return () => { alive = false; };
+  }, [roomName]);
 
   useEffect(() => {
-    if (!roomName || !HANGOUTS_API_URL) return undefined;
+    if (!roomName || !apiUrl) return undefined;
     let alive = true;
     const check = () => {
-      fetch(`${HANGOUTS_API_URL}/rooms/${encodeURIComponent(roomName)}/dvr/status`)
+      fetch(`${apiUrl}/rooms/${encodeURIComponent(roomName)}/dvr/status`)
         .then((r) => (r.ok ? r.json() : null))
         .then((d) => { if (alive) setAvailable(!!d?.recording); })
         .catch(() => { if (alive) setAvailable(false); });
@@ -33,19 +40,19 @@ export default function StreamClipButton({ roomName, variant = 'inline' }) {
     // time (DVR only starts on Start) for the button to show.
     const timer = setInterval(check, 5000);
     return () => { alive = false; clearInterval(timer); };
-  }, [roomName]);
+  }, [roomName, apiUrl]);
 
   const clip = useCallback(async () => {
-    if (busy || !HANGOUTS_API_URL) return;
+    if (busy || !apiUrl) return;
     setBusy(true);
     try {
-      const r = await fetch(`${HANGOUTS_API_URL}/rooms/${encodeURIComponent(roomName)}/dvr/clip`, { method: 'POST' });
+      const r = await fetch(`${apiUrl}/rooms/${encodeURIComponent(roomName)}/dvr/clip`, { method: 'POST' });
       if (!r.ok) throw new Error(String(r.status));
       const { path } = await r.json();
       // Fetch the file and SAVE it (download) rather than opening a new tab. The
       // clip host sends CORS, so the cross-origin blob fetch is allowed; the
       // object URL is same-origin so the <a download> actually downloads.
-      const fileResp = await fetch(`${HANGOUTS_API_URL}${path}`);
+      const fileResp = await fetch(`${apiUrl}${path}`);
       if (!fileResp.ok) throw new Error('fetch');
       const blob = await fileResp.blob();
       const objUrl = URL.createObjectURL(blob);
@@ -65,7 +72,7 @@ export default function StreamClipButton({ roomName, variant = 'inline' }) {
     } finally {
       setBusy(false);
     }
-  }, [busy, roomName, t]);
+  }, [busy, roomName, apiUrl, t]);
 
   if (!available) return null;
 

@@ -20,7 +20,8 @@
     "queue": "Queue",
     "playlist": "Playlist",
     "plays_one": "{{count}} play",
-    "plays_other": "{{count}} plays"
+    "plays_other": "{{count}} plays",
+    "fromAlbum": "mula sa {{album}}"
   },
   "author": {
     "followed": "Fina-follow mo na si @{{author}}",
@@ -135,7 +136,9 @@
       "couldntResolveContainer": "Hindi mahanap ang peak.snaps container: {{error}}",
       "published_one": "Na-publish ang {{count}} track",
       "published_other": "Na-publish ang {{count}} tracks",
-      "someFailed": "May mga track na pumalya — buksan ang pumalyang track para subukan ulit"
+      "someFailed": "May mga track na pumalya — buksan ang pumalyang track para subukan ulit",
+      "trackLinksFailed": "Na-publish na ang mga track mo, pero hindi naidagdag ang mga link nila sa album post: {{error}}",
+      "addToBlogFailed": "Na-publish na, pero hindi ito naidagdag sa blog mo: {{error}}"
     },
     "gate": {
       "checking": "Tinitingnan…",
@@ -175,6 +178,7 @@
     "playlist": {
       "helpRequired": "Kailangan — pumili o gumawa ng playlist. Nasa loob ng playlist ang mga album post para manatiling magkakasama ang mga track nito sa isang 3Speak album. Nakakatulong ito sa exposure at mas kitang puwesto sa audio page.",
       "helpOptional": "Opsyonal — idagdag lahat ng track sa isang playlist.",
+      "onlyOn3Speak": "Sa 3Speak lang umiiral ang mga playlist. Pinapangkat nila ang mga track mo rito at hindi kailanman binabago ang mga post mo.",
       "none": "Walang playlist",
       "noneHint": "Hindi pagsasama-samahin ang mga track",
       "creatingPending": "ginagawa… (hinihintay ang indexer)",
@@ -235,7 +239,10 @@
       "selectCommunity": "Pumili ng komunidad",
       "change": "Palitan",
       "tagsPlaceholder": "Tags — hiwalay sa space o kuwit (opsyonal)",
-      "whatKind": "Anong uri ng audio ito?"
+      "removeTag": "Alisin ang tag na {{tag}}",
+      "whatKind": "Anong uri ng audio ito?",
+      "addToBlog": "Idagdag sa blog ko",
+      "addToBlogHint": "Ipinapakita rin ang post sa blog mo at sa feed ng mga follower mo. Hindi kusang lumalabas doon ang mga post sa isang community."
     },
     "tracks": {
       "helpAlbum": "Bawat track ay ipa-publish bilang comment sa ilalim ng main post. Itakda nang isang beses ang mga shared value at i-apply sa lahat, tapos baguhin bawat track kung kailangan.",
@@ -245,7 +252,10 @@
       "sharedCover": "Shared na cover image",
       "applyToAll_one": "I-apply sa {{count}} track",
       "applyToAll_other": "I-apply sa lahat ng {{count}} tracks",
-      "hide": "Itago"
+      "hide": "Itago",
+      "commentText": "Text ng comment para sa track na ito (opsyonal)",
+      "snapText": "Text para sa snap na ito (opsyonal)",
+      "trackCover": "Cover para sa track na ito (opsyonal)"
     },
     "review": {
       "standalone": "Standalone na post",
@@ -270,7 +280,15 @@
       "retryAllFailed": "Subukan ulit lahat ng pumalya",
       "failedDuringUpload": "Pumalya habang ina-upload ang audio file: {{message}}",
       "failedDuringPost": "Pumalya habang pino-post sa Hive: {{message}}",
-      "failedWithMessage": "Pumalya: {{message}}"
+      "failedWithMessage": "Pumalya: {{message}}",
+      "mainFailed": "Hindi ma-publish ang album post: {{message}}",
+      "containerFailed": "Hindi maabot ang snap thread na pagpo-post-an: {{message}}"
+    },
+    "done": {
+      "title": "Tapos na! Na-publish na ang audio mo.",
+      "openPost": "Buksan ang post",
+      "openPlaylist": "Buksan ang playlist",
+      "openMyAudio": "Buksan ang audio ko"
     },
     "stage": {
       "upload": "Ina-upload ang audio file",

@@ -1,0 +1,18 @@
+/* Free-tier 3Speak mark over an OBS stream (StreamWatermark.jsx). Sits over the
+   video but under the ad layer (z 30) and every control; never takes a touch. */
+.stream-watermark {
+  position: absolute;
+  inset: 0;
+  z-index: 20;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.stream-watermark__logo {
+  position: absolute;
+  width: auto;
+  max-width: none;
+  opacity: 0.9;
+  user-select: none;
+  -webkit-user-select: none;
+}

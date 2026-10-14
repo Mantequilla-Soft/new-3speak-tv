@@ -144,6 +144,12 @@ function CommentSection({ videoDetails, author, permlink, currentTime, duration,
     setTimelineOverride(false);
   }, []);
 
+  // The textarea grows with an inline height while typing; drop it once the text
+  // is cleared (posted or cancelled) so the box shrinks back to its CSS size.
+  useEffect(() => {
+    if (!commentInfo && commentInputRef.current) commentInputRef.current.style.height = '';
+  }, [commentInfo]);
+
   // Listen for 3speak player ready messages to detect vertical videos in comments
   useEffect(() => {
     const handleMessage = (event) => {

@@ -25,7 +25,8 @@
     "selectVideo": "Select Video",
     "chooseThumbnail": "Choose Thumbnail",
     "addDetails": "Add Details",
-    "previewUpload": "Preview & Upload"
+    "previewUpload": "Preview & Upload",
+    "timeline": "Timeline"
   },
   "preview": {
     "playVideo": "Play video",
@@ -193,6 +194,11 @@
       "info": "Flags this video as adult content. It will be hidden from feeds and search for viewers who have not enabled NSFW, and tagged <code>nsfw</code> across Hive.",
       "hint": "Adult content."
     },
+    "addToBlog": {
+      "label": "Add to my blog",
+      "hint": "Show it on your blog and in your followers' feeds.",
+      "info": "3Speak posts every video into a community, and Hive keeps community posts off your blog and out of your followers' feeds unless you share them. With this on, 3Speak shares (reblogs) the video to your blog right after publishing."
+    },
     "ads": {
       "label": "Ads on this video",
       "info": "Your account carries ads, so this video does too unless you turn it off here. This only affects this one video; your other videos and your account setting stay as they are.",
@@ -236,7 +242,8 @@
     "watchAdToPublish": "Watch ad to publish",
     "watchSponsorFirst": "Watch the sponsor message first",
     "postShort": "Post Short",
-    "postVideo": "Post Video"
+    "postVideo": "Post Video",
+    "backToTimeline": "Back to timeline"
   },
   "publishing": {
     "titleShort": "Publishing Short",
@@ -398,6 +405,62 @@
     "couldNotSchedule": "Could not schedule post",
     "scheduleFailed": "Schedule failed: {{msg}}",
     "hivePostFailed": "Failed to post to Hive",
-    "uploadFailedWith": "Upload failed: {{msg}}"
+    "uploadFailedWith": "Upload failed: {{msg}}",
+    "addToBlogFailed": "Published, but adding it to your blog failed: {{error}}"
+  },
+  "timeline": {
+    "title": "Chapters and links",
+    "intro": "Split your video into chapters and add links that pop up at the top right of the video while it plays: other 3Speak videos, Hive profiles or any website. Both are optional.",
+    "previewUnavailable": "This video can't be played here, but you can still type the times in by hand.",
+    "noPreview": "No preview for this video here. You can still type the times in by hand.",
+    "setNow": "Set to the current time",
+    "trackLabel": "Timeline: tap to jump, drag a marker to move it",
+    "moveChapter": "Move the start of {{title}}",
+    "moveLink": "Move this link",
+    "fixChapters": "Please fix the chapters first, or remove them.",
+    "chapters": {
+      "heading": "Chapters",
+      "add": "Add at {{time}}",
+      "hint": "Chapters show on the progress bar. With 3 or more, they are also written into your description so other Hive apps show them too.",
+      "empty": "No chapters yet. Play the video and add one wherever a new part starts.",
+      "start": "Start time",
+      "titlePlaceholder": "Chapter title",
+      "errFirst": "The first chapter has to start at 0:00.",
+      "errGap": "Chapters have to be at least 5 seconds apart.",
+      "errTitle": "Every chapter needs a title.",
+      "errEnd": "A chapter starts after the end of the video.",
+      "errTooFew": "Add at least one more chapter. A single chapter is not shown.",
+      "max": "You can add up to {{max}} chapters."
+    },
+    "links": {
+      "heading": "Links",
+      "count": "{{n}} of {{max}}",
+      "add": "Add link",
+      "hint": "Each link shows as a small box at the top right of the video for a few seconds. Viewers can click it or close it.",
+      "empty": "No links yet. Add a 3Speak video, a Hive profile or any website.",
+      "max": "You can add up to {{max}} links.",
+      "showsAt": "Shows at",
+      "onScreen": "On screen for",
+      "secondsUnit": "seconds",
+      "forSeconds": "for {{seconds}} s",
+      "afterEnd": "This link starts after the end of the video."
+    },
+    "form": {
+      "addTitle": "Add a link",
+      "editTitle": "Edit link",
+      "tabLink": "Paste a link",
+      "tabVideo": "3Speak video",
+      "tabProfile": "Profile",
+      "urlPlaceholder": "https://… or @username",
+      "urlHint": "A 3Speak video, a Hive profile or any website.",
+      "searchVideo": "Search 3Speak videos",
+      "searchProfile": "Search for people",
+      "searching": "Searching…",
+      "noResults": "Nothing found.",
+      "checking": "Checking the link…",
+      "badUrl": "That doesn't look like a web address. It has to start with http:// or https://.",
+      "noAccount": "There is no account with that name.",
+      "addButton": "Add link"
+    }
   }
 }

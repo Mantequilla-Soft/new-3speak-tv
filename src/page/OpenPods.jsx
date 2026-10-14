@@ -9,11 +9,12 @@ import { broadcastWithAioha, getOperationUser } from '../hive-api/aioha';
 import { useAppStore } from '../lib/store';
 import { usePremiumStatus } from '../hooks/usePremiumStatus';
 import { providerSignPrompt } from '../utils/aiohaProviderUi';
-import { OPENPODS_STANDALONE } from '../utils/config';
+import { OPENPODS_STANDALONE, openpodsEnabledFor } from '../utils/config';
 import { defaultEndpoint, pickLeastLoadedEndpoint, fetchAllEndpoints } from '../utils/hangoutsEndpoints';
-import { postOpenPodAnnouncement, setPendingAnnouncement, setAnnounceConfig } from '../utils/openpodAnnounce';
+import { postOpenPodAnnouncement, setPendingAnnouncement, setAnnounceConfig, getAnnounceConfig } from '../utils/openpodAnnounce';
 import AnnounceOptions from '../components/openpods/AnnounceOptions';
 import MarkdownComposer from '../components/studio/MarkdownComposer';
+import { StreamTemplatesPanel, SaveAsTemplate } from '../components/openpods/StreamTemplates';
 import './OpenPods.scss';
 
 // Strip any trailing slash — useHangoutsRoom builds `${apiBaseUrl}/rooms` with a
@@ -213,8 +214,49 @@ export default function OpenPods() {
   // `allowGuestBrowse` / `guestFallback` handle the /listen flow). A hangouts
   // `sessionToken` — handed over from the user's 3Speak wallet session — simply
   // unlocks hosting and speaking on top of that. We never block on it.
+  // Stream Studio tabs: "New stream" (the create form below) and "Templates"
+  // (saved setups that go live from OBS). URL-synced (?tab=templates) so links
+  // and the back button work. Streams only: a group-chat entry gets no tabs.
+  const studioTabs = OPENPODS_STANDALONE && authenticated && !!user && openpodsEnabledFor(user)
+    && createReq.mode !== 'conference';
+  const tab = studioTabs && new URLSearchParams(location.search).get('tab') === 'templates' ? 'templates' : 'new';
+  const setTab = (next) => {
+    const params = new URLSearchParams(location.search);
+    if (next === 'templates') params.set('tab', 'templates'); else params.delete('tab');
+    const qs = params.toString();
+    navigate({ pathname: location.pathname, search: qs ? `?${qs}` : '' });
+  };
+
   return (
     <div className="openpods-page" data-hh-theme={hhTheme}>
+      {studioTabs && (
+        <div className="openpods-studio-tabs" role="tablist" aria-label={t('live.obs.tabs.label')}>
+          <button
+            type="button"
+            role="tab"
+            aria-selected={tab === 'new'}
+            className={tab === 'new' ? 'is-active' : ''}
+            onClick={() => tab !== 'new' && setTab('new')}
+          >
+            {t('live.obs.tabs.newStream')}
+          </button>
+          <button
+            type="button"
+            role="tab"
+            aria-selected={tab === 'templates'}
+            className={tab === 'templates' ? 'is-active' : ''}
+            onClick={() => tab !== 'templates' && setTab('templates')}
+          >
+            {t('live.obs.tabs.templates')}
+          </button>
+        </div>
+      )}
+
+      {tab === 'templates' ? (
+        <div className="openpods-studio-panel">
+          <StreamTemplatesPanel token={sessionToken} user={user} isPremium={isPremium} />
+        </div>
+      ) : (
       <HangoutsProvider
         apiBaseUrl={endpoint.api}
         livekitServerUrl={endpoint.lk}
@@ -264,6 +306,18 @@ export default function OpenPods() {
           renderAnnounceOptions={(announceType) => (
             <AnnounceOptions announceType={announceType} isPremium={isPremium} />
           )}
+          /* "Save as template" under a stream's create form: keeps this setup
+             for going live from OBS later, without creating a room. */
+          renderStandaloneExtras={studioTabs ? (draft) => (
+            <SaveAsTemplate
+              draft={draft}
+              token={sessionToken}
+              user={user}
+              isPremium={isPremium}
+              getAnnounceConfig={getAnnounceConfig}
+              onManage={() => setTab('templates')}
+            />
+          ) : undefined}
           renderDescriptionEditor={(value, onChange) => (
             <MarkdownComposer
               value={value}
@@ -273,6 +327,7 @@ export default function OpenPods() {
           )}
         />
       </HangoutsProvider>
+      )}
 
       {/* No session yet → show the right call-to-action without blocking the
           lobby. Signing in progress · can hand over on demand · not signed in. */}

@@ -143,8 +143,11 @@
   "routeError": {
     "title": "Diese Seite wurde nicht geladen",
     "body": "Ein Teil der App konnte nicht heruntergeladen werden. Das heißt meist, dass eine neue Version erschienen ist, während dieser Tab offen war. Neu laden holt sie.",
+    "brokenTitle": "Auf dieser Seite ist etwas schiefgelaufen",
+    "brokenBody": "Ein Teil dieser Seite hatte einen Fehler. Neu laden hilft meistens, und die Details unten helfen uns, die Ursache zu finden.",
     "reload": "Neu laden",
-    "goHome": "Zur Startseite"
+    "goHome": "Zur Startseite",
+    "details": "Details"
   },
   "seo": {
     "defaultTitle": "3Speak – Dezentrale Videoplattform",

@@ -236,6 +236,33 @@
       "listingFailed": "Impossible de mettre à jour la visibilité.",
       "trailerFailed": "Impossible de mettre à jour la bande-annonce de votre chaîne.",
       "saveFailed": "Impossible d'enregistrer les modifications."
-    }
+    },
+    "timeline": "Chapitres et liens",
+    "timelineHint": "Les chapitres s'affichent sur la barre de progression, les liens apparaissent en haut à droite de la vidéo. L'aperçu lit la vidéo publiée.",
+    "timelineLoadingVideo": "Chargement de la vidéo…",
+    "tabs": {
+      "label": "Sections d'édition",
+      "details": "Détails",
+      "media": "Médias",
+      "settings": "Paramètres",
+      "unsaved": "Modifications non enregistrées",
+      "hasErrors": "À vérifier"
+    },
+    "sections": {
+      "visibility": "Visibilité",
+      "content": "Contenu",
+      "promotion": "Promotion"
+    },
+    "chaptersNote": "À partir de 3 chapitres, la liste des chapitres est écrite dans la description à l'enregistrement.",
+    "editChapters": "Modifier les chapitres",
+    "fixErrors": "Corrige d'abord l'onglet signalé."
+  },
+  "timeline": {
+    "video": "Vidéo",
+    "profile": "Profil",
+    "link": "Lien",
+    "region": "Liens du créateur",
+    "dismiss": "Fermer",
+    "opensNewTab": "S'ouvre dans un nouvel onglet"
   }
 }

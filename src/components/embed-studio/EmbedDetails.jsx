@@ -11,6 +11,7 @@ import { useAppStore } from '../../lib/store';
 import MarkdownComposer from '../studio/MarkdownComposer';
 import { getMinMaxDates } from '../../utils/schedulingHelpers';
 import EmbedUploadProgressBar from './EmbedUploadProgressBar';
+import StepActions from './StepActions';
 import { usePremiumStatus } from '../../hooks/usePremiumStatus';
 import { isTestUser } from '../../utils/config';
 import { getHiveClient } from '../../utils/hiveNode';
@@ -45,8 +46,8 @@ function EmbedDetails() {
     tagsInputValue, setTagsInputValue,
     tagsPreview, setTagsPreview,
     community, setCommunity, setBeneficiaries,
-    SetDeclineRewards,
-    setRewardPowerup,
+    declineRewards, SetDeclineRewards,
+    rewardPowerup, setRewardPowerup,
     communitiesData,
     navigate,
     BeneficiaryList, setBeneficiaryList,
@@ -61,6 +62,7 @@ function EmbedDetails() {
     fromStories,
     reusable, setReusable,
     isNsfw, setIsNsfw,
+    addToBlog, setAddToBlog,
     videoAdsEnabled, setVideoAdsEnabled,
     gated, setGated,
     gatedAllowlist, setGatedAllowlist,
@@ -113,7 +115,9 @@ function EmbedDetails() {
   const [scheduleDraft, setScheduleDraft] = useState('');
   const [rewardsOpen, setRewardsOpen] = useState(false);
   const [guestsOpen, setGuestsOpen] = useState(false);
-  const [rewardChoice, setRewardChoice] = useState('default');
+  // From the upload state, not 'default': this page is revisited (Back from
+  // Timeline/Preview), and the tile must show what will actually be published.
+  const [rewardChoice, setRewardChoice] = useState(() => (declineRewards ? 'decline' : rewardPowerup ? 'powerup' : 'default'));
   const [allowlistDraft, setAllowlistDraft] = useState('');
   const [allowlistChecking, setAllowlistChecking] = useState(false);
   // Same check the beneficiary dialog uses: the name has to be shaped like a
@@ -241,8 +245,22 @@ function EmbedDetails() {
       return;
     }
 
-    navigate("/embed-studio/preview");
+    // Long-form videos get the Timeline step (chapters + link toasters) before
+    // the preview; shorts go straight on, they have no such step.
+    if (fromStories) {
+      navigate("/embed-studio/preview");
+    } else {
+      navigate("/embed-studio/timeline");
+    }
     setStep(4);
+  };
+
+  // Rendered above and below the form from this one object; validation stays in
+  // process(), so either Next shows the same single message. Back keeps every
+  // field: they live in the upload state, not in this page.
+  const actions = {
+    back: { label: t('common.actions.back'), onClick: () => navigate('/embed-studio/thumbnail') },
+    primary: [{ key: 'proceed', label: t('upload.details.proceed'), onClick: process }],
   };
 
 
@@ -278,13 +296,14 @@ function EmbedDetails() {
 
   return (
     <>
-      <div className="studio-main-container embed-details-page">
+      <div className="studio-main-container embed-wizard embed-details-page">
         <div className="studio-page-header">
           <h1>{fromStories ? t("upload.page.shareShort") : t("upload.page.shareVideo")}</h1>
         </div>
-        <StepProgress step={step} />
+        <StepProgress step={step} short={fromStories} />
         <EmbedUploadProgressBar />
         <div className="studio-page-content">
+          <StepActions placement="top" {...actions} />
 
           <div className="video-detail-wrap">
             <div className="video-items">
@@ -383,12 +402,12 @@ function EmbedDetails() {
                     ? t('upload.details.beneficiaries.accounts', { count: list.length })
                     : t('upload.details.beneficiaries.none')}</div>
                 </div>
-                <div className="beneficiary-wrap" onClick={() => setIsRemix(!isRemix)}>
+                <div className="beneficiary-wrap" onClick={() => { if (!isRemix) setReusable(!reusable); }}>
                   <div className="wrap">
                     <span>{t('upload.details.remix.label')}<SettingInfo title={t('upload.details.remix.label')}>{t('upload.details.remix.info')}</SettingInfo></span>
                       <span>{t('upload.details.remix.hint')}</span>
                   </div>
-                  <label className={`toggle-switch${isRemix ? ' disabled' : ''}`}>
+                  <label className={`toggle-switch${isRemix ? ' disabled' : ''}`} onClick={(e) => e.stopPropagation()}>
                     <input
                       type="checkbox"
                       checked={isRemix ? true : reusable}
@@ -412,6 +431,24 @@ function EmbedDetails() {
                     <span className="toggle-track"><span className="toggle-thumb" /></span>
                   </label>
                 </div>
+                {/* Regular videos only: a short is a reply, not a post, so there
+                    is nothing to put on a blog. */}
+                {!fromStories && (
+                  <div className="beneficiary-wrap" onClick={() => setAddToBlog(!addToBlog)}>
+                    <div className="wrap">
+                      <span>{t('upload.details.addToBlog.label')}<SettingInfo title={t('upload.details.addToBlog.label')}>{t('upload.details.addToBlog.info')}</SettingInfo></span>
+                      <span>{t('upload.details.addToBlog.hint')}</span>
+                    </div>
+                    <label className="toggle-switch" onClick={(e) => e.stopPropagation()}>
+                      <input
+                        type="checkbox"
+                        checked={!!addToBlog}
+                        onChange={(e) => setAddToBlog(e.target.checked)}
+                      />
+                      <span className="toggle-track"><span className="toggle-thumb" /></span>
+                    </label>
+                  </div>
+                )}
                 {accountAdsOn && (
                   <div className="beneficiary-wrap" onClick={() => setVideoAdsEnabled(!videoAdsEnabled)}>
                     <div className="wrap">
@@ -613,19 +650,10 @@ function EmbedDetails() {
                 })()}
               </SettingSheet>
 
-              <div className="submit-btn-wrap">
-                <button
-                  onClick={() => {
-                    process();
-                  }}
-                >
-                  {t('upload.details.proceed')}
-                </button>
-              </div>
-
             </div>
 
           </div>
+          <StepActions placement="bottom" {...actions} />
 
 
         </div>

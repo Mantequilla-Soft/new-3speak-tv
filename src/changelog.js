@@ -7,6 +7,78 @@
 // 1.0.0 — that way they see all of these when develop is pushed to production.
 export const CHANGELOG = [
   {
+    version: '1.79.83',
+    date: '2026-10-13',
+    summary:
+      'Smoother on phones: the video makes room while you write a comment, and menus and buttons fit small screens.',
+  },
+  {
+    version: '1.79.82',
+    date: '2026-10-13',
+    summary:
+      'A cleaner upload flow: a new step bar, Back buttons, and the Next buttons at the top and at the bottom of every step.',
+  },
+  {
+    version: '1.79.81',
+    date: '2026-10-13',
+    summary:
+      'Editing a video is tidier, with tabs for Details, Media, Chapters and links, and Settings. Add chapters and links to videos you already posted.',
+  },
+  {
+    version: '1.79.80',
+    date: '2026-10-13',
+    summary:
+      'New Timeline step when uploading: add chapters and links that pop up at the top right of your video at the moment you choose.',
+  },
+  {
+    version: '1.79.79',
+    date: '2026-10-13',
+    summary:
+      'Podcast feed buttons on profiles and playlists now always open the feed itself, ready to copy into a podcast app.',
+  },
+  {
+    version: '1.79.78',
+    date: '2026-10-13',
+    summary:
+      'Album uploads: each track can now get its own cover, and shared track settings only apply when you tap Apply to all tracks.',
+  },
+  {
+    version: '1.79.77',
+    date: '2026-10-13',
+    summary:
+      'If a page ever fails to load, it now explains what happened, offers a reload, and sends us the details so we can fix it.',
+  },
+  {
+    version: '1.79.76',
+    date: '2026-10-13',
+    summary:
+      'New audio now shows up in podcast feeds and with its votes right away, and scheduled videos also go to your blog when Add to my blog is on.',
+  },
+  {
+    version: '1.79.75',
+    date: '2026-10-13',
+    summary:
+      'After publishing audio you get buttons to open your post or playlist, and audio tiles now show their album and track number.',
+  },
+  {
+    version: '1.79.74',
+    date: '2026-10-13',
+    summary:
+      'Easier album uploads: tags turn into pills, each track has its own text, and the album post lists links to all its tracks.',
+  },
+  {
+    version: '1.79.73',
+    date: '2026-10-13',
+    summary:
+      "Uploads get an Add to my blog option (on by default), so your videos and audio posts also reach your blog and your followers' feeds.",
+  },
+  {
+    version: '1.79.72',
+    date: '2026-10-13',
+    summary:
+      'Playlists now have their own podcast feed: tap Podcast feed on any public playlist page to follow just that series in your podcast app.',
+  },
+  {
     version: '1.79.71',
     date: '2026-10-12',
     summary:

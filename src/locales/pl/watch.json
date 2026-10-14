@@ -240,6 +240,33 @@
       "listingFailed": "Nie udało się zmienić widoczności.",
       "trailerFailed": "Nie udało się zaktualizować zwiastuna kanału.",
       "saveFailed": "Nie udało się zapisać zmian."
-    }
+    },
+    "timeline": "Rozdziały i linki",
+    "timelineHint": "Rozdziały są na pasku postępu, linki pojawiają się w prawym górnym rogu filmu. Podgląd odtwarza opublikowany film.",
+    "timelineLoadingVideo": "Ładowanie filmu…",
+    "tabs": {
+      "label": "Sekcje edycji",
+      "details": "Szczegóły",
+      "media": "Multimedia",
+      "settings": "Ustawienia",
+      "unsaved": "Niezapisane zmiany",
+      "hasErrors": "Wymaga uwagi"
+    },
+    "sections": {
+      "visibility": "Widoczność",
+      "content": "Treść",
+      "promotion": "Promocja"
+    },
+    "chaptersNote": "Gdy są co najmniej 3 rozdziały, ich lista trafia do opisu przy zapisie.",
+    "editChapters": "Edytuj rozdziały",
+    "fixErrors": "Najpierw popraw oznaczoną kartę."
+  },
+  "timeline": {
+    "video": "Film",
+    "profile": "Profil",
+    "link": "Link",
+    "region": "Linki od twórcy",
+    "dismiss": "Zamknij",
+    "opensNewTab": "Otwiera się w nowej karcie"
   }
 }

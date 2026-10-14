@@ -20,7 +20,8 @@
     "queue": "Warteschlange",
     "playlist": "Playlist",
     "plays_one": "{{count}} Wiedergabe",
-    "plays_other": "{{count}} Wiedergaben"
+    "plays_other": "{{count}} Wiedergaben",
+    "fromAlbum": "aus {{album}}"
   },
   "author": {
     "followed": "Du folgst jetzt @{{author}}",
@@ -135,7 +136,9 @@
       "couldntResolveContainer": "peak.snaps-Container konnte nicht ermittelt werden: {{error}}",
       "published_one": "{{count}} Track veröffentlicht",
       "published_other": "{{count}} Tracks veröffentlicht",
-      "someFailed": "Einige Tracks sind fehlgeschlagen – öffne den fehlgeschlagenen Track, um es nochmal zu versuchen"
+      "someFailed": "Einige Tracks sind fehlgeschlagen – öffne den fehlgeschlagenen Track, um es nochmal zu versuchen",
+      "trackLinksFailed": "Deine Tracks sind veröffentlicht, aber ihre Links konnten nicht zum Album-Beitrag hinzugefügt werden: {{error}}",
+      "addToBlogFailed": "Veröffentlicht, aber das Hinzufügen zu deinem Blog ist fehlgeschlagen: {{error}}"
     },
     "gate": {
       "checking": "Wird geprüft…",
@@ -175,6 +178,7 @@
     "playlist": {
       "helpRequired": "Erforderlich – wähle oder erstelle eine Playlist. Album-Posts liegen in einer Playlist, damit ihre Tracks in einem 3Speak-Album gruppiert bleiben. Das sorgt für mehr Sichtbarkeit und eine prominentere Platzierung auf der Audio-Seite.",
       "helpOptional": "Optional – füge alle Tracks einer Playlist hinzu.",
+      "onlyOn3Speak": "Playlisten gibt es nur auf 3Speak. Sie gruppieren deine Tracks hier und ändern nie deine Beiträge.",
       "none": "Keine Playlist",
       "noneHint": "Tracks werden nicht gruppiert",
       "creatingPending": "wird erstellt… (warte auf den Indexer)",
@@ -235,7 +239,10 @@
       "selectCommunity": "Community auswählen",
       "change": "Ändern",
       "tagsPlaceholder": "Tags – durch Leerzeichen oder Komma getrennt (optional)",
-      "whatKind": "Was für ein Audio ist das?"
+      "removeTag": "Tag {{tag}} entfernen",
+      "whatKind": "Was für ein Audio ist das?",
+      "addToBlog": "Zu meinem Blog hinzufügen",
+      "addToBlogHint": "Zeigt den Beitrag auch in deinem Blog und im Feed deiner Follower. Beiträge in einer Community erscheinen dort nicht von selbst."
     },
     "tracks": {
       "helpAlbum": "Jeder Track wird als Kommentar unter dem Hauptpost veröffentlicht. Leg gemeinsame Werte einmal fest, wende sie auf alle an und passe dann einzelne Tracks an.",
@@ -245,7 +252,10 @@
       "sharedCover": "Gemeinsames Coverbild",
       "applyToAll_one": "Auf {{count}} Track anwenden",
       "applyToAll_other": "Auf alle {{count}} Tracks anwenden",
-      "hide": "Ausblenden"
+      "hide": "Ausblenden",
+      "commentText": "Kommentartext für diesen Track (optional)",
+      "snapText": "Text für diesen Snap (optional)",
+      "trackCover": "Cover für diesen Track (optional)"
     },
     "review": {
       "standalone": "Eigenständiger Post",
@@ -270,7 +280,15 @@
       "retryAllFailed": "Alle fehlgeschlagenen erneut versuchen",
       "failedDuringUpload": "Fehler beim Hochladen der Audiodatei: {{message}}",
       "failedDuringPost": "Fehler beim Posten auf Hive: {{message}}",
-      "failedWithMessage": "Fehlgeschlagen: {{message}}"
+      "failedWithMessage": "Fehlgeschlagen: {{message}}",
+      "mainFailed": "Der Album-Beitrag konnte nicht veröffentlicht werden: {{message}}",
+      "containerFailed": "Der Snaps-Thread zum Posten war nicht erreichbar: {{message}}"
+    },
+    "done": {
+      "title": "Fertig! Dein Audio ist veröffentlicht.",
+      "openPost": "Beitrag öffnen",
+      "openPlaylist": "Playlist öffnen",
+      "openMyAudio": "Meine Audios öffnen"
     },
     "stage": {
       "upload": "Audiodatei wird hochgeladen",

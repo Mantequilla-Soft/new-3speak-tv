@@ -143,8 +143,11 @@
   "routeError": {
     "title": "This page didn't load",
     "body": "Part of the app failed to download. That usually means a new version was released while this tab was open. Reloading picks it up.",
+    "brokenTitle": "Something went wrong on this page",
+    "brokenBody": "Part of this page ran into an error. Reloading usually fixes it, and the details below help us find the cause.",
     "reload": "Reload",
-    "goHome": "Go home"
+    "goHome": "Go home",
+    "details": "Details"
   },
   "seo": {
     "defaultTitle": "3Speak - Decentralized Video Platform",

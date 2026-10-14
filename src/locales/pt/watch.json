@@ -236,6 +236,33 @@
       "listingFailed": "Não foi possível atualizar a listagem.",
       "trailerFailed": "Não foi possível atualizar o trailer do seu canal.",
       "saveFailed": "Não foi possível salvar as alterações."
-    }
+    },
+    "timeline": "Capítulos e links",
+    "timelineHint": "Os capítulos aparecem na barra de progresso e os links no canto superior direito do vídeo. A prévia reproduz o vídeo publicado.",
+    "timelineLoadingVideo": "Carregando o vídeo…",
+    "tabs": {
+      "label": "Seções de edição",
+      "details": "Detalhes",
+      "media": "Mídia",
+      "settings": "Configurações",
+      "unsaved": "Alterações não salvas",
+      "hasErrors": "Precisa de atenção"
+    },
+    "sections": {
+      "visibility": "Visibilidade",
+      "content": "Conteúdo",
+      "promotion": "Promoção"
+    },
+    "chaptersNote": "Com 3 ou mais capítulos, a lista de capítulos é escrita na descrição ao salvar.",
+    "editChapters": "Editar capítulos",
+    "fixErrors": "Corrija primeiro a aba marcada."
+  },
+  "timeline": {
+    "video": "Vídeo",
+    "profile": "Perfil",
+    "link": "Link",
+    "region": "Links do criador",
+    "dismiss": "Fechar",
+    "opensNewTab": "Abre em uma nova aba"
   }
 }

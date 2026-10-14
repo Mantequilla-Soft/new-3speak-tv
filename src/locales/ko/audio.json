@@ -19,7 +19,8 @@
     "bpm": "{{bpm}} bpm",
     "queue": "대기열",
     "playlist": "재생목록",
-    "plays_other": "재생 {{count}}회"
+    "plays_other": "재생 {{count}}회",
+    "fromAlbum": "{{album}} 앨범"
   },
   "author": {
     "followed": "@{{author}}님을 팔로우했어요",
@@ -131,7 +132,9 @@
       "couldntPublishMain": "메인 게시물을 게시하지 못했어요: {{error}}",
       "couldntResolveContainer": "peak.snaps 컨테이너를 확인하지 못했어요: {{error}}",
       "published_other": "트랙 {{count}}개를 게시했어요",
-      "someFailed": "일부 트랙이 실패했어요. 실패한 트랙을 열어 다시 시도하세요"
+      "someFailed": "일부 트랙이 실패했어요. 실패한 트랙을 열어 다시 시도하세요",
+      "trackLinksFailed": "트랙은 게시됐지만 앨범 게시물에 트랙 링크를 추가하지 못했어요: {{error}}",
+      "addToBlogFailed": "게시됐지만 내 블로그에 추가하지 못했어요: {{error}}"
     },
     "gate": {
       "checking": "확인 중…",
@@ -169,6 +172,7 @@
     "playlist": {
       "helpRequired": "필수 — 재생목록을 선택하거나 만드세요. 앨범 게시물은 재생목록 안에 있어서 트랙들이 3Speak 앨범으로 묶여요. 노출이 늘고 오디오 페이지에서 더 눈에 띄게 배치돼요.",
       "helpOptional": "선택 — 모든 트랙을 재생목록에 추가해요.",
+      "onlyOn3Speak": "재생목록은 3Speak에만 있어요. 여기서 트랙을 묶어 줄 뿐, 게시물은 절대 바꾸지 않아요.",
       "none": "재생목록 없음",
       "noneHint": "트랙이 묶이지 않아요",
       "creatingPending": "만드는 중… (인덱서 대기 중)",
@@ -227,7 +231,10 @@
       "selectCommunity": "커뮤니티 선택",
       "change": "변경",
       "tagsPlaceholder": "태그 — 공백 또는 쉼표로 구분(선택)",
-      "whatKind": "어떤 종류의 오디오인가요?"
+      "removeTag": "{{tag}} 태그 삭제",
+      "whatKind": "어떤 종류의 오디오인가요?",
+      "addToBlog": "내 블로그에 추가",
+      "addToBlogHint": "게시물이 내 블로그와 팔로워 피드에도 표시돼요. 커뮤니티 게시물은 저절로 그곳에 표시되지 않아요."
     },
     "tracks": {
       "helpAlbum": "각 트랙은 메인 게시물 아래 댓글로 게시돼요. 공통 값을 한 번 설정해 모두에 적용한 다음, 트랙별로 바꿀 수 있어요.",
@@ -236,7 +243,10 @@
       "sharedDescription": "공통 설명(선택)",
       "sharedCover": "공통 커버 이미지",
       "applyToAll_other": "트랙 {{count}}개 모두에 적용",
-      "hide": "숨기기"
+      "hide": "숨기기",
+      "commentText": "이 트랙의 댓글 내용(선택)",
+      "snapText": "이 Snap의 내용(선택)",
+      "trackCover": "이 트랙의 커버(선택)"
     },
     "review": {
       "standalone": "단독 게시물",
@@ -255,7 +265,15 @@
       "retryAllFailed": "실패한 항목 모두 재시도",
       "failedDuringUpload": "오디오 파일 업로드 중 실패: {{message}}",
       "failedDuringPost": "Hive에 게시 중 실패: {{message}}",
-      "failedWithMessage": "실패: {{message}}"
+      "failedWithMessage": "실패: {{message}}",
+      "mainFailed": "앨범 게시물을 게시하지 못했어요: {{message}}",
+      "containerFailed": "게시할 Snap 스레드에 연결하지 못했어요: {{message}}"
+    },
+    "done": {
+      "title": "완료! 오디오가 게시됐어요.",
+      "openPost": "게시물 열기",
+      "openPlaylist": "재생목록 열기",
+      "openMyAudio": "내 오디오 열기"
     },
     "stage": {
       "upload": "오디오 파일 업로드 중",

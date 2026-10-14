@@ -82,6 +82,7 @@ const EmbedCameraRecord = lazyRoute(() => import("./components/embed-studio/Embe
 const EmbedDetails = lazyRoute(() => import("./components/embed-studio/EmbedDetails"), "./components/embed-studio/EmbedDetails");
 const EmbedPlayer = lazyRoute(() => import("./page/EmbedPlayer"), "./page/EmbedPlayer");
 const EmbedPreview = lazyRoute(() => import("./components/embed-studio/EmbedPreview"), "./components/embed-studio/EmbedPreview");
+const EmbedTimeline = lazyRoute(() => import("./components/embed-studio/EmbedTimeline"), "./components/embed-studio/EmbedTimeline");
 const EmbedStudioPage = lazyRoute(() => import("./components/embed-studio/EmbedStudioPage"), "./components/embed-studio/EmbedStudioPage");
 const EmbedThumbnail = lazyRoute(() => import("./components/embed-studio/EmbedThumbnail"), "./components/embed-studio/EmbedThumbnail");
 const YoutubeImportPage = lazyRoute(() => import("./page/YoutubeImportPage"), "./page/YoutubeImportPage");
@@ -694,6 +695,7 @@ function App() {
               <Route path="/embed-studio/record" element={<EmbedCameraRecord />} />
               <Route path="/embed-studio/thumbnail" element={<EmbedThumbnail />} />
               <Route path="/embed-studio/details" element={<EmbedDetails />} />
+              <Route path="/embed-studio/timeline" element={<EmbedTimeline />} />
               <Route path="/embed-studio/preview" element={<EmbedPreview />} />
               <Route path="/draft" element={<DraftStudio />} />
               <Route path="/editvideo/:d" element={<EditVideo />} />
@@ -743,6 +745,9 @@ function App() {
               <Route path="/image" element={<HiveImageUploader />} />
               <Route path="/openpods" element={<OpenPods />} />
               <Route path="/openpods/publish" element={<OpenPodPublish />} />
+              {/* Old address of the OBS templates, now the Stream Studio's
+                  Templates tab. A static segment, so it wins over /openpods/:roomName. */}
+              <Route path="/openpods/templates" element={<Navigate to="/openpods?tab=templates" replace />} />
               <Route path="/openpods/:roomName" element={<OpenPods />} />
               <Route path="/chat" element={<ChatPage />} />
               <Route path="*" element={<HiveLinkRedirect />} />

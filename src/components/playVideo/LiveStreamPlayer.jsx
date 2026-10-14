@@ -7,6 +7,7 @@ import { useStreamSession } from '../../hooks/useStreamSession';
 import StreamBoostButton from '../openpods/StreamBoostButton';
 import StreamSignInButton from '../openpods/StreamSignInButton';
 import LiveAdLayer from '../openpods/LiveAdLayer';
+import StreamWatermark from '../openpods/StreamWatermark';
 import '@snapie/hangouts-react/src/styles/hangouts.css';
 import './LiveStreamPlayer.scss';
 
@@ -50,12 +51,20 @@ function VodProcessingNotice({ expected }) {
  */
 export default function LiveStreamPlayer({ roomName, chatSlot = null, onChatSent = null, vodAssetPending = false, onRoomMeta = null }) {
   const { t } = useTranslation();
-  // Resolve which deployment hosts this room before connecting.
+  // Resolve which deployment hosts this room BEFORE connecting. With more than
+  // one deployment configured, connecting to the default first joins the wrong
+  // server, fails, and the SDK never retries the room (StandaloneWatch keeps a
+  // per-room "already tried" flag), so the player hung on "Connecting to the
+  // stream" for every room that lives on the second server.
   const [endpoint, setEndpoint] = useState(() => defaultEndpoint());
+  const [endpointReady, setEndpointReady] = useState(false);
   useEffect(() => {
     if (!roomName) return;
     let alive = true;
-    findRoomEndpoint(roomName).then((ep) => { if (alive) setEndpoint(ep); });
+    setEndpointReady(false);
+    findRoomEndpoint(roomName)
+      .then((ep) => { if (alive) setEndpoint(ep); })
+      .finally(() => { if (alive) setEndpointReady(true); });
     return () => { alive = false; };
   }, [roomName]);
 
@@ -88,9 +97,12 @@ export default function LiveStreamPlayer({ roomName, chatSlot = null, onChatSent
         username={hangoutsUser || undefined}
         aioha={aioha}
       >
-        {connectReady && (
-          <StandaloneWatch key={joinKey} roomName={roomName}>
+        {connectReady && endpointReady && (
+          <StandaloneWatch key={`${joinKey}:${endpoint.api}`} roomName={roomName}>
             <StreamVideo showLiveBadge />
+            {/* A free host's stream from OBS: the page draws the 3Speak mark
+                the browser studio would have burned into the picture. */}
+            <StreamWatermark show={!!(roomMeta?.headless && roomMeta?.watermark)} />
             {/* Ticker + drawn banner; the host comes from the room lookup above. */}
             {roomMeta?.host && <LiveAdLayer host={roomMeta.host} room={roomName} />}
             {/* The host's own choice is the reliable signal; an encoder row

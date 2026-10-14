@@ -20,7 +20,8 @@
     "queue": "Foleni",
     "playlist": "Orodha ya kucheza",
     "plays_one": "uchezaji {{count}}",
-    "plays_other": "michezo {{count}}"
+    "plays_other": "michezo {{count}}",
+    "fromAlbum": "kutoka {{album}}"
   },
   "author": {
     "followed": "Umemfuata @{{author}}",
@@ -135,7 +136,9 @@
       "couldntResolveContainer": "Imeshindwa kupata kontena la peak.snaps: {{error}}",
       "published_one": "Wimbo {{count}} umechapishwa",
       "published_other": "Nyimbo {{count}} zimechapishwa",
-      "someFailed": "Baadhi ya nyimbo zimeshindwa — fungua wimbo ulioshindwa ili ujaribu tena"
+      "someFailed": "Baadhi ya nyimbo zimeshindwa — fungua wimbo ulioshindwa ili ujaribu tena",
+      "trackLinksFailed": "Nyimbo zako zimechapishwa, lakini kuongeza viungo vyake kwenye chapisho la albamu kumeshindikana: {{error}}",
+      "addToBlogFailed": "Imechapishwa, lakini kuiongeza kwenye blogu yako kumeshindikana: {{error}}"
     },
     "gate": {
       "checking": "Inakagua…",
@@ -175,6 +178,7 @@
     "playlist": {
       "helpRequired": "Inahitajika — chagua au unda orodha ya kucheza. Machapisho ya albamu huishi ndani ya orodha ya kucheza ili nyimbo zake zibaki pamoja ndani ya albamu ya 3Speak. Hii husaidia kuonekana zaidi na kupata nafasi maarufu zaidi kwenye ukurasa wa sauti.",
       "helpOptional": "Si lazima — ongeza nyimbo zote kwenye orodha ya kucheza.",
+      "onlyOn3Speak": "Orodha za kucheza zipo kwenye 3Speak pekee. Zinapanga nyimbo zako hapa na hazibadilishi machapisho yako kamwe.",
       "none": "Hakuna orodha ya kucheza",
       "noneHint": "Nyimbo hazitawekwa pamoja",
       "creatingPending": "inaunda… (inasubiri kiorodheshaji)",
@@ -235,7 +239,10 @@
       "selectCommunity": "Chagua jumuiya",
       "change": "Badilisha",
       "tagsPlaceholder": "Lebo — zilizotenganishwa kwa nafasi au koma (si lazima)",
-      "whatKind": "Hii ni sauti ya aina gani?"
+      "removeTag": "Ondoa lebo {{tag}}",
+      "whatKind": "Hii ni sauti ya aina gani?",
+      "addToBlog": "Ongeza kwenye blogu yangu",
+      "addToBlogHint": "Huonyesha chapisho pia kwenye blogu yako na kwenye mlisho wa wafuasi wako. Machapisho ya jumuiya hayaonekani huko yenyewe."
     },
     "tracks": {
       "helpAlbum": "Kila wimbo huchapishwa kama maoni chini ya chapisho kuu. Weka thamani za pamoja mara moja na uzitumie kwa zote, kisha ubadilishe kwa kila wimbo.",
@@ -245,7 +252,10 @@
       "sharedCover": "Picha ya jalada ya pamoja",
       "applyToAll_one": "Tumia kwa wimbo {{count}}",
       "applyToAll_other": "Tumia kwa nyimbo zote {{count}}",
-      "hide": "Ficha"
+      "hide": "Ficha",
+      "commentText": "Maandishi ya maoni kwa wimbo huu (si lazima)",
+      "snapText": "Maandishi ya snap hii (si lazima)",
+      "trackCover": "Jalada la wimbo huu (si lazima)"
     },
     "review": {
       "standalone": "Chapisho la kujitegemea",
@@ -270,7 +280,15 @@
       "retryAllFailed": "Jaribu tena zote zilizoshindwa",
       "failedDuringUpload": "Imeshindwa wakati wa kupakia faili ya sauti: {{message}}",
       "failedDuringPost": "Imeshindwa wakati wa kuchapisha kwenye Hive: {{message}}",
-      "failedWithMessage": "Imeshindwa: {{message}}"
+      "failedWithMessage": "Imeshindwa: {{message}}",
+      "mainFailed": "Chapisho la albamu halikuweza kuchapishwa: {{message}}",
+      "containerFailed": "Imeshindikana kufikia uzi wa snap wa kuchapisha: {{message}}"
+    },
+    "done": {
+      "title": "Tayari! Sauti yako imechapishwa.",
+      "openPost": "Fungua chapisho",
+      "openPlaylist": "Fungua orodha ya kucheza",
+      "openMyAudio": "Fungua sauti zangu"
     },
     "stage": {
       "upload": "Inapakia faili ya sauti",

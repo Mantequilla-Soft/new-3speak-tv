@@ -1,0 +1,660 @@
+@use "../../mixins.scss" as mix;
+
+/* Stream templates ("go live from OBS"): the Stream Studio's Templates tab and
+   the "Save as template" sheet on its New stream form. Buttons follow the 3Speak
+   rule: no red fills anywhere, red is an outline (text + border). */
+.stream-templates {
+  color: var(--text-primary);
+
+  // AnnounceOptions (and the modals it opens) are styled with the SDK's vars;
+  // map them to the 3Speak theme exactly as the /openpods page does.
+  --hh-bg:               var(--bg-primary);
+  --hh-bg-secondary:     var(--card-bg);
+  --hh-bg-hover:         var(--bg-hover);
+  --hh-text:             var(--text-primary);
+  --hh-text-secondary:   var(--text-secondary);
+  --hh-text-muted:       var(--text-muted, var(--text-secondary));
+  --hh-border:           var(--border-color);
+  --hh-border-light:     var(--border-light);
+  --hh-primary:          var(--accent-primary, #e53935);
+}
+
+.st-intro {
+  margin: 0 0 14px;
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+
+.st-empty,
+.st-gate p {
+  color: var(--text-secondary);
+}
+
+.st-gate {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 24px 0;
+}
+
+/* ── Buttons ─────────────────────────────────────────────────────────────── */
+.st-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 8px 14px;
+  border-radius: 8px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  background: transparent;
+  border: 1px solid var(--border-color);
+  color: var(--text-primary);
+  transition: background 0.15s, border-color 0.15s;
+  white-space: nowrap;
+
+  &:hover:not(:disabled) { background: var(--bg-hover); }
+  &:disabled { opacity: 0.5; cursor: not-allowed; }
+}
+
+.st-btn--primary {
+  color: var(--accent-primary, #e53935);
+  border-color: var(--accent-primary, #e53935);
+
+  &:hover:not(:disabled) {
+    background: color-mix(in srgb, var(--accent-primary, #e53935) 10%, transparent);
+  }
+}
+
+.st-btn--danger {
+  color: #e53935;
+  border-color: color-mix(in srgb, #e53935 60%, transparent);
+
+  &:hover:not(:disabled) {
+    background: color-mix(in srgb, #e53935 10%, transparent);
+    border-color: #e53935;
+  }
+}
+
+.st-icon-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: none;
+  background: transparent;
+  color: var(--text-secondary);
+  cursor: pointer;
+
+  &:hover { background: var(--bg-hover); color: var(--text-primary); }
+}
+
+/* ── Stream secret ───────────────────────────────────────────────────────── */
+.st-secret {
+  border: 1px solid var(--border-color);
+  background: var(--card-bg);
+  border-radius: 12px;
+  padding: 16px;
+  margin-bottom: 14px;
+
+  h2 {
+    font-size: 1.05rem;
+    margin: 0 0 4px;
+  }
+
+  p {
+    margin: 0 0 12px;
+    color: var(--text-secondary);
+    font-size: 0.875rem;
+    line-height: 1.5;
+  }
+}
+
+.st-secret__row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.st-secret__value {
+  flex: 1 1 260px;
+  min-width: 0;
+  padding: 9px 12px;
+  border-radius: 8px;
+  background: var(--bg-tertiary, var(--bg-hover));
+  font-size: 0.85rem;
+  overflow-wrap: anywhere;
+  user-select: all;
+
+  &.is-masked {
+    letter-spacing: 2px;
+    color: var(--text-secondary);
+    user-select: none;
+  }
+}
+
+.st-secret__actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+/* ── OBS guide ───────────────────────────────────────────────────────────── */
+.st-guide {
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  margin-bottom: 20px;
+  background: var(--card-bg);
+
+  &.is-open .st-guide__toggle svg { transform: rotate(180deg); }
+}
+
+.st-guide__toggle {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 16px;
+  border: none;
+  background: transparent;
+  color: var(--text-primary);
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  text-align: start;
+
+  svg { transition: transform 0.2s; flex-shrink: 0; }
+}
+
+.st-guide__body {
+  padding: 0 16px 16px;
+  font-size: 0.9rem;
+  line-height: 1.55;
+
+  h4 {
+    margin: 14px 0 6px;
+    font-size: 0.95rem;
+  }
+}
+
+.st-guide__steps,
+.st-guide__list {
+  margin: 0;
+  padding-inline-start: 22px;
+
+  li { margin-bottom: 4px; }
+}
+
+.st-guide__limits {
+  margin: 12px 0 0;
+  padding: 10px 12px;
+  border-radius: 8px;
+  background: var(--bg-tertiary, var(--bg-hover));
+  color: var(--text-secondary);
+}
+
+/* ── Template list ───────────────────────────────────────────────────────── */
+.st-list-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 12px;
+
+  h2 {
+    font-size: 1.15rem;
+    margin: 0;
+  }
+}
+
+.st-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 12px;
+}
+
+.st-card {
+  display: grid;
+  grid-template-columns: 200px minmax(0, 1fr);
+
+  @include mix.respond(phone) {
+    grid-template-columns: 1fr;
+  }
+
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  overflow: hidden;
+  background: var(--card-bg);
+
+  &--live { border-color: color-mix(in srgb, #e53935 60%, transparent); }
+}
+
+.st-card__thumb {
+  position: relative;
+  aspect-ratio: 16 / 9;
+  align-self: start;
+  background: var(--bg-tertiary, #111);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-secondary);
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+}
+
+.st-badge {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  padding: 3px 8px;
+  border-radius: 999px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+  background: rgba(0, 0, 0, 0.6);
+  color: #fff;
+
+  &--live { color: #ff5a5f; border: 1px solid #ff5a5f; }
+  &--connecting,
+  &--ending { color: #ffb300; border: 1px solid #ffb300; }
+}
+
+.st-card__body {
+  padding: 12px 14px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+
+.st-card__name {
+  font-weight: 700;
+  font-size: 1rem;
+  overflow-wrap: anywhere;
+}
+
+.st-card__title {
+  color: var(--text-secondary);
+  font-size: 0.875rem;
+  overflow-wrap: anywhere;
+}
+
+.st-card__url {
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.st-card__ingress,
+.st-card__meta {
+  font-size: 0.78rem;
+  color: var(--text-secondary);
+}
+
+.st-card__watch {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--accent-primary, #e53935);
+  align-self: flex-start;
+}
+
+.st-card__warn {
+  font-size: 0.8rem;
+  color: #ffb300;
+}
+
+.st-card__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 8px;
+
+  .st-btn { padding: 6px 10px; font-size: 0.8rem; }
+}
+
+/* ── Sheets (dialog on desktop, bottom sheet on phones) ──────────────────── */
+.st-sheet-overlay {
+  position: fixed;
+  inset: 0;
+  // Same level as Settings: above the page FABs, below the login / signing
+  // prompts (100000), which must be able to open on top of this form.
+  z-index: 99990;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+}
+
+.st-sheet {
+  width: 460px;
+  max-width: 100%;
+  max-height: min(88vh, 860px);
+  display: flex;
+  flex-direction: column;
+  background: var(--card-bg, #1a1a2e);
+  color: var(--text-primary);
+  border: 1px solid var(--border-light, rgba(255, 255, 255, 0.12));
+  border-radius: 14px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+
+  &--wide { width: 680px; }
+
+  // Same SDK var mapping as the page: the sheet is portalled out of it.
+  --hh-bg:               var(--bg-primary);
+  --hh-bg-secondary:     var(--card-bg);
+  --hh-bg-hover:         var(--bg-hover);
+  --hh-text:             var(--text-primary);
+  --hh-text-secondary:   var(--text-secondary);
+  --hh-text-muted:       var(--text-muted, var(--text-secondary));
+  --hh-border:           var(--border-color);
+  --hh-border-light:     var(--border-light);
+  --hh-primary:          var(--accent-primary, #e53935);
+}
+
+.st-sheet__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 14px 16px 10px 20px;
+  border-bottom: 1px solid var(--border-light, rgba(255, 255, 255, 0.08));
+
+  h3 { margin: 0; font-size: 1.05rem; }
+}
+
+.st-sheet__body {
+  padding: 16px 20px;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  flex: 1 1 auto;
+}
+
+.st-sheet__foot {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+  gap: 10px;
+  padding: 12px 20px 16px;
+  border-top: 1px solid var(--border-light, rgba(255, 255, 255, 0.08));
+}
+
+.st-sheet__foot-error {
+  margin-inline-end: auto;
+}
+
+.st-confirm-text {
+  margin: 0;
+  line-height: 1.55;
+  color: var(--text-secondary);
+}
+
+@media (max-width: 767px) {
+  .st-sheet-overlay {
+    align-items: flex-end;
+    padding: 0;
+  }
+
+  .st-sheet,
+  .st-sheet--wide {
+    width: 100%;
+    max-width: 100%;
+    max-height: 92vh;
+    border-radius: 16px 16px 0 0;
+    border-bottom: none;
+    // No fill-mode: a transform left on the sheet would turn it into the
+    // containing block of the community / beneficiary modals opened inside it.
+    animation: st-sheet-up 0.26s ease;
+  }
+
+  .st-sheet__foot {
+    padding-bottom: calc(16px + env(safe-area-inset-bottom, 0px));
+  }
+}
+
+@keyframes st-sheet-up {
+  from { transform: translateY(100%); }
+  to { transform: translateY(0); }
+}
+
+/* ── Form ────────────────────────────────────────────────────────────────── */
+.st-form {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.st-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+}
+
+.st-field__label {
+  font-size: 0.85rem;
+  font-weight: 600;
+
+  em { font-style: normal; color: var(--text-secondary); font-weight: 400; }
+}
+
+.st-field__hint {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  line-height: 1.45;
+  margin: 0;
+}
+
+.st-field__preview {
+  font-size: 0.78rem;
+  padding: 6px 10px;
+  border-radius: 6px;
+  background: var(--bg-tertiary, var(--bg-hover));
+  overflow-wrap: anywhere;
+}
+
+.st-field__error {
+  font-size: 0.8rem;
+  color: #ff5a5f;
+}
+
+.st-input {
+  width: 100%;
+  padding: 9px 12px;
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  font-size: 0.9rem;
+
+  &:focus { outline: none; border-color: var(--accent-primary, #e53935); }
+}
+
+.st-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-top: 8px;
+
+  @include mix.respond(phone) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.st-thumb {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+
+  img,
+  .st-thumb__empty {
+    width: 160px;
+    aspect-ratio: 16 / 9;
+    border-radius: 8px;
+    object-fit: cover;
+    background: var(--bg-tertiary, var(--bg-hover));
+  }
+
+  .st-thumb__empty {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-secondary);
+  }
+}
+
+.st-thumb__actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.st-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  padding: 6px;
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
+  background: var(--bg-primary);
+}
+
+.st-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 4px 3px 10px;
+  border-radius: 999px;
+  background: var(--bg-tertiary, var(--bg-hover));
+  font-size: 0.82rem;
+
+  button {
+    border: none;
+    background: transparent;
+    color: var(--text-secondary);
+    cursor: pointer;
+    font-size: 1rem;
+    line-height: 1;
+    padding: 0 4px;
+  }
+}
+
+.st-tags__input {
+  flex: 1 1 120px;
+  min-width: 100px;
+  border: none;
+  background: transparent;
+  color: var(--text-primary);
+  padding: 4px;
+  font-size: 0.875rem;
+
+  &:focus { outline: none; }
+}
+
+.st-tiles {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+
+  @include mix.respond(phone) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.st-tile {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 1px solid var(--border-color);
+  background: transparent;
+  color: var(--text-primary);
+  text-align: start;
+  cursor: pointer;
+
+  span { font-size: 0.78rem; color: var(--text-secondary); }
+
+  &.is-active {
+    border-color: var(--accent-primary, #e53935);
+    background: color-mix(in srgb, var(--accent-primary, #e53935) 8%, transparent);
+  }
+}
+
+.st-check {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  font-size: 0.9rem;
+  cursor: pointer;
+
+  input { margin-top: 3px; accent-color: var(--accent-primary, #e53935); }
+
+  &.is-locked { opacity: 0.7; cursor: not-allowed; }
+}
+
+.st-pro-hint {
+  display: block;
+  font-style: normal;
+  font-size: 0.78rem;
+  color: var(--text-secondary);
+}
+
+.st-notice {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+  padding: 10px 12px;
+  border-radius: 8px;
+  border: 1px solid color-mix(in srgb, #ffb300 50%, transparent);
+  background: color-mix(in srgb, #ffb300 8%, transparent);
+
+  p { margin: 0; font-size: 0.85rem; line-height: 1.45; }
+}
+
+.st-announce {
+  gap: 10px;
+}
+
+/* "Save as template" inside the SDK's create form (renderStandaloneExtras). */
+.st-save {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px 12px;
+  padding: 12px 0 2px;
+  border-top: 1px solid var(--border-light, rgba(255, 255, 255, 0.08));
+}
+
+.st-save__hint {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  flex: 1 1 200px;
+}
+
+.st-saved .st-secret,
+.st-saved .st-guide {
+  margin-bottom: 0;
+}
+
+.st-saved {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}

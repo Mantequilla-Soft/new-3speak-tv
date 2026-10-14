@@ -228,6 +228,33 @@
       "listingFailed": "无法更新公开状态。",
       "trailerFailed": "无法更新你的频道预告片。",
       "saveFailed": "保存更改失败。"
-    }
+    },
+    "timeline": "章节和链接",
+    "timelineHint": "章节显示在进度条上，链接出现在视频右上角。预览播放的是已发布的视频。",
+    "timelineLoadingVideo": "正在加载视频…",
+    "tabs": {
+      "label": "编辑分区",
+      "details": "详情",
+      "media": "媒体",
+      "settings": "设置",
+      "unsaved": "有未保存的更改",
+      "hasErrors": "需要处理"
+    },
+    "sections": {
+      "visibility": "可见性",
+      "content": "内容",
+      "promotion": "推广"
+    },
+    "chaptersNote": "章节达到 3 个或以上时，保存时会把章节列表写入描述。",
+    "editChapters": "编辑章节",
+    "fixErrors": "请先修正标记的标签页。"
+  },
+  "timeline": {
+    "video": "视频",
+    "profile": "个人主页",
+    "link": "链接",
+    "region": "创作者的链接",
+    "dismiss": "关闭",
+    "opensNewTab": "在新标签页中打开"
   }
 }

@@ -51,6 +51,8 @@
     "private": "Playlist ini privat",
     "items_other": "{{count}} item",
     "created": "Dibuat {{when}}",
+    "podcastFeed": "Feed podcast",
+    "podcastFeedTitle": "Ikuti {{name}} di aplikasi podcast apa pun (feed RSS)",
     "album": {
       "genre": "<strong>Genre:</strong> {{value}}",
       "year": "<strong>Tahun:</strong> {{value}}",

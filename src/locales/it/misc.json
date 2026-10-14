@@ -143,8 +143,11 @@
   "routeError": {
     "title": "Questa pagina non si è caricata",
     "body": "Una parte dell'app non è stata scaricata. Di solito significa che è uscita una nuova versione mentre questa scheda era aperta. Ricaricando la ottieni.",
+    "brokenTitle": "Qualcosa è andato storto in questa pagina",
+    "brokenBody": "Una parte di questa pagina ha avuto un errore. Ricaricare di solito risolve, e i dettagli qui sotto ci aiutano a trovarne la causa.",
     "reload": "Ricarica",
-    "goHome": "Vai alla Home"
+    "goHome": "Vai alla Home",
+    "details": "Dettagli"
   },
   "seo": {
     "defaultTitle": "3Speak - Piattaforma video decentralizzata",

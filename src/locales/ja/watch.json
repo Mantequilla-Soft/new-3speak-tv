@@ -228,6 +228,33 @@
       "listingFailed": "公開設定を更新できませんでした。",
       "trailerFailed": "チャンネル予告編を更新できませんでした。",
       "saveFailed": "変更を保存できませんでした。"
-    }
+    },
+    "timeline": "チャプターとリンク",
+    "timelineHint": "チャプターはシークバーに、リンクは動画の右上に表示されます。プレビューでは公開済みの動画が再生されます。",
+    "timelineLoadingVideo": "動画を読み込んでいます…",
+    "tabs": {
+      "label": "編集セクション",
+      "details": "詳細",
+      "media": "メディア",
+      "settings": "設定",
+      "unsaved": "未保存の変更",
+      "hasErrors": "要確認"
+    },
+    "sections": {
+      "visibility": "公開範囲",
+      "content": "コンテンツ",
+      "promotion": "プロモーション"
+    },
+    "chaptersNote": "チャプターが3つ以上ある場合、保存時にチャプター一覧が説明文に書き込まれます。",
+    "editChapters": "チャプターを編集",
+    "fixErrors": "先に印の付いたタブを修正してください。"
+  },
+  "timeline": {
+    "video": "動画",
+    "profile": "プロフィール",
+    "link": "リンク",
+    "region": "クリエイターからのリンク",
+    "dismiss": "閉じる",
+    "opensNewTab": "新しいタブで開きます"
   }
 }

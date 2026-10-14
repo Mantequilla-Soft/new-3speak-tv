@@ -19,29 +19,197 @@
 .edit-video-modal-content {
   background: var(--card-bg, #fff);
   color: var(--text-primary, #000);
-  border-radius: 12px;
-  padding: 24px;
-  width: 560px;
-  max-width: 95vw;
-  max-height: 90vh;
-  overflow-y: auto;
+  border-radius: 14px;
+  // One size for every tab, so switching never makes the dialog jump: wide
+  // enough for the timeline editor, as tall as the screen allows.
+  width: min(860px, 95vw);
+  height: min(780px, calc(100vh - 48px));
+  height: min(780px, calc(100dvh - 48px));
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
   position: relative;
+  text-align: left;
 
   @include mix.respond(phone) {
     width: 100%;
     max-width: 100%;
-    max-height: 90vh;
+    height: calc(100vh - 12px);
+    height: calc(100dvh - 12px);
     border-radius: 16px 16px 0 0;
-    padding: 20px 16px;
-    padding-bottom: calc(20px + env(safe-area-inset-bottom, 0px));
     animation: edit-video-modal-slide-up 0.25s ease forwards;
   }
 }
 
+// ── header / tabs / body / footer ─────────────────────────────────────────
+.evm-header {
+  flex-shrink: 0;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 18px 22px 10px;
+
+  @include mix.respond(phone) { padding: 14px 16px 8px; }
+}
+.evm-header__text {
+  min-width: 0;
+  .edit-video-subtitle { margin: 0; }
+}
+
+.evm-tabs {
+  flex-shrink: 0;
+  display: flex;
+  gap: 2px;
+  padding: 0 16px;
+  border-bottom: 1px solid var(--border-light, #e0e0e0);
+  overflow-x: auto;
+  scrollbar-width: none;
+  &::-webkit-scrollbar { display: none; }
+
+  @include mix.respond(phone) { padding: 0 8px; }
+}
+
+.evm-tab {
+  position: relative;
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 11px 12px 10px;
+  background: none;
+  border: 0;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -1px;
+  color: var(--text-secondary, #666);
+  font-size: 14px;
+  font-weight: 600;
+  white-space: nowrap;
+  cursor: pointer;
+
+  &:hover:not(:disabled) { color: var(--text-primary, #000); }
+  &:focus-visible { outline: 2px solid var(--accent-primary, #e53935); outline-offset: -2px; border-radius: 6px; }
+  &:disabled { opacity: 0.5; cursor: default; }
+  &.is-active {
+    color: var(--text-primary, #000);
+    border-bottom-color: var(--accent-primary, #e53935);
+  }
+
+  @include mix.respond(phone) {
+    gap: 5px;
+    padding: 10px 9px 9px;
+    font-size: 13px;
+  }
+  // The narrowest phones: labels only, so all four tabs fit without scrolling.
+  @media (max-width: 420px) {
+    > svg { display: none; }
+    padding: 10px 7px 9px;
+  }
+}
+
+// Unsaved changes on this tab.
+.evm-tab__dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--text-secondary, #666);
+  flex-shrink: 0;
+}
+// Something to fix on this tab: an outline badge, never a red fill.
+.evm-tab__badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  border: 1.5px solid var(--accent-primary, #e53935);
+  color: var(--accent-primary, #e53935);
+  font-size: 10px;
+  font-weight: 800;
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+.evm-body {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: 18px 22px 22px;
+
+  @include mix.respond(phone) { padding: 14px 16px 18px; }
+}
+
+.evm-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  min-width: 0;
+}
+.evm-panel__intro { margin: 0; }
+
+.evm-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+  .edit-video-label { margin-top: 0; }
+  .edit-video-hint { margin-bottom: 0; }
+}
+
+.evm-group {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-width: 0;
+}
+.evm-group__title {
+  margin: 0;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--text-secondary, #666);
+}
+
+.evm-note {
+  margin: 2px 0 0;
+  font-size: 12px;
+  line-height: 1.45;
+  color: var(--text-secondary, #666);
+}
+.evm-linkbtn {
+  padding: 0;
+  background: none;
+  border: 0;
+  color: var(--accent-primary, #e53935);
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.evm-footer {
+  flex-shrink: 0;
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  padding: 12px 22px;
+  border-top: 1px solid var(--border-light, #e0e0e0);
+  background: var(--card-bg, #fff);
+
+  @include mix.respond(phone) {
+    padding: 10px 16px calc(10px + env(safe-area-inset-bottom, 0px));
+    .edit-video-btn-primary,
+    .edit-video-btn-secondary { flex: 1; }
+  }
+}
+
 .edit-video-close-btn {
-  position: absolute;
-  top: 12px;
-  right: 12px;
+  flex-shrink: 0;
+  margin: -4px -6px 0 0;
   background: none;
   border: none;
   cursor: pointer;
@@ -49,6 +217,9 @@
   padding: 4px;
   display: flex;
   align-items: center;
+  border-radius: 8px;
+
+  &:hover { background: var(--bg-hover, rgba(0, 0, 0, 0.05)); }
 }
 
 .edit-video-title {
@@ -74,13 +245,6 @@
 
 .edit-video-error {
   color: var(--accent-color, #e31337);
-}
-
-.edit-video-form {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-  text-align: left;
 }
 
 .edit-video-label {
@@ -127,10 +291,10 @@
 }
 
 /* --- Replace the video file ------------------------------------------------
-   Sits directly above the thumbnail row and borrows its visual language, so the
-   two "swap the media" controls read as a pair. */
+   Media tab, under the thumbnail; borrows its visual language, so the two
+   "swap the media" controls read as a pair. */
 .evm-video-replace {
-  margin-bottom: 12px;
+  margin: 0;
 }
 
 .evm-video-pick {
@@ -279,13 +443,6 @@
   }
 }
 
-.edit-video-actions {
-  display: flex;
-  justify-content: flex-end;
-  gap: 8px;
-  margin-top: 16px;
-}
-
 .edit-video-btn-primary,
 .edit-video-btn-secondary {
   padding: 10px 18px;
@@ -306,7 +463,9 @@
   border: 1px solid var(--accent-primary, #e53935);
   color: var(--accent-primary, #e53935);
 
-  &:hover:not(:disabled) { opacity: 0.9; }
+  &:hover:not(:disabled) { background: var(--accent-light, rgba(229, 57, 53, 0.1)); }
+  // Something to fix on a tab: looks inactive, but a press still goes to it.
+  &.is-blocked { opacity: 0.55; }
 }
 
 .edit-video-btn-secondary {
@@ -402,4 +561,9 @@
 
   &:hover:not(:disabled) { background: color-mix(in srgb, var(--accent-primary, #e53935) 10%, transparent); border-color: var(--accent-primary, #e53935); color: var(--accent-primary, #e53935); }
   &:disabled { opacity: 0.6; cursor: not-allowed; }
+}
+
+.edit-video-tags-preview .tag--auto {
+  opacity: 0.7;
+  font-style: italic;
 }
