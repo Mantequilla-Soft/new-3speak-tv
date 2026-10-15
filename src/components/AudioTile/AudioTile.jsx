@@ -18,7 +18,7 @@ function audioThumb(item) {
   if (fixed && fixed !== fallbackImg && fixed !== '/images/speak.jpg') return fixed;
   // Fall back to the cover of the first playlist this audio was published into
   // (set by the checker via $lookup against the playlists collection).
-  if (item.playlist_thumbnail) return item.playlist_thumbnail;
+  if (item.playlist_thumbnail) return fixVideoThumbnail({ thumbnail: item.playlist_thumbnail });
   return `/img/u/${item.owner}/avatar/small`;
 }
 

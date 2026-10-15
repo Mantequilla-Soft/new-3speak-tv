@@ -47,6 +47,23 @@ export const hiveProxy = (url, size) => (
     : `/img/h/p/${bs58.encode(Buffer.from(url))}?format=jpeg&mode=cover&width=${size.w}&height=${size.h}`
 );
 
+/**
+ * A playlist or album cover for a SQUARE spot, through our /img/ cache.
+ *
+ * Covers are stored as the uploaded original (one album cover is 4284 px and
+ * 367 KB) and were loaded as-is into a 120 px box. Our own images.3speak.tv goes
+ * through /img/a/ (square crop, 64 / 128 / 512 px); anything else through Hive's
+ * resize proxy. Local assets and empty values come back unchanged. For the 16:9
+ * tiles and cards, fixVideoThumbnail() already does the same in that shape.
+ */
+export function squareCover(url, px = 512) {
+  const u = String(url || '').trim();
+  const own = u.match(/^https?:\/\/images\.3speak\.tv\/(.+)$/i);
+  if (own) return `/img/a/${own[1].split('?')[0]}?px=${px}`;
+  if (/^https?:\/\//i.test(u)) return hiveProxy(u, { w: px, h: px });
+  return u;
+}
+
 export function fixVideoThumbnail(video, portrait = false) {
   const size = portrait ? PORTRAIT : LANDSCAPE;
   const thumbnail = video?.images?.thumbnail || video?.thumbUrl || video?.spkvideo?.thumbnail_url || video?.thumbnailUrl || video?.thumbnail_url || video?.thumbnail;
