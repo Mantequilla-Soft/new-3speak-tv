@@ -7,6 +7,12 @@
 // 1.0.0 — that way they see all of these when develop is pushed to production.
 export const CHANGELOG = [
   {
+    version: '1.79.88',
+    date: '2026-10-15',
+    summary:
+      'Sharing a channel, playlist, album or audio link on Discord, X or WhatsApp now shows a proper preview with its picture and title.',
+  },
+  {
     version: '1.79.87',
     date: '2026-10-15',
     summary:

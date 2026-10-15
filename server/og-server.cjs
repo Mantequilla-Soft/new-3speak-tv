@@ -747,6 +747,13 @@ async function serveOembed(req, res, url, origin) {
   res.end(JSON.stringify(body));
 }
 
+// Profiles, playlists/albums and audio posts. See og-pages.cjs.
+const ogPages = require('./og-pages.cjs')({
+  BASE_URL, CHECKER_URL, escapeHtml, fixThumbnail, boundImage, extractDescription,
+  parseMeta, getIndexability, fetchHivePost, secondsToISO8601, toIsoDate,
+  ogVideo, rememberOembed, OEMBED_PATH,
+});
+
 const server = http.createServer(async (req, res) => {
   const origin = requestOrigin(req);
 
@@ -807,6 +814,17 @@ const server = http.createServer(async (req, res) => {
       return await ogSite.serveSitePage(req, res, url, origin);
     } catch (err) {
       console.error('[og] site page error:', err && err.message);
+      return sendHtml(req, res, 200, buildGenericHtml(origin + req.url));
+    }
+  }
+
+  const page = ogPages.match(url);
+  if (page) {
+    try {
+      const html = await ogPages.render(req, res, page, origin);
+      return sendHtml(req, res, 200, html || buildGenericHtml(origin + req.url));
+    } catch (err) {
+      console.error(`[og] ${page.kind} page error:`, err && err.message);
       return sendHtml(req, res, 200, buildGenericHtml(origin + req.url));
     }
   }
