@@ -23,7 +23,7 @@ import { HIVE_API_URL, PLAYLISTS_READ_URL, CHECKER_URL } from '../utils/config';
 import { MdPlayArrow as MdPlayIcon } from 'react-icons/md';
 import AudioTile from '../components/AudioTile/AudioTile';
 import AddToPlaylistModal from '../components/AddToPlaylistModal/AddToPlaylistModal';
-import { fixVideoThumbnail, fallbackImg } from '../utils/fixThumbnails';
+import { fixVideoThumbnail, fallbackImg, squareCover } from '../utils/fixThumbnails';
 import useHoverPreview from '../hooks/useHoverPreview';
 import { uploadThumbnail } from '../utils/uploadThumbnail';
 import { DATE_FILTERS, getSinceTimestamp, formatRelativeDate } from '../utils/dateFilters';
@@ -519,7 +519,7 @@ function PlaylistView() {
         <div className="playlist-info">
           {playlist.thumbnail ? (
             <div className="playlist-cover-wrap">
-              <img className="playlist-cover" src={playlist.thumbnail} alt="" onError={(e) => { e.currentTarget.style.display = 'none'; }} />
+              <img className="playlist-cover" src={squareCover(playlist.thumbnail)} alt="" onError={(e) => { e.currentTarget.style.display = 'none'; }} />
             </div>
           ) : (
             <div className="playlist-icon-wrap">

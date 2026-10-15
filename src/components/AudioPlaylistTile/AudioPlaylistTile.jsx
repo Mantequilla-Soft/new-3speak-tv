@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { MdPlayArrow, MdLibraryMusic } from 'react-icons/md';
 import { useAppStore } from '../../lib/store';
 import PremiumBadge from '../PremiumBadge/PremiumBadge';
-import { fallbackImg } from '../../utils/fixThumbnails';
+import { fallbackImg, fixVideoThumbnail } from '../../utils/fixThumbnails';
 // Reuse the audio tile styles so playlists look identical to track tiles.
 import '../../page/Audio.scss';
 
@@ -21,7 +21,10 @@ export default function AudioPlaylistTile({ playlist, kind }) {
   const audioAddToQueue = useAppStore((s) => s.audioAddToQueue);
   if (!playlist) return null;
 
-  const cover = playlist.thumbnail || playlist.tracks?.find(tr => tr.thumbnail_url)?.thumbnail_url || fallbackImg;
+  // Through the /img/ cache in the tile's 16:9 shape: covers are stored as the
+  // full-size upload.
+  const rawCover = playlist.thumbnail || playlist.tracks?.find(tr => tr.thumbnail_url)?.thumbnail_url;
+  const cover = rawCover ? fixVideoThumbnail({ thumbnail: rawCover }) : fallbackImg;
   const tracks = playlist.tracks || [];
   const open = (e) => { e?.stopPropagation(); navigate(`/playlist/${playlist.id}`); };
   const playAlbum = (e) => {
