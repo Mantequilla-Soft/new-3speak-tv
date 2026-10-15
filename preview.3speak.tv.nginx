@@ -104,7 +104,7 @@ server {
     # OG sidecar (:4023), humans → Vite, decided by $threespeak_share_backend
     # (see the map above). $request_uri preserves the ?v=author/permlink query.
     # Regex/exact locations take precedence over `location /`, so humans see no
-    # change. /@user and /@user/shorts (no permlink) just yield the generic card.
+    # change. /@user and /@user/shorts (no permlink) get the profile card.
     location = /watch {
         proxy_pass $threespeak_share_backend$request_uri;
         proxy_http_version 1.1;
@@ -203,6 +203,20 @@ server {
     }
 
     location ~ ^/@ {
+        proxy_pass $threespeak_share_backend$request_uri;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection "upgrade";
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_buffering off;
+    }
+
+    # Share cards for profiles, playlists/albums and audio posts (og-pages.cjs).
+    # Same split as /watch: bots → OG sidecar (:4023), humans → Vite.
+    location ~ ^/(p|user|playlist|audio)/ {
         proxy_pass $threespeak_share_backend$request_uri;
         proxy_http_version 1.1;
         proxy_set_header Upgrade $http_upgrade;

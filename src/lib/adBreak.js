@@ -37,6 +37,21 @@ import { CHECKER_URL } from '../utils/config';
  */
 const LANDING_MARGIN_S = 0.35;
 
+/* Forward moves under this are the PLAYER recovering, not the viewer skipping.
+ *
+ * 🚨 hls.js gets out of a stall by writing currentTime itself: a nudge of 0.1-0.3s,
+ * a jump over a buffer hole, a 1µs step to flush the decoder after a video hole. Each
+ * one is a seek, and the lock used to refuse it and put the playhead back. A stall at
+ * the start of a spot (the decoder reconfiguring across the discontinuity is enough)
+ * then never cleared: the ad's first frame flashed on every attempt, the countdown
+ * froze, and hls.js gave up with a fatal stall after three tries. Seen 2026-10-15 on
+ * Firefox, meno/hud76xd4.
+ *
+ * A viewer leaving the ad moves seconds at a time (a drag, an arrow key, a chapter),
+ * so a second is far below anything that skips a spot and above every recovery step.
+ */
+const RECOVERY_STEP_S = 1;
+
 /* How many seconds of warning a viewer gets before the break.
  *
  * Exported because it is now TWO decisions wearing one number: how long the "Ad in 3"
@@ -668,12 +683,15 @@ export function createAdBreak() {
      * way back. Blocking it would take the one control that costs the advertiser
      * nothing, and turn "you cannot skip this" into "you cannot move at all", which is
      * the version people take to be a bug.
+     *
+     * SMALL STEPS FORWARD ARE ALLOWED TOO: see RECOVERY_STEP_S.
      */
     lockedSeekTarget(playerTime, cameFrom) {
       if (!Number.isFinite(playerTime) || !Number.isFinite(cameFrom)) return null;
       if (!this.seekLocked(cameFrom)) return null;
       if (playerTime < window_.start) return null;   // going back, or still short of the cut
       if (playerTime <= cameFrom) return null;       // not a forward jump
+      if (playerTime - cameFrom < RECOVERY_STEP_S) return null;   // hls.js unsticking a stall
       return cameFrom;
     },
 

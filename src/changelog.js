@@ -7,6 +7,24 @@
 // 1.0.0 — that way they see all of these when develop is pushed to production.
 export const CHANGELOG = [
   {
+    version: '1.79.88',
+    date: '2026-10-15',
+    summary:
+      'Sharing a channel, playlist, album or audio link on Discord, X or WhatsApp now shows a proper preview with its picture and title.',
+  },
+  {
+    version: '1.79.87',
+    date: '2026-10-15',
+    summary:
+      'Ad labels on videos are now lighter and see-through, so more of the ad stays visible.',
+  },
+  {
+    version: '1.79.86',
+    date: '2026-10-15',
+    summary:
+      'Smoother playback when a video moves into or out of a sponsor break.',
+  },
+  {
     version: '1.79.84',
     date: '2026-10-14',
     summary:
