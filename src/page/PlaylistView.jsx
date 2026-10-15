@@ -91,7 +91,7 @@ async function fetchVideosForPlaylist(items) {
             `${CHECKER_URL}/audio?owner=${encodeURIComponent(post.author)}&permlink=${encodeURIComponent(audioPermlink)}&limit=1`
           );
           audioDoc = ad?.audio?.[0] || null;
-        } catch {}
+        } catch { /* no audio doc: the item still lists as a plain post */ }
       }
 
       return {
@@ -229,16 +229,24 @@ function PlaylistView() {
   // Check if there are unsaved changes
   const hasChanges = pendingChanges.length > 0;
 
-  // Parse tags from playlist json_metadata
-  const playlistTags = useMemo(() => {
-    if (!playlist?.json_metadata) return [];
+  // The playlist's json_metadata as an object. It carries more than tags (an
+  // album's `type: 'audio'`, for one), so an edit merges into it.
+  const playlistJsonMeta = useMemo(() => {
+    if (!playlist?.json_metadata) return {};
     try {
       const meta = typeof playlist.json_metadata === 'string'
         ? JSON.parse(playlist.json_metadata)
         : playlist.json_metadata;
-      return meta?.tags || [];
-    } catch { return []; }
+      return meta && typeof meta === 'object' && !Array.isArray(meta) ? meta : {};
+    } catch { return {}; }
   }, [playlist]);
+  const playlistTags = useMemo(() => playlistJsonMeta.tags || [], [playlistJsonMeta]);
+
+  // What the edit dialog opened with. Cover and album details are only sent when
+  // they differ from it: an update that carries them REPLACES what is stored, so
+  // sending the dialog's values unchanged would wipe a cover the page never
+  // received (the playlists API on prod did not return covers until 2026-10).
+  const editBaselineRef = useRef({ thumb: '', album: {} });
 
   // Open edit modal
   const handleOpenEdit = () => {
@@ -247,6 +255,7 @@ function PlaylistView() {
     setEditTags([...playlistTags]);
     setEditTagInput('');
     const album = playlist.metadata?.album || {};
+    editBaselineRef.current = { thumb: playlist.thumbnail || album.thumbnail || '', album };
     setEditThumb(playlist.thumbnail || album.thumbnail || '');
     setEditMusicStyle(album.musicStyle || '');
     setEditYear(album.year ? String(album.year) : '');
@@ -281,23 +290,31 @@ function PlaylistView() {
     setIsUpdating(true);
     try {
       // Build the album payload — only include fields with values
-      // (mirrors the create flow in AudioUploadModal).
-      const album = {};
-      if (editCredits.trim()) album.credits = editCredits.trim();
-      if (editMusicStyle.trim()) album.musicStyle = editMusicStyle.trim();
+      // (mirrors the create flow in AudioUploadModal). Starts from what is
+      // stored so fields this dialog does not edit survive the update.
+      const baseline = editBaselineRef.current;
+      const album = { ...baseline.album };
+      const setOrDrop = (key, value) => { if (value) album[key] = value; else delete album[key]; };
+      setOrDrop('credits', editCredits.trim());
+      setOrDrop('musicStyle', editMusicStyle.trim());
       const yearNum = parseInt(editYear, 10);
-      if (!isNaN(yearNum) && yearNum > 0) album.year = yearNum;
-      if (editLabel.trim()) album.label = editLabel.trim();
-      if (editDescription.trim()) album.description = editDescription.trim();
-      if (editThumb) album.thumbnail = editThumb;
+      setOrDrop('year', !isNaN(yearNum) && yearNum > 0 ? yearNum : null);
+      setOrDrop('label', editLabel.trim());
+      setOrDrop('description', editDescription.trim());
+      // The cover lives on the playlist; mirror it into the album only where the
+      // album already carried one, or the viewer changed it.
+      if (editThumb !== baseline.thumb || 'thumbnail' in baseline.album) setOrDrop('thumbnail', editThumb);
 
-      await updatePlaylist(playlistId, {
+      const fields = {
         name: editName.trim(),
         access: editAccess,
-        json_metadata: JSON.stringify({ tags: editTags }),
-        thumbnail: editThumb || '',
-        metadata: { album },
-      });
+        json_metadata: JSON.stringify({ ...playlistJsonMeta, tags: editTags }),
+      };
+      if (editThumb !== baseline.thumb) fields.thumbnail = editThumb || '';
+      if (JSON.stringify(album) !== JSON.stringify(baseline.album)) {
+        fields.metadata = { ...(playlist.metadata || {}), album };
+      }
+      await updatePlaylist(playlistId, fields);
       toast.success(t('playlists.view.updated'));
       setShowEditModal(false);
       setTimeout(() => {
