@@ -2,7 +2,7 @@ import { useQuery } from '@tanstack/react-query';
 import { getHiveUrl } from '../utils/hiveNode';
 import axios from 'axios';
 import { HIVE_API_URL, PLAYLISTS_READ_URL } from '../utils/config';
-import { fallbackImg } from '../utils/fixThumbnails';
+import { fallbackImg, fixVideoThumbnail } from '../utils/fixThumbnails';
 
 /**
  * Fetch thumbnail URL from Hive post metadata
@@ -94,8 +94,10 @@ export function useUserPlaylists(owner, options = {}) {
  */
 export function getPlaylistThumbnail(playlist) {
   // Use pre-fetched thumbnail if available
+  // Resized through the /img/ cache: a cover is the full-size upload, and the
+  // first item's thumbnail can be a raw original too.
   if (playlist?.thumbnail) {
-    return playlist.thumbnail;
+    return fixVideoThumbnail({ thumbnail: playlist.thumbnail });
   }
 
   // Fallback to default
