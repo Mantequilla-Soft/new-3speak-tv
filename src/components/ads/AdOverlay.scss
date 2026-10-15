@@ -1,4 +1,14 @@
 /* The ad disclosure, drawn over the top-left of the player while a spot plays. */
+
+/* What keeps white text readable on any frame without a dark box behind it: a tight
+   outline first (stacked, so it reads as a solid edge even on white or on the ad's
+   own lettering), then a soft wider glow. */
+$brandmark-halo:
+  0 0 1px #000,
+  0 0 2px #000,
+  0 0 2px #000,
+  0 1px 4px rgba(0, 0, 0, 0.85),
+  0 0 8px rgba(0, 0, 0, 0.5);
 .brandmark {
   display: flex;
   flex-direction: column;
@@ -13,11 +23,16 @@
   max-width: 240px;
   padding: 8px 12px 10px;
   border-radius: 10px;
-  /* Its own dark ground rather than the theme's: it sits on video, which can be any
-     colour, so the text needs a surface it can rely on in both themes. */
-  background: rgba(0, 0, 0, 0.62);
-  backdrop-filter: blur(6px);
+  /* A light tint and NO backdrop blur. The overlay sits on the advertiser's own
+     spot, and whatever they put in that corner (a URL, a price, a face) has to stay
+     visible through it: a 62% ground plus a 6px backdrop blur turned the corner into
+     a smudge. Readability comes from the text halo instead, which carries on any
+     background, white included, without hiding what is behind. */
+  background: rgba(0, 0, 0, 0.32);
+  /* Anchors the open icon on the link variant. */
+  position: relative;
   color: #fff;
+  text-shadow: $brandmark-halo;
   pointer-events: none;
 }
 
@@ -25,7 +40,7 @@
   font-size: 11px;
   line-height: 1.3;
   letter-spacing: 0.02em;
-  color: rgba(255, 255, 255, 0.72);
+  color: rgba(255, 255, 255, 0.9);
 
   strong { color: #fff; font-weight: 600; }
 }
@@ -35,7 +50,7 @@
 .brandmark-resume {
   font-size: 10.5px;
   line-height: 1.3;
-  color: rgba(255, 255, 255, 0.72);
+  color: rgba(255, 255, 255, 0.9);
   font-variant-numeric: tabular-nums;
 
   strong { color: #fff; font-weight: 700; }
@@ -69,6 +84,12 @@
   min-width: 0;
 }
 
+/* 🚨 `overflow: hidden` (for the ellipsis / line clamp) clips the text halo at the
+   element's box, which drew a hard dark rectangle around the name. Padding gives
+   the glow room inside the clip, and the matching negative margin keeps the
+   layout exactly where it was. */
+$brandmark-halo-room: 8px;
+
 .brandmark-name {
   font-size: 11px;
   font-weight: 700;
@@ -76,24 +97,32 @@
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+  padding: $brandmark-halo-room;
+  margin: -$brandmark-halo-room;
 }
 
 .brandmark-slogan {
   font-size: 12px;
   line-height: 1.3;
-  color: rgba(255, 255, 255, 0.82);
+  color: rgba(255, 255, 255, 0.94);
   /* Two lines, hard. A long slogan must not grow the overlay over the video. */
   display: -webkit-box;
   -webkit-line-clamp: 2;
   line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
+  /* Sideways room only: vertical padding would let the top of a clamped-off line
+     show through. Two lines of glow above and below is what the line height gives. */
+  padding-inline: $brandmark-halo-room;
+  margin-inline: -$brandmark-halo-room;
 }
 
 /* On /advertise it is a sample, not an overlay: no absolute placement, and it keeps
    its dark ground so it reads the way it will on a video. */
 .brandmark-preview {
   max-width: 300px;
+
+  background: rgba(0, 0, 0, 0.62);
   pointer-events: auto;
 }
 
@@ -105,14 +134,14 @@
   text-decoration: none;
   color: #fff;
   transition: background-color 120ms ease;
-  /* Anchor for the open icon, and room for it: without the extra right padding a
-     long product name would run underneath the glyph instead of ellipsising before
-     it. Only on the link variant, so the plain disclosure keeps its tighter box. */
-  position: relative;
+  /* Room for the open icon (anchored by .brandmark's own position): without the
+     extra right padding a long product name would run underneath the glyph instead
+     of ellipsising before it. Only on the link variant, so the plain disclosure
+     keeps its tighter box. */
   padding-right: 34px;
 
   &:hover,
-  &:focus-visible { background: rgba(0, 0, 0, 0.76); }
+  &:focus-visible { background: rgba(0, 0, 0, 0.48); }
   &:focus-visible { outline: 2px solid #fff; outline-offset: 2px; }
 
   &:hover .brandmark-open,
@@ -129,7 +158,8 @@
   transform: translateY(-50%);
   width: 16px;
   height: 16px;
-  color: rgba(255, 255, 255, 0.62);
+  color: rgba(255, 255, 255, 0.85);
+  filter: drop-shadow(0 0 1px rgba(0, 0, 0, 0.95)) drop-shadow(0 1px 2px rgba(0, 0, 0, 0.8));
   transition: color 120ms ease;
 }
 

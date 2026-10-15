@@ -22,11 +22,17 @@
   gap: 5px;
   padding: 6px 11px;
   border-radius: 999px;
-  /* Its own dark ground: drawn over video we do not control and can assume no
-     contrast against. */
-  background: rgba(0, 0, 0, 0.66);
-  backdrop-filter: blur(6px);
+  /* A light tint and no blur, like the disclosure (AdOverlay.scss): the corner it
+     sits in belongs to the advertiser's spot. The halo keeps the text readable on
+     any frame. */
+  background: rgba(0, 0, 0, 0.34);
   color: #fff;
+  text-shadow:
+    0 0 1px #000,
+    0 0 2px #000,
+    0 0 2px #000,
+    0 1px 4px rgba(0, 0, 0, 0.85),
+    0 0 8px rgba(0, 0, 0, 0.5);
   font-size: 13px;
   font-weight: 600;
   line-height: 1.4;
@@ -35,7 +41,7 @@
   font-variant-numeric: tabular-nums;
   white-space: nowrap;
 
-  svg { font-size: 16px; }
+  svg { font-size: 16px; filter: drop-shadow(0 0 1px rgba(0, 0, 0, 0.95)) drop-shadow(0 1px 2px rgba(0, 0, 0, 0.8)); }
 
   @media (max-width: 600px) {
     right: 8px;
@@ -61,13 +67,13 @@
 .ad-skip-ready {
   pointer-events: auto;
   cursor: pointer;
-  border: 1px solid rgba(255, 255, 255, 0.45);
+  border: 1px solid rgba(255, 255, 255, 0.6);
   transition: background 120ms ease, border-color 120ms ease;
 
   &:hover,
   &:focus-visible {
-    background: rgba(0, 0, 0, 0.85);
-    border-color: rgba(255, 255, 255, 0.75);
+    background: rgba(0, 0, 0, 0.5);
+    border-color: rgba(255, 255, 255, 0.85);
   }
 
   &:focus-visible {
