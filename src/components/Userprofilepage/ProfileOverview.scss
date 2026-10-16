@@ -113,6 +113,13 @@
       margin-left: 0;      // some of these cards centre themselves with auto
       margin-right: 0;     // margins, which breaks the rail's spacing
     }
+
+    // The hover preview is a child of .card-container too, but it is not a
+    // card. As a snap target, showing it scrolled the rail to it, which moved
+    // the card it follows, which moved it again: an endless loop (React #185).
+    > .card-hover-overlay {
+      scroll-snap-align: none;
+    }
   }
 
   // Video/playlist/audio tiles are fixed-aspect, so clipping vertical overflow
