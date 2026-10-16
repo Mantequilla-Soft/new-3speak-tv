@@ -7,6 +7,12 @@
 // 1.0.0 — that way they see all of these when develop is pushed to production.
 export const CHANGELOG = [
   {
+    version: '1.79.90',
+    date: '2026-10-16',
+    summary:
+      'Hovering a video on a channel\'s Overview no longer breaks the page with "Something went wrong". The preview also lines up with its video again after you scroll a row sideways.',
+  },
+  {
     version: '1.79.89',
     date: '2026-10-15',
     summary:

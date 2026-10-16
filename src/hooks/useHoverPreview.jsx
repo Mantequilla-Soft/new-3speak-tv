@@ -216,12 +216,22 @@ export default function useHoverPreview({ renderControls } = {}) {
   // Nothing is saved as a choice.
   const { cues, subtitleStyle } = useSubtitles(hover?.author, hover?.permlink, { autoSelect: true });
 
+  // In the container's CONTENT coordinates, which is where the absolutely
+  // positioned overlay lives. When the container is itself a scroller (the
+  // profile Overview rails), the viewport offset alone moves every time the rail
+  // scrolls: the preview landed beside its card, and the follow-the-card effect
+  // below read each scroll as the card moving and set state forever (React #185).
   const rectOf = (node) => {
     const cont = containerRef.current;
     if (!node || !cont) return null;
     const r = node.getBoundingClientRect();
     const cr = cont.getBoundingClientRect();
-    return { top: r.top - cr.top, left: r.left - cr.left, width: r.width, height: r.height };
+    return {
+      top: r.top - cr.top + cont.scrollTop,
+      left: r.left - cr.left + cont.scrollLeft,
+      width: r.width,
+      height: r.height,
+    };
   };
 
   // ── Mobile: auto-play the card nearest the viewport centre; keep the overlay
