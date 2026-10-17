@@ -359,7 +359,8 @@ $mkt-sub: 12px;
     font-weight: 700;
     cursor: pointer;
 
-    &:hover { background: var(--accent-hover); }
+    // Same faint tint as every other red button here: a solid fill hid the red text.
+    &:hover { background: color-mix(in srgb, var(--accent-primary, #e53935) 10%, transparent); }
 
     &:focus-visible { outline: 2px solid var(--accent-primary); outline-offset: 2px; }
   }
@@ -1044,7 +1045,8 @@ $mkt-sub: 12px;
     background: transparent;
     color: var(--accent-primary, #e53935);
 
-    &:hover:not(:disabled) { background: var(--accent-hover); }
+    // Same faint tint as every other red button here: a solid fill hid the red text.
+    &:hover:not(:disabled) { background: color-mix(in srgb, var(--accent-primary, #e53935) 10%, transparent); }
   }
 
   .mkt-secondary {
@@ -1063,7 +1065,7 @@ $mkt-sub: 12px;
     color: var(--accent-primary);
 
     &:hover:not(:disabled) {
-      background: color-mix(in srgb, var(--accent-primary) 12%, transparent);
+      background: color-mix(in srgb, var(--accent-primary, #e53935) 10%, transparent);
     }
   }
 
@@ -1954,6 +1956,43 @@ $mkt-sub: 12px;
     gap: 12px;
     font-size: $mkt-text;
     color: var(--text-secondary);
+  }
+
+  /* The quoted plays, right above "Book this ad": the figure an advertiser is
+     buying, so it reads first, before the price breakdown's small print. */
+  .mkt-forecast {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+    padding: 12px 22px;
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    background: var(--bg-secondary);
+    transition: opacity 0.15s ease;
+
+    &--stale { opacity: 0.55; }
+  }
+
+  .mkt-forecast-label {
+    font-size: $mkt-sub;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--text-secondary);
+  }
+
+  .mkt-forecast-value {
+    font-size: 1.9rem;
+    font-weight: 800;
+    line-height: 1.15;
+    color: var(--text-primary);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .mkt-forecast-over {
+    font-size: $mkt-text;
+    color: var(--text-primary);
   }
 
   /* Sits above the campaign list, where somebody about to book will see it. */
