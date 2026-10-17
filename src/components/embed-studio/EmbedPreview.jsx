@@ -19,7 +19,7 @@ import UploadGate from "../ads/UploadGate";
 import { fetchUploadGateAd, confirmUploadGatePost, gateSessionId } from "../../lib/uploadGate";
 import { useTranslation, Trans } from "react-i18next";
 import AccountImg from "../HiveAvatar/AccountImg";
-import { normalizeChapters, applyChaptersToDescription } from "../../utils/videoTimeline";
+import { timelineMeta, applyTimelineToDescription } from "../../utils/videoTimeline";
 
 function EmbedPreview() {
   const { t } = useTranslation();
@@ -52,6 +52,7 @@ function EmbedPreview() {
     isPremium,
     setStep,
     chapters,
+    timelineLinks,
     videoDuration,
   } = useEmbedUpload();
 
@@ -157,11 +158,12 @@ function EmbedPreview() {
   // footer, but BlogContent strips both on render — so rendering this through the
   // same BlogContent the watch page uses gives a faithful preview. The player is
   // shown separately above, standing in for that leading embed URL.
-  // The chapter block the Timeline step writes into the description on publish
-  // (same call as publishToEmbed), so what is shown here is what gets posted.
+  // The chapter and link sections the Timeline step writes into the description
+  // on publish (same call as publishToEmbed), so what is shown here is what gets
+  // posted, except that the chapter times link to the post once it exists.
   const shownDescription = fromStories
     ? description
-    : applyChaptersToDescription(description, normalizeChapters(chapters, { duration: Number(videoDuration) || 0 }));
+    : applyTimelineToDescription(description, timelineMeta(chapters, timelineLinks, { duration: Number(videoDuration) || 0 }));
   const previewBody = isRemix
     ? `${shownDescription}\n\n---\n*Based on a video by [@${originalAuthor}](${
         fromStories

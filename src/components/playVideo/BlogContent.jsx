@@ -8,7 +8,7 @@ import { FaChevronDown, FaChevronUp } from "react-icons/fa";
 import { TailChase } from 'ldrs/react';
 import AudioPlayerInline from "../AudioPlayerInline/AudioPlayerInline";
 import { getPostBodyRenderer } from "../../lib/hiveRenderer";
-import { linkifyTimestamps, handleTimestampClick } from "../../utils/timestamps";
+import { linkifyTimestamps, handleTimestampClick, unlinkTimestampsInMarkdown } from "../../utils/timestamps";
 
 const THRESHOLD_HEIGHT = 100;
 
@@ -25,6 +25,7 @@ const BlogContent = ({ author, permlink, description, alwaysExpanded = false, du
   const contentRef   = useRef(null);
   const audioUrlsRef = useRef([]);
   const audioRootsRef = useRef([]);
+  const seekable = !!onSeek;
 
   // Strip the "this video, on 3Speak" boilerplate our own uploads and the other
   // Hive frontends put in the body. The page IS that video, so a link back to it
@@ -120,7 +121,13 @@ const BlogContent = ({ author, permlink, description, alwaysExpanded = false, du
     getPostBodyRenderer()
       .then((render) => {
         try {
-          let renderedHTML = render(contentString);
+          // On the watch page a "[0:00](3speak.tv/watch?v=this/video&t=0)" link
+          // (the chapter block uploads write) becomes a plain time again, so
+          // linkifyTimestamps turns it into an in-page seek, not a reload.
+          const source = seekable
+            ? unlinkTimestampsInMarkdown(contentString, { author, permlink })
+            : contentString;
+          let renderedHTML = render(source);
           renderedHTML = cleanContent(renderedHTML);
 
           // Extract audio.3speak.tv containers and replace with React mount slots
@@ -147,7 +154,7 @@ const BlogContent = ({ author, permlink, description, alwaysExpanded = false, du
         setRenderedContent(t('comments.blog.rendererError'));
       })
       .finally(() => setLoading(false));
-  }, [content, t]);
+  }, [content, t, seekable, author, permlink]);
 
   // Mount native React audio players into the slots left by the renderer
   useEffect(() => {
