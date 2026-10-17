@@ -235,6 +235,8 @@
     "changeAnytime": "Kamu bisa mengubah keduanya kapan saja di <b>Pengaturan</b>.",
     "allowAds": "Izinkan iklan di videoku",
     "allowAdsDesc": "Aktif secara default. Nonaktif berarti tidak ada iklan di apa pun yang kamu posting, dan tidak ada bagian.",
+    "allowRolls": "Izinkan video roll iklan",
+    "allowRollsDesc": "Jika mati, hanya banner dan ticker, yang tidak pernah menghentikan videomu.",
     "shareCommunity": "Berbagi dengan komunitas",
     "shareCommunityDesc": "Berapa bagian dari {{pool}}% yang masuk ke komunitas tempat kamu memposting video.",
     "breakdownYou": "<b>{{pct}}%</b> kamu",

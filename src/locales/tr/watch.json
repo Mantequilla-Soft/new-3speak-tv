@@ -196,6 +196,12 @@
     "allowRemix": "Remix/Klibe İzin Ver",
     "remixOn": "Başkaları remix/klip oluşturabilir; orijinal yazar olarak sen gösterilirsin.",
     "remixOff": "Başkaları bu videodan remix veya klip oluşturamaz.",
+    "adsOnVideo": "Bu videoda reklamlar",
+    "adsOnHint": "Bu videoda reklam gösterilebilir.",
+    "adsOffHint": "Bu videoda reklam yok.",
+    "rollsOnVideo": "Video reklamları",
+    "rollsOnHint": "Video reklamları, bannerlar ve kayan yazılar görünebilir.",
+    "rollsOffHint": "Bu videoda yalnızca bannerlar ve kayan yazılar.",
     "trailer": "Kanal fragmanı",
     "trailerOn": "Profilinin Genel Bakış sekmesinin en üstünde otomatik oynar ve daha önce ayarladığın fragmanın yerini alır.",
     "trailerOff": "Bunu profilinin Genel Bakış sekmesinin en üstünde otomatik oynayan video yap.",
@@ -231,6 +237,7 @@
       "broadcastFailed": "Yayınlama başarısız",
       "listingFailed": "Listeleme güncellenemedi.",
       "trailerFailed": "Kanal fragmanın güncellenemedi.",
+      "adsSyncFailed": "Kaydedildi, ancak bu videonun reklam ayarı henüz 3Speak'e ulaşmadı. Yeniden kaydetmeyi dene.",
       "saveFailed": "Değişiklikler kaydedilemedi."
     },
     "timeline": "Bölümler ve bağlantılar",
@@ -247,6 +254,7 @@
     "sections": {
       "visibility": "Görünürlük",
       "content": "İçerik",
+      "ads": "Reklamlar",
       "promotion": "Tanıtım"
     },
     "chaptersNote": "3 veya daha fazla bölüm olduğunda, bölüm listesi kaydederken açıklamaya yazılır.",

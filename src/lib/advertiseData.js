@@ -143,6 +143,26 @@ export async function syncVideoAdOptOut(author, permlink) {
   }
 }
 
+/**
+ * After an EDIT of a post's ad choice: mirror it, and keep asking until the
+ * checker reads the new choice ('on', 'off' or 'no-rolls') off the chain. Unlike
+ * a fresh post, an edited one is readable at once, but with its OLD metadata for
+ * a block or so, and a sync then would quietly copy the old choice.
+ */
+const VIDEO_ADS_EDIT_DELAYS_MS = [3000, 3000, 6000, 9000];
+export async function syncVideoAdChoice(author, permlink, expectedMode) {
+  for (let attempt = 0; ; attempt += 1) {
+    if (attempt > 0) await new Promise((r) => setTimeout(r, VIDEO_ADS_EDIT_DELAYS_MS[attempt - 1]));
+    const res = await syncVideoAdOptOut(author, permlink);
+    // A checker that predates `adMode` answers only adsEnabled.
+    const mode = res?.adMode || (res?.adsEnabled === false ? 'off' : 'on');
+    if (mode === expectedMode) return res;
+    if (attempt >= VIDEO_ADS_EDIT_DELAYS_MS.length) {
+      throw new Error(`video ad choice still reads ${mode}, expected ${expectedMode}`);
+    }
+  }
+}
+
 /* ─── turning ads off ─────────────────────────────────────────────────── */
 
 // Wallets that can sign an arbitrary message in the browser. HiveSigner cannot
@@ -162,9 +182,14 @@ function canSignLocally() {
 
 // Must match prefsMessage() in 3speakchecks/routes/advertise.js exactly. The
 // community share is part of it because that field decides where money goes — a
-// signature made for one split must not be reusable on another.
-const prefsMessage = (account, adsEnabled, communitySharePct, timestamp) =>
-  ['3speak-ads', 'creator-prefs', account, adsEnabled ? 'on' : 'off',
+// signature made for one split must not be reusable on another. The mode is 'on',
+// 'off' or 'no-rolls' (banners and tickers only).
+const prefsMode = (adsEnabled, rollsEnabled) => {
+  if (!adsEnabled) return 'off';
+  return rollsEnabled === false ? 'no-rolls' : 'on';
+};
+const prefsMessage = (account, adsEnabled, rollsEnabled, communitySharePct, timestamp) =>
+  ['3speak-ads', 'creator-prefs', account, prefsMode(adsEnabled, rollsEnabled),
     String(communitySharePct), String(timestamp)].join('|');
 
 /**
@@ -182,13 +207,13 @@ const prefsMessage = (account, adsEnabled, communitySharePct, timestamp) =>
  * account has not granted the authority, which is what makes the wallet fallback
  * in setCreatorAdPrefs reachable.
  */
-async function signViaThreespeak(adsEnabled, communitySharePct, account) {
+async function signViaThreespeak(adsEnabled, rollsEnabled, communitySharePct, account) {
   const provider = getCurrentProvider();
   const isWallet = !!provider && provider !== Providers.HiveSigner && !isManteAuthLogin();
 
   const doPost = async () => {
     const headers = { 'Content-Type': 'application/json' };
-    const body = { adsEnabled, communitySharePct };
+    const body = { adsEnabled, rollsEnabled, communitySharePct };
 
     if (provider === Providers.HiveSigner) {
       const token = localStorage.getItem('hivesignerToken');
@@ -241,10 +266,10 @@ async function signViaThreespeak(adsEnabled, communitySharePct, account) {
   return { signature: data.signature, timestamp: data.timestamp };
 }
 
-async function signLocally(account, adsEnabled, communitySharePct) {
+async function signLocally(account, adsEnabled, rollsEnabled, communitySharePct) {
   const timestamp = Date.now();
   const res = await signMessageWithAioha(
-    prefsMessage(account, adsEnabled, communitySharePct, timestamp),
+    prefsMessage(account, adsEnabled, rollsEnabled, communitySharePct, timestamp),
     KeyTypes.Posting,
     adsEnabled ? t('ads.wallet.saveAdSettings') : t('ads.wallet.turnAdsOff'),
   );
@@ -261,7 +286,9 @@ async function signLocally(account, adsEnabled, communitySharePct) {
  * Both fields go in one signed message, so saving is one signature rather than one
  * per field — which matters when the wallet shows a prompt for each.
  */
-export async function setCreatorAdPrefs(account, { adsEnabled, communitySharePct }) {
+export async function setCreatorAdPrefs(account, { adsEnabled, rollsEnabled = true, communitySharePct }) {
+  // Video rolls only mean something with ads on; 'off' signs no rolls choice.
+  const rolls = !adsEnabled || rollsEnabled !== false;
   // No default here on purpose: the platform default lives on the server, and a
   // second copy in the browser is a copy that can drift out of step with the
   // message being signed. Omitting the field lets the server decide; passing 0
@@ -275,20 +302,20 @@ export async function setCreatorAdPrefs(account, { adsEnabled, communitySharePct
   // up that authority, which is the only case where it is actually needed.
   let signed;
   try {
-    signed = await signViaThreespeak(adsEnabled, communitySharePct, account);
+    signed = await signViaThreespeak(adsEnabled, rolls, communitySharePct, account);
   } catch (err) {
     // A 403 is "no @threespeak grant". Anything else is a session or server
     // problem. Either way, a wallet that can sign should just sign rather than
     // hand the creator an error about authority they may not want to grant.
     if (!canSignLocally()) throw err;
-    signed = await signLocally(account, adsEnabled, communitySharePct);
+    signed = await signLocally(account, adsEnabled, rolls, communitySharePct);
   }
   const { signature, timestamp } = signed;
 
   return readJson(await fetch(`${BASE}/creator/prefs`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ account, adsEnabled, communitySharePct, signature, timestamp }),
+    body: JSON.stringify({ account, adsEnabled, rollsEnabled: rolls, communitySharePct, signature, timestamp }),
   }));
 }
 

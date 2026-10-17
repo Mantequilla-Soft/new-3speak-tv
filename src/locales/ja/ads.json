@@ -235,6 +235,8 @@
     "changeAnytime": "どちらも<b>設定</b>からいつでも変更できます。",
     "allowAds": "自分の動画で広告を許可",
     "allowAdsDesc": "デフォルトはオンです。オフにすると、あなたの投稿には広告が付かず、取り分もありません。",
+    "allowRolls": "動画広告ロールを許可する",
+    "allowRollsDesc": "オフにすると、動画を止めることのないバナーとティッカーだけになります。",
     "shareCommunity": "コミュニティと分け合う",
     "shareCommunityDesc": "{{pool}}% のうち、動画の投稿先のコミュニティに渡す割合。",
     "breakdownYou": "あなた <b>{{pct}}%</b>",

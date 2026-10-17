@@ -200,6 +200,12 @@
     "allowRemix": "Permitir remix/clip",
     "remixOn": "Otros pueden crear remixes/clips; apareces como autor original.",
     "remixOff": "Otros no pueden hacer remix ni clips de este video.",
+    "adsOnVideo": "Anuncios en este video",
+    "adsOnHint": "Puede haber anuncios en este video.",
+    "adsOffHint": "Sin anuncios en este video.",
+    "rollsOnVideo": "Anuncios en video",
+    "rollsOnHint": "Pueden aparecer anuncios en video, banners y tickers.",
+    "rollsOffHint": "Solo banners y tickers en este video.",
     "trailer": "Tráiler del canal",
     "trailerOn": "Se reproduce automáticamente arriba de la pestaña Resumen de tu perfil y reemplaza cualquier tráiler que hayas configurado antes.",
     "trailerOff": "Haz que este sea el video que se reproduce automáticamente arriba de la pestaña Resumen de tu perfil.",
@@ -235,6 +241,7 @@
       "broadcastFailed": "Falló el envío a la cadena",
       "listingFailed": "No se pudo actualizar la visibilidad.",
       "trailerFailed": "No se pudo actualizar el tráiler de tu canal.",
+      "adsSyncFailed": "Guardado, pero la configuración de anuncios de este video aún no llegó a 3Speak. Intenta guardar de nuevo.",
       "saveFailed": "No se pudieron guardar los cambios."
     },
     "timeline": "Capítulos y enlaces",
@@ -251,6 +258,7 @@
     "sections": {
       "visibility": "Visibilidad",
       "content": "Contenido",
+      "ads": "Anuncios",
       "promotion": "Promoción"
     },
     "chaptersNote": "Con 3 o más capítulos, la lista de capítulos se escribe en la descripción al guardar.",

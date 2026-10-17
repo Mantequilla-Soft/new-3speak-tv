@@ -196,6 +196,12 @@
     "allowRemix": "Remix/clip toestaan",
     "remixOn": "Anderen kunnen remixes/clips maken; jij wordt vermeld als oorspronkelijke maker.",
     "remixOff": "Anderen kunnen deze video niet remixen of clippen.",
+    "adsOnVideo": "Advertenties in deze video",
+    "adsOnHint": "Er kunnen advertenties in deze video worden getoond.",
+    "adsOffHint": "Geen advertenties in deze video.",
+    "rollsOnVideo": "Videorolls",
+    "rollsOnHint": "Rolls, banners en tickers kunnen verschijnen.",
+    "rollsOffHint": "Alleen banners en tickers op deze video.",
     "trailer": "Kanaaltrailer",
     "trailerOn": "Speelt automatisch af bovenaan het tabblad Overzicht van je profiel en vervangt een eerder ingestelde trailer.",
     "trailerOff": "Maak dit de video die automatisch afspeelt bovenaan het tabblad Overzicht van je profiel.",
@@ -231,6 +237,7 @@
       "broadcastFailed": "Versturen mislukt",
       "listingFailed": "Zichtbaarheid kon niet worden bijgewerkt.",
       "trailerFailed": "Je kanaaltrailer kon niet worden bijgewerkt.",
+      "adsSyncFailed": "Opgeslagen, maar de advertentie-instelling voor deze video is nog niet bij 3Speak aangekomen. Probeer opnieuw op te slaan.",
       "saveFailed": "Wijzigingen opslaan mislukt."
     },
     "timeline": "Hoofdstukken en links",
@@ -247,6 +254,7 @@
     "sections": {
       "visibility": "Zichtbaarheid",
       "content": "Inhoud",
+      "ads": "Advertenties",
       "promotion": "Promotie"
     },
     "chaptersNote": "Vanaf 3 hoofdstukken wordt de hoofdstukkenlijst bij het opslaan in de beschrijving gezet.",

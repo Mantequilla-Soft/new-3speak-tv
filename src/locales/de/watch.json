@@ -196,6 +196,12 @@
     "allowRemix": "Remix/Clip erlauben",
     "remixOn": "Andere können Remixe/Clips erstellen; du wirst als Originalautor genannt.",
     "remixOff": "Andere können dieses Video nicht remixen oder clippen.",
+    "adsOnVideo": "Werbung in diesem Video",
+    "adsOnHint": "In diesem Video kann Werbung laufen.",
+    "adsOffHint": "Keine Werbung in diesem Video.",
+    "rollsOnVideo": "Video-Rolls",
+    "rollsOnHint": "Rolls, Banner und Ticker können erscheinen.",
+    "rollsOffHint": "Auf diesem Video nur Banner und Ticker.",
     "trailer": "Kanaltrailer",
     "trailerOn": "Startet automatisch oben im Übersicht-Tab deines Profils und ersetzt jeden Trailer, den du vorher festgelegt hast.",
     "trailerOff": "Mach dieses Video zu dem, das oben im Übersicht-Tab deines Profils automatisch startet.",
@@ -231,6 +237,7 @@
       "broadcastFailed": "Übertragung fehlgeschlagen",
       "listingFailed": "Die Sichtbarkeit konnte nicht geändert werden.",
       "trailerFailed": "Dein Kanaltrailer konnte nicht aktualisiert werden.",
+      "adsSyncFailed": "Gespeichert, aber die Werbeeinstellung für dieses Video ist noch nicht bei 3Speak angekommen. Versuch es noch einmal.",
       "saveFailed": "Änderungen konnten nicht gespeichert werden."
     },
     "timeline": "Kapitel und Links",
@@ -247,6 +254,7 @@
     "sections": {
       "visibility": "Sichtbarkeit",
       "content": "Inhalt",
+      "ads": "Werbung",
       "promotion": "Werbung"
     },
     "chaptersNote": "Ab 3 Kapiteln wird die Kapitelliste beim Speichern in die Beschreibung geschrieben.",

@@ -206,6 +206,12 @@
       "hintOn": "Su questo video possono comparire annunci.",
       "hintOff": "Nessuna pubblicità su questo video."
     },
+    "rolls": {
+      "label": "Spot nei video",
+      "info": "Gli spot sono brevi video pubblicitari che partono prima o durante questo video. Disattivali per tenere solo banner e ticker su questo video. Gli altri tuoi video e l'impostazione dell'account restano come sono.",
+      "hintOn": "Possono comparire spot, banner e ticker.",
+      "hintOff": "Solo banner e ticker su questo video."
+    },
     "gated": {
       "label": "Solo per i sostenitori",
       "info": "Cripta questo video in modo che solo gli abbonati a 3Speak Pro possano riprodurlo. Insieme al video viene pubblicata un'<b>anteprima non criptata di 10 secondi</b>, così il post mostra comunque un trailer ovunque su Hive. Titolo, descrizione e tag sono normali contenuti di un post Hive e <b>non sono criptati</b> — lo è solo il video. <b>Non è possibile modificarlo dopo il caricamento.</b>",
@@ -270,6 +276,7 @@
     "scheduled": "Post programmato!",
     "linkingEmbed": "Collegamento del video incorporato...",
     "adsOffFailedToast": "Pubblicato, ma non è stato ancora possibile disattivare la pubblicità per questo video.",
+    "rollsOffFailedToast": "Pubblicato, ma non è stato ancora possibile disattivare gli spot per questo video.",
     "trailerFailedToast": "Pubblicato, ma non è stato possibile impostarlo come trailer del canale.",
     "completed": "Completato",
     "publishedToast": "Video pubblicato!",
@@ -297,6 +304,8 @@
       "thumbnailLinkFailed": "Attenzione: impossibile impostare la miniatura incorporata (non critico)",
       "adsOffSaved": "Pubblicità disattivata per questo video",
       "adsOffFailed": "Impossibile salvare l'impostazione senza pubblicità per questo video",
+      "rollsOffSaved": "Spot disattivati per questo video",
+      "rollsOffFailed": "Impossibile salvare l'impostazione senza spot per questo video",
       "trailerSet": "Impostato come trailer del tuo canale",
       "trailerFailed": "Pubblicato, ma non è stato possibile impostarlo come trailer del canale",
       "published": "Video pubblicato!"

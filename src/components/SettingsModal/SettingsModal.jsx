@@ -118,6 +118,8 @@ function AdsSection() {
   const { t } = useTranslation();
   const user = useAppStore((s) => s.user);
   const [adsEnabled, setAdsEnabled] = useState(true);
+  // Video rolls on top of banners and tickers. Off = overlays only.
+  const [rollsEnabled, setRollsEnabled] = useState(true);
   // Placeholder only — the real split (and the platform default for a creator who
   // has never set one) comes from the server. The row stays hidden until it lands,
   // so nobody is shown a share that is about to change under them.
@@ -140,6 +142,7 @@ function AdsSection() {
       .then((r) => {
         if (!alive) return;
         setAdsEnabled(r.adsEnabled !== false);
+        setRollsEnabled(r.rollsEnabled !== false);
         if (r.split) { setSplit(r.split); setDraftCommunity(String(r.split.communityPct)); }
       })
       .catch(() => { /* unreadable preference just shows the default */ })
@@ -148,7 +151,7 @@ function AdsSection() {
   }, [user, visible]);
 
   // Both fields ride one signed message, so saving either costs a single prompt.
-  async function save(nextEnabled, nextCommunity) {
+  async function save(nextEnabled, nextCommunity, nextRolls = rollsEnabled) {
     if (saving) return false;
     setSaving(true);
     setError(null);
@@ -158,6 +161,7 @@ function AdsSection() {
       // wallet prompt does not undo a setting that has already taken effect here.
       const res = await saveCreatorAdSettings(user, {
         adsEnabled: nextEnabled,
+        rollsEnabled: nextRolls,
         communitySharePct: nextCommunity,
       });
       if (res.split) { setSplit(res.split); setDraftCommunity(String(res.split.communityPct)); }
@@ -179,6 +183,14 @@ function AdsSection() {
     const ok = await save(next, split ? split.communityPct : undefined);
     if (ok) toast.success(next ? t('settings.ads.onToast') : t('settings.ads.offToast'));
     else setAdsEnabled(previous); // put it back; the setting did not change
+  }
+
+  async function onToggleRolls(next) {
+    const previous = rollsEnabled;
+    setRollsEnabled(next);
+    const ok = await save(adsEnabled, split ? split.communityPct : undefined, next);
+    if (ok) toast.success(next ? t('settings.ads.rollsOnToast') : t('settings.ads.rollsOffToast'));
+    else setRollsEnabled(previous);
   }
 
   const parsedDraft = parseInt(draftCommunity, 10);
@@ -209,6 +221,21 @@ function AdsSection() {
           ariaLabel={t('settings.ads.allowAria')}
         />
       </div>
+      {adsEnabled && (
+        <div className="settings-modal-row">
+          <div className="settings-row-text">
+            <span className="settings-row-title">{t('settings.ads.rolls')}</span>
+            <span className="settings-row-desc">
+              {t('settings.ads.rollsDesc')}
+            </span>
+          </div>
+          <Switch
+            checked={rollsEnabled}
+            onChange={onToggleRolls}
+            ariaLabel={t('settings.ads.rolls')}
+          />
+        </div>
+      )}
       {adsEnabled && split && (
         <div className="settings-modal-row settings-ads-split">
           <div className="settings-row-text">

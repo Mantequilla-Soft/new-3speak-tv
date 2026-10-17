@@ -244,6 +244,8 @@
     "changeAnytime": "Obie opcje możesz zmienić w każdej chwili w <b>Ustawieniach</b>.",
     "allowAds": "Zezwól na reklamy w moich filmach",
     "allowAdsDesc": "Domyślnie włączone. Wyłączenie oznacza brak reklam we wszystkim, co publikujesz, i brak udziału.",
+    "allowRolls": "Zezwól na spoty w filmach",
+    "allowRollsDesc": "Wyłączone oznacza tylko banery i paski, które nigdy nie zatrzymują filmu.",
     "shareCommunity": "Podziel się ze społecznością",
     "shareCommunityDesc": "Ile z {{pool}}% trafia do społeczności, w której opublikowano film.",
     "breakdownYou": "<b>{{pct}}%</b> ty",

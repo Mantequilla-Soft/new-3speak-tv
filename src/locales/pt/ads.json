@@ -241,6 +241,8 @@
     "changeAnytime": "Você pode mudar qualquer uma dessas opções a qualquer momento nas <b>Configurações</b>.",
     "allowAds": "Permitir anúncios nos meus vídeos",
     "allowAdsDesc": "Ativado por padrão. Desativado significa nenhum anúncio em nada que você publicar, e nenhuma parte da receita.",
+    "allowRolls": "Permitir spots em vídeo",
+    "allowRollsDesc": "Desativado significa só banners e tickers, que nunca param o seu vídeo.",
     "shareCommunity": "Dividir com a comunidade",
     "shareCommunityDesc": "Quanto dos {{pool}}% vai para a comunidade em que você publicou o vídeo.",
     "breakdownYou": "<b>{{pct}}%</b> você",

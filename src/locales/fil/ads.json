@@ -238,6 +238,8 @@
     "changeAnytime": "Puwede mong baguhin ang alinman sa mga ito anumang oras sa <b>Settings</b>.",
     "allowAds": "Payagan ang ads sa mga video ko",
     "allowAdsDesc": "Naka-on bilang default. Kapag naka-off, walang ads sa anumang i-post mo, at walang bahagi.",
+    "allowRolls": "Payagan ang video ad roll",
+    "allowRollsDesc": "Kapag naka-off, banner at ticker lang, na hindi kailanman humihinto sa video mo.",
     "shareCommunity": "Ibahagi sa komunidad",
     "shareCommunityDesc": "Gaano kalaki sa {{pool}}% ang mapupunta sa komunidad kung saan mo in-post ang video.",
     "breakdownYou": "<b>{{pct}}%</b> ikaw",

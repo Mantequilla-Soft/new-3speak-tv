@@ -204,6 +204,12 @@
       "hintOn": "此视频可能会播放广告。",
       "hintOff": "此视频不显示广告。"
     },
+    "rolls": {
+      "label": "视频插播广告",
+      "info": "插播广告是在此视频播放前或播放中出现的简短视频广告。关闭后此视频只保留横幅和滚动字幕。你的其他视频和账户设置保持不变。",
+      "hintOn": "可能出现插播广告、横幅和滚动字幕。",
+      "hintOff": "此视频只显示横幅和滚动字幕。"
+    },
     "gated": {
       "label": "仅限支持者",
       "info": "加密此视频，只有 3Speak Pro 订阅者可以播放。同时会发布一段 <b>10 秒的未加密预览</b>，因此帖子在 Hive 上的任何地方仍会显示预告。你的标题、简介和标签是普通的 Hive 帖子内容，<b>不会被加密</b>——只有视频会被加密。<b>上传后无法更改。</b>",
@@ -266,6 +272,7 @@
     "scheduled": "帖子已定时！",
     "linkingEmbed": "正在关联嵌入视频...",
     "adsOffFailedToast": "已发布，但暂时无法关闭此视频的广告。",
+    "rollsOffFailedToast": "已发布，但暂时无法为此视频关闭视频插播广告。",
     "trailerFailedToast": "已发布，但无法设为你的频道预告片。",
     "completed": "已完成",
     "publishedToast": "视频发布成功！",
@@ -293,6 +300,8 @@
       "thumbnailLinkFailed": "警告：无法设置嵌入缩略图（不影响发布）",
       "adsOffSaved": "已关闭此视频的广告",
       "adsOffFailed": "无法保存此视频的无广告设置",
+      "rollsOffSaved": "已为此视频关闭视频插播广告",
+      "rollsOffFailed": "无法保存此视频的无插播广告设置",
       "trailerSet": "已设为你的频道预告片",
       "trailerFailed": "已发布，但无法设为你的频道预告片",
       "published": "视频发布成功！"

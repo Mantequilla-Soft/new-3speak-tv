@@ -204,6 +204,12 @@
       "hintOn": "Iklan dapat diputar di video ini.",
       "hintOff": "Tidak ada iklan di video ini."
     },
+    "rolls": {
+      "label": "Video roll iklan",
+      "info": "Roll adalah iklan video pendek yang diputar sebelum atau di tengah video ini. Matikan agar video ini hanya punya banner dan ticker. Video lain dan pengaturan akunmu tetap seperti semula.",
+      "hintOn": "Roll, banner, dan ticker bisa tampil.",
+      "hintOff": "Hanya banner dan ticker di video ini."
+    },
     "gated": {
       "label": "Khusus pendukung",
       "info": "Mengenkripsi video ini agar hanya pelanggan 3Speak Pro yang bisa memutarnya. <b>Pratinjau 10 detik tanpa enkripsi</b> diterbitkan bersamanya, jadi postingan tetap menampilkan cuplikan di mana pun di Hive. Judul, deskripsi, dan tag-mu adalah konten postingan Hive biasa dan <b>tidak dienkripsi</b> — hanya videonya. <b>Ini tidak bisa diubah setelah diunggah.</b>",
@@ -266,6 +272,7 @@
     "scheduled": "Postingan dijadwalkan!",
     "linkingEmbed": "Menautkan video embed...",
     "adsOffFailedToast": "Sudah dipublikasikan, tetapi iklan untuk video ini belum bisa dimatikan.",
+    "rollsOffFailedToast": "Sudah terbit, tetapi video roll iklan belum bisa dimatikan untuk video ini.",
     "trailerFailedToast": "Sudah diterbitkan, tetapi tidak dapat dijadikan trailer channel-mu.",
     "completed": "Selesai",
     "publishedToast": "Video berhasil diterbitkan!",
@@ -293,6 +300,8 @@
       "thumbnailLinkFailed": "Peringatan: Thumbnail embed tidak dapat diatur (tidak kritis)",
       "adsOffSaved": "Iklan dimatikan untuk video ini",
       "adsOffFailed": "Tidak dapat menyimpan pengaturan tanpa iklan untuk video ini",
+      "rollsOffSaved": "Video roll iklan dimatikan untuk video ini",
+      "rollsOffFailed": "Tidak dapat menyimpan pengaturan tanpa roll untuk video ini",
       "trailerSet": "Dijadikan trailer channel-mu",
       "trailerFailed": "Sudah diterbitkan, tetapi tidak dapat dijadikan trailer channel-mu",
       "published": "Video berhasil diterbitkan!"

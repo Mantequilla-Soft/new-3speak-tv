@@ -238,6 +238,8 @@
     "changeAnytime": "Unaweza kubadilisha lolote kati ya haya wakati wowote kwenye <b>Mipangilio</b>.",
     "allowAds": "Ruhusu matangazo kwenye video zangu",
     "allowAdsDesc": "Imewashwa kwa chaguo-msingi. Ikizimwa, hakuna matangazo kwenye chochote unachochapisha, na hakuna mgao.",
+    "allowRolls": "Ruhusu matangazo ya video",
+    "allowRollsDesc": "Ukizima, ni mabango na tika pekee, ambazo hazisimamishi video yako kamwe.",
     "shareCommunity": "Gawana na jumuiya",
     "shareCommunityDesc": "Kiasi gani cha {{pool}}% kinaenda kwa jumuiya uliyochapisha video ndani yake.",
     "breakdownYou": "<b>{{pct}}%</b> wewe",

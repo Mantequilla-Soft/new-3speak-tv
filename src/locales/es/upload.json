@@ -206,6 +206,12 @@
       "hintOn": "Puede haber anuncios en este video.",
       "hintOff": "Sin anuncios en este video."
     },
+    "rolls": {
+      "label": "Anuncios en video",
+      "info": "Los anuncios en video son spots cortos que se reproducen antes o durante este video. Desactívalos para dejar solo banners y tickers en él. Tus otros videos y la configuración de tu cuenta no cambian.",
+      "hintOn": "Pueden aparecer anuncios en video, banners y tickers.",
+      "hintOff": "Solo banners y tickers en este video."
+    },
     "gated": {
       "label": "Solo suscriptores",
       "info": "Cifra este video para que solo los suscriptores de 3Speak Pro puedan reproducirlo. Junto con él se publica una <b>vista previa de 10 segundos sin cifrar</b>, así que la publicación sigue mostrando un tráiler en todo Hive. Tu título, descripción y etiquetas son contenido normal de una publicación de Hive y <b>no se cifran</b>; solo el video. <b>Esto no se puede cambiar después de subirlo.</b>",
@@ -270,6 +276,7 @@
     "scheduled": "¡Publicación programada!",
     "linkingEmbed": "Vinculando el video insertado...",
     "adsOffFailedToast": "Publicado, pero aún no se pudieron desactivar los anuncios de este video.",
+    "rollsOffFailedToast": "Publicado, pero aún no se pudieron desactivar los anuncios en video de este video.",
     "trailerFailedToast": "Publicado, pero no se pudo configurar como tráiler de tu canal.",
     "completed": "Completado",
     "publishedToast": "¡Video publicado!",
@@ -297,6 +304,8 @@
       "thumbnailLinkFailed": "Aviso: no se pudo configurar la miniatura del video insertado (no es crítico)",
       "adsOffSaved": "Anuncios desactivados para este video",
       "adsOffFailed": "No se pudo guardar la opción sin anuncios para este video",
+      "rollsOffSaved": "Anuncios en video desactivados para este video",
+      "rollsOffFailed": "No se pudo guardar la opción sin anuncios en video para este video",
       "trailerSet": "Configurado como tráiler de tu canal",
       "trailerFailed": "Publicado, pero no se pudo configurar como tráiler de tu canal",
       "published": "¡Video publicado!"

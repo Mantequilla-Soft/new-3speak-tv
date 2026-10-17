@@ -196,6 +196,12 @@
     "allowRemix": "Ruhusu Remix/Klipu",
     "remixOn": "Wengine wanaweza kutengeneza remix/klipu; wewe unatajwa kama mwandishi asili.",
     "remixOff": "Wengine hawawezi kufanya remix wala kukata klipu ya video hii.",
+    "adsOnVideo": "Matangazo kwenye video hii",
+    "adsOnHint": "Matangazo yanaweza kuchezwa kwenye video hii.",
+    "adsOffHint": "Hakuna matangazo kwenye video hii.",
+    "rollsOnVideo": "Matangazo ya video",
+    "rollsOnHint": "Matangazo ya video, mabango na tika yanaweza kuonekana.",
+    "rollsOffHint": "Mabango na tika pekee kwenye video hii.",
     "trailer": "Trela ya chaneli",
     "trailerOn": "Inacheza kiotomatiki juu ya kichupo cha Muhtasari kwenye wasifu wako, ikichukua nafasi ya trela yoyote uliyoweka awali.",
     "trailerOff": "Ifanye hii kuwa video inayocheza kiotomatiki juu ya kichupo cha Muhtasari kwenye wasifu wako.",
@@ -231,6 +237,7 @@
       "broadcastFailed": "Kutangaza kumeshindwa",
       "listingFailed": "Imeshindwa kusasisha uorodheshaji.",
       "trailerFailed": "Imeshindwa kusasisha trela ya chaneli yako.",
+      "adsSyncFailed": "Imehifadhiwa, lakini mpangilio wa matangazo wa video hii bado haujafika 3Speak. Jaribu kuhifadhi tena.",
       "saveFailed": "Imeshindwa kuhifadhi mabadiliko."
     },
     "timeline": "Sura na viungo",
@@ -247,6 +254,7 @@
     "sections": {
       "visibility": "Mwonekano",
       "content": "Maudhui",
+      "ads": "Matangazo",
       "promotion": "Utangazaji"
     },
     "chaptersNote": "Sura zikiwa 3 au zaidi, orodha ya sura huandikwa kwenye maelezo unapohifadhi.",

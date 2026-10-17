@@ -235,6 +235,8 @@
     "changeAnytime": "Bạn có thể thay đổi bất kỳ mục nào trong số này bất cứ lúc nào trong <b>Cài đặt</b>.",
     "allowAds": "Cho phép quảng cáo trên video của tôi",
     "allowAdsDesc": "Bật theo mặc định. Tắt nghĩa là không có quảng cáo trên bất cứ thứ gì bạn đăng, và không có phần chia.",
+    "allowRolls": "Cho phép quảng cáo dạng video",
+    "allowRollsDesc": "Tắt nghĩa là chỉ có banner và ticker, không bao giờ làm dừng video của bạn.",
     "shareCommunity": "Chia sẻ với cộng đồng",
     "shareCommunityDesc": "Phần bao nhiêu trong {{pool}}% được chuyển cho cộng đồng nơi bạn đăng video.",
     "breakdownYou": "<b>{{pct}}%</b> bạn",

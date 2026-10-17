@@ -1799,6 +1799,13 @@ app.post('/api/ads/opt-out-signature', signChallengeLimiter, async (req, res) =>
       return res.status(400).json({ error: 'adsEnabled must be true or false' })
     }
     const adsEnabled = req.body.adsEnabled
+    // Banners and tickers but no video rolls. Optional (older clients never send
+    // it) and only signed with ads on, as the 'no-rolls' mode.
+    const rollsRaw = req.body.rollsEnabled
+    if (rollsRaw !== undefined && typeof rollsRaw !== 'boolean') {
+      return res.status(400).json({ error: 'rollsEnabled must be true or false' })
+    }
+    const mode = !adsEnabled ? 'off' : (rollsRaw === false ? 'no-rolls' : 'on')
 
     // The community's cut of the creator pool. Signed along with everything else so
     // a signature cannot be lifted from one split and reused on another — this is
@@ -1822,7 +1829,7 @@ app.post('/api/ads/opt-out-signature', signChallengeLimiter, async (req, res) =>
 
     const timestamp = Date.now()
     // Keep in lockstep with prefsMessage() in 3speakchecks/routes/advertise.js.
-    const message = ['3speak-ads', 'creator-prefs', hiveUsername, adsEnabled ? 'on' : 'off',
+    const message = ['3speak-ads', 'creator-prefs', hiveUsername, mode,
       String(communitySharePct), String(timestamp)].join('|')
     const signature = PrivateKey.fromString(POSTING_WIF).sign(cryptoUtils.sha256(Buffer.from(message, 'utf8'))).toString()
 

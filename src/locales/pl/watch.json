@@ -204,6 +204,12 @@
     "allowRemix": "Zezwól na remiks/klip",
     "remixOn": "Inni mogą tworzyć remiksy/klipy; jako autor oryginału widniejesz ty.",
     "remixOff": "Inni nie mogą remiksować ani wycinać klipów z tego filmu.",
+    "adsOnVideo": "Reklamy w tym filmie",
+    "adsOnHint": "W tym filmie mogą pojawiać się reklamy.",
+    "adsOffHint": "Brak reklam w tym filmie.",
+    "rollsOnVideo": "Spoty w filmach",
+    "rollsOnHint": "Mogą pojawić się spoty, banery i paski.",
+    "rollsOffHint": "W tym filmie tylko banery i paski.",
     "trailer": "Zwiastun kanału",
     "trailerOn": "Odtwarza się automatycznie na górze zakładki Przegląd na twoim profilu, zastępując poprzedni zwiastun.",
     "trailerOff": "Ustaw ten film jako automatycznie odtwarzany na górze zakładki Przegląd na twoim profilu.",
@@ -239,6 +245,7 @@
       "broadcastFailed": "Wysłanie transakcji nie powiodło się",
       "listingFailed": "Nie udało się zmienić widoczności.",
       "trailerFailed": "Nie udało się zaktualizować zwiastuna kanału.",
+      "adsSyncFailed": "Zapisano, ale ustawienie reklam dla tego filmu jeszcze nie dotarło do 3Speak. Spróbuj zapisać ponownie.",
       "saveFailed": "Nie udało się zapisać zmian."
     },
     "timeline": "Rozdziały i linki",
@@ -255,6 +262,7 @@
     "sections": {
       "visibility": "Widoczność",
       "content": "Treść",
+      "ads": "Reklamy",
       "promotion": "Promocja"
     },
     "chaptersNote": "Gdy są co najmniej 3 rozdziały, ich lista trafia do opisu przy zapisie.",

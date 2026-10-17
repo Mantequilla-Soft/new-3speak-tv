@@ -192,6 +192,12 @@
     "allowRemix": "Cho phép Remix/Clip",
     "remixOn": "Người khác có thể tạo remix/clip; bạn được ghi nhận là tác giả gốc.",
     "remixOff": "Người khác không thể remix hoặc cắt clip video này.",
+    "adsOnVideo": "Quảng cáo trên video này",
+    "adsOnHint": "Video này có thể phát quảng cáo.",
+    "adsOffHint": "Không có quảng cáo trên video này.",
+    "rollsOnVideo": "Quảng cáo dạng video",
+    "rollsOnHint": "Có thể hiện quảng cáo video, banner và ticker.",
+    "rollsOffHint": "Video này chỉ có banner và ticker.",
     "trailer": "Video giới thiệu kênh",
     "trailerOn": "Tự động phát ở đầu tab Tổng quan trên hồ sơ của bạn, thay thế video giới thiệu bạn đã đặt trước đó.",
     "trailerOff": "Đặt video này làm video tự động phát ở đầu tab Tổng quan trên hồ sơ của bạn.",
@@ -227,6 +233,7 @@
       "broadcastFailed": "Phát giao dịch thất bại",
       "listingFailed": "Không thể cập nhật chế độ hiển thị.",
       "trailerFailed": "Không thể cập nhật video giới thiệu kênh của bạn.",
+      "adsSyncFailed": "Đã lưu, nhưng cài đặt quảng cáo của video này chưa đến 3Speak. Hãy thử lưu lại.",
       "saveFailed": "Lưu thay đổi thất bại."
     },
     "timeline": "Chương và liên kết",
@@ -243,6 +250,7 @@
     "sections": {
       "visibility": "Hiển thị",
       "content": "Nội dung",
+      "ads": "Quảng cáo",
       "promotion": "Quảng bá"
     },
     "chaptersNote": "Khi có từ 3 chương trở lên, danh sách chương sẽ được ghi vào phần mô tả khi lưu.",

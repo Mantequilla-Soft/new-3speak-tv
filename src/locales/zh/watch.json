@@ -192,6 +192,12 @@
     "allowRemix": "允许二创/剪辑",
     "remixOn": "其他人可以进行二创或剪辑；你会被署名为原作者。",
     "remixOff": "其他人不能二创或剪辑这个视频。",
+    "adsOnVideo": "此视频的广告",
+    "adsOnHint": "此视频可能会播放广告。",
+    "adsOffHint": "此视频不显示广告。",
+    "rollsOnVideo": "视频插播广告",
+    "rollsOnHint": "可能出现插播广告、横幅和滚动字幕。",
+    "rollsOffHint": "此视频只显示横幅和滚动字幕。",
     "trailer": "频道预告片",
     "trailerOn": "在你个人主页“概览”标签页顶部自动播放，并替换你之前设置的预告片。",
     "trailerOff": "把这个视频设为在你个人主页“概览”标签页顶部自动播放的视频。",
@@ -227,6 +233,7 @@
       "broadcastFailed": "广播失败",
       "listingFailed": "无法更新公开状态。",
       "trailerFailed": "无法更新你的频道预告片。",
+      "adsSyncFailed": "已保存，但此视频的广告设置尚未同步到 3Speak。请再保存一次。",
       "saveFailed": "保存更改失败。"
     },
     "timeline": "章节和链接",
@@ -243,6 +250,7 @@
     "sections": {
       "visibility": "可见性",
       "content": "内容",
+      "ads": "广告",
       "promotion": "推广"
     },
     "chaptersNote": "章节达到 3 个或以上时，保存时会把章节列表写入描述。",

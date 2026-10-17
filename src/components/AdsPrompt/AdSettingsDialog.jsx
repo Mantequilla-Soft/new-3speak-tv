@@ -19,10 +19,12 @@ const toast = toastIn('Advertising');
 // Two callbacks rather than one with a flag: the dismiss paths are wired straight
 // to onClick handlers, which would hand a click event to a `saved` argument and
 // make every dismissal look like a save.
-export default function AdSettingsDialog({ user, split, initialAdsEnabled, onSaved, onDismiss }) {
+export default function AdSettingsDialog({ user, split, initialAdsEnabled, initialRollsEnabled, onSaved, onDismiss }) {
   const { t } = useTranslation();
   const [step, setStep] = useState(0);
   const [adsEnabled, setAdsEnabled] = useState(initialAdsEnabled !== false);
+  // Off = banners and tickers only, no video rolls.
+  const [rollsEnabled, setRollsEnabled] = useState(initialRollsEnabled !== false);
   // Seeded from the server's own default community share rather than a constant
   // kept here — see readCreatorAdChoice. (That default is 0 now, not the 25 this
   // comment used to name: sharing with a community is opt in.)
@@ -48,6 +50,7 @@ export default function AdSettingsDialog({ user, split, initialAdsEnabled, onSav
     try {
       const res = await saveCreatorAdSettings(user, {
         adsEnabled,
+        rollsEnabled,
         communitySharePct: community,
       });
       if (res.chainSaved) {
@@ -169,6 +172,28 @@ export default function AdSettingsDialog({ user, split, initialAdsEnabled, onSav
                 <span className="ads-prompt-switch-knob" />
               </button>
             </div>
+
+            {adsEnabled && (
+              <div className="ads-prompt-row">
+                <div className="ads-prompt-row-text">
+                  <span className="ads-prompt-row-title">{t('ads.prompt.allowRolls')}</span>
+                  <span className="ads-prompt-row-desc">
+                    {t('ads.prompt.allowRollsDesc')}
+                  </span>
+                </div>
+                <button
+                  type="button"
+                  role="switch"
+                  aria-checked={rollsEnabled}
+                  aria-label={t('ads.prompt.allowRolls')}
+                  className={`ads-prompt-switch${rollsEnabled ? ' is-on' : ''}`}
+                  onClick={() => setRollsEnabled((v) => !v)}
+                  disabled={saving}
+                >
+                  <span className="ads-prompt-switch-knob" />
+                </button>
+              </div>
+            )}
 
             {adsEnabled && (
               <div className="ads-prompt-share">

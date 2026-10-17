@@ -192,6 +192,12 @@
     "allowRemix": "Izinkan Remix/Klip",
     "remixOn": "Orang lain bisa membuat remix/klip; kamu dicantumkan sebagai pembuat aslinya.",
     "remixOff": "Orang lain tidak bisa me-remix atau membuat klip dari video ini.",
+    "adsOnVideo": "Iklan di video ini",
+    "adsOnHint": "Iklan dapat diputar di video ini.",
+    "adsOffHint": "Tidak ada iklan di video ini.",
+    "rollsOnVideo": "Video roll iklan",
+    "rollsOnHint": "Roll, banner, dan ticker bisa tampil.",
+    "rollsOffHint": "Hanya banner dan ticker di video ini.",
     "trailer": "Trailer channel",
     "trailerOn": "Diputar otomatis di bagian atas tab Ringkasan profilmu, menggantikan trailer yang kamu atur sebelumnya.",
     "trailerOff": "Jadikan video ini yang diputar otomatis di bagian atas tab Ringkasan profilmu.",
@@ -227,6 +233,7 @@
       "broadcastFailed": "Broadcast gagal",
       "listingFailed": "Status publikasi tidak dapat diperbarui.",
       "trailerFailed": "Trailer channel-mu tidak dapat diperbarui.",
+      "adsSyncFailed": "Tersimpan, tetapi pengaturan iklan video ini belum sampai ke 3Speak. Coba simpan lagi.",
       "saveFailed": "Gagal menyimpan perubahan."
     },
     "timeline": "Bab dan tautan",
@@ -243,6 +250,7 @@
     "sections": {
       "visibility": "Visibilitas",
       "content": "Konten",
+      "ads": "Iklan",
       "promotion": "Promosi"
     },
     "chaptersNote": "Jika ada 3 bab atau lebih, daftar bab ditulis ke deskripsi saat kamu menyimpan.",

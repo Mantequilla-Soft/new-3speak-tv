@@ -164,6 +164,8 @@ export function EmbedUploadProvider({ children }) {
   // Per-video ad opt-out. Only offered to creators whose account-level setting
   // carries ads; written into the post itself, see the publish path below.
   const [videoAdsEnabled, setVideoAdsEnabled] = useState(true);
+  // Video rolls on THIS video (banners and tickers stay when off).
+  const [videoRollsEnabled, setVideoRollsEnabled] = useState(true);
   // "Mark as channel trailer" — pinned to the creator's profile after publish.
   const [isChannelTrailer, setIsChannelTrailer] = useState(false);
   const [isScheduled, setIsScheduled] = useState(false);
@@ -390,6 +392,7 @@ export function EmbedUploadProvider({ children }) {
     setBeneficiaries([]);
     setIsNsfw(false);
     setVideoAdsEnabled(true);
+    setVideoRollsEnabled(true);
     setIsChannelTrailer(false);
     SetDeclineRewards(false);
     setRewardPowerup(false);
@@ -1792,10 +1795,12 @@ export function EmbedUploadProvider({ children }) {
         // explicitly rather than re-derived by every reader.
         ...(gated ? { gated: true, gatedVideoId: embedAssetPermlink } : {}),
         // Per-video ad opt-out, namespaced like the account-level `3speak.ads` in
-        // posting_json_metadata. Written only when off: the post is the creator's
+        // posting_json_metadata: `ads: false` = no ads, `rolls: false` = banners
+        // and tickers only. Written only when off: the post is the creator's
         // signed record, and the checker mirrors it from the chain (routes/
         // advertise.js, /creator/video-ads/sync), so no separate signature is asked.
-        ...(videoAdsEnabled ? {} : { '3speak': { ads: false } }),
+        ...(!videoAdsEnabled ? { '3speak': { ads: false } }
+          : (!videoRollsEnabled ? { '3speak': { rolls: false } } : {})),
         // ▶️ Where an imported video came from (/youtube-import): provenance on the
         // creator's own signed record, for later features (dedupe, re-sync,
         // "originally on …") without depending on our server's bookkeeping.
@@ -2132,14 +2137,14 @@ export function EmbedUploadProvider({ children }) {
       // Only needed when off: an absent row already means ads on. Non-fatal, but
       // surfaced, because a quiet failure means ads play on a video the creator
       // said should have none. A scheduled post is synced by the checker itself.
-      if (!videoAdsEnabled && !result.incubation) {
+      if ((!videoAdsEnabled || !videoRollsEnabled) && !result.incubation) {
         try {
           await syncVideoAdOptOut(user, hivePermlink);
-          addMessage(t('upload.publishing.log.adsOffSaved'), 'success');
+          addMessage(t(videoAdsEnabled ? 'upload.publishing.log.rollsOffSaved' : 'upload.publishing.log.adsOffSaved'), 'success');
         } catch (adsErr) {
           console.warn('Failed to save per-video ad opt-out:', adsErr);
-          addMessage(t('upload.publishing.log.adsOffFailed'), 'warning');
-          toast.error(t('upload.publishing.adsOffFailedToast'));
+          addMessage(t(videoAdsEnabled ? 'upload.publishing.log.rollsOffFailed' : 'upload.publishing.log.adsOffFailed'), 'warning');
+          toast.error(t(videoAdsEnabled ? 'upload.publishing.rollsOffFailedToast' : 'upload.publishing.adsOffFailedToast'));
         }
       }
 
@@ -2211,6 +2216,7 @@ export function EmbedUploadProvider({ children }) {
     rewardPowerup, setRewardPowerup,
     isNsfw, setIsNsfw,
     videoAdsEnabled, setVideoAdsEnabled,
+    videoRollsEnabled, setVideoRollsEnabled,
     isChannelTrailer, setIsChannelTrailer,
     isScheduled, setIsScheduled,
     scheduleDateTime, setScheduleDateTime,

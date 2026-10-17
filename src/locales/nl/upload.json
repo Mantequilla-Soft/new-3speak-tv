@@ -205,6 +205,12 @@
       "hintOn": "Er kunnen advertenties in deze video worden getoond.",
       "hintOff": "Geen advertenties in deze video."
     },
+    "rolls": {
+      "label": "Videorolls",
+      "info": "Rolls zijn korte videospots die voor of tijdens deze video spelen. Zet ze uit om op deze video alleen banners en tickers te houden. Je andere video's en je accountinstelling blijven zoals ze zijn.",
+      "hintOn": "Rolls, banners en tickers kunnen verschijnen.",
+      "hintOff": "Alleen banners en tickers op deze video."
+    },
     "gated": {
       "label": "Alleen voor supporters",
       "info": "Versleutelt deze video zodat alleen 3Speak Pro-abonnees hem kunnen afspelen. Er wordt een <b>onversleuteld voorproefje van 10 seconden</b> naast gepubliceerd, zodat de post overal op Hive nog een trailer toont. Je titel, beschrijving en tags zijn gewone inhoud van een Hive-post en worden <b>niet versleuteld</b> — alleen de video. <b>Dit kan na het uploaden niet meer worden gewijzigd.</b>",
@@ -268,6 +274,7 @@
     "scheduled": "Post ingepland!",
     "linkingEmbed": "Embedvideo koppelen...",
     "adsOffFailedToast": "Gepubliceerd, maar de advertenties voor deze video konden nog niet worden uitgezet.",
+    "rollsOffFailedToast": "Gepubliceerd, maar de videorolls konden voor deze video nog niet worden uitgezet.",
     "trailerFailedToast": "Gepubliceerd, maar kon niet worden ingesteld als je kanaaltrailer.",
     "completed": "Voltooid",
     "publishedToast": "Video gepubliceerd!",
@@ -295,6 +302,8 @@
       "thumbnailLinkFailed": "Waarschuwing: embedthumbnail kon niet worden ingesteld (niet kritiek)",
       "adsOffSaved": "Advertenties uitgezet voor deze video",
       "adsOffFailed": "Kon de instelling zonder advertenties voor deze video niet opslaan",
+      "rollsOffSaved": "Videorolls uitgezet voor deze video",
+      "rollsOffFailed": "De instelling zonder rolls kon voor deze video niet worden opgeslagen",
       "trailerSet": "Ingesteld als je kanaaltrailer",
       "trailerFailed": "Gepubliceerd, maar kon niet worden ingesteld als je kanaaltrailer",
       "published": "Video gepubliceerd!"

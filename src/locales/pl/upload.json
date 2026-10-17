@@ -207,6 +207,12 @@
       "hintOn": "W tym filmie mogą pojawiać się reklamy.",
       "hintOff": "Brak reklam w tym filmie."
     },
+    "rolls": {
+      "label": "Spoty w filmach",
+      "info": "Spoty to krótkie reklamy wideo odtwarzane przed tym filmem lub w jego trakcie. Wyłącz je, aby w tym filmie zostały tylko banery i paski. Pozostałe filmy i ustawienie konta się nie zmienią.",
+      "hintOn": "Mogą pojawić się spoty, banery i paski.",
+      "hintOff": "W tym filmie tylko banery i paski."
+    },
     "gated": {
       "label": "Tylko dla wspierających",
       "info": "Szyfruje ten film, aby mogli go odtwarzać tylko subskrybenci 3Speak Pro. Razem z nim publikowany jest <b>10-sekundowy niezaszyfrowany podgląd</b>, więc post nadal pokazuje zwiastun wszędzie na Hive. Tytuł, opis i tagi to zwykła treść posta Hive i <b>nie są szyfrowane</b> — szyfrowany jest tylko film. <b>Nie można tego zmienić po przesłaniu.</b>",
@@ -272,6 +278,7 @@
     "scheduled": "Post zaplanowany!",
     "linkingEmbed": "Łączenie osadzonego filmu...",
     "adsOffFailedToast": "Opublikowano, ale nie udało się jeszcze wyłączyć reklam w tym filmie.",
+    "rollsOffFailedToast": "Opublikowano, ale nie udało się jeszcze wyłączyć spotów w tym filmie.",
     "trailerFailedToast": "Opublikowano, ale nie udało się ustawić go jako zwiastuna kanału.",
     "completed": "Zakończono",
     "publishedToast": "Film opublikowany!",
@@ -299,6 +306,8 @@
       "thumbnailLinkFailed": "Ostrzeżenie: nie udało się ustawić miniatury osadzenia (niekrytyczne)",
       "adsOffSaved": "Reklamy w tym filmie wyłączone",
       "adsOffFailed": "Nie udało się zapisać ustawienia bez reklam dla tego filmu",
+      "rollsOffSaved": "Spoty w tym filmie wyłączone",
+      "rollsOffFailed": "Nie udało się zapisać ustawienia bez spotów dla tego filmu",
       "trailerSet": "Ustawiono jako zwiastun kanału",
       "trailerFailed": "Opublikowano, ale nie udało się ustawić go jako zwiastuna kanału",
       "published": "Film opublikowany!"

@@ -205,6 +205,12 @@
       "hintOn": "Bu videoda reklam gösterilebilir.",
       "hintOff": "Bu videoda reklam yok."
     },
+    "rolls": {
+      "label": "Video reklamları",
+      "info": "Video reklamları, bu videodan önce veya video sırasında oynayan kısa reklamlardır. Kapatırsan bu videoda yalnızca bannerlar ve kayan yazılar kalır. Diğer videoların ve hesap ayarın olduğu gibi kalır.",
+      "hintOn": "Video reklamları, bannerlar ve kayan yazılar görünebilir.",
+      "hintOff": "Bu videoda yalnızca bannerlar ve kayan yazılar."
+    },
     "gated": {
       "label": "Yalnızca destekçilere",
       "info": "Bu videoyu şifreler, böylece yalnızca 3Speak Pro aboneleri oynatabilir. Yanında <b>10 saniyelik şifresiz bir önizleme</b> yayınlanır, böylece gönderi Hive'ın her yerinde yine bir fragman gösterir. Başlığın, açıklaman ve etiketlerin sıradan Hive gönderi içeriğidir ve <b>şifrelenmez</b>; yalnızca video şifrelenir. <b>Bu, yüklemeden sonra değiştirilemez.</b>",
@@ -268,6 +274,7 @@
     "scheduled": "Gönderi planlandı!",
     "linkingEmbed": "Gömülü video bağlanıyor...",
     "adsOffFailedToast": "Yayınlandı, ancak bu videonun reklamları henüz kapatılamadı.",
+    "rollsOffFailedToast": "Yayınlandı, ancak bu video için video reklamları henüz kapatılamadı.",
     "trailerFailedToast": "Yayınlandı ama kanal fragmanın olarak ayarlanamadı.",
     "completed": "Tamamlandı",
     "publishedToast": "Video yayınlandı!",
@@ -295,6 +302,8 @@
       "thumbnailLinkFailed": "Uyarı: Gömülü video küçük resmi ayarlanamadı (kritik değil)",
       "adsOffSaved": "Bu video için reklamlar kapatıldı",
       "adsOffFailed": "Bu video için reklamsız ayarı kaydedilemedi",
+      "rollsOffSaved": "Bu video için video reklamları kapatıldı",
+      "rollsOffFailed": "Bu video için video reklamı olmayan ayar kaydedilemedi",
       "trailerSet": "Kanal fragmanın olarak ayarlandı",
       "trailerFailed": "Yayınlandı ama kanal fragmanın olarak ayarlanamadı",
       "published": "Video yayınlandı!"

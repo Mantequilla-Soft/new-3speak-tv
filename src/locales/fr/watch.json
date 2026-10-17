@@ -200,6 +200,12 @@
     "allowRemix": "Autoriser remix/clip",
     "remixOn": "D'autres peuvent créer des remix/clips ; vous êtes crédité comme auteur original.",
     "remixOff": "Personne ne peut remixer ni clipper cette vidéo.",
+    "adsOnVideo": "Publicités sur cette vidéo",
+    "adsOnHint": "Des publicités peuvent être diffusées sur cette vidéo.",
+    "adsOffHint": "Aucune publicité sur cette vidéo.",
+    "rollsOnVideo": "Spots vidéo",
+    "rollsOnHint": "Spots, bannières et bandeaux peuvent s'afficher.",
+    "rollsOffHint": "Seulement des bannières et des bandeaux sur cette vidéo.",
     "trailer": "Bande-annonce de la chaîne",
     "trailerOn": "Se lance automatiquement en haut de l'onglet Aperçu de votre profil, en remplaçant toute bande-annonce définie auparavant.",
     "trailerOff": "Faites-en la vidéo lancée automatiquement en haut de l'onglet Aperçu de votre profil.",
@@ -235,6 +241,7 @@
       "broadcastFailed": "Échec de la diffusion",
       "listingFailed": "Impossible de mettre à jour la visibilité.",
       "trailerFailed": "Impossible de mettre à jour la bande-annonce de votre chaîne.",
+      "adsSyncFailed": "Enregistré, mais le réglage publicitaire de cette vidéo n'est pas encore arrivé chez 3Speak. Réessayez d'enregistrer.",
       "saveFailed": "Impossible d'enregistrer les modifications."
     },
     "timeline": "Chapitres et liens",
@@ -251,6 +258,7 @@
     "sections": {
       "visibility": "Visibilité",
       "content": "Contenu",
+      "ads": "Publicités",
       "promotion": "Promotion"
     },
     "chaptersNote": "À partir de 3 chapitres, la liste des chapitres est écrite dans la description à l'enregistrement.",
