@@ -16,7 +16,7 @@ import { useAppStore } from '../../lib/store';
 import PromoteModal from '../Promote/PromoteModal';
 import { Rocket, FileText, Image as ImageIcon, ListOrdered, SlidersHorizontal } from 'lucide-react';
 import TimelineEditor, { withTimelineKeys, chapterIssues } from '../timeline/TimelineEditor';
-import { readTimeline, withTimeline, applyChaptersToBody, normalizeChapters, chaptersFromText } from '../../utils/videoTimeline';
+import { readTimeline, withTimeline, applyTimelineToBody, chaptersFromText } from '../../utils/videoTimeline';
 import { fetchPlaySource } from '../../lib/videoData';
 import './EditVideoModal.scss';
 
@@ -677,10 +677,11 @@ export default function EditVideoModal({ isOpen, onClose, author, permlink, onSa
           );
         }
 
-        // Chapters also go into the description as plain "0:00 Title" lines (3+
-        // from 0:00), replacing the old block, so other Hive apps show them too.
+        // Chapters and links also go into the description under "Video Chapters"
+        // (3+ from 0:00, times linked to that moment on 3speak.tv) and "Video
+        // Links" headings, replacing the old sections, so other Hive apps show them.
         const editedBody = timelineDirty
-          ? applyChaptersToBody(body, normalizeChapters(tlChapters, { duration: tlDuration }))
+          ? applyTimelineToBody(body, withTimeline({}, tlChapters, tlLinks, { duration: tlDuration }), { author, permlink })
           : body;
         finalBody = recombinePostBody(finalHeader, editedBody, bodyFooter);
         savedMeta = newMeta;

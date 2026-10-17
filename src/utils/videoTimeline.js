@@ -26,11 +26,13 @@
  * Times are CONTENT seconds (the creator's own timeline; a stitched ad is not in
  * it), whole seconds.
  *
- * Chapters are ALSO written into the description as plain "0:00 Title" lines
- * (applyChaptersToDescription), so PeakD, Ecency and every other Hive frontend
- * show them too; the metadata copy is what 3Speak itself prefers.
+ * Chapters and links are ALSO written into the description, under "Video
+ * Chapters" and "Video Links" headings (applyTimelineToDescription), each
+ * chapter time linked to that moment on 3speak.tv, so PeakD, Ecency and every
+ * other Hive frontend show them too; the metadata copy is what 3Speak itself
+ * prefers.
  */
-import { chapterFromLine, formatStamp, MIN_CHAPTERS, MIN_CHAPTER_SECONDS } from './timestamps';
+import { chapterFromLine, formatStamp, watchTimeUrl, MIN_CHAPTERS, MIN_CHAPTER_SECONDS } from './timestamps';
 
 export const TIMELINE_VERSION = 1;
 export const TIMELINE_KEYS = ['timeline_v', 'chapters', 'links'];
@@ -281,34 +283,158 @@ export function chaptersFromText(text) {
   return block.chapters.map((c) => ({ start: c.start, title: cleanText(c.title, CHAPTER_TITLE_MAX) }));
 }
 
-/** The plain block written into descriptions: "0:00 Intro" lines. */
-export function chapterBlock(chapters) {
-  return chapters.map((c) => `${formatStamp(c.start)} ${c.title}`).join('\n');
+// ── The timeline sections written into a description ─────────────────────
+//
+//   #### Video Chapters
+//
+//   - [0:00](https://3speak.tv/watch?v=a/p) Intro
+//   - [1:05](https://3speak.tv/watch?v=a/p&t=65) Setup
+//
+//   #### Video Links
+//   [@bob on 3Speak.tv](https://3speak.tv/@bob)
+//   [My vid by @alice](https://3speak.tv/watch?v=alice/my-vid)
+//   [Example page](https://example.com/x)
+//
+// Written for PeakD, Ecency and every other Hive frontend, which never see the
+// metadata. On 3Speak's own watch page BlogContent turns links to the same video
+// back into in-page seeks, and chapterFromLine reads a linked line like a plain one.
+
+const SITE = 'https://3speak.tv';
+const CHAPTERS_HEADING = '#### Video Chapters';
+const LINKS_HEADING = '#### Video Links';
+const CHAPTERS_HEADING_RE = /^\s*#{1,6}\s*Video Chapters\s*:?\s*$/i;
+const LINKS_HEADING_RE = /^\s*#{1,6}\s*Video Links\s*:?\s*$/i;
+// One markdown link on its own line, maybe bulleted (an escaped "\]" in the label).
+const LINK_LINE_RE = /^\s*(?:[-*+•]\s+)?\[(?:\\.|[^\]\\])*\]\([^)\s]+\)\s*$/;
+
+// Link labels are the creator's titles: keep them from closing the link early.
+const mdLabel = (s) => String(s).replace(/([\\[\]])/g, '\\$1');
+const mdUrl = (u) => String(u).replace(/\(/g, '%28').replace(/\)/g, '%29').replace(/\s/g, '%20');
+
+const chapterUrl = (author, permlink, start) => (start > 0
+  ? watchTimeUrl(author, permlink, start)
+  : `${SITE}/watch?v=${author}/${permlink}`);
+
+/**
+ * The chapter section: heading + "- 0:00 Intro" list. With the post's author and
+ * permlink each time links to that moment on 3speak.tv; without them (the post
+ * doesn't exist yet) the times stay plain. [] when the chapters are not a list
+ * every Hive frontend would accept (at least three, from 0:00).
+ */
+export function chapterBlock(chapters, { author, permlink } = {}) {
+  const norm = normalizeChapters(chapters);
+  if (norm.length < MIN_CHAPTERS) return [];
+  return [CHAPTERS_HEADING, '', ...norm.map((c) => {
+    const stamp = formatStamp(c.start);
+    const time = author && permlink ? `[${stamp}](${chapterUrl(author, permlink, c.start)})` : stamp;
+    return `- ${time} ${c.title}`;
+  })];
+}
+
+/** One link as a description line, or null. */
+function linkLine(l) {
+  if (l.kind === 'profile') return `[@${l.account} on 3Speak.tv](${SITE}/@${l.account})`;
+  if (l.kind === 'video') {
+    const label = l.title ? `${l.title} by @${l.author}` : `A video by @${l.author}`;
+    return `[${mdLabel(label)}](${SITE}/watch?v=${l.author}/${l.permlink})`;
+  }
+  if (l.kind === 'url') return `[${mdLabel(l.title || l.site || l.url)}](${mdUrl(l.url)})`;
+  return null;
+}
+
+/** The link section: heading + one line per link target (repeats listed once). [] for none. */
+export function linkBlock(links) {
+  const seen = new Set();
+  const lines = [];
+  for (const l of normalizeLinks(links)) {
+    const line = linkLine(l);
+    if (!line || seen.has(line)) continue;
+    seen.add(line);
+    lines.push(line);
+  }
+  return lines.length ? [LINKS_HEADING, ...lines] : [];
+}
+
+/** Line range of the chapter list (with its heading, if it has one), or null. */
+function findChapterSection(lines) {
+  const block = findChapterBlock(lines.join('\n'));
+  if (!block) return null;
+  let from = block.from;
+  let i = from - 1;
+  while (i >= 0 && !lines[i].trim()) i -= 1;
+  if (i >= 0 && CHAPTERS_HEADING_RE.test(lines[i])) from = i;
+  return { from, to: block.to };
+}
+
+/** Line range of a "Video Links" heading and the link lines under it, or null. */
+function findLinkSection(lines) {
+  const from = lines.findIndex((l) => LINKS_HEADING_RE.test(l));
+  if (from < 0) return null;
+  let to = from;
+  for (let i = from + 1; i < lines.length; i += 1) {
+    if (!lines[i].trim()) continue;
+    if (!LINK_LINE_RE.test(lines[i])) break;
+    to = i;
+  }
+  return { from, to };
+}
+
+/** `lines` with `block` added at the end, one blank line between. */
+function appendBlock(lines, block) {
+  const out = [...lines];
+  while (out.length && !out[out.length - 1].trim()) out.pop();
+  return out.length ? [...out, '', ...block] : [...block];
+}
+
+/** Runs of blank lines down to one, none at either end. */
+function tidyLines(lines) {
+  const out = [];
+  for (const l of lines) {
+    if (!l.trim() && (!out.length || !out[out.length - 1].trim())) continue;
+    out.push(l);
+  }
+  while (out.length && !out[out.length - 1].trim()) out.pop();
+  return out;
 }
 
 /**
- * The description with its chapter block rewritten from `chapters`.
+ * The description with its timeline sections rewritten from `chapters` and
+ * `links`. The chapter section replaces the existing chapter list where it
+ * stands (a list typed without a heading too), or is appended; with too few
+ * chapters for a list, an existing one is left as written. The link section
+ * follows the chapters (or replaces the old one where it stands, or is
+ * appended), and goes away when there are no links.
  *
- * Only when the chapters make a list every Hive frontend would accept (at least
- * three, from 0:00): then an existing block is replaced where it stands, or a new
- * one appended. Otherwise the description is returned untouched.
- *
- * Plain lines on purpose, never [0:00](link): 3Speak's renderer turns timestamp
- * links into navigation, and PeakD and Ecency detect chapters from the text.
+ * `post` ({ author, permlink }) links each chapter time to that moment on
+ * 3speak.tv, so a reader on PeakD or Ecency lands right on the chapter.
  */
-export function applyChaptersToDescription(description, chapters) {
+export function applyTimelineToDescription(description, { chapters, links } = {}, post = {}) {
   const text = typeof description === 'string' ? description : '';
-  const norm = normalizeChapters(chapters);
-  if (norm.length < MIN_CHAPTERS) return text;
-  const blockLines = chapterBlock(norm).split('\n');
-  const found = findChapterBlock(text);
-  if (found) {
-    const lines = splitLines(text);
-    lines.splice(found.from, found.to - found.from + 1, ...blockLines);
-    return lines.join('\n');
+  const chBlock = chapterBlock(chapters, post);
+  const lkBlock = linkBlock(links);
+  let lines = splitLines(text);
+  const oldLinks = findLinkSection(lines);
+  if (!chBlock.length && !lkBlock.length && !oldLinks) return text;
+
+  if (chBlock.length) {
+    const found = findChapterSection(lines);
+    if (found) lines.splice(found.from, found.to - found.from + 1, ...chBlock);
+    else lines = appendBlock(lines, chBlock);
   }
-  const head = text.replace(/\s+$/, '');
-  return head ? `${head}\n\n${blockLines.join('\n')}` : blockLines.join('\n');
+
+  let at = null;
+  const staleLinks = findLinkSection(lines);
+  if (staleLinks) {
+    lines.splice(staleLinks.from, staleLinks.to - staleLinks.from + 1);
+    at = staleLinks.from;
+  }
+  if (lkBlock.length) {
+    const ch = findChapterSection(lines);
+    if (ch) at = ch.to + 1;
+    if (at == null) lines = appendBlock(lines, lkBlock);
+    else lines.splice(at, 0, '', ...lkBlock, '');
+  }
+  return tidyLines(lines).join('\n');
 }
 
 // A section after a "---" that 3Speak itself wrote: the remix credit, sound
@@ -336,17 +462,16 @@ export function splitSystemTail(body) {
 }
 
 /**
- * applyChaptersToDescription for a whole post body (the edit dialog edits the
- * body, footer included): an existing block is replaced in place, a new one goes
- * above 3Speak's own trailing sections rather than after the "Watch on" link.
+ * applyTimelineToDescription for a whole post body (the edit dialog edits the
+ * body, footer included): the sections go above 3Speak's own trailing sections
+ * rather than after the "Watch on" link.
  */
-export function applyChaptersToBody(body, chapters) {
+export function applyTimelineToBody(body, timeline, post = {}) {
   const text = typeof body === 'string' ? body : '';
-  if (normalizeChapters(chapters).length < MIN_CHAPTERS) return text;
-  if (findChapterBlock(text)) return applyChaptersToDescription(text, chapters);
   const { main, tail } = splitSystemTail(text);
-  const withBlock = applyChaptersToDescription(main, chapters);
-  return tail.trim() ? `${withBlock}\n\n${tail.replace(/^\s+/, '')}` : withBlock;
+  const withBlocks = applyTimelineToDescription(main, timeline, post);
+  if (withBlocks === main) return text;
+  return tail.trim() ? `${withBlocks}\n\n${tail.replace(/^\s+/, '')}` : withBlocks;
 }
 
 /** The links whose toaster is on screen at content second `t`. */

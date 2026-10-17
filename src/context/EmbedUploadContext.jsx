@@ -23,7 +23,7 @@ import axios from 'axios';
 import { isWeakLinkForced } from '../utils/uploadFaults';
 import { useTranslation } from 'react-i18next';
 import { readAddToBlog, writeAddToBlog, reblogOp } from '../utils/addToBlog';
-import { timelineMeta, applyChaptersToDescription } from '../utils/videoTimeline';
+import { timelineMeta, applyTimelineToDescription } from '../utils/videoTimeline';
 
 // Every toast from this module is headed "Upload"; the message becomes the
 // line under it. See utils/toast.js.
@@ -1666,14 +1666,15 @@ export function EmbedUploadProvider({ children }) {
       }
       const communityTag = typeof community === 'string' ? community : community?.name || 'hive-181335';
 
-      // ⏱️ Timeline (long-form only). Chapters go into the metadata AND, when there
-      // are enough for every Hive frontend to accept them (3+ from 0:00), into the
-      // description as plain "0:00 Title" lines, so PeakD/Ecency show them too.
+      // ⏱️ Timeline (long-form only). Chapters and links go into the metadata AND
+      // into the description under "Video Chapters" (3+ from 0:00, each time
+      // linked to that moment on 3speak.tv; the permlink is fixed above) and
+      // "Video Links" headings, so PeakD/Ecency show them too.
       const timelineDuration = Number(videoDuration) || 0;
       const timeline = fromStories ? {} : timelineMeta(chapters, timelineLinks, { duration: timelineDuration });
-      const publishDescription = fromStories || !timeline.chapters
+      const publishDescription = fromStories
         ? description
-        : applyChaptersToDescription(description, timeline.chapters);
+        : applyTimelineToDescription(description, timeline, { author: user, permlink: hivePermlink });
 
       // Build body: embed URL (video first) + description + credit to original author
       let postBody = `${capturedEmbedUrl}\n\n${publishDescription}`;
