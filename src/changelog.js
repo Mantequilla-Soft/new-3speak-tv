@@ -7,6 +7,12 @@
 // 1.0.0 — that way they see all of these when develop is pushed to production.
 export const CHANGELOG = [
   {
+    version: '1.79.91',
+    date: '2026-10-17',
+    summary:
+      'Ad bookings show the forecast plays before you book, and red buttons stay readable on hover.',
+  },
+  {
     version: '1.79.90',
     date: '2026-10-16',
     summary:

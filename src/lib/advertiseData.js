@@ -843,6 +843,22 @@ export async function fetchSlots({ days, startAt, format }) {
   return readJson(await fetch(`${BASE}/slots?${q.toString()}`));
 }
 
+/**
+ * The plays a booking would be quoted, before it is made. Same inputs as
+ * createCampaign and the same server function that records the forecast on the
+ * booking, so the number on the form is the number a shortfall is measured
+ * against. `forecast` is null for formats not served against plays.
+ */
+export async function fetchForecast({ format, days, slotPercent, startAt, minVideoSeconds, maxVideoSeconds }) {
+  const q = new URLSearchParams({ days: String(days) });
+  if (format) q.set('format', String(format));
+  if (slotPercent != null) q.set('slotPercent', String(slotPercent));
+  if (startAt) q.set('startAt', String(startAt));
+  if (minVideoSeconds) q.set('minVideoSeconds', String(minVideoSeconds));
+  if (maxVideoSeconds) q.set('maxVideoSeconds', String(maxVideoSeconds));
+  return readJson(await fetch(`${BASE}/forecast?${q.toString()}`));
+}
+
 export async function fetchCampaigns(reference) {
   return readJson(await fetch(`${BASE}/campaigns?reference=${encodeURIComponent(reference)}`));
 }

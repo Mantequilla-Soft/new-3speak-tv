@@ -36,6 +36,7 @@ import {
   createCampaign,
   fetchCampaigns,
   fetchSlots,
+  fetchForecast,
   claimCampaign,
   attachCreative,
   BLOCKED_REASON,
@@ -646,6 +647,43 @@ function CampaignPanel({
   const videoRangeOk = !(Number.isFinite(minVideoNum) && Number.isFinite(maxVideoNum)
     && minVideoNum > maxVideoNum);
 
+  // The plays this booking would be quoted, shown above "Book this ad" BEFORE booking.
+  // The server answers with the same function that records the forecast on the
+  // booking, so the two never disagree. Debounced, because the video-length fields
+  // ask again as they are typed. Fails silent: no number beats a made-up one, and
+  // the quote must never stand in the way of a booking.
+  const quoteMin = Number.isFinite(minVideoNum) && minVideoNum > 0 ? minVideoNum : undefined;
+  const quoteMax = Number.isFinite(maxVideoNum) && maxVideoNum > 0 ? maxVideoNum : undefined;
+  const quoteKey = fmt?.surface === 'watch' && videoRangeOk
+    ? [fmt.key, Number(days), fmt.positioned ? Number(chosenSlot) : '', startAt || '', quoteMin || '', quoteMax || ''].join('|')
+    : null;
+  const [forecastQuote, setForecastQuote] = useState(null);
+  useEffect(() => {
+    if (!quoteKey) return undefined;
+    let live = true;
+    const id = setTimeout(() => {
+      fetchForecast({
+        format: fmt.key,
+        days: Number(days),
+        slotPercent: fmt.positioned ? Number(chosenSlot) : undefined,
+        startAt: startAt || undefined,
+        minVideoSeconds: quoteMin,
+        maxVideoSeconds: quoteMax,
+      })
+        .then((r) => {
+          if (live) setForecastQuote(Number.isFinite(r?.forecast) ? { key: quoteKey, forecast: r.forecast, days: r.days } : null);
+        })
+        .catch(() => { if (live) setForecastQuote(null); });
+    }, 400);
+    return () => { live = false; clearTimeout(id); };
+    // quoteKey carries every input the request reads.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [quoteKey]);
+  // The last answer stays up, dimmed, while a changed booking is re-quoted, so the
+  // number does not blink out on every keystroke.
+  const shownQuote = quoteKey && forecastQuote ? forecastQuote : null;
+  const quoteStale = !!shownQuote && shownQuote.key !== quoteKey;
+
   /* The earliest start we accept: TODAY, in the viewer's own timezone.
    *
    * It used to be tomorrow, on the reasoning that a flight has to be approved and paid
@@ -1159,6 +1197,16 @@ function CampaignPanel({
                 </span>
               ) : null}
             </span>
+          ) : null}
+          {shownQuote ? (
+            <div className={`mkt-forecast${quoteStale ? ' mkt-forecast--stale' : ''}`} aria-live="polite">
+              <span className="mkt-forecast-label">{t('ads.book.forecastLabel')}</span>
+              <span className="mkt-forecast-value">
+                {t('ads.book.forecastValue', { count: shownQuote.forecast, plays: formatCount(shownQuote.forecast) })}
+              </span>
+              <span className="mkt-forecast-over">{t('ads.book.forecastOver', { count: shownQuote.days })}</span>
+              <span className="mkt-hint">{t('ads.book.forecastNote')}</span>
+            </div>
           ) : null}
           <button
             type="submit"
