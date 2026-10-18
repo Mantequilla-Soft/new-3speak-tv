@@ -802,6 +802,12 @@ function Comment({
   const { t } = useI18n();
   const isReplying = activeReply === comment.permlink;
   const replyInputRef = useRef(null);
+  // One click handler for the life of the comment: MarkdownView is memoised, and
+  // a new arrow per render (every playhead tick) defeated it and rebuilt the body
+  // each second (selection lost, code blocks' scrollbars flashing).
+  const onSeekRef = useRef(onSeek);
+  useEffect(() => { onSeekRef.current = onSeek; }, [onSeek]);
+  const onBodyClick = useCallback((e) => handleTimestampClick(e, onSeekRef.current), []);
   const editInputRef = useRef(null);
   const [editing, setEditing] = useState(false);
   const [editText, setEditText] = useState('');
@@ -919,7 +925,7 @@ function Comment({
           ) : (
             <MarkdownView
               html={processedBody(comment?.body || '', comment?.permlink)}
-              onClick={(e) => handleTimestampClick(e, onSeek)}
+              onClick={onBodyClick}
             />
           )}
           {translatedText && (

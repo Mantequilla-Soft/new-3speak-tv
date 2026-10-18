@@ -447,7 +447,13 @@ const PlayVideo = ({ videoDetails, author, permlink, mediaUnavailable = false, m
         case ' ':
         case 'Spacebar': {
           // A focused button or link already acts on space; don't toggle twice.
-          if (tag === 'BUTTON' || tag === 'A' || tgt?.getAttribute?.('role') === 'button') return;
+          // Except the player's own control buttons: one keeps focus after a
+          // click, and space then pressed IT again, so clicking fullscreen and
+          // hitting space left fullscreen instead of pausing. There space means
+          // play/pause, like any video player; the preventDefault below stops
+          // the button's own activation. (Enter still presses the button.)
+          const playerButton = !!tgt?.closest?.('.video-controls .vc-btn');
+          if (!playerButton && (tag === 'BUTTON' || tag === 'A' || tgt?.getAttribute?.('role') === 'button')) return;
           e.preventDefault(); // and don't scroll the page
           flashActionRef.current(vc.isPlaying ? 'pause' : 'play');
           vc.onTogglePlay?.();

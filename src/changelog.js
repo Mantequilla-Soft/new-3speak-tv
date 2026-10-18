@@ -7,6 +7,19 @@
 // 1.0.0 — that way they see all of these when develop is pushed to production.
 export const CHANGELOG = [
   {
+    version: '1.79.100',
+    date: '2026-10-18',
+    summary:
+      'Every creator now gets an auto-updating banner at 3speak.tv/banners/yourname.png, also at the end of your long video posts. '
+      + 'Put it in a post, signature or bio and it stays current.',
+  },
+  {
+    version: '1.79.99',
+    date: '2026-10-18',
+    summary:
+      'Emoji and GIF pickers on phones: they now sit above the keyboard instead of behind it, and GIFs show three to a row.',
+  },
+  {
     version: '1.79.97',
     date: '2026-10-18',
     summary:

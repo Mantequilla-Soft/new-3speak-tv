@@ -1,5 +1,5 @@
 import MarkdownView from '../common/MarkdownView';
-import React, { useEffect, useMemo, useState, useRef } from "react";
+import React, { useEffect, useMemo, useState, useRef, useCallback } from "react";
 import { createRoot } from "react-dom/client";
 import { useTranslation } from "react-i18next";
 import { getUersContent } from "../../utils/hiveUtils";
@@ -198,6 +198,14 @@ const BlogContent = ({ author, permlink, description, alwaysExpanded = false, du
 
   const toggleExpand = () => setIsExpanded(!isExpanded);
 
+  // Stable for the component's life. MarkdownView is memoised so playback ticks
+  // never rebuild the description; a fresh arrow here on every render (the watch
+  // page re-renders each second while playing) defeated that, and the rebuilt
+  // code block re-showed its horizontal scrollbar every second.
+  const onSeekRef = useRef(onSeek);
+  useEffect(() => { onSeekRef.current = onSeek; }, [onSeek]);
+  const onBodyClick = useCallback((e) => handleTimestampClick(e, onSeekRef.current), []);
+
   // Floored so the HTML only changes when a whole second is added to the video,
   // which is never during ordinary playback.
   const durationSec = onSeek ? Math.floor(duration || 0) : 0;
@@ -221,7 +229,7 @@ const BlogContent = ({ author, permlink, description, alwaysExpanded = false, du
         ) : (
           <MarkdownView
             html={linkedContent}
-            onClick={(e) => handleTimestampClick(e, onSeek)}
+            onClick={onBodyClick}
           />
         )}
         {needsExpansion && !isExpanded && <div className="fade-overlay" />}

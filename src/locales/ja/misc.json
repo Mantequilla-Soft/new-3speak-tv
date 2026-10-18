@@ -160,8 +160,7 @@
     "groupChat": "グループチャット",
     "communitySnap": "コミュニティの Snap",
     "shortsEditor": "ショートエディター",
-    "goLive": "ライブ配信",
-    "streamStudio": "配信スタジオ",
+    "goLiveNow": "ライブ配信する！",
     "headings": {
       "upload": "アップロード",
       "live": "ライブ",

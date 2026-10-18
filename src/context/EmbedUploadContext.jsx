@@ -1701,6 +1701,15 @@ export function EmbedUploadProvider({ children }) {
         : `/watch?v=${assetOwner}/${hivePermlink}`;
       postBody += `\n\n---\n▶ [Watch on 3speak.tv](https://3speak.tv${watchPath})`;
 
+      // The creator's banner under it, long-form only: the auto-updating
+      // 3speak.tv/banners/<user>.png (3speak-banners service), linked to their
+      // channel. It needs a Hive account, so warm-up and incubating uploads get
+      // none. server/import-batch.cjs writes the same line.
+      if (!fromStories && user && !incubationHandle) {
+        // No alt text: PeakD prints it as a caption under the image.
+        postBody += `\n\n[![](https://3speak.tv/banners/${user}.png)](https://3speak.tv/user/${user})`;
+      }
+
       // Only the community tag is added automatically (no '3speak', no 'short').
       // Shorts are identified by the embed-video `short` DB field, not a Hive tag.
       // The community tag is surfaced in the uploader's tag list and counts toward
