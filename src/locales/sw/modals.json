@@ -104,6 +104,7 @@
     "confirmLeave": "Kihariri bado kiko wazi. Kuondoka kwenye ukurasa huu kutafunga kihariri na mabadiliko ambayo hayajahifadhiwa yatapotea.\n\nSawa = Funga kihariri na uondoke\nGhairi = Baki kwenye ukurasa huu",
     "confirmClose": "Una uhakika unataka kufunga kihariri? Mabadiliko ambayo hayajahifadhiwa yatapotea.",
     "iframeTitle": "Kihariri cha video cha 3Speak",
+    "fileNotSupported": "Video yako bado haijaweza kuongezwa kwenye kihariri. Iongeze kutoka kwenye kifaa chako ndani ya kihariri.",
     "finding": "Inatafuta kihariri kinachopatikana...",
     "loading": "Inapakia kihariri...",
     "unavailable": "Hakuna seva ya kihariri inayopatikana kwa sasa. Tafadhali jaribu tena baadaye.",

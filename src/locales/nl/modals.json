@@ -104,6 +104,7 @@
     "confirmLeave": "De editor is nog open. Als je deze pagina verlaat, wordt de editor gesloten en gaan niet-opgeslagen wijzigingen verloren.\n\nOK = Editor sluiten & weggaan\nAnnuleren = Op deze pagina blijven",
     "confirmClose": "Weet je zeker dat je de editor wilt sluiten? Niet-opgeslagen wijzigingen gaan verloren.",
     "iframeTitle": "3Speak-video-editor",
+    "fileNotSupported": "Je video kon nog niet aan de editor worden toegevoegd. Voeg hem in de editor toe vanaf je apparaat.",
     "finding": "Beschikbare editor zoeken...",
     "loading": "Editor laden...",
     "unavailable": "Er is momenteel geen editorserver beschikbaar. Probeer het later opnieuw.",

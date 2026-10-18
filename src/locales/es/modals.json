@@ -104,6 +104,7 @@
     "confirmLeave": "El editor sigue abierto. Si sales de esta página, se cerrará el editor y se perderán los cambios no guardados.\n\nAceptar = Cerrar editor y salir\nCancelar = Quedarse en esta página",
     "confirmClose": "¿Seguro que quieres cerrar el editor? Se perderán los cambios no guardados.",
     "iframeTitle": "Editor de video de 3Speak",
+    "fileNotSupported": "Aún no se pudo añadir tu video al editor. Agrégalo desde tu dispositivo dentro del editor.",
     "finding": "Buscando un editor disponible...",
     "loading": "Cargando editor...",
     "unavailable": "No hay ningún servidor de edición disponible en este momento. Inténtalo más tarde.",

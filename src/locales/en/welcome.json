@@ -1,8 +1,14 @@
 {
   "banner": {
     "title": "Welcome to 3Speak!",
-    "text": "Videos that belong to the people who make them. New here? Take a quick tour or read the answers to common questions.",
-    "textShort": "New here? Take a quick tour or read the FAQ.",
+    "lead": "Made by video creators, for video creators.",
+    "points": {
+      "alternative": "<b>A real alternative</b> to corporate social media.",
+      "community": "<b>Community-owned</b>: no central authority, no CEO.",
+      "creatorsEarn": "<b>Creators own their videos</b> and earn from upvotes and ads.",
+      "viewersEarn": "<b>Viewers earn too</b>, just by watching.",
+      "data": "<b>We never sell your data.</b>"
+    },
     "tour": "Take the tour",
     "tourShort": "Tour",
     "faq": "FAQ",

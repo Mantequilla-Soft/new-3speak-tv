@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
-import { useTranslation } from 'react-i18next';
-import { MdClose, MdExplore } from 'react-icons/md';
+import { useTranslation, Trans } from 'react-i18next';
+import { MdClose, MdExplore, MdGroups, MdLock, MdDiversity3, MdPayments, MdPlayCircle } from 'react-icons/md';
 import { useAppStore } from '../../lib/store';
 import { markWelcomeDone, resetWelcome, startWelcomeTour, useWelcomeDone } from './welcomeState';
 import mark from '../../assets/image/3S_mark.svg';
@@ -32,8 +32,17 @@ export default function WelcomeBanner() {
       <img className="welcome-banner-mark" src={mark} alt="" aria-hidden="true" />
       <div className="welcome-banner-body">
         <h2 id="welcome-banner-title">{t('welcome.banner.title')}</h2>
-        <p className="welcome-banner-text--long">{t('welcome.banner.text')}</p>
-        <p className="welcome-banner-text--short">{t('welcome.banner.textShort')}</p>
+        {/* What 3Speak is, one short line each: why it exists, who runs it, who
+            earns, and what we never do with your data. Phones too, smaller. */}
+        <ul className="welcome-banner-points">
+          <li><MdDiversity3 aria-hidden="true" /><span><Trans i18nKey="welcome.banner.points.alternative" components={{ b: <strong /> }} /></span></li>
+          <li><MdGroups aria-hidden="true" /><span><Trans i18nKey="welcome.banner.points.community" components={{ b: <strong /> }} /></span></li>
+          <li><MdPayments aria-hidden="true" /><span><Trans i18nKey="welcome.banner.points.creatorsEarn" components={{ b: <strong /> }} /></span></li>
+          <li><MdPlayCircle aria-hidden="true" /><span><Trans i18nKey="welcome.banner.points.viewersEarn" components={{ b: <strong /> }} /></span></li>
+          <li><MdLock aria-hidden="true" /><span><Trans i18nKey="welcome.banner.points.data" components={{ b: <strong /> }} /></span></li>
+        </ul>
+        {/* The sign-off, under everything else. */}
+        <p className="welcome-banner-lead">{t('welcome.banner.lead')}</p>
       </div>
       <div className="welcome-banner-actions">
         <button type="button" className="welcome-banner-btn welcome-banner-btn--primary" onClick={startWelcomeTour}>

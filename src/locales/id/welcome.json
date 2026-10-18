@@ -1,8 +1,14 @@
 {
   "banner": {
     "title": "Selamat datang di 3Speak!",
-    "text": "Video yang menjadi milik para pembuatnya. Baru di sini? Ikuti tur singkat atau baca jawaban atas pertanyaan umum.",
-    "textShort": "Baru di sini? Ikuti tur singkat atau baca FAQ.",
+    "lead": "Dibuat oleh kreator video, untuk kreator video.",
+    "points": {
+      "alternative": "<b>Alternatif sejati</b> dari media sosial korporat.",
+      "community": "<b>Milik komunitas</b>: tanpa otoritas pusat, tanpa CEO.",
+      "creatorsEarn": "<b>Kreator memiliki videonya</b> dan mendapat penghasilan dari upvote dan iklan.",
+      "viewersEarn": "<b>Penonton juga dapat penghasilan</b>, cukup dengan menonton.",
+      "data": "<b>Kami tidak pernah menjual datamu.</b>"
+    },
     "tour": "Ikuti tur",
     "tourShort": "Tur",
     "faq": "FAQ",

@@ -1,8 +1,14 @@
 {
   "banner": {
     "title": "Karibu 3Speak!",
-    "text": "Video ambazo ni mali ya watu wanaozitengeneza. Wewe ni mgeni hapa? Pitia ziara fupi au soma majibu ya maswali ya kawaida.",
-    "textShort": "Wewe ni mgeni hapa? Pitia ziara fupi au soma Maswali.",
+    "lead": "Imetengenezwa na watengenezaji wa video, kwa ajili ya watengenezaji wa video.",
+    "points": {
+      "alternative": "<b>Mbadala wa kweli</b> wa mitandao ya kijamii ya makampuni makubwa.",
+      "community": "<b>Inamilikiwa na jumuiya</b>: hakuna mamlaka kuu, hakuna CEO.",
+      "creatorsEarn": "<b>Watengenezaji wanamiliki video zao</b> na hupata mapato kutokana na kura na matangazo.",
+      "viewersEarn": "<b>Watazamaji hupata pia</b>, kwa kutazama tu.",
+      "data": "<b>Hatuuzi data yako kamwe.</b>"
+    },
     "tour": "Anza ziara",
     "tourShort": "Ziara",
     "faq": "Maswali",

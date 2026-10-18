@@ -10,9 +10,12 @@ import { usePremiumStatus } from '../../hooks/usePremiumStatus';
 import { getLockedBeneficiaries } from '../../utils/beneficiaries';
 import { sanitizeMusicCredits, soundAuthorsOf } from '../../utils/soundCredits';
 import { useTranslation } from 'react-i18next';
+import { toastIn } from '../../utils/toast';
 import './EditorModal.scss';
 
-function EditorModal({ isOpen, onClose, videoUrl, videoName, videoType, clipStart, clipEnd, originalAuthor, originalPermlink, originalShortPermlink }) {
+const toast = toastIn('Shorts');
+
+function EditorModal({ isOpen, onClose, videoUrl, videoName, videoType, clipStart, clipEnd, originalAuthor, originalPermlink, originalShortPermlink, videoFile }) {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const { setVideoFile, setPrevVideoFile, setGeneratedThumbnail, setVideoDuration, setOriginalAuthor, setOriginalPermlink, setOriginalShortPermlink, setMusicCredits, setFromStories, setList, setRemaingPercent } = useEmbedUpload();
@@ -122,6 +125,17 @@ function EditorModal({ isOpen, onClose, videoUrl, videoName, videoType, clipStar
             if (originalAuthor) msg.parentAuthor = originalAuthor;
             if (originalPermlink) msg.parentPermlink = originalPermlink;
             sendToEditor(msg);
+          } else if (videoFile && !mediaLoadedRef.current) {
+            // The creator's own file, from the shorts uploader. Posted as the File
+            // itself: a blob: URL made here cannot be read from the editor's origin.
+            // An editor that predates this says nothing about `canLoadFile` and would
+            // drop the file, so say so instead of opening an empty timeline in silence.
+            mediaLoadedRef.current = true;
+            if (data.canLoadFile) {
+              sendToEditor({ type: 'load-media', file: videoFile, name: videoFile.name || 'Short Video', mediaType: 'video' });
+            } else {
+              toast.warning(t('modals.editor.fileNotSupported'));
+            }
           }
           break;
 
@@ -173,7 +187,7 @@ function EditorModal({ isOpen, onClose, videoUrl, videoName, videoType, clipStar
 
     window.addEventListener('message', handleMessage);
     return () => window.removeEventListener('message', handleMessage);
-  }, [isOpen, resolvedUrl, videoUrl, videoName, videoType, clipStart, clipEnd, sendToEditor]);
+  }, [isOpen, resolvedUrl, videoUrl, videoName, videoType, clipStart, clipEnd, sendToEditor, videoFile, t]);
 
   // While the editor is open, keys must not reach the page behind it (the
   // shorts page plays/pauses on Space and switches videos on the arrow keys).
@@ -354,9 +368,13 @@ function EditorModal({ isOpen, onClose, videoUrl, videoName, videoType, clipStar
 
       // Pre-populate beneficiary list with locked minimums. Pro
       // subscribers skip the threespeakfund 10% — but the remix-author
-      // 5% attribution always stays.
+      // 5% attribution always stays. The 1% encoder.pay split too: a rendered
+      // short goes through the encoder like any upload, and the publish path
+      // adds it either way (enforceLockedBeneficiaries), so the list must show it.
       const lockedBeneficiaries = getLockedBeneficiaries({
         isPremium,
+        username: user,
+        includeEncoder: true,
         originalAuthor: originalAuthor || null,
         soundAuthors: soundAuthorsOf(musicCredits, user),
       });

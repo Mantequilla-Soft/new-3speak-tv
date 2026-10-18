@@ -104,6 +104,7 @@
     "confirmLeave": "The editor is still open. Leaving this page will close the editor and unsaved changes will be lost.\n\nOK = Close editor & leave\nCancel = Stay on this page",
     "confirmClose": "Are you sure you want to close the editor? Unsaved changes will be lost.",
     "iframeTitle": "3Speak Video Editor",
+    "fileNotSupported": "Your video could not be added to the editor yet. Add it from your device inside the editor.",
     "finding": "Finding available editor...",
     "loading": "Loading editor...",
     "unavailable": "No editor server is currently available. Please try again later.",

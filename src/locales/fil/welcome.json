@@ -1,8 +1,14 @@
 {
   "banner": {
     "title": "Maligayang pagdating sa 3Speak!",
-    "text": "Mga video na pag-aari ng mga gumawa nito. Bago ka rito? Mag-tour nang mabilis o basahin ang mga sagot sa mga karaniwang tanong.",
-    "textShort": "Bago ka rito? Mag-tour nang mabilis o basahin ang FAQ.",
+    "lead": "Gawa ng mga video creator, para sa mga video creator.",
+    "points": {
+      "alternative": "<b>Tunay na alternatibo</b> sa corporate social media.",
+      "community": "<b>Pag-aari ng komunidad</b>: walang sentral na awtoridad, walang CEO.",
+      "creatorsEarn": "<b>Pag-aari ng mga creator ang kanilang video</b> at kumikita sila mula sa upvote at ads.",
+      "viewersEarn": "<b>Kumikita rin ang mga manonood</b>, sa panonood lang.",
+      "data": "<b>Hindi namin kailanman ibinebenta ang data mo.</b>"
+    },
     "tour": "Mag-tour",
     "tourShort": "Tour",
     "faq": "FAQ",

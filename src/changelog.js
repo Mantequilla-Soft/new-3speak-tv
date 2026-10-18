@@ -7,6 +7,18 @@
 // 1.0.0 — that way they see all of these when develop is pushed to production.
 export const CHANGELOG = [
   {
+    version: '1.79.95',
+    date: '2026-10-18',
+    summary:
+      "Uploading a short? Tap 'Edit this video' to open it straight in the shorts editor, ready to cut.",
+  },
+  {
+    version: '1.79.94',
+    date: '2026-10-18',
+    summary:
+      "The upload page now shows a 'Proceed to Thumbnails' button right next to 'Replace Video' once your file is ready.",
+  },
+  {
     version: '1.79.93',
     date: '2026-10-17',
     summary:

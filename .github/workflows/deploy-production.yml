@@ -1,0 +1,59 @@
+name: Deploy to 3speak.tv
+
+# Every push to `production` (a merged develop -> production PR) goes live on
+# 3speak.tv. The runner only opens an SSH connection: the box fetches, builds and
+# swaps the site itself (/usr/local/sbin/3speak-prod-deploy), so no code from the
+# runner ever reaches the server.
+#
+# The `deploy-3speak` key in the `production-server` environment can run nothing
+# but "deploy <commit>" / "check <commit>", and the environment only hands it to
+# runs on the `production` branch. The box waits for running video uploads to
+# finish before it swaps, smoke-tests the live site afterwards and swaps back on
+# failure. A deploy of what is already live is a no-op, so re-running is safe.
+#
+# Manual run (Actions tab, on production): "check" builds without going live.
+
+on:
+  push:
+    branches: [production]
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: 'deploy = go live, check = build only'
+        type: choice
+        options: [deploy, check]
+        default: deploy
+
+permissions:
+  contents: read
+
+# One deploy at a time, and never cancel one halfway: the next push queues behind it.
+concurrency:
+  group: deploy-production
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment: production-server
+    # The box may wait up to an hour for uploads to finish before swapping.
+    timeout-minutes: 100
+    steps:
+      - name: Deploy on the server
+        env:
+          SSH_KEY: ${{ secrets.DEPLOY_SSH_KEY }}
+          KNOWN_HOSTS: ${{ secrets.DEPLOY_KNOWN_HOSTS }}
+          HOST: ${{ vars.DEPLOY_HOST }}
+          PORT: ${{ vars.DEPLOY_PORT }}
+          DEPLOY_USER: ${{ vars.DEPLOY_USER }}
+          MODE: ${{ inputs.mode || 'deploy' }}
+        run: |
+          install -d -m 700 ~/.ssh
+          printf '%s\n' "$SSH_KEY" > ~/.ssh/deploy_key
+          chmod 600 ~/.ssh/deploy_key
+          printf '%s\n' "$KNOWN_HOSTS" > ~/.ssh/known_hosts
+          ssh -i ~/.ssh/deploy_key -p "$PORT" \
+            -o IdentitiesOnly=yes -o StrictHostKeyChecking=yes -o BatchMode=yes \
+            -o ServerAliveInterval=30 -o ServerAliveCountMax=6 \
+            "$DEPLOY_USER@$HOST" "$MODE $GITHUB_SHA"
+          rm -f ~/.ssh/deploy_key

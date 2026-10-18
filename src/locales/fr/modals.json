@@ -104,6 +104,7 @@
     "confirmLeave": "L'éditeur est encore ouvert. Quitter cette page fermera l'éditeur et les modifications non enregistrées seront perdues.\n\nOK = Fermer l'éditeur et quitter\nAnnuler = Rester sur cette page",
     "confirmClose": "Voulez-vous vraiment fermer l'éditeur ? Les modifications non enregistrées seront perdues.",
     "iframeTitle": "Éditeur vidéo 3Speak",
+    "fileNotSupported": "Votre vidéo n'a pas encore pu être ajoutée à l'éditeur. Ajoutez-la depuis votre appareil dans l'éditeur.",
     "finding": "Recherche d'un éditeur disponible...",
     "loading": "Chargement de l'éditeur...",
     "unavailable": "Aucun serveur d'édition n'est disponible pour le moment. Veuillez réessayer plus tard.",

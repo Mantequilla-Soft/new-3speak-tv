@@ -1,8 +1,14 @@
 {
   "banner": {
     "title": "Chào mừng bạn đến với 3Speak!",
-    "text": "Video thuộc về chính những người làm ra chúng. Bạn mới đến? Hãy xem nhanh một vòng hoặc đọc câu trả lời cho các câu hỏi thường gặp.",
-    "textShort": "Bạn mới đến? Hãy xem nhanh một vòng hoặc đọc câu hỏi thường gặp.",
+    "lead": "Do nhà sáng tạo video làm ra, dành cho nhà sáng tạo video.",
+    "points": {
+      "alternative": "<b>Một lựa chọn thay thế thực sự</b> cho mạng xã hội của các tập đoàn.",
+      "community": "<b>Thuộc về cộng đồng</b>: không có cơ quan trung ương, không có CEO.",
+      "creatorsEarn": "<b>Nhà sáng tạo sở hữu video của mình</b> và kiếm tiền từ upvote và quảng cáo.",
+      "viewersEarn": "<b>Người xem cũng kiếm được</b>, chỉ cần xem.",
+      "data": "<b>Chúng tôi không bao giờ bán dữ liệu của bạn.</b>"
+    },
     "tour": "Xem hướng dẫn",
     "tourShort": "Tham quan",
     "faq": "FAQ",

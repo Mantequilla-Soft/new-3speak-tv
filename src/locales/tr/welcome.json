@@ -1,8 +1,14 @@
 {
   "banner": {
     "title": "3Speak'e hoş geldin!",
-    "text": "Videolar, onları yapan insanlara aittir. Burada yeni misin? Kısa bir tura katıl ya da sık sorulan soruların cevaplarını oku.",
-    "textShort": "Burada yeni misin? Kısa bir tura katıl ya da SSS'yi oku.",
+    "lead": "Video üreticileri tarafından, video üreticileri için.",
+    "points": {
+      "alternative": "Kurumsal sosyal medyaya <b>gerçek bir alternatif</b>.",
+      "community": "<b>Topluluğa ait</b>: merkezi otorite yok, CEO yok.",
+      "creatorsEarn": "<b>Üreticiler videolarının sahibidir</b> ve oylardan ve reklamlardan kazanır.",
+      "viewersEarn": "<b>İzleyiciler de kazanır</b>, sadece izleyerek.",
+      "data": "<b>Verilerini asla satmayız.</b>"
+    },
     "tour": "Tura başla",
     "tourShort": "Tur",
     "faq": "SSS",

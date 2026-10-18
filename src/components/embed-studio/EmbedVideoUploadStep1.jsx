@@ -1,5 +1,5 @@
 import React, { useRef, useState, useEffect, useMemo } from 'react'
-import { Upload, FileVideo, Video } from "lucide-react";
+import { Upload, FileVideo, Video, Scissors } from "lucide-react";
 import { FaFileImport } from "react-icons/fa";
 import "../legacy-studio/VideoUploadStep1.scss"
 import { generateVideoThumbnails } from "../../utils/videoThumbnails";
@@ -15,7 +15,7 @@ import { canUseUploadFaults, getUploadFaults, setUploadFaults, initUploadFaults 
 import { checkPostingRc } from '../../utils/rcCheck';
 import RcInsufficientModal from './RcInsufficientModal';
 import StepActions from './StepActions';
-import { SHORTS_MAX_DURATION_SEC, shortsMaxDurationLabel, cameraRecordEnabledFor, VIDEO_IMPORT_ENABLED } from '../../utils/config';
+import { SHORTS_MAX_DURATION_SEC, shortsMaxDurationLabel, cameraRecordEnabledFor, VIDEO_IMPORT_ENABLED, FEATURE_EDITOR } from '../../utils/config';
 import { isChromium } from '../../utils/browser';
 import { useTranslation, Trans } from 'react-i18next';
 
@@ -489,10 +489,28 @@ function EmbedVideoUploadStep1() {
                   </label>
                 )
               ) : (
-                <div className="button-group">
+                // The way on sits right beside Replace, not only in the action rows
+                // above and below: with a file picked, this box is where people look,
+                // and "Replace Video" alone read as the only thing to do next.
+                <div className="button-group button-group--row">
                   <label htmlFor="embed-video-upload" className="button button--outline">
                     {t("upload.select.replace")}
                   </label>
+                  {/* Shorts: open the picked clip in the shorts editor, already on
+                      the timeline. A render posted from there replaces this file. */}
+                  {fromStories && FEATURE_EDITOR && (
+                    <button
+                      type="button"
+                      className="button button--outline"
+                      onClick={() => window.dispatchEvent(new CustomEvent('open-shorts-editor', { detail: { file: videoFile } }))}
+                    >
+                      <Scissors className="w-4 h-4" style={{ display: 'inline', verticalAlign: 'middle', marginRight: 6 }} />
+                      {t("upload.select.editVideo")}
+                    </button>
+                  )}
+                  <button type="button" className="button" onClick={uploadVideo}>
+                    {t("upload.select.proceed")}
+                  </button>
                 </div>
               )}
 

@@ -130,7 +130,8 @@
     "beta": "bêta",
     "browseFiles": "Parcourir les fichiers",
     "proceed": "Passer aux miniatures",
-    "replace": "Remplacer la vidéo"
+    "replace": "Remplacer la vidéo",
+    "editVideo": "Modifier cette vidéo"
   },
   "details": {
     "guests": {

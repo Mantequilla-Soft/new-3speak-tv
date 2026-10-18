@@ -130,7 +130,8 @@
     "beta": "ベータ",
     "browseFiles": "ファイルを選択",
     "proceed": "サムネイルへ進む",
-    "replace": "動画を差し替え"
+    "replace": "動画を差し替え",
+    "editVideo": "この動画を編集"
   },
   "details": {
     "guests": {

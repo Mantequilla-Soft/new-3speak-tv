@@ -130,7 +130,8 @@
     "beta": "beta",
     "browseFiles": "Pilih File",
     "proceed": "Lanjut ke Thumbnail",
-    "replace": "Ganti Video"
+    "replace": "Ganti Video",
+    "editVideo": "Edit video ini"
   },
   "details": {
     "guests": {

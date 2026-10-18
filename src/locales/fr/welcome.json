@@ -1,8 +1,14 @@
 {
   "banner": {
     "title": "Bienvenue sur 3Speak !",
-    "text": "Des vidéos qui appartiennent à celles et ceux qui les créent. Vous débutez ? Faites une visite rapide ou lisez les réponses aux questions fréquentes.",
-    "textShort": "Vous débutez ? Faites une visite rapide ou lisez la FAQ.",
+    "lead": "Fait par des créateurs vidéo, pour des créateurs vidéo.",
+    "points": {
+      "alternative": "<b>Une vraie alternative</b> aux réseaux sociaux des grandes entreprises.",
+      "community": "<b>Appartient à la communauté</b> : pas d'autorité centrale, pas de PDG.",
+      "creatorsEarn": "<b>Les créateurs possèdent leurs vidéos</b> et gagnent grâce aux votes et aux publicités.",
+      "viewersEarn": "<b>Les spectateurs gagnent aussi</b>, rien qu'en regardant.",
+      "data": "<b>Nous ne vendons jamais vos données.</b>"
+    },
     "tour": "Faire la visite",
     "tourShort": "Visite",
     "faq": "FAQ",

@@ -104,6 +104,7 @@
     "confirmLeave": "Düzenleyici hâlâ açık. Bu sayfadan ayrılırsan düzenleyici kapanır ve kaydedilmemiş değişiklikler kaybolur.\n\nTamam = Düzenleyiciyi kapat ve ayrıl\nİptal = Bu sayfada kal",
     "confirmClose": "Düzenleyiciyi kapatmak istediğinden emin misin? Kaydedilmemiş değişiklikler kaybolacak.",
     "iframeTitle": "3Speak Video Düzenleyici",
+    "fileNotSupported": "Videon henüz düzenleyiciye eklenemedi. Düzenleyicinin içinden cihazından ekle.",
     "finding": "Uygun düzenleyici aranıyor...",
     "loading": "Düzenleyici yükleniyor...",
     "unavailable": "Şu an kullanılabilir düzenleyici sunucusu yok. Lütfen daha sonra tekrar dene.",
