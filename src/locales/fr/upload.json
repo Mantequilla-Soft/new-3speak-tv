@@ -206,6 +206,12 @@
       "hintOn": "Des publicités peuvent être diffusées sur cette vidéo.",
       "hintOff": "Aucune publicité sur cette vidéo."
     },
+    "rolls": {
+      "label": "Spots vidéo",
+      "info": "Les spots vidéo sont de courtes publicités qui passent avant ou pendant cette vidéo. Désactivez-les pour n'y garder que les bannières et les bandeaux. Vos autres vidéos et le réglage de votre compte ne changent pas.",
+      "hintOn": "Spots, bannières et bandeaux peuvent s'afficher.",
+      "hintOff": "Seulement des bannières et des bandeaux sur cette vidéo."
+    },
     "gated": {
       "label": "Réservé aux soutiens",
       "info": "Chiffre cette vidéo pour que seuls les abonnés 3Speak Pro puissent la lire. Un <b>aperçu non chiffré de 10 secondes</b> est publié avec, pour que la publication affiche quand même une bande-annonce partout sur Hive. Votre titre, votre description et vos tags sont du contenu Hive ordinaire et ne sont <b>pas chiffrés</b> — seule la vidéo l'est. <b>Ce choix ne peut pas être modifié après la mise en ligne.</b>",
@@ -270,6 +276,7 @@
     "scheduled": "Publication programmée !",
     "linkingEmbed": "Association de la vidéo intégrée...",
     "adsOffFailedToast": "Publiée, mais les publicités n'ont pas encore pu être désactivées pour cette vidéo.",
+    "rollsOffFailedToast": "Publiée, mais les spots vidéo n'ont pas encore pu être désactivés pour cette vidéo.",
     "trailerFailedToast": "Publiée, mais impossible de la définir comme bande-annonce de votre chaîne.",
     "completed": "Terminé",
     "publishedToast": "Vidéo publiée !",
@@ -297,6 +304,8 @@
       "thumbnailLinkFailed": "Attention : impossible de définir la miniature intégrée (non bloquant)",
       "adsOffSaved": "Publicités désactivées pour cette vidéo",
       "adsOffFailed": "Impossible d'enregistrer le réglage sans publicité pour cette vidéo",
+      "rollsOffSaved": "Spots vidéo désactivés pour cette vidéo",
+      "rollsOffFailed": "Impossible d'enregistrer le réglage sans spots vidéo pour cette vidéo",
       "trailerSet": "Définie comme bande-annonce de votre chaîne",
       "trailerFailed": "Publiée, mais impossible de la définir comme bande-annonce de votre chaîne",
       "published": "Vidéo publiée !"

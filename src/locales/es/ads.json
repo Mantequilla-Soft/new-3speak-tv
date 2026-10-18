@@ -241,6 +241,8 @@
     "changeAnytime": "Puedes cambiar cualquiera de estas opciones cuando quieras en <b>Ajustes</b>.",
     "allowAds": "Permitir anuncios en mis videos",
     "allowAdsDesc": "Activado por defecto. Desactivado significa ningún anuncio en nada de lo que publiques, y ninguna ganancia.",
+    "allowRolls": "Permitir anuncios en video",
+    "allowRollsDesc": "Desactivado significa solo banners y tickers, que nunca detienen tu video.",
     "shareCommunity": "Compartir con la comunidad",
     "shareCommunityDesc": "Cuánto del {{pool}}% va a la comunidad donde publicaste el video.",
     "breakdownYou": "<b>{{pct}}%</b> tú",

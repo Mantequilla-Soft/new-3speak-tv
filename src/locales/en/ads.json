@@ -238,6 +238,8 @@
     "changeAnytime": "You can change either of these at any time in <b>Settings</b>.",
     "allowAds": "Allow ads on my videos",
     "allowAdsDesc": "On by default. Off means no ads on anything you post, and no share.",
+    "allowRolls": "Allow video ad rolls",
+    "allowRollsDesc": "Off means only banners and tickers, which never stop your video.",
     "shareCommunity": "Share with the community",
     "shareCommunityDesc": "How much of the {{pool}}% goes to the community you posted the video into.",
     "breakdownYou": "<b>{{pct}}%</b> you",

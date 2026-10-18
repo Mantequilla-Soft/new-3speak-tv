@@ -196,6 +196,12 @@
     "allowRemix": "Payagan ang Remix/Clip",
     "remixOn": "Puwedeng gumawa ang iba ng remix/clip; ikaw ang kikilalaning original author.",
     "remixOff": "Hindi puwedeng i-remix o i-clip ng iba ang video na ito.",
+    "adsOnVideo": "Mga ad sa video na ito",
+    "adsOnHint": "Maaaring may ad na mag-play sa video na ito.",
+    "adsOffHint": "Walang ad sa video na ito.",
+    "rollsOnVideo": "Video ad roll",
+    "rollsOnHint": "Puwedeng lumabas ang roll, banner at ticker.",
+    "rollsOffHint": "Banner at ticker lang sa video na ito.",
     "trailer": "Channel trailer",
     "trailerOn": "Kusang magpe-play sa itaas ng Overview tab ng profile mo, at papalitan ang anumang trailer na itinakda mo dati.",
     "trailerOff": "Gawin itong video na kusang magpe-play sa itaas ng Overview tab ng profile mo.",
@@ -231,6 +237,7 @@
       "broadcastFailed": "Pumalya ang broadcast",
       "listingFailed": "Hindi ma-update ang listing.",
       "trailerFailed": "Hindi ma-update ang channel trailer mo.",
+      "adsSyncFailed": "Na-save, pero hindi pa umaabot sa 3Speak ang ad setting ng video na ito. Subukang i-save ulit.",
       "saveFailed": "Hindi ma-save ang mga pagbabago."
     },
     "timeline": "Mga kabanata at link",
@@ -247,6 +254,7 @@
     "sections": {
       "visibility": "Visibility",
       "content": "Nilalaman",
+      "ads": "Mga ad",
       "promotion": "Promosyon"
     },
     "chaptersNote": "Kapag 3 o higit pa ang kabanata, isinusulat ang listahan sa description pag nag-save ka.",

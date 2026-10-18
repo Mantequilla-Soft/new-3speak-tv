@@ -48,6 +48,8 @@ export function readAdSettingsFromAccount(account) {
     // Only a literal `false` is off. Anything else — including a malformed value
     // written by some future version of this — falls back to the platform default.
     enabled: ads.enabled !== false,
+    // Video rolls on top of banners and tickers. Same rule: only `false` is off.
+    rolls: ads.rolls !== false,
     communityPct: Number.isInteger(pct) && pct >= 0 && pct <= 100 ? pct : null,
     updatedAt: typeof ads.updatedAt === 'string' ? ads.updatedAt : null,
   };
@@ -80,13 +82,15 @@ export async function fetchAdSettingsFromHive(username) {
  * or Butter Auth session is routed through @threespeak under the authority the
  * creator already granted it, and costs no wallet prompt at all.
  */
-export async function saveAdSettingsToHive(username, { adsEnabled, communitySharePct }) {
+export async function saveAdSettingsToHive(username, { adsEnabled, rollsEnabled = true, communitySharePct }) {
   const u = clean(username);
   if (!u) throw new Error(t('ads.errors.notLoggedIn'));
 
   const [account] = await getAccounts([u]);
   const meta = parsePostingMeta(account);
   const ads = { enabled: adsEnabled !== false, updatedAt: new Date().toISOString() };
+  // Written only when off, like the per-video flag: an absent key is the default.
+  if (adsEnabled !== false && rollsEnabled === false) ads.rolls = false;
   // Omitted rather than nulled when the caller has no number to write: an absent
   // key means "whatever the platform default is", and writing null would make the
   // read path above fall back anyway while looking like a deliberate choice.
@@ -114,13 +118,13 @@ export async function saveAdSettingsToHive(username, { adsEnabled, communityShar
  * ad server reads, and the checker row can exist for an account that has never
  * seen the question.
  *
- * Returns `{ chosen, split, adsEnabled }`, or `chosen: null` when NEITHER store
+ * Returns `{ chosen, split, adsEnabled, rollsEnabled }`, or `chosen: null` when NEITHER store
  * could be read — the caller must not prompt on that, or an RPC blip turns into a
  * modal in front of someone who already answered.
  */
 export async function readCreatorAdChoice(username) {
   const u = clean(username);
-  if (!u) return { chosen: null, split: null, adsEnabled: true };
+  if (!u) return { chosen: null, split: null, adsEnabled: true, rollsEnabled: true };
 
   const [server, chain] = await Promise.all([
     fetchCreatorAdPrefs(u).catch(() => null),
@@ -140,6 +144,7 @@ export async function readCreatorAdChoice(username) {
     // signed message is actually checked against.
     split: (server && server.split) || null,
     adsEnabled: server ? server.adsEnabled !== false : (chain ? chain.enabled : true),
+    rollsEnabled: server ? server.rollsEnabled !== false : (chain ? chain.rolls : true),
   };
 }
 
@@ -152,8 +157,8 @@ export async function readCreatorAdChoice(username) {
  * still taken effect, and reporting that honestly beats rolling back a preference
  * the creator asked for.
  */
-export async function saveCreatorAdSettings(username, { adsEnabled, communitySharePct }) {
-  const res = await setCreatorAdPrefs(username, { adsEnabled, communitySharePct });
+export async function saveCreatorAdSettings(username, { adsEnabled, rollsEnabled = true, communitySharePct }) {
+  const res = await setCreatorAdPrefs(username, { adsEnabled, rollsEnabled, communitySharePct });
 
   let chainSaved = false;
   let chainError = null;
@@ -161,7 +166,7 @@ export async function saveCreatorAdSettings(username, { adsEnabled, communitySha
     // Write the number the server settled on, not the draft — if the server
     // clamped or defaulted anything, the two copies must not disagree.
     const pct = res && res.split ? res.split.communityPct : communitySharePct;
-    await saveAdSettingsToHive(username, { adsEnabled, communitySharePct: pct });
+    await saveAdSettingsToHive(username, { adsEnabled, rollsEnabled, communitySharePct: pct });
     chainSaved = true;
   } catch (err) {
     chainError = (err && err.message) || t('ads.errors.saveToHiveAccount');

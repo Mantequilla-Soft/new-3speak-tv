@@ -200,6 +200,12 @@
     "allowRemix": "Consenti remix/clip",
     "remixOn": "Altri possono creare remix/clip; tu vieni citato come autore originale.",
     "remixOff": "Altri non possono fare remix o clip di questo video.",
+    "adsOnVideo": "Pubblicità su questo video",
+    "adsOnHint": "Su questo video possono comparire annunci.",
+    "adsOffHint": "Nessuna pubblicità su questo video.",
+    "rollsOnVideo": "Spot nei video",
+    "rollsOnHint": "Possono comparire spot, banner e ticker.",
+    "rollsOffHint": "Solo banner e ticker su questo video.",
     "trailer": "Trailer del canale",
     "trailerOn": "Parte in automatico in cima alla scheda Panoramica del tuo profilo, sostituendo qualsiasi trailer impostato in precedenza.",
     "trailerOff": "Rendi questo il video che parte in automatico in cima alla scheda Panoramica del tuo profilo.",
@@ -235,6 +241,7 @@
       "broadcastFailed": "Trasmissione non riuscita",
       "listingFailed": "Impossibile aggiornare la visibilità.",
       "trailerFailed": "Impossibile aggiornare il trailer del tuo canale.",
+      "adsSyncFailed": "Salvato, ma l'impostazione degli annunci di questo video non è ancora arrivata a 3Speak. Prova a salvare di nuovo.",
       "saveFailed": "Impossibile salvare le modifiche."
     },
     "timeline": "Capitoli e link",
@@ -251,6 +258,7 @@
     "sections": {
       "visibility": "Visibilità",
       "content": "Contenuto",
+      "ads": "Pubblicità",
       "promotion": "Promozione"
     },
     "chaptersNote": "Con 3 o più capitoli, l'elenco dei capitoli viene scritto nella descrizione al salvataggio.",

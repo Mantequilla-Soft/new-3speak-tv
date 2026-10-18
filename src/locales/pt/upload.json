@@ -206,6 +206,12 @@
       "hintOn": "Este vídeo pode exibir anúncios.",
       "hintOff": "Sem anúncios neste vídeo."
     },
+    "rolls": {
+      "label": "Spots em vídeo",
+      "info": "Spots são anúncios curtos em vídeo que passam antes ou durante este vídeo. Desative-os para manter só banners e tickers nele. Seus outros vídeos e a configuração da sua conta continuam como estão.",
+      "hintOn": "Spots, banners e tickers podem aparecer.",
+      "hintOff": "Só banners e tickers neste vídeo."
+    },
     "gated": {
       "label": "Só para apoiadores",
       "info": "Criptografa este vídeo para que só assinantes do 3Speak Pro possam reproduzi-lo. Uma <b>prévia de 10 segundos sem criptografia</b> é publicada junto, então o post ainda mostra um trailer em toda a Hive. Seu título, descrição e tags são conteúdo comum de post da Hive e <b>não são criptografados</b> — só o vídeo é. <b>Isso não pode ser alterado depois do envio.</b>",
@@ -270,6 +276,7 @@
     "scheduled": "Post agendado!",
     "linkingEmbed": "Vinculando o vídeo incorporado...",
     "adsOffFailedToast": "Publicado, mas ainda não foi possível desativar os anúncios deste vídeo.",
+    "rollsOffFailedToast": "Publicado, mas ainda não foi possível desativar os spots em vídeo deste vídeo.",
     "trailerFailedToast": "Publicado, mas não foi possível defini-lo como trailer do seu canal.",
     "completed": "Concluído",
     "publishedToast": "Vídeo publicado!",
@@ -297,6 +304,8 @@
       "thumbnailLinkFailed": "Aviso: não foi possível definir a miniatura incorporada (não crítico)",
       "adsOffSaved": "Anúncios desativados para este vídeo",
       "adsOffFailed": "Não foi possível salvar a opção sem anúncios para este vídeo",
+      "rollsOffSaved": "Spots em vídeo desativados para este vídeo",
+      "rollsOffFailed": "Não foi possível salvar a configuração sem spots para este vídeo",
       "trailerSet": "Definido como trailer do seu canal",
       "trailerFailed": "Publicado, mas não foi possível defini-lo como trailer do seu canal",
       "published": "Vídeo publicado!"

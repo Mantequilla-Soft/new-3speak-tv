@@ -241,6 +241,8 @@
     "changeAnytime": "Vous pouvez modifier ces deux options à tout moment dans les <b>Paramètres</b>.",
     "allowAds": "Autoriser les pubs sur mes vidéos",
     "allowAdsDesc": "Activé par défaut. Désactivé signifie aucune pub sur ce que vous publiez, et aucune part.",
+    "allowRolls": "Autoriser les spots vidéo",
+    "allowRollsDesc": "Désactivé : seulement des bannières et des bandeaux, qui n'interrompent jamais votre vidéo.",
     "shareCommunity": "Partager avec la communauté",
     "shareCommunityDesc": "La part des {{pool}} % qui revient à la communauté dans laquelle vous avez publié la vidéo.",
     "breakdownYou": "<b>{{pct}} %</b> vous",

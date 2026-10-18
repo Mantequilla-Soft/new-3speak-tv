@@ -235,6 +235,8 @@
     "changeAnytime": "你随时可以在<b>设置</b>中更改这两项。",
     "allowAds": "允许在我的视频中投放广告",
     "allowAdsDesc": "默认开启。关闭后，你发布的任何内容都不会有广告，也不会有分成。",
+    "allowRolls": "允许视频插播广告",
+    "allowRollsDesc": "关闭后只显示横幅和滚动字幕，它们绝不会打断你的视频。",
     "shareCommunity": "与社区分享",
     "shareCommunityDesc": "{{pool}}% 中有多少分给你发布视频所在的社区。",
     "breakdownYou": "<b>{{pct}}%</b> 你",

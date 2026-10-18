@@ -196,6 +196,12 @@
     "allowRemix": "Allow Remix/Clip",
     "remixOn": "Others can create remixes/clips; you are credited as original author.",
     "remixOff": "Others cannot remix or clip this video.",
+    "adsOnVideo": "Ads on this video",
+    "adsOnHint": "Ads may play on this video.",
+    "adsOffHint": "No ads on this video.",
+    "rollsOnVideo": "Video ad rolls",
+    "rollsOnHint": "Rolls, banners and tickers may show.",
+    "rollsOffHint": "Only banners and tickers on this video.",
     "trailer": "Channel trailer",
     "trailerOn": "Autoplays at the top of your profile’s Overview tab, replacing any trailer you set before.",
     "trailerOff": "Make this the video that autoplays at the top of your profile’s Overview tab.",
@@ -231,6 +237,7 @@
       "broadcastFailed": "Broadcast failed",
       "listingFailed": "Could not update the listing.",
       "trailerFailed": "Could not update your channel trailer.",
+      "adsSyncFailed": "Saved, but the ad setting for this video has not reached 3Speak yet. Try saving again.",
       "saveFailed": "Failed to save changes."
     },
     "timeline": "Chapters and links",
@@ -247,6 +254,7 @@
     "sections": {
       "visibility": "Visibility",
       "content": "Content",
+      "ads": "Ads",
       "promotion": "Promotion"
     },
     "chaptersNote": "With 3 or more chapters, the chapter list is written into the description when you save.",

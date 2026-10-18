@@ -238,6 +238,8 @@
     "changeAnytime": "Bunların ikisini de istediğin zaman <b>Ayarlar</b>'dan değiştirebilirsin.",
     "allowAds": "Videolarımda reklamlara izin ver",
     "allowAdsDesc": "Varsayılan olarak açık. Kapalıysa paylaştığın hiçbir şeyde reklam olmaz ve pay da almazsın.",
+    "allowRolls": "Video reklamlarına izin ver",
+    "allowRollsDesc": "Kapalıysa yalnızca videonu asla durdurmayan bannerlar ve kayan yazılar gösterilir.",
     "shareCommunity": "Toplulukla paylaş",
     "shareCommunityDesc": "%{{pool}} payın ne kadarının videoyu paylaştığın topluluğa gideceği.",
     "breakdownYou": "<b>%{{pct}}</b> sen",

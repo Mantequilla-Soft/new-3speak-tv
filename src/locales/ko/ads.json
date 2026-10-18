@@ -235,6 +235,8 @@
     "changeAnytime": "두 설정 모두 <b>설정</b>에서 언제든지 바꿀 수 있어요.",
     "allowAds": "내 동영상에 광고 허용",
     "allowAdsDesc": "기본적으로 켜져 있어요. 끄면 내가 게시하는 모든 콘텐츠에 광고가 붙지 않고, 수익도 없어요.",
+    "allowRolls": "동영상 광고 허용",
+    "allowRollsDesc": "끄면 동영상을 멈추지 않는 배너와 티커만 표시돼요.",
     "shareCommunity": "커뮤니티와 나누기",
     "shareCommunityDesc": "{{pool}}% 중 동영상을 게시한 커뮤니티에 줄 몫.",
     "breakdownYou": "나 <b>{{pct}}%</b>",

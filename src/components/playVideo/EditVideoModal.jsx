@@ -18,6 +18,8 @@ import { Rocket, FileText, Image as ImageIcon, ListOrdered, SlidersHorizontal } 
 import TimelineEditor, { withTimelineKeys, chapterIssues } from '../timeline/TimelineEditor';
 import { readTimeline, withTimeline, applyTimelineToBody, chaptersFromText } from '../../utils/videoTimeline';
 import { fetchPlaySource } from '../../lib/videoData';
+import { fetchCreatorAdPrefs, syncVideoAdChoice } from '../../lib/advertiseData';
+import { adsEnabledFor } from '../../utils/config';
 import './EditVideoModal.scss';
 
 // Every toast from this module is headed "Video"; the message becomes the
@@ -182,6 +184,14 @@ export default function EditVideoModal({ isOpen, onClose, author, permlink, onSa
   const [trailerKnown, setTrailerKnown] = useState(false);
   const initialTrailerRef = useRef(false);
 
+  // Ads on THIS video, stored in the post (json_metadata["3speak"]: `ads: false`
+  // = none, `rolls: false` = banners and tickers only) and mirrored by the
+  // checker. Offered only when the account carries ads (and the rolls switch only
+  // when it carries rolls), the same rule as the uploader's Details step.
+  const [videoAds, setVideoAds] = useState(true);
+  const [videoRolls, setVideoRolls] = useState(true);
+  const [accountAds, setAccountAds] = useState({ ads: false, rolls: false });
+
   // ⏱️ Timeline (long-form only): chapters + link toasters, the same editor as
   // the upload wizard's Timeline step. Previewed against the published stream
   // (HLS via play.3speak.tv), fetched only once the section is opened.
@@ -196,6 +206,22 @@ export default function EditVideoModal({ isOpen, onClose, author, permlink, onSa
   const [tlSrcState, setTlSrcState] = useState('idle'); // idle | loading | done
   const [tlDuration, setTlDuration] = useState(0);
   const tlBaselineRef = useRef('');
+
+  // The account's own ad setting decides which per-video switches mean anything.
+  // Hidden until a definite answer, like the uploader: a failed read must not
+  // offer a switch that would do nothing.
+  useEffect(() => {
+    if (!isOpen || !isOwner || !adsEnabledFor(author)) return undefined;
+    let alive = true;
+    fetchCreatorAdPrefs(author)
+      .then((p) => {
+        if (!alive) return;
+        const ads = p?.adsEnabled === true;
+        setAccountAds({ ads, rolls: ads && p?.rollsEnabled !== false });
+      })
+      .catch(() => {});
+    return () => { alive = false; };
+  }, [isOpen, isOwner, author]);
 
   // Fetch original post when modal opens
   useEffect(() => {
@@ -257,6 +283,9 @@ export default function EditVideoModal({ isOpen, onClose, author, permlink, onSa
         const metaReusable = meta.video?.reusable !== false;
         setReusable(metaReusable);
         initialReusableRef.current = metaReusable;
+        const adNs = meta['3speak'] && typeof meta['3speak'] === 'object' ? meta['3speak'] : {};
+        setVideoAds(adNs.ads !== false);
+        setVideoRolls(adNs.ads === false || adNs.rolls !== false);
         // Timeline: the stored one, or (none yet) chapters already typed into
         // the description, so the editor starts from what viewers see today.
         const metaDuration = Number(meta.video?.info?.duration) || 0;
@@ -340,6 +369,9 @@ export default function EditVideoModal({ isOpen, onClose, author, permlink, onSa
     setPromoteOpen(false);
     setIsTrailer(false);
     setTrailerKnown(false);
+    setVideoAds(true);
+    setVideoRolls(true);
+    setAccountAds({ ads: false, rolls: false });
     initialListedRef.current = true;
     initialNsfwRef.current = false;
     initialReusableRef.current = true;
@@ -431,6 +463,8 @@ export default function EditVideoModal({ isOpen, onClose, author, permlink, onSa
       tags: Array.isArray(original.meta.tags) ? original.meta.tags : [],
       thumb: smThumb || (Array.isArray(original.meta.image) ? (original.meta.image[0] || '') : ''),
       reusable: original.meta.video?.reusable !== false,
+      ads: original.meta['3speak']?.ads !== false,
+      rolls: original.meta['3speak']?.ads === false || original.meta['3speak']?.rolls !== false,
     };
   }, [original]);
 
@@ -441,9 +475,11 @@ export default function EditVideoModal({ isOpen, onClose, author, permlink, onSa
   const userTagsDirty = !!orig && finalTags.filter((x) => x !== 'nsfw').join(' ') !== orig.tags.filter((x) => x !== 'nsfw').join(' ');
   const thumbDirty = !!orig && thumbnailUrl.trim() !== (orig.thumb || initialThumbRef.current || '').trim();
   const reusableDirty = !!orig && reusable !== orig.reusable;
+  // Rolls only count while ads are on: with ads off the rolls switch is hidden.
+  const adsDirty = !!orig && (videoAds !== orig.ads || (videoAds && videoRolls !== orig.rolls));
 
   // On-chain content change (needs a Hive broadcast). Includes the nsfw tag.
-  const contentDirty = titleDirty || bodyDirty || tagsDirty || thumbDirty || reusableDirty;
+  const contentDirty = titleDirty || bodyDirty || tagsDirty || thumbDirty || reusableDirty || adsDirty;
 
   const listingChanged = listed !== initialListedRef.current;
   const nsfwChanged = isNsfw !== initialNsfwRef.current;
@@ -458,7 +494,7 @@ export default function EditVideoModal({ isOpen, onClose, author, permlink, onSa
   // Tab indicators: a dot for unsaved changes, a badge for something to fix.
   const detailsDirty = titleDirty || bodyDirty || userTagsDirty;
   const mediaDirty = thumbDirty || !!newVideoFile;
-  const settingsDirty = listingChanged || nsfwChanged || reusableDirty || trailerChanged;
+  const settingsDirty = listingChanged || nsfwChanged || reusableDirty || trailerChanged || adsDirty;
   const detailsError = !!original && (!titleValid || !tagsValid || !bodyValid);
   // The first tab Save would trip over, in tab order.
   const errorTab = detailsError ? 'details' : (timelineIssues.length ? 'timeline' : null);
@@ -645,6 +681,17 @@ export default function EditVideoModal({ isOpen, onClose, author, permlink, onSa
         newMeta.tags = finalTags;
         // Allow Remix/Clip lives at json_metadata.video.reusable.
         newMeta.video = { ...(newMeta.video || { platform: '3speak' }), reusable };
+        // Ads on this video. Only the two keys this owns are touched, so anything
+        // else some app keeps under "3speak" survives; an empty block is dropped.
+        if (adsDirty) {
+          const adNs = { ...(newMeta['3speak'] && typeof newMeta['3speak'] === 'object' ? newMeta['3speak'] : {}) };
+          delete adNs.ads;
+          delete adNs.rolls;
+          if (!videoAds) adNs.ads = false;
+          else if (!videoRolls) adNs.rolls = false;
+          if (Object.keys(adNs).length) newMeta['3speak'] = adNs;
+          else delete newMeta['3speak'];
+        }
         // ⏱️ Timeline: rewritten only when it was edited, so an edit of something
         // else never touches (or re-normalises) what is stored.
         if (timelineDirty) {
@@ -697,6 +744,18 @@ export default function EditVideoModal({ isOpen, onClose, author, permlink, onSa
         );
         if (!result?.success) {
           throw new Error(result?.error || t('watch.edit.errors.broadcastFailed'));
+        }
+
+        // The checker mirrors the choice from the chain, so it waits for the edit
+        // to be readable there. In the background: the save itself is done, and a
+        // failure is said out loud because ads would keep playing as before.
+        if (adsDirty) {
+          const mode = !videoAds ? 'off' : (videoRolls ? 'on' : 'no-rolls');
+          syncVideoAdChoice(author, permlink, mode)
+            .catch((e) => {
+              console.warn('Per-video ad setting sync failed:', e?.message);
+              toast.error(t('watch.edit.errors.adsSyncFailed'));
+            });
         }
 
         // Reflect the new thumbnail in Mongo immediately (best-effort).
@@ -1134,6 +1193,45 @@ export default function EditVideoModal({ isOpen, onClose, author, permlink, onSa
                   )}
                 </div>
               </section>
+
+              {isOwner && accountAds.ads && (
+                <section className="evm-group">
+                  <h4 className="evm-group__title">{t('watch.edit.sections.ads')}</h4>
+                  <div className="evm-toggle-row">
+                    <button
+                      type="button"
+                      role="switch"
+                      aria-checked={videoAds}
+                      className={`evm-switch${videoAds ? ' is-on' : ''}`}
+                      onClick={() => setVideoAds((v) => !v)}
+                      disabled={saving}
+                    >
+                      <span className="evm-switch__track"><span className="evm-switch__thumb" /></span>
+                      <span className="evm-switch__label">
+                        <strong>{t('watch.edit.adsOnVideo')}</strong>
+                        <small>{videoAds ? t('watch.edit.adsOnHint') : t('watch.edit.adsOffHint')}</small>
+                      </span>
+                    </button>
+
+                    {accountAds.rolls && videoAds && (
+                      <button
+                        type="button"
+                        role="switch"
+                        aria-checked={videoRolls}
+                        className={`evm-switch${videoRolls ? ' is-on' : ''}`}
+                        onClick={() => setVideoRolls((v) => !v)}
+                        disabled={saving}
+                      >
+                        <span className="evm-switch__track"><span className="evm-switch__thumb" /></span>
+                        <span className="evm-switch__label">
+                          <strong>{t('watch.edit.rollsOnVideo')}</strong>
+                          <small>{videoRolls ? t('watch.edit.rollsOnHint') : t('watch.edit.rollsOffHint')}</small>
+                        </span>
+                      </button>
+                    )}
+                  </div>
+                </section>
+              )}
 
               {!isShort && (
                 <section className="evm-group">

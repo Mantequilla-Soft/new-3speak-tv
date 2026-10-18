@@ -205,6 +205,12 @@
       "hintOn": "In diesem Video kann Werbung laufen.",
       "hintOff": "Keine Werbung in diesem Video."
     },
+    "rolls": {
+      "label": "Video-Rolls",
+      "info": "Rolls sind kurze Videospots, die vor oder während dieses Videos laufen. Schalte sie aus, um hier nur Banner und Ticker zu behalten. Deine anderen Videos und deine Kontoeinstellung bleiben, wie sie sind.",
+      "hintOn": "Rolls, Banner und Ticker können erscheinen.",
+      "hintOff": "Auf diesem Video nur Banner und Ticker."
+    },
     "gated": {
       "label": "Nur für Unterstützer",
       "info": "Verschlüsselt dieses Video, sodass nur 3Speak-Pro-Abonnenten es abspielen können. Zusätzlich wird eine <b>unverschlüsselte Vorschau von 10 Sekunden</b> veröffentlicht, damit der Post überall auf Hive trotzdem einen Trailer zeigt. Titel, Beschreibung und Tags sind normale Hive-Post-Inhalte und <b>nicht verschlüsselt</b> – nur das Video ist es. <b>Das kann nach dem Upload nicht mehr geändert werden.</b>",
@@ -268,6 +274,7 @@
     "scheduled": "Post geplant!",
     "linkingEmbed": "Embed-Video wird verknüpft...",
     "adsOffFailedToast": "Veröffentlicht, aber die Werbung für dieses Video konnte noch nicht ausgeschaltet werden.",
+    "rollsOffFailedToast": "Veröffentlicht, aber die Video-Rolls konnten für dieses Video noch nicht ausgeschaltet werden.",
     "trailerFailedToast": "Veröffentlicht, aber konnte nicht als dein Kanaltrailer festgelegt werden.",
     "completed": "Abgeschlossen",
     "publishedToast": "Video erfolgreich veröffentlicht!",
@@ -295,6 +302,8 @@
       "thumbnailLinkFailed": "Warnung: Embed-Thumbnail konnte nicht gesetzt werden (nicht kritisch)",
       "adsOffSaved": "Werbung für dieses Video ausgeschaltet",
       "adsOffFailed": "Die Einstellung ohne Werbung für dieses Video konnte nicht gespeichert werden",
+      "rollsOffSaved": "Video-Rolls für dieses Video ausgeschaltet",
+      "rollsOffFailed": "Die Einstellung ohne Rolls konnte für dieses Video nicht gespeichert werden",
       "trailerSet": "Als Kanaltrailer festgelegt",
       "trailerFailed": "Veröffentlicht, aber konnte nicht als dein Kanaltrailer festgelegt werden",
       "published": "Video erfolgreich veröffentlicht!"

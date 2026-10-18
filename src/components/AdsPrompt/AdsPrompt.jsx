@@ -44,6 +44,7 @@ export default function AdsPrompt() {
   // browser, where it would drift out of step with what the save is checked against.
   const [split, setSplit] = useState(null);
   const [adsEnabled, setAdsEnabled] = useState(true);
+  const [rollsEnabled, setRollsEnabled] = useState(true);
   const promptsActive = usePromptsActive('ads');
 
   // Closed testing. Two conditions, and both are needed.
@@ -121,6 +122,7 @@ export default function AdsPrompt() {
         } else {
           setSplit(choice.split);
           setAdsEnabled(choice.adsEnabled);
+          setRollsEnabled(choice.rollsEnabled !== false);
           next = 'settings';
         }
       }
@@ -158,6 +160,7 @@ export default function AdsPrompt() {
         user={user}
         split={split}
         initialAdsEnabled={adsEnabled}
+        initialRollsEnabled={rollsEnabled}
         onSaved={afterSettingsSaved}
         onDismiss={afterSettingsDismissed}
       />

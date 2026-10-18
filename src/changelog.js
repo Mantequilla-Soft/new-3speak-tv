@@ -7,6 +7,12 @@
 // 1.0.0 — that way they see all of these when develop is pushed to production.
 export const CHANGELOG = [
   {
+    version: '1.79.93',
+    date: '2026-10-17',
+    summary:
+      'You can now keep banners and tickers on your videos but turn off video ad rolls, in Settings or for a single video.',
+  },
+  {
     version: '1.79.92',
     date: '2026-10-17',
     summary:

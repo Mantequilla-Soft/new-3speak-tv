@@ -192,6 +192,12 @@
     "allowRemix": "리믹스/클립 허용",
     "remixOn": "다른 사람이 리믹스나 클립을 만들 수 있으며, 원작자로 내 이름이 표시돼요.",
     "remixOff": "다른 사람이 이 동영상을 리믹스하거나 클립으로 만들 수 없어요.",
+    "adsOnVideo": "이 동영상의 광고",
+    "adsOnHint": "이 동영상에 광고가 재생될 수 있습니다.",
+    "adsOffHint": "이 동영상에는 광고가 없습니다.",
+    "rollsOnVideo": "동영상 광고",
+    "rollsOnHint": "동영상 광고, 배너, 티커가 표시될 수 있어요.",
+    "rollsOffHint": "이 동영상에는 배너와 티커만 표시돼요.",
     "trailer": "채널 트레일러",
     "trailerOn": "프로필 개요 탭 상단에서 자동 재생되며, 이전에 설정한 트레일러를 대체해요.",
     "trailerOff": "이 동영상을 프로필 개요 탭 상단에서 자동 재생되도록 설정해요.",
@@ -227,6 +233,7 @@
       "broadcastFailed": "브로드캐스트 실패",
       "listingFailed": "공개 상태를 변경하지 못했어요.",
       "trailerFailed": "채널 트레일러를 변경하지 못했어요.",
+      "adsSyncFailed": "저장했지만 이 동영상의 광고 설정이 아직 3Speak에 반영되지 않았어요. 다시 저장해 보세요.",
       "saveFailed": "변경 사항을 저장하지 못했어요."
     },
     "timeline": "챕터와 링크",
@@ -243,6 +250,7 @@
     "sections": {
       "visibility": "공개 범위",
       "content": "콘텐츠",
+      "ads": "광고",
       "promotion": "홍보"
     },
     "chaptersNote": "챕터가 3개 이상이면 저장할 때 챕터 목록이 설명에 기록됩니다.",

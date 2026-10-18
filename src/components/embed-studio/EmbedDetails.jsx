@@ -64,6 +64,7 @@ function EmbedDetails() {
     isNsfw, setIsNsfw,
     addToBlog, setAddToBlog,
     videoAdsEnabled, setVideoAdsEnabled,
+    videoRollsEnabled, setVideoRollsEnabled,
     gated, setGated,
     gatedAllowlist, setGatedAllowlist,
     user,
@@ -95,12 +96,19 @@ function EmbedDetails() {
   // definite yes: a failed read (or ads switched off platform-wide, which 404s)
   // must not offer a switch that would do nothing.
   const [accountAdsOn, setAccountAdsOn] = useState(false);
+  // The rolls switch likewise only when the account takes rolls at all: with
+  // the account on banners and tickers only, this video already gets no rolls.
+  const [accountRollsOn, setAccountRollsOn] = useState(false);
   useEffect(() => {
-    if (!user || incubationHandle) { setAccountAdsOn(false); return undefined; }
+    if (!user || incubationHandle) { setAccountAdsOn(false); setAccountRollsOn(false); return undefined; }
     let alive = true;
     fetchCreatorAdPrefs(user)
-      .then((p) => { if (alive) setAccountAdsOn(p?.adsEnabled === true); })
-      .catch(() => { if (alive) setAccountAdsOn(false); });
+      .then((p) => {
+        if (!alive) return;
+        setAccountAdsOn(p?.adsEnabled === true);
+        setAccountRollsOn(p?.adsEnabled === true && p?.rollsEnabled !== false);
+      })
+      .catch(() => { if (alive) { setAccountAdsOn(false); setAccountRollsOn(false); } });
     return () => { alive = false; };
   }, [user, incubationHandle]);
 
@@ -108,6 +116,9 @@ function EmbedDetails() {
   useEffect(() => {
     if (!accountAdsOn && !videoAdsEnabled) setVideoAdsEnabled(true);
   }, [accountAdsOn, videoAdsEnabled, setVideoAdsEnabled]);
+  useEffect(() => {
+    if ((!accountRollsOn || !videoAdsEnabled) && !videoRollsEnabled) setVideoRollsEnabled(true);
+  }, [accountRollsOn, videoAdsEnabled, videoRollsEnabled, setVideoRollsEnabled]);
 
   const [scheduleOpen, setScheduleOpen] = useState(false);
   // The sheet edits a draft; only OK writes it back, so closing or pressing
@@ -460,6 +471,22 @@ function EmbedDetails() {
                         type="checkbox"
                         checked={!!videoAdsEnabled}
                         onChange={(e) => setVideoAdsEnabled(e.target.checked)}
+                      />
+                      <span className="toggle-track"><span className="toggle-thumb" /></span>
+                    </label>
+                  </div>
+                )}
+                {accountAdsOn && accountRollsOn && videoAdsEnabled && (
+                  <div className="beneficiary-wrap" onClick={() => setVideoRollsEnabled(!videoRollsEnabled)}>
+                    <div className="wrap">
+                      <span>{t('upload.details.rolls.label')}<SettingInfo title={t('upload.details.rolls.label')}>{t('upload.details.rolls.info')}</SettingInfo></span>
+                      <span>{videoRollsEnabled ? t('upload.details.rolls.hintOn') : t('upload.details.rolls.hintOff')}</span>
+                    </div>
+                    <label className="toggle-switch" onClick={(e) => e.stopPropagation()}>
+                      <input
+                        type="checkbox"
+                        checked={!!videoRollsEnabled}
+                        onChange={(e) => setVideoRollsEnabled(e.target.checked)}
                       />
                       <span className="toggle-track"><span className="toggle-thumb" /></span>
                     </label>

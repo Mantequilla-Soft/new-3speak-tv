@@ -238,6 +238,8 @@
     "changeAnytime": "Je kunt beide op elk moment wijzigen in <b>Instellingen</b>.",
     "allowAds": "Advertenties in mijn video's toestaan",
     "allowAdsDesc": "Standaard aan. Uit betekent geen advertenties bij alles wat je plaatst, en geen deel.",
+    "allowRolls": "Videorolls toestaan",
+    "allowRollsDesc": "Uit betekent alleen banners en tickers, die je video nooit stoppen.",
     "shareCommunity": "Delen met de community",
     "shareCommunityDesc": "Hoeveel van de {{pool}}% naar de community gaat waarin je de video hebt geplaatst.",
     "breakdownYou": "<b>{{pct}}%</b> jij",

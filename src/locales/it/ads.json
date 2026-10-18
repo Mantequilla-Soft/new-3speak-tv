@@ -241,6 +241,8 @@
     "changeAnytime": "Puoi cambiare entrambe le opzioni in qualsiasi momento nelle <b>Impostazioni</b>.",
     "allowAds": "Consenti annunci sui miei video",
     "allowAdsDesc": "Attivo per impostazione predefinita. Disattivato significa nessun annuncio su ciò che pubblichi, e nessuna quota.",
+    "allowRolls": "Consenti gli spot nei video",
+    "allowRollsDesc": "Disattivato significa solo banner e ticker, che non fermano mai il tuo video.",
     "shareCommunity": "Condividi con la community",
     "shareCommunityDesc": "Quanto del {{pool}}% va alla community in cui hai pubblicato il video.",
     "breakdownYou": "<b>{{pct}}%</b> a te",

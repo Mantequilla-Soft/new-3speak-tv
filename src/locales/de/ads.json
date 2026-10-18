@@ -238,6 +238,8 @@
     "changeAnytime": "Du kannst beides jederzeit in den <b>Einstellungen</b> ändern.",
     "allowAds": "Werbung in meinen Videos erlauben",
     "allowAdsDesc": "Standardmäßig an. Aus bedeutet: keine Werbung bei allem, was du postest, und kein Anteil.",
+    "allowRolls": "Video-Rolls erlauben",
+    "allowRollsDesc": "Aus heißt: nur Banner und Ticker, die dein Video nie anhalten.",
     "shareCommunity": "Mit der Community teilen",
     "shareCommunityDesc": "Wie viel der {{pool}} % an die Community geht, in der du das Video gepostet hast.",
     "breakdownYou": "<b>{{pct}} %</b> du",
