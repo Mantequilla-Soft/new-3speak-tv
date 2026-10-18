@@ -469,7 +469,15 @@
     "noHistory": "아직 아무것도 없어요. 게재가 끝나거나 취소되면 여기에 표시돼요.",
     "forecastPlays_other": " · 예상 재생 {{plays}}회",
     "makingVideo": "동영상을 제작하고 있어요",
-    "teamWillReview": "팀이 곧 광고 파일을 검토할 거예요. 통과하면 대신 첨부해 드리고, 선택할 사항이 있으면 연락드릴게요."
+    "teamWillReview": "팀이 곧 광고 파일을 검토할 거예요. 통과하면 대신 첨부해 드리고, 선택할 사항이 있으면 연락드릴게요.",
+    "chartTitle": "{{format}}: 하루 초당 가격 (HBD)",
+    "chartSub": "예약 기간이 길수록 하루 비용이 줄어듭니다. 선을 가리켜 비교하고, 클릭해 일수를 고르세요.",
+    "chartRate_other": "{{count}}일: 하루 초당 {{rate}} HBD",
+    "chartChip_other": "{{count}}일: {{rate}}",
+    "chartTotal_other": "{{seconds}}초 × {{count}}일 = {{total}} HBD",
+    "chartDays": "예약 일수",
+    "chartYAxis": "하루 초당 HBD",
+    "chartAria": "{{format}}: {{min}}일 기준 하루 초당 {{from}} HBD, {{max}}일에는 {{to}} HBD까지 낮아집니다"
   },
   "attach": {
     "needsTicker": "티커 게재이므로 승인된 티커 메시지가 필요해요.",
@@ -640,6 +648,10 @@
     "flatBooking": "정액 예약: 광고가 정해진 기간 동안 정해진 가격으로 네트워크 전체에 게재돼요. CPM이 아니라서 수치를 부풀릴 이유가 없어요.",
     "quotedForecast": "아래 예상치를 기준으로 견적을 받고, 실제 재생 수를 기준으로 보고받아요. 미달하면 차액이 다음 예약의 크레딧으로 돌아와요.",
     "audienceTitle": "광고를 기다리는 시청자",
+    "explorerTitle": "가격 계산하기",
+    "explorerLede": "형식과 광고 길이를 고르세요. 선은 예약 기간별 하루 초당 비용과 내 광고의 총액을 보여 줍니다.",
+    "explorerFormat": "광고 형식",
+    "explorerSeconds": "광고 길이(초, 최대 {{max}})",
     "creatorTitle": "크리에이터라면",
     "creatorNote": "설정에서 언제든지 끌 수 있어요. 그러면 내 동영상은 광고주에게 제공하는 인벤토리에서도 제외돼요.",
     "viewerTitle": "시청자라면",

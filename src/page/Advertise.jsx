@@ -12,6 +12,7 @@ import NotFound from './NotFound';
 import AdOverlay from '../components/ads/AdOverlay';
 import TickerCrawl from '../components/ads/TickerCrawl';
 import FundsNotice from '../components/ads/FundsNotice';
+import DayRateChart, { PriceExplorer } from '../components/ads/DayRateChart';
 import { fetchBalances } from '../hive-api/api';
 import {
   AD_CATEGORIES,
@@ -1149,6 +1150,21 @@ function CampaignPanel({
         </fieldset>
         ) : null}
         </div>
+        {/* What one second of this format costs per day at every flight length, so
+            the length and the duration can be weighed against each other. Same
+            formula as the total below; clicking a point sets the days. */}
+        {fmt && rate != null ? (
+          <DayRateChart
+            rate={Number(rate)}
+            dayCurveK={pricing?.dayCurveK}
+            minDays={pricing?.minDays || 1}
+            maxDays={pricing?.maxDays || 90}
+            days={days}
+            seconds={lengthOk ? chosenLength : null}
+            formatLabel={fmt.label}
+            onPickDays={(d) => setDays(d)}
+          />
+        ) : null}
         {/* What this booking buys, exactly: the message at the length being priced, in
             its style. Changing the seconds above changes the speed here. */}
         {isTicker && tickerCreative ? (
@@ -2621,6 +2637,16 @@ export default function Advertise({ openLoginModal }) {
         <h2><FaUsers aria-hidden="true" /> {t('ads.general.audienceTitle')}</h2>
         <InventoryPanel data={inventory} isLoading={isLoading} error={error} />
       </section>
+
+      {/* Work the price out before booking: any format, any length, every flight
+          length, from the same rate card the booking form quotes from. */}
+      {pricing?.formats?.length ? (
+        <section className="mkt-section mkt-price-explorer">
+          <h2><MdSchedule aria-hidden="true" /> {t('ads.general.explorerTitle')}</h2>
+          <p>{t('ads.general.explorerLede')}</p>
+          <PriceExplorer pricing={pricing} />
+        </section>
+      ) : null}
 
       {/* Two audiences who are not buying anything, side by side: the people whose
           videos carry the ads and the people who watch them. Both are paid, and an

@@ -1,0 +1,138 @@
+// The booking form's day-rate chart. Recessive grid and axes, one 2px line in the
+// chart's own red (validated: #e53935 on the light card, #f44336 on the dark one;
+// the site's dark accent #ff5252 is too light for a chart line), text in text tokens.
+.mkt-dayrate {
+  --mkt-chart-line: #e53935;
+  margin: 4px 0 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 0;
+}
+
+[data-theme="dark"] .mkt-dayrate {
+  --mkt-chart-line: #f44336;
+}
+
+.mkt-dayrate-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 4px 10px;
+  color: var(--text-primary);
+}
+
+.mkt-dayrate-plot {
+  position: relative;
+  width: 100%;
+  min-width: 0;
+  cursor: crosshair;
+  touch-action: pan-y;
+
+  svg { display: block; overflow: visible; }
+}
+
+.mkt-dayrate-grid {
+  stroke: var(--border-color);
+  stroke-width: 1;
+  opacity: 0.6;
+}
+
+// Tick labels: secondary ink at 12px (the muted 11px ones were hard to read).
+.mkt-dayrate-axis {
+  fill: var(--text-secondary);
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
+}
+
+// Axis titles: what each axis measures.
+.mkt-dayrate-title {
+  fill: var(--text-primary);
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.mkt-dayrate-baseline {
+  stroke: var(--text-muted);
+  stroke-width: 1;
+}
+
+.mkt-dayrate-line {
+  fill: none;
+  stroke: var(--mkt-chart-line);
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.mkt-dayrate-cross {
+  stroke: var(--text-muted);
+  stroke-width: 1;
+  stroke-dasharray: 3 3;
+}
+
+.mkt-dayrate-dot {
+  fill: var(--mkt-chart-line);
+  // A surface ring, so the dot reads on top of the line.
+  stroke: var(--bg-secondary);
+  stroke-width: 2;
+
+  &.is-chosen {
+    fill: var(--bg-secondary);
+    stroke: var(--mkt-chart-line);
+  }
+}
+
+.mkt-dayrate-readout {
+  margin: 0;
+  min-height: 1.4em;
+  color: var(--text-primary);
+  font-size: 13px;
+  font-variant-numeric: tabular-nums;
+}
+
+// The table view: every key point as text, each one a shortcut to those days.
+.mkt-dayrate-keys {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+
+  button {
+    padding: 3px 9px;
+    border: 1px solid var(--border-color);
+    border-radius: 999px;
+    background: transparent;
+    color: var(--text-secondary);
+    font: inherit;
+    font-size: 12px;
+    cursor: pointer;
+
+    &:hover { border-color: var(--mkt-chart-line); }
+
+    &.selected {
+      border-color: var(--mkt-chart-line);
+      color: var(--text-primary);
+    }
+  }
+}
+
+// The general page's explorer: format chips, a length field, then the chart.
+.mkt-explorer {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  min-width: 0;
+}
+
+// Format dropdown and length side by side; they stack on a phone.
+.mkt-explorer-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+
+  .mkt-explorer-format { flex: 2 1 220px; }
+  .mkt-explorer-seconds { flex: 1 1 160px; max-width: 260px; }
+}

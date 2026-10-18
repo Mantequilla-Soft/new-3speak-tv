@@ -469,7 +469,15 @@
     "noHistory": "这里还什么都没有。投放结束或被取消后会显示在这里。",
     "forecastPlays_other": " · 预计播放 {{plays}} 次",
     "makingVideo": "我们正在制作视频",
-    "teamWillReview": "团队很快会审核你的广告文件。审核通过后我们会为你附加上去，如果有需要你决定的事项，我们会联系你。"
+    "teamWillReview": "团队很快会审核你的广告文件。审核通过后我们会为你附加上去，如果有需要你决定的事项，我们会联系你。",
+    "chartTitle": "{{format}}：每秒每天价格（HBD）",
+    "chartSub": "预订时间越长，每天越便宜。指向线条进行比较，点击即可选择天数。",
+    "chartRate_other": "{{count}} 天：每秒每天 {{rate}} HBD",
+    "chartChip_other": "{{count}} 天：{{rate}}",
+    "chartTotal_other": "{{seconds}} 秒，{{count}} 天 = {{total}} HBD",
+    "chartDays": "预订天数",
+    "chartYAxis": "每秒每天 HBD",
+    "chartAria": "{{format}}：{{min}} 天时每秒每天 {{from}} HBD，{{max}} 天时降至 {{to}} HBD"
   },
   "attach": {
     "needsTicker": "这是滚动字幕投放，因此需要一条已批准的滚动字幕。",
@@ -640,6 +648,10 @@
     "flatBooking": "固定价格预订：你的广告在固定期限内以固定价格在全网投放。不按 CPM 计费，所以没有人有理由虚报数字。",
     "quotedForecast": "报价依据下方的预测数据，报告依据实际播放数据。如果未达标，差额会作为额度返还到你的下一次预订中。",
     "audienceTitle": "等待你广告的观众",
+    "explorerTitle": "计算你的价格",
+    "explorerLede": "选择一种格式和广告时长。线条显示每种预订时长下每秒每天的费用，以及你的广告总价。",
+    "explorerFormat": "广告格式",
+    "explorerSeconds": "广告时长（秒，最多 {{max}}）",
     "creatorTitle": "如果你是创作者",
     "creatorNote": "你随时可以在设置中关闭广告。届时你的视频也会从我们提供给广告主的资源中移除。",
     "viewerTitle": "如果你是观众",

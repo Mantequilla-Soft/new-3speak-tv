@@ -469,7 +469,15 @@
     "noHistory": "Belum ada apa-apa di sini. Penayangan masuk ke sini setelah selesai atau dibatalkan.",
     "forecastPlays_other": " · perkiraan {{plays}} putar",
     "makingVideo": "Kami sedang membuat videonya",
-    "teamWillReview": "Tim akan segera meninjau file iklanmu. Kami melampirkannya untukmu setelah lolos, dan menghubungimu jika ada pilihan yang perlu dibuat."
+    "teamWillReview": "Tim akan segera meninjau file iklanmu. Kami melampirkannya untukmu setelah lolos, dan menghubungimu jika ada pilihan yang perlu dibuat.",
+    "chartTitle": "{{format}}: harga per detik per hari (HBD)",
+    "chartSub": "Pemesanan yang lebih lama lebih murah per hari. Arahkan ke garis untuk membandingkan, klik untuk memilih jumlah hari.",
+    "chartRate_other": "{{count}} hari: {{rate}} HBD per detik per hari",
+    "chartChip_other": "{{count}} hari: {{rate}}",
+    "chartTotal_other": "{{seconds}} dtk selama {{count}} hari = {{total}} HBD",
+    "chartDays": "Hari yang dipesan",
+    "chartYAxis": "HBD per detik per hari",
+    "chartAria": "{{format}}: {{from}} HBD per detik per hari untuk {{min}} hari, turun menjadi {{to}} HBD untuk {{max}} hari"
   },
   "attach": {
     "needsTicker": "Ini penayangan ticker, jadi butuh pesan ticker yang sudah disetujui.",
@@ -640,6 +648,10 @@
     "flatBooking": "Pemesanan tetap: spot-mu tayang di seluruh jaringan selama periode tetap dengan harga tetap. Tanpa CPM, jadi tidak ada yang punya alasan menggelembungkan angka.",
     "quotedForecast": "Harga yang ditawarkan berdasarkan perkiraan di bawah dan laporan berdasarkan yang benar-benar diputar. Jika kurang, selisihnya dikembalikan sebagai kredit di pemesanan berikutnya.",
     "audienceTitle": "Penonton yang menunggu iklanmu",
+    "explorerTitle": "Hitung harga Anda",
+    "explorerLede": "Pilih format dan durasi iklan. Garis menunjukkan biaya setiap detik per hari untuk setiap lama pemesanan, beserta total untuk iklan Anda.",
+    "explorerFormat": "Format iklan",
+    "explorerSeconds": "Durasi iklan dalam detik (hingga {{max}})",
     "creatorTitle": "Jika kamu kreator",
     "creatorNote": "Matikan kapan saja di Pengaturan. Videomu lalu juga dikeluarkan dari yang kami tawarkan ke pengiklan.",
     "viewerTitle": "Jika kamu penonton",
