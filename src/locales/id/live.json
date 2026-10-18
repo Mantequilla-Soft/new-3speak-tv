@@ -130,6 +130,8 @@
     "card": {
       "copyUrl": "Salin URL server",
       "urlCopied": "URL server disalin",
+      "copyChatUrl": "Salin URL overlay obrolan",
+      "chatUrlCopied": "URL overlay obrolan disalin",
       "lastLive": "Terakhir live: {{date}}",
       "neverLive": "Belum pernah dipakai",
       "watch": "Tonton siaran",
@@ -151,6 +153,11 @@
       "encoder": "Encoder: x264 atau encoder hardware kamu",
       "audio": "Sample rate audio: 48 kHz",
       "bframes": "Tanpa B-frames (atur ke 0 jika encoder-mu menyediakannya)",
+      "chatTitle": "Tampilkan obrolan di siaranmu",
+      "chat1": "Di kartu template, klik \"Salin URL overlay obrolan\".",
+      "chat2": "Di OBS, tambahkan sumber dengan + lalu pilih \"Browser\". Tempel URL-nya, atur ukuran ke 400 kali 600, dan letakkan di tempat yang kamu mau.",
+      "chat3": "Cukup tambahkan sekali: overlay ini menemukan siaranmu sendiri setiap kali kamu live dengan template ini. Pesan penonton muncul di sana dan memudar setelah 30 detik.",
+      "chatOptions": "Opsional, tambahkan di akhir URL: &fade=0 membuat pesan tetap tampil, &max=5 menampilkan lebih sedikit baris, &size=28 memperbesar teks.",
       "limitsFree": "Siaran gratis berakhir setelah 1 jam dan menampilkan watermark 3Speak. Dengan 3Speak Pro kamu bisa siaran selama 4 jam tanpa watermark.",
       "limitsPro": "Dengan 3Speak Pro siaranmu bisa berjalan 4 jam tanpa watermark."
     },
@@ -225,6 +232,9 @@
     },
     "pickTemplate": "Mulai dari template",
     "pickTemplatePlaceholder": "Pilih template…",
-    "templateLoaded": "“{{name}}” dimuat ke Siaran baru"
+    "templateLoaded": "“{{name}}” dimuat ke Siaran baru",
+    "chatOverlay": {
+      "invalid": "Tautan overlay obrolan ini tidak valid. Salin lagi dari template-mu di Stream Studio."
+    }
   }
 }

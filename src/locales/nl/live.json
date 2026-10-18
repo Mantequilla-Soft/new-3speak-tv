@@ -131,6 +131,8 @@
     "card": {
       "copyUrl": "Server-URL kopiëren",
       "urlCopied": "Server-URL gekopieerd",
+      "copyChatUrl": "URL van chat-overlay kopiëren",
+      "chatUrlCopied": "URL van chat-overlay gekopieerd",
       "lastLive": "Laatst live: {{date}}",
       "neverLive": "Nog niet gebruikt",
       "watch": "Bekijk de stream",
@@ -152,6 +154,11 @@
       "encoder": "Encoder: x264 of je hardware-encoder",
       "audio": "Audio-samplefrequentie: 48 kHz",
       "bframes": "Geen B-frames (zet ze op 0 als je encoder dat aanbiedt)",
+      "chatTitle": "Toon de chat in je stream",
+      "chat1": "Klik op de kaart van het sjabloon op \"URL van chat-overlay kopiëren\".",
+      "chat2": "Voeg in OBS met + een bron toe en kies \"Browser\". Plak de URL, stel de grootte in op 400 bij 600 en zet hem waar je de chat wilt hebben.",
+      "chat3": "Je voegt hem maar één keer toe: hij vindt je stream vanzelf elke keer dat je met dit sjabloon live gaat. Berichten van kijkers verschijnen daar en verdwijnen na 30 seconden.",
+      "chatOptions": "Optioneel, zet achter de URL: &fade=0 houdt berichten in beeld, &max=5 toont minder regels, &size=28 maakt de tekst groter.",
       "limitsFree": "Gratis streams stoppen na 1 uur en tonen een 3Speak-watermerk. Met 3Speak Pro kun je 4 uur streamen zonder watermerk.",
       "limitsPro": "Met 3Speak Pro kunnen je streams 4 uur duren en hebben ze geen watermerk."
     },
@@ -226,6 +233,9 @@
     },
     "pickTemplate": "Begin met een sjabloon",
     "pickTemplatePlaceholder": "Kies een sjabloon…",
-    "templateLoaded": "“{{name}}” geladen in Nieuwe stream"
+    "templateLoaded": "“{{name}}” geladen in Nieuwe stream",
+    "chatOverlay": {
+      "invalid": "Deze link naar de chat-overlay is ongeldig. Kopieer hem opnieuw vanuit je sjabloon in de Stream Studio."
+    }
   }
 }

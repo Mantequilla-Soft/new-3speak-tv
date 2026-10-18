@@ -132,6 +132,8 @@
     "card": {
       "copyUrl": "Copiar URL del servidor",
       "urlCopied": "URL del servidor copiada",
+      "copyChatUrl": "Copiar URL del overlay de chat",
+      "chatUrlCopied": "URL del overlay de chat copiada",
       "lastLive": "Última vez en vivo: {{date}}",
       "neverLive": "Aún sin usar",
       "watch": "Ver la transmisión",
@@ -153,6 +155,11 @@
       "encoder": "Codificador: x264 o tu codificador por hardware",
       "audio": "Frecuencia de muestreo de audio: 48 kHz",
       "bframes": "Sin B-frames (ponlos en 0 si tu codificador lo permite)",
+      "chatTitle": "Muestra el chat en tu transmisión",
+      "chat1": "En la tarjeta de la plantilla, haz clic en \"Copiar URL del overlay de chat\".",
+      "chat2": "En OBS, añade una fuente con + y elige \"Navegador\". Pega la URL, pon el tamaño en 400 por 600 y colócala donde quieras el chat.",
+      "chat3": "Solo lo añades una vez: encuentra tu transmisión por sí solo cada vez que sales en vivo con esta plantilla. Los mensajes de los espectadores aparecen ahí y se desvanecen tras 30 segundos.",
+      "chatOptions": "Opcional, añade al final de la URL: &fade=0 mantiene los mensajes en pantalla, &max=5 muestra menos líneas, &size=28 agranda el texto.",
       "limitsFree": "Las transmisiones gratuitas terminan tras 1 hora y muestran una marca de agua de 3Speak. Con 3Speak Pro puedes transmitir 4 horas sin marca de agua.",
       "limitsPro": "Con 3Speak Pro tus transmisiones pueden durar 4 horas y no llevan marca de agua."
     },
@@ -227,6 +234,9 @@
     },
     "pickTemplate": "Empezar desde una plantilla",
     "pickTemplatePlaceholder": "Elige una plantilla…",
-    "templateLoaded": "“{{name}}” cargada en Nueva transmisión"
+    "templateLoaded": "“{{name}}” cargada en Nueva transmisión",
+    "chatOverlay": {
+      "invalid": "Este enlace del overlay de chat no es válido. Vuelve a copiarlo desde tu plantilla en el Stream Studio."
+    }
   }
 }

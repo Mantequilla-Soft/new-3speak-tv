@@ -132,6 +132,8 @@
     "card": {
       "copyUrl": "Copier l'URL du serveur",
       "urlCopied": "URL du serveur copiée",
+      "copyChatUrl": "Copier l'URL de l'overlay du chat",
+      "chatUrlCopied": "URL de l'overlay du chat copiée",
       "lastLive": "Dernier direct : {{date}}",
       "neverLive": "Pas encore utilisé",
       "watch": "Regarder le live",
@@ -153,6 +155,11 @@
       "encoder": "Encodeur : x264 ou votre encodeur matériel",
       "audio": "Fréquence d'échantillonnage audio : 48 kHz",
       "bframes": "Pas de B-frames (réglez-les sur 0 si votre encodeur le propose)",
+      "chatTitle": "Afficher le chat dans votre stream",
+      "chat1": "Sur la carte du modèle, cliquez sur « Copier l'URL de l'overlay du chat ».",
+      "chat2": "Dans OBS, ajoutez une source avec + et choisissez « Navigateur ». Collez l'URL, réglez la taille sur 400 par 600 et placez-la là où vous voulez le chat.",
+      "chat3": "Vous ne l'ajoutez qu'une fois : il retrouve votre stream tout seul à chaque fois que vous passez en direct avec ce modèle. Les messages des spectateurs s'y affichent et disparaissent après 30 secondes.",
+      "chatOptions": "Facultatif, à ajouter à la fin de l'URL : &fade=0 garde les messages à l'écran, &max=5 affiche moins de lignes, &size=28 agrandit le texte.",
       "limitsFree": "Les lives gratuits s'arrêtent après 1 heure et affichent un filigrane 3Speak. Avec 3Speak Pro, vous pouvez streamer 4 heures sans filigrane.",
       "limitsPro": "Avec 3Speak Pro, vos lives peuvent durer 4 heures et n'ont pas de filigrane."
     },
@@ -227,6 +234,9 @@
     },
     "pickTemplate": "Partir d’un modèle",
     "pickTemplatePlaceholder": "Choisis un modèle…",
-    "templateLoaded": "« {{name}} » chargé dans Nouveau direct"
+    "templateLoaded": "« {{name}} » chargé dans Nouveau direct",
+    "chatOverlay": {
+      "invalid": "Ce lien d'overlay du chat n'est pas valide. Copiez-le à nouveau depuis votre modèle dans le Stream Studio."
+    }
   }
 }

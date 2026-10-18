@@ -131,6 +131,8 @@
     "card": {
       "copyUrl": "Copy server URL",
       "urlCopied": "Server URL copied",
+      "copyChatUrl": "Copy chat overlay URL",
+      "chatUrlCopied": "Chat overlay URL copied",
       "lastLive": "Last live: {{date}}",
       "neverLive": "Not used yet",
       "watch": "Watch the stream",
@@ -152,6 +154,11 @@
       "encoder": "Encoder: x264 or your hardware encoder",
       "audio": "Audio sample rate: 48 kHz",
       "bframes": "No B-frames (set them to 0 if your encoder offers it)",
+      "chatTitle": "Show the chat in your stream",
+      "chat1": "On the template's card, click \"Copy chat overlay URL\".",
+      "chat2": "In OBS, add a source with + and choose \"Browser\". Paste the URL, set the size to 400 by 600 and move it to where you want the chat.",
+      "chat3": "You only add it once: it finds your stream by itself every time you go live with this template. Viewers' messages show up there and fade out after 30 seconds.",
+      "chatOptions": "Optional, add to the end of the URL: &fade=0 keeps messages on screen, &max=5 shows fewer lines, &size=28 makes the text bigger.",
       "limitsFree": "Free streams end after 1 hour and show a 3Speak watermark. With 3Speak Pro you can stream for 4 hours without a watermark.",
       "limitsPro": "With 3Speak Pro your streams can run for 4 hours and carry no watermark."
     },
@@ -226,6 +233,9 @@
     },
     "pickTemplate": "Start from a template",
     "pickTemplatePlaceholder": "Choose a template…",
-    "templateLoaded": "Loaded “{{name}}” into New stream"
+    "templateLoaded": "Loaded “{{name}}” into New stream",
+    "chatOverlay": {
+      "invalid": "This chat overlay link is not valid. Copy it again from your template in the Stream Studio."
+    }
   }
 }

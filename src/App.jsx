@@ -59,6 +59,7 @@ import ChatOverlay from "./components/Chat/ChatOverlay";
 import ChatAutoOpen from "./components/Chat/ChatAutoOpen";
 const OpenPodModal = lazyRoute(() => import("./components/OpenPod/OpenPodModal"), "./components/OpenPod/OpenPodModal");
 const ObsOverlay = lazyRoute(() => import("./page/ObsOverlay"), "./page/ObsOverlay");
+const ObsChatOverlay = lazyRoute(() => import("./page/ObsChatOverlay"), "./page/ObsChatOverlay");
 
 // Route components are code-split: only the route the visitor actually opens is
 // downloaded. Everything here used to be a static import, so a first paint pulled
@@ -579,6 +580,16 @@ function App() {
     return (
       <Suspense fallback={<div style={{ position: 'fixed', inset: 0, background: 'transparent' }} />}>
         <ObsOverlay />
+      </Suspense>
+    );
+  }
+
+  // Same idea for a stream template's live chat (key = the template's chat
+  // overlay key, copied from its card in the Stream Studio).
+  if (location.pathname === '/obs/chat') {
+    return (
+      <Suspense fallback={<div style={{ position: 'fixed', inset: 0, background: 'transparent' }} />}>
+        <ObsChatOverlay />
       </Suspense>
     );
   }

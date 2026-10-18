@@ -131,6 +131,8 @@
     "card": {
       "copyUrl": "Server-URL kopieren",
       "urlCopied": "Server-URL kopiert",
+      "copyChatUrl": "Chat-Overlay-URL kopieren",
+      "chatUrlCopied": "Chat-Overlay-URL kopiert",
       "lastLive": "Zuletzt live: {{date}}",
       "neverLive": "Noch nicht genutzt",
       "watch": "Stream ansehen",
@@ -152,6 +154,11 @@
       "encoder": "Encoder: x264 oder dein Hardware-Encoder",
       "audio": "Audio-Abtastrate: 48 kHz",
       "bframes": "Keine B-frames (stell sie auf 0, wenn dein Encoder das anbietet)",
+      "chatTitle": "Den Chat im Stream anzeigen",
+      "chat1": "Klicke auf der Karte der Vorlage auf \"Chat-Overlay-URL kopieren\".",
+      "chat2": "Füge in OBS mit + eine Quelle hinzu und wähle \"Browser\". Füge die URL ein, setze die Größe auf 400 mal 600 und schiebe sie dorthin, wo der Chat erscheinen soll.",
+      "chat3": "Du fügst sie nur einmal hinzu: Sie findet deinen Stream jedes Mal von selbst, wenn du mit dieser Vorlage live gehst. Nachrichten der Zuschauer erscheinen dort und blenden nach 30 Sekunden aus.",
+      "chatOptions": "Optional, ans Ende der URL anhängen: &fade=0 lässt Nachrichten stehen, &max=5 zeigt weniger Zeilen, &size=28 macht die Schrift größer.",
       "limitsFree": "Kostenlose Streams enden nach 1 Stunde und zeigen ein 3Speak-Wasserzeichen. Mit 3Speak Pro kannst du 4 Stunden ohne Wasserzeichen streamen.",
       "limitsPro": "Mit 3Speak Pro laufen deine Streams bis zu 4 Stunden und ohne Wasserzeichen."
     },
@@ -226,6 +233,9 @@
     },
     "pickTemplate": "Mit einer Vorlage beginnen",
     "pickTemplatePlaceholder": "Vorlage wählen…",
-    "templateLoaded": "„{{name}}“ in Neuer Stream geladen"
+    "templateLoaded": "„{{name}}“ in Neuer Stream geladen",
+    "chatOverlay": {
+      "invalid": "Dieser Chat-Overlay-Link ist ungültig. Kopiere ihn erneut aus deiner Vorlage im Stream Studio."
+    }
   }
 }

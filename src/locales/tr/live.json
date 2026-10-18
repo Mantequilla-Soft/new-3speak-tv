@@ -131,6 +131,8 @@
     "card": {
       "copyUrl": "Sunucu URL'sini kopyala",
       "urlCopied": "Sunucu URL'si kopyalandı",
+      "copyChatUrl": "Sohbet katmanı URL'sini kopyala",
+      "chatUrlCopied": "Sohbet katmanı URL'si kopyalandı",
       "lastLive": "Son canlı yayın: {{date}}",
       "neverLive": "Henüz kullanılmadı",
       "watch": "Yayını izle",
@@ -152,6 +154,11 @@
       "encoder": "Kodlayıcı: x264 veya donanım kodlayıcın",
       "audio": "Ses örnekleme hızı: 48 kHz",
       "bframes": "B-frames yok (kodlayıcın izin veriyorsa 0 yap)",
+      "chatTitle": "Sohbeti yayınında göster",
+      "chat1": "Şablonun kartında \"Sohbet katmanı URL'sini kopyala\"ya tıkla.",
+      "chat2": "OBS'de + ile bir kaynak ekle ve \"Tarayıcı\"yı seç. URL'yi yapıştır, boyutu 400'e 600 yap ve sohbetin görünmesini istediğin yere taşı.",
+      "chat3": "Bunu yalnızca bir kez eklersin: bu şablonla her canlı yayına çıktığında yayınını kendisi bulur. İzleyici mesajları orada görünür ve 30 saniye sonra kaybolur.",
+      "chatOptions": "İsteğe bağlı, URL'nin sonuna ekle: &fade=0 mesajları ekranda tutar, &max=5 daha az satır gösterir, &size=28 yazıyı büyütür.",
       "limitsFree": "Ücretsiz yayınlar 1 saat sonra biter ve 3Speak filigranı gösterir. 3Speak Pro ile filigransız 4 saat yayın yapabilirsin.",
       "limitsPro": "3Speak Pro ile yayınların 4 saat sürebilir ve filigran içermez."
     },
@@ -226,6 +233,9 @@
     },
     "pickTemplate": "Bir şablonla başla",
     "pickTemplatePlaceholder": "Şablon seç…",
-    "templateLoaded": "“{{name}}” Yeni yayın'a yüklendi"
+    "templateLoaded": "“{{name}}” Yeni yayın'a yüklendi",
+    "chatOverlay": {
+      "invalid": "Bu sohbet katmanı bağlantısı geçerli değil. Stream Studio'daki şablonundan yeniden kopyala."
+    }
   }
 }

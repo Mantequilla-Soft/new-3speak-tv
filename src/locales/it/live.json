@@ -132,6 +132,8 @@
     "card": {
       "copyUrl": "Copia URL del server",
       "urlCopied": "URL del server copiato",
+      "copyChatUrl": "Copia URL overlay chat",
+      "chatUrlCopied": "URL overlay chat copiato",
       "lastLive": "Ultima diretta: {{date}}",
       "neverLive": "Non ancora usato",
       "watch": "Guarda la diretta",
@@ -153,6 +155,11 @@
       "encoder": "Codificatore: x264 o il tuo codificatore hardware",
       "audio": "Frequenza di campionamento audio: 48 kHz",
       "bframes": "Nessun B-frames (impostali su 0 se il codificatore lo consente)",
+      "chatTitle": "Mostra la chat nella tua diretta",
+      "chat1": "Sulla scheda del modello, fai clic su \"Copia URL overlay chat\".",
+      "chat2": "In OBS, aggiungi una fonte con + e scegli \"Browser\". Incolla l'URL, imposta la dimensione a 400 per 600 e spostala dove vuoi la chat.",
+      "chat3": "La aggiungi una volta sola: trova la tua diretta da sola ogni volta che vai live con questo modello. I messaggi degli spettatori compaiono lì e svaniscono dopo 30 secondi.",
+      "chatOptions": "Facoltativo, aggiungi alla fine dell'URL: &fade=0 lascia i messaggi sullo schermo, &max=5 mostra meno righe, &size=28 ingrandisce il testo.",
       "limitsFree": "Le dirette gratuite terminano dopo 1 ora e mostrano una filigrana 3Speak. Con 3Speak Pro puoi trasmettere per 4 ore senza filigrana.",
       "limitsPro": "Con 3Speak Pro le tue dirette possono durare 4 ore e non hanno filigrana."
     },
@@ -227,6 +234,9 @@
     },
     "pickTemplate": "Parti da un modello",
     "pickTemplatePlaceholder": "Scegli un modello…",
-    "templateLoaded": "“{{name}}” caricato in Nuova diretta"
+    "templateLoaded": "“{{name}}” caricato in Nuova diretta",
+    "chatOverlay": {
+      "invalid": "Questo link dell'overlay chat non è valido. Copialo di nuovo dal tuo modello nello Stream Studio."
+    }
   }
 }

@@ -130,6 +130,8 @@
     "card": {
       "copyUrl": "Sao chép URL máy chủ",
       "urlCopied": "Đã sao chép URL máy chủ",
+      "copyChatUrl": "Sao chép URL lớp phủ trò chuyện",
+      "chatUrlCopied": "Đã sao chép URL lớp phủ trò chuyện",
       "lastLive": "Lần phát gần nhất: {{date}}",
       "neverLive": "Chưa dùng lần nào",
       "watch": "Xem buổi phát",
@@ -151,6 +153,11 @@
       "encoder": "Bộ mã hóa: x264 hoặc bộ mã hóa phần cứng của bạn",
       "audio": "Tần số lấy mẫu âm thanh: 48 kHz",
       "bframes": "Không dùng B-frames (đặt về 0 nếu bộ mã hóa có tùy chọn này)",
+      "chatTitle": "Hiển thị trò chuyện trong buổi phát",
+      "chat1": "Trên thẻ của mẫu, bấm \"Sao chép URL lớp phủ trò chuyện\".",
+      "chat2": "Trong OBS, thêm nguồn bằng nút + và chọn \"Browser\". Dán URL, đặt kích thước 400 x 600 rồi đặt nó ở chỗ bạn muốn hiện trò chuyện.",
+      "chat3": "Bạn chỉ cần thêm một lần: nó tự tìm buổi phát của bạn mỗi khi bạn phát trực tiếp với mẫu này. Tin nhắn của người xem hiện ở đó và mờ dần sau 30 giây.",
+      "chatOptions": "Tùy chọn, thêm vào cuối URL: &fade=0 giữ tin nhắn trên màn hình, &max=5 hiện ít dòng hơn, &size=28 làm chữ to hơn.",
       "limitsFree": "Buổi phát miễn phí kết thúc sau 1 giờ và có hình mờ 3Speak. Với 3Speak Pro, bạn có thể phát 4 giờ mà không có hình mờ.",
       "limitsPro": "Với 3Speak Pro, buổi phát của bạn có thể kéo dài 4 giờ và không có hình mờ."
     },
@@ -225,6 +232,9 @@
     },
     "pickTemplate": "Bắt đầu từ mẫu",
     "pickTemplatePlaceholder": "Chọn mẫu…",
-    "templateLoaded": "Đã tải “{{name}}” vào Buổi phát mới"
+    "templateLoaded": "Đã tải “{{name}}” vào Buổi phát mới",
+    "chatOverlay": {
+      "invalid": "Liên kết lớp phủ trò chuyện này không hợp lệ. Hãy sao chép lại từ mẫu của bạn trong Stream Studio."
+    }
   }
 }

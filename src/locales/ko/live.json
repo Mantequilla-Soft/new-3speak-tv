@@ -130,6 +130,8 @@
     "card": {
       "copyUrl": "서버 URL 복사",
       "urlCopied": "서버 URL을 복사했어요",
+      "copyChatUrl": "채팅 오버레이 URL 복사",
+      "chatUrlCopied": "채팅 오버레이 URL을 복사했어요",
       "lastLive": "마지막 라이브: {{date}}",
       "neverLive": "아직 사용 안 함",
       "watch": "방송 보기",
@@ -151,6 +153,11 @@
       "encoder": "인코더: x264 또는 하드웨어 인코더",
       "audio": "오디오 샘플 레이트: 48 kHz",
       "bframes": "B-frames 사용 안 함(인코더에 옵션이 있으면 0으로 설정)",
+      "chatTitle": "방송에 채팅 표시하기",
+      "chat1": "템플릿 카드에서 \"채팅 오버레이 URL 복사\"를 클릭하세요.",
+      "chat2": "OBS에서 +로 소스를 추가하고 \"브라우저\"를 선택하세요. URL을 붙여 넣고 크기를 400 x 600으로 맞춘 뒤 채팅을 둘 위치로 옮기세요.",
+      "chat3": "한 번만 추가하면 돼요. 이 템플릿으로 방송을 시작할 때마다 알아서 방송을 찾아요. 시청자 메시지가 거기에 표시되고 30초 뒤에 사라져요.",
+      "chatOptions": "선택 사항, URL 끝에 추가하세요: &fade=0은 메시지를 계속 표시하고, &max=5는 줄 수를 줄이고, &size=28은 글자를 키워요.",
       "limitsFree": "무료 방송은 1시간 후 종료되며 3Speak 워터마크가 표시돼요. 3Speak Pro를 사용하면 워터마크 없이 4시간 동안 방송할 수 있어요.",
       "limitsPro": "3Speak Pro로 워터마크 없이 최대 4시간 동안 방송할 수 있어요."
     },
@@ -225,6 +232,9 @@
     },
     "pickTemplate": "템플릿으로 시작",
     "pickTemplatePlaceholder": "템플릿 선택…",
-    "templateLoaded": "“{{name}}”을(를) 새 스트림에 불러왔습니다"
+    "templateLoaded": "“{{name}}”을(를) 새 스트림에 불러왔습니다",
+    "chatOverlay": {
+      "invalid": "이 채팅 오버레이 링크가 올바르지 않아요. Stream Studio의 템플릿에서 다시 복사하세요."
+    }
   }
 }

@@ -2,7 +2,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { Copy, Eye, EyeOff, Pencil, Plus, RefreshCw, Trash2, X, ImagePlus, Radio, ChevronDown, Clapperboard } from 'lucide-react';
+import { Copy, Eye, EyeOff, Pencil, Plus, RefreshCw, Trash2, X, ImagePlus, Radio, ChevronDown, Clapperboard, MessageSquare } from 'lucide-react';
 import { toastIn } from '../../utils/toast';
 import { getLanguage } from '../../i18n';
 import { getCurrentProvider, Providers } from '../../hive-api/aioha';
@@ -218,6 +218,13 @@ function ObsGuide({ isPremium, defaultOpen }) {
             <li>{t('live.obs.guide.audio')}</li>
             <li>{t('live.obs.guide.bframes')}</li>
           </ul>
+          <h4>{t('live.obs.guide.chatTitle')}</h4>
+          <ol className="st-guide__steps">
+            <li>{t('live.obs.guide.chat1')}</li>
+            <li>{t('live.obs.guide.chat2')}</li>
+            <li>{t('live.obs.guide.chat3')}</li>
+          </ol>
+          <p className="st-guide__limits">{t('live.obs.guide.chatOptions')}</p>
           <p className="st-guide__limits">
             {isPremium ? t('live.obs.guide.limitsPro') : t('live.obs.guide.limitsFree')}
           </p>
@@ -268,6 +275,13 @@ function TemplateCard({ tpl, token, onEdit, onDelete, onUse }) {
     else toast.error(t('live.obs.copyFailed'));
   };
 
+  // OBS Browser Source for this template's live chat (see page/ObsChatOverlay).
+  const copyChatUrl = async () => {
+    const url = `${window.location.origin}/obs/chat?key=${encodeURIComponent(tpl.chatOverlayKey || '')}`;
+    if (await copyText(url)) toast.success(t('live.obs.card.chatUrlCopied'));
+    else toast.error(t('live.obs.copyFailed'));
+  };
+
   return (
     <article ref={ref} className={`st-card st-card--${state}`}>
       <div className="st-card__thumb">
@@ -315,6 +329,11 @@ function TemplateCard({ tpl, token, onEdit, onDelete, onUse }) {
           <button type="button" className="st-btn st-btn--ghost" onClick={copyUrl}>
             <Copy size={15} /><span>{t('live.obs.card.copyUrl')}</span>
           </button>
+          {tpl.chatOverlayKey && (
+            <button type="button" className="st-btn st-btn--ghost" onClick={copyChatUrl}>
+              <MessageSquare size={15} /><span>{t('live.obs.card.copyChatUrl')}</span>
+            </button>
+          )}
           <button type="button" className="st-btn st-btn--ghost" onClick={() => onEdit(tpl)}>
             <Pencil size={15} /><span>{t('common.actions.edit')}</span>
           </button>

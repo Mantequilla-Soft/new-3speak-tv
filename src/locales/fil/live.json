@@ -131,6 +131,8 @@
     "card": {
       "copyUrl": "I-copy ang server URL",
       "urlCopied": "Na-copy ang server URL",
+      "copyChatUrl": "Kopyahin ang URL ng chat overlay",
+      "chatUrlCopied": "Nakopya ang URL ng chat overlay",
       "lastLive": "Huling live: {{date}}",
       "neverLive": "Hindi pa nagagamit",
       "watch": "Panoorin ang stream",
@@ -152,6 +154,11 @@
       "encoder": "Encoder: x264 o ang hardware encoder mo",
       "audio": "Audio sample rate: 48 kHz",
       "bframes": "Walang B-frames (gawing 0 kung may ganitong option ang encoder mo)",
+      "chatTitle": "Ipakita ang chat sa iyong stream",
+      "chat1": "Sa card ng template, i-click ang \"Kopyahin ang URL ng chat overlay\".",
+      "chat2": "Sa OBS, magdagdag ng source gamit ang + at piliin ang \"Browser\". I-paste ang URL, gawing 400 by 600 ang laki at ilagay kung saan mo gusto ang chat.",
+      "chat3": "Isang beses mo lang itong idadagdag: kusa nitong hinahanap ang stream mo tuwing mag-live ka gamit ang template na ito. Doon lumalabas ang mga mensahe ng manonood at nawawala pagkalipas ng 30 segundo.",
+      "chatOptions": "Opsyonal, idagdag sa dulo ng URL: &fade=0 para manatili ang mga mensahe, &max=5 para mas kaunting linya, &size=28 para lumaki ang text.",
       "limitsFree": "Natatapos ang mga libreng stream pagkalipas ng 1 oras at may 3Speak watermark. Sa 3Speak Pro, puwede kang mag-stream nang 4 na oras nang walang watermark.",
       "limitsPro": "Sa 3Speak Pro, puwedeng tumagal nang 4 na oras ang mga stream mo nang walang watermark."
     },
@@ -226,6 +233,9 @@
     },
     "pickTemplate": "Magsimula sa isang template",
     "pickTemplatePlaceholder": "Pumili ng template…",
-    "templateLoaded": "Na-load ang “{{name}}” sa Bagong stream"
+    "templateLoaded": "Na-load ang “{{name}}” sa Bagong stream",
+    "chatOverlay": {
+      "invalid": "Hindi valid ang link ng chat overlay na ito. Kopyahin ulit mula sa template mo sa Stream Studio."
+    }
   }
 }

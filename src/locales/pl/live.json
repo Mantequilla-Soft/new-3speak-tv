@@ -133,6 +133,8 @@
     "card": {
       "copyUrl": "Kopiuj URL serwera",
       "urlCopied": "URL serwera skopiowany",
+      "copyChatUrl": "Kopiuj URL nakładki czatu",
+      "chatUrlCopied": "Skopiowano URL nakładki czatu",
       "lastLive": "Ostatnio na żywo: {{date}}",
       "neverLive": "Jeszcze nieużywany",
       "watch": "Oglądaj transmisję",
@@ -154,6 +156,11 @@
       "encoder": "Koder: x264 lub koder sprzętowy",
       "audio": "Częstotliwość próbkowania dźwięku: 48 kHz",
       "bframes": "Bez B-frames (ustaw 0, jeśli koder na to pozwala)",
+      "chatTitle": "Pokaż czat na swoim streamie",
+      "chat1": "Na karcie szablonu kliknij \"Kopiuj URL nakładki czatu\".",
+      "chat2": "W OBS dodaj źródło przyciskiem + i wybierz \"Przeglądarka\". Wklej URL, ustaw rozmiar 400 na 600 i przesuń w miejsce, gdzie ma być czat.",
+      "chat3": "Dodajesz ją tylko raz: sama znajduje twój stream za każdym razem, gdy wchodzisz na żywo z tym szablonem. Wiadomości widzów pojawiają się tam i znikają po 30 sekundach.",
+      "chatOptions": "Opcjonalnie dopisz na końcu URL: &fade=0 zostawia wiadomości na ekranie, &max=5 pokazuje mniej linii, &size=28 powiększa tekst.",
       "limitsFree": "Darmowe transmisje kończą się po 1 godzinie i mają znak wodny 3Speak. Z 3Speak Pro możesz nadawać przez 4 godziny bez znaku wodnego.",
       "limitsPro": "Z 3Speak Pro twoje transmisje mogą trwać 4 godziny i nie mają znaku wodnego."
     },
@@ -228,6 +235,9 @@
     },
     "pickTemplate": "Zacznij od szablonu",
     "pickTemplatePlaceholder": "Wybierz szablon…",
-    "templateLoaded": "Wczytano „{{name}}” do Nowej transmisji"
+    "templateLoaded": "Wczytano „{{name}}” do Nowej transmisji",
+    "chatOverlay": {
+      "invalid": "Ten link do nakładki czatu jest nieprawidłowy. Skopiuj go ponownie ze swojego szablonu w Stream Studio."
+    }
   }
 }

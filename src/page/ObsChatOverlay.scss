@@ -1,0 +1,87 @@
+// OBS chat overlay (Browser Source): newest message at the bottom, each in a
+// translucent dark bubble so it reads over any video.
+.obs-chat {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 12px;
+  box-sizing: border-box;
+  overflow: hidden;
+  background: transparent;
+  font-family: "Roboto", "Arial", sans-serif;
+  font-size: var(--obs-chat-size, 20px);
+  line-height: 1.3;
+  color: #fff;
+}
+
+.obs-chat__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4em;
+}
+
+.obs-chat__msg {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5em;
+  max-width: 100%;
+  padding: 0.4em 0.7em 0.4em 0.4em;
+  border-radius: 0.9em;
+  background: rgba(10, 12, 20, 0.72);
+  align-self: flex-start;
+  animation: obs-chat-in 0.25s ease-out;
+  transition: opacity 1s ease;
+
+  &.is-fading {
+    opacity: 0;
+  }
+}
+
+.obs-chat__avatar {
+  flex: none;
+  width: 1.6em;
+  height: 1.6em;
+  border-radius: 50%;
+  object-fit: cover;
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.obs-chat__avatar--letter {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.8em;
+  width: 2em;
+  height: 2em;
+  font-weight: 700;
+}
+
+.obs-chat__body {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.obs-chat__name {
+  font-weight: 700;
+  color: #7cc4ff;
+  margin-right: 0.4em;
+}
+
+.obs-chat__invalid {
+  margin: 0;
+  padding: 0.5em 0.8em;
+  border-radius: 0.6em;
+  background: rgba(10, 12, 20, 0.72);
+  font-size: 0.8em;
+  align-self: flex-start;
+}
+
+@keyframes obs-chat-in {
+  from { opacity: 0; transform: translateY(0.4em); }
+  to { opacity: 1; transform: none; }
+}

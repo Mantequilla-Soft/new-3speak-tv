@@ -130,6 +130,8 @@
     "card": {
       "copyUrl": "复制服务器 URL",
       "urlCopied": "服务器 URL 已复制",
+      "copyChatUrl": "复制聊天叠加层链接",
+      "chatUrlCopied": "已复制聊天叠加层链接",
       "lastLive": "上次直播：{{date}}",
       "neverLive": "尚未使用",
       "watch": "观看直播",
@@ -151,6 +153,11 @@
       "encoder": "编码器：x264 或你的硬件编码器",
       "audio": "音频采样率：48 kHz",
       "bframes": "不使用 B-frames（如编码器有此选项，请设为 0）",
+      "chatTitle": "在直播中显示聊天",
+      "chat1": "在模板卡片上点击“复制聊天叠加层链接”。",
+      "chat2": "在 OBS 中用 + 添加来源并选择“浏览器”。粘贴链接，把尺寸设为 400 x 600，然后拖到你想放聊天的位置。",
+      "chat3": "只需添加一次：每次你用这个模板开播时，它都会自动找到你的直播。观众的消息会显示在那里，30 秒后淡出。",
+      "chatOptions": "可选，加在链接末尾：&fade=0 让消息一直显示，&max=5 显示更少行，&size=28 放大文字。",
       "limitsFree": "免费直播 1 小时后结束，并显示 3Speak 水印。使用 3Speak Pro 可直播 4 小时且无水印。",
       "limitsPro": "使用 3Speak Pro，你的直播最长可达 4 小时且无水印。"
     },
@@ -225,6 +232,9 @@
     },
     "pickTemplate": "从模板开始",
     "pickTemplatePlaceholder": "选择模板…",
-    "templateLoaded": "已将“{{name}}”载入新直播"
+    "templateLoaded": "已将“{{name}}”载入新直播",
+    "chatOverlay": {
+      "invalid": "这个聊天叠加层链接无效。请从 Stream Studio 中的模板重新复制。"
+    }
   }
 }
