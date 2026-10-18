@@ -1,8 +1,14 @@
 {
   "banner": {
     "title": "Welkom bij 3Speak!",
-    "text": "Video's die van hun makers zijn. Nieuw hier? Volg een korte rondleiding of lees de antwoorden op veelgestelde vragen.",
-    "textShort": "Nieuw hier? Volg een korte rondleiding of lees de FAQ.",
+    "lead": "Door videomakers, voor videomakers.",
+    "points": {
+      "alternative": "<b>Een echt alternatief</b> voor sociale media van grote bedrijven.",
+      "community": "<b>Van de community</b>: geen centrale autoriteit, geen CEO.",
+      "creatorsEarn": "<b>Makers bezitten hun video's</b> en verdienen aan upvotes en advertenties.",
+      "viewersEarn": "<b>Kijkers verdienen ook</b>, gewoon door te kijken.",
+      "data": "<b>We verkopen nooit je gegevens.</b>"
+    },
     "tour": "Rondleiding starten",
     "tourShort": "Rondleiding",
     "faq": "FAQ",

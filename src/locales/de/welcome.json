@@ -1,8 +1,14 @@
 {
   "banner": {
     "title": "Willkommen bei 3Speak!",
-    "text": "Videos, die den Menschen gehören, die sie machen. Neu hier? Mach eine kurze Tour oder lies die Antworten auf häufige Fragen.",
-    "textShort": "Neu hier? Mach eine kurze Tour oder lies die FAQ.",
+    "lead": "Von Videocreators, für Videocreators.",
+    "points": {
+      "alternative": "<b>Eine echte Alternative</b> zu den Social-Media-Konzernen.",
+      "community": "<b>Gehört der Community</b>: keine zentrale Instanz, kein CEO.",
+      "creatorsEarn": "<b>Creators besitzen ihre Videos</b> und verdienen an Upvotes und Werbung.",
+      "viewersEarn": "<b>Zuschauer verdienen auch</b>, einfach durchs Zuschauen.",
+      "data": "<b>Wir verkaufen nie deine Daten.</b>"
+    },
     "tour": "Tour starten",
     "tourShort": "Tour",
     "faq": "FAQ",

@@ -1,8 +1,14 @@
 {
   "banner": {
     "title": "Witaj w 3Speak!",
-    "text": "Filmy, które należą do ich twórców. Dopiero zaczynasz? Przejdź krótki przewodnik albo przeczytaj odpowiedzi na częste pytania.",
-    "textShort": "Dopiero zaczynasz? Przejdź krótki przewodnik albo przeczytaj FAQ.",
+    "lead": "Tworzone przez twórców wideo, dla twórców wideo.",
+    "points": {
+      "alternative": "<b>Prawdziwa alternatywa</b> dla korporacyjnych mediów społecznościowych.",
+      "community": "<b>Należy do społeczności</b>: bez centralnej władzy, bez prezesa.",
+      "creatorsEarn": "<b>Twórcy są właścicielami swoich filmów</b> i zarabiają na głosach i reklamach.",
+      "viewersEarn": "<b>Widzowie też zarabiają</b>, po prostu oglądając.",
+      "data": "<b>Nigdy nie sprzedajemy Twoich danych.</b>"
+    },
     "tour": "Rozpocznij przewodnik",
     "tourShort": "Przewodnik",
     "faq": "FAQ",
