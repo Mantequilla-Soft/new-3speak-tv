@@ -135,6 +135,7 @@
       "watch": "Tonton siaran",
       "notAnnounced": "Siaran ini tidak diumumkan di Hive.",
       "notAnnouncedAuth": "Tidak diumumkan di Hive: 3Speak belum boleh memposting untukmu. Edit template untuk mengizinkannya.",
+      "stuck": "OBS sudah terhubung, tetapi tidak ada video yang sampai ke kami, jadi siaran tidak dimulai. Hentikan streaming di OBS lalu mulai lagi.",
       "useInStudio": "Gunakan di Stream Studio"
     },
     "guide": {

@@ -137,6 +137,7 @@
       "watch": "Assistir à transmissão",
       "notAnnounced": "Esta transmissão não foi anunciada na Hive.",
       "notAnnouncedAuth": "Não anunciada na Hive: o 3Speak ainda não pode publicar por você. Edite o modelo para permitir.",
+      "stuck": "O OBS se conectou, mas nenhum vídeo chegou até nós, então a transmissão não começou. Pare a transmissão no OBS e inicie de novo.",
       "useInStudio": "Usar no Stream Studio"
     },
     "guide": {

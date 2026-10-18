@@ -136,6 +136,7 @@
       "watch": "Yayını izle",
       "notAnnounced": "Bu yayın Hive'da duyurulmadı.",
       "notAnnouncedAuth": "Hive'da duyurulmadı: 3Speak henüz senin adına paylaşım yapamıyor. İzin vermek için şablonu düzenle.",
+      "stuck": "OBS bağlandı ama bize hiç görüntü ulaşmadı, bu yüzden yayın başlamadı. OBS'de yayını durdur ve yeniden başlat.",
       "useInStudio": "Stream Studio'da kullan"
     },
     "guide": {

@@ -136,6 +136,7 @@
       "watch": "Bekijk de stream",
       "notAnnounced": "Deze stream is niet aangekondigd op Hive.",
       "notAnnouncedAuth": "Niet aangekondigd op Hive: 3Speak mag nog niet voor je posten. Bewerk het sjabloon om dit toe te staan.",
+      "stuck": "OBS is verbonden, maar er kwam geen video bij ons aan, dus de stream is niet gestart. Stop het streamen in OBS en start opnieuw.",
       "useInStudio": "Gebruiken in Stream Studio"
     },
     "guide": {

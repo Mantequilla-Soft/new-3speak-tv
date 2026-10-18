@@ -135,6 +135,7 @@
       "watch": "방송 보기",
       "notAnnounced": "이 방송은 Hive에 알리지 않았어요.",
       "notAnnouncedAuth": "Hive에 알리지 않음: 아직 3Speak가 나 대신 게시할 수 없어요. 템플릿을 편집해서 허용하세요.",
+      "stuck": "OBS가 연결됐지만 영상이 전달되지 않아 방송이 시작되지 않았어요. OBS에서 방송을 중지한 뒤 다시 시작하세요.",
       "useInStudio": "Stream Studio에서 사용"
     },
     "guide": {

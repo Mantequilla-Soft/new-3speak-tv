@@ -138,6 +138,7 @@
       "watch": "Oglądaj transmisję",
       "notAnnounced": "Ta transmisja nie została ogłoszona na Hive.",
       "notAnnouncedAuth": "Nie ogłoszono na Hive: 3Speak nie może jeszcze publikować w twoim imieniu. Edytuj szablon, aby na to zezwolić.",
+      "stuck": "OBS się połączył, ale nie dotarło do nas żadne wideo, więc transmisja się nie rozpoczęła. Zatrzymaj streamowanie w OBS i uruchom je ponownie.",
       "useInStudio": "Użyj w Stream Studio"
     },
     "guide": {

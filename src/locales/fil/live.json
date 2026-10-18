@@ -136,6 +136,7 @@
       "watch": "Panoorin ang stream",
       "notAnnounced": "Hindi in-announce sa Hive ang stream na ito.",
       "notAnnouncedAuth": "Hindi in-announce sa Hive: hindi pa puwedeng mag-post ang 3Speak para sa iyo. I-edit ang template para payagan ito.",
+      "stuck": "Nakakonekta ang OBS, pero walang video na dumating sa amin, kaya hindi nagsimula ang stream. Ihinto ang pag-stream sa OBS at simulan ulit.",
       "useInStudio": "Gamitin sa Stream Studio"
     },
     "guide": {

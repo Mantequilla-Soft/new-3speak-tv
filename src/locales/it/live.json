@@ -137,6 +137,7 @@
       "watch": "Guarda la diretta",
       "notAnnounced": "Questa diretta non è stata annunciata su Hive.",
       "notAnnouncedAuth": "Non annunciata su Hive: 3Speak non può ancora pubblicare per te. Modifica il modello per consentirlo.",
+      "stuck": "OBS si è connesso, ma non ci è arrivato alcun video, quindi la diretta non è partita. Interrompi lo streaming in OBS e riavvialo.",
       "useInStudio": "Usa in Stream Studio"
     },
     "guide": {

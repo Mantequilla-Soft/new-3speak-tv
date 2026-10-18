@@ -137,6 +137,7 @@
       "watch": "Regarder le live",
       "notAnnounced": "Ce live n'a pas été annoncé sur Hive.",
       "notAnnouncedAuth": "Non annoncé sur Hive : 3Speak n'a pas encore le droit de publier pour vous. Modifiez le modèle pour l'autoriser.",
+      "stuck": "OBS s'est connecté, mais aucune vidéo ne nous est parvenue, le stream n'a donc pas démarré. Arrêtez le stream dans OBS puis relancez-le.",
       "useInStudio": "Utiliser dans Stream Studio"
     },
     "guide": {

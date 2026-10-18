@@ -137,6 +137,7 @@
       "watch": "Ver la transmisión",
       "notAnnounced": "Esta transmisión no se anunció en Hive.",
       "notAnnouncedAuth": "No se anunció en Hive: 3Speak aún no puede publicar por ti. Edita la plantilla para permitirlo.",
+      "stuck": "OBS se conectó, pero no nos llegó ningún video, así que la transmisión no empezó. Detén la transmisión en OBS y vuelve a iniciarla.",
       "useInStudio": "Usar en Stream Studio"
     },
     "guide": {

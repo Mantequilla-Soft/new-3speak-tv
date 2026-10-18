@@ -135,6 +135,7 @@
       "watch": "观看直播",
       "notAnnounced": "这场直播没有在 Hive 上发布公告。",
       "notAnnouncedAuth": "未在 Hive 上发布公告：3Speak 还不能代你发帖。编辑模板即可授权。",
+      "stuck": "OBS 已连接，但我们没有收到视频，因此直播没有开始。请在 OBS 中停止推流后重新开始。",
       "useInStudio": "在 Stream Studio 中使用"
     },
     "guide": {

@@ -135,6 +135,7 @@
       "watch": "配信を見る",
       "notAnnounced": "この配信は Hive で告知されませんでした。",
       "notAnnouncedAuth": "Hive で告知されていません: 3Speak はまだあなたの代わりに投稿できません。テンプレートを編集して許可してください。",
+      "stuck": "OBS は接続されましたが、映像が届かなかったため配信は始まりませんでした。OBS で配信を停止して、もう一度開始してください。",
       "useInStudio": "Stream Studio で使う"
     },
     "guide": {

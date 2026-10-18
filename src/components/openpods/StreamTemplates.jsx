@@ -296,6 +296,10 @@ function TemplateCard({ tpl, token, onEdit, onDelete, onUse }) {
               : t('live.obs.card.notAnnounced')}
           </div>
         )}
+        {/* We gave up on the session, but OBS may still think it is live. */}
+        {state === 'idle' && status?.lastEnd?.reason === 'never_published' && (
+          <div className="st-card__warn">{t('live.obs.card.stuck')}</div>
+        )}
         <div className="st-card__meta">
           {lastLive
             ? t('live.obs.card.lastLive', { date: lastLive.toLocaleString(getLanguage(), { dateStyle: 'medium', timeStyle: 'short' }) })

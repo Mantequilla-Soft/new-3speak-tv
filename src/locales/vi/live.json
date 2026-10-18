@@ -135,6 +135,7 @@
       "watch": "Xem buổi phát",
       "notAnnounced": "Buổi phát này không được thông báo trên Hive.",
       "notAnnouncedAuth": "Chưa thông báo trên Hive: 3Speak chưa được phép đăng bài thay bạn. Hãy sửa mẫu để cho phép.",
+      "stuck": "OBS đã kết nối nhưng không có video nào đến được chỗ chúng tôi, nên buổi phát chưa bắt đầu. Hãy dừng phát trong OBS rồi bắt đầu lại.",
       "useInStudio": "Dùng trong Stream Studio"
     },
     "guide": {

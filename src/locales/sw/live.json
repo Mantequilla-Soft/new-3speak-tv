@@ -136,6 +136,7 @@
       "watch": "Tazama mtiririko",
       "notAnnounced": "Mtiririko huu haukutangazwa kwenye Hive.",
       "notAnnouncedAuth": "Haukutangazwa kwenye Hive: 3Speak bado haiwezi kuchapisha kwa niaba yako. Hariri kiolezo ili kuruhusu.",
+      "stuck": "OBS imeunganishwa, lakini hakuna video iliyotufikia, kwa hivyo mtiririko haukuanza. Simamisha utiririshaji kwenye OBS kisha uanze tena.",
       "useInStudio": "Tumia kwenye Stream Studio"
     },
     "guide": {
