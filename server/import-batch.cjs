@@ -159,7 +159,8 @@ function buildPost({ user, source, media, embedUrl, thumbnailUrl, options, isSho
   const watchPath = isShort ? `/shorts?v=${user}/${permlink}` : `/watch?v=${user}/${permlink}`
   // Long-form posts end with the creator's auto-updating banner, linked to their
   // channel: the same line the upload wizard writes (src/context/EmbedUploadContext.jsx).
-  const banner = isShort ? '' : `\n\n[![@${user} on 3Speak](https://3speak.tv/banners/${user}.png)](https://3speak.tv/user/${user})`
+  // No alt text: PeakD prints it as a caption under the image.
+  const banner = isShort ? '' : `\n\n[![](https://3speak.tv/banners/${user}.png)](https://3speak.tv/user/${user})`
   const body = `${embedUrl}\n\n${description}\n\n---\n▶ [Watch on 3speak.tv](https://3speak.tv${watchPath})${banner}`
   const baseTags = isShort ? ['hive-181335'] : [options.community]
   const tags = tagsFor(source, baseTags, options.nsfw)

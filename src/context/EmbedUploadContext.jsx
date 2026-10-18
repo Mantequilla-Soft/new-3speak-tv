@@ -1706,7 +1706,8 @@ export function EmbedUploadProvider({ children }) {
       // channel. It needs a Hive account, so warm-up and incubating uploads get
       // none. server/import-batch.cjs writes the same line.
       if (!fromStories && user && !incubationHandle) {
-        postBody += `\n\n[![@${user} on 3Speak](https://3speak.tv/banners/${user}.png)](https://3speak.tv/user/${user})`;
+        // No alt text: PeakD prints it as a caption under the image.
+        postBody += `\n\n[![](https://3speak.tv/banners/${user}.png)](https://3speak.tv/user/${user})`;
       }
 
       // Only the community tag is added automatically (no '3speak', no 'short').
