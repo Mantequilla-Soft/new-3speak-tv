@@ -7,6 +7,13 @@
 // 1.0.0 — that way they see all of these when develop is pushed to production.
 export const CHANGELOG = [
   {
+    version: '1.79.97',
+    date: '2026-10-18',
+    summary:
+      'A new chart on /advertise and in the booking form shows the price per second per day for each ad format, '
+      + 'so you can pick your length and days.',
+  },
+  {
     version: '1.79.95',
     date: '2026-10-18',
     summary:
