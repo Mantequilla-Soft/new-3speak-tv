@@ -128,11 +128,15 @@
       "resetDone": "Siri mpya ya mtiririko imeundwa. Isasishe kwenye OBS.",
       "resetFailed": "Imeshindwa kuweka upya siri ya mtiririko wako."
     },
+    "chatBox": {
+      "title": "Gumzo lako ndani ya OBS",
+      "desc": "Kiungo kimoja kwa mitiririko yako yote. Kiongeze kwenye OBS kama dock ili usome ujumbe mpya ukiwa mubashara. Mwongozo ulio hapa chini unaonyesha jinsi.",
+      "copy": "Nakili URL ya gumzo kwa OBS",
+      "copied": "URL ya gumzo imenakiliwa"
+    },
     "card": {
       "copyUrl": "Nakili URL ya seva",
       "urlCopied": "URL ya seva imenakiliwa",
-      "copyChatUrl": "Nakili URL ya gumzo kwa OBS",
-      "chatUrlCopied": "URL ya gumzo imenakiliwa",
       "lastLive": "Mubashara mara ya mwisho: {{date}}",
       "neverLive": "Bado haijatumika",
       "watch": "Tazama mtiririko",
@@ -155,7 +159,7 @@
       "audio": "Kiwango cha sampuli za sauti: 48 kHz",
       "bframes": "Bila B-frames (ziweke 0 ikiwa encoder yako ina chaguo hilo)",
       "chatTitle": "Ona gumzo ndani ya OBS",
-      "chat1": "Kwenye kadi ya kiolezo, bofya \"Nakili URL ya gumzo kwa OBS\".",
+      "chatCopy": "Juu ya ukurasa huu, chini ya \"Gumzo lako ndani ya OBS\", bofya \"Nakili URL ya gumzo kwa OBS\". Ni kiungo kimoja kwa mitiririko yako yote.",
       "chat2": "Katika OBS, fungua menyu ya \"Docks\" na uchague \"Custom Browser Docks\". Andika jina kama \"Gumzo la 3Speak\", bandika URL na ubofye \"Apply\". Ujumbe mpya huonekana kwenye paneli hiyo ukiwa mubashara. Watazamaji hawaioni kamwe.",
       "chat3": "Watazamaji tayari wanaona gumzo kando ya mtiririko wako, kwa hivyo huhitaji kuliweka kwenye video. Ikiwa tu unashiriki mtiririko mahali pengine pia: ongeza URL hiyo hiyo kama chanzo cha \"Browser\" na uondoe \"&dock=1\" mwishoni. Hapo ujumbe huelea juu ya video na kufifia baada ya sekunde 30.",
       "chatOptions": "Si lazima, ongeza mwishoni mwa URL: &max=10 huonyesha mistari michache, &size=18 hukuza maandishi, &fade=0 huacha ujumbe kwenye video.",
@@ -236,7 +240,7 @@
     "templateLoaded": "“{{name}}” imepakiwa kwenye Mubashara mpya",
     "chatOverlay": {
       "invalid": "Kiungo hiki cha kiwekelea cha gumzo si sahihi. Kinakili tena kutoka kwenye kiolezo chako katika Stream Studio.",
-      "waiting": "Hauko mubashara sasa. Ujumbe mpya wa gumzo utaonekana hapa utakapoenda mubashara kwa kiolezo hiki.",
+      "offline": "Hauko mubashara sasa. Ujumbe mpya wa gumzo utaonekana hapa utakapoenda mubashara.",
       "empty": "Uko mubashara. Ujumbe mpya wa gumzo huonekana hapa."
     }
   }

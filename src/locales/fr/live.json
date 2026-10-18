@@ -129,11 +129,15 @@
       "resetDone": "Nouvelle clé secrète créée. Mettez-la à jour dans OBS.",
       "resetFailed": "Impossible de réinitialiser votre clé secrète de live."
     },
+    "chatBox": {
+      "title": "Votre chat dans OBS",
+      "desc": "Un seul lien pour tous vos streams. Ajoutez-le dans OBS comme dock pour lire les nouveaux messages pendant votre live. Le guide ci-dessous explique comment.",
+      "copy": "Copier l'URL du chat pour OBS",
+      "copied": "URL du chat copiée"
+    },
     "card": {
       "copyUrl": "Copier l'URL du serveur",
       "urlCopied": "URL du serveur copiée",
-      "copyChatUrl": "Copier l'URL du chat pour OBS",
-      "chatUrlCopied": "URL du chat copiée",
       "lastLive": "Dernier direct : {{date}}",
       "neverLive": "Pas encore utilisé",
       "watch": "Regarder le live",
@@ -156,7 +160,7 @@
       "audio": "Fréquence d'échantillonnage audio : 48 kHz",
       "bframes": "Pas de B-frames (réglez-les sur 0 si votre encodeur le propose)",
       "chatTitle": "Voir le chat dans OBS",
-      "chat1": "Sur la carte du modèle, cliquez sur « Copier l'URL du chat pour OBS ».",
+      "chatCopy": "En haut de cette page, sous « Votre chat dans OBS », cliquez sur « Copier l'URL du chat pour OBS ». C'est un seul lien pour tous vos streams.",
       "chat2": "Dans OBS, ouvrez le menu \"Docks\" et choisissez \"Custom Browser Docks\". Saisissez un nom comme « Chat 3Speak », collez l'URL et cliquez sur \"Apply\". Les nouveaux messages s'affichent dans ce panneau pendant votre live. Les spectateurs ne le voient jamais.",
       "chat3": "Les spectateurs voient déjà le chat à côté de votre stream, inutile donc de l'ajouter à la vidéo. Seulement si vous partagez aussi le stream ailleurs : ajoutez la même URL comme source \"Browser\" et retirez \"&dock=1\" à la fin. Les messages flottent alors sur la vidéo et disparaissent après 30 secondes.",
       "chatOptions": "Facultatif, à ajouter à la fin de l'URL : &max=10 affiche moins de lignes, &size=18 agrandit le texte, &fade=0 garde les messages sur la vidéo.",
@@ -237,7 +241,7 @@
     "templateLoaded": "« {{name}} » chargé dans Nouveau direct",
     "chatOverlay": {
       "invalid": "Ce lien d'overlay du chat n'est pas valide. Copiez-le à nouveau depuis votre modèle dans le Stream Studio.",
-      "waiting": "Pas en direct pour le moment. Les nouveaux messages du chat s'afficheront ici quand vous passerez en direct avec ce modèle.",
+      "offline": "Pas en direct pour le moment. Les nouveaux messages du chat s'afficheront ici quand vous passerez en direct.",
       "empty": "Vous êtes en direct. Les nouveaux messages du chat s'affichent ici."
     }
   }

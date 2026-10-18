@@ -127,11 +127,15 @@
       "resetDone": "Kunci rahasia siaran baru dibuat. Perbarui di OBS.",
       "resetFailed": "Kunci rahasia siaran tidak dapat direset."
     },
+    "chatBox": {
+      "title": "Obrolanmu di OBS",
+      "desc": "Satu tautan untuk semua siaranmu. Tambahkan di OBS sebagai dock untuk membaca pesan baru selama kamu live. Panduan di bawah menunjukkan caranya.",
+      "copy": "Salin URL obrolan untuk OBS",
+      "copied": "URL obrolan disalin"
+    },
     "card": {
       "copyUrl": "Salin URL server",
       "urlCopied": "URL server disalin",
-      "copyChatUrl": "Salin URL obrolan untuk OBS",
-      "chatUrlCopied": "URL obrolan disalin",
       "lastLive": "Terakhir live: {{date}}",
       "neverLive": "Belum pernah dipakai",
       "watch": "Tonton siaran",
@@ -154,7 +158,7 @@
       "audio": "Sample rate audio: 48 kHz",
       "bframes": "Tanpa B-frames (atur ke 0 jika encoder-mu menyediakannya)",
       "chatTitle": "Lihat obrolan di OBS",
-      "chat1": "Di kartu template, klik \"Salin URL obrolan untuk OBS\".",
+      "chatCopy": "Di bagian atas halaman ini, di bawah \"Obrolanmu di OBS\", klik \"Salin URL obrolan untuk OBS\". Ini satu tautan untuk semua siaranmu.",
       "chat2": "Di OBS, buka menu \"Docks\" lalu pilih \"Custom Browser Docks\". Isi nama seperti \"Obrolan 3Speak\", tempel URL-nya, lalu klik \"Apply\". Pesan baru muncul di panel itu selama kamu live. Penonton tidak pernah melihatnya.",
       "chat3": "Penonton sudah melihat obrolan di samping siaranmu, jadi kamu tidak perlu memasukkannya ke video. Hanya jika kamu juga membagikan siaran di tempat lain: tambahkan URL yang sama sebagai sumber \"Browser\" dan hapus \"&dock=1\" di akhirnya. Pesan pun tampil di atas video dan memudar setelah 30 detik.",
       "chatOptions": "Opsional, tambahkan di akhir URL: &max=10 menampilkan lebih sedikit baris, &size=18 memperbesar teks, &fade=0 membuat pesan tetap di video.",
@@ -235,7 +239,7 @@
     "templateLoaded": "“{{name}}” dimuat ke Siaran baru",
     "chatOverlay": {
       "invalid": "Tautan overlay obrolan ini tidak valid. Salin lagi dari template-mu di Stream Studio.",
-      "waiting": "Kamu sedang tidak live. Pesan obrolan baru akan muncul di sini saat kamu live dengan template ini.",
+      "offline": "Kamu sedang tidak live. Pesan obrolan baru akan muncul di sini saat kamu live.",
       "empty": "Kamu sedang live. Pesan obrolan baru muncul di sini."
     }
   }

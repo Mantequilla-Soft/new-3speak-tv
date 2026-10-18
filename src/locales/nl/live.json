@@ -128,11 +128,15 @@
       "resetDone": "Nieuw stream-geheim aangemaakt. Werk het bij in OBS.",
       "resetFailed": "Je stream-geheim kon niet worden gereset."
     },
+    "chatBox": {
+      "title": "Je chat in OBS",
+      "desc": "Eén link voor al je streams. Voeg hem in OBS toe als dock om nieuwe berichten te lezen terwijl je live bent. De handleiding hieronder laat zien hoe.",
+      "copy": "Chat-URL voor OBS kopiëren",
+      "copied": "Chat-URL gekopieerd"
+    },
     "card": {
       "copyUrl": "Server-URL kopiëren",
       "urlCopied": "Server-URL gekopieerd",
-      "copyChatUrl": "Chat-URL voor OBS kopiëren",
-      "chatUrlCopied": "Chat-URL gekopieerd",
       "lastLive": "Laatst live: {{date}}",
       "neverLive": "Nog niet gebruikt",
       "watch": "Bekijk de stream",
@@ -155,7 +159,7 @@
       "audio": "Audio-samplefrequentie: 48 kHz",
       "bframes": "Geen B-frames (zet ze op 0 als je encoder dat aanbiedt)",
       "chatTitle": "Bekijk de chat in OBS",
-      "chat1": "Klik op de kaart van het sjabloon op \"Chat-URL voor OBS kopiëren\".",
+      "chatCopy": "Klik bovenaan deze pagina, onder \"Je chat in OBS\", op \"Chat-URL voor OBS kopiëren\". Het is één link voor al je streams.",
       "chat2": "Open in OBS het menu \"Docks\" en kies \"Custom Browser Docks\". Vul een naam in zoals \"3Speak chat\", plak de URL en klik op \"Apply\". Nieuwe berichten verschijnen in dat paneel zolang je live bent. Kijkers zien het nooit.",
       "chat3": "Kijkers zien de chat al naast je stream, dus je hoeft hem niet in de video te zetten. Alleen als je de stream ook ergens anders deelt: voeg dezelfde URL toe als \"Browser\"-bron en haal \"&dock=1\" van het eind weg. Dan zweven de berichten over de video en verdwijnen ze na 30 seconden.",
       "chatOptions": "Optioneel, zet achter de URL: &max=10 toont minder regels, &size=18 maakt de tekst groter, &fade=0 houdt berichten in beeld.",
@@ -236,7 +240,7 @@
     "templateLoaded": "“{{name}}” geladen in Nieuwe stream",
     "chatOverlay": {
       "invalid": "Deze link naar de chat-overlay is ongeldig. Kopieer hem opnieuw vanuit je sjabloon in de Stream Studio.",
-      "waiting": "Je bent nu niet live. Nieuwe chatberichten verschijnen hier zodra je met dit sjabloon live gaat.",
+      "offline": "Je bent nu niet live. Nieuwe chatberichten verschijnen hier zodra je live gaat.",
       "empty": "Je bent live. Nieuwe chatberichten verschijnen hier."
     }
   }

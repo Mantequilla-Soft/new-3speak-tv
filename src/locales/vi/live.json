@@ -127,11 +127,15 @@
       "resetDone": "Đã tạo mã bí mật mới. Hãy cập nhật trong OBS.",
       "resetFailed": "Không thể đặt lại mã bí mật phát trực tiếp."
     },
+    "chatBox": {
+      "title": "Trò chuyện của bạn trong OBS",
+      "desc": "Một liên kết cho mọi buổi phát của bạn. Thêm nó vào OBS dưới dạng dock để đọc tin nhắn mới khi bạn đang phát. Hướng dẫn bên dưới chỉ cách làm.",
+      "copy": "Sao chép URL trò chuyện cho OBS",
+      "copied": "Đã sao chép URL trò chuyện"
+    },
     "card": {
       "copyUrl": "Sao chép URL máy chủ",
       "urlCopied": "Đã sao chép URL máy chủ",
-      "copyChatUrl": "Sao chép URL trò chuyện cho OBS",
-      "chatUrlCopied": "Đã sao chép URL trò chuyện",
       "lastLive": "Lần phát gần nhất: {{date}}",
       "neverLive": "Chưa dùng lần nào",
       "watch": "Xem buổi phát",
@@ -154,7 +158,7 @@
       "audio": "Tần số lấy mẫu âm thanh: 48 kHz",
       "bframes": "Không dùng B-frames (đặt về 0 nếu bộ mã hóa có tùy chọn này)",
       "chatTitle": "Xem trò chuyện trong OBS",
-      "chat1": "Trên thẻ của mẫu, bấm \"Sao chép URL trò chuyện cho OBS\".",
+      "chatCopy": "Ở đầu trang này, trong mục \"Trò chuyện của bạn trong OBS\", bấm \"Sao chép URL trò chuyện cho OBS\". Đây là một liên kết cho mọi buổi phát của bạn.",
       "chat2": "Trong OBS, mở menu \"Docks\" và chọn \"Custom Browser Docks\". Nhập tên như \"Trò chuyện 3Speak\", dán URL rồi bấm \"Apply\". Tin nhắn mới hiện trong bảng đó khi bạn đang phát. Người xem không bao giờ thấy nó.",
       "chat3": "Người xem đã thấy trò chuyện bên cạnh buổi phát của bạn, nên bạn không cần đưa nó vào video. Chỉ khi bạn chia sẻ buổi phát ở nơi khác nữa: thêm cùng URL đó làm nguồn \"Browser\" và bỏ \"&dock=1\" ở cuối. Khi đó tin nhắn hiện đè lên video và mờ dần sau 30 giây.",
       "chatOptions": "Tùy chọn, thêm vào cuối URL: &max=10 hiện ít dòng hơn, &size=18 làm chữ to hơn, &fade=0 giữ tin nhắn trên video.",
@@ -235,7 +239,7 @@
     "templateLoaded": "Đã tải “{{name}}” vào Buổi phát mới",
     "chatOverlay": {
       "invalid": "Liên kết lớp phủ trò chuyện này không hợp lệ. Hãy sao chép lại từ mẫu của bạn trong Stream Studio.",
-      "waiting": "Hiện bạn không phát trực tiếp. Tin nhắn trò chuyện mới sẽ hiện ở đây khi bạn phát trực tiếp với mẫu này.",
+      "offline": "Hiện bạn không phát trực tiếp. Tin nhắn trò chuyện mới sẽ hiện ở đây khi bạn phát trực tiếp.",
       "empty": "Bạn đang phát trực tiếp. Tin nhắn trò chuyện mới hiện ở đây."
     }
   }

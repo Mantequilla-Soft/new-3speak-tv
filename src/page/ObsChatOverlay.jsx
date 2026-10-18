@@ -5,10 +5,10 @@ import { useTranslation } from "react-i18next";
 import { getHangoutsEndpoints, defaultEndpoint } from "../utils/hangoutsEndpoints";
 import "./ObsChatOverlay.scss";
 
-// A stream template's live chat for OBS. The URL carries the template's chat
-// overlay key (copied from its card in the Stream Studio), so it keeps working
-// across streams: we poll the templates API for the room the template is live
-// in and join it as a silent observer (read-only, not counted as a viewer).
+// A streamer's live chat for OBS. The URL carries the user's chat overlay key
+// (copied from the Templates tab of the Stream Studio), so one link covers all
+// their streams: we poll the hangouts API for the room they are live in and
+// join it as a silent observer (read-only, not counted as a viewer).
 //
 // Two ways to use it:
 //  - `dock=1` (what the card copies): an OBS Custom Browser Dock, so the
@@ -168,7 +168,7 @@ export default function ObsChatOverlay() {
     // Over the video: nothing at all. In a dock: say why it's empty.
     return (
       <div className={cls} style={style}>
-        {opts.dock && <p className="obs-chat__status">{t("live.obs.chatOverlay.waiting")}</p>}
+        {opts.dock && <p className="obs-chat__status">{t("live.obs.chatOverlay.offline")}</p>}
       </div>
     );
   }

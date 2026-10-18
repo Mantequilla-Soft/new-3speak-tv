@@ -128,11 +128,15 @@
       "resetDone": "New stream secret created. Update it in OBS.",
       "resetFailed": "Could not reset your stream secret."
     },
+    "chatBox": {
+      "title": "Your chat in OBS",
+      "desc": "One link for all your streams. Add it in OBS as a dock to read new messages while you are live. The guide below shows how.",
+      "copy": "Copy chat URL for OBS",
+      "copied": "Chat URL copied"
+    },
     "card": {
       "copyUrl": "Copy server URL",
       "urlCopied": "Server URL copied",
-      "copyChatUrl": "Copy chat URL for OBS",
-      "chatUrlCopied": "Chat URL copied",
       "lastLive": "Last live: {{date}}",
       "neverLive": "Not used yet",
       "watch": "Watch the stream",
@@ -155,7 +159,7 @@
       "audio": "Audio sample rate: 48 kHz",
       "bframes": "No B-frames (set them to 0 if your encoder offers it)",
       "chatTitle": "See the chat in OBS",
-      "chat1": "On the template's card, click \"Copy chat URL for OBS\".",
+      "chatCopy": "At the top of this page, under \"Your chat in OBS\", click \"Copy chat URL for OBS\". It is one link for all your streams.",
       "chat2": "In OBS, open the \"Docks\" menu and choose \"Custom Browser Docks\". Enter a name like \"3Speak chat\", paste the URL and click \"Apply\". New messages show up in that panel while you are live. Viewers never see it.",
       "chat3": "Viewers already see the chat next to your stream, so you don't need to put it into the video. Only if you also share the stream somewhere else: add the same URL as a \"Browser\" source and remove \"&dock=1\" from its end. Then the messages float over the video and fade out after 30 seconds.",
       "chatOptions": "Optional, add to the end of the URL: &max=10 shows fewer lines, &size=18 makes the text bigger, &fade=0 keeps messages on the video.",
@@ -236,7 +240,7 @@
     "templateLoaded": "Loaded “{{name}}” into New stream",
     "chatOverlay": {
       "invalid": "This chat overlay link is not valid. Copy it again from your template in the Stream Studio.",
-      "waiting": "Not live right now. New chat messages show up here when you go live with this template.",
+      "offline": "Not live right now. New chat messages show up here when you go live.",
       "empty": "You are live. New chat messages show up here."
     }
   }

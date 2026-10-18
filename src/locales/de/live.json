@@ -128,11 +128,15 @@
       "resetDone": "Neues Stream-Secret erstellt. Aktualisiere es in OBS.",
       "resetFailed": "Dein Stream-Secret konnte nicht zurückgesetzt werden."
     },
+    "chatBox": {
+      "title": "Dein Chat in OBS",
+      "desc": "Ein Link für alle deine Streams. Füge ihn in OBS als Dock hinzu, um neue Nachrichten zu lesen, während du live bist. Die Anleitung unten zeigt, wie.",
+      "copy": "Chat-URL für OBS kopieren",
+      "copied": "Chat-URL kopiert"
+    },
     "card": {
       "copyUrl": "Server-URL kopieren",
       "urlCopied": "Server-URL kopiert",
-      "copyChatUrl": "Chat-URL für OBS kopieren",
-      "chatUrlCopied": "Chat-URL kopiert",
       "lastLive": "Zuletzt live: {{date}}",
       "neverLive": "Noch nicht genutzt",
       "watch": "Stream ansehen",
@@ -155,7 +159,7 @@
       "audio": "Audio-Abtastrate: 48 kHz",
       "bframes": "Keine B-frames (stell sie auf 0, wenn dein Encoder das anbietet)",
       "chatTitle": "Den Chat in OBS sehen",
-      "chat1": "Klicke auf der Karte der Vorlage auf \"Chat-URL für OBS kopieren\".",
+      "chatCopy": "Klicke oben auf dieser Seite unter \"Dein Chat in OBS\" auf \"Chat-URL für OBS kopieren\". Es ist ein Link für alle deine Streams.",
       "chat2": "Öffne in OBS das Menü \"Docks\" und wähle \"Custom Browser Docks\". Gib einen Namen wie \"3Speak Chat\" ein, füge die URL ein und klicke auf \"Apply\". Neue Nachrichten erscheinen in diesem Fenster, solange du live bist. Zuschauer sehen es nie.",
       "chat3": "Zuschauer sehen den Chat bereits neben deinem Stream, du musst ihn also nicht ins Video einbauen. Nur wenn du den Stream auch anderswo teilst: Füge dieselbe URL als \"Browser\"-Quelle hinzu und entferne \"&dock=1\" am Ende. Dann schweben die Nachrichten über dem Video und blenden nach 30 Sekunden aus.",
       "chatOptions": "Optional, ans Ende der URL anhängen: &max=10 zeigt weniger Zeilen, &size=18 macht die Schrift größer, &fade=0 lässt Nachrichten im Video stehen.",
@@ -236,7 +240,7 @@
     "templateLoaded": "„{{name}}“ in Neuer Stream geladen",
     "chatOverlay": {
       "invalid": "Dieser Chat-Overlay-Link ist ungültig. Kopiere ihn erneut aus deiner Vorlage im Stream Studio.",
-      "waiting": "Gerade nicht live. Neue Chat-Nachrichten erscheinen hier, sobald du mit dieser Vorlage live gehst.",
+      "offline": "Gerade nicht live. Neue Chat-Nachrichten erscheinen hier, sobald du live gehst.",
       "empty": "Du bist live. Neue Chat-Nachrichten erscheinen hier."
     }
   }

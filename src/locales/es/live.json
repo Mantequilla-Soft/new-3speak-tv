@@ -129,11 +129,15 @@
       "resetDone": "Nueva clave secreta creada. Actualízala en OBS.",
       "resetFailed": "No se pudo restablecer tu clave secreta de transmisión."
     },
+    "chatBox": {
+      "title": "Tu chat en OBS",
+      "desc": "Un enlace para todas tus transmisiones. Añádelo en OBS como dock para leer los mensajes nuevos mientras estás en vivo. La guía de abajo explica cómo.",
+      "copy": "Copiar URL del chat para OBS",
+      "copied": "URL del chat copiada"
+    },
     "card": {
       "copyUrl": "Copiar URL del servidor",
       "urlCopied": "URL del servidor copiada",
-      "copyChatUrl": "Copiar URL del chat para OBS",
-      "chatUrlCopied": "URL del chat copiada",
       "lastLive": "Última vez en vivo: {{date}}",
       "neverLive": "Aún sin usar",
       "watch": "Ver la transmisión",
@@ -156,7 +160,7 @@
       "audio": "Frecuencia de muestreo de audio: 48 kHz",
       "bframes": "Sin B-frames (ponlos en 0 si tu codificador lo permite)",
       "chatTitle": "Ve el chat en OBS",
-      "chat1": "En la tarjeta de la plantilla, haz clic en \"Copiar URL del chat para OBS\".",
+      "chatCopy": "Arriba en esta página, en \"Tu chat en OBS\", haz clic en \"Copiar URL del chat para OBS\". Es un solo enlace para todas tus transmisiones.",
       "chat2": "En OBS, abre el menú \"Docks\" y elige \"Custom Browser Docks\". Escribe un nombre como \"Chat de 3Speak\", pega la URL y haz clic en \"Apply\". Los mensajes nuevos aparecen en ese panel mientras estás en vivo. Los espectadores nunca lo ven.",
       "chat3": "Los espectadores ya ven el chat junto a tu transmisión, así que no necesitas meterlo en el video. Solo si también compartes la transmisión en otro sitio: añade la misma URL como fuente \"Browser\" y quita \"&dock=1\" del final. Así los mensajes flotan sobre el video y se desvanecen tras 30 segundos.",
       "chatOptions": "Opcional, añade al final de la URL: &max=10 muestra menos líneas, &size=18 agranda el texto, &fade=0 mantiene los mensajes en el video.",
@@ -237,7 +241,7 @@
     "templateLoaded": "“{{name}}” cargada en Nueva transmisión",
     "chatOverlay": {
       "invalid": "Este enlace del overlay de chat no es válido. Vuelve a copiarlo desde tu plantilla en el Stream Studio.",
-      "waiting": "No estás en vivo ahora. Los mensajes nuevos del chat aparecerán aquí cuando salgas en vivo con esta plantilla.",
+      "offline": "No estás en vivo ahora. Los mensajes nuevos del chat aparecerán aquí cuando salgas en vivo.",
       "empty": "Estás en vivo. Los mensajes nuevos del chat aparecen aquí."
     }
   }

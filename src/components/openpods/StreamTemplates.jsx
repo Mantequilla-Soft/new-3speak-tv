@@ -188,6 +188,35 @@ function SecretBox({ token }) {
   );
 }
 
+// ─── Chat in OBS ───────────────────────────────────────────────────────────
+/**
+ * The user's chat URL for OBS: one link for all their streams (the server
+ * finds whichever room they are live in), meant as a Custom Browser Dock. See
+ * page/ObsChatOverlay; without dock=1 the same page is an overlay for the video.
+ */
+function ChatUrlBox({ overlayKey }) {
+  const { t } = useTranslation();
+  if (!overlayKey) return null;
+  const copy = async () => {
+    const url = `${window.location.origin}/obs/chat?key=${encodeURIComponent(overlayKey)}&dock=1`;
+    if (await copyText(url)) toast.success(t('live.obs.chatBox.copied'));
+    else toast.error(t('live.obs.copyFailed'));
+  };
+  return (
+    <section className="st-secret st-chatbox">
+      <div className="st-secret__text">
+        <h2>{t('live.obs.chatBox.title')}</h2>
+        <p>{t('live.obs.chatBox.desc')}</p>
+      </div>
+      <div className="st-secret__actions">
+        <button type="button" className="st-btn st-btn--ghost" onClick={copy}>
+          <MessageSquare size={15} /><span>{t('live.obs.chatBox.copy')}</span>
+        </button>
+      </div>
+    </section>
+  );
+}
+
 // ─── OBS guide ─────────────────────────────────────────────────────────────
 function ObsGuide({ isPremium, defaultOpen }) {
   const { t } = useTranslation();
@@ -220,7 +249,7 @@ function ObsGuide({ isPremium, defaultOpen }) {
           </ul>
           <h4>{t('live.obs.guide.chatTitle')}</h4>
           <ol className="st-guide__steps">
-            <li>{t('live.obs.guide.chat1')}</li>
+            <li>{t('live.obs.guide.chatCopy')}</li>
             <li>{t('live.obs.guide.chat2')}</li>
             <li>{t('live.obs.guide.chat3')}</li>
           </ol>
@@ -275,14 +304,6 @@ function TemplateCard({ tpl, token, onEdit, onDelete, onUse }) {
     else toast.error(t('live.obs.copyFailed'));
   };
 
-  // This template's live chat as an OBS Custom Browser Dock (see
-  // page/ObsChatOverlay; without dock=1 it is an overlay for the video).
-  const copyChatUrl = async () => {
-    const url = `${window.location.origin}/obs/chat?key=${encodeURIComponent(tpl.chatOverlayKey || '')}&dock=1`;
-    if (await copyText(url)) toast.success(t('live.obs.card.chatUrlCopied'));
-    else toast.error(t('live.obs.copyFailed'));
-  };
-
   return (
     <article ref={ref} className={`st-card st-card--${state}`}>
       <div className="st-card__thumb">
@@ -330,11 +351,6 @@ function TemplateCard({ tpl, token, onEdit, onDelete, onUse }) {
           <button type="button" className="st-btn st-btn--ghost" onClick={copyUrl}>
             <Copy size={15} /><span>{t('live.obs.card.copyUrl')}</span>
           </button>
-          {tpl.chatOverlayKey && (
-            <button type="button" className="st-btn st-btn--ghost" onClick={copyChatUrl}>
-              <MessageSquare size={15} /><span>{t('live.obs.card.copyChatUrl')}</span>
-            </button>
-          )}
           <button type="button" className="st-btn st-btn--ghost" onClick={() => onEdit(tpl)}>
             <Pencil size={15} /><span>{t('common.actions.edit')}</span>
           </button>
@@ -753,7 +769,7 @@ function TemplateEditor({ token, user, whipBase, existing, isPremium, onSaved, o
  */
 export function StreamTemplatesPanel({ token, user, isPremium, onUse }) {
   const { t } = useTranslation();
-  const [data, setData] = useState({ status: 'idle', templates: [], whipBase: '' });
+  const [data, setData] = useState({ status: 'idle', templates: [], whipBase: '', chatOverlayKey: '' });
   const [editing, setEditing] = useState(null);   // null | 'new' | template
   const [deleting, setDeleting] = useState(null); // template awaiting confirmation
   const [deleteBusy, setDeleteBusy] = useState(false);
@@ -762,7 +778,12 @@ export function StreamTemplatesPanel({ token, user, isPremium, onUse }) {
     if (!token) return;
     try {
       const res = await listTemplates(token);
-      setData({ status: 'ready', templates: Array.isArray(res.templates) ? res.templates : [], whipBase: res.whipBase || '' });
+      setData({
+        status: 'ready',
+        templates: Array.isArray(res.templates) ? res.templates : [],
+        whipBase: res.whipBase || '',
+        chatOverlayKey: res.chatOverlayKey || '',
+      });
     } catch {
       setData((d) => (d.status === 'ready' ? d : { ...d, status: 'error' }));
     }
@@ -810,6 +831,8 @@ export function StreamTemplatesPanel({ token, user, isPremium, onUse }) {
       <p className="st-intro">{t('live.obs.pageIntro')}</p>
 
       <SecretBox token={token} />
+
+      <ChatUrlBox overlayKey={data.chatOverlayKey} />
 
       <ObsGuide isPremium={isPremium} defaultOpen={data.status === 'ready' && data.templates.length === 0} />
 

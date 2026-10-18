@@ -129,11 +129,15 @@
       "resetDone": "Nuovo segreto di diretta creato. Aggiornalo in OBS.",
       "resetFailed": "Impossibile reimpostare il tuo segreto di diretta."
     },
+    "chatBox": {
+      "title": "La tua chat in OBS",
+      "desc": "Un solo link per tutte le tue dirette. Aggiungilo in OBS come dock per leggere i nuovi messaggi mentre sei in diretta. La guida qui sotto spiega come.",
+      "copy": "Copia URL della chat per OBS",
+      "copied": "URL della chat copiato"
+    },
     "card": {
       "copyUrl": "Copia URL del server",
       "urlCopied": "URL del server copiato",
-      "copyChatUrl": "Copia URL della chat per OBS",
-      "chatUrlCopied": "URL della chat copiato",
       "lastLive": "Ultima diretta: {{date}}",
       "neverLive": "Non ancora usato",
       "watch": "Guarda la diretta",
@@ -156,7 +160,7 @@
       "audio": "Frequenza di campionamento audio: 48 kHz",
       "bframes": "Nessun B-frames (impostali su 0 se il codificatore lo consente)",
       "chatTitle": "Vedi la chat in OBS",
-      "chat1": "Sulla scheda del modello, fai clic su \"Copia URL della chat per OBS\".",
+      "chatCopy": "In cima a questa pagina, sotto \"La tua chat in OBS\", fai clic su \"Copia URL della chat per OBS\". È un solo link per tutte le tue dirette.",
       "chat2": "In OBS, apri il menu \"Docks\" e scegli \"Custom Browser Docks\". Inserisci un nome come \"Chat 3Speak\", incolla l'URL e fai clic su \"Apply\". I nuovi messaggi compaiono in quel pannello mentre sei in diretta. Gli spettatori non lo vedono mai.",
       "chat3": "Gli spettatori vedono già la chat accanto alla tua diretta, quindi non serve inserirla nel video. Solo se condividi la diretta anche altrove: aggiungi lo stesso URL come fonte \"Browser\" e togli \"&dock=1\" dalla fine. Così i messaggi scorrono sopra il video e svaniscono dopo 30 secondi.",
       "chatOptions": "Facoltativo, aggiungi alla fine dell'URL: &max=10 mostra meno righe, &size=18 ingrandisce il testo, &fade=0 lascia i messaggi sul video.",
@@ -237,7 +241,7 @@
     "templateLoaded": "“{{name}}” caricato in Nuova diretta",
     "chatOverlay": {
       "invalid": "Questo link dell'overlay chat non è valido. Copialo di nuovo dal tuo modello nello Stream Studio.",
-      "waiting": "Non sei in diretta ora. I nuovi messaggi della chat compariranno qui quando vai in diretta con questo modello.",
+      "offline": "Non sei in diretta ora. I nuovi messaggi della chat compariranno qui quando vai in diretta.",
       "empty": "Sei in diretta. I nuovi messaggi della chat compaiono qui."
     }
   }
