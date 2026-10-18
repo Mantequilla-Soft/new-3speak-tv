@@ -160,8 +160,7 @@
     "groupChat": "群聊",
     "communitySnap": "社区 Snap",
     "shortsEditor": "短视频编辑器",
-    "goLive": "开直播",
-    "streamStudio": "直播工作室",
+    "goLiveNow": "开始直播！",
     "headings": {
       "upload": "上传",
       "live": "直播",

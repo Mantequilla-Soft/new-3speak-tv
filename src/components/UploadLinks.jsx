@@ -97,13 +97,13 @@ export default function UploadLinks({ linkClass, iconClass = "icon", onClick }) 
           <Link
             to="/openpods?create=1&mode=standalone"
             className={linkClass}
-            title={isMobile ? t('misc.uploadLinks.goLive') : t('misc.uploadLinks.streamStudio')}
+            title={t('misc.uploadLinks.goLiveNow')}
             onClick={go}
           >
             {isMobile
               ? <MdSmartphone className={iconClass} />
               : <MdDesktopWindows className={iconClass} />}
-            {' '}<span>{isMobile ? t('misc.uploadLinks.goLive') : t('misc.uploadLinks.streamStudio')}</span>
+            {' '}<span>{t('misc.uploadLinks.goLiveNow')}</span>
           </Link>
         </>
       )}
