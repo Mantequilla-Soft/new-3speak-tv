@@ -6,6 +6,22 @@ import { useAppStore } from '../../../lib/store'
 import useGiphySearch, { normalizeGifUrl } from '../../../hooks/useGiphySearch'
 import './EmojiGifPicker.scss'
 
+const PHONE = '(max-width: 767px)'
+const isPhone = () => typeof window !== 'undefined' && !!window.matchMedia?.(PHONE).matches
+
+const isTextField = (el) => !!el && (
+  el.tagName === 'TEXTAREA' || el.tagName === 'INPUT' || el.isContentEditable
+)
+
+// What is still visible of the screen: the height of the visual viewport and how
+// far the on-screen keyboard reaches up over the layout viewport (which is what
+// position:fixed hangs off, so a bottom sheet would otherwise sit behind it).
+const readViewport = () => {
+  const vv = window.visualViewport
+  if (!vv) return { kb: 0, h: window.innerHeight }
+  return { kb: Math.max(0, Math.round(window.innerHeight - vv.height - vv.offsetTop)), h: Math.round(vv.height) }
+}
+
 /**
  * Emoji + GIF picker for comment/reply composers — the same experience as the
  * chat composer (emoji-picker-react + Giphy). Insertion is delegated to the
@@ -32,6 +48,31 @@ export default function EmojiGifPicker({
   const wrapRef = useRef(null)
   const appTheme = useAppStore((s) => s.theme)
   const { query, setQuery, gifs, loading } = useGiphySearch(open === 'gif')
+  const [viewport, setViewport] = useState(null) // phones only, while open
+
+  // Phones: keep the bottom sheet above the keyboard and inside what is visible.
+  useEffect(() => {
+    if (!open || !isPhone()) { setViewport(null); return }
+    const update = () => setViewport(readViewport())
+    update()
+    const vv = window.visualViewport
+    vv?.addEventListener('resize', update)
+    vv?.addEventListener('scroll', update)
+    window.addEventListener('resize', update)
+    return () => {
+      vv?.removeEventListener('resize', update)
+      vv?.removeEventListener('scroll', update)
+      window.removeEventListener('resize', update)
+    }
+  }, [open])
+
+  const toggle = (kind) => {
+    const next = open === kind ? null : kind
+    // Phones: emoji replace the keyboard, like a native emoji keyboard. iOS keeps
+    // the composer focused when a button is tapped, so drop the focus by hand.
+    if (next === 'emoji' && isPhone() && isTextField(document.activeElement)) document.activeElement.blur()
+    setOpen(next)
+  }
 
   // Close on outside click / Escape.
   useEffect(() => {
@@ -50,14 +91,16 @@ export default function EmojiGifPicker({
 
   if (disabled) return null
 
-  const popClass = `egp-popover egp-${align} egp-open-${openDirection}`
+  const popClass = `egp-popover egp-${align} egp-open-${openDirection}${viewport?.kb ? ' egp-above-kb' : ''}`
+  const popStyle = viewport ? { '--egp-kb': `${viewport.kb}px`, '--egp-vh': `${viewport.h}px` } : undefined
+  const emojiHeight = viewport ? Math.max(200, Math.min(380, viewport.h - 24)) : 380
 
   return (
     <div className={`egp-tools ${className}`} ref={wrapRef}>
       <button
         type="button"
         className={`egp-btn${open === 'emoji' ? ' active' : ''}`}
-        onClick={() => setOpen(open === 'emoji' ? null : 'emoji')}
+        onClick={() => toggle('emoji')}
         aria-label={t('app.emojiGif.emoji')}
         title={t('app.emojiGif.emoji')}
       >
@@ -66,7 +109,7 @@ export default function EmojiGifPicker({
       <button
         type="button"
         className={`egp-btn egp-gif-btn${open === 'gif' ? ' active' : ''}`}
-        onClick={() => setOpen(open === 'gif' ? null : 'gif')}
+        onClick={() => toggle('gif')}
         aria-label="GIF"
         title="GIF"
       >
@@ -74,13 +117,13 @@ export default function EmojiGifPicker({
       </button>
 
       {open === 'emoji' && (
-        <div className={`${popClass} egp-emoji-popover`}>
+        <div className={`${popClass} egp-emoji-popover`} style={popStyle}>
           <EmojiPicker
             onEmojiClick={(d) => onPickEmoji?.(d.emoji)}
             theme={appTheme === 'light' ? 'light' : 'dark'}
             lazyLoadEmojis
             width="100%"
-            height={380}
+            height={emojiHeight}
             previewConfig={{ showPreview: false }}
             searchPlaceholder={t('app.emojiGif.searchEmoji')}
           />
@@ -88,7 +131,7 @@ export default function EmojiGifPicker({
       )}
 
       {open === 'gif' && (
-        <div className={`${popClass} egp-gif-popover`}>
+        <div className={`${popClass} egp-gif-popover`} style={popStyle}>
           <input
             className="egp-gif-search"
             type="text"

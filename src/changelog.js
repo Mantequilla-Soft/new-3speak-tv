@@ -7,6 +7,12 @@
 // 1.0.0 — that way they see all of these when develop is pushed to production.
 export const CHANGELOG = [
   {
+    version: '1.79.99',
+    date: '2026-10-18',
+    summary:
+      'Emoji and GIF pickers on phones: they now sit above the keyboard instead of behind it, and GIFs show three to a row.',
+  },
+  {
     version: '1.79.97',
     date: '2026-10-18',
     summary:

@@ -56,6 +56,12 @@
     bottom: calc(12px + env(safe-area-inset-bottom, 0px));
     top: auto;
     z-index: 3000;
+    // --egp-vh / --egp-kb come from the visual viewport (EmojiGifPicker.jsx), so
+    // the sheet rides on top of the on-screen keyboard and never runs under it.
+    max-height: calc(var(--egp-vh, 100dvh) - 24px);
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    &.egp-above-kb { bottom: calc(var(--egp-kb) + 8px); }
   }
 }
 
@@ -92,7 +98,12 @@
   gap: 6px;
   max-height: 300px;
   overflow-y: auto;
-  @include mix.respond(phone) { max-height: 44vh; }
+  // Room left for the grid once the search field and attribution are in.
+  @include mix.respond(phone) {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 4px;
+    max-height: min(44vh, calc(var(--egp-vh, 100dvh) - 130px));
+  }
 }
 .egp-gif-item {
   border: none;

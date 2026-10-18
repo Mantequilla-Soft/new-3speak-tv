@@ -23,11 +23,14 @@ export function insertAtCursor(el, value, snippet, setValue) {
   const end = el.selectionEnd ?? start
   const next = v.slice(0, start) + snippet + v.slice(end)
   setValue(next)
+  // Phones: focusing the field brings the keyboard back up over the picker
+  // after every emoji, so leave the focus where it is there.
+  const phone = typeof window !== 'undefined' && !!window.matchMedia?.('(max-width: 767px)').matches
   requestAnimationFrame(() => {
     try {
-      el.focus()
+      if (!phone) el.focus()
       const pos = start + snippet.length
-      el.setSelectionRange(pos, pos)
+      if (!phone || document.activeElement === el) el.setSelectionRange(pos, pos)
       if (el.tagName === 'TEXTAREA') {
         el.style.height = 'auto'
         el.style.height = el.scrollHeight + 'px'
