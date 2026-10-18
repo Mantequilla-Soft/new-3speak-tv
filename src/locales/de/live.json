@@ -131,8 +131,8 @@
     "card": {
       "copyUrl": "Server-URL kopieren",
       "urlCopied": "Server-URL kopiert",
-      "copyChatUrl": "Chat-Overlay-URL kopieren",
-      "chatUrlCopied": "Chat-Overlay-URL kopiert",
+      "copyChatUrl": "Chat-URL für OBS kopieren",
+      "chatUrlCopied": "Chat-URL kopiert",
       "lastLive": "Zuletzt live: {{date}}",
       "neverLive": "Noch nicht genutzt",
       "watch": "Stream ansehen",
@@ -154,11 +154,11 @@
       "encoder": "Encoder: x264 oder dein Hardware-Encoder",
       "audio": "Audio-Abtastrate: 48 kHz",
       "bframes": "Keine B-frames (stell sie auf 0, wenn dein Encoder das anbietet)",
-      "chatTitle": "Den Chat im Stream anzeigen",
-      "chat1": "Klicke auf der Karte der Vorlage auf \"Chat-Overlay-URL kopieren\".",
-      "chat2": "Füge in OBS mit + eine Quelle hinzu und wähle \"Browser\". Füge die URL ein, setze die Größe auf 400 mal 600 und schiebe sie dorthin, wo der Chat erscheinen soll.",
-      "chat3": "Du fügst sie nur einmal hinzu: Sie findet deinen Stream jedes Mal von selbst, wenn du mit dieser Vorlage live gehst. Nachrichten der Zuschauer erscheinen dort und blenden nach 30 Sekunden aus.",
-      "chatOptions": "Optional, ans Ende der URL anhängen: &fade=0 lässt Nachrichten stehen, &max=5 zeigt weniger Zeilen, &size=28 macht die Schrift größer.",
+      "chatTitle": "Den Chat in OBS sehen",
+      "chat1": "Klicke auf der Karte der Vorlage auf \"Chat-URL für OBS kopieren\".",
+      "chat2": "Öffne in OBS das Menü \"Docks\" und wähle \"Custom Browser Docks\". Gib einen Namen wie \"3Speak Chat\" ein, füge die URL ein und klicke auf \"Apply\". Neue Nachrichten erscheinen in diesem Fenster, solange du live bist. Zuschauer sehen es nie.",
+      "chat3": "Zuschauer sehen den Chat bereits neben deinem Stream, du musst ihn also nicht ins Video einbauen. Nur wenn du den Stream auch anderswo teilst: Füge dieselbe URL als \"Browser\"-Quelle hinzu und entferne \"&dock=1\" am Ende. Dann schweben die Nachrichten über dem Video und blenden nach 30 Sekunden aus.",
+      "chatOptions": "Optional, ans Ende der URL anhängen: &max=10 zeigt weniger Zeilen, &size=18 macht die Schrift größer, &fade=0 lässt Nachrichten im Video stehen.",
       "limitsFree": "Kostenlose Streams enden nach 1 Stunde und zeigen ein 3Speak-Wasserzeichen. Mit 3Speak Pro kannst du 4 Stunden ohne Wasserzeichen streamen.",
       "limitsPro": "Mit 3Speak Pro laufen deine Streams bis zu 4 Stunden und ohne Wasserzeichen."
     },
@@ -235,7 +235,9 @@
     "pickTemplatePlaceholder": "Vorlage wählen…",
     "templateLoaded": "„{{name}}“ in Neuer Stream geladen",
     "chatOverlay": {
-      "invalid": "Dieser Chat-Overlay-Link ist ungültig. Kopiere ihn erneut aus deiner Vorlage im Stream Studio."
+      "invalid": "Dieser Chat-Overlay-Link ist ungültig. Kopiere ihn erneut aus deiner Vorlage im Stream Studio.",
+      "waiting": "Gerade nicht live. Neue Chat-Nachrichten erscheinen hier, sobald du mit dieser Vorlage live gehst.",
+      "empty": "Du bist live. Neue Chat-Nachrichten erscheinen hier."
     }
   }
 }

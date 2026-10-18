@@ -5,15 +5,21 @@ import { useTranslation } from "react-i18next";
 import { getHangoutsEndpoints, defaultEndpoint } from "../utils/hangoutsEndpoints";
 import "./ObsChatOverlay.scss";
 
-// Chrome-free OBS Browser Source that shows a stream template's live chat.
-// The URL carries the template's chat overlay key (copied from its card in the
-// Stream Studio), so one Browser Source keeps working across streams: we poll
-// the templates API for the room the template is live in and join it as a
-// silent observer (read-only, not counted as a viewer). Offline it renders
-// nothing, so the stream never shows placeholder text.
+// A stream template's live chat for OBS. The URL carries the template's chat
+// overlay key (copied from its card in the Stream Studio), so it keeps working
+// across streams: we poll the templates API for the room the template is live
+// in and join it as a silent observer (read-only, not counted as a viewer).
 //
-// Query options: fade (seconds before a message fades, 0 = never, default 30),
-// max (lines, default 10), size (text px, default 20).
+// Two ways to use it:
+//  - `dock=1` (what the card copies): an OBS Custom Browser Dock, so the
+//    streamer can read new messages. Solid background, messages stay, and a
+//    status line says whether the stream is live.
+//  - without it: a Browser Source over the video (for a stream shared outside
+//    3Speak, which already shows the chat next to the stream). Transparent,
+//    messages fade, and offline it renders nothing.
+//
+// Query options: fade (seconds before a message fades, 0 = never), max
+// (lines), size (text px). Defaults: dock 0 / 50 / 14, overlay 30 / 10 / 20.
 
 const API = (import.meta.env.VITE_HANGOUTS_TEMPLATES_API_URL || import.meta.env.VITE_HANGOUTS_API_URL || "")
   .replace(/\/$/, "");
@@ -26,11 +32,13 @@ function clampInt(raw, min, max, fallback) {
 
 function readOptions() {
   const p = new URLSearchParams(window.location.search);
+  const dock = p.get("dock") === "1";
   return {
     key: p.get("key") || "",
-    fade: clampInt(p.get("fade"), 0, 3600, 30),
-    max: clampInt(p.get("max"), 1, 50, 10),
-    size: clampInt(p.get("size"), 10, 64, 20),
+    dock,
+    fade: clampInt(p.get("fade"), 0, 3600, dock ? 0 : 30),
+    max: clampInt(p.get("max"), 1, 50, dock ? 50 : 10),
+    size: clampInt(p.get("size"), 10, 64, dock ? 14 : 20),
   };
 }
 
@@ -82,8 +90,12 @@ function ChatLine({ msg, fade }) {
   );
 }
 
-function ChatFeed({ fade, max }) {
+function ChatFeed({ fade, max, dock }) {
+  const { t } = useTranslation();
   const { messages } = useChat();
+  if (dock && messages.length === 0) {
+    return <p className="obs-chat__status">{t("live.obs.chatOverlay.empty")}</p>;
+  }
   return (
     <ul className="obs-chat__list">
       {messages.slice(-max).map((m) => <ChatLine key={m.id} msg={m} fade={fade} />)}
@@ -101,13 +113,13 @@ export default function ObsChatOverlay() {
   const [invalid, setInvalid] = useState(false);
 
   // OBS's Browser Source injects a transparent body, but the app's own CSS
-  // may paint one.
+  // may paint one. A dock gets a solid background instead.
   useEffect(() => {
     const els = [document.documentElement, document.body];
     const prev = els.map((el) => el.style.background);
-    els.forEach((el) => { el.style.background = "transparent"; });
+    els.forEach((el) => { el.style.background = opts.dock ? "#0f1117" : "transparent"; });
     return () => els.forEach((el, i) => { el.style.background = prev[i]; });
-  }, []);
+  }, [opts.dock]);
 
   // Which room is the template live in right now?
   const missingKey = !opts.key || !API;
@@ -146,17 +158,25 @@ export default function ObsChatOverlay() {
   }, [room]);
 
   const style = { "--obs-chat-size": `${opts.size}px` };
+  const cls = `obs-chat${opts.dock ? " obs-chat--dock" : ""}`;
 
   if (missingKey || invalid) {
-    return <div className="obs-chat" style={style}><p className="obs-chat__invalid">{t("live.obs.chatOverlay.invalid")}</p></div>;
+    return <div className={cls} style={style}><p className="obs-chat__invalid">{t("live.obs.chatOverlay.invalid")}</p></div>;
   }
   const token = grant && grant.room === room ? grant.token : null;
-  if (!room || !token) return <div className="obs-chat" style={style} />;
+  if (!room || !token) {
+    // Over the video: nothing at all. In a dock: say why it's empty.
+    return (
+      <div className={cls} style={style}>
+        {opts.dock && <p className="obs-chat__status">{t("live.obs.chatOverlay.waiting")}</p>}
+      </div>
+    );
+  }
 
   return (
-    <div className="obs-chat" style={style}>
+    <div className={cls} style={style}>
       <LiveKitRoom key={room} serverUrl={livekitUrl()} token={token} connect audio={false} video={false}>
-        <ChatFeed fade={opts.fade} max={opts.max} />
+        <ChatFeed fade={opts.fade} max={opts.max} dock={opts.dock} />
       </LiveKitRoom>
     </div>
   );

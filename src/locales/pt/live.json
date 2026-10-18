@@ -132,8 +132,8 @@
     "card": {
       "copyUrl": "Copiar URL do servidor",
       "urlCopied": "URL do servidor copiada",
-      "copyChatUrl": "Copiar URL do overlay do chat",
-      "chatUrlCopied": "URL do overlay do chat copiada",
+      "copyChatUrl": "Copiar URL do chat para o OBS",
+      "chatUrlCopied": "URL do chat copiada",
       "lastLive": "Última vez ao vivo: {{date}}",
       "neverLive": "Ainda não usado",
       "watch": "Assistir à transmissão",
@@ -155,11 +155,11 @@
       "encoder": "Codificador: x264 ou o codificador de hardware",
       "audio": "Taxa de amostragem de áudio: 48 kHz",
       "bframes": "Sem B-frames (defina como 0 se o seu codificador permitir)",
-      "chatTitle": "Mostre o chat na sua transmissão",
-      "chat1": "No cartão do modelo, clique em \"Copiar URL do overlay do chat\".",
-      "chat2": "No OBS, adicione uma fonte com + e escolha \"Navegador\". Cole a URL, defina o tamanho como 400 por 600 e posicione onde quiser o chat.",
-      "chat3": "Você só adiciona uma vez: ele encontra sua transmissão sozinho sempre que você entra ao vivo com este modelo. As mensagens dos espectadores aparecem ali e somem depois de 30 segundos.",
-      "chatOptions": "Opcional, adicione ao final da URL: &fade=0 mantém as mensagens na tela, &max=5 mostra menos linhas, &size=28 aumenta o texto.",
+      "chatTitle": "Veja o chat no OBS",
+      "chat1": "No cartão do modelo, clique em \"Copiar URL do chat para o OBS\".",
+      "chat2": "No OBS, abra o menu \"Docks\" e escolha \"Custom Browser Docks\". Digite um nome como \"Chat do 3Speak\", cole a URL e clique em \"Apply\". As mensagens novas aparecem nesse painel enquanto você está ao vivo. Os espectadores nunca o veem.",
+      "chat3": "Os espectadores já veem o chat ao lado da sua transmissão, então você não precisa colocá-lo no vídeo. Só se você também compartilhar a transmissão em outro lugar: adicione a mesma URL como fonte \"Browser\" e remova \"&dock=1\" do final. Assim as mensagens flutuam sobre o vídeo e somem depois de 30 segundos.",
+      "chatOptions": "Opcional, adicione ao final da URL: &max=10 mostra menos linhas, &size=18 aumenta o texto, &fade=0 mantém as mensagens no vídeo.",
       "limitsFree": "Transmissões gratuitas terminam após 1 hora e mostram uma marca d'água do 3Speak. Com o 3Speak Pro você pode transmitir por 4 horas sem marca d'água.",
       "limitsPro": "Com o 3Speak Pro suas transmissões podem durar 4 horas e não têm marca d'água."
     },
@@ -236,7 +236,9 @@
     "pickTemplatePlaceholder": "Escolhe um modelo…",
     "templateLoaded": "“{{name}}” carregado em Nova transmissão",
     "chatOverlay": {
-      "invalid": "Este link do overlay do chat não é válido. Copie de novo a partir do seu modelo no Stream Studio."
+      "invalid": "Este link do overlay do chat não é válido. Copie de novo a partir do seu modelo no Stream Studio.",
+      "waiting": "Você não está ao vivo agora. As mensagens novas do chat aparecem aqui quando você entrar ao vivo com este modelo.",
+      "empty": "Você está ao vivo. As mensagens novas do chat aparecem aqui."
     }
   }
 }

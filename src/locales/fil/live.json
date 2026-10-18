@@ -131,8 +131,8 @@
     "card": {
       "copyUrl": "I-copy ang server URL",
       "urlCopied": "Na-copy ang server URL",
-      "copyChatUrl": "Kopyahin ang URL ng chat overlay",
-      "chatUrlCopied": "Nakopya ang URL ng chat overlay",
+      "copyChatUrl": "Kopyahin ang chat URL para sa OBS",
+      "chatUrlCopied": "Nakopya ang chat URL",
       "lastLive": "Huling live: {{date}}",
       "neverLive": "Hindi pa nagagamit",
       "watch": "Panoorin ang stream",
@@ -154,11 +154,11 @@
       "encoder": "Encoder: x264 o ang hardware encoder mo",
       "audio": "Audio sample rate: 48 kHz",
       "bframes": "Walang B-frames (gawing 0 kung may ganitong option ang encoder mo)",
-      "chatTitle": "Ipakita ang chat sa iyong stream",
-      "chat1": "Sa card ng template, i-click ang \"Kopyahin ang URL ng chat overlay\".",
-      "chat2": "Sa OBS, magdagdag ng source gamit ang + at piliin ang \"Browser\". I-paste ang URL, gawing 400 by 600 ang laki at ilagay kung saan mo gusto ang chat.",
-      "chat3": "Isang beses mo lang itong idadagdag: kusa nitong hinahanap ang stream mo tuwing mag-live ka gamit ang template na ito. Doon lumalabas ang mga mensahe ng manonood at nawawala pagkalipas ng 30 segundo.",
-      "chatOptions": "Opsyonal, idagdag sa dulo ng URL: &fade=0 para manatili ang mga mensahe, &max=5 para mas kaunting linya, &size=28 para lumaki ang text.",
+      "chatTitle": "Tingnan ang chat sa OBS",
+      "chat1": "Sa card ng template, i-click ang \"Kopyahin ang chat URL para sa OBS\".",
+      "chat2": "Sa OBS, buksan ang menu na \"Docks\" at piliin ang \"Custom Browser Docks\". Maglagay ng pangalan gaya ng \"3Speak chat\", i-paste ang URL at i-click ang \"Apply\". Lalabas sa panel na iyon ang mga bagong mensahe habang live ka. Hindi ito nakikita ng mga manonood.",
+      "chat3": "Nakikita na ng mga manonood ang chat sa tabi ng stream mo, kaya hindi mo na kailangang ilagay ito sa video. Kung ibinabahagi mo rin ang stream sa ibang lugar: idagdag ang parehong URL bilang \"Browser\" source at alisin ang \"&dock=1\" sa dulo. Lulutang ang mga mensahe sa ibabaw ng video at mawawala pagkalipas ng 30 segundo.",
+      "chatOptions": "Opsyonal, idagdag sa dulo ng URL: &max=10 para mas kaunting linya, &size=18 para lumaki ang text, &fade=0 para manatili ang mga mensahe sa video.",
       "limitsFree": "Natatapos ang mga libreng stream pagkalipas ng 1 oras at may 3Speak watermark. Sa 3Speak Pro, puwede kang mag-stream nang 4 na oras nang walang watermark.",
       "limitsPro": "Sa 3Speak Pro, puwedeng tumagal nang 4 na oras ang mga stream mo nang walang watermark."
     },
@@ -235,7 +235,9 @@
     "pickTemplatePlaceholder": "Pumili ng template…",
     "templateLoaded": "Na-load ang “{{name}}” sa Bagong stream",
     "chatOverlay": {
-      "invalid": "Hindi valid ang link ng chat overlay na ito. Kopyahin ulit mula sa template mo sa Stream Studio."
+      "invalid": "Hindi valid ang link ng chat overlay na ito. Kopyahin ulit mula sa template mo sa Stream Studio.",
+      "waiting": "Hindi ka live ngayon. Lalabas dito ang mga bagong mensahe sa chat kapag nag-live ka gamit ang template na ito.",
+      "empty": "Live ka na. Lalabas dito ang mga bagong mensahe sa chat."
     }
   }
 }

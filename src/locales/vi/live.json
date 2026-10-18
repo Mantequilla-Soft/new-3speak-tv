@@ -130,8 +130,8 @@
     "card": {
       "copyUrl": "Sao chép URL máy chủ",
       "urlCopied": "Đã sao chép URL máy chủ",
-      "copyChatUrl": "Sao chép URL lớp phủ trò chuyện",
-      "chatUrlCopied": "Đã sao chép URL lớp phủ trò chuyện",
+      "copyChatUrl": "Sao chép URL trò chuyện cho OBS",
+      "chatUrlCopied": "Đã sao chép URL trò chuyện",
       "lastLive": "Lần phát gần nhất: {{date}}",
       "neverLive": "Chưa dùng lần nào",
       "watch": "Xem buổi phát",
@@ -153,11 +153,11 @@
       "encoder": "Bộ mã hóa: x264 hoặc bộ mã hóa phần cứng của bạn",
       "audio": "Tần số lấy mẫu âm thanh: 48 kHz",
       "bframes": "Không dùng B-frames (đặt về 0 nếu bộ mã hóa có tùy chọn này)",
-      "chatTitle": "Hiển thị trò chuyện trong buổi phát",
-      "chat1": "Trên thẻ của mẫu, bấm \"Sao chép URL lớp phủ trò chuyện\".",
-      "chat2": "Trong OBS, thêm nguồn bằng nút + và chọn \"Browser\". Dán URL, đặt kích thước 400 x 600 rồi đặt nó ở chỗ bạn muốn hiện trò chuyện.",
-      "chat3": "Bạn chỉ cần thêm một lần: nó tự tìm buổi phát của bạn mỗi khi bạn phát trực tiếp với mẫu này. Tin nhắn của người xem hiện ở đó và mờ dần sau 30 giây.",
-      "chatOptions": "Tùy chọn, thêm vào cuối URL: &fade=0 giữ tin nhắn trên màn hình, &max=5 hiện ít dòng hơn, &size=28 làm chữ to hơn.",
+      "chatTitle": "Xem trò chuyện trong OBS",
+      "chat1": "Trên thẻ của mẫu, bấm \"Sao chép URL trò chuyện cho OBS\".",
+      "chat2": "Trong OBS, mở menu \"Docks\" và chọn \"Custom Browser Docks\". Nhập tên như \"Trò chuyện 3Speak\", dán URL rồi bấm \"Apply\". Tin nhắn mới hiện trong bảng đó khi bạn đang phát. Người xem không bao giờ thấy nó.",
+      "chat3": "Người xem đã thấy trò chuyện bên cạnh buổi phát của bạn, nên bạn không cần đưa nó vào video. Chỉ khi bạn chia sẻ buổi phát ở nơi khác nữa: thêm cùng URL đó làm nguồn \"Browser\" và bỏ \"&dock=1\" ở cuối. Khi đó tin nhắn hiện đè lên video và mờ dần sau 30 giây.",
+      "chatOptions": "Tùy chọn, thêm vào cuối URL: &max=10 hiện ít dòng hơn, &size=18 làm chữ to hơn, &fade=0 giữ tin nhắn trên video.",
       "limitsFree": "Buổi phát miễn phí kết thúc sau 1 giờ và có hình mờ 3Speak. Với 3Speak Pro, bạn có thể phát 4 giờ mà không có hình mờ.",
       "limitsPro": "Với 3Speak Pro, buổi phát của bạn có thể kéo dài 4 giờ và không có hình mờ."
     },
@@ -234,7 +234,9 @@
     "pickTemplatePlaceholder": "Chọn mẫu…",
     "templateLoaded": "Đã tải “{{name}}” vào Buổi phát mới",
     "chatOverlay": {
-      "invalid": "Liên kết lớp phủ trò chuyện này không hợp lệ. Hãy sao chép lại từ mẫu của bạn trong Stream Studio."
+      "invalid": "Liên kết lớp phủ trò chuyện này không hợp lệ. Hãy sao chép lại từ mẫu của bạn trong Stream Studio.",
+      "waiting": "Hiện bạn không phát trực tiếp. Tin nhắn trò chuyện mới sẽ hiện ở đây khi bạn phát trực tiếp với mẫu này.",
+      "empty": "Bạn đang phát trực tiếp. Tin nhắn trò chuyện mới hiện ở đây."
     }
   }
 }

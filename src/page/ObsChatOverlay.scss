@@ -72,6 +72,23 @@
   margin-right: 0.4em;
 }
 
+// OBS Custom Browser Dock: read by the streamer, never on the video.
+.obs-chat--dock {
+  background: #0f1117;
+  padding: 8px;
+
+  .obs-chat__msg {
+    background: rgba(255, 255, 255, 0.06);
+    animation: none;
+  }
+}
+
+.obs-chat__status {
+  margin: 0;
+  opacity: 0.7;
+  font-size: 0.9em;
+}
+
 .obs-chat__invalid {
   margin: 0;
   padding: 0.5em 0.8em;

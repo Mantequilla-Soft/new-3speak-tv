@@ -275,9 +275,10 @@ function TemplateCard({ tpl, token, onEdit, onDelete, onUse }) {
     else toast.error(t('live.obs.copyFailed'));
   };
 
-  // OBS Browser Source for this template's live chat (see page/ObsChatOverlay).
+  // This template's live chat as an OBS Custom Browser Dock (see
+  // page/ObsChatOverlay; without dock=1 it is an overlay for the video).
   const copyChatUrl = async () => {
-    const url = `${window.location.origin}/obs/chat?key=${encodeURIComponent(tpl.chatOverlayKey || '')}`;
+    const url = `${window.location.origin}/obs/chat?key=${encodeURIComponent(tpl.chatOverlayKey || '')}&dock=1`;
     if (await copyText(url)) toast.success(t('live.obs.card.chatUrlCopied'));
     else toast.error(t('live.obs.copyFailed'));
   };
