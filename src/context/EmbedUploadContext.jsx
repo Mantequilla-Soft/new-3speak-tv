@@ -1677,7 +1677,7 @@ export function EmbedUploadProvider({ children }) {
       const timeline = fromStories ? {} : timelineMeta(chapters, timelineLinks, { duration: timelineDuration });
       const publishDescription = fromStories
         ? description
-        : applyTimelineToDescription(description, timeline, { author: user, permlink: hivePermlink });
+        : applyTimelineToDescription(description, timeline, { author: assetOwner, permlink: hivePermlink });
 
       // Build body: embed URL (video first) + description + credit to original author
       let postBody = `${capturedEmbedUrl}\n\n${publishDescription}`;
@@ -1694,9 +1694,11 @@ export function EmbedUploadProvider({ children }) {
       // "Watch on 3Speak" link at the bottom, pointing at the right page for the
       // content type: shorts → /shorts, regular videos → /watch. Always points at
       // the main instance (3speak.tv), never preview, regardless of where posted.
+      // assetOwner, not user: a warm-up uploader has no Hive name yet, and `user`
+      // wrote "v=null/..." into every warm-up post (issue #502).
       const watchPath = fromStories
-        ? `/shorts?v=${user}/${hivePermlink}`
-        : `/watch?v=${user}/${hivePermlink}`;
+        ? `/shorts?v=${assetOwner}/${hivePermlink}`
+        : `/watch?v=${assetOwner}/${hivePermlink}`;
       postBody += `\n\n---\n▶ [Watch on 3speak.tv](https://3speak.tv${watchPath})`;
 
       // Only the community tag is added automatically (no '3speak', no 'short').

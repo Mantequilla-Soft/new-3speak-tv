@@ -124,9 +124,14 @@ const BlogContent = ({ author, permlink, description, alwaysExpanded = false, du
           // On the watch page a "[0:00](3speak.tv/watch?v=this/video&t=0)" link
           // (the chapter block uploads write) becomes a plain time again, so
           // linkifyTimestamps turns it into an in-page seek, not a reload.
-          const source = seekable
-            ? unlinkTimestampsInMarkdown(contentString, { author, permlink })
+          // Warm-up posts uploaded before the fix carry "watch?v=null/<permlink>"
+          // links (issue #502): point them at this post's real author.
+          const repaired = author
+            ? contentString.replace(/(3speak\.tv\/(?:watch|shorts)\?v=)null\//g, `$1${author}/`)
             : contentString;
+          const source = seekable
+            ? unlinkTimestampsInMarkdown(repaired, { author, permlink })
+            : repaired;
           let renderedHTML = render(source);
           renderedHTML = cleanContent(renderedHTML);
 

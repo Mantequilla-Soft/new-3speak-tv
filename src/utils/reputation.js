@@ -44,6 +44,11 @@ export async function getUserReputation(username) {
 
     return rep;
   } catch (error) {
+    // Not on Hive (a warm-up creator): neutral, cached, and not an error.
+    if (/does not exist/i.test(String(error?.message || '') + JSON.stringify(error?.jse_info || error?.data || ''))) {
+      repCache.set(username, { rep: 25, timestamp: Date.now() });
+      return 25;
+    }
     console.error('Error fetching reputation for', username, error);
     return 25; // Default to neutral on error (fail-open)
   }

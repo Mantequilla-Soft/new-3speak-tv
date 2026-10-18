@@ -246,6 +246,7 @@ function CommentSection({ videoDetails, author, permlink, currentTime, duration,
   useEffect(() => {
   
       const fetchAccountData = async () => {
+        if (!user) return;   // guests have no voting power to show
         try {
           const result = await getVotePower(user);
           if (result) {

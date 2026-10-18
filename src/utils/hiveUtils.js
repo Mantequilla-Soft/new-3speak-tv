@@ -120,7 +120,14 @@ export async function has3SpeakPostAuth(username) {
     }
 }
 
+// Hive's answer for an account or post that is not on chain, e.g. a warm-up
+// (pre-Hive) creator or their off-chain post. A normal result, not an error.
+export const isMissingOnHive = (error) => /does not exist/i.test(
+  String(error?.message || '') + JSON.stringify(error?.jse_info || error?.data || ''),
+);
+
 export async function getUersContent(author, permlink) {
+    if (!author || !permlink) return null;
     try {
       const post = await client.database.call("get_content", [author, permlink]);
       // console.log("post===>", post.body);
@@ -132,7 +139,7 @@ export async function getUersContent(author, permlink) {
       // Use the post body as the content
       return post;
     } catch (error) {
-      console.error("Error fetching post:", error);
+      if (!isMissingOnHive(error)) console.error("Error fetching post:", error);
       return null;
     }
   }
@@ -192,9 +199,12 @@ export async function getContentData(active_user, author, permlink, setHasVoted1
   };
 
   export const getVotePower = async (username) => {
+    // No user (a guest) or no such account on Hive (a warm-up user): nothing to compute.
+    if (!username) return null;
     try {
       // Get full account data
         const [account] = await client.database.getAccounts([username]);
+        if (!account) return null;
 
         // --- Calculate Voting Power ---
         const lastVote = new Date(account.last_vote_time + 'Z');
@@ -207,6 +217,7 @@ export async function getContentData(active_user, author, permlink, setHasVoted1
         // --- Get RC ---
     const rcData = await client.call('rc_api', 'find_rc_accounts', { accounts: [username] });
     const rcAccount = rcData.rc_accounts?.[0];
+    if (!rcAccount) return null;
 
     const maxRC = parseFloat(rcAccount.max_rc);
     const currentRC = parseFloat(rcAccount.rc_manabar.current_mana);

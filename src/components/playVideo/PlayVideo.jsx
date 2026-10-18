@@ -871,10 +871,15 @@ const PlayVideo = ({ videoDetails, author, permlink, mediaUnavailable = false, m
   }, [user, calculateVoteValue, weight]);
 
   // Effect: Fetch speak data, followers, reputation, and follow status (only when author/permlink changes)
+  // A warm-up (off-chain) post's author has no Hive account: no followers,
+  // reputation or follow relationship to ask Hive for. Which kind of post this is
+  // is only known once videoDetails has loaded, so the Hive half waits for it.
+  const detailsReady = !!videoDetails;
   useEffect(() => {
     if (!author || !permlink) return;
 
     speakWatchData();
+    if (!detailsReady || postIsOffChain) return;
     getFollowersCount(author);
     getUserReputation(author).then(rep => setAuthorReputation(rep)).catch(() => {});
 
@@ -885,13 +890,14 @@ const PlayVideo = ({ videoDetails, author, permlink, mediaUnavailable = false, m
         if (relation?.follows != null) setIsFollowingCreator(relation.follows);
       }).catch(() => {});
     }
-  }, [author, permlink, speakWatchData, getFollowersCount, user]);
+  }, [author, permlink, speakWatchData, getFollowersCount, user, postIsOffChain, detailsReady]);
 
-  // Effect: Get tooltip voters (only when author/permlink/user changes)
+  // Effect: Get tooltip voters (only when author/permlink/user changes). Off-chain
+  // posts have no Hive votes; their likes come from loadOffChainLikes.
   useEffect(() => {
-    if (!author || !permlink) return;
+    if (!author || !permlink || !detailsReady || postIsOffChain) return;
     getTooltipVoters();
-  }, [author, permlink, getTooltipVoters]);
+  }, [author, permlink, getTooltipVoters, postIsOffChain, detailsReady]);
 
   // Effect: Fetch community data (subscribers count)
   useEffect(() => {
