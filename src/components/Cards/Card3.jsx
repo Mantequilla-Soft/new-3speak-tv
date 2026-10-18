@@ -350,7 +350,7 @@ function Card3({ videos = [], loading = false, error = null, interleaveEvery = 0
                    thumbnail, because the hover preview covers the thumbnail and
                    would hide the hint. */
                 <span className="card-author-group">
-                  <AuthorBadge author={cardAuthor} noLink compact />
+                  <AuthorBadge author={cardAuthor} noLink compact offChainAuthor />
                   <span
                     className="card-incubation-leaf"
                     role="img"

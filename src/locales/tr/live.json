@@ -128,6 +128,12 @@
       "resetDone": "Yeni yayın anahtarı oluşturuldu. OBS'te güncelle.",
       "resetFailed": "Yayın anahtarın sıfırlanamadı."
     },
+    "chatBox": {
+      "title": "OBS'de sohbetin",
+      "desc": "Tüm yayınların için tek bağlantı. Canlıdayken yeni mesajları okumak için onu OBS'ye dock olarak ekle. Aşağıdaki rehber nasıl yapılacağını gösteriyor.",
+      "copy": "OBS için sohbet URL'sini kopyala",
+      "copied": "Sohbet URL'si kopyalandı"
+    },
     "card": {
       "copyUrl": "Sunucu URL'sini kopyala",
       "urlCopied": "Sunucu URL'si kopyalandı",
@@ -136,6 +142,7 @@
       "watch": "Yayını izle",
       "notAnnounced": "Bu yayın Hive'da duyurulmadı.",
       "notAnnouncedAuth": "Hive'da duyurulmadı: 3Speak henüz senin adına paylaşım yapamıyor. İzin vermek için şablonu düzenle.",
+      "stuck": "OBS bağlandı ama bize hiç görüntü ulaşmadı, bu yüzden yayın başlamadı. OBS'de yayını durdur ve yeniden başlat.",
       "useInStudio": "Stream Studio'da kullan"
     },
     "guide": {
@@ -151,6 +158,11 @@
       "encoder": "Kodlayıcı: x264 veya donanım kodlayıcın",
       "audio": "Ses örnekleme hızı: 48 kHz",
       "bframes": "B-frames yok (kodlayıcın izin veriyorsa 0 yap)",
+      "chatTitle": "Sohbeti OBS'de gör",
+      "chatCopy": "Bu sayfanın üstünde, \"OBS'de sohbetin\" altında \"OBS için sohbet URL'sini kopyala\"ya tıkla. Tüm yayınların için tek bir bağlantıdır.",
+      "chat2": "OBS'de \"Docks\" menüsünü aç ve \"Custom Browser Docks\"u seç. \"3Speak sohbet\" gibi bir ad gir, URL'yi yapıştır ve \"Apply\"a tıkla. Canlıdayken yeni mesajlar o panelde görünür. İzleyiciler onu asla görmez.",
+      "chat3": "İzleyiciler sohbeti zaten yayınının yanında görüyor, yani onu videoya eklemene gerek yok. Sadece yayını başka bir yerde de paylaşıyorsan: aynı URL'yi \"Browser\" kaynağı olarak ekle ve sonundaki \"&dock=1\"i sil. O zaman mesajlar videonun üzerinde görünür ve 30 saniye sonra kaybolur.",
+      "chatOptions": "İsteğe bağlı, URL'nin sonuna ekle: &max=10 daha az satır gösterir, &size=18 yazıyı büyütür, &fade=0 mesajları videoda tutar.",
       "limitsFree": "Ücretsiz yayınlar 1 saat sonra biter ve 3Speak filigranı gösterir. 3Speak Pro ile filigransız 4 saat yayın yapabilirsin.",
       "limitsPro": "3Speak Pro ile yayınların 4 saat sürebilir ve filigran içermez."
     },
@@ -225,6 +237,11 @@
     },
     "pickTemplate": "Bir şablonla başla",
     "pickTemplatePlaceholder": "Şablon seç…",
-    "templateLoaded": "“{{name}}” Yeni yayın'a yüklendi"
+    "templateLoaded": "“{{name}}” Yeni yayın'a yüklendi",
+    "chatOverlay": {
+      "invalid": "Bu sohbet katmanı bağlantısı geçerli değil. Stream Studio'daki şablonundan yeniden kopyala.",
+      "offline": "Şu an canlı değilsin. Canlıya çıktığında yeni sohbet mesajları burada görünür.",
+      "empty": "Canlıdasın. Yeni sohbet mesajları burada görünür."
+    }
   }
 }

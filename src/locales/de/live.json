@@ -128,6 +128,12 @@
       "resetDone": "Neues Stream-Secret erstellt. Aktualisiere es in OBS.",
       "resetFailed": "Dein Stream-Secret konnte nicht zurückgesetzt werden."
     },
+    "chatBox": {
+      "title": "Dein Chat in OBS",
+      "desc": "Ein Link für alle deine Streams. Füge ihn in OBS als Dock hinzu, um neue Nachrichten zu lesen, während du live bist. Die Anleitung unten zeigt, wie.",
+      "copy": "Chat-URL für OBS kopieren",
+      "copied": "Chat-URL kopiert"
+    },
     "card": {
       "copyUrl": "Server-URL kopieren",
       "urlCopied": "Server-URL kopiert",
@@ -136,6 +142,7 @@
       "watch": "Stream ansehen",
       "notAnnounced": "Dieser Stream wurde nicht auf Hive angekündigt.",
       "notAnnouncedAuth": "Nicht auf Hive angekündigt: 3Speak darf noch nicht für dich posten. Bearbeite die Vorlage, um es zu erlauben.",
+      "stuck": "OBS hat sich verbunden, aber bei uns kam kein Video an, deshalb ist der Stream nicht gestartet. Beende das Streamen in OBS und starte es erneut.",
       "useInStudio": "Im Stream Studio verwenden"
     },
     "guide": {
@@ -151,6 +158,11 @@
       "encoder": "Encoder: x264 oder dein Hardware-Encoder",
       "audio": "Audio-Abtastrate: 48 kHz",
       "bframes": "Keine B-frames (stell sie auf 0, wenn dein Encoder das anbietet)",
+      "chatTitle": "Den Chat in OBS sehen",
+      "chatCopy": "Klicke oben auf dieser Seite unter \"Dein Chat in OBS\" auf \"Chat-URL für OBS kopieren\". Es ist ein Link für alle deine Streams.",
+      "chat2": "Öffne in OBS das Menü \"Docks\" und wähle \"Custom Browser Docks\". Gib einen Namen wie \"3Speak Chat\" ein, füge die URL ein und klicke auf \"Apply\". Neue Nachrichten erscheinen in diesem Fenster, solange du live bist. Zuschauer sehen es nie.",
+      "chat3": "Zuschauer sehen den Chat bereits neben deinem Stream, du musst ihn also nicht ins Video einbauen. Nur wenn du den Stream auch anderswo teilst: Füge dieselbe URL als \"Browser\"-Quelle hinzu und entferne \"&dock=1\" am Ende. Dann schweben die Nachrichten über dem Video und blenden nach 30 Sekunden aus.",
+      "chatOptions": "Optional, ans Ende der URL anhängen: &max=10 zeigt weniger Zeilen, &size=18 macht die Schrift größer, &fade=0 lässt Nachrichten im Video stehen.",
       "limitsFree": "Kostenlose Streams enden nach 1 Stunde und zeigen ein 3Speak-Wasserzeichen. Mit 3Speak Pro kannst du 4 Stunden ohne Wasserzeichen streamen.",
       "limitsPro": "Mit 3Speak Pro laufen deine Streams bis zu 4 Stunden und ohne Wasserzeichen."
     },
@@ -225,6 +237,11 @@
     },
     "pickTemplate": "Mit einer Vorlage beginnen",
     "pickTemplatePlaceholder": "Vorlage wählen…",
-    "templateLoaded": "„{{name}}“ in Neuer Stream geladen"
+    "templateLoaded": "„{{name}}“ in Neuer Stream geladen",
+    "chatOverlay": {
+      "invalid": "Dieser Chat-Overlay-Link ist ungültig. Kopiere ihn erneut aus deiner Vorlage im Stream Studio.",
+      "offline": "Gerade nicht live. Neue Chat-Nachrichten erscheinen hier, sobald du live gehst.",
+      "empty": "Du bist live. Neue Chat-Nachrichten erscheinen hier."
+    }
   }
 }

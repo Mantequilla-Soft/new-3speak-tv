@@ -128,6 +128,12 @@
       "resetDone": "Nieuw stream-geheim aangemaakt. Werk het bij in OBS.",
       "resetFailed": "Je stream-geheim kon niet worden gereset."
     },
+    "chatBox": {
+      "title": "Je chat in OBS",
+      "desc": "Eén link voor al je streams. Voeg hem in OBS toe als dock om nieuwe berichten te lezen terwijl je live bent. De handleiding hieronder laat zien hoe.",
+      "copy": "Chat-URL voor OBS kopiëren",
+      "copied": "Chat-URL gekopieerd"
+    },
     "card": {
       "copyUrl": "Server-URL kopiëren",
       "urlCopied": "Server-URL gekopieerd",
@@ -136,6 +142,7 @@
       "watch": "Bekijk de stream",
       "notAnnounced": "Deze stream is niet aangekondigd op Hive.",
       "notAnnouncedAuth": "Niet aangekondigd op Hive: 3Speak mag nog niet voor je posten. Bewerk het sjabloon om dit toe te staan.",
+      "stuck": "OBS is verbonden, maar er kwam geen video bij ons aan, dus de stream is niet gestart. Stop het streamen in OBS en start opnieuw.",
       "useInStudio": "Gebruiken in Stream Studio"
     },
     "guide": {
@@ -151,6 +158,11 @@
       "encoder": "Encoder: x264 of je hardware-encoder",
       "audio": "Audio-samplefrequentie: 48 kHz",
       "bframes": "Geen B-frames (zet ze op 0 als je encoder dat aanbiedt)",
+      "chatTitle": "Bekijk de chat in OBS",
+      "chatCopy": "Klik bovenaan deze pagina, onder \"Je chat in OBS\", op \"Chat-URL voor OBS kopiëren\". Het is één link voor al je streams.",
+      "chat2": "Open in OBS het menu \"Docks\" en kies \"Custom Browser Docks\". Vul een naam in zoals \"3Speak chat\", plak de URL en klik op \"Apply\". Nieuwe berichten verschijnen in dat paneel zolang je live bent. Kijkers zien het nooit.",
+      "chat3": "Kijkers zien de chat al naast je stream, dus je hoeft hem niet in de video te zetten. Alleen als je de stream ook ergens anders deelt: voeg dezelfde URL toe als \"Browser\"-bron en haal \"&dock=1\" van het eind weg. Dan zweven de berichten over de video en verdwijnen ze na 30 seconden.",
+      "chatOptions": "Optioneel, zet achter de URL: &max=10 toont minder regels, &size=18 maakt de tekst groter, &fade=0 houdt berichten in beeld.",
       "limitsFree": "Gratis streams stoppen na 1 uur en tonen een 3Speak-watermerk. Met 3Speak Pro kun je 4 uur streamen zonder watermerk.",
       "limitsPro": "Met 3Speak Pro kunnen je streams 4 uur duren en hebben ze geen watermerk."
     },
@@ -225,6 +237,11 @@
     },
     "pickTemplate": "Begin met een sjabloon",
     "pickTemplatePlaceholder": "Kies een sjabloon…",
-    "templateLoaded": "“{{name}}” geladen in Nieuwe stream"
+    "templateLoaded": "“{{name}}” geladen in Nieuwe stream",
+    "chatOverlay": {
+      "invalid": "Deze link naar de chat-overlay is ongeldig. Kopieer hem opnieuw vanuit je sjabloon in de Stream Studio.",
+      "offline": "Je bent nu niet live. Nieuwe chatberichten verschijnen hier zodra je live gaat.",
+      "empty": "Je bent live. Nieuwe chatberichten verschijnen hier."
+    }
   }
 }

@@ -128,6 +128,12 @@
       "resetDone": "New stream secret created. Update it in OBS.",
       "resetFailed": "Could not reset your stream secret."
     },
+    "chatBox": {
+      "title": "Your chat in OBS",
+      "desc": "One link for all your streams. Add it in OBS as a dock to read new messages while you are live. The guide below shows how.",
+      "copy": "Copy chat URL for OBS",
+      "copied": "Chat URL copied"
+    },
     "card": {
       "copyUrl": "Copy server URL",
       "urlCopied": "Server URL copied",
@@ -136,6 +142,7 @@
       "watch": "Watch the stream",
       "notAnnounced": "This stream was not announced on Hive.",
       "notAnnouncedAuth": "Not announced on Hive: 3Speak may not post for you yet. Edit the template to allow it.",
+      "stuck": "OBS connected, but no video reached us, so the stream did not start. Stop streaming in OBS and start again.",
       "useInStudio": "Use in Stream Studio"
     },
     "guide": {
@@ -151,6 +158,11 @@
       "encoder": "Encoder: x264 or your hardware encoder",
       "audio": "Audio sample rate: 48 kHz",
       "bframes": "No B-frames (set them to 0 if your encoder offers it)",
+      "chatTitle": "See the chat in OBS",
+      "chatCopy": "At the top of this page, under \"Your chat in OBS\", click \"Copy chat URL for OBS\". It is one link for all your streams.",
+      "chat2": "In OBS, open the \"Docks\" menu and choose \"Custom Browser Docks\". Enter a name like \"3Speak chat\", paste the URL and click \"Apply\". New messages show up in that panel while you are live. Viewers never see it.",
+      "chat3": "Viewers already see the chat next to your stream, so you don't need to put it into the video. Only if you also share the stream somewhere else: add the same URL as a \"Browser\" source and remove \"&dock=1\" from its end. Then the messages float over the video and fade out after 30 seconds.",
+      "chatOptions": "Optional, add to the end of the URL: &max=10 shows fewer lines, &size=18 makes the text bigger, &fade=0 keeps messages on the video.",
       "limitsFree": "Free streams end after 1 hour and show a 3Speak watermark. With 3Speak Pro you can stream for 4 hours without a watermark.",
       "limitsPro": "With 3Speak Pro your streams can run for 4 hours and carry no watermark."
     },
@@ -225,6 +237,11 @@
     },
     "pickTemplate": "Start from a template",
     "pickTemplatePlaceholder": "Choose a template…",
-    "templateLoaded": "Loaded “{{name}}” into New stream"
+    "templateLoaded": "Loaded “{{name}}” into New stream",
+    "chatOverlay": {
+      "invalid": "This chat overlay link is not valid. Copy it again from your template in the Stream Studio.",
+      "offline": "Not live right now. New chat messages show up here when you go live.",
+      "empty": "You are live. New chat messages show up here."
+    }
   }
 }

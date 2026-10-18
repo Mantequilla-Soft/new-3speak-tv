@@ -123,7 +123,9 @@ function AuthorBadge({ author, onClick, followersCount, fetchFollowers, showFoll
     }
   }, [author, following, followLoading, onFollow, offChainAuthor, incubationHandle, t]);
 
-  const avatarUrl = useAvatarUrl(author, 'small');
+  // A warm-up author has no Hive account, so no Hive avatar to request (it can only
+  // 404): no name makes useAvatarUrl return the 3Speak mark straight away.
+  const avatarUrl = useAvatarUrl(offChainAuthor ? null : author, 'small');
 
   const inner = (
     <>

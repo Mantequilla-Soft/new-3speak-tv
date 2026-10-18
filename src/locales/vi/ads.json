@@ -469,7 +469,15 @@
     "noHistory": "Chưa có gì ở đây. Các đợt quảng cáo sẽ hiện ở đây khi kết thúc hoặc bị hủy.",
     "forecastPlays_other": " · dự báo {{plays}} lượt phát",
     "makingVideo": "Chúng tôi đang làm video",
-    "teamWillReview": "Đội ngũ sẽ sớm xét duyệt tệp quảng cáo của bạn. Chúng tôi sẽ gắn nó cho bạn khi được duyệt, và liên hệ nếu có điều cần lựa chọn."
+    "teamWillReview": "Đội ngũ sẽ sớm xét duyệt tệp quảng cáo của bạn. Chúng tôi sẽ gắn nó cho bạn khi được duyệt, và liên hệ nếu có điều cần lựa chọn.",
+    "chartTitle": "{{format}}: giá mỗi giây mỗi ngày (HBD)",
+    "chartSub": "Đặt càng lâu thì mỗi ngày càng rẻ. Trỏ vào đường để so sánh, nhấp để chọn số ngày.",
+    "chartRate_other": "{{count}} ngày: {{rate}} HBD mỗi giây mỗi ngày",
+    "chartChip_other": "{{count}} ngày: {{rate}}",
+    "chartTotal_other": "{{seconds}} giây trong {{count}} ngày = {{total}} HBD",
+    "chartDays": "Số ngày đã đặt",
+    "chartYAxis": "HBD mỗi giây mỗi ngày",
+    "chartAria": "{{format}}: {{from}} HBD mỗi giây mỗi ngày cho {{min}} ngày, giảm xuống {{to}} HBD cho {{max}} ngày"
   },
   "attach": {
     "needsTicker": "Đây là đợt quảng cáo ticker, nên cần một thông điệp ticker đã được duyệt.",
@@ -640,6 +648,10 @@
     "flatBooking": "Lượt đặt trọn gói: đoạn quảng cáo của bạn chạy trên toàn mạng trong một khoảng thời gian cố định với mức giá cố định. Không tính theo CPM, nên không ai có lý do để thổi phồng số liệu.",
     "quotedForecast": "Bạn được báo giá dựa trên dự báo bên dưới và nhận báo cáo dựa trên số lượt thực sự đã phát. Nếu không đạt, phần chênh lệch được hoàn lại dưới dạng tín dụng cho lượt đặt tiếp theo.",
     "audienceTitle": "Khán giả đang chờ quảng cáo của bạn",
+    "explorerTitle": "Tính giá của bạn",
+    "explorerLede": "Chọn định dạng và độ dài quảng cáo. Đường biểu đồ cho thấy chi phí mỗi giây mỗi ngày cho từng thời lượng đặt, cùng tổng chi phí cho quảng cáo của bạn.",
+    "explorerFormat": "Định dạng quảng cáo",
+    "explorerSeconds": "Độ dài quảng cáo tính bằng giây (tối đa {{max}})",
     "creatorTitle": "Nếu bạn là nhà sáng tạo",
     "creatorNote": "Bạn có thể tắt quảng cáo bất cứ lúc nào trong Cài đặt. Khi đó video của bạn cũng bị loại khỏi những gì chúng tôi chào bán cho nhà quảng cáo.",
     "viewerTitle": "Nếu bạn là người xem",

@@ -127,6 +127,12 @@
       "resetDone": "Kunci rahasia siaran baru dibuat. Perbarui di OBS.",
       "resetFailed": "Kunci rahasia siaran tidak dapat direset."
     },
+    "chatBox": {
+      "title": "Obrolanmu di OBS",
+      "desc": "Satu tautan untuk semua siaranmu. Tambahkan di OBS sebagai dock untuk membaca pesan baru selama kamu live. Panduan di bawah menunjukkan caranya.",
+      "copy": "Salin URL obrolan untuk OBS",
+      "copied": "URL obrolan disalin"
+    },
     "card": {
       "copyUrl": "Salin URL server",
       "urlCopied": "URL server disalin",
@@ -135,6 +141,7 @@
       "watch": "Tonton siaran",
       "notAnnounced": "Siaran ini tidak diumumkan di Hive.",
       "notAnnouncedAuth": "Tidak diumumkan di Hive: 3Speak belum boleh memposting untukmu. Edit template untuk mengizinkannya.",
+      "stuck": "OBS sudah terhubung, tetapi tidak ada video yang sampai ke kami, jadi siaran tidak dimulai. Hentikan streaming di OBS lalu mulai lagi.",
       "useInStudio": "Gunakan di Stream Studio"
     },
     "guide": {
@@ -150,6 +157,11 @@
       "encoder": "Encoder: x264 atau encoder hardware kamu",
       "audio": "Sample rate audio: 48 kHz",
       "bframes": "Tanpa B-frames (atur ke 0 jika encoder-mu menyediakannya)",
+      "chatTitle": "Lihat obrolan di OBS",
+      "chatCopy": "Di bagian atas halaman ini, di bawah \"Obrolanmu di OBS\", klik \"Salin URL obrolan untuk OBS\". Ini satu tautan untuk semua siaranmu.",
+      "chat2": "Di OBS, buka menu \"Docks\" lalu pilih \"Custom Browser Docks\". Isi nama seperti \"Obrolan 3Speak\", tempel URL-nya, lalu klik \"Apply\". Pesan baru muncul di panel itu selama kamu live. Penonton tidak pernah melihatnya.",
+      "chat3": "Penonton sudah melihat obrolan di samping siaranmu, jadi kamu tidak perlu memasukkannya ke video. Hanya jika kamu juga membagikan siaran di tempat lain: tambahkan URL yang sama sebagai sumber \"Browser\" dan hapus \"&dock=1\" di akhirnya. Pesan pun tampil di atas video dan memudar setelah 30 detik.",
+      "chatOptions": "Opsional, tambahkan di akhir URL: &max=10 menampilkan lebih sedikit baris, &size=18 memperbesar teks, &fade=0 membuat pesan tetap di video.",
       "limitsFree": "Siaran gratis berakhir setelah 1 jam dan menampilkan watermark 3Speak. Dengan 3Speak Pro kamu bisa siaran selama 4 jam tanpa watermark.",
       "limitsPro": "Dengan 3Speak Pro siaranmu bisa berjalan 4 jam tanpa watermark."
     },
@@ -224,6 +236,11 @@
     },
     "pickTemplate": "Mulai dari template",
     "pickTemplatePlaceholder": "Pilih template…",
-    "templateLoaded": "“{{name}}” dimuat ke Siaran baru"
+    "templateLoaded": "“{{name}}” dimuat ke Siaran baru",
+    "chatOverlay": {
+      "invalid": "Tautan overlay obrolan ini tidak valid. Salin lagi dari template-mu di Stream Studio.",
+      "offline": "Kamu sedang tidak live. Pesan obrolan baru akan muncul di sini saat kamu live.",
+      "empty": "Kamu sedang live. Pesan obrolan baru muncul di sini."
+    }
   }
 }

@@ -127,6 +127,12 @@
       "resetDone": "새 방송 시크릿을 만들었어요. OBS에서 업데이트하세요.",
       "resetFailed": "방송 시크릿을 재설정하지 못했어요."
     },
+    "chatBox": {
+      "title": "OBS에서 보는 내 채팅",
+      "desc": "모든 방송에 쓰는 링크 하나예요. OBS에 독으로 추가하면 방송 중에 새 메시지를 읽을 수 있어요. 방법은 아래 가이드를 참고하세요.",
+      "copy": "OBS용 채팅 URL 복사",
+      "copied": "채팅 URL을 복사했어요"
+    },
     "card": {
       "copyUrl": "서버 URL 복사",
       "urlCopied": "서버 URL을 복사했어요",
@@ -135,6 +141,7 @@
       "watch": "방송 보기",
       "notAnnounced": "이 방송은 Hive에 알리지 않았어요.",
       "notAnnouncedAuth": "Hive에 알리지 않음: 아직 3Speak가 나 대신 게시할 수 없어요. 템플릿을 편집해서 허용하세요.",
+      "stuck": "OBS가 연결됐지만 영상이 전달되지 않아 방송이 시작되지 않았어요. OBS에서 방송을 중지한 뒤 다시 시작하세요.",
       "useInStudio": "Stream Studio에서 사용"
     },
     "guide": {
@@ -150,6 +157,11 @@
       "encoder": "인코더: x264 또는 하드웨어 인코더",
       "audio": "오디오 샘플 레이트: 48 kHz",
       "bframes": "B-frames 사용 안 함(인코더에 옵션이 있으면 0으로 설정)",
+      "chatTitle": "OBS에서 채팅 보기",
+      "chatCopy": "이 페이지 위쪽의 \"OBS에서 보는 내 채팅\"에서 \"OBS용 채팅 URL 복사\"를 클릭하세요. 모든 방송에 쓰는 링크 하나예요.",
+      "chat2": "OBS에서 \"Docks\" 메뉴를 열고 \"Custom Browser Docks\"를 선택하세요. \"3Speak 채팅\" 같은 이름을 입력하고 URL을 붙여 넣은 뒤 \"Apply\"를 클릭하세요. 방송 중에는 그 패널에 새 메시지가 표시돼요. 시청자에게는 보이지 않아요.",
+      "chat3": "시청자는 이미 방송 옆에서 채팅을 보고 있으니 영상에 넣을 필요는 없어요. 방송을 다른 곳에도 공유할 때만 같은 URL을 \"Browser\" 소스로 추가하고 끝의 \"&dock=1\"을 지우세요. 그러면 메시지가 영상 위에 떠서 30초 뒤에 사라져요.",
+      "chatOptions": "선택 사항, URL 끝에 추가하세요: &max=10은 줄 수를 줄이고, &size=18은 글자를 키우고, &fade=0은 메시지를 영상에 계속 표시해요.",
       "limitsFree": "무료 방송은 1시간 후 종료되며 3Speak 워터마크가 표시돼요. 3Speak Pro를 사용하면 워터마크 없이 4시간 동안 방송할 수 있어요.",
       "limitsPro": "3Speak Pro로 워터마크 없이 최대 4시간 동안 방송할 수 있어요."
     },
@@ -224,6 +236,11 @@
     },
     "pickTemplate": "템플릿으로 시작",
     "pickTemplatePlaceholder": "템플릿 선택…",
-    "templateLoaded": "“{{name}}”을(를) 새 스트림에 불러왔습니다"
+    "templateLoaded": "“{{name}}”을(를) 새 스트림에 불러왔습니다",
+    "chatOverlay": {
+      "invalid": "이 채팅 오버레이 링크가 올바르지 않아요. Stream Studio의 템플릿에서 다시 복사하세요.",
+      "offline": "지금은 방송 중이 아니에요. 방송을 시작하면 새 채팅 메시지가 여기에 표시돼요.",
+      "empty": "방송 중이에요. 새 채팅 메시지가 여기에 표시돼요."
+    }
   }
 }

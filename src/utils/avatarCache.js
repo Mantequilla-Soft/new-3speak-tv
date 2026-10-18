@@ -21,8 +21,14 @@ const MAX_AGE_MS = 7 * 24 * 60 * 60 * 1000;   // the proxy is long past stale by
 // reconcile in that window would throw away the URL we just set.
 const RECONCILE_GRACE_MS = 2 * 60 * 1000;
 
+// Names Hive says do not exist: warm-up (pre-Hive) creators. Their avatar is
+// the 3Speak mark, never /img/u/<name>/avatar, which can only 404 (issue #505).
+// Kept for a day only, so someone who moves to Hive gets their picture back.
+const NO_HIVE_KEY = '3speak_avatar_nohive';
+const NO_HIVE_TTL_MS = 24 * 60 * 60 * 1000;
 let overrides = null;
 let resolved = null;
+let noHive = null;
 const subscribers = new Set();
 
 const clean = (u) => String(u || '').trim().replace(/^@/, '').toLowerCase();
@@ -40,6 +46,21 @@ function load() {
 function loadResolved() {
   if (!resolved) resolved = readStore(RESOLVED_KEY);
   return resolved;
+}
+
+function loadNoHive() {
+  if (!noHive) {
+    noHive = readStore(NO_HIVE_KEY);
+    const now = Date.now();
+    for (const [name, ts] of Object.entries(noHive)) {
+      if (!(now - ts < NO_HIVE_TTL_MS)) delete noHive[name];
+    }
+  }
+  return noHive;
+}
+
+function isNoHiveAccount(u) {
+  return u in loadNoHive();
 }
 
 function notify() {
@@ -210,6 +231,18 @@ async function flushLookups() {
       }),
     });
     const { result } = await res.json();
+    // get_accounts simply leaves out names that do not exist. Only trusted on a
+    // real answer: a failed call says nothing about who exists.
+    if (Array.isArray(result)) {
+      const found = new Set(result.map((a) => clean(a.name)));
+      const missing = names.filter((n) => !found.has(n));
+      if (missing.length) {
+        loadNoHive();
+        missing.forEach((n) => { noHive[n] = Date.now(); });
+        try { localStorage.setItem(NO_HIVE_KEY, JSON.stringify(noHive)); } catch { /* ignore */ }
+        notify();
+      }
+    }
     for (const acct of result || []) {
       let image = '';
       for (const field of ['posting_json_metadata', 'json_metadata']) {
@@ -232,7 +265,7 @@ async function flushLookups() {
 /** Ask for this account's real picture, once, soon, together with others. */
 function queueLookup(username) {
   const u = clean(username);
-  if (!u || inFlight.has(u)) return;
+  if (!u || inFlight.has(u) || isNoHiveAccount(u)) return;
   loadResolved();
   if (u in resolved) return;        // already known, including "known to be blank"
   pendingLookups.add(u);
@@ -253,6 +286,8 @@ export function useAvatarUrl(username, size = 'small') {
   if (!username) return NO_ACCOUNT_AVATAR;
   const override = getAvatarOverride(username);
   if (override) return override;
+  // A warm-up creator: no Hive account, so no Hive avatar to ask for.
+  if (isNoHiveAccount(clean(username))) return NO_ACCOUNT_AVATAR;
   const known = getResolvedAvatar(username);
   if (known) return viaHiveProxy(known, size);
   // Nothing known yet: show the proxy now and find out the truth in the

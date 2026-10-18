@@ -469,7 +469,15 @@
     "noHistory": "まだ何もありません。掲載が終了または中止されるとここに表示されます。",
     "forecastPlays_other": " · 予測 {{plays}} 回再生",
     "makingVideo": "動画を制作中です",
-    "teamWillReview": "チームがまもなく広告ファイルを審査します。通過したらこちらで添付し、選択が必要な場合はご連絡します。"
+    "teamWillReview": "チームがまもなく広告ファイルを審査します。通過したらこちらで添付し、選択が必要な場合はご連絡します。",
+    "chartTitle": "{{format}}：1日あたり1秒の料金（HBD）",
+    "chartSub": "予約期間が長いほど1日あたりは安くなります。線にカーソルを合わせて比較し、クリックで日数を選べます。",
+    "chartRate_other": "{{count}} 日：1日あたり1秒 {{rate}} HBD",
+    "chartChip_other": "{{count}} 日：{{rate}}",
+    "chartTotal_other": "{{seconds}} 秒を {{count}} 日間 = {{total}} HBD",
+    "chartDays": "予約日数",
+    "chartYAxis": "1日あたり1秒の HBD",
+    "chartAria": "{{format}}：{{min}} 日で1日あたり1秒 {{from}} HBD、{{max}} 日では {{to}} HBD まで下がります"
   },
   "attach": {
     "needsTicker": "これはティッカーの掲載なので、承認済みのティッカーメッセージが必要です。",
@@ -640,6 +648,10 @@
     "flatBooking": "定額の予約です: あなたの枠は決まった期間、決まった価格でネットワーク全体に掲載されます。CPM ではないので、誰にも数字を水増しする理由がありません。",
     "quotedForecast": "見積もりは下の予測に基づき、報告は実際の再生数に基づきます。不足した場合、その差額は次の予約のクレジットとして返還されます。",
     "audienceTitle": "あなたの広告を待っている視聴者",
+    "explorerTitle": "料金を計算する",
+    "explorerLede": "フォーマットと広告の長さを選んでください。線は予約期間ごとの1日あたり1秒の料金と、あなたの広告の合計を示します。",
+    "explorerFormat": "広告フォーマット",
+    "explorerSeconds": "広告の長さ（秒、最大 {{max}}）",
     "creatorTitle": "クリエイターの方へ",
     "creatorNote": "設定からいつでもオフにできます。その場合、あなたの動画は広告主に提供する枠からも除外されます。",
     "viewerTitle": "視聴者の方へ",

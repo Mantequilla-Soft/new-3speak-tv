@@ -127,6 +127,12 @@
       "resetDone": "已生成新的直播密钥。请在 OBS 中更新。",
       "resetFailed": "无法重置直播密钥。"
     },
+    "chatBox": {
+      "title": "你在 OBS 中的聊天",
+      "desc": "一个链接适用于你的所有直播。把它作为停靠窗口添加到 OBS，直播时就能看到新消息。具体步骤见下方指南。",
+      "copy": "复制 OBS 聊天链接",
+      "copied": "已复制聊天链接"
+    },
     "card": {
       "copyUrl": "复制服务器 URL",
       "urlCopied": "服务器 URL 已复制",
@@ -135,6 +141,7 @@
       "watch": "观看直播",
       "notAnnounced": "这场直播没有在 Hive 上发布公告。",
       "notAnnouncedAuth": "未在 Hive 上发布公告：3Speak 还不能代你发帖。编辑模板即可授权。",
+      "stuck": "OBS 已连接，但我们没有收到视频，因此直播没有开始。请在 OBS 中停止推流后重新开始。",
       "useInStudio": "在 Stream Studio 中使用"
     },
     "guide": {
@@ -150,6 +157,11 @@
       "encoder": "编码器：x264 或你的硬件编码器",
       "audio": "音频采样率：48 kHz",
       "bframes": "不使用 B-frames（如编码器有此选项，请设为 0）",
+      "chatTitle": "在 OBS 中查看聊天",
+      "chatCopy": "在本页顶部的“你在 OBS 中的聊天”里点击“复制 OBS 聊天链接”。这是适用于你所有直播的同一个链接。",
+      "chat2": "在 OBS 中打开 \"Docks\" 菜单，选择 \"Custom Browser Docks\"。输入名称（例如“3Speak 聊天”），粘贴链接并点击 \"Apply\"。直播时新消息会显示在这个面板里，观众看不到它。",
+      "chat3": "观众已经能在直播旁边看到聊天，所以不需要把它放进视频里。只有当你也在其他地方分享直播时：把同一个链接添加为 \"Browser\" 来源，并删掉末尾的 \"&dock=1\"。这样消息会浮在视频上方，30 秒后淡出。",
+      "chatOptions": "可选，加在链接末尾：&max=10 显示更少行，&size=18 放大文字，&fade=0 让消息一直留在视频上。",
       "limitsFree": "免费直播 1 小时后结束，并显示 3Speak 水印。使用 3Speak Pro 可直播 4 小时且无水印。",
       "limitsPro": "使用 3Speak Pro，你的直播最长可达 4 小时且无水印。"
     },
@@ -224,6 +236,11 @@
     },
     "pickTemplate": "从模板开始",
     "pickTemplatePlaceholder": "选择模板…",
-    "templateLoaded": "已将“{{name}}”载入新直播"
+    "templateLoaded": "已将“{{name}}”载入新直播",
+    "chatOverlay": {
+      "invalid": "这个聊天叠加层链接无效。请从 Stream Studio 中的模板重新复制。",
+      "offline": "当前未在直播。开播后，新的聊天消息会显示在这里。",
+      "empty": "正在直播。新的聊天消息会显示在这里。"
+    }
   }
 }

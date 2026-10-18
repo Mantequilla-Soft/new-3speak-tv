@@ -130,6 +130,12 @@
       "resetDone": "Utworzono nowy sekret transmisji. Zaktualizuj go w OBS.",
       "resetFailed": "Nie udało się zresetować sekretu transmisji."
     },
+    "chatBox": {
+      "title": "Twój czat w OBS",
+      "desc": "Jeden link do wszystkich twoich streamów. Dodaj go w OBS jako dock, aby czytać nowe wiadomości, gdy jesteś na żywo. Poradnik poniżej pokazuje, jak to zrobić.",
+      "copy": "Kopiuj URL czatu dla OBS",
+      "copied": "Skopiowano URL czatu"
+    },
     "card": {
       "copyUrl": "Kopiuj URL serwera",
       "urlCopied": "URL serwera skopiowany",
@@ -138,6 +144,7 @@
       "watch": "Oglądaj transmisję",
       "notAnnounced": "Ta transmisja nie została ogłoszona na Hive.",
       "notAnnouncedAuth": "Nie ogłoszono na Hive: 3Speak nie może jeszcze publikować w twoim imieniu. Edytuj szablon, aby na to zezwolić.",
+      "stuck": "OBS się połączył, ale nie dotarło do nas żadne wideo, więc transmisja się nie rozpoczęła. Zatrzymaj streamowanie w OBS i uruchom je ponownie.",
       "useInStudio": "Użyj w Stream Studio"
     },
     "guide": {
@@ -153,6 +160,11 @@
       "encoder": "Koder: x264 lub koder sprzętowy",
       "audio": "Częstotliwość próbkowania dźwięku: 48 kHz",
       "bframes": "Bez B-frames (ustaw 0, jeśli koder na to pozwala)",
+      "chatTitle": "Zobacz czat w OBS",
+      "chatCopy": "Na górze tej strony, w sekcji \"Twój czat w OBS\", kliknij \"Kopiuj URL czatu dla OBS\". To jeden link do wszystkich twoich streamów.",
+      "chat2": "W OBS otwórz menu \"Docks\" i wybierz \"Custom Browser Docks\". Wpisz nazwę, np. \"Czat 3Speak\", wklej URL i kliknij \"Apply\". Nowe wiadomości pojawiają się w tym panelu, gdy jesteś na żywo. Widzowie nigdy go nie widzą.",
+      "chat3": "Widzowie już widzą czat obok twojego streamu, więc nie musisz dodawać go do obrazu. Tylko jeśli udostępniasz stream także gdzie indziej: dodaj ten sam URL jako źródło \"Browser\" i usuń \"&dock=1\" z końca. Wtedy wiadomości pojawiają się na obrazie i znikają po 30 sekundach.",
+      "chatOptions": "Opcjonalnie dopisz na końcu URL: &max=10 pokazuje mniej linii, &size=18 powiększa tekst, &fade=0 zostawia wiadomości na obrazie.",
       "limitsFree": "Darmowe transmisje kończą się po 1 godzinie i mają znak wodny 3Speak. Z 3Speak Pro możesz nadawać przez 4 godziny bez znaku wodnego.",
       "limitsPro": "Z 3Speak Pro twoje transmisje mogą trwać 4 godziny i nie mają znaku wodnego."
     },
@@ -227,6 +239,11 @@
     },
     "pickTemplate": "Zacznij od szablonu",
     "pickTemplatePlaceholder": "Wybierz szablon…",
-    "templateLoaded": "Wczytano „{{name}}” do Nowej transmisji"
+    "templateLoaded": "Wczytano „{{name}}” do Nowej transmisji",
+    "chatOverlay": {
+      "invalid": "Ten link do nakładki czatu jest nieprawidłowy. Skopiuj go ponownie ze swojego szablonu w Stream Studio.",
+      "offline": "Nie jesteś teraz na żywo. Nowe wiadomości z czatu pojawią się tutaj, gdy wejdziesz na żywo.",
+      "empty": "Jesteś na żywo. Nowe wiadomości z czatu pojawiają się tutaj."
+    }
   }
 }

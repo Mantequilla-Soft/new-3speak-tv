@@ -129,6 +129,12 @@
       "resetDone": "Nuovo segreto di diretta creato. Aggiornalo in OBS.",
       "resetFailed": "Impossibile reimpostare il tuo segreto di diretta."
     },
+    "chatBox": {
+      "title": "La tua chat in OBS",
+      "desc": "Un solo link per tutte le tue dirette. Aggiungilo in OBS come dock per leggere i nuovi messaggi mentre sei in diretta. La guida qui sotto spiega come.",
+      "copy": "Copia URL della chat per OBS",
+      "copied": "URL della chat copiato"
+    },
     "card": {
       "copyUrl": "Copia URL del server",
       "urlCopied": "URL del server copiato",
@@ -137,6 +143,7 @@
       "watch": "Guarda la diretta",
       "notAnnounced": "Questa diretta non è stata annunciata su Hive.",
       "notAnnouncedAuth": "Non annunciata su Hive: 3Speak non può ancora pubblicare per te. Modifica il modello per consentirlo.",
+      "stuck": "OBS si è connesso, ma non ci è arrivato alcun video, quindi la diretta non è partita. Interrompi lo streaming in OBS e riavvialo.",
       "useInStudio": "Usa in Stream Studio"
     },
     "guide": {
@@ -152,6 +159,11 @@
       "encoder": "Codificatore: x264 o il tuo codificatore hardware",
       "audio": "Frequenza di campionamento audio: 48 kHz",
       "bframes": "Nessun B-frames (impostali su 0 se il codificatore lo consente)",
+      "chatTitle": "Vedi la chat in OBS",
+      "chatCopy": "In cima a questa pagina, sotto \"La tua chat in OBS\", fai clic su \"Copia URL della chat per OBS\". È un solo link per tutte le tue dirette.",
+      "chat2": "In OBS, apri il menu \"Docks\" e scegli \"Custom Browser Docks\". Inserisci un nome come \"Chat 3Speak\", incolla l'URL e fai clic su \"Apply\". I nuovi messaggi compaiono in quel pannello mentre sei in diretta. Gli spettatori non lo vedono mai.",
+      "chat3": "Gli spettatori vedono già la chat accanto alla tua diretta, quindi non serve inserirla nel video. Solo se condividi la diretta anche altrove: aggiungi lo stesso URL come fonte \"Browser\" e togli \"&dock=1\" dalla fine. Così i messaggi scorrono sopra il video e svaniscono dopo 30 secondi.",
+      "chatOptions": "Facoltativo, aggiungi alla fine dell'URL: &max=10 mostra meno righe, &size=18 ingrandisce il testo, &fade=0 lascia i messaggi sul video.",
       "limitsFree": "Le dirette gratuite terminano dopo 1 ora e mostrano una filigrana 3Speak. Con 3Speak Pro puoi trasmettere per 4 ore senza filigrana.",
       "limitsPro": "Con 3Speak Pro le tue dirette possono durare 4 ore e non hanno filigrana."
     },
@@ -226,6 +238,11 @@
     },
     "pickTemplate": "Parti da un modello",
     "pickTemplatePlaceholder": "Scegli un modello…",
-    "templateLoaded": "“{{name}}” caricato in Nuova diretta"
+    "templateLoaded": "“{{name}}” caricato in Nuova diretta",
+    "chatOverlay": {
+      "invalid": "Questo link dell'overlay chat non è valido. Copialo di nuovo dal tuo modello nello Stream Studio.",
+      "offline": "Non sei in diretta ora. I nuovi messaggi della chat compariranno qui quando vai in diretta.",
+      "empty": "Sei in diretta. I nuovi messaggi della chat compaiono qui."
+    }
   }
 }
