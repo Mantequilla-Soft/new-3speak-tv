@@ -368,9 +368,13 @@ function EditorModal({ isOpen, onClose, videoUrl, videoName, videoType, clipStar
 
       // Pre-populate beneficiary list with locked minimums. Pro
       // subscribers skip the threespeakfund 10% — but the remix-author
-      // 5% attribution always stays.
+      // 5% attribution always stays. The 1% encoder.pay split too: a rendered
+      // short goes through the encoder like any upload, and the publish path
+      // adds it either way (enforceLockedBeneficiaries), so the list must show it.
       const lockedBeneficiaries = getLockedBeneficiaries({
         isPremium,
+        username: user,
+        includeEncoder: true,
         originalAuthor: originalAuthor || null,
         soundAuthors: soundAuthorsOf(musicCredits, user),
       });
