@@ -438,8 +438,9 @@ export function applyTimelineToDescription(description, { chapters, links } = {}
 }
 
 // A section after a "---" that 3Speak itself wrote: the remix credit, sound
-// credits, the "Watch on 3speak.tv" footer (and the legacy "[3Speak]" one).
-const SYSTEM_LINE_RE = /^\s*(?:(?:▶|\uFE0F|\s)*\[\s*(?:Watch on 3speak\.tv|Watch on 3Speak|3Speak)\s*\]\(|\*(?:Based on a video by|Sound:|Music:))/i;
+// credits, the "Watch on 3speak.tv" footer (and the legacy "[3Speak]" one), and
+// the creator banner image under it (3speak.tv/banners/<user>.png).
+const SYSTEM_LINE_RE = /^\s*(?:(?:▶|\uFE0F|\s)*\[\s*(?:Watch on 3speak\.tv|Watch on 3Speak|3Speak)\s*\]\(|\*(?:Based on a video by|Sound:|Music:)|\[!\[[^\]]*\]\(https:\/\/3speak\.tv\/banners\/)/i;
 const RULE_RE = /^\s*-{3,}\s*$/;
 
 /**

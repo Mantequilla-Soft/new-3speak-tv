@@ -157,7 +157,10 @@ function buildPost({ user, source, media, embedUrl, thumbnailUrl, options, isSho
     : String(source.description || '')
   const title = isShort ? '' : String(source.title || '').slice(0, 250)
   const watchPath = isShort ? `/shorts?v=${user}/${permlink}` : `/watch?v=${user}/${permlink}`
-  const body = `${embedUrl}\n\n${description}\n\n---\n▶ [Watch on 3speak.tv](https://3speak.tv${watchPath})`
+  // Long-form posts end with the creator's auto-updating banner, linked to their
+  // channel: the same line the upload wizard writes (src/context/EmbedUploadContext.jsx).
+  const banner = isShort ? '' : `\n\n[![@${user} on 3Speak](https://3speak.tv/banners/${user}.png)](https://3speak.tv/user/${user})`
+  const body = `${embedUrl}\n\n${description}\n\n---\n▶ [Watch on 3speak.tv](https://3speak.tv${watchPath})${banner}`
   const baseTags = isShort ? ['hive-181335'] : [options.community]
   const tags = tagsFor(source, baseTags, options.nsfw)
   let embedOwner = user

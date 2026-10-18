@@ -70,8 +70,9 @@ cleanupOutdatedCaches();
 // link pages (/links/<user> and legacy /@<user>/links) which are standalone HTML
 // from the API, NOT part of the React app, and the files nginx serves from other
 // services: podcast feeds (/rss/<user>.xml, /rss/playlist/<id>.xml, served by the
-// checker) and cached images (/img/...). Without those two, opening a feed in a
-// browser that had visited 3Speak showed the app instead of the feed.
+// checker), cached images (/img/...) and creator banners (/banners/<user>.png,
+// the banner service). Without those, opening a feed or a banner in a browser
+// that had visited 3Speak showed the app instead.
 // createHandlerBoundToURL THROWS when its URL isn't in the precache manifest,
 // and in dev that manifest is empty (`precacheAndRoute([])`) — which killed the
 // whole worker at evaluation time, so nothing registered and push had no
@@ -81,7 +82,7 @@ try {
   const navHandler = createHandlerBoundToURL('/index.html');
   registerRoute(
     new NavigationRoute(navHandler, {
-      denylist: [/^\/hivesigner\.html/, /^\/links\//, /^\/@[^/]+\/links\/?$/, /^\/rss\//, /^\/img\//],
+      denylist: [/^\/hivesigner\.html/, /^\/links\//, /^\/@[^/]+\/links\/?$/, /^\/rss\//, /^\/img\//, /^\/banners\//],
     })
   );
 } catch {
@@ -94,9 +95,15 @@ registerRoute(
   new StaleWhileRevalidate({ cacheName: 'static-assets' })
 );
 
-// Runtime cache: images
+// Runtime cache: images. Not creator banners (/banners/<user>.png): they are
+// redrawn whenever the creator's numbers change, and cache-first would pin a
+// copy for up to 30 days. They go to the network like any uncached request.
 registerRoute(
-  /\.(?:png|jpg|jpeg|svg|webp)$/i,
+  // Same-origin only, as the RegExp route this replaces was (Workbox never
+  // matches a mid-URL regex cross-origin).
+  ({ url }) => url.origin === self.location.origin
+    && /\.(?:png|jpg|jpeg|svg|webp)$/i.test(url.href)
+    && !url.pathname.startsWith('/banners/'),
   new CacheFirst({
     cacheName: 'images',
     plugins: [
