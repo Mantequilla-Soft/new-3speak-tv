@@ -104,6 +104,7 @@
     "confirmLeave": "Der Editor ist noch geöffnet. Wenn du diese Seite verlässt, wird der Editor geschlossen und ungespeicherte Änderungen gehen verloren.\n\nOK = Editor schließen & Seite verlassen\nAbbrechen = Auf dieser Seite bleiben",
     "confirmClose": "Willst du den Editor wirklich schließen? Ungespeicherte Änderungen gehen verloren.",
     "iframeTitle": "3Speak-Videoeditor",
+    "fileNotSupported": "Dein Video konnte noch nicht in den Editor übernommen werden. Füge es im Editor von deinem Gerät hinzu.",
     "finding": "Verfügbarer Editor wird gesucht...",
     "loading": "Editor wird geladen...",
     "unavailable": "Derzeit ist kein Editor-Server verfügbar. Bitte versuch es später nochmal.",

@@ -104,6 +104,7 @@
     "confirmLeave": "Bukas pa ang editor. Kapag umalis ka sa page na ito, magsasara ang editor at mawawala ang mga hindi na-save na pagbabago.\n\nOK = Isara ang editor at umalis\nCancel = Manatili sa page na ito",
     "confirmClose": "Sigurado ka bang isasara ang editor? Mawawala ang mga hindi na-save na pagbabago.",
     "iframeTitle": "3Speak Video Editor",
+    "fileNotSupported": "Hindi pa maidagdag ang video mo sa editor. Idagdag ito mula sa device mo sa loob ng editor.",
     "finding": "Naghahanap ng available na editor...",
     "loading": "Naglo-load ng editor...",
     "unavailable": "Walang available na editor server ngayon. Subukan ulit mamaya.",

@@ -130,7 +130,8 @@
     "beta": "测试版",
     "browseFiles": "浏览文件",
     "proceed": "下一步：缩略图",
-    "replace": "更换视频"
+    "replace": "更换视频",
+    "editVideo": "编辑此视频"
   },
   "details": {
     "guests": {

@@ -104,6 +104,7 @@
     "confirmLeave": "Editor masih terbuka. Meninggalkan halaman ini akan menutup editor dan perubahan yang belum disimpan akan hilang.\n\nOK = Tutup editor & keluar\nBatal = Tetap di halaman ini",
     "confirmClose": "Yakin ingin menutup editor? Perubahan yang belum disimpan akan hilang.",
     "iframeTitle": "Editor Video 3Speak",
+    "fileNotSupported": "Videomu belum bisa ditambahkan ke editor. Tambahkan dari perangkatmu di dalam editor.",
     "finding": "Mencari editor yang tersedia...",
     "loading": "Memuat editor...",
     "unavailable": "Saat ini tidak ada server editor yang tersedia. Silakan coba lagi nanti.",

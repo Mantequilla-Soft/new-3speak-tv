@@ -158,6 +158,14 @@
       flex-direction: column;
       gap: 0.5rem;
       align-items: center;
+
+      // Replace + Proceed side by side once a file is picked; they wrap onto two
+      // lines only where the row is too narrow for both.
+      &--row {
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: center;
+      }
     }
 
     .button {

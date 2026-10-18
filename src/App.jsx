@@ -241,6 +241,8 @@ function App() {
   const [loginIntent, setLoginIntent] = useState(null); // 'login' | 'signup' from the nav
   const [loginProof, setLoginProof] = useState(() => Math.floor(Date.now() / 1000));
   const [editorModalOpen, setEditorModalOpen] = useState(false);
+  // A file to open the editor with (the shorts uploader's "Edit this video").
+  const [editorFile, setEditorFile] = useState(null);
   const [audioUploadOpen, setAudioUploadOpen] = useState(false);
   // Carries an in-flight blob handed off from another flow (e.g. an
   // OpenPods recording stop). The AudioUploadModal seeds it as the
@@ -266,9 +268,13 @@ function App() {
 
   const hideNavOnMobile = isShorts && isMobile;
 
-  // Listen for "open-shorts-editor" custom event from UploadLinks
+  // Listen for "open-shorts-editor" custom event from UploadLinks (no detail) and
+  // the shorts uploader (detail.file = the video it already has)
   useEffect(() => {
-    const handleOpenEditor = () => setEditorModalOpen(true);
+    const handleOpenEditor = (e) => {
+      setEditorFile(e?.detail?.file instanceof Blob ? e.detail.file : null);
+      setEditorModalOpen(true);
+    };
     window.addEventListener('open-shorts-editor', handleOpenEditor);
     return () => window.removeEventListener('open-shorts-editor', handleOpenEditor);
   }, []);
@@ -816,7 +822,8 @@ function App() {
         {FEATURE_EDITOR && (
           <EditorModal
             isOpen={editorModalOpen}
-            onClose={() => setEditorModalOpen(false)}
+            onClose={() => { setEditorModalOpen(false); setEditorFile(null); }}
+            videoFile={editorFile}
           />
         )}
       </div>

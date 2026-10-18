@@ -104,6 +104,7 @@
     "confirmLeave": "Trình chỉnh sửa vẫn đang mở. Rời trang này sẽ đóng trình chỉnh sửa và các thay đổi chưa lưu sẽ bị mất.\n\nOK = Đóng trình chỉnh sửa & rời đi\nHủy = Ở lại trang này",
     "confirmClose": "Bạn có chắc muốn đóng trình chỉnh sửa? Các thay đổi chưa lưu sẽ bị mất.",
     "iframeTitle": "Trình chỉnh sửa video 3Speak",
+    "fileNotSupported": "Chưa thêm được video của bạn vào trình chỉnh sửa. Hãy thêm từ thiết bị của bạn ngay trong trình chỉnh sửa.",
     "finding": "Đang tìm trình chỉnh sửa khả dụng...",
     "loading": "Đang tải trình chỉnh sửa...",
     "unavailable": "Hiện không có máy chủ chỉnh sửa nào khả dụng. Vui lòng thử lại sau.",

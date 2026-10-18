@@ -104,6 +104,7 @@
     "confirmLeave": "Edytor jest nadal otwarty. Opuszczenie tej strony zamknie edytor, a niezapisane zmiany zostaną utracone.\n\nOK = Zamknij edytor i wyjdź\nAnuluj = Zostań na tej stronie",
     "confirmClose": "Czy na pewno chcesz zamknąć edytor? Niezapisane zmiany zostaną utracone.",
     "iframeTitle": "Edytor wideo 3Speak",
+    "fileNotSupported": "Nie udało się jeszcze dodać filmu do edytora. Dodaj go z urządzenia w edytorze.",
     "finding": "Szukanie dostępnego edytora...",
     "loading": "Wczytywanie edytora...",
     "unavailable": "Żaden serwer edytora nie jest teraz dostępny. Spróbuj ponownie później.",
