@@ -429,6 +429,7 @@
     "trackLabel": "Línea de tiempo: toca para saltar, arrastra un marcador para moverlo",
     "moveChapter": "Mover el inicio de {{title}}",
     "moveLink": "Mover este enlace",
+    "resizeLink": "Cambiar cuánto tiempo se muestra este enlace",
     "fixChapters": "Primero corrige los capítulos o elimínalos.",
     "chapters": {
       "heading": "Capítulos",

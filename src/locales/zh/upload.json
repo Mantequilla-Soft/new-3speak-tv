@@ -425,6 +425,7 @@
     "trackLabel": "时间线：点按跳转，拖动标记来移动",
     "moveChapter": "移动“{{title}}”的开始位置",
     "moveLink": "移动此链接",
+    "resizeLink": "更改此链接的显示时长",
     "fixChapters": "请先修正章节，或将其删除。",
     "chapters": {
       "heading": "章节",

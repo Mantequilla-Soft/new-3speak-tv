@@ -425,6 +425,7 @@
     "trackLabel": "Linimasa: ketuk untuk melompat, seret penanda untuk memindahkannya",
     "moveChapter": "Pindahkan awal {{title}}",
     "moveLink": "Pindahkan tautan ini",
+    "resizeLink": "Ubah berapa lama tautan ini tampil",
     "fixChapters": "Perbaiki dulu bab-babnya, atau hapus.",
     "chapters": {
       "heading": "Bab",

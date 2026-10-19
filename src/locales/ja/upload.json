@@ -425,6 +425,7 @@
     "trackLabel": "タイムライン：タップで移動、マーカーをドラッグで位置を変更",
     "moveChapter": "「{{title}}」の開始位置を移動",
     "moveLink": "このリンクを移動",
+    "resizeLink": "このリンクの表示時間を変更",
     "fixChapters": "先にチャプターを修正するか、削除してください。",
     "chapters": {
       "heading": "チャプター",

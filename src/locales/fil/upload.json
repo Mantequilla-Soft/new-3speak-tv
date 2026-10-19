@@ -427,6 +427,7 @@
     "trackLabel": "Timeline: i-tap para lumipat, i-drag ang marker para ilipat ito",
     "moveChapter": "Ilipat ang simula ng {{title}}",
     "moveLink": "Ilipat ang link na ito",
+    "resizeLink": "Baguhin kung gaano katagal lalabas ang link na ito",
     "fixChapters": "Ayusin muna ang mga kabanata, o alisin ang mga ito.",
     "chapters": {
       "heading": "Mga kabanata",

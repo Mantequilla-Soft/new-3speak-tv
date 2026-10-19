@@ -429,6 +429,7 @@
     "trackLabel": "Linha do tempo: toque para pular, arraste um marcador para movê-lo",
     "moveChapter": "Mover o início de {{title}}",
     "moveLink": "Mover este link",
+    "resizeLink": "Alterar por quanto tempo este link aparece",
     "fixChapters": "Corrija os capítulos primeiro ou remova-os.",
     "chapters": {
       "heading": "Capítulos",

@@ -429,6 +429,7 @@
     "trackLabel": "Timeline: tocca per saltare, trascina un segnaposto per spostarlo",
     "moveChapter": "Sposta l'inizio di {{title}}",
     "moveLink": "Sposta questo link",
+    "resizeLink": "Cambia per quanto tempo viene mostrato questo link",
     "fixChapters": "Correggi prima i capitoli, oppure rimuovili.",
     "chapters": {
       "heading": "Capitoli",

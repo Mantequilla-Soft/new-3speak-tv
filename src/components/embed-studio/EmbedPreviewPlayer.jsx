@@ -1,17 +1,28 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { FileVideo, Play } from "lucide-react";
 import { useTranslation } from "react-i18next";
+import TimelineToasters from "../playVideo/TimelineToasters";
+import { chaptersWithEnds } from "../../utils/videoTimeline";
+import { chapterAt, formatStamp } from "../../utils/timestamps";
 
 // Preview-step stand-in for the final 3Speak player. The published body starts
 // with the embed URL, which renders as the video player at the top of the post;
 // here we emulate that with the locally-selected file. Until the user hits play
 // we show the thumbnail (the poster the published player would show), matching
 // what viewers see before they start the video.
-const EmbedPreviewPlayer = ({ file, poster, portrait = false }) => {
+//
+// Long-form videos also get their Timeline: the link toasters over the picture
+// (the watch page's own component; a click pauses instead of leaving the
+// wizard) and a chapter strip under it that seeks.
+const EmbedPreviewPlayer = ({ file, poster, portrait = false, chapters = [], links = [], duration = 0 }) => {
   const { t } = useTranslation();
   const [objectUrl, setObjectUrl] = useState(null);
   const [playing, setPlaying] = useState(false);
   const [previewError, setPreviewError] = useState(false);
+  const [currentTime, setCurrentTime] = useState(0);
+  const [mediaDuration, setMediaDuration] = useState(0);
+  const videoRef = useRef(null);
+  const pendingSeek = useRef(null);
 
   useEffect(() => {
     if (!file) {
@@ -26,9 +37,54 @@ const EmbedPreviewPlayer = ({ file, poster, portrait = false }) => {
 
   const cls = `ep-player${portrait ? " ep-player--portrait" : ""}`;
 
+  const total = mediaDuration || Number(duration) || 0;
+  const chapterList = chaptersWithEnds(chapters, total);
+  const liveChapter = playing ? chapterAt(chapterList, currentTime) : null;
+
+  const seekTo = (sec) => {
+    const v = videoRef.current;
+    if (v && v.readyState >= 1) {
+      v.currentTime = sec;
+      setCurrentTime(sec);
+      v.play?.().catch(() => {});
+    } else {
+      pendingSeek.current = sec; // applied once the video has loaded
+      setPlaying(true);
+    }
+  };
+
+  const onMeta = (e) => {
+    const v = e.currentTarget;
+    if (Number.isFinite(v.duration) && v.duration > 0) setMediaDuration(v.duration);
+    if (pendingSeek.current != null) {
+      v.currentTime = pendingSeek.current;
+      setCurrentTime(pendingSeek.current);
+      pendingSeek.current = null;
+    }
+  };
+
+  const chapterStrip = chapterList.length > 0 && objectUrl && !previewError ? (
+    <div className="ep-chapters" role="group" aria-label={t("upload.timeline.chapters.heading")}>
+      {chapterList.map((c) => (
+        <button
+          type="button"
+          key={c.start}
+          className={`ep-chapters__seg${liveChapter?.start === c.start ? " is-live" : ""}`}
+          style={{ flexGrow: Math.max(1, c.end - c.start) }}
+          onClick={() => seekTo(c.start)}
+          title={`${formatStamp(c.start)} ${c.title}`}
+        >
+          <span className="ep-chapters__time">{formatStamp(c.start)}</span>
+          <span className="ep-chapters__title">{c.title}</span>
+        </button>
+      ))}
+    </div>
+  ) : null;
+
   // Poster state — thumbnail with a play button, until the user clicks it.
   if (poster && !playing) {
     return (
+      <>
       <div className={cls}>
         <button
           type="button"
@@ -45,6 +101,8 @@ const EmbedPreviewPlayer = ({ file, poster, portrait = false }) => {
           )}
         </button>
       </div>
+      {chapterStrip}
+      </>
     );
   }
 
@@ -72,15 +130,31 @@ const EmbedPreviewPlayer = ({ file, poster, portrait = false }) => {
   }
 
   return (
-    <div className={cls}>
-      <video
-        src={objectUrl}
-        poster={poster || undefined}
-        controls
-        autoPlay={playing}
-        onError={() => setPreviewError(true)}
-      />
-    </div>
+    <>
+      <div className={cls}>
+        <video
+          ref={videoRef}
+          src={objectUrl}
+          poster={poster || undefined}
+          controls
+          autoPlay={playing}
+          onError={() => setPreviewError(true)}
+          onLoadedMetadata={onMeta}
+          onTimeUpdate={(e) => setCurrentTime(e.currentTarget.currentTime || 0)}
+          onSeeked={(e) => setCurrentTime(e.currentTarget.currentTime || 0)}
+          onPlay={() => setPlaying(true)}
+        />
+        <TimelineToasters
+          links={links}
+          currentTime={currentTime}
+          top={8}
+          compact
+          resetKey={links}
+          onSelect={() => videoRef.current?.pause()}
+        />
+      </div>
+      {chapterStrip}
+    </>
   );
 };
 

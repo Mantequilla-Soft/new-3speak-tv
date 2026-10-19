@@ -427,6 +427,7 @@
     "trackLabel": "Ratiba ya muda: gusa kuruka, buruta alama kuisogeza",
     "moveChapter": "Sogeza mwanzo wa {{title}}",
     "moveLink": "Sogeza kiungo hiki",
+    "resizeLink": "Badilisha muda kiungo hiki kinaonyeshwa",
     "fixChapters": "Tafadhali rekebisha sura kwanza, au uziondoe.",
     "chapters": {
       "heading": "Sura",

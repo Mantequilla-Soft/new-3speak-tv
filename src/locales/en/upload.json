@@ -427,6 +427,7 @@
     "trackLabel": "Timeline: tap to jump, drag a marker to move it",
     "moveChapter": "Move the start of {{title}}",
     "moveLink": "Move this link",
+    "resizeLink": "Change how long this link shows",
     "fixChapters": "Please fix the chapters first, or remove them.",
     "chapters": {
       "heading": "Chapters",

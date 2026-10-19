@@ -161,9 +161,10 @@ function EmbedPreview() {
   // The chapter and link sections the Timeline step writes into the description
   // on publish (same call as publishToEmbed), so what is shown here is what gets
   // posted, except that the chapter times link to the post once it exists.
+  const shownTimeline = fromStories ? {} : timelineMeta(chapters, timelineLinks, { duration: Number(videoDuration) || 0 });
   const shownDescription = fromStories
     ? description
-    : applyTimelineToDescription(description, timelineMeta(chapters, timelineLinks, { duration: Number(videoDuration) || 0 }));
+    : applyTimelineToDescription(description, shownTimeline);
   const previewBody = isRemix
     ? `${shownDescription}\n\n---\n*Based on a video by [@${originalAuthor}](${
         fromStories
@@ -293,6 +294,9 @@ function EmbedPreview() {
                     file={prevVideoFile}
                     poster={selectedThumbnail}
                     portrait={fromStories}
+                    chapters={shownTimeline.chapters}
+                    links={shownTimeline.links}
+                    duration={Number(videoDuration) || 0}
                   />
 
                   <div className="ep-body">

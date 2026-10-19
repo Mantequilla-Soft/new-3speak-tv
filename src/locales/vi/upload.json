@@ -425,6 +425,7 @@
     "trackLabel": "Dòng thời gian: chạm để nhảy tới, kéo một điểm đánh dấu để di chuyển",
     "moveChapter": "Di chuyển điểm bắt đầu của {{title}}",
     "moveLink": "Di chuyển liên kết này",
+    "resizeLink": "Thay đổi thời gian hiển thị liên kết này",
     "fixChapters": "Hãy sửa các chương trước, hoặc xoá chúng.",
     "chapters": {
       "heading": "Chương",

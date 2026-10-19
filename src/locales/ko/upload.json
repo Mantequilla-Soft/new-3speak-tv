@@ -425,6 +425,7 @@
     "trackLabel": "타임라인: 탭하면 이동, 마커를 끌면 위치 변경",
     "moveChapter": "{{title}} 시작 위치 옮기기",
     "moveLink": "이 링크 옮기기",
+    "resizeLink": "이 링크가 표시되는 시간 변경",
     "fixChapters": "먼저 챕터를 고치거나 삭제해 주세요.",
     "chapters": {
       "heading": "챕터",

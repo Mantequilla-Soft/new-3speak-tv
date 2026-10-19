@@ -427,6 +427,7 @@
     "trackLabel": "Zeitleiste: tippen zum Springen, Markierung ziehen zum Verschieben",
     "moveChapter": "Beginn von {{title}} verschieben",
     "moveLink": "Diesen Link verschieben",
+    "resizeLink": "Ändern, wie lange dieser Link angezeigt wird",
     "fixChapters": "Bitte korrigiere zuerst die Kapitel oder entferne sie.",
     "chapters": {
       "heading": "Kapitel",

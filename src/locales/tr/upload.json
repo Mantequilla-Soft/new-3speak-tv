@@ -427,6 +427,7 @@
     "trackLabel": "Zaman çizelgesi: atlamak için dokun, taşımak için bir işareti sürükle",
     "moveChapter": "{{title}} başlangıcını taşı",
     "moveLink": "Bu bağlantıyı taşı",
+    "resizeLink": "Bu bağlantının ne kadar süre görüneceğini değiştir",
     "fixChapters": "Lütfen önce bölümleri düzelt veya kaldır.",
     "chapters": {
       "heading": "Bölümler",

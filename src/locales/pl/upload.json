@@ -431,6 +431,7 @@
     "trackLabel": "Oś czasu: dotknij, aby przeskoczyć, przeciągnij znacznik, aby go przesunąć",
     "moveChapter": "Przesuń początek: {{title}}",
     "moveLink": "Przesuń ten link",
+    "resizeLink": "Zmień, jak długo widać ten link",
     "fixChapters": "Najpierw popraw rozdziały albo je usuń.",
     "chapters": {
       "heading": "Rozdziały",

@@ -427,6 +427,7 @@
     "trackLabel": "Tijdlijn: tik om te springen, sleep een markering om die te verplaatsen",
     "moveChapter": "Begin van {{title}} verplaatsen",
     "moveLink": "Deze link verplaatsen",
+    "resizeLink": "Wijzig hoe lang deze link te zien is",
     "fixChapters": "Verbeter eerst de hoofdstukken, of verwijder ze.",
     "chapters": {
       "heading": "Hoofdstukken",
