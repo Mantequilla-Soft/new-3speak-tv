@@ -516,6 +516,7 @@ function buildOgHtml({
   commentCount,
   video,
   oembedUrl,
+  player,
   ogType = 'video.other',
   imageType,
 }) {
@@ -550,6 +551,24 @@ function buildOgHtml({
   <meta name="twitter:player:width" content="${Number(video.width) || 1280}" />
   <meta name="twitter:player:height" content="${Number(video.height) || 720}" />`
     : '<meta name="twitter:card" content="summary_large_image" />';
+  // The iframe player for apps that read twitter:player whatever the card type
+  // (Misskey, Iframely). X ignores it under summary_large_image, which is what
+  // it should keep showing: its player cards need approval.
+  const playerMeta = player
+    ? `
+  <meta name="twitter:player" content="${escapeHtml(player.url)}" />
+  <meta name="twitter:player:width" content="${player.width}" />
+  <meta name="twitter:player:height" content="${player.height}" />`
+    : '';
+  const playerOgVideo = player && player.ogVideo
+    ? `
+  <meta property="og:video" content="${escapeHtml(player.url)}" />
+  <meta property="og:video:url" content="${escapeHtml(player.url)}" />
+  <meta property="og:video:secure_url" content="${escapeHtml(player.url)}" />
+  <meta property="og:video:type" content="text/html" />
+  <meta property="og:video:width" content="${player.width}" />
+  <meta property="og:video:height" content="${player.height}" />`
+    : '';
 
   const robotsMeta = noindex
     ? '<meta name="robots" content="noindex, follow" />'
@@ -624,10 +643,10 @@ function buildOgHtml({
     imageType ? `\n  <meta property="og:image:type" content="${escapeHtml(imageType)}" />` : ''
   }
   <meta property="og:url" content="${safeUrl}" />
-  ${durationMeta}${videoMeta}
+  ${durationMeta}${videoMeta}${playerOgVideo}
 
   <!-- Twitter Card -->
-  ${twitterCard}
+  ${twitterCard}${playerMeta}
   <meta name="twitter:site" content="@3speaktv" />
   <meta name="twitter:title" content="${safeTitle}" />
   <meta name="twitter:description" content="${safeDesc}" />
@@ -710,6 +729,104 @@ function sendHtml(req, res, status, html) {
 // there. The card was just rendered when Discord asks for this, so its text is
 // remembered briefly instead of fetched twice.
 const OEMBED_PATH = '/og-video/oembed.json';
+
+// Public oEmbed (https://oembed.com) of type "video": the play.3speak.tv
+// iframe. Mastodon, Misskey, WordPress, Ghost and Iframely read it to play
+// 3Speak links inline; it is listed in the oembed.com provider registry.
+// OEMBED_PATH above is a different, Discord-only trick and stays separate.
+const PUBLIC_OEMBED_PATH = '/oembed';
+const PLAYER_ORIGIN = (process.env.OG_PLAYER_ORIGIN || 'https://play.3speak.tv').replace(/\/+$/, '');
+
+/** The no-autoplay iframe player for a parsed share URL. play.3speak.tv's
+ * /watch resolves legacy videos, new uploads and shorts alike. */
+function playerUrlFor(video) {
+  return `${PLAYER_ORIGIN}/watch?v=${encodeURIComponent(video.author)}/${encodeURIComponent(video.permlink)}&mode=iframe`;
+}
+
+/** Player box: 16:9 for videos, 9:16 for shorts, shrunk to fit maxwidth/maxheight. */
+function playerSize(video, maxwidth, maxheight) {
+  const portrait = video.kind === 'shorts';
+  let width = portrait ? 360 : 640;
+  let height = portrait ? 640 : 360;
+  const mw = parseInt(maxwidth, 10);
+  const mh = parseInt(maxheight, 10);
+  if (mw > 0 && width > mw) {
+    height = Math.round((height * mw) / width);
+    width = mw;
+  }
+  if (mh > 0 && height > mh) {
+    width = Math.round((width * mh) / height);
+    height = mh;
+  }
+  return { width, height };
+}
+
+// Apps that read og:video as an iframe page (og:video:type text/html) and play
+// it inline: Lemmy, Mbin, Friendica, Snort, Misskey. Not for everyone: Facebook,
+// WhatsApp and X would read it as a broken video file, Amethyst and Stoat play
+// og:video in a <video> tag, and Discord/Telegram get the MP4 teaser instead.
+const PLAYER_OG_VIDEO_BOTS = new RegExp(
+  (process.env.OG_PLAYER_BOTS || 'Lemmy,Mbin,Friendica,Snort,SummalyBot,Misskey,Mastodon,Pleroma,Akkoma,Iframely')
+    .split(',').map((s) => s.trim().replace(/[.*+?^${}()|[\]\\]/g, '\\$&')).filter(Boolean).join('|'),
+  'i',
+);
+
+function publicOembedUrl(origin, canonicalUrl) {
+  return `${origin}${PUBLIC_OEMBED_PATH}?url=${encodeURIComponent(canonicalUrl)}&format=json`;
+}
+
+function sendOembedError(req, res, status, message) {
+  res.writeHead(status, { 'Content-Type': 'text/plain; charset=utf-8', 'Cache-Control': 'no-store' });
+  return res.end(req.method === 'HEAD' ? undefined : message);
+}
+
+async function servePublicOembed(req, res, url, origin) {
+  const format = (url.searchParams.get('format') || 'json').toLowerCase();
+  if (format !== 'json') return sendOembedError(req, res, 501, 'Only format=json is supported');
+
+  let target;
+  try {
+    target = new URL(url.searchParams.get('url') || '');
+  } catch (_) {
+    return sendOembedError(req, res, 404, 'Not a 3Speak video URL');
+  }
+  if (!/^(www\.)?3speak\.tv$/i.test(target.hostname) && target.host !== new URL(origin).host) {
+    return sendOembedError(req, res, 404, 'Not a 3Speak video URL');
+  }
+  const video = parseVideoUrl(target);
+  if (!video) return sendOembedError(req, res, 404, 'Not a 3Speak video URL');
+
+  const card = await resolveVideoCard(video, origin);
+  if (!card) return sendOembedError(req, res, 404, 'Video not found');
+  // NSFW, muted, blacklisted or gated: no player anywhere off-site.
+  if (!card.inlineAllowed) return sendOembedError(req, res, 401, 'This video cannot be embedded');
+
+  const player = playerUrlFor(video);
+  const { width, height } = playerSize(video, url.searchParams.get('maxwidth'), url.searchParams.get('maxheight'));
+  const body = {
+    version: '1.0',
+    type: 'video',
+    title: card.title,
+    author_name: video.author,
+    author_url: `${origin}/user/${video.author}`,
+    provider_name: '3Speak',
+    provider_url: `${origin}/`,
+    cache_age: 3600,
+    thumbnail_url: card.image,
+    thumbnail_width: video.kind === 'shorts' ? 720 : 1280,
+    thumbnail_height: video.kind === 'shorts' ? 1280 : 720,
+    html: `<iframe src="${escapeHtml(player)}" width="${width}" height="${height}" frameborder="0" allow="fullscreen; picture-in-picture; encrypted-media" allowfullscreen title="${escapeHtml(`3Speak video: ${card.title}`)}"></iframe>`,
+    width,
+    height,
+  };
+  res.writeHead(200, {
+    'Content-Type': 'application/json; charset=utf-8',
+    'Cache-Control': 'public, max-age=3600',
+    'Access-Control-Allow-Origin': '*',
+  });
+  if (req.method === 'HEAD') return res.end();
+  return res.end(JSON.stringify(body));
+}
 const oembedMemo = new Map();
 const OEMBED_TTL_MS = 60 * 60 * 1000;
 
@@ -754,6 +871,83 @@ const ogPages = require('./og-pages.cjs')({
   ogVideo, rememberOembed, OEMBED_PATH,
 });
 
+/**
+ * Everything a card says about one video: the Hive post and/or embed doc,
+ * title, description, thumbnail and the indexing / inline-playback verdicts.
+ * Shared by the watch-page card and /oembed. Null when nothing resolves.
+ */
+async function resolveVideoCard(video, origin) {
+  // Resolve the Hive post and/or the embed-video doc. Shorts (and some embed
+  // videos) aren't Hive posts — the share URL's permlink is the embed *asset*
+  // id, so a Hive lookup by it 404s. Strategy:
+  //   - /shorts: resolve the embed doc first, then the Hive post via embed_url.
+  //   - /watch & /@: try Hive directly; only on a miss fall back to the embed
+  //     doc (cheap, and avoids a checker call for ordinary videos).
+  let post = null;
+  let embed = null;
+  if (video.kind === 'shorts') {
+    embed = await fetchEmbedDetails(video.author, video.permlink);
+    const hiveRef = embed && parseEmbedUrl(embed.embed_url);
+    if (hiveRef) post = await fetchHivePost(hiveRef.author, hiveRef.permlink);
+  } else {
+    post = await fetchHivePost(video.author, video.permlink);
+    if (!post) {
+      embed = await fetchEmbedDetails(video.author, video.permlink);
+      const hiveRef = embed && parseEmbedUrl(embed.embed_url);
+      if (hiveRef) post = await fetchHivePost(hiveRef.author, hiveRef.permlink);
+    }
+  }
+
+  if (!post && !embed) return null;
+
+  const meta = post ? parseMeta(post.json_metadata) : {};
+  const videoInfo = (meta.video && meta.video.info) || {};
+
+  // Thumbnail: embed doc's thumbnail_url wins (it's the one the app shows for
+  // shorts), then the Hive post's sourceMap/image, then the site fallback.
+  let thumbnail = (embed && embed.thumbnail_url) || null;
+  if (!thumbnail && videoInfo.sourceMap) {
+    const thumbSource = videoInfo.sourceMap.find((s) => s.type === 'thumbnail');
+    if (thumbSource) thumbnail = thumbSource.url;
+  }
+  if (!thumbnail && meta.image && meta.image[0]) thumbnail = meta.image[0];
+  const image = boundImage(fixThumbnail(thumbnail));
+
+  const kindLabel = video.kind === 'shorts' ? 'Short' : 'Video';
+  const title =
+    (post && post.title) ||
+    (embed && (embed.hive_title || embed.embed_title || embed.originalFilename)) ||
+    `${kindLabel} by @${video.author}`;
+
+  const description = post
+    ? extractDescription(post.body)
+    : `A ${kindLabel.toLowerCase()} by @${video.author} on 3Speak.`;
+
+  // Canonicalize to the exact route that was shared (/watch, /shorts or
+  // /shorts/stories), keeping the original permlink so the link opens right.
+  const selfUrl = `${origin}/${video.routePath}?v=${video.author}/${video.permlink}`;
+  const canonicalUrl = resolveCanonical(meta, selfUrl);
+  const duration = videoInfo.duration || (embed && embed.duration) || null;
+  const uploadDate = toIsoDate((post && post.created) || (embed && embed.createdAt));
+
+  // Indexability: full signal set when there's a Hive post; for embed-only
+  // assets fall back to the NSFW flag + title heuristic.
+  const indexability = post ? getIndexability(post, meta) : null;
+  const index = post
+    ? indexability.index
+    : !(embed && embed.isNsfwContent) && !isAdultByTitle(title);
+  // Inline playback follows the same NSFW/muted/blacklist rules, but not the
+  // SEO-only "empty" one: a short posted as an Ecency wave is a reply with a
+  // one-line body, which is thin for Google and perfectly fine for Discord.
+  const inlineAllowed =
+    (index || (indexability && indexability.reason === 'empty')) &&
+    !(embed && (embed.gated === true || embed.gated === 'true'));
+  return {
+    post, embed, meta, image, title, description, canonicalUrl,
+    duration, uploadDate, index, indexability, inlineAllowed,
+  };
+}
+
 const server = http.createServer(async (req, res) => {
   const origin = requestOrigin(req);
 
@@ -779,6 +973,15 @@ const server = http.createServer(async (req, res) => {
       console.error('[og] thumb error:', err && err.message);
       res.writeHead(404, { 'Content-Type': 'text/plain', 'Cache-Control': 'no-store' });
       return res.end();
+    }
+  }
+
+  if (url.pathname === PUBLIC_OEMBED_PATH) {
+    try {
+      return await servePublicOembed(req, res, url, origin);
+    } catch (err) {
+      console.error('[og] public oembed error:', err && err.message);
+      return sendOembedError(req, res, 500, 'oEmbed lookup failed');
     }
   }
 
@@ -841,77 +1044,18 @@ const server = http.createServer(async (req, res) => {
       ? ogVideo.ogVideoFor(video.author, video.permlink).catch(() => null)
       : Promise.resolve(null);
 
-    // Resolve the Hive post and/or the embed-video doc. Shorts (and some embed
-    // videos) aren't Hive posts — the share URL's permlink is the embed *asset*
-    // id, so a Hive lookup by it 404s. Strategy:
-    //   - /shorts: resolve the embed doc first, then the Hive post via embed_url.
-    //   - /watch & /@: try Hive directly; only on a miss fall back to the embed
-    //     doc (cheap, and avoids a checker call for ordinary videos).
-    let post = null;
-    let embed = null;
-    if (video.kind === 'shorts') {
-      embed = await fetchEmbedDetails(video.author, video.permlink);
-      const hiveRef = embed && parseEmbedUrl(embed.embed_url);
-      if (hiveRef) post = await fetchHivePost(hiveRef.author, hiveRef.permlink);
-    } else {
-      post = await fetchHivePost(video.author, video.permlink);
-      if (!post) {
-        embed = await fetchEmbedDetails(video.author, video.permlink);
-        const hiveRef = embed && parseEmbedUrl(embed.embed_url);
-        if (hiveRef) post = await fetchHivePost(hiveRef.author, hiveRef.permlink);
-      }
-    }
-
-    if (!post && !embed) return sendHtml(req, res, 200, buildGenericHtml(origin + req.url));
-
-    const meta = post ? parseMeta(post.json_metadata) : {};
-    const videoInfo = (meta.video && meta.video.info) || {};
-
-    // Thumbnail: embed doc's thumbnail_url wins (it's the one the app shows for
-    // shorts), then the Hive post's sourceMap/image, then the site fallback.
-    let thumbnail = (embed && embed.thumbnail_url) || null;
-    if (!thumbnail && videoInfo.sourceMap) {
-      const thumbSource = videoInfo.sourceMap.find((s) => s.type === 'thumbnail');
-      if (thumbSource) thumbnail = thumbSource.url;
-    }
-    if (!thumbnail && meta.image && meta.image[0]) thumbnail = meta.image[0];
-    let image = boundImage(fixThumbnail(thumbnail));
+    const card = await resolveVideoCard(video, origin);
+    if (!card) return sendHtml(req, res, 200, buildGenericHtml(origin + req.url));
+    const {
+      post, title, description, canonicalUrl, duration, uploadDate, index, inlineAllowed,
+    } = card;
+    let { image } = card;
     // WhatsApp shows no preview at all for a WebP image (every 3Speak
     // thumbnail is WebP), and may read video.other as "a video" it can't
     // play. It gets a JPEG copy and a plain website card instead.
     const whatsapp = /whatsapp/i.test(req.headers['user-agent'] || '');
     const waThumb = whatsapp ? ogVideo.jpegThumbPath(image) : null;
     if (waThumb) image = origin + waThumb;
-
-    const kindLabel = video.kind === 'shorts' ? 'Short' : 'Video';
-    const title =
-      (post && post.title) ||
-      (embed && (embed.hive_title || embed.embed_title || embed.originalFilename)) ||
-      `${kindLabel} by @${video.author}`;
-
-    const description = post
-      ? extractDescription(post.body)
-      : `A ${kindLabel.toLowerCase()} by @${video.author} on 3Speak.`;
-
-    // Canonicalize to the exact route that was shared (/watch, /shorts or
-    // /shorts/stories), keeping the original permlink so the link opens right.
-    const selfUrl = `${origin}/${video.routePath}?v=${video.author}/${video.permlink}`;
-    const canonicalUrl = resolveCanonical(meta, selfUrl);
-    const duration = videoInfo.duration || (embed && embed.duration) || null;
-    const uploadDate = toIsoDate((post && post.created) || (embed && embed.createdAt));
-
-    // Indexability: full signal set when there's a Hive post; for embed-only
-    // assets fall back to the NSFW flag + title heuristic.
-    const indexability = post ? getIndexability(post, meta) : null;
-    const index = post
-      ? indexability.index
-      : !(embed && embed.isNsfwContent) && !isAdultByTitle(title);
-    // Inline playback follows the same NSFW/muted/blacklist rules, but not the
-    // SEO-only "empty" one: a short posted as an Ecency wave is a reply with a
-    // one-line body, which is thin for Google and perfectly fine for Discord.
-    const inlineAllowed =
-      (index || (indexability && indexability.reason === 'empty')) &&
-      !(embed && (embed.gated === true || embed.gated === 'true'));
 
     // Transcripts only exist for Hive-backed videos; fetch by the resolved Hive
     // author/permlink (not the embed asset id), and skip on noindex pages.
@@ -968,7 +1112,18 @@ const server = http.createServer(async (req, res) => {
       video: inline ? { url: origin + inline.path, width: inline.width, height: inline.height } : null,
       ogType: whatsapp ? 'website' : 'video.other',
       imageType: waThumb ? 'image/jpeg' : undefined,
-      oembedUrl: inline ? `${origin}${OEMBED_PATH}?v=${encodeURIComponent(`${video.author}/${video.permlink}`)}` : null,
+      oembedUrl: inline
+        ? `${origin}${OEMBED_PATH}?v=${encodeURIComponent(`${video.author}/${video.permlink}`)}`
+        : inlineAllowed ? publicOembedUrl(origin, canonicalUrl) : null,
+      // Iframe player for Misskey & co. Not with the teaser: Discord gets its
+      // MP4 player card instead.
+      player: !inline && inlineAllowed && !whatsapp
+        ? {
+          url: playerUrlFor(video),
+          ...playerSize(video),
+          ogVideo: PLAYER_OG_VIDEO_BOTS.test(req.headers['user-agent'] || ''),
+        }
+        : null,
     });
 
     return sendHtml(req, res, 200, html);
