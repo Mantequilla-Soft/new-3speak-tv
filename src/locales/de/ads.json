@@ -430,6 +430,8 @@
     "datePassed": "Dieses Datum ist vorbei. Wähle heute oder später.",
     "runsTo": "Läuft bis {{date}}.",
     "startBlank": "Leer lassen oder heute wählen, um zu starten, sobald sie freigegeben und bezahlt ist.",
+    "startToday_one": "Startet, sobald sie freigegeben und bezahlt ist, und läuft dann {{count}} Tag.",
+    "startToday_other": "Startet, sobald sie freigegeben und bezahlt ist, und läuft dann {{count}} Tage.",
     "howLongShows": "Wie lange sie angezeigt wird",
     "adLength": "Werbelänge",
     "tooManySpots": "Du hast mehr als ein Werbevideo, daher wissen wir nicht, welche Länge wir nehmen sollen. Gib sie selbst ein.",
@@ -548,6 +550,14 @@
     "avgWatchedOf": "<b>{{seconds}} s</b> im Schnitt angesehen, von {{length}} s",
     "avgWatched": "<b>{{seconds}} s</b> im Schnitt angesehen",
     "toEnd": "{{percent}} % bis zum Ende angesehen"
+  },
+  "rebook": {
+    "button": "Erneut buchen",
+    "notice": "Du buchst \"{{name}}\" erneut. Alles ist aus dieser Buchung vorausgefüllt und lässt sich ändern.",
+    "stepAd": "Du buchst \"{{name}}\" erneut. Hier kannst du deine Werbung, ihre Kennzeichnung oder deinen Ticker ändern. Die Buchung im nächsten Schritt ist schon ausgefüllt.",
+    "attachAd": "Deine Werbung mit dieser Buchung verknüpfen: {{what}}",
+    "adAttached": "Deine Werbung ist mit der neuen Buchung verknüpft",
+    "attachFailed": "Gebucht, aber deine Werbung konnte nicht verknüpft werden: {{reason}} Wähle unten bei der Buchung eine aus."
   },
   "creativeStatus": {
     "pending": "Wird encodiert",

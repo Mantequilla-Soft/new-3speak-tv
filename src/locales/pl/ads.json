@@ -446,6 +446,10 @@
     "datePassed": "Ta data już minęła. Wybierz dzisiejszą lub późniejszą.",
     "runsTo": "Emisja do {{date}}.",
     "startBlank": "Zostaw puste lub wybierz dzisiejszą datę, aby rozpocząć, gdy tylko reklama zostanie zatwierdzona i opłacona.",
+    "startToday_one": "Startuje po zatwierdzeniu i opłaceniu, potem trwa {{count}} dzień.",
+    "startToday_few": "Startuje po zatwierdzeniu i opłaceniu, potem trwa {{count}} dni.",
+    "startToday_many": "Startuje po zatwierdzeniu i opłaceniu, potem trwa {{count}} dni.",
+    "startToday_other": "Startuje po zatwierdzeniu i opłaceniu, potem trwa {{count}} dnia.",
     "howLongShows": "Jak długo jest wyświetlana",
     "adLength": "Długość reklamy",
     "tooManySpots": "Masz więcej niż jeden film reklamowy, więc nie wiemy, której długości użyć. Wpisz ją samodzielnie.",
@@ -590,6 +594,14 @@
     "avgWatchedOf": "Średnio obejrzano <b>{{seconds}} s</b> z {{length}} s",
     "avgWatched": "Średnio obejrzano <b>{{seconds}} s</b>",
     "toEnd": "{{percent}}% obejrzało do końca"
+  },
+  "rebook": {
+    "button": "Zarezerwuj ponownie",
+    "notice": "Ponowna rezerwacja \"{{name}}\". Wszystko jest wypełnione na podstawie tamtej rezerwacji i możesz to zmienić.",
+    "stepAd": "Ponowna rezerwacja \"{{name}}\". Tutaj możesz zmienić reklamę, jej oznaczenie lub pasek z tekstem. Rezerwacja w następnym kroku jest już wypełniona.",
+    "attachAd": "Przypnij reklamę do tej rezerwacji: {{what}}",
+    "adAttached": "Twoja reklama jest przypięta do nowej rezerwacji",
+    "attachFailed": "Zarezerwowano, ale nie udało się przypiąć reklamy: {{reason}} Wybierz ją przy rezerwacji poniżej."
   },
   "creativeStatus": {
     "pending": "Kodowanie",

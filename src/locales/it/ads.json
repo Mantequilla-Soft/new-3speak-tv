@@ -438,6 +438,9 @@
     "datePassed": "Quella data è passata. Scegli oggi o una data successiva.",
     "runsTo": "Attivo fino al {{date}}.",
     "startBlank": "Lascia vuoto, o scegli oggi, per iniziare non appena è approvato e pagato.",
+    "startToday_one": "Parte appena è approvata e pagata, poi dura {{count}} giorno.",
+    "startToday_many": "Parte appena è approvata e pagata, poi dura {{count}} di giorni.",
+    "startToday_other": "Parte appena è approvata e pagata, poi dura {{count}} giorni.",
     "howLongShows": "Per quanto tempo viene mostrato",
     "adLength": "Durata dell'annuncio",
     "tooManySpots": "Hai più di un video pubblicitario, quindi non possiamo sapere quale durata usare. Inseriscila tu.",
@@ -569,6 +572,14 @@
     "avgWatchedOf": "<b>{{seconds}} s</b> guardati in media, su {{length}} s",
     "avgWatched": "<b>{{seconds}} s</b> guardati in media",
     "toEnd": "{{percent}}% l'ha guardato fino alla fine"
+  },
+  "rebook": {
+    "button": "Prenota di nuovo",
+    "notice": "Stai prenotando di nuovo \"{{name}}\". È tutto precompilato da quella prenotazione e puoi cambiare qualsiasi cosa.",
+    "stepAd": "Stai prenotando di nuovo \"{{name}}\". Qui puoi cambiare il tuo annuncio, la sua etichetta o il tuo ticker. La prenotazione nel passo successivo è già compilata.",
+    "attachAd": "Collega il tuo annuncio a questa prenotazione: {{what}}",
+    "adAttached": "Il tuo annuncio è collegato alla nuova prenotazione",
+    "attachFailed": "Prenotato, ma non è stato possibile collegare il tuo annuncio: {{reason}} Scegline uno nella prenotazione qui sotto."
   },
   "creativeStatus": {
     "pending": "In codifica",

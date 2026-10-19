@@ -422,6 +422,7 @@
     "datePassed": "その日付は過ぎています。今日以降を選んでください。",
     "runsTo": "{{date}} まで掲載。",
     "startBlank": "空欄にするか今日を選ぶと、承認と支払いが済み次第すぐに開始します。",
+    "startToday_other": "承認と支払いが済みしだい開始し、{{count}} 日間掲載されます。",
     "howLongShows": "表示時間",
     "adLength": "広告の長さ",
     "tooManySpots": "広告動画が複数あるため、どの長さを使うか判断できません。直接入力してください。",
@@ -527,6 +528,14 @@
     "avgWatchedOf": "平均 <b>{{seconds}} 秒</b> 視聴（{{length}} 秒中）",
     "avgWatched": "平均 <b>{{seconds}} 秒</b> 視聴",
     "toEnd": "{{percent}}% が最後まで視聴"
+  },
+  "rebook": {
+    "button": "もう一度予約",
+    "notice": "\"{{name}}\" を再予約します。前回の予約内容がすべて入力済みで、どれでも変更できます。",
+    "stepAd": "\"{{name}}\" を再予約します。ここで広告、そのラベル、ティッカーを変更できます。次のステップの予約内容は入力済みです。",
+    "attachAd": "この予約に広告を設定: {{what}}",
+    "adAttached": "広告を新しい予約に設定しました",
+    "attachFailed": "予約しましたが、広告を設定できませんでした: {{reason}} 下の予約で選んでください。"
   },
   "creativeStatus": {
     "pending": "エンコード中",

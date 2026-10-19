@@ -430,6 +430,8 @@
     "datePassed": "Die datum is al voorbij. Kies vandaag of later.",
     "runsTo": "Loopt tot {{date}}.",
     "startBlank": "Laat leeg, of kies vandaag, om te starten zodra het is goedgekeurd en betaald.",
+    "startToday_one": "Start zodra hij is goedgekeurd en betaald, en loopt dan {{count}} dag.",
+    "startToday_other": "Start zodra hij is goedgekeurd en betaald, en loopt dan {{count}} dagen.",
     "howLongShows": "Hoe lang het te zien is",
     "adLength": "Lengte van de advertentie",
     "tooManySpots": "Je hebt meer dan één advertentievideo, dus we weten niet welke lengte we moeten gebruiken. Vul het zelf in.",
@@ -548,6 +550,14 @@
     "avgWatchedOf": "Gemiddeld <b>{{seconds}} s</b> bekeken, van {{length}} s",
     "avgWatched": "Gemiddeld <b>{{seconds}} s</b> bekeken",
     "toEnd": "{{percent}}% keek tot het einde"
+  },
+  "rebook": {
+    "button": "Opnieuw boeken",
+    "notice": "Je boekt \"{{name}}\" opnieuw. Alles is ingevuld vanuit die boeking en je kunt alles aanpassen.",
+    "stepAd": "Je boekt \"{{name}}\" opnieuw. Hier kun je je advertentie, het label of je ticker aanpassen. De boeking in de volgende stap is al ingevuld.",
+    "attachAd": "Je advertentie aan deze boeking koppelen: {{what}}",
+    "adAttached": "Je advertentie is aan de nieuwe boeking gekoppeld",
+    "attachFailed": "Geboekt, maar je advertentie kon niet worden gekoppeld: {{reason}} Kies er een bij de boeking hieronder."
   },
   "creativeStatus": {
     "pending": "Encoderen",

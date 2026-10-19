@@ -438,6 +438,9 @@
     "datePassed": "Esa fecha ya pasó. Elige hoy o una fecha posterior.",
     "runsTo": "Se muestra hasta el {{date}}.",
     "startBlank": "Déjalo vacío, o elige hoy, para empezar en cuanto esté aprobado y pagado.",
+    "startToday_one": "Empieza en cuanto esté aprobado y pagado, y dura {{count}} día.",
+    "startToday_many": "Empieza en cuanto esté aprobado y pagado, y dura {{count}} de días.",
+    "startToday_other": "Empieza en cuanto esté aprobado y pagado, y dura {{count}} días.",
     "howLongShows": "Cuánto tiempo se muestra",
     "adLength": "Duración del anuncio",
     "tooManySpots": "Tienes más de un video publicitario, así que no podemos saber qué duración usar. Ingrésala tú.",
@@ -569,6 +572,14 @@
     "avgWatchedOf": "<b>{{seconds}} s</b> vistos de media, de {{length}} s",
     "avgWatched": "<b>{{seconds}} s</b> vistos de media",
     "toEnd": "{{percent}} % lo vio hasta el final"
+  },
+  "rebook": {
+    "button": "Reservar de nuevo",
+    "notice": "Reservando \"{{name}}\" de nuevo. Todo está rellenado a partir de esa reserva y puedes cambiar lo que quieras.",
+    "stepAd": "Reservando \"{{name}}\" de nuevo. Aquí puedes cambiar tu anuncio, su etiqueta o tu ticker. La reserva del siguiente paso ya está rellenada.",
+    "attachAd": "Vincular tu anuncio a esta reserva: {{what}}",
+    "adAttached": "Tu anuncio está vinculado a la nueva reserva",
+    "attachFailed": "Reservado, pero no se pudo vincular tu anuncio: {{reason}} Elige uno en la reserva de abajo."
   },
   "creativeStatus": {
     "pending": "Codificando",

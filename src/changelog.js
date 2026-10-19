@@ -7,6 +7,17 @@
 // 1.0.0 — that way they see all of these when develop is pushed to production.
 export const CHANGELOG = [
   {
+    version: '1.79.107',
+    date: '2026-10-19',
+    summary: 'New tickers now start with Slide in, pause, slide out, which is easier to read.',
+  },
+  {
+    version: '1.79.106',
+    date: '2026-10-19',
+    summary:
+      'Book an ad again in one click: the new Book again button under History fills in everything from that booking, ready to tweak.',
+  },
+  {
     version: '1.79.105',
     date: '2026-10-19',
     summary:

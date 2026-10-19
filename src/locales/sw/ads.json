@@ -430,6 +430,8 @@
     "datePassed": "Tarehe hiyo imepita. Chagua leo au baadaye.",
     "runsTo": "Linaonyeshwa hadi {{date}}.",
     "startBlank": "Acha tupu, au chagua leo, ili lianze mara tu likiidhinishwa na kulipiwa.",
+    "startToday_one": "Itaanza mara tu itakapoidhinishwa na kulipwa, kisha itaendelea siku {{count}}.",
+    "startToday_other": "Itaanza mara tu itakapoidhinishwa na kulipwa, kisha itaendelea siku {{count}}.",
     "howLongShows": "Muda linaoonekana",
     "adLength": "Urefu wa tangazo",
     "tooManySpots": "Una video zaidi ya moja za tangazo, kwa hivyo hatuwezi kujua urefu upi utumike. Uweke mwenyewe.",
@@ -548,6 +550,14 @@
     "avgWatchedOf": "Wastani wa <b>sek {{seconds}}</b> zimetazamwa, kati ya sek {{length}}",
     "avgWatched": "Wastani wa <b>sek {{seconds}}</b> zimetazamwa",
     "toEnd": "{{percent}}% walitazama hadi mwisho"
+  },
+  "rebook": {
+    "button": "Weka tena",
+    "notice": "Unaweka \"{{name}}\" tena. Kila kitu kimejazwa kutoka kwenye uwekaji huo, na unaweza kubadilisha chochote.",
+    "stepAd": "Unaweka \"{{name}}\" tena. Hapa unaweza kubadilisha tangazo lako, lebo yake au utepe wako wa maandishi. Uwekaji katika hatua inayofuata umeshajazwa.",
+    "attachAd": "Ambatisha tangazo lako kwenye uwekaji huu: {{what}}",
+    "adAttached": "Tangazo lako limeambatishwa kwenye uwekaji mpya",
+    "attachFailed": "Imewekwa, lakini tangazo lako halikuweza kuambatishwa: {{reason}} Chagua moja kwenye uwekaji hapa chini."
   },
   "creativeStatus": {
     "pending": "Inasimbwa",

@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useId, useMemo, useRef, useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { useTranslation, Trans } from 'react-i18next';
-import { MdCampaign, MdInfoOutline, MdCheckCircle, MdSchedule, MdCancel } from 'react-icons/md';
+import { MdCampaign, MdInfoOutline, MdCheckCircle, MdSchedule, MdCancel, MdReplay } from 'react-icons/md';
 import { FaRocket, FaLayerGroup, FaUsers, FaVideo, FaTv } from 'react-icons/fa';
 import { toastIn } from '../utils/toast';
 import { useAppStore } from '../lib/store';
@@ -167,6 +167,13 @@ function FormatPicker({ formats, value, onChange }) {
  * nobody thinks about a ten minute video as 600. Shown alongside rather than replacing
  * the input: converting the field itself would make "601" impossible to type.
  */
+/* Today as the date input wants it, in the viewer's own timezone. Built from the local
+ * date parts on purpose: toISOString is UTC and would offer yesterday to anyone west of it. */
+function localTodayISO() {
+  const d = new Date();
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+}
+
 function inMinutes(raw, t) {
   const n = parseInt(raw, 10);
   if (!Number.isFinite(n) || n <= 0) return null;
@@ -251,6 +258,8 @@ const isVideoAd = (t) => t === 'video' || t === 'shorts' || t === 'upload';
 /* Which product an ad TYPE books. Module-level so the wizard and a product's own
    "Book a spot" agree on it. */
 const AD_TYPE_FORMAT = { video: 'video_roll', banner: 'video_banner', shorts: 'shorts_roll', ticker: 'video_ticker', upload: 'upload_gate' };
+// The other way round, for "Book again": a finished flight knows its format, the page asks for a type.
+const FORMAT_AD_TYPE = Object.fromEntries(Object.entries(AD_TYPE_FORMAT).map(([k, v]) => [v, k]));
 // Types that run a video spot, and so carry the label overlay and the "we make it" offer.
 const isSpotType = (t) => t === 'video' || t === 'shorts' || t === 'upload';
 
@@ -352,13 +361,20 @@ function CampaignPanel({
   // Who the ad is for, for the ticker preview (it shows the avatar and product name).
   account = null,
   productName = null,
+  /* "Book again" from History: the finished flight's choices to fill the form with.
+     `key` changes on every click, so booking the same flight twice fills it twice. */
+  prefill = null,
+  // Offered on History flights; the page switches to the booking form and prefills it.
+  onRebook = null,
 }) {
   const { t } = useTranslation();
   const [campaigns, setCampaigns] = useState([]);
   const [days, setDays] = useState(pricing?.minDays || 1);
   // When it should start. Optional: blank means "as soon as it is approved and paid",
   // which is what most people want and what the server already did on its own.
-  const [startAt, setStartAt] = useState('');
+  // Today by default. The server starts the clock at the later of this and the moment
+  // the flight is paid, so today means exactly what a blank field did, just visibly.
+  const [startAt, setStartAt] = useState(localTodayISO);
   // What is being bought. Everything below reads from the chosen format's own
   // record — its rate, its maximum length, whether it has a position at all — so
   // there is no second place where a product's rules are written down.
@@ -547,6 +563,41 @@ function CampaignPanel({
   const tooManySpots = spotCandidates.length > 1 && takesVideo;
   const [autoLength, setAutoLength] = useState(true);
 
+  // Video-length targeting, entered in seconds and open-ended at both ends.
+  const [minVideo, setMinVideo] = useState('');
+  const [maxVideo, setMaxVideo] = useState('');
+
+  /* Fill the form from the flight being booked again. Same render-time pattern as the
+     lockFormat reset above, and AFTER it on purpose: "Book again" usually changes the
+     ad type too, and that reset clearing the slot and length must not undo this.
+     Everything stays editable; the start date becomes today, because the old one is
+     in the past. */
+  const [prefillSeen, setPrefillSeen] = useState(null);
+  const [reuseCreative, setReuseCreative] = useState(true);
+  if (prefill && prefill.key !== prefillSeen) {
+    setPrefillSeen(prefill.key);
+    const lo = pricing?.minDays || 1;
+    const hi = pricing?.maxDays || 90;
+    setDays(Math.min(hi, Math.max(lo, Number(prefill.days) || lo)));
+    setStartAt(localTodayISO());
+    setSlotPct(prefill.slotPercent ?? null);
+    if (prefill.spotSeconds) {
+      setSpotSeconds(prefill.spotSeconds);
+      // The length they paid for last time, not whatever the newest upload measures.
+      setAutoLength(false);
+    }
+    setMinVideo(prefill.minVideoSeconds ? String(prefill.minVideoSeconds) : '');
+    setMaxVideo(prefill.maxVideoSeconds ? String(prefill.maxVideoSeconds) : '');
+    setReuseCreative(true);
+  }
+  /* The ad that flight ran, if it can run again here: not turned down since, and the
+     same format (a different type chosen in step 1 means a different ad). */
+  const reusable = prefill?.creative && prefill.creative.kind
+    && prefill.creative.status !== 'rejected' && prefill.format === fmt?.key
+    ? prefill.creative
+    : null;
+  const reusing = !!reusable && reuseCreative;
+
   /* Paying from the wallet, rather than making somebody copy three fields into one.
    *
    * transferWithAioha already routes every login correctly: Keychain, HiveAuth,
@@ -628,8 +679,10 @@ function CampaignPanel({
    * has no duration of its own, but its message has a readability minimum, so that is
    * the default length (instead of the format's maximum) and the floor the checker
    * holds the attach to. */
+  // When booking a ticker again, the one that flight ran (see `reusable` below).
+  const rebookTicker = reusing && reusable.kind === 'text' ? reusable : null;
   const tickerCreative = isTicker
-    ? (creatives || []).find((c) => c.kind === 'text' && c.status !== 'rejected') || null
+    ? rebookTicker || (creatives || []).find((c) => c.kind === 'text' && c.status !== 'rejected') || null
     : null;
   const tickerNeeds = tickerCreative
     ? (tickerCreative.minSeconds || tickerMinSeconds(tickerCreative.message, fmt?.creativeSpec))
@@ -641,9 +694,6 @@ function CampaignPanel({
     && !tickerTooShort;
   const autoTooLong = autoOn && chosenLength > maxSpot;
 
-  // Video-length targeting, entered in seconds and open-ended at both ends.
-  const [minVideo, setMinVideo] = useState('');
-  const [maxVideo, setMaxVideo] = useState('');
   const minVideoNum = parseInt(minVideo, 10);
   const maxVideoNum = parseInt(maxVideo, 10);
   const videoRangeOk = !(Number.isFinite(minVideoNum) && Number.isFinite(maxVideoNum)
@@ -693,14 +743,8 @@ function CampaignPanel({
    * the requested date, so "today" does not promise anything early: it means start the
    * moment it is approved and paid, which is the thing an advertiser actually wants and
    * is what a blank field has always done. Offering tomorrow as the floor just pushed
-   * every same-day booking a day out for no reason.
-   *
-   * Built from the local date parts on purpose: toISOString is UTC and would offer
-   * yesterday to anyone west of it. */
-  const earliestISO = useMemo(() => {
-    const d = new Date();
-    return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
-  }, []);
+   * every same-day booking a day out for no reason. */
+  const earliestISO = useMemo(() => localTodayISO(), []);
   // `min` on a date input stops the PICKER, not a typed or pasted value, so the same
   // rule is checked here as well — and again on the server, which is the only copy
   // that actually decides.
@@ -769,8 +813,21 @@ function CampaignPanel({
       toast.success(res?.payment?.alreadyCovered
         ? t('ads.book.bookedCovered')
         : t('ads.book.bookedPay'));
+      /* Booking again with the same ad: attach it now, so there is no picker step left.
+         A refusal (a length changed below what the ad needs, say) is not a failed
+         booking; the flight exists and its picker below says what to do. */
+      if (res?.campaign?.id && reusing) {
+        try {
+          await attachCreative(reusable.kind === 'image'
+            ? { reference, campaignId: res.campaign.id, imageUrl: reusable.imageUrl }
+            : { reference, campaignId: res.campaign.id, embedId: reusable.permlink || reusable.embedId });
+          toast.success(t('ads.rebook.adAttached'));
+        } catch (err) {
+          toast.error(t('ads.rebook.attachFailed', { reason: err.message || '' }));
+        }
+      }
       refresh();
-      if (!creatives.length) onNeedCreative?.();
+      if (!creatives.length && !reusing) onNeedCreative?.();
       if (res?.campaign?.id) {
         setBookedId(res.campaign.id);
         onBooked?.(res.campaign.id);
@@ -945,6 +1002,37 @@ function CampaignPanel({
           note used to say the opposite, that slots were settled at approval, which had
           simply stopped being true. The duration comes from the server so this cannot
           drift the same way twice. */}
+      {prefill && prefillSeen === prefill.key && (
+        <div className="mkt-note mkt-rebook-note">
+          <MdReplay aria-hidden="true" />
+          <div>
+            <span>{t('ads.rebook.notice', { name: prefill.name })}</span>
+            {reusable && (
+              <label className="mkt-check">
+                <input
+                  type="checkbox"
+                  checked={reuseCreative}
+                  onChange={(e) => setReuseCreative(e.target.checked)}
+                />
+                <span>
+                  {t('ads.rebook.attachAd', {
+                    what: reusable.kind === 'image'
+                      ? t('ads.attach.bannerOption')
+                      : reusable.kind === 'text'
+                        ? `"${reusable.message.length > 48 ? `${reusable.message.slice(0, 47)}…` : reusable.message}"`
+                        : t('ads.attach.secondsAd', { seconds: reusable.durationSeconds }),
+                  })}
+                  {/* An edited ticker is a new one, and runs only once we have read it. */}
+                  {reusable.status !== 'ready' && CREATIVE_STATUS[reusable.status]
+                    ? ` · ${t(CREATIVE_STATUS[reusable.status])}`
+                    : ''}
+                </span>
+              </label>
+            )}
+          </div>
+        </div>
+      )}
+
       {awaitingApproval && (
         <p className="mkt-note">
           <MdInfoOutline aria-hidden="true" />
@@ -1005,9 +1093,13 @@ function CampaignPanel({
           <span className={startOk ? 'mkt-hint' : 'mkt-upload-error'}>
             {!startOk
               ? t('ads.book.datePassed')
-              : runsUntil
-                ? t('ads.book.runsTo', { date: runsUntil })
-                : t('ads.book.startBlank')}
+              /* Today is "when approved and paid", which may not be today, so an end
+                 date would be a promise the review could break. */
+              : startAt === earliestISO
+                ? t('ads.book.startToday', { count: Number(days) || 1 })
+                : runsUntil
+                  ? t('ads.book.runsTo', { date: runsUntil })
+                  : t('ads.book.startBlank')}
           </span>
         </div>
         <div className="mkt-field">
@@ -1494,6 +1586,17 @@ function CampaignPanel({
                   )}
                 </div>
               )}
+
+              {/* Only for a format still on sale to this advertiser: a beta format they
+                  can no longer book would open a form that cannot be sent. */}
+              {view === 'history' && onRebook && FORMAT_AD_TYPE[c.format]
+                && (pricing?.formats || []).some((f) => f.key === c.format) && (
+                <div className="mkt-rebook-row">
+                  <button type="button" className="mkt-outline" onClick={() => onRebook(c)}>
+                    <MdReplay aria-hidden="true" /> {t('ads.rebook.button')}
+                  </button>
+                </div>
+              )}
             </li>
           ))}
         </ul>
@@ -1683,9 +1786,10 @@ function BrandPanel({ reference, account, productName, initialLogoUrl, initialSl
  * reviewed again, which the server enforces by keying the creative on its content.
  */
 // title/blurb are i18n keys.
+// Slide-in-and-pause first: it is the default, because a line that stops can be read.
 const TICKER_STYLES = [
-  { id: 'crawl', title: 'ads.tickerStyle.crawl.title', blurb: 'ads.tickerStyle.crawl.blurb' },
   { id: 'hold', title: 'ads.tickerStyle.hold.title', blurb: 'ads.tickerStyle.hold.blurb' },
+  { id: 'crawl', title: 'ads.tickerStyle.crawl.title', blurb: 'ads.tickerStyle.crawl.blurb' },
 ];
 
 /* The ticker as a viewer will get it: the same TickerCrawl the watch page draws, at the
@@ -1865,18 +1969,29 @@ function FlightCreative({ c, account, productName }) {
   );
 }
 
-function TickerPanel({ reference, account, productName, format = null, onCreatives }) {
+function TickerPanel({ reference, account, productName, format = null, onCreatives, prefill = null, onSaved = null }) {
   const { t } = useTranslation();
   const spec = format?.creativeSpec;
   const maxChars = spec?.maxChars || 140;
   const maxSeconds = format?.maxSeconds || 20;
   const [message, setMessage] = useState('');
-  const [tickerStyle, setTickerStyle] = useState('crawl');
+  // A new ticker starts as slide in, pause, slide out. Saved ones keep their own style.
+  const [tickerStyle, setTickerStyle] = useState('hold');
   const styleName = `mkt-ticker-style-${useId()}`;
   const [link, setLink] = useState('https://');
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState(null);
   const [saved, setSaved] = useState([]);
+  /* "Book again" on a ticker flight: start from the message, link and style that flight
+     ran, once per click. Left as is, it is already saved and nothing needs doing; an
+     edit makes Save live again, and saving hands the new ticker to the booking. */
+  const [prefillSeen, setPrefillSeen] = useState(null);
+  if (prefill?.creative?.kind === 'text' && prefill.key !== prefillSeen) {
+    setPrefillSeen(prefill.key);
+    setMessage(prefill.creative.message || '');
+    setLink(prefill.creative.clickUrl || 'https://');
+    setTickerStyle(prefill.creative.tickerStyle === 'hold' ? 'hold' : 'crawl');
+  }
 
   const refresh = useCallback(() => {
     fetchCreatives(reference)
@@ -1908,8 +2023,9 @@ function TickerPanel({ reference, account, productName, format = null, onCreativ
     if (!canSave) return;
     setBusy(true); setError(null);
     try {
-      await saveTickerCreative({ reference, message: message.trim(), clickUrl: link.trim(), style: tickerStyle });
+      const r = await saveTickerCreative({ reference, message: message.trim(), clickUrl: link.trim(), style: tickerStyle });
       toast.success(t('ads.ticker.savedReview'));
+      if (r?.creative) onSaved?.(r.creative);
       refresh();
     } catch (err) {
       setError(err.message || t('ads.ticker.saveFailed'));
@@ -2426,6 +2542,30 @@ export default function Advertise({ openLoginModal }) {
   const [bookStep, setBookStep] = useState(1);
   // What a product's "Book a spot" is booking, chosen first in step 1. See AdTypePicker.
   const [bookType, setBookType] = useState('video');
+  // The finished flight "Book again" was pressed on, as the booking form's prefill.
+  const [rebook, setRebook] = useState(null);
+  const ptabsRef = useRef(null);
+  const onRebook = useCallback((c) => {
+    setBookType(FORMAT_AD_TYPE[c.format] || 'video');
+    setRebook({
+      key: `${c.id}:${Date.now()}`,
+      name: c.name,
+      format: c.format,
+      days: c.days,
+      slotPercent: c.slotPercent,
+      spotSeconds: c.spotSeconds,
+      minVideoSeconds: c.minVideoSeconds,
+      maxVideoSeconds: c.maxVideoSeconds,
+      creative: c.creative,
+    });
+    // On "Your ad" first, so the label, the ticker and the file can all be changed
+    // before the booking, which is filled in already.
+    setPtab('book');
+    setBookStep(1);
+    // The History list can be long; bring the form into view rather than leave
+    // somebody scrolled past it.
+    requestAnimationFrame(() => ptabsRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' }));
+  }, []);
   const TABS = [
     { id: 'general', label: t('ads.tabs.general') },
     { id: 'wizard', label: t('ads.tabs.wizard') },
@@ -3157,7 +3297,7 @@ export default function Advertise({ openLoginModal }) {
                       type="button"
                       className={`mkt-mine-item${a.reference === lookupRef.trim() ? ' selected' : ''}`}
                       aria-current={a.reference === lookupRef.trim() ? 'true' : undefined}
-                      onClick={() => { setLookupRef(a.reference); setLookup(a); }}
+                      onClick={() => { setLookupRef(a.reference); setLookup(a); setRebook(null); }}
                     >
                       <span className="mkt-mine-body">
                         <strong>{a.projectName}</strong>
@@ -3214,7 +3354,7 @@ export default function Advertise({ openLoginModal }) {
                 {lookup.note ? <p className="mkt-lookup-note">{lookup.note}</p> : null}
 
                 {(lookup.status === 'pending' || lookup.status === 'approved') && (
-                  <div className="mkt-ptabs" role="tablist" aria-label={t('ads.mine.thisProduct')}>
+                  <div className="mkt-ptabs" role="tablist" aria-label={t('ads.mine.thisProduct')} ref={ptabsRef}>
                     {PRODUCT_TABS.map((tb) => (
                       <button
                         key={tb.id}
@@ -3259,7 +3399,13 @@ export default function Advertise({ openLoginModal }) {
                     empty for anyone who opened a product straight into another tab. */}
                 {(lookup.status === 'pending' || lookup.status === 'approved') && (
                   <div style={{ display: ptab === 'book' && bookStep === 1 ? undefined : 'none' }}>
-                  <AdTypePicker value={bookType} onChange={setBookType} pricing={pricing} />
+                  {rebook && (
+                    <p className="mkt-note">
+                      <MdReplay aria-hidden="true" />
+                      <span>{t('ads.rebook.stepAd', { name: rebook.name })}</span>
+                    </p>
+                  )}
+                  <AdTypePicker value={bookType} onChange={(v) => { setBookType(v); setRebook(null); }} pricing={pricing} />
                   {/* The upload panel stays MOUNTED for the ticker too (hidden), because it
                       owns the creative list the Active spots pickers are filled from. */}
                   <div style={{ display: bookType === 'ticker' ? 'none' : undefined }}>
@@ -3293,6 +3439,9 @@ export default function Advertise({ openLoginModal }) {
                       productName={lookup.projectName}
                       format={pricing?.formats?.find((f) => f.key === 'video_ticker')}
                       onCreatives={setCreativeList}
+                      prefill={rebook}
+                      // An edited ticker is a new one: the rebooking attaches that, not the old.
+                      onSaved={(cr) => setRebook((r) => (r ? { ...r, creative: cr } : r))}
                     />
                   )}
                   </div>
@@ -3313,9 +3462,11 @@ export default function Advertise({ openLoginModal }) {
                     lockFormat={AD_TYPE_FORMAT[bookType] || 'video_roll'}
                     view={ptab}
                     step={ptab === 'book' ? bookStep : null}
-                    onBooked={() => setBookStep(3)}
+                    onBooked={() => { setBookStep(3); setRebook(null); }}
                     account={lookup.hiveAccount}
                     productName={lookup.projectName}
+                    prefill={rebook}
+                    onRebook={onRebook}
                   />
                 )}
 

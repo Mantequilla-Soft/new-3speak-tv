@@ -430,6 +430,8 @@
     "datePassed": "Lumipas na ang petsang iyon. Pumili ng ngayon o mas huli.",
     "runsTo": "Tatakbo hanggang {{date}}.",
     "startBlank": "Iwanang blangko, o piliin ang ngayon, para magsimula agad kapag naaprubahan at nabayaran na.",
+    "startToday_one": "Magsisimula kapag naaprubahan at nabayaran, at tatakbo nang {{count}} araw.",
+    "startToday_other": "Magsisimula kapag naaprubahan at nabayaran, at tatakbo nang {{count}} araw.",
     "howLongShows": "Gaano katagal ito ipapakita",
     "adLength": "Haba ng ad",
     "tooManySpots": "Higit sa isa ang ad video mo, kaya hindi namin alam kung aling haba ang gagamitin. Ilagay mo ito.",
@@ -548,6 +550,14 @@
     "avgWatchedOf": "<b>{{seconds}}s</b> ang average na napanood, sa {{length}}s",
     "avgWatched": "<b>{{seconds}}s</b> ang average na napanood",
     "toEnd": "{{percent}}% ang nanood hanggang dulo"
+  },
+  "rebook": {
+    "button": "I-book ulit",
+    "notice": "Bina-book ulit ang \"{{name}}\". Napunan na ang lahat mula sa booking na iyon, at puwede mong baguhin ang kahit ano.",
+    "stepAd": "Bina-book ulit ang \"{{name}}\". Dito mo puwedeng baguhin ang ad mo, ang label nito o ang ticker mo. Napunan na ang booking sa susunod na hakbang.",
+    "attachAd": "I-attach ang ad mo sa booking na ito: {{what}}",
+    "adAttached": "Naka-attach na ang ad mo sa bagong booking",
+    "attachFailed": "Na-book, pero hindi na-attach ang ad mo: {{reason}} Pumili ng isa sa booking sa ibaba."
   },
   "creativeStatus": {
     "pending": "Ine-encode",
