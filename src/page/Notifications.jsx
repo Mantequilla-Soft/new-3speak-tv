@@ -77,7 +77,18 @@ function Notifications() {
   const { t } = useTranslation();
   const { user, authenticated } = useAppStore();
   const navigate = useNavigate();
-  const [filter, setFilter] = useState('all');
+  // The filter last picked ("unread only" is the usual one to keep). A category that
+  // no longer exists falls back to all.
+  const [filter, setFilterState] = useState(() => {
+    try {
+      const saved = localStorage.getItem('3speak-notif-filter');
+      return saved && (saved === 'all' || saved === 'unread' || NOTIF_CATEGORIES[saved]) ? saved : 'all';
+    } catch { return 'all'; }
+  });
+  const setFilter = (key) => {
+    setFilterState(key);
+    try { localStorage.setItem('3speak-notif-filter', key); } catch { /* storage off */ }
+  };
 
   const {
     notifications,

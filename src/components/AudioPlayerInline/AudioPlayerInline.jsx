@@ -3,6 +3,15 @@ import { useTranslation } from 'react-i18next';
 import './AudioPlayerInline.scss';
 
 const SPEEDS = [1, 1.5, 2];
+const SPEED_STORAGE_KEY = '3speak-audio-speed';
+
+// The speed last picked on any of these players, as an index into SPEEDS.
+function savedSpeedIdx() {
+  try {
+    const i = SPEEDS.indexOf(parseFloat(localStorage.getItem(SPEED_STORAGE_KEY)));
+    return i >= 0 ? i : 0;
+  } catch { return 0; }
+}
 
 export default function AudioPlayerInline({
   src,
@@ -24,7 +33,7 @@ export default function AudioPlayerInline({
   const [playing, setPlaying]         = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration]       = useState(0);
-  const [speedIdx, setSpeedIdx]       = useState(0);
+  const [speedIdx, setSpeedIdx]       = useState(savedSpeedIdx);
   const [dragging, setDragging]       = useState(false);
   const audioRef    = useRef(null);
   const progressRef = useRef(null);
@@ -107,6 +116,7 @@ export default function AudioPlayerInline({
     const next = (speedIdx + 1) % SPEEDS.length;
     setSpeedIdx(next);
     if (audioRef.current) audioRef.current.playbackRate = SPEEDS[next];
+    try { localStorage.setItem(SPEED_STORAGE_KEY, String(SPEEDS[next])); } catch { /* storage off */ }
   };
 
   const fmt = (s) => {
@@ -132,6 +142,8 @@ export default function AudioPlayerInline({
           onLoadedMetadata={() => {
             const d = audioRef.current?.duration;
             if (d && !isNaN(d)) setDuration(d);
+            // A newly loaded source starts at 1x; carry the saved speed over.
+            if (audioRef.current) audioRef.current.playbackRate = SPEEDS[speedIdx];
           }}
           onPlay={() => setPlaying(true)}
           onPause={() => setPlaying(false)}

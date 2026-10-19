@@ -46,6 +46,11 @@ const VERTICAL_PREF_KEY = 'ws-vertical-view';
 function readVerticalPref() {
   try { return localStorage.getItem(VERTICAL_PREF_KEY) !== '0'; } catch { return true; }
 }
+// Chat over the picture, on or off. Same kind of convenience; on unless turned off.
+const CHAT_OVERLAY_KEY = 'ws-chat-overlay';
+function readChatOverlayPref() {
+  try { return localStorage.getItem(CHAT_OVERLAY_KEY) !== '0'; } catch { return true; }
+}
 
 /**
  * The chat composer, docked to the bottom of the screen like the shorts
@@ -135,7 +140,7 @@ export default function WatchStream() {
     return () => { if (hideTimerRef.current) clearTimeout(hideTimerRef.current); };
   }, [revealInfo]);
 
-  const [chatOverlayOn, setChatOverlayOn] = useState(true);
+  const [chatOverlayOn, setChatOverlayOn] = useState(readChatOverlayPref);
   // Phones: the viewer's "clean view". Everything over the picture goes (rail,
   // caption, chat, composer, quality, back); one small button in the top-right
   // corner brings it all back.
@@ -346,7 +351,10 @@ export default function WatchStream() {
                     </div>
 
                     <div className="actionSidebar" onClick={(e) => e.stopPropagation()}>
-                      <div className="actionItem" onClick={() => setChatOverlayOn((v) => !v)}>
+                      <div className="actionItem" onClick={() => setChatOverlayOn((v) => {
+                        try { localStorage.setItem(CHAT_OVERLAY_KEY, v ? '0' : '1'); } catch { /* storage off */ }
+                        return !v;
+                      })}>
                         <div className={`actionButton${chatOverlayOn ? ' liked' : ''}`}>
                           <MessageSquare size={24} />
                         </div>

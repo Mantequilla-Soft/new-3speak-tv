@@ -4,6 +4,9 @@ import Transcript from './Transcript';
 import { listSubtitleLanguages } from '../../hooks/useSubtitles';
 import './WatchTabs.scss';
 
+// The side tab last picked on the watch page ('reactions' | 'transcript').
+const WATCH_TAB_KEY = '3speak-watch-side-tab';
+
 /**
  * The top of the watch page's right column: reactions and the transcript,
  * one at a time, above the recommendations.
@@ -52,10 +55,20 @@ export default function WatchTabs({ reactionPanel, author, permlink, currentTime
 
   const [active, setActive] = useState(null);
   // Keep the selection valid as tabs appear and disappear (resizing across the
-  // breakpoint, subtitles arriving late, reactions being closed).
+  // breakpoint, subtitles arriving late, reactions being closed). The tab last
+  // picked wins whenever this video has it: the transcript tab arrives after the
+  // subtitles do, so without that a transcript reader landed on Reactions every time.
   useEffect(() => {
-    setActive((cur) => (cur && tabs.includes(cur) ? cur : tabs[0] || null));
+    let pref = null;
+    try { pref = localStorage.getItem(WATCH_TAB_KEY); } catch { /* storage off */ }
+    setActive((cur) => (pref && tabs.includes(pref)
+      ? pref
+      : (cur && tabs.includes(cur) ? cur : tabs[0] || null)));
   }, [tabs]);
+  const pickTab = (tab) => {
+    setActive(tab);
+    try { localStorage.setItem(WATCH_TAB_KEY, tab); } catch { /* storage off */ }
+  };
 
   if (!tabs.length) return null;
   // Nothing to choose between: render exactly what was there before.
@@ -71,7 +84,7 @@ export default function WatchTabs({ reactionPanel, author, permlink, currentTime
             role="tab"
             aria-selected={active === tab}
             className={`watch-tab${active === tab ? ' active' : ''}`}
-            onClick={() => setActive(tab)}
+            onClick={() => pickTab(tab)}
           >
             {tab === 'reactions' ? t('comments.tabs.reactions') : t('comments.tabs.transcript')}
           </button>
