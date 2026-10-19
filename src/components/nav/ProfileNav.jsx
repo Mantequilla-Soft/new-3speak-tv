@@ -18,6 +18,7 @@ import { SiTelegram } from "react-icons/si";
 import { getVotePower } from '../../utils/hiveUtils';
 import { getHiveUrl, ensureHealthyNode } from '../../utils/hiveNode';
 import { adsEnabledFor, VIDEO_IMPORT_ENABLED } from '../../utils/config';
+import useCanImportVideos from '../../hooks/useCanImportVideos';
 import LabeledToggle from '../LabeledToggle/LabeledToggle';
 import SettingsModal from '../SettingsModal/SettingsModal';
 import { useAvatarUrl } from '../../utils/avatarCache';
@@ -46,6 +47,7 @@ function ProfileNav({ isVisible, onclose, toggleAddAccount, openLoginModal }) {
   // the advertiser console are all things that read or spend an account that
   // does not exist yet. Showing them was offering a menu of dead ends.
   const isIncubating = !user && !!incubationHandle;
+  const canImport = useCanImportVideos(VIDEO_IMPORT_ENABLED ? user : null);
 
   // How many off-chain posts are still waiting to be published to Hive.
   //
@@ -216,8 +218,9 @@ function ProfileNav({ isVisible, onclose, toggleAddAccount, openLoginModal }) {
             </Link>
           )}
           {/* ▶️ Import your own videos from YouTube & co. (moved here from the profile
-              header). Needs a Hive account to publish, so not for incubating users. */}
-          {VIDEO_IMPORT_ENABLED && !isIncubating && (
+              header). Needs a Hive account to publish, so not for incubating users,
+              and a verified link to a platform we import from. */}
+          {VIDEO_IMPORT_ENABLED && !isIncubating && canImport && (
             <Link to="/youtube-import" className="pn-item" role="menuitem" onClick={onclose}>
               <FaFileImport className="pn-icon" /> <span>{t('ytimport.entry')}</span>
             </Link>

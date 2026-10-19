@@ -10,7 +10,7 @@ import { toastIn } from "../utils/toast";
 import { BatchForm, BatchStatus } from "./ImportBatch";
 import { SHORTS_MAX_DURATION_SEC } from "../utils/config";
 import {
-  getImportStatus, listChannelVideos, listTikTokVideos, listInstagramVideos, listPlatformVideos, resolveImportUrl, getImportBatches, startImportJob, getImportJob, cancelImportJob,
+  IMPORT_MODE_PLATFORMS, getImportStatus, listChannelVideos, listTikTokVideos, listInstagramVideos, listPlatformVideos, resolveImportUrl, getImportBatches, startImportJob, getImportJob, cancelImportJob,
   downloadImportFile, fetchThumbnailDataUrl, handOffToStudio, youtubeStudioUrl, youtubeWatchUrl,
 } from "../lib/youtubeImport";
 import "./YoutubeImportPage.scss";
@@ -26,12 +26,6 @@ const PLATFORM_TABS = [
   { key: 'rumble', Icon: SiRumble },
   { key: 'bitchute', Icon: FaPlayCircle },
 ];
-// Which platforms fit which uploader: TikTok / Instagram are short-form only,
-// BitChute long-form only, YouTube and Rumble have both.
-const MODE_PLATFORMS = {
-  shorts: ['youtube', 'tiktok', 'instagram', 'rumble'],
-  videos: ['youtube', 'rumble', 'bitchute'],
-};
 // Everything but YouTube: a grid plus a paste-a-link box. TikTok / Instagram list
 // only their newest few; BitChute / Rumble page through the whole channel.
 // Each loader takes the page number and answers { videos, hasMore? }.
@@ -190,7 +184,7 @@ export default function YoutubeImportPage() {
   const hasLinkAccount = isLinkPlatform && !!status?.links?.[platform]?.length;
   // Only the platforms that fit the uploader's mode; Instagram shows once the
   // server has its session.
-  const platformTabs = PLATFORM_TABS.filter((p) => (!mode || MODE_PLATFORMS[mode].includes(p.key))
+  const platformTabs = PLATFORM_TABS.filter((p) => (!mode || IMPORT_MODE_PLATFORMS[mode].includes(p.key))
     && (!status?.sources || status.sources.includes(p.key))
     && (p.key !== 'instagram' || status?.instagramReady));
   useEffect(() => {

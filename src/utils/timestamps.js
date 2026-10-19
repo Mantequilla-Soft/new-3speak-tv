@@ -152,7 +152,7 @@ export function chapterFromLine(raw) {
 }
 
 export const MIN_CHAPTERS = 3;
-export const MIN_CHAPTER_SECONDS = 5;
+export const MIN_CHAPTER_SECONDS = 3;
 
 /**
  * Chapters from a description, YouTube style: a run of at least three

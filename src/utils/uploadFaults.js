@@ -23,8 +23,12 @@
 const FAULT_USER = 'badadib';
 const KEY = '3speak_upload_faults';
 
+// Off: the debug panel is hidden and nothing can be armed, not even by badadib.
+// Kept for the next upload investigation; flip to true to bring it back.
+const FAULTS_ENABLED = false;
+
 export function canUseUploadFaults(user) {
-  return String(user || '').toLowerCase() === FAULT_USER;
+  return FAULTS_ENABLED && String(user || '').toLowerCase() === FAULT_USER;
 }
 
 const DEFAULTS = {
@@ -53,6 +57,7 @@ const DEFAULTS = {
  * the closest we can get to the conditions that cost a real upload 68 minutes.
  */
 export function isWeakLinkForced() {
+  if (!FAULTS_ENABLED) return false;
   try { return !!getUploadFaults().forceWeakLink; } catch { return false; }
 }
 

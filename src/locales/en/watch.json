@@ -257,7 +257,7 @@
       "ads": "Ads",
       "promotion": "Promotion"
     },
-    "chaptersNote": "With 3 or more chapters, the chapter list is written into the description when you save.",
+    "chaptersNoteAll": "The chapter list is written into the description when you save.",
     "editChapters": "Edit chapters",
     "fixErrors": "Please fix the marked tab first."
   },

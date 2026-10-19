@@ -9,6 +9,13 @@ import { getCurrentProvider, Providers } from '../hive-api/aioha';
 
 const API = import.meta.env.VITE_THREESPEAK_API || '/api';
 
+// Which platforms fit which uploader: TikTok / Instagram are short-form only,
+// BitChute long-form only, YouTube and Rumble have both.
+export const IMPORT_MODE_PLATFORMS = {
+  shorts: ['youtube', 'tiktok', 'instagram', 'rumble'],
+  videos: ['youtube', 'rumble', 'bitchute'],
+};
+
 function headers(json) {
   const h = json ? { 'Content-Type': 'application/json' } : {};
   if (getCurrentProvider() === Providers.HiveSigner) {

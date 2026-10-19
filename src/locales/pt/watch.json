@@ -261,7 +261,7 @@
       "ads": "Anúncios",
       "promotion": "Promoção"
     },
-    "chaptersNote": "Com 3 ou mais capítulos, a lista de capítulos é escrita na descrição ao salvar.",
+    "chaptersNoteAll": "A lista de capítulos é escrita na descrição ao salvar.",
     "editChapters": "Editar capítulos",
     "fixErrors": "Corrija primeiro a aba marcada."
   },

@@ -257,7 +257,7 @@
       "ads": "Mga ad",
       "promotion": "Promosyon"
     },
-    "chaptersNote": "Kapag 3 o higit pa ang kabanata, isinusulat ang listahan sa description pag nag-save ka.",
+    "chaptersNoteAll": "Isinusulat ang listahan ng mga kabanata sa description pag nag-save ka.",
     "editChapters": "I-edit ang mga kabanata",
     "fixErrors": "Ayusin muna ang naka-markang tab."
   },

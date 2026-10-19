@@ -257,7 +257,7 @@
       "ads": "Werbung",
       "promotion": "Werbung"
     },
-    "chaptersNote": "Ab 3 Kapiteln wird die Kapitelliste beim Speichern in die Beschreibung geschrieben.",
+    "chaptersNoteAll": "Die Kapitelliste wird beim Speichern in die Beschreibung geschrieben.",
     "editChapters": "Kapitel bearbeiten",
     "fixErrors": "Bitte korrigiere zuerst den markierten Tab."
   },

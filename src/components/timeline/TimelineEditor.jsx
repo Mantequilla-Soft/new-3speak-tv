@@ -45,7 +45,7 @@ export function chapterIssues(list, duration = 0) {
   if (!Array.isArray(list) || !list.length) return out;
   const sorted = [...list].sort(byStart);
   if (sorted[0].start !== 0) out.push('errFirst');
-  if (sorted.some((c, i) => i > 0 && c.start - sorted[i - 1].start < MIN_CHAPTER_SECONDS)) out.push('errGap');
+  if (sorted.some((c, i) => i > 0 && c.start - sorted[i - 1].start < MIN_CHAPTER_SECONDS)) out.push('errMinGap');
   if (sorted.some((c) => !String(c.title || '').trim())) out.push('errTitle');
   if (duration > 0 && sorted.some((c) => c.start >= duration)) out.push('errEnd');
   if (sorted.length === 1) out.push('errTooFew');
@@ -844,8 +844,8 @@ export default function TimelineEditor({
               <Plus size={15} /> {t('upload.timeline.chapters.add', { time: formatStamp(now) })}
             </button>
           </header>
-          <p className="tle-hint">{t('upload.timeline.chapters.hint')}</p>
-          {issues.map((k) => <p key={k} className="tle-issue">{t(`upload.timeline.chapters.${k}`)}</p>)}
+          <p className="tle-hint">{t('upload.timeline.chapters.hintAll')}</p>
+          {issues.map((k) => <p key={k} className="tle-issue">{t(`upload.timeline.chapters.${k}`, { seconds: MIN_CHAPTER_SECONDS })}</p>)}
           {chapterList.length >= MAX_CHAPTERS && <p className="tle-hint">{t('upload.timeline.chapters.max', { max: MAX_CHAPTERS })}</p>}
           {!chapterList.length ? (
             <p className="tle-empty">{t('upload.timeline.chapters.empty')}</p>
