@@ -23,7 +23,13 @@ function TagFeed() {
   const { tag } = useParams();
   const queryClient = useQueryClient();
 
-  const [activeTab, setActiveTab] = useState('videos');
+  // Videos, shorts or both, as last picked on any tag page.
+  const [activeTab, setActiveTab] = useState(() => {
+    try {
+      const saved = localStorage.getItem('3speak-tag-type');
+      return ['all', 'videos', 'shorts'].includes(saved) ? saved : 'videos';
+    } catch { return 'videos'; }
+  });
   const [dateFilter, setDateFilter] = useState('all');
   const [currentPage, setCurrentPage] = useState(1);
   const hideWatched = useAppStore(s => s.hideWatched);
@@ -34,6 +40,7 @@ function TagFeed() {
   const handleTabChange = useCallback((tab) => {
     setActiveTab(tab);
     setCurrentPage(1);
+    try { localStorage.setItem('3speak-tag-type', tab); } catch { /* storage off */ }
   }, []);
 
   const handleDateFilterChange = useCallback((key) => {

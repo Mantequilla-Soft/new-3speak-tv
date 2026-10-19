@@ -200,6 +200,18 @@ const loadTabOrder = () => {
 const saveTabOrder = (order) => {
   try { localStorage.setItem(TAB_ORDER_KEY, JSON.stringify(order)); } catch { /* ignore */ }
 };
+
+// ── The tab you were on, by KEY ('discover', 'home', 'interests', 'new'), not by
+// position: Interests only exists for some accounts and the order is draggable, so
+// a saved index would land on a different feed. ──
+const ACTIVE_TAB_KEY = "3speak_home_active_tab";
+const loadActiveTab = () => {
+  try { return localStorage.getItem(ACTIVE_TAB_KEY) || null; } catch { return null; }
+};
+const saveActiveTab = (key) => {
+  try { localStorage.setItem(ACTIVE_TAB_KEY, key); } catch { /* ignore */ }
+};
+
 // Reorder sections by the saved order; new/unknown keys keep their natural spot.
 const applyTabOrder = (sections, order) => {
   if (!order || !order.length) return sections;
@@ -278,7 +290,14 @@ const HomeGrouped = () => {
     mq.addEventListener('change', onChange);
     return () => mq.removeEventListener('change', onChange);
   }, []);
-  const [activeTab, setActiveTab] = useState(0);
+  // Null = the first tab. A saved tab that is not on offer (Interests before they
+  // have loaded, or after logging out) falls back to the first one without being
+  // forgotten, so it comes back once it is there again.
+  const [activeKey, setActiveKey] = useState(loadActiveTab);
+  const selectTab = (key) => {
+    setActiveKey(key);
+    saveActiveTab(key);
+  };
 
   // Persisted custom tab order + live drag state (pointer-based so it works on
   // both mouse and touch). `dragKey` = the tab being dragged, `overKey` = the tab
@@ -417,8 +436,7 @@ const HomeGrouped = () => {
   // page 1 (the sentinel then stays in view and loops). applyTabOrder is cheap.
   const tabSections = applyTabOrder(naturalSections, tabOrder);
 
-  const safeTab = Math.min(Math.max(activeTab, 0), Math.max(tabSections.length - 1, 0));
-  const activeSection = tabSections[safeTab] || null;
+  const activeSection = tabSections.find((s) => s.key === activeKey) || tabSections[0] || null;
   const activeVideos = activeSection?.videos || [];
 
   // ── Metadata (payout/votes/views/watch) is fetched only for cards near the
@@ -705,16 +723,13 @@ const HomeGrouped = () => {
       const order = drag.order;
       setTabOrder(order);
       saveTabOrder(order);
-      const activeKey = activeSection?.key;
-      const ni = activeKey ? order.indexOf(activeKey) : -1;
+      // The active tab is held by key, so it stays selected wherever it moved to.
       setDrag(null);
-      if (ni >= 0) setActiveTab(ni);
       return;
     }
     setDrag(null);
     // No real drag → treat as a tab select.
-    const i = tabSections.findIndex((s) => s.key === d.key);
-    if (i >= 0) setActiveTab(i);
+    if (tabSections.some((s) => s.key === d.key)) selectTab(d.key);
   };
   // Global listeners while a pointer is down on a tab.
   useEffect(() => {

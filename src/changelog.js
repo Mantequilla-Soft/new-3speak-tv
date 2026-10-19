@@ -7,6 +7,18 @@
 // 1.0.0 — that way they see all of these when develop is pushed to production.
 export const CHANGELOG = [
   {
+    version: '1.79.109',
+    date: '2026-10-19',
+    summary:
+      'More of your choices now stick between visits, like the Shorts comment panel, transcripts, tag filters and notification filters.',
+  },
+  {
+    version: '1.79.108',
+    date: '2026-10-19',
+    summary:
+      'Your playback speed and the home feed tab you were on are now remembered, on the watch page and on audio posts too.',
+  },
+  {
     version: '1.79.107',
     date: '2026-10-19',
     summary: 'New tickers now start with Slide in, pause, slide out, which is easier to read.',

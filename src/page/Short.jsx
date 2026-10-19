@@ -334,9 +334,12 @@ const VideoShort = () => {
     })();
     return () => { cancelled = true; };
   }, [hideAi]);
-  // Desktop opens the comments side-panel by default; mobile keeps it closed
-  // (it's a full-screen bottom sheet there).
-  const [showComments, setShowComments] = useState(() => typeof window !== 'undefined' && window.innerWidth > 768);
+  // Desktop opens the comments side-panel by default, or as the viewer last left it;
+  // mobile keeps it closed (it's a full-screen bottom sheet there, opened per short).
+  const [showComments, setShowComments] = useState(() => {
+    if (typeof window === 'undefined' || window.innerWidth <= 768) return false;
+    try { return localStorage.getItem('3speak-shorts-comments') !== '0'; } catch { return true; }
+  });
   // The comments panel stands down for the length of a spot, like the rest of the
   // chrome in the `.ad-playing` block in Short.scss. It was the one piece that did
   // not, and on desktop it is open by DEFAULT, so an advertiser's spot played with a
@@ -2352,7 +2355,14 @@ const VideoShort = () => {
 
   /* ---------- INTERACTIONS ---------- */
 
-  const handleToggleComments = () => setShowComments(prev => !prev);
+  // Remembered on desktop only: there the panel is a layout choice, on a phone it is
+  // a sheet somebody opens to read one short's comments.
+  const handleToggleComments = () => setShowComments((prev) => {
+    if (window.innerWidth > 768) {
+      try { localStorage.setItem('3speak-shorts-comments', prev ? '0' : '1'); } catch { /* storage off */ }
+    }
+    return !prev;
+  });
 
   // Mobile comments panel drag-to-close
   const handleCommentsDragStart = useCallback((e) => {

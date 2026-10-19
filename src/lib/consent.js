@@ -15,7 +15,7 @@
  *     • Login session (access_token, user_id, accountsList, activeAccount, aioha*,
  *       hivesigner*, manteauth_login, butrauth_*, auth-entropy/public-key; plus the
  *       server httpOnly cookies threespeak_session/wsession/user + manteauth_pkce)
- *     • Settings YOU set: theme, volume, mute, autoplay, quality, subtitles,
+ *     • Settings YOU set: theme, volume, mute, speed, autoplay, quality, subtitles,
  *       language, NSFW, card size, feed prefs, home tab order, reactions, vote
  *       weight, OpenPod announce config, shorts mute/mode  (`user-store` + friends)
  *     • Resuming an interrupted upload (tus::*, chunked::*) AND post-composer drafts

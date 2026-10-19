@@ -336,6 +336,16 @@ function Watch({ v2 = false }) {
   // Persist mute/volume preference across video navigations
   const MUTE_STORAGE_KEY = '3speak-muted';
   const VOLUME_STORAGE_KEY = '3speak-volume';
+  const SPEED_STORAGE_KEY = '3speak-speed';
+  /* The speed picked from the speed menu, kept like volume. Re-applied on every video
+     load, because a new source resets the element to 1x. Anything unreadable or out of
+     the menu's range is 1x. */
+  const preferredRateRef = useRef(null);
+  if (preferredRateRef.current === null) {
+    let saved = NaN;
+    try { saved = parseFloat(localStorage.getItem(SPEED_STORAGE_KEY)); } catch { /* storage off */ }
+    preferredRateRef.current = saved >= 0.25 && saved <= 2 ? saved : 1;
+  }
   const storedMuted = localStorage.getItem(MUTE_STORAGE_KEY) === '1';
   const storedVolume = parseFloat(localStorage.getItem(VOLUME_STORAGE_KEY)) || 1;
 
@@ -492,6 +502,27 @@ function Watch({ v2 = false }) {
   const {
     adBreakRef, chrome: adChrome, beginVideo, loadWithSpot, tickerVisible, tickerHeld,
   } = useAdPlayback({ player, playerState, videoElRef, videoAttached });
+
+  /* Speed changes from the controls. Only a pick from the speed menu (`chosen`) is
+     saved: press-and-hold calls this too, and puts the old speed back on release. */
+  const choosePlaybackRate = useCallback((rate, opts) => {
+    setPlaybackRate(rate);
+    if (!opts?.chosen) return;
+    preferredRateRef.current = rate;
+    try { localStorage.setItem(SPEED_STORAGE_KEY, String(rate)); } catch { /* storage off */ }
+  }, [setPlaybackRate]);
+
+  /* An ad plays at 1x whatever the viewer's speed. The controls are down during the
+     spot so it could not be changed there, but a speed set before it carried straight
+     in: a 30-second spot ran in 15 at 2x, and the advertiser is credited only the
+     seconds that really passed. The chosen speed comes back when the ad ends. */
+  const adPlayingRef = useRef(false);
+  adPlayingRef.current = !!adChrome.adPlaying;
+  useEffect(() => {
+    if (!player) return;
+    const want = adChrome.adPlaying ? 1 : preferredRateRef.current;
+    if (player.element && player.element.playbackRate !== want) player.setPlaybackRate(want);
+  }, [player, adChrome.adPlaying]);
 
 
 
@@ -713,6 +744,9 @@ function Watch({ v2 = false }) {
       player.setMuted(shouldMute);
       const savedVol = parseFloat(localStorage.getItem('3speak-volume'));
       if (!isNaN(savedVol)) player.setVolume(savedVol);
+      // And the speed. Not into a spot that is already playing: the ad effect owns
+      // the speed until it ends, then hands back this same preference.
+      if (!adPlayingRef.current) player.setPlaybackRate(preferredRateRef.current);
 
       // Autoplay: wait for canplay (enough data buffered) instead of playing
       // immediately on metadata load, which fails on slow connections.
@@ -1929,7 +1963,7 @@ function Watch({ v2 = false }) {
           subtitleStyle,
           onSubtitleStyleChange: updateSubtitleStyle,
           playbackRate: playerState.playbackRate,
-          onPlaybackRateChange: setPlaybackRate,
+          onPlaybackRateChange: choosePlaybackRate,
           onHoldControls: holdControls,
           onReleaseControls: releaseControls,
         }}

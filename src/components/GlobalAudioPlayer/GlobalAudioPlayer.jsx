@@ -27,6 +27,9 @@ import mantequillaLogo from '../../assets/mantequilla-logo.png';
 import '../../page/Audio.scss';
 import './GlobalAudioPlayer.scss';
 
+const TRANSCRIPT_ON_KEY = '3speak-audio-transcript';
+const TRANSCRIPT_LANG_KEY = '3speak-audio-transcript-lang';
+
 // ipfs-audio serves every embed-audio CID with CORS + Range. The hotipfs zone
 // can't pull from its origin (500 "block was not found locally") and took the
 // whole audio tab down; the main Bunny zone is the fallback on a media error.
@@ -175,9 +178,21 @@ function GlobalAudioPlayer() {
   };
 
   // Subtitles
-  const [showSubtitles, setShowSubtitles] = useState(false);
+  // Transcript on/off and its language, as last chosen. Kept apart from the watch
+  // page's caption language on purpose: that key also switches captions ON there.
+  const readTranscriptOn = () => { try { return localStorage.getItem(TRANSCRIPT_ON_KEY) === '1'; } catch { return false; } };
+  const readTranscriptLang = () => { try { return localStorage.getItem(TRANSCRIPT_LANG_KEY); } catch { return null; } };
+  const [showSubtitles, setShowSubtitlesState] = useState(readTranscriptOn);
+  const setShowSubtitles = (on) => {
+    setShowSubtitlesState(on);
+    try { localStorage.setItem(TRANSCRIPT_ON_KEY, on ? '1' : '0'); } catch { /* storage off */ }
+  };
   const [subtitleData, setSubtitleData] = useState(null);
-  const [selectedLang, setSelectedLang] = useState('en');
+  const [selectedLang, setSelectedLangState] = useState(() => readTranscriptLang() || 'en');
+  const setSelectedLang = (lang) => {
+    setSelectedLangState(lang);
+    try { localStorage.setItem(TRANSCRIPT_LANG_KEY, lang); } catch { /* storage off */ }
+  };
   const [subtitleCues, setSubtitleCues] = useState([]);
   const [loadingSubs, setLoadingSubs] = useState(false);
   const activeCueRef = useRef(null);
@@ -260,7 +275,9 @@ function GlobalAudioPlayer() {
     const desired = `${AUDIO_CDN}/${audioCurrent.audio_cid}`;
     if (el.src !== desired) {
       el.src = desired;
-      setShowSubtitles(false);
+      // The next track opens the way the viewer left the transcript. It only shows
+      // once that track's subtitles have loaded, so a track without any is unaffected.
+      setShowSubtitlesState(readTranscriptOn());
       setSubtitleData(null);
       setSubtitleCues([]);
     }
@@ -353,9 +370,13 @@ function GlobalAudioPlayer() {
         .then(({ data }) => {
           if (data?.found) {
             setSubtitleData(data.subtitles);
-            setSelectedLang(p => Object.keys(data.subtitles?.subtitles || {}).includes(p)
-              ? p
-              : Object.keys(data.subtitles?.subtitles || {})[0] || 'en');
+            // The language last picked, if this track has it; otherwise as before. Not
+            // saved from here: falling back is not the viewer choosing.
+            const langs = Object.keys(data.subtitles?.subtitles || {});
+            const want = readTranscriptLang();
+            setSelectedLangState((p) => (want && langs.includes(want)
+              ? want
+              : (langs.includes(p) ? p : langs[0] || 'en')));
           } else setSubtitleData(null);
         })
         .catch(() => setSubtitleData(null));

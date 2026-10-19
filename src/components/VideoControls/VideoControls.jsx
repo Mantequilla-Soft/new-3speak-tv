@@ -742,7 +742,10 @@ function VideoControls({
                     <button
                       key={rate}
                       className={`vc-speed-item${playbackRate === rate ? ' active' : ''}`}
-                      onClick={() => { onPlaybackRateChange(rate); setSpeedMenuOpen(false); }}
+                      // `chosen`: a pick from this menu is a preference to remember. The
+                      // press-and-hold speed-up calls the same handler without it, and a
+                      // hold is only for that moment.
+                      onClick={() => { onPlaybackRateChange(rate, { chosen: true }); setSpeedMenuOpen(false); }}
                     >
                       {rate === 1 ? t('player.controls.speedNormal') : `${rate}x`}
                     </button>
