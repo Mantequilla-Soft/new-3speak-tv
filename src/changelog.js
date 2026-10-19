@@ -7,6 +7,18 @@
 // 1.0.0 — that way they see all of these when develop is pushed to production.
 export const CHANGELOG = [
   {
+    version: '1.79.105',
+    date: '2026-10-19',
+    summary:
+      'Each booking now lists its dates, clicks and plays. Tickers show their style and speed, and video ads show the average watch time.',
+  },
+  {
+    version: '1.79.104',
+    date: '2026-10-19',
+    summary:
+      'Your active and past ad bookings now show the ad itself: the banner image, a live preview of your ticker, or your ad video in a player.',
+  },
+  {
     version: '1.79.103',
     date: '2026-10-19',
     summary: 'Optimization in the chapter editor.',

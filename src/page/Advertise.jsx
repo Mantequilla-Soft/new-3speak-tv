@@ -7,6 +7,7 @@ import { toastIn } from '../utils/toast';
 import { useAppStore } from '../lib/store';
 import { transferWithAioha, getOperationUser } from '../hive-api/aioha';
 import { adsEnabledFor, tickerEnabledFor, ENABLE_BUTRAUTH } from '../utils/config';
+import { formatDate } from '../i18n';
 import SEOHead from '../components/SEOHead';
 import NotFound from './NotFound';
 import AdOverlay from '../components/ads/AdOverlay';
@@ -1264,14 +1265,9 @@ function CampaignPanel({
                 <span className="mkt-campaign-name">{c.name}</span>
                 <span className="mkt-creative-status">{c.status.replace(/_/g, ' ')}</span>
               </div>
-              <div className="mkt-creative-meta">
-                {t('ads.wizard.days', { count: c.days })} · {c.spotSeconds ? `${c.spotSeconds}s · ` : ''}
-                {slotLabel({
-                  percent: c.slotPercent,
-                  position: c.slotPosition,
-                  banner: c.format === 'video_banner',
-                })} · {c.priceHbd} HBD
-                {c.forecast != null ? t('ads.book.forecastPlays', { count: c.forecast, plays: formatCount(c.forecast) }) : ''}
+              <div className="mkt-flight-body">
+                <FlightFacts c={c} />
+                <FlightCreative c={c} account={account} productName={productName} />
               </div>
 
               {c.production && (
@@ -1438,13 +1434,46 @@ function CampaignPanel({
                 );
               })()}
 
-              {(c.delivered > 0 || c.status === 'complete') && (
+              {(c.delivered > 0 || c.status === 'complete' || c.status === 'running') && (
                 <div className="mkt-delivery">
                   <span>
                     {c.forecast
                       ? <Trans i18nKey="ads.delivery.deliveredOf" count={c.delivered} values={{ delivered: formatCount(c.delivered), forecast: formatCount(c.forecast) }} components={{ b: <strong /> }} />
                       : <Trans i18nKey="ads.delivery.delivered" count={c.delivered} values={{ delivered: formatCount(c.delivered) }} components={{ b: <strong /> }} />}
                   </span>
+                  {c.forecast > 0 && (
+                    <span
+                      className="mkt-delivery-bar"
+                      role="progressbar"
+                      aria-valuemin={0}
+                      aria-valuemax={c.forecast}
+                      aria-valuenow={Math.min(c.delivered, c.forecast)}
+                    >
+                      <span style={{ width: `${Math.min(100, (c.delivered / c.forecast) * 100)}%` }} />
+                    </span>
+                  )}
+                  {/* Plays say the ad was seen; clicks say somebody wanted more. A rate
+                      on a handful of plays means nothing, so it waits for a hundred. */}
+                  <span>
+                    <Trans i18nKey="ads.flight.clicks" count={c.clicks || 0} values={{ clicks: formatCount(c.clicks || 0) }} components={{ b: <strong /> }} />
+                    {c.delivered >= 100
+                      ? ` ${t('ads.flight.clickRate', { rate: (((c.clicks || 0) / c.delivered) * 100).toFixed(1) })}`
+                      : ''}
+                  </span>
+                  {/* Only a video spot has watch time; a banner or ticker is shown or not. */}
+                  {c.watch && c.watch.views > 0 && (() => {
+                    const length = c.creative?.durationSeconds || c.spotSeconds;
+                    return (
+                      <span>
+                        {length
+                          ? <Trans i18nKey="ads.flight.avgWatchedOf" values={{ seconds: c.watch.avgSeconds, length }} components={{ b: <strong /> }} />
+                          : <Trans i18nKey="ads.flight.avgWatched" values={{ seconds: c.watch.avgSeconds }} components={{ b: <strong /> }} />}
+                        {c.watch.toEndShare != null && length
+                          ? ` · ${t('ads.flight.toEnd', { percent: Math.round(c.watch.toEndShare * 100) })}`
+                          : ''}
+                      </span>
+                    );
+                  })()}
                   {/* A shortfall against forecast is settled as credit toward the
                       next booking, not as a transfer back. Saying "we will send it"
                       would leave them waiting for money that is not coming. */}
@@ -1699,6 +1728,139 @@ function TickerPreview({ account, productName, message, seconds, tickerStyle = '
           loop
         />
       </div>
+    </div>
+  );
+}
+
+/* The facts of one flight, as a short list rather than a sentence. The old line ran
+ * days, length, position, price and forecast together with dots, and left out the two
+ * things people asked first: what was bought and when it runs. */
+function FlightFacts({ c }) {
+  const { t } = useTranslation();
+  // Read once per mount: "day 3 of 7" does not need to tick while the page is open.
+  const [now] = useState(() => Date.now());
+  const start = c.startAt ? new Date(c.startAt) : null;
+  const end = c.endAt ? new Date(c.endAt) : null;
+  const days = t('ads.wizard.days', { count: c.days });
+  let when;
+  if (start && end) {
+    when = t('ads.flight.window', { start: formatDate(start), end: formatDate(end) });
+    if (c.status === 'running' && now >= start.getTime() && now < end.getTime()) {
+      const day = Math.min(c.days, Math.floor((now - start.getTime()) / 86400000) + 1);
+      when = `${when} · ${t('ads.flight.dayOf', { day, days: c.days })}`;
+    } else {
+      when = `${when} · ${days}`;
+    }
+  } else {
+    // No window yet: the server sets it when the flight is paid and approved. A flight
+    // called off before then never gets one, and "starts once…" would be untrue of it.
+    when = c.status === 'cancelled' || c.status === 'complete'
+      ? days
+      : `${days} · ${t('ads.flight.startsWhenReady')}`;
+  }
+  const positioned = c.slotPercent != null || c.slotPosition != null;
+  /* A ticker's two settings: how it moves, and how long it takes doing it. The
+     booked seconds ARE its speed (one pass in that time), so for a ticker they get
+     their own row instead of sitting under placement as a bare "20s". */
+  const isTicker = c.format === 'video_ticker';
+  const tickerStyle = c.creative?.tickerStyle === 'hold' ? 'hold' : 'crawl';
+  const seconds = isTicker ? null : c.spotSeconds;
+  const rows = [
+    ['format', c.formatLabel],
+    ['when', when],
+    isTicker && c.creative?.kind === 'text' ? ['style', t(`ads.tickerStyle.${tickerStyle}.title`)] : null,
+    isTicker && c.spotSeconds ? ['speed', tickerStyle === 'hold'
+      ? t('ads.flight.holdSpeed', { seconds: c.spotSeconds })
+      : t('ads.flight.crawlSpeed', { seconds: c.spotSeconds })] : null,
+    positioned || seconds ? ['placement', [
+      positioned ? slotLabel({
+        percent: c.slotPercent,
+        position: c.slotPosition,
+        // The ticker interrupts nothing either, so its 0% is the beginning, as a banner's is.
+        banner: c.format === 'video_banner' || c.format === 'video_ticker',
+      }) : null,
+      seconds ? t('ads.flight.seconds', { seconds }) : null,
+    ].filter(Boolean).join(' · ')] : null,
+    ['price', `${c.priceHbd} HBD${c.pricePerSecondDayHbd != null ? ` · ${t('ads.book.perSecondPerDay', { rate: c.pricePerSecondDayHbd })}` : ''}`],
+    // Once plays are counting, the delivery line below carries the forecast.
+    c.forecast != null && !(c.delivered > 0) ? ['forecast', t('ads.flight.forecastValue', { count: c.forecast, plays: formatCount(c.forecast) })] : null,
+    c.createdAt ? ['booked', formatDate(c.createdAt)] : null,
+  ].filter(Boolean);
+  return (
+    <dl className="mkt-flight-facts">
+      {rows.map(([k, v]) => (
+        <div key={k}>
+          <dt>{t(`ads.flight.${k}`)}</dt>
+          <dd>{v}</dd>
+        </div>
+      ))}
+    </dl>
+  );
+}
+
+/* What a booked flight actually runs, on the flight itself. Which banner or ticker line
+ * a booking carried used to be something the advertiser had to remember. A still is
+ * cheap and shown outright; a spot is an embedded player, so it loads only when asked
+ * for, or a history of ten flights would be ten players. */
+function FlightCreative({ c, account, productName }) {
+  const { t } = useTranslation();
+  const cr = c.creative;
+  // A checker from before the campaign list carried the whole creative sends no kind.
+  if (!cr || !cr.kind) return null;
+  const seconds = c.spotSeconds || cr.minSeconds || 10;
+  return (
+    <div className="mkt-flight-creative">
+      <div className="mkt-flight-creative-head">
+        <span className="mkt-preview-cap">
+          {cr.kind === 'image'
+            ? t('ads.flight.runsBanner')
+            : cr.kind === 'text'
+              ? t('ads.flight.runsTicker')
+              : t('ads.flight.runsVideo', { seconds: cr.durationSeconds || seconds })}
+        </span>
+        <CreativeStatus c={cr} />
+      </div>
+      {cr.kind === 'image' && cr.imageUrl ? (
+        <a
+          className="mkt-creative-thumb"
+          href={cr.imageUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          title={t('ads.creative.openFull')}
+        >
+          <img src={cr.imageUrl} alt={t('ads.creative.yourBanner')} loading="lazy" />
+        </a>
+      ) : cr.kind === 'text' && cr.message ? (
+        <>
+          <TickerPreview
+            account={account}
+            productName={productName}
+            message={cr.message}
+            seconds={seconds}
+            tickerStyle={cr.tickerStyle === 'hold' ? 'hold' : 'crawl'}
+            caption={t('ads.ticker.previewCaption', { seconds })}
+          />
+          {cr.clickUrl ? (
+            <span className="mkt-creative-meta">
+              {t('ads.flight.linksTo')}{' '}
+              <a href={cr.clickUrl} target="_blank" rel="noopener noreferrer">{cr.clickUrl.replace(/^https?:\/\//, '')}</a>
+            </span>
+          ) : null}
+        </>
+      ) : cr.previewUrl && cr.encoded ? (
+        // The player itself. Lazy, so a long history only loads the ones scrolled to.
+        <div className="mkt-flight-player">
+          <iframe
+            src={cr.previewUrl}
+            title={t('ads.creative.yourVideo')}
+            loading="lazy"
+            allow="fullscreen; picture-in-picture"
+            allowFullScreen
+          />
+        </div>
+      ) : cr.kind === 'video' ? (
+        <span className="mkt-creative-meta">{t('ads.creative.stillEncoding')}</span>
+      ) : null}
     </div>
   );
 }
