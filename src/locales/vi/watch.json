@@ -253,7 +253,7 @@
       "ads": "Quảng cáo",
       "promotion": "Quảng bá"
     },
-    "chaptersNote": "Khi có từ 3 chương trở lên, danh sách chương sẽ được ghi vào phần mô tả khi lưu.",
+    "chaptersNoteAll": "Danh sách chương sẽ được ghi vào phần mô tả khi lưu.",
     "editChapters": "Sửa chương",
     "fixErrors": "Hãy sửa thẻ được đánh dấu trước."
   },

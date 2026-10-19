@@ -257,7 +257,7 @@
       "ads": "Reklamlar",
       "promotion": "Tanıtım"
     },
-    "chaptersNote": "3 veya daha fazla bölüm olduğunda, bölüm listesi kaydederken açıklamaya yazılır.",
+    "chaptersNoteAll": "Bölüm listesi kaydederken açıklamaya yazılır.",
     "editChapters": "Bölümleri düzenle",
     "fixErrors": "Lütfen önce işaretli sekmeyi düzelt."
   },

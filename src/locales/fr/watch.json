@@ -261,7 +261,7 @@
       "ads": "Publicités",
       "promotion": "Promotion"
     },
-    "chaptersNote": "À partir de 3 chapitres, la liste des chapitres est écrite dans la description à l'enregistrement.",
+    "chaptersNoteAll": "La liste des chapitres est écrite dans la description à l'enregistrement.",
     "editChapters": "Modifier les chapitres",
     "fixErrors": "Corrige d'abord l'onglet signalé."
   },

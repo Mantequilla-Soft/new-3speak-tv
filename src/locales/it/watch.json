@@ -261,7 +261,7 @@
       "ads": "Pubblicità",
       "promotion": "Promozione"
     },
-    "chaptersNote": "Con 3 o più capitoli, l'elenco dei capitoli viene scritto nella descrizione al salvataggio.",
+    "chaptersNoteAll": "L'elenco dei capitoli viene scritto nella descrizione al salvataggio.",
     "editChapters": "Modifica capitoli",
     "fixErrors": "Correggi prima la scheda segnalata."
   },

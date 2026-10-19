@@ -253,7 +253,7 @@
       "ads": "广告",
       "promotion": "推广"
     },
-    "chaptersNote": "章节达到 3 个或以上时，保存时会把章节列表写入描述。",
+    "chaptersNoteAll": "保存时会把章节列表写入描述。",
     "editChapters": "编辑章节",
     "fixErrors": "请先修正标记的标签页。"
   },

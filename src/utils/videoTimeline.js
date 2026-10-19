@@ -98,7 +98,7 @@ export function siteOf(url) {
 
 /**
  * Chapters as stored: [{ start, title }] ascending, the first at 0:00, at least
- * 5 seconds apart, 2 to 50 of them, every one titled. Anything else is [].
+ * 3 seconds apart, 2 to 50 of them, every one titled. Anything else is [].
  * With a known duration, chapters at or past the end are dropped first.
  */
 export function normalizeChapters(raw, { duration } = {}) {
@@ -318,12 +318,12 @@ const chapterUrl = (author, permlink, start) => (start > 0
 /**
  * The chapter section: heading + "- 0:00 Intro" list. With the post's author and
  * permlink each time links to that moment on 3speak.tv; without them (the post
- * doesn't exist yet) the times stay plain. [] when the chapters are not a list
- * every Hive frontend would accept (at least three, from 0:00).
+ * doesn't exist yet) the times stay plain. [] only when there is no valid
+ * chapter list at all: every list the metadata keeps is written out too.
  */
 export function chapterBlock(chapters, { author, permlink } = {}) {
   const norm = normalizeChapters(chapters);
-  if (norm.length < MIN_CHAPTERS) return [];
+  if (!norm.length) return [];
   return [CHAPTERS_HEADING, '', ...norm.map((c) => {
     const stamp = formatStamp(c.start);
     const time = author && permlink ? `[${stamp}](${chapterUrl(author, permlink, c.start)})` : stamp;
@@ -358,12 +358,26 @@ export function linkBlock(links) {
 /** Line range of the chapter list (with its heading, if it has one), or null. */
 function findChapterSection(lines) {
   const block = findChapterBlock(lines.join('\n'));
-  if (!block) return null;
+  if (!block) return headedChapterSection(lines);
   let from = block.from;
   let i = from - 1;
   while (i >= 0 && !lines[i].trim()) i -= 1;
   if (i >= 0 && CHAPTERS_HEADING_RE.test(lines[i])) from = i;
   return { from, to: block.to };
+}
+
+// A list shorter than MIN_CHAPTERS (we write two-chapter lists too) is only
+// recognised under our own heading, so stray timestamps in the text stay put.
+function headedChapterSection(lines) {
+  const from = lines.findIndex((l) => CHAPTERS_HEADING_RE.test(l));
+  if (from < 0) return null;
+  let to = from;
+  for (let i = from + 1; i < lines.length; i += 1) {
+    if (!lines[i].trim()) continue;
+    if (!chapterFromLine(lines[i])) break;
+    to = i;
+  }
+  return { from, to };
 }
 
 /** Line range of a "Video Links" heading and the link lines under it, or null. */

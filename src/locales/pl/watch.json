@@ -265,7 +265,7 @@
       "ads": "Reklamy",
       "promotion": "Promocja"
     },
-    "chaptersNote": "Gdy są co najmniej 3 rozdziały, ich lista trafia do opisu przy zapisie.",
+    "chaptersNoteAll": "Lista rozdziałów trafia do opisu przy zapisie.",
     "editChapters": "Edytuj rozdziały",
     "fixErrors": "Najpierw popraw oznaczoną kartę."
   },

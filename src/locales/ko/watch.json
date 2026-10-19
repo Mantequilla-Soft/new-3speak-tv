@@ -253,7 +253,7 @@
       "ads": "광고",
       "promotion": "홍보"
     },
-    "chaptersNote": "챕터가 3개 이상이면 저장할 때 챕터 목록이 설명에 기록됩니다.",
+    "chaptersNoteAll": "저장할 때 챕터 목록이 설명에 기록됩니다.",
     "editChapters": "챕터 편집",
     "fixErrors": "먼저 표시된 탭을 수정해 주세요."
   },

@@ -14,6 +14,7 @@ import { useAppStore } from '../../lib/store';
 import { canUseUploadFaults, getUploadFaults, setUploadFaults, initUploadFaults } from '../../utils/uploadFaults';
 import { checkPostingRc } from '../../utils/rcCheck';
 import RcInsufficientModal from './RcInsufficientModal';
+import useCanImportVideos from '../../hooks/useCanImportVideos';
 import StepActions from './StepActions';
 import { SHORTS_MAX_DURATION_SEC, shortsMaxDurationLabel, cameraRecordEnabledFor, VIDEO_IMPORT_ENABLED, FEATURE_EDITOR } from '../../utils/config';
 import { isChromium } from '../../utils/browser';
@@ -56,6 +57,7 @@ function EmbedVideoUploadStep1() {
   const [rcModalOpen, setRcModalOpen] = useState(false)
   const rcInsufficient = rcStatus ? rcStatus.ok === false : false
   const navigate = useNavigate()
+  const canImport = useCanImportVideos(VIDEO_IMPORT_ENABLED ? user : null, fromStories ? 'shorts' : 'videos')
 
   // Upload fault injection — badadib only. These failure modes (a carrier eating
   // PATCH, a middlebox black-holing a POST) cannot be reproduced on a healthy
@@ -516,8 +518,9 @@ function EmbedVideoUploadStep1() {
 
               {/* ▶️ Import from the creator's own verified YouTube / TikTok. The mode
                   makes the import page offer only what fits this uploader:
-                  Shorts → YouTube Shorts + TikTok, videos → YouTube videos + streams. */}
-              {VIDEO_IMPORT_ENABLED && !videoFile && !needsAuth && !rcInsufficient && !authChecking && !rcChecking && (
+                  Shorts → YouTube Shorts + TikTok, videos → YouTube videos + streams.
+                  Only shown with a verified link to a platform that fits the mode. */}
+              {VIDEO_IMPORT_ENABLED && canImport && !videoFile && !needsAuth && !rcInsufficient && !authChecking && !rcChecking && (
                 <button
                   type="button"
                   className="button button--outline yt-import-entry"

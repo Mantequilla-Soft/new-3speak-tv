@@ -253,7 +253,7 @@
       "ads": "Iklan",
       "promotion": "Promosi"
     },
-    "chaptersNote": "Jika ada 3 bab atau lebih, daftar bab ditulis ke deskripsi saat kamu menyimpan.",
+    "chaptersNoteAll": "Daftar bab ditulis ke deskripsi saat kamu menyimpan.",
     "editChapters": "Edit bab",
     "fixErrors": "Perbaiki dulu tab yang ditandai."
   },

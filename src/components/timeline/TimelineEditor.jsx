@@ -45,7 +45,7 @@ export function chapterIssues(list, duration = 0) {
   if (!Array.isArray(list) || !list.length) return out;
   const sorted = [...list].sort(byStart);
   if (sorted[0].start !== 0) out.push('errFirst');
-  if (sorted.some((c, i) => i > 0 && c.start - sorted[i - 1].start < MIN_CHAPTER_SECONDS)) out.push('errGap');
+  if (sorted.some((c, i) => i > 0 && c.start - sorted[i - 1].start < MIN_CHAPTER_SECONDS)) out.push('errMinGap');
   if (sorted.some((c) => !String(c.title || '').trim())) out.push('errTitle');
   if (duration > 0 && sorted.some((c) => c.start >= duration)) out.push('errEnd');
   if (sorted.length === 1) out.push('errTooFew');
@@ -606,6 +606,13 @@ export default function TimelineEditor({
   };
 
   // ── the track: tap to seek, drag to scrub, drag a marker or an edge to retime ──
+  // A link's length from its start to `end`: whole seconds, LINK_DUR_MIN to
+  // LINK_DUR_MAX, and never past the end of the video.
+  const linkDurTo = (l, end) => {
+    const room = Math.max(LINK_DUR_MIN, Math.min(LINK_DUR_MAX, Math.floor(duration) - l.at));
+    return clamp(Math.round(end - l.at), LINK_DUR_MIN, room);
+  };
+
   const timeAtX = (clientX) => {
     const r = trackRef.current?.getBoundingClientRect();
     if (!r || !r.width || !(duration > 0)) return 0;
@@ -651,6 +658,13 @@ export default function TimelineEditor({
       if (l && at !== l.at) patchLink(d.key, { at });
       setSelected({ type: 'link', key: d.key });
       seek(at);
+    } else if (d.kind === 'linkEnd') {
+      const l = linkList.find((x) => x._k === d.key);
+      if (!l) return;
+      const dur = linkDurTo(l, tSec);
+      if (dur !== l.dur) patchLink(d.key, { dur });
+      setSelected({ type: 'link', key: d.key });
+      seek(l.at + dur - 1); // the link's last second, so the preview still shows it
     } else {
       seek(tSec);
     }
@@ -663,15 +677,23 @@ export default function TimelineEditor({
     try { trackRef.current.releasePointerCapture(e.pointerId); } catch { /* fine */ }
     if (d.moved) return;
     if (d.kind === 'chapter' || d.kind === 'edge') select('chapter', d.key, { scroll: true });
-    else if (d.kind === 'link') select('link', d.key, { scroll: true });
+    else if (d.kind === 'link' || d.kind === 'linkEnd') select('link', d.key, { scroll: true });
   };
 
-  // Arrow keys move a focused edge or marker by a second (Shift: five).
+  // Arrow keys move a focused edge or marker by a second (Shift: five); on a
+  // link's end handle they make the link shorter or longer.
   const onMarkerKey = (type, key) => (e) => {
     if (e.key !== 'ArrowLeft' && e.key !== 'ArrowRight') return;
     e.preventDefault();
+    e.stopPropagation(); // the end handle sits inside the link marker
     const step = (e.key === 'ArrowLeft' ? -1 : 1) * (e.shiftKey ? 5 : 1);
-    if (type === 'edge') {
+    if (type === 'linkEnd') {
+      const l = linkList.find((x) => x._k === key);
+      if (!l) return;
+      const dur = linkDurTo(l, l.at + l.dur + step);
+      patchLink(key, { dur });
+      seek(l.at + dur - 1);
+    } else if (type === 'edge') {
       const i = chapterList.findIndex((c) => c._k === key);
       if (i <= 0) return;
       const lo = chapterList[i - 1].start + MIN_CHAPTER_SECONDS;
@@ -820,6 +842,18 @@ export default function TimelineEditor({
                       onKeyDown={onMarkerKey('link', l._k)}
                     >
                       {l.kind === 'video' ? <Film size={11} /> : l.kind === 'profile' ? <span className="tle-mark__at">@</span> : <Link2 size={11} />}
+                      <span
+                        data-tl="linkEnd"
+                        data-key={l._k}
+                        className="tle-mark__end"
+                        tabIndex={0}
+                        role="slider"
+                        aria-label={t('upload.timeline.resizeLink')}
+                        aria-valuemin={LINK_DUR_MIN}
+                        aria-valuemax={LINK_DUR_MAX}
+                        aria-valuenow={l.dur}
+                        onKeyDown={onMarkerKey('linkEnd', l._k)}
+                      />
                     </div>
                   );
                 })}
@@ -844,8 +878,8 @@ export default function TimelineEditor({
               <Plus size={15} /> {t('upload.timeline.chapters.add', { time: formatStamp(now) })}
             </button>
           </header>
-          <p className="tle-hint">{t('upload.timeline.chapters.hint')}</p>
-          {issues.map((k) => <p key={k} className="tle-issue">{t(`upload.timeline.chapters.${k}`)}</p>)}
+          <p className="tle-hint">{t('upload.timeline.chapters.hintAll')}</p>
+          {issues.map((k) => <p key={k} className="tle-issue">{t(`upload.timeline.chapters.${k}`, { seconds: MIN_CHAPTER_SECONDS })}</p>)}
           {chapterList.length >= MAX_CHAPTERS && <p className="tle-hint">{t('upload.timeline.chapters.max', { max: MAX_CHAPTERS })}</p>}
           {!chapterList.length ? (
             <p className="tle-empty">{t('upload.timeline.chapters.empty')}</p>

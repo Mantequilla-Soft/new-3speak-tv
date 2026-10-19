@@ -951,7 +951,7 @@ export default function EditVideoModal({ isOpen, onClose, author, permlink, onSa
                 <span className={`edit-video-hint${!bodyValid ? ' error' : ''}`}>{t('watch.edit.markdownHint')}</span>
                 {!isShort && (
                   <p className="evm-note">
-                    {t('watch.edit.chaptersNote')}{' '}
+                    {t('watch.edit.chaptersNoteAll')}{' '}
                     <button type="button" className="evm-linkbtn" onClick={() => selectTab('timeline')}>
                       {t('watch.edit.editChapters')}
                     </button>
