@@ -12,7 +12,8 @@
     "pro": "PRO",
     "new": "NOWE",
     "live": "● NA ŻYWO",
-    "liveChat": "● CZAT NA ŻYWO"
+    "liveChat": "● CZAT NA ŻYWO",
+    "spotlight": "Wyróżnione"
   },
   "status": {
     "scheduled": "Zaplanowany",
@@ -46,5 +47,10 @@
   "watched": {
     "title": "Obejrzane",
     "subtitle": "Twoja historia oglądania"
+  },
+  "spotlightSize": {
+    "label": "Zmień rozmiar",
+    "small": "Mały",
+    "medium": "Średni"
   }
 }

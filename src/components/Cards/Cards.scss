@@ -573,6 +573,192 @@ html[data-card-size="large"] { --card-min-w: 420px; }
   }
 }
 
+// The featured video: the first card of the home Discover tab, two columns wide
+// (Card3 sets the span inline). Spanning two rows it has more height than a 16:9
+// thumbnail needs, so the title gets a bigger font and a third line, and the stats
+// row sits at the bottom of the card.
+.card-container .card.card--featured {
+  h2 {
+    font-size: calc(var(--card-fs) + 4px);
+  }
+  &.card--featured-tall {
+    justify-content: flex-start;
+    // Hard 16:9. The thumbnail (and the strip) clip their content, which lets a
+    // flex column squash them below their own height when the card's content is
+    // taller than its two rows, and the picture stopped being 16:9. They never
+    // shrink now; if it ever does not fit, the row grows a little instead.
+    .img-wrap,
+    .featured-strip-wrap {
+      flex-shrink: 0;
+    }
+    h2 {
+      -webkit-line-clamp: 3;
+      margin-top: 4px;
+    }
+    .bottom-action {
+      margin-top: auto;
+    }
+  }
+
+  // No hover zoom here: the transform would make the card its own stacking context
+  // and put the arrows under the hover preview (z-index 4).
+  @media (hover: hover) {
+    &:hover { transform: none; }
+  }
+
+  // "Spotlight" over the top-left of the big thumbnail; above the hover preview
+  // like the arrows, so it stays while the preview plays. A PRO badge moves
+  // below it.
+  .card-spotlight {
+    position: absolute;
+    top: 8px;
+    left: 8px;
+    z-index: 7;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    pointer-events: none;
+  }
+  .card-spotlight-badge {
+    padding: 3px 10px;
+    border-radius: 999px;
+    // The theme's own surface and text, light or dark, rather than the accent
+    background: var(--bg-elevated);
+    color: var(--text-primary);
+    border: 1px solid var(--border-color);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.35);
+  }
+  // The size toggle beside it, same look
+  .card-spotlight-size {
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    border-radius: 50%;
+    background: var(--bg-elevated);
+    color: var(--text-primary);
+    border: 1px solid var(--border-color);
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.35);
+    font-size: 13px;
+    cursor: pointer;
+    pointer-events: auto;
+    // Solid on hover too: --bg-hover is a see-through tint, which over a
+    // thumbnail made the button look like it was fading away
+    &:hover { background: color-mix(in srgb, var(--bg-elevated) 85%, var(--text-primary)); }
+    &:focus-visible { outline: 2px solid var(--accent-primary); }
+  }
+  .card-gated-badge {
+    top: 38px;
+  }
+
+  .featured-arrow {
+    position: absolute;
+    top: 50%;
+    z-index: 7; // above the hover preview (4) and its controls
+    transform: translateY(-50%);
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    border-radius: 50%;
+    background: rgba(0, 0, 0, 0.55);
+    color: #fff;
+    font-size: 20px;
+    cursor: pointer;
+    opacity: 0;
+    transition: opacity 0.15s ease, background-color 0.15s ease;
+    &--prev { left: 8px; }
+    &--next { right: 8px; }
+    &:hover { background: rgba(0, 0, 0, 0.8); }
+    &:focus-visible { opacity: 1; outline: 2px solid var(--accent-primary); }
+  }
+  &:hover .featured-arrow { opacity: 1; }
+
+  // Under the stats, filling the height that is left in the card: the thumbnails
+  // are exactly that tall and 16:9 wide, so how many show depends on the room,
+  // and the rest scroll sideways. The list itself is out of the flow, so the strip
+  // never makes the rows taller; it only takes the room they leave (48px at least).
+  &:has(.featured-strip) .bottom-action {
+    margin-top: 0;
+  }
+  .featured-strip-wrap {
+    position: relative;
+    flex: 1 1 0;
+    min-height: 48px;
+    padding: 8px 0;
+  }
+  // Semi-transparent, over the ends of the list
+  .featured-strip-arrow {
+    position: absolute;
+    top: 50%;
+    z-index: 2;
+    transform: translateY(-50%);
+    width: 26px;
+    height: 26px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    border-radius: 50%;
+    background: rgba(0, 0, 0, 0.45);
+    color: #fff;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.15s ease;
+    &--prev { left: 2px; }
+    &--next { right: 2px; }
+    &:hover { background: rgba(0, 0, 0, 0.75); }
+    &:focus-visible { outline: 2px solid var(--accent-primary); }
+  }
+  .featured-strip {
+    --strip-gap: 6px;
+    position: absolute;
+    inset: 8px 0;
+    display: flex;
+    gap: var(--strip-gap);
+    padding: 0 4px;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: thin;
+    overscroll-behavior-x: contain;
+  }
+  // With the strip there the title keeps to two lines, so the card still fits
+  // its two rows
+  &.card--featured-tall:has(.featured-strip) h2 {
+    -webkit-line-clamp: 2;
+  }
+  .featured-strip-item {
+    // As tall as the strip, 16:9 wide
+    flex: 0 0 auto;
+    height: 100%;
+    aspect-ratio: 16 / 9;
+    scroll-snap-align: start;
+    padding: 0;
+    border: none;
+    border-radius: 4px;
+    overflow: hidden;
+    background: var(--skeleton-bg, rgba(150, 150, 150, 0.14));
+    cursor: pointer;
+    opacity: 0.8;
+    transition: opacity 0.15s ease;
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    &:hover { opacity: 1; }
+  }
+}
+
 .card-container--shorts {
   grid-template-columns: repeat(auto-fill, minmax(270px, 1fr)); // ~1.5x larger
 

@@ -45,6 +45,17 @@
     width: 28px;
     height: 28px;
   }
+
+  // The Spotlight card: in the SPOTLIGHT label row, after the size button and
+  // the same size and shape (the row lays it out, so not absolute here)
+  &.card-options-btn--spotlight {
+    position: static;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    pointer-events: auto;
+    svg { width: 16px; height: 16px; }
+  }
 }
 
 // Touch devices never fire `.card:hover`, so the reveal rule in Cards.scss would

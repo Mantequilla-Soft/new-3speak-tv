@@ -10,7 +10,8 @@
     "pro": "PRO",
     "new": "YENİ",
     "live": "● CANLI",
-    "liveChat": "● CANLI SOHBET"
+    "liveChat": "● CANLI SOHBET",
+    "spotlight": "Öne çıkan"
   },
   "status": {
     "scheduled": "Planlandı",
@@ -42,5 +43,10 @@
   "watched": {
     "title": "İzlenenler",
     "subtitle": "İzleme geçmişin"
+  },
+  "spotlightSize": {
+    "label": "Boyutu değiştir",
+    "small": "Küçük",
+    "medium": "Orta"
   }
 }

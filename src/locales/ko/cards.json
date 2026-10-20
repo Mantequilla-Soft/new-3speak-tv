@@ -9,7 +9,8 @@
     "pro": "PRO",
     "new": "NEW",
     "live": "● LIVE",
-    "liveChat": "● 라이브 채팅"
+    "liveChat": "● 라이브 채팅",
+    "spotlight": "스포트라이트"
   },
   "status": {
     "scheduled": "예약됨",
@@ -40,5 +41,10 @@
   "watched": {
     "title": "시청한 동영상",
     "subtitle": "내 시청 기록"
+  },
+  "spotlightSize": {
+    "label": "크기 변경",
+    "small": "작게",
+    "medium": "보통"
   }
 }

@@ -10,7 +10,8 @@
     "pro": "PRO",
     "new": "नया",
     "live": "● लाइव",
-    "liveChat": "● लाइव चैट"
+    "liveChat": "● लाइव चैट",
+    "spotlight": "स्पॉटलाइट"
   },
   "status": {
     "scheduled": "शेड्यूल्ड",
@@ -42,5 +43,10 @@
   "watched": {
     "title": "देखे गए",
     "subtitle": "आपकी वॉच हिस्ट्री"
+  },
+  "spotlightSize": {
+    "label": "आकार बदलें",
+    "small": "छोटा",
+    "medium": "मध्यम"
   }
 }

@@ -10,7 +10,8 @@
     "pro": "PRO",
     "new": "NIEUW",
     "live": "● LIVE",
-    "liveChat": "● LIVECHAT"
+    "liveChat": "● LIVECHAT",
+    "spotlight": "In de kijker"
   },
   "status": {
     "scheduled": "Ingepland",
@@ -42,5 +43,10 @@
   "watched": {
     "title": "Bekeken",
     "subtitle": "Je kijkgeschiedenis"
+  },
+  "spotlightSize": {
+    "label": "Grootte wijzigen",
+    "small": "Klein",
+    "medium": "Middel"
   }
 }

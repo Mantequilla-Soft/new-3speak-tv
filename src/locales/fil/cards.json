@@ -10,7 +10,8 @@
     "pro": "PRO",
     "new": "BAGO",
     "live": "● LIVE",
-    "liveChat": "● LIVE CHAT"
+    "liveChat": "● LIVE CHAT",
+    "spotlight": "Tampok"
   },
   "status": {
     "scheduled": "Naka-schedule",
@@ -42,5 +43,10 @@
   "watched": {
     "title": "Napanood",
     "subtitle": "Ang watch history mo"
+  },
+  "spotlightSize": {
+    "label": "Baguhin ang laki",
+    "small": "Maliit",
+    "medium": "Katamtaman"
   }
 }

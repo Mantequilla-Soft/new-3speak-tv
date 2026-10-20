@@ -7,6 +7,24 @@
 // 1.0.0 — that way they see all of these when develop is pushed to production.
 export const CHANGELOG = [
   {
+    version: '1.80.2',
+    date: '2026-10-20',
+    summary:
+      'Video previews on cards now keep playing while you move the mouse around the card.',
+  },
+  {
+    version: '1.80.1',
+    date: '2026-10-20',
+    summary:
+      'Discover is more varied: videos from the same creator are now spread out instead of bunched together.',
+  },
+  {
+    version: '1.80.0',
+    date: '2026-10-20',
+    summary:
+      'Discover now opens with a Spotlight: a top video of the last two days, shown big, with more top picks underneath.',
+  },
+  {
     version: '1.79.116',
     date: '2026-10-20',
     summary:

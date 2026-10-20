@@ -9,7 +9,8 @@
     "pro": "PRO",
     "new": "MỚI",
     "live": "● TRỰC TIẾP",
-    "liveChat": "● CHAT TRỰC TIẾP"
+    "liveChat": "● CHAT TRỰC TIẾP",
+    "spotlight": "Tiêu điểm"
   },
   "status": {
     "scheduled": "Đã lên lịch",
@@ -40,5 +41,10 @@
   "watched": {
     "title": "Đã xem",
     "subtitle": "Lịch sử xem của bạn"
+  },
+  "spotlightSize": {
+    "label": "Đổi kích thước",
+    "small": "Nhỏ",
+    "medium": "Vừa"
   }
 }

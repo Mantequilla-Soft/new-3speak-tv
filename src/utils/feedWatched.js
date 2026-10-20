@@ -62,6 +62,13 @@ export function dropWatchedFromFeeds(queryClient, { author, permlink } = {}) {
   const p = norm(permlink);
   if (!a || !p) return;
 
+  // The featured video (HomeGrouped's fetchFeatured) skips watched videos whatever
+  // the preference, so the next one in line takes over as soon as you have seen it.
+  queryClient.setQueriesData(
+    { queryKey: ['featured'] },
+    (data) => (Array.isArray(data) ? data.filter((item) => !isSameVideo(item, a, p)) : data),
+  );
+
   // The preference is the viewer's. With hide-watched off, a video staying in the
   // feed after you watch it is the CORRECT behaviour, not a stale cache.
   const { hideWatched, watchHistoryEnabled } = useAppStore.getState();

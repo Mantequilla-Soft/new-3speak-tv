@@ -10,7 +10,8 @@
     "pro": "PRO",
     "new": "NEW",
     "live": "● LIVE",
-    "liveChat": "● LIVE CHAT"
+    "liveChat": "● LIVE CHAT",
+    "spotlight": "Spotlight"
   },
   "status": {
     "scheduled": "Scheduled",
@@ -42,5 +43,10 @@
   "watched": {
     "title": "Watched",
     "subtitle": "Your watch history"
+  },
+  "spotlightSize": {
+    "label": "Change size",
+    "small": "Small",
+    "medium": "Medium"
   }
 }

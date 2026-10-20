@@ -10,7 +10,8 @@
     "pro": "PRO",
     "new": "MPYA",
     "live": "● MUBASHARA",
-    "liveChat": "● GUMZO MUBASHARA"
+    "liveChat": "● GUMZO MUBASHARA",
+    "spotlight": "Kivutio"
   },
   "status": {
     "scheduled": "Imeratibiwa",
@@ -42,5 +43,10 @@
   "watched": {
     "title": "Ulizotazama",
     "subtitle": "Historia yako ya kutazama"
+  },
+  "spotlightSize": {
+    "label": "Badilisha ukubwa",
+    "small": "Ndogo",
+    "medium": "Wastani"
   }
 }

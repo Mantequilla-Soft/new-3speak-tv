@@ -346,6 +346,14 @@ export default function useHoverPreview({ renderControls } = {}) {
 
   const onCardEnter = (e, postKey, author, permlink, thumb, title) => {
     if (!canHover) return;
+    // Already previewing this card: the pointer only left it for a moment, for the
+    // scrub bar or the menu, which live in the overlay and not in the card. Going
+    // through the start again set `ready` back to false, which hid the clip that
+    // was still playing (it never fires "playing" again), so it looked stopped.
+    if (hover?.key === postKey) {
+      clearTimeout(hoverTimer.current);
+      return;
+    }
     clearTimeout(hoverTimer.current);
     // The source is normally already preloaded (this card is displayed, so the
     // viewport observer resolved it). This is a fast-path fallback for the case
@@ -372,6 +380,31 @@ export default function useHoverPreview({ renderControls } = {}) {
       });
     }, 500);
   };
+  // Start the preview on a card without a hover, at once. The featured card does
+  // this when a click swaps its video, so the new one plays wherever the pointer
+  // is; it then ends like any hover (leaving the grid, or hovering another card).
+  const startPreview = (postKey, title) => {
+    if (!active || !canHover) return;
+    const node = [...cardNodesRef.current].find((n) => n.isConnected && n.dataset.postkey === postKey);
+    if (!node) return;
+    const { author, permlink, thumb } = node.dataset;
+    clearTimeout(hoverTimer.current);
+    preload(postKey, author, permlink);
+    prefetchSubtitles(author, permlink);
+    const thumbEl = node.querySelector(".img-wrap, .video-thumbnail") || node;
+    hoverNodeRef.current = thumbEl;
+    setReady(false);
+    setHover({
+      key: postKey,
+      author,
+      permlink,
+      thumb,
+      title,
+      source: sourcesRef.current.get(postKey),
+      rect: rectOf(thumbEl),
+    });
+  };
+
   const onContainerLeave = () => {
     if (!canHover) return;
     // While an overlay control has a popup open (the card options menu), the
@@ -444,5 +477,6 @@ export default function useHoverPreview({ renderControls } = {}) {
     containerProps: { ref: containerRef, onMouseLeave: onContainerLeave },
     getCardProps,
     overlay,
+    startPreview,
   };
 }

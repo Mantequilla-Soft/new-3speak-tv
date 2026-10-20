@@ -11,7 +11,8 @@
     "pro": "PRO",
     "new": "NOVO",
     "live": "● AO VIVO",
-    "liveChat": "● CHAT AO VIVO"
+    "liveChat": "● CHAT AO VIVO",
+    "spotlight": "Destaque"
   },
   "status": {
     "scheduled": "Agendado",
@@ -44,5 +45,10 @@
   "watched": {
     "title": "Assistidos",
     "subtitle": "Seu histórico de vídeos"
+  },
+  "spotlightSize": {
+    "label": "Alterar tamanho",
+    "small": "Pequeno",
+    "medium": "Médio"
   }
 }
