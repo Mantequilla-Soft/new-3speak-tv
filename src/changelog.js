@@ -7,6 +7,12 @@
 // 1.0.0 — that way they see all of these when develop is pushed to production.
 export const CHANGELOG = [
   {
+    version: '1.79.110',
+    date: '2026-10-20',
+    summary:
+      'Warm-up accounts can now comment and reply on shorts.',
+  },
+  {
     version: '1.79.109',
     date: '2026-10-19',
     summary:
