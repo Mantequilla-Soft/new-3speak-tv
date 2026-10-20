@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { BUTRAUTH_URL } from './config';
+import { useAppStore } from '../lib/store';
 
 /**
  * Can somebody create a free Hive account from THIS device?
@@ -19,13 +20,18 @@ import { BUTRAUTH_URL } from './config';
  * is a courtesy, not an enforcement point.
  */
 
-// One answer per page load. It is keyed on the address, which does not change
-// under someone mid-session, and every entry point asks -- the nav, the login
+// One answer per login state. Every entry point asks -- the nav, the login
 // modal, the mobile bar -- so without this a single page could ask three times.
+// Keyed on who is signed in, not just the page load: signing in with a Hive or
+// warm-up account is what closes signup on this network (Butter Auth records
+// the address at login), so the answer from before that login is stale the
+// moment they log out again, and the Sign up button stayed until a reload.
 let cached = null;
+let cachedKey = null;
 
-export function fetchSignupPossible() {
-  if (cached) return cached;
+export function fetchSignupPossible(key = null) {
+  if (cached && cachedKey === key) return cached;
+  cachedKey = key;
   cached = (async () => {
     try {
       const res = await fetch(`${BUTRAUTH_URL}/api/account/signup-possible`, {
@@ -58,14 +64,17 @@ export function useSignupPossible() {
   // is in flight, then corrected if the answer says otherwise. The other order
   // makes signup flicker out of existence on every page load.
   const [state, setState] = useState({ possible: true, reason: null, message: null, loading: true });
+  const user = useAppStore((s) => s.user);
+  const incubationHandle = useAppStore((s) => s.incubationHandle);
+  const authKey = user || incubationHandle || '';
 
   useEffect(() => {
     let alive = true;
-    fetchSignupPossible().then((r) => {
+    fetchSignupPossible(authKey).then((r) => {
       if (alive) setState({ ...r, loading: false });
     });
     return () => { alive = false; };
-  }, []);
+  }, [authKey]);
 
   return state;
 }
