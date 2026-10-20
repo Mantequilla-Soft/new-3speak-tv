@@ -7,6 +7,18 @@
 // 1.0.0 — that way they see all of these when develop is pushed to production.
 export const CHANGELOG = [
   {
+    version: '1.79.116',
+    date: '2026-10-20',
+    summary:
+      'New in the Shorts Editor: moving stickers, auto cut at pauses or scene changes, beat sync, colour and noise fixes, sound effects and a bigger window on desktop.',
+  },
+  {
+    version: '1.79.115',
+    date: '2026-10-20',
+    summary:
+      'The Shorts Editor now saves your project as a draft while you work: 48 hours, or 3 drafts for 30 days with 3Speak Pro.',
+  },
+  {
     version: '1.79.114',
     date: '2026-10-20',
     summary:

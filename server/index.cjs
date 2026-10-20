@@ -2268,6 +2268,62 @@ app.get('/api/stt-token', baseLimiter, (req, res) => {
   res.json({ token: `${exp}.${sig}`, exp })
 })
 
+// === Editor drafts token ===
+// The shorts editor (another origin, in an iframe) keeps a signed-in user's
+// project on ITS backend. It cannot see our session cookies, so we tell it who
+// the user is: a short-lived token signed with EDITOR_TOKEN_SECRET, which only
+// we and the editor backend hold. Identity comes from a VERIFIED credential
+// only (butrauth session, or the wallet / HiveSigner session the user proved),
+// never from a claimed username, so nobody can open someone else's drafts.
+// Pro (from the checker) decides the limits: 3 projects for 30 days instead
+// of 1 for 48 hours. 401 'sign-in-needed' -> the site runs
+// establishWalletSession() (one signature for wallet logins) and asks again.
+const EDITOR_TOKEN_SECRET = process.env.EDITOR_TOKEN_SECRET || ''
+const EDITOR_TOKEN_TTL_MS = 6 * 60 * 60 * 1000
+const CHECKER_URL = (process.env.CHECKER_URL || 'https://checker.3speak.tv').replace(/\/+$/, '')
+const premiumCache = new Map() // user -> { pro, at }
+
+async function isPro(user) {
+  const hit = premiumCache.get(user)
+  if (hit && Date.now() - hit.at < 5 * 60 * 1000) return hit.pro
+  try {
+    const r = await fetch(`${CHECKER_URL}/premium/${encodeURIComponent(user)}`, { signal: AbortSignal.timeout(3000) })
+    const pro = r.ok ? !!(await r.json()).premium : false
+    premiumCache.set(user, { pro, at: Date.now() })
+    return pro
+  } catch {
+    return hit ? hit.pro : false
+  }
+}
+
+app.post('/api/editor-token', baseLimiter, async (req, res) => {
+  if (!EDITOR_TOKEN_SECRET) return res.status(503).json({ error: 'Drafts not configured' })
+  // A browser can hold verified sessions of two accounts (a parked wallet
+  // session after switching to butrauth, or the other way round). The page
+  // says which account it is logged in as; only a VERIFIED session of exactly
+  // that account counts, so the claim picks among proven identities and can
+  // never add one.
+  const want = String(req.body?.user || '').toLowerCase()
+  const butr = await resolveButrUser(req, res)
+  const ws = req.cookies?.[WSESSION_COOKIE_NAME]
+  const wallet = ws && verifyWalletSession(ws)
+  const verified = [butr, wallet].filter(Boolean).map(u => String(u).toLowerCase())
+  const user = want ? verified.find(u => u === want) : verified[0]
+  if (!user || !HIVE_USER_RE.test(user)) return res.status(401).json({ error: 'sign-in-needed' })
+  const pro = await isPro(user)
+  const exp = Date.now() + EDITOR_TOKEN_TTL_MS
+  const body = Buffer.from(JSON.stringify({ u: user, pro, exp })).toString('base64url')
+  const sig = crypto.createHmac('sha256', EDITOR_TOKEN_SECRET).update(body).digest('hex')
+  res.json({
+    token: `v1.${body}.${sig}`,
+    user,
+    pro,
+    exp,
+    maxProjects: pro ? 3 : 1,
+    ttlHours: pro ? 30 * 24 : 48
+  })
+})
+
 // Which languages the STT server actually has models for. Proxied server-side so
 // the browser doesn't need CORS on the STT box; cached for a minute.
 const STT_HTTP_URL = (process.env.STT_HTTP_URL || '').replace(/\/+$/, '')

@@ -11,6 +11,7 @@ import { getLockedBeneficiaries } from '../../utils/beneficiaries';
 import { sanitizeMusicCredits, soundAuthorsOf } from '../../utils/soundCredits';
 import { useTranslation } from 'react-i18next';
 import { toastIn } from '../../utils/toast';
+import { establishWalletSession, getCurrentProvider, Providers } from '../../hive-api/aioha';
 import './EditorModal.scss';
 
 const toast = toastIn('Shorts');
@@ -26,6 +27,9 @@ function EditorModal({ isOpen, onClose, videoUrl, videoName, videoType, clipStar
   const premiumStatus = usePremiumStatus(user);
   const userRef = useRef(user);
   useEffect(() => { userRef.current = user; }, [user]);
+  // The editor keeps drafts of signed-in users and asks before closing
+  // (editor-ready says canSaveDrafts); older editors get the plain confirm.
+  const editorDraftsRef = useRef(false);
   const isPremium = !!premiumStatus?.premium;
   const [renderStatus, setRenderStatus] = useState(null); // null | 'sending' | 'rendering' | 'complete' | 'error' | 'preparing'
   const [renderProgress, setRenderProgress] = useState(0);
@@ -106,6 +110,8 @@ function EditorModal({ isOpen, onClose, videoUrl, videoName, videoType, clipStar
       switch (data.type) {
         case 'editor-ready':
           setEditorReady(true);
+          editorDraftsRef.current = !!data.canSaveDrafts;
+          if (data.canSaveDrafts) sendDraftSession(false);
           // If we have a video to pre-load (remix mode), send it once
           if (videoUrl && !mediaLoadedRef.current) {
             mediaLoadedRef.current = true;
@@ -152,10 +158,61 @@ function EditorModal({ isOpen, onClose, videoUrl, videoName, videoType, clipStar
           handleClose({ confirmed: true });
           break;
 
+        // Our close button asked the editor first (request-close); it offered
+        // to save the project and answers here
+        case 'close-decision':
+          if (data.close) handleClose({ confirmed: true });
+          break;
+
+        // "Save drafts" in the editor: sign in (one signature for wallet logins)
+        case 'drafts-sign-in':
+          sendDraftSession(true);
+          break;
+
         case 'stt-config-request':
           replySttConfig(data.requestId);
           break;
       }
+    };
+
+    // Drafts: tell the editor who the user is with a token from our server,
+    // which only issues it for a VERIFIED session (butrauth, or the wallet /
+    // HiveSigner session cookie). No session yet: HiveSigner gets one silently;
+    // wallet logins sign once, but only when they ask (interactive), never as
+    // a surprise popup on opening the studio.
+    const sendDraftSession = async (interactive) => {
+      const who = userRef.current;
+      const hasMedia = !!(videoUrl || videoFile);
+      if (!who) {
+        sendToEditor({ type: 'drafts-session', session: null, reason: 'logged-out', hasMedia });
+        return;
+      }
+      // Our account goes along: the server only uses a verified session of it
+      const mint = () => fetch('/api/editor-token', {
+        method: 'POST',
+        credentials: 'include',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ user: String(who).toLowerCase() }),
+      }).catch(() => null);
+      let res = await mint();
+      const silent = getCurrentProvider() === Providers.HiveSigner;
+      if (res && res.status === 401 && (interactive || silent)) {
+        try { await establishWalletSession(who); } catch { /* declined or failed */ }
+        res = await mint();
+      }
+      let session = null;
+      if (res && res.ok) {
+        const s = await res.json().catch(() => null);
+        // A session cookie left over from another account must not open its drafts
+        if (s && s.user === String(who).toLowerCase()) session = s;
+      }
+      let reason = null;
+      if (!session) {
+        const needsSignIn = res && (res.status === 401 || res.ok);
+        // Asked to sign in and it did not work (declined, or no signature): say so
+        reason = needsSignIn ? (interactive ? 'sign-in-failed' : 'sign-in-needed') : 'unavailable';
+      }
+      sendToEditor({ type: 'drafts-session', session, reason, hasMedia });
     };
 
     // The editor's teleprompter asks for the STT server + a short-lived token.
@@ -423,6 +480,11 @@ function EditorModal({ isOpen, onClose, videoUrl, videoName, videoType, clipStar
   }, []);
 
   const handleClose = (opts) => {
+    // A drafts-capable editor asks itself (save the project?) and answers with close-decision
+    if (editorReady && opts?.confirmed !== true && editorDraftsRef.current) {
+      sendToEditor({ type: 'request-close' });
+      return;
+    }
     if (editorReady && opts?.confirmed !== true && !window.confirm(t('modals.editor.confirmClose'))) {
       return;
     }
@@ -433,6 +495,7 @@ function EditorModal({ isOpen, onClose, videoUrl, videoName, videoType, clipStar
     setResolvedUrl(null);
     setResolveError(false);
     mediaLoadedRef.current = false;
+    editorDraftsRef.current = false;
     if (pollIntervalRef.current) clearInterval(pollIntervalRef.current);
     onClose();
   };
