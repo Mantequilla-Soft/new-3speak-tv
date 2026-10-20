@@ -428,6 +428,13 @@
     "moveChapter": "Sogeza mwanzo wa {{title}}",
     "moveLink": "Sogeza kiungo hiki",
     "resizeLink": "Badilisha muda kiungo hiki kinaonyeshwa",
+    "zoom": "Kuza",
+    "zoomIn": "Kuza ndani",
+    "zoomOut": "Kuza nje",
+    "zoomFit": "Tosha",
+    "zoomHint": "Kuza ratiba ya muda. Ctrl au ⌘ + gurudumu la kipanya hukuza mahali kielekezi kilipo.",
+    "expand": "Upana kamili",
+    "collapse": "Toka kwenye upana kamili",
     "fixChapters": "Tafadhali rekebisha sura kwanza, au uziondoe.",
     "chapters": {
       "heading": "Sura",

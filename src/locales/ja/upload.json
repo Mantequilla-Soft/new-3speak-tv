@@ -426,6 +426,13 @@
     "moveChapter": "「{{title}}」の開始位置を移動",
     "moveLink": "このリンクを移動",
     "resizeLink": "このリンクの表示時間を変更",
+    "zoom": "ズーム",
+    "zoomIn": "拡大",
+    "zoomOut": "縮小",
+    "zoomFit": "全体表示",
+    "zoomHint": "タイムラインをズームします。Ctrl または ⌘ + マウスホイールでポインターの位置を中心にズームします。",
+    "expand": "全幅表示",
+    "collapse": "全幅表示を終了",
     "fixChapters": "先にチャプターを修正するか、削除してください。",
     "chapters": {
       "heading": "チャプター",

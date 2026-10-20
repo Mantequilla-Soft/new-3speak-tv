@@ -428,6 +428,13 @@
     "moveChapter": "Begin van {{title}} verplaatsen",
     "moveLink": "Deze link verplaatsen",
     "resizeLink": "Wijzig hoe lang deze link te zien is",
+    "zoom": "Zoom",
+    "zoomIn": "Inzoomen",
+    "zoomOut": "Uitzoomen",
+    "zoomFit": "Passend",
+    "zoomHint": "Zoom de tijdlijn. Ctrl of ⌘ + muiswiel zoomt op de plek van de aanwijzer.",
+    "expand": "Volledige breedte",
+    "collapse": "Volledige breedte sluiten",
     "fixChapters": "Verbeter eerst de hoofdstukken, of verwijder ze.",
     "chapters": {
       "heading": "Hoofdstukken",

@@ -1,8 +1,8 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { useTranslation } from 'react-i18next';
 import axios from 'axios';
-import { Clock, Film, Link2, Pencil, Plus, Search, Trash2, X } from 'lucide-react';
+import { Clock, Film, Link2, Maximize2, Minimize2, Pencil, Plus, Search, Trash2, X, ZoomIn, ZoomOut } from 'lucide-react';
 import TimelineToasters from '../playVideo/TimelineToasters';
 import AccountImg from '../HiveAvatar/AccountImg';
 import { fetchLinkMeta, parseOne } from '../Chat/chatLinks';
@@ -460,10 +460,21 @@ function LinkSheet({ initial, defaultAt, duration, onSave, onClose }) {
 
 const LANE_H = 22;
 
-/** Greedy lanes so overlapping links stack instead of hiding each other. */
-function laneLinks(links, duration) {
+// Zoom: at most this many pixels per second (and never past MAX_ZOOM), so a
+// two-hour video can still be zoomed down to single seconds.
+const MAX_PX_PER_SEC = 24;
+const MAX_ZOOM = 256;
+// Ruler labels: the first of these steps that leaves at least TICK_MIN_PX
+// between two labels at the current zoom.
+const TICK_STEPS = [1, 2, 5, 10, 15, 30, 60, 120, 300, 600, 900, 1800, 3600];
+const TICK_MIN_PX = 64;
+
+/**
+ * Greedy lanes so overlapping links stack instead of hiding each other.
+ * `minSpan` is how many seconds the narrowest marker covers on screen.
+ */
+function laneLinks(links, minSpan) {
   const lanes = [];
-  const minSpan = duration > 0 ? duration * 0.02 : 1;   // a marker is never thinner than ~2% to the eye
   return links.map((l) => {
     const end = l.at + Math.max(l.dur, minSpan);
     let lane = lanes.findIndex((laneEnd) => laneEnd <= l.at);
@@ -496,6 +507,12 @@ export default function TimelineEditor({
   const [selected, setSelected] = useState(null);       // { type: 'chapter'|'link', key }
   const [sheet, setSheet] = useState(null);             // { key|null }
   const [focusKey, setFocusKey] = useState(null);
+  const scrollRef = useRef(null);
+  const zoomAnchor = useRef(null);                       // { time, x } to hold still while zooming
+  const [zoomWanted, setZoomWanted] = useState(1);
+  const [viewW, setViewW] = useState(0);                 // visible track width, px
+  const [scrollX, setScrollX] = useState(0);
+  const [expanded, setExpanded] = useState(false);       // full-window mode
 
   const chapterList = useMemo(() => [...(chapters || [])].sort(byStart), [chapters]);
   const linkList = useMemo(() => [...(links || [])].sort(byAt), [links]);
@@ -548,6 +565,92 @@ export default function TimelineEditor({
       try { el.currentTime = tSec; } catch { /* not seekable yet */ }
     }
   }, [duration, canPlay]);
+
+  // ── zoom ─────────────────────────────────────────────────────────────────
+  // The track is `zoom` times as wide as its scroll box. Zooming keeps one moment
+  // still on screen: the pointer for Ctrl/⌘ + wheel, else the playhead (or the
+  // middle when the playhead is out of view).
+  const hasTrack = duration > 0;
+  const maxZoom = hasTrack && viewW > 0 ? clamp((duration * MAX_PX_PER_SEC) / viewW, 1, MAX_ZOOM) : 1;
+  const zoom = clamp(zoomWanted, 1, maxZoom);
+  const innerW = viewW * zoom;
+
+  const zoomTo = (next, anchor = null) => {
+    const el = scrollRef.current;
+    const nz = clamp(next, 1, maxZoom);
+    if (!el || !hasTrack || Math.abs(nz - zoom) < 0.001) return;
+    let a = anchor;
+    if (!a) {
+      const w = el.clientWidth * zoom;
+      const px = (currentTime / duration) * w - el.scrollLeft;
+      a = px >= 0 && px <= el.clientWidth
+        ? { time: currentTime, x: px }
+        : { time: ((el.scrollLeft + el.clientWidth / 2) / w) * duration, x: el.clientWidth / 2 };
+    }
+    zoomAnchor.current = a;
+    setZoomWanted(nz);
+  };
+  const zoomToRef = useRef(zoomTo);
+  useEffect(() => { zoomToRef.current = zoomTo; });
+
+  useLayoutEffect(() => {
+    const a = zoomAnchor.current;
+    const el = scrollRef.current;
+    if (!a || !el || !hasTrack) return;
+    zoomAnchor.current = null;
+    el.scrollLeft = (a.time / duration) * el.clientWidth * zoom - a.x;
+    setScrollX(el.scrollLeft);
+  }, [zoom]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  // Track width, and Ctrl/⌘ + wheel (also a trackpad pinch) to zoom at the pointer.
+  // A native listener: React's wheel handler is passive and cannot stop the page zoom.
+  useEffect(() => {
+    const el = scrollRef.current;
+    if (!el) return undefined;
+    const ro = new ResizeObserver(() => setViewW(el.clientWidth));
+    ro.observe(el);
+    setViewW(el.clientWidth);
+    const onWheel = (e) => {
+      if (!(e.ctrlKey || e.metaKey)) return;
+      e.preventDefault();
+      const r = el.getBoundingClientRect();
+      const x = e.clientX - r.left;
+      const w = el.scrollWidth || 1;
+      const time = ((el.scrollLeft + x) / w) * (Number(el.dataset.duration) || 0);
+      zoomToRef.current(Number(el.dataset.zoom || 1) * (e.deltaY < 0 ? 1.25 : 0.8), { time, x });
+    };
+    el.addEventListener('wheel', onWheel, { passive: false });
+    return () => { ro.disconnect(); el.removeEventListener('wheel', onWheel); };
+  }, [hasTrack]);
+
+  // Zoomed in, the view follows the playhead: a page turn while playing, and a
+  // jump when something outside the view is selected. Not while dragging.
+  useEffect(() => {
+    const el = scrollRef.current;
+    if (!el || zoom <= 1 || !hasTrack || dragRef.current) return;
+    const px = (currentTime / duration) * el.clientWidth * zoom;
+    const left = el.scrollLeft;
+    const w = el.clientWidth;
+    if (px < left + 4 || px > left + w - 4) el.scrollLeft = px - w * (playing ? 0.1 : 0.3);
+  }, [currentTime, zoom, duration, playing, hasTrack]);
+
+  // ── full-window mode ─────────────────────────────────────────────────────
+  // The same editor, laid out over the whole window: nothing remounts, so the
+  // video keeps playing. Esc leaves it (the link sheet handles its own Esc first).
+  useEffect(() => {
+    if (!expanded) return undefined;
+    document.body.classList.add('tle-expanded-open');
+    const onKey = (e) => {
+      if (e.key !== 'Escape' || sheet) return;
+      e.preventDefault(); // the Edit dialog ignores a handled Esc, so it stays open
+      setExpanded(false);
+    };
+    window.addEventListener('keydown', onKey, true);
+    return () => {
+      document.body.classList.remove('tle-expanded-open');
+      window.removeEventListener('keydown', onKey, true);
+    };
+  }, [expanded, sheet]);
 
   // ── selection ────────────────────────────────────────────────────────────
   const select = useCallback((type, key, { seekTo = true, scroll = false } = {}) => {
@@ -641,6 +744,13 @@ export default function TimelineEditor({
     if (!d || d.id !== e.pointerId) return;
     if (!d.moved && Math.abs(e.clientX - d.x) < 4) return;
     d.moved = true;
+    // Zoomed in: dragging against either edge scrolls the view along.
+    const box = scrollRef.current;
+    if (box && zoom > 1) {
+      const r = box.getBoundingClientRect();
+      if (e.clientX < r.left + 28) box.scrollLeft -= 14;
+      else if (e.clientX > r.right - 28) box.scrollLeft += 14;
+    }
     const tSec = timeAtX(e.clientX);
     if (d.kind === 'edge') {
       const i = chapterList.findIndex((c) => c._k === d.key);
@@ -714,9 +824,26 @@ export default function TimelineEditor({
   const liveChapter = chapterAt(chapterList, currentTime);
   const liveLinks = new Set(activeLinksAt(linkList, currentTime).map((l) => l._k));
   const issues = chapterIssues(chapterList, duration);
-  const laned = laneLinks(linkList, duration);
+  const laned = laneLinks(linkList, innerW > 0 ? (26 / innerW) * duration : duration * 0.02);
   const laneCount = Math.max(1, ...laned.map((x) => x.lane + 1));
   const pct = (sec) => `${duration > 0 ? clamp((sec / duration) * 100, 0, 100) : 0}%`;
+
+  // Ruler labels, only those near the visible part (a zoomed two-hour video
+  // would otherwise draw thousands).
+  const tickStep = innerW > 0 && hasTrack
+    ? (TICK_STEPS.find((st) => (st / duration) * innerW >= TICK_MIN_PX) || 3600)
+    : 0;
+  const ticks = [];
+  if (tickStep) {
+    const from = Math.max(0, Math.floor((((scrollX - viewW) / innerW) * duration) / tickStep) * tickStep);
+    const to = Math.min(duration, (((scrollX + 2 * viewW) / innerW) * duration));
+    for (let st = from; st <= to; st += tickStep) {
+      // Leave room for the label before the end of the track.
+      if (st > 0 && ((duration - st) / duration) * innerW < 28) break;
+      ticks.push(st);
+    }
+  }
+  const zoomSlider = maxZoom > 1 ? Math.round((Math.log(zoom) / Math.log(maxZoom)) * 100) : 0;
   const selectedLinkIndex = selected?.type === 'link' ? linkList.findIndex((l) => l._k === selected.key) : -1;
 
   const rowInvalid = (c, i) => (
@@ -727,7 +854,20 @@ export default function TimelineEditor({
   );
 
   return (
-    <div className={`tle${compact ? ' tle--compact' : ''}`}>
+    <div
+      className={`tle${compact ? ' tle--compact' : ''}${expanded ? ' tle--expanded' : ''}`}
+      role={expanded ? 'dialog' : undefined}
+      aria-modal={expanded ? 'true' : undefined}
+      aria-label={expanded ? t('upload.timeline.title') : undefined}
+    >
+      {expanded && (
+        <div className="tle-xhead">
+          <h3>{t('upload.timeline.title')}</h3>
+          <button type="button" className="tle-icon-btn" onClick={() => setExpanded(false)} aria-label={t('upload.timeline.collapse')} title={t('upload.timeline.collapse')}>
+            <X size={18} />
+          </button>
+        </div>
+      )}
       <div className="tle-top">
         {/* Preview: the real file (or the published stream), with the toasters
             drawn by the same component the watch page uses. */}
@@ -777,6 +917,48 @@ export default function TimelineEditor({
 
         {duration > 0 && (
           <div className="tle-trackwrap">
+            <div className="tle-zoombar">
+              <button type="button" className="tle-icon-btn" onClick={() => zoomTo(zoom / 2)} disabled={zoom <= 1} aria-label={t('upload.timeline.zoomOut')} title={t('upload.timeline.zoomOut')}>
+                <ZoomOut size={16} />
+              </button>
+              <input
+                type="range"
+                className="tle-zoombar__range"
+                min={0}
+                max={100}
+                value={zoomSlider}
+                disabled={maxZoom <= 1}
+                onChange={(e) => zoomTo(maxZoom ** (Number(e.target.value) / 100))}
+                aria-label={t('upload.timeline.zoom')}
+                title={t('upload.timeline.zoomHint')}
+              />
+              <button type="button" className="tle-icon-btn" onClick={() => zoomTo(zoom * 2)} disabled={zoom >= maxZoom} aria-label={t('upload.timeline.zoomIn')} title={t('upload.timeline.zoomIn')}>
+                <ZoomIn size={16} />
+              </button>
+              {zoom > 1 && (
+                <button type="button" className="tle-btn tle-btn--sm tle-zoombar__fit" onClick={() => zoomTo(1)}>
+                  {t('upload.timeline.zoomFit')}
+                </button>
+              )}
+              <span className="tle-zoombar__spacer" />
+              <button
+                type="button"
+                className="tle-btn tle-btn--sm"
+                onClick={() => setExpanded((v) => !v)}
+                aria-pressed={expanded}
+              >
+                {expanded ? <Minimize2 size={15} /> : <Maximize2 size={15} />}
+                {' '}{expanded ? t('upload.timeline.collapse') : t('upload.timeline.expand')}
+              </button>
+            </div>
+            <div
+              ref={scrollRef}
+              className={`tle-scroll${zoom > 1 ? ' is-zoomed' : ''}`}
+              data-zoom={zoom}
+              data-duration={duration}
+              onScroll={(e) => setScrollX(e.currentTarget.scrollLeft)}
+            >
+            <div className="tle-zoom" style={{ width: `${zoom * 100}%` }}>
             <div
               ref={trackRef}
               className={`tle-track${playing ? ' is-playing' : ''}`}
@@ -860,10 +1042,14 @@ export default function TimelineEditor({
               </div>
               <div className="tle-playhead" style={{ left: pct(currentTime) }} />
             </div>
-            <div className="tle-ruler">
-              <span>0:00</span>
-              <span>{formatStamp(duration / 2)}</span>
-              <span>{formatStamp(duration)}</span>
+            <div className="tle-ruler" onClick={(e) => seek(timeAtX(e.clientX))}>
+              {ticks.map((st) => (
+                <span key={st} className={`tle-tick${st === 0 ? ' tle-tick--first' : ''}`} style={{ left: pct(st) }}>
+                  {formatStamp(st)}
+                </span>
+              ))}
+            </div>
+            </div>
             </div>
           </div>
         )}

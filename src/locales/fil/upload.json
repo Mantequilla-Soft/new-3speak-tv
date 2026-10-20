@@ -428,6 +428,13 @@
     "moveChapter": "Ilipat ang simula ng {{title}}",
     "moveLink": "Ilipat ang link na ito",
     "resizeLink": "Baguhin kung gaano katagal lalabas ang link na ito",
+    "zoom": "Zoom",
+    "zoomIn": "I-zoom in",
+    "zoomOut": "I-zoom out",
+    "zoomFit": "Ipagkasya",
+    "zoomHint": "I-zoom ang timeline. Ang Ctrl o ⌘ + mouse wheel ay nag-zoom sa kinaroroonan ng pointer.",
+    "expand": "Buong lapad",
+    "collapse": "Lumabas sa buong lapad",
     "fixChapters": "Ayusin muna ang mga kabanata, o alisin ang mga ito.",
     "chapters": {
       "heading": "Mga kabanata",

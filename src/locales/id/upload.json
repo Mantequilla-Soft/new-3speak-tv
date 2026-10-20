@@ -426,6 +426,13 @@
     "moveChapter": "Pindahkan awal {{title}}",
     "moveLink": "Pindahkan tautan ini",
     "resizeLink": "Ubah berapa lama tautan ini tampil",
+    "zoom": "Zoom",
+    "zoomIn": "Perbesar",
+    "zoomOut": "Perkecil",
+    "zoomFit": "Pas",
+    "zoomHint": "Zoom lini waktu. Ctrl atau ⌘ + roda mouse memperbesar di posisi penunjuk.",
+    "expand": "Lebar penuh",
+    "collapse": "Keluar dari lebar penuh",
     "fixChapters": "Perbaiki dulu bab-babnya, atau hapus.",
     "chapters": {
       "heading": "Bab",

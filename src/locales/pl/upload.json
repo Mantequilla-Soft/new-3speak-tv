@@ -432,6 +432,13 @@
     "moveChapter": "Przesuń początek: {{title}}",
     "moveLink": "Przesuń ten link",
     "resizeLink": "Zmień, jak długo widać ten link",
+    "zoom": "Powiększenie",
+    "zoomIn": "Powiększ",
+    "zoomOut": "Pomniejsz",
+    "zoomFit": "Dopasuj",
+    "zoomHint": "Powiększ oś czasu. Ctrl lub ⌘ + kółko myszy powiększa w miejscu wskaźnika.",
+    "expand": "Pełna szerokość",
+    "collapse": "Wyjdź z pełnej szerokości",
     "fixChapters": "Najpierw popraw rozdziały albo je usuń.",
     "chapters": {
       "heading": "Rozdziały",

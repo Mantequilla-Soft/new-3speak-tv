@@ -430,6 +430,13 @@
     "moveChapter": "Mover el inicio de {{title}}",
     "moveLink": "Mover este enlace",
     "resizeLink": "Cambiar cuánto tiempo se muestra este enlace",
+    "zoom": "Zoom",
+    "zoomIn": "Acercar",
+    "zoomOut": "Alejar",
+    "zoomFit": "Ajustar",
+    "zoomHint": "Haz zoom en la línea de tiempo. Ctrl o ⌘ + rueda del ratón hace zoom donde está el puntero.",
+    "expand": "Ancho completo",
+    "collapse": "Salir del ancho completo",
     "fixChapters": "Primero corrige los capítulos o elimínalos.",
     "chapters": {
       "heading": "Capítulos",

@@ -426,6 +426,13 @@
     "moveChapter": "Di chuyển điểm bắt đầu của {{title}}",
     "moveLink": "Di chuyển liên kết này",
     "resizeLink": "Thay đổi thời gian hiển thị liên kết này",
+    "zoom": "Thu phóng",
+    "zoomIn": "Phóng to",
+    "zoomOut": "Thu nhỏ",
+    "zoomFit": "Vừa khung",
+    "zoomHint": "Thu phóng dòng thời gian. Ctrl hoặc ⌘ + con lăn chuột thu phóng tại vị trí con trỏ.",
+    "expand": "Toàn chiều rộng",
+    "collapse": "Thoát toàn chiều rộng",
     "fixChapters": "Hãy sửa các chương trước, hoặc xoá chúng.",
     "chapters": {
       "heading": "Chương",

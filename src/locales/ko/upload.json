@@ -426,6 +426,13 @@
     "moveChapter": "{{title}} 시작 위치 옮기기",
     "moveLink": "이 링크 옮기기",
     "resizeLink": "이 링크가 표시되는 시간 변경",
+    "zoom": "확대/축소",
+    "zoomIn": "확대",
+    "zoomOut": "축소",
+    "zoomFit": "맞춤",
+    "zoomHint": "타임라인을 확대/축소합니다. Ctrl 또는 ⌘ + 마우스 휠로 포인터 위치에서 확대/축소합니다.",
+    "expand": "전체 너비",
+    "collapse": "전체 너비 종료",
     "fixChapters": "먼저 챕터를 고치거나 삭제해 주세요.",
     "chapters": {
       "heading": "챕터",
