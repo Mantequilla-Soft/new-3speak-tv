@@ -34,7 +34,7 @@ export const CHANGELOG = [
     version: '1.79.115',
     date: '2026-10-20',
     summary:
-      'The Shorts Editor now saves your project as a draft while you work: 48 hours, or 3 drafts for 30 days with 3Speak Pro.',
+      'The Shorts Editor now saves your project as a draft while you work: 7 days, or 3 drafts for 30 days with 3Speak Pro.',
   },
   {
     version: '1.79.114',

@@ -2276,7 +2276,7 @@ app.get('/api/stt-token', baseLimiter, (req, res) => {
 // only (butrauth session, or the wallet / HiveSigner session the user proved),
 // never from a claimed username, so nobody can open someone else's drafts.
 // Pro (from the checker) decides the limits: 3 projects for 30 days instead
-// of 1 for 48 hours. 401 'sign-in-needed' -> the site runs
+// of 1 for 7 days. 401 'sign-in-needed' -> the site runs
 // establishWalletSession() (one signature for wallet logins) and asks again.
 const EDITOR_TOKEN_SECRET = process.env.EDITOR_TOKEN_SECRET || ''
 const EDITOR_TOKEN_TTL_MS = 6 * 60 * 60 * 1000
@@ -2320,7 +2320,7 @@ app.post('/api/editor-token', baseLimiter, async (req, res) => {
     pro,
     exp,
     maxProjects: pro ? 3 : 1,
-    ttlHours: pro ? 30 * 24 : 48
+    ttlHours: pro ? 30 * 24 : 7 * 24
   })
 })
 
