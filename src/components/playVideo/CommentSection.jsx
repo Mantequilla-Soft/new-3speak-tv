@@ -417,10 +417,13 @@ function CommentSection({ videoDetails, author, permlink, currentTime, duration,
       // reply to an off-chain post has to be stored no matter who is writing it
       // — including a Hive user with a perfectly good account.
       //
+      // The same goes for a reply to an off-chain COMMENT (a warm-up user's, or
+      // one stored under a warm-up post) on an otherwise on-chain post.
+      //
       // The AUTHOR having no Hive account is handled inside commentWithAioha,
       // at the one choke point every posting path already passes through.
       let result;
-      if (videoDetails?._incubation) {
+      if (videoDetails?._incubation || replyToComment?.onChain === false) {
         const stored = await postIncubationContent({
           body,
           parentAuthor: parent_author,
@@ -441,6 +444,8 @@ function CommentSection({ videoDetails, author, permlink, currentTime, duration,
 
       if (result.success) {
         toast.success(t('comments.section.posted'));
+        // A stored comment gets the store's permlink; replying to it must use that.
+        const postedPermlink = (result.incubation && result.permlink) || new_permlink;
         const newComment = {
           author: {
             username: displayName,
@@ -457,8 +462,8 @@ function CommentSection({ videoDetails, author, permlink, currentTime, duration,
           },
           // Marks this as off-chain so the thread can show it differently and
           // so nothing tries to build a Hive permalink for it.
-          onChain: !incubationHandle,
-          permlink: new_permlink,
+          onChain: !incubationHandle && !result.incubation,
+          permlink: postedPermlink,
           created_at: new Date().toISOString(),
           parentAuthor: parent_author,
           parentPermlink: parent_permlink,
@@ -482,7 +487,7 @@ function CommentSection({ videoDetails, author, permlink, currentTime, duration,
         // (e.g. a literal `![gif](url)`) until the next fetch/reload.
         try {
           const render = await getHiveRenderer();
-          setRenderedBodies(prev => ({ ...prev, [new_permlink]: render(textToPost) }));
+          setRenderedBodies(prev => ({ ...prev, [postedPermlink]: render(textToPost) }));
         } catch (_) { /* fall back to raw body until refetch */ }
 
         if (isReplyingToMainPost) {

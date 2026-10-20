@@ -622,6 +622,26 @@
   "production": {
     "offer": "No ad video? Have us make it for you.",
     "fee": "A one-off <b>{{fee}} HBD</b>, added to your booking.",
+    "offerAny": "No ad yet? Have us make it for you.",
+    "ownAd": "No thanks, I have my own",
+    "tiers": {
+      "static_banner": "Static banner",
+      "animated_banner": "Animated banner",
+      "ai_commercial": "AI commercial",
+      "human_commercial": "Presenter commercial"
+    },
+    "tierDetails": {
+      "static_banner": "A still image shown over the video",
+      "animated_banner": "A moving banner (video) that runs for your booked length",
+      "ai_commercial": "A video spot made with AI, with background music only and no voice",
+      "human_commercial": "A video spot with a real person presenting your product"
+    },
+    "tierFlat": "{{fee}} HBD, one-off",
+    "tierPerFive": "{{fee}} HBD per 5 seconds of your booked length",
+    "tableKind": "Kind of ad",
+    "tableDetails": "Details",
+    "tablePrice": "Price",
+    "rounds": "Every ad we make goes through as many rounds as it takes until you are happy with the result. We talk it through with you over the contact you gave us.",
     "briefLabel": "What should the ad say?",
     "briefPlaceholder": "What you are advertising, who it is for, the one thing a viewer should remember, and anything you want us to avoid. Upload a logo or stills above and we will use them.",
     "moreChars_one": "{{count}} more character, we cannot make an ad from a blank brief",
@@ -659,6 +679,7 @@
     "moreChars_other": "{{count}} more characters",
     "enough": "Enough to go on, thanks",
     "productionFee": "<b>Have us make the video for you.</b> Tick this if you do not have a spot yet. A one-off <b>{{fee}} HBD</b>, quoted with your booking and charged only when you book, so applying costs nothing.",
+    "productionTiers": "<b>Have us make the ad for you.</b> Tick this if you do not have one yet. You choose the kind of ad when you book, and nothing is charged before then.",
     "production": "<b>Have us make the video for you.</b> Tick this if you do not have a spot yet.",
     "briefLabel": "What should the spot say?",
     "briefPlaceholder": "What you are advertising, who it is for, the one thing a viewer should remember, and anything you want us to avoid. You can send us a logo and stills once your product is registered.",

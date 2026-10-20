@@ -622,6 +622,26 @@
   "production": {
     "offer": "Huna video ya tangazo? Tuombe tukutengenezee.",
     "fee": "<b>{{fee}} HBD</b> mara moja, inaongezwa kwenye agizo lako.",
+    "offerAny": "Huna tangazo bado? Tukutengenezee.",
+    "ownAd": "Hapana asante, nina langu",
+    "tiers": {
+      "static_banner": "Bango tuli",
+      "animated_banner": "Bango linalosonga",
+      "ai_commercial": "Tangazo la AI",
+      "human_commercial": "Tangazo lenye mtangazaji"
+    },
+    "tierDetails": {
+      "static_banner": "Picha tuli inayoonyeshwa juu ya video",
+      "animated_banner": "Bango linalosonga (video) linalodumu kwa muda uliohifadhi",
+      "ai_commercial": "Tangazo la video lililotengenezwa kwa AI, muziki wa nyuma pekee bila sauti",
+      "human_commercial": "Tangazo la video lenye mtu halisi anayetambulisha bidhaa yako"
+    },
+    "tierFlat": "{{fee}} HBD, mara moja",
+    "tierPerFive": "{{fee}} HBD kwa kila sekunde 5 za muda uliohifadhi",
+    "tableKind": "Aina ya tangazo",
+    "tableDetails": "Maelezo",
+    "tablePrice": "Bei",
+    "rounds": "Kila tangazo tunalotengeneza hupitia marekebisho mara nyingi kadri inavyohitajika hadi utakaporidhika na matokeo. Tunazungumza nawe kupitia mawasiliano uliyotupa.",
     "briefLabel": "Tangazo liseme nini?",
     "briefPlaceholder": "Unachotangaza, ni kwa ajili ya nani, kitu kimoja mtazamaji anachopaswa kukumbuka, na chochote unachotaka tuepuke. Pakia nembo au picha hapo juu na tutazitumia.",
     "moreChars_one": "Herufi {{count}} zaidi, hatuwezi kutengeneza tangazo kutoka kwa maelezo matupu",
@@ -659,6 +679,7 @@
     "moreChars_other": "Herufi {{count}} zaidi",
     "enough": "Inatosha kuanzia, asante",
     "productionFee": "<b>Tuombe tukutengenezee video.</b> Weka tiki hapa ikiwa bado huna tangazo. <b>{{fee}} HBD</b> mara moja, inanukuliwa pamoja na agizo lako na kutozwa tu unapoweka agizo, kwa hivyo kuomba hakugharimu chochote.",
+    "productionTiers": "<b>Tukutengenezee tangazo.</b> Weka alama hapa kama huna tangazo bado. Unachagua aina ya tangazo unapohifadhi nafasi, na hakuna malipo kabla ya hapo.",
     "production": "<b>Tuombe tukutengenezee video.</b> Weka tiki hapa ikiwa bado huna tangazo.",
     "briefLabel": "Tangazo liseme nini?",
     "briefPlaceholder": "Unachotangaza, ni kwa ajili ya nani, kitu kimoja mtazamaji anachopaswa kukumbuka, na chochote unachotaka tuepuke. Unaweza kututumia nembo na picha bidhaa yako ikishasajiliwa.",

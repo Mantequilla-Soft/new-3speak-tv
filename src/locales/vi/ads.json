@@ -600,6 +600,26 @@
   "production": {
     "offer": "Không có video quảng cáo? Hãy để chúng tôi làm cho bạn.",
     "fee": "Phí một lần <b>{{fee}} HBD</b>, cộng vào lượt đặt của bạn.",
+    "offerAny": "Chưa có quảng cáo? Để chúng tôi làm cho bạn.",
+    "ownAd": "Không, cảm ơn, tôi có sẵn rồi",
+    "tiers": {
+      "static_banner": "Banner tĩnh",
+      "animated_banner": "Banner động",
+      "ai_commercial": "Quảng cáo AI",
+      "human_commercial": "Quảng cáo có người dẫn"
+    },
+    "tierDetails": {
+      "static_banner": "Một hình ảnh tĩnh hiển thị trên video",
+      "animated_banner": "Một banner chuyển động (video) chạy suốt thời lượng bạn đã đặt",
+      "ai_commercial": "Quảng cáo video làm bằng AI, chỉ có nhạc nền, không lời thoại",
+      "human_commercial": "Quảng cáo video có một người thật giới thiệu sản phẩm của bạn"
+    },
+    "tierFlat": "{{fee}} HBD, một lần",
+    "tierPerFive": "{{fee}} HBD cho mỗi 5 giây thời lượng đã đặt",
+    "tableKind": "Loại quảng cáo",
+    "tableDetails": "Chi tiết",
+    "tablePrice": "Giá",
+    "rounds": "Mỗi quảng cáo chúng tôi làm đều qua bao nhiêu vòng chỉnh sửa cũng được cho đến khi bạn hài lòng với kết quả. Chúng tôi trao đổi với bạn qua thông tin liên hệ bạn đã cung cấp.",
     "briefLabel": "Quảng cáo nên nói gì?",
     "briefPlaceholder": "Bạn đang quảng cáo gì, dành cho ai, một điều người xem nên nhớ, và bất cứ điều gì bạn muốn chúng tôi tránh. Tải logo hoặc hình ảnh lên ở trên và chúng tôi sẽ dùng chúng.",
     "moreChars_other": "Cần thêm {{count}} ký tự, chúng tôi không thể làm quảng cáo từ một bản mô tả trống",
@@ -635,6 +655,7 @@
     "moreChars_other": "Cần thêm {{count}} ký tự",
     "enough": "Đủ để bắt đầu rồi, cảm ơn bạn",
     "productionFee": "<b>Để chúng tôi làm video cho bạn.</b> Đánh dấu nếu bạn chưa có đoạn quảng cáo. Phí một lần <b>{{fee}} HBD</b>, được báo giá cùng lượt đặt và chỉ tính khi bạn đặt, nên việc đăng ký không mất phí.",
+    "productionTiers": "<b>Để chúng tôi làm quảng cáo cho bạn.</b> Đánh dấu ô này nếu bạn chưa có. Bạn chọn loại quảng cáo khi đặt chỗ, và không có khoản phí nào trước đó.",
     "production": "<b>Để chúng tôi làm video cho bạn.</b> Đánh dấu nếu bạn chưa có đoạn quảng cáo.",
     "briefLabel": "Đoạn quảng cáo nên nói gì?",
     "briefPlaceholder": "Bạn đang quảng cáo gì, dành cho ai, một điều người xem nên nhớ, và bất cứ điều gì bạn muốn chúng tôi tránh. Bạn có thể gửi logo và hình ảnh cho chúng tôi sau khi sản phẩm được đăng ký.",

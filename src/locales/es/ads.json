@@ -644,6 +644,26 @@
   "production": {
     "offer": "¿No tienes video publicitario? Deja que lo hagamos por ti.",
     "fee": "Un pago único de <b>{{fee}} HBD</b>, que se suma a tu reserva.",
+    "offerAny": "¿Aún no tienes anuncio? Deja que lo hagamos por ti.",
+    "ownAd": "No, gracias, tengo el mío",
+    "tiers": {
+      "static_banner": "Banner estático",
+      "animated_banner": "Banner animado",
+      "ai_commercial": "Anuncio con IA",
+      "human_commercial": "Anuncio con presentador"
+    },
+    "tierDetails": {
+      "static_banner": "Una imagen fija que se muestra sobre el vídeo",
+      "animated_banner": "Un banner en movimiento (vídeo) que dura lo que hayas reservado",
+      "ai_commercial": "Un anuncio en vídeo hecho con IA, solo con música de fondo y sin voz",
+      "human_commercial": "Un anuncio en vídeo con una persona real presentando tu producto"
+    },
+    "tierFlat": "{{fee}} HBD, pago único",
+    "tierPerFive": "{{fee}} HBD por cada 5 segundos de la duración reservada",
+    "tableKind": "Tipo de anuncio",
+    "tableDetails": "Detalles",
+    "tablePrice": "Precio",
+    "rounds": "Cada anuncio que hacemos pasa por tantas rondas como haga falta hasta que estés contento con el resultado. Lo hablamos contigo por el contacto que nos diste.",
     "briefLabel": "¿Qué debería decir el anuncio?",
     "briefPlaceholder": "Qué anuncias, para quién es, lo único que un espectador debería recordar y cualquier cosa que quieras que evitemos. Sube un logo o imágenes arriba y las usaremos.",
     "moreChars_one": "Falta {{count}} carácter; no podemos hacer un anuncio sin indicaciones",
@@ -683,6 +703,7 @@
     "moreChars_other": "Faltan {{count}} caracteres",
     "enough": "Suficiente para empezar, gracias",
     "productionFee": "<b>Deja que hagamos el video por ti.</b> Marca esto si todavía no tienes un anuncio. Un pago único de <b>{{fee}} HBD</b>, cotizado con tu reserva y cobrado solo cuando reserves, así que solicitar no cuesta nada.",
+    "productionTiers": "<b>Deja que hagamos el anuncio por ti.</b> Marca esto si aún no tienes uno. Eliges el tipo de anuncio al reservar y no se cobra nada antes.",
     "production": "<b>Deja que hagamos el video por ti.</b> Marca esto si todavía no tienes un anuncio.",
     "briefLabel": "¿Qué debería decir el anuncio?",
     "briefPlaceholder": "Qué anuncias, para quién es, lo único que un espectador debería recordar y cualquier cosa que quieras que evitemos. Puedes enviarnos un logo e imágenes cuando tu producto esté registrado.",

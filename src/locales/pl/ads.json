@@ -666,6 +666,26 @@
   "production": {
     "offer": "Nie masz filmu reklamowego? Zlecimy jego przygotowanie.",
     "fee": "Jednorazowo <b>{{fee}} HBD</b>, doliczane do rezerwacji.",
+    "offerAny": "Nie masz jeszcze reklamy? Zrobimy ją za Ciebie.",
+    "ownAd": "Nie, dziękuję, mam własną",
+    "tiers": {
+      "static_banner": "Baner statyczny",
+      "animated_banner": "Baner animowany",
+      "ai_commercial": "Reklama AI",
+      "human_commercial": "Reklama z prezenterem"
+    },
+    "tierDetails": {
+      "static_banner": "Nieruchomy obraz wyświetlany na filmie",
+      "animated_banner": "Ruchomy baner (wideo) trwający tyle, ile zarezerwowano",
+      "ai_commercial": "Spot wideo zrobiony z AI, tylko muzyka w tle, bez głosu",
+      "human_commercial": "Spot wideo, w którym prawdziwa osoba prezentuje Twój produkt"
+    },
+    "tierFlat": "{{fee}} HBD, jednorazowo",
+    "tierPerFive": "{{fee}} HBD za każde 5 sekund zarezerwowanej długości",
+    "tableKind": "Rodzaj reklamy",
+    "tableDetails": "Szczegóły",
+    "tablePrice": "Cena",
+    "rounds": "Każda reklama, którą robimy, przechodzi tyle poprawek, ile trzeba, aż będziesz zadowolony z efektu. Omawiamy wszystko z Tobą przez kontakt, który nam podałeś.",
     "briefLabel": "Co ma mówić reklama?",
     "briefPlaceholder": "Co reklamujesz, dla kogo, jedyna rzecz, którą widz ma zapamiętać, i czego mamy unikać. Prześlij powyżej logo lub obrazy, a ich użyjemy.",
     "moreChars_one": "Jeszcze {{count}} znak, z pustego opisu nie zrobimy reklamy",
@@ -707,6 +727,7 @@
     "moreChars_other": "Jeszcze {{count}} znaku",
     "enough": "Wystarczy, dziękujemy",
     "productionFee": "<b>Zleć nam przygotowanie filmu.</b> Zaznacz, jeśli nie masz jeszcze spotu. Jednorazowo <b>{{fee}} HBD</b>, wycenione razem z rezerwacją i pobierane dopiero przy rezerwacji, więc zgłoszenie nic nie kosztuje.",
+    "productionTiers": "<b>Zrobimy reklamę za Ciebie.</b> Zaznacz to, jeśli jeszcze jej nie masz. Rodzaj reklamy wybierasz przy rezerwacji i do tego czasu nic nie jest pobierane.",
     "production": "<b>Zleć nam przygotowanie filmu.</b> Zaznacz, jeśli nie masz jeszcze spotu.",
     "briefLabel": "Co ma mówić spot?",
     "briefPlaceholder": "Co reklamujesz, dla kogo, jedyna rzecz, którą widz ma zapamiętać, i czego mamy unikać. Logo i obrazy możesz przesłać, gdy produkt zostanie zarejestrowany.",

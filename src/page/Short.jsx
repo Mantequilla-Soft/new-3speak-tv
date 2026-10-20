@@ -114,7 +114,7 @@ import { markByReputation } from '../utils/reputation';
 import { markByHidden } from '../utils/hiddenCreators';
 import { getVotePower, getDynamicProps } from '../utils/hiveUtils';
 import { mergeOffChainReplies, applyOffChainLikes } from '../utils/offChainReplies';
-import { fetchIncubationShorts, handleAvatar } from '../lib/incubation';
+import { fetchIncubationShorts, handleAvatar, postIncubationContent } from '../lib/incubation';
 import { timeAgo } from '../lib/creatorStats';
 import { warmupRailEnabledFor } from '../utils/config';
 import { commentWithAioha, isLoggedIn } from '../hive-api/aioha';
@@ -2083,7 +2083,10 @@ const VideoShort = () => {
   };
 
   /* ---------- POST COMMENT ---------- */
-  const handlePostComment = async (parentAuthor, parentPermlink, commentText, isReply = false) => {
+  // `offChainParent`: the parent is a warm-up short or an off-chain reply. Hive
+  // rejects a comment whose parent does not exist, so such a reply is stored
+  // off-chain whoever writes it, as the watch page's CommentSection does.
+  const handlePostComment = async (parentAuthor, parentPermlink, commentText, isReply = false, offChainParent = false) => {
     if (!commentText.trim()) {
       toast.error(t('shorts.comments.enterComment'));
       return;
@@ -2094,17 +2097,21 @@ const VideoShort = () => {
       return;
     }
 
-    if (!user || !isLoggedIn()) {
+    // A warm-up user has a handle rather than a `user`; commentWithAioha
+    // already stores their comment off-chain. Gating on `user` alone shut them
+    // out of every comment box on shorts.
+    const commenter = user || incubationHandle;
+    if (!commenter || (user && !isLoggedIn())) {
       toast.error(t('shorts.comments.loginToComment'));
       return;
     }
 
     setPostingComment(true);
-    const newPermlink = `re-${parentPermlink}-${Date.now()}`;
+    let newPermlink = `re-${parentPermlink}-${Date.now()}`;
 
     const newCommentObj = {
-      id: `${user}-${newPermlink}`,
-      author: user,
+      id: `${commenter}-${newPermlink}`,
+      author: commenter,
       permlink: newPermlink,
       body: commentText,
       createdAt: new Date().toISOString(),
@@ -2116,9 +2123,11 @@ const VideoShort = () => {
         total_hive_reward: 0
       },
       user: {
-        username: `@${user}`,
-        avatar: `/img/u/${user}/avatar/small`
+        username: `@${commenter}`,
+        // images.hive.blog has nothing for a warm-up handle.
+        avatar: user ? `/img/u/${user}/avatar/small` : handleAvatar(commenter)
       },
+      onChain: !offChainParent && !!user,
       has_voted: false
     };
 
@@ -2147,14 +2156,34 @@ const VideoShort = () => {
     if (isReply) { setReplyText(''); setActiveReply(null); } else { setNewComment(''); }
 
     try {
-      await commentWithAioha(
-        parentAuthor,
-        parentPermlink,
-        newPermlink,
-        '', // title (empty for comments)
-        commentText,
-        { app: '3speak/new-version' }
-      );
+      if (offChainParent) {
+        const stored = await postIncubationContent({
+          body: commentText,
+          parentAuthor,
+          parentPermlink,
+          jsonMetadata: { app: '3speak/new-version' },
+        });
+        // The store picks its own permlink; adopt it so a reply to this
+        // comment points at the stored one.
+        if (stored?.permlink && stored.permlink !== newPermlink) {
+          const tmp = newPermlink;
+          newPermlink = stored.permlink;
+          const swap = (list) => list.map((c) => c.permlink === tmp
+            ? { ...c, permlink: stored.permlink }
+            : (c.children?.length ? { ...c, children: swap(c.children) } : c));
+          setVideos(prev => prev.map((v, idx) => idx === currentIndex ? { ...v, comments: swap(v.comments) } : v));
+          setRenderedBodies(prev => ({ ...prev, [stored.permlink]: prev[tmp] }));
+        }
+      } else {
+        await commentWithAioha(
+          parentAuthor,
+          parentPermlink,
+          newPermlink,
+          '', // title (empty for comments)
+          commentText,
+          { app: '3speak/new-version' }
+        );
+      }
       toast.success(t('shorts.comments.posted'));
     } catch (err) {
       console.error('Comment failed:', err);
@@ -4001,7 +4030,7 @@ const VideoShort = () => {
         {/* Comment Input */}
         <div className="commentInput">
           <div className="commentInputAvatar">
-            <HiveAvatar username={user || 'guest'} size={null} alt="" badgeSize={11} />
+            <HiveAvatar username={user || incubationHandle || 'guest'} srcOverride={!user && incubationHandle ? handleAvatar(incubationHandle) : undefined} size={null} alt="" badgeSize={11} />
           </div>
           <textarea
             ref={mainCommentRef}
@@ -4012,7 +4041,7 @@ const VideoShort = () => {
               // comment..." and simply refused to focus, which reads as broken.
               currentVideo.hivePostMissing
                 ? t('shorts.comments.unavailable')
-                : user ? t('shorts.comments.addPlaceholder') : t('shorts.comments.loginPlaceholder')
+                : (user || incubationHandle) ? t('shorts.comments.addPlaceholder') : t('shorts.comments.loginPlaceholder')
             }
             value={newComment}
             onChange={(e) => {
@@ -4020,11 +4049,11 @@ const VideoShort = () => {
               e.target.style.height = 'auto';
               e.target.style.height = e.target.scrollHeight + 'px';
             }}
-            disabled={!user || postingComment || currentVideo.hivePostMissing}
+            disabled={!(user || incubationHandle) || postingComment || currentVideo.hivePostMissing}
             // Enter always inserts a newline (multi-line comments); posting is
             // handled only by the Send button.
           />
-          {user && !currentVideo.hivePostMissing && (
+          {(user || incubationHandle) && !currentVideo.hivePostMissing && (
             <EmojiGifPicker
               align="right"
               openDirection="up"
@@ -4034,8 +4063,8 @@ const VideoShort = () => {
           )}
           <button
             className="sendCommentBtn"
-            onClick={() => handlePostComment(currentVideo.author, currentVideo.hivePermlink, newComment, false)}
-            disabled={!user || !newComment.trim() || postingComment || currentVideo.hivePostMissing}
+            onClick={() => handlePostComment(currentVideo.author, currentVideo.hivePermlink || currentVideo.permlink, newComment, false, !!currentVideo._incubation)}
+            disabled={!(user || incubationHandle) || !newComment.trim() || postingComment || currentVideo.hivePostMissing}
           >
             {postingComment ? <Loader2 size={18} className="spinner" /> : <Send size={18} />}
           </button>
@@ -4067,7 +4096,7 @@ const VideoShort = () => {
             placeholder={
               currentVideo.hivePostMissing
                 ? t('shorts.comments.unavailable')
-                : user ? t('shorts.comments.addPlaceholderBar') : t('shorts.comments.loginPlaceholder')
+                : (user || incubationHandle) ? t('shorts.comments.addPlaceholderBar') : t('shorts.comments.loginPlaceholder')
             }
             value={newComment}
             onChange={(e) => {
@@ -4075,9 +4104,9 @@ const VideoShort = () => {
               e.target.style.height = 'auto';
               e.target.style.height = e.target.scrollHeight + 'px';
             }}
-            disabled={!user || currentVideo.hivePostMissing}
+            disabled={!(user || incubationHandle) || currentVideo.hivePostMissing}
           />
-          {user && !currentVideo.hivePostMissing && (
+          {(user || incubationHandle) && !currentVideo.hivePostMissing && (
             <EmojiGifPicker
               align="right"
               openDirection="up"
@@ -4087,8 +4116,8 @@ const VideoShort = () => {
           )}
           <button
             className="sendCommentBtn"
-            onClick={() => handlePostComment(currentVideo.author, currentVideo.hivePermlink, newComment, false)}
-            disabled={!user || !newComment.trim() || postingComment || currentVideo.hivePostMissing}
+            onClick={() => handlePostComment(currentVideo.author, currentVideo.hivePermlink || currentVideo.permlink, newComment, false, !!currentVideo._incubation)}
+            disabled={!(user || incubationHandle) || !newComment.trim() || postingComment || currentVideo.hivePostMissing}
             aria-label={t('shorts.comments.send')}
           >
             {postingComment ? <Loader2 size={18} className="spinner" /> : <Send size={18} />}
@@ -4290,7 +4319,7 @@ const CommentItem = ({
                 disabled={postingComment}
                 onKeyPress={(e) => {
                   if (e.key === 'Enter' && !postingComment) {
-                    handlePostComment(comment.author, comment.permlink, replyText, true);
+                    handlePostComment(authorName, comment.permlink, replyText, true, comment.onChain === false);
                   }
                 }}
               />
@@ -4305,7 +4334,7 @@ const CommentItem = ({
                   <button onClick={() => setActiveReply(null)}>{t('common.actions.cancel')}</button>
                   <button
                     className="submitReply"
-                    onClick={() => handlePostComment(comment.author, comment.permlink, replyText, true)}
+                    onClick={() => handlePostComment(authorName, comment.permlink, replyText, true, comment.onChain === false)}
                     disabled={!replyText.trim() || postingComment}
                   >
                     {postingComment ? <Loader2 size={14} className="spinner" /> : t('common.actions.reply')}

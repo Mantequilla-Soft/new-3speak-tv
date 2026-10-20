@@ -600,6 +600,26 @@
   "production": {
     "offer": "没有广告视频？让我们为你制作。",
     "fee": "一次性收费 <b>{{fee}} HBD</b>，计入你的预订。",
+    "offerAny": "还没有广告？让我们为你制作。",
+    "ownAd": "不用了，我有自己的",
+    "tiers": {
+      "static_banner": "静态横幅",
+      "animated_banner": "动态横幅",
+      "ai_commercial": "AI 广告",
+      "human_commercial": "真人出镜广告"
+    },
+    "tierDetails": {
+      "static_banner": "显示在视频上方的静态图片",
+      "animated_banner": "按预订时长播放的动态横幅（视频）",
+      "ai_commercial": "用 AI 制作的视频广告，仅背景音乐，无配音",
+      "human_commercial": "由真人介绍你产品的视频广告"
+    },
+    "tierFlat": "{{fee}} HBD，一次性",
+    "tierPerFive": "按预订时长每 5 秒 {{fee}} HBD",
+    "tableKind": "广告类型",
+    "tableDetails": "详情",
+    "tablePrice": "价格",
+    "rounds": "我们制作的每支广告都会根据需要反复修改，直到你对结果满意为止。我们会通过你留下的联系方式与你沟通。",
     "briefLabel": "广告要传达什么？",
     "briefPlaceholder": "你要宣传的是什么、面向谁、观众应该记住的一件事，以及任何你希望我们避免的内容。在上方上传 Logo 或图片，我们会使用它们。",
     "moreChars_other": "还需要 {{count}} 个字符，我们无法根据空白的简介制作广告",
@@ -635,6 +655,7 @@
     "moreChars_other": "还需要 {{count}} 个字符",
     "enough": "信息足够了，谢谢",
     "productionFee": "<b>让我们为你制作视频。</b>如果你还没有广告视频，请勾选此项。一次性收费 <b>{{fee}} HBD</b>，会随你的预订一起报价，仅在你预订时收取，所以申请是免费的。",
+    "productionTiers": "<b>让我们为你制作广告。</b>如果你还没有广告，请勾选此项。你在预订时选择广告类型，在此之前不会收取任何费用。",
     "production": "<b>让我们为你制作视频。</b>如果你还没有广告视频，请勾选此项。",
     "briefLabel": "广告要传达什么？",
     "briefPlaceholder": "你要宣传的是什么、面向谁、观众应该记住的一件事，以及任何你希望我们避免的内容。产品登记后，你可以把 Logo 和图片发给我们。",

@@ -644,6 +644,26 @@
   "production": {
     "offer": "Pas de vidéo publicitaire ? Nous pouvons la réaliser pour vous.",
     "fee": "Un forfait unique de <b>{{fee}} HBD</b>, ajouté à votre réservation.",
+    "offerAny": "Pas encore de publicité ? Laissez-nous la créer pour vous.",
+    "ownAd": "Non merci, j'ai la mienne",
+    "tiers": {
+      "static_banner": "Bannière statique",
+      "animated_banner": "Bannière animée",
+      "ai_commercial": "Publicité IA",
+      "human_commercial": "Publicité avec présentateur"
+    },
+    "tierDetails": {
+      "static_banner": "Une image fixe affichée sur la vidéo",
+      "animated_banner": "Une bannière animée (vidéo) qui dure le temps réservé",
+      "ai_commercial": "Un spot vidéo réalisé avec l'IA, avec musique de fond uniquement et sans voix",
+      "human_commercial": "Un spot vidéo avec une vraie personne qui présente votre produit"
+    },
+    "tierFlat": "{{fee}} HBD, paiement unique",
+    "tierPerFive": "{{fee}} HBD par tranche de 5 secondes de la durée réservée",
+    "tableKind": "Type de publicité",
+    "tableDetails": "Détails",
+    "tablePrice": "Prix",
+    "rounds": "Chaque publicité que nous réalisons passe par autant d'allers-retours qu'il le faut jusqu'à ce que le résultat vous plaise. Nous en discutons avec vous via le contact que vous nous avez donné.",
     "briefLabel": "Que doit dire la pub ?",
     "briefPlaceholder": "Ce que vous promouvez, à qui cela s'adresse, la chose à retenir pour un spectateur, et ce que vous voulez que nous évitions. Envoyez un logo ou des images ci-dessus et nous les utiliserons.",
     "moreChars_one": "Encore {{count}} caractère, nous ne pouvons pas réaliser une pub à partir d'un brief vide",
@@ -683,6 +703,7 @@
     "moreChars_other": "Encore {{count}} caractères",
     "enough": "C'est suffisant pour commencer, merci",
     "productionFee": "<b>Faites réaliser la vidéo par nos soins.</b> Cochez cette case si vous n'avez pas encore de spot. Un forfait unique de <b>{{fee}} HBD</b>, indiqué avec votre réservation et facturé uniquement lors de la réservation : la demande ne coûte donc rien.",
+    "productionTiers": "<b>Laissez-nous créer la publicité pour vous.</b> Cochez ceci si vous n'en avez pas encore. Vous choisissez le type de publicité au moment de réserver, et rien n'est facturé avant.",
     "production": "<b>Faites réaliser la vidéo par nos soins.</b> Cochez cette case si vous n'avez pas encore de spot.",
     "briefLabel": "Que doit dire le spot ?",
     "briefPlaceholder": "Ce que vous promouvez, à qui cela s'adresse, la chose à retenir pour un spectateur, et ce que vous voulez que nous évitions. Vous pourrez nous envoyer un logo et des images une fois votre produit enregistré.",

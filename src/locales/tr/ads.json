@@ -622,6 +622,26 @@
   "production": {
     "offer": "Reklam videon yok mu? Bizim yapmamızı iste.",
     "fee": "Rezervasyonuna eklenen tek seferlik <b>{{fee}} HBD</b>.",
+    "offerAny": "Henüz reklamın yok mu? Senin için biz yapalım.",
+    "ownAd": "Hayır teşekkürler, kendiminki var",
+    "tiers": {
+      "static_banner": "Statik banner",
+      "animated_banner": "Animasyonlu banner",
+      "ai_commercial": "Yapay zekâ reklamı",
+      "human_commercial": "Sunuculu reklam"
+    },
+    "tierDetails": {
+      "static_banner": "Videonun üzerinde gösterilen sabit bir görsel",
+      "animated_banner": "Rezerve ettiğin süre boyunca oynayan hareketli bir banner (video)",
+      "ai_commercial": "Yapay zekâ ile yapılmış video reklam, yalnızca arka plan müziği, ses yok",
+      "human_commercial": "Ürününü gerçek bir kişinin tanıttığı video reklam"
+    },
+    "tierFlat": "{{fee}} HBD, tek seferlik",
+    "tierPerFive": "Rezerve ettiğin sürenin her 5 saniyesi için {{fee}} HBD",
+    "tableKind": "Reklam türü",
+    "tableDetails": "Ayrıntılar",
+    "tablePrice": "Fiyat",
+    "rounds": "Yaptığımız her reklam, sonuçtan memnun kalana kadar gerektiği kadar düzeltme turundan geçer. Bize verdiğin iletişim yolu üzerinden seninle konuşuruz.",
     "briefLabel": "Reklam ne söylemeli?",
     "briefPlaceholder": "Neyin reklamını yaptığın, kime yönelik olduğu, izleyicinin hatırlaması gereken tek şey ve kaçınmamızı istediğin her şey. Yukarıya bir logo veya görseller yüklersen onları kullanırız.",
     "moreChars_one": "{{count}} karakter daha; boş bir brifle reklam yapamayız",
@@ -659,6 +679,7 @@
     "moreChars_other": "{{count}} karakter daha",
     "enough": "Başlamak için yeterli, teşekkürler",
     "productionFee": "<b>Videoyu bizim yapmamızı iste.</b> Henüz bir spotun yoksa bunu işaretle. Tek seferlik <b>{{fee}} HBD</b>; rezervasyonunla birlikte fiyatlandırılır ve yalnızca rezervasyon yaptığında alınır, yani başvurmak ücretsizdir.",
+    "productionTiers": "<b>Reklamı senin için biz yapalım.</b> Henüz bir reklamın yoksa bunu işaretle. Reklam türünü rezervasyon yaparken seçersin ve o zamana kadar hiçbir ücret alınmaz.",
     "production": "<b>Videoyu bizim yapmamızı iste.</b> Henüz bir spotun yoksa bunu işaretle.",
     "briefLabel": "Spot ne söylemeli?",
     "briefPlaceholder": "Neyin reklamını yaptığın, kime yönelik olduğu, izleyicinin hatırlaması gereken tek şey ve kaçınmamızı istediğin her şey. Ürünün kaydedildikten sonra bize bir logo ve görseller gönderebilirsin.",

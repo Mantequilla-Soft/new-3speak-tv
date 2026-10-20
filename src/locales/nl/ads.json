@@ -622,6 +622,26 @@
   "production": {
     "offer": "Geen advertentievideo? Laat ons hem voor je maken.",
     "fee": "Eenmalig <b>{{fee}} HBD</b>, opgeteld bij je boeking.",
+    "offerAny": "Nog geen advertentie? Laat ons hem voor je maken.",
+    "ownAd": "Nee bedankt, ik heb mijn eigen",
+    "tiers": {
+      "static_banner": "Statische banner",
+      "animated_banner": "Geanimeerde banner",
+      "ai_commercial": "AI-reclamespot",
+      "human_commercial": "Spot met presentator"
+    },
+    "tierDetails": {
+      "static_banner": "Een stilstaand beeld over de video",
+      "animated_banner": "Een bewegende banner (video) die je hele geboekte lengte loopt",
+      "ai_commercial": "Een videospot gemaakt met AI, alleen achtergrondmuziek en geen stem",
+      "human_commercial": "Een videospot waarin een echt persoon je product presenteert"
+    },
+    "tierFlat": "{{fee}} HBD, eenmalig",
+    "tierPerFive": "{{fee}} HBD per 5 seconden van je geboekte lengte",
+    "tableKind": "Soort advertentie",
+    "tableDetails": "Details",
+    "tablePrice": "Prijs",
+    "rounds": "Elke advertentie die we maken gaat door zoveel rondes als nodig tot je tevreden bent met het resultaat. We overleggen met je via het contact dat je ons gaf.",
     "briefLabel": "Wat moet de advertentie zeggen?",
     "briefPlaceholder": "Wat je adverteert, voor wie het is, het ene ding dat een kijker moet onthouden, en alles wat we moeten vermijden. Upload hierboven een logo of afbeeldingen en we gebruiken ze.",
     "moreChars_one": "Nog {{count}} teken, we kunnen geen advertentie maken van een lege briefing",
@@ -659,6 +679,7 @@
     "moreChars_other": "Nog {{count}} tekens",
     "enough": "Genoeg om mee verder te gaan, bedankt",
     "productionFee": "<b>Laat ons de video voor je maken.</b> Vink dit aan als je nog geen spot hebt. Eenmalig <b>{{fee}} HBD</b>, geoffreerd bij je boeking en alleen in rekening gebracht als je boekt, dus aanvragen kost niets.",
+    "productionTiers": "<b>Laat ons de advertentie voor je maken.</b> Vink dit aan als je er nog geen hebt. Je kiest het soort advertentie bij het boeken, en daarvoor wordt niets in rekening gebracht.",
     "production": "<b>Laat ons de video voor je maken.</b> Vink dit aan als je nog geen spot hebt.",
     "briefLabel": "Wat moet de spot zeggen?",
     "briefPlaceholder": "Wat je adverteert, voor wie het is, het ene ding dat een kijker moet onthouden, en alles wat we moeten vermijden. Je kunt ons een logo en afbeeldingen sturen zodra je product is geregistreerd.",

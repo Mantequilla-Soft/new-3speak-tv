@@ -7,6 +7,18 @@
 // 1.0.0 — that way they see all of these when develop is pushed to production.
 export const CHANGELOG = [
   {
+    version: '1.79.111',
+    date: '2026-10-20',
+    summary:
+      'Advertisers on /advertise can now have us make their ad in four kinds, from a 5 HBD static banner to a presenter commercial.',
+  },
+  {
+    version: '1.79.110',
+    date: '2026-10-20',
+    summary:
+      'Warm-up accounts can now comment and reply on shorts.',
+  },
+  {
     version: '1.79.109',
     date: '2026-10-19',
     summary:

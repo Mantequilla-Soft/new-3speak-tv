@@ -2228,6 +2228,50 @@ $mkt-sub: 12px;
      where the fee is actually charged. Spans the form grid in both places. */
   .mkt-form .mkt-production { grid-column: 1 / -1; }
 
+  .mkt-production-title { font-size: $mkt-text; color: var(--text-primary); }
+  .mkt-production-tiers { display: flex; flex-direction: column; gap: 8px; }
+  .mkt-production-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: $mkt-text;
+    line-height: 1.4;
+    color: var(--text-secondary);
+
+    th, td {
+      padding: 8px 10px;
+      text-align: left;
+      vertical-align: top;
+      border-bottom: 1px solid var(--border-color);
+    }
+    thead th {
+      font-size: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: var(--text-secondary);
+    }
+    tbody th { font-weight: 600; color: var(--text-primary); }
+    tbody tr:last-child th, tbody tr:last-child td { border-bottom: none; }
+    // Short name, then the details take the room, then the price.
+    tbody th { white-space: nowrap; }
+    td:last-child { width: 30%; }
+
+    // At phone width three columns of prose do not fit: each row becomes a block.
+    @media (max-width: 600px) {
+      thead { display: none; }
+      tr { display: block; padding: 8px 0; border-bottom: 1px solid var(--border-color); }
+      tbody tr:last-child { border-bottom: none; }
+      th, td { display: block; width: auto; padding: 2px 0; border-bottom: none; }
+      td:last-child { width: auto; color: var(--text-primary); }
+    }
+  }
+
+  .mkt-production-detail {
+    display: block;
+    font-size: 12px;
+    color: var(--text-secondary);
+  }
+
   .mkt-production {
     width: 100%;
     display: flex;
