@@ -263,6 +263,22 @@ const FORMAT_AD_TYPE = Object.fromEntries(Object.entries(AD_TYPE_FORMAT).map(([k
 // Types that run a video spot, and so carry the label overlay and the "we make it" offer.
 const isSpotType = (t) => t === 'video' || t === 'shorts' || t === 'upload';
 
+/* "Have us make it", priced by the kind of ad. The table is the server's
+   (pricing.productionTiers), and this is the same sum productionFeeFor() in
+   3speakchecks/utils/adModel.js charges: flat, or per started 5 seconds of the
+   booked length. The quote and the charge have to agree. */
+const tiersFor = (pricing, formatKey) => (pricing?.productionTiers || []).filter((x) => x.formats.includes(formatKey));
+function productionFeeFor(tier, seconds) {
+  if (tier.flatHbd != null) return tier.flatHbd;
+  const secs = Number(seconds) > 0 ? Number(seconds) : 0;
+  return Math.ceil(secs / 5) * tier.perFiveSecondsHbd;
+}
+function tierPriceText(t, tier) {
+  return tier.flatHbd != null
+    ? t('ads.production.tierFlat', { fee: tier.flatHbd })
+    : t('ads.production.tierPerFive', { fee: tier.perFiveSecondsHbd });
+}
+
 /**
  * What "Your ad" still needs before the booking makes sense, as an i18n key, or null when
  * it is complete. Read from the creatives on record, so a rejected one does not count,
@@ -272,8 +288,8 @@ function adStepMissing(type, creatives, production) {
   const live = (creatives || []).filter((c) => c.status !== 'rejected');
   const has = (...kinds) => live.some((c) => kinds.includes(c.kind || 'video'));
   if (type === 'ticker') return has('text') ? null : 'ads.missing.ticker';
-  if (type === 'banner') return has('image', 'video') ? null : 'ads.missing.banner';
   const briefOk = !!production?.wanted && String(production?.brief || '').trim().length >= 20;
+  if (type === 'banner') return has('image', 'video') || briefOk ? null : 'ads.missing.banner';
   return has('video') || briefOk ? null : 'ads.missing.video';
 }
 
@@ -400,7 +416,6 @@ function CampaignPanel({
   // video itself — asking "do you have a spot?" underneath Days and Placement put it
   // in the middle of a pricing decision. The fee is still charged HERE, on the
   // flight, so the state is passed down rather than moved.
-  const wantProduction = !!production?.wanted;
   const brief = production?.brief || '';
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState(null);
@@ -451,6 +466,12 @@ function CampaignPanel({
   // refuse it later, after they had picked days, length and a slot.
   const offered = lockFormat ? formats.filter((f) => f.key === lockFormat) : formats;
   const fmt = offered.find((f) => f.key === formatKey) || offered[0] || null;
+  // A tier picked for a different kind of ad (they switched from a video to a banner)
+  // is no request at all. No tier is a page without the tier table: the old flat fee.
+  const prodTier = production?.tier
+    ? tiersFor(pricing, fmt?.key).find((x) => x.key === production.tier) || null
+    : null;
+  const wantProduction = !!production?.wanted && (!production?.tier || !!prodTier);
 
   // Availability is per WINDOW, so it is re-read when the length of the flight
   // changes. Failure is silent and leaves every slot selectable — the server still
@@ -759,7 +780,8 @@ function CampaignPanel({
     return end.toLocaleDateString(undefined, { day: 'numeric', month: 'short', year: 'numeric' });
   }, [startAt, days]);
 
-  const productionFee = wantProduction ? (pricing?.productionFeeHbd || 0) : 0;
+  const productionFee = !wantProduction ? 0
+    : prodTier ? productionFeeFor(prodTier, chosenLength) : (pricing?.productionFeeHbd || 0);
   // Must match priceForDays() in 3speakchecks/utils/adModel.js: days x rate x
   // seconds. The quote shown here and the price the server writes have to agree.
   // Must match priceForDays() in 3speakchecks/utils/adModel.js, at the rate for THIS
@@ -805,7 +827,7 @@ function CampaignPanel({
         startAt: startAt || undefined,
         minVideoSeconds: Number.isFinite(minVideoNum) && minVideoNum > 0 ? minVideoNum : undefined,
         maxVideoSeconds: Number.isFinite(maxVideoNum) && maxVideoNum > 0 ? maxVideoNum : undefined,
-        production: wantProduction ? { requested: true, brief: brief.trim() } : undefined,
+        production: wantProduction ? { requested: true, brief: brief.trim(), tier: prodTier?.key } : undefined,
       });
       // Credit from an earlier flight that under-delivered is spent at booking, so
       // there may be nothing left to send. Telling someone to pay when they do not
@@ -1364,7 +1386,9 @@ function CampaignPanel({
 
               {c.production && (
                 <div className="mkt-campaign-blocked">
-                  {t('ads.book.makingVideo')} · {c.production.status}
+                  {t('ads.book.makingVideo')}
+                  {c.production.tier ? ` · ${t(`ads.production.tiers.${c.production.tier}`)}` : ''}
+                  {' '}· {c.production.status}
                   {c.productionFeeHbd ? ` · ${c.productionFeeHbd} HBD` : ''}
                 </div>
               )}
@@ -2140,6 +2164,7 @@ function CreativePanel({ reference, account, maxSeconds, bannerSpec, onCreatives
    * nothing, with no error, because the click was landing on a different panel's
    * control. */
   const inputId = `mkt-creative-file-${useId()}`;
+  const tierName = `mkt-production-tier-${useId()}`;
 
   // One file when the wizard asks for one. A booking runs a single creative, so
   // offering "add another" mid-enrollment invites a library nobody asked for and a
@@ -2278,11 +2303,46 @@ function CreativePanel({ reference, account, maxSeconds, bannerSpec, onCreatives
           on the flight, which is why the state lives with the booking panel. */}
       {offer && (
         <div className="mkt-production">
+          {offer.tiers?.length ? (
+            // One choice, not a checkbox plus a dropdown: "my own" or the kind of ad
+            // we make. The price is per kind; the total lands on the booking, where
+            // the length it is multiplied by is chosen.
+            <>
+              <strong className="mkt-production-title">{t('ads.production.offerAny')}</strong>
+              <div className="mkt-production-tiers" role="radiogroup" aria-label={t('ads.production.offerAny')}>
+                <label className="mkt-check">
+                  <input
+                    type="radio"
+                    name={tierName}
+                    checked={!offer.wanted}
+                    onChange={() => offer.onChange({ wanted: false, tier: null, brief: offer.brief })}
+                  />
+                  <span>{t('ads.production.ownAd')}</span>
+                </label>
+                {offer.tiers.map((tier) => (
+                  <label className="mkt-check" key={tier.key}>
+                    <input
+                      type="radio"
+                      name={tierName}
+                      checked={!!offer.wanted && offer.tier === tier.key}
+                      onChange={() => offer.onChange({ wanted: true, tier: tier.key, brief: offer.brief })}
+                    />
+                    <span>
+                      <strong>{t(`ads.production.tiers.${tier.key}`)}</strong>
+                      {' '}· {tierPriceText(t, tier)}
+                      <span className="mkt-production-detail">{t(`ads.production.tierDetails.${tier.key}`)}</span>
+                    </span>
+                  </label>
+                ))}
+              </div>
+              <span className="mkt-fine">{t('ads.production.rounds')}</span>
+            </>
+          ) : (
           <label className="mkt-check">
             <input
               type="checkbox"
               checked={!!offer.wanted}
-              onChange={(e) => offer.onChange({ wanted: e.target.checked, brief: offer.brief })}
+              onChange={(e) => offer.onChange({ wanted: e.target.checked, tier: null, brief: offer.brief })}
             />
             <span>
               <strong>{t('ads.production.offer')}</strong>
@@ -2291,6 +2351,7 @@ function CreativePanel({ reference, account, maxSeconds, bannerSpec, onCreatives
                 : null}
             </span>
           </label>
+          )}
           {offer.wanted && (
             <div className="mkt-field mkt-field-wide">
               <label htmlFor="mkt-spot-brief">{t('ads.production.briefLabel')}</label>
@@ -2298,7 +2359,7 @@ function CreativePanel({ reference, account, maxSeconds, bannerSpec, onCreatives
                 id="mkt-spot-brief"
                 rows={4}
                 value={offer.brief}
-                onChange={(e) => offer.onChange({ wanted: true, brief: e.target.value })}
+                onChange={(e) => offer.onChange({ wanted: true, tier: offer.tier, brief: e.target.value })}
                 placeholder={t('ads.production.briefPlaceholder')}
               />
               <span className={`mkt-hint${offer.brief.trim().length < 20 ? ' mkt-hint-short' : ''}`}>
@@ -2445,7 +2506,7 @@ export default function Advertise({ openLoginModal }) {
   // What the wizard is working on: the product step 1 just created, or the one a
   // "Have us make the video": chosen in the spot panel, charged on the flight, so
   // it cannot live inside either one.
-  const [bookProduction, setBookProduction] = useState({ wanted: false, brief: '' });
+  const [bookProduction, setBookProduction] = useState({ wanted: false, tier: null, brief: '' });
 
   // The enrollment wizard. `wizRef` is the product once step 1 has created it, which
   // is what unlocks the later steps: there is nothing to upload to, or book against,
@@ -2752,11 +2813,38 @@ export default function Advertise({ openLoginModal }) {
                   onChange={(e) => setForm((f) => ({ ...f, wantProduction: e.target.checked }))}
                 />
                 <span>
-                  {pricing?.productionFeeHbd
+                  {pricing?.productionTiers?.length
+                    ? <Trans i18nKey="ads.apply.productionTiers" components={{ b: <strong /> }} />
+                    : pricing?.productionFeeHbd
                     ? <Trans i18nKey="ads.apply.productionFee" values={{ fee: pricing.productionFeeHbd }} components={{ b: <strong /> }} />
                     : <Trans i18nKey="ads.apply.production" components={{ b: <strong /> }} />}
                 </span>
               </label>
+              {/* The price list up front, so nobody applies for "we make it" without
+                  knowing roughly what it costs. Which one is picked at booking. */}
+              {pricing?.productionTiers?.length ? (
+                <>
+                  <table className="mkt-production-table">
+                    <thead>
+                      <tr>
+                        <th scope="col">{t('ads.production.tableKind')}</th>
+                        <th scope="col">{t('ads.production.tableDetails')}</th>
+                        <th scope="col">{t('ads.production.tablePrice')}</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {pricing.productionTiers.map((tier) => (
+                        <tr key={tier.key}>
+                          <th scope="row">{t(`ads.production.tiers.${tier.key}`)}</th>
+                          <td>{t(`ads.production.tierDetails.${tier.key}`)}</td>
+                          <td>{tierPriceText(t, tier)}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                  <span className="mkt-fine">{t('ads.production.rounds')}</span>
+                </>
+              ) : null}
               {form.wantProduction && (
                 <div className="mkt-field mkt-field-wide">
                   <label htmlFor="mkt-apply-brief">{t('ads.apply.briefLabel')}</label>
@@ -3093,7 +3181,12 @@ export default function Advertise({ openLoginModal }) {
                   <AdTypePicker
                     value={wizType}
                     pricing={pricing}
-                    onChange={(type) => { setWizType(type); if (wizRef?.reference) rememberWizard(user, wizRef.reference, wizAt, type); }}
+                    onChange={(type) => {
+                      setWizType(type);
+                      // A tier belongs to one kind of ad; the brief is still worth keeping.
+                      setBookProduction((p) => ({ ...p, wanted: false, tier: null }));
+                      if (wizRef?.reference) rememberWizard(user, wizRef.reference, wizAt, type);
+                    }}
                   />
                   {wizType === 'ticker' ? (
                     <TickerPanel
@@ -3117,7 +3210,12 @@ export default function Advertise({ openLoginModal }) {
                        part of the burned image — so asking for a logo and slogan here
                        would collect something that is never drawn. */
                     brand={wizType === 'banner' ? null : { productName: wizRef.projectName, logoUrl: null, slogan: null }}
-                    offer={wizType === 'banner' ? null : { ...bookProduction, feeHbd: pricing?.productionFeeHbd, onChange: setBookProduction }}
+                    offer={{
+                      ...bookProduction,
+                      feeHbd: pricing?.productionFeeHbd,
+                      tiers: tiersFor(pricing, WIZ_FORMAT[wizType] || 'video_roll'),
+                      onChange: setBookProduction,
+                    }}
                     onCreatives={setWizCreativeList}
                   />
                   )}
@@ -3405,7 +3503,11 @@ export default function Advertise({ openLoginModal }) {
                       <span>{t('ads.rebook.stepAd', { name: rebook.name })}</span>
                     </p>
                   )}
-                  <AdTypePicker value={bookType} onChange={(v) => { setBookType(v); setRebook(null); }} pricing={pricing} />
+                  <AdTypePicker
+                    value={bookType}
+                    onChange={(v) => { setBookType(v); setRebook(null); setBookProduction((p) => ({ ...p, wanted: false, tier: null })); }}
+                    pricing={pricing}
+                  />
                   {/* The upload panel stays MOUNTED for the ticker too (hidden), because it
                       owns the creative list the Active spots pickers are filled from. */}
                   <div style={{ display: bookType === 'ticker' ? 'none' : undefined }}>
@@ -3425,9 +3527,10 @@ export default function Advertise({ openLoginModal }) {
                       logoUrl: lookup.logoUrl,
                       slogan: lookup.slogan,
                     } : null}
-                    offer={isSpotType(bookType) && lookup.status === 'approved' && !lookup.production?.requested ? {
+                    offer={bookType !== 'ticker' && lookup.status === 'approved' && !lookup.production?.requested ? {
                       ...bookProduction,
                       feeHbd: pricing?.productionFeeHbd,
+                      tiers: tiersFor(pricing, AD_TYPE_FORMAT[bookType] || 'video_roll'),
                       onChange: setBookProduction,
                     } : null}
                   />
@@ -3455,8 +3558,8 @@ export default function Advertise({ openLoginModal }) {
                     reference={lookupRef.trim()}
                     pricing={pricing}
                     creatives={creativeList}
-                    // A production request only means something for a video spot.
-                    production={isSpotType(bookType) ? bookProduction : null}
+                    // A ticker is text they type, so there is nothing for us to make.
+                    production={bookType !== 'ticker' ? bookProduction : null}
                     awaitingApproval={lookup.status !== 'approved'}
                     // Settled in "Your ad", so the booking form does not ask again.
                     lockFormat={AD_TYPE_FORMAT[bookType] || 'video_roll'}

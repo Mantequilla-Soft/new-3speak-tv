@@ -600,6 +600,26 @@
   "production": {
     "offer": "Tidak punya video iklan? Biar kami yang membuatnya.",
     "fee": "Biaya sekali <b>{{fee}} HBD</b>, ditambahkan ke pemesananmu.",
+    "offerAny": "Belum punya iklan? Biar kami yang membuatkan.",
+    "ownAd": "Tidak, terima kasih, saya punya sendiri",
+    "tiers": {
+      "static_banner": "Banner statis",
+      "animated_banner": "Banner animasi",
+      "ai_commercial": "Iklan AI",
+      "human_commercial": "Iklan dengan presenter"
+    },
+    "tierDetails": {
+      "static_banner": "Gambar diam yang tampil di atas video",
+      "animated_banner": "Banner bergerak (video) yang tayang sepanjang durasi yang dipesan",
+      "ai_commercial": "Iklan video buatan AI, hanya musik latar tanpa suara",
+      "human_commercial": "Iklan video dengan orang sungguhan yang memperkenalkan produk Anda"
+    },
+    "tierFlat": "{{fee}} HBD, sekali bayar",
+    "tierPerFive": "{{fee}} HBD per 5 detik dari durasi yang Anda pesan",
+    "tableKind": "Jenis iklan",
+    "tableDetails": "Detail",
+    "tablePrice": "Harga",
+    "rounds": "Setiap iklan yang kami buat melalui putaran revisi sebanyak yang diperlukan sampai Anda puas dengan hasilnya. Kami membicarakannya dengan Anda melalui kontak yang Anda berikan.",
     "briefLabel": "Apa yang harus disampaikan iklan ini?",
     "briefPlaceholder": "Apa yang kamu iklankan, untuk siapa, satu hal yang harus diingat penonton, dan apa pun yang ingin kamu hindari. Unggah logo atau gambar di atas dan kami akan memakainya.",
     "moreChars_other": "{{count}} karakter lagi, kami tidak bisa membuat iklan dari brief kosong",
@@ -635,6 +655,7 @@
     "moreChars_other": "{{count}} karakter lagi",
     "enough": "Sudah cukup, terima kasih",
     "productionFee": "<b>Biar kami yang membuat videonya.</b> Centang ini jika kamu belum punya spot. Biaya sekali <b>{{fee}} HBD</b>, dicantumkan bersama pemesananmu dan hanya ditagih saat kamu memesan, jadi mengajukan tidak dipungut biaya apa pun.",
+    "productionTiers": "<b>Biar kami yang membuat iklannya.</b> Centang ini jika Anda belum punya. Anda memilih jenis iklan saat memesan, dan tidak ada biaya sebelum itu.",
     "production": "<b>Biar kami yang membuat videonya.</b> Centang ini jika kamu belum punya spot.",
     "briefLabel": "Apa yang harus disampaikan spot ini?",
     "briefPlaceholder": "Apa yang kamu iklankan, untuk siapa, satu hal yang harus diingat penonton, dan apa pun yang ingin kamu hindari. Kamu bisa mengirimkan logo dan gambar setelah produkmu terdaftar.",

@@ -600,6 +600,26 @@
   "production": {
     "offer": "광고 동영상이 없나요? 저희가 만들어 드려요.",
     "fee": "1회 <b>{{fee}} HBD</b>가 예약에 추가돼요.",
+    "offerAny": "아직 광고가 없나요? 저희가 만들어 드립니다.",
+    "ownAd": "괜찮아요, 제 광고가 있어요",
+    "tiers": {
+      "static_banner": "정적 배너",
+      "animated_banner": "애니메이션 배너",
+      "ai_commercial": "AI 광고",
+      "human_commercial": "진행자 광고"
+    },
+    "tierDetails": {
+      "static_banner": "동영상 위에 표시되는 정지 이미지",
+      "animated_banner": "예약한 길이만큼 재생되는 움직이는 배너(동영상)",
+      "ai_commercial": "AI로 만든 동영상 광고, 배경 음악만 있고 음성 없음",
+      "human_commercial": "실제 사람이 제품을 소개하는 동영상 광고"
+    },
+    "tierFlat": "{{fee}} HBD, 1회",
+    "tierPerFive": "예약한 길이 5초당 {{fee}} HBD",
+    "tableKind": "광고 종류",
+    "tableDetails": "세부 정보",
+    "tablePrice": "가격",
+    "rounds": "저희가 만드는 모든 광고는 결과에 만족하실 때까지 필요한 만큼 수정을 거칩니다. 알려 주신 연락처로 함께 이야기합니다.",
     "briefLabel": "광고에서 무엇을 말해야 하나요?",
     "briefPlaceholder": "광고할 대상, 대상 고객, 시청자가 꼭 기억해야 할 한 가지, 피했으면 하는 것을 알려주세요. 위에 로고나 이미지를 업로드하면 활용할게요.",
     "moreChars_other": "{{count}}자 더 필요해요. 빈 브리프로는 광고를 만들 수 없어요",
@@ -635,6 +655,7 @@
     "moreChars_other": "{{count}}자 더 필요해요",
     "enough": "충분해요, 감사합니다",
     "productionFee": "<b>동영상 제작을 맡겨 주세요.</b> 아직 광고가 없다면 체크하세요. 1회 <b>{{fee}} HBD</b>로, 예약 시 견적에 포함되며 예약할 때만 청구되므로 신청은 무료예요.",
+    "productionTiers": "<b>광고를 저희가 만들어 드립니다.</b> 아직 광고가 없다면 체크하세요. 광고 종류는 예약할 때 고르며, 그 전에는 아무것도 청구되지 않습니다.",
     "production": "<b>동영상 제작을 맡겨 주세요.</b> 아직 광고가 없다면 체크하세요.",
     "briefLabel": "광고에서 무엇을 말해야 하나요?",
     "briefPlaceholder": "광고할 대상, 대상 고객, 시청자가 꼭 기억해야 할 한 가지, 피했으면 하는 것을 알려주세요. 제품이 등록되면 로고와 이미지를 보내 주실 수 있어요.",

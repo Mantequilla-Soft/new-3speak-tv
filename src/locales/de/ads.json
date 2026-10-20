@@ -622,6 +622,26 @@
   "production": {
     "offer": "Kein Werbevideo? Lass es von uns erstellen.",
     "fee": "Einmalig <b>{{fee}} HBD</b>, zu deiner Buchung hinzugerechnet.",
+    "offerAny": "Noch keine Werbung? Lass sie von uns erstellen.",
+    "ownAd": "Nein danke, ich habe meine eigene",
+    "tiers": {
+      "static_banner": "Statisches Banner",
+      "animated_banner": "Animiertes Banner",
+      "ai_commercial": "KI-Werbespot",
+      "human_commercial": "Spot mit Sprecher"
+    },
+    "tierDetails": {
+      "static_banner": "Ein Standbild, das über dem Video angezeigt wird",
+      "animated_banner": "Ein bewegtes Banner (Video), das so lange läuft wie gebucht",
+      "ai_commercial": "Ein mit KI erstellter Videospot, nur Hintergrundmusik, keine Stimme",
+      "human_commercial": "Ein Videospot, in dem eine echte Person dein Produkt vorstellt"
+    },
+    "tierFlat": "{{fee}} HBD, einmalig",
+    "tierPerFive": "{{fee}} HBD pro 5 Sekunden deiner gebuchten Länge",
+    "tableKind": "Art der Werbung",
+    "tableDetails": "Details",
+    "tablePrice": "Preis",
+    "rounds": "Jede Werbung, die wir erstellen, durchläuft so viele Runden, bis du mit dem Ergebnis zufrieden bist. Wir besprechen alles mit dir über den Kontakt, den du uns gegeben hast.",
     "briefLabel": "Was soll die Werbung sagen?",
     "briefPlaceholder": "Was du bewirbst, für wen es ist, das eine, was sich ein Zuschauer merken soll, und alles, was wir vermeiden sollen. Lade oben ein Logo oder Standbilder hoch, und wir verwenden sie.",
     "moreChars_one": "Noch {{count}} Zeichen, aus einem leeren Briefing können wir keine Werbung machen",
@@ -659,6 +679,7 @@
     "moreChars_other": "Noch {{count}} Zeichen",
     "enough": "Genug für den Anfang, danke",
     "productionFee": "<b>Lass das Video von uns erstellen.</b> Hak das an, wenn du noch keinen Spot hast. Einmalig <b>{{fee}} HBD</b>, angegeben mit deiner Buchung und nur berechnet, wenn du buchst – die Bewerbung kostet also nichts.",
+    "productionTiers": "<b>Lass uns die Werbung für dich erstellen.</b> Kreuze das an, wenn du noch keine hast. Die Art der Werbung wählst du bei der Buchung, vorher wird nichts berechnet.",
     "production": "<b>Lass das Video von uns erstellen.</b> Hak das an, wenn du noch keinen Spot hast.",
     "briefLabel": "Was soll der Spot sagen?",
     "briefPlaceholder": "Was du bewirbst, für wen es ist, das eine, was sich ein Zuschauer merken soll, und alles, was wir vermeiden sollen. Ein Logo und Standbilder kannst du uns schicken, sobald dein Produkt registriert ist.",

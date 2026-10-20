@@ -600,6 +600,26 @@
   "production": {
     "offer": "広告動画がない場合は、制作を依頼できます。",
     "fee": "1 回限り <b>{{fee}} HBD</b> が予約に加算されます。",
+    "offerAny": "まだ広告がありませんか？私たちが制作します。",
+    "ownAd": "いいえ、自分の広告があります",
+    "tiers": {
+      "static_banner": "静止画バナー",
+      "animated_banner": "動くバナー",
+      "ai_commercial": "AI CM",
+      "human_commercial": "出演者付きCM"
+    },
+    "tierDetails": {
+      "static_banner": "動画の上に表示される静止画",
+      "animated_banner": "予約した長さの間流れる動くバナー（動画）",
+      "ai_commercial": "AIで制作する動画CM、BGMのみでナレーションなし",
+      "human_commercial": "実際の人物が商品を紹介する動画CM"
+    },
+    "tierFlat": "{{fee}} HBD（1回のみ）",
+    "tierPerFive": "予約した長さ5秒ごとに {{fee}} HBD",
+    "tableKind": "広告の種類",
+    "tableDetails": "詳細",
+    "tablePrice": "料金",
+    "rounds": "制作する広告はすべて、結果にご満足いただけるまで必要なだけ修正を重ねます。いただいた連絡先でご相談します。",
     "briefLabel": "広告で何を伝えますか？",
     "briefPlaceholder": "広告する内容、対象、視聴者に覚えてほしいひとつのこと、避けてほしいこと。上にロゴや静止画をアップロードすれば、それを使います。",
     "moreChars_other": "あと {{count}} 文字必要です。空の依頼内容では広告を作れません",
@@ -635,6 +655,7 @@
     "moreChars_other": "あと {{count}} 文字必要です",
     "enough": "これで十分です。ありがとうございます",
     "productionFee": "<b>動画の制作を依頼する。</b>まだ広告枠用の動画がない場合はチェックしてください。1 回限りの <b>{{fee}} HBD</b> で、予約時に見積もられ、予約したときにのみ請求されるため、申し込みは無料です。",
+    "productionTiers": "<b>広告を私たちが制作します。</b> まだ広告がない場合はチェックしてください。広告の種類は予約時に選び、それまで料金は一切かかりません。",
     "production": "<b>動画の制作を依頼する。</b>まだ広告枠用の動画がない場合はチェックしてください。",
     "briefLabel": "広告で何を伝えますか？",
     "briefPlaceholder": "広告する内容、対象、視聴者に覚えてほしいひとつのこと、避けてほしいこと。商品の登録後に、ロゴや静止画を送ることもできます。",

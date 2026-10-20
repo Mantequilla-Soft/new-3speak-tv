@@ -644,6 +644,26 @@
   "production": {
     "offer": "Non hai un video pubblicitario? Fallo realizzare a noi.",
     "fee": "Un costo una tantum di <b>{{fee}} HBD</b>, aggiunto alla tua prenotazione.",
+    "offerAny": "Non hai ancora un annuncio? Lo facciamo noi per te.",
+    "ownAd": "No grazie, ho il mio",
+    "tiers": {
+      "static_banner": "Banner statico",
+      "animated_banner": "Banner animato",
+      "ai_commercial": "Spot con IA",
+      "human_commercial": "Spot con presentatore"
+    },
+    "tierDetails": {
+      "static_banner": "Un'immagine fissa mostrata sopra il video",
+      "animated_banner": "Un banner in movimento (video) che dura quanto hai prenotato",
+      "ai_commercial": "Uno spot video realizzato con l'IA, solo musica di sottofondo e senza voce",
+      "human_commercial": "Uno spot video con una persona reale che presenta il tuo prodotto"
+    },
+    "tierFlat": "{{fee}} HBD, una tantum",
+    "tierPerFive": "{{fee}} HBD ogni 5 secondi della durata prenotata",
+    "tableKind": "Tipo di annuncio",
+    "tableDetails": "Dettagli",
+    "tablePrice": "Prezzo",
+    "rounds": "Ogni annuncio che realizziamo passa per tutte le revisioni necessarie finché il risultato non ti soddisfa. Ne parliamo con te tramite il contatto che ci hai dato.",
     "briefLabel": "Cosa deve dire l'annuncio?",
     "briefPlaceholder": "Cosa stai pubblicizzando, a chi è rivolto, l'unica cosa che uno spettatore deve ricordare e tutto ciò che vuoi evitiamo. Carica qui sopra un logo o delle immagini e li useremo.",
     "moreChars_one": "Ancora {{count}} carattere, non possiamo realizzare un annuncio da un brief vuoto",
@@ -683,6 +703,7 @@
     "moreChars_other": "Ancora {{count}} caratteri",
     "enough": "Abbastanza per procedere, grazie",
     "productionFee": "<b>Fai realizzare il video a noi.</b> Spunta questa casella se non hai ancora uno spot. Un costo una tantum di <b>{{fee}} HBD</b>, indicato nel preventivo della prenotazione e addebitato solo quando prenoti, quindi fare richiesta non costa nulla.",
+    "productionTiers": "<b>Facciamo noi l'annuncio per te.</b> Spunta questa casella se non ne hai ancora uno. Scegli il tipo di annuncio al momento della prenotazione e prima non viene addebitato nulla.",
     "production": "<b>Fai realizzare il video a noi.</b> Spunta questa casella se non hai ancora uno spot.",
     "briefLabel": "Cosa deve dire lo spot?",
     "briefPlaceholder": "Cosa stai pubblicizzando, a chi è rivolto, l'unica cosa che uno spettatore deve ricordare e tutto ciò che vuoi evitiamo. Potrai inviarci un logo e delle immagini una volta registrato il prodotto.",

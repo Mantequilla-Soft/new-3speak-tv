@@ -622,6 +622,26 @@
   "production": {
     "offer": "Walang ad video? Ipagawa sa amin.",
     "fee": "Isang beses na <b>{{fee}} HBD</b>, idinadagdag sa booking mo.",
+    "offerAny": "Wala ka pang ad? Kami na ang gagawa para sa iyo.",
+    "ownAd": "Hindi na, salamat, may sarili ako",
+    "tiers": {
+      "static_banner": "Static na banner",
+      "animated_banner": "Animated na banner",
+      "ai_commercial": "AI na commercial",
+      "human_commercial": "Commercial na may presenter"
+    },
+    "tierDetails": {
+      "static_banner": "Isang larawang hindi gumagalaw na ipinapakita sa ibabaw ng video",
+      "animated_banner": "Gumagalaw na banner (video) na tumatakbo sa habang na-book mo",
+      "ai_commercial": "Video ad na gawa sa AI, background music lang at walang boses",
+      "human_commercial": "Video ad na may totoong taong nagpapakilala ng produkto mo"
+    },
+    "tierFlat": "{{fee}} HBD, isang beses",
+    "tierPerFive": "{{fee}} HBD bawat 5 segundo ng haba na na-book mo",
+    "tableKind": "Uri ng ad",
+    "tableDetails": "Mga detalye",
+    "tablePrice": "Presyo",
+    "rounds": "Bawat ad na ginagawa namin ay dumadaan sa kahit ilang rebisyon hanggang masiyahan ka sa resulta. Kakausapin ka namin sa contact na ibinigay mo.",
     "briefLabel": "Ano ang dapat sabihin ng ad?",
     "briefPlaceholder": "Ano ang ina-advertise mo, para kanino ito, ang isang bagay na dapat matandaan ng viewer, at anumang gusto mong iwasan namin. Mag-upload ng logo o stills sa itaas at gagamitin namin ang mga ito.",
     "moreChars_one": "{{count}} character pa, hindi kami makakagawa ng ad mula sa blangkong brief",
@@ -659,6 +679,7 @@
     "moreChars_other": "{{count}} characters pa",
     "enough": "Sapat na, salamat",
     "productionFee": "<b>Ipagawa sa amin ang video.</b> I-tick ito kung wala ka pang spot. Isang beses na <b>{{fee}} HBD</b>, kasama sa quote ng booking mo at sisingilin lang kapag nag-book ka, kaya libre ang pag-apply.",
+    "productionTiers": "<b>Kami na ang gagawa ng ad para sa iyo.</b> Lagyan ito ng tsek kung wala ka pang ad. Pipiliin mo ang uri ng ad kapag nag-book ka, at walang sisingilin bago iyon.",
     "production": "<b>Ipagawa sa amin ang video.</b> I-tick ito kung wala ka pang spot.",
     "briefLabel": "Ano ang dapat sabihin ng spot?",
     "briefPlaceholder": "Ano ang ina-advertise mo, para kanino ito, ang isang bagay na dapat matandaan ng viewer, at anumang gusto mong iwasan namin. Puwede mo kaming padalhan ng logo at stills kapag na-register na ang product mo.",
