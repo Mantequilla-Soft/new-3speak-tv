@@ -21,8 +21,9 @@
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: 50%;
-  height: 90%;
+  // Desktop: roomy (settings sit beside the preview), still not fullscreen
+  width: min(1280px, 92vw);
+  height: 94vh;
   display: flex;
   flex-direction: column;
   z-index: 1;

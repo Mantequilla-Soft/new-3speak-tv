@@ -206,7 +206,7 @@ function WatchedView() {
           </div>
         ) : activeTab === 'shorts' ? (
           <div className="watched-shorts-grid">
-            <Card3
+            <Card3 windowed
               videos={filtered}
               linkPrefix="/shorts"
               shortsGrid
@@ -216,7 +216,7 @@ function WatchedView() {
         ) : (
           <div className="watched-videos-grid">
             {/* The main feed's card, so history looks and behaves like every feed. */}
-            <Card3 videos={filtered} renderFooter={renderFooter} />
+            <Card3 windowed videos={filtered} renderFooter={renderFooter} />
           </div>
         )}
       </div>

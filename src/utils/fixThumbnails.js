@@ -64,8 +64,11 @@ export function squareCover(url, px = 512) {
   return u;
 }
 
-export function fixVideoThumbnail(video, portrait = false) {
-  const size = portrait ? PORTRAIT : LANDSCAPE;
+// A card several columns wide (the featured video) asks for this instead.
+export const LANDSCAPE_LARGE = { w: 960, h: 540 };
+
+export function fixVideoThumbnail(video, portrait = false, sizeOverride = null) {
+  const size = sizeOverride || (portrait ? PORTRAIT : LANDSCAPE);
   const thumbnail = video?.images?.thumbnail || video?.thumbUrl || video?.spkvideo?.thumbnail_url || video?.thumbnailUrl || video?.thumbnail_url || video?.thumbnail;
 
   // Validate thumbnail exists and is not just whitespace

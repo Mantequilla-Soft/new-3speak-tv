@@ -29,6 +29,10 @@ export const useAppStore = create(
       // Drives home, profile and playlist card grids.
       homeCardSize: 'small',
       setHomeCardSize: (val) => a[0]({ homeCardSize: typeof val === 'function' ? val(a[1]().homeCardSize) : val }),
+      // Spotlight card width on the Discover tab: 'small' | 'medium' (2 / 3 cards
+      // wide). Not used in large-card mode, which keeps 2.
+      spotlightSize: 'small',
+      setSpotlightSize: (val) => a[0]({ spotlightSize: val }),
       // Hover/scroll video previews on cards (default on).
       previewEnabled: true,
       setPreviewEnabled: (val) => a[0]({ previewEnabled: typeof val === 'function' ? val(a[1]().previewEnabled) : val }),
@@ -104,6 +108,7 @@ export const useAppStore = create(
         watchHistoryEnabled: state.watchHistoryEnabled,
         showNsfw: state.showNsfw,
         homeCardSize: state.homeCardSize,
+        spotlightSize: state.spotlightSize,
         previewEnabled: state.previewEnabled,
         interests: state.interests,
         shortsFeedMode: state.shortsFeedMode,

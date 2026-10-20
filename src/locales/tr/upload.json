@@ -428,6 +428,13 @@
     "moveChapter": "{{title}} başlangıcını taşı",
     "moveLink": "Bu bağlantıyı taşı",
     "resizeLink": "Bu bağlantının ne kadar süre görüneceğini değiştir",
+    "zoom": "Yakınlaştırma",
+    "zoomIn": "Yakınlaştır",
+    "zoomOut": "Uzaklaştır",
+    "zoomFit": "Sığdır",
+    "zoomHint": "Zaman çizelgesini yakınlaştır. Ctrl veya ⌘ + fare tekerleği imlecin olduğu yerde yakınlaştırır.",
+    "expand": "Tam genişlik",
+    "collapse": "Tam genişlikten çık",
     "fixChapters": "Lütfen önce bölümleri düzelt veya kaldır.",
     "chapters": {
       "heading": "Bölümler",

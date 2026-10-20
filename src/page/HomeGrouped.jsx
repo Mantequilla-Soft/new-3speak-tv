@@ -8,6 +8,8 @@ import Card3 from "../components/Cards/Card3";
 import { FEED_URL, TRENDING_SORTED_URL, FOLLOW_FEED_URL, DISCOVER_FEED_URL, INTERESTS_FEED_URL, NEW_CONTENT_URL, CHECKER_URL, appendNsfw, warmupRailEnabledFor } from "../utils/config";
 import { useContentBatch } from "../hooks/useContentBatch";
 import { useWatchHistory } from "../hooks/useWatchHistory";
+import { batchCheckWatched } from "../utils/watchHistory";
+import { getHidden } from "../utils/userFilters";
 import useViewCounts from "../hooks/useViewCounts";
 import { useAppStore } from "../lib/store";
 import { getFeedSeed, refreshHomeFeeds } from "../utils/feedSeed";
@@ -75,6 +77,109 @@ const fetchDiscover = async (page = 1) => {
   const res = await axios.get(appendNsfw(`${DISCOVER_FEED_URL}?page=${page}&limit=${PAGE_POOL}${feedParams()}`, useAppStore.getState().showNsfw));
   return res.data?.videos || [];
 };
+
+// Featured (the Spotlight): one of the best-performing videos of the last 48 hours,
+// drawn large as the first card of the Discover tab. "Best" = Hive rewards, and
+// nothing else. NOT the trending score: that counts the old view counter (one per
+// play, no de-duplication, bot-inflated before the purge), and for videos from the
+// new uploader the checker has no vote or comment counts (it sends 0), so views
+// alone carried a 57-minute upload with 41 views and no votes, comments or rewards
+// into the top 10. Rewards come live from Hive for every video, old or new.
+// The candidates come newest-first (`chrono=1`), so the views-based score does not
+// even decide which videos are looked at, and without currentuser, which would tilt
+// toward creators the viewer follows: these are the top videos for everyone. The
+// viewer's own filters are applied here instead: anything they watched (whatever
+// their hide-watched setting), dismissed, or whose creator they hid. Returns the
+// remaining candidates in rank order; orderFeatured shuffles the first twenty.
+const FEATURED_WINDOW_MS = 48 * 60 * 60 * 1000;
+const FEATURED_TOP = 20;
+// At least this much in Hive rewards to be in the Spotlight at all.
+const FEATURED_MIN_REWARD = 1;
+const FEATURED_PAGE = 100;
+const FEATURED_MAX_PAGES = 3;
+const fetchFeatured = async (viewer) => {
+  const since = Date.now() - FEATURED_WINDOW_MS;
+  const createdAt = (v) => new Date(v.created || v.created_at).getTime();
+  const rewardOf = (v) => Number(v.stats?.total_hive_reward || 0);
+  // Newest first, until a page reaches back past the window (one is usually 60h+)
+  const all = [];
+  for (let page = 1; page <= FEATURED_MAX_PAGES; page++) {
+    const res = await axios.get(appendNsfw(
+      `${TRENDING_SORTED_URL}?page=${page}&limit=${FEATURED_PAGE}&chrono=1`,
+      useAppStore.getState().showNsfw,
+    ));
+    const vids = res.data?.videos || [];
+    all.push(...vids);
+    if (vids.length < FEATURED_PAGE || createdAt(vids[vids.length - 1]) < since) break;
+  }
+  const authorOf = (v) => v.author?.username || v.author || v.owner;
+  // The watched lookup takes 50 at most, and a pool that deep is plenty.
+  const recent = all
+    .filter((v) => createdAt(v) >= since && rewardOf(v) >= FEATURED_MIN_REWARD)
+    .sort((a, b) => rewardOf(b) - rewardOf(a))
+    .slice(0, 50);
+  const norm = (x) => String(x || '').toLowerCase();
+  // One video per creator: their best. Applied AFTER the viewer's filters, so a
+  // creator whose best video they already watched can still be there with the next.
+  const onePerCreator = (list) => {
+    const seen = new Set();
+    return list.filter((v) => {
+      const who = norm(authorOf(v));
+      if (seen.has(who)) return false;
+      seen.add(who);
+      return true;
+    });
+  };
+  if (!viewer || !recent.length) return onePerCreator(recent);
+  const [watched, hidden] = await Promise.all([
+    batchCheckWatched(viewer, recent.map((v) => ({ author: authorOf(v), permlink: v.permlink }))),
+    getHidden(viewer),
+  ]);
+  const hiddenVideos = new Set(hidden.videos.map((h) => `${norm(h.owner)}/${norm(h.permlink)}`));
+  const hiddenCreators = new Set(hidden.creators.map((h) => norm(h.creator)));
+  return onePerCreator(recent.filter((v) => {
+    const people = [norm(authorOf(v)), norm(v.owner)];
+    return !watched.has(`${authorOf(v)}/${v.permlink}`)
+      && !people.some((p) => hiddenCreators.has(p) || hiddenVideos.has(`${p}/${norm(v.permlink)}`));
+  }));
+};
+
+// The top FEATURED_TOP in a random order fixed for the page load: each candidate's
+// place comes from hashing the session seed with its key, so a reload (new seed)
+// shuffles again, while watching the featured video (it leaves the pool) hands
+// over to the one that was already next, instead of reshuffling the rest. The
+// first is featured; the arrows and the strip under it step through the others.
+const featuredKeyOf = (v) => `${v.author?.username || v.author || v.owner}/${v.permlink}`;
+const seededRank = (seed, key) => {
+  let h = 2166136261 ^ seed; // FNV-1a
+  for (let i = 0; i < key.length; i++) { h ^= key.charCodeAt(i); h = Math.imul(h, 16777619); }
+  return h >>> 0;
+};
+const orderFeatured = (pool, seed) => (pool || [])
+  .slice(0, FEATURED_TOP)
+  .map((v) => ({ v, r: seededRank(seed, featuredKeyOf(v)) }))
+  .sort((a, b) => a.r - b.r)
+  .map(({ v }) => v);
+
+// Phones get no featured card at all: their feed stays exactly as it was. Same
+// breakpoint as the `respond(phone)` mixin.
+const PHONE_QUERY = "(max-width: 767px)";
+const useIsPhone = () => {
+  const [isPhone, setIsPhone] = useState(() => typeof window !== "undefined" && !!window.matchMedia?.(PHONE_QUERY).matches);
+  useEffect(() => {
+    const mq = window.matchMedia?.(PHONE_QUERY);
+    if (!mq) return undefined;
+    const onChange = () => setIsPhone(mq.matches);
+    mq.addEventListener("change", onChange);
+    return () => mq.removeEventListener("change", onChange);
+  }, []);
+  return isPhone;
+};
+
+const EMPTY_FEATURED = [];
+// Spotlight sizes, in toggle order: cards wide. A saved size that is no longer
+// here (there was a 4-wide 'large') falls back to small.
+const SPOTLIGHT_SPANS = { small: 2, medium: 3 };
 
 // "Interests" row: ONLY videos whose winning topic is in the user's interests,
 // re-ranked by retention with older ones sprinkled in. Empty with no interests.
@@ -166,6 +271,42 @@ const fetchNewContent = async (page = 1) => {
 // first empty page. One extra (empty) request at the very end is fine.
 const nextPage = () => (lastPage, allPages) =>
   (lastPage?.length || 0) > 0 ? allPages.length + 1 : undefined;
+
+// Discover keeps two videos by the same creator at least this many cards apart,
+// so one creator never fills a screen. Nothing is hidden: a video that comes too
+// soon waits and goes in as soon as it fits. A card count, not rows, on purpose:
+// tied to the column count, resizing the window would reshuffle the feed.
+const CREATOR_SPACING = 8;
+
+/**
+ * Reorder a feed so the same creator is at least CREATOR_SPACING cards apart.
+ * Deterministic and append-safe: the output for the first N videos never
+ * depends on what comes after them, so when the next page loads, cards already
+ * on screen do not move. A video still waiting at the end of the loaded pages is
+ * held back for the next page; only once the feed is `complete` (no more pages)
+ * do the leftovers go at the end, closer together than the spacing.
+ */
+const spreadCreators = (videos, complete) => {
+  const who = (v) => String(v.author?.username || v.author || v.owner || '').toLowerCase();
+  const out = [];
+  const lastAt = new Map(); // creator -> position of their latest card in `out`
+  const waiting = [];
+  const fits = (v) => !lastAt.has(who(v)) || out.length - lastAt.get(who(v)) >= CREATOR_SPACING;
+  const place = (v) => { lastAt.set(who(v), out.length); out.push(v); };
+  // Waiting videos go first, oldest first, whenever one fits again
+  const drain = () => {
+    for (let i = 0; i < waiting.length;) {
+      if (fits(waiting[i])) { place(waiting.splice(i, 1)[0]); i = 0; } else i++;
+    }
+  };
+  for (const v of videos) {
+    drain();
+    if (fits(v)) place(v); else waiting.push(v);
+  }
+  drain();
+  if (complete) waiting.forEach(place);
+  return out;
+};
 
 // Helper to deduplicate videos by author+permlink
 const deduplicateVideos = (videos) => {
@@ -272,6 +413,8 @@ function useVisibleKeys(rootRef, sig, count) {
 const HomeGrouped = () => {
   const { t } = useTranslation();
   const { authenticated, user, showNsfw, homeCardSize, hideWatched, interests, simpleFeed } = useAppStore();
+  const spotlightSize = useAppStore((st) => st.spotlightSize);
+  const setSpotlightSize = useAppStore((st) => st.setSpotlightSize);
   // Who is looking, for feature gates that are keyed on a name. A warm-up user
   // has a handle and no Hive username, so `user` alone is null for them.
   const incubationHandle = useAppStore((st) => st.incubationHandle);
@@ -325,7 +468,12 @@ const HomeGrouped = () => {
     getNextPageParam: nextPage(),
     ...INF,
   });
-  const discoverData = useMemo(() => deduplicateVideos(discoverQ.data?.pages.flat() || []), [discoverQ.data]);
+  // Same creator spread out (see spreadCreators); leftovers only once the last page is in
+  const discoverComplete = discoverQ.hasNextPage === false;
+  const discoverData = useMemo(
+    () => spreadCreators(deduplicateVideos(discoverQ.data?.pages.flat() || []), discoverComplete),
+    [discoverQ.data, discoverComplete],
+  );
 
   const interestsQ = useInfiniteQuery({
     queryKey: ["interests-grouped", showNsfw, hideWatched, user, interestsKey, simpleFeed],
@@ -410,6 +558,52 @@ const HomeGrouped = () => {
     [promotedData, warmupVideos],
   );
 
+  // The featured video (see fetchFeatured / orderFeatured), leading the Discover tab.
+  const isPhone = useIsPhone();
+  const { data: featuredPool } = useQuery({
+    queryKey: ["featured", showNsfw, gateViewer || null],
+    queryFn: () => fetchFeatured(gateViewer),
+    enabled: !isPhone,
+    staleTime: 5 * 60 * 1000,
+    gcTime: 10 * 60 * 1000,
+  });
+  // The seed is read at render, so pull-to-refresh (which draws a new one) reshuffles.
+  const feedSeed = getFeedSeed();
+  const featuredItems = useMemo(
+    () => (isPhone ? EMPTY_FEATURED : orderFeatured(featuredPool, feedSeed)),
+    [isPhone, featuredPool, feedSeed],
+  );
+  // Which of them the arrows / strip have selected. Kept as a position, so when the
+  // featured video is watched and leaves the list, the next one moves into it.
+  const [featuredIndex, setFeaturedIndex] = useState(0);
+  const featuredAt = featuredItems.length ? featuredIndex % featuredItems.length : 0;
+  const featured = featuredItems[featuredAt] || null;
+  const featuredKey = featured ? featuredKeyOf(featured) : null;
+  // The size toggle on the card: small <-> medium. Hidden in
+  // large-card mode, where the width is fixed.
+  const featuredNav = useMemo(() => ({
+    items: featuredItems,
+    index: featuredAt,
+    onSelect: setFeaturedIndex,
+    size: homeCardSize === 'large' ? null : (SPOTLIGHT_SPANS[spotlightSize] ? spotlightSize : 'small'),
+    onCycleSize: () => {
+      const order = Object.keys(SPOTLIGHT_SPANS);
+      const at = order.indexOf(spotlightSize);
+      setSpotlightSize(order[(at + 1) % order.length]);
+    },
+  }), [featuredItems, featuredAt, homeCardSize, spotlightSize, setSpotlightSize]);
+  // The rest of the feed leaves out EVERY video in the line-up, not just the one
+  // that is big right now: browsing the Spotlight then only swaps the first card,
+  // and nothing below it moves (the shown one used to drop out of its place and
+  // the previous one come back into its own, shifting every card after them).
+  const featuredKeys = useMemo(
+    () => new Set(featuredItems.map((v) => featuredKeyOf(v).toLowerCase())),
+    [featuredItems],
+  );
+  const withFeatured = (vids) => (featured
+    ? [featured, ...vids.filter((v) => !featuredKeys.has(featuredKeyOf(v).toLowerCase()))]
+    : vids);
+
   // Live OpenPods streams, prepended into the grids as regular cards. "all"
   // for public feeds; "following" for the follow feed / personalised tabs.
   const liveAll = useLiveStreams();
@@ -418,7 +612,7 @@ const HomeGrouped = () => {
 
   // ── Build the section list (natural order), then apply the user's saved order ──
   const baseSections = [
-    { key: 'discover', title: 'Discover', label: t('feeds.home.sections.discover'), videos: withLive(liveAll, leadWithPromoted(discoverData)), isLoading: discoverLoading, priority: true },
+    { key: 'discover', title: 'Discover', label: t('feeds.home.sections.discover'), videos: withFeatured(withLive(liveAll, leadWithPromoted(discoverData))), isLoading: discoverLoading, priority: true },
     { key: 'home', title: authenticated ? 'Follow Feed' : 'Home Feed', label: authenticated ? t('feeds.home.sections.follow') : t('feeds.home.sections.home'), videos: withLive(authenticated ? liveFollowing : liveAll, leadWithPromoted(homeData)), linkTo: authenticated ? '/follow-feed' : '/home-feed', isLoading: homeLoading, priority: true },
     { key: 'new', title: 'New Content', label: t('feeds.home.sections.new'), videos: withLive(liveAll, leadWithPromoted(deduplicateVideos(newContentData || []))), linkTo: '/new', isLoading: newContentLoading },
   ];
@@ -495,6 +689,24 @@ const HomeGrouped = () => {
 
   // Live column count of the card grid — drives "a shorts rail every 2 rows".
   const gridCols = useGridColumns(panelRef, `${activeSection?.key}:${activeVideos.length}`);
+  // How big the featured card is: several columns by two rows, or a full-width
+  // single row on a two-column grid. The thumbnail is always 16:9; at three columns
+  // it is taller than two normal rows hold, so those rows grow to fit it. `weight` is how many normal cards it counts as for the rails: so
+  // little that its block (it plus the cards beside it) counts as NOTHING. The
+  // rails then start counting below the block, and the feed under it looks like a
+  // feed without it: a row, the follow suggestions, a row, the first shorts rail.
+  // No rail can land inside the block either, which would leave holes in the grid.
+  // Width: the viewer's Spotlight size (2 or 3 cards, toggled on the card), or
+  // always two in large-card mode (its tiles are already big), and always at least
+  // one column left beside it.
+  const featuredLayout = useMemo(() => {
+    if (gridCols < 2) return null;
+    if (gridCols === 2) return { span: 2, rows: 1, weight: 0 };
+    const wanted = homeCardSize === 'large' ? 2 : (SPOTLIGHT_SPANS[spotlightSize] || 2);
+    const span = Math.min(wanted, gridCols - 1);
+    // The block is two full rows; minus what the cards beside it fill, it counts as nothing
+    return { span, rows: 2, weight: 2 * span - 2 * gridCols };
+  }, [gridCols, homeCardSize, spotlightSize]);
   // How many narrow creator tiles fit across the grid — the "follow these" rail uses
   // this to fill its row exactly on desktop (no horizontal scroll). Mobile ignores it
   // (that rail stays a scroller); it's only >0 once the grid is measured, which also
@@ -798,7 +1010,7 @@ const HomeGrouped = () => {
     const creatorsMode = hasInterests && (s.key === 'discover' || s.key === 'interests');
     return (
       <>
-        <Card3
+        <Card3 windowed
           videos={s.videos}
           loading={false}
           getContentForVideo={getContentForVideo}
@@ -807,6 +1019,9 @@ const HomeGrouped = () => {
           watchedVersion={watchedVersion}
           getViewCount={getViewCount}
           priority={s.priority}
+          featuredKey={s.key === 'discover' ? featuredKey : null}
+          featuredLayout={featuredLayout}
+          featuredNav={featuredNav}
           /* A shorts rail after every 2 REAL rows of videos, on any feed that has a
              shorts source (see shortsMode). `gridCols` is measured from the live
              grid, so this lands on a row boundary at every breakpoint (2 cols on

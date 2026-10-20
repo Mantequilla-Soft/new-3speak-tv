@@ -178,6 +178,8 @@ import AudioUploadModal from "./components/AudioUploadModal/AudioUploadModal";
 import { KeyTypes, Providers } from "@aioha/aioha";
 import '@aioha/react-ui/dist/build.css';
 import { LOCAL_STORAGE_USER_ID_KEY } from "./hooks/localStorageKeys";
+import { endWalletSession } from "./hive-api/aioha";
+import { rememberButrauthAccount } from "./utils/butrauthAccounts";
 
 // Every toast from this module is headed "Sign in"; the message becomes the
 // line under it. See utils/toast.js.
@@ -384,7 +386,10 @@ function App() {
   useEffect(() => {
     if (loginInProgress.current) return; // handleAiohaLogin is already handling this
     if (aiohaUser) aiohaUserSeen.current = true;
-    if (!aiohaUser && appUser && aiohaUserSeen.current) {
+    // A Butter Auth session never depends on aioha: logging in with Butter Auth
+    // ends the wallet session, and that must not log the new session out.
+    const butrauthSession = localStorage.getItem('manteauth_login') === 'true';
+    if (!aiohaUser && appUser && aiohaUserSeen.current && !butrauthSession) {
       // Aioha logged out - log out of 3Speak too
       console.log("Aioha logged out, logging out of 3Speak");
       LogOut(appUser);
@@ -427,7 +432,7 @@ function App() {
   // token exchange, then writes `butrauth_login_result` to localStorage and
   // closes — which fires a `storage` event here in the opener window.
   useEffect(() => {
-    const onStorage = (e) => {
+    const onStorage = async (e) => {
       if (e.key !== 'butrauth_login_result' || !e.newValue) return;
       let payload;
       try { payload = JSON.parse(e.newValue); } catch { return; }
@@ -440,6 +445,14 @@ function App() {
       if (payload?.error) {
         toast.error(t('app.auth.butrauthFailed', { error: payload.error }));
         return;
+      }
+      // Logged in on top of a wallet session ("Change account" while signed in
+      // with Keychain & co.): end that one first. The modal closes BEFORE aioha
+      // logs out, so the account-switch effects (which only act while it is
+      // open) leave the new session alone.
+      if (payload?.username || (payload?.incubation && payload?.handle)) {
+        setLoginModalOpen(false);
+        await endWalletSession();
       }
       // An incubating login has NO username by design — that is the whole
       // point of it — so checking only for one dropped the result on the floor:
@@ -459,6 +472,15 @@ function App() {
     window.addEventListener('storage', onStorage);
     return () => window.removeEventListener('storage', onStorage);
   }, []);
+
+  // Every Butter Auth account used here joins the "Change account" list
+  // (utils/butrauthAccounts), also one that was already signed in before.
+  const incubationHandle = useAppStore((s) => s.incubationHandle);
+  useEffect(() => {
+    if (localStorage.getItem('manteauth_login') !== 'true') return;
+    if (appUser) rememberButrauthAccount(appUser);
+    else if (incubationHandle) rememberButrauthAccount(incubationHandle, { incubation: true });
+  }, [appUser, incubationHandle]);
 
   // Banned-creator gate. Keyed on the persisted `appUser` (NOT `authenticated`)
   // so it reliably fires on a page refresh too: `user` is restored synchronously
@@ -590,6 +612,20 @@ function App() {
     return (
       <Suspense fallback={<div style={{ position: 'fixed', inset: 0, background: 'transparent' }} />}>
         <ObsChatOverlay />
+      </Suspense>
+    );
+  }
+
+  // The Butter Auth login popup: only the callback, no app shell. The full app
+  // here would boot as the opener's account (shared storage) and start signing
+  // for it (chat sign-in, wallet session): a Keychain prompt for the account
+  // being switched away from, and its session minted behind the switch.
+  if (location.pathname === '/callback' && new URLSearchParams(location.search).get('state') === 'popup') {
+    return (
+      <Suspense fallback={null}>
+        <Routes>
+          <Route path="/callback" element={<ManteAuthCallback />} />
+        </Routes>
       </Suspense>
     );
   }

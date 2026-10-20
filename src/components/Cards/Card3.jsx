@@ -11,19 +11,21 @@ import { IoCalendarOutline } from "react-icons/io5";
 dayjs.extend(utc);
 import { MdDelete, MdError, MdPhoneIphone, MdVisibilityOff } from "react-icons/md";
 import { FaCog, FaFileAlt } from "react-icons/fa";
+import { IoChevronBack, IoChevronForward, IoExpandOutline, IoContractOutline } from "react-icons/io5";
 import { Leaf } from "lucide-react";
 import CardOptionsMenu from "../CardOptionsMenu/CardOptionsMenu";
 import TimeAgo from "../TimeAgo/TimeAgo";
 import { Link, useNavigate } from "react-router-dom";
 import PropTypes from "prop-types";
 import "./Cards.scss";
-import { useState, useMemo, memo, useCallback } from "react";
+import { useState, useMemo, memo, useCallback, useRef, useEffect } from "react";
 import img from "../../assets/image/speak.jpg";
 import CardThumbnail from "./CardThumbnail";
-import { fixVideoThumbnail } from "../../utils/fixThumbnails";
+import { fixVideoThumbnail, LANDSCAPE_LARGE } from "../../utils/fixThumbnails";
 import AuthorBadge from "../AuthorBadge/AuthorBadge";
 import ProfileModal from "../modal/ProfileModal";
 import useHoverPreview from "../../hooks/useHoverPreview";
+import { useCardWindowing, useWindowedCard } from "../../hooks/useCardWindowing";
 import { AiPill } from "../AiBadge/AiBadge";
 import { aiKey, isAiFlagged, useAiFlags } from "../../utils/aiFlags";
 import { useAppStore } from "../../lib/store";
@@ -42,14 +44,17 @@ import { formatDate } from "../../i18n";
  */
 // Supports MULTIPLE full-width interleave streams (e.g. shorts rails + community
 // posts), each `{ every, render, key }`. Both can land after the same card.
-function withInterleave(cards, channels) {
+// `offset` shifts the count when the first card is not one cell wide (the featured
+// card), so every rail still lands on a row boundary.
+function withInterleave(cards, channels, offset = 0) {
   const active = (channels || []).filter((c) => c && c.every >= 1 && typeof c.render === 'function');
   if (!active.length) return cards;
   const out = [];
   cards.forEach((card, i) => {
     out.push(card);
-    const n = i + 1;
-    if (n >= cards.length) return; // never append after the last card
+    if (i + 1 >= cards.length) return; // never append after the last card
+    const n = i + 1 + offset;
+    if (n < 1) return;
     active.forEach((ch) => {
       if (n % ch.every !== 0) return;
       const slot = n / ch.every - 1;
@@ -83,6 +88,9 @@ function shortsHint(video) {
 // every existing caller is unaffected.
 const isShortCard = (video, shortsGrid) => !!(shortsGrid || video?._short);
 
+// Same key the grid uses for each card (and callers use for featuredKey).
+const cardKeyOf = (v) => `${v.author?.username || v.author || v.owner}/${v.permlink}`;
+
 // AI flag lookup keys for a card. The card is addressed by its hive author, but a
 // short can carry the ASSET permlink with an owner who is not the hive author, so
 // the owner pair is asked too. Live tiles are rooms, not videos.
@@ -94,7 +102,94 @@ const aiKeysFor = (v) => (v._liveStream ? [] : [
 const isAiCard = (v) => !v._liveStream
   && (isAiFlagged(cardAuthorOf(v), v.permlink) || (!!v.owner && isAiFlagged(v.owner, v.permlink)));
 
-function Card3({ videos = [], loading = false, error = null, interleaveEvery = 0, renderInterleave = null, communityEvery = 0, renderCommunity = null, creatorsEvery = 0, renderCreators = null, getContentForVideo = null, isWatched = null, getViewCount = null, isNew = null, linkPrefix = '/watch', linkQuery = '', shortTimeAgo = true, shortsGrid = false, priority = false, hideWatched = false, watchedVersion = 0, renderFooter = null }) {
+// One card's link. Far from the viewport (windowed grids only) it renders as an
+// empty slot of its last height; `render` draws the card's content otherwise.
+function CardLink({ windowing, cardKey, index, cardProps, render, ...linkProps }) {
+  const { ref: ownRef, ...restCardProps } = cardProps;
+  const { ref, hiddenHeight } = useWindowedCard(windowing, cardKey, index, ownRef);
+  if (hiddenHeight != null) {
+    return <Link {...linkProps} {...restCardProps} ref={ref} style={{ height: hiddenHeight }} tabIndex={-1} aria-hidden="true" />;
+  }
+  return <Link {...linkProps} {...restCardProps} ref={ref}>{render()}</Link>;
+}
+
+// The rest of the featured line-up under the big card: five across, the others a
+// sideways scroll away. A mouse wheel scrolls it sideways while over it (there is
+// no other way to reach the hidden ones without a trackpad); at either end the
+// wheel goes back to scrolling the page. Registered by hand because React's wheel
+// listener is passive and cannot stop the page from scrolling.
+function FeaturedStrip({ items, index, onPick }) {
+  const { t } = useTranslation();
+  const ref = useRef(null);
+  // Which arrows to show: each hides at its end of the list
+  const [ends, setEnds] = useState({ left: false, right: false });
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return undefined;
+    const update = () => {
+      const max = el.scrollWidth - el.clientWidth;
+      setEnds((prev) => {
+        const next = { left: el.scrollLeft > 1, right: el.scrollLeft < max - 1 };
+        return prev.left === next.left && prev.right === next.right ? prev : next;
+      });
+    };
+    const onWheel = (e) => {
+      if (Math.abs(e.deltaY) <= Math.abs(e.deltaX)) return;
+      const max = el.scrollWidth - el.clientWidth;
+      if (max <= 0) return;
+      if ((e.deltaY < 0 && el.scrollLeft <= 0) || (e.deltaY > 0 && el.scrollLeft >= max - 1)) return;
+      e.preventDefault();
+      el.scrollLeft += e.deltaY;
+    };
+    update();
+    el.addEventListener('wheel', onWheel, { passive: false });
+    el.addEventListener('scroll', update, { passive: true });
+    const ro = typeof ResizeObserver !== 'undefined' ? new ResizeObserver(update) : null;
+    ro?.observe(el);
+    return () => {
+      el.removeEventListener('wheel', onWheel);
+      el.removeEventListener('scroll', update);
+      ro?.disconnect();
+    };
+  }, [items, index]);
+  // One page (the five in view) per click. Inside the card's link: never open it.
+  const page = (e, dir) => {
+    e.preventDefault();
+    e.stopPropagation();
+    const el = ref.current;
+    if (el) el.scrollBy({ left: dir * el.clientWidth, behavior: 'smooth' });
+  };
+  return (
+    <div className="featured-strip-wrap">
+      {ends.left && (
+        <button type="button" className="featured-strip-arrow featured-strip-arrow--prev" aria-label={t('feeds.scrollLeft')} onClick={(e) => page(e, -1)}>
+          <IoChevronBack aria-hidden="true" />
+        </button>
+      )}
+      <div className="featured-strip" ref={ref}>
+        {items.map((item, i) => (i === index ? null : (
+          <button
+            type="button"
+            key={cardKeyOf(item)}
+            className="featured-strip-item"
+            title={item.title}
+            aria-label={item.title}
+            onClick={(e) => onPick(e, i)}
+          >
+            <img src={fixVideoThumbnail(item)} alt="" loading="lazy" decoding="async" />
+          </button>
+        )))}
+      </div>
+      {ends.right && (
+        <button type="button" className="featured-strip-arrow featured-strip-arrow--next" aria-label={t('feeds.scrollRight')} onClick={(e) => page(e, 1)}>
+          <IoChevronForward aria-hidden="true" />
+        </button>
+      )}
+    </div>
+  );
+}
+
+function Card3({ videos = [], loading = false, error = null, interleaveEvery = 0, renderInterleave = null, communityEvery = 0, renderCommunity = null, creatorsEvery = 0, renderCreators = null, getContentForVideo = null, isWatched = null, getViewCount = null, isNew = null, linkPrefix = '/watch', linkQuery = '', shortTimeAgo = true, shortsGrid = false, priority = false, hideWatched = false, watchedVersion = 0, renderFooter = null, windowed = false, featuredKey = null, featuredLayout = null, featuredNav = null }) {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const [modalUser, setModalUser] = useState(null);
@@ -121,17 +216,21 @@ function Card3({ videos = [], loading = false, error = null, interleaveEvery = 0
   // On hover-capable devices the options menu is rendered INSIDE the preview
   // overlay: `.card:hover` sets a transform, which makes the card its own stacking
   // context, so a menu rendered in the card is always painted under the overlay.
+  // Not for the Spotlight card: its menu sits in the SPOTLIGHT label row instead
+  // (that card has no hover zoom, so the row already draws above the preview).
   const renderCardControls = useCallback(({ author, permlink, title, setLock }) => (
-    <CardOptionsMenu
-      author={author}
-      permlink={permlink}
-      title={title}
-      onDismiss={handleDismiss}
-      onOpenChange={setLock}
-    />
-  ), [handleDismiss]);
+    featuredKey && `${author}/${permlink}` === featuredKey ? null : (
+      <CardOptionsMenu
+        author={author}
+        permlink={permlink}
+        title={title}
+        onDismiss={handleDismiss}
+        onOpenChange={setLock}
+      />
+    )
+  ), [handleDismiss, featuredKey]);
 
-  const { containerProps, getCardProps, overlay, canHover } = useHoverPreview({
+  const { containerProps, getCardProps, overlay, canHover, startPreview } = useHoverPreview({
     renderControls: renderCardControls,
   });
 
@@ -178,18 +277,50 @@ function Card3({ videos = [], loading = false, error = null, interleaveEvery = 0
       // (isWatched is a stable ref-reader and wouldn't trigger it alone).
       .filter((v) => !(hideWatched && isWatched
         && isWatched(v.author?.username || v.author || v.owner, v.permlink) === true))
-      .map(video => ({
+      .map((video, i) => ({
         ...video,
+        _featured: i === 0 && !!featuredLayout && featuredKey === cardKeyOf(video),
         // Portrait resize for a portrait card, whether the whole grid is shorts
         // or just this one is: asking for a 340x191 crop of a 9:16 source is
         // what makes a mixed grid look like a row of letterboxed accidents.
         _processedThumbnail: video._liveStream
           ? video.thumbnail
-          : fixVideoThumbnail(video, isShortCard(video, shortsGrid))
+          : fixVideoThumbnail(video, isShortCard(video, shortsGrid),
+            i === 0 && !!featuredLayout && featuredKey === cardKeyOf(video) ? LANDSCAPE_LARGE : null)
       }));
     // aiVersion: isAiFlagged reads a module cache, so the counter is what makes
     // this recompute when answers arrive.
-  }, [videos, shortsGrid, dismissed, deadVideos, hideWatched, isWatched, watchedVersion, hideAi, aiVersion]);
+  }, [videos, shortsGrid, dismissed, deadVideos, hideWatched, isWatched, watchedVersion, hideAi, aiVersion, featuredKey, featuredLayout]);
+
+  // A mixed grid (shorts beside videos) sizes each card's WIDTH from its content
+  // on desktop, so an empty slot would collapse. It is only ever a short profile
+  // list, so it simply isn't windowed.
+  const mixed = !shortsGrid && processedVideos.some((v) => v._short);
+  const windowing = useCardWindowing(windowed && !mixed);
+
+  // The featured card's arrows and strip step through featuredNav.items. They sit
+  // inside the card's link, so a click must not also open the video.
+  const featuredBrowsable = featuredLayout?.rows > 1 && featuredNav?.items?.length > 1;
+  // The video a click just chose: once it is the big card, its preview starts by
+  // itself (below), without waiting for a hover.
+  const pendingPreviewRef = useRef(null);
+  const selectFeatured = (e, i) => {
+    e.preventDefault();
+    e.stopPropagation();
+    const n = featuredNav.items.length;
+    const next = ((i % n) + n) % n;
+    pendingPreviewRef.current = cardKeyOf(featuredNav.items[next]);
+    featuredNav.onSelect(next);
+  };
+  const featuredFirst = processedVideos[0]?._featured ? processedVideos[0] : null;
+  const featuredFirstKey = featuredFirst ? cardKeyOf(featuredFirst) : null;
+  useEffect(() => {
+    if (!featuredFirstKey || pendingPreviewRef.current !== featuredFirstKey) return;
+    pendingPreviewRef.current = null;
+    startPreview(featuredFirstKey, featuredFirst.title);
+    // Only when the big card changes; startPreview and the card are read fresh then.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [featuredFirstKey]);
 
   if (loading && videos.length === 0) return <div>{t('cards.loading')}</div>;
   if (error) return <div>{t('cards.error', { error })}</div>;
@@ -197,7 +328,7 @@ function Card3({ videos = [], loading = false, error = null, interleaveEvery = 0
   return (
     <div
       className={`card-container${shortsGrid ? ' card-container--shorts' : ''}${
-        !shortsGrid && processedVideos.some((v) => v._short) ? ' card-container--mixed' : ''
+        mixed ? ' card-container--mixed' : ''
       }`}
       {...containerProps}
     >
@@ -209,20 +340,26 @@ function Card3({ videos = [], loading = false, error = null, interleaveEvery = 0
         const cardAuthor = video.author?.username || video.author || video.owner;
 
         return (
-          <Link
+          <CardLink
+            windowing={windowing}
+            cardKey={postKey}
+            index={index}
             to={video._liveStream
               ? (video._openpodRoom ? `/openpods/${video.roomName}` : `/watch/${video.roomName}`)
               : `${linkPrefix}?v=${cardAuthor}/${
                 video.permlink
               }${linkQuery}${video._scheduled ? '&scheduled=1' : ''}`}
-            className={`card${!shortsGrid && video._short ? ' card--short' : ''}`}
+            className={`card${!shortsGrid && video._short ? ' card--short' : ''}${video._featured ? ` card--featured${featuredLayout.rows > 1 ? ' card--featured-tall' : ''}` : ''}`}
+            style={video._featured
+              ? { gridColumn: `span ${featuredLayout.span}`, gridRow: `span ${featuredLayout.rows}` }
+              : undefined}
             key={postKey}
             data-vidkey={postKey}
-            {...(video._liveStream
+            cardProps={video._liveStream
               ? {}
-              : getCardProps(postKey, cardAuthor, video.permlink, video._processedThumbnail, video.status, video.title))}
+              : getCardProps(postKey, cardAuthor, video.permlink, video._processedThumbnail, video.status, video.title)}
             {...(isShortCard(video, shortsGrid) ? { title: shortsHint(video) } : {})}
-          >
+            render={() => (<>
             {/* Thumbnail — fast fallback so a dead image host can't leave the
                 card blank for ~a minute (see CardThumbnail). */}
             <div className="img-wrap">
@@ -231,6 +368,53 @@ function Card3({ videos = [], loading = false, error = null, interleaveEvery = 0
                 fallback={img}
                 eager={priority && index < 6}
               />
+              {video._featured && (
+                <div className="card-spotlight">
+                  <span className="card-spotlight-badge">{t('cards.badges.spotlight')}</span>
+                  {featuredNav?.size && featuredLayout?.rows > 1 && (
+                    <button
+                      type="button"
+                      className="card-spotlight-size"
+                      title={`${t('cards.spotlightSize.label')}: ${t(`cards.spotlightSize.${featuredNav.size}`)}`}
+                      aria-label={`${t('cards.spotlightSize.label')}: ${t(`cards.spotlightSize.${featuredNav.size}`)}`}
+                      onClick={(e) => { e.preventDefault(); e.stopPropagation(); featuredNav.onCycleSize(); }}
+                    >
+                      {/* Shows what a click does: grow while small, shrink while medium */}
+                      {featuredNav.size === 'medium'
+                        ? <IoContractOutline aria-hidden="true" />
+                        : <IoExpandOutline aria-hidden="true" />}
+                    </button>
+                  )}
+                  {/* The card menu, next to the size button */}
+                  <CardOptionsMenu
+                    author={cardAuthor}
+                    permlink={video.permlink}
+                    title={video.title}
+                    onDismiss={handleDismiss}
+                    className="card-options-btn--spotlight"
+                  />
+                </div>
+              )}
+              {video._featured && featuredBrowsable && (
+                <>
+                  <button
+                    type="button"
+                    className="featured-arrow featured-arrow--prev"
+                    aria-label={t('player.playlist.previous')}
+                    onClick={(e) => selectFeatured(e, featuredNav.index - 1)}
+                  >
+                    <IoChevronBack aria-hidden="true" />
+                  </button>
+                  <button
+                    type="button"
+                    className="featured-arrow featured-arrow--next"
+                    aria-label={t('player.playlist.next')}
+                    onClick={(e) => selectFeatured(e, featuredNav.index + 1)}
+                  >
+                    <IoChevronForward aria-hidden="true" />
+                  </button>
+                </>
+              )}
               {!isShortCard(video, shortsGrid) && !video._liveStream && (
                 <div className="wrap">
                   <span className="play">
@@ -274,7 +458,7 @@ function Card3({ videos = [], loading = false, error = null, interleaveEvery = 0
                   Hover-capable devices get it inside the preview overlay instead —
                   see renderCardControls above. Touch devices never get the
                   `.card:hover` transform, so rendering here works for them. */}
-              {!canHover && (
+              {!canHover && !video._featured && (
                 <CardOptionsMenu
                   author={video.author?.username || video.author || video.owner}
                   permlink={video.permlink}
@@ -439,17 +623,23 @@ function Card3({ videos = [], loading = false, error = null, interleaveEvery = 0
               <p><TimeAgo date={video.created_at || video.created} short={shortTimeAgo} /></p>
             </div>
 
+            {/* The rest of the featured line-up, small, at the bottom of the card. */}
+            {video._featured && featuredBrowsable && (
+              <FeaturedStrip items={featuredNav.items} index={featuredNav.index} onPick={selectFeatured} />
+            )}
+
             {/* Caller-specific line under the card (watch history: when it was
                 watched, and its remove button). Anything clickable in it must
                 stop the event, or the click also follows the card's link. */}
             {renderFooter?.(video)}
-          </Link>
+            </>)}
+          />
         );
       }), [
         { every: interleaveEvery, render: renderInterleave, key: 'shorts' },
         { every: communityEvery, render: renderCommunity, key: 'community' },
         { every: creatorsEvery, render: renderCreators, key: 'creators' },
-      ])}
+      ], processedVideos[0]?._featured ? featuredLayout.weight - 1 : 0)}
       {modalUser && (
         <ProfileModal
           username={modalUser}
@@ -474,6 +664,16 @@ Card3.propTypes = {
   getViewCount: PropTypes.func,
   linkPrefix: PropTypes.string,
   renderFooter: PropTypes.func,      // (video) => node drawn under the card's bottom row
+  windowed: PropTypes.bool,
+  featuredKey: PropTypes.string,     // "author/permlink" of a first card to draw large
+  featuredNav: PropTypes.shape({      // the featured line-up the card's arrows / strip step through
+    items: PropTypes.array, index: PropTypes.number, onSelect: PropTypes.func,
+    size: PropTypes.string,          // 'small' | 'medium', null = no size toggle
+    onCycleSize: PropTypes.func,
+  }),
+  featuredLayout: PropTypes.shape({  // its size in grid cells; weight = cells it counts as for the rails
+    span: PropTypes.number, rows: PropTypes.number, weight: PropTypes.number,
+  }),          // long feeds: far-off cards render as empty slots (see useCardWindowing)
 };
 
 export default memo(Card3);

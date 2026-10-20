@@ -428,6 +428,13 @@
     "moveChapter": "Move the start of {{title}}",
     "moveLink": "Move this link",
     "resizeLink": "Change how long this link shows",
+    "zoom": "Zoom",
+    "zoomIn": "Zoom in",
+    "zoomOut": "Zoom out",
+    "zoomFit": "Fit",
+    "zoomHint": "Zoom the timeline. Ctrl or ⌘ + mouse wheel zooms at the pointer.",
+    "expand": "Full width",
+    "collapse": "Exit full width",
     "fixChapters": "Please fix the chapters first, or remove them.",
     "chapters": {
       "heading": "Chapters",

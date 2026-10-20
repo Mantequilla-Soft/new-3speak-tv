@@ -9,7 +9,8 @@
     "pro": "PRO",
     "new": "BARU",
     "live": "● LIVE",
-    "liveChat": "● CHAT LIVE"
+    "liveChat": "● CHAT LIVE",
+    "spotlight": "Sorotan"
   },
   "status": {
     "scheduled": "Terjadwal",
@@ -40,5 +41,10 @@
   "watched": {
     "title": "Sudah Ditonton",
     "subtitle": "Riwayat tontonanmu"
+  },
+  "spotlightSize": {
+    "label": "Ubah ukuran",
+    "small": "Kecil",
+    "medium": "Sedang"
   }
 }

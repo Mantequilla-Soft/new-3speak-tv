@@ -426,6 +426,13 @@
     "moveChapter": "移动“{{title}}”的开始位置",
     "moveLink": "移动此链接",
     "resizeLink": "更改此链接的显示时长",
+    "zoom": "缩放",
+    "zoomIn": "放大",
+    "zoomOut": "缩小",
+    "zoomFit": "适应宽度",
+    "zoomHint": "缩放时间轴。按住 Ctrl 或 ⌘ 并滚动鼠标滚轮，可在指针位置缩放。",
+    "expand": "全宽",
+    "collapse": "退出全宽",
     "fixChapters": "请先修正章节，或将其删除。",
     "chapters": {
       "heading": "章节",

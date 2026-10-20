@@ -9,7 +9,8 @@
     "pro": "PRO",
     "new": "NEW",
     "live": "● LIVE",
-    "liveChat": "● LIVE チャット"
+    "liveChat": "● LIVE チャット",
+    "spotlight": "スポットライト"
   },
   "status": {
     "scheduled": "予約済み",
@@ -40,5 +41,10 @@
   "watched": {
     "title": "視聴済み",
     "subtitle": "再生履歴"
+  },
+  "spotlightSize": {
+    "label": "サイズを変更",
+    "small": "小",
+    "medium": "中"
   }
 }

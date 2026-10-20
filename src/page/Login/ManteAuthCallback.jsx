@@ -3,6 +3,7 @@ import { useNavigate, useSearchParams } from "react-router-dom"
 import { toastIn } from '../../utils/toast';
 import { useAppStore } from "../../lib/store"
 import { useTranslation } from "react-i18next"
+import { endWalletSession } from "../../hive-api/aioha"
 
 // Every toast from this module is headed "Sign in"; the message becomes the
 // line under it. See utils/toast.js.
@@ -93,6 +94,10 @@ const ManteAuthCallback = () => {
         // also in the threespeak_user cookie (non-sensitive). localStorage is
         // shared with the opener, so this also keeps a later reload logged in.
         localStorage.setItem("manteauth_login", "true")
+
+        // Full-page login (popup blocked) on top of a wallet session: end that
+        // session here, the popup path does it in App.
+        if (!isPopup) await endWalletSession()
 
         if (data.incubation) {
           // The handle is deliberately kept OUT of `user_id`. getOperationUser()

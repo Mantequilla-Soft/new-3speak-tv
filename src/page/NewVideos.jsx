@@ -88,7 +88,7 @@ const NewVideos = () => {
       {isLoading ? (
         <CardSkeleton />
       ) : (
-        <Card3 videos={[...liveStreams, ...videos]} loading={isFetchingNextPage} getContentForVideo={getContentForVideo} isWatched={isWatched} getViewCount={getViewCount} />
+        <Card3 windowed videos={[...liveStreams, ...videos]} loading={isFetchingNextPage} getContentForVideo={getContentForVideo} isWatched={isWatched} getViewCount={getViewCount} />
       )}
 
       {isError && <p>{t('feeds.errors.fetchVideos')}</p>}

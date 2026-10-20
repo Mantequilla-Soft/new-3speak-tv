@@ -246,13 +246,104 @@
 }
 .tle-track.is-playing .tle-playhead { transition: left 0.25s linear; }
 
+// Labels at a step that fits the zoom; tap the ruler to jump. On touch screens
+// it is also where a zoomed track scrolls sideways (the track itself drags).
 .tle-ruler {
-  display: flex;
-  justify-content: space-between;
-  margin-top: 3px;
+  position: relative;
+  height: 20px;
+  margin-top: 2px;
   font-size: 11px;
   color: var(--text-secondary);
   font-variant-numeric: tabular-nums;
+  cursor: pointer;
+  touch-action: pan-x;
+  user-select: none;
+  -webkit-user-select: none;
+}
+.tle-tick {
+  position: absolute;
+  top: 0;
+  padding-top: 5px;
+  transform: translateX(-50%);
+  white-space: nowrap;
+  pointer-events: none;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 50%;
+    width: 1px;
+    height: 4px;
+    background: var(--text-secondary, #5a5a5a);
+    opacity: 0.6;
+  }
+  &--first { transform: none; }
+  &--first::before { left: 0; }
+}
+
+// ── zoom ───────────────────────────────────────────────────────────────────
+.tle-zoombar {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 6px;
+  min-width: 0;
+}
+.tle-zoombar__range {
+  width: 110px;
+  min-width: 60px;
+  flex: 0 1 110px;
+  accent-color: var(--accent-primary, #e53935);
+  cursor: pointer;
+
+  &:disabled { opacity: 0.4; cursor: default; }
+}
+.tle-zoombar__spacer { flex: 1 1 auto; }
+
+.tle-scroll {
+  position: relative;
+  overflow: hidden;
+
+  &.is-zoomed {
+    overflow-x: auto;
+    padding-bottom: 4px;     // room for the scrollbar under the ruler
+    scrollbar-width: thin;
+  }
+}
+.tle-zoom { position: relative; min-width: 100%; }
+
+// ── full-window mode ───────────────────────────────────────────────────────
+// Above the Edit video dialog (1100), below the link sheet (1200).
+.tle--expanded {
+  position: fixed;
+  inset: 0;
+  z-index: 1150;
+  overflow-y: auto;
+  padding: 12px 20px 28px;
+  gap: 14px;
+  background: var(--bg-primary, var(--card-bg, #fff));
+
+  // A smaller picture, so the track and both lists fit around it.
+  .tle-preview { max-width: min(100%, calc(42vh * 16 / 9)); }
+  .tle-trackwrap { max-width: none; }
+  .tle-track__chapters { height: 38px; }
+  .tle-seg__label { font-size: 12px; }
+}
+.tle-xhead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+
+  h3 { margin: 0; font-size: 17px; }
+}
+body.tle-expanded-open {
+  overflow: hidden;
+
+  // The phone sheet keeps its slide-up transform, which would trap a fixed
+  // child inside the dialog instead of the window.
+  .edit-video-modal-content { animation: none; transform: none; }
 }
 
 // ── lists ──────────────────────────────────────────────────────────────────
@@ -630,5 +721,7 @@
   .tle-row__title { flex: 1 1 140px; }
   .tle-track__chapters { height: 34px; }
   .tle-mark { height: 20px; min-width: 28px; }
+  .tle-zoombar__range { display: none; }   // the buttons are easier with a thumb
+  .tle--expanded { padding: 10px 12px 24px; }
   .tle-mark__end { width: 13px; }
 }

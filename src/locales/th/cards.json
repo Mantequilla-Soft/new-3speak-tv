@@ -9,7 +9,8 @@
     "pro": "PRO",
     "new": "ใหม่",
     "live": "● ไลฟ์",
-    "liveChat": "● แชตสด"
+    "liveChat": "● แชตสด",
+    "spotlight": "สปอตไลท์"
   },
   "status": {
     "scheduled": "ตั้งเวลาไว้",
@@ -40,5 +41,10 @@
   "watched": {
     "title": "ดูแล้ว",
     "subtitle": "ประวัติการดูของคุณ"
+  },
+  "spotlightSize": {
+    "label": "เปลี่ยนขนาด",
+    "small": "เล็ก",
+    "medium": "กลาง"
   }
 }

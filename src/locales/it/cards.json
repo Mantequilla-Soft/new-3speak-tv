@@ -11,7 +11,8 @@
     "pro": "PRO",
     "new": "NUOVO",
     "live": "● LIVE",
-    "liveChat": "● CHAT LIVE"
+    "liveChat": "● CHAT LIVE",
+    "spotlight": "In evidenza"
   },
   "status": {
     "scheduled": "Programmato",
@@ -44,5 +45,10 @@
   "watched": {
     "title": "Guardati",
     "subtitle": "La tua cronologia"
+  },
+  "spotlightSize": {
+    "label": "Cambia dimensione",
+    "small": "Piccolo",
+    "medium": "Medio"
   }
 }

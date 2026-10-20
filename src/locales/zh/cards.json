@@ -9,7 +9,8 @@
     "pro": "PRO",
     "new": "新",
     "live": "● 直播中",
-    "liveChat": "● 直播聊天"
+    "liveChat": "● 直播聊天",
+    "spotlight": "焦点"
   },
   "status": {
     "scheduled": "定时发布",
@@ -40,5 +41,10 @@
   "watched": {
     "title": "已观看",
     "subtitle": "你的观看记录"
+  },
+  "spotlightSize": {
+    "label": "更改大小",
+    "small": "小",
+    "medium": "中"
   }
 }

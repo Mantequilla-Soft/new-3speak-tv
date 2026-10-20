@@ -12,7 +12,8 @@
     "pro": "PRO",
     "new": "НОВЕ",
     "live": "● НАЖИВО",
-    "liveChat": "● ЧАТ НАЖИВО"
+    "liveChat": "● ЧАТ НАЖИВО",
+    "spotlight": "У фокусі"
   },
   "status": {
     "scheduled": "Заплановано",
@@ -46,5 +47,10 @@
   "watched": {
     "title": "Переглянуте",
     "subtitle": "Ваша історія переглядів"
+  },
+  "spotlightSize": {
+    "label": "Змінити розмір",
+    "small": "Малий",
+    "medium": "Середній"
   }
 }

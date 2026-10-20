@@ -91,6 +91,8 @@ export default function InlineVideoPlayer({ author, permlink, poster = null, onO
       levelLoadingTimeOut: 20000,
       startLevel: -1,
       abrEwmaDefaultEstimate: 1000000,
+      // Don't keep the whole played video in memory (see page/Watch.jsx).
+      backBufferLength: 60,
       ...(IS_APPLE_WEBKIT ? APPLE_HLS_CAPS : {}),
     },
   });

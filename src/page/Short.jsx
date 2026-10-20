@@ -2819,6 +2819,8 @@ const VideoShort = () => {
       loop: playbackModeRef.current === 'auto-replay',
       poster: false,
       debug: false,
+      // Don't keep the whole played short in memory (see page/Watch.jsx).
+      hlsConfig: { backBufferLength: 30 },
     });
 
     player.attach(element);
