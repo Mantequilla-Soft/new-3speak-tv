@@ -27,7 +27,14 @@ aioha.setApi(HIVE_API)
 if (!IS_VSC_TESTNET) {
   ensureHealthyNode().then((u) => { try { aioha.setApi(u) } catch { /* ignore */ } })
 }
-aioha.loadAuth()
+// The Butter Auth login popup (/callback?state=popup) shares localStorage with
+// the tab that opened it. Restoring that tab's wallet login here would have the
+// popup sign as the account being switched AWAY from (a Keychain prompt, and a
+// fresh wallet session minted behind the switch), so the popup stays logged out.
+const isButrauthPopup = typeof window !== 'undefined'
+  && window.location.pathname === '/callback'
+  && new URLSearchParams(window.location.search).get('state') === 'popup'
+if (!isButrauthPopup) aioha.loadAuth()
 aioha.vscSetNetId(VSC_NET_ID)
 if (typeof aioha.setChainId === 'function') {
   aioha.setChainId(CHAIN_ID)
@@ -726,8 +733,41 @@ export const clearServerSession = async () => {
   walletSessionPromise = null
   await Promise.allSettled([
     fetch(`${THREESPEAK_API}/auth/wallet/logout`, { method: 'POST', credentials: 'include' }),
-    fetch(`${THREESPEAK_API}/manteauth/logout`, { method: 'POST', credentials: 'include' }),
+    // A live Butter Auth login is never the stale one: after switching to it
+    // from a wallet, only the wallet cookie can be left over.
+    ...(isManteAuthLogin() ? [] : [
+      fetch(`${THREESPEAK_API}/manteauth/logout`, { method: 'POST', credentials: 'include' }),
+    ]),
   ])
+}
+
+// A Butter Auth login REPLACES a wallet login instead of sitting on top of it:
+// the wallet stops being aioha's current account and its SIWH cookie goes, so
+// nothing keeps signing or identifying as it. The wallet login is PARKED in
+// aioha's account list rather than logged out, so "Change account" can switch
+// straight back to it (aioha.switchUser works with no current account).
+export const endWalletSession = async () => {
+  walletSessionPromise = null
+  const current = aioha.getCurrentUser()
+  if (aioha.isLoggedIn() && current) {
+    let parked = false
+    try {
+      // Not the provider's own logout: for HiveAuth/HiveSigner that would end
+      // the very session being parked. addOtherLogin/handleLogout are private
+      // in aioha's types but plain methods at runtime; fall back to a logout.
+      const info = aioha.getPI()?.getLoginInfo?.()
+      if (info) {
+        aioha.addOtherLogin(current, info)
+        aioha.handleLogout()
+        parked = true
+      }
+    } catch { /* fall through */ }
+    if (!parked) {
+      try { await aioha.logout() } catch { /* already gone */ }
+    }
+  }
+  await fetch(`${THREESPEAK_API}/auth/wallet/logout`, { method: 'POST', credentials: 'include' })
+    .catch(() => {})
 }
 
 // @threespeak proxy broadcast — the user granted @threespeak posting authority

@@ -271,15 +271,12 @@ function ProfileNav({ isVisible, onclose, toggleAddAccount, openLoginModal }) {
         </div>
 
         <div className="pn-section">
-          {/* Hidden for ButrAuth sessions: the account switcher is aioha-only and
-              there is no path yet between a ButrAuth session and an aioha wallet.
-              Until ButrAuth is available as an aioha provider, offering the switch
-              would just strand the user. */}
-          {!isManteAuth && (
-            <button type="button" className="pn-item" role="menuitem" onClick={() => { onclose(); openLoginModal(); }}>
-              <IoPower className="pn-icon" /> <span>{t('nav.profile.changeAccount')}</span>
-            </button>
-          )}
+          {/* For every login: wallet users get aioha's switcher (with their
+              Butter Auth accounts added), Butter Auth users the login modal's
+              own list (wallet accounts + other Butter Auth accounts). */}
+          <button type="button" className="pn-item" role="menuitem" onClick={() => { onclose(); openLoginModal(); }}>
+            <IoPower className="pn-icon" /> <span>{t('nav.profile.changeAccount')}</span>
+          </button>
           {isManteAuth && (
             <button type="button" className="pn-item" role="menuitem" onClick={() => { LogOut(user); onclose(); navigate('/'); }}>
               <IoPower className="pn-icon" /> <span>{t('nav.profile.logout')}</span>

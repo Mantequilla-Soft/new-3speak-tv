@@ -5,12 +5,24 @@ import { withLocale } from '../../utils/butrauthPopup';
 import { AiohaModal, useAioha } from "@aioha/react-ui";
 import { Providers, KeyTypes } from "@aioha/aioha";
 import { IoPower } from "react-icons/io5";
+import { X } from "lucide-react";
 import { createPortal } from "react-dom";
 import { useTranslation, Trans } from "react-i18next";
 import { ENABLE_METAMASK_SNAP, ENABLE_BUTRAUTH } from "../../utils/config";
 import { useAppStore } from "../../lib/store";
+import AccountImg from "../HiveAvatar/AccountImg";
+import { listButrauthAccounts, forgetButrauthAccount } from "../../utils/butrauthAccounts";
+import { toastIn } from "../../utils/toast";
 import "./LoginModal.scss";
 import mark from "../../assets/image/3S_mark.svg";
+
+const toast = toastIn('Sign in');
+
+// aioha provider ids → the names people know them by.
+const PROVIDER_NAMES = {
+  keychain: 'Keychain', hiveauth: 'HiveAuth', hivesigner: 'HiveSigner', ledger: 'Ledger',
+  peakvault: 'PeakVault', metamasksnap: 'MetaMask', custom: 'Wallet',
+};
 
 /**
  * Custom login modal wrapper that adds Butter Auth + MetaMask Snap login options to AiohaModal
@@ -22,6 +34,13 @@ function LoginModal({ displayed, onLogin, onClose, loginTitle, loginOptions, int
   const [step, setStep] = useState('choose');
   const { aioha } = useAioha();
   const { user, LogOut } = useAppStore();
+  const incubationHandle = useAppStore((s) => s.incubationHandle);
+  const [, setAccountsVersion] = useState(0);
+  // aioha's modal keeps whatever page it showed last (e.g. "Add Account" after a
+  // switch made from our own list); a fresh instance per opening always starts
+  // on the account overview.
+  const [aiohaKey, setAiohaKey] = useState(0);
+  useEffect(() => { if (displayed) setAiohaKey((k) => k + 1); }, [displayed]);
 
   // Logged in via Butter Auth → the chooser offers logout instead of
   // sign-up/login (matches the "Logout" item the nav shows for these users).
@@ -30,6 +49,38 @@ function LoginModal({ displayed, onLogin, onClose, loginTitle, loginOptions, int
   const handleLogout = async () => {
     try { await LogOut(user); } catch { /* ignore */ }
     onClose?.();
+  };
+
+  // ── account switching ────────────────────────────────────────────────────
+  // Wallet accounts are aioha's own list (also the wallet a Butter Auth login
+  // parked there, see endWalletSession); Butter Auth accounts are the names
+  // used in this browser (utils/butrauthAccounts). A Butter Auth account comes
+  // back through the normal popup, where Butter Auth only asks to continue.
+  const currentName = String(user || incubationHandle || '').toLowerCase();
+  const walletAccounts = displayed
+    ? Object.entries(aioha.getOtherLogins?.() || {}).map(([name, provider]) => ({ name, provider }))
+    : [];
+  const butrAccounts = displayed && ENABLE_BUTRAUTH
+    ? listButrauthAccounts().filter((a) => a.name !== currentName)
+    : [];
+
+  const switchToWallet = (name) => {
+    let ok;
+    try { ok = aioha.switchUser(name); } catch { ok = false; }
+    if (!ok) {
+      // An expired HiveAuth/HiveSigner login cannot be resumed: log in again.
+      toast.error(t('auth.loginModal.switchExpired'));
+      setStep('providers');
+      return;
+    }
+    // Same path as a fresh wallet login: ends the Butter Auth session, sets the
+    // user, closes the modal.
+    onLogin?.({ success: true, username: name, provider: aioha.getCurrentProvider?.() });
+  };
+
+  const forgetButr = (name) => {
+    forgetButrauthAccount(name);
+    setAccountsVersion((v) => v + 1);
   };
 
   // On open, route to the nav's intent so DESKTOP skips the "Welcome" chooser:
@@ -167,7 +218,61 @@ function LoginModal({ displayed, onLogin, onClose, loginTitle, loginOptions, int
       providerList.appendChild(li);
     };
 
+    // aioha's "Switch User" page is a table of its wallet accounts; the Butter
+    // Auth accounts used in this browser join it as rows in the same markup
+    // (a clone of aioha's own row), badge "butter auth". A click opens the
+    // Butter Auth popup; finishing it parks the wallet (endWalletSession).
+    const injectButrauthAccounts = () => {
+      if (!ENABLE_BUTRAUTH) return;
+      const tbody = document.querySelector('#aioha-modal table tbody');
+      if (!tbody) return;
+      const accounts = listButrauthAccounts();
+      const rows = [...tbody.querySelectorAll('tr.butrauth-switch-row')];
+      if (rows.length === accounts.length && rows.every((r, i) => r.dataset.name === accounts[i].name)) return;
+      rows.forEach((r) => r.remove());
+      const sample = tbody.querySelector('tr:not(.butrauth-switch-row)');
+      for (const acc of accounts) {
+        let tr;
+        if (sample && sample.cells.length >= 2) {
+          tr = sample.cloneNode(true);
+          const nameEl = tr.cells[0].querySelector('div') || tr.cells[0];
+          nameEl.textContent = acc.name;
+          const badge = tr.cells[1].querySelector('span') || tr.cells[1];
+          badge.textContent = 'butter auth';
+          if (tr.cells[2]) tr.cells[2].innerHTML = '';
+        } else {
+          tr = document.createElement('tr');
+          tr.innerHTML = '<td style="padding:16px 20px;font-size:14px;font-weight:500"></td><td style="padding:16px 12px;font-size:12px;opacity:.7">butter auth</td>';
+          tr.cells[0].textContent = acc.name;
+        }
+        tr.classList.add('butrauth-switch-row');
+        tr.dataset.name = acc.name;
+        tr.style.cursor = 'pointer';
+        tr.addEventListener('click', (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          startButrauthFlow();
+        });
+        tbody.appendChild(tr);
+      }
+    };
+
+    // Watch the modal for page changes (Switch User, Add account, ...). It may not
+    // exist yet when this effect runs (a reopened modal mounts a moment later),
+    // so attach as soon as it does.
+    let observer = null;
+    let watched = null;
+    const watchModal = () => {
+      const m = document.querySelector('#aioha-modal');
+      if (!m || m === watched || !observer) return;
+      observer.disconnect();
+      observer.observe(m, { childList: true, subtree: true });
+      watched = m;
+    };
+
     const injectButton = () => {
+      watchModal();
+      injectButrauthAccounts();
       replaceHiveAuthQRText();
       styleHiveAuthQR();
       if (ENABLE_METAMASK_SNAP) injectMetaMaskButton();
@@ -177,15 +282,6 @@ function LoginModal({ displayed, onLogin, onClose, loginTitle, loginOptions, int
         const providerList = modalContent.querySelector('ul');
         if (!providerList) {
           // Not on provider selection page — tear the injected section back down.
-          modalContent.querySelector('.login-top-section')?.remove();
-          setTopContainer(null);
-          return;
-        }
-
-        // A non-Butter-Auth wallet session is already active ("Change account"):
-        // don't offer Butter Auth here — the user must log out first to use it.
-        // Tear down any existing top section and skip.
-        if (aioha.isLoggedIn()) {
           modalContent.querySelector('.login-top-section')?.remove();
           setTopContainer(null);
           return;
@@ -213,17 +309,14 @@ function LoginModal({ displayed, onLogin, onClose, loginTitle, loginOptions, int
       setTimeout(injectButton, 50),
       setTimeout(injectButton, 150),
       setTimeout(injectButton, 300),
+      setTimeout(injectButton, 800),
+      setTimeout(injectButton, 1600),
     ];
 
-    // Also observe for page changes within the modal
-    const observer = new MutationObserver(() => {
+    observer = new MutationObserver(() => {
       injectButton();
     });
-
-    const modal = document.querySelector('#aioha-modal');
-    if (modal) {
-      observer.observe(modal, { childList: true, subtree: true });
-    }
+    watchModal();
 
     return () => {
       timeouts.forEach(clearTimeout);
@@ -231,11 +324,10 @@ function LoginModal({ displayed, onLogin, onClose, loginTitle, loginOptions, int
     };
   }, [displayed, step, t]);
 
-  // Offer Butter Auth on the provider list only when there is NO active wallet
-  // session — i.e. logged out, or a Butter Auth session (aioha.isLoggedIn() is
-  // false for both). When logged in with a Hive wallet, "Change account" must NOT
-  // surface Butter Auth; the user has to log out first.
-  const showLoginExtras = displayed && step === 'providers' && !aioha.isLoggedIn();
+  // Butter Auth is offered on the provider list in every state, also on "Change
+  // account" from a wallet session: a Butter Auth login ends the wallet session
+  // (endWalletSession, called where the login completes).
+  const showLoginExtras = displayed && step === 'providers';
   // Asked once per page load and shared by every entry point.
   const signupPossible = useSignupPossible();
 
@@ -257,8 +349,44 @@ function LoginModal({ displayed, onLogin, onClose, loginTitle, loginOptions, int
                     ? <Trans i18nKey="auth.loginModal.signedInAs" values={{ user }} components={{ b: <strong /> }} />
                     : t('auth.loginModal.signedIn')}
                 </p>
+                {(walletAccounts.length > 0 || butrAccounts.length > 0) && (
+                  <div className="login-switch">
+                    <div className="login-switch__label">{t('auth.loginModal.switchTo')}</div>
+                    <ul className="login-switch__list">
+                      {walletAccounts.map((a) => (
+                        <li key={`w:${a.name}`} className="login-switch__row">
+                          <button type="button" className="login-switch__item" onClick={() => switchToWallet(a.name)}>
+                            <AccountImg className="login-switch__avatar" account={a.name} alt="" />
+                            <span className="login-switch__name">@{a.name}</span>
+                            <span className="login-switch__via">{PROVIDER_NAMES[a.provider] || a.provider}</span>
+                          </button>
+                        </li>
+                      ))}
+                      {butrAccounts.map((a) => (
+                        <li key={`b:${a.name}`} className="login-switch__row">
+                          <button type="button" className="login-switch__item" onClick={() => startButrauthFlow()}>
+                            {a.incubation
+                              ? <span className="login-switch__avatar login-switch__avatar--initial">{a.name.charAt(0).toUpperCase()}</span>
+                              : <AccountImg className="login-switch__avatar" account={a.name} alt="" />}
+                            <span className="login-switch__name">{a.incubation ? a.name : `@${a.name}`}</span>
+                            <span className="login-switch__via">Butter Auth</span>
+                          </button>
+                          <button
+                            type="button"
+                            className="login-switch__forget"
+                            onClick={() => forgetButr(a.name)}
+                            aria-label={t('auth.loginModal.forgetAccount')}
+                            title={t('auth.loginModal.forgetAccount')}
+                          >
+                            <X size={14} />
+                          </button>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
                 <button className="login-chooser-login" onClick={() => setStep('providers')}>
-                  <span style={{ display: 'block' }}>{t('auth.loginModal.changeAccount')}</span>
+                  <span style={{ display: 'block' }}>{t('auth.loginModal.addAccount')}</span>
                   <span style={{ display: 'block', fontWeight: 400, fontSize: '12.5px', opacity: 0.7, marginTop: '2px' }}>
                     {ENABLE_BUTRAUTH ? t('auth.loginModal.loginWithButrauthOrWallet') : t('auth.loginModal.loginWithWallet')}
                   </span>
@@ -331,6 +459,7 @@ function LoginModal({ displayed, onLogin, onClose, loginTitle, loginOptions, int
         </div>
       )}
       <AiohaModal
+        key={aiohaKey}
         displayed={displayed && step === 'providers'}
         onLogin={onLogin}
         onClose={onClose}
