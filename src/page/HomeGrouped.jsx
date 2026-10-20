@@ -798,7 +798,7 @@ const HomeGrouped = () => {
     const creatorsMode = hasInterests && (s.key === 'discover' || s.key === 'interests');
     return (
       <>
-        <Card3
+        <Card3 windowed
           videos={s.videos}
           loading={false}
           getContentForVideo={getContentForVideo}

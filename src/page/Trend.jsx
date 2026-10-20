@@ -89,7 +89,7 @@ const Trend = () => {
       {isLoading ? (
         <CardSkeleton />
       ) : (
-        <Card3 videos={videos} loading={isFetchingNextPage} getContentForVideo={getContentForVideo} isWatched={isWatched} getViewCount={getViewCount} />
+        <Card3 windowed videos={videos} loading={isFetchingNextPage} getContentForVideo={getContentForVideo} isWatched={isWatched} getViewCount={getViewCount} />
       )}
 
       {isError && <p>{t('misc.followFeed.error')}</p>}

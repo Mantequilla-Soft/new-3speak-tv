@@ -712,7 +712,7 @@ function ProfilePage() {
             ) : videoListItems.length === 0 ? (
               <ProfileEmptyState kind="video" isOwnProfile username={user} />
             ) : (
-              <Card3 videos={videoListItems} loading={isFetchingNextPage} getContentForVideo={getContentForVideo} isWatched={isWatched} getViewCount={getViewCount} />
+              <Card3 windowed videos={videoListItems} loading={isFetchingNextPage} getContentForVideo={getContentForVideo} isWatched={isWatched} getViewCount={getViewCount} />
             )}
           </>
         ) : show === "shorts" ? (
@@ -721,7 +721,7 @@ function ProfilePage() {
           ) : shortsVideos.length === 0 ? (
             <ProfileEmptyState kind="shorts" isOwnProfile username={user} />
           ) : (
-            <Card3 videos={shortsVideos} loading={isFetchingNextShortsPage} linkPrefix="/shorts" linkQuery={`&user=${user}`} getViewCount={getViewCount} shortsGrid />
+            <Card3 windowed videos={shortsVideos} loading={isFetchingNextShortsPage} linkPrefix="/shorts" linkQuery={`&user=${user}`} getViewCount={getViewCount} shortsGrid />
           )
         ) : show === "supporters" ? (
           isGatedLoading ? (

@@ -276,7 +276,7 @@ function BadgeView({ account }) {
                 </p>
               </div>
             ) : (
-              <Card3
+              <Card3 windowed
                 videos={videos}
                 loading={isFetchingNextPage}
                 getContentForVideo={getContentForVideo}

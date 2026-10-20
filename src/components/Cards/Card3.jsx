@@ -24,6 +24,7 @@ import { fixVideoThumbnail } from "../../utils/fixThumbnails";
 import AuthorBadge from "../AuthorBadge/AuthorBadge";
 import ProfileModal from "../modal/ProfileModal";
 import useHoverPreview from "../../hooks/useHoverPreview";
+import { useCardWindowing, useWindowedCard } from "../../hooks/useCardWindowing";
 import { AiPill } from "../AiBadge/AiBadge";
 import { aiKey, isAiFlagged, useAiFlags } from "../../utils/aiFlags";
 import { useAppStore } from "../../lib/store";
@@ -94,7 +95,18 @@ const aiKeysFor = (v) => (v._liveStream ? [] : [
 const isAiCard = (v) => !v._liveStream
   && (isAiFlagged(cardAuthorOf(v), v.permlink) || (!!v.owner && isAiFlagged(v.owner, v.permlink)));
 
-function Card3({ videos = [], loading = false, error = null, interleaveEvery = 0, renderInterleave = null, communityEvery = 0, renderCommunity = null, creatorsEvery = 0, renderCreators = null, getContentForVideo = null, isWatched = null, getViewCount = null, isNew = null, linkPrefix = '/watch', linkQuery = '', shortTimeAgo = true, shortsGrid = false, priority = false, hideWatched = false, watchedVersion = 0, renderFooter = null }) {
+// One card's link. Far from the viewport (windowed grids only) it renders as an
+// empty slot of its last height; `render` draws the card's content otherwise.
+function CardLink({ windowing, cardKey, index, cardProps, render, ...linkProps }) {
+  const { ref: ownRef, ...restCardProps } = cardProps;
+  const { ref, hiddenHeight } = useWindowedCard(windowing, cardKey, index, ownRef);
+  if (hiddenHeight != null) {
+    return <Link {...linkProps} {...restCardProps} ref={ref} style={{ height: hiddenHeight }} tabIndex={-1} aria-hidden="true" />;
+  }
+  return <Link {...linkProps} {...restCardProps} ref={ref}>{render()}</Link>;
+}
+
+function Card3({ videos = [], loading = false, error = null, interleaveEvery = 0, renderInterleave = null, communityEvery = 0, renderCommunity = null, creatorsEvery = 0, renderCreators = null, getContentForVideo = null, isWatched = null, getViewCount = null, isNew = null, linkPrefix = '/watch', linkQuery = '', shortTimeAgo = true, shortsGrid = false, priority = false, hideWatched = false, watchedVersion = 0, renderFooter = null, windowed = false }) {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const [modalUser, setModalUser] = useState(null);
@@ -191,13 +203,19 @@ function Card3({ videos = [], loading = false, error = null, interleaveEvery = 0
     // this recompute when answers arrive.
   }, [videos, shortsGrid, dismissed, deadVideos, hideWatched, isWatched, watchedVersion, hideAi, aiVersion]);
 
+  // A mixed grid (shorts beside videos) sizes each card's WIDTH from its content
+  // on desktop, so an empty slot would collapse. It is only ever a short profile
+  // list, so it simply isn't windowed.
+  const mixed = !shortsGrid && processedVideos.some((v) => v._short);
+  const windowing = useCardWindowing(windowed && !mixed);
+
   if (loading && videos.length === 0) return <div>{t('cards.loading')}</div>;
   if (error) return <div>{t('cards.error', { error })}</div>;
 
   return (
     <div
       className={`card-container${shortsGrid ? ' card-container--shorts' : ''}${
-        !shortsGrid && processedVideos.some((v) => v._short) ? ' card-container--mixed' : ''
+        mixed ? ' card-container--mixed' : ''
       }`}
       {...containerProps}
     >
@@ -209,7 +227,10 @@ function Card3({ videos = [], loading = false, error = null, interleaveEvery = 0
         const cardAuthor = video.author?.username || video.author || video.owner;
 
         return (
-          <Link
+          <CardLink
+            windowing={windowing}
+            cardKey={postKey}
+            index={index}
             to={video._liveStream
               ? (video._openpodRoom ? `/openpods/${video.roomName}` : `/watch/${video.roomName}`)
               : `${linkPrefix}?v=${cardAuthor}/${
@@ -218,11 +239,11 @@ function Card3({ videos = [], loading = false, error = null, interleaveEvery = 0
             className={`card${!shortsGrid && video._short ? ' card--short' : ''}`}
             key={postKey}
             data-vidkey={postKey}
-            {...(video._liveStream
+            cardProps={video._liveStream
               ? {}
-              : getCardProps(postKey, cardAuthor, video.permlink, video._processedThumbnail, video.status, video.title))}
+              : getCardProps(postKey, cardAuthor, video.permlink, video._processedThumbnail, video.status, video.title)}
             {...(isShortCard(video, shortsGrid) ? { title: shortsHint(video) } : {})}
-          >
+            render={() => (<>
             {/* Thumbnail — fast fallback so a dead image host can't leave the
                 card blank for ~a minute (see CardThumbnail). */}
             <div className="img-wrap">
@@ -443,7 +464,8 @@ function Card3({ videos = [], loading = false, error = null, interleaveEvery = 0
                 watched, and its remove button). Anything clickable in it must
                 stop the event, or the click also follows the card's link. */}
             {renderFooter?.(video)}
-          </Link>
+            </>)}
+          />
         );
       }), [
         { every: interleaveEvery, render: renderInterleave, key: 'shorts' },
@@ -474,6 +496,7 @@ Card3.propTypes = {
   getViewCount: PropTypes.func,
   linkPrefix: PropTypes.string,
   renderFooter: PropTypes.func,      // (video) => node drawn under the card's bottom row
+  windowed: PropTypes.bool,          // long feeds: far-off cards render as empty slots (see useCardWindowing)
 };
 
 export default memo(Card3);

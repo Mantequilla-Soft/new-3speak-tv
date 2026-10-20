@@ -91,7 +91,7 @@ function TagFeed() {
   }, [queryClient, tag]);
 
   const renderVideos = (items) => (
-    <Card3
+    <Card3 windowed
       videos={items}
       error={isError ? t('feeds.errors.loadVideos') : ''}
       loading={isFetching}
@@ -102,7 +102,7 @@ function TagFeed() {
   );
 
   const renderShorts = (items) => (
-    <Card3
+    <Card3 windowed
       videos={items}
       error={isError ? t('feeds.errors.loadShorts') : ''}
       loading={isFetching}

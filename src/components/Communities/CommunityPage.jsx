@@ -441,7 +441,7 @@ function CommunityPage() {
               {tab === 'top' ? t('communities.page.emptyRange') : t('communities.page.empty')}
             </p>
           ) : (
-            <Card3
+            <Card3 windowed
               videos={videos}
               loading={isFetchingNextPage}
               getContentForVideo={getContentForVideo}

@@ -451,6 +451,11 @@ function Watch({ v2 = false }) {
       // throughput is known.
       startLevel: -1,
       abrEwmaDefaultEstimate: 1000000, // ~1 Mbps → starts around 480p, not 1080p
+      // hls.js keeps everything already played (backBufferLength: Infinity) until the
+      // browser's own quota evicts it, so a long video held hundreds of MB on Chrome,
+      // Firefox and Android. A minute behind the playhead covers a quick skip back;
+      // further back is re-fetched, by then from a warm CDN.
+      backBufferLength: 60,
       // Apple devices cap how much video a page may buffer. The 60s / 60MB above
       // trips that limit on iPad and Mac Safari and playback stalls further into
       // a video, so they get the limits the embed player uses there.

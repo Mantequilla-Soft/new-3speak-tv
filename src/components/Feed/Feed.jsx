@@ -117,7 +117,7 @@ function Feed() {
     <>
     <CommunitiesTags />
 
-    {isLoading ? <CardSkeleton /> :  <Card3 videos={videos} loading={isFetchingNextPage} getContentForVideo={getContentForVideo} isWatched={isWatched} hideWatched={hideWatched} watchedVersion={watchedVersion} getViewCount={getViewCount} />}
+    {isLoading ? <CardSkeleton /> :  <Card3 windowed videos={videos} loading={isFetchingNextPage} getContentForVideo={getContentForVideo} isWatched={isWatched} hideWatched={hideWatched} watchedVersion={watchedVersion} getViewCount={getViewCount} />}
     {isError && <p>{t('feeds.errors.fetchVideos')}</p>}
       {isFetchingNextPage && (
         <p style={{ textAlign: "center" }}>{t('feeds.loadingMore')}</p>

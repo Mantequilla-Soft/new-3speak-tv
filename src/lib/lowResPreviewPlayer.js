@@ -45,6 +45,8 @@ export function createLowResPreviewPlayer(videoEl, { loop = false, requirePrevie
       // 200 kbps default estimate → ABR selects the smallest variant up front,
       // before the pin below takes over (all renditions are well above this).
       abrEwmaDefaultEstimate: 200000,
+      // A looping preview otherwise keeps every played segment in memory.
+      backBufferLength: 10,
     },
   });
   player.attach(videoEl);

@@ -7,6 +7,12 @@
 // 1.0.0 — that way they see all of these when develop is pushed to production.
 export const CHANGELOG = [
   {
+    version: '1.79.114',
+    date: '2026-10-20',
+    summary:
+      'Videos and feeds now use less memory, which helps older phones and laptops.',
+  },
+  {
     version: '1.79.111',
     date: '2026-10-20',
     summary:

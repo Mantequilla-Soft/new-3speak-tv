@@ -720,7 +720,7 @@ const {
       ) : videos?.length === 0 ? (
         <ProfileEmptyState kind="video" isOwnProfile={isOwnProfile} username={user} />
       ) : (
-        <Card3 videos={videos} loading={isFetchingNextPage} getContentForVideo={getContentForVideo} isWatched={isWatched} getViewCount={getViewCount} />
+        <Card3 windowed videos={videos} loading={isFetchingNextPage} getContentForVideo={getContentForVideo} isWatched={isWatched} getViewCount={getViewCount} />
       )}
     </>
   ) : show === "shorts" ? (
@@ -729,7 +729,7 @@ const {
     ) : shortsVideos.length === 0 ? (
       <ProfileEmptyState kind="shorts" isOwnProfile={isOwnProfile} username={user} />
     ) : (
-      <Card3 videos={shortsVideos} loading={isFetchingNextShortsPage} linkPrefix="/shorts" linkQuery={`&user=${user}`} getViewCount={getViewCount} shortsGrid />
+      <Card3 windowed videos={shortsVideos} loading={isFetchingNextShortsPage} linkPrefix="/shorts" linkQuery={`&user=${user}`} getViewCount={getViewCount} shortsGrid />
     )
   ) : show === "audio" ? (
     <UserAudioList user={user} isOwnProfile={isOwnProfile} />
