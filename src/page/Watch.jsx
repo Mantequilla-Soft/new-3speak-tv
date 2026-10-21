@@ -119,6 +119,12 @@ function filterValidVideos(videos) {
   });
 }
 
+// Statuses whose placeholder is a final notice (deleted, failed), not "still processing".
+const DEAD_SOURCE_STATUSES = new Set(['delete', 'deleted', 'self_deleted', 'encoding_failed', 'failed', 'error', 'cancelled']);
+function isStillProcessing(src) {
+  return !!src?.placeholder && !DEAD_SOURCE_STATUSES.has(src.status);
+}
+
 // Safari on macOS, or any browser on iPhone/iPad (all WebKit). Detected the way
 // the player SDK does it; an iPad reports itself as a Mac with touch.
 const IS_APPLE_WEBKIT = typeof navigator !== 'undefined' && (
@@ -293,6 +299,8 @@ function Watch({ v2 = false }) {
   const [autoplayNext, setAutoplayNext] = useState(() => localStorage.getItem('3speak-autoplay') !== '0');
   const autoplayNextRef = useRef(autoplayNext);
   autoplayNextRef.current = autoplayNext;
+  // True while the player is on the encoder's "still processing" clip (set below).
+  const stillProcessingRef = useRef(false);
   const toggleAutoplayNext = useCallback(() => {
     setAutoplayNext(prev => {
       const next = !prev;
@@ -843,6 +851,10 @@ function Watch({ v2 = false }) {
         // Surfing: always stay on the channel, whatever the autoplay-next toggle or
         // an open playlist would do otherwise.
         surfFlipRef.current();
+      } else if (stillProcessingRef.current) {
+        // What just ended is the few-second "still processing" clip, not the video.
+        // Moving on would carry a creator off their own fresh upload; stay put.
+        setVideoEnded(true);
       } else if (playlistDataRef.current && showPlaylistRef.current) {
         navigateToNextVideoRef.current();
       } else if (autoplayNextRef.current && suggestedVideosRef.current?.length > 0) {
@@ -877,6 +889,28 @@ function Watch({ v2 = false }) {
       if (canPlayCleanup) canPlayCleanup();
     };
   }, [player]);
+
+  /* Vertical or not follows the VIDEO's frames, never the spot's. A landscape spot in a
+   * portrait video is encoded landscape so it fills the 16:9 box (the checker's
+   * adConform.js), and a pre-roll is the first picture `ready` measures. So it is
+   * decided again whenever the picture changes size, skipping frames inside the spot. */
+  useEffect(() => {
+    const el = videoElRef.current;
+    if (!videoAttached || !el) return undefined;
+    const onResize = () => {
+      const w = el.videoWidth;
+      const h = el.videoHeight;
+      if (!w || !h) return;
+      const ab = adBreakRef.current;
+      if (ab?.resolved && ab.isInside(el.currentTime)) return;
+      const vertical = h > w;
+      if (vertical === videoIsVerticalRef.current) return;
+      videoIsVerticalRef.current = vertical;
+      wrapperRef.current?.classList.toggle('vertical-video', vertical);
+    };
+    el.addEventListener('resize', onResize);
+    return () => el.removeEventListener('resize', onResize);
+  }, [videoAttached, adBreakRef]);
 
   // Handle quality change with optimistic UI update + persist preference
   const handleQualityChange = useCallback((level) => {
@@ -1311,6 +1345,19 @@ function Watch({ v2 = false }) {
   // what mounts the live player, the chat column and the hangouts sign-in.
   const livePending = !!videoDetails?.live && !liveVodReady;
   const isLive = livePending && liveChecked;
+
+  // Is the player on the encoder's "still processing" clip? Then autoplay-next stays
+  // off until the real video is published (re-checked every 20 s). Deleted and failed
+  // notices are placeholders too, but nothing is coming, so moving on is right there.
+  // Same query key as PlayVideo's, so the two share one request. Fails OPEN.
+  const { data: playSourceNow } = useQuery({
+    queryKey: ['play-source', author, permlink],
+    queryFn: () => fetchPlaySource(author, permlink),
+    enabled: !scheduled && !videoDetails?.live && !!author && !!permlink,
+    staleTime: 5 * 60 * 1000,
+    refetchInterval: (q) => (isStillProcessing(q.state.data) ? 20000 : false),
+  });
+  stillProcessingRef.current = !scheduled && !videoDetails?.live && isStillProcessing(playSourceNow);
 
   // Chapters from a timestamp list in the description, YouTube style. Content
   // seconds, like the rest of the timeline; nothing until the duration is known,
