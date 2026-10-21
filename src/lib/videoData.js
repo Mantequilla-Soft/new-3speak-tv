@@ -89,6 +89,8 @@ export async function fetchPlaySource(author, permlink) {
     // video is ready. `isPlaceholder` is the encoder's "still processing" card.
     status: data.status || null,
     published: data.status === 'published' && data.isPlaceholder !== true,
+    // The player is serving a notice clip (processing, deleted or failed), not the video.
+    placeholder: data.isPlaceholder === true,
   };
 }
 
