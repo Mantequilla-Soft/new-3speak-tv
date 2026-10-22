@@ -184,10 +184,8 @@ const handleSwitchAccount = (user) => {
 
     const login3SpeakEmail = () => {
   const CLIENT_ID = '28d4e054a65f1fa22ddee25688';
-//   const REDIRECT_URI = 'https://3speak-new-version-01.vercel.app/auth/callback';
   const REDIRECT_URI = 'http://localhost:3000/auth/callback';
   
-//   const authUrl = `https://auth.3speak.tv/3/login?client_id=28d4e054a65f1fa22ddee25688&redirect_uri=https://3speak-new-version-01.vercel.app`;
     const authUrl = `https://auth.3speak.tv/3/login?client_id=${CLIENT_ID}&redirect_uri=${encodeURIComponent(REDIRECT_URI)}`;
 
   // Redirect user to 3Speak auth

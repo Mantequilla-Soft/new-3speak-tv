@@ -10,10 +10,9 @@
 // schema.org VideoObject HTML for those bots. Humans never hit it — nginx routes
 // only crawler User-Agents here (see preview.3speak.tv.nginx).
 //
-// This is a near-verbatim port of the Vercel Edge Middleware in ../middleware.js
-// (which only runs on Vercel and is dead in our Vite-dev / static-nginx deploys),
+// This started as a port of the old Vercel Edge Middleware (since removed),
 // re-expressed as a plain Node http server and EXTENDED to also cover the
-// /shorts?v=author/permlink route. Keep the two in sync if you touch either.
+// /shorts?v=author/permlink route.
 //
 // Deps: none — Node 18+ global fetch / AbortController only (run with /usr/bin/node v18;
 // nvm v22 segfaults on this box — see the preview-3speak-api service notes).
