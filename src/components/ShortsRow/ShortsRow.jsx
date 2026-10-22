@@ -29,17 +29,26 @@ import './ShortsRow.scss';
  * through bodyToPlaintext (strips the embed URL, markdown, HTML, tags) and take
  * the opening as the title.
  */
+// A caption can be a whole blog post; the hover tooltip and card title only need
+// the opening, so cap it at 100 characters.
+const TITLE_MAX = 100;
+
+function clip(text) {
+  if (text.length <= TITLE_MAX) return text;
+  return `${text.slice(0, TITLE_MAX).trimEnd()}…`;
+}
+
 function shortTitle(s) {
   const caption = bodyToPlaintext(s.hive_body || '').trim();
-  if (caption) return caption;
+  if (caption) return clip(caption);
 
   const hive = (s.hive_title || '').trim();
-  if (hive) return hive;
+  if (hive) return clip(hive);
 
   const embed = (s.embed_title || '').trim();
   // "Comment" is the placeholder the uploader writes for a comment-type post —
   // never show it as a title.
-  if (embed && embed.toLowerCase() !== 'comment') return embed;
+  if (embed && embed.toLowerCase() !== 'comment') return clip(embed);
 
   return '';
 }
