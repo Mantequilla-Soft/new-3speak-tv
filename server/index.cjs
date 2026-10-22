@@ -79,10 +79,13 @@ const SESSION_SIGNING_SECRET = process.env.SESSION_SIGNING_SECRET
     ? crypto.createHash('sha256').update('3speak-wallet-session|' + MANTEAUTH_CLIENT_SECRET).digest('hex')
     : '')
 
-// Legacy app-key auth on /api/broadcast: the PUBLIC app key + a CLAIMED username.
-// Kept ON by default for backwards-compat; set ALLOW_APPKEY_AUTH=0 to require a
-// SIWH wallet session cookie instead (the secure path — see /api/auth/wallet/*).
-const ALLOW_APPKEY_AUTH = process.env.ALLOW_APPKEY_AUTH !== '0'
+// Legacy app-key auth on /api/broadcast and the delegated signers: the PUBLIC app
+// key + a CLAIMED username, so anyone holding the key could act as any account
+// that granted @threespeak. OFF by default wherever wallet sessions work (the
+// secure path, see /api/auth/wallet/*); the frontend falls back to minting a
+// session on the 401. ALLOW_APPKEY_AUTH=1 turns it back on, =0 forces it off.
+const ALLOW_APPKEY_AUTH = process.env.ALLOW_APPKEY_AUTH === '1'
+  || (process.env.ALLOW_APPKEY_AUTH !== '0' && !SESSION_SIGNING_SECRET)
 
 // Allowed origins for CORS — only the trusted 3speak frontends
 const ALLOWED_ORIGINS = (process.env.ALLOWED_ORIGINS || 'https://3speak.tv,https://3speak.okinoko.io,http://localhost:5173')
@@ -105,7 +108,8 @@ app.use(cors({
   origin: (origin, cb) => {
     // Allow no-origin (server-to-server, curl) AND whitelisted origins
     if (!origin || ALLOWED_ORIGINS.includes(origin)) return cb(null, true)
-    cb(new Error('CORS: origin not allowed'))
+    // Refused here, before any route runs (a 403 from the error handler).
+    cb(Object.assign(new Error('CORS: origin not allowed'), { status: 403 }))
   },
   credentials: true
 }))
@@ -1087,25 +1091,24 @@ async function broadcastAsThreespeak(hiveUsername, operations, res) {
     }
     if (opType === 'custom_json') {
       const auths = opData.required_posting_auths || []
-      if (!auths.includes(hiveUsername)) {
-        // Acting for ANOTHER account is allowed only where that account has
-        // granted THIS user posting authority — a badge they created being the
-        // case this exists for. Awarding a badge is the badge account following
-        // someone, so the op is authorised by the badge, never by them.
-        //
-        // 🚨 The check is what keeps this from being an escalation. @threespeak
-        // holds a posting grant over every user who signed up here, so without
-        // verifying the requester's OWN authority over the named account, one
-        // user could have the proxy act as any other. Chain-verified, and it
-        // grants nothing they could not already do by signing themselves.
-        const others = auths.filter((a) => a !== hiveUsername)
-        if (!others.length) {
-          return res.status(403).json({ error: 'Operation not allowed' })
-        }
-        for (const acct of others) {
-          if (!await hasPostingAuthorityOver(hiveUsername, acct)) {
-            return res.status(403).json({ error: 'You do not hold posting authority over @' + acct })
-          }
+      if (!auths.length) {
+        return res.status(403).json({ error: 'Operation not allowed' })
+      }
+      // Acting for ANOTHER account is allowed only where that account has
+      // granted THIS user posting authority — a badge they created being the
+      // case this exists for. Awarding a badge is the badge account following
+      // someone, so the op is authorised by the badge, never by them.
+      //
+      // 🚨 The check is what keeps this from being an escalation. @threespeak
+      // holds a posting grant over every user who signed up here, so without
+      // verifying the requester's OWN authority over the named account, one
+      // user could have the proxy act as any other. Chain-verified, and it
+      // grants nothing they could not already do by signing themselves.
+      // It runs for every other account even when the requester is listed too:
+      // co-signing as [me, victim] must not slip past it.
+      for (const acct of auths.filter((a) => a !== hiveUsername)) {
+        if (!await hasPostingAuthorityOver(hiveUsername, acct)) {
+          return res.status(403).json({ error: 'You do not hold posting authority over @' + acct })
         }
       }
       if (!ALLOWED_CUSTOM_JSON_IDS.has(opData.id)) {
@@ -1338,7 +1341,7 @@ async function resolveGatedVideoOwner(req, res) {
 }
 
 // Read the current guest list, so the editor can show who is already invited.
-app.get('/api/gated/:permlink/allowlist', async (req, res) => {
+app.get('/api/gated/:permlink/allowlist', baseLimiter, async (req, res) => {
   try {
     const ctx = await resolveGatedVideoOwner(req, res)
     if (!ctx) return undefined
@@ -1360,7 +1363,7 @@ app.get('/api/gated/:permlink/allowlist', async (req, res) => {
   }
 })
 
-app.patch('/api/gated/:permlink/allowlist', async (req, res) => {
+app.patch('/api/gated/:permlink/allowlist', baseLimiter, async (req, res) => {
   try {
     const ctx = await resolveGatedVideoOwner(req, res)
     if (!ctx) return undefined
@@ -2454,7 +2457,14 @@ app.get(/^\/api\/pl\/(.*)$/, baseLimiter, async (req, res) => {
   try {
     const subPath = req.params[0] || '' // path after /api/pl/, no query string
     // Whitelist the playlist read paths only — no arbitrary reach into upstream.
-    if (!/^(playlists(\/|$)|video\/[^/]+\/[^/]+\/playlists(\/|$))/.test(subPath)) {
+    // The check runs on the path fetch will really request: URL parsing resolves
+    // "..", "%2e%2e" and backslashes, so "playlists/../../admin" must not pass.
+    const base = new URL(PLAYLISTS_UPSTREAM)
+    const target = new URL(`${PLAYLISTS_UPSTREAM}/${subPath}`)
+    const basePath = base.pathname.replace(/\/+$/, '') + '/'
+    const rel = target.pathname.startsWith(basePath) ? target.pathname.slice(basePath.length) : null
+    if (target.origin !== base.origin || rel === null ||
+        !/^(playlists(\/|$)|video\/[^/]+\/[^/]+\/playlists(\/|$))/.test(rel)) {
       return res.status(404).json({ error: 'not found' })
     }
     const qIdx = req.originalUrl.indexOf('?')
@@ -2465,7 +2475,7 @@ app.get(/^\/api\/pl\/(.*)$/, baseLimiter, async (req, res) => {
     // buckets per user (otherwise every read looks like it's from this server).
     const fwd = req.headers['x-forwarded-for'] || req.ip
     if (fwd) headers['X-Forwarded-For'] = fwd
-    const upstream = await fetch(`${PLAYLISTS_UPSTREAM}/${subPath}${qs}`, { method: 'GET', headers })
+    const upstream = await fetch(`${base.origin}${basePath}${rel}${qs}`, { method: 'GET', headers })
     const body = await upstream.text()
     const ct = upstream.headers.get('content-type')
     if (ct) res.set('Content-Type', ct)
@@ -2768,6 +2778,13 @@ app.get('/spotlight-page/:username', baseLimiter, async (req, res) => {
 
 // Generic error handler
 app.use((err, req, res, next) => {
+  // Client errors keep their status (bad JSON 400, body too large 413, foreign
+  // origin 403) with a fixed message, so nothing internal leaks either way.
+  const status = err.status || err.statusCode
+  if (status >= 400 && status < 500) {
+    const messages = { 400: 'Bad request', 403: 'Forbidden', 413: 'Request too large' }
+    return res.status(status).json({ error: messages[status] || 'Bad request' })
+  }
   console.error('Unhandled error:', err.message)
   res.status(500).json({ error: 'Internal error' })
 })
