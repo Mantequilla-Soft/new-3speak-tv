@@ -576,6 +576,8 @@
     "tooLong": "Video đó dài {{seconds}} giây. Quảng cáo dài nhất là {{max}} giây.",
     "spotUploaded": "Đã tải đoạn quảng cáo lên. Chúng tôi sẽ xét duyệt trước khi chạy",
     "uploadFailed": "Tải lên thất bại",
+    "makeInWizard": "Tạo bằng Ad Wizard",
+    "makeInWizardHint": "Dựng video từ các cảnh có sẵn với logo, hình ảnh và nhạc của bạn. Video sẽ được thêm vào đây khi bạn bấm \"Use for my campaign\".",
     "yourBanner": "Banner của bạn",
     "yourVideo": "Video quảng cáo của bạn",
     "yourCreatives": "Nội dung quảng cáo của bạn",

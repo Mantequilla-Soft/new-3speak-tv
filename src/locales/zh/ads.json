@@ -576,6 +576,8 @@
     "tooLong": "该视频时长为 {{seconds}} 秒。广告最长只能播放 {{max}} 秒。",
     "spotUploaded": "广告素材已上传。我们会在投放前进行审核",
     "uploadFailed": "上传失败",
+    "makeInWizard": "用 Ad Wizard 制作",
+    "makeInWizardHint": "用现成的场景加上你的标志、图片和音乐来制作视频。点击“Use for my campaign”后会添加到这里。",
     "yourBanner": "你的横幅",
     "yourVideo": "你的广告视频",
     "yourCreatives": "你的广告素材",

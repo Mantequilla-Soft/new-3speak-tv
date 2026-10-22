@@ -642,6 +642,8 @@
     "tooLong": "Ten film ma {{seconds}} sekund. Reklama może trwać maksymalnie {{max}}.",
     "spotUploaded": "Spot przesłany. Sprawdzimy go przed emisją",
     "uploadFailed": "Przesyłanie nie powiodło się",
+    "makeInWizard": "Stwórz w Ad Wizard",
+    "makeInWizardHint": "Zbuduj film z gotowych scen z Twoim logo, zdjęciami i muzyką. Trafi tutaj, gdy klikniesz \"Use for my campaign\".",
     "yourBanner": "Twój baner",
     "yourVideo": "Twój film reklamowy",
     "yourCreatives": "Twoje kreacje reklamowe",

@@ -57,3 +57,43 @@ jobs:
             -o ServerAliveInterval=30 -o ServerAliveCountMax=6 \
             "$DEPLOY_USER@$HOST" "$MODE $GITHUB_SHA"
           rm -f ~/.ssh/deploy_key
+
+  # After a successful deploy that bumped APP_VERSION, tag the commit v<version>
+  # and publish a GitHub Release whose notes are the changelog entries since the
+  # last release. A deploy without a bump, a "check" run or a failed deploy
+  # creates nothing, and an existing tag is never touched, so re-runs are safe.
+  # Only this job can write to the repo; it never talks to the server.
+  release:
+    needs: deploy
+    if: github.event_name == 'push' || inputs.mode == 'deploy'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Tag and publish the release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          version_at() { git show "$1:src/version.js" | sed -nE "s/^export const APP_VERSION = '([^']+)'.*/\1/p"; }
+          version=$(version_at "$GITHUB_SHA")
+          tag="v$version"
+          if git rev-parse -q --verify "refs/tags/$tag" >/dev/null; then
+            echo "$tag is already released, nothing to do."
+            exit 0
+          fi
+          # The previous release on production's own history; before the first
+          # one, whatever production ran before this merge.
+          prev_tag=$(git describe --tags --abbrev=0 --first-parent --match 'v*' "$GITHUB_SHA" 2>/dev/null || true)
+          if [ -n "$prev_tag" ]; then prev=${prev_tag#v}; else prev=$(version_at "$GITHUB_SHA^1"); fi
+          if [ "$prev" = "$version" ]; then
+            echo "APP_VERSION is still $version, no release."
+            exit 0
+          fi
+          node scripts/release-notes.mjs "$prev" "$version" > "$RUNNER_TEMP/notes.md"
+          gh release create "$tag" --target "$GITHUB_SHA" --title "$tag" --notes-file "$RUNNER_TEMP/notes.md" --latest

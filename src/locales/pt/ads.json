@@ -620,6 +620,8 @@
     "tooLong": "Esse vídeo tem {{seconds}} segundos. O máximo que um anúncio pode durar é {{max}}.",
     "spotUploaded": "Spot enviado. Vamos analisá-lo antes de ele rodar",
     "uploadFailed": "Falha no envio",
+    "makeInWizard": "Crie no Ad Wizard",
+    "makeInWizardHint": "Monte o vídeo com cenas prontas, seu logo, suas imagens e sua música. Ele é adicionado aqui quando você clica em \"Use for my campaign\".",
     "yourBanner": "Seu banner",
     "yourVideo": "Seu vídeo de anúncio",
     "yourCreatives": "Seus criativos",

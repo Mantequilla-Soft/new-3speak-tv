@@ -359,6 +359,18 @@ const ENABLE_CAMERA_RECORD = import.meta.env.VITE_ENABLE_CAMERA_RECORD === 'true
 // testing the teleprompter regardless of VITE_ENABLE_CAMERA_RECORD.
 const cameraRecordEnabledFor = (user) => ENABLE_CAMERA_RECORD || isTestUser(user);
 
+// Ad Wizard (the editor's second entry mode, ?mode=ads): build an ad from motion-graphics scenes without code.
+// Beta only for now: the team accounts above plus VITE_AD_WIZARD_BETA_USERS (comma list, add testers without a
+// code change), or everyone once VITE_ENABLE_AD_WIZARD is "true". Gates both /ad-wizard and the "make it in the
+// Ad Wizard" button next to the creative upload on /advertise.
+const ENABLE_AD_WIZARD = import.meta.env.VITE_ENABLE_AD_WIZARD === 'true';
+const AD_WIZARD_BETA_USERS = new Set(
+  (import.meta.env.VITE_AD_WIZARD_BETA_USERS || '')
+    .split(',').map((s) => s.trim().toLowerCase()).filter(Boolean),
+);
+const adWizardEnabledFor = (user) => ENABLE_AD_WIZARD || isTestUser(user)
+  || (!!user && AD_WIZARD_BETA_USERS.has(String(user).toLowerCase()));
+
 // Self-hosted streaming speech-to-text WebSocket for the teleprompter. Empty =
 // use the browser Web Speech API only (which can't share the mic with the audio
 // recording). When set, recording taps the SINGLE recording audio track and
@@ -437,6 +449,7 @@ export {
   FEED_EXCLUDED_HOSTS,
   ENABLE_CAMERA_RECORD,
   cameraRecordEnabledFor,
+  adWizardEnabledFor,
   STT_WS_URL,
   ENABLE_PPL,
   THREESPEAK_AUDIO_API_URL,

@@ -6,7 +6,10 @@ import { FaRocket, FaLayerGroup, FaUsers, FaVideo, FaTv } from 'react-icons/fa';
 import { toastIn } from '../utils/toast';
 import { useAppStore } from '../lib/store';
 import { transferWithAioha, getOperationUser } from '../hive-api/aioha';
-import { adsEnabledFor, tickerEnabledFor, ENABLE_BUTRAUTH } from '../utils/config';
+import { adsEnabledFor, tickerEnabledFor, ENABLE_BUTRAUTH, adWizardEnabledFor } from '../utils/config';
+import { createPortal } from 'react-dom';
+import { X as CloseIcon } from 'lucide-react';
+import AdWizardFrame from '../components/ads/AdWizardFrame';
 import { formatDate } from '../i18n';
 import SEOHead from '../components/SEOHead';
 import NotFound from './NotFound';
@@ -2149,7 +2152,12 @@ function TickerPanel({ reference, account, productName, format = null, onCreativ
 
 function CreativePanel({ reference, account, maxSeconds, bannerSpec, onCreatives, pending, production, offer, brand, adType = null, single = false }) {
   const { t } = useTranslation();
+  const user = useAppStore((s) => s.user);
   const [creatives, setCreatives] = useState([]);
+  // Ad Wizard (beta, config.adWizardEnabledFor): build the spot from scenes instead of uploading one.
+  // Video spots only; a shorts spot is made portrait, the others landscape; capped at the booked length.
+  const [wizardOpen, setWizardOpen] = useState(false);
+  const wizardOffered = isVideoAd(adType) && adWizardEnabledFor(user);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState(null);
   const inputRef = useRef(null);
@@ -2183,6 +2191,30 @@ function CreativePanel({ reference, account, maxSeconds, bannerSpec, onCreatives
   async function onFile(e) {
     const file = e.target.files && e.target.files[0];
     if (!file) return;
+    await handleFile(file);
+  }
+
+  // The finished Ad Wizard video goes through exactly the same path as a file picked from disk.
+  async function onWizardAd(d) {
+    setWizardOpen(false);
+    setError(null);
+    setBusy(true);
+    let file;
+    try {
+      const res = await fetch(d.outputUrl);
+      if (!res.ok) throw new Error(String(res.status));
+      const blob = await res.blob();
+      const base = String(d.name || 'ad-wizard').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '') || 'ad-wizard';
+      file = new File([blob], `${base}.mp4`, { type: 'video/mp4' });
+    } catch {
+      setBusy(false);
+      setError(t('ads.creative.uploadFailed'));
+      return;
+    }
+    await handleFile(file);
+  }
+
+  async function handleFile(file) {
     setError(null);
     setBusy(true);
     try {
@@ -2296,6 +2328,29 @@ function CreativePanel({ reference, account, maxSeconds, bannerSpec, onCreatives
         </label>
       </div>
       {error ? <p className="mkt-upload-error">{error}</p> : null}
+      {wizardOffered && !atLimit && (
+        <div className="mkt-upload-row">
+          <button type="button" className="mkt-outline mkt-upload-btn" disabled={busy} onClick={() => setWizardOpen(true)}>
+            {t('ads.creative.makeInWizard')}
+          </button>
+          <p className="mkt-fine">{t('ads.creative.makeInWizardHint')}</p>
+        </div>
+      )}
+      {wizardOpen && createPortal(
+        <div style={{ position: 'fixed', inset: 0, zIndex: 100050, background: 'var(--bg-primary, #0f0f0f)' }}>
+          <button type="button" onClick={() => setWizardOpen(false)} aria-label={t('common.actions.close')}
+            style={{ position: 'absolute', top: 6, right: 10, zIndex: 2, width: 34, height: 34, borderRadius: '50%', border: '1px solid rgba(128,128,128,.4)', background: 'transparent', color: 'inherit', cursor: 'pointer', display: 'grid', placeItems: 'center' }}>
+            <CloseIcon size={18} />
+          </button>
+          <AdWizardFrame
+            format={adType === 'shorts' ? 'portrait' : 'landscape'}
+            maxSeconds={maxSeconds || null}
+            brand={brand ? { name: brand.productName || null, logo: brand.logoUrl || null } : null}
+            onUse={onWizardAd}
+          />
+        </div>,
+        document.body,
+      )}
 
       {/* "Or have us make it" belongs here, next to the upload button: the question
           is about the video, and the person who has just failed to find a file to
