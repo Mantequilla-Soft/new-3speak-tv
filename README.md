@@ -176,6 +176,60 @@ Issues and pull requests are welcome. The full guide is in [CONTRIBUTING.md](CON
 
 Fixing a translation is one of the most useful things you can do: see [TRANSLATING.md](TRANSLATING.md).
 
+## How the services fit together
+
+This repo is the web app and its small API. Uploads, encoding, feeds, playlists and live rooms run as separate services:
+
+```mermaid
+flowchart TB
+    user(["Viewer or creator"]) --> app
+
+    subgraph site["3speak.tv (this repo)"]
+        app["Web app<br/>src/"] --> api["App API<br/>server/"]
+    end
+
+    subgraph services["Background services"]
+        direction LR
+        embed["embedvideos<br/>uploads, encoding jobs"]
+        encoder["3speakencoder<br/>managed + community"]
+        player["3speak-player<br/>play.3speak.tv"]
+        checker["3speakchecks<br/>feeds, views, ads"]
+        playlists["playlists indexer"]
+        hangouts["hangouts API<br/>OpenPods"]
+        livekit["LiveKit<br/>live media"]
+    end
+
+    subgraph data["Storage and network"]
+        direction LR
+        ipfs[("IPFS + CDN")]
+        mongo[("MongoDB")]
+        hive[("Hive")]
+    end
+
+    app -- "upload" --> embed
+    embed -- "jobs" --> encoder
+    encoder -. "done" .-> embed
+    encoder -- "HLS" --> ipfs
+    app -- "embeds" --> player
+    player -- "streams" --> ipfs
+    app -- "feeds, ads" --> checker
+    app -- "playlists" --> playlists
+    app -- "login, tokens" --> hangouts
+    hangouts --> livekit
+    app <-. "WebRTC" .-> livekit
+    app -- "posts, votes" --> hive
+
+    embed --> mongo
+    checker --> mongo
+    playlists --> mongo
+    playlists -- "reads" --> hive
+```
+
+- **Uploading:** the app sends the file to embedvideos in resumable chunks. An encoder picks up the job, either pushed to a 3Speak-run encoder or polled by a community encoder, writes the HLS renditions to IPFS and reports back. The creator's post then goes to Hive.
+- **Watching:** the player streams the HLS files from IPFS through the CDN. Feeds, view counts and ads come from 3speakchecks.
+- **Playlists** are Hive `custom_json` operations. The indexer reads them back and serves them to the app.
+- **Live:** the hangouts API checks your Hive signature and hands out a LiveKit token. Audio and video then flow directly between your browser and LiveKit (OBS can join over WHIP).
+
 ## Related projects
 
 | Project | What it is |
