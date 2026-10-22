@@ -1,198 +1,197 @@
-# 3Speak - Decentralized Video Platform
+<p align="center">
+  <img src="public/3speak.jpeg" alt="3Speak" width="110" />
+</p>
+
+<h1 align="center">3Speak</h1>
 
 <p align="center">
-  <img src="public/3speak.jpeg" alt="3Speak Logo" width="120" />
+  <strong>The video platform where creators own their channel and viewers earn too.</strong><br>
+  Videos, Shorts, audio, playlists and live streams on <a href="https://hive.io">Hive</a>, the community-owned social network.
 </p>
 
 <p align="center">
-  <strong>The decentralized video platform built on the Hive blockchain</strong>
-</p>
-
-<p align="center">
-  <a href="https://new.3speak.tv">Live Site</a> •
-  <a href="#features">Features</a> •
-  <a href="#getting-started">Getting Started</a> •
-  <a href="#development">Development</a> •
+  <a href="https://3speak.tv"><b>3speak.tv</b></a> ·
+  <a href="#features">Features</a> ·
+  <a href="#getting-started">Getting started</a> ·
+  <a href="#how-it-ships">How it ships</a> ·
   <a href="#contributing">Contributing</a>
 </p>
 
----
+<p align="center">
+  <img src="docs/screenshots/home.jpg" alt="3Speak home page with the Discover Spotlight and video grid" width="100%" />
+</p>
 
-## About
-
-3Speak is a decentralized, censorship-resistant video hosting platform that leverages the Hive blockchain for content storage and monetization. Creators own their content and earn cryptocurrency rewards directly from their audience.
+This repository is the web app behind [3speak.tv](https://3speak.tv): a React single-page app plus a small Node API that signs, proxies and renders share cards. Every video is a Hive post owned by its creator, so votes, tips and ad revenue go straight to the creator's own account.
 
 ## Features
 
-- 🎬 **Decentralized Video Hosting** - Videos stored on IPFS and Hive
-- 💰 **Creator Monetization** - Earn HIVE/HBD through upvotes and tips
-- 🔐 **Censorship Resistant** - No central authority can remove your content
-- 👛 **Multiple Auth Options** - Hive Keychain, HiveAuth, and more
-- 🏘️ **Community Support** - Organize content by Hive communities
-- 📱 **Responsive Design** - Works on desktop and mobile
+<img src="docs/screenshots/mobile-feed.jpg" alt="3Speak feed on a phone" width="260" align="right" />
 
-## Tech Stack
+**Watching**
+- Home with a **Discover Spotlight**, following feed, new videos, trending, tags and a "new from people you follow" row
+- **Zapping** (`/surf`): TV-style channel surfing through topics
+- Watch page with hover and scrub previews, a "most replayed" graph, hold-to-speed-up, keyboard shortcuts, autoplay countdown and a mini player
+- Subtitles in the viewer's language, a searchable **Transcript** tab, and one-click title translation
+- **Video Timeline**: chapters from description timestamps, chapter names on the progress bar, and links that pop up during playback
+- **Video reactions**, watch history, leaderboards, and hiding watched videos or creators you don't want to see
 
-- **Frontend**: React 18 + Vite
-- **State Management**: Zustand + Redux Toolkit
-- **Styling**: SCSS
-- **Blockchain**: Hive (via @hiveio/dhive)
-- **Authentication**: Hive Keychain SDK, HiveAuth, Aioha
-- **GraphQL**: Apollo Client
-- **Video Player**: JW Player - Snapie Open Source Video Player
+**Shorts**
+- Vertical feed (`/shorts`) and a Stories view, up to 2 minutes per Short
+- Remix modes: Stitch, Reaction and Free edit
 
-## Getting Started
+**Audio**
+- Audio page (`/audio`) for songs, podcasts and voice messages, with a player that keeps going while you browse
+- **Audio Shorts** (voice memos with covers), album uploads with per-track covers, and pay-per-listen
 
-### Prerequisites
+**Creating**
+- Uploader (`/embed-studio`) with resumable uploads, scheduled posts, community picker, beneficiaries and a channel trailer
+- **Shorts Editor**: teleprompter that follows your voice, green screen, music library with song credits, moving stickers, auto-cut, beat sync, sound effects, and saved drafts
+- Edit after publishing (`/editvideo`): details, chapters and links, or replace the video file while keeping votes and payout
+- Import from YouTube, TikTok, BitChute, Rumble and Instagram after verifying the account is yours
+- Creator stats: retention, most replayed moments, audience
 
-- Node.js 18+ 
-- npm or yarn
-- [Hive Keychain](https://hive-keychain.com/) browser extension (recommended)
+**Playlists and podcasts**
+- Playlists with a playlist bar on the watch page
+- Podcast-ready RSS feeds per channel (`/rss/<user>.xml`) and per playlist
 
-### Installation
+**Ads that pay creators and viewers**
+- Self-serve booking at `/advertise`: video spots, player banners, Shorts spots, pre-upload spots and scrolling tickers, paid in HIVE or HBD
+- **Creators get 50%** of ad revenue, **viewers who opt in get 10%**, paid in the same currency the advertiser used
+- Creators can switch video ads off per video or for the whole channel; Pro subscribers watch ad-free and still earn
+- Details: [docs/ADVERTISING.md](docs/ADVERTISING.md)
 
-1. **Clone the repository**
-   ```bash
-   git clone https://github.com/Mantequilla-Soft/new-3speak-tv.git
-   cd new-3speak-tv
-   ```
+**Live** (OpenPods)
+- Live streams and audio rooms built on LiveKit, Stream Studio, go live from OBS with chat and overlay docks, stream pre-rolls and recordings
 
-2. **Install dependencies**
-   ```bash
-   npm install
-   ```
+**Community and earning**
+- Upvotes, tips and a **Supporters** tab, comment sorting, pinned comments, GIFs, images and previews
+- Hive communities and badges, creator link pages (`/links/<user>`), notifications with web push
+- **3Speak Chat**: direct messages and channels
+- Wallet with HIVE and HBD, 3Speak Pro subscription
 
-3. **Set up environment variables**
-   ```bash
-   cp .env.example .env
-   ```
-   Then edit `.env` with your configuration values (see [Environment Variables](#environment-variables)).
+**Accounts**
+- Log in with Hive Keychain, HiveAuth, HiveSigner, PeakVault, Ledger or Butter Auth
+- Start without a Hive account: warm-up accounts and invite links
 
-4. **Start the development server**
-   ```bash
-   npm run dev
-   ```
+**Everywhere**
+- 21 languages, translated by the community at `/translate` (see [TRANSLATING.md](TRANSLATING.md))
+- Installable PWA with app shortcuts, and native app builds via Capacitor
+- Embeddable player, an oEmbed endpoint and rich share cards for Discord, X and other apps
 
-   > ⚠️ **Note**: Due to a known issue with Vite's dev server and Node.js polyfills, you may need to use production preview mode for local development:
-   > ```bash
-   > npm run build && npm run preview
-   > ```
+<p align="center">
+  <img src="docs/screenshots/watch.jpg" alt="3Speak watch page with video reactions and topic chips" width="100%" />
+</p>
 
-5. **Open your browser**
-   - Dev server: http://localhost:5173
-   - Preview server: http://localhost:4173
+## Tech stack
 
-## Environment Variables
+| Area | Used |
+|---|---|
+| UI | React 19, React Router 7, SCSS |
+| Build | Vite 8, vite-plugin-pwa, Capacitor 8 for the native apps |
+| State and data | Zustand, TanStack Query (plus a small legacy Redux store) |
+| Player | [`@mantequilla-soft/3speak-player`](https://github.com/Mantequilla-Soft/3speak-player) (HLS) |
+| Hive | `@hiveio/dhive`, `@hiveio/content-renderer`, Aioha, Keychain SDK, HiveAuth |
+| Live | LiveKit, [`@snapie/hangouts-*`](https://github.com/Mantequilla-Soft/hangouts) |
+| Uploads | tus resumable uploads to [embedvideos](https://github.com/Mantequilla-Soft/embedvideos) |
+| i18n | i18next, 21 languages |
+| API (`server/`) | Node + Express 5: login sessions, signing, share cards, oEmbed, imports, translation editor |
 
-Create a `.env` file in the root directory with the following variables:
+## Getting started
 
-| Variable | Description | Required |
-|----------|-------------|----------|
-| `VITE_API_URL_FROM_WEST` | Main 3Speak API endpoint | ✅ |
-| `VITE_GRAPHQL_API_URL` | GraphQL API for video queries | ✅ |
-| `VITE_APP_VIDEO_CDN_DOMAIN` | Video CDN domain | ✅ |
-| `VITE_UPLOAD_TOKEN` | Upload authentication token | ✅ |
-| `VITE_UPLOAD_URL` | Upload endpoint URL | ✅ |
-| `VITE_JWPLAYER_LICENSE_ID` | JW Player license ID | ❌ |
-| `VITE_JWPLAYER_LICENSE_KEY` | JW Player license key | ❌ |
+You need **Node.js 22** and npm.
 
-See `.env.example` for a complete template.
+```bash
+git clone https://github.com/Mantequilla-Soft/new-3speak-tv.git
+cd new-3speak-tv
+npm install
+cp .env.example .env      # then fill in the values you need
+npm run dev               # http://localhost:5173
+```
 
-## Available Scripts
+`.env.example` lists the variables with a comment for each. The main groups:
 
-| Command | Description |
-|---------|-------------|
-| `npm run dev` | Start development server |
-| `npm run build` | Build for production |
-| `npm run preview` | Preview production build locally |
-| `npm run lint` | Run ESLint |
+| Group | Examples |
+|---|---|
+| Core APIs | `VITE_API_URL_FROM_WEST`, `VITE_CHECKER_URL`, `VITE_SITE_URL` |
+| Player and media | `VITE_PLAYER_URL`, `VITE_APP_VIDEO_CDN_DOMAIN`, `VITE_PLAYLISTS_API_URL` |
+| Uploads and editor | `VITE_EMBED_UPLOAD_URLS`, `VITE_EMBED_API_URL`, `VITE_EDITOR_URLS` |
+| Hive nodes | `VITE_HIVE_API_URL`, `VITE_HIVE_API_FALLBACKS` |
+| Feature switches | `VITE_ENABLE_BUTRAUTH`, `VITE_ENABLE_PPL`, `VITE_ENABLE_CAMERA_RECORD`, `VITE_FEATURE_EDITOR` |
+| Live | `VITE_HANGOUTS_API_URL`, `VITE_LIVEKIT_URL` (leave unset to turn live features off) |
 
-## Project Structure
+The API in `server/` is optional for browsing. It has its own `server/.env.example`; start it with `node server/index.cjs`.
+
+### Scripts
+
+| Command | What it does |
+|---|---|
+| `npm run dev` | Dev server with hot reload |
+| `npm run build` | Production build into `dist/` |
+| `npm run preview` | Serve the production build locally |
+| `npm run lint` | ESLint |
+| `npm run i18n:check` | Check every language for missing or broken keys |
+| `npm run i18n:translate` | Machine-translate missing keys (needs `ANTHROPIC_API_KEY`) |
+
+### Known issue
+
+`@snapie/hangouts-react` is currently pinned to a local build (0.26.7) that is not on npm yet, so `npm install` stops at that package on a fresh clone. This goes away once that version is published.
+
+## Project structure
 
 ```
 src/
-├── assets/          # Static assets (images, fonts)
-├── auth/            # Authentication utilities
-├── components/      # React components
-│   ├── Cards/       # Video card components
-│   ├── Communities/ # Community-related components
-│   ├── Editor/      # Post editor components
-│   ├── Feed/        # Feed display components
-│   ├── nav/         # Navigation components
-│   ├── playVideo/   # Video player components
-│   ├── Sidebar/     # Sidebar components
-│   ├── studio/      # Creator studio components
-│   └── ...
-├── context/         # React context providers
-├── graphql/         # GraphQL queries
-├── hive-api/        # Hive blockchain API utilities
-├── hooks/           # Custom React hooks
-├── lib/             # Libraries (Apollo client, Zustand store)
-├── page/            # Page components
-├── redux/           # Redux store and reducers
-└── utils/           # Utility functions
+├── App.jsx          routes
+├── page/            one component per route
+├── components/      feature folders (playVideo, embed-studio, openpods, ads, Chat, Wallet, ...)
+├── hooks/           playback, ads, live streams, teleprompter, watch history
+├── lib/             Zustand store and slices, ads, supporters, video data
+├── hive-api/        Aioha setup and Hive API helpers
+├── utils/           helpers (Hive nodes, uploads, timeline, push, PWA)
+├── i18n/ locales/   i18next setup and the 21 languages
+├── changelog.js     the "We shipped an update" entries users see
+└── version.js       APP_VERSION
+server/
+├── index.cjs        the API (auth sessions, signing, uploads, editor tokens, playlists proxy)
+├── og-*.cjs         share cards, oEmbed, Discord video teasers, sitemaps
+├── i18n-editor.cjs  the community translation editor
+└── *import*.cjs     imports from other video platforms
+docs/                advertising, upload API notes, screenshots
 ```
 
-## Development
+## How it ships
 
-### Code Style
-
-- Use functional components with hooks
-- Follow React best practices
-- SCSS for styling with BEM-like naming
-
-### Branch Naming
-
-- `feat/` - New features
-- `fix/` - Bug fixes
-- `docs/` - Documentation updates
-- `refactor/` - Code refactoring
-- `chore/` - Maintenance tasks
-
-### Commit Messages
-
-Follow [Conventional Commits](https://www.conventionalcommits.org/):
-- `feat:` - New feature
-- `fix:` - Bug fix
-- `docs:` - Documentation
-- `style:` - Formatting
-- `refactor:` - Code refactoring
-- `test:` - Tests
-- `chore:` - Maintenance
-
-## Known Issues
-
-- **Vite Dev Server**: The development server may crash due to Buffer polyfill timing issues with `keychain-sdk`. Use `npm run build && npm run preview` as a workaround.
+- `develop` is where work lands. [preview.3speak.tv](https://preview.3speak.tv) runs it.
+- A pull request from `develop` into `production` is the release. Merging it deploys 3speak.tv automatically ([deploy-production.yml](.github/workflows/deploy-production.yml)): the server builds the release itself, waits for running uploads to finish, swaps the site, smoke-tests it and swaps back if anything fails.
+- User-facing changes get a short entry in `src/changelog.js` and a version bump in `src/version.js`, which shows returning users the "We shipped an update" popup.
+- Pull requests that touch the deploy workflow are checked by [deploy-production-test.yml](.github/workflows/deploy-production-test.yml); translation changes by [i18n.yml](.github/workflows/i18n.yml).
 
 ## Contributing
 
-1. Fork the repository
-2. Create your feature branch (`git checkout -b feat/amazing-feature`)
-3. Commit your changes (`git commit -m 'feat: add amazing feature'`)
-4. Push to the branch (`git push origin feat/amazing-feature`)
-5. Open a Pull Request
+Issues and pull requests are welcome.
 
-## Related Projects
+1. Fork the repo and branch off `develop` (`feat/...`, `fix/...`, `docs/...`).
+2. Use [Conventional Commits](https://www.conventionalcommits.org/) (`feat:`, `fix:`, `docs:`, `chore:`).
+3. New UI text goes through i18next and needs a key in every language: run `npm run i18n:check`.
+4. Open the pull request against `develop`.
 
-- [3Speak Backend](https://github.com/spknetwork) - API services
-- [@snapie/renderer](https://www.npmjs.com/package/@snapie/renderer) - Hive markdown renderer
-- [@snapie/operations](https://www.npmjs.com/package/@snapie/operations) - Hive operation builder
+Fixing a translation is one of the most useful things you can do: see [TRANSLATING.md](TRANSLATING.md).
 
-## License
+## Related projects
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+| Project | What it is |
+|---|---|
+| [3speak-player](https://github.com/Mantequilla-Soft/3speak-player) | The video player |
+| [embedvideos](https://github.com/Mantequilla-Soft/embedvideos) | Upload and embed service other Hive apps can use too |
+| [3speakencoder](https://github.com/Mantequilla-Soft/3speakencoder) | Community video encoder |
+| [hangouts](https://github.com/Mantequilla-Soft/hangouts) | OpenPods: live streams and audio rooms |
+| [snapieaudio](https://github.com/Mantequilla-Soft/snapieaudio) | Audio hosting and player |
+| [3speakchecks](https://github.com/Mantequilla-Soft/3speakchecks) | Feeds, views and ads API |
 
 ## Links
 
-- 🌐 [3Speak.tv](https://new.3speak.tv)
-- 💬 [Discord](https://discord.gg/NSFS2VGj83)
-- 🐦 [Twitter/X](https://x.com/3speaktv)
-- 📝 [Hive Blog](https://ecency.com/@threespeak)
-
----
+[3speak.tv](https://3speak.tv) · [Discord](https://discord.gg/NSFS2VGj83) · [X](https://x.com/3speaktv) · [@threespeak on Hive](https://ecency.com/@threespeak)
 
 <p align="center">
-  Built with ❤️ by the 3Speak team and contributors
-<br>
-@kesolink - @menobass - @eddiespino
+  Built by the 3Speak team and contributors<br>
+  @kesolink · @menobass · @eddiespino · @tibfox
 </p>
