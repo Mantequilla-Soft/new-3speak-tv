@@ -167,7 +167,7 @@ docs/                advertising, upload API notes, screenshots
 
 ## Contributing
 
-Issues and pull requests are welcome.
+Issues and pull requests are welcome. The full guide is in [CONTRIBUTING.md](CONTRIBUTING.md).
 
 1. Fork the repo and branch off `develop` (`feat/...`, `fix/...`, `docs/...`).
 2. Use [Conventional Commits](https://www.conventionalcommits.org/) (`feat:`, `fix:`, `docs:`, `chore:`).
@@ -186,6 +186,10 @@ Fixing a translation is one of the most useful things you can do: see [TRANSLATI
 | [hangouts](https://github.com/Mantequilla-Soft/hangouts) | OpenPods: live streams and audio rooms |
 | [snapieaudio](https://github.com/Mantequilla-Soft/snapieaudio) | Audio hosting and player |
 | [3speakchecks](https://github.com/Mantequilla-Soft/3speakchecks) | Feeds, views and ads API |
+
+## License
+
+[MIT](LICENSE)
 
 ## Links
 
