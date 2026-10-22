@@ -163,7 +163,7 @@ docs/                advertising, upload API notes, screenshots
 - `develop` is where work lands. [preview.3speak.tv](https://preview.3speak.tv) runs it.
 - A pull request from `develop` into `production` is the release. Merging it deploys 3speak.tv automatically ([deploy-production.yml](.github/workflows/deploy-production.yml)): the server builds the release itself, waits for running uploads to finish, swaps the site, smoke-tests it and swaps back if anything fails.
 - User-facing changes get a short entry in `src/changelog.js` and a version bump in `src/version.js`, which shows returning users the "We shipped an update" popup.
-- Pull requests that touch the deploy workflow are checked by [deploy-production-test.yml](.github/workflows/deploy-production-test.yml); translation changes by [i18n.yml](.github/workflows/i18n.yml).
+- Translation changes are checked by [i18n.yml](.github/workflows/i18n.yml).
 
 ## Contributing
 
