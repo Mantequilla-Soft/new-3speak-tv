@@ -176,6 +176,17 @@ Issues and pull requests are welcome. The full guide is in [CONTRIBUTING.md](CON
 
 Fixing a translation is one of the most useful things you can do: see [TRANSLATING.md](TRANSLATING.md).
 
+## Related projects
+
+| Project | What it is |
+|---|---|
+| [3speak-player](https://github.com/Mantequilla-Soft/3speak-player) | The video player |
+| [embedvideos](https://github.com/Mantequilla-Soft/embedvideos) | Upload and embed service other Hive apps can use too |
+| [3speakencoder](https://github.com/Mantequilla-Soft/3speakencoder) | Community video encoder |
+| [hangouts](https://github.com/Mantequilla-Soft/hangouts) | OpenPods: live streams and audio rooms |
+| [snapieaudio](https://github.com/Mantequilla-Soft/snapieaudio) | Audio hosting and player |
+| [3speakchecks](https://github.com/Mantequilla-Soft/3speakchecks) | Feeds, views and ads API |
+
 ## How the services fit together
 
 This repo is the web app and its small API. Uploads, encoding, feeds, playlists and live rooms run as separate services:
@@ -229,17 +240,6 @@ flowchart TB
 - **Watching:** the player streams the HLS files from IPFS through the CDN. Feeds, view counts and ads come from 3speakchecks.
 - **Playlists** are Hive `custom_json` operations. The indexer reads them back and serves them to the app.
 - **Live:** the hangouts API checks your Hive signature and hands out a LiveKit token. Audio and video then flow directly between your browser and LiveKit (OBS can join over WHIP).
-
-## Related projects
-
-| Project | What it is |
-|---|---|
-| [3speak-player](https://github.com/Mantequilla-Soft/3speak-player) | The video player |
-| [embedvideos](https://github.com/Mantequilla-Soft/embedvideos) | Upload and embed service other Hive apps can use too |
-| [3speakencoder](https://github.com/Mantequilla-Soft/3speakencoder) | Community video encoder |
-| [hangouts](https://github.com/Mantequilla-Soft/hangouts) | OpenPods: live streams and audio rooms |
-| [snapieaudio](https://github.com/Mantequilla-Soft/snapieaudio) | Audio hosting and player |
-| [3speakchecks](https://github.com/Mantequilla-Soft/3speakchecks) | Feeds, views and ads API |
 
 ## License
 
