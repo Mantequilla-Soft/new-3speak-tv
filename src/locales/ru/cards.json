@@ -8,7 +8,7 @@
   "watchingNow_many": "{{count}} зрителей сейчас",
   "watchingNow_other": "{{count}} зрителя сейчас",
   "badges": {
-    "gatedTitle": "Только для поддержавших: 3Speak Pro открывает полное видео",
+    "gatedTitle": "Только для участников. 3Speak Pro открывает полное видео",
     "pro": "PRO",
     "new": "НОВОЕ",
     "live": "● ЭФИР",

@@ -16,10 +16,13 @@
  *       hivesigner*, manteauth_login, butrauth_*, auth-entropy/public-key; plus the
  *       server httpOnly cookies threespeak_session/wsession/user + manteauth_pkce)
  *     • Settings YOU set: theme, volume, mute, speed, autoplay, quality, subtitles,
- *       language, NSFW, card size, feed prefs, home tab order, reactions, vote
+ *       language, NSFW, card size, feed prefs, home tab order, comment sort, reactions, vote
  *       weight, OpenPod announce config, shorts mute/mode  (`user-store` + friends)
  *     • Resuming an interrupted upload (tus::*, chunked::*) AND post-composer drafts
  *       (hh-studio-post-draft) — so you don't lose work you explicitly started
+ *     • A tip you just sent that 3Speak hasn't counted as a support yet
+ *       (3speak_pending_supports), so a reload or closed tab doesn't lose it;
+ *       removed once counted, or after 24 hours
  *     • Your stream studio setup (hh-studio-setup:<user>: scene, mixer, layout) and
  *       the media/sound files YOU added to it (IndexedDB `hh-studio`), so the
  *       studio opens the way you left it; removing a file there deletes it

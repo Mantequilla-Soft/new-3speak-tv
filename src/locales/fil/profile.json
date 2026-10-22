@@ -234,6 +234,7 @@
     "shorts": "Shorts",
     "audio": "Audio",
     "supporters": "Supporters",
+    "members": "Mga miyembro",
     "streams": "Streams",
     "community": "Komunidad",
     "playlists": "Mga Playlist",
@@ -270,5 +271,25 @@
     "processing": "Pinoproseso ang mga video mo",
     "minAgo_one": "{{count}} min ang nakalipas",
     "minAgo_other": "{{count}} min ang nakalipas"
+  },
+  "supports": {
+    "incomingTitle": "Nag-tip si @{{user}} kay @{{profile}} ng kabuuang {{amount}}",
+    "outgoingTitle": "Nag-tip si @{{profile}} kay @{{user}} ng kabuuang {{amount}}",
+    "received": "Natanggap",
+    "given": "Ibinigay",
+    "subTabTotal": "{{label}} · {{amount}}",
+    "emptyReceived": "Wala pang natatanggap na tip si @{{user}} sa isang video.",
+    "emptyReceivedOwn": "Wala pang tip. Kapag may nag-tip sa isa sa mga video mo, lalabas ito rito.",
+    "emptyGiven": "Hindi pa nagti-tip si @{{user}} sa anumang video.",
+    "emptyGivenOwn": "Hindi ka pa nagti-tip sa anumang video. Lalabas dito ang mga tip na ipinadala mo mula sa isang video.",
+    "untitled": "Walang pamagat",
+    "paidInHive": "ipinadala bilang {{amount}} HIVE",
+    "hideTip": "Itago ang tip",
+    "unhideTip": "Ipakita ang tip",
+    "hiddenLabel": "Nakatago sa profile mo",
+    "hiddenToast": "Naitago ang tip sa profile mo",
+    "unhiddenToast": "Muling ipinapakita ang tip sa profile mo",
+    "hideFailed": "Hindi mabago ang tip na ito. Pakisubukan ulit.",
+    "hideWalletPrompt": "Mag-sign para baguhin kung aling mga tip ang lalabas sa profile mo"
   }
 }

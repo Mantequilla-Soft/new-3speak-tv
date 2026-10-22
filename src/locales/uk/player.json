@@ -49,7 +49,8 @@
     "close": "Закрити плейлист"
   },
   "overlay": {
-    "replay": "Повторити"
+    "replay": "Повторити",
+    "nextIn": "Наступне відео через {{seconds}}"
   },
   "reactions": {
     "translation": "Переклад",

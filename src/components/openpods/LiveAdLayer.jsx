@@ -16,7 +16,9 @@ const TICK_MS = 500;
 export const LIVE_ASSUMED_SECONDS = 300;
 // How long the stream waits for the checker's answer before it is shown without
 // a pre-roll. Fails open: an ad system having a bad day never holds a stream.
-const ASK_TIMEOUT_MS = 3000;
+// 6 s, not 3: on a phone the first request to the checker pays for a new TLS
+// connection and a CORS preflight, and 3 s dropped a booked pre-roll that way.
+const ASK_TIMEOUT_MS = 6000;
 // A remount of the same stream (signing in reconnects it) reuses the answer
 // instead of opening a second session and replaying the pre-roll.
 const REUSE_MS = 2 * 60 * 1000;
@@ -51,23 +53,27 @@ async function askLiveAds({ host, room, viewer }) {
   if (!roll && !ticker && !banner) return null;
   const sid = ((roll?.manifestUrl || banner?.manifestUrl || ticker?.shownUrl || '').match(/\/m\/([0-9a-f]{32})[./]/) || [])[1] || null;
 
-  // The banner's window and close delay come from the session, which fixed
-  // them from the same slot maths (routes/adServe.js, surface 'live').
-  let bannerWindow = null;
-  let closeAfter = 5;
-  if (banner && sid) {
-    try {
-      const r = await fetch(`${CHECKER_URL}/m/${sid}/i`);
-      if (r.ok) {
-        const i = await r.json();
-        if (typeof i.bannerStartAt === 'number' && i.bannerDurationSeconds) {
-          bannerWindow = { start: i.bannerStartAt, duration: i.bannerDurationSeconds };
-        }
-        if (typeof i.bannerCloseAfterSeconds === 'number') closeAfter = i.bannerCloseAfterSeconds;
-      }
-    } catch { /* no window, no banner */ }
-  }
-  return { sid, roll, ticker, banner: bannerWindow ? banner : null, bannerWindow, closeAfter };
+  // The banner's window and close delay come from the session, which fixed them
+  // from the same slot maths (routes/adServe.js, surface 'live'). Fetched AFTER
+  // this answer, not before it: the pre-roll decision needs only the session, and
+  // waiting on a second round trip here is what pushed a booked pre-roll past the
+  // ask timeout on mobile. The banner runs minutes in, so it can arrive later.
+  const bannerLater = banner && sid ? bannerWindowFor(sid, banner) : Promise.resolve(null);
+  return { sid, roll, ticker, banner: null, bannerWindow: null, closeAfter: 5, bannerLater };
+}
+
+async function bannerWindowFor(sid, banner) {
+  try {
+    const r = await fetch(`${CHECKER_URL}/m/${sid}/i`);
+    if (!r.ok) return null;
+    const i = await r.json();
+    if (!(typeof i.bannerStartAt === 'number' && i.bannerDurationSeconds)) return null;
+    return {
+      banner,
+      bannerWindow: { start: i.bannerStartAt, duration: i.bannerDurationSeconds },
+      closeAfter: typeof i.bannerCloseAfterSeconds === 'number' ? i.bannerCloseAfterSeconds : 5,
+    };
+  } catch { return null; /* no window, no banner */ }
 }
 
 /**
@@ -137,6 +143,10 @@ export default function LiveAdLayer({ host, room, fit = 'contain', tickerTop = '
     setAds(null);
     setPhase('asking');
     const current = () => mountedRef.current && askedForRef.current === key;
+    // The banner's window lands after the answer (see askLiveAds); merged in then.
+    const withBanner = (got) => {
+      got?.bannerLater?.then((b) => { if (b && current()) setAds((a) => (a ? { ...a, ...b } : a)); });
+    };
     const timeout = new Promise((resolve) => { setTimeout(() => resolve('timeout'), ASK_TIMEOUT_MS); });
     Promise.race([entry.promise, timeout]).then((got) => {
       if (!current()) return;
@@ -144,10 +154,11 @@ export default function LiveAdLayer({ host, room, fit = 'contain', tickerTop = '
         // Too slow for a pre-roll; the overlays may still arrive.
         entry.prerollDone = true;
         setPhase('done');
-        entry.promise.then((late) => { if (current() && late) setAds(late); });
+        entry.promise.then((late) => { if (current() && late) { setAds(late); withBanner(late); } });
         return;
       }
       setAds(got);
+      withBanner(got);
       setPhase(got?.roll && !entry.prerollDone ? 'preroll' : 'done');
     });
   }, [live, key, host, room, viewer]);

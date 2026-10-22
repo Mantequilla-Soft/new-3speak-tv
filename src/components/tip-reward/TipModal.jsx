@@ -8,13 +8,19 @@ import { toastIn } from '../../utils/toast';
 import { LineSpinner } from 'ldrs/react'
 import 'ldrs/react/LineSpinner.css'
 import { transferWithAioha, isLoggedIn } from '../../hive-api/aioha';
+import { useQueryClient } from '@tanstack/react-query';
+import { queueSupport, recordSupport } from '../../lib/supports';
 
 // Every toast from this module is headed "Tip"; the message becomes the
 // line under it. See utils/toast.js.
 const toast = toastIn('Tip');
 
-const TipModal = ({ recipient, isOpen, onClose, onSendTip }) => {
+// `permlink`: the video (or audio post) the tip is sent from. With it, a tip of
+// any amount is reported to the checker as a support (lib/supports.js);
+// a profile tip passes none and is not one.
+const TipModal = ({ recipient, permlink, isOpen, onClose, onSendTip }) => {
     const { t } = useTranslation();
+    const queryClient = useQueryClient();
     const { user: activetUser } = useAppStore();
   const [amount, setAmount] = useState("");
   const [currency, setCurrency] = useState("HIVE");
@@ -88,10 +94,28 @@ const TipModal = ({ recipient, isOpen, onClose, onSendTip }) => {
       return;
     }
 
+    // Saved BEFORE the broadcast: if the page reloads while the wallet is still
+    // signing, the next app start reports it (lib/supports.js).
+    const pending = permlink
+      ? queueSupport({ tipper: activetUser, author: recipient, permlink, amount: parseFloat(amount), currency, memo })
+      : null;
     try {
       await transferWithAioha(recipient, parseFloat(amount), currency, memo || '');
       setStep(2);
+      if (pending) {
+        recordSupport(pending)
+          .then((r) => {
+            if (!r?.recorded) return;
+            queryClient.invalidateQueries({ queryKey: ['supporters', recipient] });
+            queryClient.invalidateQueries({ queryKey: ['supports', recipient] });
+            queryClient.invalidateQueries({ queryKey: ['supported', activetUser] });
+            queryClient.invalidateQueries({ queryKey: ['supports-given', activetUser] });
+          });
+      }
     } catch (error) {
+      // The queued report stays: a wallet timeout can still have broadcast the
+      // transfer. If nothing was sent, the checker answers "pending" until the
+      // report ages out of its window.
       toast.error(t('engagement.tip.errors.transferFailed', { message: error.message }));
       console.error(error);
     }

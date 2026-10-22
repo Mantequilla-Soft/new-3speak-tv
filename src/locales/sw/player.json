@@ -47,7 +47,8 @@
     "close": "Funga orodha ya kucheza"
   },
   "overlay": {
-    "replay": "Cheza tena"
+    "replay": "Cheza tena",
+    "nextIn": "Video inayofuata baada ya {{seconds}}"
   },
   "reactions": {
     "translation": "Tafsiri",

@@ -234,6 +234,7 @@
     "shorts": "Shorts",
     "audio": "Audio",
     "supporters": "Supporters",
+    "members": "Leden",
     "streams": "Streams",
     "community": "Community",
     "playlists": "Playlists",
@@ -270,5 +271,25 @@
     "processing": "Je video's worden verwerkt",
     "minAgo_one": "{{count}} min geleden",
     "minAgo_other": "{{count}} min geleden"
+  },
+  "supports": {
+    "incomingTitle": "@{{user}} gaf @{{profile}} in totaal {{amount}} aan fooien",
+    "outgoingTitle": "@{{profile}} gaf @{{user}} in totaal {{amount}} aan fooien",
+    "received": "Ontvangen",
+    "given": "Gegeven",
+    "subTabTotal": "{{label}} · {{amount}}",
+    "emptyReceived": "@{{user}} heeft nog geen fooi ontvangen op een video.",
+    "emptyReceivedOwn": "Nog geen fooien. Als iemand een fooi geeft bij een van je video's, verschijnt die hier.",
+    "emptyGiven": "@{{user}} heeft nog bij geen enkele video een fooi gegeven.",
+    "emptyGivenOwn": "Je hebt nog bij geen enkele video een fooi gegeven. Fooien die je vanaf een video stuurt, verschijnen hier.",
+    "untitled": "Zonder titel",
+    "paidInHive": "verstuurd als {{amount}} HIVE",
+    "hideTip": "Fooi verbergen",
+    "unhideTip": "Fooi tonen",
+    "hiddenLabel": "Verborgen op je profiel",
+    "hiddenToast": "Fooi verborgen op je profiel",
+    "unhiddenToast": "Fooi staat weer op je profiel",
+    "hideFailed": "Kon deze fooi niet wijzigen. Probeer het opnieuw.",
+    "hideWalletPrompt": "Onderteken om te kiezen welke fooien op je profiel staan"
   }
 }

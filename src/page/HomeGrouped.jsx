@@ -764,14 +764,18 @@ const HomeGrouped = () => {
   const removeSnap = useCallback((snap) => {
     setRemovedSnaps((prev) => new Set(prev).add(`${snap.owner}/${snap.permlink}`));
   }, []);
-  const feedCommunity = useMemo(
-    () => (communityQ.data?.pages || []).flat().filter(
+  const feedCommunity = useMemo(() => {
+    const visible = (communityQ.data?.pages || []).flat().filter(
       // Own snaps never show in your own feed (the checker also filters them
       // server-side — this covers pages cached before login/logout).
       (s) => s.owner !== user && !removedSnaps.has(`${s.owner}/${s.permlink}`),
-    ),
-    [communityQ.data, removedSnaps, user],
-  );
+    );
+    if (!isDiscover) return visible;
+    // Discover shows one snap per creator: the checker returns newest first, so
+    // the first one seen for an owner is their most recent.
+    const seen = new Set();
+    return visible.filter((s) => !seen.has(s.owner) && seen.add(s.owner));
+  }, [communityQ.data, removedSnaps, user, isDiscover]);
 
   // ── Recently-changed public playlists, MIXED INTO the community-snaps stream ──
   // Same scope model as the snaps feed (communityMode): Discover + New → any

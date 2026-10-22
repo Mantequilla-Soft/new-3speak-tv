@@ -215,8 +215,8 @@
       "hintOff": "W tym filmie tylko banery i paski."
     },
     "gated": {
-      "label": "Tylko dla wspierających",
-      "info": "Szyfruje ten film, aby mogli go odtwarzać tylko subskrybenci 3Speak Pro. Razem z nim publikowany jest <b>10-sekundowy niezaszyfrowany podgląd</b>, więc post nadal pokazuje zwiastun wszędzie na Hive. Tytuł, opis i tagi to zwykła treść posta Hive i <b>nie są szyfrowane</b> — szyfrowany jest tylko film. <b>Nie można tego zmienić po przesłaniu.</b>",
+      "label": "Tylko dla członków",
+      "info": "Szyfruje ten film, aby mogli go odtwarzać tylko subskrybenci 3Speak Pro. Razem z nim publikowany jest <b>10-sekundowy niezaszyfrowany podgląd</b>, więc post nadal pokazuje zwiastun wszędzie na Hive. Tytuł, opis i tagi to zwykła treść posta Hive i <b>nie są szyfrowane</b>: szyfrowany jest tylko film. <b>Nie można tego zmienić po przesłaniu.</b>",
       "withGuests_one": "Subskrybenci Pro + {{count}} gość.",
       "withGuests_few": "Subskrybenci Pro + {{count}} gości.",
       "withGuests_many": "Subskrybenci Pro + {{count}} gości.",
@@ -400,7 +400,7 @@
     "noHost": "Nie skonfigurowano hosta osadzania",
     "emptyFile": "Pusty plik",
     "noToken": "Nie udało się uzyskać tokenu przesyłania",
-    "gatedUnsupported": "Ten serwer przesyłania nie obsługuje jeszcze filmów tylko dla wspierających. Nic nie zostało przesłane. Wyłącz przełącznik, aby opublikować publicznie, lub spróbuj ponownie później.",
+    "gatedUnsupported": "Ten serwer przesyłania nie obsługuje jeszcze filmów tylko dla członków. Nic nie zostało przesłane. Wyłącz opcję, aby opublikować publicznie, albo spróbuj ponownie później.",
     "couldNotStart": "Nie udało się rozpocząć przesyłania — spróbuj ponownie",
     "sessionExpired": "Sesja przesyłania wygasła — spróbuj ponownie",
     "chunkFailed": "Fragment {{index}} nie powiódł się",
@@ -413,7 +413,7 @@
     "noVideoFile": "Brak pliku wideo",
     "noEmbedUrlAfterUpload": "Przesłano, ale nie zwrócono adresu URL osadzenia",
     "deferralLost": "Nie udało się sfinalizować tego przesyłania, ponieważ sesja przesyłania została przerwana. Nic nie zostało opublikowane. Wybierz film ponownie i prześlij go jeszcze raz.",
-    "gatedTooLate": "Tryb tylko dla wspierających włączono po rozpoczęciu przesyłania, a ten serwer nie może go zastosować później. Nic nie zostało opublikowane. Wybierz film ponownie i włącz tryb tylko dla wspierających przed kontynuacją.",
+    "gatedTooLate": "Opcję „Tylko dla członków” włączono po rozpoczęciu przesyłania, a ten serwer przesyłania nie może jej zastosować później. Nic nie zostało opublikowane. Wybierz film ponownie i włącz „Tylko dla członków” przed kontynuowaniem.",
     "noSnapsContainer": "Nie znaleziono posta-kontenera Snaps, na który można odpowiedzieć",
     "scheduleSaveFailed": "Nie udało się zapisać zaplanowanego posta",
     "couldNotSchedule": "Nie udało się zaplanować posta",

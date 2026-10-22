@@ -213,8 +213,8 @@
       "hintOff": "Alleen banners en tickers op deze video."
     },
     "gated": {
-      "label": "Alleen voor supporters",
-      "info": "Versleutelt deze video zodat alleen 3Speak Pro-abonnees hem kunnen afspelen. Er wordt een <b>onversleuteld voorproefje van 10 seconden</b> naast gepubliceerd, zodat de post overal op Hive nog een trailer toont. Je titel, beschrijving en tags zijn gewone inhoud van een Hive-post en worden <b>niet versleuteld</b> — alleen de video. <b>Dit kan na het uploaden niet meer worden gewijzigd.</b>",
+      "label": "Alleen voor leden",
+      "info": "Versleutelt deze video zodat alleen 3Speak Pro-abonnees hem kunnen afspelen. Er wordt een <b>onversleuteld voorproefje van 10 seconden</b> naast gepubliceerd, zodat de post overal op Hive nog een trailer toont. Je titel, beschrijving en tags zijn gewone inhoud van een Hive-post en worden <b>niet versleuteld</b>: alleen de video. <b>Dit kan na het uploaden niet meer worden gewijzigd.</b>",
       "withGuests_one": "Pro-abonnees + {{count}} gast.",
       "withGuests_other": "Pro-abonnees + {{count}} gasten.",
       "hint": "Alleen Pro-abonnees."
@@ -396,7 +396,7 @@
     "noHost": "Geen embedhost ingesteld",
     "emptyFile": "Leeg bestand",
     "noToken": "Uploadtoken ophalen mislukt",
-    "gatedUnsupported": "Deze uploadserver ondersteunt nog geen video's alleen voor supporters. Er is niets geüpload. Zet de schakelaar uit om openbaar te publiceren, of probeer het later opnieuw.",
+    "gatedUnsupported": "Deze uploadserver ondersteunt nog geen video's alleen voor leden. Er is niets geüpload. Zet de schakelaar uit om openbaar te publiceren, of probeer het later opnieuw.",
     "couldNotStart": "De upload kon niet starten — probeer het opnieuw",
     "sessionExpired": "Uploadsessie verlopen — probeer het opnieuw",
     "chunkFailed": "Deel {{index}} mislukt",
@@ -409,7 +409,7 @@
     "noVideoFile": "Geen videobestand",
     "noEmbedUrlAfterUpload": "Upload gelukt, maar er is geen embed-URL teruggekomen",
     "deferralLost": "Deze upload kon niet worden afgerond omdat de uploadsessie werd onderbroken. Er is niets gepubliceerd. Kies de video opnieuw en upload hem nog een keer.",
-    "gatedTooLate": "Alleen voor supporters werd ingeschakeld nadat de upload al was begonnen, en deze uploadserver kan dat achteraf niet meer toepassen. Er is niets gepubliceerd. Kies de video opnieuw en zet alleen voor supporters aan voordat je verdergaat.",
+    "gatedTooLate": "'Alleen voor leden' werd aangezet nadat de upload al was begonnen, en deze uploadserver kan dat achteraf niet toepassen. Er is niets gepubliceerd. Selecteer de video opnieuw en zet 'Alleen voor leden' aan voordat je verdergaat.",
     "noSnapsContainer": "Er is geen Snaps-containerpost gevonden om op te reageren",
     "scheduleSaveFailed": "Ingeplande post opslaan mislukt",
     "couldNotSchedule": "Post kon niet worden ingepland",

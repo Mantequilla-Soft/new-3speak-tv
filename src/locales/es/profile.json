@@ -250,6 +250,7 @@
     "shorts": "Shorts",
     "audio": "Audio",
     "supporters": "Patrocinadores",
+    "members": "Miembros",
     "streams": "Transmisiones",
     "community": "Comunidad",
     "playlists": "Playlists",
@@ -287,5 +288,25 @@
     "minAgo_one": "hace {{count}} min",
     "minAgo_many": "hace {{count}} min",
     "minAgo_other": "hace {{count}} min"
+  },
+  "supports": {
+    "incomingTitle": "@{{user}} dio a @{{profile}} {{amount}} en propinas en total",
+    "outgoingTitle": "@{{profile}} dio a @{{user}} {{amount}} en propinas en total",
+    "received": "Recibidas",
+    "given": "Dadas",
+    "subTabTotal": "{{label}} · {{amount}}",
+    "emptyReceived": "@{{user}} aún no ha recibido propinas en ningún video.",
+    "emptyReceivedOwn": "Aún no hay propinas. Cuando alguien dé una propina en uno de tus videos, aparecerá aquí.",
+    "emptyGiven": "@{{user}} aún no ha dado propinas en ningún video.",
+    "emptyGivenOwn": "Aún no has dado propinas en ningún video. Las propinas que envíes desde un video aparecen aquí.",
+    "untitled": "Sin título",
+    "paidInHive": "enviado como {{amount}} HIVE",
+    "hideTip": "Ocultar propina",
+    "unhideTip": "Mostrar propina",
+    "hiddenLabel": "Oculta en tu perfil",
+    "hiddenToast": "Propina ocultada de tu perfil",
+    "unhiddenToast": "La propina vuelve a mostrarse en tu perfil",
+    "hideFailed": "No se pudo cambiar esta propina. Inténtalo de nuevo.",
+    "hideWalletPrompt": "Firma para cambiar qué propinas se muestran en tu perfil"
   }
 }

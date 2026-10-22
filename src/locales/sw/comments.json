@@ -115,6 +115,26 @@
     "translation": "Tafsiri",
     "translationFailed": "Tafsiri imeshindwa. Je, huduma ya tafsiri inafanya kazi?",
     "reportComment": "Ripoti maoni",
-    "openInShorts": "Fungua kwenye Shorts"
+    "openInShorts": "Fungua kwenye Shorts",
+    "sortBy": "Panga",
+    "sortNewest": "Mpya zaidi",
+    "sortOldest": "Za zamani zaidi",
+    "sortPopular": "Maarufu",
+    "pin": "Bandika",
+    "unpin": "Ondoa kibandiko",
+    "pinned": "Maoni yamebandikwa",
+    "unpinned": "Maoni yameondolewa kibandiko",
+    "pinnedByCreator": "Imebandikwa na mtayarishi",
+    "pinFailed": "Imeshindwa kubadilisha kibandiko. Tafadhali jaribu tena.",
+    "pinWalletPrompt": "Saini ili kubandika au kuondoa kibandiko cha maoni haya kwenye video yako",
+    "addImage": "Ongeza picha",
+    "imageTooLarge": "Picha hiyo ni kubwa mno (kiwango cha juu 10 MB).",
+    "imageUploadFailed": "Kupakia picha kumeshindwa. Tafadhali jaribu tena.",
+    "dropImage": "Achia picha ili kuiongeza kwenye maoni yako",
+    "removeImage": "Ondoa picha",
+    "uploadingImage": "Inapakia picha",
+    "write": "Andika",
+    "preview": "Hakiki",
+    "nothingToPreview": "Bado hakuna cha kuhakiki"
   }
 }

@@ -49,7 +49,8 @@
     "close": "Zamknij playlistę"
   },
   "overlay": {
-    "replay": "Odtwórz ponownie"
+    "replay": "Odtwórz ponownie",
+    "nextIn": "Następny film za {{seconds}}"
   },
   "reactions": {
     "translation": "Tłumaczenie",

@@ -212,8 +212,8 @@
       "hintOff": "Video này chỉ có banner và ticker."
     },
     "gated": {
-      "label": "Chỉ dành cho người ủng hộ",
-      "info": "Mã hóa video này để chỉ người đăng ký 3Speak Pro mới phát được. Một <b>bản xem trước 10 giây không mã hóa</b> được xuất bản kèm theo, nên bài đăng vẫn hiển thị đoạn giới thiệu ở mọi nơi trên Hive. Tiêu đề, mô tả và thẻ của bạn là nội dung bài đăng Hive thông thường và <b>không được mã hóa</b> — chỉ có video được mã hóa. <b>Không thể thay đổi sau khi tải lên.</b>",
+      "label": "Chỉ dành cho thành viên",
+      "info": "Mã hóa video này để chỉ người đăng ký 3Speak Pro mới phát được. Một <b>bản xem trước 10 giây không mã hóa</b> được xuất bản kèm theo, nên bài đăng vẫn hiển thị đoạn giới thiệu ở mọi nơi trên Hive. Tiêu đề, mô tả và thẻ của bạn là nội dung bài đăng Hive thông thường và <b>không được mã hóa</b>: chỉ có video được mã hóa. <b>Không thể thay đổi sau khi tải lên.</b>",
       "withGuests_other": "Người đăng ký Pro + {{count}} khách.",
       "hint": "Chỉ người đăng ký Pro."
     },
@@ -394,7 +394,7 @@
     "noHost": "Chưa cấu hình máy chủ nhúng",
     "emptyFile": "Tệp trống",
     "noToken": "Không lấy được token tải lên",
-    "gatedUnsupported": "Máy chủ tải lên này chưa hỗ trợ video chỉ dành cho người ủng hộ. Chưa có gì được tải lên. Hãy tắt tùy chọn này để xuất bản công khai, hoặc thử lại sau.",
+    "gatedUnsupported": "Máy chủ tải lên này chưa hỗ trợ video chỉ dành cho thành viên. Chưa có gì được tải lên. Hãy tắt tùy chọn để đăng công khai, hoặc thử lại sau.",
     "couldNotStart": "Không thể bắt đầu tải lên — vui lòng thử lại",
     "sessionExpired": "Phiên tải lên đã hết hạn — vui lòng thử lại",
     "chunkFailed": "Phần {{index}} thất bại",
@@ -407,7 +407,7 @@
     "noVideoFile": "Không có tệp video",
     "noEmbedUrlAfterUpload": "Tải lên thành công nhưng không nhận được URL nhúng",
     "deferralLost": "Không thể hoàn tất lượt tải lên này vì phiên tải lên đã bị gián đoạn. Chưa có gì được xuất bản. Vui lòng chọn lại video và tải lên lần nữa.",
-    "gatedTooLate": "Chế độ chỉ dành cho người ủng hộ đã được bật sau khi việc tải lên đã bắt đầu, và máy chủ tải lên này không thể áp dụng sau đó. Chưa có gì được xuất bản. Vui lòng chọn lại video và bật chế độ chỉ dành cho người ủng hộ trước khi tiếp tục.",
+    "gatedTooLate": "Chế độ chỉ dành cho thành viên được bật sau khi quá trình tải lên đã bắt đầu, và máy chủ tải lên này không thể áp dụng về sau. Chưa có gì được đăng. Vui lòng chọn lại video và bật chỉ dành cho thành viên trước khi tiếp tục.",
     "noSnapsContainer": "Không tìm thấy bài chứa Snaps để phản hồi",
     "scheduleSaveFailed": "Không thể lưu bài đăng đã lên lịch",
     "couldNotSchedule": "Không thể lên lịch bài đăng",

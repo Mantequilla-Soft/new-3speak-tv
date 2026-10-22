@@ -213,7 +213,7 @@
       "hintOff": "Auf diesem Video nur Banner und Ticker."
     },
     "gated": {
-      "label": "Nur für Unterstützer",
+      "label": "Nur für Mitglieder",
       "info": "Verschlüsselt dieses Video, sodass nur 3Speak-Pro-Abonnenten es abspielen können. Zusätzlich wird eine <b>unverschlüsselte Vorschau von 10 Sekunden</b> veröffentlicht, damit der Post überall auf Hive trotzdem einen Trailer zeigt. Titel, Beschreibung und Tags sind normale Hive-Post-Inhalte und <b>nicht verschlüsselt</b> – nur das Video ist es. <b>Das kann nach dem Upload nicht mehr geändert werden.</b>",
       "withGuests_one": "Pro-Abonnenten + {{count}} Gast.",
       "withGuests_other": "Pro-Abonnenten + {{count}} Gäste.",
@@ -396,7 +396,7 @@
     "noHost": "Kein Embed-Host konfiguriert",
     "emptyFile": "Leere Datei",
     "noToken": "Upload-Token konnte nicht abgerufen werden",
-    "gatedUnsupported": "Dieser Upload-Server unterstützt Videos nur für Unterstützer noch nicht. Es wurde nichts hochgeladen. Schalte die Option aus, um öffentlich zu veröffentlichen, oder versuch es später nochmal.",
+    "gatedUnsupported": "Dieser Upload-Server unterstützt Videos nur für Mitglieder noch nicht. Es wurde nichts hochgeladen. Schalte die Option aus, um öffentlich zu veröffentlichen, oder versuch es später nochmal.",
     "couldNotStart": "Der Upload konnte nicht gestartet werden – bitte versuch es nochmal",
     "sessionExpired": "Upload-Sitzung abgelaufen – bitte versuch es nochmal",
     "chunkFailed": "Teil {{index}} fehlgeschlagen",
@@ -409,7 +409,7 @@
     "noVideoFile": "Keine Videodatei",
     "noEmbedUrlAfterUpload": "Upload erfolgreich, aber es wurde keine Embed-URL zurückgegeben",
     "deferralLost": "Dieser Upload konnte nicht abgeschlossen werden, weil seine Upload-Sitzung unterbrochen wurde. Es wurde nichts veröffentlicht. Bitte wähle das Video erneut aus und lade es nochmal hoch.",
-    "gatedTooLate": "„Nur für Unterstützer“ wurde eingeschaltet, nachdem der Upload bereits begonnen hatte, und dieser Upload-Server kann das nachträglich nicht anwenden. Es wurde nichts veröffentlicht. Bitte wähle das Video erneut aus und schalte „Nur für Unterstützer“ ein, bevor du weitermachst.",
+    "gatedTooLate": "„Nur für Mitglieder“ wurde eingeschaltet, nachdem der Upload bereits begonnen hatte, und dieser Upload-Server kann das nachträglich nicht anwenden. Es wurde nichts veröffentlicht. Bitte wähle das Video erneut aus und schalte „Nur für Mitglieder“ ein, bevor du weitermachst.",
     "noSnapsContainer": "Es wurde kein Snaps-Container-Post zum Antworten gefunden",
     "scheduleSaveFailed": "Geplanter Post konnte nicht gespeichert werden",
     "couldNotSchedule": "Post konnte nicht geplant werden",

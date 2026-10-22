@@ -110,6 +110,26 @@
     "translation": "Terjemahan",
     "translationFailed": "Terjemahan gagal. Apakah layanan terjemahan sedang berjalan?",
     "reportComment": "Laporkan komentar",
-    "openInShorts": "Buka di Shorts"
+    "openInShorts": "Buka di Shorts",
+    "sortBy": "Urutkan",
+    "sortNewest": "Terbaru",
+    "sortOldest": "Terlama",
+    "sortPopular": "Populer",
+    "pin": "Sematkan",
+    "unpin": "Lepas sematan",
+    "pinned": "Komentar disematkan",
+    "unpinned": "Sematan komentar dilepas",
+    "pinnedByCreator": "Disematkan oleh kreator",
+    "pinFailed": "Tidak dapat mengubah sematan. Silakan coba lagi.",
+    "pinWalletPrompt": "Tanda tangani untuk menyematkan atau melepas sematan komentar ini di videomu",
+    "addImage": "Tambah gambar",
+    "imageTooLarge": "Gambar terlalu besar (maks. 10 MB).",
+    "imageUploadFailed": "Gagal mengunggah gambar. Silakan coba lagi.",
+    "dropImage": "Lepaskan gambar untuk menambahkannya ke komentarmu",
+    "removeImage": "Hapus gambar",
+    "uploadingImage": "Mengunggah gambar",
+    "write": "Tulis",
+    "preview": "Pratinjau",
+    "nothingToPreview": "Belum ada yang bisa dipratinjau"
   }
 }

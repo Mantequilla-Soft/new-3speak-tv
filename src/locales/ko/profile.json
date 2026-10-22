@@ -218,6 +218,7 @@
     "shorts": "쇼츠",
     "audio": "오디오",
     "supporters": "후원자",
+    "members": "멤버",
     "streams": "방송",
     "community": "커뮤니티",
     "playlists": "재생목록",
@@ -253,5 +254,25 @@
   "uploads": {
     "processing": "동영상을 처리하는 중",
     "minAgo_other": "{{count}}분 전"
+  },
+  "supports": {
+    "incomingTitle": "@{{user}} 님이 @{{profile}} 님에게 총 {{amount}}를 팁으로 보냈습니다",
+    "outgoingTitle": "@{{profile}} 님이 @{{user}} 님에게 총 {{amount}}를 팁으로 보냈습니다",
+    "received": "받음",
+    "given": "보냄",
+    "subTabTotal": "{{label}} · {{amount}}",
+    "emptyReceived": "@{{user}} 님은 아직 동영상에서 팁을 받지 않았습니다.",
+    "emptyReceivedOwn": "아직 팁이 없습니다. 누군가 내 동영상에 팁을 보내면 여기에 표시됩니다.",
+    "emptyGiven": "@{{user}} 님은 아직 동영상에 팁을 보내지 않았습니다.",
+    "emptyGivenOwn": "아직 동영상에 팁을 보내지 않았습니다. 동영상에서 보낸 팁이 여기에 표시됩니다.",
+    "untitled": "제목 없음",
+    "paidInHive": "{{amount}} HIVE로 보냄",
+    "hideTip": "팁 숨기기",
+    "unhideTip": "팁 다시 표시",
+    "hiddenLabel": "내 프로필에서 숨김",
+    "hiddenToast": "팁을 내 프로필에서 숨겼습니다",
+    "unhiddenToast": "팁이 내 프로필에 다시 표시됩니다",
+    "hideFailed": "이 팁을 변경할 수 없습니다. 다시 시도해 주세요.",
+    "hideWalletPrompt": "내 프로필에 표시할 팁을 바꾸려면 서명하세요"
   }
 }

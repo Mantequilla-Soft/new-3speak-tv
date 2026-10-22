@@ -213,8 +213,8 @@
       "hintOff": "Banner at ticker lang sa video na ito."
     },
     "gated": {
-      "label": "Para sa supporters lang",
-      "info": "Ine-encrypt ang video na ito para mga 3Speak Pro subscriber lang ang makapanood. May kasamang <b>10 segundong hindi naka-encrypt na preview</b> na ipa-publish, kaya may trailer pa rin ang post kahit saan sa Hive. Ang pamagat, description at tags mo ay ordinaryong content ng Hive post at <b>hindi naka-encrypt</b> — ang video lang. <b>Hindi na ito mababago pagkatapos ng upload.</b>",
+      "label": "Para lang sa mga miyembro",
+      "info": "Ine-encrypt ang video na ito para mga 3Speak Pro subscriber lang ang makapanood. May kasamang <b>10 segundong hindi naka-encrypt na preview</b> na ipa-publish, kaya may trailer pa rin ang post kahit saan sa Hive. Ang pamagat, description at tags mo ay ordinaryong content ng Hive post at <b>hindi naka-encrypt</b>: ang video lang. <b>Hindi na ito mababago pagkatapos ng upload.</b>",
       "withGuests_one": "Pro subscribers + {{count}} guest.",
       "withGuests_other": "Pro subscribers + {{count}} guests.",
       "hint": "Pro subscribers lang."
@@ -396,7 +396,7 @@
     "noHost": "Walang naka-configure na embed host",
     "emptyFile": "Walang laman ang file",
     "noToken": "Hindi makakuha ng upload token",
-    "gatedUnsupported": "Hindi pa suportado ng upload server na ito ang mga video para sa supporters lang. Walang na-upload. I-off ang toggle para i-publish nang public, o subukan ulit mamaya.",
+    "gatedUnsupported": "Hindi pa sinusuportahan ng upload server na ito ang mga video na para lang sa mga miyembro. Walang na-upload. I-off ang toggle para i-publish nang pampubliko, o subukan ulit mamaya.",
     "couldNotStart": "Hindi masimulan ang upload — subukan ulit",
     "sessionExpired": "Nag-expire ang upload session — subukan ulit",
     "chunkFailed": "Pumalya ang chunk {{index}}",
@@ -409,7 +409,7 @@
     "noVideoFile": "Walang video file",
     "noEmbedUrlAfterUpload": "Tagumpay ang upload pero walang ibinalik na embed URL",
     "deferralLost": "Hindi matapos ang upload na ito dahil naputol ang upload session nito. Walang na-publish. Piliin ulit ang video at i-upload ito ulit.",
-    "gatedTooLate": "In-on ang supporters-only matapos magsimula ang upload, at hindi na ito kayang i-apply ng upload server na ito pagkatapos. Walang na-publish. Piliin ulit ang video at i-on ang supporters-only bago magpatuloy.",
+    "gatedTooLate": "Na-on ang para lang sa mga miyembro nang nagsimula na ang upload, at hindi na ito mailalapat ng upload server na ito pagkatapos. Walang na-publish. Piliin ulit ang video at i-on ang para lang sa mga miyembro bago magpatuloy.",
     "noSnapsContainer": "Walang mahanap na snaps container post na sasagutin",
     "scheduleSaveFailed": "Hindi ma-save ang naka-schedule na post",
     "couldNotSchedule": "Hindi ma-schedule ang post",

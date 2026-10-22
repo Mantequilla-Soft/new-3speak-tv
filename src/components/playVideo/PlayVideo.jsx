@@ -1350,8 +1350,34 @@ const PlayVideo = ({ videoDetails, author, permlink, mediaUnavailable = false, m
                   </button>
                 </div>
               )}
-              {videoControls?.videoEnded && (() => {
-                const suggestions = (!videoControls.autoplayNext && videoControls.endSuggestions?.length > 0) ? videoControls.endSuggestions : [];
+              {videoControls?.videoEnded && videoControls.nextUp && (() => {
+                const v = videoControls.nextUp.video;
+                const vAuthor = v?.author?.username || v?.author?.id || v?.author || v?.owner;
+                return (
+                  <div className="video-ended-overlay video-next-up" role="status" aria-live="polite">
+                    <span className="video-next-up-label">{t('player.overlay.nextIn', { seconds: videoControls.nextUp.seconds })}</span>
+                    <a
+                      className="video-ended-card"
+                      href={`/watch?v=${vAuthor}/${v.permlink}`}
+                      onClick={(e) => { e.preventDefault(); videoControls.onPlayNextNow?.(); }}
+                    >
+                      <img src={fixVideoThumbnail(v)} alt={v.title} onError={(e) => (e.currentTarget.src = fallbackImg)} />
+                      <div className="video-ended-card-info">
+                        <span className="video-ended-card-title">{v.title?.length > 60 ? v.title.slice(0, 60) + '...' : v.title}</span>
+                        <span className="video-ended-card-author">@{vAuthor}</span>
+                      </div>
+                    </a>
+                    <button type="button" className="video-next-up-cancel" onClick={videoControls.onCancelNextUp}>
+                      {t('common.actions.cancel')}
+                    </button>
+                  </div>
+                );
+              })()}
+              {videoControls?.videoEnded && !videoControls.nextUp && (() => {
+                // Suggestions when autoplay is off, or when it was due but held
+                // back (player out of view, or the countdown was cancelled).
+                const showSuggestions = !videoControls.autoplayNext || videoControls.autoplayHeld;
+                const suggestions = (showSuggestions && videoControls.endSuggestions?.length > 0) ? videoControls.endSuggestions : [];
                 const renderCard = (v, i) => {
                   const vAuthor = v?.author?.username || v?.author?.id || v?.author || v?.owner;
                   return (
@@ -1875,10 +1901,13 @@ const PlayVideo = ({ videoDetails, author, permlink, mediaUnavailable = false, m
                       <MdPlaylistAdd />
                       <span>{t('watch.actions.playlist')}</span>
                     </button>
-                    <button type="button" className="pv-btn tip-btn" onClick={() => setIsTipModalOpen(true)} title={t('watch.actions.tipTitle')} {...lockProps}>
-                      <Gift size={16} />
-                      <span>{t('watch.actions.tip')}</span>
-                    </button>
+                    {/* Nobody tips themselves: no gift button on your own post. */}
+                    {user !== author && (
+                      <button type="button" className="pv-btn tip-btn" onClick={() => setIsTipModalOpen(true)} title={t('watch.actions.tipTitle')} {...lockProps}>
+                        <Gift size={16} />
+                        <span>{t('watch.actions.tip')}</span>
+                      </button>
+                    )}
                   </>
                 )}
 
@@ -2034,12 +2063,15 @@ const PlayVideo = ({ videoDetails, author, permlink, mediaUnavailable = false, m
           onSeek={isLive ? videoControls?.onSeek : seekFromText}
           onRefreshReactions={videoControls?.onRefreshReactions}
           onPause={videoControls?.onPause}
+          pinnedComments={extendedDetails?.pinned_comments}
+          pinnable={!isLive && !scheduled}
         />
       </div>
       
       {isTipModalOpen && (
         <TipModal
           recipient={author}
+          permlink={isLive ? undefined : permlink}
           isOpen={isTipModalOpen}
           onClose={() => setIsTipModalOpen(false)}
         />

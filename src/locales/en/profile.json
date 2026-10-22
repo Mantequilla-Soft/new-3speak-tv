@@ -234,6 +234,7 @@
     "shorts": "Shorts",
     "audio": "Audio",
     "supporters": "Supporters",
+    "members": "Members",
     "streams": "Streams",
     "community": "Community",
     "playlists": "Playlists",
@@ -270,5 +271,25 @@
     "processing": "Processing your videos",
     "minAgo_one": "{{count}} min ago",
     "minAgo_other": "{{count}} min ago"
+  },
+  "supports": {
+    "incomingTitle": "@{{user}} tipped @{{profile}} {{amount}} in total",
+    "outgoingTitle": "@{{profile}} tipped @{{user}} {{amount}} in total",
+    "received": "Received",
+    "given": "Given",
+    "subTabTotal": "{{label}} · {{amount}}",
+    "emptyReceived": "@{{user}} hasn't received any tips on a video yet.",
+    "emptyReceivedOwn": "No tips yet. When someone tips one of your videos, it shows up here.",
+    "emptyGiven": "@{{user}} hasn't tipped any videos yet.",
+    "emptyGivenOwn": "You haven't tipped any videos yet. Tips you send from a video show up here.",
+    "untitled": "Untitled",
+    "paidInHive": "sent as {{amount}} HIVE",
+    "hideTip": "Hide tip",
+    "unhideTip": "Unhide tip",
+    "hiddenLabel": "Hidden from your profile",
+    "hiddenToast": "Tip hidden from your profile",
+    "unhiddenToast": "Tip shown on your profile again",
+    "hideFailed": "Could not change this tip. Please try again.",
+    "hideWalletPrompt": "Sign to change which tips show on your profile"
   }
 }

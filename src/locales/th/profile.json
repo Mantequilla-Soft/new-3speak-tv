@@ -218,6 +218,7 @@
     "shorts": "Shorts",
     "audio": "เสียง",
     "supporters": "ผู้สนับสนุน",
+    "members": "สมาชิก",
     "streams": "ไลฟ์",
     "community": "ชุมชน",
     "playlists": "เพลย์ลิสต์",
@@ -253,5 +254,25 @@
   "uploads": {
     "processing": "กำลังประมวลผลวิดีโอของคุณ",
     "minAgo_other": "{{count}} นาทีที่แล้ว"
+  },
+  "supports": {
+    "incomingTitle": "@{{user}} ให้ทิป @{{profile}} รวม {{amount}}",
+    "outgoingTitle": "@{{profile}} ให้ทิป @{{user}} รวม {{amount}}",
+    "received": "ได้รับ",
+    "given": "ให้แล้ว",
+    "subTabTotal": "{{label}} · {{amount}}",
+    "emptyReceived": "@{{user}} ยังไม่ได้รับทิปบนวิดีโอ",
+    "emptyReceivedOwn": "ยังไม่มีทิป เมื่อมีคนให้ทิปวิดีโอของคุณ จะแสดงที่นี่",
+    "emptyGiven": "@{{user}} ยังไม่เคยให้ทิปวิดีโอใด",
+    "emptyGivenOwn": "คุณยังไม่เคยให้ทิปวิดีโอใด ทิปที่คุณส่งจากวิดีโอจะแสดงที่นี่",
+    "untitled": "ไม่มีชื่อ",
+    "paidInHive": "ส่งเป็น {{amount}} HIVE",
+    "hideTip": "ซ่อนทิป",
+    "unhideTip": "เลิกซ่อนทิป",
+    "hiddenLabel": "ซ่อนจากโปรไฟล์ของคุณแล้ว",
+    "hiddenToast": "ซ่อนทิปจากโปรไฟล์ของคุณแล้ว",
+    "unhiddenToast": "ทิปแสดงบนโปรไฟล์ของคุณอีกครั้งแล้ว",
+    "hideFailed": "เปลี่ยนทิปนี้ไม่ได้ โปรดลองอีกครั้ง",
+    "hideWalletPrompt": "ลงนามเพื่อเปลี่ยนว่าทิปใดจะแสดงบนโปรไฟล์ของคุณ"
   }
 }

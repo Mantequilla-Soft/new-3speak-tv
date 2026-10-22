@@ -27,7 +27,7 @@
     "backToProfile": "Back to profile"
   },
   "gated": {
-    "title": "Supporters only",
+    "title": "Members only",
     "checkFailed": "We could not confirm your subscription just now. Try again in a moment.",
     "preview": "You are watching a free preview. 3Speak Pro unlocks the full video.",
     "subscribersOnly": "This video is available to 3Speak Pro subscribers.",

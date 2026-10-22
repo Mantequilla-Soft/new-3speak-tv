@@ -115,6 +115,26 @@
     "translation": "Vertaling",
     "translationFailed": "Vertalen mislukt. Draait de vertaaldienst?",
     "reportComment": "Reactie melden",
-    "openInShorts": "Openen in Shorts"
+    "openInShorts": "Openen in Shorts",
+    "sortBy": "Sorteren",
+    "sortNewest": "Nieuwste",
+    "sortOldest": "Oudste",
+    "sortPopular": "Populair",
+    "pin": "Vastzetten",
+    "unpin": "Losmaken",
+    "pinned": "Reactie vastgezet",
+    "unpinned": "Reactie losgemaakt",
+    "pinnedByCreator": "Vastgezet door de maker",
+    "pinFailed": "Vastzetten kon niet worden gewijzigd. Probeer het opnieuw.",
+    "pinWalletPrompt": "Onderteken om deze reactie op je video vast te zetten of los te maken",
+    "addImage": "Afbeelding toevoegen",
+    "imageTooLarge": "Die afbeelding is te groot (max. 10 MB).",
+    "imageUploadFailed": "Uploaden van afbeelding mislukt. Probeer het opnieuw.",
+    "dropImage": "Zet de afbeelding neer om hem aan je reactie toe te voegen",
+    "removeImage": "Afbeelding verwijderen",
+    "uploadingImage": "Afbeelding uploaden",
+    "write": "Schrijven",
+    "preview": "Voorbeeld",
+    "nothingToPreview": "Nog niets om te bekijken"
   }
 }

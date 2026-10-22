@@ -218,6 +218,7 @@
     "shorts": "ショート",
     "audio": "音声",
     "supporters": "サポーター",
+    "members": "メンバー",
     "streams": "配信",
     "community": "コミュニティ",
     "playlists": "再生リスト",
@@ -253,5 +254,25 @@
   "uploads": {
     "processing": "動画を処理しています",
     "minAgo_other": "{{count}} 分前"
+  },
+  "supports": {
+    "incomingTitle": "@{{user}} さんが @{{profile}} さんに合計 {{amount}} のチップを送りました",
+    "outgoingTitle": "@{{profile}} さんが @{{user}} さんに合計 {{amount}} のチップを送りました",
+    "received": "受け取り",
+    "given": "贈った",
+    "subTabTotal": "{{label}} · {{amount}}",
+    "emptyReceived": "@{{user}} さんはまだ動画でチップを受け取っていません。",
+    "emptyReceivedOwn": "まだチップはありません。誰かがあなたの動画にチップを送ると、ここに表示されます。",
+    "emptyGiven": "@{{user}} さんはまだ動画にチップを送っていません。",
+    "emptyGivenOwn": "まだ動画にチップを送っていません。動画から送ったチップがここに表示されます。",
+    "untitled": "無題",
+    "paidInHive": "{{amount}} HIVEで送信",
+    "hideTip": "チップを非表示",
+    "unhideTip": "チップを再表示",
+    "hiddenLabel": "プロフィールで非表示",
+    "hiddenToast": "チップをプロフィールから非表示にしました",
+    "unhiddenToast": "チップがプロフィールに再び表示されます",
+    "hideFailed": "このチップを変更できませんでした。もう一度お試しください。",
+    "hideWalletPrompt": "プロフィールに表示するチップを変更するには署名してください"
   }
 }

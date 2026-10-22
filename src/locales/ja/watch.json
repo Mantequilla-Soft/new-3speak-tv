@@ -27,7 +27,7 @@
     "backToProfile": "プロフィールに戻る"
   },
   "gated": {
-    "title": "サポーター限定",
+    "title": "メンバー限定",
     "checkFailed": "現在、サブスクリプションを確認できませんでした。少ししてからお試しください。",
     "preview": "無料プレビューを視聴中です。3Speak Pro で動画全編が見られます。",
     "subscribersOnly": "この動画は 3Speak Pro 登録者が視聴できます。",

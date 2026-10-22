@@ -125,6 +125,26 @@
     "translation": "Tłumaczenie",
     "translationFailed": "Tłumaczenie nie powiodło się. Czy usługa tłumaczeń działa?",
     "reportComment": "Zgłoś komentarz",
-    "openInShorts": "Otwórz w Shorts"
+    "openInShorts": "Otwórz w Shorts",
+    "sortBy": "Sortuj",
+    "sortNewest": "Najnowsze",
+    "sortOldest": "Najstarsze",
+    "sortPopular": "Popularne",
+    "pin": "Przypnij",
+    "unpin": "Odepnij",
+    "pinned": "Komentarz przypięty",
+    "unpinned": "Komentarz odpięty",
+    "pinnedByCreator": "Przypięte przez twórcę",
+    "pinFailed": "Nie udało się zmienić przypięcia. Spróbuj ponownie.",
+    "pinWalletPrompt": "Podpisz, aby przypiąć lub odpiąć ten komentarz pod swoim filmem",
+    "addImage": "Dodaj obraz",
+    "imageTooLarge": "Ten obraz jest za duży (maks. 10 MB).",
+    "imageUploadFailed": "Przesyłanie obrazu nie powiodło się. Spróbuj ponownie.",
+    "dropImage": "Upuść obraz, aby dodać go do komentarza",
+    "removeImage": "Usuń obraz",
+    "uploadingImage": "Przesyłanie obrazu",
+    "write": "Pisz",
+    "preview": "Podgląd",
+    "nothingToPreview": "Na razie nie ma nic do podglądu"
   }
 }

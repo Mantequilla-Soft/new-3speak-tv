@@ -110,6 +110,26 @@
     "translation": "翻訳",
     "translationFailed": "翻訳に失敗しました。翻訳サービスは動作していますか？",
     "reportComment": "コメントを報告",
-    "openInShorts": "ショートで開く"
+    "openInShorts": "ショートで開く",
+    "sortBy": "並べ替え",
+    "sortNewest": "新しい順",
+    "sortOldest": "古い順",
+    "sortPopular": "人気順",
+    "pin": "固定",
+    "unpin": "固定を解除",
+    "pinned": "コメントを固定しました",
+    "unpinned": "コメントの固定を解除しました",
+    "pinnedByCreator": "クリエイターが固定",
+    "pinFailed": "固定を変更できませんでした。もう一度お試しください。",
+    "pinWalletPrompt": "動画のこのコメントを固定または解除するために署名してください",
+    "addImage": "画像を追加",
+    "imageTooLarge": "画像が大きすぎます（最大10MB）。",
+    "imageUploadFailed": "画像のアップロードに失敗しました。もう一度お試しください。",
+    "dropImage": "画像をドロップしてコメントに追加",
+    "removeImage": "画像を削除",
+    "uploadingImage": "画像をアップロード中",
+    "write": "書く",
+    "preview": "プレビュー",
+    "nothingToPreview": "プレビューする内容はまだありません"
   }
 }

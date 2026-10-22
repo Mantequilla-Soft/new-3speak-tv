@@ -27,7 +27,7 @@
     "backToProfile": "프로필로 돌아가기"
   },
   "gated": {
-    "title": "후원자 전용",
+    "title": "멤버 전용",
     "checkFailed": "지금은 구독을 확인할 수 없어요. 잠시 후 다시 시도하세요.",
     "preview": "무료 미리보기를 시청 중이에요. 3Speak Pro로 전체 동영상을 볼 수 있어요.",
     "subscribersOnly": "3Speak Pro 구독자만 볼 수 있는 동영상이에요.",

@@ -67,6 +67,25 @@ const WATCH_SHORTS_SEED_OFFSET = 4231;
 
 // Build the videoDetails shape PlayVideo expects from a checker scheduled-post
 // doc (the post isn't on Hive yet, so there are no stats/payout/votes).
+// Autoplay-next only moves on while the viewer is actually looking at the player:
+// the tab is visible and at least half of the player is on screen (or it is
+// fullscreen). Someone scrolled down reading comments, or in another tab, keeps
+// their place instead of being carried off to a video they never chose.
+function isPlayerInFocus(el) {
+  if (typeof document === 'undefined' || document.hidden) return false;
+  if (document.fullscreenElement) return true;
+  if (!el) return false;
+  const r = el.getBoundingClientRect();
+  if (!r.height) return false;
+  const visible = Math.min(r.bottom, window.innerHeight) - Math.max(r.top, 0);
+  return visible / r.height >= 0.5;
+}
+
+// Seconds the "Next video in 3, 2, 1" card shows before autoplay-next moves on.
+const NEXT_UP_SECONDS = 3;
+
+const videoAuthorOf = (v) => v?.author?.username || v?.author?.id || v?.author || v?.owner;
+
 function buildScheduledVideoDetails(doc) {
   if (!doc) return null;
   return {
@@ -308,6 +327,33 @@ function Watch({ v2 = false }) {
       return next;
     });
   }, []);
+  // The countdown before autoplay-next moves on: { video, seconds } or null.
+  // `autoplayHeld` = autoplay was due but did not happen (player out of view,
+  // or the viewer cancelled the countdown), so the end screen shows the
+  // suggestions to pick from instead.
+  const [nextUp, setNextUp] = useState(null);
+  const [autoplayHeld, setAutoplayHeld] = useState(false);
+  useEffect(() => { setNextUp(null); setAutoplayHeld(false); }, [author, permlink]);
+  useEffect(() => {
+    if (!nextUp) return undefined;
+    if (nextUp.seconds <= 0) {
+      setNextUp(null);
+      navigate(`/watch?v=${videoAuthorOf(nextUp.video)}/${nextUp.video.permlink}`);
+      return undefined;
+    }
+    const id = setTimeout(() => {
+      // Scrolled away or switched tabs mid-countdown: stay put.
+      if (!isPlayerInFocus(wrapperRef.current)) {
+        setNextUp(null);
+        setAutoplayHeld(true);
+        return;
+      }
+      setNextUp((n) => (n ? { ...n, seconds: n.seconds - 1 } : n));
+    }, 1000);
+    return () => clearTimeout(id);
+  }, [nextUp, navigate]);
+  const cancelNextUp = useCallback(() => { setNextUp(null); setAutoplayHeld(true); }, []);
+  const playNextNow = useCallback(() => setNextUp((n) => (n ? { ...n, seconds: 0 } : n)), []);
 
   const { glowMode, toggleGlow } = useAmbientGlow();
 
@@ -860,14 +906,20 @@ function Watch({ v2 = false }) {
       } else if (autoplayNextRef.current && suggestedVideosRef.current?.length > 0) {
         // Find the first suggested video not already watched (backend) or played (session)
         const next = suggestedVideosRef.current.find(v => {
-          const a = v?.author?.username || v?.author?.id || v?.author || v?.owner;
+          const a = videoAuthorOf(v);
           if (!a || !v.permlink) return false;
           const key = `${a}/${v.permlink}`;
           return !playedVideosRef.current.has(key) && !watchedMapRef.current.has(key);
         });
         if (next) {
-          const nextAuthor = next?.author?.username || next?.author?.id || next?.author || next?.owner;
-          navigate(`/watch?v=${nextAuthor}/${next.permlink}`);
+          // A short "Next video in 3, 2, 1" first, and only while the player is
+          // in view; otherwise the end screen waits with the suggestions.
+          if (isPlayerInFocus(wrapperRef.current)) {
+            setNextUp({ video: next, seconds: NEXT_UP_SECONDS });
+          } else {
+            setAutoplayHeld(true);
+          }
+          setVideoEnded(true);
         } else {
           setVideoEnded(true);
         }
@@ -879,6 +931,8 @@ function Watch({ v2 = false }) {
     const unsubPlay = player.on('play', () => {
       setVideoEnded(false);
       setAutoplayBlocked(false);
+      setNextUp(null);
+      setAutoplayHeld(false);
     });
 
     return () => {
@@ -1989,6 +2043,10 @@ function Watch({ v2 = false }) {
           onAutoplayTap: togglePlay,
           autoplayNext,
           onToggleAutoplay: toggleAutoplayNext,
+          autoplayHeld,
+          nextUp,
+          onCancelNextUp: cancelNextUp,
+          onPlayNextNow: playNextNow,
           endSuggestions: suggestedVideos
             .filter(v => {
               const a = v?.author?.username || v?.author?.id || v?.author || v?.owner;

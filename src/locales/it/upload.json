@@ -214,8 +214,8 @@
       "hintOff": "Solo banner e ticker su questo video."
     },
     "gated": {
-      "label": "Solo per i sostenitori",
-      "info": "Cripta questo video in modo che solo gli abbonati a 3Speak Pro possano riprodurlo. Insieme al video viene pubblicata un'<b>anteprima non criptata di 10 secondi</b>, così il post mostra comunque un trailer ovunque su Hive. Titolo, descrizione e tag sono normali contenuti di un post Hive e <b>non sono criptati</b> — lo è solo il video. <b>Non è possibile modificarlo dopo il caricamento.</b>",
+      "label": "Solo per i membri",
+      "info": "Cripta questo video in modo che solo gli abbonati a 3Speak Pro possano riprodurlo. Insieme al video viene pubblicata un'<b>anteprima non criptata di 10 secondi</b>, così il post mostra comunque un trailer ovunque su Hive. Titolo, descrizione e tag sono normali contenuti di un post Hive e <b>non sono criptati</b>: lo è solo il video. <b>Non è possibile modificarlo dopo il caricamento.</b>",
       "withGuests_one": "Abbonati Pro + {{count}} ospite.",
       "withGuests_many": "Abbonati Pro + {{count}} ospiti.",
       "withGuests_other": "Abbonati Pro + {{count}} ospiti.",
@@ -398,7 +398,7 @@
     "noHost": "Nessun host di incorporamento configurato",
     "emptyFile": "File vuoto",
     "noToken": "Impossibile ottenere il token di caricamento",
-    "gatedUnsupported": "Questo server di caricamento non supporta ancora i video solo per i sostenitori. Non è stato caricato nulla. Disattiva l'opzione per pubblicare pubblicamente, o riprova più tardi.",
+    "gatedUnsupported": "Questo server di caricamento non supporta ancora i video solo per i membri. Non è stato caricato nulla. Disattiva l'opzione per pubblicare pubblicamente, oppure riprova più tardi.",
     "couldNotStart": "Impossibile avviare il caricamento — riprova",
     "sessionExpired": "Sessione di caricamento scaduta — riprova",
     "chunkFailed": "Blocco {{index}} non riuscito",
@@ -411,7 +411,7 @@
     "noVideoFile": "Nessun file video",
     "noEmbedUrlAfterUpload": "Caricamento riuscito, ma non è stato restituito alcun URL di incorporamento",
     "deferralLost": "Impossibile finalizzare questo caricamento perché la sua sessione è stata interrotta. Non è stato pubblicato nulla. Seleziona di nuovo il video e caricalo ancora.",
-    "gatedTooLate": "L'opzione solo per i sostenitori è stata attivata dopo l'inizio del caricamento, e questo server di caricamento non può applicarla a posteriori. Non è stato pubblicato nulla. Seleziona di nuovo il video e attiva l'opzione solo per i sostenitori prima di continuare.",
+    "gatedTooLate": "«Solo per i membri» è stato attivato dopo l'inizio del caricamento, e questo server di caricamento non può applicarlo in seguito. Non è stato pubblicato nulla. Seleziona di nuovo il video e attiva «Solo per i membri» prima di continuare.",
     "noSnapsContainer": "Impossibile trovare un post contenitore degli Snaps a cui rispondere",
     "scheduleSaveFailed": "Impossibile salvare il post programmato",
     "couldNotSchedule": "Impossibile programmare il post",

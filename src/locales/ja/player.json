@@ -46,7 +46,8 @@
     "close": "再生リストを閉じる"
   },
   "overlay": {
-    "replay": "もう一度再生"
+    "replay": "もう一度再生",
+    "nextIn": "{{seconds}}秒後に次の動画"
   },
   "reactions": {
     "translation": "翻訳",

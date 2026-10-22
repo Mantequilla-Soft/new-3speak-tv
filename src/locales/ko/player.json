@@ -46,7 +46,8 @@
     "close": "재생목록 닫기"
   },
   "overlay": {
-    "replay": "다시 보기"
+    "replay": "다시 보기",
+    "nextIn": "{{seconds}}초 후 다음 동영상"
   },
   "reactions": {
     "translation": "번역",

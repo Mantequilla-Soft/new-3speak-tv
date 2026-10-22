@@ -115,6 +115,26 @@
     "translation": "Übersetzung",
     "translationFailed": "Übersetzung fehlgeschlagen. Läuft der Übersetzungsdienst?",
     "reportComment": "Kommentar melden",
-    "openInShorts": "In Shorts öffnen"
+    "openInShorts": "In Shorts öffnen",
+    "sortBy": "Sortieren",
+    "sortNewest": "Neueste",
+    "sortOldest": "Älteste",
+    "sortPopular": "Beliebt",
+    "pin": "Anheften",
+    "unpin": "Lösen",
+    "pinned": "Kommentar angeheftet",
+    "unpinned": "Kommentar gelöst",
+    "pinnedByCreator": "Vom Creator angeheftet",
+    "pinFailed": "Die Anheftung konnte nicht geändert werden. Bitte versuche es erneut.",
+    "pinWalletPrompt": "Signiere, um diesen Kommentar an deinem Video anzuheften oder zu lösen",
+    "addImage": "Bild hinzufügen",
+    "imageTooLarge": "Das Bild ist zu groß (max. 10 MB).",
+    "imageUploadFailed": "Bild-Upload fehlgeschlagen. Bitte versuche es erneut.",
+    "dropImage": "Bild ablegen, um es zu deinem Kommentar hinzuzufügen",
+    "removeImage": "Bild entfernen",
+    "uploadingImage": "Bild wird hochgeladen",
+    "write": "Schreiben",
+    "preview": "Vorschau",
+    "nothingToPreview": "Noch nichts für die Vorschau"
   }
 }

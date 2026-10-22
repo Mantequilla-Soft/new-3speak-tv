@@ -234,6 +234,7 @@
     "shorts": "शॉर्ट्स",
     "audio": "ऑडियो",
     "supporters": "सपोर्टर्स",
+    "members": "सदस्य",
     "streams": "स्ट्रीम",
     "community": "कम्युनिटी",
     "playlists": "प्लेलिस्ट",
@@ -270,5 +271,25 @@
     "processing": "आपके वीडियो प्रोसेस हो रहे हैं",
     "minAgo_one": "{{count}} मिनट पहले",
     "minAgo_other": "{{count}} मिनट पहले"
+  },
+  "supports": {
+    "incomingTitle": "@{{user}} ने @{{profile}} को कुल {{amount}} टिप दिए",
+    "outgoingTitle": "@{{profile}} ने @{{user}} को कुल {{amount}} टिप दिए",
+    "received": "मिली",
+    "given": "दी",
+    "subTabTotal": "{{label}} · {{amount}}",
+    "emptyReceived": "@{{user}} को अभी तक किसी वीडियो पर टिप नहीं मिली है।",
+    "emptyReceivedOwn": "अभी कोई टिप नहीं। जब कोई आपके किसी वीडियो पर टिप देगा, तो वह यहाँ दिखेगी।",
+    "emptyGiven": "@{{user}} ने अभी तक किसी वीडियो पर टिप नहीं दी है।",
+    "emptyGivenOwn": "आपने अभी तक किसी वीडियो पर टिप नहीं दी है। किसी वीडियो से भेजी गई टिप यहाँ दिखेगी।",
+    "untitled": "बिना शीर्षक",
+    "paidInHive": "{{amount}} HIVE के रूप में भेजा गया",
+    "hideTip": "टिप छिपाएँ",
+    "unhideTip": "टिप दिखाएँ",
+    "hiddenLabel": "आपकी प्रोफ़ाइल से छिपी",
+    "hiddenToast": "टिप आपकी प्रोफ़ाइल से छिपा दी गई",
+    "unhiddenToast": "टिप फिर से आपकी प्रोफ़ाइल पर दिख रही है",
+    "hideFailed": "यह टिप बदली नहीं जा सकी। कृपया फिर से कोशिश करें।",
+    "hideWalletPrompt": "आपकी प्रोफ़ाइल पर कौन-सी टिप दिखें, यह बदलने के लिए साइन करें"
   }
 }

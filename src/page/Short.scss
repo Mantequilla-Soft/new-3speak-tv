@@ -1891,6 +1891,22 @@
     gap: 0.5rem;
   }
 
+  // Newest / Oldest / Popular, between the count and the close button.
+  .commentsSort {
+    font-size: 0.75rem;
+    color: var(--text-primary);
+    background: transparent;
+    border: 1px solid var(--border-light, rgba(255, 255, 255, 0.15));
+    border-radius: 6px;
+    padding: 0.2rem 0.4rem;
+    cursor: pointer;
+
+    option {
+      background: var(--bg-secondary);
+      color: var(--text-primary);
+    }
+  }
+
   .headerBtn {
     width: 2.5rem;
     height: 2.5rem;
@@ -2071,6 +2087,22 @@
   .commentTime {
     font-size: 0.75rem;
     color: var(--text-secondary);
+  }
+
+  .commentPinned {
+    display: inline-flex;
+    align-items: center;
+    gap: 3px;
+    font-size: 0.6875rem;
+    font-weight: 600;
+    color: var(--accent-primary);
+  }
+
+  // Emoji, GIF and image buttons side by side in the reply box.
+  .replyTools {
+    display: inline-flex;
+    align-items: center;
+    gap: 2px;
   }
 
   .commentText {
@@ -2669,5 +2701,18 @@
      back through is still there afterwards. */
   .shortBackBtn {
     display: none;
+  }
+}
+
+// The shorts comment boxes (panel composer and mobile quick bar) sit inside the
+// shared CommentDropZone wrapper (components/playVideo/commentTools.jsx); the
+// wrapper takes the row space the textarea used to take itself.
+.commentInputBox {
+  flex: 1;
+  min-width: 0;
+
+  textarea {
+    width: 100%;
+    box-sizing: border-box;
   }
 }

@@ -60,6 +60,7 @@ import { createRoot } from 'react-dom/client';
 import { BrowserRouter } from 'react-router-dom';
 import { Provider } from 'react-redux'; // Importing the Provider from react-redux
 import Bootstrap from './components/EmergencyScreen/Bootstrap';
+import { resumePendingSupports } from './lib/supports';
 import './index.css';
 import store from '../src/redux/Store'; // Importing the Redux store (replace with your store file path)
 import { ToastContainer } from 'react-toastify';
@@ -135,3 +136,6 @@ ensurePlayerUrl();
 // slow or failed language download renders in English and swaps when it lands,
 // never a blank page.
 Promise.race([languageReady, new Promise((r) => setTimeout(r, 1500))]).finally(boot);
+// Tip reports that a reload or a closed tab cut short (see lib/supports.js), on
+// every page, not just the watch page. After first paint, off the critical path.
+setTimeout(resumePendingSupports, 3000);

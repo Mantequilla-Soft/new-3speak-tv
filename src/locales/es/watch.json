@@ -27,7 +27,7 @@
     "backToProfile": "Volver al perfil"
   },
   "gated": {
-    "title": "Solo para suscriptores",
+    "title": "Solo para miembros",
     "checkFailed": "No pudimos confirmar tu suscripción en este momento. Inténtalo de nuevo en un momento.",
     "preview": "Estás viendo una vista previa gratis. 3Speak Pro desbloquea el video completo.",
     "subscribersOnly": "Este video está disponible para suscriptores de 3Speak Pro.",

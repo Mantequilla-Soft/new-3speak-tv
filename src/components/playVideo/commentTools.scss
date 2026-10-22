@@ -1,0 +1,130 @@
+/* Comment box wrapper shared by the watch page and Shorts (commentTools.jsx):
+   the "drop image here" hint and the image preview strip. */
+
+.comment-drop-zone {
+  position: relative;
+  min-width: 0;
+}
+
+// Dashed outline over the whole box while files are dragged over it. It ignores
+// the pointer, so the drop still lands on the box underneath.
+.comment-drop-hint {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 4px 8px;
+  border: 2px dashed var(--accent-primary);
+  border-radius: 10px;
+  background: color-mix(in srgb, var(--bg-secondary, #1f1f1f) 88%, transparent);
+  color: var(--accent-primary);
+  font-size: 12px;
+  font-weight: 600;
+  text-align: center;
+  pointer-events: none;
+}
+
+.comment-image-previews {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 6px;
+}
+
+.comment-image-preview {
+  position: relative;
+  width: 56px;
+  height: 56px;
+  border-radius: 8px;
+  overflow: hidden;
+  background: var(--bg-hover, rgba(255, 255, 255, 0.08));
+  flex: 0 0 auto;
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  &.is-uploading img { opacity: 0.45; }
+
+  .comment-image-spinner {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin: -8px 0 0 -8px;
+    color: #fff;
+  }
+}
+
+.comment-image-remove {
+  position: absolute;
+  top: 3px;
+  right: 3px;
+  width: 18px;
+  height: 18px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border: none;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.65);
+  color: #fff;
+  cursor: pointer;
+
+  &:hover { background: rgba(0, 0, 0, 0.85); }
+}
+
+// Write / Preview: a compact version of the watch page's Comment / React tabs
+// (CommentSection.scss .comment-tab), same underline language, smaller.
+.comment-write-tabs {
+  display: flex;
+  gap: 2px;
+  margin-bottom: 6px;
+  border-bottom: 1px solid var(--border-light, rgba(255, 255, 255, 0.1));
+}
+
+.comment-write-tab {
+  padding: 4px 10px;
+  font-size: 12px;
+  font-weight: 600;
+  font-family: inherit;
+  color: var(--text-secondary, #aaa);
+  background: none;
+  border: none;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -1px;
+  cursor: pointer;
+  transition: color 0.15s ease, border-color 0.15s ease;
+
+  &:hover { color: var(--text-primary); }
+
+  &.active {
+    color: var(--text-primary);
+    border-bottom-color: var(--accent-primary);
+  }
+}
+
+// The preview pane stands where the box was, at least as tall as an empty box,
+// so switching tabs does not make the composer jump.
+.comment-preview {
+  min-height: 44px;
+  padding: 8px 10px;
+  border: 1px solid var(--border-light, rgba(255, 255, 255, 0.1));
+  border-radius: 10px;
+  overflow-wrap: anywhere;
+
+  img { max-width: 100%; height: auto; }
+}
+
+.comment-preview-empty {
+  margin: 0;
+  font-size: 12px;
+  font-style: italic;
+  color: var(--text-muted, var(--text-secondary));
+}
