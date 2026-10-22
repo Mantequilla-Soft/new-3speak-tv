@@ -195,7 +195,8 @@ export function formatHbdCompact(n) {
   const v = Number(n || 0);
   if (v <= 0) return '0 HBD';
   if (v < 0.001) return '<0.001 HBD';
-  if (v >= 1000) return `${(Math.round(v / 100) / 10).toString()}k HBD`;
+  // 999.6 rounds to 1000 at 0 decimals, so it already reads as "1k".
+  if (v >= 999.5) return `${(Math.round(v / 100) / 10).toString()}k HBD`;
   const decimals = v >= 100 ? 0 : v >= 10 ? 1 : v >= 1 ? 2 : 3;
   return `${parseFloat(v.toFixed(decimals))} HBD`;
 }
