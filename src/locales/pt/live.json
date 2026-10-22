@@ -144,6 +144,7 @@
       "notAnnounced": "Esta transmissão não foi anunciada na Hive.",
       "notAnnouncedAuth": "Não anunciada na Hive: o 3Speak ainda não pode publicar por você. Edite o modelo para permitir.",
       "stuck": "O OBS se conectou, mas nenhum vídeo chegou até nós, então a transmissão não começou. Pare a transmissão no OBS e inicie de novo.",
+      "dailyLimit": "O OBS não conseguiu entrar ao vivo: contas gratuitas podem iniciar uma transmissão por dia. Tente de novo 24 horas depois do início da sua última transmissão ou assine o 3Speak Pro para transmitir sem limite diário.",
       "useInStudio": "Usar no Stream Studio"
     },
     "guide": {
@@ -164,7 +165,7 @@
       "chat2": "No OBS, abra o menu \"Docks\" e escolha \"Custom Browser Docks\". Digite um nome como \"Chat do 3Speak\", cole a URL e clique em \"Apply\". As mensagens novas aparecem nesse painel enquanto você está ao vivo. Os espectadores nunca o veem.",
       "chat3": "Os espectadores já veem o chat ao lado da sua transmissão, então você não precisa colocá-lo no vídeo. Só se você também compartilhar a transmissão em outro lugar: adicione a mesma URL como fonte \"Browser\" e remova \"&dock=1\" do final. Assim as mensagens flutuam sobre o vídeo e somem depois de 30 segundos.",
       "chatOptions": "Opcional, adicione ao final da URL: &max=10 mostra menos linhas, &size=18 aumenta o texto, &fade=0 mantém as mensagens no vídeo.",
-      "limitsFree": "Transmissões gratuitas terminam após 1 hora e mostram uma marca d'água do 3Speak. Com o 3Speak Pro você pode transmitir por 4 horas sem marca d'água.",
+      "limitsFree": "Transmissões gratuitas terminam após 30 minutos e mostram uma marca d'água do 3Speak. Com o 3Speak Pro você pode transmitir por 4 horas sem marca d'água.",
       "limitsPro": "Com o 3Speak Pro suas transmissões podem durar 4 horas e não têm marca d'água."
     },
     "form": {
@@ -201,6 +202,7 @@
       "publishVod": "Publicar a gravação como vídeo",
       "allowClips": "Permitir que espectadores façam clipes",
       "proOnly": "Disponível com o 3Speak Pro",
+      "publishVodFree": "Até 30 minutos no plano gratuito",
       "announce": "Anunciar na Hive quando eu entrar ao vivo",
       "announceUnlisted": "Transmissões não listadas nunca são anunciadas.",
       "authNeeded": "O 3Speak ainda não pode publicar por você, então esta transmissão entraria ao vivo sem o anúncio na Hive. Permita que o 3Speak publique por você para anunciá-la automaticamente.",
@@ -242,7 +244,11 @@
     "chatOverlay": {
       "invalid": "Este link do overlay do chat não é válido. Copie de novo a partir do seu modelo no Stream Studio.",
       "offline": "Você não está ao vivo agora. As mensagens novas do chat aparecem aqui quando você entrar ao vivo.",
-      "empty": "Você está ao vivo. As mensagens novas do chat aparecem aqui."
+      "empty": "Você está ao vivo. As mensagens novas do chat aparecem aqui.",
+      "viewers": "Espectadores assistindo",
+      "liveFor": "Tempo ao vivo",
+      "timeLeft": "Tempo restante até a transmissão terminar",
+      "boosts": "Boosts recebidos nesta transmissão (USD)"
     }
   }
 }

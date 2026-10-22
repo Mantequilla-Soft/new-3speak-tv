@@ -143,6 +143,7 @@
       "notAnnounced": "This stream was not announced on Hive.",
       "notAnnouncedAuth": "Not announced on Hive: 3Speak may not post for you yet. Edit the template to allow it.",
       "stuck": "OBS connected, but no video reached us, so the stream did not start. Stop streaming in OBS and start again.",
+      "dailyLimit": "OBS could not go live: free accounts can start one stream per day. Try again 24 hours after your last stream started, or get 3Speak Pro to stream without a daily limit.",
       "useInStudio": "Use in Stream Studio"
     },
     "guide": {
@@ -163,7 +164,7 @@
       "chat2": "In OBS, open the \"Docks\" menu and choose \"Custom Browser Docks\". Enter a name like \"3Speak chat\", paste the URL and click \"Apply\". New messages show up in that panel while you are live. Viewers never see it.",
       "chat3": "Viewers already see the chat next to your stream, so you don't need to put it into the video. Only if you also share the stream somewhere else: add the same URL as a \"Browser\" source and remove \"&dock=1\" from its end. Then the messages float over the video and fade out after 30 seconds.",
       "chatOptions": "Optional, add to the end of the URL: &max=10 shows fewer lines, &size=18 makes the text bigger, &fade=0 keeps messages on the video.",
-      "limitsFree": "Free streams end after 1 hour and show a 3Speak watermark. With 3Speak Pro you can stream for 4 hours without a watermark.",
+      "limitsFree": "Free streams end after 30 minutes and show a 3Speak watermark. With 3Speak Pro you can stream for 4 hours without a watermark.",
       "limitsPro": "With 3Speak Pro your streams can run for 4 hours and carry no watermark."
     },
     "form": {
@@ -200,6 +201,7 @@
       "publishVod": "Publish the recording as a video",
       "allowClips": "Allow viewers to clip",
       "proOnly": "Available with 3Speak Pro",
+      "publishVodFree": "Up to 30 minutes on the free plan",
       "announce": "Announce on Hive when I go live",
       "announceUnlisted": "Unlisted streams are never announced.",
       "authNeeded": "3Speak may not post for you yet, so this stream would go live without the Hive announcement. Allow 3Speak to post for you to announce it automatically.",
@@ -241,7 +243,11 @@
     "chatOverlay": {
       "invalid": "This chat overlay link is not valid. Copy it again from your template in the Stream Studio.",
       "offline": "Not live right now. New chat messages show up here when you go live.",
-      "empty": "You are live. New chat messages show up here."
+      "empty": "You are live. New chat messages show up here.",
+      "viewers": "Viewers watching",
+      "liveFor": "Time live",
+      "timeLeft": "Time left before the stream ends",
+      "boosts": "Boosts received this stream (USD)"
     }
   }
 }

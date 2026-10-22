@@ -147,7 +147,7 @@ export function formToInput(form, { isPremium }) {
     // Pro-only perks. The server enforces this too; sending false for a free
     // account just keeps the stored template honest.
     recording: {
-      publishVod: !!isPremium && !!form.recording.publishVod,
+      publishVod: !!form.recording.publishVod,
       allowClips: !!isPremium && !!form.recording.allowClips,
     },
     announce: {

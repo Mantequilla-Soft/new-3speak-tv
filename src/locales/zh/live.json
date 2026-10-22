@@ -142,6 +142,7 @@
       "notAnnounced": "这场直播没有在 Hive 上发布公告。",
       "notAnnouncedAuth": "未在 Hive 上发布公告：3Speak 还不能代你发帖。编辑模板即可授权。",
       "stuck": "OBS 已连接，但我们没有收到视频，因此直播没有开始。请在 OBS 中停止推流后重新开始。",
+      "dailyLimit": "OBS 无法开播：免费账户每天只能开播一次。请在上次直播开始 24 小时后再试，或升级 3Speak Pro 即可不受每日次数限制地直播。",
       "useInStudio": "在 Stream Studio 中使用"
     },
     "guide": {
@@ -162,7 +163,7 @@
       "chat2": "在 OBS 中打开 \"Docks\" 菜单，选择 \"Custom Browser Docks\"。输入名称（例如“3Speak 聊天”），粘贴链接并点击 \"Apply\"。直播时新消息会显示在这个面板里，观众看不到它。",
       "chat3": "观众已经能在直播旁边看到聊天，所以不需要把它放进视频里。只有当你也在其他地方分享直播时：把同一个链接添加为 \"Browser\" 来源，并删掉末尾的 \"&dock=1\"。这样消息会浮在视频上方，30 秒后淡出。",
       "chatOptions": "可选，加在链接末尾：&max=10 显示更少行，&size=18 放大文字，&fade=0 让消息一直留在视频上。",
-      "limitsFree": "免费直播 1 小时后结束，并显示 3Speak 水印。使用 3Speak Pro 可直播 4 小时且无水印。",
+      "limitsFree": "免费直播 30 分钟后结束，并显示 3Speak 水印。使用 3Speak Pro 可直播 4 小时且无水印。",
       "limitsPro": "使用 3Speak Pro，你的直播最长可达 4 小时且无水印。"
     },
     "form": {
@@ -199,6 +200,7 @@
       "publishVod": "将录像发布为视频",
       "allowClips": "允许观众剪辑",
       "proOnly": "3Speak Pro 专享",
+      "publishVodFree": "免费方案最多 30 分钟",
       "announce": "开播时在 Hive 上发布公告",
       "announceUnlisted": "不公开列出的直播不会发布公告。",
       "authNeeded": "3Speak 还不能代你发帖，因此这场直播开播时不会在 Hive 上发布公告。允许 3Speak 代你发帖，即可自动发布公告。",
@@ -240,7 +242,11 @@
     "chatOverlay": {
       "invalid": "这个聊天叠加层链接无效。请从 Stream Studio 中的模板重新复制。",
       "offline": "当前未在直播。开播后，新的聊天消息会显示在这里。",
-      "empty": "正在直播。新的聊天消息会显示在这里。"
+      "empty": "正在直播。新的聊天消息会显示在这里。",
+      "viewers": "正在观看的人数",
+      "liveFor": "直播时长",
+      "timeLeft": "距离直播结束的剩余时间",
+      "boosts": "本场直播收到的助推 (USD)"
     }
   }
 }

@@ -145,6 +145,7 @@
       "notAnnounced": "Ta transmisja nie została ogłoszona na Hive.",
       "notAnnouncedAuth": "Nie ogłoszono na Hive: 3Speak nie może jeszcze publikować w twoim imieniu. Edytuj szablon, aby na to zezwolić.",
       "stuck": "OBS się połączył, ale nie dotarło do nas żadne wideo, więc transmisja się nie rozpoczęła. Zatrzymaj streamowanie w OBS i uruchom je ponownie.",
+      "dailyLimit": "OBS nie mógł rozpocząć transmisji: konta darmowe mogą rozpocząć jedną transmisję dziennie. Spróbuj ponownie 24 godziny po rozpoczęciu ostatniej transmisji albo wybierz 3Speak Pro, aby nadawać bez dziennego limitu.",
       "useInStudio": "Użyj w Stream Studio"
     },
     "guide": {
@@ -165,7 +166,7 @@
       "chat2": "W OBS otwórz menu \"Docks\" i wybierz \"Custom Browser Docks\". Wpisz nazwę, np. \"Czat 3Speak\", wklej URL i kliknij \"Apply\". Nowe wiadomości pojawiają się w tym panelu, gdy jesteś na żywo. Widzowie nigdy go nie widzą.",
       "chat3": "Widzowie już widzą czat obok twojego streamu, więc nie musisz dodawać go do obrazu. Tylko jeśli udostępniasz stream także gdzie indziej: dodaj ten sam URL jako źródło \"Browser\" i usuń \"&dock=1\" z końca. Wtedy wiadomości pojawiają się na obrazie i znikają po 30 sekundach.",
       "chatOptions": "Opcjonalnie dopisz na końcu URL: &max=10 pokazuje mniej linii, &size=18 powiększa tekst, &fade=0 zostawia wiadomości na obrazie.",
-      "limitsFree": "Darmowe transmisje kończą się po 1 godzinie i mają znak wodny 3Speak. Z 3Speak Pro możesz nadawać przez 4 godziny bez znaku wodnego.",
+      "limitsFree": "Darmowe transmisje kończą się po 30 minutach i mają znak wodny 3Speak. Z 3Speak Pro możesz nadawać przez 4 godziny bez znaku wodnego.",
       "limitsPro": "Z 3Speak Pro twoje transmisje mogą trwać 4 godziny i nie mają znaku wodnego."
     },
     "form": {
@@ -202,6 +203,7 @@
       "publishVod": "Opublikuj nagranie jako film",
       "allowClips": "Pozwól widzom tworzyć klipy",
       "proOnly": "Dostępne z 3Speak Pro",
+      "publishVodFree": "Do 30 minut w planie darmowym",
       "announce": "Ogłoś na Hive, gdy zacznę nadawać",
       "announceUnlisted": "Niepubliczne transmisje nigdy nie są ogłaszane.",
       "authNeeded": "3Speak nie może jeszcze publikować w twoim imieniu, więc ta transmisja ruszy bez ogłoszenia na Hive. Pozwól 3Speak publikować w twoim imieniu, aby ogłaszać ją automatycznie.",
@@ -243,7 +245,11 @@
     "chatOverlay": {
       "invalid": "Ten link do nakładki czatu jest nieprawidłowy. Skopiuj go ponownie ze swojego szablonu w Stream Studio.",
       "offline": "Nie jesteś teraz na żywo. Nowe wiadomości z czatu pojawią się tutaj, gdy wejdziesz na żywo.",
-      "empty": "Jesteś na żywo. Nowe wiadomości z czatu pojawiają się tutaj."
+      "empty": "Jesteś na żywo. Nowe wiadomości z czatu pojawiają się tutaj.",
+      "viewers": "Oglądający teraz",
+      "liveFor": "Czas na żywo",
+      "timeLeft": "Pozostały czas do końca transmisji",
+      "boosts": "Boosty otrzymane w tej transmisji (USD)"
     }
   }
 }

@@ -83,6 +83,47 @@
   }
 }
 
+// Dock header: viewers, time live, time left, boosts. Pinned to the top of the
+// dock: the chat is stacked from the bottom and overflows at the top, so a bar
+// in the flow would be pushed out of view by a long chat. The dock reserves its
+// height (--with-counters) and older lines slide under it.
+.obs-chat--with-counters {
+  padding-top: 52px;
+}
+
+.obs-chat__counters {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  padding: 8px;
+  background: #0f1117;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.obs-chat__counter {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35em;
+  padding: 0.25em 0.6em;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.08);
+  font-size: 0.9em;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+
+  // The last minutes before the cap ends the stream.
+  &.is-low {
+    background: rgba(245, 158, 11, 0.22);
+    color: #fbbf24;
+  }
+}
+
 .obs-chat__status {
   margin: 0;
   opacity: 0.7;

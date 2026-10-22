@@ -143,6 +143,7 @@
       "notAnnounced": "Deze stream is niet aangekondigd op Hive.",
       "notAnnouncedAuth": "Niet aangekondigd op Hive: 3Speak mag nog niet voor je posten. Bewerk het sjabloon om dit toe te staan.",
       "stuck": "OBS is verbonden, maar er kwam geen video bij ons aan, dus de stream is niet gestart. Stop het streamen in OBS en start opnieuw.",
+      "dailyLimit": "OBS kon niet live gaan: gratis accounts kunnen één stream per dag starten. Probeer het opnieuw 24 uur nadat je laatste stream begon, of neem 3Speak Pro om zonder daglimiet te streamen.",
       "useInStudio": "Gebruiken in Stream Studio"
     },
     "guide": {
@@ -163,7 +164,7 @@
       "chat2": "Open in OBS het menu \"Docks\" en kies \"Custom Browser Docks\". Vul een naam in zoals \"3Speak chat\", plak de URL en klik op \"Apply\". Nieuwe berichten verschijnen in dat paneel zolang je live bent. Kijkers zien het nooit.",
       "chat3": "Kijkers zien de chat al naast je stream, dus je hoeft hem niet in de video te zetten. Alleen als je de stream ook ergens anders deelt: voeg dezelfde URL toe als \"Browser\"-bron en haal \"&dock=1\" van het eind weg. Dan zweven de berichten over de video en verdwijnen ze na 30 seconden.",
       "chatOptions": "Optioneel, zet achter de URL: &max=10 toont minder regels, &size=18 maakt de tekst groter, &fade=0 houdt berichten in beeld.",
-      "limitsFree": "Gratis streams stoppen na 1 uur en tonen een 3Speak-watermerk. Met 3Speak Pro kun je 4 uur streamen zonder watermerk.",
+      "limitsFree": "Gratis streams stoppen na 30 minuten en tonen een 3Speak-watermerk. Met 3Speak Pro kun je 4 uur streamen zonder watermerk.",
       "limitsPro": "Met 3Speak Pro kunnen je streams 4 uur duren en hebben ze geen watermerk."
     },
     "form": {
@@ -200,6 +201,7 @@
       "publishVod": "Opname publiceren als video",
       "allowClips": "Kijkers laten clippen",
       "proOnly": "Beschikbaar met 3Speak Pro",
+      "publishVodFree": "Tot 30 minuten met het gratis abonnement",
       "announce": "Aankondigen op Hive als ik live ga",
       "announceUnlisted": "Niet-vermelde streams worden nooit aangekondigd.",
       "authNeeded": "3Speak mag nog niet voor je posten, dus deze stream zou live gaan zonder aankondiging op Hive. Sta 3Speak toe om voor je te posten, zodat hij automatisch wordt aangekondigd.",
@@ -241,7 +243,11 @@
     "chatOverlay": {
       "invalid": "Deze link naar de chat-overlay is ongeldig. Kopieer hem opnieuw vanuit je sjabloon in de Stream Studio.",
       "offline": "Je bent nu niet live. Nieuwe chatberichten verschijnen hier zodra je live gaat.",
-      "empty": "Je bent live. Nieuwe chatberichten verschijnen hier."
+      "empty": "Je bent live. Nieuwe chatberichten verschijnen hier.",
+      "viewers": "Kijkers nu",
+      "liveFor": "Tijd live",
+      "timeLeft": "Resterende tijd tot de stream stopt",
+      "boosts": "Boosts ontvangen in deze stream (USD)"
     }
   }
 }

@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
-import { LiveKitRoom } from "@livekit/components-react";
-import { useChat } from "@snapie/hangouts-react";
+import { LiveKitRoom, useParticipants } from "@livekit/components-react";
+import { useChat, resolveStreamCap } from "@snapie/hangouts-react";
 import { useTranslation } from "react-i18next";
 import { getHangoutsEndpoints, defaultEndpoint } from "../utils/hangoutsEndpoints";
+import { CHECKER_URL } from "../utils/config";
 import "./ObsChatOverlay.scss";
 
 // A streamer's live chat for OBS. The URL carries the user's chat overlay key
@@ -24,6 +25,11 @@ import "./ObsChatOverlay.scss";
 const API = (import.meta.env.VITE_HANGOUTS_TEMPLATES_API_URL || import.meta.env.VITE_HANGOUTS_API_URL || "")
   .replace(/\/$/, "");
 const POLL_MS = 5000;
+// The dock's counters re-read the room (go-live time, host) and the boost ledger this often.
+const INFO_POLL_MS = 15000;
+// A Pro host's time-left counter appears only in the last stretch: 4 hours is not news.
+const PRO_LEFT_SHOWN_MS = 15 * 60 * 1000;
+const LOW_LEFT_MS = 5 * 60 * 1000;
 
 function clampInt(raw, min, max, fallback) {
   const n = parseInt(raw, 10);
@@ -87,6 +93,106 @@ function ChatLine({ msg, fade }) {
         <span className="obs-chat__text">{msg.text}</span>
       </span>
     </li>
+  );
+}
+
+/** 75 s -> "1:15", 3725 s -> "1:02:05". */
+function clock(ms) {
+  const s = Math.max(0, Math.floor(ms / 1000));
+  const h = Math.floor(s / 3600);
+  const m = Math.floor((s % 3600) / 60);
+  const sec = String(s % 60).padStart(2, "0");
+  return h ? `${h}:${String(m).padStart(2, "0")}:${sec}` : `${m}:${sec}`;
+}
+
+/**
+ * The dock's header: viewers, time live, time left before the stream's cap ends
+ * it, and boosts received. An OBS streamer has no studio, so this is the only
+ * place they see these numbers while live.
+ *
+ * Viewers are counted like the studio counts them: everyone in the room but the
+ * host and the silent `obs-` observers (this dock among them). The cap is the
+ * same one the studio and server enforce (resolveStreamCap): 30 minutes free.
+ */
+function DockCounters({ room }) {
+  const { t } = useTranslation();
+  const participants = useParticipants();
+  const [info, setInfo] = useState(null);       // { host, liveAt }
+  const [premium, setPremium] = useState(null); // unknown until the checker answers
+  const [boostUsd, setBoostUsd] = useState(0);
+  const [now, setNow] = useState(() => Date.now());
+
+  useEffect(() => {
+    const id = setInterval(() => setNow(Date.now()), 1000);
+    return () => clearInterval(id);
+  }, []);
+
+  useEffect(() => {
+    let alive = true;
+    const poll = async () => {
+      try {
+        const [r, b] = await Promise.all([
+          fetch(`${API}/rooms/${encodeURIComponent(room)}`, { cache: "no-store" }),
+          fetch(`${API}/boosts/ledger?room=${encodeURIComponent(room)}`, { cache: "no-store" }),
+        ]);
+        if (!alive) return;
+        if (r.ok) {
+          const d = await r.json();
+          const at = d?.liveAt ? Date.parse(d.liveAt) : NaN;
+          setInfo({ host: d?.host || null, liveAt: Number.isFinite(at) ? at : null });
+        }
+        if (b.ok) {
+          const rows = await b.json();
+          if (Array.isArray(rows)) {
+            setBoostUsd(rows.filter((x) => x.status !== "rejected")
+              .reduce((sum, x) => sum + (Number(x.usdAmount) || 0), 0));
+          }
+        }
+      } catch { /* keep the last numbers through a blip */ }
+    };
+    poll();
+    const id = setInterval(poll, INFO_POLL_MS);
+    return () => { alive = false; clearInterval(id); };
+  }, [room]);
+
+  const host = info?.host;
+  useEffect(() => {
+    if (!host) return undefined;
+    let alive = true;
+    fetch(`${CHECKER_URL}/premium/${encodeURIComponent(host)}`)
+      .then((r) => (r.ok ? r.json() : null))
+      .then((d) => { if (alive && d) setPremium(!!d.premium); })
+      .catch(() => { /* no time-left counter rather than a wrong one */ });
+    return () => { alive = false; };
+  }, [host]);
+
+  const viewers = participants.filter(
+    (p) => !p.isLocal && p.identity !== host && !p.identity.startsWith("obs-"),
+  ).length;
+  const elapsed = info?.liveAt ? now - info.liveAt : null;
+  const capMs = premium == null ? null : resolveStreamCap(premium).capMs;
+  const left = capMs != null && elapsed != null ? capMs - elapsed : null;
+  const showLeft = left != null && (!premium || left < PRO_LEFT_SHOWN_MS);
+
+  return (
+    <div className="obs-chat__counters" role="status">
+      <span className="obs-chat__counter" title={t("live.obs.chatOverlay.viewers")} aria-label={`${t("live.obs.chatOverlay.viewers")}: ${viewers}`}>
+        👁 {viewers}
+      </span>
+      {elapsed != null && (
+        <span className="obs-chat__counter" title={t("live.obs.chatOverlay.liveFor")} aria-label={`${t("live.obs.chatOverlay.liveFor")}: ${clock(elapsed)}`}>
+          ⏱ {clock(elapsed)}
+        </span>
+      )}
+      {showLeft && (
+        <span className={`obs-chat__counter${left < LOW_LEFT_MS ? " is-low" : ""}`} title={t("live.obs.chatOverlay.timeLeft")} aria-label={`${t("live.obs.chatOverlay.timeLeft")}: ${clock(left)}`}>
+          ⏳ {clock(left)}
+        </span>
+      )}
+      <span className="obs-chat__counter" title={t("live.obs.chatOverlay.boosts")} aria-label={`${t("live.obs.chatOverlay.boosts")}: $${boostUsd.toFixed(2)}`}>
+        🚀 ${boostUsd.toFixed(2)}
+      </span>
+    </div>
   );
 }
 
@@ -174,8 +280,9 @@ export default function ObsChatOverlay() {
   }
 
   return (
-    <div className={cls} style={style}>
+    <div className={`${cls}${opts.dock ? " obs-chat--with-counters" : ""}`} style={style}>
       <LiveKitRoom key={room} serverUrl={livekitUrl()} token={token} connect audio={false} video={false}>
+        {opts.dock && <DockCounters room={room} />}
         <ChatFeed fade={opts.fade} max={opts.max} dock={opts.dock} />
       </LiveKitRoom>
     </div>

@@ -18,11 +18,12 @@
   background: #000;
 }
 
-/* The disclosure, top-left, below a phone's back button row. */
+/* The disclosure, top-right (below a phone's back button row), clear of the
+   "Tap for sound" button bottom-left and Skip bottom-right. */
 .live-preroll__brand {
   position: absolute;
   top: 12px;
-  left: 12px;
+  right: 12px;
   max-width: calc(100% - 24px);
 }
 
