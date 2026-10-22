@@ -598,6 +598,8 @@
     "tooLong": "Die video duurt {{seconds}} seconden. Een advertentie mag maximaal {{max}} duren.",
     "spotUploaded": "Spot geüpload. We beoordelen hem voordat hij draait",
     "uploadFailed": "Uploaden mislukt",
+    "makeInWizard": "Maak het in de Ad Wizard",
+    "makeInWizardHint": "Bouw de video uit kant-en-klare scènes met je logo, afbeeldingen en muziek. Hij komt hier te staan zodra je op \"Use for my campaign\" klikt.",
     "yourBanner": "Je banner",
     "yourVideo": "Je advertentievideo",
     "yourCreatives": "Je advertentiemateriaal",

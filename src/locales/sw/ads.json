@@ -598,6 +598,8 @@
     "tooLong": "Video hiyo ni sekunde {{seconds}}. Tangazo linaweza kuonyeshwa kwa sekunde {{max}} zaidi.",
     "spotUploaded": "Tangazo limepakiwa. Tutalikagua kabla halijaonyeshwa",
     "uploadFailed": "Upakiaji umeshindwa",
+    "makeInWizard": "Itengeneze kwa Ad Wizard",
+    "makeInWizardHint": "Tengeneza video kwa kutumia matukio yaliyo tayari pamoja na nembo, picha na muziki wako. Itaongezwa hapa ukibofya \"Use for my campaign\".",
     "yourBanner": "Bango lako",
     "yourVideo": "Video yako ya tangazo",
     "yourCreatives": "Matangazo yako",

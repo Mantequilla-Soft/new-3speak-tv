@@ -598,6 +598,8 @@
     "tooLong": "That video is {{seconds}} seconds. The most an ad can run is {{max}}.",
     "spotUploaded": "Spot uploaded. We will review it before it runs",
     "uploadFailed": "Upload failed",
+    "makeInWizard": "Make it in the Ad Wizard",
+    "makeInWizardHint": "Build the video from ready-made scenes with your logo, pictures and music. It is added here when you click \"Use for my campaign\".",
     "yourBanner": "Your banner",
     "yourVideo": "Your ad video",
     "yourCreatives": "Your ad creatives",

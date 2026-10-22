@@ -576,6 +576,8 @@
     "tooLong": "이 동영상은 {{seconds}}초예요. 광고는 최대 {{max}}초까지 가능해요.",
     "spotUploaded": "광고를 업로드했어요. 게재 전에 검토할게요",
     "uploadFailed": "업로드 실패",
+    "makeInWizard": "Ad Wizard에서 만들기",
+    "makeInWizardHint": "준비된 장면에 로고, 이미지, 음악을 넣어 영상을 만드세요. \"Use for my campaign\"을 누르면 여기에 추가됩니다.",
     "yourBanner": "내 배너",
     "yourVideo": "내 광고 동영상",
     "yourCreatives": "내 광고 소재",

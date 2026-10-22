@@ -598,6 +598,8 @@
     "tooLong": "Bu video {{seconds}} saniye. Bir reklam en fazla {{max}} saniye olabilir.",
     "spotUploaded": "Spot yüklendi. Yayınlanmadan önce inceleyeceğiz",
     "uploadFailed": "Yükleme başarısız",
+    "makeInWizard": "Ad Wizard ile oluştur",
+    "makeInWizardHint": "Videoyu hazır sahnelerden logonuz, görselleriniz ve müziğinizle oluşturun. \"Use for my campaign\" düğmesine tıkladığınızda buraya eklenir.",
     "yourBanner": "Bannerın",
     "yourVideo": "Reklam videon",
     "yourCreatives": "Reklam kreatiflerin",

@@ -576,6 +576,8 @@
     "tooLong": "その動画は {{seconds}} 秒です。広告は最大 {{max}} までです。",
     "spotUploaded": "広告枠をアップロードしました。掲載前に審査します",
     "uploadFailed": "アップロードに失敗しました",
+    "makeInWizard": "Ad Wizardで作成",
+    "makeInWizardHint": "用意されたシーンにロゴ、画像、音楽を入れて動画を作れます。「Use for my campaign」をクリックするとここに追加されます。",
     "yourBanner": "あなたのバナー",
     "yourVideo": "あなたの広告動画",
     "yourCreatives": "あなたの広告素材",

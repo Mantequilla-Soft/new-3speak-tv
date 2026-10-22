@@ -598,6 +598,8 @@
     "tooLong": "{{seconds}} segundo ang video na iyan. {{max}} ang pinakamahabang puwedeng itakbo ng isang ad.",
     "spotUploaded": "Na-upload ang spot. Ire-review namin ito bago tumakbo",
     "uploadFailed": "Pumalya ang upload",
+    "makeInWizard": "Gawin sa Ad Wizard",
+    "makeInWizardHint": "Buuin ang video mula sa mga handang eksena gamit ang iyong logo, mga larawan at musika. Idaragdag ito rito kapag pinindot mo ang \"Use for my campaign\".",
     "yourBanner": "Ang banner mo",
     "yourVideo": "Ang ad video mo",
     "yourCreatives": "Ang mga ad creative mo",

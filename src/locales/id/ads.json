@@ -576,6 +576,8 @@
     "tooLong": "Video itu {{seconds}} detik. Iklan paling lama {{max}}.",
     "spotUploaded": "Spot diunggah. Kami akan meninjaunya sebelum tayang",
     "uploadFailed": "Gagal mengunggah",
+    "makeInWizard": "Buat di Ad Wizard",
+    "makeInWizardHint": "Susun video dari adegan siap pakai dengan logo, gambar, dan musik Anda. Video ditambahkan di sini saat Anda mengklik \"Use for my campaign\".",
     "yourBanner": "Banner-mu",
     "yourVideo": "Video iklanmu",
     "yourCreatives": "Materi iklanmu",

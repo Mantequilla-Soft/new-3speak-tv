@@ -67,6 +67,7 @@ const ObsChatOverlay = lazyRoute(() => import("./page/ObsChatOverlay"), "./page/
 // The index route (HomeGrouped) stays eager - lazying it would only add a waterfall.
 const AboutPage = lazyRoute(() => import("./components/LandingPage/AboutPage"), "./components/LandingPage/AboutPage");
 const FaqPage = lazyRoute(() => import("./page/Faq"), "./page/Faq");
+const AdWizardPage = lazyRoute(() => import("./page/AdWizardPage"), "./page/AdWizardPage");
 const Audio = lazyRoute(() => import("./page/Audio"), "./page/Audio");
 const AudioPost = lazyRoute(() => import("./page/AudioPost"), "./page/AudioPost");
 const AuthCallback = lazyRoute(() => import("./page/Login/AuthCallback"), "./page/Login/AuthCallback");
@@ -760,6 +761,7 @@ function App() {
               <Route path="/communities" element={<Navigate to="/groups" replace />} />
               <Route path="/about" element={<AboutPage />} />
               <Route path="/faq" element={<FaqPage />} />
+              <Route path="/ad-wizard" element={<AdWizardPage />} />
               <Route path="/privacy" element={<Legal />} />
               <Route path="/imprint" element={<Legal />} />
               <Route path="/shorts/stories" element={<ShortsStoryFeed />} />
