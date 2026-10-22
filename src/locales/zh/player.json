@@ -46,7 +46,8 @@
     "close": "关闭播放列表"
   },
   "overlay": {
-    "replay": "重播"
+    "replay": "重播",
+    "nextIn": "{{seconds}} 秒后播放下一个视频"
   },
   "reactions": {
     "translation": "翻译",

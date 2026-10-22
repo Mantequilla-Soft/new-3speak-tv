@@ -115,6 +115,26 @@
     "translation": "Çeviri",
     "translationFailed": "Çeviri başarısız. Çeviri servisi çalışıyor mu?",
     "reportComment": "Yorumu bildir",
-    "openInShorts": "Shorts'ta aç"
+    "openInShorts": "Shorts'ta aç",
+    "sortBy": "Sırala",
+    "sortNewest": "En yeni",
+    "sortOldest": "En eski",
+    "sortPopular": "Popüler",
+    "pin": "Sabitle",
+    "unpin": "Sabitlemeyi kaldır",
+    "pinned": "Yorum sabitlendi",
+    "unpinned": "Yorumun sabitlemesi kaldırıldı",
+    "pinnedByCreator": "İçerik üreticisi tarafından sabitlendi",
+    "pinFailed": "Sabitleme değiştirilemedi. Lütfen tekrar dene.",
+    "pinWalletPrompt": "Videondaki bu yorumu sabitlemek veya sabitlemesini kaldırmak için imzala",
+    "addImage": "Görsel ekle",
+    "imageTooLarge": "Bu görsel çok büyük (en fazla 10 MB).",
+    "imageUploadFailed": "Görsel yüklenemedi. Lütfen tekrar dene.",
+    "dropImage": "Yorumuna eklemek için görseli bırak",
+    "removeImage": "Görseli kaldır",
+    "uploadingImage": "Görsel yükleniyor",
+    "write": "Yaz",
+    "preview": "Önizleme",
+    "nothingToPreview": "Henüz önizlenecek bir şey yok"
   }
 }

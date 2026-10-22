@@ -1,12 +1,12 @@
 import MarkdownView from '../common/MarkdownView';
-import React, { useEffect, useState, useRef, useCallback } from 'react';
+import React, { useEffect, useState, useRef, useCallback, useMemo } from 'react';
 import { getHiveClient } from '../../utils/hiveNode';
 import './CommentSection.scss';
 import './BlogContent.scss';
 import { BiDislike } from 'react-icons/bi';
 import { ImSpinner9 } from 'react-icons/im';
 import { TailChase } from 'ldrs/react';
-import { MdVideocam, MdComment, MdKeyboardArrowUp, MdTranslate, MdFlag } from 'react-icons/md';
+import { MdVideocam, MdComment, MdKeyboardArrowUp, MdTranslate, MdFlag, MdPushPin } from 'react-icons/md';
 import ReportModal, { isReported } from '../modal/ReportModal';
 import useTranslation from '../../hooks/useTranslation';
 import { useTranslation as useI18n } from 'react-i18next';
@@ -34,6 +34,10 @@ import { Link } from 'react-router-dom';
 import EmojiGifPicker from '../common/EmojiGifPicker/EmojiGifPicker';
 import { insertAtCursor, gifMarkdown } from '../../utils/composerInsert';
 import { getHiveRenderer } from '../../lib/hiveRenderer';
+import { setCommentPinned } from '../../lib/commentPins';
+import {
+  readCommentSort, saveCommentSort, sortComments, pinnedFirst, useCommentImageUpload, CommentImageButton, CommentDropZone,
+} from './commentTools';
 import {
   linkifyTimestamps, handleTimestampClick, linkTimestampsInMarkdown, unlinkTimestampsInMarkdown,
 } from '../../utils/timestamps';
@@ -82,7 +86,7 @@ function splitRepliedTo(body) {
     : { text: body || '', suffix: '' };
 }
 
-function CommentSection({ videoDetails, author, permlink, currentTime, duration, onSeek, onPause, onRefreshReactions }) {
+function CommentSection({ videoDetails, author, permlink, currentTime, duration, onSeek, onPause, onRefreshReactions, pinnedComments, pinnable = false }) {
   const { t } = useI18n();
   const { user, incubationHandle } = useAppStore();
   // The name to SHOW. For an incubating user there is no Hive account, so
@@ -106,6 +110,49 @@ function CommentSection({ videoDetails, author, permlink, currentTime, duration,
   // Cache for rendered comment bodies
   const [renderedBodies, setRenderedBodies] = useState({});
   const commentInputRef = useRef(null);
+  const commentImages = useCommentImageUpload(commentInputRef, commentInfo, setCommentInfo, user);
+
+  // Write / Preview: the preview goes through what a posted comment goes
+  // through (handlePostComment's linkTimestampsInMarkdown, then the fetch's
+  // render(stripTimestampEmbeds(...)), then processedBody's linkifyTimestamps),
+  // so it shows exactly what will be posted.
+  const canSeek = !!onSeek;
+  const toPreviewHtml = useCallback((render, text) => {
+    const html = render(stripTimestampEmbeds(linkTimestampsInMarkdown(text, { author, permlink, duration })));
+    return canSeek ? linkifyTimestamps(html, duration) : html;
+  }, [author, permlink, duration, canSeek]);
+  const onSeekLatest = useRef(onSeek);
+  useEffect(() => { onSeekLatest.current = onSeek; }, [onSeek]);
+  const onPreviewClick = useCallback((e) => handleTimestampClick(e, onSeekLatest.current), []);
+
+  const [sort, setSort] = useState(readCommentSort);
+  const changeSort = (v) => { setSort(v); saveCommentSort(v); };
+
+  // Comments the video's author pinned to the top (permlinks, newest pin first),
+  // stored on the video row by the checker (routes/commentPins.js).
+  const [pinned, setPinned] = useState(() => (Array.isArray(pinnedComments) ? pinnedComments : []));
+  useEffect(() => { setPinned(Array.isArray(pinnedComments) ? pinnedComments : []); }, [pinnedComments, author, permlink]);
+  // Only the author of the video, signed in with a Hive account.
+  const canPin = pinnable && !!user && !incubationHandle && user === author;
+  const [pinBusy, setPinBusy] = useState(null);
+  const handleTogglePin = async (comment) => {
+    if (!canPin || pinBusy) return;
+    const isPinned = pinned.includes(comment.permlink);
+    setPinBusy(comment.permlink);
+    try {
+      const next = await setCommentPinned({ author, permlink, comment: comment.permlink, pinned: !isPinned });
+      setPinned(next);
+      toast.success(isPinned ? t('comments.section.unpinned') : t('comments.section.pinned'));
+    } catch (err) {
+      console.error('Comment pin failed:', err);
+      toast.error(err?.message || t('comments.section.pinFailed'));
+    } finally {
+      setPinBusy(null);
+    }
+  };
+
+  // Pinned first (in pin order), then the rest in the viewer's order.
+  const displayList = useMemo(() => pinnedFirst(sortComments(commentList, sort), pinned), [commentList, sort, pinned]);
 
   // Timeline position state — auto-follows playhead unless manually edited
   const [timelineInput, setTimelineInput] = useState('0:00');
@@ -664,6 +711,14 @@ function CommentSection({ videoDetails, author, permlink, currentTime, duration,
       {/* Comment tab */}
       {activeTab === 'comment' && (
         <div className="add-comment-wrap">
+          <CommentDropZone
+            images={commentImages}
+            value={commentInfo}
+            setValue={setCommentInfo}
+            toHtml={toPreviewHtml}
+            previewClassName="comment-content"
+            onPreviewClick={onPreviewClick}
+          >
           <textarea
             ref={commentInputRef}
             placeholder={t('comments.section.commentPlaceholder')}
@@ -675,12 +730,17 @@ function CommentSection({ videoDetails, author, permlink, currentTime, duration,
               e.target.style.height = e.target.scrollHeight + 'px';
             }}
             onFocus={handleTextareaFocus}
+            onPaste={commentImages.onPaste}
           />
+          </CommentDropZone>
           <div className="comment-form-row">
-            <EmojiGifPicker
-              onPickEmoji={(em) => insertAtCursor(commentInputRef.current, commentInfo, em, setCommentInfo)}
-              onPickGif={(url) => insertAtCursor(commentInputRef.current, commentInfo, gifMarkdown(url), setCommentInfo)}
-            />
+            <div className="comment-compose-tools">
+              <EmojiGifPicker
+                onPickEmoji={(em) => insertAtCursor(commentInputRef.current, commentInfo, em, setCommentInfo)}
+                onPickGif={(url) => insertAtCursor(commentInputRef.current, commentInfo, gifMarkdown(url), setCommentInfo)}
+              />
+              <CommentImageButton uploading={commentImages.uploading} onFiles={commentImages.upload} />
+            </div>
             <div className="btn-wrap">
               <Button text={t('common.actions.cancel')} onClick={() => {
                 setCommentInfo('');
@@ -709,7 +769,17 @@ function CommentSection({ videoDetails, author, permlink, currentTime, duration,
         </div>
       )}
 
-      <h4>{t('comments.section.count', { count: countComments(commentList) })}</h4>
+      <div className="comments-header-row">
+        <h4>{t('comments.section.count', { count: countComments(commentList) })}</h4>
+        <label className="comment-sort">
+          <span className="comment-sort-label">{t('comments.section.sortBy')}</span>
+          <select value={sort} onChange={(e) => changeSort(e.target.value)}>
+            <option value="newest">{t('comments.section.sortNewest')}</option>
+            <option value="oldest">{t('comments.section.sortOldest')}</option>
+            <option value="popular">{t('comments.section.sortPopular')}</option>
+          </select>
+        </label>
+      </div>
 
       {loadingComments ? (
         <div className="comments-loading">
@@ -718,7 +788,7 @@ function CommentSection({ videoDetails, author, permlink, currentTime, duration,
           </div>
         </div>
       ) : (
-        commentList.map((comment, index) => (
+        displayList.map((comment, index) => (
         <Comment
         key={`${comment.author?.username}-${comment.permlink || index}`}
           commentIndex={index}
@@ -758,6 +828,12 @@ function CommentSection({ videoDetails, author, permlink, currentTime, duration,
       editableBy={editableBy}
       onEditComment={handleEditComment}
       editableText={editableText}
+      isPinned={pinned.includes(comment.permlink)}
+      onTogglePin={canPin && comment.onChain !== false ? handleTogglePin : null}
+      pinBusy={pinBusy === comment.permlink}
+      currentUser={user}
+      onPause={onPause}
+      toPreviewHtml={toPreviewHtml}
         />
       )) )}
     </div>
@@ -803,6 +879,14 @@ function Comment({
       editableBy,
       onEditComment,
       editableText,
+      isPinned = false,
+      onTogglePin = null,
+      pinBusy = false,
+      currentUser = null,
+      // The reply box's React tab pauses the video while recording, as the
+      // top-level one does. It was used here without ever being passed down.
+      onPause,
+      toPreviewHtml,
 }) {
   const { t } = useI18n();
   const isReplying = activeReply === comment.permlink;
@@ -816,6 +900,8 @@ function Comment({
   const editInputRef = useRef(null);
   const [editing, setEditing] = useState(false);
   const [editText, setEditText] = useState('');
+  const editImages = useCommentImageUpload(editInputRef, editText, setEditText, currentUser);
+  const replyImages = useCommentImageUpload(replyInputRef, replyText, setReplyText, currentUser);
   const [savingEdit, setSavingEdit] = useState(false);
   // Off-chain replies (onChain: false) live in our own store, not on Hive, so a
   // Hive edit cannot reach them.
@@ -893,6 +979,9 @@ function Comment({
           <div className="comment-header">
             <AuthorBadge author={comment?.author?.username} reputation={comment?.author?.reputation} noLink />
             <span className="comment-date"><TimeAgo date={comment?.created_at} /></span>
+            {isPinned && (
+              <span className="comment-pinned-badge"><MdPushPin size={12} />{t('comments.section.pinnedByCreator')}</span>
+            )}
             {comment?.edited && <span className="comment-edited">{t('comments.section.edited')}</span>}
             {comment?.parentTimestamp != null && (
               <span className="comment-timestamp-badge" onClick={() => onSeek?.(comment.parentTimestamp)}>{t('comments.section.atTime', { time: formatTimeInput(comment.parentTimestamp) })}</span>
@@ -901,6 +990,15 @@ function Comment({
           </div>
           {editing ? (
             <div className="add-comment-wrap comment-edit-wrap">
+              <CommentDropZone
+                images={editImages}
+                value={editText}
+                setValue={setEditText}
+                disabled={savingEdit}
+                toHtml={toPreviewHtml}
+                previewClassName="comment-content"
+                onPreviewClick={onBodyClick}
+              >
               <textarea
                 ref={editInputRef}
                 className="textarea-box"
@@ -911,12 +1009,17 @@ function Comment({
                   e.target.style.height = 'auto';
                   e.target.style.height = e.target.scrollHeight + 'px';
                 }}
+                onPaste={editImages.onPaste}
               />
+              </CommentDropZone>
               <div className="comment-form-row">
-                <EmojiGifPicker
-                  onPickEmoji={(em) => insertAtCursor(editInputRef.current, editText, em, setEditText)}
-                  onPickGif={(url) => insertAtCursor(editInputRef.current, editText, gifMarkdown(url), setEditText)}
-                />
+                <div className="comment-compose-tools">
+                  <EmojiGifPicker
+                    onPickEmoji={(em) => insertAtCursor(editInputRef.current, editText, em, setEditText)}
+                    onPickGif={(url) => insertAtCursor(editInputRef.current, editText, gifMarkdown(url), setEditText)}
+                  />
+                  <CommentImageButton uploading={editImages.uploading} onFiles={editImages.upload} />
+                </div>
                 <div className="btn-wrap">
                   <Button text={t('common.actions.cancel')} onClick={() => setEditing(false)} />
                   <Button
@@ -976,6 +1079,13 @@ function Comment({
                   <MdVideocam size={13} />
                   <span className="comment-btn-label">{t('comments.section.openInShorts')}</span>
                 </Link>
+              )}
+              {onTogglePin && depth === 0 && (
+                <Button
+                  text={isPinned ? t('comments.section.unpin') : t('comments.section.pin')}
+                  onClick={() => onTogglePin(comment)}
+                  disabled={pinBusy}
+                />
               )}
               {canEdit && !editing && (
                 <Button text={t('common.actions.edit')} onClick={startEdit} />
@@ -1043,6 +1153,14 @@ function Comment({
           {/* Comment tab */}
           {replyTab === 'comment' && (
             <>
+              <CommentDropZone
+                images={replyImages}
+                value={replyText}
+                setValue={setReplyText}
+                toHtml={toPreviewHtml}
+                previewClassName="comment-content"
+                onPreviewClick={onBodyClick}
+              >
               <textarea
                 ref={replyInputRef}
                 placeholder={t('comments.section.replyPlaceholder')}
@@ -1053,12 +1171,17 @@ function Comment({
                   e.target.style.height = 'auto';
                   e.target.style.height = e.target.scrollHeight + 'px';
                 }}
+                onPaste={replyImages.onPaste}
               />
+              </CommentDropZone>
               <div className="comment-form-row">
-                <EmojiGifPicker
-                  onPickEmoji={(em) => insertAtCursor(replyInputRef.current, replyText, em, setReplyText)}
-                  onPickGif={(url) => insertAtCursor(replyInputRef.current, replyText, gifMarkdown(url), setReplyText)}
-                />
+                <div className="comment-compose-tools">
+                  <EmojiGifPicker
+                    onPickEmoji={(em) => insertAtCursor(replyInputRef.current, replyText, em, setReplyText)}
+                    onPickGif={(url) => insertAtCursor(replyInputRef.current, replyText, gifMarkdown(url), setReplyText)}
+                  />
+                  <CommentImageButton uploading={replyImages.uploading} onFiles={replyImages.upload} />
+                </div>
                 <div className="btn-wrap">
                   <Button text={t('common.actions.cancel')} onClick={() => {setReplyText(""); setActiveReply(null)}} />
                   <Button text={t('comments.section.commentButton')} prominent onClick={() => handlePostComment(replyTimestamp)} />
@@ -1126,6 +1249,9 @@ function Comment({
       editableBy={editableBy}
       onEditComment={onEditComment}
       editableText={editableText}
+      currentUser={currentUser}
+      onPause={onPause}
+      toPreviewHtml={toPreviewHtml}
             />
           ))}
         </div>

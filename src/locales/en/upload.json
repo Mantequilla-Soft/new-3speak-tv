@@ -213,8 +213,8 @@
       "hintOff": "Only banners and tickers on this video."
     },
     "gated": {
-      "label": "Supporters only",
-      "info": "Encrypts this video so only 3Speak Pro subscribers can play it. A <b>10 second unencrypted preview</b> is published alongside it, so the post still shows a trailer everywhere on Hive. Your title, description and tags are ordinary Hive post content and are <b>not encrypted</b> — only the video is. <b>This cannot be changed after upload.</b>",
+      "label": "Members only",
+      "info": "Encrypts this video so only 3Speak Pro subscribers can play it. A <b>10 second unencrypted preview</b> is published alongside it, so the post still shows a trailer everywhere on Hive. Your title, description and tags are ordinary Hive post content and are <b>not encrypted</b>: only the video is. <b>This cannot be changed after upload.</b>",
       "withGuests_one": "Pro subscribers + {{count}} guest.",
       "withGuests_other": "Pro subscribers + {{count}} guests.",
       "hint": "Pro subscribers only."
@@ -396,7 +396,7 @@
     "noHost": "No embed host configured",
     "emptyFile": "Empty file",
     "noToken": "Failed to obtain upload token",
-    "gatedUnsupported": "This upload server does not support supporters-only videos yet. Nothing was uploaded. Turn the toggle off to publish publicly, or try again later.",
+    "gatedUnsupported": "This upload server does not support members-only videos yet. Nothing was uploaded. Turn the toggle off to publish publicly, or try again later.",
     "couldNotStart": "Could not start the upload — please retry",
     "sessionExpired": "Upload session expired — please retry",
     "chunkFailed": "Chunk {{index}} failed",
@@ -409,7 +409,7 @@
     "noVideoFile": "No video file",
     "noEmbedUrlAfterUpload": "Upload succeeded but no embed URL was returned",
     "deferralLost": "This upload could not be finalised because its upload session was interrupted. Nothing was published. Please re-select the video and upload it again.",
-    "gatedTooLate": "Supporters-only was switched on after the upload had already started, and this upload server cannot apply it afterwards. Nothing was published. Please re-select the video and turn supporters-only on before continuing.",
+    "gatedTooLate": "Members-only was switched on after the upload had already started, and this upload server cannot apply it afterwards. Nothing was published. Please re-select the video and turn members-only on before continuing.",
     "noSnapsContainer": "Could not find a snaps container post to reply to",
     "scheduleSaveFailed": "Failed to save scheduled post",
     "couldNotSchedule": "Could not schedule post",

@@ -47,7 +47,8 @@
     "close": "Playlist sluiten"
   },
   "overlay": {
-    "replay": "Opnieuw afspelen"
+    "replay": "Opnieuw afspelen",
+    "nextIn": "Volgende video over {{seconds}}"
   },
   "reactions": {
     "translation": "Vertaling",

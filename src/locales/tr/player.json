@@ -47,7 +47,8 @@
     "close": "Oynatma listesini kapat"
   },
   "overlay": {
-    "replay": "Tekrar oynat"
+    "replay": "Tekrar oynat",
+    "nextIn": "Sonraki video {{seconds}} içinde"
   },
   "reactions": {
     "translation": "Çeviri",

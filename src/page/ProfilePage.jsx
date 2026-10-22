@@ -24,6 +24,9 @@ import { IoMdShare, IoMdAdd } from "react-icons/io";
 import { MdLock, MdPublic, MdClose, MdRssFeed } from "react-icons/md";
 import SocialLinks from "../components/Userprofilepage/SocialLinks";
 import LeaderboardBadges from "../components/LeaderboardBadges/LeaderboardBadges";
+import SupportersBadges from "../components/Supporters/SupportersBadges";
+import SupportersList from "../components/Supporters/SupportersList";
+import { useSupporters } from "../lib/supports";
 import HiveBadges from "../components/HiveBadges/HiveBadges";
 import ProfileStreams, { ProfileLiveNow } from "../components/Userprofilepage/ProfileStreams";
 import AddSocialLink_modal from "../components/modal/AddSocialLink_modal";
@@ -73,7 +76,9 @@ function ProfilePage() {
     const tab = searchParams.get('tab');
     if (tab === 'playlists') return 'playlists';
     if (tab === 'shorts') return 'shorts';
-    if (tab === 'supporters') return 'supporters';
+    if (tab === 'members') return 'members';
+    // `supporters` was the members-only shelf's old id; it now means tippers.
+    if (tab === 'supports' || tab === 'supporters') return 'supports';
     if (tab === 'audio') return 'audio';
     if (tab === 'community') return 'community';
     if (tab === 'links') return 'links';
@@ -87,7 +92,8 @@ function ProfilePage() {
     const tab = searchParams.get('tab');
     if (tab === 'playlists') setShow('playlists');
     else if (tab === 'shorts') setShow('shorts');
-    else if (tab === 'supporters') setShow('supporters');
+    else if (tab === 'members') setShow('members');
+    else if (tab === 'supports' || tab === 'supporters') setShow('supports');
     else if (tab === 'audio') setShow('audio');
     else if (tab === 'community') setShow('community');
     else if (tab === 'links') setShow('links');
@@ -350,7 +356,7 @@ function ProfilePage() {
     staleTime: 5 * 60 * 1000,
     retry: 1,
   });
-  // 🔐 Supporters-only shelf. Public and unfiltered by entitlement on purpose:
+  // 🔐 Members-only shelf. Public and unfiltered by entitlement on purpose:
   // it exists to show non-subscribers what they are missing. The tab is hidden
   // entirely when the creator has none, so nobody sees an empty paywall pitch.
   const { data: gatedData, isLoading: isGatedLoading } = useQuery({
@@ -363,6 +369,11 @@ function ProfilePage() {
   });
   const gatedVideos = gatedData?.videos || [];
   const hasGated = gatedVideos.length > 0;
+
+  // Tips on your videos. Always a tab here: this page is
+  // only ever your own profile, so it's where you find out the feature exists.
+  const { data: supportersData } = useSupporters(user);
+  const supporterCount = supportersData?.total || 0;
 
   const videoCount = profileCounts?.videos || 0;
   const shortsCount = profileCounts?.shorts || 0;
@@ -524,6 +535,7 @@ function ProfilePage() {
             <div className="own-badges">
               <LeaderboardBadges username={user} />
             </div>
+            <SupportersBadges username={user} onOpen={() => selectTab('supports')} />
           </>
         }
         aside={
@@ -621,10 +633,13 @@ function ProfilePage() {
             {t('profile.tabs.audio')} {audioCount > 0 && `(${audioCount})`}
           </span>
           {hasGated && (
-            <span className={show === "supporters" ? "active" : ""} onClick={() => selectTab("supporters")}>
-              🔒 {t('profile.tabs.supporters')} ({gatedVideos.length})
+            <span className={show === "members" ? "active" : ""} onClick={() => selectTab("members")}>
+              🔒 {t('profile.tabs.members')} ({gatedVideos.length})
             </span>
           )}
+          <span className={show === "supports" ? "active" : ""} onClick={() => selectTab("supports")}>
+            {t('profile.tabs.supporters')} {supporterCount > 0 && `(${supporterCount})`}
+          </span>
           {streamCount > 0 && (
             <span className={show === "streams" ? "active" : ""} onClick={() => selectTab("streams")}>
               {t('profile.tabs.streams')} ({streamCount})
@@ -723,7 +738,7 @@ function ProfilePage() {
           ) : (
             <Card3 windowed videos={shortsVideos} loading={isFetchingNextShortsPage} linkPrefix="/shorts" linkQuery={`&user=${user}`} getViewCount={getViewCount} shortsGrid />
           )
-        ) : show === "supporters" ? (
+        ) : show === "members" ? (
           isGatedLoading ? (
             <BarLoader />
           ) : (
@@ -731,6 +746,8 @@ function ProfilePage() {
           )
         ) : show === "audio" ? (
           <UserAudioList user={user} isOwnProfile />
+        ) : show === "supports" ? (
+          <SupportersList user={user} isOwnProfile />
         ) : show === "streams" ? (
           <ProfileStreams user={user} getViewCount={getViewCount} />
         ) : show === "community" ? (

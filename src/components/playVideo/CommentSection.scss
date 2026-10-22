@@ -59,6 +59,41 @@
       margin-top: 0;
     }
   }
+
+  .comment-sort {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    color: var(--text-secondary);
+
+    select {
+      font-size: 12px;
+      color: var(--text-primary);
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-light);
+      border-radius: 8px;
+      padding: 4px 8px;
+      cursor: pointer;
+    }
+  }
+
+  // Emoji, GIF and image buttons, side by side left of Cancel / Comment.
+  .comment-compose-tools {
+    display: inline-flex;
+    align-items: center;
+    gap: 2px;
+  }
+
+  .comment-pinned-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 3px;
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--accent-primary);
+    white-space: nowrap;
+  }
 }
 /* Loader for comments */
 .vid-comment-wrap {

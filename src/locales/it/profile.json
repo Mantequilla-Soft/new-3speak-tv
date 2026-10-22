@@ -250,6 +250,7 @@
     "shorts": "Shorts",
     "audio": "Audio",
     "supporters": "Sostenitori",
+    "members": "Membri",
     "streams": "Dirette",
     "community": "Community",
     "playlists": "Playlist",
@@ -287,5 +288,25 @@
     "minAgo_one": "{{count}} min fa",
     "minAgo_many": "{{count}} min fa",
     "minAgo_other": "{{count}} min fa"
+  },
+  "supports": {
+    "incomingTitle": "@{{user}} ha dato a @{{profile}} {{amount}} di mance in totale",
+    "outgoingTitle": "@{{profile}} ha dato a @{{user}} {{amount}} di mance in totale",
+    "received": "Ricevute",
+    "given": "Date",
+    "subTabTotal": "{{label}} · {{amount}}",
+    "emptyReceived": "@{{user}} non ha ancora ricevuto mance su un video.",
+    "emptyReceivedOwn": "Ancora nessuna mancia. Quando qualcuno lascia una mancia su uno dei tuoi video, compare qui.",
+    "emptyGiven": "@{{user}} non ha ancora lasciato mance su nessun video.",
+    "emptyGivenOwn": "Non hai ancora lasciato mance su nessun video. Le mance che invii da un video compaiono qui.",
+    "untitled": "Senza titolo",
+    "paidInHive": "inviato come {{amount}} HIVE",
+    "hideTip": "Nascondi mancia",
+    "unhideTip": "Mostra mancia",
+    "hiddenLabel": "Nascosta dal tuo profilo",
+    "hiddenToast": "Mancia nascosta dal tuo profilo",
+    "unhiddenToast": "La mancia è di nuovo visibile sul tuo profilo",
+    "hideFailed": "Impossibile modificare questa mancia. Riprova.",
+    "hideWalletPrompt": "Firma per scegliere quali mance mostrare sul tuo profilo"
   }
 }

@@ -47,7 +47,8 @@
     "close": "প্লেলিস্ট বন্ধ করুন"
   },
   "overlay": {
-    "replay": "আবার চালান"
+    "replay": "আবার চালান",
+    "nextIn": "পরের ভিডিও {{seconds}} সেকেন্ডে"
   },
   "reactions": {
     "translation": "অনুবাদ",

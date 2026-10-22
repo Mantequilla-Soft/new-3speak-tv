@@ -218,6 +218,7 @@
     "shorts": "Shorts",
     "audio": "Âm thanh",
     "supporters": "Người ủng hộ",
+    "members": "Thành viên",
     "streams": "Buổi phát",
     "community": "Cộng đồng",
     "playlists": "Danh sách phát",
@@ -253,5 +254,25 @@
   "uploads": {
     "processing": "Đang xử lý video của bạn",
     "minAgo_other": "{{count}} phút trước"
+  },
+  "supports": {
+    "incomingTitle": "@{{user}} đã tip cho @{{profile}} tổng cộng {{amount}}",
+    "outgoingTitle": "@{{profile}} đã tip cho @{{user}} tổng cộng {{amount}}",
+    "received": "Đã nhận",
+    "given": "Đã tặng",
+    "subTabTotal": "{{label}} · {{amount}}",
+    "emptyReceived": "@{{user}} chưa nhận được tip nào trên video.",
+    "emptyReceivedOwn": "Chưa có tip nào. Khi ai đó tip cho một video của bạn, khoản đó sẽ hiện ở đây.",
+    "emptyGiven": "@{{user}} chưa tip cho video nào.",
+    "emptyGivenOwn": "Bạn chưa tip cho video nào. Các khoản tip bạn gửi từ video sẽ hiện ở đây.",
+    "untitled": "Không có tiêu đề",
+    "paidInHive": "gửi dưới dạng {{amount}} HIVE",
+    "hideTip": "Ẩn tip",
+    "unhideTip": "Hiện tip",
+    "hiddenLabel": "Đã ẩn khỏi hồ sơ của bạn",
+    "hiddenToast": "Đã ẩn tip khỏi hồ sơ của bạn",
+    "unhiddenToast": "Tip đã hiện lại trên hồ sơ của bạn",
+    "hideFailed": "Không thể thay đổi tip này. Vui lòng thử lại.",
+    "hideWalletPrompt": "Ký để thay đổi những tip hiển thị trên hồ sơ của bạn"
   }
 }

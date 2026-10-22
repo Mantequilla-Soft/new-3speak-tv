@@ -46,7 +46,8 @@
     "close": "ปิดเพลย์ลิสต์"
   },
   "overlay": {
-    "replay": "เล่นอีกครั้ง"
+    "replay": "เล่นอีกครั้ง",
+    "nextIn": "วิดีโอถัดไปใน {{seconds}}"
   },
   "reactions": {
     "translation": "คำแปล",

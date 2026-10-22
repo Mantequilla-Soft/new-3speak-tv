@@ -214,8 +214,8 @@
       "hintOff": "Só banners e tickers neste vídeo."
     },
     "gated": {
-      "label": "Só para apoiadores",
-      "info": "Criptografa este vídeo para que só assinantes do 3Speak Pro possam reproduzi-lo. Uma <b>prévia de 10 segundos sem criptografia</b> é publicada junto, então o post ainda mostra um trailer em toda a Hive. Seu título, descrição e tags são conteúdo comum de post da Hive e <b>não são criptografados</b> — só o vídeo é. <b>Isso não pode ser alterado depois do envio.</b>",
+      "label": "Só para membros",
+      "info": "Criptografa este vídeo para que só assinantes do 3Speak Pro possam reproduzi-lo. Uma <b>prévia de 10 segundos sem criptografia</b> é publicada junto, então o post ainda mostra um trailer em toda a Hive. Seu título, descrição e tags são conteúdo comum de post da Hive e <b>não são criptografados</b>: só o vídeo é. <b>Isso não pode ser alterado depois do envio.</b>",
       "withGuests_one": "Assinantes Pro + {{count}} convidado.",
       "withGuests_many": "Assinantes Pro + {{count}} convidados.",
       "withGuests_other": "Assinantes Pro + {{count}} convidados.",
@@ -398,7 +398,7 @@
     "noHost": "Nenhum host de incorporação configurado",
     "emptyFile": "Arquivo vazio",
     "noToken": "Não foi possível obter o token de envio",
-    "gatedUnsupported": "Este servidor de envio ainda não aceita vídeos só para apoiadores. Nada foi enviado. Desative a opção para publicar para todos ou tente de novo mais tarde.",
+    "gatedUnsupported": "Este servidor de upload ainda não aceita vídeos só para membros. Nada foi enviado. Desative a opção para publicar publicamente ou tente novamente mais tarde.",
     "couldNotStart": "Não foi possível iniciar o envio — tente de novo",
     "sessionExpired": "A sessão de envio expirou — tente de novo",
     "chunkFailed": "A parte {{index}} falhou",
@@ -411,7 +411,7 @@
     "noVideoFile": "Nenhum arquivo de vídeo",
     "noEmbedUrlAfterUpload": "O envio deu certo, mas nenhuma URL de incorporação foi retornada",
     "deferralLost": "Não foi possível finalizar este envio porque a sessão de envio foi interrompida. Nada foi publicado. Selecione o vídeo de novo e envie outra vez.",
-    "gatedTooLate": "A opção \"só para apoiadores\" foi ativada depois que o envio já tinha começado, e este servidor de envio não consegue aplicá-la depois. Nada foi publicado. Selecione o vídeo de novo e ative \"só para apoiadores\" antes de continuar.",
+    "gatedTooLate": "A opção só para membros foi ativada depois que o upload já tinha começado, e este servidor de upload não consegue aplicá-la depois. Nada foi publicado. Selecione o vídeo de novo e ative só para membros antes de continuar.",
     "noSnapsContainer": "Não foi possível encontrar um post container de snaps para responder",
     "scheduleSaveFailed": "Não foi possível salvar o post agendado",
     "couldNotSchedule": "Não foi possível agendar o post",

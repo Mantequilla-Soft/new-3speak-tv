@@ -234,6 +234,7 @@
     "shorts": "Shorts",
     "audio": "Ses",
     "supporters": "Destekçiler",
+    "members": "Üyeler",
     "streams": "Yayınlar",
     "community": "Topluluk",
     "playlists": "Oynatma listeleri",
@@ -270,5 +271,25 @@
     "processing": "Videoların işleniyor",
     "minAgo_one": "{{count}} dk önce",
     "minAgo_other": "{{count}} dk önce"
+  },
+  "supports": {
+    "incomingTitle": "@{{user}}, @{{profile}} hesabına toplam {{amount}} bahşiş verdi",
+    "outgoingTitle": "@{{profile}}, @{{user}} hesabına toplam {{amount}} bahşiş verdi",
+    "received": "Alınan",
+    "given": "Verilen",
+    "subTabTotal": "{{label}} · {{amount}}",
+    "emptyReceived": "@{{user}} henüz bir videoda bahşiş almadı.",
+    "emptyReceivedOwn": "Henüz bahşiş yok. Biri videolarından birine bahşiş verdiğinde burada görünür.",
+    "emptyGiven": "@{{user}} henüz hiçbir videoya bahşiş vermedi.",
+    "emptyGivenOwn": "Henüz hiçbir videoya bahşiş vermedin. Bir videodan gönderdiğin bahşişler burada görünür.",
+    "untitled": "Başlıksız",
+    "paidInHive": "{{amount}} HIVE olarak gönderildi",
+    "hideTip": "Bahşişi gizle",
+    "unhideTip": "Bahşişi göster",
+    "hiddenLabel": "Profilinde gizli",
+    "hiddenToast": "Bahşiş profilinden gizlendi",
+    "unhiddenToast": "Bahşiş profilinde yeniden görünüyor",
+    "hideFailed": "Bu bahşiş değiştirilemedi. Lütfen tekrar dene.",
+    "hideWalletPrompt": "Profilinde hangi bahşişlerin görüneceğini değiştirmek için imzala"
   }
 }

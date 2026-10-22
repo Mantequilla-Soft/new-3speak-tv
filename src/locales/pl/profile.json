@@ -266,6 +266,7 @@
     "shorts": "Shorts",
     "audio": "Audio",
     "supporters": "Wspierający",
+    "members": "Członkowie",
     "streams": "Transmisje",
     "community": "Społeczność",
     "playlists": "Playlisty",
@@ -304,5 +305,25 @@
     "minAgo_few": "{{count}} min temu",
     "minAgo_many": "{{count}} min temu",
     "minAgo_other": "{{count}} min temu"
+  },
+  "supports": {
+    "incomingTitle": "@{{user}} dał(a) @{{profile}} łącznie {{amount}} napiwków",
+    "outgoingTitle": "@{{profile}} dał(a) @{{user}} łącznie {{amount}} napiwków",
+    "received": "Otrzymane",
+    "given": "Dane",
+    "subTabTotal": "{{label}} · {{amount}}",
+    "emptyReceived": "@{{user}} nie otrzymał(a) jeszcze napiwków pod filmem.",
+    "emptyReceivedOwn": "Jeszcze brak napiwków. Gdy ktoś da napiwek pod jednym z twoich filmów, pojawi się tutaj.",
+    "emptyGiven": "@{{user}} nie dał(a) jeszcze napiwku pod żadnym filmem.",
+    "emptyGivenOwn": "Nie dałeś(-aś) jeszcze napiwku pod żadnym filmem. Napiwki wysłane spod filmu pojawią się tutaj.",
+    "untitled": "Bez tytułu",
+    "paidInHive": "wysłano jako {{amount}} HIVE",
+    "hideTip": "Ukryj napiwek",
+    "unhideTip": "Pokaż napiwek",
+    "hiddenLabel": "Ukryty w twoim profilu",
+    "hiddenToast": "Napiwek ukryty w twoim profilu",
+    "unhiddenToast": "Napiwek znów widoczny w twoim profilu",
+    "hideFailed": "Nie udało się zmienić tego napiwku. Spróbuj ponownie.",
+    "hideWalletPrompt": "Podpisz, aby zmienić, które napiwki są widoczne w twoim profilu"
   }
 }

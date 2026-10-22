@@ -46,7 +46,8 @@
     "close": "Tutup playlist"
   },
   "overlay": {
-    "replay": "Putar ulang"
+    "replay": "Putar ulang",
+    "nextIn": "Video berikutnya dalam {{seconds}}"
   },
   "reactions": {
     "translation": "Terjemahan",

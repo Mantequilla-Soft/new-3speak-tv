@@ -46,7 +46,8 @@
     "close": "Đóng danh sách phát"
   },
   "overlay": {
-    "replay": "Phát lại"
+    "replay": "Phát lại",
+    "nextIn": "Video tiếp theo sau {{seconds}}"
   },
   "reactions": {
     "translation": "Bản dịch",

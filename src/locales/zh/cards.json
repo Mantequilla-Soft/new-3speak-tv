@@ -5,7 +5,7 @@
   "topicTitle": "话题：{{topic}}",
   "watchingNow_other": "{{count}} 人正在观看",
   "badges": {
-    "gatedTitle": "仅限支持者 — 3Speak Pro 可解锁完整视频",
+    "gatedTitle": "仅限会员。3Speak Pro 可解锁完整视频",
     "pro": "PRO",
     "new": "新",
     "live": "● 直播中",

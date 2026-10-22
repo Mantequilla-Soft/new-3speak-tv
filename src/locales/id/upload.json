@@ -212,8 +212,8 @@
       "hintOff": "Hanya banner dan ticker di video ini."
     },
     "gated": {
-      "label": "Khusus pendukung",
-      "info": "Mengenkripsi video ini agar hanya pelanggan 3Speak Pro yang bisa memutarnya. <b>Pratinjau 10 detik tanpa enkripsi</b> diterbitkan bersamanya, jadi postingan tetap menampilkan cuplikan di mana pun di Hive. Judul, deskripsi, dan tag-mu adalah konten postingan Hive biasa dan <b>tidak dienkripsi</b> — hanya videonya. <b>Ini tidak bisa diubah setelah diunggah.</b>",
+      "label": "Khusus anggota",
+      "info": "Mengenkripsi video ini agar hanya pelanggan 3Speak Pro yang bisa memutarnya. <b>Pratinjau 10 detik tanpa enkripsi</b> diterbitkan bersamanya, jadi postingan tetap menampilkan cuplikan di mana pun di Hive. Judul, deskripsi, dan tag-mu adalah konten postingan Hive biasa dan <b>tidak dienkripsi</b>: hanya videonya. <b>Ini tidak bisa diubah setelah diunggah.</b>",
       "withGuests_other": "Pelanggan Pro + {{count}} tamu.",
       "hint": "Hanya pelanggan Pro."
     },
@@ -394,7 +394,7 @@
     "noHost": "Tidak ada host embed yang dikonfigurasi",
     "emptyFile": "File kosong",
     "noToken": "Gagal mendapatkan token unggah",
-    "gatedUnsupported": "Server unggah ini belum mendukung video khusus pendukung. Tidak ada yang diunggah. Matikan tombolnya untuk menerbitkan secara publik, atau coba lagi nanti.",
+    "gatedUnsupported": "Server unggah ini belum mendukung video khusus anggota. Tidak ada yang diunggah. Matikan opsi untuk menerbitkan secara publik, atau coba lagi nanti.",
     "couldNotStart": "Unggahan tidak dapat dimulai — silakan coba lagi",
     "sessionExpired": "Sesi unggah berakhir — silakan coba lagi",
     "chunkFailed": "Bagian {{index}} gagal",
@@ -407,7 +407,7 @@
     "noVideoFile": "Tidak ada file video",
     "noEmbedUrlAfterUpload": "Unggahan berhasil, tetapi tidak ada URL embed yang dikembalikan",
     "deferralLost": "Unggahan ini tidak dapat diselesaikan karena sesi unggahnya terputus. Tidak ada yang diterbitkan. Silakan pilih ulang video dan unggah lagi.",
-    "gatedTooLate": "Khusus pendukung diaktifkan setelah unggahan sudah dimulai, dan server unggah ini tidak bisa menerapkannya setelahnya. Tidak ada yang diterbitkan. Silakan pilih ulang video dan aktifkan khusus pendukung sebelum melanjutkan.",
+    "gatedTooLate": "Khusus anggota dinyalakan setelah unggahan sudah dimulai, dan server unggah ini tidak bisa menerapkannya belakangan. Tidak ada yang diterbitkan. Silakan pilih ulang videonya dan nyalakan khusus anggota sebelum melanjutkan.",
     "noSnapsContainer": "Tidak menemukan postingan kontainer Snaps untuk dibalas",
     "scheduleSaveFailed": "Gagal menyimpan postingan terjadwal",
     "couldNotSchedule": "Postingan tidak dapat dijadwalkan",

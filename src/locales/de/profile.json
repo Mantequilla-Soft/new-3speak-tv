@@ -234,6 +234,7 @@
     "shorts": "Shorts",
     "audio": "Audio",
     "supporters": "Unterstützer",
+    "members": "Mitglieder",
     "streams": "Streams",
     "community": "Community",
     "playlists": "Playlists",
@@ -270,5 +271,25 @@
     "processing": "Deine Videos werden verarbeitet",
     "minAgo_one": "vor {{count}} Min.",
     "minAgo_other": "vor {{count}} Min."
+  },
+  "supports": {
+    "incomingTitle": "@{{user}} hat @{{profile}} insgesamt {{amount}} als Tipp gegeben",
+    "outgoingTitle": "@{{profile}} hat @{{user}} insgesamt {{amount}} als Tipp gegeben",
+    "received": "Erhalten",
+    "given": "Gegeben",
+    "subTabTotal": "{{label}} · {{amount}}",
+    "emptyReceived": "@{{user}} hat bei Videos noch keine Tipps erhalten.",
+    "emptyReceivedOwn": "Noch keine Tipps. Wenn jemand bei einem deiner Videos einen Tipp gibt, erscheint er hier.",
+    "emptyGiven": "@{{user}} hat noch bei keinem Video einen Tipp gegeben.",
+    "emptyGivenOwn": "Du hast noch bei keinem Video einen Tipp gegeben. Tipps, die du bei einem Video gibst, erscheinen hier.",
+    "untitled": "Ohne Titel",
+    "paidInHive": "gesendet als {{amount}} HIVE",
+    "hideTip": "Tipp ausblenden",
+    "unhideTip": "Tipp einblenden",
+    "hiddenLabel": "In deinem Profil ausgeblendet",
+    "hiddenToast": "Tipp in deinem Profil ausgeblendet",
+    "unhiddenToast": "Tipp wird in deinem Profil wieder angezeigt",
+    "hideFailed": "Dieser Tipp konnte nicht geändert werden. Bitte versuch es nochmal.",
+    "hideWalletPrompt": "Signiere, um zu ändern, welche Tipps in deinem Profil erscheinen"
   }
 }

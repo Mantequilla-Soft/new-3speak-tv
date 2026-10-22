@@ -47,7 +47,8 @@
     "close": "Isara ang playlist"
   },
   "overlay": {
-    "replay": "Panoorin ulit"
+    "replay": "Panoorin ulit",
+    "nextIn": "Susunod na video sa {{seconds}}"
   },
   "reactions": {
     "translation": "Salin",

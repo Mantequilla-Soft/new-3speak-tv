@@ -115,6 +115,26 @@
     "translation": "Translation",
     "translationFailed": "Translation failed. Is the translation service running?",
     "reportComment": "Report comment",
-    "openInShorts": "Open in Shorts"
+    "openInShorts": "Open in Shorts",
+    "sortBy": "Sort",
+    "sortNewest": "Newest",
+    "sortOldest": "Oldest",
+    "sortPopular": "Popular",
+    "pin": "Pin",
+    "unpin": "Unpin",
+    "pinned": "Comment pinned",
+    "unpinned": "Comment unpinned",
+    "pinnedByCreator": "Pinned by creator",
+    "pinFailed": "Could not change the pin. Please try again.",
+    "pinWalletPrompt": "Sign to pin or unpin this comment on your video",
+    "addImage": "Add image",
+    "imageTooLarge": "That image is too large (max 10 MB).",
+    "imageUploadFailed": "Image upload failed. Please try again.",
+    "dropImage": "Drop image to add it to your comment",
+    "removeImage": "Remove image",
+    "uploadingImage": "Uploading image",
+    "write": "Write",
+    "preview": "Preview",
+    "nothingToPreview": "Nothing to preview yet"
   }
 }

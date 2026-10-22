@@ -7,6 +7,42 @@
 // 1.0.0 — that way they see all of these when develop is pushed to production.
 export const CHANGELOG = [
   {
+    version: '1.80.11',
+    date: '2026-10-22',
+    summary:
+      'The new Supporters tab lists every tip received and given, with the video, amount and message. Creators can hide tips they don\'t want shown.',
+  },
+  {
+    version: '1.80.10',
+    date: '2026-10-22',
+    summary:
+      'Every tip on a video now counts as support. Profiles show who supported them and whom they supported.',
+  },
+  {
+    version: '1.80.9',
+    date: '2026-10-22',
+    summary:
+      'Autoplay shows a 3, 2, 1 countdown you can cancel, and waits while you read comments or switch tabs.',
+  },
+  {
+    version: '1.80.8',
+    date: '2026-10-22',
+    summary:
+      'Comments now have a Preview tab, and you can add images by button, paste or drag and drop.',
+  },
+  {
+    version: '1.80.7',
+    date: '2026-10-22',
+    summary:
+      'Creators can pin up to three comments on their videos and Shorts.',
+  },
+  {
+    version: '1.80.6',
+    date: '2026-10-22',
+    summary:
+      'Sort comments by newest, oldest or most popular, on videos and Shorts.',
+  },
+  {
     version: '1.80.2',
     date: '2026-10-20',
     summary:

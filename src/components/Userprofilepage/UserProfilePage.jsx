@@ -43,6 +43,9 @@ import ProfileStreams, { ProfileLiveNow } from './ProfileStreams';
 import { fetchSnaps } from '../../lib/snaps';
 import SocialLinks from './SocialLinks';
 import LeaderboardBadges from '../LeaderboardBadges/LeaderboardBadges';
+import SupportersBadges from '../Supporters/SupportersBadges';
+import SupportersList from '../Supporters/SupportersList';
+import { useSupporters, useSupported } from '../../lib/supports';
 import HiveBadges from '../HiveBadges/HiveBadges';
 import ProfileHeader from '../ProfileHeader/ProfileHeader';
 import ProfileStats from '../ProfileHeader/ProfileStats';
@@ -77,6 +80,9 @@ function UserProfilePage() {
       if (tab === 'links') return 'links';
       if (tab === 'stats') return 'stats';
       if (tab === 'video') return 'video';
+      if (tab === 'members') return 'members';
+      // `supporters` was the members-only shelf's old id; it now means tippers.
+      if (tab === 'supports' || tab === 'supporters') return 'supports';
       // Overview is the landing tab: it shows what KIND of channel this is
       // before dropping the visitor into one endless list.
       return 'overview';
@@ -92,6 +98,8 @@ function UserProfilePage() {
       else if (tab === 'links') setShow('links');
       else if (tab === 'stats') setShow('stats');
       else if (tab === 'video') setShow('video');
+      else if (tab === 'members') setShow('members');
+      else if (tab === 'supports' || tab === 'supporters') setShow('supports');
       else if (!tab) setShow('overview');
     }, [searchParams]);
 
@@ -183,7 +191,7 @@ function UserProfilePage() {
     });
     const audioCount = audioCountData?.total || 0;
 
-    // 🔐 Supporters-only shelf. Public and unfiltered by entitlement on purpose:
+    // 🔐 Members-only shelf. Public and unfiltered by entitlement on purpose:
     // it exists to show non-subscribers what they are missing. The tab is hidden
     // entirely when the creator has none, so nobody sees an empty paywall pitch.
     const { data: gatedData } = useQuery({
@@ -196,6 +204,15 @@ function UserProfilePage() {
     });
     const gatedVideos = gatedData?.videos || [];
     const hasGated = gatedVideos.length > 0;
+
+    // Tips on this creator's videos (the `supports` tab, not
+    // the 🔒 `members` shelf above). The tab shows once there is one, and
+    // always to the owner so they can find it.
+    const { data: supportersData } = useSupporters(user);
+    const supporterCount = supportersData?.total || 0;
+    // Tips this profile SENT: the tab (its Given sub-tab) shows for those too.
+    const { data: supportedData } = useSupported(user);
+    const hasGivenTips = (supportedData?.total || 0) > 0;
 
     // The Streams tab only exists when there's something to show — a running
     // OpenPods session, or the VOD of a finished one. Counts both.
@@ -583,6 +600,7 @@ const {
             <div className="own-badges">
               <LeaderboardBadges username={user} />
             </div>
+            <SupportersBadges username={user} onOpen={() => selectTab('supports')} />
           </>
         }
         aside={<SocialLinks hiveUsername={user} column />}
@@ -670,8 +688,13 @@ const {
             {t('profile.tabs.audio')} {audioCount > 0 && `(${audioCount})`}
           </span>
           {hasGated && (
-            <span className={show === "supporters" ? "active" : ""} onClick={() => selectTab("supporters")}>
-              🔒 {t('profile.tabs.supporters')} ({gatedVideos.length})
+            <span className={show === "members" ? "active" : ""} onClick={() => selectTab("members")}>
+              🔒 {t('profile.tabs.members')} ({gatedVideos.length})
+            </span>
+          )}
+          {(supporterCount > 0 || hasGivenTips || isOwnProfile) && (
+            <span className={show === "supports" ? "active" : ""} onClick={() => selectTab("supports")}>
+              {t('profile.tabs.supporters')} {supporterCount > 0 && `(${supporterCount})`}
             </span>
           )}
           {streamCount > 0 && (
@@ -733,8 +756,10 @@ const {
     )
   ) : show === "audio" ? (
     <UserAudioList user={user} isOwnProfile={isOwnProfile} />
-  ) : show === "supporters" ? (
+  ) : show === "members" ? (
     <Card3 videos={gatedVideos} getViewCount={getViewCount} />
+  ) : show === "supports" ? (
+    <SupportersList user={user} isOwnProfile={isOwnProfile} />
   ) : show === "streams" ? (
     <ProfileStreams user={user} getViewCount={getViewCount} />
   ) : show === "community" ? (

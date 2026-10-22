@@ -213,8 +213,8 @@
       "hintOff": "Mabango na tika pekee kwenye video hii."
     },
     "gated": {
-      "label": "Kwa wafadhili tu",
-      "info": "Inasimba video hii kwa njia fiche ili wanachama wa 3Speak Pro pekee waweze kuicheza. <b>Onyesho la sekunde 10 lisilosimbwa</b> huchapishwa pamoja nayo, ili chapisho bado lionyeshe trela kila mahali kwenye Hive. Kichwa, maelezo na lebo zako ni maudhui ya kawaida ya chapisho la Hive na <b>hayasimbwi kwa njia fiche</b> — ni video tu inayosimbwa. <b>Hili haliwezi kubadilishwa baada ya kupakia.</b>",
+      "label": "Kwa wanachama pekee",
+      "info": "Inasimba video hii kwa njia fiche ili wanachama wa 3Speak Pro pekee waweze kuicheza. <b>Onyesho la sekunde 10 lisilosimbwa</b> huchapishwa pamoja nayo, ili chapisho bado lionyeshe trela kila mahali kwenye Hive. Kichwa, maelezo na lebo zako ni maudhui ya kawaida ya chapisho la Hive na <b>hayasimbwi kwa njia fiche</b>: ni video tu inayosimbwa. <b>Hili haliwezi kubadilishwa baada ya kupakia.</b>",
       "withGuests_one": "Wanachama wa Pro + mgeni {{count}}.",
       "withGuests_other": "Wanachama wa Pro + wageni {{count}}.",
       "hint": "Wanachama wa Pro tu."
@@ -396,7 +396,7 @@
     "noHost": "Hakuna seva ya kupachika iliyowekwa",
     "emptyFile": "Faili tupu",
     "noToken": "Imeshindwa kupata tokeni ya upakiaji",
-    "gatedUnsupported": "Seva hii ya upakiaji bado haitumii video za wafadhili tu. Hakuna kilichopakiwa. Zima kitufe ili kuchapisha hadharani, au jaribu tena baadaye.",
+    "gatedUnsupported": "Seva hii ya kupakia bado haitumii video za wanachama pekee. Hakuna kilichopakiwa. Zima chaguo ili kuchapisha hadharani, au jaribu tena baadaye.",
     "couldNotStart": "Imeshindwa kuanza upakiaji — tafadhali jaribu tena",
     "sessionExpired": "Kipindi cha upakiaji kimeisha — tafadhali jaribu tena",
     "chunkFailed": "Kipande {{index}} kimeshindwa",
@@ -409,7 +409,7 @@
     "noVideoFile": "Hakuna faili ya video",
     "noEmbedUrlAfterUpload": "Upakiaji umefaulu lakini hakuna URL ya kupachika iliyorudishwa",
     "deferralLost": "Upakiaji huu haukuweza kukamilishwa kwa sababu kipindi chake cha upakiaji kilikatizwa. Hakuna kilichochapishwa. Tafadhali chagua video tena na uipakie upya.",
-    "gatedTooLate": "Kwa wafadhili tu kuliwashwa baada ya upakiaji kuwa umeshaanza, na seva hii ya upakiaji haiwezi kukitumia baadaye. Hakuna kilichochapishwa. Tafadhali chagua video tena na uwashe kwa wafadhili tu kabla ya kuendelea.",
+    "gatedTooLate": "\"Kwa wanachama pekee\" iliwashwa baada ya upakiaji kuanza, na seva hii ya kupakia haiwezi kuitumia baadaye. Hakuna kilichochapishwa. Tafadhali chagua video tena na uwashe \"Kwa wanachama pekee\" kabla ya kuendelea.",
     "noSnapsContainer": "Imeshindwa kupata chapisho la kontena la Snaps la kujibu",
     "scheduleSaveFailed": "Imeshindwa kuhifadhi chapisho lililoratibiwa",
     "couldNotSchedule": "Imeshindwa kuratibu chapisho",

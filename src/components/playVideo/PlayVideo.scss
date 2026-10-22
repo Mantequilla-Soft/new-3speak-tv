@@ -760,6 +760,36 @@
   }
 }
 
+// "Next video in 3, 2, 1": one card with a label above and Cancel below, the
+// same column on every screen size.
+.video-ended-overlay.video-next-up {
+  flex-direction: column;
+  gap: 10px;
+
+  .video-ended-card {
+    flex: 0 0 auto;
+    width: min(280px, 60%);
+  }
+}
+
+.video-next-up-label {
+  color: #fff;
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.video-next-up-cancel {
+  background: transparent;
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  border-radius: 999px;
+  padding: 6px 18px;
+  font-size: 13px;
+  cursor: pointer;
+
+  &:hover { background: rgba(255, 255, 255, 0.12); }
+}
+
 .video-ended-mobile-card {
   display: none;
 

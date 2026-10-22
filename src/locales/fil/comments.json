@@ -115,6 +115,26 @@
     "translation": "Salin",
     "translationFailed": "Pumalya ang pagsasalin. Tumatakbo ba ang translation service?",
     "reportComment": "I-report ang comment",
-    "openInShorts": "Buksan sa Shorts"
+    "openInShorts": "Buksan sa Shorts",
+    "sortBy": "Ayusin",
+    "sortNewest": "Pinakabago",
+    "sortOldest": "Pinakaluma",
+    "sortPopular": "Sikat",
+    "pin": "I-pin",
+    "unpin": "Alisin sa pin",
+    "pinned": "Na-pin ang komento",
+    "unpinned": "Inalis sa pin ang komento",
+    "pinnedByCreator": "Na-pin ng creator",
+    "pinFailed": "Hindi mabago ang pin. Pakisubukang muli.",
+    "pinWalletPrompt": "Pumirma para i-pin o alisin sa pin ang komentong ito sa video mo",
+    "addImage": "Magdagdag ng larawan",
+    "imageTooLarge": "Masyadong malaki ang larawan (max 10 MB).",
+    "imageUploadFailed": "Nabigo ang pag-upload ng larawan. Pakisubukang muli.",
+    "dropImage": "Bitawan ang larawan para idagdag ito sa komento mo",
+    "removeImage": "Alisin ang larawan",
+    "uploadingImage": "Ina-upload ang larawan",
+    "write": "Isulat",
+    "preview": "Preview",
+    "nothingToPreview": "Wala pang mapi-preview"
   }
 }

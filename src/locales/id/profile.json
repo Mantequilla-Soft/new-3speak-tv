@@ -218,6 +218,7 @@
     "shorts": "Shorts",
     "audio": "Audio",
     "supporters": "Pendukung",
+    "members": "Anggota",
     "streams": "Siaran",
     "community": "Komunitas",
     "playlists": "Playlist",
@@ -253,5 +254,25 @@
   "uploads": {
     "processing": "Memproses videomu",
     "minAgo_other": "{{count}} menit lalu"
+  },
+  "supports": {
+    "incomingTitle": "@{{user}} memberi @{{profile}} tip total {{amount}}",
+    "outgoingTitle": "@{{profile}} memberi @{{user}} tip total {{amount}}",
+    "received": "Diterima",
+    "given": "Diberikan",
+    "subTabTotal": "{{label}} · {{amount}}",
+    "emptyReceived": "@{{user}} belum menerima tip di video mana pun.",
+    "emptyReceivedOwn": "Belum ada tip. Saat seseorang memberi tip pada salah satu videomu, tip itu muncul di sini.",
+    "emptyGiven": "@{{user}} belum memberi tip di video mana pun.",
+    "emptyGivenOwn": "Kamu belum memberi tip di video mana pun. Tip yang kamu kirim dari sebuah video muncul di sini.",
+    "untitled": "Tanpa judul",
+    "paidInHive": "dikirim sebagai {{amount}} HIVE",
+    "hideTip": "Sembunyikan tip",
+    "unhideTip": "Tampilkan tip",
+    "hiddenLabel": "Disembunyikan dari profilmu",
+    "hiddenToast": "Tip disembunyikan dari profilmu",
+    "unhiddenToast": "Tip kembali ditampilkan di profilmu",
+    "hideFailed": "Tidak bisa mengubah tip ini. Silakan coba lagi.",
+    "hideWalletPrompt": "Tanda tangani untuk mengubah tip mana yang tampil di profilmu"
   }
 }

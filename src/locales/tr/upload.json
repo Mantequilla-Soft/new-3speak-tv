@@ -213,7 +213,7 @@
       "hintOff": "Bu videoda yalnızca bannerlar ve kayan yazılar."
     },
     "gated": {
-      "label": "Yalnızca destekçilere",
+      "label": "Yalnızca üyelere",
       "info": "Bu videoyu şifreler, böylece yalnızca 3Speak Pro aboneleri oynatabilir. Yanında <b>10 saniyelik şifresiz bir önizleme</b> yayınlanır, böylece gönderi Hive'ın her yerinde yine bir fragman gösterir. Başlığın, açıklaman ve etiketlerin sıradan Hive gönderi içeriğidir ve <b>şifrelenmez</b>; yalnızca video şifrelenir. <b>Bu, yüklemeden sonra değiştirilemez.</b>",
       "withGuests_one": "Pro aboneleri + {{count}} misafir.",
       "withGuests_other": "Pro aboneleri + {{count}} misafir.",
@@ -396,7 +396,7 @@
     "noHost": "Yapılandırılmış gömme sunucusu yok",
     "emptyFile": "Boş dosya",
     "noToken": "Yükleme token'ı alınamadı",
-    "gatedUnsupported": "Bu yükleme sunucusu henüz yalnızca destekçilere özel videoları desteklemiyor. Hiçbir şey yüklenmedi. Herkese açık yayınlamak için seçeneği kapat ya da daha sonra tekrar dene.",
+    "gatedUnsupported": "Bu yükleme sunucusu henüz yalnızca üyelere özel videoları desteklemiyor. Hiçbir şey yüklenmedi. Herkese açık yayınlamak için seçeneği kapat ya da daha sonra tekrar dene.",
     "couldNotStart": "Yükleme başlatılamadı, lütfen tekrar dene",
     "sessionExpired": "Yükleme oturumunun süresi doldu, lütfen tekrar dene",
     "chunkFailed": "{{index}}. parça başarısız oldu",
@@ -409,7 +409,7 @@
     "noVideoFile": "Video dosyası yok",
     "noEmbedUrlAfterUpload": "Yükleme başarılı ama gömme URL'si dönmedi",
     "deferralLost": "Yükleme oturumu kesildiği için bu yükleme tamamlanamadı. Hiçbir şey yayınlanmadı. Lütfen videoyu yeniden seçip tekrar yükle.",
-    "gatedTooLate": "Yalnızca destekçilere seçeneği yükleme başladıktan sonra açıldı ve bu yükleme sunucusu bunu sonradan uygulayamıyor. Hiçbir şey yayınlanmadı. Lütfen videoyu yeniden seç ve devam etmeden önce yalnızca destekçilere seçeneğini aç.",
+    "gatedTooLate": "\"Yalnızca üyelere\" yükleme başladıktan sonra açıldı ve bu yükleme sunucusu bunu sonradan uygulayamıyor. Hiçbir şey yayınlanmadı. Lütfen videoyu yeniden seç ve devam etmeden önce \"Yalnızca üyelere\" seçeneğini aç.",
     "noSnapsContainer": "Yanıt verilecek bir snaps kapsayıcı gönderisi bulunamadı",
     "scheduleSaveFailed": "Planlanmış gönderi kaydedilemedi",
     "couldNotSchedule": "Gönderi planlanamadı",

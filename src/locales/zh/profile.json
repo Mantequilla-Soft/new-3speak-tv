@@ -218,6 +218,7 @@
     "shorts": "短视频",
     "audio": "音频",
     "supporters": "支持者",
+    "members": "会员",
     "streams": "直播",
     "community": "社区",
     "playlists": "播放列表",
@@ -253,5 +254,25 @@
   "uploads": {
     "processing": "正在处理你的视频",
     "minAgo_other": "{{count}} 分钟前"
+  },
+  "supports": {
+    "incomingTitle": "@{{user}} 共打赏 @{{profile}} {{amount}}",
+    "outgoingTitle": "@{{profile}} 共打赏 @{{user}} {{amount}}",
+    "received": "收到",
+    "given": "送出",
+    "subTabTotal": "{{label}} · {{amount}}",
+    "emptyReceived": "@{{user}} 还没有在视频上收到打赏。",
+    "emptyReceivedOwn": "还没有打赏。当有人在你的视频上打赏时，会显示在这里。",
+    "emptyGiven": "@{{user}} 还没有打赏过任何视频。",
+    "emptyGivenOwn": "你还没有打赏过任何视频。你在视频上送出的打赏会显示在这里。",
+    "untitled": "无标题",
+    "paidInHive": "以 {{amount}} HIVE 发送",
+    "hideTip": "隐藏打赏",
+    "unhideTip": "取消隐藏",
+    "hiddenLabel": "已从你的主页隐藏",
+    "hiddenToast": "已从你的主页隐藏此打赏",
+    "unhiddenToast": "此打赏已重新显示在你的主页",
+    "hideFailed": "无法更改此打赏。请重试。",
+    "hideWalletPrompt": "签名以更改你的主页上显示哪些打赏"
   }
 }

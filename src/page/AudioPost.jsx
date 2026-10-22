@@ -328,7 +328,7 @@ function AudioPost() {
       )}
 
       {isTipOpen && (
-        <TipModal recipient={author} isOpen={isTipOpen} onClose={() => setIsTipOpen(false)} />
+        <TipModal recipient={author} permlink={permlink} isOpen={isTipOpen} onClose={() => setIsTipOpen(false)} />
       )}
     </div>
   );

@@ -120,6 +120,26 @@
     "translation": "Traduzione",
     "translationFailed": "Traduzione non riuscita. Il servizio di traduzione è attivo?",
     "reportComment": "Segnala commento",
-    "openInShorts": "Apri in Shorts"
+    "openInShorts": "Apri in Shorts",
+    "sortBy": "Ordina",
+    "sortNewest": "Più recenti",
+    "sortOldest": "Meno recenti",
+    "sortPopular": "Popolari",
+    "pin": "Fissa",
+    "unpin": "Sblocca",
+    "pinned": "Commento fissato",
+    "unpinned": "Commento sbloccato",
+    "pinnedByCreator": "Fissato dal creator",
+    "pinFailed": "Impossibile modificare il commento fissato. Riprova.",
+    "pinWalletPrompt": "Firma per fissare o sbloccare questo commento sul tuo video",
+    "addImage": "Aggiungi immagine",
+    "imageTooLarge": "L'immagine è troppo grande (max 10 MB).",
+    "imageUploadFailed": "Caricamento dell'immagine non riuscito. Riprova.",
+    "dropImage": "Rilascia l'immagine per aggiungerla al tuo commento",
+    "removeImage": "Rimuovi immagine",
+    "uploadingImage": "Caricamento immagine",
+    "write": "Scrivi",
+    "preview": "Anteprima",
+    "nothingToPreview": "Ancora niente da mostrare in anteprima"
   }
 }

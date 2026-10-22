@@ -1330,7 +1330,7 @@ async function resolveGatedVideoOwner(req, res) {
     return null
   }
   if (video?.gated !== true) {
-    res.status(400).json({ error: 'That video is not supporters-only' })
+    res.status(400).json({ error: 'That video is not members-only' })
     return null
   }
 
@@ -1550,6 +1550,23 @@ async function resolveDelegatedSignUsers(req, res) {
   if (bearer) add(await verifyHiveSignerToken(bearer))
   if (!out.length) add(await resolveDelegatedSignUser(req, res))   // the gated legacy app-key path
   return out
+}
+
+// The account a delegated signer should sign for. The page names it
+// (`body.username`, the account it is acting as), and it is used ONLY if this
+// request is verifiably signed in as it (resolveDelegatedSignUsers): a browser
+// holding a ButrAuth cookie for one account and a wallet session for another
+// would otherwise always get the ButrAuth one, and the wallet user was asked to
+// log in again on every click. With no name given, the first verified account.
+// Returns null when the named account has no verified session in this request;
+// callers answer 401 with reason 'not_signed_in_as' so the page knows a wallet
+// login (and only that) can fix it. Callers must drop the app key first, so the
+// claimed-name path can never be the one that matches.
+async function resolveRequestedSignUser(req, res) {
+  const requested = typeof req.body?.username === 'string' ? req.body.username.trim().toLowerCase() : ''
+  const signedInAs = await resolveDelegatedSignUsers(req, res)
+  if (!requested) return signedInAs[0] || null
+  return signedInAs.includes(requested) ? requested : null
 }
 
 // True when `hiveUsername` granted @threespeak posting authority at/above threshold.
@@ -1883,6 +1900,81 @@ app.post('/api/captions/edit-signature', signChallengeLimiter, async (req, res) 
     return res.json({ success: true, signature, timestamp, username: hiveUsername })
   } catch (err) {
     console.error('Caption edit signature error:', err.message)
+    res.status(500).json({ error: 'Signing failed' })
+  }
+})
+
+// POST /api/comments/pin-signature — sign a comment pin/unpin for the video's author.
+//
+// Same delegated shape and the same 🔒 as the caption edit above: the author in
+// the message is the SESSION user, never a value from the body, so this can only
+// ever sign "I am pinning a comment on my own video", and the public-app-key path
+// is not accepted. The checker (routes/commentPins.js) verifies it.
+app.post('/api/comments/pin-signature', signChallengeLimiter, async (req, res) => {
+  try {
+    if (!POSTING_WIF) return res.status(500).json({ error: 'Server is not configured' })
+    delete req.headers['x-api-key'] // see 🔒 on /api/captions/edit-signature
+    const hiveUsername = await resolveRequestedSignUser(req, res)
+    if (!hiveUsername) return res.status(401).json({ error: 'Unauthorized', reason: 'not_signed_in_as' })
+
+    const permlink = typeof req.body?.permlink === 'string' ? req.body.permlink : ''
+    const comment = typeof req.body?.comment === 'string' ? req.body.comment : ''
+    const action = req.body?.pinned === true ? 'pin' : req.body?.pinned === false ? 'unpin' : ''
+    if (!/^[a-z0-9-]{1,255}$/.test(permlink) || !/^[a-z0-9-]{1,255}$/.test(comment) || !action) {
+      return res.status(400).json({ error: 'Invalid request' })
+    }
+
+    if (!(await hasThreespeakPostingGrant(hiveUsername))) {
+      return res.status(403).json({
+        error: `Pinning from here needs @${HIVE_ACCOUNT} posting authority on your account. Log in with Keychain, HiveAuth, PeakVault or Ledger to sign it directly instead.`,
+      })
+    }
+
+    const timestamp = Date.now()
+    // Keep in lockstep with pinMessage() in 3speakchecks/routes/commentPins.js.
+    const message = ['3speak-comments', action, hiveUsername, permlink, comment, String(timestamp)].join('|')
+    const signature = PrivateKey.fromString(POSTING_WIF).sign(cryptoUtils.sha256(Buffer.from(message, 'utf8'))).toString()
+    return res.json({ success: true, signature, timestamp, username: hiveUsername })
+  } catch (err) {
+    console.error('Comment pin signature error:', err.message)
+    res.status(500).json({ error: 'Signing failed' })
+  }
+})
+
+// POST /api/supports/hide-signature — sign a creator hiding (or unhiding) a tip
+// they received, so it no longer shows on their profile.
+//
+// Same delegated shape and the same 🔒 as the comment pin above: the author in the
+// message is the SESSION user, never a value from the body, so this can only ever
+// sign "I am hiding a tip sent to me", and the public-app-key path is not
+// accepted. The checker (routes/supports.js, POST /supports/hide) verifies it and
+// only touches a tip whose author is that user.
+app.post('/api/supports/hide-signature', signChallengeLimiter, async (req, res) => {
+  try {
+    if (!POSTING_WIF) return res.status(500).json({ error: 'Server is not configured' })
+    delete req.headers['x-api-key'] // see 🔒 on /api/captions/edit-signature
+    const hiveUsername = await resolveRequestedSignUser(req, res)
+    if (!hiveUsername) return res.status(401).json({ error: 'Unauthorized', reason: 'not_signed_in_as' })
+
+    const trxId = typeof req.body?.trx_id === 'string' ? req.body.trx_id.toLowerCase() : ''
+    const action = req.body?.hidden === true ? 'hide' : req.body?.hidden === false ? 'unhide' : ''
+    if (!/^[a-f0-9]{40}$/.test(trxId) || !action) {
+      return res.status(400).json({ error: 'Invalid request' })
+    }
+
+    if (!(await hasThreespeakPostingGrant(hiveUsername))) {
+      return res.status(403).json({
+        error: `Hiding a tip from here needs @${HIVE_ACCOUNT} posting authority on your account. Log in with Keychain, HiveAuth, PeakVault or Ledger to sign it directly instead.`,
+      })
+    }
+
+    const timestamp = Date.now()
+    // Keep in lockstep with hideMessage() in 3speakchecks/routes/supports.js.
+    const message = ['3speak-supports', action, hiveUsername, trxId, String(timestamp)].join('|')
+    const signature = PrivateKey.fromString(POSTING_WIF).sign(cryptoUtils.sha256(Buffer.from(message, 'utf8'))).toString()
+    return res.json({ success: true, signature, timestamp, username: hiveUsername })
+  } catch (err) {
+    console.error('Support hide signature error:', err.message)
     res.status(500).json({ error: 'Signing failed' })
   }
 })

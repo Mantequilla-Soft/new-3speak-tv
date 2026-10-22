@@ -48,7 +48,8 @@
     "close": "Cerrar playlist"
   },
   "overlay": {
-    "replay": "Volver a ver"
+    "replay": "Volver a ver",
+    "nextIn": "Siguiente video en {{seconds}}"
   },
   "reactions": {
     "translation": "Traducción",

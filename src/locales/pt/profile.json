@@ -250,6 +250,7 @@
     "shorts": "Shorts",
     "audio": "Áudio",
     "supporters": "Apoiadores",
+    "members": "Membros",
     "streams": "Transmissões",
     "community": "Comunidade",
     "playlists": "Playlists",
@@ -287,5 +288,25 @@
     "minAgo_one": "há {{count}} min",
     "minAgo_many": "há {{count}} min",
     "minAgo_other": "há {{count}} min"
+  },
+  "supports": {
+    "incomingTitle": "@{{user}} deu a @{{profile}} {{amount}} em gorjetas no total",
+    "outgoingTitle": "@{{profile}} deu a @{{user}} {{amount}} em gorjetas no total",
+    "received": "Recebidas",
+    "given": "Dadas",
+    "subTabTotal": "{{label}} · {{amount}}",
+    "emptyReceived": "@{{user}} ainda não recebeu gorjetas em nenhum vídeo.",
+    "emptyReceivedOwn": "Ainda sem gorjetas. Quando alguém der uma gorjeta em um dos seus vídeos, ela aparece aqui.",
+    "emptyGiven": "@{{user}} ainda não deu gorjetas em nenhum vídeo.",
+    "emptyGivenOwn": "Você ainda não deu gorjetas em nenhum vídeo. As gorjetas que você enviar de um vídeo aparecem aqui.",
+    "untitled": "Sem título",
+    "paidInHive": "enviado como {{amount}} HIVE",
+    "hideTip": "Ocultar gorjeta",
+    "unhideTip": "Mostrar gorjeta",
+    "hiddenLabel": "Oculta no seu perfil",
+    "hiddenToast": "Gorjeta ocultada do seu perfil",
+    "unhiddenToast": "A gorjeta voltou a aparecer no seu perfil",
+    "hideFailed": "Não foi possível alterar esta gorjeta. Tente novamente.",
+    "hideWalletPrompt": "Assine para mudar quais gorjetas aparecem no seu perfil"
   }
 }

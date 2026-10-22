@@ -110,6 +110,26 @@
     "translation": "翻译",
     "translationFailed": "翻译失败。翻译服务是否在运行？",
     "reportComment": "举报评论",
-    "openInShorts": "在短视频中打开"
+    "openInShorts": "在短视频中打开",
+    "sortBy": "排序",
+    "sortNewest": "最新",
+    "sortOldest": "最早",
+    "sortPopular": "热门",
+    "pin": "置顶",
+    "unpin": "取消置顶",
+    "pinned": "评论已置顶",
+    "unpinned": "评论已取消置顶",
+    "pinnedByCreator": "创作者已置顶",
+    "pinFailed": "无法更改置顶。请重试。",
+    "pinWalletPrompt": "签名以在你的视频上置顶或取消置顶此评论",
+    "addImage": "添加图片",
+    "imageTooLarge": "图片太大（最大 10 MB）。",
+    "imageUploadFailed": "图片上传失败。请重试。",
+    "dropImage": "拖放图片即可添加到你的评论",
+    "removeImage": "移除图片",
+    "uploadingImage": "正在上传图片",
+    "write": "编写",
+    "preview": "预览",
+    "nothingToPreview": "暂无可预览的内容"
   }
 }

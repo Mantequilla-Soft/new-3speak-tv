@@ -266,6 +266,7 @@
     "shorts": "Shorts",
     "audio": "Аудио",
     "supporters": "Поддержавшие",
+    "members": "Участники",
     "streams": "Эфиры",
     "community": "Сообщество",
     "playlists": "Плейлисты",
@@ -304,5 +305,25 @@
     "minAgo_few": "{{count}} мин назад",
     "minAgo_many": "{{count}} мин назад",
     "minAgo_other": "{{count}} мин назад"
+  },
+  "supports": {
+    "incomingTitle": "@{{user}} всего отправил(а) @{{profile}} {{amount}} чаевых",
+    "outgoingTitle": "@{{profile}} всего отправил(а) @{{user}} {{amount}} чаевых",
+    "received": "Получено",
+    "given": "Отправлено",
+    "subTabTotal": "{{label}} · {{amount}}",
+    "emptyReceived": "@{{user}} пока не получал(а) чаевых под видео.",
+    "emptyReceivedOwn": "Чаевых пока нет. Когда кто-то оставит чаевые под одним из ваших видео, они появятся здесь.",
+    "emptyGiven": "@{{user}} пока не оставлял(а) чаевых под видео.",
+    "emptyGivenOwn": "Вы пока не оставляли чаевых под видео. Чаевые, отправленные из видео, появятся здесь.",
+    "untitled": "Без названия",
+    "paidInHive": "отправлено как {{amount}} HIVE",
+    "hideTip": "Скрыть чаевые",
+    "unhideTip": "Показать чаевые",
+    "hiddenLabel": "Скрыто в вашем профиле",
+    "hiddenToast": "Чаевые скрыты из вашего профиля",
+    "unhiddenToast": "Чаевые снова видны в вашем профиле",
+    "hideFailed": "Не удалось изменить эти чаевые. Попробуйте ещё раз.",
+    "hideWalletPrompt": "Подпишите, чтобы изменить, какие чаевые видны в вашем профиле"
   }
 }

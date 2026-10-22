@@ -234,6 +234,7 @@
     "shorts": "Shorts",
     "audio": "Sauti",
     "supporters": "Wafadhili",
+    "members": "Wanachama",
     "streams": "Mitiririko",
     "community": "Jumuiya",
     "playlists": "Orodha za kucheza",
@@ -270,5 +271,25 @@
     "processing": "Inachakata video zako",
     "minAgo_one": "dakika {{count}} iliyopita",
     "minAgo_other": "dakika {{count}} zilizopita"
+  },
+  "supports": {
+    "incomingTitle": "@{{user}} amempa @{{profile}} tip za jumla ya {{amount}}",
+    "outgoingTitle": "@{{profile}} amempa @{{user}} tip za jumla ya {{amount}}",
+    "received": "Zilizopokelewa",
+    "given": "Zilizotolewa",
+    "subTabTotal": "{{label}} · {{amount}}",
+    "emptyReceived": "@{{user}} bado hajapokea tip kwenye video yoyote.",
+    "emptyReceivedOwn": "Bado hakuna tip. Mtu akitoa tip kwenye moja ya video zako, itaonekana hapa.",
+    "emptyGiven": "@{{user}} bado hajatoa tip kwenye video yoyote.",
+    "emptyGivenOwn": "Bado hujatoa tip kwenye video yoyote. Tip unazotuma kutoka kwenye video zitaonekana hapa.",
+    "untitled": "Bila kichwa",
+    "paidInHive": "imetumwa kama {{amount}} HIVE",
+    "hideTip": "Ficha tip",
+    "unhideTip": "Onyesha tip",
+    "hiddenLabel": "Imefichwa kwenye wasifu wako",
+    "hiddenToast": "Tip imefichwa kwenye wasifu wako",
+    "unhiddenToast": "Tip inaonekana tena kwenye wasifu wako",
+    "hideFailed": "Imeshindikana kubadilisha tip hii. Tafadhali jaribu tena.",
+    "hideWalletPrompt": "Saini ili kubadilisha tip zipi zinaonekana kwenye wasifu wako"
   }
 }

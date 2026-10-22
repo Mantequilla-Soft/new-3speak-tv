@@ -47,7 +47,8 @@
     "close": "Playlist schließen"
   },
   "overlay": {
-    "replay": "Nochmal abspielen"
+    "replay": "Nochmal abspielen",
+    "nextIn": "Nächstes Video in {{seconds}}"
   },
   "reactions": {
     "translation": "Übersetzung",

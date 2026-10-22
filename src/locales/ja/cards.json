@@ -5,7 +5,7 @@
   "topicTitle": "トピック: {{topic}}",
   "watchingNow_other": "{{count}} 人が視聴中",
   "badges": {
-    "gatedTitle": "サポーター限定 — 3Speak Pro で動画全編が見られます",
+    "gatedTitle": "メンバー限定。3Speak Pro で動画全編が見られます",
     "pro": "PRO",
     "new": "NEW",
     "live": "● LIVE",

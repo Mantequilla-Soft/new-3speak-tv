@@ -48,7 +48,8 @@
     "close": "Fechar playlist"
   },
   "overlay": {
-    "replay": "Assistir de novo"
+    "replay": "Assistir de novo",
+    "nextIn": "Próximo vídeo em {{seconds}}"
   },
   "reactions": {
     "translation": "Tradução",

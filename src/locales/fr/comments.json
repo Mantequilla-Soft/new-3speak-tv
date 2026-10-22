@@ -120,6 +120,26 @@
     "translation": "Traduction",
     "translationFailed": "La traduction a échoué. Le service de traduction est-il actif ?",
     "reportComment": "Signaler le commentaire",
-    "openInShorts": "Ouvrir dans Shorts"
+    "openInShorts": "Ouvrir dans Shorts",
+    "sortBy": "Trier",
+    "sortNewest": "Plus récents",
+    "sortOldest": "Plus anciens",
+    "sortPopular": "Populaires",
+    "pin": "Épingler",
+    "unpin": "Désépingler",
+    "pinned": "Commentaire épinglé",
+    "unpinned": "Commentaire désépinglé",
+    "pinnedByCreator": "Épinglé par le créateur",
+    "pinFailed": "Impossible de modifier l'épingle. Veuillez réessayer.",
+    "pinWalletPrompt": "Signez pour épingler ou désépingler ce commentaire sur votre vidéo",
+    "addImage": "Ajouter une image",
+    "imageTooLarge": "Cette image est trop lourde (10 Mo max.).",
+    "imageUploadFailed": "Échec de l'envoi de l'image. Veuillez réessayer.",
+    "dropImage": "Déposez l'image pour l'ajouter à votre commentaire",
+    "removeImage": "Retirer l'image",
+    "uploadingImage": "Envoi de l'image",
+    "write": "Écrire",
+    "preview": "Aperçu",
+    "nothingToPreview": "Rien à prévisualiser pour l'instant"
   }
 }

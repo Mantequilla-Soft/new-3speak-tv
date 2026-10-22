@@ -214,8 +214,8 @@
       "hintOff": "Seulement des bannières et des bandeaux sur cette vidéo."
     },
     "gated": {
-      "label": "Réservé aux soutiens",
-      "info": "Chiffre cette vidéo pour que seuls les abonnés 3Speak Pro puissent la lire. Un <b>aperçu non chiffré de 10 secondes</b> est publié avec, pour que la publication affiche quand même une bande-annonce partout sur Hive. Votre titre, votre description et vos tags sont du contenu Hive ordinaire et ne sont <b>pas chiffrés</b> — seule la vidéo l'est. <b>Ce choix ne peut pas être modifié après la mise en ligne.</b>",
+      "label": "Réservé aux membres",
+      "info": "Chiffre cette vidéo pour que seuls les abonnés 3Speak Pro puissent la lire. Un <b>aperçu non chiffré de 10 secondes</b> est publié avec, pour que la publication affiche quand même une bande-annonce partout sur Hive. Votre titre, votre description et vos tags sont du contenu Hive ordinaire et ne sont <b>pas chiffrés</b>: seule la vidéo l'est. <b>Ce choix ne peut pas être modifié après la mise en ligne.</b>",
       "withGuests_one": "Abonnés Pro + {{count}} invité.",
       "withGuests_many": "Abonnés Pro + {{count}} invités.",
       "withGuests_other": "Abonnés Pro + {{count}} invités.",
@@ -398,7 +398,7 @@
     "noHost": "Aucun hôte d'intégration configuré",
     "emptyFile": "Fichier vide",
     "noToken": "Impossible d'obtenir le jeton de mise en ligne",
-    "gatedUnsupported": "Ce serveur de mise en ligne ne prend pas encore en charge les vidéos réservées aux soutiens. Rien n'a été mis en ligne. Désactivez l'option pour publier publiquement, ou réessayez plus tard.",
+    "gatedUnsupported": "Ce serveur de mise en ligne ne prend pas encore en charge les vidéos réservées aux membres. Rien n'a été mis en ligne. Désactive l'option pour publier publiquement, ou réessaie plus tard.",
     "couldNotStart": "Impossible de démarrer la mise en ligne — veuillez réessayer",
     "sessionExpired": "Session de mise en ligne expirée — veuillez réessayer",
     "chunkFailed": "Échec du bloc {{index}}",
@@ -411,7 +411,7 @@
     "noVideoFile": "Aucun fichier vidéo",
     "noEmbedUrlAfterUpload": "Mise en ligne réussie, mais aucune URL d'intégration n'a été renvoyée",
     "deferralLost": "Cette mise en ligne n'a pas pu être finalisée car sa session a été interrompue. Rien n'a été publié. Veuillez choisir à nouveau la vidéo et la remettre en ligne.",
-    "gatedTooLate": "L'option « Réservé aux soutiens » a été activée alors que la mise en ligne avait déjà commencé, et ce serveur ne peut pas l'appliquer après coup. Rien n'a été publié. Veuillez choisir à nouveau la vidéo et activer « Réservé aux soutiens » avant de continuer.",
+    "gatedTooLate": "L'option « Réservé aux membres » a été activée alors que la mise en ligne avait déjà commencé, et ce serveur de mise en ligne ne peut pas l'appliquer après coup. Rien n'a été publié. Sélectionne à nouveau la vidéo et active « Réservé aux membres » avant de continuer.",
     "noSnapsContainer": "Impossible de trouver une publication conteneur Snaps à laquelle répondre",
     "scheduleSaveFailed": "Impossible d'enregistrer la publication programmée",
     "couldNotSchedule": "Impossible de programmer la publication",

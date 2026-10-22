@@ -59,7 +59,7 @@ import {
   Music,
 } from 'lucide-react';
 import { GiTwoCoins } from 'react-icons/gi';
-import { MdTranslate, MdClosedCaption, MdClosedCaptionOff, MdFlag } from 'react-icons/md';
+import { MdTranslate, MdClosedCaption, MdClosedCaptionOff, MdFlag, MdPushPin } from 'react-icons/md';
 import mantequillaLogo from '../assets/mantequilla-logo.png';
 import ReportModal, { isReported } from '../components/modal/ReportModal';
 import { Flag, Megaphone } from 'lucide-react';
@@ -103,6 +103,10 @@ import { toastIn } from '../utils/toast';
 import CommentVoteTooltip from '../components/tooltip/CommentVoteTooltip';
 import { FEATURE_EDITOR } from '../utils/config';
 import { getHiveRenderer } from '../lib/hiveRenderer';
+import { setCommentPinned } from '../lib/commentPins';
+import {
+  readCommentSort, saveCommentSort, sortComments, pinnedFirst, useCommentImageUpload, CommentImageButton, CommentDropZone,
+} from '../components/playVideo/commentTools';
 import { getPlayerUrl } from '../utils/playerUrl';
 import { Player, ThreeSpeakApi } from '@mantequilla-soft/3speak-player';
 import { useNavigate, useLocation, Link } from 'react-router-dom';
@@ -158,6 +162,11 @@ function ShortsSubtitleOverlay({ timeRef, cues, style }) {
 // Markdown collapses single newlines — turn them into hard breaks so multi-line
 // comments keep their line breaks when rendered.
 const hardBreakMd = (text) => String(text || '').replace(/\n/g, '  \n');
+
+// Write / Preview in the comment boxes: the exact transform fetched comments are
+// rendered with (fetchComments: render(hardBreakMd(body))), so the preview is
+// the posted comment. See CommentDropZone in components/playVideo/commentTools.
+const shortsCommentPreviewHtml = (render, text) => render(hardBreakMd(text));
 
 /* ---- Caption renderer: markdown links → clickable badges, strips HTML ---- */
 function renderCaption(text) {
@@ -1316,7 +1325,12 @@ const VideoShort = () => {
       .then(r => r.ok ? r.json() : {})
       .then(details => {
         setVideos(prev => prev.map(v =>
-          v.id === videoId ? { ...v, mantecurated: details.mantecurated === true } : v
+          v.id === videoId ? {
+            ...v,
+            mantecurated: details.mantecurated === true,
+            // Comments the creator pinned (routes/commentPins.js on the checker).
+            pinnedComments: Array.isArray(details.pinned_comments) ? details.pinned_comments : [],
+          } : v
         ));
       })
       .catch(() => {});
@@ -2018,6 +2032,39 @@ const VideoShort = () => {
   useEffect(() => {
     prefetchVideoTagsV2(currentVideo?.author, currentVideo?.hivePermlink);
   }, [currentVideo?.author, currentVideo?.hivePermlink]);
+
+  /* ---------- COMMENT SORT, PINS, IMAGES (shared with the watch page) ---------- */
+  const [commentSort, setCommentSort] = useState(readCommentSort);
+  const changeCommentSort = (v) => { setCommentSort(v); saveCommentSort(v); };
+  const sortedComments = useMemo(
+    () => pinnedFirst(sortComments(currentVideo?.comments || [], commentSort), currentVideo?.pinnedComments),
+    [currentVideo?.comments, currentVideo?.pinnedComments, commentSort],
+  );
+  // Only the short's creator, signed in with a Hive account, and only on a short
+  // that has a Hive post: without one there are no on-chain comments to pin.
+  const canPinComments = !!user && !incubationHandle && user === currentVideo?.author
+    && !!currentVideo?.hivePermlink && !currentVideo?.hivePostMissing && !currentVideo?._incubation;
+  const [pinBusy, setPinBusy] = useState(null);
+  const handleTogglePin = useCallback(async (comment) => {
+    const video = videos[currentIndex];
+    if (!video || pinBusy) return;
+    const isPinned = (video.pinnedComments || []).includes(comment.permlink);
+    setPinBusy(comment.permlink);
+    try {
+      // The row is the embed asset ({owner, permlink}), which every short has,
+      // whether or not the checker has linked its Hive post yet.
+      const next = await setCommentPinned({ author: video.author, permlink: video.permlink, comment: comment.permlink, pinned: !isPinned });
+      setVideos((prev) => prev.map((v) => (v.id === video.id ? { ...v, pinnedComments: next } : v)));
+      toast.success(isPinned ? t('comments.section.unpinned') : t('comments.section.pinned'));
+    } catch (err) {
+      console.error('Comment pin failed:', err);
+      toast.error(err?.message || t('comments.section.pinFailed'));
+    } finally {
+      setPinBusy(null);
+    }
+  }, [videos, currentIndex, pinBusy, t]);
+  const mainCommentImages = useCommentImageUpload(mainCommentRef, newComment, setNewComment, user);
+  const bottomCommentImages = useCommentImageUpload(bottomCommentRef, newComment, setNewComment, user);
 
   /* ---------- SUBTITLES ---------- */
   const {
@@ -3969,6 +4016,16 @@ const VideoShort = () => {
         <div className="commentsHeader">
           <span className="commentsTitle">{t('shorts.comments.title')}</span>
           <span className="commentsCount">{currentVideo.stats.comments}</span>
+          <select
+            className="commentsSort"
+            value={commentSort}
+            onChange={(e) => changeCommentSort(e.target.value)}
+            aria-label={t('comments.section.sortBy')}
+          >
+            <option value="newest">{t('comments.section.sortNewest')}</option>
+            <option value="oldest">{t('comments.section.sortOldest')}</option>
+            <option value="popular">{t('comments.section.sortPopular')}</option>
+          </select>
           <div className="commentsHeaderActions">
             <button className="headerBtn" onClick={handleToggleComments}>
               <X size={20} />
@@ -3992,11 +4049,14 @@ const VideoShort = () => {
               </span>
             </div>
           ) : (
-            currentVideo.comments?.map((comment) => (
+            sortedComments.map((comment) => (
               <CommentItem
                 key={comment.id}
                 comment={comment}
                 depth={0}
+                isPinned={(currentVideo.pinnedComments || []).includes(comment.permlink)}
+                onTogglePin={canPinComments && comment.onChain !== false ? handleTogglePin : null}
+                pinBusy={pinBusy === comment.permlink}
                 formatNumber={formatNumber}
                 toggleVoteTooltip={toggleVoteTooltip}
                 showTooltip={showTooltip}
@@ -4034,6 +4094,15 @@ const VideoShort = () => {
           <div className="commentInputAvatar">
             <HiveAvatar username={user || incubationHandle || 'guest'} srcOverride={!user && incubationHandle ? handleAvatar(incubationHandle) : undefined} size={null} alt="" badgeSize={11} />
           </div>
+          <CommentDropZone
+            className="commentInputBox"
+            images={mainCommentImages}
+            value={newComment}
+            setValue={setNewComment}
+            disabled={!(user || incubationHandle) || postingComment || currentVideo.hivePostMissing}
+            toHtml={shortsCommentPreviewHtml}
+            previewMarkdownClass="commentText"
+          >
           <textarea
             ref={mainCommentRef}
             rows={1}
@@ -4052,16 +4121,21 @@ const VideoShort = () => {
               e.target.style.height = e.target.scrollHeight + 'px';
             }}
             disabled={!(user || incubationHandle) || postingComment || currentVideo.hivePostMissing}
+            onPaste={mainCommentImages.onPaste}
             // Enter always inserts a newline (multi-line comments); posting is
             // handled only by the Send button.
           />
+          </CommentDropZone>
           {(user || incubationHandle) && !currentVideo.hivePostMissing && (
-            <EmojiGifPicker
-              align="right"
-              openDirection="up"
-              onPickEmoji={(em) => insertAtCursor(mainCommentRef.current, newComment, em, setNewComment)}
-              onPickGif={(url) => insertAtCursor(mainCommentRef.current, newComment, gifMarkdown(url), setNewComment)}
-            />
+            <>
+              <EmojiGifPicker
+                align="right"
+                openDirection="up"
+                onPickEmoji={(em) => insertAtCursor(mainCommentRef.current, newComment, em, setNewComment)}
+                onPickGif={(url) => insertAtCursor(mainCommentRef.current, newComment, gifMarkdown(url), setNewComment)}
+              />
+              <CommentImageButton uploading={mainCommentImages.uploading} onFiles={mainCommentImages.upload} />
+            </>
           )}
           <button
             className="sendCommentBtn"
@@ -4092,6 +4166,13 @@ const VideoShort = () => {
           OFF by default — enable it in Settings ("Comment bar on shorts"). */}
       {!showComments && shortsCommentBar && (
         <div className="shortsBottomComment">
+          <CommentDropZone
+            className="commentInputBox"
+            images={bottomCommentImages}
+            value={newComment}
+            setValue={setNewComment}
+            disabled={!(user || incubationHandle) || currentVideo.hivePostMissing}
+          >
           <textarea
             ref={bottomCommentRef}
             rows={1}
@@ -4107,14 +4188,19 @@ const VideoShort = () => {
               e.target.style.height = e.target.scrollHeight + 'px';
             }}
             disabled={!(user || incubationHandle) || currentVideo.hivePostMissing}
+            onPaste={bottomCommentImages.onPaste}
           />
+          </CommentDropZone>
           {(user || incubationHandle) && !currentVideo.hivePostMissing && (
-            <EmojiGifPicker
-              align="right"
-              openDirection="up"
-              onPickEmoji={(em) => insertAtCursor(bottomCommentRef.current, newComment, em, setNewComment)}
-              onPickGif={(url) => insertAtCursor(bottomCommentRef.current, newComment, gifMarkdown(url), setNewComment)}
-            />
+            <>
+              <EmojiGifPicker
+                align="right"
+                openDirection="up"
+                onPickEmoji={(em) => insertAtCursor(bottomCommentRef.current, newComment, em, setNewComment)}
+                onPickGif={(url) => insertAtCursor(bottomCommentRef.current, newComment, gifMarkdown(url), setNewComment)}
+              />
+              <CommentImageButton uploading={bottomCommentImages.uploading} onFiles={bottomCommentImages.upload} />
+            </>
           )}
           <button
             className="sendCommentBtn"
@@ -4170,6 +4256,9 @@ const CommentItem = ({
   getTranslation,
   clearTranslation,
   translating,
+  isPinned = false,
+  onTogglePin = null,
+  pinBusy = false,
 }) => {
   const { t } = useI18n();
   const [showReplies, setShowReplies] = useState(false);
@@ -4178,6 +4267,7 @@ const CommentItem = ({
   const [translateError, setTranslateError] = useState(false);
   const [isReportOpen, setIsReportOpen] = useState(false);
   const replyInputRef = useRef(null);
+  const replyImages = useCommentImageUpload(replyInputRef, replyText, setReplyText, user);
   const maxDepth = 3;
 
   const handleTranslate = async (langCode) => {
@@ -4246,6 +4336,9 @@ const CommentItem = ({
               <span className="commentUsername">{comment.user?.username}</span>
             )}
             <span className="commentTime">{comment.timeAgo}</span>
+            {isPinned && (
+              <span className="commentPinned"><MdPushPin size={12} />{t('comments.section.pinnedByCreator')}</span>
+            )}
             <span className="comment-collapse-chevron" onClick={() => setCollapsed(true)}><ChevronUp size={16} /></span>
           </div>
           <div className="commentText markdown-view" dangerouslySetInnerHTML={{ __html: getCommentHtml() }} />
@@ -4289,6 +4382,11 @@ const CommentItem = ({
             >
               {t('common.actions.reply')}
             </button>
+            {onTogglePin && depth === 0 && (
+              <button className="replyBtn" onClick={() => onTogglePin(comment)} disabled={pinBusy}>
+                {isPinned ? t('comments.section.unpin') : t('comments.section.pin')}
+              </button>
+            )}
             <CommentVoteTooltip
               voteKind="comment"
               author={comment.author}
@@ -4312,6 +4410,14 @@ const CommentItem = ({
           {/* Reply Input */}
           {isReplying && (
             <div className="replyInputWrapper">
+              <CommentDropZone
+                images={replyImages}
+                value={replyText}
+                setValue={setReplyText}
+                disabled={postingComment}
+                toHtml={shortsCommentPreviewHtml}
+                previewMarkdownClass="commentText"
+              >
               <input
                 ref={replyInputRef}
                 type="text"
@@ -4319,19 +4425,24 @@ const CommentItem = ({
                 value={replyText}
                 onChange={(e) => setReplyText(e.target.value)}
                 disabled={postingComment}
+                onPaste={replyImages.onPaste}
                 onKeyPress={(e) => {
                   if (e.key === 'Enter' && !postingComment) {
                     handlePostComment(authorName, comment.permlink, replyText, true, comment.onChain === false);
                   }
                 }}
               />
+              </CommentDropZone>
               <div className="replyBottomRow">
-                <EmojiGifPicker
-                  align="left"
-                  openDirection="up"
-                  onPickEmoji={(em) => insertAtCursor(replyInputRef.current, replyText, em, setReplyText)}
-                  onPickGif={(url) => insertAtCursor(replyInputRef.current, replyText, gifMarkdown(url), setReplyText)}
-                />
+                <div className="replyTools">
+                  <EmojiGifPicker
+                    align="left"
+                    openDirection="up"
+                    onPickEmoji={(em) => insertAtCursor(replyInputRef.current, replyText, em, setReplyText)}
+                    onPickGif={(url) => insertAtCursor(replyInputRef.current, replyText, gifMarkdown(url), setReplyText)}
+                  />
+                  <CommentImageButton uploading={replyImages.uploading} onFiles={replyImages.upload} />
+                </div>
                 <div className="replyActions">
                   <button onClick={() => setActiveReply(null)}>{t('common.actions.cancel')}</button>
                   <button

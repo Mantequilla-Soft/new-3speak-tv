@@ -234,6 +234,7 @@
     "shorts": "শর্টস",
     "audio": "অডিও",
     "supporters": "সমর্থক",
+    "members": "সদস্য",
     "streams": "স্ট্রিম",
     "community": "কমিউনিটি",
     "playlists": "প্লেলিস্ট",
@@ -270,5 +271,25 @@
     "processing": "আপনার ভিডিও প্রসেস হচ্ছে",
     "minAgo_one": "{{count}} মিনিট আগে",
     "minAgo_other": "{{count}} মিনিট আগে"
+  },
+  "supports": {
+    "incomingTitle": "@{{user}} @{{profile}}-কে মোট {{amount}} টিপ দিয়েছেন",
+    "outgoingTitle": "@{{profile}} @{{user}}-কে মোট {{amount}} টিপ দিয়েছেন",
+    "received": "পাওয়া",
+    "given": "দেওয়া",
+    "subTabTotal": "{{label}} · {{amount}}",
+    "emptyReceived": "@{{user}} এখনো কোনো ভিডিওতে টিপ পাননি।",
+    "emptyReceivedOwn": "এখনো কোনো টিপ নেই। কেউ আপনার কোনো ভিডিওতে টিপ দিলে তা এখানে দেখা যাবে।",
+    "emptyGiven": "@{{user}} এখনো কোনো ভিডিওতে টিপ দেননি।",
+    "emptyGivenOwn": "আপনি এখনো কোনো ভিডিওতে টিপ দেননি। ভিডিও থেকে পাঠানো টিপ এখানে দেখা যাবে।",
+    "untitled": "শিরোনামহীন",
+    "paidInHive": "{{amount}} HIVE হিসেবে পাঠানো",
+    "hideTip": "টিপ লুকান",
+    "unhideTip": "টিপ দেখান",
+    "hiddenLabel": "আপনার প্রোফাইল থেকে লুকানো",
+    "hiddenToast": "টিপটি আপনার প্রোফাইল থেকে লুকানো হয়েছে",
+    "unhiddenToast": "টিপটি আবার আপনার প্রোফাইলে দেখা যাচ্ছে",
+    "hideFailed": "এই টিপটি পরিবর্তন করা যায়নি। আবার চেষ্টা করুন।",
+    "hideWalletPrompt": "আপনার প্রোফাইলে কোন টিপ দেখা যাবে তা বদলাতে সাইন করুন"
   }
 }

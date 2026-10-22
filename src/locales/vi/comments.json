@@ -110,6 +110,26 @@
     "translation": "Bản dịch",
     "translationFailed": "Dịch thất bại. Dịch vụ dịch có đang chạy không?",
     "reportComment": "Báo cáo bình luận",
-    "openInShorts": "Mở trong Shorts"
+    "openInShorts": "Mở trong Shorts",
+    "sortBy": "Sắp xếp",
+    "sortNewest": "Mới nhất",
+    "sortOldest": "Cũ nhất",
+    "sortPopular": "Phổ biến",
+    "pin": "Ghim",
+    "unpin": "Bỏ ghim",
+    "pinned": "Đã ghim bình luận",
+    "unpinned": "Đã bỏ ghim bình luận",
+    "pinnedByCreator": "Được ghim bởi nhà sáng tạo",
+    "pinFailed": "Không thể thay đổi ghim. Vui lòng thử lại.",
+    "pinWalletPrompt": "Ký để ghim hoặc bỏ ghim bình luận này trên video của bạn",
+    "addImage": "Thêm hình ảnh",
+    "imageTooLarge": "Hình ảnh quá lớn (tối đa 10 MB).",
+    "imageUploadFailed": "Tải hình ảnh lên thất bại. Vui lòng thử lại.",
+    "dropImage": "Thả hình ảnh để thêm vào bình luận của bạn",
+    "removeImage": "Xóa hình ảnh",
+    "uploadingImage": "Đang tải hình ảnh lên",
+    "write": "Viết",
+    "preview": "Xem trước",
+    "nothingToPreview": "Chưa có gì để xem trước"
   }
 }
