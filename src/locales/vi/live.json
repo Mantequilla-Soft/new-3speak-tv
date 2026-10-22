@@ -142,6 +142,7 @@
       "notAnnounced": "Buổi phát này không được thông báo trên Hive.",
       "notAnnouncedAuth": "Chưa thông báo trên Hive: 3Speak chưa được phép đăng bài thay bạn. Hãy sửa mẫu để cho phép.",
       "stuck": "OBS đã kết nối nhưng không có video nào đến được chỗ chúng tôi, nên buổi phát chưa bắt đầu. Hãy dừng phát trong OBS rồi bắt đầu lại.",
+      "dailyLimit": "OBS không thể phát trực tiếp: tài khoản miễn phí chỉ được bắt đầu một buổi phát mỗi ngày. Hãy thử lại 24 giờ sau khi buổi phát trước bắt đầu, hoặc dùng 3Speak Pro để phát không giới hạn mỗi ngày.",
       "useInStudio": "Dùng trong Stream Studio"
     },
     "guide": {
@@ -162,7 +163,7 @@
       "chat2": "Trong OBS, mở menu \"Docks\" và chọn \"Custom Browser Docks\". Nhập tên như \"Trò chuyện 3Speak\", dán URL rồi bấm \"Apply\". Tin nhắn mới hiện trong bảng đó khi bạn đang phát. Người xem không bao giờ thấy nó.",
       "chat3": "Người xem đã thấy trò chuyện bên cạnh buổi phát của bạn, nên bạn không cần đưa nó vào video. Chỉ khi bạn chia sẻ buổi phát ở nơi khác nữa: thêm cùng URL đó làm nguồn \"Browser\" và bỏ \"&dock=1\" ở cuối. Khi đó tin nhắn hiện đè lên video và mờ dần sau 30 giây.",
       "chatOptions": "Tùy chọn, thêm vào cuối URL: &max=10 hiện ít dòng hơn, &size=18 làm chữ to hơn, &fade=0 giữ tin nhắn trên video.",
-      "limitsFree": "Buổi phát miễn phí kết thúc sau 1 giờ và có hình mờ 3Speak. Với 3Speak Pro, bạn có thể phát 4 giờ mà không có hình mờ.",
+      "limitsFree": "Buổi phát miễn phí kết thúc sau 30 phút và có hình mờ 3Speak. Với 3Speak Pro, bạn có thể phát 4 giờ mà không có hình mờ.",
       "limitsPro": "Với 3Speak Pro, buổi phát của bạn có thể kéo dài 4 giờ và không có hình mờ."
     },
     "form": {
@@ -199,6 +200,7 @@
       "publishVod": "Đăng bản ghi thành video",
       "allowClips": "Cho phép người xem cắt clip",
       "proOnly": "Có trong 3Speak Pro",
+      "publishVodFree": "Tối đa 30 phút với gói miễn phí",
       "announce": "Thông báo trên Hive khi tôi phát trực tiếp",
       "announceUnlisted": "Buổi phát không công khai sẽ không bao giờ được thông báo.",
       "authNeeded": "3Speak chưa được phép đăng bài thay bạn, nên buổi phát này sẽ bắt đầu mà không có thông báo trên Hive. Hãy cho phép 3Speak đăng bài thay bạn để tự động thông báo.",
@@ -240,7 +242,11 @@
     "chatOverlay": {
       "invalid": "Liên kết lớp phủ trò chuyện này không hợp lệ. Hãy sao chép lại từ mẫu của bạn trong Stream Studio.",
       "offline": "Hiện bạn không phát trực tiếp. Tin nhắn trò chuyện mới sẽ hiện ở đây khi bạn phát trực tiếp.",
-      "empty": "Bạn đang phát trực tiếp. Tin nhắn trò chuyện mới hiện ở đây."
+      "empty": "Bạn đang phát trực tiếp. Tin nhắn trò chuyện mới hiện ở đây.",
+      "viewers": "Người đang xem",
+      "liveFor": "Thời gian phát",
+      "timeLeft": "Thời gian còn lại trước khi buổi phát kết thúc",
+      "boosts": "Boost nhận được trong buổi phát này (USD)"
     }
   }
 }

@@ -7,6 +7,12 @@
 // 1.0.0 — that way they see all of these when develop is pushed to production.
 export const CHANGELOG = [
   {
+    version: '1.80.12',
+    date: '2026-10-22',
+    summary:
+      '"New from creators you follow" now clears a creator once you\'ve watched their latest video.',
+  },
+  {
     version: '1.80.11',
     date: '2026-10-22',
     summary:

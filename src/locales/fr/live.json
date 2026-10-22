@@ -144,6 +144,7 @@
       "notAnnounced": "Ce live n'a pas été annoncé sur Hive.",
       "notAnnouncedAuth": "Non annoncé sur Hive : 3Speak n'a pas encore le droit de publier pour vous. Modifiez le modèle pour l'autoriser.",
       "stuck": "OBS s'est connecté, mais aucune vidéo ne nous est parvenue, le stream n'a donc pas démarré. Arrêtez le stream dans OBS puis relancez-le.",
+      "dailyLimit": "OBS n'a pas pu passer en direct : les comptes gratuits peuvent lancer un live par jour. Réessayez 24 heures après le début de votre dernier live, ou passez à 3Speak Pro pour streamer sans limite quotidienne.",
       "useInStudio": "Utiliser dans Stream Studio"
     },
     "guide": {
@@ -164,7 +165,7 @@
       "chat2": "Dans OBS, ouvrez le menu \"Docks\" et choisissez \"Custom Browser Docks\". Saisissez un nom comme « Chat 3Speak », collez l'URL et cliquez sur \"Apply\". Les nouveaux messages s'affichent dans ce panneau pendant votre live. Les spectateurs ne le voient jamais.",
       "chat3": "Les spectateurs voient déjà le chat à côté de votre stream, inutile donc de l'ajouter à la vidéo. Seulement si vous partagez aussi le stream ailleurs : ajoutez la même URL comme source \"Browser\" et retirez \"&dock=1\" à la fin. Les messages flottent alors sur la vidéo et disparaissent après 30 secondes.",
       "chatOptions": "Facultatif, à ajouter à la fin de l'URL : &max=10 affiche moins de lignes, &size=18 agrandit le texte, &fade=0 garde les messages sur la vidéo.",
-      "limitsFree": "Les lives gratuits s'arrêtent après 1 heure et affichent un filigrane 3Speak. Avec 3Speak Pro, vous pouvez streamer 4 heures sans filigrane.",
+      "limitsFree": "Les lives gratuits s'arrêtent après 30 minutes et affichent un filigrane 3Speak. Avec 3Speak Pro, vous pouvez streamer 4 heures sans filigrane.",
       "limitsPro": "Avec 3Speak Pro, vos lives peuvent durer 4 heures et n'ont pas de filigrane."
     },
     "form": {
@@ -201,6 +202,7 @@
       "publishVod": "Publier l'enregistrement comme vidéo",
       "allowClips": "Autoriser les spectateurs à créer des clips",
       "proOnly": "Disponible avec 3Speak Pro",
+      "publishVodFree": "Jusqu'à 30 minutes avec l'offre gratuite",
       "announce": "Annoncer sur Hive quand je passe en direct",
       "announceUnlisted": "Les lives non répertoriés ne sont jamais annoncés.",
       "authNeeded": "3Speak n'a pas encore le droit de publier pour vous, ce live démarrerait donc sans annonce sur Hive. Autorisez 3Speak à publier pour vous pour l'annoncer automatiquement.",
@@ -242,7 +244,11 @@
     "chatOverlay": {
       "invalid": "Ce lien d'overlay du chat n'est pas valide. Copiez-le à nouveau depuis votre modèle dans le Stream Studio.",
       "offline": "Pas en direct pour le moment. Les nouveaux messages du chat s'afficheront ici quand vous passerez en direct.",
-      "empty": "Vous êtes en direct. Les nouveaux messages du chat s'affichent ici."
+      "empty": "Vous êtes en direct. Les nouveaux messages du chat s'affichent ici.",
+      "viewers": "Spectateurs en train de regarder",
+      "liveFor": "Durée du live",
+      "timeLeft": "Temps restant avant la fin du live",
+      "boosts": "Boosts reçus pendant ce live (USD)"
     }
   }
 }

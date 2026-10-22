@@ -25,14 +25,17 @@ import './StreamBoostButton.scss';
  */
 export default function StreamBoostButton({ variant = 'button' }) {
   const { t } = useTranslation();
-  const { roomName, boostConfig, isGuest } = useStreamContext();
+  const { roomName, boostConfig, isGuest, hostIdentity } = useStreamContext();
   const authenticated = useAppStore((s) => s.authenticated);
+  const user = useAppStore((s) => s.user);
   const [open, setOpen] = useState(false);
 
   // Boosts are real Hive transfers, so a guest or signed-out viewer has nothing
   // to send them with. Hide rather than disable — an inert boost button on a
-  // stream reads as a bug.
+  // stream reads as a bug. The host watching their own stream has nobody to
+  // boost either.
   if (boostConfig?.enabled === false || !authenticated || isGuest) return null;
+  if (hostIdentity && user && hostIdentity === user) return null;
 
   const label = t('live.boost.label');
   return (

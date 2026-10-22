@@ -140,7 +140,7 @@ export function bannerShape(spec) {
   const m = /^(\d+)\s*x\s*(\d+)$/i.exec(String(spec?.recommended || ''));
   if (!m) return null;
   const ratio = Number(m[1]) / Number(m[2]);
-  if (!(ratio > 0)) return null;
+  if (!(ratio > 0) || !Number.isFinite(ratio)) return null;
   const minW = spec.minWidth || Number(m[1]);
   return {
     // 1456/240 is 6.07, which nobody wants to read as "6.1:1".

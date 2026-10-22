@@ -336,6 +336,11 @@ function TemplateCard({ tpl, token, onEdit, onDelete, onUse }) {
         {state === 'idle' && status?.lastEnd?.reason === 'never_published' && (
           <div className="st-card__warn">{t('live.obs.card.stuck')}</div>
         )}
+        {/* OBS was refused at connect: a free account's one stream a day is used up.
+            OBS itself only shows a generic connection error. */}
+        {state === 'idle' && status?.lastEnd?.reason === 'daily_limit' && (
+          <div className="st-card__warn">{t('live.obs.card.dailyLimit')}</div>
+        )}
         <div className="st-card__meta">
           {lastLive
             ? t('live.obs.card.lastLive', { date: lastLive.toLocaleString(getLanguage(), { dateStyle: 'medium', timeStyle: 'short' }) })
@@ -705,16 +710,17 @@ function TemplateEditor({ token, user, whipBase, existing, isPremium, onSaved, o
         {/* Recording: Pro perks */}
         <div className="st-field">
           <span className="st-field__label">{t('live.obs.form.whenEnds')}</span>
-          <label className={`st-check${isPremium ? '' : ' is-locked'}`}>
+          {/* Everyone may publish the recording; a free one is as long as a free
+              stream (the server stops it there). Clips stay Pro. */}
+          <label className="st-check">
             <input
               type="checkbox"
-              disabled={!isPremium}
-              checked={isPremium && !!form.recording.publishVod}
+              checked={!!form.recording.publishVod}
               onChange={(e) => setIn('recording', { publishVod: e.target.checked })}
             />
             <span>
               {t('live.obs.form.publishVod')}
-              {!isPremium && <em className="st-pro-hint">{t('live.obs.form.proOnly')}</em>}
+              {!isPremium && <em className="st-pro-hint">{t('live.obs.form.publishVodFree')}</em>}
             </span>
           </label>
           <label className={`st-check${isPremium ? '' : ' is-locked'}`}>
@@ -958,10 +964,10 @@ function draftToTemplateInput(name, draft, announceCfg, isPremium) {
       minBoostUsd: Number(draft.boost?.minBoostUsd) || 0,
       creatorPayoutAccount: String(draft.boost?.creatorPayoutAccount || '').trim().toLowerCase().replace(/^@/, ''),
     },
-    // Pro perks. The VOD replaces the announcement's video, so like the create
-    // form it only counts when the stream is announced.
+    // The VOD replaces the announcement's video, so like the create form it only
+    // counts when the stream is announced. Free hosts too (clips stay Pro).
     recording: {
-      publishVod: !!isPremium && notify && !!draft.recording?.autoVod,
+      publishVod: notify && !!draft.recording?.autoVod,
       allowClips: !!isPremium && !!draft.recording?.allowClips,
     },
     announce: {

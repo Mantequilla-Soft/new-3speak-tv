@@ -9,7 +9,12 @@
     "lint": "eslint .",
     "preview": "vite preview",
     "i18n:check": "node scripts/i18n/check.mjs",
-    "i18n:translate": "node scripts/i18n/translate.mjs"
+    "i18n:translate": "node scripts/i18n/translate.mjs",
+    "test": "vitest run",
+    "test:unit": "vitest run tests/unit",
+    "test:server": "vitest run tests/server",
+    "test:e2e": "playwright test",
+    "test:watch": "vitest"
   },
   "dependencies": {
     "@aioha/aioha": "^1.8.5",
@@ -29,7 +34,7 @@
     "@reduxjs/toolkit": "^2.12.0",
     "@snapie/chat-client": "^0.3.0",
     "@snapie/hangouts-core": "^0.16.0",
-    "@snapie/hangouts-react": "file:../../../../../home/dockeruser/hangouts/packages/sdk-react/snapie-hangouts-react-0.26.7.tgz",
+    "@snapie/hangouts-react": "file:../../../../../home/dockeruser/hangouts/packages/sdk-react/snapie-hangouts-react-0.26.11.tgz",
     "@tanstack/react-query": "^5.101.4",
     "@tiptap/extension-color": "^3.30.0",
     "@tiptap/extension-highlight": "^3.30.0",
@@ -92,6 +97,7 @@
   "devDependencies": {
     "@anthropic-ai/sdk": "^0.131.0",
     "@eslint/js": "^10.0.1",
+    "@playwright/test": "^1.64.1",
     "@types/react": "^19.2.18",
     "@types/react-dom": "^19.2.4",
     "@vitejs/plugin-react": "^6.0.5",
@@ -99,12 +105,14 @@
     "eslint-plugin-react-hooks": "^7.1.1",
     "eslint-plugin-react-refresh": "^0.5.4",
     "globals": "^17.10.0",
+    "jsdom": "^28.1.0",
     "os-browserify": "^0.3.0",
     "path-browserify": "^1.0.1",
     "source-map-js": "^1.2.1",
     "url": "^0.11.4",
     "vite": "^8.2.1",
-    "vite-plugin-pwa": "^1.3.0"
+    "vite-plugin-pwa": "^1.3.0",
+    "vitest": "^5.0.5"
   },
   "overrides": {
     "@snapie/chat-client": {

@@ -40,4 +40,11 @@ export default [
       ],
     },
   },
+  // Tests and tool configs run in Node (and jsdom); Playwright fixtures call
+  // use(), which is not a React hook.
+  {
+    files: ['tests/**/*.{js,jsx,cjs,mjs}', '*.config.js'],
+    languageOptions: { globals: { ...globals.node, ...globals.browser } },
+    rules: { 'react-hooks/rules-of-hooks': 'off' },
+  },
 ]

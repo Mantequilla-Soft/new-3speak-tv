@@ -142,6 +142,7 @@
       "notAnnounced": "Siaran ini tidak diumumkan di Hive.",
       "notAnnouncedAuth": "Tidak diumumkan di Hive: 3Speak belum boleh memposting untukmu. Edit template untuk mengizinkannya.",
       "stuck": "OBS sudah terhubung, tetapi tidak ada video yang sampai ke kami, jadi siaran tidak dimulai. Hentikan streaming di OBS lalu mulai lagi.",
+      "dailyLimit": "OBS tidak bisa siaran: akun gratis bisa memulai satu siaran per hari. Coba lagi 24 jam setelah siaran terakhirmu dimulai, atau gunakan 3Speak Pro untuk siaran tanpa batas harian.",
       "useInStudio": "Gunakan di Stream Studio"
     },
     "guide": {
@@ -162,7 +163,7 @@
       "chat2": "Di OBS, buka menu \"Docks\" lalu pilih \"Custom Browser Docks\". Isi nama seperti \"Obrolan 3Speak\", tempel URL-nya, lalu klik \"Apply\". Pesan baru muncul di panel itu selama kamu live. Penonton tidak pernah melihatnya.",
       "chat3": "Penonton sudah melihat obrolan di samping siaranmu, jadi kamu tidak perlu memasukkannya ke video. Hanya jika kamu juga membagikan siaran di tempat lain: tambahkan URL yang sama sebagai sumber \"Browser\" dan hapus \"&dock=1\" di akhirnya. Pesan pun tampil di atas video dan memudar setelah 30 detik.",
       "chatOptions": "Opsional, tambahkan di akhir URL: &max=10 menampilkan lebih sedikit baris, &size=18 memperbesar teks, &fade=0 membuat pesan tetap di video.",
-      "limitsFree": "Siaran gratis berakhir setelah 1 jam dan menampilkan watermark 3Speak. Dengan 3Speak Pro kamu bisa siaran selama 4 jam tanpa watermark.",
+      "limitsFree": "Siaran gratis berakhir setelah 30 menit dan menampilkan watermark 3Speak. Dengan 3Speak Pro kamu bisa siaran selama 4 jam tanpa watermark.",
       "limitsPro": "Dengan 3Speak Pro siaranmu bisa berjalan 4 jam tanpa watermark."
     },
     "form": {
@@ -199,6 +200,7 @@
       "publishVod": "Publikasikan rekaman sebagai video",
       "allowClips": "Izinkan penonton membuat klip",
       "proOnly": "Tersedia dengan 3Speak Pro",
+      "publishVodFree": "Hingga 30 menit di paket gratis",
       "announce": "Umumkan di Hive saat aku live",
       "announceUnlisted": "Siaran tidak terdaftar tidak pernah diumumkan.",
       "authNeeded": "3Speak belum boleh memposting untukmu, jadi siaran ini akan live tanpa pengumuman di Hive. Izinkan 3Speak memposting untukmu agar diumumkan otomatis.",
@@ -240,7 +242,11 @@
     "chatOverlay": {
       "invalid": "Tautan overlay obrolan ini tidak valid. Salin lagi dari template-mu di Stream Studio.",
       "offline": "Kamu sedang tidak live. Pesan obrolan baru akan muncul di sini saat kamu live.",
-      "empty": "Kamu sedang live. Pesan obrolan baru muncul di sini."
+      "empty": "Kamu sedang live. Pesan obrolan baru muncul di sini.",
+      "viewers": "Penonton yang menonton",
+      "liveFor": "Lama siaran",
+      "timeLeft": "Sisa waktu sebelum siaran berakhir",
+      "boosts": "Boost yang diterima di siaran ini (USD)"
     }
   }
 }

@@ -69,6 +69,13 @@ export function dropWatchedFromFeeds(queryClient, { author, permlink } = {}) {
     (data) => (Array.isArray(data) ? data.filter((item) => !isSameVideo(item, a, p)) : data),
   );
 
+  // The "new from creators you follow" pills also always skip watched videos, but
+  // they only hold per-creator counts, so there is nothing to remove locally. Mark
+  // them stale instead (no refetch now): home refetches them on its next mount,
+  // long after recordWatch's PUT has landed, so a creator whose last new video
+  // you just watched drops off the rail.
+  queryClient.invalidateQueries({ queryKey: ['new-from-following'], refetchType: 'none' });
+
   // The preference is the viewer's. With hide-watched off, a video staying in the
   // feed after you watch it is the CORRECT behaviour, not a stale cache.
   const { hideWatched, watchHistoryEnabled } = useAppStore.getState();

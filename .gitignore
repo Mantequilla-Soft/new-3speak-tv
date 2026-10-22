@@ -43,3 +43,8 @@ internal-docs/server/.env
 
 # Community translation editor data (server/i18n-editor.cjs file store)
 server/data/
+
+# Test output
+test-results/
+playwright-report/
+.vitest/

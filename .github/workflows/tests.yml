@@ -1,0 +1,69 @@
+name: Tests
+
+# Unit, API and browser tests (see tests/README.md). Informational: a red run shows
+# up on the pull request but blocks nothing, unless it is made a required check.
+
+on:
+  pull_request:
+  push:
+    branches: [develop]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: tests-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  unit-and-api:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+      # @snapie/hangouts-react may point at a local build (file:...) that only exists on
+      # the dev box. These tests do not import it, so the newest published version will do.
+      - name: Install
+        run: |
+          dep=$(node -p "require('./package.json').dependencies['@snapie/hangouts-react'] || ''")
+          if [[ "$dep" == file:* ]]; then
+            echo "::notice::@snapie/hangouts-react points at a local build; using the published one for the tests"
+            npm pkg set "dependencies.@snapie/hangouts-react=latest"
+          fi
+          npm install --no-audit --no-fund
+          npm ci --prefix server --no-audit --no-fund
+      - run: npm test
+
+  e2e:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+      # The app only builds with the OpenPods SDK it was written against. While that is a
+      # local build, test the deployed develop (preview.3speak.tv) instead of this branch.
+      - name: Install
+        run: |
+          dep=$(node -p "require('./package.json').dependencies['@snapie/hangouts-react'] || ''")
+          if [[ "$dep" == file:* ]]; then
+            echo "::warning::@snapie/hangouts-react points at a local build, so this branch cannot be built here; the browser tests run against preview.3speak.tv"
+            echo "E2E_BASE_URL=https://preview.3speak.tv" >> "$GITHUB_ENV"
+            npm pkg set "dependencies.@snapie/hangouts-react=latest"
+          fi
+          npm install --no-audit --no-fund
+          npx playwright install --with-deps chromium
+      - run: npm run test:e2e
+      - uses: actions/upload-artifact@v7
+        if: failure()
+        with:
+          name: playwright-report
+          path: |
+            playwright-report/
+            test-results/
+          retention-days: 7

@@ -143,6 +143,7 @@
       "notAnnounced": "Mtiririko huu haukutangazwa kwenye Hive.",
       "notAnnouncedAuth": "Haukutangazwa kwenye Hive: 3Speak bado haiwezi kuchapisha kwa niaba yako. Hariri kiolezo ili kuruhusu.",
       "stuck": "OBS imeunganishwa, lakini hakuna video iliyotufikia, kwa hivyo mtiririko haukuanza. Simamisha utiririshaji kwenye OBS kisha uanze tena.",
+      "dailyLimit": "OBS haikuweza kwenda hewani: akaunti za bure zinaweza kuanzisha mtiririko mmoja kwa siku. Jaribu tena saa 24 baada ya mtiririko wako wa mwisho kuanza, au pata 3Speak Pro ili kutiririsha bila kikomo cha kila siku.",
       "useInStudio": "Tumia kwenye Stream Studio"
     },
     "guide": {
@@ -163,7 +164,7 @@
       "chat2": "Katika OBS, fungua menyu ya \"Docks\" na uchague \"Custom Browser Docks\". Andika jina kama \"Gumzo la 3Speak\", bandika URL na ubofye \"Apply\". Ujumbe mpya huonekana kwenye paneli hiyo ukiwa mubashara. Watazamaji hawaioni kamwe.",
       "chat3": "Watazamaji tayari wanaona gumzo kando ya mtiririko wako, kwa hivyo huhitaji kuliweka kwenye video. Ikiwa tu unashiriki mtiririko mahali pengine pia: ongeza URL hiyo hiyo kama chanzo cha \"Browser\" na uondoe \"&dock=1\" mwishoni. Hapo ujumbe huelea juu ya video na kufifia baada ya sekunde 30.",
       "chatOptions": "Si lazima, ongeza mwishoni mwa URL: &max=10 huonyesha mistari michache, &size=18 hukuza maandishi, &fade=0 huacha ujumbe kwenye video.",
-      "limitsFree": "Mitiririko ya bure huisha baada ya saa 1 na huonyesha alama ya maji ya 3Speak. Ukiwa na 3Speak Pro unaweza kutiririsha kwa saa 4 bila alama ya maji.",
+      "limitsFree": "Mitiririko ya bure huisha baada ya dakika 30 na huonyesha alama ya maji ya 3Speak. Ukiwa na 3Speak Pro unaweza kutiririsha kwa saa 4 bila alama ya maji.",
       "limitsPro": "Ukiwa na 3Speak Pro mitiririko yako inaweza kudumu saa 4 bila alama ya maji."
     },
     "form": {
@@ -200,6 +201,7 @@
       "publishVod": "Chapisha rekodi kama video",
       "allowClips": "Ruhusu watazamaji kukata klipu",
       "proOnly": "Inapatikana kwa 3Speak Pro",
+      "publishVodFree": "Hadi dakika 30 kwenye mpango wa bure",
       "announce": "Tangaza kwenye Hive ninapoenda mubashara",
       "announceUnlisted": "Mitiririko isiyoorodheshwa haitangazwi kamwe.",
       "authNeeded": "3Speak bado haiwezi kuchapisha kwa niaba yako, kwa hiyo mtiririko huu utaenda mubashara bila tangazo la Hive. Ruhusu 3Speak ichapishe kwa niaba yako ili kuutangaza kiotomatiki.",
@@ -241,7 +243,11 @@
     "chatOverlay": {
       "invalid": "Kiungo hiki cha kiwekelea cha gumzo si sahihi. Kinakili tena kutoka kwenye kiolezo chako katika Stream Studio.",
       "offline": "Hauko mubashara sasa. Ujumbe mpya wa gumzo utaonekana hapa utakapoenda mubashara.",
-      "empty": "Uko mubashara. Ujumbe mpya wa gumzo huonekana hapa."
+      "empty": "Uko mubashara. Ujumbe mpya wa gumzo huonekana hapa.",
+      "viewers": "Watazamaji sasa",
+      "liveFor": "Muda hewani",
+      "timeLeft": "Muda uliobaki kabla mtiririko kuisha",
+      "boosts": "Boost zilizopokelewa katika mtiririko huu (USD)"
     }
   }
 }

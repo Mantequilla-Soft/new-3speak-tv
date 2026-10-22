@@ -143,6 +143,7 @@
       "notAnnounced": "Bu yayın Hive'da duyurulmadı.",
       "notAnnouncedAuth": "Hive'da duyurulmadı: 3Speak henüz senin adına paylaşım yapamıyor. İzin vermek için şablonu düzenle.",
       "stuck": "OBS bağlandı ama bize hiç görüntü ulaşmadı, bu yüzden yayın başlamadı. OBS'de yayını durdur ve yeniden başlat.",
+      "dailyLimit": "OBS yayına başlayamadı: ücretsiz hesaplar günde bir yayın başlatabilir. Son yayınının başlamasından 24 saat sonra tekrar dene ya da günlük sınır olmadan yayın yapmak için 3Speak Pro al.",
       "useInStudio": "Stream Studio'da kullan"
     },
     "guide": {
@@ -163,7 +164,7 @@
       "chat2": "OBS'de \"Docks\" menüsünü aç ve \"Custom Browser Docks\"u seç. \"3Speak sohbet\" gibi bir ad gir, URL'yi yapıştır ve \"Apply\"a tıkla. Canlıdayken yeni mesajlar o panelde görünür. İzleyiciler onu asla görmez.",
       "chat3": "İzleyiciler sohbeti zaten yayınının yanında görüyor, yani onu videoya eklemene gerek yok. Sadece yayını başka bir yerde de paylaşıyorsan: aynı URL'yi \"Browser\" kaynağı olarak ekle ve sonundaki \"&dock=1\"i sil. O zaman mesajlar videonun üzerinde görünür ve 30 saniye sonra kaybolur.",
       "chatOptions": "İsteğe bağlı, URL'nin sonuna ekle: &max=10 daha az satır gösterir, &size=18 yazıyı büyütür, &fade=0 mesajları videoda tutar.",
-      "limitsFree": "Ücretsiz yayınlar 1 saat sonra biter ve 3Speak filigranı gösterir. 3Speak Pro ile filigransız 4 saat yayın yapabilirsin.",
+      "limitsFree": "Ücretsiz yayınlar 30 dakika sonra biter ve 3Speak filigranı gösterir. 3Speak Pro ile filigransız 4 saat yayın yapabilirsin.",
       "limitsPro": "3Speak Pro ile yayınların 4 saat sürebilir ve filigran içermez."
     },
     "form": {
@@ -200,6 +201,7 @@
       "publishVod": "Kaydı video olarak yayınla",
       "allowClips": "İzleyicilerin klip almasına izin ver",
       "proOnly": "3Speak Pro ile kullanılabilir",
+      "publishVodFree": "Ücretsiz planda en fazla 30 dakika",
       "announce": "Canlı yayına geçtiğimde Hive'da duyur",
       "announceUnlisted": "Liste dışı yayınlar asla duyurulmaz.",
       "authNeeded": "3Speak henüz senin adına paylaşım yapamıyor, bu yüzden bu yayın Hive duyurusu olmadan başlar. Otomatik duyurmak için 3Speak'in senin adına paylaşım yapmasına izin ver.",
@@ -241,7 +243,11 @@
     "chatOverlay": {
       "invalid": "Bu sohbet katmanı bağlantısı geçerli değil. Stream Studio'daki şablonundan yeniden kopyala.",
       "offline": "Şu an canlı değilsin. Canlıya çıktığında yeni sohbet mesajları burada görünür.",
-      "empty": "Canlıdasın. Yeni sohbet mesajları burada görünür."
+      "empty": "Canlıdasın. Yeni sohbet mesajları burada görünür.",
+      "viewers": "Şu an izleyenler",
+      "liveFor": "Yayın süresi",
+      "timeLeft": "Yayının bitmesine kalan süre",
+      "boosts": "Bu yayında alınan boostlar (USD)"
     }
   }
 }
