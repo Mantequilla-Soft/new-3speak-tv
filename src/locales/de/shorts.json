@@ -69,12 +69,6 @@
     "linkCopied": "Link in die Zwischenablage kopiert!",
     "failed": "Teilen fehlgeschlagen"
   },
-  "reshare": {
-    "loginRequired": "Melde dich an, um zu teilen",
-    "unavailable": "Erneutes Teilen ist für diesen Post nicht verfügbar",
-    "done": "Geteilt!",
-    "failed": "Erneutes Teilen fehlgeschlagen"
-  },
   "remix": {
     "noUrl": "Video-URL für den Remix konnte nicht ermittelt werden",
     "loadFailed": "Video für den Remix konnte nicht geladen werden"

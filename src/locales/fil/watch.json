@@ -56,14 +56,6 @@
     "removeFailed": "Hindi maalis: {{error}}",
     "removeTitle": "Alisin sa Panoorin Mamaya"
   },
-  "reshare": {
-    "loginRequired": "Mag-log in para mag-reshare",
-    "success": "Na-reshare!",
-    "failed": "Hindi ma-reshare",
-    "reshared": "Na-reshare",
-    "reshare": "Reshare",
-    "reshareWithCount": "Reshare ({{count}})"
-  },
   "clip": {
     "noVideoUrlRemix": "Hindi makuha ang video URL para sa remix",
     "noVideoUrl": "Hindi makuha ang video URL",

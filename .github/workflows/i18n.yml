@@ -2,6 +2,8 @@ name: Translations
 
 on:
   pull_request:
+    # Release PRs only (develop -> production), like tests.yml.
+    branches: [production]
     paths:
       - 'src/locales/**'
       - 'src/i18n/**'

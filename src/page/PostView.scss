@@ -206,6 +206,24 @@
   padding: 7px 10px;
 }
 
+.post-reblog-action {
+  &.active {
+    border-color: rgba(34, 197, 94, 0.38);
+    color: #22c55e;
+    background: rgba(34, 197, 94, 0.12);
+  }
+
+  &.armed {
+    border-color: var(--accent-primary);
+    color: var(--accent-primary);
+  }
+
+  span {
+    font-size: 12px;
+    font-weight: 700;
+  }
+}
+
 .post-reshare-action {
   &.active {
     border-color: rgba(34, 197, 94, 0.38);

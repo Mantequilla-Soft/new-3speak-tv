@@ -69,12 +69,6 @@
     "linkCopied": "Lien copié dans le presse-papiers !",
     "failed": "Échec du partage"
   },
-  "reshare": {
-    "loginRequired": "Connectez-vous pour repartager",
-    "unavailable": "Le repartage n'est pas disponible pour cette publication",
-    "done": "Repartagé !",
-    "failed": "Échec du repartage"
-  },
   "remix": {
     "noUrl": "Impossible de trouver l'URL de la vidéo pour le remix",
     "loadFailed": "Impossible de charger la vidéo pour le remix"

@@ -97,5 +97,23 @@
   "language": {
     "label": "Dil",
     "hint": "3Speak menülerinin ve düğmelerinin gösterildiği dil. Videolar ve gönderiler, içerik üreticisinin yazdığı dilde kalır."
+  },
+  "hype": {
+    "hype": "Hype",
+    "hyped": "Hype verildi",
+    "withCount": "Hype ({{count}})",
+    "title": "3Speak’te hype ver (bu bir Hive reblog’u değil)",
+    "loginRequired": "Hype vermek için giriş yap",
+    "success": "Hype verildi!",
+    "failed": "Hype verilemedi",
+    "unavailable": "Bu gönderi için hype kullanılamıyor"
+  },
+  "reblog": {
+    "reblog": "Reblog",
+    "reblogged": "Reblog yapıldı",
+    "confirm": "Reblog için tekrar dokun",
+    "title": "Hive bloguna reblog yap",
+    "success": "Hive bloguna reblog yapıldı",
+    "failed": "Reblog başarısız oldu"
   }
 }

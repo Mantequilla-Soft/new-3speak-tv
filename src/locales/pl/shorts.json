@@ -69,12 +69,6 @@
     "linkCopied": "Skopiowano link do schowka!",
     "failed": "Nie udało się udostępnić"
   },
-  "reshare": {
-    "loginRequired": "Zaloguj się, aby udostępnić dalej",
-    "unavailable": "Udostępnianie dalej nie jest dostępne dla tego posta",
-    "done": "Udostępniono dalej!",
-    "failed": "Nie udało się udostępnić dalej"
-  },
   "remix": {
     "noUrl": "Nie udało się ustalić adresu URL filmu do remiksu",
     "loadFailed": "Nie udało się wczytać filmu do remiksu"

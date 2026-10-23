@@ -33,6 +33,8 @@
     "sendInChatSub": "Nhắn cho ai đó trên 3Speak",
     "embedOnWebsite": "Nhúng vào trang web",
     "embedOnWebsiteSub": "Sao chép mã HTML cho trang web hoặc blog của bạn",
+    "forHivePost": "Cho bài đăng Hive",
+    "hivePostCopied": "Đã sao chép liên kết. Hãy dán vào bài đăng Hive của bạn.",
     "generalShare": "Chia sẻ / sao chép đường liên kết",
     "generalShareSub": "Ứng dụng khác, hoặc sao chép đường liên kết"
   },

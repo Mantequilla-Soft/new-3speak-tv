@@ -97,5 +97,23 @@
   "language": {
     "label": "Wika",
     "hint": "Ang wikang gagamitin sa mga menu at button ng 3Speak. Mananatili ang mga video at post sa wikang ginamit ng kanilang creator."
+  },
+  "hype": {
+    "hype": "Hype",
+    "hyped": "Na-hype na",
+    "withCount": "Hype ({{count}})",
+    "title": "I-hype sa 3Speak (hindi ito Hive reblog)",
+    "loginRequired": "Mag-log in para mag-hype",
+    "success": "Na-hype!",
+    "failed": "Hindi ma-hype ito",
+    "unavailable": "Hindi available ang hype para sa post na ito"
+  },
+  "reblog": {
+    "reblog": "Reblog",
+    "reblogged": "Na-reblog na",
+    "confirm": "I-tap ulit para i-reblog",
+    "title": "I-reblog sa iyong Hive blog",
+    "success": "Na-reblog sa iyong Hive blog",
+    "failed": "Nabigo ang reblog"
   }
 }

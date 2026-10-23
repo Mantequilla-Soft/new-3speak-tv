@@ -18,7 +18,8 @@ import { resolveRootPost, ensure3SpeakStatus } from '../utils/threeSpeakDetectio
 import { recordReshare, getResharesForVideo } from '../utils/reshares';
 import { isLoggedIn } from '../hive-api/aioha';
 import { LuTimer } from 'react-icons/lu';
-import { Repeat2 } from 'lucide-react';
+import { Flame, Repeat2 } from 'lucide-react';
+import useReblog from '../hooks/useReblog';
 import { MdAttachMoney, MdComment, MdFlag, MdShare } from 'react-icons/md';
 import { useTranslation } from 'react-i18next';
 import { formatTimeAgo } from '../i18n';
@@ -191,14 +192,18 @@ function PostView() {
     }
   }, [author, permlink, post?.title, t]);
 
+  // The real Hive reblog, next to the 3Speak "Hype" below.
+  const reblog = useReblog(author, permlink, toast);
+
+  // "Hype" in the UI: 3Speak's own reshare row, not a Hive reblog.
   const handleReshare = useCallback(async () => {
     const asWho = currentUser || incubationHandle;
     if (!authenticated || !asWho) {
-      toast.error(t('posts.view.loginToReblog'));
+      toast.error(t('common.hype.loginRequired'));
       return;
     }
     if (hasReshared) {
-      toast.info(t('posts.view.alreadyReblogged'));
+      toast.info(t('common.hype.hyped'));
       return;
     }
 
@@ -206,9 +211,9 @@ function PostView() {
     if (result) {
       setHasReshared(true);
       setReshareCount(prev => prev + 1);
-      toast.success(t('posts.view.reblogged'));
+      toast.success(t('common.hype.success'));
     } else {
-      toast.error(t('posts.view.reblogFailed'));
+      toast.error(t('common.hype.failed'));
     }
   }, [authenticated, hasReshared, currentUser, incubationHandle, author, permlink, t]);
 
@@ -485,11 +490,24 @@ function PostView() {
               // isLoggedIn() is the wallet check, which an incubating user
               // never passes. The reshare itself does not need one.
               disabled={!authenticated || (!isLoggedIn() && !incubationHandle)}
-              title={!authenticated ? t('posts.view.loginToReblog') : hasReshared ? t('posts.view.rebloggedState') : t('posts.view.reblog')}
+              title={!authenticated ? t('common.hype.loginRequired') : hasReshared ? t('common.hype.hyped') : t('common.hype.title')}
             >
-              <Repeat2 size={16} />
+              <Flame size={16} />
               {reshareCount > 0 && <span>{reshareCount}</span>}
             </button>
+            {reblog.canReblog && (
+              <button
+                type="button"
+                className={`post-icon-action post-reblog-action${reblog.reblogged ? ' active' : ''}${reblog.armed ? ' armed' : ''}`}
+                onClick={reblog.press}
+                disabled={reblog.busy}
+                title={reblog.reblogged ? t('common.reblog.reblogged') : t('common.reblog.title')}
+              >
+                <Repeat2 size={16} />
+                {/* Icon-only like its neighbours, except while armed: the second tap needs saying. */}
+                {reblog.armed && <span>{reblog.label}</span>}
+              </button>
+            )}
             {authenticated && currentUser !== post.author && (
               <button type="button" className="post-icon-action post-tip-action" onClick={handleTip} title={t('posts.view.tipCreator')}>
                 <MdAttachMoney size={17} />

@@ -56,14 +56,6 @@
     "removeFailed": "Failed to remove: {{error}}",
     "removeTitle": "Remove from Watch Later"
   },
-  "reshare": {
-    "loginRequired": "Log in to reshare",
-    "success": "Reshared!",
-    "failed": "Failed to reshare",
-    "reshared": "Reshared",
-    "reshare": "Reshare",
-    "reshareWithCount": "Reshare ({{count}})"
-  },
   "clip": {
     "noVideoUrlRemix": "Could not resolve video URL for remix",
     "noVideoUrl": "Could not resolve video URL",

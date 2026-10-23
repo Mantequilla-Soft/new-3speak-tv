@@ -69,12 +69,6 @@
     "linkCopied": "¡Enlace copiado al portapapeles!",
     "failed": "No se pudo compartir"
   },
-  "reshare": {
-    "loginRequired": "Inicia sesión para volver a compartir",
-    "unavailable": "No se puede volver a compartir esta publicación",
-    "done": "¡Compartido de nuevo!",
-    "failed": "No se pudo volver a compartir"
-  },
   "remix": {
     "noUrl": "No se pudo obtener la URL del video para el remix",
     "loadFailed": "No se pudo cargar el video para el remix"

@@ -56,14 +56,6 @@
     "removeFailed": "Nie udało się usunąć: {{error}}",
     "removeTitle": "Usuń z listy Do obejrzenia"
   },
-  "reshare": {
-    "loginRequired": "Zaloguj się, aby udostępnić dalej",
-    "success": "Udostępniono dalej!",
-    "failed": "Nie udało się udostępnić dalej",
-    "reshared": "Udostępniono",
-    "reshare": "Udostępnij dalej",
-    "reshareWithCount": "Udostępnij dalej ({{count}})"
-  },
   "clip": {
     "noVideoUrlRemix": "Nie udało się ustalić adresu URL filmu do remiksu",
     "noVideoUrl": "Nie udało się ustalić adresu URL filmu",

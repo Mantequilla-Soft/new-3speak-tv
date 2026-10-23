@@ -7,6 +7,18 @@
 // 1.0.0 — that way they see all of these when develop is pushed to production.
 export const CHANGELOG = [
   {
+    version: '1.80.15',
+    date: '2026-10-23',
+    summary:
+      'Reshare is now called Hype. New: a Reblog button on videos and posts that shares them to your Hive blog.',
+  },
+  {
+    version: '1.80.14',
+    date: '2026-10-23',
+    summary:
+      'The share menu on videos and shorts has a new "For Hive post" option. It copies the video\'s 3speak.tv/watch link, ready to paste into a post on Hive.',
+  },
+  {
     version: '1.80.12',
     date: '2026-10-22',
     summary:

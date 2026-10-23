@@ -69,12 +69,6 @@
     "linkCopied": "Link copiado!",
     "failed": "Não foi possível compartilhar"
   },
-  "reshare": {
-    "loginRequired": "Entre para compartilhar",
-    "unavailable": "Não é possível compartilhar este post",
-    "done": "Compartilhado!",
-    "failed": "Não foi possível compartilhar"
-  },
   "remix": {
     "noUrl": "Não foi possível obter a URL do vídeo para o remix",
     "loadFailed": "Não foi possível carregar o vídeo para o remix"

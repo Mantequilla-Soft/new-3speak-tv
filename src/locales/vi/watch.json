@@ -56,14 +56,6 @@
     "removeFailed": "Xóa thất bại: {{error}}",
     "removeTitle": "Xóa khỏi Xem sau"
   },
-  "reshare": {
-    "loginRequired": "Đăng nhập để chia sẻ lại",
-    "success": "Đã chia sẻ lại!",
-    "failed": "Chia sẻ lại thất bại",
-    "reshared": "Đã chia sẻ lại",
-    "reshare": "Chia sẻ lại",
-    "reshareWithCount": "Chia sẻ lại ({{count}})"
-  },
   "clip": {
     "noVideoUrlRemix": "Không thể xác định URL video để remix",
     "noVideoUrl": "Không thể xác định URL video",

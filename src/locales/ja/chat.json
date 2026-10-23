@@ -33,6 +33,8 @@
     "sendInChatSub": "3Speak のユーザーにメッセージで送る",
     "embedOnWebsite": "ウェブサイトに埋め込む",
     "embedOnWebsiteSub": "自分のサイトやブログ用の HTML をコピー",
+    "forHivePost": "Hive投稿用",
+    "hivePostCopied": "リンクをコピーしました。Hiveの投稿に貼り付けてください。",
     "generalShare": "共有 / リンクをコピー",
     "generalShareSub": "ほかのアプリ、またはリンクをコピー"
   },

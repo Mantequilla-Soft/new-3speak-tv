@@ -34,6 +34,8 @@
     "sendInChatSub": "Message it to someone on 3Speak",
     "embedOnWebsite": "Embed on a website",
     "embedOnWebsiteSub": "Copy the HTML for your own site or blog",
+    "forHivePost": "For Hive post",
+    "hivePostCopied": "Link copied. Paste it into your Hive post.",
     "generalShare": "Share / copy link",
     "generalShareSub": "Other apps, or copy the link"
   },

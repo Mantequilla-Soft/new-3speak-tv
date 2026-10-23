@@ -36,6 +36,8 @@
     "sendInChatSub": "Надішліть комусь на 3Speak",
     "embedOnWebsite": "Вбудувати на сайт",
     "embedOnWebsiteSub": "Скопіюйте HTML для свого сайту чи блогу",
+    "forHivePost": "Для допису в Hive",
+    "hivePostCopied": "Посилання скопійовано. Вставте його у свій допис у Hive.",
     "generalShare": "Поділитися / копіювати посилання",
     "generalShareSub": "Інші застосунки або копіювання посилання"
   },

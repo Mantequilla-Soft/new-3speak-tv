@@ -63,7 +63,8 @@ import { removeFromPlaylist } from "../../utils/playlistOperations";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import AuthorBadge from "../AuthorBadge/AuthorBadge";
 import Button from "../Button/Button";
-import { Repeat2, Scissors, Tornado, Film, Music, Rocket, Gift } from 'lucide-react';
+import { Repeat2, Scissors, Tornado, Film, Music, Rocket, Gift, Flame } from 'lucide-react';
+import useReblog from '../../hooks/useReblog';
 import PromoteModal from '../Promote/PromoteModal';
 import { recordReshare, getResharesForVideo } from '../../utils/reshares';
 import EditorModal from '../modal/EditorModal';
@@ -960,6 +961,11 @@ const PlayVideo = ({ videoDetails, author, permlink, mediaUnavailable = false, m
     })();
   }, [author, permlink, user, incubationHandle]);
 
+  // The real Hive reblog. Nothing to reblog yet on a scheduled post or a live
+  // stream, nor on an incubating creator's post (it is not on Hive).
+  const reblog = useReblog(author, !scheduled && !isLive && !postIsOffChain ? permlink : null, toast);
+
+  // "Hype" in the UI (it was called Reshare, which people took for a reblog).
   const handleReshare = useCallback(async () => {
     // A reshare is not a chain operation: it is a row in 3Speak's own reshare
     // store, keyed by name. So an incubating user can make one under their
@@ -967,7 +973,7 @@ const PlayVideo = ({ videoDetails, author, permlink, mediaUnavailable = false, m
     // for a Hive username they do not have.
     const asWho = user || incubationHandle;
     if (!authenticated || !asWho) {
-      toast.error(t('watch.reshare.loginRequired'));
+      toast.error(t('common.hype.loginRequired'));
       return;
     }
     if (hasReshared) return;
@@ -975,9 +981,9 @@ const PlayVideo = ({ videoDetails, author, permlink, mediaUnavailable = false, m
     if (result) {
       setHasReshared(true);
       setReshareCount(prev => prev + 1);
-      toast.success(t('watch.reshare.success'));
+      toast.success(t('common.hype.success'));
     } else {
-      toast.error(t('watch.reshare.failed'));
+      toast.error(t('common.hype.failed'));
     }
   }, [authenticated, user, incubationHandle, author, permlink, hasReshared]);
 
@@ -1835,12 +1841,25 @@ const PlayVideo = ({ videoDetails, author, permlink, mediaUnavailable = false, m
                   className={`pv-btn reshare-btn${hasReshared ? ' reshared' : ''}`}
                   onClick={handleReshare}
                   disabled={!authenticated || (!isLoggedIn() && !incubationHandle)}
-                  title={!authenticated ? t('watch.reshare.loginRequired') : hasReshared ? t('watch.reshare.reshared') : t('watch.reshare.reshare')}
+                  title={!authenticated ? t('common.hype.loginRequired') : hasReshared ? t('common.hype.hyped') : t('common.hype.title')}
                 >
-                  <Repeat2 size={16} />
-                  <span>{t('watch.reshare.reshare')}</span>
+                  <Flame size={16} />
+                  <span>{t('common.hype.hype')}</span>
                   {reshareCount > 0 && <span className="reshare-count">{reshareCount}</span>}
                 </button>
+
+                {reblog.canReblog && (
+                  <button
+                    type="button"
+                    className={`pv-btn reblog-btn${reblog.reblogged ? ' reshared' : ''}${reblog.armed ? ' active' : ''}${reblog.busy ? ' loading' : ''}`}
+                    onClick={reblog.press}
+                    disabled={reblog.busy}
+                    title={reblog.reblogged ? t('common.reblog.reblogged') : t('common.reblog.title')}
+                  >
+                    <Repeat2 size={16} />
+                    <span>{reblog.label}</span>
+                  </button>
+                )}
 
                 {authenticated && isLoggedIn() && (
                   <button
@@ -2049,6 +2068,8 @@ const PlayVideo = ({ videoDetails, author, permlink, mediaUnavailable = false, m
              actually play: a scheduled post isn't public yet, and a live stream
              has no VOD asset for the player to resolve. */
           embed={!scheduled && !isLive ? { author, permlink } : null}
+          /* Not for a scheduled post: the link would be dead in a post until it publishes. */
+          hivePost={!scheduled ? { author, permlink } : null}
           onClose={() => setShareChooserOpen(false)}
           onGeneralShare={handleShare}
         />
@@ -2265,11 +2286,26 @@ const PlayVideo = ({ videoDetails, author, permlink, mediaUnavailable = false, m
 
               {authenticated && isLoggedIn() && author !== user && (
                 <div className="fab-action">
-                  <span className="fab-action-label">{reshareCount > 0 ? t('watch.reshare.reshareWithCount', { count: reshareCount }) : t('watch.reshare.reshare')}</span>
+                  <span className="fab-action-label">{reshareCount > 0 ? t('common.hype.withCount', { count: reshareCount }) : t('common.hype.hype')}</span>
                   <button
                     className={`fab-action-btn${hasReshared ? ' fab-action-btn--voted' : ''}`}
                     onClick={() => { handleReshare(); setFabOpen(false); }}
-                    aria-label={t('watch.reshare.reshare')}
+                    aria-label={t('common.hype.title')}
+                  >
+                    <Flame size={20} />
+                  </button>
+                </div>
+              )}
+
+              {reblog.canReblog && (
+                <div className="fab-action">
+                  <span className="fab-action-label">{reblog.label}</span>
+                  <button
+                    className={`fab-action-btn${reblog.reblogged ? ' fab-action-btn--voted' : ''}${reblog.armed ? ' fab-action-btn--active' : ''}`}
+                    // The first tap only arms it, so the menu stays open for the second.
+                    onClick={async () => { if (await reblog.press()) setFabOpen(false); }}
+                    disabled={reblog.busy}
+                    aria-label={t('common.reblog.title')}
                   >
                     <Repeat2 size={20} />
                   </button>

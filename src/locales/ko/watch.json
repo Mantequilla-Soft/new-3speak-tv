@@ -56,14 +56,6 @@
     "removeFailed": "제거 실패: {{error}}",
     "removeTitle": "나중에 볼 동영상에서 제거"
   },
-  "reshare": {
-    "loginRequired": "다시 공유하려면 로그인하세요",
-    "success": "다시 공유했어요!",
-    "failed": "다시 공유하지 못했어요",
-    "reshared": "공유됨",
-    "reshare": "다시 공유",
-    "reshareWithCount": "다시 공유({{count}})"
-  },
   "clip": {
     "noVideoUrlRemix": "리믹스할 동영상 URL을 확인하지 못했어요",
     "noVideoUrl": "동영상 URL을 확인하지 못했어요",

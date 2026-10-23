@@ -56,14 +56,6 @@
     "removeFailed": "Imeshindwa kuondoa: {{error}}",
     "removeTitle": "Ondoa kwenye Tazama Baadaye"
   },
-  "reshare": {
-    "loginRequired": "Ingia ili kushiriki tena",
-    "success": "Imeshirikiwa tena!",
-    "failed": "Imeshindwa kushiriki tena",
-    "reshared": "Imeshirikiwa tena",
-    "reshare": "Shiriki tena",
-    "reshareWithCount": "Shiriki tena ({{count}})"
-  },
   "clip": {
     "noVideoUrlRemix": "Imeshindwa kupata URL ya video kwa ajili ya remix",
     "noVideoUrl": "Imeshindwa kupata URL ya video",

@@ -34,6 +34,8 @@
     "sendInChatSub": "3Speak पर किसी को मैसेज करें",
     "embedOnWebsite": "वेबसाइट पर एम्बेड करें",
     "embedOnWebsiteSub": "अपनी साइट या ब्लॉग के लिए HTML कॉपी करें",
+    "forHivePost": "Hive पोस्ट के लिए",
+    "hivePostCopied": "लिंक कॉपी हो गया। इसे अपनी Hive पोस्ट में पेस्ट करें।",
     "generalShare": "शेयर करें / लिंक कॉपी करें",
     "generalShareSub": "दूसरे ऐप, या लिंक कॉपी करें"
   },

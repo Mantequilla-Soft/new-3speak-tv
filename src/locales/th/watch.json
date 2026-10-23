@@ -56,14 +56,6 @@
     "removeFailed": "นำออกไม่สำเร็จ: {{error}}",
     "removeTitle": "นำออกจากดูภายหลัง"
   },
-  "reshare": {
-    "loginRequired": "เข้าสู่ระบบเพื่อแชร์ต่อ",
-    "success": "แชร์ต่อแล้ว!",
-    "failed": "แชร์ต่อไม่สำเร็จ",
-    "reshared": "แชร์ต่อแล้ว",
-    "reshare": "แชร์ต่อ",
-    "reshareWithCount": "แชร์ต่อ ({{count}})"
-  },
   "clip": {
     "noVideoUrlRemix": "หา URL วิดีโอสำหรับรีมิกซ์ไม่ได้",
     "noVideoUrl": "หา URL วิดีโอไม่ได้",

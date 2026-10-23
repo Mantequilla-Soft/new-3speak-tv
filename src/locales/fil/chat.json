@@ -34,6 +34,8 @@
     "sendInChatSub": "I-message ito sa isang tao sa 3Speak",
     "embedOnWebsite": "I-embed sa website",
     "embedOnWebsiteSub": "Kopyahin ang HTML para sa sarili mong site o blog",
+    "forHivePost": "Para sa Hive post",
+    "hivePostCopied": "Nakopya ang link. I-paste ito sa iyong Hive post.",
     "generalShare": "I-share / kopyahin ang link",
     "generalShareSub": "Ibang app, o kopyahin ang link"
   },

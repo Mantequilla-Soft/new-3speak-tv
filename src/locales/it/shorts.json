@@ -69,12 +69,6 @@
     "linkCopied": "Link copiato negli appunti!",
     "failed": "Condivisione non riuscita"
   },
-  "reshare": {
-    "loginRequired": "Accedi per ricondividere",
-    "unavailable": "La ricondivisione non è disponibile per questo post",
-    "done": "Ricondiviso!",
-    "failed": "Ricondivisione non riuscita"
-  },
   "remix": {
     "noUrl": "Impossibile trovare l'URL del video per il remix",
     "loadFailed": "Impossibile caricare il video per il remix"

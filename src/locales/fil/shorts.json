@@ -69,12 +69,6 @@
     "linkCopied": "Nakopya ang link sa clipboard!",
     "failed": "Hindi ma-share"
   },
-  "reshare": {
-    "loginRequired": "Mag-log in para mag-reshare",
-    "unavailable": "Hindi available ang reshare sa post na ito",
-    "done": "Na-reshare!",
-    "failed": "Hindi ma-reshare"
-  },
   "remix": {
     "noUrl": "Hindi makuha ang video URL para sa remix",
     "loadFailed": "Hindi ma-load ang video para sa remix"

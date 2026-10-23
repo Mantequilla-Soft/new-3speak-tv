@@ -69,12 +69,6 @@
     "linkCopied": "Đã sao chép đường liên kết vào bộ nhớ tạm!",
     "failed": "Chia sẻ thất bại"
   },
-  "reshare": {
-    "loginRequired": "Đăng nhập để chia sẻ lại",
-    "unavailable": "Không thể chia sẻ lại bài đăng này",
-    "done": "Đã chia sẻ lại!",
-    "failed": "Chia sẻ lại thất bại"
-  },
   "remix": {
     "noUrl": "Không thể xác định URL video để remix",
     "loadFailed": "Không tải được video để remix"

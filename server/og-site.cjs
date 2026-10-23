@@ -179,7 +179,9 @@ ${trending
   <meta property="og:site_name" content="3Speak" />
   <meta property="og:title" content="${escapeHtml(PAGE_TITLE)}" />
   <meta property="og:description" content="${escapeHtml(PAGE_DESC)}" />
-  <meta property="og:image" content="${escapeHtml(`${BASE_URL}/3speak.jpeg`)}" />
+  <meta property="og:image" content="${escapeHtml(`${BASE_URL}/og-image.jpg`)}" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
   <meta property="og:url" content="${canonical}" />
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:site" content="@3speaktv" />

@@ -92,5 +92,23 @@
   "language": {
     "label": "Ngôn ngữ",
     "hint": "Ngôn ngữ hiển thị menu và nút của 3Speak. Video và bài đăng vẫn giữ ngôn ngữ mà nhà sáng tạo đã viết."
+  },
+  "hype": {
+    "hype": "Hype",
+    "hyped": "Đã hype",
+    "withCount": "Hype ({{count}})",
+    "title": "Hype trên 3Speak (đây không phải reblog Hive)",
+    "loginRequired": "Đăng nhập để hype",
+    "success": "Đã hype!",
+    "failed": "Không thể hype",
+    "unavailable": "Không thể hype bài đăng này"
+  },
+  "reblog": {
+    "reblog": "Reblog",
+    "reblogged": "Đã reblog",
+    "confirm": "Chạm lần nữa để reblog",
+    "title": "Reblog lên blog Hive của bạn",
+    "success": "Đã reblog lên blog Hive của bạn",
+    "failed": "Reblog thất bại"
   }
 }
