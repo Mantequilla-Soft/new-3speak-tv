@@ -34,6 +34,6 @@ Rewards are paid in HIVE and HBD (Hive Backed Dollars), the native assets of the
 
 ## Optional
 
-- [Video sitemap](https://3speak.tv/sitemap-videos.xml)
+- [Sitemap of every video, short and channel](https://3speak.tv/sitemap.xml)
 - [Channel sitemap](https://3speak.tv/sitemap-channels.xml)
 - [Hive blockchain](https://hive.io)

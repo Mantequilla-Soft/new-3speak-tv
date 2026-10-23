@@ -1,11 +1,12 @@
 /**
  * Crawler-facing site pages for og-server.cjs: what 3Speak is, for readers that
- * do not run JavaScript (AI assistants and their search crawlers, mostly), plus
- * the two dynamic sitemaps that sitemap.xml has always pointed at.
+ * do not run JavaScript (AI assistants and their search crawlers, mostly). The
+ * sitemaps moved to the API (sitemaps.cjs), which reads Mongo directly.
  *
  * Why this exists: the SPA shell is an empty <div id="root">. ChatGPT, Claude
  * and Perplexity fetch pages without running JS, so `/` and `/about` told them
- * nothing beyond a one-line meta description. nginx sends only AI-agent UAs to
+ * nothing beyond a one-line meta description. nginx sends AI-agent UAs and
+ * Bingbot (which renders little JS, and feeds DuckDuckGo, Yahoo and Ecosia) to
  * `/` and `/about` here; Googlebot keeps rendering the real SPA there.
  *
  * 🚨 Every claim below is checked against the code that pays it out. Keep it
@@ -47,7 +48,7 @@ async function fetchJson(url) {
 }
 
 // One cache entry per key: serve stale on a failed refresh, and never run two
-// refreshes of the same key at once (a crawler asks for sitemaps in bursts).
+// refreshes of the same key at once.
 const cache = new Map();
 async function cached(key, ttlMs, load) {
   const hit = cache.get(key);
@@ -272,105 +273,10 @@ async function serveSitePage(req, res, url, origin) {
   res.end(buildSitePage(origin, url.pathname, trending));
 }
 
-// ── Sitemaps ─────────────────────────────────────────────────────────────────
-// sitemap.xml (a static index in public/) has listed these two since launch and
-// neither existed: both fell through to the SPA and answered 200 with HTML.
-
-const SITEMAP_TTL_MS = 6 * 60 * 60 * 1000;
-const MAX_SITEMAP_URLS = 5000;
-
-async function pagesOf(path, key, maxPages) {
-  const out = [];
-  for (let page = 1; page <= maxPages; page++) {
-    const sep = path.includes('?') ? '&' : '?';
-    const data = await fetchJson(`${CHECKER_URL}${path}${sep}limit=100&page=${page}`);
-    const items = data[key] || [];
-    out.push(...items);
-    const totalPages = data.totalPages || (data.has_more ? page + 1 : page);
-    if (!items.length || page >= totalPages) break;
-  }
-  return out;
-}
-
-function isoDay(d) {
-  const t = d ? new Date(d) : null;
-  return t && !Number.isNaN(t.getTime()) ? t.toISOString().slice(0, 10) : null;
-}
-
-function urlset(entries) {
-  const body = entries
-    .map((e) => `  <url><loc>${escapeHtml(e.loc)}</loc>${e.lastmod ? `<lastmod>${e.lastmod}</lastmod>` : ''}</url>`)
-    .join('\n');
-  return `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${body}\n</urlset>\n`;
-}
-
-async function loadVideoSitemap() {
-  const seen = new Set();
-  const entries = [];
-  const add = (route, v) => {
-    if (!v || !v.owner || !v.permlink || v.isNsfwContent) return;
-    const loc = `${BASE_URL}/${route}?v=${v.owner}/${v.permlink}`;
-    if (seen.has(loc) || entries.length >= MAX_SITEMAP_URLS) return;
-    seen.add(loc);
-    entries.push({ loc, lastmod: isoDay(v.created || v.created_at || v.createdAt) });
-  };
-  // Sequential on purpose: the checker is shared with live traffic.
-  for (const [path, pages] of [['/feeds/trendingSorted', 3], ['/feeds/new', 2], ['/feeds/discover', 30]]) {
-    try {
-      (await pagesOf(path, 'videos', pages)).forEach((v) => add('watch', v));
-    } catch (err) {
-      console.error('[og-site] sitemap', path, err && err.message);
-    }
-  }
-  try {
-    (await pagesOf('/shortssorted', 'shorts', 7)).forEach((v) => add('shorts', v));
-  } catch (err) {
-    console.error('[og-site] sitemap shorts', err && err.message);
-  }
-  if (!entries.length) throw new Error('no videos from any feed');
-  return urlset(entries);
-}
-
-async function loadChannelSitemap() {
-  const rows = await pagesOf('/leaderboard?window=30d', 'entries', 10);
-  const names = [...new Set(rows.map((r) => r.user).filter((u) => /^[a-z0-9.-]{3,16}$/.test(u || '')))];
-  if (!names.length) throw new Error('no channels');
-  return urlset(names.map((u) => ({ loc: `${BASE_URL}/user/${u}` })));
-}
-
-const SITEMAPS = {
-  '/sitemap-videos.xml': loadVideoSitemap,
-  '/sitemap-channels.xml': loadChannelSitemap,
-};
-
-function isSitemapPath(pathname) {
-  return Object.prototype.hasOwnProperty.call(SITEMAPS, pathname);
-}
-
-async function serveSitemap(req, res, pathname) {
-  let xml;
-  try {
-    xml = await cached(pathname, SITEMAP_TTL_MS, SITEMAPS[pathname]);
-  } catch (_) {
-    // A 503 tells a crawler to come back; an empty urlset would tell it the
-    // site has no videos.
-    res.writeHead(503, { 'Content-Type': 'text/plain', 'Retry-After': '600', 'Cache-Control': 'no-store' });
-    return res.end();
-  }
-  res.writeHead(200, {
-    'Content-Type': 'application/xml; charset=utf-8',
-    // Same for every UA, so the edge may keep it for a while.
-    'Cache-Control': 'public, max-age=3600',
-  });
-  if (req.method === 'HEAD') return res.end();
-  res.end(xml);
-}
-
-// Building the video sitemap takes ~30s of sequential checker calls; do it once
-// at startup so the first crawler after a restart is not the one that waits.
+// Fetch the trending list once at startup so the first reader after a restart
+// is not the one that waits.
 function warm() {
-  for (const path of Object.keys(SITEMAPS)) cached(path, SITEMAP_TTL_MS, SITEMAPS[path]).catch(() => {});
   cached('trending', 15 * 60 * 1000, loadTrending).catch(() => {});
 }
 
-module.exports = { isSitePath, serveSitePage, isSitemapPath, serveSitemap, buildSitePage, warm };
+module.exports = { isSitePath, serveSitePage, buildSitePage, warm };

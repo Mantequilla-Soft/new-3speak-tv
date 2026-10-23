@@ -18,12 +18,20 @@
 // nvm v22 segfaults on this box — see the preview-3speak-api service notes).
 
 const http = require('http');
+const dns = require('dns');
+// ipfs.3speak.tv publishes an AAAA in 200::/7 (Yggdrasil, unroutable). Node 18's
+// fetch connects in DNS order with no IPv4 fallback, so every read there sat out
+// a 10s connect timeout (Discord teasers, transcripts). IPv4 first, process-wide.
+dns.setDefaultResultOrder('ipv4first');
 const ogVideo = require('./og-video.cjs');
 const ogSite = require('./og-site.cjs');
 
 const PORT = process.env.OG_PORT || 4023;
 const HIVE_API = 'https://api.hive.blog';
-const BUNNY_IPFS_CDN = 'https://hotipfs-3speak-1.b-cdn.net';
+// Our own gateway for thumbnails and subtitle files. Both Bunny IPFS zones have
+// answered 403 "Domain suspended" since 2026-09-08, which left every legacy
+// thumbnail in the cards and the VideoObject pointing at an error page.
+const IPFS_GATEWAY = 'https://ipfs.3speak.tv';
 // Base for author/publisher links + the fallback logo. og:url / canonical are
 // derived from the *request* host instead (so a shared preview link points back
 // to preview, and a prod link to prod) — see requestOrigin().
@@ -258,11 +266,11 @@ function fixThumbnail(thumbnail) {
   if (t.includes('ipfs://')) {
     const hash = t.replace('ipfs://', '').trim();
     if (!hash) return FALLBACK_THUMBNAIL;
-    return `${BUNNY_IPFS_CDN}/ipfs/${hash}`;
+    return `${IPFS_GATEWAY}/ipfs/${hash}`;
   }
 
-  if (t.includes('ipfs-3speak.b-cdn.net')) {
-    return t.replace('https://ipfs-3speak.b-cdn.net', BUNNY_IPFS_CDN);
+  if (/^https:\/\/(hot)?ipfs-3speak(-1)?\.b-cdn\.net\/ipfs\//.test(t)) {
+    return t.replace(/^https:\/\/[^/]+/, IPFS_GATEWAY);
   }
 
   if (
@@ -326,6 +334,65 @@ function secondsToISO8601(sec) {
   return `PT${h ? `${h}H` : ''}${m ? `${m}M` : ''}${s ? `${s}S` : ''}` || 'PT0S';
 }
 
+/** 0:38, 12:05, 1:02:09: how chapter lists write a start time. */
+function clockTime(sec) {
+  const total = Math.max(0, Math.floor(sec));
+  const h = Math.floor(total / 3600);
+  const m = Math.floor((total % 3600) / 60);
+  const s = String(total % 60).padStart(2, '0');
+  return h ? `${h}:${String(m).padStart(2, '0')}:${s}` : `${m}:${s}`;
+}
+
+/**
+ * The post's chapters (json_metadata.video.chapters, written by the upload
+ * Timeline step) as [{ start, end, title }], each ending where the next begins
+ * and the last at the video's end. Two or more, or none: one chapter is no
+ * timeline.
+ */
+function videoChapters(meta, duration) {
+  const raw = meta && meta.video && Array.isArray(meta.video.chapters) ? meta.video.chapters : [];
+  const list = raw
+    .map((c) => ({ start: Math.floor(Number(c && c.start)), title: String((c && c.title) || '').trim().slice(0, 100) }))
+    .filter((c) => Number.isFinite(c.start) && c.start >= 0 && c.title)
+    .sort((a, b) => a.start - b.start)
+    .filter((c, i, all) => i === 0 || c.start > all[i - 1].start)
+    .slice(0, 50);
+  if (list.length < 2) return [];
+  const total = Math.floor(Number(duration) || 0);
+  return list.map((c, i) => {
+    const end = i + 1 < list.length ? list[i + 1].start : total;
+    return end > c.start ? { ...c, end } : c;
+  });
+}
+
+/** The post's topic tags as /t/ links. Community ids (hive-123456) are not topics. */
+function videoTags(meta) {
+  const tags = meta && Array.isArray(meta.tags) ? meta.tags : [];
+  return [...new Set(tags.map((t) => String(t || '').toLowerCase().trim()))]
+    .filter((t) => /^[a-z0-9][a-z0-9-]{0,31}$/.test(t) && !/^hive-\d+$/.test(t))
+    .slice(0, 10);
+}
+
+const MAX_RELATED = 12;
+
+/** Related videos from the checker, as links for crawlers. [] on any failure. */
+async function fetchRelated(author, permlink) {
+  try {
+    const res = await fetch(
+      `${CHECKER_URL}/feeds/related/${encodeURIComponent(author)}/${encodeURIComponent(permlink)}?limit=${MAX_RELATED}`,
+      { signal: AbortSignal.timeout(4000) },
+    );
+    if (!res.ok) return [];
+    const data = await res.json();
+    return (Array.isArray(data.videos) ? data.videos : [])
+      .map((v) => ({ author: v.author || v.owner, permlink: v.permlink, title: String(v.title || '').trim() }))
+      .filter((v) => v.author && v.permlink && v.title && !(v.author === author && v.permlink === permlink))
+      .slice(0, MAX_RELATED);
+  } catch (_) {
+    return [];
+  }
+}
+
 function toIsoDate(created) {
   if (!created || typeof created !== 'string') return null;
   return /[zZ]|[+-]\d{2}:?\d{2}$/.test(created) ? created : `${created}Z`;
@@ -357,20 +424,19 @@ function srtToText(srt) {
   return joined;
 }
 
-// Subtitle files live on IPFS, and the hot CDN 500s ("block was not found
-// locally") for anything it hasn't pinned yet — as of 2026-08 that is EVERY
-// subtitle file, which is why the transcript section silently never rendered
-// despite this code existing. The checker's /subtitle-proxy fetches the CID
+// Subtitle files live on IPFS. The checker's /subtitle-proxy fetches the CID
 // server-side, falling through the gateways to the ingest node's own IPFS API,
-// so it answers when the CDN doesn't.
+// so it goes first. Direct is the fallback only: ipfs.3speak.tv publishes an
+// unroutable AAAA (200::/7), and Node 18's fetch sits out a 10s connect
+// timeout on it instead of trying IPv4, which ate the whole transcript budget.
 async function fetchSrt(cid, signal) {
-  try {
-    const direct = await fetch(`${BUNNY_IPFS_CDN}/ipfs/${cid}`, { signal });
-    if (direct.ok) return await direct.text();
-  } catch (_) { /* fall through to the proxy */ }
   try {
     const proxied = await fetch(`${CHECKER_URL}/subtitle-proxy/${cid}`, { signal });
     if (proxied.ok) return await proxied.text();
+  } catch (_) { /* fall through to the gateway */ }
+  try {
+    const direct = await fetch(`${IPFS_GATEWAY}/ipfs/${cid}`, { signal });
+    if (direct.ok) return await direct.text();
   } catch (_) { /* no transcript for this one */ }
   return null;
 }
@@ -512,6 +578,11 @@ function buildOgHtml({
   noindex,
   uploadDate,
   embedUrl,
+  contentUrl,
+  chapters,
+  tags,
+  related,
+  origin = BASE_URL,
   transcript,
   transcriptLang,
   subtitleLanguages,
@@ -583,7 +654,6 @@ function buildOgHtml({
     name: title,
     description: description || title,
     thumbnailUrl: image,
-    contentUrl: url,
     embedUrl,
     url,
     author: { '@type': 'Person', name: `@${author}`, url: `${BASE_URL}/user/${author}` },
@@ -593,6 +663,9 @@ function buildOgHtml({
       logo: { '@type': 'ImageObject', url: LOGO_URL },
     },
   };
+  // The media itself, when the player can name it. Never the watch page: a
+  // contentUrl that answers HTML tells Google there is no video to fetch.
+  if (contentUrl) ld.contentUrl = contentUrl;
   if (uploadDate) ld.uploadDate = uploadDate;
   const isoDuration = secondsToISO8601(duration);
   if (isoDuration) ld.duration = isoDuration;
@@ -609,6 +682,17 @@ function buildOgHtml({
       author: { '@type': 'Person', name: `@${c.author}` },
       text: c.text,
       ...(c.created ? { dateCreated: c.created } : {}),
+    }));
+  }
+  // Chapters as key moments: Google links each one into the video by its &t=.
+  const atTime = (sec) => `${url}${url.includes('?') ? '&' : '?'}t=${sec}`;
+  if (Array.isArray(chapters) && chapters.length) {
+    ld.hasPart = chapters.map((c) => ({
+      '@type': 'Clip',
+      name: c.title,
+      startOffset: c.start,
+      ...(c.end ? { endOffset: c.end } : {}),
+      url: atTime(c.start),
     }));
   }
   const jsonLd = `<script type="application/ld+json">${JSON.stringify(ld).replace(
@@ -628,6 +712,31 @@ function buildOgHtml({
     ? `\n  <section>\n    <h2>Comments</h2>\n${comments
         .map((c) => `    <article><p><b>@${escapeHtml(c.author)}</b>: ${escapeHtml(c.text)}</p></article>`)
         .join('\n')}\n  </section>`
+    : '';
+
+  // The player on the page: Google only lists a page under video results when
+  // the video is actually on it.
+  const playerFrame = player
+    ? `\n  <iframe src="${escapeHtml(player.url)}" width="${player.width}" height="${player.height}" title="${safeTitle}" allow="fullscreen; picture-in-picture" allowfullscreen loading="lazy"></iframe>`
+    : '';
+
+  const chaptersSection = Array.isArray(chapters) && chapters.length
+    ? `\n  <section>\n    <h2>Chapters</h2>\n    <ol>\n${chapters
+        .map((c) => `      <li><a href="${escapeHtml(atTime(c.start))}">${clockTime(c.start)} ${escapeHtml(c.title)}</a></li>`)
+        .join('\n')}\n    </ol>\n  </section>`
+    : '';
+
+  const tagLine = Array.isArray(tags) && tags.length
+    ? `\n  <p>Tags: ${tags
+        .map((t) => `<a href="${escapeHtml(`${origin}/t/${t}`)}">#${escapeHtml(t)}</a>`)
+        .join(' ')}</p>`
+    : '';
+
+  // Other videos, so a crawler that lands here can walk on into the catalogue.
+  const relatedSection = Array.isArray(related) && related.length
+    ? `\n  <section>\n    <h2>More videos on 3Speak</h2>\n    <ul>\n${related
+        .map((r) => `      <li><a href="${escapeHtml(`${origin}/watch?v=${r.author}/${r.permlink}`)}">${escapeHtml(r.title)}</a> by @${escapeHtml(r.author)}</li>`)
+        .join('\n')}\n    </ul>\n  </section>`
     : '';
 
   return `<!DOCTYPE html>
@@ -664,9 +773,9 @@ function buildOgHtml({
   ${jsonLd}
 </head>
 <body>
-  <h1>${safeTitle}</h1>
-  <p><a href="${safeUrl}">${safeTitle}</a> by @${safeAuthor} on <a href="${escapeHtml(BASE_URL)}">3Speak</a></p>
-  <p>${safeDesc}</p>${transcriptSection}${commentsSection}
+  <h1>${safeTitle}</h1>${playerFrame}
+  <p><a href="${safeUrl}">${safeTitle}</a> by <a href="${escapeHtml(`${origin}/user/${author}`)}">@${safeAuthor}</a> on <a href="${escapeHtml(origin)}">3Speak</a></p>
+  <p>${safeDesc}</p>${tagLine}${chaptersSection}${transcriptSection}${commentsSection}${relatedSection}
 </body>
 </html>`;
 }
@@ -1030,11 +1139,7 @@ const server = http.createServer(async (req, res) => {
     }
   }
 
-  // What 3Speak is (/ and /about, AI agents only per nginx) and the dynamic
-  // sitemaps. See og-site.cjs.
-  if (ogSite.isSitemapPath(url.pathname)) {
-    return ogSite.serveSitemap(req, res, url.pathname);
-  }
+  // What 3Speak is (/ and /about, AI agents and Bingbot per nginx). See og-site.cjs.
   if (ogSite.isSitePath(url.pathname)) {
     try {
       return await ogSite.serveSitePage(req, res, url, origin);
@@ -1075,7 +1180,7 @@ const server = http.createServer(async (req, res) => {
     const card = await resolveVideoCard(video, origin);
     if (!card) return sendHtml(req, res, 200, buildGenericHtml(origin + req.url));
     const {
-      post, title, description, canonicalUrl, duration, uploadDate, index, inlineAllowed,
+      post, meta, title, description, canonicalUrl, duration, uploadDate, index, inlineAllowed,
     } = card;
     let { image } = card;
     // WhatsApp shows no preview at all for a WebP image (every 3Speak
@@ -1091,20 +1196,26 @@ const server = http.createServer(async (req, res) => {
     let transcriptLang = null;
     let subtitleLanguages = null;
     let comments = [];
+    let related = [];
+    let contentUrl = null;
     let inline = null;
     // Transcript + comments are for search engines; Discord shows neither, and
     // it gives up on a slow unfurl. Skipping them for the video bot keeps its
     // card at "lookup + teaser build" even when the translate API hangs
     // (seen 2026-10-02: every Discord card waited out the 6s transcript budget).
     if (post && index && !videoBot) {
-      // Both hang off the same Hive post; fetch them together rather than
-      // adding the comment round-trip on top of the transcript's.
-      const [t, c, v] = await Promise.all([
+      // All hang off the same Hive post; fetch them together rather than
+      // adding each round-trip on top of the transcript's.
+      const [t, c, v, r, m] = await Promise.all([
         fetchTranscript(post.author, post.permlink),
         fetchComments(post.author, post.permlink),
         inlineVideo,
+        fetchRelated(post.author, post.permlink),
+        inlineAllowed ? ogVideo.manifestUrl(video.author, video.permlink) : null,
       ]);
       if (inlineAllowed) inline = v;
+      related = r;
+      contentUrl = m;
       transcript = (t && t.text) || null;
       transcriptLang = (t && t.lang) || null;
       subtitleLanguages = (t && t.languages) || null;
@@ -1131,7 +1242,15 @@ const server = http.createServer(async (req, res) => {
       author: video.author,
       noindex: !index,
       uploadDate,
-      embedUrl: `${origin}/embed?v=${video.author}/${video.permlink}`,
+      // The same player the oEmbed and the sitemap hand out.
+      embedUrl: playerUrlFor(video),
+      contentUrl,
+      // Each chapter links to the canonical watch page + &t=, so only when that
+      // page is ours (a post may declare a canonical_url elsewhere).
+      chapters: canonicalUrl.startsWith(`${origin}/watch?`) ? videoChapters(meta, duration) : [],
+      tags: videoTags(meta),
+      related,
+      origin,
       transcript,
       transcriptLang,
       subtitleLanguages,
