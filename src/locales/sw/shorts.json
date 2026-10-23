@@ -69,12 +69,6 @@
     "linkCopied": "Kiungo kimenakiliwa!",
     "failed": "Imeshindwa kushiriki"
   },
-  "reshare": {
-    "loginRequired": "Ingia ili kushiriki tena",
-    "unavailable": "Kushiriki tena hakupatikani kwa chapisho hili",
-    "done": "Imeshirikiwa tena!",
-    "failed": "Imeshindwa kushiriki tena"
-  },
   "remix": {
     "noUrl": "Imeshindwa kupata URL ya video kwa ajili ya remix",
     "loadFailed": "Imeshindwa kupakia video kwa ajili ya remix"

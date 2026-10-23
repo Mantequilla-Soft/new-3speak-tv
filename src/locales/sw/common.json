@@ -97,5 +97,23 @@
   "language": {
     "label": "Lugha",
     "hint": "Lugha ambayo menyu na vitufe vya 3Speak vinaonyeshwa. Video na machapisho hubaki katika lugha aliyoandika mtayarishaji wake."
+  },
+  "hype": {
+    "hype": "Hype",
+    "hyped": "Imepewa hype",
+    "withCount": "Hype ({{count}})",
+    "title": "Ipe hype kwenye 3Speak (hii si reblog ya Hive)",
+    "loginRequired": "Ingia ili kutoa hype",
+    "success": "Hype imetolewa!",
+    "failed": "Imeshindwa kutoa hype",
+    "unavailable": "Hype haipatikani kwa chapisho hili"
+  },
+  "reblog": {
+    "reblog": "Reblog",
+    "reblogged": "Ime-reblogiwa",
+    "confirm": "Gusa tena ili ku-reblog",
+    "title": "Reblog kwenye blogu yako ya Hive",
+    "success": "Ime-reblogiwa kwenye blogu yako ya Hive",
+    "failed": "Reblog imeshindwa"
   }
 }

@@ -56,14 +56,6 @@
     "removeFailed": "সরানো যায়নি: {{error}}",
     "removeTitle": "পরে দেখুন থেকে সরান"
   },
-  "reshare": {
-    "loginRequired": "রিশেয়ার করতে লগ ইন করুন",
-    "success": "রিশেয়ার হয়েছে!",
-    "failed": "রিশেয়ার করা যায়নি",
-    "reshared": "রিশেয়ার করা হয়েছে",
-    "reshare": "রিশেয়ার",
-    "reshareWithCount": "রিশেয়ার ({{count}})"
-  },
   "clip": {
     "noVideoUrlRemix": "রিমিক্সের জন্য ভিডিও URL পাওয়া যায়নি",
     "noVideoUrl": "ভিডিও URL পাওয়া যায়নি",

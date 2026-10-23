@@ -56,14 +56,6 @@
     "removeFailed": "Kaldırılamadı: {{error}}",
     "removeTitle": "Sonra İzle listesinden kaldır"
   },
-  "reshare": {
-    "loginRequired": "Yeniden paylaşmak için giriş yap",
-    "success": "Yeniden paylaşıldı!",
-    "failed": "Yeniden paylaşılamadı",
-    "reshared": "Yeniden paylaşıldı",
-    "reshare": "Yeniden paylaş",
-    "reshareWithCount": "Yeniden paylaş ({{count}})"
-  },
   "clip": {
     "noVideoUrlRemix": "Remix için video URL'si çözümlenemedi",
     "noVideoUrl": "Video URL'si çözümlenemedi",

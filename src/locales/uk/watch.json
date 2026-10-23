@@ -56,14 +56,6 @@
     "removeFailed": "Не вдалося прибрати: {{error}}",
     "removeTitle": "Прибрати з «Переглянути пізніше»"
   },
-  "reshare": {
-    "loginRequired": "Увійдіть, щоб зробити репост",
-    "success": "Репост зроблено!",
-    "failed": "Не вдалося зробити репост",
-    "reshared": "Репост зроблено",
-    "reshare": "Репост",
-    "reshareWithCount": "Репост ({{count}})"
-  },
   "clip": {
     "noVideoUrlRemix": "Не вдалося визначити URL відео для реміксу",
     "noVideoUrl": "Не вдалося визначити URL відео",

@@ -92,5 +92,23 @@
   "language": {
     "label": "Bahasa",
     "hint": "Bahasa yang dipakai untuk menu dan tombol 3Speak. Video dan postingan tetap dalam bahasa yang ditulis kreatornya."
+  },
+  "hype": {
+    "hype": "Hype",
+    "hyped": "Sudah di-hype",
+    "withCount": "Hype ({{count}})",
+    "title": "Hype di 3Speak (ini bukan reblog Hive)",
+    "loginRequired": "Masuk untuk memberi hype",
+    "success": "Hype terkirim!",
+    "failed": "Gagal memberi hype",
+    "unavailable": "Hype tidak tersedia untuk postingan ini"
+  },
+  "reblog": {
+    "reblog": "Reblog",
+    "reblogged": "Sudah di-reblog",
+    "confirm": "Ketuk lagi untuk reblog",
+    "title": "Reblog ke blog Hive kamu",
+    "success": "Sudah di-reblog ke blog Hive kamu",
+    "failed": "Reblog gagal"
   }
 }

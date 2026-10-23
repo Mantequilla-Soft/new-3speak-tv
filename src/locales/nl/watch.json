@@ -56,14 +56,6 @@
     "removeFailed": "Verwijderen mislukt: {{error}}",
     "removeTitle": "Verwijderen uit Later bekijken"
   },
-  "reshare": {
-    "loginRequired": "Log in om opnieuw te delen",
-    "success": "Opnieuw gedeeld!",
-    "failed": "Opnieuw delen mislukt",
-    "reshared": "Opnieuw gedeeld",
-    "reshare": "Opnieuw delen",
-    "reshareWithCount": "Opnieuw delen ({{count}})"
-  },
   "clip": {
     "noVideoUrlRemix": "Video-URL voor de remix kon niet worden gevonden",
     "noVideoUrl": "Video-URL kon niet worden gevonden",

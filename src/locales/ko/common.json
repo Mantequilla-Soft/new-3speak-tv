@@ -92,5 +92,23 @@
   "language": {
     "label": "언어",
     "hint": "3Speak의 메뉴와 버튼에 표시되는 언어예요. 동영상과 게시물은 크리에이터가 작성한 언어 그대로 표시돼요."
+  },
+  "hype": {
+    "hype": "하이프",
+    "hyped": "하이프함",
+    "withCount": "하이프 ({{count}})",
+    "title": "3Speak에서 하이프하기 (Hive 리블로그가 아닙니다)",
+    "loginRequired": "하이프하려면 로그인하세요",
+    "success": "하이프했습니다!",
+    "failed": "하이프하지 못했습니다",
+    "unavailable": "이 게시물에는 하이프를 사용할 수 없습니다"
+  },
+  "reblog": {
+    "reblog": "리블로그",
+    "reblogged": "리블로그함",
+    "confirm": "한 번 더 탭하면 리블로그됩니다",
+    "title": "내 Hive 블로그에 리블로그",
+    "success": "내 Hive 블로그에 리블로그했습니다",
+    "failed": "리블로그 실패"
   }
 }

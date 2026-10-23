@@ -56,14 +56,6 @@
     "removeFailed": "Gagal menghapus: {{error}}",
     "removeTitle": "Hapus dari Tonton Nanti"
   },
-  "reshare": {
-    "loginRequired": "Masuk untuk membagikan ulang",
-    "success": "Berhasil dibagikan ulang!",
-    "failed": "Gagal membagikan ulang",
-    "reshared": "Sudah dibagikan ulang",
-    "reshare": "Bagikan ulang",
-    "reshareWithCount": "Bagikan ulang ({{count}})"
-  },
   "clip": {
     "noVideoUrlRemix": "URL video untuk remix tidak dapat ditemukan",
     "noVideoUrl": "URL video tidak dapat ditemukan",

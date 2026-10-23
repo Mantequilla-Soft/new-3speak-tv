@@ -402,6 +402,22 @@ export const followWithAioha = async (target, follow = true) => {
   }, follow ? 'Approve follow on HiveAuth...' : 'Approve unfollow on HiveAuth...');
 };
 
+/**
+ * Reblog a post onto the user's own Hive blog: the `follow` custom_json with a
+ * "reblog" action, which is what PeakD, Ecency and hive.blog show as a reblog.
+ * Not the 3Speak "Hype" (utils/reshares.js), an off-chain ranking signal.
+ *
+ * ⚠️ Refused for an incubating user BEFORE any broadcast: there is no Hive blog
+ * to reblog to, and divertToIncubation would read this `follow` id as a follow.
+ */
+export const reblogWithAioha = async (author, permlink) => {
+  if (incubatingHandle()) {
+    throw new Error('Reblogging needs a Hive account. Yours is still being set up.');
+  }
+  const json = JSON.stringify(['reblog', { account: getOperationUser(), author, permlink }]);
+  return customJsonWithAioha(KeyTypes.Posting, 'follow', json, `Reblog @${author}/${permlink}`);
+};
+
 // Helper function for custom_json operations
 export const customJsonWithAioha = async (keyType, id, json, displayTitle = '') => {
   if (isManteAuthLogin() && keyType === KeyTypes.Posting) {

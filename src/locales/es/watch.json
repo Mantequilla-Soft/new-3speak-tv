@@ -56,14 +56,6 @@
     "removeFailed": "No se pudo quitar: {{error}}",
     "removeTitle": "Quitar de Ver más tarde"
   },
-  "reshare": {
-    "loginRequired": "Inicia sesión para volver a compartir",
-    "success": "¡Compartido de nuevo!",
-    "failed": "No se pudo volver a compartir",
-    "reshared": "Compartido",
-    "reshare": "Volver a compartir",
-    "reshareWithCount": "Volver a compartir ({{count}})"
-  },
   "clip": {
     "noVideoUrlRemix": "No se pudo obtener la URL del video para el remix",
     "noVideoUrl": "No se pudo obtener la URL del video",

@@ -92,5 +92,23 @@
   "language": {
     "label": "语言",
     "hint": "3Speak 菜单和按钮显示的语言。视频和帖子仍保持创作者发布时使用的语言。"
+  },
+  "hype": {
+    "hype": "助推",
+    "hyped": "已助推",
+    "withCount": "助推 ({{count}})",
+    "title": "在 3Speak 上助推（这不是 Hive 转发）",
+    "loginRequired": "登录后即可助推",
+    "success": "已助推！",
+    "failed": "助推失败",
+    "unavailable": "此帖子无法助推"
+  },
+  "reblog": {
+    "reblog": "转发",
+    "reblogged": "已转发",
+    "confirm": "再点一次即可转发",
+    "title": "转发到你的 Hive 博客",
+    "success": "已转发到你的 Hive 博客",
+    "failed": "转发失败"
   }
 }

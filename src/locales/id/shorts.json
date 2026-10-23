@@ -69,12 +69,6 @@
     "linkCopied": "Tautan tersalin ke clipboard!",
     "failed": "Gagal membagikan"
   },
-  "reshare": {
-    "loginRequired": "Masuk untuk membagikan ulang",
-    "unavailable": "Bagikan ulang tidak tersedia untuk postingan ini",
-    "done": "Berhasil dibagikan ulang!",
-    "failed": "Gagal membagikan ulang"
-  },
   "remix": {
     "noUrl": "URL video untuk remix tidak dapat ditemukan",
     "loadFailed": "Gagal memuat video untuk remix"

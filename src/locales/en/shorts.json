@@ -69,12 +69,6 @@
     "linkCopied": "Link copied to clipboard!",
     "failed": "Failed to share"
   },
-  "reshare": {
-    "loginRequired": "Log in to reshare",
-    "unavailable": "Reshare isn't available for this post",
-    "done": "Reshared!",
-    "failed": "Failed to reshare"
-  },
   "remix": {
     "noUrl": "Could not resolve video URL for remix",
     "loadFailed": "Failed to load video for remix"

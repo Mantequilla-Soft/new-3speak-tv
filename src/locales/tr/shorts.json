@@ -69,12 +69,6 @@
     "linkCopied": "Bağlantı panoya kopyalandı!",
     "failed": "Paylaşılamadı"
   },
-  "reshare": {
-    "loginRequired": "Yeniden paylaşmak için giriş yap",
-    "unavailable": "Bu gönderi yeniden paylaşılamıyor",
-    "done": "Yeniden paylaşıldı!",
-    "failed": "Yeniden paylaşılamadı"
-  },
   "remix": {
     "noUrl": "Remix için video URL'si çözümlenemedi",
     "loadFailed": "Remix için video yüklenemedi"

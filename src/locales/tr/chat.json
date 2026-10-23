@@ -34,6 +34,8 @@
     "sendInChatSub": "3Speak'te birine mesajla gönder",
     "embedOnWebsite": "Web sitesine yerleştir",
     "embedOnWebsiteSub": "Kendi siten veya blogun için HTML kodunu kopyala",
+    "forHivePost": "Hive gönderisi için",
+    "hivePostCopied": "Bağlantı kopyalandı. Hive gönderine yapıştır.",
     "generalShare": "Paylaş / bağlantıyı kopyala",
     "generalShareSub": "Diğer uygulamalar ya da bağlantıyı kopyala"
   },

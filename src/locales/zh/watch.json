@@ -56,14 +56,6 @@
     "removeFailed": "移除失败：{{error}}",
     "removeTitle": "从稍后观看中移除"
   },
-  "reshare": {
-    "loginRequired": "登录后转发",
-    "success": "已转发！",
-    "failed": "转发失败",
-    "reshared": "已转发",
-    "reshare": "转发",
-    "reshareWithCount": "转发（{{count}}）"
-  },
   "clip": {
     "noVideoUrlRemix": "无法获取用于二创的视频 URL",
     "noVideoUrl": "无法获取视频 URL",

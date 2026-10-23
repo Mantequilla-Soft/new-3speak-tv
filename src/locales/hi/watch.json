@@ -56,14 +56,6 @@
     "removeFailed": "हटाया नहीं जा सका: {{error}}",
     "removeTitle": "'बाद में देखें' से हटाएँ"
   },
-  "reshare": {
-    "loginRequired": "रीशेयर करने के लिए लॉग इन करें",
-    "success": "रीशेयर हो गया!",
-    "failed": "रीशेयर नहीं हो सका",
-    "reshared": "रीशेयर किया",
-    "reshare": "रीशेयर",
-    "reshareWithCount": "रीशेयर ({{count}})"
-  },
   "clip": {
     "noVideoUrlRemix": "रीमिक्स के लिए वीडियो का URL नहीं मिल सका",
     "noVideoUrl": "वीडियो का URL नहीं मिल सका",

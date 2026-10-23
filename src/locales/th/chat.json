@@ -33,6 +33,8 @@
     "sendInChatSub": "ส่งข้อความหาใครสักคนบน 3Speak",
     "embedOnWebsite": "ฝังในเว็บไซต์",
     "embedOnWebsiteSub": "คัดลอก HTML สำหรับเว็บไซต์หรือบล็อกของคุณ",
+    "forHivePost": "สำหรับโพสต์ Hive",
+    "hivePostCopied": "คัดลอกลิงก์แล้ว วางลงในโพสต์ Hive ของคุณได้เลย",
     "generalShare": "แชร์ / คัดลอกลิงก์",
     "generalShareSub": "แอปอื่นๆ หรือคัดลอกลิงก์"
   },

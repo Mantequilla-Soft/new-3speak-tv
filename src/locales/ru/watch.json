@@ -56,14 +56,6 @@
     "removeFailed": "Не удалось удалить: {{error}}",
     "removeTitle": "Удалить из «Смотреть позже»"
   },
-  "reshare": {
-    "loginRequired": "Войдите, чтобы сделать репост",
-    "success": "Репост сделан!",
-    "failed": "Не удалось сделать репост",
-    "reshared": "Репост сделан",
-    "reshare": "Репост",
-    "reshareWithCount": "Репост ({{count}})"
-  },
   "clip": {
     "noVideoUrlRemix": "Не удалось получить URL видео для ремикса",
     "noVideoUrl": "Не удалось получить URL видео",

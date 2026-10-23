@@ -1,6 +1,6 @@
 import { useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
-import { ArrowLeft, Code2, Copy, MessageCircle, Share2, X } from 'lucide-react'
+import { ArrowLeft, Code2, Copy, FileText, MessageCircle, Share2, X } from 'lucide-react'
 import { toastIn } from '../../utils/toast';
 import { useChat } from '../../context/ChatContext'
 import { useOpenChat } from '../../hooks/useOpenChat'
@@ -25,10 +25,15 @@ const toast = toastIn('Chat');
  *           Present ⇒ the embed option is offered. Omit it for anything that
  *           can't be played on someone else's page (a scheduled post, a live
  *           stream with no VOD asset yet).
+ *  - hivePost: optional { author, permlink }. Present ⇒ "For Hive post" is offered:
+ *           it copies https://3speak.tv/watch?v=author/permlink, the one link
+ *           form Hive frontends turn into a player, from the watch page AND
+ *           from shorts (whose own share link is /shorts?v=…). Always the public
+ *           origin, so a copy made on preview still works in a post.
  *  - onClose: () => void
  *  - onGeneralShare: () => void  — the page's existing share handler
  */
-export default function ShareChooserModal({ open, url, title, embed, onClose, onGeneralShare }) {
+export default function ShareChooserModal({ open, url, title, embed, hivePost, onClose, onGeneralShare }) {
   const { t } = useTranslation()
   const openChat = useOpenChat()
   const { setShareDraft, backToList } = useChat()
@@ -51,6 +56,9 @@ export default function ShareChooserModal({ open, url, title, embed, onClose, on
 
   const canEmbed = !!(embed?.author && embed?.permlink)
   const embedCode = canEmbed ? buildEmbedHtml(embed.author, embed.permlink, { size, title }) : ''
+  const hivePostUrl = hivePost?.author && hivePost?.permlink
+    ? `https://3speak.tv/watch?v=${hivePost.author}/${hivePost.permlink}`
+    : ''
 
   const sendInChat = () => {
     // Just the link — the chat renders a rich card (title/author/thumb) from it.
@@ -65,6 +73,18 @@ export default function ShareChooserModal({ open, url, title, embed, onClose, on
   const generalShare = () => {
     onClose?.()
     onGeneralShare?.()
+  }
+
+  const copyHivePostLink = async () => {
+    try {
+      await navigator.clipboard.writeText(hivePostUrl)
+      toast.success(t('chat.share.hivePostCopied'))
+      onClose?.()
+    } catch {
+      // Clipboard denied (or an older browser): the prompt shows the link
+      // pre-selected so it can still be copied by hand.
+      window.prompt(t('chat.share.forHivePost'), hivePostUrl)
+    }
   }
 
   const copyEmbed = async () => {
@@ -145,6 +165,15 @@ export default function ShareChooserModal({ open, url, title, embed, onClose, on
                 <span>
                   <span className="share-chooser-opt-title">{t('chat.share.embedOnWebsite')}</span>
                   <span className="share-chooser-opt-sub">{t('chat.share.embedOnWebsiteSub')}</span>
+                </span>
+              </button>
+            )}
+            {hivePostUrl && (
+              <button className="share-chooser-opt" onClick={copyHivePostLink}>
+                <FileText size={20} />
+                <span>
+                  <span className="share-chooser-opt-title">{t('chat.share.forHivePost')}</span>
+                  <span className="share-chooser-opt-sub share-chooser-opt-link">{hivePostUrl.replace('https://', '')}</span>
                 </span>
               </button>
             )}

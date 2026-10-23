@@ -56,14 +56,6 @@
     "removeFailed": "Impossibile rimuovere: {{error}}",
     "removeTitle": "Rimuovi da Guarda più tardi"
   },
-  "reshare": {
-    "loginRequired": "Accedi per ricondividere",
-    "success": "Ricondiviso!",
-    "failed": "Ricondivisione non riuscita",
-    "reshared": "Ricondiviso",
-    "reshare": "Ricondividi",
-    "reshareWithCount": "Ricondividi ({{count}})"
-  },
   "clip": {
     "noVideoUrlRemix": "Impossibile trovare l'URL del video per il remix",
     "noVideoUrl": "Impossibile trovare l'URL del video",

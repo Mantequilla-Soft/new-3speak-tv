@@ -56,14 +56,6 @@
     "removeFailed": "削除できませんでした: {{error}}",
     "removeTitle": "「後で見る」から削除"
   },
-  "reshare": {
-    "loginRequired": "リシェアするにはログイン",
-    "success": "リシェアしました！",
-    "failed": "リシェアに失敗しました",
-    "reshared": "リシェア済み",
-    "reshare": "リシェア",
-    "reshareWithCount": "リシェア（{{count}}）"
-  },
   "clip": {
     "noVideoUrlRemix": "リミックス用の動画 URL を取得できませんでした",
     "noVideoUrl": "動画の URL を取得できませんでした",

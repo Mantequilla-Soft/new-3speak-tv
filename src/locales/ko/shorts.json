@@ -69,12 +69,6 @@
     "linkCopied": "링크를 클립보드에 복사했어요!",
     "failed": "공유하지 못했어요"
   },
-  "reshare": {
-    "loginRequired": "다시 공유하려면 로그인하세요",
-    "unavailable": "이 게시물은 다시 공유할 수 없어요",
-    "done": "다시 공유했어요!",
-    "failed": "다시 공유하지 못했어요"
-  },
   "remix": {
     "noUrl": "리믹스할 동영상 URL을 확인하지 못했어요",
     "loadFailed": "리믹스할 동영상을 불러오지 못했어요"

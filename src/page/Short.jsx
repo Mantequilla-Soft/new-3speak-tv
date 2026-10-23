@@ -49,7 +49,7 @@ import {
   ChevronsUp,
   Square,
   RotateCcw,
-  Repeat2,
+  Flame,
   WandSparkles,
   Pencil,
   Moon,
@@ -2361,14 +2361,14 @@ const VideoShort = () => {
     }
   };
 
-  /* ---------- RESHARE FUNCTIONALITY ---------- */
+  /* ---------- RESHARE FUNCTIONALITY ("Hype" in the UI; not a Hive reblog) ---------- */
   const handleReshare = async () => {
     if (!currentVideo || !user) {
-      toast.error(t('shorts.reshare.loginRequired'));
+      toast.error(t('common.hype.loginRequired'));
       return;
     }
     if (currentVideo.hivePostMissing) {
-      toast.error(t('shorts.reshare.unavailable'));
+      toast.error(t('common.hype.unavailable'));
       return;
     }
     if (hasReshared) return;
@@ -2381,9 +2381,9 @@ const VideoShort = () => {
       setHasReshared(true);
       setReshareCount(prev => prev + 1);
       setReshareUsers(prev => [...prev, { username: user, reshared_at: Math.floor(Date.now() / 1000) }]);
-      toast.success(t('shorts.reshare.done'));
+      toast.success(t('common.hype.success'));
     } else {
-      toast.error(t('shorts.reshare.failed'));
+      toast.error(t('common.hype.failed'));
     }
   };
 
@@ -3738,7 +3738,7 @@ const VideoShort = () => {
                         imgClassName="reshareAvatar"
                         badgeSize={9}
                       />
-                      <Repeat2 size={14} className="reshareBadge" />
+                      <Flame size={14} className="reshareBadge" />
                     </div>
                   ))}
                 {reshareUsers.filter(r => r.username !== user).length > 5 && (
@@ -3893,8 +3893,11 @@ const VideoShort = () => {
           </div>
 
           <div className="actionItem" onClick={(e) => { e.stopPropagation(); handleReshare(); }}>
-            <div className={`actionButton ${hasReshared ? 'reshared' : ''}`}>
-              <Repeat2 size={24} />
+            <div
+              className={`actionButton ${hasReshared ? 'reshared' : ''}`}
+              title={hasReshared ? t('common.hype.hyped') : t('common.hype.title')}
+            >
+              <Flame size={24} />
             </div>
             <span className="actionLabel">{reshareCount || 0}</span>
           </div>
@@ -3955,6 +3958,9 @@ const VideoShort = () => {
           open={shareChooserOpen}
           url={`${window.location.origin}/shorts?v=${currentVideo.author}/${currentVideo.permlink}`}
           title={currentVideo.title}
+          /* The 3Speak permlink, not hivePermlink: that is the id the player and
+             Hive frontends resolve a short by (and a warm-up short has no Hive post). */
+          hivePost={{ author: currentVideo.author, permlink: currentVideo.permlink }}
           onClose={() => setShareChooserOpen(false)}
           onGeneralShare={handleShare}
         />

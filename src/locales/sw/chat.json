@@ -34,6 +34,8 @@
     "sendInChatSub": "Mtumie mtu kwenye 3Speak",
     "embedOnWebsite": "Pachika kwenye tovuti",
     "embedOnWebsiteSub": "Nakili HTML kwa tovuti au blogu yako",
+    "forHivePost": "Kwa chapisho la Hive",
+    "hivePostCopied": "Kiungo kimenakiliwa. Kibandike kwenye chapisho lako la Hive.",
     "generalShare": "Shiriki / nakili kiungo",
     "generalShareSub": "Programu nyingine, au nakili kiungo"
   },

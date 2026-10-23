@@ -33,6 +33,8 @@
     "sendInChatSub": "3Speak의 다른 사용자에게 메시지로 보내기",
     "embedOnWebsite": "웹사이트에 임베드",
     "embedOnWebsiteSub": "내 사이트나 블로그용 HTML 복사",
+    "forHivePost": "Hive 게시물용",
+    "hivePostCopied": "링크를 복사했습니다. Hive 게시물에 붙여 넣으세요.",
     "generalShare": "공유 / 링크 복사",
     "generalShareSub": "다른 앱으로 공유하거나 링크 복사"
   },

@@ -33,6 +33,8 @@
     "sendInChatSub": "Kirim sebagai pesan ke seseorang di 3Speak",
     "embedOnWebsite": "Sematkan di situs web",
     "embedOnWebsiteSub": "Salin HTML untuk situs atau blogmu sendiri",
+    "forHivePost": "Untuk postingan Hive",
+    "hivePostCopied": "Tautan disalin. Tempelkan ke postingan Hive kamu.",
     "generalShare": "Bagikan / salin tautan",
     "generalShareSub": "Aplikasi lain, atau salin tautannya"
   },

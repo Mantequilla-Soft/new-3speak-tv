@@ -97,5 +97,23 @@
   "language": {
     "label": "Sprache",
     "hint": "Die Sprache, in der die Menüs und Buttons von 3Speak angezeigt werden. Videos und Posts bleiben in der Sprache, in der ihr Creator sie verfasst hat."
+  },
+  "hype": {
+    "hype": "Hype",
+    "hyped": "Gehypt",
+    "withCount": "Hype ({{count}})",
+    "title": "Auf 3Speak hypen (das ist kein Hive-Reblog)",
+    "loginRequired": "Melde dich an, um zu hypen",
+    "success": "Gehypt!",
+    "failed": "Hypen fehlgeschlagen",
+    "unavailable": "Hype ist für diesen Post nicht verfügbar"
+  },
+  "reblog": {
+    "reblog": "Reblog",
+    "reblogged": "Gereblogt",
+    "confirm": "Zum Rebloggen erneut tippen",
+    "title": "Auf deinen Hive-Blog rebloggen",
+    "success": "Auf deinen Hive-Blog gereblogt",
+    "failed": "Reblog fehlgeschlagen"
   }
 }
