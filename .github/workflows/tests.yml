@@ -3,10 +3,11 @@ name: Tests
 # Unit, API and browser tests (see tests/README.md). Informational: a red run shows
 # up on the pull request but blocks nothing, unless it is made a required check.
 
+# Only on release PRs (develop -> production), not on every push. Run it by hand
+# from the Actions tab (workflow_dispatch) when a branch needs checking earlier.
 on:
   pull_request:
-  push:
-    branches: [develop]
+    branches: [production]
   workflow_dispatch:
 
 permissions:
