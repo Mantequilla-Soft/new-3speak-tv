@@ -12,10 +12,12 @@
 //   /sitemap-uploads-N.xml     `embed-video` long-form
 //   /sitemap-shorts-N.xml      `embed-video` shorts
 //   /sitemap-channels.xml      everyone with at least one of the above
+//   /sitemap-pages.xml         topic tags with enough videos, communities,
+//                              public playlists and audio posts
 //
 // nginx (outside git) maps those paths onto /api/sitemap/<name>.xml:
 //   location = /sitemap.xml { proxy_set_header Host $host; proxy_pass http://127.0.0.1:4022/api/sitemap/index.xml; }
-//   location ~ "^/sitemap-((videos|uploads|shorts)-[0-9]{1,4}|channels)\.xml$" {
+//   location ~ "^/sitemap-((videos|uploads|shorts)-[0-9]{1,4}|channels|pages)\.xml$" {
 //       proxy_set_header Host $host; proxy_pass http://127.0.0.1:4022/api/sitemap/$1.xml; }
 
 const zlib = require('zlib')
@@ -29,6 +31,12 @@ const PLAYER_ORIGIN = 'https://play.3speak.tv'
 // Our own gateway: both Bunny IPFS zones answer 403 "Domain suspended" (2026-09-08).
 const IPFS_GATEWAY = 'https://ipfs.3speak.tv'
 const HOSTS = new Set(['3speak.tv', 'preview.3speak.tv'])
+// sitemap-pages.xml: a topic needs this many videos to be listed, and at most
+// MAX_TOPICS tags go in (the busiest first). Tag spelling as og-lists accepts it.
+const MIN_TOPIC_VIDEOS = 25
+const MAX_TOPICS = 5000
+const TOPIC_RE = /^[a-z0-9][a-z0-9-]{0,31}$/
+const COMMUNITY_RE = /^hive-\d{1,10}$/
 
 function ageCutoff() {
   const d = new Date()
@@ -219,8 +227,13 @@ function urlset(lines, withVideo) {
 }
 
 function mountSitemaps(app, { uri, dbName }) {
+  // Said once at startup, not per request: prod's server/.env had no Mongo
+  // settings when this moved here, and every sitemap would have answered 503
+  // with nothing in the log to say why.
+  if (!uri) console.warn('[sitemap] MONGODB_URI is not set: every /api/sitemap/* file will answer 503')
   let dbPromise = null
   function getDb() {
+    if (!uri) return Promise.reject(new Error('MONGODB_URI is not set'))
     if (!dbPromise) {
       const { MongoClient } = require('mongodb')
       const client = new MongoClient(uri, { maxPoolSize: 3, serverSelectionTimeoutMS: 20000 })
@@ -289,6 +302,7 @@ function mountSitemaps(app, { uri, dbName }) {
     const maps = [
       { loc: `${base}/sitemap-static.xml` },
       { loc: `${base}/sitemap-channels.xml`, lastmod: today },
+      { loc: `${base}/sitemap-pages.xml`, lastmod: today },
     ]
     for (const [name, { pages, newest }] of Object.entries(counts)) {
       for (let n = 1; n <= pages; n++) {
@@ -345,7 +359,81 @@ function mountSitemaps(app, { uri, dbName }) {
     return urlset(lines, false)
   }
 
-  app.get(/^\/api\/sitemap\/(index|channels|(videos|uploads|shorts)-(\d{1,4}))\.xml$/, async (req, res) => {
+  // Pages that collect videos: topic tags, communities, public playlists, and
+  // the audio posts. A tag or community needs MIN_TOPIC_VIDEOS videos to be
+  // listed: below that its page is thin, and the OG sidecar marks a tag page
+  // with almost nothing on it noindex anyway.
+  async function buildPages(base) {
+    const db = await getDb()
+    const hidden = await hiddenCreators(db)
+    const blocked = new Set([
+      ...hidden,
+      ...(await db.collection('contentcreators')
+        .find({ banned: true }, { projection: { username: 1, _id: 0 } }).toArray())
+        .map((r) => String(r.username || '').toLowerCase()),
+    ])
+
+    // Tag counts across both collections, the same videos the feeds show.
+    const topics = new Map()
+    const addTopics = (rows) => {
+      for (const r of rows) {
+        const tag = String(r._id || '').toLowerCase().trim()
+        if (!TOPIC_RE.test(tag)) continue
+        const prev = topics.get(tag) || { n: 0, last: null }
+        topics.set(tag, { n: prev.n + r.n, last: !prev.last || r.last > prev.last ? r.last : prev.last })
+      }
+    }
+    addTopics(await db.collection('videos').aggregate([
+      { $match: legacyMatch(hidden) },
+      { $project: { tags_v2: 1, created: 1 } },
+      { $unwind: '$tags_v2' },
+      { $group: { _id: { $toLower: '$tags_v2' }, n: { $sum: 1 }, last: { $max: '$created' } } },
+      { $match: { n: { $gte: 5 } } },
+    ], { allowDiskUse: true }).toArray())
+    addTopics(await db.collection('embed-video').aggregate([
+      { $match: { ...embedMatch(hidden, false), short: { $in: [true, false] } } },
+      { $project: { hive_tags: 1, createdAt: 1 } },
+      { $unwind: '$hive_tags' },
+      { $group: { _id: { $toLower: '$hive_tags' }, n: { $sum: 1 }, last: { $max: '$createdAt' } } },
+      { $match: { n: { $gte: 5 } } },
+    ], { allowDiskUse: true }).toArray())
+
+    const lines = []
+    const add = (path, last) => {
+      const day = isoDay(last)
+      lines.push(`  <url><loc>${xml(`${base}${path}`)}</loc>${day ? `<lastmod>${day}</lastmod>` : ''}</url>`)
+    }
+    const ranked = [...topics.entries()]
+      .filter(([, t]) => t.n >= MIN_TOPIC_VIDEOS)
+      .sort((a, b) => b[1].n - a[1].n)
+    // Communities (hive-123456) have pages of their own; everything else is a tag.
+    for (const [tag, t] of ranked.filter(([tag]) => COMMUNITY_RE.test(tag))) add(`/community/${tag}`, t.last)
+    for (const [tag, t] of ranked.filter(([tag]) => !COMMUNITY_RE.test(tag)).slice(0, MAX_TOPICS)) add(`/t/${tag}`, t.last)
+
+    // Public playlists with at least two items (a one-video playlist is that video).
+    const playlists = await db.collection('playlists')
+      .find({ access: 'public', 'items.1': { $exists: true } }, { projection: { _id: 1, owner: 1, updated_at: 1 } })
+      .sort({ _id: 1 }).limit(10000).toArray()
+    for (const p of playlists) {
+      if (!p.owner || blocked.has(String(p.owner).toLowerCase()) || !/^[a-zA-Z0-9-]{8,64}$/.test(String(p._id))) continue
+      add(`/playlist/${p._id}`, p.updated_at)
+    }
+
+    // Audio posts, at the address the audio page reads (post_permlink is
+    // "permlink" or "owner/permlink" depending on the writer).
+    const audio = await db.collection('embed-audio')
+      .find({ status: 'published', post_permlink: { $nin: [null, ''] } }, { projection: { owner: 1, post_permlink: 1, createdAt: 1, created_at: 1 } })
+      .sort({ _id: 1 }).limit(20000).toArray()
+    for (const a of audio) {
+      const owner = String(a.owner || '').toLowerCase()
+      const permlink = String(a.post_permlink).split('/').pop()
+      if (!/^[a-z0-9.-]{3,16}$/.test(owner) || blocked.has(owner) || !/^[a-z0-9][a-z0-9-]{0,255}$/i.test(permlink)) continue
+      add(`/audio/${owner}/${permlink}`, a.createdAt || a.created_at)
+    }
+    return urlset(lines, false)
+  }
+
+  app.get(/^\/api\/sitemap\/(index|channels|pages|(videos|uploads|shorts)-(\d{1,4}))\.xml$/, async (req, res) => {
     // Absolute URLs for the host that asked (prod or preview), never a forged one.
     const host = HOSTS.has(req.hostname) ? req.hostname : '3speak.tv'
     const base = `https://${host}`
@@ -356,6 +444,8 @@ function mountSitemaps(app, { uri, dbName }) {
         gz = await cached(`${host}:index`, () => buildIndex(base))
       } else if (file === 'channels') {
         gz = await cached(`${host}:channels`, () => buildChannels(base))
+      } else if (file === 'pages') {
+        gz = await cached(`${host}:pages`, () => buildPages(base))
       } else {
         const n = Number(num)
         const { pages } = (await seriesCounts())[series]

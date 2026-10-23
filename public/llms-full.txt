@@ -26,7 +26,7 @@
 
 - Watch trending (https://3speak.tv/trend) and new (https://3speak.tv/new) videos
 - Shorts (https://3speak.tv/shorts): vertical short videos
-- Communities (https://3speak.tv/communities) built around shared topics and languages
+- Communities (https://3speak.tv/groups) built around shared topics and languages
 - Creator leaderboard (https://3speak.tv/leaderboard)
 - Podcast RSS feeds for every channel, at https://3speak.tv/rss/<username>.xml
 - Advertise (https://3speak.tv/advertise) with video, banner and ticker ads, paid in HBD or HIVE

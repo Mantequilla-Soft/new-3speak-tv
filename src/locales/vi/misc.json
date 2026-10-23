@@ -151,7 +151,9 @@
   },
   "seo": {
     "defaultTitle": "3Speak - Nền tảng video phi tập trung",
-    "defaultDescription": "3Speak là nền tảng chia sẻ video phi tập trung được xây dựng trên công nghệ blockchain. Xem, tải lên và chia sẻ video đồng thời nhận phần thưởng tiền mã hóa."
+    "homeTitle": "3Speak: nền tảng video nơi nhà sáng tạo và người xem cùng kiếm tiền",
+    "siteDescription": "3Speak là giải pháp thay thế YouTube phi tập trung, nơi nhà sáng tạo kiếm tiền ngay từ video đầu tiên và người xem cũng có thể kiếm tiền. Người thật, chuyện thật.",
+    "pageDescription": "{{page}} trên 3Speak, giải pháp thay thế YouTube phi tập trung nơi nhà sáng tạo và người xem cùng kiếm tiền."
   },
   "uploadLinks": {
     "regularVideo": "Video thường",

@@ -151,7 +151,9 @@
   },
   "seo": {
     "defaultTitle": "3Speak - 去中心化视频平台",
-    "defaultDescription": "3Speak 是一个基于区块链技术的去中心化视频分享平台。观看、上传和分享视频，同时赚取加密货币奖励。"
+    "homeTitle": "3Speak：创作者和观众都能赚钱的视频平台",
+    "siteDescription": "3Speak 是去中心化的 YouTube 替代平台，创作者从第一个视频起就能赚钱，观众也能赚钱。真实的人，真实的故事。",
+    "pageDescription": "3Speak 上的{{page}}：创作者和观众都能赚钱的去中心化 YouTube 替代平台。"
   },
   "uploadLinks": {
     "regularVideo": "普通视频",

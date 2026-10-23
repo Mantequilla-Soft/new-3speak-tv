@@ -19,7 +19,7 @@ const SEOHead = ({
   // branded twice.
   const { t } = useTranslation();
   const fullTitle = title ? `3S | ${title}` : t('misc.seo.defaultTitle');
-  const desc = description || t('misc.seo.defaultDescription');
+  const desc = description || t('misc.seo.siteDescription');
 
   return (
     <Helmet>

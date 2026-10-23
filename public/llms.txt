@@ -21,7 +21,7 @@ Rewards are paid in HIVE and HBD (Hive Backed Dollars), the native assets of the
 - [Trending videos](https://3speak.tv/trend)
 - [New videos](https://3speak.tv/new)
 - [Shorts](https://3speak.tv/shorts): vertical short videos
-- [Communities](https://3speak.tv/communities)
+- [Communities](https://3speak.tv/groups)
 - [Creator leaderboard](https://3speak.tv/leaderboard)
 - [Advertise](https://3speak.tv/advertise): video, banner and ticker ads, paid in HBD or HIVE
 
@@ -34,6 +34,6 @@ Rewards are paid in HIVE and HBD (Hive Backed Dollars), the native assets of the
 
 ## Optional
 
-- [Sitemap of every video, short and channel](https://3speak.tv/sitemap.xml)
+- [Sitemap of every video, short, channel, topic, community and playlist](https://3speak.tv/sitemap.xml)
 - [Channel sitemap](https://3speak.tv/sitemap-channels.xml)
 - [Hive blockchain](https://hive.io)

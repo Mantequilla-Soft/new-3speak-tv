@@ -369,9 +369,12 @@ function CommunitiesRender() {
                           title={t('communities.directory.videoBy', { title: v.title, author: v.author })}
                           onClick={(e) => e.stopPropagation()}
                         >
+                          {/* The image is the link's only content, so its alt is
+                              the link text: search engines read it as the
+                              anchor, screen readers as the link's name. */}
                           <img
                             src={fixVideoThumbnail(v)}
-                            alt=""
+                            alt={v.title || ''}
                             loading="lazy"
                             onError={(e) => { e.currentTarget.src = fallbackImg; }}
                           />

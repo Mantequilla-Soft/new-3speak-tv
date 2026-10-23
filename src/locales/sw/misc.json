@@ -151,7 +151,9 @@
   },
   "seo": {
     "defaultTitle": "3Speak - Jukwaa la video lililogatuliwa",
-    "defaultDescription": "3Speak ni jukwaa la kushiriki video lililogatuliwa lililojengwa kwa teknolojia ya blockchain. Tazama, pakia na shiriki video huku ukipata zawadi za sarafu za kidijitali."
+    "homeTitle": "3Speak: jukwaa la video ambapo watayarishi na watazamaji hupata mapato",
+    "siteDescription": "3Speak ni mbadala wa YouTube uliogatuliwa ambapo watayarishi hupata mapato tangu video yao ya kwanza na watazamaji pia wanaweza kupata mapato. Watu halisi, hadithi halisi.",
+    "pageDescription": "{{page}} kwenye 3Speak, mbadala wa YouTube uliogatuliwa ambapo watayarishi na watazamaji hupata mapato."
   },
   "uploadLinks": {
     "regularVideo": "Video ya kawaida",

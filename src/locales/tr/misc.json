@@ -151,7 +151,9 @@
   },
   "seo": {
     "defaultTitle": "3Speak - Merkeziyetsiz Video Platformu",
-    "defaultDescription": "3Speak, blokzincir teknolojisi üzerine kurulu merkeziyetsiz bir video paylaşım platformudur. Kripto para ödülleri kazanırken video izle, yükle ve paylaş."
+    "homeTitle": "3Speak: içerik üreticilerinin ve izleyicilerin kazandığı video platformu",
+    "siteDescription": "3Speak, içerik üreticilerinin ilk videolarından itibaren kazandığı ve izleyicilerin de kazanabildiği merkeziyetsiz YouTube alternatifidir. Gerçek insanlar, gerçek hikâyeler.",
+    "pageDescription": "3Speak'te {{page}}: içerik üreticilerinin ve izleyicilerin kazandığı merkeziyetsiz YouTube alternatifi."
   },
   "uploadLinks": {
     "regularVideo": "Normal Video",

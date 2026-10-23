@@ -151,7 +151,9 @@
   },
   "seo": {
     "defaultTitle": "3Speak - Gedecentraliseerd videoplatform",
-    "defaultDescription": "3Speak is een gedecentraliseerd platform voor het delen van video's, gebouwd op blockchaintechnologie. Bekijk, upload en deel video's en verdien ondertussen cryptovaluta als beloning."
+    "homeTitle": "3Speak: het videoplatform waar makers en kijkers verdienen",
+    "siteDescription": "3Speak is het gedecentraliseerde YouTube-alternatief waar makers verdienen vanaf hun eerste video en kijkers ook kunnen verdienen. Echte mensen, echte verhalen.",
+    "pageDescription": "{{page}} op 3Speak, het gedecentraliseerde YouTube-alternatief waar makers en kijkers verdienen."
   },
   "uploadLinks": {
     "regularVideo": "Gewone video",

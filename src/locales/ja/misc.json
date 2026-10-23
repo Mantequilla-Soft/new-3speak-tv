@@ -151,7 +151,9 @@
   },
   "seo": {
     "defaultTitle": "3Speak - 分散型動画プラットフォーム",
-    "defaultDescription": "3Speak は、ブロックチェーン技術で作られた分散型の動画共有プラットフォームです。動画を視聴、アップロード、共有しながら、暗号資産の報酬を得られます。"
+    "homeTitle": "3Speak：クリエイターと視聴者が稼げる動画プラットフォーム",
+    "siteDescription": "3Speakは、クリエイターが最初の動画から稼げて、視聴者も稼げる分散型のYouTube代替サービスです。リアルな人々の、リアルな物語。",
+    "pageDescription": "3Speakの{{page}}：クリエイターと視聴者が稼げる分散型のYouTube代替サービス。"
   },
   "uploadLinks": {
     "regularVideo": "通常の動画",

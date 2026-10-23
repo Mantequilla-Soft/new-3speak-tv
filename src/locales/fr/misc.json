@@ -151,7 +151,9 @@
   },
   "seo": {
     "defaultTitle": "3Speak - Plateforme vidéo décentralisée",
-    "defaultDescription": "3Speak est une plateforme de partage vidéo décentralisée basée sur la blockchain. Regardez, mettez en ligne et partagez des vidéos tout en gagnant des récompenses en cryptomonnaie."
+    "homeTitle": "3Speak : la plateforme vidéo où créateurs et spectateurs gagnent",
+    "siteDescription": "3Speak est l'alternative décentralisée à YouTube où les créateurs gagnent dès leur première vidéo et où les spectateurs peuvent aussi gagner. De vraies personnes, de vraies histoires.",
+    "pageDescription": "{{page}} sur 3Speak, l'alternative décentralisée à YouTube où créateurs et spectateurs gagnent."
   },
   "uploadLinks": {
     "regularVideo": "Vidéo classique",

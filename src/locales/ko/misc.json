@@ -151,7 +151,9 @@
   },
   "seo": {
     "defaultTitle": "3Speak - 탈중앙화 동영상 플랫폼",
-    "defaultDescription": "3Speak는 블록체인 기술 기반의 탈중앙화 동영상 공유 플랫폼이에요. 동영상을 시청하고, 업로드하고, 공유하면서 암호화폐 보상을 받으세요."
+    "homeTitle": "3Speak: 크리에이터와 시청자가 함께 수익을 얻는 동영상 플랫폼",
+    "siteDescription": "3Speak는 크리에이터가 첫 동영상부터 수익을 얻고 시청자도 수익을 얻을 수 있는 탈중앙화 YouTube 대안입니다. 진짜 사람들, 진짜 이야기.",
+    "pageDescription": "3Speak의 {{page}}: 크리에이터와 시청자가 함께 수익을 얻는 탈중앙화 YouTube 대안."
   },
   "uploadLinks": {
     "regularVideo": "일반 동영상",

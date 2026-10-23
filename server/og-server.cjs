@@ -36,6 +36,10 @@ const IPFS_GATEWAY = 'https://ipfs.3speak.tv';
 // derived from the *request* host instead (so a shared preview link points back
 // to preview, and a prod link to prod) — see requestOrigin().
 const BASE_URL = process.env.OG_BASE_URL || 'https://3speak.tv';
+// Where rel=canonical points, whichever host was asked. preview.3speak.tv and
+// www.3speak.tv serve the same pages as 3speak.tv; a canonical on prod tells
+// search engines which copy to rank instead of letting the copies compete.
+const CANONICAL_ORIGIN = (process.env.OG_CANONICAL_ORIGIN || BASE_URL).replace(/\/+$/, '');
 // The 1200x630 site banner, for cards with no image of their own. Not the square
 // 3speak.jpeg: link previews stretch a square to the card's 1.91:1 shape.
 const FALLBACK_THUMBNAIL = `${BASE_URL}/og-image.jpg`;
@@ -90,6 +94,21 @@ function isBot(userAgent) {
   return BOT_USER_AGENTS.some((bot) => ua.includes(bot.toLowerCase()));
 }
 
+// Apps that only draw a link preview. A link to a deleted video still gets the
+// generic 3Speak card for them (a 404 would leave the chat with a bare URL);
+// search engines and AI crawlers get a real 404 instead, see sendMissing().
+const LINK_PREVIEW_BOTS = /facebookexternalhit|facebot|twitterbot|discordbot|telegrambot|whatsapp|linkedinbot|slackbot|embedly|pinterest|vkshare|bluesky|cardyb|mastodon|iframely|redditbot|summalybot|misskey|lemmy|mbin|friendica|pleroma|akkoma|synapse|zulipurlpreview|mattermost|january|amethyst|snort|wordpress|ghost\/|discourse|skypeuripreview/i;
+
+// A valid Hive account name. Anything else cannot own a video, so a URL naming
+// it is missing without asking anyone.
+const ACCOUNT_RE = /^[a-z][a-z0-9.-]{2,15}$/;
+
+/** True when a Hive RPC error says the thing is not there (vs. a node failing). */
+function isMissingError(error) {
+  const text = error && `${error.message || ''} ${JSON.stringify(error.data || '')}`;
+  return /does not exist|not valid|unknown account/i.test(text || '');
+}
+
 // Routes that carry the video as a ?v=author/permlink param. The value is the
 // canonical path to echo back (og:url/canonical), and whether it's a short.
 const VPARAM_ROUTES = {
@@ -114,7 +133,9 @@ function parseVideoUrl(url) {
   if (vRoute) {
     const v = searchParams.get('v');
     if (v && v.includes('/')) {
-      const [author, ...rest] = v.split('/');
+      const [rawAuthor, ...rest] = v.split('/');
+      // Hive account names are lowercase; /watch?v=Alice/x is alice's video.
+      const author = rawAuthor.toLowerCase();
       const permlink = rest.join('/');
       if (author && permlink) {
         return { author, permlink, kind: vRoute.kind, routePath: vRoute.routePath };
@@ -126,41 +147,57 @@ function parseVideoUrl(url) {
   // /@author/permlink
   const atMatch = pathname.match(/^\/@([^/]+)\/(.+)$/);
   if (atMatch) {
-    const [, author, permlink] = atMatch;
+    const [, rawAuthor, permlink] = atMatch;
     if (permlink === 'shorts') return null; // shorts listing page, not a video
-    return { author, permlink, kind: 'watch', routePath: 'watch' };
+    return { author: rawAuthor.toLowerCase(), permlink, kind: 'watch', routePath: 'watch' };
   }
 
   return null;
 }
 
+/**
+ * A Hive post as { post }, or { missing: true } when Hive says it does not
+ * exist, or { error: true } when the node could not answer. Only "missing" may
+ * turn into a 404: a slow node must never get a real video dropped from search.
+ */
+async function lookupHivePost(author, permlink) {
+  if (!ACCOUNT_RE.test(author) || !permlink) return { missing: true };
+  try {
+    const res = await fetch(HIVE_API, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        jsonrpc: '2.0',
+        method: 'bridge.get_post',
+        params: { author, permlink, observer: '' },
+        id: 1,
+      }),
+      signal: AbortSignal.timeout(5000),
+    });
+    if (!res.ok) return { error: true };
+    const data = await res.json();
+    if (data && data.error) return isMissingError(data.error) ? { missing: true } : { error: true };
+    const post = data && data.result;
+    // A deleted post comes back as an empty shell rather than an error.
+    if (!post || !post.author) return { missing: true };
+    return { post };
+  } catch (_) {
+    return { error: true };
+  }
+}
+
 async function fetchHivePost(author, permlink) {
-  const res = await fetch(HIVE_API, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      jsonrpc: '2.0',
-      method: 'bridge.get_post',
-      params: { author, permlink, observer: '' },
-      id: 1,
-    }),
-  });
-
-  if (!res.ok) return null;
-
-  const data = await res.json();
-  const post = data && data.result;
-  if (!post || !post.author || post.author === '') return null;
-  return post;
+  return (await lookupHivePost(author, permlink)).post || null;
 }
 
 /**
- * Resolve an embed-video doc from the checker (/videodetails/:owner/:permlink).
- * Returns the raw doc or null. Time-boxed — never blocks the bot response long.
- * The matching `videos`/`embed-video` collections key on owner+permlink (asset
- * id) OR hive_author+hive_permlink, so it works for the share URL's id directly.
+ * Resolve an embed-video doc from the checker (/videodetails/:owner/:permlink)
+ * as { doc }, { missing: true } (a 404) or { error: true }. Time-boxed, never
+ * blocks the bot response long. The matching `videos`/`embed-video`
+ * collections key on owner+permlink (asset id) OR hive_author+hive_permlink,
+ * so it works for the share URL's id directly.
  */
-async function fetchEmbedDetails(owner, permlink) {
+async function lookupEmbed(owner, permlink) {
   const ctrl = new AbortController();
   const timer = setTimeout(() => ctrl.abort(), 3000);
   try {
@@ -168,12 +205,13 @@ async function fetchEmbedDetails(owner, permlink) {
       `${CHECKER_URL}/videodetails/${encodeURIComponent(owner)}/${encodeURIComponent(permlink)}`,
       { signal: ctrl.signal },
     );
-    if (!res.ok) return null;
+    if (res.status === 404) return { missing: true };
+    if (!res.ok) return { error: true };
     const doc = await res.json();
-    if (!doc || typeof doc !== 'object' || (!doc.permlink && !doc.owner)) return null;
-    return doc;
+    if (!doc || typeof doc !== 'object' || (!doc.permlink && !doc.owner)) return { missing: true };
+    return { doc };
   } catch (_) {
-    return null;
+    return { error: true };
   } finally {
     clearTimeout(timer);
   }
@@ -323,6 +361,25 @@ function extractDescription(body) {
     text = text.slice(0, 197) + '...';
   }
   return text;
+}
+
+/**
+ * The first line of a post that is real text: not the player link or an image,
+ * at least three characters. Snaps put their caption there.
+ */
+function firstLine(body) {
+  for (const line of String(body || '').split('\n')) {
+    const text = line
+      .replace(/<[^>]+>/g, ' ')
+      .replace(/!\[[^\]]*\]\([^)]*\)/g, ' ')
+      .replace(/\[([^\]]*)\]\([^)]*\)/g, '$1')
+      .replace(/https?:\/\/\S+/g, ' ')
+      .replace(/[#*_~`>|▶]+/g, ' ')
+      .replace(/\s+/g, ' ')
+      .trim();
+    if (text.length >= 3 && !/^-+$/.test(text)) return text.length > 100 ? `${text.slice(0, 97).trim()}...` : text;
+  }
+  return '';
 }
 
 function secondsToISO8601(sec) {
@@ -568,11 +625,26 @@ function escapeHtml(str) {
     .replace(/>/g, '&gt;');
 }
 
+/** JSON-LD as a <script>, with `<` escaped so no value can close the tag. */
+function ldScript(data) {
+  return `<script type="application/ld+json">${JSON.stringify(data).replace(/</g, '\\u003c')}</script>`;
+}
+
+/** schema.org BreadcrumbList from [name, url] pairs, root first. */
+function breadcrumbLd(crumbs) {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: crumbs.map(([name, item], i) => ({ '@type': 'ListItem', position: i + 1, name, item })),
+  };
+}
+
 function buildOgHtml({
   title,
   description,
   image,
   url,
+  canonical = url,
   duration,
   author,
   noindex,
@@ -598,6 +670,7 @@ function buildOgHtml({
   const safeDesc = escapeHtml(description);
   const safeImage = escapeHtml(image);
   const safeUrl = escapeHtml(url);
+  const safeCanonical = escapeHtml(canonical);
   const safeAuthor = escapeHtml(author);
 
   const durationMeta = duration
@@ -655,7 +728,7 @@ function buildOgHtml({
     description: description || title,
     thumbnailUrl: image,
     embedUrl,
-    url,
+    url: canonical,
     author: { '@type': 'Person', name: `@${author}`, url: `${BASE_URL}/user/${author}` },
     publisher: {
       '@type': 'Organization',
@@ -684,8 +757,9 @@ function buildOgHtml({
       ...(c.created ? { dateCreated: c.created } : {}),
     }));
   }
-  // Chapters as key moments: Google links each one into the video by its &t=.
-  const atTime = (sec) => `${url}${url.includes('?') ? '&' : '?'}t=${sec}`;
+  // Chapters as key moments: Google links each one into the video by its &t=,
+  // on the page it ranks, so off the canonical.
+  const atTime = (sec) => `${canonical}${canonical.includes('?') ? '&' : '?'}t=${sec}`;
   if (Array.isArray(chapters) && chapters.length) {
     ld.hasPart = chapters.map((c) => ({
       '@type': 'Clip',
@@ -695,10 +769,14 @@ function buildOgHtml({
       url: atTime(c.start),
     }));
   }
-  const jsonLd = `<script type="application/ld+json">${JSON.stringify(ld).replace(
-    /</g,
-    '\\u003c',
-  )}</script>`;
+  // 3Speak > @creator > video: search results show this trail instead of the
+  // bare ?v= address.
+  const breadcrumbs = breadcrumbLd([
+    ['3Speak', `${CANONICAL_ORIGIN}/`],
+    [`@${author}`, `${CANONICAL_ORIGIN}/user/${author}`],
+    [title, canonical],
+  ]);
+  const jsonLd = ldScript(noindex ? ld : [ld, breadcrumbs]);
 
   // `lang` on the section matters when the spoken language isn't the page's:
   // it stops a Spanish transcript being read as bad English.
@@ -764,7 +842,7 @@ function buildOgHtml({
   <meta name="twitter:description" content="${safeDesc}" />
   <meta name="twitter:image" content="${safeImage}" />
 
-  <link rel="canonical" href="${safeUrl}" />${
+  <link rel="canonical" href="${safeCanonical}" />${
     oembedUrl
       ? `\n  <link rel="alternate" type="application/json+oembed" href="${escapeHtml(oembedUrl)}" />`
       : ''
@@ -784,9 +862,9 @@ function buildOgHtml({
 // so the worst case is identical to today's static index.html defaults rather
 // than a broken response. Mirrors index.html's primary OG/Twitter tags.
 const GENERIC_CARD = {
-  title: '3S | Real People - Real Stories',
+  title: '3Speak: the video platform where creators and viewers earn',
   description:
-    '3Speak is a decentralized video sharing platform built on blockchain technology. Watch, upload, and share videos while earning cryptocurrency rewards.',
+    '3Speak is the decentralized YouTube alternative where creators earn from their first video and viewers can earn too. Real people, real stories.',
   image: FALLBACK_THUMBNAIL,
 };
 
@@ -801,8 +879,21 @@ const PAGE_CARDS = {
   },
 };
 
-function buildGenericHtml(siteUrl, card = GENERIC_CARD) {
+/**
+ * The generic card. `canonical` defaults to the page on 3speak.tv without its
+ * query string; `noindex` is for URLs that are not a page of their own (a
+ * /watch with no video named, a lookup that failed).
+ */
+function buildGenericHtml(siteUrl, card = GENERIC_CARD, { canonical, noindex = false } = {}) {
   const url = escapeHtml(siteUrl);
+  let canonicalUrl = canonical;
+  if (!canonicalUrl) {
+    try {
+      canonicalUrl = `${CANONICAL_ORIGIN}${new URL(siteUrl).pathname}`;
+    } catch (_) {
+      canonicalUrl = `${CANONICAL_ORIGIN}/`;
+    }
+  }
   const title = escapeHtml(card.title);
   const desc = escapeHtml(card.description);
   const image = escapeHtml(card.image);
@@ -811,7 +902,8 @@ function buildGenericHtml(siteUrl, card = GENERIC_CARD) {
 <head>
   <meta charset="UTF-8" />
   <title>${title}</title>
-  <meta name="robots" content="index, follow" />
+  <meta name="description" content="${desc}" />
+  <meta name="robots" content="${noindex ? 'noindex, follow' : 'index, follow'}" />
   <meta property="og:type" content="website" />
   <meta property="og:site_name" content="3Speak" />
   <meta property="og:title" content="${title}" />
@@ -825,19 +917,64 @@ function buildGenericHtml(siteUrl, card = GENERIC_CARD) {
   <meta name="twitter:title" content="${title}" />
   <meta name="twitter:description" content="${desc}" />
   <meta name="twitter:image" content="${image}" />
-  <link rel="canonical" href="${url}" />
+  <link rel="canonical" href="${escapeHtml(canonicalUrl)}" />
 </head>
-<body><h1>${title}</h1><p>${desc}</p></body>
+<body><h1>${title}</h1><p>${desc}</p><p><a href="${escapeHtml(`${CANONICAL_ORIGIN}/`)}">3Speak</a></p></body>
 </html>`;
 }
 
 // Reconstruct the public origin from the proxy headers nginx forwards
-// (X-Forwarded-Proto + Host) so og:url/canonical match the host that was
-// actually shared — preview on preview, prod on prod.
+// (X-Forwarded-Proto + Host) so og:url matches the host that was actually
+// shared: preview on preview, prod on prod. www is folded into the apex: it is
+// the same site, and videos do not play on www (the IPFS gateway sends CORS
+// headers for the apex only). rel=canonical uses CANONICAL_ORIGIN instead.
 function requestOrigin(req) {
   const proto = (req.headers['x-forwarded-proto'] || 'https').split(',')[0].trim();
-  const host = (req.headers['host'] || '3speak.tv').split(',')[0].trim();
+  const host = (req.headers['host'] || '3speak.tv').split(',')[0].trim().replace(/^www\.3speak\.tv$/i, '3speak.tv');
   return `${proto}://${host}`;
+}
+
+/**
+ * A URL that names something that does not exist (a deleted video, an unknown
+ * account). Search engines and AI crawlers get a real 404, so the URL drops
+ * out of their index instead of sitting there as a copy of the homepage (a
+ * "soft 404"). Link-preview apps keep the generic 3Speak card, marked noindex.
+ */
+function sendMissing(req, res, origin, url) {
+  const ua = req.headers['user-agent'] || '';
+  const card = GENERIC_CARD;
+  if (LINK_PREVIEW_BOTS.test(ua)) {
+    return sendHtml(req, res, 200, buildGenericHtml(origin + url.pathname + url.search, card, { noindex: true }));
+  }
+  const html = `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Not found - 3Speak</title>
+  <meta name="robots" content="noindex, follow" />
+</head>
+<body>
+  <h1>This page is not on 3Speak</h1>
+  <p>The video or channel may have been removed, or the link is mistyped.</p>
+  <p><a href="${escapeHtml(`${CANONICAL_ORIGIN}/`)}">3Speak home</a> · <a href="${escapeHtml(`${CANONICAL_ORIGIN}/trend`)}">Trending videos</a> · <a href="${escapeHtml(`${CANONICAL_ORIGIN}/new`)}">New videos</a></p>
+</body>
+</html>`;
+  return sendHtml(req, res, 404, html);
+}
+
+/**
+ * A lookup failed (Hive node or checker down, timeout). Search engines get a
+ * 503 + Retry-After, which they read as "come back later" and which costs the
+ * page nothing; a noindex or a homepage copy here would push a real video out
+ * of the index over one slow node. Link-preview apps get the generic card.
+ */
+function sendUnavailable(req, res, origin, url) {
+  const ua = req.headers['user-agent'] || '';
+  if (LINK_PREVIEW_BOTS.test(ua)) {
+    return sendHtml(req, res, 200, buildGenericHtml(origin + url.pathname + url.search, GENERIC_CARD, { noindex: true }));
+  }
+  res.writeHead(503, { 'Content-Type': 'text/plain; charset=utf-8', 'Cache-Control': 'no-store', 'Retry-After': '300' });
+  return res.end(req.method === 'HEAD' ? undefined : 'Temporarily unavailable, please retry');
 }
 
 function sendHtml(req, res, status, html) {
@@ -929,7 +1066,7 @@ async function servePublicOembed(req, res, url, origin) {
   if (!video) return sendOembedError(req, res, 404, 'Not a 3Speak video URL');
 
   const card = await resolveVideoCard(video, origin);
-  if (!card) return sendOembedError(req, res, 404, 'Video not found');
+  if (!card || card.missing) return sendOembedError(req, res, 404, 'Video not found');
   // NSFW, muted, blacklisted or gated: no player anywhere off-site.
   if (!card.inlineAllowed) return sendOembedError(req, res, 401, 'This video cannot be embedded');
 
@@ -998,42 +1135,71 @@ async function serveOembed(req, res, url, origin) {
 
 // Profiles, playlists/albums and audio posts. See og-pages.cjs.
 const ogPages = require('./og-pages.cjs')({
-  BASE_URL, CHECKER_URL, escapeHtml, fixThumbnail, boundImage, extractDescription,
-  parseMeta, getIndexability, fetchHivePost, secondsToISO8601, toIsoDate,
-  ogVideo, rememberOembed, OEMBED_PATH,
+  BASE_URL, CANONICAL_ORIGIN, CHECKER_URL, escapeHtml, fixThumbnail, boundImage, extractDescription,
+  parseMeta, getIndexability, fetchHivePost, lookupHivePost, isMissingError, breadcrumbLd,
+  secondsToISO8601, toIsoDate, ogVideo, rememberOembed, OEMBED_PATH,
+});
+
+// Feed, topic and community pages. See og-lists.cjs.
+const ogLists = require('./og-lists.cjs')({
+  CANONICAL_ORIGIN, CHECKER_URL, FALLBACK_THUMBNAIL, escapeHtml, fixThumbnail, boundImage,
+  isMissingError, breadcrumbLd, ldScript, isAdultByTitle,
 });
 
 /**
  * Everything a card says about one video: the Hive post and/or embed doc,
  * title, description, thumbnail and the indexing / inline-playback verdicts.
- * Shared by the watch-page card and /oembed. Null when nothing resolves.
+ * Shared by the watch-page card and /oembed. `{ missing: true }` when both
+ * Hive and the checker said there is no such video, null when a lookup failed.
  */
 async function resolveVideoCard(video, origin) {
+  // No Hive account can have this name, so no video can be under it.
+  if (!ACCOUNT_RE.test(video.author)) return { missing: true };
   // Resolve the Hive post and/or the embed-video doc. Shorts (and some embed
   // videos) aren't Hive posts — the share URL's permlink is the embed *asset*
   // id, so a Hive lookup by it 404s. Strategy:
   //   - /shorts: resolve the embed doc first, then the Hive post via embed_url.
+  //     A snap the checker never saw is still a Hive post: try that last.
   //   - /watch & /@: try Hive directly; only on a miss fall back to the embed
   //     doc (cheap, and avoids a checker call for ordinary videos).
   let post = null;
   let embed = null;
-  if (video.kind === 'shorts') {
-    embed = await fetchEmbedDetails(video.author, video.permlink);
+  let hiveLookup = null;
+  let embedLookup = null;
+  const fromEmbed = async () => {
+    embedLookup = await lookupEmbed(video.author, video.permlink);
+    embed = embedLookup.doc || null;
     const hiveRef = embed && parseEmbedUrl(embed.embed_url);
     if (hiveRef) post = await fetchHivePost(hiveRef.author, hiveRef.permlink);
-  } else {
-    post = await fetchHivePost(video.author, video.permlink);
-    if (!post) {
-      embed = await fetchEmbedDetails(video.author, video.permlink);
-      const hiveRef = embed && parseEmbedUrl(embed.embed_url);
-      if (hiveRef) post = await fetchHivePost(hiveRef.author, hiveRef.permlink);
+  };
+  if (video.kind === 'shorts') {
+    await fromEmbed();
+    if (!embed) {
+      hiveLookup = await lookupHivePost(video.author, video.permlink);
+      post = hiveLookup.post || null;
     }
+  } else {
+    hiveLookup = await lookupHivePost(video.author, video.permlink);
+    post = hiveLookup.post || null;
+    if (!post) await fromEmbed();
   }
 
-  if (!post && !embed) return null;
+  if (!post && !embed) {
+    return hiveLookup && hiveLookup.missing && embedLookup && embedLookup.missing ? { missing: true } : null;
+  }
 
   const meta = post ? parseMeta(post.json_metadata) : {};
   const videoInfo = (meta.video && meta.video.info) || {};
+
+  // A video posted as a Hive reply is usually a short (a snap or wave). Opened
+  // as /watch?v=<author>/<post>, it is still the short: ask the checker, which
+  // knows the post by its Hive address too, so the page names /shorts as its
+  // canonical instead of competing with it.
+  if (!embed && post && post.parent_author && meta.video) {
+    const asShort = await lookupEmbed(post.author, post.permlink);
+    if (asShort.doc && asShort.doc.short === true) embed = asShort.doc;
+  }
+  const isShort = video.kind === 'shorts' || !!(embed && embed.short === true);
 
   // Thumbnail: embed doc's thumbnail_url wins (it's the one the app shows for
   // shorts), then the Hive post's sourceMap/image, then the site fallback.
@@ -1045,28 +1211,54 @@ async function resolveVideoCard(video, origin) {
   if (!thumbnail && meta.image && meta.image[0]) thumbnail = meta.image[0];
   const image = boundImage(fixThumbnail(thumbnail));
 
-  const kindLabel = video.kind === 'shorts' ? 'Short' : 'Video';
+  const kindLabel = isShort ? 'Short' : 'Video';
+  // A short is a Hive REPLY (to a snaps/waves container), titled "RE: Snaps
+  // Container // <date>". That says nothing about the short, so a reply's own
+  // title only counts when nothing better exists: the caption the creator
+  // wrote, i.e. the first line of the post.
+  const isReply = !!(post && post.parent_author);
   const title =
-    (post && post.title) ||
-    (embed && (embed.hive_title || embed.embed_title || embed.originalFilename)) ||
+    (post && !isReply && post.title) ||
+    (embed && (embed.hive_title || embed.embed_title)) ||
+    (post && firstLine(post.body)) ||
+    (embed && embed.originalFilename) ||
     `${kindLabel} by @${video.author}`;
 
   const description = post
     ? extractDescription(post.body)
     : `A ${kindLabel.toLowerCase()} by @${video.author} on 3Speak.`;
 
-  // Canonicalize to the exact route that was shared (/watch, /shorts or
+  // og:url is the exact route that was shared (/watch, /shorts or
   // /shorts/stories), keeping the original permlink so the link opens right.
   const selfUrl = `${origin}/${video.routePath}?v=${video.author}/${video.permlink}`;
-  const canonicalUrl = resolveCanonical(meta, selfUrl);
+  // rel=canonical is ONE address per video, whichever way it was reached:
+  //   - a short by its asset id, as the sitemap lists it. Its Hive post body
+  //     links /shorts?v=<author>/<hive permlink>, which is the same short.
+  //   - a video by its Hive post (/@a/p and the embed asset id fold into it),
+  //     an embed-only video by its asset.
+  //   - /shorts/stories is the story-feed view of the same short.
+  let canonicalPath;
+  if (isShort) {
+    canonicalPath = embed && embed.owner && embed.permlink
+      ? `shorts?v=${embed.owner}/${embed.permlink}`
+      : `shorts?v=${video.author}/${video.permlink}`;
+  } else if (post) {
+    canonicalPath = `watch?v=${post.author}/${post.permlink}`;
+  } else {
+    canonicalPath = `watch?v=${embed.owner || video.author}/${embed.permlink || video.permlink}`;
+  }
+  const canonicalUrl = resolveCanonical(meta, `${CANONICAL_ORIGIN}/${canonicalPath}`);
   const duration = videoInfo.duration || (embed && embed.duration) || null;
   const uploadDate = toIsoDate((post && post.created) || (embed && embed.createdAt));
 
   // Indexability: full signal set when there's a Hive post; for embed-only
   // assets fall back to the NSFW flag + title heuristic.
   const indexability = post ? getIndexability(post, meta) : null;
+  // A Hive post with no video in it (a text post opened as /@author/permlink)
+  // is not a video page: kept out of the index rather than offered as one.
+  const isVideo = !!embed || !!meta.video || /speak/i.test(String(meta.app || ''));
   const index = post
-    ? indexability.index
+    ? indexability.index && isVideo
     : !(embed && embed.isNsfwContent) && !isAdultByTitle(title);
   // Inline playback follows the same NSFW/muted/blacklist rules, but not the
   // SEO-only "empty" one: a short posted as an Ecency wave is a reply with a
@@ -1075,7 +1267,7 @@ async function resolveVideoCard(video, origin) {
     (index || (indexability && indexability.reason === 'empty')) &&
     !(embed && (embed.gated === true || embed.gated === 'true'));
   return {
-    post, embed, meta, image, title, description, canonicalUrl,
+    post, embed, meta, image, title, description, selfUrl, canonicalUrl,
     duration, uploadDate, index, indexability, inlineAllowed,
   };
 }
@@ -1158,16 +1350,34 @@ const server = http.createServer(async (req, res) => {
   if (page) {
     try {
       const html = await ogPages.render(req, res, page, origin);
-      return sendHtml(req, res, 200, html || buildGenericHtml(origin + req.url));
+      if (html === ogPages.MISSING) return sendMissing(req, res, origin, url);
+      if (!html) return sendUnavailable(req, res, origin, url);
+      return sendHtml(req, res, 200, html);
     } catch (err) {
       console.error(`[og] ${page.kind} page error:`, err && err.message);
-      return sendHtml(req, res, 200, buildGenericHtml(origin + req.url));
+      return sendUnavailable(req, res, origin, url);
+    }
+  }
+
+  // Feed and topic pages (/trend, /new, /t/:tag, /community/:id, ...): their
+  // videos as plain links. See og-lists.cjs.
+  const list = ogLists.match(url);
+  if (list) {
+    try {
+      const html = await ogLists.render(req, list, origin);
+      if (html === ogLists.MISSING) return sendMissing(req, res, origin, url);
+      if (!html) return sendUnavailable(req, res, origin, url);
+      return sendHtml(req, res, 200, html);
+    } catch (err) {
+      console.error(`[og] ${list.kind} list error:`, err && err.message);
+      return sendUnavailable(req, res, origin, url);
     }
   }
 
   try {
     const video = parseVideoUrl(url);
-    if (!video) return sendHtml(req, res, 200, buildGenericHtml(origin + req.url));
+    // /watch with no video named (or a broken ?v=) is not a page of its own.
+    if (!video) return sendHtml(req, res, 200, buildGenericHtml(origin + req.url, GENERIC_CARD, { noindex: true }));
 
     // Started now so the probe overlaps the Hive/checker lookups below. It only
     // resolves + probes (cached per rendition); the teaser build starts further
@@ -1178,9 +1388,10 @@ const server = http.createServer(async (req, res) => {
       : Promise.resolve(null);
 
     const card = await resolveVideoCard(video, origin);
-    if (!card) return sendHtml(req, res, 200, buildGenericHtml(origin + req.url));
+    if (card && card.missing) return sendMissing(req, res, origin, url);
+    if (!card) return sendUnavailable(req, res, origin, url);
     const {
-      post, meta, title, description, canonicalUrl, duration, uploadDate, index, inlineAllowed,
+      post, meta, title, description, selfUrl, canonicalUrl, duration, uploadDate, index, inlineAllowed,
     } = card;
     let { image } = card;
     // WhatsApp shows no preview at all for a WebP image (every 3Speak
@@ -1237,7 +1448,8 @@ const server = http.createServer(async (req, res) => {
       title,
       description,
       image,
-      url: canonicalUrl,
+      url: selfUrl,
+      canonical: canonicalUrl,
       duration,
       author: video.author,
       noindex: !index,
@@ -1247,7 +1459,7 @@ const server = http.createServer(async (req, res) => {
       contentUrl,
       // Each chapter links to the canonical watch page + &t=, so only when that
       // page is ours (a post may declare a canonical_url elsewhere).
-      chapters: canonicalUrl.startsWith(`${origin}/watch?`) ? videoChapters(meta, duration) : [],
+      chapters: canonicalUrl.startsWith(`${CANONICAL_ORIGIN}/watch?`) ? videoChapters(meta, duration) : [],
       tags: videoTags(meta),
       related,
       origin,
@@ -1276,8 +1488,9 @@ const server = http.createServer(async (req, res) => {
     return sendHtml(req, res, 200, html);
   } catch (err) {
     console.error('[og] error:', err && err.message);
-    // Never fail the bot — degrade to the generic card.
-    return sendHtml(req, res, 200, buildGenericHtml(origin + req.url));
+    // Never fail the bot: a link preview degrades to the generic card, a
+    // search engine is told to come back.
+    return sendUnavailable(req, res, origin, url);
   }
 });
 

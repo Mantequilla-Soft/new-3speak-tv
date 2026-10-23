@@ -228,7 +228,7 @@ ${trending
     <ul>
       <li><a href="${escapeHtml(`${BASE_URL}/trend`)}">Trending videos</a> and <a href="${escapeHtml(`${BASE_URL}/new`)}">new videos</a></li>
       <li><a href="${escapeHtml(`${BASE_URL}/shorts`)}">Shorts</a>: vertical short videos</li>
-      <li><a href="${escapeHtml(`${BASE_URL}/communities`)}">Communities</a> built around shared topics and languages</li>
+      <li><a href="${escapeHtml(`${BASE_URL}/groups`)}">Communities</a> built around shared topics and languages</li>
       <li><a href="${escapeHtml(`${BASE_URL}/leaderboard`)}">Creator leaderboard</a></li>
       <li>Podcast RSS feeds for every channel, at 3speak.tv/rss/&lt;username&gt;.xml</li>
       <li><a href="${escapeHtml(`${BASE_URL}/advertise`)}">Advertise</a> with video, banner and ticker ads, paid in HBD or HIVE</li>
