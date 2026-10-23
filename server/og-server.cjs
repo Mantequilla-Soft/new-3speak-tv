@@ -28,7 +28,11 @@ const BUNNY_IPFS_CDN = 'https://hotipfs-3speak-1.b-cdn.net';
 // derived from the *request* host instead (so a shared preview link points back
 // to preview, and a prod link to prod) — see requestOrigin().
 const BASE_URL = process.env.OG_BASE_URL || 'https://3speak.tv';
-const FALLBACK_THUMBNAIL = `${BASE_URL}/3speak.jpeg`;
+// The 1200x630 site banner, for cards with no image of their own. Not the square
+// 3speak.jpeg: link previews stretch a square to the card's 1.91:1 shape.
+const FALLBACK_THUMBNAIL = `${BASE_URL}/og-image.jpg`;
+// The square logo, for schema.org `publisher.logo`, where a square is what is asked for.
+const LOGO_URL = `${BASE_URL}/3speak.jpeg`;
 const TRANSLATE_API_URL = process.env.TRANSLATE_API_URL || 'https://translate.3speak.tv';
 // Checker/embed metadata API. Shorts (and some embed-only videos) are NOT Hive
 // posts — they're embed assets whose permlink in the share URL is the *asset*
@@ -586,7 +590,7 @@ function buildOgHtml({
     publisher: {
       '@type': 'Organization',
       name: '3Speak',
-      logo: { '@type': 'ImageObject', url: FALLBACK_THUMBNAIL },
+      logo: { '@type': 'ImageObject', url: LOGO_URL },
     },
   };
   if (uploadDate) ld.uploadDate = uploadDate;
@@ -670,11 +674,29 @@ function buildOgHtml({
 // Generic site card — returned for bots on non-video URLs (or on any error),
 // so the worst case is identical to today's static index.html defaults rather
 // than a broken response. Mirrors index.html's primary OG/Twitter tags.
-function buildGenericHtml(siteUrl) {
+const GENERIC_CARD = {
+  title: '3S | Real People - Real Stories',
+  description:
+    '3Speak is a decentralized video sharing platform built on blockchain technology. Watch, upload, and share videos while earning cryptocurrency rewards.',
+  image: FALLBACK_THUMBNAIL,
+};
+
+// Pages with a card of their own (nginx must send their bots here: add a
+// `location = <path>` block like /watch's). Title + description mirror the
+// page's own SEOHead, so the card says what the page says.
+const PAGE_CARDS = {
+  '/advertise': {
+    title: '3S | Advertise on 3Speak videos',
+    description: 'Put a short ad inside videos on 3Speak, paid in HBD or HIVE. Every advertiser is reviewed by hand.',
+    image: `${BASE_URL}/og-advertise.jpg`,
+  },
+};
+
+function buildGenericHtml(siteUrl, card = GENERIC_CARD) {
   const url = escapeHtml(siteUrl);
-  const title = '3S | Real People - Real Stories';
-  const desc =
-    '3Speak is a decentralized video sharing platform built on blockchain technology. Watch, upload, and share videos while earning cryptocurrency rewards.';
+  const title = escapeHtml(card.title);
+  const desc = escapeHtml(card.description);
+  const image = escapeHtml(card.image);
   return `<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -685,13 +707,15 @@ function buildGenericHtml(siteUrl) {
   <meta property="og:site_name" content="3Speak" />
   <meta property="og:title" content="${title}" />
   <meta property="og:description" content="${desc}" />
-  <meta property="og:image" content="${FALLBACK_THUMBNAIL}" />
+  <meta property="og:image" content="${image}" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
   <meta property="og:url" content="${url}" />
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:site" content="@3speaktv" />
   <meta name="twitter:title" content="${title}" />
   <meta name="twitter:description" content="${desc}" />
-  <meta name="twitter:image" content="${FALLBACK_THUMBNAIL}" />
+  <meta name="twitter:image" content="${image}" />
   <link rel="canonical" href="${url}" />
 </head>
 <body><h1>${title}</h1><p>${desc}</p></body>
@@ -1018,6 +1042,11 @@ const server = http.createServer(async (req, res) => {
       console.error('[og] site page error:', err && err.message);
       return sendHtml(req, res, 200, buildGenericHtml(origin + req.url));
     }
+  }
+
+  const pageCard = PAGE_CARDS[url.pathname.replace(/\/+$/, '')];
+  if (pageCard) {
+    return sendHtml(req, res, 200, buildGenericHtml(origin + url.pathname, pageCard));
   }
 
   const page = ogPages.match(url);

@@ -2940,6 +2940,7 @@ export default function Advertise({ openLoginModal }) {
         title={t('ads.page.title')}
         description={t('ads.page.description')}
         url="https://3speak.tv/advertise"
+        image="https://3speak.tv/og-advertise.jpg"
       />
       <header className="mkt-header">
         <MdCampaign className="mkt-header-icon" aria-hidden="true" />

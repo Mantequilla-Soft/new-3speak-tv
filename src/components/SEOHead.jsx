@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next';
 const SEOHead = ({
   title = null,
   description = null,
-  image = 'https://3speak.tv/3speak.jpeg',
+  image = 'https://3speak.tv/og-image.jpg',
   url = 'https://3speak.tv/',
   type = 'website',
   author = null,
