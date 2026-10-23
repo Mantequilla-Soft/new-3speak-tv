@@ -25,12 +25,13 @@ jobs:
       - uses: actions/setup-node@v7
         with:
           node-version: 22
-      # @snapie/hangouts-react may point at a local build (file:...) that only exists on
-      # the dev box. These tests do not import it, so the newest published version will do.
+      # @snapie/hangouts-react is normally a build committed under vendor/. Should it ever
+      # point at a file outside the repo, these tests do not import it, so the newest
+      # published version will do.
       - name: Install
         run: |
           dep=$(node -p "require('./package.json').dependencies['@snapie/hangouts-react'] || ''")
-          if [[ "$dep" == file:* ]]; then
+          if [[ "$dep" == file:* && ! -f "${dep#file:}" ]]; then
             echo "::notice::@snapie/hangouts-react points at a local build; using the published one for the tests"
             npm pkg set "dependencies.@snapie/hangouts-react=latest"
           fi
@@ -46,12 +47,13 @@ jobs:
       - uses: actions/setup-node@v7
         with:
           node-version: 22
-      # The app only builds with the OpenPods SDK it was written against. While that is a
-      # local build, test the deployed develop (preview.3speak.tv) instead of this branch.
+      # The app only builds with the OpenPods SDK it was written against. If that is a
+      # local build outside the repo (not vendor/), test the deployed develop
+      # (preview.3speak.tv) instead of this branch.
       - name: Install
         run: |
           dep=$(node -p "require('./package.json').dependencies['@snapie/hangouts-react'] || ''")
-          if [[ "$dep" == file:* ]]; then
+          if [[ "$dep" == file:* && ! -f "${dep#file:}" ]]; then
             echo "::warning::@snapie/hangouts-react points at a local build, so this branch cannot be built here; the browser tests run against preview.3speak.tv"
             echo "E2E_BASE_URL=https://preview.3speak.tv" >> "$GITHUB_ENV"
             npm pkg set "dependencies.@snapie/hangouts-react=latest"
