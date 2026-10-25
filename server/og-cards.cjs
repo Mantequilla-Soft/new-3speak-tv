@@ -494,7 +494,8 @@ async function renderCard({ headline, subtitle, avatar, cjk = [] }) {
 async function profileText(account, displayName) {
   const name = String(displayName || '').trim()
   // No display name, the handle itself, or one we cannot draw: the @handle.
-  if (name && name.toLowerCase() !== account && name.toLowerCase() !== `@${account}`) {
+  // A name that only capitalises the handle ('MenO' for meno) is a name.
+  if (name && name !== account && name !== `@${account}`) {
     const prepared = await prepareText(name)
     if (prepared.ok) {
       return { headline: prepared.text, subtitle: [[`@${account}`, true], [' on 3Speak']], cjk: prepared.cjk }

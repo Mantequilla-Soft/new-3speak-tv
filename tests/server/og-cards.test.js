@@ -26,9 +26,15 @@ describe('the name on a profile card', () => {
   })
 
   it('is the @handle when there is no display name, or it is the handle itself', async () => {
-    for (const name of ['', '   ', undefined, 'alice', 'Alice', '@alice']) {
+    for (const name of ['', '   ', undefined, 'alice', '@alice']) {
       expect((await cards.profileText('alice', name)).headline).toBe('@alice')
     }
+  })
+
+  it('is the display name when it only capitalises the handle', async () => {
+    expect(await cards.profileText('meno', 'MenO')).toMatchObject({
+      headline: 'MenO', subtitle: [['@meno', true], ON_3SPEAK],
+    })
   })
 
   it('is the @handle when the name has characters the card cannot draw', async () => {
