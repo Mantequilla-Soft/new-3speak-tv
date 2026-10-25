@@ -5,54 +5,46 @@
     <link rel="icon" type="image/jpeg" href="3speak.jpeg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
 
-    <!-- Warm up connections to the video CDN + player API so card previews
-         (and playback) fetch their first manifest/segment without paying DNS/TLS setup. -->
-    <link rel="preconnect" href="https://hotipfs-3speak-1.b-cdn.net" crossorigin />
+    <!-- Warm up the connection to the player API so card previews (and playback)
+         fetch their first manifest without paying DNS/TLS setup. The Bunny IPFS
+         zone that used to sit here (hotipfs-3speak-1.b-cdn.net) has answered 403
+         since 2026-09 and nothing loads from it: a preconnect there was a socket
+         and a TLS handshake spent on every page load for nothing. -->
     <link rel="preconnect" href="https://play.3speak.tv" crossorigin />
-    <link rel="dns-prefetch" href="https://hotipfs-3speak-1.b-cdn.net" />
     <link rel="dns-prefetch" href="https://play.3speak.tv" />
 
-    <!-- The two busiest origins on a cold home feed, and both were missing: the
-         checker serves the feed itself (the FIRST request that matters) and
-         images.hive.blog serves every avatar on the page. Warming these saves a
-         DNS+TLS round trip each before the feed can even start rendering. -->
+    <!-- The checker serves the feed itself, the FIRST request that matters on a
+         cold home feed. Thumbnails and avatars come from our own /img/ cache
+         (same origin), so images.hive.blog only gets a cheap DNS prefetch for
+         the odd image that is not cached yet. -->
     <link rel="preconnect" href="https://checker.3speak.tv" crossorigin />
-    <link rel="preconnect" href="https://images.hive.blog" crossorigin />
     <link rel="dns-prefetch" href="https://checker.3speak.tv" />
     <link rel="dns-prefetch" href="https://images.hive.blog" />
 
-    <!-- Primary Meta Tags -->
-    <title>3S | Real People - Real Stories</title>
-    <meta name="title" content="3S | Real People - Real Stories" />
-    <meta name="description" content="3Speak is a decentralized video sharing platform built on blockchain technology. Watch, upload, and share videos while earning cryptocurrency rewards." />
-    <meta name="keywords" content="3speak, decentralized video, blockchain video, crypto video platform, web3 video, hive blockchain, video sharing, cryptocurrency" />
+    <!-- Primary Meta Tags. The homepage's, for readers that run no JavaScript.
+         Everything marked data-static-seo is removed by RouteTitle once the app
+         has written the page's own (React does not merge <meta> tags, so both
+         copies would stay and contradict each other). The <title> stays: the
+         app's own <title> comes first in the document, so it wins, and a page
+         still loading its title keeps this one meanwhile. Same copy as
+         misc.seo.homeTitle / misc.seo.siteDescription and server/og-server.cjs. -->
+    <title>3Speak: the video platform where creators and viewers earn</title>
+    <meta data-static-seo name="description" content="3Speak is the decentralized YouTube alternative where creators earn from their first video and viewers can earn too. Real people, real stories." />
     <meta name="author" content="3Speak" />
-    <meta name="robots" content="index, follow" />
     <!--
-      No static canonical here on purpose. This shell is shared by every SPA
-      route, so a hardcoded canonical would make every page declare the
-      homepage as its canonical. Search crawlers receive a correct per-page
-      canonical from the Edge Middleware (middleware.js). For the SPA itself,
-      per-route canonical/meta should be set client-side via react-helmet-async
-      (already a dependency) — tracked as a follow-up.
+      No canonical and no og:url in this shell, on purpose. It is served for
+      EVERY SPA route, so any fixed value told readers that run no JavaScript
+      (Bing renders little of it) that /t/hive, /trend, /leaderboard... were all
+      the homepage. A page with no canonical is taken as its own, which is
+      right for all of them. RouteTitle writes the real per-route canonical and
+      og:url once the app runs (that is what Google reads, after rendering), and
+      the bot pages from server/og-server.cjs carry their own.
     -->
-    <link rel="canonical" href="https://3speak.tv/" data-route="home" />
-    <script>
-      // Drop the homepage canonical on any non-home route so we don't tell
-      // crawlers that render JS (or non-listed bots) that every video page
-      // canonicalizes to the homepage. Removing it lets Google self-select
-      // until react-helmet sets the real per-route canonical.
-      if (location.pathname !== '/' || location.search) {
-        var c = document.querySelector('link[rel="canonical"][data-route="home"]');
-        if (c) c.parentNode.removeChild(c);
-      }
-    </script>
 
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website" />
-    <meta property="og:url" content="https://3speak.tv/" />
-    <meta property="og:title" content="3S | Real People - Real Stories" />
-    <meta property="og:description" content="3Speak is a decentralized video sharing platform built on blockchain technology. Watch, upload, and share videos while earning cryptocurrency rewards." />
+    <meta data-static-seo property="og:title" content="3Speak: the video platform where creators and viewers earn" />
+    <meta data-static-seo property="og:description" content="3Speak is the decentralized YouTube alternative where creators earn from their first video and viewers can earn too. Real people, real stories." />
     <!-- A real 1200x630 banner: the square 3speak.jpeg (still the favicon) was stretched to these dimensions in link previews. -->
     <meta property="og:image" content="https://3speak.tv/og-image.jpg" />
     <meta property="og:image:width" content="1200" />
@@ -61,11 +53,10 @@
     <meta property="og:locale" content="en_US" />
 
     <!-- Twitter -->
-    <meta property="twitter:card" content="summary_large_image" />
-    <meta property="twitter:url" content="https://3speak.tv/" />
-    <meta property="twitter:title" content="3S | Real People - Real Stories" />
-    <meta property="twitter:description" content="3Speak is a decentralized video sharing platform built on blockchain technology. Watch, upload, and share videos while earning cryptocurrency rewards." />
-    <meta property="twitter:image" content="https://3speak.tv/og-image.jpg" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta data-static-seo name="twitter:title" content="3Speak: the video platform where creators and viewers earn" />
+    <meta data-static-seo name="twitter:description" content="3Speak is the decentralized YouTube alternative where creators earn from their first video and viewers can earn too. Real people, real stories." />
+    <meta name="twitter:image" content="https://3speak.tv/og-image.jpg" />
     <meta name="twitter:site" content="@3speaktv" />
     <meta name="twitter:creator" content="@3speaktv" />
 
@@ -75,13 +66,22 @@
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
 
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-    <meta name="theme-color" content="#1a1a2e" />
-    <meta name="description" content="3Speak - Decentralized Video Platform" />
-    <meta name="apple-mobile-web-app-capable" content="yes" />
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <!-- A second viewport, theme-color, description and two apple-* tags used to
+         repeat here. Browsers take the FIRST of each, so the copies did nothing
+         but hand crawlers two different descriptions of the site. -->
     <meta name="apple-mobile-web-app-title" content="3Speak" />
     <link rel="apple-touch-icon" href="/pwa-192x192.png" />
+
+    <!-- Who runs the site and what it is called, on every page. Google reads the
+         WebSite name for the site name shown above each result, and the
+         Organization logo for the knowledge panel. Same @ids as the crawler
+         homepage in server/og-site.cjs. -->
+    <script type="application/ld+json">
+      {"@context":"https://schema.org","@graph":[
+        {"@type":"Organization","@id":"https://3speak.tv/#organization","name":"3Speak","alternateName":"3speak.tv","url":"https://3speak.tv/","logo":"https://3speak.tv/pwa-512x512.png","sameAs":["https://x.com/3speaktv","https://hive.blog/@threespeak"]},
+        {"@type":"WebSite","@id":"https://3speak.tv/#website","name":"3Speak","alternateName":"3speak.tv","url":"https://3speak.tv/","publisher":{"@id":"https://3speak.tv/#organization"}}
+      ]}
+    </script>
     <!--
       Three third-party loaders used to sit here. All removed 2026-07-14:
 

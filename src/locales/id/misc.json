@@ -151,7 +151,9 @@
   },
   "seo": {
     "defaultTitle": "3Speak - Platform Video Terdesentralisasi",
-    "defaultDescription": "3Speak adalah platform berbagi video terdesentralisasi yang dibangun dengan teknologi blockchain. Tonton, unggah, dan bagikan video sambil mendapatkan reward mata uang kripto."
+    "homeTitle": "3Speak: platform video tempat kreator dan penonton dapat penghasilan",
+    "siteDescription": "3Speak adalah alternatif YouTube terdesentralisasi tempat kreator dapat penghasilan sejak video pertama mereka, dan penonton juga bisa dapat penghasilan. Orang nyata, cerita nyata.",
+    "pageDescription": "{{page}} di 3Speak, alternatif YouTube terdesentralisasi tempat kreator dan penonton dapat penghasilan."
   },
   "uploadLinks": {
     "regularVideo": "Video Biasa",

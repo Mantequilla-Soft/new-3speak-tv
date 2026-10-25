@@ -151,7 +151,9 @@
   },
   "seo": {
     "defaultTitle": "3Speak - Decentralized na Video Platform",
-    "defaultDescription": "Ang 3Speak ay decentralized na video sharing platform na nakatayo sa blockchain technology. Manood, mag-upload, at mag-share ng video habang kumikita ng cryptocurrency rewards."
+    "homeTitle": "3Speak: ang video platform kung saan kumikita ang mga creator at manonood",
+    "siteDescription": "Ang 3Speak ay ang decentralized na alternatibo sa YouTube kung saan kumikita ang mga creator mula sa una nilang video at puwede ring kumita ang mga manonood. Totoong tao, totoong kuwento.",
+    "pageDescription": "{{page}} sa 3Speak, ang decentralized na alternatibo sa YouTube kung saan kumikita ang mga creator at manonood."
   },
   "uploadLinks": {
     "regularVideo": "Regular na Video",

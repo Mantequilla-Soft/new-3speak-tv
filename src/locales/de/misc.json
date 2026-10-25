@@ -151,7 +151,9 @@
   },
   "seo": {
     "defaultTitle": "3Speak – Dezentrale Videoplattform",
-    "defaultDescription": "3Speak ist eine dezentrale Videoplattform auf Blockchain-Basis. Schau, lade hoch und teile Videos und verdiene dabei Kryptowährungs-Belohnungen."
+    "homeTitle": "3Speak: die Videoplattform, auf der Creator und Zuschauer verdienen",
+    "siteDescription": "3Speak ist die dezentrale YouTube-Alternative, auf der Creator ab ihrem ersten Video verdienen und auch Zuschauer verdienen können. Echte Menschen, echte Geschichten.",
+    "pageDescription": "{{page}} auf 3Speak, der dezentralen YouTube-Alternative, auf der Creator und Zuschauer verdienen."
   },
   "uploadLinks": {
     "regularVideo": "Normales Video",

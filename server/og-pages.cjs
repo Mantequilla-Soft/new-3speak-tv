@@ -3,10 +3,14 @@
 // og-server.cjs (crawlers run no JavaScript, so without this every one of these
 // links unfurled as the generic 3Speak card), same rules:
 //
-//   - Never fail the bot. Any miss or error answers null and the caller sends
-//     the generic card, which is what these URLs showed before.
+//   - Never fail the bot. A lookup that FAILED answers null (the caller tells
+//     search engines to retry, link previews get the generic card). A thing
+//     that does not exist answers MISSING: a 404 for search engines, so dead
+//     URLs leave the index instead of standing in as copies of the homepage.
 //   - Private and banned things look like they do not exist: a private playlist
-//     or a banned creator gets the generic card, not a card that leaks a title.
+//     or a banned creator is MISSING too, never a card that leaks a title.
+//   - rel=canonical always names the 3speak.tv page (CANONICAL_ORIGIN), og:url
+//     the host that was asked.
 //   - Googlebot shares this route, so the body carries real text and links
 //     (bio, track list, latest videos) rather than only meta tags.
 //
@@ -27,10 +31,13 @@ const AUDIO_MIME = { mp3: 'audio/mpeg', m4a: 'audio/mp4', mp4: 'audio/mp4', webm
 
 module.exports = function createPages(h) {
   const {
-    BASE_URL, CHECKER_URL, escapeHtml, fixThumbnail, boundImage, extractDescription,
-    parseMeta, getIndexability, fetchHivePost, secondsToISO8601, toIsoDate,
-    ogVideo, rememberOembed, OEMBED_PATH,
+    CANONICAL_ORIGIN, CHECKER_URL, escapeHtml, fixThumbnail, boundImage, extractDescription,
+    parseMeta, getIndexability, fetchHivePost, lookupHivePost, isMissingError, breadcrumbLd,
+    secondsToISO8601, toIsoDate, ogVideo, rememberOembed, OEMBED_PATH,
   } = h;
+
+  /** Answered by a handler for a page that does not exist (see the header). */
+  const MISSING = Symbol('missing');
 
   async function getJson(url, init) {
     const res = await fetch(url, { ...init, signal: AbortSignal.timeout(FETCH_TIMEOUT_MS) });
@@ -38,13 +45,32 @@ module.exports = function createPages(h) {
     return res.json();
   }
 
-  async function hiveCall(method, params) {
+  /** { data } on success, { missing: true } on a 404, { error: true } otherwise. */
+  async function getJsonState(url) {
+    try {
+      const res = await fetch(url, { signal: AbortSignal.timeout(FETCH_TIMEOUT_MS) });
+      if (res.status === 404) return { missing: true };
+      if (!res.ok) return { error: true };
+      return { data: await res.json() };
+    } catch (_) {
+      return { error: true };
+    }
+  }
+
+  /** A Hive RPC call as { result }, { missing: true } or { error: true }. */
+  async function hiveCallState(method, params) {
     const data = await getJson(HIVE_API, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ jsonrpc: '2.0', method, params, id: 1 }),
     }).catch(() => null);
-    return (data && data.result) || null;
+    if (!data) return { error: true };
+    if (data.error) return isMissingError(data.error) ? { missing: true } : { error: true };
+    return { result: data.result };
+  }
+
+  async function hiveCall(method, params) {
+    return (await hiveCallState(method, params)).result || null;
   }
 
   const avatarOf = (account) => `https://images.hive.blog/u/${account}/avatar/large`;
@@ -65,20 +91,23 @@ module.exports = function createPages(h) {
   /** Which page a URL is, or null. */
   function match(url) {
     const p = url.pathname.replace(/\/+$/, '') || '/';
+    // A name no Hive account can have, an id no playlist can have: missing
+    // without asking anyone.
+    const decode = (v) => { try { return decodeURIComponent(v); } catch (_) { return ''; } };
     let m = p.match(/^\/(?:p|user)\/([^/]+)$/) || p.match(/^\/@([^/]+)(?:\/shorts)?$/);
     if (m) {
-      const account = decodeURIComponent(m[1]).toLowerCase();
-      return ACCOUNT_RE.test(account) ? { kind: 'profile', account } : null;
+      const account = decode(m[1]).toLowerCase();
+      return ACCOUNT_RE.test(account) ? { kind: 'profile', account } : { kind: 'missing' };
     }
     m = p.match(/^\/playlist\/([^/]+)$/);
-    if (m) return PLAYLIST_ID_RE.test(m[1]) ? { kind: 'playlist', id: m[1] } : null;
+    if (m) return PLAYLIST_ID_RE.test(m[1]) ? { kind: 'playlist', id: m[1] } : { kind: 'missing' };
     m = p.match(/^\/audio\/@?([^/]+)\/([^/]+)$/);
     if (m) {
-      const author = decodeURIComponent(m[1]).toLowerCase();
-      const permlink = decodeURIComponent(m[2]);
+      const author = decode(m[1]).toLowerCase();
+      const permlink = decode(m[2]);
       return ACCOUNT_RE.test(author) && PERMLINK_RE.test(permlink)
         ? { kind: 'audio', author, permlink }
-        : null;
+        : { kind: 'missing' };
     }
     return null;
   }
@@ -115,6 +144,7 @@ module.exports = function createPages(h) {
   <meta name="twitter:player:width" content="${Number(video.width) || 1280}" />
   <meta name="twitter:player:height" content="${Number(video.height) || 720}" />`
       : `<meta name="twitter:card" content="${twitterCard}" />`;
+    // One object or several (the page's own entity + its BreadcrumbList).
     const ld = jsonLd
       ? `\n  <script type="application/ld+json">${JSON.stringify(jsonLd).replace(/</g, '\\u003c')}</script>`
       : '';
@@ -150,16 +180,22 @@ ${body}
 
   async function profilePage(req, res, page, origin) {
     const { account } = page;
-    const [profile, check, counts, trailer, posts] = await Promise.all([
-      hiveCall('bridge.get_profile', { account, observer: '' }),
+    const [profileState, check, counts, trailer, posts, uploads] = await Promise.all([
+      hiveCallState('bridge.get_profile', { account, observer: '' }),
       getJson(`${CHECKER_URL}/check/${encodeURIComponent(account)}`).catch(() => null),
       getJson(`${CHECKER_URL}/user/${encodeURIComponent(account)}/counts`).catch(() => null),
       getJson(`${CHECKER_URL}/user/${encodeURIComponent(account)}/trailer`).catch(() => null),
       hiveCall('bridge.get_account_posts', { sort: 'posts', account, limit: 20, observer: '' }),
+      // The channel's own video list, as its profile page shows it. The Hive
+      // posts above are everything the account wrote, so a creator who also
+      // blogs had their videos pushed out of a list of 20.
+      getJson(`${CHECKER_URL}/api/my-videos?username=${encodeURIComponent(account)}&limit=20&offset=0&status=published&sort=newest`).catch(() => null),
     ]);
+    if (profileState.missing) return MISSING;
+    const profile = profileState.result;
     if (!profile || !profile.name) return null;
     // A banned creator's channel shows nothing on 3Speak, so the card does not either.
-    if (check && check.banned === true) return null;
+    if (check && check.banned === true) return MISSING;
 
     const p = (profile.metadata && profile.metadata.profile) || {};
     const displayName = clip(p.name, 60) || account;
@@ -172,14 +208,17 @@ ${body}
     const about = clip(p.about, 160);
     const description = [about, tally ? `${tally} on 3Speak` : `@${account} on 3Speak`].filter(Boolean).join(' · ');
 
-    const canonical = `${origin}/user/${account}`;
+    const canonical = `${CANONICAL_ORIGIN}/user/${account}`;
     const selfUrl = origin + req.url;
     const { image, imageType } = cardImage(avatarOf(account), req, origin);
 
     // Their latest uploads, as links for search engines. A post is a video or
     // an audio by its metadata; anything else (an album's own post, text) is not
     // something to link as one.
-    const latest = (Array.isArray(posts) ? posts : [])
+    const channelVideos = ((uploads && uploads.data && uploads.data.videos) || [])
+      .filter((v) => v && v.permlink && v.title && !v.isNsfwContent)
+      .map((v) => ({ title: v.title, href: `${origin}/watch?v=${v.author || v.owner || account}/${v.permlink}` }));
+    const fromPosts = (Array.isArray(posts) ? posts : [])
       .map((post) => {
         const meta = parseMeta(post.json_metadata);
         const href = meta.audio
@@ -187,8 +226,11 @@ ${body}
           : meta.video ? `${origin}/watch?v=${post.author}/${post.permlink}` : null;
         return href ? { title: post.title || post.permlink, href } : null;
       })
-      .filter(Boolean)
-      .slice(0, 12);
+      .filter(Boolean);
+    const seen = new Set();
+    const latest = [...channelVideos, ...fromPosts]
+      .filter((l) => !seen.has(l.href) && seen.add(l.href))
+      .slice(0, 20);
 
     // Discord only: the channel trailer as the inline teaser, as on a video card.
     let video = null;
@@ -237,6 +279,7 @@ ${body}
       },
     };
     if (profile.created) jsonLd.dateCreated = toIsoDate(profile.created);
+    const crumbs = breadcrumbLd([['3Speak', `${CANONICAL_ORIGIN}/`], [title, canonical]]);
 
     const list = latest.length
       ? `\n  <section>\n    <h2>Latest uploads</h2>\n    <ul>\n${latest
@@ -259,7 +302,7 @@ ${body}
       twitterCard: 'summary',
       video,
       oembedUrl,
-      jsonLd,
+      jsonLd: [jsonLd, crumbs],
       body,
     });
   }
@@ -270,7 +313,9 @@ ${body}
     // Covers, album details and item titles come from the checker: the playlists
     // API the site reads does not pass covers or album details through. 404 for
     // private playlists, Watch Later and banned owners.
-    const card = await getJson(`${CHECKER_URL}/rss/playlist/${encodeURIComponent(page.id)}/card.json`).catch(() => null);
+    const cardState = await getJsonState(`${CHECKER_URL}/rss/playlist/${encodeURIComponent(page.id)}/card.json`);
+    if (cardState.missing) return MISSING;
+    const card = cardState.data;
     if (!card || !card.owner || !card.name) return null;
 
     const isAlbum = !!card.album;
@@ -282,7 +327,7 @@ ${body}
     const what = isAlbum ? 'An album' : card.medium === 'podcast' ? 'A podcast' : 'A playlist';
     const description = clip(extractDescription(card.description || '')) || `${what} by @${card.owner} on 3Speak · ${noun}`;
 
-    const canonical = `${origin}/playlist/${card.id}`;
+    const canonical = `${CANONICAL_ORIGIN}/playlist/${card.id}`;
     const { image, imageType } = cardImage(card.cover || avatarOf(card.owner), req, origin);
     const itemUrl = (i) => (i.kind === 'audio'
       ? `${origin}/audio/${i.author}/${i.permlink}`
@@ -327,6 +372,12 @@ ${body}
         itemListElement: items.map((i, idx) => ({ '@type': 'ListItem', position: idx + 1, url: itemUrl(i), name: i.title })),
       };
 
+    const crumbs = breadcrumbLd([
+      ['3Speak', `${CANONICAL_ORIGIN}/`],
+      [`@${card.owner}`, `${CANONICAL_ORIGIN}/user/${card.owner}`],
+      [card.name, canonical],
+    ]);
+
     const list = items.length
       ? `\n  <section>\n    <h2>${isAlbum ? 'Tracks' : 'In this playlist'}</h2>\n    <ol>\n${items
         .slice(0, MAX_LISTED)
@@ -346,7 +397,7 @@ ${body}
       canonical,
       ogType,
       ogExtra,
-      jsonLd,
+      jsonLd: [jsonLd, crumbs],
       body,
     });
   }
@@ -373,16 +424,24 @@ ${body}
 
   async function audioPage(req, res, page, origin) {
     const { author, permlink } = page;
-    const post = await fetchHivePost(author, permlink).catch(() => null);
+    const lookup = await lookupHivePost(author, permlink);
+    if (lookup.missing) return MISSING;
+    const post = lookup.post;
     if (!post) return null;
     const doc = await findAudioDoc(author, permlink, post);
     const meta = parseMeta(post.json_metadata);
-    if (doc && (doc.status && doc.status !== 'published')) return null;
+    if (doc && (doc.status && doc.status !== 'published')) return MISSING;
 
     const indexability = getIndexability(post, meta);
     // The "empty" rule is about thin video posts; a post carrying a real audio
-    // file is content however short its text.
-    const index = indexability.index || (indexability.reason === 'empty' && !!doc);
+    // file is content however short its text...
+    // ...unless nothing on the page says what it is: a voice snap keeps the
+    // app's stand-in title ("Audio Snap by x") and often has no caption, which
+    // leaves a search engine a name and a player. Kept out, not removed.
+    const placeholderTitle = /^audio( snap)? by @?[a-z0-9.-]+$/i.test(String((doc && doc.title) || post.title || '').trim());
+    const caption = plainText(post.body, 2000).replace(/\s+/g, ' ').trim();
+    const thin = placeholderTitle && caption.length < 30;
+    const index = (indexability.index || (indexability.reason === 'empty' && !!doc)) && !thin;
 
     // The audio's own title first: an album track is a Hive REPLY to the album
     // post, so its post title is "RE: <album post>", not the track's name.
@@ -397,7 +456,7 @@ ${body}
       || (Array.isArray(meta.image) && meta.image[0])
       || avatarOf(author);
     const { image, imageType } = cardImage(rawImage, req, origin);
-    const canonical = `${origin}/audio/${author}/${permlink}`;
+    const canonical = `${CANONICAL_ORIGIN}/audio/${author}/${permlink}`;
 
     // The MP3 companion when there is one: WebM browser recordings play almost
     // nowhere outside a browser.
@@ -439,8 +498,14 @@ ${body}
       }
     }
 
+    const crumbs = breadcrumbLd([
+      ['3Speak', `${CANONICAL_ORIGIN}/`],
+      [`@${author}`, `${CANONICAL_ORIGIN}/user/${author}`],
+      [title, canonical],
+    ]);
+
     const body = `  <h1>${escapeHtml(title)}</h1>
-  <p><a href="${escapeHtml(canonical)}">${escapeHtml(title)}</a> by <a href="${escapeHtml(`${origin}/user/${author}`)}">@${escapeHtml(author)}</a> on 3Speak${
+  <p><a href="${escapeHtml(`${origin}/audio/${author}/${permlink}`)}">${escapeHtml(title)}</a> by <a href="${escapeHtml(`${origin}/user/${author}`)}">@${escapeHtml(author)}</a> on 3Speak${
     albumUrl && doc.playlist_name ? `, from <a href="${escapeHtml(albumUrl)}">${escapeHtml(doc.playlist_name)}</a>` : ''}</p>
   <p>${escapeHtml(plainText(post.body, 2000) || description)}</p>`;
 
@@ -453,18 +518,23 @@ ${body}
       canonical,
       ogType: isSong ? 'music.song' : 'website',
       ogExtra,
-      jsonLd,
+      jsonLd: index ? [jsonLd, crumbs] : jsonLd,
       noindex: !index,
       body,
     });
   }
 
-  const HANDLERS = { profile: profilePage, playlist: playlistPage, audio: audioPage };
+  const HANDLERS = {
+    profile: profilePage,
+    playlist: playlistPage,
+    audio: audioPage,
+    missing: async () => MISSING,
+  };
 
-  /** Rendered HTML for the page, or null to fall back to the generic card. */
+  /** Rendered HTML for the page, MISSING, or null when a lookup failed. */
   async function render(req, res, page, origin) {
     return HANDLERS[page.kind](req, res, page, origin);
   }
 
-  return { match, render };
+  return { match, render, MISSING };
 };

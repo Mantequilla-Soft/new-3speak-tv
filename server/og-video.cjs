@@ -166,7 +166,8 @@ async function resolveSource(author, permlink) {
   return value;
 }
 
-async function lookupSource(author, permlink) {
+/** The video's master playlist as { cid, masterPath }, or null. */
+async function lookupManifest(author, permlink) {
   // The player's /api/watch resolves BOTH the legacy `videos` collection and
   // embed assets (by asset id or Hive permlink), so it covers /watch, /@ and
   // /shorts share URLs alike.
@@ -178,7 +179,7 @@ async function lookupSource(author, permlink) {
   const doc = await res.json();
   if (!doc || !doc.success || doc.isPlaceholder || !doc.videoUrl) return null;
   if (doc.status && doc.status !== 'published') return null;
-  // Gated (paid) videos never get a public MP4.
+  // Gated (paid) videos never get a public MP4 or a public manifest.
   if (doc.gated === true || doc.gated === 'true') return null;
 
   let manifest = doc.videoUrl;
@@ -188,8 +189,36 @@ async function lookupSource(author, permlink) {
     return null;
   }
   const m = manifest.match(/\/ipfs\/([A-Za-z0-9]{40,})\/(.+)$/);
-  if (!m) return null;
-  const [, cid, masterPath] = m;
+  return m ? { cid: m[1], masterPath: m[2] } : null;
+}
+
+// The VideoObject's contentUrl, so search engines can fetch the video itself.
+// Our own gateway rather than a Bunny zone: both have answered 403 "Domain
+// suspended" since 2026-09-08, and a crawler needs no CORS.
+const CONTENT_GATEWAY = (process.env.OG_CONTENT_GATEWAY || 'https://ipfs.3speak.tv').replace(/\/+$/, '');
+const manifestMemo = new Map();
+
+async function manifestUrl(author, permlink) {
+  const ref = `${author}/${permlink}`;
+  const memo = manifestMemo.get(ref);
+  if (memo && Date.now() < memo.expires) return memo.value;
+
+  let value = null;
+  try {
+    const found = await lookupManifest(author, permlink);
+    if (found) value = `${CONTENT_GATEWAY}/ipfs/${found.cid}/${found.masterPath}`;
+  } catch (err) {
+    console.error('[og-video] manifest lookup failed', ref, err && err.message);
+  }
+  if (manifestMemo.size > 5000) manifestMemo.clear();
+  manifestMemo.set(ref, { value, expires: Date.now() + (value ? SOURCE_TTL_MS : SOURCE_MISS_TTL_MS) });
+  return value;
+}
+
+async function lookupSource(author, permlink) {
+  const found = await lookupManifest(author, permlink);
+  if (!found) return null;
+  const { cid, masterPath } = found;
 
   for (const gateway of GATEWAYS) {
     const masterUrl = `${gateway}/ipfs/${cid}/${masterPath}`;
@@ -850,4 +879,4 @@ async function sweep() {
 sweep();
 setInterval(sweep, 3600000).unref();
 
-module.exports = { wantsVideo, ogVideoFor, isMediaPath, serveMedia, THUMB_PATH, jpegThumbPath, serveThumb };
+module.exports = { wantsVideo, ogVideoFor, manifestUrl, isMediaPath, serveMedia, THUMB_PATH, jpegThumbPath, serveThumb };

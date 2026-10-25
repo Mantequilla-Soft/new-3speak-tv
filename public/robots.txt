@@ -6,8 +6,10 @@ Allow: /
 # rest) are welcome. A plain-text summary of 3Speak for language models:
 # https://3speak.tv/llms.txt and https://3speak.tv/llms-full.txt
 
-# Sitemaps
+# Sitemaps: every video, short, channel, topic, community, playlist and audio post.
 Sitemap: https://3speak.tv/sitemap.xml
 
-# Crawl-delay for respectful crawling
-Crawl-delay: 1
+# No Crawl-delay on purpose. Google ignores it, but Bing reads even "1" as
+# "crawl slowly", which slows Bing (and so DuckDuckGo, Yahoo and Ecosia, which
+# use Bing's index) on a site with 120,000 videos. Bulk AI crawlers are
+# rate-limited per crawler family in nginx (conf.d/blocked-bots.conf) instead.

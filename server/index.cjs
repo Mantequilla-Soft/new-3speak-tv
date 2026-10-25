@@ -1,4 +1,7 @@
 const path = require('path')
+// ipfs.3speak.tv publishes an unroutable AAAA (200::/7); Node 18's fetch would
+// wait out a 10s connect timeout on it instead of trying IPv4. See og-server.cjs.
+require('dns').setDefaultResultOrder('ipv4first')
 require('dotenv').config({ path: path.join(__dirname, '.env') })
 const express = require('express')
 const cors = require('cors')
@@ -2327,6 +2330,12 @@ app.post('/api/upload-image', imageUploadLimiter, express.raw({ type: () => true
 })
 
 app.get('/api/health', (req, res) => res.json({ ok: true }))
+
+// 🗺️ Sitemaps of every watchable video, short and channel. See sitemaps.cjs.
+require('./sitemaps.cjs').mountSitemaps(app, {
+  uri: process.env.MONGODB_URI || '',
+  dbName: process.env.DATABASE_NAME,
+})
 
 // ▶️ YouTube import (verified channel owners only). See youtube-import.cjs.
 // The whole importer is OFF unless VIDEO_IMPORT_ENABLED=true (owner's call
