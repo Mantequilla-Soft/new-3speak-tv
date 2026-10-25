@@ -1,6 +1,6 @@
 // What a visitor meets before doing anything: the cookie banner, the update popup,
 // the login chooser and the language.
-import { test, expect, APP_VERSION } from './fixtures.js'
+import { test, expect, APP_VERSION, VIDEO_LINK } from './fixtures.js'
 import es from '../../src/locales/es/common.json' with { type: 'json' }
 
 test.describe('cookie banner', () => {
@@ -15,7 +15,7 @@ test.describe('cookie banner', () => {
     const stored = await page.evaluate(() => JSON.parse(localStorage.getItem('3speak_cookie_consent')))
     expect(stored).toMatchObject({ essential: true })
     await page.reload()
-    await expect(page.locator('a[href*="/watch?v="]').first()).toBeVisible()
+    await expect(page.locator(VIDEO_LINK).first()).toBeVisible()
     await expect(banner).toBeHidden()
   })
 })
@@ -36,7 +36,7 @@ test('a returning user on an older version sees the update popup once', async ({
   await expect(modal).toBeHidden()
   expect(await page.evaluate(() => localStorage.getItem('3speak_app_version'))).toBe(APP_VERSION)
   await page.reload()
-  await expect(page.locator('a[href*="/watch?v="]').first()).toBeVisible()
+  await expect(page.locator(VIDEO_LINK).first()).toBeVisible()
   await expect(modal).toBeHidden()
 })
 
