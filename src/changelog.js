@@ -7,6 +7,12 @@
 // 1.0.0 — that way they see all of these when develop is pushed to production.
 export const CHANGELOG = [
   {
+    version: '1.80.20',
+    date: '2026-10-25',
+    summary:
+      'Shared playlist links now open the video with the playlist bar, just like clicking it inside the playlist.',
+  },
+  {
     version: '1.80.19',
     date: '2026-10-25',
     summary:

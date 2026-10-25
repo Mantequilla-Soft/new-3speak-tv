@@ -17,7 +17,8 @@ import { hasConsent } from '../lib/consent';
 import { recordWatch, batchCheckWatched } from '../utils/watchHistory';
 import { dropWatchedFromFeeds } from '../utils/feedWatched';
 import { Client } from '@hiveio/dhive';
-import { HIVE_API_NODES, SHORTS_API_URL, appendNsfw } from '../utils/config';
+import { HIVE_API_NODES, SHORTS_API_URL, PLAYLISTS_READ_URL, appendNsfw } from '../utils/config';
+import { fetchVideosForPlaylist } from '../utils/playlistVideos';
 import { getPlayerUrl } from '../utils/playerUrl';
 import ShortsRow from '../components/ShortsRow/ShortsRow';
 import { useAiFilteredShorts } from '../hooks/useAiFilteredShorts';
@@ -277,7 +278,32 @@ function Watch({ v2 = false, routeV = null }) {
   const [playlistData, setPlaylistData] = useState(null);
   const [showPlaylist, setShowPlaylist] = useState(true);
 
-  // Initialize playlist data from location state
+  // A shared ?playlist= link arrives without the state a click inside the app
+  // carries, so fetch the playlist here (same query keys as PlaylistView, so the
+  // cache is shared) and open the bar just as a click would have.
+  const playlistFromLink = !!playlistId && !(location.state?.playlist && location.state?.videos);
+  const { data: linkedPlaylist } = useQuery({
+    queryKey: ['playlist', playlistId],
+    queryFn: async () => {
+      const res = await fetch(`${PLAYLISTS_READ_URL}/playlists/${playlistId}`);
+      if (!res.ok) throw new Error(`playlist ${res.status}`);
+      return res.json();
+    },
+    enabled: playlistFromLink,
+    staleTime: 5 * 60 * 1000,
+    retry: 1,
+  });
+  // Private playlists (Watch Later too) stay owner-only, as on PlaylistView.
+  const linkedPlaylistHidden = linkedPlaylist?.access === 'private'
+    && linkedPlaylist?.owner?.toLowerCase() !== user?.toLowerCase();
+  const { data: linkedVideos } = useQuery({
+    queryKey: ['playlistVideos', playlistId, linkedPlaylist?.items],
+    queryFn: () => fetchVideosForPlaylist(linkedPlaylist?.items),
+    enabled: playlistFromLink && !linkedPlaylistHidden && !!linkedPlaylist?.items?.length,
+    staleTime: 5 * 60 * 1000,
+  });
+
+  // Initialize playlist data from location state, or from the fetched playlist
   useEffect(() => {
     if (location.state?.playlist && location.state?.videos) {
       setPlaylistData({
@@ -289,8 +315,20 @@ function Watch({ v2 = false, routeV = null }) {
     } else if (!playlistId) {
       // Clear playlist data if not in playlist mode
       setPlaylistData(null);
+    } else if (linkedPlaylist && linkedVideos && !linkedPlaylistHidden) {
+      // Locate the video by author/permlink: `pos` is the playlist's stored
+      // position, which need not match the index in the fetched list.
+      const index = linkedVideos.findIndex(
+        (vid) => vid.author === author && vid.permlink === permlink
+      );
+      if (index === -1) {
+        setPlaylistData(null);
+      } else {
+        setPlaylistData({ playlist: linkedPlaylist, videos: linkedVideos, currentIndex: index });
+        setShowPlaylist(true);
+      }
     }
-  }, [location.state, playlistId, posParam]);
+  }, [location.state, playlistId, posParam, linkedPlaylist, linkedVideos, linkedPlaylistHidden, author, permlink]);
 
   // Update current index when video changes
   useEffect(() => {
