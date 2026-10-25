@@ -201,13 +201,7 @@
     "uploadKeyMissing": "Stream afgelopen, maar de video kon niet worden geüpload (uploadsleutel ontbreekt).",
     "uploading": "Je streamvideo uploaden… {{pct}}%",
     "uploaded": "Streamvideo geüpload — hij vervangt de livestream zodra het encoderen klaar is.",
-    "uploadFailed": "Stream afgelopen, maar het uploaden van de video is mislukt.",
-    "saving": "Je streamvideo opslaan…",
-    "encoding": "Geüpload — de encoder verwerkt je video…",
-    "saved": "Streamvideo opgeslagen — hij vervangt de livestream zodra het encoderen klaar is.",
-    "saveFailed": "Stream afgelopen, maar de video kon niet worden opgeslagen: {{error}}.",
-    "uploadFailedShort": "uploaden mislukt",
-    "stillProcessing": "Stream afgelopen — de video wordt nog verwerkt; kijk straks op je profiel."
+    "uploadFailed": "Stream afgelopen, maar het uploaden van de video is mislukt."
   },
   "embedPlayer": {
     "unavailable": "Video niet beschikbaar"

@@ -201,13 +201,7 @@
     "uploadKeyMissing": "A transmissão terminou, mas não foi possível enviar o vídeo (chave de envio ausente).",
     "uploading": "Enviando o vídeo da sua transmissão… {{pct}}%",
     "uploaded": "Vídeo da transmissão enviado — ele vai substituir a transmissão ao vivo quando a codificação terminar.",
-    "uploadFailed": "A transmissão terminou, mas o envio do vídeo falhou.",
-    "saving": "Salvando o vídeo da sua transmissão…",
-    "encoding": "Enviado — o encoder está processando seu vídeo…",
-    "saved": "Vídeo da transmissão salvo — ele vai substituir a transmissão ao vivo quando a codificação terminar.",
-    "saveFailed": "A transmissão terminou, mas não foi possível salvar o vídeo: {{error}}.",
-    "uploadFailedShort": "falha no envio",
-    "stillProcessing": "A transmissão terminou — o vídeo ainda está sendo processado; confira seu perfil daqui a pouco."
+    "uploadFailed": "A transmissão terminou, mas o envio do vídeo falhou."
   },
   "embedPlayer": {
     "unavailable": "Vídeo indisponível"

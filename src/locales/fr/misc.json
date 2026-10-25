@@ -201,13 +201,7 @@
     "uploadKeyMissing": "Le live est terminé, mais la vidéo n'a pas pu être mise en ligne (clé de mise en ligne manquante).",
     "uploading": "Mise en ligne de la vidéo de votre live… {{pct}} %",
     "uploaded": "Vidéo du live mise en ligne — elle remplacera le live une fois l'encodage terminé.",
-    "uploadFailed": "Le live est terminé, mais la mise en ligne de la vidéo a échoué.",
-    "saving": "Enregistrement de la vidéo de votre live…",
-    "encoding": "Mise en ligne terminée — l'encodeur traite votre vidéo…",
-    "saved": "Vidéo du live enregistrée — elle remplacera le live une fois l'encodage terminé.",
-    "saveFailed": "Le live est terminé, mais la vidéo n'a pas pu être enregistrée : {{error}}.",
-    "uploadFailedShort": "échec de la mise en ligne",
-    "stillProcessing": "Le live est terminé — la vidéo est encore en traitement ; consultez votre profil d'ici peu."
+    "uploadFailed": "Le live est terminé, mais la mise en ligne de la vidéo a échoué."
   },
   "embedPlayer": {
     "unavailable": "Vidéo indisponible"

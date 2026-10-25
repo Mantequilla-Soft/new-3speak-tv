@@ -201,13 +201,7 @@
     "uploadKeyMissing": "Mtiririko umekwisha, lakini video haikuweza kupakiwa (ufunguo wa upakiaji unakosekana).",
     "uploading": "Inapakia video ya mtiririko wako… {{pct}}%",
     "uploaded": "Video ya mtiririko imepakiwa — itachukua nafasi ya mtiririko mubashara usimbaji ukikamilika.",
-    "uploadFailed": "Mtiririko umekwisha, lakini upakiaji wa video umeshindwa.",
-    "saving": "Inahifadhi video ya mtiririko wako…",
-    "encoding": "Imepakiwa — kisimbaji kinachakata video yako…",
-    "saved": "Video ya mtiririko imehifadhiwa — itachukua nafasi ya mtiririko mubashara usimbaji ukikamilika.",
-    "saveFailed": "Mtiririko umekwisha, lakini video haikuweza kuhifadhiwa: {{error}}.",
-    "uploadFailedShort": "upakiaji umeshindwa",
-    "stillProcessing": "Mtiririko umekwisha — video bado inachakatwa; angalia wasifu wako baada ya muda mfupi."
+    "uploadFailed": "Mtiririko umekwisha, lakini upakiaji wa video umeshindwa."
   },
   "embedPlayer": {
     "unavailable": "Video haipatikani"

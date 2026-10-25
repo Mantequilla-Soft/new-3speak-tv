@@ -201,13 +201,7 @@
     "uploadKeyMissing": "Yayın bitti ama video yüklenemedi (yükleme anahtarı eksik).",
     "uploading": "Yayın videon yükleniyor… %{{pct}}",
     "uploaded": "Yayın videosu yüklendi; kodlama bitince canlı yayının yerini alacak.",
-    "uploadFailed": "Yayın bitti ama video yüklenemedi.",
-    "saving": "Yayın videon kaydediliyor…",
-    "encoding": "Yüklendi; kodlayıcı videonu işliyor…",
-    "saved": "Yayın videosu kaydedildi; kodlama bitince canlı yayının yerini alacak.",
-    "saveFailed": "Yayın bitti ama video kaydedilemedi: {{error}}.",
-    "uploadFailedShort": "yükleme başarısız",
-    "stillProcessing": "Yayın bitti; video hâlâ işleniyor, birazdan profilini kontrol et."
+    "uploadFailed": "Yayın bitti ama video yüklenemedi."
   },
   "embedPlayer": {
     "unavailable": "Video kullanılamıyor"

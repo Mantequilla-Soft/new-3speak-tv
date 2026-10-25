@@ -201,13 +201,7 @@
     "uploadKeyMissing": "Stream beendet, aber das Video konnte nicht hochgeladen werden (Upload-Schlüssel fehlt).",
     "uploading": "Dein Stream-Video wird hochgeladen… {{pct}}%",
     "uploaded": "Stream-Video hochgeladen – es ersetzt den Livestream, sobald das Encoding fertig ist.",
-    "uploadFailed": "Stream beendet, aber der Video-Upload ist fehlgeschlagen.",
-    "saving": "Dein Stream-Video wird gespeichert…",
-    "encoding": "Hochgeladen – der Encoder verarbeitet dein Video…",
-    "saved": "Stream-Video gespeichert – es ersetzt den Livestream, sobald das Encoding fertig ist.",
-    "saveFailed": "Stream beendet, aber das Video konnte nicht gespeichert werden: {{error}}.",
-    "uploadFailedShort": "Upload fehlgeschlagen",
-    "stillProcessing": "Stream beendet – das Video wird noch verarbeitet; sieh gleich in deinem Profil nach."
+    "uploadFailed": "Stream beendet, aber der Video-Upload ist fehlgeschlagen."
   },
   "embedPlayer": {
     "unavailable": "Video nicht verfügbar"

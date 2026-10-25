@@ -11,7 +11,7 @@ import { useWakeLock } from '../../hooks/useWakeLock';
 import { getCreatorSettings, isUploadBlocked } from '../../utils/creatorSettings';
 import { useSupportBlock } from '../../lib/supportBlockStore';
 import { firePendingAnnouncement, getAnnounceConfig } from '../../utils/openpodAnnounce';
-import { publishStreamVod, trackServerVodPublish } from '../../utils/streamVod';
+import { publishStreamVod } from '../../utils/streamVod';
 import { usePremiumStatus } from '../../hooks/usePremiumStatus';
 import { defaultEndpoint, findRoomEndpoint } from '../../utils/hangoutsEndpoints';
 import AnnounceOptions from '../openpods/AnnounceOptions';
@@ -245,12 +245,9 @@ export default function OpenPodModal({ isOpen, onClose, roomName, sessionToken, 
               // video. Fire-and-forget into a module-level publisher so the
               // upload survives this modal unmounting when the room ends.
               onStreamVod={(file) => {
-                // Normal path: the server publishes the VOD itself — just track
-                // its progress and toast it.
-                if (file.publishStatusUrl) {
-                  void trackServerVodPublish({ statusUrl: file.publishStatusUrl });
-                  return;
-                }
+                // Normal path: the server publishes the VOD itself, even after
+                // the host closes the tab, so there's nothing to show here.
+                if (file.publishStatusUrl) return;
                 // Legacy fallback: an older server handed us the blob to upload.
                 const draft = readPostDraft();
                 void publishStreamVod({

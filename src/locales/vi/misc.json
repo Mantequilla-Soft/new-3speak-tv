@@ -201,13 +201,7 @@
     "uploadKeyMissing": "Buổi phát đã kết thúc, nhưng không thể tải video lên (thiếu khóa tải lên).",
     "uploading": "Đang tải video buổi phát lên… {{pct}}%",
     "uploaded": "Đã tải video buổi phát lên — video sẽ thay thế buổi phát trực tiếp khi mã hóa xong.",
-    "uploadFailed": "Buổi phát đã kết thúc, nhưng tải video lên thất bại.",
-    "saving": "Đang lưu video buổi phát…",
-    "encoding": "Đã tải lên — bộ mã hóa đang xử lý video của bạn…",
-    "saved": "Đã lưu video buổi phát — video sẽ thay thế buổi phát trực tiếp khi mã hóa xong.",
-    "saveFailed": "Buổi phát đã kết thúc, nhưng không thể lưu video: {{error}}.",
-    "uploadFailedShort": "tải lên thất bại",
-    "stillProcessing": "Buổi phát đã kết thúc — video vẫn đang được xử lý; hãy kiểm tra hồ sơ của bạn sau ít phút."
+    "uploadFailed": "Buổi phát đã kết thúc, nhưng tải video lên thất bại."
   },
   "embedPlayer": {
     "unavailable": "Video không khả dụng"
