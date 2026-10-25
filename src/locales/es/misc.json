@@ -138,7 +138,8 @@
     "contactLoadFailed": "No se pudieron cargar tus datos de contacto",
     "contactSaveFailed": "No se pudieron guardar tus datos de contacto",
     "onlyButrauthBacklog": "Solo una cuenta de Butter Auth puede tener publicaciones pendientes de incubación",
-    "publishFailed": "Falló la publicación ({{status}})"
+    "publishFailed": "Falló la publicación ({{status}})",
+    "duplicateComment": "Ya publicaste este comentario. Por favor, escribe algo nuevo."
   },
   "routeError": {
     "title": "Esta página no cargó",
@@ -201,13 +202,7 @@
     "uploadKeyMissing": "La transmisión terminó, pero no se pudo subir el video (falta la clave de subida).",
     "uploading": "Subiendo el video de tu transmisión… {{pct}}%",
     "uploaded": "Video de la transmisión subido: reemplazará la transmisión en vivo cuando termine la codificación.",
-    "uploadFailed": "La transmisión terminó, pero falló la subida del video.",
-    "saving": "Guardando el video de tu transmisión…",
-    "encoding": "Subido: el codificador está procesando tu video…",
-    "saved": "Video de la transmisión guardado: reemplazará la transmisión en vivo cuando termine la codificación.",
-    "saveFailed": "La transmisión terminó, pero no se pudo guardar el video: {{error}}.",
-    "uploadFailedShort": "falló la subida",
-    "stillProcessing": "La transmisión terminó; el video aún se está procesando. Revisa tu perfil en un rato."
+    "uploadFailed": "La transmisión terminó, pero falló la subida del video."
   },
   "embedPlayer": {
     "unavailable": "Video no disponible"

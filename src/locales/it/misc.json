@@ -138,7 +138,8 @@
     "contactLoadFailed": "Impossibile caricare i tuoi dati di contatto",
     "contactSaveFailed": "Impossibile salvare i tuoi dati di contatto",
     "onlyButrauthBacklog": "Solo un account Butter Auth può avere arretrati di incubazione",
-    "publishFailed": "Pubblicazione non riuscita ({{status}})"
+    "publishFailed": "Pubblicazione non riuscita ({{status}})",
+    "duplicateComment": "Hai già pubblicato questo commento. Scrivi qualcosa di nuovo."
   },
   "routeError": {
     "title": "Questa pagina non si è caricata",
@@ -201,13 +202,7 @@
     "uploadKeyMissing": "Diretta terminata, ma non è stato possibile caricare il video (manca la chiave di caricamento).",
     "uploading": "Caricamento del video della diretta… {{pct}}%",
     "uploaded": "Video della diretta caricato — sostituirà la diretta al termine della codifica.",
-    "uploadFailed": "Diretta terminata, ma il caricamento del video non è riuscito.",
-    "saving": "Salvataggio del video della diretta…",
-    "encoding": "Caricato — l'encoder sta elaborando il tuo video…",
-    "saved": "Video della diretta salvato — sostituirà la diretta al termine della codifica.",
-    "saveFailed": "Diretta terminata, ma non è stato possibile salvare il video: {{error}}.",
-    "uploadFailedShort": "caricamento non riuscito",
-    "stillProcessing": "Diretta terminata — il video è ancora in elaborazione; controlla il tuo profilo tra poco."
+    "uploadFailed": "Diretta terminata, ma il caricamento del video non è riuscito."
   },
   "embedPlayer": {
     "unavailable": "Video non disponibile"

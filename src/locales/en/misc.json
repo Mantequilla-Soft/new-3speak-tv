@@ -138,7 +138,8 @@
     "contactLoadFailed": "Could not load your contact details",
     "contactSaveFailed": "Could not save your contact details",
     "onlyButrauthBacklog": "Only a Butter Auth account can have an incubation backlog",
-    "publishFailed": "Publish failed ({{status}})"
+    "publishFailed": "Publish failed ({{status}})",
+    "duplicateComment": "You have already posted this comment. Please write something new."
   },
   "routeError": {
     "title": "This page didn't load",
@@ -201,13 +202,7 @@
     "uploadKeyMissing": "Stream ended, but the video could not be uploaded (upload key missing).",
     "uploading": "Uploading your stream video… {{pct}}%",
     "uploaded": "Stream video uploaded — it will replace the live stream once encoding finishes.",
-    "uploadFailed": "Stream ended, but the video upload failed.",
-    "saving": "Saving your stream video…",
-    "encoding": "Uploaded — the encoder is processing your video…",
-    "saved": "Stream video saved — it will replace the live stream once encoding finishes.",
-    "saveFailed": "Stream ended, but the video couldn't be saved: {{error}}.",
-    "uploadFailedShort": "upload failed",
-    "stillProcessing": "Stream ended — the video is still processing; check your profile shortly."
+    "uploadFailed": "Stream ended, but the video upload failed."
   },
   "embedPlayer": {
     "unavailable": "Video unavailable"

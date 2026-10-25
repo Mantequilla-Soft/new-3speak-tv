@@ -138,7 +138,8 @@
     "contactLoadFailed": "연락처 정보를 불러오지 못했어요",
     "contactSaveFailed": "연락처 정보를 저장하지 못했어요",
     "onlyButrauthBacklog": "Butter Auth 계정만 인큐베이션 미게시 목록을 가질 수 있어요",
-    "publishFailed": "게시 실패({{status}})"
+    "publishFailed": "게시 실패({{status}})",
+    "duplicateComment": "이미 게시한 댓글입니다. 새로운 내용을 작성해 주세요."
   },
   "routeError": {
     "title": "페이지를 불러오지 못했어요",
@@ -201,13 +202,7 @@
     "uploadKeyMissing": "방송은 종료되었지만 동영상을 업로드하지 못했어요(업로드 키 없음).",
     "uploading": "방송 동영상 업로드 중… {{pct}}%",
     "uploaded": "방송 동영상을 업로드했어요. 인코딩이 끝나면 라이브 방송을 대체해요.",
-    "uploadFailed": "방송은 종료되었지만 동영상 업로드에 실패했어요.",
-    "saving": "방송 동영상 저장 중…",
-    "encoding": "업로드 완료 — 인코더가 동영상을 처리하는 중이에요…",
-    "saved": "방송 동영상을 저장했어요. 인코딩이 끝나면 라이브 방송을 대체해요.",
-    "saveFailed": "방송은 종료되었지만 동영상을 저장하지 못했어요: {{error}}.",
-    "uploadFailedShort": "업로드 실패",
-    "stillProcessing": "방송 종료 — 동영상을 아직 처리하는 중이에요. 잠시 후 프로필을 확인하세요."
+    "uploadFailed": "방송은 종료되었지만 동영상 업로드에 실패했어요."
   },
   "embedPlayer": {
     "unavailable": "동영상을 사용할 수 없어요"

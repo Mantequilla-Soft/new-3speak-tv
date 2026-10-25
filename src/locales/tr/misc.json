@@ -138,7 +138,8 @@
     "contactLoadFailed": "İletişim bilgilerin yüklenemedi",
     "contactSaveFailed": "İletişim bilgilerin kaydedilemedi",
     "onlyButrauthBacklog": "Yalnızca Butter Auth hesaplarının bekleyen inkübasyon gönderileri olabilir",
-    "publishFailed": "Yayınlama başarısız ({{status}})"
+    "publishFailed": "Yayınlama başarısız ({{status}})",
+    "duplicateComment": "Bu yorumu zaten paylaştın. Lütfen yeni bir şey yaz."
   },
   "routeError": {
     "title": "Bu sayfa yüklenmedi",
@@ -201,13 +202,7 @@
     "uploadKeyMissing": "Yayın bitti ama video yüklenemedi (yükleme anahtarı eksik).",
     "uploading": "Yayın videon yükleniyor… %{{pct}}",
     "uploaded": "Yayın videosu yüklendi; kodlama bitince canlı yayının yerini alacak.",
-    "uploadFailed": "Yayın bitti ama video yüklenemedi.",
-    "saving": "Yayın videon kaydediliyor…",
-    "encoding": "Yüklendi; kodlayıcı videonu işliyor…",
-    "saved": "Yayın videosu kaydedildi; kodlama bitince canlı yayının yerini alacak.",
-    "saveFailed": "Yayın bitti ama video kaydedilemedi: {{error}}.",
-    "uploadFailedShort": "yükleme başarısız",
-    "stillProcessing": "Yayın bitti; video hâlâ işleniyor, birazdan profilini kontrol et."
+    "uploadFailed": "Yayın bitti ama video yüklenemedi."
   },
   "embedPlayer": {
     "unavailable": "Video kullanılamıyor"

@@ -138,7 +138,8 @@
     "contactLoadFailed": "Detail kontakmu tidak dapat dimuat",
     "contactSaveFailed": "Detail kontakmu tidak dapat disimpan",
     "onlyButrauthBacklog": "Hanya akun Butter Auth yang bisa punya antrean inkubasi",
-    "publishFailed": "Gagal menerbitkan ({{status}})"
+    "publishFailed": "Gagal menerbitkan ({{status}})",
+    "duplicateComment": "Kamu sudah memposting komentar ini. Silakan tulis sesuatu yang baru."
   },
   "routeError": {
     "title": "Halaman ini gagal dimuat",
@@ -201,13 +202,7 @@
     "uploadKeyMissing": "Siaran berakhir, tetapi videonya tidak dapat diunggah (kunci unggah tidak ada).",
     "uploading": "Mengunggah video siaranmu… {{pct}}%",
     "uploaded": "Video siaran diunggah — video ini akan menggantikan siaran live setelah encoding selesai.",
-    "uploadFailed": "Siaran berakhir, tetapi unggahan video gagal.",
-    "saving": "Menyimpan video siaranmu…",
-    "encoding": "Terunggah — encoder sedang memproses videomu…",
-    "saved": "Video siaran disimpan — video ini akan menggantikan siaran live setelah encoding selesai.",
-    "saveFailed": "Siaran berakhir, tetapi videonya tidak dapat disimpan: {{error}}.",
-    "uploadFailedShort": "gagal mengunggah",
-    "stillProcessing": "Siaran berakhir — videonya masih diproses; cek profilmu sebentar lagi."
+    "uploadFailed": "Siaran berakhir, tetapi unggahan video gagal."
   },
   "embedPlayer": {
     "unavailable": "Video tidak tersedia"

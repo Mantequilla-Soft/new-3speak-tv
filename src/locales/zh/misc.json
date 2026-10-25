@@ -138,7 +138,8 @@
     "contactLoadFailed": "无法加载你的联系信息",
     "contactSaveFailed": "无法保存你的联系信息",
     "onlyButrauthBacklog": "只有 Butter Auth 账号才能有孵化期待发布内容",
-    "publishFailed": "发布失败（{{status}}）"
+    "publishFailed": "发布失败（{{status}}）",
+    "duplicateComment": "你已经发过这条评论了，请写点新的内容。"
   },
   "routeError": {
     "title": "此页面没有加载出来",
@@ -201,13 +202,7 @@
     "uploadKeyMissing": "直播已结束，但视频无法上传（缺少上传密钥）。",
     "uploading": "正在上传你的直播视频… {{pct}}%",
     "uploaded": "直播视频已上传——编码完成后将替换直播。",
-    "uploadFailed": "直播已结束，但视频上传失败。",
-    "saving": "正在保存你的直播视频…",
-    "encoding": "已上传——编码器正在处理你的视频…",
-    "saved": "直播视频已保存——编码完成后将替换直播。",
-    "saveFailed": "直播已结束，但视频无法保存：{{error}}。",
-    "uploadFailedShort": "上传失败",
-    "stillProcessing": "直播已结束——视频仍在处理中，请稍后查看你的主页。"
+    "uploadFailed": "直播已结束，但视频上传失败。"
   },
   "embedPlayer": {
     "unavailable": "视频不可用"

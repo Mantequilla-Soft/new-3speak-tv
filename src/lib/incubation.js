@@ -64,10 +64,18 @@ export function handleAvatar(handle) {
   return DEFAULT_INCUBATION_AVATAR;
 }
 
+// Refusals a user can act on, shown in their own language. Any other reason
+// falls back to the service's English text.
+const REASON_MESSAGES = {
+  duplicate_comment: 'misc.incubation.duplicateComment',
+};
+
 async function json(res) {
   if (!res.ok) {
     const body = await res.json().catch(() => ({}));
-    const err = new Error(body.error || translate('misc.incubation.requestFailed', { status: res.status }));
+    const key = REASON_MESSAGES[body.reason];
+    const err = new Error(key ? translate(key)
+      : (body.error || translate('misc.incubation.requestFailed', { status: res.status })));
     err.status = res.status;
     err.reason = body.reason || null;
     throw err;

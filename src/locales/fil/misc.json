@@ -138,7 +138,8 @@
     "contactLoadFailed": "Hindi ma-load ang contact details mo",
     "contactSaveFailed": "Hindi ma-save ang contact details mo",
     "onlyButrauthBacklog": "Butter Auth account lang ang puwedeng magkaroon ng incubation backlog",
-    "publishFailed": "Pumalya ang pag-publish ({{status}})"
+    "publishFailed": "Pumalya ang pag-publish ({{status}})",
+    "duplicateComment": "Nai-post mo na ang komentong ito. Pakisulat ng bago."
   },
   "routeError": {
     "title": "Hindi nag-load ang page na ito",
@@ -201,13 +202,7 @@
     "uploadKeyMissing": "Tapos na ang stream, pero hindi ma-upload ang video (walang upload key).",
     "uploading": "Ina-upload ang stream video mo… {{pct}}%",
     "uploaded": "Na-upload ang stream video — papalitan nito ang live stream kapag tapos na ang encoding.",
-    "uploadFailed": "Tapos na ang stream, pero pumalya ang upload ng video.",
-    "saving": "Sine-save ang stream video mo…",
-    "encoding": "Na-upload na — pinoproseso ng encoder ang video mo…",
-    "saved": "Na-save ang stream video — papalitan nito ang live stream kapag tapos na ang encoding.",
-    "saveFailed": "Tapos na ang stream, pero hindi ma-save ang video: {{error}}.",
-    "uploadFailedShort": "pumalya ang upload",
-    "stillProcessing": "Tapos na ang stream — pinoproseso pa ang video; tingnan ang profile mo maya-maya."
+    "uploadFailed": "Tapos na ang stream, pero pumalya ang upload ng video."
   },
   "embedPlayer": {
     "unavailable": "Hindi available ang video"

@@ -138,7 +138,8 @@
     "contactLoadFailed": "Nie udało się wczytać twoich danych kontaktowych",
     "contactSaveFailed": "Nie udało się zapisać twoich danych kontaktowych",
     "onlyButrauthBacklog": "Zaległe posty z inkubacji może mieć tylko konto Butter Auth",
-    "publishFailed": "Publikacja nie powiodła się ({{status}})"
+    "publishFailed": "Publikacja nie powiodła się ({{status}})",
+    "duplicateComment": "Ten komentarz został już przez Ciebie opublikowany. Napisz coś nowego."
   },
   "routeError": {
     "title": "Ta strona się nie wczytała",
@@ -201,13 +202,7 @@
     "uploadKeyMissing": "Transmisja zakończona, ale nie udało się przesłać filmu (brak klucza przesyłania).",
     "uploading": "Przesyłanie filmu z transmisji… {{pct}}%",
     "uploaded": "Film z transmisji przesłany — zastąpi transmisję na żywo po zakończeniu kodowania.",
-    "uploadFailed": "Transmisja zakończona, ale przesyłanie filmu nie powiodło się.",
-    "saving": "Zapisywanie filmu z transmisji…",
-    "encoding": "Przesłano — enkoder przetwarza twój film…",
-    "saved": "Film z transmisji zapisany — zastąpi transmisję na żywo po zakończeniu kodowania.",
-    "saveFailed": "Transmisja zakończona, ale nie udało się zapisać filmu: {{error}}.",
-    "uploadFailedShort": "przesyłanie nie powiodło się",
-    "stillProcessing": "Transmisja zakończona — film jest jeszcze przetwarzany; zajrzyj wkrótce na swój profil."
+    "uploadFailed": "Transmisja zakończona, ale przesyłanie filmu nie powiodło się."
   },
   "embedPlayer": {
     "unavailable": "Film niedostępny"
