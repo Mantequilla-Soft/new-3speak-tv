@@ -407,7 +407,7 @@ function renderSection(s, theme) {
     const embed = `/embed/${esc(s.author)}/${esc(s.permlink)}${s.isShort ? '?short=1' : ''}`;
     const vcls = s.isShort ? 'vid vid-short' : 'vid';
     const frame = `<div class="${vcls}"><iframe src="${esc(embed)}" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div>`;
-    const watch = `https://3speak.tv/watch?v=${esc(s.author)}/${esc(s.permlink)}`;
+    const watch = `https://3speak.tv/@${esc(s.author)}/${esc(s.permlink)}`;
     const title = s.title
       ? `<a class="vtitle" href="${watch}" target="_blank" rel="noopener noreferrer nofollow">${esc(s.title)}</a>`
       : '';
@@ -553,7 +553,7 @@ transition:transform .12s,filter .12s,box-shadow .12s}
 ${displayName ? `<div class="hd">@${user}</div>` : ''}
 ${headline ? `<p class="bio">${esc(headline)}</p>` : ''}
 ${body}
-<a class="chbtn" href="/p/${user}">${footerText}</a>
+<a class="chbtn" href="/@${user}">${footerText}</a>
 </div></body></html>`;
 }
 

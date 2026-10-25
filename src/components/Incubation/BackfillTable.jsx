@@ -49,7 +49,7 @@ function friendlyError(detail, t) {
  */
 function previewHref(item, username) {
   if (!username || !item?.permlink) return null;
-  if (item.contentType === 'video') return `/watch?v=${username}/${item.permlink}`;
+  if (item.contentType === 'video') return `/@${username}/${item.permlink}`;
   if (item.contentType === 'short') return `/shorts?v=${username}/${item.permlink}`;
   return null;   // a reply or a like has no page of its own worth opening
 }

@@ -37,7 +37,7 @@ function AuthorProfile({ author, className = "", showAvatar = true, noLink = fal
 
   return (
     <Link
-      to={`/p/${author}`}
+      to={`/@${author}`}
       className={`author-profile ${className}`}
       onClick={(e) => e.stopPropagation()}
     >

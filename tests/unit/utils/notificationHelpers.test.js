@@ -14,7 +14,7 @@ describe('notification links', () => {
   })
 
   it('a profile url routes to the profile and is not a post', () => {
-    expect(getNotificationRoute({ url: '@alice' })).toBe('/p/alice')
+    expect(getNotificationRoute({ url: '@alice' })).toBe('/@alice')
     expect(getNotificationPostKey({ url: '@alice' })).toBeNull()
   })
 
@@ -24,7 +24,7 @@ describe('notification links', () => {
   })
 
   it('a bare author falls back to the profile', () => {
-    expect(getNotificationRoute({ url: 'alice' })).toBe('/p/alice')
+    expect(getNotificationRoute({ url: 'alice' })).toBe('/@alice')
     expect(getNotificationPostKey({ url: 'alice' })).toBeNull()
   })
 

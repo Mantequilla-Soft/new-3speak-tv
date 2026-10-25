@@ -58,9 +58,12 @@ import { useTranslation, Trans } from 'react-i18next';
 // line under it. See utils/toast.js.
 const toast = toastIn('Profile');
 
-function UserProfilePage() {
+// `user` comes as a prop on /@user (App.jsx parses it: the router cannot match
+// a segment that starts with "@"), else from the /p/:user route.
+function UserProfilePage({ user: userProp }) {
     const { t } = useTranslation();
-    const { user } = useParams();
+    const { user: routeUser } = useParams();
+    const user = userProp || routeUser;
     const [searchParams] = useSearchParams();
     const navigate = useNavigate()
     const openChat = useOpenChat()
@@ -884,7 +887,7 @@ const {
                       className="profile-fab-action-btn"
                       onClick={() => {
                         setFabOpen(false);
-                        navigate(`/watch?v=${latestVideo.author}/${latestVideo.permlink}`);
+                        navigate(`/@${latestVideo.author}/${latestVideo.permlink}`);
                       }}
                       aria-label={t('profile.fab.watchLatestVideo')}
                     >

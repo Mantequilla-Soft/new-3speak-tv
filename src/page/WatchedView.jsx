@@ -150,7 +150,7 @@ function WatchedView() {
           <div className="watched-details">
             <h1>{t('misc.watched.title')}</h1>
             <div className="watched-meta">
-              <Link to={`/p/${username}`} className="owner">
+              <Link to={`/@${username}`} className="owner">
                 @{username}
               </Link>
               <span className="separator">-</span>

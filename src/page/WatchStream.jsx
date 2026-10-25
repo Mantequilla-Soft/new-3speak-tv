@@ -271,7 +271,7 @@ export default function WatchStream() {
   // experience and the watch page's sidebar — where the chat would live — is
   // collapsed away anyway.
   if (!mobileLayout && state.hivePost) {
-    return <Navigate to={`/watch?v=${room.host}/${streamId}`} replace />;
+    return <Navigate to={`/@${room.host}/${streamId}`} replace />;
   }
   const host = room.host;
   // Set by the hangouts server on a stream started from OBS by a non-Pro host.

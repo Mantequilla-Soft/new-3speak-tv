@@ -24,6 +24,7 @@ import SettingsModal from "../SettingsModal/SettingsModal";
 import { ENABLE_BUTRAUTH } from "../../utils/config";
 import { useAvatarUrl } from "../../utils/avatarCache";
 import { isRememberedAdvertiser, rememberAdvertiserAccount, hasAdvertiserProduct } from "../../utils/advertiserAccount";
+import { isWatchPath } from '../../utils/urls';
 
 function NavPlaylistsDropdown({ user, scrollerRef }) {
   const { t } = useTranslation();
@@ -360,11 +361,11 @@ function Nav({ toggleProfileNav, openLoginModal }) {
   }, []);
 
   // The top nav stays locked/visible — no scroll-based auto-hide (it flickered).
-  // The only time it hides is immersive landscape video on /watch, which is
+  // The only time it hides is immersive landscape video on the watch page, which is
   // orientation-driven (not scroll-driven), so there's nothing to flicker.
   useEffect(() => {
     const landscapeQuery = window.matchMedia('(orientation: landscape) and (max-height: 500px)');
-    const apply = () => setNavHidden(location.pathname === '/watch' && landscapeQuery.matches);
+    const apply = () => setNavHidden(isWatchPath(location.pathname) && landscapeQuery.matches);
     apply();
     landscapeQuery.addEventListener('change', apply);
     return () => landscapeQuery.removeEventListener('change', apply);

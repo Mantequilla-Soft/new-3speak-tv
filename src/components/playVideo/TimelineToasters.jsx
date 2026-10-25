@@ -13,8 +13,8 @@ const MAX_VISIBLE = 3;
 
 /** Where an in-app toaster goes, or null for an external link. */
 export function timelineLinkPath(link) {
-  if (link.kind === 'video') return `/watch?v=${link.author}/${link.permlink}`;
-  if (link.kind === 'profile') return `/p/${link.account}`;
+  if (link.kind === 'video') return `/@${link.author}/${link.permlink}`;
+  if (link.kind === 'profile') return `/@${link.account}`;
   return null;
 }
 

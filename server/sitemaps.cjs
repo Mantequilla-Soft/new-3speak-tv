@@ -101,7 +101,7 @@ const SERIES = {
     sort: { created: 1 },
     fields: LEGACY_FIELDS,
     entry: (d) => ({
-      path: `watch?v=${d.owner}/${d.permlink}`,
+      path: `@${d.owner}/${d.permlink}`,
       player: `${d.owner}/${d.permlink}`,
       author: d.owner,
       title: d.title,
@@ -118,7 +118,7 @@ const SERIES = {
     fields: EMBED_FIELDS,
     // Long-form plays at the Hive post's address, like the feeds link it.
     entry: (d) => ({
-      path: `watch?v=${d.hive_author}/${d.hive_permlink}`,
+      path: `@${d.hive_author}/${d.hive_permlink}`,
       player: `${d.hive_author}/${d.hive_permlink}`,
       author: d.hive_author,
       title: d.hive_title,
@@ -224,7 +224,7 @@ function urlEntry(base, e) {
       + (seconds >= 1 && seconds <= 28800 ? `<video:duration>${seconds}</video:duration>` : '')
       + (published ? `<video:publication_date>${published}</video:publication_date>` : '')
       + (e.gated ? '<video:requires_subscription>yes</video:requires_subscription>' : '')
-      + (e.author ? `<video:uploader info="${xml(`${base}/user/${e.author}`)}">@${xml(e.author)}</video:uploader>` : '')
+      + (e.author ? `<video:uploader info="${xml(`${base}/@${e.author}`)}">@${xml(e.author)}</video:uploader>` : '')
       + '</video:video>'
   }
   return `  <url><loc>${xml(loc)}</loc>${day ? `<lastmod>${day}</lastmod>` : ''}${video}</url>`
@@ -363,7 +363,7 @@ function mountSitemaps(app, { uri, dbName }) {
       .slice(0, 50000)
       .map(([name, last]) => {
         const day = isoDay(last)
-        return `  <url><loc>${xml(`${base}/user/${name}`)}</loc>${day ? `<lastmod>${day}</lastmod>` : ''}</url>`
+        return `  <url><loc>${xml(`${base}/@${name}`)}</loc>${day ? `<lastmod>${day}</lastmod>` : ''}</url>`
       })
     return urlset(lines, false)
   }

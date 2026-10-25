@@ -729,7 +729,7 @@ function buildOgHtml({
     thumbnailUrl: image,
     embedUrl,
     url: canonical,
-    author: { '@type': 'Person', name: `@${author}`, url: `${BASE_URL}/user/${author}` },
+    author: { '@type': 'Person', name: `@${author}`, url: `${BASE_URL}/@${author}` },
     publisher: {
       '@type': 'Organization',
       name: '3Speak',
@@ -773,7 +773,7 @@ function buildOgHtml({
   // bare ?v= address.
   const breadcrumbs = breadcrumbLd([
     ['3Speak', `${CANONICAL_ORIGIN}/`],
-    [`@${author}`, `${CANONICAL_ORIGIN}/user/${author}`],
+    [`@${author}`, `${CANONICAL_ORIGIN}/@${author}`],
     [title, canonical],
   ]);
   const jsonLd = ldScript(noindex ? ld : [ld, breadcrumbs]);
@@ -813,7 +813,7 @@ function buildOgHtml({
   // Other videos, so a crawler that lands here can walk on into the catalogue.
   const relatedSection = Array.isArray(related) && related.length
     ? `\n  <section>\n    <h2>More videos on 3Speak</h2>\n    <ul>\n${related
-        .map((r) => `      <li><a href="${escapeHtml(`${origin}/watch?v=${r.author}/${r.permlink}`)}">${escapeHtml(r.title)}</a> by @${escapeHtml(r.author)}</li>`)
+        .map((r) => `      <li><a href="${escapeHtml(`${origin}/@${r.author}/${r.permlink}`)}">${escapeHtml(r.title)}</a> by @${escapeHtml(r.author)}</li>`)
         .join('\n')}\n    </ul>\n  </section>`
     : '';
 
@@ -852,7 +852,7 @@ function buildOgHtml({
 </head>
 <body>
   <h1>${safeTitle}</h1>${playerFrame}
-  <p><a href="${safeUrl}">${safeTitle}</a> by <a href="${escapeHtml(`${origin}/user/${author}`)}">@${safeAuthor}</a> on <a href="${escapeHtml(origin)}">3Speak</a></p>
+  <p><a href="${safeUrl}">${safeTitle}</a> by <a href="${escapeHtml(`${origin}/@${author}`)}">@${safeAuthor}</a> on <a href="${escapeHtml(origin)}">3Speak</a></p>
   <p>${safeDesc}</p>${tagLine}${chaptersSection}${transcriptSection}${commentsSection}${relatedSection}
 </body>
 </html>`;
@@ -1128,7 +1128,7 @@ async function servePublicOembed(req, res, url, origin) {
     type: 'video',
     title: card.title,
     author_name: video.author,
-    author_url: `${origin}/user/${video.author}`,
+    author_url: `${origin}/@${video.author}`,
     provider_name: '3Speak',
     provider_url: `${origin}/`,
     cache_age: 3600,
@@ -1166,7 +1166,7 @@ async function serveOembed(req, res, url, origin) {
     // generic line.
     if (/^[a-z0-9][a-z0-9.-]{1,15}$/.test(author) && permlink) {
       const post = await fetchHivePost(author, permlink).catch(() => null);
-      if (post) entry = { description: extractDescription(post.body), url: `${origin}/watch?v=${author}/${permlink}` };
+      if (post) entry = { description: extractDescription(post.body), url: `${origin}/@${author}/${permlink}` };
     }
   }
   const text = (entry && entry.description) || (author ? `A video by @${author} on 3Speak` : '3Speak');
@@ -1283,9 +1283,12 @@ async function resolveVideoCard(video, origin) {
     ? extractDescription(post.body)
     : `A ${kindLabel.toLowerCase()} by @${video.author} on 3Speak.`;
 
-  // og:url is the exact route that was shared (/watch, /shorts or
-  // /shorts/stories), keeping the original permlink so the link opens right.
-  const selfUrl = `${origin}/${video.routePath}?v=${video.author}/${video.permlink}`;
+  // og:url is the exact route that was shared (a video at /@author/permlink,
+  // whichever of its two addresses was used; /shorts or /shorts/stories),
+  // keeping the original permlink so the link opens right.
+  const selfUrl = video.kind === 'watch'
+    ? `${origin}/@${video.author}/${video.permlink}`
+    : `${origin}/${video.routePath}?v=${video.author}/${video.permlink}`;
   // rel=canonical is ONE address per video, whichever way it was reached:
   //   - a short by its asset id, as the sitemap lists it. Its Hive post body
   //     links /shorts?v=<author>/<hive permlink>, which is the same short.
@@ -1298,9 +1301,9 @@ async function resolveVideoCard(video, origin) {
       ? `shorts?v=${embed.owner}/${embed.permlink}`
       : `shorts?v=${video.author}/${video.permlink}`;
   } else if (post) {
-    canonicalPath = `watch?v=${post.author}/${post.permlink}`;
+    canonicalPath = `@${post.author}/${post.permlink}`;
   } else {
-    canonicalPath = `watch?v=${embed.owner || video.author}/${embed.permlink || video.permlink}`;
+    canonicalPath = `@${embed.owner || video.author}/${embed.permlink || video.permlink}`;
   }
   const canonicalUrl = resolveCanonical(meta, `${CANONICAL_ORIGIN}/${canonicalPath}`);
   const duration = videoInfo.duration || (embed && embed.duration) || null;

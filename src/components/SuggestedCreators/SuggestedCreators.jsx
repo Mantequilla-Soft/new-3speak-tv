@@ -192,10 +192,10 @@ export default function SuggestedCreators({ variant = 'discover' }) {
             const followers = fmtFollowers(followerCounts[c.name]);
             return (
               <div className="sc-card" key={c.name}>
-                <Link to={`/p/${c.name}`} className="sc-avatar" title={`@${c.name}`}>
+                <Link to={`/@${c.name}`} className="sc-avatar" title={`@${c.name}`}>
                   <HiveAvatar username={c.name} size={null} alt="" badgeSize={12} />
                 </Link>
-                <Link to={`/p/${c.name}`} className="sc-name" title={`@${c.name}`}>@{c.name}</Link>
+                <Link to={`/@${c.name}`} className="sc-name" title={`@${c.name}`}>@{c.name}</Link>
                 {c.basis && (
                   <span className="sc-basis" title={t('profile.creators.mostlyPosts', { topic: getTagLabel(c.basis) })}>
                     <span className="sc-basis-emoji">{getTagEmoji(c.basis)}</span>

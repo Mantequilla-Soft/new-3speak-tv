@@ -75,7 +75,7 @@ export const videoKey = (v) => {
 };
 
 export const surfUrl = (v, slug) =>
-  `/watch?v=${videoAuthor(v)}/${v.permlink}&${SURF_PARAM}=${encodeURIComponent(slug)}`;
+  `/@${videoAuthor(v)}/${v.permlink}?${SURF_PARAM}=${encodeURIComponent(slug)}`;
 
 // ── Seen this session ──────────────────────────────────────────────────────────
 // sessionStorage, not local: a fresh tab is a fresh evening in front of the TV.

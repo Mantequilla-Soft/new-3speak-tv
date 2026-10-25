@@ -16,6 +16,7 @@ import { createPortal } from "react-dom";
 import PremiumBadge from "../PremiumBadge/PremiumBadge";
 import { usePwaInstall } from "../../utils/pwaInstall";
 import "./BottomNav.scss";
+import { isWatchPath } from '../../utils/urls';
 
 
 const BottomNav = ({ openLoginModal, onOpenProfileMenu, profileMenuOpen }) => {
@@ -72,7 +73,7 @@ const BottomNav = ({ openLoginModal, onOpenProfileMenu, profileMenuOpen }) => {
 
   return createPortal(
     <>
-    <nav className={`bottom-nav${path === '/watch' ? ' bottom-nav--watch' : ''}`} ref={menuRef}>
+    <nav className={`bottom-nav${isWatchPath(path) ? ' bottom-nav--watch' : ''}`} ref={menuRef}>
       <Link to="/" className={`bottom-nav-item ${isActive("/") ? "active" : ""}`}>
         <span className="bottom-nav-icon-wrap">
           <FaChartBar className="bottom-nav-icon bottom-nav-icon--feeds" />

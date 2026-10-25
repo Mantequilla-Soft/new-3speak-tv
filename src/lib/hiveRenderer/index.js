@@ -25,7 +25,7 @@ function getRenderer(key, embeds) {
         ],
         convertHiveUrls: true,
         internalUrlPrefix: '',
-        usertagUrlFn: (account) => `/p/${account}`,
+        usertagUrlFn: (account) => `/@${account}`,
         hashtagUrlFn: (tag) => `/t/${tag}`,
         embeds,
       })

@@ -11,7 +11,7 @@ const VideoCard = ({  video, onEdit, onView, onDelete, onPublish}) => {
   const { t } = useTranslation();
   const navigate = useNavigate()
   const handleNavigate = ()=>{
-    navigate(`/watch?v=${video?.owner}/${video.permlink ?? "unknown"}`)
+    navigate(`/@${video?.owner}/${video.permlink ?? "unknown"}`)
   }
   const getStatusLabel = (status) => {
   switch (status) {

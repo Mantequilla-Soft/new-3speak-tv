@@ -244,7 +244,7 @@ ${body}
     const shareName = displayName === account || displayName === `@${account}` ? `@${account}` : displayName;
     const ogTitle = `${shareName} on 3speak.tv`;
 
-    const canonical = `${CANONICAL_ORIGIN}/user/${account}`;
+    const canonical = `${CANONICAL_ORIGIN}/@${account}`;
     const selfUrl = origin + req.url;
     // The channel's share image (og-cards.cjs: picture, name, @handle), drawn
     // on its first fetch and kept. Only the image: a channel trailer is not
@@ -256,13 +256,13 @@ ${body}
     // something to link as one.
     const channelVideos = ((uploads && uploads.data && uploads.data.videos) || [])
       .filter((v) => v && v.permlink && v.title && !v.isNsfwContent)
-      .map((v) => ({ title: v.title, href: `${origin}/watch?v=${v.author || v.owner || account}/${v.permlink}` }));
+      .map((v) => ({ title: v.title, href: `${origin}/@${v.author || v.owner || account}/${v.permlink}` }));
     const fromPosts = (Array.isArray(posts) ? posts : [])
       .map((post) => {
         const meta = parseMeta(post.json_metadata);
         const href = meta.audio
           ? `${origin}/audio/${post.author}/${post.permlink}`
-          : meta.video ? `${origin}/watch?v=${post.author}/${post.permlink}` : null;
+          : meta.video ? `${origin}/@${post.author}/${post.permlink}` : null;
         return href ? { title: post.title || post.permlink, href } : null;
       })
       .filter(Boolean);
@@ -351,17 +351,17 @@ ${body}
     const shared = drawnCard(cardUrl(origin, 'playlist', card.id), `${card.name} on 3Speak`);
     const itemUrl = (i) => (i.kind === 'audio'
       ? `${origin}/audio/${i.author}/${i.permlink}`
-      : `${origin}/watch?v=${i.author}/${i.permlink}`);
+      : `${origin}/@${i.author}/${i.permlink}`);
 
     const ogType = isAlbum ? 'music.album' : card.medium === 'video' ? 'website' : 'music.playlist';
     const ogExtra = isAlbum
-      ? [['music:musician', `${origin}/user/${card.owner}`], ['music:release_date', card.album.year ? String(card.album.year) : null]]
-      : [['music:creator', card.medium === 'video' ? null : `${origin}/user/${card.owner}`]];
+      ? [['music:musician', `${origin}/@${card.owner}`], ['music:release_date', card.album.year ? String(card.album.year) : null]]
+      : [['music:creator', card.medium === 'video' ? null : `${origin}/@${card.owner}`]];
     items.slice(0, 10).forEach((i) => {
       if (i.kind === 'audio' && ogType !== 'website') ogExtra.push(['music:song', itemUrl(i)]);
     });
 
-    const owner = { '@type': 'Person', name: `@${card.owner}`, url: `${origin}/user/${card.owner}` };
+    const owner = { '@type': 'Person', name: `@${card.owner}`, url: `${origin}/@${card.owner}` };
     const jsonLd = isAlbum
       ? {
         '@context': 'https://schema.org',
@@ -394,7 +394,7 @@ ${body}
 
     const crumbs = breadcrumbLd([
       ['3Speak', `${CANONICAL_ORIGIN}/`],
-      [`@${card.owner}`, `${CANONICAL_ORIGIN}/user/${card.owner}`],
+      [`@${card.owner}`, `${CANONICAL_ORIGIN}/@${card.owner}`],
       [card.name, canonical],
     ]);
 
@@ -405,7 +405,7 @@ ${body}
         .join('\n')}\n    </ol>\n  </section>`
       : '';
     const body = `  <h1>${escapeHtml(card.name)}</h1>
-  <p>${escapeHtml(what)} by <a href="${escapeHtml(`${origin}/user/${card.owner}`)}">@${escapeHtml(card.owner)}</a> on 3Speak · ${escapeHtml(noun)}</p>${
+  <p>${escapeHtml(what)} by <a href="${escapeHtml(`${origin}/@${card.owner}`)}">@${escapeHtml(card.owner)}</a> on 3Speak · ${escapeHtml(noun)}</p>${
     card.description ? `\n  <p>${escapeHtml(clip(card.description, 2000))}</p>` : ''}${list}`;
 
     return buildHtml({
@@ -495,7 +495,7 @@ ${body}
     if (audio) {
       ogExtra.push(['og:audio', audio.url], ['og:audio:secure_url', audio.url], ['og:audio:type', audio.type]);
     }
-    ogExtra.push(['music:duration', duration], ['music:musician', `${origin}/user/${author}`], ['music:album', albumUrl]);
+    ogExtra.push(['music:duration', duration], ['music:musician', `${origin}/@${author}`], ['music:album', albumUrl]);
 
     const jsonLd = {
       '@context': 'https://schema.org',
@@ -506,7 +506,7 @@ ${body}
       thumbnailUrl: image,
       ...(toIsoDate(post.created) ? { uploadDate: toIsoDate(post.created) } : {}),
       ...(secondsToISO8601(duration) ? { duration: secondsToISO8601(duration) } : {}),
-      author: { '@type': 'Person', name: `@${author}`, url: `${origin}/user/${author}` },
+      author: { '@type': 'Person', name: `@${author}`, url: `${origin}/@${author}` },
     };
     if (audio) {
       if (isSong) {
@@ -521,12 +521,12 @@ ${body}
 
     const crumbs = breadcrumbLd([
       ['3Speak', `${CANONICAL_ORIGIN}/`],
-      [`@${author}`, `${CANONICAL_ORIGIN}/user/${author}`],
+      [`@${author}`, `${CANONICAL_ORIGIN}/@${author}`],
       [title, canonical],
     ]);
 
     const body = `  <h1>${escapeHtml(title)}</h1>
-  <p><a href="${escapeHtml(`${origin}/audio/${author}/${permlink}`)}">${escapeHtml(title)}</a> by <a href="${escapeHtml(`${origin}/user/${author}`)}">@${escapeHtml(author)}</a> on 3Speak${
+  <p><a href="${escapeHtml(`${origin}/audio/${author}/${permlink}`)}">${escapeHtml(title)}</a> by <a href="${escapeHtml(`${origin}/@${author}`)}">@${escapeHtml(author)}</a> on 3Speak${
     albumUrl && doc.playlist_name ? `, from <a href="${escapeHtml(albumUrl)}">${escapeHtml(doc.playlist_name)}</a>` : ''}</p>
   <p>${escapeHtml(plainText(post.body, 2000) || description)}</p>`;
 
@@ -607,7 +607,7 @@ ${body}
       noindex: true,
       body: `  <h1>${escapeHtml(title)}</h1>
   <p>${escapeHtml(description)}</p>
-  <p>By <a href="${escapeHtml(`${origin}/user/${room.host}`)}">@${escapeHtml(room.host)}</a></p>`,
+  <p>By <a href="${escapeHtml(`${origin}/@${room.host}`)}">@${escapeHtml(room.host)}</a></p>`,
     });
   }
 

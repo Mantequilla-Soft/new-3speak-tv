@@ -364,7 +364,7 @@ function CommunitiesRender() {
                       {a.latest.map((v) => (
                         <Link
                           key={`${v.author}/${v.permlink}`}
-                          to={`/watch?v=${v.author}/${v.permlink}`}
+                          to={`/@${v.author}/${v.permlink}`}
                           className="blog-activity-thumb"
                           title={t('communities.directory.videoBy', { title: v.title, author: v.author })}
                           onClick={(e) => e.stopPropagation()}

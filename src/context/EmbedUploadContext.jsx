@@ -1698,7 +1698,7 @@ export function EmbedUploadProvider({ children }) {
       // wrote "v=null/..." into every warm-up post (issue #502).
       const watchPath = fromStories
         ? `/shorts?v=${assetOwner}/${hivePermlink}`
-        : `/watch?v=${assetOwner}/${hivePermlink}`;
+        : `/@${assetOwner}/${hivePermlink}`;
       postBody += `\n\n---\n▶ [Watch on 3speak.tv](https://3speak.tv${watchPath})`;
 
       // The creator's banner under it, long-form only: the auto-updating

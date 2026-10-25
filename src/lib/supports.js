@@ -178,7 +178,7 @@ export function supportItemLink(item) {
   if (item.kind === 'short' || item.video?.short) {
     return `/shorts?v=${item.author}/${item.video?.asset_permlink || item.permlink}`;
   }
-  return `/watch?v=${item.author}/${item.permlink}`;
+  return `/@${item.author}/${item.permlink}`;
 }
 
 // HBD with Hive's 3 decimals. A tiny HIVE tip can be worth less than 0.001 HBD:

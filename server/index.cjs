@@ -2720,7 +2720,7 @@ async function recentHivePosts(account, count) {
     if (!/^https?:\/\//i.test(image)) image = `https://images.hive.blog/u/${account}/avatar`
     const isVideo = /3speak/i.test(String(jm.app || '')) || !!jm.video
     items.push({
-      url: isVideo ? `https://3speak.tv/watch?v=${p.author}/${p.permlink}` : `https://peakd.com/@${p.author}/${p.permlink}`,
+      url: isVideo ? `https://3speak.tv/@${p.author}/${p.permlink}` : `https://peakd.com/@${p.author}/${p.permlink}`,
       title: (p.title || 'Untitled').slice(0, 160),
       description: hiveExcerpt(p.body).slice(0, 170),
       image,

@@ -23,7 +23,7 @@ function Recommended({suggestedVideos}) {
 
         return (
           <Link
-            to={`/watch?v=${author}/${data.permlink ?? "unknown"}`}
+            to={`/@${author}/${data.permlink ?? "unknown"}`}
             key={`${author}-${data.permlink}-${index}`}
             className="side-video-link"
           >

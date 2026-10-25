@@ -397,7 +397,7 @@ export default function CreatorStats({ user }) {
                   const toggle = () => setSelected(selected?.permlink === v.permlink ? null : v);
                   // Clicking the TITLE opens the video/short in a new tab; clicking the
                   // rest of the row shows its analytics below.
-                  const watchUrl = `/${v.short ? 'shorts' : 'watch'}?v=${user}/${v.permlink}`;
+                  const watchUrl = v.short ? `/shorts?v=${user}/${v.permlink}` : `/@${user}/${v.permlink}`;
                   return (
                     <div
                       key={v.permlink}

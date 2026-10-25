@@ -31,8 +31,10 @@ const cache = new Map();
  * a "no such account" error at every visitor arriving from a comment thread,
  * which is precisely the audience this exists for.
  */
-export default function ProfileRouter() {
-  const { user } = useParams();
+export default function ProfileRouter({ user: userProp }) {
+  // A prop on /@user (see App.jsx), the route param on /p/:user and /user/:user.
+  const { user: routeUser } = useParams();
+  const user = userProp || routeUser;
   const handle = String(user || '').toLowerCase();
   const myHandle = useAppStore((s) => s.incubationHandle);
   const [verdict, setVerdict] = useState(() => cache.get(handle) ?? null);
@@ -70,7 +72,7 @@ export default function ProfileRouter() {
   if (verdict === 'incubating') return <IncubatingProfile handle={handle} />;
   return (
     <Suspense fallback={null}>
-      <UserProfilePage />
+      <UserProfilePage user={user} />
     </Suspense>
   );
 }

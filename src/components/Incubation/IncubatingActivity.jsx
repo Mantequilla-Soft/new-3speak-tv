@@ -169,7 +169,7 @@ export default function IncubatingActivity({ handle, tab, onCount }) {
                   half a sentence, and the whole reason somebody opens this tab
                   is to see what this person engages with. */}
               {c.parentAuthor && c.parentPermlink && (
-                <Link to={`/watch?v=${key}`} className="inc-comment-parent">
+                <Link to={`/@${key}`} className="inc-comment-parent">
                   {parent?.image
                     ? <img src={parent.image} alt="" loading="lazy" />
                     : <span className="inc-comment-thumb-blank" aria-hidden="true" />}

@@ -68,7 +68,7 @@ function Podium({ entries, metric, focusUser }) {
       ) : (
         <Link
           key={e.user}
-          to={`/user/${e.user}`}
+          to={`/@${e.user}`}
           id={rowId(e.user)}
           className={`lb-podium-slot lb-rank-${e.rank}${e.user === focusUser ? ' focused' : ''}`}
         >
@@ -86,7 +86,7 @@ function Podium({ entries, metric, focusUser }) {
 function Row({ entry, metric, isMe, focused }) {
   return (
     <Link
-      to={`/user/${entry.user}`}
+      to={`/@${entry.user}`}
       id={rowId(entry.user)}
       className={`lb-row${isMe ? ' me' : ''}${focused ? ' focused' : ''}`}
     >

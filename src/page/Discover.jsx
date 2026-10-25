@@ -300,7 +300,7 @@ const Discover = () => {
     if (suggestion.type === 'title' && suggestion.author && suggestion.permlink) {
       const path = suggestion.content_type === 'short'
         ? `/shorts?v=${suggestion.author}/${suggestion.permlink}`
-        : `/watch?v=${suggestion.author}/${suggestion.permlink}`;
+        : `/@${suggestion.author}/${suggestion.permlink}`;
       setShowSuggestions(false);
       navigate(path);
       return;
@@ -674,7 +674,7 @@ const Discover = () => {
                   ) : type.key === 'user' ? (
                     <div className="discover-user-list">
                       {items.map(u => (
-                        <Link to={`/p/${u.username}`} key={u.username} className="discover-user-card">
+                        <Link to={`/@${u.username}`} key={u.username} className="discover-user-card">
                           <div className="discover-user-avatar">
                             {u.profile_image ? (
                               <img src={u.profile_image} alt="" loading="lazy" onError={(e) => { e.target.style.display = 'none'; }} />
@@ -708,7 +708,7 @@ const Discover = () => {
                     <div className="discover-media-list">
                       {items.map((item, i) => (
                         <Link
-                          to={type.key === 'short' ? `/shorts?v=${item.author}/${item.permlink}` : `/watch?v=${item.author}/${item.permlink}`}
+                          to={type.key === 'short' ? `/shorts?v=${item.author}/${item.permlink}` : `/@${item.author}/${item.permlink}`}
                           key={`${item.author}-${item.permlink}-${i}`}
                           className="discover-media-card"
                         >

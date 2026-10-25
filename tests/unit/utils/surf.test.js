@@ -108,7 +108,7 @@ describe('community channels', () => {
 describe('urls, keys and storage', () => {
   it('builds the watch URL with the channel in it', async () => {
     const { surfUrl, videoKey, videoAuthor } = await load()
-    expect(surfUrl(v('alice', 'p1'), 'music & art')).toBe('/watch?v=alice/p1&surf=music%20%26%20art')
+    expect(surfUrl(v('alice', 'p1'), 'music & art')).toBe('/@alice/p1?surf=music%20%26%20art')
     expect(videoAuthor({ author: 'bob' })).toBe('bob')
     expect(videoAuthor({ owner: 'carol' })).toBe('carol')
     expect(videoKey({ permlink: 'p' })).toBeNull()

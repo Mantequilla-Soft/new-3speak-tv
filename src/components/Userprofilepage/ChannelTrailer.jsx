@@ -197,7 +197,7 @@ export default function ChannelTrailer({ username, isOwnProfile = false, onOpenC
           video. Anything cut off is one click away on the watch page. */}
       <div className="channel-trailer-meta">
         {post?.title ? (
-          <Link className="ct-title" to={`/watch?v=${author}/${permlink}`}>{post.title}</Link>
+          <Link className="ct-title" to={`/@${author}/${permlink}`}>{post.title}</Link>
         ) : null}
         {(views != null || post?.created_at) ? (
           <div className="ct-sub">
@@ -211,7 +211,7 @@ export default function ChannelTrailer({ username, isOwnProfile = false, onOpenC
             long post always has a way out to the full text on the watch page —
             same destination as clicking the title. */}
         {description ? (
-          <Link className="ct-readmore" to={`/watch?v=${author}/${permlink}`}>{t('profile.trailer.readMore')}</Link>
+          <Link className="ct-readmore" to={`/@${author}/${permlink}`}>{t('profile.trailer.readMore')}</Link>
         ) : null}
       </div>
 

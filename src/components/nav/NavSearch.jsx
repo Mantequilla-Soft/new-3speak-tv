@@ -208,7 +208,7 @@ function NavSearch() {
     if (suggestion.type === 'title' && suggestion.author && suggestion.permlink) {
       const path = suggestion.content_type === 'short'
         ? `/shorts?v=${suggestion.author}/${suggestion.permlink}`
-        : `/watch?v=${suggestion.author}/${suggestion.permlink}`;
+        : `/@${suggestion.author}/${suggestion.permlink}`;
       setShowSuggestions(false);
       setSearchTerm('');
       setDebouncedTerm('');
@@ -596,7 +596,7 @@ function NavSearch() {
                       ) : st.key === 'user' ? (
                         <div className="discover-user-list">
                           {items.map(u => (
-                            <Link to={`/p/${u.username}`} key={u.username} className="discover-user-card" onClick={closePanel}>
+                            <Link to={`/@${u.username}`} key={u.username} className="discover-user-card" onClick={closePanel}>
                               <div className="discover-user-avatar">
                                 {u.profile_image ? <img src={u.profile_image} alt="" loading="lazy" onError={(e) => { e.target.style.display = 'none'; }} /> : <MdPerson size={24} />}
                               </div>
@@ -626,7 +626,7 @@ function NavSearch() {
                         <div className="discover-media-list">
                           {items.map((item, i) => (
                             <Link
-                              to={st.key === 'short' ? `/shorts?v=${item.author}/${item.permlink}` : `/watch?v=${item.author}/${item.permlink}`}
+                              to={st.key === 'short' ? `/shorts?v=${item.author}/${item.permlink}` : `/@${item.author}/${item.permlink}`}
                               key={`${item.author}-${item.permlink}-${i}`}
                               className="discover-media-card"
                               onClick={closePanel}

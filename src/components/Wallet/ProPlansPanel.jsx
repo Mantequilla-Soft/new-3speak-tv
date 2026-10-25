@@ -59,7 +59,7 @@ export default function ProPlansPanel() {
       }}
     >
       <ProPlans
-        onSelectUser={(u) => navigate(`/p/${u}`)}
+        onSelectUser={(u) => navigate(`/@${u}`)}
         onNotify={(kind, message) => (kind === 'success' ? toast.success(message) : toast.error(message))}
       />
     </HangoutsProvider>

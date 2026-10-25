@@ -87,7 +87,7 @@ function VideoBlock({ section, radius, fx, theme }) {
     padding: section.padding != null ? num(section.padding) : 10,
     ...fx,
   };
-  const watch = `https://3speak.tv/watch?v=${author}/${permlink}`;
+  const watch = `https://3speak.tv/@${author}/${permlink}`;
   return (
     <div className={`sp-video-card${isShort ? ' short' : ''}`} style={cardStyle}>
       {section.title ? (
@@ -242,7 +242,7 @@ export default function Spotlight() {
   return (
     <div className="spotlight-page" style={pageStyle}>
       <div className="sp-inner">
-        <Link to={`/p/${username}`} className="sp-avatar" title={`@${username}`}>
+        <Link to={`/@${username}`} className="sp-avatar" title={`@${username}`}>
           <HiveAvatar username={username} size={null} alt={`@${username}`} badgeSize={18} />
         </Link>
         <h1 className="sp-name">{profileName || `@${username}`}</h1>
@@ -261,7 +261,7 @@ export default function Spotlight() {
           <p className="sp-empty">{t('spotlight.page.empty', { user: username })}</p>
         )}
 
-        <Link to={`/p/${username}`} className="sp-profile-link">{t('spotlight.page.viewProfile')}</Link>
+        <Link to={`/@${username}`} className="sp-profile-link">{t('spotlight.page.viewProfile')}</Link>
         <div className="sp-brand"><Link to="/">{t('spotlight.page.poweredBy')}</Link></div>
       </div>
     </div>

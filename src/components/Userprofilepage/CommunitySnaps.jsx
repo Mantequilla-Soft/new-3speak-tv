@@ -271,7 +271,7 @@ function SnapComment({ comment }) {
   return (
     <li className="snap-comment">
       <div className="snap-comment-head">
-        <Link to={`/p/${comment.author}`} className="snap-comment-author">@{comment.author}</Link>
+        <Link to={`/@${comment.author}`} className="snap-comment-author">@{comment.author}</Link>
         <span className="snap-comment-time">{hiveTime(comment.created)}</span>
       </div>
       <div className="snap-comment-body markdown-body" dangerouslySetInnerHTML={{ __html: html }} />
@@ -625,7 +625,7 @@ export function SnapCard({ snap, feedMode = false, showAuthor = false, onRemove,
         {feedMode && <span className="snap-feed-title">{t('profile.snaps.communitySnap')}</span>}
         <Link
           className="snap-time"
-          to={feedMode ? `/p/${snap.owner}?tab=community` : `/post/${snap.owner}/${snap.permlink}`}
+          to={feedMode ? `/@${snap.owner}?tab=community` : `/post/${snap.owner}/${snap.permlink}`}
           title={feedMode ? t('profile.snaps.viewCommunity', { user: snap.owner }) : t('profile.snaps.viewPost')}
         >
           {hiveTime(snap.created)}

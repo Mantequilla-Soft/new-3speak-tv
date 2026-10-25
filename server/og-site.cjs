@@ -159,7 +159,7 @@ function buildSitePage(origin, path, trending) {
     <h2>Popular on 3Speak right now</h2>
     <ul>
 ${trending
-  .map((v) => `      <li><a href="${escapeHtml(`${BASE_URL}/watch?v=${v.owner}/${v.permlink}`)}">${escapeHtml(v.title)}</a> by @${escapeHtml(v.owner)}</li>`)
+  .map((v) => `      <li><a href="${escapeHtml(`${BASE_URL}/@${v.owner}/${v.permlink}`)}">${escapeHtml(v.title)}</a> by @${escapeHtml(v.owner)}</li>`)
   .join('\n')}
     </ul>
   </section>`

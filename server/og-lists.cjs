@@ -115,7 +115,7 @@ module.exports = function createLists(h) {
       .map((v) => {
         const author = v.author || v.owner;
         return {
-          path: `/watch?v=${author}/${v.permlink}`,
+          path: `/@${author}/${v.permlink}`,
           name: clip(v.title, 120),
           author,
           extra: clock(v.duration || (v.spkvideo && v.spkvideo.duration)),
@@ -187,7 +187,7 @@ module.exports = function createLists(h) {
     const list = items.length
       ? `\n  <section>\n    <h2>${escapeHtml(itemsHeading)}</h2>\n    <ol>\n${items
         .map((i) => `      <li><a href="${escapeHtml(abs(i.path))}">${escapeHtml(i.name)}</a>${
-          i.author ? ` by <a href="${escapeHtml(abs(`/user/${i.author}`))}">@${escapeHtml(i.author)}</a>` : ''}${
+          i.author ? ` by <a href="${escapeHtml(abs(`/@${i.author}`))}">@${escapeHtml(i.author)}</a>` : ''}${
           i.extra ? ` · ${escapeHtml(i.extra)}` : ''}</li>`)
         .join('\n')}\n    </ol>\n  </section>`
       : '';
@@ -350,7 +350,7 @@ module.exports = function createLists(h) {
         const uploads = Number(e.video_uploads) || 0;
         const shorts = Number(e.short_uploads) || 0;
         return {
-          path: `/user/${e.user}`,
+          path: `/@${e.user}`,
           name: `@${e.user}`,
           extra: [uploads && `${uploads} ${uploads === 1 ? 'video' : 'videos'}`, shorts && `${shorts} ${shorts === 1 ? 'short' : 'shorts'}`]
             .filter(Boolean).join(', '),

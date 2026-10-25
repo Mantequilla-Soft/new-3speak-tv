@@ -61,7 +61,7 @@ function ProfileModal({ username = "kesolink", onClose }) {
   }, [username, activeUser]);
 
   const handleProfileNavigation = (username) => {
-    navigate(`/p/${username}`);
+    navigate(`/@${username}`);
   };
 
 

@@ -7,6 +7,12 @@
 // 1.0.0 — that way they see all of these when develop is pushed to production.
 export const CHANGELOG = [
   {
+    version: '1.80.19',
+    date: '2026-10-25',
+    summary:
+      'Profiles and videos now have Hive-style addresses: 3speak.tv/@username and 3speak.tv/@username/video. Older links keep working.',
+  },
+  {
     version: '1.80.18',
     date: '2026-10-25',
     summary:

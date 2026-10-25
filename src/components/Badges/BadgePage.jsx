@@ -172,7 +172,7 @@ function BadgeView({ account }) {
           <Trans
             i18nKey="badges.page.issuedBy"
             values={{ creator: badge.creator }}
-            components={{ creatorLink: <Link to={`/p/${badge.creator}`} /> }}
+            components={{ creatorLink: <Link to={`/@${badge.creator}`} /> }}
           />
         </span>
       ) : null}
@@ -329,7 +329,7 @@ function RecipientList({ data, error }) {
       </p>
       <div className="badge-recipients">
         {data.recipients.map(r => (
-          <Link className="badge-recipient" to={`/p/${r.account}`} key={r.account}>
+          <Link className="badge-recipient" to={`/@${r.account}`} key={r.account}>
             <HiveAvatar username={r.account} size="small" className="badge-recipient-avatar" />
             <span className="badge-recipient-text">
               <span className="badge-recipient-name">{r.displayName || r.account}</span>

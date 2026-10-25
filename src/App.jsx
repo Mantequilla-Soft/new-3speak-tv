@@ -1,4 +1,5 @@
-import { Route, Routes, useLocation, useNavigate, Navigate } from "react-router-dom";
+import { Route, Routes, useLocation, useNavigate, useParams, useSearchParams, Navigate } from "react-router-dom";
+import { Helmet } from "react-helmet-async";
 import { useRef, Suspense } from "react";
 import "./App.css";
 // import Home from './page/Home'
@@ -27,6 +28,10 @@ import ProfileNav from "./components/nav/ProfileNav";
 import ScrollToTop from "./components/ScrollToTop";
 import RouteErrorBoundary from "./components/RouteErrorBoundary";
 import lazyRoute from "./utils/lazyRoute";
+import { parseHivePath, profilePath, watchPath } from "./utils/urls";
+import { ensure3SpeakStatus, getCachedPost } from "./utils/threeSpeakDetection";
+import { fetchPlaySource } from "./lib/videoData";
+import { useQueryClient } from "@tanstack/react-query";
 import RouteTitle from "./components/RouteTitle";
 import OpenShortsOnStart from "./components/OpenShortsOnStart";
 import AddAccount_modal from "./components/modal/AddAccount_modal";
@@ -186,24 +191,84 @@ import { rememberButrauthAccount } from "./utils/butrauthAccounts";
 // line under it. See utils/toast.js.
 const toast = toastIn('Sign in');
 
-// Hive-like URL redirects: /@user → profile, /@user/permlink → post view, /@user/shorts → profile shorts tab
-// PostView handles 3Speak video detection and redirects to /watch when appropriate
+// Profiles and videos live at Hive-style addresses (see utils/urls.js):
+//   /@user                profile          /@user/shorts → its shorts tab
+//   /@author/permlink     video, or any other Hive post
+// The router cannot match a segment that starts with "@", so this catch-all
+// parses the path and hands the names to the pages as props.
 const HiveLinkRedirect = () => {
   const location = useLocation();
-  const path = location.pathname;
-  const match = path.match(/^\/@([^/]+)(?:\/(.+))?$/);
-  if (match) {
-    const [, user, permlink] = match;
-    if (permlink === 'shorts') {
-      return <Navigate to={`/p/${user}?tab=shorts`} replace />;
-    }
-    if (permlink) {
-      return <Navigate to={`/post/${user}/${permlink}${location.search || ''}`} replace />;
-    }
-    // Preserve query string (e.g. ?tab=audio) when redirecting /@user → /p/user
-    return <Navigate to={`/p/${user}${location.search || ''}`} replace />;
+  const hit = parseHivePath(location.pathname);
+  if (!hit) return <NotFound />;
+  if (hit.kind === 'shorts') {
+    return <Navigate to={profilePath(hit.user, 'tab=shorts')} replace />;
   }
-  return <NotFound />;
+  if (hit.kind === 'profile') return <ProfileRouter user={hit.user} />;
+  return <HivePostRoute author={hit.author} permlink={hit.permlink} />;
+};
+
+// /@author/permlink is nearly always a video (it is the address every video link
+// in the app uses), so the watch page renders at once and starts playback
+// without waiting on Hive. Alongside, the feeds' post lookup runs; PostView takes
+// over only when Hive has the post, its metadata is not a 3Speak video AND the
+// player has no source for it (a blog post, a comment, a short's reply; PostView
+// also sends shorts on to /shorts). The player check matters: a post written in
+// Ecency or PeakD around a 3Speak embed carries no video metadata at all, and
+// /watch?v= always played those. No post at all stays on Watch: embed-only and
+// scheduled videos have no Hive post yet, and a failed lookup must not hide a
+// real video.
+const HivePostRoute = ({ author, permlink }) => {
+  const [searchParams] = useSearchParams();
+  const queryClient = useQueryClient();
+  const key = `${author}/${permlink}`;
+  const scheduled = searchParams.get('scheduled') === '1';
+  const [textPostKey, setTextPostKey] = useState(null);
+
+  useEffect(() => {
+    if (scheduled) return undefined;
+    let alive = true;
+    (async () => {
+      if (await ensure3SpeakStatus(key)) return;
+      if (!getCachedPost(key)?.author) return;
+      // Same key and options as Watch's own play-source query: one request.
+      const source = await queryClient.fetchQuery({
+        queryKey: ['play-source', author, permlink],
+        queryFn: () => fetchPlaySource(author, permlink),
+        staleTime: 5 * 60 * 1000,
+      }).catch(() => null);
+      if (alive && !source) setTextPostKey(key);
+    })();
+    return () => { alive = false; };
+  }, [key, author, permlink, scheduled, queryClient]);
+
+  if (textPostKey === key) {
+    return (
+      <>
+        <Helmet><title>{`3S | ${t('app.routes.postBy', { author })}`}</title></Helmet>
+        <PostView author={author} permlink={permlink} />
+      </>
+    );
+  }
+  return <Watch v2 routeV={key} />;
+};
+
+// The old addresses: /watch?v=author/permlink and /p/user, /user/user. Kept so
+// links already shared keep working, and moved to the new address in place
+// (replace, state kept) so what gets copied from the bar is the new one.
+const LegacyWatchRedirect = () => {
+  const location = useLocation();
+  const params = new URLSearchParams(location.search);
+  const [author, ...rest] = String(params.get('v') || '').split('/');
+  const permlink = rest.join('/');
+  if (!author || !permlink) return <Watch v2 />;
+  params.delete('v');
+  return <Navigate to={watchPath(author, permlink, params.toString())} state={location.state} replace />;
+};
+
+const LegacyProfileRedirect = () => {
+  const { user } = useParams();
+  const location = useLocation();
+  return <Navigate to={profilePath(user, location.search)} state={location.state} replace />;
 };
 
 // /login and /auth/login open the aioha modal and redirect to home
@@ -709,7 +774,7 @@ function App() {
               <Route path="/" element={<HomeGrouped />} />
               <Route path="/home-feed" element={<Feed />} />
               <Route path="/follow-feed" element={<FollowFeed />} />
-              <Route path="/watch" element={<Watch v2 />} />
+              <Route path="/watch" element={<LegacyWatchRedirect />} />
               {/* Live OpenPods stream at /watch/<roomName> (path param, distinct
                   from the ?v= VOD route above). */}
               <Route path="/watch/:streamId" element={<WatchStream />} />
@@ -791,8 +856,8 @@ function App() {
                   Legacy /@handle/links still resolves (nginx 301s it to /links/ in prod). */}
               <Route path="/links/:handle" element={<Spotlight />} />
               <Route path="/:handle/links" element={<Spotlight />} />
-              <Route path="/p/:user" element={<ProfileRouter />} />
-              <Route path="/user/:user" element={<ProfileRouter />} />
+              <Route path="/p/:user" element={<LegacyProfileRedirect />} />
+              <Route path="/user/:user" element={<LegacyProfileRedirect />} />
               <Route path="/playlist/:playlistId" element={<PlaylistView />} />
               <Route path="/watched/:username" element={<WatchedView />} />
               <Route path="/wallet/:user" element={<Wallet />} />

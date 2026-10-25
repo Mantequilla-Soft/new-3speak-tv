@@ -948,7 +948,7 @@ function AudioUploadModal({ isOpen, onClose, initialTrack }) {
     return {
       post,
       playlist: playlistChoice ? `/playlist/${playlistChoice}` : null,
-      profileAudio: mode === 'snaps' && user ? `/p/${user}?tab=audio` : null,
+      profileAudio: mode === 'snaps' && user ? `/@${user}?tab=audio` : null,
     };
   }, [mode, tracks, playlistChoice, user]);
 

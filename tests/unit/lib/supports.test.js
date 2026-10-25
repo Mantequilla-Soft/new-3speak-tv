@@ -193,7 +193,7 @@ describe('supporter lists', () => {
 
 describe('supportItemLink', () => {
   it('links videos, shorts (by asset id) and audio to their pages', () => {
-    expect(m.supportItemLink({ author: 'a', permlink: 'p' })).toBe('/watch?v=a/p')
+    expect(m.supportItemLink({ author: 'a', permlink: 'p' })).toBe('/@a/p')
     expect(m.supportItemLink({ author: 'a', permlink: 'p', kind: 'audio' })).toBe('/audio/a/p')
     expect(m.supportItemLink({ author: 'a', permlink: 'p', kind: 'short', video: { asset_permlink: 'asset1' } })).toBe('/shorts?v=a/asset1')
     expect(m.supportItemLink({ author: 'a', permlink: 'p', video: { short: true } })).toBe('/shorts?v=a/p')

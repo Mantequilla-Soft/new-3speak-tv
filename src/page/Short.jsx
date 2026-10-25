@@ -3141,7 +3141,7 @@ const VideoShort = () => {
   }, [preloadedIndices, videos, chainPreloadEntries]);
 
   const handleProfileNavigation = (username) => {
-    navigate(`/p/${username}`);
+    navigate(`/@${username}`);
   };
 
   /* ---------- RENDER ---------- */
@@ -3555,7 +3555,7 @@ const VideoShort = () => {
               : (rootStep.shortPermlink
                 ? `/shorts?v=${rootStep.shortAuthor || rootStep.author}/${rootStep.shortPermlink}`
                 : (rootIsVideo
-                  ? `/watch?v=${rootStep.author}/${rootStep.permlink}${currentVideo.parentTimestamp != null ? `&t=${currentVideo.parentTimestamp}` : ''}`
+                  ? `/@${rootStep.author}/${rootStep.permlink}${currentVideo.parentTimestamp != null ? `?t=${currentVideo.parentTimestamp}` : ''}`
                   : `/post/${rootStep.author}/${rootStep.permlink}`));
             return (
               <div className={`reactionChainOverlay${parentCardVisible ? '' : ' collapsed'}${shortHistoryRef.current.length > 0 ? ' has-back' : ''}`} onClick={(e) => e.stopPropagation()}>
@@ -3640,7 +3640,7 @@ const VideoShort = () => {
                                         <Camera size={11} />
                                       </Link>
                                     ) : (
-                                      <Link to={`/watch?v=${step.author}/${step.permlink}`} className="chainActionBtn chainActionBtn--sm" onClick={(e) => e.stopPropagation()} title={t('shorts.chain.watch')}>
+                                      <Link to={`/@${step.author}/${step.permlink}`} className="chainActionBtn chainActionBtn--sm" onClick={(e) => e.stopPropagation()} title={t('shorts.chain.watch')}>
                                         <Video size={11} />
                                       </Link>
                                     )
@@ -4326,7 +4326,7 @@ const CommentItem = ({
       {/* Main comment row */}
       <div className="commentItem">
         {authorName ? (
-          <Link to={`/p/${authorName}`} className="commentAvatar" onClick={(e) => e.stopPropagation()}>
+          <Link to={`/@${authorName}`} className="commentAvatar" onClick={(e) => e.stopPropagation()}>
             <img src={authorAvatar} alt="" />
           </Link>
         ) : (
@@ -4337,7 +4337,7 @@ const CommentItem = ({
         <div className="commentContent">
           <div className="commentMeta">
             {authorName ? (
-              <Link to={`/p/${authorName}`} className="commentUsername" onClick={(e) => e.stopPropagation()}>@{authorName}</Link>
+              <Link to={`/@${authorName}`} className="commentUsername" onClick={(e) => e.stopPropagation()}>@{authorName}</Link>
             ) : (
               <span className="commentUsername">{comment.user?.username}</span>
             )}

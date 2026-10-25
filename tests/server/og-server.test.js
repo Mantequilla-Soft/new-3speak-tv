@@ -191,7 +191,7 @@ describe('crawler cards', () => {
     expect(r.headers['cache-control']).toBe('no-store')
     expect(meta(r.text, 'og:title')).toBe('Cooking with &lt;b&gt;fire&lt;/b&gt; &amp; friends')
     expect(meta(r.text, 'og:type')).toBe('video.other')
-    expect(meta(r.text, 'og:url')).toBe('https://3speak.tv/watch?v=alice/my-video')
+    expect(meta(r.text, 'og:url')).toBe('https://3speak.tv/@alice/my-video')
     expect(meta(r.text, 'twitter:card')).toBeTruthy()
     expect(r.text).toContain('type="application/json+oembed"')
   })
@@ -295,12 +295,12 @@ describe('search engines', () => {
 
   it('see one canonical on 3speak.tv, whichever host or address was asked', async () => {
     const preview = await crawl('/watch?v=alice/my-video', GOOGLEBOT, 'preview.3speak.tv')
-    expect(canonical(preview.text)).toBe('https://3speak.tv/watch?v=alice/my-video')
-    expect(meta(preview.text, 'og:url')).toBe('https://preview.3speak.tv/watch?v=alice/my-video')
+    expect(canonical(preview.text)).toBe('https://3speak.tv/@alice/my-video')
+    expect(meta(preview.text, 'og:url')).toBe('https://preview.3speak.tv/@alice/my-video')
     const www = await crawl('/watch?v=alice/my-video', GOOGLEBOT, 'www.3speak.tv')
-    expect(meta(www.text, 'og:url')).toBe('https://3speak.tv/watch?v=alice/my-video')
+    expect(meta(www.text, 'og:url')).toBe('https://3speak.tv/@alice/my-video')
     const at = await crawl('/@alice/my-video', GOOGLEBOT)
-    expect(canonical(at.text)).toBe('https://3speak.tv/watch?v=alice/my-video')
+    expect(canonical(at.text)).toBe('https://3speak.tv/@alice/my-video')
   })
 
   it('see a short as its /shorts page, titled by its caption, however it was reached', async () => {
@@ -331,10 +331,10 @@ describe('search engines', () => {
   it('get a VideoObject and a breadcrumb trail on a watch page', async () => {
     const ld = jsonLd((await crawl('/watch?v=alice/my-video', GOOGLEBOT)).text)
     const video = ld.find((d) => d['@type'] === 'VideoObject')
-    expect(video).toMatchObject({ url: 'https://3speak.tv/watch?v=alice/my-video', duration: 'PT2M5S' })
+    expect(video).toMatchObject({ url: 'https://3speak.tv/@alice/my-video', duration: 'PT2M5S' })
     const crumbs = ld.find((d) => d['@type'] === 'BreadcrumbList')
     expect(crumbs.itemListElement.map((i) => i.item)).toEqual([
-      'https://3speak.tv/', 'https://3speak.tv/user/alice', 'https://3speak.tv/watch?v=alice/my-video',
+      'https://3speak.tv/', 'https://3speak.tv/@alice', 'https://3speak.tv/@alice/my-video',
     ])
   })
 })
@@ -345,7 +345,7 @@ describe('list pages', () => {
     expect(r.status).toBe(200)
     expect(r.text).toContain('<title>#cooking videos - 3Speak</title>')
     expect(canonical(r.text)).toBe('https://3speak.tv/t/cooking')
-    expect(r.text).toContain('href="https://3speak.tv/watch?v=alice/my-video"')
+    expect(r.text).toContain('href="https://3speak.tv/@alice/my-video"')
     expect(r.text).not.toContain('spicy-one')
     // Two videos: a thin page, kept out of the index but followed.
     expect(r.text).toMatch(/<meta name="robots" content="noindex, follow"/)
@@ -362,7 +362,7 @@ describe('list pages', () => {
     expect(r.status).toBe(200)
     expect(r.text).toContain('<title>Cooks community - 3Speak</title>')
     expect(r.text).toContain('People who cook on camera.')
-    expect(r.text).toContain('href="https://3speak.tv/watch?v=alice/my-video"')
+    expect(r.text).toContain('href="https://3speak.tv/@alice/my-video"')
     expect(canonical(r.text)).toBe('https://3speak.tv/community/hive-100001')
   })
 

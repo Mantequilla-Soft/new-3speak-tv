@@ -12,7 +12,7 @@ import './Supporters.scss';
 function SupportChip({ account, total, direction, label }) {
   const Arrow = direction === 'in' ? MdRedeem : MdVolunteerActivism;
   return (
-    <Link to={`/p/${account}`} className={`sp-badge sp-badge--${direction}`} title={label} aria-label={label}>
+    <Link to={`/@${account}`} className={`sp-badge sp-badge--${direction}`} title={label} aria-label={label}>
       <AccountImg account={account} alt="" loading="lazy" className="sp-badge-img" />
       <span className="sp-badge-amount">{formatHbdCompact(total)}</span>
       <Arrow className="sp-badge-dir" aria-hidden="true" />

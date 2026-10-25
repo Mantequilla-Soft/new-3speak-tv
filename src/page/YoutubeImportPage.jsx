@@ -412,7 +412,7 @@ export default function YoutubeImportPage() {
       {status?.imported?.[v.id] && (
         <p className="yt-import__on-site">
           <FaCheck /> {t('ytimport.onSite')} ·{' '}
-          <Link to={`/watch?v=${user}/${status.imported[v.id]}`}>{t('ytimport.viewPost')}</Link>
+          <Link to={`/@${user}/${status.imported[v.id]}`}>{t('ytimport.viewPost')}</Link>
         </p>
       )}
 
