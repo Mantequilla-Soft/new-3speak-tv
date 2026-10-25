@@ -75,10 +75,7 @@ describe('validateEntry edge cases', () => {
     expect(validateEntry('items.count_few', '{{count}} {{user}} {{who}}', en, ru)).toMatch(/Unknown \{\{who\}\}/)
   })
 
-  // src/i18n/rules.js:112-115 requires every token of EVERY English form in each
-  // plural form; scripts/i18n/check.mjs:111 (which it says it mirrors) only requires
-  // the tokens of the matching English form. No current English plural triggers it.
-  it.skip('BUG: a plural form only has to keep the placeholders of its own English form, as check.mjs does', () => {
+  it('a plural form only has to keep the placeholders of its own English form, as check.mjs does', () => {
     expect(validateEntry('items.count_one', 'Загрузите видео', en, ru)).toBeNull()
   })
 

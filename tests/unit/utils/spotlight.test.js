@@ -87,9 +87,7 @@ describe('guessIconFromUrl', () => {
     expect(guessIconFromUrl('')).toBe('link')
   })
 
-  // The suffix fallback matches on the raw string, not on a dot boundary:
-  // src/utils/spotlight.js:142 `host.endsWith(key)`, so dropbox.com ends with "x.com".
-  it.skip('BUG: an unrelated host that merely ends in a known name is not given that brand', () => {
+  it('an unrelated host that merely ends in a known name is not given that brand', () => {
     expect(guessIconFromUrl('https://dropbox.com/s/file')).toBe('globe')
     expect(guessIconFromUrl('https://netflix.com')).toBe('globe')
     expect(guessIconFromUrl('https://chat.me')).toBe('globe')
