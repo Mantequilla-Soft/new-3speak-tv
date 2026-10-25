@@ -442,7 +442,9 @@ function renderSection(s, theme) {
   return '';
 }
 
-function renderSpotlightHtml(username, page, { displayName } = {}) {
+// shareImage: the channel's 1200x630 share card (og-cards.cjs), so a shared
+// link page unfurls as the channel does; without one, the bare avatar.
+function renderSpotlightHtml(username, page, { displayName, shareImage } = {}) {
   const user = esc(username);
   const name = esc(displayName || `@${username}`);
   const avatar = `https://images.hive.blog/u/${encodeURIComponent(username)}/avatar`;
@@ -480,7 +482,10 @@ function renderSpotlightHtml(username, page, { displayName } = {}) {
 <title>${name} • 3Speak</title>
 <meta name="description" content="${esc(desc)}">
 <meta property="og:title" content="${name}"><meta property="og:description" content="${esc(desc)}">
-<meta property="og:image" content="${esc(avatar)}"><meta property="og:type" content="profile">
+${shareImage
+    ? `<meta property="og:image" content="${esc(shareImage)}"><meta property="og:image:type" content="image/jpeg"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image"><meta name="twitter:image" content="${esc(shareImage)}">`
+    : `<meta property="og:image" content="${esc(avatar)}">`}<meta property="og:type" content="profile">
 <link rel="icon" href="${esc(avatar)}">
 <style>
 *{box-sizing:border-box}html,body{margin:0}

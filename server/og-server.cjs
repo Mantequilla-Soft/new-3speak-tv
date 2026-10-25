@@ -870,12 +870,63 @@ const GENERIC_CARD = {
 
 // Pages with a card of their own (nginx must send their bots here: add a
 // `location = <path>` block like /watch's). Title + description mirror the
-// page's own SEOHead, so the card says what the page says.
+// page's own SEOHead or, without one, its own words (src/locales/en), so the
+// card says what the page says. `image` is a path on the host that was asked:
+// the files live in public/ (public/og/: feeds on a wall of thumbnails, tools
+// in the /advertise style).
+//
+// Apart from /advertise, nginx sends only link-preview fetchers here, never
+// search engines ($threespeak_preview_bot): these pages have nothing for a
+// crawler beyond the card, and Google renders the real page.
+const UPLOAD_CARD = {
+  title: '3S | Upload to 3Speak',
+  description: 'Publish videos and shorts to your own Hive account on 3Speak, with chapters and links.',
+  image: '/og/upload.jpg',
+};
 const PAGE_CARDS = {
   '/advertise': {
     title: '3S | Advertise on 3Speak videos',
     description: 'Put a short ad inside videos on 3Speak, paid in HBD or HIVE. Every advertiser is reviewed by hand.',
-    image: `${BASE_URL}/og-advertise.jpg`,
+    image: '/og-advertise.jpg',
+  },
+  '/discover': {
+    title: '3S | Discover 3Speak',
+    description: 'Search videos, shorts, audio, communities and playlists on 3Speak.',
+    image: '/og/discover.jpg',
+  },
+  '/surf': {
+    title: '3S | Surf 3Speak',
+    description: 'Pick a channel and lean back. 3Speak lines up the best videos on that topic one after another.',
+    image: '/og/surf.jpg',
+  },
+  '/audio': {
+    title: '3S | Audio on 3Speak',
+    description: 'Podcasts and music on 3Speak, with their own player. Publish audio the same way you publish video.',
+    image: '/og/audio.jpg',
+  },
+  '/badges': {
+    title: '3S | Badges on 3Speak',
+    description: 'Badges are awards given on Hive for events, contributions and milestones. Open one to see everyone who holds it and what they publish.',
+    image: '/og/badges.jpg',
+  },
+  '/upload': UPLOAD_CARD,
+  '/embed-studio': UPLOAD_CARD,
+  '/faq': {
+    title: '3S | Frequently asked questions',
+    description: 'New to 3Speak? Here are the answers to the questions people ask us most.',
+    image: '/og/faq.jpg',
+  },
+  // Live only where the importer is switched on (VITE_VIDEO_IMPORT): nginx is the switch.
+  '/youtube-import': {
+    title: '3S | Import your videos to 3Speak',
+    description: 'Bring your videos from YouTube or TikTok to 3Speak. Title, description, tags and thumbnail are filled in for you.',
+    image: '/og/youtube-import.jpg',
+  },
+  // Live only once streaming is open to everyone (VITE_ENABLE_OPENPODS): nginx is the switch.
+  '/openpods': {
+    title: '3S | Go live on 3Speak',
+    description: 'Stream on 3Speak from your browser or OBS, with live chat.',
+    image: '/og/openpods.jpg',
   },
 };
 
@@ -1347,7 +1398,7 @@ const server = http.createServer(async (req, res) => {
 
   const pageCard = PAGE_CARDS[url.pathname.replace(/\/+$/, '')];
   if (pageCard) {
-    return sendHtml(req, res, 200, buildGenericHtml(origin + url.pathname, pageCard));
+    return sendHtml(req, res, 200, buildGenericHtml(origin + url.pathname, { ...pageCard, image: origin + pageCard.image }));
   }
 
   const page = ogPages.match(url);

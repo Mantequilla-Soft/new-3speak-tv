@@ -7,6 +7,12 @@
 // 1.0.0 — that way they see all of these when develop is pushed to production.
 export const CHANGELOG = [
   {
+    version: '1.80.18',
+    date: '2026-10-25',
+    summary:
+      'Links to live streams, playlists, badges, tags and more now show their own picture when you share them.',
+  },
+  {
     version: '1.80.17',
     date: '2026-10-25',
     summary:

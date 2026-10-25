@@ -8,6 +8,16 @@
 //   GET /api/og-card/community/<hive-123>.jpg
 //   GET /api/og-card/user/<account>.jpg
 //
+// The same card for the other pages that are one thing (added 2026-10-25),
+// each drawn on its first request and kept:
+//
+//   GET /api/og-card/badge/<account>.jpg          the badge's picture and title
+//   GET /api/og-card/tag/<tag>.jpg                #tag, a '#' in the frame
+//   GET /api/og-card/invite/<code>.jpg            the inviter: "Join me on 3Speak"
+//   GET /api/og-card/stream/<room>.jpg            a live room: title, LIVE, host
+//   GET /api/og-card/playlist/<id>.jpg            cover (square) and name
+//   GET /api/og-card/audio/<author>/<permlink>.jpg   artwork (square) and title
+//
 // Files live in data/og-cards/<kind>/<id>.jpg (OG_CARD_DIR to move them):
 //   - communities: every Hive community is drawn by the weekly sync below; one
 //     that is new since then is drawn on its first request.
@@ -36,15 +46,41 @@ const crypto = require('crypto')
 const W = 1200
 const H = 630
 const CARD_DIR = process.env.OG_CARD_DIR || path.join(__dirname, 'data', 'og-cards')
-const KINDS = new Set(['community', 'user'])
+const KINDS = new Set(['community', 'user', 'badge', 'tag', 'invite', 'stream', 'playlist', 'audio'])
+// Kinds whose cards the weekly sync draws again (communities are listed from
+// Hive instead). A stream's room is gone once it ends, so its card is only
+// kept for STREAM_KEEP_MS; a tag card never changes.
+const REDRAWN = ['user', 'badge', 'invite', 'playlist', 'audio']
+const STREAM_KEEP_MS = 14 * 24 * 60 * 60 * 1000
 const ACCOUNT_RE = /^[a-z][a-z0-9.-]{2,15}$/
 const COMMUNITY_RE = /^hive-\d{1,10}$/
-const HIVE_APIS = ['https://api.hive.blog', 'https://api.deathwing.me', 'https://techcoderx.com']
-// The loopback side of the /img/ cache (nginx conf.d/3speak-img.conf): it
-// follows Hive's avatar redirect. images.hive.blog itself answers this box 403
-// for pictures it has not cached yet, so it is only the second choice.
-const AVATAR_SOURCES = (process.env.OG_CARD_AVATAR_BASES || 'http://127.0.0.1:8095/u,https://images.hive.blog/u')
+const TAG_RE = /^[a-z0-9][a-z0-9-]{0,31}$/
+const INVITE_CODE_RE = /^[a-z0-9]{10}$/
+// The hangouts server names a room `<host>-<7 base36>`.
+const ROOM_RE = /^[a-z0-9][a-z0-9.-]{2,40}$/
+const PLAYLIST_ID_RE = /^[a-zA-Z0-9-]{8,64}$/
+const AUDIO_ID_RE = /^[a-z][a-z0-9.-]{2,15}\/[a-z0-9][a-z0-9-]{0,255}$/
+// Where live rooms are looked up (the site's VITE_HANGOUTS_API_URLS servers).
+const HANGOUTS_APIS = (process.env.OG_CARD_HANGOUTS_APIS || 'https://live.3speak.tv')
   .split(',').map((s) => s.trim().replace(/\/+$/, '')).filter(Boolean)
+// The loopback side of the /img/ cache: /h/ passes images.hive.blog through,
+// /a/ square-crops an images.3speak.tv picture. '' fetches the hosts directly.
+const IMG_LOOPBACK = process.env.OG_CARD_IMG_LOOPBACK ?? 'http://127.0.0.1:8095'
+// Covers and thumbnails are only fetched from these hosts (og-video's list),
+// so a picture URL in someone's metadata cannot point the server anywhere else.
+const PICTURE_HOSTS = new Set([
+  'images.3speak.tv', 'images.hive.blog', 'files.peakd.com', 'i.ecency.com',
+  'ipfs-3speak.b-cdn.net', 'hotipfs-3speak-1.b-cdn.net', 'ipfs.3speak.tv', 'ipfs-audio.3speak.tv',
+])
+const HIVE_APIS = ['https://api.hive.blog', 'https://api.deathwing.me', 'https://techcoderx.com']
+// The site's /img/ avatar cache (nginx conf.d/3speak-img.conf): it follows
+// Hive's avatar redirect and keeps the picture, so an avatar any visitor has
+// seen comes back in ~0.2 s instead of the 10-20 s Hive's proxy can take.
+// images.hive.blog itself answers this box 403 for pictures it has not cached
+// yet, so it is only the second choice.
+const AVATAR_SOURCES = (process.env.OG_CARD_AVATAR_BASES || 'https://3speak.tv/img/u,https://images.hive.blog/u')
+  .split(',').map((s) => s.trim().replace(/\/+$/, '')).filter(Boolean)
+const AVATAR_TIMEOUT_MS = 25000
 const TWEMOJI = 'https://cdn.jsdelivr.net/gh/jdecked/twemoji@15.1.0/assets/svg'
 const FETCH_TIMEOUT_MS = 8000
 const SYNC_EVERY_MS = 7 * 24 * 60 * 60 * 1000
@@ -67,9 +103,16 @@ const LOGO_SVG = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 150 130">
 
 // ── Files ───────────────────────────────────────────────────────────────────
 
+// The id a card FILE is kept under. An invite's card is kept under the
+// inviter's account (one card however often they rotate their code); its URL
+// names the code, see mountOgCards.
 function validId(kind, id) {
   if (kind === 'community') return COMMUNITY_RE.test(id)
-  if (kind === 'user') return ACCOUNT_RE.test(id)
+  if (kind === 'user' || kind === 'badge' || kind === 'invite') return ACCOUNT_RE.test(id)
+  if (kind === 'tag') return TAG_RE.test(id)
+  if (kind === 'stream') return ROOM_RE.test(id)
+  if (kind === 'playlist') return PLAYLIST_ID_RE.test(id)
+  if (kind === 'audio') return AUDIO_ID_RE.test(id)
   return false
 }
 
@@ -87,10 +130,14 @@ function cardVersion(kind, id) {
   }
 }
 
-/** Absolute URL of a card on `origin`, versioned when the file exists. */
-function cardUrl(origin, kind, id) {
+/**
+ * Absolute URL of a card on `origin`, versioned when the file exists.
+ * `urlId` is what the URL names when that is not the file's id (an invite
+ * code; its card is kept under the inviter's account).
+ */
+function cardUrl(origin, kind, id, urlId = id) {
   const v = cardVersion(kind, id)
-  return `${origin}/api/og-card/${kind}/${id}.jpg${v ? `?v=${v}` : ''}`
+  return `${origin}/api/og-card/${kind}/${urlId}.jpg${v ? `?v=${v}` : ''}`
 }
 
 /** Write only when the bytes changed, so the mtime (and the URL) stays put otherwise. */
@@ -158,19 +205,87 @@ function imageType(buf) {
   return null
 }
 
-/** The account's Hive profile picture as a data URI, or null (no picture, or one we cannot decode). */
+/**
+ * The picture as a square JPEG, through ffmpeg: the renderer reads only PNG,
+ * JPEG and GIF, and most 3Speak thumbnails are WebP. Null when ffmpeg cannot
+ * read it either (an SVG, a broken file).
+ */
+function squareJpeg(buf, size = 512) {
+  const { spawn } = require('child_process')
+  return new Promise((resolve) => {
+    const ff = spawn('ffmpeg', ['-nostdin', '-v', 'error', '-i', 'pipe:0', '-frames:v', '1',
+      '-vf', `scale=${size}:${size}:force_original_aspect_ratio=increase,crop=${size}:${size}`,
+      '-q:v', '3', '-f', 'mjpeg', 'pipe:1'])
+    const out = []
+    const timer = setTimeout(() => ff.kill('SIGKILL'), 15000)
+    ff.stdout.on('data', (d) => out.push(d))
+    ff.on('error', () => { clearTimeout(timer); resolve(null) })
+    ff.on('close', (code) => {
+      clearTimeout(timer)
+      const jpg = Buffer.concat(out)
+      resolve(code === 0 && jpg.length ? jpg : null)
+    })
+    // ffmpeg may stop reading early (it has its frame); that is not an error.
+    ff.stdin.on('error', () => {})
+    ff.stdin.end(buf)
+  })
+}
+
+// A PNG or JPEG up to this size goes in as it is. Anything bigger, and every
+// GIF (often animated, several hundred KB), is shrunk first: resvg took ~20 s
+// on a 670 KB avatar GIF.
+const DIRECT_MAX_BYTES = 300 * 1024
+
+/** An image as a data URI the renderer can draw, or null. */
+async function drawable(buf) {
+  const type = imageType(buf)
+  if (type && type !== 'image/gif' && buf.length <= DIRECT_MAX_BYTES) return `data:${type};base64,${buf.toString('base64')}`
+  const jpg = await squareJpeg(buf)
+  return jpg ? `data:image/jpeg;base64,${jpg.toString('base64')}` : null
+}
+
+/**
+ * The account's Hive profile picture as a data URI, or null (no picture, or
+ * one we cannot decode). Throws when every source timed out or could not be
+ * reached: the card is then not drawn (and kept) with an initial in place of
+ * a picture that exists, and the next request tries again.
+ */
 async function fetchAvatar(account) {
+  let unreachable = false
   for (const base of AVATAR_SOURCES) {
     try {
-      const buf = await fetchBuf(`${base}/${account}/avatar/large`)
-      // WebP and SVG avatars are rare; the renderer cannot decode them, so they
-      // get the initial instead of an empty ring.
-      const type = imageType(buf)
+      const buf = await fetchBuf(`${base}/${account}/avatar/large`, AVATAR_TIMEOUT_MS)
       if (crypto.createHash('sha256').update(buf).digest('hex') === DEFAULT_AVATAR_SHA256) return null
-      return type ? `data:${type};base64,${buf.toString('base64')}` : null
+      // A WebP avatar goes through ffmpeg; an SVG one gets the initial.
+      return await drawable(buf)
     } catch (err) {
       if (err.status === 404) return null
+      // An HTTP answer says something about the picture; no answer says nothing.
+      if (!err.status) unreachable = true
     }
+  }
+  if (unreachable) throw new Error(`avatar of ${account} unreachable`)
+  return null
+}
+
+/**
+ * A cover or thumbnail (a URL from someone's metadata) as a square JPEG data
+ * URI, or null. Only PICTURE_HOSTS are fetched.
+ */
+async function fetchPicture(raw) {
+  let u
+  try { u = new URL(String(raw || '').trim()) } catch (_) { return null }
+  if (u.protocol !== 'https:' || !PICTURE_HOSTS.has(u.hostname)) return null
+  const tries = []
+  // images.hive.blog answers this box 403 for pictures it has not cached.
+  if (IMG_LOOPBACK && u.hostname === 'images.hive.blog') tries.push(`${IMG_LOOPBACK}/h${u.pathname}${u.search}`)
+  if (IMG_LOOPBACK && u.hostname === 'images.3speak.tv') tries.push(`${IMG_LOOPBACK}/a${u.pathname}?px=512`)
+  tries.push(u.href)
+  for (const url of tries) {
+    try {
+      const jpg = await squareJpeg(await fetchBuf(url))
+      if (jpg) return `data:image/jpeg;base64,${jpg.toString('base64')}`
+    } catch (_) { /* the next source */ }
   }
   return null
 }
@@ -401,13 +516,22 @@ const BADGE_AT = {
   y: RING.cy + (RING.d / 2) * 0.707 - BADGE / 2,
 }
 const ringBox = { position: 'absolute', left: RING.cx - RING.d / 2, top: RING.cy - RING.d / 2, width: RING.d, height: RING.d, borderRadius: RING.d / 2 }
+// An album cover or a track's artwork is square: a rounded square in the
+// ring's place, the 3S badge on its corner.
+const SQUARE_RADIUS = 36
+const squareBox = { ...ringBox, borderRadius: SQUARE_RADIUS }
+const SQUARE_BADGE_AT = { x: RING.cx + RING.d / 2 - BADGE * 0.72, y: RING.cy + RING.d / 2 - BADGE * 0.72 }
+const LIVE_RED = '#E32933'
 
 /**
  * Everything that is the same on every card: the banner's gradients, the
- * ring's shadow, "3speak.tv". Drawn once per process (the blurred shadow alone
- * costs resvg most of a second) and laid under each card as a picture.
+ * frame's shadow, "3speak.tv". Drawn once per process and frame shape (the
+ * blurred shadow alone costs resvg most of a second) and laid under each card
+ * as a picture.
  */
-function backdropTree() {
+function backdropTree(shape = 'ring') {
+  const frame = shape === 'square' ? squareBox : ringBox
+  const badge = shape === 'square' ? SQUARE_BADGE_AT : BADGE_AT
   return el('div', {
     width: W, height: H, display: 'flex', position: 'relative', fontFamily: 'Inter Tight', backgroundColor: NAVY,
     backgroundImage: [
@@ -417,20 +541,39 @@ function backdropTree() {
     ].join(', '),
   }, [
     el('div', { position: 'absolute', left: TEXT_LEFT, top: 552, display: 'flex', fontSize: 30, fontWeight: 700, color: LAVENDER }, '3speak.tv'),
-    el('div', { ...ringBox, display: 'flex', backgroundColor: '#262d71', boxShadow: '0 30px 70px rgba(5,8,30,0.45)' }),
+    el('div', { ...frame, display: 'flex', backgroundColor: '#262d71', boxShadow: '0 30px 70px rgba(5,8,30,0.45)' }),
     el('div', {
-      position: 'absolute', left: BADGE_AT.x, top: BADGE_AT.y, width: BADGE, height: BADGE, borderRadius: BADGE / 2,
+      position: 'absolute', left: badge.x, top: badge.y, width: BADGE, height: BADGE, borderRadius: BADGE / 2,
       display: 'flex', backgroundColor: LOGO_NAVY, boxShadow: '0 10px 24px rgba(5,8,30,0.4)',
     }),
   ])
 }
 
-function cardTree({ lines, size, subtitle, avatar, initial, backdrop }) {
+/**
+ * One piece of the subtitle: [text], [text, true] for bold white, or
+ * [text, 'live'] for a red dot and the word in bold (a stream that is on air).
+ */
+function subtitlePart([text, style]) {
+  // satori drops a space at the edge of a span: the gap is a no-break space.
+  const t = text.replace(/^ | $/g, ' ')
+  if (style === 'live') {
+    return el('span', { display: 'flex', alignItems: 'center', fontWeight: 800, color: '#ffffff', marginRight: 18 }, [
+      el('span', { width: 22, height: 22, borderRadius: 11, backgroundColor: LIVE_RED, marginRight: 12, display: 'flex' }),
+      el('span', {}, t),
+    ])
+  }
+  return el('span', style ? { fontWeight: 700, color: '#ffffff' } : {}, t)
+}
+
+function cardTree({ lines, size, subtitle, avatar, initial, backdrop, shape = 'ring' }) {
   const ringInner = RING.d - 6
+  const radius = shape === 'square' ? SQUARE_RADIUS - 3 : ringInner / 2
+  const frame = shape === 'square' ? squareBox : ringBox
+  const badge = shape === 'square' ? SQUARE_BADGE_AT : BADGE_AT
   const picture = avatar
-    ? { type: 'img', props: { src: avatar, width: ringInner, height: ringInner, style: { width: ringInner, height: ringInner, borderRadius: ringInner / 2, objectFit: 'cover' } } }
+    ? { type: 'img', props: { src: avatar, width: ringInner, height: ringInner, style: { width: ringInner, height: ringInner, borderRadius: radius, objectFit: 'cover' } } }
     : el('div', {
-      width: ringInner, height: ringInner, borderRadius: ringInner / 2, display: 'flex', alignItems: 'center', justifyContent: 'center',
+      width: ringInner, height: ringInner, borderRadius: radius, display: 'flex', alignItems: 'center', justifyContent: 'center',
       backgroundImage: 'linear-gradient(135deg, #3a46a8 0%, #262d71 100%)', color: '#ffffff', fontSize: 170, fontWeight: 800,
     }, initial)
 
@@ -445,38 +588,40 @@ function cardTree({ lines, size, subtitle, avatar, initial, backdrop }) {
         display: 'flex', fontSize: size, fontWeight: 800, color: '#ffffff', lineHeight: 1.04,
         letterSpacing: `${TRACKING}em`, whiteSpace: 'nowrap',
       }, line)),
-      el('div', { display: 'flex', marginTop: Math.round(size * 0.32), fontSize: 40, fontWeight: 500, color: LAVENDER, whiteSpace: 'nowrap' },
-        // satori drops a space at the edge of a span: the gap is a no-break space.
-        subtitle.map(([text, strong]) => el('span', strong ? { fontWeight: 700, color: '#ffffff' } : {}, text.replace(/^ | $/g, '\u00a0')))),
+      el('div', { display: 'flex', alignItems: 'center', marginTop: Math.round(size * 0.32), fontSize: 40, fontWeight: 500, color: LAVENDER, whiteSpace: 'nowrap' },
+        subtitle.map(subtitlePart)),
     ]),
-    el('div', { ...ringBox, border: '3px solid rgba(255,255,255,0.22)', display: 'flex' }, [picture]),
+    el('div', { ...frame, border: '3px solid rgba(255,255,255,0.22)', display: 'flex' }, [picture]),
     el('div', {
-      position: 'absolute', left: BADGE_AT.x, top: BADGE_AT.y, width: BADGE, height: BADGE, borderRadius: BADGE / 2,
+      position: 'absolute', left: badge.x, top: badge.y, width: BADGE, height: BADGE, borderRadius: BADGE / 2,
       backgroundColor: LOGO_NAVY, border: '4px solid #ffffff', display: 'flex', alignItems: 'center', justifyContent: 'center',
     }, [{ type: 'img', props: { src: `data:image/svg+xml;base64,${Buffer.from(LOGO_SVG).toString('base64')}`, width: 58, height: 50 } }]),
   ])
 }
 
-let backdropUri = null
-async function getBackdrop() {
-  if (backdropUri) return backdropUri
+const backdrops = new Map()
+async function getBackdrop(shape = 'ring') {
+  if (backdrops.has(shape)) return backdrops.get(shape)
   const { satori, Resvg, fonts } = getEngine()
-  const svg = await satori(backdropTree(), { width: W, height: H, fonts })
+  const svg = await satori(backdropTree(shape), { width: W, height: H, fonts })
   const png = new Resvg(svg, { fitTo: { mode: 'width', value: W }, font: { loadSystemFonts: false } }).render().asPng()
-  backdropUri = `data:image/png;base64,${png.toString('base64')}`
-  return backdropUri
+  const uri = `data:image/png;base64,${png.toString('base64')}`
+  backdrops.set(shape, uri)
+  return uri
 }
 
 /**
  * The card as a JPEG.
- * headline: what goes big; subtitle: [[text, strong?], ...]; avatar: data URI or null;
- * cjk: fonts from prepareText.
+ * headline: what goes big; subtitle: [[text, style?], ...] (see subtitlePart);
+ * avatar: data URI or null; cjk: fonts from prepareText; shape: 'ring' for a
+ * person or a community, 'square' for a cover; initial: what an empty frame
+ * shows (the headline's first letter by default).
  */
-async function renderCard({ headline, subtitle, avatar, cjk = [] }) {
+async function renderCard({ headline, subtitle, avatar, cjk = [], shape = 'ring', initial }) {
   const { satori, Resvg, jpeg, fonts } = getEngine()
   const { size, lines } = fitHeadline(headline)
-  const backdrop = await getBackdrop()
-  const svg = await satori(cardTree({ lines, size, subtitle, avatar, initial: initialOf(headline), backdrop }), {
+  const backdrop = await getBackdrop(shape)
+  const svg = await satori(cardTree({ lines, size, subtitle, avatar, initial: initial || initialOf(headline), backdrop, shape }), {
     width: W,
     height: H,
     // The same array every time: satori keeps parsed fonts per array, and
@@ -521,6 +666,84 @@ async function communityText(id, title) {
   return { headline: id, subtitle: [['Community', true], [' on 3Speak']], cjk: [] }
 }
 
+/** `raw` when it can be drawn, else `fallback`: { headline, cjk }. */
+async function drawnOr(raw, fallback) {
+  const prepared = await prepareText(raw)
+  return prepared.ok ? { headline: prepared.text, cjk: prepared.cjk } : { headline: fallback, cjk: [] }
+}
+
+/** What a badge card says (the badge's title, else its account). Exported for the tests. */
+async function badgeText(account, title) {
+  return { ...await drawnOr(title, account), subtitle: [['Badge', true], [' on 3Speak']] }
+}
+
+/** What a tag card says: the #tag, and a '#' in the empty frame. */
+function tagText(tag) {
+  return { headline: `#${tag}`, subtitle: [['Topic', true], [' on 3Speak']], cjk: [], initial: '#' }
+}
+
+/** What an invite card says, under the inviter's picture. Exported for the tests. */
+function inviteText(account) {
+  return { headline: 'Join me on 3Speak', subtitle: [[`@${account}`, true], [' invited you']], cjk: [] }
+}
+
+/** What a live room's card says: its title, who is on air. Exported for the tests. */
+async function streamText(room) {
+  const host = room.host
+  const title = (room.post && room.post.title) || room.title
+  const text = await drawnOr(title, `@${host} is live`)
+  // A one-man stream (the studio, OBS) is "on air"; a conference room is a hangout.
+  const subtitle = room.mode === 'standalone'
+    ? [['LIVE', 'live'], [`@${host}`, true], [' on 3Speak']]
+    : [[`@${host}`, true], ['’s room on 3Speak']]
+  return { ...text, subtitle }
+}
+
+/** What a playlist or album card says. Exported for the tests. */
+async function playlistText(card) {
+  const what = card.album ? 'Album' : card.medium === 'podcast' ? 'Podcast' : 'Playlist'
+  return { ...await drawnOr(card.name, `${what} by @${card.owner}`), subtitle: [[what, true], [' by '], [`@${card.owner}`, true]] }
+}
+
+/** What an audio post's card says. Exported for the tests. */
+async function audioText(author, title, isSong) {
+  return { ...await drawnOr(title, `@${author}`), subtitle: [[isSong ? 'Song' : 'Audio', true], [' by '], [`@${author}`, true]] }
+}
+
+async function checkerJson(checkerUrl, p) {
+  const res = await fetch(`${checkerUrl}${p}`, { signal: AbortSignal.timeout(FETCH_TIMEOUT_MS) })
+  if (res.status === 404) return null
+  if (!res.ok) throw new Error(`checker ${res.status} ${p}`)
+  return res.json()
+}
+
+/** The live room, or null when no hangouts server has it (it ended). */
+async function fetchRoom(name) {
+  let failed = null
+  for (const api of HANGOUTS_APIS) {
+    try {
+      const res = await fetch(`${api}/rooms/${encodeURIComponent(name)}`, { signal: AbortSignal.timeout(FETCH_TIMEOUT_MS) })
+      if (res.ok) return await res.json()
+      if (res.status !== 404) failed = new Error(`${api} ${res.status}`)
+    } catch (err) {
+      failed = err
+    }
+  }
+  if (failed) throw failed
+  return null
+}
+
+/** The audio doc behind a Hive post, found the way og-pages.cjs finds it. */
+async function findAudioDoc(checkerUrl, author, permlink, post) {
+  const owned = await checkerJson(checkerUrl, `/audio?owner=${encodeURIComponent(author)}&limit=100`)
+  const list = (owned && owned.audio) || []
+  const bare = (v) => String(v || '').split('/').pop()
+  const doc = list.find((a) => bare(a.post_permlink) === permlink)
+  if (doc) return doc
+  const m = post && String(post.body || '').match(/audio\.3speak\.tv\/play\?a=([A-Za-z0-9_-]+)/)
+  return (m && list.find((a) => a.permlink === m[1])) || null
+}
+
 async function isBanned(checkerUrl, account) {
   try {
     const res = await fetch(`${checkerUrl}/check/${encodeURIComponent(account)}`, { signal: AbortSignal.timeout(5000) })
@@ -532,28 +755,87 @@ async function isBanned(checkerUrl, account) {
   }
 }
 
-/**
- * Draw one card. Returns the JPEG, or null when the account or community does
- * not exist (or the creator is banned: their channel shows nothing). Throws when
- * a lookup failed, so a slow node never deletes a card.
- */
-async function buildCard(kind, id, { checkerUrl, community } = {}) {
-  if (kind === 'community') {
-    const c = community || await hiveCall('bridge.get_community', { name: id, observer: '' })
-    if (!c || !c.name) return null
-    const text = await communityText(id, c.title || id)
-    // A whole-community NSFW flag: its picture stays off the card.
-    const avatar = c.is_nsfw ? null : await fetchAvatar(id)
-    return renderCard({ ...text, avatar })
-  }
+/** The account's display name, or null when it does not exist or is banned. */
+async function liveProfile(checkerUrl, account) {
   const [profile, banned] = await Promise.all([
-    hiveCall('bridge.get_profile', { account: id, observer: '' }),
-    isBanned(checkerUrl, id),
+    hiveCall('bridge.get_profile', { account, observer: '' }),
+    isBanned(checkerUrl, account),
   ])
   if (!profile || !profile.name || banned) return null
-  const p = (profile.metadata && profile.metadata.profile) || {}
-  const text = await profileText(id, p.name)
-  return renderCard({ ...text, avatar: await fetchAvatar(id) })
+  return ((profile.metadata && profile.metadata.profile) || {}).name || ''
+}
+
+/**
+ * Draw one card. Returns the JPEG, or null when the thing does not exist (or
+ * is not shown on 3Speak: a banned creator, a private playlist, a room that
+ * ended). Throws when a lookup failed, so a slow node never deletes a card.
+ */
+async function buildCard(kind, id, { checkerUrl, community } = {}) {
+  switch (kind) {
+    case 'community': {
+      const c = community || await hiveCall('bridge.get_community', { name: id, observer: '' })
+      if (!c || !c.name) return null
+      const text = await communityText(id, c.title || id)
+      // A whole-community NSFW flag: its picture stays off the card.
+      const avatar = c.is_nsfw ? null : await fetchAvatar(id)
+      return renderCard({ ...text, avatar })
+    }
+    case 'user': {
+      const name = await liveProfile(checkerUrl, id)
+      if (name === null) return null
+      return renderCard({ ...await profileText(id, name), avatar: await fetchAvatar(id) })
+    }
+    case 'invite': {
+      // The code was checked by the route; the card is the inviter's.
+      if (await liveProfile(checkerUrl, id) === null) return null
+      return renderCard({ ...inviteText(id), avatar: await fetchAvatar(id) })
+    }
+    case 'badge': {
+      // Any Hive account can be read as a badge (the badge page does the same).
+      const badge = await checkerJson(checkerUrl, `/badges/${encodeURIComponent(id)}`)
+      if (!badge || !badge.account) return null
+      return renderCard({ ...await badgeText(id, badge.title), avatar: await fetchAvatar(id) })
+    }
+    case 'tag': {
+      // Only a tag with videos: anything else would be a card for a 404 page.
+      const list = await checkerJson(checkerUrl, `/videos/tag/${encodeURIComponent(id)}?page=1&limit=1&type=videos`)
+      if (!list || !(Number(list.total) > 0 || (Array.isArray(list.videos) && list.videos.length))) return null
+      return renderCard({ ...tagText(id), avatar: null })
+    }
+    case 'stream': {
+      const room = await fetchRoom(id)
+      if (!room || !room.host || !ACCOUNT_RE.test(room.host) || room.visibility === 'hive-internal') return null
+      return renderCard({ ...await streamText(room), avatar: await fetchAvatar(room.host) })
+    }
+    case 'playlist': {
+      // 404 for private playlists, Watch Later and banned owners.
+      const card = await checkerJson(checkerUrl, `/rss/playlist/${encodeURIComponent(id)}/card.json`)
+      if (!card || !card.owner || !card.name) return null
+      const cover = await fetchPicture(card.cover)
+      return renderCard({
+        ...await playlistText(card),
+        avatar: cover || await fetchAvatar(card.owner),
+        shape: cover ? 'square' : 'ring',
+      })
+    }
+    case 'audio': {
+      const [author, permlink] = id.split('/')
+      const post = await hiveCall('bridge.get_post', { author, permlink, observer: '' })
+      if (!post || !post.author) return null
+      const doc = await findAudioDoc(checkerUrl, author, permlink, post)
+      if (doc && doc.status && doc.status !== 'published') return null
+      // An album track is a Hive reply titled "RE: <album post>": the audio's own title first.
+      const title = (doc && doc.title) || post.title
+      const cover = await fetchPicture(doc && (doc.thumbnail_url || doc.playlist_thumbnail))
+      return renderCard({
+        ...await audioText(author, title, !!doc && doc.category === 'song'),
+        avatar: cover || await fetchAvatar(author),
+        shape: cover ? 'square' : 'ring',
+      })
+    }
+    default:
+      return null
+  }
 }
 
 // ── Concurrency ─────────────────────────────────────────────────────────────
@@ -598,6 +880,17 @@ async function listCommunities() {
   return all.filter((c) => c && COMMUNITY_RE.test(c.name))
 }
 
+/** The ids of the cards of one kind on disk (audio ids are `author/permlink`). */
+async function cardIds(kind) {
+  const base = path.join(CARD_DIR, kind)
+  const jpgs = (dir) => fsp.readdir(dir).then((names) => names.filter((f) => f.endsWith('.jpg')).map((f) => f.slice(0, -4)), () => [])
+  if (kind !== 'audio') return jpgs(base)
+  const authors = await fsp.readdir(base).catch(() => [])
+  const ids = []
+  for (const author of authors) ids.push(...(await jpgs(path.join(base, author))).map((p) => `${author}/${p}`))
+  return ids
+}
+
 async function syncAll({ checkerUrl }) {
   const started = Date.now()
   const run = limiter(SYNC_CONCURRENCY)
@@ -614,31 +907,43 @@ async function syncAll({ checkerUrl }) {
     }
   })))
 
-  // Every profile card someone asked for so far; one whose account is gone or
-  // banned is deleted, the URL then 404s like the profile does.
-  let users = []
-  try {
-    users = (await fsp.readdir(path.join(CARD_DIR, 'user')))
-      .filter((f) => f.endsWith('.jpg')).map((f) => f.slice(0, -4)).filter((a) => ACCOUNT_RE.test(a))
-  } catch (_) { /* none yet */ }
-  await Promise.all(users.map((account) => run(async () => {
-    try {
-      const buf = await buildCard('user', account, { checkerUrl })
-      if (!buf) {
-        await fsp.unlink(cardPath('user', account)).catch(() => {})
-        tally.removed++
-        return
+  // Every other card someone asked for so far (profiles, badges, invites,
+  // playlists, audio); one whose thing is gone, banned or private is deleted,
+  // the URL then 404s like the page does.
+  for (const kind of REDRAWN) {
+    const ids = (await cardIds(kind)).filter((id) => validId(kind, id))
+    await Promise.all(ids.map((id) => run(async () => {
+      try {
+        const buf = await buildCard(kind, id, { checkerUrl })
+        if (!buf) {
+          await fsp.unlink(cardPath(kind, id)).catch(() => {})
+          tally.removed++
+          return
+        }
+        if (await saveCard(kind, id, buf)) tally.changed++
+        if (kind === 'user') tally.users++
+        else tally.others = (tally.others || 0) + 1
+      } catch (err) {
+        tally.failed++
       }
-      if (await saveCard('user', account, buf)) tally.changed++
-      tally.users++
-    } catch (err) {
-      tally.failed++
-    }
-  })))
+    })))
+  }
+
+  // A stream's room is gone after it ends, so there is nothing to redraw;
+  // its card goes once nobody is likely to unfurl the link again.
+  for (const id of await cardIds('stream')) {
+    const file = cardPath('stream', id)
+    try {
+      if (Date.now() - (await fsp.stat(file)).mtimeMs > STREAM_KEEP_MS) {
+        await fsp.unlink(file)
+        tally.removed++
+      }
+    } catch (_) { /* already gone */ }
+  }
 
   const state = { lastRun: started, finished: Date.now(), ...tally }
   await writeState(state)
-  console.log(`[og-cards] weekly sync: ${tally.communities} communities, ${tally.users} profiles, ${tally.changed} redrawn, ${tally.removed} removed, ${tally.failed} failed in ${Math.round((Date.now() - started) / 1000)}s`)
+  console.log(`[og-cards] weekly sync: ${tally.communities} communities, ${tally.users} profiles, ${tally.others || 0} other cards, ${tally.changed} redrawn, ${tally.removed} removed, ${tally.failed} failed in ${Math.round((Date.now() - started) / 1000)}s`)
   return state
 }
 
@@ -745,17 +1050,22 @@ function scheduleSync(call, opts) {
 
 // ── Route ───────────────────────────────────────────────────────────────────
 
-function mountOgCards(app, { checkerUrl = 'https://checker.3speak.tv' } = {}) {
+/**
+ * resolveInvite(code) -> the inviter's account, or null for a code that is not
+ * a live 3Speak invite; throws when it could not be checked. The invite lookup
+ * needs the butrauth client, which lives in the API, not in the worker.
+ */
+function mountOgCards(app, { checkerUrl = 'https://checker.3speak.tv', resolveInvite } = {}) {
   const call = createWorkerClient()
   const inFlight = new Map()
   const missing = new Map()
 
-  app.get('/api/og-card/:kind/:file', async (req, res) => {
-    const { kind, file } = req.params
-    const m = String(file).match(/^(.+)\.jpg$/)
-    const id = m ? m[1].toLowerCase() : ''
-    if (!KINDS.has(kind) || !validId(kind, id)) return res.status(404).end()
-    const key = `${kind}/${id}`
+  const serve = async (req, res, kind, urlId) => {
+    // A playlist id keeps its case; every other id is a Hive name.
+    const asked = kind === 'playlist' ? urlId : urlId.toLowerCase()
+    if (!KINDS.has(kind)) return res.status(404).end()
+    if (kind === 'invite' ? !INVITE_CODE_RE.test(asked) : !validId(kind, asked)) return res.status(404).end()
+    const key = `${kind}/${asked}`
     // helmet says same-origin for the whole API; a share image is shown by
     // other sites' pages.
     res.set('Cross-Origin-Resource-Policy', 'cross-origin')
@@ -766,23 +1076,37 @@ function mountOgCards(app, { checkerUrl = 'https://checker.3speak.tv' } = {}) {
       res.send(buf)
     }
 
+    const gone = missing.get(key)
+    if (gone && gone > Date.now()) return res.status(404).end()
+    const notFound = () => {
+      if (missing.size > 5000) missing.clear()
+      missing.set(key, Date.now() + MISSING_TTL_MS)
+      return res.status(404).end()
+    }
+
+    // An invite's card is its inviter's, and only while the code is live.
+    let id = asked
+    if (kind === 'invite') {
+      try {
+        id = resolveInvite ? await resolveInvite(asked) : null
+      } catch (err) {
+        console.error(`[og-cards] ${key}:`, err.message)
+        res.set('Cache-Control', 'no-store')
+        return res.redirect(302, '/og-image.jpg')
+      }
+      if (!id || !ACCOUNT_RE.test(id)) return notFound()
+    }
+
     try {
       return send(await fsp.readFile(cardPath(kind, id)))
     } catch (_) { /* not drawn yet */ }
-
-    const gone = missing.get(key)
-    if (gone && gone > Date.now()) return res.status(404).end()
 
     try {
       if (!inFlight.has(key)) {
         inFlight.set(key, call('build', { kind, id, checkerUrl }).finally(() => inFlight.delete(key)))
       }
       const buf = await inFlight.get(key)
-      if (!buf) {
-        if (missing.size > 5000) missing.clear()
-        missing.set(key, Date.now() + MISSING_TTL_MS)
-        return res.status(404).end()
-      }
+      if (!buf) return notFound()
       return send(Buffer.from(buf))
     } catch (err) {
       // A lookup or the drawing failed: the general banner, uncached, so the
@@ -791,7 +1115,12 @@ function mountOgCards(app, { checkerUrl = 'https://checker.3speak.tv' } = {}) {
       res.set('Cache-Control', 'no-store')
       return res.redirect(302, '/og-image.jpg')
     }
-  })
+  }
+
+  const jpgName = (file) => { const m = String(file).match(/^(.+)\.jpg$/); return m ? m[1] : '' }
+  app.get('/api/og-card/:kind/:file', (req, res) => serve(req, res, req.params.kind, jpgName(req.params.file)))
+  // An audio post is named by its author and permlink.
+  app.get('/api/og-card/audio/:author/:file', (req, res) => serve(req, res, 'audio', `${req.params.author}/${jpgName(req.params.file)}`))
 
   if (process.env.OG_CARD_SYNC !== 'off') scheduleSync(call, { checkerUrl })
 }
@@ -810,6 +1139,12 @@ module.exports = {
   renderCard,
   profileText,
   communityText,
+  badgeText,
+  tagText,
+  inviteText,
+  streamText,
+  playlistText,
+  audioText,
   prepareText,
   fitHeadline,
   syncAll,

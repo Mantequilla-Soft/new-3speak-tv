@@ -151,8 +151,8 @@ module.exports = function createLists(h) {
     extraLd = [], extraBody = '', ogTitle, card,
   }) {
     const canonical = `${CANONICAL_ORIGIN}${path}`;
-    // A page with a share image of its own (a community: card = { url, alt });
-    // otherwise the first video's thumbnail.
+    // A page with a share image of its own (card = { url, alt }: a feed, a tag,
+    // a community); otherwise the first video's thumbnail.
     const firstImage = items.map((i) => i.image).find(Boolean);
     const image = card ? card.url : firstImage ? boundImage(fixThumbnail(firstImage)) : FALLBACK_THUMBNAIL;
     const cardTitle = ogTitle || title;
@@ -225,6 +225,11 @@ module.exports = function createLists(h) {
 </html>`;
   }
 
+  // A feed's share image: a fixed card (public/og/<name>.jpg, a tilted wall of
+  // 3Speak thumbnails under the page's name), not the first video's
+  // thumbnail, which changed by the hour and said nothing about the page.
+  const feedCard = (origin, name, alt) => ({ url: `${origin}/og/${name}.jpg`, alt });
+
   // Shared tail of every description: what 3Speak is, in one clause.
   const ABOUT = 'the decentralized YouTube alternative where creators and viewers earn';
 
@@ -234,7 +239,7 @@ module.exports = function createLists(h) {
     const data = await cached('trend', () => checker(`/feeds/trendingSorted?limit=${LIST_LIMIT}`));
     const items = videoItems(data.videos);
     return buildPage({
-      origin, path: '/trend', title: 'Trending videos', h1: 'Trending videos on 3Speak',
+      origin, path: '/trend', card: feedCard(origin, 'trend', 'Trending on 3Speak'), title: 'Trending videos', h1: 'Trending videos on 3Speak',
       description: `Trending videos on 3Speak, ${ABOUT}.`,
       items, itemsHeading: 'Trending now',
     });
@@ -244,7 +249,7 @@ module.exports = function createLists(h) {
     const data = await cached('new', () => checker(`/feeds/new?limit=${LIST_LIMIT}`));
     const items = videoItems(data.videos);
     return buildPage({
-      origin, path: '/new', title: 'New videos', h1: 'New videos on 3Speak',
+      origin, path: '/new', card: feedCard(origin, 'new', 'New on 3Speak'), title: 'New videos', h1: 'New videos on 3Speak',
       description: `The newest videos on 3Speak, ${ABOUT}.`,
       items, itemsHeading: 'Just uploaded',
     });
@@ -254,7 +259,7 @@ module.exports = function createLists(h) {
     const data = await cached('shorts', () => checker(`/shortssorted?limit=${LIST_LIMIT}`));
     const items = shortItems(data.shorts);
     return buildPage({
-      origin, path: '/shorts', title: 'Shorts', h1: 'Shorts on 3Speak',
+      origin, path: '/shorts', card: feedCard(origin, 'shorts', 'Shorts on 3Speak'), title: 'Shorts', h1: 'Shorts on 3Speak',
       description: `Short vertical videos on 3Speak, ${ABOUT}.`,
       items, itemsHeading: 'Shorts',
     });
@@ -276,6 +281,9 @@ module.exports = function createLists(h) {
       items,
       itemsHeading: `Videos tagged #${tag}`,
       noindex: Math.max(total, items.length) < MIN_TAG_VIDEOS,
+      // The tag's share image (og-cards.cjs): #tag, drawn on its first fetch.
+      ogTitle: `#${tag} on 3speak.tv`,
+      card: { url: cardUrl(origin, 'tag', tag), alt: `#${tag} on 3Speak` },
     });
   }
 
@@ -289,7 +297,7 @@ module.exports = function createLists(h) {
         extra: Number(c.subscribers) > 0 ? `${Number(c.subscribers).toLocaleString('en-US')} members` : '',
       }));
     return buildPage({
-      origin, path: '/groups', title: 'Communities', h1: 'Communities on 3Speak',
+      origin, path: '/groups', card: feedCard(origin, 'communities', 'Communities on 3Speak'), title: 'Communities', h1: 'Communities on 3Speak',
       description: `Communities on 3Speak built around shared topics and languages. 3Speak is ${ABOUT}.`,
       items, itemsHeading: 'Communities',
     });
@@ -349,7 +357,7 @@ module.exports = function createLists(h) {
         };
       });
     return buildPage({
-      origin, path: '/leaderboard', title: 'Top creators', h1: 'Top creators on 3Speak',
+      origin, path: '/leaderboard', card: feedCard(origin, 'leaderboard', 'Top creators on 3Speak'), title: 'Top creators', h1: 'Top creators on 3Speak',
       description: `The most active creators on 3Speak in the last 30 days, ranked by uploads. 3Speak is ${ABOUT}.`,
       items, itemsHeading: 'Most uploads in the last 30 days',
     });

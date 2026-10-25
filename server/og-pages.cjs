@@ -1,5 +1,6 @@
 // Share cards for the pages that are not a single video: creator profiles,
-// playlists / albums, and audio posts. Same job as the video card in
+// playlists / albums, audio posts, badges, live rooms and invite links. Each
+// one's image is drawn by the API (og-cards.cjs). Same job as the video card in
 // og-server.cjs (crawlers run no JavaScript, so without this every one of these
 // links unfurled as the generic 3Speak card), same rules:
 //
@@ -26,6 +27,15 @@ const ACCOUNT_RE = /^[a-z0-9][a-z0-9.-]{2,15}$/;
 const PLAYLIST_ID_RE = /^[a-zA-Z0-9-]{8,64}$/;
 const PERMLINK_RE = /^[a-z0-9][a-z0-9-]{0,255}$/i;
 const MAX_LISTED = 20;
+// The hangouts server names a room `<host>-<7 base36>`; same as og-cards.cjs.
+const ROOM_RE = /^[a-z0-9][a-z0-9.-]{2,40}$/;
+const OPENPODS_PAGES = new Set(['publish', 'templates']);
+const INVITE_CODE_RE = /^[a-z0-9]{10}$/;
+// Where live rooms are looked up (the site's VITE_HANGOUTS_API_URLS servers).
+const HANGOUTS_APIS = (process.env.OG_HANGOUTS_APIS || 'https://live.3speak.tv')
+  .split(',').map((s) => s.trim().replace(/\/+$/, '')).filter(Boolean);
+// What 3Speak is, in one clause (og-lists.cjs says the same).
+const ABOUT = 'the decentralized YouTube alternative where creators and viewers earn';
 
 const AUDIO_MIME = { mp3: 'audio/mpeg', m4a: 'audio/mp4', mp4: 'audio/mp4', webm: 'audio/webm', ogg: 'audio/ogg', wav: 'audio/wav' };
 
@@ -109,8 +119,28 @@ module.exports = function createPages(h) {
         ? { kind: 'audio', author, permlink }
         : { kind: 'missing' };
     }
+    m = p.match(/^\/(?:b|badge)\/([^/]+)$/);
+    if (m) {
+      const account = decode(m[1]).toLowerCase();
+      return ACCOUNT_RE.test(account) ? { kind: 'badge', account } : { kind: 'missing' };
+    }
+    // A live room: /watch/<room> and /l/<room> (a stream), /openpods/<room>
+    // (a room to join). /openpods/publish and /openpods/templates are pages.
+    m = p.match(/^\/(watch|l|openpods)\/([^/]+)$/);
+    if (m && !(m[1] === 'openpods' && OPENPODS_PAGES.has(m[2]))) {
+      const room = decode(m[2]).toLowerCase();
+      return ROOM_RE.test(room) ? { kind: 'stream', room, path: `/${m[1]}/${room}` } : { kind: 'missing' };
+    }
+    m = p.match(/^\/invite\/([^/]+)$/);
+    if (m) {
+      const code = decode(m[1]).toLowerCase();
+      return INVITE_CODE_RE.test(code) ? { kind: 'invite', code } : { kind: 'missing' };
+    }
     return null;
   }
+
+  // The page carries the card drawn by the API (og-cards.cjs), 1200x630 JPEG.
+  const drawnCard = (url, alt) => ({ image: url, imageType: 'image/jpeg', imageSize: [1200, 630], imageAlt: alt });
 
   /** Image for the card: bounded, and a JPEG copy for WhatsApp (no WebP previews). */
   function cardImage(raw, req, origin) {
@@ -315,7 +345,10 @@ ${body}
     const description = clip(extractDescription(card.description || '')) || `${what} by @${card.owner} on 3Speak · ${noun}`;
 
     const canonical = `${CANONICAL_ORIGIN}/playlist/${card.id}`;
-    const { image, imageType } = cardImage(card.cover || avatarOf(card.owner), req, origin);
+    // The share image is the playlist's card (og-cards.cjs: cover and name);
+    // the structured data keeps the cover itself.
+    const { image } = cardImage(card.cover || avatarOf(card.owner), req, origin);
+    const shared = drawnCard(cardUrl(origin, 'playlist', card.id), `${card.name} on 3Speak`);
     const itemUrl = (i) => (i.kind === 'audio'
       ? `${origin}/audio/${i.author}/${i.permlink}`
       : `${origin}/watch?v=${i.author}/${i.permlink}`);
@@ -378,8 +411,7 @@ ${body}
     return buildHtml({
       title: card.name,
       description,
-      image,
-      imageType,
+      ...shared,
       url: origin + req.url,
       canonical,
       ogType,
@@ -442,8 +474,10 @@ ${body}
     const rawImage = (doc && (doc.thumbnail_url || doc.playlist_thumbnail))
       || (Array.isArray(meta.image) && meta.image[0])
       || avatarOf(author);
-    const { image, imageType } = cardImage(rawImage, req, origin);
+    const { image } = cardImage(rawImage, req, origin);
     const canonical = `${CANONICAL_ORIGIN}/audio/${author}/${permlink}`;
+    // The share image is the post's card (og-cards.cjs: artwork and title).
+    const shared = drawnCard(cardUrl(origin, 'audio', `${author}/${permlink}`), `${title} on 3Speak`);
 
     // The MP3 companion when there is one: WebM browser recordings play almost
     // nowhere outside a browser.
@@ -499,8 +533,7 @@ ${body}
     return buildHtml({
       title,
       description,
-      image,
-      imageType,
+      ...shared,
       url: origin + req.url,
       canonical,
       ogType: isSong ? 'music.song' : 'website',
@@ -511,10 +544,105 @@ ${body}
     });
   }
 
+  // ─── Badges: /b/:account, /badge/:account ──────────────────────────────────
+
+  async function badgePage(req, res, page, origin) {
+    const { account } = page;
+    // The badge page reads any account as a badge; the checker 404s only a
+    // name that is not an account at all.
+    const state = await getJsonState(`${CHECKER_URL}/badges/${encodeURIComponent(account)}`);
+    if (state.missing) return MISSING;
+    const badge = state.data;
+    if (!badge || !badge.account) return null;
+    const name = clip(badge.title, 80) || account;
+    const holders = Number(badge.recipients) > 0 ? plural(Number(badge.recipients), 'person holds', 'people hold') : null;
+    const description = clip(badge.description, 200) || `A Hive badge on 3Speak.${holders ? ` ${holders} it.` : ''}`;
+    const canonical = `${CANONICAL_ORIGIN}/b/${account}`;
+    const crumbs = breadcrumbLd([['3Speak', `${CANONICAL_ORIGIN}/`], ['Badges', `${CANONICAL_ORIGIN}/badges`], [name, canonical]]);
+    return buildHtml({
+      title: `${name} badge`,
+      ogTitle: `${name} on 3speak.tv`,
+      description,
+      ...drawnCard(cardUrl(origin, 'badge', account), `${name} badge on 3Speak`),
+      url: origin + req.url,
+      canonical,
+      jsonLd: crumbs,
+      body: `  <h1>${escapeHtml(name)}</h1>
+  <p>${escapeHtml(clip(badge.description, 2000) || description)}</p>${holders ? `\n  <p>${escapeHtml(holders)} it.</p>` : ''}`,
+    });
+  }
+
+  // ─── Live rooms: /watch/:room, /l/:room, /openpods/:room ─────────────────
+
+  /** { room } | { missing: true } (no server has it: it ended) | { error: true }. */
+  async function findRoom(name) {
+    let error = false;
+    for (const api of HANGOUTS_APIS) {
+      const state = await getJsonState(`${api}/rooms/${encodeURIComponent(name)}`);
+      if (state.data) return { room: state.data };
+      if (state.error) error = true;
+    }
+    return error ? { error: true } : { missing: true };
+  }
+
+  async function streamPage(req, res, page, origin) {
+    const found = await findRoom(page.room);
+    if (found.missing) return MISSING;
+    const room = found.room;
+    if (!room) return null;
+    if (!room.host || !ACCOUNT_RE.test(room.host) || room.visibility === 'hive-internal') return MISSING;
+    const post = room.post || {};
+    const title = clip(post.title || room.title, 100) || `@${room.host} on 3Speak`;
+    const onAir = room.mode === 'standalone';
+    const description = clip(extractDescription(post.description || room.description || ''))
+      || (onAir ? `@${room.host} is live on 3Speak.` : `Join @${room.host}'s room on 3Speak.`);
+    return buildHtml({
+      title,
+      ogTitle: onAir ? `${title} (live on 3Speak)` : `${title} on 3speak.tv`,
+      description,
+      ...drawnCard(cardUrl(origin, 'stream', page.room), onAir ? `@${room.host} live on 3Speak` : `@${room.host}'s room on 3Speak`),
+      url: origin + req.url,
+      canonical: `${CANONICAL_ORIGIN}${page.path}`,
+      // A room lasts as long as the stream: nothing for a search engine to keep.
+      noindex: true,
+      body: `  <h1>${escapeHtml(title)}</h1>
+  <p>${escapeHtml(description)}</p>
+  <p>By <a href="${escapeHtml(`${origin}/user/${room.host}`)}">@${escapeHtml(room.host)}</a></p>`,
+    });
+  }
+
+  // ─── Invite links: /invite/:code ───────────────────────────────────────────
+
+  async function invitePage(req, res, page, origin) {
+    // The API's own invite check (butrauth, 3Speak's invites only).
+    const api = (process.env.OG_API_URL || origin).replace(/\/+$/, '');
+    const state = await getJsonState(`${api}/api/referral/invite/${page.code}`);
+    if (state.error) return null;
+    const inv = state.data;
+    if (!inv || !inv.valid || !ACCOUNT_RE.test(String(inv.referrer || ''))) return MISSING;
+    const who = `@${inv.referrer}`;
+    // The words of the invite popup (app.invite.title / signUpFree).
+    const title = `${who} invited you to 3Speak`;
+    const description = `Sign up and start on 3Speak, ${ABOUT}. Your invite is saved, so ${who} gets the credit.`;
+    return buildHtml({
+      title,
+      ogTitle: title,
+      description,
+      ...drawnCard(cardUrl(origin, 'invite', inv.referrer, page.code), `${who} invites you to 3Speak`),
+      url: origin + req.url,
+      canonical: `${CANONICAL_ORIGIN}/invite/${page.code}`,
+      noindex: true,
+      body: `  <h1>${escapeHtml(title)}</h1>\n  <p>${escapeHtml(description)}</p>`,
+    });
+  }
+
   const HANDLERS = {
     profile: profilePage,
     playlist: playlistPage,
     audio: audioPage,
+    badge: badgePage,
+    stream: streamPage,
+    invite: invitePage,
     missing: async () => MISSING,
   };
 

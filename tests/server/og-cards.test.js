@@ -71,6 +71,49 @@ describe('the name on a community card', () => {
   })
 })
 
+describe('what the other cards say', () => {
+  it('a badge: its title, else its account', async () => {
+    expect(await cards.badgeText('badge-146701', 'OG PhotoGamers')).toMatchObject({
+      headline: 'OG PhotoGamers', subtitle: [['Badge', true], ON_3SPEAK],
+    })
+    expect((await cards.badgeText('badge-146701', '')).headline).toBe('badge-146701')
+  })
+
+  it('a tag: the #tag, with a # in the empty frame', () => {
+    expect(cards.tagText('cooking')).toMatchObject({ headline: '#cooking', subtitle: [['Topic', true], ON_3SPEAK], initial: '#' })
+  })
+
+  it('an invite: who invited you', () => {
+    expect(cards.inviteText('alice')).toMatchObject({ headline: 'Join me on 3Speak', subtitle: [['@alice', true], [' invited you']] })
+  })
+
+  it('a stream: its title, LIVE and the host; a conference room says whose room it is', async () => {
+    const room = { host: 'meno', mode: 'standalone', title: 'Room title', post: { title: 'Building share cards' } }
+    expect(await cards.streamText(room)).toMatchObject({
+      headline: 'Building share cards', subtitle: [['LIVE', 'live'], ['@meno', true], ON_3SPEAK],
+    })
+    expect(await cards.streamText({ ...room, mode: 'conference', post: {} })).toMatchObject({
+      headline: 'Room title', subtitle: [['@meno', true], ['’s room on 3Speak']],
+    })
+    expect((await cards.streamText({ ...room, post: { title: 'محمد علي' } })).headline).toBe('@meno is live')
+  })
+
+  it('a playlist says whether it is an album, a podcast or a playlist, and whose', async () => {
+    expect(await cards.playlistText({ name: 'Summer Songs', owner: 'alice', album: { year: 2026 } })).toMatchObject({
+      headline: 'Summer Songs', subtitle: [['Album', true], [' by '], ['@alice', true]],
+    })
+    expect((await cards.playlistText({ name: 'Talks', owner: 'alice', medium: 'podcast' })).subtitle[0]).toEqual(['Podcast', true])
+    expect((await cards.playlistText({ name: 'Mix', owner: 'alice' })).subtitle[0]).toEqual(['Playlist', true])
+  })
+
+  it('an audio post: its title, a song or audio, and whose', async () => {
+    expect(await cards.audioText('alice', 'Sunday Tune', true)).toMatchObject({
+      headline: 'Sunday Tune', subtitle: [['Song', true], [' by '], ['@alice', true]],
+    })
+    expect((await cards.audioText('alice', '', false)).headline).toBe('@alice')
+  })
+})
+
 describe('fitting the name', () => {
   it('draws a short name big, on one line', () => {
     expect(cards.fitHeadline('Threespeak')).toEqual({ size: 104, lines: ['Threespeak'] })
@@ -117,5 +160,35 @@ describe('the card file', () => {
   it('has no URL version for an id no account or community can have', () => {
     expect(cards.cardVersion('user', '../etc/passwd')).toBe('')
     expect(cards.cardVersion('community', 'hive-x')).toBe('')
+    expect(cards.cardVersion('audio', 'alice/../../etc')).toBe('')
+    expect(cards.cardVersion('tag', 'Not A Tag')).toBe('')
+    expect(cards.cardVersion('stream', '../x')).toBe('')
   })
+
+  it('names an invite card by its code and keeps it under the inviter', async () => {
+    expect(await cards.saveCard('invite', 'alice', card)).toBe(true)
+    expect(cards.cardUrl('https://3speak.tv', 'invite', 'alice', 'abcde12345'))
+      .toMatch(/^https:\/\/3speak\.tv\/api\/og-card\/invite\/abcde12345\.jpg\?v=[0-9a-z]+$/)
+  })
+
+  it('keeps an audio card under its author', async () => {
+    expect(await cards.saveCard('audio', 'alice/sunday-tune', card)).toBe(true)
+    expect(fs.existsSync(path.join(dir, 'audio', 'alice', 'sunday-tune.jpg'))).toBe(true)
+    expect(cards.cardUrl('https://3speak.tv', 'audio', 'alice/sunday-tune'))
+      .toMatch(/^https:\/\/3speak\.tv\/api\/og-card\/audio\/alice\/sunday-tune\.jpg\?v=/)
+  })
+})
+
+describe('the other card shapes', () => {
+  it('draws a cover in a square frame and a LIVE marker, still 1200x630', async () => {
+    const png1x1 = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg=='
+    for (const opts of [
+      { headline: 'Summer Songs', subtitle: [['Album', true], [' by '], ['@alice', true]], avatar: png1x1, shape: 'square' },
+      { headline: 'On air', subtitle: [['LIVE', 'live'], ['@meno', true], ON_3SPEAK], avatar: null },
+      { ...cards.tagText('cooking'), avatar: null },
+    ]) {
+      const img = jpeg.decode(Buffer.from(await cards.renderCard(opts)), { useTArray: true })
+      expect([img.width, img.height]).toEqual([1200, 630])
+    }
+  }, 30000)
 })
