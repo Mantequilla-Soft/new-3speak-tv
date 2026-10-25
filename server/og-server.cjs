@@ -1133,17 +1133,21 @@ async function serveOembed(req, res, url, origin) {
   res.end(JSON.stringify(body));
 }
 
+// Share images of communities and profiles, drawn by the API (og-cards.cjs).
+// Only the URL helper is used here; the drawing code loads in the API.
+const { cardUrl } = require('./og-cards.cjs');
+
 // Profiles, playlists/albums and audio posts. See og-pages.cjs.
 const ogPages = require('./og-pages.cjs')({
   BASE_URL, CANONICAL_ORIGIN, CHECKER_URL, escapeHtml, fixThumbnail, boundImage, extractDescription,
-  parseMeta, getIndexability, fetchHivePost, lookupHivePost, isMissingError, breadcrumbLd,
-  secondsToISO8601, toIsoDate, ogVideo, rememberOembed, OEMBED_PATH,
+  parseMeta, getIndexability, lookupHivePost, isMissingError, breadcrumbLd,
+  secondsToISO8601, toIsoDate, ogVideo, cardUrl,
 });
 
 // Feed, topic and community pages. See og-lists.cjs.
 const ogLists = require('./og-lists.cjs')({
   CANONICAL_ORIGIN, CHECKER_URL, FALLBACK_THUMBNAIL, escapeHtml, fixThumbnail, boundImage,
-  isMissingError, breadcrumbLd, ldScript, isAdultByTitle,
+  isMissingError, breadcrumbLd, ldScript, isAdultByTitle, cardUrl,
 });
 
 /**

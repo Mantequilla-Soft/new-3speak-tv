@@ -32,8 +32,8 @@ const AUDIO_MIME = { mp3: 'audio/mpeg', m4a: 'audio/mp4', mp4: 'audio/mp4', webm
 module.exports = function createPages(h) {
   const {
     CANONICAL_ORIGIN, CHECKER_URL, escapeHtml, fixThumbnail, boundImage, extractDescription,
-    parseMeta, getIndexability, fetchHivePost, lookupHivePost, isMissingError, breadcrumbLd,
-    secondsToISO8601, toIsoDate, ogVideo, rememberOembed, OEMBED_PATH,
+    parseMeta, getIndexability, lookupHivePost, isMissingError, breadcrumbLd,
+    secondsToISO8601, toIsoDate, ogVideo, cardUrl,
   } = h;
 
   /** Answered by a handler for a page that does not exist (see the header). */
@@ -124,7 +124,7 @@ module.exports = function createPages(h) {
   }
 
   function buildHtml({
-    title, description, image, imageType, url, canonical, ogType = 'website', ogExtra = [],
+    title, ogTitle, description, image, imageType, imageSize, imageAlt, url, canonical, ogType = 'website', ogExtra = [],
     twitterCard = 'summary_large_image', video, oembedUrl, jsonLd, noindex, body,
   }) {
     const meta = (prop, content) =>
@@ -156,14 +156,15 @@ module.exports = function createPages(h) {
   <meta name="robots" content="${noindex ? 'noindex, follow' : 'index, follow'}" />
   <meta name="description" content="${escapeHtml(description)}" />
 
-  <!-- Open Graph -->${meta('og:type', ogType)}${meta('og:site_name', '3Speak')}${meta('og:title', title)}${
+  <!-- Open Graph -->${meta('og:type', ogType)}${meta('og:site_name', '3Speak')}${meta('og:title', ogTitle || title)}${
     meta('og:description', description)}${meta('og:image', image)}${meta('og:image:type', imageType)}${
+    imageSize ? meta('og:image:width', imageSize[0]) + meta('og:image:height', imageSize[1]) : ''}${meta('og:image:alt', imageAlt)}${
     meta('og:url', url)}${ogExtra.map(([p, c]) => meta(p, c)).join('')}${videoMeta}
 
   <!-- Twitter Card -->
   ${twitter}
   <meta name="twitter:site" content="@3speaktv" />
-  <meta name="twitter:title" content="${escapeHtml(title)}" />
+  <meta name="twitter:title" content="${escapeHtml(ogTitle || title)}" />
   <meta name="twitter:description" content="${escapeHtml(description)}" />
   <meta name="twitter:image" content="${escapeHtml(image)}" />
 
@@ -180,11 +181,10 @@ ${body}
 
   async function profilePage(req, res, page, origin) {
     const { account } = page;
-    const [profileState, check, counts, trailer, posts, uploads] = await Promise.all([
+    const [profileState, check, counts, posts, uploads] = await Promise.all([
       hiveCallState('bridge.get_profile', { account, observer: '' }),
       getJson(`${CHECKER_URL}/check/${encodeURIComponent(account)}`).catch(() => null),
       getJson(`${CHECKER_URL}/user/${encodeURIComponent(account)}/counts`).catch(() => null),
-      getJson(`${CHECKER_URL}/user/${encodeURIComponent(account)}/trailer`).catch(() => null),
       hiveCall('bridge.get_account_posts', { sort: 'posts', account, limit: 20, observer: '' }),
       // The channel's own video list, as its profile page shows it. The Hive
       // posts above are everything the account wrote, so a creator who also
@@ -206,11 +206,17 @@ ${body}
     const tally = [videos && plural(videos, 'video', 'videos'), shorts && plural(shorts, 'short', 'shorts')]
       .filter(Boolean).join(', ');
     const about = clip(p.about, 160);
-    const description = [about, tally ? `${tally} on 3Speak` : `@${account} on 3Speak`].filter(Boolean).join(' · ');
+    // The card says what the creator says about themselves (their Hive
+    // profile), the counts only when they wrote nothing.
+    const description = clip(p.about, 200) || (tally ? `${tally} on 3Speak` : `@${account} on 3Speak`);
+    const ogTitle = `3S | ${title === `@${account}` ? title : displayName}`;
 
     const canonical = `${CANONICAL_ORIGIN}/user/${account}`;
     const selfUrl = origin + req.url;
-    const { image, imageType } = cardImage(avatarOf(account), req, origin);
+    // The channel's share image (og-cards.cjs: picture, name, @handle), drawn
+    // on its first fetch and kept. Only the image: a channel trailer is not
+    // put in as an inline player, so every platform shows the same card.
+    const image = cardUrl(origin, 'user', account);
 
     // Their latest uploads, as links for search engines. A post is a video or
     // an audio by its metadata; anything else (an album's own post, text) is not
@@ -231,27 +237,6 @@ ${body}
     const latest = [...channelVideos, ...fromPosts]
       .filter((l) => !seen.has(l.href) && seen.add(l.href))
       .slice(0, 20);
-
-    // Discord only: the channel trailer as the inline teaser, as on a video card.
-    let video = null;
-    let oembedUrl = null;
-    const tr = trailer && trailer.trailer;
-    if (tr && tr.author && tr.permlink && ogVideo.wantsVideo(req.headers['user-agent'])) {
-      const post = await fetchHivePost(tr.author, tr.permlink).catch(() => null);
-      if (post && getIndexability(post, parseMeta(post.json_metadata)).index) {
-        const inline = await ogVideo.ogVideoFor(tr.author, tr.permlink).catch(() => null);
-        if (inline) {
-          await inline.prepare(8000);
-          video = { url: origin + inline.path, width: inline.width, height: inline.height };
-          // Discord drops og:description from a video card; the oEmbed author line carries it.
-          // Keyed apart from the trailer's own video card, which remembers its
-          // own text under author/permlink.
-          const ref = `${account}/~profile`;
-          rememberOembed(ref, { description, url: canonical });
-          oembedUrl = `${origin}${OEMBED_PATH}?v=${encodeURIComponent(ref)}`;
-        }
-      }
-    }
 
     const stats = profile.stats || {};
     const jsonLd = {
@@ -291,17 +276,16 @@ ${body}
 
     return buildHtml({
       title,
+      ogTitle,
       description,
       image,
-      imageType,
+      imageType: 'image/jpeg',
+      imageSize: [1200, 630],
+      imageAlt: `${ogTitle.slice(5)} on 3Speak`,
       url: selfUrl,
       canonical,
       ogType: 'profile',
       ogExtra: [['profile:username', account]],
-      // Square avatar: the small card, not a cropped banner.
-      twitterCard: 'summary',
-      video,
-      oembedUrl,
       jsonLd: [jsonLd, crumbs],
       body,
     });

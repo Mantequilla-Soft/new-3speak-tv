@@ -32,7 +32,7 @@ const COMMUNITY_RE = /^hive-\d{1,10}$/;
 module.exports = function createLists(h) {
   const {
     CANONICAL_ORIGIN, CHECKER_URL, FALLBACK_THUMBNAIL, escapeHtml, fixThumbnail, boundImage,
-    isMissingError, breadcrumbLd, ldScript, isAdultByTitle,
+    isMissingError, breadcrumbLd, ldScript, isAdultByTitle, cardUrl,
   } = h;
 
   const MISSING = Symbol('missing');
@@ -148,11 +148,20 @@ module.exports = function createLists(h) {
 
   function buildPage({
     origin, path, title, h1, description, intro, items, itemsHeading, noindex = false, crumbs,
-    extraLd = [], extraBody = '',
+    extraLd = [], extraBody = '', ogTitle, card,
   }) {
     const canonical = `${CANONICAL_ORIGIN}${path}`;
+    // A page with a share image of its own (a community: card = { url, alt });
+    // otherwise the first video's thumbnail.
     const firstImage = items.map((i) => i.image).find(Boolean);
-    const image = firstImage ? boundImage(fixThumbnail(firstImage)) : FALLBACK_THUMBNAIL;
+    const image = card ? card.url : firstImage ? boundImage(fixThumbnail(firstImage)) : FALLBACK_THUMBNAIL;
+    const cardTitle = ogTitle || title;
+    const imageMeta = card
+      ? `\n  <meta property="og:image:type" content="image/jpeg" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt" content="${escapeHtml(card.alt)}" />`
+      : '';
     const abs = (p) => `${origin}${p}`;
 
     const ld = [
@@ -196,13 +205,13 @@ module.exports = function createLists(h) {
   <meta name="robots" content="${noindex ? 'noindex, follow' : 'index, follow'}" />
   <meta property="og:type" content="website" />
   <meta property="og:site_name" content="3Speak" />
-  <meta property="og:title" content="${escapeHtml(title)}" />
+  <meta property="og:title" content="${escapeHtml(cardTitle)}" />
   <meta property="og:description" content="${escapeHtml(description)}" />
-  <meta property="og:image" content="${escapeHtml(image)}" />
+  <meta property="og:image" content="${escapeHtml(image)}" />${imageMeta}
   <meta property="og:url" content="${escapeHtml(abs(path))}" />
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:site" content="@3speaktv" />
-  <meta name="twitter:title" content="${escapeHtml(title)}" />
+  <meta name="twitter:title" content="${escapeHtml(cardTitle)}" />
   <meta name="twitter:description" content="${escapeHtml(description)}" />
   <meta name="twitter:image" content="${escapeHtml(image)}" />
   <link rel="canonical" href="${escapeHtml(canonical)}" />
@@ -294,7 +303,8 @@ module.exports = function createLists(h) {
       .catch(() => ({ videos: [] }));
     const items = videoItems(feed.videos);
     const name = clip(c.title || id, 80);
-    const about = clip(c.about, 300);
+    // The community's own words on Hive: the short "about", else its longer description.
+    const about = clip(c.about || c.description, 300);
     const members = Number(c.subscribers) > 0 ? `${Number(c.subscribers).toLocaleString('en-US')} members` : null;
     const extraLd = [{
       '@context': 'https://schema.org',
@@ -309,8 +319,11 @@ module.exports = function createLists(h) {
       path: `/community/${id}`,
       title: `${name} community`,
       h1: name,
-      description: clip(`${about || `The ${name} community on 3Speak.`}${members ? ` ${members}.` : ''}`, 200),
+      description: clip(about || `The ${name} community on 3Speak.${members ? ` ${members}.` : ''}`, 200),
       intro: about || `The ${name} community on 3Speak, ${ABOUT}.`,
+      // The community's share image (og-cards.cjs): its picture and name.
+      ogTitle: `3S | ${name}`,
+      card: { url: cardUrl(origin, 'community', id), alt: `${name} community on 3Speak` },
       items,
       itemsHeading: `New in ${name}`,
       crumbs: [['Communities', `${CANONICAL_ORIGIN}/groups`], [name, `${CANONICAL_ORIGIN}/community/${id}`]],

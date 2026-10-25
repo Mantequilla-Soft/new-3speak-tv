@@ -62,6 +62,14 @@ const FIXTURES = {
       url: 'https://api.hive.blog', method: 'POST', body: { method: 'bridge.get_community', params: { name: 'hive-100002' } },
       json: { error: { code: -32602, message: 'Assert Exception:given community name is not valid' } },
     },
+    // A creator profile.
+    {
+      url: 'https://api.hive.blog', method: 'POST', body: { method: 'bridge.get_profile', params: { account: 'alice' } },
+      json: { result: { name: 'alice', metadata: { profile: { name: 'Alice Cook', about: 'I cook on camera every Sunday.' } }, stats: { followers: 10 } } },
+    },
+    { url: 'https://checker.test.invalid/check/alice', json: { banned: false } },
+    { url: 'https://checker.test.invalid/user/alice/counts', json: { videos: 3, shorts: 1 } },
+    { url: 'https://checker.test.invalid/user/alice/trailer', json: { trailer: { author: 'alice', permlink: 'my-video' } } },
     { url: 'https://checker.test.invalid/feeds/community/hive-100001/new?page=1&limit=40', json: { videos: [{ owner: 'alice', permlink: 'my-video', title: 'Cooking with fire' }] } },
     // The post stands, the video does not: confirmed gone on every gateway.
     hivePost('alice', 'gone-video'),
@@ -300,6 +308,34 @@ describe('list pages', () => {
     expect(r.text).toContain('People who cook on camera.')
     expect(r.text).toContain('href="https://3speak.tv/watch?v=alice/my-video"')
     expect(canonical(r.text)).toBe('https://3speak.tv/community/hive-100001')
+  })
+
+  it("a community's share card is its own image, '3S | <name>' and its Hive about text", async () => {
+    const r = await crawl('/community/hive-100001', 'Mozilla/5.0 (compatible; Discordbot/2.0; +https://discordapp.com)')
+    expect(r.text).toContain('<meta property="og:title" content="3S | Cooks" />')
+    expect(r.text).toContain('<meta property="og:description" content="People who cook on camera." />')
+    expect(r.text).toContain('<meta property="og:image" content="https://3speak.tv/api/og-card/community/hive-100001.jpg" />')
+    expect(r.text).toContain('<meta property="og:image:width" content="1200" />')
+    expect(r.text).toContain('<meta name="twitter:title" content="3S | Cooks" />')
+  })
+
+  it("a profile's share card is its own image, '3S | <display name>' and the Hive bio", async () => {
+    const r = await crawl('/user/alice')
+    expect(r.status).toBe(200)
+    expect(r.text).toContain('<title>Alice Cook (@alice) - 3Speak</title>')
+    expect(r.text).toContain('<meta property="og:title" content="3S | Alice Cook" />')
+    expect(r.text).toContain('<meta property="og:description" content="I cook on camera every Sunday." />')
+    expect(r.text).toContain('<meta property="og:image" content="https://3speak.tv/api/og-card/user/alice.jpg" />')
+    expect(r.text).toContain('<meta name="twitter:card" content="summary_large_image" />')
+  })
+
+  it("a profile's share card has no inline player, even on Discord with a channel trailer", async () => {
+    const r = await crawl('/user/alice', 'Mozilla/5.0 (compatible; Discordbot/2.0; +https://discordapp.com)')
+    expect(r.status).toBe(200)
+    expect(r.text).toContain('<meta property="og:image" content="https://3speak.tv/api/og-card/user/alice.jpg" />')
+    expect(r.text).not.toContain('og:video')
+    expect(r.text).not.toContain('twitter:player')
+    expect(r.text).not.toContain('json+oembed')
   })
 
   it('an unknown community is a 404', async () => {

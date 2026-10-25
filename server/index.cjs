@@ -2337,6 +2337,11 @@ require('./sitemaps.cjs').mountSitemaps(app, {
   dbName: process.env.DATABASE_NAME,
 })
 
+// 🖼️ Share images for communities and profiles. See og-cards.cjs.
+require('./og-cards.cjs').mountOgCards(app, {
+  checkerUrl: (process.env.CHECKER_URL || 'https://checker.3speak.tv').replace(/\/+$/, ''),
+})
+
 // ▶️ YouTube import (verified channel owners only). See youtube-import.cjs.
 // The whole importer is OFF unless VIDEO_IMPORT_ENABLED=true (owner's call
 // 2026-10-06); each source has its own IMPORT_SOURCE_<NAME> switch inside.
