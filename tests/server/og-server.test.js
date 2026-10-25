@@ -63,6 +63,19 @@ const FIXTURES = {
       json: { error: { code: -32602, message: 'Assert Exception:given community name is not valid' } },
     },
     { url: 'https://checker.test.invalid/feeds/community/hive-100001/new?page=1&limit=40', json: { videos: [{ owner: 'alice', permlink: 'my-video', title: 'Cooking with fire' }] } },
+    // The post stands, the video does not: confirmed gone on every gateway.
+    hivePost('alice', 'gone-video'),
+    { url: 'https://checker.test.invalid/videodetails/alice/gone-video', json: { owner: 'alice', permlink: 'gone-video', status: 'published', unavailable: true } },
+    // Two voice snaps with the app's stand-in title: one with no caption, one with.
+    hivePost('carol', 'snap-bare', { parent_author: 'peak.snaps', title: '', body: 'https://audio.3speak.tv/play?a=bare1' }),
+    hivePost('carol', 'snap-said', { parent_author: 'peak.snaps', title: '', body: 'Practicing bass for a new song, re-recording it tonight\n\nhttps://audio.3speak.tv/play?a=said1' }),
+    {
+      url: 'https://checker.test.invalid/audio?owner=carol&limit=100',
+      json: { audio: [
+        { owner: 'carol', permlink: 'bare1', title: 'Audio Snap by carol', post_permlink: 'snap-bare', status: 'published', audio_cid: 'QmBare', category: 'voice_message' },
+        { owner: 'carol', permlink: 'said1', title: 'Audio Snap by carol', post_permlink: 'snap-said', status: 'published', audio_cid: 'QmSaid', category: 'voice_message' },
+      ] },
+    },
     // Every other video id: the checker has no such video.
     { url: 'https://checker.test.invalid/videodetails/', prefix: true, status: 404, json: { error: 'Video not found' } },
     // Anything else on Hive: no such post.
@@ -233,6 +246,22 @@ describe('search engines', () => {
       expect(canonical(r.text), path).toBe('https://3speak.tv/shorts?v=alice/snapasset')
       expect(r.text, path).toContain('<title>My dog learns to surf - 3Speak</title>')
     }
+  })
+
+  it('keep a video whose file is confirmed gone out of the index, page still served', async () => {
+    const r = await crawl('/watch?v=alice/gone-video', GOOGLEBOT)
+    expect(r.status).toBe(200)
+    expect(r.text).toMatch(/<meta name="robots" content="noindex, follow"/)
+    const ok = await crawl('/watch?v=alice/my-video', GOOGLEBOT)
+    expect(ok.text).toMatch(/<meta name="robots" content="index, follow"/)
+  })
+
+  it('keep a voice snap with no caption out of the index, but not one that says something', async () => {
+    const bare = await crawl('/audio/carol/snap-bare', GOOGLEBOT)
+    expect(bare.status).toBe(200)
+    expect(bare.text).toMatch(/<meta name="robots" content="noindex/)
+    const said = await crawl('/audio/carol/snap-said', GOOGLEBOT)
+    expect(said.text).toMatch(/<meta name="robots" content="index, follow"/)
   })
 
   it('get a VideoObject and a breadcrumb trail on a watch page', async () => {

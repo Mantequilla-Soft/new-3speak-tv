@@ -31,6 +31,15 @@ const PLAYER_ORIGIN = 'https://play.3speak.tv'
 // Our own gateway: both Bunny IPFS zones answer 403 "Domain suspended" (2026-09-08).
 const IPFS_GATEWAY = 'https://ipfs.3speak.tv'
 const HOSTS = new Set(['3speak.tv', 'preview.3speak.tv'])
+
+// IndexNow (Bing, Yandex, Seznam, Naver): a sitemap is read whenever a crawler
+// gets round to it, IndexNow is a push. The key is public by design: the
+// engines check public/<key>.txt to see the sender owns the host.
+const INDEXNOW_KEY = '543e8145243aad676fa99158fae9401d'
+const INDEXNOW_EVERY_MS = 10 * 60 * 1000
+// Uploads can turn `published` well after createdAt (encoding), so each round
+// looks back a full day and remembers what it already sent.
+const INDEXNOW_LOOKBACK_MS = 24 * 60 * 60 * 1000
 // sitemap-pages.xml: a topic needs this many videos to be listed, and at most
 // MAX_TOPICS tags go in (the busiest first). Tag spelling as og-lists accepts it.
 const MIN_TOPIC_VIDEOS = 25
@@ -431,6 +440,62 @@ function mountSitemaps(app, { uri, dbName }) {
       add(`/audio/${owner}/${permlink}`, a.createdAt || a.created_at)
     }
     return urlset(lines, false)
+  }
+
+  // Off unless INDEXNOW=on, which only prod's server/.env sets: preview must
+  // not submit 3speak.tv URLs as well. INDEXNOW=dry logs what would be sent.
+  const indexNowMode = process.env.INDEXNOW
+  if (indexNowMode === 'on' || indexNowMode === 'dry') {
+    const sent = new Map() // url -> when, pruned after the lookback
+    const round = async () => {
+      try {
+        const db = await getDb()
+        const hidden = await hiddenCreators(db)
+        const from = new Date(Date.now() - INDEXNOW_LOOKBACK_MS)
+        const urls = []
+        for (const s of Object.values(SERIES)) {
+          const dateField = Object.keys(s.sort)[0]
+          const docs = await db.collection(s.collection)
+            .find({ ...s.match(hidden), [dateField]: { $gte: from } }, { projection: s.fields })
+            .limit(2000)
+            .toArray()
+          for (const d of docs) {
+            const url = `https://3speak.tv/${s.entry(d).path}`
+            if (!sent.has(url)) urls.push(url)
+          }
+        }
+        for (const [url, at] of sent) if (at < from.getTime()) sent.delete(url)
+        if (!urls.length) return
+        if (indexNowMode === 'dry') {
+          console.log(`[indexnow] dry run, would send ${urls.length}: ${urls.slice(0, 3).join(' ')}${urls.length > 3 ? ' ...' : ''}`)
+          for (const url of urls) sent.set(url, Date.now())
+          return
+        }
+        const res = await fetch('https://api.indexnow.org/indexnow', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json; charset=utf-8' },
+          body: JSON.stringify({
+            host: '3speak.tv',
+            key: INDEXNOW_KEY,
+            keyLocation: `https://3speak.tv/${INDEXNOW_KEY}.txt`,
+            urlList: urls.slice(0, 10000),
+          }),
+          signal: AbortSignal.timeout(20000),
+        })
+        // 200 and 202 both mean accepted; anything else is retried next round.
+        if (res.status === 200 || res.status === 202) {
+          for (const url of urls) sent.set(url, Date.now())
+          console.log(`[indexnow] sent ${urls.length} new URLs (${res.status})`)
+        } else {
+          console.warn(`[indexnow] ${res.status} for ${urls.length} URLs, retrying next round`)
+        }
+      } catch (err) {
+        console.warn('[indexnow]', err.message)
+      }
+    }
+    setTimeout(round, 60 * 1000).unref()
+    setInterval(round, INDEXNOW_EVERY_MS).unref()
+    console.log(`[indexnow] ${indexNowMode === 'dry' ? 'dry run' : 'on'}, every ${INDEXNOW_EVERY_MS / 60000} min`)
   }
 
   app.get(/^\/api\/sitemap\/(index|channels|pages|(videos|uploads|shorts)-(\d{1,4}))\.xml$/, async (req, res) => {

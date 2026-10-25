@@ -434,8 +434,14 @@ ${body}
 
     const indexability = getIndexability(post, meta);
     // The "empty" rule is about thin video posts; a post carrying a real audio
-    // file is content however short its text.
-    const index = indexability.index || (indexability.reason === 'empty' && !!doc);
+    // file is content however short its text...
+    // ...unless nothing on the page says what it is: a voice snap keeps the
+    // app's stand-in title ("Audio Snap by x") and often has no caption, which
+    // leaves a search engine a name and a player. Kept out, not removed.
+    const placeholderTitle = /^audio( snap)? by @?[a-z0-9.-]+$/i.test(String((doc && doc.title) || post.title || '').trim());
+    const caption = plainText(post.body, 2000).replace(/\s+/g, ' ').trim();
+    const thin = placeholderTitle && caption.length < 30;
+    const index = (indexability.index || (indexability.reason === 'empty' && !!doc)) && !thin;
 
     // The audio's own title first: an album track is a Hive REPLY to the album
     // post, so its post title is "RE: <album post>", not the track's name.

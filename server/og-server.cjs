@@ -1409,6 +1409,7 @@ const server = http.createServer(async (req, res) => {
     let comments = [];
     let related = [];
     let contentUrl = null;
+    let gone = false;
     let inline = null;
     // Transcript + comments are for search engines; Discord shows neither, and
     // it gives up on a slow unfurl. Skipping them for the video bot keeps its
@@ -1417,16 +1418,23 @@ const server = http.createServer(async (req, res) => {
     if (post && index && !videoBot) {
       // All hang off the same Hive post; fetch them together rather than
       // adding each round-trip on top of the transcript's.
-      const [t, c, v, r, m] = await Promise.all([
+      const [t, c, v, r, m, d] = await Promise.all([
         fetchTranscript(post.author, post.permlink),
         fetchComments(post.author, post.permlink),
         inlineVideo,
         fetchRelated(post.author, post.permlink),
         inlineAllowed ? ogVideo.manifestUrl(video.author, video.permlink) : null,
+        card.embed ? { doc: card.embed } : lookupEmbed(post.author, post.permlink),
       ]);
       if (inlineAllowed) inline = v;
       related = r;
       contentUrl = m;
+      // The post stands but the video does not: the checker marks a video
+      // `unavailable` only once EVERY gateway answers a definite 404
+      // (3speakchecks utils/unavailable.js), and `deleted` is the creator's.
+      // A failed lookup proves nothing and keeps the page indexed.
+      const doc = d && d.doc;
+      gone = !!doc && (doc.unavailable === true || doc.status === 'deleted');
       transcript = (t && t.text) || null;
       transcriptLang = (t && t.lang) || null;
       subtitleLanguages = (t && t.languages) || null;
@@ -1452,7 +1460,7 @@ const server = http.createServer(async (req, res) => {
       canonical: canonicalUrl,
       duration,
       author: video.author,
-      noindex: !index,
+      noindex: !index || gone,
       uploadDate,
       // The same player the oEmbed and the sitemap hand out.
       embedUrl: playerUrlFor(video),
