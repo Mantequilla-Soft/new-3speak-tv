@@ -138,7 +138,8 @@
     "contactLoadFailed": "আপনার যোগাযোগের তথ্য লোড করা যায়নি",
     "contactSaveFailed": "আপনার যোগাযোগের তথ্য সেভ করা যায়নি",
     "onlyButrauthBacklog": "শুধু Butter Auth অ্যাকাউন্টেরই জমে থাকা প্রকাশের তালিকা থাকতে পারে",
-    "publishFailed": "প্রকাশ ব্যর্থ হয়েছে ({{status}})"
+    "publishFailed": "প্রকাশ ব্যর্থ হয়েছে ({{status}})",
+    "duplicateComment": "আপনি এই মন্তব্যটি আগেই পোস্ট করেছেন। অনুগ্রহ করে নতুন কিছু লিখুন।"
   },
   "routeError": {
     "title": "এই পেজটি লোড হয়নি",

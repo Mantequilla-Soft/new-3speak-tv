@@ -138,7 +138,8 @@
     "contactLoadFailed": "无法加载你的联系信息",
     "contactSaveFailed": "无法保存你的联系信息",
     "onlyButrauthBacklog": "只有 Butter Auth 账号才能有孵化期待发布内容",
-    "publishFailed": "发布失败（{{status}}）"
+    "publishFailed": "发布失败（{{status}}）",
+    "duplicateComment": "你已经发过这条评论了，请写点新的内容。"
   },
   "routeError": {
     "title": "此页面没有加载出来",

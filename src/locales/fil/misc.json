@@ -138,7 +138,8 @@
     "contactLoadFailed": "Hindi ma-load ang contact details mo",
     "contactSaveFailed": "Hindi ma-save ang contact details mo",
     "onlyButrauthBacklog": "Butter Auth account lang ang puwedeng magkaroon ng incubation backlog",
-    "publishFailed": "Pumalya ang pag-publish ({{status}})"
+    "publishFailed": "Pumalya ang pag-publish ({{status}})",
+    "duplicateComment": "Nai-post mo na ang komentong ito. Pakisulat ng bago."
   },
   "routeError": {
     "title": "Hindi nag-load ang page na ito",

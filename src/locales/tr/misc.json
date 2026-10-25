@@ -138,7 +138,8 @@
     "contactLoadFailed": "İletişim bilgilerin yüklenemedi",
     "contactSaveFailed": "İletişim bilgilerin kaydedilemedi",
     "onlyButrauthBacklog": "Yalnızca Butter Auth hesaplarının bekleyen inkübasyon gönderileri olabilir",
-    "publishFailed": "Yayınlama başarısız ({{status}})"
+    "publishFailed": "Yayınlama başarısız ({{status}})",
+    "duplicateComment": "Bu yorumu zaten paylaştın. Lütfen yeni bir şey yaz."
   },
   "routeError": {
     "title": "Bu sayfa yüklenmedi",

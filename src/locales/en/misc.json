@@ -138,7 +138,8 @@
     "contactLoadFailed": "Could not load your contact details",
     "contactSaveFailed": "Could not save your contact details",
     "onlyButrauthBacklog": "Only a Butter Auth account can have an incubation backlog",
-    "publishFailed": "Publish failed ({{status}})"
+    "publishFailed": "Publish failed ({{status}})",
+    "duplicateComment": "You have already posted this comment. Please write something new."
   },
   "routeError": {
     "title": "This page didn't load",

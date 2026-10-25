@@ -138,7 +138,8 @@
     "contactLoadFailed": "Detail kontakmu tidak dapat dimuat",
     "contactSaveFailed": "Detail kontakmu tidak dapat disimpan",
     "onlyButrauthBacklog": "Hanya akun Butter Auth yang bisa punya antrean inkubasi",
-    "publishFailed": "Gagal menerbitkan ({{status}})"
+    "publishFailed": "Gagal menerbitkan ({{status}})",
+    "duplicateComment": "Kamu sudah memposting komentar ini. Silakan tulis sesuatu yang baru."
   },
   "routeError": {
     "title": "Halaman ini gagal dimuat",

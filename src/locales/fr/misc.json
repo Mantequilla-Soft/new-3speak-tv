@@ -138,7 +138,8 @@
     "contactLoadFailed": "Impossible de charger vos coordonnées",
     "contactSaveFailed": "Impossible d'enregistrer vos coordonnées",
     "onlyButrauthBacklog": "Seul un compte Butter Auth peut avoir des publications d'incubation en attente",
-    "publishFailed": "Échec de la publication ({{status}})"
+    "publishFailed": "Échec de la publication ({{status}})",
+    "duplicateComment": "Vous avez déjà publié ce commentaire. Merci d'écrire quelque chose de nouveau."
   },
   "routeError": {
     "title": "Cette page ne s'est pas chargée",

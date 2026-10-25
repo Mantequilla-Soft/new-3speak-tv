@@ -138,7 +138,8 @@
     "contactLoadFailed": "Không thể tải thông tin liên hệ của bạn",
     "contactSaveFailed": "Không thể lưu thông tin liên hệ của bạn",
     "onlyButrauthBacklog": "Chỉ tài khoản Butter Auth mới có thể có video tồn đọng trong giai đoạn khởi động",
-    "publishFailed": "Xuất bản thất bại ({{status}})"
+    "publishFailed": "Xuất bản thất bại ({{status}})",
+    "duplicateComment": "Bạn đã đăng bình luận này rồi. Vui lòng viết nội dung mới."
   },
   "routeError": {
     "title": "Trang này không tải được",

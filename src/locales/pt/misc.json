@@ -138,7 +138,8 @@
     "contactLoadFailed": "Não foi possível carregar seus dados de contato",
     "contactSaveFailed": "Não foi possível salvar seus dados de contato",
     "onlyButrauthBacklog": "Só uma conta Butter Auth pode ter pendências de incubação",
-    "publishFailed": "Falha ao publicar ({{status}})"
+    "publishFailed": "Falha ao publicar ({{status}})",
+    "duplicateComment": "Você já publicou este comentário. Escreva algo novo, por favor."
   },
   "routeError": {
     "title": "Esta página não carregou",

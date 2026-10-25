@@ -138,7 +138,8 @@
     "contactLoadFailed": "Deine Kontaktdaten konnten nicht geladen werden",
     "contactSaveFailed": "Deine Kontaktdaten konnten nicht gespeichert werden",
     "onlyButrauthBacklog": "Nur ein Butter-Auth-Konto kann einen Inkubations-Rückstand haben",
-    "publishFailed": "Veröffentlichen fehlgeschlagen ({{status}})"
+    "publishFailed": "Veröffentlichen fehlgeschlagen ({{status}})",
+    "duplicateComment": "Diesen Kommentar hast du schon gepostet. Schreib bitte etwas Neues."
   },
   "routeError": {
     "title": "Diese Seite wurde nicht geladen",

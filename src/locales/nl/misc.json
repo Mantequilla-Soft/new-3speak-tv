@@ -138,7 +138,8 @@
     "contactLoadFailed": "Je contactgegevens konden niet worden geladen",
     "contactSaveFailed": "Je contactgegevens konden niet worden opgeslagen",
     "onlyButrauthBacklog": "Alleen een Butter Auth-account kan een incubatie-achterstand hebben",
-    "publishFailed": "Publiceren mislukt ({{status}})"
+    "publishFailed": "Publiceren mislukt ({{status}})",
+    "duplicateComment": "Je hebt deze reactie al geplaatst. Schrijf alsjeblieft iets nieuws."
   },
   "routeError": {
     "title": "Deze pagina is niet geladen",

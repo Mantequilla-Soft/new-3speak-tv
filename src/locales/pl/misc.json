@@ -138,7 +138,8 @@
     "contactLoadFailed": "Nie udało się wczytać twoich danych kontaktowych",
     "contactSaveFailed": "Nie udało się zapisać twoich danych kontaktowych",
     "onlyButrauthBacklog": "Zaległe posty z inkubacji może mieć tylko konto Butter Auth",
-    "publishFailed": "Publikacja nie powiodła się ({{status}})"
+    "publishFailed": "Publikacja nie powiodła się ({{status}})",
+    "duplicateComment": "Ten komentarz został już przez Ciebie opublikowany. Napisz coś nowego."
   },
   "routeError": {
     "title": "Ta strona się nie wczytała",

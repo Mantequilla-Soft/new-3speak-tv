@@ -138,7 +138,8 @@
     "contactLoadFailed": "आपकी संपर्क जानकारी लोड नहीं हो सकी",
     "contactSaveFailed": "आपकी संपर्क जानकारी सेव नहीं हो सकी",
     "onlyButrauthBacklog": "सिर्फ़ Butter Auth अकाउंट का ही इनक्यूबेशन बैकलॉग हो सकता है",
-    "publishFailed": "पब्लिश फ़ेल हुआ ({{status}})"
+    "publishFailed": "पब्लिश फ़ेल हुआ ({{status}})",
+    "duplicateComment": "आप यह टिप्पणी पहले ही पोस्ट कर चुके हैं। कृपया कुछ नया लिखें।"
   },
   "routeError": {
     "title": "यह पेज लोड नहीं हुआ",

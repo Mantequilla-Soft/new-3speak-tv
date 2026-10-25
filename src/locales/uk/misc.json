@@ -138,7 +138,8 @@
     "contactLoadFailed": "Не вдалося завантажити ваші контактні дані",
     "contactSaveFailed": "Не вдалося зберегти ваші контактні дані",
     "onlyButrauthBacklog": "Архів інкубації може мати лише акаунт Butter Auth",
-    "publishFailed": "Не вдалося опублікувати ({{status}})"
+    "publishFailed": "Не вдалося опублікувати ({{status}})",
+    "duplicateComment": "Ви вже публікували цей коментар. Будь ласка, напишіть щось нове."
   },
   "routeError": {
     "title": "Ця сторінка не завантажилася",

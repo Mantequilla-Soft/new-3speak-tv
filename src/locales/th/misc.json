@@ -138,7 +138,8 @@
     "contactLoadFailed": "โหลดข้อมูลติดต่อของคุณไม่ได้",
     "contactSaveFailed": "บันทึกข้อมูลติดต่อของคุณไม่ได้",
     "onlyButrauthBacklog": "เฉพาะบัญชี Butter Auth เท่านั้นที่มีรายการค้างจากช่วงวอร์มอัปได้",
-    "publishFailed": "เผยแพร่ไม่สำเร็จ ({{status}})"
+    "publishFailed": "เผยแพร่ไม่สำเร็จ ({{status}})",
+    "duplicateComment": "คุณโพสต์ความคิดเห็นนี้ไปแล้ว โปรดเขียนสิ่งใหม่"
   },
   "routeError": {
     "title": "หน้านี้โหลดไม่สำเร็จ",

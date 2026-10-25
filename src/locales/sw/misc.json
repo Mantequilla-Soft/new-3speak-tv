@@ -138,7 +138,8 @@
     "contactLoadFailed": "Imeshindwa kupakia maelezo yako ya mawasiliano",
     "contactSaveFailed": "Imeshindwa kuhifadhi maelezo yako ya mawasiliano",
     "onlyButrauthBacklog": "Ni akaunti ya Butter Auth pekee inayoweza kuwa na machapisho yanayosubiri ya maandalizi",
-    "publishFailed": "Kuchapisha kumeshindwa ({{status}})"
+    "publishFailed": "Kuchapisha kumeshindwa ({{status}})",
+    "duplicateComment": "Tayari umechapisha maoni haya. Tafadhali andika kitu kipya."
   },
   "routeError": {
     "title": "Ukurasa huu haukupakia",
