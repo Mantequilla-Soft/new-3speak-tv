@@ -40,9 +40,16 @@ export const test = base.extend({
 
 export { expect, APP_VERSION }
 
-// The first few /watch links on the current page.
+// Links in the app's Hive-style form (src/utils/urls.js): a video is
+// /@author/permlink, a channel /@user. CSS cannot count slashes, so XPath: a
+// video link has a second "/" after "/@". A trailing `>> visible=true` keeps
+// hidden copies (the mobile menu) out.
+export const VIDEO_LINK = 'xpath=//a[starts-with(@href, "/@") and contains(substring(@href, 3), "/")]'
+export const PROFILE_LINK = 'xpath=//a[starts-with(@href, "/@") and not(contains(substring(@href, 3), "/"))]'
+
+// The first few video links on the current page.
 export async function watchLinks(page, n = 5) {
-  const links = page.locator('a[href*="/watch?v="]')
+  const links = page.locator(VIDEO_LINK)
   await expect(links.first()).toBeVisible()
   return (await links.evaluateAll((as) => as.map((a) => a.getAttribute('href')))).slice(0, n)
 }

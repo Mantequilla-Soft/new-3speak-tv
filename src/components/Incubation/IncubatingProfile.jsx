@@ -286,7 +286,7 @@ export default function IncubatingProfile({ handle, own = false }) {
 
       <p className="inc-note">
         {graduated ? (
-          <Trans i18nKey="incubation.profile.note.graduated" values={{ user: profile.hiveUsername }} components={{ userLink: <Link to={`/p/${profile.hiveUsername}`} /> }} />
+          <Trans i18nKey="incubation.profile.note.graduated" values={{ user: profile.hiveUsername }} components={{ userLink: <Link to={`/@${profile.hiveUsername}`} /> }} />
         ) : advertiser ? (
           <>{t('incubation.profile.note.advertiser')}</>
         ) : own ? (

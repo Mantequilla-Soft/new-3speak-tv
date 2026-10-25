@@ -181,7 +181,7 @@ function AudioTile({
   const handleAuthor = (e) => {
     e.stopPropagation();
     if (onAuthorClick) return onAuthorClick();
-    navigate(`/p/${item.owner}?tab=audio`);
+    navigate(`/@${item.owner}?tab=audio`);
   };
 
   const thumb = audioThumb(item);

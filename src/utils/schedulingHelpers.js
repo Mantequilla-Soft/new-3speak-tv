@@ -59,6 +59,12 @@ export function getSchedulingParams(isScheduled, datetimeValue) {
   const publish_data = Math.floor(scheduledDate.getTime() / 1000);
   const nowUnix = Math.floor(Date.now() / 1000);
 
+  // An unparseable value gives NaN, which slips past the `<= now` check below.
+  if (!Number.isFinite(publish_data)) {
+    console.warn(`Scheduled time "${datetimeValue}" is not a valid date, rejecting`);
+    return { publish_type: 'error', error: 'Scheduled time is not a valid date' };
+  }
+
   if (publish_data <= nowUnix) {
     console.warn(`Scheduled time is in the past (${publish_data} <= ${nowUnix}), rejecting`);
     return { publish_type: 'error', error: 'Scheduled time is in the past' };

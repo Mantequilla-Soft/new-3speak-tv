@@ -106,16 +106,17 @@ function validateEntry (key, value, en, categories) {
     if (!enTags.has(t[2])) return `Tag <${t[2]}> is not in the English text`
   }
 
-  // Same rule as check.mjs. A plural form may drop {{count}} ("one comment"), and
-  // may use any token from ANY English form of that text: Russian "one" also covers
-  // 21, 31…, so it needs {{count}} even where English "one" reads "Upload a video".
-  const refTokens = m
+  // Same rule as check.mjs. A plural form must keep the tokens of its own English
+  // form (or of "other"), but may drop {{count}} ("one comment"), and may use any
+  // token from ANY English form of that text: Russian "one" also covers 21, 31…, so
+  // it needs {{count}} even where English "one" reads "Upload a video".
+  const allowed = m
     ? [...new Set(PLURAL_FORMS.flatMap((c) => (has(en, `${base}_${c}`) ? tokens(en[`${base}_${c}`]) : [])))]
     : tokens(ref)
-  const want = refTokens.filter((t) => !(m && t === '{{count}}'))
+  const want = tokens(ref).filter((t) => !(m && t === '{{count}}'))
   const haveTokens = tokens(value)
   const lost = want.filter((t) => !haveTokens.includes(t))
-  const extra = haveTokens.filter((t) => !refTokens.includes(t))
+  const extra = haveTokens.filter((t) => !allowed.includes(t))
   if (lost.length) return `Missing ${lost.join(' ')}`
   if (extra.length) return `Unknown ${extra.join(' ')}`
   return null

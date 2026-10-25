@@ -7,6 +7,24 @@
 // 1.0.0 — that way they see all of these when develop is pushed to production.
 export const CHANGELOG = [
   {
+    version: '1.80.19',
+    date: '2026-10-25',
+    summary:
+      'Profiles and videos now have Hive-style addresses: 3speak.tv/@username and 3speak.tv/@username/video. Older links keep working.',
+  },
+  {
+    version: '1.80.18',
+    date: '2026-10-25',
+    summary:
+      'Links to live streams, playlists, badges, tags and more now show their own picture when you share them.',
+  },
+  {
+    version: '1.80.17',
+    date: '2026-10-25',
+    summary:
+      'Dropbox and Netflix links no longer get the X icon in Spotlight, and NSFW snaps keep their nsfw tag.',
+  },
+  {
     version: '1.80.15',
     date: '2026-10-23',
     summary:

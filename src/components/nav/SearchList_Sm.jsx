@@ -157,7 +157,7 @@ function SearchList_Sm({searchTerm, setSearchTerm, handleNav, setIsDropdownOpens
         };
 
         const handleNavigate = (user)=>{
-            navigate(`/p/${user}`)
+            navigate(`/@${user}`)
             setSearchTerm("")
 
           }

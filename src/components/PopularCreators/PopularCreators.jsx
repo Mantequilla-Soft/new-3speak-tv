@@ -132,10 +132,10 @@ export default function PopularCreators() {
           const followers = fmtFollowers(followerCounts[c.name]);
           return (
             <div className="pc-card" key={c.name}>
-              <Link to={`/p/${c.name}`} className="pc-avatar" title={`@${c.name}`}>
+              <Link to={`/@${c.name}`} className="pc-avatar" title={`@${c.name}`}>
                 <HiveAvatar username={c.name} size={null} alt="" badgeSize={12} />
               </Link>
-              <Link to={`/p/${c.name}`} className="pc-name" title={`@${c.name}`}>@{c.name}</Link>
+              <Link to={`/@${c.name}`} className="pc-name" title={`@${c.name}`}>@{c.name}</Link>
               <span className="pc-followers">
                 {followers != null ? t('profile.creators.followers', { count: followerCounts[c.name], num: followers }) : ' '}
               </span>

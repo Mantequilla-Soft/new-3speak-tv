@@ -160,7 +160,9 @@ const APPLE_HLS_CAPS = {
   backBufferLength: 10,
 };
 
-function Watch({ v2 = false }) {
+// `routeV` ("author/permlink") comes from the /@author/permlink path (see
+// App.jsx); the old /watch?v=author/permlink form carries it as `v`.
+function Watch({ v2 = false, routeV = null }) {
   const { t } = useTranslation();
   const [searchParams] = useSearchParams();
   const location = useLocation();
@@ -168,7 +170,7 @@ function Watch({ v2 = false }) {
   const { user, watchHistoryEnabled, setMiniPlayer, clearMiniPlayer, showNsfw, inlineShorts } = useAppStore();
   const queryClient = useQueryClient();
   const incubationHandle = useAppStore((s) => s.incubationHandle);
-  const v = searchParams.get('v'); // Extract the "v" query parameter
+  const v = routeV || searchParams.get('v');
   const playlistId = searchParams.get('playlist');
   const posParam = searchParams.get('pos');
   const [author, permlink] = (v ?? 'unknown/unknown').split('/');
@@ -338,7 +340,7 @@ function Watch({ v2 = false }) {
     if (!nextUp) return undefined;
     if (nextUp.seconds <= 0) {
       setNextUp(null);
-      navigate(`/watch?v=${videoAuthorOf(nextUp.video)}/${nextUp.video.permlink}`);
+      navigate(`/@${videoAuthorOf(nextUp.video)}/${nextUp.video.permlink}`);
       return undefined;
     }
     const id = setTimeout(() => {
@@ -685,7 +687,7 @@ function Watch({ v2 = false }) {
     // Check if there's a next video
     if (nextIndex < videos.length) {
       const nextVideo = videos[nextIndex];
-      navigate(`/watch?v=${nextVideo.author}/${nextVideo.permlink}&playlist=${playlist.id}&pos=${nextIndex}`, {
+      navigate(`/@${nextVideo.author}/${nextVideo.permlink}?playlist=${playlist.id}&pos=${nextIndex}`, {
         state: { playlist, videos, currentIndex: nextIndex },
       });
     }
@@ -1873,7 +1875,7 @@ function Watch({ v2 = false }) {
         <SEOHead
           title={videoDetails.title}
           author={author}
-          url={`https://3speak.tv/watch?v=${author}/${permlink}`}
+          url={`https://3speak.tv/@${author}/${permlink}`}
         />
       )}
       <AmbientGlow getVideoEl={() => player?.element} glowMode={glowMode} />

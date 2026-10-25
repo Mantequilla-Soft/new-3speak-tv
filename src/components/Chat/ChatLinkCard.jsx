@@ -38,9 +38,9 @@ export default function ChatLinkCard({ link }) {
   if (!meta) return <div className="chat-linkcard chat-linkcard-loading">{t('chat.linkCard.loadingPreview')}</div>
 
   const open = () => {
-    if (meta.kind === 'profile') navigate(`/p/${meta.author}`)
+    if (meta.kind === 'profile') navigate(`/@${meta.author}`)
     else if (meta.kind === 'community') navigate(`/community/${meta.name}`)
-    else if (meta.kind === 'post' && meta.isVideo) navigate(`/watch?v=${meta.author}/${meta.permlink}`)
+    else if (meta.kind === 'post' && meta.isVideo) navigate(`/@${meta.author}/${meta.permlink}`)
     else navigate(`/post/${meta.author}/${meta.permlink}`)
   }
   const keyOpen = (e) => { if (e.key === 'Enter') open() }
@@ -88,7 +88,7 @@ export default function ChatLinkCard({ link }) {
   // A playable video: big thumbnail on top that turns into the player on press,
   // title and author below (which still open the watch page).
   if (meta.isVideo && meta.playable) {
-    const watchUrl = `/watch?v=${meta.author}/${meta.permlink}`
+    const watchUrl = `/@${meta.author}/${meta.permlink}`
     return (
       <div className="chat-linkcard chat-linkcard-video">
         {playing ? (

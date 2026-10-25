@@ -3,6 +3,7 @@ import { useLocation, matchPath } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import { useTranslation } from 'react-i18next';
 import { t } from '../i18n';
+import { parseHivePath } from '../utils/urls';
 
 /**
  * Sets the browser-tab title, and the search-engine tags, for every route.
@@ -45,8 +46,8 @@ const PRIVATE = [
 // `full: true` means the string IS the whole tab title — it does not get the
 // "3S | <page>" prefix. Used by the home page, which carries the brand line
 // itself rather than being labelled like a sub-page.
-// `canonical` maps the matched params to the page's one address (/p/x and
-// /user/x are the same profile); without it the pathname is the canonical.
+// `canonical` maps the matched params to the page's one address (/p/x,
+// /user/x and /@x are the same profile); without it the pathname is the canonical.
 //
 // The prefix is "3S" rather than "3Speak": it matches the logo, so a tab is
 // recognisable from the mark alone, and putting it first means the platform
@@ -70,8 +71,8 @@ const ROUTES = [
   { path: '/audio', titleKey: 'app.routes.audio' },
   { path: '/playlist/:playlistId', titleKey: 'app.routes.playlist' },
   { path: '/t/:tag', title: (p) => `#${p.tag}`, canonical: (p) => `/t/${encodeURIComponent(String(p.tag).toLowerCase())}` },
-  { path: '/p/:user', title: (p) => `@${p.user}`, canonical: (p) => `/user/${String(p.user).toLowerCase()}` },
-  { path: '/user/:user', title: (p) => `@${p.user}`, canonical: (p) => `/user/${String(p.user).toLowerCase()}` },
+  { path: '/p/:user', title: (p) => `@${p.user}`, canonical: (p) => `/@${String(p.user).toLowerCase()}` },
+  { path: '/user/:user', title: (p) => `@${p.user}`, canonical: (p) => `/@${String(p.user).toLowerCase()}` },
   // Self-titled (their name needs a lookup), so no label here: the canonical
   // and the site description only. /badge/x is the spelled-out alias of /b/x.
   { path: '/community/:communityName', title: () => null },
@@ -99,7 +100,12 @@ const BRAND_FALLBACK_KEY = 'app.routes.brandFallback';
 const matchesAny = (patterns, pathname) =>
   patterns.some((p) => matchPath({ path: p, end: false }, pathname));
 
+// /@user, which matchPath cannot express (a segment starting with "@").
+const HIVE_PROFILE_ROUTE = { title: (p) => `@${p.user}`, canonical: (p) => `/@${String(p.user).toLowerCase()}` };
+
 function matchRoute(pathname) {
+  const hive = parseHivePath(pathname);
+  if (hive && hive.kind !== 'post') return { route: HIVE_PROFILE_ROUTE, params: { user: hive.user } };
   for (const r of ROUTES) {
     const m = matchPath({ path: r.path, end: r.end ?? false }, pathname);
     if (m) return { route: r, params: m.params };
@@ -164,7 +170,9 @@ export default function RouteTitle() {
     document.querySelectorAll('head [data-static-seo]').forEach((node) => node.remove());
   }, []);
 
-  if (matchesAny(SELF_SEO, pathname)) return null;
+  // /@author/permlink is the watch page (or PostView, titled by App.jsx's
+  // HivePostRoute): SEOHead writes everything there, as on /watch.
+  if (matchesAny(SELF_SEO, pathname) || parseHivePath(pathname)?.kind === 'post') return null;
 
   const hit = matchRoute(pathname);
   const label = hit ? routeLabel(hit.route, hit.params) : null;

@@ -465,7 +465,7 @@ function GlobalAudioPlayer() {
                 <MdOpenInNew className="audio-np-title-icon" size={12} aria-hidden />
               )}
             </span>
-            <span className="audio-np-author" onClick={(e) => { e.stopPropagation(); navigate(`/p/${nowPlaying.owner}?tab=audio`); audioSetExpanded(false); }}>@{nowPlaying.owner}</span>
+            <span className="audio-np-author" onClick={(e) => { e.stopPropagation(); navigate(`/@${nowPlaying.owner}?tab=audio`); audioSetExpanded(false); }}>@{nowPlaying.owner}</span>
           </div>
 
           <div className="audio-np-desktop-meta">

@@ -139,7 +139,9 @@ export function guessIconFromUrl(url) {
       'patreon.com': 'patreon', 'medium.com': 'medium', 'reddit.com': 'reddit',
     };
     if (map[host]) return map[host];
-    for (const key of Object.keys(map)) if (host.endsWith(key)) return map[key];
+    // Subdomains only (m.youtube.com), never a host that merely ends in the name
+    // (dropbox.com is not x.com).
+    for (const key of Object.keys(map)) if (host.endsWith(`.${key}`)) return map[key];
     if (url.startsWith('mailto:')) return 'email';
     return 'globe';
   } catch {

@@ -11,9 +11,11 @@ describe('resolveCanonical', () => {
     expect(resolveCanonical('/leaderboard/', '')).toBe('https://3speak.tv/leaderboard')
   })
 
-  it('folds the profile aliases into /user/<name>, lowercased', () => {
-    expect(resolveCanonical('/p/Alice')).toBe('https://3speak.tv/user/alice')
-    expect(resolveCanonical('/user/alice')).toBe('https://3speak.tv/user/alice')
+  it('folds the profile aliases into /@<name>, lowercased', () => {
+    expect(resolveCanonical('/p/Alice')).toBe('https://3speak.tv/@alice')
+    expect(resolveCanonical('/user/alice')).toBe('https://3speak.tv/@alice')
+    expect(resolveCanonical('/@Alice')).toBe('https://3speak.tv/@alice')
+    expect(resolveCanonical('/@alice/shorts')).toBe('https://3speak.tv/@alice')
   })
 
   it('lowercases tags and sends the old communities address to /groups', () => {

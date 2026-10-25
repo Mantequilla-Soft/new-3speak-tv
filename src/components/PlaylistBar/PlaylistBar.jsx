@@ -34,7 +34,7 @@ function PlaylistBar({ playlist, videos, currentIndex, onClose }) {
   const handlePrevious = () => {
     if (currentIndex > 0) {
       const prevVideo = videos[currentIndex - 1];
-      navigate(`/watch?v=${prevVideo.author}/${prevVideo.permlink}&playlist=${playlist.id}&pos=${currentIndex - 1}`, {
+      navigate(`/@${prevVideo.author}/${prevVideo.permlink}?playlist=${playlist.id}&pos=${currentIndex - 1}`, {
         state: { playlist, videos, currentIndex: currentIndex - 1 },
       });
     }
@@ -43,7 +43,7 @@ function PlaylistBar({ playlist, videos, currentIndex, onClose }) {
   const handleNext = () => {
     if (currentIndex < videos.length - 1) {
       const nextVideo = videos[currentIndex + 1];
-      navigate(`/watch?v=${nextVideo.author}/${nextVideo.permlink}&playlist=${playlist.id}&pos=${currentIndex + 1}`, {
+      navigate(`/@${nextVideo.author}/${nextVideo.permlink}?playlist=${playlist.id}&pos=${currentIndex + 1}`, {
         state: { playlist, videos, currentIndex: currentIndex + 1 },
       });
     }
@@ -94,7 +94,7 @@ function PlaylistBar({ playlist, videos, currentIndex, onClose }) {
         {videos.map((video, index) => (
           <Link
             key={`${video.author}-${video.permlink}`}
-            to={`/watch?v=${video.author}/${video.permlink}&playlist=${playlist.id}&pos=${index}`}
+            to={`/@${video.author}/${video.permlink}?playlist=${playlist.id}&pos=${index}`}
             state={{ playlist, videos, currentIndex: index }}
             className={`playlist-video-item ${index === currentIndex ? 'active' : ''}`}
             ref={index === currentIndex ? currentItemRef : null}

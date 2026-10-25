@@ -80,7 +80,7 @@ export function CommunityPinned({ id }) {
             <Link
               key={`${p.author}/${p.permlink}`}
               className="community-pinned-card"
-              to={video ? `/watch?v=${p.author}/${p.permlink}` : `/post/${p.author}/${p.permlink}`}
+              to={video ? `/@${p.author}/${p.permlink}` : `/post/${p.author}/${p.permlink}`}
             >
               <div className="community-pinned-thumb">
                 {thumb
@@ -123,7 +123,7 @@ function CreatorChip({ c, rank }) {
   const { t } = useTranslation();
   const avatar = useAvatarUrl(c.name);
   return (
-    <Link className="community-creator" to={`/p/${c.name}`} title={t('communities.page.creatorTitle', { name: c.name, views: fmtNum(c.views), count: c.videos })}>
+    <Link className="community-creator" to={`/@${c.name}`} title={t('communities.page.creatorTitle', { name: c.name, views: fmtNum(c.views), count: c.videos })}>
       <span className="community-creator-avatar">
         <img src={avatar} alt="" loading="lazy" />
         {rank <= 3 && <span className={`community-creator-rank rank-${rank}`}>{rank}</span>}
@@ -187,7 +187,7 @@ function TeamMember({ name, role, title }) {
   const { t } = useTranslation();
   const avatar = useAvatarUrl(name);
   return (
-    <Link className="community-team-member" to={`/p/${name}`}>
+    <Link className="community-team-member" to={`/@${name}`}>
       <img src={avatar} alt="" loading="lazy" />
       <span className="community-team-text">
         <span className="community-team-name">{name}</span>

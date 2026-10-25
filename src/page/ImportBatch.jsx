@@ -219,7 +219,7 @@ export function BatchStatus({ batch, user, onChange }) {
                 {it.status === 'posted' && <FaCheck />} {label(it)}
                 {it.isShort && <> · {t('ytimport.batch.short')}</>}
                 {it.status === 'posted' && it.permlink && (
-                  <> · <Link to={it.isShort ? `/shorts?v=${user}/${it.permlink}` : `/watch?v=${user}/${it.permlink}`}>{t('ytimport.viewPost')}</Link></>
+                  <> · <Link to={it.isShort ? `/shorts?v=${user}/${it.permlink}` : `/@${user}/${it.permlink}`}>{t('ytimport.viewPost')}</Link></>
                 )}
               </span>
               {RUNNING.has(it.status) && it.status !== 'queued' && (

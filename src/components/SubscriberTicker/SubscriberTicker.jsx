@@ -38,7 +38,7 @@ export default function SubscriberTicker() {
   const loop = useMemo(() => [...subs, ...subs], [subs]);
   if (subs.length === 0) return null;
 
-  const goProfile = (u) => { setOpen(false); navigate(`/p/${u}`); };
+  const goProfile = (u) => { setOpen(false); navigate(`/@${u}`); };
 
   return (
     <>

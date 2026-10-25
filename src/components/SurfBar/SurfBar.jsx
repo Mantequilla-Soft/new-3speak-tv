@@ -110,7 +110,7 @@ function SurfBar({ channel: slug, author, permlink, flipRef, overlayTarget = nul
     if (targetSlug !== slug) tuneTo(targetSlug);
   };
 
-  const stopSurfing = () => navigate(`/watch?v=${author}/${permlink}`, { replace: true });
+  const stopSurfing = () => navigate(`/@${author}/${permlink}`, { replace: true });
 
   useEffect(() => {
     if (!guideOpen) return undefined;

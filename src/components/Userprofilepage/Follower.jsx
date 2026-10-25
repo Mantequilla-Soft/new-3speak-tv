@@ -168,7 +168,7 @@ function Follower({ count = {}, username }) {
                 type="button"
                 className="user-card"
                 key={`${activeTab}-${u}`}
-                onClick={() => navigate(`/p/${u}`)}
+                onClick={() => navigate(`/@${u}`)}
               >
                 <img
                   className="user-avatar"

@@ -127,12 +127,13 @@ export async function publishSnap({ user, body, tags = [], rewards = 'default', 
   const permlink = makePermlink(text);
 
   // Every snap carries the built-in `community` tag, so users get at most 9 of their
-  // own — 1 + 9 = 10, Hive's practical tag limit. `nsfw` is a content flag on top.
+  // own — 1 + 9 = 10, Hive's practical tag limit. `nsfw` takes the last of those
+  // slots when set, so it is never the tag that gets cut.
   const userTags = [...new Set(
     (tags || [])
       .map((t) => String(t).toLowerCase().replace(/^#/, '').trim())
-      .filter((t) => t && t !== SNAP_TAG),
-  )].slice(0, 9);
+      .filter((t) => t && t !== SNAP_TAG && t !== 'nsfw'),
+  )].slice(0, nsfw ? 8 : 9);
   const cleanTags = [SNAP_TAG, ...userTags];
   if (nsfw) cleanTags.push('nsfw');
   const finalTags = cleanTags.slice(0, 10);
@@ -191,8 +192,8 @@ export async function updateSnap({ user, permlink, body, tags = [], nsfw = false
   const userTags = [...new Set(
     (tags || [])
       .map((t) => String(t).toLowerCase().replace(/^#/, '').trim())
-      .filter((t) => t && t !== SNAP_TAG),
-  )].slice(0, 9);
+      .filter((t) => t && t !== SNAP_TAG && t !== 'nsfw'),
+  )].slice(0, nsfw ? 8 : 9);
   const cleanTags = [SNAP_TAG, ...userTags];
   if (nsfw) cleanTags.push('nsfw');
 

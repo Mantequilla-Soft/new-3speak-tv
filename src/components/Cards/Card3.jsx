@@ -31,6 +31,7 @@ import { aiKey, isAiFlagged, useAiFlags } from "../../utils/aiFlags";
 import { useAppStore } from "../../lib/store";
 import { useTranslation } from "react-i18next";
 import { formatDate } from "../../i18n";
+import { watchPath } from '../../utils/urls';
 
 
 /**
@@ -189,6 +190,11 @@ function FeaturedStrip({ items, index, onPick }) {
   );
 }
 
+// A video card opens /@author/permlink; other prefixes (/shorts) keep their ?v= form.
+const cardHref = (linkPrefix, author, permlink, query) => (linkPrefix === '/watch'
+  ? watchPath(author, permlink, query)
+  : `${linkPrefix}?v=${author}/${permlink}${query}`);
+
 function Card3({ videos = [], loading = false, error = null, interleaveEvery = 0, renderInterleave = null, communityEvery = 0, renderCommunity = null, creatorsEvery = 0, renderCreators = null, getContentForVideo = null, isWatched = null, getViewCount = null, isNew = null, linkPrefix = '/watch', linkQuery = '', shortTimeAgo = true, shortsGrid = false, priority = false, hideWatched = false, watchedVersion = 0, renderFooter = null, windowed = false, featuredKey = null, featuredLayout = null, featuredNav = null }) {
   const { t } = useTranslation();
   const navigate = useNavigate();
@@ -346,9 +352,8 @@ function Card3({ videos = [], loading = false, error = null, interleaveEvery = 0
             index={index}
             to={video._liveStream
               ? (video._openpodRoom ? `/openpods/${video.roomName}` : `/watch/${video.roomName}`)
-              : `${linkPrefix}?v=${cardAuthor}/${
-                video.permlink
-              }${linkQuery}${video._scheduled ? '&scheduled=1' : ''}`}
+              : cardHref(linkPrefix, cardAuthor, video.permlink,
+                `${linkQuery}${video._scheduled ? '&scheduled=1' : ''}`)}
             className={`card${!shortsGrid && video._short ? ' card--short' : ''}${video._featured ? ` card--featured${featuredLayout.rows > 1 ? ' card--featured-tall' : ''}` : ''}`}
             style={video._featured
               ? { gridColumn: `span ${featuredLayout.span}`, gridRow: `span ${featuredLayout.rows}` }

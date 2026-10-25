@@ -44,7 +44,8 @@ function formatRelativeTime(dateString) {
   return formatTimeAgo(date, { style: 'narrow' });
 }
 
-function PostView() {
+// Props on /@author/permlink (App.jsx's HivePostRoute), route params on /post/.
+function PostView({ author: authorProp, permlink: permlinkProp }) {
   const { t } = useTranslation();
   const params = useParams();
   const { state } = useLocation();
@@ -55,8 +56,8 @@ function PostView() {
   const incubationHandle = useAppStore((st) => st.incubationHandle);
 
   // Support both `:author` and `:user` param names defensively
-  const author = (params.author || params.user || '').replace(/^@/, '');
-  const permlink = params.permlink || '';
+  const author = (authorProp || params.author || params.user || '').replace(/^@/, '');
+  const permlink = permlinkProp || params.permlink || '';
 
   // Fresh-publish state from OpenPodPublish navigation
   const prefilled = (state?.author === author && state?.permlink === permlink) ? state : null;
@@ -355,7 +356,7 @@ function PostView() {
   }
 
   if (is3Speak === true && !isComment) {
-    return <Navigate to={`/watch?v=${author}/${permlink}`} replace />;
+    return <Navigate to={`/@${author}/${permlink}`} replace />;
   }
 
   if (loading) return <BarLoader />;
@@ -397,7 +398,7 @@ function PostView() {
           )}
           {!resolvingRoot && rootPost && (
             rootPost.is3Speak ? (
-              <Link to={`/watch?v=${rootPost.author}/${rootPost.permlink}`} className="post-view-nav-btn">
+              <Link to={`/@${rootPost.author}/${rootPost.permlink}`} className="post-view-nav-btn">
                 <i className="fa-solid fa-play" /> {t('posts.view.showVideo')}
               </Link>
             ) : (

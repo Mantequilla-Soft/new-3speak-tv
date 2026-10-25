@@ -1,5 +1,6 @@
 // Share cards for the pages that are not a single video: creator profiles,
-// playlists / albums, and audio posts. Same job as the video card in
+// playlists / albums, audio posts, badges, live rooms and invite links. Each
+// one's image is drawn by the API (og-cards.cjs). Same job as the video card in
 // og-server.cjs (crawlers run no JavaScript, so without this every one of these
 // links unfurled as the generic 3Speak card), same rules:
 //
@@ -26,14 +27,23 @@ const ACCOUNT_RE = /^[a-z0-9][a-z0-9.-]{2,15}$/;
 const PLAYLIST_ID_RE = /^[a-zA-Z0-9-]{8,64}$/;
 const PERMLINK_RE = /^[a-z0-9][a-z0-9-]{0,255}$/i;
 const MAX_LISTED = 20;
+// The hangouts server names a room `<host>-<7 base36>`; same as og-cards.cjs.
+const ROOM_RE = /^[a-z0-9][a-z0-9.-]{2,40}$/;
+const OPENPODS_PAGES = new Set(['publish', 'templates']);
+const INVITE_CODE_RE = /^[a-z0-9]{10}$/;
+// Where live rooms are looked up (the site's VITE_HANGOUTS_API_URLS servers).
+const HANGOUTS_APIS = (process.env.OG_HANGOUTS_APIS || 'https://live.3speak.tv')
+  .split(',').map((s) => s.trim().replace(/\/+$/, '')).filter(Boolean);
+// What 3Speak is, in one clause (og-lists.cjs says the same).
+const ABOUT = 'the decentralized YouTube alternative where creators and viewers earn';
 
 const AUDIO_MIME = { mp3: 'audio/mpeg', m4a: 'audio/mp4', mp4: 'audio/mp4', webm: 'audio/webm', ogg: 'audio/ogg', wav: 'audio/wav' };
 
 module.exports = function createPages(h) {
   const {
     CANONICAL_ORIGIN, CHECKER_URL, escapeHtml, fixThumbnail, boundImage, extractDescription,
-    parseMeta, getIndexability, fetchHivePost, lookupHivePost, isMissingError, breadcrumbLd,
-    secondsToISO8601, toIsoDate, ogVideo, rememberOembed, OEMBED_PATH,
+    parseMeta, getIndexability, lookupHivePost, isMissingError, breadcrumbLd,
+    secondsToISO8601, toIsoDate, ogVideo, cardUrl,
   } = h;
 
   /** Answered by a handler for a page that does not exist (see the header). */
@@ -109,8 +119,28 @@ module.exports = function createPages(h) {
         ? { kind: 'audio', author, permlink }
         : { kind: 'missing' };
     }
+    m = p.match(/^\/(?:b|badge)\/([^/]+)$/);
+    if (m) {
+      const account = decode(m[1]).toLowerCase();
+      return ACCOUNT_RE.test(account) ? { kind: 'badge', account } : { kind: 'missing' };
+    }
+    // A live room: /watch/<room> and /l/<room> (a stream), /openpods/<room>
+    // (a room to join). /openpods/publish and /openpods/templates are pages.
+    m = p.match(/^\/(watch|l|openpods)\/([^/]+)$/);
+    if (m && !(m[1] === 'openpods' && OPENPODS_PAGES.has(m[2]))) {
+      const room = decode(m[2]).toLowerCase();
+      return ROOM_RE.test(room) ? { kind: 'stream', room, path: `/${m[1]}/${room}` } : { kind: 'missing' };
+    }
+    m = p.match(/^\/invite\/([^/]+)$/);
+    if (m) {
+      const code = decode(m[1]).toLowerCase();
+      return INVITE_CODE_RE.test(code) ? { kind: 'invite', code } : { kind: 'missing' };
+    }
     return null;
   }
+
+  // The page carries the card drawn by the API (og-cards.cjs), 1200x630 JPEG.
+  const drawnCard = (url, alt) => ({ image: url, imageType: 'image/jpeg', imageSize: [1200, 630], imageAlt: alt });
 
   /** Image for the card: bounded, and a JPEG copy for WhatsApp (no WebP previews). */
   function cardImage(raw, req, origin) {
@@ -124,7 +154,7 @@ module.exports = function createPages(h) {
   }
 
   function buildHtml({
-    title, description, image, imageType, url, canonical, ogType = 'website', ogExtra = [],
+    title, ogTitle, description, image, imageType, imageSize, imageAlt, url, canonical, ogType = 'website', ogExtra = [],
     twitterCard = 'summary_large_image', video, oembedUrl, jsonLd, noindex, body,
   }) {
     const meta = (prop, content) =>
@@ -156,14 +186,15 @@ module.exports = function createPages(h) {
   <meta name="robots" content="${noindex ? 'noindex, follow' : 'index, follow'}" />
   <meta name="description" content="${escapeHtml(description)}" />
 
-  <!-- Open Graph -->${meta('og:type', ogType)}${meta('og:site_name', '3Speak')}${meta('og:title', title)}${
+  <!-- Open Graph -->${meta('og:type', ogType)}${meta('og:site_name', '3Speak')}${meta('og:title', ogTitle || title)}${
     meta('og:description', description)}${meta('og:image', image)}${meta('og:image:type', imageType)}${
+    imageSize ? meta('og:image:width', imageSize[0]) + meta('og:image:height', imageSize[1]) : ''}${meta('og:image:alt', imageAlt)}${
     meta('og:url', url)}${ogExtra.map(([p, c]) => meta(p, c)).join('')}${videoMeta}
 
   <!-- Twitter Card -->
   ${twitter}
   <meta name="twitter:site" content="@3speaktv" />
-  <meta name="twitter:title" content="${escapeHtml(title)}" />
+  <meta name="twitter:title" content="${escapeHtml(ogTitle || title)}" />
   <meta name="twitter:description" content="${escapeHtml(description)}" />
   <meta name="twitter:image" content="${escapeHtml(image)}" />
 
@@ -180,11 +211,10 @@ ${body}
 
   async function profilePage(req, res, page, origin) {
     const { account } = page;
-    const [profileState, check, counts, trailer, posts, uploads] = await Promise.all([
+    const [profileState, check, counts, posts, uploads] = await Promise.all([
       hiveCallState('bridge.get_profile', { account, observer: '' }),
       getJson(`${CHECKER_URL}/check/${encodeURIComponent(account)}`).catch(() => null),
       getJson(`${CHECKER_URL}/user/${encodeURIComponent(account)}/counts`).catch(() => null),
-      getJson(`${CHECKER_URL}/user/${encodeURIComponent(account)}/trailer`).catch(() => null),
       hiveCall('bridge.get_account_posts', { sort: 'posts', account, limit: 20, observer: '' }),
       // The channel's own video list, as its profile page shows it. The Hive
       // posts above are everything the account wrote, so a creator who also
@@ -206,24 +236,33 @@ ${body}
     const tally = [videos && plural(videos, 'video', 'videos'), shorts && plural(shorts, 'short', 'shorts')]
       .filter(Boolean).join(', ');
     const about = clip(p.about, 160);
-    const description = [about, tally ? `${tally} on 3Speak` : `@${account} on 3Speak`].filter(Boolean).join(' · ');
+    // The card says what the creator says about themselves (their Hive
+    // profile), the counts only when they wrote nothing.
+    const description = clip(p.about, 200) || (tally ? `${tally} on 3Speak` : `@${account} on 3Speak`);
+    // As on the share image: any display name but the handle itself, even one
+    // that only capitalises it ('MenO' for meno).
+    const shareName = displayName === account || displayName === `@${account}` ? `@${account}` : displayName;
+    const ogTitle = `${shareName} on 3speak.tv`;
 
-    const canonical = `${CANONICAL_ORIGIN}/user/${account}`;
+    const canonical = `${CANONICAL_ORIGIN}/@${account}`;
     const selfUrl = origin + req.url;
-    const { image, imageType } = cardImage(avatarOf(account), req, origin);
+    // The channel's share image (og-cards.cjs: picture, name, @handle), drawn
+    // on its first fetch and kept. Only the image: a channel trailer is not
+    // put in as an inline player, so every platform shows the same card.
+    const image = cardUrl(origin, 'user', account);
 
     // Their latest uploads, as links for search engines. A post is a video or
     // an audio by its metadata; anything else (an album's own post, text) is not
     // something to link as one.
     const channelVideos = ((uploads && uploads.data && uploads.data.videos) || [])
       .filter((v) => v && v.permlink && v.title && !v.isNsfwContent)
-      .map((v) => ({ title: v.title, href: `${origin}/watch?v=${v.author || v.owner || account}/${v.permlink}` }));
+      .map((v) => ({ title: v.title, href: `${origin}/@${v.author || v.owner || account}/${v.permlink}` }));
     const fromPosts = (Array.isArray(posts) ? posts : [])
       .map((post) => {
         const meta = parseMeta(post.json_metadata);
         const href = meta.audio
           ? `${origin}/audio/${post.author}/${post.permlink}`
-          : meta.video ? `${origin}/watch?v=${post.author}/${post.permlink}` : null;
+          : meta.video ? `${origin}/@${post.author}/${post.permlink}` : null;
         return href ? { title: post.title || post.permlink, href } : null;
       })
       .filter(Boolean);
@@ -231,27 +270,6 @@ ${body}
     const latest = [...channelVideos, ...fromPosts]
       .filter((l) => !seen.has(l.href) && seen.add(l.href))
       .slice(0, 20);
-
-    // Discord only: the channel trailer as the inline teaser, as on a video card.
-    let video = null;
-    let oembedUrl = null;
-    const tr = trailer && trailer.trailer;
-    if (tr && tr.author && tr.permlink && ogVideo.wantsVideo(req.headers['user-agent'])) {
-      const post = await fetchHivePost(tr.author, tr.permlink).catch(() => null);
-      if (post && getIndexability(post, parseMeta(post.json_metadata)).index) {
-        const inline = await ogVideo.ogVideoFor(tr.author, tr.permlink).catch(() => null);
-        if (inline) {
-          await inline.prepare(8000);
-          video = { url: origin + inline.path, width: inline.width, height: inline.height };
-          // Discord drops og:description from a video card; the oEmbed author line carries it.
-          // Keyed apart from the trailer's own video card, which remembers its
-          // own text under author/permlink.
-          const ref = `${account}/~profile`;
-          rememberOembed(ref, { description, url: canonical });
-          oembedUrl = `${origin}${OEMBED_PATH}?v=${encodeURIComponent(ref)}`;
-        }
-      }
-    }
 
     const stats = profile.stats || {};
     const jsonLd = {
@@ -291,17 +309,16 @@ ${body}
 
     return buildHtml({
       title,
+      ogTitle,
       description,
       image,
-      imageType,
+      imageType: 'image/jpeg',
+      imageSize: [1200, 630],
+      imageAlt: `${shareName} on 3Speak`,
       url: selfUrl,
       canonical,
       ogType: 'profile',
       ogExtra: [['profile:username', account]],
-      // Square avatar: the small card, not a cropped banner.
-      twitterCard: 'summary',
-      video,
-      oembedUrl,
       jsonLd: [jsonLd, crumbs],
       body,
     });
@@ -328,20 +345,23 @@ ${body}
     const description = clip(extractDescription(card.description || '')) || `${what} by @${card.owner} on 3Speak · ${noun}`;
 
     const canonical = `${CANONICAL_ORIGIN}/playlist/${card.id}`;
-    const { image, imageType } = cardImage(card.cover || avatarOf(card.owner), req, origin);
+    // The share image is the playlist's card (og-cards.cjs: cover and name);
+    // the structured data keeps the cover itself.
+    const { image } = cardImage(card.cover || avatarOf(card.owner), req, origin);
+    const shared = drawnCard(cardUrl(origin, 'playlist', card.id), `${card.name} on 3Speak`);
     const itemUrl = (i) => (i.kind === 'audio'
       ? `${origin}/audio/${i.author}/${i.permlink}`
-      : `${origin}/watch?v=${i.author}/${i.permlink}`);
+      : `${origin}/@${i.author}/${i.permlink}`);
 
     const ogType = isAlbum ? 'music.album' : card.medium === 'video' ? 'website' : 'music.playlist';
     const ogExtra = isAlbum
-      ? [['music:musician', `${origin}/user/${card.owner}`], ['music:release_date', card.album.year ? String(card.album.year) : null]]
-      : [['music:creator', card.medium === 'video' ? null : `${origin}/user/${card.owner}`]];
+      ? [['music:musician', `${origin}/@${card.owner}`], ['music:release_date', card.album.year ? String(card.album.year) : null]]
+      : [['music:creator', card.medium === 'video' ? null : `${origin}/@${card.owner}`]];
     items.slice(0, 10).forEach((i) => {
       if (i.kind === 'audio' && ogType !== 'website') ogExtra.push(['music:song', itemUrl(i)]);
     });
 
-    const owner = { '@type': 'Person', name: `@${card.owner}`, url: `${origin}/user/${card.owner}` };
+    const owner = { '@type': 'Person', name: `@${card.owner}`, url: `${origin}/@${card.owner}` };
     const jsonLd = isAlbum
       ? {
         '@context': 'https://schema.org',
@@ -374,7 +394,7 @@ ${body}
 
     const crumbs = breadcrumbLd([
       ['3Speak', `${CANONICAL_ORIGIN}/`],
-      [`@${card.owner}`, `${CANONICAL_ORIGIN}/user/${card.owner}`],
+      [`@${card.owner}`, `${CANONICAL_ORIGIN}/@${card.owner}`],
       [card.name, canonical],
     ]);
 
@@ -385,14 +405,13 @@ ${body}
         .join('\n')}\n    </ol>\n  </section>`
       : '';
     const body = `  <h1>${escapeHtml(card.name)}</h1>
-  <p>${escapeHtml(what)} by <a href="${escapeHtml(`${origin}/user/${card.owner}`)}">@${escapeHtml(card.owner)}</a> on 3Speak · ${escapeHtml(noun)}</p>${
+  <p>${escapeHtml(what)} by <a href="${escapeHtml(`${origin}/@${card.owner}`)}">@${escapeHtml(card.owner)}</a> on 3Speak · ${escapeHtml(noun)}</p>${
     card.description ? `\n  <p>${escapeHtml(clip(card.description, 2000))}</p>` : ''}${list}`;
 
     return buildHtml({
       title: card.name,
       description,
-      image,
-      imageType,
+      ...shared,
       url: origin + req.url,
       canonical,
       ogType,
@@ -455,8 +474,10 @@ ${body}
     const rawImage = (doc && (doc.thumbnail_url || doc.playlist_thumbnail))
       || (Array.isArray(meta.image) && meta.image[0])
       || avatarOf(author);
-    const { image, imageType } = cardImage(rawImage, req, origin);
+    const { image } = cardImage(rawImage, req, origin);
     const canonical = `${CANONICAL_ORIGIN}/audio/${author}/${permlink}`;
+    // The share image is the post's card (og-cards.cjs: artwork and title).
+    const shared = drawnCard(cardUrl(origin, 'audio', `${author}/${permlink}`), `${title} on 3Speak`);
 
     // The MP3 companion when there is one: WebM browser recordings play almost
     // nowhere outside a browser.
@@ -474,7 +495,7 @@ ${body}
     if (audio) {
       ogExtra.push(['og:audio', audio.url], ['og:audio:secure_url', audio.url], ['og:audio:type', audio.type]);
     }
-    ogExtra.push(['music:duration', duration], ['music:musician', `${origin}/user/${author}`], ['music:album', albumUrl]);
+    ogExtra.push(['music:duration', duration], ['music:musician', `${origin}/@${author}`], ['music:album', albumUrl]);
 
     const jsonLd = {
       '@context': 'https://schema.org',
@@ -485,7 +506,7 @@ ${body}
       thumbnailUrl: image,
       ...(toIsoDate(post.created) ? { uploadDate: toIsoDate(post.created) } : {}),
       ...(secondsToISO8601(duration) ? { duration: secondsToISO8601(duration) } : {}),
-      author: { '@type': 'Person', name: `@${author}`, url: `${origin}/user/${author}` },
+      author: { '@type': 'Person', name: `@${author}`, url: `${origin}/@${author}` },
     };
     if (audio) {
       if (isSong) {
@@ -500,20 +521,19 @@ ${body}
 
     const crumbs = breadcrumbLd([
       ['3Speak', `${CANONICAL_ORIGIN}/`],
-      [`@${author}`, `${CANONICAL_ORIGIN}/user/${author}`],
+      [`@${author}`, `${CANONICAL_ORIGIN}/@${author}`],
       [title, canonical],
     ]);
 
     const body = `  <h1>${escapeHtml(title)}</h1>
-  <p><a href="${escapeHtml(`${origin}/audio/${author}/${permlink}`)}">${escapeHtml(title)}</a> by <a href="${escapeHtml(`${origin}/user/${author}`)}">@${escapeHtml(author)}</a> on 3Speak${
+  <p><a href="${escapeHtml(`${origin}/audio/${author}/${permlink}`)}">${escapeHtml(title)}</a> by <a href="${escapeHtml(`${origin}/@${author}`)}">@${escapeHtml(author)}</a> on 3Speak${
     albumUrl && doc.playlist_name ? `, from <a href="${escapeHtml(albumUrl)}">${escapeHtml(doc.playlist_name)}</a>` : ''}</p>
   <p>${escapeHtml(plainText(post.body, 2000) || description)}</p>`;
 
     return buildHtml({
       title,
       description,
-      image,
-      imageType,
+      ...shared,
       url: origin + req.url,
       canonical,
       ogType: isSong ? 'music.song' : 'website',
@@ -524,10 +544,105 @@ ${body}
     });
   }
 
+  // ─── Badges: /b/:account, /badge/:account ──────────────────────────────────
+
+  async function badgePage(req, res, page, origin) {
+    const { account } = page;
+    // The badge page reads any account as a badge; the checker 404s only a
+    // name that is not an account at all.
+    const state = await getJsonState(`${CHECKER_URL}/badges/${encodeURIComponent(account)}`);
+    if (state.missing) return MISSING;
+    const badge = state.data;
+    if (!badge || !badge.account) return null;
+    const name = clip(badge.title, 80) || account;
+    const holders = Number(badge.recipients) > 0 ? plural(Number(badge.recipients), 'person holds', 'people hold') : null;
+    const description = clip(badge.description, 200) || `A Hive badge on 3Speak.${holders ? ` ${holders} it.` : ''}`;
+    const canonical = `${CANONICAL_ORIGIN}/b/${account}`;
+    const crumbs = breadcrumbLd([['3Speak', `${CANONICAL_ORIGIN}/`], ['Badges', `${CANONICAL_ORIGIN}/badges`], [name, canonical]]);
+    return buildHtml({
+      title: `${name} badge`,
+      ogTitle: `${name} on 3speak.tv`,
+      description,
+      ...drawnCard(cardUrl(origin, 'badge', account), `${name} badge on 3Speak`),
+      url: origin + req.url,
+      canonical,
+      jsonLd: crumbs,
+      body: `  <h1>${escapeHtml(name)}</h1>
+  <p>${escapeHtml(clip(badge.description, 2000) || description)}</p>${holders ? `\n  <p>${escapeHtml(holders)} it.</p>` : ''}`,
+    });
+  }
+
+  // ─── Live rooms: /watch/:room, /l/:room, /openpods/:room ─────────────────
+
+  /** { room } | { missing: true } (no server has it: it ended) | { error: true }. */
+  async function findRoom(name) {
+    let error = false;
+    for (const api of HANGOUTS_APIS) {
+      const state = await getJsonState(`${api}/rooms/${encodeURIComponent(name)}`);
+      if (state.data) return { room: state.data };
+      if (state.error) error = true;
+    }
+    return error ? { error: true } : { missing: true };
+  }
+
+  async function streamPage(req, res, page, origin) {
+    const found = await findRoom(page.room);
+    if (found.missing) return MISSING;
+    const room = found.room;
+    if (!room) return null;
+    if (!room.host || !ACCOUNT_RE.test(room.host) || room.visibility === 'hive-internal') return MISSING;
+    const post = room.post || {};
+    const title = clip(post.title || room.title, 100) || `@${room.host} on 3Speak`;
+    const onAir = room.mode === 'standalone';
+    const description = clip(extractDescription(post.description || room.description || ''))
+      || (onAir ? `@${room.host} is live on 3Speak.` : `Join @${room.host}'s room on 3Speak.`);
+    return buildHtml({
+      title,
+      ogTitle: onAir ? `${title} (live on 3Speak)` : `${title} on 3speak.tv`,
+      description,
+      ...drawnCard(cardUrl(origin, 'stream', page.room), onAir ? `@${room.host} live on 3Speak` : `@${room.host}'s room on 3Speak`),
+      url: origin + req.url,
+      canonical: `${CANONICAL_ORIGIN}${page.path}`,
+      // A room lasts as long as the stream: nothing for a search engine to keep.
+      noindex: true,
+      body: `  <h1>${escapeHtml(title)}</h1>
+  <p>${escapeHtml(description)}</p>
+  <p>By <a href="${escapeHtml(`${origin}/@${room.host}`)}">@${escapeHtml(room.host)}</a></p>`,
+    });
+  }
+
+  // ─── Invite links: /invite/:code ───────────────────────────────────────────
+
+  async function invitePage(req, res, page, origin) {
+    // The API's own invite check (butrauth, 3Speak's invites only).
+    const api = (process.env.OG_API_URL || origin).replace(/\/+$/, '');
+    const state = await getJsonState(`${api}/api/referral/invite/${page.code}`);
+    if (state.error) return null;
+    const inv = state.data;
+    if (!inv || !inv.valid || !ACCOUNT_RE.test(String(inv.referrer || ''))) return MISSING;
+    const who = `@${inv.referrer}`;
+    // The words of the invite popup (app.invite.title / signUpFree).
+    const title = `${who} invited you to 3Speak`;
+    const description = `Sign up and start on 3Speak, ${ABOUT}. Your invite is saved, so ${who} gets the credit.`;
+    return buildHtml({
+      title,
+      ogTitle: title,
+      description,
+      ...drawnCard(cardUrl(origin, 'invite', inv.referrer, page.code), `${who} invites you to 3Speak`),
+      url: origin + req.url,
+      canonical: `${CANONICAL_ORIGIN}/invite/${page.code}`,
+      noindex: true,
+      body: `  <h1>${escapeHtml(title)}</h1>\n  <p>${escapeHtml(description)}</p>`,
+    });
+  }
+
   const HANDLERS = {
     profile: profilePage,
     playlist: playlistPage,
     audio: audioPage,
+    badge: badgePage,
+    stream: streamPage,
+    invite: invitePage,
     missing: async () => MISSING,
   };
 

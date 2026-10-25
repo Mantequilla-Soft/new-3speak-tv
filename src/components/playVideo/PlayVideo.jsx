@@ -1071,7 +1071,7 @@ const PlayVideo = ({ videoDetails, author, permlink, mediaUnavailable = false, m
   }, [videoUrlSelected, author, permlink, videoDetails?.title, clipStart, clipEnd, videoControls]);
 
   const handleProfileNavigate = useCallback((userName) => {
-    navigate(`/p/${userName}`);
+    navigate(`/@${userName}`);
   }, [navigate]);
 
   const toggleTooltip = useCallback(() => {
@@ -1081,8 +1081,8 @@ const PlayVideo = ({ videoDetails, author, permlink, mediaUnavailable = false, m
 
   const handleShare = useCallback(async () => {
     const time = Math.floor(videoControls?.currentTime || 0);
-    const timeParam = time > 0 ? `&t=${time}` : '';
-    const shareUrl = `${window.location.origin}/watch?v=${author}/${permlink}${timeParam}`;
+    const timeParam = time > 0 ? `?t=${time}` : '';
+    const shareUrl = `${window.location.origin}/@${author}/${permlink}${timeParam}`;
     const shareData = { title: videoDetails?.title || t('watch.share.defaultTitle'), url: shareUrl };
     try {
       if (navigator.share && navigator.canShare?.(shareData)) {
@@ -1364,7 +1364,7 @@ const PlayVideo = ({ videoDetails, author, permlink, mediaUnavailable = false, m
                     <span className="video-next-up-label">{t('player.overlay.nextIn', { seconds: videoControls.nextUp.seconds })}</span>
                     <a
                       className="video-ended-card"
-                      href={`/watch?v=${vAuthor}/${v.permlink}`}
+                      href={`/@${vAuthor}/${v.permlink}`}
                       onClick={(e) => { e.preventDefault(); videoControls.onPlayNextNow?.(); }}
                     >
                       <img src={fixVideoThumbnail(v)} alt={v.title} onError={(e) => (e.currentTarget.src = fallbackImg)} />
@@ -1390,8 +1390,8 @@ const PlayVideo = ({ videoDetails, author, permlink, mediaUnavailable = false, m
                     <a
                       key={`${vAuthor}-${v.permlink}-${i}`}
                       className="video-ended-card"
-                      href={`/watch?v=${vAuthor}/${v.permlink}`}
-                      onClick={(e) => { e.preventDefault(); navigate(`/watch?v=${vAuthor}/${v.permlink}`); }}
+                      href={`/@${vAuthor}/${v.permlink}`}
+                      onClick={(e) => { e.preventDefault(); navigate(`/@${vAuthor}/${v.permlink}`); }}
                     >
                       <img src={fixVideoThumbnail(v)} alt={v.title} onError={(e) => (e.currentTarget.src = fallbackImg)} />
                       <div className="video-ended-card-info">
@@ -2062,7 +2062,7 @@ const PlayVideo = ({ videoDetails, author, permlink, mediaUnavailable = false, m
 
         <ShareChooserModal
           open={shareChooserOpen}
-          url={`${window.location.origin}/watch?v=${author}/${permlink}`}
+          url={`${window.location.origin}/@${author}/${permlink}`}
           title={videoDetails?.title}
           /* Embed code is offered only for something a stranger's page can
              actually play: a scheduled post isn't public yet, and a live stream

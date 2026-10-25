@@ -110,7 +110,7 @@ export default function UploadLinks({ linkClass, iconClass = "icon", onClick }) 
 
       {hasOthers && <div className="share-menu-heading">{t('misc.uploadLinks.headings.others')}</div>}
       {user && (
-        <Link to={`/p/${user}?tab=community`} className={linkClass} title={t('misc.uploadLinks.communitySnap')} onClick={go}>
+        <Link to={`/@${user}?tab=community`} className={linkClass} title={t('misc.uploadLinks.communitySnap')} onClick={go}>
           <BiCommentDetail className={iconClass} /> <span>{t('misc.uploadLinks.communitySnap')}</span>
         </Link>
       )}

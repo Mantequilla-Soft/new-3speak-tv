@@ -54,9 +54,7 @@ describe('getSchedulingParams', () => {
     expect(getSchedulingParams(true, '2026-10-22T12:00')).toMatchObject({ publish_type: 'error' })
   })
 
-  // src/utils/schedulingHelpers.js:57-66: an Invalid Date gives publish_data NaN, which
-  // passes the `<= now` check, and the log line then calls toISOString() on it (RangeError).
-  it.skip('BUG: an unparseable time is rejected instead of throwing', () => {
+  it('an unparseable time is rejected instead of throwing', () => {
     expect(getSchedulingParams(true, 'not-a-date')).toMatchObject({ publish_type: 'error' })
   })
 })

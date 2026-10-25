@@ -135,9 +135,7 @@ describe('publishSnap', () => {
     expect(lastMeta().community).toBeUndefined()
   })
 
-  // src/lib/snaps.js:135-138 (and 196-210 in updateSnap): nsfw is pushed after
-  // community + 9 user tags and then cut by slice(0, 10), so it silently disappears.
-  it.skip('BUG: an NSFW snap keeps its nsfw tag even with the maximum number of user tags', async () => {
+  it('an NSFW snap keeps its nsfw tag even with the maximum number of user tags', async () => {
     const tags = Array.from({ length: 9 }, (_, i) => `t${i}`)
     await run(publishSnap({ user: 'a', body: 'x', tags, nsfw: true }))
     expect(lastMeta().tags).toContain('nsfw')

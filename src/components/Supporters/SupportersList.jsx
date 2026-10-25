@@ -100,7 +100,7 @@ function SupportCard({ item, person, canHide }) {
       <div className="sp-card-body">
         <Link to={link} className="sp-card-title" title={title}>{title}</Link>
         <div className="sp-card-meta">
-          <Link to={`/p/${person}`} className="sp-card-tipper">
+          <Link to={`/@${person}`} className="sp-card-tipper">
             <AccountImg account={person} alt="" loading="lazy" />
             <span>@{person}</span>
           </Link>

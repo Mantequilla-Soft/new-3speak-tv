@@ -39,7 +39,7 @@ export function getNotificationRoute(notif) {
 
   // @username profile
   if (raw.startsWith('@') && !raw.includes('/')) {
-    return `/p/${raw.slice(1)}`;
+    return `/@${raw.slice(1)}`;
   }
 
   // trx:... — nothing to link to
@@ -55,7 +55,7 @@ export function getNotificationRoute(notif) {
   }
 
   // Bare author (fallback)
-  if (author) return `/p/${author}`;
+  if (author) return `/@${author}`;
 
   return null;
 }

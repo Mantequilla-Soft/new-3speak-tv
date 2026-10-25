@@ -98,7 +98,7 @@ export default function IncubationBell() {
               {data.items.map((n) => (
                 <li key={`${n.type}-${n.replyPermlink || n.permlink}-${n.at}`}>
                   <Link
-                    to={`/watch?v=${incubationHandle}/${n.permlink}`}
+                    to={`/@${incubationHandle}/${n.permlink}`}
                     onClick={() => setOpen(false)}
                   >
                     <img

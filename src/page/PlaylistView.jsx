@@ -451,7 +451,7 @@ function PlaylistView() {
 
       // Navigate back to profile after a short delay
       setTimeout(() => {
-        navigate(`/p/${playlist.owner}`);
+        navigate(`/@${playlist.owner}`);
       }, 1500);
     } catch (error) {
       toast.error(t('playlists.view.deleteFailed', { error: error.message }));
@@ -529,7 +529,7 @@ function PlaylistView() {
           <div className="playlist-details">
             <h1>{playlist.name}</h1>
             <div className="playlist-meta">
-              <Link to={`/p/${playlist.owner}`} className="owner">
+              <Link to={`/@${playlist.owner}`} className="owner">
                 @{playlist.owner}
               </Link>
               <span className="separator">•</span>
@@ -676,7 +676,7 @@ function PlaylistView() {
                 </div>
                 <span className="video-position">{index + 1}</span>
                 <Link
-                  to={`/watch?v=${video.author}/${video.permlink}&playlist=${playlistId}&pos=${index}`}
+                  to={`/@${video.author}/${video.permlink}?playlist=${playlistId}&pos=${index}`}
                   state={{ playlist, videos: allVideos, currentIndex: index }}
                   className="video-link"
                 >
@@ -743,7 +743,7 @@ function PlaylistView() {
             ) : (
               <Link
                 key={`${video.author}-${video.permlink}`}
-                to={`/watch?v=${video.author}/${video.permlink}&playlist=${playlistId}&pos=${video.position}`}
+                to={`/@${video.author}/${video.permlink}?playlist=${playlistId}&pos=${video.position}`}
                 state={{ playlist, videos: allVideos, currentIndex: video.position }}
                 className="playlist-video-card"
                 {...getCardProps(`${video.author}/${video.permlink}`, video.author, video.permlink, fixVideoThumbnail(video), video.status)}

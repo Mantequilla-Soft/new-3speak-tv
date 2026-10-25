@@ -8,6 +8,7 @@ import { useAppStore } from '../../lib/store';
 import { hasConsent } from '../../lib/consent';
 import { getPlayerUrl } from '../../utils/playerUrl';
 import './MiniPlayer.scss';
+import { isProfilePath, isWatchPath } from '../../utils/urls';
 
 const MiniPlayer = () => {
   const { t } = useTranslation();
@@ -17,10 +18,10 @@ const MiniPlayer = () => {
   const clearMiniPlayer = useAppStore((s) => s.clearMiniPlayer);
   const [loaded, setLoaded] = useState(false);
 
-  // Hide mini player on shorts, upload, and profile pages
-  const hiddenPaths = ['/watch', '/shorts', '/upload', '/upload-video', '/studio'];
+  // Hide mini player on the watch page, shorts, upload, and profile pages
+  const hiddenPaths = ['/shorts', '/upload', '/upload-video', '/studio'];
   const pathname = location.pathname;
-  const shouldHide = hiddenPaths.includes(pathname) || pathname.startsWith('/p/');
+  const shouldHide = hiddenPaths.includes(pathname) || isWatchPath(pathname) || isProfilePath(pathname);
 
   const {
     ref: videoRef,
@@ -55,7 +56,7 @@ const MiniPlayer = () => {
     if (!miniPlayer) return;
     const seconds = Math.floor(playerState.currentTime || 0);
     clearMiniPlayer();
-    navigate(`/watch?v=${miniPlayer.author}/${miniPlayer.permlink}${seconds > 0 ? `&t=${seconds}` : ''}`);
+    navigate(`/@${miniPlayer.author}/${miniPlayer.permlink}${seconds > 0 ? `?t=${seconds}` : ''}`);
   }, [miniPlayer, playerState.currentTime, navigate, clearMiniPlayer]);
 
   const handleClose = useCallback((e) => {

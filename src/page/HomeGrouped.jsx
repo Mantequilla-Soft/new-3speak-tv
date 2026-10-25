@@ -10,6 +10,7 @@ import { useContentBatch } from "../hooks/useContentBatch";
 import { useWatchHistory } from "../hooks/useWatchHistory";
 import { batchCheckWatched } from "../utils/watchHistory";
 import { getHidden } from "../utils/userFilters";
+import { aiKey, isAiFlagged, loadAiFlags } from "../utils/aiFlags";
 import useViewCounts from "../hooks/useViewCounts";
 import { useAppStore } from "../lib/store";
 import { getFeedSeed, refreshHomeFeeds } from "../utils/feedSeed";
@@ -89,15 +90,18 @@ const fetchDiscover = async (page = 1) => {
 // even decide which videos are looked at, and without currentuser, which would tilt
 // toward creators the viewer follows: these are the top videos for everyone. The
 // viewer's own filters are applied here instead: anything they watched (whatever
-// their hide-watched setting), dismissed, or whose creator they hid. Returns the
-// remaining candidates in rank order; orderFeatured shuffles the first twenty.
+// their hide-watched setting), dismissed, or whose creator they hid, and with
+// "Hide AI-generated" on, anything flagged as AI. That has to happen here, before
+// a video is picked: the grid drops an AI card itself, and when that card was the
+// big one the whole Spotlight went with it. Returns the remaining candidates in
+// rank order; orderFeatured shuffles the first twenty.
 const FEATURED_WINDOW_MS = 48 * 60 * 60 * 1000;
 const FEATURED_TOP = 20;
 // At least this much in Hive rewards to be in the Spotlight at all.
 const FEATURED_MIN_REWARD = 1;
 const FEATURED_PAGE = 100;
 const FEATURED_MAX_PAGES = 3;
-const fetchFeatured = async (viewer) => {
+const fetchFeatured = async (viewer, hideAi) => {
   const since = Date.now() - FEATURED_WINDOW_MS;
   const createdAt = (v) => new Date(v.created || v.created_at).getTime();
   const rewardOf = (v) => Number(v.stats?.total_hive_reward || 0);
@@ -130,18 +134,27 @@ const fetchFeatured = async (viewer) => {
       return true;
     });
   };
-  if (!viewer || !recent.length) return onePerCreator(recent);
+  // The same lookup keys as the grid's AI pill (Card3 aiKeysFor): the hive author,
+  // and the owner when a different account owns the asset. A failed lookup reads
+  // as "not flagged", so the Spotlight never disappears over an outage.
+  const aiKeysOf = (v) => [aiKey(authorOf(v), v.permlink), v.owner ? aiKey(v.owner, v.permlink) : null];
+  const dropAi = async (list) => {
+    if (!hideAi || !list.length) return list;
+    await loadAiFlags(list.flatMap(aiKeysOf).filter(Boolean));
+    return list.filter((v) => !isAiFlagged(authorOf(v), v.permlink) && !(v.owner && isAiFlagged(v.owner, v.permlink)));
+  };
+  if (!viewer || !recent.length) return onePerCreator(await dropAi(recent));
   const [watched, hidden] = await Promise.all([
     batchCheckWatched(viewer, recent.map((v) => ({ author: authorOf(v), permlink: v.permlink }))),
     getHidden(viewer),
   ]);
   const hiddenVideos = new Set(hidden.videos.map((h) => `${norm(h.owner)}/${norm(h.permlink)}`));
   const hiddenCreators = new Set(hidden.creators.map((h) => norm(h.creator)));
-  return onePerCreator(recent.filter((v) => {
+  return onePerCreator(await dropAi(recent.filter((v) => {
     const people = [norm(authorOf(v)), norm(v.owner)];
     return !watched.has(`${authorOf(v)}/${v.permlink}`)
       && !people.some((p) => hiddenCreators.has(p) || hiddenVideos.has(`${p}/${norm(v.permlink)}`));
-  }));
+  })));
 };
 
 // The top FEATURED_TOP in a random order fixed for the page load: each candidate's
@@ -412,7 +425,7 @@ function useVisibleKeys(rootRef, sig, count) {
 
 const HomeGrouped = () => {
   const { t } = useTranslation();
-  const { authenticated, user, showNsfw, homeCardSize, hideWatched, interests, simpleFeed } = useAppStore();
+  const { authenticated, user, showNsfw, homeCardSize, hideWatched, hideAi, interests, simpleFeed } = useAppStore();
   const spotlightSize = useAppStore((st) => st.spotlightSize);
   const setSpotlightSize = useAppStore((st) => st.setSpotlightSize);
   // Who is looking, for feature gates that are keyed on a name. A warm-up user
@@ -561,8 +574,8 @@ const HomeGrouped = () => {
   // The featured video (see fetchFeatured / orderFeatured), leading the Discover tab.
   const isPhone = useIsPhone();
   const { data: featuredPool } = useQuery({
-    queryKey: ["featured", showNsfw, gateViewer || null],
-    queryFn: () => fetchFeatured(gateViewer),
+    queryKey: ["featured", showNsfw, gateViewer || null, hideAi],
+    queryFn: () => fetchFeatured(gateViewer, hideAi),
     enabled: !isPhone,
     staleTime: 5 * 60 * 1000,
     gcTime: 10 * 60 * 1000,

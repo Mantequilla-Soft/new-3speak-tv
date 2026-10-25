@@ -729,7 +729,7 @@ function buildOgHtml({
     thumbnailUrl: image,
     embedUrl,
     url: canonical,
-    author: { '@type': 'Person', name: `@${author}`, url: `${BASE_URL}/user/${author}` },
+    author: { '@type': 'Person', name: `@${author}`, url: `${BASE_URL}/@${author}` },
     publisher: {
       '@type': 'Organization',
       name: '3Speak',
@@ -773,7 +773,7 @@ function buildOgHtml({
   // bare ?v= address.
   const breadcrumbs = breadcrumbLd([
     ['3Speak', `${CANONICAL_ORIGIN}/`],
-    [`@${author}`, `${CANONICAL_ORIGIN}/user/${author}`],
+    [`@${author}`, `${CANONICAL_ORIGIN}/@${author}`],
     [title, canonical],
   ]);
   const jsonLd = ldScript(noindex ? ld : [ld, breadcrumbs]);
@@ -813,7 +813,7 @@ function buildOgHtml({
   // Other videos, so a crawler that lands here can walk on into the catalogue.
   const relatedSection = Array.isArray(related) && related.length
     ? `\n  <section>\n    <h2>More videos on 3Speak</h2>\n    <ul>\n${related
-        .map((r) => `      <li><a href="${escapeHtml(`${origin}/watch?v=${r.author}/${r.permlink}`)}">${escapeHtml(r.title)}</a> by @${escapeHtml(r.author)}</li>`)
+        .map((r) => `      <li><a href="${escapeHtml(`${origin}/@${r.author}/${r.permlink}`)}">${escapeHtml(r.title)}</a> by @${escapeHtml(r.author)}</li>`)
         .join('\n')}\n    </ul>\n  </section>`
     : '';
 
@@ -852,7 +852,7 @@ function buildOgHtml({
 </head>
 <body>
   <h1>${safeTitle}</h1>${playerFrame}
-  <p><a href="${safeUrl}">${safeTitle}</a> by <a href="${escapeHtml(`${origin}/user/${author}`)}">@${safeAuthor}</a> on <a href="${escapeHtml(origin)}">3Speak</a></p>
+  <p><a href="${safeUrl}">${safeTitle}</a> by <a href="${escapeHtml(`${origin}/@${author}`)}">@${safeAuthor}</a> on <a href="${escapeHtml(origin)}">3Speak</a></p>
   <p>${safeDesc}</p>${tagLine}${chaptersSection}${transcriptSection}${commentsSection}${relatedSection}
 </body>
 </html>`;
@@ -870,12 +870,63 @@ const GENERIC_CARD = {
 
 // Pages with a card of their own (nginx must send their bots here: add a
 // `location = <path>` block like /watch's). Title + description mirror the
-// page's own SEOHead, so the card says what the page says.
+// page's own SEOHead or, without one, its own words (src/locales/en), so the
+// card says what the page says. `image` is a path on the host that was asked:
+// the files live in public/ (public/og/: feeds on a wall of thumbnails, tools
+// in the /advertise style).
+//
+// Apart from /advertise, nginx sends only link-preview fetchers here, never
+// search engines ($threespeak_preview_bot): these pages have nothing for a
+// crawler beyond the card, and Google renders the real page.
+const UPLOAD_CARD = {
+  title: '3S | Upload to 3Speak',
+  description: 'Publish videos and shorts to your own Hive account on 3Speak, with chapters and links.',
+  image: '/og/upload.jpg',
+};
 const PAGE_CARDS = {
   '/advertise': {
     title: '3S | Advertise on 3Speak videos',
     description: 'Put a short ad inside videos on 3Speak, paid in HBD or HIVE. Every advertiser is reviewed by hand.',
-    image: `${BASE_URL}/og-advertise.jpg`,
+    image: '/og-advertise.jpg',
+  },
+  '/discover': {
+    title: '3S | Discover 3Speak',
+    description: 'Search videos, shorts, audio, communities and playlists on 3Speak.',
+    image: '/og/discover.jpg',
+  },
+  '/surf': {
+    title: '3S | Surf 3Speak',
+    description: 'Pick a channel and lean back. 3Speak lines up the best videos on that topic one after another.',
+    image: '/og/surf.jpg',
+  },
+  '/audio': {
+    title: '3S | Audio on 3Speak',
+    description: 'Podcasts and music on 3Speak, with their own player. Publish audio the same way you publish video.',
+    image: '/og/audio.jpg',
+  },
+  '/badges': {
+    title: '3S | Badges on 3Speak',
+    description: 'Badges are awards given on Hive for events, contributions and milestones. Open one to see everyone who holds it and what they publish.',
+    image: '/og/badges.jpg',
+  },
+  '/upload': UPLOAD_CARD,
+  '/embed-studio': UPLOAD_CARD,
+  '/faq': {
+    title: '3S | Frequently asked questions',
+    description: 'New to 3Speak? Here are the answers to the questions people ask us most.',
+    image: '/og/faq.jpg',
+  },
+  // Live only where the importer is switched on (VITE_VIDEO_IMPORT): nginx is the switch.
+  '/youtube-import': {
+    title: '3S | Import your videos to 3Speak',
+    description: 'Bring your videos from YouTube or TikTok to 3Speak. Title, description, tags and thumbnail are filled in for you.',
+    image: '/og/youtube-import.jpg',
+  },
+  // Live only once streaming is open to everyone (VITE_ENABLE_OPENPODS): nginx is the switch.
+  '/openpods': {
+    title: '3S | Go live on 3Speak',
+    description: 'Stream on 3Speak from your browser or OBS, with live chat.',
+    image: '/og/openpods.jpg',
   },
 };
 
@@ -1077,7 +1128,7 @@ async function servePublicOembed(req, res, url, origin) {
     type: 'video',
     title: card.title,
     author_name: video.author,
-    author_url: `${origin}/user/${video.author}`,
+    author_url: `${origin}/@${video.author}`,
     provider_name: '3Speak',
     provider_url: `${origin}/`,
     cache_age: 3600,
@@ -1115,7 +1166,7 @@ async function serveOembed(req, res, url, origin) {
     // generic line.
     if (/^[a-z0-9][a-z0-9.-]{1,15}$/.test(author) && permlink) {
       const post = await fetchHivePost(author, permlink).catch(() => null);
-      if (post) entry = { description: extractDescription(post.body), url: `${origin}/watch?v=${author}/${permlink}` };
+      if (post) entry = { description: extractDescription(post.body), url: `${origin}/@${author}/${permlink}` };
     }
   }
   const text = (entry && entry.description) || (author ? `A video by @${author} on 3Speak` : '3Speak');
@@ -1133,17 +1184,21 @@ async function serveOembed(req, res, url, origin) {
   res.end(JSON.stringify(body));
 }
 
+// Share images of communities and profiles, drawn by the API (og-cards.cjs).
+// Only the URL helper is used here; the drawing code loads in the API.
+const { cardUrl } = require('./og-cards.cjs');
+
 // Profiles, playlists/albums and audio posts. See og-pages.cjs.
 const ogPages = require('./og-pages.cjs')({
   BASE_URL, CANONICAL_ORIGIN, CHECKER_URL, escapeHtml, fixThumbnail, boundImage, extractDescription,
-  parseMeta, getIndexability, fetchHivePost, lookupHivePost, isMissingError, breadcrumbLd,
-  secondsToISO8601, toIsoDate, ogVideo, rememberOembed, OEMBED_PATH,
+  parseMeta, getIndexability, lookupHivePost, isMissingError, breadcrumbLd,
+  secondsToISO8601, toIsoDate, ogVideo, cardUrl,
 });
 
 // Feed, topic and community pages. See og-lists.cjs.
 const ogLists = require('./og-lists.cjs')({
   CANONICAL_ORIGIN, CHECKER_URL, FALLBACK_THUMBNAIL, escapeHtml, fixThumbnail, boundImage,
-  isMissingError, breadcrumbLd, ldScript, isAdultByTitle,
+  isMissingError, breadcrumbLd, ldScript, isAdultByTitle, cardUrl,
 });
 
 /**
@@ -1228,9 +1283,12 @@ async function resolveVideoCard(video, origin) {
     ? extractDescription(post.body)
     : `A ${kindLabel.toLowerCase()} by @${video.author} on 3Speak.`;
 
-  // og:url is the exact route that was shared (/watch, /shorts or
-  // /shorts/stories), keeping the original permlink so the link opens right.
-  const selfUrl = `${origin}/${video.routePath}?v=${video.author}/${video.permlink}`;
+  // og:url is the exact route that was shared (a video at /@author/permlink,
+  // whichever of its two addresses was used; /shorts or /shorts/stories),
+  // keeping the original permlink so the link opens right.
+  const selfUrl = video.kind === 'watch'
+    ? `${origin}/@${video.author}/${video.permlink}`
+    : `${origin}/${video.routePath}?v=${video.author}/${video.permlink}`;
   // rel=canonical is ONE address per video, whichever way it was reached:
   //   - a short by its asset id, as the sitemap lists it. Its Hive post body
   //     links /shorts?v=<author>/<hive permlink>, which is the same short.
@@ -1243,9 +1301,9 @@ async function resolveVideoCard(video, origin) {
       ? `shorts?v=${embed.owner}/${embed.permlink}`
       : `shorts?v=${video.author}/${video.permlink}`;
   } else if (post) {
-    canonicalPath = `watch?v=${post.author}/${post.permlink}`;
+    canonicalPath = `@${post.author}/${post.permlink}`;
   } else {
-    canonicalPath = `watch?v=${embed.owner || video.author}/${embed.permlink || video.permlink}`;
+    canonicalPath = `@${embed.owner || video.author}/${embed.permlink || video.permlink}`;
   }
   const canonicalUrl = resolveCanonical(meta, `${CANONICAL_ORIGIN}/${canonicalPath}`);
   const duration = videoInfo.duration || (embed && embed.duration) || null;
@@ -1343,7 +1401,7 @@ const server = http.createServer(async (req, res) => {
 
   const pageCard = PAGE_CARDS[url.pathname.replace(/\/+$/, '')];
   if (pageCard) {
-    return sendHtml(req, res, 200, buildGenericHtml(origin + url.pathname, pageCard));
+    return sendHtml(req, res, 200, buildGenericHtml(origin + url.pathname, { ...pageCard, image: origin + pageCard.image }));
   }
 
   const page = ogPages.match(url);

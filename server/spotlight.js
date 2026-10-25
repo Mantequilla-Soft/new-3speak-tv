@@ -407,7 +407,7 @@ function renderSection(s, theme) {
     const embed = `/embed/${esc(s.author)}/${esc(s.permlink)}${s.isShort ? '?short=1' : ''}`;
     const vcls = s.isShort ? 'vid vid-short' : 'vid';
     const frame = `<div class="${vcls}"><iframe src="${esc(embed)}" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div>`;
-    const watch = `https://3speak.tv/watch?v=${esc(s.author)}/${esc(s.permlink)}`;
+    const watch = `https://3speak.tv/@${esc(s.author)}/${esc(s.permlink)}`;
     const title = s.title
       ? `<a class="vtitle" href="${watch}" target="_blank" rel="noopener noreferrer nofollow">${esc(s.title)}</a>`
       : '';
@@ -442,7 +442,9 @@ function renderSection(s, theme) {
   return '';
 }
 
-function renderSpotlightHtml(username, page, { displayName } = {}) {
+// shareImage: the channel's 1200x630 share card (og-cards.cjs), so a shared
+// link page unfurls as the channel does; without one, the bare avatar.
+function renderSpotlightHtml(username, page, { displayName, shareImage } = {}) {
   const user = esc(username);
   const name = esc(displayName || `@${username}`);
   const avatar = `https://images.hive.blog/u/${encodeURIComponent(username)}/avatar`;
@@ -480,7 +482,10 @@ function renderSpotlightHtml(username, page, { displayName } = {}) {
 <title>${name} • 3Speak</title>
 <meta name="description" content="${esc(desc)}">
 <meta property="og:title" content="${name}"><meta property="og:description" content="${esc(desc)}">
-<meta property="og:image" content="${esc(avatar)}"><meta property="og:type" content="profile">
+${shareImage
+    ? `<meta property="og:image" content="${esc(shareImage)}"><meta property="og:image:type" content="image/jpeg"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image"><meta name="twitter:image" content="${esc(shareImage)}">`
+    : `<meta property="og:image" content="${esc(avatar)}">`}<meta property="og:type" content="profile">
 <link rel="icon" href="${esc(avatar)}">
 <style>
 *{box-sizing:border-box}html,body{margin:0}
@@ -548,7 +553,7 @@ transition:transform .12s,filter .12s,box-shadow .12s}
 ${displayName ? `<div class="hd">@${user}</div>` : ''}
 ${headline ? `<p class="bio">${esc(headline)}</p>` : ''}
 ${body}
-<a class="chbtn" href="/p/${user}">${footerText}</a>
+<a class="chbtn" href="/@${user}">${footerText}</a>
 </div></body></html>`;
 }
 

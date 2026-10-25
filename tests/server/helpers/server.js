@@ -211,8 +211,9 @@ export function startApi({ env = configuredEnv(), fixtures } = {}) {
     fixtures,
     portVar: 'SERVER_PORT',
     healthPath: '/api/health',
-    // The translation editor's file store, kept out of server/data.
-    extraEnv: (dir) => ({ I18N_DATA_DIR: path.join(dir, 'i18n') }),
+    // The translation editor's file store and the share images, kept out of
+    // server/data; no weekly share-image sync.
+    extraEnv: (dir) => ({ I18N_DATA_DIR: path.join(dir, 'i18n'), OG_CARD_DIR: path.join(dir, 'og-cards'), OG_CARD_SYNC: 'off' }),
   })
 }
 
@@ -228,6 +229,6 @@ export function startOg({ env = {}, fixtures } = {}) {
     fixtures,
     portVar: 'OG_PORT',
     healthPath: '/og-health',
-    extraEnv: (dir) => ({ OG_VIDEO_CACHE_DIR: path.join(dir, 'og-video') }),
+    extraEnv: (dir) => ({ OG_VIDEO_CACHE_DIR: path.join(dir, 'og-video'), OG_CARD_DIR: path.join(dir, 'og-cards') }),
   })
 }

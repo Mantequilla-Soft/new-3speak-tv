@@ -81,7 +81,7 @@ function AuthorBadge({ author, onClick, followersCount, fetchFollowers, showFoll
     }
     if (noLink) {
       e.preventDefault();
-      navigate(`/p/${author}`);
+      navigate(`/@${author}`);
     }
   };
 
@@ -172,7 +172,7 @@ function AuthorBadge({ author, onClick, followersCount, fetchFollowers, showFoll
           {inner}
         </span>
       ) : (
-        <Link to={tabHint ? `/p/${author}?tab=${tabHint}` : `/p/${author}`} className="author-badge-link" onClick={handleClick}>
+        <Link to={tabHint ? `/@${author}?tab=${tabHint}` : `/@${author}`} className="author-badge-link" onClick={handleClick}>
           {inner}
         </Link>
       )}

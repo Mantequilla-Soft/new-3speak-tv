@@ -2337,6 +2337,19 @@ require('./sitemaps.cjs').mountSitemaps(app, {
   dbName: process.env.DATABASE_NAME,
 })
 
+// 🖼️ Share images for communities, profiles, badges, tags, invites, live
+// rooms, playlists and audio. See og-cards.cjs.
+require('./og-cards.cjs').mountOgCards(app, {
+  checkerUrl: (process.env.CHECKER_URL || 'https://checker.3speak.tv').replace(/\/+$/, ''),
+  // The same check as /api/referral/invite/:code: a live invite to 3Speak.
+  resolveInvite: async (code) => {
+    if (!butr || typeof butr.getInvite !== 'function') throw new Error('ButrAuth not ready')
+    const inv = await butr.getInvite(code)
+    if (!inv.valid || inv.app?.clientId !== MANTEAUTH_CLIENT_ID) return null
+    return String(inv.referrer || '').toLowerCase() || null
+  },
+})
+
 // ▶️ YouTube import (verified channel owners only). See youtube-import.cjs.
 // The whole importer is OFF unless VIDEO_IMPORT_ENABLED=true (owner's call
 // 2026-10-06); each source has its own IMPORT_SOURCE_<NAME> switch inside.
@@ -2707,7 +2720,7 @@ async function recentHivePosts(account, count) {
     if (!/^https?:\/\//i.test(image)) image = `https://images.hive.blog/u/${account}/avatar`
     const isVideo = /3speak/i.test(String(jm.app || '')) || !!jm.video
     items.push({
-      url: isVideo ? `https://3speak.tv/watch?v=${p.author}/${p.permlink}` : `https://peakd.com/@${p.author}/${p.permlink}`,
+      url: isVideo ? `https://3speak.tv/@${p.author}/${p.permlink}` : `https://peakd.com/@${p.author}/${p.permlink}`,
       title: (p.title || 'Untitled').slice(0, 160),
       description: hiveExcerpt(p.body).slice(0, 170),
       image,
@@ -2773,7 +2786,10 @@ app.get('/spotlight-page/:username', baseLimiter, async (req, res) => {
       const meta = account && account.posting_json_metadata ? JSON.parse(account.posting_json_metadata) : {}
       displayName = (meta && meta.profile && meta.profile.name) || ''
     } catch { /* no name */ }
-    const html = spotlight.renderSpotlightHtml(username, page, { displayName })
+    // The channel's share card on the host that was asked (3speak.tv or preview).
+    const host = /^(preview\.)?3speak\.tv$/.test(req.get('host') || '') ? req.get('host') : '3speak.tv'
+    const shareImage = require('./og-cards.cjs').cardUrl(`https://${host}`, 'user', username)
+    const html = spotlight.renderSpotlightHtml(username, page, { displayName, shareImage })
     res.set('Content-Type', 'text/html; charset=utf-8')
     // Short cache so an edit shows up quickly (on-chain propagation is the real floor).
     res.set('Cache-Control', 'public, max-age=15')
