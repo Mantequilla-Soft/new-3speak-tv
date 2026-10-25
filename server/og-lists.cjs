@@ -322,7 +322,7 @@ module.exports = function createLists(h) {
       description: clip(about || `The ${name} community on 3Speak.${members ? ` ${members}.` : ''}`, 200),
       intro: about || `The ${name} community on 3Speak, ${ABOUT}.`,
       // The community's share image (og-cards.cjs): its picture and name.
-      ogTitle: `3S | ${name}`,
+      ogTitle: `${name} on 3speak.tv`,
       card: { url: cardUrl(origin, 'community', id), alt: `${name} community on 3Speak` },
       items,
       itemsHeading: `New in ${name}`,

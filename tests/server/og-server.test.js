@@ -310,13 +310,13 @@ describe('list pages', () => {
     expect(canonical(r.text)).toBe('https://3speak.tv/community/hive-100001')
   })
 
-  it("a community's share card is its own image, '3S | <name>' and its Hive about text", async () => {
+  it("a community's share card is its own image, '<name> on 3speak.tv' and its Hive about text", async () => {
     const r = await crawl('/community/hive-100001', 'Mozilla/5.0 (compatible; Discordbot/2.0; +https://discordapp.com)')
-    expect(r.text).toContain('<meta property="og:title" content="3S | Cooks" />')
+    expect(r.text).toContain('<meta property="og:title" content="Cooks on 3speak.tv" />')
     expect(r.text).toContain('<meta property="og:description" content="People who cook on camera." />')
     expect(r.text).toContain('<meta property="og:image" content="https://3speak.tv/api/og-card/community/hive-100001.jpg" />')
     expect(r.text).toContain('<meta property="og:image:width" content="1200" />')
-    expect(r.text).toContain('<meta name="twitter:title" content="3S | Cooks" />')
+    expect(r.text).toContain('<meta name="twitter:title" content="Cooks on 3speak.tv" />')
   })
 
   it("a profile's share card is its own image, '<display name> on 3speak.tv' and the Hive bio", async () => {
