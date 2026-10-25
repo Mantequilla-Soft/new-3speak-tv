@@ -1,7 +1,7 @@
 // Publishing a finished OpenPods stream as a video (src/utils/streamVod.js): the
-// TUS upload under the room's permlink, the follow-up calls, and the server-side
-// publish tracker.
-import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
+// TUS upload under the room's permlink and the follow-up calls. (The server-side
+// publish tracker and its toasts were removed in 57aac2c2.)
+import { describe, it, expect, vi, beforeEach } from 'vitest'
 
 const h = vi.hoisted(() => ({
   cfg: { EMBED_API_KEY: 'embed-key', CHECKER_URL: 'https://checker.example', CHECKER_API_KEY: 'checker-key' },
@@ -30,7 +30,7 @@ vi.mock('../../../src/utils/embedEndpoints', () => ({
   pickEmbedEndpoint: vi.fn(async () => ({ base: 'https://embed.example/', uploadUrl: 'https://embed.example/uploads' })),
 }))
 
-import { publishStreamVod, trackServerVodPublish } from '../../../src/utils/streamVod.js'
+import { publishStreamVod } from '../../../src/utils/streamVod.js'
 
 const blob = { type: '', size: 10 }
 let fetchMock
@@ -107,51 +107,5 @@ describe('publishStreamVod', () => {
     await publishStreamVod({ blob, roomName: 'r', owner: 'o' })
     expect(h.toast.error).toHaveBeenCalledWith('misc.streamVod.uploadFailed', { id: 'tid' })
     expect(fetchMock).not.toHaveBeenCalled()
-  })
-})
-
-describe('trackServerVodPublish', () => {
-  beforeEach(() => { vi.useFakeTimers() })
-  afterEach(() => { vi.useRealTimers() })
-
-  const answers = (...states) => {
-    for (const s of states) {
-      if (s instanceof Error) fetchMock.mockRejectedValueOnce(s)
-      else fetchMock.mockResolvedValueOnce({ ok: true, json: async () => s })
-    }
-  }
-
-  it('does nothing without a status URL', async () => {
-    await trackServerVodPublish({})
-    expect(h.toast.loading).not.toHaveBeenCalled()
-  })
-
-  it('narrates upload, encode and publish, then stops polling', async () => {
-    answers({ status: 'uploading', progress: 40 }, new Error('blip'), { status: 'processing' }, { status: 'published' })
-    await trackServerVodPublish({ statusUrl: 'https://h/status' })
-    await vi.advanceTimersByTimeAsync(3000 * 5)
-    expect(fetchMock).toHaveBeenCalledTimes(4)
-    expect(fetchMock).toHaveBeenCalledWith('https://h/status', { cache: 'no-store' })
-    expect(h.toast.loading).toHaveBeenCalledWith('misc.streamVod.uploading {"pct":40}', { id: 'tid' })
-    expect(h.toast.loading).toHaveBeenCalledWith('misc.streamVod.encoding', { id: 'tid' })
-    expect(h.toast.success).toHaveBeenCalledWith('misc.streamVod.saved', { id: 'tid', duration: 8000 })
-  })
-
-  it('stops with an error when the server reports a failure', async () => {
-    answers({ status: 'failed', error: 'disk full' })
-    await trackServerVodPublish({ statusUrl: 's' })
-    await vi.advanceTimersByTimeAsync(10000)
-    expect(fetchMock).toHaveBeenCalledTimes(1)
-    expect(h.toast.error).toHaveBeenCalledWith('misc.streamVod.saveFailed {"error":"disk full"}', { id: 'tid' })
-  })
-
-  it('gives up after twenty minutes without an answer', async () => {
-    fetchMock.mockResolvedValue({ ok: false })
-    await trackServerVodPublish({ statusUrl: 's' })
-    await vi.advanceTimersByTimeAsync(21 * 60 * 1000)
-    expect(h.toast.error).toHaveBeenCalledWith('misc.streamVod.stillProcessing', { id: 'tid', duration: 8000 })
-    const calls = fetchMock.mock.calls.length
-    await vi.advanceTimersByTimeAsync(60 * 1000)
-    expect(fetchMock.mock.calls.length).toBe(calls)
   })
 })
