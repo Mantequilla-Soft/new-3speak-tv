@@ -7,6 +7,12 @@
 // 1.0.0 — that way they see all of these when develop is pushed to production.
 export const CHANGELOG = [
   {
+    version: '1.80.17',
+    date: '2026-10-25',
+    summary:
+      'Dropbox and Netflix links no longer get the X icon in Spotlight, and NSFW snaps keep their nsfw tag.',
+  },
+  {
     version: '1.80.15',
     date: '2026-10-23',
     summary:
