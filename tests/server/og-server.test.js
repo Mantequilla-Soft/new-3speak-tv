@@ -319,11 +319,11 @@ describe('list pages', () => {
     expect(r.text).toContain('<meta name="twitter:title" content="3S | Cooks" />')
   })
 
-  it("a profile's share card is its own image, '3S | <display name>' and the Hive bio", async () => {
+  it("a profile's share card is its own image, '<display name> on 3speak.tv' and the Hive bio", async () => {
     const r = await crawl('/user/alice')
     expect(r.status).toBe(200)
     expect(r.text).toContain('<title>Alice Cook (@alice) - 3Speak</title>')
-    expect(r.text).toContain('<meta property="og:title" content="3S | Alice Cook" />')
+    expect(r.text).toContain('<meta property="og:title" content="Alice Cook on 3speak.tv" />')
     expect(r.text).toContain('<meta property="og:description" content="I cook on camera every Sunday." />')
     expect(r.text).toContain('<meta property="og:image" content="https://3speak.tv/api/og-card/user/alice.jpg" />')
     expect(r.text).toContain('<meta name="twitter:card" content="summary_large_image" />')

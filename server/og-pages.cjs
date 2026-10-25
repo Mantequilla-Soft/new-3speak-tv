@@ -211,7 +211,8 @@ ${body}
     const description = clip(p.about, 200) || (tally ? `${tally} on 3Speak` : `@${account} on 3Speak`);
     // As on the share image: any display name but the handle itself, even one
     // that only capitalises it ('MenO' for meno).
-    const ogTitle = `3S | ${displayName === account || displayName === `@${account}` ? `@${account}` : displayName}`;
+    const shareName = displayName === account || displayName === `@${account}` ? `@${account}` : displayName;
+    const ogTitle = `${shareName} on 3speak.tv`;
 
     const canonical = `${CANONICAL_ORIGIN}/user/${account}`;
     const selfUrl = origin + req.url;
@@ -283,7 +284,7 @@ ${body}
       image,
       imageType: 'image/jpeg',
       imageSize: [1200, 630],
-      imageAlt: `${ogTitle.slice(5)} on 3Speak`,
+      imageAlt: `${shareName} on 3Speak`,
       url: selfUrl,
       canonical,
       ogType: 'profile',
