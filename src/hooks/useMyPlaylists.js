@@ -65,7 +65,7 @@ export function useMyPlaylists(options = {}) {
                   return { ...playlist, thumbnail: metadata.image[0] };
                 }
                 if (metadata.video?.info?.ipfsThumbnail) {
-                  return { ...playlist, thumbnail: `https://ipfs-3speak.b-cdn.net/ipfs/${metadata.video.info.ipfsThumbnail}` };
+                  return { ...playlist, thumbnail: `https://ipfs.3speak.tv/ipfs/${metadata.video.info.ipfsThumbnail}` };
                 }
               }
             } catch (e) {

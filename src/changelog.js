@@ -7,6 +7,12 @@
 // 1.0.0 — that way they see all of these when develop is pushed to production.
 export const CHANGELOG = [
   {
+    version: '1.80.21',
+    date: '2026-10-26',
+    summary:
+      'Video thumbnails uploaded through other Hive apps now show up reliably on video cards and playlists.',
+  },
+  {
     version: '1.80.20',
     date: '2026-10-25',
     summary:

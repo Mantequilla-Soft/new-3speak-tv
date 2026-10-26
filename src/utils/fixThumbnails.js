@@ -13,13 +13,16 @@ export { fallbackImg };
 const LANDSCAPE = { w: 340, h: 191 };
 const PORTRAIT = { w: 360, h: 640 };
 
-// The ONLY IPFS gateway images.hive.blog's resize proxy will accept. It 403s on
-// ipfs.3speak.tv, hotipfs-3speak-1.b-cdn.net and ipfs-audio.3speak.tv, but serves
-// ipfs-3speak.b-cdn.net fine. Legacy IPFS thumbnails are routinely the raw, full
-// resolution upload (1–12 MB — one drone photo is 12 MB), so sending an unresized
-// one straight to a card is what makes those thumbnails take forever to appear.
-// Normalising to this host lets the proxy downscale it (12 MB → ~24 KB).
-const IPFS_PROXY_HOST = "https://ipfs-3speak.b-cdn.net";
+// The IPFS gateway we hand to images.hive.blog's resize proxy. Legacy IPFS
+// thumbnails are routinely the raw, full resolution upload (1–12 MB — one drone
+// photo is 12 MB), so sending an unresized one straight to a card is what makes
+// those thumbnails take forever to appear. Normalising to one host lets the proxy
+// downscale it (12 MB → ~24 KB).
+// ⚠️ This used to be ipfs-3speak.b-cdn.net, but that Bunny zone has answered 403
+// "Domain suspended" since 2026-09-08, so every thumbnail the proxy had not cached
+// before then came back as a 403 (verified 2026-10-26). The proxy now fetches
+// ipfs.3speak.tv fine, which it used to refuse.
+const IPFS_PROXY_HOST = "https://ipfs.3speak.tv";
 const IPFS_GATEWAY_RE = /^https?:\/\/(?:ipfs\.3speak\.tv|hotipfs-3speak-1\.b-cdn\.net|ipfs-3speak\.b-cdn\.net|ipfs-audio\.3speak\.tv)\/ipfs\/(.+)$/i;
 
 // Hosts Hive's resize proxy REFUSES. It answers 403 for images.3speak.tv, so

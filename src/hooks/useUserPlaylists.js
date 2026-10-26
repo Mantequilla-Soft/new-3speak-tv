@@ -27,7 +27,7 @@ async function fetchVideoThumbnail(author, permlink) {
         return metadata.image[0];
       }
       if (metadata.video?.info?.ipfsThumbnail) {
-        return `https://ipfs-3speak.b-cdn.net/ipfs/${metadata.video.info.ipfsThumbnail}`;
+        return `https://ipfs.3speak.tv/ipfs/${metadata.video.info.ipfsThumbnail}`;
       }
     }
   } catch (error) {

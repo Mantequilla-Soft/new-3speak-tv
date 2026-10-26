@@ -27,7 +27,7 @@ async function fetchFirstItemThumb(author, permlink) {
     if (!raw) return null;
     const meta = typeof raw === 'string' ? JSON.parse(raw) : raw;
     if (meta.image?.[0]) return meta.image[0];
-    if (meta.video?.info?.ipfsThumbnail) return `https://ipfs-3speak.b-cdn.net/ipfs/${meta.video.info.ipfsThumbnail}`;
+    if (meta.video?.info?.ipfsThumbnail) return `https://ipfs.3speak.tv/ipfs/${meta.video.info.ipfsThumbnail}`;
   } catch { /* ignore — fall back to avatar */ }
   return null;
 }
