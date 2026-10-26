@@ -79,6 +79,17 @@
       "includesWhale": "Include account 🐋 balena",
       "includesOrca": "Include account 🐬 orca",
       "andMore": "e altri {{count}}…"
+    },
+    "stories": {
+      "heading": "Storie delle persone che segui",
+      "posted": "@{{user}} ha pubblicato una storia",
+      "type": "Storia",
+      "hoursLeft_one": "{{count}} h rimasta",
+      "hoursLeft_many": "{{count}} h rimaste",
+      "hoursLeft_other": "{{count}} h rimaste",
+      "ariaUnseen_one": "Notifiche, {{count}} nuova storia",
+      "ariaUnseen_many": "Notifiche, {{count}} nuove storie",
+      "ariaUnseen_other": "Notifiche, {{count}} nuove storie"
     }
   },
   "search": {

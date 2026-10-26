@@ -53,6 +53,7 @@
   },
   "page": {
     "shareShort": "Partager un Short",
+    "shareStory": "Partager une story",
     "shareVideo": "Partager une vidéo"
   },
   "progress": {
@@ -251,11 +252,13 @@
     "watchAdToPublish": "Regarder la pub pour publier",
     "watchSponsorFirst": "Regardez d'abord le message du sponsor",
     "postShort": "Publier le Short",
+    "postStory": "Publier la story",
     "postVideo": "Publier la vidéo",
     "backToTimeline": "Retour à la chronologie"
   },
   "publishing": {
     "titleShort": "Publication du Short",
+    "titleStory": "Publication de la story",
     "titleVideo": "Publication de la vidéo",
     "subtitle": "Veuillez patienter pendant le traitement de votre contenu...",
     "starting": "Démarrage...",
@@ -279,6 +282,7 @@
     "adsOffFailedToast": "Publiée, mais les publicités n'ont pas encore pu être désactivées pour cette vidéo.",
     "rollsOffFailedToast": "Publiée, mais les spots vidéo n'ont pas encore pu être désactivés pour cette vidéo.",
     "trailerFailedToast": "Publiée, mais impossible de la définir comme bande-annonce de votre chaîne.",
+    "storyRegisterFailedToast": "Publié, mais impossible pour l'instant d'en faire une story de 24 heures.",
     "completed": "Terminé",
     "publishedToast": "Vidéo publiée !",
     "log": {
@@ -309,12 +313,15 @@
       "rollsOffFailed": "Impossible d'enregistrer le réglage sans spots vidéo pour cette vidéo",
       "trailerSet": "Définie comme bande-annonce de votre chaîne",
       "trailerFailed": "Publiée, mais impossible de la définir comme bande-annonce de votre chaîne",
+      "storyRegistered": "La story est en ligne pour 24 heures",
+      "storyRegisterFailed": "Publié, mais impossible d'en faire une story de 24 heures",
       "published": "Vidéo publiée !"
     }
   },
   "done": {
     "title": "Mise en ligne terminée !",
     "shortPublished": "Votre Short a été publié sur 3Speak. Il apparaîtra sur votre profil d'ici 5 minutes environ.",
+    "storyPublished": "Votre story est visible sur 3Speak pendant les prochaines 24 heures.",
     "videoPublished": "Votre vidéo a été publiée !<br/>Elle est maintenant en cours d'encodage en arrière-plan, ce qui peut prendre quelques minutes.",
     "promote": "Promouvoir cette vidéo",
     "goToProfile": "Aller sur mon profil →",

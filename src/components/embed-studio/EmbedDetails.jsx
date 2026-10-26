@@ -60,6 +60,7 @@ function EmbedDetails() {
     isScheduled, setIsScheduled,
     scheduleDateTime, setScheduleDateTime,
     fromStories,
+    isStory,
     reusable, setReusable,
     isNsfw, setIsNsfw,
     addToBlog, setAddToBlog,
@@ -309,7 +310,7 @@ function EmbedDetails() {
     <>
       <div className="studio-main-container embed-wizard embed-details-page">
         <div className="studio-page-header">
-          <h1>{fromStories ? t("upload.page.shareShort") : t("upload.page.shareVideo")}</h1>
+          <h1>{fromStories ? t(isStory ? "upload.page.shareStory" : "upload.page.shareShort") : t("upload.page.shareVideo")}</h1>
         </div>
         <StepProgress step={step} short={fromStories} />
         <EmbedUploadProgressBar />

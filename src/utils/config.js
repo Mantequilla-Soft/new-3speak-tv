@@ -90,6 +90,9 @@ const shortsMaxDurationLabel = () => (
 );
 
 const SHORTS_STORIES_URL = `${CHECKER_URL}/shorts/stories`;
+// 24h stories (checker routes/stories.js): the row on the home page, the follower
+// notifications and the call that marks a just-published post as a story.
+const STORIES_URL = `${CHECKER_URL}/stories`;
 const SHORTS_API_URL = `${CHECKER_URL}/shortssorted`;
 const USER_SHORTS_API_URL = `${CHECKER_URL}/shorts`;
 
@@ -258,6 +261,12 @@ const ALWAYS_ON_TEST_USERS = ['badadib', 'meno', 'tibfox', 'coolmole'];
 const isTestUser = (user) => !!user && ALWAYS_ON_TEST_USERS.includes(String(user).toLowerCase());
 const openpodsEnabledFor = (user) => ENABLE_OPENPODS || isTestUser(user);
 
+// Posting a story (the "Story" entry in the share menu) is a closed trial. Keep in
+// step with STORIES_ALLOWED_OWNERS on the checker, which enforces it. Watching
+// stories and their notifications are open to everyone.
+const STORY_POSTERS = ['badadib', 'meno', 'tibfox'];
+const storiesEnabledFor = (user) => !!user && STORY_POSTERS.includes(String(user).toLowerCase());
+
 // The "New here" rail: creators who have no Hive account yet, surfaced in the
 // home feed. OFF by default while the warm-up is still being tested -- the whole
 // point of a warm-up is that this content has not been through the same gates as
@@ -417,6 +426,7 @@ export {
   SHORTS_MAX_DURATION_SEC,
   shortsMaxDurationLabel,
   SHORTS_STORIES_URL,
+  STORIES_URL,
   SHORTS_API_URL,
   USER_SHORTS_API_URL,
   EDITOR_URLS,
@@ -439,6 +449,7 @@ export {
   OPENPODS_STANDALONE,
   ENABLE_OPENPODS,
   openpodsEnabledFor,
+  storiesEnabledFor,
   ENABLE_ADS,
   adsEnabledFor,
   selfPromoEnabledFor,

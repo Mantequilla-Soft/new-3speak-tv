@@ -7,7 +7,8 @@
     "default": "3S | 쇼츠"
   },
   "stories": {
-    "you": "나"
+    "you": "나",
+    "storyTitle": "{{user}}님의 스토리"
   },
   "errors": {
     "votingUnavailable": "이 게시물에는 투표할 수 없어요",

@@ -25,6 +25,8 @@ import { groupNotifications } from '../utils/notificationGrouping';
 import { useWhaleDetection } from '../utils/whaleDetection';
 import threeSpeakLogo from '../assets/image/3S_mark.svg';
 import HiveAvatar from '../components/HiveAvatar/HiveAvatar';
+import StoryNotifications from '../components/nav/StoryNotifications';
+import { useStoryNotifications } from '../lib/stories';
 import './Notifications.scss';
 import { useTranslation } from 'react-i18next';
 
@@ -104,6 +106,7 @@ function Notifications() {
     markingAsRead,
     isUnread,
   } = useHiveNotifications(authenticated ? user : null, { limit: 50 });
+  const { stories } = useStoryNotifications(authenticated ? user : null);
 
   // Monthly state declared early so mergedNotifications can reference it
   const [monthNotifs, setMonthNotifs] = useState([]);
@@ -375,6 +378,9 @@ function Notifications() {
           {unreadCount > 0 && <span className="notifications-filter-count">{unreadCount}</span>}
         </button>
       </div>
+
+      {/* ─── 24h stories from followed accounts (injected, not on chain) ─────── */}
+      <StoryNotifications stories={stories} variant="page" />
 
       {/* ─── Activity Summary (tabbed) ─────── */}
       {authenticated && user && (

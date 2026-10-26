@@ -159,6 +159,7 @@
   "uploadLinks": {
     "regularVideo": "通常の動画",
     "verticalShort": "縦型ショート",
+    "story": "ストーリー(24時間)",
     "musicAudio": "音楽 / 音声",
     "groupChat": "グループチャット",
     "communitySnap": "コミュニティの Snap",

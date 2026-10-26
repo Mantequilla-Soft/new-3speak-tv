@@ -159,6 +159,7 @@
   "uploadLinks": {
     "regularVideo": "Vidéo classique",
     "verticalShort": "Short vertical",
+    "story": "Story (24 h)",
     "musicAudio": "Musique / Audio",
     "groupChat": "Chat de groupe",
     "communitySnap": "Snap de communauté",

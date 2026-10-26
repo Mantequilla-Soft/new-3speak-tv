@@ -77,6 +77,15 @@
       "includesWhale": "May kasamang 🐋 whale account",
       "includesOrca": "May kasamang 🐬 orca account",
       "andMore": "at {{count}} pa…"
+    },
+    "stories": {
+      "heading": "Mga story mula sa mga sinusundan mo",
+      "posted": "Nag-post si @{{user}} ng story",
+      "type": "Story",
+      "hoursLeft_one": "{{count}}h na lang",
+      "hoursLeft_other": "{{count}}h na lang",
+      "ariaUnseen_one": "Mga notification, {{count}} bagong story",
+      "ariaUnseen_other": "Mga notification, {{count}} bagong story"
     }
   },
   "search": {

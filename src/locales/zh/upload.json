@@ -53,6 +53,7 @@
   },
   "page": {
     "shareShort": "分享短视频",
+    "shareStory": "分享快拍",
     "shareVideo": "分享视频"
   },
   "progress": {
@@ -247,11 +248,13 @@
     "watchAdToPublish": "看完广告即可发布",
     "watchSponsorFirst": "请先观看赞助商信息",
     "postShort": "发布短视频",
+    "postStory": "发布快拍",
     "postVideo": "发布视频",
     "backToTimeline": "返回时间线"
   },
   "publishing": {
     "titleShort": "正在发布短视频",
+    "titleStory": "正在发布快拍",
     "titleVideo": "正在发布视频",
     "subtitle": "请稍候，我们正在处理你的内容...",
     "starting": "正在开始...",
@@ -275,6 +278,7 @@
     "adsOffFailedToast": "已发布，但暂时无法关闭此视频的广告。",
     "rollsOffFailedToast": "已发布，但暂时无法为此视频关闭视频插播广告。",
     "trailerFailedToast": "已发布，但无法设为你的频道预告片。",
+    "storyRegisterFailedToast": "已发布,但暂时无法设为 24 小时快拍。",
     "completed": "已完成",
     "publishedToast": "视频发布成功！",
     "log": {
@@ -305,12 +309,15 @@
       "rollsOffFailed": "无法保存此视频的无插播广告设置",
       "trailerSet": "已设为你的频道预告片",
       "trailerFailed": "已发布，但无法设为你的频道预告片",
+      "storyRegistered": "快拍将展示 24 小时",
+      "storyRegisterFailed": "已发布,但无法设为 24 小时快拍",
       "published": "视频发布成功！"
     }
   },
   "done": {
     "title": "上传完成！",
     "shortPublished": "你的短视频已在 3Speak 上发布。大约需要 5 分钟才会出现在你的主页上。",
+    "storyPublished": "你的快拍将在 3Speak 上展示 24 小时。",
     "videoPublished": "你的视频已发布！<br/>它正在后台编码，可能需要几分钟。",
     "promote": "推广这个视频",
     "goToProfile": "前往我的主页 →",

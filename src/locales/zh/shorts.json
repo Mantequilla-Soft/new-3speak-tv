@@ -7,7 +7,8 @@
     "default": "3S | 短视频"
   },
   "stories": {
-    "you": "你"
+    "you": "你",
+    "storyTitle": "{{user}} 的快拍"
   },
   "errors": {
     "votingUnavailable": "此帖子暂不支持点赞",

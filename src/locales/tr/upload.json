@@ -53,6 +53,7 @@
   },
   "page": {
     "shareShort": "Shorts Paylaş",
+    "shareStory": "Bir hikâye paylaş",
     "shareVideo": "Video Paylaş"
   },
   "progress": {
@@ -249,11 +250,13 @@
     "watchAdToPublish": "Yayınlamak için reklamı izle",
     "watchSponsorFirst": "Önce sponsor mesajını izle",
     "postShort": "Shorts Paylaş",
+    "postStory": "Hikâyeyi paylaş",
     "postVideo": "Video Paylaş",
     "backToTimeline": "Zaman çizelgesine dön"
   },
   "publishing": {
     "titleShort": "Shorts Yayınlanıyor",
+    "titleStory": "Hikâye yayınlanıyor",
     "titleVideo": "Video Yayınlanıyor",
     "subtitle": "İçeriğini işlerken lütfen bekle...",
     "starting": "Başlatılıyor...",
@@ -277,6 +280,7 @@
     "adsOffFailedToast": "Yayınlandı, ancak bu videonun reklamları henüz kapatılamadı.",
     "rollsOffFailedToast": "Yayınlandı, ancak bu video için video reklamları henüz kapatılamadı.",
     "trailerFailedToast": "Yayınlandı ama kanal fragmanın olarak ayarlanamadı.",
+    "storyRegisterFailedToast": "Yayınlandı, ancak henüz 24 saatlik hikâye olarak ayarlanamadı.",
     "completed": "Tamamlandı",
     "publishedToast": "Video yayınlandı!",
     "log": {
@@ -307,12 +311,15 @@
       "rollsOffFailed": "Bu video için video reklamı olmayan ayar kaydedilemedi",
       "trailerSet": "Kanal fragmanın olarak ayarlandı",
       "trailerFailed": "Yayınlandı ama kanal fragmanın olarak ayarlanamadı",
+      "storyRegistered": "Hikâye 24 saat yayında",
+      "storyRegisterFailed": "Yayınlandı, ancak 24 saatlik hikâye olarak ayarlanamadı",
       "published": "Video yayınlandı!"
     }
   },
   "done": {
     "title": "Yükleme Tamamlandı!",
     "shortPublished": "Shorts videon 3Speak'te yayınlandı. Profilinde görünmesi yaklaşık 5 dakika sürer.",
+    "storyPublished": "Hikâyen önümüzdeki 24 saat boyunca 3Speak'te yayında.",
     "videoPublished": "Videon yayınlandı!<br/>Şu an arka planda kodlanıyor, bu birkaç dakika sürebilir.",
     "promote": "Bu videoyu öne çıkar",
     "goToProfile": "Profilime Git →",

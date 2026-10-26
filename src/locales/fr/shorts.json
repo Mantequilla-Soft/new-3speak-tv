@@ -7,7 +7,8 @@
     "default": "3S | Shorts"
   },
   "stories": {
-    "you": "Vous"
+    "you": "Vous",
+    "storyTitle": "Story de {{user}}"
   },
   "errors": {
     "votingUnavailable": "Le vote n'est pas disponible pour cette publication",

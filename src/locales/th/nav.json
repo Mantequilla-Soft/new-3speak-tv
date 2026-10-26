@@ -75,6 +75,13 @@
       "includesWhale": "รวมบัญชี 🐋 วาฬ",
       "includesOrca": "รวมบัญชี 🐬 ออร์กา",
       "andMore": "และอีก {{count}} รายการ…"
+    },
+    "stories": {
+      "heading": "สตอรี่จากคนที่คุณติดตาม",
+      "posted": "@{{user}} โพสต์สตอรี่",
+      "type": "สตอรี่",
+      "hoursLeft_other": "เหลือ {{count}} ชม.",
+      "ariaUnseen_other": "การแจ้งเตือน, สตอรี่ใหม่ {{count}} รายการ"
     }
   },
   "search": {

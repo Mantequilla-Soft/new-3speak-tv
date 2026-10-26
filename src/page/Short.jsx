@@ -130,6 +130,7 @@ import EditVideoModal from '../components/playVideo/EditVideoModal';
 import PromoteModal from '../components/Promote/PromoteModal';
 import { notifyMediaPlay, onMediaPlay } from '../utils/mediaCoordinator';
 import HiveAvatar from '../components/HiveAvatar/HiveAvatar';
+import { markStorySeen, useInvalidateStories } from '../lib/stories';
 
 import { soundLabel } from '../utils/soundCredits';
 // Every toast from this module is headed "Shorts"; the message becomes the
@@ -548,6 +549,11 @@ const VideoShort = () => {
   }, [location.search]);
   const feedUserRef = useRef(feedUser);
   feedUserRef.current = feedUser;
+  // ?story=1 (with ?user=): the creator's live 24h stories instead of their shorts.
+  const storyMode = useMemo(() => !!feedUser && new URLSearchParams(location.search).get('story') === '1', [feedUser, location.search]);
+  const storyModeRef = useRef(storyMode);
+  storyModeRef.current = storyMode;
+  const invalidateStories = useInvalidateStories();
 
   // Minimum swipe distance to trigger navigation (in pixels)
   const minSwipeDistance = 50;
@@ -952,8 +958,16 @@ const VideoShort = () => {
       hivePermlink: currentVid.hivePermlink,
     });
 
+    // A 24h story counts as seen once opened: its cyan ring, notification and the
+    // bell's dot clear here (the checker's own seen comes from watch history,
+    // which a viewer may have switched off).
+    if (storyMode) {
+      markStorySeen(currentVid.author, currentVid.permlink, currentVid.hivePermlink);
+      invalidateStories();
+    }
+
     // Decrement unseen_count for the current creator in the stories bar cache
-    if (isStoriesMode && feedUser) {
+    if (isStoriesMode && feedUser && !storyMode) {
       queryClient.setQueryData(['shorts-stories', user], (old) => {
         if (!old?.creators) return old;
         return {
@@ -1646,7 +1660,7 @@ const VideoShort = () => {
         // User-specific feed mode: skip preloading, fetch directly from user endpoint
         if (feedUser) {
           setLoading(true);
-          const data = await fetchUserShortsWithDetails(feedUser, 1, 20);
+          const data = await fetchUserShortsWithDetails(feedUser, 1, 20, false, { story: storyMode });
           if (data.success) {
             const formattedVideos = await dropAiShorts(formatShorts(data.shorts), { hide: useAppStore.getState().hideAi });
             await applySharedVideoLogic(formattedVideos, data);
@@ -1700,7 +1714,7 @@ const VideoShort = () => {
 
     fetchShorts();
     // `shortsFeedMode` is a dep so flipping Discover ⇄ My interests refetches page 1.
-  }, [user, incubationHandle, feedUser, shortsFeedMode, getSharedVideoFromUrl, updateUrlWithCurrentVideo]);
+  }, [user, incubationHandle, feedUser, storyMode, shortsFeedMode, getSharedVideoFromUrl, updateUrlWithCurrentVideo]);
 
   /* ---------- HANDLE IN-PAGE NAVIGATION TO A SHORT ---------- */
   // When location.search changes (e.g. clicking "View parent reaction"),
@@ -1888,7 +1902,7 @@ const VideoShort = () => {
 
     try {
       const data = feedUserRef.current
-        ? await fetchUserShortsWithDetails(feedUserRef.current, nextPage, SHORTS_PAGE_SIZE)
+        ? await fetchUserShortsWithDetails(feedUserRef.current, nextPage, SHORTS_PAGE_SIZE, false, { story: storyModeRef.current })
         : await hiveApi.fetchShortsWithDetails(nextPage, SHORTS_PAGE_SIZE, user);
 
       if (data.success) {

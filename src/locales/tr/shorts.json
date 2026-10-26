@@ -7,7 +7,8 @@
     "default": "3S | Shorts"
   },
   "stories": {
-    "you": "Sen"
+    "you": "Sen",
+    "storyTitle": "{{user}} adlı kişinin hikâyesi"
   },
   "errors": {
     "votingUnavailable": "Bu gönderi için oy verme kullanılamıyor",

@@ -33,6 +33,9 @@
   
   /* Brand Colors */
   --accent-primary: #e53935;
+  /* 24h stories: ring, notification dot and share-menu icon */
+  --story-cyan: #0891b2;
+  --story-cyan-2: #22d3ee;
   --accent-hover: #c62828;
   --accent-light: rgba(229, 57, 53, 0.1);
   
@@ -95,6 +98,8 @@
   
   /* Brand Colors */
   --accent-primary: #ff5252;
+  --story-cyan: #22d3ee;
+  --story-cyan-2: #06b6d4;
   --accent-hover: #ff1744;
   --accent-light: rgba(255, 82, 82, 0.15);
   

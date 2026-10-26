@@ -7,7 +7,8 @@
     "default": "3S | शॉर्ट्स"
   },
   "stories": {
-    "you": "आप"
+    "you": "आप",
+    "storyTitle": "{{user}} की स्टोरी"
   },
   "errors": {
     "votingUnavailable": "इस पोस्ट पर वोटिंग उपलब्ध नहीं है",

@@ -53,6 +53,7 @@
   },
   "page": {
     "shareShort": "ショートを共有",
+    "shareStory": "ストーリーをシェア",
     "shareVideo": "動画を共有"
   },
   "progress": {
@@ -247,11 +248,13 @@
     "watchAdToPublish": "広告を見て公開",
     "watchSponsorFirst": "先にスポンサーメッセージをご覧ください",
     "postShort": "ショートを投稿",
+    "postStory": "ストーリーを投稿",
     "postVideo": "動画を投稿",
     "backToTimeline": "タイムラインに戻る"
   },
   "publishing": {
     "titleShort": "ショートを公開中",
+    "titleStory": "ストーリーを公開中",
     "titleVideo": "動画を公開中",
     "subtitle": "コンテンツを処理しています。しばらくお待ちください...",
     "starting": "開始中...",
@@ -275,6 +278,7 @@
     "adsOffFailedToast": "公開しましたが、この動画の広告をまだオフにできませんでした。",
     "rollsOffFailedToast": "公開しましたが、この動画の動画広告ロールはまだオフにできていません。",
     "trailerFailedToast": "公開しましたが、チャンネル予告編に設定できませんでした。",
+    "storyRegisterFailedToast": "公開しましたが、まだ24時間ストーリーに設定できませんでした。",
     "completed": "完了",
     "publishedToast": "動画を公開しました！",
     "log": {
@@ -305,12 +309,15 @@
       "rollsOffFailed": "この動画のロールなし設定を保存できませんでした",
       "trailerSet": "チャンネル予告編に設定しました",
       "trailerFailed": "公開しましたが、チャンネル予告編に設定できませんでした",
+      "storyRegistered": "ストーリーは24時間公開されます",
+      "storyRegisterFailed": "公開しましたが、24時間ストーリーに設定できませんでした",
       "published": "動画を公開しました！"
     }
   },
   "done": {
     "title": "アップロード完了！",
     "shortPublished": "ショートが 3Speak で公開されました。プロフィールに表示されるまで 5 分ほどかかります。",
+    "storyPublished": "あなたのストーリーは今から24時間、3Speakで公開されます。",
     "videoPublished": "動画が公開されました！<br/>現在バックグラウンドでエンコード中です。数分かかる場合があります。",
     "promote": "この動画をプロモーション",
     "goToProfile": "マイプロフィールへ →",

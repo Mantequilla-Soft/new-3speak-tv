@@ -7,7 +7,8 @@
     "default": "3S | Shorts"
   },
   "stories": {
-    "you": "Вы"
+    "you": "Вы",
+    "storyTitle": "История {{user}}"
   },
   "errors": {
     "votingUnavailable": "Голосование за этот пост недоступно",

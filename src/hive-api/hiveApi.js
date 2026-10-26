@@ -783,9 +783,12 @@ export async function fetchShortsWithDetails(page = 1, limit = 10, loggedInUser 
    User-specific shorts feed
 ------------------------------ */
 
-export async function fetchUserShortsList(username, page = 1, limit = 20, includeUnlisted = false) {
+// `story`: only the creator's live 24h stories (the story viewer); without it the
+// checker leaves stories out, so a profile's Shorts never lists one.
+export async function fetchUserShortsList(username, page = 1, limit = 20, includeUnlisted = false, { story = false } = {}) {
   let url = appendNsfw(`${USER_SHORTS_API}/${username}?page=${page}&limit=${limit}`, useAppStore.getState().showNsfw);
   if (includeUnlisted) url += '&include_unlisted=1';
+  if (story) url += '&story=1';
   const response = await axios.get(url);
 
   // Index results in the same maps so findShortByPermlink works
@@ -799,8 +802,8 @@ export async function fetchUserShortsList(username, page = 1, limit = 20, includ
   return response.data;
 }
 
-export async function fetchUserShortsWithDetails(username, page = 1, limit = 20, includeUnlisted = false) {
-  const shortsList = await fetchUserShortsList(username, page, limit, includeUnlisted);
+export async function fetchUserShortsWithDetails(username, page = 1, limit = 20, includeUnlisted = false, opts = {}) {
+  const shortsList = await fetchUserShortsList(username, page, limit, includeUnlisted, opts);
 
   if (!shortsList?.shorts) {
     throw new Error("Failed to fetch user shorts list");

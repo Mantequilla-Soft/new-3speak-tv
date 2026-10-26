@@ -159,6 +159,7 @@
   "uploadLinks": {
     "regularVideo": "普通视频",
     "verticalShort": "竖屏短视频",
+    "story": "快拍(24小时)",
     "musicAudio": "音乐 / 音频",
     "groupChat": "群聊",
     "communitySnap": "社区 Snap",

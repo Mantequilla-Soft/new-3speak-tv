@@ -77,6 +77,15 @@
       "includesWhale": "🐋 হোয়েল অ্যাকাউন্টও আছে",
       "includesOrca": "🐬 অর্কা অ্যাকাউন্টও আছে",
       "andMore": "আরও {{count}}টি…"
+    },
+    "stories": {
+      "heading": "আপনি যাদের ফলো করেন তাদের স্টোরি",
+      "posted": "@{{user}} একটি স্টোরি পোস্ট করেছেন",
+      "type": "স্টোরি",
+      "hoursLeft_one": "আর {{count}} ঘণ্টা",
+      "hoursLeft_other": "আর {{count}} ঘণ্টা",
+      "ariaUnseen_one": "নোটিফিকেশন, {{count}}টি নতুন স্টোরি",
+      "ariaUnseen_other": "নোটিফিকেশন, {{count}}টি নতুন স্টোরি"
     }
   },
   "search": {

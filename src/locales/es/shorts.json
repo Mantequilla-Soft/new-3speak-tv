@@ -7,7 +7,8 @@
     "default": "3S | Shorts"
   },
   "stories": {
-    "you": "Tú"
+    "you": "Tú",
+    "storyTitle": "Historia de {{user}}"
   },
   "errors": {
     "votingUnavailable": "No se puede votar en esta publicación",

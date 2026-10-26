@@ -53,6 +53,7 @@
   },
   "page": {
     "shareShort": "Shiriki short",
+    "shareStory": "Shiriki Hadithi",
     "shareVideo": "Shiriki video"
   },
   "progress": {
@@ -249,11 +250,13 @@
     "watchAdToPublish": "Tazama tangazo ili kuchapisha",
     "watchSponsorFirst": "Tazama ujumbe wa mfadhili kwanza",
     "postShort": "Chapisha short",
+    "postStory": "Chapisha Hadithi",
     "postVideo": "Chapisha video",
     "backToTimeline": "Rudi kwenye ratiba ya muda"
   },
   "publishing": {
     "titleShort": "Inachapisha short",
+    "titleStory": "Inachapisha Hadithi",
     "titleVideo": "Inachapisha video",
     "subtitle": "Tafadhali subiri tunapochakata maudhui yako...",
     "starting": "Inaanza...",
@@ -277,6 +280,7 @@
     "adsOffFailedToast": "Imechapishwa, lakini matangazo ya video hii bado hayajaweza kuzimwa.",
     "rollsOffFailedToast": "Imechapishwa, lakini matangazo ya video bado hayajaweza kuzimwa kwa video hii.",
     "trailerFailedToast": "Imechapishwa, lakini imeshindwa kuiweka kama trela ya chaneli yako.",
+    "storyRegisterFailedToast": "Imechapishwa, lakini bado haijawekwa kuwa hadithi ya saa 24.",
     "completed": "Imekamilika",
     "publishedToast": "Video imechapishwa!",
     "log": {
@@ -307,12 +311,15 @@
       "rollsOffFailed": "Imeshindwa kuhifadhi mpangilio wa bila matangazo ya video kwa video hii",
       "trailerSet": "Imewekwa kama trela ya chaneli yako",
       "trailerFailed": "Imechapishwa, lakini imeshindwa kuiweka kama trela ya chaneli yako",
+      "storyRegistered": "Hadithi iko hewani kwa saa 24",
+      "storyRegisterFailed": "Imechapishwa, lakini haikuweza kuwekwa kuwa hadithi ya saa 24",
       "published": "Video imechapishwa!"
     }
   },
   "done": {
     "title": "Upakiaji umekamilika!",
     "shortPublished": "Short yako imechapishwa kwenye 3Speak. Itachukua takriban dakika 5 kuonekana kwenye wasifu wako.",
+    "storyPublished": "Hadithi yako iko hewani kwenye 3Speak kwa saa 24 zijazo.",
     "videoPublished": "Video yako imechapishwa!<br/>Sasa inasimbwa chinichini, jambo ambalo linaweza kuchukua dakika chache.",
     "promote": "Tangaza video hii",
     "goToProfile": "Nenda kwenye wasifu wangu →",

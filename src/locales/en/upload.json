@@ -53,6 +53,7 @@
   },
   "page": {
     "shareShort": "Share a Short",
+    "shareStory": "Share a Story",
     "shareVideo": "Share a Video"
   },
   "progress": {
@@ -249,11 +250,13 @@
     "watchAdToPublish": "Watch ad to publish",
     "watchSponsorFirst": "Watch the sponsor message first",
     "postShort": "Post Short",
+    "postStory": "Post Story",
     "postVideo": "Post Video",
     "backToTimeline": "Back to timeline"
   },
   "publishing": {
     "titleShort": "Publishing Short",
+    "titleStory": "Publishing Story",
     "titleVideo": "Publishing Video",
     "subtitle": "Please wait while we process your content...",
     "starting": "Starting...",
@@ -277,6 +280,7 @@
     "adsOffFailedToast": "Published, but ads could not be turned off for this video yet.",
     "rollsOffFailedToast": "Published, but video ad rolls could not be turned off for this video yet.",
     "trailerFailedToast": "Published, but could not set it as your channel trailer.",
+    "storyRegisterFailedToast": "Published, but it could not be set as a 24-hour story yet.",
     "completed": "Completed",
     "publishedToast": "Video published successfully!",
     "log": {
@@ -307,12 +311,15 @@
       "rollsOffFailed": "Could not save the no-rolls setting for this video",
       "trailerSet": "Set as your channel trailer",
       "trailerFailed": "Published, but could not set it as your channel trailer",
+      "storyRegistered": "Story is live for 24 hours",
+      "storyRegisterFailed": "Published, but could not set it as a 24-hour story",
       "published": "Video successfully published!"
     }
   },
   "done": {
     "title": "Upload Finished!",
     "shortPublished": "Your short has been published on 3Speak. It will take around 5 minutes to show up on your profile.",
+    "storyPublished": "Your story is live on 3Speak for the next 24 hours.",
     "videoPublished": "Your video has been published!<br/>It's now encoding in the background, which can take a few minutes.",
     "promote": "Promote this video",
     "goToProfile": "Go To My Profile →",

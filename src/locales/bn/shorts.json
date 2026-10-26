@@ -7,7 +7,8 @@
     "default": "3S | শর্টস"
   },
   "stories": {
-    "you": "আপনি"
+    "you": "আপনি",
+    "storyTitle": "{{user}}-এর স্টোরি"
   },
   "errors": {
     "votingUnavailable": "এই পোস্টে ভোট দেওয়া যাচ্ছে না",

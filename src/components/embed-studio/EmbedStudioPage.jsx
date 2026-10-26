@@ -10,7 +10,7 @@ import axios from "axios";
 import { has3SpeakPostAuth } from "../../utils/hiveUtils";
 import 'ldrs/react/LineSpinner.css'
 import { useEmbedUpload } from "../../context/EmbedUploadContext";
-import { HIVE_API_URL, SHORTS_MAX_DURATION_SEC } from "../../utils/config";
+import { HIVE_API_URL, SHORTS_MAX_DURATION_SEC, storiesEnabledFor } from "../../utils/config";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useState } from "react";
 import { generateVideoThumbnails } from "../../utils/videoThumbnails";
@@ -29,6 +29,7 @@ function EmbedStudioPage() {
     setCommunitiesData,
     step, setStep,
     fromStories, setFromStories,
+    isStory, setIsStory,
     completed,
     resetUploadState,
     videoFile,
@@ -63,13 +64,15 @@ function EmbedStudioPage() {
   useEffect(() => {
     const params = new URLSearchParams(location.search);
     const from = params.get("from");
-    const isShorts = from === "stories" || from === "shorts";
+    // `story` = a 24h story (share menu → Story): a short with one more flag.
+    const isShorts = from === "stories" || from === "shorts" || from === "story";
     const enteringMode = isShorts ? "shorts" : "longform";
     if (videoFile && videoMode && videoMode !== enteringMode) {
       clearVideoSelection();
     }
     setFromStories(isShorts);
-  }, [location.search]);
+    setIsStory(from === "story" && storiesEnabledFor(user));
+  }, [location.search, user]);
 
   // Prefilled flow: an external uploader (e.g. Hangouts server-side recording)
   // has already pushed a video to the embed service. Skip Step 1 and land the
@@ -113,7 +116,8 @@ function EmbedStudioPage() {
       // is the thing that actually says which uploader was asked for, and it
       // cannot be stale by the time this runs.
       const from = new URLSearchParams(window.location.search).get('from');
-      setFromStories(from === 'stories' || from === 'shorts');
+      setFromStories(from === 'stories' || from === 'shorts' || from === 'story');
+      setIsStory(from === 'story' && storiesEnabledFor(user));
     } else {
       setStep(1);
     }
@@ -262,7 +266,7 @@ function EmbedStudioPage() {
     <>
       <div className="studio-main-container embed-wizard">
         <div className="studio-page-header">
-          <h1>{fromStories ? t("upload.page.shareShort") : t("upload.page.shareVideo")}</h1>
+          <h1>{fromStories ? t(isStory ? "upload.page.shareStory" : "upload.page.shareShort") : t("upload.page.shareVideo")}</h1>
         </div>
         <StepProgress step={step} short={fromStories} />
         {/* Hidden until the background upload runs (it starts on Details), so it

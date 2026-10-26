@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { IoCloudUploadSharp } from "react-icons/io5";
-import { Clapperboard } from "lucide-react";
+import { Clapperboard, CircleDashed } from "lucide-react";
 import { MdGraphicEq, MdDesktopWindows, MdSmartphone, MdGroups } from "react-icons/md";
 import { BiCommentDetail } from "react-icons/bi";
 import ShortsIcon from "./icons/ShortsIcon";
-import { FEATURE_EDITOR, openpodsEnabledFor } from "../utils/config";
+import { FEATURE_EDITOR, openpodsEnabledFor, storiesEnabledFor } from "../utils/config";
 import { getCreatorSettings, isUploadBlocked } from "../utils/creatorSettings";
 import { useSupportBlock } from "../lib/supportBlockStore";
 import { useAppStore } from "../lib/store";
@@ -76,6 +76,13 @@ export default function UploadLinks({ linkClass, iconClass = "icon", onClick }) 
       <Link to="/embed-studio?from=shorts" className={linkClass} title={t('misc.uploadLinks.verticalShort')} onClick={(e) => gatedGo(e, () => navigate('/embed-studio?from=shorts'))}>
         <ShortsIcon className={iconClass} outlineWidth={30} /> <span>{t('misc.uploadLinks.verticalShort')}</span>
       </Link>
+      {/* 24h story: a vertical short that leaves the stories row after a day.
+          Closed trial for now (storiesEnabledFor); the checker enforces it too. */}
+      {storiesEnabledFor(user) && (
+        <Link to="/embed-studio?from=story" className={linkClass} title={t('misc.uploadLinks.story')} onClick={(e) => gatedGo(e, () => navigate('/embed-studio?from=story'))}>
+          <CircleDashed className={`${iconClass} upload-link-story-icon`} size={18} /> <span>{t('misc.uploadLinks.story')}</span>
+        </Link>
+      )}
       <a href="#" className={linkClass} title={t('misc.uploadLinks.musicAudio')} onClick={(e) => gatedGo(e, () => window.dispatchEvent(new CustomEvent('open-audio-upload')))}>
         <MdGraphicEq className={iconClass} /> <span>{t('misc.uploadLinks.musicAudio')}</span>
       </a>

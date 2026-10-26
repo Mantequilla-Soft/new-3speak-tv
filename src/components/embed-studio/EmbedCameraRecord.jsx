@@ -7,7 +7,7 @@ import {
 import { useEmbedUpload } from '../../context/EmbedUploadContext';
 import { useVoiceTeleprompter } from '../../hooks/useVoiceTeleprompter';
 import { generateVideoThumbnails } from '../../utils/videoThumbnails';
-import { cameraRecordEnabledFor, SHORTS_MAX_DURATION_SEC, STT_WS_URL } from '../../utils/config';
+import { cameraRecordEnabledFor, storiesEnabledFor, SHORTS_MAX_DURATION_SEC, STT_WS_URL } from '../../utils/config';
 import { useAppStore } from '../../lib/store';
 import { detectScriptLang, modelIdToTag } from '../../utils/detectLang';
 import { createSttStream } from '../../utils/sttClient';
@@ -157,14 +157,15 @@ function EmbedCameraRecord() {
   const location = useLocation();
   const user = useAppStore((s) => s.user);
   const {
-    fromStories, setFromStories, setVideoFile, setPrevVideoFile,
+    fromStories, setFromStories, setIsStory, setVideoFile, setPrevVideoFile,
     setVideoDuration, setGeneratedThumbnail, setVideoMode,
   } = useEmbedUpload();
 
   useEffect(() => {
     const from = new URLSearchParams(location.search).get('from');
-    setFromStories(from === 'stories' || from === 'shorts');
-  }, [location.search, setFromStories]);
+    setFromStories(from === 'stories' || from === 'shorts' || from === 'story');
+    setIsStory(from === 'story' && storiesEnabledFor(user));
+  }, [location.search, setFromStories, setIsStory, user]);
 
   const rootRef = useRef(null);
   const previewRef = useRef(null);

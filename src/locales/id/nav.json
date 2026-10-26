@@ -75,6 +75,13 @@
       "includesWhale": "Termasuk akun 🐋 whale",
       "includesOrca": "Termasuk akun 🐬 orca",
       "andMore": "dan {{count}} lainnya…"
+    },
+    "stories": {
+      "heading": "Story dari orang yang kamu ikuti",
+      "posted": "@{{user}} memposting story",
+      "type": "Story",
+      "hoursLeft_other": "{{count}} jam lagi",
+      "ariaUnseen_other": "Notifikasi, {{count}} story baru"
     }
   },
   "search": {

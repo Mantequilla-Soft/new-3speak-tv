@@ -75,6 +75,13 @@
       "includesWhale": "Bao gồm tài khoản 🐋 cá voi",
       "includesOrca": "Bao gồm tài khoản 🐬 cá hổ kình",
       "andMore": "và {{count}} người khác…"
+    },
+    "stories": {
+      "heading": "Tin từ những người bạn theo dõi",
+      "posted": "@{{user}} đã đăng một tin",
+      "type": "Tin",
+      "hoursLeft_other": "còn {{count}} giờ",
+      "ariaUnseen_other": "Thông báo, {{count}} tin mới"
     }
   },
   "search": {

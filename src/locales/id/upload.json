@@ -53,6 +53,7 @@
   },
   "page": {
     "shareShort": "Bagikan Shorts",
+    "shareStory": "Bagikan Story",
     "shareVideo": "Bagikan Video"
   },
   "progress": {
@@ -247,11 +248,13 @@
     "watchAdToPublish": "Tonton iklan untuk menerbitkan",
     "watchSponsorFirst": "Tonton pesan sponsor dulu",
     "postShort": "Posting Shorts",
+    "postStory": "Posting Story",
     "postVideo": "Posting Video",
     "backToTimeline": "Kembali ke linimasa"
   },
   "publishing": {
     "titleShort": "Menerbitkan Shorts",
+    "titleStory": "Memublikasikan Story",
     "titleVideo": "Menerbitkan Video",
     "subtitle": "Mohon tunggu, kami sedang memproses kontenmu...",
     "starting": "Memulai...",
@@ -275,6 +278,7 @@
     "adsOffFailedToast": "Sudah dipublikasikan, tetapi iklan untuk video ini belum bisa dimatikan.",
     "rollsOffFailedToast": "Sudah terbit, tetapi video roll iklan belum bisa dimatikan untuk video ini.",
     "trailerFailedToast": "Sudah diterbitkan, tetapi tidak dapat dijadikan trailer channel-mu.",
+    "storyRegisterFailedToast": "Sudah terbit, tapi belum bisa dijadikan story 24 jam.",
     "completed": "Selesai",
     "publishedToast": "Video berhasil diterbitkan!",
     "log": {
@@ -305,12 +309,15 @@
       "rollsOffFailed": "Tidak dapat menyimpan pengaturan tanpa roll untuk video ini",
       "trailerSet": "Dijadikan trailer channel-mu",
       "trailerFailed": "Sudah diterbitkan, tetapi tidak dapat dijadikan trailer channel-mu",
+      "storyRegistered": "Story tayang selama 24 jam",
+      "storyRegisterFailed": "Sudah terbit, tapi tidak bisa dijadikan story 24 jam",
       "published": "Video berhasil diterbitkan!"
     }
   },
   "done": {
     "title": "Unggahan Selesai!",
     "shortPublished": "Shorts-mu sudah diterbitkan di 3Speak. Butuh sekitar 5 menit untuk muncul di profilmu.",
+    "storyPublished": "Story kamu tayang di 3Speak selama 24 jam ke depan.",
     "videoPublished": "Videomu sudah diterbitkan!<br/>Sekarang sedang di-encode di latar belakang, yang bisa memakan waktu beberapa menit.",
     "promote": "Promosikan video ini",
     "goToProfile": "Ke Profilku →",

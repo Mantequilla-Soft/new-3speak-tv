@@ -35,6 +35,7 @@ function EmbedVideoUploadStep1() {
     setVideoMode,
     clearVideoSelection,
     fromStories,
+    isStory,
     user,
   } = useEmbedUpload()
 
@@ -478,7 +479,7 @@ function EmbedVideoUploadStep1() {
                     <button
                       type="button"
                       className="button button--outline"
-                      onClick={() => navigate(fromStories ? '/embed-studio/record?from=stories' : '/embed-studio/record')}
+                      onClick={() => navigate(fromStories ? `/embed-studio/record?from=${isStory ? 'story' : 'stories'}` : '/embed-studio/record')}
                     >
                       <Video className="w-4 h-4" style={{ display: 'inline', verticalAlign: 'middle', marginRight: 6 }} />
                       {t("upload.select.selfieTeleprompter")}

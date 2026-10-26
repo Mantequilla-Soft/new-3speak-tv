@@ -40,6 +40,7 @@ function EmbedPreview() {
     publishToEmbed,
     user,
     fromStories,
+    isStory,
     community,
     beneficiaries,
     declineRewards,
@@ -260,7 +261,7 @@ function EmbedPreview() {
       !gateSatisfied && { key: "watch", label: t("upload.review.watchAdToPublish"), onClick: startGateAd },
       {
         key: "post",
-        label: fromStories ? t('upload.review.postShort') : t('upload.review.postVideo'),
+        label: fromStories ? t(isStory ? 'upload.review.postStory' : 'upload.review.postShort') : t('upload.review.postVideo'),
         onClick: handlePostVideo,
         disabled: !gateSatisfied || publishing,
         title: gateSatisfied ? undefined : t('upload.review.watchSponsorFirst'),
@@ -276,7 +277,7 @@ function EmbedPreview() {
       {!uploading && !completed && (
         <div className="studio-main-container embed-wizard">
           <div className="studio-page-header">
-            <h1>{fromStories ? t("upload.page.shareShort") : t("upload.page.shareVideo")}</h1>
+            <h1>{fromStories ? t(isStory ? "upload.page.shareStory" : "upload.page.shareShort") : t("upload.page.shareVideo")}</h1>
           </div>
 
           <StepProgress step={step} short={fromStories} />
@@ -386,7 +387,7 @@ function EmbedPreview() {
             </div>
 
             <h2 className="upload-title">
-              {fromStories ? t('upload.publishing.titleShort') : t('upload.publishing.titleVideo')}
+              {fromStories ? t(isStory ? 'upload.publishing.titleStory' : 'upload.publishing.titleShort') : t('upload.publishing.titleVideo')}
             </h2>
             <p className="upload-subtitle">{t("upload.publishing.subtitle")}</p>
 
@@ -449,7 +450,7 @@ function EmbedPreview() {
             <h3>{t("upload.done.title")}</h3>
             <p>
               {fromStories
-                ? t('upload.done.shortPublished')
+                ? t(isStory ? 'upload.done.storyPublished' : 'upload.done.shortPublished')
                 : (
                   <Trans i18nKey="upload.done.videoPublished" components={{ br: <br /> }} />
                 )}

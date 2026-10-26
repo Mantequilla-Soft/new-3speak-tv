@@ -21,3 +21,8 @@
     padding-top: 0.15rem;
   }
 }
+
+// The share menu's Story entry carries the stories cyan, like the ring it makes.
+.upload-link-story-icon {
+  color: var(--story-cyan, #22d3ee);
+}

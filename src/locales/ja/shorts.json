@@ -7,7 +7,8 @@
     "default": "3S | ショート"
   },
   "stories": {
-    "you": "あなた"
+    "you": "あなた",
+    "storyTitle": "{{user}}さんのストーリー"
   },
   "errors": {
     "votingUnavailable": "この投稿には投票できません",

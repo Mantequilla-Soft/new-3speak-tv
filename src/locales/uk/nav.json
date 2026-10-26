@@ -81,6 +81,19 @@
       "includesWhale": "Серед них є акаунти-🐋 кити",
       "includesOrca": "Серед них є акаунти-🐬 косатки",
       "andMore": "і ще {{count}}…"
+    },
+    "stories": {
+      "heading": "Історії тих, на кого ви підписані",
+      "posted": "@{{user}} опублікував(ла) історію",
+      "type": "Історія",
+      "hoursLeft_one": "залишилася {{count}} год",
+      "hoursLeft_few": "залишилося {{count}} год",
+      "hoursLeft_many": "залишилося {{count}} год",
+      "hoursLeft_other": "залишилося {{count}} год",
+      "ariaUnseen_one": "Сповіщення, {{count}} нова історія",
+      "ariaUnseen_few": "Сповіщення, {{count}} нові історії",
+      "ariaUnseen_many": "Сповіщення, {{count}} нових історій",
+      "ariaUnseen_other": "Сповіщення, {{count}} нової історії"
     }
   },
   "search": {

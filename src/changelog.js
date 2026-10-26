@@ -7,6 +7,12 @@
 // 1.0.0 — that way they see all of these when develop is pushed to production.
 export const CHANGELOG = [
   {
+    version: '1.80.24',
+    date: '2026-10-26',
+    summary:
+      'New 24-hour Stories, first in the stories row: the ring around each avatar counts down their time, and followers get a notification.',
+  },
+  {
     version: '1.80.23',
     date: '2026-10-26',
     summary:

@@ -53,6 +53,7 @@
   },
   "page": {
     "shareShort": "Compartilhar um Short",
+    "shareStory": "Compartilhe um story",
     "shareVideo": "Compartilhar um vídeo"
   },
   "progress": {
@@ -251,11 +252,13 @@
     "watchAdToPublish": "Assista ao anúncio para publicar",
     "watchSponsorFirst": "Assista primeiro à mensagem do patrocinador",
     "postShort": "Publicar Short",
+    "postStory": "Publicar story",
     "postVideo": "Publicar vídeo",
     "backToTimeline": "Voltar à linha do tempo"
   },
   "publishing": {
     "titleShort": "Publicando Short",
+    "titleStory": "Publicando story",
     "titleVideo": "Publicando vídeo",
     "subtitle": "Aguarde enquanto processamos seu conteúdo...",
     "starting": "Iniciando...",
@@ -279,6 +282,7 @@
     "adsOffFailedToast": "Publicado, mas ainda não foi possível desativar os anúncios deste vídeo.",
     "rollsOffFailedToast": "Publicado, mas ainda não foi possível desativar os spots em vídeo deste vídeo.",
     "trailerFailedToast": "Publicado, mas não foi possível defini-lo como trailer do seu canal.",
+    "storyRegisterFailedToast": "Publicado, mas ainda não foi possível defini-lo como story de 24 horas.",
     "completed": "Concluído",
     "publishedToast": "Vídeo publicado!",
     "log": {
@@ -309,12 +313,15 @@
       "rollsOffFailed": "Não foi possível salvar a configuração sem spots para este vídeo",
       "trailerSet": "Definido como trailer do seu canal",
       "trailerFailed": "Publicado, mas não foi possível defini-lo como trailer do seu canal",
+      "storyRegistered": "O story fica no ar por 24 horas",
+      "storyRegisterFailed": "Publicado, mas não foi possível defini-lo como story de 24 horas",
       "published": "Vídeo publicado!"
     }
   },
   "done": {
     "title": "Envio concluído!",
     "shortPublished": "Seu Short foi publicado no 3Speak. Ele leva cerca de 5 minutos para aparecer no seu perfil.",
+    "storyPublished": "Seu story fica no ar no 3Speak pelas próximas 24 horas.",
     "videoPublished": "Seu vídeo foi publicado!<br/>Agora ele está sendo codificado em segundo plano, o que pode levar alguns minutos.",
     "promote": "Promover este vídeo",
     "goToProfile": "Ir para meu perfil →",

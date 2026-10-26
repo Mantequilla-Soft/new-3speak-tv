@@ -53,6 +53,7 @@
   },
   "page": {
     "shareShort": "Udostępnij shorta",
+    "shareStory": "Udostępnij relację",
     "shareVideo": "Udostępnij film"
   },
   "progress": {
@@ -253,11 +254,13 @@
     "watchAdToPublish": "Obejrzyj reklamę, aby opublikować",
     "watchSponsorFirst": "Najpierw obejrzyj wiadomość sponsora",
     "postShort": "Opublikuj shorta",
+    "postStory": "Opublikuj relację",
     "postVideo": "Opublikuj film",
     "backToTimeline": "Wróć do osi czasu"
   },
   "publishing": {
     "titleShort": "Publikowanie shorta",
+    "titleStory": "Publikowanie relacji",
     "titleVideo": "Publikowanie filmu",
     "subtitle": "Poczekaj, aż przetworzymy twoje treści...",
     "starting": "Rozpoczynanie...",
@@ -281,6 +284,7 @@
     "adsOffFailedToast": "Opublikowano, ale nie udało się jeszcze wyłączyć reklam w tym filmie.",
     "rollsOffFailedToast": "Opublikowano, ale nie udało się jeszcze wyłączyć spotów w tym filmie.",
     "trailerFailedToast": "Opublikowano, ale nie udało się ustawić go jako zwiastuna kanału.",
+    "storyRegisterFailedToast": "Opublikowano, ale nie udało się jeszcze ustawić tego jako 24-godzinnej relacji.",
     "completed": "Zakończono",
     "publishedToast": "Film opublikowany!",
     "log": {
@@ -311,12 +315,15 @@
       "rollsOffFailed": "Nie udało się zapisać ustawienia bez spotów dla tego filmu",
       "trailerSet": "Ustawiono jako zwiastun kanału",
       "trailerFailed": "Opublikowano, ale nie udało się ustawić go jako zwiastuna kanału",
+      "storyRegistered": "Relacja jest widoczna przez 24 godziny",
+      "storyRegisterFailed": "Opublikowano, ale nie udało się ustawić tego jako 24-godzinnej relacji",
       "published": "Film opublikowany!"
     }
   },
   "done": {
     "title": "Przesyłanie zakończone!",
     "shortPublished": "Twój short został opublikowany na 3Speak. Pojawienie się na twoim profilu zajmie około 5 minut.",
+    "storyPublished": "Twoja relacja będzie widoczna na 3Speak przez najbliższe 24 godziny.",
     "videoPublished": "Twój film został opublikowany!<br/>Teraz jest kodowany w tle, co może potrwać kilka minut.",
     "promote": "Promuj ten film",
     "goToProfile": "Przejdź do mojego profilu →",

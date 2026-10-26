@@ -27,6 +27,7 @@ function EmbedThumbnail() {
     selectedIndex,
     setSelectedIndex,
     fromStories,
+    isStory,
     prefilled,
   } = useEmbedUpload();
 
@@ -133,7 +134,7 @@ function EmbedThumbnail() {
   const actions = {
     back: prefilled ? null : {
       label: t("common.actions.back"),
-      onClick: () => navigate(fromStories ? "/embed-studio?from=stories" : "/embed-studio"),
+      onClick: () => navigate(fromStories ? `/embed-studio?from=${isStory ? "story" : "stories"}` : "/embed-studio"),
     },
     primary: [{ key: "proceed", label: t("upload.thumbnail.proceed"), onClick: uploadThumbnail }],
   };
@@ -142,7 +143,7 @@ function EmbedThumbnail() {
     <>
       <div className="studio-main-container embed-wizard">
         <div className="studio-page-header">
-          <h1>{fromStories ? t("upload.page.shareShort") : t("upload.page.shareVideo")}</h1>
+          <h1>{fromStories ? t(isStory ? "upload.page.shareStory" : "upload.page.shareShort") : t("upload.page.shareVideo")}</h1>
         </div>
 
         <StepProgress step={step} short={fromStories} />

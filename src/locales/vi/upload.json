@@ -53,6 +53,7 @@
   },
   "page": {
     "shareShort": "Chia sẻ Shorts",
+    "shareStory": "Chia sẻ tin",
     "shareVideo": "Chia sẻ video"
   },
   "progress": {
@@ -247,11 +248,13 @@
     "watchAdToPublish": "Xem quảng cáo để xuất bản",
     "watchSponsorFirst": "Hãy xem thông điệp của nhà tài trợ trước",
     "postShort": "Đăng Shorts",
+    "postStory": "Đăng tin",
     "postVideo": "Đăng video",
     "backToTimeline": "Quay lại dòng thời gian"
   },
   "publishing": {
     "titleShort": "Đang xuất bản Shorts",
+    "titleStory": "Đang đăng tin",
     "titleVideo": "Đang xuất bản video",
     "subtitle": "Vui lòng chờ trong lúc chúng tôi xử lý nội dung của bạn...",
     "starting": "Đang bắt đầu...",
@@ -275,6 +278,7 @@
     "adsOffFailedToast": "Đã đăng, nhưng chưa thể tắt quảng cáo cho video này.",
     "rollsOffFailedToast": "Đã đăng, nhưng chưa tắt được quảng cáo dạng video cho video này.",
     "trailerFailedToast": "Đã xuất bản, nhưng không thể đặt làm video giới thiệu kênh của bạn.",
+    "storyRegisterFailedToast": "Đã đăng, nhưng chưa thể đặt thành tin 24 giờ.",
     "completed": "Hoàn tất",
     "publishedToast": "Đã xuất bản video thành công!",
     "log": {
@@ -305,12 +309,15 @@
       "rollsOffFailed": "Không lưu được cài đặt không có quảng cáo video cho video này",
       "trailerSet": "Đã đặt làm video giới thiệu kênh của bạn",
       "trailerFailed": "Đã xuất bản, nhưng không thể đặt làm video giới thiệu kênh của bạn",
+      "storyRegistered": "Tin sẽ hiển thị trong 24 giờ",
+      "storyRegisterFailed": "Đã đăng, nhưng không thể đặt thành tin 24 giờ",
       "published": "Đã xuất bản video thành công!"
     }
   },
   "done": {
     "title": "Đã tải lên xong!",
     "shortPublished": "Shorts của bạn đã được xuất bản trên 3Speak. Sẽ mất khoảng 5 phút để hiển thị trên hồ sơ của bạn.",
+    "storyPublished": "Tin của bạn sẽ hiển thị trên 3Speak trong 24 giờ tới.",
     "videoPublished": "Video của bạn đã được xuất bản!<br/>Video đang được mã hóa trong nền, có thể mất vài phút.",
     "promote": "Quảng bá video này",
     "goToProfile": "Đến hồ sơ của tôi →",

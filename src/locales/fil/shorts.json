@@ -7,7 +7,8 @@
     "default": "3S | Shorts"
   },
   "stories": {
-    "you": "Ikaw"
+    "you": "Ikaw",
+    "storyTitle": "Story ni {{user}}"
   },
   "errors": {
     "votingUnavailable": "Hindi available ang voting sa post na ito",

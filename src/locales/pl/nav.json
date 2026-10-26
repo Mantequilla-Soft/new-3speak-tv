@@ -81,6 +81,19 @@
       "includesWhale": "Zawiera konta 🐋 wielorybów",
       "includesOrca": "Zawiera konta 🐬 orek",
       "andMore": "i {{count}} więcej…"
+    },
+    "stories": {
+      "heading": "Relacje osób, które obserwujesz",
+      "posted": "@{{user}} dodał(a) relację",
+      "type": "Relacja",
+      "hoursLeft_one": "została {{count}} godz.",
+      "hoursLeft_few": "zostały {{count}} godz.",
+      "hoursLeft_many": "zostało {{count}} godz.",
+      "hoursLeft_other": "zostało {{count}} godz.",
+      "ariaUnseen_one": "Powiadomienia, {{count}} nowa relacja",
+      "ariaUnseen_few": "Powiadomienia, {{count}} nowe relacje",
+      "ariaUnseen_many": "Powiadomienia, {{count}} nowych relacji",
+      "ariaUnseen_other": "Powiadomienia, {{count}} nowej relacji"
     }
   },
   "search": {

@@ -25,6 +25,7 @@ import { isWeakLinkForced } from '../utils/uploadFaults';
 import { useTranslation } from 'react-i18next';
 import { readAddToBlog, writeAddToBlog, reblogOp } from '../utils/addToBlog';
 import { timelineMeta, applyTimelineToDescription } from '../utils/videoTimeline';
+import { registerStory } from '../lib/stories';
 
 // Every toast from this module is headed "Upload"; the message becomes the
 // line under it. See utils/toast.js.
@@ -210,6 +211,9 @@ export function EmbedUploadProvider({ children }) {
 
   // Entry origin (stories → "Share a Short", default → "Share a Video")
   const [fromStories, setFromStories] = useState(false);
+  // A 24h story (share menu → Story, `?from=story`). Always a short too, so every
+  // `fromStories` branch applies; this only adds the story flag on publish.
+  const [isStory, setIsStory] = useState(false);
   // 🔐 Gated (paid) upload. Only offered to 3Speak Pro users, and only ever
   // honoured because the embed backend re-checks Pro status when it mints the
   // upload token — this flag is a UI intent, not an authorisation.
@@ -403,6 +407,7 @@ export function EmbedUploadProvider({ children }) {
     setIsScheduled(false);
     setScheduleDateTime('');
     setFromStories(false);
+    setIsStory(false);
     setOriginalAuthor(null);
     setOriginalPermlink(null);
     setOriginalShortPermlink(null);
@@ -1817,8 +1822,15 @@ export function EmbedUploadProvider({ children }) {
         // and tickers only. Written only when off: the post is the creator's
         // signed record, and the checker mirrors it from the chain (routes/
         // advertise.js, /creator/video-ads/sync), so no separate signature is asked.
-        ...(!videoAdsEnabled ? { '3speak': { ads: false } }
-          : (!videoRollsEnabled ? { '3speak': { rolls: false } } : {})),
+        // `story: true` lives in the same namespace: the post is the author's signed
+        // claim that this short expires after 24h, which the checker reads back
+        // (routes/stories.js) instead of asking for another signature.
+        ...((!videoAdsEnabled || !videoRollsEnabled || (isStory && fromStories)) ? {
+          '3speak': {
+            ...(!videoAdsEnabled ? { ads: false } : (!videoRollsEnabled ? { rolls: false } : {})),
+            ...(isStory && fromStories ? { story: true } : {}),
+          },
+        } : {}),
         // ▶️ Where an imported video came from (/youtube-import): provenance on the
         // creator's own signed record, for later features (dedupe, re-sync,
         // "originally on …") without depending on our server's bookkeeping.
@@ -2184,6 +2196,20 @@ export function EmbedUploadProvider({ children }) {
         }
       }
 
+      // ─── Story: start its 24 hours ───
+      // Until the checker has read the flag back, the short behaves like any other
+      // (it would even show in the shorts feeds), so this one is worth a warning.
+      if (isStory && fromStories && !result.incubation) {
+        try {
+          await registerStory(user, hivePermlink);
+          addMessage(t('upload.publishing.log.storyRegistered'), 'success');
+        } catch (storyErr) {
+          console.warn('Failed to register the story:', storyErr);
+          addMessage(t('upload.publishing.log.storyRegisterFailed'), 'warning');
+          toast.error(t('upload.publishing.storyRegisterFailedToast'));
+        }
+      }
+
       // ─── Imported video: remember it is on 3Speak now ───
       // Non-fatal and silent: it only feeds the ✓ on the import page.
       if (importSource && !result.incubation) {
@@ -2270,6 +2296,7 @@ export function EmbedUploadProvider({ children }) {
     setPrefilledFromQuery,
     // Entry origin
     fromStories, setFromStories,
+    isStory, setIsStory,
     gated, setGated,
     gatedAllowlist, setGatedAllowlist,
     // Original video attribution

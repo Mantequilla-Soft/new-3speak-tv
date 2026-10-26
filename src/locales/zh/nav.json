@@ -75,6 +75,13 @@
       "includesWhale": "包含 🐋 鲸鱼账号",
       "includesOrca": "包含 🐬 虎鲸账号",
       "andMore": "还有 {{count}} 条…"
+    },
+    "stories": {
+      "heading": "你关注的人的快拍",
+      "posted": "@{{user}} 发布了快拍",
+      "type": "快拍",
+      "hoursLeft_other": "剩余 {{count}} 小时",
+      "ariaUnseen_other": "通知,{{count}} 条新快拍"
     }
   },
   "search": {

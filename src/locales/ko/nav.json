@@ -75,6 +75,13 @@
       "includesWhale": "🐋 고래 계정 포함",
       "includesOrca": "🐬 범고래 계정 포함",
       "andMore": "외 {{count}}개…"
+    },
+    "stories": {
+      "heading": "팔로우하는 사람들의 스토리",
+      "posted": "@{{user}}님이 스토리를 올렸어요",
+      "type": "스토리",
+      "hoursLeft_other": "{{count}}시간 남음",
+      "ariaUnseen_other": "알림, 새 스토리 {{count}}개"
     }
   },
   "search": {

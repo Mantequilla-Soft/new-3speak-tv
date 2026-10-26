@@ -53,6 +53,7 @@
   },
   "page": {
     "shareShort": "Mag-share ng Short",
+    "shareStory": "Magbahagi ng Story",
     "shareVideo": "Mag-share ng Video"
   },
   "progress": {
@@ -249,11 +250,13 @@
     "watchAdToPublish": "Manood ng ad para mag-publish",
     "watchSponsorFirst": "Panoorin muna ang sponsor message",
     "postShort": "I-post ang Short",
+    "postStory": "I-post ang Story",
     "postVideo": "I-post ang Video",
     "backToTimeline": "Bumalik sa timeline"
   },
   "publishing": {
     "titleShort": "Pine-publish ang Short",
+    "titleStory": "Ipinapublish ang Story",
     "titleVideo": "Pine-publish ang Video",
     "subtitle": "Sandali lang habang pinoproseso namin ang content mo...",
     "starting": "Nagsisimula...",
@@ -277,6 +280,7 @@
     "adsOffFailedToast": "Na-publish na, pero hindi pa ma-off ang mga ad para sa video na ito.",
     "rollsOffFailedToast": "Na-publish na, pero hindi pa ma-off ang video ad roll para sa video na ito.",
     "trailerFailedToast": "Na-publish na, pero hindi maitakda bilang channel trailer mo.",
+    "storyRegisterFailedToast": "Na-publish, pero hindi pa ito naitakda bilang 24-oras na story.",
     "completed": "Tapos na",
     "publishedToast": "Na-publish na ang video!",
     "log": {
@@ -307,12 +311,15 @@
       "rollsOffFailed": "Hindi ma-save ang setting na walang roll para sa video na ito",
       "trailerSet": "Itinakda bilang channel trailer mo",
       "trailerFailed": "Na-publish na, pero hindi maitakda bilang channel trailer mo",
+      "storyRegistered": "Live ang story sa loob ng 24 oras",
+      "storyRegisterFailed": "Na-publish, pero hindi naitakda bilang 24-oras na story",
       "published": "Na-publish na ang video!"
     }
   },
   "done": {
     "title": "Tapos na ang Upload!",
     "shortPublished": "Na-publish na sa 3Speak ang short mo. Aabutin ng mga 5 minuto bago ito lumabas sa profile mo.",
+    "storyPublished": "Live ang story mo sa 3Speak sa susunod na 24 oras.",
     "videoPublished": "Na-publish na ang video mo!<br/>Ine-encode na ito sa background, na puwedeng tumagal nang ilang minuto.",
     "promote": "I-promote ang video na ito",
     "goToProfile": "Pumunta sa Profile Ko →",

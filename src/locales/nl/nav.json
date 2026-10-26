@@ -77,6 +77,15 @@
       "includesWhale": "Inclusief 🐋 whale-account(s)",
       "includesOrca": "Inclusief 🐬 orca-account(s)",
       "andMore": "en nog {{count}}…"
+    },
+    "stories": {
+      "heading": "Story's van mensen die je volgt",
+      "posted": "@{{user}} heeft een story geplaatst",
+      "type": "Story",
+      "hoursLeft_one": "nog {{count}} u",
+      "hoursLeft_other": "nog {{count}} u",
+      "ariaUnseen_one": "Meldingen, {{count}} nieuwe story",
+      "ariaUnseen_other": "Meldingen, {{count}} nieuwe story's"
     }
   },
   "search": {
