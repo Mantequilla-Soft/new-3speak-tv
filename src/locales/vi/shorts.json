@@ -71,7 +71,9 @@
   },
   "remix": {
     "noUrl": "Không thể xác định URL video để remix",
-    "loadFailed": "Không tải được video để remix"
+    "loadFailed": "Không tải được video để remix",
+    "chainFull": "Video này đã được tạo từ {{max}} video trước đó nên không thể remix thêm nữa.",
+    "chainNoSlots": "Chuỗi remix này đã chia thưởng cho quá nhiều nhà sáng tạo nên không còn chỗ trên Hive cho một bản remix mới. Với 3Speak Pro, bạn vẫn có thể remix."
   },
   "watchLater": {
     "loginRequired": "Đăng nhập để lưu Shorts",

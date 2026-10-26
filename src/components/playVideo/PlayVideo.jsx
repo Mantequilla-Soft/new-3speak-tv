@@ -68,6 +68,8 @@ import useReblog from '../../hooks/useReblog';
 import PromoteModal from '../Promote/PromoteModal';
 import { recordReshare, getResharesForVideo } from '../../utils/reshares';
 import EditorModal from '../modal/EditorModal';
+import { checkRemix, remixBlockedMessage } from '../../utils/remixChain';
+import { usePremiumStatus } from '../../hooks/usePremiumStatus';
 import SubtitleOverlay from '../SubtitleOverlay/SubtitleOverlay';
 import TimelineToasters from './TimelineToasters';
 import ReportModal, { isReported } from '../modal/ReportModal';
@@ -88,6 +90,7 @@ dayjs.extend(relativeTime);
 const PlayVideo = ({ videoDetails, author, permlink, mediaUnavailable = false, mediaBlocked = false, onRetryPlayback = null, mediaLoading = false, playlistData, onClosePlaylist, videoControls, mobileReactionPanel, cinemaReactionPanel, videoRef, wrapperRef, onVideoEdited, overrideBody, scheduled = false, scheduledOn = null, onEditScheduled, v2 = false, isLive = false, streamRoom = null, liveChatSlot = null, onLiveChatSent = null, vodAssetPending = false, onStreamRoomMeta = null, belowPlayerSlot = null, sponsorLabel = null, adCountdown = null, bannerHit = null, tickerSlot = null, adSkip = null, adPlaying = false, adLocked = false, timelineLinks = null, timelineResetKey = null, tickerShown = false, surfActive = false }) => {
   const { t } = useTranslation();
   const { user, authenticated } = useAppStore();
+  const isPremium = !!usePremiumStatus(user)?.premium;
   const incubationHandle = useAppStore((s) => s.incubationHandle);
   // Actions that move value on Hive: promoting spends funds, tipping sends
   // them, and a clip/remix publishes a post that pays its original author
@@ -567,6 +570,7 @@ const PlayVideo = ({ videoDetails, author, permlink, mediaUnavailable = false, m
   const [editorVideoName, setEditorVideoName] = useState(null);
   const [editorClipStart, setEditorClipStart] = useState(null);
   const [editorClipEnd, setEditorClipEnd] = useState(null);
+  const [editorRemixChain, setEditorRemixChain] = useState(null);
   const [editorVideoType, setEditorVideoType] = useState('video');
   const [remixDropdownOpen, setRemixDropdownOpen] = useState(false);
   const remixDropdownRef = useRef(null);
@@ -987,11 +991,24 @@ const PlayVideo = ({ videoDetails, author, permlink, mediaUnavailable = false, m
     }
   }, [authenticated, user, incubationHandle, author, permlink, hasReshared]);
 
-  const handleRemix = useCallback((mediaType = 'video') => {
+  // A remix (or clip) of a remix pays every earlier creator: refuse a chain with
+  // no room left, else keep the chain for the editor (utils/remixChain.js)
+  const remixAllowed = useCallback(async () => {
+    const { chain, blocked } = await checkRemix({ author, permlink }, { user, isPremium });
+    if (blocked) {
+      toast.info(remixBlockedMessage(blocked, t));
+      return false;
+    }
+    setEditorRemixChain(chain);
+    return true;
+  }, [author, permlink, user, isPremium, t]);
+
+  const handleRemix = useCallback(async (mediaType = 'video') => {
     if (!videoUrlSelected) {
       toast.error(t('watch.clip.noVideoUrlRemix'));
       return;
     }
+    if (!(await remixAllowed())) return;
     if (videoControls?.onPause) videoControls.onPause();
     setEditorVideoUrl(videoUrlSelected);
     setEditorVideoName(`${author} - ${videoDetails?.title || permlink}`);
@@ -999,7 +1016,7 @@ const PlayVideo = ({ videoDetails, author, permlink, mediaUnavailable = false, m
     setEditorClipEnd(null);
     setEditorVideoType(mediaType);
     setShowEditorModal(true);
-  }, [videoUrlSelected, author, permlink, videoDetails?.title, videoControls]);
+  }, [videoUrlSelected, author, permlink, videoDetails?.title, videoControls, remixAllowed]);
 
   // Close remix dropdown on click outside
   useEffect(() => {
@@ -1020,12 +1037,13 @@ const PlayVideo = ({ videoDetails, author, permlink, mediaUnavailable = false, m
     return `${m}:${s.toString().padStart(2, '0')}`;
   };
 
-  const handleStartClipMode = useCallback(() => {
+  const handleStartClipMode = useCallback(async () => {
+    if (!(await remixAllowed())) return;
     setClipMode('start');
     setClipStart(null);
     setClipEnd(null);
     toast.info(t('watch.clip.startHint'));
-  }, []);
+  }, [remixAllowed]);
 
   const handleSetClipStart = useCallback(() => {
     const time = Math.floor(videoControls?.currentTime || 0);
@@ -2116,6 +2134,7 @@ const PlayVideo = ({ videoDetails, author, permlink, mediaUnavailable = false, m
         clipEnd={editorClipEnd}
         originalAuthor={author}
         originalPermlink={permlink}
+        remixChain={editorRemixChain}
       />
 
       <ReportModal

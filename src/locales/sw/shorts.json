@@ -71,7 +71,9 @@
   },
   "remix": {
     "noUrl": "Imeshindwa kupata URL ya video kwa ajili ya remix",
-    "loadFailed": "Imeshindwa kupakia video kwa ajili ya remix"
+    "loadFailed": "Imeshindwa kupakia video kwa ajili ya remix",
+    "chainFull": "Video hii tayari imejengwa juu ya video {{max}} za awali, kwa hiyo haiwezi kufanyiwa remix tena.",
+    "chainNoSlots": "Mnyororo huu wa remix tayari unawalipa watayarishi wengi kiasi kwamba hakuna nafasi kwenye Hive kwa remix nyingine. Ukiwa na 3Speak Pro bado unaweza kuifanyia remix."
   },
   "watchLater": {
     "loginRequired": "Ingia ili kuhifadhi Shorts",

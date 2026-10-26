@@ -70,7 +70,8 @@
       "invalidAccount": "Geçersiz kullanıcı adı veya topluluk kimliği.",
       "cannotIncrease": "Kalan %{{percent}} payın ötesine çıkılamaz",
       "pendingRow": "@{{account}} henüz eklenmedi; eklemek için + düğmesine tıkla ya da alanı temizle.",
-      "atLeastOne": "Ödül yüzdesi en az %1 olmalı"
+      "atLeastOne": "Ödül yüzdesi en az %1 olmalı",
+      "maxCount": "Hive gönderi başına en fazla {{max}} lehtara izin verir."
     },
     "title": "Lehtarlar",
     "intro": "Bu gönderinin ödüllerinden otomatik olarak pay almasını istediğin bir kullanıcı ekle.",

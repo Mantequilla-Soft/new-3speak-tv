@@ -70,7 +70,8 @@
       "invalidAccount": "Nama pengguna atau ID komunitas tidak valid.",
       "cannotIncrease": "Tidak bisa dinaikkan melebihi sisa {{percent}}%",
       "pendingRow": "@{{account}} belum ditambahkan — klik + untuk menambahkannya, atau kosongkan kolomnya.",
-      "atLeastOne": "Persentase reward minimal 1%"
+      "atLeastOne": "Persentase reward minimal 1%",
+      "maxCount": "Hive mengizinkan paling banyak {{max}} penerima manfaat per postingan."
     },
     "title": "Penerima manfaat",
     "intro": "Tambahkan pengguna yang akan otomatis menerima sebagian reward dari postingan ini.",

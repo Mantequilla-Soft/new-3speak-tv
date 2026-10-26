@@ -71,7 +71,9 @@
   },
   "remix": {
     "noUrl": "Hindi makuha ang video URL para sa remix",
-    "loadFailed": "Hindi ma-load ang video para sa remix"
+    "loadFailed": "Hindi ma-load ang video para sa remix",
+    "chainFull": "Nakabatay na ang video na ito sa {{max}} naunang video, kaya hindi na ito puwedeng i-remix.",
+    "chainNoSlots": "Napakarami nang creator na binabayaran ng remix chain na ito kaya wala nang puwang sa Hive para sa isa pang remix. Sa 3Speak Pro, puwede mo pa rin itong i-remix."
   },
   "watchLater": {
     "loginRequired": "Mag-log in para mag-save ng Shorts",

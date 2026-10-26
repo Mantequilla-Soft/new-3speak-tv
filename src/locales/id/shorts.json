@@ -71,7 +71,9 @@
   },
   "remix": {
     "noUrl": "URL video untuk remix tidak dapat ditemukan",
-    "loadFailed": "Gagal memuat video untuk remix"
+    "loadFailed": "Gagal memuat video untuk remix",
+    "chainFull": "Video ini sudah dibuat dari {{max}} video sebelumnya, jadi tidak bisa di-remix lagi.",
+    "chainNoSlots": "Rantai remix ini sudah membayar begitu banyak kreator sehingga remix baru tidak muat lagi di Hive. Dengan 3Speak Pro kamu masih bisa me-remix-nya."
   },
   "watchLater": {
     "loginRequired": "Masuk untuk menyimpan Shorts",

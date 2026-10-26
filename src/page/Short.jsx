@@ -124,6 +124,8 @@ import { warmupRailEnabledFor } from '../utils/config';
 import { commentWithAioha, isLoggedIn } from '../hive-api/aioha';
 import AmbientGlow, { useAmbientGlow } from '../components/AmbientGlow/AmbientGlow';
 import EditorModal from '../components/modal/EditorModal';
+import { checkRemix, remixBlockedMessage } from '../utils/remixChain';
+import { usePremiumStatus } from '../hooks/usePremiumStatus';
 import EditVideoModal from '../components/playVideo/EditVideoModal';
 import PromoteModal from '../components/Promote/PromoteModal';
 import { notifyMediaPlay, onMediaPlay } from '../utils/mediaCoordinator';
@@ -271,6 +273,7 @@ function shortWatchBeat(watchRef, position) {
 /* ================= COMPONENT ================= */
 const VideoShort = () => {
   const { user, authenticated, watchHistoryEnabled } = useAppStore();
+  const isPremium = !!usePremiumStatus(user)?.premium;
   const incubationHandle = useAppStore((s) => s.incubationHandle);
   // Shorts feed mode — 'discover' (everything, interests just boost the ranking) or
   // 'interests' (ONLY shorts whose winning topic is one of mine). Persisted in the
@@ -391,6 +394,7 @@ const VideoShort = () => {
   const [editorOriginalAuthor, setEditorOriginalAuthor] = useState(null);
   const [editorOriginalPermlink, setEditorOriginalPermlink] = useState(null);
   const [editorOriginalShortPermlink, setEditorOriginalShortPermlink] = useState(null);
+  const [editorRemixChain, setEditorRemixChain] = useState(null);
   const [editorVideoType, setEditorVideoType] = useState('video');
   const [remixDropdownOpen, setRemixDropdownOpen] = useState(false);
   const remixDropdownRef = useRef(null);
@@ -2397,10 +2401,21 @@ const VideoShort = () => {
     }
 
     try {
+      // A remix of a remix pays every earlier creator: refuse a chain with no room left
+      const { chain, blocked } = await checkRemix(
+        { author: currentVid.author, permlink: currentVid.hivePermlink || currentVid.permlink, short: currentVid.permlink },
+        { user, isPremium },
+      );
+      if (blocked) {
+        toast.info(remixBlockedMessage(blocked, t));
+        return;
+      }
+
       const source = await sdkApiRef.current.fetchSource(currentVid.author, currentVid.permlink);
       const directUrl = source?.url;
 
       if (directUrl) {
+        setEditorRemixChain(chain);
         setEditorVideoUrl(directUrl);
         setEditorVideoName(`${currentVid.author} - ${currentVid.caption || currentVid.permlink}`);
         setEditorOriginalAuthor(currentVid.author);
@@ -2415,7 +2430,7 @@ const VideoShort = () => {
       console.error('[VideoShort] Remix URL resolve failed:', err);
       toast.error(t('shorts.remix.loadFailed'));
     }
-  }, [videos, currentIndex, t]);
+  }, [videos, currentIndex, t, user, isPremium]);
 
   // Close remix dropdown on click outside
   useEffect(() => {
@@ -4165,6 +4180,7 @@ const VideoShort = () => {
         originalAuthor={editorOriginalAuthor}
         originalPermlink={editorOriginalPermlink}
         originalShortPermlink={editorOriginalShortPermlink}
+        remixChain={editorRemixChain}
       />
 
       {/* Mobile-only quick comment bar at the bottom (replaces the app nav bar

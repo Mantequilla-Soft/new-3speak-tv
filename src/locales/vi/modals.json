@@ -70,7 +70,8 @@
       "invalidAccount": "Tên người dùng hoặc ID cộng đồng không hợp lệ.",
       "cannotIncrease": "Không thể tăng vượt quá {{percent}}% còn lại",
       "pendingRow": "@{{account}} chưa được thêm — nhấn + để thêm, hoặc xóa trường này.",
-      "atLeastOne": "Tỷ lệ phần thưởng phải ít nhất 1%"
+      "atLeastOne": "Tỷ lệ phần thưởng phải ít nhất 1%",
+      "maxCount": "Hive cho phép tối đa {{max}} người thụ hưởng cho mỗi bài đăng."
     },
     "title": "Người thụ hưởng",
     "intro": "Thêm người dùng mà bạn muốn tự động nhận một phần phần thưởng của bài đăng này.",

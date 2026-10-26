@@ -70,7 +70,8 @@
       "invalidAccount": "Nom d'utilisateur ou ID de communauté invalide.",
       "cannotIncrease": "Impossible de dépasser les {{percent}} % restants",
       "pendingRow": "@{{account}} n'a pas encore été ajouté — cliquez sur + pour l'ajouter, ou videz le champ.",
-      "atLeastOne": "Le pourcentage de récompense doit être d'au moins 1 %"
+      "atLeastOne": "Le pourcentage de récompense doit être d'au moins 1 %",
+      "maxCount": "Hive autorise au maximum {{max}} bénéficiaires par publication."
     },
     "title": "Bénéficiaires",
     "intro": "Ajoutez un utilisateur qui recevra automatiquement une partie des récompenses de cette publication.",

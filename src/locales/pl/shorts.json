@@ -71,7 +71,9 @@
   },
   "remix": {
     "noUrl": "Nie udało się ustalić adresu URL filmu do remiksu",
-    "loadFailed": "Nie udało się wczytać filmu do remiksu"
+    "loadFailed": "Nie udało się wczytać filmu do remiksu",
+    "chainFull": "Ten film opiera się już na {{max}} wcześniejszych filmach, więc nie można go już remiksować.",
+    "chainNoSlots": "Ten łańcuch remiksów opłaca już tylu twórców, że na Hive nie zmieściłby się kolejny remiks. Z 3Speak Pro nadal możesz go zremiksować."
   },
   "watchLater": {
     "loginRequired": "Zaloguj się, aby zapisywać Shorts",

@@ -71,7 +71,9 @@
   },
   "remix": {
     "noUrl": "No se pudo obtener la URL del video para el remix",
-    "loadFailed": "No se pudo cargar el video para el remix"
+    "loadFailed": "No se pudo cargar el video para el remix",
+    "chainFull": "Este video ya parte de {{max}} videos anteriores, así que ya no se puede remezclar.",
+    "chainNoSlots": "Esta cadena de remixes ya paga a tantos creadores que un remix no tendría espacio en Hive. Con 3Speak Pro todavía puedes remezclarlo."
   },
   "watchLater": {
     "loginRequired": "Inicia sesión para guardar Shorts",

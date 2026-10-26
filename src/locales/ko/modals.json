@@ -70,7 +70,8 @@
       "invalidAccount": "잘못된 사용자 이름 또는 커뮤니티 ID예요.",
       "cannotIncrease": "남은 {{percent}}%를 넘어서 늘릴 수 없어요",
       "pendingRow": "@{{account}}이(가) 아직 추가되지 않았어요. +를 눌러 추가하거나 입력란을 비우세요.",
-      "atLeastOne": "보상 비율은 최소 1%여야 해요"
+      "atLeastOne": "보상 비율은 최소 1%여야 해요",
+      "maxCount": "Hive에서는 게시물당 수혜자를 최대 {{max}}명까지 지정할 수 있어요."
     },
     "title": "수혜자",
     "intro": "이 게시물 보상의 일부를 자동으로 받을 사용자를 추가하세요.",

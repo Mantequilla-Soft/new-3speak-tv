@@ -70,7 +70,8 @@
       "invalidAccount": "Nieprawidłowa nazwa użytkownika lub ID społeczności.",
       "cannotIncrease": "Nie można zwiększyć powyżej pozostałych {{percent}}%",
       "pendingRow": "@{{account}} nie zostało jeszcze dodane — kliknij +, aby je dodać, albo wyczyść pole.",
-      "atLeastOne": "Procent nagrody musi wynosić co najmniej 1%"
+      "atLeastOne": "Procent nagrody musi wynosić co najmniej 1%",
+      "maxCount": "Hive pozwala na maksymalnie {{max}} beneficjentów na post."
     },
     "title": "Beneficjenci",
     "intro": "Dodaj użytkownika, który ma automatycznie otrzymywać część nagród za ten post.",

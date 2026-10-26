@@ -70,7 +70,8 @@
       "invalidAccount": "Ungültiger Benutzername oder ungültige Community-ID.",
       "cannotIncrease": "Kann nicht über die verbleibenden {{percent}} % erhöht werden",
       "pendingRow": "@{{account}} wurde noch nicht hinzugefügt – klicke auf +, um es hinzuzufügen, oder leere das Feld.",
-      "atLeastOne": "Der Belohnungsanteil muss mindestens 1 % betragen"
+      "atLeastOne": "Der Belohnungsanteil muss mindestens 1 % betragen",
+      "maxCount": "Hive erlaubt höchstens {{max}} Begünstigte pro Beitrag."
     },
     "title": "Begünstigte",
     "intro": "Füge einen Nutzer hinzu, der automatisch einen Teil der Belohnungen für diesen Post erhalten soll.",

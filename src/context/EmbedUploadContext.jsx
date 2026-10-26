@@ -18,6 +18,7 @@ import { syncVideoAdOptOut } from '../lib/advertiseData';
 import { markImportPublished } from '../lib/youtubeImport';
 import { sanitizeMusicCredits, soundAuthorsOf, soundCreditsMarkdown, primarySoundMetadata } from '../utils/soundCredits';
 import { enforceLockedBeneficiaries, getLockedBeneficiaries, chargesEncoder, LOCKED_FUND_ACCOUNT, LOCKED_ENCODER_ACCOUNT } from '../utils/beneficiaries';
+import { remixChainAuthors, remixChainMarkdown } from '../utils/remixChain';
 import { oaEnvelope, threespeakVideo, probeVideoOrientation, OA_ARTICLE, OA_MICROPOST, OA_COMMENT } from '../utils/openAttribute';
 import axios from 'axios';
 import { isWeakLinkForced } from '../utils/uploadFaults';
@@ -223,6 +224,9 @@ export function EmbedUploadProvider({ children }) {
   const [originalAuthor, setOriginalAuthor] = useState(null);
   const [originalPermlink, setOriginalPermlink] = useState(null);
   const [originalShortPermlink, setOriginalShortPermlink] = useState(null);
+  // The whole remix chain, source first (utils/remixChain.js): every author
+  // gets a split, the earlier videos are linked in the body
+  const [remixChain, setRemixChain] = useState([]);
 
   // Songs from the shorts editor's music library (credited in the body, shown
   // in the soundtrack ticker, 3Speak sound creators get a locked split)
@@ -402,6 +406,7 @@ export function EmbedUploadProvider({ children }) {
     setOriginalAuthor(null);
     setOriginalPermlink(null);
     setOriginalShortPermlink(null);
+    setRemixChain([]);
     setMusicCreditsRaw([]);
     setReusable(true);
     setChapters([]);
@@ -1688,6 +1693,7 @@ export function EmbedUploadProvider({ children }) {
           ? `${window.location.origin}/shorts?v=${originalAuthor}/${shortPl}`
           : `${window.location.origin}/@${originalAuthor}/${originalPermlink}`;
         postBody += `\n\n---\n*Based on a video by [@${originalAuthor}](${originalLink})*`;
+        postBody += remixChainMarkdown(remixChain);
       }
       postBody += soundCreditsMarkdown(musicCredits);
 
@@ -1766,6 +1772,7 @@ export function EmbedUploadProvider({ children }) {
           reusable: (originalAuthor && originalPermlink) ? true : reusable,
           ...(thumbnailUrl ? { thumbnail: thumbnailUrl } : {}),
           ...(originalAuthor ? { originalAuthor, originalPermlink } : {}),
+          ...(originalAuthor && remixChain.length ? { remixChain } : {}),
           ...(musicCredits.length ? { sound: primarySoundMetadata(musicCredits) } : {}),
           // Chapters + link toasters (utils/videoTimeline.js). Read by the watch
           // page and the embed player; nothing when the creator added none.
@@ -1850,6 +1857,7 @@ export function EmbedUploadProvider({ children }) {
         username: user,
         includeEncoder: true,
         originalAuthor: originalAuthor && originalPermlink ? originalAuthor : null,
+        remixAuthors: originalAuthor && originalPermlink ? remixChainAuthors(remixChain, user) : [],
         soundAuthors: soundAuthorsOf(musicCredits, user),
       });
 
@@ -2268,6 +2276,7 @@ export function EmbedUploadProvider({ children }) {
     originalAuthor, setOriginalAuthor,
     originalPermlink, setOriginalPermlink,
     originalShortPermlink, setOriginalShortPermlink,
+    remixChain, setRemixChain,
     musicCredits, setMusicCredits,
     // Reusable flag
     reusable, setReusable,

@@ -8,6 +8,7 @@ import { useAppStore } from '../../lib/store';
 import { useEmbedUpload } from '../../context/EmbedUploadContext';
 import { usePremiumStatus } from '../../hooks/usePremiumStatus';
 import { getLockedBeneficiaries } from '../../utils/beneficiaries';
+import { remixChainAuthors } from '../../utils/remixChain';
 import { sanitizeMusicCredits, soundAuthorsOf } from '../../utils/soundCredits';
 import { useTranslation } from 'react-i18next';
 import { toastIn } from '../../utils/toast';
@@ -16,10 +17,10 @@ import './EditorModal.scss';
 
 const toast = toastIn('Shorts');
 
-function EditorModal({ isOpen, onClose, videoUrl, videoName, videoType, clipStart, clipEnd, originalAuthor, originalPermlink, originalShortPermlink, videoFile }) {
+function EditorModal({ isOpen, onClose, videoUrl, videoName, videoType, clipStart, clipEnd, originalAuthor, originalPermlink, originalShortPermlink, remixChain, videoFile }) {
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const { setVideoFile, setPrevVideoFile, setGeneratedThumbnail, setVideoDuration, setOriginalAuthor, setOriginalPermlink, setOriginalShortPermlink, setMusicCredits, setFromStories, setList, setRemaingPercent } = useEmbedUpload();
+  const { setVideoFile, setPrevVideoFile, setGeneratedThumbnail, setVideoDuration, setOriginalAuthor, setOriginalPermlink, setOriginalShortPermlink, setRemixChain, setMusicCredits, setFromStories, setList, setRemaingPercent } = useEmbedUpload();
   const iframeRef = useRef(null);
   const mediaLoadedRef = useRef(false);
   const [editorReady, setEditorReady] = useState(false);
@@ -414,6 +415,16 @@ function EditorModal({ isOpen, onClose, videoUrl, videoName, videoType, clipStar
       if (originalAuthor) setOriginalAuthor(originalAuthor);
       if (originalPermlink) setOriginalPermlink(originalPermlink);
       if (originalShortPermlink) setOriginalShortPermlink(originalShortPermlink);
+      // The chain the remix button resolved (utils/remixChain.js); without one,
+      // just the source, so the post still records where it came from
+      const chain = originalAuthor && originalPermlink
+        ? (remixChain?.length ? remixChain : [{
+          author: originalAuthor,
+          permlink: originalPermlink,
+          ...(originalShortPermlink && originalShortPermlink !== originalPermlink ? { short: originalShortPermlink } : {}),
+        }])
+        : [];
+      setRemixChain(chain);
 
       // Songs from the editor's music library: credited in the post body and
       // metadata, and 3Speak sound creators get a locked 5% like remix authors
@@ -433,6 +444,7 @@ function EditorModal({ isOpen, onClose, videoUrl, videoName, videoType, clipStar
         username: user,
         includeEncoder: true,
         originalAuthor: originalAuthor || null,
+        remixAuthors: remixChainAuthors(chain, user),
         soundAuthors: soundAuthorsOf(musicCredits, user),
       });
       setList(lockedBeneficiaries);

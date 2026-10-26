@@ -71,7 +71,9 @@
   },
   "remix": {
     "noUrl": "无法获取用于二创的视频 URL",
-    "loadFailed": "无法加载用于二创的视频"
+    "loadFailed": "无法加载用于二创的视频",
+    "chainFull": "此视频已基于之前的 {{max}} 个视频创作，无法再进行二创。",
+    "chainNoSlots": "这条二创链已向太多创作者分配收益，Hive 上已没有空间再加一个二创。使用 3Speak Pro 仍可二创。"
   },
   "watchLater": {
     "loginRequired": "登录后收藏短视频",

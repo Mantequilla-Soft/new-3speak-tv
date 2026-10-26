@@ -70,7 +70,8 @@
       "invalidAccount": "Jina la mtumiaji au kitambulisho cha jumuiya si sahihi.",
       "cannotIncrease": "Haiwezi kuongezeka zaidi ya {{percent}}% iliyobaki",
       "pendingRow": "@{{account}} bado haijaongezwa — bofya + ili kuiongeza, au futa sehemu hiyo.",
-      "atLeastOne": "Asilimia ya zawadi lazima iwe angalau 1%"
+      "atLeastOne": "Asilimia ya zawadi lazima iwe angalau 1%",
+      "maxCount": "Hive inaruhusu wanufaika wasiozidi {{max}} kwa kila chapisho."
     },
     "title": "Wanufaika",
     "intro": "Ongeza mtumiaji unayetaka apokee kiotomatiki sehemu ya zawadi za chapisho hili.",

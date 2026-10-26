@@ -70,7 +70,8 @@
       "invalidAccount": "Ongeldige gebruikersnaam of community-ID.",
       "cannotIncrease": "Kan niet hoger dan de resterende {{percent}}%",
       "pendingRow": "@{{account}} is nog niet toegevoegd — klik op + om het toe te voegen, of maak het veld leeg.",
-      "atLeastOne": "Het beloningspercentage moet minstens 1% zijn"
+      "atLeastOne": "Het beloningspercentage moet minstens 1% zijn",
+      "maxCount": "Hive staat maximaal {{max}} begunstigden per post toe."
     },
     "title": "Begunstigden",
     "intro": "Voeg een gebruiker toe die automatisch een deel van de beloningen van deze post moet krijgen.",

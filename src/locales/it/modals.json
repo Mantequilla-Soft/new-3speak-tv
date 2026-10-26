@@ -70,7 +70,8 @@
       "invalidAccount": "Nome utente o ID community non valido.",
       "cannotIncrease": "Non puoi superare il {{percent}}% rimanente",
       "pendingRow": "@{{account}} non è ancora stato aggiunto — fai clic su + per aggiungerlo, o svuota il campo.",
-      "atLeastOne": "La percentuale di ricompensa deve essere almeno dell'1%"
+      "atLeastOne": "La percentuale di ricompensa deve essere almeno dell'1%",
+      "maxCount": "Hive consente al massimo {{max}} beneficiari per post."
     },
     "title": "Beneficiari",
     "intro": "Aggiungi un utente che deve ricevere automaticamente una parte delle ricompense di questo post.",

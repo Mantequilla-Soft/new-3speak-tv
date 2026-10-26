@@ -70,7 +70,8 @@
       "invalidAccount": "Nome de usuário ou ID de comunidade inválido.",
       "cannotIncrease": "Não é possível passar dos {{percent}}% restantes",
       "pendingRow": "@{{account}} ainda não foi adicionado — clique em + para adicionar ou limpe o campo.",
-      "atLeastOne": "A porcentagem da recompensa deve ser de pelo menos 1%"
+      "atLeastOne": "A porcentagem da recompensa deve ser de pelo menos 1%",
+      "maxCount": "A Hive permite no máximo {{max}} beneficiários por post."
     },
     "title": "Beneficiários",
     "intro": "Adicione um usuário que deve receber automaticamente parte das recompensas deste post.",

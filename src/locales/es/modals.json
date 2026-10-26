@@ -70,7 +70,8 @@
       "invalidAccount": "Usuario o ID de comunidad no válido.",
       "cannotIncrease": "No se puede aumentar más allá del {{percent}}% disponible",
       "pendingRow": "@{{account}} aún no se agregó: haz clic en + para agregarlo o borra el campo.",
-      "atLeastOne": "El porcentaje de recompensa debe ser al menos 1%"
+      "atLeastOne": "El porcentaje de recompensa debe ser al menos 1%",
+      "maxCount": "Hive permite como máximo {{max}} beneficiarios por publicación."
     },
     "title": "Beneficiarios",
     "intro": "Agrega un usuario que quieras que reciba automáticamente una parte de las recompensas de esta publicación.",

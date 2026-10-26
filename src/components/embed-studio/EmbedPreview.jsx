@@ -8,6 +8,7 @@ import EmbedUploadProgressBar from "./EmbedUploadProgressBar";
 import StepActions from "./StepActions";
 import { useEmbedUpload } from "../../context/EmbedUploadContext";
 import { enforceLockedBeneficiaries } from "../../utils/beneficiaries";
+import { remixChainAuthors, remixChainMarkdown } from "../../utils/remixChain";
 import { soundCreditsMarkdown, soundAuthorsOf } from '../../utils/soundCredits';
 import "../legacy-studio/VideoUploadStatus.scss";
 import BlogContent from "../playVideo/BlogContent";
@@ -46,6 +47,7 @@ function EmbedPreview() {
     reusable,
     originalAuthor,
     originalPermlink,
+    remixChain,
     musicCredits,
     isNsfw,
     publishedPermlink,
@@ -170,7 +172,7 @@ function EmbedPreview() {
         fromStories
           ? `${window.location.origin}/shorts?v=${originalAuthor}/${originalPermlink}`
           : `${window.location.origin}/@${originalAuthor}/${originalPermlink}`
-      })*${soundCreditsMarkdown(musicCredits)}`
+      })*${remixChainMarkdown(remixChain)}${soundCreditsMarkdown(musicCredits)}`
     : `${shownDescription}${soundCreditsMarkdown(musicCredits)}`;
 
   // `beneficiaries` is an array initially but the beneficiary modal stores it as
@@ -199,6 +201,7 @@ function EmbedPreview() {
       username: user,
       includeEncoder: true,
       originalAuthor: originalAuthor && originalPermlink ? originalAuthor : null,
+      remixAuthors: isRemix ? remixChainAuthors(remixChain, user) : [],
       soundAuthors: soundAuthorsOf(musicCredits, user),
     });
     return [...beneMap.entries()]

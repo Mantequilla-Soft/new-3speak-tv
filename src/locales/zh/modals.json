@@ -70,7 +70,8 @@
       "invalidAccount": "用户名或社区 ID 无效。",
       "cannotIncrease": "不能超过剩余的 {{percent}}%",
       "pendingRow": "@{{account}} 还没有添加——点击 + 添加，或清空该字段。",
-      "atLeastOne": "奖励百分比至少为 1%"
+      "atLeastOne": "奖励百分比至少为 1%",
+      "maxCount": "Hive 每篇帖子最多允许 {{max}} 位受益人。"
     },
     "title": "受益人",
     "intro": "添加一位用户，让其自动获得这篇帖子的一部分奖励。",

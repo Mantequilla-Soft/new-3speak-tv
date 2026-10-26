@@ -71,7 +71,9 @@
   },
   "remix": {
     "noUrl": "Remix için video URL'si çözümlenemedi",
-    "loadFailed": "Remix için video yüklenemedi"
+    "loadFailed": "Remix için video yüklenemedi",
+    "chainFull": "Bu video zaten önceki {{max}} videonun üzerine kurulu, bu yüzden artık remix yapılamaz.",
+    "chainNoSlots": "Bu remix zinciri zaten o kadar çok içerik üreticisine ödeme yapıyor ki Hive'da yeni bir remix için yer kalmıyor. 3Speak Pro ile yine de remix yapabilirsin."
   },
   "watchLater": {
     "loginRequired": "Shorts kaydetmek için giriş yap",
