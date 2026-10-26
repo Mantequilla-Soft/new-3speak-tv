@@ -21,6 +21,7 @@ import "./Cards.scss";
 import { useState, useMemo, memo, useCallback, useRef, useEffect } from "react";
 import img from "../../assets/image/speak.jpg";
 import CardThumbnail from "./CardThumbnail";
+import { SpotlightSkeleton } from "./GridSkeleton";
 import { fixVideoThumbnail, LANDSCAPE_LARGE } from "../../utils/fixThumbnails";
 import AuthorBadge from "../AuthorBadge/AuthorBadge";
 import ProfileModal from "../modal/ProfileModal";
@@ -195,7 +196,7 @@ const cardHref = (linkPrefix, author, permlink, query) => (linkPrefix === '/watc
   ? watchPath(author, permlink, query)
   : `${linkPrefix}?v=${author}/${permlink}${query}`);
 
-function Card3({ videos = [], loading = false, error = null, interleaveEvery = 0, renderInterleave = null, communityEvery = 0, renderCommunity = null, creatorsEvery = 0, renderCreators = null, getContentForVideo = null, isWatched = null, getViewCount = null, isNew = null, linkPrefix = '/watch', linkQuery = '', shortTimeAgo = true, shortsGrid = false, priority = false, hideWatched = false, watchedVersion = 0, renderFooter = null, windowed = false, featuredKey = null, featuredLayout = null, featuredNav = null }) {
+function Card3({ videos = [], loading = false, error = null, interleaveEvery = 0, renderInterleave = null, communityEvery = 0, renderCommunity = null, creatorsEvery = 0, renderCreators = null, getContentForVideo = null, isWatched = null, getViewCount = null, isNew = null, linkPrefix = '/watch', linkQuery = '', shortTimeAgo = true, shortsGrid = false, priority = false, hideWatched = false, watchedVersion = 0, renderFooter = null, windowed = false, featuredKey = null, featuredLayout = null, featuredNav = null, featuredPending = false }) {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const [modalUser, setModalUser] = useState(null);
@@ -319,6 +320,10 @@ function Card3({ videos = [], loading = false, error = null, interleaveEvery = 0
     featuredNav.onSelect(next);
   };
   const featuredFirst = processedVideos[0]?._featured ? processedVideos[0] : null;
+  // Its block, held by a skeleton while the featured videos are still on the way
+  const featuredPlaceholder = featuredPending && !!featuredLayout && !featuredFirst
+    ? <SpotlightSkeleton key="featured-skeleton" layout={featuredLayout} />
+    : null;
   const featuredFirstKey = featuredFirst ? cardKeyOf(featuredFirst) : null;
   useEffect(() => {
     if (!featuredFirstKey || pendingPreviewRef.current !== featuredFirstKey) return;
@@ -338,7 +343,7 @@ function Card3({ videos = [], loading = false, error = null, interleaveEvery = 0
       }`}
       {...containerProps}
     >
-      {withInterleave(processedVideos.map((video, index) => {
+      {withInterleave([...(featuredPlaceholder ? [featuredPlaceholder] : []), ...processedVideos.map((video, index) => {
         const postKey = `${video.author?.username || video.author || video.owner}/${
           video.permlink
         }`;
@@ -640,11 +645,11 @@ function Card3({ videos = [], loading = false, error = null, interleaveEvery = 0
             </>)}
           />
         );
-      }), [
+      })], [
         { every: interleaveEvery, render: renderInterleave, key: 'shorts' },
         { every: communityEvery, render: renderCommunity, key: 'community' },
         { every: creatorsEvery, render: renderCreators, key: 'creators' },
-      ], processedVideos[0]?._featured ? featuredLayout.weight - 1 : 0)}
+      ], featuredFirst || featuredPlaceholder ? featuredLayout.weight - 1 : 0)}
       {modalUser && (
         <ProfileModal
           username={modalUser}
@@ -671,6 +676,7 @@ Card3.propTypes = {
   renderFooter: PropTypes.func,      // (video) => node drawn under the card's bottom row
   windowed: PropTypes.bool,
   featuredKey: PropTypes.string,     // "author/permlink" of a first card to draw large
+  featuredPending: PropTypes.bool,   // hold that block with a skeleton until the card is there
   featuredNav: PropTypes.shape({      // the featured line-up the card's arrows / strip step through
     items: PropTypes.array, index: PropTypes.number, onSelect: PropTypes.func,
     size: PropTypes.string,          // 'small' | 'medium', null = no size toggle

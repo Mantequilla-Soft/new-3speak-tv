@@ -1050,3 +1050,65 @@ html[data-card-size="large"] { --card-min-w: 420px; }
 
   [data-theme="dark"] & { color: #5cc47f; }
 }
+
+// Loading stand-ins in the card grid (GridSkeleton.jsx): the home tabs while
+// their first page loads, and the Discover Spotlight's block until its videos
+// arrive. Same grid cell, thumbnail shape and spacing as a real card.
+.card-container .card.card--skeleton {
+  pointer-events: none;
+  justify-content: flex-start;
+  box-shadow: none;
+
+  .card-skeleton-block {
+    display: block;
+    background: var(--skeleton-bg, rgba(150, 150, 150, 0.14));
+    border-radius: 6px;
+    animation: card-skeleton-pulse 1.4s ease-in-out infinite;
+  }
+  .card-skeleton-thumb {
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    border-radius: 5px;
+    flex-shrink: 0;
+  }
+  .card-skeleton-body {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 12px 4px;
+  }
+  .card-skeleton-line {
+    height: 12px;
+    width: 85%;
+    &--short { width: 55%; }
+  }
+  .card-skeleton-author {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 4px;
+  }
+  .card-skeleton-avatar {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+  .card-skeleton-name {
+    height: 10px;
+    width: 40%;
+  }
+
+  @media (hover: hover) {
+    &:hover { transform: none; box-shadow: none; }
+  }
+}
+
+@keyframes card-skeleton-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.55; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .card-container .card.card--skeleton .card-skeleton-block { animation: none; }
+}

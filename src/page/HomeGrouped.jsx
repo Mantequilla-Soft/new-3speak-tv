@@ -3,7 +3,7 @@ import { useQuery, useInfiniteQuery, useQueryClient } from "@tanstack/react-quer
 import axios from "axios";
 import { Link } from "react-router-dom";
 import "./HomeGrouped.scss";
-import CardSkeleton from "../components/Cards/CardSkeleton";
+import { SkeletonCard, SpotlightSkeleton } from "../components/Cards/GridSkeleton";
 import Card3 from "../components/Cards/Card3";
 import { FEED_URL, TRENDING_SORTED_URL, FOLLOW_FEED_URL, DISCOVER_FEED_URL, INTERESTS_FEED_URL, NEW_CONTENT_URL, CHECKER_URL, appendNsfw, warmupRailEnabledFor } from "../utils/config";
 import { useContentBatch } from "../hooks/useContentBatch";
@@ -137,20 +137,24 @@ const fetchFeatured = async (viewer, hideAi) => {
   // The same lookup keys as the grid's AI pill (Card3 aiKeysFor): the hive author,
   // and the owner when a different account owns the asset. A failed lookup reads
   // as "not flagged", so the Spotlight never disappears over an outage.
+  // Asked for the whole pool at once, alongside the watched / hidden lookups.
   const aiKeysOf = (v) => [aiKey(authorOf(v), v.permlink), v.owner ? aiKey(v.owner, v.permlink) : null];
-  const dropAi = async (list) => {
-    if (!hideAi || !list.length) return list;
-    await loadAiFlags(list.flatMap(aiKeysOf).filter(Boolean));
-    return list.filter((v) => !isAiFlagged(authorOf(v), v.permlink) && !(v.owner && isAiFlagged(v.owner, v.permlink)));
-  };
-  if (!viewer || !recent.length) return onePerCreator(await dropAi(recent));
+  const aiReady = hideAi && recent.length ? loadAiFlags(recent.flatMap(aiKeysOf).filter(Boolean)) : null;
+  const dropAi = (list) => (hideAi
+    ? list.filter((v) => !isAiFlagged(authorOf(v), v.permlink) && !(v.owner && isAiFlagged(v.owner, v.permlink)))
+    : list);
+  if (!viewer || !recent.length) {
+    await aiReady;
+    return onePerCreator(dropAi(recent));
+  }
   const [watched, hidden] = await Promise.all([
     batchCheckWatched(viewer, recent.map((v) => ({ author: authorOf(v), permlink: v.permlink }))),
     getHidden(viewer),
+    aiReady,
   ]);
   const hiddenVideos = new Set(hidden.videos.map((h) => `${norm(h.owner)}/${norm(h.permlink)}`));
   const hiddenCreators = new Set(hidden.creators.map((h) => norm(h.creator)));
-  return onePerCreator(await dropAi(recent.filter((v) => {
+  return onePerCreator(dropAi(recent.filter((v) => {
     const people = [norm(authorOf(v)), norm(v.owner)];
     return !watched.has(`${authorOf(v)}/${v.permlink}`)
       && !people.some((p) => hiddenCreators.has(p) || hiddenVideos.has(`${p}/${norm(v.permlink)}`));
@@ -573,7 +577,7 @@ const HomeGrouped = () => {
 
   // The featured video (see fetchFeatured / orderFeatured), leading the Discover tab.
   const isPhone = useIsPhone();
-  const { data: featuredPool } = useQuery({
+  const { data: featuredPool, isLoading: featuredLoading } = useQuery({
     queryKey: ["featured", showNsfw, gateViewer || null, hideAi],
     queryFn: () => fetchFeatured(gateViewer, hideAi),
     enabled: !isPhone,
@@ -592,6 +596,9 @@ const HomeGrouped = () => {
   const featuredAt = featuredItems.length ? featuredIndex % featuredItems.length : 0;
   const featured = featuredItems[featuredAt] || null;
   const featuredKey = featured ? featuredKeyOf(featured) : null;
+  // Still on its way: the grid holds its block with a skeleton, so the Spotlight
+  // drops into place instead of shoving the first rows aside when it arrives.
+  const spotlightPending = !isPhone && featuredLoading;
   // The size toggle on the card: small <-> medium. Hidden in
   // large-card mode, where the width is fixed.
   const featuredNav = useMemo(() => ({
@@ -1015,7 +1022,15 @@ const HomeGrouped = () => {
       && s.key === activeSection?.key
       && shortsQ.isLoading;
     if (waitingForShorts || (s.isLoading && (!s.videos || s.videos.length === 0))) {
-      return <div className="home-tab-skeletons">{Array.from({ length: 12 }).map((_, i) => <CardSkeleton key={i} />)}</div>;
+      // Skeleton cards in the real card grid (same columns as what follows, and
+      // measurable for featuredLayout), the Spotlight's block reserved on Discover
+      const withSpotlight = s.key === 'discover' && !isPhone && !!featuredLayout && (spotlightPending || !!featured);
+      return (
+        <div className="card-container">
+          {withSpotlight && <SpotlightSkeleton layout={featuredLayout} />}
+          {Array.from({ length: 12 }).map((_, i) => <SkeletonCard key={i} />)}
+        </div>
+      );
     }
     if (!s.videos || s.videos.length === 0) {
       return <div className="home-tab-empty">{t('feeds.home.empty')}</div>;
@@ -1039,6 +1054,7 @@ const HomeGrouped = () => {
           featuredKey={s.key === 'discover' ? featuredKey : null}
           featuredLayout={featuredLayout}
           featuredNav={featuredNav}
+          featuredPending={s.key === 'discover' && spotlightPending}
           /* A shorts rail after every 2 REAL rows of videos, on any feed that has a
              shorts source (see shortsMode). `gridCols` is measured from the live
              grid, so this lands on a row boundary at every breakpoint (2 cols on

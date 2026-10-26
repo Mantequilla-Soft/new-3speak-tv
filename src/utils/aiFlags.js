@@ -21,8 +21,8 @@ const FLUSH_MS = 30;
 const flags = new Map();      // key -> true | false
 const queued = new Set();
 const attempted = new Set();  // asked already, answer or not: never ask twice
-let waiters = [];             // resolve after the NEXT flush
-let inflight = Promise.resolve(); // settles when every started flush has
+const pending = new Map();    // key -> promise of the batch that answers it
+let batch = null;             // the batch being queued: { promise, resolve }
 let timer = null;
 let version = 0;
 const listeners = new Set();
@@ -44,17 +44,20 @@ function notify() {
 
 function flush() {
   timer = null;
-  const run = doFlush();
-  inflight = Promise.all([inflight, run]);
-}
-
-async function doFlush() {
   const keys = [...queued];
   queued.clear();
-  const done = waiters;
-  waiters = [];
-  for (let i = 0; i < keys.length; i += BATCH_MAX) {
-    const chunk = keys.slice(i, i + BATCH_MAX);
+  const { resolve } = batch;
+  batch = null;
+  doFlush(keys).then(() => {
+    keys.forEach((k) => pending.delete(k));
+    resolve();
+  });
+}
+
+async function doFlush(keys) {
+  const chunks = [];
+  for (let i = 0; i < keys.length; i += BATCH_MAX) chunks.push(keys.slice(i, i + BATCH_MAX));
+  await Promise.all(chunks.map(async (chunk) => {
     try {
       const res = await axios.post(`${CHECKER_URL}/transcription-tags/ai-batch`, { keys: chunk });
       const hit = new Set(Array.isArray(res.data?.flagged) ? res.data.flagged : []);
@@ -62,9 +65,8 @@ async function doFlush() {
     } catch {
       /* decorative: leave them unknown */
     }
-  }
+  }));
   if (keys.length) notify();
-  done.forEach((fn) => fn());
 }
 
 /** Queue lookups for any of these keys we have not asked about yet. */
@@ -72,21 +74,32 @@ export function requestAiFlags(keys) {
   let added = false;
   for (const k of keys || []) {
     if (!k || attempted.has(k)) continue;
+    if (!batch) {
+      let resolve;
+      const promise = new Promise((r) => { resolve = r; });
+      batch = { promise, resolve };
+    }
     attempted.add(k);
     queued.add(k);
+    pending.set(k, batch.promise);
     added = true;
   }
   if (added && !timer) timer = setTimeout(flush, FLUSH_MS);
 }
 
-/** Resolves once every key has an answer (or its batch failed). Never rejects. */
+/**
+ * Resolves once every one of these keys has an answer (or its batch failed).
+ * Waits only for the batches holding them: a key a shorts rail asked for first
+ * is waited on, but not the grid's batches for other cards. Never rejects.
+ */
 export function loadAiFlags(keys) {
   requestAiFlags(keys);
-  // Keys asked for earlier may still be in flight (a shorts rail on the page
-  // asked first), so wait for those batches as well as the one just queued.
-  const current = inflight;
-  const next = timer ? new Promise((resolve) => { waiters.push(resolve); }) : null;
-  return Promise.all([current, next]).then(() => inflight).then(() => {});
+  const waits = new Set();
+  for (const k of keys || []) {
+    const p = k && pending.get(k);
+    if (p) waits.add(p);
+  }
+  return Promise.all(waits).then(() => {});
 }
 
 const subscribe = (fn) => { listeners.add(fn); return () => listeners.delete(fn); };
