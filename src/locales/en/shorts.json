@@ -108,5 +108,10 @@
     "viewReplies_other": "View {{count}} replies",
     "hideReplies_one": "Hide {{count}} reply",
     "hideReplies_other": "Hide {{count}} replies"
+  },
+  "storyExpired": {
+    "title": "This story has expired",
+    "body": "Stories on 3Speak are visible for 24 hours.",
+    "next": "Next short"
   }
 }

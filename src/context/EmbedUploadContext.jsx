@@ -26,6 +26,7 @@ import { useTranslation } from 'react-i18next';
 import { readAddToBlog, writeAddToBlog, reblogOp } from '../utils/addToBlog';
 import { timelineMeta, applyTimelineToDescription } from '../utils/videoTimeline';
 import { registerStory } from '../lib/stories';
+import { withShortHeading, shortHeading } from '../utils/shortTitle';
 
 // Every toast from this module is headed "Upload"; the message becomes the
 // line under it. See utils/toast.js.
@@ -1520,7 +1521,7 @@ export function EmbedUploadProvider({ children }) {
       // link endpoint expects.
       // Permlink slug source: longform videos use the title; shorts have no
       // title, so they keep using the first words of the description (caption).
-      const slugSource = ((fromStories ? description : title) || description || '').trim();
+      const slugSource = ((fromStories ? (title || description) : title) || description || '').trim();
       const slug = slugSource
         ? slugSource.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '').slice(0, 27).replace(/-+$/, '')
         : '';
@@ -1689,8 +1690,12 @@ export function EmbedUploadProvider({ children }) {
         ? description
         : applyTimelineToDescription(description, timeline, { author: assetOwner, permlink: hivePermlink });
 
-      // Build body: embed URL (video first) + description + credit to original author
+      // Build body: embed URL (video first) + description + credit to original author.
+      // A short's optional title goes on top as a `## Title` heading: shorts are
+      // Hive comments with no title field, and 3Speak shows that line as the
+      // short's title (utils/shortTitle.js).
       let postBody = `${capturedEmbedUrl}\n\n${publishDescription}`;
+      if (fromStories) postBody = withShortHeading(title, postBody);
       if (originalAuthor && originalPermlink) {
         // Use shorts link format when remix comes from a short
         const shortPl = originalShortPermlink || originalPermlink;
@@ -2134,7 +2139,7 @@ export function EmbedUploadProvider({ children }) {
             body: JSON.stringify({
               hive_author: user,
               hive_permlink: hivePermlink,
-              hive_title: fromStories ? '' : title,
+              hive_title: fromStories ? shortHeading(postBody) : title,
               hive_body: postBody,
               hive_tags: ['3speak', ...tagsPreview],
             }),

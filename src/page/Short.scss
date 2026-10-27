@@ -290,6 +290,72 @@
     100% { background-position: -200% 0; }
   }
 
+  // An expired 24h story, in place of the video (Short.jsx). The same look as the
+  // embed player's expired clip: the empty 0h ring on the 3Speak dark. Above the
+  // gesture layer (10) but click-through, except for the button.
+  .storyExpiredScreen {
+    position: absolute;
+    inset: 0;
+    z-index: 11;
+    pointer-events: none;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 24px;
+    text-align: center;
+    color: #fff;
+    background:
+      radial-gradient(circle at 50% 0%, rgba(229, 57, 53, 0.22), transparent 55%),
+      radial-gradient(circle at 100% 100%, rgba(40, 60, 140, 0.25), transparent 60%),
+      #0b0d14;
+  }
+
+  .storyExpiredRing {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    border: 6px solid rgba(255, 255, 255, 0.14);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 12px;
+    font-size: 3rem;
+    font-weight: 800;
+
+    small {
+      font-size: 1.4rem;
+      color: #e53935;
+      margin-left: 2px;
+    }
+  }
+
+  .storyExpiredTitle {
+    margin: 0;
+    font-size: 1.5rem;
+    font-weight: 800;
+  }
+
+  .storyExpiredBody {
+    margin: 0;
+    max-width: 280px;
+    opacity: 0.75;
+  }
+
+  // Outline, not a red fill (house rule for buttons).
+  .storyExpiredNext {
+    pointer-events: auto;
+    margin-top: 14px;
+    padding: 8px 20px;
+    border-radius: 999px;
+    border: 1.5px solid #e53935;
+    background: transparent;
+    color: #fff;
+    font-weight: 600;
+    cursor: pointer;
+  }
+
   .videoOverlay {
     position: absolute;
     top: 0;
@@ -1152,6 +1218,31 @@
     @media (max-width: 768px) {
       margin-bottom: 0.4rem;
       font-size: 0.75rem;
+    }
+
+    // A live 24h story: "Story · 5h left" above the title / caption.
+    .shortsStoryBadge {
+      display: inline-block;
+      margin-bottom: 4px;
+      padding: 2px 8px;
+      border-radius: 999px;
+      border: 1px solid rgba(229, 57, 53, 0.9);
+      background: rgba(0, 0, 0, 0.35);
+      font-size: 0.72rem;
+      font-weight: 600;
+    }
+
+    // The creator's `## Title` line: one bold line above the caption.
+    .captionTitle {
+      margin: 0 0 2px;
+      font-weight: 700;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    &--expanded .captionTitle {
+      white-space: normal;
     }
 
     .captionText {

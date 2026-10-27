@@ -33,6 +33,7 @@ import { getHiveClient } from '../../utils/hiveNode';
 import { CHECKER_URL } from '../../utils/config';
 import { isLoggedIn } from '../../hive-api/aioha';
 import './SpotlightEditor.scss';
+import { shortHeading } from '../../utils/shortTitle';
 
 // Every toast from this module is headed "Spotlight"; the message becomes the
 // line under it. See utils/toast.js.
@@ -144,7 +145,8 @@ async function fetchRecentShorts(account) {
     const thumb = s.thumbnail_url || '';
     // Shorts rarely have a title, so use the first words of the post body — the same
     // caption the profile Shorts tab shows (bodyToPlaintext(hive_body)).
-    const caption = (bodyToPlaintext(s.hive_body) || s.hive_title || s.embed_title || '').slice(0, 100).trim();
+    // The creator's `## Title` first line wins (utils/shortTitle.js).
+    const caption = (shortHeading(s.hive_body) || bodyToPlaintext(s.hive_body) || s.hive_title || s.embed_title || '').slice(0, 100).trim();
     out.push({
       author: s.owner || account,
       permlink: s.permlink,

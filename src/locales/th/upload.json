@@ -153,6 +153,7 @@
       "tooManyTags": "คุณเพิ่มได้สูงสุด {{max}} แท็ก — แท็กชุมชนจะถูกเพิ่มให้อัตโนมัติ"
     },
     "title": "ชื่อเรื่อง",
+    "titleShort": "ชื่อ (ไม่บังคับ)",
     "description": "คำอธิบาย",
     "descriptionPlaceholderShort": "อธิบาย Shorts ของคุณ...",
     "descriptionPlaceholder": "เขียนคำอธิบายวิดีโอของคุณที่นี่... รองรับการจัดรูปแบบ markdown!",

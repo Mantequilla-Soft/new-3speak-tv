@@ -153,6 +153,7 @@
       "tooManyTags": "Hanggang {{max}} tags lang ang puwede mong idagdag — awtomatikong idinadagdag ang community tag."
     },
     "title": "Pamagat",
+    "titleShort": "Pamagat (opsyonal)",
     "description": "Description",
     "descriptionPlaceholderShort": "I-describe ang short mo...",
     "descriptionPlaceholder": "Isulat dito ang description ng video mo... Puwede ang markdown formatting!",

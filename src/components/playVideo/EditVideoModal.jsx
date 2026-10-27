@@ -20,6 +20,7 @@ import { readTimeline, withTimeline, applyTimelineToBody, chaptersFromText } fro
 import { fetchPlaySource } from '../../lib/videoData';
 import { fetchCreatorAdPrefs, syncVideoAdChoice } from '../../lib/advertiseData';
 import { adsEnabledFor } from '../../utils/config';
+import { splitShortHeading, withShortHeading, SHORT_TITLE_MAX } from '../../utils/shortTitle';
 import './EditVideoModal.scss';
 
 // Every toast from this module is headed "Video"; the message becomes the
@@ -105,6 +106,10 @@ function timelineSnapshot(chapters, links) {
   ]);
 }
 
+// Shorts are Hive comments (replies to a snaps container); videos are root posts.
+// The watch page opens this dialog without `isShort`, so the post decides too.
+const isReplyPost = (post) => !!post?.parent_author;
+
 function recombinePostBody(header, middle, footer) {
   const parts = [];
   if (header) parts.push(header.replace(/\s+$/, ''));
@@ -132,6 +137,8 @@ export default function EditVideoModal({ isOpen, onClose, author, permlink, onSa
 
   // Original on-chain post — source of truth for round-trip fidelity.
   const [original, setOriginal] = useState(null);
+  // Editing a short: its optional title is a `## Title` line in the body.
+  const shortEdit = isShort || isReplyPost(original?.post);
 
   // Editable fields
   const [title, setTitle] = useState('');
@@ -260,10 +267,14 @@ export default function EditVideoModal({ isOpen, onClose, author, permlink, onSa
         const metaTags = Array.isArray(meta.tags) ? meta.tags : [];
 
         const { header, middle, footer } = splitPostBody(post.body || '');
+        // A short's title is the `## Title` first line of its body
+        // (utils/shortTitle.js): edited in the title field, put back on top on save.
+        const shortPost = isShort || isReplyPost(post);
+        const { heading, rest } = shortPost ? splitShortHeading(middle) : { heading: '', rest: middle };
 
         setOriginal({ post, meta });
-        setTitle(post.title || '');
-        setBody(middle);
+        setTitle(shortPost ? heading : (post.title || ''));
+        setBody(rest);
         setBodyHeader(header);
         setBodyFooter(footer);
         const tagNsfw = metaTags.some((tag) => String(tag).toLowerCase() === 'nsfw');
@@ -426,7 +437,8 @@ export default function EditVideoModal({ isOpen, onClose, author, permlink, onSa
   const titleLen = title.trim().length;
   // Shorts don't require a long title or any user tags (they carry a caption and
   // the fixed shorts taxonomy) — relax those minimums for shorts.
-  const titleValid = titleLen <= TITLE_MAX && (isShort || titleLen >= TITLE_MIN);
+  const titleMax = shortEdit ? SHORT_TITLE_MAX : TITLE_MAX;
+  const titleValid = titleLen <= titleMax && (shortEdit || titleLen >= TITLE_MIN);
   // The preserved taxonomy (community, short, …) counts toward the 10-tag limit,
   // so the user can add up to (10 − taxonomy) of their own — matching the uploader.
   const userTagLimit = Math.max(1, MAX_TAGS - systemTags.length);
@@ -457,9 +469,11 @@ export default function EditVideoModal({ isOpen, onClose, author, permlink, onSa
     if (!original) return null;
     const sm = original.meta.video?.info?.sourceMap;
     const smThumb = Array.isArray(sm) ? sm.find((s) => s.type === 'thumbnail')?.url : '';
+    const middle = splitPostBody(original.post.body || '').middle;
+    const sh = (isShort || isReplyPost(original.post)) ? splitShortHeading(middle) : null;
     return {
-      title: (original.post.title || '').trim(),
-      middle: splitPostBody(original.post.body || '').middle,
+      title: sh ? sh.heading : (original.post.title || '').trim(),
+      middle: sh ? sh.rest : middle,
       tags: Array.isArray(original.meta.tags) ? original.meta.tags : [],
       thumb: smThumb || (Array.isArray(original.meta.image) ? (original.meta.image[0] || '') : ''),
       reusable: original.meta.video?.reusable !== false,
@@ -730,14 +744,16 @@ export default function EditVideoModal({ isOpen, onClose, author, permlink, onSa
         const editedBody = timelineDirty
           ? applyTimelineToBody(body, withTimeline({}, tlChapters, tlLinks, { duration: tlDuration }), { author, permlink })
           : body;
-        finalBody = recombinePostBody(finalHeader, editedBody, bodyFooter);
+        finalBody = recombinePostBody(finalHeader, shortEdit ? withShortHeading(title, editedBody) : editedBody, bodyFooter);
         savedMeta = newMeta;
 
         const result = await commentWithAioha(
           post.parent_author || '',
           post.parent_permlink || '',
           permlink,
-          title.trim(),
+          // A short is a comment: its Hive title stays as it was; its own title
+          // went into the body above.
+          shortEdit ? (post.title || '') : title.trim(),
           finalBody,
           newMeta,
           null // don't touch comment_options on edit
@@ -920,23 +936,22 @@ export default function EditVideoModal({ isOpen, onClose, author, permlink, onSa
 
           {ready && tab === 'details' && (
             <div className="evm-panel" role="tabpanel" id="evm-panel-details" aria-labelledby="evm-tab-details">
-              {/* Title: hidden for shorts (they use their caption/description). */}
-              {!isShort && (
-                <div className="evm-field">
-                  <label className="edit-video-label" htmlFor="evm-title-input">{t('watch.edit.titleLabel')}</label>
-                  <input
-                    id="evm-title-input"
-                    type="text"
-                    className="edit-video-input"
-                    value={title}
-                    onChange={(e) => setTitle(e.target.value)}
-                    maxLength={TITLE_MAX}
-                  />
-                  <span className={`edit-video-hint${!titleValid && title ? ' error' : ''}`}>
-                    {titleLen}/{TITLE_MAX} · {t('watch.edit.titleMin', { min: TITLE_MIN })}
-                  </span>
-                </div>
-              )}
+              {/* Title. For a short it is optional and lives in the body as a
+                  `## Title` first line (utils/shortTitle.js). */}
+              <div className="evm-field">
+                <label className="edit-video-label" htmlFor="evm-title-input">{shortEdit ? t('upload.details.titleShort') : t('watch.edit.titleLabel')}</label>
+                <input
+                  id="evm-title-input"
+                  type="text"
+                  className="edit-video-input"
+                  value={title}
+                  onChange={(e) => setTitle(e.target.value)}
+                  maxLength={titleMax}
+                />
+                <span className={`edit-video-hint${!titleValid && title ? ' error' : ''}`}>
+                  {shortEdit ? `${titleLen}/${SHORT_TITLE_MAX}` : <>{titleLen}/{TITLE_MAX} · {t('watch.edit.titleMin', { min: TITLE_MIN })}</>}
+                </span>
+              </div>
 
               <div className="evm-field">
                 <label className="edit-video-label" htmlFor="evm-body-input">{t('watch.edit.description')}</label>

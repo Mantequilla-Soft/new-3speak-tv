@@ -112,5 +112,10 @@
     "hideReplies_few": "Ukryj {{count}} odpowiedzi",
     "hideReplies_many": "Ukryj {{count}} odpowiedzi",
     "hideReplies_other": "Ukryj {{count}} odpowiedzi"
+  },
+  "storyExpired": {
+    "title": "Ta relacja wygasła",
+    "body": "Relacje na 3Speak są widoczne przez 24 godziny.",
+    "next": "Następny short"
   }
 }

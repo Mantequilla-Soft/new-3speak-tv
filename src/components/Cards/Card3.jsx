@@ -33,6 +33,7 @@ import { useAppStore } from "../../lib/store";
 import { useTranslation } from "react-i18next";
 import { formatDate } from "../../i18n";
 import { watchPath } from '../../utils/urls';
+import { shortHeading } from '../../utils/shortTitle';
 
 
 /**
@@ -74,7 +75,10 @@ function withInterleave(cards, channels, offset = 0) {
 const SHORT_HINT_MAX = 70;
 function shortsHint(video) {
   const raw = (
-    video.caption
+    // The creator's `## Title` first line wins (utils/shortTitle.js).
+    video.heading
+    || shortHeading(video.hive_body)
+    || video.caption
     || bodyToPlaintext(video.hive_body || '')
     || video.title
     || ''

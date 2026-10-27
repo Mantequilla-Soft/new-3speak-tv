@@ -112,5 +112,10 @@
     "hideReplies_few": "Скрыть {{count}} ответа",
     "hideReplies_many": "Скрыть {{count}} ответов",
     "hideReplies_other": "Скрыть {{count}} ответа"
+  },
+  "storyExpired": {
+    "title": "Срок этой истории истёк",
+    "body": "Истории на 3Speak доступны 24 часа.",
+    "next": "Следующий шортс"
   }
 }

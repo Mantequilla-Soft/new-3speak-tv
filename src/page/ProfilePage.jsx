@@ -470,7 +470,7 @@ function ProfilePage() {
       (page?.shorts || []).map(s => ({
         author: s.author,
         permlink: s.permlink,
-        title: (s.caption || s.title || '').slice(0, 80),
+        title: (s.heading || s.caption || s.title || '').slice(0, 80), // `## Title` first (utils/shortTitle.js)
         images: { thumbnail: s.thumbnailUrl },
         duration: 0,
         stats: {

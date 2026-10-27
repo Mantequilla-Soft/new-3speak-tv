@@ -153,6 +153,7 @@
       "tooManyTags": "Можна додати до {{max}} тегів — тег спільноти додається автоматично."
     },
     "title": "Назва",
+    "titleShort": "Назва (необов’язково)",
     "description": "Опис",
     "descriptionPlaceholderShort": "Опишіть свій Shorts...",
     "descriptionPlaceholder": "Напишіть тут опис відео... Підтримується форматування Markdown!",

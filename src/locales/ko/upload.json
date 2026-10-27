@@ -153,6 +153,7 @@
       "tooManyTags": "태그는 최대 {{max}}개까지 추가할 수 있어요. 커뮤니티 태그는 자동으로 추가돼요."
     },
     "title": "제목",
+    "titleShort": "제목 (선택)",
     "description": "설명",
     "descriptionPlaceholderShort": "쇼츠를 설명해 주세요...",
     "descriptionPlaceholder": "동영상 설명을 작성하세요... 마크다운 서식을 지원해요!",

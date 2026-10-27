@@ -112,5 +112,10 @@
     "hideReplies_few": "Сховати {{count}} відповіді",
     "hideReplies_many": "Сховати {{count}} відповідей",
     "hideReplies_other": "Сховати {{count}} відповіді"
+  },
+  "storyExpired": {
+    "title": "Термін цієї історії минув",
+    "body": "Історії на 3Speak доступні 24 години.",
+    "next": "Наступний шортс"
   }
 }

@@ -108,5 +108,10 @@
     "viewReplies_other": "{{count}} जवाब देखें",
     "hideReplies_one": "{{count}} जवाब छिपाएँ",
     "hideReplies_other": "{{count}} जवाब छिपाएँ"
+  },
+  "storyExpired": {
+    "title": "यह स्टोरी समाप्त हो गई है",
+    "body": "3Speak पर स्टोरी 24 घंटे दिखती हैं।",
+    "next": "अगला शॉर्ट"
   }
 }

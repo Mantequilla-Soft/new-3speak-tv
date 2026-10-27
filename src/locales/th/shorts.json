@@ -106,5 +106,10 @@
     "replyPlaceholder": "เขียนการตอบกลับ...",
     "viewReplies_other": "ดูการตอบกลับ {{count}} รายการ",
     "hideReplies_other": "ซ่อนการตอบกลับ {{count}} รายการ"
+  },
+  "storyExpired": {
+    "title": "สตอรี่นี้หมดอายุแล้ว",
+    "body": "สตอรี่บน 3Speak แสดงเป็นเวลา 24 ชั่วโมง",
+    "next": "ช็อตถัดไป"
   }
 }

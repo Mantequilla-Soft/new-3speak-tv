@@ -108,5 +108,10 @@
     "viewReplies_other": "{{count}}টি রিপ্লাই দেখুন",
     "hideReplies_one": "{{count}}টি রিপ্লাই লুকান",
     "hideReplies_other": "{{count}}টি রিপ্লাই লুকান"
+  },
+  "storyExpired": {
+    "title": "এই স্টোরির মেয়াদ শেষ",
+    "body": "3Speak-এ স্টোরি ২৪ ঘণ্টা দেখা যায়।",
+    "next": "পরের শর্ট"
   }
 }

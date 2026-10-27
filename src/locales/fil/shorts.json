@@ -108,5 +108,10 @@
     "viewReplies_other": "Tingnan ang {{count}} replies",
     "hideReplies_one": "Itago ang {{count}} reply",
     "hideReplies_other": "Itago ang {{count}} replies"
+  },
+  "storyExpired": {
+    "title": "Nag-expire na ang story na ito",
+    "body": "Nakikita ang mga story sa 3Speak sa loob ng 24 oras.",
+    "next": "Susunod na short"
   }
 }

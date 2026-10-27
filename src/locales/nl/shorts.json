@@ -108,5 +108,10 @@
     "viewReplies_other": "{{count}} antwoorden bekijken",
     "hideReplies_one": "{{count}} antwoord verbergen",
     "hideReplies_other": "{{count}} antwoorden verbergen"
+  },
+  "storyExpired": {
+    "title": "Deze story is verlopen",
+    "body": "Story's op 3Speak zijn 24 uur te zien.",
+    "next": "Volgende short"
   }
 }

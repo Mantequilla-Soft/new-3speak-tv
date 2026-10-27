@@ -106,5 +106,10 @@
     "replyPlaceholder": "返信を入力...",
     "viewReplies_other": "{{count}} 件の返信を表示",
     "hideReplies_other": "{{count}} 件の返信を隠す"
+  },
+  "storyExpired": {
+    "title": "このストーリーは期限切れです",
+    "body": "3Speakのストーリーは24時間公開されます。",
+    "next": "次のショート"
   }
 }

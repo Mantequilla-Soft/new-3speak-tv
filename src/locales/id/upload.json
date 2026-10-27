@@ -153,6 +153,7 @@
       "tooManyTags": "Kamu bisa menambahkan hingga {{max}} tag — tag komunitas ditambahkan otomatis."
     },
     "title": "Judul",
+    "titleShort": "Judul (opsional)",
     "description": "Deskripsi",
     "descriptionPlaceholderShort": "Jelaskan Shorts-mu...",
     "descriptionPlaceholder": "Tulis deskripsi videomu di sini... Mendukung format markdown!",

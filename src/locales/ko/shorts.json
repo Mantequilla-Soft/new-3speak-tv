@@ -106,5 +106,10 @@
     "replyPlaceholder": "답글 작성...",
     "viewReplies_other": "답글 {{count}}개 보기",
     "hideReplies_other": "답글 {{count}}개 숨기기"
+  },
+  "storyExpired": {
+    "title": "이 스토리는 만료되었어요",
+    "body": "3Speak의 스토리는 24시간 동안 공개돼요.",
+    "next": "다음 쇼츠"
   }
 }

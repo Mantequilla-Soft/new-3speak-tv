@@ -24,6 +24,7 @@ import SettingInfo, { SettingSheet } from './SettingInfo';
 import './EmbedDetails.scss';
 import { useTranslation, Trans } from 'react-i18next';
 import AccountImg from '../HiveAvatar/AccountImg';
+import { SHORT_TITLE_MAX } from '../../utils/shortTitle';
 
 // Every toast from this module is headed "Upload"; the message becomes the
 // line under it. See utils/toast.js.
@@ -319,12 +320,18 @@ function EmbedDetails() {
 
           <div className="video-detail-wrap">
             <div className="video-items">
-              {!fromStories && (
-                <div className="input-group">
-                  <label htmlFor="">{t("upload.details.title")}</label>
-                  <input type="text" value={title} onChange={(e) => setTitle(e.target.value)} />
-                </div>
-              )}
+              {/* Shorts and stories: optional, posted as a `## Title` line on top of
+                  the post and then shown as the short's title on 3Speak
+                  (utils/shortTitle.js). */}
+              <div className="input-group">
+                <label htmlFor="">{fromStories ? t("upload.details.titleShort") : t("upload.details.title")}</label>
+                <input
+                  type="text"
+                  value={title}
+                  onChange={(e) => setTitle(e.target.value)}
+                  {...(fromStories ? { maxLength: SHORT_TITLE_MAX } : {})}
+                />
+              </div>
               <div className="input-group">
                 <label htmlFor="">{t("upload.details.description")}</label>
                 <div className={`wrap-dec${fromStories ? ' wrap-dec--short' : ''}`}>

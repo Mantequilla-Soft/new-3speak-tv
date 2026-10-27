@@ -108,5 +108,10 @@
     "viewReplies_other": "Tazama majibu {{count}}",
     "hideReplies_one": "Ficha jibu {{count}}",
     "hideReplies_other": "Ficha majibu {{count}}"
+  },
+  "storyExpired": {
+    "title": "Hadithi hii imeisha muda",
+    "body": "Hadithi kwenye 3Speak huonekana kwa saa 24.",
+    "next": "Short inayofuata"
   }
 }

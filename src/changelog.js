@@ -7,6 +7,18 @@
 // 1.0.0 — that way they see all of these when develop is pushed to production.
 export const CHANGELOG = [
   {
+    version: '1.80.26',
+    date: '2026-10-27',
+    summary:
+      'Stories now also play in the Shorts feed with a badge showing how long they stay, and an expired story shows a short note instead.',
+  },
+  {
+    version: '1.80.25',
+    date: '2026-10-27',
+    summary:
+      "Shorts can now have a title: add or change it when you upload or edit a short, and it shows on the short's card and above its caption.",
+  },
+  {
     version: '1.80.24',
     date: '2026-10-26',
     summary:

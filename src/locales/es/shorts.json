@@ -110,5 +110,10 @@
     "hideReplies_one": "Ocultar {{count}} respuesta",
     "hideReplies_many": "Ocultar {{count}} respuestas",
     "hideReplies_other": "Ocultar {{count}} respuestas"
+  },
+  "storyExpired": {
+    "title": "Esta historia ha caducado",
+    "body": "Las historias en 3Speak se ven durante 24 horas.",
+    "next": "Siguiente short"
   }
 }

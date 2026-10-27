@@ -108,5 +108,10 @@
     "viewReplies_other": "{{count}} yanıtı gör",
     "hideReplies_one": "{{count}} yanıtı gizle",
     "hideReplies_other": "{{count}} yanıtı gizle"
+  },
+  "storyExpired": {
+    "title": "Bu hikâyenin süresi doldu",
+    "body": "3Speak'teki hikâyeler 24 saat boyunca görünür.",
+    "next": "Sonraki short"
   }
 }

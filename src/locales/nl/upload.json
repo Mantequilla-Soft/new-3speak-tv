@@ -153,6 +153,7 @@
       "tooManyTags": "Je kunt maximaal {{max}} tags toevoegen — de communitytag wordt automatisch toegevoegd."
     },
     "title": "Titel",
+    "titleShort": "Titel (optioneel)",
     "description": "Beschrijving",
     "descriptionPlaceholderShort": "Beschrijf je short...",
     "descriptionPlaceholder": "Schrijf hier je videobeschrijving... Markdown wordt ondersteund!",

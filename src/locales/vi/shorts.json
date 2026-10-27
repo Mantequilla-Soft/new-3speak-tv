@@ -106,5 +106,10 @@
     "replyPlaceholder": "Viết phản hồi...",
     "viewReplies_other": "Xem {{count}} phản hồi",
     "hideReplies_other": "Ẩn {{count}} phản hồi"
+  },
+  "storyExpired": {
+    "title": "Tin này đã hết hạn",
+    "body": "Tin trên 3Speak hiển thị trong 24 giờ.",
+    "next": "Short tiếp theo"
   }
 }

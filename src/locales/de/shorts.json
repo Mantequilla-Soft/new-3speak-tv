@@ -108,5 +108,10 @@
     "viewReplies_other": "{{count}} Antworten ansehen",
     "hideReplies_one": "{{count}} Antwort ausblenden",
     "hideReplies_other": "{{count}} Antworten ausblenden"
+  },
+  "storyExpired": {
+    "title": "Diese Story ist abgelaufen",
+    "body": "Storys sind auf 3Speak 24 Stunden lang zu sehen.",
+    "next": "Nächster Short"
   }
 }

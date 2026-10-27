@@ -153,6 +153,7 @@
       "tooManyTags": "En fazla {{max}} etiket ekleyebilirsin; topluluk etiketi otomatik eklenir."
     },
     "title": "Başlık",
+    "titleShort": "Başlık (isteğe bağlı)",
     "description": "Açıklama",
     "descriptionPlaceholderShort": "Shorts videonu anlat...",
     "descriptionPlaceholder": "Video açıklamanı buraya yaz... Markdown biçimlendirmesi desteklenir!",

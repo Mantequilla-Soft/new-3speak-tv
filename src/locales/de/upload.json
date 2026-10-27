@@ -153,6 +153,7 @@
       "tooManyTags": "Du kannst bis zu {{max}} Tags hinzufügen – der Community-Tag wird automatisch ergänzt."
     },
     "title": "Titel",
+    "titleShort": "Titel (optional)",
     "description": "Beschreibung",
     "descriptionPlaceholderShort": "Beschreibe deinen Short...",
     "descriptionPlaceholder": "Schreib hier deine Videobeschreibung... Markdown wird unterstützt!",

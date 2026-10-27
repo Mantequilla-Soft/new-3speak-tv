@@ -8,6 +8,7 @@ import { AiPill } from '../AiBadge/AiBadge';
 import { aiKey, useAiFlags } from '../../utils/aiFlags';
 import { hiveAuthorOf, isAiShort } from '../../hooks/useAiFilteredShorts';
 import './ShortsRow.scss';
+import { shortHeading } from '../../utils/shortTitle';
 
 /**
  * ONE FULL ROW of shorts dropped INTO the video grid every few rows (see
@@ -39,6 +40,10 @@ function clip(text) {
 }
 
 function shortTitle(s) {
+  // The creator's `## Title` first line wins (utils/shortTitle.js).
+  const heading = shortHeading(s.hive_body);
+  if (heading) return heading;
+
   const caption = bodyToPlaintext(s.hive_body || '').trim();
   if (caption) return clip(caption);
 

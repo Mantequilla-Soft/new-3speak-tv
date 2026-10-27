@@ -153,6 +153,7 @@
       "tooManyTags": "Unaweza kuongeza hadi lebo {{max}} — lebo ya jumuiya huongezwa kiotomatiki."
     },
     "title": "Kichwa",
+    "titleShort": "Kichwa (si lazima)",
     "description": "Maelezo",
     "descriptionPlaceholderShort": "Eleza short yako...",
     "descriptionPlaceholder": "Andika maelezo ya video yako hapa... Inakubali muundo wa markdown!",

@@ -110,5 +110,10 @@
     "hideReplies_one": "Ocultar {{count}} resposta",
     "hideReplies_many": "Ocultar {{count}} respostas",
     "hideReplies_other": "Ocultar {{count}} respostas"
+  },
+  "storyExpired": {
+    "title": "Este story expirou",
+    "body": "Os stories no 3Speak ficam visíveis por 24 horas.",
+    "next": "Próximo short"
   }
 }

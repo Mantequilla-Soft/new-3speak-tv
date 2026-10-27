@@ -153,6 +153,7 @@
       "tooManyTags": "Bạn có thể thêm tối đa {{max}} thẻ — thẻ cộng đồng được thêm tự động."
     },
     "title": "Tiêu đề",
+    "titleShort": "Tiêu đề (không bắt buộc)",
     "description": "Mô tả",
     "descriptionPlaceholderShort": "Mô tả Shorts của bạn...",
     "descriptionPlaceholder": "Viết mô tả video của bạn tại đây... Hỗ trợ định dạng markdown!",

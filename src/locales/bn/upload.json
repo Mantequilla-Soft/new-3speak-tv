@@ -153,6 +153,7 @@
       "tooManyTags": "আপনি সর্বোচ্চ {{max}}টি ট্যাগ যোগ করতে পারবেন — কমিউনিটি ট্যাগ স্বয়ংক্রিয়ভাবে যোগ হয়।"
     },
     "title": "শিরোনাম",
+    "titleShort": "শিরোনাম (ঐচ্ছিক)",
     "description": "বিবরণ",
     "descriptionPlaceholderShort": "আপনার শর্টের বিবরণ দিন...",
     "descriptionPlaceholder": "এখানে আপনার ভিডিওর বিবরণ লিখুন... markdown ফরম্যাটিং চলবে!",

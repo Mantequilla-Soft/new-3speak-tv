@@ -153,6 +153,7 @@
       "tooManyTags": "Możesz dodać maksymalnie {{max}} tagów — tag społeczności jest dodawany automatycznie."
     },
     "title": "Tytuł",
+    "titleShort": "Tytuł (opcjonalnie)",
     "description": "Opis",
     "descriptionPlaceholderShort": "Opisz swojego shorta...",
     "descriptionPlaceholder": "Napisz tu opis filmu... Obsługuje formatowanie markdown!",

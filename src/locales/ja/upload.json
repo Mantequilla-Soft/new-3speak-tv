@@ -153,6 +153,7 @@
       "tooManyTags": "タグは {{max}} 個まで追加できます。コミュニティのタグは自動で追加されます。"
     },
     "title": "タイトル",
+    "titleShort": "タイトル(任意)",
     "description": "説明",
     "descriptionPlaceholderShort": "ショートの説明を入力...",
     "descriptionPlaceholder": "動画の説明を入力... Markdown 形式に対応しています！",

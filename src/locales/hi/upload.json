@@ -153,6 +153,7 @@
       "tooManyTags": "आप ज़्यादा से ज़्यादा {{max}} टैग जोड़ सकते हैं — कम्युनिटी टैग अपने-आप जुड़ जाता है।"
     },
     "title": "टाइटल",
+    "titleShort": "शीर्षक (वैकल्पिक)",
     "description": "विवरण",
     "descriptionPlaceholderShort": "अपने शॉर्ट के बारे में बताएँ...",
     "descriptionPlaceholder": "अपने वीडियो का विवरण यहाँ लिखें... Markdown फ़ॉर्मैटिंग सपोर्ट है!",

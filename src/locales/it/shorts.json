@@ -110,5 +110,10 @@
     "hideReplies_one": "Nascondi {{count}} risposta",
     "hideReplies_many": "Nascondi {{count}} risposte",
     "hideReplies_other": "Nascondi {{count}} risposte"
+  },
+  "storyExpired": {
+    "title": "Questa storia è scaduta",
+    "body": "Le storie su 3Speak sono visibili per 24 ore.",
+    "next": "Short successivo"
   }
 }

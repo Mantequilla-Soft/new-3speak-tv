@@ -106,5 +106,10 @@
     "replyPlaceholder": "写下回复...",
     "viewReplies_other": "查看 {{count}} 条回复",
     "hideReplies_other": "隐藏 {{count}} 条回复"
+  },
+  "storyExpired": {
+    "title": "此快拍已过期",
+    "body": "3Speak 上的快拍展示 24 小时。",
+    "next": "下一个短视频"
   }
 }

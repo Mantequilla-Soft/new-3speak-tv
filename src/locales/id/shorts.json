@@ -106,5 +106,10 @@
     "replyPlaceholder": "Tulis balasan...",
     "viewReplies_other": "Lihat {{count}} balasan",
     "hideReplies_other": "Sembunyikan {{count}} balasan"
+  },
+  "storyExpired": {
+    "title": "Story ini sudah kedaluwarsa",
+    "body": "Story di 3Speak tayang selama 24 jam.",
+    "next": "Short berikutnya"
   }
 }
