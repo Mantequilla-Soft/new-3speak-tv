@@ -15,7 +15,7 @@ import {
   formatDuration,
   formatMetric,
   METRICS,
-  METRIC_GROUPS,
+  BOARD_TYPES,
   MAX_PROFILE_BADGES,
 } from '../../../src/lib/leaderboardData.js'
 
@@ -32,11 +32,11 @@ describe('requests', () => {
     await fetchTopicLeaderboard({ topic: 'music & art' })
     await fetchLeaderboardBadges('alice')
     expect(f.mock.calls.map((c) => c[0])).toEqual([
-      `${C}/leaderboard?window=7d&metric=video_uploads&limit=50&page=1`,
+      `${C}/leaderboard?window=7d&metric=video_watch_secs&limit=50&page=1`,
       `${C}/leaderboard?window=30d&metric=streams&limit=10&page=2`,
       `${C}/leaderboard/user/a%20b?window=7d`,
       `${C}/leaderboard/topics`,
-      `${C}/leaderboard/topic?topic=music%20%26%20art&window=7d&metric=video_uploads&limit=50&page=1`,
+      `${C}/leaderboard/topic?topic=music%20%26%20art&window=7d&metric=video_watch_secs&limit=50&page=1`,
       `${C}/leaderboard/badges/alice`,
     ])
   })
@@ -61,8 +61,9 @@ describe('metrics', () => {
     expect(metricById('nope')).toBe(METRICS[0])
   })
 
-  it('every metric belongs to a known group', () => {
-    for (const m of METRICS) expect(METRIC_GROUPS).toContain(m.group)
+  it('every metric is reachable from a board type', () => {
+    const boardMetrics = BOARD_TYPES.flatMap((bt) => bt.metrics.map((m) => m.id))
+    for (const m of METRICS) expect(boardMetrics).toContain(m.id)
   })
 })
 
