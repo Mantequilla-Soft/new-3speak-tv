@@ -136,14 +136,31 @@ export default function ActiveAuthModal() {
     setError('');
     if (!username) { setError(t('auth.activeAuth.errors.noUsername')); return; }
     setBusy(true);
+    // A Butter Auth login parks the user's wallet session in aioha's other
+    // logins, and aioha.login() refuses a parked username ("Already logged
+    // in"). Same wallet: switch back to it. Other wallet: drop the parked
+    // entry so the fresh login can replace it (restored if that fails).
+    let parked = null;
+    try {
+      const parkedProvider = aioha.getOtherLogins()[username];
+      if (parkedProvider === provider && aioha.switchUser(username)) {
+        await signWithAioha();
+        return;
+      }
+      if (parkedProvider) parked = aioha.removeOtherLogin(username, false);
+    } catch { /* fall through to a fresh login */ }
     try {
       const res = await aioha.login(provider, username, {
         msg: 'Authorize active transaction',
         keyType: KeyTypes.Active,
       });
       if (!res?.success) throw new Error(res?.error || t('auth.activeAuth.errors.connectFailed'));
+      parked = null;
       await signWithAioha();
     } catch (e) {
+      if (parked) {
+        try { aioha.addOtherLogin(username, parked); } catch { /* ignore */ }
+      }
       setError(e.message || t('auth.activeAuth.errors.connectFailed'));
       setBusy(false);
     }
