@@ -72,7 +72,7 @@ function PlaylistFeedCard({ playlist }) {
       <div className="pfc-body">
         <Link to={`/playlist/${id}`} className="pfc-title" title={name}>{name}</Link>
         <div className="pfc-owner">
-          <AuthorBadge author={owner} showFollow compact tabHint="playlists" />
+          <AuthorBadge author={owner} compact tabHint="playlists" />
         </div>
         {changed && <p className="pfc-changed">{t('cards.playlist.updated', { when: changed })}</p>}
       </div>
