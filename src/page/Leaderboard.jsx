@@ -372,7 +372,9 @@ function Leaderboard() {
 
       {/* Your-standing card is overall-only: the checker's per-user endpoint
           covers the five global metrics, not the per-topic boards. */}
-      {user && !activeTopic && <MyStanding user={user} window={window} metric={metric} />}
+      {/* Only above a board that has people on it: on an empty one (nobody has
+          posted a story yet) a lone "you: 0" row reads as a board of one. */}
+      {user && !activeTopic && entries.length > 0 && <MyStanding user={user} window={window} metric={metric} />}
 
       {isLoading && <div className="lb-state">{t('badges.leaderboard.loading')}</div>}
       {isError && <div className="lb-state error">{t('badges.leaderboard.loadError')}</div>}
