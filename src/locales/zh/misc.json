@@ -95,7 +95,13 @@
     },
     "badgeLabel": "{{tier}} {{noun}}",
     "badgeTitleAllTime": "{{what}} 历史总榜第 {{rank}} 名",
-    "badgeTitleWindow": "最近 {{window}} {{what}} 排名第 {{rank}}"
+    "badgeTitleWindow": "最近 {{window}} {{what}} 排名第 {{rank}}",
+    "sub": {
+      "count": "数量",
+      "watchTime": "观看时长",
+      "streak": "连续"
+    },
+    "timeRange": "时间范围"
   },
   "duration": {
     "hoursMinutes": "{{h}} 小时 {{m}} 分",

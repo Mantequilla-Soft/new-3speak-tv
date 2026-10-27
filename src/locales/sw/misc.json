@@ -95,7 +95,13 @@
     },
     "badgeLabel": "{{tier}} {{noun}}",
     "badgeTitleAllTime": "Nafasi ya #{{rank}} kwa {{what}} katika muda wote",
-    "badgeTitleWindow": "Nafasi ya #{{rank}} kwa {{what}} katika kipindi cha {{window}} kilichopita"
+    "badgeTitleWindow": "Nafasi ya #{{rank}} kwa {{what}} katika kipindi cha {{window}} kilichopita",
+    "sub": {
+      "count": "Idadi",
+      "watchTime": "Muda wa kutazama",
+      "streak": "Mfululizo"
+    },
+    "timeRange": "Kipindi"
   },
   "duration": {
     "hoursMinutes": "saa {{h}} dk {{m}}",

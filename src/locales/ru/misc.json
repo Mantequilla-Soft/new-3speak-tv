@@ -95,7 +95,13 @@
     },
     "badgeLabel": "{{tier}} {{noun}}",
     "badgeTitleAllTime": "Место №{{rank}} по показателю «{{what}}» за всё время",
-    "badgeTitleWindow": "Место №{{rank}} по показателю «{{what}}» за {{window}}"
+    "badgeTitleWindow": "Место №{{rank}} по показателю «{{what}}» за {{window}}",
+    "sub": {
+      "count": "Количество",
+      "watchTime": "Время просмотра",
+      "streak": "Серия"
+    },
+    "timeRange": "Период"
   },
   "duration": {
     "hoursMinutes": "{{h}} ч {{m}} мин",

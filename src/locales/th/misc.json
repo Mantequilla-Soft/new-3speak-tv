@@ -95,7 +95,13 @@
     },
     "badgeLabel": "{{noun}} {{tier}}",
     "badgeTitleAllTime": "อันดับ #{{rank}} ด้าน{{what}} ตลอดเวลา",
-    "badgeTitleWindow": "อันดับ #{{rank}} ด้าน{{what}} ในช่วง {{window}} ที่ผ่านมา"
+    "badgeTitleWindow": "อันดับ #{{rank}} ด้าน{{what}} ในช่วง {{window}} ที่ผ่านมา",
+    "sub": {
+      "count": "จำนวน",
+      "watchTime": "เวลาในการดู",
+      "streak": "ต่อเนื่อง"
+    },
+    "timeRange": "ช่วงเวลา"
   },
   "duration": {
     "hoursMinutes": "{{h}} ชม. {{m}} นาที",

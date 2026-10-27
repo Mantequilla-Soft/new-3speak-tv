@@ -95,7 +95,13 @@
     },
     "badgeLabel": "{{tier}} {{noun}}",
     "badgeTitleAllTime": "Rank #{{rank}} sa {{what}} sa lahat ng panahon",
-    "badgeTitleWindow": "Rank #{{rank}} sa {{what}} sa nakaraang {{window}}"
+    "badgeTitleWindow": "Rank #{{rank}} sa {{what}} sa nakaraang {{window}}",
+    "sub": {
+      "count": "Bilang",
+      "watchTime": "Watch time",
+      "streak": "Streak"
+    },
+    "timeRange": "Saklaw ng oras"
   },
   "duration": {
     "hoursMinutes": "{{h}}h {{m}}m",

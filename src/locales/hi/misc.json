@@ -95,7 +95,13 @@
     },
     "badgeLabel": "{{tier}} {{noun}}",
     "badgeTitleAllTime": "हर समय के {{what}} में #{{rank}} रैंक",
-    "badgeTitleWindow": "पिछले {{window}} के {{what}} में #{{rank}} रैंक"
+    "badgeTitleWindow": "पिछले {{window}} के {{what}} में #{{rank}} रैंक",
+    "sub": {
+      "count": "संख्या",
+      "watchTime": "वॉच टाइम",
+      "streak": "स्ट्रीक"
+    },
+    "timeRange": "समय सीमा"
   },
   "duration": {
     "hoursMinutes": "{{h}} घं {{m}} मि",

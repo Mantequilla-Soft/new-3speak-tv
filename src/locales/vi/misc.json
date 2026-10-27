@@ -95,7 +95,13 @@
     },
     "badgeLabel": "{{noun}} {{tier}}",
     "badgeTitleAllTime": "Hạng #{{rank}} về {{what}} mọi thời đại",
-    "badgeTitleWindow": "Hạng #{{rank}} về {{what}} trong {{window}} qua"
+    "badgeTitleWindow": "Hạng #{{rank}} về {{what}} trong {{window}} qua",
+    "sub": {
+      "count": "Số lượng",
+      "watchTime": "Thời gian xem",
+      "streak": "Chuỗi"
+    },
+    "timeRange": "Khoảng thời gian"
   },
   "duration": {
     "hoursMinutes": "{{h}} giờ {{m}} phút",

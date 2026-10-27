@@ -95,7 +95,13 @@
     },
     "badgeLabel": "{{tier}} {{noun}}",
     "badgeTitleAllTime": "সব সময়ের হিসেবে {{what}}-এ #{{rank}} স্থান",
-    "badgeTitleWindow": "গত {{window}}-এ {{what}}-এ #{{rank}} স্থান"
+    "badgeTitleWindow": "গত {{window}}-এ {{what}}-এ #{{rank}} স্থান",
+    "sub": {
+      "count": "সংখ্যা",
+      "watchTime": "দেখার সময়",
+      "streak": "স্ট্রিক"
+    },
+    "timeRange": "সময়সীমা"
   },
   "duration": {
     "hoursMinutes": "{{h}} ঘ {{m}} মি",

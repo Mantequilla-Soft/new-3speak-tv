@@ -38,14 +38,55 @@ export const METRICS = [
   { id: 'story_streak', labelKey: 'misc.leaderboard.metrics.story_streak', unit: 'count', group: 'Stories', blurbKey: 'misc.leaderboard.blurbs.story_streak' },
 ];
 
-// Metric groups, in tab order. Drives the grouped metric selector on the board.
-export const METRIC_GROUPS = ['Video', 'Streaming', 'Stories'];
-// Group ids above are compared against METRICS[].group; display via these keys.
-export const METRIC_GROUP_LABEL_KEYS = {
-  Video: 'misc.leaderboard.groups.video',
-  Streaming: 'misc.leaderboard.groups.streaming',
-  Stories: 'misc.leaderboard.groups.stories',
-};
+// The board picker: a type first (chips), then the measure inside it (a small
+// switch, hidden when a type has only one). `kind` lets a switch between types
+// keep the same measure where both have it (Videos watch time -> Shorts watch time).
+// The chip reuses the metric's own board label ("Videos", "Shorts", ...).
+//
+// Streaming is `deepLinkOnly`: those boards are not offered, but a profile badge
+// earned on one still links there, so its chip shows while one is selected.
+export const BOARD_TYPES = [
+  {
+    id: 'videos', labelKey: 'misc.leaderboard.metrics.video_uploads',
+    metrics: [
+      { id: 'video_watch_secs', kind: 'watch', labelKey: 'misc.leaderboard.sub.watchTime' },
+      { id: 'video_uploads', kind: 'count', labelKey: 'misc.leaderboard.sub.count' },
+    ],
+  },
+  {
+    id: 'shorts', labelKey: 'misc.leaderboard.metrics.short_uploads',
+    metrics: [
+      { id: 'short_watch_secs', kind: 'watch', labelKey: 'misc.leaderboard.sub.watchTime' },
+      { id: 'short_uploads', kind: 'count', labelKey: 'misc.leaderboard.sub.count' },
+    ],
+  },
+  {
+    id: 'stories', labelKey: 'misc.leaderboard.metrics.story_uploads',
+    metrics: [
+      { id: 'story_uploads', kind: 'count', labelKey: 'misc.leaderboard.sub.count' },
+      { id: 'story_streak', kind: 'streak', labelKey: 'misc.leaderboard.sub.streak' },
+    ],
+  },
+  {
+    id: 'tags', labelKey: 'misc.leaderboard.metrics.tags_given',
+    metrics: [{ id: 'tags_given', kind: 'count', labelKey: 'misc.leaderboard.metrics.tags_given' }],
+  },
+  {
+    id: 'streams', labelKey: 'misc.leaderboard.metrics.streams', deepLinkOnly: true,
+    metrics: METRICS.filter((m) => m.group === 'Streaming').map((m) => ({ id: m.id, kind: m.id, labelKey: m.labelKey })),
+  },
+];
+
+/** The board type a metric belongs to. */
+export function boardTypeOf(metricId) {
+  return BOARD_TYPES.find((bt) => bt.metrics.some((m) => m.id === metricId)) || BOARD_TYPES[0];
+}
+
+/** The metric to show after switching to `type`: the same kind of measure if it has one, else its first. */
+export function metricForType(type, fromMetricId) {
+  const kind = boardTypeOf(fromMetricId).metrics.find((m) => m.id === fromMetricId)?.kind;
+  return (type.metrics.find((m) => m.kind === kind) || type.metrics[0]).id;
+}
 
 // The metric tabs are the SAME list whether or not a topic is selected — the
 // labels must never change under the user. The four content metrics exist on
@@ -66,7 +107,7 @@ export function metricSupportsTopics(id) {
 }
 
 export const DEFAULT_WINDOW = '7d';
-export const DEFAULT_METRIC = 'video_uploads';
+export const DEFAULT_METRIC = 'video_watch_secs';
 
 export function metricById(id) {
   return METRICS.find((m) => m.id === id) || METRICS[0];

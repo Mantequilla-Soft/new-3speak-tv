@@ -95,7 +95,13 @@
     },
     "badgeLabel": "{{tier}} {{noun}}",
     "badgeTitleAllTime": "전체 기간 {{what}} 부문 {{rank}}위",
-    "badgeTitleWindow": "최근 {{window}} {{what}} 부문 {{rank}}위"
+    "badgeTitleWindow": "최근 {{window}} {{what}} 부문 {{rank}}위",
+    "sub": {
+      "count": "개수",
+      "watchTime": "시청 시간",
+      "streak": "연속"
+    },
+    "timeRange": "기간"
   },
   "duration": {
     "hoursMinutes": "{{h}}시간 {{m}}분",

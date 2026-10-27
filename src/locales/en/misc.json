@@ -95,7 +95,13 @@
     },
     "badgeLabel": "{{tier}} {{noun}}",
     "badgeTitleAllTime": "Ranked #{{rank}} for {{what}} over all time",
-    "badgeTitleWindow": "Ranked #{{rank}} for {{what}} over the last {{window}}"
+    "badgeTitleWindow": "Ranked #{{rank}} for {{what}} over the last {{window}}",
+    "sub": {
+      "count": "Count",
+      "watchTime": "Watch time",
+      "streak": "Streak"
+    },
+    "timeRange": "Time range"
   },
   "duration": {
     "hoursMinutes": "{{h}}h {{m}}m",

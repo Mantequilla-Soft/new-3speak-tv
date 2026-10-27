@@ -95,7 +95,13 @@
     },
     "badgeLabel": "{{tier}} {{noun}}",
     "badgeTitleAllTime": "№{{rank}} за показником «{{what}}» за весь час",
-    "badgeTitleWindow": "№{{rank}} за показником «{{what}}» за {{window}}"
+    "badgeTitleWindow": "№{{rank}} за показником «{{what}}» за {{window}}",
+    "sub": {
+      "count": "Кількість",
+      "watchTime": "Час перегляду",
+      "streak": "Серія"
+    },
+    "timeRange": "Період"
   },
   "duration": {
     "hoursMinutes": "{{h}} год {{m}} хв",

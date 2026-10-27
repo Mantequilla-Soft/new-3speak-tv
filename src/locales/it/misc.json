@@ -95,7 +95,13 @@
     },
     "badgeLabel": "{{tier}} {{noun}}",
     "badgeTitleAllTime": "#{{rank}} in classifica per {{what}} di sempre",
-    "badgeTitleWindow": "#{{rank}} in classifica per {{what}} negli ultimi {{window}}"
+    "badgeTitleWindow": "#{{rank}} in classifica per {{what}} negli ultimi {{window}}",
+    "sub": {
+      "count": "Numero",
+      "watchTime": "Tempo di visione",
+      "streak": "Serie"
+    },
+    "timeRange": "Periodo"
   },
   "duration": {
     "hoursMinutes": "{{h}} h {{m}} min",

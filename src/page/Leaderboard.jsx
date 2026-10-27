@@ -8,8 +8,9 @@ import { TAG_CATEGORIES, getCategoryOf } from '../utils/tagsV2';
 import {
   WINDOWS,
   METRICS,
-  METRIC_GROUPS,
-  METRIC_GROUP_LABEL_KEYS,
+  BOARD_TYPES,
+  boardTypeOf,
+  metricForType,
   DEFAULT_WINDOW,
   DEFAULT_METRIC,
   metricSupportsTopics,
@@ -156,6 +157,9 @@ function Leaderboard() {
     ? searchParams.get('metric')
     : DEFAULT_METRIC;
   const metric = metricById(metricId);
+  const boardType = boardTypeOf(metricId);
+  // Streaming only shows while a badge link has it selected (see BOARD_TYPES).
+  const shownTypes = BOARD_TYPES.filter((bt) => !bt.deepLinkOnly || bt.id === boardType.id);
 
   // Tags aren't tracked per topic, so that metric has no topic board at all.
   const topicsAvailable = metricSupportsTopics(metricId);
@@ -265,9 +269,11 @@ function Leaderboard() {
 
   return (
     <div className="leaderboard-page">
+      {/* The time range applies to every board, so it sits with the title as the
+          page's one global filter. */}
       <header className="lb-header">
         <MdOutlineLeaderboard className="lb-header-icon" />
-        <div>
+        <div className="lb-header-text">
           <h1>{t('badges.leaderboard.title')}</h1>
           <p>
             {activeTopic
@@ -275,40 +281,50 @@ function Leaderboard() {
               : t('badges.leaderboard.subtitle', { blurb: t(metric.blurbKey) })}
           </p>
         </div>
+        <div className="lb-window-switch" role="group" aria-label={t('misc.leaderboard.timeRange')}>
+          {WINDOWS.map((w) => (
+            <button
+              key={w.id}
+              type="button"
+              className={window === w.id ? 'active' : ''}
+              aria-pressed={window === w.id}
+              onClick={() => setWindow(w.id)}
+            >
+              {t(w.labelKey)}
+            </button>
+          ))}
+        </div>
       </header>
 
-      {/* What you're ranking, then over what interval, then narrowed to a topic.
-          Metrics are grouped (Video / Streaming / Boosts) so the 13 tabs stay legible. */}
-      <div className="lb-tabs lb-metrics">
-        {METRIC_GROUPS.map((g) => (
-          <div className="lb-metric-group" key={g}>
-            <span className="lb-metric-group-label">{t(METRIC_GROUP_LABEL_KEYS[g])}</span>
-            {METRICS.filter((m) => m.group === g).map((m) => (
-              <button
-                key={m.id}
-                type="button"
-                className={`lb-tab${metricId === m.id ? ' active' : ''}`}
-                onClick={() => setMetricId(m.id)}
-              >
-                {t(m.labelKey)}
-              </button>
-            ))}
-          </div>
-        ))}
-      </div>
-
-      <div className={`lb-tabs lb-windows${topicsAvailable ? '' : ' last-filter'}`}>
-        {WINDOWS.map((w) => (
+      {/* What is ranked: the type as chips, then the measure inside it. */}
+      <div className="lb-tabs lb-types">
+        {shownTypes.map((bt) => (
           <button
-            key={w.id}
+            key={bt.id}
             type="button"
-            className={`lb-tab${window === w.id ? ' active' : ''}`}
-            onClick={() => setWindow(w.id)}
+            className={`lb-tab${boardType.id === bt.id ? ' active' : ''}`}
+            onClick={() => setMetricId(metricForType(bt, metricId))}
           >
-            {t(w.labelKey)}
+            {t(bt.labelKey)}
           </button>
         ))}
       </div>
+
+      {boardType.metrics.length > 1 && (
+        <div className="lb-subs" role="group" aria-label={t(boardType.labelKey)}>
+          {boardType.metrics.map((m) => (
+            <button
+              key={m.id}
+              type="button"
+              className={metricId === m.id ? 'active' : ''}
+              aria-pressed={metricId === m.id}
+              onClick={() => setMetricId(m.id)}
+            >
+              {t(m.labelKey)}
+            </button>
+          ))}
+        </div>
+      )}
 
       {/* Hidden entirely for Tags, which isn't tracked per topic. */}
       {topicsAvailable && groups.length > 0 && (

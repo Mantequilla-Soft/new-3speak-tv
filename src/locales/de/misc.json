@@ -95,7 +95,13 @@
     },
     "badgeLabel": "{{tier}} {{noun}}",
     "badgeTitleAllTime": "Platz {{rank}} bei „{{what}}“ über den gesamten Zeitraum",
-    "badgeTitleWindow": "Platz {{rank}} bei „{{what}}“ (Zeitraum: {{window}})"
+    "badgeTitleWindow": "Platz {{rank}} bei „{{what}}“ (Zeitraum: {{window}})",
+    "sub": {
+      "count": "Anzahl",
+      "watchTime": "Wiedergabezeit",
+      "streak": "Serie"
+    },
+    "timeRange": "Zeitraum"
   },
   "duration": {
     "hoursMinutes": "{{h}} Std. {{m}} Min.",

@@ -95,7 +95,13 @@
     },
     "badgeLabel": "{{tier}} {{noun}}",
     "badgeTitleAllTime": "全期間の{{what}}で {{rank}} 位",
-    "badgeTitleWindow": "過去 {{window}} の{{what}}で {{rank}} 位"
+    "badgeTitleWindow": "過去 {{window}} の{{what}}で {{rank}} 位",
+    "sub": {
+      "count": "件数",
+      "watchTime": "視聴時間",
+      "streak": "連続記録"
+    },
+    "timeRange": "期間"
   },
   "duration": {
     "hoursMinutes": "{{h}}時間{{m}}分",

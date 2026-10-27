@@ -95,7 +95,13 @@
     },
     "badgeLabel": "{{tier}} {{noun}}",
     "badgeTitleAllTime": "Puesto #{{rank}} en {{what}} de todos los tiempos",
-    "badgeTitleWindow": "Puesto #{{rank}} en {{what}} (periodo: {{window}})"
+    "badgeTitleWindow": "Puesto #{{rank}} en {{what}} (periodo: {{window}})",
+    "sub": {
+      "count": "Cantidad",
+      "watchTime": "Tiempo de visualización",
+      "streak": "Racha"
+    },
+    "timeRange": "Periodo"
   },
   "duration": {
     "hoursMinutes": "{{h}} h {{m}} min",

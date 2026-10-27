@@ -95,7 +95,13 @@
     },
     "badgeLabel": "{{tier}} {{noun}}",
     "badgeTitleAllTime": "Nr. {{rank}} voor {{what}} aller tijden",
-    "badgeTitleWindow": "Nr. {{rank}} voor {{what}} in {{window}}"
+    "badgeTitleWindow": "Nr. {{rank}} voor {{what}} in {{window}}",
+    "sub": {
+      "count": "Aantal",
+      "watchTime": "Kijktijd",
+      "streak": "Reeks"
+    },
+    "timeRange": "Periode"
   },
   "duration": {
     "hoursMinutes": "{{h}}u {{m}}m",

@@ -95,7 +95,13 @@
     },
     "badgeLabel": "{{noun}} {{tier}}",
     "badgeTitleAllTime": "Peringkat #{{rank}} untuk {{what}} sepanjang waktu",
-    "badgeTitleWindow": "Peringkat #{{rank}} untuk {{what}} selama {{window}} terakhir"
+    "badgeTitleWindow": "Peringkat #{{rank}} untuk {{what}} selama {{window}} terakhir",
+    "sub": {
+      "count": "Jumlah",
+      "watchTime": "Waktu tonton",
+      "streak": "Streak"
+    },
+    "timeRange": "Rentang waktu"
   },
   "duration": {
     "hoursMinutes": "{{h}}j {{m}}m",

@@ -95,7 +95,13 @@
     },
     "badgeLabel": "{{tier}} {{noun}}",
     "badgeTitleAllTime": "Tüm zamanlarda {{what}} sıralamasında #{{rank}}",
-    "badgeTitleWindow": "Son {{window}} içinde {{what}} sıralamasında #{{rank}}"
+    "badgeTitleWindow": "Son {{window}} içinde {{what}} sıralamasında #{{rank}}",
+    "sub": {
+      "count": "Sayı",
+      "watchTime": "İzlenme süresi",
+      "streak": "Seri"
+    },
+    "timeRange": "Zaman aralığı"
   },
   "duration": {
     "hoursMinutes": "{{h}}sa {{m}}dk",

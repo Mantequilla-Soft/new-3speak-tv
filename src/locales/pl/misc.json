@@ -95,7 +95,13 @@
     },
     "badgeLabel": "{{tier}} {{noun}}",
     "badgeTitleAllTime": "Miejsce #{{rank}} pod względem {{what}} (cały czas)",
-    "badgeTitleWindow": "Miejsce #{{rank}} pod względem {{what}} (okres: {{window}})"
+    "badgeTitleWindow": "Miejsce #{{rank}} pod względem {{what}} (okres: {{window}})",
+    "sub": {
+      "count": "Liczba",
+      "watchTime": "Czas oglądania",
+      "streak": "Seria"
+    },
+    "timeRange": "Okres"
   },
   "duration": {
     "hoursMinutes": "{{h}} godz. {{m}} min",
