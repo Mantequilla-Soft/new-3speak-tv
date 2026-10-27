@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
-import { IoClose } from 'react-icons/io5';
 import { BsLightningChargeFill } from 'react-icons/bs';
 import { formatDuration } from '../../utils/rcCheck';
 import { useTranslation, Trans } from 'react-i18next';
+import ModalHeader from '../ModalHeader/ModalHeader';
 import './RcInsufficientModal.scss';
 
 /**
@@ -43,15 +43,11 @@ export default function RcInsufficientModal({ isOpen, onClose, status, onRecheck
   return createPortal(
     <div className="rc-modal-overlay" onClick={onClose}>
       <div className="rc-modal-content" onClick={(e) => e.stopPropagation()}>
-        <button className="rc-close-btn" onClick={onClose} aria-label={t('common.actions.close')}>
-          <IoClose size={22} />
-        </button>
+        <ModalHeader title={t('upload.rc.title')} onClose={onClose} />
 
         <div className="rc-modal-icon">
           <BsLightningChargeFill />
         </div>
-
-        <h3 className="rc-modal-title">{t('upload.rc.title')}</h3>
 
         <p className="rc-modal-text">
           <Trans i18nKey="upload.rc.explanation" components={{ b: <strong /> }} />

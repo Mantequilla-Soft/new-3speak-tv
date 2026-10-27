@@ -9,6 +9,7 @@ import { usePremiumStatus } from '../../hooks/usePremiumStatus';
 import { HIVE_API_NODES } from '../../utils/config';
 import { HIVE_MAX_BENEFICIARIES } from '../../utils/beneficiaries';
 import { useTranslation, Trans } from 'react-i18next';
+import ModalHeader from '../ModalHeader/ModalHeader';
 
 const client = getHiveClient();
 
@@ -214,12 +215,7 @@ function Beneficiary_modal({ isOpen, close, setBeneficiaries, setBeneficiaryList
         }`}
         onClick={(e) => e.stopPropagation()}
       >
-        <div className="modal-header">
-          <h2>{t('modals.beneficiary.title')}</h2>
-          <button type="button" className="close-btn" onClick={cancel}>
-            &times;
-          </button>
-        </div>
+        <ModalHeader title={t('modals.beneficiary.title')} onClose={cancel} />
 
         <p className="bene-text">
           {t('modals.beneficiary.intro')}

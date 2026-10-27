@@ -48,26 +48,10 @@
   }
 }
 
-.setting-info__head {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-  padding: 14px 16px 8px;
-  font-size: 14px;
-
-  button {
-    border: 0;
-    background: none;
-    color: inherit;
-    font-size: 22px;
-    line-height: 1;
-    padding: 0 2px;
-    cursor: pointer;
-    opacity: 0.7;
-
-    &:hover { opacity: 1; }
-  }
+/* The sheet has no padding of its own, so the shared header brings its own. */
+.setting-info__sheet .setting-info__head {
+  padding: 14px 16px 12px;
+  margin-bottom: 12px;
 }
 
 .setting-info__body {
@@ -172,42 +156,14 @@
     color: #222;
   }
 
-  .modal-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 12px;
-    padding: 14px 16px 8px;
-    border-bottom: 0;
-
-    h2, h3, strong, span:first-child {
-      font-size: 14px;
-      font-weight: 600;
-      margin: 0;
-    }
-
-    .close-btn {
-      border: 0;
-      background: none;
-      color: inherit;
-      font-size: 22px;
-      line-height: 1;
-      padding: 0 2px;
-      cursor: pointer;
-      opacity: 0.7;
-
-      &:hover { opacity: 1; }
-    }
-  }
-
   p, span, li, label, input, button, select, textarea {
     font-size: 12px;
   }
 
-  /* One padding rule for the whole dialog body rather than each block bringing
-     its own, which is what made the beneficiary modal look uneven: the header
-     had padding, the text and the list did not. */
-  > *:not(.modal-header) {
+  /* One padding rule for the whole dialog rather than each block bringing its
+     own, which is what made the beneficiary modal look uneven: the header had
+     padding, the text and the list did not. */
+  > * {
     padding-left: 16px;
     padding-right: 16px;
   }

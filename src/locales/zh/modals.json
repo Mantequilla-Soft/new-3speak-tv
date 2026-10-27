@@ -87,7 +87,8 @@
   },
   "qr": {
     "scan": "在 Hive Keychain 中扫描此二维码：",
-    "click": "点击二维码在 Keychain App 中打开"
+    "click": "点击二维码在 Keychain App 中打开",
+    "title": "使用 Keychain 登录"
   },
   "editVideoHint": {
     "title": "编辑你的任意视频",

@@ -88,26 +88,6 @@
     animation: story-seen-slide-up 0.25s ease forwards;
   }
 
-  &__head {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-
-    h3 {
-      margin: 0;
-      font-size: 1rem;
-    }
-  }
-
-  &__close {
-    border: none;
-    background: none;
-    color: var(--text-secondary);
-    font-size: 1.5rem;
-    line-height: 1;
-    cursor: pointer;
-  }
-
   &__note,
   &__empty {
     margin: 6px 0 10px;

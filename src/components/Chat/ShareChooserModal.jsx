@@ -1,10 +1,11 @@
 import { useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
-import { ArrowLeft, Code2, Copy, FileText, MessageCircle, Share2, X } from 'lucide-react'
+import { ArrowLeft, Code2, Copy, FileText, MessageCircle, Share2 } from 'lucide-react'
 import { toastIn } from '../../utils/toast';
 import { useChat } from '../../context/ChatContext'
 import { useOpenChat } from '../../hooks/useOpenChat'
 import { EMBED_SIZES, buildEmbedHtml } from '../../utils/embedCode'
+import ModalHeader from '../ModalHeader/ModalHeader'
 import './shareChooser.scss'
 import { useTranslation } from 'react-i18next'
 
@@ -103,18 +104,19 @@ export default function ShareChooserModal({ open, url, title, embed, hivePost, o
   return createPortal(
     <div className="share-chooser-overlay" onClick={onClose}>
       <div className="share-chooser" role="dialog" aria-label={t('common.actions.share')} onClick={(e) => e.stopPropagation()}>
-        {view === 'embed' && (
-          <button className="share-chooser-back" onClick={() => setView('menu')} aria-label={t('common.actions.back')}>
-            <ArrowLeft size={18} />
-          </button>
-        )}
-        <button className="share-chooser-close" onClick={onClose} aria-label={t('common.actions.close')}>
-          <X size={18} />
-        </button>
+        <ModalHeader
+          className="share-chooser-header"
+          title={view === 'embed' ? t('chat.share.embedTitle') : t('common.actions.share')}
+          onClose={onClose}
+          leading={view === 'embed' && (
+            <button className="share-chooser-back" onClick={() => setView('menu')} aria-label={t('common.actions.back')}>
+              <ArrowLeft size={18} />
+            </button>
+          )}
+        />
 
         {view === 'embed' ? (
           <>
-            <h3 className="share-chooser-title">{t('chat.share.embedTitle')}</h3>
             <p className="share-embed-hint">{t('chat.share.embedHint')}</p>
             <div className="share-embed-sizes" role="group" aria-label={t('chat.share.embedSize')}>
               {EMBED_SIZES.map((s) => (
@@ -151,7 +153,6 @@ export default function ShareChooserModal({ open, url, title, embed, hivePost, o
           </>
         ) : (
           <>
-            <h3 className="share-chooser-title">{t('common.actions.share')}</h3>
             <button className="share-chooser-opt" onClick={sendInChat}>
               <MessageCircle size={20} />
               <span>

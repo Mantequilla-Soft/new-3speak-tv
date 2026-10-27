@@ -1,13 +1,14 @@
 import { useState } from 'react';
 import { createPortal } from 'react-dom';
 import { useTranslation, Trans } from 'react-i18next';
-import { MdStar, MdStarBorder, MdClose, MdThumbUp, MdThumbDown } from 'react-icons/md';
+import { MdStar, MdStarBorder, MdThumbUp, MdThumbDown } from 'react-icons/md';
 import { useLocation } from 'react-router-dom';
 import axios from 'axios';
 import { toastIn } from '../../utils/toast';
 import { CHECKER_URL } from '../../utils/config';
 import { APP_VERSION } from '../../version';
 import { useReviewModal } from '../../lib/reviewStore';
+import ModalHeader from '../ModalHeader/ModalHeader';
 import './ReviewModal.scss';
 
 // Every toast from this module is headed "Feedback"; the message becomes the
@@ -99,17 +100,10 @@ function ReviewModal({ area = 'global', username = null, permlink = null, onClos
         role="dialog"
         aria-label={t('comments.review.sendFeedback')}
       >
-        <div className="review-header">
-          <div className="review-head-text">
-            <h3>{title}</h3>
-            <p>{t('comments.review.subtitle')}</p>
-          </div>
-          <button className="review-close" onClick={onClose} aria-label={t('common.actions.close')}>
-            <MdClose />
-          </button>
-        </div>
+        <ModalHeader className="review-header" title={title} onClose={onClose} />
 
         <div className="review-body">
+          <p className="review-subtitle">{t('comments.review.subtitle')}</p>
           <div className="review-stars" role="radiogroup" aria-label={t('comments.review.starRating')}>
             {[1, 2, 3, 4, 5].map((n) => (
               <button

@@ -87,7 +87,8 @@
   },
   "qr": {
     "scan": "Scan deze QR in Hive Keychain:",
-    "click": "Klik op de QR om hem in de Keychain-app te openen"
+    "click": "Klik op de QR om hem in de Keychain-app te openen",
+    "title": "Inloggen met Keychain"
   },
   "editVideoHint": {
     "title": "Bewerk al je video's",

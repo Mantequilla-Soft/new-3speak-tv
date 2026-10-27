@@ -26,6 +26,7 @@ import { enforceLockedBeneficiaries } from '../../utils/beneficiaries';
 import { PPL_BENEFICIARY, ENABLE_PPL, CHECKER_URL, CHECKER_API_KEY } from '../../utils/config';
 import './AudioUploadModal.scss';
 import AccountImg from '../HiveAvatar/AccountImg';
+import ModalHeader from '../ModalHeader/ModalHeader';
 import { getHiveUrl } from '../../utils/hiveNode';
 import { readAddToBlog, writeAddToBlog, reblogOp } from '../../utils/addToBlog';
 
@@ -1143,10 +1144,7 @@ function AudioUploadModal({ isOpen, onClose, initialTrack }) {
         {MUSIC_GENRES.map((g) => <option key={g} value={g} />)}
       </datalist>
       <div className="audio-upload-modal audio-upload-modal-wizard" onClick={e => e.stopPropagation()}>
-        <div className="audio-upload-header">
-          <h3><MdCloudUpload /> {t('audio.upload.title')}</h3>
-          <button className="audio-upload-close" onClick={attemptClose} aria-label={t('common.actions.close')}><MdClose size={20} /></button>
-        </div>
+        <ModalHeader className="audio-upload-header" title={t('audio.upload.title')} onClose={attemptClose} />
 
         {(authChecking || rcChecking || needsAuth || rcInsufficient) ? (
           <div className="audio-upload-body">

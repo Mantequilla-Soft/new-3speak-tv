@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { MdUploadFile } from 'react-icons/md';
 import { useAppStore } from '../../lib/store';
 import { usePromptsActive, setPromptActive } from '../../utils/welcomeGate';
 import { fetchBackfillSummary, claimAssetsOnce } from '../../lib/incubation';
 import { useTranslation, Trans } from 'react-i18next';
+import ModalHeader from '../ModalHeader/ModalHeader';
 import '../AdsPrompt/AdsPrompt.scss';
 
 const SNOOZE_KEY = 'backlog_prompt_snoozed_until';
@@ -72,17 +72,10 @@ export default function BacklogPrompt() {
   return (
     <div className="ads-prompt-overlay">
       <div className="ads-prompt" role="dialog" aria-modal="true" aria-labelledby="backlog-title">
-        <header className="ads-prompt-head">
-          <MdUploadFile className="ads-prompt-head-icon" aria-hidden="true" />
-          <div>
-            <h3 className="ads-prompt-title" id="backlog-title">
-              {t('incubation.backlog.title')}
-            </h3>
-            <p className="ads-prompt-lede">
-              <Trans i18nKey="incubation.backlog.lede" count={n} values={{ user }} components={{ b: <strong /> }} />
-            </p>
-          </div>
-        </header>
+        <ModalHeader title={t('incubation.backlog.title')} titleId="backlog-title" onClose={close} />
+        <p className="ads-prompt-lede">
+          <Trans i18nKey="incubation.backlog.lede" count={n} values={{ user }} components={{ b: <strong /> }} />
+        </p>
 
         <p className="ads-prompt-text">
           {t('incubation.backlog.text')}

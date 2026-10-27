@@ -1,8 +1,8 @@
 import { FaDiscord } from 'react-icons/fa';
 import { SiTelegram } from 'react-icons/si';
-import { MdClose } from 'react-icons/md';
 import { useTranslation } from 'react-i18next';
 import { useSupportBlock } from '../../lib/supportBlockStore';
+import ModalHeader from '../ModalHeader/ModalHeader';
 import './SupportModal.scss';
 
 // Discord / Telegram — same links as the profile sidebar's support-wrap.
@@ -31,8 +31,7 @@ export default function SupportModal() {
   return (
     <div className="support-modal-overlay" onClick={hide}>
       <div className="support-modal" onClick={(e) => e.stopPropagation()}>
-        <button className="support-modal-close" onClick={hide} aria-label={t('common.actions.close')}><MdClose size={20} /></button>
-        <h3 className="support-modal-title">{t(copy.titleKey)}</h3>
+        <ModalHeader title={t(copy.titleKey)} onClose={hide} />
         <p className="support-modal-body">{t(copy.bodyKey)}</p>
         <div className="support-modal-actions">
           <a className="support-modal-btn discord" href={DISCORD_URL} target="_blank" rel="noopener noreferrer">

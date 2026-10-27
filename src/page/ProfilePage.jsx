@@ -51,6 +51,7 @@ import ProfileHeader from "../components/ProfileHeader/ProfileHeader";
 import ProfileStats from "../components/ProfileHeader/ProfileStats";
 import ProfileOverview from "../components/Userprofilepage/ProfileOverview";
 import ProfileEmptyState from "../components/Userprofilepage/ProfileEmptyState";
+import ModalHeader from "../components/ModalHeader/ModalHeader";
 import ProfileEditModal from "../components/WelcomePrompt/ProfileEditModal";
 import { FiEdit2 } from "react-icons/fi";
 import { useTranslation } from "react-i18next";
@@ -810,7 +811,7 @@ function ProfilePage() {
       {showCreateModal && (
         <div className="create-playlist-modal-overlay" onClick={() => setShowCreateModal(false)}>
           <div className="create-playlist-modal" onClick={(e) => e.stopPropagation()}>
-            <h3>{t('profile.playlists.modalTitle')}</h3>
+            <ModalHeader title={t('profile.playlists.modalTitle')} onClose={isCreating ? undefined : () => setShowCreateModal(false)} />
             <div className="form-group">
               <label>{t('profile.playlists.nameLabel')}</label>
               <input

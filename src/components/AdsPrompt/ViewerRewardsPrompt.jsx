@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
-import { MdTv } from 'react-icons/md';
 import { useTranslation, Trans } from 'react-i18next';
 import { toastIn } from '../../utils/toast';
 import { useAppStore } from '../../lib/store';
@@ -8,6 +7,7 @@ import { adsEnabledFor, adsBetaUserFor } from '../../utils/config';
 import { fetchAdAccess, fetchViewerAdPrefs, setViewerAdPrefs } from '../../lib/advertiseData';
 import { usePromptsActive, setPromptActive } from '../../utils/welcomeGate';
 import { isAdvertiserAccount } from '../../utils/advertiserAccount';
+import ModalHeader from '../ModalHeader/ModalHeader';
 import './AdsPrompt.scss';
 
 // Every toast from this module is headed "Advertising"; the message becomes the
@@ -106,18 +106,12 @@ export default function ViewerRewardsPrompt() {
   return (
     <div className="ads-prompt-overlay">
       <div className="ads-prompt" role="dialog" aria-modal="true" aria-labelledby="viewer-rewards-title">
-        {/* The viewer half of /advertise, same icon and same promise. The three ad
-            dialogs share this header shape and differ only by icon, so which side of
-            the deal you are being asked about is legible before the copy is read. */}
-        <header className="ads-prompt-head">
-          <MdTv className="ads-prompt-head-icon" aria-hidden="true" />
-          <div>
-            <h3 className="ads-prompt-title" id="viewer-rewards-title">{t('ads.viewerPrompt.title')}</h3>
-            <p className="ads-prompt-lede">
-              <Trans i18nKey="ads.viewerPrompt.lede" components={{ b: <strong /> }} />
-            </p>
-          </div>
-        </header>
+        {/* No X: both ways out record an answer (yes or no), and closing without
+            one would only bring the question back. */}
+        <ModalHeader title={t('ads.viewerPrompt.title')} titleId="viewer-rewards-title" />
+        <p className="ads-prompt-lede">
+          <Trans i18nKey="ads.viewerPrompt.lede" components={{ b: <strong /> }} />
+        </p>
 
         <p className="ads-prompt-text">
           {t('ads.viewerPrompt.text')}

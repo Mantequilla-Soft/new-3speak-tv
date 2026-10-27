@@ -1,7 +1,7 @@
 import { useEffect, useState, useCallback } from 'react';
-import { MdClose, MdAutoAwesome } from 'react-icons/md';
 import { useTranslation } from 'react-i18next';
 import TranslateButton from '../TranslateButton/TranslateButton';
+import ModalHeader from '../ModalHeader/ModalHeader';
 import { translateText, SUPPORTED_LANGUAGES } from '../../utils/translate';
 import './SummaryModal.scss';
 
@@ -63,23 +63,9 @@ export default function SummaryModal({ isOpen, onClose, summary, title }) {
   return (
     <div className="summary-modal-overlay" onClick={onClose}>
       <div className="summary-modal" onClick={(e) => e.stopPropagation()}>
-        <div className="summary-modal-header">
-          <div className="summary-modal-heading">
-            <MdAutoAwesome size={18} />
-            <h3>{t('watch.summary.title')}</h3>
-          </div>
-          <div className="summary-modal-actions">
-            <TranslateButton onTranslate={handleTranslate} isTranslating={isTranslating} />
-            <button
-              type="button"
-              className="summary-modal-close"
-              onClick={onClose}
-              aria-label={t('watch.summary.close')}
-            >
-              <MdClose size={20} />
-            </button>
-          </div>
-        </div>
+        <ModalHeader className="summary-modal-header" title={t('watch.summary.title')} onClose={onClose}>
+          <TranslateButton onTranslate={handleTranslate} isTranslating={isTranslating} />
+        </ModalHeader>
 
         {title && <p className="summary-modal-title">{title}</p>}
 

@@ -34,6 +34,7 @@ import {
 } from '../../lib/translatorApi';
 import { AREA_INFO } from './areaInfo';
 import { toastIn } from '../../utils/toast';
+import ModalHeader from '../../components/ModalHeader/ModalHeader';
 import './Translate.scss';
 
 const toast = toastIn('Settings');
@@ -802,7 +803,7 @@ function AddLanguage({ onClose, onAdded }) {
         onClick={(e) => e.stopPropagation()}
         onSubmit={submit}
       >
-        <h2 id="translate-add-title">{t('translator.add.title')}</h2>
+        <ModalHeader className="translate-modal-header" title={t('translator.add.title')} titleId="translate-add-title" onClose={onClose} />
         <label>
           <span>{t('translator.add.code')}</span>
           <input value={form.code} onChange={set('code')} maxLength={6} autoCapitalize="none" autoCorrect="off" spellCheck={false} autoFocus />

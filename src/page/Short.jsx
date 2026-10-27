@@ -29,7 +29,6 @@ import {
   Music2,
   ArrowUp,
   ArrowDown,
-  X,
   SlidersHorizontal,
   Loader2,
   Play,
@@ -132,6 +131,7 @@ import { notifyMediaPlay, onMediaPlay } from '../utils/mediaCoordinator';
 import HiveAvatar from '../components/HiveAvatar/HiveAvatar';
 import { markStorySeen, useInvalidateStories, useStoryClock } from '../lib/stories';
 import StoryOwnerTools from '../components/StoryOwnerTools/StoryOwnerTools';
+import ModalHeader from '../components/ModalHeader/ModalHeader';
 
 import { soundLabel } from '../utils/soundCredits';
 // Every toast from this module is headed "Shorts"; the message becomes the
@@ -4119,8 +4119,7 @@ const VideoShort = () => {
           onTouchEnd={handleCommentsDragEnd}
         />
 
-        <div className="commentsHeader">
-          <span className="commentsTitle">{t('shorts.comments.title')}</span>
+        <ModalHeader className="commentsHeader" title={t('shorts.comments.title')} onClose={handleToggleComments}>
           <span className="commentsCount">{currentVideo.stats.comments}</span>
           <select
             className="commentsSort"
@@ -4132,12 +4131,7 @@ const VideoShort = () => {
             <option value="oldest">{t('comments.section.sortOldest')}</option>
             <option value="popular">{t('comments.section.sortPopular')}</option>
           </select>
-          <div className="commentsHeaderActions">
-            <button className="headerBtn" onClick={handleToggleComments}>
-              <X size={20} />
-            </button>
-          </div>
-        </div>
+        </ModalHeader>
 
         <div className="commentsList">
           {commentsLoading ? (

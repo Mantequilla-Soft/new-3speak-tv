@@ -1,10 +1,10 @@
 import { useState } from 'react';
 import { createPortal } from 'react-dom';
-import { IoClose } from 'react-icons/io5';
 import { toastIn } from '../../utils/toast';
 import { useAppStore } from '../../lib/store';
 import { REPORT_API_URL, REPORT_API_SECRET } from '../../utils/config';
 import { useTranslation } from 'react-i18next';
+import ModalHeader from '../ModalHeader/ModalHeader';
 import './ReportModal.scss';
 
 // Every toast from this module is headed "Report"; the message becomes the
@@ -144,11 +144,7 @@ export default function ReportModal({ isOpen, onClose, type = 'video', target })
   return createPortal(
     <div className="report-modal-overlay" onClick={handleClose}>
       <div className="report-modal-content" onClick={(e) => e.stopPropagation()}>
-        <button className="report-close-btn" onClick={handleClose}>
-          <IoClose size={22} />
-        </button>
-
-        <h3 className="report-modal-title">{title}</h3>
+        <ModalHeader title={title} onClose={handleClose} />
 
         {target?.author && (
           <p className="report-target">

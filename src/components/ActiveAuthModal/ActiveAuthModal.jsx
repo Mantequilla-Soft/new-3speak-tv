@@ -3,10 +3,10 @@ import { getHiveClient } from '../../utils/hiveNode';
 import { createPortal } from 'react-dom';
 import { Client, PrivateKey } from '@hiveio/dhive';
 import { KeyTypes, Providers } from '@aioha/aioha';
-import { IoClose } from 'react-icons/io5';
 import { useTranslation, Trans } from 'react-i18next';
 import aioha, { setActiveAuthHandler } from '../../hive-api/aioha';
 import { HIVE_API_NODES } from '../../utils/config';
+import ModalHeader from '../ModalHeader/ModalHeader';
 import './ActiveAuthModal.scss';
 
 const client = getHiveClient();
@@ -184,11 +184,7 @@ export default function ActiveAuthModal() {
   return createPortal(
     <div className="aauth-overlay" onClick={busy ? undefined : close}>
       <div className="aauth-content" onClick={(e) => e.stopPropagation()}>
-        <button className="aauth-close" onClick={close} disabled={busy} aria-label={t('common.actions.cancel')}>
-          <IoClose size={22} />
-        </button>
-
-        <h3 className="aauth-title">{t('auth.activeAuth.title')}</h3>
+        <ModalHeader title={t('auth.activeAuth.title')} onClose={busy ? undefined : close} />
         <p className="aauth-desc">
           <Trans i18nKey="auth.activeAuth.desc" components={{ b: <strong /> }} />
         </p>

@@ -52,6 +52,7 @@ import ProfileStats from '../ProfileHeader/ProfileStats';
 import ProfileOverview from './ProfileOverview';
 import ProfileLinksButton from './ProfileLinksButton';
 import ProfileEmptyState from './ProfileEmptyState';
+import ModalHeader from '../ModalHeader/ModalHeader';
 import { useTranslation, Trans } from 'react-i18next';
 
 // Every toast from this module is headed "Profile"; the message becomes the
@@ -800,7 +801,7 @@ const {
       {showCreateModal && (
         <div className="create-playlist-modal-overlay" onClick={() => setShowCreateModal(false)}>
           <div className="create-playlist-modal" onClick={(e) => e.stopPropagation()}>
-            <h3>{t('profile.playlists.modalTitle')}</h3>
+            <ModalHeader title={t('profile.playlists.modalTitle')} onClose={isCreating ? undefined : () => setShowCreateModal(false)} />
             <div className="form-group">
               <label>{t('profile.playlists.nameLabel')}</label>
               <input

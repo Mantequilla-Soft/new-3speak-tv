@@ -9,6 +9,7 @@ import { rememberCreatedBadge, indexNewCommunity } from '../../utils/badgeAwards
 import { useAppStore } from '../../lib/store';
 // import Loader from "../components/loader/Loader";
 import "./CreateCommunity.scss"
+import ModalHeader from "../ModalHeader/ModalHeader";
 import { MdOutlineContentCopy } from "react-icons/md";
 import { FaDownload, FaCheck } from "react-icons/fa";
 import { toastIn } from '../../utils/toast';
@@ -353,6 +354,8 @@ const CreateCommunity = ({ isOpen, close, kind = 'community'}) => {
     toast.success(t('communities.create.keysDownloaded'));
   };
  
+  const createTitle = isBadge ? t('communities.create.badge.title') : t('communities.create.community.title');
+  const headerTitle = step === 2 ? t('communities.create.saveKeysTitle') : step === 3 ? t('communities.create.signTitle') : createTitle;
 
   return (
     <div className={`modal ${isOpen ? "open" : ""}`}>
@@ -363,12 +366,7 @@ const CreateCommunity = ({ isOpen, close, kind = 'community'}) => {
         }`}
         onClick={(e) => e.stopPropagation()}
       >
-        <div className="modal-header">
-          {/* <h2>{`Create Hive ${Noun}`}</h2> */}
-          <button className="close-btn" onClick={close}>
-            &times;
-          </button>
-        </div>
+        <ModalHeader title={headerTitle} onClose={close} />
           <div className="create-community-container">
             {/* {isLoading && <div>Loading</div>} */}
 
@@ -379,7 +377,6 @@ const CreateCommunity = ({ isOpen, close, kind = 'community'}) => {
             {step === 1 && (
               <div className="cc-step">
                 <header className="cc-head">
-                  <h2>{isBadge ? t('communities.create.badge.title') : t('communities.create.community.title')}</h2>
                   <p>
                     {isBadge ? t('communities.create.badge.intro') : t('communities.create.community.intro')}
                   </p>
@@ -472,7 +469,6 @@ const CreateCommunity = ({ isOpen, close, kind = 'community'}) => {
             {step === 2 && (
               <div className="cc-step">
                 <header className="cc-head">
-                  <h2>{t('communities.create.saveKeysTitle')}</h2>
                   <p>
                     {isBadge ? t('communities.create.badge.saveKeysText') : t('communities.create.community.saveKeysText')}
                   </p>
@@ -560,7 +556,6 @@ const CreateCommunity = ({ isOpen, close, kind = 'community'}) => {
             {step === 3 && (
               <div className="cc-step">
                 <header className="cc-head">
-                  <h2>{t('communities.create.signTitle')}</h2>
                   <p>
                     <Trans i18nKey="communities.create.signText" values={{ user }} components={{ strong: <strong /> }} />
                   </p>

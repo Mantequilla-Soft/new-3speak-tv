@@ -1940,46 +1940,19 @@
   }
 
   .commentsHeader {
-    display: flex;
-    align-items: center;
-    padding: 1rem 1.25rem;
-    border-bottom: 1px solid var(--border-color);
-    gap: 0.5rem;
-
-    [data-theme="dark"] & {
-      border-bottom-color: #272727;
-    }
+    flex-shrink: 0;
+    padding: 1rem 1.25rem 0.75rem;
+    margin-bottom: 0;
 
     @media (max-width: 768px) {
       padding: 0.1rem 1rem 0.75rem;
     }
   }
 
-  .commentsTitle {
-    font-size: 1.125rem;
-    font-weight: 500;
-    color: var(--text-primary);
-
-    @media (max-width: 768px) {
-      font-size: 1rem;
-    }
-  }
-
   .commentsCount {
-    font-size: 1.125rem;
+    font-size: 1rem;
     font-weight: 400;
     color: var(--text-secondary);
-    margin-right: auto;
-
-    @media (max-width: 768px) {
-      font-size: 1rem;
-    }
-  }
-
-  .commentsHeaderActions {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
   }
 
   // Newest / Oldest / Popular, between the count and the close button.
@@ -1995,31 +1968,6 @@
     option {
       background: var(--bg-secondary);
       color: var(--text-primary);
-    }
-  }
-
-  .headerBtn {
-    width: 2.5rem;
-    height: 2.5rem;
-    border-radius: 50%;
-    background-color: transparent;
-    border: none;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    transition: background-color 150ms;
-
-    svg {
-      color: var(--text-primary);
-    }
-
-    &:hover {
-      background-color: var(--bg-hover);
-
-      [data-theme="dark"] & {
-        background-color: #272727;
-      }
     }
   }
 

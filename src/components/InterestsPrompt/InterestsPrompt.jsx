@@ -9,6 +9,7 @@ import { fetchMyIncubationProfile, saveIncubationProfile } from '../../lib/incub
 import { usePromptsActive, setPromptActive } from '../../utils/welcomeGate';
 import { refreshHomeFeeds } from '../../utils/feedSeed';
 import TagsV2Picker from '../tooltip/TagsV2Picker';
+import ModalHeader from '../ModalHeader/ModalHeader';
 import './InterestsPrompt.scss';
 
 // Every toast from this module is headed "Settings"; the message becomes the
@@ -139,7 +140,7 @@ export default function InterestsPrompt() {
   return createPortal(
     <div className="interests-prompt-overlay" onClick={close}>
       <div className="interests-prompt" onClick={(e) => e.stopPropagation()}>
-        <h3 className="interests-prompt-title">{t('app.interests.title')}</h3>
+        <ModalHeader title={t('app.interests.title')} onClose={saving ? undefined : close} />
         <p className="interests-prompt-text">
           <Trans i18nKey="app.interests.body" components={{ b: <strong /> }} />
         </p>

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import Success from './Success';
 import { useTranslation } from 'react-i18next';
+import ModalHeader from '../ModalHeader/ModalHeader';
 import './TipModal.scss';
 import { fetchBalances, isAccountValid } from '../../hive-api/api';
 import { useAppStore } from '../../lib/store';
@@ -126,12 +127,13 @@ const TipModal = ({ recipient, permlink, isOpen, onClose, onSendTip }) => {
   return (
     <div className={`tip-modal ${step === 2 ? "add" : ""}`}>
         <div className={`modal-content-trx ${step === 2 ? "add" : ""}`}>
+        <ModalHeader
+          className="tip-modal-header"
+          title={step === 2 ? t('engagement.tip.successTitle') : t('engagement.tip.heading', { recipient })}
+          onClose={handleClose}
+        />
       
         {step === 1 && <div className="tip-modal-in">
-          <div className="header">
-            <h2>{t('engagement.tip.heading', { recipient })}</h2>
-          </div>
-          
           <div className="form">
             <div className="field">
               <label>{t('engagement.tip.amountLabel')}</label>

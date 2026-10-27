@@ -22,48 +22,10 @@
   box-shadow: 0 24px 60px rgba(0, 0, 0, 0.55);
   overflow: hidden;
 
+  // The box has no side padding, so the shared header brings its own.
   .summary-modal-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 14px 16px;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-
-    .summary-modal-heading {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      color: var(--accent-primary, #e53935);
-
-      h3 {
-        margin: 0;
-        font-size: 16px;
-        font-weight: 600;
-        color: var(--text-primary, #fff);
-      }
-    }
-
-    .summary-modal-actions {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-    }
-
-    .summary-modal-close {
-      display: inline-flex;
-      padding: 4px;
-      border: none;
-      border-radius: 6px;
-      background: none;
-      color: var(--text-secondary, #94a3b8);
-      cursor: pointer;
-      transition: background 0.15s ease, color 0.15s ease;
-
-      &:hover {
-        background: rgba(255, 255, 255, 0.1);
-        color: var(--text-primary, #fff);
-      }
-    }
+    padding: 14px 16px 12px;
+    margin-bottom: 0;
   }
 
   .summary-modal-translated-note {

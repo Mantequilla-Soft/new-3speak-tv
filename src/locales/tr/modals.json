@@ -87,7 +87,8 @@
   },
   "qr": {
     "scan": "Bu QR kodunu Hive Keychain'de tara:",
-    "click": "Keychain uygulamasında açmak için QR koda tıkla"
+    "click": "Keychain uygulamasında açmak için QR koda tıkla",
+    "title": "Keychain ile giriş yap"
   },
   "editVideoHint": {
     "title": "Videolarından herhangi birini düzenle",

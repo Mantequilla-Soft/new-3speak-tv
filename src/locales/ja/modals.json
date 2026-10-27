@@ -87,7 +87,8 @@
   },
   "qr": {
     "scan": "Hive Keychain でこの QR をスキャン:",
-    "click": "QR をクリックして Keychain アプリで開く"
+    "click": "QR をクリックして Keychain アプリで開く",
+    "title": "Keychainでログイン"
   },
   "editVideoHint": {
     "title": "自分の動画はいつでも編集できます",

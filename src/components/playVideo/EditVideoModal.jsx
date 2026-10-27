@@ -2,7 +2,6 @@ import { useState, useEffect, useMemo, useRef } from 'react';
 import { getHiveClient } from '../../utils/hiveNode';
 import { createPortal } from 'react-dom';
 import { useTranslation, Trans } from 'react-i18next';
-import { IoClose } from 'react-icons/io5';
 import { MdImage, MdUpload } from 'react-icons/md';
 import { toastIn } from '../../utils/toast';
 import axios from 'axios';
@@ -14,6 +13,7 @@ import { uploadVideoAsset, probeVideoDuration, registerMediaReplacement, fetchRe
 import { setChannelTrailer, fetchChannelTrailer, trailerMatches } from '../../utils/channelTrailer';
 import { useAppStore } from '../../lib/store';
 import PromoteModal from '../Promote/PromoteModal';
+import ModalHeader from '../ModalHeader/ModalHeader';
 import { Rocket, FileText, Image as ImageIcon, ListOrdered, SlidersHorizontal } from 'lucide-react';
 import TimelineEditor, { withTimelineKeys, chapterIssues } from '../timeline/TimelineEditor';
 import { readTimeline, withTimeline, applyTimelineToBody, chaptersFromText } from '../../utils/videoTimeline';
@@ -895,15 +895,8 @@ export default function EditVideoModal({ isOpen, onClose, author, permlink, onSa
         aria-labelledby="evm-title"
         noValidate
       >
-        <header className="evm-header">
-          <div className="evm-header__text">
-            <h3 className="edit-video-title" id="evm-title">{t('watch.edit.title')}</h3>
-            <p className="edit-video-subtitle">@{author}/{permlink}</p>
-          </div>
-          <button type="button" className="edit-video-close-btn" onClick={onClose} aria-label={t('common.actions.close')}>
-            <IoClose size={22} />
-          </button>
-        </header>
+        <ModalHeader className="evm-header" title={t('watch.edit.title')} titleId="evm-title" onClose={onClose} />
+        <p className="edit-video-subtitle">@{author}/{permlink}</p>
 
         <div className="evm-tabs" role="tablist" aria-label={t('watch.edit.tabs.label')} onKeyDown={onTabKey}>
           {tabs.map(({ id, icon: Icon, label, dirty, error }) => (

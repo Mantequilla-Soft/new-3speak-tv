@@ -19,28 +19,6 @@
   border-radius: 16px;
   padding: 22px 22px 18px;
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.35);
-
-  &__close {
-    position: absolute;
-    top: 12px;
-    right: 12px;
-    border: none;
-    background: transparent;
-    color: var(--text-secondary, #888);
-    cursor: pointer;
-    padding: 4px;
-    border-radius: 8px;
-    &:hover { background: var(--bg-primary, #f1f1f3); }
-  }
-
-  &__head {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    color: var(--text-primary, #111);
-    margin-bottom: 12px;
-    h3 { margin: 0; font-size: 18px; color: var(--text-primary, #111); }
-  }
 }
 
 .promote-intro {

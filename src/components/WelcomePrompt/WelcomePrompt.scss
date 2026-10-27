@@ -51,32 +51,6 @@
   to   { transform: none; }
 }
 
-/* Close button, used by the standalone edit dialog */
-.welcome-close {
-  position: absolute;
-  top: 14px;
-  right: 14px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 32px;
-  height: 32px;
-  padding: 0;
-  border: none;
-  border-radius: 8px;
-  background: var(--bg-hover, rgba(255, 255, 255, 0.08));
-  color: var(--text-secondary, #aaa);
-  cursor: pointer;
-  transition: background 0.2s ease, color 0.2s ease;
-
-  &:hover:not(:disabled) {
-    background: var(--bg-elevated, #2d2d2d);
-    color: var(--text-primary, #f1f1f1);
-  }
-
-  &:disabled { opacity: 0.5; cursor: default; }
-}
-
 .welcome-loading {
   margin: 0 0 16px;
   padding: 26px 0;

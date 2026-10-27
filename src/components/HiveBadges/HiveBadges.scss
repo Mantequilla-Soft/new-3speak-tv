@@ -144,27 +144,6 @@
   to { transform: translateY(0); }
 }
 
-.hbadges-close {
-  position: absolute;
-  top: 12px;
-  right: 12px;
-  background: none;
-  border: none;
-  cursor: pointer;
-  color: var(--text-secondary, #888);
-  padding: 4px;
-  display: flex;
-  align-items: center;
-
-  &:hover { color: var(--text-primary, #000); }
-}
-
-.hbadges-title {
-  font-size: 18px;
-  font-weight: 700;
-  margin: 0 0 4px;
-}
-
 .hbadges-sub {
   font-size: 13px;
   color: var(--text-secondary, #666);

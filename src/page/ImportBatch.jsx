@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { FaCheck, FaTimes } from "react-icons/fa";
+import { FaCheck } from "react-icons/fa";
 import CommunityModal from "../components/modal/Community_modal";
 import { createImportBatch, cancelImportBatch } from "../lib/youtubeImport";
 import { addThreespeakToPostingAuth, waitForThreespeakPostingAuth } from "../utils/postingAuthority";
 import { getCurrentProvider, Providers } from "../hive-api/aioha";
 import AccountImg from "../components/HiveAvatar/AccountImg";
+import ModalHeader from "../components/ModalHeader/ModalHeader";
 
 // ▶️ Batch import UI: the one-time form for up to 5 picked videos, and the status
 // of the creator's batches. The server does everything else (import-batch.cjs).
@@ -77,12 +78,7 @@ export function BatchForm({ user, videos, spacingMin, granted, onGranted, onClos
     <div className="yt-batch-modal" role="dialog" aria-modal="true" aria-label={t('ytimport.batch.formTitle', { count: videos.length })}>
       <div className="yt-batch-modal__overlay" onClick={busy || granting ? undefined : onClose} />
       <div className="yt-batch-modal__sheet">
-        <div className="yt-batch-modal__head">
-          <h2>{t('ytimport.batch.formTitle', { count: videos.length })}</h2>
-          <button type="button" className="yt-batch-modal__close" onClick={onClose} disabled={busy || granting} aria-label={t('ytimport.cancel')}>
-            <FaTimes />
-          </button>
-        </div>
+        <ModalHeader title={t('ytimport.batch.formTitle', { count: videos.length })} onClose={busy || granting ? undefined : onClose} />
         <p className="yt-import__note">{t('ytimport.batch.formIntro')}</p>
 
         <ul className="yt-batch-modal__picked">

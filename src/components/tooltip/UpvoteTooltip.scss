@@ -174,7 +174,7 @@
   max-width: 90vw;
   background: #fff;
   border-radius: 16px;
-  padding: 28px 24px 24px;
+  padding: 18px 24px 24px;
   box-shadow: 0 12px 40px rgba(0, 0, 0, 0.25);
   display: flex;
   flex-direction: column;
@@ -193,41 +193,12 @@
     box-shadow: 0 12px 40px rgba(0, 0, 0, 0.6);
   }
 
-  .vote-popup-close {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 32px;
-    height: 32px;
-    padding: 0;
-    border: none;
-    border-radius: 50%;
-    background: rgba(0, 0, 0, 0.08);
-    color: #555;
-    cursor: pointer;
-    transition: background 0.15s;
+  // Shared ModalHeader, kept tight: the popup's flex gap already spaces it.
+  .vote-popup-header {
+    margin-bottom: 0;
+    padding-bottom: 10px;
 
-    &:hover { background: rgba(0, 0, 0, 0.15); }
-    &:disabled { opacity: 0.4; cursor: not-allowed; }
-
-    [data-theme="dark"] & {
-      background: rgba(255, 255, 255, 0.12);
-      color: #ccc;
-      &:hover { background: rgba(255, 255, 255, 0.2); }
-    }
-  }
-
-  .vote-popup-label {
-    margin: 0;
-    font-size: 16px;
-    font-weight: 600;
-    text-align: center;
-    color: #222;
-
-    [data-theme="dark"] & { color: #eee; }
+    .app-modal-header-title { font-size: 16px; }
   }
 
   --range-track: #ddd;
@@ -338,12 +309,11 @@
       // Wide enough for a 4-across tag grid whose tiles fit "Entertainment" /
       // "Cryptocurrency" unbroken, while staying compact vertically.
       width: 480px;
-      padding: 20px 18px 18px;
+      padding: 14px 18px 18px;
       gap: 12px;
       border-radius: 12px;
 
-      .vote-popup-close { width: 26px; height: 26px; top: 8px; right: 8px; }
-      .vote-popup-label { font-size: 14px; }
+      .vote-popup-header .app-modal-header-title { font-size: 15px; }
       .vote-popup-value { font-size: 18px; min-height: 24px; }
       .vote-slider-thumb { width: 23px; height: 23px; }
 

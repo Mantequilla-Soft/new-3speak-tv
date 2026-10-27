@@ -87,7 +87,8 @@
   },
   "qr": {
     "scan": "Changanua QR hii kwenye Hive Keychain:",
-    "click": "Bofya QR ili kufungua kwenye programu ya Keychain"
+    "click": "Bofya QR ili kufungua kwenye programu ya Keychain",
+    "title": "Ingia kwa Keychain"
   },
   "editVideoHint": {
     "title": "Hariri video zako zozote",

@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
 import PropTypes from 'prop-types';
 import { useTranslation, Trans } from 'react-i18next';
-import { X } from 'lucide-react';
 import { toastIn } from '../../utils/toast';
 import { TailChase } from 'ldrs/react';
 import 'ldrs/react/TailChase.css';
@@ -13,6 +12,7 @@ import { tagVideoWithAioha, isLoggedIn } from '../../hive-api/aioha';
 import { recordViewerTag, getViewerTags, getMyViewerTag } from '../../utils/viewerTag';
 import { getVideoTagsV2, getTagLabel, getCategoryOf } from '../../utils/tagsV2';
 import TagsV2Picker from '../tooltip/TagsV2Picker';
+import ModalHeader from '../ModalHeader/ModalHeader';
 // Reuses the vote dialog's popup shell (already a bottom sheet on mobile) and the
 // tag-tile styles, so tagging looks identical wherever it's offered.
 import '../tooltip/UpvoteTooltip.scss';
@@ -126,11 +126,7 @@ function AddTagModal({ isOpen, onClose, author, permlink, title }) {
         onClick={(e) => e.stopPropagation()}
         onMouseDown={(e) => e.stopPropagation()}
       >
-        <button className="vote-popup-close" onClick={onClose} disabled={saving}>
-          <X size={18} />
-        </button>
-
-        <p className="vote-popup-label">{t('modals.addTag.title')}</p>
+        <ModalHeader className="vote-popup-header" title={t('modals.addTag.title')} onClose={saving ? undefined : onClose} />
         {title && <p className="add-tag-title">{title}</p>}
 
         {existing === undefined ? (

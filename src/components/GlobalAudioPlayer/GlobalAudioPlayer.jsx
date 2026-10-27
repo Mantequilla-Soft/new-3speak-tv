@@ -21,6 +21,7 @@ import CommentVoteTooltip from '../tooltip/CommentVoteTooltip';
 import AddToPlaylistModal from '../AddToPlaylistModal/AddToPlaylistModal';
 import BlogContent from '../playVideo/BlogContent';
 import Waveform from './Waveform';
+import ModalHeader from '../ModalHeader/ModalHeader';
 import { fixVideoThumbnail, fallbackImg } from '../../utils/fixThumbnails';
 import { notifyMediaPlay, onMediaPlay } from '../../utils/mediaCoordinator';
 import mantequillaLogo from '../../assets/mantequilla-logo.png';
@@ -601,17 +602,14 @@ function GlobalAudioPlayer() {
       {audioShowQueue && (
         <div className="audio-queue-overlay" onClick={() => audioSetShowQueue(false)}>
           <div className="audio-queue-panel" onClick={e => e.stopPropagation()}>
-            <div className="audio-queue-header">
-              <h3>{t('audio.player.queue')} <span className="audio-queue-count">{audioQueue.length}</span></h3>
-              <div className="audio-queue-header-actions">
-                {audioQueue.length > 0 && (
-                  <button className="audio-queue-clear" onClick={audioClearQueue} title={t('audio.player.clearQueue')}>
-                    <MdDelete size={16} /> {t('audio.player.clearAll')}
-                  </button>
-                )}
-                <button className="audio-queue-close" onClick={() => audioSetShowQueue(false)}><MdClose size={20} /></button>
-              </div>
-            </div>
+            <ModalHeader title={t('audio.player.queue')} onClose={() => audioSetShowQueue(false)}>
+              <span className="audio-queue-count">{audioQueue.length}</span>
+              {audioQueue.length > 0 && (
+                <button className="audio-queue-clear" onClick={audioClearQueue} title={t('audio.player.clearQueue')}>
+                  <MdDelete size={16} /> {t('audio.player.clearAll')}
+                </button>
+              )}
+            </ModalHeader>
             {audioQueue.length === 0 ? (
               <p className="audio-queue-empty">{t('audio.player.queueEmpty')}</p>
             ) : (
@@ -638,7 +636,7 @@ function GlobalAudioPlayer() {
       {shareTarget && shareTarget._id !== audioCurrent?._id && (
         <div className="audio-share-overlay" onClick={() => setShareTarget(null)}>
           <div className="audio-share-popup" onClick={e => e.stopPropagation()}>
-            <AudioShareDropdown item={shareTarget} onClose={() => setShareTarget(null)} />
+            <AudioShareDropdown item={shareTarget} onClose={() => setShareTarget(null)} title={t('common.actions.share')} />
           </div>
         </div>
       )}
@@ -690,7 +688,7 @@ function GlobalAudioPlayer() {
   );
 }
 
-export function AudioShareDropdown({ item, onClose }) {
+export function AudioShareDropdown({ item, onClose, title }) {
   const { t } = useTranslation();
   const ref = useRef(null);
   const author = item?.owner;
@@ -728,6 +726,7 @@ export function AudioShareDropdown({ item, onClose }) {
 
   return (
     <div className="audio-share-dropdown" ref={ref}>
+      {title && <ModalHeader className="audio-share-header" title={title} onClose={onClose} />}
       {hivePermlink && <button className="audio-share-option" onClick={() => copy(`https://peakd.com/@${author}/${hivePermlink}`, t('audio.share.copiedPeakd'))}><MdContentCopy size={14} /><span>{t('audio.share.copyPeakd')}</span></button>}
       {searching && !hivePermlink && <span className="audio-share-loading">{t('audio.share.searchingHive')}</span>}
       <button className="audio-share-option" onClick={() => copy(threeSpeakUrl, t('audio.share.copied3speak'))}><MdContentCopy size={14} /><span>{t('audio.share.copy3speak')}</span></button>

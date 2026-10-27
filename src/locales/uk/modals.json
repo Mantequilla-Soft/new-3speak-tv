@@ -87,7 +87,8 @@
   },
   "qr": {
     "scan": "Відскануйте цей QR у Hive Keychain:",
-    "click": "Натисніть QR, щоб відкрити в застосунку Keychain"
+    "click": "Натисніть QR, щоб відкрити в застосунку Keychain",
+    "title": "Увійти через Keychain"
   },
   "editVideoHint": {
     "title": "Редагуйте будь-яке своє відео",

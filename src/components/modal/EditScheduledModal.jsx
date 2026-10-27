@@ -1,7 +1,7 @@
 import { createPortal } from 'react-dom';
-import { IoClose } from 'react-icons/io5';
 import ScheduledPostEditor from '../studio/ScheduledPostEditor';
 import { useTranslation } from 'react-i18next';
+import ModalHeader from '../ModalHeader/ModalHeader';
 import './EditScheduledModal.scss';
 
 /**
@@ -22,9 +22,7 @@ export default function EditScheduledModal({ isOpen, permlink, onClose, onSaved,
   return createPortal(
     <div className="esm-overlay" onClick={onClose}>
       <div className="esm-content" onClick={(e) => e.stopPropagation()}>
-        <button className="esm-close" onClick={onClose} aria-label={t('common.actions.close')}>
-          <IoClose size={22} />
-        </button>
+        <ModalHeader className="esm-header" title={t('studio.scheduled.title')} onClose={onClose} />
         <ScheduledPostEditor
           permlink={permlink}
           onClose={onClose}

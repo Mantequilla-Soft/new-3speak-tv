@@ -1,7 +1,6 @@
 import { useState, useEffect, useLayoutEffect, useMemo, useRef } from 'react';
 import { createPortal } from 'react-dom';
 import { useTranslation } from 'react-i18next';
-import { IoClose } from 'react-icons/io5';
 import { toastIn } from '../../utils/toast';
 import { useAppStore } from '../../lib/store';
 import { APP_VERSION } from '../../version';
@@ -21,6 +20,7 @@ import {
 import TagsV2Picker from '../tooltip/TagsV2Picker';
 import DataRequestForm from './DataRequestForm';
 import LanguagePicker from '../LanguagePicker/LanguagePicker';
+import ModalHeader from '../ModalHeader/ModalHeader';
 import './SettingsModal.scss';
 
 // Every toast from this module is headed "Settings"; the message becomes the
@@ -775,12 +775,7 @@ export default function SettingsModal({ isOpen, onClose }) {
           maxHeight: `calc(100vh - ${Math.round(anchor.top)}px - 16px)`,
         } : undefined}
       >
-        <div className="settings-modal-header">
-          <h3>{t('common.nav.settings')}</h3>
-          <button className="settings-modal-close" onClick={onClose} aria-label={t('common.actions.close')}>
-            <IoClose size={20} />
-          </button>
-        </div>
+        <ModalHeader title={t('common.nav.settings')} onClose={onClose} />
 
         <div className="settings-tabs" role="tablist">
           {visibleTabs.map(({ id, labelKey }) => (

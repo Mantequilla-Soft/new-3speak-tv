@@ -2,7 +2,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { Copy, Eye, EyeOff, Pencil, Plus, RefreshCw, Trash2, X, ImagePlus, Radio, ChevronDown, Clapperboard, MessageSquare } from 'lucide-react';
+import { Copy, Eye, EyeOff, Pencil, Plus, RefreshCw, Trash2, ImagePlus, Radio, ChevronDown, Clapperboard, MessageSquare } from 'lucide-react';
 import { toastIn } from '../../utils/toast';
 import { getLanguage } from '../../i18n';
 import { getCurrentProvider, Providers } from '../../hive-api/aioha';
@@ -15,6 +15,7 @@ import {
 } from '../../utils/streamTemplates';
 import AnnounceOptions from './AnnounceOptions';
 import MarkdownComposer from '../studio/MarkdownComposer';
+import ModalHeader from '../ModalHeader/ModalHeader';
 import './StreamTemplates.scss';
 
 const toast = toastIn('Live');
@@ -49,7 +50,6 @@ async function copyText(text) {
 
 /** Centred dialog on desktop, bottom sheet on phones. Portalled to <body>. */
 function Sheet({ title, onClose, children, footer, wide = false }) {
-  const { t } = useTranslation();
   useEffect(() => {
     const onKey = (e) => { if (e.key === 'Escape') onClose?.(); };
     window.addEventListener('keydown', onKey);
@@ -58,12 +58,7 @@ function Sheet({ title, onClose, children, footer, wide = false }) {
   return createPortal(
     <div className="st-sheet-overlay" onMouseDown={(e) => { if (e.target === e.currentTarget) onClose?.(); }}>
       <div className={`st-sheet${wide ? ' st-sheet--wide' : ''}`} role="dialog" aria-modal="true" aria-label={title}>
-        <div className="st-sheet__head">
-          <h3>{title}</h3>
-          <button type="button" className="st-icon-btn" onClick={onClose} aria-label={t('common.actions.close')}>
-            <X size={18} />
-          </button>
-        </div>
+        <ModalHeader className="st-sheet__header" title={title} onClose={onClose} />
         <div className="st-sheet__body">{children}</div>
         {footer && <div className="st-sheet__foot">{footer}</div>}
       </div>

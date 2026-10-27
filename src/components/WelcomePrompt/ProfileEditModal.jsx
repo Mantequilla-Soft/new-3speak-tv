@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
-import { X } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { fetchProfile } from '../../utils/profileMeta';
 import { reconcileAvatarOverride } from '../../utils/avatarCache';
 import ProfileFields, { useProfileEditor } from './ProfileFields';
+import ModalHeader from '../ModalHeader/ModalHeader';
 import './WelcomePrompt.scss';
 
 /**
@@ -74,18 +74,9 @@ export default function ProfileEditModal({
       onClick={() => { if (!saving && onClose) onClose(); }}
     >
       <div className="welcome-modal" onClick={(e) => e.stopPropagation()}>
-        <button
-          type="button"
-          className="welcome-close"
-          onClick={() => onClose && onClose()}
-          disabled={saving}
-          aria-label={t('common.actions.close')}
-        >
-          <X size={18} />
-        </button>
+        <ModalHeader title={t('app.profileEdit.title')} onClose={saving || !onClose ? undefined : onClose} />
 
         <div className="welcome-head">
-          <h2>{t('app.profileEdit.title')}</h2>
           <p>
             {t('app.profileEdit.subtitle')}
           </p>

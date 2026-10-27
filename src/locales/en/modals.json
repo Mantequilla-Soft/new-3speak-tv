@@ -87,7 +87,8 @@
   },
   "qr": {
     "scan": "Scan this QR in Hive Keychain:",
-    "click": "Click QR to open in Keychain app"
+    "click": "Click QR to open in Keychain app",
+    "title": "Log in with Keychain"
   },
   "editVideoHint": {
     "title": "Edit any of your videos",

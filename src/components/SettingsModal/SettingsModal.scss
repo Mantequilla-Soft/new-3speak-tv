@@ -85,27 +85,6 @@
   to { transform: translateY(0); }
 }
 
-.settings-modal-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 6px;
-
-  h3 { margin: 0; font-size: 18px; }
-}
-
-.settings-modal-close {
-  background: none;
-  border: none;
-  color: var(--text-secondary, #aaa);
-  cursor: pointer;
-  display: flex;
-  padding: 4px;
-  border-radius: 6px;
-
-  &:hover { color: var(--text-primary, #fff); background: var(--bg-hover, rgba(255, 255, 255, 0.06)); }
-}
-
 .settings-section {
   margin-top: 16px;
 }

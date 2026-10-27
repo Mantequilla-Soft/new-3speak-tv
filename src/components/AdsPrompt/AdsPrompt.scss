@@ -68,6 +68,10 @@
   strong { color: var(--accent-primary, #e0594b); font-weight: 600; }
 }
 
+// Under the shared ModalHeader, as the first line of the body (the reconnect
+// dialog still carries its lede inside .ads-prompt-head).
+.ads-prompt > .ads-prompt-lede { margin-bottom: 16px; }
+
 .ads-prompt-step {
   display: block;
   margin-bottom: 8px;
@@ -386,6 +390,7 @@
   .ads-prompt-head-icon { font-size: 32px; }
 
   .ads-prompt-text { margin-bottom: 13px; }
+  .ads-prompt > .ads-prompt-lede { margin-bottom: 13px; }
 
   .ads-prompt-actions {
     gap: 8px;

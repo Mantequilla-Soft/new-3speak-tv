@@ -87,7 +87,8 @@
   },
   "qr": {
     "scan": "Quét mã QR này bằng Hive Keychain:",
-    "click": "Nhấn vào mã QR để mở trong ứng dụng Keychain"
+    "click": "Nhấn vào mã QR để mở trong ứng dụng Keychain",
+    "title": "Đăng nhập bằng Keychain"
   },
   "editVideoHint": {
     "title": "Chỉnh sửa bất kỳ video nào của bạn",

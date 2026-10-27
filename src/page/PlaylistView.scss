@@ -739,13 +739,6 @@
   max-width: 400px;
   box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
 
-  h3 {
-    margin: 0 0 12px;
-    font-size: 20px;
-    font-weight: 600;
-    color: var(--text-primary, #fff);
-  }
-
   p {
     margin: 0 0 24px;
     font-size: 14px;
@@ -868,13 +861,6 @@
     align-items: center;
     justify-content: center;
     cursor: pointer;
-  }
-
-  h3 {
-    margin: 0 0 20px;
-    font-size: 20px;
-    font-weight: 600;
-    color: var(--text-primary, #fff);
   }
 
   .form-group {

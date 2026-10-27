@@ -1,12 +1,12 @@
 import { useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
-import { IoClose } from 'react-icons/io5';
 import { FaCheck } from 'react-icons/fa';
 import { toastIn } from '../../utils/toast';
 import { awardBadgeWithAioha } from '../../hive-api/aioha';
 import { badgeHolders } from '../../utils/badgeAwards';
 import { cachedProfileImage } from '../../utils/avatarCache';
 import { useTranslation, Trans } from 'react-i18next';
+import ModalHeader from '../ModalHeader/ModalHeader';
 import './AwardBadgeModal.scss';
 
 // Every toast from this module is headed "Badges"; the message becomes the line
@@ -71,15 +71,8 @@ export default function AwardBadgeModal({ username, badges, onClose, onAwarded }
         aria-label={t('badges.award.dialogLabel', { username })}
         onClick={(e) => e.stopPropagation()}
       >
-        <header className="award-head">
-          <div>
-            <h3>{t('badges.award.title')}</h3>
-            <p>{t('badges.award.toUser', { username })}</p>
-          </div>
-          <button type="button" className="award-close" onClick={onClose} aria-label={t('common.actions.close')}>
-            <IoClose size={20} />
-          </button>
-        </header>
+        <ModalHeader className="award-header" title={t('badges.award.title')} onClose={onClose} />
+        <p className="award-sub">{t('badges.award.toUser', { username })}</p>
 
         <ul className="award-list">
           {badges.map((badge) => {

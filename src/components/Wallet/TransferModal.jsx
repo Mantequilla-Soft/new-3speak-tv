@@ -5,6 +5,7 @@ import {isAccountValid} from "../../hive-api/api"
 import { transferWithAioha, isLoggedIn } from "../../hive-api/aioha"
 import { toastIn } from '../../utils/toast';
 import { useTranslation } from 'react-i18next';
+import ModalHeader from '../ModalHeader/ModalHeader';
 
 // Every toast from this module is headed "Wallet"; the message becomes the
 // line under it. See utils/toast.js.
@@ -69,7 +70,7 @@ function TransferModal({showModal, selectedCoin, balances, fetchBalances}) {
   return (
     <div className="transfer-modal">
             <div className="modal-content-tran">
-              <h3>{t('wallet.transferModal.title', { coin: selectedCoin.name })}</h3>
+              <ModalHeader title={t('wallet.transferModal.title', { coin: selectedCoin.name })} onClose={() => showModal(false)} />
               <div className="input-group">
                 <label>{t('wallet.transferModal.amountLabel', { coin: selectedCoin.name })}</label> <span className='error'>{balErr}</span>
                 <input

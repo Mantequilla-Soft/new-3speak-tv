@@ -1,9 +1,9 @@
 import { useState } from 'react';
 import { createPortal } from 'react-dom';
-import { MdVideocam } from 'react-icons/md';
 import { useTranslation, Trans } from 'react-i18next';
 import { toastIn } from '../../utils/toast';
 import { saveCreatorAdSettings } from '../../utils/adSettings';
+import ModalHeader from '../ModalHeader/ModalHeader';
 
 // Every toast from this module is headed "Advertising"; the message becomes the
 // line under it. See utils/toast.js.
@@ -76,20 +76,14 @@ export default function AdSettingsDialog({ user, split, initialAdsEnabled, initi
     // out is the explicit "Not now" button.
     <div className="ads-prompt-overlay">
       <div className="ads-prompt">
-        {/* The creator half of /advertise, same icon and same promise, so the page
-            and this dialog are recognisably one feature. It stays put across both
-            steps: the step titles below say where you are, the header says what the
-            whole thing is, and losing that on step two is how "Your choice" ends up
-            floating with nothing naming the subject. */}
-        <header className="ads-prompt-head">
-          <MdVideocam className="ads-prompt-head-icon" aria-hidden="true" />
-          <div>
-            <h3 className="ads-prompt-title">{t('ads.prompt.title')}</h3>
-            <p className="ads-prompt-lede">
-              {t('ads.prompt.lede')}
-            </p>
-          </div>
-        </header>
+        {/* The header and lede stay put across both steps: the step titles below
+            say where you are, the header says what the whole thing is, and losing
+            that on step two is how "Your choice" ends up floating with nothing
+            naming the subject. */}
+        <ModalHeader title={t('ads.prompt.title')} onClose={saving ? undefined : () => onDismiss()} />
+        <p className="ads-prompt-lede">
+          {t('ads.prompt.lede')}
+        </p>
 
         <span className="ads-prompt-step">{t('ads.prompt.stepOf', { step: step + 1, total: 2 })}</span>
 

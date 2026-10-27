@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import { MdVisibility, MdBookmarkAdded } from 'react-icons/md';
 import { useTranslation } from 'react-i18next';
 import HiveAvatar from '../HiveAvatar/HiveAvatar';
+import ModalHeader from '../ModalHeader/ModalHeader';
 import { useStorySeenBy, keepStoryAsShort, useInvalidateStories } from '../../lib/stories';
 import { formatTimeAgo } from '../../i18n';
 import { toastIn } from '../../utils/toast';
@@ -72,10 +73,7 @@ function StoryOwnerTools({ author, hivePermlink, onKept }) {
       {sheetOpen && createPortal(
         <div className="storySeenOverlay" onClick={() => setSheetOpen(false)}>
           <div className="storySeenSheet" role="dialog" aria-label={t('shorts.storyTools.seenTitle')} onClick={stop}>
-            <div className="storySeenSheet__head">
-              <h3>{t('shorts.storyTools.seenTitle')}</h3>
-              <button type="button" className="storySeenSheet__close" onClick={() => setSheetOpen(false)} aria-label={t('common.actions.close')}>×</button>
-            </div>
+            <ModalHeader title={t('shorts.storyTools.seenTitle')} onClose={() => setSheetOpen(false)} />
             <p className="storySeenSheet__note">{t('shorts.storyTools.seenNote')}</p>
             {isLoading ? null : viewers.length === 0 ? (
               <p className="storySeenSheet__empty">{t('shorts.storyTools.seenEmpty')}</p>

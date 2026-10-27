@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
 import './SettingInfo.scss';
 import { useTranslation } from 'react-i18next';
+import ModalHeader from '../ModalHeader/ModalHeader';
 
 /**
  * The (i) beside a setting's short description, holding the long explanation.
@@ -28,7 +29,6 @@ import { useTranslation } from 'react-i18next';
  * locked while open.
  */
 export function SettingSheet({ title, open, onClose, children }) {
-  const { t } = useTranslation();
   useEffect(() => {
     if (!open) return undefined;
     const onKey = (e) => { if (e.key === 'Escape') onClose(); };
@@ -52,10 +52,7 @@ export function SettingSheet({ title, open, onClose, children }) {
         aria-label={title}
         onClick={(e) => e.stopPropagation()}
       >
-        <div className="setting-info__head">
-          <strong>{title}</strong>
-          <button type="button" aria-label={t('common.actions.close')} onClick={(e) => { e.stopPropagation(); onClose(); }}>×</button>
-        </div>
+        <ModalHeader className="setting-info__head" title={title} onClose={(e) => { e.stopPropagation(); onClose(); }} />
         <div className="setting-info__body">{children}</div>
       </div>
     </div>,
@@ -107,10 +104,7 @@ export default function SettingInfo({ title, children }) {
             aria-label={title}
             onClick={(e) => e.stopPropagation()}
           >
-            <div className="setting-info__head">
-              <strong>{title}</strong>
-              <button type="button" aria-label={t('common.actions.close')} onClick={(e) => { e.stopPropagation(); setOpen(false); }}>×</button>
-            </div>
+            <ModalHeader className="setting-info__head" title={title} onClose={(e) => { e.stopPropagation(); setOpen(false); }} />
             <div className="setting-info__body">{children}</div>
           </div>
         </div>,

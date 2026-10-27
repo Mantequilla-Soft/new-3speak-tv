@@ -253,7 +253,7 @@ const handleSwitchAccount = (user) => {
         </div>
       </div>
     </div>
-        { qrCode && showModal && <QrCode_modal qrCode={qrCode} openKeychainApp={openKeychainApp} />}
+        { qrCode && showModal && <QrCode_modal qrCode={qrCode} openKeychainApp={openKeychainApp} onClose={() => setShowModal(false)} />}
     
     </>
   );

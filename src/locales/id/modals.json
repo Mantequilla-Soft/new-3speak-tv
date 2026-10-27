@@ -87,7 +87,8 @@
   },
   "qr": {
     "scan": "Pindai QR ini di Hive Keychain:",
-    "click": "Klik QR untuk membuka di aplikasi Keychain"
+    "click": "Klik QR untuk membuka di aplikasi Keychain",
+    "title": "Masuk dengan Keychain"
   },
   "editVideoHint": {
     "title": "Edit videomu kapan saja",

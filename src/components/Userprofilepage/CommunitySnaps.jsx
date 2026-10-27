@@ -25,6 +25,7 @@ import UpvoteCount from '../UpvoteCount/UpvoteCount';
 import AuthorBadge from '../AuthorBadge/AuthorBadge';
 import CommentVoteTooltip from '../tooltip/CommentVoteTooltip';
 import BarLoader from '../Loader/BarLoader';
+import ModalHeader from '../ModalHeader/ModalHeader';
 import { useTranslation } from 'react-i18next';
 import './CommunitySnaps.scss';
 
@@ -490,10 +491,7 @@ function SnapCommentsModal({ owner, permlink, onClose, onCommented }) {
   return createPortal(
     <div className="snap-comments-modal-backdrop" onClick={onClose}>
       <div className="community-snaps snap-comments-modal" onClick={(e) => e.stopPropagation()}>
-        <div className="snap-comments-modal-head">
-          <span>{t('profile.snaps.commentsOn', { user: owner })}</span>
-          <button type="button" onClick={onClose} aria-label={t('common.actions.close')}><MdClose /></button>
-        </div>
+        <ModalHeader className="snap-comments-modal-head" title={t('profile.snaps.commentsOn', { user: owner })} onClose={onClose} />
         <div className="snap-card snap-comments-modal-scroll">
           <SnapComments owner={owner} permlink={permlink} onCommented={onCommented} />
         </div>

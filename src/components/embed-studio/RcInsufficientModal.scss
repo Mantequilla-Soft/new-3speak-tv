@@ -18,7 +18,7 @@
   background: var(--card-bg, #fff);
   color: var(--text-primary, #000);
   border-radius: 14px;
-  padding: 28px 24px 24px;
+  padding: 20px 24px 24px;
   width: 440px;
   max-width: 95vw;
   position: relative;
@@ -34,19 +34,8 @@
   }
 }
 
-.rc-close-btn {
-  position: absolute;
-  top: 12px;
-  right: 12px;
-  background: none;
-  border: none;
-  cursor: pointer;
-  color: var(--text-secondary, #888);
-  padding: 4px;
-  display: flex;
-  align-items: center;
-
-  &:hover { color: var(--text-primary, #000); }
+.rc-modal-content .app-modal-header {
+  text-align: left;
 }
 
 .rc-modal-icon {
@@ -60,12 +49,6 @@
   background: rgba(227, 19, 55, 0.12);
   color: rgb(227, 19, 55);
   font-size: 26px;
-}
-
-.rc-modal-title {
-  font-size: 19px;
-  font-weight: 700;
-  margin: 0 0 10px;
 }
 
 .rc-modal-text {

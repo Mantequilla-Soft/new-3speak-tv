@@ -31,41 +31,32 @@
     min-height: 100%;
   }
 
+  // The box has no padding of its own: the header brings its own.
+  .esm-header {
+    padding: 18px 22px 12px;
+    margin-bottom: 0;
+
+    @include mix.respond(phone) {
+      padding: 14px 14px 12px;
+    }
+  }
+
   // The editor reuses the studio's full-page container styling; inside the modal
   // it should fill the popup instead of behaving like a standalone page.
   .studio-main-container {
     width: 100%;
     max-width: 100%;
     margin: 0;
-    padding: 22px 22px 18px;
+    padding: 16px 22px 18px;
     box-sizing: border-box;
 
     @include mix.respond(phone) {
-      padding: 56px 14px 18px;
+      padding: 16px 14px 18px;
     }
   }
 
+  // The editor's own page heading repeats the modal title here.
   .studio-page-header h1 {
-    font-size: 20px;
-    margin: 0 0 4px;
+    display: none;
   }
-}
-
-.esm-close {
-  position: absolute;
-  top: 12px;
-  right: 12px;
-  z-index: 2;
-  background: var(--bg-tertiary, #ececec);
-  border: none;
-  border-radius: 50%;
-  width: 34px;
-  height: 34px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  color: var(--text-primary, #000);
-
-  &:hover { background: var(--bg-hover, #ddd); }
 }

@@ -87,7 +87,8 @@
   },
   "qr": {
     "scan": "Hive Keychain-এ এই QR স্ক্যান করুন:",
-    "click": "Keychain অ্যাপে খুলতে QR-এ ক্লিক করুন"
+    "click": "Keychain অ্যাপে খুলতে QR-এ ক্লিক করুন",
+    "title": "Keychain দিয়ে লগ ইন করুন"
   },
   "editVideoHint": {
     "title": "আপনার যেকোনো ভিডিও এডিট করুন",

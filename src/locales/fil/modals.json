@@ -87,7 +87,8 @@
   },
   "qr": {
     "scan": "I-scan ang QR na ito sa Hive Keychain:",
-    "click": "I-click ang QR para buksan sa Keychain app"
+    "click": "I-click ang QR para buksan sa Keychain app",
+    "title": "Mag-log in gamit ang Keychain"
   },
   "editVideoHint": {
     "title": "I-edit ang alinman sa mga video mo",

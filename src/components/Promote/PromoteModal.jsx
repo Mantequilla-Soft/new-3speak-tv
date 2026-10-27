@@ -3,12 +3,13 @@ import { createPortal } from 'react-dom';
 import axios from 'axios';
 import { useTranslation, Trans } from 'react-i18next';
 import { toastIn } from '../../utils/toast';
-import { Rocket, X, Megaphone, ChevronRight } from 'lucide-react';
+import { Rocket, Megaphone, ChevronRight } from 'lucide-react';
 import { CHECKER_URL, CHECKER_API_KEY, selfPromoEnabledFor } from '../../utils/config';
 import { transferWithAioha, isLoggedIn } from '../../hive-api/aioha';
 import { fetchBalances } from '../../hive-api/api';
 import { useAppStore } from '../../lib/store';
 import AdWizardModal from './AdWizardModal';
+import ModalHeader from '../ModalHeader/ModalHeader';
 import './PromoteModal.scss';
 
 // Every toast from this module is headed "Promotion"; the message becomes the
@@ -129,11 +130,7 @@ export default function PromoteModal({ open, onClose, author, permlink, promoted
   return createPortal(
     <div className="promote-overlay" onClick={onClose}>
       <div className="promote-modal" onClick={e => e.stopPropagation()}>
-        <button className="promote-modal__close" onClick={onClose} aria-label={t('common.actions.close')}><X size={18} /></button>
-        <div className="promote-modal__head">
-          <Rocket size={20} />
-          <h3>{t('ads.promote.title')}</h3>
-        </div>
+        <ModalHeader title={t('ads.promote.title')} onClose={onClose} />
 
         {mode === null ? (
           <div className="promote-choose">
