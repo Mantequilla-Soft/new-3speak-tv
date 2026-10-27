@@ -7,6 +7,21 @@
 // 1.0.0 — that way they see all of these when develop is pushed to production.
 export const CHANGELOG = [
   {
+    version: '1.80.35',
+    date: '2026-10-27',
+    summary: 'Approving actions with your active key now works smoothly after switching between Butter Auth and your wallet.',
+  },
+  {
+    version: '1.80.34',
+    date: '2026-10-27',
+    summary: 'Tips now add a link to the video or audio you tipped, so creators see what it was for.',
+  },
+  {
+    version: '1.80.33',
+    date: '2026-10-27',
+    summary: 'New Customize profile button on your profile: drag, resize and hide sections, and give phones their own layout.',
+  },
+  {
     version: '1.80.32',
     date: '2026-10-27',
     summary: 'Wider Share menu with a short description for each option, plus a new Playlist shortcut.',
