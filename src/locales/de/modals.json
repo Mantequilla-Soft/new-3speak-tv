@@ -70,7 +70,8 @@
       "invalidAccount": "Ungültiger Benutzername oder ungültige Community-ID.",
       "cannotIncrease": "Kann nicht über die verbleibenden {{percent}} % erhöht werden",
       "pendingRow": "@{{account}} wurde noch nicht hinzugefügt – klicke auf +, um es hinzuzufügen, oder leere das Feld.",
-      "atLeastOne": "Der Belohnungsanteil muss mindestens 1 % betragen"
+      "atLeastOne": "Der Belohnungsanteil muss mindestens 1 % betragen",
+      "maxCount": "Hive erlaubt höchstens {{max}} Begünstigte pro Beitrag."
     },
     "title": "Begünstigte",
     "intro": "Füge einen Nutzer hinzu, der automatisch einen Teil der Belohnungen für diesen Post erhalten soll.",
@@ -86,7 +87,8 @@
   },
   "qr": {
     "scan": "Scanne diesen QR-Code in Hive Keychain:",
-    "click": "Klicke auf den QR-Code, um ihn in der Keychain-App zu öffnen"
+    "click": "Klicke auf den QR-Code, um ihn in der Keychain-App zu öffnen",
+    "title": "Mit Keychain anmelden"
   },
   "editVideoHint": {
     "title": "Bearbeite jedes deiner Videos",
@@ -115,7 +117,12 @@
     "preparing": "Video wird für den Upload vorbereitet...",
     "renderUnavailable": "Der Render-Dienst ist noch nicht verfügbar. Die Timeline-Daten wurden in der Konsole ausgegeben.",
     "backToEditor": "Zurück zum Editor",
-    "postError": "Das Video konnte nicht für den Upload vorbereitet werden. Bitte lade es stattdessen herunter."
+    "postError": "Das Video konnte nicht für den Upload vorbereitet werden. Bitte lade es stattdessen herunter.",
+    "postAs": "Posten als",
+    "postAsStory": "Story",
+    "postAsStoryHint": "24 Stunden, ganz oben im Shorts-Feed",
+    "postAsShort": "Short",
+    "postAsShortHint": "Bleibt auf deinem Kanal"
   },
   "profile": {
     "mustLogin": "Du musst dich zuerst anmelden",

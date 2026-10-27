@@ -16,6 +16,7 @@
     "availableBalance": "Verfügbares Guthaben: {{currency}}",
     "memoLabel": "Memo (optional):",
     "memoPlaceholder": "z. B. Danke für diesen tollen Inhalt!",
+    "memoLinkNote": "Dieser Link wird dem Memo angehängt: {{link}}",
     "send": "Trinkgeld senden"
   },
   "cardMenu": {

@@ -31,36 +31,13 @@
   }
 }
 
-.award-head {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 12px;
+// The column's own gap already spaces the header from the body.
+.award-modal .award-header { margin-bottom: 0; }
 
-  h3 {
-    margin: 0;
-    font-size: 16px;
-    color: var(--text-primary);
-  }
-
-  p {
-    margin: 2px 0 0;
-    font-size: 13px;
-    color: var(--text-muted);
-  }
-}
-
-.award-close {
-  flex-shrink: 0;
-  display: inline-flex;
-  padding: 4px;
-  border: 0;
-  border-radius: 8px;
-  background: none;
+.award-sub {
+  margin: -4px 0 0;
+  font-size: 13px;
   color: var(--text-muted);
-  cursor: pointer;
-
-  &:hover { color: var(--text-primary); }
 }
 
 .award-list {

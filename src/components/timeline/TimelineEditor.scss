@@ -602,12 +602,8 @@ body.tle-expanded-open {
   }
 }
 
-.tle-sheet__head {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  h4 { margin: 0; font-size: 17px; font-weight: 700; }
-}
+// The sheet's flex gap already spaces the shared header from the tabs.
+.tle-sheet .tle-sheet__head { margin-bottom: 0; }
 
 .tle-tabs {
   display: flex;

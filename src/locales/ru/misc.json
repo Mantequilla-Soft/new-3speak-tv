@@ -25,7 +25,9 @@
       "boosts_received": "Полученные бусты",
       "boost_amount_received": "Полученная сумма",
       "boosts_given": "Отправленные бусты",
-      "boost_amount_given": "Отправленная сумма"
+      "boost_amount_given": "Отправленная сумма",
+      "story_uploads": "Истории",
+      "story_streak": "Серия историй"
     },
     "metricsInSentence": {
       "video_uploads": "видео",
@@ -40,7 +42,9 @@
       "boosts_received": "полученные бусты",
       "boost_amount_received": "полученная сумма",
       "boosts_given": "отправленные бусты",
-      "boost_amount_given": "отправленная сумма"
+      "boost_amount_given": "отправленная сумма",
+      "story_uploads": "истории",
+      "story_streak": "серия историй"
     },
     "blurbs": {
       "video_uploads": "Загружено видео",
@@ -55,7 +59,9 @@
       "boosts_received": "Бусты, отправленные в их эфиры",
       "boost_amount_received": "Общая сумма полученных бустов",
       "boosts_given": "Бусты, которые они отправили другим стримерам",
-      "boost_amount_given": "Общая сумма отправленных ими бустов"
+      "boost_amount_given": "Общая сумма отправленных ими бустов",
+      "story_uploads": "Опубликованные истории",
+      "story_streak": "Больше всего дней подряд с историей"
     },
     "blurbsInSentence": {
       "video_uploads": "загружено видео",
@@ -70,22 +76,32 @@
       "boosts_received": "бусты, отправленные в их эфиры",
       "boost_amount_received": "общая сумма полученных бустов",
       "boosts_given": "бусты, которые они отправили другим стримерам",
-      "boost_amount_given": "общая сумма отправленных ими бустов"
+      "boost_amount_given": "общая сумма отправленных ими бустов",
+      "story_uploads": "опубликованные истории",
+      "story_streak": "больше всего дней подряд с историей"
     },
     "groups": {
       "video": "Видео",
-      "streaming": "Эфиры"
+      "streaming": "Эфиры",
+      "stories": "Истории"
     },
     "badgeNouns": {
       "video_uploads": "Видео",
       "short_uploads": "Shorts",
       "video_watch_secs": "Просмотры",
       "short_watch_secs": "Просмотры Shorts",
-      "tags_given": "Теггер"
+      "tags_given": "Теггер",
+      "story_streak": "Серия"
     },
     "badgeLabel": "{{tier}} {{noun}}",
     "badgeTitleAllTime": "Место №{{rank}} по показателю «{{what}}» за всё время",
-    "badgeTitleWindow": "Место №{{rank}} по показателю «{{what}}» за {{window}}"
+    "badgeTitleWindow": "Место №{{rank}} по показателю «{{what}}» за {{window}}",
+    "sub": {
+      "count": "Количество",
+      "watchTime": "Время просмотра",
+      "streak": "Серия"
+    },
+    "timeRange": "Период"
   },
   "duration": {
     "hoursMinutes": "{{h}} ч {{m}} мин",
@@ -159,15 +175,28 @@
   "uploadLinks": {
     "regularVideo": "Обычное видео",
     "verticalShort": "Вертикальный Shorts",
+    "story": "История (24 ч)",
     "musicAudio": "Музыка / аудио",
     "groupChat": "Групповой чат",
     "communitySnap": "Snap в сообществе",
     "shortsEditor": "Редактор Shorts",
     "goLiveNow": "Выйти в эфир!",
+    "playlist": "Плейлист",
     "headings": {
       "upload": "Загрузка",
       "live": "Эфир",
       "others": "Другое"
+    },
+    "subtitles": {
+      "regularVideo": "Обычное видео для вашего канала",
+      "verticalShort": "Вертикальный клип для ленты Shorts",
+      "shortsEditor": "Запишите и смонтируйте Shorts в браузере",
+      "story": "Короткий клип, который виден 24 часа",
+      "musicAudio": "Песни, подкасты и другое аудио",
+      "groupChat": "Живая комната, которую вы ведёте с гостями",
+      "goLiveNow": "Прямой эфир для ваших подписчиков",
+      "communitySnap": "Быстрый пост во вкладке сообщества",
+      "playlist": "Соберите видео в список, которым можно поделиться"
     }
   },
   "chat": {

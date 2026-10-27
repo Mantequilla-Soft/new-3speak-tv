@@ -53,6 +53,7 @@
   },
   "page": {
     "shareShort": "Short teilen",
+    "shareStory": "Story teilen",
     "shareVideo": "Video teilen"
   },
   "progress": {
@@ -131,7 +132,9 @@
     "browseFiles": "Dateien durchsuchen",
     "proceed": "Weiter zu den Thumbnails",
     "replace": "Video ersetzen",
-    "editVideo": "Dieses Video bearbeiten"
+    "editVideo": "Dieses Video bearbeiten",
+    "asStory": "Als 24-Stunden-Story posten",
+    "asStoryHint": "Sie steht ganz oben im Shorts-Feed und deine Follower werden benachrichtigt. Solange sie läuft, kannst du sie noch als Short behalten."
   },
   "details": {
     "guests": {
@@ -152,6 +155,7 @@
       "tooManyTags": "Du kannst bis zu {{max}} Tags hinzufügen – der Community-Tag wird automatisch ergänzt."
     },
     "title": "Titel",
+    "titleShort": "Titel (optional)",
     "description": "Beschreibung",
     "descriptionPlaceholderShort": "Beschreibe deinen Short...",
     "descriptionPlaceholder": "Schreib hier deine Videobeschreibung... Markdown wird unterstützt!",
@@ -249,11 +253,13 @@
     "watchAdToPublish": "Werbung ansehen zum Veröffentlichen",
     "watchSponsorFirst": "Sieh dir zuerst die Sponsor-Botschaft an",
     "postShort": "Short posten",
+    "postStory": "Story posten",
     "postVideo": "Video posten",
     "backToTimeline": "Zurück zur Zeitleiste"
   },
   "publishing": {
     "titleShort": "Short wird veröffentlicht",
+    "titleStory": "Story wird veröffentlicht",
     "titleVideo": "Video wird veröffentlicht",
     "subtitle": "Bitte warte, während wir deine Inhalte verarbeiten...",
     "starting": "Wird gestartet...",
@@ -277,6 +283,7 @@
     "adsOffFailedToast": "Veröffentlicht, aber die Werbung für dieses Video konnte noch nicht ausgeschaltet werden.",
     "rollsOffFailedToast": "Veröffentlicht, aber die Video-Rolls konnten für dieses Video noch nicht ausgeschaltet werden.",
     "trailerFailedToast": "Veröffentlicht, aber konnte nicht als dein Kanaltrailer festgelegt werden.",
+    "storyRegisterFailedToast": "Veröffentlicht, konnte aber noch nicht als 24-Stunden-Story gesetzt werden.",
     "completed": "Abgeschlossen",
     "publishedToast": "Video erfolgreich veröffentlicht!",
     "log": {
@@ -307,12 +314,15 @@
       "rollsOffFailed": "Die Einstellung ohne Rolls konnte für dieses Video nicht gespeichert werden",
       "trailerSet": "Als Kanaltrailer festgelegt",
       "trailerFailed": "Veröffentlicht, aber konnte nicht als dein Kanaltrailer festgelegt werden",
+      "storyRegistered": "Story ist 24 Stunden lang sichtbar",
+      "storyRegisterFailed": "Veröffentlicht, konnte aber nicht als 24-Stunden-Story gesetzt werden",
       "published": "Video erfolgreich veröffentlicht!"
     }
   },
   "done": {
     "title": "Upload abgeschlossen!",
     "shortPublished": "Dein Short wurde auf 3Speak veröffentlicht. Es dauert etwa 5 Minuten, bis er auf deinem Profil erscheint.",
+    "storyPublished": "Deine Story ist die nächsten 24 Stunden auf 3Speak zu sehen.",
     "videoPublished": "Dein Video wurde veröffentlicht!<br/>Es wird jetzt im Hintergrund encodiert, was ein paar Minuten dauern kann.",
     "promote": "Dieses Video bewerben",
     "goToProfile": "Zu meinem Profil →",
@@ -480,5 +490,17 @@
       "noAccount": "Es gibt kein Konto mit diesem Namen.",
       "addButton": "Link hinzufügen"
     }
+  },
+  "story": {
+    "captionPlaceholder": "Bildunterschrift hinzufügen (optional)",
+    "moreOptions": "Weitere Optionen",
+    "reach_one": "Erreicht deinen {{count}} Follower und steht 24 Stunden lang ganz oben im Shorts-Feed.",
+    "reach_other": "Erreicht deine {{count}} Follower und steht 24 Stunden lang ganz oben im Shorts-Feed.",
+    "reachNoCount": "Erreicht deine Follower und steht 24 Stunden lang ganz oben im Shorts-Feed.",
+    "streakOn_one": "Du hast eine Story-Serie von {{count}} Tag.",
+    "streakOn_other": "Du hast eine Story-Serie von {{count}} Tagen.",
+    "streakNext_one": "Damit wird es eine Story-Serie von {{count}} Tag.",
+    "streakNext_other": "Damit wird es eine Story-Serie von {{count}} Tagen.",
+    "streakStart": "Poste jeden Tag eine Story, um eine Serie aufzubauen."
   }
 }

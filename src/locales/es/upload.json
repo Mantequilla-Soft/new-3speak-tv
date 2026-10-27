@@ -53,6 +53,7 @@
   },
   "page": {
     "shareShort": "Comparte un short",
+    "shareStory": "Comparte una historia",
     "shareVideo": "Comparte un video"
   },
   "progress": {
@@ -131,7 +132,9 @@
     "browseFiles": "Buscar archivos",
     "proceed": "Continuar a las miniaturas",
     "replace": "Reemplazar video",
-    "editVideo": "Editar este video"
+    "editVideo": "Editar este video",
+    "asStory": "Publicar como historia de 24 h",
+    "asStoryHint": "Encabeza el feed de Shorts y tus seguidores reciben una notificación. Mientras esté activa, aún puedes conservarla como short."
   },
   "details": {
     "guests": {
@@ -152,6 +155,7 @@
       "tooManyTags": "Puedes agregar hasta {{max}} etiquetas; la etiqueta de la comunidad se agrega automáticamente."
     },
     "title": "Título",
+    "titleShort": "Título (opcional)",
     "description": "Descripción",
     "descriptionPlaceholderShort": "Describe tu short...",
     "descriptionPlaceholder": "Escribe la descripción de tu video aquí... ¡Admite formato markdown!",
@@ -251,11 +255,13 @@
     "watchAdToPublish": "Mira el anuncio para publicar",
     "watchSponsorFirst": "Primero mira el mensaje del patrocinador",
     "postShort": "Publicar short",
+    "postStory": "Publicar historia",
     "postVideo": "Publicar video",
     "backToTimeline": "Volver a la línea de tiempo"
   },
   "publishing": {
     "titleShort": "Publicando short",
+    "titleStory": "Publicando historia",
     "titleVideo": "Publicando video",
     "subtitle": "Espera mientras procesamos tu contenido...",
     "starting": "Iniciando...",
@@ -279,6 +285,7 @@
     "adsOffFailedToast": "Publicado, pero aún no se pudieron desactivar los anuncios de este video.",
     "rollsOffFailedToast": "Publicado, pero aún no se pudieron desactivar los anuncios en video de este video.",
     "trailerFailedToast": "Publicado, pero no se pudo configurar como tráiler de tu canal.",
+    "storyRegisterFailedToast": "Publicado, pero aún no se pudo marcar como historia de 24 horas.",
     "completed": "Completado",
     "publishedToast": "¡Video publicado!",
     "log": {
@@ -309,12 +316,15 @@
       "rollsOffFailed": "No se pudo guardar la opción sin anuncios en video para este video",
       "trailerSet": "Configurado como tráiler de tu canal",
       "trailerFailed": "Publicado, pero no se pudo configurar como tráiler de tu canal",
+      "storyRegistered": "La historia estará visible 24 horas",
+      "storyRegisterFailed": "Publicado, pero no se pudo marcar como historia de 24 horas",
       "published": "¡Video publicado!"
     }
   },
   "done": {
     "title": "¡Subida terminada!",
     "shortPublished": "Tu short se publicó en 3Speak. Tardará unos 5 minutos en aparecer en tu perfil.",
+    "storyPublished": "Tu historia estará visible en 3Speak durante las próximas 24 horas.",
     "videoPublished": "¡Tu video se publicó!<br/>Ahora se está codificando en segundo plano, lo que puede tardar unos minutos.",
     "promote": "Promocionar este video",
     "goToProfile": "Ir a mi perfil →",
@@ -482,5 +492,20 @@
       "noAccount": "No existe ninguna cuenta con ese nombre.",
       "addButton": "Añadir enlace"
     }
+  },
+  "story": {
+    "captionPlaceholder": "Añade una descripción (opcional)",
+    "moreOptions": "Más opciones",
+    "reach_one": "Llega a tu {{count}} seguidor y encabeza el feed de Shorts durante 24 horas.",
+    "reach_many": "Llega a tus {{count}} seguidores y encabeza el feed de Shorts durante 24 horas.",
+    "reach_other": "Llega a tus {{count}} seguidores y encabeza el feed de Shorts durante 24 horas.",
+    "reachNoCount": "Llega a tus seguidores y encabeza el feed de Shorts durante 24 horas.",
+    "streakOn_one": "Llevas una racha de historias de {{count}} día.",
+    "streakOn_many": "Llevas una racha de historias de {{count}} días.",
+    "streakOn_other": "Llevas una racha de historias de {{count}} días.",
+    "streakNext_one": "Con esta, tu racha de historias llega a {{count}} día.",
+    "streakNext_many": "Con esta, tu racha de historias llega a {{count}} días.",
+    "streakNext_other": "Con esta, tu racha de historias llega a {{count}} días.",
+    "streakStart": "Publica una historia cada día para crear una racha."
   }
 }

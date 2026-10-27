@@ -10,7 +10,8 @@
     "backHome": "Về trang chủ",
     "howWasStream": "Buổi phát trực tiếp của bạn thế nào?",
     "connecting": "Đang kết nối với OpenPods…",
-    "authenticating": "Đang xác thực với OpenPods…"
+    "authenticating": "Đang xác thực với OpenPods…",
+    "postStoryAboutIt": "Đăng tin về buổi phát này"
   },
   "strip": {
     "liveNow_other": "<n>{{count}}</n> OpenPod đang trực tiếp",

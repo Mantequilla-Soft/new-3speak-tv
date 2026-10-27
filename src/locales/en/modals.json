@@ -70,7 +70,8 @@
       "invalidAccount": "Invalid username or community ID.",
       "cannotIncrease": "Cannot increase beyond remaining {{percent}}%",
       "pendingRow": "@{{account}} hasn't been added yet — click + to add it, or clear the field.",
-      "atLeastOne": "Reward percent must be at least 1%"
+      "atLeastOne": "Reward percent must be at least 1%",
+      "maxCount": "Hive allows at most {{max}} beneficiaries per post."
     },
     "title": "Beneficiaries",
     "intro": "Add a user you want to automatically receive a portion of the rewards for this post.",
@@ -86,7 +87,8 @@
   },
   "qr": {
     "scan": "Scan this QR in Hive Keychain:",
-    "click": "Click QR to open in Keychain app"
+    "click": "Click QR to open in Keychain app",
+    "title": "Log in with Keychain"
   },
   "editVideoHint": {
     "title": "Edit any of your videos",
@@ -115,7 +117,12 @@
     "preparing": "Preparing video for upload...",
     "renderUnavailable": "Render service not available yet. Timeline data logged to console.",
     "backToEditor": "Back to Editor",
-    "postError": "Failed to prepare video for upload. Please try downloading instead."
+    "postError": "Failed to prepare video for upload. Please try downloading instead.",
+    "postAs": "Post it as",
+    "postAsStory": "Story",
+    "postAsStoryHint": "24 hours, leads the Shorts feed",
+    "postAsShort": "Short",
+    "postAsShortHint": "Stays on your channel"
   },
   "profile": {
     "mustLogin": "You must login first",

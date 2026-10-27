@@ -77,6 +77,15 @@
       "includesWhale": "इसमें 🐋 whale अकाउंट शामिल हैं",
       "includesOrca": "इसमें 🐬 orca अकाउंट शामिल हैं",
       "andMore": "और {{count}} अन्य…"
+    },
+    "stories": {
+      "heading": "आप जिन्हें फ़ॉलो करते हैं उनकी स्टोरी",
+      "posted": "@{{user}} ने एक स्टोरी पोस्ट की",
+      "type": "स्टोरी",
+      "hoursLeft_one": "{{count}} घंटा बाकी",
+      "hoursLeft_other": "{{count}} घंटे बाकी",
+      "ariaUnseen_one": "सूचनाएँ, {{count}} नई स्टोरी",
+      "ariaUnseen_other": "सूचनाएँ, {{count}} नई स्टोरी"
     }
   },
   "search": {

@@ -25,7 +25,9 @@
       "boosts_received": "Boost đã nhận",
       "boost_amount_received": "Số tiền đã nhận",
       "boosts_given": "Boost đã gửi",
-      "boost_amount_given": "Số tiền đã gửi"
+      "boost_amount_given": "Số tiền đã gửi",
+      "story_uploads": "Tin",
+      "story_streak": "Chuỗi đăng tin"
     },
     "metricsInSentence": {
       "video_uploads": "video",
@@ -40,7 +42,9 @@
       "boosts_received": "boost đã nhận",
       "boost_amount_received": "số tiền đã nhận",
       "boosts_given": "boost đã gửi",
-      "boost_amount_given": "số tiền đã gửi"
+      "boost_amount_given": "số tiền đã gửi",
+      "story_uploads": "tin",
+      "story_streak": "chuỗi đăng tin"
     },
     "blurbs": {
       "video_uploads": "Video đã tải lên",
@@ -55,7 +59,9 @@
       "boosts_received": "Boost được gửi đến buổi phát của họ",
       "boost_amount_received": "Tổng số tiền boost đã nhận",
       "boosts_given": "Boost họ đã gửi cho người phát khác",
-      "boost_amount_given": "Tổng số tiền boost họ đã gửi"
+      "boost_amount_given": "Tổng số tiền boost họ đã gửi",
+      "story_uploads": "Tin đã đăng",
+      "story_streak": "Số ngày liên tiếp có tin nhiều nhất"
     },
     "blurbsInSentence": {
       "video_uploads": "video đã tải lên",
@@ -70,22 +76,32 @@
       "boosts_received": "boost được gửi đến buổi phát của họ",
       "boost_amount_received": "tổng số tiền boost đã nhận",
       "boosts_given": "boost họ đã gửi cho người phát khác",
-      "boost_amount_given": "tổng số tiền boost họ đã gửi"
+      "boost_amount_given": "tổng số tiền boost họ đã gửi",
+      "story_uploads": "tin đã đăng",
+      "story_streak": "số ngày liên tiếp có tin nhiều nhất"
     },
     "groups": {
       "video": "Video",
-      "streaming": "Phát trực tiếp"
+      "streaming": "Phát trực tiếp",
+      "stories": "Tin"
     },
     "badgeNouns": {
       "video_uploads": "Video",
       "short_uploads": "Shorts",
       "video_watch_secs": "Lượt xem",
       "short_watch_secs": "Lượt xem Shorts",
-      "tags_given": "Gắn thẻ"
+      "tags_given": "Gắn thẻ",
+      "story_streak": "Chuỗi"
     },
     "badgeLabel": "{{noun}} {{tier}}",
     "badgeTitleAllTime": "Hạng #{{rank}} về {{what}} mọi thời đại",
-    "badgeTitleWindow": "Hạng #{{rank}} về {{what}} trong {{window}} qua"
+    "badgeTitleWindow": "Hạng #{{rank}} về {{what}} trong {{window}} qua",
+    "sub": {
+      "count": "Số lượng",
+      "watchTime": "Thời gian xem",
+      "streak": "Chuỗi"
+    },
+    "timeRange": "Khoảng thời gian"
   },
   "duration": {
     "hoursMinutes": "{{h}} giờ {{m}} phút",
@@ -159,15 +175,28 @@
   "uploadLinks": {
     "regularVideo": "Video thường",
     "verticalShort": "Shorts dọc",
+    "story": "Tin (24 giờ)",
     "musicAudio": "Nhạc / Âm thanh",
     "groupChat": "Chat nhóm",
     "communitySnap": "Snap cộng đồng",
     "shortsEditor": "Trình chỉnh sửa Shorts",
     "goLiveNow": "Phát trực tiếp!",
+    "playlist": "Danh sách phát",
     "headings": {
       "upload": "Tải lên",
       "live": "Trực tiếp",
       "others": "Khác"
+    },
+    "subtitles": {
+      "regularVideo": "Video truyền thống cho kênh của bạn",
+      "verticalShort": "Clip dọc cho bảng tin Shorts",
+      "shortsEditor": "Quay và chỉnh sửa short ngay trên trình duyệt",
+      "story": "Clip ngắn hiển thị trong 24 giờ",
+      "musicAudio": "Bài hát, podcast và âm thanh khác",
+      "groupChat": "Phòng trực tiếp bạn dẫn cùng khách mời",
+      "goLiveNow": "Phát trực tiếp cho người theo dõi",
+      "communitySnap": "Bài đăng nhanh trên tab cộng đồng",
+      "playlist": "Gom video thành danh sách để chia sẻ"
     }
   },
   "chat": {

@@ -25,7 +25,9 @@
       "boosts_received": "Erhaltene Boosts",
       "boost_amount_received": "Erhaltener Betrag",
       "boosts_given": "Vergebene Boosts",
-      "boost_amount_given": "Vergebener Betrag"
+      "boost_amount_given": "Vergebener Betrag",
+      "story_uploads": "Storys",
+      "story_streak": "Story-Serie"
     },
     "metricsInSentence": {
       "video_uploads": "Videos",
@@ -40,7 +42,9 @@
       "boosts_received": "Erhaltene Boosts",
       "boost_amount_received": "Erhaltener Betrag",
       "boosts_given": "Vergebene Boosts",
-      "boost_amount_given": "Vergebener Betrag"
+      "boost_amount_given": "Vergebener Betrag",
+      "story_uploads": "Storys",
+      "story_streak": "Story-Serie"
     },
     "blurbs": {
       "video_uploads": "Hochgeladene Videos",
@@ -55,7 +59,9 @@
       "boosts_received": "Boosts an ihre Streams",
       "boost_amount_received": "Summe der erhaltenen Boosts",
       "boosts_given": "Boosts, die sie an andere Streamer gesendet haben",
-      "boost_amount_given": "Summe der vergebenen Boosts"
+      "boost_amount_given": "Summe der vergebenen Boosts",
+      "story_uploads": "Gepostete Storys",
+      "story_streak": "Die meisten Tage am Stück mit einer Story"
     },
     "blurbsInSentence": {
       "video_uploads": "Hochgeladene Videos",
@@ -70,22 +76,32 @@
       "boosts_received": "Boosts an ihre Streams",
       "boost_amount_received": "Summe der erhaltenen Boosts",
       "boosts_given": "Boosts, die sie an andere Streamer gesendet haben",
-      "boost_amount_given": "Summe der vergebenen Boosts"
+      "boost_amount_given": "Summe der vergebenen Boosts",
+      "story_uploads": "gepostete Storys",
+      "story_streak": "die meisten Tage am Stück mit einer Story"
     },
     "groups": {
       "video": "Video",
-      "streaming": "Streaming"
+      "streaming": "Streaming",
+      "stories": "Storys"
     },
     "badgeNouns": {
       "video_uploads": "Videos",
       "short_uploads": "Shorts",
       "video_watch_secs": "Angesehen",
       "short_watch_secs": "Shorts angesehen",
-      "tags_given": "Tagger"
+      "tags_given": "Tagger",
+      "story_streak": "Serie"
     },
     "badgeLabel": "{{tier}} {{noun}}",
     "badgeTitleAllTime": "Platz {{rank}} bei „{{what}}“ über den gesamten Zeitraum",
-    "badgeTitleWindow": "Platz {{rank}} bei „{{what}}“ (Zeitraum: {{window}})"
+    "badgeTitleWindow": "Platz {{rank}} bei „{{what}}“ (Zeitraum: {{window}})",
+    "sub": {
+      "count": "Anzahl",
+      "watchTime": "Wiedergabezeit",
+      "streak": "Serie"
+    },
+    "timeRange": "Zeitraum"
   },
   "duration": {
     "hoursMinutes": "{{h}} Std. {{m}} Min.",
@@ -159,15 +175,28 @@
   "uploadLinks": {
     "regularVideo": "Normales Video",
     "verticalShort": "Hochformat-Short",
+    "story": "Story (24 Std.)",
     "musicAudio": "Musik / Audio",
     "groupChat": "Gruppenchat",
     "communitySnap": "Community-Snap",
     "shortsEditor": "Shorts-Editor",
     "goLiveNow": "Live gehen!",
+    "playlist": "Playlist",
     "headings": {
       "upload": "Hochladen",
       "live": "Live",
       "others": "Sonstiges"
+    },
+    "subtitles": {
+      "regularVideo": "Klassisches Video für deinen Kanal",
+      "verticalShort": "Hochformat-Clip für den Shorts-Feed",
+      "shortsEditor": "Short im Browser aufnehmen und schneiden",
+      "story": "Kurzer Clip, der 24 Stunden sichtbar bleibt",
+      "musicAudio": "Songs, Podcasts und anderes Audio",
+      "groupChat": "Live-Raum, den du mit Gästen hostest",
+      "goLiveNow": "Live für deine Follower streamen",
+      "communitySnap": "Kurzer Beitrag im Community-Tab",
+      "playlist": "Videos in einer teilbaren Liste sammeln"
     }
   },
   "chat": {

@@ -4,7 +4,8 @@ import { useTranslation } from 'react-i18next';
 import './UpvoteTooltip.scss';
 import { useAppStore } from '../../lib/store';
 import { IoChevronUpCircleOutline } from 'react-icons/io5';
-import { X, ChevronUp } from 'lucide-react';
+import { ChevronUp } from 'lucide-react';
+import ModalHeader from '../ModalHeader/ModalHeader';
 import { estimate, getUersContent, getVotePower } from '../../utils/hiveUtils';
 import { TailChase } from 'ldrs/react';
 import 'ldrs/react/TailChase.css';
@@ -163,11 +164,11 @@ const CardVoteTooltip = ({
           onClick={(e) => e.stopPropagation()}
           onMouseDown={(e) => e.stopPropagation()}
         >
-          <button className="vote-popup-close" onClick={() => setShowTooltip(false)} disabled={isLoading}>
-            <X size={18} />
-          </button>
-
-          <p className="vote-popup-label">{t('engagement.vote.weight', { weight })}</p>
+          <ModalHeader
+            className="vote-popup-header"
+            title={t('engagement.vote.weight', { weight })}
+            onClose={isLoading ? undefined : () => setShowTooltip(false)}
+          />
 
           <input
             type="range"

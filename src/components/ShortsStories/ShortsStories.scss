@@ -72,6 +72,12 @@
         border-width: 1.5px;
       }
 
+      .streak-badge {
+        height: 15px;
+        font-size: 9px;
+        border-width: 1.5px;
+      }
+
       .add-badge {
         width: 16px;
         height: 16px;
@@ -192,6 +198,11 @@
         box-shadow: 0 0 8px rgba(128, 128, 128, 0.35), 0 0 16px rgba(128, 128, 128, 0.12);
       }
 
+      // A story's ring is its timer: keep the arc, only add the glow.
+      .story-avatar-wrap.story-timer {
+        border-color: transparent !important;
+      }
+
       .story-username {
         color: var(--text-primary);
         font-weight: 600;
@@ -225,6 +236,41 @@
       border: 2.5px solid var(--text-primary);
     }
 
+    // 24h story: the ring is a countdown. Same colours as the shorts rings (red =
+    // you follow them, white = you don't), but only the time left is drawn: the arc
+    // runs counter-clockwise from 12 o'clock and shrinks as the newest story ages, so
+    // a story posted 12h ago shows the left half of the ring. `--story-left` (0..1) is set inline.
+    // A gradient can't be a border, so the transparent border keeps the box and a
+    // masked conic gradient on ::before paints the arc into it.
+    &.story-timer {
+      border: 2.5px solid transparent;
+      --story-ring: var(--text-primary);
+
+      &::before {
+        content: '';
+        position: absolute;
+        inset: -2.5px;
+        border-radius: 50%;
+        // Track first, arc last: the arc ends at 12 o'clock, so it reads counter-clockwise.
+        background: conic-gradient(
+          color-mix(in srgb, var(--text-primary) 12%, transparent) calc((1 - var(--story-left, 1)) * 360deg),
+          var(--story-ring) 0
+        );
+        -webkit-mask: radial-gradient(farthest-side, transparent calc(100% - 2.5px), #000 calc(100% - 2.5px));
+        mask: radial-gradient(farthest-side, transparent calc(100% - 2.5px), #000 calc(100% - 2.5px));
+        pointer-events: none;
+      }
+    }
+
+    &.story-timer--followed {
+      --story-ring: var(--accent-primary);
+    }
+
+    // Every story of theirs watched: the timer still runs, quieter.
+    &.story-timer--seen::before {
+      opacity: 0.45;
+    }
+
     // HiveAvatar wraps the <img> in a span (so the premium badge can overlap the
     // corner). That span is an auto-sized inline-block, so "height: 100%" on the
     // image below resolved against nothing and the picture spilled out of its
@@ -241,6 +287,30 @@
       border-radius: 50%;
       object-fit: cover;
       background: var(--bg-tertiary);
+    }
+
+    // A story streak (days in a row), opposite the count / add badge.
+    .streak-badge {
+      position: absolute;
+      bottom: -2px;
+      left: -2px;
+      display: flex;
+      align-items: center;
+      gap: 1px;
+      height: 18px;
+      padding: 0 5px 0 3px;
+      border-radius: 9px;
+      border: 2px solid var(--bg-primary);
+      background: var(--card-bg, var(--bg-secondary));
+      color: var(--text-primary);
+      font-size: 10px;
+      font-weight: 700;
+      line-height: 1;
+
+      svg {
+        color: var(--accent-primary);
+        font-size: 11px;
+      }
     }
 
     .count-badge {

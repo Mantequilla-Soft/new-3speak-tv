@@ -7,6 +7,82 @@
 // 1.0.0 — that way they see all of these when develop is pushed to production.
 export const CHANGELOG = [
   {
+    version: '1.80.35',
+    date: '2026-10-27',
+    summary: 'Approving actions with your active key now works smoothly after switching between Butter Auth and your wallet.',
+  },
+  {
+    version: '1.80.34',
+    date: '2026-10-27',
+    summary: 'Tips now add a link to the video or audio you tipped, so creators see what it was for.',
+  },
+  {
+    version: '1.80.33',
+    date: '2026-10-27',
+    summary: 'New Customize profile button on your profile: drag, resize and hide sections, and give phones their own layout.',
+  },
+  {
+    version: '1.80.32',
+    date: '2026-10-27',
+    summary: 'Wider Share menu with a short description for each option, plus a new Playlist shortcut.',
+  },
+  {
+    version: '1.80.31',
+    date: '2026-10-27',
+    summary: 'Easier Leaderboard (/leaderboard): pick Videos, Shorts, Stories or Tags, then what to rank by, with the time range at the top right.',
+  },
+  {
+    version: '1.80.30',
+    date: '2026-10-27',
+    summary: 'Story streaks: post a story every day and a flame with your streak count shows on your avatar in the stories row.',
+  },
+  {
+    version: '1.80.29',
+    date: '2026-10-27',
+    summary: 'Your live story now shows who has seen it, and Keep as short turns it into a short that stays on your channel.',
+  },
+  {
+    version: '1.80.28',
+    date: '2026-10-27',
+    summary: 'Stories now post in two taps: pick or record a clip, then post. Start one from the + on your avatar, the shorts uploader or the editor.',
+  },
+  {
+    version: '1.80.26',
+    date: '2026-10-27',
+    summary:
+      'Stories now also play in the Shorts feed with a badge showing how long they stay, and an expired story shows a short note instead.',
+  },
+  {
+    version: '1.80.25',
+    date: '2026-10-27',
+    summary:
+      "Shorts can now have a title: add or change it when you upload or edit a short, and it shows on the short's card and above its caption.",
+  },
+  {
+    version: '1.80.24',
+    date: '2026-10-26',
+    summary:
+      'New 24-hour Stories, first in the stories row: the ring around each avatar counts down their time, and followers get a notification.',
+  },
+  {
+    version: '1.80.23',
+    date: '2026-10-26',
+    summary:
+      'The Spotlight on the Discover tab now loads faster and holds its place while loading, so nothing shifts when it appears.',
+  },
+  {
+    version: '1.80.22',
+    date: '2026-10-26',
+    summary:
+      'Remixing a remix now credits and pays every creator in the chain, and the description links all the earlier videos.',
+  },
+  {
+    version: '1.80.21',
+    date: '2026-10-26',
+    summary:
+      'Video thumbnails uploaded through other Hive apps now show up reliably on video cards and playlists.',
+  },
+  {
     version: '1.80.20',
     date: '2026-10-25',
     summary:

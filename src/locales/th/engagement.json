@@ -16,6 +16,7 @@
     "availableBalance": "ยอดคงเหลือที่ใช้ได้: {{currency}}",
     "memoLabel": "บันทึกช่วยจำ (ไม่บังคับ):",
     "memoPlaceholder": "เช่น ขอบคุณสำหรับคอนเทนต์ดีๆ!",
+    "memoLinkNote": "ลิงก์นี้จะถูกเพิ่มในบันทึก: {{link}}",
     "send": "ส่งทิป"
   },
   "cardMenu": {

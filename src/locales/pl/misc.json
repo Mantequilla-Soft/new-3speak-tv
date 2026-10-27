@@ -25,7 +25,9 @@
       "boosts_received": "Otrzymane boosty",
       "boost_amount_received": "Otrzymana kwota",
       "boosts_given": "Wysłane boosty",
-      "boost_amount_given": "Wysłana kwota"
+      "boost_amount_given": "Wysłana kwota",
+      "story_uploads": "Relacje",
+      "story_streak": "Seria relacji"
     },
     "metricsInSentence": {
       "video_uploads": "filmów",
@@ -40,7 +42,9 @@
       "boosts_received": "otrzymanych boostów",
       "boost_amount_received": "otrzymanej kwoty",
       "boosts_given": "wysłanych boostów",
-      "boost_amount_given": "wysłanej kwoty"
+      "boost_amount_given": "wysłanej kwoty",
+      "story_uploads": "relacje",
+      "story_streak": "seria relacji"
     },
     "blurbs": {
       "video_uploads": "Przesłane filmy",
@@ -55,7 +59,9 @@
       "boosts_received": "Boosty wysłane na ich transmisje",
       "boost_amount_received": "Łączna kwota otrzymanych boostów",
       "boosts_given": "Boosty wysłane innym streamerom",
-      "boost_amount_given": "Łączna kwota wysłanych boostów"
+      "boost_amount_given": "Łączna kwota wysłanych boostów",
+      "story_uploads": "Opublikowane relacje",
+      "story_streak": "Najwięcej dni z rzędu z relacją"
     },
     "blurbsInSentence": {
       "video_uploads": "przesłane filmy",
@@ -70,22 +76,32 @@
       "boosts_received": "boosty wysłane na ich transmisje",
       "boost_amount_received": "łączna kwota otrzymanych boostów",
       "boosts_given": "boosty wysłane innym streamerom",
-      "boost_amount_given": "łączna kwota wysłanych boostów"
+      "boost_amount_given": "łączna kwota wysłanych boostów",
+      "story_uploads": "opublikowane relacje",
+      "story_streak": "najwięcej dni z rzędu z relacją"
     },
     "groups": {
       "video": "Wideo",
-      "streaming": "Transmisje"
+      "streaming": "Transmisje",
+      "stories": "Relacje"
     },
     "badgeNouns": {
       "video_uploads": "Filmy",
       "short_uploads": "Shorts",
       "video_watch_secs": "Oglądalność",
       "short_watch_secs": "Oglądalność Shorts",
-      "tags_given": "Tagujący"
+      "tags_given": "Tagujący",
+      "story_streak": "Seria"
     },
     "badgeLabel": "{{tier}} {{noun}}",
     "badgeTitleAllTime": "Miejsce #{{rank}} pod względem {{what}} (cały czas)",
-    "badgeTitleWindow": "Miejsce #{{rank}} pod względem {{what}} (okres: {{window}})"
+    "badgeTitleWindow": "Miejsce #{{rank}} pod względem {{what}} (okres: {{window}})",
+    "sub": {
+      "count": "Liczba",
+      "watchTime": "Czas oglądania",
+      "streak": "Seria"
+    },
+    "timeRange": "Okres"
   },
   "duration": {
     "hoursMinutes": "{{h}} godz. {{m}} min",
@@ -159,15 +175,28 @@
   "uploadLinks": {
     "regularVideo": "Zwykły film",
     "verticalShort": "Pionowy short",
+    "story": "Relacja (24 h)",
     "musicAudio": "Muzyka / audio",
     "groupChat": "Czat grupowy",
     "communitySnap": "Snap w społeczności",
     "shortsEditor": "Edytor Shorts",
     "goLiveNow": "Nadawaj na żywo!",
+    "playlist": "Playlista",
     "headings": {
       "upload": "Prześlij",
       "live": "Na żywo",
       "others": "Inne"
+    },
+    "subtitles": {
+      "regularVideo": "Klasyczny film na Twój kanał",
+      "verticalShort": "Pionowy klip do kanału Shorts",
+      "shortsEditor": "Nagraj i edytuj shorta w przeglądarce",
+      "story": "Krótki klip widoczny przez 24 godziny",
+      "musicAudio": "Piosenki, podcasty i inne audio",
+      "groupChat": "Pokój na żywo, który prowadzisz z gośćmi",
+      "goLiveNow": "Nadawaj na żywo dla obserwujących",
+      "communitySnap": "Szybki wpis w zakładce społeczności",
+      "playlist": "Zbierz filmy w listę do udostępnienia"
     }
   },
   "chat": {

@@ -25,7 +25,9 @@
       "boosts_received": "Ontvangen boosts",
       "boost_amount_received": "Ontvangen bedrag",
       "boosts_given": "Gegeven boosts",
-      "boost_amount_given": "Gegeven bedrag"
+      "boost_amount_given": "Gegeven bedrag",
+      "story_uploads": "Story’s",
+      "story_streak": "Storyreeks"
     },
     "metricsInSentence": {
       "video_uploads": "video's",
@@ -40,7 +42,9 @@
       "boosts_received": "ontvangen boosts",
       "boost_amount_received": "ontvangen bedrag",
       "boosts_given": "gegeven boosts",
-      "boost_amount_given": "gegeven bedrag"
+      "boost_amount_given": "gegeven bedrag",
+      "story_uploads": "story’s",
+      "story_streak": "storyreeks"
     },
     "blurbs": {
       "video_uploads": "Geüploade video's",
@@ -55,7 +59,9 @@
       "boosts_received": "Boosts gestuurd naar hun streams",
       "boost_amount_received": "Opgeteld bedrag van ontvangen boosts",
       "boosts_given": "Boosts die ze naar andere streamers stuurden",
-      "boost_amount_given": "Opgeteld bedrag van gegeven boosts"
+      "boost_amount_given": "Opgeteld bedrag van gegeven boosts",
+      "story_uploads": "Geplaatste story’s",
+      "story_streak": "Meeste dagen op rij met een story"
     },
     "blurbsInSentence": {
       "video_uploads": "geüploade video's",
@@ -70,22 +76,32 @@
       "boosts_received": "boosts gestuurd naar hun streams",
       "boost_amount_received": "opgeteld bedrag van ontvangen boosts",
       "boosts_given": "boosts die ze naar andere streamers stuurden",
-      "boost_amount_given": "opgeteld bedrag van gegeven boosts"
+      "boost_amount_given": "opgeteld bedrag van gegeven boosts",
+      "story_uploads": "geplaatste story’s",
+      "story_streak": "meeste dagen op rij met een story"
     },
     "groups": {
       "video": "Video",
-      "streaming": "Streaming"
+      "streaming": "Streaming",
+      "stories": "Story’s"
     },
     "badgeNouns": {
       "video_uploads": "Video's",
       "short_uploads": "Shorts",
       "video_watch_secs": "Bekeken",
       "short_watch_secs": "Shorts bekeken",
-      "tags_given": "Tagger"
+      "tags_given": "Tagger",
+      "story_streak": "Reeks"
     },
     "badgeLabel": "{{tier}} {{noun}}",
     "badgeTitleAllTime": "Nr. {{rank}} voor {{what}} aller tijden",
-    "badgeTitleWindow": "Nr. {{rank}} voor {{what}} in {{window}}"
+    "badgeTitleWindow": "Nr. {{rank}} voor {{what}} in {{window}}",
+    "sub": {
+      "count": "Aantal",
+      "watchTime": "Kijktijd",
+      "streak": "Reeks"
+    },
+    "timeRange": "Periode"
   },
   "duration": {
     "hoursMinutes": "{{h}}u {{m}}m",
@@ -159,15 +175,28 @@
   "uploadLinks": {
     "regularVideo": "Gewone video",
     "verticalShort": "Verticale short",
+    "story": "Story (24 u)",
     "musicAudio": "Muziek / audio",
     "groupChat": "Groepschat",
     "communitySnap": "Community-Snap",
     "shortsEditor": "Shorts-editor",
     "goLiveNow": "Ga live!",
+    "playlist": "Afspeellijst",
     "headings": {
       "upload": "Uploaden",
       "live": "Live",
       "others": "Overig"
+    },
+    "subtitles": {
+      "regularVideo": "Klassieke video voor je kanaal",
+      "verticalShort": "Verticale clip voor de Shorts-feed",
+      "shortsEditor": "Neem een short op en bewerk hem in je browser",
+      "story": "Korte clip die 24 uur zichtbaar blijft",
+      "musicAudio": "Nummers, podcasts en andere audio",
+      "groupChat": "Liveruimte die je host met gasten",
+      "goLiveNow": "Stream live voor je volgers",
+      "communitySnap": "Snel bericht op je community-tabblad",
+      "playlist": "Verzamel video's in een lijst om te delen"
     }
   },
   "chat": {

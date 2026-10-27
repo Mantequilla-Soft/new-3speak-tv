@@ -199,3 +199,13 @@ function captureFrame(src, time) {
     v.load();
   });
 }
+
+/** A base64 data URL (what generateVideoThumbnails returns) as a Blob for upload. */
+export function dataUrlToBlob(dataUrl) {
+  const [head, data] = String(dataUrl).split(',');
+  const mime = head.split(';')[0].split(':')[1] || 'image/jpeg';
+  const bytes = atob(data);
+  const buf = new Uint8Array(bytes.length);
+  for (let i = 0; i < bytes.length; i += 1) buf[i] = bytes.charCodeAt(i);
+  return new Blob([buf], { type: mime });
+}

@@ -25,6 +25,7 @@ import { HIVE_API_URL, CHECKER_URL, SHORTS_API_URL, USER_SHORTS_API_URL, appendN
 import { getPlayerUrl } from "../utils/playerUrl";
 import { getFeedSeed, regenerateFeedSeed } from "../utils/feedSeed";
 import { useAppStore } from "../lib/store";
+import { splitShortHeading } from "../utils/shortTitle";
 
 /* -----------------------------
    Hive RPC setup
@@ -260,7 +261,9 @@ export async function fetchCompleteShortData(shortItem, loggedInUser = null) {
     views,
     createdAt,
     embed_url,
-    embed_title
+    embed_title,
+    story,
+    story_expires_at
   } = shortItem;
 
   const { author: embedAuthor, permlink: hivePermlink } = parseEmbedUrl(embed_url);
@@ -281,6 +284,8 @@ export async function fetchCompleteShortData(shortItem, loggedInUser = null) {
     timeAgo: timeAgo(createdAt),
     title: embed_title || "",
     caption: embed_title || "",
+    // A 24h story: badged while live, an "expired" screen after (Short.jsx).
+    storyExpiresAt: story === true ? story_expires_at || null : null,
     user: {
       username: `@${author}`,
       avatar: `/img/u/${author}/avatar/small`,
@@ -326,8 +331,11 @@ export async function fetchCompleteShortData(shortItem, loggedInUser = null) {
         base.stats.comments = post.children || 0;
         const payout = parseFloat(post.payout) || parseFloat(post.pending_payout_value) || 0;
         base.stats.payout = payout.toFixed(2);
-        base.caption = bodyToPlaintext(post.body) || base.caption;
-        base.title = post.title || base.title;
+        // A `## Title` first line is the short's title; the caption is the rest.
+        const { heading, rest } = splitShortHeading(post.body);
+        base.heading = heading || base.heading || '';
+        base.caption = bodyToPlaintext(rest) || base.caption;
+        base.title = heading || post.title || base.title;
 
         // Check if this short is a reaction with a parentTimestamp
         const jm = typeof post.json_metadata === 'string'
@@ -730,6 +738,7 @@ export async function fetchShortsWithDetails(page = 1, limit = 10, loggedInUser 
   const shorts = shortsList.shorts.map((s) => {
     const { author, permlink: hivePermlink } = parseEmbedUrl(s.embed_url);
     const finalAuthor = author || s.owner;
+    const sh = splitShortHeading(s.hive_body);
 
     return {
       id: `${finalAuthor}-${s.permlink}`,
@@ -741,8 +750,13 @@ export async function fetchShortsWithDetails(page = 1, limit = 10, loggedInUser 
       views: s.views || 0,
       createdAt: s.createdAt,
       timeAgo: timeAgo(s.createdAt),
-      title: s.hive_title || s.embed_title || "",
-      caption: bodyToPlaintext(s.hive_body) || s.hive_title || s.embed_title || "",
+      // A `## Title` first line is the short's title (utils/shortTitle.js);
+      // without one, the old caption-derived behaviour.
+      heading: sh.heading,
+      title: sh.heading || s.hive_title || s.embed_title || "",
+      caption: bodyToPlaintext(sh.rest) || s.hive_title || s.embed_title || "",
+      // A 24h story: badged while live, an "expired" screen after (Short.jsx).
+      storyExpiresAt: s.story === true ? s.story_expires_at || null : null,
       tags: Array.isArray(s.hive_tags) ? s.hive_tags : [],
       // Music library song (json_metadata.video.sound), for the soundtrack ticker
       sound: s.hive_sound || null,
@@ -783,9 +797,12 @@ export async function fetchShortsWithDetails(page = 1, limit = 10, loggedInUser 
    User-specific shorts feed
 ------------------------------ */
 
-export async function fetchUserShortsList(username, page = 1, limit = 20, includeUnlisted = false) {
+// `story`: only the creator's live 24h stories (the story viewer); without it the
+// checker leaves stories out, so a profile's Shorts never lists one.
+export async function fetchUserShortsList(username, page = 1, limit = 20, includeUnlisted = false, { story = false } = {}) {
   let url = appendNsfw(`${USER_SHORTS_API}/${username}?page=${page}&limit=${limit}`, useAppStore.getState().showNsfw);
   if (includeUnlisted) url += '&include_unlisted=1';
+  if (story) url += '&story=1';
   const response = await axios.get(url);
 
   // Index results in the same maps so findShortByPermlink works
@@ -799,8 +816,8 @@ export async function fetchUserShortsList(username, page = 1, limit = 20, includ
   return response.data;
 }
 
-export async function fetchUserShortsWithDetails(username, page = 1, limit = 20, includeUnlisted = false) {
-  const shortsList = await fetchUserShortsList(username, page, limit, includeUnlisted);
+export async function fetchUserShortsWithDetails(username, page = 1, limit = 20, includeUnlisted = false, opts = {}) {
+  const shortsList = await fetchUserShortsList(username, page, limit, includeUnlisted, opts);
 
   if (!shortsList?.shorts) {
     throw new Error("Failed to fetch user shorts list");
@@ -809,6 +826,7 @@ export async function fetchUserShortsWithDetails(username, page = 1, limit = 20,
   const shorts = shortsList.shorts.map((s) => {
     const { author, permlink: hivePermlink } = parseEmbedUrl(s.embed_url);
     const finalAuthor = author || s.owner;
+    const sh = splitShortHeading(s.hive_body);
 
     return {
       id: `${finalAuthor}-${s.permlink}`,
@@ -820,8 +838,13 @@ export async function fetchUserShortsWithDetails(username, page = 1, limit = 20,
       views: s.views || 0,
       createdAt: s.createdAt,
       timeAgo: timeAgo(s.createdAt),
-      title: s.hive_title || s.embed_title || "",
-      caption: bodyToPlaintext(s.hive_body) || s.hive_title || s.embed_title || "",
+      // A `## Title` first line is the short's title (utils/shortTitle.js);
+      // without one, the old caption-derived behaviour.
+      heading: sh.heading,
+      title: sh.heading || s.hive_title || s.embed_title || "",
+      caption: bodyToPlaintext(sh.rest) || s.hive_title || s.embed_title || "",
+      // A 24h story: badged while live, an "expired" screen after (Short.jsx).
+      storyExpiresAt: s.story === true ? s.story_expires_at || null : null,
       tags: Array.isArray(s.hive_tags) ? s.hive_tags : [],
       // Music library song (json_metadata.video.sound), for the soundtrack ticker
       sound: s.hive_sound || null,

@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
-import { IoClose } from 'react-icons/io5';
 import { FaYoutube, FaSoundcloud, FaTiktok, FaInstagram, FaPlayCircle, FaCopy, FaCheck, FaTrash, FaExternalLinkAlt } from 'react-icons/fa';
 import { SiRumble } from 'react-icons/si';
 import { toastIn } from '../../utils/toast';
@@ -16,6 +15,7 @@ import {
 } from '../../utils/socialVerifier';
 import { useTranslation, Trans } from 'react-i18next';
 import { SOCIAL_LINK_ENABLED } from '../../utils/config';
+import ModalHeader from '../ModalHeader/ModalHeader';
 import './AddSocialLink_modal.scss';
 
 // Every toast from this module is headed "Profile"; the message becomes the
@@ -198,13 +198,15 @@ export default function AddSocialLink_modal({ isOpen, onClose, hiveUsername, onC
   return createPortal(
     <div className="social-link-modal-overlay" onClick={handleClose}>
       <div className="social-link-modal-content" onClick={(e) => e.stopPropagation()}>
-        <button className="social-link-close-btn" onClick={handleClose}>
-          <IoClose size={22} />
-        </button>
+        <ModalHeader
+          title={step === 'flow' && selectedPlatform
+            ? t('modals.socialLink.flowTitle', { platform: platformLabel(selectedPlatform) })
+            : t('modals.socialLink.title')}
+          onClose={handleClose}
+        />
 
         {step === 'list' && (
           <>
-            <h3 className="social-link-modal-title">{t('modals.socialLink.title')}</h3>
             <p className="social-link-modal-sub">
               {t('modals.socialLink.intro')}
             </p>
@@ -272,10 +274,6 @@ export default function AddSocialLink_modal({ isOpen, onClose, hiveUsername, onC
 
         {step === 'flow' && selectedPlatform && (
           <>
-            <h3 className="social-link-modal-title">
-              {t('modals.socialLink.flowTitle', { platform: platformLabel(selectedPlatform) })}
-            </h3>
-
             <ol className="social-link-steps">
               <li>
                 <strong>{t('modals.socialLink.step1')}</strong>

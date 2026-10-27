@@ -9,6 +9,7 @@ import {
   LOCKED_ENCODER_WEIGHT,
   REMIX_AUTHOR_WEIGHT,
   SOUND_AUTHOR_WEIGHT,
+  HIVE_MAX_BENEFICIARIES,
 } from '../../../src/utils/beneficiaries.js'
 
 describe('split constants', () => {
@@ -121,5 +122,31 @@ describe('enforceLockedBeneficiaries', () => {
   it('returns the same map for chaining', () => {
     const m = new Map()
     expect(enforceLockedBeneficiaries(m, { isPremium: false })).toBe(m)
+  })
+})
+
+describe('remix chain authors', () => {
+  it('locks 5% for every earlier author of the chain, each once', () => {
+    const list = getLockedBeneficiaries({ isPremium: true, originalAuthor: 'bob', remixAuthors: ['bob', 'carol', 'dave'] })
+    expect(list.map(b => [b.account, b.percent, b.locked])).toEqual([
+      ['bob', 5, true], ['carol', 5, true], ['dave', 5, true],
+    ])
+    const map = enforceLockedBeneficiaries(new Map(), { isPremium: true, originalAuthor: 'bob', remixAuthors: ['carol', 'bob'] })
+    expect(Object.fromEntries(map)).toEqual({ bob: REMIX_AUTHOR_WEIGHT, carol: REMIX_AUTHOR_WEIGHT })
+  })
+
+  it('leaves out a sound split that no longer fits in Hive\'s 8 slots', () => {
+    const chain = ['a1', 'a2', 'a3', 'a4', 'a5', 'a6']
+    const list = getLockedBeneficiaries({ isPremium: false, includeEncoder: true, username: 'me', remixAuthors: chain, soundAuthors: ['singer'] })
+    expect(list).toHaveLength(HIVE_MAX_BENEFICIARIES)
+    expect(list.some(b => b.account === 'singer')).toBe(false)
+    const map = enforceLockedBeneficiaries(new Map(), { isPremium: false, includeEncoder: true, username: 'me', remixAuthors: chain, soundAuthors: ['singer'] })
+    expect(map.size).toBe(HIVE_MAX_BENEFICIARIES)
+    expect(map.has('singer')).toBe(false)
+  })
+
+  it('still raises a sound creator who is already in the chain', () => {
+    const list = getLockedBeneficiaries({ isPremium: false, includeEncoder: true, username: 'me', remixAuthors: ['a1', 'a2', 'a3', 'a4', 'a5', 'singer'], soundAuthors: ['singer'] })
+    expect(list.find(b => b.account === 'singer').percent).toBe(5)
   })
 })

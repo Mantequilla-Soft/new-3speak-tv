@@ -13,6 +13,7 @@ import { useAppStore } from "../../lib/store";
 import AccountImg from "../HiveAvatar/AccountImg";
 import { listButrauthAccounts, forgetButrauthAccount } from "../../utils/butrauthAccounts";
 import { toastIn } from "../../utils/toast";
+import ModalHeader from "../ModalHeader/ModalHeader";
 import "./LoginModal.scss";
 import mark from "../../assets/image/3S_mark.svg";
 
@@ -340,10 +341,13 @@ function LoginModal({ displayed, onLogin, onClose, loginTitle, loginOptions, int
       {displayed && step === 'choose' && (
         <div className="login-chooser-overlay" onMouseDown={onClose}>
           <div className="login-chooser" onMouseDown={(e) => e.stopPropagation()}>
+            <ModalHeader
+              title={isManteAuth ? t('auth.loginModal.signedInTitle') : t('auth.loginModal.welcomeTitle')}
+              onClose={onClose}
+            />
             <img className="login-chooser-mark" src={mark} alt="3Speak" />
             {isManteAuth ? (
               <>
-                <h3 className="login-chooser-title">{t('auth.loginModal.signedInTitle')}</h3>
                 <p className="login-chooser-sub">
                   {user
                     ? <Trans i18nKey="auth.loginModal.signedInAs" values={{ user }} components={{ b: <strong /> }} />
@@ -398,7 +402,6 @@ function LoginModal({ displayed, onLogin, onClose, loginTitle, loginOptions, int
               </>
             ) : (
               <>
-                <h3 className="login-chooser-title">{t('auth.loginModal.welcomeTitle')}</h3>
                 <p className="login-chooser-sub">
                   {ENABLE_BUTRAUTH
                     ? t('auth.loginModal.welcomeSubSignup')
@@ -443,8 +446,8 @@ function LoginModal({ displayed, onLogin, onClose, loginTitle, loginOptions, int
       {displayed && step === 'signup' && (
         <div className="login-chooser-overlay" onMouseDown={onClose}>
           <div className="login-chooser" onMouseDown={(e) => e.stopPropagation()}>
+            <ModalHeader title={t('auth.loginModal.openingSignup')} onClose={onClose} />
             <img className="login-chooser-mark" src={mark} alt="3Speak" />
-            <h3 className="login-chooser-title">{t('auth.loginModal.openingSignup')}</h3>
             <p className="login-chooser-sub">
               {t('auth.loginModal.openingSignupHint')}
             </p>

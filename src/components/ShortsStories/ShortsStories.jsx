@@ -3,9 +3,11 @@ import { useQuery } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { FaChevronLeft, FaChevronRight, FaPlus } from "react-icons/fa";
-import { SHORTS_STORIES_URL } from "../../utils/config";
+import { MdLocalFireDepartment } from "react-icons/md";
+import { SHORTS_STORIES_URL, storiesEnabledFor } from "../../utils/config";
 import { useAppStore } from "../../lib/store";
 import HiveAvatar from "../HiveAvatar/HiveAvatar";
+import { useStoryCreators, storyViewerPath, storyTimeLeft, useStoryClock, STREAK_MIN } from "../../lib/stories";
 import "./ShortsStories.scss";
 import { useTranslation } from "react-i18next";
 
@@ -43,17 +45,31 @@ export const useShortsStories = () => {
   };
 };
 
+/** Days in a row with a story, on the avatar's bottom-left. Nothing below STREAK_MIN. */
+const StreakBadge = ({ streak }) => {
+  const { t } = useTranslation();
+  if (!(streak >= STREAK_MIN)) return null;
+  return (
+    <div className="streak-badge" title={t("shorts.stories.streakTitle", { count: streak })}>
+      <MdLocalFireDepartment aria-hidden="true" />
+      {streak}
+    </div>
+  );
+};
+
 /**
  * ShortsStories component — horizontal row of creator avatars.
  *
  * Props:
  * - activeCreator: string | null — username of the currently selected creator (highlighted)
- * - onCreatorSelect: (username: string) => void — called when a creator avatar is clicked
- *                    If not provided, defaults to navigating to /shorts?user=username
+ * - activeStory: boolean — the active creator is being watched as a 24h story
+ * - onCreatorSelect: (username: string, { story: boolean }) => void — called when a creator avatar is clicked.
+ *                    `story` is true for a 24h-story avatar (the cyan ring).
+ *                    If not provided, defaults to navigating to the shorts / story viewer
  * - compact: boolean — smaller avatars for the shorts player context
  * - hiddenOnMobile: boolean — hide the entire bar on mobile (for shorts player, where swipe is used instead)
  */
-const ShortsStories = ({ activeCreator, onCreatorSelect, compact = false, hiddenOnMobile = false }) => {
+const ShortsStories = ({ activeCreator, activeStory = false, onCreatorSelect, compact = false, hiddenOnMobile = false }) => {
   const { t } = useTranslation();
   const { authenticated, user } = useAppStore();
   const navigate = useNavigate();
@@ -64,6 +80,12 @@ const ShortsStories = ({ activeCreator, onCreatorSelect, compact = false, hidden
   const isDragging = useRef(false);
 
   const { creators, currentUserHasShort, isLoading } = useShortsStories();
+  // 24h stories go first, with the cyan ring. A creator with a live story shows
+  // once, as a story; the shorts creators follow (they leave this row over time).
+  const { storyCreators, currentUserStreak } = useStoryCreators();
+  const now = useStoryClock();
+  const storyUsers = new Set(storyCreators.map((c) => c.username));
+  const shortCreators = creators.filter((c) => c.username !== user && !storyUsers.has(c.username));
 
   const checkScrollButtons = () => {
     if (scrollRef.current) {
@@ -80,7 +102,7 @@ const ShortsStories = ({ activeCreator, onCreatorSelect, compact = false, hidden
       el.addEventListener("scroll", checkScrollButtons);
       return () => el.removeEventListener("scroll", checkScrollButtons);
     }
-  }, [creators, isLoading]);
+  }, [creators, storyCreators.length, isLoading]);
 
   // Auto-scroll to active creator when it changes
   useEffect(() => {
@@ -115,22 +137,23 @@ const ShortsStories = ({ activeCreator, onCreatorSelect, compact = false, hidden
     isDragging.current = moved > 5;
   }, []);
 
-  const handleCreatorClick = useCallback((username) => {
+  const handleCreatorClick = useCallback((username, story = false) => {
     if (isDragging.current) return;
     if (onCreatorSelect) {
-      onCreatorSelect(username);
+      onCreatorSelect(username, { story });
     } else {
-      navigate(`/shorts/stories?user=${username}`);
+      navigate(story ? storyViewerPath(username) : `/shorts/stories?user=${username}`);
     }
   }, [onCreatorSelect, navigate]);
 
   const handleOwnAvatarClick = useCallback(() => {
     if (isDragging.current) return;
-    navigate("/embed-studio?from=stories");
-  }, [navigate]);
+    // Whoever can post a story gets one from here; a story can still be kept as a short.
+    navigate(storiesEnabledFor(user) ? "/embed-studio?from=story" : "/embed-studio?from=stories");
+  }, [navigate, user]);
 
   // Don't render if no data and not loading
-  if (!isLoading && creators.length === 0 && !authenticated) return null;
+  if (!isLoading && creators.length === 0 && storyCreators.length === 0 && !authenticated) return null;
 
   const wrapperClass = [
     "shorts-stories",
@@ -187,16 +210,53 @@ const ShortsStories = ({ activeCreator, onCreatorSelect, compact = false, hidden
                     <div className="add-badge">
                       <FaPlus />
                     </div>
+                    <StreakBadge streak={currentUserStreak} />
                   </div>
                   <span className="story-username">{t("shorts.stories.you")}</span>
                 </div>
               )}
 
+              {/* 24h stories, unseen first (the checker sorts them). The ring is a
+                  countdown of the newest story: red/white like the shorts rings,
+                  drawn only for the share of its 24h still left. */}
+              {storyCreators.map((creator) => {
+                const isActive = activeStory && activeCreator === creator.username;
+                return (
+                  <div
+                    key={`story-${creator.username}`}
+                    data-creator={creator.username}
+                    className={`story-item story-item--story${isActive ? " story-item--active" : ""}`}
+                    onClick={() => handleCreatorClick(creator.username, true)}
+                    title={t("shorts.stories.storyTitle", { user: creator.username })}
+                  >
+                    <div
+                      className={`story-avatar-wrap story-timer${creator.followed ? " story-timer--followed" : ""}${creator.unseen_count > 0 ? "" : " story-timer--seen"}`}
+                      style={{ "--story-left": storyTimeLeft(creator.latest_at, creator.latest_expires_at, now) }}
+                    >
+                      <HiveAvatar
+                        username={creator.username}
+                        size={null}
+                        alt={creator.username}
+                        imgClassName="story-avatar"
+                        onError={(e) => {
+                          e.currentTarget.src = `https://ui-avatars.com/api/?name=${creator.username}&background=dc2626&color=ffffff&size=150`;
+                        }}
+                        badgeSize={12}
+                      />
+                      {creator.unseen_count > 1 && (
+                        <div className="count-badge">{creator.unseen_count}</div>
+                      )}
+                      <StreakBadge streak={creator.streak} />
+                    </div>
+                    <span className="story-username">{creator.username}</span>
+                  </div>
+                );
+              })}
+
               {/* Other creators */}
-              {creators
-                .filter((c) => c.username !== user)
+              {shortCreators
                 .map((creator) => {
-                  const isActive = activeCreator === creator.username;
+                  const isActive = !activeStory && activeCreator === creator.username;
                   return (
                     <div
                       key={creator.username}

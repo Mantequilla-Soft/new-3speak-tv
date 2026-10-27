@@ -25,7 +25,9 @@
       "boosts_received": "บูสต์ที่ได้รับ",
       "boost_amount_received": "ยอดที่ได้รับ",
       "boosts_given": "บูสต์ที่ให้",
-      "boost_amount_given": "ยอดที่ให้"
+      "boost_amount_given": "ยอดที่ให้",
+      "story_uploads": "สตอรี่",
+      "story_streak": "สตอรี่ต่อเนื่อง"
     },
     "metricsInSentence": {
       "video_uploads": "วิดีโอ",
@@ -40,7 +42,9 @@
       "boosts_received": "บูสต์ที่ได้รับ",
       "boost_amount_received": "ยอดที่ได้รับ",
       "boosts_given": "บูสต์ที่ให้",
-      "boost_amount_given": "ยอดที่ให้"
+      "boost_amount_given": "ยอดที่ให้",
+      "story_uploads": "สตอรี่",
+      "story_streak": "สตอรี่ต่อเนื่อง"
     },
     "blurbs": {
       "video_uploads": "วิดีโอที่อัปโหลด",
@@ -55,7 +59,9 @@
       "boosts_received": "บูสต์ที่ส่งมายังไลฟ์",
       "boost_amount_received": "ยอดรวมของบูสต์ที่ได้รับ",
       "boosts_given": "บูสต์ที่ส่งให้สตรีมเมอร์คนอื่น",
-      "boost_amount_given": "ยอดรวมของบูสต์ที่ให้"
+      "boost_amount_given": "ยอดรวมของบูสต์ที่ให้",
+      "story_uploads": "สตอรี่ที่โพสต์",
+      "story_streak": "จำนวนวันติดต่อกันที่มีสตอรี่มากที่สุด"
     },
     "blurbsInSentence": {
       "video_uploads": "วิดีโอที่อัปโหลด",
@@ -70,22 +76,32 @@
       "boosts_received": "บูสต์ที่ส่งมายังไลฟ์",
       "boost_amount_received": "ยอดรวมของบูสต์ที่ได้รับ",
       "boosts_given": "บูสต์ที่ส่งให้สตรีมเมอร์คนอื่น",
-      "boost_amount_given": "ยอดรวมของบูสต์ที่ให้"
+      "boost_amount_given": "ยอดรวมของบูสต์ที่ให้",
+      "story_uploads": "สตอรี่ที่โพสต์",
+      "story_streak": "จำนวนวันติดต่อกันที่มีสตอรี่มากที่สุด"
     },
     "groups": {
       "video": "วิดีโอ",
-      "streaming": "ไลฟ์"
+      "streaming": "ไลฟ์",
+      "stories": "สตอรี่"
     },
     "badgeNouns": {
       "video_uploads": "วิดีโอ",
       "short_uploads": "Shorts",
       "video_watch_secs": "ยอดดู",
       "short_watch_secs": "ยอดดู Shorts",
-      "tags_given": "นักติดแท็ก"
+      "tags_given": "นักติดแท็ก",
+      "story_streak": "ต่อเนื่อง"
     },
     "badgeLabel": "{{noun}} {{tier}}",
     "badgeTitleAllTime": "อันดับ #{{rank}} ด้าน{{what}} ตลอดเวลา",
-    "badgeTitleWindow": "อันดับ #{{rank}} ด้าน{{what}} ในช่วง {{window}} ที่ผ่านมา"
+    "badgeTitleWindow": "อันดับ #{{rank}} ด้าน{{what}} ในช่วง {{window}} ที่ผ่านมา",
+    "sub": {
+      "count": "จำนวน",
+      "watchTime": "เวลาในการดู",
+      "streak": "ต่อเนื่อง"
+    },
+    "timeRange": "ช่วงเวลา"
   },
   "duration": {
     "hoursMinutes": "{{h}} ชม. {{m}} นาที",
@@ -159,15 +175,28 @@
   "uploadLinks": {
     "regularVideo": "วิดีโอทั่วไป",
     "verticalShort": "Shorts แนวตั้ง",
+    "story": "สตอรี่ (24 ชม.)",
     "musicAudio": "เพลง / เสียง",
     "groupChat": "แชตกลุ่ม",
     "communitySnap": "Snap ชุมชน",
     "shortsEditor": "ตัวแก้ไข Shorts",
     "goLiveNow": "ไลฟ์เลย!",
+    "playlist": "เพลย์ลิสต์",
     "headings": {
       "upload": "อัปโหลด",
       "live": "ไลฟ์",
       "others": "อื่นๆ"
+    },
+    "subtitles": {
+      "regularVideo": "วิดีโอแบบปกติสำหรับช่องของคุณ",
+      "verticalShort": "คลิปแนวตั้งสำหรับฟีด Shorts",
+      "shortsEditor": "อัดและตัดต่อ Shorts ในเบราว์เซอร์",
+      "story": "คลิปสั้นที่แสดงอยู่ 24 ชั่วโมง",
+      "musicAudio": "เพลง พอดแคสต์ และเสียงอื่นๆ",
+      "groupChat": "ห้องไลฟ์ที่คุณจัดร่วมกับแขกรับเชิญ",
+      "goLiveNow": "ไลฟ์สดให้ผู้ติดตามของคุณ",
+      "communitySnap": "โพสต์ด่วนในแท็บชุมชนของคุณ",
+      "playlist": "รวมวิดีโอเป็นรายการที่แชร์ได้"
     }
   },
   "chat": {

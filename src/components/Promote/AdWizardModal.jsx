@@ -2,13 +2,14 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { createPortal } from 'react-dom';
 import axios from 'axios';
 import { useTranslation, Trans } from 'react-i18next';
-import { Megaphone, X, ArrowLeft, Check, Loader2 } from 'lucide-react';
+import { ArrowLeft, Check, Loader2 } from 'lucide-react';
 import { toastIn } from '../../utils/toast';
 import { CHECKER_URL } from '../../utils/config';
 import { transferWithAioha, isLoggedIn } from '../../hive-api/aioha';
 import { getOperationUser } from '../../hive-api/aioha';
 import { fetchBalances } from '../../hive-api/api';
 import { useAppStore } from '../../lib/store';
+import ModalHeader from '../ModalHeader/ModalHeader';
 import './AdWizardModal.scss';
 
 // Every toast from this module is headed "Ads"; the message becomes the line under
@@ -150,14 +151,13 @@ export default function AdWizardModal({ open, onClose, author, permlink }) {
   return createPortal(
     <div className="adw-overlay" onClick={onClose}>
       <div className="adw-modal" onClick={(e) => e.stopPropagation()}>
-        <button className="adw-close" onClick={onClose} aria-label={t('common.actions.close')}><X size={18} /></button>
-        <div className="adw-head">
-          {step > 1 && step < 4 && (
+        <ModalHeader
+          title={step === 4 ? t('ads.wizard.bookedTitle') : t('ads.wizard.title')}
+          onClose={onClose}
+          leading={step > 1 && step < 4 && (
             <button className="adw-back" onClick={back} aria-label={t('common.actions.back')}><ArrowLeft size={16} /></button>
           )}
-          <Megaphone size={18} />
-          <h3>{step === 4 ? t('ads.wizard.bookedTitle') : t('ads.wizard.title')}</h3>
-        </div>
+        />
 
         {step < 4 && (
           <div className="adw-steps" aria-hidden="true">

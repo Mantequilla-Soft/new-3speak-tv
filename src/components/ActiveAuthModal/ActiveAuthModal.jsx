@@ -3,10 +3,10 @@ import { getHiveClient } from '../../utils/hiveNode';
 import { createPortal } from 'react-dom';
 import { Client, PrivateKey } from '@hiveio/dhive';
 import { KeyTypes, Providers } from '@aioha/aioha';
-import { IoClose } from 'react-icons/io5';
 import { useTranslation, Trans } from 'react-i18next';
 import aioha, { setActiveAuthHandler } from '../../hive-api/aioha';
 import { HIVE_API_NODES } from '../../utils/config';
+import ModalHeader from '../ModalHeader/ModalHeader';
 import './ActiveAuthModal.scss';
 
 const client = getHiveClient();
@@ -136,14 +136,31 @@ export default function ActiveAuthModal() {
     setError('');
     if (!username) { setError(t('auth.activeAuth.errors.noUsername')); return; }
     setBusy(true);
+    // A Butter Auth login parks the user's wallet session in aioha's other
+    // logins, and aioha.login() refuses a parked username ("Already logged
+    // in"). Same wallet: switch back to it. Other wallet: drop the parked
+    // entry so the fresh login can replace it (restored if that fails).
+    let parked = null;
+    try {
+      const parkedProvider = aioha.getOtherLogins()[username];
+      if (parkedProvider === provider && aioha.switchUser(username)) {
+        await signWithAioha();
+        return;
+      }
+      if (parkedProvider) parked = aioha.removeOtherLogin(username, false);
+    } catch { /* fall through to a fresh login */ }
     try {
       const res = await aioha.login(provider, username, {
         msg: 'Authorize active transaction',
         keyType: KeyTypes.Active,
       });
       if (!res?.success) throw new Error(res?.error || t('auth.activeAuth.errors.connectFailed'));
+      parked = null;
       await signWithAioha();
     } catch (e) {
+      if (parked) {
+        try { aioha.addOtherLogin(username, parked); } catch { /* ignore */ }
+      }
       setError(e.message || t('auth.activeAuth.errors.connectFailed'));
       setBusy(false);
     }
@@ -184,11 +201,7 @@ export default function ActiveAuthModal() {
   return createPortal(
     <div className="aauth-overlay" onClick={busy ? undefined : close}>
       <div className="aauth-content" onClick={(e) => e.stopPropagation()}>
-        <button className="aauth-close" onClick={close} disabled={busy} aria-label={t('common.actions.cancel')}>
-          <IoClose size={22} />
-        </button>
-
-        <h3 className="aauth-title">{t('auth.activeAuth.title')}</h3>
+        <ModalHeader title={t('auth.activeAuth.title')} onClose={busy ? undefined : close} />
         <p className="aauth-desc">
           <Trans i18nKey="auth.activeAuth.desc" components={{ b: <strong /> }} />
         </p>

@@ -67,6 +67,15 @@
   pointer-events: none;
 }
 
+// An unseen 24h story from someone you follow: top LEFT, so it never covers the
+// red unread dot (top right) and reads as its own signal.
+.notif-bell-dot--story {
+  right: auto;
+  left: 3px;
+  background: var(--story-cyan-2, #22d3ee);
+  box-shadow: 0 0 6px rgba(34, 211, 238, 0.7);
+}
+
 .notif-dropdown {
   position: absolute;
   top: calc(100% + 6px);

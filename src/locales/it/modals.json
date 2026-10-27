@@ -70,7 +70,8 @@
       "invalidAccount": "Nome utente o ID community non valido.",
       "cannotIncrease": "Non puoi superare il {{percent}}% rimanente",
       "pendingRow": "@{{account}} non è ancora stato aggiunto — fai clic su + per aggiungerlo, o svuota il campo.",
-      "atLeastOne": "La percentuale di ricompensa deve essere almeno dell'1%"
+      "atLeastOne": "La percentuale di ricompensa deve essere almeno dell'1%",
+      "maxCount": "Hive consente al massimo {{max}} beneficiari per post."
     },
     "title": "Beneficiari",
     "intro": "Aggiungi un utente che deve ricevere automaticamente una parte delle ricompense di questo post.",
@@ -86,7 +87,8 @@
   },
   "qr": {
     "scan": "Scansiona questo QR in Hive Keychain:",
-    "click": "Fai clic sul QR per aprirlo nell'app Keychain"
+    "click": "Fai clic sul QR per aprirlo nell'app Keychain",
+    "title": "Accedi con Keychain"
   },
   "editVideoHint": {
     "title": "Modifica i tuoi video",
@@ -115,7 +117,12 @@
     "preparing": "Preparazione del video per il caricamento...",
     "renderUnavailable": "Servizio di rendering non ancora disponibile. Dati della timeline registrati nella console.",
     "backToEditor": "Torna all'editor",
-    "postError": "Impossibile preparare il video per il caricamento. Prova invece a scaricarlo."
+    "postError": "Impossibile preparare il video per il caricamento. Prova invece a scaricarlo.",
+    "postAs": "Pubblica come",
+    "postAsStory": "Storia",
+    "postAsStoryHint": "24 ore, in cima al feed Shorts",
+    "postAsShort": "Short",
+    "postAsShortHint": "Resta sul tuo canale"
   },
   "profile": {
     "mustLogin": "Prima devi accedere",

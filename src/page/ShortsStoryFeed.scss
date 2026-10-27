@@ -140,6 +140,11 @@
             box-shadow: 0 0 8px rgba(255, 255, 255, 0.35), 0 0 16px rgba(255, 255, 255, 0.12);
           }
 
+          // A story's ring is its timer (ShortsStories.scss): keep the arc.
+          .story-avatar-wrap.story-timer {
+            border-color: transparent !important;
+          }
+
           .story-username {
             color: #fff;
           }

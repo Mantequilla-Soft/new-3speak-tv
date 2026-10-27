@@ -83,26 +83,10 @@
   box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
 }
 
-.sub-modal-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 16px 18px;
-  border-bottom: 1px solid var(--border-light, rgba(255, 255, 255, 0.1));
-
-  h3 { margin: 0; font-size: 16px; i { color: #f1c40f; margin-right: 6px; } }
-}
-
-.sub-modal-close {
-  background: none;
-  border: none;
-  color: var(--text-secondary, #aaa);
-  cursor: pointer;
-  display: flex;
-  padding: 4px;
-  border-radius: 6px;
-
-  &:hover { color: var(--text-primary, #fff); background: var(--bg-hover, rgba(255, 255, 255, 0.06)); }
+.sub-modal .sub-modal-header {
+  flex-shrink: 0;
+  padding: 16px 18px 12px;
+  margin-bottom: 0;
 }
 
 .sub-modal-list {

@@ -16,6 +16,7 @@
     "availableBalance": "Доступний баланс: {{currency}}",
     "memoLabel": "Примітка (необов'язково):",
     "memoPlaceholder": "напр. Дякую за чудовий контент!",
+    "memoLinkNote": "Це посилання додається до мемо: {{link}}",
     "send": "Надіслати чайові"
   },
   "cardMenu": {

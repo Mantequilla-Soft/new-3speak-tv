@@ -10,6 +10,7 @@ import { useAppStore } from "../../lib/store";
 import { useTranslation } from "react-i18next";
 import { getHiveRenderer } from '../../lib/hiveRenderer';
 import AccountImg from '../HiveAvatar/AccountImg';
+import ModalHeader from '../ModalHeader/ModalHeader';
 
 // Debounce hook
 const useDebounce = (value, delay = 300) => {
@@ -296,10 +297,7 @@ function CommunitieModal({ isOpen, data, close, setCommunity, selected }) {
       <div className="overlay" onClick={close}></div>
 
       <div className={`modal-content community-modal ${isOpen ? "open" : ""}`} onClick={(e) => e.stopPropagation()}>
-        <div className="modal-header">
-          <h2>{t('communities.picker.title')}</h2>
-          <button type="button" className="close-btn" onClick={close}>×</button>
-        </div>
+        <ModalHeader title={t('communities.picker.title')} onClose={close} />
 
         <div className="modal-body">
 

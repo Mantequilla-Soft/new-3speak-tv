@@ -25,7 +25,9 @@
       "boosts_received": "收到的助力",
       "boost_amount_received": "收到的金额",
       "boosts_given": "送出的助力",
-      "boost_amount_given": "送出的金额"
+      "boost_amount_given": "送出的金额",
+      "story_uploads": "快拍",
+      "story_streak": "快拍连续天数"
     },
     "metricsInSentence": {
       "video_uploads": "视频",
@@ -40,7 +42,9 @@
       "boosts_received": "收到的助力",
       "boost_amount_received": "收到的金额",
       "boosts_given": "送出的助力",
-      "boost_amount_given": "送出的金额"
+      "boost_amount_given": "送出的金额",
+      "story_uploads": "快拍",
+      "story_streak": "快拍连续天数"
     },
     "blurbs": {
       "video_uploads": "上传的视频",
@@ -55,7 +59,9 @@
       "boosts_received": "其直播收到的助力",
       "boost_amount_received": "收到的助力总金额",
       "boosts_given": "送给其他主播的助力",
-      "boost_amount_given": "送出的助力总金额"
+      "boost_amount_given": "送出的助力总金额",
+      "story_uploads": "发布的快拍",
+      "story_streak": "连续发布快拍的最多天数"
     },
     "blurbsInSentence": {
       "video_uploads": "上传的视频",
@@ -70,22 +76,32 @@
       "boosts_received": "其直播收到的助力",
       "boost_amount_received": "收到的助力总金额",
       "boosts_given": "送给其他主播的助力",
-      "boost_amount_given": "送出的助力总金额"
+      "boost_amount_given": "送出的助力总金额",
+      "story_uploads": "发布的快拍",
+      "story_streak": "连续发布快拍的最多天数"
     },
     "groups": {
       "video": "视频",
-      "streaming": "直播"
+      "streaming": "直播",
+      "stories": "快拍"
     },
     "badgeNouns": {
       "video_uploads": "视频",
       "short_uploads": "短视频",
       "video_watch_secs": "观看",
       "short_watch_secs": "短视频观看",
-      "tags_given": "标签达人"
+      "tags_given": "标签达人",
+      "story_streak": "连续"
     },
     "badgeLabel": "{{tier}} {{noun}}",
     "badgeTitleAllTime": "{{what}} 历史总榜第 {{rank}} 名",
-    "badgeTitleWindow": "最近 {{window}} {{what}} 排名第 {{rank}}"
+    "badgeTitleWindow": "最近 {{window}} {{what}} 排名第 {{rank}}",
+    "sub": {
+      "count": "数量",
+      "watchTime": "观看时长",
+      "streak": "连续"
+    },
+    "timeRange": "时间范围"
   },
   "duration": {
     "hoursMinutes": "{{h}} 小时 {{m}} 分",
@@ -159,15 +175,28 @@
   "uploadLinks": {
     "regularVideo": "普通视频",
     "verticalShort": "竖屏短视频",
+    "story": "快拍(24小时)",
     "musicAudio": "音乐 / 音频",
     "groupChat": "群聊",
     "communitySnap": "社区 Snap",
     "shortsEditor": "短视频编辑器",
     "goLiveNow": "开始直播！",
+    "playlist": "播放列表",
     "headings": {
       "upload": "上传",
       "live": "直播",
       "others": "其他"
+    },
+    "subtitles": {
+      "regularVideo": "发布到频道的普通视频",
+      "verticalShort": "用于短视频流的竖屏片段",
+      "shortsEditor": "在浏览器中录制并剪辑短视频",
+      "story": "展示 24 小时的短片",
+      "musicAudio": "歌曲、播客及其他音频",
+      "groupChat": "与嘉宾一起主持的直播间",
+      "goLiveNow": "向你的关注者直播",
+      "communitySnap": "在社区标签页快速发帖",
+      "playlist": "把视频整理成可分享的列表"
     }
   },
   "chat": {

@@ -7,7 +7,10 @@
     "default": "3S | Shorts"
   },
   "stories": {
-    "you": "Jij"
+    "you": "Jij",
+    "storyTitle": "Story van {{user}}",
+    "streakTitle_one": "Storyreeks van {{count}} dag",
+    "streakTitle_other": "Storyreeks van {{count}} dagen"
   },
   "errors": {
     "votingUnavailable": "Voten is niet mogelijk voor deze post",
@@ -71,7 +74,9 @@
   },
   "remix": {
     "noUrl": "Video-URL voor de remix kon niet worden gevonden",
-    "loadFailed": "Video laden voor remix mislukt"
+    "loadFailed": "Video laden voor remix mislukt",
+    "chainFull": "Deze video bouwt al voort op {{max}} eerdere video's en kan niet meer geremixt worden.",
+    "chainNoSlots": "Deze remixketen betaalt al zoveel makers dat er op Hive geen plek meer is voor nog een remix. Met 3Speak Pro kun je hem nog wel remixen."
   },
   "watchLater": {
     "loginRequired": "Log in om Shorts op te slaan",
@@ -105,5 +110,25 @@
     "viewReplies_other": "{{count}} antwoorden bekijken",
     "hideReplies_one": "{{count}} antwoord verbergen",
     "hideReplies_other": "{{count}} antwoorden verbergen"
+  },
+  "storyExpired": {
+    "title": "Deze story is verlopen",
+    "body": "Story's op 3Speak zijn 24 uur te zien.",
+    "next": "Volgende short"
+  },
+  "storyTools": {
+    "seenBy_one": "Gezien door {{count}}",
+    "seenBy_other": "Gezien door {{count}}",
+    "seenTitle": "Gezien door",
+    "seenNote": "Ingelogde kijkers die hun kijkgeschiedenis aan hebben staan.",
+    "seenEmpty": "Nog niemand heeft hem gezien.",
+    "keep": "Bewaren als Short",
+    "keepHint": "Blijft na de 24 uur op je kanaal",
+    "keepConfirm": "Voorgoed bewaren?",
+    "keepYes": "Bewaren",
+    "keeping": "Bewaren…",
+    "kept": "Bewaard. Hij blijft als Short op je kanaal.",
+    "keepFailed": "Deze story kon niet worden bewaard.",
+    "keepWalletPrompt": "Onderteken om je story als Short te bewaren"
   }
 }

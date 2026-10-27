@@ -1947,6 +1947,41 @@ app.post('/api/comments/pin-signature', signChallengeLimiter, async (req, res) =
   }
 })
 
+// POST /api/stories/keep-signature — sign "keep my live story as a short".
+//
+// Same delegated shape and the same 🔒 as the comment pin above: the author in the
+// message is the SESSION user, never a value from the body, so this can only ever
+// sign "I am keeping my own story". The checker (routes/stories.js, POST
+// /stories/keep) verifies it and only touches a live story of that user.
+app.post('/api/stories/keep-signature', signChallengeLimiter, async (req, res) => {
+  try {
+    if (!POSTING_WIF) return res.status(500).json({ error: 'Server is not configured' })
+    delete req.headers['x-api-key'] // see 🔒 on /api/captions/edit-signature
+    const hiveUsername = await resolveRequestedSignUser(req, res)
+    if (!hiveUsername) return res.status(401).json({ error: 'Unauthorized', reason: 'not_signed_in_as' })
+
+    const permlink = typeof req.body?.permlink === 'string' ? req.body.permlink : ''
+    if (!/^[a-z0-9-]{1,255}$/.test(permlink)) {
+      return res.status(400).json({ error: 'Invalid request' })
+    }
+
+    if (!(await hasThreespeakPostingGrant(hiveUsername))) {
+      return res.status(403).json({
+        error: `Keeping a story from here needs @${HIVE_ACCOUNT} posting authority on your account. Log in with Keychain, HiveAuth, PeakVault or Ledger to sign it directly instead.`,
+      })
+    }
+
+    const timestamp = Date.now()
+    // Keep in lockstep with keepMessage() in 3speakchecks/routes/stories.js.
+    const message = ['3speak-stories', 'keep', hiveUsername, permlink, String(timestamp)].join('|')
+    const signature = PrivateKey.fromString(POSTING_WIF).sign(cryptoUtils.sha256(Buffer.from(message, 'utf8'))).toString()
+    return res.json({ success: true, signature, timestamp, username: hiveUsername })
+  } catch (err) {
+    console.error('Story keep signature error:', err.message)
+    res.status(500).json({ error: 'Signing failed' })
+  }
+})
+
 // POST /api/supports/hide-signature — sign a creator hiding (or unhiding) a tip
 // they received, so it no longer shows on their profile.
 //
@@ -2347,6 +2382,27 @@ require('./og-cards.cjs').mountOgCards(app, {
     const inv = await butr.getInvite(code)
     if (!inv.valid || inv.app?.clientId !== MANTEAUTH_CLIENT_ID) return null
     return String(inv.referrer || '').toLowerCase() || null
+  },
+})
+
+// 🧩 Section order + settings of a channel's Overview tab. See profile-layout.cjs.
+require('./profile-layout.cjs').mountProfileLayout(app, {
+  uri: process.env.MONGODB_URI || '',
+  dbName: process.env.DATABASE_NAME,
+  limiter: baseLimiter,
+  // As /api/editor-token: the page names the account it is signed in as, and
+  // only a VERIFIED session of exactly that account counts.
+  resolveOwner: async (req, res, claimed) => {
+    const want = String(claimed || '').toLowerCase()
+    const butrUser = await resolveButrUser(req, res)
+    const ws = req.cookies?.[WSESSION_COOKIE_NAME]
+    const wallet = ws && verifyWalletSession(ws)
+    const authHeader = req.headers.authorization || ''
+    const bearer = authHeader.startsWith('Bearer ') ? authHeader.slice(7).trim() : ''
+    const hs = bearer ? await verifyHiveSignerToken(bearer) : null
+    const verified = [butrUser, wallet, hs].filter(Boolean).map(u => String(u).toLowerCase())
+    const user = want ? verified.find(u => u === want) : verified[0]
+    return user && HIVE_USER_RE.test(user) ? user : null
   },
 })
 

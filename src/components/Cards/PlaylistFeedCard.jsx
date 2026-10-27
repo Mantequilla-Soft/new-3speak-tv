@@ -27,7 +27,7 @@ async function fetchFirstItemThumb(author, permlink) {
     if (!raw) return null;
     const meta = typeof raw === 'string' ? JSON.parse(raw) : raw;
     if (meta.image?.[0]) return meta.image[0];
-    if (meta.video?.info?.ipfsThumbnail) return `https://ipfs-3speak.b-cdn.net/ipfs/${meta.video.info.ipfsThumbnail}`;
+    if (meta.video?.info?.ipfsThumbnail) return `https://ipfs.3speak.tv/ipfs/${meta.video.info.ipfsThumbnail}`;
   } catch { /* ignore — fall back to avatar */ }
   return null;
 }
@@ -72,7 +72,7 @@ function PlaylistFeedCard({ playlist }) {
       <div className="pfc-body">
         <Link to={`/playlist/${id}`} className="pfc-title" title={name}>{name}</Link>
         <div className="pfc-owner">
-          <AuthorBadge author={owner} showFollow compact tabHint="playlists" />
+          <AuthorBadge author={owner} compact tabHint="playlists" />
         </div>
         {changed && <p className="pfc-changed">{t('cards.playlist.updated', { when: changed })}</p>}
       </div>

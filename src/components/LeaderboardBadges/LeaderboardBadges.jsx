@@ -1,8 +1,8 @@
 import { Link } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
-import { MdOndemandVideo, MdVisibility, MdTimer, MdLocalOffer, MdRocketLaunch } from 'react-icons/md';
+import { MdOndemandVideo, MdVisibility, MdTimer, MdLocalOffer, MdRocketLaunch, MdAccessTime, MdLocalFireDepartment } from 'react-icons/md';
 import ShortsIcon from '../icons/ShortsIcon';
-import { usePremiumStatus } from '../../hooks/usePremiumStatus';
+import { usePremiumBadge } from '../../hooks/usePremiumStatus';
 import {
   fetchLeaderboardBadges,
   visibleBadges,
@@ -19,6 +19,8 @@ const BADGE_ICONS = {
   video_watch_secs: MdVisibility,
   short_watch_secs: MdTimer,
   tags_given: MdLocalOffer,
+  story_uploads: MdAccessTime,
+  story_streak: MdLocalFireDepartment,
 };
 
 /**
@@ -43,8 +45,7 @@ function LeaderboardBadges({ username }) {
   // 3Speak Pro sits in the same row as the standings. It's a status, not a
   // ranking, so it leads — and it shows even for accounts holding no
   // leaderboard badges at all.
-  const premiumStatus = usePremiumStatus(username);
-  const isPro = !!premiumStatus?.premium;
+  const isPro = !!usePremiumBadge(username);
 
   const badges = visibleBadges(data?.badges);
   if (!badges.length && !isPro) return null;

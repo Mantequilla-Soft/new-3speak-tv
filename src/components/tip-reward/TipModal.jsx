@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import Success from './Success';
 import { useTranslation } from 'react-i18next';
+import ModalHeader from '../ModalHeader/ModalHeader';
 import './TipModal.scss';
 import { fetchBalances, isAccountValid } from '../../hive-api/api';
 import { useAppStore } from '../../lib/store';
@@ -18,7 +19,9 @@ const toast = toastIn('Tip');
 // `permlink`: the video (or audio post) the tip is sent from. With it, a tip of
 // any amount is reported to the checker as a support (lib/supports.js);
 // a profile tip passes none and is not one.
-const TipModal = ({ recipient, permlink, isOpen, onClose, onSendTip }) => {
+// `memoLink`: public 3speak.tv link of that video/audio post, appended to the
+// memo so the recipient sees what the tip was for.
+const TipModal = ({ recipient, permlink, memoLink, isOpen, onClose, onSendTip }) => {
     const { t } = useTranslation();
     const queryClient = useQueryClient();
     const { user: activetUser } = useAppStore();
@@ -94,13 +97,20 @@ const TipModal = ({ recipient, permlink, isOpen, onClose, onSendTip }) => {
       return;
     }
 
+    // The checker matches the reported memo against the on-chain one, so the
+    // support report carries the memo with the link too.
+    const typed = memo.trim();
+    const fullMemo = memoLink && !typed.includes(memoLink)
+      ? (typed ? `${typed} ${memoLink}` : memoLink)
+      : typed;
+
     // Saved BEFORE the broadcast: if the page reloads while the wallet is still
     // signing, the next app start reports it (lib/supports.js).
     const pending = permlink
-      ? queueSupport({ tipper: activetUser, author: recipient, permlink, amount: parseFloat(amount), currency, memo })
+      ? queueSupport({ tipper: activetUser, author: recipient, permlink, amount: parseFloat(amount), currency, memo: fullMemo })
       : null;
     try {
-      await transferWithAioha(recipient, parseFloat(amount), currency, memo || '');
+      await transferWithAioha(recipient, parseFloat(amount), currency, fullMemo);
       setStep(2);
       if (pending) {
         recordSupport(pending)
@@ -126,12 +136,13 @@ const TipModal = ({ recipient, permlink, isOpen, onClose, onSendTip }) => {
   return (
     <div className={`tip-modal ${step === 2 ? "add" : ""}`}>
         <div className={`modal-content-trx ${step === 2 ? "add" : ""}`}>
+        <ModalHeader
+          className="tip-modal-header"
+          title={step === 2 ? t('engagement.tip.successTitle') : t('engagement.tip.heading', { recipient })}
+          onClose={handleClose}
+        />
       
         {step === 1 && <div className="tip-modal-in">
-          <div className="header">
-            <h2>{t('engagement.tip.heading', { recipient })}</h2>
-          </div>
-          
           <div className="form">
             <div className="field">
               <label>{t('engagement.tip.amountLabel')}</label>
@@ -167,6 +178,9 @@ const TipModal = ({ recipient, permlink, isOpen, onClose, onSendTip }) => {
                 value={memo}
                 onChange={(e) => setMemo(e.target.value)}
               />
+              {memoLink && (
+                <div className="memo-link-note">{t('engagement.tip.memoLinkNote', { link: memoLink })}</div>
+              )}
             </div>
 
             <div className="actions">

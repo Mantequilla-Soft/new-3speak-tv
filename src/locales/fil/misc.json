@@ -25,7 +25,9 @@
       "boosts_received": "Natanggap na boosts",
       "boost_amount_received": "Halagang natanggap",
       "boosts_given": "Ibinigay na boosts",
-      "boost_amount_given": "Halagang ibinigay"
+      "boost_amount_given": "Halagang ibinigay",
+      "story_uploads": "Mga story",
+      "story_streak": "Story streak"
     },
     "metricsInSentence": {
       "video_uploads": "video",
@@ -40,7 +42,9 @@
       "boosts_received": "natanggap na boosts",
       "boost_amount_received": "halagang natanggap",
       "boosts_given": "ibinigay na boosts",
-      "boost_amount_given": "halagang ibinigay"
+      "boost_amount_given": "halagang ibinigay",
+      "story_uploads": "mga story",
+      "story_streak": "story streak"
     },
     "blurbs": {
       "video_uploads": "Mga video na in-upload",
@@ -55,7 +59,9 @@
       "boosts_received": "Mga boost na ipinadala sa kanilang stream",
       "boost_amount_received": "Kabuuang halaga ng natanggap na boosts",
       "boosts_given": "Mga boost na ipinadala nila sa ibang streamer",
-      "boost_amount_given": "Kabuuang halaga ng mga boost na ibinigay nila"
+      "boost_amount_given": "Kabuuang halaga ng mga boost na ibinigay nila",
+      "story_uploads": "Mga na-post na story",
+      "story_streak": "Pinakamaraming sunod-sunod na araw na may story"
     },
     "blurbsInSentence": {
       "video_uploads": "mga video na in-upload",
@@ -70,22 +76,32 @@
       "boosts_received": "mga boost na ipinadala sa kanilang stream",
       "boost_amount_received": "kabuuang halaga ng natanggap na boosts",
       "boosts_given": "mga boost na ipinadala nila sa ibang streamer",
-      "boost_amount_given": "kabuuang halaga ng mga boost na ibinigay nila"
+      "boost_amount_given": "kabuuang halaga ng mga boost na ibinigay nila",
+      "story_uploads": "mga na-post na story",
+      "story_streak": "pinakamaraming sunod-sunod na araw na may story"
     },
     "groups": {
       "video": "Video",
-      "streaming": "Streaming"
+      "streaming": "Streaming",
+      "stories": "Mga story"
     },
     "badgeNouns": {
       "video_uploads": "Videos",
       "short_uploads": "Shorts",
       "video_watch_secs": "Napanood",
       "short_watch_secs": "Shorts na Napanood",
-      "tags_given": "Tagger"
+      "tags_given": "Tagger",
+      "story_streak": "Streak"
     },
     "badgeLabel": "{{tier}} {{noun}}",
     "badgeTitleAllTime": "Rank #{{rank}} sa {{what}} sa lahat ng panahon",
-    "badgeTitleWindow": "Rank #{{rank}} sa {{what}} sa nakaraang {{window}}"
+    "badgeTitleWindow": "Rank #{{rank}} sa {{what}} sa nakaraang {{window}}",
+    "sub": {
+      "count": "Bilang",
+      "watchTime": "Watch time",
+      "streak": "Streak"
+    },
+    "timeRange": "Saklaw ng oras"
   },
   "duration": {
     "hoursMinutes": "{{h}}h {{m}}m",
@@ -159,15 +175,28 @@
   "uploadLinks": {
     "regularVideo": "Regular na Video",
     "verticalShort": "Vertical na Short",
+    "story": "Story (24h)",
     "musicAudio": "Musika / Audio",
     "groupChat": "Group Chat",
     "communitySnap": "Community Snap",
     "shortsEditor": "Shorts Editor",
     "goLiveNow": "Mag-live na!",
+    "playlist": "Playlist",
     "headings": {
       "upload": "Upload",
       "live": "Live",
       "others": "Iba pa"
+    },
+    "subtitles": {
+      "regularVideo": "Klasikong video para sa channel mo",
+      "verticalShort": "Vertical na clip para sa Shorts feed",
+      "shortsEditor": "Mag-record at mag-edit ng short sa browser mo",
+      "story": "Maikling clip na nakikita sa loob ng 24 oras",
+      "musicAudio": "Mga kanta, podcast at iba pang audio",
+      "groupChat": "Live room na hino-host mo kasama ang mga bisita",
+      "goLiveNow": "Mag-stream nang live para sa mga follower mo",
+      "communitySnap": "Mabilis na post sa community tab mo",
+      "playlist": "Pagsamahin ang mga video sa listahang maibabahagi"
     }
   },
   "chat": {

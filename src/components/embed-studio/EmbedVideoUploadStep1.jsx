@@ -16,7 +16,7 @@ import { checkPostingRc } from '../../utils/rcCheck';
 import RcInsufficientModal from './RcInsufficientModal';
 import useCanImportVideos from '../../hooks/useCanImportVideos';
 import StepActions from './StepActions';
-import { SHORTS_MAX_DURATION_SEC, shortsMaxDurationLabel, cameraRecordEnabledFor, VIDEO_IMPORT_ENABLED, FEATURE_EDITOR } from '../../utils/config';
+import { SHORTS_MAX_DURATION_SEC, shortsMaxDurationLabel, cameraRecordEnabledFor, VIDEO_IMPORT_ENABLED, FEATURE_EDITOR, storiesEnabledFor } from '../../utils/config';
 import { isChromium } from '../../utils/browser';
 import { useTranslation, Trans } from 'react-i18next';
 
@@ -35,6 +35,10 @@ function EmbedVideoUploadStep1() {
     setVideoMode,
     clearVideoSelection,
     fromStories,
+    isStory,
+    setIsStory,
+    generatedThumbnail,
+    pickFirstThumbnail,
     user,
   } = useEmbedUpload()
 
@@ -257,6 +261,10 @@ function EmbedVideoUploadStep1() {
       setVideoDuration(hasDuration ? duration : 0);
       setVideoMode(fromStories ? 'shorts' : 'longform');
 
+      // A story goes straight to Post: the first frame is its cover and the
+      // caption is optional, so there is nothing for the two steps between to ask.
+      if (isStory && pickFirstThumbnail(thumbs)) navigate('/embed-studio/preview');
+
     } catch (err) {
       console.error(err);
       toast.error(err.message || t("upload.select.processFailed"));
@@ -271,6 +279,10 @@ function EmbedVideoUploadStep1() {
       return;
     }
 
+    if (isStory && pickFirstThumbnail(generatedThumbnail)) {
+      navigate("/embed-studio/preview");
+      return;
+    }
     navigate("/embed-studio/thumbnail");
   };
 
@@ -307,6 +319,17 @@ function EmbedVideoUploadStep1() {
   return (
     <div>
       <StepActions placement="top" {...actions} />
+      {/* A short can go out as a 24h story instead: it leads the shorts feed and
+          reaches followers as a notification, and the creator can still keep it. */}
+      {fromStories && storiesEnabledFor(user) && (
+        <label className="story-switch">
+          <input type="checkbox" checked={!!isStory} onChange={(e) => setIsStory(e.target.checked)} />
+          <span className="story-switch__text">
+            <strong>{t("upload.select.asStory")}</strong>
+            <small>{t("upload.select.asStoryHint")}</small>
+          </span>
+        </label>
+      )}
       <div className="upload-step">
 
         <div className="content">
@@ -478,7 +501,7 @@ function EmbedVideoUploadStep1() {
                     <button
                       type="button"
                       className="button button--outline"
-                      onClick={() => navigate(fromStories ? '/embed-studio/record?from=stories' : '/embed-studio/record')}
+                      onClick={() => navigate(fromStories ? `/embed-studio/record?from=${isStory ? 'story' : 'stories'}` : '/embed-studio/record')}
                     >
                       <Video className="w-4 h-4" style={{ display: 'inline', verticalAlign: 'middle', marginRight: 6 }} />
                       {t("upload.select.selfieTeleprompter")}

@@ -7,7 +7,9 @@
     "default": "3S | ショート"
   },
   "stories": {
-    "you": "あなた"
+    "you": "あなた",
+    "storyTitle": "{{user}}さんのストーリー",
+    "streakTitle_other": "{{count}}日連続ストーリー"
   },
   "errors": {
     "votingUnavailable": "この投稿には投票できません",
@@ -71,7 +73,9 @@
   },
   "remix": {
     "noUrl": "リミックス用の動画 URL を取得できませんでした",
-    "loadFailed": "リミックス用の動画を読み込めませんでした"
+    "loadFailed": "リミックス用の動画を読み込めませんでした",
+    "chainFull": "この動画はすでに {{max}} 本の動画を元にしているため、これ以上リミックスできません。",
+    "chainNoSlots": "このリミックスの連鎖はすでに多くのクリエイターに報酬を分配しているため、Hive 上に新しいリミックスの空きがありません。3Speak Pro ならリミックスできます。"
   },
   "watchLater": {
     "loginRequired": "ショートを保存するにはログイン",
@@ -103,5 +107,24 @@
     "replyPlaceholder": "返信を入力...",
     "viewReplies_other": "{{count}} 件の返信を表示",
     "hideReplies_other": "{{count}} 件の返信を隠す"
+  },
+  "storyExpired": {
+    "title": "このストーリーは期限切れです",
+    "body": "3Speakのストーリーは24時間公開されます。",
+    "next": "次のショート"
+  },
+  "storyTools": {
+    "seenBy_other": "{{count}}人が閲覧",
+    "seenTitle": "閲覧したユーザー",
+    "seenNote": "ログイン中で、視聴履歴をオンにしている視聴者です。",
+    "seenEmpty": "まだ誰も見ていません。",
+    "keep": "ショートとして残す",
+    "keepHint": "24時間後もチャンネルに残ります",
+    "keepConfirm": "ずっと残しますか？",
+    "keepYes": "残す",
+    "keeping": "保存中…",
+    "kept": "残しました。ショートとしてチャンネルに残ります。",
+    "keepFailed": "このストーリーを残せませんでした。",
+    "keepWalletPrompt": "ストーリーをショートとして残すには署名してください"
   }
 }

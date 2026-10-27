@@ -27,6 +27,7 @@ import { fetchVideosForPlaylist } from '../utils/playlistVideos';
 import useHoverPreview from '../hooks/useHoverPreview';
 import { uploadThumbnail } from '../utils/uploadThumbnail';
 import { DATE_FILTERS, getSinceTimestamp, formatRelativeDate } from '../utils/dateFilters';
+import ModalHeader from '../components/ModalHeader/ModalHeader';
 
 // Every toast from this module is headed "Playlist"; the message becomes the
 // line under it. See utils/toast.js.
@@ -705,7 +706,7 @@ function PlaylistView() {
       {showDeleteConfirm && (
         <div className="delete-confirm-overlay" onClick={() => setShowDeleteConfirm(false)}>
           <div className="delete-confirm-modal" onClick={(e) => e.stopPropagation()}>
-            <h3>{t('playlists.view.deleteConfirmTitle')}</h3>
+            <ModalHeader title={t('playlists.view.deleteConfirmTitle')} onClose={isDeleting ? undefined : () => setShowDeleteConfirm(false)} />
             <p>{t('playlists.view.deleteConfirmText', { name: playlist.name })}</p>
             <div className="modal-actions">
               <button type="button" className="btn-cancel" onClick={() => setShowDeleteConfirm(false)} disabled={isDeleting}>
@@ -723,7 +724,7 @@ function PlaylistView() {
       {showEditModal && (
         <div className="delete-confirm-overlay" onClick={() => setShowEditModal(false)}>
           <div className="edit-playlist-modal" onClick={(e) => e.stopPropagation()}>
-            <h3>{t('playlists.view.editTitle')}</h3>
+            <ModalHeader title={t('playlists.view.editTitle')} onClose={isUpdating ? undefined : () => setShowEditModal(false)} />
             <div className="form-group">
               <label>{t('playlists.modal.name')}</label>
               <input

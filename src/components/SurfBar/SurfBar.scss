@@ -409,29 +409,6 @@
   }
 }
 
-.surf-guide__head {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 12px;
-  font-size: 16px;
-
-  button {
-    display: grid;
-    place-items: center;
-    width: 32px;
-    height: 32px;
-    border: 0;
-    border-radius: 50%;
-    background: transparent;
-    color: var(--text-secondary);
-    font-size: 20px;
-    cursor: pointer;
-
-    &:hover { background: var(--bg-hover); color: var(--text-primary); }
-  }
-}
-
 .surf-guide__group + .surf-guide__group {
   margin-top: 10px;
   padding-top: 10px;

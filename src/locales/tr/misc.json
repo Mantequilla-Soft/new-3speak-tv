@@ -25,7 +25,9 @@
       "boosts_received": "Alınan boost'lar",
       "boost_amount_received": "Alınan miktar",
       "boosts_given": "Verilen boost'lar",
-      "boost_amount_given": "Verilen miktar"
+      "boost_amount_given": "Verilen miktar",
+      "story_uploads": "Hikâyeler",
+      "story_streak": "Hikâye serisi"
     },
     "metricsInSentence": {
       "video_uploads": "video",
@@ -40,7 +42,9 @@
       "boosts_received": "alınan boost",
       "boost_amount_received": "alınan miktar",
       "boosts_given": "verilen boost",
-      "boost_amount_given": "verilen miktar"
+      "boost_amount_given": "verilen miktar",
+      "story_uploads": "hikâye",
+      "story_streak": "hikâye serisi"
     },
     "blurbs": {
       "video_uploads": "Yüklenen videolar",
@@ -55,7 +59,9 @@
       "boosts_received": "Yayınlarına gönderilen boost'lar",
       "boost_amount_received": "Alınan boost'ların toplam miktarı",
       "boosts_given": "Diğer yayıncılara gönderdikleri boost'lar",
-      "boost_amount_given": "Verdikleri boost'ların toplam miktarı"
+      "boost_amount_given": "Verdikleri boost'ların toplam miktarı",
+      "story_uploads": "Paylaşılan hikâyeler",
+      "story_streak": "Art arda en çok hikâyeli gün"
     },
     "blurbsInSentence": {
       "video_uploads": "yüklenen videolar",
@@ -70,22 +76,32 @@
       "boosts_received": "yayınlarına gönderilen boost'lar",
       "boost_amount_received": "alınan boost'ların toplam miktarı",
       "boosts_given": "diğer yayıncılara gönderdikleri boost'lar",
-      "boost_amount_given": "verdikleri boost'ların toplam miktarı"
+      "boost_amount_given": "verdikleri boost'ların toplam miktarı",
+      "story_uploads": "paylaşılan hikâye",
+      "story_streak": "art arda en çok hikâyeli gün"
     },
     "groups": {
       "video": "Video",
-      "streaming": "Yayın"
+      "streaming": "Yayın",
+      "stories": "Hikâyeler"
     },
     "badgeNouns": {
       "video_uploads": "Videolar",
       "short_uploads": "Shorts",
       "video_watch_secs": "İzlenen",
       "short_watch_secs": "İzlenen Shorts",
-      "tags_given": "Etiketleyici"
+      "tags_given": "Etiketleyici",
+      "story_streak": "Seri"
     },
     "badgeLabel": "{{tier}} {{noun}}",
     "badgeTitleAllTime": "Tüm zamanlarda {{what}} sıralamasında #{{rank}}",
-    "badgeTitleWindow": "Son {{window}} içinde {{what}} sıralamasında #{{rank}}"
+    "badgeTitleWindow": "Son {{window}} içinde {{what}} sıralamasında #{{rank}}",
+    "sub": {
+      "count": "Sayı",
+      "watchTime": "İzlenme süresi",
+      "streak": "Seri"
+    },
+    "timeRange": "Zaman aralığı"
   },
   "duration": {
     "hoursMinutes": "{{h}}sa {{m}}dk",
@@ -159,15 +175,28 @@
   "uploadLinks": {
     "regularVideo": "Normal Video",
     "verticalShort": "Dikey Shorts",
+    "story": "Hikâye (24 sa)",
     "musicAudio": "Müzik / Ses",
     "groupChat": "Grup Sohbeti",
     "communitySnap": "Topluluk Snap'i",
     "shortsEditor": "Shorts Düzenleyici",
     "goLiveNow": "Canlı yayına geç!",
+    "playlist": "Oynatma listesi",
     "headings": {
       "upload": "Yükle",
       "live": "Canlı",
       "others": "Diğer"
+    },
+    "subtitles": {
+      "regularVideo": "Kanalın için klasik video",
+      "verticalShort": "Shorts akışı için dikey klip",
+      "shortsEditor": "Tarayıcında short kaydet ve düzenle",
+      "story": "24 saat yayında kalan kısa klip",
+      "musicAudio": "Şarkılar, podcast'ler ve diğer sesler",
+      "groupChat": "Konuklarla sunduğun canlı oda",
+      "goLiveNow": "Takipçilerine canlı yayın yap",
+      "communitySnap": "Topluluk sekmende hızlı gönderi",
+      "playlist": "Videoları paylaşılabilir bir listede topla"
     }
   },
   "chat": {

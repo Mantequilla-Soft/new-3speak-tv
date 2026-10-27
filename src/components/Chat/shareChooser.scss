@@ -35,30 +35,8 @@
 
 @keyframes share-chooser-up { from { transform: translateY(100%); } to { transform: translateY(0); } }
 
-.share-chooser-title {
-  margin: 0 0 12px;
-  font-size: 16px;
-  font-weight: 600;
-  color: var(--text-primary);
-  text-align: center;
-}
-
-.share-chooser-close {
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  width: 30px;
-  height: 30px;
-  border: none;
-  background: transparent;
-  color: var(--text-secondary);
-  border-radius: 8px;
-  cursor: pointer;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  &:hover { background: var(--bg-hover); color: var(--text-primary); }
-}
+// The first option row brings its own 10px top margin.
+.share-chooser .share-chooser-header { margin-bottom: 6px; }
 
 .share-chooser-opt {
   display: flex;
@@ -86,9 +64,8 @@
 
 /* --- Embed view (share menu → "Embed on a website") --- */
 .share-chooser-back {
-  position: absolute;
-  top: 10px;
-  left: 10px;
+  flex-shrink: 0;
+  margin-left: -6px;
   width: 30px;
   height: 30px;
   border: none;

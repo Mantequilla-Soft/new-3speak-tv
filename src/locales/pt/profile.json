@@ -308,5 +308,116 @@
     "unhiddenToast": "A gorjeta voltou a aparecer no seu perfil",
     "hideFailed": "Não foi possível alterar esta gorjeta. Tente novamente.",
     "hideWalletPrompt": "Assine para mudar quais gorjetas aparecem no seu perfil"
+  },
+  "layout": {
+    "customize": "Personalizar perfil",
+    "title": "Personalize seu perfil",
+    "hint": "Arraste uma seção pela alça: ao lado de outra para uma nova coluna, acima ou abaixo de uma para empilhar, ou sobre uma linha entre as fileiras para uma nova linha. Puxe a borda direita para mudar a largura e use a engrenagem para as propriedades.",
+    "mobileHint": "Este é o seu perfil nos celulares: uma coluna. Arraste as seções para cima ou para baixo, oculte-as ou mude as propriedades. Até você mudar algo aqui, os celulares seguem o layout do desktop.",
+    "save": "Salvar layout",
+    "saving": "Salvando…",
+    "reset": "Restaurar padrão",
+    "undo": "Desfazer",
+    "redo": "Refazer",
+    "undoTitle": "Desfazer (Ctrl+Z)",
+    "redoTitle": "Refazer (Ctrl+Shift+Z)",
+    "matchDesktop": "Igual ao desktop",
+    "deviceDesktop": "Desktop",
+    "deviceMobile": "Celular",
+    "saved": "Layout do perfil salvo",
+    "saveFailed": "Não foi possível salvar o layout: {{error}}",
+    "signInNeeded": "Entre novamente para salvar o layout",
+    "drag": "Arraste para reordenar",
+    "dropHere": "Solte aqui",
+    "newRow": "Nova linha",
+    "resize": "Arraste para mudar a largura",
+    "dockHold": "segure para uma coluna de altura total",
+    "dockLeft": "Solte: coluna esquerda de altura total",
+    "dockRight": "Solte: coluna direita de altura total",
+    "moveUp": "Mover para cima",
+    "moveDown": "Mover para baixo",
+    "show": "Mostrar esta seção",
+    "hide": "Ocultar esta seção",
+    "settings": "Configurações da seção",
+    "remove": "Remover esta seção",
+    "hiddenBadge": "Oculta",
+    "hiddenTitle": "Seções ocultas",
+    "noSettings": "Esta seção não tem configurações.",
+    "emptySection": "Ainda não há nada para mostrar. Os visitantes só veem esta seção quando ela tiver conteúdo.",
+    "linksNote": "Só aparece em telas largas. \"Na página\" coloca na grade com as outras seções; você também pode arrastar pela alça.",
+    "addPlaylist": "Adicionar uma playlist como seção própria",
+    "playlistMissing": "Playlist não encontrada (excluída ou privada)",
+    "fields": {
+      "playlist": "Playlist",
+      "heading": "Título",
+      "count_one": "Mostrar {{count}} item",
+      "count_many": "Mostrar {{count}} itens",
+      "count_other": "Mostrar {{count}} itens",
+      "playlists_one": "Mostrar {{count}} playlist",
+      "playlists_many": "Mostrar {{count}} playlists",
+      "playlists_other": "Mostrar {{count}} playlists",
+      "size": "Tamanho do vídeo",
+      "size_sm": "Pequeno",
+      "size_md": "Médio",
+      "size_lg": "Grande",
+      "size_full": "Largura total",
+      "showInfo": "Mostrar título e descrição",
+      "showSnap": "Mostrar a última publicação da comunidade",
+      "view": "Layout",
+      "viewRow": "Linha",
+      "viewGrid": "Grade",
+      "side": "Posição",
+      "sideLeft": "Esquerda",
+      "sideRight": "Direita",
+      "sideNone": "Na página"
+    },
+    "types": {
+      "trailer": "Trailer do canal",
+      "live": "Ao vivo agora",
+      "audioPlaylists": "Álbuns e playlists de áudio",
+      "playlistRails": "Conteúdo das playlists",
+      "playlist": "Playlist",
+      "links": "Página de links"
+    },
+    "tour": {
+      "open": "Tour rápido",
+      "stepOf": "Passo {{n}} de {{total}}",
+      "skip": "Pular",
+      "back": "Voltar",
+      "next": "Avançar",
+      "done": "Vamos lá",
+      "intro": {
+        "title": "Deixe o canal com a sua cara",
+        "body": "Sua Visão geral agora é o editor: organize do jeito que os visitantes devem ver. Nada muda para eles até você tocar em Salvar."
+      },
+      "move": {
+        "title": "Mova seções",
+        "body": "Pegue uma seção pela alça e solte sobre outra. A borda esquerda ou direita coloca ao lado, a borda de cima ou de baixo empilha naquela coluna, e as linhas entre as fileiras começam uma nova fileira."
+      },
+      "resize": {
+        "title": "Mude a largura",
+        "body": "Puxe a alça na borda direita de uma seção. A largura muda em etapas, então seções lado a lado sempre ficam alinhadas."
+      },
+      "props": {
+        "title": "Propriedades da seção",
+        "body": "A engrenagem abre as propriedades de uma seção: quantos itens, fileira ou grade, o título e, no trailer, o tamanho do vídeo e o que fica ao lado."
+      },
+      "hide": {
+        "title": "Mostrar e ocultar",
+        "body": "O olho oculta uma seção. Seções ocultas esperam numa bandeja abaixo da página; clique em uma para trazê-la de volta."
+      },
+      "links": {
+        "title": "Sua página de links",
+        "body": "Arraste sua página de links para a página como qualquer outra seção. Segure-a um instante bem à esquerda ou à direita para virar uma coluna de altura total daquele lado."
+      },
+      "mobile": {
+        "title": "No celular também",
+        "body": "Mude para Celular na barra para definir como seu perfil aparece em celulares: uma coluna, na sua ordem. Até você mudar algo ali, os celulares seguem o layout do desktop."
+      },
+      "save": {
+        "title": "Salve quando gostar",
+        "body": "Salvar layout publica. Desfazer e Refazer passam pelas suas mudanças (Ctrl+Z também funciona), Cancelar descarta e Restaurar padrão traz a página normal de volta. O ? ao lado do título abre este tour de novo."
+      }
+    }
   }
 }

@@ -16,6 +16,7 @@
     "availableBalance": "利用可能な残高: {{currency}}",
     "memoLabel": "メモ（任意）:",
     "memoPlaceholder": "例: 素晴らしいコンテンツをありがとう！",
+    "memoLinkNote": "このリンクがメモに追加されます: {{link}}",
     "send": "投げ銭を送る"
   },
   "cardMenu": {

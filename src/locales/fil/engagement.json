@@ -16,6 +16,7 @@
     "availableBalance": "Available na balance: {{currency}}",
     "memoLabel": "Memo (opsyonal):",
     "memoPlaceholder": "hal. Salamat sa astig na content na ito!",
+    "memoLinkNote": "Idadagdag ang link na ito sa memo: {{link}}",
     "send": "Ipadala ang Tip"
   },
   "cardMenu": {

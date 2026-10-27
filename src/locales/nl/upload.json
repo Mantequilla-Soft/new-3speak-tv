@@ -53,6 +53,7 @@
   },
   "page": {
     "shareShort": "Deel een short",
+    "shareStory": "Deel een story",
     "shareVideo": "Deel een video"
   },
   "progress": {
@@ -131,7 +132,9 @@
     "browseFiles": "Bestanden bekijken",
     "proceed": "Verder naar thumbnails",
     "replace": "Video vervangen",
-    "editVideo": "Deze video bewerken"
+    "editVideo": "Deze video bewerken",
+    "asStory": "Plaatsen als story van 24 uur",
+    "asStoryHint": "Hij staat bovenaan de Shorts-feed en je volgers krijgen een melding. Zolang hij live is, kun je hem nog als Short houden."
   },
   "details": {
     "guests": {
@@ -152,6 +155,7 @@
       "tooManyTags": "Je kunt maximaal {{max}} tags toevoegen — de communitytag wordt automatisch toegevoegd."
     },
     "title": "Titel",
+    "titleShort": "Titel (optioneel)",
     "description": "Beschrijving",
     "descriptionPlaceholderShort": "Beschrijf je short...",
     "descriptionPlaceholder": "Schrijf hier je videobeschrijving... Markdown wordt ondersteund!",
@@ -249,11 +253,13 @@
     "watchAdToPublish": "Bekijk advertentie om te publiceren",
     "watchSponsorFirst": "Bekijk eerst de sponsorboodschap",
     "postShort": "Short plaatsen",
+    "postStory": "Story plaatsen",
     "postVideo": "Video plaatsen",
     "backToTimeline": "Terug naar tijdlijn"
   },
   "publishing": {
     "titleShort": "Short publiceren",
+    "titleStory": "Story wordt geplaatst",
     "titleVideo": "Video publiceren",
     "subtitle": "Even geduld terwijl we je content verwerken...",
     "starting": "Starten...",
@@ -277,6 +283,7 @@
     "adsOffFailedToast": "Gepubliceerd, maar de advertenties voor deze video konden nog niet worden uitgezet.",
     "rollsOffFailedToast": "Gepubliceerd, maar de videorolls konden voor deze video nog niet worden uitgezet.",
     "trailerFailedToast": "Gepubliceerd, maar kon niet worden ingesteld als je kanaaltrailer.",
+    "storyRegisterFailedToast": "Geplaatst, maar kon nog niet als 24-uurs story worden ingesteld.",
     "completed": "Voltooid",
     "publishedToast": "Video gepubliceerd!",
     "log": {
@@ -307,12 +314,15 @@
       "rollsOffFailed": "De instelling zonder rolls kon voor deze video niet worden opgeslagen",
       "trailerSet": "Ingesteld als je kanaaltrailer",
       "trailerFailed": "Gepubliceerd, maar kon niet worden ingesteld als je kanaaltrailer",
+      "storyRegistered": "Story is 24 uur zichtbaar",
+      "storyRegisterFailed": "Geplaatst, maar kon niet als 24-uurs story worden ingesteld",
       "published": "Video gepubliceerd!"
     }
   },
   "done": {
     "title": "Upload klaar!",
     "shortPublished": "Je short is gepubliceerd op 3Speak. Het duurt ongeveer 5 minuten voordat hij op je profiel verschijnt.",
+    "storyPublished": "Je story is de komende 24 uur te zien op 3Speak.",
     "videoPublished": "Je video is gepubliceerd!<br/>Hij wordt nu op de achtergrond geëncodeerd, wat een paar minuten kan duren.",
     "promote": "Deze video promoten",
     "goToProfile": "Naar mijn profiel →",
@@ -480,5 +490,17 @@
       "noAccount": "Er is geen account met die naam.",
       "addButton": "Link toevoegen"
     }
+  },
+  "story": {
+    "captionPlaceholder": "Bijschrift toevoegen (optioneel)",
+    "moreOptions": "Meer opties",
+    "reach_one": "Bereikt je {{count}} volger en staat 24 uur bovenaan de Shorts-feed.",
+    "reach_other": "Bereikt je {{count}} volgers en staat 24 uur bovenaan de Shorts-feed.",
+    "reachNoCount": "Bereikt je volgers en staat 24 uur bovenaan de Shorts-feed.",
+    "streakOn_one": "Je zit op een storyreeks van {{count}} dag.",
+    "streakOn_other": "Je zit op een storyreeks van {{count}} dagen.",
+    "streakNext_one": "Hiermee wordt je storyreeks {{count}} dag.",
+    "streakNext_other": "Hiermee wordt je storyreeks {{count}} dagen.",
+    "streakStart": "Plaats elke dag een story om een reeks op te bouwen."
   }
 }

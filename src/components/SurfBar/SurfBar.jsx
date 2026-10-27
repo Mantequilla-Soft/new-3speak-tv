@@ -13,6 +13,7 @@ import {
   markSeen, saveLastChannel, surfUrl, videoAuthor,
 } from '../../utils/surf';
 import { useTranslation } from 'react-i18next';
+import ModalHeader from '../ModalHeader/ModalHeader';
 import './SurfBar.scss';
 
 const toast = toastIn('Channel Surfing');
@@ -218,10 +219,7 @@ function SurfBar({ channel: slug, author, permlink, flipRef, overlayTarget = nul
       {guideOpen && createPortal(
         <div className="surf-guide-overlay" onClick={() => setGuideOpen(false)}>
           <div className="surf-guide" role="dialog" aria-label={t('feeds.surf.guide')} onClick={(e) => e.stopPropagation()}>
-            <div className="surf-guide__head">
-              <strong>{t('feeds.surf.guide')}</strong>
-              <button type="button" onClick={() => setGuideOpen(false)} aria-label={t('common.actions.close')}><MdClose /></button>
-            </div>
+            <ModalHeader title={t('feeds.surf.guide')} onClose={() => setGuideOpen(false)} />
             {TAG_CATEGORIES.map((cat) => (
               <div className="surf-guide__group" key={cat.slug}>
                 <div className="surf-guide__grid">

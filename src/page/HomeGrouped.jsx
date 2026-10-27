@@ -3,7 +3,7 @@ import { useQuery, useInfiniteQuery, useQueryClient } from "@tanstack/react-quer
 import axios from "axios";
 import { Link } from "react-router-dom";
 import "./HomeGrouped.scss";
-import CardSkeleton from "../components/Cards/CardSkeleton";
+import { SkeletonCard, SpotlightSkeleton } from "../components/Cards/GridSkeleton";
 import Card3 from "../components/Cards/Card3";
 import { FEED_URL, TRENDING_SORTED_URL, FOLLOW_FEED_URL, DISCOVER_FEED_URL, INTERESTS_FEED_URL, NEW_CONTENT_URL, CHECKER_URL, appendNsfw, warmupRailEnabledFor } from "../utils/config";
 import { useContentBatch } from "../hooks/useContentBatch";
@@ -18,7 +18,7 @@ import ShortsStories from "../components/ShortsStories/ShortsStories";
 import WelcomeBanner from "../components/WelcomeTour/WelcomeBanner";
 import NewFromFollowing from "../components/NewFromFollowing/NewFromFollowing";
 import SuggestedCreators from "../components/SuggestedCreators/SuggestedCreators";
-import { useWarmupVideos } from "../hooks/useWarmupVideos";
+import { useWarmupVideos, useFollowedWarmupVideos } from "../hooks/useWarmupVideos";
 import { useLiveStreams } from "../hooks/useLiveStreams";
 import PullToRefresh from "../components/PullToRefresh/PullToRefresh";
 import ShortsRow from "../components/ShortsRow/ShortsRow";
@@ -137,20 +137,24 @@ const fetchFeatured = async (viewer, hideAi) => {
   // The same lookup keys as the grid's AI pill (Card3 aiKeysFor): the hive author,
   // and the owner when a different account owns the asset. A failed lookup reads
   // as "not flagged", so the Spotlight never disappears over an outage.
+  // Asked for the whole pool at once, alongside the watched / hidden lookups.
   const aiKeysOf = (v) => [aiKey(authorOf(v), v.permlink), v.owner ? aiKey(v.owner, v.permlink) : null];
-  const dropAi = async (list) => {
-    if (!hideAi || !list.length) return list;
-    await loadAiFlags(list.flatMap(aiKeysOf).filter(Boolean));
-    return list.filter((v) => !isAiFlagged(authorOf(v), v.permlink) && !(v.owner && isAiFlagged(v.owner, v.permlink)));
-  };
-  if (!viewer || !recent.length) return onePerCreator(await dropAi(recent));
+  const aiReady = hideAi && recent.length ? loadAiFlags(recent.flatMap(aiKeysOf).filter(Boolean)) : null;
+  const dropAi = (list) => (hideAi
+    ? list.filter((v) => !isAiFlagged(authorOf(v), v.permlink) && !(v.owner && isAiFlagged(v.owner, v.permlink)))
+    : list);
+  if (!viewer || !recent.length) {
+    await aiReady;
+    return onePerCreator(dropAi(recent));
+  }
   const [watched, hidden] = await Promise.all([
     batchCheckWatched(viewer, recent.map((v) => ({ author: authorOf(v), permlink: v.permlink }))),
     getHidden(viewer),
+    aiReady,
   ]);
   const hiddenVideos = new Set(hidden.videos.map((h) => `${norm(h.owner)}/${norm(h.permlink)}`));
   const hiddenCreators = new Set(hidden.creators.map((h) => norm(h.creator)));
-  return onePerCreator(await dropAi(recent.filter((v) => {
+  return onePerCreator(dropAi(recent.filter((v) => {
     const people = [norm(authorOf(v)), norm(v.owner)];
     return !watched.has(`${authorOf(v)}/${v.permlink}`)
       && !people.some((p) => hiddenCreators.has(p) || hiddenVideos.has(`${p}/${norm(v.permlink)}`));
@@ -276,6 +280,25 @@ const fetchNewContent = async (page = 1) => {
   const dismissals = st.user ? `&currentuser=${encodeURIComponent(st.user)}&hidewatched=0` : '';
   const res = await axios.get(appendNsfw(`${NEW_CONTENT_URL}?page=${page}&limit=${PAGE_MAIN}${dismissals}`, st.showNsfw));
   return res.data?.videos || [];
+};
+
+const EMPTY_VIDEOS = [];
+
+// Warm-up videos slotted into a newest-first feed at their own date, ahead of
+// the first video older than them. One older than everything loaded so far
+// waits for the page that reaches its date (or the end of the feed), so it does
+// not sit at the bottom and then jump up as more pages arrive.
+const placeByDate = (videos, extras, complete) => {
+  if (!extras.length) return videos;
+  const at = (v) => new Date(v.created || v.created_at).getTime() || 0;
+  const out = [...videos];
+  // Newest first, so each lands after the newer warm-up videos placed before it.
+  for (const x of [...extras].sort((a, b) => at(b) - at(a))) {
+    const i = out.findIndex((v) => at(v) < at(x));
+    if (i >= 0) out.splice(i, 0, x);
+    else if (complete) out.push(x);
+  }
+  return out;
 };
 
 // getNextPageParam: keep paging as long as the last page returned ANYTHING. This
@@ -559,13 +582,16 @@ const HomeGrouped = () => {
     ownHandle: incubationHandle,
   });
 
+  // The Follow feed only carries warm-up users the viewer follows.
+  const followedWarmupVideos = useFollowedWarmupVideos(warmupVideos, authenticated ? gateViewer : null);
+
   // Promoted videos LEAD EVERY FEED — they no longer get a tab of their own. Each
-  // section is prefixed with them (then the warm-up videos) and deduped, so a
-  // promoted video that also shows up organically further down that feed isn't
-  // rendered twice.
+  // section is prefixed with them (then, unless the feed places them by date
+  // itself, the warm-up videos) and deduped, so a promoted video that also shows
+  // up organically further down that feed isn't rendered twice.
   const leadWithPromoted = useCallback(
-    (videos) => {
-      const lead = [...(promotedData || []), ...warmupVideos];
+    (videos, warmup = warmupVideos) => {
+      const lead = [...(promotedData || []), ...warmup];
       return lead.length ? deduplicateVideos([...lead, ...(videos || [])]) : (videos || []);
     },
     [promotedData, warmupVideos],
@@ -573,7 +599,7 @@ const HomeGrouped = () => {
 
   // The featured video (see fetchFeatured / orderFeatured), leading the Discover tab.
   const isPhone = useIsPhone();
-  const { data: featuredPool } = useQuery({
+  const { data: featuredPool, isLoading: featuredLoading } = useQuery({
     queryKey: ["featured", showNsfw, gateViewer || null, hideAi],
     queryFn: () => fetchFeatured(gateViewer, hideAi),
     enabled: !isPhone,
@@ -592,6 +618,9 @@ const HomeGrouped = () => {
   const featuredAt = featuredItems.length ? featuredIndex % featuredItems.length : 0;
   const featured = featuredItems[featuredAt] || null;
   const featuredKey = featured ? featuredKeyOf(featured) : null;
+  // Still on its way: the grid holds its block with a skeleton, so the Spotlight
+  // drops into place instead of shoving the first rows aside when it arrives.
+  const spotlightPending = !isPhone && featuredLoading;
   // The size toggle on the card: small <-> medium. Hidden in
   // large-card mode, where the width is fixed.
   const featuredNav = useMemo(() => ({
@@ -626,8 +655,8 @@ const HomeGrouped = () => {
   // ── Build the section list (natural order), then apply the user's saved order ──
   const baseSections = [
     { key: 'discover', title: 'Discover', label: t('feeds.home.sections.discover'), videos: withFeatured(withLive(liveAll, leadWithPromoted(discoverData))), isLoading: discoverLoading, priority: true },
-    { key: 'home', title: authenticated ? 'Follow Feed' : 'Home Feed', label: authenticated ? t('feeds.home.sections.follow') : t('feeds.home.sections.home'), videos: withLive(authenticated ? liveFollowing : liveAll, leadWithPromoted(homeData)), linkTo: authenticated ? '/follow-feed' : '/home-feed', isLoading: homeLoading, priority: true },
-    { key: 'new', title: 'New Content', label: t('feeds.home.sections.new'), videos: withLive(liveAll, leadWithPromoted(deduplicateVideos(newContentData || []))), linkTo: '/new', isLoading: newContentLoading },
+    { key: 'home', title: authenticated ? 'Follow Feed' : 'Home Feed', label: authenticated ? t('feeds.home.sections.follow') : t('feeds.home.sections.home'), videos: withLive(authenticated ? liveFollowing : liveAll, authenticated ? leadWithPromoted(placeByDate(homeData, followedWarmupVideos, homeQ.hasNextPage === false), EMPTY_VIDEOS) : leadWithPromoted(homeData)), linkTo: authenticated ? '/follow-feed' : '/home-feed', isLoading: homeLoading, priority: true },
+    { key: 'new', title: 'New Content', label: t('feeds.home.sections.new'), videos: withLive(liveAll, leadWithPromoted(placeByDate(newContentData, warmupVideos, newQ.hasNextPage === false), EMPTY_VIDEOS)), linkTo: '/new', isLoading: newContentLoading },
   ];
   // Interests row (logged-in + has interests): between the follow feed and New.
   if (authenticated && hasInterests) {
@@ -1015,7 +1044,15 @@ const HomeGrouped = () => {
       && s.key === activeSection?.key
       && shortsQ.isLoading;
     if (waitingForShorts || (s.isLoading && (!s.videos || s.videos.length === 0))) {
-      return <div className="home-tab-skeletons">{Array.from({ length: 12 }).map((_, i) => <CardSkeleton key={i} />)}</div>;
+      // Skeleton cards in the real card grid (same columns as what follows, and
+      // measurable for featuredLayout), the Spotlight's block reserved on Discover
+      const withSpotlight = s.key === 'discover' && !isPhone && !!featuredLayout && (spotlightPending || !!featured);
+      return (
+        <div className="card-container">
+          {withSpotlight && <SpotlightSkeleton layout={featuredLayout} />}
+          {Array.from({ length: 12 }).map((_, i) => <SkeletonCard key={i} />)}
+        </div>
+      );
     }
     if (!s.videos || s.videos.length === 0) {
       return <div className="home-tab-empty">{t('feeds.home.empty')}</div>;
@@ -1039,6 +1076,7 @@ const HomeGrouped = () => {
           featuredKey={s.key === 'discover' ? featuredKey : null}
           featuredLayout={featuredLayout}
           featuredNav={featuredNav}
+          featuredPending={s.key === 'discover' && spotlightPending}
           /* A shorts rail after every 2 REAL rows of videos, on any feed that has a
              shorts source (see shortsMode). `gridCols` is measured from the live
              grid, so this lands on a row boundary at every breakpoint (2 cols on

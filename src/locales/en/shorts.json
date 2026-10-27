@@ -7,7 +7,10 @@
     "default": "3S | Shorts"
   },
   "stories": {
-    "you": "You"
+    "you": "You",
+    "storyTitle": "{{user}}'s story",
+    "streakTitle_one": "{{count}}-day story streak",
+    "streakTitle_other": "{{count}}-day story streak"
   },
   "errors": {
     "votingUnavailable": "Voting isn't available for this post",
@@ -71,7 +74,9 @@
   },
   "remix": {
     "noUrl": "Could not resolve video URL for remix",
-    "loadFailed": "Failed to load video for remix"
+    "loadFailed": "Failed to load video for remix",
+    "chainFull": "This video already builds on {{max}} earlier videos, so it can't be remixed anymore.",
+    "chainNoSlots": "This remix chain already pays so many creators that a remix would leave no room on Hive. With 3Speak Pro you can still remix it."
   },
   "watchLater": {
     "loginRequired": "Login to save shorts",
@@ -105,5 +110,25 @@
     "viewReplies_other": "View {{count}} replies",
     "hideReplies_one": "Hide {{count}} reply",
     "hideReplies_other": "Hide {{count}} replies"
+  },
+  "storyExpired": {
+    "title": "This story has expired",
+    "body": "Stories on 3Speak are visible for 24 hours.",
+    "next": "Next short"
+  },
+  "storyTools": {
+    "seenBy_one": "Seen by {{count}}",
+    "seenBy_other": "Seen by {{count}}",
+    "seenTitle": "Seen by",
+    "seenNote": "Signed-in viewers who keep their watch history on.",
+    "seenEmpty": "Nobody has seen it yet.",
+    "keep": "Keep as short",
+    "keepHint": "It stays on your channel after the 24 hours",
+    "keepConfirm": "Keep it for good?",
+    "keepYes": "Keep it",
+    "keeping": "Keeping…",
+    "kept": "Kept. It stays on your channel as a short.",
+    "keepFailed": "Could not keep this story.",
+    "keepWalletPrompt": "Sign to keep your story as a short"
   }
 }

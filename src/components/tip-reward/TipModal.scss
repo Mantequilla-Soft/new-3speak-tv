@@ -35,24 +35,23 @@
   }
   &.add {
     padding: 0px;
+
+    // The success step has no box padding, so the header brings its own; the
+    // success card's own heading would repeat the header title.
+    .tip-modal-header {
+      padding: 16px 24px 12px;
+      margin-bottom: 0;
+    }
+
+    .success-page-content {
+      box-shadow: none;
+
+      .title { display: none; }
+    }
   }
 }
 
 .tip-modal {
-  .header {
-    color: var(--text-primary, #333);
-    margin-bottom: 1.5rem;
-    text-align: center;
-
-    h2 {
-      font-size: 1.5rem;
-      font-weight: 600;
-      @include mix.respond(phone) {
-        font-size: 18px;
-      }
-    }
-  }
-
   .form {
     display: flex;
     flex-direction: column;
@@ -100,6 +99,13 @@
       gap: 4px;
       font-size: 12.35px;
       color: var(--text-secondary, #666);
+    }
+
+    .memo-link-note {
+      margin-top: 4px;
+      font-size: 12.35px;
+      color: var(--text-secondary, #666);
+      overflow-wrap: anywhere;
     }
   }
 

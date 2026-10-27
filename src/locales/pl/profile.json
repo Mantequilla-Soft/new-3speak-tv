@@ -325,5 +325,118 @@
     "unhiddenToast": "Napiwek znów widoczny w twoim profilu",
     "hideFailed": "Nie udało się zmienić tego napiwku. Spróbuj ponownie.",
     "hideWalletPrompt": "Podpisz, aby zmienić, które napiwki są widoczne w twoim profilu"
+  },
+  "layout": {
+    "customize": "Dostosuj profil",
+    "title": "Dostosuj swój profil",
+    "hint": "Przeciągnij sekcję za uchwyt: obok innej, aby utworzyć nową kolumnę, nad lub pod inną, aby ją ułożyć w stos, albo na linię między rzędami, aby zacząć nowy rząd. Pociągnij prawą krawędź, aby zmienić szerokość, a zębatką otwórz właściwości.",
+    "mobileHint": "Tak wygląda Twój profil na telefonach: jedna kolumna. Przeciągaj sekcje w górę lub w dół, ukrywaj je albo zmieniaj ich właściwości. Dopóki niczego tu nie zmienisz, telefony korzystają z układu z komputera.",
+    "save": "Zapisz układ",
+    "saving": "Zapisywanie…",
+    "reset": "Przywróć domyślny",
+    "undo": "Cofnij",
+    "redo": "Ponów",
+    "undoTitle": "Cofnij (Ctrl+Z)",
+    "redoTitle": "Ponów (Ctrl+Shift+Z)",
+    "matchDesktop": "Jak na komputerze",
+    "deviceDesktop": "Komputer",
+    "deviceMobile": "Telefon",
+    "saved": "Układ profilu zapisany",
+    "saveFailed": "Nie udało się zapisać układu: {{error}}",
+    "signInNeeded": "Zaloguj się ponownie, aby zapisać układ",
+    "drag": "Przeciągnij, aby zmienić kolejność",
+    "dropHere": "Upuść tutaj",
+    "newRow": "Nowy rząd",
+    "resize": "Przeciągnij, aby zmienić szerokość",
+    "dockHold": "przytrzymaj, aby zrobić kolumnę na całą wysokość",
+    "dockLeft": "Puść: lewa kolumna na całą wysokość",
+    "dockRight": "Puść: prawa kolumna na całą wysokość",
+    "moveUp": "W górę",
+    "moveDown": "W dół",
+    "show": "Pokaż tę sekcję",
+    "hide": "Ukryj tę sekcję",
+    "settings": "Ustawienia sekcji",
+    "remove": "Usuń tę sekcję",
+    "hiddenBadge": "Ukryta",
+    "hiddenTitle": "Ukryte sekcje",
+    "noSettings": "Ta sekcja nie ma ustawień.",
+    "emptySection": "Na razie nie ma tu nic do pokazania. Odwiedzający zobaczą tę sekcję dopiero, gdy pojawi się w niej treść.",
+    "linksNote": "Widoczna tylko na szerokich ekranach. „Na stronie” umieszcza ją w siatce z innymi sekcjami; możesz też przeciągnąć ją tam za uchwyt.",
+    "addPlaylist": "Dodaj playlistę jako osobną sekcję",
+    "playlistMissing": "Nie znaleziono playlisty (usunięta lub prywatna)",
+    "fields": {
+      "playlist": "Playlista",
+      "heading": "Nagłówek",
+      "count_one": "Pokaż {{count}} pozycję",
+      "count_few": "Pokaż {{count}} pozycje",
+      "count_many": "Pokaż {{count}} pozycji",
+      "count_other": "Pokaż {{count}} pozycji",
+      "playlists_one": "Pokaż {{count}} playlistę",
+      "playlists_few": "Pokaż {{count}} playlisty",
+      "playlists_many": "Pokaż {{count}} playlist",
+      "playlists_other": "Pokaż {{count}} playlist",
+      "size": "Rozmiar wideo",
+      "size_sm": "Mały",
+      "size_md": "Średni",
+      "size_lg": "Duży",
+      "size_full": "Pełna szerokość",
+      "showInfo": "Pokaż tytuł i opis",
+      "showSnap": "Pokaż najnowszy wpis społeczności",
+      "view": "Układ",
+      "viewRow": "Rząd",
+      "viewGrid": "Siatka",
+      "side": "Położenie",
+      "sideLeft": "Lewo",
+      "sideRight": "Prawo",
+      "sideNone": "Na stronie"
+    },
+    "types": {
+      "trailer": "Zwiastun kanału",
+      "live": "Na żywo",
+      "audioPlaylists": "Albumy i playlisty audio",
+      "playlistRails": "Zawartość playlist",
+      "playlist": "Playlista",
+      "links": "Strona z linkami"
+    },
+    "tour": {
+      "open": "Szybki przewodnik",
+      "stepOf": "Krok {{n}} z {{total}}",
+      "skip": "Pomiń",
+      "back": "Wstecz",
+      "next": "Dalej",
+      "done": "Zaczynamy",
+      "intro": {
+        "title": "Twój kanał po twojemu",
+        "body": "Twój Przegląd to teraz edytor: ułóż go tak, jak mają go widzieć odwiedzający. Dla nich nic się nie zmieni, dopóki nie zapiszesz."
+      },
+      "move": {
+        "title": "Przenoś sekcje",
+        "body": "Chwyć sekcję za uchwyt i upuść ją na inną. Lewa lub prawa krawędź stawia ją obok, górna lub dolna układa ją w tej kolumnie, a linie między wierszami zaczynają nowy wiersz."
+      },
+      "resize": {
+        "title": "Zmień szerokość",
+        "body": "Pociągnij uchwyt na prawej krawędzi sekcji. Szerokość zmienia się skokowo, więc sąsiednie sekcje zawsze są wyrównane."
+      },
+      "props": {
+        "title": "Właściwości sekcji",
+        "body": "Zębatka otwiera właściwości sekcji: ile pozycji, wiersz czy siatka, nagłówek, a przy zwiastunie rozmiar filmu i to, co jest obok."
+      },
+      "hide": {
+        "title": "Pokaż i ukryj",
+        "body": "Oko ukrywa sekcję. Ukryte sekcje czekają na tacy pod stroną; kliknij jedną, aby ją przywrócić."
+      },
+      "links": {
+        "title": "Twoja strona z linkami",
+        "body": "Przeciągnij stronę z linkami na stronę jak każdą inną sekcję. Przytrzymaj ją chwilę przy samej lewej lub prawej krawędzi, aby stała się kolumną na całą wysokość po tej stronie."
+      },
+      "mobile": {
+        "title": "Także na telefonach",
+        "body": "Przełącz na Telefon na pasku, aby ustawić wygląd profilu na telefonach: jedna kolumna, w twojej kolejności. Dopóki nic tam nie zmienisz, telefony pokazują układ z komputera."
+      },
+      "save": {
+        "title": "Zapisz, gdy ci się podoba",
+        "body": "Zapisz układ go publikuje. Cofnij i Ponów przechodzą przez zmiany (działa też Ctrl+Z), Anuluj je odrzuca, a Przywróć domyślny przywraca standardową stronę. ? obok tytułu ponownie otwiera ten przewodnik."
+      }
+    }
   }
 }

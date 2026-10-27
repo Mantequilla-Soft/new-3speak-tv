@@ -1,6 +1,7 @@
 import { useState, useCallback, useEffect, useLayoutEffect, useRef, useMemo } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import ShortsStories, { useShortsStories } from "../components/ShortsStories/ShortsStories";
+import { useStoryCreators, storyViewerPath } from "../lib/stories";
 import VideoShort from "./Short";
 import { useAppStore } from "../lib/store";
 import "./ShortsStoryFeed.scss";
@@ -24,9 +25,18 @@ const ShortsStoryFeed = () => {
     return params.get("user") || null;
   }, [location.search]);
 
+  // ?story=1: watching 24h stories, so left / right moves between story creators.
+  const storyMode = useMemo(
+    () => !!feedUser && new URLSearchParams(location.search).get("story") === "1",
+    [feedUser, location.search]
+  );
+
   const { creators } = useShortsStories();
+  const { storyCreators } = useStoryCreators();
   const creatorsRef = useRef(creators);
-  creatorsRef.current = creators;
+  creatorsRef.current = storyMode ? storyCreators : creators;
+  const storyModeRef = useRef(storyMode);
+  storyModeRef.current = storyMode;
   const feedUserRef = useRef(feedUser);
   feedUserRef.current = feedUser;
 
@@ -87,8 +97,8 @@ const ShortsStoryFeed = () => {
 
   // Navigate to a specific creator
   const navigateToCreator = useCallback(
-    (username) => {
-      navigate(`/shorts/stories?user=${username}`, { replace: true });
+    (username, { story = false } = {}) => {
+      navigate(story ? storyViewerPath(username) : `/shorts/stories?user=${username}`, { replace: true });
     },
     [navigate]
   );
@@ -113,7 +123,7 @@ const ShortsStoryFeed = () => {
       }
 
       triggerSwipeAnim(direction);
-      navigateToCreator(list[next].username);
+      navigateToCreator(list[next].username, { story: storyModeRef.current });
     },
     [user, navigateToCreator, triggerSwipeAnim]
   );
@@ -185,6 +195,7 @@ const ShortsStoryFeed = () => {
       {/* Desktop: compact bar above player */}
       <ShortsStories
         activeCreator={feedUser}
+        activeStory={storyMode}
         onCreatorSelect={navigateToCreator}
         compact
         hiddenOnMobile
@@ -194,11 +205,12 @@ const ShortsStoryFeed = () => {
         <div className="shorts-story-feed__mobile-stories">
           <ShortsStories
             activeCreator={feedUser}
+            activeStory={storyMode}
             onCreatorSelect={navigateToCreator}
             compact
           />
         </div>
-        <VideoShort key={feedUser || "__global__"} />
+        <VideoShort key={`${feedUser || "__global__"}${storyMode ? ":story" : ""}`} />
       </div>
     </div>
   );

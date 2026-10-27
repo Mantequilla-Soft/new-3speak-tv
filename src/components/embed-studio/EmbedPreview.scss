@@ -180,6 +180,52 @@
   width: 100%;
 }
 
+/* A story's caption is typed right here (it skips the details step), with what
+   the story gets the creator underneath. */
+.ep-story {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.ep-story__caption {
+  width: 100%;
+  box-sizing: border-box;
+  resize: vertical;
+  min-height: 72px;
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 1px solid var(--input-border, var(--border-color));
+  background: var(--input-bg, var(--bg-primary));
+  color: var(--text-primary);
+  font: inherit;
+  font-size: 14px;
+
+  &:focus {
+    outline: none;
+    border-color: var(--input-focus, var(--accent-primary));
+  }
+}
+
+.ep-story__reach,
+.ep-story__streak {
+  margin: 0;
+  font-size: 13px;
+  color: var(--text-secondary);
+}
+
+.ep-story__streak {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+
+  svg {
+    flex: none;
+    color: var(--accent-primary);
+    font-size: 16px;
+  }
+}
+
 .ep-tags {
   display: flex;
   flex-wrap: wrap;

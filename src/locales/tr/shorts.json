@@ -7,7 +7,10 @@
     "default": "3S | Shorts"
   },
   "stories": {
-    "you": "Sen"
+    "you": "Sen",
+    "storyTitle": "{{user}} adlı kişinin hikâyesi",
+    "streakTitle_one": "{{count}} günlük hikâye serisi",
+    "streakTitle_other": "{{count}} günlük hikâye serisi"
   },
   "errors": {
     "votingUnavailable": "Bu gönderi için oy verme kullanılamıyor",
@@ -71,7 +74,9 @@
   },
   "remix": {
     "noUrl": "Remix için video URL'si çözümlenemedi",
-    "loadFailed": "Remix için video yüklenemedi"
+    "loadFailed": "Remix için video yüklenemedi",
+    "chainFull": "Bu video zaten önceki {{max}} videonun üzerine kurulu, bu yüzden artık remix yapılamaz.",
+    "chainNoSlots": "Bu remix zinciri zaten o kadar çok içerik üreticisine ödeme yapıyor ki Hive'da yeni bir remix için yer kalmıyor. 3Speak Pro ile yine de remix yapabilirsin."
   },
   "watchLater": {
     "loginRequired": "Shorts kaydetmek için giriş yap",
@@ -105,5 +110,25 @@
     "viewReplies_other": "{{count}} yanıtı gör",
     "hideReplies_one": "{{count}} yanıtı gizle",
     "hideReplies_other": "{{count}} yanıtı gizle"
+  },
+  "storyExpired": {
+    "title": "Bu hikâyenin süresi doldu",
+    "body": "3Speak'teki hikâyeler 24 saat boyunca görünür.",
+    "next": "Sonraki short"
+  },
+  "storyTools": {
+    "seenBy_one": "{{count}} kişi gördü",
+    "seenBy_other": "{{count}} kişi gördü",
+    "seenTitle": "Görenler",
+    "seenNote": "Oturum açmış ve izleme geçmişi açık olan izleyiciler.",
+    "seenEmpty": "Henüz kimse görmedi.",
+    "keep": "Shorts olarak tut",
+    "keepHint": "24 saatten sonra kanalında kalır",
+    "keepConfirm": "Kalıcı olarak tutulsun mu?",
+    "keepYes": "Tut",
+    "keeping": "Tutuluyor…",
+    "kept": "Tutuldu. Kanalında Shorts olarak kalacak.",
+    "keepFailed": "Bu hikâye tutulamadı.",
+    "keepWalletPrompt": "Hikâyeni Shorts olarak tutmak için imzala"
   }
 }

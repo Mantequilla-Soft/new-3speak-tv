@@ -18,6 +18,7 @@ import   {KeyTypes, Providers } from '@aioha/aioha'
 import QrCode_modal from '../../components/modal/QrCode_modal';
 import aioha from "../../hive-api/aioha";
 import { useTranslation } from 'react-i18next';
+import ModalHeader from '../ModalHeader/ModalHeader';
 
 // Every toast from this module is headed "Sign in"; the message becomes the
 // line under it. See utils/toast.js.
@@ -210,19 +211,13 @@ function AddAccount_modal({ isOpen, close}) {
         className={`modal-content  ${isOpen ? "open" : ""}`}
         onClick={(e) => e.stopPropagation()} // Prevent click on modal from closing it
       >
-        <div className="modal-header ">
-          
-          <button className="close-btn auth-bg" onClick={close}>
-            &times;
-          </button>
-        </div>
+        <ModalHeader title={t('modals.addAccount.title')} onClose={close} />
         <div className="modal-body ">
           <div className="login-container">
 
         <div className="main-login-keywrapper-add">
           {theme === "light" ? <img src={logo} alt={t('modals.addAccount.logoAlt')} /> :
                     <img src={logoDark} alt={t('modals.addAccount.logoAlt')} />}
-          <span>{t('modals.addAccount.title')}</span>
 
           <input
             type="text"

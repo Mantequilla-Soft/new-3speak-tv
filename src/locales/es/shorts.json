@@ -7,7 +7,11 @@
     "default": "3S | Shorts"
   },
   "stories": {
-    "you": "Tú"
+    "you": "Tú",
+    "storyTitle": "Historia de {{user}}",
+    "streakTitle_one": "Racha de historias de {{count}} día",
+    "streakTitle_many": "Racha de historias de {{count}} días",
+    "streakTitle_other": "Racha de historias de {{count}} días"
   },
   "errors": {
     "votingUnavailable": "No se puede votar en esta publicación",
@@ -71,7 +75,9 @@
   },
   "remix": {
     "noUrl": "No se pudo obtener la URL del video para el remix",
-    "loadFailed": "No se pudo cargar el video para el remix"
+    "loadFailed": "No se pudo cargar el video para el remix",
+    "chainFull": "Este video ya parte de {{max}} videos anteriores, así que ya no se puede remezclar.",
+    "chainNoSlots": "Esta cadena de remixes ya paga a tantos creadores que un remix no tendría espacio en Hive. Con 3Speak Pro todavía puedes remezclarlo."
   },
   "watchLater": {
     "loginRequired": "Inicia sesión para guardar Shorts",
@@ -107,5 +113,26 @@
     "hideReplies_one": "Ocultar {{count}} respuesta",
     "hideReplies_many": "Ocultar {{count}} respuestas",
     "hideReplies_other": "Ocultar {{count}} respuestas"
+  },
+  "storyExpired": {
+    "title": "Esta historia ha caducado",
+    "body": "Las historias en 3Speak se ven durante 24 horas.",
+    "next": "Siguiente short"
+  },
+  "storyTools": {
+    "seenBy_one": "Vista por {{count}}",
+    "seenBy_many": "Vista por {{count}}",
+    "seenBy_other": "Vista por {{count}}",
+    "seenTitle": "Vista por",
+    "seenNote": "Espectadores con sesión iniciada que tienen activado su historial de reproducciones.",
+    "seenEmpty": "Nadie la ha visto todavía.",
+    "keep": "Conservar como short",
+    "keepHint": "Se queda en tu canal después de las 24 horas",
+    "keepConfirm": "¿Conservarla para siempre?",
+    "keepYes": "Conservarla",
+    "keeping": "Conservando…",
+    "kept": "Conservada. Se queda en tu canal como short.",
+    "keepFailed": "No se pudo conservar esta historia.",
+    "keepWalletPrompt": "Firma para conservar tu historia como short"
   }
 }

@@ -70,7 +70,8 @@
       "invalidAccount": "Jina la mtumiaji au kitambulisho cha jumuiya si sahihi.",
       "cannotIncrease": "Haiwezi kuongezeka zaidi ya {{percent}}% iliyobaki",
       "pendingRow": "@{{account}} bado haijaongezwa — bofya + ili kuiongeza, au futa sehemu hiyo.",
-      "atLeastOne": "Asilimia ya zawadi lazima iwe angalau 1%"
+      "atLeastOne": "Asilimia ya zawadi lazima iwe angalau 1%",
+      "maxCount": "Hive inaruhusu wanufaika wasiozidi {{max}} kwa kila chapisho."
     },
     "title": "Wanufaika",
     "intro": "Ongeza mtumiaji unayetaka apokee kiotomatiki sehemu ya zawadi za chapisho hili.",
@@ -86,7 +87,8 @@
   },
   "qr": {
     "scan": "Changanua QR hii kwenye Hive Keychain:",
-    "click": "Bofya QR ili kufungua kwenye programu ya Keychain"
+    "click": "Bofya QR ili kufungua kwenye programu ya Keychain",
+    "title": "Ingia kwa Keychain"
   },
   "editVideoHint": {
     "title": "Hariri video zako zozote",
@@ -115,7 +117,12 @@
     "preparing": "Inaandaa video kwa ajili ya kupakia...",
     "renderUnavailable": "Huduma ya kutengeneza video bado haipatikani. Data ya ratiba imeandikwa kwenye console.",
     "backToEditor": "Rudi kwenye kihariri",
-    "postError": "Imeshindwa kuandaa video kwa ajili ya kupakia. Tafadhali jaribu kuipakua badala yake."
+    "postError": "Imeshindwa kuandaa video kwa ajili ya kupakia. Tafadhali jaribu kuipakua badala yake.",
+    "postAs": "Chapisha kama",
+    "postAsStory": "Hadithi",
+    "postAsStoryHint": "Saa 24, juu ya mlisho wa Shorts",
+    "postAsShort": "Short",
+    "postAsShortHint": "Inabaki kwenye chaneli yako"
   },
   "profile": {
     "mustLogin": "Lazima uingie kwanza",

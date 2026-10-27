@@ -49,12 +49,35 @@
     animation: modal-slide-up 0.3s ease forwards;
   }
 
+  // The box centres its text; the shared header keeps its title on the left.
+  .app-modal-header {
+    text-align: left;
+  }
+
   &.auth-bg {
     background-color: green;
     background-image: linear-gradient(to right, rgb(55, 65, 81), rgb(31, 41, 55), rgb(17, 24, 39));
+
+    .app-modal-header {
+      border-bottom-color: rgba(255, 255, 255, 0.2);
+    }
+
+    .app-modal-header-title {
+      color: #fff;
+    }
+
+    .app-modal-header-close {
+      color: rgba(255, 255, 255, 0.75);
+
+      &:hover {
+        background: rgba(255, 255, 255, 0.12);
+        color: #fff;
+      }
+    }
   }
 }
 
+// Still matched by AddToPlaylistModal, ReactionPlayer and PlaylistBar buttons.
 .close-btn {
   background: none;
   border: none;
@@ -65,26 +88,6 @@
   padding: 5px 7px;
   cursor: pointer;
   color: var(--text-primary, #000);
-
-  &.auth-bg {
-    color: #fff;
-    font-size: 24px;
-  }
-}
-
-.modal-header {
-  h2 {
-    text-align: center;
-    font-size: 20px;
-  }
-
-  &.auth-bg {
-    h2 {
-      color: #fff;
-      font-size: 22px;
-      margin-bottom: 5px;
-    }
-  }
 }
 
 .modal-body {

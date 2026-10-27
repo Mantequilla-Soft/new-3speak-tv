@@ -16,6 +16,7 @@
     "availableBalance": "Saldo tersedia: {{currency}}",
     "memoLabel": "Memo (opsional):",
     "memoPlaceholder": "mis. Makasih untuk konten kerennya!",
+    "memoLinkNote": "Tautan ini ditambahkan ke memo: {{link}}",
     "send": "Kirim Tip"
   },
   "cardMenu": {

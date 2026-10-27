@@ -46,20 +46,8 @@
   to { transform: translateY(0); }
 }
 
-.adw-close {
-  position: absolute;
-  top: 12px;
-  right: 12px;
-  border: none;
-  background: transparent;
-  color: var(--text-secondary, #888);
-  cursor: pointer;
-  padding: 4px;
-  border-radius: 8px;
-  &:hover { background: var(--bg-primary, #f1f1f3); }
-}
-
 .adw-back {
+  flex-shrink: 0;
   border: none;
   background: transparent;
   color: var(--text-secondary, #888);
@@ -67,16 +55,6 @@
   padding: 2px;
   display: inline-flex;
   &:hover { color: var(--text-primary, #111); }
-}
-
-.adw-head {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  margin-bottom: 14px;
-  padding-right: 28px;
-
-  h3 { margin: 0; font-size: 1.05rem; }
 }
 
 /* Three dots, not "Step 2 of 3": the same information in less furniture. */

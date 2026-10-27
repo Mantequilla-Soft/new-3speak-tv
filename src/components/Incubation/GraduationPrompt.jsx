@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
-import { MdRocketLaunch } from 'react-icons/md';
 import { toastIn } from '../../utils/toast';
 import { useAppStore } from '../../lib/store';
 import { usePromptsActive, setPromptActive } from '../../utils/welcomeGate';
@@ -9,6 +8,7 @@ import {
   fetchIncubationProgress, fetchMyIncubationProfile,
 } from '../../lib/incubation';
 import { openButrauthPopup } from '../../utils/butrauthPopup';
+import ModalHeader from '../ModalHeader/ModalHeader';
 import { useTranslation, Trans } from 'react-i18next';
 // Reuses the ads prompt's dialog styles rather than duplicating them. That file
 // is the app's one modal-dialog shape, and a second copy would drift from it.
@@ -203,19 +203,16 @@ export default function GraduationPrompt() {
         aria-modal="true"
         aria-labelledby="graduation-title"
       >
-        <header className="ads-prompt-head">
-          <MdRocketLaunch className="ads-prompt-head-icon" aria-hidden="true" />
-          <div>
-            <h3 className="ads-prompt-title" id="graduation-title">
-              {copy ? copy.title : t('incubation.graduation.creator.title')}
-            </h3>
-            <p className="ads-prompt-lede">
-              {copy ? copy.lede : (
-                <Trans i18nKey="incubation.graduation.creator.lede" values={{ handle: incubationHandle }} components={{ b: <strong /> }} />
-              )}
-            </p>
-          </div>
-        </header>
+        <ModalHeader
+          title={copy ? copy.title : t('incubation.graduation.creator.title')}
+          titleId="graduation-title"
+          onClose={() => close(true)}
+        />
+        <p className="ads-prompt-lede">
+          {copy ? copy.lede : (
+            <Trans i18nKey="incubation.graduation.creator.lede" values={{ handle: incubationHandle }} components={{ b: <strong /> }} />
+          )}
+        </p>
 
         <p className="ads-prompt-text">
           {copy ? copy.text : t('incubation.graduation.creator.text')}

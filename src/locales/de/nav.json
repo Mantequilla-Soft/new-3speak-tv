@@ -77,6 +77,15 @@
       "includesWhale": "Enthält 🐋 Whale-Konto/-Konten",
       "includesOrca": "Enthält 🐬 Orca-Konto/-Konten",
       "andMore": "und {{count}} weitere…"
+    },
+    "stories": {
+      "heading": "Storys von Leuten, denen du folgst",
+      "posted": "@{{user}} hat eine Story gepostet",
+      "type": "Story",
+      "hoursLeft_one": "noch {{count}} Std.",
+      "hoursLeft_other": "noch {{count}} Std.",
+      "ariaUnseen_one": "Benachrichtigungen, {{count}} neue Story",
+      "ariaUnseen_other": "Benachrichtigungen, {{count}} neue Storys"
     }
   },
   "search": {

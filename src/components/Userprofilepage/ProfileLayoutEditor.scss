@@ -1,0 +1,884 @@
+@use "../../mixins.scss" as mix;
+
+// Edit mode for the Overview tab (ProfileLayoutEditor.jsx): a sticky bar, then
+// the real sections, each in a dashed frame with its own toolbar.
+
+// Outline only: no 3Speak button has a solid red fill.
+%ple-pill {
+  padding: 0.38rem 0.9rem;
+  border-radius: 999px;
+  border: 1px solid var(--border-color);
+  background: transparent;
+  color: var(--text-secondary);
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.ple-bar {
+  position: sticky;
+  top: calc(var(--nav-height, 60px) + 8px);
+  z-index: 20;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.6rem 1rem;
+  margin-bottom: 1rem;
+  padding: 0.7rem 0.9rem;
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  background: var(--bg-secondary);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.18);
+
+  .ple-titles {
+    flex: 1 1 240px;
+    min-width: 0;
+
+    h3 {
+      margin: 0 0 0.15rem;
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+
+    p {
+      margin: 0;
+      font-size: 0.78rem;
+      line-height: 1.35;
+      color: var(--text-secondary);
+    }
+  }
+
+  .ple-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.45rem;
+    min-width: 0;
+  }
+
+  .ple-btn {
+    @extend %ple-pill;
+
+    &:hover:not(:disabled) {
+      color: var(--text-primary);
+      border-color: var(--text-secondary);
+      background: var(--bg-hover);
+    }
+
+    &:disabled { opacity: 0.55; cursor: default; }
+
+    &--primary {
+      color: var(--accent-primary, #e53935);
+      border-color: var(--accent-primary, #e53935);
+
+      &:hover:not(:disabled) {
+        color: var(--accent-primary, #e53935);
+        border-color: var(--accent-primary, #e53935);
+        background: color-mix(in srgb, var(--accent-primary, #e53935) 10%, transparent);
+      }
+
+      // Unsaved changes: a small dot ahead of the label.
+      &.dirty::before {
+        content: '';
+        display: inline-block;
+        width: 7px;
+        height: 7px;
+        margin-right: 0.4rem;
+        border-radius: 50%;
+        background: currentColor;
+        vertical-align: 1px;
+      }
+    }
+  }
+
+  .ple-add {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    max-width: 100%;
+    padding: 0.1rem 0.6rem;
+    border: 1px dashed var(--border-color);
+    border-radius: 999px;
+    color: var(--text-secondary);
+
+    select {
+      min-width: 0;
+      max-width: 220px;
+      padding: 0.3rem 0.1rem;
+      border: none;
+      background: transparent;
+      color: var(--text-primary);
+      font-size: 0.8rem;
+      cursor: pointer;
+    }
+  }
+
+  @include mix.respond(phone) {
+    top: calc(var(--nav-height, 56px) + 4px);
+    padding: 0.6rem;
+
+    .ple-titles p { display: none; }   // the frames explain themselves; keep the bar short
+  }
+}
+
+// ── one section in edit mode ────────────────────────────────────────────────
+.ple-frame {
+  position: relative;
+  margin-bottom: 1.5rem;   // room for the outlines above and below
+  min-width: 0;
+  // The frame is drawn OUTSIDE the section (outline, no padding or border), so
+  // the section inside gets exactly the width it has on the visitor's page: a
+  // padded frame shrank it, and a grid section then fitted one card less per
+  // row and stretched the rest.
+  outline: 1px dashed var(--border-color);
+  outline-offset: 7px;
+  border-radius: 12px;
+  transition: outline-color 0.15s ease, opacity 0.15s ease;
+
+  &:hover,
+  &.is-open { outline-color: var(--text-secondary); }
+
+  // The section's own spacing is for the plain page; the frame has its own.
+  .ple-body .pov-section { margin-bottom: 0.25rem; }
+
+  &.is-hidden .ple-body {
+    opacity: 0.35;
+    filter: grayscale(0.6);
+  }
+
+  &.is-dragging { opacity: 0.4; }
+
+  // Where the dragged section will land: a bar on that side of this one.
+  &.is-target { outline-color: var(--accent-primary, #e53935); }
+  &.is-target::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    height: 3px;
+    border-radius: 3px;
+    background: var(--accent-primary, #e53935);
+  }
+  &.is-target--top::after { top: -12px; }
+  &.is-target--bottom::after { bottom: -12px; }
+}
+
+.ple-toolbar {
+  position: relative;   // anchors the properties popover
+  z-index: 5;
+  display: flex;
+  align-items: center;
+  gap: 0.1rem;
+  margin-bottom: 0.35rem;
+  min-width: 0;
+}
+
+.ple-tag {
+  flex: 1 1 auto;
+  min-width: 0;
+  display: flex;
+  align-items: baseline;
+  gap: 0.4rem;
+  padding: 0 0.3rem;
+  overflow: hidden;
+  white-space: nowrap;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+
+  small {
+    font-weight: 500;
+    text-transform: none;
+    letter-spacing: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+}
+
+.ple-badge {
+  font-style: normal;
+  font-size: 0.66rem;
+  font-weight: 600;
+  text-transform: none;
+  padding: 0.02rem 0.45rem;
+  border-radius: 999px;
+  border: 1px solid var(--border-color);
+}
+
+.ple-icon {
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  padding: 0;
+  border: 1px solid transparent;
+  border-radius: 7px;
+  background: transparent;
+  color: var(--text-secondary);
+  cursor: pointer;
+
+  &:hover:not(:disabled) { background: var(--bg-hover); color: var(--text-primary); }
+  &:disabled { opacity: 0.3; cursor: default; }
+  &.on {
+    color: var(--accent-primary, #e53935);
+    border-color: var(--accent-primary, #e53935);
+  }
+  &--remove:hover:not(:disabled) { color: var(--accent-primary, #e53935); }
+
+  @include mix.respond(phone) { width: 28px; }
+}
+
+.ple-grip {
+  cursor: grab;
+  touch-action: none;   // the pointer sensor needs the touch, not the page scroll
+
+  &:active { cursor: grabbing; }
+}
+
+// Shown in place of a section that currently renders nothing, so it can still
+// be found, moved and switched off.
+.ple-empty {
+  padding: 0.9rem;
+  border-radius: 8px;
+  background: var(--bg-hover);
+  color: var(--text-secondary);
+  font-size: 0.8rem;
+  text-align: center;
+}
+
+// What follows the pointer while dragging.
+.ple-drag-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.5rem 0.9rem;
+  border: 1px solid var(--accent-primary, #e53935);
+  border-radius: 999px;
+  background: var(--bg-secondary);
+  color: var(--text-primary);
+  font-size: 0.85rem;
+  font-weight: 600;
+  white-space: nowrap;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+  cursor: grabbing;
+}
+
+// The links column's frame takes the column's place in the row.
+.ple-frame--links {
+  flex: 0 0 20%;
+  max-width: 20%;
+  align-self: flex-start;
+  position: sticky;
+  top: calc(var(--nav-height, 60px) + 16px);
+
+  .ple-tag { text-transform: none; }
+
+  .profile-links-panel {
+    position: static;
+    flex: none;
+    width: 100%;
+    max-width: 100%;
+  }
+}
+
+// ── properties ──────────────────────────────────────────────────────────────
+.ple-props {
+  position: absolute;
+  top: calc(100% + 6px);
+  right: 0;
+  z-index: 40;
+  width: min(340px, calc(100vw - 32px));
+  max-height: 70vh;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  background: var(--bg-secondary);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.3);
+  text-transform: none;
+
+  &-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+    padding: 0.55rem 0.6rem 0.45rem 0.9rem;
+    border-bottom: 1px solid var(--border-color);
+
+    strong {
+      font-size: 0.9rem;
+      color: var(--text-primary);
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+  }
+
+  &-body {
+    display: flex;
+    flex-direction: column;
+    gap: 0.85rem;
+    padding: 0.8rem 0.9rem 0.95rem;
+  }
+
+  // Phone: a bottom sheet, portalled to <body>.
+  &--sheet {
+    position: static;
+    width: 100%;
+    max-height: 88vh;
+    border-radius: 16px 16px 0 0;
+    border-bottom: none;
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+    animation: ple-sheet-up 0.22s ease-out;
+
+    .ple-sheet-header {
+      padding: 12px 16px;
+      margin-bottom: 0;
+    }
+  }
+}
+
+.ple-sheet-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  background: rgba(0, 0, 0, 0.45);
+
+  > div { width: 100%; }
+}
+
+@keyframes ple-sheet-up {
+  from { transform: translateY(100%); }
+  to { transform: translateY(0); }
+}
+
+.ple-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  min-width: 0;
+
+  > span {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--text-secondary);
+  }
+
+  input[type="text"],
+  select {
+    width: 100%;
+    min-width: 0;
+    padding: 0.45rem 0.6rem;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    background: var(--bg-primary, transparent);
+    color: var(--text-primary);
+    font-size: 0.85rem;
+  }
+
+  input[type="range"] {
+    width: 100%;
+    accent-color: var(--accent-primary, #e53935);
+  }
+}
+
+.ple-note {
+  font-size: 0.74rem;
+  color: var(--text-secondary);
+}
+
+.ple-seg {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 0.3rem;
+
+  button {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    padding: 0.3rem 0.75rem;
+    border-radius: 999px;
+    border: 1px solid var(--border-color);
+    background: transparent;
+    color: var(--text-secondary);
+    font-size: 0.8rem;
+    font-weight: 600;
+    cursor: pointer;
+
+    &:hover { color: var(--text-primary); }
+
+    &.active {
+      color: var(--accent-primary, #e53935);
+      border-color: var(--accent-primary, #e53935);
+      background: color-mix(in srgb, var(--accent-primary, #e53935) 10%, transparent);
+    }
+  }
+}
+
+// An open popover must sit above the next section's toolbar, which comes later
+// in the page and would otherwise paint over it.
+.ple-frame.is-open .ple-toolbar { z-index: 50; }
+
+// Links column on the left: open its properties rightwards, into the page.
+.profile-overview--links-left .ple-frame--links .ple-props {
+  right: auto;
+  left: 0;
+}
+
+// On/off switch in the properties (e.g. the trailer's description).
+.ple-switch {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  cursor: pointer;
+  font-size: 0.85rem;
+  color: var(--text-primary);
+
+  input {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .ple-switch-track {
+    position: relative;
+    flex: 0 0 auto;
+    width: 34px;
+    height: 20px;
+    border-radius: 999px;
+    border: 1px solid var(--border-color);
+    background: var(--bg-hover);
+    transition: all 0.15s ease;
+
+    &::after {
+      content: '';
+      position: absolute;
+      top: 2px;
+      left: 2px;
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      background: var(--text-secondary);
+      transition: transform 0.15s ease, background 0.15s ease;
+    }
+  }
+
+  input:checked + .ple-switch-track {
+    border-color: var(--accent-primary, #e53935);
+    background: color-mix(in srgb, var(--accent-primary, #e53935) 15%, transparent);
+
+    &::after {
+      transform: translateX(14px);
+      background: var(--accent-primary, #e53935);
+    }
+  }
+
+  input:focus-visible + .ple-switch-track {
+    outline: 2px solid var(--accent-primary, #e53935);
+    outline-offset: 2px;
+  }
+}
+
+// ── grid editing ────────────────────────────────────────────────────────────
+
+// Above the later frames, which would otherwise cover its popover.
+.ple-frame.is-open { z-index: 30 !important; }
+
+// Side markers for a drop beside a section (top/bottom are above).
+.ple-frame.is-target--left::after,
+.ple-frame.is-target--right::after {
+  top: 0;
+  bottom: 0;
+  left: auto;
+  right: auto;
+  width: 3px;
+  height: auto;
+}
+.ple-frame.is-target--left::after { left: -12px; }
+.ple-frame.is-target--right::after { right: -12px; }
+
+// Width handle on the right edge.
+.ple-resize {
+  position: absolute;
+  top: 0;
+  right: -14px;   // centred on the frame's outline (7px outside the section)
+  bottom: 0;
+  width: 14px;
+  z-index: 6;
+  cursor: ew-resize;
+  touch-action: none;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 6px;
+    height: 38px;
+    transform: translate(-50%, -50%);
+    border-radius: 999px;
+    border: 1px solid var(--border-color);
+    background: var(--bg-secondary);
+    transition: all 0.15s ease;
+  }
+
+  &:hover::before { border-color: var(--accent-primary, #e53935); }
+
+  @media screen and (max-width: 767px) { display: none; }   // one column there
+}
+
+.ple-frame.is-resizing {
+  outline-color: var(--accent-primary, #e53935);
+
+  .ple-resize::before {
+    border-color: var(--accent-primary, #e53935);
+    background: var(--accent-primary, #e53935);
+  }
+}
+
+.ple-resize-label {
+  position: absolute;
+  top: 50%;
+  right: 16px;
+  transform: translateY(-50%);
+  padding: 0.15rem 0.5rem;
+  border-radius: 999px;
+  border: 1px solid var(--accent-primary, #e53935);
+  background: var(--bg-secondary);
+  color: var(--accent-primary, #e53935);
+  font-size: 0.75rem;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+// A row's empty columns: a drop target, shown while something is dragged.
+.ple-free {
+  align-self: stretch;
+  min-height: 80px;
+  margin-bottom: 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 12px;
+  color: var(--text-secondary);
+  font-size: 0.8rem;
+  font-weight: 600;
+  transition: all 0.15s ease;
+
+  &.is-active { border: 1px dashed var(--text-secondary); }
+
+  &.is-over {
+    border: 1px dashed var(--accent-primary, #e53935);
+    color: var(--accent-primary, #e53935);
+    background: color-mix(in srgb, var(--accent-primary, #e53935) 8%, transparent);
+  }
+
+  @media screen and (max-width: 767px) { display: none; }
+}
+
+// Switched-off sections, under the grid.
+.ple-tray {
+  // Pinned to the bottom of the screen while the page scrolls, like the edit
+  // bar at the top: switched-off sections stay one click away from anywhere.
+  position: sticky;
+  bottom: calc(12px + env(safe-area-inset-bottom, 0px));
+  z-index: 20;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem 0.75rem;
+  max-height: 30vh;
+  overflow-y: auto;
+  margin: 0.25rem 0 1.5rem;
+  padding: 0.7rem 0.85rem;
+  border: 1px dashed var(--border-color);
+  border-radius: 12px;
+  background: var(--bg-secondary);
+  box-shadow: 0 -6px 20px rgba(0, 0, 0, 0.18);
+
+  // Above the app's bottom navigation on phones.
+  @include mix.respond(phone) {
+    bottom: calc(var(--bottom-nav-height, 56px) + 8px + env(safe-area-inset-bottom, 0px));
+  }
+
+  .ple-tray-title {
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+    color: var(--text-secondary);
+  }
+
+  .ple-tray-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    min-width: 0;
+  }
+
+  .ple-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    max-width: 100%;
+    padding: 0.3rem 0.75rem;
+    border: 1px solid var(--border-color);
+    border-radius: 999px;
+    background: transparent;
+    color: var(--text-secondary);
+    font-size: 0.8rem;
+    font-weight: 600;
+    cursor: pointer;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+
+    &:hover {
+      color: var(--text-primary);
+      border-color: var(--text-secondary);
+      background: var(--bg-hover);
+    }
+  }
+}
+
+// The links page stretching to its row's height, in edit mode.
+.ple-frame--fill {
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+
+  > .ple-body {
+    flex: 1 1 auto;
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+  }
+}
+
+// ── docking the links page as a side column ────────────────────────────────
+// While held on a row's outer edge: a bar along that side of the grid fills up
+// over the hold time; full = release now docks it, and the whole side lights.
+.ple-dock {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  z-index: 3;
+  width: 6px;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--accent-primary, #e53935) 15%, transparent);
+  overflow: hidden;
+  pointer-events: none;
+
+  &--left { left: -16px; }
+  &--right { right: -16px; }
+
+  // The fill, top to bottom, over the hold time.
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: var(--accent-primary, #e53935);
+    transform-origin: top;
+    animation: ple-dock-fill var(--ple-dock-ms, 700ms) linear forwards;
+  }
+
+  &.is-ready {
+    width: min(22%, 260px);
+    border-radius: 12px;
+    border: 2px dashed var(--accent-primary, #e53935);
+    background: color-mix(in srgb, var(--accent-primary, #e53935) 10%, transparent);
+
+    &::before { display: none; }
+  }
+
+  &.is-ready.ple-dock--left { left: 0; }
+  &.is-ready.ple-dock--right { right: 0; }
+}
+
+@keyframes ple-dock-fill {
+  from { transform: scaleY(0); }
+  to { transform: scaleY(1); }
+}
+
+.ple-drag-chip {
+  small {
+    margin-left: 0.35rem;
+    font-weight: 500;
+    color: var(--text-secondary);
+  }
+
+  &.is-dock {
+    color: var(--accent-primary, #e53935);
+  }
+}
+
+// The "?" beside the edit bar's title: opens the tour again.
+.ple-bar .ple-titles h3 {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+.ple-tour-btn {
+  width: 26px;
+  height: 26px;
+}
+
+// Clicks inside a framed section are swallowed in edit mode (ProfileLayoutEditor
+// swallow()); an iframe's clicks never bubble out, so it takes none at all.
+.ple-body iframe { pointer-events: none; }
+
+// The line between rows: a drop target for a new full-width row. No height of
+// its own; the hit area sits in the gap above the row it starts.
+.ple-rowgap {
+  grid-column: 1 / -1;
+  position: relative;
+  height: 0;
+  z-index: 4;
+
+  @media screen and (max-width: 767px) { display: none; }
+}
+
+.ple-rowgap-hit {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: -22px;
+  height: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+
+  &.is-active {
+    pointer-events: auto;
+
+    &::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: 50%;
+      height: 2px;
+      border-radius: 2px;
+      background: color-mix(in srgb, var(--text-secondary) 45%, transparent);
+    }
+  }
+
+  &.is-over::before {
+    height: 3px;
+    background: var(--accent-primary, #e53935);
+  }
+
+  span {
+    position: relative;
+    padding: 0.05rem 0.6rem;
+    border: 1px solid var(--accent-primary, #e53935);
+    border-radius: 999px;
+    background: var(--bg-secondary);
+    color: var(--accent-primary, #e53935);
+    font-size: 0.72rem;
+    font-weight: 700;
+  }
+}
+
+// ── mobile mode: the phone layout inside a drawn phone ──────────────────────
+.ple-phone {
+  width: 410px;
+  max-width: 100%;
+  margin: 0.5rem auto 1.25rem;
+  padding: 12px;
+  border-radius: 46px;
+  background: #0b0b0d;
+  border: 1px solid color-mix(in srgb, var(--text-primary) 18%, transparent);
+  box-shadow:
+    0 0 0 3px color-mix(in srgb, var(--text-primary) 6%, transparent),
+    0 24px 60px rgba(0, 0, 0, 0.45);
+  position: relative;
+
+  // The camera island.
+  &::before {
+    content: '';
+    position: absolute;
+    top: 22px;
+    left: 50%;
+    z-index: 5;
+    width: 96px;
+    height: 26px;
+    transform: translateX(-50%);
+    border-radius: 999px;
+    background: #000;
+  }
+}
+
+.ple-phone-screen {
+  height: min(780px, calc(100vh - var(--nav-height, 60px) - 200px));
+  min-height: 480px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  overscroll-behavior: contain;
+  padding: 52px 12px 24px;   // clear of the camera island
+  border-radius: 36px;
+  background: var(--bg-primary, #0f0f0f);
+  scrollbar-width: none;
+
+  &::-webkit-scrollbar { display: none; }
+}
+
+// Inside the drawn phone, sections take their phone sizes even though the
+// browser window is wide (the stylesheets size them by window width).
+.pov-grid--phone {
+  grid-template-columns: 1fr;
+
+  > * { grid-column: 1 / -1 !important; }
+
+
+  .pov-head h3 { font-size: 0.95rem; }
+
+  .card-container > * { width: 240px; }
+  .playlist-card-container > * { width: 200px; }
+  .audio-tile-grid > * { width: 168px; }
+  .snap-list > * { width: 280px; }
+  .card-container--shorts > * { width: 156px; }
+
+  .pov-section--grid {
+    .card-container { grid-template-columns: 1fr; }
+    .card-container--shorts,
+    .playlist-card-container,
+    .audio-tile-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .snap-list { grid-template-columns: 1fr; }
+  }
+
+  // The trailer stacks: player, then its text.
+  .channel-trailer-row { flex-direction: column; flex-wrap: nowrap; gap: 0.75rem; }
+  .channel-trailer { width: 100%; border-radius: 10px; }
+  .channel-trailer-meta { width: 100%; height: auto; max-height: 7.5rem; overflow: hidden; }
+
+  .ple-tag small { display: none; }
+  .ple-icon { width: 28px; }
+}
+
+// A popover inside the phone stays inside it.
+.ple-phone .ple-props { width: min(320px, calc(100% - 8px)); }
+
+// Undo / redo in the edit bar.
+.ple-history {
+  display: inline-flex;
+  gap: 0.15rem;
+  padding: 0.1rem;
+  border: 1px solid var(--border-color);
+  border-radius: 999px;
+
+  .ple-icon { border-radius: 999px; }
+}

@@ -20,7 +20,7 @@
   background: var(--card-bg, #fff);
   color: var(--text-primary, #000);
   border-radius: 14px;
-  padding: 26px 24px;
+  padding: 20px 24px 26px;
   width: 440px;
   max-width: 95vw;
   position: relative;
@@ -32,25 +32,6 @@
     padding: 22px 16px;
     padding-bottom: calc(22px + env(safe-area-inset-bottom, 0px));
   }
-}
-
-.aauth-close {
-  position: absolute;
-  top: 14px;
-  right: 14px;
-  background: transparent;
-  border: none;
-  color: var(--text-secondary, #888);
-  cursor: pointer;
-  padding: 4px;
-  line-height: 0;
-
-  &:disabled { opacity: 0.4; cursor: not-allowed; }
-}
-
-.aauth-title {
-  margin: 0 36px 8px 0;
-  font-size: 19px;
 }
 
 .aauth-desc {
@@ -105,9 +86,13 @@
   cursor: pointer;
 
   &.primary {
-    background: var(--accent, #e0594b);
+    background: transparent;
     border-color: var(--accent, #e0594b);
-    color: #fff;
+    color: var(--accent, #e0594b);
+
+    &:hover:not(:disabled) {
+      background: color-mix(in srgb, var(--accent, #e0594b) 10%, transparent);
+    }
   }
 
   &:disabled { opacity: 0.55; cursor: not-allowed; }

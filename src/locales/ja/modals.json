@@ -70,7 +70,8 @@
       "invalidAccount": "ユーザー名またはコミュニティ ID が無効です。",
       "cannotIncrease": "残りの {{percent}}% を超えて増やすことはできません",
       "pendingRow": "@{{account}} はまだ追加されていません。+ をクリックして追加するか、入力欄をクリアしてください。",
-      "atLeastOne": "報酬の割合は 1% 以上にしてください"
+      "atLeastOne": "報酬の割合は 1% 以上にしてください",
+      "maxCount": "Hive では 1 投稿あたりの受益者は最大 {{max}} 人です。"
     },
     "title": "受益者",
     "intro": "この投稿の報酬の一部を自動的に受け取るユーザーを追加します。",
@@ -86,7 +87,8 @@
   },
   "qr": {
     "scan": "Hive Keychain でこの QR をスキャン:",
-    "click": "QR をクリックして Keychain アプリで開く"
+    "click": "QR をクリックして Keychain アプリで開く",
+    "title": "Keychainでログイン"
   },
   "editVideoHint": {
     "title": "自分の動画はいつでも編集できます",
@@ -115,7 +117,12 @@
     "preparing": "アップロード用に動画を準備中...",
     "renderUnavailable": "レンダリングサービスはまだ利用できません。タイムラインのデータはコンソールに出力されました。",
     "backToEditor": "エディターに戻る",
-    "postError": "アップロード用の動画を準備できませんでした。代わりにダウンロードをお試しください。"
+    "postError": "アップロード用の動画を準備できませんでした。代わりにダウンロードをお試しください。",
+    "postAs": "投稿形式",
+    "postAsStory": "ストーリー",
+    "postAsStoryHint": "24時間、ショートフィードの先頭",
+    "postAsShort": "ショート",
+    "postAsShortHint": "チャンネルに残ります"
   },
   "profile": {
     "mustLogin": "先にログインしてください",

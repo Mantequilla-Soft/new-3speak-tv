@@ -70,7 +70,8 @@
       "invalidAccount": "Nama pengguna atau ID komunitas tidak valid.",
       "cannotIncrease": "Tidak bisa dinaikkan melebihi sisa {{percent}}%",
       "pendingRow": "@{{account}} belum ditambahkan — klik + untuk menambahkannya, atau kosongkan kolomnya.",
-      "atLeastOne": "Persentase reward minimal 1%"
+      "atLeastOne": "Persentase reward minimal 1%",
+      "maxCount": "Hive mengizinkan paling banyak {{max}} penerima manfaat per postingan."
     },
     "title": "Penerima manfaat",
     "intro": "Tambahkan pengguna yang akan otomatis menerima sebagian reward dari postingan ini.",
@@ -86,7 +87,8 @@
   },
   "qr": {
     "scan": "Pindai QR ini di Hive Keychain:",
-    "click": "Klik QR untuk membuka di aplikasi Keychain"
+    "click": "Klik QR untuk membuka di aplikasi Keychain",
+    "title": "Masuk dengan Keychain"
   },
   "editVideoHint": {
     "title": "Edit videomu kapan saja",
@@ -115,7 +117,12 @@
     "preparing": "Menyiapkan video untuk diunggah...",
     "renderUnavailable": "Layanan render belum tersedia. Data timeline dicatat ke konsol.",
     "backToEditor": "Kembali ke Editor",
-    "postError": "Gagal menyiapkan video untuk diunggah. Silakan coba unduh saja."
+    "postError": "Gagal menyiapkan video untuk diunggah. Silakan coba unduh saja.",
+    "postAs": "Posting sebagai",
+    "postAsStory": "Story",
+    "postAsStoryHint": "24 jam, paling atas di feed Shorts",
+    "postAsShort": "Shorts",
+    "postAsShortHint": "Tetap ada di channel-mu"
   },
   "profile": {
     "mustLogin": "Kamu harus masuk dulu",

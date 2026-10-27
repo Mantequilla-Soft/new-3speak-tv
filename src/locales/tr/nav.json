@@ -77,6 +77,15 @@
       "includesWhale": "🐋 balina hesap(lar) içerir",
       "includesOrca": "🐬 orka hesap(lar) içerir",
       "andMore": "ve {{count}} tane daha…"
+    },
+    "stories": {
+      "heading": "Takip ettiklerinin hikâyeleri",
+      "posted": "@{{user}} bir hikâye paylaştı",
+      "type": "Hikâye",
+      "hoursLeft_one": "{{count}} sa kaldı",
+      "hoursLeft_other": "{{count}} sa kaldı",
+      "ariaUnseen_one": "Bildirimler, {{count}} yeni hikâye",
+      "ariaUnseen_other": "Bildirimler, {{count}} yeni hikâye"
     }
   },
   "search": {

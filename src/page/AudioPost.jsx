@@ -328,7 +328,7 @@ function AudioPost() {
       )}
 
       {isTipOpen && (
-        <TipModal recipient={author} permlink={permlink} isOpen={isTipOpen} onClose={() => setIsTipOpen(false)} />
+        <TipModal recipient={author} permlink={permlink} memoLink={`https://3speak.tv/audio/${author}/${permlink}`} isOpen={isTipOpen} onClose={() => setIsTipOpen(false)} />
       )}
     </div>
   );

@@ -25,7 +25,9 @@
       "boosts_received": "मिले बूस्ट",
       "boost_amount_received": "मिली राशि",
       "boosts_given": "दिए गए बूस्ट",
-      "boost_amount_given": "दी गई राशि"
+      "boost_amount_given": "दी गई राशि",
+      "story_uploads": "स्टोरीज़",
+      "story_streak": "स्टोरी स्ट्रीक"
     },
     "metricsInSentence": {
       "video_uploads": "वीडियो",
@@ -40,7 +42,9 @@
       "boosts_received": "मिले बूस्ट",
       "boost_amount_received": "मिली राशि",
       "boosts_given": "दिए गए बूस्ट",
-      "boost_amount_given": "दी गई राशि"
+      "boost_amount_given": "दी गई राशि",
+      "story_uploads": "स्टोरीज़",
+      "story_streak": "स्टोरी स्ट्रीक"
     },
     "blurbs": {
       "video_uploads": "अपलोड किए गए वीडियो",
@@ -55,7 +59,9 @@
       "boosts_received": "उनकी स्ट्रीम को भेजे गए बूस्ट",
       "boost_amount_received": "मिले बूस्ट की कुल राशि",
       "boosts_given": "उनके द्वारा दूसरे स्ट्रीमर्स को भेजे गए बूस्ट",
-      "boost_amount_given": "उनके द्वारा दिए गए बूस्ट की कुल राशि"
+      "boost_amount_given": "उनके द्वारा दिए गए बूस्ट की कुल राशि",
+      "story_uploads": "पोस्ट की गई स्टोरीज़",
+      "story_streak": "लगातार सबसे ज़्यादा दिन स्टोरी के साथ"
     },
     "blurbsInSentence": {
       "video_uploads": "अपलोड किए गए वीडियो",
@@ -70,22 +76,32 @@
       "boosts_received": "उनकी स्ट्रीम को भेजे गए बूस्ट",
       "boost_amount_received": "मिले बूस्ट की कुल राशि",
       "boosts_given": "उनके द्वारा दूसरे स्ट्रीमर्स को भेजे गए बूस्ट",
-      "boost_amount_given": "उनके द्वारा दिए गए बूस्ट की कुल राशि"
+      "boost_amount_given": "उनके द्वारा दिए गए बूस्ट की कुल राशि",
+      "story_uploads": "पोस्ट की गई स्टोरीज़",
+      "story_streak": "लगातार सबसे ज़्यादा दिन स्टोरी के साथ"
     },
     "groups": {
       "video": "वीडियो",
-      "streaming": "स्ट्रीमिंग"
+      "streaming": "स्ट्रीमिंग",
+      "stories": "स्टोरीज़"
     },
     "badgeNouns": {
       "video_uploads": "वीडियो",
       "short_uploads": "शॉर्ट्स",
       "video_watch_secs": "देखे गए",
       "short_watch_secs": "शॉर्ट्स देखे गए",
-      "tags_given": "टैगर"
+      "tags_given": "टैगर",
+      "story_streak": "स्ट्रीक"
     },
     "badgeLabel": "{{tier}} {{noun}}",
     "badgeTitleAllTime": "हर समय के {{what}} में #{{rank}} रैंक",
-    "badgeTitleWindow": "पिछले {{window}} के {{what}} में #{{rank}} रैंक"
+    "badgeTitleWindow": "पिछले {{window}} के {{what}} में #{{rank}} रैंक",
+    "sub": {
+      "count": "संख्या",
+      "watchTime": "वॉच टाइम",
+      "streak": "स्ट्रीक"
+    },
+    "timeRange": "समय सीमा"
   },
   "duration": {
     "hoursMinutes": "{{h}} घं {{m}} मि",
@@ -159,15 +175,28 @@
   "uploadLinks": {
     "regularVideo": "सामान्य वीडियो",
     "verticalShort": "वर्टिकल शॉर्ट",
+    "story": "स्टोरी (24 घंटे)",
     "musicAudio": "संगीत / ऑडियो",
     "groupChat": "ग्रुप चैट",
     "communitySnap": "कम्युनिटी Snap",
     "shortsEditor": "शॉर्ट्स एडिटर",
     "goLiveNow": "लाइव जाएं!",
+    "playlist": "प्लेलिस्ट",
     "headings": {
       "upload": "अपलोड",
       "live": "लाइव",
       "others": "अन्य"
+    },
+    "subtitles": {
+      "regularVideo": "आपके चैनल के लिए सामान्य वीडियो",
+      "verticalShort": "Shorts फ़ीड के लिए वर्टिकल क्लिप",
+      "shortsEditor": "ब्राउज़र में शॉर्ट रिकॉर्ड और एडिट करें",
+      "story": "24 घंटे तक दिखने वाली छोटी क्लिप",
+      "musicAudio": "गाने, पॉडकास्ट और अन्य ऑडियो",
+      "groupChat": "मेहमानों के साथ होस्ट किया जाने वाला लाइव रूम",
+      "goLiveNow": "अपने फ़ॉलोअर्स के लिए लाइव स्ट्रीम करें",
+      "communitySnap": "कम्युनिटी टैब पर झटपट पोस्ट",
+      "playlist": "वीडियो को शेयर करने लायक सूची में जोड़ें"
     }
   },
   "chat": {

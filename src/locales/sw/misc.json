@@ -25,7 +25,9 @@
       "boosts_received": "Boosts zilizopokelewa",
       "boost_amount_received": "Kiasi kilichopokelewa",
       "boosts_given": "Boosts zilizotolewa",
-      "boost_amount_given": "Kiasi kilichotolewa"
+      "boost_amount_given": "Kiasi kilichotolewa",
+      "story_uploads": "Hadithi",
+      "story_streak": "Mfululizo wa hadithi"
     },
     "metricsInSentence": {
       "video_uploads": "video",
@@ -40,7 +42,9 @@
       "boosts_received": "boosts zilizopokelewa",
       "boost_amount_received": "kiasi kilichopokelewa",
       "boosts_given": "boosts zilizotolewa",
-      "boost_amount_given": "kiasi kilichotolewa"
+      "boost_amount_given": "kiasi kilichotolewa",
+      "story_uploads": "hadithi",
+      "story_streak": "mfululizo wa hadithi"
     },
     "blurbs": {
       "video_uploads": "Video zilizopakiwa",
@@ -55,7 +59,9 @@
       "boosts_received": "Boosts zilizotumwa kwa mitiririko yao",
       "boost_amount_received": "Jumla ya kiasi cha boosts zilizopokelewa",
       "boosts_given": "Boosts walizotuma kwa watiririshaji wengine",
-      "boost_amount_given": "Jumla ya kiasi cha boosts walizotoa"
+      "boost_amount_given": "Jumla ya kiasi cha boosts walizotoa",
+      "story_uploads": "Hadithi zilizochapishwa",
+      "story_streak": "Siku nyingi zaidi mfululizo zenye hadithi"
     },
     "blurbsInSentence": {
       "video_uploads": "video zilizopakiwa",
@@ -70,22 +76,32 @@
       "boosts_received": "boosts zilizotumwa kwa mitiririko yao",
       "boost_amount_received": "jumla ya kiasi cha boosts zilizopokelewa",
       "boosts_given": "boosts walizotuma kwa watiririshaji wengine",
-      "boost_amount_given": "jumla ya kiasi cha boosts walizotoa"
+      "boost_amount_given": "jumla ya kiasi cha boosts walizotoa",
+      "story_uploads": "hadithi zilizochapishwa",
+      "story_streak": "siku nyingi zaidi mfululizo zenye hadithi"
     },
     "groups": {
       "video": "Video",
-      "streaming": "Utiririshaji"
+      "streaming": "Utiririshaji",
+      "stories": "Hadithi"
     },
     "badgeNouns": {
       "video_uploads": "Video",
       "short_uploads": "Shorts",
       "video_watch_secs": "Zilizotazamwa",
       "short_watch_secs": "Shorts zilizotazamwa",
-      "tags_given": "Mweka lebo"
+      "tags_given": "Mweka lebo",
+      "story_streak": "Mfululizo"
     },
     "badgeLabel": "{{tier}} {{noun}}",
     "badgeTitleAllTime": "Nafasi ya #{{rank}} kwa {{what}} katika muda wote",
-    "badgeTitleWindow": "Nafasi ya #{{rank}} kwa {{what}} katika kipindi cha {{window}} kilichopita"
+    "badgeTitleWindow": "Nafasi ya #{{rank}} kwa {{what}} katika kipindi cha {{window}} kilichopita",
+    "sub": {
+      "count": "Idadi",
+      "watchTime": "Muda wa kutazama",
+      "streak": "Mfululizo"
+    },
+    "timeRange": "Kipindi"
   },
   "duration": {
     "hoursMinutes": "saa {{h}} dk {{m}}",
@@ -159,15 +175,28 @@
   "uploadLinks": {
     "regularVideo": "Video ya kawaida",
     "verticalShort": "Short wima",
+    "story": "Hadithi (saa 24)",
     "musicAudio": "Muziki / Sauti",
     "groupChat": "Gumzo la kikundi",
     "communitySnap": "Snap ya jumuiya",
     "shortsEditor": "Kihariri cha Shorts",
     "goLiveNow": "Nenda mubashara!",
+    "playlist": "Orodha ya kucheza",
     "headings": {
       "upload": "Pakia",
       "live": "Mubashara",
       "others": "Nyingine"
+    },
+    "subtitles": {
+      "regularVideo": "Video ya kawaida kwa chaneli yako",
+      "verticalShort": "Klipu wima kwa mlisho wa Shorts",
+      "shortsEditor": "Rekodi na uhariri short kwenye kivinjari",
+      "story": "Klipu fupi inayokaa kwa saa 24",
+      "musicAudio": "Nyimbo, podikasti na sauti nyingine",
+      "groupChat": "Chumba mubashara unachoongoza na wageni",
+      "goLiveNow": "Tiririsha mubashara kwa wafuasi wako",
+      "communitySnap": "Chapisho la haraka kwenye kichupo cha jumuiya",
+      "playlist": "Kusanya video kwenye orodha ya kushiriki"
     }
   },
   "chat": {

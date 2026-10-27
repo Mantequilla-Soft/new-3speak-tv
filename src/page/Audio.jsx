@@ -536,7 +536,7 @@ function Audio() {
       {shareTarget && shareTarget._id !== audioCurrent?._id && (
         <div className="audio-share-overlay" onClick={() => setShareTarget(null)}>
           <div className="audio-share-popup" onClick={e => e.stopPropagation()}>
-            <AudioShareDropdown item={shareTarget} onClose={() => setShareTarget(null)} />
+            <AudioShareDropdown item={shareTarget} onClose={() => setShareTarget(null)} title={t('common.actions.share')} />
           </div>
         </div>
       )}

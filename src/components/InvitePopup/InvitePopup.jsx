@@ -3,6 +3,7 @@ import { createPortal } from 'react-dom';
 import { useLocation } from 'react-router-dom';
 import { useTranslation, Trans } from 'react-i18next';
 import HiveAvatar from '../HiveAvatar/HiveAvatar';
+import ModalHeader from '../ModalHeader/ModalHeader';
 import { useAppStore } from '../../lib/store';
 import { fetchInvite } from '../../lib/referralLinks';
 import { rememberInvite, takeQueuedInvitePopup } from '../../utils/referral';
@@ -76,11 +77,16 @@ export default function InvitePopup({ openLoginModal }) {
   return createPortal(
     <div className="invite-popup-overlay" onClick={close}>
       <div className="invite-popup" role="dialog" aria-modal="true" aria-labelledby="invite-popup-title" onClick={(e) => e.stopPropagation()}>
+        <ModalHeader
+          className="invite-popup-header"
+          title={<Trans i18nKey="app.invite.title" values={{ referrer: invite.referrer }} components={{ who: <span /> }} />}
+          titleId="invite-popup-title"
+          onClose={close}
+        />
         <div className="invite-from">
           <HiveAvatar username={invite.referrer} size="medium" className="invite-avatar" />
-          <h1 id="invite-popup-title"><Trans i18nKey="app.invite.title" values={{ referrer: invite.referrer }} components={{ who: <span /> }} /></h1>
+          <p className="invite-text">{text}</p>
         </div>
-        <p className="invite-text">{text}</p>
         <div className="invite-actions">
           {showSignUp && (
             <button type="button" className="invite-btn primary" onClick={signUp}>

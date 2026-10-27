@@ -70,7 +70,8 @@
       "invalidAccount": "Nieprawidłowa nazwa użytkownika lub ID społeczności.",
       "cannotIncrease": "Nie można zwiększyć powyżej pozostałych {{percent}}%",
       "pendingRow": "@{{account}} nie zostało jeszcze dodane — kliknij +, aby je dodać, albo wyczyść pole.",
-      "atLeastOne": "Procent nagrody musi wynosić co najmniej 1%"
+      "atLeastOne": "Procent nagrody musi wynosić co najmniej 1%",
+      "maxCount": "Hive pozwala na maksymalnie {{max}} beneficjentów na post."
     },
     "title": "Beneficjenci",
     "intro": "Dodaj użytkownika, który ma automatycznie otrzymywać część nagród za ten post.",
@@ -86,7 +87,8 @@
   },
   "qr": {
     "scan": "Zeskanuj ten kod QR w Hive Keychain:",
-    "click": "Kliknij kod QR, aby otworzyć w aplikacji Keychain"
+    "click": "Kliknij kod QR, aby otworzyć w aplikacji Keychain",
+    "title": "Zaloguj się przez Keychain"
   },
   "editVideoHint": {
     "title": "Edytuj dowolny ze swoich filmów",
@@ -115,7 +117,12 @@
     "preparing": "Przygotowywanie filmu do przesłania...",
     "renderUnavailable": "Usługa renderowania nie jest jeszcze dostępna. Dane osi czasu zapisano w konsoli.",
     "backToEditor": "Wróć do edytora",
-    "postError": "Nie udało się przygotować filmu do przesłania. Spróbuj go zamiast tego pobrać."
+    "postError": "Nie udało się przygotować filmu do przesłania. Spróbuj go zamiast tego pobrać.",
+    "postAs": "Opublikuj jako",
+    "postAsStory": "Relacja",
+    "postAsStoryHint": "24 godziny, na początku kanału Shorts",
+    "postAsShort": "Short",
+    "postAsShortHint": "Zostaje na Twoim kanale"
   },
   "profile": {
     "mustLogin": "Najpierw musisz się zalogować",

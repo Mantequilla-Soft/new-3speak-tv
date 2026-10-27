@@ -36,25 +36,6 @@
   }
 }
 
-.report-close-btn {
-  position: absolute;
-  top: 12px;
-  right: 12px;
-  background: none;
-  border: none;
-  cursor: pointer;
-  color: var(--text-primary, #000);
-  padding: 4px;
-  display: flex;
-  align-items: center;
-}
-
-.report-modal-title {
-  font-size: 18px;
-  font-weight: 600;
-  margin: 0 0 4px;
-}
-
 .report-target {
   font-size: 13px;
   color: var(--text-secondary, #666);

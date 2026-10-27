@@ -1,11 +1,11 @@
 import { useEffect, useState } from 'react';
-import { MdPersonOff } from 'react-icons/md';
 import { useAppStore } from '../../lib/store';
 import { usePromptsActive, setPromptActive } from '../../utils/welcomeGate';
 import { handleStateOnHive } from '../../hive-api/api';
 import { fetchGraduationStatus } from '../../lib/incubation';
 import { openButrauthPopup } from '../../utils/butrauthPopup';
 import { toastIn } from '../../utils/toast';
+import ModalHeader from '../ModalHeader/ModalHeader';
 import { useTranslation, Trans } from 'react-i18next';
 // Reuses the shared dialog shape rather than duplicating it, as the graduation
 // prompt does. That file is the app's one modal-dialog shape.
@@ -110,17 +110,14 @@ export default function HandleTakenPrompt() {
         aria-modal="true"
         aria-labelledby="handle-taken-title"
       >
-        <header className="ads-prompt-head">
-          <MdPersonOff className="ads-prompt-head-icon" aria-hidden="true" />
-          <div>
-            <h3 className="ads-prompt-title" id="handle-taken-title">
-              {t('incubation.handleTaken.title', { handle: incubationHandle })}
-            </h3>
-            <p className="ads-prompt-lede">
-              <Trans i18nKey="incubation.handleTaken.lede" components={{ b: <strong /> }} />
-            </p>
-          </div>
-        </header>
+        <ModalHeader
+          title={t('incubation.handleTaken.title', { handle: incubationHandle })}
+          titleId="handle-taken-title"
+          onClose={later}
+        />
+        <p className="ads-prompt-lede">
+          <Trans i18nKey="incubation.handleTaken.lede" components={{ b: <strong /> }} />
+        </p>
 
         <p className="ads-prompt-text">
           {t('incubation.handleTaken.text')}

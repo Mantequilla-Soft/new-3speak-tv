@@ -3,11 +3,12 @@ import { createPortal } from 'react-dom';
 import { useNavigate } from 'react-router-dom';
 import { X, Loader2 } from 'lucide-react';
 import { generateVideoThumbnails } from '../../utils/videoThumbnails';
-import { getEditorUrl, STT_WS_URL, EMBED_API_KEY, cameraRecordEnabledFor } from '../../utils/config';
+import { getEditorUrl, STT_WS_URL, EMBED_API_KEY, cameraRecordEnabledFor, storiesEnabledFor } from '../../utils/config';
 import { useAppStore } from '../../lib/store';
 import { useEmbedUpload } from '../../context/EmbedUploadContext';
 import { usePremiumStatus } from '../../hooks/usePremiumStatus';
 import { getLockedBeneficiaries } from '../../utils/beneficiaries';
+import { remixChainAuthors } from '../../utils/remixChain';
 import { sanitizeMusicCredits, soundAuthorsOf } from '../../utils/soundCredits';
 import { useTranslation } from 'react-i18next';
 import { toastIn } from '../../utils/toast';
@@ -16,10 +17,10 @@ import './EditorModal.scss';
 
 const toast = toastIn('Shorts');
 
-function EditorModal({ isOpen, onClose, videoUrl, videoName, videoType, clipStart, clipEnd, originalAuthor, originalPermlink, originalShortPermlink, videoFile }) {
+function EditorModal({ isOpen, onClose, videoUrl, videoName, videoType, clipStart, clipEnd, originalAuthor, originalPermlink, originalShortPermlink, remixChain, videoFile }) {
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const { setVideoFile, setPrevVideoFile, setGeneratedThumbnail, setVideoDuration, setOriginalAuthor, setOriginalPermlink, setOriginalShortPermlink, setMusicCredits, setFromStories, setList, setRemaingPercent } = useEmbedUpload();
+  const { setVideoFile, setPrevVideoFile, setGeneratedThumbnail, setVideoDuration, setOriginalAuthor, setOriginalPermlink, setOriginalShortPermlink, setRemixChain, setMusicCredits, setFromStories, setIsStory, pickFirstThumbnail, setList, setRemaingPercent } = useEmbedUpload();
   const iframeRef = useRef(null);
   const mediaLoadedRef = useRef(false);
   const [editorReady, setEditorReady] = useState(false);
@@ -31,7 +32,10 @@ function EditorModal({ isOpen, onClose, videoUrl, videoName, videoType, clipStar
   // (editor-ready says canSaveDrafts); older editors get the plain confirm.
   const editorDraftsRef = useRef(false);
   const isPremium = !!premiumStatus?.premium;
-  const [renderStatus, setRenderStatus] = useState(null); // null | 'sending' | 'rendering' | 'complete' | 'error' | 'preparing'
+  const [renderStatus, setRenderStatus] = useState(null); // null | 'sending' | 'rendering' | 'complete' | 'error' | 'preparing' | 'choose-target'
+  // The editor's "Post to 3Speak" for someone who can post stories: held here
+  // while they pick short or story (the editor itself has one Post button).
+  const [pendingPost, setPendingPost] = useState(null);
   const [renderProgress, setRenderProgress] = useState(0);
   const [renderedVideoUrl, setRenderedVideoUrl] = useState(null);
   const pollIntervalRef = useRef(null);
@@ -150,7 +154,12 @@ function EditorModal({ isOpen, onClose, videoUrl, videoName, videoType, clipStar
           break;
 
         case 'post-to-3speak':
-          handlePostTo3Speak(data.outputUrl, data.musicCredits);
+          if (storiesEnabledFor(userRef.current)) {
+            setPendingPost({ outputUrl: data.outputUrl, musicCredits: data.musicCredits });
+            setRenderStatus('choose-target');
+          } else {
+            handlePostTo3Speak(data.outputUrl, data.musicCredits);
+          }
           break;
 
         case 'editor-closed':
@@ -351,7 +360,7 @@ function EditorModal({ isOpen, onClose, videoUrl, videoName, videoType, clipStar
   };
 
   // Handle "Post to 3Speak" from editor — fetch rendered video, navigate to embed-studio
-  const handlePostTo3Speak = async (outputUrl, rawMusicCredits) => {
+  const handlePostTo3Speak = async (outputUrl, rawMusicCredits, asStory = false) => {
     if (!outputUrl) return;
 
     try {
@@ -385,8 +394,9 @@ function EditorModal({ isOpen, onClose, videoUrl, videoName, videoType, clipStar
       } catch { /* duration will be 0 */ }
 
       // Generate thumbnails from the video file (with timeout to avoid hanging)
+      let thumbs = [];
       try {
-        const thumbs = await Promise.race([
+        thumbs = await Promise.race([
           generateVideoThumbnails(file, 2, 'url'),
           new Promise((_, reject) => setTimeout(() => reject(new Error('Thumbnail timeout')), 10000))
         ]);
@@ -414,6 +424,16 @@ function EditorModal({ isOpen, onClose, videoUrl, videoName, videoType, clipStar
       if (originalAuthor) setOriginalAuthor(originalAuthor);
       if (originalPermlink) setOriginalPermlink(originalPermlink);
       if (originalShortPermlink) setOriginalShortPermlink(originalShortPermlink);
+      // The chain the remix button resolved (utils/remixChain.js); without one,
+      // just the source, so the post still records where it came from
+      const chain = originalAuthor && originalPermlink
+        ? (remixChain?.length ? remixChain : [{
+          author: originalAuthor,
+          permlink: originalPermlink,
+          ...(originalShortPermlink && originalShortPermlink !== originalPermlink ? { short: originalShortPermlink } : {}),
+        }])
+        : [];
+      setRemixChain(chain);
 
       // Songs from the editor's music library: credited in the post body and
       // metadata, and 3Speak sound creators get a locked 5% like remix authors
@@ -422,6 +442,7 @@ function EditorModal({ isOpen, onClose, videoUrl, videoName, videoType, clipStar
 
       // Remix from shorts should use the short upload form (no title/tags)
       setFromStories(true);
+      setIsStory(asStory);
 
       // Pre-populate beneficiary list with locked minimums. Pro
       // subscribers skip the threespeakfund 10% — but the remix-author
@@ -433,14 +454,17 @@ function EditorModal({ isOpen, onClose, videoUrl, videoName, videoType, clipStar
         username: user,
         includeEncoder: true,
         originalAuthor: originalAuthor || null,
+        remixAuthors: remixChainAuthors(chain, user),
         soundAuthors: soundAuthorsOf(musicCredits, user),
       });
       setList(lockedBeneficiaries);
       const usedPercent = lockedBeneficiaries.reduce((sum, b) => sum + b.percent, 0);
       setRemaingPercent(100 - usedPercent);
 
-      // Navigate to embed-studio thumbnail step (video uploads at publish time)
-      navigate('/embed-studio/thumbnail?from=stories');
+      // Navigate to embed-studio thumbnail step (video uploads at publish time).
+      // A story goes straight to Post, like one picked in the uploader.
+      if (asStory && pickFirstThumbnail(thumbs)) navigate('/embed-studio/preview');
+      else navigate('/embed-studio/thumbnail?from=stories');
     } catch (err) {
       console.error('[EditorModal] Post to 3Speak failed:', err);
       setRenderStatus('post-error');
@@ -579,6 +603,24 @@ function EditorModal({ isOpen, onClose, videoUrl, videoName, videoType, clipStar
                   <span>{t('modals.editor.complete')}</span>
                   <button className="render-btn" onClick={handleUseRenderedVideo}>
                     {t('modals.editor.useVideo')}
+                  </button>
+                </div>
+              )}
+              {renderStatus === 'choose-target' && pendingPost && (
+                <div className="render-status">
+                  <span>{t('modals.editor.postAs')}</span>
+                  <div className="post-target">
+                    <button className="post-target__btn" onClick={() => handlePostTo3Speak(pendingPost.outputUrl, pendingPost.musicCredits, true)}>
+                      <strong>{t('modals.editor.postAsStory')}</strong>
+                      <small>{t('modals.editor.postAsStoryHint')}</small>
+                    </button>
+                    <button className="post-target__btn" onClick={() => handlePostTo3Speak(pendingPost.outputUrl, pendingPost.musicCredits, false)}>
+                      <strong>{t('modals.editor.postAsShort')}</strong>
+                      <small>{t('modals.editor.postAsShortHint')}</small>
+                    </button>
+                  </div>
+                  <button className="post-target__back" onClick={() => { setPendingPost(null); setRenderStatus(null); }}>
+                    {t('modals.editor.backToEditor')}
                   </button>
                 </div>
               )}

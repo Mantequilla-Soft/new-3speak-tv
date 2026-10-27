@@ -291,5 +291,114 @@
     "unhiddenToast": "Bahşiş profilinde yeniden görünüyor",
     "hideFailed": "Bu bahşiş değiştirilemedi. Lütfen tekrar dene.",
     "hideWalletPrompt": "Profilinde hangi bahşişlerin görüneceğini değiştirmek için imzala"
+  },
+  "layout": {
+    "customize": "Profili özelleştir",
+    "title": "Profilini özelleştir",
+    "hint": "Bir bölümü tutamağından sürükle: yeni bir sütun için başka birinin yanına, üst üste dizmek için birinin üstüne ya da altına, yeni bir satır için de satırlar arasındaki çizgiye bırak. Genişliği değiştirmek için sağ kenarını çek, özellikleri için dişliyi kullan.",
+    "mobileHint": "Profilin telefonlarda böyle görünür: tek sütun. Bölümleri yukarı ya da aşağı sürükle, gizle veya özelliklerini değiştir. Burada bir şey değiştirene kadar telefonlar masaüstü düzenini izler.",
+    "save": "Düzeni kaydet",
+    "saving": "Kaydediliyor…",
+    "reset": "Varsayılana sıfırla",
+    "undo": "Geri al",
+    "redo": "Yinele",
+    "undoTitle": "Geri al (Ctrl+Z)",
+    "redoTitle": "Yinele (Ctrl+Shift+Z)",
+    "matchDesktop": "Masaüstüyle aynı",
+    "deviceDesktop": "Masaüstü",
+    "deviceMobile": "Mobil",
+    "saved": "Profil düzeni kaydedildi",
+    "saveFailed": "Düzen kaydedilemedi: {{error}}",
+    "signInNeeded": "Düzeni kaydetmek için tekrar giriş yap",
+    "drag": "Sıralamak için sürükle",
+    "dropHere": "Buraya bırak",
+    "newRow": "Yeni satır",
+    "resize": "Genişliği değiştirmek için sürükle",
+    "dockHold": "tam boy bir sütun için basılı tut",
+    "dockLeft": "Bırak: tam boy sol sütun",
+    "dockRight": "Bırak: tam boy sağ sütun",
+    "moveUp": "Yukarı taşı",
+    "moveDown": "Aşağı taşı",
+    "show": "Bu bölümü göster",
+    "hide": "Bu bölümü gizle",
+    "settings": "Bölüm ayarları",
+    "remove": "Bu bölümü kaldır",
+    "hiddenBadge": "Gizli",
+    "hiddenTitle": "Gizli bölümler",
+    "noSettings": "Bu bölümün ayarı yok.",
+    "emptySection": "Burada henüz gösterilecek bir şey yok. Ziyaretçiler bu bölümü ancak içerik olduğunda görür.",
+    "linksNote": "Yalnızca geniş ekranlarda gösterilir. \"Sayfada\" onu diğer bölümlerle birlikte ızgaraya yerleştirir; tutamağından oraya sürükleyebilirsin de.",
+    "addPlaylist": "Bir oynatma listesini ayrı bölüm olarak ekle",
+    "playlistMissing": "Oynatma listesi bulunamadı (silinmiş veya gizli)",
+    "fields": {
+      "playlist": "Oynatma listesi",
+      "heading": "Başlık",
+      "count_one": "{{count}} öğe göster",
+      "count_other": "{{count}} öğe göster",
+      "playlists_one": "{{count}} oynatma listesi göster",
+      "playlists_other": "{{count}} oynatma listesi göster",
+      "size": "Video boyutu",
+      "size_sm": "Küçük",
+      "size_md": "Orta",
+      "size_lg": "Büyük",
+      "size_full": "Tam genişlik",
+      "showInfo": "Başlığı ve açıklamayı göster",
+      "showSnap": "En son topluluk gönderisini göster",
+      "view": "Görünüm",
+      "viewRow": "Satır",
+      "viewGrid": "Izgara",
+      "side": "Konum",
+      "sideLeft": "Sol",
+      "sideRight": "Sağ",
+      "sideNone": "Sayfada"
+    },
+    "types": {
+      "trailer": "Kanal fragmanı",
+      "live": "Şu an canlı",
+      "audioPlaylists": "Albümler ve ses listeleri",
+      "playlistRails": "Oynatma listesi içerikleri",
+      "playlist": "Oynatma listesi",
+      "links": "Bağlantı sayfası"
+    },
+    "tour": {
+      "open": "Hızlı tur",
+      "stepOf": "Adım {{n}} / {{total}}",
+      "skip": "Atla",
+      "back": "Geri",
+      "next": "İleri",
+      "done": "Başlayalım",
+      "intro": {
+        "title": "Kanalını kendine göre yap",
+        "body": "Genel Bakış artık düzenleyici: ziyaretçilerin görmesini istediğin gibi düzenle. Kaydet'e basana kadar onlar için hiçbir şey değişmez."
+      },
+      "move": {
+        "title": "Bölümleri taşı",
+        "body": "Bir bölümü tutamağından tut ve başka birinin üstüne bırak. Sol ya da sağ kenar onu yanına koyar, üst ya da alt kenar o sütuna dizer, satırlar arasındaki çizgiler yeni bir satır açar."
+      },
+      "resize": {
+        "title": "Genişliği değiştir",
+        "body": "Bir bölümün sağ kenarındaki tutamağı çek. Genişlik adım adım değişir, böylece yan yana bölümler hep hizalı kalır."
+      },
+      "props": {
+        "title": "Bölüm özellikleri",
+        "body": "Dişli bir bölümün özelliklerini açar: kaç öğe, satır mı ızgara mı, başlığı ve fragman için video boyutu ile yanında ne durduğu."
+      },
+      "hide": {
+        "title": "Göster ve gizle",
+        "body": "Göz bir bölümü gizler. Gizli bölümler sayfanın altındaki bir tepside bekler; geri getirmek için birine tıkla."
+      },
+      "links": {
+        "title": "Bağlantı sayfan",
+        "body": "Bağlantı sayfanı her bölüm gibi sayfaya sürükle. O tarafta tam boy bir sütun yapmak için sayfanın en solunda ya da sağında bir an tut."
+      },
+      "mobile": {
+        "title": "Telefonlarda da",
+        "body": "Profilinin telefonlarda nasıl görüneceğini ayarlamak için çubuktan Mobil'e geç: tek sütun, kendi sıranla. Orada bir şey değiştirene kadar telefonlar masaüstü düzenini izler."
+      },
+      "save": {
+        "title": "Beğenince kaydet",
+        "body": "Düzeni kaydet onu yayınlar. Geri al ve Yinele değişikliklerin arasında gezer (Ctrl+Z de çalışır), İptal onları atar, Varsayılana sıfırla standart sayfayı geri getirir. Başlığın yanındaki ? bu turu yeniden açar."
+      }
+    }
   }
 }

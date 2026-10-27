@@ -50,6 +50,9 @@ export function chargesEncoder({ isPremium, username, includeEncoder }) {
   return ENCODER_PREMIUM_PAYERS.has(String(username || '').toLowerCase());
 }
 
+// Hive refuses a post with more beneficiaries than this (HIVE_MAX_COMMENT_BENEFICIARIES)
+export const HIVE_MAX_BENEFICIARIES = 8;
+
 export const REMIX_AUTHOR_PERCENT = 5;
 export const REMIX_AUTHOR_WEIGHT = REMIX_AUTHOR_PERCENT * 100;
 // A 3Speak creator whose sound (music library) is used in a short
@@ -63,12 +66,15 @@ export const SOUND_AUTHOR_WEIGHT = SOUND_AUTHOR_PERCENT * 100;
  *  - adds the 1% encoder split when `includeEncoder` and `chargesEncoder`
  *    (Pro skips it unless grandfathered — see ENCODER_PREMIUM_PAYERS)
  *  - always includes the remix-source author when `originalAuthor` is
- *    provided (remix attribution survives Pro)
- *  - and every 3Speak sound creator in `soundAuthors` (same rule)
+ *    provided, and every earlier author of the remix chain in
+ *    `remixAuthors` (remix attribution survives Pro)
+ *  - and every 3Speak sound creator in `soundAuthors` (same rule), while
+ *    a beneficiary slot is free (a sound that does not fit stays credited
+ *    in the description only)
  *
  * @returns {Array<{account, percent, locked, minPercent}>}
  */
-export function getLockedBeneficiaries({ isPremium, originalAuthor, includeEncoder, username, soundAuthors = [] }) {
+export function getLockedBeneficiaries({ isPremium, originalAuthor, includeEncoder, username, soundAuthors = [], remixAuthors = [] }) {
   const locked = [];
   if (!isPremium) {
     locked.push({
@@ -86,9 +92,9 @@ export function getLockedBeneficiaries({ isPremium, originalAuthor, includeEncod
       minPercent: LOCKED_ENCODER_PERCENT,
     });
   }
-  if (originalAuthor) {
+  for (const account of remixAccounts(originalAuthor, remixAuthors)) {
     locked.push({
-      account: originalAuthor,
+      account,
       percent: REMIX_AUTHOR_PERCENT,
       locked: true,
       minPercent: REMIX_AUTHOR_PERCENT,
@@ -101,6 +107,7 @@ export function getLockedBeneficiaries({ isPremium, originalAuthor, includeEncod
       existing.minPercent = Math.max(existing.minPercent, SOUND_AUTHOR_PERCENT);
       continue;
     }
+    if (locked.length >= HIVE_MAX_BENEFICIARIES) continue;
     locked.push({
       account,
       percent: SOUND_AUTHOR_PERCENT,
@@ -120,7 +127,7 @@ export function getLockedBeneficiaries({ isPremium, originalAuthor, includeEncod
  *
  * Mutates `beneMap` in place and returns it for chaining.
  */
-export function enforceLockedBeneficiaries(beneMap, { isPremium, originalAuthor, includeEncoder, username, soundAuthors = [] }) {
+export function enforceLockedBeneficiaries(beneMap, { isPremium, originalAuthor, includeEncoder, username, soundAuthors = [], remixAuthors = [] }) {
   if (!isPremium) {
     beneMap.set(
       LOCKED_FUND_ACCOUNT,
@@ -141,14 +148,18 @@ export function enforceLockedBeneficiaries(beneMap, { isPremium, originalAuthor,
   } else {
     beneMap.delete(LOCKED_ENCODER_ACCOUNT);
   }
-  if (originalAuthor) {
-    beneMap.set(
-      originalAuthor,
-      Math.max(beneMap.get(originalAuthor) || 0, REMIX_AUTHOR_WEIGHT),
-    );
+  for (const account of remixAccounts(originalAuthor, remixAuthors)) {
+    beneMap.set(account, Math.max(beneMap.get(account) || 0, REMIX_AUTHOR_WEIGHT));
   }
+  // A sound split only where it fits (see getLockedBeneficiaries)
   for (const account of soundAuthors) {
+    if (!beneMap.has(account) && beneMap.size >= HIVE_MAX_BENEFICIARIES) continue;
     beneMap.set(account, Math.max(beneMap.get(account) || 0, SOUND_AUTHOR_WEIGHT));
   }
   return beneMap;
+}
+
+// The remix source plus the earlier authors of its chain, each once
+function remixAccounts(originalAuthor, remixAuthors) {
+  return [...new Set([originalAuthor, ...remixAuthors].filter(Boolean))];
 }

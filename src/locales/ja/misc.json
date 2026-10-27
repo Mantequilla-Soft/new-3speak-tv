@@ -25,7 +25,9 @@
       "boosts_received": "受け取ったブースト",
       "boost_amount_received": "受け取った金額",
       "boosts_given": "送ったブースト",
-      "boost_amount_given": "送った金額"
+      "boost_amount_given": "送った金額",
+      "story_uploads": "ストーリー",
+      "story_streak": "連続ストーリー"
     },
     "metricsInSentence": {
       "video_uploads": "動画",
@@ -40,7 +42,9 @@
       "boosts_received": "受け取ったブースト",
       "boost_amount_received": "受け取った金額",
       "boosts_given": "送ったブースト",
-      "boost_amount_given": "送った金額"
+      "boost_amount_given": "送った金額",
+      "story_uploads": "ストーリー",
+      "story_streak": "連続ストーリー"
     },
     "blurbs": {
       "video_uploads": "アップロードした動画",
@@ -55,7 +59,9 @@
       "boosts_received": "配信に送られたブースト",
       "boost_amount_received": "受け取ったブーストの合計金額",
       "boosts_given": "ほかの配信者に送ったブースト",
-      "boost_amount_given": "送ったブーストの合計金額"
+      "boost_amount_given": "送ったブーストの合計金額",
+      "story_uploads": "投稿したストーリー",
+      "story_streak": "ストーリーを投稿した最長連続日数"
     },
     "blurbsInSentence": {
       "video_uploads": "アップロードした動画",
@@ -70,22 +76,32 @@
       "boosts_received": "配信に送られたブースト",
       "boost_amount_received": "受け取ったブーストの合計金額",
       "boosts_given": "ほかの配信者に送ったブースト",
-      "boost_amount_given": "送ったブーストの合計金額"
+      "boost_amount_given": "送ったブーストの合計金額",
+      "story_uploads": "投稿したストーリー",
+      "story_streak": "ストーリーを投稿した最長連続日数"
     },
     "groups": {
       "video": "動画",
-      "streaming": "配信"
+      "streaming": "配信",
+      "stories": "ストーリー"
     },
     "badgeNouns": {
       "video_uploads": "動画",
       "short_uploads": "ショート",
       "video_watch_secs": "視聴",
       "short_watch_secs": "ショート視聴",
-      "tags_given": "タグ付け"
+      "tags_given": "タグ付け",
+      "story_streak": "連続記録"
     },
     "badgeLabel": "{{tier}} {{noun}}",
     "badgeTitleAllTime": "全期間の{{what}}で {{rank}} 位",
-    "badgeTitleWindow": "過去 {{window}} の{{what}}で {{rank}} 位"
+    "badgeTitleWindow": "過去 {{window}} の{{what}}で {{rank}} 位",
+    "sub": {
+      "count": "件数",
+      "watchTime": "視聴時間",
+      "streak": "連続記録"
+    },
+    "timeRange": "期間"
   },
   "duration": {
     "hoursMinutes": "{{h}}時間{{m}}分",
@@ -159,15 +175,28 @@
   "uploadLinks": {
     "regularVideo": "通常の動画",
     "verticalShort": "縦型ショート",
+    "story": "ストーリー(24時間)",
     "musicAudio": "音楽 / 音声",
     "groupChat": "グループチャット",
     "communitySnap": "コミュニティの Snap",
     "shortsEditor": "ショートエディター",
     "goLiveNow": "ライブ配信する！",
+    "playlist": "再生リスト",
     "headings": {
       "upload": "アップロード",
       "live": "ライブ",
       "others": "その他"
+    },
+    "subtitles": {
+      "regularVideo": "チャンネル向けの通常の動画",
+      "verticalShort": "ショートフィード向けの縦型クリップ",
+      "shortsEditor": "ブラウザでショートを撮影・編集",
+      "story": "24時間だけ公開される短いクリップ",
+      "musicAudio": "音楽、ポッドキャストなどの音声",
+      "groupChat": "ゲストと一緒に進行するライブルーム",
+      "goLiveNow": "フォロワーに向けてライブ配信",
+      "communitySnap": "コミュニティタブに手軽に投稿",
+      "playlist": "動画をまとめて共有できるリストに"
     }
   },
   "chat": {

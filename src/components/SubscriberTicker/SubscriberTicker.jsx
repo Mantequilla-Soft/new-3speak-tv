@@ -1,8 +1,8 @@
 import { useEffect, useState, useMemo } from 'react';
 import { createPortal } from 'react-dom';
 import { useNavigate } from 'react-router-dom';
-import { IoClose } from 'react-icons/io5';
 import { CHECKER_URL } from '../../utils/config';
+import ModalHeader from '../ModalHeader/ModalHeader';
 import { useTranslation } from 'react-i18next';
 import './SubscriberTicker.scss';
 
@@ -71,12 +71,7 @@ export default function SubscriberTicker() {
       {open && createPortal(
         <div className="sub-modal-overlay" onClick={() => setOpen(false)}>
           <div className="sub-modal" onClick={(e) => e.stopPropagation()}>
-            <div className="sub-modal-header">
-              <h3><i className="fa-solid fa-crown" /> {t('profile.subscriberTicker.modalTitle', { n: subs.length })}</h3>
-              <button className="sub-modal-close" onClick={() => setOpen(false)} aria-label={t('common.actions.close')}>
-                <IoClose size={20} />
-              </button>
-            </div>
+            <ModalHeader className="sub-modal-header" title={t('profile.subscriberTicker.modalTitle', { n: subs.length })} onClose={() => setOpen(false)} />
             <div className="sub-modal-list">
               {subs.map((s) => (
                 <button

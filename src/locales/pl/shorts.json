@@ -7,7 +7,12 @@
     "default": "3S | Shorts"
   },
   "stories": {
-    "you": "Ty"
+    "you": "Ty",
+    "storyTitle": "Relacja {{user}}",
+    "streakTitle_one": "Seria relacji: {{count}} dzień",
+    "streakTitle_few": "Seria relacji: {{count}} dni",
+    "streakTitle_many": "Seria relacji: {{count}} dni",
+    "streakTitle_other": "Seria relacji: {{count}} dnia"
   },
   "errors": {
     "votingUnavailable": "Głosowanie nie jest dostępne dla tego posta",
@@ -71,7 +76,9 @@
   },
   "remix": {
     "noUrl": "Nie udało się ustalić adresu URL filmu do remiksu",
-    "loadFailed": "Nie udało się wczytać filmu do remiksu"
+    "loadFailed": "Nie udało się wczytać filmu do remiksu",
+    "chainFull": "Ten film opiera się już na {{max}} wcześniejszych filmach, więc nie można go już remiksować.",
+    "chainNoSlots": "Ten łańcuch remiksów opłaca już tylu twórców, że na Hive nie zmieściłby się kolejny remiks. Z 3Speak Pro nadal możesz go zremiksować."
   },
   "watchLater": {
     "loginRequired": "Zaloguj się, aby zapisywać Shorts",
@@ -109,5 +116,27 @@
     "hideReplies_few": "Ukryj {{count}} odpowiedzi",
     "hideReplies_many": "Ukryj {{count}} odpowiedzi",
     "hideReplies_other": "Ukryj {{count}} odpowiedzi"
+  },
+  "storyExpired": {
+    "title": "Ta relacja wygasła",
+    "body": "Relacje na 3Speak są widoczne przez 24 godziny.",
+    "next": "Następny short"
+  },
+  "storyTools": {
+    "seenBy_one": "Wyświetlenia: {{count}}",
+    "seenBy_few": "Wyświetlenia: {{count}}",
+    "seenBy_many": "Wyświetlenia: {{count}}",
+    "seenBy_other": "Wyświetlenia: {{count}}",
+    "seenTitle": "Kto obejrzał",
+    "seenNote": "Zalogowani widzowie, którzy mają włączoną historię oglądania.",
+    "seenEmpty": "Nikt jej jeszcze nie obejrzał.",
+    "keep": "Zachowaj jako shorta",
+    "keepHint": "Zostanie na Twoim kanale po 24 godzinach",
+    "keepConfirm": "Zachować ją na stałe?",
+    "keepYes": "Zachowaj",
+    "keeping": "Zachowywanie…",
+    "kept": "Zachowano. Zostaje na Twoim kanale jako short.",
+    "keepFailed": "Nie udało się zachować tej relacji.",
+    "keepWalletPrompt": "Podpisz, aby zachować relację jako shorta"
   }
 }

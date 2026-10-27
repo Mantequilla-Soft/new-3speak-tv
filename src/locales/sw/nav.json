@@ -77,6 +77,15 @@
       "includesWhale": "Inajumuisha akaunti ya/za 🐋 nyangumi",
       "includesOrca": "Inajumuisha akaunti ya/za 🐬 orca",
       "andMore": "na {{count}} zaidi…"
+    },
+    "stories": {
+      "heading": "Hadithi kutoka kwa unaowafuata",
+      "posted": "@{{user}} amechapisha hadithi",
+      "type": "Hadithi",
+      "hoursLeft_one": "imebaki saa {{count}}",
+      "hoursLeft_other": "zimebaki saa {{count}}",
+      "ariaUnseen_one": "Arifa, hadithi {{count}} mpya",
+      "ariaUnseen_other": "Arifa, hadithi {{count}} mpya"
     }
   },
   "search": {

@@ -8,6 +8,7 @@ import EmbedUploadProgressBar from "./EmbedUploadProgressBar";
 import StepActions from "./StepActions";
 import { useEmbedUpload } from "../../context/EmbedUploadContext";
 import { enforceLockedBeneficiaries } from "../../utils/beneficiaries";
+import { remixChainAuthors, remixChainMarkdown } from "../../utils/remixChain";
 import { soundCreditsMarkdown, soundAuthorsOf } from '../../utils/soundCredits';
 import "../legacy-studio/VideoUploadStatus.scss";
 import BlogContent from "../playVideo/BlogContent";
@@ -20,6 +21,12 @@ import { fetchUploadGateAd, confirmUploadGatePost, gateSessionId } from "../../l
 import { useTranslation, Trans } from "react-i18next";
 import AccountImg from "../HiveAvatar/AccountImg";
 import { timelineMeta, applyTimelineToDescription } from "../../utils/videoTimeline";
+import { MdLocalFireDepartment } from "react-icons/md";
+import { getFollowers } from "../../hive-api/api";
+import { useStoryStreak, STREAK_MIN } from "../../lib/stories";
+
+// Same cap as a short's description on the details step.
+const STORY_CAPTION_MAX = 240;
 
 function EmbedPreview() {
   const { t } = useTranslation();
@@ -39,6 +46,9 @@ function EmbedPreview() {
     publishToEmbed,
     user,
     fromStories,
+    isStory,
+    setDescription,
+    startEarlyUpload,
     community,
     beneficiaries,
     declineRewards,
@@ -46,6 +56,7 @@ function EmbedPreview() {
     reusable,
     originalAuthor,
     originalPermlink,
+    remixChain,
     musicCredits,
     isNsfw,
     publishedPermlink,
@@ -62,6 +73,26 @@ function EmbedPreview() {
   }, [fromStories]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const navigate = useNavigate();
+
+  // A story arrives here straight from picking or recording the clip (no
+  // thumbnail or details step), so this screen is where its caption is typed and
+  // where the creator sees what the story gets them.
+  const quickStory = isStory && fromStories;
+  // The details step normally starts the background upload; a story skips it.
+  React.useEffect(() => {
+    if (quickStory) startEarlyUpload();
+  }, [quickStory, startEarlyUpload]);
+  const [followers, setFollowers] = React.useState(null);
+  React.useEffect(() => {
+    if (!quickStory || !user) return undefined;
+    let alive = true;
+    getFollowers(user).then((r) => { if (alive && r) setFollowers(Number(r.follower_count) || 0); });
+    return () => { alive = false; };
+  }, [quickStory, user]);
+  const { streak, postedToday } = useStoryStreak(quickStory ? user : null);
+  // What this story makes the streak: today already counted, or one day more.
+  const nextStreak = postedToday ? streak : streak + 1;
+
   const [promoteOpen, setPromoteOpen] = React.useState(false);
   const [publishing, setPublishing] = React.useState(false);
   const publishingRef = React.useRef(false);
@@ -134,7 +165,7 @@ function EmbedPreview() {
   // destination, not a half-filled form to bounce out of. Without that, anything
   // clearing the draft while this is mounted redirects the user away from their
   // own success screen.
-  if (!completed && (!description || (!fromStories && !title))) {
+  if (!completed && ((!description && !quickStory) || (!fromStories && !title) || (quickStory && !videoFile && !prevVideoFile))) {
     return <Navigate to="/embed-studio" replace />;
   }
 
@@ -170,7 +201,7 @@ function EmbedPreview() {
         fromStories
           ? `${window.location.origin}/shorts?v=${originalAuthor}/${originalPermlink}`
           : `${window.location.origin}/@${originalAuthor}/${originalPermlink}`
-      })*${soundCreditsMarkdown(musicCredits)}`
+      })*${remixChainMarkdown(remixChain)}${soundCreditsMarkdown(musicCredits)}`
     : `${shownDescription}${soundCreditsMarkdown(musicCredits)}`;
 
   // `beneficiaries` is an array initially but the beneficiary modal stores it as
@@ -199,6 +230,7 @@ function EmbedPreview() {
       username: user,
       includeEncoder: true,
       originalAuthor: originalAuthor && originalPermlink ? originalAuthor : null,
+      remixAuthors: isRemix ? remixChainAuthors(remixChain, user) : [],
       soundAuthors: soundAuthorsOf(musicCredits, user),
     });
     return [...beneMap.entries()]
@@ -246,10 +278,14 @@ function EmbedPreview() {
   // Timeline, so "Edit post" is its Back.
   const editPost = { key: "edit", label: t("upload.review.editPost"), onClick: () => navigate('/embed-studio/details') };
   const actions = {
-    back: fromStories
-      ? editPost
-      : { label: t("upload.review.backToTimeline"), onClick: () => navigate('/embed-studio/timeline') },
-    secondary: fromStories ? [] : [editPost],
+    back: quickStory
+      ? { label: t('common.actions.back'), onClick: () => navigate('/embed-studio?from=story') }
+      : fromStories
+        ? editPost
+        : { label: t("upload.review.backToTimeline"), onClick: () => navigate('/embed-studio/timeline') },
+    secondary: quickStory
+      ? [{ key: "more", label: t("upload.story.moreOptions"), onClick: () => navigate('/embed-studio/thumbnail') }]
+      : fromStories ? [] : [editPost],
     // Two steps, shown as two buttons, so what is being asked for is never in
     // doubt: watch the spot, then publish. The publish button stays visible and
     // disabled rather than hidden, so the destination is obvious from the start.
@@ -257,7 +293,7 @@ function EmbedPreview() {
       !gateSatisfied && { key: "watch", label: t("upload.review.watchAdToPublish"), onClick: startGateAd },
       {
         key: "post",
-        label: fromStories ? t('upload.review.postShort') : t('upload.review.postVideo'),
+        label: fromStories ? t(isStory ? 'upload.review.postStory' : 'upload.review.postShort') : t('upload.review.postVideo'),
         onClick: handlePostVideo,
         disabled: !gateSatisfied || publishing,
         title: gateSatisfied ? undefined : t('upload.review.watchSponsorFirst'),
@@ -273,10 +309,10 @@ function EmbedPreview() {
       {!uploading && !completed && (
         <div className="studio-main-container embed-wizard">
           <div className="studio-page-header">
-            <h1>{fromStories ? t("upload.page.shareShort") : t("upload.page.shareVideo")}</h1>
+            <h1>{fromStories ? t(isStory ? "upload.page.shareStory" : "upload.page.shareShort") : t("upload.page.shareVideo")}</h1>
           </div>
 
-          <StepProgress step={step} short={fromStories} />
+          {!quickStory && <StepProgress step={step} short={fromStories} />}
           <EmbedUploadProgressBar />
 
           <div className="studio-page-content">
@@ -299,9 +335,35 @@ function EmbedPreview() {
                     duration={Number(videoDuration) || 0}
                   />
 
-                  <div className="ep-body">
-                    <BlogContent description={previewBody} alwaysExpanded />
-                  </div>
+                  {quickStory ? (
+                    <div className="ep-body ep-story">
+                      <textarea
+                        className="ep-story__caption"
+                        value={description}
+                        onChange={(e) => setDescription(e.target.value.slice(0, STORY_CAPTION_MAX))}
+                        placeholder={t("upload.story.captionPlaceholder")}
+                        aria-label={t("upload.story.captionPlaceholder")}
+                        rows={3}
+                      />
+                      <p className="ep-story__reach">
+                        {followers != null
+                          ? t("upload.story.reach", { count: followers })
+                          : t("upload.story.reachNoCount")}
+                      </p>
+                      <p className="ep-story__streak">
+                        <MdLocalFireDepartment aria-hidden="true" />
+                        {postedToday && streak >= STREAK_MIN
+                          ? t("upload.story.streakOn", { count: streak })
+                          : nextStreak >= STREAK_MIN
+                            ? t("upload.story.streakNext", { count: nextStreak })
+                            : t("upload.story.streakStart")}
+                      </p>
+                    </div>
+                  ) : (
+                    <div className="ep-body">
+                      <BlogContent description={previewBody} alwaysExpanded />
+                    </div>
+                  )}
                 </div>
               </div>
 
@@ -383,7 +445,7 @@ function EmbedPreview() {
             </div>
 
             <h2 className="upload-title">
-              {fromStories ? t('upload.publishing.titleShort') : t('upload.publishing.titleVideo')}
+              {fromStories ? t(isStory ? 'upload.publishing.titleStory' : 'upload.publishing.titleShort') : t('upload.publishing.titleVideo')}
             </h2>
             <p className="upload-subtitle">{t("upload.publishing.subtitle")}</p>
 
@@ -446,7 +508,7 @@ function EmbedPreview() {
             <h3>{t("upload.done.title")}</h3>
             <p>
               {fromStories
-                ? t('upload.done.shortPublished')
+                ? t(isStory ? 'upload.done.storyPublished' : 'upload.done.shortPublished')
                 : (
                   <Trans i18nKey="upload.done.videoPublished" components={{ br: <br /> }} />
                 )}

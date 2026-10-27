@@ -16,6 +16,7 @@
     "availableBalance": "Beschikbaar saldo: {{currency}}",
     "memoLabel": "Memo (optioneel):",
     "memoPlaceholder": "bijv. Bedankt voor deze geweldige content!",
+    "memoLinkNote": "Deze link wordt aan de memo toegevoegd: {{link}}",
     "send": "Fooi sturen"
   },
   "cardMenu": {

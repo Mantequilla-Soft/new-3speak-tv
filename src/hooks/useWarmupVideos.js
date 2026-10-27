@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 import { useQuery } from '@tanstack/react-query';
-import { fetchIncubationFeed } from '../lib/incubation';
+import { fetchIncubationFeed, fetchIncubationProfile } from '../lib/incubation';
 
 const EMPTY = [];
 
@@ -55,4 +55,36 @@ export function useWarmupVideos({ enabled = true, limit = 8, ownHandle = null } 
         _incubation: true,
       }));
   }, [data, enabled, ownHandle]);
+}
+
+/**
+ * The warm-up videos whose author `viewer` follows, for the Follow feed.
+ *
+ * Asked per author through the profile read (`viewerFollows`), not from the
+ * viewer's own follow list: that list only exists for warm-up users, while a
+ * Hive user's follow of a handle is stored off-chain too and is only visible
+ * from the followed side. A failed lookup counts as "not followed".
+ */
+export function useFollowedWarmupVideos(videos, viewer) {
+  const authors = useMemo(
+    () => [...new Set(videos.map((v) => String(v.author).toLowerCase()))].sort(),
+    [videos],
+  );
+  const { data: followed } = useQuery({
+    queryKey: ['warmup-followed', viewer, authors.join(',')],
+    queryFn: async () => {
+      const hits = await Promise.all(authors.map((h) =>
+        fetchIncubationProfile(h, viewer).then((p) => (p?.viewerFollows ? h : null)).catch(() => null)));
+      return hits.filter(Boolean);
+    },
+    enabled: !!viewer && authors.length > 0,
+    staleTime: 5 * 60 * 1000,
+    gcTime: 10 * 60 * 1000,
+  });
+
+  return useMemo(() => {
+    if (!viewer || !followed?.length) return EMPTY;
+    const set = new Set(followed);
+    return videos.filter((v) => set.has(String(v.author).toLowerCase()));
+  }, [videos, viewer, followed]);
 }

@@ -16,6 +16,7 @@
     "availableBalance": "Số dư khả dụng: {{currency}}",
     "memoLabel": "Ghi chú (không bắt buộc):",
     "memoPlaceholder": "ví dụ Cảm ơn vì nội dung tuyệt vời này!",
+    "memoLinkNote": "Liên kết này được thêm vào ghi chú: {{link}}",
     "send": "Gửi tip"
   },
   "cardMenu": {

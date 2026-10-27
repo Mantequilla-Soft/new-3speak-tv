@@ -118,3 +118,17 @@ describe('dropAiShorts', () => {
     expect(await m.dropAiShorts(list, { hide: true })).toEqual(list)
   })
 })
+
+describe('waiting only for what was asked', () => {
+  it('does not wait for another batch still in flight', async () => {
+    const m = await load()
+    let release
+    axios.post.mockImplementationOnce(() => new Promise((r) => { release = () => r({ data: { flagged: [] } }) }))
+    m.requestAiFlags(['grid/1'])
+    await new Promise((r) => setTimeout(r, 50)) // the grid's batch is out, and slow
+    await m.loadAiFlags(['spot/1'])               // resolves on its own batch
+    expect(axios.post).toHaveBeenCalledTimes(2)
+    expect(m.isAiFlagged('grid', '1')).toBe(false)
+    release()
+  })
+})

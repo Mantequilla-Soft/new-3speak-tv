@@ -10,7 +10,8 @@
     "backHome": "Rudi Nyumbani",
     "howWasStream": "Mtiririko wako ulikuwaje?",
     "connecting": "Inaunganisha na OpenPods…",
-    "authenticating": "Inathibitisha na OpenPods…"
+    "authenticating": "Inathibitisha na OpenPods…",
+    "postStoryAboutIt": "Chapisha hadithi kuhusu hili"
   },
   "strip": {
     "liveNow_one": "OpenPod <n>{{count}}</n> iko mubashara sasa",

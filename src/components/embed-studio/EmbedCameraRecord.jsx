@@ -7,7 +7,7 @@ import {
 import { useEmbedUpload } from '../../context/EmbedUploadContext';
 import { useVoiceTeleprompter } from '../../hooks/useVoiceTeleprompter';
 import { generateVideoThumbnails } from '../../utils/videoThumbnails';
-import { cameraRecordEnabledFor, SHORTS_MAX_DURATION_SEC, STT_WS_URL } from '../../utils/config';
+import { cameraRecordEnabledFor, storiesEnabledFor, SHORTS_MAX_DURATION_SEC, STT_WS_URL } from '../../utils/config';
 import { useAppStore } from '../../lib/store';
 import { detectScriptLang, modelIdToTag } from '../../utils/detectLang';
 import { createSttStream } from '../../utils/sttClient';
@@ -157,14 +157,15 @@ function EmbedCameraRecord() {
   const location = useLocation();
   const user = useAppStore((s) => s.user);
   const {
-    fromStories, setFromStories, setVideoFile, setPrevVideoFile,
-    setVideoDuration, setGeneratedThumbnail, setVideoMode,
+    fromStories, setFromStories, isStory, setIsStory, setVideoFile, setPrevVideoFile,
+    setVideoDuration, setGeneratedThumbnail, setVideoMode, pickFirstThumbnail,
   } = useEmbedUpload();
 
   useEffect(() => {
     const from = new URLSearchParams(location.search).get('from');
-    setFromStories(from === 'stories' || from === 'shorts');
-  }, [location.search, setFromStories]);
+    setFromStories(from === 'stories' || from === 'shorts' || from === 'story');
+    setIsStory(from === 'story' && storiesEnabledFor(user));
+  }, [location.search, setFromStories, setIsStory, user]);
 
   const rootRef = useRef(null);
   const previewRef = useRef(null);
@@ -790,8 +791,9 @@ function EmbedCameraRecord() {
     setPrevVideoFile(file);
     setVideoDuration(duration);
     setVideoMode(fromStories ? 'shorts' : 'longform');
-    navigate('/embed-studio/thumbnail');
-  }, [recordedBlob, mimeType, fileExt, fromStories, navigate, setGeneratedThumbnail, setVideoFile, setPrevVideoFile, setVideoDuration, setVideoMode, stopStream]);
+    // A story goes straight to Post (see EmbedVideoUploadStep1).
+    navigate(isStory && pickFirstThumbnail(thumbs) ? '/embed-studio/preview' : '/embed-studio/thumbnail');
+  }, [recordedBlob, mimeType, fileExt, fromStories, isStory, pickFirstThumbnail, navigate, setGeneratedThumbnail, setVideoFile, setPrevVideoFile, setVideoDuration, setVideoMode, stopStream]);
 
   const requestClose = () => setConfirmClose(true);
   const doClose = () => {

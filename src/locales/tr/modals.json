@@ -70,7 +70,8 @@
       "invalidAccount": "Geçersiz kullanıcı adı veya topluluk kimliği.",
       "cannotIncrease": "Kalan %{{percent}} payın ötesine çıkılamaz",
       "pendingRow": "@{{account}} henüz eklenmedi; eklemek için + düğmesine tıkla ya da alanı temizle.",
-      "atLeastOne": "Ödül yüzdesi en az %1 olmalı"
+      "atLeastOne": "Ödül yüzdesi en az %1 olmalı",
+      "maxCount": "Hive gönderi başına en fazla {{max}} lehtara izin verir."
     },
     "title": "Lehtarlar",
     "intro": "Bu gönderinin ödüllerinden otomatik olarak pay almasını istediğin bir kullanıcı ekle.",
@@ -86,7 +87,8 @@
   },
   "qr": {
     "scan": "Bu QR kodunu Hive Keychain'de tara:",
-    "click": "Keychain uygulamasında açmak için QR koda tıkla"
+    "click": "Keychain uygulamasında açmak için QR koda tıkla",
+    "title": "Keychain ile giriş yap"
   },
   "editVideoHint": {
     "title": "Videolarından herhangi birini düzenle",
@@ -115,7 +117,12 @@
     "preparing": "Video yüklemeye hazırlanıyor...",
     "renderUnavailable": "İşleme servisi henüz kullanılamıyor. Zaman çizelgesi verisi konsola yazıldı.",
     "backToEditor": "Düzenleyiciye Dön",
-    "postError": "Video yüklemeye hazırlanamadı. Lütfen bunun yerine indirmeyi dene."
+    "postError": "Video yüklemeye hazırlanamadı. Lütfen bunun yerine indirmeyi dene.",
+    "postAs": "Şu olarak paylaş",
+    "postAsStory": "Hikâye",
+    "postAsStoryHint": "24 saat, Shorts akışının başında",
+    "postAsShort": "Shorts",
+    "postAsShortHint": "Kanalında kalır"
   },
   "profile": {
     "mustLogin": "Önce giriş yapmalısın",

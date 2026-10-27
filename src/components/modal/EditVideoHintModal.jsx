@@ -1,8 +1,8 @@
 import { createPortal } from 'react-dom';
-import { IoClose } from 'react-icons/io5';
 import { MdShare, MdEdit, MdFlag, MdPlaylistAdd } from 'react-icons/md';
 import { Repeat2 } from 'lucide-react';
 import { useTranslation, Trans } from 'react-i18next';
+import ModalHeader from '../ModalHeader/ModalHeader';
 import './EditVideoHintModal.scss';
 
 /**
@@ -24,11 +24,7 @@ export default function EditVideoHintModal({ isOpen, onClose }) {
   return createPortal(
     <div className="evh-overlay" onClick={onClose}>
       <div className="evh-content" onClick={(e) => e.stopPropagation()}>
-        <button className="evh-close" onClick={onClose} aria-label={t('common.actions.close')}>
-          <IoClose size={22} />
-        </button>
-
-        <h3 className="evh-title">{t('modals.editVideoHint.title')}</h3>
+        <ModalHeader title={t('modals.editVideoHint.title')} onClose={onClose} />
         <p className="evh-text">
           <Trans i18nKey="modals.editVideoHint.text" components={{ strong: <strong /> }} />
         </p>

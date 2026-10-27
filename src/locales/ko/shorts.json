@@ -7,7 +7,9 @@
     "default": "3S | 쇼츠"
   },
   "stories": {
-    "you": "나"
+    "you": "나",
+    "storyTitle": "{{user}}님의 스토리",
+    "streakTitle_other": "{{count}}일 연속 스토리"
   },
   "errors": {
     "votingUnavailable": "이 게시물에는 투표할 수 없어요",
@@ -71,7 +73,9 @@
   },
   "remix": {
     "noUrl": "리믹스할 동영상 URL을 확인하지 못했어요",
-    "loadFailed": "리믹스할 동영상을 불러오지 못했어요"
+    "loadFailed": "리믹스할 동영상을 불러오지 못했어요",
+    "chainFull": "이 동영상은 이미 이전 동영상 {{max}}개를 바탕으로 만들어져서 더는 리믹스할 수 없어요.",
+    "chainNoSlots": "이 리믹스 체인은 이미 많은 크리에이터에게 보상을 나누고 있어서 Hive에 리믹스를 더 넣을 자리가 없어요. 3Speak Pro로는 계속 리믹스할 수 있어요."
   },
   "watchLater": {
     "loginRequired": "쇼츠를 저장하려면 로그인하세요",
@@ -103,5 +107,24 @@
     "replyPlaceholder": "답글 작성...",
     "viewReplies_other": "답글 {{count}}개 보기",
     "hideReplies_other": "답글 {{count}}개 숨기기"
+  },
+  "storyExpired": {
+    "title": "이 스토리는 만료되었어요",
+    "body": "3Speak의 스토리는 24시간 동안 공개돼요.",
+    "next": "다음 쇼츠"
+  },
+  "storyTools": {
+    "seenBy_other": "{{count}}명이 봄",
+    "seenTitle": "본 사람",
+    "seenNote": "로그인했고 시청 기록을 켜 둔 시청자예요.",
+    "seenEmpty": "아직 아무도 보지 않았어요.",
+    "keep": "쇼츠로 남기기",
+    "keepHint": "24시간이 지나도 채널에 남아요",
+    "keepConfirm": "계속 남겨 둘까요?",
+    "keepYes": "남기기",
+    "keeping": "남기는 중…",
+    "kept": "남겼어요. 채널에 쇼츠로 계속 남아요.",
+    "keepFailed": "이 스토리를 남기지 못했어요.",
+    "keepWalletPrompt": "스토리를 쇼츠로 남기려면 서명하세요"
   }
 }

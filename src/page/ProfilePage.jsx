@@ -51,8 +51,10 @@ import ProfileHeader from "../components/ProfileHeader/ProfileHeader";
 import ProfileStats from "../components/ProfileHeader/ProfileStats";
 import ProfileOverview from "../components/Userprofilepage/ProfileOverview";
 import ProfileEmptyState from "../components/Userprofilepage/ProfileEmptyState";
+import ModalHeader from "../components/ModalHeader/ModalHeader";
 import ProfileEditModal from "../components/WelcomePrompt/ProfileEditModal";
-import { FiEdit2 } from "react-icons/fi";
+import { FiEdit2, FiLayout } from "react-icons/fi";
+import { requestLayoutEdit } from "../lib/profileLayout";
 import { useTranslation } from "react-i18next";
 
 // Every toast from this module is headed "Profile"; the message becomes the
@@ -133,6 +135,14 @@ function ProfilePage() {
   const [editProfileOpen, setEditProfileOpen] = useState(false);
   // Bumped after a profile save so the header re-reads the bio from Hive.
   const [profileRefreshKey, setProfileRefreshKey] = useState(0);
+
+  // The Share menu's Playlist entry lands here with ?create=playlist: open the
+  // create modal, then drop the param so a reload doesn't reopen it.
+  useEffect(() => {
+    if (searchParams.get('create') !== 'playlist') return;
+    setShowCreateModal(true);
+    navigate('/profile?tab=playlists', { replace: true });
+  }, [searchParams, navigate]);
 
   // Fetch user's playlists (all - public and private)
   const { data: playlists = [], isLoading: playlistsLoading, refetch: refetchPlaylists } = useMyPlaylists();
@@ -470,7 +480,7 @@ function ProfilePage() {
       (page?.shorts || []).map(s => ({
         author: s.author,
         permlink: s.permlink,
-        title: (s.caption || s.title || '').slice(0, 80),
+        title: (s.heading || s.caption || s.title || '').slice(0, 80), // `## Title` first (utils/shortTitle.js)
         images: { thumbnail: s.thumbnailUrl },
         duration: 0,
         stats: {
@@ -567,6 +577,14 @@ function ProfilePage() {
               title={t('profile.page.editTitle')}
             >
               <FiEdit2 className="icon" /> {t('common.actions.edit')}
+            </button>
+            {/* Edit mode for the Overview's layout (ProfileOverview). */}
+            <button
+              className="btn btn-secondary"
+              onClick={() => { selectTab('overview'); requestLayoutEdit(); }}
+              title={t('profile.layout.customize')}
+            >
+              <FiLayout className="icon" /> {t('profile.layout.customize')}
             </button>
 
             {/* Follower pill removed — the count in the stat line under the bio
@@ -802,7 +820,7 @@ function ProfilePage() {
       {showCreateModal && (
         <div className="create-playlist-modal-overlay" onClick={() => setShowCreateModal(false)}>
           <div className="create-playlist-modal" onClick={(e) => e.stopPropagation()}>
-            <h3>{t('profile.playlists.modalTitle')}</h3>
+            <ModalHeader title={t('profile.playlists.modalTitle')} onClose={isCreating ? undefined : () => setShowCreateModal(false)} />
             <div className="form-group">
               <label>{t('profile.playlists.nameLabel')}</label>
               <input

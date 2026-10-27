@@ -16,6 +16,7 @@
     "availableBalance": "उपलब्ध बैलेंस: {{currency}}",
     "memoLabel": "मेमो (वैकल्पिक):",
     "memoPlaceholder": "जैसे इस शानदार कंटेंट के लिए धन्यवाद!",
+    "memoLinkNote": "यह लिंक मेमो में जोड़ा जाएगा: {{link}}",
     "send": "टिप भेजें"
   },
   "cardMenu": {

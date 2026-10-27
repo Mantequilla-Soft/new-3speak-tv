@@ -172,3 +172,38 @@
 @media (prefers-reduced-motion: reduce) {
   .profile-links-panel .plp-handle { animation: none; }
 }
+
+// Placed in the Overview grid instead of beside it (profile layout): it fills
+// its grid cell, scrolls with the page, and is a sensible height for a section.
+.profile-links-panel--in-grid {
+  position: static;
+  flex: none;
+  width: 100%;
+  max-width: 100%;
+  margin-bottom: 2rem;
+
+  .plp-frame {
+    height: min(640px, calc(100vh - var(--nav-height, 60px) - 90px));
+  }
+}
+
+// Sharing a grid row: as tall as the row (the trailer beside it, say), the
+// frame taking whatever the foot link leaves.
+.profile-links-panel--fill {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+
+  .plp-inner {
+    flex: 1 1 auto;
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+  }
+
+  .plp-frame {
+    flex: 1 1 auto;
+    height: auto;
+    min-height: 220px;
+  }
+}

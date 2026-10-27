@@ -70,7 +70,8 @@
       "invalidAccount": "Invalid na username o community ID.",
       "cannotIncrease": "Hindi puwedeng lumampas sa natitirang {{percent}}%",
       "pendingRow": "Hindi pa naidagdag si @{{account}} — i-click ang + para idagdag, o i-clear ang field.",
-      "atLeastOne": "Dapat hindi bababa sa 1% ang reward percent"
+      "atLeastOne": "Dapat hindi bababa sa 1% ang reward percent",
+      "maxCount": "Hanggang {{max}} beneficiary lang ang pinapayagan ng Hive sa bawat post."
     },
     "title": "Mga Beneficiary",
     "intro": "Magdagdag ng user na awtomatikong makakatanggap ng bahagi ng rewards ng post na ito.",
@@ -86,7 +87,8 @@
   },
   "qr": {
     "scan": "I-scan ang QR na ito sa Hive Keychain:",
-    "click": "I-click ang QR para buksan sa Keychain app"
+    "click": "I-click ang QR para buksan sa Keychain app",
+    "title": "Mag-log in gamit ang Keychain"
   },
   "editVideoHint": {
     "title": "I-edit ang alinman sa mga video mo",
@@ -115,7 +117,12 @@
     "preparing": "Inihahanda ang video para i-upload...",
     "renderUnavailable": "Hindi pa available ang render service. Naka-log sa console ang timeline data.",
     "backToEditor": "Bumalik sa Editor",
-    "postError": "Hindi maihanda ang video para i-upload. Subukang i-download na lang."
+    "postError": "Hindi maihanda ang video para i-upload. Subukang i-download na lang.",
+    "postAs": "I-post bilang",
+    "postAsStory": "Story",
+    "postAsStoryHint": "24 oras, nasa unahan ng Shorts feed",
+    "postAsShort": "Short",
+    "postAsShortHint": "Mananatili sa channel mo"
   },
   "profile": {
     "mustLogin": "Kailangan mo munang mag-log in",

@@ -10,7 +10,8 @@
     "backHome": "Back to Home",
     "howWasStream": "How was your stream?",
     "connecting": "Connecting to OpenPods…",
-    "authenticating": "Authenticating with OpenPods…"
+    "authenticating": "Authenticating with OpenPods…",
+    "postStoryAboutIt": "Post a story about it"
   },
   "strip": {
     "liveNow_one": "<n>{{count}}</n> OpenPod live now",

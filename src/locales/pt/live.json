@@ -10,7 +10,8 @@
     "backHome": "Voltar ao início",
     "howWasStream": "Como foi sua transmissão?",
     "connecting": "Conectando ao OpenPods…",
-    "authenticating": "Autenticando no OpenPods…"
+    "authenticating": "Autenticando no OpenPods…",
+    "postStoryAboutIt": "Publique um story sobre isso"
   },
   "strip": {
     "liveNow_one": "<n>{{count}}</n> OpenPod ao vivo agora",

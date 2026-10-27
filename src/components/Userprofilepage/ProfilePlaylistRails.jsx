@@ -4,6 +4,7 @@ import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 import { getHiveUrl } from '../../utils/hiveNode';
 import Card3 from '../Cards/Card3';
+import { isShowablePlaylist } from '../../lib/profileLayout';
 import { useTranslation } from 'react-i18next';
 
 /**
@@ -26,7 +27,6 @@ import { useTranslation } from 'react-i18next';
 
 const MAX_PLAYLISTS = 5;
 const ITEM_CAP = 10;
-const WATCH_LATER_NAME = 'Watch Later';
 
 // The marker the checker's audioHiveSync uses too: an audio post links to its
 // own player. Detected from the body we already fetched — no second call.
@@ -34,8 +34,8 @@ const AUDIO_MARKER = /audio\.3speak\.tv\/play\?a=/;
 
 const num = (v) => Number.parseFloat(v) || 0;
 
-async function fetchPlaylistVideos(items) {
-  const ordered = [...items].sort((a, b) => (a.position ?? 0) - (b.position ?? 0)).slice(0, ITEM_CAP);
+async function fetchPlaylistVideos(items, cap = ITEM_CAP) {
+  const ordered = [...items].sort((a, b) => (a.position ?? 0) - (b.position ?? 0)).slice(0, cap);
   const resolved = await Promise.all(ordered.map(async (item) => {
     try {
       const { data } = await axios.post(getHiveUrl(), {
@@ -76,7 +76,9 @@ async function fetchPlaylistVideos(items) {
   return resolved.filter(Boolean);
 }
 
-function PlaylistRail({ playlist, getContentForVideo, isWatched, getViewCount }) {
+// Also rendered on its own, as a "Playlist" section the creator placed on the
+// Overview (see ProfileOverview): `count`, `title` and `view` come from there.
+export function PlaylistRail({ playlist, count = ITEM_CAP, title, view = 'row', getContentForVideo, isWatched, getViewCount }) {
   const { t } = useTranslation();
   const ref = useRef(null);
   const [near, setNear] = useState(false);
@@ -93,8 +95,8 @@ function PlaylistRail({ playlist, getContentForVideo, isWatched, getViewCount })
   }, []);
 
   const { data: videos = [] } = useQuery({
-    queryKey: ['profile-playlist-rail', playlist.id],
-    queryFn: () => fetchPlaylistVideos(playlist.items),
+    queryKey: ['profile-playlist-rail', playlist.id, count],
+    queryFn: () => fetchPlaylistVideos(playlist.items, count),
     enabled: near && !!playlist.items?.length,
     staleTime: 10 * 60 * 1000,
     retry: false,
@@ -106,9 +108,9 @@ function PlaylistRail({ playlist, getContentForVideo, isWatched, getViewCount })
   return (
     <div ref={ref} className="pov-playlist-rail">
       {videos.length > 0 && (
-        <section className="pov-section">
+        <section className={`pov-section pov-section--${view}`}>
           <div className="pov-head">
-            <h3>{playlist.name}</h3>
+            <h3>{title || playlist.name}</h3>
             <Link className="pov-more" to={`/playlist/${playlist.id}`}>{t('profile.overview.viewAll')}</Link>
           </div>
           <Card3
@@ -123,10 +125,8 @@ function PlaylistRail({ playlist, getContentForVideo, isWatched, getViewCount })
   );
 }
 
-export default function ProfilePlaylistRails({ playlists = [], getContentForVideo, isWatched, getViewCount }) {
-  const shown = playlists
-    .filter((p) => p?.access === 'public' && p.name !== WATCH_LATER_NAME && p.items?.length)
-    .slice(0, MAX_PLAYLISTS);
+export default function ProfilePlaylistRails({ playlists = [], maxPlaylists = MAX_PLAYLISTS, count = ITEM_CAP, view = 'row', getContentForVideo, isWatched, getViewCount }) {
+  const shown = playlists.filter(isShowablePlaylist).slice(0, maxPlaylists);
 
   if (!shown.length) return null;
 
@@ -134,6 +134,8 @@ export default function ProfilePlaylistRails({ playlists = [], getContentForVide
     <PlaylistRail
       key={playlist.id}
       playlist={playlist}
+      count={count}
+      view={view}
       getContentForVideo={getContentForVideo}
       isWatched={isWatched}
       getViewCount={getViewCount}

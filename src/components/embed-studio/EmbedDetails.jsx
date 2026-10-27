@@ -24,6 +24,7 @@ import SettingInfo, { SettingSheet } from './SettingInfo';
 import './EmbedDetails.scss';
 import { useTranslation, Trans } from 'react-i18next';
 import AccountImg from '../HiveAvatar/AccountImg';
+import { SHORT_TITLE_MAX } from '../../utils/shortTitle';
 
 // Every toast from this module is headed "Upload"; the message becomes the
 // line under it. See utils/toast.js.
@@ -60,6 +61,7 @@ function EmbedDetails() {
     isScheduled, setIsScheduled,
     scheduleDateTime, setScheduleDateTime,
     fromStories,
+    isStory,
     reusable, setReusable,
     isNsfw, setIsNsfw,
     addToBlog, setAddToBlog,
@@ -246,7 +248,8 @@ function EmbedDetails() {
       return;
     }
 
-    if (!description?.trim()) {
+    // A story may go without a caption (publishToEmbed gives it a plain one).
+    if (!description?.trim() && !(isStory && fromStories)) {
       toast.error(t("upload.details.errors.descriptionRequired"));
       return;
     }
@@ -309,7 +312,7 @@ function EmbedDetails() {
     <>
       <div className="studio-main-container embed-wizard embed-details-page">
         <div className="studio-page-header">
-          <h1>{fromStories ? t("upload.page.shareShort") : t("upload.page.shareVideo")}</h1>
+          <h1>{fromStories ? t(isStory ? "upload.page.shareStory" : "upload.page.shareShort") : t("upload.page.shareVideo")}</h1>
         </div>
         <StepProgress step={step} short={fromStories} />
         <EmbedUploadProgressBar />
@@ -318,12 +321,18 @@ function EmbedDetails() {
 
           <div className="video-detail-wrap">
             <div className="video-items">
-              {!fromStories && (
-                <div className="input-group">
-                  <label htmlFor="">{t("upload.details.title")}</label>
-                  <input type="text" value={title} onChange={(e) => setTitle(e.target.value)} />
-                </div>
-              )}
+              {/* Shorts and stories: optional, posted as a `## Title` line on top of
+                  the post and then shown as the short's title on 3Speak
+                  (utils/shortTitle.js). */}
+              <div className="input-group">
+                <label htmlFor="">{fromStories ? t("upload.details.titleShort") : t("upload.details.title")}</label>
+                <input
+                  type="text"
+                  value={title}
+                  onChange={(e) => setTitle(e.target.value)}
+                  {...(fromStories ? { maxLength: SHORT_TITLE_MAX } : {})}
+                />
+              </div>
               <div className="input-group">
                 <label htmlFor="">{t("upload.details.description")}</label>
                 <div className={`wrap-dec${fromStories ? ' wrap-dec--short' : ''}`}>
@@ -460,7 +469,8 @@ function EmbedDetails() {
                     </label>
                   </div>
                 )}
-                {accountAdsOn && (
+                {/* Shorts and stories never carry ads, so there is nothing to switch. */}
+                {accountAdsOn && !fromStories && (
                   <div className="beneficiary-wrap" onClick={() => setVideoAdsEnabled(!videoAdsEnabled)}>
                     <div className="wrap">
                       <span>{t('upload.details.ads.label')}<SettingInfo title={t('upload.details.ads.label')}>{t('upload.details.ads.info')}</SettingInfo></span>
@@ -476,7 +486,7 @@ function EmbedDetails() {
                     </label>
                   </div>
                 )}
-                {accountAdsOn && accountRollsOn && videoAdsEnabled && (
+                {accountAdsOn && accountRollsOn && videoAdsEnabled && !fromStories && (
                   <div className="beneficiary-wrap" onClick={() => setVideoRollsEnabled(!videoRollsEnabled)}>
                     <div className="wrap">
                       <span>{t('upload.details.rolls.label')}<SettingInfo title={t('upload.details.rolls.label')}>{t('upload.details.rolls.info')}</SettingInfo></span>

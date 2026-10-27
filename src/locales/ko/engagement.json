@@ -16,6 +16,7 @@
     "availableBalance": "사용 가능 잔액: {{currency}}",
     "memoLabel": "메모(선택):",
     "memoPlaceholder": "예: 멋진 콘텐츠 감사해요!",
+    "memoLinkNote": "이 링크가 메모에 추가됩니다: {{link}}",
     "send": "팁 보내기"
   },
   "cardMenu": {

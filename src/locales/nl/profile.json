@@ -291,5 +291,114 @@
     "unhiddenToast": "Fooi staat weer op je profiel",
     "hideFailed": "Kon deze fooi niet wijzigen. Probeer het opnieuw.",
     "hideWalletPrompt": "Onderteken om te kiezen welke fooien op je profiel staan"
+  },
+  "layout": {
+    "customize": "Profiel aanpassen",
+    "title": "Pas je profiel aan",
+    "hint": "Sleep een sectie aan de greep: naast een andere voor een nieuwe kolom, boven of onder een sectie om ze te stapelen, of op een lijn tussen rijen voor een nieuwe rij. Trek aan de rechterrand om de breedte te wijzigen en gebruik het tandwiel voor de eigenschappen.",
+    "mobileHint": "Zo ziet je profiel eruit op telefoons: één kolom. Sleep secties omhoog of omlaag, verberg ze of wijzig hun eigenschappen. Tot je hier iets verandert, volgen telefoons je desktopindeling.",
+    "save": "Indeling opslaan",
+    "saving": "Opslaan…",
+    "reset": "Standaard herstellen",
+    "undo": "Ongedaan maken",
+    "redo": "Opnieuw",
+    "undoTitle": "Ongedaan maken (Ctrl+Z)",
+    "redoTitle": "Opnieuw (Ctrl+Shift+Z)",
+    "matchDesktop": "Zoals desktop",
+    "deviceDesktop": "Desktop",
+    "deviceMobile": "Mobiel",
+    "saved": "Profielindeling opgeslagen",
+    "saveFailed": "Kon je indeling niet opslaan: {{error}}",
+    "signInNeeded": "Log opnieuw in om je indeling op te slaan",
+    "drag": "Sleep om te ordenen",
+    "dropHere": "Hier neerzetten",
+    "newRow": "Nieuwe rij",
+    "resize": "Sleep om de breedte te wijzigen",
+    "dockHold": "vasthouden voor een kolom over de volle hoogte",
+    "dockLeft": "Loslaten: linkerkolom over de volle hoogte",
+    "dockRight": "Loslaten: rechterkolom over de volle hoogte",
+    "moveUp": "Omhoog",
+    "moveDown": "Omlaag",
+    "show": "Deze sectie tonen",
+    "hide": "Deze sectie verbergen",
+    "settings": "Sectie-instellingen",
+    "remove": "Deze sectie verwijderen",
+    "hiddenBadge": "Verborgen",
+    "hiddenTitle": "Verborgen secties",
+    "noSettings": "Deze sectie heeft geen instellingen.",
+    "emptySection": "Hier is nog niets te zien. Bezoekers zien deze sectie pas als er inhoud in staat.",
+    "linksNote": "Alleen zichtbaar op brede schermen. \"In de pagina\" zet hem in het raster bij de andere secties; je kunt hem er ook aan de greep naartoe slepen.",
+    "addPlaylist": "Een afspeellijst als eigen sectie toevoegen",
+    "playlistMissing": "Afspeellijst niet gevonden (verwijderd of privé)",
+    "fields": {
+      "playlist": "Afspeellijst",
+      "heading": "Kop",
+      "count_one": "{{count}} item tonen",
+      "count_other": "{{count}} items tonen",
+      "playlists_one": "{{count}} afspeellijst tonen",
+      "playlists_other": "{{count}} afspeellijsten tonen",
+      "size": "Videogrootte",
+      "size_sm": "Klein",
+      "size_md": "Middel",
+      "size_lg": "Groot",
+      "size_full": "Volle breedte",
+      "showInfo": "Titel en beschrijving tonen",
+      "showSnap": "Nieuwste communitybericht tonen",
+      "view": "Weergave",
+      "viewRow": "Rij",
+      "viewGrid": "Raster",
+      "side": "Positie",
+      "sideLeft": "Links",
+      "sideRight": "Rechts",
+      "sideNone": "In de pagina"
+    },
+    "types": {
+      "trailer": "Kanaaltrailer",
+      "live": "Nu live",
+      "audioPlaylists": "Albums & audio-afspeellijsten",
+      "playlistRails": "Inhoud van afspeellijsten",
+      "playlist": "Afspeellijst",
+      "links": "Linkpagina"
+    },
+    "tour": {
+      "open": "Korte rondleiding",
+      "stepOf": "Stap {{n}} van {{total}}",
+      "skip": "Overslaan",
+      "back": "Terug",
+      "next": "Volgende",
+      "done": "Aan de slag",
+      "intro": {
+        "title": "Maak je kanaal echt van jou",
+        "body": "Je Overzicht is nu de editor: zet het neer zoals bezoekers het moeten zien. Voor hen verandert er niets tot je op Opslaan drukt."
+      },
+      "move": {
+        "title": "Secties verplaatsen",
+        "body": "Pak een sectie bij de greep en laat hem op een andere los. De linker- of rechterrand zet hem ernaast, de boven- of onderrand stapelt hem in die kolom, en de lijnen tussen rijen beginnen een nieuwe rij."
+      },
+      "resize": {
+        "title": "Breedte aanpassen",
+        "body": "Trek aan de greep op de rechterrand van een sectie. De breedte verspringt in stappen, zodat secties naast elkaar altijd netjes uitlijnen."
+      },
+      "props": {
+        "title": "Sectie-eigenschappen",
+        "body": "Het tandwiel opent de eigenschappen van een sectie: hoeveel items, rij of raster, de kop en bij de trailer de videogrootte en wat ernaast staat."
+      },
+      "hide": {
+        "title": "Tonen en verbergen",
+        "body": "Het oog verbergt een sectie. Verborgen secties wachten in een bak onder de pagina; klik er een aan om hem terug te halen."
+      },
+      "links": {
+        "title": "Je linkpagina",
+        "body": "Sleep je linkpagina de pagina in zoals elke andere sectie. Houd hem even helemaal links of rechts vast om er een kolom over de volle hoogte aan die kant van te maken."
+      },
+      "mobile": {
+        "title": "Ook op telefoons",
+        "body": "Schakel in de balk naar Mobiel om te bepalen hoe je profiel er op telefoons uitziet: één kolom, in je eigen volgorde. Tot je daar iets verandert, volgen telefoons je desktopindeling."
+      },
+      "save": {
+        "title": "Opslaan als je tevreden bent",
+        "body": "Indeling opslaan publiceert hem. Ongedaan maken en Opnieuw lopen door je wijzigingen (Ctrl+Z werkt ook), Annuleren gooit ze weg en Standaard herstellen zet de gewone pagina terug. Het ? naast de titel opent deze rondleiding opnieuw."
+      }
+    }
   }
 }

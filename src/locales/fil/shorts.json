@@ -7,7 +7,10 @@
     "default": "3S | Shorts"
   },
   "stories": {
-    "you": "Ikaw"
+    "you": "Ikaw",
+    "storyTitle": "Story ni {{user}}",
+    "streakTitle_one": "{{count}}-araw na story streak",
+    "streakTitle_other": "{{count}}-araw na story streak"
   },
   "errors": {
     "votingUnavailable": "Hindi available ang voting sa post na ito",
@@ -71,7 +74,9 @@
   },
   "remix": {
     "noUrl": "Hindi makuha ang video URL para sa remix",
-    "loadFailed": "Hindi ma-load ang video para sa remix"
+    "loadFailed": "Hindi ma-load ang video para sa remix",
+    "chainFull": "Nakabatay na ang video na ito sa {{max}} naunang video, kaya hindi na ito puwedeng i-remix.",
+    "chainNoSlots": "Napakarami nang creator na binabayaran ng remix chain na ito kaya wala nang puwang sa Hive para sa isa pang remix. Sa 3Speak Pro, puwede mo pa rin itong i-remix."
   },
   "watchLater": {
     "loginRequired": "Mag-log in para mag-save ng Shorts",
@@ -105,5 +110,25 @@
     "viewReplies_other": "Tingnan ang {{count}} replies",
     "hideReplies_one": "Itago ang {{count}} reply",
     "hideReplies_other": "Itago ang {{count}} replies"
+  },
+  "storyExpired": {
+    "title": "Nag-expire na ang story na ito",
+    "body": "Nakikita ang mga story sa 3Speak sa loob ng 24 oras.",
+    "next": "Susunod na short"
+  },
+  "storyTools": {
+    "seenBy_one": "Nakita ng {{count}}",
+    "seenBy_other": "Nakita ng {{count}}",
+    "seenTitle": "Nakakita",
+    "seenNote": "Mga naka-sign-in na manonood na naka-on ang watch history.",
+    "seenEmpty": "Wala pang nakakakita.",
+    "keep": "Itago bilang Short",
+    "keepHint": "Mananatili sa channel mo pagkalipas ng 24 oras",
+    "keepConfirm": "Itago na ito nang tuluyan?",
+    "keepYes": "Itago",
+    "keeping": "Itinatago…",
+    "kept": "Naitago na. Mananatili ito sa channel mo bilang Short.",
+    "keepFailed": "Hindi naitago ang story na ito.",
+    "keepWalletPrompt": "Pumirma para itago ang story mo bilang Short"
   }
 }

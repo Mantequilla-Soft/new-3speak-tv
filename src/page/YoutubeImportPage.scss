@@ -384,22 +384,6 @@
       padding: 16px 16px 24px;
     }
   }
-  &__head {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 12px;
-    h2 { font-size: 20px; margin: 0; }
-  }
-  &__close {
-    background: none;
-    border: 0;
-    color: inherit;
-    font-size: 18px;
-    cursor: pointer;
-    padding: 4px;
-    &:disabled { opacity: 0.4; }
-  }
   &__picked {
     list-style: none;
     padding: 0;

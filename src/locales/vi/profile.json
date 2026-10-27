@@ -274,5 +274,112 @@
     "unhiddenToast": "Tip đã hiện lại trên hồ sơ của bạn",
     "hideFailed": "Không thể thay đổi tip này. Vui lòng thử lại.",
     "hideWalletPrompt": "Ký để thay đổi những tip hiển thị trên hồ sơ của bạn"
+  },
+  "layout": {
+    "customize": "Tùy chỉnh hồ sơ",
+    "title": "Tùy chỉnh hồ sơ của bạn",
+    "hint": "Kéo tay cầm của một mục: thả cạnh mục khác để tạo cột mới, phía trên hoặc dưới một mục để xếp chồng, hoặc lên đường kẻ giữa các hàng để tạo hàng mới. Kéo mép phải để đổi độ rộng, và dùng bánh răng để đổi thuộc tính.",
+    "mobileHint": "Đây là hồ sơ của bạn trên điện thoại: một cột. Kéo các mục lên hoặc xuống, ẩn chúng hoặc đổi thuộc tính. Cho đến khi bạn thay đổi gì đó ở đây, điện thoại sẽ theo bố cục máy tính.",
+    "save": "Lưu bố cục",
+    "saving": "Đang lưu…",
+    "reset": "Khôi phục mặc định",
+    "undo": "Hoàn tác",
+    "redo": "Làm lại",
+    "undoTitle": "Hoàn tác (Ctrl+Z)",
+    "redoTitle": "Làm lại (Ctrl+Shift+Z)",
+    "matchDesktop": "Giống máy tính",
+    "deviceDesktop": "Máy tính",
+    "deviceMobile": "Di động",
+    "saved": "Đã lưu bố cục hồ sơ",
+    "saveFailed": "Không thể lưu bố cục: {{error}}",
+    "signInNeeded": "Vui lòng đăng nhập lại để lưu bố cục",
+    "drag": "Kéo để sắp xếp",
+    "dropHere": "Thả vào đây",
+    "newRow": "Hàng mới",
+    "resize": "Kéo để đổi độ rộng",
+    "dockHold": "giữ để thành cột cao toàn trang",
+    "dockLeft": "Thả: cột trái cao toàn trang",
+    "dockRight": "Thả: cột phải cao toàn trang",
+    "moveUp": "Lên trên",
+    "moveDown": "Xuống dưới",
+    "show": "Hiện mục này",
+    "hide": "Ẩn mục này",
+    "settings": "Cài đặt mục",
+    "remove": "Xóa mục này",
+    "hiddenBadge": "Đã ẩn",
+    "hiddenTitle": "Các mục đã ẩn",
+    "noSettings": "Mục này không có cài đặt.",
+    "emptySection": "Chưa có gì để hiển thị. Khách chỉ thấy mục này khi đã có nội dung.",
+    "linksNote": "Chỉ hiển thị trên màn hình rộng. \"Trong trang\" đặt nó vào lưới cùng các mục khác; bạn cũng có thể kéo nó vào bằng tay cầm.",
+    "addPlaylist": "Thêm danh sách phát thành một mục riêng",
+    "playlistMissing": "Không tìm thấy danh sách phát (đã xóa hoặc riêng tư)",
+    "fields": {
+      "playlist": "Danh sách phát",
+      "heading": "Tiêu đề",
+      "count_other": "Hiện {{count}} mục",
+      "playlists_other": "Hiện {{count}} danh sách phát",
+      "size": "Kích thước video",
+      "size_sm": "Nhỏ",
+      "size_md": "Vừa",
+      "size_lg": "Lớn",
+      "size_full": "Toàn chiều rộng",
+      "showInfo": "Hiện tiêu đề và mô tả",
+      "showSnap": "Hiện bài đăng cộng đồng mới nhất",
+      "view": "Bố cục",
+      "viewRow": "Hàng",
+      "viewGrid": "Lưới",
+      "side": "Vị trí",
+      "sideLeft": "Trái",
+      "sideRight": "Phải",
+      "sideNone": "Trong trang"
+    },
+    "types": {
+      "trailer": "Trailer kênh",
+      "live": "Đang phát trực tiếp",
+      "audioPlaylists": "Album & danh sách phát âm thanh",
+      "playlistRails": "Nội dung danh sách phát",
+      "playlist": "Danh sách phát",
+      "links": "Trang liên kết"
+    },
+    "tour": {
+      "open": "Hướng dẫn nhanh",
+      "stepOf": "Bước {{n}}/{{total}}",
+      "skip": "Bỏ qua",
+      "back": "Quay lại",
+      "next": "Tiếp",
+      "done": "Bắt đầu thôi",
+      "intro": {
+        "title": "Biến kênh thành của riêng bạn",
+        "body": "Trang Tổng quan giờ là trình chỉnh sửa: sắp xếp theo cách bạn muốn khách xem. Họ sẽ không thấy gì thay đổi cho đến khi bạn bấm Lưu."
+      },
+      "move": {
+        "title": "Di chuyển các mục",
+        "body": "Nắm một mục ở tay cầm rồi thả lên mục khác. Cạnh trái hoặc phải đặt nó bên cạnh, cạnh trên hoặc dưới xếp nó vào cột đó, còn các đường giữa các hàng tạo hàng mới."
+      },
+      "resize": {
+        "title": "Đổi độ rộng",
+        "body": "Kéo tay cầm ở cạnh phải của một mục. Độ rộng thay đổi theo bậc, nên các mục cạnh nhau luôn thẳng hàng."
+      },
+      "props": {
+        "title": "Thuộc tính của mục",
+        "body": "Bánh răng mở thuộc tính của một mục: bao nhiêu mục con, dạng hàng hay lưới, tiêu đề, và với trailer là kích thước video cùng nội dung bên cạnh."
+      },
+      "hide": {
+        "title": "Hiện và ẩn",
+        "body": "Biểu tượng con mắt ẩn một mục. Các mục đã ẩn chờ trong khay dưới trang; bấm vào một mục để đưa nó trở lại."
+      },
+      "links": {
+        "title": "Trang liên kết của bạn",
+        "body": "Kéo trang liên kết vào trang như mọi mục khác. Giữ nó một lúc ở mép trái hoặc phải để biến thành cột cao hết trang ở phía đó."
+      },
+      "mobile": {
+        "title": "Cả trên điện thoại",
+        "body": "Chuyển sang Di động trên thanh công cụ để sắp xếp hồ sơ trên điện thoại: một cột, theo thứ tự của bạn. Khi bạn chưa đổi gì ở đó, điện thoại sẽ theo bố cục máy tính."
+      },
+      "save": {
+        "title": "Lưu khi bạn hài lòng",
+        "body": "Lưu bố cục sẽ đăng nó. Hoàn tác và Làm lại đi qua lại các thay đổi (Ctrl+Z cũng được), Hủy bỏ chúng, và Khôi phục mặc định đưa trang chuẩn trở lại. Dấu ? cạnh tiêu đề mở lại hướng dẫn này."
+      }
+    }
   }
 }

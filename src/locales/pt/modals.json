@@ -70,7 +70,8 @@
       "invalidAccount": "Nome de usuário ou ID de comunidade inválido.",
       "cannotIncrease": "Não é possível passar dos {{percent}}% restantes",
       "pendingRow": "@{{account}} ainda não foi adicionado — clique em + para adicionar ou limpe o campo.",
-      "atLeastOne": "A porcentagem da recompensa deve ser de pelo menos 1%"
+      "atLeastOne": "A porcentagem da recompensa deve ser de pelo menos 1%",
+      "maxCount": "A Hive permite no máximo {{max}} beneficiários por post."
     },
     "title": "Beneficiários",
     "intro": "Adicione um usuário que deve receber automaticamente parte das recompensas deste post.",
@@ -86,7 +87,8 @@
   },
   "qr": {
     "scan": "Escaneie este QR no Hive Keychain:",
-    "click": "Clique no QR para abrir no app Keychain"
+    "click": "Clique no QR para abrir no app Keychain",
+    "title": "Entrar com o Keychain"
   },
   "editVideoHint": {
     "title": "Edite qualquer um dos seus vídeos",
@@ -115,7 +117,12 @@
     "preparing": "Preparando o vídeo para envio...",
     "renderUnavailable": "O serviço de renderização ainda não está disponível. Os dados da linha do tempo foram registrados no console.",
     "backToEditor": "Voltar ao editor",
-    "postError": "Não foi possível preparar o vídeo para envio. Tente baixá-lo em vez disso."
+    "postError": "Não foi possível preparar o vídeo para envio. Tente baixá-lo em vez disso.",
+    "postAs": "Publicar como",
+    "postAsStory": "Story",
+    "postAsStoryHint": "24 horas, no topo do feed de Shorts",
+    "postAsShort": "Short",
+    "postAsShortHint": "Fica no seu canal"
   },
   "profile": {
     "mustLogin": "Você precisa entrar na sua conta primeiro",

@@ -16,6 +16,7 @@
     "availableBalance": "Salio linalopatikana: {{currency}}",
     "memoLabel": "Memo (si lazima):",
     "memoPlaceholder": "k.m. Asante kwa maudhui haya mazuri!",
+    "memoLinkNote": "Kiungo hiki kinaongezwa kwenye memo: {{link}}",
     "send": "Tuma bakshishi"
   },
   "cardMenu": {

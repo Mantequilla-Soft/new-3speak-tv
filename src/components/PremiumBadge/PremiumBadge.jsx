@@ -1,4 +1,4 @@
-import { usePremiumStatus } from '../../hooks/usePremiumStatus';
+import { usePremiumBadge } from '../../hooks/usePremiumStatus';
 import './PremiumBadge.scss';
 
 /**
@@ -14,8 +14,7 @@ import './PremiumBadge.scss';
  *   className — extra class for layout tweaks at the callsite.
  */
 export default function PremiumBadge({ username, size = 14, title = '3Speak Pro', className }) {
-  const status = usePremiumStatus(username);
-  if (!status?.premium) return null;
+  if (!usePremiumBadge(username)) return null;
 
   return (
     <span

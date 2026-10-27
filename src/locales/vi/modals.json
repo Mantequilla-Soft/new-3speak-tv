@@ -70,7 +70,8 @@
       "invalidAccount": "Tên người dùng hoặc ID cộng đồng không hợp lệ.",
       "cannotIncrease": "Không thể tăng vượt quá {{percent}}% còn lại",
       "pendingRow": "@{{account}} chưa được thêm — nhấn + để thêm, hoặc xóa trường này.",
-      "atLeastOne": "Tỷ lệ phần thưởng phải ít nhất 1%"
+      "atLeastOne": "Tỷ lệ phần thưởng phải ít nhất 1%",
+      "maxCount": "Hive cho phép tối đa {{max}} người thụ hưởng cho mỗi bài đăng."
     },
     "title": "Người thụ hưởng",
     "intro": "Thêm người dùng mà bạn muốn tự động nhận một phần phần thưởng của bài đăng này.",
@@ -86,7 +87,8 @@
   },
   "qr": {
     "scan": "Quét mã QR này bằng Hive Keychain:",
-    "click": "Nhấn vào mã QR để mở trong ứng dụng Keychain"
+    "click": "Nhấn vào mã QR để mở trong ứng dụng Keychain",
+    "title": "Đăng nhập bằng Keychain"
   },
   "editVideoHint": {
     "title": "Chỉnh sửa bất kỳ video nào của bạn",
@@ -115,7 +117,12 @@
     "preparing": "Đang chuẩn bị video để tải lên...",
     "renderUnavailable": "Dịch vụ kết xuất chưa khả dụng. Dữ liệu dòng thời gian đã được ghi vào console.",
     "backToEditor": "Quay lại trình chỉnh sửa",
-    "postError": "Không thể chuẩn bị video để tải lên. Vui lòng thử tải xuống thay thế."
+    "postError": "Không thể chuẩn bị video để tải lên. Vui lòng thử tải xuống thay thế.",
+    "postAs": "Đăng dưới dạng",
+    "postAsStory": "Tin",
+    "postAsStoryHint": "24 giờ, đứng đầu bảng tin Shorts",
+    "postAsShort": "Shorts",
+    "postAsShortHint": "Ở lại trên kênh của bạn"
   },
   "profile": {
     "mustLogin": "Bạn cần đăng nhập trước",

@@ -53,6 +53,7 @@
   },
   "page": {
     "shareShort": "分享短视频",
+    "shareStory": "分享快拍",
     "shareVideo": "分享视频"
   },
   "progress": {
@@ -131,7 +132,9 @@
     "browseFiles": "浏览文件",
     "proceed": "下一步：缩略图",
     "replace": "更换视频",
-    "editVideo": "编辑此视频"
+    "editVideo": "编辑此视频",
+    "asStory": "作为 24 小时快拍发布",
+    "asStoryHint": "它会排在短视频信息流的最前面，你的关注者也会收到通知。快拍有效期间，你仍可将其保留为短视频。"
   },
   "details": {
     "guests": {
@@ -152,6 +155,7 @@
       "tooManyTags": "最多可添加 {{max}} 个标签——社区标签会自动添加。"
     },
     "title": "标题",
+    "titleShort": "标题(可选)",
     "description": "简介",
     "descriptionPlaceholderShort": "描述一下你的短视频...",
     "descriptionPlaceholder": "在这里写视频简介……支持 Markdown 格式！",
@@ -247,11 +251,13 @@
     "watchAdToPublish": "看完广告即可发布",
     "watchSponsorFirst": "请先观看赞助商信息",
     "postShort": "发布短视频",
+    "postStory": "发布快拍",
     "postVideo": "发布视频",
     "backToTimeline": "返回时间线"
   },
   "publishing": {
     "titleShort": "正在发布短视频",
+    "titleStory": "正在发布快拍",
     "titleVideo": "正在发布视频",
     "subtitle": "请稍候，我们正在处理你的内容...",
     "starting": "正在开始...",
@@ -275,6 +281,7 @@
     "adsOffFailedToast": "已发布，但暂时无法关闭此视频的广告。",
     "rollsOffFailedToast": "已发布，但暂时无法为此视频关闭视频插播广告。",
     "trailerFailedToast": "已发布，但无法设为你的频道预告片。",
+    "storyRegisterFailedToast": "已发布,但暂时无法设为 24 小时快拍。",
     "completed": "已完成",
     "publishedToast": "视频发布成功！",
     "log": {
@@ -305,12 +312,15 @@
       "rollsOffFailed": "无法保存此视频的无插播广告设置",
       "trailerSet": "已设为你的频道预告片",
       "trailerFailed": "已发布，但无法设为你的频道预告片",
+      "storyRegistered": "快拍将展示 24 小时",
+      "storyRegisterFailed": "已发布,但无法设为 24 小时快拍",
       "published": "视频发布成功！"
     }
   },
   "done": {
     "title": "上传完成！",
     "shortPublished": "你的短视频已在 3Speak 上发布。大约需要 5 分钟才会出现在你的主页上。",
+    "storyPublished": "你的快拍将在 3Speak 上展示 24 小时。",
     "videoPublished": "你的视频已发布！<br/>它正在后台编码，可能需要几分钟。",
     "promote": "推广这个视频",
     "goToProfile": "前往我的主页 →",
@@ -478,5 +488,14 @@
       "noAccount": "没有这个名字的账号。",
       "addButton": "添加链接"
     }
+  },
+  "story": {
+    "captionPlaceholder": "添加说明（可选）",
+    "moreOptions": "更多选项",
+    "reach_other": "将推送给你的 {{count}} 位关注者，并在 24 小时内排在短视频信息流最前面。",
+    "reachNoCount": "将推送给你的关注者，并在 24 小时内排在短视频信息流最前面。",
+    "streakOn_other": "你已连续 {{count}} 天发布快拍。",
+    "streakNext_other": "发布这条后，你将连续 {{count}} 天发布快拍。",
+    "streakStart": "每天发布一条快拍，打造连续记录。"
   }
 }

@@ -10,7 +10,8 @@
     "backHome": "Ana sayfaya dön",
     "howWasStream": "Yayının nasıl geçti?",
     "connecting": "OpenPods'a bağlanılıyor…",
-    "authenticating": "OpenPods ile kimlik doğrulanıyor…"
+    "authenticating": "OpenPods ile kimlik doğrulanıyor…",
+    "postStoryAboutIt": "Bununla ilgili bir hikâye paylaş"
   },
   "strip": {
     "liveNow_one": "Şu an <n>{{count}}</n> OpenPod canlı",

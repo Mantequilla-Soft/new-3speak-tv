@@ -81,6 +81,19 @@
       "includesWhale": "Среди них есть аккаунты-🐋 киты",
       "includesOrca": "Среди них есть аккаунты-🐬 косатки",
       "andMore": "и ещё {{count}}…"
+    },
+    "stories": {
+      "heading": "Истории тех, на кого вы подписаны",
+      "posted": "@{{user}} опубликовал(а) историю",
+      "type": "История",
+      "hoursLeft_one": "остался {{count}} ч",
+      "hoursLeft_few": "осталось {{count}} ч",
+      "hoursLeft_many": "осталось {{count}} ч",
+      "hoursLeft_other": "осталось {{count}} ч",
+      "ariaUnseen_one": "Уведомления, {{count}} новая история",
+      "ariaUnseen_few": "Уведомления, {{count}} новые истории",
+      "ariaUnseen_many": "Уведомления, {{count}} новых историй",
+      "ariaUnseen_other": "Уведомления, {{count}} новой истории"
     }
   },
   "search": {

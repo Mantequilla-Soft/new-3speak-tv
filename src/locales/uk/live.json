@@ -10,7 +10,8 @@
     "backHome": "На головну",
     "howWasStream": "Як пройшла ваша трансляція?",
     "connecting": "Підключення до OpenPods…",
-    "authenticating": "Автентифікація в OpenPods…"
+    "authenticating": "Автентифікація в OpenPods…",
+    "postStoryAboutIt": "Опублікувати історію про це"
   },
   "strip": {
     "liveNow_one": "<n>{{count}}</n> OpenPod зараз наживо",

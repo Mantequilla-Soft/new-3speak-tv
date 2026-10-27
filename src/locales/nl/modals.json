@@ -70,7 +70,8 @@
       "invalidAccount": "Ongeldige gebruikersnaam of community-ID.",
       "cannotIncrease": "Kan niet hoger dan de resterende {{percent}}%",
       "pendingRow": "@{{account}} is nog niet toegevoegd — klik op + om het toe te voegen, of maak het veld leeg.",
-      "atLeastOne": "Het beloningspercentage moet minstens 1% zijn"
+      "atLeastOne": "Het beloningspercentage moet minstens 1% zijn",
+      "maxCount": "Hive staat maximaal {{max}} begunstigden per post toe."
     },
     "title": "Begunstigden",
     "intro": "Voeg een gebruiker toe die automatisch een deel van de beloningen van deze post moet krijgen.",
@@ -86,7 +87,8 @@
   },
   "qr": {
     "scan": "Scan deze QR in Hive Keychain:",
-    "click": "Klik op de QR om hem in de Keychain-app te openen"
+    "click": "Klik op de QR om hem in de Keychain-app te openen",
+    "title": "Inloggen met Keychain"
   },
   "editVideoHint": {
     "title": "Bewerk al je video's",
@@ -115,7 +117,12 @@
     "preparing": "Video voorbereiden voor upload...",
     "renderUnavailable": "Renderdienst nog niet beschikbaar. Tijdlijngegevens zijn naar de console gelogd.",
     "backToEditor": "Terug naar editor",
-    "postError": "Video voorbereiden voor upload mislukt. Probeer hem in plaats daarvan te downloaden."
+    "postError": "Video voorbereiden voor upload mislukt. Probeer hem in plaats daarvan te downloaden.",
+    "postAs": "Plaatsen als",
+    "postAsStory": "Story",
+    "postAsStoryHint": "24 uur, bovenaan de Shorts-feed",
+    "postAsShort": "Short",
+    "postAsShortHint": "Blijft op je kanaal"
   },
   "profile": {
     "mustLogin": "Je moet eerst inloggen",

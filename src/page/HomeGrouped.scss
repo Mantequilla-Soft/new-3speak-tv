@@ -581,13 +581,6 @@
 // horizontal scrolling anywhere.
 .home-tab-panel { padding: 0 8px; }
 
-.home-tab-skeletons {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-  gap: 16px;
-  padding: 0 8px;
-}
-
 .home-tab-viewall {
   display: flex;
   justify-content: center;

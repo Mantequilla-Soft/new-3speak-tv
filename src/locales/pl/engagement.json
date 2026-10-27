@@ -16,6 +16,7 @@
     "availableBalance": "Dostępne saldo: {{currency}}",
     "memoLabel": "Notatka (opcjonalnie):",
     "memoPlaceholder": "np. Dzięki za świetne treści!",
+    "memoLinkNote": "Ten link zostanie dodany do notatki: {{link}}",
     "send": "Wyślij napiwek"
   },
   "cardMenu": {

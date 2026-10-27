@@ -6,7 +6,7 @@ import {
   DndContext, DragOverlay, useDraggable, useDroppable,
   PointerSensor, KeyboardSensor, useSensor, useSensors, pointerWithin,
 } from '@dnd-kit/core';
-import { IoClose } from 'react-icons/io5';
+import ModalHeader from '../ModalHeader/ModalHeader';
 import { MdLock, MdAdd } from 'react-icons/md';
 import { RxDragHandleDots2 } from 'react-icons/rx';
 import { toastIn } from '../../utils/toast';
@@ -139,10 +139,7 @@ function AllBadgesModal({ username, badges, canArrange, startArranging, onClose,
         aria-label={t('badges.hive.dialogLabel', { username })}
         onClick={(e) => e.stopPropagation()}
       >
-        <button className="hbadges-close" onClick={onClose} aria-label={t('common.actions.close')}>
-          <IoClose size={22} />
-        </button>
-        <h3 className="hbadges-title">{t('badges.hive.title')}</h3>
+        <ModalHeader title={t('badges.hive.title')} onClose={onClose} />
         <p className="hbadges-sub">
           {arranging
             ? t('badges.hive.arrangeHint')

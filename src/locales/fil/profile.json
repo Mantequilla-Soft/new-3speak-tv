@@ -291,5 +291,114 @@
     "unhiddenToast": "Muling ipinapakita ang tip sa profile mo",
     "hideFailed": "Hindi mabago ang tip na ito. Pakisubukan ulit.",
     "hideWalletPrompt": "Mag-sign para baguhin kung aling mga tip ang lalabas sa profile mo"
+  },
+  "layout": {
+    "customize": "I-customize ang profile",
+    "title": "I-customize ang iyong profile",
+    "hint": "I-drag ang seksyon sa hawakan nito: sa tabi ng iba para sa bagong column, sa itaas o ibaba ng isa para ipatong ito, o sa linya sa pagitan ng mga hanay para sa bagong hanay. Hilahin ang kanang gilid para baguhin ang lapad, at gamitin ang gear para sa properties.",
+    "mobileHint": "Ganito ang profile mo sa mga phone: isang column. I-drag pataas o pababa ang mga seksyon, itago ang mga ito, o baguhin ang properties. Hangga't wala kang binabago rito, susundan ng mga phone ang desktop layout mo.",
+    "save": "I-save ang layout",
+    "saving": "Sine-save…",
+    "reset": "I-reset sa default",
+    "undo": "I-undo",
+    "redo": "I-redo",
+    "undoTitle": "I-undo (Ctrl+Z)",
+    "redoTitle": "I-redo (Ctrl+Shift+Z)",
+    "matchDesktop": "Gayahin ang desktop",
+    "deviceDesktop": "Desktop",
+    "deviceMobile": "Mobile",
+    "saved": "Na-save ang layout ng profile",
+    "saveFailed": "Hindi ma-save ang layout mo: {{error}}",
+    "signInNeeded": "Mag-sign in ulit para i-save ang layout mo",
+    "drag": "I-drag para ayusin",
+    "dropHere": "Ibagsak dito",
+    "newRow": "Bagong hanay",
+    "resize": "I-drag para baguhin ang lapad",
+    "dockHold": "i-hold para sa column na buong taas",
+    "dockLeft": "Bitawan: kaliwang column na buong taas",
+    "dockRight": "Bitawan: kanang column na buong taas",
+    "moveUp": "Itaas",
+    "moveDown": "Ibaba",
+    "show": "Ipakita ang seksyong ito",
+    "hide": "Itago ang seksyong ito",
+    "settings": "Settings ng seksyon",
+    "remove": "Alisin ang seksyong ito",
+    "hiddenBadge": "Nakatago",
+    "hiddenTitle": "Mga nakatagong seksyon",
+    "noSettings": "Walang settings ang seksyong ito.",
+    "emptySection": "Wala pang maipapakita rito. Makikita lang ng mga bisita ang seksyong ito kapag may laman na.",
+    "linksNote": "Sa malalapad na screen lang ipinapakita. Ang \"Sa loob ng page\" ay inilalagay ito sa grid kasama ng ibang seksyon; puwede mo rin itong i-drag doon sa hawakan nito.",
+    "addPlaylist": "Magdagdag ng playlist bilang sariling seksyon",
+    "playlistMissing": "Hindi makita ang playlist (binura o pribado)",
+    "fields": {
+      "playlist": "Playlist",
+      "heading": "Heading",
+      "count_one": "Ipakita ang {{count}} item",
+      "count_other": "Ipakita ang {{count}} item",
+      "playlists_one": "Ipakita ang {{count}} playlist",
+      "playlists_other": "Ipakita ang {{count}} playlist",
+      "size": "Laki ng video",
+      "size_sm": "Maliit",
+      "size_md": "Katamtaman",
+      "size_lg": "Malaki",
+      "size_full": "Buong lapad",
+      "showInfo": "Ipakita ang pamagat at paglalarawan",
+      "showSnap": "Ipakita ang pinakabagong community post",
+      "view": "Layout",
+      "viewRow": "Hanay",
+      "viewGrid": "Grid",
+      "side": "Posisyon",
+      "sideLeft": "Kaliwa",
+      "sideRight": "Kanan",
+      "sideNone": "Sa loob ng page"
+    },
+    "types": {
+      "trailer": "Trailer ng channel",
+      "live": "Live ngayon",
+      "audioPlaylists": "Mga album at audio playlist",
+      "playlistRails": "Laman ng mga playlist",
+      "playlist": "Playlist",
+      "links": "Links page"
+    },
+    "tour": {
+      "open": "Mabilis na tour",
+      "stepOf": "Hakbang {{n}} ng {{total}}",
+      "skip": "Laktawan",
+      "back": "Bumalik",
+      "next": "Susunod",
+      "done": "Tara na",
+      "intro": {
+        "title": "Gawing iyo ang channel mo",
+        "body": "Ang Overview mo na ang editor: ayusin ito ayon sa gusto mong makita ng mga bisita. Walang magbabago para sa kanila hanggang pindutin mo ang Save."
+      },
+      "move": {
+        "title": "Ilipat ang mga seksyon",
+        "body": "Hawakan ang seksyon sa grip nito at bitawan sa ibabaw ng iba. Ang kaliwa o kanang gilid ay naglalagay nito sa tabi, ang itaas o ibabang gilid ay nagpapatong nito sa column na iyon, at ang mga linya sa pagitan ng mga row ay nagsisimula ng bagong row."
+      },
+      "resize": {
+        "title": "Baguhin ang lapad",
+        "body": "Hilahin ang handle sa kanang gilid ng seksyon. Pa-hakbang nagbabago ang lapad, kaya laging pantay ang magkakatabing seksyon."
+      },
+      "props": {
+        "title": "Mga property ng seksyon",
+        "body": "Binubuksan ng gear ang mga property ng seksyon: ilang entry, row o grid, ang heading nito, at para sa trailer ang laki ng video at kung ano ang nasa tabi nito."
+      },
+      "hide": {
+        "title": "Ipakita at itago",
+        "body": "Itinatago ng mata ang isang seksyon. Naghihintay ang mga nakatagong seksyon sa tray sa ilalim ng page; i-click ang isa para ibalik ito."
+      },
+      "links": {
+        "title": "Ang links page mo",
+        "body": "I-drag ang links page mo papunta sa page tulad ng ibang seksyon. Hawakan ito sandali sa pinakakaliwa o pinakakanan para maging full-height na column sa panig na iyon."
+      },
+      "mobile": {
+        "title": "Pati sa phone",
+        "body": "Lumipat sa Mobile sa bar para ayusin ang itsura ng profile mo sa phone: isang column, sa sarili mong ayos. Hangga't wala kang binabago doon, sinusundan ng phone ang desktop layout mo."
+      },
+      "save": {
+        "title": "I-save kapag gusto mo na",
+        "body": "Ina-publish ito ng I-save ang layout. Ang I-undo at I-redo ay pabalik-balik sa mga pagbabago mo (gumagana rin ang Ctrl+Z), itinatapon ng Cancel ang mga ito, at ibinabalik ng I-reset sa default ang karaniwang page. Binubuksan ulit ng ? sa tabi ng title ang tour na ito."
+      }
+    }
   }
 }

@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 import axios from 'axios';
 import { Clock, Film, Link2, Maximize2, Minimize2, Pencil, Plus, Search, Trash2, X, ZoomIn, ZoomOut } from 'lucide-react';
 import TimelineToasters from '../playVideo/TimelineToasters';
+import ModalHeader from '../ModalHeader/ModalHeader';
 import AccountImg from '../HiveAvatar/AccountImg';
 import { fetchLinkMeta, parseOne } from '../Chat/chatLinks';
 import { CHECKER_URL } from '../../utils/config';
@@ -291,12 +292,11 @@ function LinkSheet({ initial, defaultAt, duration, onSave, onClose }) {
         aria-label={editing ? t('upload.timeline.form.editTitle') : t('upload.timeline.form.addTitle')}
         onClick={(e) => e.stopPropagation()}
       >
-        <div className="tle-sheet__head">
-          <h4>{editing ? t('upload.timeline.form.editTitle') : t('upload.timeline.form.addTitle')}</h4>
-          <button type="button" className="tle-icon-btn" onClick={onClose} aria-label={t('common.actions.close')}>
-            <X size={18} />
-          </button>
-        </div>
+        <ModalHeader
+          className="tle-sheet__head"
+          title={editing ? t('upload.timeline.form.editTitle') : t('upload.timeline.form.addTitle')}
+          onClose={onClose}
+        />
 
         <div className="tle-tabs" role="tablist">
           {[

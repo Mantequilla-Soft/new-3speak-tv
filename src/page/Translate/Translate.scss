@@ -373,7 +373,7 @@
     padding: 18px 16px calc(18px + env(safe-area-inset-bottom));
   }
 
-  h2 { margin: 0; font-size: 18px; }
+  .translate-modal-header { margin-bottom: 2px; }
 
   > label:not(.translate-check) {
     display: flex;

@@ -53,6 +53,7 @@
   },
   "page": {
     "shareShort": "Udostępnij shorta",
+    "shareStory": "Udostępnij relację",
     "shareVideo": "Udostępnij film"
   },
   "progress": {
@@ -131,7 +132,9 @@
     "browseFiles": "Przeglądaj pliki",
     "proceed": "Przejdź do miniatur",
     "replace": "Zastąp film",
-    "editVideo": "Edytuj ten film"
+    "editVideo": "Edytuj ten film",
+    "asStory": "Opublikuj jako relację na 24 godz.",
+    "asStoryHint": "Trafia na początek kanału Shorts, a obserwujący dostają powiadomienie. Dopóki trwa, możesz ją jeszcze zachować jako shorta."
   },
   "details": {
     "guests": {
@@ -152,6 +155,7 @@
       "tooManyTags": "Możesz dodać maksymalnie {{max}} tagów — tag społeczności jest dodawany automatycznie."
     },
     "title": "Tytuł",
+    "titleShort": "Tytuł (opcjonalnie)",
     "description": "Opis",
     "descriptionPlaceholderShort": "Opisz swojego shorta...",
     "descriptionPlaceholder": "Napisz tu opis filmu... Obsługuje formatowanie markdown!",
@@ -253,11 +257,13 @@
     "watchAdToPublish": "Obejrzyj reklamę, aby opublikować",
     "watchSponsorFirst": "Najpierw obejrzyj wiadomość sponsora",
     "postShort": "Opublikuj shorta",
+    "postStory": "Opublikuj relację",
     "postVideo": "Opublikuj film",
     "backToTimeline": "Wróć do osi czasu"
   },
   "publishing": {
     "titleShort": "Publikowanie shorta",
+    "titleStory": "Publikowanie relacji",
     "titleVideo": "Publikowanie filmu",
     "subtitle": "Poczekaj, aż przetworzymy twoje treści...",
     "starting": "Rozpoczynanie...",
@@ -281,6 +287,7 @@
     "adsOffFailedToast": "Opublikowano, ale nie udało się jeszcze wyłączyć reklam w tym filmie.",
     "rollsOffFailedToast": "Opublikowano, ale nie udało się jeszcze wyłączyć spotów w tym filmie.",
     "trailerFailedToast": "Opublikowano, ale nie udało się ustawić go jako zwiastuna kanału.",
+    "storyRegisterFailedToast": "Opublikowano, ale nie udało się jeszcze ustawić tego jako 24-godzinnej relacji.",
     "completed": "Zakończono",
     "publishedToast": "Film opublikowany!",
     "log": {
@@ -311,12 +318,15 @@
       "rollsOffFailed": "Nie udało się zapisać ustawienia bez spotów dla tego filmu",
       "trailerSet": "Ustawiono jako zwiastun kanału",
       "trailerFailed": "Opublikowano, ale nie udało się ustawić go jako zwiastuna kanału",
+      "storyRegistered": "Relacja jest widoczna przez 24 godziny",
+      "storyRegisterFailed": "Opublikowano, ale nie udało się ustawić tego jako 24-godzinnej relacji",
       "published": "Film opublikowany!"
     }
   },
   "done": {
     "title": "Przesyłanie zakończone!",
     "shortPublished": "Twój short został opublikowany na 3Speak. Pojawienie się na twoim profilu zajmie około 5 minut.",
+    "storyPublished": "Twoja relacja będzie widoczna na 3Speak przez najbliższe 24 godziny.",
     "videoPublished": "Twój film został opublikowany!<br/>Teraz jest kodowany w tle, co może potrwać kilka minut.",
     "promote": "Promuj ten film",
     "goToProfile": "Przejdź do mojego profilu →",
@@ -484,5 +494,23 @@
       "noAccount": "Nie ma konta o tej nazwie.",
       "addButton": "Dodaj link"
     }
+  },
+  "story": {
+    "captionPlaceholder": "Dodaj opis (opcjonalnie)",
+    "moreOptions": "Więcej opcji",
+    "reach_one": "Trafia do {{count}} obserwującego i przez 24 godziny jest na początku kanału Shorts.",
+    "reach_few": "Trafia do {{count}} obserwujących i przez 24 godziny jest na początku kanału Shorts.",
+    "reach_many": "Trafia do {{count}} obserwujących i przez 24 godziny jest na początku kanału Shorts.",
+    "reach_other": "Trafia do {{count}} obserwujących i przez 24 godziny jest na początku kanału Shorts.",
+    "reachNoCount": "Trafia do obserwujących i przez 24 godziny jest na początku kanału Shorts.",
+    "streakOn_one": "Masz serię relacji: {{count}} dzień z rzędu.",
+    "streakOn_few": "Masz serię relacji: {{count}} dni z rzędu.",
+    "streakOn_many": "Masz serię relacji: {{count}} dni z rzędu.",
+    "streakOn_other": "Masz serię relacji: {{count}} dnia z rzędu.",
+    "streakNext_one": "Dzięki tej relacji seria wyniesie {{count}} dzień z rzędu.",
+    "streakNext_few": "Dzięki tej relacji seria wyniesie {{count}} dni z rzędu.",
+    "streakNext_many": "Dzięki tej relacji seria wyniesie {{count}} dni z rzędu.",
+    "streakNext_other": "Dzięki tej relacji seria wyniesie {{count}} dnia z rzędu.",
+    "streakStart": "Dodawaj relację codziennie, by zbudować serię."
   }
 }

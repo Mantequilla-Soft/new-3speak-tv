@@ -79,21 +79,6 @@
   }
 }
 
-.st-icon-btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
-  border: none;
-  background: transparent;
-  color: var(--text-secondary);
-  cursor: pointer;
-
-  &:hover { background: var(--bg-hover); color: var(--text-primary); }
-}
-
 /* ── Stream secret ───────────────────────────────────────────────────────── */
 .st-secret {
   border: 1px solid var(--border-color);
@@ -365,15 +350,10 @@
   --hh-primary:          var(--accent-primary, #e53935);
 }
 
-.st-sheet__head {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-  padding: 14px 16px 10px 20px;
-  border-bottom: 1px solid var(--border-light, rgba(255, 255, 255, 0.08));
-
-  h3 { margin: 0; font-size: 1.05rem; }
+.st-sheet .st-sheet__header {
+  flex-shrink: 0;
+  padding: 14px 20px 12px;
+  margin-bottom: 0;
 }
 
 .st-sheet__body {

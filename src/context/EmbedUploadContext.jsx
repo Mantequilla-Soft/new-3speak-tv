@@ -18,12 +18,19 @@ import { syncVideoAdOptOut } from '../lib/advertiseData';
 import { markImportPublished } from '../lib/youtubeImport';
 import { sanitizeMusicCredits, soundAuthorsOf, soundCreditsMarkdown, primarySoundMetadata } from '../utils/soundCredits';
 import { enforceLockedBeneficiaries, getLockedBeneficiaries, chargesEncoder, LOCKED_FUND_ACCOUNT, LOCKED_ENCODER_ACCOUNT } from '../utils/beneficiaries';
+import { remixChainAuthors, remixChainMarkdown } from '../utils/remixChain';
 import { oaEnvelope, threespeakVideo, probeVideoOrientation, OA_ARTICLE, OA_MICROPOST, OA_COMMENT } from '../utils/openAttribute';
 import axios from 'axios';
 import { isWeakLinkForced } from '../utils/uploadFaults';
 import { useTranslation } from 'react-i18next';
 import { readAddToBlog, writeAddToBlog, reblogOp } from '../utils/addToBlog';
 import { timelineMeta, applyTimelineToDescription } from '../utils/videoTimeline';
+import { registerStory } from '../lib/stories';
+import { dataUrlToBlob } from '../utils/videoThumbnails';
+
+// The body of a story posted without a caption (see publishToEmbed).
+const STORY_FALLBACK_CAPTION = 'My 24-hour story on 3Speak.';
+import { withShortHeading, shortHeading } from '../utils/shortTitle';
 
 // Every toast from this module is headed "Upload"; the message becomes the
 // line under it. See utils/toast.js.
@@ -145,6 +152,16 @@ export function EmbedUploadProvider({ children }) {
   const [selectedThumbnail, setSelectedThumbnail] = useState(null);
   const [thumbnailFile, setThumbnailFile] = useState(null);
   const [selectedIndex, setSelectedIndex] = useState(null);
+  // The quick story flow skips the thumbnail step: the first generated frame is
+  // the cover. False when there is no frame, so the caller can fall back to the step.
+  const pickFirstThumbnail = useCallback((thumbs) => {
+    const first = thumbs?.[0];
+    if (!first) return false;
+    setSelectedIndex(0);
+    setSelectedThumbnail(first);
+    setThumbnailFile(dataUrlToBlob(first));
+    return true;
+  }, []);
 
   // Details state
   const [title, setTitle] = useState('');
@@ -209,6 +226,9 @@ export function EmbedUploadProvider({ children }) {
 
   // Entry origin (stories → "Share a Short", default → "Share a Video")
   const [fromStories, setFromStories] = useState(false);
+  // A 24h story (share menu → Story, `?from=story`). Always a short too, so every
+  // `fromStories` branch applies; this only adds the story flag on publish.
+  const [isStory, setIsStory] = useState(false);
   // 🔐 Gated (paid) upload. Only offered to 3Speak Pro users, and only ever
   // honoured because the embed backend re-checks Pro status when it mints the
   // upload token — this flag is a UI intent, not an authorisation.
@@ -223,6 +243,9 @@ export function EmbedUploadProvider({ children }) {
   const [originalAuthor, setOriginalAuthor] = useState(null);
   const [originalPermlink, setOriginalPermlink] = useState(null);
   const [originalShortPermlink, setOriginalShortPermlink] = useState(null);
+  // The whole remix chain, source first (utils/remixChain.js): every author
+  // gets a split, the earlier videos are linked in the body
+  const [remixChain, setRemixChain] = useState([]);
 
   // Songs from the shorts editor's music library (credited in the body, shown
   // in the soundtrack ticker, 3Speak sound creators get a locked split)
@@ -399,9 +422,11 @@ export function EmbedUploadProvider({ children }) {
     setIsScheduled(false);
     setScheduleDateTime('');
     setFromStories(false);
+    setIsStory(false);
     setOriginalAuthor(null);
     setOriginalPermlink(null);
     setOriginalShortPermlink(null);
+    setRemixChain([]);
     setMusicCreditsRaw([]);
     setReusable(true);
     setChapters([]);
@@ -1459,7 +1484,11 @@ export function EmbedUploadProvider({ children }) {
       toast.error(t('upload.details.errors.titleRequired'));
       return;
     }
-    if (!description?.trim()) {
+    // A story may go out without a caption (the quick story flow posts in two
+    // taps); its post still needs a body, so it gets a plain one. English, like
+    // everything sent to Hive.
+    const caption = description?.trim() ? description : (isStory && fromStories ? STORY_FALLBACK_CAPTION : description);
+    if (!caption?.trim()) {
       toast.error(t('upload.details.errors.descriptionRequired'));
       return;
     }
@@ -1510,7 +1539,7 @@ export function EmbedUploadProvider({ children }) {
       // link endpoint expects.
       // Permlink slug source: longform videos use the title; shorts have no
       // title, so they keep using the first words of the description (caption).
-      const slugSource = ((fromStories ? description : title) || description || '').trim();
+      const slugSource = ((fromStories ? (title || caption) : title) || caption || '').trim();
       const slug = slugSource
         ? slugSource.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '').slice(0, 27).replace(/-+$/, '')
         : '';
@@ -1676,11 +1705,15 @@ export function EmbedUploadProvider({ children }) {
       const timelineDuration = Number(videoDuration) || 0;
       const timeline = fromStories ? {} : timelineMeta(chapters, timelineLinks, { duration: timelineDuration });
       const publishDescription = fromStories
-        ? description
-        : applyTimelineToDescription(description, timeline, { author: assetOwner, permlink: hivePermlink });
+        ? caption
+        : applyTimelineToDescription(caption, timeline, { author: assetOwner, permlink: hivePermlink });
 
-      // Build body: embed URL (video first) + description + credit to original author
+      // Build body: embed URL (video first) + description + credit to original author.
+      // A short's optional title goes on top as a `## Title` heading: shorts are
+      // Hive comments with no title field, and 3Speak shows that line as the
+      // short's title (utils/shortTitle.js).
       let postBody = `${capturedEmbedUrl}\n\n${publishDescription}`;
+      if (fromStories) postBody = withShortHeading(title, postBody);
       if (originalAuthor && originalPermlink) {
         // Use shorts link format when remix comes from a short
         const shortPl = originalShortPermlink || originalPermlink;
@@ -1688,6 +1721,7 @@ export function EmbedUploadProvider({ children }) {
           ? `${window.location.origin}/shorts?v=${originalAuthor}/${shortPl}`
           : `${window.location.origin}/@${originalAuthor}/${originalPermlink}`;
         postBody += `\n\n---\n*Based on a video by [@${originalAuthor}](${originalLink})*`;
+        postBody += remixChainMarkdown(remixChain);
       }
       postBody += soundCreditsMarkdown(musicCredits);
 
@@ -1766,6 +1800,7 @@ export function EmbedUploadProvider({ children }) {
           reusable: (originalAuthor && originalPermlink) ? true : reusable,
           ...(thumbnailUrl ? { thumbnail: thumbnailUrl } : {}),
           ...(originalAuthor ? { originalAuthor, originalPermlink } : {}),
+          ...(originalAuthor && remixChain.length ? { remixChain } : {}),
           ...(musicCredits.length ? { sound: primarySoundMetadata(musicCredits) } : {}),
           // Chapters + link toasters (utils/videoTimeline.js). Read by the watch
           // page and the embed player; nothing when the creator added none.
@@ -1810,8 +1845,15 @@ export function EmbedUploadProvider({ children }) {
         // and tickers only. Written only when off: the post is the creator's
         // signed record, and the checker mirrors it from the chain (routes/
         // advertise.js, /creator/video-ads/sync), so no separate signature is asked.
-        ...(!videoAdsEnabled ? { '3speak': { ads: false } }
-          : (!videoRollsEnabled ? { '3speak': { rolls: false } } : {})),
+        // `story: true` lives in the same namespace: the post is the author's signed
+        // claim that this short expires after 24h, which the checker reads back
+        // (routes/stories.js) instead of asking for another signature.
+        ...((!videoAdsEnabled || !videoRollsEnabled || (isStory && fromStories)) ? {
+          '3speak': {
+            ...(!videoAdsEnabled ? { ads: false } : (!videoRollsEnabled ? { rolls: false } : {})),
+            ...(isStory && fromStories ? { story: true } : {}),
+          },
+        } : {}),
         // ▶️ Where an imported video came from (/youtube-import): provenance on the
         // creator's own signed record, for later features (dedupe, re-sync,
         // "originally on …") without depending on our server's bookkeeping.
@@ -1850,6 +1892,7 @@ export function EmbedUploadProvider({ children }) {
         username: user,
         includeEncoder: true,
         originalAuthor: originalAuthor && originalPermlink ? originalAuthor : null,
+        remixAuthors: originalAuthor && originalPermlink ? remixChainAuthors(remixChain, user) : [],
         soundAuthors: soundAuthorsOf(musicCredits, user),
       });
 
@@ -2114,7 +2157,7 @@ export function EmbedUploadProvider({ children }) {
             body: JSON.stringify({
               hive_author: user,
               hive_permlink: hivePermlink,
-              hive_title: fromStories ? '' : title,
+              hive_title: fromStories ? shortHeading(postBody) : title,
               hive_body: postBody,
               hive_tags: ['3speak', ...tagsPreview],
             }),
@@ -2176,6 +2219,20 @@ export function EmbedUploadProvider({ children }) {
         }
       }
 
+      // ─── Story: start its 24 hours ───
+      // Until the checker has read the flag back, the short behaves like any other
+      // (it would even show in the shorts feeds), so this one is worth a warning.
+      if (isStory && fromStories && !result.incubation) {
+        try {
+          await registerStory(user, hivePermlink);
+          addMessage(t('upload.publishing.log.storyRegistered'), 'success');
+        } catch (storyErr) {
+          console.warn('Failed to register the story:', storyErr);
+          addMessage(t('upload.publishing.log.storyRegisterFailed'), 'warning');
+          toast.error(t('upload.publishing.storyRegisterFailedToast'));
+        }
+      }
+
       // ─── Imported video: remember it is on 3Speak now ───
       // Non-fatal and silent: it only feeds the ✓ on the import page.
       if (importSource && !result.incubation) {
@@ -2215,6 +2272,7 @@ export function EmbedUploadProvider({ children }) {
     selectedThumbnail, setSelectedThumbnail,
     thumbnailFile, setThumbnailFile,
     selectedIndex, setSelectedIndex,
+    pickFirstThumbnail,
     // Details
     title, setTitle,
     description, setDescription,
@@ -2262,12 +2320,14 @@ export function EmbedUploadProvider({ children }) {
     setPrefilledFromQuery,
     // Entry origin
     fromStories, setFromStories,
+    isStory, setIsStory,
     gated, setGated,
     gatedAllowlist, setGatedAllowlist,
     // Original video attribution
     originalAuthor, setOriginalAuthor,
     originalPermlink, setOriginalPermlink,
     originalShortPermlink, setOriginalShortPermlink,
+    remixChain, setRemixChain,
     musicCredits, setMusicCredits,
     // Reusable flag
     reusable, setReusable,

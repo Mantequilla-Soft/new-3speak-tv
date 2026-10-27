@@ -359,3 +359,35 @@
     margin: 0 auto;
   }
 }
+
+/* "Post as a 24h story" on the shorts uploader (EmbedVideoUploadStep1). */
+.story-switch {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  margin: 0 0 12px;
+  padding: 10px 12px;
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+  background: var(--bg-secondary);
+  cursor: pointer;
+
+  input {
+    flex: none;
+    margin-top: 3px;
+    accent-color: var(--accent-primary);
+  }
+
+  .story-switch__text {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    color: var(--text-primary);
+    font-size: 14px;
+
+    small {
+      color: var(--text-secondary);
+      font-size: 12px;
+    }
+  }
+}

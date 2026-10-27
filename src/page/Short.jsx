@@ -29,7 +29,6 @@ import {
   Music2,
   ArrowUp,
   ArrowDown,
-  X,
   SlidersHorizontal,
   Loader2,
   Play,
@@ -124,10 +123,15 @@ import { warmupRailEnabledFor } from '../utils/config';
 import { commentWithAioha, isLoggedIn } from '../hive-api/aioha';
 import AmbientGlow, { useAmbientGlow } from '../components/AmbientGlow/AmbientGlow';
 import EditorModal from '../components/modal/EditorModal';
+import { checkRemix, remixBlockedMessage } from '../utils/remixChain';
+import { usePremiumStatus } from '../hooks/usePremiumStatus';
 import EditVideoModal from '../components/playVideo/EditVideoModal';
 import PromoteModal from '../components/Promote/PromoteModal';
 import { notifyMediaPlay, onMediaPlay } from '../utils/mediaCoordinator';
 import HiveAvatar from '../components/HiveAvatar/HiveAvatar';
+import { markStorySeen, useInvalidateStories, useStoryClock } from '../lib/stories';
+import StoryOwnerTools from '../components/StoryOwnerTools/StoryOwnerTools';
+import ModalHeader from '../components/ModalHeader/ModalHeader';
 
 import { soundLabel } from '../utils/soundCredits';
 // Every toast from this module is headed "Shorts"; the message becomes the
@@ -139,6 +143,11 @@ const toast = toastIn('Shorts');
 // anyway. Long enough that a healthy load always reports ready first, short enough
 // that a broken one barely delays the swipe-ahead warm-up.
 const PREFETCH_GRACE_MS = 4000;
+
+// A 24h story past its time (checker routes/stories.js). It is never loaded into
+// the player: the expired screen stands in for it, so this does not depend on the
+// embed player's own expired clip being deployed.
+const isExpiredStory = (v) => !!v?.storyExpiresAt && new Date(v.storyExpiresAt).getTime() <= Date.now();
 
 // The Watch Later playlist is identified by NAME — same convention as the watch
 // page and the add-to-playlist modal. Private, and created on first save.
@@ -271,6 +280,7 @@ function shortWatchBeat(watchRef, position) {
 /* ================= COMPONENT ================= */
 const VideoShort = () => {
   const { user, authenticated, watchHistoryEnabled } = useAppStore();
+  const isPremium = !!usePremiumStatus(user)?.premium;
   const incubationHandle = useAppStore((s) => s.incubationHandle);
   // Shorts feed mode — 'discover' (everything, interests just boost the ranking) or
   // 'interests' (ONLY shorts whose winning topic is one of mine). Persisted in the
@@ -391,6 +401,7 @@ const VideoShort = () => {
   const [editorOriginalAuthor, setEditorOriginalAuthor] = useState(null);
   const [editorOriginalPermlink, setEditorOriginalPermlink] = useState(null);
   const [editorOriginalShortPermlink, setEditorOriginalShortPermlink] = useState(null);
+  const [editorRemixChain, setEditorRemixChain] = useState(null);
   const [editorVideoType, setEditorVideoType] = useState('video');
   const [remixDropdownOpen, setRemixDropdownOpen] = useState(false);
   const remixDropdownRef = useRef(null);
@@ -544,6 +555,12 @@ const VideoShort = () => {
   }, [location.search]);
   const feedUserRef = useRef(feedUser);
   feedUserRef.current = feedUser;
+  // ?story=1 (with ?user=): the creator's live 24h stories instead of their shorts.
+  const storyMode = useMemo(() => !!feedUser && new URLSearchParams(location.search).get('story') === '1', [feedUser, location.search]);
+  const storyModeRef = useRef(storyMode);
+  storyModeRef.current = storyMode;
+  const invalidateStories = useInvalidateStories();
+  const storyNow = useStoryClock(); // a live story's badge counts down; an expiring one flips to the expired screen
 
   // Minimum swipe distance to trigger navigation (in pixels)
   const minSwipeDistance = 50;
@@ -948,8 +965,16 @@ const VideoShort = () => {
       hivePermlink: currentVid.hivePermlink,
     });
 
+    // A 24h story counts as seen once opened: its cyan ring, notification and the
+    // bell's dot clear here (the checker's own seen comes from watch history,
+    // which a viewer may have switched off).
+    if (storyMode) {
+      markStorySeen(currentVid.author, currentVid.permlink, currentVid.hivePermlink);
+      invalidateStories();
+    }
+
     // Decrement unseen_count for the current creator in the stories bar cache
-    if (isStoriesMode && feedUser) {
+    if (isStoriesMode && feedUser && !storyMode) {
       queryClient.setQueryData(['shorts-stories', user], (old) => {
         if (!old?.creators) return old;
         return {
@@ -1038,6 +1063,11 @@ const VideoShort = () => {
 
     // Load new video into the persistent player (reuses same <video> element + Player instance)
     const player = playerRef.current;
+    if (player && !player.destroyed && isExpiredStory(currentVid)) {
+      // Nothing to play: the previous short stops and the expired screen shows.
+      player.pause();
+      return undefined;
+    }
     if (player && !player.destroyed) {
       pendingPlayRef.current = currentVid.id;
       console.log(`[VideoShort] Loading new source into persistent player: ${currentVid.id}`);
@@ -1172,7 +1202,7 @@ const VideoShort = () => {
       // Back to whatever the viewer chose, which the spot borrowed the player from.
       player.setLoop(playbackModeRef.current === 'auto-replay');
     }
-    if (player && !player.destroyed && vid) {
+    if (player && !player.destroyed && vid && !isExpiredStory(vid)) {
       const cached = prefetchedSourcesRef.current.get(vid.id);
       player.load(cached || `${vid.author}/${vid.permlink}`)
         .then(() => playPlayerWithMuteSync(player))
@@ -1504,6 +1534,8 @@ const VideoShort = () => {
         reputation: short.user.reputation ?? null,
       },
       caption: short.caption || short.title || '',
+      heading: short.heading || '', // `## Title` (utils/shortTitle.js)
+      storyExpiresAt: short.storyExpiresAt || null, // 24h story
       tags: short.tags || [],
       audio: soundLabel(short.sound, short.user.username),
       albumArt: short.user.avatar,
@@ -1572,6 +1604,9 @@ const VideoShort = () => {
                     views: d.views || 0,
                     createdAt: d.createdAt || new Date().toISOString(),
                     embed_title: d.embed_title || d.hive_title || '',
+                    // An expired story is in no feed, so this is how a direct link learns it.
+                    story: d.story === true,
+                    story_expires_at: d.story_expires_at || null,
                   };
                 }
               } catch { /* ignore — falls through to the minimal shortItem below */ }
@@ -1596,6 +1631,8 @@ const VideoShort = () => {
               embedUrl: sharedVideoData.embedUrl,
               user: sharedVideoData.user,
               caption: sharedVideoData.caption || sharedVideoData.title || '',
+              heading: sharedVideoData.heading || '', // `## Title` (utils/shortTitle.js)
+              storyExpiresAt: sharedVideoData.storyExpiresAt || null, // 24h story
               audio: soundLabel(sharedVideoData.sound, sharedVideoData.user.username),
               albumArt: sharedVideoData.user.avatar,
               stats: sharedVideoData.stats,
@@ -1642,7 +1679,7 @@ const VideoShort = () => {
         // User-specific feed mode: skip preloading, fetch directly from user endpoint
         if (feedUser) {
           setLoading(true);
-          const data = await fetchUserShortsWithDetails(feedUser, 1, 20);
+          const data = await fetchUserShortsWithDetails(feedUser, 1, 20, false, { story: storyMode });
           if (data.success) {
             const formattedVideos = await dropAiShorts(formatShorts(data.shorts), { hide: useAppStore.getState().hideAi });
             await applySharedVideoLogic(formattedVideos, data);
@@ -1696,7 +1733,7 @@ const VideoShort = () => {
 
     fetchShorts();
     // `shortsFeedMode` is a dep so flipping Discover ⇄ My interests refetches page 1.
-  }, [user, incubationHandle, feedUser, shortsFeedMode, getSharedVideoFromUrl, updateUrlWithCurrentVideo]);
+  }, [user, incubationHandle, feedUser, storyMode, shortsFeedMode, getSharedVideoFromUrl, updateUrlWithCurrentVideo]);
 
   /* ---------- HANDLE IN-PAGE NAVIGATION TO A SHORT ---------- */
   // When location.search changes (e.g. clicking "View parent reaction"),
@@ -1795,6 +1832,8 @@ const VideoShort = () => {
               hivePermlink: shortData.hivePermlink,
               user: shortData.user,
               caption: shortData.caption || shortData.title || '',
+              heading: shortData.heading || '', // `## Title` (utils/shortTitle.js)
+              storyExpiresAt: shortData.storyExpiresAt || null, // 24h story
               audio: soundLabel(shortData.sound, shortData.user.username),
               albumArt: shortData.user.avatar,
               stats: shortData.stats,
@@ -1845,6 +1884,8 @@ const VideoShort = () => {
           hivePermlink: shortData.hivePermlink,
           user: shortData.user,
           caption: shortData.caption || shortData.title || '',
+          heading: shortData.heading || '', // `## Title` (utils/shortTitle.js)
+          storyExpiresAt: shortData.storyExpiresAt || null, // 24h story
           audio: soundLabel(shortData.sound, shortData.user.username),
           albumArt: shortData.user.avatar,
           stats: shortData.stats,
@@ -1884,7 +1925,7 @@ const VideoShort = () => {
 
     try {
       const data = feedUserRef.current
-        ? await fetchUserShortsWithDetails(feedUserRef.current, nextPage, SHORTS_PAGE_SIZE)
+        ? await fetchUserShortsWithDetails(feedUserRef.current, nextPage, SHORTS_PAGE_SIZE, false, { story: storyModeRef.current })
         : await hiveApi.fetchShortsWithDetails(nextPage, SHORTS_PAGE_SIZE, user);
 
       if (data.success) {
@@ -1903,6 +1944,8 @@ const VideoShort = () => {
             reputation: short.user.reputation ?? null,
           },
           caption: short.caption || short.title || '',
+          heading: short.heading || '', // `## Title` (utils/shortTitle.js)
+          storyExpiresAt: short.storyExpiresAt || null, // 24h story
           tags: short.tags || [],
           audio: soundLabel(short.sound, short.user.username),
           albumArt: short.user.avatar,
@@ -2026,6 +2069,14 @@ const VideoShort = () => {
   }, [showComments, currentIndex, videos, fetchComments]);
 
   const currentVideo = videos[currentIndex];
+  // 24h story: hours left for the badge, or expired (the screen instead of the video).
+  const storyMsLeft = currentVideo?.storyExpiresAt ? new Date(currentVideo.storyExpiresAt).getTime() - storyNow : null;
+  const storyExpired = storyMsLeft != null && storyMsLeft <= 0;
+  const storyHoursLeft = storyMsLeft > 0 ? Math.max(1, Math.ceil(storyMsLeft / 3600000)) : 0;
+  // A story that runs out while it is on screen stops playing.
+  useEffect(() => {
+    if (storyExpired && playerRef.current && !playerRef.current.destroyed) playerRef.current.pause();
+  }, [storyExpired]);
 
   // Warm the v2-tag lookup for the visible short so the vote dialog knows which
   // tag picker to draw the moment it opens (otherwise the wrong one flashes).
@@ -2331,7 +2382,7 @@ const VideoShort = () => {
     // Use shorts route with video parameter
     const shareUrl = `${window.location.origin}/shorts?v=${currentVideo.author}/${currentVideo.permlink}`;
     const shareData = {
-      title: currentVideo.caption || t('shorts.share.defaultTitle'),
+      title: currentVideo.heading || currentVideo.caption || t('shorts.share.defaultTitle'),
       text: t('shorts.share.text', { user: currentVideo.user.username }),
       url: shareUrl
     };
@@ -2397,10 +2448,21 @@ const VideoShort = () => {
     }
 
     try {
+      // A remix of a remix pays every earlier creator: refuse a chain with no room left
+      const { chain, blocked } = await checkRemix(
+        { author: currentVid.author, permlink: currentVid.hivePermlink || currentVid.permlink, short: currentVid.permlink },
+        { user, isPremium },
+      );
+      if (blocked) {
+        toast.info(remixBlockedMessage(blocked, t));
+        return;
+      }
+
       const source = await sdkApiRef.current.fetchSource(currentVid.author, currentVid.permlink);
       const directUrl = source?.url;
 
       if (directUrl) {
+        setEditorRemixChain(chain);
         setEditorVideoUrl(directUrl);
         setEditorVideoName(`${currentVid.author} - ${currentVid.caption || currentVid.permlink}`);
         setEditorOriginalAuthor(currentVid.author);
@@ -2415,7 +2477,7 @@ const VideoShort = () => {
       console.error('[VideoShort] Remix URL resolve failed:', err);
       toast.error(t('shorts.remix.loadFailed'));
     }
-  }, [videos, currentIndex, t]);
+  }, [videos, currentIndex, t, user, isPremium]);
 
   // Close remix dropdown on click outside
   useEffect(() => {
@@ -3006,9 +3068,9 @@ const VideoShort = () => {
       }
     });
 
-    // Load the first video
+    // Load the first video (not an expired story: its screen stands in for it)
     const currentVid = videosRef.current[currentIndexRef.current];
-    if (currentVid) {
+    if (currentVid && !isExpiredStory(currentVid)) {
       pendingPlayRef.current = currentVid.id;
       const cachedSource = prefetchedSourcesRef.current.get(currentVid.id);
       if (cachedSource) {
@@ -3211,8 +3273,8 @@ const VideoShort = () => {
           /shorts so it doesn't fight us for the <title> tag). */}
       <Helmet>
         <title>
-          {currentVideo?.title
-            ? `3S | ${currentVideo.title}`
+          {(currentVideo?.heading || currentVideo?.title)
+            ? `3S | ${currentVideo.heading || currentVideo.title}`
             : currentVideo?.author
               ? t('shorts.pageTitle.byAuthor', { author: currentVideo.author })
               : t('shorts.pageTitle.default')}
@@ -3324,8 +3386,24 @@ const VideoShort = () => {
           {/* Only when there is nothing else to look at. With the short's own
               thumbnail painted underneath (see the poster above), a second
               "Loading shorts..." over it is just the same wait announced twice. */}
-          {showInitialLoadingOverlay && !currentVideo?.thumbnailUrl && (
+          {showInitialLoadingOverlay && !currentVideo?.thumbnailUrl && !storyExpired && (
             <ShortsLoadingScreen overlay />
+          )}
+
+          {/* A 24h story past its time: said here instead of playing it. Above the
+              gesture layer, but click-through except for its button, so swiping on
+              to the next short still works. */}
+          {storyExpired && (
+            <div className="storyExpiredScreen">
+              <div className="storyExpiredRing" aria-hidden="true">0<small>h</small></div>
+              <p className="storyExpiredTitle">{t('shorts.storyExpired.title')}</p>
+              <p className="storyExpiredBody">{t('shorts.storyExpired.body')}</p>
+              {(currentIndex < videos.length - 1 || hasMore) && (
+                <button type="button" className="storyExpiredNext" onClick={(e) => { e.stopPropagation(); handleNext(); }}>
+                  {t('shorts.storyExpired.next')}
+                </button>
+              )}
+            </div>
           )}
 
           {/* Chain preload videos are prefetched via API + manifest only (no <video> elements) */}
@@ -3780,8 +3858,30 @@ const VideoShort = () => {
                   <MdFlag size={14} />
                 </button>
               )}
+              {/* A live 24h story: what it is and how long it stays. */}
+              {storyHoursLeft > 0 && (
+                <span className="shortsStoryBadge">
+                  {t('nav.notifications.stories.type')} · {t('nav.notifications.stories.hoursLeft', { count: storyHoursLeft })}
+                </span>
+              )}
+              {/* The poster's own live story: who saw it, and keeping it as a short. */}
+              {storyHoursLeft > 0 && user && currentVideo.author === user && currentVideo.hivePermlink && (
+                <StoryOwnerTools
+                  author={currentVideo.author}
+                  hivePermlink={currentVideo.hivePermlink}
+                  onKept={() => {
+                    // Now an ordinary short: the badge and these tools go, it stays.
+                    const kept = currentVideo;
+                    setVideos((list) => list.map((v) => (v === kept ? { ...v, storyExpiresAt: null } : v)));
+                  }}
+                />
+              )}
+              {/* The creator's `## Title` (utils/shortTitle.js), above the caption. */}
+              {currentVideo.heading && <p className="captionTitle">{currentVideo.heading}</p>}
               <p className="captionText">
-                {renderCaption(translatedCaption || currentVideo.caption)}
+                {/* A short with a title and no description falls back to the title as
+                    its caption; don't say it twice. */}
+                {renderCaption(translatedCaption || (currentVideo.caption !== currentVideo.heading ? currentVideo.caption : ''))}
                 {!captionExpanded && currentVideo.mantecurated && (
                   <span className="shortsCuratedBadge shortsCuratedBadge--inline" title={t('shorts.caption.curatedBy')} onClick={(e) => { e.stopPropagation(); navigate('/t/mantecurated'); }}>
                     <img src={mantequillaLogo} alt="" />
@@ -4019,8 +4119,7 @@ const VideoShort = () => {
           onTouchEnd={handleCommentsDragEnd}
         />
 
-        <div className="commentsHeader">
-          <span className="commentsTitle">{t('shorts.comments.title')}</span>
+        <ModalHeader className="commentsHeader" title={t('shorts.comments.title')} onClose={handleToggleComments}>
           <span className="commentsCount">{currentVideo.stats.comments}</span>
           <select
             className="commentsSort"
@@ -4032,12 +4131,7 @@ const VideoShort = () => {
             <option value="oldest">{t('comments.section.sortOldest')}</option>
             <option value="popular">{t('comments.section.sortPopular')}</option>
           </select>
-          <div className="commentsHeaderActions">
-            <button className="headerBtn" onClick={handleToggleComments}>
-              <X size={20} />
-            </button>
-          </div>
-        </div>
+        </ModalHeader>
 
         <div className="commentsList">
           {commentsLoading ? (
@@ -4165,6 +4259,7 @@ const VideoShort = () => {
         originalAuthor={editorOriginalAuthor}
         originalPermlink={editorOriginalPermlink}
         originalShortPermlink={editorOriginalShortPermlink}
+        remixChain={editorRemixChain}
       />
 
       {/* Mobile-only quick comment bar at the bottom (replaces the app nav bar

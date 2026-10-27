@@ -10,7 +10,8 @@
     "backHome": "হোমে ফিরে যান",
     "howWasStream": "আপনার স্ট্রিম কেমন হলো?",
     "connecting": "OpenPods-এ কানেক্ট হচ্ছে…",
-    "authenticating": "OpenPods-এ যাচাই করা হচ্ছে…"
+    "authenticating": "OpenPods-এ যাচাই করা হচ্ছে…",
+    "postStoryAboutIt": "এ নিয়ে একটি স্টোরি পোস্ট করুন"
   },
   "strip": {
     "liveNow_one": "এখন <n>{{count}}</n>টি OpenPod লাইভ",

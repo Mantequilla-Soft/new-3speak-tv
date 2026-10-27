@@ -3,7 +3,7 @@ import { createPortal } from 'react-dom';
 import { useTranslation, Trans } from 'react-i18next';
 import './UpvoteTooltip.scss';
 import { useAppStore } from '../../lib/store';
-import { X, ChevronUp } from 'lucide-react';
+import { ChevronUp } from 'lucide-react';
 import { toastIn } from '../../utils/toast';
 import { getUersContent, getVotePower, getDynamicProps, votingPower, accountVestingShares, calculateVoteRshares } from '../../utils/hiveUtils';
 import { TailChase } from 'ldrs/react';
@@ -15,6 +15,7 @@ import { recordViewerTag, getViewerTags, getMyViewerTag } from '../../utils/view
 import { getVideoTagsV2, getCachedTagsV2, getTagLabel, getCategoryOf } from '../../utils/tagsV2';
 import { getSavedVoteWeight, saveVoteWeight } from '../../utils/voteWeight';
 import TagsV2Picker from './TagsV2Picker';
+import ModalHeader from '../ModalHeader/ModalHeader';
 
 // Every toast from this module is headed "Vote"; the message becomes the
 // line under it. See utils/toast.js.
@@ -478,23 +479,27 @@ const CommentVoteTooltip = ({
             onClick={(e) => e.stopPropagation()}
             onMouseDown={(e) => e.stopPropagation()}
           >
-            <button
-              className="vote-popup-close"
-              onClick={() => {
-                if (!isLoading) {
-                  setShowTooltip(false);
-                  setActiveTooltipPermlink?.(null);
-                }
+            {/* The weight span stays mounted while "just tag" hides it, so the
+                slider's direct DOM writes to labelRef survive the toggle. */}
+            <ModalHeader
+              className="vote-popup-header"
+              title={tagOnlyMode ? t('engagement.vote.votingClosed') : (
+                <>
+                  <span ref={labelRef} style={justTag ? { display: 'none' } : undefined}>
+                    {t('engagement.vote.weight', { weight: parentWeight })}
+                  </span>
+                  {justTag && t('engagement.vote.tagThisVideo')}
+                </>
+              )}
+              onClose={isLoading ? undefined : () => {
+                setShowTooltip(false);
+                setActiveTooltipPermlink?.(null);
               }}
-              disabled={isLoading}
-            >
-              <X size={18} />
-            </button>
+            />
 
             {tagOnlyMode ? (
               // ── Payout window closed: no voting, tag-only (one-shot) ──
               <>
-                <p className="vote-popup-label">{t('engagement.vote.votingClosed')}</p>
                 {myExistingTag === undefined ? (
                   <div style={{ display: 'flex', justifyContent: 'center' }}>
                     <Orbit size="24" speed="1.5" color="red" />
@@ -532,10 +537,6 @@ const CommentVoteTooltip = ({
                 {/* Vote-weight UI — kept mounted (so the slider effect stays intact)
                     but hidden when "just tag" is on, since there's no vote then. */}
                 <div style={justTag ? { display: 'none' } : undefined}>
-                  <p className="vote-popup-label" ref={labelRef}>
-                    {t('engagement.vote.weight', { weight: parentWeight })}
-                  </p>
-
                   {/* Container for custom div-based slider — no <input> at all */}
                   <div ref={sliderContainerRef} />
 

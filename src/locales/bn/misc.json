@@ -25,7 +25,9 @@
       "boosts_received": "পাওয়া বুস্ট",
       "boost_amount_received": "পাওয়া পরিমাণ",
       "boosts_given": "দেওয়া বুস্ট",
-      "boost_amount_given": "দেওয়া পরিমাণ"
+      "boost_amount_given": "দেওয়া পরিমাণ",
+      "story_uploads": "স্টোরি",
+      "story_streak": "স্টোরি স্ট্রিক"
     },
     "metricsInSentence": {
       "video_uploads": "ভিডিও",
@@ -40,7 +42,9 @@
       "boosts_received": "পাওয়া বুস্ট",
       "boost_amount_received": "পাওয়া পরিমাণ",
       "boosts_given": "দেওয়া বুস্ট",
-      "boost_amount_given": "দেওয়া পরিমাণ"
+      "boost_amount_given": "দেওয়া পরিমাণ",
+      "story_uploads": "স্টোরি",
+      "story_streak": "স্টোরি স্ট্রিক"
     },
     "blurbs": {
       "video_uploads": "আপলোড করা ভিডিও",
@@ -55,7 +59,9 @@
       "boosts_received": "তাদের স্ট্রিমে পাঠানো বুস্ট",
       "boost_amount_received": "পাওয়া বুস্টের মোট পরিমাণ",
       "boosts_given": "অন্য স্ট্রিমারদের পাঠানো বুস্ট",
-      "boost_amount_given": "দেওয়া বুস্টের মোট পরিমাণ"
+      "boost_amount_given": "দেওয়া বুস্টের মোট পরিমাণ",
+      "story_uploads": "পোস্ট করা স্টোরি",
+      "story_streak": "টানা সবচেয়ে বেশি দিন স্টোরি"
     },
     "blurbsInSentence": {
       "video_uploads": "আপলোড করা ভিডিও",
@@ -70,22 +76,32 @@
       "boosts_received": "তাদের স্ট্রিমে পাঠানো বুস্ট",
       "boost_amount_received": "পাওয়া বুস্টের মোট পরিমাণ",
       "boosts_given": "অন্য স্ট্রিমারদের পাঠানো বুস্ট",
-      "boost_amount_given": "দেওয়া বুস্টের মোট পরিমাণ"
+      "boost_amount_given": "দেওয়া বুস্টের মোট পরিমাণ",
+      "story_uploads": "পোস্ট করা স্টোরি",
+      "story_streak": "টানা সবচেয়ে বেশি দিন স্টোরি"
     },
     "groups": {
       "video": "ভিডিও",
-      "streaming": "স্ট্রিমিং"
+      "streaming": "স্ট্রিমিং",
+      "stories": "স্টোরি"
     },
     "badgeNouns": {
       "video_uploads": "ভিডিও",
       "short_uploads": "শর্টস",
       "video_watch_secs": "দেখা",
       "short_watch_secs": "শর্টস দেখা",
-      "tags_given": "ট্যাগার"
+      "tags_given": "ট্যাগার",
+      "story_streak": "স্ট্রিক"
     },
     "badgeLabel": "{{tier}} {{noun}}",
     "badgeTitleAllTime": "সব সময়ের হিসেবে {{what}}-এ #{{rank}} স্থান",
-    "badgeTitleWindow": "গত {{window}}-এ {{what}}-এ #{{rank}} স্থান"
+    "badgeTitleWindow": "গত {{window}}-এ {{what}}-এ #{{rank}} স্থান",
+    "sub": {
+      "count": "সংখ্যা",
+      "watchTime": "দেখার সময়",
+      "streak": "স্ট্রিক"
+    },
+    "timeRange": "সময়সীমা"
   },
   "duration": {
     "hoursMinutes": "{{h}} ঘ {{m}} মি",
@@ -159,15 +175,28 @@
   "uploadLinks": {
     "regularVideo": "সাধারণ ভিডিও",
     "verticalShort": "ভার্টিক্যাল শর্ট",
+    "story": "স্টোরি (২৪ ঘণ্টা)",
     "musicAudio": "গান / অডিও",
     "groupChat": "গ্রুপ চ্যাট",
     "communitySnap": "কমিউনিটি Snap",
     "shortsEditor": "শর্টস এডিটর",
     "goLiveNow": "লাইভে যান!",
+    "playlist": "প্লেলিস্ট",
     "headings": {
       "upload": "আপলোড",
       "live": "লাইভ",
       "others": "অন্যান্য"
+    },
+    "subtitles": {
+      "regularVideo": "আপনার চ্যানেলের জন্য সাধারণ ভিডিও",
+      "verticalShort": "Shorts ফিডের জন্য ভার্টিক্যাল ক্লিপ",
+      "shortsEditor": "ব্রাউজারে শর্ট রেকর্ড ও এডিট করুন",
+      "story": "২৪ ঘণ্টা দেখা যায় এমন ছোট ক্লিপ",
+      "musicAudio": "গান, পডকাস্ট ও অন্যান্য অডিও",
+      "groupChat": "অতিথিদের নিয়ে হোস্ট করা লাইভ রুম",
+      "goLiveNow": "আপনার ফলোয়ারদের জন্য লাইভ স্ট্রিম",
+      "communitySnap": "কমিউনিটি ট্যাবে দ্রুত পোস্ট",
+      "playlist": "ভিডিওগুলো শেয়ারযোগ্য তালিকায় সাজান"
     }
   },
   "chat": {

@@ -70,7 +70,8 @@
       "invalidAccount": "Nom d'utilisateur ou ID de communauté invalide.",
       "cannotIncrease": "Impossible de dépasser les {{percent}} % restants",
       "pendingRow": "@{{account}} n'a pas encore été ajouté — cliquez sur + pour l'ajouter, ou videz le champ.",
-      "atLeastOne": "Le pourcentage de récompense doit être d'au moins 1 %"
+      "atLeastOne": "Le pourcentage de récompense doit être d'au moins 1 %",
+      "maxCount": "Hive autorise au maximum {{max}} bénéficiaires par publication."
     },
     "title": "Bénéficiaires",
     "intro": "Ajoutez un utilisateur qui recevra automatiquement une partie des récompenses de cette publication.",
@@ -86,7 +87,8 @@
   },
   "qr": {
     "scan": "Scannez ce QR code dans Hive Keychain :",
-    "click": "Cliquez sur le QR code pour l'ouvrir dans l'app Keychain"
+    "click": "Cliquez sur le QR code pour l'ouvrir dans l'app Keychain",
+    "title": "Se connecter avec Keychain"
   },
   "editVideoHint": {
     "title": "Modifiez n'importe laquelle de vos vidéos",
@@ -115,7 +117,12 @@
     "preparing": "Préparation de la vidéo pour la mise en ligne...",
     "renderUnavailable": "Le service de rendu n'est pas encore disponible. Les données de la timeline ont été envoyées dans la console.",
     "backToEditor": "Retour à l'éditeur",
-    "postError": "Impossible de préparer la vidéo pour la mise en ligne. Essayez plutôt de la télécharger."
+    "postError": "Impossible de préparer la vidéo pour la mise en ligne. Essayez plutôt de la télécharger.",
+    "postAs": "Publier en tant que",
+    "postAsStory": "Story",
+    "postAsStoryHint": "24 heures, en tête du fil Shorts",
+    "postAsShort": "Short",
+    "postAsShortHint": "Reste sur votre chaîne"
   },
   "profile": {
     "mustLogin": "Vous devez d'abord vous connecter",

@@ -7,7 +7,9 @@
     "default": "3S | Shorts"
   },
   "stories": {
-    "you": "Bạn"
+    "you": "Bạn",
+    "storyTitle": "Tin của {{user}}",
+    "streakTitle_other": "Chuỗi đăng tin {{count}} ngày"
   },
   "errors": {
     "votingUnavailable": "Không thể vote cho bài đăng này",
@@ -71,7 +73,9 @@
   },
   "remix": {
     "noUrl": "Không thể xác định URL video để remix",
-    "loadFailed": "Không tải được video để remix"
+    "loadFailed": "Không tải được video để remix",
+    "chainFull": "Video này đã được tạo từ {{max}} video trước đó nên không thể remix thêm nữa.",
+    "chainNoSlots": "Chuỗi remix này đã chia thưởng cho quá nhiều nhà sáng tạo nên không còn chỗ trên Hive cho một bản remix mới. Với 3Speak Pro, bạn vẫn có thể remix."
   },
   "watchLater": {
     "loginRequired": "Đăng nhập để lưu Shorts",
@@ -103,5 +107,24 @@
     "replyPlaceholder": "Viết phản hồi...",
     "viewReplies_other": "Xem {{count}} phản hồi",
     "hideReplies_other": "Ẩn {{count}} phản hồi"
+  },
+  "storyExpired": {
+    "title": "Tin này đã hết hạn",
+    "body": "Tin trên 3Speak hiển thị trong 24 giờ.",
+    "next": "Short tiếp theo"
+  },
+  "storyTools": {
+    "seenBy_other": "{{count}} người đã xem",
+    "seenTitle": "Người đã xem",
+    "seenNote": "Người xem đã đăng nhập và bật lịch sử xem.",
+    "seenEmpty": "Chưa có ai xem.",
+    "keep": "Giữ thành Shorts",
+    "keepHint": "Vẫn ở trên kênh của bạn sau 24 giờ",
+    "keepConfirm": "Giữ lại vĩnh viễn?",
+    "keepYes": "Giữ lại",
+    "keeping": "Đang giữ…",
+    "kept": "Đã giữ. Tin sẽ ở lại kênh của bạn dưới dạng Shorts.",
+    "keepFailed": "Không thể giữ tin này.",
+    "keepWalletPrompt": "Ký để giữ tin của bạn thành Shorts"
   }
 }

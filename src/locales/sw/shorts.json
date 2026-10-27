@@ -7,7 +7,10 @@
     "default": "3S | Shorts"
   },
   "stories": {
-    "you": "Wewe"
+    "you": "Wewe",
+    "storyTitle": "Hadithi ya {{user}}",
+    "streakTitle_one": "Mfululizo wa hadithi wa siku {{count}}",
+    "streakTitle_other": "Mfululizo wa hadithi wa siku {{count}}"
   },
   "errors": {
     "votingUnavailable": "Kupiga kura hakupatikani kwa chapisho hili",
@@ -71,7 +74,9 @@
   },
   "remix": {
     "noUrl": "Imeshindwa kupata URL ya video kwa ajili ya remix",
-    "loadFailed": "Imeshindwa kupakia video kwa ajili ya remix"
+    "loadFailed": "Imeshindwa kupakia video kwa ajili ya remix",
+    "chainFull": "Video hii tayari imejengwa juu ya video {{max}} za awali, kwa hiyo haiwezi kufanyiwa remix tena.",
+    "chainNoSlots": "Mnyororo huu wa remix tayari unawalipa watayarishi wengi kiasi kwamba hakuna nafasi kwenye Hive kwa remix nyingine. Ukiwa na 3Speak Pro bado unaweza kuifanyia remix."
   },
   "watchLater": {
     "loginRequired": "Ingia ili kuhifadhi Shorts",
@@ -105,5 +110,25 @@
     "viewReplies_other": "Tazama majibu {{count}}",
     "hideReplies_one": "Ficha jibu {{count}}",
     "hideReplies_other": "Ficha majibu {{count}}"
+  },
+  "storyExpired": {
+    "title": "Hadithi hii imeisha muda",
+    "body": "Hadithi kwenye 3Speak huonekana kwa saa 24.",
+    "next": "Short inayofuata"
+  },
+  "storyTools": {
+    "seenBy_one": "Imeonwa na {{count}}",
+    "seenBy_other": "Imeonwa na {{count}}",
+    "seenTitle": "Walioiona",
+    "seenNote": "Watazamaji walioingia ambao wameacha historia ya kutazama ikiwa imewashwa.",
+    "seenEmpty": "Bado hakuna aliyeiona.",
+    "keep": "Ibakize kama short",
+    "keepHint": "Inabaki kwenye chaneli yako baada ya saa 24",
+    "keepConfirm": "Ibakize milele?",
+    "keepYes": "Ibakize",
+    "keeping": "Inabakizwa…",
+    "kept": "Imebakizwa. Itabaki kwenye chaneli yako kama short.",
+    "keepFailed": "Imeshindwa kubakiza hadithi hii.",
+    "keepWalletPrompt": "Tia sahihi ili kubakiza hadithi yako kama short"
   }
 }

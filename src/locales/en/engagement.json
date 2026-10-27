@@ -16,6 +16,7 @@
     "availableBalance": "Available balance: {{currency}}",
     "memoLabel": "Memo (optional):",
     "memoPlaceholder": "e.g. Thanks for this amazing content!",
+    "memoLinkNote": "This link is added to the memo: {{link}}",
     "send": "Send Tip"
   },
   "cardMenu": {

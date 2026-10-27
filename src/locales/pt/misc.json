@@ -25,7 +25,9 @@
       "boosts_received": "Boosts recebidos",
       "boost_amount_received": "Valor recebido",
       "boosts_given": "Boosts dados",
-      "boost_amount_given": "Valor dado"
+      "boost_amount_given": "Valor dado",
+      "story_uploads": "Stories",
+      "story_streak": "Sequência de stories"
     },
     "metricsInSentence": {
       "video_uploads": "vídeos",
@@ -40,7 +42,9 @@
       "boosts_received": "boosts recebidos",
       "boost_amount_received": "valor recebido",
       "boosts_given": "boosts dados",
-      "boost_amount_given": "valor dado"
+      "boost_amount_given": "valor dado",
+      "story_uploads": "stories",
+      "story_streak": "sequência de stories"
     },
     "blurbs": {
       "video_uploads": "Vídeos enviados",
@@ -55,7 +59,9 @@
       "boosts_received": "Boosts enviados às suas transmissões",
       "boost_amount_received": "Soma dos boosts recebidos",
       "boosts_given": "Boosts enviados a outros streamers",
-      "boost_amount_given": "Soma dos boosts dados"
+      "boost_amount_given": "Soma dos boosts dados",
+      "story_uploads": "Stories publicados",
+      "story_streak": "Mais dias seguidos com um story"
     },
     "blurbsInSentence": {
       "video_uploads": "vídeos enviados",
@@ -70,22 +76,32 @@
       "boosts_received": "boosts enviados às suas transmissões",
       "boost_amount_received": "soma dos boosts recebidos",
       "boosts_given": "boosts enviados a outros streamers",
-      "boost_amount_given": "soma dos boosts dados"
+      "boost_amount_given": "soma dos boosts dados",
+      "story_uploads": "stories publicados",
+      "story_streak": "mais dias seguidos com um story"
     },
     "groups": {
       "video": "Vídeo",
-      "streaming": "Transmissão"
+      "streaming": "Transmissão",
+      "stories": "Stories"
     },
     "badgeNouns": {
       "video_uploads": "Vídeos",
       "short_uploads": "Shorts",
       "video_watch_secs": "Assistidos",
       "short_watch_secs": "Shorts assistidos",
-      "tags_given": "Tagueador"
+      "tags_given": "Tagueador",
+      "story_streak": "Sequência"
     },
     "badgeLabel": "{{noun}} {{tier}}",
     "badgeTitleAllTime": "#{{rank}} em {{what}} em todo o período",
-    "badgeTitleWindow": "#{{rank}} em {{what}} nos últimos {{window}}"
+    "badgeTitleWindow": "#{{rank}} em {{what}} nos últimos {{window}}",
+    "sub": {
+      "count": "Quantidade",
+      "watchTime": "Tempo assistido",
+      "streak": "Sequência"
+    },
+    "timeRange": "Período"
   },
   "duration": {
     "hoursMinutes": "{{h}}h {{m}}min",
@@ -159,15 +175,28 @@
   "uploadLinks": {
     "regularVideo": "Vídeo normal",
     "verticalShort": "Short vertical",
+    "story": "Story (24h)",
     "musicAudio": "Música / Áudio",
     "groupChat": "Chat em grupo",
     "communitySnap": "Snap na comunidade",
     "shortsEditor": "Editor de Shorts",
     "goLiveNow": "Entrar ao vivo!",
+    "playlist": "Playlist",
     "headings": {
       "upload": "Enviar",
       "live": "Ao vivo",
       "others": "Outros"
+    },
+    "subtitles": {
+      "regularVideo": "Vídeo clássico para o seu canal",
+      "verticalShort": "Clipe vertical para o feed de Shorts",
+      "shortsEditor": "Grave e edite um short no navegador",
+      "story": "Clipe curto que fica no ar por 24 horas",
+      "musicAudio": "Músicas, podcasts e outros áudios",
+      "groupChat": "Sala ao vivo que você apresenta com convidados",
+      "goLiveNow": "Transmita ao vivo para seus seguidores",
+      "communitySnap": "Post rápido na sua aba de comunidade",
+      "playlist": "Junte vídeos numa lista para compartilhar"
     }
   },
   "chat": {

@@ -11,9 +11,15 @@
 
   .lb-header {
     display: flex;
+    flex-wrap: wrap;
     align-items: center;
     gap: 14px;
     margin-bottom: 18px;
+
+    .lb-header-text {
+      flex: 1 1 220px;
+      min-width: 0;
+    }
 
     .lb-header-icon {
       flex-shrink: 0;
@@ -74,37 +80,75 @@
     }
   }
 
-  .lb-metrics {
-    margin-bottom: 10px;
-    // 13 metrics across 3 groups: wrap instead of the shared horizontal scroll.
-    flex-wrap: wrap;
-    overflow-x: visible;
-    align-items: center;
-    row-gap: 10px;
-  }
-  .lb-metric-group {
+  // Time range, top right of the header: one compact segmented control. On a
+  // phone it drops under the title, still right-aligned.
+  .lb-window-switch {
     display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    &:not(:last-child) {
-      padding-right: 12px;
-      border-right: 1px solid var(--border-light, rgba(150, 150, 150, 0.25));
+    margin-left: auto;
+    padding: 3px;
+    gap: 2px;
+    border: 1px solid var(--border-light, rgba(150, 150, 150, 0.25));
+    border-radius: 999px;
+    background: var(--bg-secondary);
+
+    button {
+      padding: 5px 12px;
+      border: none;
+      border-radius: 999px;
+      background: transparent;
+      color: var(--text-secondary);
+      font-size: 12.5px;
+      font-weight: 600;
+      white-space: nowrap;
+      cursor: pointer;
+
+      &:hover { color: var(--text-primary); }
+
+      &.active {
+        background: var(--text-primary);
+        color: var(--bg-secondary);
+      }
+    }
+
+    @include mix.respond(phone) {
+      button { padding: 5px 10px; font-size: 12px; }
     }
   }
-  .lb-metric-group-label {
-    font-size: 10.5px;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.04em;
-    color: var(--text-secondary);
-    opacity: 0.7;
-    flex-shrink: 0;
+
+  // The board type: Videos / Shorts / Stories / Tags.
+  .lb-types {
+    margin-bottom: 12px;
+
+    .lb-tab {
+      padding: 8px 18px;
+      font-size: 14px;
+    }
   }
 
-  // Normally the topic row closes the filter block; with Tags selected it's
-  // hidden, so the window row has to carry the gap instead.
-  .lb-windows.last-filter {
-    margin-bottom: 16px;
+  // The measure inside the type (Count / Watch time / Streak): smaller and
+  // underlined, so it reads as belonging to the chip above.
+  .lb-subs {
+    display: flex;
+    gap: 18px;
+    margin: 0 0 16px 4px;
+
+    button {
+      padding: 2px 0 4px;
+      border: none;
+      border-bottom: 2px solid transparent;
+      background: none;
+      color: var(--text-secondary);
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+
+      &:hover { color: var(--text-primary); }
+
+      &.active {
+        color: var(--accent-primary, #e53935);
+        border-bottom-color: var(--accent-primary, #e53935);
+      }
+    }
   }
 
   // All 16 topics are visible at once on desktop — they wrap onto as many rows

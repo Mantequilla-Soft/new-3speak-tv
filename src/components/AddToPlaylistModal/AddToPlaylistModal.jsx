@@ -8,6 +8,7 @@ import { addToPlaylist, createPlaylistAndAdd } from '../../utils/playlistOperati
 import { useAppStore } from '../../lib/store';
 import { useTranslation } from 'react-i18next';
 import { formatDate as formatLocaleDate } from '../../i18n';
+import ModalHeader from '../ModalHeader/ModalHeader';
 import './AddToPlaylistModal.scss';
 
 // Every toast from this module is headed "Playlist"; the message becomes the
@@ -162,14 +163,11 @@ function AddToPlaylistModal({ isOpen, onClose, author, permlink, videoTitle }) {
   return createPortal(
     <div className="add-to-playlist-overlay" onClick={handleOverlayClick} onMouseDown={(e) => e.stopPropagation()}>
       <div className="add-to-playlist-modal" onClick={(e) => { e.preventDefault(); e.stopPropagation(); }}>
-        <div className="modal-header">
-          <h3>
-            <MdPlaylistAdd /> {t('playlists.modal.title')}
-          </h3>
-          <button className="close-btn" onClick={(e) => { e.preventDefault(); e.stopPropagation(); onClose(); }}>
-            <MdClose />
-          </button>
-        </div>
+        <ModalHeader
+          className="atp-header"
+          title={t('playlists.modal.title')}
+          onClose={(e) => { e.preventDefault(); e.stopPropagation(); onClose(); }}
+        />
 
         <div className="modal-content">
           {/* Watch Later - Always shown first */}
