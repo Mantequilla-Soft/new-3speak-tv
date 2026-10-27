@@ -172,6 +172,9 @@ export default function EditVideoModal({ isOpen, onClose, author, permlink, onSa
   const [isNsfw, setIsNsfw] = useState(false);
   const [reusable, setReusable] = useState(true);
   const [promotedUntil, setPromotedUntil] = useState(null);
+  // The checker doc's `short` flag: the watch page opens this modal without
+  // `isShort`, so a short edited from there is only known by its doc.
+  const [docShort, setDocShort] = useState(false);
   const [promoteOpen, setPromoteOpen] = useState(false);
   const initialListedRef = useRef(true);
   const initialNsfwRef = useRef(false);
@@ -318,6 +321,7 @@ export default function EditVideoModal({ isOpen, onClose, author, permlink, onSa
             setListed(isListed);
             setIsNsfw(nsfw);
             setPromotedUntil(doc.promotedUntil || null);
+            setDocShort(doc.short === true);
             initialListedRef.current = isListed;
             initialNsfwRef.current = nsfw;
             // Shorts store their thumbnail on the checker (not the video
@@ -377,6 +381,7 @@ export default function EditVideoModal({ isOpen, onClose, author, permlink, onSa
     setIsNsfw(false);
     setReusable(true);
     setPromotedUntil(null);
+    setDocShort(false);
     setPromoteOpen(false);
     setIsTrailer(false);
     setTrailerKnown(false);
@@ -1209,7 +1214,8 @@ export default function EditVideoModal({ isOpen, onClose, author, permlink, onSa
                 </div>
               </section>
 
-              {isOwner && accountAds.ads && (
+              {/* Shorts and stories never carry ads, so there is nothing to switch. */}
+              {isOwner && accountAds.ads && !isShort && !docShort && (
                 <section className="evm-group">
                   <h4 className="evm-group__title">{t('watch.edit.sections.ads')}</h4>
                   <div className="evm-toggle-row">

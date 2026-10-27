@@ -468,7 +468,8 @@ function EmbedDetails() {
                     </label>
                   </div>
                 )}
-                {accountAdsOn && (
+                {/* Shorts and stories never carry ads, so there is nothing to switch. */}
+                {accountAdsOn && !fromStories && (
                   <div className="beneficiary-wrap" onClick={() => setVideoAdsEnabled(!videoAdsEnabled)}>
                     <div className="wrap">
                       <span>{t('upload.details.ads.label')}<SettingInfo title={t('upload.details.ads.label')}>{t('upload.details.ads.info')}</SettingInfo></span>
@@ -484,7 +485,7 @@ function EmbedDetails() {
                     </label>
                   </div>
                 )}
-                {accountAdsOn && accountRollsOn && videoAdsEnabled && (
+                {accountAdsOn && accountRollsOn && videoAdsEnabled && !fromStories && (
                   <div className="beneficiary-wrap" onClick={() => setVideoRollsEnabled(!videoRollsEnabled)}>
                     <div className="wrap">
                       <span>{t('upload.details.rolls.label')}<SettingInfo title={t('upload.details.rolls.label')}>{t('upload.details.rolls.info')}</SettingInfo></span>
