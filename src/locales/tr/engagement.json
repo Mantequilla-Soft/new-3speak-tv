@@ -16,6 +16,7 @@
     "availableBalance": "Kullanılabilir bakiye: {{currency}}",
     "memoLabel": "Not (isteğe bağlı):",
     "memoPlaceholder": "örn. Bu harika içerik için teşekkürler!",
+    "memoLinkNote": "Bu bağlantı nota eklenir: {{link}}",
     "send": "Bahşiş Gönder"
   },
   "cardMenu": {

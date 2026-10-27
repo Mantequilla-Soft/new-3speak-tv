@@ -16,6 +16,7 @@
     "availableBalance": "可用余额：{{currency}}",
     "memoLabel": "备注（可选）：",
     "memoPlaceholder": "例如：感谢这么棒的内容！",
+    "memoLinkNote": "此链接会附加到备注中：{{link}}",
     "send": "打赏"
   },
   "cardMenu": {

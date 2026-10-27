@@ -16,6 +16,7 @@
     "availableBalance": "Saldo disponível: {{currency}}",
     "memoLabel": "Memo (opcional):",
     "memoPlaceholder": "ex.: Valeu por esse conteúdo incrível!",
+    "memoLinkNote": "Este link é adicionado ao memo: {{link}}",
     "send": "Enviar gorjeta"
   },
   "cardMenu": {

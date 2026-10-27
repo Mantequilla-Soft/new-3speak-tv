@@ -2111,6 +2111,7 @@ const PlayVideo = ({ videoDetails, author, permlink, mediaUnavailable = false, m
         <TipModal
           recipient={author}
           permlink={isLive ? undefined : permlink}
+          memoLink={isLive ? undefined : `https://3speak.tv/watch?v=${author}/${permlink}`}
           isOpen={isTipModalOpen}
           onClose={() => setIsTipModalOpen(false)}
         />
