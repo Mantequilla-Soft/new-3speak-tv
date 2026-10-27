@@ -181,10 +181,22 @@
     "communitySnap": "Community Snap",
     "shortsEditor": "Shorts Editor",
     "goLiveNow": "Mag-live na!",
+    "playlist": "Playlist",
     "headings": {
       "upload": "Upload",
       "live": "Live",
       "others": "Iba pa"
+    },
+    "subtitles": {
+      "regularVideo": "Klasikong video para sa channel mo",
+      "verticalShort": "Vertical na clip para sa Shorts feed",
+      "shortsEditor": "Mag-record at mag-edit ng short sa browser mo",
+      "story": "Maikling clip na nakikita sa loob ng 24 oras",
+      "musicAudio": "Mga kanta, podcast at iba pang audio",
+      "groupChat": "Live room na hino-host mo kasama ang mga bisita",
+      "goLiveNow": "Mag-stream nang live para sa mga follower mo",
+      "communitySnap": "Mabilis na post sa community tab mo",
+      "playlist": "Pagsamahin ang mga video sa listahang maibabahagi"
     }
   },
   "chat": {

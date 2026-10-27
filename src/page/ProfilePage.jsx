@@ -134,6 +134,14 @@ function ProfilePage() {
   // Bumped after a profile save so the header re-reads the bio from Hive.
   const [profileRefreshKey, setProfileRefreshKey] = useState(0);
 
+  // The Share menu's Playlist entry lands here with ?create=playlist: open the
+  // create modal, then drop the param so a reload doesn't reopen it.
+  useEffect(() => {
+    if (searchParams.get('create') !== 'playlist') return;
+    setShowCreateModal(true);
+    navigate('/profile?tab=playlists', { replace: true });
+  }, [searchParams, navigate]);
+
   // Fetch user's playlists (all - public and private)
   const { data: playlists = [], isLoading: playlistsLoading, refetch: refetchPlaylists } = useMyPlaylists();
 

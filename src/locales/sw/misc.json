@@ -181,10 +181,22 @@
     "communitySnap": "Snap ya jumuiya",
     "shortsEditor": "Kihariri cha Shorts",
     "goLiveNow": "Nenda mubashara!",
+    "playlist": "Orodha ya kucheza",
     "headings": {
       "upload": "Pakia",
       "live": "Mubashara",
       "others": "Nyingine"
+    },
+    "subtitles": {
+      "regularVideo": "Video ya kawaida kwa chaneli yako",
+      "verticalShort": "Klipu wima kwa mlisho wa Shorts",
+      "shortsEditor": "Rekodi na uhariri short kwenye kivinjari",
+      "story": "Klipu fupi inayokaa kwa saa 24",
+      "musicAudio": "Nyimbo, podikasti na sauti nyingine",
+      "groupChat": "Chumba mubashara unachoongoza na wageni",
+      "goLiveNow": "Tiririsha mubashara kwa wafuasi wako",
+      "communitySnap": "Chapisho la haraka kwenye kichupo cha jumuiya",
+      "playlist": "Kusanya video kwenye orodha ya kushiriki"
     }
   },
   "chat": {

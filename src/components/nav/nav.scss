@@ -23,6 +23,34 @@
   }
 }
 
+// Share menu rows, used by the desktop flyout and the mobile bottom sheet.
+@mixin nav-upload-items {
+  .nav-upload-flyout-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 16px;
+    color: var(--text-primary);
+    font-size: 14px;
+    font-weight: 500;
+    text-decoration: none;
+    white-space: nowrap;
+    cursor: pointer;
+    transition: background-color 0.15s ease;
+
+    .nav-upload-flyout-icon {
+      flex-shrink: 0;
+      width: 18px;
+      height: 18px;
+    }
+
+    &:hover {
+      background-color: var(--bg-hover, var(--sidebar-hover-bg));
+      color: var(--accent-primary);
+    }
+  }
+}
+
 .nav-container {
   display: flex;
   align-items: center;
@@ -445,7 +473,8 @@
         position: absolute;
         top: calc(100% + 6px);
         right: 0;
-        min-width: 170px;
+        width: 300px;
+        max-width: calc(100vw - 32px);
         background: var(--bg-secondary);
         border-radius: 8px;
         box-shadow: var(--shadow-lg, 0 4px 16px rgba(0, 0, 0, 0.2));
@@ -453,29 +482,7 @@
         padding: 6px 0;
         z-index: 100;
 
-        .nav-upload-flyout-item {
-          display: flex;
-          align-items: center;
-          gap: 10px;
-          padding: 10px 16px;
-          color: var(--text-primary);
-          font-size: 14px;
-          font-weight: 500;
-          text-decoration: none;
-          white-space: nowrap;
-          cursor: pointer;
-          transition: background-color 0.15s ease;
-
-          .nav-upload-flyout-icon {
-            width: 16px;
-            height: 16px;
-          }
-
-          &:hover {
-            background-color: var(--bg-hover, var(--sidebar-hover-bg));
-            color: var(--accent-primary);
-          }
-        }
+        @include nav-upload-items;
       }
 
       // Compact "+" wherever the bottom nav is shown. Placed AFTER .nav-upload-btn
@@ -780,4 +787,50 @@
 @keyframes nav-tabs-in {
   from { opacity: 0; transform: translateX(-6px); }
   to   { opacity: 1; transform: translateX(0); }
+}
+
+// Share menu on phone + tab: a bottom sheet, portalled to <body> (see
+// NavUploadDropdown). Above the bottom nav and ProfileNav (100000).
+.nav-upload-sheet-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 100001;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.5);
+  animation: nav-upload-sheet-fade 0.2s ease;
+}
+
+.nav-upload-sheet {
+  width: 100%;
+  max-width: 480px;
+  max-height: 88vh;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-light);
+  border-bottom: none;
+  border-radius: 16px 16px 0 0;
+  box-shadow: var(--shadow-lg, 0 -4px 16px rgba(0, 0, 0, 0.2));
+  padding: 6px 0 calc(10px + env(safe-area-inset-bottom, 0px));
+  animation: nav-upload-sheet-up 0.25s ease;
+
+  @include nav-upload-items;
+
+  // The sheet has no side padding of its own (rows run edge to edge).
+  .nav-upload-sheet-header {
+    padding: 10px 16px 12px;
+    margin-bottom: 4px;
+  }
+}
+
+@keyframes nav-upload-sheet-up {
+  from { transform: translateY(100%); }
+  to { transform: translateY(0); }
+}
+
+@keyframes nav-upload-sheet-fade {
+  from { opacity: 0; }
+  to { opacity: 1; }
 }

@@ -1,0 +1,47 @@
+// Shared modal header (see ModalHeader.jsx). Sits inside the dialog's own
+// padding; the bottom border is the divider between title and content.
+.app-modal-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding-bottom: 12px;
+  margin-bottom: 16px;
+  border-bottom: 1px solid var(--border-light, rgba(128, 128, 128, 0.25));
+  // Many dialog boxes centre their text; the header stays left-aligned.
+  text-align: left;
+
+  .app-modal-header-title {
+    flex: 1;
+    min-width: 0;
+    margin: 0;
+    font-size: 18px;
+    font-weight: 700;
+    line-height: 1.3;
+    color: var(--text-primary);
+    overflow-wrap: anywhere;
+  }
+
+  // Pulled into the corner a little so the X lines up with the dialog's edge
+  // rather than floating inside its padding.
+  .app-modal-header-close {
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    margin: -6px -8px -6px 0;
+    padding: 0;
+    border: none;
+    border-radius: 50%;
+    background: transparent;
+    color: var(--text-secondary, #8a8a8a);
+    cursor: pointer;
+    transition: background-color 0.15s ease, color 0.15s ease;
+
+    &:hover {
+      background: var(--bg-hover, rgba(128, 128, 128, 0.12));
+      color: var(--text-primary);
+    }
+  }
+}

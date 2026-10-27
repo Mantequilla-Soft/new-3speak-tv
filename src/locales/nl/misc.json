@@ -181,10 +181,22 @@
     "communitySnap": "Community-Snap",
     "shortsEditor": "Shorts-editor",
     "goLiveNow": "Ga live!",
+    "playlist": "Afspeellijst",
     "headings": {
       "upload": "Uploaden",
       "live": "Live",
       "others": "Overig"
+    },
+    "subtitles": {
+      "regularVideo": "Klassieke video voor je kanaal",
+      "verticalShort": "Verticale clip voor de Shorts-feed",
+      "shortsEditor": "Neem een short op en bewerk hem in je browser",
+      "story": "Korte clip die 24 uur zichtbaar blijft",
+      "musicAudio": "Nummers, podcasts en andere audio",
+      "groupChat": "Liveruimte die je host met gasten",
+      "goLiveNow": "Stream live voor je volgers",
+      "communitySnap": "Snel bericht op je community-tabblad",
+      "playlist": "Verzamel video's in een lijst om te delen"
     }
   },
   "chat": {

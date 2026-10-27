@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { IoCloudUploadSharp } from "react-icons/io5";
-import { Clapperboard, CircleDashed } from "lucide-react";
-import { MdGraphicEq, MdDesktopWindows, MdSmartphone, MdGroups } from "react-icons/md";
+import { Clapperboard } from "lucide-react";
+import { MdGraphicEq, MdDesktopWindows, MdSmartphone, MdGroups, MdAccessTime, MdPlaylistAdd } from "react-icons/md";
 import { BiCommentDetail } from "react-icons/bi";
 import ShortsIcon from "./icons/ShortsIcon";
 import { FEATURE_EDITOR, openpodsEnabledFor, storiesEnabledFor } from "../utils/config";
@@ -24,8 +24,19 @@ function pauseAllMedia() {
   });
 }
 
+// Label plus a one-line subtitle saying what the entry makes.
+function ItemText({ label, sub }) {
+  return (
+    <span className="share-menu-text">
+      <span className="share-menu-label">{label}</span>
+      <span className="share-menu-sub">{sub}</span>
+    </span>
+  );
+}
+
 export default function UploadLinks({ linkClass, iconClass = "icon", onClick }) {
   const { t } = useTranslation();
+  const text = (key) => <ItemText label={t(`misc.uploadLinks.${key}`)} sub={t(`misc.uploadLinks.subtitles.${key}`)} />;
   const navigate = useNavigate();
   const user = useAppStore((s) => s.user);
 
@@ -62,30 +73,34 @@ export default function UploadLinks({ linkClass, iconClass = "icon", onClick }) 
     action();
   };
 
-  // "Others" can be empty (no signed-in user, editor flag off), so its header
-  // only renders when there's something under it — a lone heading reads as a
-  // bug.
-  const hasOthers = !!user || FEATURE_EDITOR;
+  // "Others" is empty without a signed-in user, so its header only renders
+  // when there's something under it: a lone heading reads as a bug.
+  const hasOthers = !!user;
 
   return (
     <>
       <div className="share-menu-heading">{t('misc.uploadLinks.headings.upload')}</div>
       <Link to="/embed-studio" className={linkClass} title={t('misc.uploadLinks.regularVideo')} onClick={(e) => gatedGo(e, () => navigate('/embed-studio'))}>
-        <IoCloudUploadSharp className={iconClass} /> <span>{t('misc.uploadLinks.regularVideo')}</span>
+        <IoCloudUploadSharp className={iconClass} /> {text('regularVideo')}
       </Link>
       <Link to="/embed-studio?from=shorts" className={linkClass} title={t('misc.uploadLinks.verticalShort')} onClick={(e) => gatedGo(e, () => navigate('/embed-studio?from=shorts'))}>
-        <ShortsIcon className={iconClass} outlineWidth={30} /> <span>{t('misc.uploadLinks.verticalShort')}</span>
+        <ShortsIcon className={iconClass} outlineWidth={30} /> {text('verticalShort')}
       </Link>
       {/* 24h story: a vertical short that leaves the stories row after a day.
           Closed trial for now (storiesEnabledFor); the checker enforces it too. */}
       {storiesEnabledFor(user) && (
         <Link to="/embed-studio?from=story" className={linkClass} title={t('misc.uploadLinks.story')} onClick={(e) => gatedGo(e, () => navigate('/embed-studio?from=story'))}>
-          <CircleDashed className={`${iconClass} upload-link-story-icon`} size={18} /> <span>{t('misc.uploadLinks.story')}</span>
+          <MdAccessTime className={iconClass} /> {text('story')}
         </Link>
       )}
       <a href="#" className={linkClass} title={t('misc.uploadLinks.musicAudio')} onClick={(e) => gatedGo(e, () => window.dispatchEvent(new CustomEvent('open-audio-upload')))}>
-        <MdGraphicEq className={iconClass} /> <span>{t('misc.uploadLinks.musicAudio')}</span>
+        <MdGraphicEq className={iconClass} /> {text('musicAudio')}
       </a>
+      {FEATURE_EDITOR && (
+        <a href="#" className={linkClass} title={t('misc.uploadLinks.shortsEditor')} onClick={(e) => gatedGo(e, () => window.dispatchEvent(new CustomEvent('open-shorts-editor')))}>
+          <Clapperboard className={iconClass} size={18} /> {text('shortsEditor')}
+        </a>
+      )}
 
       {/* OpenPods live streaming — the whole "Live" category is gated behind
           VITE_ENABLE_OPENPODS (off by default), plus an always-on allowlist of
@@ -93,14 +108,6 @@ export default function UploadLinks({ linkClass, iconClass = "icon", onClick }) 
       {openpodsEnabledFor(user) && (
         <>
           <div className="share-menu-heading">{t('misc.uploadLinks.headings.live')}</div>
-          <Link
-            to="/openpods?create=1&mode=conference"
-            className={linkClass}
-            title={t('misc.uploadLinks.groupChat')}
-            onClick={go}
-          >
-            <MdGroups className={iconClass} /> <span>{t('misc.uploadLinks.groupChat')}</span>
-          </Link>
           <Link
             to="/openpods?create=1&mode=standalone"
             className={linkClass}
@@ -110,7 +117,15 @@ export default function UploadLinks({ linkClass, iconClass = "icon", onClick }) 
             {isMobile
               ? <MdSmartphone className={iconClass} />
               : <MdDesktopWindows className={iconClass} />}
-            {' '}<span>{t('misc.uploadLinks.goLiveNow')}</span>
+            {' '}{text('goLiveNow')}
+          </Link>
+          <Link
+            to="/openpods?create=1&mode=conference"
+            className={linkClass}
+            title={t('misc.uploadLinks.groupChat')}
+            onClick={go}
+          >
+            <MdGroups className={iconClass} /> {text('groupChat')}
           </Link>
         </>
       )}
@@ -118,13 +133,13 @@ export default function UploadLinks({ linkClass, iconClass = "icon", onClick }) 
       {hasOthers && <div className="share-menu-heading">{t('misc.uploadLinks.headings.others')}</div>}
       {user && (
         <Link to={`/@${user}?tab=community`} className={linkClass} title={t('misc.uploadLinks.communitySnap')} onClick={go}>
-          <BiCommentDetail className={iconClass} /> <span>{t('misc.uploadLinks.communitySnap')}</span>
+          <BiCommentDetail className={iconClass} /> {text('communitySnap')}
         </Link>
       )}
-      {FEATURE_EDITOR && (
-        <a href="#" className={linkClass} title={t('misc.uploadLinks.shortsEditor')} onClick={(e) => gatedGo(e, () => window.dispatchEvent(new CustomEvent('open-shorts-editor')))}>
-          <Clapperboard className={iconClass} size={18} /> <span>{t('misc.uploadLinks.shortsEditor')}</span>
-        </a>
+      {user && (
+        <Link to="/profile?tab=playlists&create=playlist" className={linkClass} title={t('misc.uploadLinks.playlist')} onClick={go}>
+          <MdPlaylistAdd className={iconClass} /> {text('playlist')}
+        </Link>
       )}
     </>
   );

@@ -181,10 +181,22 @@
     "communitySnap": "Snap ชุมชน",
     "shortsEditor": "ตัวแก้ไข Shorts",
     "goLiveNow": "ไลฟ์เลย!",
+    "playlist": "เพลย์ลิสต์",
     "headings": {
       "upload": "อัปโหลด",
       "live": "ไลฟ์",
       "others": "อื่นๆ"
+    },
+    "subtitles": {
+      "regularVideo": "วิดีโอแบบปกติสำหรับช่องของคุณ",
+      "verticalShort": "คลิปแนวตั้งสำหรับฟีด Shorts",
+      "shortsEditor": "อัดและตัดต่อ Shorts ในเบราว์เซอร์",
+      "story": "คลิปสั้นที่แสดงอยู่ 24 ชั่วโมง",
+      "musicAudio": "เพลง พอดแคสต์ และเสียงอื่นๆ",
+      "groupChat": "ห้องไลฟ์ที่คุณจัดร่วมกับแขกรับเชิญ",
+      "goLiveNow": "ไลฟ์สดให้ผู้ติดตามของคุณ",
+      "communitySnap": "โพสต์ด่วนในแท็บชุมชนของคุณ",
+      "playlist": "รวมวิดีโอเป็นรายการที่แชร์ได้"
     }
   },
   "chat": {

@@ -13,6 +13,7 @@ import { FaMedal } from "react-icons/fa6";
 import { useMyPlaylists } from "../../hooks/useMyPlaylists";
 import ShortsIcon from "../icons/ShortsIcon";
 import UploadLinks from "../UploadLinks";
+import ModalHeader from "../ModalHeader/ModalHeader";
 import NavProgress from '../Incubation/NavProgress';
 import IncubationBell from '../Incubation/IncubationBell';
 import NotificationBell from "./NotificationBell";
@@ -137,14 +138,33 @@ function NavAdvertiseButton({ user }) {
   );
 }
 
+// Same range as the compact "+" button (phone + tab): the menu opens as a
+// bottom sheet there, since a dropdown hung off the "+" runs off the screen.
+const UPLOAD_SHEET_QUERY = '(max-width: 1024px)';
+
 function NavUploadDropdown() {
   const { t } = useTranslation();
   const [open, setOpen] = useState(false);
   const ref = useRef(null);
+  const sheetRef = useRef(null);
+  const [asSheet, setAsSheet] = useState(
+    () => typeof window !== 'undefined' && window.matchMedia?.(UPLOAD_SHEET_QUERY).matches,
+  );
 
   useEffect(() => {
+    const mq = window.matchMedia(UPLOAD_SHEET_QUERY);
+    const onChange = (e) => setAsSheet(e.matches);
+    mq.addEventListener('change', onChange);
+    return () => mq.removeEventListener('change', onChange);
+  }, []);
+
+  useEffect(() => {
+    // The sheet is portalled to <body>, so it's outside `ref`: a tap on one of
+    // its items must not count as an outside click (that would unmount it
+    // before the link's click lands).
     const handleClickOutside = (e) => {
-      if (ref.current && !ref.current.contains(e.target)) setOpen(false);
+      if (ref.current?.contains(e.target) || sheetRef.current?.contains(e.target)) return;
+      setOpen(false);
     };
     if (open) document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
@@ -160,10 +180,21 @@ function NavUploadDropdown() {
         <MdAdd size={21} className="nav-upload-icon-mobile" />
         <span className="nav-upload-label">{t('common.actions.share')}</span>
       </div>
-      {open && (
+      {open && !asSheet && (
         <div className="nav-upload-flyout" onClick={() => setOpen(false)}>
           <UploadLinks linkClass="nav-upload-flyout-item" iconClass="nav-upload-flyout-icon" />
         </div>
+      )}
+      {/* Portalled: the nav bar gets a transform when it auto-hides on scroll,
+          which would otherwise drag a position:fixed sheet along with it. */}
+      {open && asSheet && createPortal(
+        <div className="nav-upload-sheet-overlay" onClick={() => setOpen(false)}>
+          <div className="nav-upload-sheet" ref={sheetRef} role="dialog" aria-label={t('common.actions.share')}>
+            <ModalHeader className="nav-upload-sheet-header" title={t('common.actions.share')} onClose={() => setOpen(false)} />
+            <UploadLinks linkClass="nav-upload-flyout-item" iconClass="nav-upload-flyout-icon" />
+          </div>
+        </div>,
+        document.body,
       )}
     </div>
   );

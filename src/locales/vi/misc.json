@@ -181,10 +181,22 @@
     "communitySnap": "Snap cộng đồng",
     "shortsEditor": "Trình chỉnh sửa Shorts",
     "goLiveNow": "Phát trực tiếp!",
+    "playlist": "Danh sách phát",
     "headings": {
       "upload": "Tải lên",
       "live": "Trực tiếp",
       "others": "Khác"
+    },
+    "subtitles": {
+      "regularVideo": "Video truyền thống cho kênh của bạn",
+      "verticalShort": "Clip dọc cho bảng tin Shorts",
+      "shortsEditor": "Quay và chỉnh sửa short ngay trên trình duyệt",
+      "story": "Clip ngắn hiển thị trong 24 giờ",
+      "musicAudio": "Bài hát, podcast và âm thanh khác",
+      "groupChat": "Phòng trực tiếp bạn dẫn cùng khách mời",
+      "goLiveNow": "Phát trực tiếp cho người theo dõi",
+      "communitySnap": "Bài đăng nhanh trên tab cộng đồng",
+      "playlist": "Gom video thành danh sách để chia sẻ"
     }
   },
   "chat": {

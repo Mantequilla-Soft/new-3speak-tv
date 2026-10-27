@@ -181,10 +181,22 @@
     "communitySnap": "コミュニティの Snap",
     "shortsEditor": "ショートエディター",
     "goLiveNow": "ライブ配信する！",
+    "playlist": "再生リスト",
     "headings": {
       "upload": "アップロード",
       "live": "ライブ",
       "others": "その他"
+    },
+    "subtitles": {
+      "regularVideo": "チャンネル向けの通常の動画",
+      "verticalShort": "ショートフィード向けの縦型クリップ",
+      "shortsEditor": "ブラウザでショートを撮影・編集",
+      "story": "24時間だけ公開される短いクリップ",
+      "musicAudio": "音楽、ポッドキャストなどの音声",
+      "groupChat": "ゲストと一緒に進行するライブルーム",
+      "goLiveNow": "フォロワーに向けてライブ配信",
+      "communitySnap": "コミュニティタブに手軽に投稿",
+      "playlist": "動画をまとめて共有できるリストに"
     }
   },
   "chat": {

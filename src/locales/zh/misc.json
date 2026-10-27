@@ -181,10 +181,22 @@
     "communitySnap": "社区 Snap",
     "shortsEditor": "短视频编辑器",
     "goLiveNow": "开始直播！",
+    "playlist": "播放列表",
     "headings": {
       "upload": "上传",
       "live": "直播",
       "others": "其他"
+    },
+    "subtitles": {
+      "regularVideo": "发布到频道的普通视频",
+      "verticalShort": "用于短视频流的竖屏片段",
+      "shortsEditor": "在浏览器中录制并剪辑短视频",
+      "story": "展示 24 小时的短片",
+      "musicAudio": "歌曲、播客及其他音频",
+      "groupChat": "与嘉宾一起主持的直播间",
+      "goLiveNow": "向你的关注者直播",
+      "communitySnap": "在社区标签页快速发帖",
+      "playlist": "把视频整理成可分享的列表"
     }
   },
   "chat": {

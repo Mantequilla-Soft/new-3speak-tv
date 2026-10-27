@@ -181,10 +181,22 @@
     "communitySnap": "Community-Snap",
     "shortsEditor": "Shorts-Editor",
     "goLiveNow": "Live gehen!",
+    "playlist": "Playlist",
     "headings": {
       "upload": "Hochladen",
       "live": "Live",
       "others": "Sonstiges"
+    },
+    "subtitles": {
+      "regularVideo": "Klassisches Video für deinen Kanal",
+      "verticalShort": "Hochformat-Clip für den Shorts-Feed",
+      "shortsEditor": "Short im Browser aufnehmen und schneiden",
+      "story": "Kurzer Clip, der 24 Stunden sichtbar bleibt",
+      "musicAudio": "Songs, Podcasts und anderes Audio",
+      "groupChat": "Live-Raum, den du mit Gästen hostest",
+      "goLiveNow": "Live für deine Follower streamen",
+      "communitySnap": "Kurzer Beitrag im Community-Tab",
+      "playlist": "Videos in einer teilbaren Liste sammeln"
     }
   },
   "chat": {

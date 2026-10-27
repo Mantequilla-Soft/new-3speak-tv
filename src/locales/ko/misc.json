@@ -181,10 +181,22 @@
     "communitySnap": "커뮤니티 Snap",
     "shortsEditor": "쇼츠 편집기",
     "goLiveNow": "라이브 시작!",
+    "playlist": "재생목록",
     "headings": {
       "upload": "업로드",
       "live": "라이브",
       "others": "기타"
+    },
+    "subtitles": {
+      "regularVideo": "채널용 일반 동영상",
+      "verticalShort": "쇼츠 피드용 세로 클립",
+      "shortsEditor": "브라우저에서 쇼츠 녹화 및 편집",
+      "story": "24시간 동안 공개되는 짧은 클립",
+      "musicAudio": "노래, 팟캐스트 및 기타 오디오",
+      "groupChat": "게스트와 함께 진행하는 라이브 룸",
+      "goLiveNow": "팔로워에게 라이브 방송",
+      "communitySnap": "커뮤니티 탭에 간단히 게시",
+      "playlist": "동영상을 공유할 수 있는 목록으로 묶기"
     }
   },
   "chat": {

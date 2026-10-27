@@ -181,10 +181,22 @@
     "communitySnap": "Topluluk Snap'i",
     "shortsEditor": "Shorts Düzenleyici",
     "goLiveNow": "Canlı yayına geç!",
+    "playlist": "Oynatma listesi",
     "headings": {
       "upload": "Yükle",
       "live": "Canlı",
       "others": "Diğer"
+    },
+    "subtitles": {
+      "regularVideo": "Kanalın için klasik video",
+      "verticalShort": "Shorts akışı için dikey klip",
+      "shortsEditor": "Tarayıcında short kaydet ve düzenle",
+      "story": "24 saat yayında kalan kısa klip",
+      "musicAudio": "Şarkılar, podcast'ler ve diğer sesler",
+      "groupChat": "Konuklarla sunduğun canlı oda",
+      "goLiveNow": "Takipçilerine canlı yayın yap",
+      "communitySnap": "Topluluk sekmende hızlı gönderi",
+      "playlist": "Videoları paylaşılabilir bir listede topla"
     }
   },
   "chat": {

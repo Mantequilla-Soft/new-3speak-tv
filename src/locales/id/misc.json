@@ -181,10 +181,22 @@
     "communitySnap": "Snap Komunitas",
     "shortsEditor": "Editor Shorts",
     "goLiveNow": "Siaran langsung!",
+    "playlist": "Playlist",
     "headings": {
       "upload": "Unggah",
       "live": "Live",
       "others": "Lainnya"
+    },
+    "subtitles": {
+      "regularVideo": "Video klasik untuk kanalmu",
+      "verticalShort": "Klip vertikal untuk feed Shorts",
+      "shortsEditor": "Rekam dan edit short di browser",
+      "story": "Klip pendek yang tayang selama 24 jam",
+      "musicAudio": "Lagu, podcast, dan audio lainnya",
+      "groupChat": "Ruang live yang kamu pandu bersama tamu",
+      "goLiveNow": "Siaran langsung untuk pengikutmu",
+      "communitySnap": "Postingan cepat di tab komunitasmu",
+      "playlist": "Kumpulkan video dalam daftar yang bisa dibagikan"
     }
   },
   "chat": {

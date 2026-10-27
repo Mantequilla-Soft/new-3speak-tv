@@ -7,6 +7,11 @@
 // 1.0.0 — that way they see all of these when develop is pushed to production.
 export const CHANGELOG = [
   {
+    version: '1.80.32',
+    date: '2026-10-27',
+    summary: 'Wider Share menu with a short description for each option, plus a new Playlist shortcut.',
+  },
+  {
     version: '1.80.31',
     date: '2026-10-27',
     summary: 'Easier Leaderboard (/leaderboard): pick Videos, Shorts, Stories or Tags, then what to rank by, with the time range at the top right.',

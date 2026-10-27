@@ -181,10 +181,22 @@
     "communitySnap": "Snap w społeczności",
     "shortsEditor": "Edytor Shorts",
     "goLiveNow": "Nadawaj na żywo!",
+    "playlist": "Playlista",
     "headings": {
       "upload": "Prześlij",
       "live": "Na żywo",
       "others": "Inne"
+    },
+    "subtitles": {
+      "regularVideo": "Klasyczny film na Twój kanał",
+      "verticalShort": "Pionowy klip do kanału Shorts",
+      "shortsEditor": "Nagraj i edytuj shorta w przeglądarce",
+      "story": "Krótki klip widoczny przez 24 godziny",
+      "musicAudio": "Piosenki, podcasty i inne audio",
+      "groupChat": "Pokój na żywo, który prowadzisz z gośćmi",
+      "goLiveNow": "Nadawaj na żywo dla obserwujących",
+      "communitySnap": "Szybki wpis w zakładce społeczności",
+      "playlist": "Zbierz filmy w listę do udostępnienia"
     }
   },
   "chat": {
