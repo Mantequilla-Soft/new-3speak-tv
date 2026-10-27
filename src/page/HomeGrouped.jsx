@@ -18,7 +18,7 @@ import ShortsStories from "../components/ShortsStories/ShortsStories";
 import WelcomeBanner from "../components/WelcomeTour/WelcomeBanner";
 import NewFromFollowing from "../components/NewFromFollowing/NewFromFollowing";
 import SuggestedCreators from "../components/SuggestedCreators/SuggestedCreators";
-import { useWarmupVideos } from "../hooks/useWarmupVideos";
+import { useWarmupVideos, useFollowedWarmupVideos } from "../hooks/useWarmupVideos";
 import { useLiveStreams } from "../hooks/useLiveStreams";
 import PullToRefresh from "../components/PullToRefresh/PullToRefresh";
 import ShortsRow from "../components/ShortsRow/ShortsRow";
@@ -280,6 +280,25 @@ const fetchNewContent = async (page = 1) => {
   const dismissals = st.user ? `&currentuser=${encodeURIComponent(st.user)}&hidewatched=0` : '';
   const res = await axios.get(appendNsfw(`${NEW_CONTENT_URL}?page=${page}&limit=${PAGE_MAIN}${dismissals}`, st.showNsfw));
   return res.data?.videos || [];
+};
+
+const EMPTY_VIDEOS = [];
+
+// Warm-up videos slotted into a newest-first feed at their own date, ahead of
+// the first video older than them. One older than everything loaded so far
+// waits for the page that reaches its date (or the end of the feed), so it does
+// not sit at the bottom and then jump up as more pages arrive.
+const placeByDate = (videos, extras, complete) => {
+  if (!extras.length) return videos;
+  const at = (v) => new Date(v.created || v.created_at).getTime() || 0;
+  const out = [...videos];
+  // Newest first, so each lands after the newer warm-up videos placed before it.
+  for (const x of [...extras].sort((a, b) => at(b) - at(a))) {
+    const i = out.findIndex((v) => at(v) < at(x));
+    if (i >= 0) out.splice(i, 0, x);
+    else if (complete) out.push(x);
+  }
+  return out;
 };
 
 // getNextPageParam: keep paging as long as the last page returned ANYTHING. This
@@ -563,13 +582,16 @@ const HomeGrouped = () => {
     ownHandle: incubationHandle,
   });
 
+  // The Follow feed only carries warm-up users the viewer follows.
+  const followedWarmupVideos = useFollowedWarmupVideos(warmupVideos, authenticated ? gateViewer : null);
+
   // Promoted videos LEAD EVERY FEED — they no longer get a tab of their own. Each
-  // section is prefixed with them (then the warm-up videos) and deduped, so a
-  // promoted video that also shows up organically further down that feed isn't
-  // rendered twice.
+  // section is prefixed with them (then, unless the feed places them by date
+  // itself, the warm-up videos) and deduped, so a promoted video that also shows
+  // up organically further down that feed isn't rendered twice.
   const leadWithPromoted = useCallback(
-    (videos) => {
-      const lead = [...(promotedData || []), ...warmupVideos];
+    (videos, warmup = warmupVideos) => {
+      const lead = [...(promotedData || []), ...warmup];
       return lead.length ? deduplicateVideos([...lead, ...(videos || [])]) : (videos || []);
     },
     [promotedData, warmupVideos],
@@ -633,8 +655,8 @@ const HomeGrouped = () => {
   // ── Build the section list (natural order), then apply the user's saved order ──
   const baseSections = [
     { key: 'discover', title: 'Discover', label: t('feeds.home.sections.discover'), videos: withFeatured(withLive(liveAll, leadWithPromoted(discoverData))), isLoading: discoverLoading, priority: true },
-    { key: 'home', title: authenticated ? 'Follow Feed' : 'Home Feed', label: authenticated ? t('feeds.home.sections.follow') : t('feeds.home.sections.home'), videos: withLive(authenticated ? liveFollowing : liveAll, leadWithPromoted(homeData)), linkTo: authenticated ? '/follow-feed' : '/home-feed', isLoading: homeLoading, priority: true },
-    { key: 'new', title: 'New Content', label: t('feeds.home.sections.new'), videos: withLive(liveAll, leadWithPromoted(deduplicateVideos(newContentData || []))), linkTo: '/new', isLoading: newContentLoading },
+    { key: 'home', title: authenticated ? 'Follow Feed' : 'Home Feed', label: authenticated ? t('feeds.home.sections.follow') : t('feeds.home.sections.home'), videos: withLive(authenticated ? liveFollowing : liveAll, authenticated ? leadWithPromoted(placeByDate(homeData, followedWarmupVideos, homeQ.hasNextPage === false), EMPTY_VIDEOS) : leadWithPromoted(homeData)), linkTo: authenticated ? '/follow-feed' : '/home-feed', isLoading: homeLoading, priority: true },
+    { key: 'new', title: 'New Content', label: t('feeds.home.sections.new'), videos: withLive(liveAll, leadWithPromoted(placeByDate(newContentData, warmupVideos, newQ.hasNextPage === false), EMPTY_VIDEOS)), linkTo: '/new', isLoading: newContentLoading },
   ];
   // Interests row (logged-in + has interests): between the follow feed and New.
   if (authenticated && hasInterests) {
